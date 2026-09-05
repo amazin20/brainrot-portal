@@ -10,6 +10,17 @@ const errors=[],requests=[];page.on('pageerror',e=>errors.push(e.message));page.
 const report={renderer:'CI Chromium / SwiftShader; NOT a user-device FPS benchmark',routes:[],errors};
 const ready=()=>page.waitForFunction(()=>window.__NESI_DEMO_GAME__?.state==='ready');
 const shot=name=>page.screenshot({path:`${out}/${name}.png`});
+async function clickMenu(selector){
+ await page.waitForFunction(selector=>{
+   const e=document.querySelector(selector),screen=e?.closest('.screen');
+   return e&&!e.disabled&&(!screen||(!screen.inert&&getComputedStyle(screen).opacity==='1'))&&!document.pointerLockElement;
+ },{},selector);
+ await page.locator(selector).click();
+}
+const uiState=()=>page.evaluate(()=>({level:window.__NESI_DEMO_GAME__?.levelIndex,state:window.__NESI_DEMO_GAME__?.state,
+ blocked:window.__NESI_DEMO_GAME__?.externalBlocked,focused:document.hasFocus(),hidden:document.hidden,locked:!!document.pointerLockElement,
+ body:document.body.dataset.playState,win:document.querySelector('#win-screen')?.className,pause:document.querySelector('#pause-screen')?.className,
+ button:document.querySelector('#play-again-button')?.textContent,error:document.querySelector('#error-detail')?.textContent}));
 try{
  await page.goto(root+'?debug=1',{waitUntil:'networkidle2'});await ready();
  assert.equal(await page.$$eval('#level-select option',a=>a.length),CAMPAIGN.length);assert.equal(requests.length,4);
@@ -19,8 +30,8 @@ try{
   oldHudHidden:getComputedStyle(document.querySelector('#hud')).display==='none',audioState:window.__NESI_DEMO_GAME__.audio.context?.state}));
  assert.equal(report.initial.models,4);assert.ok(report.initial.oldHudHidden);assert.equal(report.initial.audioState,'running');
  for(let index=0;index<CAMPAIGN.length;index++){
-   if(index>0){await page.click('#play-again-button');await page.waitForFunction(i=>window.__NESI_DEMO_GAME__?.levelIndex===i&&window.__NESI_DEMO_GAME__.state==='playing',{},index);await shot(`level-${index+1}-start`);}
-   const result=await page.evaluate(()=>window.__NESI_RUN_LEVEL_ROUTE__());report.routes.push(result);assert.ok(result.pass&&result.resets===0&&result.respawns===0);
+   if(index>0){await clickMenu('#play-again-button');await page.waitForFunction(i=>window.__NESI_DEMO_GAME__?.levelIndex===i&&window.__NESI_DEMO_GAME__.state==='playing',{},index);await shot(`level-${index+1}-start`);}
+   const result=await page.evaluate(()=>window.__NESI_RUN_LEVEL_ROUTE__());report.routes.push(result);console.log('Browser course',index+1,'passed',result.frames,'frames');assert.ok(result.pass&&result.resets===0&&result.respawns===0);
    assert.equal(await page.$eval('#level-number',e=>e.textContent),String(index+1));
    assert.equal(await page.$('#quick-hint'),null);assert.equal(await page.$('#quick-settings'),null);await shot(`level-${index+1}-complete`);
    // Art-only overview: camera changes are explicitly not passage evidence.
@@ -31,7 +42,8 @@ try{
    await page.$eval('#win-screen',e=>e.style.visibility='');
  }
  assert.equal(new Set(requests.map(x=>x.split('?')[0])).size,9);assert.equal(requests.length,9,'cached models must not download twice');
- await page.click('#play-again-button');await page.waitForFunction(()=>window.__NESI_DEMO_GAME__.levelIndex===0&&window.__NESI_DEMO_GAME__.state==='playing');
+ console.log('Returning to first course',await uiState());
+ await clickMenu('#play-again-button');console.log('Return button pressed',await uiState());await page.waitForFunction(()=>window.__NESI_DEMO_GAME__.levelIndex===0&&window.__NESI_DEMO_GAME__.state==='playing');
  await page.evaluate(()=>document.exitPointerLock?.());await page.waitForFunction(()=>!document.pointerLockElement);
  if(await page.evaluate(()=>window.__NESI_DEMO_GAME__.state==='playing'))await page.keyboard.press('Escape');
  await page.waitForFunction(()=>window.__NESI_DEMO_GAME__.state==='paused');
@@ -58,4 +70,4 @@ try{
  await page.click('#play-button');await page.evaluate(()=>document.exitPointerLock?.());await page.waitForFunction(()=>!document.pointerLockElement);if(await page.evaluate(()=>window.__NESI_DEMO_GAME__.state==='playing'))await page.keyboard.press('Escape');await shot('mobile-settings');assert.equal(await page.$eval('#settings-level-select',e=>!!e.getBoundingClientRect().width),true);
  assert.deepEqual(errors,[]);
  fs.writeFileSync(`${out}/report.json`,JSON.stringify(report,null,2));console.log('Campaign WebGL: all active routes, lazy assets, menus, sound and persistence passed.');
-}finally{fs.writeFileSync(`${out}/report.json`,JSON.stringify(report,null,2));await browser.close();}
+}catch(error){report.failure={error:String(error),state:await uiState().catch(()=>null)};console.error('Browser failure',report.failure);await shot('browser-failure').catch(()=>{});throw error;}finally{fs.writeFileSync(`${out}/report.json`,JSON.stringify(report,null,2));await browser.close();}
