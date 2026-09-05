@@ -63,7 +63,10 @@ export async function runV8Journey(game,{onMilestone=()=>{}}={}) {
   }
   try {
     wait(.5);
-    if(index===0){
+    if(index>=5){
+      const {runExtendedStages}=await import('./LabExtendedJourney.js');
+      await runExtendedStages({game,level,walk,wait,aim,until,pickup,enter,mark,frame,worldMove,stop});
+    }else if(index===0){
       aim(0,level.panels.entry.getFrame().center);aim(1,level.panels.exit.getFrame().center);
       enter(level.panels.entry);mark('crossed the trench');walk(0,-11.5);
     }else if(index===1){

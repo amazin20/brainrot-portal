@@ -21,19 +21,19 @@ try{
  for(let index=0;index<CAMPAIGN.length;index++){
    if(index>0){await page.click('#play-again-button');await page.waitForFunction(i=>window.__NESI_DEMO_GAME__?.levelIndex===i&&window.__NESI_DEMO_GAME__.state==='playing',{},index);await shot(`level-${index+1}-start`);}
    const result=await page.evaluate(()=>window.__NESI_RUN_LEVEL_ROUTE__());report.routes.push(result);assert.ok(result.pass&&result.resets===0&&result.respawns===0);
-   assert.equal(await page.$eval('#level-number',e=>e.textContent),`УРОВЕНЬ ${String(index+1).padStart(2,'0')}`);
-   assert.equal(await page.$('#quick-hint'),null);await shot(`level-${index+1}-complete`);
+   assert.equal(await page.$eval('#level-number',e=>e.textContent),String(index+1));
+   assert.equal(await page.$('#quick-hint'),null);assert.equal(await page.$('#quick-settings'),null);await shot(`level-${index+1}-complete`);
    // Art-only overview: camera changes are explicitly not passage evidence.
    await page.evaluate(()=>{const g=window.__NESI_DEMO_GAME__,l=g.firstLevel;g.cameraRig.restoreProjection?.();g.camera.updateProjectionMatrix();
      document.querySelector('#win-screen').style.visibility='hidden';
-     g.camera.position.set(l.index===4?15:17,l.index>=2?22:19,23);g.camera.lookAt(0,l.index>=2?2:0,0);g.camera.updateMatrixWorld(true);g.render();});
+     const b=l.bounds,cx=(b.minX+b.maxX)/2,cz=(b.minZ+b.maxZ)/2;g.camera.position.set(cx+15,22,cz+23);g.camera.lookAt(cx,2,cz);g.camera.updateMatrixWorld(true);g.render();});
    await shot(`level-${index+1}-overview`);
    await page.$eval('#win-screen',e=>e.style.visibility='');
  }
  assert.equal(new Set(requests.map(x=>x.split('?')[0])).size,9);assert.equal(requests.length,9,'cached models must not download twice');
  await page.click('#play-again-button');await page.waitForFunction(()=>window.__NESI_DEMO_GAME__.levelIndex===0&&window.__NESI_DEMO_GAME__.state==='playing');
  await page.evaluate(()=>document.exitPointerLock?.());await page.waitForFunction(()=>!document.pointerLockElement);
- if(await page.evaluate(()=>window.__NESI_DEMO_GAME__.state==='playing'))await page.click('#quick-settings');
+ if(await page.evaluate(()=>window.__NESI_DEMO_GAME__.state==='playing'))await page.keyboard.press('Escape');
  await page.waitForFunction(()=>window.__NESI_DEMO_GAME__.state==='paused');
  await page.select('#quality-select','low');await page.$eval('#volume-control',e=>{e.value='25';e.dispatchEvent(new Event('input',{bubbles:true}));});await page.click('#mute-toggle');
  await page.click('#hint-button');await page.click('#hint-unlock');await page.waitForFunction(()=>window.__NESI_PREFS__.value.hints[0]===1);await shot('settings');
@@ -55,7 +55,7 @@ try{
  report.walkFrames=60;
  // Narrow-screen controls and settings remain inside viewport.
  await page.setViewport({width:390,height:844,isMobile:true,hasTouch:true,deviceScaleFactor:1});await page.reload({waitUntil:'networkidle2'});await ready();
- await page.click('#play-button');await page.evaluate(()=>document.exitPointerLock?.());await page.waitForFunction(()=>!document.pointerLockElement);if(await page.evaluate(()=>window.__NESI_DEMO_GAME__.state==='playing'))await page.click('#quick-settings');await shot('mobile-settings');assert.equal(await page.$eval('#settings-level-select',e=>!!e.getBoundingClientRect().width),true);
+ await page.click('#play-button');await page.evaluate(()=>document.exitPointerLock?.());await page.waitForFunction(()=>!document.pointerLockElement);if(await page.evaluate(()=>window.__NESI_DEMO_GAME__.state==='playing'))await page.keyboard.press('Escape');await shot('mobile-settings');assert.equal(await page.$eval('#settings-level-select',e=>!!e.getBoundingClientRect().width),true);
  assert.deepEqual(errors,[]);
  fs.writeFileSync(`${out}/report.json`,JSON.stringify(report,null,2));console.log('Campaign WebGL: all active routes, lazy assets, menus, sound and persistence passed.');
 }finally{fs.writeFileSync(`${out}/report.json`,JSON.stringify(report,null,2));await browser.close();}

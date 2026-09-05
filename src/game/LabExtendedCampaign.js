@@ -11,8 +11,8 @@ export const EXTENDED_CAMPAIGN=Object.freeze([
   hints:['Первая площадка — не выход. За проходом находится вторая шахта.','Перед каждым перелётом подготовь и наклон, и оба портала. С другом на руках стрелять нельзя.','Пройди первую шахту с другом. На промежуточном балконе поставь его, настрой новую пару и вторую панель, затем повтори разгон.']},
  {id:'three-debts',title:'Три долга',description:'Два шлюза и лифт. Один друг — три разные нагрузки.',assets:[1,2,11,19,24,29],concept:'Обратимые физические цепи',
   hints:['Оставленный груз нужен дальше. Ни один механизм не запоминает его вес.','За каждым шлюзом есть новый приёмник. Найди его, затем вернись к месту, откуда видна грузовая плита.','Дважды открой шлюз весом друга и верни его через напольный портал. В последней секции используй груз для подъёма выхода, а друга забери уже с верхней галереи.']},
- {id:'price-of-height',title:'Цена высоты',description:'Сначала получить высоту. Потом сохранить её в траектории.',assets:[1,2,11,19,22,23,24,28,29],concept:'Высота как ресурс',
-  hints:['Поднятый лифт — промежуточный этап, а не финиш. Друг должен покинуть нижнюю плиту.','Забери друга на неподвижную галерею, прежде чем готовить дальний перелёт.','С верхней галереи верни груз через независимую пару. За проходом оставь друга на балконе, настрой наклонённый выход и вход внизу; затем перенеси обоих одним падением.']},
+ {id:'price-of-height',title:'Цена высоты',description:'Шлюз, заёмная высота и два последовательных перелёта.',assets:[1,2,11,19,22,23,24,28,29],concept:'Высота как ресурс',
+  hints:['Поднятый лифт — промежуточный этап, а не финиш. Друг должен покинуть нижнюю плиту.','Забери друга на неподвижную галерею, прежде чем готовить дальний перелёт.','Верни друга после шлюза и грузового лифта. Затем пройди две шахты по очереди: сначала настрой пару и наклон, потом бери друга и падай во вход.']},
  {id:'route-architect',title:'Архитектор маршрута',description:'Два шлюза, подъём, две шахты. Построй весь маршрут сам.',assets:[1,2,11,19,22,23,24,28,29],concept:'Составная пространственная система',
   hints:['Рассматривай каждую секцию как долг: открыл путь весом — верни друга, прежде чем двигаться дальше.','Здесь одна портальная пара на весь маршрут. Переноси её только после того, как оба оказались на устойчивой стороне.','Верни друга после каждого из двух шлюзов, затем после грузового лифта. Пройди две шахты по очереди: сначала настрой вход и угол выхода, потом бери друга и используй падение.']},
 ]);
@@ -24,14 +24,15 @@ export function buildExtendedCampaign(game,index){
  const spec=EXTENDED_CAMPAIGN[index-5];if(!spec)throw new RangeError('Unknown extended level');
  const colors=[0x81d5ca,0x9ab8ed,0xeac086,0x9ed39b,0xd1b2eb];
  const world=new LabTileWorld(game,{wall:0x464a50,floor:0x697176,accent:colors[index-5],sky:0x555963});
- const pads=[],gates=[],lifts=[],rotators=[],terminals=[],fixtures=[],panels={},stages=[],extents=[];
+ const pads=[],gates=[],lifts=[],rotators=[],terminals=[],fixtures=[],panels={},stages=[],extents=[],partitions=[];
  let clock=0;
  const record=(id,role,art)=>{art.userData.gameplayRole=role;fixtures.push({id,role,art});return art;};
  const sync=(c,b,dt)=>{if(c.box.min.distanceToSquared(b.min)+c.box.max.distanceToSquared(b.max)>1e-14||!dt)game.syncCollision(c,b,dt);};
  function patch(name,position,normal,w=4,h=4,parent=world.root,moving=false){
   const p=world.patch(name,position,normal,w,h,parent,moving);panels[name]=p;return p;
  }
- function screen(z,left,right,bottom,top,gapLeft,gapRight,gapTop){
+ function screen(...args){partitions.push(args);}
+ function drawScreen(z,left,right,bottom,top,gapLeft,gapRight,gapTop){
   const strip=(x0,x1,y0,y1)=>{if(x1-x0<.01||y1-y0<.01)return;
    for(const sign of [-1,1])world.surface({name:'Solid tiled partition',position:[(x0+x1)/2,(y0+y1)/2,z+sign*.14],normal:[0,0,sign],width:x1-x0,height:y1-y0});};
   strip(left,gapLeft,bottom,top);strip(gapRight,right,bottom,top);strip(gapLeft,gapRight,gapTop,top);
@@ -55,7 +56,7 @@ export function buildExtendedCampaign(game,index){
  }
  const weighted=p=>!!game.cargo&&!game.heldCube&&game.cargoOnPad(p.mechanism.getPortalFrame().center,1.15);
  function cable(p,to){
-  const a=p.position,b=V(...to),mid=V(b.x,a.y,b.z);
+  const a=p.position.clone();a.y=.016;const b=V(...to),mid=V(b.x,a.y,b.z);
   const material=new THREE.MeshBasicMaterial({color:0xbfa779});
   for(const [s,e] of [[a,V(a.x,a.y,b.z)],[V(a.x,a.y,b.z),mid]]){
    const d=e.clone().sub(s);world.box(s.clone().add(e).multiplyScalar(.5).toArray(),[Math.abs(d.x)+.04,.026,Math.abs(d.z)+.04],material,false);
@@ -124,15 +125,22 @@ export function buildExtendedCampaign(game,index){
  if(index===6){spawn=[-6,5,-3];cargoSpawn=[-4.8,5.55,-2];const first=addFling();divideFlings(first);last=addFling([15,-1.5,23]);}
  if(index===7){addGate(0);addGate(-38);last=addLift(-76);spawn=[3,0,11];cargoSpawn=[.2,.55,10];}
  if(index===8||index===9){
-  let z=0;if(index===9){addGate(0);addGate(-38);z=-76;}
+  addGate(0);let z=-38;if(index===9){addGate(-38);z=-76;}
   addLift(z);spawn=[3,0,11];cargoSpawn=[.2,.55,10];
   // Sealed interface: only the common floor-height doorway joins the cells.
   screen(z-24,-28,15,-2,19,-3,3,8.8);
   last=addFling([-6,0,z-34],true);
-  if(index===9){divideFlings(last);last=addFling([-21,-1.5,z-57],true);}
+  divideFlings(last);last=addFling([-21,-1.5,z-57],true);
  }
  const bounds={minX:Math.min(...extents.map(e=>e[0]))-.2,maxX:Math.max(...extents.map(e=>e[1]))+.2,minZ:Math.min(...extents.map(e=>e[2])),maxZ:Math.max(...extents.map(e=>e[3]))};
  const ceiling=Math.max(...extents.map(e=>e[4]));world.walls(bounds,ceiling,-5);
+ // Local side walls keep every portal tile supported and prevent shots around
+ // a narrow gate into a later, laterally offset chamber. Partitions seal to roof.
+ for(const [x0,x1,z0,z1] of extents)for(const [x,n]of [[x0,1],[x1,-1]])
+  world.surface({name:'Chamber side wall',position:[x,(ceiling-5)/2,(z0+z1)/2],normal:[n,0,0],width:z1-z0,height:ceiling+5});
+ for(const [x0,x1,z0,z1]of extents)for(let z=z0+3;z<z1;z+=7)
+  world.box([(x0+x1)/2,ceiling-.03,z],[Math.min(5.8,x1-x0-1),.025,.29],world.materials.lamp,false);
+ for(const a of partitions)drawScreen(a[0],Math.min(a[1],bounds.minX),Math.max(a[2],bounds.maxX),-5,ceiling+.34,a[5],a[6],a[7]);
  game.scene.background=new THREE.Color(world.palette.sky);game.scene.fog=new THREE.Fog(world.palette.sky,48,145);
  const goal=world.goal(last.end.toArray(),[4.4,4.4]);
  function update(dt){

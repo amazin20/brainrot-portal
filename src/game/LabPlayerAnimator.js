@@ -62,6 +62,8 @@ export class LabPlayerAnimator extends BaseAnimator{
     this.chestTarget=new THREE.Euler();this.chestQuaternion=new THREE.Quaternion();
     this.jointTargets.Chest=this.chestTarget;this.basePose.Chest=new THREE.Quaternion();
     this.headBefore=new THREE.Quaternion();this.headTarget=new THREE.Euler();this.headQuaternion=new THREE.Quaternion();
+    this.freeBefore={ArmL:new THREE.Quaternion(),ForearmL:new THREE.Quaternion(),HandL:new THREE.Quaternion()};
+    this.freeEuler=new THREE.Euler();this.freeTarget=new THREE.Quaternion();
     this.reset();
   }
   reset(){
@@ -69,14 +71,16 @@ export class LabPlayerAnimator extends BaseAnimator{
     if(this.bones.Chest){this.bones.Chest.quaternion.identity();this.basePose?.Chest?.identity();this.bones.Chest.position.copy(this.rig.rest.Chest);this.rig.mesh.updateWorldMatrix(true,true);this.rig.skeleton.update();this.snapCarrierToBody();}
   }
   update(input={}){super.update(input);this.basePose.Chest.copy(this.bones.Chest.quaternion);}
-  get diagnostics(){return {...super.diagnostics,boneCount:LAB_PLAYER_JOINTS.length,profile:'flight-brace-v10',chestIndependent:true};}
+  get diagnostics(){return {...super.diagnostics,boneCount:LAB_PLAYER_JOINTS.length,profile:'expressive-companions-v12',chestIndependent:true};}
   stepPose(input){
-    this.headBefore.copy(this.bones.Head.quaternion);super.stepPose(input);
+    this.headBefore.copy(this.bones.Head.quaternion);
+    for(const name of Object.keys(this.freeBefore))this.freeBefore[name].copy(this.bones[name].quaternion);
+    super.stepPose(input);
     const dt=input.dt||0,run=smooth(2.5,5.7,this.speed),moving=this.moveBlend*(1-this.airBlend);
     const cadence=this.gait*Math.PI*2,body=this.jointTargets.Body,relaxed=(1-.8*this.aimBlend)*(1-.55*this.carryBlend);
-    this.chestTarget.set(-body.x*.24+.018*this.carryBlend+Math.sin(this.elapsed*1.6)*.006*this.idleBlend+this.airBlend*.045*(1-this.ascentBlend),
-      -body.y*.45+Math.sin(cadence-.45)*.026*moving*relaxed,
-      -Math.sin(cadence-.22)*.105*moving*relaxed+this.turn*.016);
+    this.chestTarget.set(-body.x*.32+.018*this.carryBlend+Math.sin(this.elapsed*1.6)*.006*this.idleBlend+this.airBlend*.045*(1-this.ascentBlend),
+      -body.y*.45+Math.sin(cadence-.45)*.040*moving*relaxed,
+      -Math.sin(cadence-.22)*.155*moving*relaxed+this.turn*.016);
     // A fast portal flight has a held, braced silhouette, not a walking loop.
     const flight=this.airBlend*smooth(6,14,Math.hypot(input.velocity?.x||0,input.velocity?.z||0));
     this.flightBrace=THREE.MathUtils.damp(this.flightBrace||0,flight,9,dt);
@@ -84,13 +88,24 @@ export class LabPlayerAnimator extends BaseAnimator{
     this.chestTarget.y-=this.turn*.018*this.flightBrace;
     this.chestQuaternion.setFromEuler(this.chestTarget);
     this.bones.Chest.quaternion.slerp(this.chestQuaternion,1-Math.exp(-12*dt));
+    // Soft acknowledgement: a free-hand gesture and nod, never a camera shake.
+    const cycle=this.elapsed%10.4;
+    const gesture=(cycle>3&&cycle<5.6?Math.sin((cycle-3)/2.6*Math.PI)**2:0)*this.idleBlend*(1-this.aimBlend)*(1-this.carryBlend);
     const head=this.jointTargets.Head;
-    this.headTarget.set(head.x-this.chestTarget.x*.65,head.y-this.chestTarget.y*.65,head.z-this.chestTarget.z*.65);
+    this.headTarget.set(head.x-this.chestTarget.x*.65+.075*gesture*Math.sin((cycle-3)*3),head.y-this.chestTarget.y*.65,head.z-this.chestTarget.z*.65);
     this.headQuaternion.setFromEuler(this.headTarget);this.bones.Head.quaternion.copy(this.headBefore).slerp(this.headQuaternion,1-Math.exp(-8*dt));
     // Slightly wider free-arm travel without disturbing the held-device hand.
     const free=(1-this.carryBlend)*(1-this.interactionBlend)*(1-this.aimBlend);
-    this.bones.ArmL.rotateX(Math.sin(cadence+.31)*(.009+.004*run)*moving*free*dt*60);
-    this.bones.ArmL.rotateZ(-.035*this.flightBrace*free);
+    for(const name of Object.keys(this.freeBefore)){
+      this.freeEuler.copy(this.jointTargets[name]);
+      if(name==='ArmL'){
+        this.freeEuler.x+=Math.sin(cadence+.31)*(.08+.03*run)*moving*free-.14*gesture;
+        this.freeEuler.z-=.10*this.flightBrace*free+.16*gesture;
+      }else if(name==='ForearmL')this.freeEuler.x-=.19*gesture+.05*moving*free*(1-Math.cos(cadence-.4));
+      else this.freeEuler.y+=.10*gesture*Math.sin((cycle-3)*5);
+      this.freeTarget.setFromEuler(this.freeEuler);
+      this.bones[name].quaternion.copy(this.freeBefore[name]).slerp(this.freeTarget,1-Math.exp(-12*dt));
+    }
   }
   applyCarryReach(){
     const blend=smooth(.01,.985,this.reachBlend);this.carryReach.blend=blend;

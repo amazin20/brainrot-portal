@@ -26,7 +26,7 @@ try{
  await page.click('#play-button');
  await page.waitForFunction(()=>window.__NESI_DEMO_GAME__?.state==='playing'&&window.__NESI_DEMO_GAME__.performanceMonitor.stats.fps>0);
  await page.evaluate(()=>document.exitPointerLock?.());await page.waitForFunction(()=>!document.pointerLockElement);
- if(await page.evaluate(()=>window.__NESI_DEMO_GAME__.state==='playing'))await page.click('#quick-settings');
+ if(await page.evaluate(()=>window.__NESI_DEMO_GAME__.state==='playing'))await page.keyboard.press('Escape');
  await page.waitForFunction(()=>{
   const m=document.querySelector('#pause-screen');return window.__NESI_DEMO_GAME__.state==='paused'&&!m.inert&&getComputedStyle(m).opacity==='1';
  });

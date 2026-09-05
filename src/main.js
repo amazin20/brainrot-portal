@@ -39,7 +39,7 @@ const game=new LabGame({container:$('#game'),touch:{joystick:$('#joystick'),joys
       window.__NESI_RUN_LEVEL_ROUTE__=async()=>{const {runV8Journey}=await import('./game/LabV8Journey.js');game.renderer.setAnimationLoop(null);hideScreens();setState('playing');
         try{return await runV8Journey(game,{onMilestone:()=>game.render()});}finally{game.render();clearInput();setState(game.state);diagnostics();}};}
     $('#play-button').focus({preventScroll:true});if(query.get('smoke')==='1')enterLevel(game.levelIndex,'initial');},
-  onHud:({chamber,objective,hasCargo,portalsReady})=>{$('#level-number').textContent=`УРОВЕНЬ ${String(game.levelIndex+1).padStart(2,'0')}`;$('#chamber').textContent=chamber;$('#objective').textContent=objective||'';$('#cargo-status').textContent=hasCargo?'Друг на руках':'Друг ждёт';$('#portal-status').textContent=portalsReady?'Связаны':'Два портала';},
+  onHud:({chamber,objective,hasCargo,portalsReady})=>{$('#level-number').textContent=String(game.levelIndex+1);$('#chamber').textContent=chamber;$('#objective').textContent=objective||'';$('#cargo-status').textContent=hasCargo?'Друг на руках':'Друг ждёт';$('#portal-status').textContent=portalsReady?'Связаны':'Два портала';},
   onToast:message=>{if(/Сначала|не помещается|препятствие|белую|Раздвинь|свободное|лицевую/.test(message))game.tutorial.explain(message);},
   onPause:paused=>{clearInput();screen('pause-screen',paused);setState(paused?'paused':'playing');if(paused){pauseInfo();$('#resume-button').focus({preventScroll:true});}},
   onRestartRequest:()=>restartLevel(),
@@ -70,7 +70,7 @@ function resume(){if(holds.size)return;game.audio.unlock();game.togglePause(fals
 $('#play-button').addEventListener('click',()=>enterLevel(Number($('#level-select').value),game.state==='ready'&&!preferences.value.completed.length?'initial':'next'));
 $('#play-again-button').addEventListener('click',()=>enterLevel((game.levelIndex+1)%CAMPAIGN.length));
 $('#resume-button').addEventListener('click',resume);$('#restart-button').addEventListener('click',restartLevel);
-for(const id of ['pause-button','quick-settings'])$('#'+id).addEventListener('click',()=>game.togglePause(true));
+for(const id of ['pause-button'])$('#'+id).addEventListener('click',()=>game.togglePause(true));
 $('#hint-button').addEventListener('click',showHints);
 $('#hint-unlock').addEventListener('click',async()=>{
   if(hintBusy||holds.size||(preferences.value.hints[game.levelIndex]||0)>=3)return;

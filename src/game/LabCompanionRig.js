@@ -49,27 +49,35 @@ export class LabCompanionRig {
     this.mesh = mesh; this.phase = 0; this.walk = 0; this.alert = 0;
   }
   reset() {
-    this.phase = this.walk = this.alert = this.flightBrace = 0;
+    this.phase = this.walk = this.alert = this.flightBrace = this.cueAge = 0;this.wasCarrying=false;
     if (!this.mesh) return;
     Object.values(this.bones).forEach(b => b.quaternion.identity());
     this.mesh.updateWorldMatrix(true, true); this.skeleton.update();
   }
-  update({ dt = 0, elapsed = 0, speed = 0, grounded = true, carrying = false, recovering = false, tumbling = false }) {
+  update({ dt = 0, elapsed = 0, speed = 0, grounded = true, carrying = false, recovering = false, tumbling = false, celebrating = false, reaction = null }) {
     if (!this.mesh) return;
+    // Being held is not a free tumble: it must not suppress face/fins/tail.
+    tumbling=tumbling&&!carrying;
+    if(carrying!==this.wasCarrying){this.cueAge=0;this.wasCarrying=carrying;}
+    this.cueAge=Math.min(2,(this.cueAge||0)+dt);
     const walk = grounded && !carrying && !tumbling ? THREE.MathUtils.clamp(speed / .32, 0, 1) : 0;
     this.walk = THREE.MathUtils.damp(this.walk, walk, 8, dt);
-    this.alert = THREE.MathUtils.damp(this.alert, tumbling ? 0 : carrying ? .5 : 1, 7, dt);
+    this.alert = THREE.MathUtils.damp(this.alert, tumbling ? 0 : carrying ? .8 : 1, 7, dt);
     this.phase += dt * (3 + Math.min(speed, .6) * 28);
     const wave = Math.sin(this.phase), t = elapsed;
+    const u=reaction?THREE.MathUtils.clamp(reaction.elapsed/reaction.duration,0,1):Math.min(1,this.cueAge/1.1);
+    const cue=Math.sin(Math.PI*u)**2;
+    const happy=celebrating?1:0;
+    const nod=cue*Math.sin(u*Math.PI*2);
     // Carried high-speed flight: small fin/foot bracing, without moving the grip or body.
     this.flightBrace=THREE.MathUtils.damp(this.flightBrace||0,carrying&&!grounded?THREE.MathUtils.clamp((speed-5)/9,0,1):0,9,dt);
-    this.bones.Tail.rotation.z = (Math.sin(t * 3.1) * .07 + wave * .055 * this.walk) * this.alert;
-    this.bones.Head.rotation.x = Math.sin(t * 1.2) * .022 * this.alert;
-    this.bones.Head.rotation.y = Math.sin(t * 2.1) * .017 * this.alert;
-    this.bones.Tail.rotation.z+=Math.sin(t*4.2)*.025*this.flightBrace;
+    this.bones.Tail.rotation.z = (Math.sin(t * 3.1) * .13 + wave * .085 * this.walk) * this.alert;
+    this.bones.Head.rotation.x = (Math.sin(t * 1.2) * .035+.11*nod) * this.alert;
+    this.bones.Head.rotation.y = (Math.sin(t * 2.1) * .028+.045*cue) * this.alert;
+    this.bones.Tail.rotation.z+=Math.sin(t*4.2)*.06*this.flightBrace+happy*Math.sin(t*9)*.16;
     for (const [side, sign] of [['L', -1], ['R', 1]]) {
-      this.bones[`Fin${side}`].rotation.x = sign * (Math.sin(t * 2.7) * .04 + wave * .07 * this.walk) * this.alert + sign*.14*this.flightBrace;
-      this.bones[`Foot${side}`].rotation.y = sign * wave * .12 * this.walk + (recovering ? sign * Math.sin(t * 8) * .055 : 0)+sign*.045*this.flightBrace;
+      this.bones[`Fin${side}`].rotation.x = sign * (Math.sin(t * 2.7) * .085 + wave * .12 * this.walk + .12*cue + happy*.18*Math.sin(t*8)) * this.alert*(1-.8*this.flightBrace) + sign*.18*this.flightBrace;
+      this.bones[`Foot${side}`].rotation.y = sign * wave * .12 * this.walk + (recovering ? sign * Math.sin(t * 8) * .055 : 0)+sign*.07*this.flightBrace+(carrying?sign*Math.sin(t*4.3)*.028:0)+happy*sign*Math.sin(t*8)*.12;
     }
     this.mesh.updateWorldMatrix(true, true); this.skeleton.update();
   }

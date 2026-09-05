@@ -26,6 +26,7 @@ jobs:
           node scripts/v8-package-check.mjs
           node scripts/v8-journey.mjs
           node scripts/v10-shortcuts.mjs
+          node scripts/v12-shortcuts.mjs
           npm run build -- --mode yandex --outDir dist-yandex
       - name: Production browser tests
         run: |
@@ -44,6 +45,7 @@ jobs:
             smoke-artifacts/
             qa/v8-journeys.json
             qa/v10-shortcut-audit.json
+            qa/v12-shortcuts.json
           retention-days: 7
       - name: Keep verified browser package
         uses: actions/upload-artifact@v4
