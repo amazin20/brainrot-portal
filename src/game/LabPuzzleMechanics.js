@@ -56,7 +56,7 @@ export function wall(world,z,left,right,ceiling=10,gap=null){
  for(const [x0,x1,y0,y1]of blocks)if(x1>x0&&y1>y0)for(const sign of [-1,1])world.surface({name:'Sealed partition',position:[(x0+x1)/2,(y0+y1)/2,z+sign*.13],normal:[0,0,sign],width:x1-x0,height:y1-y0});
 }
 export function gate(world,z,roomWidth=24,ceiling=10){
- const game=world.game,g=createArchitecturalGate(game,{z,roomWidth,roomHeight:ceiling,constructWalls:false});wall(world,z,-roomWidth/2,roomWidth/2,ceiling,[-2.4,2.4,3.65]);
+ const game=world.game,g=createArchitecturalGate(world.game,{z,roomWidth,roomHeight:ceiling,constructWalls:false});wall(world,z,-roomWidth/2,roomWidth/2,ceiling,[-2.4,2.4,3.65]);
  g.mechanism.getFrameBoxes().forEach(b=>game.collisionProxy(b));const colliders=g.mechanism.getLeafBoxes().map(b=>game.collisionProxy(b,{kinematic:true}));
  return {...g,colliders,progress:0,previous:0,open:false,
   update(open,dt,time){this.open=!!open;this.previous=this.progress;
@@ -67,8 +67,21 @@ export function gate(world,z,roomWidth=24,ceiling=10){
   render(a,time){this.mechanism.update(THREE.MathUtils.lerp(this.previous,this.progress,a),time);}};
 }
 export function consoleNode(world,terminals,position,action,kind,lesson){
- const game=world.game,art=game.addProp(22,1.5,position,0,0);game.collisionProxy(new THREE.Box3().setFromObject(art));art.userData.gameplayRole=kind;
- const t={position:V(...position).add(V(0,.8,0)),art,action,kind,lesson};terminals.push(t);return t;
+ const game=world.game,art=game.addProp(22,1.5,position,0,0);const collider=game.collisionProxy(new THREE.Box3().setFromObject(art));art.userData.gameplayRole=kind;
+ const t={position:V(...position).add(V(0,.8,0)),art,collider,action,kind,lesson};terminals.push(t);return t;
+}
+/** Hands cannot operate a terminal through its cabin walls or a glass cover.
+ * Ignore only the terminal's own shell, not arbitrary nearby geometry. */
+export function terminalAccessible(game,terminal){
+ const origin=game.playerPosition.clone().add(V(0,.9,0));
+ const delta=terminal.position.clone().sub(origin),distance=delta.length();
+ if(distance>=2.35)return false;if(distance<.08)return true;
+ const ray=new THREE.Ray(origin,delta.multiplyScalar(1/distance));
+ return !game.colliders.some(c=>{
+  if(c.enabled===false||c===terminal.collider)return false;
+  const hit=ray.intersectBox(c.box,V());
+  return hit&&hit.distanceTo(origin)<distance-.08;
+ });
 }
 export function ringDevice(world,position,normal,color=0x82d9de,radius=.5){
  const g=new THREE.Group();g.position.fromArray(position);g.quaternion.setFromUnitVectors(V(0,0,1),V(...normal));world.root.add(g);

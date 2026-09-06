@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import {LabTileWorld} from './LabTileWorld.js';
 import {cargoLoadsPlate} from './LabPlateContact.js';
-import {V,inRect,tracePortalRay,rayTouches,beamDrawing,glass,wall,gate,consoleNode,ringDevice,rotorDevice,integrateBalance,impactPiston} from './LabPuzzleMechanics.js';
+import {V,inRect,tracePortalRay,rayTouches,beamDrawing,glass,wall,gate,consoleNode,terminalAccessible,ringDevice,rotorDevice,integrateBalance,impactPiston} from './LabPuzzleMechanics.js';
 export const EXTENDED_CAMPAIGN=Object.freeze([
  {id:'crossed-light',title:'Перекрёстный свет',description:'Калибровочная кабина, зеркало и свет, проходящий через порталы.',assets:[1,2,11,22,24],concept:'Оптика',hints:['Свет проходит через связанную пару так же, как предмет. Серебристый диск отражает луч.','До отражателя нельзя дотянуться снаружи кабины, но в её окне видна портальная панель.','Сначала войди в кабину и поверни зеркало. Вернись, свяжи панель напротив излучателя с панелью перед зеркалом. Свет должен попасть в круглый приёмник.']},
  {id:'moment-arm',title:'Точка опоры',description:'Один мост, подвижный противовес и настоящий момент силы.',assets:[1,2,11,22,23,24],concept:'Равновесие рычага',hints:['Один и тот же вес сильнее поворачивает мост, когда находится дальше от оси. Игрок тоже нагружает мост.','Противовес можно передвинуть терминалом. Одного противовеса не хватает удержать дальний конец под твоим весом.','Сдвинь противовес к ближнему концу, подготовь портал на конце моста и оставь там друга. Перейди мост, найди приёмную панель за выступом и верни груз.']},
@@ -147,7 +147,7 @@ export function buildExtendedCampaign(game,index){
   reset=()=>{state.enabled=false;state.direction=0;};
  }
  world.root.userData.distinctConcept=spec.concept;
- const near=()=>terminals.filter(t=>game.playerPosition.clone().add(V(0,.9,0)).distanceTo(t.position)<2.35).sort((a,b)=>a.position.distanceToSquared(game.playerPosition)-b.position.distanceToSquared(game.playerPosition))[0];
+ const near=()=>terminals.filter(t=>terminalAccessible(game,t)).sort((a,b)=>a.position.distanceToSquared(game.playerPosition)-b.position.distanceToSquared(game.playerPosition))[0];
  const level={id:spec.id,title:`${index+1} / ${spec.title}`,index,bounds,spawn,cargoSpawn,goal,world,structure:world.root,panels,terminals,state,pads:[],gates:state.door?[state.door]:[],fixtures,floors:world.floors,bridges:[],lift:null,receiverPanel:null,launchPad:null,momentum:true,hints:spec.hints,
   update(dt){time+=dt;update(dt);},reset(){time=0;reset();update(0);},renderUpdate(a=1){render(a);},applyCargoForces,playerAcceleration,
   interact(){const t=near();if(!t)return false;t.action();game.companionAnimator?.trigger?.('curiosity');return true;},
