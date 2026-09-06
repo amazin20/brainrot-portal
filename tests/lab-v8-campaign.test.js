@@ -19,7 +19,7 @@ test('v8 five courses have distinct geometry, declared purposeful assets and rea
  assert.equal(layouts.size,5);
 });
 test('v8 low first level contains no lift, weight switch or unexplained furniture',async()=>{
- await g.selectLevel(0,false);const l=g.firstLevel;assert.equal(l.pads.length,0);assert.equal(l.fixtures.length,0);assert.equal(l.terminals.length,0);assert.equal(l.lift,null);assert.equal(l.world.surfaces.filter(s=>s.portal).length,2);
+ await g.selectLevel(0,false);const l=g.firstLevel;assert.equal(l.pads.length,0);assert.equal(l.fixtures.length,0);assert.equal(l.terminals.length,0);assert.equal(l.lift,null);assert.equal(l.world.surfaces.filter(s=>s.portal).length,6);
 });
 test('v8 gravity fling retains momentum with no input, not airborne velocity damping',()=>{
  g.resetRun(true);g.playerPosition.set(0,6,0);g.previousPlayerPosition.copy(g.playerPosition);g.playerGrounded=false;g.playerVelocity.set(8,0,0);

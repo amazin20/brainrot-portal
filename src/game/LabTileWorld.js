@@ -14,7 +14,22 @@ const FINISHES=new Map([
 export class LabTileWorld extends StructuralWorld{
  constructor(game,palette){
   super(game,{...palette,...(FINISHES.get(palette.wall)||{})});
-  this.materials.trim.color.setHex(0x262a2e);
+  this.materials.trim.color.setHex(0x171d24);
+  this.materials.wall.color.setHex(0x29313a);
+  this.materials.floor.color.setHex(0x424b55);
+  this.materials.ceramic.color.setHex(0xfffbed);
+  this.materials.ceramic.emissive.setHex(0x6b706e);
+  this.materials.ceramic.emissiveIntensity=.16;
+ }
+ surface(options){
+  const area=super.surface(options);
+  if(options.portal)area.group.traverse(o=>{if(o.isInstancedMesh&&o.userData.portalTile)o.material=this.materials.ceramic;});
+  return area;
+ }
+ patch(name,position,normal,width=4,height=4,parent=this.root,moving=false){
+  const expansions={'entry':10,'exit':9,'receiver':7,'cab-entry':7,'light-intake':10,'air-intake':10};
+  if(!moving&&expansions[name])width=Math.max(width,expansions[name]);
+  return super.patch(name,position,normal,width,height,parent,moving);
  }
  walls(bounds,height,base=-.2){
   const {minX,maxX,minZ,maxZ}=bounds;
