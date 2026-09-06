@@ -4,7 +4,7 @@ import {cargoLoadsPlate} from './LabPlateContact.js';
 import {V,inRect,tracePortalRay,rayTouches,beamDrawing,glass,wall,gate,consoleNode,terminalAccessible,ringDevice,rotorDevice,integrateBalance,impactPiston} from './LabPuzzleMechanics.js';
 export const EXTENDED_CAMPAIGN=Object.freeze([
  {id:'crossed-light',title:'Перекрёстный свет',description:'Калибровочная кабина, зеркало и свет, проходящий через порталы.',assets:[1,2,11,22,24],concept:'Оптика',hints:['Свет проходит через связанную пару так же, как предмет. Серебристый диск отражает луч.','До отражателя нельзя дотянуться снаружи кабины, но в её окне видна портальная панель.','Сначала войди в кабину и поверни зеркало. Вернись, свяжи панель напротив излучателя с панелью перед зеркалом. Свет должен попасть в круглый приёмник.']},
- {id:'moment-arm',title:'Точка опоры',description:'Один мост, подвижный противовес и настоящий момент силы.',assets:[1,2,11,22,23,24],concept:'Равновесие рычага',hints:['Один и тот же вес сильнее поворачивает мост, когда находится дальше от оси. Игрок тоже нагружает мост.','Противовес можно передвинуть терминалом. Одного противовеса не хватает удержать дальний конец под твоим весом.','Сдвинь противовес к ближнему концу, подготовь портал на конце моста и оставь там друга. Перейди мост, найди приёмную панель за выступом и верни груз.']},
+ {id:'moment-arm',title:'Точка опоры',description:'Один мост, подвижный противовес и настоящий момент силы.',assets:[1,2,11,22,23,24],concept:'Равновесие рычага',hints:['Один и тот же вес сильнее поворачивает мост, когда находится дальше от оси. Игрок тоже нагружает мост.','Противовес можно передвинуть терминалом. Одного противовеса не хватает удержать дальний конец под твоим весом.','Сдвинь противовес и оставь друга на дальнем плече. С промежуточной галереи отправь друга в верхний док. Затем перенеси вход на стену галереи и пройди сам.']},
  {id:'wind-column',title:'Ветер за углом',description:'Перенаправь воздушную струю и поймай восходящий поток.',assets:[1,2,11,22,23,24],concept:'Сила воздушного потока',hints:['Вентилятор создаёт постоянную силу, а не разовый прыжок. Частицы показывают направление воздуха.','Напольный выход превратит горизонтальную струю в восходящую. Высокая площадка находится сбоку от потока.','Свяжи панель напротив вентилятора с плитой внизу шахты. Включи нагнетание, возьми друга, войди в поток и на высоте уйди к верхней площадке.']},
  {id:'impact-workshop',title:'Работа удара',description:'Ролики разгоняют груз. Его импульс сжимает пружину и защёлкивает затвор.',assets:[1,2,11,22,24],concept:'Кинетическая энергия и упругость',hints:['Пружинный затвор находится в низком канале. Слабого толчка недостаточно сжать пружину до защёлки.','Ролики придают другу скорость. Портальная пара должна направить этот импульс в торец поршня.','Настрой пару с выхода роликов в канал перед поршнем, включи движение вперёд и отпусти друга на загрузочном столе. После удара откроется крышка канала — забери друга.']},
  {id:'vector-vault',title:'Векторный сейф',description:'Управляй полем в закрытом лабиринте и подготовь путь извлечения друга.',assets:[1,2,11,22,23,24],concept:'Дистанционное управление силами',hints:['Под стеклом действует направленное поле. Оно толкает свободного друга по стрелке, но не переносит его мгновенно.','Сначала рассмотри проходы сверху и подготовь портал в открытом колодце. Крышка не пропускает руки.','На терминале меняй направление: вправо, к дальней стене, влево, к дальней стене, вправо, к колодцу. Свяжи дно колодца с панелью на верхней галерее.']},
@@ -47,8 +47,8 @@ export function buildExtendedCampaign(game,index){
    state.segments=tracePortalRay(game,V(-9.8,2.1,6),V(1,0,0),{reflectors:[reflector]});state.lit=rayTouches(state.segments,V(9.7,2.1,-8));sensor.glow.material.color.setHex(state.lit?0x9af4bd:0xa38b6b);ray.update(state.segments);door.update(state.lit,dt,time);};
   reset=()=>{state.mirror=state.target=0;state.lit=false;door.reset();};render=a=>door.render(a,time);
  }else if(index===6){
-  bounds={minX:-13,maxX:13,minZ:-17,maxZ:15};spawn=[8,2.2,2];cargoSpawn=[6,2.75,1];world.walls(bounds,12,-4.5);
-  world.floor(-13,13,-17,15,-4);world.floor(1.85,13,-3,3,2.2);world.floor(-4,7,-17,-10.4,5.5);
+  bounds={minX:-13,maxX:13,minZ:-17,maxZ:15};spawn=[8,2.2,2];cargoSpawn=[6,2.75,1];world.walls(bounds,14,-4.5);
+  world.floor(-13,13,-17,15,-4);world.floor(1.85,13,-3,3,2.2);world.floor(-10,7,-17,-10.4,5.5);
   // A recovery stair returns only to the entrance, never to the high exit.
   world.stairs(9,12,4,14,-4,2.2);world.floor(9,13,3,4,-4);
   const bridge=new THREE.Group();bridge.position.set(0,2.2,0);world.root.add(bridge);
@@ -60,7 +60,7 @@ export function buildExtendedCampaign(game,index){
   const axle=new THREE.Mesh(new THREE.CylinderGeometry(.45,.45,5.7,16),world.materials.trim);axle.rotation.z=Math.PI/2;axle.position.y=2;world.root.add(axle);
   const mass=world.box([0,-.8,-6],[2,.9,1.3],world.materials.trim,false,bridge);world.box([0,-.8,0],[.12,.12,16],world.materials.accent,false,bridge);
   const load=patch('lever-load',[0,.027,8.4],[0,1,0],3.2,3.8,bridge,true);load.collider.walkablePlane=true;game.colliders=game.colliders.filter(c=>c!==load.collider);load.mesh.userData.portalColliderId=collider.mesh.uuid;collider.frontPlane=()=>load.getFrame();
-  const receiver=patch('lever-receiver',[6.8,7.6,-14],[ -1,0,0]);
+  const receiver=patch('lever-receiver',[6.8,11.1,-14],[ -1,0,0]);
   world.box([4.5,6,-11.55],[5,12,.25]);
   console([8,2.2,0],()=>{state.counterIndex=(state.counterIndex+1)%3;game.audio?.mechanism?.('switch');},'balance','E — сдвинуть противовес. Важны вес и расстояние от оси; игрок тоже нагружает мост.');
   Object.assign(state,{angle:0,omega:0,previousAngle:0,counterIndex:0,counterZ:-6,torque:0,bridge,load,collider});
@@ -68,7 +68,11 @@ export function buildExtendedCampaign(game,index){
   const f={minX:-1.9,maxX:1.9,minZ:-11,maxZ:11,y:2.2,mesh:deck,enabled:true,heightAt,normalAt:()=>V(0,Math.cos(state.angle),Math.sin(state.angle))};game.floors.push(f);
   const contact=()=>cargoLoadsPlate(game.cargo,game.heldCube,{center:V(0,2.2,0),normal:V(0,Math.cos(state.angle),Math.sin(state.angle)),right:V(-1,0,0),up:V(0,-Math.sin(state.angle),Math.cos(state.angle)),halfWidth:1.9,halfHeight:11});
   mechanicalContact=()=>contact(game.cargo.position);
-  goal=world.goal([0,5.5,-14.5],[4.8,4]);
+  // A distinct upper dock is outside the deck's full tilt + jump envelope.
+  // Reaching the lever landing is not reaching the exit: carry must be solved
+  // with a portal transfer, including when bunny-hopping unloads the deck.
+  world.floor(2.2,7,-17,-12,9);
+  goal=world.goal([4.6,9,-14.5],[4.4,4]);
   function pose(angle,dt){bridge.rotation.x=angle;bridge.updateWorldMatrix(true,true);collider.box.setFromObject(deck);load.collider.box.setFromObject(load.mesh);
    if(!game.physics)return;
    // Physical boxes rotate with the authored deck; never replace them by AABBs.
@@ -123,7 +127,10 @@ export function buildExtendedCampaign(game,index){
   reset=()=>{state.direction=-1;piston.reset();if(piston.body){piston.body.type=1;piston.body.updateMassProperties();}hood.position.x=0;door.reset();};render=a=>{piston.render();door.render(a,time);};
  }else{
   bounds={minX:-15,maxX:15,minZ:-15,maxZ:15};spawn=[-12,3,11];cargoSpawn=[-6,.55,6];world.walls(bounds,12,-4.5);world.floor(-15,15,-15,15,-4.2);
-  world.floor(-15,15,9.6,15,3);world.floor(-15,-9.5,-15,9.6,3);world.floor(9.5,15,-15,9.6,3);world.floor(-9.5,9.5,-15,-9.6,3);
+  world.floor(-15,15,9.6,15,3);world.floor(-15,-9.5,-15,-8.5,3);world.floor(-11.2,-9.5,-8.5,9.6,3);
+  // A real stairwell is cut out of the west observation ring. Its upper end
+  // returns to the entrance, not to the cargo well or completion area.
+  world.stairs(-14.2,-11.5,-8.5,9.6,-4.2,3);world.floor(9.5,15,-15,9.6,3);world.floor(-9.5,9.5,-15,-9.6,3);
   const mazeFloor=world.floor(-8,8,-5,9,0);world.floor(-8,4,-9,-5,0);const well=world.floor(4,8,-9,-5,-4);
   // Transparent sealed cover makes the remote-object problem physically clear.
   glass(world,[0,1.52,2],[16.2,.10,14]);glass(world,[-2,1.52,-7],[12,.10,4]);

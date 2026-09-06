@@ -21,7 +21,9 @@ export async function runExtendedStages(d){
   collect();walk(0,1);walk(0,5.5);walk(0,7.75);drop();
   wait(2);mark('same load creates a larger torque at the end of the lever');
   walk(0,0);walk(0,-9.5);walk(0,-12.8);mark('crossed a load-balanced physical deck');
-  aim(1,level.panels['lever-receiver'].getFrame().center);wait(2);mark('retrieval after releasing lever load');collect();walk(0,-14.5);
+  walk(-7.8,-14);aim(1,level.panels['lever-receiver'].getFrame().center);wait(2);mark('retrieval after releasing lever load');
+  walk(-7.8,-14);aim(0,level.panels['balance-upper-transfer'].getFrame().center);enter(level.panels['balance-upper-transfer']);
+  if(game.state!=='won'){collect();walk(4.6,-14.5);}
  }else if(level.index===7){
   aim(0,level.panels['air-intake'].getFrame().center);
   walk(0,3);aim(1,level.panels['air-up'].getFrame().center);

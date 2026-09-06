@@ -27,6 +27,8 @@ jobs:
           node scripts/v8-journey.mjs
           node scripts/v10-shortcuts.mjs
           node scripts/v13-audit.mjs
+          node scripts/v14-jump-audit.mjs
+          node scripts/v14-recovery.mjs
           npm run build -- --mode yandex --outDir dist-yandex
       - name: Production browser tests
         run: |
@@ -36,6 +38,7 @@ jobs:
           export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
           node scripts/v8-browser.mjs
           node scripts/v8-yandex-browser.mjs
+          node scripts/v14-browser.mjs
       - name: Keep verification evidence
         if: always()
         uses: actions/upload-artifact@v4
@@ -46,6 +49,7 @@ jobs:
             qa/v8-journeys.json
             qa/v10-shortcut-audit.json
             qa/v13-audit.json
+            qa/v14-*.json
           retention-days: 7
       - name: Keep verified browser package
         uses: actions/upload-artifact@v4
