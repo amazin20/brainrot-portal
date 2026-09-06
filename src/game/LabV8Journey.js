@@ -90,7 +90,7 @@ export async function runV8Journey(game,{onMilestone=()=>{}}={}) {
       walk(-4.8,-1);pickup();walk(-6,1);fallFromEdge(2.65,1);walk(9,9.7);
     }
     until(()=>game.state==='won',3,'Goal did not complete');
-    assert(game.heldCube||index===0,'Friend lost from hands');mark('both at exit');
+    assert(game.heldCube||index===0||index>=5,'Friend lost from hands');mark('both at exit');
     report.pass=true;report.teleports=game.teleportCount;return report;
   } finally {
     stop();game.input.getMove=oldMove;game.respawn=respawn;game.physics.resetCargo=resetCargo;

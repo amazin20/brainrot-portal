@@ -1,0 +1,24 @@
+{
+  "version": "v13-distinct",
+  "verifiedRuntimeCommit": "78651346c7c5d8c97ab4ead5710019ebf8cc3a82",
+  "workflowRun": 34003259190,
+  "evidenceArtifact": 9980184860,
+  "browserArtifact": 9980185094,
+  "unitTestsPassedLocally": 258,
+  "ciTestBuildAndBrowserSteps": "success",
+  "browserCompletedLevels": [1,2,3,4,5,6,7,8,9,10],
+  "browserPlayerRespawns": 0,
+  "browserCompanionResets": 0,
+  "browserPageErrors": [],
+  "settingsPersisted": true,
+  "renderedWalkFrames": 60,
+  "negativeAudit": {
+    "introductoryJumpAttempts": 180,
+    "newNoPowerJumpAttempts": 108,
+    "sealedCoverGrabProbes": 45,
+    "weakImpactTrials": 12,
+    "incorrectBalanceTrials": 9,
+    "testedBypasses": 0
+  },
+  "limits": "Bounded regression coverage, not exhaustive exploit proof or human difficulty assessment. SwiftShader is not a player-device benchmark. Yandex SDK contract stub is not actual ad delivery. Publication requires the separate Pages verification."
+}

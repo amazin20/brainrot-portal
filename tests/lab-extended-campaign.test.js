@@ -3,20 +3,16 @@ import assert from 'node:assert/strict';
 import {createHeadlessGame} from '../scripts/lab-headless.mjs';
 import {CAMPAIGN} from '../src/game/LabCampaignLevels.js';
 const g=await createHeadlessGame();
-test('ten courses retain the original five and add growing multistage compositions',async()=>{
- assert.equal(CAMPAIGN.length,10);const counts=[];let previousArea=0;
+test('replacement courses have five independent causal mechanisms, not stage chains',async()=>{
+ assert.equal(CAMPAIGN.length,10);
+ const ids=[],concepts=[],shapes=[];
  for(let i=5;i<10;i++){
-  await g.selectLevel(i,false);const l=g.firstLevel;counts.push(l.stages.length);
-  const area=(l.bounds.maxX-l.bounds.minX)*(l.bounds.maxZ-l.bounds.minZ);assert.ok(area>previousArea);previousArea=area;
-  assert.equal(l.launchPad,null);for(const f of l.fixtures){assert.ok(CAMPAIGN[i].assets.includes(f.id));assert.ok(f.role.length>8);}
+  await g.selectLevel(i,false);const l=g.firstLevel;ids.push(l.id);concepts.push(l.world.root.userData.distinctConcept);
+  shapes.push(Object.keys(l.panels).join(','));assert.equal(l.stages,undefined);assert.equal(l.lift,null);assert.equal(l.launchPad,null);
+  assert.equal(l.getLaunch(l.goal.position),null);assert.ok(l.terminals.length);assert.equal(l.isWon(),false);
  }
- assert.deepEqual(counts,[1,2,3,4,5]);
-});
-test('load-driven lift is reversible and has a single visible deck',async()=>{
- await g.selectLevel(5,false);g.resetRun(true);const l=g.firstLevel,lift=l.lifts[0],pad=l.pads[0];
- assert.equal(lift.mesh.visible,false);g.cargo.position.copy(pad.mechanism.getPortalFrame().center);g.cargo.position.y+=.4;g.cargo.velocity.set(0,0,0);
- for(let n=0;n<600;n++)l.update(1/120);assert.ok(lift.y>4.9);
- g.cargo.position.x+=8;for(let n=0;n<600;n++)l.update(1/120);assert.ok(lift.y<.1);assert.equal(pad.pressed,false);
+ assert.deepEqual(ids,['crossed-light','moment-arm','wind-column','impact-workshop','vector-vault']);
+ assert.equal(new Set(concepts).size,5);assert.equal(new Set(shapes).size,5);
 });
 test('carried brainrot is expressive even when its dynamic body is not grounded',()=>{
  const rig=g.companionRig;rig.reset();const rotations=[];
