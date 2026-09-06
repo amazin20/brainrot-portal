@@ -1,0 +1,27 @@
+name: Inspect retained V15 binary
+on:
+  push:
+    branches: ['feature/twenty-workshops-v16']
+    paths: ['.github/workflows/recover-v15-blob.yml']
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          python3 - <<'PY'
+          import pathlib,struct,json,hashlib
+          b=pathlib.Path('recovery/retained-v15.bin').read_bytes()
+          print('Retained binary:',len(b),b[:12].hex(),hashlib.sha256(b).hexdigest())
+          if b[:4]==b'glTF':
+              n=struct.unpack_from('<I',b,12)[0]
+              j=json.loads(b[20:20+n])
+              print(json.dumps({'asset':j.get('asset'),'nodes':j.get('nodes'),'images':j.get('images'),'meshes':j.get('meshes')},ensure_ascii=False))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: retained-v15-binary
+          path: recovery/retained-v15.bin
+          retention-days: 7
