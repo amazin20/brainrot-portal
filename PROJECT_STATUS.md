@@ -1,12 +1,11 @@
-# NESI — V13 distinct-chamber replacement
+# NESI — V14 open-space corrections
 
 Repository: amazin20/nesi-brainrot. Vite / Three.js / cannon-es.
 Live URL: https://amazin20.github.io/nesi-brainrot/
-Confirm build-info.json version v13-distinct and the exact successful Pages commit before calling it updated.
+Verify public build-info.json against a successful Pages commit, version v14-open, ten levels before calling the correction live.
 
-First five layouts retained; centre-only pressure detection replaced with true inset footprint contact.
-Levels 6–10 wholly replaced: optical mirror/ray routing; gravity lever/counterweight; continuous portal airflow; conveyor collision work against a spring piston; remote force navigation in a covered maze. No repeated old stage chain.
-New mechanics: src/game/LabPuzzleMechanics.js and LabPlateContact.js. New authored rooms and positive routes replace LabExtendedCampaign.js and LabExtendedJourney.js.
-Original player and brainrot rigs/textures remain. Upper-right Arabic level number and Escape settings remain.
-Verify npm run check; node scripts/v8-journey.mjs; node scripts/v10-shortcuts.mjs; node scripts/v13-audit.mjs; both production browser scripts. Read docs/RELEASE_V13.md for exact scope and test limits.
-Pending previously supplied extra GLBs are not claimed installed. Requested separate future-object pictures are not gameplay screenshots.
+The ten V13 concepts remain. Added continuous ivory portal walls and darker non-portal finishes throughout. Course 7 has a separate high exit dock requiring a spatial transfer rather than repeated jumping from the lever. Course 10 includes an open physical stairwell and continuous return walls so an unprepared fall is recoverable. Footprint-based plate activation is retained.
+New files: LabExplorationSurfaces.js, LabRecoveryJourney.js; scripts/v14-jump-audit.mjs, v14-recovery.mjs and v14-browser.mjs; tests/lab-open-surfaces.test.js.
+Read docs/RELEASE_V14.md for scope, regression coverage and limitations.
+
+IMPORTANT PENDING SCOPE: ten uploaded optimized GLBs are not yet integrated/animated; requested levels 11–15 are not built. Do not substitute artwork or this corrective release for those deliverables. All original character models and expressive rigs remain.
