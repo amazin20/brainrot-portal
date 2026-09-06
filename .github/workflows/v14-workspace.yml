@@ -1,0 +1,19 @@
+name: V14 exact workspace
+on:
+  push:
+    branches: ['feature/open-physics-v14']
+    paths: ['.github/workflows/v14-workspace.yml']
+permissions:
+  contents: read
+jobs:
+  workspace:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Exact runtime source and test fixtures
+        run: tar --exclude='./.git' --exclude='./public' --exclude='./qa' -czf /tmp/v14-source.tgz .
+      - uses: actions/upload-artifact@v4
+        with:
+          name: v14-source
+          path: /tmp/v14-source.tgz
+          retention-days: 1
