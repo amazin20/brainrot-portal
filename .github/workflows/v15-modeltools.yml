@@ -1,0 +1,20 @@
+name: V15 model tooling
+on:
+  push:
+    branches: ['feature/tactile-fifteen-v15']
+    paths: ['.github/workflows/v15-modeltools.yml']
+permissions:
+  contents: read
+jobs:
+  tooling:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm pack meshoptimizer@0.24.0
+      - uses: actions/upload-artifact@v4
+        with:
+          name: v15-meshoptimizer
+          path: meshoptimizer-*.tgz
+          retention-days: 1
