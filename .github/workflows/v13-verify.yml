@@ -1,0 +1,71 @@
+name: V13 distinct chamber verification
+on:
+  push:
+    branches: ['feature/distinct-chambers-v13']
+permissions:
+  contents: write
+concurrency:
+  group: v13-review
+  cancel-in-progress: true
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Apply reviewed textual core changes to the isolated branch
+        run: |
+          test "$GITHUB_REF_NAME" = 'feature/distinct-chambers-v13'
+          if test -f maintenance/v13-core.patch; then
+            git apply --check maintenance/v13-core.patch
+            git apply maintenance/v13-core.patch
+            rm maintenance/v13-core.patch
+          fi
+      - name: Dependencies
+        run: |
+          npm ci
+          npm install --no-save --package-lock=false puppeteer-core@24.16.0
+      - name: Source, physical routes and mechanism-specific negative checks
+        run: |
+          npm run check
+          node scripts/v8-package-check.mjs
+          node scripts/v8-journey.mjs
+          node scripts/v10-shortcuts.mjs
+          node scripts/v13-audit.mjs
+          npm run build -- --mode yandex --outDir dist-yandex
+      - name: Actual Chromium gameplay and menus
+        run: |
+          npm run preview -- --host 127.0.0.1 --port 4173 >/tmp/preview.log 2>&1 &
+          python3 -m http.server 4174 --bind 127.0.0.1 --directory dist-yandex >/tmp/yandex.log 2>&1 &
+          for i in {1..30}; do curl -fsS http://127.0.0.1:4173/ >/dev/null && break; sleep 1; done
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+          node scripts/v8-browser.mjs
+          node scripts/v8-yandex-browser.mjs
+      - name: Save verified source without altering main
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add src scripts tests index.html maintenance
+          if ! git diff --cached --quiet; then
+            git commit -m 'V13 verified runtime: footprint plates and five distinct physical puzzles'
+            git push origin HEAD:refs/heads/feature/distinct-chambers-v13
+          fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: v13-verification
+          path: |
+            smoke-artifacts/
+            qa/v8-journeys.json
+            qa/v10-shortcut-audit.json
+            qa/v13-audit.json
+          retention-days: 7
+      - uses: actions/upload-artifact@v4
+        with:
+          name: v13-browser
+          path: dist/
+          retention-days: 7
