@@ -17,14 +17,16 @@ jobs:
         with:
           node-version: 22
           cache: npm
-      - name: Apply reviewed textual core changes to the isolated branch
+      - name: Apply reviewed textual changes to the isolated branch
         run: |
           test "$GITHUB_REF_NAME" = 'feature/distinct-chambers-v13'
-          if test -f maintenance/v13-core.patch; then
-            git apply --check maintenance/v13-core.patch
-            git apply maintenance/v13-core.patch
-            rm maintenance/v13-core.patch
-          fi
+          for patch in maintenance/v13-core.patch maintenance/v13-review.patch; do
+            if test -f "$patch"; then
+              git apply --check "$patch"
+              git apply "$patch"
+              rm "$patch"
+            fi
+          done
       - name: Dependencies
         run: |
           npm ci
