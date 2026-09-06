@@ -1,0 +1,42 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import * as THREE from 'three';
+import {createHeadlessGame} from '../scripts/lab-headless.mjs';
+import {resolvePortalPlacement} from '../src/game/LabPortals.js';
+const g=await createHeadlessGame();
+test('every room offers additional continuous portal areas without changing its physical concept',async()=>{
+ for(let i=0;i<10;i++){
+  await g.selectLevel(i,false);const l=g.firstLevel;
+  assert.ok(l.explorationSurfaces.length>=2,`Course ${i+1} lacks choice`);
+  assert.ok(g.portalPanels.length>=4,`Course ${i+1} still has only two slots`);
+  assert.ok(l.world.surfaces.some(s=>s.portal&&s.width>=5.5));
+  const luminance=c=>.2126*c.r+.7152*c.g+.0722*c.b;
+  assert.ok(luminance(l.world.materials.ceramic.color)>luminance(l.world.materials.wall.color)*3);
+  for(const a of l.world.surfaces.filter(s=>s.portal))a.group.traverse(o=>{
+   if(o.isInstancedMesh&&o.userData.portalTile)assert.equal(o.material,l.world.materials.ceramic,'A gray authored albedo must not disguise portalability');
+  });
+ }
+});
+test('a full recovery wall accepts widely separated shots, including tile seams, not a fixed centre',async()=>{
+ await g.selectLevel(9,false);const area=g.firstLevel.panels['vault-front-return'];g.scene.updateMatrixWorld(true);
+ for(const x of [-9,-4,0,4,9])for(const y of [-2.1,5.1]){
+  const point=new THREE.Vector3(x,y,14.76);
+  const result=resolvePortalPlacement(area.mesh,point,{blockers:g.colliders});
+  assert.ok(result.ok,`Rejected wall point ${point.toArray()}: ${result.reason}`);
+  assert.ok(result.position.distanceTo(point)<1e-6,'Shot snapped to a designated slot');
+ }
+});
+test('seventh exit is outside the entire lever tilt plus ordinary jump envelope',async()=>{
+ await g.selectLevel(6,false);const l=g.firstLevel;
+ const maximumLeverHeight=2.2+Math.tan(.32)*11;
+ const jumpRise=7.8*7.8/(2*19.5);
+ assert.ok(l.goal.position.y>maximumLeverHeight+jumpRise+.9);
+ assert.ok(l.panels['lever-receiver'].getFrame().center.y>l.goal.position.y+1.8);
+ assert.equal(l.isWon(),false);
+});
+test('wide portal areas are released on a level change',async()=>{
+ await g.selectLevel(0,false);const count=g.colliders.length,roots=g.scene.children.length;
+ await g.selectLevel(9,false);await g.selectLevel(6,false);await g.selectLevel(0,false);
+ assert.equal(g.colliders.length,count);assert.equal(g.scene.children.length,roots);
+ g.physics.dispose();g.portals.dispose();
+});

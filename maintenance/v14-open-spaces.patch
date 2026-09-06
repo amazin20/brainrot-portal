@@ -1,0 +1,156 @@
+diff --git a/index.html b/index.html
+index 6a2b21b..135fe8c 100644
+--- a/index.html
++++ b/index.html
+@@ -22,7 +22,7 @@
+       <div class="hero-panel">
+         <span class="brand">NESI <i></i> МАЛЕНЬКОЕ ПУТЕШЕСТВИЕ</span>
+         <h1 id="game-title">TRANSFER<br /><span>LAB</span></h1>
+-        <div class="hero-meta"><span>10 уровней · v13</span><span>Один друг</span><span>Можно не спешить</span></div>
++        <div class="hero-meta"><span>10 уровней · v14</span><span>Один друг</span><span>Можно не спешить</span></div>
+         <p class="lead">Десять испытаний: от двух порталов до многоэтапных маршрутов с весом, высотой и перенаправлением полёта. Светлые плиты принимают портал. Тёмные — нет. Друг должен добраться вместе с тобой.</p>
+         <label class="setting-row">Уровень <select id="level-select"></select></label>
+         <button id="play-button" class="primary-button">Отправиться вместе <span aria-hidden="true">↗</span></button>
+diff --git a/src/game/LabCampaignLevels.js b/src/game/LabCampaignLevels.js
+index 6fff805..49ca1f4 100644
+--- a/src/game/LabCampaignLevels.js
++++ b/src/game/LabCampaignLevels.js
+@@ -1,3 +1,4 @@
++import {addExplorationSurfaces} from './LabExplorationSurfaces.js';
+ import {CAMPAIGN as INTRODUCTORY_CAMPAIGN,buildLabCampaignLevel as buildIntroductoryLevel} from './LabIntroductoryCampaign.js';
+ import {EXTENDED_CAMPAIGN,buildExtendedCampaign} from './LabExtendedCampaign.js';
+ 
+@@ -5,5 +6,6 @@ import {EXTENDED_CAMPAIGN,buildExtendedCampaign} from './LabExtendedCampaign.js'
+ export const CAMPAIGN=Object.freeze([...INTRODUCTORY_CAMPAIGN,...EXTENDED_CAMPAIGN]);
+ export function buildLabCampaignLevel(game,index){
+  if(!Number.isInteger(index)||index<0||index>=CAMPAIGN.length)throw new RangeError('Unknown campaign course');
+- return index<INTRODUCTORY_CAMPAIGN.length?buildIntroductoryLevel(game,index):buildExtendedCampaign(game,index);
++ const level=index<INTRODUCTORY_CAMPAIGN.length?buildIntroductoryLevel(game,index):buildExtendedCampaign(game,index);
++ return addExplorationSurfaces(game,level,index);
+ }
+diff --git a/src/game/LabExtendedCampaign.js b/src/game/LabExtendedCampaign.js
+index 4fd9c4d..2346448 100644
+--- a/src/game/LabExtendedCampaign.js
++++ b/src/game/LabExtendedCampaign.js
+@@ -4,7 +4,7 @@ import {cargoLoadsPlate} from './LabPlateContact.js';
+ import {V,inRect,tracePortalRay,rayTouches,beamDrawing,glass,wall,gate,consoleNode,terminalAccessible,ringDevice,rotorDevice,integrateBalance,impactPiston} from './LabPuzzleMechanics.js';
+ export const EXTENDED_CAMPAIGN=Object.freeze([
+  {id:'crossed-light',title:'Перекрёстный свет',description:'Калибровочная кабина, зеркало и свет, проходящий через порталы.',assets:[1,2,11,22,24],concept:'Оптика',hints:['Свет проходит через связанную пару так же, как предмет. Серебристый диск отражает луч.','До отражателя нельзя дотянуться снаружи кабины, но в её окне видна портальная панель.','Сначала войди в кабину и поверни зеркало. Вернись, свяжи панель напротив излучателя с панелью перед зеркалом. Свет должен попасть в круглый приёмник.']},
+- {id:'moment-arm',title:'Точка опоры',description:'Один мост, подвижный противовес и настоящий момент силы.',assets:[1,2,11,22,23,24],concept:'Равновесие рычага',hints:['Один и тот же вес сильнее поворачивает мост, когда находится дальше от оси. Игрок тоже нагружает мост.','Противовес можно передвинуть терминалом. Одного противовеса не хватает удержать дальний конец под твоим весом.','Сдвинь противовес к ближнему концу, подготовь портал на конце моста и оставь там друга. Перейди мост, найди приёмную панель за выступом и верни груз.']},
++ {id:'moment-arm',title:'Точка опоры',description:'Один мост, подвижный противовес и настоящий момент силы.',assets:[1,2,11,22,23,24],concept:'Равновесие рычага',hints:['Один и тот же вес сильнее поворачивает мост, когда находится дальше от оси. Игрок тоже нагружает мост.','Противовес можно передвинуть терминалом. Одного противовеса не хватает удержать дальний конец под твоим весом.','Сдвинь противовес и оставь друга на дальнем плече. С промежуточной галереи отправь друга в верхний док. Затем перенеси вход на стену галереи и пройди сам.']},
+  {id:'wind-column',title:'Ветер за углом',description:'Перенаправь воздушную струю и поймай восходящий поток.',assets:[1,2,11,22,23,24],concept:'Сила воздушного потока',hints:['Вентилятор создаёт постоянную силу, а не разовый прыжок. Частицы показывают направление воздуха.','Напольный выход превратит горизонтальную струю в восходящую. Высокая площадка находится сбоку от потока.','Свяжи панель напротив вентилятора с плитой внизу шахты. Включи нагнетание, возьми друга, войди в поток и на высоте уйди к верхней площадке.']},
+  {id:'impact-workshop',title:'Работа удара',description:'Ролики разгоняют груз. Его импульс сжимает пружину и защёлкивает затвор.',assets:[1,2,11,22,24],concept:'Кинетическая энергия и упругость',hints:['Пружинный затвор находится в низком канале. Слабого толчка недостаточно сжать пружину до защёлки.','Ролики придают другу скорость. Портальная пара должна направить этот импульс в торец поршня.','Настрой пару с выхода роликов в канал перед поршнем, включи движение вперёд и отпусти друга на загрузочном столе. После удара откроется крышка канала — забери друга.']},
+  {id:'vector-vault',title:'Векторный сейф',description:'Управляй полем в закрытом лабиринте и подготовь путь извлечения друга.',assets:[1,2,11,22,23,24],concept:'Дистанционное управление силами',hints:['Под стеклом действует направленное поле. Оно толкает свободного друга по стрелке, но не переносит его мгновенно.','Сначала рассмотри проходы сверху и подготовь портал в открытом колодце. Крышка не пропускает руки.','На терминале меняй направление: вправо, к дальней стене, влево, к дальней стене, вправо, к колодцу. Свяжи дно колодца с панелью на верхней галерее.']},
+@@ -47,8 +47,8 @@ export function buildExtendedCampaign(game,index){
+    state.segments=tracePortalRay(game,V(-9.8,2.1,6),V(1,0,0),{reflectors:[reflector]});state.lit=rayTouches(state.segments,V(9.7,2.1,-8));sensor.glow.material.color.setHex(state.lit?0x9af4bd:0xa38b6b);ray.update(state.segments);door.update(state.lit,dt,time);};
+   reset=()=>{state.mirror=state.target=0;state.lit=false;door.reset();};render=a=>door.render(a,time);
+  }else if(index===6){
+-  bounds={minX:-13,maxX:13,minZ:-17,maxZ:15};spawn=[8,2.2,2];cargoSpawn=[6,2.75,1];world.walls(bounds,12,-4.5);
+-  world.floor(-13,13,-17,15,-4);world.floor(1.85,13,-3,3,2.2);world.floor(-4,7,-17,-10.4,5.5);
++  bounds={minX:-13,maxX:13,minZ:-17,maxZ:15};spawn=[8,2.2,2];cargoSpawn=[6,2.75,1];world.walls(bounds,14,-4.5);
++  world.floor(-13,13,-17,15,-4);world.floor(1.85,13,-3,3,2.2);world.floor(-10,7,-17,-10.4,5.5);
+   // A recovery stair returns only to the entrance, never to the high exit.
+   world.stairs(9,12,4,14,-4,2.2);world.floor(9,13,3,4,-4);
+   const bridge=new THREE.Group();bridge.position.set(0,2.2,0);world.root.add(bridge);
+@@ -60,7 +60,7 @@ export function buildExtendedCampaign(game,index){
+   const axle=new THREE.Mesh(new THREE.CylinderGeometry(.45,.45,5.7,16),world.materials.trim);axle.rotation.z=Math.PI/2;axle.position.y=2;world.root.add(axle);
+   const mass=world.box([0,-.8,-6],[2,.9,1.3],world.materials.trim,false,bridge);world.box([0,-.8,0],[.12,.12,16],world.materials.accent,false,bridge);
+   const load=patch('lever-load',[0,.027,8.4],[0,1,0],3.2,3.8,bridge,true);load.collider.walkablePlane=true;game.colliders=game.colliders.filter(c=>c!==load.collider);load.mesh.userData.portalColliderId=collider.mesh.uuid;collider.frontPlane=()=>load.getFrame();
+-  const receiver=patch('lever-receiver',[6.8,7.6,-14],[ -1,0,0]);
++  const receiver=patch('lever-receiver',[6.8,11.1,-14],[ -1,0,0]);
+   world.box([4.5,6,-11.55],[5,12,.25]);
+   console([8,2.2,0],()=>{state.counterIndex=(state.counterIndex+1)%3;game.audio?.mechanism?.('switch');},'balance','E — сдвинуть противовес. Важны вес и расстояние от оси; игрок тоже нагружает мост.');
+   Object.assign(state,{angle:0,omega:0,previousAngle:0,counterIndex:0,counterZ:-6,torque:0,bridge,load,collider});
+@@ -68,7 +68,11 @@ export function buildExtendedCampaign(game,index){
+   const f={minX:-1.9,maxX:1.9,minZ:-11,maxZ:11,y:2.2,mesh:deck,enabled:true,heightAt,normalAt:()=>V(0,Math.cos(state.angle),Math.sin(state.angle))};game.floors.push(f);
+   const contact=()=>cargoLoadsPlate(game.cargo,game.heldCube,{center:V(0,2.2,0),normal:V(0,Math.cos(state.angle),Math.sin(state.angle)),right:V(-1,0,0),up:V(0,-Math.sin(state.angle),Math.cos(state.angle)),halfWidth:1.9,halfHeight:11});
+   mechanicalContact=()=>contact(game.cargo.position);
+-  goal=world.goal([0,5.5,-14.5],[4.8,4]);
++  // A distinct upper dock is outside the deck's full tilt + jump envelope.
++  // Reaching the lever landing is not reaching the exit: carry must be solved
++  // with a portal transfer, including when bunny-hopping unloads the deck.
++  world.floor(2.2,7,-17,-12,9);
++  goal=world.goal([4.6,9,-14.5],[4.4,4]);
+   function pose(angle,dt){bridge.rotation.x=angle;bridge.updateWorldMatrix(true,true);collider.box.setFromObject(deck);load.collider.box.setFromObject(load.mesh);
+    if(!game.physics)return;
+    // Physical boxes rotate with the authored deck; never replace them by AABBs.
+@@ -123,7 +127,10 @@ export function buildExtendedCampaign(game,index){
+   reset=()=>{state.direction=-1;piston.reset();if(piston.body){piston.body.type=1;piston.body.updateMassProperties();}hood.position.x=0;door.reset();};render=a=>{piston.render();door.render(a,time);};
+  }else{
+   bounds={minX:-15,maxX:15,minZ:-15,maxZ:15};spawn=[-12,3,11];cargoSpawn=[-6,.55,6];world.walls(bounds,12,-4.5);world.floor(-15,15,-15,15,-4.2);
+-  world.floor(-15,15,9.6,15,3);world.floor(-15,-9.5,-15,9.6,3);world.floor(9.5,15,-15,9.6,3);world.floor(-9.5,9.5,-15,-9.6,3);
++  world.floor(-15,15,9.6,15,3);world.floor(-15,-9.5,-15,-8.5,3);world.floor(-11.2,-9.5,-8.5,9.6,3);
++  // A real stairwell is cut out of the west observation ring. Its upper end
++  // returns to the entrance, not to the cargo well or completion area.
++  world.stairs(-14.2,-11.5,-8.5,9.6,-4.2,3);world.floor(9.5,15,-15,9.6,3);world.floor(-9.5,9.5,-15,-9.6,3);
+   const mazeFloor=world.floor(-8,8,-5,9,0);world.floor(-8,4,-9,-5,0);const well=world.floor(4,8,-9,-5,-4);
+   // Transparent sealed cover makes the remote-object problem physically clear.
+   glass(world,[0,1.52,2],[16.2,.10,14]);glass(world,[-2,1.52,-7],[12,.10,4]);
+diff --git a/src/game/LabExtendedJourney.js b/src/game/LabExtendedJourney.js
+index ea8e623..89aec2e 100644
+--- a/src/game/LabExtendedJourney.js
++++ b/src/game/LabExtendedJourney.js
+@@ -21,7 +21,9 @@ export async function runExtendedStages(d){
+   collect();walk(0,1);walk(0,5.5);walk(0,7.75);drop();
+   wait(2);mark('same load creates a larger torque at the end of the lever');
+   walk(0,0);walk(0,-9.5);walk(0,-12.8);mark('crossed a load-balanced physical deck');
+-  aim(1,level.panels['lever-receiver'].getFrame().center);wait(2);mark('retrieval after releasing lever load');collect();walk(0,-14.5);
++  walk(-7.8,-14);aim(1,level.panels['lever-receiver'].getFrame().center);wait(2);mark('retrieval after releasing lever load');
++  walk(-7.8,-14);aim(0,level.panels['balance-upper-transfer'].getFrame().center);enter(level.panels['balance-upper-transfer']);
++  if(game.state!=='won'){collect();walk(4.6,-14.5);}
+  }else if(level.index===7){
+   aim(0,level.panels['air-intake'].getFrame().center);
+   walk(0,3);aim(1,level.panels['air-up'].getFrame().center);
+diff --git a/src/game/LabTileWorld.js b/src/game/LabTileWorld.js
+index 8f1de07..71d79b7 100644
+--- a/src/game/LabTileWorld.js
++++ b/src/game/LabTileWorld.js
+@@ -14,7 +14,22 @@ const FINISHES=new Map([
+ export class LabTileWorld extends StructuralWorld{
+  constructor(game,palette){
+   super(game,{...palette,...(FINISHES.get(palette.wall)||{})});
+-  this.materials.trim.color.setHex(0x262a2e);
++  this.materials.trim.color.setHex(0x171d24);
++  this.materials.wall.color.setHex(0x29313a);
++  this.materials.floor.color.setHex(0x424b55);
++  this.materials.ceramic.color.setHex(0xfffbed);
++  this.materials.ceramic.emissive.setHex(0x6b706e);
++  this.materials.ceramic.emissiveIntensity=.16;
++ }
++ surface(options){
++  const area=super.surface(options);
++  if(options.portal)area.group.traverse(o=>{if(o.isInstancedMesh&&o.userData.portalTile)o.material=this.materials.ceramic;});
++  return area;
++ }
++ patch(name,position,normal,width=4,height=4,parent=this.root,moving=false){
++  const expansions={'entry':10,'exit':9,'receiver':7,'cab-entry':7,'light-intake':10,'air-intake':10};
++  if(!moving&&expansions[name])width=Math.max(width,expansions[name]);
++  return super.patch(name,position,normal,width,height,parent,moving);
+  }
+  walls(bounds,height,base=-.2){
+   const {minX,maxX,minZ,maxZ}=bounds;
+diff --git a/src/main.js b/src/main.js
+index 441342c..0f8bfc3 100644
+--- a/src/main.js
++++ b/src/main.js
+@@ -36,6 +36,7 @@ const game=new LabGame({container:$('#game'),touch:{joystick:$('#joystick'),joys
+   onReady:()=>{hideScreens();setState('ready');screen('start-screen',true);platform?.ready();
+     game.audio.configure(preferences.value);applyLabQuality(game,preferences.value.quality);diagnostics();
+     if(debug){window.__NESI_DEMO_GAME__=game;window.__NESI_PLATFORM__=platform;window.__NESI_PREFS__=preferences;
++      window.__NESI_RUN_RECOVERY_ROUTE__=async()=>{const {runRecoveryJourney}=await import('./game/LabRecoveryJourney.js');game.renderer.setAnimationLoop(null);hideScreens();setState('playing');try{return await runRecoveryJourney(game,{onMilestone:()=>game.render()});}finally{game.render();clearInput();setState(game.state);}};
+       window.__NESI_RUN_LEVEL_ROUTE__=async()=>{const {runV8Journey}=await import('./game/LabV8Journey.js');game.renderer.setAnimationLoop(null);hideScreens();setState('playing');
+         try{return await runV8Journey(game,{onMilestone:()=>game.render()});}finally{game.render();clearInput();setState(game.state);diagnostics();}};}
+     $('#play-button').focus({preventScroll:true});if(query.get('smoke')==='1')enterLevel(game.levelIndex,'initial');},
+diff --git a/tests/lab-v8-campaign.test.js b/tests/lab-v8-campaign.test.js
+index 1efe5ee..61ac212 100644
+--- a/tests/lab-v8-campaign.test.js
++++ b/tests/lab-v8-campaign.test.js
+@@ -19,7 +19,7 @@ test('v8 five courses have distinct geometry, declared purposeful assets and rea
+  assert.equal(layouts.size,5);
+ });
+ test('v8 low first level contains no lift, weight switch or unexplained furniture',async()=>{
+- await g.selectLevel(0,false);const l=g.firstLevel;assert.equal(l.pads.length,0);assert.equal(l.fixtures.length,0);assert.equal(l.terminals.length,0);assert.equal(l.lift,null);assert.equal(l.world.surfaces.filter(s=>s.portal).length,2);
++ await g.selectLevel(0,false);const l=g.firstLevel;assert.equal(l.pads.length,0);assert.equal(l.fixtures.length,0);assert.equal(l.terminals.length,0);assert.equal(l.lift,null);assert.equal(l.world.surfaces.filter(s=>s.portal).length,6);
+ });
+ test('v8 gravity fling retains momentum with no input, not airborne velocity damping',()=>{
+  g.resetRun(true);g.playerPosition.set(0,6,0);g.previousPlayerPosition.copy(g.playerPosition);g.playerGrounded=false;g.playerVelocity.set(8,0,0);
