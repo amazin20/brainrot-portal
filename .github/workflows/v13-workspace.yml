@@ -1,0 +1,28 @@
+name: V13 exact workspace
+on:
+  push:
+    branches: ['feature/distinct-chambers-v13']
+    paths: ['.github/workflows/v13-workspace.yml']
+permissions:
+  contents: read
+jobs:
+  workspace:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm install --no-save --package-lock=false puppeteer-core@24.16.0
+      - name: Export exact development source
+        run: |
+          git rev-parse HEAD > SOURCE_REVISION
+          tar --exclude='./.git' --exclude='./dist' --exclude='./smoke-artifacts' -czf /tmp/nesi-v13-workspace.tgz .
+      - uses: actions/upload-artifact@v4
+        with:
+          name: v13-workspace
+          path: /tmp/nesi-v13-workspace.tgz
+          retention-days: 1
