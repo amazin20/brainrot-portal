@@ -31,7 +31,13 @@ try{
  assert.equal(report.initial.models,4);assert.ok(report.initial.oldHudHidden);assert.equal(report.initial.audioState,'running');
  for(let index=0;index<CAMPAIGN.length;index++){
    if(index>0){await clickMenu('#play-again-button');await page.waitForFunction(i=>window.__NESI_DEMO_GAME__?.levelIndex===i&&window.__NESI_DEMO_GAME__.state==='playing',{},index);await shot(`level-${index+1}-start`);}
-   const result=await page.evaluate(()=>window.__NESI_RUN_LEVEL_ROUTE__());report.routes.push(result);console.log('Browser course',index+1,'passed',result.frames,'frames');assert.ok(result.pass&&result.resets===0&&result.respawns===0);
+   const captured=await page.evaluate(async()=>{
+     const g=window.__NESI_DEMO_GAME__,original=g.render,images=[];
+     g.render=function(){original.call(this);if(this.levelIndex>=5&&this.state==='playing')images.push(this.renderer.domElement.toDataURL('image/png'));};
+     try{return {route:await window.__NESI_RUN_LEVEL_ROUTE__(),images};}finally{g.render=original;}
+   });
+   captured.images.forEach((image,k)=>fs.writeFileSync(`${out}/level-${index+1}-mechanic-${k+1}.png`,Buffer.from(image.split(',')[1],'base64')));
+   const result=captured.route;report.routes.push(result);console.log('Browser course',index+1,'passed',result.frames,'frames');assert.ok(result.pass&&result.resets===0&&result.respawns===0);
    assert.equal(await page.$eval('#level-number',e=>e.textContent),String(index+1));
    assert.equal(await page.$('#quick-hint'),null);assert.equal(await page.$('#quick-settings'),null);await shot(`level-${index+1}-complete`);
    // Art-only overview: camera changes are explicitly not passage evidence.

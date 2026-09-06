@@ -58,7 +58,7 @@ export function buildLabCampaignLevel(game,index) {
     const f={minX:top.min.x,maxX:top.max.x,minZ:top.min.z,maxZ:top.max.z,y:mechanism.getSupport().center.y,mesh:collider.mesh,enabled:true};game.floors.push(f);
     const p={art,mechanism,collider,position:V(x,y+.2,z),floor:f,top:surface,progress:0,previousProgress:0,pressed:false,contact:0};pads.push(p);return p;
   }
-  const weighted=p=>!!game.cargo&&!game.heldCube&&game.cargoOnPad(p.mechanism.getPortalFrame().center,1.15);
+  const weighted=p=>!!game.cargo&&!game.heldCube&&game.cargoOnPad(p.mechanism.getLoadFrame());
   function doorway(z,pad,roomWidth=16,ceiling=9) {
     const g=createArchitecturalGate(game,{z,roomWidth,roomHeight:ceiling,constructWalls:false});
     for(const s of [-1,1])for(const front of [-1,1])world.surface({name:'gate surround',position:[s*(roomWidth/4+1.2),ceiling/2,z+front*.25],normal:[0,0,front],width:roomWidth/2-2.4,height:ceiling});

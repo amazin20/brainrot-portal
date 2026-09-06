@@ -1,3 +1,4 @@
+import { cargoLoadsPlate } from './LabPlateContact.js';
 import * as THREE from 'three';
 import { InputController } from './InputController.js';
 import { AudioController } from './AudioController.js';
@@ -551,6 +552,8 @@ export class LabGame {
         this.audio.jump();
       }
     }
+    const field=this.firstLevel?.playerAcceleration?.(this.playerPosition,this.playerVelocity);
+    if(field){this.playerVelocity.addScaledVector(field,dt);if(field.y>19.5)this.playerGrounded=false;}
     this.playerVelocity.y -= 19.5 * dt;
     this.playerPosition.addScaledVector(this.playerVelocity, dt);
     const center = this.playerPosition.clone().addScaledVector(UP, CENTER_HEIGHT);
@@ -631,7 +634,8 @@ export class LabGame {
   floorHeight(x, z, maxY = Infinity, throughPortals = false) {
     let height = null;
     for (const f of this.floors) {
-      const y = f.y ?? 0;
+      const y = f.heightAt ? f.heightAt(x,z) : (f.y ?? 0);
+      if(y===null)continue;
       if (throughPortals && f.mesh && this.portalOpensCollider({ mesh: f.mesh,
         box: this.colliders.find(c => c.mesh === f.mesh)?.box }, new THREE.Vector3(x, y + CENTER_HEIGHT, z), PLAYER_RADIUS)) continue;
       if (f.enabled !== false && y <= maxY + .001 && x >= f.minX && x <= f.maxX && z >= f.minZ && z <= f.maxZ) height = height === null ? y : Math.max(height, y);
@@ -646,7 +650,7 @@ export class LabGame {
 
   sampleFootSupport(x, z, maxY) {
     let height = this.floorHeight(x, z, maxY), normal = UP.clone();
-    for (const c of this.colliders) if (c.enabled !== false && c.box.max.y <= maxY
+    for (const c of this.colliders) if (!c.walkablePlane && c.enabled !== false && c.box.max.y <= maxY
       && x >= c.box.min.x && x <= c.box.max.x && z >= c.box.min.z && z <= c.box.max.z
       && (height === null || c.box.max.y > height)) height = c.box.max.y;
     for (const ramp of this.ramps) {
@@ -654,6 +658,7 @@ export class LabGame {
       const surface = sampleRampSurface(ramp, z);
       if (Math.abs(surface.height - height) < .015) normal.copy(surface.normal);
     }
+    for(const f of this.floors)if(f.heightAt&&Math.abs((f.heightAt(x,z)??-1e9)-height)<.015&&f.normalAt)normal.copy(f.normalAt());
     return height === null ? null : { height, normal };
   }
 
@@ -670,7 +675,7 @@ export class LabGame {
 
   resolveBody(position, previous, velocity, radius, height, allowPortals = false) {
     for (let iteration = 0; iteration < 3; iteration++) for (const collider of this.colliders) {
-      if (!collider.enabled) continue;
+      if (!collider.enabled || collider.walkablePlane) continue;
       // A tilted plate's world AABB includes empty air in front of its real
       // surface. Reject that broad-phase false positive before resolution.
       if (collider.frontPlane) {
@@ -812,6 +817,7 @@ export class LabGame {
       this.cargoLaunchCooldown = cargoLaunch.duration + .1; this.companionAnimator.trigger('startle');
     }
     this.cargoLaunchCooldown = Math.max(0, (this.cargoLaunchCooldown ?? 0) - dt);
+    this.firstLevel?.applyCargoForces?.(dt);
     this.physics.setPlayerProxy({ position: this.playerPosition, radius: PLAYER_RADIUS, height: PLAYER_HEIGHT, velocity: this.playerVelocity }, dt);
     this.physics.step(dt);
     let sample = this.physics.sample(1);
@@ -844,6 +850,7 @@ export class LabGame {
   }
 
   cargoOnPad(position, radius = .86) {
+    if(position?.center&&position?.right)return cargoLoadsPlate(this.cargo,this.heldCube,position,CUBE_RADIUS);
     const p = Array.isArray(position) ? new THREE.Vector3(...position) : position;
     return !this.heldCube && Math.hypot(this.cargo.position.x - p.x, this.cargo.position.z - p.z) < radius
       && this.cargo.position.y > p.y + .18 && this.cargo.position.y < p.y + .75 && this.cargo.velocity.length() < 1.0;

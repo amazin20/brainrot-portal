@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import {LabTileWorld} from './LabTileWorld.js';
+import {cargoLoadsPlate} from './LabPlateContact.js';
 import {V,inRect,tracePortalRay,rayTouches,beamDrawing,glass,wall,gate,consoleNode,ringDevice,rotorDevice,integrateBalance,impactPiston} from './LabPuzzleMechanics.js';
 export const EXTENDED_CAMPAIGN=Object.freeze([
  {id:'crossed-light',title:'Перекрёстный свет',description:'Калибровочная кабина, зеркало и свет, проходящий через порталы.',assets:[1,2,11,22,24],concept:'Оптика',hints:['Свет проходит через связанную пару так же, как предмет. Серебристый диск отражает луч.','До отражателя нельзя дотянуться снаружи кабины, но в её окне видна портальная панель.','Сначала войди в кабину и поверни зеркало. Вернись, свяжи панель напротив излучателя с панелью перед зеркалом. Свет должен попасть в круглый приёмник.']},
@@ -28,6 +29,7 @@ export function buildExtendedCampaign(game,index){
   // A real low service slot admits sightlines, not a standing player.
   world.box([-5,.62,-4.5],[.25,1.24,5]);world.box([-5,6.4,-4.5],[.25,7.2,5]);
   for(const z of [-7,-2])world.box([-7.5,5,z],[5,10,.25]);
+  world.box([-10.05,5,-4.5],[.25,10,5]);
   for(const y of [1.25,2.8])world.box([-4.84,y,-4.5],[.06,.06,5],world.materials.accent,false);
   patch('light-intake',[11.8,2.1,6],[-1,0,0]);
   patch('light-outlet',[0,2.1,-3],[0,0,-1]);
@@ -64,7 +66,7 @@ export function buildExtendedCampaign(game,index){
   Object.assign(state,{angle:0,omega:0,previousAngle:0,counterIndex:0,counterZ:-6,torque:0,bridge,load,collider});
   const heightAt=(x,z)=>Math.abs(x)<=1.9&&Math.abs(z)<=11*Math.cos(state.angle)?2.2-Math.tan(state.angle)*z:null;
   const f={minX:-1.9,maxX:1.9,minZ:-11,maxZ:11,y:2.2,mesh:deck,enabled:true,heightAt,normalAt:()=>V(0,Math.cos(state.angle),Math.sin(state.angle))};game.floors.push(f);
-  const contact=p=>{const y=heightAt(p.x,p.z);return y!==null&&Math.abs(p.y-y-.39)<.20;};
+  const contact=()=>cargoLoadsPlate(game.cargo,game.heldCube,{center:V(0,2.2,0),normal:V(0,Math.cos(state.angle),Math.sin(state.angle)),right:V(-1,0,0),up:V(0,-Math.sin(state.angle),Math.cos(state.angle)),halfWidth:1.9,halfHeight:11});
   mechanicalContact=()=>contact(game.cargo.position);
   goal=world.goal([0,5.5,-14.5],[4.8,4]);
   function pose(angle,dt){bridge.rotation.x=angle;bridge.updateWorldMatrix(true,true);collider.box.setFromObject(deck);load.collider.box.setFromObject(load.mesh);
@@ -78,7 +80,7 @@ export function buildExtendedCampaign(game,index){
    state.counterZ=THREE.MathUtils.damp(state.counterZ,[-6,0,6][state.counterIndex],2.4,dt);mass.position.z=state.counterZ;
    const cargoMoment=!game.heldCube&&contact(game.cargo.position)?3.2*game.cargo.position.z:0;
    const playerMoment=aboard?(3.2+(game.heldCube?3.2:0))*game.playerPosition.z:0;
-   state.torque=19.5*(2.7*state.counterZ+cargoMoment+playerMoment)*Math.cos(state.angle);
+   state.torque=19.5*(2.7*state.counterZ*Math.cos(state.angle)+cargoMoment+playerMoment);
    integrateBalance(state,state.torque,dt);pose(state.angle,dt);
    if(aboard&&dt){const next=heightAt(game.playerPosition.x,game.playerPosition.z);if(next!==null){game.playerPosition.y+=next-py;game.previousPlayerPosition.y+=next-py;}}
   };
@@ -108,7 +110,7 @@ export function buildExtendedCampaign(game,index){
   patch('belt-end',[9.8,2.2,6.2],[-1,0,0]);patch('impact-entry',[0,2.1,-2.8],[0,0,-1]);
   const lane=world.floor(-2,2,-11,-3,.02),piston=impactPiston(world,-8.5);state.piston=piston;
   for(const x of [-2.1,2.1])world.box([x,.65,-8],[.14,1.3,6]);
-  const hood=glass(world,[0,1.55,-8],[4.3,.12,5.8]),hoodCollider=game.colliders.find(c=>c.mesh===hood);
+  const hood=glass(world,[0,2.25,-8],[4.3,.12,5.8]),hoodCollider=game.colliders.find(c=>c.mesh===hood);
   const door=gate(world,-12.3,26,10);state.door=door;
   console([-11,1,4],()=>{state.direction*=-1;game.audio?.mechanism?.('switch');},'belt','E — направление роликов. Скорость друга сжимает пружину; защёлка удержит затвор.');
   const arrow=new THREE.ArrowHelper(V(1,0,0),V(-7,1.05,5),2.5,0xf0bc7d,.5,.35);world.root.add(arrow);
@@ -117,20 +119,20 @@ export function buildExtendedCampaign(game,index){
    const x=THREE.MathUtils.damp(hood.position.x,piston.latched?5:0,4,dt);hood.position.x=x;hoodCollider.box.setFromObject(hood);game.physics?.updateStaticBox(hood.uuid,hoodCollider.box,dt);};
   mechanicalContact=()=>inRect(game.cargo.position,[-10,10,4.6,7.8])||inRect(game.cargo.position,[-2,2,-11,-3]);
   applyCargoForces=()=>{piston.forces();if(game.heldCube)return;const p=game.cargo.position,b=game.physics.cargoBody;
-   if(inRect(p,[-10,9.8,4.6,7.8])&&Math.abs(p.y-1.39)<.3){b.force.x+=b.mass*THREE.MathUtils.clamp((state.direction*10-b.velocity.x)*12,-65,65);b.wakeUp();}};
+   if(inRect(p,[-10,9.8,4.6,7.8])&&Math.abs(p.y-1.39)<.3){b.force.x+=b.mass*THREE.MathUtils.clamp((state.direction*12-b.velocity.x)*12,-65,65);b.wakeUp();}};
   reset=()=>{state.direction=-1;piston.reset();if(piston.body){piston.body.type=1;piston.body.updateMassProperties();}hood.position.x=0;door.reset();};render=a=>{piston.render();door.render(a,time);};
  }else{
   bounds={minX:-15,maxX:15,minZ:-15,maxZ:15};spawn=[-12,3,11];cargoSpawn=[-6,.55,6];world.walls(bounds,12,-4.5);world.floor(-15,15,-15,15,-4.2);
   world.floor(-15,15,9.6,15,3);world.floor(-15,-9.5,-15,9.6,3);world.floor(9.5,15,-15,9.6,3);world.floor(-9.5,9.5,-15,-9.6,3);
   const mazeFloor=world.floor(-8,8,-5,9,0);world.floor(-8,4,-9,-5,0);const well=world.floor(4,8,-9,-5,-4);
   // Transparent sealed cover makes the remote-object problem physically clear.
-  glass(world,[0,1.52,2],[16.2,.10,14.2]);glass(world,[-2,1.52,-7],[12,.10,4]);
+  glass(world,[0,1.52,2],[16.2,.10,14]);glass(world,[-2,1.52,-7],[12,.10,4]);
   world.box([0,.7,9],[16.2,1.4,.18]);world.box([-2,.7,-9],[12,1.4,.18]);world.box([6,-2,-9],[4,4,.18]);
   for(const x of [-8,7.2])world.box([x,.7,0],[.18,1.4,18]);
   world.box([-3,.7,3],[10,1.4,.2]);world.box([3,.7,-1],[10,1.4,.2]);world.box([-2.5,.7,-5],[11,1.4,.2]);
   // An observation spur looks into a dead-end, rather than another repeated room.
   world.box([-5,.7,7.7],[.18,1.4,2]);world.box([-6.5,.7,6.7],[3,1.4,.18]);
-  patch('well',[6,-3.975,-7],[0,1,0],3.8,3.8);patch('collection',[14.8,5.1,-8],[-1,0,0]);
+  patch('well',[6.4,-3.975,-7],[0,1,0],3.2,3.8);patch('collection',[14.8,5.1,-8],[-1,0,0]);
   const directions=[V(1,0,0),V(0,0,-1),V(-1,0,0),V(0,0,1)];state.direction=0;state.enabled=false;
   const pointer=new THREE.ArrowHelper(directions[0],V(0,2.0,6),2,0xcbb8f0,.65,.4);world.root.add(pointer);
   const device=ringDevice(world,[0,6.8,0],[0,-1,0],0xcbb8f0,1.15);world.box([0,9.5,0],[.18,5,.18],world.materials.trim,false);

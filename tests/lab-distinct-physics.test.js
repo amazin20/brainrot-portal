@@ -82,6 +82,22 @@ test('vector field applies forces to the same companion but never to a held load
 test('low glass cover prevents retrieving the companion directly from the upper walkway',async()=>{
  await g.selectLevel(9,false);g.resetRun(true);g.playerPosition.set(-6,3,6);g.previousPlayerPosition.copy(g.playerPosition);g.interact();assert.equal(g.heldCube,null);
 });
+test('calibration cabin cannot be entered by walking around any of its four sides',async()=>{
+ await g.selectLevel(5,false);
+ for(const [start,dir]of [[[-11,0,-4.5],[1,0]],[[-3,0,-4.5],[-1,0]],[[-8,0,0],[0,-1]],[[-8,0,-8.7],[0,1]]])for(const jump of [false,true]){
+  g.resetRun(true);g.playerPosition.fromArray(start);g.previousPlayerPosition.copy(g.playerPosition);g.playerGrounded=true;g.yaw=0;
+  g.input.getMove=()=>new THREE.Vector2(...dir);g.input.jumpQueued=jump;g.input.keys.add('ShiftLeft');
+  for(let n=0;n<360;n++){g.updatePlayer(1/120);const p=g.playerPosition;assert.ok(!(p.x> -9.65&&p.x< -5.4&&p.z> -6.5&&p.z< -2.5),'cabin bypass');}
+ }
+});
+test('piston body retains a matching physical obstruction for the player and camera',async()=>{
+ await g.selectLevel(8,false);g.resetRun(true);const p=g.firstLevel.state.piston;
+ assert.ok(g.colliders.includes(p.collider));assert.ok(g.cameraBlockers.includes(p.mesh));
+ p.body.position.z-=.6;p.render();assert.ok(Math.abs(p.collider.box.getCenter(V()).z-p.body.position.z)<1e-9);
+ const point=V(0,0,-8.8),previous=V(0,0,-7),velocity=V(0,0,-3);
+ const colliders=g.colliders;g.colliders=[p.collider];
+ try{g.resolveBody(point,previous,velocity,.43,2.45);assert.ok(point.z>-8.5);}finally{g.colliders=colliders;}
+});
 test('optical and impact doors start closed; restarting clears actuator state',async()=>{
  for(const i of [5,8]){await g.selectLevel(i,false);g.resetRun(true);assert.equal(g.firstLevel.state.door.open,false);assert.equal(g.firstLevel.isWon(),false);}
  g.physics.dispose();g.portals.dispose();

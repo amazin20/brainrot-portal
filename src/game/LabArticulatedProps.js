@@ -165,6 +165,7 @@ export class LabPressurePlatform {
     this.art.updateWorldMatrix(true, true);
   }
   getPortalFrame() { return worldSurface(this.surface); }
+  getLoadFrame() { const f=worldSurface(this.surface); return {...f,halfWidth:f.halfWidth*(.355/.30),halfHeight:f.halfHeight*(.355/.30)}; }
   getSupport() { return support(this.surface); }
   getFrameBox() { return worldBox(this.frame); }
   getTopBox() { return worldBox(this.top); }
