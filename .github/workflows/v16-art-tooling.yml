@@ -1,0 +1,20 @@
+name: V16 asset optimization tools
+on:
+  push:
+    branches: ['feature/twenty-workshops-v16']
+    paths: ['.github/workflows/v16-art-tooling.yml']
+permissions:
+  contents: read
+jobs:
+  tools:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm pack meshoptimizer@1.1.0
+      - uses: actions/upload-artifact@v4
+        with:
+          name: meshoptimizer-v16
+          path: meshoptimizer-*.tgz
+          retention-days: 1
