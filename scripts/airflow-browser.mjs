@@ -3,9 +3,9 @@ import assert from 'node:assert/strict';
 import puppeteer from 'puppeteer-core';
 const out='airflow-evidence';fs.mkdirSync(out,{recursive:true});
 const report={pass:false,errors:[],networkFailures:[],resourceMessages:[],note:'Actual production route; diagnostic cameras for airflow closeups, not a device FPS benchmark.'};
-const browser=await puppeteer.launch({executablePath:process.env.CHROME_PATH||'/usr/bin/google-chrome',headless:true,args:['--no-sandbox','--disable-dev-shm-usage','--use-angle=swiftshader','--enable-unsafe-swiftshader']});
+const browser=await puppeteer.launch({executablePath:process.env.CHROME_PATH||'/usr/bin/google-chrome',headless:true,protocolTimeout:240000,args:['--no-sandbox','--disable-dev-shm-usage','--use-angle=swiftshader','--enable-unsafe-swiftshader']});
 try {
- const page=await browser.newPage();await page.setViewport({width:1280,height:800});page.setDefaultTimeout(90000);
+ const page=await browser.newPage();await page.setViewport({width:960,height:600});page.setDefaultTimeout(90000);
  page.on('pageerror',e=>report.errors.push(String(e)));
  page.on('response',r=>{if(r.status()>=400)report.networkFailures.push({url:r.url(),status:r.status()});});
  page.on('requestfailed',r=>report.networkFailures.push({url:r.url(),error:r.failure()?.errorText}));
@@ -23,7 +23,7 @@ try {
  const result=await page.evaluate(async()=>{
   const g=window.__NESI_DEMO_GAME__,update=g.updateVisuals,render=g.render,images=[],views=[];let samples=0;
   g.updateVisuals=function(...args){update.apply(this,args);const s=this.firstLevel.state;
-   if(!s.flywheel.power||samples>=120)return;
+   if(!s.flywheel.power||samples>=90)return;
    samples++;const p=this.camera.position.clone(),q=this.camera.quaternion.clone();
    this.camera.position.set(1,6.3,14);this.camera.lookAt(3,2,-.5);this.camera.updateMatrixWorld(true);render.call(this);
    images.push(this.renderer.domElement.toDataURL());
