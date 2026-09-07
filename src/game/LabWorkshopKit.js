@@ -61,7 +61,7 @@ export class Workshop {
   }
   const a=V(...from),b=V(...to),prev=a.clone(),delta=V();let t=0,prior=0;
   const m={name,group,floor:f,collider:floor.collider,mesh:floor.mesh,panel,art,progress:0,target:0,locked:false,rate:.16,position:a.clone(),
-   update(dt){prior=t;prev.copy(group.position);if(!m.locked)t+=clamp(m.target-t,-m.rate*dt,m.rate*dt);m.progress=t;group.position.lerpVectors(a,b,t);m.position.copy(group.position);delta.copy(group.position).sub(prev);group.updateWorldMatrix(true,true);
+   update(dt){prior=t;prev.copy(m.position);if(!m.locked)t+=clamp(m.target-t,-m.rate*dt,m.rate*dt);m.progress=t;group.position.lerpVectors(a,b,t);m.position.copy(group.position);delta.copy(group.position).sub(prev);group.updateWorldMatrix(true,true);
     const p=game.playerPosition,wasOn=game.playerGrounded&&Math.abs(p.y-f.y)<.18&&p.x>f.minX-.1&&p.x<f.maxX+.1&&p.z>f.minZ-.1&&p.z<f.maxZ+.1;
     if(wasOn&&dt){p.add(delta);game.previousPlayerPosition.add(delta);}
     f.minX=group.position.x-width/2;f.maxX=group.position.x+width/2;f.minZ=group.position.z-depth/2;f.maxZ=group.position.z+depth/2;f.y=group.position.y;

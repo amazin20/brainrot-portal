@@ -35,7 +35,7 @@ The final dock is now a physically enclosed upper bay, not an exposed ledge. Vis
 
 ## Animation and feedback
 
-The independent chest, planted feet, hand contact, flight bracing and companion attention are preserved. Terminals trigger a short relaxed hand/body acknowledgement. The companion retains head, fin, tail and foot response while carried. Supplied rotor, ram, gripper, drum, lift and winch moving parts animate independently of their fixed frames. Fan rotors accelerate and coast continuously; winch drums follow the actual platform travel. Animation does not assign the player's physics transform or shake the camera. This is procedural animation, not motion capture.
+The independent chest, planted feet, hand contact, flight bracing and companion attention are preserved. Terminals trigger a short relaxed hand/body acknowledgement. The companion retains head, fin, tail and foot response while carried. Supplied rotor, ram, gripper, drum, lift and winch moving parts animate independently of their fixed frames. Fan rotors accelerate and coast continuously; winch drums follow the actual platform travel. Passenger carry uses committed physical deck travel, not the last interpolated render pose, avoiding extra upward displacement at different render rates. Animation does not assign the player's physics transform or shake the camera. This is procedural animation, not motion capture.
 
 The top-right display is the Arabic level number alone. Escape opens level selection, graphics, sound, tutorial and hints. The GitHub build has free hints and no actual ads. The separate Yandex draft exercises rewarded/fullscreen callback behavior only.
 

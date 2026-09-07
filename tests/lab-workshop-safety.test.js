@@ -41,6 +41,18 @@ test('manual ferry winch has a physical return direction and bounded movement wi
  for(let n=0;n<60;n++)l.update(1/120);assert.equal(s.sailPhysics.recalling,false);assert.equal(s.sail.progress,0);assert.equal(s.sailPhysics.velocity,0);
  assert.equal(game.portals.ready,false);assert.ok(l.fixtures.some(f=>f.id===39));
 });
+test('render interpolation never adds phantom deck travel to the physical passenger',async()=>{
+ await game.selectLevel(12,false);const lift=game.firstLevel.state['brake-lift'];const heights=[];
+ for(const alpha of [1,0,.37]){
+  game.resetRun(true);game.playerPosition.copy(lift.position);game.previousPlayerPosition.copy(game.playerPosition);game.playerGrounded=true;lift.target=1;
+  for(let n=0;n<240;n++){
+   lift.update(1/120);assert.ok(Math.abs(game.playerPosition.y-lift.floor.y)<1e-9,'Passenger was carried by render history instead of committed physical travel');
+   lift.render(alpha);
+  }
+  heights.push(game.playerPosition.y);
+ }
+ assert.ok(heights.every(y=>Math.abs(y-heights[0])<1e-9));
+});
 test('winch reset clears the recall state and spool motion',async()=>{
  await game.selectLevel(16,false);const s=game.firstLevel.state;s.sailPhysics.recalling=true;game.resetRun(true);
  assert.equal(s.sailPhysics.recalling,false);assert.equal(s.sailPhysics.velocity,0);assert.equal(s.sail.progress,0);
