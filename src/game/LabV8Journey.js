@@ -33,7 +33,7 @@ export async function runV8Journey(game,{onMilestone=()=>{},scenario=null}={}) {
     stop();assert(game.state==='won'||Math.hypot(game.playerPosition.x-x,game.playerPosition.z-z)<.3,`Walk timed out at ${game.playerPosition.toArray()} target ${x},${z}`);
   }
   function aim(index,point){
-    stop();game.aimHeld=true;
+    stop();
     for(let n=0;n<240;n++){
       game.scene.updateMatrixWorld(true);
       if(point.clone().sub(game.camera.position).dot(game.camera.getWorldDirection(V()))<0){game.yaw+=.18;frame();continue;}
@@ -42,7 +42,11 @@ export async function runV8Journey(game,{onMilestone=()=>{},scenario=null}={}) {
       game.yaw-=THREE.MathUtils.clamp(ndc.x,-1,1)*.22;
       game.pitch=THREE.MathUtils.clamp(game.pitch+THREE.MathUtils.clamp(ndc.y,-1,1)*.19,-1.15,1.15);frame();
     }
-    const okay=game.placePortal(index);game.aimHeld=false;
+    const okay=game.firePortal(index);
+    assert(okay,'Shot input was not accepted');
+    until(()=>game.portalShots.queue.length===0&&game.portalShots.active.length===0,2,'Portal charge did not finish');
+    const impact=game.portalShots.lastImpact;
+    assert(impact?.valid,`Portal impact rejected at ${point.toArray()}: ${JSON.stringify(impact)}`);
     if(!okay) console.error('Aim blockers',game.raycaster.intersectObjects(game.aimBlockers,true).slice(0,6).map(h=>({name:h.object.name,point:h.point.toArray(),portal:h.object.userData.portalable,proxy:h.object.userData.collisionProxy})));
     assert(okay,`Could not shoot portal ${index} at ${point.toArray()} from ${game.playerPosition.toArray()}; camera ${game.camera.position.toArray()}`);
   }

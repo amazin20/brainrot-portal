@@ -27,8 +27,17 @@ export function buildWorkshopCampaign(game,index){
  const latch=(name,p,condition)=>{const art=w.box([p[0],p[1],p[2]],[.6,.2,.7],w.materials.accent,false);const state={engaged:false};k.state[name]=state;k.ticks.push(()=>{if(condition())state.engaged=true;art.rotation.z=state.engaged?-.6:0;});k.resets.push(()=>state.engaged=false);return state;};
  if(index===8){
   baseWalls();const s=k.spring('piston',[0,.0,-5]);k.panel('drop-ceiling',[0,9,-5],[0,-1,0],7,6);k.panel('loading-floor',[-7,.025,6],[0,1,0],5,5);
-  // A glass guard protects the barrel while the receiving top is exposed.
-  for(const x of [-2.2,2.2])glass(w,[x,1.1,-5],[.1,2.2,4.5]);
+  // Open-top spring test enclosure. A held body must not turn the new
+  // stable grip into an infinite-force hand press. All four visible sides
+  // protect the piston; real spring compression retracts the guards so the
+  // same friend can be collected. No portal-use flag is involved.
+  const guards=[];
+  for(const [p,size]of [[[-2.2,1.6,-5],[.1,3.2,4.5]],[[2.2,1.6,-5],[.1,3.2,4.5]],[[0,1.6,-7.25],[4.5,3.2,.1]],[[0,1.6,-2.75],[4.5,3.2,.1]]]){
+    const mesh=glass(w,p,size),c=game.colliders.find(c=>c.mesh===mesh);c.kinematic=true;guards.push({mesh,c,base:p[1]});
+  }
+  k.state.springGuards=guards;
+  k.ticks.push(dt=>{for(const a of guards){a.mesh.position.y=THREE.MathUtils.damp(a.mesh.position.y,s.latched?a.base-3.3:a.base,4,dt);game.syncCollision(a.c,new THREE.Box3().setFromObject(a.mesh),dt);}});
+  k.resets.push(()=>{for(const a of guards)a.mesh.position.y=a.base;});
   k.control('release',[-5,0,-5],()=>s.reset(),'E — освободить механическую защёлку для нового опыта.');closedExit(()=>s.latched);
   k.wire([[1.6,.06,-5],[4,.06,-5],[4,.06,-11.5],[0,.06,-11.5]],()=>s.latched);
  }else if(index===9){

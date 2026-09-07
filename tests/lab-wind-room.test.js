@@ -64,7 +64,7 @@ test('air on the back, side or behind an obstacle cannot power the receiver',()=
  assert.ok(!receivesFrontAir([seg([0,2,4],[0,0,-1],2)],inlet,normal,1));
 });
 test('controls alone cannot open the door, power and accumulated work are reset',()=>{
- g.resetRun(true);const l=g.firstLevel,s=l.state;s.clutchControl.action();s['fan-switchControl'].action();
+ g.resetRun(true);const l=g.firstLevel,s=l.state;assert.equal(s.clutchControl,undefined);assert.equal(l.terminals.length,1);s['fan-switchControl'].action();
  for(let n=0;n<1200;n++)l.update(1/120);
  assert.equal(s.flywheel.wheel.work,0);assert.equal(s.ratchet.engaged,false);assert.equal(s.door.open,false);
  s.flywheel.wheel.work=71;l.update(1/120);assert.equal(s.door.open,true);

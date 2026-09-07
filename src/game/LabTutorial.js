@@ -10,7 +10,7 @@ export class LabTutorial {
     if(contextual)return g.heldCube?['room-put-down','E','Поставить друга. Для работы с пультом нужны свободные руки.',false]:contextual;
     const near=point=>point&&p.distanceTo(point)<4.5;
     if(g.levelIndex===0&&!this.seen.has('move'))return ['move',mobile?'◉':'W A S D','Пройди несколько шагов. Поверни камеру мышью или движением пальца.',p.distanceTo(new p.constructor(...l.spawn))>1.2];
-    if(!this.seen.has('portal')&&!g.heldCube)return ['portal',mobile?'① · ②':'ЛКМ · ПКМ','Светлые плиты принимают порталы, тёмные — нет. Создай пару. F — прицел.',g.portals.ready];
+    if(!this.seen.has('portal')&&!g.heldCube)return ['portal',mobile?'① · ②':'ЛКМ · ПКМ','Светлые плиты принимают порталы, тёмные — нет. Создай пару.',g.portals.ready];
     if(g.levelIndex===0&&!this.seen.has('cross'))return ['cross','↔','Вход и выход связаны. Пройди в ближайший портал.',g.teleportCount>0];
     if(g.levelIndex>0&&near(g.cargo?.position)&&!this.seen.has('carry'))return ['carry','E','Возьми друга. Ещё раз E — поставить. С другом на руках стрелять нельзя.',!!g.heldCube];
     const pad=l.pads?.find(pad=>near(pad.position));

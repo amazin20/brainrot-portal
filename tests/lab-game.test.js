@@ -124,7 +124,7 @@ test('walking and sprinting stop at walls while diagonal motion can slide', () =
   }
 });
 
-test('ordinary gun fire places a portal without activating aim or moving the camera', () => {
+test('direct placement regression does not move the camera; removed aim key stays inactive', () => {
   const game = fixture();
   const panel = addWall(game, 0, 3, 10, 12, 6, .2).mesh;
   Object.assign(panel.userData, { portalable: true, collisionProxy: true,
@@ -149,7 +149,7 @@ test('ordinary gun fire places a portal without activating aim or moving the cam
     assert.ok(Math.abs(game.camera.fov - fov) < 1e-7, 'shot changed field of view');
   }
   game.input.keys.add('KeyF');
-  assert.equal(game.isAiming(), true, 'explicit aim must still work'); game.close();
+  assert.equal(game.isAiming(), false, 'removed aim key must not change gameplay'); game.close();
 });
 
 test('game placement retains free hit coordinates and permits separate portals on one white panel', () => {

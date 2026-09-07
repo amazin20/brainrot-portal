@@ -15,7 +15,7 @@ try{
   catch(error){console.log('Publication propagation:',String(error));}
   await wait(5000);
  }
- assert.equal(info?.commit,expected);assert.equal(info?.levels,20);assert.equal(info?.version,'v17-twenty');report.build=info;
+ assert.equal(info?.commit,expected);assert.equal(info?.levels,20);assert.equal(info?.version,'v18-core');report.build=info;
  const response=await fetch(base+'models/runtime/manifest.json?revision='+expected);assert.ok(response.ok);const manifest=await response.json();assert.equal(manifest.models.length,18);
  const source=JSON.parse(fs.readFileSync('public/models/runtime/manifest.json','utf8'));
  for(const model of manifest.models){
@@ -30,8 +30,8 @@ try{
  await page.waitForFunction(()=>window.__NESI_DEMO_GAME__?.state==='ready');
  assert.equal(await page.$$eval('#level-select option',a=>a.length),20);assert.equal(await page.$eval('#level-select',e=>e.value),'10');
  await page.click('#play-button');await page.waitForFunction(()=>window.__NESI_DEMO_GAME__.state==='playing'&&window.__NESI_DEMO_GAME__.performanceMonitor.stats.fps>0);
- report.room11=await page.evaluate(()=>{const l=window.__NESI_DEMO_GAME__.firstLevel;return {fan:l.state.blower.art.id,drive:l.state.flywheel.art.id,airflow:l.readability?.airflow?.mesh.name};});
- assert.equal(report.room11.fan,31);assert.equal(report.room11.drive,35);assert.equal(report.room11.airflow,'Soft advected airflow');
+ report.room11=await page.evaluate(()=>{const l=window.__NESI_DEMO_GAME__.firstLevel;return {fan:l.state.blower.art.id,drive:l.state.flywheel.art.id,airflow:l.readability?.airflow?.mesh.name,terminals:l.terminals.length,travellingShots:typeof window.__NESI_DEMO_GAME__.portalShots?.request==='function'};});
+ assert.equal(report.room11.terminals,1);assert.equal(report.room11.travellingShots,true);assert.equal(report.room11.fan,31);assert.equal(report.room11.drive,35);assert.equal(report.room11.airflow,'Soft advected airflow');
  await page.screenshot({path:'live-evidence/level-11-public-start.png'});
  report.route=await page.evaluate(()=>window.__NESI_RUN_LEVEL_ROUTE__());assert.ok(report.route.pass&&report.route.respawns===0&&report.route.resets===0);assert.equal(report.route.level,11);
  await page.screenshot({path:'live-evidence/level-11-public-complete.png'});
