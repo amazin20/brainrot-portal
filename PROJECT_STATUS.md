@@ -4,7 +4,7 @@ Repository: amazin20/nesi-brainrot. Base main: 037b7a9fd1cf6a52588711d648dc4d1ba
 
 This pass integrates reviewed gameplay changes from PR14 candidate 446650cc4d16cc02e7e28adcffe5bcd12ae883be, excluding its later automatic-merge workflow. It repairs the balanced beam/support and room8 fan placement, and additionally makes room8 wind strength/radius agree with rotor spin-up, coast and the visible plume.
 
-Travelling shots gain explicit outcomes, static front-face checking, live-transform/range/timing/level-lifetime safeguards, a larger coloured energy core and short trail, stronger local muzzle pulse, and distinct same-colour success/rejection effects. Mouse/keyboard controls remain unchanged. Source GLBs and character rigs are retained.
+Travelling shots gain explicit outcomes, static front-face checking, live-transform/range/timing/level-lifetime safeguards, a larger coloured energy core and short trail, stronger local muzzle pulse, and distinct same-colour success/rejection effects. A constant shoulder offset clears the centre ray beside the avatar; a bounded low camera boom avoids the floor-induced close-up when aiming upward. Mouse/keyboard controls remain unchanged. Source GLBs and character rigs are retained.
 
 Read docs/PORTAL_SHOT_CONTACT_REPAIR.md for reproducible cases and limits. The two user recordings were found, but the supported transfer returned HTTP502; their exact visual scenario has NOT been reviewed or declared fixed. Verify the actual main commit and public build-info.json before calling this candidate published.
 
