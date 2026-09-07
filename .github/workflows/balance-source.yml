@@ -1,0 +1,31 @@
+name: Balance source workspace
+on:
+  push:
+    branches: ['polish/balance-geometry-v19']
+    paths: ['.github/workflows/balance-source.yml']
+permissions:
+  contents: read
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci && npm install --no-save --package-lock=false puppeteer-core@24.16.0
+      - name: Package tracked source and offline dependencies only
+        run: |
+          git rev-parse HEAD > source-revision.txt
+          git archive HEAD > /tmp/balance-source.tar
+          tar -rf /tmp/balance-source.tar node_modules source-revision.txt
+          gzip /tmp/balance-source.tar
+      - uses: actions/upload-artifact@v4
+        with:
+          name: balance-source
+          path: /tmp/balance-source.tar.gz
+          retention-days: 1
