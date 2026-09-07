@@ -1,0 +1,56 @@
+name: Import and review room11 airflow
+on:
+  push:
+    branches: ['polish/room11-airflow']
+    paths: ['.github/workflows/airflow-import.yml']
+permissions:
+  contents: write
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - name: Import seven verified text files on review branch only
+        run: |
+          python3 - <<'PY'
+          import urllib.request,json,hashlib,zipfile,io,pathlib,stat
+          url='https://api.firestorage.ai/dev/file/shares/NxI602TwrMI_/files/01a07b98c3e977ac9f8a198105e635b7/download'
+          with urllib.request.urlopen(urllib.request.Request(url,method='POST'),timeout=30) as r: link=json.load(r)['downloadUrl']
+          assert link.startswith('https://')
+          with urllib.request.urlopen(link,timeout=30) as r: data=r.read(1000000)
+          assert len(data)==15980 and hashlib.sha256(data).hexdigest()=='d9872c53d55542d52d3cb19ea6befbfbf870baec0c57ffba33b293674787bf0b'
+          allowed={'src/game/LabWindRoom.js','src/game/LabAirflowVisual.js','src/game/LabCampaignLevels.js','tests/lab-wind-room.test.js','tests/lab-airflow-visual.test.js','scripts/airflow-browser.mjs','docs/ROOM_11_AIRFLOW.md'}
+          z=zipfile.ZipFile(io.BytesIO(data));assert z.testzip() is None and set(z.namelist())==allowed
+          for e in z.infolist():
+              assert not stat.S_ISLNK(e.external_attr>>16)
+              p=pathlib.Path(e.filename);p.parent.mkdir(parents=True,exist_ok=True);p.write_bytes(z.read(e))
+          PY
+      - name: Save candidate, preserving published main
+        run: |
+          test "$GITHUB_REF_NAME" = 'polish/room11-airflow'
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add src tests scripts docs
+          git diff --cached --quiet || git commit -m 'Swap requested fan/drive models in room 11 and add soft portal-advected airflow'
+          git push origin HEAD:refs/heads/polish/room11-airflow
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci && npm install --no-save --package-lock=false puppeteer-core@24.16.0
+      - run: npm run check && node scripts/v8-journey.mjs
+      - name: Render actual airflow and complete ordinary-control route
+        run: |
+          npm run preview -- --host 127.0.0.1 --port 4173 > /tmp/preview.log 2>&1 &
+          for i in {1..30}; do curl -fsS http://127.0.0.1:4173/ >/dev/null && break; sleep 1; done
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+          node scripts/airflow-browser.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: room11-airflow-review
+          path: |
+            airflow-evidence/
+            qa/v8-journeys.json
+          retention-days: 7
