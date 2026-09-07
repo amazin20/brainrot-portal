@@ -39,7 +39,6 @@ jobs:
           export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
           node scripts/v8-browser.mjs
           node scripts/video-repair-browser.mjs
-          node scripts/portal-shot-browser.mjs
           node scripts/v8-yandex-browser.mjs
       - name: Record reviewed revision
         run: |
@@ -74,4 +73,31 @@ jobs:
         with:
           name: campaign-yandex-draft
           path: dist-yandex/
+          retention-days: 14
+  verify-shots:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Build the same production revision
+        run: |
+          npm ci
+          npm install --no-save --package-lock=false puppeteer-core@24.16.0
+          npm run build
+      - name: Verify trusted mouse shots and record real gameplay
+        run: |
+          npm run preview -- --host 127.0.0.1 --port 4173 >/tmp/shot-preview.log 2>&1 &
+          for i in {1..30}; do curl -fsS http://127.0.0.1:4173/ >/dev/null && break; sleep 1; done
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+          node scripts/portal-shot-browser.mjs
+      - name: Preserve mouse input and rendered evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: portal-shot-mouse
+          path: portal-shot-evidence/
           retention-days: 14

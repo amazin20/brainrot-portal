@@ -102,7 +102,8 @@ export class LabPortalShots {
  step(dt){
   if(!Number.isFinite(dt)||dt<0)throw new RangeError('Shot time must be finite and nonnegative');
   if(!dt||this.game.state!=='playing'||this.game.externalBlocked||!this.root.parent)return;
-  this.time+=dt;this.cooldown=Math.max(0,this.cooldown-dt);this.game.scene.updateMatrixWorld(true);
+  this.time+=dt;this.cooldown=Math.max(0,this.cooldown-dt);
+  if(this.queue.length||this.active.length)this.game.scene.updateMatrixWorld(true);
   for(const p of this.pulses)p.age+=dt;
   for(const s of this.queue){s.delay-=dt;if(s.delay<=0){const shot=this.launch(s);if(shot)shot.firstStep=Math.max(0,-s.delay);}}
   this.queue=this.queue.filter(q=>q.delay>0);
