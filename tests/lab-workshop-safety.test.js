@@ -23,14 +23,18 @@ test('sorter access physically opens after load and closes on restart without ch
  assert.equal(l.state['sort-lock'].engaged,false);
 });
 test('fan rotor accelerates and coasts smoothly while disabled fan supplies no invisible air',async()=>{
- await game.selectLevel(10,false);game.resetRun(true);const fan=game.firstLevel.state.blower;
+ // The general rotor-fan contract is exercised in unchanged room 15; room 11
+ // now uses the louvred housing as a blower, not a spinning grille.
+ await game.selectLevel(14,false);game.resetRun(true);const fan=game.firstLevel.state.blower;
  fan.enabled=true;fan.update(.2);assert.ok(fan.rotorSpeed>0&&fan.rotorSpeed<9);const moving=fan.rotorSpeed;
  fan.enabled=false;fan.update(.2);assert.ok(fan.rotorSpeed>0&&fan.rotorSpeed<moving);assert.equal(fan.segments.length,0);
  assert.deepEqual(fan.acceleration(V(),V()).toArray(),[0,0,0]);
  game.resetRun(true);assert.equal(fan.rotorSpeed,0);assert.equal(fan.art.pivot.rotation.z,0);
 });
 test('fan rotor integration matches elapsed time at 30, 60 and 144 render Hz',async()=>{
- await game.selectLevel(10,false);const values=[];
+ // The general rotor-fan contract is exercised in unchanged room 15; room 11
+ // now uses the louvred housing as a blower, not a spinning grille.
+ await game.selectLevel(14,false);const values=[];
  for(const hz of [30,60,144]){game.resetRun(true);const f=game.firstLevel.state.blower;f.enabled=true;for(let i=0;i<hz*2;i++)f.update(1/hz);f.enabled=false;for(let i=0;i<hz;i++)f.update(1/hz);values.push([f.rotorSpeed,f.art.pivot.rotation.z]);}
  for(const pair of values)pair.forEach((value,i)=>assert.ok(Math.abs(value-values[0][i])<1e-9));
 });

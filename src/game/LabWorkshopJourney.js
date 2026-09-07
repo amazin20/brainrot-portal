@@ -21,7 +21,7 @@ export async function runWorkshopJourney(d){
   shot(0,'loading-dock');shot(1,'unloading-dock');enter(p['loading-dock']);collect();
   walk(7,-1);wait(1);groundExit();
  }else if(index===10){
-  shot(0,'wind-intake');walk(-5,-4);shot(1,'wind-outlet');lever('fan-switch');lever('clutch',8);
+  shot(0,'wind-intake');shot(1,'wind-outlet');lever('fan-switch');lever('clutch',8);
   until(()=>s.ratchet.engaged,15,'Wind did not do mechanical work');mark('air spun flywheel and lifted ratchet');collect();groundExit();
  }else if(index===11){
   shot(0,'work-front');shot(1,'carousel');lever('rotation',3);enter(p['work-front']);mark('moving portal served cargo balcony');collect();enter(p.carousel);put(-5,10);
