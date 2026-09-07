@@ -1,0 +1,36 @@
+name: Room11 airflow visual review
+on:
+  push:
+    branches: ['polish/room11-airflow']
+    paths: ['src/game/LabWindRoom.js', 'src/game/LabAirflowVisual.js', 'scripts/airflow-browser.mjs', '.github/workflows/airflow-review.yml']
+  pull_request:
+    paths: ['src/game/LabWindRoom.js', 'src/game/LabAirflowVisual.js', 'scripts/airflow-browser.mjs', '.github/workflows/airflow-review.yml']
+permissions:
+  contents: read
+concurrency:
+  group: airflow-review-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci && npm install --no-save --package-lock=false puppeteer-core@24.16.0
+      - run: npm run build
+      - name: Review full portal airflow, actual swapped models and gameplay route
+        run: |
+          npm run preview -- --host 127.0.0.1 --port 4173 > /tmp/preview.log 2>&1 &
+          for i in {1..30}; do curl -fsS http://127.0.0.1:4173/ >/dev/null && break; sleep 1; done
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+          node scripts/airflow-browser.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: room11-airflow-review
+          path: airflow-evidence/
+          retention-days: 7
