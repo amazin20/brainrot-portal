@@ -255,7 +255,9 @@ export async function runPortalShotBrowser({ browser, baseUrl = 'http://127.0.0.
         movedEntry: entry.getFrame().center.clone().addScaledVector(entry.getFrame().right, 1.1).toArray(),
         entryId: entry.mesh.userData.portalColliderId ?? entry.mesh.uuid,
         exitId: exit.mesh.userData.portalColliderId ?? exit.mesh.uuid,
-        darkWall: [l.bounds.maxX, 2.1, 9] };
+        // The added start-wall ceramic spans y=0..4.6. Aim at the visible
+        // graphite above it; y=2.1 correctly accepts portals in this room.
+        darkWall: [l.bounds.maxX, 6.3, 9] };
     });
     await shoot({ label: 'blue-entry', target: targets.entry, button: 'left', valid: true, surface: targets.entryId });
     await shoot({ label: 'amber-exit', target: targets.exit, button: 'right', valid: true, surface: targets.exitId });
