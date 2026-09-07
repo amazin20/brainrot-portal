@@ -39,7 +39,7 @@ export async function runWorkshopJourney(d){
   shot(0,'wind-intake');walk(-8,2);walk(-3.7,2);walk(-3.7,-.2);walk(0,-.2);shot(1,'duct-mouth');lever('fan-switch');lever('shutter-0');walk(-7,1);walk(-7,-9.5);walk(7,-9.5);lever('shutter-1',8);
   until(()=>s['duct-lock'].engaged,15,'Shutters still obstruct airflow');mark('both real shutters clear the duct');walk(8,5);collect();walk(8,8);walk(8,-9.5);groundExit();
  }else if(index===15){
-  shot(0,'work-front');shot(1,'drawbridge');lever('bridge-drive',9);collect();enter(p['work-front']);put(0,4);game.clearPortals();
+  shot(0,'work-front');shot(1,'drawbridge');lever('bridge-drive',9);collect();enter(p['work-front']);put(0,4);
   walk(-1.6,1);shot(1,'bridge-wall');shot(0,'drawbridge');collect();enter(p.drawbridge);walk(5,-7);
  }else if(index===16){
   shot(0,'supply');shot(1,'rail-air');collect();put(-7.5,2);lever('sail-fan',.2);collect();
