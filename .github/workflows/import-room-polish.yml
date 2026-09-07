@@ -15,11 +15,11 @@ jobs:
         run: |
           python3 - <<'PY'
           import urllib.request,hashlib,json,zipfile,io,pathlib,stat
-          url='https://api.firestorage.ai/dev/file/shares/NxI602TwrMI_/files/01a07b27a4b47781ac4d0be2ad75dc94/download'
+          url='https://api.firestorage.ai/dev/file/shares/NxI602TwrMI_/files/01a07b3370e67203a49e308b89d22bbf/download'
           with urllib.request.urlopen(urllib.request.Request(url,method='POST'),timeout=30) as r: link=json.load(r)['downloadUrl']
           assert link.startswith('https://')
           with urllib.request.urlopen(link,timeout=30) as r: data=r.read(1000000)
-          assert len(data)==17832 and hashlib.sha256(data).hexdigest()=='4c80047404b5242840bf5da3c8f82dbc496babf05760509f83e7a29ff57d8307'
+          assert len(data)==18449 and hashlib.sha256(data).hexdigest()=='5a55e856981b8f532492a848b7ea3ff7ff80f00021b178f87159b7022786d3ac'
           allowed={'src/game/LabWindRoom.js','src/game/LabCampaignLevels.js','src/game/LabTutorial.js','src/game/LabWorkshopJourney.js','scripts/room-polish-browser.mjs','tests/lab-wind-room.test.js','tests/lab-workshop-safety.test.js','docs/ROOM_11_POLISH.md','PROJECT_STATUS.md'}
           z=zipfile.ZipFile(io.BytesIO(data));assert z.testzip() is None and set(z.namelist())==allowed
           for e in z.infolist():
@@ -32,7 +32,7 @@ jobs:
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add src scripts tests docs PROJECT_STATUS.md
-          git commit -m 'Polish room eleven only: grounded properly facing machines, true front rotor and readable exit'
+          git commit -m 'Make both machine fronts visible from the aisle and keep the painted intake rim fixed'
           git push origin HEAD:refs/heads/polish/one-readable-room
       - uses: actions/setup-node@v4
         with:
@@ -49,7 +49,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: room-polish-first-review
+          name: room-polish-final-review
           path: |
             room-evidence/
             qa/v8-journeys.json
