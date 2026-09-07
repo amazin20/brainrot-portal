@@ -1,10 +1,11 @@
 import * as THREE from 'three';
 import { Workshop, Flywheel, V, tracePortalRay } from './LabWorkshopKit.js';
+import { LabAirflowVisual } from './LabAirflowVisual.js';
 
 /** Room 11 only. No new device, game rule or campaign entry.
  * Existing source meshes, air tracing, inertia and door actuator are retained.
- * The blower grille faces its emitted air; the generator's FRONT rotor receives
- * it. Unlike the generic derivative partition, its rear cap never rotates. */
+ * User's model roles: round model 31 is the blower; louvred model 35 is
+ * the receiving drive. Only the blower's front impeller rotates. */
 export function generatorSkin(game) {
   const source = game.model(31, 1);
   source.updateWorldMatrix(true, true);
@@ -73,24 +74,27 @@ export function buildReadableWindRoom(game, spec) {
   k.panel('wind-intake', [13.975, 2.1, 4], [-1, 0, 0], 9);
   k.panel('wind-outlet', [13.975, 2.1, -5], [-1, 0, 0], 8);
 
-  // Existing louvred blower (35), standing on its own feet. Its grille is not
-  // an impeller: do not spin its casing or its complete bank of louvres.
-  const blowerArt = k.staticFixture(35, [-7.2, 0, 4], 3.3, Math.PI / 2);
+  // Requested role swap: the round impeller model PRODUCES the air.
+  // Keep its proven front-only partition, grounded feet and fixed painted rim.
+  const blowerArt = generatorSkin(game);
+  blowerArt.art.scale.setScalar(5.27596);
+  blowerArt.art.rotation.y = Math.PI / 2;
+  blowerArt.art.position.set(-8.3, 0, 4);
+  blowerArt.art.userData.gameplayRole = 'Fan: emits air through its rotating front impeller';
+  w.root.add(blowerArt.art); k.fixtures.push(blowerArt);
   const blowerBox = new THREE.Box3().setFromObject(blowerArt.art);
+  game.collisionProxy(blowerBox);
   const origin = V(blowerBox.max.x + .04, 2.1, 4);
-  const fan = { art: blowerArt, origin, direction: V(1, 0, 0), enabled: false, segments: [] };
+  const fan = { art: blowerArt, origin, direction: V(1, 0, 0), enabled: false, segments: [], rotorSpeed: 0, angle: 0 };
   k.state.blower = fan;
 
-  // The actual front impeller, not the closed rear cap, is the moving part.
-  const turbineArt = generatorSkin(game);
-  turbineArt.art.scale.setScalar(5.27596); // native axle height .39807 -> 2.10 m
-  turbineArt.art.rotation.y = Math.PI / 2;
-  turbineArt.art.position.set(-5.4, 0, -5);
-  turbineArt.art.userData.gameplayRole = 'Receives air and stores rotational energy';
-  w.root.add(turbineArt.art); k.fixtures.push(turbineArt);
+  // The louvred model RECEIVES the stream and drives the existing door.
+  // Its grille and fixed housing are not a propeller; never spin the whole model.
+  const turbineArt = k.staticFixture(35, [-5.4, 0, -5], 3.3, Math.PI / 2);
+  turbineArt.art.userData.gameplayRole = 'Drive: receives airflow at the front grille and powers the door';
   const turbineBox = new THREE.Box3().setFromObject(turbineArt.art);
-  const housing = game.collisionProxy(turbineBox);
-  const inlet = V(turbineBox.max.x + .025, .39807 * 5.27596, -5);
+  const housing = game.colliders.find(c => c.box.equals(turbineBox));
+  const inlet = V(turbineBox.max.x + .025, 2.1, -5);
   const wheel = new Flywheel();
   const turbine = { art: turbineArt, wheel, position: inlet, normal: V(1, 0, 0), power: false, clutch: false, housing };
   k.state.flywheel = turbine;
@@ -103,49 +107,43 @@ export function buildReadableWindRoom(game, spec) {
   const fanControl = k.control('fan-switch', [-4.7, 0, 6], () => { fan.enabled = !fan.enabled; }, 'E — включить вентилятор.');
   const clutchControl = k.control('clutch', [-.6, 0, -4], () => { turbine.clutch = !turbine.clutch; }, 'E — подключить привод двери.');
   // A single grounded, continuous existing cable route, not a floating wire.
-  k.wire([[-8.05, .065, -5], [-8.05, .065, -9], [-2.65, .065, -9], [-2.65, .065, -11.4], [-2.65, 1.7, -11.4]], () => turbine.clutch && wheel.omega > .1);
+  k.wire([[turbineBox.min.x - .02, .065, -5], [turbineBox.min.x - .02, .065, -9], [-2.65, .065, -9], [-2.65, .065, -11.4], [-2.65, 1.7, -11.4]], () => turbine.clutch && wheel.omega > .1);
 
-  // Air is visible as drifting dust, never a glowing vector line through the
-  // room. Particles stop at the same real blockers used by the air simulation.
-  const dust = new THREE.InstancedMesh(new THREE.SphereGeometry(.045, 5, 4), new THREE.MeshBasicMaterial({ color: 0xb7d8de }), 72);
-  dust.frustumCulled = false; w.root.add(dust);
-  const matrix = new THREE.Matrix4(), right = V(), up = V(), position = V(), axisUp = V(0, 1, 0);
+  // Soft, path-advected wisps replace opaque dots. They share the exact traced
+  // blockers/portal mapping and a physical-time clock; no extra physics/labels.
+  const airflow = new LabAirflowVisual(w.root);
+  const dust = airflow.mesh; // retained diagnostics alias; no sphere instances
   let previousAngle = 0, previousPawl = 0;
   const lights = [];
   door.art.traverse(o => { if (o.isMesh && o.material.isMeshBasicMaterial) lights.push(o); });
   k.ticks.push(dt => {
-    previousAngle = wheel.angle; previousPawl = ratchet.progress;
-    fan.segments = fan.enabled ? tracePortalRay(game, origin, fan.direction, { medium: 'air', length: 80 }) : [];
+    previousAngle = fan.angle; previousPawl = ratchet.progress;
+    const target = fan.enabled ? 12 : 0, rate = fan.enabled ? 3.5 : 2.7, old = fan.rotorSpeed;
+    fan.rotorSpeed = THREE.MathUtils.damp(old, target, rate, dt);
+    fan.angle += target * dt + (old - target) * (1 - Math.exp(-rate * dt)) / rate;
+    const strength = fan.rotorSpeed / 12;
+    fan.segments = strength > .005 ? tracePortalRay(game, origin, fan.direction, { medium: 'air', length: 80 }) : [];
+    airflow.step(dt, strength); airflow.setPath(fan.segments, game.portals?.portals || []);
     turbine.power = receivesFrontAir(fan.segments, inlet, turbine.normal, 1.0);
-    wheel.step(turbine.power ? 24 : 0, turbine.clutch && !ratchet.engaged ? 2.2 : 0, dt);
+    wheel.step(turbine.power ? 24 * strength : 0, turbine.clutch && !ratchet.engaged ? 2.2 : 0, dt);
     if (wheel.work > 70) ratchet.engaged = true;
     ratchet.progress = THREE.MathUtils.damp(ratchet.progress, ratchet.engaged ? 1 : 0, 6, dt);
     door.update(ratchet.engaged, dt, k.time);
     fanControl.lesson = fan.enabled ? 'E — выключить вентилятор.' : 'E — включить вентилятор.';
-    clutchControl.lesson = turbine.clutch ? 'E — отключить привод двери.' : 'E — подключить привод двери. Вращение турбины передаст ему усилие.';
+    clutchControl.lesson = turbine.clutch ? 'E — отключить привод двери.' : 'E — подключить привод двери. Поток воздуха передаст ему усилие.';
   });
   k.renders.push(alpha => {
-    turbineArt.spin(THREE.MathUtils.lerp(previousAngle, wheel.angle, alpha));
+    blowerArt.spin(THREE.MathUtils.lerp(previousAngle, fan.angle, alpha));
     pawl.rotation.z = -.6 * THREE.MathUtils.lerp(previousPawl, ratchet.progress, alpha);
     for (const light of lights) light.material.color.setHex(ratchet.engaged ? 0x82d6c1 : 0xd4a254);
-    dust.visible = fan.enabled && fan.segments.length > 0;
-    for (let i = 0; i < dust.count; i++) {
-      const s = fan.segments[i % Math.max(1, fan.segments.length)];
-      if (!s) break;
-      right.crossVectors(s.direction, axisUp); if (right.lengthSq() < .01) right.set(1, 0, 0); right.normalize();
-      up.crossVectors(right, s.direction).normalize();
-      position.copy(s.a).addScaledVector(s.direction, ((k.time * .22 + i / 72) % 1) * s.length)
-        .addScaledVector(right, Math.sin(i * 2.4) * .28).addScaledVector(up, Math.cos(i * 3.7) * .28);
-      dust.setMatrixAt(i, matrix.makeTranslation(position.x, position.y, position.z));
-    }
-    dust.instanceMatrix.needsUpdate = true;
+    airflow.render(alpha, game.quality?.shadows === false ? 'low' : 'balanced');
   });
   k.resets.push(() => {
     fan.enabled = false; fan.segments = []; turbine.power = turbine.clutch = false; wheel.reset();
     ratchet.engaged = false; ratchet.progress = previousPawl = previousAngle = 0;
-    turbineArt.spin(0); pawl.rotation.z = 0; dust.visible = false;
+    fan.rotorSpeed = fan.angle = 0; blowerArt.spin(0); pawl.rotation.z = 0; airflow.reset();
   });
-  const level = k.finish([-1, 0, 8], [1.5, .55, 7.5], [0, 0, -16], { workshop: k, readability: { inlet, housing, dust, pawl, fanControl, clutchControl } });
+  const level = k.finish([-1, 0, 8], [1.5, .55, 7.5], [0, 0, -16], { workshop: k, readability: { inlet, housing, dust, airflow, pawl, fanControl, clutchControl } });
   // Context comes from the nearby existing control, not instructions painted
   // on the wall or a central overlay. No solution markers or forced ordering.
   level.getContextLesson = () => {
