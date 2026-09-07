@@ -5,7 +5,7 @@ import vm from 'node:vm';
 import assert from 'node:assert/strict';
 import * as THREE from 'three';
 import { LabGame } from '../src/game/LabGame.js';
-import { FIRST_LEVEL_ASSETS, runtimeAssetPath } from '../src/game/labAssets.js';
+import { ALL_LAB_ASSETS, runtimeAssetPath } from '../src/game/labAssets.js';
 
 const scope = { console, TextDecoder, module: { exports: {} } };
 vm.runInNewContext(fs.readFileSync(new URL('../node_modules/three/examples/jsm/libs/draco/gltf/draco_decoder.js', import.meta.url), 'utf8'), scope);
@@ -27,7 +27,7 @@ export async function loadHeadlessGLB(file) {
   }
   function mesh(primitive) {
     const geometry = new THREE.BufferGeometry(), ext = primitive.extensions?.KHR_draco_mesh_compression;
-    const semantics = [['POSITION','position',3],['NORMAL','normal',3],['TEXCOORD_0','uv',2]];
+    const semantics = [['POSITION','position',3],['NORMAL','normal',3],['TEXCOORD_0','uv',2],['COLOR_0','color',3]];
     if (ext) {
       const view = doc.bufferViews[ext.bufferView], buffer = new draco.DecoderBuffer();
       buffer.Init(new Int8Array(bin.subarray(view.byteOffset || 0, (view.byteOffset || 0) + view.byteLength)), view.byteLength);
@@ -52,7 +52,7 @@ export async function loadHeadlessGLB(file) {
     return new THREE.Mesh(geometry, new THREE.MeshStandardMaterial({ side: THREE.DoubleSide }));
   }
   const nodes = doc.nodes.map(node => {
-    const object = new THREE.Group();
+    const object = new THREE.Group();object.name=node.name||'';
     if (node.mesh !== undefined) for (const primitive of doc.meshes[node.mesh].primitives) object.add(mesh(primitive));
     if (node.rotation) object.quaternion.fromArray(node.rotation);
     if (node.translation) object.position.fromArray(node.translation);
@@ -78,7 +78,7 @@ export async function createHeadlessGame() {
   game.label = () => new THREE.Object3D();
   game.createOverlay = () => { game.prompt = { textContent: '' }; };
   globalThis.document = { exitPointerLock() {} };
-  for (const asset of FIRST_LEVEL_ASSETS) game.assets.set(asset.id, await loadHeadlessGLB(new URL(`../public/${runtimeAssetPath(asset)}`, import.meta.url)));
+  for (const asset of ALL_LAB_ASSETS.filter(a=>fs.existsSync(new URL(`../public/${runtimeAssetPath(a)}`,import.meta.url)))) game.assets.set(asset.id, await loadHeadlessGLB(new URL(`../public/${runtimeAssetPath(asset)}`, import.meta.url)));
   game.buildLevel();
   return game;
 }

@@ -66,21 +66,20 @@ test('fan is a sustained force, not a scripted launch, and no force survives swi
  l.state.enabled=true;l.update(1/120);assert.ok(l.playerAcceleration(V(-5,1,7),V()).x>19.5);
  assert.equal(l.playerAcceleration(V(-5,1,0),V()).lengthSq(),0);l.state.enabled=false;l.update(1/120);assert.equal(l.playerAcceleration(V(-5,1,7),V()).lengthSq(),0);
 });
-test('weak and strong direct physical impacts differ without assigning piston success',async()=>{
- await g.selectLevel(8,false);const l=g.firstLevel,p=l.state.piston;
- const trial=speed=>{g.resetRun(true);cargoAt(V(0,.42,-7.05));g.physics.cargoBody.velocity.z=-speed;g.cargo.velocity.z=-speed;
-  let peak=0;for(let n=0;n<360;n++){g.updatePlaying(1/120);peak=Math.max(peak,p.compression);}return {latched:p.latched,peak};};
- const weak=trial(2),strong=trial(12);assert.equal(weak.latched,false);assert.ok(strong.latched,JSON.stringify({weak,strong}));
- g.resetRun(true);assert.equal(p.latched,false);assert.equal(p.body.type,1);assert.ok(Math.abs(p.body.position.z-p.restZ)<1e-8);
+test('weak resting load cannot latch the new vertical spring; a real drop can',async()=>{
+ await g.selectLevel(8,false);const p=g.firstLevel.state.piston;
+ const trial=height=>{g.resetRun(true);cargoAt(V(0,height,-5));let peak=0;for(let n=0;n<480;n++){g.updatePlaying(1/120);peak=Math.max(peak,p.compression);}return {latched:p.latched,peak};};
+ const weak=trial(1.18),strong=trial(7);assert.equal(weak.latched,false);assert.ok(strong.latched,JSON.stringify({weak,strong}));
+ g.resetRun(true);assert.equal(p.latched,false);assert.equal(p.body.type,1);assert.ok(Math.abs(p.body.position.y-p.restY)<1e-8);
 });
-test('vector field applies forces to the same companion but never to a held load or player',async()=>{
- await g.selectLevel(9,false);g.resetRun(true);const l=g.firstLevel,b=g.physics.cargoBody,id=b.id;const before=b.position.clone();
- l.state.enabled=true;l.applyCargoForces(1/120);assert.ok(b.force.x>0);assert.deepEqual(b.position,before);
- b.force.setZero();l.state.direction=1;l.applyCargoForces(1/120);assert.ok(b.force.z<0);assert.equal(l.playerAcceleration,undefined);
+test('physical crane pulls the same cargo with force and never assigns its position',async()=>{
+ await g.selectLevel(13,false);g.resetRun(true);const l=g.firstLevel,b=g.physics.cargoBody,id=b.id,before=b.position.clone(),c=l.state.crane;
+ c.attached=true;l.applyCargoForces(1/120);assert.ok(b.force.y>0);assert.deepEqual(b.position,before);
  b.force.setZero();g.heldCube=g.cargo;l.applyCargoForces(1/120);assert.equal(b.force.lengthSquared(),0);assert.equal(b.id,id);g.heldCube=null;
+ assert.equal(l.playerAcceleration,undefined);assert.equal(l.state.direction,undefined,'Retired remote vector UI is not active');
 });
-test('low glass cover prevents retrieving the companion directly from the upper walkway',async()=>{
- await g.selectLevel(9,false);g.resetRun(true);g.playerPosition.set(-6,3,6);g.previousPlayerPosition.copy(g.playerPosition);g.interact();assert.equal(g.heldCube,null);
+test('sealed claw well prevents pickup through its glass cover',async()=>{
+ await g.selectLevel(13,false);g.resetRun(true);g.playerPosition.set(-5,0,-.1);g.previousPlayerPosition.copy(g.playerPosition);g.interact();assert.equal(g.heldCube,null);
 });
 test('calibration cabin cannot be entered by walking around any of its four sides',async()=>{
  await g.selectLevel(5,false);
@@ -90,13 +89,11 @@ test('calibration cabin cannot be entered by walking around any of its four side
   for(let n=0;n<360;n++){g.updatePlayer(1/120);const p=g.playerPosition;assert.ok(!(p.x> -9.65&&p.x< -5.4&&p.z> -6.5&&p.z< -2.5),'cabin bypass');}
  }
 });
-test('piston body retains a matching physical obstruction for the player and camera',async()=>{
+test('vertical piston has matching player, camera and cargo obstruction',async()=>{
  await g.selectLevel(8,false);g.resetRun(true);const p=g.firstLevel.state.piston;
- assert.ok(g.colliders.includes(p.collider));assert.ok(g.cameraBlockers.includes(p.mesh));
- p.body.position.z-=.6;p.render();assert.ok(Math.abs(p.collider.box.getCenter(V()).z-p.body.position.z)<1e-9);
- const point=V(0,0,-8.8),previous=V(0,0,-7),velocity=V(0,0,-3);
- const colliders=g.colliders;g.colliders=[p.collider];
- try{g.resolveBody(point,previous,velocity,.43,2.45);assert.ok(point.z>-8.5);}finally{g.colliders=colliders;}
+ assert.ok(g.colliders.includes(p.collider));assert.ok(g.cameraBlockers.includes(p.top));
+ p.body.position.y-=.30;p.render();assert.ok(Math.abs(p.collider.box.getCenter(V()).y-p.body.position.y)<1e-9);
+ assert.ok(Math.abs(p.floor.y-(p.body.position.y+.11))<1e-9);
 });
 test('optical and impact doors start closed; restarting clears actuator state',async()=>{
  for(const i of [5,8]){await g.selectLevel(i,false);g.resetRun(true);assert.equal(g.firstLevel.state.door.open,false);assert.equal(g.firstLevel.isWon(),false);}

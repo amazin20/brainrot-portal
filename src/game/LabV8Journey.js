@@ -52,7 +52,7 @@ export async function runV8Journey(game,{onMilestone=()=>{}}={}) {
     const f=patch.getFrame(),before=game.teleportCount;
     walk(f.center.x+f.normal.x*1.35,f.center.z+f.normal.z*1.35);
     for(let n=0;n<seconds*60&&game.teleportCount===before;n++){worldMove(-f.normal.x,-f.normal.z);frame();}
-    stop();assert(game.teleportCount>before,'Entry traversal failed');wait(.6);
+    stop();assert(game.teleportCount>before,`Entry traversal failed at ${game.playerPosition.toArray()} into ${patch.name}: ${game.portals.portals.map(p=>p?.position.toArray())}`);wait(.6);
   }
   function fallFromEdge(edgeZ,direction){
     walk(index===4?-6:0,edgeZ);const before=game.teleportCount;
@@ -63,7 +63,10 @@ export async function runV8Journey(game,{onMilestone=()=>{}}={}) {
   }
   try {
     wait(.5);
-    if(index>=5){
+    if(index>=8){
+      const {runWorkshopJourney}=await import('./LabWorkshopJourney.js');
+      await runWorkshopJourney({game,level,walk,wait,aim,until,pickup,enter,mark,frame,worldMove,stop});
+    }else if(index>=5){
       const {runExtendedStages}=await import('./LabExtendedJourney.js');
       await runExtendedStages({game,level,walk,wait,aim,until,pickup,enter,mark,frame,worldMove,stop});
     }else if(index===0){

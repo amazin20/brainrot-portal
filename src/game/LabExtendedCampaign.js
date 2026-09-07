@@ -1,11 +1,12 @@
+import {suppliedArt} from './LabWorkshopKit.js';
 import * as THREE from 'three';
 import {LabTileWorld} from './LabTileWorld.js';
 import {cargoLoadsPlate} from './LabPlateContact.js';
 import {V,inRect,tracePortalRay,rayTouches,beamDrawing,glass,wall,gate,consoleNode,terminalAccessible,ringDevice,rotorDevice,integrateBalance,impactPiston} from './LabPuzzleMechanics.js';
 export const EXTENDED_CAMPAIGN=Object.freeze([
  {id:'crossed-light',title:'Перекрёстный свет',description:'Калибровочная кабина, зеркало и свет, проходящий через порталы.',assets:[1,2,11,22,24],concept:'Оптика',hints:['Свет проходит через связанную пару так же, как предмет. Серебристый диск отражает луч.','До отражателя нельзя дотянуться снаружи кабины, но в её окне видна портальная панель.','Сначала войди в кабину и поверни зеркало. Вернись, свяжи панель напротив излучателя с панелью перед зеркалом. Свет должен попасть в круглый приёмник.']},
- {id:'moment-arm',title:'Точка опоры',description:'Один мост, подвижный противовес и настоящий момент силы.',assets:[1,2,11,22,23,24],concept:'Равновесие рычага',hints:['Один и тот же вес сильнее поворачивает мост, когда находится дальше от оси. Игрок тоже нагружает мост.','Противовес можно передвинуть терминалом. Одного противовеса не хватает удержать дальний конец под твоим весом.','Сдвинь противовес и оставь друга на дальнем плече. С промежуточной галереи отправь друга в верхний док. Затем перенеси вход на стену галереи и пройди сам.']},
- {id:'wind-column',title:'Ветер за углом',description:'Перенаправь воздушную струю и поймай восходящий поток.',assets:[1,2,11,22,23,24],concept:'Сила воздушного потока',hints:['Вентилятор создаёт постоянную силу, а не разовый прыжок. Частицы показывают направление воздуха.','Напольный выход превратит горизонтальную струю в восходящую. Высокая площадка находится сбоку от потока.','Свяжи панель напротив вентилятора с плитой внизу шахты. Включи нагнетание, возьми друга, войди в поток и на высоте уйди к верхней площадке.']},
+ {id:'moment-arm',title:'Точка опоры',description:'Один мост, подвижный противовес и настоящий момент силы.',assets:[1,2,11,22,23,24,34],concept:'Равновесие рычага',hints:['Один и тот же вес сильнее поворачивает мост, когда находится дальше от оси. Игрок тоже нагружает мост.','Противовес можно передвинуть терминалом. Одного противовеса не хватает удержать дальний конец под твоим весом.','Сдвинь противовес и оставь друга на дальнем плече. С промежуточной галереи отправь друга в верхний док. Затем перенеси вход на стену галереи и пройди сам.']},
+ {id:'wind-column',title:'Ветер за углом',description:'Перенаправь воздушную струю и поймай восходящий поток.',assets:[1,2,11,22,23,24,31],concept:'Сила воздушного потока',hints:['Вентилятор создаёт постоянную силу, а не разовый прыжок. Частицы показывают направление воздуха.','Напольный выход превратит горизонтальную струю в восходящую. Высокая площадка находится сбоку от потока.','Свяжи панель напротив вентилятора с плитой внизу шахты. Включи нагнетание, возьми друга, войди в поток и на высоте уйди к верхней площадке.']},
  {id:'impact-workshop',title:'Работа удара',description:'Ролики разгоняют груз. Его импульс сжимает пружину и защёлкивает затвор.',assets:[1,2,11,22,24],concept:'Кинетическая энергия и упругость',hints:['Пружинный затвор находится в низком канале. Слабого толчка недостаточно сжать пружину до защёлки.','Ролики придают другу скорость. Портальная пара должна направить этот импульс в торец поршня.','Настрой пару с выхода роликов в канал перед поршнем, включи движение вперёд и отпусти друга на загрузочном столе. После удара откроется крышка канала — забери друга.']},
  {id:'vector-vault',title:'Векторный сейф',description:'Управляй полем в закрытом лабиринте и подготовь путь извлечения друга.',assets:[1,2,11,22,23,24],concept:'Дистанционное управление силами',hints:['Под стеклом действует направленное поле. Оно толкает свободного друга по стрелке, но не переносит его мгновенно.','Сначала рассмотри проходы сверху и подготовь портал в открытом колодце. Крышка не пропускает руки.','На терминале меняй направление: вправо, к дальней стене, влево, к дальней стене, вправо, к колодцу. Свяжи дно колодца с панелью на верхней галерее.']},
 ]);
@@ -72,6 +73,22 @@ export function buildExtendedCampaign(game,index){
   // Reaching the lever landing is not reaching the exit: carry must be solved
   // with a portal transfer, including when bunny-hopping unloads the deck.
   world.floor(2.2,7,-17,-12,9);
+  // A visible, enclosed arrival dock, not another reachable step on the lever.
+  // Its service slot passes a portal shot, but is shorter than the 2.4 m body.
+  // The full roof and side walls also block running around / corner climbing.
+  world.box([2.08,2.675,-14.35],[.22,13.35,5.3]);
+  world.box([2.08,12.75,-14.35],[.22,2.7,5.3]);
+  world.box([7.12,5,-14.35],[.22,18,5.3]);
+  world.box([4.6,13.2,-11.55],[5.3,2.4,.25]);
+  for(const h of [9.35,11.4])world.box([2.06,h,-14.35],[.28,.055,5.3],world.materials.accent,false);
+  state.exitWindow={bottom:9.35,top:11.4,x:2.08};
+  // The user's balance model becomes the actual bridge, not idle scenery.
+  // Bake only instance transforms into owned derivatives; cached source is intact.
+  const authored=game.model(34,1);authored.rotation.y=Math.PI/2;authored.scale.set(22,.9/.3707,3.8/.2665);authored.position.y=1.3;authored.updateWorldMatrix(true,true);
+  authored.traverse(n=>{if(!n.isMesh)return;const moving=n.parent.name==='Moving';const geo=n.geometry.clone().applyMatrix4(n.matrixWorld);if(moving)geo.translate(0,-2.2,0);const m=new THREE.Mesh(geo,n.material);m.receiveShadow=true;(moving?bridge:world.root).add(m);});
+  deck.visible=false;deck.userData.collisionProxy=true;
+  fixtures.push({id:34,role:'Actual gravity-balanced deck and stationary pivot'});
+
   goal=world.goal([4.6,9,-14.5],[4.4,4]);
   function pose(angle,dt){bridge.rotation.x=angle;bridge.updateWorldMatrix(true,true);collider.box.setFromObject(deck);load.collider.box.setFromObject(load.mesh);
    if(!game.physics)return;
@@ -95,11 +112,13 @@ export function buildExtendedCampaign(game,index){
   // Tall column, open only toward the high gallery. It is not an elevator.
   for(const x of [-3.1,3.1]){world.box([x,6,0],[.20,12,.20]);glass(world,[x,5,0],[.10,10,5.2]);}
   patch('air-intake',[9.8,2.1,7],[-1,0,0]);patch('air-up',[0,.025,0],[0,1,0],4,4);
-  const fan=rotorDevice(world,[-9.6,2.1,7],[1,0,0],1.25),drawing=beamDrawing(world,0x95ddec,.055);
+  const sourceFan=suppliedArt(game,world,31,[-8.3,.60,7],3.2,-Math.PI/2);
+  game.collisionProxy(new THREE.Box3().setFromObject(sourceFan.art));fixtures.push({id:31,role:'Original uploaded wind generator with independent rotor'});
+  const drawing=beamDrawing(world,0x95ddec,.035);let fanPhase=0;
   const beads=new THREE.InstancedMesh(new THREE.SphereGeometry(.055,6,4),world.materials.accent,36);beads.instanceMatrix.setUsage(THREE.DynamicDrawUsage);beads.frustumCulled=false;world.root.add(beads);
   const m=new THREE.Matrix4();state.enabled=false;state.segments=[];
   console([6,0,9],()=>{state.enabled=!state.enabled;game.audio?.mechanism?.('switch');},'air','E — включить воздух. Связанная пара перенаправляет струю; поток действует непрерывно.');
-  update=dt=>{fan.rotor.rotation.z+=dt*(state.enabled?7:.35);state.segments=state.enabled?tracePortalRay(game,V(-9.4,2.1,7),V(1,0,0),{medium:'air'}):[];drawing.update(state.segments);
+  update=dt=>{fanPhase+=dt*(state.enabled?7:0);sourceFan.spin(fanPhase);state.segments=state.enabled?tracePortalRay(game,V(-6.55,2.1,7),V(1,0,0),{medium:'air'}):[];drawing.update(state.segments);
    beads.visible=state.enabled;const s=state.segments.at(-1);if(s){for(let i=0;i<36;i++){const u=((time*.8+i/36)%1),p=s.a.clone().addScaledVector(s.direction,u*s.length);p.x+=Math.sin(i*2.7)*1.25;p.z+=Math.cos(i*2.7)*1.25;m.makeTranslation(p.x,p.y,p.z);beads.setMatrixAt(i,m);}beads.instanceMatrix.needsUpdate=true;}};
   const acceleration=(position,velocity)=>{for(const s of state.segments){const offset=position.clone().sub(s.a),t=offset.dot(s.direction);if(t<0||t>s.length)continue;offset.addScaledVector(s.direction,-t);if(offset.length()>1.65)continue;return s.direction.clone().multiplyScalar(THREE.MathUtils.clamp((14-velocity.dot(s.direction))*5,-35,70));}return V();};
   playerAcceleration=(p,v)=>acceleration(p.clone().add(V(0,1.1,0)),v);
