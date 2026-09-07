@@ -1,8 +1,12 @@
 /** Original procedural sound design. No Portal/Valve samples or recordings.
  * One shared noise buffer, bounded voices, quiet room tone and a lift motor. */
 export class AudioController {
-  shot(index=0){this.tone(index?280:460,.095,'triangle',.03);this.tone(index?650:870,.055,'sine',.017);}
-  rejectShot(){this.tone(145,.07,'triangle',.016);}
+  shot(index=0){
+    this.hush(.12,.028,3200);
+    this.tone(index?220:330,.13,'triangle',.032,0,index?460:680);
+    this.tone(index?860:1150,.19,'sine',.014,.025,index?280:410);
+  }
+  rejectShot(index=0){this.hush(.10,.018,1100);this.tone(index?230:310,.14,'triangle',.016,0,100);}
 
   constructor(){this.context=null;this.enabled=true;this.volume=.65;this.muted=false;this.blocks=new Set(['menu']);this.voices=0;this.motorOn=false;}
   unlock(){

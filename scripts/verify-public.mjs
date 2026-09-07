@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
 import {setTimeout as wait} from 'node:timers/promises';
 import puppeteer from 'puppeteer-core';
+import {runPortalShotBrowser} from './portal-shot-browser.mjs';
 const base=(process.env.PAGE_URL||'').replace(/\/$/,'')+'/',expected=process.env.GITHUB_SHA;
 assert.ok(base.startsWith('https://')&&expected,'Public URL and expected revision are required');
 fs.mkdirSync('live-evidence',{recursive:true});
@@ -15,7 +16,7 @@ try{
   catch(error){console.log('Publication propagation:',String(error));}
   await wait(5000);
  }
- assert.equal(info?.commit,expected);assert.equal(info?.levels,20);assert.equal(info?.version,'v18-core');report.build=info;
+ assert.equal(info?.commit,expected);assert.equal(info?.levels,20);assert.equal(info?.version,'v20-shot-contact');report.build=info;
  const response=await fetch(base+'models/runtime/manifest.json?revision='+expected);assert.ok(response.ok);const manifest=await response.json();assert.equal(manifest.models.length,18);
  const source=JSON.parse(fs.readFileSync('public/models/runtime/manifest.json','utf8'));
  for(const model of manifest.models){
@@ -38,7 +39,8 @@ try{
  await page.waitForFunction(()=>!document.pointerLockElement&&getComputedStyle(document.querySelector('#win-screen')).opacity==='1');await page.locator('#play-again-button').click();
  await page.waitForFunction(()=>window.__NESI_DEMO_GAME__.levelIndex===11&&window.__NESI_DEMO_GAME__.state==='playing');
  assert.equal(await page.$eval('#level-number',e=>e.textContent),'12');assert.equal(await page.$('#quick-hint'),null);assert.equal(await page.$('#quick-settings'),null);
- await page.screenshot({path:'live-evidence/level-12-public-start.png'});assert.deepEqual(report.errors,[]);report.pass=true;
+ await page.screenshot({path:'live-evidence/level-12-public-start.png'});assert.deepEqual(report.errors,[]);
+ report.shots=await runPortalShotBrowser({browser,baseUrl:base,out:'live-evidence/portal-shots'});report.pass=true;
  console.log('LIVE VERIFIED',expected,'20 selectable levels, 18 exact models, actual level 11 completed and next-level button opened 12');
 }catch(error){report.error=String(error);throw error;}
 finally{fs.writeFileSync('live-evidence/report.json',JSON.stringify(report,null,2));await browser?.close();}

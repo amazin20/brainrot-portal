@@ -10,7 +10,7 @@ Node.js 22. Install locked dependencies with `npm ci`, then `npm run dev`. `npm 
 
 ## Gameplay and controls
 
-WASD moves; mouse orbits; left/right mouse place the blue/amber portals. E picks up/releases the companion or operates the nearest accessible mechanism. Space jumps, Shift runs, F holds the aim view, X clears the portal pair, V waves. Escape opens settings, level selection and hints. Touch controls are also present. Continuous ivory ceramic areas accept portals; dark graphite construction does not.
+WASD moves; mouse orbits; left/right mouse fire the blue/amber portal charges. E picks up/releases the companion or operates the nearest accessible mechanism. Space jumps, Shift runs, V waves. Escape opens settings, level selection and hints. Click the scene to capture the mouse after resuming. Touch controls are also present. Continuous ivory ceramic areas accept portals; dark graphite construction does not.
 
 The first five rooms introduce linked space, live weight, gravity/momentum, a moving portal surface and exit angle. Later chambers introduce reflection, balance, airflow and tangible workshop interactions: a spring pawl, freight ferry, flywheel and clutch, rotary portal drum, winch brake, gripper crane, duct shutters, lifted sightline, wind sail, roller sorter and elastic rebound. Details and honest limits are in `docs/RELEASE_V17.md`.
 

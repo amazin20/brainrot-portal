@@ -18,6 +18,9 @@ export async function runWorkshopJourney(d){
   walk(-4,-2);walk(0,-2.7);collect();groundExit();
  }else if(index===9){
   collect();walk(11,12);walk(11,-7.5);walk(-9.5,-7.5);walk(-9.5,1);put(-6,3);lever('dispatch',9);assert(s['dock-lock'].engaged,'Loaded carriage did not latch dock');mark('same cargo carried through the low tunnel');
+  // Step clear of the dispatch console before sighting across the room: the
+  // persistent shoulder camera must obey its foreground collision too.
+  walk(-6.6,4.8);
   shot(0,'loading-dock');shot(1,'unloading-dock');enter(p['loading-dock']);collect();
   walk(7,-1);wait(1);groundExit();
  }else if(index===10){

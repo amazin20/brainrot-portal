@@ -48,7 +48,12 @@ try{
    // Art-only overview: camera changes are explicitly not passage evidence.
    await page.evaluate(()=>{const g=window.__NESI_DEMO_GAME__,l=g.firstLevel;g.cameraRig.restoreProjection?.();g.camera.updateProjectionMatrix();
      document.querySelector('#win-screen').style.visibility='hidden';
-     const b=l.bounds,cx=(b.minX+b.maxX)/2,cz=(b.minZ+b.maxZ)/2;g.camera.position.set(cx+15,22,cz+23);g.camera.lookAt(cx,2,cz);g.camera.updateMatrixWorld(true);g.render();});
+     const b=l.bounds,cx=(b.minX+b.maxX)/2,cz=(b.minZ+b.maxZ)/2;
+     // These two repaired mechanisms need an in-room art view, not the opaque roof.
+     if(g.levelIndex===6){g.camera.position.set(-12,4,0);g.camera.lookAt(0,.7,0);}
+     else if(g.levelIndex===7){g.camera.position.set(6,9,8);g.camera.lookAt(-1,3,0);}
+     else{g.camera.position.set(cx+15,22,cz+23);g.camera.lookAt(cx,2,cz);}
+     g.camera.updateMatrixWorld(true);g.render();});
    await shot(`level-${index+1}-overview`);
    await page.$eval('#win-screen',e=>e.style.visibility='');
  }

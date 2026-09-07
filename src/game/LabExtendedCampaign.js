@@ -1,4 +1,7 @@
-import {suppliedArt} from './LabWorkshopKit.js';
+import {BALANCE_BIND, buildBalanceModel} from './LabBalanceModel.js';
+import {generatorSkin} from './LabWindRoom.js';
+import {LabAirflowVisual} from './LabAirflowVisual.js';
+import {airAcceleration} from './LabAirForces.js';
 import * as THREE from 'three';
 import {LabTileWorld} from './LabTileWorld.js';
 import {cargoLoadsPlate} from './LabPlateContact.js';
@@ -52,22 +55,25 @@ export function buildExtendedCampaign(game,index){
   world.floor(-13,13,-17,15,-4);world.floor(1.85,13,-3,3,2.2);world.floor(-10,7,-17,-10.4,5.5);
   // A recovery stair returns only to the entrance, never to the high exit.
   world.stairs(9,12,4,14,-4,2.2);world.floor(9,13,3,4,-4);
-  const bridge=new THREE.Group();bridge.position.set(0,2.2,0);world.root.add(bridge);
-  const deck=world.box([0,-.14,0],[3.8,.28,22],world.materials.floor,true,bridge);
+  const surfaceOffset=BALANCE_BIND.surfaceOffset;
+  const bridge=new THREE.Group();bridge.position.set(0,2.2-surfaceOffset,0);world.root.add(bridge);
+  const deck=world.box([0,surfaceOffset-.14,0],[3.8,.28,22],world.materials.floor,true,bridge);
   const collider=game.colliders.find(c=>c.mesh===deck);collider.kinematic=true;collider.walkablePlane=true;
-  for(const x of [-1.85,1.85])world.box([x,.045,0],[.07,.09,22],world.materials.accent,false,bridge);
-  for(let z=-10;z<=10;z+=2)world.box([0,.012,z],[3.7,.022,.035],world.materials.trim,false,bridge);
-  for(const x of [-2.5,2.5])world.box([x,.4,0],[.35,3.6,1.1]);
-  const axle=new THREE.Mesh(new THREE.CylinderGeometry(.45,.45,5.7,16),world.materials.trim);axle.rotation.z=Math.PI/2;axle.position.y=2;world.root.add(axle);
-  const mass=world.box([0,-.8,-6],[2,.9,1.3],world.materials.trim,false,bridge);world.box([0,-.8,0],[.12,.12,16],world.materials.accent,false,bridge);
-  const load=patch('lever-load',[0,.027,8.4],[0,1,0],3.2,3.8,bridge,true);load.collider.walkablePlane=true;game.colliders=game.colliders.filter(c=>c!==load.collider);load.mesh.userData.portalColliderId=collider.mesh.uuid;collider.frontPlane=()=>load.getFrame();
+  for(const x of [-1.85,1.85])world.box([x,surfaceOffset+.045,0],[.07,.09,22],world.materials.accent,false,bridge);
+  for(let z=-10;z<=10;z+=2)world.box([0,surfaceOffset+.012,z],[3.7,.022,.035],world.materials.trim,false,bridge);
+  // Visible load-bearing crossmembers support the deck above the original
+  // narrow beam. No second false floor and no posts piercing the walkway.
+  for(let z=-6;z<=6;z+=3)world.box([0,surfaceOffset-.58,z],[3.5,.58,.16],world.materials.trim,false,bridge);
+  const mass=world.box([2.25,surfaceOffset-.65,-6],[.8,.75,1.3],world.materials.trim,false,bridge);
+  world.box([2.25,surfaceOffset-.3,0],[.10,.12,16],world.materials.accent,false,bridge);
+  const load=patch('lever-load',[0,surfaceOffset+.027,8.4],[0,1,0],3.2,3.8,bridge,true);load.collider.walkablePlane=true;game.colliders=game.colliders.filter(c=>c!==load.collider);load.mesh.userData.portalColliderId=collider.mesh.uuid;collider.frontPlane=()=>load.getFrame();
   const receiver=patch('lever-receiver',[6.8,11.1,-14],[ -1,0,0]);
   world.box([4.5,6,-11.55],[5,12,.25]);
   console([8,2.2,0],()=>{state.counterIndex=(state.counterIndex+1)%3;game.audio?.mechanism?.('switch');},'balance','E — сдвинуть противовес. Важны вес и расстояние от оси; игрок тоже нагружает мост.');
-  Object.assign(state,{angle:0,omega:0,previousAngle:0,counterIndex:0,counterZ:-6,torque:0,bridge,load,collider});
-  const heightAt=(x,z)=>Math.abs(x)<=1.9&&Math.abs(z)<=11*Math.cos(state.angle)?2.2-Math.tan(state.angle)*z:null;
+  Object.assign(state,{angle:0,omega:0,previousAngle:0,counterIndex:0,counterZ:-6,torque:0,bridge,load,collider,surfaceOffset});
+  const heightAt=(x,z)=>Math.abs(x)<=1.9&&Math.abs((z-surfaceOffset*Math.sin(state.angle))/Math.cos(state.angle))<=11?bridge.position.y+surfaceOffset/Math.cos(state.angle)-Math.tan(state.angle)*z:null;
   const f={minX:-1.9,maxX:1.9,minZ:-11,maxZ:11,y:2.2,mesh:deck,enabled:true,heightAt,normalAt:()=>V(0,Math.cos(state.angle),Math.sin(state.angle))};game.floors.push(f);
-  const contact=()=>cargoLoadsPlate(game.cargo,game.heldCube,{center:V(0,2.2,0),normal:V(0,Math.cos(state.angle),Math.sin(state.angle)),right:V(-1,0,0),up:V(0,-Math.sin(state.angle),Math.cos(state.angle)),halfWidth:1.9,halfHeight:11});
+  const contact=()=>cargoLoadsPlate(game.cargo,game.heldCube,{center:V(0,bridge.position.y+surfaceOffset*Math.cos(state.angle),surfaceOffset*Math.sin(state.angle)),normal:V(0,Math.cos(state.angle),Math.sin(state.angle)),right:V(-1,0,0),up:V(0,-Math.sin(state.angle),Math.cos(state.angle)),halfWidth:1.9,halfHeight:11});
   mechanicalContact=()=>contact(game.cargo.position);
   // A distinct upper dock is outside the deck's full tilt + jump envelope.
   // Reaching the lever landing is not reaching the exit: carry must be solved
@@ -82,15 +88,14 @@ export function buildExtendedCampaign(game,index){
   world.box([4.6,13.2,-11.55],[5.3,2.4,.25]);
   for(const h of [9.35,11.4])world.box([2.06,h,-14.35],[.28,.055,5.3],world.materials.accent,false);
   state.exitWindow={bottom:9.35,top:11.4,x:2.08};
-  // The user's balance model becomes the actual bridge, not idle scenery.
-  // Bake only instance transforms into owned derivatives; cached source is intact.
-  const authored=game.model(34,1);authored.rotation.y=Math.PI/2;authored.scale.set(22,.9/.3707,3.8/.2665);authored.position.y=1.3;authored.updateWorldMatrix(true,true);
-  authored.traverse(n=>{if(!n.isMesh)return;const moving=n.parent.name==='Moving';const geo=n.geometry.clone().applyMatrix4(n.matrixWorld);if(moving)geo.translate(0,-2.2,0);const m=new THREE.Mesh(geo,n.material);m.receiveShadow=true;(moving?bridge:world.root).add(m);});
-  deck.visible=false;deck.userData.collisionProxy=true;
-  fixtures.push({id:34,role:'Actual gravity-balanced deck and stationary pivot'});
+  const authored=buildBalanceModel(game,world.root,bridge);fixtures.push(authored);state.balanceArt=authored;
+  // The supplied stand, not an invented hovering hinge, supports the axle.
+  const standBox=new THREE.Box3().setFromObject(authored.fixed);authored.supportBoxes.forEach(b=>game.collisionProxy(b));
+  if(standBox.min.y>-4.001)world.box([(standBox.min.x+standBox.max.x)/2,(-4+standBox.min.y)/2,(standBox.min.z+standBox.max.z)/2],[standBox.max.x-standBox.min.x+.08,Math.max(.025,standBox.min.y+4),standBox.max.z-standBox.min.z+.08],world.materials.trim);
 
   goal=world.goal([4.6,9,-14.5],[4.4,4]);
   function pose(angle,dt){bridge.rotation.x=angle;bridge.updateWorldMatrix(true,true);collider.box.setFromObject(deck);load.collider.box.setFromObject(load.mesh);
+   f.minZ=surfaceOffset*Math.sin(angle)-11*Math.cos(angle);f.maxZ=surfaceOffset*Math.sin(angle)+11*Math.cos(angle);
    if(!game.physics)return;
    // Physical boxes rotate with the authored deck; never replace them by AABBs.
    for(const [c,mesh]of [[collider,deck],[load.collider,load.mesh]]){const item=game.physics.solids.get(c.mesh.uuid);if(!item)continue;const pos=mesh.getWorldPosition(V()),q=bridge.getWorldQuaternion(new THREE.Quaternion());
@@ -107,23 +112,31 @@ export function buildExtendedCampaign(game,index){
   };
   reset=()=>{Object.assign(state,{angle:0,omega:0,previousAngle:0,counterIndex:0,counterZ:-6});pose(0,0);};render=a=>{bridge.rotation.x=THREE.MathUtils.lerp(state.previousAngle,state.angle,a);};
  }else if(index===7){
-  bounds={minX:-10,maxX:10,minZ:-13,maxZ:13};spawn=[-4,0,10];cargoSpawn=[-3,.55,8.5];world.walls(bounds,15);world.floor(-10,10,-13,13);
+  bounds={minX:-10,maxX:10,minZ:-13,maxZ:13};spawn=[1,0,5.8];cargoSpawn=[2.2,.55,4.5];world.walls(bounds,15);world.floor(-10,10,-13,13);
   world.floor(-4.2,4.2,-13,-3.1,7);goal=world.goal([0,7,-9],[4.8,4.5]);
   // Tall column, open only toward the high gallery. It is not an elevator.
   for(const x of [-3.1,3.1]){world.box([x,6,0],[.20,12,.20]);glass(world,[x,5,0],[.10,10,5.2]);}
   patch('air-intake',[9.8,2.1,7],[-1,0,0]);patch('air-up',[0,.025,0],[0,1,0],4,4);
-  const sourceFan=suppliedArt(game,world,31,[-8.3,.60,7],3.2,-Math.PI/2);
-  game.collisionProxy(new THREE.Box3().setFromObject(sourceFan.art));fixtures.push({id:31,role:'Original uploaded wind generator with independent rotor'});
-  const drawing=beamDrawing(world,0x95ddec,.035);let fanPhase=0;
-  const beads=new THREE.InstancedMesh(new THREE.SphereGeometry(.055,6,4),world.materials.accent,36);beads.instanceMatrix.setUsage(THREE.DynamicDrawUsage);beads.frustumCulled=false;world.root.add(beads);
-  const m=new THREE.Matrix4();state.enabled=false;state.segments=[];
+  const sourceFan=generatorSkin(game);sourceFan.art.scale.setScalar(5.27596);sourceFan.art.rotation.y=Math.PI/2;sourceFan.art.position.set(-7,0,7);world.root.add(sourceFan.art);
+  sourceFan.art.userData.gameplayRole='Fan: front impeller supplies the physical updraft through portals';fixtures.push(sourceFan);
+  const fanBox=new THREE.Box3().setFromObject(sourceFan.art);game.collisionProxy(fanBox);
+  const origin=V(fanBox.max.x+.04,2.1,7),airflow=new LabAirflowVisual(world.root,{radius:1.65});
+  Object.assign(state,{enabled:false,segments:[],fanSpeed:0,fanPhase:0,previousFanPhase:0,airflow,sourceFan,airOrigin:origin});
   console([6,0,9],()=>{state.enabled=!state.enabled;game.audio?.mechanism?.('switch');},'air','E — включить воздух. Связанная пара перенаправляет струю; поток действует непрерывно.');
-  update=dt=>{fanPhase+=dt*(state.enabled?7:0);sourceFan.spin(fanPhase);state.segments=state.enabled?tracePortalRay(game,V(-6.55,2.1,7),V(1,0,0),{medium:'air'}):[];drawing.update(state.segments);
-   beads.visible=state.enabled;const s=state.segments.at(-1);if(s){for(let i=0;i<36;i++){const u=((time*.8+i/36)%1),p=s.a.clone().addScaledVector(s.direction,u*s.length);p.x+=Math.sin(i*2.7)*1.25;p.z+=Math.cos(i*2.7)*1.25;m.makeTranslation(p.x,p.y,p.z);beads.setMatrixAt(i,m);}beads.instanceMatrix.needsUpdate=true;}};
-  const acceleration=(position,velocity)=>{for(const s of state.segments){const offset=position.clone().sub(s.a),t=offset.dot(s.direction);if(t<0||t>s.length)continue;offset.addScaledVector(s.direction,-t);if(offset.length()>1.65)continue;return s.direction.clone().multiplyScalar(THREE.MathUtils.clamp((14-velocity.dot(s.direction))*5,-35,70));}return V();};
+  update=dt=>{state.previousFanPhase=state.fanPhase;const target=state.enabled?12:0,rate=state.enabled?3.5:2.7,old=state.fanSpeed;
+   state.fanSpeed=THREE.MathUtils.damp(old,target,rate,dt);state.fanPhase+=target*dt+(old-target)*(1-Math.exp(-rate*dt))/rate;
+   // The coasting rotor supplies the same fading plume to rendering and
+   // physics. Clear both together when its strength is no longer visible.
+   if(!state.enabled&&state.fanSpeed<.06)state.fanSpeed=0;
+   state.segments=state.fanSpeed>0?tracePortalRay(game,origin,V(1,0,0),{medium:'air'}):[];
+   airflow.step(dt,state.fanSpeed/12);airflow.setPath(state.segments,game.portals?.portals||[]);
+  };
+  render=a=>{sourceFan.spin(THREE.MathUtils.lerp(state.previousFanPhase,state.fanPhase,a));airflow.render(a,game.quality?.shadows===false?'low':'balanced');};
+  const acceleration=(position,velocity)=>airAcceleration(state.segments,position,velocity,
+   {strength:state.fanSpeed/12,speed:14,radius:airflow.radius,response:5,maximum:70});
   playerAcceleration=(p,v)=>acceleration(p.clone().add(V(0,1.1,0)),v);
   applyCargoForces=()=>{if(game.heldCube)return;const b=game.physics.cargoBody,a=acceleration(game.cargo.position,game.cargo.velocity);b.force.x+=a.x*b.mass;b.force.y+=a.y*b.mass;b.force.z+=a.z*b.mass;if(a.lengthSq())b.wakeUp();};
-  reset=()=>{state.enabled=false;state.segments=[];drawing.update([]);};
+  reset=()=>{state.enabled=false;state.segments=[];state.fanSpeed=state.fanPhase=state.previousFanPhase=0;sourceFan.spin(0);airflow.reset();};
  }else if(index===8){
   bounds={minX:-13,maxX:13,minZ:-19,maxZ:14};spawn=[-8,1,11];cargoSpawn=[-9,1.55,10];world.walls(bounds,10);world.floor(-13,13,-19,14);
   world.floor(-13,-6,2,14,1);world.stairs(-12,-10,-1,2,0,1);const belt=world.floor(-10,8.8,4.6,7.8,1);state.direction=-1;

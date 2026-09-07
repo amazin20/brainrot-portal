@@ -130,11 +130,11 @@ export class LabHeldDevice {
       transparent: true, depthWrite: false, side: THREE.DoubleSide, blending: THREE.AdditiveBlending,
       toneMapped: false,
     });
-    this.flash = new THREE.Mesh(new THREE.RingGeometry(0.065 * sourceUnit, 0.10 * sourceUnit, 32), this.flashMaterial);
+    this.flash = new THREE.Mesh(new THREE.RingGeometry(0.045 * sourceUnit, 0.15 * sourceUnit, 32), this.flashMaterial);
     this.flash.name = 'LabDeviceEnergyPulse';
     this.flash.visible = false;
     this.flash.frustumCulled = false;
-    this.light = new THREE.PointLight(0x55ddff, 0, 1.2, 2);
+    this.light = new THREE.PointLight(0x55ddff, 0, 1.8, 2);
     this.emitter.add(this.flash, this.light);
     this.setSocket(false);
   }
@@ -203,8 +203,8 @@ export class LabHeldDevice {
     const strength = this.flashTime / FLASH_DURATION;
     this.flashMaterial.uniforms.strength.value = strength;
     this.flash.visible = strength > 0 && this.state === 'held';
-    this.flash.scale.setScalar(1 + (1 - strength) * 0.45);
-    this.light.intensity = this.flash.visible ? strength * strength * 0.75 : 0;
+    this.flash.scale.setScalar(1 + (1 - strength) * 1.7);
+    this.light.intensity = this.flash.visible ? strength * strength * 1.4 : 0;
   }
 
   fire(index = 0) {
@@ -215,7 +215,7 @@ export class LabHeldDevice {
     this.flashMaterial.uniforms.color.value.setHex(color);
     this.flashMaterial.uniforms.strength.value = 1;
     this.light.color.setHex(color);
-    this.light.intensity = 0.75;
+    this.light.intensity = 1.4;
     this.flash.scale.setScalar(1);
     this.flash.visible = true;
     return true;

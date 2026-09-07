@@ -180,7 +180,14 @@ export class LabCamera {
     this.viewUp.copy(UP).applyQuaternion(this.portalUpOrientation);
     const length = THREE.MathUtils.lerp(6.5, 5.7, this.aimBlend);
     this.desired.copy(this.focus).addScaledVector(this.forward, -length)
-      .addScaledVector(this.right, THREE.MathUtils.lerp(0.62, 0.78, this.aimBlend));
+      .addScaledVector(this.right, THREE.MathUtils.lerp(1.4, 1.56, this.aimBlend));
+    // The normal shoulder view leaves the centre ray beside the visible body.
+    // Looking up must not drive the boom underground and force collision to
+    // collapse it into the backpack. Keep its low end above the feet while
+    // retaining the complete wall/near-plane sweep below. Transported viewUp
+    // preserves this construction through floor and tilted portal transitions.
+    const belowFocus = this.desired.dot(this.viewUp) - this.focus.dot(this.viewUp);
+    if (belowFocus < -.65) this.desired.addScaledVector(this.viewUp, -.65 - belowFocus);
     for (const object of this.blockers) object.updateWorldMatrix(true, true);
 
     // Resolve both the smoothed pivot and the actual player. The latter matters

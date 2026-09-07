@@ -44,7 +44,7 @@ try{
  });image('physical-wind',report.wind.image);delete report.wind.image;assert.ok(report.wind.playerDistance>1&&report.wind.friendDistance>1&&report.wind.sameBody);
  const route=await page.evaluate(async()=>{
   const g=window.__NESI_DEMO_GAME__,update=g.updateVisuals,images=[];let frames=0,shots=0;const fire=g.firePortal;
-  g.firePortal=function(...args){const result=fire.apply(this,args);if(result){shots++;frames=30;}return result;};
+  g.firePortal=function(...args){const result=fire.apply(this,args);if(result){shots++;frames=72;}return result;};
   g.updateVisuals=function(...args){update.apply(this,args);if(frames>0){frames--;this.render();images.push(this.renderer.domElement.toDataURL());}};
   try{return{route:await window.__NESI_RUN_LEVEL_ROUTE__(),images,shots,terminals:g.firstLevel.terminals.length,automaticDoor:g.firstLevel.state.ratchet.engaged};}
   finally{g.updateVisuals=update;g.firePortal=fire;}
