@@ -111,7 +111,7 @@ export function buildExtendedCampaign(game,index){
   };
   reset=()=>{Object.assign(state,{angle:0,omega:0,previousAngle:0,counterIndex:0,counterZ:-6});pose(0,0);};render=a=>{bridge.rotation.x=THREE.MathUtils.lerp(state.previousAngle,state.angle,a);};
  }else if(index===7){
-  bounds={minX:-10,maxX:10,minZ:-13,maxZ:13};spawn=[-4,0,10];cargoSpawn=[-3,.55,8.5];world.walls(bounds,15);world.floor(-10,10,-13,13);
+  bounds={minX:-10,maxX:10,minZ:-13,maxZ:13};spawn=[1,0,5.8];cargoSpawn=[2.2,.55,4.5];world.walls(bounds,15);world.floor(-10,10,-13,13);
   world.floor(-4.2,4.2,-13,-3.1,7);goal=world.goal([0,7,-9],[4.8,4.5]);
   // Tall column, open only toward the high gallery. It is not an elevator.
   for(const x of [-3.1,3.1]){world.box([x,6,0],[.20,12,.20]);glass(world,[x,5,0],[.10,10,5.2]);}
