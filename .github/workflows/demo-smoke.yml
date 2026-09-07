@@ -39,13 +39,14 @@ jobs:
           export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
           node scripts/v8-browser.mjs
           node scripts/video-repair-browser.mjs
+          node scripts/portal-shot-browser.mjs
           node scripts/v8-yandex-browser.mjs
       - name: Record reviewed revision
         run: |
           node --input-type=module <<'NODE'
           import fs from 'node:fs';
           import {CAMPAIGN} from './src/game/LabCampaignLevels.js';
-          fs.writeFileSync('dist/build-info.json',JSON.stringify({commit:process.env.GITHUB_SHA,version:'v18-core',levels:CAMPAIGN.length,verified:true,run:process.env.GITHUB_RUN_ID},null,2));
+          fs.writeFileSync('dist/build-info.json',JSON.stringify({commit:process.env.GITHUB_SHA,version:'v20-shot-contact',levels:CAMPAIGN.length,verified:true,run:process.env.GITHUB_RUN_ID},null,2));
           NODE
       - name: Preserve rendered and physical verification
         if: always()
@@ -60,6 +61,7 @@ jobs:
             qa/v17-recovery.json
             qa/video-after.json
             video-repair-evidence/
+            portal-shot-evidence/
           retention-days: 14
       - name: Preserve reviewed browser package
         uses: actions/upload-artifact@v4

@@ -57,14 +57,16 @@ test('balance deck physical shape and player support refer to the same rotated p
  await g.selectLevel(6,false);g.resetRun(true);const l=g.firstLevel,s=l.state;s.counterIndex=2;step(180);
  const f=g.floors.find(f=>f.heightAt),p=g.physics.solids.get(s.collider.mesh.uuid).body;
  assert.ok(s.angle>.2);const q=s.bridge.getWorldQuaternion(new THREE.Quaternion());assert.ok(Math.abs(new THREE.Quaternion().copy(p.quaternion).dot(q))>.99999);
- for(const z of [-8,0,8])assert.ok(Math.abs(f.heightAt(0,z)-(2.2-Math.tan(s.angle)*z))<1e-8);
+ for(const z of [-8,0,8])assert.ok(Math.abs(f.heightAt(0,z)-(s.bridge.position.y+s.surfaceOffset/Math.cos(s.angle)-Math.tan(s.angle)*z))<1e-8);
  assert.equal(f.heightAt(3,0),null);
 });
-test('fan is a sustained force, not a scripted launch, and no force survives switching it off',async()=>{
+test('fan is a sustained force, not a scripted launch, and fully stops after rotor coast',async()=>{
  await g.selectLevel(7,false);g.resetRun(true);const l=g.firstLevel;
  assert.equal(l.playerAcceleration(V(0,0,0),V()).lengthSq(),0);assert.equal(l.getLaunch(V()),null);
- l.state.enabled=true;l.update(1/120);assert.ok(l.playerAcceleration(V(-5,1,7),V()).x>19.5);
- assert.equal(l.playerAcceleration(V(-5,1,0),V()).lengthSq(),0);l.state.enabled=false;l.update(1/120);assert.equal(l.playerAcceleration(V(-5,1,7),V()).lengthSq(),0);
+ l.state.enabled=true;for(let n=0;n<120;n++)l.update(1/120);assert.ok(l.playerAcceleration(l.state.airOrigin.clone().add(V(1,-1.1,0)),V()).x>19.5);
+ assert.equal(l.playerAcceleration(V(-5,1,0),V()).lengthSq(),0);l.state.enabled=false;
+ for(let n=0;n<360;n++)l.update(1/120);
+ assert.equal(l.playerAcceleration(l.state.airOrigin.clone().add(V(1,-1.1,0)),V()).lengthSq(),0);
 });
 test('weak resting load cannot latch the new vertical spring; a real drop can',async()=>{
  await g.selectLevel(8,false);const p=g.firstLevel.state.piston;
