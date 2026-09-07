@@ -36,7 +36,7 @@ const game=new LabGame({container:$('#game'),touch:{joystick:$('#joystick'),joys
   onReady:()=>{hideScreens();setState('ready');screen('start-screen',true);platform?.ready();
     game.audio.configure(preferences.value);applyLabQuality(game,preferences.value.quality);diagnostics();
     if(debug){window.__NESI_DEMO_GAME__=game;window.__NESI_PLATFORM__=platform;window.__NESI_PREFS__=preferences;
-      window.__NESI_RUN_RECOVERY_ROUTE__=async()=>{const {runRecoveryJourney}=await import('./game/LabRecoveryJourney.js');game.renderer.setAnimationLoop(null);hideScreens();setState('playing');try{return await runRecoveryJourney(game,{onMilestone:()=>game.render()});}finally{game.render();clearInput();setState(game.state);}};
+      window.__NESI_RUN_RECOVERY_ROUTE__=async()=>{const {runRecoveryJourney}=await import('./game/LabWorkshopRecovery.js');game.renderer.setAnimationLoop(null);hideScreens();setState('playing');try{return await runRecoveryJourney(game,{onMilestone:()=>game.render()});}finally{game.render();clearInput();setState(game.state);}};
       window.__NESI_RUN_LEVEL_ROUTE__=async()=>{const {runV8Journey}=await import('./game/LabV8Journey.js');game.renderer.setAnimationLoop(null);hideScreens();setState('playing');
         try{return await runV8Journey(game,{onMilestone:()=>game.render()});}finally{game.render();clearInput();setState(game.state);diagnostics();}};}
     $('#play-button').focus({preventScroll:true});if(query.get('smoke')==='1')enterLevel(game.levelIndex,'initial');},

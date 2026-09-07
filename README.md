@@ -1,43 +1,25 @@
 # NESI / Transfer Lab
 
-3D-головоломка от третьего лица: новый первый уровень «Вместе через мост», один постоянный брейнрот и порталы с сохранением движения.
+A third-person browser physics puzzle game: take the same animated companion through portals and physical machinery. Twenty selectable rooms, original character models, procedural animation, no progress checkpoints.
 
-[GitHub Pages](https://amazin20.github.io/nesi-brainrot/) публикует ветку `main`. Изменения из PR появятся по этому адресу после слияния и успешного Actions. `build-info.json` показывает точный опубликованный commit.
+Play: https://amazin20.github.io/nesi-brainrot/
 
-## Первый уровень
+## Development
 
-Оставь один портал в настоящей поверхности нажимной плиты и поставь на неё друга. Его вес опустит мост с противовесом. Перейди на дальний берег, поверни панель у терминала и открой второй портал: брейнрот вернётся к тебе, а разгруженный мост поднимется. Следующий шлюз использует ту же понятную связь веса, двери и энергетического поля.
+Node.js 22. Install locked dependencies with `npm ci`, then `npm run dev`. `npm run check` runs the unit/regression suite and Vite production build. `npm run preview` serves `dist` locally. The Pages deployment verifies the exact public `build-info.json` commit after publishing. Do not confuse a branch, source archive, unit-test success or concept image with an updated public demo.
 
-На старте есть мебель, батут и пандус для исследования. Подъёмник возвращает обоих из траншеи. Брейнрот сохраняет физическое тело при переноске, прыжках и переходах; после падения встаёт и немного гуляет рядом. На плите остаётся ждать. Стрелять при занятых руках нельзя.
+## Gameplay and controls
 
-## Управление
+WASD moves; mouse orbits; left/right mouse place the blue/amber portals. E picks up/releases the companion or operates the nearest accessible mechanism. Space jumps, Shift runs, F holds the aim view, X clears the portal pair, V waves. Escape opens settings, level selection and hints. Touch controls are also present. Continuous ivory ceramic areas accept portals; dark graphite construction does not.
 
-- WASD / стрелки — движение; Shift — бег; Space — прыжок.
-- Мышь — камера; ЛКМ / ПКМ — голубой / оранжевый портал.
-- F — удерживать прицел; E — взять / отпустить друга или повернуть панель у терминала.
-- X — сбросить пару порталов; V — помахать рукой; R — заново; Esc — пауза.
+The first five rooms introduce linked space, live weight, gravity/momentum, a moving portal surface and exit angle. Later chambers introduce reflection, balance, airflow and tangible workshop interactions: a spring pawl, freight ferry, flywheel and clutch, rotary portal drum, winch brake, gripper crane, duct shutters, lifted sightline, wind sail, roller sorter and elastic rebound. Details and honest limits are in `docs/RELEASE_V17.md`.
 
-Белые поверхности и нажимные плиты принимают порталы. Окрашенные стены служебной зоны их не принимают. Напольный портал ориентируется по направлению взгляда. Предварительный круг размещения отсутствует.
+The active campaign loads eighteen runtime GLBs across all rooms and four at startup. Nine supplied object derivatives are split into fixed and moving parts; their hashes and source filenames are in `docs/WORKSHOP_ASSETS.json`. Source/reference assets are excluded from `dist`. The original player and companion remain in use.
 
-## Модели и движение
+## Verification
 
-Игровые копии исходных GLB находятся в `public/models/runtime`. Оригинальные текстуры сохранены. Игрок использует 80 тысяч треугольников вместо 750 тысяч; брейнрот — 55 тысяч. Скелет игрока имеет 14 костей. Бег ограничен 2,2 полными циклами ног в секунду; стопы в покое устойчивы, прыжок меняет позу на отталкивании, в полёте и при приземлении. Руки поддерживают фактическое положение брейнрота. Пушка крепится к кисти либо к держателю на корпусе.
+Run `node scripts/v8-journey.mjs` for twenty normal-control routes on production physics, `node scripts/v10-shortcuts.mjs` and `node scripts/v17-audit.mjs` for bounded negative checks, and `node scripts/v17-recovery.mjs` for an unprepared-fall/missed-ferry recovery. Test fixtures that assign positions are clearly separated from the positive playthroughs.
 
-Модели 23–27 образуют пол, стены, пандусы и ограждения. Новая модель 28 поворачивает настоящую панель в неподвижных опорах, 29 нажимает собственную поверхность без белой накладки, 30 поднимает настил и противовес. Дверь раздвигает створки; поле гаснет между неподвижными стойками.
+For Chromium evidence, install the CI browser driver and run `scripts/v8-browser.mjs` against a production preview on port 4173 with `CHROME_PATH` pointing to Chrome. The separate Yandex draft (`npm run build -- --mode yandex --outDir dist-yandex`) is tested on port 4174 by `scripts/v8-yandex-browser.mjs` with an explicit SDK stub. This does not verify live advertisements, moderation or revenue. GitHub demo hints are free and do not imitate ad views.
 
-Камера, персонаж и брейнрот преобразуются системой порталов. При пересечении рисуются две обрезанные части текущей скелетной позы, а после переходов между плоскостями горизонт и поза восстанавливаются плавно. Физика работает на 120 Гц; анимация обновляется с частотой кадров.
-
-## Сборка и проверка
-
-```bash
-npm ci
-npm run dev
-npm run check
-node scripts/lab-journey.mjs
-```
-
-Production-сборка включает только модели первого уровня, код и локальный Draco-декодер. Галереи, исходные тяжёлые GLB, концепты и source maps не входят в загрузку игры. Размеры файлов печатаются при `npm run build`. Загрузчик параллельно скачивает четыре файла и декодирует две модели, показывает реальные байты и отдельно готовит первый кадр.
-
-`lab-journey.mjs` проверяет маршрут на реальной оптимизированной геометрии. GitHub Actions дополнительно запускает WebGL-проверку и запись движения. `?evidence=1` открывает проверку поз и маршрута, `?debug=1` — диагностику. CPU-проверки исходной скелетной модели находятся в `qa/player-motion-v6-*`; они не заменяют проверку WebGL.
-
-Оптимизацию можно повторить скриптом `scripts/optimize-runtime-models.mjs`; закреплённые версии инструментов и параметр папки новых исходных GLB описаны в начале файла. Состав и контрольные суммы: `public/models/runtime/manifest.json`.
+This is a twenty-level demo, not a completed hundred-level release. Finite automated routes and software-rendered evidence cannot establish universal FPS, subjective puzzle quality or the absence of every possible alternative route.

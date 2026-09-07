@@ -79,13 +79,13 @@ export class Workshop {
   const shell=new THREE.Box3().setFromObject(art.art);game.collisionProxy(shell);
   const floorY=p[1]-2.1;if(shell.min.y>floorY+.08)this.world.box([(shell.min.x+shell.max.x)/2,(shell.min.y+floorY)/2,(shell.min.z+shell.max.z)/2],[shell.max.x-shell.min.x,shell.min.y-floorY,shell.max.z-shell.min.z]);
   // Dust motes identify airflow without an abstract vector-arrow UI.
-  const dust=new THREE.InstancedMesh(new THREE.SphereGeometry(.055,5,4),this.world.materials.accent,36);dust.frustumCulled=false;this.world.root.add(dust);const matrix=new THREE.Matrix4();let spin=0;
+  const dust=new THREE.InstancedMesh(new THREE.SphereGeometry(.055,5,4),this.world.materials.accent,36);dust.frustumCulled=false;this.world.root.add(dust);const matrix=new THREE.Matrix4();let spin=0,spinSpeed=0;
   const fan={art,origin,direction,enabled:false,segments:[],speed:12,radius,update:dt=>{
-   spin+=dt*(fan.enabled?9:0);art.spin(spin);fan.segments=fan.enabled?tracePortalRay(game,origin,direction,{medium:'air',length:80}):[];drawing.update(fan.segments);dust.visible=fan.enabled;
+   const targetSpin=fan.enabled?9:0,rate=fan.enabled?5:2.4;const oldSpin=spinSpeed;spinSpeed=THREE.MathUtils.damp(spinSpeed,targetSpin,rate,dt);spin+=targetSpin*dt+(oldSpin-targetSpin)*(1-Math.exp(-rate*dt))/rate;fan.rotorSpeed=spinSpeed;art.spin(spin);fan.segments=fan.enabled?tracePortalRay(game,origin,direction,{medium:'air',length:80}):[];drawing.update(fan.segments);dust.visible=fan.enabled;
    for(let i=0;i<36;i++){const s=fan.segments[i%Math.max(1,fan.segments.length)];if(!s)break;const u=(this.time*.25+i/36)%1,p=s.a.clone().addScaledVector(s.direction,s.length*u);matrix.makeTranslation(p.x+Math.sin(i*4)*.35,p.y+Math.cos(i*5)*.35,p.z);dust.setMatrixAt(i,matrix);}dust.instanceMatrix.needsUpdate=true;
   },touch:point=>rayTouches(fan.segments,point,radius),acceleration:(p,v)=>{
    for(const s of fan.segments){const off=p.clone().sub(s.a),u=off.dot(s.direction);if(u<0||u>s.length)continue;off.addScaledVector(s.direction,-u);if(off.length()>radius)continue;return s.direction.clone().multiplyScalar(clamp((fan.speed-v.dot(s.direction))*5,-30,65));}return V();
-  }};this.ticks.push(fan.update);this.resets.push(()=>{fan.enabled=false;fan.segments=[];spin=0;});this.state[name]=fan;return fan;
+  }};this.ticks.push(fan.update);this.resets.push(()=>{fan.enabled=false;fan.segments=[];spin=spinSpeed=0;fan.rotorSpeed=0;art.spin(0);});this.state[name]=fan;return fan;
  }
  turbine(name,p){const art=this.fixture(35,[p[0],p[1]-1.1,p[2]],2.5),wheel=new Flywheel(),indicator=this.world.box([p[0]+1.2,p[1],p[2]],[.12,1.8,.10],this.world.materials.accent,false);
   const t={wheel,art,position:V(...p),power:false,clutch:false,update(dt){wheel.step(t.power?24:0,t.clutch?2.2:0,dt);art.spin(wheel.angle);indicator.scale.y=.05+.95*Math.min(1,wheel.work/60);},reset(){wheel.reset();t.power=t.clutch=false;}};this.state[name]=t;this.ticks.push(dt=>t.update(dt));this.resets.push(()=>t.reset());return t;}

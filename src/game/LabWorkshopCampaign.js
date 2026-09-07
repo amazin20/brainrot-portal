@@ -11,7 +11,7 @@ const specs=[
  ['gentle-crane','Бережный кран','Захват и транспортировка физического груза','Вытащи друга из низкого отсека механическим захватом.',[36,39],['Прозрачная крышка не пропускает руки. Захват может поднять крышку вместе с грузом.','Рычаг последовательно опускает захват, поднимает и переносит его. Пружинный хват не телепортирует друга.','Войди порталами в операторскую, опусти захват и дождись контакта. Затем подними, перенеси к приёмной чаше и отпусти.']],
  ['air-shutters','Жалюзи','Проходимость воздуха и механические заслонки','Открывай нужный воздуховод, а не рисуй направление силы.',[31,35],['Стеклянные заслонки останавливают воздух, хотя за ними всё видно.','За боковым проходом есть второй рычаг. Одна открытая заслонка ещё не делает сквозной канал.','Направь воздух к турбине и открой обе заслонки с разных сторон канала. Сквозной поток раскрутит подключённый привод.']],
  ['load-exchange','Перестановка опор','Подвижная точка обзора','Подними панель к сервисному окну и проложи путь за перегородку.',[37],['Подвижная секция несёт портальную панель. Поднимаясь, она открывает сервисное окно.','Окно пропускает выстрел, но его высоты недостаточно для игрока. Портал нужен и после подъёма.','Поставь выход на подвижную панель, подними её и пройди с другом. Оставь друга на площадке; с левого края видна белая стена за окном. Переставь пару между панелью и этой стеной, забери друга и пройди.']],
- ['wind-ferry','Парусный док','Сила ветра и масса платформы','Направь ветер в парус реальной подвижной платформы.',[31,37],['Платформа едет под действием потока. Без ветра она постепенно останавливается.','Портальная пара меняет путь воздуха. Нужен поток вдоль рельса, не поперёк.','Свяжи воздухозаборную стену с боковой стеной у рельса. Включи вентилятор, забери друга и сядь на платформу; на другом берегу выйди к двери.']],
+ ['wind-ferry','Парусный док','Сила ветра и масса платформы','Направь ветер в парус реальной подвижной платформы.',[31,37,39],['Платформа едет под действием потока. Пропустил рейс — верни её лебёдкой у ближнего причала.','Портальная пара меняет путь воздуха. Нужен поток вдоль рельса, не поперёк.','Свяжи воздухозаборную стену с боковой стеной у рельса. Включи вентилятор, забери друга и сядь на платформу; на другом берегу выйди к двери.']],
  ['sorting-table','Поворотный сортировщик','Ролики и ориентация механизма','Поверни стол до загрузки. Неверный выход возвращает груз в зал.',[38],['Ролики толкают свободный груз в сторону открытого борта стола.','Приёмная чаша стоит у единственного жёлобa. С других сторон груз упадёт на пол, где его можно подобрать.','Поверни ролики к жёлобу и включи привод. Подай друга на стол через портал, дождись доставки в чашу, обойди стол и забери друга.']],
  ['soft-landing','Мягкая посадка','Упругий отскок','Наклонная подушка отбрасывает друга к боковому поршню.',[32,33],['Упругая чаша возвращает часть скорости падения. Слабое падение даёт небольшой отскок.','Приёмник смещён в сторону. Падая, друг проходит рядом; отражаясь от наклонной подушки, нажимает поршень снизу.','Поставь вход под другом, а выход на потолке над подушкой. Дождись отскока и щелчка бокового поршня, подбери друга и пройди к открывшемуся выходу.']],
  ['shared-workshop','Общая мастерская','Передача энергии и освобождение груза','Преврати портальную пару из линии питания в дорогу для двоих.',[31,35,33,39],['Ветер питает привод, а тормоз сохраняет поднятую площадку. Это разные задачи.','На сервисном помосте справа удобно увидеть поднятую панель. После настройки питания та же портальная пара должна стать маршрутом для вас двоих.','Направь ветер в турбину и подключи сцепление. Поднимись на правый помост, чтобы поставить портал на поднятую левую панель. Пройди наверх и затяни тормоз. Вернись той же парой за другом и пройди к выходу вместе.']],
@@ -60,7 +60,7 @@ export function buildWorkshopCampaign(game,index){
  }else if(index===12){
   baseWalls();const load=k.pad('weight',[7,0,5],4,4);const lift=k.slider('brake-lift',[-7,0,0],[-7,7,0],{width:4,depth:4,wallSide:true,asset:33,assetSize:3.8});
   w.floor(-9,1,-10,-2,7);goal=[-4,7,-7];
-  k.staticFixture(39,[-1,7,-5],2);k.control('brake',[-2.5,7,-3.8],()=>lift.locked=!lift.locked,'E — затянуть тормоз лебёдки. Зафиксированная высота не зависит от груза.');
+  const brakeDrum=k.staticFixture(39,[-1,7,-5],2);k.ticks.push(()=>brakeDrum.spin(lift.progress*15,'y'));k.control('brake',[-2.5,7,-3.8],()=>lift.locked=!lift.locked,'E — затянуть тормоз лебёдки. Зафиксированная высота не зависит от груза.');
   k.ticks.unshift(()=>lift.target=load.loaded()?1:0);
   // A waist-high working aperture admits shots to the load, but no ladder.
   k.wire([[7,.05,5],[7,.05,0],[-7,.05,0]],()=>load.loaded());
@@ -104,9 +104,23 @@ export function buildWorkshopCampaign(game,index){
   const raft=k.slider('sail',[-7.5,3.25,2],[8,3.25,2],{width:3.5,depth:4,portal:false,asset:37,assetSize:3.3});raft.rate=1;
   const sail=w.box([1.6,2,0],[.15,3,3],w.materials.floor,false,raft.group);const fan=k.fan('blower',[-10,5.1,10],[1,0,0]);
   k.panel('supply',[11.7,5.1,10],[-1,0,0],7);k.panel('rail-air',[-11.7,5.1,2],[1,0,0],7);
-  k.control('sail-fan',[-10,3,4.5],()=>fan.enabled=!fan.enabled,'E — поток в парус. Платформа набирает скорость постепенно.');let position=0,velocity=0;k.state.sailPhysics={};
-  k.ticks.unshift(dt=>{const wind=fan.touch(raft.position.clone().add(V(0,2,0)));const load=(raft.loaded()?3.2:0)+(game.playerGrounded&&Math.abs(game.playerPosition.y-3.25)<.2&&game.playerPosition.distanceTo(raft.position)<2.5?3.2:0);velocity+=(wind?6/(9+load):0)*dt-velocity*.15*dt;position=Math.min(1,position+velocity*dt/15.5);raft.target=position;k.state.sailPhysics.velocity=velocity;});
-  k.resets.push(()=>position=velocity=0);w.stairs(-11,-8,-12,-5,0,3);
+  k.control('sail-fan',[-10,3,4.5],()=>fan.enabled=!fan.enabled,'E — поток в парус. Платформа набирает скорость постепенно.');let position=0,velocity=0;
+  const motion={recalling:false,velocity:0};k.state.sailPhysics=motion;
+  const winch=k.staticFixture(39,[-10.5,3,-1.9],1.45);
+  const cable=w.box([-8.8,3.5,2],[2.4,.035,.035],w.materials.trim,false);
+  k.control('sail-return',[-10,3,.1],()=>motion.recalling=!motion.recalling,'E — вернуть каретку тросовой лебёдкой. Повторное нажатие освобождает трос.');
+  k.ticks.unshift(dt=>{
+   const wind=fan.touch(raft.position.clone().add(V(0,2,0)));
+   const load=(raft.loaded()?3.2:0)+(game.playerGrounded&&Math.abs(game.playerPosition.y-3.25)<.2&&game.playerPosition.distanceTo(raft.position)<2.5?3.2:0);
+   const force=motion.recalling?-10:wind?6:0;
+   velocity+=(force/(9+load)-velocity*.15)*dt;
+   position=THREE.MathUtils.clamp(position+velocity*dt/15.5,0,1);
+   if((position===0&&velocity<0)||(position===1&&velocity>0))velocity=0;
+   if(position===0&&motion.recalling)motion.recalling=false;
+   raft.target=position;motion.velocity=velocity;
+  });
+  k.ticks.push(()=>{winch.spin(position*24,'y');cable.position.x=(-10.3+raft.position.x)/2;cable.scale.x=(raft.position.x+10.3)/2.4;});
+  k.resets.push(()=>{position=velocity=0;motion.recalling=false;motion.velocity=0;});w.stairs(-11,-8,-12,-5,0,3);
  }else if(index===17){
   baseWalls();const table=k.fixture(38,[0,0,2],4.4);const deck=w.floor(-2.2,2.2,-.2,4.2,2.5);k.panel('feed',[0,4.8,4.1],[0,0,-1],4.2,4.6);
   k.panel('load-floor',[-7,.025,7],[0,1,0],5,5);
@@ -115,8 +129,19 @@ export function buildWorkshopCampaign(game,index){
   const dirs=[V(1,0,0),V(0,0,-1),V(-1,0,0),V(0,0,1)];let angle=0;k.ticks.push(dt=>{angle=THREE.MathUtils.damp(angle,state.index*Math.PI/2,4,dt);table.spin(angle,'y');});
   k.forces.push(()=>{if(game.heldCube||!state.running)return;const p=game.cargo.position;if(Math.abs(p.x)<2.25&&Math.abs(p.z-2)<2.25&&p.y>2.6&&p.y<3.2){const b=game.physics.cargoBody,d=dirs[state.index];b.force.x+=b.mass*(d.x*8-b.velocity.x)*10;b.force.z+=b.mass*(d.z*8-b.velocity.z)*10;b.wakeUp();}});
   const lock=latch('sort-lock',[2.1,.4,-7],()=>receiver.loaded());closedExit(()=>lock.engaged);k.resets.push(()=>{state.index=0;state.running=false;angle=0;});
-  // Physical sloping chute below the north outlet, with side guides.
-  for(const x of [-1.6,1.6])w.box([x,1,-3.5],[.13,2,6]);
+  // A covered receiving chute admits rolling cargo but not a standing player
+  // or a hand-carried shortcut straight onto the pressure cup. Its access
+  // shields physically rise after the cup catches the load, for retrieval.
+  const shields=[];
+  for(const [p,size] of [[[1.65,2.65,-3.5],[.13,5.3,6.6]],[[-1.65,2.65,-3.5],[.13,5.3,6.6]],[[0,2.65,-6.8],[3.4,5.3,.13]],[[0,5.3,-3.5],[3.4,.13,6.6]]]){
+   const mesh=glass(w,p,size),c=game.colliders.find(c=>c.mesh===mesh);c.kinematic=true;shields.push({mesh,c,y:p[1]});
+  }
+  for(const [y,h]of [[1.075,2.15],[4.75,1.1]]){
+   const mesh=glass(w,[0,y,-.28],[3.4,h,.13]),c=game.colliders.find(c=>c.mesh===mesh);c.kinematic=true;shields.push({mesh,c,y});
+  }
+  k.state.sorterShields=shields;
+  k.ticks.push(dt=>{for(const q of shields){q.mesh.position.y=THREE.MathUtils.damp(q.mesh.position.y,lock.engaged?q.y+6:q.y,4,dt);game.syncCollision(q.c,new THREE.Box3().setFromObject(q.mesh),dt);}});
+  k.resets.push(()=>{for(const q of shields)q.mesh.position.y=q.y;});
  }else if(index===18){
   baseWalls();const springArt=k.fixture(32,[-3,-.1,-4],3.7,Math.PI/2);
   k.panel('ceiling-drop',[-3,10,-4],[0,-1,0],5,5);k.panel('feed-floor',[-7,.025,7],[0,1,0],5,5);
@@ -149,7 +174,7 @@ export function buildWorkshopCampaign(game,index){
  }else{
   baseWalls();spawn=[7,0,11];cargo=[-8,.55,8];w.floor(8,11.4,2,7,3);w.stairs(9,11,-5,2,0,3);k.panel('wind-intake',[11.7,2.1,10.5],[-1,0,0],9);k.panel('power-route',[0,2.1,-1],[0,0,-1],7);
   const fan=k.fan('blower',[-10,2.1,10.5],[1,0,0]),t=k.turbine('flywheel',[0,2.1,-8]);const lift=k.slider('foundry-lift',[-7,0,-1],[-7,7,-1],{width:4,depth:5,asset:33,assetSize:3.8,wallSide:true});
-  w.floor(-10,3,-11,-3.5,7);k.staticFixture(39,[0,7,-7],2.2);
+  w.floor(-10,3,-11,-3.5,7);const driveDrum=k.staticFixture(39,[0,7,-7],2.2);k.ticks.push(()=>driveDrum.spin(lift.progress*18,'y'));
   k.control('power-switch',[8,0,8],()=>fan.enabled=!fan.enabled,'E — включить нагнетатель.');k.control('drive-clutch',[6,0,-5],()=>t.clutch=!t.clutch,'E — передать энергию маховика подъёмнику.');
   k.control('foundry-brake',[-2,7,-6],()=>lift.locked=!lift.locked,'E — удерживать колонну тормозом, пока портальная пара занята другим рейсом.');
   k.ticks.unshift(()=>{t.power=fan.touch(t.position);lift.target=t.wheel.omega>2?Math.min(1,t.wheel.work/90):0;});
