@@ -18,8 +18,15 @@ export async function runRecoveryJourney(game,options={}){
   walk(-8.6,.1);wait(.2);game.interact();wait(.2);check(s.sailPhysics.recalling,'Winch control not reachable');
   until(()=>s.sail.progress<.01&&!s.sailPhysics.recalling,60,'Winch did not bring the same ferry back');
   mark('winch returned ferry through continuous physical motion');
+  // A projected X/Z waypoint is not a route between different storeys.
+  // The friend can settle below the returned ferry. Walk into the open basin
+  // before approaching it; never attempt pickup through the deck above it.
+  if(game.cargo.position.y<2.5&&game.playerPosition.y>2.8){
+   walk(-5,8);until(()=>game.playerGrounded&&game.playerPosition.y<.1,5,'Could not descend to the fallen friend');
+  }
   let c=game.cargo.position.clone();walk(c.x,c.z+1.2);until(()=>game.playerGrounded,4,'Could not approach fallen companion');
-  c=game.cargo.position.clone();walk(c.x,c.z+1.1);pickup();
+  c=game.cargo.position.clone();walk(c.x,c.z+1.1);mark('approached the friend on its actual floor');
+  try{pickup();}catch(error){throw new Error(`${error.message}; recovery player ${game.playerPosition.toArray()}; friend ${game.cargo.position.toArray()}`);}
   if(game.playerPosition.y<2.8){walk(-6,-13);walk(-9.5,-13);walk(-9.5,-5.2);wait(.4);}
   check(game.playerPosition.y>2.8,'Recovery must end back at the starting dock');
   check(game.heldCube===game.cargo&&game.teleportCount===0,'Recovery changed companion or teleported the player');
