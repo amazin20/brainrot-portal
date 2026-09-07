@@ -1,0 +1,34 @@
+name: Tactile mechanics regression
+on:
+  push:
+    branches: ['feature/twenty-workshops-v16']
+    paths:
+      - 'src/game/LabTactileDynamics.js'
+      - 'tests/lab-tactile-dynamics.test.js'
+      - '.github/workflows/tactile-dynamics-regression.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Mechanical energy and load tests
+        run: node --test tests/lab-tactile-dynamics.test.js
+      - name: Existing regression and production build
+        run: npm run check
+      - name: Preserve testable source, not a claimed new campaign
+        uses: actions/upload-artifact@v4
+        with:
+          name: tactile-dynamics-source
+          path: |
+            src/game/LabTactileDynamics.js
+            tests/lab-tactile-dynamics.test.js
+          retention-days: 7
