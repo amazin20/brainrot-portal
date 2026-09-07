@@ -6,7 +6,8 @@ export class LabTutorial {
   select(){
     const g=this.game,l=g.firstLevel,p=g.playerPosition;if(!l)return null;const mobile=globalThis.matchMedia?.('(pointer:coarse)')?.matches===true;
     if(this.feedback&&this.feedback.until>g.visualTime)return ['feedback','·',this.feedback.text,false];
-    const contextual=l.getContextLesson?.();if(contextual)return contextual;
+    const contextual=l.getContextLesson?.();
+    if(contextual)return g.heldCube?['room-put-down','E','Поставить друга. Для работы с пультом нужны свободные руки.',false]:contextual;
     const near=point=>point&&p.distanceTo(point)<4.5;
     if(g.levelIndex===0&&!this.seen.has('move'))return ['move',mobile?'◉':'W A S D','Пройди несколько шагов. Поверни камеру мышью или движением пальца.',p.distanceTo(new p.constructor(...l.spawn))>1.2];
     if(!this.seen.has('portal')&&!g.heldCube)return ['portal',mobile?'① · ②':'ЛКМ · ПКМ','Светлые плиты принимают порталы, тёмные — нет. Создай пару. F — прицел.',g.portals.ready];
