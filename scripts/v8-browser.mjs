@@ -31,6 +31,11 @@ try{
  assert.equal(report.initial.models,4);assert.ok(report.initial.oldHudHidden);assert.equal(report.initial.audioState,'running');
  for(let index=0;index<CAMPAIGN.length;index++){
    if(index>0){await clickMenu('#play-again-button');await page.waitForFunction(i=>window.__NESI_DEMO_GAME__?.levelIndex===i&&window.__NESI_DEMO_GAME__.state==='playing',{},index);await shot(`level-${index+1}-start`);}
+   if(index===16){
+     report.recovery=await page.evaluate(()=>window.__NESI_RUN_RECOVERY_ROUTE__());
+     assert.ok(report.recovery.pass&&report.recovery.respawns===0&&report.recovery.resets===0&&report.recovery.teleports===0);
+     await shot('level-17-recovered');console.log('Browser recovery: missed ferry, unprepared fall, stairs and return winch passed');
+   }
    const captured=await page.evaluate(async()=>{
      const g=window.__NESI_DEMO_GAME__,original=g.render,images=[];
      g.render=function(){original.call(this);if(this.levelIndex>=5&&this.state==='playing')images.push(this.renderer.domElement.toDataURL('image/png'));};
@@ -47,7 +52,7 @@ try{
    await shot(`level-${index+1}-overview`);
    await page.$eval('#win-screen',e=>e.style.visibility='');
  }
- assert.equal(new Set(requests.map(x=>x.split('?')[0])).size,9);assert.equal(requests.length,9,'cached models must not download twice');
+ assert.equal(new Set(requests.map(x=>x.split('?')[0])).size,18);assert.equal(requests.length,18,'cached models must not download twice');
  console.log('Returning to first course',await uiState());
  await clickMenu('#play-again-button');console.log('Return button pressed',await uiState());await page.waitForFunction(()=>window.__NESI_DEMO_GAME__.levelIndex===0&&window.__NESI_DEMO_GAME__.state==='playing');
  await page.evaluate(()=>document.exitPointerLock?.());await page.waitForFunction(()=>!document.pointerLockElement);

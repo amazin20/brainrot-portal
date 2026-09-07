@@ -1,11 +1,13 @@
-# NESI — V14 open-space corrections
+# NESI — twenty physical workshops, V17
 
 Repository: amazin20/nesi-brainrot. Vite / Three.js / cannon-es.
 Live URL: https://amazin20.github.io/nesi-brainrot/
-Verify public build-info.json against a successful Pages commit, version v14-open, ten levels before calling the correction live.
+Confirm the exact public build-info.json commit, version v17-twenty and levels 20 against a successful Pages run before calling a revision live.
 
-The ten V13 concepts remain. Added continuous ivory portal walls and darker non-portal finishes throughout. Course 7 has a separate high exit dock requiring a spatial transfer rather than repeated jumping from the lever. Course 10 includes an open physical stairwell and continuous return walls so an unprepared fall is recoverable. Footprint-based plate activation is retained.
-New files: LabExplorationSurfaces.js, LabRecoveryJourney.js; scripts/v14-jump-audit.mjs, v14-recovery.mjs and v14-browser.mjs; tests/lab-open-surfaces.test.js.
-Read docs/RELEASE_V14.md for scope, regression coverage and limitations.
+There are twenty active, selectable rooms: original introductory 1–5, revised 6–8, tangible replacements 9–10, and ten new workshop chambers 11–20. Rejected vector-maze control is not part of the active campaign. The seventh exit has a physical enclosed dock and low shot-only sightline, not merely a higher exposed ledge.
 
-IMPORTANT PENDING SCOPE: ten uploaded optimized GLBs are not yet integrated/animated; requested levels 11–15 are not built. Do not substitute artwork or this corrective release for those deliverables. All original character models and expressive rigs remain.
+Nine supplied GLB derivatives (31–39) are integrated and articulated. Provenance: docs/WORKSHOP_ASSETS.json. First level loads four models, total campaign eighteen. Original characters remain. Read docs/RELEASE_V17.md for exact chamber concepts, animations, tests and limits.
+
+Entry: src/main.js -> LabGame -> LabCampaignLevels. Workshops: LabWorkshopCampaign.js and LabWorkshopKit.js. Normal-control routes: LabV8Journey.js / LabWorkshopJourney.js. Ferry recovery: LabWorkshopRecovery.js. Full-world negative audit: scripts/v17-audit.mjs. Whole-inset pressure contact: LabPlateContact.js.
+
+Verify npm run check, scripts/v8-package-check.mjs, v8-journey.mjs, v10-shortcuts.mjs, v17-audit.mjs, v17-recovery.mjs. Browser CI runs scripts/v8-browser.mjs and v8-yandex-browser.mjs. Yandex checks use a stub, not live ads; software CI FPS is not a hardware benchmark. No claim of 100 levels or exhaustive exploit-proofing.

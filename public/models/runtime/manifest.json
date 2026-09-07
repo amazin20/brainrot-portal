@@ -711,6 +711,105 @@
       "authoredTransformsUnchanged": true,
       "compression": "KHR_draco_mesh_compression",
       "buildMilliseconds": 1533
+    },
+    {
+      "id": 31,
+      "filename": "model-31-wind-generator.glb",
+      "sourceFilename": "39ce982c7342ccc56020742c85385694-optimized.glb",
+      "sourceSHA256": "f08f716bc48bb0d88dfbacc1ca21ea37da140579cb10563b2a41cb7cd885b795",
+      "outputSHA256": "024f25db27e96e1efdaa5e200c13a665dee487e798338f86fef985feeae9019e",
+      "sourceBytes": 2607540,
+      "outputBytes": 25768,
+      "triangles": 4442,
+      "notes": "Derived LOD; source colors baked to vertices. Independent Frame/Moving nodes. Original upload unchanged."
+    },
+    {
+      "id": 32,
+      "filename": "model-32-spring-ram.glb",
+      "sourceFilename": "7e23326189292e3ba1c1fd2b5dab1524-optimized.glb",
+      "sourceSHA256": "e4f032d8672925e1f753022f1633d22a90240b8806846157a4edf0070fb3080c",
+      "outputSHA256": "958d5ed533736d5779da078be20ae2b0e84212bfc3a00b456dc0106bc0a093d7",
+      "sourceBytes": 2592864,
+      "outputBytes": 25400,
+      "triangles": 4198,
+      "notes": "Derived LOD; source colors baked to vertices. Independent Frame/Moving nodes. Original upload unchanged."
+    },
+    {
+      "id": 33,
+      "filename": "model-33-telescopic-lift.glb",
+      "sourceFilename": "cf6d1e629b5abb23462aba1935b5f23e-optimized.glb",
+      "sourceSHA256": "0ce4ffa323fa7377ea16d31e3fb5d284fd72f864e7e607c6f9a5d4e42a0357dc",
+      "outputSHA256": "3bfdc6c22c1c69095e924c59a3e3deb574ef567a50476df29b3f7f308fb317e9",
+      "sourceBytes": 2434076,
+      "outputBytes": 25516,
+      "triangles": 4198,
+      "notes": "Derived LOD; source colors baked to vertices. Independent Frame/Moving nodes. Original upload unchanged."
+    },
+    {
+      "id": 34,
+      "filename": "model-34-balance.glb",
+      "sourceFilename": "31d681a76eab4dc306fe5c0183e680ab-optimized.glb",
+      "sourceSHA256": "80aab58f472a6edc5a581283f9e8b444d0f5ed0090415d7cc9d9ed0e921ec906",
+      "outputSHA256": "2189c0ac2f33c120858cf933d745179f034cfde2c88d92ef20613b95a7a3d129",
+      "sourceBytes": 2433068,
+      "outputBytes": 22476,
+      "triangles": 4198,
+      "notes": "Derived LOD; source colors baked to vertices. Independent Frame/Moving nodes. Original upload unchanged."
+    },
+    {
+      "id": 35,
+      "filename": "model-35-shutter-fan.glb",
+      "sourceFilename": "6b643fd609324ab4adc3c438dc2abe66-optimized.glb",
+      "sourceSHA256": "83956289ef80546cec34fb38e9c15736f5173c2c4734963d349ad8b5f71286d4",
+      "outputSHA256": "8e11d5ab83250348f6e08f034ec87d82727162742d5a7be18f981fc523aa907a",
+      "sourceBytes": 2852608,
+      "outputBytes": 27816,
+      "triangles": 4495,
+      "notes": "Derived LOD; source colors baked to vertices. Independent Frame/Moving nodes. Original upload unchanged."
+    },
+    {
+      "id": 36,
+      "filename": "model-36-gripper.glb",
+      "sourceFilename": "33eb394d1159714510fcea9db769f630-optimized.glb",
+      "sourceSHA256": "7e9bc2b71c745a2a6741df7f94c569f286cb9438965fc3b18055ea65cb8654e3",
+      "outputSHA256": "9d7de7d9b096d67a13324dbab5c0fed0a7bb52c0fd4d4dd9de1727d9c1016301",
+      "sourceBytes": 2616424,
+      "outputBytes": 25700,
+      "triangles": 4197,
+      "notes": "Derived LOD; source colors baked to vertices. Independent Frame/Moving nodes. Original upload unchanged."
+    },
+    {
+      "id": 37,
+      "filename": "model-37-extension-bridge.glb",
+      "sourceFilename": "144a19caada61112df2a389a558cc922-optimized.glb",
+      "sourceSHA256": "91f39be8d1f53bb2bc9d65c42dbbdcefd7a8e420f0fda32422e9066692c9cad8",
+      "outputSHA256": "96173a9ef89375066b08fad8dff1928425863c6b4e6b8c0373c497448f109c55",
+      "sourceBytes": 2414136,
+      "outputBytes": 25764,
+      "triangles": 4198,
+      "notes": "Derived LOD; source colors baked to vertices. Independent Frame/Moving nodes. Original upload unchanged."
+    },
+    {
+      "id": 38,
+      "filename": "model-38-turntable.glb",
+      "sourceFilename": "ad23c2529c50c054fe6e429043d96c3c-optimized.glb",
+      "sourceSHA256": "00d2713d3117a1666bf4c46e2d410a68e313bd62cb45f90f45f47729e3fc0c27",
+      "outputSHA256": "6cb15a3242fee284478d39460a5bea71a6eb5f1b4fae0c52f0f10319971219c9",
+      "sourceBytes": 2832404,
+      "outputBytes": 26576,
+      "triangles": 4196,
+      "notes": "Derived LOD; source colors baked to vertices. Independent Frame/Moving nodes. Original upload unchanged."
+    },
+    {
+      "id": 39,
+      "filename": "model-39-cable-winch.glb",
+      "sourceFilename": "cb93f48cb29bff32758a9c2086032a48-optimized.glb",
+      "sourceSHA256": "a0b2e3e00f144d77159a9d40e48e494350de62d4ccccbdb4d6adac67ed0d7c5e",
+      "outputSHA256": "301f148938ec83e2a8f4b45c7f9bdfd19fb40ca79d8fb9abc7601caf4fe0eafd",
+      "sourceBytes": 2767452,
+      "outputBytes": 28608,
+      "triangles": 4400,
+      "notes": "Derived LOD; source colors baked to vertices. Independent Frame/Moving nodes. Original upload unchanged."
     }
   ],
   "validation": {

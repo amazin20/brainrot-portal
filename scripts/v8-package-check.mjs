@@ -4,4 +4,4 @@ assert.deepEqual(manifest.models.map(m=>m.id).sort((a,b)=>a-b),[...CAMPAIGN_ASSE
 for(const m of manifest.models)assert.ok(fs.statSync(root+'/models/runtime/'+m.filename).size>1000);
 assert.ok(!fs.existsSync(root+'/models/model-01-player.glb'));assert.ok(!fs.existsSync(root+'/model-screens'));assert.ok(!fs.existsSync(root+'/concepts'));
 assert.ok(manifest.totalBytes<4000000);assert.ok(fs.readFileSync(root+'/index.html','utf8').includes('settings-level-select'));
-console.log('V8 package verified: 9 purposeful runtime assets, no source/reference files.');
+console.log('Package verified:', manifest.models.length,'runtime assets; no source/reference files.');

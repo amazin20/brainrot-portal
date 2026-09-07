@@ -17,7 +17,7 @@ export class LabTutorial {
     if(l.lifts?.length&&pad&&!this.seen.has('load-lift'))return ['load-lift','↕','Вес друга удерживает подъёмник. Без нагрузки он опускается; верхняя галерея остаётся на месте.',l.lifts.some(lift=>lift.y>4.8)];
     const action=l.nearbyInteraction?.();
     if(action?.text&&!this.seen.has(action.kind))return [action.kind,'E',action.text,false];
-    if(action&&!this.seen.has(action.kind))return [action.kind,'E',action.kind==='lift'?'Терминал меняет высоту подъёмника. Его портал движется вместе с панелью.':'Терминал меняет наклон панели. Направление вылета изменится вместе с порталом.',action.kind==='lift'?l.lift?.target>0:l.receiverPanel?.target>0];
+    if(action&&!this.seen.has(action.kind))return [action.kind,'E',action.text||(action.kind==='lift'?'Терминал меняет высоту подъёмника. Его портал движется вместе с панелью.':'Терминал меняет наклон панели. Направление вылета изменится вместе с порталом.'),action.kind==='lift'?l.lift?.target>0:l.receiverPanel?.target>0];
     return null;
   }
   update(){let lesson=this.enabled&&this.game.state==='playing'&&!this.game.externalBlocked?this.select():null;

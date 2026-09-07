@@ -3,16 +3,16 @@ import assert from 'node:assert/strict';
 import {createHeadlessGame} from '../scripts/lab-headless.mjs';
 import {CAMPAIGN} from '../src/game/LabCampaignLevels.js';
 const g=await createHeadlessGame();
-test('replacement courses have five independent causal mechanisms, not stage chains',async()=>{
- assert.equal(CAMPAIGN.length,10);
+test('twenty-course registry has independent causal workshop concepts, not stage chains',async()=>{
+ assert.equal(CAMPAIGN.length,20);
  const ids=[],concepts=[],shapes=[];
- for(let i=5;i<10;i++){
+ for(let i=5;i<20;i++){
   await g.selectLevel(i,false);const l=g.firstLevel;ids.push(l.id);concepts.push(l.world.root.userData.distinctConcept);
   shapes.push(Object.keys(l.panels).join(','));assert.equal(l.stages,undefined);assert.equal(l.lift,null);assert.equal(l.launchPad,null);
-  assert.equal(l.getLaunch(l.goal.position),null);assert.ok(l.terminals.length);assert.equal(l.isWon(),false);
+  assert.equal(l.getLaunch(l.goal.position),null);assert.ok(l.terminals.length || l.state.rebound, "An actively controlled or contact-driven physical mechanism is required");assert.equal(l.isWon(),false);
  }
- assert.deepEqual(ids,['crossed-light','moment-arm','wind-column','impact-workshop','vector-vault']);
- assert.equal(new Set(concepts).size,5);assert.equal(new Set(shapes).size,5);
+ assert.deepEqual(ids,CAMPAIGN.slice(5).map(s=>s.id));assert.ok(!ids.includes('impact-workshop')&&!ids.includes('vector-vault')); 
+ assert.equal(new Set(concepts).size,15);assert.equal(new Set(shapes).size,15);
 });
 test('carried brainrot is expressive even when its dynamic body is not grounded',()=>{
  const rig=g.companionRig;rig.reset();const rotations=[];
@@ -28,7 +28,7 @@ test('new courses have no hidden mechanism-use victory requirement',()=>{
 });
 test('new rooms release colliders and reuse the original player asset on switching',async()=>{
  await g.selectLevel(0,false);const base=g.colliders.length,roots=g.scene.children.length,asset=g.assets.get(1);
- for(let i=5;i<10;i++)await g.selectLevel(i,false);await g.selectLevel(0,false);
+ for(let i=5;i<20;i++)await g.selectLevel(i,false);await g.selectLevel(0,false);
  assert.equal(g.colliders.length,base);assert.equal(g.scene.children.length,roots);assert.equal(g.assets.get(1),asset);
  g.physics.dispose();g.portals.dispose();
 });

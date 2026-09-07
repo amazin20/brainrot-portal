@@ -28,7 +28,10 @@ export const CORE_ASSETS = Object.freeze([
   { id: 11, file: 'model-11-portal-gun.glb', label: 'Портальная пушка', role: 'portal-gun', preferredSize: 0.85 },
 ]);
 
-export const ALL_LAB_ASSETS = Object.freeze([...CORE_ASSETS, ...LAB_ASSETS]);
+export const WORKSHOP_ASSETS = Object.freeze([
+{id:31,file:'model-31-wind-generator.glb',label:'wind-generator',role:'wind-generator',preferredSize:3},{id:32,file:'model-32-spring-ram.glb',label:'spring-ram',role:'spring-ram',preferredSize:3},{id:33,file:'model-33-telescopic-lift.glb',label:'telescopic-lift',role:'telescopic-lift',preferredSize:3},{id:34,file:'model-34-balance.glb',label:'balance',role:'balance',preferredSize:3},{id:35,file:'model-35-shutter-fan.glb',label:'shutter-fan',role:'shutter-fan',preferredSize:3},{id:36,file:'model-36-gripper.glb',label:'gripper',role:'gripper',preferredSize:3},{id:37,file:'model-37-extension-bridge.glb',label:'extension-bridge',role:'extension-bridge',preferredSize:3},{id:38,file:'model-38-turntable.glb',label:'turntable',role:'turntable',preferredSize:3},{id:39,file:'model-39-cable-winch.glb',label:'cable-winch',role:'cable-winch',preferredSize:3}
+]);
+export const ALL_LAB_ASSETS = Object.freeze([...CORE_ASSETS, ...LAB_ASSETS, ...WORKSHOP_ASSETS]);
 
 // Active campaign dependencies exclude the retired decorative door/barrier; the full catalog is not a loading list.
 // The exact set is shared by the loader and the production packaging gate.
@@ -37,5 +40,5 @@ export const FIRST_LEVEL_ASSETS = Object.freeze(ALL_LAB_ASSETS.filter(asset => F
 export const runtimeAssetPath = asset => `models/runtime/${asset.file}`;
 
 // V8 loads only each course's declared dependencies. Source catalog stays intact.
-export const CAMPAIGN_ASSET_IDS=Object.freeze([1,2,11,19,22,23,24,28,29]);
+export const CAMPAIGN_ASSET_IDS=Object.freeze([1,2,11,19,22,23,24,28,29,31,32,33,34,35,36,37,38,39]);
 export const CAMPAIGN_ASSETS=Object.freeze(ALL_LAB_ASSETS.filter(a=>CAMPAIGN_ASSET_IDS.includes(a.id)));
