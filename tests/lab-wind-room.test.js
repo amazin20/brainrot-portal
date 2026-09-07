@@ -31,6 +31,14 @@ test('front impeller articulation preserves every triangle, source cache and fix
  f.art.updateWorldMatrix(true,true);const fixed=f.fixed.matrixWorld.clone();f.spin(1.2);f.art.updateWorldMatrix(true,true);
  assert.ok(f.fixed.matrixWorld.equals(fixed));const after=[];base.traverse(o=>after.push(...o.position.toArray(),...o.quaternion.toArray(),...o.scale.toArray()));assert.deepEqual(after,signature);f.spin(0);
 });
+test('painted front intake rim stays out of the moving impeller',()=>{
+ const rotor=g.firstLevel.state.flywheel.art.pivot;
+ rotor.traverse(o=>{if(!o.isMesh)return;const p=o.geometry.attributes.position,c=o.geometry.attributes.color,idx=o.geometry.index;
+  for(let i=0;i<idx.count;i+=3){let x=0,y=0,paint=0;for(let j=0;j<3;j++){const id=idx.getX(i+j);x+=p.getX(id)/3;y+=p.getY(id)/3;paint+=(.2126*c.getX(id)+.7152*c.getY(id)+.0722*c.getZ(id))/3;}
+   assert.ok(Math.hypot(x,y)<.14+1e-6||paint<.18,'White housing was included in moving geometry');
+  }
+ });
+});
 test('portal walls are flush, nonoverlapping, broad and do not extend behind the locked exit',()=>{
  const l=g.firstLevel;
  for(const p of Object.values(l.panels)){
@@ -38,12 +46,12 @@ test('portal walls are flush, nonoverlapping, broad and do not extend behind the
   assert.ok(f.center.z-p.width/2> -12||Math.abs(f.normal.z)>.9);
   const shot=resolvePortalPlacement(p.mesh,f.center,{blockers:g.colliders});assert.ok(shot.ok,`${p.name}: ${shot.reason}`);
  }
- const left=Object.values(l.panels).filter(p=>p.getFrame().normal.x>.9).map(p=>[p.getFrame().center.z-p.width/2,p.getFrame().center.z+p.width/2]);
- assert.ok(left[0][0]>left[1][1]||left[1][0]>left[0][1]);
+ const sides=Object.values(l.panels).filter(p=>Math.abs(p.getFrame().normal.x)>.9);
+ for(let i=0;i<sides.length;i++)for(let j=i+1;j<sides.length;j++){const a=sides[i],b=sides[j],af=a.getFrame(),bf=b.getFrame();if(Math.abs(af.center.x-bf.center.x)>.1)continue;assert.ok(af.center.z+a.width/2<bf.center.z-b.width/2||bf.center.z+b.width/2<af.center.z-a.width/2);}
  assert.equal(l.world.surfaces.filter(p=>p.portal&&p.width>=5.5).length,4);
 });
 test('door is visible from entry without an opaque central billboard',()=>{
- const target=V(0,1.8,-12),origin=V(2,1.8,11),direction=target.clone().sub(origin).normalize();
+ const target=V(0,1.8,-12),origin=V(-1,1.8,8),direction=target.clone().sub(origin).normalize();
  const ray=new THREE.Ray(origin,direction),hits=g.colliders.map(c=>ray.intersectBox(c.box,V())).filter(Boolean);
  const nearest=hits.reduce((n,p)=>Math.min(n,p.distanceTo(origin)),Infinity);
  assert.ok(nearest>target.distanceTo(origin)-.7,`Entry sightline blocked at ${nearest}`);

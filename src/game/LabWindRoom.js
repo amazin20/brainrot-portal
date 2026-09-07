@@ -23,7 +23,12 @@ export function generatorSkin(game) {
       const center = ids.reduce((v, j) => v.add(new THREE.Vector3().fromBufferAttribute(p, j)), V()).multiplyScalar(1 / 3);
       // Native unit-size model: front impeller is +Z. Housing/stand and
       // the sealed -Z motor cap remain fixed. No triangles are dropped.
-      const spins = center.z > .20 && Math.hypot(center.x + .00096, center.y - .39807) < .275;
+      const radius = Math.hypot(center.x + .00096, center.y - .39807);
+      const color = geometry.attributes.color;
+      const paint = color ? ids.reduce((sum, j) => sum + .2126 * color.getX(j) + .7152 * color.getY(j) + .0722 * color.getZ(j), 0) / 3 : 0;
+      // The white intake rim meets blade tips in the same mesh. Keep its
+      // painted faces fixed; rotating the whole radial slice tears that rim.
+      const spins = center.z > .20 && radius < .275 && (radius < .14 || paint < .18);
       (spins ? moving : still).push(...ids); sourceTriangles++;
     }
     for (const [indices, parent] of [[still, fixed], [moving, rotor]]) {
@@ -63,31 +68,31 @@ export function buildReadableWindRoom(game, spec) {
   // Flush wall-mounted areas, no duplicate coplanar panels or opaque billboard
   // in the middle of the room. All stop BEFORE the locked doorway partition.
   k.panel('work-front', [0, 2.3, 14.975], [0, 0, -1], 27);
-  k.panel('work-left', [-13.975, 2.3, 8], [1, 0, 0], 10);
-  k.panel('work-right', [13.975, 2.3, -7], [-1, 0, 0], 5);
-  k.panel('wind-intake', [13.975, 2.1, 5], [-1, 0, 0], 16);
-  k.panel('wind-outlet', [-13.975, 2.1, -5], [1, 0, 0], 12);
+  k.panel('work-left', [-13.975, 2.3, 2], [1, 0, 0], 23);
+  k.panel('work-right', [13.975, 2.3, 12], [-1, 0, 0], 5);
+  k.panel('wind-intake', [13.975, 2.1, 4], [-1, 0, 0], 9);
+  k.panel('wind-outlet', [13.975, 2.1, -5], [-1, 0, 0], 8);
 
   // Existing louvred blower (35), standing on its own feet. Its grille is not
   // an impeller: do not spin its casing or its complete bank of louvres.
-  const blowerArt = k.staticFixture(35, [-11.3, 0, 5], 3.3, Math.PI / 2);
+  const blowerArt = k.staticFixture(35, [-7.2, 0, 4], 3.3, Math.PI / 2);
   const blowerBox = new THREE.Box3().setFromObject(blowerArt.art);
-  const origin = V(blowerBox.max.x + .04, 2.1, 5);
+  const origin = V(blowerBox.max.x + .04, 2.1, 4);
   const fan = { art: blowerArt, origin, direction: V(1, 0, 0), enabled: false, segments: [] };
   k.state.blower = fan;
 
   // The actual front impeller, not the closed rear cap, is the moving part.
   const turbineArt = generatorSkin(game);
   turbineArt.art.scale.setScalar(5.27596); // native axle height .39807 -> 2.10 m
-  turbineArt.art.rotation.y = -Math.PI / 2;
+  turbineArt.art.rotation.y = Math.PI / 2;
   turbineArt.art.position.set(-5.4, 0, -5);
   turbineArt.art.userData.gameplayRole = 'Receives air and stores rotational energy';
   w.root.add(turbineArt.art); k.fixtures.push(turbineArt);
   const turbineBox = new THREE.Box3().setFromObject(turbineArt.art);
   const housing = game.collisionProxy(turbineBox);
-  const inlet = V(turbineBox.min.x - .025, .39807 * 5.27596, -5);
+  const inlet = V(turbineBox.max.x + .025, .39807 * 5.27596, -5);
   const wheel = new Flywheel();
-  const turbine = { art: turbineArt, wheel, position: inlet, normal: V(-1, 0, 0), power: false, clutch: false, housing };
+  const turbine = { art: turbineArt, wheel, position: inlet, normal: V(1, 0, 0), power: false, clutch: false, housing };
   k.state.flywheel = turbine;
 
   // Keep the existing exit and physical latch. Remove the unrelated loose
@@ -95,10 +100,10 @@ export function buildReadableWindRoom(game, spec) {
   const door = k.door(-12);
   const pawl = w.box([-2.65, 1.7, -11.63], [.6, .2, .7], w.materials.accent, false);
   const ratchet = { engaged: false, progress: 0 }; k.state.ratchet = ratchet;
-  const fanControl = k.control('fan-switch', [-9.5, 0, 8.3], () => { fan.enabled = !fan.enabled; }, 'E — включить вентилятор.');
+  const fanControl = k.control('fan-switch', [-4.7, 0, 6], () => { fan.enabled = !fan.enabled; }, 'E — включить вентилятор.');
   const clutchControl = k.control('clutch', [-.6, 0, -4], () => { turbine.clutch = !turbine.clutch; }, 'E — подключить привод двери.');
   // A single grounded, continuous existing cable route, not a floating wire.
-  k.wire([[-3.04, .065, -5], [-2.65, .065, -5], [-2.65, .065, -11.4], [-2.65, 1.7, -11.4]], () => turbine.clutch && wheel.omega > .1);
+  k.wire([[-8.05, .065, -5], [-8.05, .065, -9], [-2.65, .065, -9], [-2.65, .065, -11.4], [-2.65, 1.7, -11.4]], () => turbine.clutch && wheel.omega > .1);
 
   // Air is visible as drifting dust, never a glowing vector line through the
   // room. Particles stop at the same real blockers used by the air simulation.
@@ -140,7 +145,7 @@ export function buildReadableWindRoom(game, spec) {
     ratchet.engaged = false; ratchet.progress = previousPawl = previousAngle = 0;
     turbineArt.spin(0); pawl.rotation.z = 0; dust.visible = false;
   });
-  const level = k.finish([2, 0, 11], [0, .55, 9], [0, 0, -16], { workshop: k, readability: { inlet, housing, dust, pawl, fanControl, clutchControl } });
+  const level = k.finish([-1, 0, 8], [1.5, .55, 7.5], [0, 0, -16], { workshop: k, readability: { inlet, housing, dust, pawl, fanControl, clutchControl } });
   // Context comes from the nearby existing control, not instructions painted
   // on the wall or a central overlay. No solution markers or forced ordering.
   level.getContextLesson = () => {
