@@ -296,7 +296,7 @@ export class LabPlayerAnimator {
     this.lastVerticalSpeed = 0;
     this.state = this.locomotionState = 'idle';
     this.weaponRequested = true;
-    this.weaponBlend = this.aimBlend = this.aimPitch = this.recoil = 0;
+    this.weaponBlend = this.aimBlend = this.aimPitch = this.recoil = this.shotRaise = 0;
     this.directionForward = 1;
     this.directionRight = this.localForwardSpeed = this.localRightSpeed = 0;
     this.inertiaForward = this.inertiaRight = 0;
@@ -401,7 +401,7 @@ export class LabPlayerAnimator {
 
   stepPose({ dt = 1 / 60, speed = 0, velocity = ORIGIN, grounded = true, turnRate = 0,
     carrying = false, phase = false, elapsed, weapon = true, aiming = false, aimPitch = 0,
-    moveForward = 1, moveRight = 0 } = {}) {
+    moveForward = 1, moveRight = 0, shooting = false } = {}) {
     dt = clamp(Number.isFinite(dt) ? dt : 0, 0, 0.05);
     speed = clamp(Number.isFinite(speed) ? speed : 0, 0, 12);
     this.elapsed = Number.isFinite(elapsed) ? elapsed : this.elapsed + dt;
@@ -452,6 +452,7 @@ export class LabPlayerAnimator {
     this.handoffBlend = Math.sin(this.holsterProgress * Math.PI) ** 2;
     this.weaponRequested = !!weapon && !carrying;
     this.weaponBlend = damp(this.weaponBlend, weapon && !carrying ? 1 : 0, 12, dt);
+    this.shotRaise = damp(this.shotRaise||0, shooting&&!carrying?1:0, 18, dt);
     this.aimBlend = damp(this.aimBlend, aiming && weapon && !carrying ? 1 : 0, 12, dt);
     this.aimPitch = damp(this.aimPitch, clamp(Number.isFinite(aimPitch) ? aimPitch : 0, -0.5, 0.65), 12, dt);
     this.attentionBlend = damp(this.attentionBlend, this.requestedAttention.active && !aiming && grounded
@@ -605,6 +606,7 @@ export class LabPlayerAnimator {
         hand.set(THREE.MathUtils.lerp(hand.x, 0.08 + this.aimBlend * 0.19 - pitch * 0.74 - this.recoil * 0.045, hold),
           hold * 0.025, -hold * 0.025);
       }
+      if(side==='R') {arm.x-=.24*this.shotRaise;forearm.x-=.22*this.shotRaise;hand.x+=.46*this.shotRaise;}
       // Cargo brings both hands to the same supported posture; interaction adds
       // a short reach around the caller's immediate pickup/place item transfer.
       arm.x = THREE.MathUtils.lerp(arm.x, -0.48, this.carryBlend);

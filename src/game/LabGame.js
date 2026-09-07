@@ -1,3 +1,5 @@
+import { LabPortalShots } from './LabPortalShots.js';
+import { sweepBox } from './LabSweep.js';
 import { cargoLoadsPlate } from './LabPlateContact.js';
 import * as THREE from 'three';
 import { InputController } from './InputController.js';
@@ -255,6 +257,7 @@ export class LabGame {
     this.portalActors = new LabPortalActors({ scene: this.scene, portals: this.portals });
     this.portalActors.register(this.playerGroup, { radius: 1.5, centerOffset: [0, 1.2, 0] });
     this.portalActors.register(this.cargo.group, { radius: .75, centerOffset: [0, 0, 0] });
+    this.portalShots = new LabPortalShots(this);
     this.createOverlay(); this.resetRun(false);
     this.levelRoots = this.scene.children.filter(root => !previousRoots.has(root));
   }
@@ -278,12 +281,12 @@ export class LabGame {
     this.reticle = document.createElement('div'); this.reticle.className = 'lab-reticle';
     this.reticle.innerHTML = '<i></i><i></i>'; document.body.appendChild(this.reticle);
     this.help = document.createElement('div'); this.help.className = 'lab-controls';
-    this.help.innerHTML = '<span><b class="blue">ЛКМ</b> голубой</span><span><b class="amber">ПКМ</b> оранжевый</span><span><b>F</b> прицел</span><span><b>E</b> брейнрот</span><span><b>X</b> сброс пары</span>';
+    this.help.innerHTML = '<span><b class="blue">ЛКМ</b> голубой</span><span><b class="amber">ПКМ</b> оранжевый</span><span><b>E</b> брейнрот</span>';
     document.body.appendChild(this.help);
     this.prompt = document.createElement('div'); this.prompt.className = 'lab-prompt'; document.body.appendChild(this.prompt);
     this.surfaceHint = document.createElement('div'); this.surfaceHint.className = 'lab-surface-hint'; document.body.appendChild(this.surfaceHint);
     const mobile = document.createElement('div'); mobile.className = 'lab-mobile';
-    for (const [label, action] of [['①', () => this.placePortal(0)], ['②', () => this.placePortal(1)], ['◎', () => { this.aimHeld = !this.aimHeld; }], ['E', () => this.interact()], ['X', () => this.clearPortals()], ['Пауза', () => this.togglePause(true)]]) {
+    for (const [label, action] of [['①', () => this.firePortal(0)], ['②', () => this.firePortal(1)], ['E', () => this.interact()], ['Пауза', () => this.togglePause(true)]]) {
       const button = document.createElement('button'); button.textContent = label;
       button.addEventListener('pointerdown', e => { e.preventDefault(); action(); }); mobile.appendChild(button);
     }
@@ -298,7 +301,7 @@ export class LabGame {
     canvas.addEventListener('pointerdown', e => {
       if (this.state !== 'playing' || e.pointerType === 'touch') return;
       if (document.pointerLockElement !== canvas) { canvas.requestPointerLock?.()?.catch?.(() => {}); return; }
-      if (e.button === 0 || e.button === 2) this.placePortal(e.button === 0 ? 0 : 1);
+      if (e.button === 0 || e.button === 2) this.firePortal(e.button === 0 ? 0 : 1);
     });
     addEventListener('mousemove', e => {
       if (document.pointerLockElement !== canvas || this.state !== 'playing') return;
@@ -316,7 +319,6 @@ export class LabGame {
     addEventListener('keydown', e => {
       if (e.repeat || this.state !== 'playing') return;
       if (e.code === 'KeyE') this.interactQueued = true;
-      if (e.code === 'KeyX') this.clearPortals();
       if (e.code === 'KeyV') { this.animator?.trigger?.('celebrate'); this.companionAnimator?.trigger?.('celebrate'); }
     });
     addEventListener('blur', () => { this.input.keys.clear(); if (this.state === 'playing') this.togglePause(true); });
@@ -342,6 +344,13 @@ export class LabGame {
       && portalBacksCollider(p, box));
   }
 
+  firePortal(index) {
+    if(this.heldCube){this.callbacks.onToast('Сначала поставь друга [E]');return false;}
+    return this.portalShots?.request(index)??false;
+  }
+
+  // Immediate geometric placement remains available to isolated geometry tests.
+  // Mouse/touch input and complete playthroughs use firePortal and its flight.
   placePortal(index) {
     if (this.externalBlocked || this.state !== 'playing') return false;
     if (this.heldCube) { this.callbacks.onToast('Сначала поставь брейнрота [E], чтобы взять пушку'); return false; }
@@ -380,7 +389,7 @@ export class LabGame {
   }
 
   isAiming() {
-    return !this.heldCube && Boolean(this.aimHeld || this.input?.keys.has('KeyF'));
+    return !this.heldCube && Boolean(this.aimHeld); // internal debug framing only; no player aim button
   }
 
   placeOnPanel(index, panel, hitPoint = panel.userData.center) {
@@ -413,6 +422,7 @@ export class LabGame {
     for (const id of this.portalCargoColliders) this.physics.setStaticEnabled(id, true);
     this.portalCargoColliders.clear();
     this.state = playing ? 'playing' : 'ready'; this.stage = 0; this.elapsed = 0; this.teleportCount = 0;
+    this.portalShots?.reset(); this.shotPoseTime=0; this.shotAimPoint=null;this.windStrength=0;this.lastCompanionState=null;
     this.heldCube = null; this.portalCooldown = 0; this.portals.clear(); this.portalSurfaceIds = [null, null];
     this.launchTime = 0; this.aimHeld = false; this.aimingTime = 0; this.completedStages = 0;
     this.socialClock = 0; this.jumpBuffer = this.coyoteTime = 0; this.jumpWindup = 0; this.carryMotionPhase = 0; this.interactQueued = false;
@@ -505,7 +515,8 @@ export class LabGame {
     }
     this.launchTime = Math.max(0, this.launchTime - dt);
     if (this.interactQueued) { this.interactQueued = false; this.interact(); }
-    this.updateMechanisms(dt); this.updatePlayer(dt); this.updateCubes(dt); this.updateDoors(dt);
+    this.shotPoseTime=Math.max(0,(this.shotPoseTime||0)-dt);
+    this.updateMechanisms(dt); this.portalShots?.step(dt); this.updatePlayer(dt); this.updateCubes(dt); this.updateDoors(dt);
     this.portals.endPhysicsStep?.();
     const nextStage = this.firstLevel ? 0 : this.playerPosition.z < -27 ? 2 : this.playerPosition.z < -4 ? 1 : 0;
     if (nextStage !== this.stage) {
@@ -553,6 +564,7 @@ export class LabGame {
       }
     }
     const field=this.firstLevel?.playerAcceleration?.(this.playerPosition,this.playerVelocity);
+    this.windStrength=field?Math.min(1,field.length()/55):0;
     if(field){this.playerVelocity.addScaledVector(field,dt);if(field.y>19.5)this.playerGrounded=false;}
     this.playerVelocity.y -= 19.5 * dt;
     this.playerPosition.addScaledVector(this.playerVelocity, dt);
@@ -619,9 +631,10 @@ export class LabGame {
     if (this.playerPosition.y < -12) { this.respawn(); return; }
     const planar = Math.hypot(this.playerVelocity.x, this.playerVelocity.z);
     const priorFacing = this.facing;
-    if (aiming || planar > .12) {
-      const target = aiming ? this.yaw + Math.PI : Math.atan2(this.playerVelocity.x, this.playerVelocity.z);
-      this.facing += Math.atan2(Math.sin(target - this.facing), Math.cos(target - this.facing)) * (1 - Math.exp(-12 * dt));
+    if ((this.shotPoseTime>0&&!this.heldCube) || aiming || planar > .12) {
+      const target = this.shotPoseTime>0&&!this.heldCube ? this.shotFacing : aiming ? this.yaw + Math.PI : Math.atan2(this.playerVelocity.x, this.playerVelocity.z);
+      const turn = Math.atan2(Math.sin(target - this.facing), Math.cos(target - this.facing)) * (1 - Math.exp(-12 * dt));
+      this.facing += this.heldCube ? THREE.MathUtils.clamp(turn, -8 * dt, 8 * dt) : turn;
     }
     const directionScale = planar > .01 ? 1 / planar : 0;
     this.motion = {
@@ -684,13 +697,18 @@ export class LabGame {
         if(centre.sub(f.center).dot(f.normal)>extent+.05)continue;
       }
       const b = collider.box;
+      // The combined traveller needs elbow/box clearance beside tall walls.
+      // Floor edges, small steps and portal apertures keep the actual capsule
+      // footprint; expanding those would prevent leaving a narrow platform.
+      const contactRadius = allowPortals && this.heldCube && b.min.y < position.y + .5
+        && b.max.y > position.y + height ? Math.max(radius,.62) : radius;
       if (position.y + height <= b.min.y + .001 || position.y >= b.max.y - .001) continue;
       const nearestX = THREE.MathUtils.clamp(position.x, b.min.x, b.max.x);
       const nearestZ = THREE.MathUtils.clamp(position.z, b.min.z, b.max.z);
       const dx = position.x - nearestX, dz = position.z - nearestZ;
-      if (dx * dx + dz * dz >= radius * radius) continue;
+      if (dx * dx + dz * dz >= contactRadius * contactRadius) continue;
       const center = position.clone().addScaledVector(UP, height / 2);
-      if (allowPortals && this.portalOpensCollider(collider, center, radius)) continue;
+      if (allowPortals && this.portalOpensCollider(collider, center, Math.min(radius, PLAYER_RADIUS))) continue;
       if (velocity.y <= 0 && previous.y >= b.max.y - .035) {
         position.y = b.max.y; velocity.y = 0; this.groundedByCollider = true; continue;
       }
@@ -703,12 +721,12 @@ export class LabGame {
       const length = Math.hypot(dx, dz);
       if (length > .00001) {
         const nx = dx / length, nz = dz / length;
-        position.x += nx * (radius - length + .0001); position.z += nz * (radius - length + .0001);
+        position.x += nx * (contactRadius - length + .0001); position.z += nz * (contactRadius - length + .0001);
         const inward = velocity.x * nx + velocity.z * nz;
         if (inward < 0) { velocity.x -= nx * inward; velocity.z -= nz * inward; }
       } else {
-        const options = [[Math.abs(position.x - b.min.x + radius), 'x', b.min.x - radius], [Math.abs(b.max.x + radius - position.x), 'x', b.max.x + radius],
-          [Math.abs(position.z - b.min.z + radius), 'z', b.min.z - radius], [Math.abs(b.max.z + radius - position.z), 'z', b.max.z + radius]].sort((a, b) => a[0] - b[0]);
+        const options = [[Math.abs(position.x - b.min.x + contactRadius), 'x', b.min.x - contactRadius], [Math.abs(b.max.x + contactRadius - position.x), 'x', b.max.x + contactRadius],
+          [Math.abs(position.z - b.min.z + contactRadius), 'z', b.min.z - contactRadius], [Math.abs(b.max.z + contactRadius - position.z), 'z', b.max.z + contactRadius]].sort((a, b) => a[0] - b[0]);
         position[options[0][1]] = options[0][2]; velocity[options[0][1]] = 0;
       }
     }
@@ -771,17 +789,37 @@ export class LabGame {
       const side = new THREE.Vector3(forward.z, 0, -forward.x);
       const target = origin.clone().addScaledVector(forward, .72)
         .addScaledVector(side, Math.sin(this.carryMotionPhase) * walking * .012);
-      this.raycaster.set(origin, forward); this.raycaster.far = 1.3;
-      const hit = this.raycaster.intersectObjects(this.cameraBlockers, true).find(h => {
-        if (!this.isActiveBlocker(h.object)) return false;
-        const collider = this.colliders.find(c => c.mesh === h.object);
-        return !collider || !this.portalOpensCollider(collider, origin, CUBE_RADIUS);
-      }); this.raycaster.far = Infinity;
-      if (hit) target.copy(origin).addScaledVector(forward, Math.max(.06, hit.distance - CUBE_RADIUS - .07));
       const quaternion = new THREE.Quaternion().setFromAxisAngle(UP, this.facing);
+      // Constrain the complete held box, including its corners during turns,
+      // not just a single centre ray. The target may slide/retract, never ask
+      // the body to accelerate through the wall at the player's shoulder.
+      const e = CUBE_RADIUS * (Math.abs(Math.sin(this.facing)) + Math.abs(Math.cos(this.facing))) + .035;
+      const extent = new THREE.Vector3(e, CUBE_RADIUS + .035, e);
+      const expanded=new THREE.Box3();
+      for (let pass = 0; pass < 3; pass++) for (const c of this.colliders) {
+        if (c.enabled === false || c.walkablePlane || this.portalOpensCollider(c, origin, CUBE_RADIUS)) continue;
+        if (c.frontPlane) {
+          const f=c.frontPlane();if(target.clone().sub(f.center).dot(f.normal)>CUBE_RADIUS*Math.sqrt(3)+.05)continue;
+        }
+        const nearMin=this.cargo.position;
+        if(Math.min(origin.x,target.x,nearMin.x)>c.box.max.x+e||Math.max(origin.x,target.x,nearMin.x)<c.box.min.x-e||Math.min(origin.z,target.z,nearMin.z)>c.box.max.z+e||Math.max(origin.z,target.z,nearMin.z)<c.box.min.z-e||Math.min(origin.y,target.y,nearMin.y)>c.box.max.y+extent.y||Math.max(origin.y,target.y,nearMin.y)<c.box.min.y-extent.y)continue;
+        const b=expanded.copy(c.box).expandByVector(extent);
+        const start=b.containsPoint(origin)?this.cargo.position:origin;
+        const hit=sweepBox(start,target,b.min,b.max);
+        if(hit){target[hit.axis]=start[hit.axis]+(target[hit.axis]-start[hit.axis])*hit.t+hit.sign*.002;}
+        else if(b.containsPoint(target)){
+          // The player can stand closer to a wall than a rotated box. Pick the
+          // face facing that player, not the opposite side of the wall.
+          const faces=[];
+          for(const key of ['x','y','z']){
+            if(origin[key]<=c.box.min[key])faces.push({key,v:b.min[key]-.002,d:Math.abs(origin[key]-b.min[key])});
+            if(origin[key]>=c.box.max[key])faces.push({key,v:b.max[key]+.002,d:Math.abs(origin[key]-b.max[key])});
+          }
+          faces.sort((a,b)=>a.d-b.d);if(faces[0])target[faces[0].key]=faces[0].v;
+        }
+      }
       this.physics.setCarryTarget(target, { velocity: this.playerVelocity, quaternion, dt });
-      // Blocked objects are released where they actually are, never snapped to the player.
-      if (this.cargo.position.distanceTo(origin) > 3.2) { this.physics.release(); this.heldCube = null; this.animator.triggerInteraction('place'); }
+      // Only E releases the friend. Contacts do not silently drop the grip.
     }
     // A free companion passes through the same apertures. Collision is opened
     // only while this body's centre fits inside the actual portal footprint.
@@ -950,6 +988,12 @@ export class LabGame {
     this.portalVisualRotation.slerp(new THREE.Quaternion(), 1 - Math.exp(-10 * visualDt));
     const cargo = this.physics.sample(blend);
     this.cargo.group.position.copy(cargo.position); this.cargo.group.quaternion.copy(cargo.quaternion);
+    const companionState=this.companionBehavior?.state;
+    if(visualDt>0&&companionState!==this.lastCompanionState){
+      if(companionState==='wandering')this.companionAnimator.trigger('curious');
+      if(this.lastCompanionState==='getting_up'&&companionState!=='getting_up'&&cargo.grounded)this.companionAnimator.trigger('nod');
+      this.lastCompanionState=companionState;
+    }
     this.companionAnimator.update({ dt: visualDt, elapsed: this.visualTime, speed: cargo.velocity.length(),
       velocity: cargo.velocity, angularVelocity: cargo.angularVelocity, impact: cargo.impact,
       grounded: cargo.grounded, carrying: Boolean(this.heldCube), curious: this.playerPosition.distanceTo(this.cargo.position) < 2.5, celebrating:this.state==='won' });
@@ -964,7 +1008,7 @@ export class LabGame {
       carrying: Boolean(this.heldCube), carryGripTargets: this.heldCube ? this.carryGripTargets : null,
       lookTarget: this.playerPosition.distanceTo(this.cargo.position) < 3.2 ? this.cargo.group.position : null,
       sampleGround: (x, z, maxY) => this.sampleFootSupport(x, z, maxY),
-      phase: this.portalCooldown > .2, elapsed: this.visualTime, weapon: true, aiming: this.isAiming(), aimPitch: this.pitch });
+      windStrength:this.windStrength||0,shooting: this.shotPoseTime>0&&!this.heldCube, phase: this.portalCooldown > .2, elapsed: this.visualTime, weapon: true, aiming: this.isAiming() || (this.shotPoseTime>0&&!this.heldCube), aimPitch: this.shotPoseTime>0&&this.shotAimPoint ? Math.atan2(this.shotAimPoint.y-this.playerPosition.y-1.4, Math.hypot(this.shotAimPoint.x-this.playerPosition.x,this.shotAimPoint.z-this.playerPosition.z)) : this.pitch });
     if (visualDt > 0) {
       const contacts = this.animator.diagnostics?.footContact;
       for (const side of ['L', 'R']) {
@@ -994,7 +1038,7 @@ export class LabGame {
     this.camera.getWorldDirection(this.cameraForward);
     this.updateAimHint(visualDt);
     // The light and shadow frustum stay fixed across the complete level.
-    this.portals.update(this.visualTime);
+    this.portals.update(this.visualTime); this.portalShots?.render(blend);
     const nearbyAction = this.firstLevel?.nearbyInteraction?.();
     this.prompt.textContent = (typeof nearbyAction === 'string' ? nearbyAction : nearbyAction?.label) || (this.nearbyTerminal() ? 'E — включить мост' : this.heldCube ? 'E — отпустить брейнрота' : this.playerPosition.distanceTo(this.cargo.position) < 2.25 ? 'E — взять брейнрота' : '');
   }

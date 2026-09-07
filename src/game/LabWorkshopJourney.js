@@ -21,7 +21,7 @@ export async function runWorkshopJourney(d){
   shot(0,'loading-dock');shot(1,'unloading-dock');enter(p['loading-dock']);collect();
   walk(7,-1);wait(1);groundExit();
  }else if(index===10){
-  shot(0,'wind-intake');shot(1,'wind-outlet');lever('fan-switch');lever('clutch',8);
+  shot(0,'wind-intake');shot(1,'wind-outlet');lever('fan-switch',8);
   until(()=>s.ratchet.engaged,15,'Wind did not do mechanical work');mark('air spun flywheel and lifted ratchet');collect();groundExit();
  }else if(index===11){
   shot(0,'work-front');shot(1,'carousel');lever('rotation',3);enter(p['work-front']);mark('moving portal served cargo balcony');collect();enter(p.carousel);put(-5,10);
@@ -29,9 +29,9 @@ export async function runWorkshopJourney(d){
  }else if(index===12){
   shot(0,'work-front');shot(1,'brake-lift');collect();put(7,5);until(()=>s['brake-lift'].progress>.99,9,'Weight did not raise lift');enter(p['work-front']);
   walk(-6,-3.5);lever('brake');assert(s['brake-lift'].locked,'Brake did not hold');mark('mechanical brake holds height while pair is repurposed');
-  aim(0,p.weight.getFrame().center);wait(3);walk(-7,-3.5);walk(-7,-.8);collect();walk(-7,-3.5);walk(-4,-7);
+  walk(-4,-2.2);aim(0,p.weight.getFrame().center);wait(3);walk(-7,-3.5);walk(-7,-.8);collect();walk(-7,-3.5);walk(-4,-7);
  }else if(index===13){
-  portTo('operator');lever('crane-handle',3);assert(s.crane.attached,'Claw missed friend');mark('claw grips the original body');
+  walk(-7,9.5);portTo('operator');lever('crane-handle',3);assert(s.crane.attached,'Claw missed friend');mark('claw grips the original body');
   lever('crane-handle',3);lever('crane-handle',5);lever('crane-handle',3);
   until(()=>s['cup-lock'].engaged,5,'Cargo did not reach receiver');mark('crane deposited friend without teleport');
   enter(p.operator);walk(7,-3);collect();groundExit();

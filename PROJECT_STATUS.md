@@ -1,17 +1,11 @@
-# Current focus: one readable existing room
+# Current candidate — V18 core video regressions
 
-New content is paused. Only room 11 is being cleaned up; no new levels or GLBs. See `docs/ROOM_11_POLISH.md`. Keep the remaining nineteen rooms and source models unchanged. Publication still requires the full existing checks and actual single-room visual review.
+Base main: 228accb2bfce4ff620c743f68c3d52c2e9e46a4d. Repository: amazin20/nesi-brainrot. Vite / Three.js / cannon-es, twenty active rooms.
 
-# NESI — twenty physical workshops, V17
+Current work addresses the user video: stable collision-aware held companion, wall/corner recovery, physical wind and automatic drive in room 11, wandering instead of a global stay flag, travelling portal shots/weapon turn pose, and removed F/X aim/clear controls. The stronger grip exposed a hand-press bypass in room 9: its real open-top protective enclosure now retracts after piston compression.
 
-Repository: amazin20/nesi-brainrot. Vite / Three.js / cannon-es.
-Live URL: https://amazin20.github.io/nesi-brainrot/
-Confirm the exact public build-info.json commit, version v17-twenty and levels 20 against a successful Pages run before calling a revision live.
+All normal journeys now fire travelling charges, not instant placement or debug aim. Geometric unit fixtures still have a direct placement method. Original GLBs are unchanged. New wind brace and curiosity/recovery cues retain the existing rig and hands/feet contacts.
 
-There are twenty active, selectable rooms: original introductory 1–5, revised 6–8, tangible replacements 9–10, and ten new workshop chambers 11–20. Rejected vector-maze control is not part of the active campaign. The seventh exit has a physical enclosed dock and low shot-only sightline, not merely a higher exposed ledge.
+Read docs/VIDEO_REPAIR_V18.md. The comprehensive room7–10 art cleanup, full new locomotion set and portal-lens transition redesign are NOT claimed completed. No new levels have been added.
 
-Nine supplied GLB derivatives (31–39) are integrated and articulated. Provenance: docs/WORKSHOP_ASSETS.json. First level loads four models, total campaign eighteen. Original characters remain. Read docs/RELEASE_V17.md for exact chamber concepts, animations, tests and limits.
-
-Entry: src/main.js -> LabGame -> LabCampaignLevels. Workshops: LabWorkshopCampaign.js and LabWorkshopKit.js. Normal-control routes: LabV8Journey.js / LabWorkshopJourney.js. Ferry recovery: LabWorkshopRecovery.js. Full-world negative audit: scripts/v17-audit.mjs. Whole-inset pressure contact: LabPlateContact.js.
-
-Verify npm run check, scripts/v8-package-check.mjs, v8-journey.mjs, v10-shortcuts.mjs, v17-audit.mjs, v17-recovery.mjs. Browser CI runs scripts/v8-browser.mjs and v8-yandex-browser.mjs. Yandex checks use a stub, not live ads; software CI FPS is not a hardware benchmark. No claim of 100 levels or exhaustive exploit-proofing.
+Verify npm run check; node scripts/v8-journey.mjs; node scripts/v10-shortcuts.mjs; node scripts/v17-audit.mjs; node scripts/v17-recovery.mjs; node scripts/video-repro.mjs. CI must also pass scripts/v8-browser.mjs, scripts/video-repair-browser.mjs, scripts/v8-yandex-browser.mjs. Publication requires the exact public revision/model hashes and a real public room-11 route. Before those checks, this status is a candidate, not a live-release claim.

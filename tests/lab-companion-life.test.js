@@ -24,14 +24,14 @@ test('a fallen companion stands under physical torque and keeps the same body', 
   }
 });
 
-test('curiosity makes short local walks and a pressure pad keeps the companion in place', () => {
+test('curiosity walks in varied directions within a safe area while a pressure pad keeps the companion in place', () => {
   const f = fixture(), positions = [], states = new Set();
   for (let i = 0; i < 120 * 24; i++) {
     f.step(); positions.push(f.physics.cargoBody.position.clone()); states.add(f.behavior.state);
   }
   assert.ok(states.has('wandering'));
   const maxDistance = Math.max(...positions.map(p => Math.hypot(p.x, p.z)));
-  assert.ok(maxDistance > .15 && maxDistance < 1.1, `local movement radius ${maxDistance}`);
+  assert.ok(maxDistance > .8 && maxDistance < 3.3, `local movement radius ${maxDistance}`);
   const start = f.physics.cargoBody.position.clone();
   for (let i = 0; i < 120 * 8; i++) f.step({ onPad: true });
   assert.ok(f.physics.cargoBody.position.distanceTo(start) < .08);

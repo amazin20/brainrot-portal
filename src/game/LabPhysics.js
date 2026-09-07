@@ -1,3 +1,4 @@
+import { sweepBox } from './LabSweep.js';
 import { Body, Box, ConvexPolyhedron, Material, Quaternion, SAPBroadphase, Sphere, Vec3, World } from 'cannon-es';
 
 const SOLID = 1, CARGO = 2, PLAYER = 4;
@@ -288,7 +289,7 @@ export class LabPhysics {
     // Cap a wall-clamped target change so a newly blocked grip cannot fling it.
     if (target && Number.isFinite(dt) && dt > 0 && dt <= this.maxFrame) {
       nextPosition.vsub(target.position, handVelocity);
-      handVelocity.scale(1 / dt, handVelocity); limit(handVelocity, 12);
+      handVelocity.scale(1 / dt, handVelocity); limit(handVelocity, this.maxLinearSpeed);
       if (!angularVelocity) {
         target.quaternion.conjugate(this._inverseRotation);
         nextQuaternion.mult(this._inverseRotation, this._angularError);
@@ -385,37 +386,61 @@ export class LabPhysics {
   _carryForces() {
     const body = this.cargoBody, target = this.carryTarget;
     if (!body || !target) return;
-    target.position.vsub(body.position, this._error);
-    target.velocity.vsub(body.velocity, this._force);
-    // Implicit critically damped spring: quick hand tracking without the
-    // overshoot of a stiff explicit spring or positional snaps. A short force
-    // onset softens pickup, while the object remains a colliding dynamic body.
-    const h = this.fixedStep, frequency = 24;
-    const spring = frequency * frequency, damping = 2 * frequency;
-    const denominator = 1 + damping * h + spring * h * h;
+    const h = this.fixedStep;
     target.age += h;
+    // A held body follows an endpoint velocity constraint, not a trailing
+    // rubber spring. Pickup approaches monotonically; the established grip
+    // follows the current fixed-step hand point without extrapolating it twice.
+    const settle = Math.min(1, target.age / .28);
+    const gain = settle * settle * (3 - 2 * settle);
     const onset = Math.min(1, target.age / .12);
-    const gain = onset * onset * (3 - 2 * onset);
-    this._force.scale((damping + spring * h) / denominator, this._force);
-    this._force.addScaledVector(spring / denominator, this._error, this._force);
-    this._force.scale(gain, this._force);
-    this._force.vsub(this.world.gravity, this._force);
-    limit(this._force, 90).scale(body.mass, this._force);
+    const follow = ((1 - Math.exp(-22 * h)) * (1 - gain) + gain) * onset * onset * (3 - 2 * onset);
+    target.position.vsub(body.position, this._error);
+    this._error.scale(follow / h, body.velocity);
+    limit(body.velocity, this.maxLinearSpeed);
+    // Supporting the carried mass cancels gravity, not contacts or other
+    // forces. Cannon and the swept wall guard still own the collision outcome.
+    this.world.gravity.scale(-body.mass, this._force);
     body.applyForce(this._force);
-
     body.quaternion.conjugate(this._inverseRotation);
     target.quaternion.mult(this._inverseRotation, this._angularError);
     const sign = this._angularError.w < 0 ? -1 : 1;
     const angle = 2 * Math.acos(Math.min(1, Math.abs(this._angularError.w)));
-    const sine = Math.sqrt(Math.max(0, 1 - this._angularError.w * this._angularError.w));
-    const factor = sine > 1e-5 ? sign * angle / sine : 2 * sign;
-    const inertia = body.mass * this.cargoSize * this.cargoSize / 6;
-    const angularSpring = 196, angularDamping = 28;
-    const angularDenominator = 1 + angularDamping * h + angularSpring * h * h;
-    const kp = angularSpring / angularDenominator, kd = (angularDamping + angularSpring * h) / angularDenominator;
-    for (const axis of ['x', 'y', 'z']) body.torque[axis] += gain * inertia *
-      (kp * this._angularError[axis] * factor + kd * (target.angularVelocity[axis] - body.angularVelocity[axis]));
-    limit(body.torque, body.mass * 8);
+    const sine = Math.sqrt(Math.max(0, 1 - this._angularError.w ** 2));
+    const factor = (sine > 1e-5 ? sign * angle / sine : 2 * sign) * follow / h;
+    body.angularVelocity.set(this._angularError.x * factor, this._angularError.y * factor, this._angularError.z * factor);
+    limit(body.angularVelocity, 18);
+    body.torque.setZero();
+  }
+
+  _guardSweptCargo(previous) {
+    const body = this.cargoBody;
+    if (!body || !previous) return;
+    // Contact solver is primary. A small inscribed-volume sweep only catches
+    // solver tunnelling under a kinematic player or a blocked carry target.
+    // Disabled portal backing walls and real moving/tilted mechanisms are not
+    // converted into AABBs here. This never restarts the level or changes body id.
+    const r = this.cargoSize * .48;
+    for (let pass = 0; pass < 3; pass++) {
+      let first = null;
+      const low={x:Math.min(previous.x,body.position.x),y:Math.min(previous.y,body.position.y),z:Math.min(previous.z,body.position.z)};
+      const high={x:Math.max(previous.x,body.position.x),y:Math.max(previous.y,body.position.y),z:Math.max(previous.z,body.position.z)};
+      for (const {body: solid, half, kind} of this.solids.values()) {
+        if (!solid.collisionFilterMask || solid.type !== Body.STATIC || kind === 'ramp'
+          || Math.abs(solid.quaternion.w) < .999999) continue;
+        if(high.x<solid.position.x-half.x-r||low.x>solid.position.x+half.x+r||high.y<solid.position.y-half.y-r||low.y>solid.position.y+half.y+r||high.z<solid.position.z-half.z-r||low.z>solid.position.z+half.z+r)continue;
+        const min = {x: solid.position.x-half.x-r, y: solid.position.y-half.y-r, z: solid.position.z-half.z-r};
+        const max = {x: solid.position.x+half.x+r, y: solid.position.y+half.y+r, z: solid.position.z+half.z+r};
+        const hit = sweepBox(previous, body.position, min, max);
+        if (hit && (!first || hit.t < first.t)) first = hit;
+      }
+      if (!first) break;
+      const key=first.axis, delta=body.position[key]-previous[key];
+      body.position[key]=previous[key]+delta*first.t+first.sign*.0001;
+      if(body.velocity[key]*first.sign<0)body.velocity[key]=0;
+      if(key==='y'&&first.sign>0)this.sweepSupported=true;
+      this.sweptContacts=(this.sweptContacts||0)+1;body.aabbNeedsUpdate=true;
+    }
   }
 
   step(dt) {
@@ -434,12 +459,15 @@ export class LabPhysics {
         limit(this.cargoBody.velocity, this.maxLinearSpeed);
         limit(this.cargoBody.angularVelocity, 18);
       }
+      const previousCargo = this.cargoBody?.position.clone();
+      this.sweepSupported = false;
       this.world.step(this.fixedStep);
+      this._guardSweptCargo(previousCargo);
       const supported = this.world.contacts.some(contact =>
         (contact.bi === this.cargoBody && contact.ni.y < -.45) ||
         (contact.bj === this.cargoBody && contact.ni.y > .45));
       // Sleeping bodies leave the narrowphase; retain their last support state.
-      this.grounded = supported || (this.cargoBody?.sleepState === Body.SLEEPING && this.grounded);
+      this.grounded = this.sweepSupported || supported || (this.cargoBody?.sleepState === Body.SLEEPING && this.grounded);
       if (this.cargoBody) {
         limit(this.cargoBody.velocity, this.maxLinearSpeed);
         limit(this.cargoBody.angularVelocity, 18);

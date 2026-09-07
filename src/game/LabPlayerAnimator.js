@@ -67,12 +67,12 @@ export class LabPlayerAnimator extends BaseAnimator{
     this.reset();
   }
   reset(){
-    super.reset();this.flightBrace=0;this.operateTime=2;
+    super.reset();this.flightBrace=0;this.windBrace=0;this.operateTime=2;
     if(this.bones.Chest){this.bones.Chest.quaternion.identity();this.basePose?.Chest?.identity();this.bones.Chest.position.copy(this.rig.rest.Chest);this.rig.mesh.updateWorldMatrix(true,true);this.rig.skeleton.update();this.snapCarrierToBody();}
   }
   triggerOperate(){this.operateTime=0;}
   update(input={}){super.update(input);this.basePose.Chest.copy(this.bones.Chest.quaternion);}
-  get diagnostics(){return {...super.diagnostics,boneCount:LAB_PLAYER_JOINTS.length,profile:'workshop-life-v17',chestIndependent:true};}
+  get diagnostics(){return {...super.diagnostics,boneCount:LAB_PLAYER_JOINTS.length,profile:'responsive-grip-shot-v18',chestIndependent:true,windBrace:this.windBrace};}
   stepPose(input){
     this.headBefore.copy(this.bones.Head.quaternion);
     for(const name of Object.keys(this.freeBefore))this.freeBefore[name].copy(this.bones[name].quaternion);
@@ -87,7 +87,9 @@ export class LabPlayerAnimator extends BaseAnimator{
     // A fast portal flight has a held, braced silhouette, not a walking loop.
     const flight=this.airBlend*smooth(6,14,Math.hypot(input.velocity?.x||0,input.velocity?.z||0));
     this.flightBrace=THREE.MathUtils.damp(this.flightBrace||0,flight,9,dt);
-    this.chestTarget.x+=.075*this.flightBrace*(1-.65*this.carryBlend);
+    this.windBrace=THREE.MathUtils.damp(this.windBrace||0,THREE.MathUtils.clamp(input.windStrength||0,0,1),7,dt);
+    this.chestTarget.x+=.075*this.flightBrace*(1-.65*this.carryBlend)+.07*this.windBrace;
+    this.chestTarget.z+=.035*Math.sin(this.elapsed*3.1)*this.windBrace;
     this.chestTarget.y-=this.turn*.018*this.flightBrace;
     this.chestQuaternion.setFromEuler(this.chestTarget);
     this.bones.Chest.quaternion.slerp(this.chestQuaternion,1-Math.exp(-12*dt));
@@ -102,9 +104,9 @@ export class LabPlayerAnimator extends BaseAnimator{
     for(const name of Object.keys(this.freeBefore)){
       this.freeEuler.copy(this.jointTargets[name]);
       if(name==='ArmL'){
-        this.freeEuler.x+=Math.sin(cadence+.31)*(.08+.03*run)*moving*free-.14*gesture-.28*operate;
+        this.freeEuler.x+=Math.sin(cadence+.31)*(.08+.03*run)*moving*free-.14*gesture-.28*operate-.23*this.windBrace*free;
         this.freeEuler.z-=.10*this.flightBrace*free+.16*gesture+.12*operate;
-      }else if(name==='ForearmL')this.freeEuler.x-=.32*operate+.19*gesture+.05*moving*free*(1-Math.cos(cadence-.4));
+      }else if(name==='ForearmL')this.freeEuler.x-=.24*this.windBrace*free+.32*operate+.19*gesture+.05*moving*free*(1-Math.cos(cadence-.4));
       else this.freeEuler.y+=.16*operate+.10*gesture*Math.sin((cycle-3)*5);
       this.freeTarget.setFromEuler(this.freeEuler);
       this.bones[name].quaternion.copy(this.freeBefore[name]).slerp(this.freeTarget,1-Math.exp(-12*dt));

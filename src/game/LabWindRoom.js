@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { Workshop, Flywheel, V, tracePortalRay } from './LabWorkshopKit.js';
+import { airAcceleration } from './LabAirForces.js';
 import { LabAirflowVisual } from './LabAirflowVisual.js';
 
 /** Room 11 only. No new device, game rule or campaign entry.
@@ -105,13 +106,14 @@ export function buildReadableWindRoom(game, spec) {
   const pawl = w.box([-2.65, 1.7, -11.63], [.6, .2, .7], w.materials.accent, false);
   const ratchet = { engaged: false, progress: 0 }; k.state.ratchet = ratchet;
   const fanControl = k.control('fan-switch', [-4.7, 0, 6], () => { fan.enabled = !fan.enabled; }, 'E — включить вентилятор.');
-  const clutchControl = k.control('clutch', [-.6, 0, -4], () => { turbine.clutch = !turbine.clutch; }, 'E — подключить привод двери.');
+  // The receiver is always connected to its door: no redundant second console.
+  turbine.clutch = true;
   // A single grounded, continuous existing cable route, not a floating wire.
-  k.wire([[turbineBox.min.x - .02, .065, -5], [turbineBox.min.x - .02, .065, -9], [-2.65, .065, -9], [-2.65, .065, -11.4], [-2.65, 1.7, -11.4]], () => turbine.clutch && wheel.omega > .1);
+  k.wire([[turbineBox.min.x - .02, .065, -5], [turbineBox.min.x - .02, .065, -9], [-2.65, .065, -9], [-2.65, .065, -11.4], [-2.65, 1.7, -11.4]], () => turbine.power);
 
   // Soft, path-advected wisps replace opaque dots. They share the exact traced
   // blockers/portal mapping and a physical-time clock; no extra physics/labels.
-  const airflow = new LabAirflowVisual(w.root);
+  const airflow = new LabAirflowVisual(w.root, { radius: 1.35, speed: 7.2 });
   const dust = airflow.mesh; // retained diagnostics alias; no sphere instances
   let previousAngle = 0, previousPawl = 0;
   const lights = [];
@@ -125,12 +127,11 @@ export function buildReadableWindRoom(game, spec) {
     fan.segments = strength > .005 ? tracePortalRay(game, origin, fan.direction, { medium: 'air', length: 80 }) : [];
     airflow.step(dt, strength); airflow.setPath(fan.segments, game.portals?.portals || []);
     turbine.power = receivesFrontAir(fan.segments, inlet, turbine.normal, 1.0);
-    wheel.step(turbine.power ? 24 * strength : 0, turbine.clutch && !ratchet.engaged ? 2.2 : 0, dt);
+    wheel.step(turbine.power ? 24 * strength : 0, !ratchet.engaged ? 2.2 : 0, dt);
     if (wheel.work > 70) ratchet.engaged = true;
     ratchet.progress = THREE.MathUtils.damp(ratchet.progress, ratchet.engaged ? 1 : 0, 6, dt);
     door.update(ratchet.engaged, dt, k.time);
     fanControl.lesson = fan.enabled ? 'E — выключить вентилятор.' : 'E — включить вентилятор.';
-    clutchControl.lesson = turbine.clutch ? 'E — отключить привод двери.' : 'E — подключить привод двери. Поток воздуха передаст ему усилие.';
   });
   k.renders.push(alpha => {
     blowerArt.spin(THREE.MathUtils.lerp(previousAngle, fan.angle, alpha));
@@ -139,16 +140,28 @@ export function buildReadableWindRoom(game, spec) {
     airflow.render(alpha, game.quality?.shadows === false ? 'low' : 'balanced');
   });
   k.resets.push(() => {
-    fan.enabled = false; fan.segments = []; turbine.power = turbine.clutch = false; wheel.reset();
+    fan.enabled = false;fan.touchingFriend=false; fan.segments = []; turbine.power = false; turbine.clutch = true; wheel.reset();
     ratchet.engaged = false; ratchet.progress = previousPawl = previousAngle = 0;
     fan.rotorSpeed = fan.angle = 0; blowerArt.spin(0); pawl.rotation.z = 0; airflow.reset();
   });
-  const level = k.finish([-1, 0, 8], [1.5, .55, 7.5], [0, 0, -16], { workshop: k, readability: { inlet, housing, dust, airflow, pawl, fanControl, clutchControl } });
+  const level = k.finish([-1, 0, 8], [1.5, .55, 7.5], [0, 0, -16], { workshop: k, readability: { inlet, housing, dust, airflow, pawl, fanControl } });
   // Context comes from the nearby existing control, not instructions painted
   // on the wall or a central overlay. No solution markers or forced ordering.
   level.getContextLesson = () => {
     const action = level.nearbyInteraction();
     return action ? ['room11-' + action.kind, 'E', action.text.replace(/^E — /, ''), false] : null;
   };
+  const forceAt=(point,velocity,bodyRadius)=>airAcceleration(fan.segments,point,velocity,{strength:fan.rotorSpeed/12,radius:1.35,bodyRadius});
+  level.playerAcceleration=(point,velocity)=>forceAt(point.clone().add(V(0,1.25,0)),velocity,.5);
+  k.forces.push(()=>{
+    if(game.heldCube)return;
+    const body=game.physics.cargoBody, force=forceAt(game.cargo.position,game.cargo.velocity,.55);
+    if(force.lengthSq()>1e-5){
+      // Walking control must not oppose the air or keep the box friction-locked.
+      body.material.friction=.06;
+      if(!fan.touchingFriend)game.companionAnimator?.trigger('startle');fan.touchingFriend=true;
+      body.force.x+=force.x*body.mass;body.force.y+=force.y*body.mass;body.force.z+=force.z*body.mass;body.wakeUp();
+    }else fan.touchingFriend=false;
+  });
   level.reset(); return level;
 }
