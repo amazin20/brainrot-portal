@@ -1,3 +1,7 @@
+# Current focus: one readable existing room
+
+New content is paused. Only room 11 is being cleaned up; no new levels or GLBs. See `docs/ROOM_11_POLISH.md`. Keep the remaining nineteen rooms and source models unchanged. Publication still requires the full existing checks and actual single-room visual review.
+
 # NESI — twenty physical workshops, V17
 
 Repository: amazin20/nesi-brainrot. Vite / Three.js / cannon-es.
