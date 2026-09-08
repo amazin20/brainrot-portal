@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import * as THREE from 'three';
 import {createHeadlessGame} from '../scripts/lab-headless.mjs';
+import {BALANCE_RIG_LAYOUT as L} from '../src/game/LabBalanceRig.js';
 import {resolvePortalPlacement} from '../src/game/LabPortals.js';
 const g=await createHeadlessGame();
 test('every room offers additional continuous portal areas without changing its physical concept',async()=>{
@@ -26,12 +27,18 @@ test('a full recovery wall accepts widely separated shots, including tile seams,
   assert.ok(result.position.distanceTo(point)<1e-6,'Shot snapped to a designated slot');
  }
 });
-test('seventh exit is outside the entire lever tilt plus ordinary jump envelope',async()=>{
+test('the receiving balcony is above rocker jumping and its floor hides the portal from below',async()=>{
  await g.selectLevel(6,false);const l=g.firstLevel;
- const maximumLeverHeight=2.2+Math.tan(.32)*11;
+ const maximumLeverHeight=L.pivotHeight+Math.sin(L.maxAngle)*L.length/2+l.state.surfaceOffset;
  const jumpRise=7.8*7.8/(2*19.5);
  assert.ok(l.goal.position.y>maximumLeverHeight+jumpRise+.9);
- assert.ok(l.panels['lever-receiver'].getFrame().center.y>l.goal.position.y+1.8);
+ const receiver=l.panels['lever-receiver'].getFrame();
+ assert.ok(receiver.normal.y>.999999,'The receiving portal must face upward on the actual dock floor');
+ assert.ok(Math.abs(receiver.center.y-l.goal.position.y)<1e-6);
+ const origin=receiver.center.clone().add(new THREE.Vector3(0,-5,0));
+ const hits=new THREE.Raycaster(origin,new THREE.Vector3(0,1,0)).intersectObjects(g.aimBlockers,true);
+ assert.ok(hits.length>0);assert.ok(hits[0].distance<5-.1,'A lower shot can reach the exposed back of the receiving portal');
+ assert.notEqual(hits[0].object,l.panels['lever-receiver'].mesh);
  assert.equal(l.isWon(),false);
 });
 test('wide portal areas are released on a level change',async()=>{

@@ -17,8 +17,8 @@ try{
   catch(error){console.log('Publication propagation:',String(error));}
   await wait(5000);
  }
- assert.equal(info?.commit,expected);assert.equal(info?.levels,20);assert.equal(info?.version,'v21-video-workshop');report.build=info;
- const response=await fetch(base+'models/runtime/manifest.json?revision='+expected);assert.ok(response.ok);const manifest=await response.json();assert.equal(manifest.models.length,18);
+ assert.equal(info?.commit,expected);assert.equal(info?.levels,20);assert.equal(info?.version,'v22-balance-rebuild');report.build=info;
+ const response=await fetch(base+'models/runtime/manifest.json?revision='+expected);assert.ok(response.ok);const manifest=await response.json();assert.equal(manifest.models.length,17);
  const source=JSON.parse(fs.readFileSync('public/models/runtime/manifest.json','utf8'));
  for(const model of manifest.models){
   const original=source.models.find(m=>m.id===model.id);assert.ok(original);assert.equal(model.outputSHA256,original.outputSHA256);
@@ -26,7 +26,7 @@ try{
   const bytes=Buffer.from(await r.arrayBuffer());assert.equal(createHash('sha256').update(bytes).digest('hex'),model.outputSHA256);assert.equal(bytes.length,model.outputBytes);
   report.models.push({id:model.id,bytes:bytes.length,verified:true});
  }
- browser=await puppeteer.launch({executablePath:process.env.CHROME_PATH||'/usr/bin/google-chrome',headless:true,args:['--no-sandbox','--disable-dev-shm-usage','--use-angle=swiftshader','--enable-unsafe-swiftshader']});
+ browser=await puppeteer.launch({executablePath:process.env.CHROME_PATH||'/usr/bin/google-chrome',headless:true,protocolTimeout:300000,args:['--no-sandbox','--disable-dev-shm-usage','--use-angle=swiftshader','--enable-unsafe-swiftshader']});
  const page=await browser.newPage();page.setDefaultTimeout(120000);await page.setViewport({width:1280,height:800});page.on('pageerror',e=>report.errors.push(e.message));
  await page.goto(base+'?debug=1&level=11&revision='+expected,{waitUntil:'networkidle2'});
  await page.waitForFunction(()=>window.__NESI_DEMO_GAME__?.state==='ready');
@@ -43,6 +43,6 @@ try{
  await page.screenshot({path:'live-evidence/level-12-public-start.png'});assert.deepEqual(report.errors,[]);
  report.shots=await runPortalShotBrowser({browser,baseUrl:base,out:'live-evidence/portal-shots'});
  report.sep8=await runSep8Browser({browser,baseUrl:base,out:'live-evidence/sep8',mode:'all'});report.pass=true;
- console.log('LIVE VERIFIED',expected,'20 selectable levels, 18 exact models, actual level 11 completed and next-level button opened 12');
+ console.log('LIVE VERIFIED',expected,'20 selectable levels, 17 exact source models and the new procedural rocker, actual level 11 completed and next-level button opened 12');
 }catch(error){report.error=String(error);throw error;}
 finally{fs.writeFileSync('live-evidence/report.json',JSON.stringify(report,null,2));await browser?.close();}

@@ -18,7 +18,10 @@ test('nine supplied derived GLBs have full binary length, exact hashes, frame an
   const model=await loadHeadlessGLB('public/models/runtime/'+a.filename);
   assert.ok(model.getObjectByName('Frame'));assert.ok(model.getObjectByName('Moving'));
   let count=0;model.traverse(m=>{if(!m.isMesh)return;count+=m.geometry.index.count/3;for(const value of m.geometry.attributes.position.array)assert.ok(Number.isFinite(value));assert.ok(m.geometry.attributes.color,'Original source colors are retained as baked vertex colors');});
-  assert.ok(count>500&&count<7500);assert.ok(CAMPAIGN.some(l=>l.assets.includes(a.id)));
+  assert.ok(count>500&&count<7500);
+  // The rejected scanned rocker is retained and hash-checked as a source,
+  // while the rebuilt seventh room uses its own articulated geometry.
+  assert.equal(CAMPAIGN.some(l=>l.assets.includes(a.id)),a.id!==34);
  }
 });
 test('an idle flywheel cannot do work against a positive load or create stored energy',()=>{

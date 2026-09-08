@@ -7,7 +7,7 @@ import {
   resolveLabPlayerSkin as resolveBaseSkin,
   solveLabArm,
 } from './LabPlayerAnimatorBase.js';
-export {sampleLabFootCycle, solveLabLeg, solveLabArm} from './LabPlayerAnimatorBase.js';
+export {sampleLabFootCycle, sampleLabJumpPose, solveLabLeg, solveLabArm} from './LabPlayerAnimatorBase.js';
 
 // Keep all existing bone indices stable; append the rib cage. This preserves
 // old attachment/foot contracts while giving shoulders an independent rhythm.
@@ -67,23 +67,28 @@ export class LabPlayerAnimator extends BaseAnimator{
     this.reset();
   }
   reset(){
-    super.reset();this.flightBrace=0;this.windBrace=0;this.operateTime=2;
+    super.reset();this.flightBrace=0;this.windBrace=0;this.operateTime=2;this.landingChest=0;
     if(this.bones.Chest){this.bones.Chest.quaternion.identity();this.basePose?.Chest?.identity();this.bones.Chest.position.copy(this.rig.rest.Chest);this.rig.mesh.updateWorldMatrix(true,true);this.rig.skeleton.update();this.snapCarrierToBody();}
   }
   triggerOperate(){this.operateTime=0;}
   update(input={}){super.update(input);this.basePose.Chest.copy(this.bones.Chest.quaternion);}
-  get diagnostics(){return {...super.diagnostics,boneCount:LAB_PLAYER_JOINTS.length,profile:'responsive-grip-shot-v18',chestIndependent:true,windBrace:this.windBrace};}
+  get diagnostics(){return {...super.diagnostics,boneCount:LAB_PLAYER_JOINTS.length,profile:'grounded-jump-recovery-v22',chestIndependent:true,windBrace:this.windBrace,landingChest:this.landingChest};}
   stepPose(input){
     this.headBefore.copy(this.bones.Head.quaternion);
     for(const name of Object.keys(this.freeBefore))this.freeBefore[name].copy(this.bones[name].quaternion);
     super.stepPose(input);
-    const dt=input.dt||0,run=smooth(2.5,5.7,this.speed),moving=this.moveBlend*(1-this.airBlend);
+    const dt=input.dt||0,run=smooth(2.5,5.7,this.speed),moving=this.moveBlend*(1-this.airBlend)*(1-.78*this.landingSupport);
     this.operateTime=Math.min(2,(this.operateTime??2)+dt);
     const operate=Math.sin(Math.PI*Math.min(1,this.operateTime/1.1))**2*(1-this.carryBlend)*(1-this.aimBlend);
     const cadence=this.gait*Math.PI*2,body=this.jointTargets.Body,relaxed=(1-.8*this.aimBlend)*(1-.55*this.carryBlend);
     this.chestTarget.set(-body.x*.32+.018*this.carryBlend+Math.sin(this.elapsed*1.6)*.006*this.idleBlend+this.airBlend*.045*(1-this.ascentBlend),
       -body.y*.45+Math.sin(cadence-.45)*.040*moving*relaxed,
       -Math.sin(cadence-.22)*.155*moving*relaxed+this.turn*.016);
+    // The pelvis receives impact first; ribs and the rigid backpack follow a
+    // beat later, then the head compensates below. The lag is elapsed-time
+    // based and affects only bones, so the camera and carry contact stay stable.
+    this.landingChest=THREE.MathUtils.damp(this.landingChest,-this.landing*2.2,13,dt);
+    this.chestTarget.x+=this.landingChest*(1-.55*this.aimBlend);
     // A fast portal flight has a held, braced silhouette, not a walking loop.
     const flight=this.airBlend*smooth(6,14,Math.hypot(input.velocity?.x||0,input.velocity?.z||0));
     this.flightBrace=THREE.MathUtils.damp(this.flightBrace||0,flight,9,dt);

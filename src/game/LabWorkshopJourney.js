@@ -39,6 +39,7 @@ export async function runWorkshopJourney(d){
   walk(-2.8,4.7);shot(1,'unloading-dock');
   walk(-5.4,5.6);walk(-8.2,5.6);walk(-9.7,4.2);
   shot(0,'loading-dock');enter(p['loading-dock']);collect();
+  walk(5.2,4.2);lookAt(new THREE.Vector3(7.6,1.84,.5));mark('inspected the receiver cable across the bank');
   walk(7,-2.5);wait(1);groundExit();
  }else if(index===10){
   shot(0,'wind-intake');shot(1,'wind-outlet');lever('fan-switch',8);

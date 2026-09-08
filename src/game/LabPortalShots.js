@@ -39,7 +39,7 @@ export class LabPortalShots {
    // unrelated walls, frames and furniture keep their original hit order.
    const support=h.object.userData.collisionProxy&&g.colliders.find(c=>c.mesh===h.object)?.frontPlane?.();
    if(support?.normal&&this.ray.ray.direction.dot(support.normal)<-.02){
-    const owners=g.portalPanels.filter(panel=>panel!==h.object&&panel.userData.portalColliderId===h.object.uuid
+    const owners=g.portalPanels.filter(panel=>panel!==h.object&&(panel.userData.portalColliderId===h.object.uuid||panel.userData.portalBackingIds?.includes(h.object.uuid))
      &&g.aimBlockers.includes(panel)&&g.isActiveBlocker(panel));
     if(owners.length){
      // The front can lie beyond this fixed tick's segment. Prove that the

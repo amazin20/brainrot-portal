@@ -1,3 +1,5 @@
+import {runBalanceJourney} from './LabBalanceJourney.js';
+export {runBalanceJumpAttempt} from './LabBalanceJourney.js';
 /** Authored positive solutions. Only ordinary walking, aiming, interaction and
  * elapsed simulation are used: no actor teleports, assigned actuator targets,
  * forced success, disabled collision or test-only forces. */
@@ -16,14 +18,7 @@ export async function runExtendedStages(d){
   until(()=>level.state.lit,4,'Light did not reach receiver');mark('beam physically traversed pair and reflected to receiver');
   collect();walk(4,-10);walk(0,-10);walk(0,-16.3);
  }else if(level.index===6){
-  walk(8,1.2);game.interact();wait(.3);game.interact();wait(4);
-  walk(0,1);aim(0,level.panels['lever-load'].getFrame().center);
-  collect();walk(0,1);walk(0,5.5);walk(0,7.75);drop();
-  wait(2);mark('same load creates a larger torque at the end of the lever');
-  walk(0,0);walk(0,-9.5);walk(0,-12.8);mark('crossed a load-balanced physical deck');
-  walk(-7.8,-14);aim(1,level.panels['lever-receiver'].getFrame().center);wait(2);mark('retrieval after releasing lever load');
-  walk(-7.8,-14);aim(0,level.panels['balance-upper-transfer'].getFrame().center);enter(level.panels['balance-upper-transfer']);
-  if(game.state!=='won'){collect();walk(4.6,-14.5);}
+  await runBalanceJourney(d);
  }else if(level.index===7){
   aim(0,level.panels['air-intake'].getFrame().center);
   walk(0,3);aim(1,level.panels['air-up'].getFrame().center);
@@ -54,26 +49,4 @@ export async function runExtendedStages(d){
   until(()=>c().y>3&&c().x>9,12,'Friend did not travel from the well to the collection gallery');mark('field navigated the sealed maze; friend extracted through bottom portal');
   walk(14,11);walk(14,-8);walk(11.8,-6.8);if(game.state!=='won'){const p=game.cargo.position;walk(p.x+.9,p.z-.9);pickup();walk(11.8,-8);}
  }
-}
-
-/** Regression route from the 2026-09-08 room-7 recording. Uses the same
- * controls as a player: move the counterweight, carry the friend, then try
- * repeated jumps to the intermediate gallery. Reaching that gallery matters:
- * the final dock can subsequently be entered through an ordinary portal pair.
- * No actor poses, mechanism targets, collision flags or win flags are assigned. */
-export function runBalanceJumpAttempt(d,{carry=true,counter=2,sprint=true,jumpEvery=8,maxFrames=420}={}){
- const {game,level,walk,wait,pickup,worldMove,frame,stop}=d;
- if(level.index!==6)throw Error('Balance regression requires room 7');
- walk(8,1.2);for(let n=0;n<counter;n++){game.interact();wait(.3);}wait(4);
- if(carry){const c=game.cargo.position;walk(c.x,c.z+1.05);pickup();}
- walk(0,1);if(sprint)game.input.keys.add('ShiftLeft');
- let reached=false,maxY=game.playerPosition.y,frames=0;
- for(;frames<maxFrames;frames++){
-  if(jumpEvery&&frames%jumpEvery===0)game.input.jumpQueued=true;
-  worldMove(0,-1);frame();maxY=Math.max(maxY,game.playerPosition.y);
-  if(game.playerPosition.z<-11.3&&game.playerPosition.y>5.49&&game.playerGrounded){reached=true;break;}
-  if(game.playerPosition.y<-3)break;
- }
- stop();return {reached,maxY,frames,player:game.playerPosition.toArray(),angle:level.state.angle,
-  cargoHeld:game.heldCube===game.cargo,teleports:game.teleportCount};
 }

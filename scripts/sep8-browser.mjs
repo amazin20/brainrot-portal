@@ -8,7 +8,7 @@ import assert from 'node:assert/strict';
  * The rapid-fire section uses only trusted mouse events and the normal clock.
  * Its observers preserve the original methods and return values. The room
  * section uses the existing ordinary-control route with its fixed simulation
- * clock; captured images retain the game's normal third-person camera. The complete bridge movement is sampled every fifth 60Hz simulation frame (12Hz) without interpolation. Neither
+ * clock; captured images retain the game's normal third-person camera. The bridge is sampled at12Hz; the rocker at15Hz and its portal flight at30Hz, using production render interpolation. Neither
  * section assigns an actor, cargo, portal, mechanism, or camera transform.
  * Run this as a project CI test, with the built production preview running.
  */
@@ -17,9 +17,9 @@ export async function runSep8Browser({ browser, baseUrl = 'http://127.0.0.1:4173
   assert.ok(browser, 'Use the existing CI browser harness');
   assert.ok(['all', 'burst', 'rooms'].includes(mode));
   fs.mkdirSync(out, { recursive: true });
-  const report = { pass: false, baseUrl, mode, errors: [], networkFailures: [], rooms: [],
+  const report = { pass: false, baseUrl, mode, version: 'v22-balance-rebuild', errors: [], networkFailures: [], rooms: [], animations: [],
     renderer: 'Production WebGL / CI Chromium SwiftShader',
-    limits: 'Mouse burst uses real input and normal render timing. Room clips sample ordinary routes at 60Hz; the full bridge movement uses every fifth step (12Hz). These are simulation samples, not measured real-time gameplay FPS. No free camera or moved gameplay fixtures.' };
+    limits: 'Mouse burst uses real input and normal render timing. Room clips sample ordinary control routes: balance and animation 15Hz, portal flight 30Hz, spring 60Hz, bridge/stairs 12Hz. These are simulation samples, not measured real-time gameplay FPS. No free camera or moved gameplay fixtures.' };
   const started = Date.now();
   const page = await browser.newPage();
   page.setDefaultTimeout(90000);
@@ -232,23 +232,26 @@ export async function runSep8Browser({ browser, baseUrl = 'http://127.0.0.1:4173
       await page.screenshot({ path: path.join(out, `room-${room}-start.png`) });
       const captured = await page.evaluate(async room => {
         const g = window.__NESI_DEMO_GAME__, original = { render: g.render, updateVisuals: g.updateVisuals };
-        const stills = [], frames = [], timeline = [];
-        let ticks = 0, capturing = false, captureStart = 0;
-        const sampleEvery = room === 10 ? 5 : 1, sampleCount = room === 10 ? 60 : 24;
+        const stills = [], frames = [], timeline = [], extra = { stairs: [], flight: [], cable: null };
+        let ticks = 0, capturing = false, captureStart = 0, stairStart = 0, flightStart = 0;
+        const sampleEvery = room === 10 ? 5 : room === 7 ? 4 : 1, sampleCount = room === 9 ? 24 : 60;
         const state = () => ({ simulationFrame: ticks, player: g.playerPosition.toArray(), cargo: g.cargo.position.toArray(),
           camera: { position: g.camera.position.toArray(), quaternion: g.camera.quaternion.toArray() },
-          mechanism: room === 7 ? { angle: g.firstLevel.state.angle, counter: g.firstLevel.state.counterIndex }
+          mechanism: room === 7 ? { angle: g.firstLevel.state.angle, omega: g.firstLevel.state.omega, counter: g.firstLevel.state.counterIndex }
             : room === 9 ? { compression: g.firstLevel.state.piston.compression, latched: g.firstLevel.state.piston.latched }
               : { progress: g.firstLevel.state.freight.progress, loaded: g.firstLevel.state.freight.loaded() } });
         g.render = function (...args) {
           const result = original.render.apply(this, args);
-          if (this.state === 'playing') stills.push({ ...state(), image: this.renderer.domElement.toDataURL('image/png') });
+          if (this.state === 'playing') {
+            const view = { ...state(), image: this.renderer.domElement.toDataURL('image/png') }; stills.push(view);
+            if (room === 10 && Math.hypot(this.playerPosition.x - 5.2, this.playerPosition.z - 4.2) < .15) extra.cable = view;
+          }
           return result;
         };
         g.updateVisuals = function (...args) {
           const result = original.updateVisuals.apply(this, args); ticks++;
           const s = this.firstLevel.state;
-          const active = room === 7 ? s.counterIndex === 2 && Math.abs(s.omega) > .01
+          const active = room === 7 ? s.loaded && !this.heldCube && this.cargo.position.z > 0 && Math.abs(s.omega) > .018
             : room === 9 ? !this.heldCube && this.cargo.position.y < 4 && this.cargo.position.y > 2.5 && this.cargo.position.z < -2 && this.physics.cargoBody.velocity.y < -1
               : s.freight.progress > .10 && s.freight.progress < .90;
           if (!capturing && active) { capturing = true; captureStart = ticks; }
@@ -256,18 +259,52 @@ export async function runSep8Browser({ browser, baseUrl = 'http://127.0.0.1:4173
             original.render.call(this);
             frames.push(this.renderer.domElement.toDataURL('image/png')); timeline.push(state());
           }
+          if (room === 7) {
+            if (!flightStart && this.teleportCount > 0 && !this.playerGrounded && this.playerPosition.y > 3) flightStart = ticks;
+            if (flightStart && (ticks - flightStart) % 2 === 0 && extra.flight.length < 60) {
+              original.render.call(this); extra.flight.push({ ...state(), image: this.renderer.domElement.toDataURL('image/png') });
+            }
+          }
+          if (room === 10) {
+            const p = this.playerPosition;
+            if (!stairStart && p.x < -8.2 && p.z < 10 && p.z > 5.9 && p.y > .05) stairStart = ticks;
+            if (stairStart && (ticks - stairStart) % 5 === 0 && extra.stairs.length < 24) {
+              original.render.call(this); extra.stairs.push({ ...state(), image: this.renderer.domElement.toDataURL('image/png') });
+            }
+
+          }
           return result;
         };
-        try { return { route: await window.__NESI_RUN_LEVEL_ROUTE__(), stills, frames, timeline }; }
+        try { return { route: await window.__NESI_RUN_LEVEL_ROUTE__(), stills, frames, timeline, extra }; }
         finally { g.render = original.render; g.updateVisuals = original.updateVisuals; }
       }, room);
-      const item = { room, initial, route: captured.route, sampledSimulationFps: room === 10 ? 12 : 60,
+      const item = { room, initial, route: captured.route, sampledSimulationFps: room === 10 ? 12 : room === 7 ? 15 : 60,
         sampledFrames: captured.frames.length, timeline: captured.timeline,
         stills: captured.stills.map(({ image, ...state }, i) => ({ file: `room-${room}-milestone-${i + 1}.png`, ...state })) };
       report.rooms.push(item);
       captured.stills.forEach((s, i) => saveImage(`room-${room}-milestone-${i + 1}.png`, s.image));
       const frameDir = `room-${room}-frames`; fs.mkdirSync(path.join(out, frameDir), { recursive: true });
       captured.frames.forEach((data, i) => saveImage(`${frameDir}/${String(i).padStart(3, '0')}.png`, data));
+      item.additionalViews = {};
+      for (const [name, fps] of [['stairs', 12], ['flight', 30]]) if (captured.extra[name].length) {
+        const dir = `room-${room}-${name}-frames`; fs.mkdirSync(path.join(out, dir), { recursive: true });
+        captured.extra[name].forEach((s, i) => saveImage(`${dir}/${String(i).padStart(3, '0')}.png`, s.image));
+        item.additionalViews[name] = { directory: dir, sampledSimulationFps: fps,
+          timeline: captured.extra[name].map(({ image, ...s }) => s) };
+      }
+      if (room === 7) {
+        assert.equal(captured.extra.flight.length, 60, 'The new balance route must show the actual portal flight');
+        const names = captured.route.milestones.map(m => m.name);
+        assert.ok(names.includes('gravity speed redirected by the tilting portal'));
+        assert.ok(names.includes('landed on the upper receiving balcony'));
+      }
+      if (room === 10) {
+        assert.equal(captured.extra.stairs.length, 24, 'The repaired stairs must be inspected during the real approach');
+        assert.ok(captured.extra.cable, 'The receiver cable must be inspected from the actual receiving bank');
+        const { image, ...view } = captured.extra.cable;
+        saveImage('room-10-receiver-cable.png', image);
+        item.additionalViews.cable = { file: 'room-10-receiver-cable.png', ...view };
+      }
       if (room === 9) {
         const checkpoint = captured.route.milestones.find(m => m.name === 'inspected spring linkage and guard slot');
         assert.ok(checkpoint, 'The ordinary route must inspect the accessible side of the spring before pickup');
@@ -281,7 +318,7 @@ export async function runSep8Browser({ browser, baseUrl = 'http://127.0.0.1:4173
       }
       await page.screenshot({ path: path.join(out, `room-${room}-complete.png`) });
       assert.ok(captured.route.pass && captured.route.resets === 0 && captured.route.respawns === 0, `Room ${room} ordinary route must pass`);
-      assert.equal(captured.frames.length, room === 10 ? 60 : 24, `Room ${room} must expose real mechanism motion`);
+      assert.equal(captured.frames.length, room === 9 ? 24 : 60, `Room ${room} must expose real mechanism motion`);
       assert.ok(captured.stills.length >= 1);
       console.log(`September 8 room ${room} ordinary route and normal-camera evidence passed`, captured.route.frames);
       if (room === 7) {
@@ -290,7 +327,7 @@ export async function runSep8Browser({ browser, baseUrl = 'http://127.0.0.1:4173
           let capturing = false, ticks = 0;
           g.updateVisuals = function (...args) {
             const result = update.apply(this, args); ticks++;
-            if (this.heldCube && !this.playerGrounded && this.playerPosition.z < .9) capturing = true;
+            if (this.heldCube && !this.playerGrounded) capturing = true;
             if (capturing && images.length < 18) {
               this.render(); images.push(this.renderer.domElement.toDataURL('image/png'));
               timeline.push({ simulationFrame: ticks, player: this.playerPosition.toArray(),
@@ -310,12 +347,50 @@ export async function runSep8Browser({ browser, baseUrl = 'http://127.0.0.1:4173
         const { images, ...data } = negative;
         report.balanceBypass = { ...data, consecutiveFrames: images.length, sampledSimulationFps: 60 };
         await page.screenshot({ path: path.join(out, 'room-7-bypass-blocked.png') });
-        assert.equal(negative.attempt.reached, false, 'Carry jumping must not reach the high gallery');
+        assert.equal(negative.attempt.reached, false, 'Carry jumping must not reach the upper receiving balcony');
         assert.equal(negative.attempt.cargoHeld, true, 'The correction must retain the carried friend');
         assert.equal(negative.attempt.teleports, 0);
         assert.equal(negative.route.resets + negative.route.respawns, 0);
         assert.equal(negative.images.length, 18);
         console.log('September 8 ordinary carry-jump bypass rejected', JSON.stringify(negative.attempt));
+      }
+    }
+    if (mode !== 'burst') {
+      for (const carrying of [false, true]) {
+        const initial = await openRoom(9);
+        for (const fps of [30, 60, 120]) {
+          const captured = await page.evaluate(async ({ fps, carrying }) => {
+            const g = window.__NESI_DEMO_GAME__, images = [], timeline = [];
+            window.__NESI_CAPTURE_ANIMATION_FRAME__ = sample => {
+              if (fps === 60 && sample.frame % 4 === 0) {
+                g.render(); images.push(g.renderer.domElement.toDataURL('image/png'));
+                timeline.push({ ...sample, camera: { position: g.camera.position.toArray(), quaternion: g.camera.quaternion.toArray() } });
+              }
+            };
+            try { return { ...await window.__NESI_RUN_ANIMATION_ROUTE__({ fps, carrying }), images, timeline }; }
+            finally { delete window.__NESI_CAPTURE_ANIMATION_FRAME__; }
+          }, { fps, carrying });
+          const name = `animation-${carrying ? 'carrying' : 'free'}-${fps}`;
+          if (captured.images.length) {
+            fs.mkdirSync(path.join(out, name), { recursive: true });
+            captured.images.forEach((data, i) => saveImage(`${name}/${String(i).padStart(3, '0')}.png`, data));
+            assert.equal(captured.images.length, 48, 'The entire run, jump, landing and stop must be visible');
+          }
+          const { images, ...data } = captured;
+          const item = { ...data, initial, frameDirectory: images.length ? name : null,
+            sampledFrames: images.length, sampledSimulationFps: images.length ? 15 : null };
+          report.animations.push(item);
+          assert.ok(captured.route.pass && captured.route.resets === 0 && captured.route.respawns === 0);
+          assert.equal(captured.motion.jumps, 1); assert.equal(captured.motion.landings, 1);
+          assert.ok(captured.motion.finalGrounded && captured.motion.maxHeight > 1);
+          assert.ok(captured.motion.phases.includes('jump') && captured.motion.phases.includes('fall') && captured.motion.phases.includes('landing'));
+          assert.ok(captured.motion.maxGripError < .06);
+          assert.equal(captured.motion.physicsSteps, 384, 'Render sampling must not alter simulation duration');
+          const reference = report.animations.find(a => a.motion.carrying === carrying && a.motion.fps === 30);
+          assert.ok(captured.motion.final.every((v, i) => Math.abs(v - reference.motion.final[i]) < 1e-6));
+          assert.ok(Math.abs(captured.motion.maxHeight - reference.motion.maxHeight) < 1e-6);
+          console.log('V22 ordinary animation inspection passed', fps, carrying ? 'carrying' : 'free');
+        }
       }
     }
     const optional = new Set(['/favicon.ico', '/.well-known/appspecific/com.chrome.devtools.json']);
