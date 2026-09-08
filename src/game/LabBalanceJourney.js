@@ -41,9 +41,9 @@ export async function runBalanceJourney(d) {
 
   // Prepare the floor address from the safe lower service passage, then
   // return to the visible load tray with the same physical companion.
-  walk(-8.2, 8); walk(-8.2, -10.8);
+  walk(-11.7, 8); walk(-11.7, -10.8);
   aim(0, p['balance-drop'].getFrame().center);
-  walk(-8.2, 8); walk(6, 12.6); collect(d); loadingApproach(d);
+  walk(-11.7, 8); walk(6, 12.6); collect(d); loadingApproach(d);
   walk(0, 2.4);
   for (let n = 0; n < 12; n++) { worldMove(0, .18); frame(); }
   stop(); wait(.25); game.interact();
@@ -57,8 +57,8 @@ export async function runBalanceJourney(d) {
 
   // Climb the enclosed stair. The last slow walk preserves a modest horizontal
   // speed over the floor address; ordinary inertia continues during the fall.
-  walk(-8.2, 8); walk(-12, 8); walk(-12, 5.8); walk(-12, -11.1);
-  walk(-8.2, -11.25); walk(-8.2, -12);
+  walk(-11.7, 8); walk(-15.5, 8); walk(-15.5, 5.8); walk(-15.5, -11.1);
+  walk(-11.7, -11.25); walk(-11.7, -12);
   const before = game.teleportCount;
   for (let n = 0; n < 240 && game.teleportCount === before; n++) {
     worldMove(0, -.43);

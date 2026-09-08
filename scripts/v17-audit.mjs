@@ -17,7 +17,7 @@ await g.selectLevel(6,false);
 // landing and the enclosed fall-tower landing. Old gallery coordinates no
 // longer exercised any existing structure. The raised starts remain explicit
 // adversarial allowances, never evidence of a playable positive route.
-const starts=[[0,2.25,0],[0,3.9,4.1],[1.4,3.9,4.1],[2.1,3.3,4.7],[8,3.3,4.7],[-8.2,10,-11.2]];
+const starts=[[0,2.25,0],[0,3.9,4.1],[1.4,3.9,4.1],[2.1,3.3,4.7],[8,3.3,4.7],[-11.7,10,-11.2]];
 for(const start of starts)for(const carry of [false,true])for(const extra of [0,.9])for(const counter of [0,1,2])for(const route of [0,1,2])trial({start,carry,extra,counter,route});
 console.log('Seventh room full-physics trials:',results.length);
 for(let index=8;index<20;index++){

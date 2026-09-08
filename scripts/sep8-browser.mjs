@@ -242,7 +242,10 @@ export async function runSep8Browser({ browser, baseUrl = 'http://127.0.0.1:4173
               : { progress: g.firstLevel.state.freight.progress, loaded: g.firstLevel.state.freight.loaded() } });
         g.render = function (...args) {
           const result = original.render.apply(this, args);
-          if (this.state === 'playing') stills.push({ ...state(), image: this.renderer.domElement.toDataURL('image/png') });
+          if (this.state === 'playing') {
+            const view = { ...state(), image: this.renderer.domElement.toDataURL('image/png') }; stills.push(view);
+            if (room === 10 && Math.hypot(this.playerPosition.x - 5.2, this.playerPosition.z - 4.2) < .15) extra.cable = view;
+          }
           return result;
         };
         g.updateVisuals = function (...args) {
@@ -268,9 +271,7 @@ export async function runSep8Browser({ browser, baseUrl = 'http://127.0.0.1:4173
             if (stairStart && (ticks - stairStart) % 5 === 0 && extra.stairs.length < 24) {
               original.render.call(this); extra.stairs.push({ ...state(), image: this.renderer.domElement.toDataURL('image/png') });
             }
-            if (!extra.cable && this.teleportCount > 0 && p.x > 2.3 && p.x < 6 && p.y > 1.6 && p.z < 3) {
-              original.render.call(this); extra.cable = { ...state(), image: this.renderer.domElement.toDataURL('image/png') };
-            }
+
           }
           return result;
         };

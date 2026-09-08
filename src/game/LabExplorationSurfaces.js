@@ -35,7 +35,7 @@ export function addExplorationSurfaces(game,level,index){
  }else if(index===6){
   wall('balance-work-wall',[13.97,2.3,10],[-1,0,0],8);
   wall('balance-low-return',[13.97,2.3,-9],[-1,0,0],10);
-  wall('balance-tower-return',[-10.15,2.3,-17.77],[0,0,1],8);
+  wall('balance-tower-return',[-13.65,2.3,-17.77],[0,0,1],8);
  }else if(index===7){
   wall('pneumatic-front-wall',[0,2.3,12.76],[0,0,-1],18.8);
   wall('pneumatic-low-wall',[-9.76,2.3,-6],[1,0,0],12.5);

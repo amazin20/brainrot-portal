@@ -10,9 +10,9 @@ import {V,consoleNode,terminalAccessible,glass} from './LabPuzzleMechanics.js';
 export function buildBalanceChamber(game,spec){
  const world=new LabTileWorld(game,{wall:0x52616a,floor:0x75838a,accent:0x99cfbb,sky:0x637681});
  world.materials.wall.color.setHex(0x52616a);world.materials.floor.color.setHex(0x75838a);world.materials.trim.color.setHex(0x30434d);
- const bounds={minX:-15,maxX:14,minZ:-18.5,maxZ:19},spawn=[8,0,12.5],cargoSpawn=[6,.55,11.5];
+ const bounds={minX:-18.5,maxX:14,minZ:-18.5,maxZ:19},spawn=[8,0,12.5],cargoSpawn=[6,.55,11.5];
  const panels={},terminals=[],fixtures=[],state={angle:0,previousAngle:0,omega:0,torque:0,counterIndex:2,counterZ:-1.2};
- world.walls(bounds,16);world.floor(-15,14,-18.5,19);
+ world.walls(bounds,16);world.floor(-18.5,14,-18.5,19);
  const patch=(name,p,n,w,h,parent=world.root,moving=false)=>(panels[name]=world.patch(name,p,n,w,h,parent,moving));
  // Treads are ordered in positive Z and have positive tile dimensions. Each
  // riser has one recessed backing; there are no coplanar stair foundations.
@@ -29,23 +29,23 @@ export function buildBalanceChamber(game,spec){
  world.box([5.75,3.15,4.7],[7.9,.16,.25]);
  // The fall tower is a visible, enclosed structure. Its high stair cannot
  // serve as a direct jumping platform to the receiving balcony.
- const tower={minX:-14.5,maxX:-5.8,minZ:-17.8,maxZ:6.8,height:14.5};state.tower=tower;
- world.surface({name:'Fall tower west wall',position:[-14.5,7.25,-5.5],normal:[1,0,0],width:24.6,height:14.5});
- world.surface({name:'Fall tower back wall',position:[-10.15,7.25,-17.8],normal:[0,0,1],width:8.7,height:14.5});
+ const tower={minX:-18,maxX:-9.3,minZ:-17.8,maxZ:6.8,height:14.5};state.tower=tower;
+ world.surface({name:'Fall tower west wall',position:[-18,7.25,-5.5],normal:[1,0,0],width:24.6,height:14.5});
+ world.surface({name:'Fall tower back wall',position:[-13.65,7.25,-17.8],normal:[0,0,1],width:8.7,height:14.5});
  // Solid lower panels and framed glazing show the stairs from the chamber.
- world.box([-5.8,1.6,-5.5],[.24,3.2,24.6]);
- glass(world,[-5.8,8.85,-5.5],[.16,11.3,24.6]);
- for(const z of [-17.8,-11.65,-5.5,.65,6.8])world.box([-5.8,8.85,z],[.3,11.3,.15]);
- world.box([-10.15,8.85,6.8],[8.7,11.3,.24]);
- for(const x of [-14.05,-6.2])world.box([x,1.6,6.8],[.9,3.2,.24]);
- world.box([-10.15,14.58,-5.5],[8.7,.16,24.6]);
- stairs(-13.6,-10.4,5.5,-10.5,10);
- world.floor(-13.6,-6.4,-12.4,-10.5,10);
- for(const z of [-12.1,-10.8])world.box([-10.15,9.825,z],[8.7,.20,.22]);
+ world.box([-9.3,1.6,-5.5],[.24,3.2,24.6]);
+ glass(world,[-9.3,8.85,-5.5],[.16,11.3,24.6]);
+ for(const z of [-17.8,-11.65,-5.5,.65,6.8])world.box([-9.3,8.85,z],[.3,11.3,.15]);
+ world.box([-13.65,8.85,6.8],[8.7,11.3,.24]);
+ for(const x of [-17.55,-9.7])world.box([x,1.6,6.8],[.9,3.2,.24]);
+ world.box([-13.65,14.58,-5.5],[8.7,.16,24.6]);
+ stairs(-17.1,-13.9,5.5,-10.5,10);
+ world.floor(-17.1,-9.9,-12.4,-10.5,10);
+ for(const z of [-12.1,-10.8])world.box([-13.65,9.825,z],[8.7,.20,.22]);
  // Landing guardrails leave the well edge open, with a broad floor target.
- world.box([-13.7,10.7,-11.4],[.1,1.4,2]);
- world.box([-8.3,10.7,-10.45],[4,1.4,.10]);
- patch('balance-drop',[-8.2,.025,-14.8],[0,1,0],3.6,4.8);
+ world.box([-17.2,10.7,-11.4],[.1,1.4,2]);
+ world.box([-11.8,10.7,-10.45],[4,1.4,.10]);
+ patch('balance-drop',[-11.7,.025,-14.8],[0,1,0],3.6,4.8);
  // Open receiving dock: its underside is opaque and physically solid, and
  // the front lip is well outside the unloaded rocker + jump envelope.
  world.floor(-3.4,3.4,7.3,14,8.2);
