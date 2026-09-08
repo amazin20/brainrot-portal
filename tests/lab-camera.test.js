@@ -241,3 +241,27 @@ test('floor and wall passages preserve mouse pitch while the transported horizon
     'The recovered view must match the ordinary gravity-relative shoulder camera');
   }
 });
+
+test('emerging portal lens never reverses depth or retains a clipping plane behind its eye', () => {
+  const { camera, rig } = setup();
+  camera.near = .1;
+  const exit = makePortalFrame(new THREE.Vector3(-11.75, 2.3, 8), new THREE.Vector3(1, 0, 0));
+  // Includes the recorded WebGL failure at x=-11.64398 (10.6 cm beyond the
+  // exit), where the previous near+.035 release threshold inverted depth.
+  for (const distance of [-.3, -.05, -.001, 0, .01, .025, .035, .06, .1060226776, .135]) {
+    camera.position.set(exit.position.x + distance, 4.091828615, 7.256411062);
+    camera.quaternion.set(-.0802034845, -.8189170309, -.2009939454, .5315484282).normalize();
+    camera.updateMatrixWorld(true);
+    rig.portalExit = exit; rig.updatePortalClipping();
+    const direction = camera.getWorldDirection(new THREE.Vector3());
+    const nearPoint = camera.position.clone().addScaledVector(direction, 5).project(camera);
+    const farPoint = camera.position.clone().addScaledVector(direction, 15).project(camera);
+    assert.ok(nearPoint.z < farPoint.z, `Depth reversed while crossing the exit: ${distance}`);
+    assert.ok(nearPoint.z > -1 && farPoint.z < 1, `Visible room geometry was clipped: ${distance}`);
+    if (distance >= 0) {
+      assert.equal(rig.portalExit, null);
+      const ordinary = camera.clone(); ordinary.updateProjectionMatrix();
+      assert.deepEqual(camera.projectionMatrix.elements, ordinary.projectionMatrix.elements);
+    }
+  }
+});

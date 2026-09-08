@@ -17,7 +17,7 @@ const expectedFiles=ALL_LAB_ASSETS.filter(asset=>expectedIds.includes(asset.id))
 assert.equal(expectedFiles.length,expectedIds.length,'Every selected course dependency must exist in the source asset catalog');
 function startUrl(level){const url=new URL(root);url.searchParams.set('debug','1');url.searchParams.set('level',String(level));return url.href;}
 fs.mkdirSync(out,{recursive:true});
-const browser=await puppeteer.launch({executablePath:process.env.CHROME_PATH||'/usr/bin/google-chrome',headless:true,timeout:60000,
+const browser=await puppeteer.launch({executablePath:process.env.CHROME_PATH||'/usr/bin/google-chrome',headless:true,timeout:60000,protocolTimeout:720000,
  args:['--no-sandbox','--disable-dev-shm-usage','--use-angle=swiftshader','--enable-unsafe-swiftshader']});
 const page=await browser.newPage();await page.setViewport({width:1280,height:800});page.setDefaultTimeout(120000);
 const errors=[],requests=[];page.on('pageerror',e=>errors.push(e.message));page.on('request',r=>{if(r.url().includes('.glb'))requests.push(r.url());});
@@ -141,4 +141,17 @@ try{
  assert.deepEqual(errors,[]);
  assert.equal(report.routes.length,last-first+1);report.pass=true;
  fs.writeFileSync(`${out}/report.json`,JSON.stringify(report,null,2));console.log(`Campaign WebGL: courses ${first}–${last}, lazy assets${checkUI?', menus, sound and persistence':''} passed.`);
-}catch(error){report.failure={error:String(error),state:await uiState().catch(()=>null)};console.error('Browser failure',report.failure);await shot('browser-failure').catch(()=>{});throw error;}finally{fs.writeFileSync(`${out}/report.json`,JSON.stringify(report,null,2));await browser.close();}
+}catch(error){
+ report.failure={error:String(error),state:null};console.error('Browser failure',report.failure);
+ // A busy renderer must not turn one timeout into two more long diagnostic waits.
+ report.failure.state=await bounded(uiState(),10000).catch(()=>null);
+ await bounded(shot('browser-failure'),10000).catch(()=>{});throw error;
+}finally{
+ fs.writeFileSync(`${out}/report.json`,JSON.stringify(report,null,2));
+ await bounded(browser.close(),10000).catch(()=>browser.process()?.kill('SIGKILL'));
+}
+async function bounded(promise,ms){
+ let timer;try{return await Promise.race([promise,new Promise((_,reject)=>{timer=setTimeout(()=>reject(Error('Diagnostic timeout')),ms);})]);}
+ finally{clearTimeout(timer);}
+}
+

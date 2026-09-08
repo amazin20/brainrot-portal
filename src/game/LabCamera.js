@@ -250,7 +250,11 @@ export class LabCamera {
     const exit = this.portalExit;
     if (exit.group && !exit.group.parent) { this.portalExit = null; return; }
     const distance = this.camera.position.clone().sub(exit.position).dot(exit.normal);
-    if (distance >= this.camera.near + .035) { this.portalExit = null; return; }
+    // Oblique clipping is valid only while the eye is behind the exit. Once
+    // the lens crosses it, waiting for the ordinary near-plane clearance puts
+    // the oblique plane behind the eye: projection depth reverses and whole
+    // actors disappear for a frame. The normal near plane handles this side.
+    if (distance >= 0) { this.portalExit = null; return; }
     const direction = this.camera.getWorldDirection(this.castDirection);
     // A clipped frustum is meaningful only while the transported eye looks
     // into the destination. The ordinary blocker sweep handles turning away.
