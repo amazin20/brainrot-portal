@@ -6,6 +6,7 @@ import puppeteer from 'puppeteer-core';
 import {CAMPAIGN} from '../src/game/LabCampaignLevels.js';
 import {CAMPAIGN_ASSET_IDS} from '../src/game/labAssets.js';
 import {runPortalEdgeBrowser} from './portal-edge-browser.mjs';
+import {runFlightAudioBrowser} from './flight-audio-browser.mjs';
 const base=(process.env.PAGE_URL||'').replace(/\/$/,'')+'/',expected=process.env.GITHUB_SHA;
 assert.ok(base.startsWith('https://')&&expected,'Public URL and expected revision are required');
 fs.mkdirSync('live-evidence',{recursive:true});
@@ -18,7 +19,7 @@ try{
   catch(error){console.log('Publication propagation:',String(error));}
   await wait(5000);
  }
- assert.equal(info?.commit,expected);assert.equal(info?.levels,CAMPAIGN.length);assert.equal(info?.version,'v25-atrium-refinement');assert.equal(info?.levels,12);report.build=info;
+ assert.equal(info?.commit,expected);assert.equal(info?.levels,CAMPAIGN.length);assert.equal(info?.version,'v26-flight-feel');assert.equal(info?.levels,12);report.build=info;
  const response=await fetch(base+'models/runtime/manifest.json?revision='+expected);assert.ok(response.ok);const manifest=await response.json();
  assert.deepEqual(manifest.models.map(m=>m.id).sort((a,b)=>a-b),[...CAMPAIGN_ASSET_IDS]);
  const source=JSON.parse(fs.readFileSync('public/models/runtime/manifest.json','utf8'));
@@ -45,7 +46,9 @@ try{
  assert.equal(await page.$eval('#level-number',e=>e.textContent),'1');
  await page.screenshot({path:'live-evidence/campaign-wrap-to-room-1.png'});assert.deepEqual(report.errors,[]);await page.close();
  report.portalEdge=await runPortalEdgeBrowser({browser,baseUrl:base,out:'live-evidence/portal-edge',capture:false});
- assert.equal(report.portalEdge.pass,true);report.pass=true;
- console.log('LIVE VERIFIED',expected,'v25: БРЕЙНРОТ ПОРТАЛ, 12 rooms, reverse-perspective ordinary route, campaign wrap, live model hashes and room9 jump/turn portal regressions');
+ assert.equal(report.portalEdge.pass,true);
+ report.flightAudio=await runFlightAudioBrowser({browser,baseUrl:base,out:'live-evidence/flight-audio',capture:false});
+ assert.equal(report.flightAudio.pass,true);report.pass=true;
+ console.log('LIVE VERIFIED',expected,'v26: БРЕЙНРОТ ПОРТАЛ, 12 rooms, reverse-perspective ordinary route, campaign wrap, live model hashes and room9 jump/turn portal regressions');
 }catch(error){report.error=String(error);throw error;}
 finally{fs.writeFileSync('live-evidence/report.json',JSON.stringify(report,null,2));await browser?.close();}
