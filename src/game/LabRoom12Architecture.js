@@ -175,7 +175,10 @@ export function buildRoom12Architecture(world) {
       color: 0xffffff, vertexColors: true, roughness: .8, metalness: .14, side: THREE.DoubleSide,
     }));
     skin.name = 'Existing stair stringer cladding'; skin.userData.visualOnly = true;
-    skin.receiveShadow = true; root.add(skin);
+    // These thin decorative faces sit 19 mm from the original step bodies.
+    // Receiving their nearby shadow samples creates a dotted surface; keep
+    // the scene's lighting and real tread shadows on the original geometry.
+    skin.receiveShadow = false; root.add(skin);
     const count = Math.ceil((high - low) / .26), dz = run / count;
     for (let i = 1; i < count; i++) {
       const z = z0 + dz * i, top = low + (high - low) * (i + 1) / count;
