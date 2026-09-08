@@ -34,7 +34,7 @@ test('the receiving balcony is above rocker jumping and its floor hides the port
  assert.ok(l.goal.position.y>maximumLeverHeight+jumpRise+.9);
  const receiver=l.panels['lever-receiver'].getFrame();
  assert.ok(receiver.normal.y>.999999,'The receiving portal must face upward on the actual dock floor');
- assert.ok(Math.abs(receiver.center.y-l.goal.position.y-.025)<1e-6);
+ assert.ok(Math.abs(receiver.center.y-l.goal.position.y)<1e-6);
  const origin=receiver.center.clone().add(new THREE.Vector3(0,-5,0));
  const hits=new THREE.Raycaster(origin,new THREE.Vector3(0,1,0)).intersectObjects(g.aimBlockers,true);
  assert.ok(hits.length>0);assert.ok(hits[0].distance<5-.1,'A lower shot can reach the exposed back of the receiving portal');
