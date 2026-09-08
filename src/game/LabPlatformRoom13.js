@@ -15,7 +15,7 @@ export function buildRoom13(game,index=12){
  const k=new Workshop(game,ROOM13_SPEC,index);
  k.shell({minX:-22,maxX:22,minZ:-25,maxZ:23},22);
  const w=k.world;
- w.materials.wall.color.setHex(0xa4b9af);w.materials.floor.color.setHex(0x697e75);
+ w.materials.wall.color.setHex(0x6e877b);w.materials.floor.color.setHex(0x697e75);
  w.materials.trim.color.setHex(0x324941);game.scene.background=new THREE.Color(0x8fa99e);
  if(game.scene.fog)game.scene.fog.color.setHex(0x8fa99e);
  const stone=new THREE.MeshStandardMaterial({color:0xb9c7b4,roughness:.94});
@@ -25,7 +25,9 @@ export function buildRoom13(game,index=12){
  const terraces=[];
  function terrace(name,x0,x1,z0,z1,y){
   const f=w.floor(x0,x1,z0,z1,y,{name});
-  w.box([(x0+x1)/2,y-.31,(z0+z1)/2],[x1-x0,.4,z1-z0],stone);
+  // Recess the slab sides 5 cm behind the tile backing. Their vertical
+  // height ranges overlap, so equal footprints caused a flickering fascia.
+  w.box([(x0+x1)/2,y-.31,(z0+z1)/2],[x1-x0-.1,.4,z1-z0-.1],stone);
   const xs=x1-x0>6?[x0+.65,x1-.65]:[(x0+x1)/2];
   for(const x of xs)for(const z of [z0+.65,z1-.65]){
    w.box([x,(y-.51)/2,z],[.42,y-.51,.42],w.materials.trim);
@@ -90,12 +92,14 @@ export function buildRoom13(game,index=12){
  k.panel('court-east',[21.97,2.3,9],[-1,0,0],13,4.6);
  k.panel('court-north',[10,2.3,-24.97],[0,0,1],12,4.6);
  k.state.terraces=terraces;
- return k.finish([-17,0,22],[-15.8,.55,21.5],[-14.7,15,-1],{workshop:k,platforming:true});
+ // Start in the open west aisle. Its rear clearance accommodates the normal
+ // 6.5 m shoulder boom without moving walls or exposing new upper sightlines.
+ return k.finish([-13,0,16],[-13,.55,14],[-14.7,15,-1],{workshop:k,platforming:true});
 }
 
 export async function runRoom13(d){
  const {game,level,walk,wait,pickup,aim,enter,mark}=d,p=level.panels;
- walk(-16.8,21.5);pickup();walk(-17,21.4);walk(-17,12);walk(-14.3,8);
+ walk(-13,15);pickup();walk(-13,21.5);walk(-17,21.5);walk(-17,12);walk(-14.3,8);
  jump13(d,-13.48,8,-9.8,8,3.15,'first rising gap');
  walk(-8.5,11.7);jump13(d,-8.5,12.5,-8.5,16.3,3.9,'turn around the lower court');
  walk(-5.5,17.2);jump13(d,-4.5,17.2,-.8,17.2,4.65,'lower viewing gallery');

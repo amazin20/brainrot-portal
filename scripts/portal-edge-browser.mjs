@@ -66,6 +66,8 @@ export async function runPortalEdgeBrowser({ browser, baseUrl = 'http://127.0.0.
       assert.equal(captured.travel.teleports, 1, spec.name);
       assert.ok(captured.travel.minY > -1.3, `${spec.name}: traveller escaped below the portal throat`);
       assert.ok(captured.travel.minCameraDistance > 2.7, `${spec.name}: camera folded into the character`);
+      assert.ok(captured.timeline.filter(frame => frame.teleports > 0).every(frame => frame.camera[1] > .1),
+        `${spec.name}: recovering camera escaped under the physical room floor`);
       assert.ok(captured.timeline.length >= 36 && captured.timeline.length <= 48, 'The complete passage needs 36–48 real simulation frames');
       if (capture) assert.equal(images.length, captured.timeline.length);
       assert.ok(captured.timeline.some(frame => frame.teleports === 0));

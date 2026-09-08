@@ -54,15 +54,19 @@ test('ordinary floor and wall passage keeps the same held friend and the third-p
   const game = await createHeadlessGame();
   try {
     await game.selectLevel(8, false);
+    const cameraInsideFloor = sample => {
+      if (sample.teleports > 0) assert.ok(sample.camera[1] > .1,
+        `The recovering lens escaped under the physical floor: ${JSON.stringify(sample)}`);
+    };
     for (const carrying of [false, true]) for (const sprint of [false, true]) {
       for (const offset of [0, .55, .7]) {
-        const { route, travel } = await runPortalEdgeJourney(game, { carrying, sprint, offset });
+        const { route, travel } = await runPortalEdgeJourney(game, { carrying, sprint, offset, onFrame: cameraInsideFloor });
         assert.equal(route.pass, true);
         assert.equal(route.resets + route.respawns, 0);
         assert.equal(travel.teleports, 1);
         assert.ok(travel.minCameraDistance > 2.7, JSON.stringify(travel));
       }
-      const { route, travel } = await runPortalEdgeJourney(game, { carrying, sprint, reverse: true, offset: 0 });
+      const { route, travel } = await runPortalEdgeJourney(game, { carrying, sprint, reverse: true, offset: 0, onFrame: cameraInsideFloor });
       assert.equal(route.pass, true);
       assert.equal(travel.teleports, 1);
       assert.ok(travel.minCameraDistance > 2.7, JSON.stringify(travel));

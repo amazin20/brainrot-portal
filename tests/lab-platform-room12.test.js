@@ -8,6 +8,8 @@ after(()=>{game.physics.dispose();game.portals.dispose();});
 test('the split atrium has a complete ordinary jump and gravity route with the same companion',async()=>{
  await game.selectLevel(11,false);
  assert.equal(game.firstLevel.id,ROOM12_SPEC.id);
+ assert.equal(game.cameraRig.obstructed,false,'The real entrance walls must leave the standard spawn camera clear');
+ assert.ok(game.cameraRig.distance>6.3,'The spawn must show the full character and atrium');
  const result=await runV8Journey(game,{scenario:runRoom12});
  assert.equal(game.state,'won');assert.ok(result.pass);
  assert.equal(result.resets,0);assert.equal(result.respawns,0);assert.ok(result.teleports>=1);

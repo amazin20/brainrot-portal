@@ -12,7 +12,9 @@ export const ROOM12_LEDGES = Object.freeze(Array.from({length:7},(_,i)=>({x:-17+
  * fall well, and its speed is redirected by an ordinary static portal face. */
 export function buildRoom12(game,index=11){
  const k=new Workshop(game,ROOM12_SPEC,index),w=k.world;
- const bounds={minX:-24,maxX:24,minZ:-30,maxZ:30};k.shell(bounds,23);
+ // The entrance court leaves the complete shoulder-camera boom behind
+ // the spawn. Its actual rear wall and ceramic share the same plane.
+ const bounds={minX:-24,maxX:24,minZ:-30,maxZ:36};k.shell(bounds,23);
  w.materials.wall.color.setHex(0x4b5961);w.materials.floor.color.setHex(0x6d7b7d);w.materials.trim.color.setHex(0x253a45);
  const rust=new THREE.MeshStandardMaterial({color:0x957d61,roughness:.84,metalness:.13});
  const dark=new THREE.MeshStandardMaterial({color:0x334550,roughness:.72,metalness:.18});
@@ -107,7 +109,7 @@ export function buildRoom12(game,index=11){
  }
  k.panel('west-recovery',[-23.97,2.4,9],[1,0,0],12,4.8);
  k.panel('east-recovery',[23.97,2.4,10],[-1,0,0],12,4.8);
- k.panel('arrival-wall',[-15,2.4,29.97],[0,0,-1],14,4.8);
+ k.panel('arrival-wall',[-15,2.4,35.97],[0,0,-1],14,4.8);
  k.panel('far-court-wall',[14,2.4,-29.97],[0,0,1],14,4.8);
  return k.finish([-17,0,28.2],[-18.5,.55,27.8],[16,8.2,14.5],{
   workshop:k,platforming:true,

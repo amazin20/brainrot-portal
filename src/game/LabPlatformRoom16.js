@@ -17,7 +17,9 @@ export const ROOM16_SPEC={
  * jump and one permanently moving body of air are the complete puzzle. */
 export function buildRoom16(game,index=15){
  const k=new Workshop(game,ROOM16_SPEC,index),w=k.world;
- k.shell({minX:-23,maxX:23,minZ:-28,maxZ:28},22);
+ // The entrance forecourt leaves the full ordinary camera boom behind the
+ // stair approach. No camera timing or player visibility override is needed.
+ k.shell({minX:-23,maxX:23,minZ:-28,maxZ:36},22);
  w.materials.wall.color.setHex(0x738e94);w.materials.floor.color.setHex(0x738788);
  w.materials.trim.color.setHex(0x30494e);w.materials.lamp.color.setHex(0xe6ffff);
  game.scene.background=new THREE.Color(0xb8d5db);if(game.scene.fog)game.scene.fog.color.setHex(0xb8d5db);
@@ -97,7 +99,7 @@ export function buildRoom16(game,index=15){
  }
  for(const x of [-19.5,-.5,20.5])w.box([x,.011,-1],[.045,.02,48],w.materials.accent,false);
  Object.assign(k.state,{islands,routeJumps:6,permanentWind:true});
- return k.finish([-14,0,27.4],[-12.8,.55,27.4],[-8,13.25,-14],{
+ return k.finish([-14,0,28],[-12.8,.55,28],[-8,13.25,-14],{
   workshop:k,platforming:true,playerAcceleration:(p,v)=>acceleration(p.clone().add(V(0,1.1,0)),v),
  });
 }

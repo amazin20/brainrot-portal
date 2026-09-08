@@ -83,10 +83,17 @@ function jumpTo(d,x,z,label){
  throw Error('Landing timeout: '+label);
 }
 function fall(d,direction,label){
- const {game,worldMove,frame,stop,until}=d;const before=game.teleportCount;
+ const {game,worldMove,frame,stop}=d;const before=game.teleportCount;
  for(let n=0;n<300&&game.teleportCount===before;n++){worldMove(0,direction*.43);frame();}
  stop();check(game.teleportCount>before,'Fall missed portal: '+label);
- d.mark(label+' / gravity redirected');until(()=>game.playerGrounded,6,label+' landing');
+ d.mark(label+' / gravity redirected');
+ // Ordinary mouse-look correction after the floor-to-wall turn. The player
+ // looks back toward the horizon while gravity continues the same flight;
+ // camera pose, orbit yaw and every actor's motion remain simulation-owned.
+ for(let n=0;n<360&&!game.playerGrounded;n++){
+  game.pitch+=THREE.MathUtils.clamp(-.2-game.pitch,-.06,.06);frame();
+ }
+ check(game.playerGrounded,label+' landing timeout');
  check(game.playerPosition.y>4.9,'Flight missed receiver: '+label+' at '+game.playerPosition.toArray());d.mark(label+' / landed');
 }
 export async function runRoom14(d){
@@ -100,7 +107,11 @@ export async function runRoom14(d){
  walk(5,5.5);jumpTo(d,5,2.1,'jump 2 / crossing balcony');
  walk(7,-.5);jumpTo(d,7,-3.9,'jump 3 / corner balcony');
  walk(10,-6.5);jumpTo(d,10,-9.9,'jump 4 / north overlook');
- walk(17,-11.5);game.interact();wait(1);
+ walk(17,-11.5);
+ // Face the open centre of the overlook before setting the friend down, so
+ // the subsequent aiming approach passes behind the cargo instead of pushing it.
+ for(let n=0;n<12;n++){d.worldMove(0,-.18);d.frame();}d.stop();wait(.25);
+ game.interact();wait(1);
  walk(19,-11);aim(1,p['gallery-launch-north'].getFrame().center);
  walk(22.5,-13.7);aim(0,p['gallery-drop-north'].getFrame().center);
  walk(game.cargo.position.x,game.cargo.position.z+1.1);pickup();walk(19,-13.75);fall(d,-1,'second longitudinal flight');

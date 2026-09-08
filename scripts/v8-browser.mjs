@@ -60,12 +60,14 @@ try{
      let started=false,visualFrame=0,startElapsed=null;
      g.render=function(){original.call(this);if(this.levelIndex>=5&&this.state==='playing')images.push(this.renderer.domElement.toDataURL('image/png'));};
      // The route advances visuals at 60 Hz. Sample this same execution at
-     // 15 Hz, starting with its first airborne movement. Rendering observes
+     // 15 Hz, starting with its first airborne movement (first portal flight
+     // in the flight gallery, whose entrance stairs also briefly unground).
+     // Rendering observes
      // the ordinary shoulder camera; no actor or camera pose is assigned.
      if(record)g.updateVisuals=function(...args){
        const result=originalVisuals.apply(this,args);
        if(this.state!=='playing'||platformFrames.length>=60||!(args[0]>0))return result;
-       if(!started&&!this.playerGrounded&&Math.abs(this.playerVelocity.y)>1e-6){started=true;startElapsed=this.elapsed;}
+       if(!started&&!this.playerGrounded&&Math.abs(this.playerVelocity.y)>1e-6&&(this.levelIndex!==13||this.teleportCount>0)){started=true;startElapsed=this.elapsed;}
        if(started&&visualFrame++%4===0){original.call(this);platformFrames.push(this.renderer.domElement.toDataURL('image/png'));}
        return result;
      };
@@ -79,7 +81,7 @@ try{
      captured.platformFrames.forEach((image,k)=>fs.writeFileSync(`${out}/${directory}/${String(k).padStart(3,'0')}.png`,Buffer.from(image.split(',')[1],'base64')));
      assert.equal(captured.platformFrames.length,60,`Course ${index+1} must provide 60 ordinary gameplay samples within its single route`);
      report.platformClips.push({level:index+1,directory,frames:60,simulationFps:15,startElapsed:captured.startElapsed,width:captured.width,height:captured.height,
-       method:'Every fourth 60 Hz route visual update after the first airborne movement; normal game camera'});
+       method:`Every fourth 60 Hz route visual update after the ${index===13?'first portal flight':'first airborne movement'}; normal game camera`});
    }
    const result=captured.route;report.routes.push(result);console.log('Browser course',index+1,'passed',result.frames,'frames');assert.ok(result.pass&&result.resets===0&&result.respawns===0);
    assert.equal(await page.$eval('#level-number',e=>e.textContent),String(index+1));

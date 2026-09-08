@@ -7,6 +7,19 @@ import {runV8Journey} from '../src/game/LabV8Journey.js';
 const game=await createHeadlessGame();
 after(()=>{game.physics.dispose();game.portals.dispose();});
 
+test('archipelago: the entrance keeps the ordinary camera clear from the first frame',async()=>{
+ await game.selectLevel(15,false);game.resetRun(true);
+ for(let frame=0;frame<=60;frame++){
+  if(frame===0||frame===30||frame===60){
+   assert.equal(game.cameraRig.obstructed,false);
+   assert.ok(game.cameraRig.distance>=6.49);
+   assert.ok(game.camera.position.distanceTo(game.playerPosition)>6.5);
+   assert.ok(Math.abs(game.playerPosition.y)<.01);
+  }
+  if(frame<60){game.updatePlaying(1/120);game.updatePlaying(1/120);game.updateVisuals(1/60,1);}
+ }
+});
+
 test('archipelago: ordinary jumps and redirected ambient air deliver the original friend',async()=>{
  await game.selectLevel(15,false);
  const report=await runV8Journey(game);

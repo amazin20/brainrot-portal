@@ -189,6 +189,12 @@ export class LabCamera {
     // preserves this construction through floor and tilted portal transitions.
     const belowFocus = this.desired.dot(this.viewUp) - this.focus.dot(this.viewUp);
     if (belowFocus < -.65) this.desired.addScaledVector(this.viewUp, -.65 - belowFocus);
+    // The rigidly transported view is exact at dt=0. On subsequent frames
+    // gravity still defines the physical floor even while the visual horizon
+    // is rolling back: a rotated viewUp must not put the boom underground.
+    if (step > 0 && this.blockers.length && this.portalUpOrientation.angleTo(IDENTITY) > .01) {
+      this.desired.y = Math.max(this.desired.y, target.y + .67);
+    }
     for (const object of this.blockers) object.updateWorldMatrix(true, true);
 
     // Resolve both the smoothed pivot and the actual player. The latter matters
