@@ -54,7 +54,10 @@ test('moment of force changes with sign and arm length, with bounded damped moti
  for(let n=0;n<2400;n++)integrateBalance(b,0,1/120);assert.ok(Math.abs(b.angle)<.003);
 });
 test('balance deck physical shape and player support refer to the same rotated plane',async()=>{
- await g.selectLevel(6,false);g.resetRun(true);const l=g.firstLevel,s=l.state;s.counterIndex=2;step(180);
+ await g.selectLevel(6,false);g.resetRun(true);const l=g.firstLevel,s=l.state;s.counterIndex=2;
+ // The shorter counterweight arm takes longer to raise the unloaded deck.
+ // Still compare the cargo box and the player plane at a substantial tilt.
+ step(480);
  const f=g.floors.find(f=>f.heightAt),p=g.physics.solids.get(s.collider.mesh.uuid).body;
  assert.ok(s.angle>.2);const q=s.bridge.getWorldQuaternion(new THREE.Quaternion());assert.ok(Math.abs(new THREE.Quaternion().copy(p.quaternion).dot(q))>.99999);
  for(const z of [-8,0,8])assert.ok(Math.abs(f.heightAt(0,z)-(s.bridge.position.y+s.surfaceOffset/Math.cos(s.angle)-Math.tan(s.angle)*z))<1e-8);
@@ -68,10 +71,10 @@ test('fan is a sustained force, not a scripted launch, and fully stops after rot
  for(let n=0;n<360;n++)l.update(1/120);
  assert.equal(l.playerAcceleration(l.state.airOrigin.clone().add(V(1,-1.1,0)),V()).lengthSq(),0);
 });
-test('weak resting load cannot latch the new vertical spring; a real drop can',async()=>{
+test('weak resting load cannot latch the spring cup; a real drop can',async()=>{
  await g.selectLevel(8,false);const p=g.firstLevel.state.piston;
  const trial=height=>{g.resetRun(true);cargoAt(V(0,height,-5));let peak=0;for(let n=0;n<480;n++){g.updatePlaying(1/120);peak=Math.max(peak,p.compression);}return {latched:p.latched,peak};};
- const weak=trial(1.18),strong=trial(7);assert.equal(weak.latched,false);assert.ok(strong.latched,JSON.stringify({weak,strong}));
+ const weak=trial(p.restY+.54),strong=trial(p.restY+6.35);assert.equal(weak.latched,false);assert.ok(strong.latched,JSON.stringify({weak,strong}));
  g.resetRun(true);assert.equal(p.latched,false);assert.equal(p.body.type,1);assert.ok(Math.abs(p.body.position.y-p.restY)<1e-8);
 });
 test('physical crane pulls the same cargo with force and never assigns its position',async()=>{

@@ -7,21 +7,22 @@ const V=()=>new THREE.Vector3();
 export class LabPortalShots {
  constructor(game){
   this.game=game;this.root=new THREE.Group();this.root.name='Portal charge effects';game.scene.add(this.root);
-  this.serial=[0,0];this.epoch=0;this.queue=[];this.active=[];this.pulses=[];this.time=0;this.lastImpact=null;this.lastRequest=null;this.lastOutcome=null;this.cooldown=0;
+  this.serial=[0,0];this.placedSerial=[0,0];this.epoch=0;this.queue=[];this.active=[];this.pulses=[];this.time=0;this.lastImpact=null;this.lastRequest=null;this.lastOutcome=null;this.cooldown=0;
   this.ray=new THREE.Raycaster();
   this.pool=Array.from({length:6},()=>createChargeSlot(this.root));
   this.impactPool=Array.from({length:8},()=>createImpactSlot(this.root));
  }
  request(index){
   const g=this.game;
-  const blocked=![0,1].includes(index)?'channel':g.state!=='playing'?'paused':g.externalBlocked?'external':g.heldCube?'hands-full':this.cooldown>0?'cooldown':null;
+  const blocked=![0,1].includes(index)?'channel':g.state!=='playing'?'paused':g.externalBlocked?'external':g.heldCube?'hands-full':this.cooldown>0?'cooldown':this.queue.length?'preparing':null;
   if(blocked){this.lastRequest={accepted:false,index,reason:blocked};return false;}
   g.scene.updateMatrixWorld(true);g.camera.updateWorldMatrix(true,false);this.ray.near=0;this.ray.far=Infinity;this.ray.setFromCamera(new THREE.Vector2(),g.camera);
   const hit=this.firstHit(),point=hit?.point.clone()||this.ray.ray.at(65,V());
   const facing=Math.atan2(point.x-g.playerPosition.x,point.z-g.playerPosition.z);
   const turn=Math.abs(Math.atan2(Math.sin(facing-g.facing),Math.cos(facing-g.facing)));
   this.cooldown=.20;const sequence=++this.serial[index];
-  this.queue=this.queue.filter(s=>s.index!==index);
+  // A click during the windup must not restart it forever. Once accepted,
+  // a charge keeps its target and completes its visible flight independently.
   const wait=Math.max(.23,Math.min(.30,turn/14),g.heldDevice?.holsterProgress*.32||0);
   this.queue.push({index,sequence,epoch:this.epoch,point,delay:wait});
   this.lastRequest={accepted:true,index,sequence,epoch:this.epoch};this.lastOutcome={state:'preparing',index,sequence,epoch:this.epoch};
@@ -54,7 +55,7 @@ export class LabPortalShots {
  }
  launch(s){
   const g=this.game;
-  if(g.heldCube||s.sequence!==this.serial[s.index]||(s.epoch??this.epoch)!==this.epoch||!this.root.parent){
+  if(g.heldCube||(s.epoch??this.epoch)!==this.epoch||!this.root.parent){
    this.lastOutcome={state:'canceled',reason:g.heldCube?'hands-full':'superseded',index:s.index,sequence:s.sequence,epoch:s.epoch};return;
   }
   const origin=g.heldDevice?.emitter?.getWorldPosition(V())||g.playerPosition.clone().add(new THREE.Vector3(0,1.4,0));
@@ -81,14 +82,16 @@ export class LabPortalShots {
  impact(shot,hit){
   const g=this.game;let valid=false,reason=!hit.object?'miss':hit.object.userData.portalable?'placement':'surface';
   const normal=hit.face?.normal.clone().applyMatrix3(new THREE.Matrix3().getNormalMatrix(hit.object.matrixWorld)).normalize()||shot.direction.clone().negate();
-  if(shot.sequence!==this.serial[shot.index]||shot.epoch!==this.epoch)reason='superseded';
+  // Only a newer SUCCESSFUL placement supersedes an older arrival. Comparing
+  // against the latest click starves every charge in an ordinary rapid burst.
+  if(shot.sequence<this.placedSerial[shot.index]||shot.epoch!==this.epoch)reason='superseded';
   else if(hit.object?.userData.portalable){
    const frame=hit.object.userData.portalFrame?.()||hit.object.userData;
    // Static tiled panels have the same single usable face as moving panels.
    if(frame.normal&&normal.dot(frame.normal)>.15&&shot.direction.dot(frame.normal)<-.02)valid=g.placeOnPanel(shot.index,hit.object,hit.point);
    else reason='back-face';
   }
-  if(valid)reason='placed';
+  if(valid){reason='placed';this.placedSerial[shot.index]=shot.sequence;}
   if(reason==='surface')g.callbacks?.onToast?.('Заряд попал в препятствие. Нужна свободная белая поверхность');
   if(reason==='back-face')g.callbacks?.onToast?.('Установи проход на лицевую поверхность панели');
   if(reason==='miss')g.callbacks?.onToast?.('Заряд рассеялся: поверхность слишком далеко');
@@ -126,6 +129,6 @@ export class LabPortalShots {
   for(const s of this.active){s.slot.group.position.lerpVectors(s.previous,s.position,alpha);renderCharge(s.slot,s,this.time);}
   for(const p of this.pulses)renderImpact(p);
  }
- reset(){this.epoch++;this.serial=[0,0];this.queue=[];this.active=[];this.pulses=[];this.time=this.cooldown=0;this.lastImpact=this.lastRequest=this.lastOutcome=null;for(const p of this.pool)p.group.visible=false;for(const p of this.impactPool)p.mesh.visible=false;}
+  reset(){this.epoch++;this.serial=[0,0];this.placedSerial=[0,0];this.queue=[];this.active=[];this.pulses=[];this.time=this.cooldown=0;this.lastImpact=this.lastRequest=this.lastOutcome=null;for(const p of this.pool)p.group.visible=false;for(const p of this.impactPool)p.mesh.visible=false;}
  get diagnostics(){return{pending:this.queue.length,flying:this.active.length,lastImpact:this.lastImpact};}
 }

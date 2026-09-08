@@ -64,13 +64,15 @@ export function buildExtendedCampaign(game,index){
   // Visible load-bearing crossmembers support the deck above the original
   // narrow beam. No second false floor and no posts piercing the walkway.
   for(let z=-6;z<=6;z+=3)world.box([0,surfaceOffset-.58,z],[3.5,.58,.16],world.materials.trim,false,bridge);
-  const mass=world.box([2.25,surfaceOffset-.65,-6],[.8,.75,1.3],world.materials.trim,false,bridge);
-  world.box([2.25,surfaceOffset-.3,0],[.10,.12,16],world.materials.accent,false,bridge);
+  const counterPositions=[-2.2,0,2.2];
+  const mass=world.box([2.25,surfaceOffset-.65,counterPositions[0]],[.8,.75,1.3],world.materials.trim,false,bridge);
+  world.box([2.25,surfaceOffset-.3,0],[.10,.12,6],world.materials.accent,false,bridge);
+  for(const z of [-3,3])world.box([2.25,surfaceOffset-.55,z],[.95,.55,.14],world.materials.trim,false,bridge);
   const load=patch('lever-load',[0,surfaceOffset+.027,8.4],[0,1,0],3.2,3.8,bridge,true);load.collider.walkablePlane=true;game.colliders=game.colliders.filter(c=>c!==load.collider);load.mesh.userData.portalColliderId=collider.mesh.uuid;collider.frontPlane=()=>load.getFrame();
   const receiver=patch('lever-receiver',[6.8,11.1,-14],[ -1,0,0]);
   world.box([4.5,6,-11.55],[5,12,.25]);
   console([8,2.2,0],()=>{state.counterIndex=(state.counterIndex+1)%3;game.audio?.mechanism?.('switch');},'balance','E — сдвинуть противовес. Важны вес и расстояние от оси; игрок тоже нагружает мост.');
-  Object.assign(state,{angle:0,omega:0,previousAngle:0,counterIndex:0,counterZ:-6,torque:0,bridge,load,collider,surfaceOffset});
+  Object.assign(state,{angle:0,omega:0,previousAngle:0,counterIndex:0,counterZ:counterPositions[0],torque:0,bridge,load,collider,surfaceOffset});
   const heightAt=(x,z)=>Math.abs(x)<=1.9&&Math.abs((z-surfaceOffset*Math.sin(state.angle))/Math.cos(state.angle))<=11?bridge.position.y+surfaceOffset/Math.cos(state.angle)-Math.tan(state.angle)*z:null;
   const f={minX:-1.9,maxX:1.9,minZ:-11,maxZ:11,y:2.2,mesh:deck,enabled:true,heightAt,normalAt:()=>V(0,Math.cos(state.angle),Math.sin(state.angle))};game.floors.push(f);
   const contact=()=>cargoLoadsPlate(game.cargo,game.heldCube,{center:V(0,bridge.position.y+surfaceOffset*Math.cos(state.angle),surfaceOffset*Math.sin(state.angle)),normal:V(0,Math.cos(state.angle),Math.sin(state.angle)),right:V(-1,0,0),up:V(0,-Math.sin(state.angle),Math.cos(state.angle)),halfWidth:1.9,halfHeight:11});
@@ -103,14 +105,25 @@ export function buildExtendedCampaign(game,index){
    game.physics.world.broadphase.dirty=true;
   }
   update=dt=>{state.previousAngle=state.angle;const py=heightAt(game.playerPosition.x,game.playerPosition.z),aboard=py!==null&&game.playerGrounded&&Math.abs(game.playerPosition.y-py)<.22;
-   state.counterZ=THREE.MathUtils.damp(state.counterZ,[-6,0,6][state.counterIndex],2.4,dt);mass.position.z=state.counterZ;
+   // Weight disappears in flight, but its equal-and-opposite takeoff and
+   // landing impulses must remain on the beam. Otherwise repeated jumping
+   // makes the carried load nearly weightless and pins the lever at its stop.
+   const travellerMass=3.2+(game.heldCube?3.2:0),vy=game.playerVelocity.y;
+   if(dt>0&&state.lastPlayerContact!==undefined){
+    if(state.lastPlayerContact&&!aboard&&vy>1&&py!==null&&Math.abs(game.playerPosition.y-py)<.35)
+     state.omega+=(state.lastPlayerMass||travellerMass)*(vy-Math.min(0,state.lastPlayerVy||0))*state.lastPlayerZ/280;
+    else if(!state.lastPlayerContact&&aboard&&(state.lastPlayerVy||0)<-.2)
+     state.omega+=travellerMass*(-state.lastPlayerVy)*game.playerPosition.z/280;
+   }
+   state.lastPlayerContact=aboard;state.lastPlayerVy=vy;state.lastPlayerZ=game.playerPosition.z;state.lastPlayerMass=travellerMass;
+   state.counterZ=THREE.MathUtils.damp(state.counterZ,counterPositions[state.counterIndex],2.4,dt);mass.position.z=state.counterZ;
    const cargoMoment=!game.heldCube&&contact(game.cargo.position)?3.2*game.cargo.position.z:0;
    const playerMoment=aboard?(3.2+(game.heldCube?3.2:0))*game.playerPosition.z:0;
    state.torque=19.5*(2.7*state.counterZ*Math.cos(state.angle)+cargoMoment+playerMoment);
    integrateBalance(state,state.torque,dt);pose(state.angle,dt);
    if(aboard&&dt){const next=heightAt(game.playerPosition.x,game.playerPosition.z);if(next!==null){game.playerPosition.y+=next-py;game.previousPlayerPosition.y+=next-py;}}
   };
-  reset=()=>{Object.assign(state,{angle:0,omega:0,previousAngle:0,counterIndex:0,counterZ:-6});pose(0,0);};render=a=>{bridge.rotation.x=THREE.MathUtils.lerp(state.previousAngle,state.angle,a);};
+  reset=()=>{Object.assign(state,{angle:0,omega:0,previousAngle:0,counterIndex:0,counterZ:counterPositions[0],lastPlayerContact:undefined,lastPlayerVy:0,lastPlayerZ:0,lastPlayerMass:0});pose(0,0);};render=a=>{bridge.rotation.x=THREE.MathUtils.lerp(state.previousAngle,state.angle,a);};
  }else if(index===7){
   bounds={minX:-10,maxX:10,minZ:-13,maxZ:13};spawn=[1,0,5.8];cargoSpawn=[2.2,.55,4.5];world.walls(bounds,15);world.floor(-10,10,-13,13);
   world.floor(-4.2,4.2,-13,-3.1,7);goal=world.goal([0,7,-9],[4.8,4.5]);

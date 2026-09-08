@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import {Body,Box,Vec3,Material} from 'cannon-es';
 import {LabTileWorld} from './LabTileWorld.js';
 import {cargoLoadsPlate} from './LabPlateContact.js';
+import {buildSpringRamModel} from './LabWorkshopModels.js';
 import {V,gate,wall,glass,consoleNode,terminalAccessible,tracePortalRay,rayTouches,beamDrawing} from './LabPuzzleMechanics.js';
 export {V,wall,glass,tracePortalRay,rayTouches};
 const UP=V(0,1,0),clamp=THREE.MathUtils.clamp;
@@ -89,8 +90,12 @@ export class Workshop {
  }
  turbine(name,p){const art=this.fixture(35,[p[0],p[1]-1.1,p[2]],2.5),wheel=new Flywheel(),indicator=this.world.box([p[0]+1.2,p[1],p[2]],[.12,1.8,.10],this.world.materials.accent,false);
   const t={wheel,art,position:V(...p),power:false,clutch:false,update(dt){wheel.step(t.power?24:0,t.clutch?2.2:0,dt);art.spin(wheel.angle);indicator.scale.y=.05+.95*Math.min(1,wheel.work/60);},reset(){wheel.reset();t.power=t.clutch=false;}};this.state[name]=t;this.ticks.push(dt=>t.update(dt));this.resets.push(()=>t.reset());return t;}
- spring(name,p){
-  const game=this.game,world=this.world,art=this.fixture(32,[p[0],p[1]-.1,p[2]],3.5,Math.PI/2),top=world.box([p[0],p[1]+.65,p[2]],[2.7,.22,2.7],world.materials.ceramic,false);
+ spring(name,p,{presentation=null}={}){
+  const game=this.game,world=this.world;
+  const art=presentation?buildSpringRamModel(game,world.root,{...presentation,plateCenter:[p[0],p[1]+.65,p[2]],stroke:.72}):this.fixture(32,[p[0],p[1]-.1,p[2]],3.5,Math.PI/2);
+  if(presentation){this.fixtures.push(art);art.supportBoxes.forEach(b=>game.collisionProxy(b));}
+  const plateMaterial=presentation?new THREE.MeshStandardMaterial({color:0x97beb7,roughness:.52,metalness:.18}):world.materials.ceramic;
+  const top=world.box([p[0],p[1]+.65,p[2]],[2.7,.22,2.7],plateMaterial,false);
   const collider={mesh:top,box:new THREE.Box3().setFromObject(top),enabled:true,kinematic:true};game.colliders.push(collider);game.cameraBlockers.push(top);game.aimBlockers.push(top);
   const f={minX:p[0]-1.35,maxX:p[0]+1.35,minZ:p[2]-1.35,maxZ:p[2]+1.35,y:p[1]+.76,mesh:top,enabled:true};game.floors.push(f);
   const base=p[1]+.65,s={body:null,compression:0,latched:false,restY:base,top,mesh:top,collider,floor:f,ensure(){if(!game.physics||s.owner===game.physics)return;s.owner=game.physics;
@@ -98,7 +103,7 @@ export class Workshop {
    game.physics.removeStaticBox(top.uuid);s.body=new Body({mass:6,position:new Vec3(p[0],base,p[2]),shape:new Box(new Vec3(1.35,.11,1.35)),fixedRotation:true,linearFactor:new Vec3(0,1,0),linearDamping:.02,material:new Material({friction:.65,restitution:.05}),collisionFilterGroup:1,collisionFilterMask:2});game.physics.world.addBody(s.body);
   },forces(){s.ensure();const b=s.body;if(!b)return;s.compression=Math.max(0,base-b.position.y);if(s.compression>.68)s.latched=true;
    if(s.latched){b.type=Body.STATIC;b.position.y=base-.72;b.velocity.setZero();}else{b.type=Body.DYNAMIC;b.force.y+=6*19.5+s.compression*190-b.velocity.y*28;if(b.position.y>base){b.position.y=base;b.velocity.y=Math.min(0,b.velocity.y);}}
-  },render(){top.position.y=s.body?.position.y??base;f.y=top.position.y+.11;collider.box.setFromObject(top);art.slide(V(0,-s.compression*.15,0));},reset(){s.ensure();s.latched=false;s.compression=0;if(s.body){s.body.type=Body.DYNAMIC;s.body.position.set(p[0],base,p[2]);s.body.velocity.setZero();s.body.force.setZero();s.body.wakeUp();}s.render();}};
+  },render(){top.position.y=s.body?.position.y??base;f.y=top.position.y+.11;collider.box.setFromObject(top);if(presentation)art.setCompression(s.compression);else art.slide(V(0,-s.compression*.15,0));},reset(){s.ensure();s.latched=false;s.compression=0;if(s.body){s.body.type=Body.DYNAMIC;s.body.position.set(p[0],base,p[2]);s.body.velocity.setZero();s.body.force.setZero();s.body.wakeUp();}s.render();}};
   this.forces.push(()=>s.forces());this.renders.push(()=>s.render());this.ticks.push(()=>s.render());this.resets.push(()=>s.reset());this.state[name]=s;return s;
  }
  finish(spawn,cargoSpawn,goalPosition,extra={}){

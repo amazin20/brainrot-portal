@@ -38,7 +38,15 @@ const game=new LabGame({container:$('#game'),touch:{joystick:$('#joystick'),joys
     if(debug){window.__NESI_DEMO_GAME__=game;window.__NESI_PLATFORM__=platform;window.__NESI_PREFS__=preferences;
       window.__NESI_RUN_RECOVERY_ROUTE__=async()=>{const {runRecoveryJourney}=await import('./game/LabWorkshopRecovery.js');game.renderer.setAnimationLoop(null);hideScreens();setState('playing');try{return await runRecoveryJourney(game,{onMilestone:()=>game.render()});}finally{game.render();clearInput();setState(game.state);}};
       window.__NESI_RUN_LEVEL_ROUTE__=async()=>{const {runV8Journey}=await import('./game/LabV8Journey.js');game.renderer.setAnimationLoop(null);hideScreens();setState('playing');
-        try{return await runV8Journey(game,{onMilestone:()=>game.render()});}finally{game.render();clearInput();setState(game.state);diagnostics();}};}
+        try{return await runV8Journey(game,{onMilestone:()=>game.render()});}finally{game.render();clearInput();setState(game.state);diagnostics();}};
+      window.__NESI_RUN_BALANCE_BYPASS__=async()=>{
+        if(game.levelIndex!==6)throw Error('Balance scenario belongs to room 7');
+        const {runV8Journey}=await import('./game/LabV8Journey.js');
+        const {runBalanceJumpAttempt}=await import('./game/LabExtendedJourney.js');
+        game.renderer.setAnimationLoop(null);hideScreens();setState('playing');let attempt;
+        try{const route=await runV8Journey(game,{scenario:d=>{attempt=runBalanceJumpAttempt(d);}});return{route,attempt};}
+        finally{game.render();clearInput();setState(game.state);diagnostics();}
+      };}
     $('#play-button').focus({preventScroll:true});if(query.get('smoke')==='1')enterLevel(game.levelIndex,'initial');},
   onHud:({chamber,objective,hasCargo,portalsReady})=>{$('#level-number').textContent=String(game.levelIndex+1);$('#chamber').textContent=chamber;$('#objective').textContent=objective||'';$('#cargo-status').textContent=hasCargo?'Друг на руках':'Друг ждёт';$('#portal-status').textContent=portalsReady?'Связаны':'Два портала';},
   onToast:message=>{if(/Сначала|не помещается|препятствие|белую|Раздвинь|свободное|лицевую/.test(message))game.tutorial.explain(message);},
