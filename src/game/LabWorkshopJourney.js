@@ -24,6 +24,11 @@ export async function runWorkshopJourney(d){
  }
  if(index===8){
   shot(1,'drop-ceiling');floorFeed('loading-floor',new THREE.Vector3(0,2,-5));until(()=>s.piston.latched,7,'Piston did not catch impact');mark('gravity compressed the physical spring');
+  // Inspect the supplied horizontal ram and its linkage from the rear aisle
+  // using ordinary walking and camera controls before collecting the friend.
+  walk(2.6,-2);walk(2.6,-8.9);walk(-3,-8.9);
+  lookAt(new THREE.Vector3(-3.2,1.35,-5));mark('inspected spring linkage and guard slot');
+  walk(2.6,-8.9);walk(2.6,-2);
   walk(-4,-2);walk(game.cargo.position.x,-2.7);walk(game.cargo.position.x,-3.32);pickup();
   walk(2.6,-2.7);walk(2.6,-7.6);groundExit();
  }else if(index===9){

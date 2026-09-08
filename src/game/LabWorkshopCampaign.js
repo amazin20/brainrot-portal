@@ -29,6 +29,9 @@ export function buildWorkshopCampaign(game,index){
  if(index===8){
   buildSpringMailRoom(k,{baseWalls,closedExit});
  }else if(index===9){
+  // Arrive beside the stair approach so the ordinary starting camera shows
+  // the cassette and receiving bank instead of facing the foundation wall.
+  spawn=[-6.8,0,11];cargo=[-5.5,.55,9.5];
   buildFreightBridgeRoom(k,{baseWalls,closedExit});
  }else if(index===10){
   baseWalls();k.panel('wind-intake',[11.7,2.1,5],[-1,0,0],10);k.panel('wind-outlet',[0,2.1,-1],[0,0,-1],8);

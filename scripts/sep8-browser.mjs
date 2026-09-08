@@ -19,7 +19,7 @@ export async function runSep8Browser({ browser, baseUrl = 'http://127.0.0.1:4173
   fs.mkdirSync(out, { recursive: true });
   const report = { pass: false, baseUrl, mode, errors: [], networkFailures: [], rooms: [],
     renderer: 'Production WebGL / CI Chromium SwiftShader',
-    limits: 'Mouse burst uses real input and normal render timing. Room clips are consecutive 1/60-second simulation samples of ordinary routes, not measured real-time gameplay FPS. No free camera or moved gameplay fixtures.' };
+    limits: 'Mouse burst uses real input and normal render timing. Room clips sample ordinary routes at 60Hz; the full bridge movement uses every fifth step (12Hz). These are simulation samples, not measured real-time gameplay FPS. No free camera or moved gameplay fixtures.' };
   const started = Date.now();
   const page = await browser.newPage();
   page.setDefaultTimeout(90000);
@@ -262,12 +262,23 @@ export async function runSep8Browser({ browser, baseUrl = 'http://127.0.0.1:4173
         finally { g.render = original.render; g.updateVisuals = original.updateVisuals; }
       }, room);
       const item = { room, initial, route: captured.route, sampledSimulationFps: room === 10 ? 12 : 60,
-        consecutiveFrames: captured.frames.length, timeline: captured.timeline,
+        sampledFrames: captured.frames.length, timeline: captured.timeline,
         stills: captured.stills.map(({ image, ...state }, i) => ({ file: `room-${room}-milestone-${i + 1}.png`, ...state })) };
       report.rooms.push(item);
       captured.stills.forEach((s, i) => saveImage(`room-${room}-milestone-${i + 1}.png`, s.image));
       const frameDir = `room-${room}-frames`; fs.mkdirSync(path.join(out, frameDir), { recursive: true });
       captured.frames.forEach((data, i) => saveImage(`${frameDir}/${String(i).padStart(3, '0')}.png`, data));
+      if (room === 9) {
+        const checkpoint = captured.route.milestones.find(m => m.name === 'inspected spring linkage and guard slot');
+        assert.ok(checkpoint, 'The ordinary route must inspect the accessible side of the spring before pickup');
+        const close = captured.stills.find(s => s.player.every((v, i) => Math.abs(v - checkpoint.player[i]) < 1e-8));
+        assert.ok(close, 'The near spring checkpoint must have an actual normal-camera render');
+        assert.equal(close.mechanism.latched, true);
+        assert.ok(Math.hypot(close.player[0] + 2, close.player[2] + 5) < 7, 'Close inspection must walk near the real linkage');
+        saveImage('room-9-linkage-close.png', close.image);
+        const { image, ...view } = close;
+        item.closeInspection = { file: 'room-9-linkage-close.png', checkpoint: checkpoint.name, ...view };
+      }
       await page.screenshot({ path: path.join(out, `room-${room}-complete.png`) });
       assert.ok(captured.route.pass && captured.route.resets === 0 && captured.route.respawns === 0, `Room ${room} ordinary route must pass`);
       assert.equal(captured.frames.length, room === 10 ? 60 : 24, `Room ${room} must expose real mechanism motion`);

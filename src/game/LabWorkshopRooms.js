@@ -35,7 +35,7 @@ function glassLift(k,p,size,travel,open) {
 export function buildSpringMailRoom(k,{baseWalls,closedExit}) {
   const w=k.world;finishes(k);baseWalls();
   const spring=k.spring('piston',[0,1.25,-5],{
-    presentation:{position:[-3.9,0,-5],size:4.5,yaw:Math.PI/2},
+    presentation:{position:[-4.35,0,-5],size:4.5,yaw:Math.PI/2},
   });
   k.panel('drop-ceiling',[0,10.6,-5],[0,-1,0],6.2,5.6);
   k.panel('loading-floor',[-7,.025,6],[0,1,0],5,5);
@@ -52,8 +52,15 @@ export function buildSpringMailRoom(k,{baseWalls,closedExit}) {
     w.box([x,.12,z],[.36,.24,.36]);
   }
   const guards=[];
+  // The grounded machine stops before the left glass. Its working crank
+  // passes through an open-top slot, measured over the complete .72 m stroke.
+  // A closed hole would sweep its top edge through the crank as the guard
+  // retracts. These three pieces share the exact same vertical travel.
   for(const [p,size] of [
-    [[-1.94,1.8,-5],[.08,3.6,3.88]],[[1.94,1.8,-5],[.08,3.6,3.88]],
+    [[-1.94,1.8,-6.625],[.08,3.6,.63]],
+    [[-1.94,1.8,-4.525],[.08,3.6,2.93]],
+    [[-1.94,1.14,-6.15],[.08,2.28,.32]],
+    [[1.94,1.8,-5],[.08,3.6,3.88]],
     [[0,1.8,-6.94],[3.88,3.6,.08]],[[0,1.8,-3.06],[3.88,3.6,.08]],
   ]) guards.push(glassLift(k,p,size,-3.75,()=>spring.latched));
   k.state.springGuards=guards;
