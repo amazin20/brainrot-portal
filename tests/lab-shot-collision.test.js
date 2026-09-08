@@ -34,6 +34,10 @@ test('real room eleven: delayed firePortal uses animated muzzle and creates both
    assert.equal(g.portalShots.lastImpact?.valid,true);assert.ok(g.portals.portals[index]);
   }
   assert.equal(g.portals.ready,true);
+  // A queued rapid click cannot leak into a freshly selected room.
+  const previousShots=g.portalShots;previousShots.reset();g.firePortal(0);previousShots.step(.20);assert.equal(g.firePortal(1),true);
+  await g.selectLevel(0,false);assert.equal(previousShots.buffered,null);assert.equal(g.portalShots.diagnostics.pending,0);
+  previousShots.step(1);assert.equal(previousShots.active.length,0);
  }finally{g.physics.dispose();g.portals.dispose();}
 });
 
@@ -121,6 +125,44 @@ test('clicks faster than preparation cannot cancel an accepted charge or starve 
  }
  assert.ok(firstPlacement>=0&&firstPlacement<.4,`first portal at ${firstPlacement}`);
  assert.ok(accepted>=3);finish(g);assert.equal(g.portalShots.placedSerial[0],accepted);g.portals.dispose();
+});
+
+test('a single opposite-channel click in the last 80 ms of preparation keeps its clicked target and fires once',()=>{
+ const {g}=fixture(),fired=[];g.audio.shot=index=>fired.push(index);
+ aim(g,V(0,2,5),V(-2.7,2,0));assert.equal(g.firePortal(0),true);
+ const first=g.portalShots.queue[0],firstTarget=first.point.clone();
+ g.portalShots.step(.20);const remaining=first.delay;
+  aim(g,V(0,2,5),V(2.7,2,0));assert.equal(g.firePortal(1),true,'A short second click must not disappear between cooldown and launch');
+ assert.equal(g.portalShots.diagnostics.pending,2,'Both accepted clicks are pending work');
+ assert.equal(first.delay,remaining,'The first charge was restarted');assert.deepEqual(first.point,firstTarget);
+ assert.equal(g.firePortal(0),false,'Only one next click can be buffered');
+ aim(g,V(0,2,5),V(0,30,5));finish(g);
+ assert.deepEqual(fired,[0,1]);assert.ok(g.portals.portals[0].position.x<0);assert.ok(g.portals.portals[1].position.x>0);
+  g.portalShots.step(2);assert.deepEqual(fired,[0,1],'Releasing the button must not leave automatic fire running');g.portals.dispose();
+});
+
+test('pause and a pickup/release cancel buffered input before or after its preparation starts',()=>{
+ for(const interruption of ['pause','pickup','external','reset'])for(const preparing of [false,true]){
+  const {g}=fixture(),fired=[];g.audio.shot=index=>fired.push(index);
+  g.firePortal(0);g.portalShots.step(.20);assert.equal(g.firePortal(1),true);
+  if(preparing)g.portalShots.step(.04);
+  if(interruption==='pause'){
+   const previousDocument=globalThis.document;globalThis.document={exitPointerLock(){}};
+   g.input={keys:new Set()};g.renderer={domElement:{requestPointerLock(){}}};
+   try{g.togglePause(true);g.togglePause(false);}finally{globalThis.document=previousDocument;}
+  }else if(interruption==='pickup'){
+   g.cargo=new THREE.Object3D();g.cargo.position.set(1,1.7,5);g.scene.add(g.cargo);
+   g.animator={triggerInteraction(){}};g.companionAnimator={trigger(){}};g.audio.pickup=()=>{};g.physics={release(){}};
+   assert.equal(g.interact(),true);assert.equal(g.heldCube,g.cargo);
+   assert.equal(g.interact(),true);assert.equal(g.heldCube,null);
+  }else if(interruption==='external'){
+   g.externalBlocked=true;g.portalShots.render();g.externalBlocked=false;
+  }else g.portalShots.reset();
+  finish(g);g.portalShots.step(1);
+  assert.ok(!fired.includes(1),`${interruption}, preparing=${preparing}: canceled input fired later`);
+  if(interruption!=='reset')assert.deepEqual(fired,[0],'The first accepted charge must survive canceling only the extra input');
+  assert.equal(g.portalShots.buffered,null);assert.equal(g.portalShots.queue.length,0);g.portals.dispose();
+ }
 });
 
 test('an older long flight cannot replace a newer successful close shot',()=>{

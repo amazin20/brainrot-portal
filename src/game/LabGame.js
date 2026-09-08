@@ -264,6 +264,7 @@ export class LabGame {
 
   async selectLevel(index, playing = true) {
     if (!Number.isInteger(index) || index < 0 || index >= CAMPAIGN.length) throw new RangeError('Unknown campaign level');
+    this.portalShots?.cancelBuffered('level-change');
     this.state = 'loading'; this.renderer?.setAnimationLoop(null); this.input?.keys.clear();
     this.audio?.motor?.(false);
     this.levelIndex = index;
@@ -472,6 +473,7 @@ export class LabGame {
     // Repeated blur/pointer-lock notifications must not rebuild an open hint menu.
     if ((this.state === 'paused') === paused) { if (paused) document.exitPointerLock?.(); return; }
     this.state = paused ? 'paused' : 'playing';
+    if (paused) this.portalShots?.cancelBuffered('paused');
     this.input.keys.clear(); this.lastFrame = performance.now(); this.accumulator = 0;
     if (paused) document.exitPointerLock?.(); else this.renderer.domElement.requestPointerLock?.()?.catch?.(() => {});
     this.callbacks.onPause(paused);
@@ -822,6 +824,7 @@ export class LabGame {
     this.raycaster.far = Infinity;
     if (blocked) { this.callbacks.onToast('Между вами препятствие'); return false; }
     this.heldCube = this.cargo; this.aimingTime = 0; this.aimHeld = false;
+    this.portalShots?.cancelBuffered('hands-full');
     this.animator.triggerInteraction('pickup'); this.companionAnimator.trigger('pickup'); this.audio.pickup();
     return true;
   }
