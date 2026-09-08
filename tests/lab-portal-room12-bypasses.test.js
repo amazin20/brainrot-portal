@@ -35,6 +35,11 @@ test('room 12 hides every sampled final-panel edge from reachable stationary and
     [-27, 8.5, 7], [-27, 15, -9], [-27, 21.5, -25],
     [-28, 22, -31], [-12.6, 22, -26.5], [-16, 22, -29],
     [21.5, 12, 7.5], [24, 12, 10], [26.5, 12, 12],
+    // Probe the exact upper-deck/stair corners as well as the original
+    // broader fixtures after widening the aerial sight windows.
+    [-28.8, 22, -31.8], [-12.1, 22, -31.8], [-12.1, 22, -26.1], [-28.8, 22, -26.1],
+    [-25.1, 21, -24], [-28.9, 18, -18],
+    [-16.1, 8, 8.1], [-16.1, 8, 19.9], [-28.9, 8, 19.9],
   ];
   const targets = [];
   // Test visible pixels up to the outer ceramic edges, not just legal portal
@@ -53,7 +58,7 @@ test('room 12 hides every sampled final-panel edge from reachable stationary and
       rays++;
     }
   }
-  assert.equal(rays, 10816);
+  assert.equal(rays, 13858);
   // This enclosed pit is reached after entering the flight bay. Its ceramic
   // remains usable for recovery; the test must not demand a hidden shot ban.
   assert.ok(acceptedRay(V(16.5, 1.4, -10), centre, panel));

@@ -37,15 +37,17 @@ export function buildRoom12(game,index=11){
  // The main wall is an actual optical baffle. Its tall window is visible
  // from the airborne centre, but its jamb hides the final face from both
  // observation and gravity-reservoir platforms.
- w.box([12,15,-23.9],[.65,30,22.2],w.materials.wall);
+ w.box([12,15,-24.4],[.65,30,21.2],w.materials.wall);
  w.box([12,15,-4.125],[.65,30,8.75],w.materials.wall);
- w.box([12,11,-10.9],[.65,22,4.8],w.materials.wall);
- w.box([12,28,-10.9],[.65,4,4.8],w.materials.wall);
+ w.box([12,11,-11.15],[.65,22,5.3],w.materials.wall);
+ w.box([12,28,-11.15],[.65,4,5.3],w.materials.wall);
  // A second deep jamb excludes oblique views from the upper western rooms.
- w.box([9,15,-20.75],[.55,30,24.5],w.materials.wall);
- w.box([9,15,-.1],[.55,30,8.2],w.materials.wall);
- w.box([9,11,-6.35],[.55,22,4.3],w.materials.wall);
- w.box([9,29,-6.35],[.55,2,4.3],w.materials.wall);
+ // Wide horizontal reveals accommodate both the viewing ray and the later
+ // moving muzzle ray; the high sill still requires momentum to see through.
+ w.box([9,15,-21.25],[.55,30,23.5],w.materials.wall);
+ w.box([9,15,.4],[.55,30,7.2],w.materials.wall);
+ w.box([9,11,-6.35],[.55,22,6.3],w.materials.wall);
+ w.box([9,29,-6.35],[.55,2,6.3],w.materials.wall);
  // The tall launch bay opens only at flight height. No ground corridor
  // leads behind its optical baffles; a ceramic pit floor enables recovery.
  w.box([20.6,15,-13],[.5,30,26],w.materials.wall);
@@ -78,7 +80,10 @@ export function buildRoom12(game,index=11){
  k.panel('entry',[-23,2.2,36.97],[0,0,-1],9,4.6);
  k.panel('observation',[-22,13.2,17],[0,0,1],9,4.6);
  k.panel('freight-floor',[-12,.025,16],[0,1,0],8,8);
- k.panel('freight-exit',[24,14.5,6],[0,0,1],7,4.6);
+ // The white face ends inside the actual jambs (inner edges 20.975/27.025).
+ // Its own fit bounds can then seat an edge hit without pushing the complete
+ // portal rim into a side wall. The low arch and freight physics stay intact.
+ k.panel('freight-exit',[24,14.5,6],[0,0,1],6,4.6);
  k.panel('reservoir-floor',[-16,.025,-22],[0,1,0],8,8);
  k.panel('return-floor',[4,.025,4],[0,1,0],10,10);
  k.panel('far-exit',[16.5,24,-20],[0,0,1],7,4.6);
@@ -95,7 +100,7 @@ export function buildRoom12(game,index=11){
  for(const x of[-6,9])w.box([x,.007,0],[.055,.01,62],w.materials.accent,false);
  buildRoom12Architecture(w);
  const level=k.finish([-23,0,26],[-20,.55,27],[21,12,21],{workshop:k,portalPuzzle:true});
- level.puzzleGeometry={safeFloor:0,reservoirHeight:22,freightHeight:6,goalHeight:12,normalGaps:0,airWindow:{x:12,z:[-13.3,-8.5],y:[22,26]},cargoWindow:{z:14,minY:12,maxY:13.35},deductions:['change the observation point','send the friend independently','reuse the airborne return']};
+ level.puzzleGeometry={safeFloor:0,reservoirHeight:22,freightHeight:6,goalHeight:12,normalGaps:0,airWindow:{x:12,z:[-13.8,-8.5],y:[22,26]},nearAirWindow:{x:9,z:[-9.5,-3.2],y:[22,28]},cargoWindow:{z:14,minY:12,maxY:13.35},deductions:['change the observation point','send the friend independently','reuse the airborne return']};
  return level;
 }
 

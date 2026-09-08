@@ -125,15 +125,35 @@ try{
  await page.select('#settings-level-select','3');await page.waitForFunction(()=>window.__NESI_DEMO_GAME__.levelIndex===3&&window.__NESI_DEMO_GAME__.state==='playing');
  await page.reload({waitUntil:'networkidle2'});await ready();const saved=await page.evaluate(()=>window.__NESI_PREFS__.value);assert.equal(saved.quality,'low');assert.equal(saved.hints[0],1);assert.equal(saved.muted,true);
  report.persistence=true;
- // Original production walk/jump sequence. Rendered frame sequence, not a realtime benchmark.
+ // Ordinary keyboard run, turn, stop/settle and jump. Rendered simulation
+ // frames at 30 Hz; this is not a realtime GPU performance measurement.
  await page.setViewport({width:960,height:600});await page.click('#play-button');await page.evaluate(()=>{const g=window.__NESI_DEMO_GAME__;g.renderer.setAnimationLoop(null);g.resetRun(true);});
  fs.mkdirSync(`${out}/walk-frames`,{recursive:true});
- for(let f=0;f<60;f++){
-   if(f===0)await page.keyboard.down('w');if(f===22){await page.keyboard.up('w');await page.keyboard.down('d');}if(f===36)await page.keyboard.up('d');if(f===41)await page.keyboard.press('Space');
-   await page.evaluate(()=>{const g=window.__NESI_DEMO_GAME__;for(let i=0;i<4;i++)g.updatePlaying(1/120);g.updateVisuals(1/30,1);g.render();});
+ const walkSamples=[];
+ for(let f=0;f<120;f++){
+   if(f===0){await page.keyboard.down('Shift');await page.keyboard.down('w');}
+   if(f===22){await page.keyboard.up('w');await page.keyboard.up('Shift');await page.keyboard.down('d');}
+   if(f===36)await page.keyboard.up('d');
+   if(f===80)await page.keyboard.press('Space');
+   const sample=await page.evaluate(()=>{
+     const g=window.__NESI_DEMO_GAME__;for(let i=0;i<4;i++)g.updatePlaying(1/120);g.updateVisuals(1/30,1);g.render();
+     return {speed:Math.hypot(g.playerVelocity.x,g.playerVelocity.z),grounded:g.playerGrounded,
+       forward:g.animator.groundFollow?.forward??0,right:g.animator.groundFollow?.right??0};
+   });
+   walkSamples.push({frame:f,...sample});
    await page.screenshot({path:`${out}/walk-frames/${String(f).padStart(3,'0')}.png`});
  }
- report.walkFrames=60;
+ report.walkFrames=120;report.walkSimulationFps=30;
+ report.walkInputWindows=[{name:'run',firstFrame:0,lastFrame:21,keys:['Shift','w']},
+   {name:'turn',firstFrame:22,lastFrame:35,keys:['d']},
+   {name:'stop and settle',firstFrame:36,lastFrame:79,keys:[]},
+   {name:'jump and landing',firstFrame:80,lastFrame:119,pressedAtStart:'Space'}];
+ report.walkFollowThrough={maxAbsForward:Math.max(...walkSamples.map(s=>Math.abs(s.forward))),
+   maxAbsRight:Math.max(...walkSamples.map(s=>Math.abs(s.right))),samples:walkSamples};
+ assert.ok(walkSamples.slice(0,80).every(s=>s.grounded),'Run, turn and stop capture must remain on the arrival floor');
+ assert.ok(walkSamples.slice(0,22).some(s=>s.speed>4),'The capture must reach a real sprint through keyboard input');
+ assert.ok(walkSamples[79].speed<.01,'The capture must include a completed stop before jumping');
+ assert.ok(walkSamples.slice(80).some(s=>!s.grounded),'The keyboard jump must leave the floor');
  // Narrow-screen controls and settings remain inside viewport.
  await page.setViewport({width:390,height:844,isMobile:true,hasTouch:true,deviceScaleFactor:1});await page.reload({waitUntil:'networkidle2'});await ready();
  await page.click('#play-button');await page.evaluate(()=>document.exitPointerLock?.());await page.waitForFunction(()=>!document.pointerLockElement);if(await page.evaluate(()=>window.__NESI_DEMO_GAME__.state==='playing'))await page.keyboard.press('Escape');await shot('mobile-settings');assert.equal(await page.$eval('#settings-level-select',e=>!!e.getBoundingClientRect().width),true);
