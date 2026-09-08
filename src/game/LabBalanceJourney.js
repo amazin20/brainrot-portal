@@ -53,7 +53,9 @@ export async function runBalanceJourney(d) {
   inspectRocker(d); wait(1.5);
   until(() => level.state.angle > .36, 8, 'The far load did not establish the launch angle');
   mark('loaded friend sets the moving portal launch angle');
-  walk(-3.8, 6); aim(1, p['balance-launch'].getFrame().center);
+  // Use the open aisle west of the dock column so the ordinary shoulder
+  // camera and muzzle both have a clear line at 16:10 as well as 16:9.
+  walk(-5.5, 6); aim(1, p['balance-launch'].getFrame().center);
 
   // Climb the enclosed stair. The last slow walk preserves a modest horizontal
   // speed over the floor address; ordinary inertia continues during the fall.
