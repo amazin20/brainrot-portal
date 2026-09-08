@@ -73,14 +73,24 @@ export async function runFlightAudioBrowser({browser,baseUrl='http://127.0.0.1:4
           else if(kind==='pause')audio.block('isolated-probe',true);
           else audio.configure({volume:0});
           await state('suspended');
-          const stopped={kind,state:context.state,masterGain:audio.master.gain.value,flightGain:audio.flightGain.gain.value};
+          // Suspension stops rendering; scheduled gain values and analyser
+          // buffers can still describe the last rendered quantum. Verify the
+          // stopped clock, then actual silence after resuming, not stale getters.
+          // https://www.w3.org/TR/webaudio/#dom-audiocontext-suspend
+          await wait(40);
+          const stopped={kind,state:context.state,audible:audio.audible,
+            masterGain:audio.master.gain.value,flightGain:audio.flightGain.gain.value,contextTime:context.currentTime};
           result.lifecycle.push(stopped);
-          check(stopped.state==='suspended'&&stopped.masterGain===0&&stopped.flightGain===0,`${kind} did not silence/suspend the real context`);
+          await wait(80);stopped.contextTimeAfterWait=context.currentTime;
+          check(stopped.state==='suspended'&&context.state==='suspended'&&!stopped.audible&&
+            stopped.contextTimeAfterWait===stopped.contextTime,`${kind} did not suspend real audio processing`);
           if(kind==='mute')audio.configure({muted:false});
           else if(kind==='pause')audio.block('isolated-probe',false);
           else audio.configure({volume:.65});
           await state('running');await wait(180);
-          check(context.state==='running',`${kind} did not resume the existing context`);
+          stopped.resumedContextTime=context.currentTime;
+          check(context.state==='running'&&audio.audible&&stopped.resumedContextTime>stopped.contextTimeAfterWait,
+            `${kind} did not resume processing on the existing context`);
           const resumed=await measure(`${kind} resumed without movement`);
           check(resumed.rms<1e-7,`${kind} restored stale flight audio`);
         }
