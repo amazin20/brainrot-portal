@@ -40,5 +40,5 @@ export const FIRST_LEVEL_ASSETS = Object.freeze(ALL_LAB_ASSETS.filter(asset => F
 export const runtimeAssetPath = asset => `models/runtime/${asset.file}`;
 
 // V8 loads only each course's declared dependencies. Source catalog stays intact.
-export const CAMPAIGN_ASSET_IDS=Object.freeze([1,2,11,19,22,23,24,28,29,31,32,33,35,37,38,39]);
+export const CAMPAIGN_ASSET_IDS=Object.freeze([1,2,11,19,22,23,24,28,29,31,32,35,37]);
 export const CAMPAIGN_ASSETS=Object.freeze(ALL_LAB_ASSETS.filter(a=>CAMPAIGN_ASSET_IDS.includes(a.id)));

@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import puppeteer from 'puppeteer-core';
 const out='video-repair-evidence';fs.mkdirSync(out,{recursive:true});
 const report={pass:false,errors:[],networkFailures:[],note:'Real production GLBs/rendering. Stress cases use explicit reachable starting fixtures; the positive room route uses normal controls and actual travelling shots. Not a user-GPU FPS benchmark.'};
-const browser=await puppeteer.launch({executablePath:process.env.CHROME_PATH||'/usr/bin/google-chrome',headless:true,protocolTimeout:240000,args:['--no-sandbox','--disable-dev-shm-usage','--use-angle=swiftshader','--enable-unsafe-swiftshader']});
+const browser=await puppeteer.launch({executablePath:process.env.CHROME_PATH||'/usr/bin/google-chrome',headless:true,timeout:60000,protocolTimeout:240000,args:['--no-sandbox','--disable-dev-shm-usage','--use-angle=swiftshader','--enable-unsafe-swiftshader']});
 let page;
 const image=(name,data)=>fs.writeFileSync(`${out}/${name}.png`,Buffer.from(data.split(',')[1],'base64'));
 try{

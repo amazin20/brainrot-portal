@@ -4,14 +4,14 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="theme-color" content="#12272d" />
-    <meta name="description" content="NESI / Transfer Lab — спокойная 3D-головоломка. Двадцать испытаний: порталы, вес, падение, движущаяся панель и инерция. Доставьте друга до выхода вместе." />
-    <title>NESI / Transfer Lab — 3D-игра от третьего лица</title>
+    <meta name="description" content="БРЕЙНРОТ ПОРТАЛ — 3D-головоломка от третьего лица. Исследуйте пространство, сохраняйте импульс и меняйте порталы на лету. Доставьте брейнрота к выходу вместе." />
+    <title>БРЕЙНРОТ ПОРТАЛ — физическая 3D-головоломка</title>
   </head>
   <body>
-    <main id="game" aria-label="Трёхмерная лаборатория"></main>
+    <main id="game" aria-label="БРЕЙНРОТ ПОРТАЛ — игровая сцена"></main>
     <section id="loading" class="screen screen--active" aria-live="polite" aria-labelledby="loading-title">
       <div class="loading-card">
-        <span class="brand">NESI <i></i> TRANSFER LAB</span>
+        <span class="brand">БРЕЙНРОТ ПОРТАЛ</span>
         <h1 id="loading-title">Скоро<br />отправляемся<span>.</span></h1>
         <p class="muted">Собираем лабораторию и загружаем модели.</p>
         <div id="loading-progress" class="progress-track" role="progressbar" aria-label="Загрузка моделей" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div id="loading-bar"></div></div>
@@ -20,10 +20,10 @@
     </section>
     <section id="start-screen" class="screen start-screen" aria-labelledby="game-title" aria-hidden="true">
       <div class="hero-panel">
-        <span class="brand">NESI <i></i> МАЛЕНЬКОЕ ПУТЕШЕСТВИЕ</span>
-        <h1 id="game-title">TRANSFER<br /><span>LAB</span></h1>
-        <div class="hero-meta"><span>20 уровней · v18</span><span>Один друг</span><span>Можно не спешить</span></div>
-        <p class="lead">Двадцать испытаний: от двух порталов до многоэтапных маршрутов с весом, высотой и перенаправлением полёта. Светлые плиты принимают портал. Тёмные — нет. Друг должен добраться вместе с тобой.</p>
+        <span class="brand">ПОРТАЛЫ <i></i> ФИЗИКА <i></i> ОДИН ДРУГ</span>
+        <h1 id="game-title">БРЕЙНРОТ<br /><span>ПОРТАЛ</span></h1>
+        <div class="hero-meta"><span>12 уровней</span><span>Исследуй пространство</span><span>Действуй в нужный момент</span></div>
+        <p class="lead">Падение становится разгоном, стена — продолжением пути. Продумай маршрут, меняй порталы и доставь брейнрота к выходу. Светлые плиты принимают портал. Тёмные — нет.</p>
         <label class="setting-row">Уровень <select id="level-select"></select></label>
         <button id="play-button" class="primary-button">Отправиться вместе <span aria-hidden="true">↗</span></button>
         <div class="control-grid" aria-label="Управление">

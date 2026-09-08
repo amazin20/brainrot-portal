@@ -19,9 +19,9 @@ test('nine supplied derived GLBs have full binary length, exact hashes, frame an
   assert.ok(model.getObjectByName('Frame'));assert.ok(model.getObjectByName('Moving'));
   let count=0;model.traverse(m=>{if(!m.isMesh)return;count+=m.geometry.index.count/3;for(const value of m.geometry.attributes.position.array)assert.ok(Number.isFinite(value));assert.ok(m.geometry.attributes.color,'Original source colors are retained as baked vertex colors');});
   assert.ok(count>500&&count<7500);
-  // The rejected scanned rocker is retained and hash-checked as a source,
-  // while the rebuilt seventh room uses its own articulated geometry.
-  assert.equal(CAMPAIGN.some(l=>l.assets.includes(a.id)),![34,36].includes(a.id));
+  // Archived mechanisms retain their verified source models, but only the
+  // fan, spring, drive and extension bridge serve the retained campaign.
+  assert.equal(CAMPAIGN.some(l=>l.assets.includes(a.id)),[31,32,35,37].includes(a.id));
  }
 });
 test('an idle flywheel cannot do work against a positive load or create stored energy',()=>{
@@ -45,7 +45,7 @@ test('nonfinite and negative actuator input is rejected atomically',()=>{
 });
 const g=await createHeadlessGame();
 test('new plate centre, edge and corner support count, held or hovering objects do not',async()=>{
- await g.selectLevel(17,false);g.resetRun(true);const p=g.firstLevel.workshop.pad('contact-test',[8,0,10],4,4),f=p.surface.getFrame();
+ await g.selectLevel(8,false);g.resetRun(true);const p=g.firstLevel.workshop.pad('contact-test',[8,0,10],4,4),f=p.surface.getFrame();
  for(const [x,z]of [[0,0],[1.9,0],[-1.9,0],[0,1.9],[0,-1.9],[1.9,1.9],[-1.9,-1.9]]){
   g.cargo.position.copy(f.center).add(V(x,.39,z));g.cargo.velocity.set(0,0,0);g.cargo.quaternion.identity();assert.equal(p.loaded(),true);
  }
@@ -62,16 +62,9 @@ test('spring room latch resets physically and never stays enabled after restart'
  await g.selectLevel(8,false);g.resetRun(true);const s=g.firstLevel.state.piston;s.latched=true;s.forces();g.resetRun(true);
  assert.equal(s.latched,false);assert.equal(s.body.type,1);assert.equal(g.firstLevel.state.door.open,false);assert.ok(s.body.position.y===s.restY);
 });
-test('power removal lowers an unsecured foundry lift, but the brake holds its actual location',async()=>{
- await g.selectLevel(19,false);g.resetRun(true);const l=g.firstLevel,s=l.state,lift=s['foundry-lift'],wheel=s.generator?.wheel||s.flywheel?.wheel;
- const turbine=Object.values(s).find(o=>o?.wheel);assert.ok(turbine);turbine.wheel.work=100;turbine.wheel.omega=20;
- for(let n=0;n<800;n++)l.update(1/120);assert.ok(lift.progress>.95);
- turbine.wheel.omega=0;for(let n=0;n<600;n++)l.update(1/120);assert.ok(lift.progress<.3);
- lift.locked=true;const position=lift.position.clone();for(let n=0;n<600;n++)l.update(1/120);assert.ok(lift.position.distanceTo(position)<1e-9);
-});
-test('twenty-level switching leaves no extra scene roots, bodies or collider references',async()=>{
+test('active-campaign switching leaves no extra scene roots, bodies or collider references',async()=>{
  await g.selectLevel(0,false);const roots=g.scene.children.length,colliders=g.colliders.length,bodies=g.physics.world.bodies.length;
- for(let i=19;i>=0;i--)await g.selectLevel(i,false);
+ for(let i=CAMPAIGN.length-1;i>=0;i--)await g.selectLevel(i,false);
  assert.equal(g.scene.children.length,roots);assert.equal(g.colliders.length,colliders);assert.equal(g.physics.world.bodies.length,bodies);
  g.physics.dispose();g.portals.dispose();
 });

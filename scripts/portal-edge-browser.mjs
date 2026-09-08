@@ -11,7 +11,7 @@ export async function runPortalEdgeBrowser({ browser, baseUrl = 'http://127.0.0.
   out = 'portal-edge-evidence', capture = true } = {}) {
   assert.ok(browser, 'Use the existing CI browser harness');
   fs.mkdirSync(out, { recursive: true });
-  const report = { pass: false, baseUrl, capture, kind: 'v23-portal-edge', errors: [], networkFailures: [], scenarios: [],
+  const report = { pass: false, baseUrl, capture, kind: 'v24-portal-camera', errors: [], networkFailures: [], scenarios: [],
     renderer: 'Production WebGL / CI Chromium SwiftShader',
     limits: 'Ordinary controls and the production third-person camera; 15 Hz simulation samples, not measured real-time gameplay FPS.' };
   const started = Date.now(), page = await browser.newPage();
@@ -30,6 +30,7 @@ export async function runPortalEdgeBrowser({ browser, baseUrl = 'http://127.0.0.
     for (const spec of [
       { name: 'floor-rim', options: { offset: .7, sprint: false, carrying: false, reverse: false } },
       { name: 'wall-return-with-friend', options: { offset: 0, sprint: false, carrying: true, reverse: true } },
+      { name: 'jump-and-turn', options: { offset: 0, sprint: false, carrying: false, reverse: false, jump: true, turn: true } },
     ]) {
       const url = new URL(baseUrl); url.searchParams.set('debug', '1'); url.searchParams.set('level', '9');
       await page.goto(url.href, { waitUntil: 'networkidle2' });
@@ -66,6 +67,8 @@ export async function runPortalEdgeBrowser({ browser, baseUrl = 'http://127.0.0.
       assert.equal(captured.travel.teleports, 1, spec.name);
       assert.ok(captured.travel.minY > -1.3, `${spec.name}: traveller escaped below the portal throat`);
       assert.ok(captured.travel.minCameraDistance > 2.7, `${spec.name}: camera folded into the character`);
+      assert.ok(Math.abs(captured.travel.finalPitch + .5) < .001,
+        `${spec.name}: passage changed the user's selected mouse pitch`);
       assert.ok(captured.timeline.filter(frame => frame.teleports > 0).every(frame => frame.camera[1] > .1),
         `${spec.name}: recovering camera escaped under the physical room floor`);
       assert.ok(captured.timeline.length >= 36 && captured.timeline.length <= 48, 'The complete passage needs 36–48 real simulation frames');
@@ -95,7 +98,7 @@ export async function runPortalEdgeBrowser({ browser, baseUrl = 'http://127.0.0.
 if (process.argv[1] && pathToFileURL(path.resolve(process.argv[1])).href === import.meta.url) {
   const { default: puppeteer } = await import('puppeteer-core');
   const browser = await puppeteer.launch({ executablePath: process.env.CHROME_PATH || '/usr/bin/google-chrome',
-    headless: true, protocolTimeout: 240000,
+    headless: true, timeout: 60000, protocolTimeout: 240000,
     args: ['--no-sandbox', '--disable-dev-shm-usage', '--use-angle=swiftshader', '--enable-unsafe-swiftshader'] });
   try {
     await runPortalEdgeBrowser({ browser, baseUrl: process.env.PORTAL_EDGE_URL || 'http://127.0.0.1:4173/',

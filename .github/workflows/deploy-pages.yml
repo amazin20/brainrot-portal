@@ -41,9 +41,9 @@ jobs:
           import assert from 'node:assert/strict';
           const info=JSON.parse(fs.readFileSync('dist/build-info.json','utf8'));
           assert.equal(info.commit,process.env.BUILD_COMMIT);
-          assert.equal(info.version,'v23-platform-worlds');
+          assert.equal(info.version,'v24-reverse-perspective');
           assert.equal(info.run,process.env.GITHUB_RUN_ID);
-          assert.equal(info.levels,20);
+          assert.equal(info.levels,12);
           assert.equal(info.verified,true);
           NODE
       - uses: actions/configure-pages@v5

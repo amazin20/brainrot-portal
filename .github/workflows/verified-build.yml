@@ -28,7 +28,7 @@ jobs:
         run: |
           npm run check
           node scripts/v8-package-check.mjs
-          node scripts/stamp-build.mjs v23-platform-worlds
+          node scripts/stamp-build.mjs v24-reverse-perspective
       - name: Preserve the exact deployable package
         uses: actions/upload-artifact@v4
         with:
@@ -38,7 +38,7 @@ jobs:
           retention-days: 14
 
   physics:
-    name: All twenty routes, bypass checks and recovery
+    name: All twelve routes, bypass checks and recovery
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -55,7 +55,6 @@ jobs:
           node scripts/v8-journey.mjs
           node scripts/v10-shortcuts.mjs
           node scripts/v17-audit.mjs
-          node scripts/v17-recovery.mjs
           node scripts/video-repro.mjs
       - name: Preserve physical evidence
         if: always()
@@ -66,7 +65,6 @@ jobs:
             qa/v8-journeys.json
             qa/v10-shortcut-audit.json
             qa/v17-adversarial.json
-            qa/v17-recovery.json
             qa/video-after.json
           retention-days: 14
 
@@ -80,9 +78,7 @@ jobs:
         include:
           - {first: 1, last: 5, ui: '1'}
           - {first: 6, last: 11, ui: '0'}
-          - {first: 12, last: 13, ui: '0'}
-          - {first: 14, last: 16, ui: '0'}
-          - {first: 17, last: 20, ui: '0'}
+          - {first: 12, last: 12, ui: '0'}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -96,13 +92,13 @@ jobs:
           npm ci
           npm install --no-save --package-lock=false puppeteer-core@24.16.0
           npm run build
-          node scripts/stamp-build.mjs v23-platform-worlds
+          node scripts/stamp-build.mjs v24-reverse-perspective
       - name: Verify ordinary routes in actual WebGL
         env:
           NESI_FIRST: ${{ matrix.first }}
           NESI_LAST: ${{ matrix.last }}
           NESI_UI: ${{ matrix.ui }}
-          NESI_CAPTURE_PLATFORM: '1'
+          NESI_CAPTURE_PUZZLE: '1'
         run: |
           npm run preview -- --host 127.0.0.1 --port 4173 >campaign-preview.log 2>&1 &
           for i in {1..30}; do curl -fsS http://127.0.0.1:4173/ >/dev/null && break; sleep 1; done
@@ -136,7 +132,7 @@ jobs:
           npm ci
           npm install --no-save --package-lock=false puppeteer-core@24.16.0
           npm run build
-          node scripts/stamp-build.mjs v23-platform-worlds
+          node scripts/stamp-build.mjs v24-reverse-perspective
       - name: Verify actual mouse shots and ordinary floor/wall traversal
         run: |
           npm run preview -- --host 127.0.0.1 --port 4173 >input-preview.log 2>&1 &
@@ -173,9 +169,9 @@ jobs:
           npm ci
           npm install --no-save --package-lock=false puppeteer-core@24.16.0
           npm run build
-          node scripts/stamp-build.mjs v23-platform-worlds
+          node scripts/stamp-build.mjs v24-reverse-perspective
           npm run build -- --mode yandex --outDir dist-yandex
-          node scripts/stamp-build.mjs v23-platform-worlds dist-yandex
+          node scripts/stamp-build.mjs v24-reverse-perspective dist-yandex
       - name: Verify physical video regressions and advertising contract
         run: |
           npm run preview -- --host 127.0.0.1 --port 4173 >sdk-preview.log 2>&1 &

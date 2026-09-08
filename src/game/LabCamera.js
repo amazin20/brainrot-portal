@@ -3,6 +3,8 @@ import { portalTransformMatrix, applyPortalObliqueClipping, portalBacksCollider 
 
 const UP = new THREE.Vector3(0, 1, 0);
 const IDENTITY = new THREE.Quaternion();
+export const CAMERA_PITCH_MIN = -1.56;
+export const CAMERA_PITCH_MAX = 1.15;
 const SAMPLE_OFFSETS = [
   [0, 0], [1, 0], [-1, 0], [0, 1], [0, -1],
   [Math.SQRT1_2, Math.SQRT1_2], [-Math.SQRT1_2, Math.SQRT1_2],
@@ -75,7 +77,7 @@ export class LabCamera {
     this.portalUpOrientation.identity();
     this.portalExit = null;
     this.yaw = yaw;
-    this.pitch = THREE.MathUtils.clamp(pitch, -1.15, 1.15);
+    this.pitch = THREE.MathUtils.clamp(pitch, CAMERA_PITCH_MIN, CAMERA_PITCH_MAX);
     this.yawVelocity = 0;
     this.pitchVelocity = 0;
     this.distance = 6.5;
@@ -105,7 +107,11 @@ export class LabCamera {
     const transportedOrbit = rotation.clone().multiply(currentOrbit);
     const angles = new THREE.Euler().setFromQuaternion(transportedOrbit, 'YXZ');
     const newYaw = angles.y;
-    const newPitch = THREE.MathUtils.clamp(angles.x, -1.15, 1.15);
+    // The transported lens retains the exact view at the aperture, but the
+    // player's gravity-relative mouse pitch must not become a permanent look
+    // at the ceiling after a floor/wall passage. Recover toward the pitch the
+    // player selected; portalOrientation holds the temporary rigid rotation.
+    const newPitch = THREE.MathUtils.clamp(this.pitch, CAMERA_PITCH_MIN, CAMERA_PITCH_MAX);
     // Euler rates are basis dependent: transport a tiny tangent step instead
     // of discarding velocity or treating a floor exit as a yaw-only rotation.
     const tangent = rotation.clone().multiply(this.portalOrientation).multiply(new THREE.Quaternion().setFromEuler(
@@ -131,7 +137,7 @@ export class LabCamera {
     this.portalExit = clipExit && exit?.normal ? exit : null;
     this.updatePortalClipping();
     const controls = new THREE.Euler().setFromQuaternion(control, 'YXZ');
-    return { yaw: controls.y, pitch: THREE.MathUtils.clamp(controls.x, -1.15, 1.15), rotation };
+    return { yaw: controls.y, pitch: THREE.MathUtils.clamp(pitch, CAMERA_PITCH_MIN, CAMERA_PITCH_MAX), rotation };
   }
 
   update({ dt, target, yaw, pitch, velocity, aiming = false, teleported = false }) {
@@ -158,7 +164,7 @@ export class LabCamera {
     const yawGoal = this.yaw + Math.atan2(Math.sin(yaw - this.yaw), Math.cos(yaw - this.yaw));
     [this.yaw, this.yawVelocity] = spring(this.yaw, this.yawVelocity, yawGoal, 38, step);
     [this.pitch, this.pitchVelocity] = spring(
-      this.pitch, this.pitchVelocity, THREE.MathUtils.clamp(pitch, -1.15, 1.15), 38, step,
+      this.pitch, this.pitchVelocity, THREE.MathUtils.clamp(pitch, CAMERA_PITCH_MIN, CAMERA_PITCH_MAX), 38, step,
     );
     // A shot must never move the whole frame. Even an explicit aim change moves
     // the shoulder and boom continuously instead of switching their direction
@@ -180,8 +186,14 @@ export class LabCamera {
     this.right.set(1, 0, 0).applyQuaternion(this.orbitQuaternion);
     this.viewUp.copy(UP).applyQuaternion(this.portalUpOrientation);
     const length = THREE.MathUtils.lerp(6.5, 5.7, this.aimBlend);
+    // Near a vertical downward shot the normal shoulder creates a lateral
+    // blind spot directly below the traveller. Follow the already-smoothed
+    // orbit into an overhead view; ordinary walking/aiming keeps its shoulder.
+    const overhead = THREE.MathUtils.smoothstep(-this.pitch, 1.08, -CAMERA_PITCH_MIN);
+    const shoulder = THREE.MathUtils.lerp(1.4, 1.56, this.aimBlend)
+      * THREE.MathUtils.lerp(1, .035, overhead);
     this.desired.copy(this.focus).addScaledVector(this.forward, -length)
-      .addScaledVector(this.right, THREE.MathUtils.lerp(1.4, 1.56, this.aimBlend));
+      .addScaledVector(this.right, shoulder);
     // The normal shoulder view leaves the centre ray beside the visible body.
     // Looking up must not drive the boom underground and force collision to
     // collapse it into the backpack. Keep its low end above the feet while

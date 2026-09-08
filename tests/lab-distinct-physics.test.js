@@ -89,8 +89,6 @@ test('weak resting load cannot latch the spring cup; a real drop can',async()=>{
  const weak=trial(p.restY+.54),strong=trial(p.restY+6.35);assert.equal(weak.latched,false);assert.ok(strong.latched,JSON.stringify({weak,strong}));
  g.resetRun(true);assert.equal(p.latched,false);assert.equal(p.body.type,1);assert.ok(Math.abs(p.body.position.y-p.restY)<1e-8);
 });
-// The former crane rooms 12–16 were replaced by spatial platforming courses.
-// Their current routes/contact regressions live in lab-platform-room*.test.js.
 test('calibration cabin cannot be entered by walking around any of its four sides',async()=>{
  await g.selectLevel(5,false);
  for(const [start,dir]of [[[-11,0,-4.5],[1,0]],[[-3,0,-4.5],[-1,0]],[[-8,0,0],[0,-1]],[[-8,0,-8.7],[0,1]]])for(const jump of [false,true]){

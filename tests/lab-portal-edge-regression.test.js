@@ -94,3 +94,26 @@ test('transported camera clips only its exit backing while its eye is still behi
   assert.equal(rig.portalExit, null);
   assert.equal(rig.clipsPortalBacking(backing), false);
 });
+
+test('jumping through the floor and turning during recovery keeps the camera usable', async () => {
+  const game = await createHeadlessGame();
+  try {
+    await game.selectLevel(8, false);
+    for (const carrying of [false, true]) {
+      const samples = [];
+      const { route, travel } = await runPortalEdgeJourney(game, {
+        offset: 0, jump: true, turn: true, carrying, onFrame: frame => samples.push(frame),
+      });
+      assert.equal(route.pass, true);
+      assert.equal(route.resets + route.respawns, 0);
+      assert.equal(travel.teleports, 1);
+      assert.ok(travel.minCameraDistance > 2.7, JSON.stringify(travel));
+      assert.ok(Math.abs(travel.finalPitch + .5) < .001, 'The view was left pointing into the ceiling');
+      for (const frame of samples.filter(frame => frame.teleports > 0)) {
+        assert.ok(frame.camera[1] > .1, 'The camera went below the room');
+        assert.ok(frame.portalClipped || frame.camera[0] > -12,
+          `An unclipped camera escaped behind the outer wall: ${JSON.stringify(frame)}`);
+      }
+    }
+  } finally { game.physics.dispose(); game.portals.dispose(); }
+});

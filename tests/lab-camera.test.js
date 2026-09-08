@@ -217,3 +217,27 @@ test('a vertical portal view does not convert an Euler singularity into an orbit
   rig.update({ dt: 1 / 120, target, ...controls });
   assert.ok(before.angleTo(camera.quaternion) < .09);
 });
+
+test('floor and wall passages preserve mouse pitch while the transported horizon recovers', () => {
+  for (const reverse of [false, true]) for (const pitch of [-.9, -.5, -.1, .35]) {
+    const { camera, rig } = setup();
+    rig.reset(new THREE.Vector3(), 0, pitch);
+    const wall = makePortalFrame(new THREE.Vector3(0, 1.32, 0), new THREE.Vector3(1, 0, 0));
+    const floor = makePortalFrame(new THREE.Vector3(0, 0, -16), new THREE.Vector3(0, 1, 0));
+    const entry = reverse ? wall : floor, exit = reverse ? floor : wall;
+    const target = exit.position.clone().addScaledVector(exit.normal, .6);
+    const before = camera.quaternion.clone();
+    const mapped = portalRotation(entry, exit).multiply(before);
+    const controls = rig.applyPortalTransform(entry, exit, { target, yaw: 0, pitch });
+    assert.equal(controls.pitch, pitch, 'The passage must not permanently turn mouse aim toward the ceiling');
+    assert.ok(camera.quaternion.angleTo(mapped) < 1e-7, 'Preserve the actual image at the crossing itself');
+    for (let n = 0; n < 180; n++) rig.update({ dt: 1 / 120, target, ...controls });
+    assert.ok(Math.abs(rig.pitch - pitch) < .001);
+    assert.ok(camera.up.distanceTo(new THREE.Vector3(0, 1, 0)) < .02);
+    const ordinary = setup(); ordinary.rig.reset(target, controls.yaw, pitch);
+    for (let n = 0; n < 180; n++) ordinary.rig.update({ dt: 1 / 120, target, ...controls });
+    assert.ok(camera.getWorldDirection(new THREE.Vector3()).angleTo(
+      ordinary.camera.getWorldDirection(new THREE.Vector3())) < .025,
+    'The recovered view must match the ordinary gravity-relative shoulder camera');
+  }
+});

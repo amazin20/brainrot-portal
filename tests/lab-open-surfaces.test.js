@@ -2,11 +2,12 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import * as THREE from 'three';
 import {createHeadlessGame} from '../scripts/lab-headless.mjs';
+import {CAMPAIGN} from '../src/game/LabCampaignLevels.js';
 import {BALANCE_RIG_LAYOUT as L} from '../src/game/LabBalanceRig.js';
 import {resolvePortalPlacement} from '../src/game/LabPortals.js';
 const g=await createHeadlessGame();
 test('every room offers additional continuous portal areas without changing its physical concept',async()=>{
- for(let i=0;i<20;i++){
+ for(let i=0;i<CAMPAIGN.length;i++){
   await g.selectLevel(i,false);const l=g.firstLevel;
   assert.ok(l.explorationSurfaces.length>=2,`Course ${i+1} lacks choice`);
   assert.ok(g.portalPanels.length>=3,`Course ${i+1} still has only two slots`);

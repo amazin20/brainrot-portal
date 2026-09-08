@@ -36,9 +36,8 @@ const game=new LabGame({container:$('#game'),touch:{joystick:$('#joystick'),joys
   onReady:()=>{hideScreens();setState('ready');screen('start-screen',true);platform?.ready();
     game.audio.configure(preferences.value);applyLabQuality(game,preferences.value.quality);diagnostics();
     if(debug){window.__NESI_DEMO_GAME__=game;window.__NESI_PLATFORM__=platform;window.__NESI_PREFS__=preferences;
-      window.__NESI_RUN_RECOVERY_ROUTE__=async()=>{const {runRecoveryJourney}=await import('./game/LabWorkshopRecovery.js');game.renderer.setAnimationLoop(null);hideScreens();setState('playing');try{return await runRecoveryJourney(game,{onMilestone:()=>game.render()});}finally{game.render();clearInput();setState(game.state);}};
       window.__NESI_RUN_LEVEL_ROUTE__=async()=>{const {runV8Journey}=await import('./game/LabV8Journey.js');game.renderer.setAnimationLoop(null);hideScreens();setState('playing');
-        try{return await runV8Journey(game,{onMilestone:()=>game.render()});}finally{game.render();clearInput();setState(game.state);diagnostics();}};
+        try{return await runV8Journey(game,{onMilestone:mark=>{game.render();window.__NESI_CAPTURE_LEVEL_MARK__?.(mark);}});}finally{game.render();clearInput();setState(game.state);diagnostics();}};
       window.__NESI_RUN_PORTAL_EDGE_ROUTE__=async(options={})=>{
         const {runPortalEdgeJourney}=await import('./game/LabPortalEdgeJourney.js');
         game.renderer.setAnimationLoop(null);hideScreens();setState('playing');
