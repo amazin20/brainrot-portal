@@ -57,7 +57,7 @@ try{
    await shot(`level-${index+1}-overview`);
    await page.$eval('#win-screen',e=>e.style.visibility='');
  }
- assert.equal(new Set(requests.map(x=>x.split('?')[0])).size,18);assert.equal(requests.length,18,'cached models must not download twice');
+ assert.equal(new Set(requests.map(x=>x.split('?')[0])).size,17);assert.equal(requests.length,17,'cached models must not download twice');
  console.log('Returning to first course',await uiState());
  await clickMenu('#play-again-button');console.log('Return button pressed',await uiState());await page.waitForFunction(()=>window.__NESI_DEMO_GAME__.levelIndex===0&&window.__NESI_DEMO_GAME__.state==='playing');
  await page.evaluate(()=>document.exitPointerLock?.());await page.waitForFunction(()=>!document.pointerLockElement);

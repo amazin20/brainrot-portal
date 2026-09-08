@@ -13,7 +13,11 @@ function trial({start,carry=false,extra=0,repeat=true,counter=0,route=0,seconds=
  const r={level:g.levelIndex+1,start,carry,extra,repeat,counter,route,maxY,reached,teleports:g.teleportCount};results.push(r);if(reached)bad.push(r);
 }
 await g.selectLevel(6,false);
-const starts=[[0,2.2,0],[0,5.84,-10.3],[1.4,5.84,-10.3],[0,5.5,-14.5],[1.5,5.5,-12.7],[-8,5.5,-14.5]];
+// Rebuilt room 7: actual spine, generous raised-tray edge fixtures, loading
+// landing and the enclosed fall-tower landing. Old gallery coordinates no
+// longer exercised any existing structure. The raised starts remain explicit
+// adversarial allowances, never evidence of a playable positive route.
+const starts=[[0,2.25,0],[0,3.9,4.1],[1.4,3.9,4.1],[2.1,3.3,4.7],[8,3.3,4.7],[-8.2,10,-11.2]];
 for(const start of starts)for(const carry of [false,true])for(const extra of [0,.9])for(const counter of [0,1,2])for(const route of [0,1,2])trial({start,carry,extra,counter,route});
 console.log('Seventh room full-physics trials:',results.length);
 for(let index=8;index<20;index++){

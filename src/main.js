@@ -46,6 +46,13 @@ const game=new LabGame({container:$('#game'),touch:{joystick:$('#joystick'),joys
         game.renderer.setAnimationLoop(null);hideScreens();setState('playing');let attempt;
         try{const route=await runV8Journey(game,{scenario:d=>{attempt=runBalanceJumpAttempt(d);}});return{route,attempt};}
         finally{game.render();clearInput();setState(game.state);diagnostics();}
+      };
+      window.__NESI_RUN_ANIMATION_ROUTE__=async(options={})=>{
+        const {runAnimationJourney}=await import('./game/LabAnimationJourney.js');
+        game.renderer.setAnimationLoop(null);hideScreens();setState('playing');
+        try{return await runAnimationJourney(game,{...options,onMilestone:()=>game.render(),
+          onFrame:sample=>window.__NESI_CAPTURE_ANIMATION_FRAME__?.(sample)});}
+        finally{game.render();clearInput();setState(game.state);diagnostics();}
       };}
     $('#play-button').focus({preventScroll:true});if(query.get('smoke')==='1')enterLevel(game.levelIndex,'initial');},
   onHud:({chamber,objective,hasCargo,portalsReady})=>{$('#level-number').textContent=String(game.levelIndex+1);$('#chamber').textContent=chamber;$('#objective').textContent=objective||'';$('#cargo-status').textContent=hasCargo?'Друг на руках':'Друг ждёт';$('#portal-status').textContent=portalsReady?'Связаны':'Два портала';},

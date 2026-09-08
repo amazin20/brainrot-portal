@@ -133,8 +133,9 @@ export function resolvePortalPlacement(panel, hitPoint, { otherPortal = null, bl
     const mesh = blocker.mesh || blocker;
     if (mesh === panel || blocker.enabled === false || mesh.userData?.portalClearance === false) continue;
     // A tilted plate's axis-aligned proxy encloses empty space in front.
-    // Exempt only THIS registered support, never nearby crates, pillars or doors.
-    if (mesh.uuid === metadata.portalColliderId && blocker.frontPlane) {
+    // Exempt only this registered deck and its authored backing members, never
+    // nearby crates, pillars, rims or doors. Each must share the actual plane.
+    if ((mesh.uuid === metadata.portalColliderId || metadata.portalBackingIds?.includes(mesh.uuid)) && blocker.frontPlane) {
       const support = blocker.frontPlane();
       if (support?.normal && Math.abs(support.normal.dot(frame.normal)) > .999
         && Math.abs(frame.position.clone().sub(support.center).dot(support.normal)) < .04) continue;

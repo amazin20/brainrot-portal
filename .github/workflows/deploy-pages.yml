@@ -50,7 +50,7 @@ jobs:
           import fs from 'node:fs';
           import {CAMPAIGN} from './src/game/LabCampaignLevels.js';
           if(CAMPAIGN.length!==20)throw Error('Unexpected chamber count');
-          fs.writeFileSync('dist/build-info.json',JSON.stringify({commit:process.env.GITHUB_SHA,version:'v21-video-workshop',levels:CAMPAIGN.length,verified:true,repository:process.env.GITHUB_REPOSITORY,run:process.env.GITHUB_RUN_ID},null,2));
+          fs.writeFileSync('dist/build-info.json',JSON.stringify({commit:process.env.GITHUB_SHA,version:'v22-balance-rebuild',levels:CAMPAIGN.length,verified:true,repository:process.env.GITHUB_REPOSITORY,run:process.env.GITHUB_RUN_ID},null,2));
           NODE
       - uses: actions/upload-artifact@v4
         if: always()
@@ -74,7 +74,7 @@ jobs:
     if: github.ref == 'refs/heads/main'
     needs: [build, verify-sep8]
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 25
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -106,7 +106,7 @@ jobs:
 
   verify-sep8:
     runs-on: ubuntu-latest
-    timeout-minutes: 12
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -118,7 +118,7 @@ jobs:
           npm ci
           npm install --no-save --package-lock=false puppeteer-core@24.16.0
           npm run build
-      - name: Verify rapid mouse shots, carry-jump bypass and rebuilt rooms
+      - name: Verify rapid shots, rebuilt balance, stairs and player animation
         run: |
           npm run preview -- --host 127.0.0.1 --port 4173 >/tmp/sep8-preview.log 2>&1 &
           for i in {1..30}; do curl -fsS http://127.0.0.1:4173/ >/dev/null && break; sleep 1; done

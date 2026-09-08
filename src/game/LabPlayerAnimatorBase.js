@@ -168,6 +168,25 @@ export function sampleLabFootCycle(cycle, stride, run = 0) {
     roll:THREE.MathUtils.lerp(.25,-.14,smooth(0,1,t)),planted:false };
 }
 
+/** Separate take-off, gather and landing poses. The trailing leg finishes its
+ * push before it catches the leading knee; ankle extension is independent of
+ * the knee fold. This prevents the old scaled copy of one joint angle from
+ * turning the whole airborne leg into a rigid, folded pendulum. */
+export function sampleLabJumpPose(age, verticalSpeed, leading, run = 0, carrying = 0) {
+  const gather = smooth(.035, .25, age);
+  const push = 1 - smooth(.055, .22, age);
+  const reach = smooth(-.5, 9.5, -verticalSpeed);
+  const split = leading * gather * (1 - reach) * (1 - .72 * smooth(.22, .62, age));
+  const fold = gather * (1 - .88 * reach);
+  return {
+    hip: -.065 - fold * (.57 - .06 * carrying) - split * (.19 + .04 * run)
+      + leading * push * .045 - reach * .055,
+    knee: .11 + fold * (1.15 - .09 * carrying) + split * .32 - leading * push * .11,
+    ankle: .035 - fold * .30 - split * .09 + leading * push * .09 + reach * .035,
+    gather, reach,
+  };
+}
+
 /** Solve a fixed-length anatomical arm in its shoulder-parent coordinates.
  * The stable, outward/downward elbow pole avoids flipping at a straight arm.
  * This returns rotations only: no scaling, translating joints, or editing skin.
@@ -272,6 +291,7 @@ export class LabPlayerAnimator {
       recoil: this.recoil,
       carryReach: { ...this.carryReach },
       airborne: { phase: this.airbornePhase, age: this.airAge, lift: this.ascentBlend, lead: this.takeoffLead },
+      landingSupport: { age: this.landingAge, blend: this.landingSupport, impact: this.landingImpact },
       attention: { blend: this.attentionBlend, yaw: this.attentionYaw, pitch: this.attentionPitch },
       expression: this.expression ? { ...this.expression } : null,
       idle: { blend: this.idleBlend, footTap: this.idleFootTap },
@@ -311,6 +331,7 @@ export class LabPlayerAnimator {
     this.holsterProgress = this.handoffBlend = 0;
     this.carryingRequested = false;
     this.airAge = 0; this.ascentBlend = 0; this.takeoffLead = 1; this.airbornePhase = 'grounded';
+    this.landingAge = 2; this.landingSupport = this.landingImpact = 0;
     this.attentionPitch = this.attentionYaw = this.attentionBlend = 0;
     this.requestedAttention = { pitch: 0, yaw: 0, active: false };
     this.reachBlend = 0; this.hasGripTargets = false;
@@ -406,8 +427,20 @@ export class LabPlayerAnimator {
     speed = clamp(Number.isFinite(speed) ? speed : 0, 0, 12);
     this.elapsed = Number.isFinite(elapsed) ? elapsed : this.elapsed + dt;
     const vy = Number.isFinite(velocity?.y) ? velocity.y : 0;
-    if (grounded && !this.previousGrounded) this.triggerLanding(this.lastVerticalSpeed);
-    if (!grounded && this.previousGrounded) { this.airAge = 0; this.takeoffLead = this.gait < 0.5 ? 1 : -1; }
+    if (grounded && !this.previousGrounded) {
+      this.triggerLanding(this.lastVerticalSpeed);
+      this.landingAge = 0;
+      this.landingImpact = clamp(Math.abs(this.lastVerticalSpeed) / 10, .15, 1);
+      // Resume on the actual leading foot. Letting the cadence run in flight
+      // made identical landings arrive randomly in stance or high swing.
+      this.gait = this.takeoffLead < 0 ? .04 : .54;
+    }
+    if (!grounded && this.previousGrounded) {
+      this.airAge = 0; this.takeoffLead = this.gait < 0.5 ? 1 : -1;
+      this.landingAge = 2;
+    }
+    this.landingAge = Math.min(2, this.landingAge + dt);
+    this.landingSupport = grounded ? 1 - smooth(.07, .27, this.landingAge) : 0;
     this.airAge = grounded ? 0 : this.airAge + dt;
     this.ascentBlend = damp(this.ascentBlend, smooth(-1.4, 2.6, vy), 10, dt);
     this.airbornePhase = grounded ? 'grounded' : vy > 2.5 ? 'push_off' : vy > -1.5 ? 'float' : 'prepare_land';
@@ -490,8 +523,10 @@ export class LabPlayerAnimator {
     // Starts lengthen into a relaxed stride; sprint never accelerates the clip
     // past 2.2 cycles/s. Ground contact is a separate bounded overlay.
     const frequency = Math.max(smooth(0, .8, this.speed) * clamp(.92 + this.speed * .24, 0, 2.2), turning * .9);
-    this.cadenceHz = frequency;
-    this.gait = (this.gait + dt * frequency) % 1;
+    // Cadence follows ground travel only. A short reception phase blends both
+    // boots into contact, then smoothly releases the trailing recovery step.
+    this.cadenceHz = grounded ? frequency * (1 - .75 * this.landingSupport) : 0;
+    this.gait = (this.gait + dt * this.cadenceHz) % 1;
     // Closed-form damped spring: a soft rebound, independent of frame size.
     const decay = Math.exp(-10.5 * dt), omega = Math.sqrt(260 - 10.5 ** 2);
     const sine = Math.sin(omega * dt), cosine = Math.cos(omega * dt);
@@ -500,7 +535,7 @@ export class LabPlayerAnimator {
     this.landVelocity = decay * (landVelocity * cosine - (10.5 * landVelocity + 260 * landing) / omega * sine);
     this.landing = clamp(this.landing, -0.065, 0.022);
     const ground = 1 - this.airBlend;
-    const moving = this.moveBlend * ground;
+    const moving = this.moveBlend * ground * (1 - .78 * this.landingSupport);
     const turnStep = turning * ground;
     this.idleBlend = damp(this.idleBlend, ground * (1 - this.moveBlend) * (1 - turning)
       * (1 - this.aimBlend) * (1 - this.interactionBlend), 5, dt);
@@ -522,14 +557,17 @@ export class LabPlayerAnimator {
     const strideBounce = (0.004 + run * 0.005) * (1 - Math.cos(cadence * 2)) * 0.5;
     const compression = (0.012 + run * 0.011 - strideBounce) * moving + 0.004 * turnStep - this.landing;
     this.bones.Body.position.copy(this.rig.rest.Body);
-    this.bones.Body.position.z += compression + this.interactionBlend * 0.011 + this.anticipation * 0.014 - hop * 0.012;
+    // The jump command is immediate in physics. Anticipation belongs to the
+    // grounded push; it must not keep squatting after the feet have left.
+    const groundedAnticipation = this.anticipation * ground;
+    this.bones.Body.position.z += compression + this.interactionBlend * 0.011 + groundedAnticipation * 0.014 - hop * 0.012;
     this.bones.Body.position.x += Math.sin(cadence - .18) * moving * (0.006 + run * 0.0025);
     const body = this.jointTargets.Body;
     body.set((0.050 + .070 * run) * moving * this.directionForward + 0.115 * this.inertiaForward * ground
       + 0.05 * this.carryBlend + this.interactionBlend * 0.095 - this.landing * 0.55,
       -0.043 * moving * this.directionRight - 0.060 * this.inertiaRight * ground,
       Math.sin(cadence + 0.15) * 0.071 * moving - this.turn * 0.026);
-    body.x += this.airBlend * (0.015 + 0.095 * this.ascentBlend) + this.anticipation * 0.055;
+    body.x += this.airBlend * (0.015 + 0.095 * this.ascentBlend) + groundedAnticipation * 0.055;
     body.y += Math.sin(cadence - .28) * moving * 0.046;
     this.jointTargets.Head.set(-body.x * 0.6 - this.aimPitch * this.aimBlend * 0.2 + Math.sin(this.elapsed * 1.7) * 0.004,
       -body.y * 0.65 + curious * 0.065 + joy * Math.sin(expressionTime * 10) * 0.03,
@@ -553,24 +591,23 @@ export class LabPlayerAnimator {
       lift *= Math.max(moving, turnStep * 0.5);
       const down = 0.177 - compression - lift;
       const leg = solveLabLeg(forward, down);
-      const legBlend = clamp(moving + turnStep + Math.abs(this.landing) * 8, 0, 1);
+      // A stationary landing still needs the full two-link support solve.
+      // Scaling the IK angles by the impact left straight knees beneath a
+      // compressed pelvis, so the boots sank during the recovery.
+      const legBlend = clamp(moving + turnStep + Math.max(this.landingSupport, smooth(.0002, .005, Math.abs(this.landing))), 0, 1);
       const lateralRoll = clamp(Math.atan2(lateral, Math.max(0.09, down)), -0.21, 0.21);
       // A lead leg rises first; at the apex the trailing knee catches up, then
       // both feet extend for the landing. Vertical speed is blended across zero
       // so the jump cannot switch from one frozen pose to another at the apex.
       const leading = sign * this.takeoffLead;
-      const pushOff = 1 - smooth(0.06, 0.28, this.airAge);
-      const tuck = smooth(.045, .23, this.airAge);
-      const landingReach = smooth(-.5, 9.5, -vy);
-      const jumpFold = .07 + tuck * (.66 - .59 * landingReach)
-        + leading * tuck * (1 - landingReach) * (.14 + .045 * run)
-        - leading * pushOff * .05 + this.anticipation * .10;
-      this.jointTargets[`Thigh${side}`].set(leg.hip * legBlend - jumpFold * this.airBlend,
+      const jump = sampleLabJumpPose(this.airAge, vy, leading, run, this.carryBlend);
+      this.jointTargets[`Thigh${side}`].set(leg.hip * legBlend * ground + jump.hip * this.airBlend,
         lateralRoll, sign * 0.012 * moving - this.turn * 0.018 * turnStep);
-      this.jointTargets[`Shin${side}`].set(leg.knee * legBlend + jumpFold * 1.75 * this.airBlend, 0, 0);
-      this.jointTargets[`Foot${side}`].set(leg.ankle * legBlend + roll * moving * (1 - .3*this.carryBlend) - jumpFold * 0.65 * this.airBlend,
+      this.jointTargets[`Shin${side}`].set(leg.knee * legBlend * ground + jump.knee * this.airBlend, 0, 0);
+      this.jointTargets[`Foot${side}`].set(leg.ankle * legBlend * ground + roll * moving * (1 - .3*this.carryBlend) + jump.ankle * this.airBlend,
         -lateralRoll, this.turn * 0.018 * turnStep);
-      this.footContact[side] = grounded && (planted || moving + turnStep < 0.05) ? ground : 0;
+      this.footContact[side] = grounded && (planted || moving + turnStep < 0.05 || this.landingSupport > .35)
+        ? Math.max(ground, this.landingSupport) : 0;
       const swingPhase = (cycle + 0.05) * Math.PI * 2;
       const swing = clamp(Math.sin(swingPhase) * (0.40 + 0.12 * run)
         + Math.sin(swingPhase * 2 -.22) * (0.025 + run * 0.025), -0.55, 0.55) * moving

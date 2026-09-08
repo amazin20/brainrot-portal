@@ -86,11 +86,14 @@ export function buildFreightBridgeRoom(k,{baseWalls,closedExit}) {
   deck(k,-11.6,-5.15,-1.8,5.8,bankY);
   deck(k,-5.15,-1.25,3.12,5.8,bankY);
   deck(k,2.3,8.8,-1.8,4.9,bankY);
-  w.stairs(-10.7,-8.3,10.2,5.8,0,bankY);
-  // Solid stair foundations leave no floating tread undersides.
+  // This flight ascends towards -Z. Author each tread with positive extents:
+  // a negative surface depth produces no tile instances and inverted bounds.
+  // Each foundation stops at the recessed backing's underside, so there is
+  // one exposed face at every height instead of overlapping riser skins.
   for(let i=0;i<7;i++){
-    const h=bankY*(i+1)/7,z=10.2-(i+.5)*4.4/7;
-    w.box([-9.5,h/2-.08,z],[2.4,Math.max(.04,h-.16),4.4/7],w.materials.trim);
+    const h=bankY*(i+1)/7,z0=10.2-(i+1)*4.4/7,z1=10.2-i*4.4/7,foundation=h-.1451;
+    w.box([-9.5,foundation/2,(z0+z1)/2],[2.4,foundation,z1-z0],w.materials.trim);
+    w.floor(-10.7,-8.3,z0,z1,h,{name:`Dock stair tread ${i+1}`});
   }
   k.panel('loading-dock',[-11.7,bankY+2.1,3.8],[1,0,0],5.8);
   k.panel('unloading-dock',[8.65,bankY+2.1,1.5],[-1,0,0],5.8);
@@ -152,8 +155,20 @@ export function buildFreightBridgeRoom(k,{baseWalls,closedExit}) {
   for(const x of [-.6,8.2])for(const z of [-.10,3.10])w.box([x,3.7,z],[.14,7.4,.14]);
   w.box([3.8,7.32,-.1],[9,.16,.16]);w.box([3.8,7.32,3.1],[9,.16,.16]);
   const indicator=w.box([2.5,bankY+.025,3.5],[1.3,.04,.12],new THREE.MeshStandardMaterial({color:0xb49462}),false);
+  // The same contact colour outlines the supported receiving end of the bay;
+  // the incoming edge stays open to the telescopic deck.
+  for(const z of [.3,2.7])w.box([2.84,bankY+.008,z],[1.02,.016,.05],indicator.material,false);
+  w.box([3.35,bankY+.008,1.5],[.05,.016,2.45],indicator.material,false);
   k.ticks.push(()=>indicator.material.color.setHex(lock.engaged?0x80dabc:0xb49462));
   k.state.freightHood=hood;k.state.presentation={kind:'telescopic-cargo-transfer',bankY,loadingPoint:[-1.55,bankY,1.5],receiver};
   closedExit(()=>lock.engaged);
-  k.wire([[3.7,bankY+.02,3.5],[7.6,bankY+.02,3.5],[7.6,.06,-10.8],[0,.06,-10.8]],()=>lock.engaged);
+  // The dock contact feeds the indicator, then follows the bank surface,
+  // drops down its visible end face and reaches the fixed door-frame lamp.
+  // wire() uses axis-aligned strips: a simultaneous Y/Z change would create
+  // an opaque wall rather than a cable. All bends here lie on real surfaces.
+  k.wire([
+    [2.5,bankY+.015,2.7],[2.5,bankY+.015,3.5],[7.6,bankY+.015,3.5],
+    [7.6,bankY+.015,-1.823],[7.6,.015,-1.823],[7.6,.015,-11.6975],
+    [2.49,.015,-11.6975],[2.49,1.3,-11.6975],[2.445,1.3,-11.6975],
+  ],()=>lock.engaged);
 }

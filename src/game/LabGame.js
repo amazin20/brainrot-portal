@@ -682,13 +682,22 @@ export class LabGame {
       const planeDistance = Math.abs(center.clone().sub(portal.position).dot(portal.normal));
       if (planeDistance > radius + .7 + Math.abs(portal.normal.y) * CENTER_HEIGHT) return false;
       // The aperture opens both its thin white panel and the structural wall behind it.
-      return collider.mesh.uuid === this.portalSurfaceIds[index] || portalBacksCollider(portal, collider.box);
+      return collider.mesh.uuid === this.portalSurfaceIds[index]
+        || (collider.portalOwner && collider.portalOwner.userData.portalColliderId === this.portalSurfaceIds[index])
+        || portalBacksCollider(portal, collider.box);
     });
   }
 
   resolveBody(position, previous, velocity, radius, height, allowPortals = false) {
     for (let iteration = 0; iteration < 3; iteration++) for (const collider of this.colliders) {
-      if (!collider.enabled || collider.walkablePlane) continue;
+      if (!collider.enabled || (collider.walkablePlane && !collider.solidUnderside)) continue;
+      // A walkable moving top is not an empty volume from below. Its floor
+      // solver owns feet on the plane; the real deck and beams block a body
+      // approaching the underside. Only explicitly authored tops use this.
+      if (collider.solidUnderside && collider.frontPlane) {
+        const top = collider.frontPlane();
+        if (position.clone().sub(top.center).dot(top.normal) >= -.035) continue;
+      }
       // A tilted plate's world AABB includes empty air in front of its real
       // surface. Reject that broad-phase false positive before resolution.
       if (collider.frontPlane) {

@@ -53,15 +53,27 @@ test('moment of force changes with sign and arm length, with bounded damped moti
  assert.ok(a.angle>0&&b.angle>a.angle);assert.ok(Math.abs(b.angle+c.angle)<1e-9);
  for(let n=0;n<2400;n++)integrateBalance(b,0,1/120);assert.ok(Math.abs(b.angle)<.003);
 });
-test('balance deck physical shape and player support refer to the same rotated plane',async()=>{
- await g.selectLevel(6,false);g.resetRun(true);const l=g.firstLevel,s=l.state;s.counterIndex=2;
- // The shorter counterweight arm takes longer to raise the unloaded deck.
- // Still compare the cargo box and the player plane at a substantial tilt.
- step(480);
- const f=g.floors.find(f=>f.heightAt),p=g.physics.solids.get(s.collider.mesh.uuid).body;
- assert.ok(s.angle>.2);const q=s.bridge.getWorldQuaternion(new THREE.Quaternion());assert.ok(Math.abs(new THREE.Quaternion().copy(p.quaternion).dot(q))>.99999);
- for(const z of [-8,0,8])assert.ok(Math.abs(f.heightAt(0,z)-(s.bridge.position.y+s.surfaceOffset/Math.cos(s.angle)-Math.tan(s.angle)*z))<1e-8);
- assert.equal(f.heightAt(3,0),null);
+test('balance deck cargo bodies and player supports share each moving rotated plane',async()=>{
+ await g.selectLevel(6,false);g.resetRun(true);const l=g.firstLevel,s=l.state;
+ // The new unloaded rocker is biased toward the negative end. Check the
+ // production fixed-step motion throughout settling, not a posed fixture.
+ let maxTilt=0;
+ for(let n=0;n<480;n++){
+  step(1);maxTilt=Math.max(maxTilt,Math.abs(s.angle));
+  for(const [i,c] of s.support.entries()){
+   const body=g.physics.solids.get(c.mesh.uuid).body;
+   const q=s.bridge.getWorldQuaternion(new THREE.Quaternion());
+   assert.ok(Math.abs(new THREE.Quaternion().copy(body.quaternion).dot(q))>.999999);
+   const normal=V(0,1,0).applyQuaternion(body.quaternion);
+   const top=V().copy(body.position).addScaledVector(normal,body.shapes[0].halfExtents.y);
+   const local=s.rig.deckSurfaces[i].center.clone();local.y=c.surfaceOffset;
+   const point=s.bridge.localToWorld(local);
+   assert.ok(Math.abs(c.floor.heightAt(point.x,point.z)-point.y)<1e-8);
+   assert.ok(Math.abs(point.clone().sub(top).dot(normal))<1e-6,'Cannon support lags the rotating player plane');
+   assert.equal(c.floor.heightAt(3,point.z),null);
+  }
+ }
+ assert.ok(maxTilt>.2,'The check never exercised a meaningful tilt');
 });
 test('fan is a sustained force, not a scripted launch, and fully stops after rotor coast',async()=>{
  await g.selectLevel(7,false);g.resetRun(true);const l=g.firstLevel;

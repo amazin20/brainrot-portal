@@ -1,4 +1,4 @@
-import {BALANCE_BIND, buildBalanceModel} from './LabBalanceModel.js';
+import {buildBalanceChamber} from './LabBalanceChamber.js';
 import {generatorSkin} from './LabWindRoom.js';
 import {LabAirflowVisual} from './LabAirflowVisual.js';
 import {airAcceleration} from './LabAirForces.js';
@@ -8,7 +8,7 @@ import {cargoLoadsPlate} from './LabPlateContact.js';
 import {V,inRect,tracePortalRay,rayTouches,beamDrawing,glass,wall,gate,consoleNode,terminalAccessible,ringDevice,rotorDevice,integrateBalance,impactPiston} from './LabPuzzleMechanics.js';
 export const EXTENDED_CAMPAIGN=Object.freeze([
  {id:'crossed-light',title:'Перекрёстный свет',description:'Калибровочная кабина, зеркало и свет, проходящий через порталы.',assets:[1,2,11,22,24],concept:'Оптика',hints:['Свет проходит через связанную пару так же, как предмет. Серебристый диск отражает луч.','До отражателя нельзя дотянуться снаружи кабины, но в её окне видна портальная панель.','Сначала войди в кабину и поверни зеркало. Вернись, свяжи панель напротив излучателя с панелью перед зеркалом. Свет должен попасть в круглый приёмник.']},
- {id:'moment-arm',title:'Точка опоры',description:'Один мост, подвижный противовес и настоящий момент силы.',assets:[1,2,11,22,23,24,34],concept:'Равновесие рычага',hints:['Один и тот же вес сильнее поворачивает мост, когда находится дальше от оси. Игрок тоже нагружает мост.','Противовес можно передвинуть терминалом. Одного противовеса не хватает удержать дальний конец под твоим весом.','Сдвинь противовес и оставь друга на дальнем плече. С промежуточной галереи отправь друга в верхний док. Затем перенеси вход на стену галереи и пройди сам.']},
+ {id:'moment-arm',title:'Инерционный балансир',description:'Друг наклоняет портал на качели. Используй скорость падения, чтобы попасть на верхнюю площадку.',assets:[1,2,11,22,23,24],concept:'Масса, плечо и направление импульса',hints:['Вес друга и расстояние до оси определяют наклон качели. Направление выхода портала меняется вместе с настилом.','Оставь друга на ближнем плече. Свяжи пол башни с поднявшимся дальним настилом и спустись через портал с верхней площадки башни.','После перелёта поставь выход на пол верхнего дока, а вход — под другом на качели. Забери друга; при промахе пол и лестница позволяют повторить попытку.']},
  {id:'wind-column',title:'Ветер за углом',description:'Перенаправь воздушную струю и поймай восходящий поток.',assets:[1,2,11,22,23,24,31],concept:'Сила воздушного потока',hints:['Вентилятор создаёт постоянную силу, а не разовый прыжок. Частицы показывают направление воздуха.','Напольный выход превратит горизонтальную струю в восходящую. Высокая площадка находится сбоку от потока.','Свяжи панель напротив вентилятора с плитой внизу шахты. Включи нагнетание, возьми друга, войди в поток и на высоте уйди к верхней площадке.']},
  {id:'impact-workshop',title:'Работа удара',description:'Ролики разгоняют груз. Его импульс сжимает пружину и защёлкивает затвор.',assets:[1,2,11,22,24],concept:'Кинетическая энергия и упругость',hints:['Пружинный затвор находится в низком канале. Слабого толчка недостаточно сжать пружину до защёлки.','Ролики придают другу скорость. Портальная пара должна направить этот импульс в торец поршня.','Настрой пару с выхода роликов в канал перед поршнем, включи движение вперёд и отпусти друга на загрузочном столе. После удара откроется крышка канала — забери друга.']},
  {id:'vector-vault',title:'Векторный сейф',description:'Управляй полем в закрытом лабиринте и подготовь путь извлечения друга.',assets:[1,2,11,22,23,24],concept:'Дистанционное управление силами',hints:['Под стеклом действует направленное поле. Оно толкает свободного друга по стрелке, но не переносит его мгновенно.','Сначала рассмотри проходы сверху и подготовь портал в открытом колодце. Крышка не пропускает руки.','На терминале меняй направление: вправо, к дальней стене, влево, к дальней стене, вправо, к колодцу. Свяжи дно колодца с панелью на верхней галерее.']},
@@ -20,6 +20,7 @@ const PALETTES=[{wall:0x454953,floor:0x727c87,accent:0xefc783,sky:0x4c5560},{wal
  * gate/lift/fling stages, mirrors of courses or mechanism-use victory flags. */
 export function buildExtendedCampaign(game,index){
  const spec=EXTENDED_CAMPAIGN[index-5];if(!spec)throw new RangeError('Unknown chamber');
+ if(index===6)return buildBalanceChamber(game,spec);
  const world=new LabTileWorld(game,PALETTES[index-5]),terminals=[],panels={},fixtures=[];
  let time=0,goal,bounds,spawn,cargoSpawn,update=()=>{},reset=()=>{},render=()=>{},applyCargoForces,playerAcceleration,mechanicalContact=()=>false;
  const state={};
@@ -50,80 +51,6 @@ export function buildExtendedCampaign(game,index){
   update=dt=>{state.mirror=THREE.MathUtils.damp(state.mirror,state.target,5,dt);const angle=state.mirror*Math.PI/4;reflector.normal.set(Math.cos(angle),0,Math.sin(angle));mirror.group.quaternion.setFromUnitVectors(V(0,0,1),reflector.normal);
    state.segments=tracePortalRay(game,V(-9.8,2.1,6),V(1,0,0),{reflectors:[reflector]});state.lit=rayTouches(state.segments,V(9.7,2.1,-8));sensor.glow.material.color.setHex(state.lit?0x9af4bd:0xa38b6b);ray.update(state.segments);door.update(state.lit,dt,time);};
   reset=()=>{state.mirror=state.target=0;state.lit=false;door.reset();};render=a=>door.render(a,time);
- }else if(index===6){
-  bounds={minX:-13,maxX:13,minZ:-17,maxZ:15};spawn=[8,2.2,2];cargoSpawn=[6,2.75,1];world.walls(bounds,14,-4.5);
-  world.floor(-13,13,-17,15,-4);world.floor(1.85,13,-3,3,2.2);world.floor(-10,7,-17,-10.4,5.5);
-  // A recovery stair returns only to the entrance, never to the high exit.
-  world.stairs(9,12,4,14,-4,2.2);world.floor(9,13,3,4,-4);
-  const surfaceOffset=BALANCE_BIND.surfaceOffset;
-  const bridge=new THREE.Group();bridge.position.set(0,2.2-surfaceOffset,0);world.root.add(bridge);
-  const deck=world.box([0,surfaceOffset-.14,0],[3.8,.28,22],world.materials.floor,true,bridge);
-  const collider=game.colliders.find(c=>c.mesh===deck);collider.kinematic=true;collider.walkablePlane=true;
-  for(const x of [-1.85,1.85])world.box([x,surfaceOffset+.045,0],[.07,.09,22],world.materials.accent,false,bridge);
-  for(let z=-10;z<=10;z+=2)world.box([0,surfaceOffset+.012,z],[3.7,.022,.035],world.materials.trim,false,bridge);
-  // Visible load-bearing crossmembers support the deck above the original
-  // narrow beam. No second false floor and no posts piercing the walkway.
-  for(let z=-6;z<=6;z+=3)world.box([0,surfaceOffset-.58,z],[3.5,.58,.16],world.materials.trim,false,bridge);
-  const counterPositions=[-2.2,0,2.2];
-  const mass=world.box([2.25,surfaceOffset-.65,counterPositions[0]],[.8,.75,1.3],world.materials.trim,false,bridge);
-  world.box([2.25,surfaceOffset-.3,0],[.10,.12,6],world.materials.accent,false,bridge);
-  for(const z of [-3,3])world.box([2.25,surfaceOffset-.55,z],[.95,.55,.14],world.materials.trim,false,bridge);
-  const load=patch('lever-load',[0,surfaceOffset+.027,8.4],[0,1,0],3.2,3.8,bridge,true);load.collider.walkablePlane=true;game.colliders=game.colliders.filter(c=>c!==load.collider);load.mesh.userData.portalColliderId=collider.mesh.uuid;collider.frontPlane=()=>load.getFrame();
-  const receiver=patch('lever-receiver',[6.8,11.1,-14],[ -1,0,0]);
-  world.box([4.5,6,-11.55],[5,12,.25]);
-  console([8,2.2,0],()=>{state.counterIndex=(state.counterIndex+1)%3;game.audio?.mechanism?.('switch');},'balance','E — сдвинуть противовес. Важны вес и расстояние от оси; игрок тоже нагружает мост.');
-  Object.assign(state,{angle:0,omega:0,previousAngle:0,counterIndex:0,counterZ:counterPositions[0],torque:0,bridge,load,collider,surfaceOffset});
-  const heightAt=(x,z)=>Math.abs(x)<=1.9&&Math.abs((z-surfaceOffset*Math.sin(state.angle))/Math.cos(state.angle))<=11?bridge.position.y+surfaceOffset/Math.cos(state.angle)-Math.tan(state.angle)*z:null;
-  const f={minX:-1.9,maxX:1.9,minZ:-11,maxZ:11,y:2.2,mesh:deck,enabled:true,heightAt,normalAt:()=>V(0,Math.cos(state.angle),Math.sin(state.angle))};game.floors.push(f);
-  const contact=()=>cargoLoadsPlate(game.cargo,game.heldCube,{center:V(0,bridge.position.y+surfaceOffset*Math.cos(state.angle),surfaceOffset*Math.sin(state.angle)),normal:V(0,Math.cos(state.angle),Math.sin(state.angle)),right:V(-1,0,0),up:V(0,-Math.sin(state.angle),Math.cos(state.angle)),halfWidth:1.9,halfHeight:11});
-  mechanicalContact=()=>contact(game.cargo.position);
-  // A distinct upper dock is outside the deck's full tilt + jump envelope.
-  // Reaching the lever landing is not reaching the exit: carry must be solved
-  // with a portal transfer, including when bunny-hopping unloads the deck.
-  world.floor(2.2,7,-17,-12,9);
-  // A visible, enclosed arrival dock, not another reachable step on the lever.
-  // Its service slot passes a portal shot, but is shorter than the 2.4 m body.
-  // The full roof and side walls also block running around / corner climbing.
-  world.box([2.08,2.675,-14.35],[.22,13.35,5.3]);
-  world.box([2.08,12.75,-14.35],[.22,2.7,5.3]);
-  world.box([7.12,5,-14.35],[.22,18,5.3]);
-  world.box([4.6,13.2,-11.55],[5.3,2.4,.25]);
-  for(const h of [9.35,11.4])world.box([2.06,h,-14.35],[.28,.055,5.3],world.materials.accent,false);
-  state.exitWindow={bottom:9.35,top:11.4,x:2.08};
-  const authored=buildBalanceModel(game,world.root,bridge);fixtures.push(authored);state.balanceArt=authored;
-  // The supplied stand, not an invented hovering hinge, supports the axle.
-  const standBox=new THREE.Box3().setFromObject(authored.fixed);authored.supportBoxes.forEach(b=>game.collisionProxy(b));
-  if(standBox.min.y>-4.001)world.box([(standBox.min.x+standBox.max.x)/2,(-4+standBox.min.y)/2,(standBox.min.z+standBox.max.z)/2],[standBox.max.x-standBox.min.x+.08,Math.max(.025,standBox.min.y+4),standBox.max.z-standBox.min.z+.08],world.materials.trim);
-
-  goal=world.goal([4.6,9,-14.5],[4.4,4]);
-  function pose(angle,dt){bridge.rotation.x=angle;bridge.updateWorldMatrix(true,true);collider.box.setFromObject(deck);load.collider.box.setFromObject(load.mesh);
-   f.minZ=surfaceOffset*Math.sin(angle)-11*Math.cos(angle);f.maxZ=surfaceOffset*Math.sin(angle)+11*Math.cos(angle);
-   if(!game.physics)return;
-   // Physical boxes rotate with the authored deck; never replace them by AABBs.
-   for(const [c,mesh]of [[collider,deck],[load.collider,load.mesh]]){const item=game.physics.solids.get(c.mesh.uuid);if(!item)continue;const pos=mesh.getWorldPosition(V()),q=bridge.getWorldQuaternion(new THREE.Quaternion());
-    item.body.position.copy(pos);item.body.quaternion.copy(q);item.body.angularVelocity.setZero();item.body.aabbNeedsUpdate=true;item.target.copy(pos);item.remaining=0;}
-   game.physics.world.broadphase.dirty=true;
-  }
-  update=dt=>{state.previousAngle=state.angle;const py=heightAt(game.playerPosition.x,game.playerPosition.z),aboard=py!==null&&game.playerGrounded&&Math.abs(game.playerPosition.y-py)<.22;
-   // Weight disappears in flight, but its equal-and-opposite takeoff and
-   // landing impulses must remain on the beam. Otherwise repeated jumping
-   // makes the carried load nearly weightless and pins the lever at its stop.
-   const travellerMass=3.2+(game.heldCube?3.2:0),vy=game.playerVelocity.y;
-   if(dt>0&&state.lastPlayerContact!==undefined){
-    if(state.lastPlayerContact&&!aboard&&vy>1&&py!==null&&Math.abs(game.playerPosition.y-py)<.35)
-     state.omega+=(state.lastPlayerMass||travellerMass)*(vy-Math.min(0,state.lastPlayerVy||0))*state.lastPlayerZ/280;
-    else if(!state.lastPlayerContact&&aboard&&(state.lastPlayerVy||0)<-.2)
-     state.omega+=travellerMass*(-state.lastPlayerVy)*game.playerPosition.z/280;
-   }
-   state.lastPlayerContact=aboard;state.lastPlayerVy=vy;state.lastPlayerZ=game.playerPosition.z;state.lastPlayerMass=travellerMass;
-   state.counterZ=THREE.MathUtils.damp(state.counterZ,counterPositions[state.counterIndex],2.4,dt);mass.position.z=state.counterZ;
-   const cargoMoment=!game.heldCube&&contact(game.cargo.position)?3.2*game.cargo.position.z:0;
-   const playerMoment=aboard?(3.2+(game.heldCube?3.2:0))*game.playerPosition.z:0;
-   state.torque=19.5*(2.7*state.counterZ*Math.cos(state.angle)+cargoMoment+playerMoment);
-   integrateBalance(state,state.torque,dt);pose(state.angle,dt);
-   if(aboard&&dt){const next=heightAt(game.playerPosition.x,game.playerPosition.z);if(next!==null){game.playerPosition.y+=next-py;game.previousPlayerPosition.y+=next-py;}}
-  };
-  reset=()=>{Object.assign(state,{angle:0,omega:0,previousAngle:0,counterIndex:0,counterZ:counterPositions[0],lastPlayerContact:undefined,lastPlayerVy:0,lastPlayerZ:0,lastPlayerMass:0});pose(0,0);};render=a=>{bridge.rotation.x=THREE.MathUtils.lerp(state.previousAngle,state.angle,a);};
  }else if(index===7){
   bounds={minX:-10,maxX:10,minZ:-13,maxZ:13};spawn=[1,0,5.8];cargoSpawn=[2.2,.55,4.5];world.walls(bounds,15);world.floor(-10,10,-13,13);
   world.floor(-4.2,4.2,-13,-3.1,7);goal=world.goal([0,7,-9],[4.8,4.5]);
