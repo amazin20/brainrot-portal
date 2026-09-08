@@ -20,11 +20,12 @@ await g.selectLevel(6,false);
 const starts=[[0,2.25,0],[0,3.9,4.1],[1.4,3.9,4.1],[2.1,3.3,4.7],[8,3.3,4.7],[-11.7,10,-11.2]];
 for(const start of starts)for(const carry of [false,true])for(const extra of [0,.9])for(const counter of [0,1,2])for(const route of [0,1,2])trial({start,carry,extra,counter,route});
 console.log('Seventh room full-physics trials:',results.length);
-for(let index=8;index<20;index++){
+for(let index=8;index<11;index++){
  await g.selectLevel(index,false);
  for(const carry of [false,true])for(const repeat of [false,true])for(const route of [0,1,2])trial({start:g.firstLevel.spawn,carry,repeat,route,seconds:12});
 }
-// The former service-window mechanism in room 16 is replaced by the aerial
-// platforming course; each new room above is still searched from its real spawn.
+// Rooms 12–20 were retired. This gate preserves all 216 seventh-room
+// fixtures and all 36 retained workshop-room spawn trials. The new room 12
+// has its own portal-puzzle route, recovery and negative-path checks.
 fs.mkdirSync('qa',{recursive:true});fs.writeFileSync('qa/v17-adversarial.json',JSON.stringify({scope:'Full updatePlaying (actuators + player + same cargo body), with explicit negative starting fixtures. Not positive walkthroughs; bounded search, not exhaustive proof.',pass:bad.length===0,attempts:results.length,bypasses:bad,results},null,2));
 console.log('Adversarial trials',results.length,'bypasses',bad.length);assert.equal(bad.length,0,JSON.stringify(bad.slice(0,5)));g.physics.dispose();g.portals.dispose();

@@ -125,7 +125,7 @@ export function buildLabArchitecture(game) {
     const fill = new THREE.PointLight(0xfff2dc, 36, 24, 2);
     fill.position.set(0, 6.8, room.center); scene.add(fill);
   });
-  game.label('N E S I  /  TRANSFER LAB', 0, 6.1, 21.91, 10.2, '#456778', Math.PI);
+  game.label('БРЕЙНРОТ ПОРТАЛ', 0, 6.1, 21.91, 10.2, '#456778', Math.PI);
   game.label('ВМЕСТЕ ДО ВЫХОДА', 0, 3.8, -50.91, 8, '#5f8c8b');
 
   const bridges = [], terminals = [];

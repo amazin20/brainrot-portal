@@ -295,7 +295,7 @@ export async function runPortalShotBrowser({ browser, baseUrl = 'http://127.0.0.
 if (process.argv[1] && pathToFileURL(path.resolve(process.argv[1])).href === import.meta.url) {
   const { default: puppeteer } = await import('puppeteer-core');
   const browser = await puppeteer.launch({ executablePath: process.env.CHROME_PATH || '/usr/bin/google-chrome',
-    headless: true, protocolTimeout: 240000,
+    headless: true, timeout: 60000, protocolTimeout: 240000,
     args: ['--no-sandbox', '--disable-dev-shm-usage', '--use-angle=swiftshader', '--enable-unsafe-swiftshader'] });
   try {
     await runPortalShotBrowser({ browser, baseUrl: process.env.PORTAL_SHOT_URL || 'http://127.0.0.1:4173/',

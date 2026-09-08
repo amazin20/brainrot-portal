@@ -1,4 +1,6 @@
-const KEY='nesi.preferences.v8';
+const KEY='brainrot-portal.preferences.v24';
+const LEGACY_KEY='nesi.preferences.v8';
+const CAMPAIGN_REVISION='reverse-perspective-v24';
 export const DEFAULT_PREFERENCES=Object.freeze({quality:'balanced',volume:.65,muted:false,tutorial:true,completed:[],hints:{}});
 export function sanitizePreferences(value={}) {
   const safe=value&&typeof value==='object'?value:{};
@@ -9,8 +11,19 @@ export function sanitizePreferences(value={}) {
     hints:Object.fromEntries(Object.entries(safe.hints&&typeof safe.hints==='object'?safe.hints:{}).filter(([k,v])=>/^\d{1,2}$/.test(k)&&Number.isInteger(v)&&v>=0&&v<=3))};
 }
 export class LabPreferences {
-  constructor(storage){this.storage=storage;try{this.value=sanitizePreferences(JSON.parse(storage?.getItem(KEY)||'{}'));}catch{this.value=sanitizePreferences();}}
-  save(changes={}){this.value=sanitizePreferences({...this.value,...changes});try{this.storage?.setItem(KEY,JSON.stringify(this.value));}catch{/* Storage may be disabled; session settings still work. */}return this.value;}
+  constructor(storage){
+    this.storage=storage;let saved={};
+    try{saved=JSON.parse(storage?.getItem(KEY)||storage?.getItem(LEGACY_KEY)||'{}')||{};}catch{}
+    this.value=sanitizePreferences(saved);
+    if(saved.campaignRevision!==CAMPAIGN_REVISION){
+      // Rooms 1–11 and personal settings survive the rename. The replacement
+      // chamber must not inherit the old room's completion or spoiler hints.
+      this.value.completed=this.value.completed.filter(index=>index<11);
+      this.value.hints=Object.fromEntries(Object.entries(this.value.hints).filter(([index])=>Number(index)<11));
+      this.save();
+    }
+  }
+  save(changes={}){this.value=sanitizePreferences({...this.value,...changes});try{this.storage?.setItem(KEY,JSON.stringify({...this.value,campaignRevision:CAMPAIGN_REVISION}));}catch{/* Storage may be disabled; session settings still work. */}return this.value;}
   complete(index){this.save({completed:[...this.value.completed,index]});}
   unlockHint(index){this.save({hints:{...this.value.hints,[index]:Math.min(3,(this.value.hints[index]||0)+1)}});}
 }

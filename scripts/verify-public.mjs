@@ -18,7 +18,7 @@ try{
   catch(error){console.log('Publication propagation:',String(error));}
   await wait(5000);
  }
- assert.equal(info?.commit,expected);assert.equal(info?.levels,CAMPAIGN.length);assert.equal(info?.version,'v23-platform-worlds');report.build=info;
+ assert.equal(info?.commit,expected);assert.equal(info?.levels,CAMPAIGN.length);assert.equal(info?.version,'v24-reverse-perspective');assert.equal(info?.levels,12);report.build=info;
  const response=await fetch(base+'models/runtime/manifest.json?revision='+expected);assert.ok(response.ok);const manifest=await response.json();
  assert.deepEqual(manifest.models.map(m=>m.id).sort((a,b)=>a-b),[...CAMPAIGN_ASSET_IDS]);
  const source=JSON.parse(fs.readFileSync('public/models/runtime/manifest.json','utf8'));
@@ -32,19 +32,20 @@ try{
  const page=await browser.newPage();page.setDefaultTimeout(120000);await page.setViewport({width:960,height:600});page.on('pageerror',e=>report.errors.push(e.message));
  await page.goto(base+'?debug=1&level=12&revision='+expected,{waitUntil:'networkidle2'});
  await page.waitForFunction(()=>window.__NESI_DEMO_GAME__?.state==='ready');
- assert.equal(await page.$$eval('#level-select option',a=>a.length),CAMPAIGN.length);
+ assert.equal(await page.$$eval('#level-select option',a=>a.length),12);
+ assert.equal(await page.title(),'БРЕЙНРОТ ПОРТАЛ — физическая 3D-головоломка');
  await page.click('#play-button');await page.waitForFunction(()=>window.__NESI_DEMO_GAME__.state==='playing'&&window.__NESI_DEMO_GAME__.performanceMonitor.stats.fps>0);
- report.platform=await page.evaluate(()=>{const l=window.__NESI_DEMO_GAME__.firstLevel;return {id:l.id,platforming:l.platforming,terminals:l.terminals.length,bounds:l.bounds};});
- assert.equal(report.platform.id,CAMPAIGN[11].id);assert.equal(report.platform.platforming,true);assert.equal(report.platform.terminals,0);
+ report.puzzle=await page.evaluate(()=>{const l=window.__NESI_DEMO_GAME__.firstLevel;return {id:l.id,portalPuzzle:l.portalPuzzle,terminals:l.terminals.length,bounds:l.bounds};});
+ assert.equal(report.puzzle.id,CAMPAIGN[11].id);assert.equal(report.puzzle.portalPuzzle,true);assert.equal(report.puzzle.terminals,0);
  await page.screenshot({path:'live-evidence/room-12-public-start.png'});
  report.route=await page.evaluate(()=>window.__NESI_RUN_LEVEL_ROUTE__());assert.ok(report.route.pass&&report.route.respawns===0&&report.route.resets===0);assert.equal(report.route.level,12);
  await page.screenshot({path:'live-evidence/room-12-public-complete.png'});
  await page.waitForFunction(()=>!document.pointerLockElement&&getComputedStyle(document.querySelector('#win-screen')).opacity==='1');await page.locator('#play-again-button').click();
- await page.waitForFunction(()=>window.__NESI_DEMO_GAME__.levelIndex===12&&window.__NESI_DEMO_GAME__.state==='playing');
- assert.equal(await page.$eval('#level-number',e=>e.textContent),'13');
- await page.screenshot({path:'live-evidence/room-13-public-start.png'});assert.deepEqual(report.errors,[]);await page.close();
+ await page.waitForFunction(()=>window.__NESI_DEMO_GAME__.levelIndex===0&&window.__NESI_DEMO_GAME__.state==='playing');
+ assert.equal(await page.$eval('#level-number',e=>e.textContent),'1');
+ await page.screenshot({path:'live-evidence/campaign-wrap-to-room-1.png'});assert.deepEqual(report.errors,[]);await page.close();
  report.portalEdge=await runPortalEdgeBrowser({browser,baseUrl:base,out:'live-evidence/portal-edge',capture:false});
  assert.equal(report.portalEdge.pass,true);report.pass=true;
- console.log('LIVE VERIFIED',expected,'v23: exact live assets, new room 12 ordinary route, next room 13, and room 9 portal-edge regressions');
+ console.log('LIVE VERIFIED',expected,'v24: БРЕЙНРОТ ПОРТАЛ, 12 rooms, reverse-perspective ordinary route, campaign wrap, live model hashes and room9 jump/turn portal regressions');
 }catch(error){report.error=String(error);throw error;}
 finally{fs.writeFileSync('live-evidence/report.json',JSON.stringify(report,null,2));await browser?.close();}

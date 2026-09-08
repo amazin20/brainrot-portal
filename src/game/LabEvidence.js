@@ -604,7 +604,7 @@ export function mountLabEvidence(game) {
       assert(report.shots.length === 2 && report.shots.every(shot => shot.placed), 'The reel must contain two successful gameplay shots');
       entries.push({ name: 'report.json', blob: new Blob([JSON.stringify(report, null, 2)], { type: 'application/json' }) });
       say('Собираю архив с кадрами…'); const zip = await makeStoredZip(entries);
-      download(zip, 'nesi-animation-v6-60fps-frames.zip', 'Скачать 600 кадров · 60 FPS');
+      download(zip, 'brainrot-portal-animation-60fps-frames.zip', 'Скачать 600 кадров · 60 FPS');
       reportEl.textContent = JSON.stringify(report, null, 2); panel.dataset.status = 'frames-ready'; panel.dataset.frames = String(FRAME_COUNT);
       say('Готово: 600 разных шагов анимации, 1200 шагов физики. 10 секунд при 60 FPS.');
     } finally { restore(); state.busy = false; }
@@ -631,7 +631,7 @@ export function mountLabEvidence(game) {
         say(`Видео: ${simulation.toFixed(1)} / 10 с анимации · ${Math.round(frames / Math.max(elapsed, .001))} кадров/с`);
       }
       recorder.stop(); await ended;
-      download(new Blob(chunks, { type: mimeType }), 'nesi-animation-v6-realtime.webm', 'Скачать видео WebM');
+      download(new Blob(chunks, { type: mimeType }), 'brainrot-portal-animation-realtime.webm', 'Скачать видео WebM');
       reportEl.textContent = JSON.stringify({ kind: 'realtime-production-showcase', frames, duration: elapsed, actualAverageFPS: frames / elapsed, simulatedDuration: simulation, requestedFrameDuplication: false, shots: reel.diagnostics.shots }, null, 2);
       panel.dataset.status = 'video-ready'; say(`Видео готово. Фактическая частота записи: ${(frames / elapsed).toFixed(1)} кадров/с.`);
     } finally {
@@ -641,7 +641,7 @@ export function mountLabEvidence(game) {
   });
   button('Скриншот', 'evidence-screenshot', async () => {
     render(); const blob = await new Promise(resolve => game.renderer.domElement.toBlob(resolve, 'image/png'));
-    assert(blob, 'Screenshot encoder returned no data'); download(blob, `nesi-v6-${panel.dataset.pose || 'level'}.png`);
+    assert(blob, 'Screenshot encoder returned no data'); download(blob, `brainrot-portal-${panel.dataset.pose || 'level'}.png`);
   });
   button('Играть', 'evidence-play', () => {
     stop(); prepareReview(); game.input.keys.clear(); game.lastFrame = performance.now(); game.state = 'playing'; game.renderer.setAnimationLoop(game.animate); say('Игровой режим.');

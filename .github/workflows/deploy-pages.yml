@@ -15,6 +15,9 @@ jobs:
     uses: ./.github/workflows/verified-build.yml
     with:
       revision: ${{ github.sha }}
+      # The identical candidate tree already has the full reviewed video.
+      # Run every WebGL route again without re-encoding its 330 PNG excerpts.
+      record_puzzle: false
   deploy:
     if: github.ref == 'refs/heads/main'
     needs: checks
@@ -41,9 +44,9 @@ jobs:
           import assert from 'node:assert/strict';
           const info=JSON.parse(fs.readFileSync('dist/build-info.json','utf8'));
           assert.equal(info.commit,process.env.BUILD_COMMIT);
-          assert.equal(info.version,'v23-platform-worlds');
+          assert.equal(info.version,'v24-reverse-perspective');
           assert.equal(info.run,process.env.GITHUB_RUN_ID);
-          assert.equal(info.levels,20);
+          assert.equal(info.levels,12);
           assert.equal(info.verified,true);
           NODE
       - uses: actions/configure-pages@v5

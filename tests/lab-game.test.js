@@ -292,13 +292,26 @@ test('an opened energy field stops blocking pickup, carry targets and the camera
   const rig = new LabCamera({ camera, blockers: game.cameraBlockers, isBlocker: object => game.isActiveBlocker(object) });
   rig.reset(new THREE.Vector3(0, 0, -16), 0, -.15);
   assert.equal(rig.obstructed, false); assert.ok(rig.distance > 6.2, 'camera collapsed against a deactivated field');
+  const openLens = camera.position.clone();
   game.heldCube = null; game.playerPosition.set(3, 0, -14); putCargo(game, 3, .4, -16);
   run(game, 1.5, 'updateMechanisms');
   assert.equal(barrier.collider.enabled, true);
   game.playerPosition.set(0, 0, -14); putCargo(game, 0, 1.06, -16);
   assert.equal(game.toggleCube(), false, 'closing must restore interaction collision');
   rig.reset(new THREE.Vector3(0, 0, -16), 0, -.15);
-  assert.equal(rig.obstructed, true); assert.ok(rig.distance < 1, 'closing must restore camera collision');
+  assert.equal(game.isActiveBlocker(barrier.mesh), true, 'the closed field must be an active camera blocker');
+  assert.equal(rig.obstructed, true, 'closing must obstruct the original camera boom');
+  assert.ok(camera.position.distanceTo(openLens) > .5, 'the camera must leave its blocked open-field position');
+  assert.ok(camera.position.distanceTo(rig.playerPivot) >= 2.2, 'collision must not collapse the camera into the player');
+  // The camera may rise above the short field, but neither its lens nor the
+  // sightline back to the player may pass through the closed collision box.
+  const nearSafeBox = barrier.collider.box.clone().expandByScalar(camera.near);
+  assert.equal(nearSafeBox.containsPoint(camera.position), false, 'the lens intersects the closed field');
+  const boom = camera.position.clone().sub(rig.playerPivot);
+  const hit = new THREE.Ray(rig.playerPivot.clone(), boom.clone().normalize())
+    .intersectBox(nearSafeBox, new THREE.Vector3());
+  assert.ok(!hit || hit.distanceTo(rig.playerPivot) > boom.length(),
+    'the camera crosses the field instead of avoiding it');
   game.close();
 });
 

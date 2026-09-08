@@ -4,25 +4,25 @@ import puppeteer from 'puppeteer-core';
 import {CAMPAIGN} from '../src/game/LabCampaignLevels.js';
 import {ALL_LAB_ASSETS} from '../src/game/labAssets.js';
 const root=process.env.PAGE_URL||'http://127.0.0.1:4173/',out=process.env.EVIDENCE_OUT||'smoke-artifacts';
-const first=Number(process.env.NESI_FIRST??1),last=Number(process.env.NESI_LAST??20);
+const first=Number(process.env.NESI_FIRST??1),last=Number(process.env.NESI_LAST??CAMPAIGN.length);
 assert.ok(Number.isInteger(first)&&Number.isInteger(last)&&first>=1&&first<=last&&last<=CAMPAIGN.length,'NESI_FIRST/NESI_LAST must select a valid inclusive course range');
 function flag(name,fallback){
  const value=process.env[name];if(value===undefined)return fallback;
  assert.match(value,/^(true|false|1|0)$/i,`${name} must be true/false or 1/0`);
  return /^(true|1)$/i.test(value);
 }
-const checkUI=flag('NESI_UI',first===1),capturePlatform=flag('NESI_CAPTURE_PLATFORM',true);
+const checkUI=flag('NESI_UI',first===1),capturePuzzle=flag('NESI_CAPTURE_PUZZLE',true);
 const expectedIds=[...new Set(CAMPAIGN.slice(first-1,last).flatMap(level=>level.assets))].sort((a,b)=>a-b);
 const expectedFiles=ALL_LAB_ASSETS.filter(asset=>expectedIds.includes(asset.id)).map(asset=>asset.file).sort();
 assert.equal(expectedFiles.length,expectedIds.length,'Every selected course dependency must exist in the source asset catalog');
 function startUrl(level){const url=new URL(root);url.searchParams.set('debug','1');url.searchParams.set('level',String(level));return url.href;}
 fs.mkdirSync(out,{recursive:true});
-const browser=await puppeteer.launch({executablePath:process.env.CHROME_PATH||'/usr/bin/google-chrome',headless:true,
+const browser=await puppeteer.launch({executablePath:process.env.CHROME_PATH||'/usr/bin/google-chrome',headless:true,timeout:60000,protocolTimeout:720000,
  args:['--no-sandbox','--disable-dev-shm-usage','--use-angle=swiftshader','--enable-unsafe-swiftshader']});
 const page=await browser.newPage();await page.setViewport({width:1280,height:800});page.setDefaultTimeout(120000);
 const errors=[],requests=[];page.on('pageerror',e=>errors.push(e.message));page.on('request',r=>{if(r.url().includes('.glb'))requests.push(r.url());});
 const report={renderer:'CI Chromium / SwiftShader; NOT a user-device FPS benchmark',baseUrl:root,range:{first,last},ui:checkUI,
- capturePlatform,platformClips:[],routes:[],errors};
+ capturePuzzle,puzzleClips:[],routes:[],errors};
 const ready=()=>page.waitForFunction(()=>window.__NESI_DEMO_GAME__?.state==='ready');
 const shot=name=>page.screenshot({path:`${out}/${name}.png`});
 async function clickMenu(selector){
@@ -39,6 +39,7 @@ const uiState=()=>page.evaluate(()=>({level:window.__NESI_DEMO_GAME__?.levelInde
 try{
  await page.goto(startUrl(first),{waitUntil:'networkidle2'});await ready();
  assert.equal(await page.$$eval('#level-select option',a=>a.length),CAMPAIGN.length);
+ assert.equal(await page.title(),'БРЕЙНРОТ ПОРТАЛ — физическая 3D-головоломка');
  if(first===1)assert.equal(requests.length,4);
  await shot('menu');await page.click('#play-button');await page.waitForFunction(()=>window.__NESI_DEMO_GAME__.state==='playing');
  if(first===1)await page.waitForFunction(()=>window.__NESI_DEMO_GAME__.performanceMonitor.stats.fps>0);
@@ -49,46 +50,45 @@ try{
  if(first===1){assert.equal(report.initial.models,4);assert.equal(report.initial.audioState,'running');}
  for(let index=first-1;index<last;index++){
    if(index>first-1){await clickMenu('#play-again-button');await page.waitForFunction(i=>window.__NESI_DEMO_GAME__?.levelIndex===i&&window.__NESI_DEMO_GAME__.state==='playing',{},index);await shot(`level-${index+1}-start`);}
-   if(index===16){
-     report.recovery=await page.evaluate(()=>window.__NESI_RUN_RECOVERY_ROUTE__());
-     assert.ok(report.recovery.pass&&report.recovery.respawns===0&&report.recovery.resets===0&&report.recovery.teleports===0);
-     await shot('level-17-recovered');console.log('Browser recovery: missed ferry, unprepared fall, stairs and return winch passed');
-   }
-   const captured=await page.evaluate(async capturePlatform=>{
-     const g=window.__NESI_DEMO_GAME__,original=g.render,originalVisuals=g.updateVisuals,images=[],platformFrames=[];
-     const record=capturePlatform&&g.levelIndex>=11&&g.levelIndex<=15;
-     let started=false,visualFrame=0,startElapsed=null;
+   const captured=await page.evaluate(async capturePuzzle=>{
+     const g=window.__NESI_DEMO_GAME__,original=g.render,originalVisuals=g.updateVisuals,images=[],clips=[];
+     const requests=new Map([['observation flight',90],['freight release',90],['final flight',150]]);
+     let active=null;
      g.render=function(){original.call(this);if(this.levelIndex>=5&&this.state==='playing')images.push(this.renderer.domElement.toDataURL('image/png'));};
-     // The route advances visuals at 60 Hz. Sample this same execution at
-     // 15 Hz, starting with its first airborne movement (first portal flight
-     // in the flight gallery, whose entrance stairs also briefly unground).
-     // Rendering observes
-     // the ordinary shoulder camera; no actor or camera pose is assigned.
-     if(record)g.updateVisuals=function(...args){
+     window.__NESI_CAPTURE_LEVEL_MARK__=mark=>{
+       if(!capturePuzzle||g.levelIndex!==11||!requests.has(mark.name))return;
+       active={name:mark.name,maxFrames:requests.get(mark.name),startElapsed:g.elapsed,step:0,frames:[]};clips.push(active);
+     };
+     // Sample the same ordinary route at 15 simulation Hz. Markers merely
+     // select recording windows; they cannot move the player or camera.
+     if(capturePuzzle&&g.levelIndex===11)g.updateVisuals=function(...args){
        const result=originalVisuals.apply(this,args);
-       if(this.state!=='playing'||platformFrames.length>=60||!(args[0]>0))return result;
-       if(!started&&!this.playerGrounded&&Math.abs(this.playerVelocity.y)>1e-6&&(this.levelIndex!==13||this.teleportCount>0)){started=true;startElapsed=this.elapsed;}
-       if(started&&visualFrame++%4===0){original.call(this);platformFrames.push(this.renderer.domElement.toDataURL('image/png'));}
+       if(active&&active.frames.length<active.maxFrames&&args[0]>0&&this.state==='playing'&&active.step++%4===0){
+         original.call(this);active.frames.push(this.renderer.domElement.toDataURL('image/png'));
+       }
        return result;
      };
-     try{return {route:await window.__NESI_RUN_LEVEL_ROUTE__(),images,platformFrames,startElapsed,
+     try{return {route:await window.__NESI_RUN_LEVEL_ROUTE__(),images,clips,
        width:g.renderer.domElement.width,height:g.renderer.domElement.height};}
-     finally{g.render=original;g.updateVisuals=originalVisuals;}
-   },capturePlatform);
+     finally{g.render=original;g.updateVisuals=originalVisuals;delete window.__NESI_CAPTURE_LEVEL_MARK__;}
+   },capturePuzzle);
    captured.images.forEach((image,k)=>fs.writeFileSync(`${out}/level-${index+1}-mechanic-${k+1}.png`,Buffer.from(image.split(',')[1],'base64')));
-   if(capturePlatform&&index>=11&&index<=15){
-     const directory=`platform-room-${index+1}-frames`;fs.mkdirSync(`${out}/${directory}`,{recursive:true});
-     captured.platformFrames.forEach((image,k)=>fs.writeFileSync(`${out}/${directory}/${String(k).padStart(3,'0')}.png`,Buffer.from(image.split(',')[1],'base64')));
-     assert.equal(captured.platformFrames.length,60,`Course ${index+1} must provide 60 ordinary gameplay samples within its single route`);
-     report.platformClips.push({level:index+1,directory,frames:60,simulationFps:15,startElapsed:captured.startElapsed,width:captured.width,height:captured.height,
-       method:`Every fourth 60 Hz route visual update after the ${index===13?'first portal flight':'first airborne movement'}; normal game camera`});
+   if(capturePuzzle&&index===11){
+     assert.deepEqual(captured.clips.map(c=>c.name),['observation flight','freight release','final flight']);
+     for(const clip of captured.clips){
+       const directory='room-12-'+clip.name.replaceAll(' ','-');fs.mkdirSync(`${out}/${directory}`,{recursive:true});
+       assert.ok(clip.frames.length>=24,`Record a readable interval of ${clip.name}`);
+       clip.frames.forEach((image,k)=>fs.writeFileSync(`${out}/${directory}/${String(k).padStart(3,'0')}.png`,Buffer.from(image.split(',')[1],'base64')));
+       report.puzzleClips.push({name:clip.name,directory,frames:clip.frames.length,simulationFps:15,startElapsed:clip.startElapsed,width:captured.width,height:captured.height,
+         method:'Every fourth 60 Hz update within the same ordinary route, selected by observable milestones; standard third-person camera'});
+     }
    }
    const result=captured.route;report.routes.push(result);console.log('Browser course',index+1,'passed',result.frames,'frames');assert.ok(result.pass&&result.resets===0&&result.respawns===0);
    assert.equal(await page.$eval('#level-number',e=>e.textContent),String(index+1));
    assert.equal(await page.$('#quick-hint'),null);assert.equal(await page.$('#quick-settings'),null);await shot(`level-${index+1}-complete`);
-   // Preserve legacy art inspection separately. New platforming rooms use
+   // Preserve legacy art inspection separately. The new portal chamber uses
    // their normal-camera route milestones and sampled movement above.
-   if(index<11||index>15){
+   if(index<11){
    // Art-only overview: camera changes are explicitly not passage evidence.
    await page.evaluate(()=>{const g=window.__NESI_DEMO_GAME__,l=g.firstLevel;g.cameraRig.restoreProjection?.();g.camera.updateProjectionMatrix();
      document.querySelector('#win-screen').style.visibility='hidden';
@@ -141,4 +141,16 @@ try{
  assert.deepEqual(errors,[]);
  assert.equal(report.routes.length,last-first+1);report.pass=true;
  fs.writeFileSync(`${out}/report.json`,JSON.stringify(report,null,2));console.log(`Campaign WebGL: courses ${first}–${last}, lazy assets${checkUI?', menus, sound and persistence':''} passed.`);
-}catch(error){report.failure={error:String(error),state:await uiState().catch(()=>null)};console.error('Browser failure',report.failure);await shot('browser-failure').catch(()=>{});throw error;}finally{fs.writeFileSync(`${out}/report.json`,JSON.stringify(report,null,2));await browser.close();}
+}catch(error){
+ report.failure={error:String(error),state:null};console.error('Browser failure',report.failure);
+ // A busy renderer must not turn one timeout into two more long diagnostic waits.
+ report.failure.state=await bounded(uiState(),10000).catch(()=>null);
+ await bounded(shot('browser-failure'),10000).catch(()=>{});throw error;
+}finally{
+ fs.writeFileSync(`${out}/report.json`,JSON.stringify(report,null,2));
+ await bounded(browser.close(),10000).catch(()=>browser.process()?.kill('SIGKILL'));
+}
+async function bounded(promise,ms){
+ let timer;try{return await Promise.race([promise,new Promise((_,reject)=>{timer=setTimeout(()=>reject(Error('Diagnostic timeout')),ms);})]);}
+ finally{clearTimeout(timer);}
+}

@@ -4,12 +4,12 @@ import assert from 'node:assert/strict';
 import {execFileSync} from 'node:child_process';
 import {CAMPAIGN} from '../src/game/LabCampaignLevels.js';
 
-const [version='v23-platform-worlds',directory='dist']=process.argv.slice(2);
+const [version='v24-reverse-perspective',directory='dist']=process.argv.slice(2);
 const commit=process.env.BUILD_COMMIT||process.env.GITHUB_SHA;
 assert.match(commit||'',/^[a-f0-9]{40}$/,'Build metadata requires the exact checked-out commit SHA');
 assert.equal(execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),commit,'Metadata must describe the checked-out source');
-assert.equal(version,'v23-platform-worlds','Unexpected publication version');
-assert.equal(CAMPAIGN.length,20,'Unexpected campaign size');
+assert.equal(version,'v24-reverse-perspective','Unexpected publication version');
+assert.equal(CAMPAIGN.length,12,'Unexpected campaign size');
 assert.ok(fs.existsSync(path.join(directory,'index.html')),'Stamp an existing production package');
 const info={commit,version,levels:CAMPAIGN.length,verified:true,
  repository:process.env.GITHUB_REPOSITORY,run:process.env.GITHUB_RUN_ID};
