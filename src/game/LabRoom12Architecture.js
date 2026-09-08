@@ -157,28 +157,10 @@ export function buildRoom12Architecture(world) {
     }
   }
 
-  // Continuous side stringers sit inside each stair's existing stepped
-  // envelope. A shallow painted triangle replaces the black comb silhouette
-  // without adding a rail across an intentional drop or a new collision.
-  const stairSkin = (x0, x1, z0, z1, low, high, paint) => {
-    const vertices = [], colours = [], c = new THREE.Color(paint);
-    const run = z1 - z0, start = z0 + run * .026, bottom = low - .065;
-    for (const x of [x0 + .021, x1 - .021]) {
-      vertices.push(x, bottom, start, x, high - .24, z1 - run * .002, x, bottom, z1 - run * .002);
-      for (let i = 0; i < 3; i++) colours.push(c.r, c.g, c.b);
-    }
-    const skinGeometry = new THREE.BufferGeometry();
-    skinGeometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
-    skinGeometry.setAttribute('color', new THREE.Float32BufferAttribute(colours, 3));
-    skinGeometry.computeVertexNormals();
-    const skin = new THREE.Mesh(skinGeometry, new THREE.MeshStandardMaterial({
-      color: 0xffffff, vertexColors: true, roughness: .8, metalness: .14, side: THREE.DoubleSide,
-    }));
-    skin.name = 'Existing stair stringer cladding'; skin.userData.visualOnly = true;
-    // These thin decorative faces sit 19 mm from the original step bodies.
-    // Receiving their nearby shadow samples creates a dotted surface; keep
-    // the scene's lighting and real tread shadows on the original geometry.
-    skin.receiveShadow = false; root.add(skin);
+  // Exposed risers identify each physical tread. Keep the original solid
+  // stair sides: a second broad skin produced patterned fragments in WebGL.
+  const stairRisers = (x0, x1, z0, z1, low, high, paint) => {
+    const run = z1 - z0;
     const count = Math.ceil((high - low) / .26), dz = run / count;
     for (let i = 1; i < count; i++) {
       const z = z0 + dz * i, top = low + (high - low) * (i + 1) / count;
@@ -187,8 +169,8 @@ export function buildRoom12Architecture(world) {
         [x1 - x0 - .12, .17, .025], i % 4 === 0 ? paint : edge);
     }
   };
-  stairSkin(-29, -25, 8, -26, 8, 22, brass);
-  stairSkin(-11, -8, 33, 23, 0, 6, freight);
+  stairRisers(-29, -25, 8, -26, 8, 22, brass);
+  stairRisers(-11, -8, 33, 23, 0, 6, freight);
 
   // Every light is mounted to a real column or roof beam. Broad ceiling
   // trays are visibly luminous, narrow service inserts cannot be mistaken

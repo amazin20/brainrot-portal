@@ -40,6 +40,6 @@ test('district paint retains ceramic material and the exact existing tile transf
   assert.deepEqual(Array.from(portal.instanceMatrix.array), portalBefore);
   assert.equal(portal.material, ceramic); assert.equal(portal.instanceColor, null);
   assert.ok(structural.instanceColor); assert.notEqual(structural.material, structuralMaterial);
-  assert.equal(skin.children.filter(o => o.isMesh).length, 5);
+  assert.equal(skin.children.filter(o => o.isMesh).length, 3);
   assert.equal(skin.children.filter(o => o.isLight).length, 0);
 });
