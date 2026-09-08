@@ -15,6 +15,9 @@ jobs:
     uses: ./.github/workflows/verified-build.yml
     with:
       revision: ${{ github.sha }}
+      # The identical candidate tree already has the full reviewed video.
+      # Run every WebGL route again without re-encoding its 330 PNG excerpts.
+      record_puzzle: false
   deploy:
     if: github.ref == 'refs/heads/main'
     needs: checks

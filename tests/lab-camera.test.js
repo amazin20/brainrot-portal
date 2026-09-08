@@ -187,18 +187,20 @@ test('aperture-aware camera collision receives each hit without ignoring the res
   assert.equal(rig.obstructed, true);
 });
 
-test('transported lens clips the exit backing wall and restores the optical projection after emerging', () => {
+test('transported lens clips its backing with a world plane while keeping ordinary depth precision', () => {
   const { camera, rig } = setup();
   const entry = makePortalFrame(new THREE.Vector3(0, 1.32, 0), new THREE.Vector3(0, 0, 1));
   const exit = makePortalFrame(new THREE.Vector3(0, 1.32, -20), new THREE.Vector3(0, 0, -1));
   rig.applyPortalTransform(entry, exit, { target: new THREE.Vector3(0, 0, -20.5) });
   assert.equal(rig.portalExit, exit);
-  assert.ok(exit.position.clone().project(camera).z < -1, 'the destination backing wall hides the transported lens');
+  assert.equal(rig.mainClippingPlanes.length, 1);
+  assert.ok(rig.mainClippingPlanes[0].distanceToPoint(exit.position) < 0, 'the destination backing wall is discarded');
   const expected = camera.clone(); expected.updateProjectionMatrix();
-  assert.notDeepEqual(camera.projectionMatrix.elements, expected.projectionMatrix.elements);
+  assert.deepEqual(camera.projectionMatrix.elements, expected.projectionMatrix.elements);
   camera.position.copy(exit.position).addScaledVector(exit.normal, .3);
   rig.updatePortalClipping();
   assert.equal(rig.portalExit, null);
+  assert.equal(rig.mainClippingPlanes.length, 0);
   assert.deepEqual(camera.projectionMatrix.elements, expected.projectionMatrix.elements);
   rig.reset(new THREE.Vector3());
   assert.equal(rig.portalExit, null);
@@ -253,6 +255,9 @@ test('emerging portal lens never reverses depth or retains a clipping plane behi
     camera.quaternion.set(-.0802034845, -.8189170309, -.2009939454, .5315484282).normalize();
     camera.updateMatrixWorld(true);
     rig.portalExit = exit; rig.updatePortalClipping();
+    const ordinaryProjection = camera.clone(); ordinaryProjection.updateProjectionMatrix();
+    assert.deepEqual(camera.projectionMatrix.elements, ordinaryProjection.projectionMatrix.elements,
+      `The main lens lost ordinary depth precision ${distance} metres from the exit`);
     const direction = camera.getWorldDirection(new THREE.Vector3());
     const nearPoint = camera.position.clone().addScaledVector(direction, 5).project(camera);
     const farPoint = camera.position.clone().addScaledVector(direction, 15).project(camera);

@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { portalTransformMatrix, applyPortalObliqueClipping, portalBacksCollider } from './LabPortals.js';
+import { portalTransformMatrix, portalBacksCollider } from './LabPortals.js';
 
 const UP = new THREE.Vector3(0, 1, 0);
 const IDENTITY = new THREE.Quaternion();
@@ -49,6 +49,9 @@ export class LabCamera {
     this.castUp = new THREE.Vector3();
     this.castOrigin = new THREE.Vector3();
     this.clipDirection = new THREE.Vector3();
+    this.avoidance = new THREE.Vector3();
+    this.avoidanceVelocity = new THREE.Vector3();
+    this.avoidanceActive = false;
     this.raycaster = new THREE.Raycaster();
     this.euler = new THREE.Euler(0, 0, 0, 'YXZ');
     this.orbitQuaternion = new THREE.Quaternion();
@@ -56,6 +59,8 @@ export class LabCamera {
     this.portalUpOrientation = new THREE.Quaternion();
     this.viewUp = UP.clone();
     this.portalExit = null;
+    this.portalClipPlane = new THREE.Plane();
+    this.mainClippingPlanes = [];
     this.yaw = 0;
     this.pitch = -0.2;
     this.yawVelocity = 0;
@@ -76,6 +81,8 @@ export class LabCamera {
     this.portalOrientation.identity();
     this.portalUpOrientation.identity();
     this.portalExit = null;
+    this.mainClippingPlanes.length = 0;
+    this.avoidance.set(0, 0, 0); this.avoidanceVelocity.set(0, 0, 0); this.avoidanceActive = false;
     this.yaw = yaw;
     this.pitch = THREE.MathUtils.clamp(pitch, CAMERA_PITCH_MIN, CAMERA_PITCH_MAX);
     this.yawVelocity = 0;
@@ -127,7 +134,7 @@ export class LabCamera {
     this.portalOrientation.copy(transportedOrbit).multiply(uprightOrbit.invert()).normalize();
     this.portalUpOrientation.premultiply(rotation).normalize();
     for (const point of [this.focus, this.lastTarget, this.goal, this.playerPivot, this.desired, this.lookPoint]) point.applyMatrix4(matrix);
-    for (const direction of [this.focusVelocity, this.forward, this.right, this.boomDirection, this.viewUp]) direction.applyQuaternion(rotation);
+    for (const direction of [this.focusVelocity, this.forward, this.right, this.boomDirection, this.viewUp, this.avoidance, this.avoidanceVelocity]) direction.applyQuaternion(rotation);
     if (target) this.lastTarget.copy(target);
     this.camera.position.applyMatrix4(matrix);
     this.camera.quaternion.premultiply(rotation);
@@ -211,16 +218,47 @@ export class LabCamera {
 
     // Resolve both the smoothed pivot and the actual player. The latter matters
     // when crossing a doorway: a lagging focus must never see through its wall.
-    const desiredLength = this.desired.distanceTo(this.focus);
     this.obstructed = this.constrain(this.focus, this.desired);
     this.obstructed = this.constrain(this.playerPivot, this.desired) || this.obstructed;
+    // A straight retracting boom can end inside the head/backpack at a wall.
+    // Start routing it upward before it reaches the body, and sweep every
+    // alternative against the same walls and near-plane volume. This is camera
+    // collision only; neither the player nor its aim controls are moved.
+    const directDistance = this.desired.distanceTo(this.playerPivot);
+    const avoidGoal = new THREE.Vector3();
+    let escapePosition = null;
+    if (directDistance < (this.avoidanceActive ? 4.1 : 3.1) && this.blockers.length) {
+      const direct = this.desired.clone().sub(this.playerPivot);
+      let best = null, bestScore = Infinity;
+      for (const height of [2.5, 4, 5.5]) for (const side of [0, 1.8, -1.8]) {
+        const candidate = this.playerPivot.clone().addScaledVector(direct, .7)
+          .addScaledVector(this.right, side);
+        candidate.y = Math.max(candidate.y, this.playerPivot.y + height);
+        this.constrain(this.playerPivot, candidate);
+        const clearance = candidate.distanceTo(this.playerPivot);
+        if (clearance < 3.2) continue;
+        const score = candidate.distanceToSquared(this.desired)
+          + candidate.distanceToSquared(this.camera.position) * .15;
+        if (score < bestScore) { bestScore = score; best = candidate; }
+      }
+      if (best) { escapePosition = best; avoidGoal.copy(best).sub(this.desired); this.avoidanceActive = true; }
+      else this.avoidanceActive = false;
+    } else this.avoidanceActive = false;
+    for (const axis of ['x', 'y', 'z']) {
+      [this.avoidance[axis], this.avoidanceVelocity[axis]] = spring(
+        this.avoidance[axis], this.avoidanceVelocity[axis], avoidGoal[axis], 16, step);
+    }
+    if (this.avoidance.lengthSq() > .00001) {
+      this.desired.add(this.avoidance);
+      this.constrain(this.playerPivot, this.desired);
+    }
     const safeLength = this.desired.distanceTo(this.focus);
     if (safeLength < this.distance) {
       this.distance = safeLength;
       this.distanceVelocity = 0;
     } else {
       [this.distance, this.distanceVelocity] = spring(
-        this.distance, this.distanceVelocity, Math.min(desiredLength, safeLength), 9, step,
+        this.distance, this.distanceVelocity, safeLength, 9, step,
       );
       this.distance = Math.min(this.distance, safeLength);
     }
@@ -234,6 +272,15 @@ export class LabCamera {
       this.distance = this.camera.position.distanceTo(this.focus);
       this.distanceVelocity = 0;
     }
+    // A fast fall past a balcony can close the available boom in one physics
+    // step. In that exceptional case collision safety outranks spring lag:
+    // use the already swept escape rather than render from inside the body.
+    if (escapePosition && this.camera.position.distanceTo(this.playerPivot) < 2.2) {
+      this.camera.position.copy(escapePosition);
+      this.distance = this.camera.position.distanceTo(this.focus);
+      this.distanceVelocity = 0;
+      this.avoidance.copy(avoidGoal); this.avoidanceVelocity.set(0, 0, 0);
+    }
     this.lookPoint.copy(this.focus).addScaledVector(this.forward, 16);
     this.camera.up.copy(this.viewUp);
     this.camera.lookAt(this.lookPoint);
@@ -243,28 +290,28 @@ export class LabCamera {
   }
 
   updatePortalClipping() {
-    if (!this.portalExit) return;
-    // Rebuild before applying an oblique plane; modifying an already clipped
-    // matrix accumulates distortion and would leak into normal gameplay.
+    this.mainClippingPlanes.length = 0;
+    // Keep ordinary depth precision all the way through a crossing. An oblique
+    // near plane becomes ill-conditioned as the real eye approaches that plane;
+    // tiled walls then z-fight although their geometry has a proper separation.
+    // The main render uses a world-space discard plane instead. Virtual portal
+    // cameras retain their own independently constructed oblique projection.
     this.camera.updateProjectionMatrix();
+    if (!this.portalExit) return;
     const exit = this.portalExit;
     if (exit.group && !exit.group.parent) { this.portalExit = null; return; }
     const distance = this.camera.position.clone().sub(exit.position).dot(exit.normal);
-    // Oblique clipping is valid only while the eye is behind the exit. Once
-    // the lens crosses it, waiting for the ordinary near-plane clearance puts
-    // the oblique plane behind the eye: projection depth reverses and whole
-    // actors disappear for a frame. The normal near plane handles this side.
     if (distance >= 0) { this.portalExit = null; return; }
     const direction = this.camera.getWorldDirection(this.castDirection);
-    // A clipped frustum is meaningful only while the transported eye looks
-    // into the destination. The ordinary blocker sweep handles turning away.
     if (direction.dot(exit.normal) <= .04) return;
-    applyPortalObliqueClipping(this.camera, exit);
+    this.portalClipPlane.setFromNormalAndCoplanarPoint(exit.normal,
+      exit.position.clone().addScaledVector(exit.normal, .025));
+    this.mainClippingPlanes.push(this.portalClipPlane);
   }
 
   // The transported lens can still be behind its exit while the traveller is
-  // already in front. That one backing surface is removed by the oblique
-  // projection, so colliding the boom with it would contradict the rendered
+  // already in front. That one backing surface is removed by the world
+  // clipping plane, so colliding the boom with it would contradict the rendered
   // passage and collapse the lens into the character. Other walls still block.
   clipsPortalBacking(box) {
     return !!this.portalExit && portalBacksCollider(this.portalExit, box)

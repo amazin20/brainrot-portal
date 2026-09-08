@@ -6,6 +6,11 @@ on:
         description: Exact PR head or publication commit SHA
         required: true
         type: string
+      record_puzzle:
+        description: Record the reviewed room-12 video; ordinary WebGL routes always run
+        required: false
+        default: true
+        type: boolean
 permissions:
   contents: read
 env:
@@ -98,7 +103,7 @@ jobs:
           NESI_FIRST: ${{ matrix.first }}
           NESI_LAST: ${{ matrix.last }}
           NESI_UI: ${{ matrix.ui }}
-          NESI_CAPTURE_PUZZLE: '1'
+          NESI_CAPTURE_PUZZLE: ${{ inputs.record_puzzle && '1' || '0' }}
         run: |
           npm run preview -- --host 127.0.0.1 --port 4173 >campaign-preview.log 2>&1 &
           for i in {1..30}; do curl -fsS http://127.0.0.1:4173/ >/dev/null && break; sleep 1; done

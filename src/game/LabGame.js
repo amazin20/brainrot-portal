@@ -341,8 +341,12 @@ export class LabGame {
     const collider = this.colliders.find(c => c.mesh === object);
     const box = collider?.box ?? new THREE.Box3().setFromObject(object);
     if (this.cameraRig?.clipsPortalBacking?.(box)) return false;
-    return !this.portals.portals.some(p => pointInsidePortal(p, hit.point, .04)
-      && portalBacksCollider(p, box));
+    // A camera is not a traveller: letting its boom pass through an entry
+    // aperture before the player crosses puts it outside the room, looking at
+    // the solid back of that same wall. Only a transported exit lens is exempt.
+    const direction = this.cameraRig.raycaster.ray.direction;
+    return !this.portals.portals.some(p => p && direction.dot(p.normal) >= -.00001
+      && pointInsidePortal(p, hit.point, .04) && portalBacksCollider(p, box));
   }
 
   firePortal(index) {
@@ -1092,7 +1096,13 @@ export class LabGame {
   render() {
     if (this.renderer.info) { this.renderer.info.autoReset = false; this.renderer.info.reset(); }
     this.portalActors?.update();
-    this.portals.render(this.visualTime); this.renderer.render(this.scene, this.camera);
+    this.portals.render(this.visualTime);
+    // Only the main lens needs its transitional world plane. Applying it while
+    // drawing the portal textures would clip unrelated destination chambers.
+    const previousClipping = this.renderer.clippingPlanes;
+    this.renderer.clippingPlanes = this.cameraRig.mainClippingPlanes;
+    try { this.renderer.render(this.scene, this.camera); }
+    finally { this.renderer.clippingPlanes = previousClipping; }
   }
 
   emitHud() {

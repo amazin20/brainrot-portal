@@ -117,8 +117,23 @@ export async function runRoom12(d){
  walk(-12,22);aim(0,V(-12,.025,17.3));walk(-20,28.1);pickup();
  walk(-16,30);walk(-9.5,34);walk(-9.5,21);walk(-12,20);walk(-12,18.05);
  for(let n=0;n<12;n++){worldMove(0,-.12);frame();}stop();wait(.5);mark('freight release');game.interact();
- until(()=>game.physics.portalTransports>0,4,'The free friend did not enter freight portal');
- until(()=>game.cargo.position.z>15&&game.cargo.position.y>11.9,4,'The friend missed the freight arch');wait(2);mark('the same free companion crosses the low freight window');
+ // Follow the released rigid body with ordinary mouse-look input. Changing
+ // view only after E preserves the exact held-body release and its velocity.
+ const watchFreight=()=>{
+  game.scene.updateMatrixWorld(true);
+  const point=game.cargo.position.clone(),direction=point.clone().sub(game.camera.position);
+  if(direction.dot(game.camera.getWorldDirection(V()))<0){
+   const desired=Math.atan2(-direction.x,-direction.z);
+   game.yaw+=THREE.MathUtils.clamp(Math.atan2(Math.sin(desired-game.yaw),Math.cos(desired-game.yaw)),-.12,.12);
+  }else{
+   const ndc=point.project(game.camera);
+   game.yaw-=THREE.MathUtils.clamp(ndc.x,-1,1)*.12;
+   game.pitch=THREE.MathUtils.clamp(game.pitch+THREE.MathUtils.clamp(ndc.y,-1,1)*.12,CAMERA_PITCH_MIN,CAMERA_PITCH_MAX);
+  }
+ };
+ until(()=>{watchFreight();return game.physics.portalTransports>0;},4,'The free friend did not enter freight portal');
+ until(()=>{watchFreight();return game.cargo.position.z>15&&game.cargo.position.y>11.9;},4,'The friend missed the freight arch');
+ for(let n=0;n<120;n++){watchFreight();frame();}mark('the same free companion crosses the low freight window');
  walk(-12,23.8);until(()=>game.playerGrounded&&game.playerPosition.y<.1,4,'Freight apron return');
  walk(-23,26);aim(0,p.entry.getFrame().center);aim(1,p.observation.getFrame().center);enter(p.entry);
  walk(-19,8.55);aim(0,V(-16,.025,-23.2));walk(-16.6,8.55);aim(1,p['return-floor'].getFrame().center);mark('the reservoir is configured as a vertical return');

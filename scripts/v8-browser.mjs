@@ -154,4 +154,3 @@ async function bounded(promise,ms){
  let timer;try{return await Promise.race([promise,new Promise((_,reject)=>{timer=setTimeout(()=>reject(Error('Diagnostic timeout')),ms);})]);}
  finally{clearTimeout(timer);}
 }
-

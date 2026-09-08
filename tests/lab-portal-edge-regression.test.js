@@ -86,7 +86,8 @@ test('transported camera clips only its exit backing while its eye is still behi
   assert.equal(rig.clipsPortalBacking(backing), true);
   assert.equal(rig.clipsPortalBacking(pillar), false);
   assert.equal(rig.clipsPortalBacking(floor), false);
-  assert.ok(exit.position.clone().project(camera).z < -1);
+  assert.equal(rig.mainClippingPlanes.length, 1);
+  assert.ok(rig.mainClippingPlanes[0].distanceToPoint(exit.position) < 0);
   camera.lookAt(-8, 2, 0); camera.updateMatrixWorld(true);
   assert.equal(rig.clipsPortalBacking(backing), false, 'turning away must restore ordinary wall collision');
   camera.position.set(.3, 2, 0); camera.lookAt(4, 2, 0); camera.updateMatrixWorld(true);
