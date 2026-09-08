@@ -265,6 +265,7 @@ export class LabGame {
   async selectLevel(index, playing = true) {
     if (!Number.isInteger(index) || index < 0 || index >= CAMPAIGN.length) throw new RangeError('Unknown campaign level');
     this.portalShots?.cancelBuffered('level-change');
+    this.audio?.flight?.(0,true);
     this.state = 'loading'; this.renderer?.setAnimationLoop(null); this.input?.keys.clear();
     this.audio?.motor?.(false);
     this.levelIndex = index;
@@ -425,6 +426,7 @@ export class LabGame {
   start() { this.audio.unlock(); this.resetRun(true); this.renderer.domElement.requestPointerLock?.()?.catch?.(() => {}); }
   restart() { this.resetRun(true); this.callbacks.onPause(false); }
   resetRun(playing = true) {
+    this.audio?.flight?.(0,true);
     for (const id of this.portalCargoColliders) this.physics.setStaticEnabled(id, true);
     this.portalCargoColliders.clear();
     this.state = playing ? 'playing' : 'ready'; this.stage = 0; this.elapsed = 0; this.teleportCount = 0;
@@ -474,6 +476,7 @@ export class LabGame {
     if ((this.state === 'paused') === paused) { if (paused) document.exitPointerLock?.(); return; }
     this.state = paused ? 'paused' : 'playing';
     if (paused) this.portalShots?.cancelBuffered('paused');
+    if (paused) this.audio?.flight?.(0,true);
     this.input.keys.clear(); this.lastFrame = performance.now(); this.accumulator = 0;
     if (paused) document.exitPointerLock?.(); else this.renderer.domElement.requestPointerLock?.()?.catch?.(() => {});
     this.callbacks.onPause(paused);
@@ -624,7 +627,7 @@ export class LabGame {
       this.portalVisualOffset.copy(transportedVisual).sub(this.playerPosition);
       const upright = new THREE.Quaternion().setFromAxisAngle(UP, this.facing);
       this.portalVisualRotation.copy(transportedQ).multiply(upright.invert());
-      if(this.audio.travel)this.audio.travel();else this.audio.tone(620, .12, 'triangle', .035);
+      if(this.audio.travel)this.audio.travel(teleport.velocity.length());else this.audio.tone(620, .12, 'triangle', .035);
     } else this.resolveBody(this.playerPosition, previous, this.playerVelocity, PLAYER_RADIUS, PLAYER_HEIGHT, true);
     this.playerGrounded = Boolean(this.groundedByCollider);
     if (this.playerGrounded && !wasGrounded && downwardImpact > 1) {
@@ -1029,6 +1032,7 @@ export class LabGame {
   }
 
   updateVisuals(dt, alpha = 1) {
+    this.audio?.flight?.(this.playerVelocity.length(),this.playerGrounded||this.state!=='playing'||this.externalBlocked);
     const active = this.state === 'playing' || this.state === 'won' || this.state === 'ready';
     const visualDt = active ? dt : 0;
     this.visualTime += visualDt;
@@ -1051,6 +1055,7 @@ export class LabGame {
       velocity: cargo.velocity, angularVelocity: cargo.angularVelocity, impact: cargo.impact,
       grounded: cargo.grounded, carrying: Boolean(this.heldCube), curious: this.playerPosition.distanceTo(this.cargo.position) < 2.5, celebrating:this.state==='won' });
     this.companionRig?.update({ dt: visualDt, elapsed: this.visualTime, speed: Math.hypot(cargo.velocity.x, cargo.velocity.z),
+      velocity: cargo.velocity,
       grounded: cargo.grounded, carrying: Boolean(this.heldCube), recovering: this.companionBehavior?.state === 'getting_up',
       tumbling: !cargo.grounded || cargo.angularVelocity.length() > 3, celebrating:this.state==='won', reaction:this.companionAnimator.reactionClip });
     const gripVisual = this.cargo.visual ?? this.cargo.group;
@@ -1132,6 +1137,7 @@ export class LabGame {
   win() {
     if (this.state === 'won') return;
     this.state = 'won'; this.playerVelocity.set(0, 0, 0); this.motion = { speed: 0, turnRate: 0 };
+    this.audio?.flight?.(0,true);
     this.audio.win(); document.exitPointerLock?.();
     this.animator.trigger?.('celebrate'); this.companionAnimator.trigger('celebrate'); this.callbacks.onWin({});
   }

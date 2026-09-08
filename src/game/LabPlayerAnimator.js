@@ -90,7 +90,8 @@ export class LabPlayerAnimator extends BaseAnimator{
     this.landingChest=THREE.MathUtils.damp(this.landingChest,-this.landing*2.2,13,dt);
     this.chestTarget.x+=this.landingChest*(1-.55*this.aimBlend);
     // A fast portal flight has a held, braced silhouette, not a walking loop.
-    const flight=this.airBlend*smooth(6,14,Math.hypot(input.velocity?.x||0,input.velocity?.z||0));
+    const flightSpeed=Math.hypot(...['x','y','z'].map(axis=>Number.isFinite(input.velocity?.[axis])?input.velocity[axis]:0));
+    const flight=this.airBlend*smooth(6,14,flightSpeed);
     this.flightBrace=THREE.MathUtils.damp(this.flightBrace||0,flight,9,dt);
     this.windBrace=THREE.MathUtils.damp(this.windBrace||0,THREE.MathUtils.clamp(input.windStrength||0,0,1),7,dt);
     this.chestTarget.x+=.075*this.flightBrace*(1-.65*this.carryBlend)+.07*this.windBrace;

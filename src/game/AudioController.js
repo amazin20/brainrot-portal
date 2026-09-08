@@ -1,5 +1,10 @@
 /** Original procedural sound design. No Portal/Valve samples or recordings.
  * One shared noise buffer, bounded voices, quiet room tone and a lift motor. */
+const flightIntensity=speed=>{
+  const t=Number.isFinite(speed)?Math.min(1,Math.max(0,(speed-10)/22)):0;
+  return t*t*(3-2*t);
+};
+
 export class AudioController {
   shot(index=0){
     this.hush(.12,.028,3200);
@@ -8,7 +13,7 @@ export class AudioController {
   }
   rejectShot(index=0){this.hush(.10,.018,1100);this.tone(index?230:310,.14,'triangle',.016,0,100);}
 
-  constructor(){this.context=null;this.enabled=true;this.volume=.65;this.muted=false;this.blocks=new Set(['menu']);this.voices=0;this.motorOn=false;}
+  constructor(){this.context=null;this.enabled=true;this.volume=.65;this.muted=false;this.blocks=new Set(['menu']);this.voices=0;this.motorOn=false;this.flightAmount=0;}
   unlock(){
     if(!this.context){
       const AC=globalThis.AudioContext||globalThis.webkitAudioContext;if(!AC)return;
@@ -23,6 +28,11 @@ export class AudioController {
         }
         const length=c.sampleRate;this.noise=c.createBuffer(1,length,c.sampleRate);const data=this.noise.getChannelData(0);
         let seed=71473;for(let i=0;i<length;i++){seed=(Math.imul(seed,1664525)+1013904223)>>>0;data[i]=((seed/4294967296)*2-1)*.5;}
+        // One reusable air layer, driven by physical speed. Ordinary jumps stay quiet.
+        this.flightGain=c.createGain();this.flightGain.gain.value=0;
+        this.flightFilter=c.createBiquadFilter();this.flightFilter.type='lowpass';this.flightFilter.Q.value=.5;this.flightFilter.frequency.value=600;
+        const air=c.createBufferSource();air.buffer=this.noise;air.loop=true;
+        air.connect(this.flightFilter).connect(this.flightGain).connect(this.fx);air.start();this.loops.push(air);
       }catch(error){this.enabled=false;console.warn('WebAudio unavailable',error);return;}
     }
     this.sync();
@@ -33,6 +43,7 @@ export class AudioController {
     const c=this.context;if(!c)return;
     const active=this.enabled&&!this.muted&&!this.blocks.size&&this.volume>0;
     this.master.gain.cancelScheduledValues(c.currentTime);this.master.gain.setValueAtTime(active?this.volume:0,c.currentTime);
+    if(!active&&this.flightGain){this.flightAmount=0;this.flightGain.gain.cancelScheduledValues(c.currentTime);this.flightGain.gain.setValueAtTime(0,c.currentTime);}
     if(active&&c.state==='suspended')c.resume().catch(()=>{});
     else if(!active&&c.state==='running')c.suspend().catch(()=>{});
   }
@@ -52,7 +63,16 @@ export class AudioController {
     s.connect(f).connect(g).connect(this.fx);s.onended=()=>{s.disconnect();f.disconnect();g.disconnect();this.voices--;};s.start(t);s.stop(t+duration);
   }
   portal(index=0){this.hush(.21,.026,2400);this.tone(index?420:590,.24,'sine',.035,0,index?680:910);this.tone(index?841:1181,.30,'sine',.007,.03,520);}
-  travel(){this.hush(.38,.045,1900);this.tone(130,.34,'sine',.045,0,420);this.tone(310,.28,'sine',.016,.07,170);}
+  travel(speed=0){const rush=flightIntensity(speed);this.hush(.38+rush*.08,.045+rush*.012,1900+rush*650);this.tone(130,.34,'sine',.045,0,420+rush*110);this.tone(310,.28,'sine',.016,.07,170);}
+  flight(speed=0,grounded=true){
+    if(!this.context||!this.flightGain)return;
+    const amount=this.audible&&!grounded?flightIntensity(speed):0;
+    if(amount===this.flightAmount)return;
+    this.flightAmount=amount;
+    const t=this.context.currentTime;
+    this.flightGain.gain.cancelScheduledValues(t);this.flightGain.gain.setTargetAtTime(amount*.06,t,amount>0?.09:.045);
+    this.flightFilter.frequency.cancelScheduledValues(t);this.flightFilter.frequency.setTargetAtTime(600+amount*1800,t,.12);
+  }
   pickup(){this.tone(370,.12,'triangle',.018,0,470);this.tone(630,.16,'sine',.018,.07);}
   checkpoint(){this.mechanism('switch');}
   mechanism(kind){this.hush(.12,.023,kind==='switch'?1200:600);this.tone(kind==='close'?150:220,.23,'triangle',.017,0,kind==='close'?95:350);}
@@ -62,5 +82,5 @@ export class AudioController {
   land(strength=1){this.hush(.16,.025+Math.min(1,strength/12)*.035,400);this.tone(67,.19,'triangle',.018);}
   hit(){this.hush(.12,.04,750);this.tone(91,.12,'triangle',.023);}
   win(){[392,494,587,784].forEach((f,i)=>this.tone(f,.36,'sine',.032,i*.11));}
-  dispose(){this.loops?.forEach(o=>{o.stop();o.disconnect();});this.context?.close().catch(()=>{});this.context=null;}
+  dispose(){this.loops?.forEach(o=>{o.stop();o.disconnect();});this.context?.close().catch(()=>{});this.context=null;this.flightAmount=0;this.flightGain=null;this.flightFilter=null;}
 }

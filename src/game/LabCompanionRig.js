@@ -54,7 +54,7 @@ export class LabCompanionRig {
     Object.values(this.bones).forEach(b => b.quaternion.identity());
     this.mesh.updateWorldMatrix(true, true); this.skeleton.update();
   }
-  update({ dt = 0, elapsed = 0, speed = 0, grounded = true, carrying = false, recovering = false, tumbling = false, celebrating = false, reaction = null }) {
+  update({ dt = 0, elapsed = 0, speed = 0, velocity, grounded = true, carrying = false, recovering = false, tumbling = false, celebrating = false, reaction = null }) {
     if (!this.mesh) return;
     dt=Number.isFinite(dt)?THREE.MathUtils.clamp(dt,0,.25):0;elapsed=Number.isFinite(elapsed)?elapsed:0;speed=Number.isFinite(speed)?Math.abs(speed):0;
     // Being held is not a free tumble: it must not suppress face/fins/tail.
@@ -70,8 +70,12 @@ export class LabCompanionRig {
     const cue=Math.sin(Math.PI*u)**2;
     this.happyBlend=THREE.MathUtils.damp(this.happyBlend||0,celebrating?1:0,7,dt);const happy=this.happyBlend;
     const nod=cue*Math.sin(u*Math.PI*2);
-    // Carried high-speed flight: small fin/foot bracing, without moving the grip or body.
-    this.flightBrace=THREE.MathUtils.damp(this.flightBrace||0,carrying&&!grounded?THREE.MathUtils.clamp((speed-5)/9,0,1):0,9,dt);
+    // A portal can turn horizontal momentum into a vertical flight. Keep the
+    // existing fin/foot brace tied to total physical speed through that turn;
+    // horizontal speed above still owns the walk cycle. No grip/body offset.
+    const flightSpeed = velocity && [velocity.x, velocity.y, velocity.z].every(Number.isFinite)
+      ? Math.hypot(velocity.x, velocity.y, velocity.z) : speed;
+    this.flightBrace=THREE.MathUtils.damp(this.flightBrace||0,carrying&&!grounded?THREE.MathUtils.clamp((flightSpeed-5)/9,0,1):0,9,dt);
     this.bones.Tail.rotation.z = (Math.sin(t * 3.1) * .16 + wave * .085 * this.walk) * this.alert;
     this.bones.Head.rotation.x = (Math.sin(t * 1.2) * .045+.14*nod) * this.alert;
     this.bones.Head.rotation.y = (Math.sin(t * 2.1) * .028+.045*cue) * this.alert;

@@ -33,7 +33,7 @@ jobs:
         run: |
           npm run check
           node scripts/v8-package-check.mjs
-          node scripts/stamp-build.mjs v25-atrium-refinement
+          node scripts/stamp-build.mjs v26-flight-feel
       - name: Preserve the exact deployable package
         uses: actions/upload-artifact@v4
         with:
@@ -97,7 +97,7 @@ jobs:
           npm ci
           npm install --no-save --package-lock=false puppeteer-core@24.16.0
           npm run build
-          node scripts/stamp-build.mjs v25-atrium-refinement
+          node scripts/stamp-build.mjs v26-flight-feel
       - name: Verify ordinary routes in actual WebGL
         env:
           NESI_FIRST: ${{ matrix.first }}
@@ -137,7 +137,7 @@ jobs:
           npm ci
           npm install --no-save --package-lock=false puppeteer-core@24.16.0
           npm run build
-          node scripts/stamp-build.mjs v25-atrium-refinement
+          node scripts/stamp-build.mjs v26-flight-feel
       - name: Verify actual mouse shots and ordinary floor/wall traversal
         run: |
           npm run preview -- --host 127.0.0.1 --port 4173 >input-preview.log 2>&1 &
@@ -146,6 +146,7 @@ jobs:
           export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
           node scripts/portal-shot-browser.mjs
           node scripts/portal-edge-browser.mjs
+          node scripts/flight-audio-browser.mjs
       - name: Preserve input evidence
         if: always()
         uses: actions/upload-artifact@v4
@@ -154,6 +155,7 @@ jobs:
           path: |
             portal-shot-evidence/
             portal-edge-evidence/
+            flight-audio-evidence/
             input-preview.log
           retention-days: 14
 
@@ -174,9 +176,9 @@ jobs:
           npm ci
           npm install --no-save --package-lock=false puppeteer-core@24.16.0
           npm run build
-          node scripts/stamp-build.mjs v25-atrium-refinement
+          node scripts/stamp-build.mjs v26-flight-feel
           npm run build -- --mode yandex --outDir dist-yandex
-          node scripts/stamp-build.mjs v25-atrium-refinement dist-yandex
+          node scripts/stamp-build.mjs v26-flight-feel dist-yandex
       - name: Verify physical video regressions and advertising contract
         run: |
           npm run preview -- --host 127.0.0.1 --port 4173 >sdk-preview.log 2>&1 &
