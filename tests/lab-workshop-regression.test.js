@@ -21,7 +21,7 @@ test('nine supplied derived GLBs have full binary length, exact hashes, frame an
   assert.ok(count>500&&count<7500);
   // The rejected scanned rocker is retained and hash-checked as a source,
   // while the rebuilt seventh room uses its own articulated geometry.
-  assert.equal(CAMPAIGN.some(l=>l.assets.includes(a.id)),a.id!==34);
+  assert.equal(CAMPAIGN.some(l=>l.assets.includes(a.id)),![34,36].includes(a.id));
  }
 });
 test('an idle flywheel cannot do work against a positive load or create stored energy',()=>{
@@ -45,7 +45,7 @@ test('nonfinite and negative actuator input is rejected atomically',()=>{
 });
 const g=await createHeadlessGame();
 test('new plate centre, edge and corner support count, held or hovering objects do not',async()=>{
- await g.selectLevel(12,false);g.resetRun(true);const p=g.firstLevel.workshop.pads[0],f=p.surface.getFrame();
+ await g.selectLevel(17,false);g.resetRun(true);const p=g.firstLevel.workshop.pad('contact-test',[8,0,10],4,4),f=p.surface.getFrame();
  for(const [x,z]of [[0,0],[1.9,0],[-1.9,0],[0,1.9],[0,-1.9],[1.9,1.9],[-1.9,-1.9]]){
   g.cargo.position.copy(f.center).add(V(x,.39,z));g.cargo.velocity.set(0,0,0);g.cargo.quaternion.identity();assert.equal(p.loaded(),true);
  }

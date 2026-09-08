@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { portalTransformMatrix, applyPortalObliqueClipping } from './LabPortals.js';
+import { portalTransformMatrix, applyPortalObliqueClipping, portalBacksCollider } from './LabPortals.js';
 
 const UP = new THREE.Vector3(0, 1, 0);
 const IDENTITY = new THREE.Quaternion();
@@ -46,6 +46,7 @@ export class LabCamera {
     this.castRight = new THREE.Vector3();
     this.castUp = new THREE.Vector3();
     this.castOrigin = new THREE.Vector3();
+    this.clipDirection = new THREE.Vector3();
     this.raycaster = new THREE.Raycaster();
     this.euler = new THREE.Euler(0, 0, 0, 'YXZ');
     this.orbitQuaternion = new THREE.Quaternion();
@@ -188,6 +189,12 @@ export class LabCamera {
     // preserves this construction through floor and tilted portal transitions.
     const belowFocus = this.desired.dot(this.viewUp) - this.focus.dot(this.viewUp);
     if (belowFocus < -.65) this.desired.addScaledVector(this.viewUp, -.65 - belowFocus);
+    // The rigidly transported view is exact at dt=0. On subsequent frames
+    // gravity still defines the physical floor even while the visual horizon
+    // is rolling back: a rotated viewUp must not put the boom underground.
+    if (step > 0 && this.blockers.length && this.portalUpOrientation.angleTo(IDENTITY) > .01) {
+      this.desired.y = Math.max(this.desired.y, target.y + .67);
+    }
     for (const object of this.blockers) object.updateWorldMatrix(true, true);
 
     // Resolve both the smoothed pivot and the actual player. The latter matters
@@ -237,6 +244,15 @@ export class LabCamera {
     // into the destination. The ordinary blocker sweep handles turning away.
     if (direction.dot(exit.normal) <= .04) return;
     applyPortalObliqueClipping(this.camera, exit);
+  }
+
+  // The transported lens can still be behind its exit while the traveller is
+  // already in front. That one backing surface is removed by the oblique
+  // projection, so colliding the boom with it would contradict the rendered
+  // passage and collapse the lens into the character. Other walls still block.
+  clipsPortalBacking(box) {
+    return !!this.portalExit && portalBacksCollider(this.portalExit, box)
+      && this.camera.getWorldDirection(this.clipDirection).dot(this.portalExit.normal) > .04;
   }
 
   constrain(origin, position) {

@@ -23,18 +23,18 @@ test('sorter access physically opens after load and closes on restart without ch
  assert.equal(l.state['sort-lock'].engaged,false);
 });
 test('fan rotor accelerates and coasts smoothly while disabled fan supplies no invisible air',async()=>{
- // The general rotor-fan contract is exercised in unchanged room 15; room 11
+ // The general rotor-fan contract is exercised in retained room 20; room 11
  // now uses the louvred housing as a blower, not a spinning grille.
- await game.selectLevel(14,false);game.resetRun(true);const fan=game.firstLevel.state.blower;
+ await game.selectLevel(19,false);game.resetRun(true);const fan=game.firstLevel.state.blower;
  fan.enabled=true;fan.update(.2);assert.ok(fan.rotorSpeed>0&&fan.rotorSpeed<9);const moving=fan.rotorSpeed;
  fan.enabled=false;fan.update(.2);assert.ok(fan.rotorSpeed>0&&fan.rotorSpeed<moving);assert.equal(fan.segments.length,0);
  assert.deepEqual(fan.acceleration(V(),V()).toArray(),[0,0,0]);
  game.resetRun(true);assert.equal(fan.rotorSpeed,0);assert.equal(fan.art.pivot.rotation.z,0);
 });
 test('fan rotor integration matches elapsed time at 30, 60 and 144 render Hz',async()=>{
- // The general rotor-fan contract is exercised in unchanged room 15; room 11
+ // The general rotor-fan contract is exercised in retained room 20; room 11
  // now uses the louvred housing as a blower, not a spinning grille.
- await game.selectLevel(14,false);const values=[];
+ await game.selectLevel(19,false);const values=[];
  for(const hz of [30,60,144]){game.resetRun(true);const f=game.firstLevel.state.blower;f.enabled=true;for(let i=0;i<hz*2;i++)f.update(1/hz);f.enabled=false;for(let i=0;i<hz;i++)f.update(1/hz);values.push([f.rotorSpeed,f.art.pivot.rotation.z]);}
  for(const pair of values)pair.forEach((value,i)=>assert.ok(Math.abs(value-values[0][i])<1e-9));
 });
@@ -46,7 +46,7 @@ test('manual ferry winch has a physical return direction and bounded movement wi
  assert.equal(game.portals.ready,false);assert.ok(l.fixtures.some(f=>f.id===39));
 });
 test('render interpolation never adds phantom deck travel to the physical passenger',async()=>{
- await game.selectLevel(12,false);const lift=game.firstLevel.state['brake-lift'];const heights=[];
+ await game.selectLevel(19,false);const lift=game.firstLevel.state['foundry-lift'];const heights=[];
  for(const alpha of [1,0,.37]){
   game.resetRun(true);game.playerPosition.copy(lift.position);game.previousPlayerPosition.copy(game.playerPosition);game.playerGrounded=true;lift.target=1;
   for(let n=0;n<240;n++){

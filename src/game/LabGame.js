@@ -340,6 +340,7 @@ export class LabGame {
     if (!hit || !this.portals?.ready) return true;
     const collider = this.colliders.find(c => c.mesh === object);
     const box = collider?.box ?? new THREE.Box3().setFromObject(object);
+    if (this.cameraRig?.clipsPortalBacking?.(box)) return false;
     return !this.portals.portals.some(p => pointInsidePortal(p, hit.point, .04)
       && portalBacksCollider(p, box));
   }
@@ -568,6 +569,7 @@ export class LabGame {
     if(field){this.playerVelocity.addScaledVector(field,dt);if(field.y>19.5)this.playerGrounded=false;}
     this.playerVelocity.y -= 19.5 * dt;
     this.playerPosition.addScaledVector(this.playerVelocity, dt);
+    this.constrainPortalThroat(this.playerPosition, previous, this.playerVelocity);
     const center = this.playerPosition.clone().addScaledVector(UP, CENTER_HEIGHT);
     const previousCenter = previous.clone().addScaledVector(UP, CENTER_HEIGHT);
     const teleport = this.portals.tryTeleport(center, previousCenter, this.playerVelocity, PLAYER_RADIUS);
@@ -659,6 +661,41 @@ export class LabGame {
       if (y <= maxY + .001) height = height === null ? y : Math.max(height, y);
     }
     return height;
+  }
+
+  // Once the feet enter a floor aperture its rim is a real lateral contact.
+  // Previously the capsule could run out of the ellipse while its centre was
+  // still above the transfer plane, then fall behind the intact floor without
+  // ever crossing either portal. Sweep to the rim and remove only the outward
+  // contact velocity; gravity and the ordinary centre-plane transfer continue.
+  constrainPortalThroat(position, previous, velocity) {
+    if (!this.portals.ready) return;
+    for (const portal of this.portals.portals) {
+      if (portal.normal.y < .65) continue;
+      const inverse = portal.quaternion.clone().invert();
+      const before = previous.clone().addScaledVector(UP, CENTER_HEIGHT).sub(portal.position).applyQuaternion(inverse);
+      const extent = PLAYER_RADIUS + (CENTER_HEIGHT - PLAYER_RADIUS) * portal.normal.y;
+      if (before.z <= 0 || before.z >= extent - .008) continue;
+      const width = portal.width - PLAYER_RADIUS, height = portal.height - PLAYER_RADIUS;
+      const inside = p => (p.x / width) ** 2 + (p.y / height) ** 2;
+      if (inside(before) > 1 + 1e-8) continue;
+      const after = position.clone().addScaledVector(UP, CENTER_HEIGHT).sub(portal.position).applyQuaternion(inverse);
+      if (inside(after) <= 1) continue;
+      let low = 0, high = 1;
+      const contact = before.clone();
+      for (let n = 0; n < 24; n++) {
+        const middle = (low + high) / 2;
+        contact.copy(before).lerp(after, middle);
+        if (inside(contact) <= 1) low = middle; else high = middle;
+      }
+      contact.copy(before).lerp(after, Math.max(0, low - 1e-6));
+      const correction = new THREE.Vector3(contact.x - after.x, contact.y - after.y, 0).applyQuaternion(portal.quaternion);
+      position.add(correction);
+      const normal = new THREE.Vector3(contact.x / (width * width), contact.y / (height * height), 0)
+        .normalize().applyQuaternion(portal.quaternion);
+      const outward = velocity.dot(normal);
+      if (outward > 0) velocity.addScaledVector(normal, -outward);
+    }
   }
 
   sampleFootSupport(x, z, maxY) {

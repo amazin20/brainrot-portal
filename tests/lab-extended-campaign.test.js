@@ -3,13 +3,13 @@ import assert from 'node:assert/strict';
 import {createHeadlessGame} from '../scripts/lab-headless.mjs';
 import {CAMPAIGN} from '../src/game/LabCampaignLevels.js';
 const g=await createHeadlessGame();
-test('twenty-course registry has independent causal workshop concepts, not stage chains',async()=>{
+test('twenty-course registry has independent physical and spatial concepts, not stage chains',async()=>{
  assert.equal(CAMPAIGN.length,20);
  const ids=[],concepts=[],shapes=[];
  for(let i=5;i<20;i++){
   await g.selectLevel(i,false);const l=g.firstLevel;ids.push(l.id);concepts.push(l.world.root.userData.distinctConcept);
   shapes.push(Object.keys(l.panels).join(','));assert.equal(l.stages,undefined);assert.equal(l.lift,null);assert.equal(l.launchPad,null);
-  assert.equal(l.getLaunch(l.goal.position),null);assert.ok(l.terminals.length || l.state.rebound, "An actively controlled or contact-driven physical mechanism is required");assert.equal(l.isWon(),false);
+  assert.equal(l.getLaunch(l.goal.position),null);assert.ok(l.platforming || l.terminals.length || l.state.rebound, 'Each room has a physical or spatial premise');assert.equal(l.isWon(),false);
  }
  assert.deepEqual(ids,CAMPAIGN.slice(5).map(s=>s.id));assert.ok(!ids.includes('impact-workshop')&&!ids.includes('vector-vault')); 
  assert.equal(new Set(concepts).size,15);assert.equal(new Set(shapes).size,15);
