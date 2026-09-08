@@ -48,7 +48,7 @@ test('missing the airborne shot lands in the court and returns to observation wi
  assert.ok(report.pass);assert.equal(report.resets+report.respawns,0);
 });
 
-test('a ground-level entry cannot replace the reservoir energy even after the final portal is discovered',async()=>{
+test('a low-energy attempt stays in the launch bay, then its floor portal returns to the observation route',async()=>{
  await game.selectLevel(11,false);
  const report=await runV8Journey(game,{scenario:async d=>{
   await untilMark(d,'the airborne angle exposes the final exit');
@@ -63,7 +63,25 @@ test('a ground-level entry cannot replace the reservoir energy even after the fi
   d.until(()=>game.playerGrounded,4,'Low-energy traveller must reach the bay floor');
   assert.ok(game.playerPosition.y<.1&&game.playerPosition.z<0,'The low-energy attempt stays below the flight aperture');
   assert.equal(game.state,'playing');assert.ok(game.cargo.position.y>11.9);
-  assert.ok(game.firstLevel.panels['launch-bay-floor'],'The real bay floor can receive a return portal');
+  // A panel's existence alone does not prove recovery: place the former far
+  // exit on it and actually return through the untouched court-floor portal.
+  d.aim(0,game.firstLevel.panels['launch-bay-floor'].getFrame().center);
+  d.walk(17.1,-12);d.walk(17.1,-14);
+  const trappedTransfers=game.teleportCount;
+  for(let n=0;n<180&&game.teleportCount===trappedTransfers;n++){d.worldMove(0,-.3);d.frame();}
+  d.stop();assert.equal(game.teleportCount,trappedTransfers+1);
+  for(let n=0;n<90&&!game.playerGrounded;n++){d.worldMove(-1,0);d.frame();}
+  d.stop();d.until(()=>game.playerGrounded&&game.playerPosition.y<.1,5,'Land beside the court return');
+  assert.ok(game.playerPosition.x<9&&game.playerPosition.z>0,'The original traveller escapes the bay');
+  // Step away before circling the open floor aperture to avoid re-entering it.
+  d.walk(0,3);d.walk(0,35);d.walk(-23,35);d.walk(-23,26);
+  d.aim(0,game.firstLevel.panels.entry.getFrame().center);
+  d.aim(1,game.firstLevel.panels.observation.getFrame().center);
+  d.enter(game.firstLevel.panels.entry);
+  d.until(()=>game.playerGrounded,2,'The observation floor catches the bay retry');
+  assert.ok(Math.abs(game.playerPosition.y-8)<.1);
+  assert.ok(game.cargo.position.y>11.9,'The delivered original friend remains available');
+  assert.equal(game.state,'playing');
  }});
  assert.ok(report.pass);assert.equal(report.resets+report.respawns,0);
 });

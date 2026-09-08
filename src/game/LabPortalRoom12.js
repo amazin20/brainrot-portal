@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import {Workshop} from './LabWorkshopKit.js';
+import {buildRoom12Architecture} from './LabRoom12Architecture.js';
 import {CAMERA_PITCH_MIN,CAMERA_PITCH_MAX} from './LabCamera.js';
 const V=(x=0,y=0,z=0)=>new THREE.Vector3(x,y,z);
 const check=(ok,message)=>{if(!ok)throw Error(message);};
@@ -92,6 +93,7 @@ export function buildRoom12(game,index=11){
  for(const z of[-29,-17,-5,7,19,31])w.box([0,29.2,z],[60,.4,.55],w.materials.trim,false);
  // Thin inset expansion strips are recessed below the walkable face.
  for(const x of[-6,9])w.box([x,.007,0],[.055,.01,62],w.materials.accent,false);
+ buildRoom12Architecture(w);
  const level=k.finish([-23,0,26],[-20,.55,27],[21,12,21],{workshop:k,portalPuzzle:true});
  level.puzzleGeometry={safeFloor:0,reservoirHeight:22,freightHeight:6,goalHeight:12,normalGaps:0,airWindow:{x:12,z:[-13.3,-8.5],y:[22,26]},cargoWindow:{z:14,minY:12,maxY:13.35},deductions:['change the observation point','send the friend independently','reuse the airborne return']};
  return level;
