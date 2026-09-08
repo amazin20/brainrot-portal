@@ -68,22 +68,44 @@ export class LabPlayerAnimator extends BaseAnimator{
   }
   reset(){
     super.reset();this.flightBrace=0;this.windBrace=0;this.operateTime=2;this.landingChest=0;
+    this.groundFollow={forward:0,right:0,forwardVelocity:0,rightVelocity:0};
     if(this.bones.Chest){this.bones.Chest.quaternion.identity();this.basePose?.Chest?.identity();this.bones.Chest.position.copy(this.rig.rest.Chest);this.rig.mesh.updateWorldMatrix(true,true);this.rig.skeleton.update();this.snapCarrierToBody();}
   }
   triggerOperate(){this.operateTime=0;}
   update(input={}){super.update(input);this.basePose.Chest.copy(this.bones.Chest.quaternion);}
-  get diagnostics(){return {...super.diagnostics,boneCount:LAB_PLAYER_JOINTS.length,profile:'grounded-jump-recovery-v22',chestIndependent:true,windBrace:this.windBrace,landingChest:this.landingChest};}
+  get diagnostics(){return {...super.diagnostics,boneCount:LAB_PLAYER_JOINTS.length,profile:'grounded-follow-through-v27',chestIndependent:true,windBrace:this.windBrace,landingChest:this.landingChest,groundFollow:{...this.groundFollow}};}
+  stepGroundedFollowThrough(dt,grounded){
+    // The pelvis responds first; the upper pack/ribs lag behind its acceleration
+    // and settle once after a stop or reversal. These accelerations already come
+    // from actual local travel in the base animator, never from a key press.
+    // Solve a damped spring in closed form for each bounded animation substep.
+    // No perpetual sway, movement delay, or extra foot trajectory is introduced.
+    const support=grounded?(1-this.airBlend)*(1-this.landingSupport):0;
+    const precision=(1-.9*this.aimBlend)*(1-.85*this.shotRaise)*(1-.5*this.carryBlend)*(1-this.interactionBlend);
+    const decay=Math.exp(-9*dt),omega=Math.sqrt(196-81),sine=Math.sin(omega*dt),cosine=Math.cos(omega*dt);
+    for(const [axis,acceleration,amount] of [['forward',this.inertiaForward,-.18],['right',this.inertiaRight,.15]]){
+      const target=acceleration*amount*support*precision,key=`${axis}Velocity`;
+      const offset=this.groundFollow[axis]-target,velocity=this.groundFollow[key];
+      this.groundFollow[axis]=target+decay*(offset*cosine+(velocity+9*offset)/omega*sine);
+      this.groundFollow[key]=decay*(velocity*cosine-(9*velocity+196*offset)/omega*sine);
+    }
+  }
   stepPose(input){
     this.headBefore.copy(this.bones.Head.quaternion);
     for(const name of Object.keys(this.freeBefore))this.freeBefore[name].copy(this.bones[name].quaternion);
     super.stepPose(input);
     const dt=input.dt||0,run=smooth(2.5,5.7,this.speed),moving=this.moveBlend*(1-this.airBlend)*(1-.78*this.landingSupport);
+    this.stepGroundedFollowThrough(dt,input.grounded!==false&&!input.phase);
+    const followSupport=input.grounded===false?0:1-this.landingSupport;
+    const followForward=this.groundFollow.forward*followSupport,followRight=this.groundFollow.right*followSupport;
     this.operateTime=Math.min(2,(this.operateTime??2)+dt);
     const operate=Math.sin(Math.PI*Math.min(1,this.operateTime/1.1))**2*(1-this.carryBlend)*(1-this.aimBlend);
     const cadence=this.gait*Math.PI*2,body=this.jointTargets.Body,relaxed=(1-.8*this.aimBlend)*(1-.55*this.carryBlend);
     this.chestTarget.set(-body.x*.32+.018*this.carryBlend+Math.sin(this.elapsed*1.6)*.006*this.idleBlend+this.airBlend*.045*(1-this.ascentBlend),
       -body.y*.45+Math.sin(cadence-.45)*.040*moving*relaxed,
       -Math.sin(cadence-.22)*.155*moving*relaxed+this.turn*.016);
+    this.chestTarget.x+=followForward;
+    this.chestTarget.y+=followRight;
     // The pelvis receives impact first; ribs and the rigid backpack follow a
     // beat later, then the head compensates below. The lag is elapsed-time
     // based and affects only bones, so the camera and carry contact stay stable.
@@ -111,6 +133,8 @@ export class LabPlayerAnimator extends BaseAnimator{
       this.freeEuler.copy(this.jointTargets[name]);
       if(name==='ArmL'){
         this.freeEuler.x+=Math.sin(cadence+.31)*(.08+.03*run)*moving*free-.14*gesture-.28*operate-.23*this.windBrace*free;
+        this.freeEuler.x-=followForward*.7*free;
+        this.freeEuler.y-=followRight*.85*free;
         this.freeEuler.z-=.10*this.flightBrace*free+.16*gesture+.12*operate;
       }else if(name==='ForearmL')this.freeEuler.x-=.24*this.windBrace*free+.32*operate+.19*gesture+.05*moving*free*(1-Math.cos(cadence-.4));
       else this.freeEuler.y+=.16*operate+.10*gesture*Math.sin((cycle-3)*5);
