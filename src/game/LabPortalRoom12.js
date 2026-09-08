@@ -54,8 +54,10 @@ export function buildRoom12(game,index=11){
  // A low, broad freight arch accepts the companion's rigid box; its
  // lintel physically excludes the standing player capsule.
  w.box([24,16,14],[7,5.3,.65],w.materials.wall);
- w.box([20.65,13.4,14],[.65,2.8,4],w.materials.trim);
- w.box([27.35,13.4,14],[.65,2.8,4],w.materials.trim);
+ // Jamb cladding stands 25 mm proud of the continuous sidewall;
+ // coincident outer faces flickered at the receiving-gallery viewpoint.
+ w.box([20.65,13.4,14],[.70,2.8,4],w.materials.trim);
+ w.box([27.35,13.4,14],[.70,2.8,4],w.materials.trim);
  w.box([20.65,12.8,9.5],[.65,1.6,9],w.materials.wall);
  w.box([20.65,17.4,9.5],[.65,4.4,9],w.materials.wall);
  w.box([27.35,15.8,9.5],[.65,7.6,9],w.materials.wall);
