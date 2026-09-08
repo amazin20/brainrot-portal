@@ -1,0 +1,207 @@
+name: Verified campaign build
+on:
+  workflow_call:
+    inputs:
+      revision:
+        description: Exact PR head or publication commit SHA
+        required: true
+        type: string
+permissions:
+  contents: read
+env:
+  BUILD_COMMIT: ${{ inputs.revision }}
+jobs:
+  source:
+    name: Source tests and deployable package
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.revision }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Test source and verify the production asset package
+        run: |
+          npm run check
+          node scripts/v8-package-check.mjs
+          node scripts/stamp-build.mjs v23-platform-worlds
+      - name: Preserve the exact deployable package
+        uses: actions/upload-artifact@v4
+        with:
+          name: campaign-browser
+          path: dist/
+          if-no-files-found: error
+          retention-days: 14
+
+  physics:
+    name: All twenty routes, bypass checks and recovery
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.revision }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Verify ordinary routes and physical regressions
+        run: |
+          node scripts/v8-journey.mjs
+          node scripts/v10-shortcuts.mjs
+          node scripts/v17-audit.mjs
+          node scripts/v17-recovery.mjs
+          node scripts/video-repro.mjs
+      - name: Preserve physical evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: campaign-physics
+          path: |
+            qa/v8-journeys.json
+            qa/v10-shortcut-audit.json
+            qa/v17-adversarial.json
+            qa/v17-recovery.json
+            qa/video-after.json
+          retention-days: 14
+
+  browser:
+    name: WebGL rooms ${{ matrix.first }}–${{ matrix.last }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - {first: 1, last: 5, ui: '1'}
+          - {first: 6, last: 11, ui: '0'}
+          - {first: 12, last: 13, ui: '0'}
+          - {first: 14, last: 16, ui: '0'}
+          - {first: 17, last: 20, ui: '0'}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.revision }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Build the same production revision
+        run: |
+          npm ci
+          npm install --no-save --package-lock=false puppeteer-core@24.16.0
+          npm run build
+          node scripts/stamp-build.mjs v23-platform-worlds
+      - name: Verify ordinary routes in actual WebGL
+        env:
+          NESI_FIRST: ${{ matrix.first }}
+          NESI_LAST: ${{ matrix.last }}
+          NESI_UI: ${{ matrix.ui }}
+          NESI_CAPTURE_PLATFORM: '1'
+        run: |
+          npm run preview -- --host 127.0.0.1 --port 4173 >campaign-preview.log 2>&1 &
+          for i in {1..30}; do curl -fsS http://127.0.0.1:4173/ >/dev/null && break; sleep 1; done
+          curl -fsS http://127.0.0.1:4173/ >/dev/null
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+          node scripts/v8-browser.mjs
+      - name: Preserve rendered route evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: campaign-webgl-${{ matrix.first }}-${{ matrix.last }}
+          path: |
+            smoke-artifacts/
+            campaign-preview.log
+          retention-days: 14
+
+  input:
+    name: Trusted mouse input and portal-edge regression
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.revision }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Build the same production revision
+        run: |
+          npm ci
+          npm install --no-save --package-lock=false puppeteer-core@24.16.0
+          npm run build
+          node scripts/stamp-build.mjs v23-platform-worlds
+      - name: Verify actual mouse shots and ordinary floor/wall traversal
+        run: |
+          npm run preview -- --host 127.0.0.1 --port 4173 >input-preview.log 2>&1 &
+          for i in {1..30}; do curl -fsS http://127.0.0.1:4173/ >/dev/null && break; sleep 1; done
+          curl -fsS http://127.0.0.1:4173/ >/dev/null
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+          node scripts/portal-shot-browser.mjs
+          node scripts/portal-edge-browser.mjs
+      - name: Preserve input evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: campaign-input
+          path: |
+            portal-shot-evidence/
+            portal-edge-evidence/
+            input-preview.log
+          retention-days: 14
+
+  sdk-regression:
+    name: Carry/wind video regressions and Yandex SDK contract
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.revision }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Build browser and Yandex packages from the same revision
+        run: |
+          npm ci
+          npm install --no-save --package-lock=false puppeteer-core@24.16.0
+          npm run build
+          node scripts/stamp-build.mjs v23-platform-worlds
+          npm run build -- --mode yandex --outDir dist-yandex
+          node scripts/stamp-build.mjs v23-platform-worlds dist-yandex
+      - name: Verify physical video regressions and advertising contract
+        run: |
+          npm run preview -- --host 127.0.0.1 --port 4173 >sdk-preview.log 2>&1 &
+          python3 -m http.server 4174 --bind 127.0.0.1 --directory dist-yandex >yandex-preview.log 2>&1 &
+          for port in 4173 4174; do
+            for i in {1..30}; do curl -fsS "http://127.0.0.1:$port/" >/dev/null && break; sleep 1; done
+            curl -fsS "http://127.0.0.1:$port/" >/dev/null
+          done
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+          node scripts/video-repair-browser.mjs
+          node scripts/v8-yandex-browser.mjs
+      - name: Preserve rendered regressions and SDK evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: campaign-sdk-regression
+          path: |
+            video-repair-evidence/
+            smoke-artifacts/
+            sdk-preview.log
+            yandex-preview.log
+          retention-days: 14
+      - name: Preserve Yandex draft (contract tested, not live ads)
+        uses: actions/upload-artifact@v4
+        with:
+          name: campaign-yandex-draft
+          path: dist-yandex/
+          if-no-files-found: error
+          retention-days: 14

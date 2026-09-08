@@ -24,11 +24,7 @@ for(let index=8;index<20;index++){
  await g.selectLevel(index,false);
  for(const carry of [false,true])for(const repeat of [false,true])for(const route of [0,1,2])trial({start:g.firstLevel.spawn,carry,repeat,route,seconds:12});
 }
-// A generous fixture puts the player on the raised platform before the service
-// window, then attempts every approach. It still must not fit through the slot.
-await g.selectLevel(15,false);
-for(const carry of [false,true])for(const extra of [0,.9])for(const route of [0,1,2]){
- trial({start:[-1.5,5,-1],carry,extra,route,setup:l=>{l.state.drawbridge.target=1;for(let n=0;n<800;n++)l.update(1/120);}});
-}
+// The former service-window mechanism in room 16 is replaced by the aerial
+// platforming course; each new room above is still searched from its real spawn.
 fs.mkdirSync('qa',{recursive:true});fs.writeFileSync('qa/v17-adversarial.json',JSON.stringify({scope:'Full updatePlaying (actuators + player + same cargo body), with explicit negative starting fixtures. Not positive walkthroughs; bounded search, not exhaustive proof.',pass:bad.length===0,attempts:results.length,bypasses:bad,results},null,2));
 console.log('Adversarial trials',results.length,'bypasses',bad.length);assert.equal(bad.length,0,JSON.stringify(bad.slice(0,5)));g.physics.dispose();g.portals.dispose();

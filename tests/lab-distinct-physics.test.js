@@ -89,15 +89,8 @@ test('weak resting load cannot latch the spring cup; a real drop can',async()=>{
  const weak=trial(p.restY+.54),strong=trial(p.restY+6.35);assert.equal(weak.latched,false);assert.ok(strong.latched,JSON.stringify({weak,strong}));
  g.resetRun(true);assert.equal(p.latched,false);assert.equal(p.body.type,1);assert.ok(Math.abs(p.body.position.y-p.restY)<1e-8);
 });
-test('physical crane pulls the same cargo with force and never assigns its position',async()=>{
- await g.selectLevel(13,false);g.resetRun(true);const l=g.firstLevel,b=g.physics.cargoBody,id=b.id,before=b.position.clone(),c=l.state.crane;
- c.attached=true;l.applyCargoForces(1/120);assert.ok(b.force.y>0);assert.deepEqual(b.position,before);
- b.force.setZero();g.heldCube=g.cargo;l.applyCargoForces(1/120);assert.equal(b.force.lengthSquared(),0);assert.equal(b.id,id);g.heldCube=null;
- assert.equal(l.playerAcceleration,undefined);assert.equal(l.state.direction,undefined,'Retired remote vector UI is not active');
-});
-test('sealed claw well prevents pickup through its glass cover',async()=>{
- await g.selectLevel(13,false);g.resetRun(true);g.playerPosition.set(-5,0,-.1);g.previousPlayerPosition.copy(g.playerPosition);g.interact();assert.equal(g.heldCube,null);
-});
+// The former crane rooms 12–16 were replaced by spatial platforming courses.
+// Their current routes/contact regressions live in lab-platform-room*.test.js.
 test('calibration cabin cannot be entered by walking around any of its four sides',async()=>{
  await g.selectLevel(5,false);
  for(const [start,dir]of [[[-11,0,-4.5],[1,0]],[[-3,0,-4.5],[-1,0]],[[-8,0,0],[0,-1]],[[-8,0,-8.7],[0,1]]])for(const jump of [false,true]){

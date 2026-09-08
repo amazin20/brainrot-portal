@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { portalTransformMatrix, applyPortalObliqueClipping } from './LabPortals.js';
+import { portalTransformMatrix, applyPortalObliqueClipping, portalBacksCollider } from './LabPortals.js';
 
 const UP = new THREE.Vector3(0, 1, 0);
 const IDENTITY = new THREE.Quaternion();
@@ -46,6 +46,7 @@ export class LabCamera {
     this.castRight = new THREE.Vector3();
     this.castUp = new THREE.Vector3();
     this.castOrigin = new THREE.Vector3();
+    this.clipDirection = new THREE.Vector3();
     this.raycaster = new THREE.Raycaster();
     this.euler = new THREE.Euler(0, 0, 0, 'YXZ');
     this.orbitQuaternion = new THREE.Quaternion();
@@ -237,6 +238,15 @@ export class LabCamera {
     // into the destination. The ordinary blocker sweep handles turning away.
     if (direction.dot(exit.normal) <= .04) return;
     applyPortalObliqueClipping(this.camera, exit);
+  }
+
+  // The transported lens can still be behind its exit while the traveller is
+  // already in front. That one backing surface is removed by the oblique
+  // projection, so colliding the boom with it would contradict the rendered
+  // passage and collapse the lens into the character. Other walls still block.
+  clipsPortalBacking(box) {
+    return !!this.portalExit && portalBacksCollider(this.portalExit, box)
+      && this.camera.getWorldDirection(this.clipDirection).dot(this.portalExit.normal) > .04;
   }
 
   constrain(origin, position) {

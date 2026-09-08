@@ -39,6 +39,13 @@ const game=new LabGame({container:$('#game'),touch:{joystick:$('#joystick'),joys
       window.__NESI_RUN_RECOVERY_ROUTE__=async()=>{const {runRecoveryJourney}=await import('./game/LabWorkshopRecovery.js');game.renderer.setAnimationLoop(null);hideScreens();setState('playing');try{return await runRecoveryJourney(game,{onMilestone:()=>game.render()});}finally{game.render();clearInput();setState(game.state);}};
       window.__NESI_RUN_LEVEL_ROUTE__=async()=>{const {runV8Journey}=await import('./game/LabV8Journey.js');game.renderer.setAnimationLoop(null);hideScreens();setState('playing');
         try{return await runV8Journey(game,{onMilestone:()=>game.render()});}finally{game.render();clearInput();setState(game.state);diagnostics();}};
+      window.__NESI_RUN_PORTAL_EDGE_ROUTE__=async(options={})=>{
+        const {runPortalEdgeJourney}=await import('./game/LabPortalEdgeJourney.js');
+        game.renderer.setAnimationLoop(null);hideScreens();setState('playing');
+        try{return await runPortalEdgeJourney(game,{...options,onMilestone:()=>game.render(),
+          onFrame:sample=>window.__NESI_CAPTURE_PORTAL_EDGE_FRAME__?.(sample)});}
+        finally{game.render();clearInput();setState(game.state);diagnostics();}
+      };
       window.__NESI_RUN_BALANCE_BYPASS__=async()=>{
         if(game.levelIndex!==6)throw Error('Balance scenario belongs to room 7');
         const {runV8Journey}=await import('./game/LabV8Journey.js');

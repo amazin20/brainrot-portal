@@ -2,12 +2,27 @@ import fs from 'node:fs';
 import assert from 'node:assert/strict';
 import puppeteer from 'puppeteer-core';
 import {CAMPAIGN} from '../src/game/LabCampaignLevels.js';
-const root='http://127.0.0.1:4173/',out='smoke-artifacts';fs.mkdirSync(out,{recursive:true});
+import {ALL_LAB_ASSETS} from '../src/game/labAssets.js';
+const root=process.env.PAGE_URL||'http://127.0.0.1:4173/',out=process.env.EVIDENCE_OUT||'smoke-artifacts';
+const first=Number(process.env.NESI_FIRST??1),last=Number(process.env.NESI_LAST??20);
+assert.ok(Number.isInteger(first)&&Number.isInteger(last)&&first>=1&&first<=last&&last<=CAMPAIGN.length,'NESI_FIRST/NESI_LAST must select a valid inclusive course range');
+function flag(name,fallback){
+ const value=process.env[name];if(value===undefined)return fallback;
+ assert.match(value,/^(true|false|1|0)$/i,`${name} must be true/false or 1/0`);
+ return /^(true|1)$/i.test(value);
+}
+const checkUI=flag('NESI_UI',first===1),capturePlatform=flag('NESI_CAPTURE_PLATFORM',true);
+const expectedIds=[...new Set(CAMPAIGN.slice(first-1,last).flatMap(level=>level.assets))].sort((a,b)=>a-b);
+const expectedFiles=ALL_LAB_ASSETS.filter(asset=>expectedIds.includes(asset.id)).map(asset=>asset.file).sort();
+assert.equal(expectedFiles.length,expectedIds.length,'Every selected course dependency must exist in the source asset catalog');
+function startUrl(level){const url=new URL(root);url.searchParams.set('debug','1');url.searchParams.set('level',String(level));return url.href;}
+fs.mkdirSync(out,{recursive:true});
 const browser=await puppeteer.launch({executablePath:process.env.CHROME_PATH||'/usr/bin/google-chrome',headless:true,
  args:['--no-sandbox','--disable-dev-shm-usage','--use-angle=swiftshader','--enable-unsafe-swiftshader']});
 const page=await browser.newPage();await page.setViewport({width:1280,height:800});page.setDefaultTimeout(120000);
 const errors=[],requests=[];page.on('pageerror',e=>errors.push(e.message));page.on('request',r=>{if(r.url().includes('.glb'))requests.push(r.url());});
-const report={renderer:'CI Chromium / SwiftShader; NOT a user-device FPS benchmark',routes:[],errors};
+const report={renderer:'CI Chromium / SwiftShader; NOT a user-device FPS benchmark',baseUrl:root,range:{first,last},ui:checkUI,
+ capturePlatform,platformClips:[],routes:[],errors};
 const ready=()=>page.waitForFunction(()=>window.__NESI_DEMO_GAME__?.state==='ready');
 const shot=name=>page.screenshot({path:`${out}/${name}.png`});
 async function clickMenu(selector){
@@ -22,29 +37,56 @@ const uiState=()=>page.evaluate(()=>({level:window.__NESI_DEMO_GAME__?.levelInde
  body:document.body.dataset.playState,win:document.querySelector('#win-screen')?.className,pause:document.querySelector('#pause-screen')?.className,
  button:document.querySelector('#play-again-button')?.textContent,error:document.querySelector('#error-detail')?.textContent}));
 try{
- await page.goto(root+'?debug=1',{waitUntil:'networkidle2'});await ready();
- assert.equal(await page.$$eval('#level-select option',a=>a.length),CAMPAIGN.length);assert.equal(requests.length,4);
+ await page.goto(startUrl(first),{waitUntil:'networkidle2'});await ready();
+ assert.equal(await page.$$eval('#level-select option',a=>a.length),CAMPAIGN.length);
+ if(first===1)assert.equal(requests.length,4);
  await shot('menu');await page.click('#play-button');await page.waitForFunction(()=>window.__NESI_DEMO_GAME__.state==='playing');
- await page.waitForFunction(()=>window.__NESI_DEMO_GAME__.performanceMonitor.stats.fps>0);await shot('level-1-start');
+ if(first===1)await page.waitForFunction(()=>window.__NESI_DEMO_GAME__.performanceMonitor.stats.fps>0);
+ await shot(`level-${first}-start`);
  report.initial=await page.evaluate(()=>({models:window.__NESI_DEMO_GAME__.assets.size,fps:document.querySelector('.lab-fps').textContent,
   oldHudHidden:getComputedStyle(document.querySelector('#hud')).display==='none',audioState:window.__NESI_DEMO_GAME__.audio.context?.state}));
- assert.equal(report.initial.models,4);assert.ok(report.initial.oldHudHidden);assert.equal(report.initial.audioState,'running');
- for(let index=0;index<CAMPAIGN.length;index++){
-   if(index>0){await clickMenu('#play-again-button');await page.waitForFunction(i=>window.__NESI_DEMO_GAME__?.levelIndex===i&&window.__NESI_DEMO_GAME__.state==='playing',{},index);await shot(`level-${index+1}-start`);}
+ assert.ok(report.initial.oldHudHidden);
+ if(first===1){assert.equal(report.initial.models,4);assert.equal(report.initial.audioState,'running');}
+ for(let index=first-1;index<last;index++){
+   if(index>first-1){await clickMenu('#play-again-button');await page.waitForFunction(i=>window.__NESI_DEMO_GAME__?.levelIndex===i&&window.__NESI_DEMO_GAME__.state==='playing',{},index);await shot(`level-${index+1}-start`);}
    if(index===16){
      report.recovery=await page.evaluate(()=>window.__NESI_RUN_RECOVERY_ROUTE__());
      assert.ok(report.recovery.pass&&report.recovery.respawns===0&&report.recovery.resets===0&&report.recovery.teleports===0);
      await shot('level-17-recovered');console.log('Browser recovery: missed ferry, unprepared fall, stairs and return winch passed');
    }
-   const captured=await page.evaluate(async()=>{
-     const g=window.__NESI_DEMO_GAME__,original=g.render,images=[];
+   const captured=await page.evaluate(async capturePlatform=>{
+     const g=window.__NESI_DEMO_GAME__,original=g.render,originalVisuals=g.updateVisuals,images=[],platformFrames=[];
+     const record=capturePlatform&&g.levelIndex>=11&&g.levelIndex<=15;
+     let started=false,visualFrame=0,startElapsed=null;
      g.render=function(){original.call(this);if(this.levelIndex>=5&&this.state==='playing')images.push(this.renderer.domElement.toDataURL('image/png'));};
-     try{return {route:await window.__NESI_RUN_LEVEL_ROUTE__(),images};}finally{g.render=original;}
-   });
+     // The route advances visuals at 60 Hz. Sample this same execution at
+     // 15 Hz, starting with its first airborne movement. Rendering observes
+     // the ordinary shoulder camera; no actor or camera pose is assigned.
+     if(record)g.updateVisuals=function(...args){
+       const result=originalVisuals.apply(this,args);
+       if(this.state!=='playing'||platformFrames.length>=60||!(args[0]>0))return result;
+       if(!started&&!this.playerGrounded&&Math.abs(this.playerVelocity.y)>1e-6){started=true;startElapsed=this.elapsed;}
+       if(started&&visualFrame++%4===0){original.call(this);platformFrames.push(this.renderer.domElement.toDataURL('image/png'));}
+       return result;
+     };
+     try{return {route:await window.__NESI_RUN_LEVEL_ROUTE__(),images,platformFrames,startElapsed,
+       width:g.renderer.domElement.width,height:g.renderer.domElement.height};}
+     finally{g.render=original;g.updateVisuals=originalVisuals;}
+   },capturePlatform);
    captured.images.forEach((image,k)=>fs.writeFileSync(`${out}/level-${index+1}-mechanic-${k+1}.png`,Buffer.from(image.split(',')[1],'base64')));
+   if(capturePlatform&&index>=11&&index<=15){
+     const directory=`platform-room-${index+1}-frames`;fs.mkdirSync(`${out}/${directory}`,{recursive:true});
+     captured.platformFrames.forEach((image,k)=>fs.writeFileSync(`${out}/${directory}/${String(k).padStart(3,'0')}.png`,Buffer.from(image.split(',')[1],'base64')));
+     assert.equal(captured.platformFrames.length,60,`Course ${index+1} must provide 60 ordinary gameplay samples within its single route`);
+     report.platformClips.push({level:index+1,directory,frames:60,simulationFps:15,startElapsed:captured.startElapsed,width:captured.width,height:captured.height,
+       method:'Every fourth 60 Hz route visual update after the first airborne movement; normal game camera'});
+   }
    const result=captured.route;report.routes.push(result);console.log('Browser course',index+1,'passed',result.frames,'frames');assert.ok(result.pass&&result.resets===0&&result.respawns===0);
    assert.equal(await page.$eval('#level-number',e=>e.textContent),String(index+1));
    assert.equal(await page.$('#quick-hint'),null);assert.equal(await page.$('#quick-settings'),null);await shot(`level-${index+1}-complete`);
+   // Preserve legacy art inspection separately. New platforming rooms use
+   // their normal-camera route milestones and sampled movement above.
+   if(index<11||index>15){
    // Art-only overview: camera changes are explicitly not passage evidence.
    await page.evaluate(()=>{const g=window.__NESI_DEMO_GAME__,l=g.firstLevel;g.cameraRig.restoreProjection?.();g.camera.updateProjectionMatrix();
      document.querySelector('#win-screen').style.visibility='hidden';
@@ -56,10 +98,19 @@ try{
      g.camera.updateMatrixWorld(true);g.render();});
    await shot(`level-${index+1}-overview`);
    await page.$eval('#win-screen',e=>e.style.visibility='');
+   }
  }
- assert.equal(new Set(requests.map(x=>x.split('?')[0])).size,17);assert.equal(requests.length,17,'cached models must not download twice');
+ const requestedFiles=[...new Set(requests.map(url=>new URL(url).pathname.split('/').at(-1)))].sort();
+ assert.deepEqual(requestedFiles,expectedFiles,'Only the union of selected courses may be downloaded');
+ assert.equal(requests.length,expectedFiles.length,'cached models must not download twice during the route range');
+ const loadedIds=await page.evaluate(()=>[...window.__NESI_DEMO_GAME__.assets.keys()].sort((a,b)=>a-b));
+ assert.deepEqual(loadedIds,expectedIds);report.assets={ids:loadedIds,files:requestedFiles,requests:requests.length};
+ if(checkUI){
  console.log('Returning to first course',await uiState());
- await clickMenu('#play-again-button');console.log('Return button pressed',await uiState());await page.waitForFunction(()=>window.__NESI_DEMO_GAME__.levelIndex===0&&window.__NESI_DEMO_GAME__.state==='playing');
+ // A shard can end before the campaign's last room, so its Next button need
+ // not wrap. Open the ordinary first-course menu before the shared UI checks.
+ await page.goto(startUrl(1),{waitUntil:'networkidle2'});await ready();await page.click('#play-button');
+ await page.waitForFunction(()=>window.__NESI_DEMO_GAME__.levelIndex===0&&window.__NESI_DEMO_GAME__.state==='playing');
  await page.evaluate(()=>document.exitPointerLock?.());await page.waitForFunction(()=>!document.pointerLockElement);
  if(await page.evaluate(()=>window.__NESI_DEMO_GAME__.state==='playing'))await page.keyboard.press('Escape');
  await page.waitForFunction(()=>window.__NESI_DEMO_GAME__.state==='paused');
@@ -84,6 +135,8 @@ try{
  // Narrow-screen controls and settings remain inside viewport.
  await page.setViewport({width:390,height:844,isMobile:true,hasTouch:true,deviceScaleFactor:1});await page.reload({waitUntil:'networkidle2'});await ready();
  await page.click('#play-button');await page.evaluate(()=>document.exitPointerLock?.());await page.waitForFunction(()=>!document.pointerLockElement);if(await page.evaluate(()=>window.__NESI_DEMO_GAME__.state==='playing'))await page.keyboard.press('Escape');await shot('mobile-settings');assert.equal(await page.$eval('#settings-level-select',e=>!!e.getBoundingClientRect().width),true);
+ }
  assert.deepEqual(errors,[]);
- fs.writeFileSync(`${out}/report.json`,JSON.stringify(report,null,2));console.log('Campaign WebGL: all active routes, lazy assets, menus, sound and persistence passed.');
+ assert.equal(report.routes.length,last-first+1);report.pass=true;
+ fs.writeFileSync(`${out}/report.json`,JSON.stringify(report,null,2));console.log(`Campaign WebGL: courses ${first}–${last}, lazy assets${checkUI?', menus, sound and persistence':''} passed.`);
 }catch(error){report.failure={error:String(error),state:await uiState().catch(()=>null)};console.error('Browser failure',report.failure);await shot('browser-failure').catch(()=>{});throw error;}finally{fs.writeFileSync(`${out}/report.json`,JSON.stringify(report,null,2));await browser.close();}
