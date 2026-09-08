@@ -55,3 +55,25 @@ export async function runExtendedStages(d){
   walk(14,11);walk(14,-8);walk(11.8,-6.8);if(game.state!=='won'){const p=game.cargo.position;walk(p.x+.9,p.z-.9);pickup();walk(11.8,-8);}
  }
 }
+
+/** Regression route from the 2026-09-08 room-7 recording. Uses the same
+ * controls as a player: move the counterweight, carry the friend, then try
+ * repeated jumps to the intermediate gallery. Reaching that gallery matters:
+ * the final dock can subsequently be entered through an ordinary portal pair.
+ * No actor poses, mechanism targets, collision flags or win flags are assigned. */
+export function runBalanceJumpAttempt(d,{carry=true,counter=2,sprint=true,jumpEvery=8,maxFrames=420}={}){
+ const {game,level,walk,wait,pickup,worldMove,frame,stop}=d;
+ if(level.index!==6)throw Error('Balance regression requires room 7');
+ walk(8,1.2);for(let n=0;n<counter;n++){game.interact();wait(.3);}wait(4);
+ if(carry){const c=game.cargo.position;walk(c.x,c.z+1.05);pickup();}
+ walk(0,1);if(sprint)game.input.keys.add('ShiftLeft');
+ let reached=false,maxY=game.playerPosition.y,frames=0;
+ for(;frames<maxFrames;frames++){
+  if(jumpEvery&&frames%jumpEvery===0)game.input.jumpQueued=true;
+  worldMove(0,-1);frame();maxY=Math.max(maxY,game.playerPosition.y);
+  if(game.playerPosition.z<-11.3&&game.playerPosition.y>5.49&&game.playerGrounded){reached=true;break;}
+  if(game.playerPosition.y<-3)break;
+ }
+ stop();return {reached,maxY,frames,player:game.playerPosition.toArray(),angle:level.state.angle,
+  cargoHeld:game.heldCube===game.cargo,teleports:game.teleportCount};
+}

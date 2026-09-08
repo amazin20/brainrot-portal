@@ -2,9 +2,10 @@ import * as THREE from 'three';
 import {Workshop,V,wall,glass} from './LabWorkshopKit.js';
 import {Body,Box,Vec3,Material,Quaternion} from 'cannon-es';
 import {cargoLoadsPlate} from './LabPlateContact.js';
+import {buildSpringMailRoom,buildFreightBridgeRoom} from './LabWorkshopRooms.js';
 const specs=[
  ['spring-mail','Пружинная почта','Гравитация и механическая защёлка','Высота падения сжимает настоящий пружинный поршень.',[32],['Друг может падать из потолочного портала. Пружина внизу принимает удар.','Обычный вес недостаточен: нужен разгон падением. Белое поле над поршнем — потолок, а не стена.','Свяжи пол загрузочной зоны с потолком над поршнем. Поставь друга на вход, дождись защёлки и забери его у сжатой пружины.']],
- ['freight-ferry','Грузовой паром','Перевозка под низким перекрытием','Пассажирский путь и путь небольшого груза здесь различаются.',[37],['На верхней станции есть грузовая каретка. Низкий тоннель не рассчитан на человека.','Отправь друга на каретке. Загруженная каретка отодвинет крышку станции при стыковке.','Поднимись по лестнице или порталами на погрузочный балкон с другом. Поставь его на каретку, отправь рейс рычагом, затем создай новую пару на открывшейся станции.']],
+ ['freight-ferry','Телескопический док','Перевозка выдвижным пролётом','Кассета закреплена на берегу; узкий пролёт доставляет груз под защитный кожух.',[37],['Кассета неподвижна: выдвигается только узкий настил. Низкий кожух пропускает друга.','Поставь друга у переднего края втянутого пролёта. На другом конце его вес освободит защитный кожух.','Поднимись на левый берег, положи друга у переднего края пролёта и включи выдвижение. После срабатывания приёмника забери друга с открывшегося берега.']],
  ['stored-wind','Запас ветра','Инерция маховика и работа привода','Сначала раскрути маховик, потом подключи нагрузку.',[31,35,39],['Воздух проходит через порталы и вращает турбину. Видимый маховик сохраняет вращение.','Рычаг у турбины подключает подъёмный механизм. Соединение без вращения ничего не поднимет.','Направь поток через пару на турбину, включи вентилятор и затем сцепление. Дождись, пока привод поднимет затвор.']],
  ['carousel-address','Карусель адресов','Движущаяся ориентация портала','Одна вращающаяся панель обслуживает разные изолированные балконы.',[38],['Портал закрепляется на панели и поворачивается вместе с ней.','Друг и выход находятся на разных балконах. После первого рейса вернись к рычагу.','Поставь выход на лицевую сторону барабана и вход внизу. Поверни его к другу, забери друга, вернись, поставь друга, поверни ещё раз и отправляйся к выходу.']],
  ['hold-the-height','Тормоз высоты','Противовес и механический тормоз','Подними площадку весом друга и закрепи её прежде, чем вернуть груз.',[33,39],['Друг на плите поднимает площадку. Снятие веса возвращает её вниз.','Наверху есть тормоз лебёдки. Он удерживает реальное положение привода, а не запоминает нажатие плиты.','Подготовь вход и выход на подвижной панели, нагрузи плиту, поднимись. Затяни верхний тормоз, затем верни друга порталом в плите.']],
@@ -26,30 +27,12 @@ export function buildWorkshopCampaign(game,index){
  const closedExit=condition=>{const d=k.door(-12);k.ticks.push(dt=>d.update(condition(),dt,k.time));return d;};
  const latch=(name,p,condition)=>{const art=w.box([p[0],p[1],p[2]],[.6,.2,.7],w.materials.accent,false);const state={engaged:false};k.state[name]=state;k.ticks.push(()=>{if(condition())state.engaged=true;art.rotation.z=state.engaged?-.6:0;});k.resets.push(()=>state.engaged=false);return state;};
  if(index===8){
-  baseWalls();const s=k.spring('piston',[0,.0,-5]);k.panel('drop-ceiling',[0,9,-5],[0,-1,0],7,6);k.panel('loading-floor',[-7,.025,6],[0,1,0],5,5);
-  // Open-top spring test enclosure. A held body must not turn the new
-  // stable grip into an infinite-force hand press. All four visible sides
-  // protect the piston; real spring compression retracts the guards so the
-  // same friend can be collected. No portal-use flag is involved.
-  const guards=[];
-  for(const [p,size]of [[[-2.2,1.6,-5],[.1,3.2,4.5]],[[2.2,1.6,-5],[.1,3.2,4.5]],[[0,1.6,-7.25],[4.5,3.2,.1]],[[0,1.6,-2.75],[4.5,3.2,.1]]]){
-    const mesh=glass(w,p,size),c=game.colliders.find(c=>c.mesh===mesh);c.kinematic=true;guards.push({mesh,c,base:p[1]});
-  }
-  k.state.springGuards=guards;
-  k.ticks.push(dt=>{for(const a of guards){a.mesh.position.y=THREE.MathUtils.damp(a.mesh.position.y,s.latched?a.base-3.3:a.base,4,dt);game.syncCollision(a.c,new THREE.Box3().setFromObject(a.mesh),dt);}});
-  k.resets.push(()=>{for(const a of guards)a.mesh.position.y=a.base;});
-  k.control('release',[-5,0,-5],()=>s.reset(),'E — освободить механическую защёлку для нового опыта.');closedExit(()=>s.latched);
-  k.wire([[1.6,.06,-5],[4,.06,-5],[4,.06,-11.5],[0,.06,-11.5]],()=>s.latched);
+  buildSpringMailRoom(k,{baseWalls,closedExit});
  }else if(index===9){
-  baseWalls();w.floor(-12,-4,0,9,3);w.stairs(-11,-8,-6,0,0,3);w.floor(4,10,0,7,3);
-  k.panel('loading-dock',[-11.7,5.1,5],[1,0,0],7);k.panel('unloading-dock',[9.7,5.1,3],[-1,0,0],6);
-  const cart=k.slider('freight',[-6,3.3,3],[6,3.3,3],{width:3.2,depth:3.2,portal:false,asset:37,assetSize:3.2});cart.rate=.12;
-  w.box([0,2.4,3],[15,.25,.24]);for(const z of [1.05,4.95])w.box([1,3.65,z],[9.8,1.3,.18]);
-  const hood=glass(w,[3,4.62,3],[10.8,.18,4]),hc=game.colliders.find(c=>c.mesh===hood);hc.kinematic=true;
-  const lock=latch('dock-lock',[7.8,3.1,3],()=>cart.progress>.985&&cart.loaded());
-  k.control('dispatch',[-7,3,7.2],()=>cart.target=cart.target?0:1,'E — отправить каретку или вернуть на погрузку.');
-  k.ticks.push(dt=>{hood.position.z=THREE.MathUtils.damp(hood.position.z,lock.engaged?-3:3,3,dt);game.syncCollision(hc,new THREE.Box3().setFromObject(hood),dt);});k.resets.push(()=>hood.position.z=3);
-  closedExit(()=>lock.engaged);
+  // Arrive beside the stair approach so the ordinary starting camera shows
+  // the cassette and receiving bank instead of facing the foundation wall.
+  spawn=[-6.8,0,11];cargo=[-5.5,.55,9.5];
+  buildFreightBridgeRoom(k,{baseWalls,closedExit});
  }else if(index===10){
   baseWalls();k.panel('wind-intake',[11.7,2.1,5],[-1,0,0],10);k.panel('wind-outlet',[0,2.1,-1],[0,0,-1],8);
   const fan=k.fan('blower',[-9.8,2.1,5],[1,0,0]),t=k.turbine('flywheel',[0,2.1,-8]);k.staticFixture(39,[5,0,-8],2.2);

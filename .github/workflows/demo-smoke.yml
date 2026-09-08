@@ -45,7 +45,7 @@ jobs:
           node --input-type=module <<'NODE'
           import fs from 'node:fs';
           import {CAMPAIGN} from './src/game/LabCampaignLevels.js';
-          fs.writeFileSync('dist/build-info.json',JSON.stringify({commit:process.env.GITHUB_SHA,version:'v20-shot-contact',levels:CAMPAIGN.length,verified:true,run:process.env.GITHUB_RUN_ID},null,2));
+          fs.writeFileSync('dist/build-info.json',JSON.stringify({commit:process.env.GITHUB_SHA,version:'v21-video-workshop',levels:CAMPAIGN.length,verified:true,run:process.env.GITHUB_RUN_ID},null,2));
           NODE
       - name: Preserve rendered and physical verification
         if: always()
@@ -100,4 +100,32 @@ jobs:
         with:
           name: portal-shot-mouse
           path: portal-shot-evidence/
+          retention-days: 14
+
+  verify-sep8:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Build the production video-repair candidate
+        run: |
+          npm ci
+          npm install --no-save --package-lock=false puppeteer-core@24.16.0
+          npm run build
+      - name: Verify rapid mouse shots, carry-jump bypass and rebuilt rooms
+        run: |
+          npm run preview -- --host 127.0.0.1 --port 4173 >/tmp/sep8-preview.log 2>&1 &
+          for i in {1..30}; do curl -fsS http://127.0.0.1:4173/ >/dev/null && break; sleep 1; done
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+          node scripts/sep8-browser.mjs
+      - name: Preserve actual game video and input evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sep8-video-repair
+          path: sep8-evidence/
           retention-days: 14

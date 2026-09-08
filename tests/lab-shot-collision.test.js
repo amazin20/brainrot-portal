@@ -79,12 +79,69 @@ test('paused/ad-blocked simulation freezes preparation and travel; reset invalid
  g.portalShots.reset();assert.deepEqual(g.portalShots.diagnostics,{pending:0,flying:0,lastImpact:null});g.portals.dispose();
 });
 
-test('new same-channel input supersedes an older flying charge and a miss preserves the other channel',()=>{
+test('later same-channel placement wins and a miss preserves the other channel',()=>{
  const {g}=fixture();g.firePortal(1);finish(g);const other=g.portals.portals[1];assert.ok(other);
  g.portalShots.cooldown=0;aim(g,V(0,2,5),V(2.7,2,0));g.firePortal(0);while(g.portalShots.queue.length)g.portalShots.step(1/120);
  const old=g.portalShots.active[0];g.portalShots.cooldown=0;aim(g,V(0,2,5),V(-2.7,2,0));g.firePortal(0);finish(g);assert.ok(g.portals.portals[0].position.x<0);assert.equal(old.sequence,1);
  g.portalShots.cooldown=0;aim(g,V(0,2,5),V(0,30,5));g.firePortal(0);finish(g);
  assert.equal(g.portalShots.lastOutcome?.reason,'miss');assert.equal(g.portals.portals[1],other);assert.equal(g.portalShots.active.length,0);g.portals.dispose();
+});
+
+test('room nine: a rapid burst places every accepted charge on the unobstructed white wall',async()=>{
+ const g=await createHeadlessGame();await g.selectLevel(8,false);g.resetRun(true);
+ try{
+  const impacts=[],impact=g.portalShots.impact.bind(g.portalShots);
+  g.portalShots.impact=(shot,hit)=>{impact(shot,hit);impacts.push({...g.portalShots.lastImpact});};
+  for(const index of [0,1]){
+   g.portalShots.reset();g.portals.clear();impacts.length=0;
+   g.playerPosition.set(2,0,4);g.previousPlayerPosition.copy(g.playerPosition);
+   const target=g.firstLevel.panels['work-front'].getFrame().center.clone();
+   g.facing=Math.atan2(target.x-g.playerPosition.x,target.z-g.playerPosition.z);g.updateVisuals(0,1);
+   for(let n=0;n<288;n++){
+    if(n<216&&n%36===0){
+     aim(g,g.playerPosition.clone().add(V(0,1.8,-4)),target);
+     assert.equal(g.firePortal(index),true);
+    }
+    g.updatePlaying(1/120);g.updateVisuals(1/120,1);
+   }
+   assert.equal(impacts.length,6);
+   assert.ok(impacts.every(h=>h.valid&&h.reason==='placed'&&h.surface==='work-front / collision'),JSON.stringify(impacts));
+   assert.ok(impacts.every(h=>V(...h.position).distanceTo(target)<.01));
+   assert.ok(g.portals.portals[index]);assert.equal(g.portalShots.placedSerial[index],6);
+  }
+ }finally{g.physics.dispose();g.portals.dispose();}
+});
+
+test('clicks faster than preparation cannot cancel an accepted charge or starve its launch',()=>{
+ const {g}=fixture();let accepted=0,firstPlacement=-1;
+ for(let n=0;n<180;n++){
+  if(n%25===0&&g.firePortal(0))accepted++;
+  g.portalShots.step(1/120);
+  if(firstPlacement<0&&g.portals.portals[0])firstPlacement=n/120;
+ }
+ assert.ok(firstPlacement>=0&&firstPlacement<.4,`first portal at ${firstPlacement}`);
+ assert.ok(accepted>=3);finish(g);assert.equal(g.portalShots.placedSerial[0],accepted);g.portals.dispose();
+});
+
+test('an older long flight cannot replace a newer successful close shot',()=>{
+ const {g,emitter}=fixture(),impacts=[],impact=g.portalShots.impact.bind(g.portalShots);
+ g.portalShots.impact=(shot,hit)=>{impact(shot,hit);impacts.push({...g.portalShots.lastImpact});};
+ g.playerPosition.z=50;emitter.position.z=50;aim(g,V(0,2,50),V(2.7,2,0));g.firePortal(0);
+ for(let n=0;n<30;n++)g.portalShots.step(1/120);
+ g.playerPosition.z=5;emitter.position.z=5;aim(g,V(0,2,5),V(-2.7,2,0));assert.equal(g.firePortal(0),true);finish(g);
+ assert.deepEqual(impacts.map(h=>[h.sequence,h.reason]),[[2,'placed'],[1,'superseded']]);
+ assert.ok(g.portals.portals[0].position.x<0);g.portals.dispose();
+});
+
+test('a newer blocked shot does not invalidate an already flying valid charge',()=>{
+ const {g,emitter}=fixture(),impacts=[],impact=g.portalShots.impact.bind(g.portalShots);
+ const wall=g.box(5,2,0,1,5,.2,new THREE.MeshBasicMaterial({side:THREE.DoubleSide}),{solid:true});wall.name='separate dark target';
+ g.portalShots.impact=(shot,hit)=>{impact(shot,hit);impacts.push({...g.portalShots.lastImpact});};
+ g.playerPosition.z=50;emitter.position.z=50;aim(g,V(0,2,50),V(-2.7,2,0));g.firePortal(0);
+ for(let n=0;n<30;n++)g.portalShots.step(1/120);
+ g.playerPosition.set(5,.6,5);emitter.position.set(5,2,5);aim(g,V(5,2,5),V(5,2,0));assert.equal(g.firePortal(0),true);finish(g);
+ assert.deepEqual(impacts.map(h=>[h.sequence,h.reason]),[[2,'surface'],[1,'placed']]);
+ assert.ok(g.portals.portals[0]);g.portals.dispose();
 });
 
 test('a muzzle beyond a thin wall impacts its near side while camera sees the target',()=>{
