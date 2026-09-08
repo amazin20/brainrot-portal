@@ -54,10 +54,13 @@ export function buildRoom12(game,index=11){
  // A low, broad freight arch accepts the companion's rigid box; its
  // lintel physically excludes the standing player capsule.
  w.box([24,16,14],[7,5.3,.65],w.materials.wall);
- // Jamb cladding stands 25 mm proud of the continuous sidewall;
- // coincident outer faces flickered at the receiving-gallery viewpoint.
- w.box([20.65,13.4,14],[.70,2.8,4],w.materials.trim);
- w.box([27.35,13.4,14],[.70,2.8,4],w.materials.trim);
+ // Render cladding 25 mm proud without changing the tested physical or
+ // camera clearance: the original jamb remains an invisible collision proxy.
+ for(const x of [20.65,27.35]){
+  const jamb=w.box([x,13.4,14],[.65,2.8,4],w.materials.trim);
+  jamb.visible=false;jamb.userData.collisionProxy=true;
+  game.box(x,13.4,14,.70,2.8,4,w.materials.trim,{parent:w.root,camera:false,aim:false});
+ }
  w.box([20.65,12.8,9.5],[.65,1.6,9],w.materials.wall);
  w.box([20.65,17.4,9.5],[.65,4.4,9],w.materials.wall);
  w.box([27.35,15.8,9.5],[.65,7.6,9],w.materials.wall);
