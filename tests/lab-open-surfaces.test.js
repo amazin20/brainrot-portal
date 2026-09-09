@@ -6,12 +6,23 @@ import {CAMPAIGN} from '../src/game/LabCampaignLevels.js';
 import {BALANCE_RIG_LAYOUT as L} from '../src/game/LabBalanceRig.js';
 import {resolvePortalPlacement} from '../src/game/LabPortals.js';
 const g=await createHeadlessGame();
-test('every room offers additional continuous portal areas without changing its physical concept',async()=>{
+test('the retained rooms offer continuous portal areas and the junction has six purposeful ceramics',async()=>{
  for(let i=0;i<CAMPAIGN.length;i++){
   await g.selectLevel(i,false);const l=g.firstLevel;
-  assert.ok(l.explorationSurfaces.length>=2,`Course ${i+1} lacks choice`);
-  assert.ok(g.portalPanels.length>=3,`Course ${i+1} still has only two slots`);
-  assert.ok(l.world.surfaces.some(s=>s.portal&&s.width>=5.5));
+  if(i<11){
+   assert.ok(l.explorationSurfaces.length>=2,`Course ${i+1} lacks choice`);
+   assert.ok(g.portalPanels.length>=3,`Course ${i+1} still has only two slots`);
+   assert.ok(l.world.surfaces.some(s=>s.portal&&s.width>=5.5));
+  }else{
+   const roles=l.puzzleGeometry.portalRoles,panels=Object.keys(l.panels);
+   assert.equal(panels.length,6,'The compact junction must not acquire unrelated portal panels');
+   assert.deepEqual(Object.keys(roles).sort(),panels.sort(),'Every ceramic needs an explicit puzzle or recovery role');
+   assert.equal(l.world.surfaces.filter(s=>s.portal).length,6,'No unaccounted portal surface is hidden outside the six roles');
+   for(const name of panels){
+    assert.ok(typeof roles[name]==='string'&&roles[name].length>8,`Missing purpose for ${name}`);
+    assert.ok(g.portalPanels.includes(l.panels[name].mesh),`${name} must be an actual usable portal surface`);
+   }
+  }
   const luminance=c=>.2126*c.r+.7152*c.g+.0722*c.b;
   assert.ok(luminance(l.world.materials.ceramic.color)>luminance(l.world.materials.wall.color)*3);
   for(const a of l.world.surfaces.filter(s=>s.portal))a.group.traverse(o=>{

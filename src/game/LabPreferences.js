@@ -1,6 +1,6 @@
 const KEY='brainrot-portal.preferences.v24';
 const LEGACY_KEY='nesi.preferences.v8';
-const CAMPAIGN_REVISION='reverse-perspective-v24';
+const CAMPAIGN_REVISION='folded-junction-v28';
 export const DEFAULT_PREFERENCES=Object.freeze({quality:'balanced',volume:.65,muted:false,tutorial:true,completed:[],hints:{}});
 export function sanitizePreferences(value={}) {
   const safe=value&&typeof value==='object'?value:{};
@@ -16,8 +16,8 @@ export class LabPreferences {
     try{saved=JSON.parse(storage?.getItem(KEY)||storage?.getItem(LEGACY_KEY)||'{}')||{};}catch{}
     this.value=sanitizePreferences(saved);
     if(saved.campaignRevision!==CAMPAIGN_REVISION){
-      // Rooms 1–11 and personal settings survive the rename. The replacement
-      // chamber must not inherit the old room's completion or spoiler hints.
+      // Rooms 1–11 and personal settings survive each chamber replacement.
+      // The new chamber must not inherit old completion or spoiler hints.
       this.value.completed=this.value.completed.filter(index=>index<11);
       this.value.hints=Object.fromEntries(Object.entries(this.value.hints).filter(([index])=>Number(index)<11));
       this.save();

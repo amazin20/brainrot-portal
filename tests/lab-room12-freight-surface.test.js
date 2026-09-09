@@ -1,37 +1,51 @@
-import test,{after} from 'node:test';
+import test, {after} from 'node:test';
 import assert from 'node:assert/strict';
 import * as THREE from 'three';
 import {createHeadlessGame} from '../scripts/lab-headless.mjs';
 import {resolvePortalPlacement} from '../src/game/LabPortals.js';
 import {runV8Journey} from '../src/game/LabV8Journey.js';
 
-const game=await createHeadlessGame();
-after(()=>{game.physics.dispose();game.portals.dispose();});
+const game = await createHeadlessGame();
+after(() => { game.physics.dispose(); game.portals.dispose(); });
 
-test('the freight ceramic fits complete portals at both visible edges without exempting its jambs',async()=>{
- await game.selectLevel(11,false);game.scene.updateMatrixWorld(true);
- const panel=game.firstLevel.panels['freight-exit'].mesh;
- for(const x of[21.01,21.5,22,23,24,25,26,26.99])for(const y of[13,14.5,16]){
-  const result=resolvePortalPlacement(panel,new THREE.Vector3(x,y,6),{blockers:game.colliders});
-  assert.equal(result.ok,true,`Ceramic edge ${x}/${y} remains obstructed: ${result.reason}`);
-  assert.ok(result.position.x>=22.318-1e-6&&result.position.x<=25.682+1e-6);
- }
- // Keep the physical obstructions real: a legal panel cannot ignore a newly
- // occupied aperture simply because its own authored bounds were corrected.
- const obstacle={box:new THREE.Box3(new THREE.Vector3(23,13,6.15),new THREE.Vector3(25,16,6.6))};
- assert.equal(resolvePortalPlacement(panel,new THREE.Vector3(24,14.5,6),{blockers:[...game.colliders,obstacle]}).reason,'obstructed');
+test('all six junction ceramics accept complete portals at their visible edges and corners', async () => {
+  await game.selectLevel(11, false); game.scene.updateMatrixWorld(true);
+  assert.equal(Object.keys(game.firstLevel.panels).length, 6);
+  for (const [name, panel] of Object.entries(game.firstLevel.panels)) {
+    const frame = panel.getFrame(), bounds = panel.mesh.userData.portalBounds;
+    const orientation = panel.mesh.getWorldQuaternion(new THREE.Quaternion());
+    const right = new THREE.Vector3(1, 0, 0).applyQuaternion(orientation);
+    const up = new THREE.Vector3(0, 1, 0).applyQuaternion(orientation);
+    for (let x = 0; x < 5; x++) for (let y = 0; y < 5; y++) {
+      const point = frame.center.clone()
+        .addScaledVector(right, -bounds.halfWidth + .01 + (2 * bounds.halfWidth - .02) * x / 4)
+        .addScaledVector(up, -bounds.halfHeight + .01 + (2 * bounds.halfHeight - .02) * y / 4);
+      const placement = resolvePortalPlacement(panel.mesh, point, {blockers: game.colliders});
+      assert.equal(placement.ok, true, `${name}: visible ceramic at ${point.toArray()} rejected: ${placement.reason}`);
+      assert.ok(Math.abs(placement.position.clone().sub(frame.center).dot(frame.normal)) < 1e-6);
+    }
+    // Successful authored bounds never exempt a genuinely occupied aperture.
+    const occupied = frame.center.clone().addScaledVector(frame.normal, .35);
+    const obstacle = {box: new THREE.Box3().setFromCenterAndSize(occupied, new THREE.Vector3(.7, .7, .7))};
+    assert.equal(resolvePortalPlacement(panel.mesh, frame.center, {blockers: [...game.colliders, obstacle]}).reason,
+      'obstructed', `${name} ignored a real obstacle`);
+  }
 });
 
-test('an ordinary shot from observation seats the freight portal where the former wide face clipped the jamb',async()=>{
- await game.selectLevel(11,false);
- const report=await runV8Journey(game,{scenario:async d=>{
-  const p=d.level.panels;
-  d.aim(0,p.entry.getFrame().center);d.aim(1,p.observation.getFrame().center);d.enter(p.entry);d.walk(-19,14);
-  d.aim(1,new THREE.Vector3(24,14.5,6));
-  assert.equal(game.portalShots.lastImpact.valid,true);
-  assert.equal(game.portalShots.lastImpact.surface,'freight-exit / collision');
-  assert.ok(game.portalShots.lastImpact.position[0]<22.1,'The ordinary camera ray must reproduce the former left-edge failure');
-  assert.ok(game.portals.portals[1].position.x>=22.318-1e-6);
- }});
- assert.equal(report.pass,true);assert.equal(report.resets+report.respawns,0);
+test('ordinary camera aiming from the folded ledge places the cargo portal through the real sight slot', async () => {
+  await game.selectLevel(11, false);
+  const report = await runV8Journey(game, {scenario: d => {
+    const p = d.level.panels;
+    d.walk(10, 14.5); d.walk(-14.5, 14.5); d.walk(-14.5, 12);
+    d.aim(0, p['access-low'].getFrame().center);
+    d.aim(1, p['access-high'].getFrame().center);
+    d.enter(p['access-low']);
+    d.until(() => game.playerGrounded, 3, 'Reach the actual ledge');
+    d.walk(-15, -8); d.walk(-9, -8);
+    d.aim(1, p.cargo.getFrame().center);
+    assert.equal(game.portalShots.lastImpact.valid, true);
+    assert.equal(game.portalSurfaceIds[1], p.cargo.mesh.uuid);
+    assert.equal(game.teleportCount, 1);
+  }});
+  assert.equal(report.pass, true); assert.equal(report.resets + report.respawns, 0);
 });

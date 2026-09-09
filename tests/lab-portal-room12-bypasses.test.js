@@ -10,99 +10,112 @@ const V = (...p) => new THREE.Vector3(...p);
 after(() => { game.physics.dispose(); game.portals.dispose(); });
 
 function acceptedRay(origin, target, panel) {
-  game.portalShots.ray.set(origin, target.clone().sub(origin).normalize());
-  game.portalShots.ray.far = Infinity;
+  const ray = game.portalShots.ray;
+  ray.set(origin, target.clone().sub(origin).normalize()); ray.near = 0; ray.far = Infinity;
   const hit = game.portalShots.firstHit();
   if (hit?.object !== panel.mesh) return false;
-  return resolvePortalPlacement(panel.mesh, hit.point, {blockers: game.colliders}).ok;
+  const normal = hit.face.normal.clone().applyMatrix3(new THREE.Matrix3().getNormalMatrix(hit.object.matrixWorld)).normalize();
+  const face = panel.getFrame().normal;
+  return normal.dot(face) > .15 && ray.ray.direction.dot(face) < -.02
+    && resolvePortalPlacement(panel.mesh, hit.point, {blockers: game.colliders}).ok;
 }
 
-test('room 12 hides every sampled final-panel edge from reachable stationary and jumping viewpoints', async () => {
-  await game.selectLevel(11, false);
-  game.scene.updateMatrixWorld(true);
-  const panel = game.firstLevel.panels['far-exit'];
-  const centre = panel.getFrame().center;
-  const bounds = panel.mesh.userData.portalBounds;
-  // Explicit adversarial muzzle fixtures, not a positive walkthrough. They
-  // include the original ground-corner, balcony, apron and diagonal-seam
-  // counterexamples. A generous 3.3m muzzle covers an ordinary ground jump.
-  const feet = [
-    [-29, 0, 36], [-26.5, 0, 36], [-23.5, 0, 33], [-20.5, 0, 27],
-    [-2.5, 0, 33], [-2.5, 0, 36], [.5, 0, 36], [9.5, 0, 24], [9.5, 0, 36],
-    [-12, 0, 15], [4, 0, 4], [4, 0, 30], [24, 0, -30], [26, 0, -10], [30, 0, 20],
-    [-28, 8, 9], [-18, 8, 18.5], [-16.6, 8, 8.55], [-28, 8, 19],
-    [-15.5, 6, 18.5], [-13.5, 6, 20.5], [-13.5, 6, 22.5], [-8.5, 6, 22.5],
-    [-27, 8.5, 7], [-27, 15, -9], [-27, 21.5, -25],
-    [-28, 22, -31], [-12.6, 22, -26.5], [-16, 22, -29],
-    [21.5, 12, 7.5], [24, 12, 10], [26.5, 12, 12],
-    // Probe the exact upper-deck/stair corners as well as the original
-    // broader fixtures after widening the aerial sight windows.
-    [-28.8, 22, -31.8], [-12.1, 22, -31.8], [-12.1, 22, -26.1], [-28.8, 22, -26.1],
-    [-25.1, 21, -24], [-28.9, 18, -18],
-    [-16.1, 8, 8.1], [-16.1, 8, 19.9], [-28.9, 8, 19.9],
-  ];
+test('the folded stairs and high walk hide sampled final-panel edges from standing and jumping viewpoints', async () => {
+  await game.selectLevel(11, false); game.scene.updateMatrixWorld(true);
+  const panel = game.firstLevel.panels.final, frame = panel.getFrame();
+  const bounds = panel.mesh.userData.portalBounds, orientation = panel.mesh.getWorldQuaternion(new THREE.Quaternion());
+  const right = V(1, 0, 0).applyQuaternion(orientation), up = V(0, 1, 0).applyQuaternion(orientation);
   const targets = [];
-  // Test visible pixels up to the outer ceramic edges, not just legal portal
-  // centres: placement can move an edge hit inward to fit a complete portal.
-  for (let x = 0; x <= 12; x++) for (let y = 0; y <= 12; y++) targets.push(V(
-    centre.x - bounds.halfWidth + .01 + (2 * bounds.halfWidth - .02) * x / 12,
-    centre.y - bounds.halfHeight + .01 + (2 * bounds.halfHeight - .02) * y / 12,
-    centre.z,
-  ));
+  for (let x = 0; x <= 8; x++) for (let y = 0; y <= 8; y++) targets.push(frame.center.clone()
+    .addScaledVector(right, -bounds.halfWidth + .01 + (2 * bounds.halfWidth - .02) * x / 8)
+    .addScaledVector(up, -bounds.halfHeight + .01 + (2 * bounds.halfHeight - .02) * y / 8));
+  const span = width => width < 1.1 ? [0] : [...new Set([-(width / 2 - .5), 0,
+    ...Array.from({length: Math.max(0, Math.floor((width - 1) / 3))}, (_, i) => -(width / 2 - .5) + (i + 1) * 3),
+    width / 2 - .5])];
+  const free = ([x, y, z]) => !game.colliders.some(c => {
+    if (!c.enabled || (c.walkablePlane && !c.solidUnderside)) return false;
+    const b = c.box;
+    // A following low stair riser is legal for the actual step controller.
+    if (b.max.y < y + .32 || b.min.y > y + 2.4 - .01) return false;
+    const dx = x - THREE.MathUtils.clamp(x, b.min.x, b.max.x), dz = z - THREE.MathUtils.clamp(z, b.min.z, b.max.z);
+    return dx * dx + dz * dz < .43 * .43;
+  });
   let rays = 0;
-  for (const [x, y, z] of feet) for (const muzzleHeight of [1.4, 3.3]) {
-    const origin = V(x, y + muzzleHeight, z);
-    for (const target of targets) {
-      assert.equal(acceptedRay(origin, target, panel), false,
-        `Premature final portal from ${origin.toArray()} toward ${target.toArray()}`);
-      rays++;
+  const areas = new Set();
+  // These are explicit adversarial viewpoints, not a positive walkthrough.
+  // Derive them from current floors so old atrium or old straight-stair
+  // coordinates cannot survive after the geometry they tested is removed.
+  for (const surface of game.firstLevel.world.surfaces) {
+    if (surface.portal || surface.normal.y < .99 || ['Receiving dock', 'Freight throat floor', 'Launch pocket recovery'].includes(surface.name)) continue;
+    const centre = surface.getFrame().center;
+    for (const x of span(surface.width)) for (const z of span(surface.height)) {
+      const feet = [centre.x + x, centre.y, centre.z + z];
+      if (!free(feet)) continue;
+      areas.add(surface.name);
+      for (const height of [1.4, 3.3]) for (const target of targets) {
+        const origin = V(...feet).add(V(0, height, 0));
+        assert.equal(acceptedRay(origin, target, panel), false,
+          `Early final portal from ${surface.name}: ${origin.toArray()} toward ${target.toArray()}`);
+        rays++;
+      }
     }
   }
-  assert.equal(rays, 13858);
-  // This enclosed pit is reached after entering the flight bay. Its ceramic
-  // remains usable for recovery; the test must not demand a hidden shot ban.
-  assert.ok(acceptedRay(V(16.5, 1.4, -10), centre, panel));
+  for (const name of ['Spine stair', 'Folded return stair', 'Over the freight tube', 'Same-shaft high lip']) assert.ok(areas.has(name));
+  assert.ok(rays > 50000, `A useful edge/viewpoint grid is required: ${rays}`);
+  assert.ok(acceptedRay(V(4, 21, 1), frame.center, panel), 'The actual high airborne sightline remains open');
+  assert.ok(acceptedRay(V(-12, 18.4, 3), frame.center, panel), 'Recovery inside the pocket remains physical');
 });
 
-test('the former carried-friend freight shortcut reaches the real vestibule but cannot cross its sides or low arch', async () => {
+function reachLedge(d, carry) {
+  const p = d.level.panels;
+  d.walk(10, 14.5); d.walk(-14.5, 14.5); d.walk(-14.5, 12);
+  d.aim(0, p['access-low'].getFrame().center); d.aim(1, p['access-high'].getFrame().center);
+  if (carry) {
+    d.walk(-14.5, 14.5); d.walk(11, 14.5); d.walk(11, 11); d.pickup();
+    d.walk(11, 14.5); d.walk(-14.5, 14.5); d.walk(-14.5, 12);
+  }
+  d.enter(p['access-low']); d.until(() => game.playerGrounded, 3, 'The original traveller reaches the folded ledge');
+}
+
+function pressAgainst(d, x, z, boundary, label) {
+  game.input.keys.add('ShiftLeft');
+  for (let n = 0; n < 240; n++) {
+    if (n % 30 === 0) game.input.jumpQueued = true;
+    d.worldMove(x, z); d.frame();
+    assert.ok(boundary(game.playerPosition), `${label}: ${game.playerPosition.toArray()}`);
+    assert.equal(game.state, 'playing'); assert.ok(game.heldCube, 'The same carried companion remains present');
+  }
+  d.wait(.5);
+}
+
+test('a carried friend reaches the actual upper corridor but cannot drop through its sides or low sight window', async () => {
   await game.selectLevel(11, false);
-  const report = await runV8Journey(game, {scenario: async d => {
-    const {level, aim, enter, walk, pickup, until, worldMove, frame, wait, mark} = d;
-    aim(0, level.panels.entry.getFrame().center);
-    aim(1, level.panels.observation.getFrame().center);
-    enter(level.panels.entry);
-    walk(-19, 14);
-    aim(1, V(25, 14.5, 6));
-    walk(-15, 14);
-    until(() => game.playerGrounded && game.playerPosition.y < .1, 4, 'Return to friend');
-    walk(-20, 28.1);
-    pickup();
-    enter(level.panels.entry);
-    walk(24, 10);
-    assert.equal(game.teleportCount, 2, 'The negative route must first reach the actual freight vestibule');
-    assert.ok(game.heldCube);
-    assert.ok(Math.abs(game.playerPosition.y - 12) < .05);
-    mark('the original two-portal shortcut reaches its formerly open side');
-    const attempts = [
-      {name: 'west observation slit', x: -1, z: 0, inside: p => p.x > 20.9},
-      {name: 'east side', x: 1, z: 0, inside: p => p.x < 27.1},
-      {name: 'low freight arch', x: 0, z: 1, inside: p => p.z < 14},
-    ];
-    for (const attempt of attempts) {
-      game.input.keys.add('ShiftLeft');
-      for (let n = 0; n < 180; n++) {
-        if (n % 30 === 0) game.input.jumpQueued = true;
-        worldMove(attempt.x, attempt.z);
-        frame();
-        assert.ok(attempt.inside(game.playerPosition), `Standing capsule escaped via ${attempt.name}`);
-        assert.equal(game.state, 'playing');
-        assert.ok(game.heldCube, 'An attempted shortcut must keep the same friend');
-      }
-      wait(.5);
-      walk(24, 10);
-    }
+  const report = await runV8Journey(game, {scenario: d => {
+    reachLedge(d, true);
+    d.walk(-15.5, -8); d.walk(-15.5, -12.5); d.walk(1.5, -12.5); d.walk(1.5, -2.5);
+    d.walk(5, -2.5); d.walk(5, -9.3); d.walk(8, -9.3); d.walk(8, 4);
+    assert.ok(game.playerPosition.y > 17.9); assert.equal(game.teleportCount, 1);
+    pressAgainst(d, 1, 0, p => p.x < 9 && p.y > 17.9, 'Upper east wall must stop the former direct goal drop');
+    d.walk(8, 4); d.walk(8, 14); d.walk(5.5, 14); d.walk(5.5, 12.3);
+    pressAgainst(d, 0, -1, p => p.z > 11.4 && p.y > 17.9, 'The low aiming window must not admit the standing capsule');
   }});
-  assert.equal(report.pass, true);
-  assert.equal(report.resets + report.respawns, 0);
-  assert.equal(report.teleports, 2);
+  assert.equal(report.pass, true); assert.equal(report.teleports, 1); assert.equal(report.resets + report.respawns, 0);
+});
+
+test('the original carried friend can enter the cargo tube but its low throat and sight slot block the standing player', async () => {
+  await game.selectLevel(11, false);
+  const report = await runV8Journey(game, {scenario: d => {
+    reachLedge(d, false);
+    d.walk(-15, -8); d.walk(-9, -8); d.aim(1, d.level.panels.cargo.getFrame().center);
+    d.walk(-15, -8); d.walk(-15, 14); d.walk(-6, 14);
+    d.until(() => game.playerGrounded && game.playerPosition.y < .1, 4, 'Return by the actual lower floor');
+    d.walk(11, 14); d.walk(game.cargo.position.x - 1.1, game.cargo.position.z); d.pickup();
+    d.walk(11, 14.5); d.walk(-14.5, 14.5); d.walk(-14.5, 12);
+    d.enter(d.level.panels['access-low']); d.until(() => game.playerGrounded, 3, 'Cargo tube floor');
+    d.walk(10, -4); assert.ok(Math.abs(game.playerPosition.y - 9) < .1); assert.equal(game.teleportCount, 2);
+    pressAgainst(d, -1, 0, p => p.x > 6.9, 'The west sight slot remains lower than the capsule');
+    d.walk(10, -4);
+    pressAgainst(d, 0, 1, p => p.z < .4, 'The freight throat admits the free body but not its carrier');
+  }});
+  assert.equal(report.pass, true); assert.equal(report.teleports, 2); assert.equal(report.resets + report.respawns, 0);
 });

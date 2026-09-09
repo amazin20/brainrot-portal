@@ -52,7 +52,7 @@ try{
    if(index>first-1){await clickMenu('#play-again-button');await page.waitForFunction(i=>window.__NESI_DEMO_GAME__?.levelIndex===i&&window.__NESI_DEMO_GAME__.state==='playing',{},index);await shot(`level-${index+1}-start`);}
    const captured=await page.evaluate(async capturePuzzle=>{
      const g=window.__NESI_DEMO_GAME__,original=g.render,originalVisuals=g.updateVisuals,images=[],clips=[];
-     const requests=new Map([['observation flight',90],['freight release',90],['final flight',150]]);
+     const requests=new Map([['folded underpass',90],['shared shaft delivery',90],['crossing flight',150]]);
      let active=null;
      g.render=function(){original.call(this);if(this.levelIndex>=5&&this.state==='playing')images.push(this.renderer.domElement.toDataURL('image/png'));};
      window.__NESI_CAPTURE_LEVEL_MARK__=mark=>{
@@ -74,7 +74,7 @@ try{
    },capturePuzzle);
    captured.images.forEach((image,k)=>fs.writeFileSync(`${out}/level-${index+1}-mechanic-${k+1}.png`,Buffer.from(image.split(',')[1],'base64')));
    if(capturePuzzle&&index===11){
-     assert.deepEqual(captured.clips.map(c=>c.name),['observation flight','freight release','final flight']);
+     assert.deepEqual(captured.clips.map(c=>c.name),['folded underpass','shared shaft delivery','crossing flight']);
      for(const clip of captured.clips){
        const directory='room-12-'+clip.name.replaceAll(' ','-');fs.mkdirSync(`${out}/${directory}`,{recursive:true});
        assert.ok(clip.frames.length>=24,`Record a readable interval of ${clip.name}`);
