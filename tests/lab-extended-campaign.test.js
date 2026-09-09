@@ -4,7 +4,7 @@ import {createHeadlessGame} from '../scripts/lab-headless.mjs';
 import {CAMPAIGN} from '../src/game/LabCampaignLevels.js';
 const g=await createHeadlessGame();
 test('twelve-course registry preserves distinct physical concepts and has one new portal puzzle',async()=>{
- assert.equal(CAMPAIGN.length,12);assert.equal(CAMPAIGN[11].id,'reverse-perspective');
+ assert.equal(CAMPAIGN.length,12);assert.equal(CAMPAIGN[11].id,'folded-junction');
  const ids=[],concepts=[],shapes=[];
  for(let i=5;i<CAMPAIGN.length;i++){
   await g.selectLevel(i,false);const l=g.firstLevel;ids.push(l.id);concepts.push(l.world.root.userData.distinctConcept);

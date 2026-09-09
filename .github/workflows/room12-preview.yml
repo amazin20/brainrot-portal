@@ -1,0 +1,62 @@
+name: Room 12 layout preview
+
+# Fast visual iteration only. The seven verified campaign jobs remain the
+# release gate; this workflow cannot publish or replace their evidence.
+on:
+  push:
+    branches:
+      - feature/folded-junction-v28
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: room12-layout-preview-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  BUILD_COMMIT: ${{ github.sha }}
+
+jobs:
+  layout:
+    name: Ordinary room 12 route and native milestone stills
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Build the exact preview revision
+        run: |
+          npm ci
+          npm install --no-save --package-lock=false puppeteer-core@24.16.0
+          npm run build
+          node scripts/stamp-build.mjs v28-folded-junction
+      - name: Capture the ordinary route without video frame sampling
+        env:
+          NESI_FIRST: '12'
+          NESI_LAST: '12'
+          NESI_UI: '0'
+          NESI_CAPTURE_PUZZLE: '0'
+        run: |
+          npm run preview -- --host 127.0.0.1 --port 4173 >room12-preview.log 2>&1 &
+          for i in {1..30}; do curl -fsS http://127.0.0.1:4173/ >/dev/null && break; sleep 1; done
+          curl -fsS http://127.0.0.1:4173/ >/dev/null
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+          node scripts/v8-browser.mjs
+      - name: Preserve the native layout preview
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: room12-layout-preview
+          path: |
+            smoke-artifacts/
+            room12-preview.log
+            dist/build-info.json
+          if-no-files-found: error
+          retention-days: 7

@@ -1,10 +1,35 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import * as THREE from 'three';
+import { LabCamera } from '../src/game/LabCamera.js';
 import { createHeadlessGame } from '../scripts/lab-headless.mjs';
 import { runV8Journey } from '../src/game/LabV8Journey.js';
 import { LabGame } from '../src/game/LabGame.js';
 
-test('the ordinary atrium route keeps the camera outside the player and inside entry walls', async () => {
+test('a ceiling above a blocked boom retains a swept lateral escape outside the body', () => {
+  const camera = new THREE.PerspectiveCamera(62, 1.6, .06, 160);
+  const backing = new THREE.Mesh(new THREE.BoxGeometry(12, 8, .2), new THREE.MeshBasicMaterial());
+  backing.position.set(0, 3, 1.1);
+  const ceiling = new THREE.Mesh(new THREE.BoxGeometry(12, .3, 12), new THREE.MeshBasicMaterial());
+  ceiling.position.set(0, 2.8, 0);
+  const rig = new LabCamera({ camera, blockers: [backing, ceiling] });
+  const target = new THREE.Vector3();
+  try {
+    rig.reset(target, 0, -.2);
+    for (let frame = 0; frame < 120; frame++) {
+      rig.update({ dt: 1 / 60, target, yaw: 0, pitch: -.2 });
+      assert.ok(camera.position.distanceTo(rig.playerPivot) >= 2.2, 'Ceiling forced the lens into the body');
+      assert.ok(camera.position.z < .76 && camera.position.y < 2.41, 'Escape crossed the backing or ceiling');
+      const swept = camera.position.clone();
+      rig.constrain(rig.playerPivot, swept);
+      assert.ok(swept.distanceTo(camera.position) < 1e-8, 'Final lateral position failed its near-plane sweep');
+    }
+  } finally {
+    for (const mesh of [backing, ceiling]) { mesh.geometry.dispose(); mesh.material.dispose(); }
+  }
+});
+
+test('the ordinary folded junction route keeps the camera outside the player and inside entry walls', async () => {
   const game = await createHeadlessGame();
   try {
     await game.selectLevel(11, false);
@@ -17,13 +42,13 @@ test('the ordinary atrium route keeps the camera outside the player and inside e
       minimum = Math.min(minimum, distance);
       assert.ok(distance >= 2.2, `Camera entered the body at frame ${frames}: ${distance}`);
       if (!this.cameraRig.portalExit) {
-        assert.ok(this.camera.position.z < 37.01,
+        assert.ok(this.camera.position.z < 17.01,
           `The ordinary boom escaped through an entrance wall at frame ${frames}`);
       }
     };
     const report = await runV8Journey(game);
     assert.equal(report.pass, true); assert.equal(report.resets + report.respawns, 0);
-    assert.ok(frames > 4000); assert.ok(minimum >= 2.2);
+    assert.ok(frames > 2000); assert.ok(minimum >= 2.2);
   } finally { game.physics.dispose(); game.portals.dispose(); }
 });
 

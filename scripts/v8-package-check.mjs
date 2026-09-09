@@ -1,6 +1,6 @@
 import fs from 'node:fs';import assert from 'node:assert/strict';import {CAMPAIGN_ASSET_IDS} from '../src/game/labAssets.js';import {CAMPAIGN} from '../src/game/LabCampaignLevels.js';
 const root=process.argv[2]||'dist',manifest=JSON.parse(fs.readFileSync(root+'/models/runtime/manifest.json'));
-assert.equal(CAMPAIGN.length,12);assert.equal(CAMPAIGN.at(-1).id,'reverse-perspective');
+assert.equal(CAMPAIGN.length,12);assert.equal(CAMPAIGN.at(-1).id,'folded-junction');
 assert.deepEqual([...new Set(CAMPAIGN.flatMap(room=>room.assets))].sort((a,b)=>a-b),[...CAMPAIGN_ASSET_IDS]);
 assert.deepEqual(manifest.models.map(m=>m.id).sort((a,b)=>a-b),[...CAMPAIGN_ASSET_IDS]);
 for(const m of manifest.models)assert.ok(fs.statSync(root+'/models/runtime/'+m.filename).size>1000);

@@ -19,7 +19,7 @@ try{
   catch(error){console.log('Publication propagation:',String(error));}
   await wait(5000);
  }
- assert.equal(info?.commit,expected);assert.equal(info?.levels,CAMPAIGN.length);assert.equal(info?.version,'v27-spatial-polish');assert.equal(info?.levels,12);report.build=info;
+ assert.equal(info?.commit,expected);assert.equal(info?.levels,CAMPAIGN.length);assert.equal(info?.version,'v28-folded-junction');assert.equal(info?.levels,12);report.build=info;
  const response=await fetch(base+'models/runtime/manifest.json?revision='+expected);assert.ok(response.ok);const manifest=await response.json();
  assert.deepEqual(manifest.models.map(m=>m.id).sort((a,b)=>a-b),[...CAMPAIGN_ASSET_IDS]);
  const source=JSON.parse(fs.readFileSync('public/models/runtime/manifest.json','utf8'));
@@ -49,6 +49,6 @@ try{
  assert.equal(report.portalEdge.pass,true);
  report.flightAudio=await runFlightAudioBrowser({browser,baseUrl:base,out:'live-evidence/flight-audio',capture:false});
  assert.equal(report.flightAudio.pass,true);report.pass=true;
- console.log('LIVE VERIFIED',expected,'v27: БРЕЙНРОТ ПОРТАЛ, 12 rooms, reverse-perspective ordinary route, campaign wrap, live model hashes and room9 jump/turn portal regressions');
+ console.log('LIVE VERIFIED',expected,'v28: БРЕЙНРОТ ПОРТАЛ, 12 rooms, folded-junction ordinary route, campaign wrap, live model hashes and room9 jump/turn portal regressions');
 }catch(error){report.error=String(error);throw error;}
 finally{fs.writeFileSync('live-evidence/report.json',JSON.stringify(report,null,2));await browser?.close();}
