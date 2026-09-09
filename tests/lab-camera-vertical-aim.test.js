@@ -34,16 +34,16 @@ test('a falling traveller can fire a real charge into the floor with production 
   const game = await createHeadlessGame();
   try {
     await game.selectLevel(11, false); game.resetRun(true);
-    // Isolated camera/shot regression fixture at the observed second-shot
-    // position. From here gravity, orbit input, muzzle and impacts are live;
-    // the complete ordinary level journey separately proves this is reachable.
-    game.playerPosition.set(3.67, 21.23, 4);
+    // Isolated camera/shot fixture above the junction's lower return surface.
+    // Gravity, orbit input, muzzle and impact remain live. This does not
+    // substitute for the complete ordinary route's reachability checks.
+    game.playerPosition.set(3.73, 16, 2.9);
     game.previousPlayerPosition.copy(game.playerPosition);
     game.playerGroup.position.copy(game.playerPosition);
     game.playerVelocity.set(0, 0, 0); game.playerGrounded = false;
     game.yaw = 0; game.pitch = -.167;
     game.cameraRig.reset(game.playerPosition, game.yaw, game.pitch);
-    const floor = game.firstLevel.panels['return-floor'].getFrame().center;
+    const floor = game.firstLevel.panels.return.getFrame().center;
     let fired = false, firingHeight = 0;
     for (let n = 0; n < 120; n++) {
       const projected = track(game, floor);
@@ -58,6 +58,6 @@ test('a falling traveller can fire a real charge into the floor with production 
     assert.equal(fired, true, 'Normal mouse orbit never reached the floor during the fall');
     assert.ok(firingHeight > 6, `The traveller had already landed before being able to aim: ${firingHeight}`);
     assert.equal(game.portalShots.lastImpact?.valid, true, JSON.stringify(game.portalShots.lastImpact));
-    assert.equal(game.portalSurfaceIds[0], game.firstLevel.panels['return-floor'].mesh.uuid);
+    assert.equal(game.portalSurfaceIds[0], game.firstLevel.panels.return.mesh.uuid);
   } finally { game.physics.dispose(); game.portals.dispose(); }
 });

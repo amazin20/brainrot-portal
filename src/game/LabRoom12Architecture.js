@@ -41,6 +41,19 @@ export function buildRoom12Architecture(world) {
   const metal = new THREE.MeshStandardMaterial({color:0xffffff, roughness:.84, metalness:.12});
   const matrix = new THREE.Matrix4(), tint = new THREE.Color();
 
+  // The structural boxes use their own room-local materials, separately from
+  // the tiled faces above. Keep their mass visible beneath crossing decks;
+  // the small ambient floor in the material adds no point light or white target.
+  world.materials.wall.color.setHex(0x728780);
+  world.materials.wall.roughness = .9;
+  world.materials.wall.emissive.setHex(0x728780);
+  world.materials.wall.emissiveIntensity = .045;
+  world.materials.trim.color.setHex(0x657570);
+  world.materials.trim.roughness = .84;
+  world.materials.trim.metalness = .1;
+  world.materials.trim.emissive.setHex(0x657570);
+  world.materials.trim.emissiveIntensity = .12;
+
   // Pigment belongs to existing tile instances, not a second facing floating
   // over them. Muted differences identify overlapping levels without making
   // extra white targets or a decorative grid of false panels.
@@ -110,6 +123,32 @@ export function buildRoom12Architecture(world) {
         a:box.min[other], b:box.max[other], low:box.min.y, high:box.max.y});
     }
   }
+
+  // Sparse construction joints on the three large structural masses explain
+  // where the lower ledge and upper crossing meet the shell. They are narrow
+  // beam reveals on an existing solid face, not extra panels or floating rails.
+  // Small baffles and the surfaces surrounding optical slots stay unadorned.
+  let structuralJoints = 0;
+  for (const node of world.root.children) {
+    if (!node.isMesh || node.material !== world.materials.wall) continue;
+    const box = new THREE.Box3().setFromObject(node);
+    if (box.max.y - box.min.y < 14 || box.max.x - box.min.x < 1 || box.max.z - box.min.z < 1) continue;
+    for (const [axis, other] of [['x','z'], ['z','x']]) for (const side of [-1,1]) {
+      const a = box.min[other] + .12, b = box.max[other] - .12;
+      if (b - a < 4.5) continue;
+      const coordinate = (side < 0 ? box.min[axis] : box.max[axis]) + side * .013;
+      for (const y of [7, 18]) {
+        if (y < box.min.y + .4 || y > box.max.y - .4) continue;
+        const count = Math.ceil((b - a) / 5.8), span = (b - a) / count;
+        for (let i = 0; i < count; i++) {
+          const u = a + span * (i + .5);
+          add(solid, axis === 'x' ? [coordinate, y - .19, u] : [u, y - .19, coordinate],
+            axis === 'x' ? [.018, .12, span - .04] : [span - .04, .12, .018], 0x8e9a8d);
+          structuralJoints++;
+        }
+      }
+    }
+  }
   const labels = [
     ['Underpass ledge', 'УЗЕЛ', COLORS.ledge],
     ['Same-shaft high lip', 'ВЕРХ', COLORS.high],
@@ -169,6 +208,7 @@ export function buildRoom12Architecture(world) {
   batch('Existing wall location stencils', lettering, painted);
   root.userData.finishCount = solid.length;
   root.userData.lightInsertCount = inserts.length;
+  root.userData.structuralJointCount = structuralJoints;
   root.userData.districts = ['lower return','folded ledge','shared shaft','receiving dock'];
   root.userData.mountedLabels = mountedLabels;
   return root;

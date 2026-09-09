@@ -241,6 +241,27 @@ export class LabCamera {
           + candidate.distanceToSquared(this.camera.position) * .15;
         if (score < bestScore) { bestScore = score; best = candidate; }
       }
+      // Beneath a ceiling or immediately after a high wall exit every upward
+      // escape can be blocked even though there is ample room beside the body.
+      // Only in that case search a short lateral ring. Every candidate keeps
+      // the same near-plane sweep; an unavailable escape never ignores a wall.
+      if (!best) {
+        const lateral = this.right.clone().setY(0).normalize();
+        if (lateral.lengthSq() < .01) lateral.set(1, 0, 0);
+        const along = new THREE.Vector3().crossVectors(lateral, UP);
+        for (const height of [0, -1.5, 1.5]) for (let sector = 0; sector < 8; sector++) {
+          const angle = sector * Math.PI / 4;
+          const candidate = this.playerPivot.clone()
+            .addScaledVector(lateral, Math.cos(angle) * 3.6)
+            .addScaledVector(along, Math.sin(angle) * 3.6);
+          candidate.y += height;
+          this.constrain(this.playerPivot, candidate);
+          if (candidate.distanceTo(this.playerPivot) < 2.4) continue;
+          const score = candidate.distanceToSquared(this.desired)
+            + candidate.distanceToSquared(this.camera.position) * .15;
+          if (score < bestScore) { bestScore = score; best = candidate; }
+        }
+      }
       if (best) { escapePosition = best; avoidGoal.copy(best).sub(this.desired); this.avoidanceActive = true; }
       else this.avoidanceActive = false;
     } else this.avoidanceActive = false;

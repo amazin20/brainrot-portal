@@ -51,7 +51,11 @@ export function room12Fling(d){
  const returnCenter=game.portals.portals[1].position;
  aimMoving(d,0,p.final.getFrame().center,{seconds:3,keepPosition:{x:returnCenter.x,z:returnCenter.z},fireWhen:()=>game.playerPosition.y>18.8});mark('spent portal becomes the lateral exit');
  stop();until(()=>game.teleportCount>=before+2,4,'Second fall missed');mark('perpendicular crossing');
- until(()=>game.playerGrounded,4,'Receiving dock landing');check(Math.abs(game.playerPosition.y-9)<.15&&game.playerPosition.x>=7,'Missed dock: '+game.playerPosition.toArray());
+ until(()=>game.playerGrounded,4,'Receiving dock landing');
+ // A slightly higher exit can first touch the receiving rail. Step onto the
+ // actual dock with ordinary movement before checking the landing surface.
+ if(game.playerPosition.x>=7&&game.playerPosition.x<15&&game.playerPosition.y>9.15&&game.playerPosition.y<=10.5){walk(12,4);until(()=>game.playerGrounded&&Math.abs(game.playerPosition.y-9)<.15,3,'Step inside receiving rail');}
+ check(Math.abs(game.playerPosition.y-9)<.15&&game.playerPosition.x>=7,'Missed dock: '+game.playerPosition.toArray());
 }
 export function room12DockReturn(d){
  const {game,walk,frame,worldMove,stop,until,mark}=d;
@@ -71,5 +75,5 @@ export async function runRoom12(d,{order='cargo-first'}={}){
  }
  room12Access(d,{carry:true,wandering:order==='scout-first'});room12Freight(d);room12Climb(d);room12Fling(d);
  const {game,walk,pickup,until,mark}=d;
- walk(game.cargo.position.x-1.1,Math.max(1.5,game.cargo.position.z));if(game.state==='playing')pickup();walk(10,4);until(()=>game.state==='won',3,'Reunited at the dock');mark('reunited above the entrance');
+ walk(THREE.MathUtils.clamp(game.cargo.position.x-1.1,8,14),THREE.MathUtils.clamp(game.cargo.position.z,1.5,7));if(game.state==='playing')pickup();walk(10,4);until(()=>game.state==='won',3,'Reunited at the dock');mark('reunited above the entrance');
 }

@@ -70,9 +70,12 @@ try{
      };
      try{return {route:await window.__NESI_RUN_LEVEL_ROUTE__(),images,clips,
        width:g.renderer.domElement.width,height:g.renderer.domElement.height};}
+     catch(error){return {failure:String(error),images,clips,
+       width:g.renderer.domElement.width,height:g.renderer.domElement.height};}
      finally{g.render=original;g.updateVisuals=originalVisuals;delete window.__NESI_CAPTURE_LEVEL_MARK__;}
    },capturePuzzle);
    captured.images.forEach((image,k)=>fs.writeFileSync(`${out}/level-${index+1}-mechanic-${k+1}.png`,Buffer.from(image.split(',')[1],'base64')));
+   if(captured.failure)throw Error(captured.failure);
    if(capturePuzzle&&index===11){
      assert.deepEqual(captured.clips.map(c=>c.name),['folded underpass','shared shaft delivery','crossing flight']);
      for(const clip of captured.clips){

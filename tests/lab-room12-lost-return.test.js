@@ -1,80 +1,67 @@
-import test, {after} from 'node:test';
+import test,{after} from 'node:test';
 import assert from 'node:assert/strict';
 import * as THREE from 'three';
 import {createHeadlessGame} from '../scripts/lab-headless.mjs';
 import {runV8Journey} from '../src/game/LabV8Journey.js';
-import {runRoom12} from '../src/game/LabPortalRoom12.js';
+import {runRoom12,room12Access,room12Climb,room12Fling} from '../src/game/LabRoom12Journey.js';
 
-const game = await createHeadlessGame();
-after(() => { game.physics.dispose(); game.portals.dispose(); });
+const game=await createHeadlessGame();
+const V=(...p)=>new THREE.Vector3(...p);
+after(()=>{game.physics.dispose();game.portals.dispose();});
+async function reach(d,label){
+ const stop=Symbol(label);let reached=false;
+ try{await runRoom12({...d,mark(name){d.mark(name);if(name===label){reached=true;throw stop;}}});}
+ catch(error){if(error!==stop)throw error;}
+ assert.ok(reached,'Ordinary controls reach '+label);
+}
+function missReturn(d){
+ for(let n=0;n<180&&!game.playerGrounded;n++){d.worldMove(1,0);d.frame();}
+ d.stop();d.until(()=>game.playerGrounded,4,'A missed return reaches a real floor');
+ assert.ok(game.playerPosition.y<.1,'The player lands in the lower passage');
+ assert.ok(game.cargo.position.y>8.9,'The delivered friend remains on the dock');
+}
+function retry(d){
+ if(game.playerPosition.x<-7)d.walk(-8,12);
+ d.walk(4,12);d.walk(10,14.5);room12Access(d);
+ d.walk(-9,-7.2);d.aim(0,V(-10,.025,9.8));room12Climb(d);room12Fling(d);
+ d.walk(THREE.MathUtils.clamp(game.cargo.position.x-1.1,8,14),THREE.MathUtils.clamp(game.cargo.position.z,1.5,7));
+ if(game.state==='playing')d.pickup();d.walk(10,4);
+ d.until(()=>game.state==='won',3,'The same delivered friend completes the retry');
+}
 
-test('room 12 recovers a lost court-return portal through a second physical fall and completes the level', async () => {
-  await game.selectLevel(11, false);
-  const report = await runV8Journey(game, {scenario: async d => {
-    const reached = Symbol('far exit placed');
-    let ready = false;
-    try {
-      await runRoom12({...d, mark(name) {
-        if (name === 'the airborne angle exposes the final exit') { ready = true; throw reached; }
-      }});
-    } catch (error) {
-      if (error !== reached) throw error;
-    }
-    assert.ok(ready);
+test('missing the airborne rewire returns through the lower passage and completes without redelivering the friend',async()=>{
+ await game.selectLevel(11,false);
+ const body=game.physics.cargoBody,group=game.cargo.group;
+ let freightTransfers;
+ const report=await runV8Journey(game,{scenario:async d=>{
+  await reach(d,'return rises through the junction');freightTransfers=game.physics.portalTransports;
+  missReturn(d);retry(d);
+ }});
+ assert.equal(report.pass,true);assert.equal(report.resets+report.respawns,0);
+ assert.equal(game.physics.cargoBody,body);assert.equal(game.cargo.group,group);
+ assert.equal(game.physics.portalTransports,freightTransfers,'The waiting friend is never resent or respawned');
+ assert.equal(game.state,'won');
+});
 
-    // Miss the normal return using ordinary air movement, then walk into it
-    // without the stored falling speed. This really reaches the enclosed bay.
-    for (let n = 0; n < 90 && !game.playerGrounded; n++) { d.worldMove(1, 0); d.frame(); }
-    d.stop();
-    d.until(() => game.playerGrounded, 3, 'Land beside the court return');
-    assert.ok(game.playerPosition.y < .1);
-    d.walk(7, 7); d.walk(4, 7);
-    const lowEntry = game.teleportCount;
-    for (let n = 0; n < 180 && game.teleportCount === lowEntry; n++) { d.worldMove(0, -.3); d.frame(); }
-    d.stop();
-    assert.equal(game.teleportCount, lowEntry + 1);
-    assert.ok(game.lastPortalTravel.speed < 10);
-    d.until(() => game.playerGrounded, 4, 'The low-energy flight reaches the bay floor');
-    assert.ok(game.playerPosition.y < .1 && game.playerPosition.z < 0);
-    assert.ok(game.cargo.position.y > 11.9);
-
-    // Deliberately spend the court portal, the opposite colour from the usual
-    // recovery. Both portals are now inside the bay; no external pair survives.
-    const farPortal = game.portals.portals[0];
-    d.aim(1, new THREE.Vector3(16.5, .025, -12.3));
-    assert.equal(game.portals.portals[0], farPortal);
-    assert.ok(game.portals.portals[1].position.z < 0);
-    const returnPoint = game.portals.portals[1].position.clone();
-    d.walk(17.1, -17); d.walk(17.1, -15);
-    const loopStart = game.teleportCount;
-    for (let n = 0; n < 180 && game.teleportCount === loopStart; n++) { d.worldMove(0, .3); d.frame(); }
-    d.stop();
-    assert.equal(game.teleportCount, loopStart + 1);
-    const firstSpeed = game.lastPortalTravel.speed;
-
-    // Brake the first low-speed wall exit backward, so its real fall lands in
-    // the offset floor portal. The second exit inherits the gained speed.
-    for (let n = 0; n < 420; n++) {
-      if (game.teleportCount === loopStart + 1) {
-        const p = game.playerPosition, velocity = game.playerVelocity;
-        d.worldMove(THREE.MathUtils.clamp((returnPoint.x - p.x) * 1.8 - velocity.x * 1.2, -1, 1), -1);
-      } else d.stop();
-      d.frame();
-      if (game.playerGrounded && game.playerPosition.z > 0 && game.playerPosition.y > 11.9) break;
-    }
-    assert.equal(game.teleportCount, loopStart + 2);
-    assert.ok(game.lastPortalTravel.speed > firstSpeed + 15, 'The second fall must supply the escape energy');
-    assert.ok(game.playerPosition.z > 0 && game.playerPosition.y > 11.9,
-      'The original player must physically cross the front of the launch bay');
-    d.walk(17, 6);
-    d.until(() => game.playerGrounded && Math.abs(game.playerPosition.y - 12) < .1, 3, 'Receiving deck');
-    d.walk(game.cargo.position.x - 1.1, game.cargo.position.z);
-    d.pickup();
-    d.walk(21, 21);
-    d.until(() => game.state === 'won', 3, 'Both original travellers complete the alternative route');
-  }});
-  assert.equal(report.pass, true);
-  assert.equal(report.teleports, 6);
-  assert.equal(report.resets + report.respawns, 0);
-  assert.equal(game.state, 'won');
+test('a weak late entry reaches the recovery shelf and a normal jump returns to the lower passage',async()=>{
+ await game.selectLevel(11,false);
+ const body=game.physics.cargoBody;
+ const report=await runV8Journey(game,{scenario:async d=>{
+  await reach(d,'spent portal becomes the lateral exit');missReturn(d);
+  d.walk(6,5.5);d.walk(4,5.5);
+  const before=game.teleportCount;
+  for(let n=0;n<300&&game.teleportCount===before;n++){d.worldMove(0,-.3);d.frame();}
+  d.stop();assert.equal(game.teleportCount,before+1,JSON.stringify({position:game.playerPosition.toArray(),portal:game.portals.portals[1].position.toArray()}));
+  assert.ok(game.lastPortalTravel.speed<10,'The local floor entry has little stored energy');
+  d.until(()=>game.playerGrounded,4,'The weak exit lands on the actual recovery shelf');
+  assert.ok(Math.abs(game.playerPosition.y-17)<.1&&game.playerPosition.x<-9);
+  assert.equal(game.state,'playing');
+  d.walk(-10.6,3);game.input.jumpQueued=true;
+  for(let n=0;n<150;n++){d.worldMove(1,0);d.frame();if(game.playerPosition.x>-8.2)break;}
+  d.stop();assert.ok(game.playerPosition.x>-8.2,'A normal jump clears the real front sill: '+game.playerPosition.toArray());
+  d.until(()=>game.playerGrounded&&game.playerPosition.y<.1,4,'Drop from the pocket to the lower passage');
+  retry(d);
+ }});
+ assert.equal(report.pass,true);assert.equal(report.resets+report.respawns,0);
+ assert.equal(game.physics.cargoBody,body);assert.equal(game.state,'won');
 });

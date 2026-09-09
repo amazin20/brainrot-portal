@@ -76,7 +76,9 @@ export function buildRoom12(game,index=11){
  k.panel('shared-drop',[-10,.025,9],[0,1,0],6,6);
  k.panel('return',[4,.025,3],[0,1,0],5.4,6);
  k.panel('cargo',[10,11.35,-9],[0,0,1],5.6,4.6);
- k.panel('final',[-17.5,21,3],[1,0,0],5.6,4.6);
+ // The receiving flight must pass below the enclosed upper walk with the
+ // entire capsule, including when portal entry offsets add vertical motion.
+ k.panel('final',[-17.5,20.5,3],[1,0,0],5.6,4.6);
  buildRoom12Architecture(w);
  const level=k.finish([10,0,11],[12,.55,11],[10,9,4],{workshop:k,portalPuzzle:true});
  level.puzzleGeometry={safeFloor:0,dropHeight:18,freightHeight:7,goalHeight:9,normalGaps:0,cargoWindow:{z:.4,minY:9,maxY:10.55},launchWindow:{x:-9,minY:18.5,maxY:24},returnSightWindow:{z:11.3,x:[3.5,6.5],y:[17.5,19.6]},footprint:36*32,
