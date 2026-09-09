@@ -33,6 +33,19 @@ test('junction finishes leave the actual cargo and lateral flight apertures clea
   }
 });
 
+test('ordinary junction floors meet at edges without duplicate coplanar walking surfaces', async () => {
+  await game.selectLevel(11, false);
+  const floors = game.firstLevel.world.surfaces.filter(surface => surface.floor && !surface.portal);
+  for (let i = 0; i < floors.length; i++) for (let j = i + 1; j < floors.length; j++) {
+    const a = floors[i], b = floors[j], first = a.floor, second = b.floor;
+    if (Math.abs(first.y - second.y) > 1e-6) continue;
+    const overlapX = Math.min(first.maxX, second.maxX) - Math.max(first.minX, second.minX);
+    const overlapZ = Math.min(first.maxZ, second.maxZ) - Math.max(first.minZ, second.minZ);
+    assert.ok(overlapX <= 1e-6 || overlapZ <= 1e-6,
+      `${a.name} and ${b.name} overlap at y=${first.y}: ${overlapX} by ${overlapZ}m causes visible z-fighting`);
+  }
+});
+
 test('finishes preserve ceramic transforms and all gameplay registries without adding shadow-overlapping stair skins', async () => {
   await game.selectLevel(11, false);
   const world = game.firstLevel.world;

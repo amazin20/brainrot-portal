@@ -30,7 +30,7 @@ export function buildRoom12(game,index=11){
  };
  // The west walk passes under the final pocket, then folds over its own shaft.
  deck('West landing',-17.5,-8,-14.3,-7,7);
- deck('Underpass ledge',-16.8,-13.6,-7,13,7);
+ deck('Underpass ledge',-16.8,-13.6,-7,11.5,7);
  deck('Shared freight lip',-16.8,-7,11.5,16,7);
  stair('North cross stair',-14,-5,-14.3,-11,7,11,'x');
  deck('North stair turn',-5,3,-14.3,-9,11);
@@ -38,7 +38,7 @@ export function buildRoom12(game,index=11){
  deck('Folded stair turn',0,6.5,-3.3,-1.8,14.6);
  stair('Folded return stair',3.5,6.5,-3.3,-9,14.6,18);
  deck('Upper crossing turn',3.5,9,-10,-9,18);
- deck('Over the freight tube',7,9,-9,14,18);
+ deck('Over the freight tube',7,9,-9,11.5,18);
  w.box([6.8,20.25,2.225],[.3,4.5,18.45],w.materials.wall);
  // The upper walk is a continuous enclosed service corridor. Its east side
  // cannot become a short drop directly onto the receiving dock below.
