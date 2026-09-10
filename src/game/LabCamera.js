@@ -154,6 +154,15 @@ export class LabCamera {
     const step = Math.min(Math.max(Number.isFinite(dt) ? dt : 0, 0), 0.1);
     this.lastTarget.copy(target);
     this.playerPivot.copy(target).y += 1.32;
+    // Clipping only bridges the lens that still trails a traveller emerging
+    // in front of an exit. Walking around the panel onto its back side ends
+    // that transit even if the lens never crossed the plane itself. Keeping
+    // the old plane there would discard the traveller and the whole room.
+    const exit = this.portalExit;
+    if (exit && this.playerPivot.dot(exit.normal) - exit.position.dot(exit.normal) < -.6) {
+      this.portalExit = null;
+      this.mainClippingPlanes.length = 0;
+    }
     this.goal.copy(this.playerPivot);
     const speed = velocity ? Math.hypot(velocity.x, velocity.z) : 0;
     // Less than half a metre of anticipation. The camera has no head bob, roll,
