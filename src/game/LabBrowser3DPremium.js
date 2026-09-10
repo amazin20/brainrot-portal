@@ -1,15 +1,17 @@
 import * as THREE from 'three';
 
 const V=(x=0,y=0,z=0)=>new THREE.Vector3(x,y,z);
-const Z=V(0,0,1);
 
 function tuneMaterial(source){
-  const m=source?.clone?.()??new THREE.MeshStandardMaterial({color:0xa8afb1});
-  if('roughness' in m)m.roughness=THREE.MathUtils.clamp(m.roughness??.62,.34,.72);
-  if('metalness' in m)m.metalness=THREE.MathUtils.clamp(m.metalness??.08,.04,.34);
-  if('envMapIntensity' in m)m.envMapIntensity=1.15;
-  if(m.color)m.color.multiplyScalar(1.08);
-  if(m.map)m.map.anisotropy=Math.max(4,m.map.anisotropy||1);
+  // Keep the actual optimized GLB geometry but normalize its old placeholder
+  // texture treatment. The source map had high-contrast scratches that read
+  // as broken normals at gameplay distance. Clean manufactured panels retain
+  // relief from the mesh itself and use a restrained industrial finish.
+  const m=new THREE.MeshStandardMaterial({
+    color:0x66727a,roughness:.58,metalness:.22,
+    emissive:0x111a20,emissiveIntensity:.18,
+  });
+  if(source?.vertexColors)m.vertexColors=true;
   return m;
 }
 
@@ -37,9 +39,9 @@ function addRealPanelCladding(level,root){
   if(!g.assets?.has(24))return {instances:0,batches:0,sourceBoxes:0};
   const template=w.template(24);if(!template?.length)return {instances:0,batches:0,sourceBoxes:0};
   const buckets=template.map(()=>[]),materials=template.map(part=>tuneMaterial(part.material));
+  w.root.updateWorldMatrix(true,true);
   const rootInv=w.root.matrixWorld.clone().invert(),normalMatrix=new THREE.Matrix3(),q=new THREE.Quaternion(),scale=new THREE.Vector3(),pos=new THREE.Vector3();
   let instances=0,sourceBoxes=0;
-  w.root.updateWorldMatrix(true,true);
   const facesFor=p=>[
     {axis:'z',sign:1,width:p.width,height:p.height,offset:p.depth/2-.038,rotation:0},
     {axis:'z',sign:-1,width:p.width,height:p.height,offset:-p.depth/2+.038,rotation:Math.PI},
@@ -63,7 +65,7 @@ function addRealPanelCladding(level,root){
         const worldCenter=pos.clone().applyMatrix4(mesh.matrixWorld);
         const localNormal=face.axis==='z'?V(0,0,face.sign):V(face.sign,0,0),worldNormal=localNormal.applyMatrix3(normalMatrix).normalize();
         if(overlapsPortal(level,worldCenter,worldNormal))continue;
-        scale.set(cw-.055,ch-.055,.08);
+        scale.set(cw-.07,ch-.07,.075);
         const local=new THREE.Matrix4().compose(pos,q,scale),base=rootInv.clone().multiply(mesh.matrixWorld).multiply(local);
         template.forEach((part,i)=>buckets[i].push(base.clone().multiply(part.matrix)));
         instances++;
@@ -74,7 +76,7 @@ function addRealPanelCladding(level,root){
     if(!matrices.length)return;
     const mesh=new THREE.InstancedMesh(template[i].geometry,materials[i],matrices.length);
     mesh.name='Real GLB structural panel cladding';mesh.userData.visualOnly=true;mesh.receiveShadow=true;
-    matrices.forEach((m,j)=>mesh.setMatrixAt(j,m));mesh.computeBoundingBox();mesh.computeBoundingSphere();root.add(mesh);
+    matrices.forEach((matrix,j)=>mesh.setMatrixAt(j,matrix));mesh.computeBoundingBox();mesh.computeBoundingSphere();root.add(mesh);
   });
   return {instances,batches:buckets.filter(b=>b.length).length,sourceBoxes};
 }
@@ -82,13 +84,13 @@ function addRealPanelCladding(level,root){
 function addLighting(level,root){
   const b=level.bounds||level.workshop?.bounds||{minX:-20,maxX:20,minZ:-20,maxZ:20};
   const ceiling=level.workshop?.ceiling??level.ceiling??24,cx=(b.minX+b.maxX)/2,cz=(b.minZ+b.maxZ)/2;
-  const ambient=new THREE.AmbientLight(0xdde8ea,.72);ambient.name='Soft industrial bounce';root.add(ambient);
-  const hemi=new THREE.HemisphereLight(0xeaf4f4,0x1b242a,1.05);hemi.name='Ceiling bounce';root.add(hemi);
-  const key=new THREE.DirectionalLight(0xfff2d6,1.05);key.name='Warm service key';key.position.set(cx-8,ceiling-2,cz+7);key.castShadow=false;
+  const ambient=new THREE.AmbientLight(0xdce9ec,1.55);ambient.name='Soft industrial bounce';root.add(ambient);
+  const hemi=new THREE.HemisphereLight(0xf4fbff,0x34434b,1.75);hemi.name='Ceiling bounce';root.add(hemi);
+  const key=new THREE.DirectionalLight(0xfff2d6,1.35);key.name='Warm service key';key.position.set(cx-8,ceiling-2,cz+7);key.castShadow=false;
   const target=new THREE.Object3D();target.position.set(cx,Math.max(4,ceiling*.38),cz);root.add(target);key.target=target;root.add(key);
   const accent=level.spec?.accent??0x88d9df;
   const points=[[-.23,.34],[.28,-.21]].map(([dx,dz],i)=>{
-    const light=new THREE.PointLight(accent,i?5.5:6.5,18,2);light.name='Mechanism readability fill';light.position.set(THREE.MathUtils.lerp(b.minX,b.maxX,.5+dx),ceiling*.48,THREE.MathUtils.lerp(b.minZ,b.maxZ,.5+dz));light.castShadow=false;root.add(light);return light;
+    const light=new THREE.PointLight(accent,i?4.2:5.0,20,2);light.name='Mechanism readability fill';light.position.set(THREE.MathUtils.lerp(b.minX,b.maxX,.5+dx),ceiling*.48,THREE.MathUtils.lerp(b.minZ,b.maxZ,.5+dz));light.castShadow=false;root.add(light);return light;
   });
   return {ambient,hemi,key,points};
 }
@@ -96,20 +98,24 @@ function addLighting(level,root){
 function brightenBackings(level){
   const w=level.world,m=w.root.userData.browserArtMaterials;
   if(m){
-    m.graphite.color.setHex(0x3b4650);m.steel.color.setHex(0x77858d);m.blackSteel.color.setHex(0x202931);m.ceramic.color.setHex(0xf7f3e9);
-    for(const mat of [m.graphite,m.steel,m.blackSteel]){if('emissive' in mat){mat.emissive.setHex(0x10171b);mat.emissiveIntensity=.12;}mat.needsUpdate=true;}
+    m.graphite.color.setHex(0x56636c);m.steel.color.setHex(0x89969c);m.blackSteel.color.setHex(0x303b43);m.ceramic.color.setHex(0xf8f5ec);
+    for(const mat of [m.graphite,m.steel,m.blackSteel]){
+      if('emissive' in mat){mat.emissive.setHex(0x172229);mat.emissiveIntensity=.28;}
+      if('roughness' in mat)mat.roughness=Math.min(mat.roughness,.58);
+      mat.needsUpdate=true;
+    }
     m.ceramic.needsUpdate=true;
   }
-  if(w.materials.wall?.color){w.materials.wall.color.setHex(0x3f4a52);w.materials.wall.emissive?.setHex(0x11191e);w.materials.wall.emissiveIntensity=.14;w.materials.wall.needsUpdate=true;}
-  if(w.materials.floor?.color){w.materials.floor.color.setHex(0x59656b);w.materials.floor.emissive?.setHex(0x12191c);w.materials.floor.emissiveIntensity=.09;w.materials.floor.needsUpdate=true;}
-  if(w.materials.trim?.color){w.materials.trim.color.setHex(0x26313a);w.materials.trim.needsUpdate=true;}
-  level.game.scene.background=new THREE.Color(0x19232a);
-  if(level.game.scene.fog)level.game.scene.fog.color.setHex(0x19232a);
+  if(w.materials.wall?.color){w.materials.wall.color.setHex(0x56626b);w.materials.wall.emissive?.setHex(0x1d2930);w.materials.wall.emissiveIntensity=.24;w.materials.wall.needsUpdate=true;}
+  if(w.materials.floor?.color){w.materials.floor.color.setHex(0x626e73);w.materials.floor.emissive?.setHex(0x182126);w.materials.floor.emissiveIntensity=.16;w.materials.floor.needsUpdate=true;}
+  if(w.materials.trim?.color){w.materials.trim.color.setHex(0x36434c);w.materials.trim.emissive?.setHex(0x11191e);w.materials.trim.emissiveIntensity=.12;w.materials.trim.needsUpdate=true;}
+  level.game.scene.background=new THREE.Color(0x2a3740);
+  if(level.game.scene.fog)level.game.scene.fog.color.setHex(0x2a3740);
 }
 
 function addServiceBands(level,root){
   const b=level.bounds||level.workshop?.bounds;if(!b)return 0;
-  const mat=new THREE.MeshStandardMaterial({color:0x2a343c,metalness:.62,roughness:.4}),lamp=new THREE.MeshBasicMaterial({color:level.spec?.accent??0x8fdde2});
+  const mat=new THREE.MeshStandardMaterial({color:0x46545d,metalness:.58,roughness:.42,emissive:0x11191d,emissiveIntensity:.14}),lamp=new THREE.MeshBasicMaterial({color:level.spec?.accent??0x8fdde2});
   const geom=new THREE.BoxGeometry(1,1,1),items=[];
   const add=(p,s,m)=>items.push({p,s,m});
   const y=(level.workshop?.ceiling??level.ceiling??24)*.72;
@@ -124,7 +130,7 @@ export function applyPremiumBrowser3DArt(level){
   if(!level?.world||level.index<11||level.index>14)return level;
   level.game=level.game||level.workshop?.game||level.world.game;
   brightenBackings(level);
-  const root=new THREE.Group();root.name='Premium browser 3D environment layer';root.userData.visualOnly=true;root.userData.version=32;level.world.root.add(root);
+  const root=new THREE.Group();root.name='Premium browser 3D environment layer';root.userData.visualOnly=true;root.userData.version=33;level.world.root.add(root);
   const cladding=addRealPanelCladding(level,root),serviceBands=addServiceBands(level,root);addLighting(level,root);
   root.userData.stats={...cladding,serviceBands};level.premiumBrowser3DArt=root;
   return level;
