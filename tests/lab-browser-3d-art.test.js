@@ -15,7 +15,7 @@ for(const room of [12,13,14,15])test(`room ${room} browser-3d art is detailed bu
  assert.ok(art.userData.stats.portalFrames>=4,'portal machinery frames should cover authored targets');
  assert.ok(art.userData.stats.deckBraces>=2,'raised architecture should have real under-deck engineering');
  assert.ok(premium&&premium.userData.visualOnly,'premium environment layer must remain visual-only');
- assert.equal(premium.userData.version,32);
+ assert.equal(premium.userData.version,33);
  assert.ok(premium.userData.stats.instances>30,'large placeholder blocks must receive real modular GLB cladding');
  assert.ok(premium.userData.stats.batches>=1&&premium.userData.stats.sourceBoxes>=1);
 
