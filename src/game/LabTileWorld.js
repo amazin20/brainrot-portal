@@ -22,11 +22,11 @@ export class LabTileWorld extends StructuralWorld{
   this.materials.ceramic.emissiveIntensity=.16;
  }
  surface(options){
-  // Rooms 12–15 opt into the authored GLB wall/floor modules. Instancing in
-  // LabTileWorldBase keeps the high-detail mesh browser-friendly while the
-  // original invisible collision plane, portal frame and dimensions remain
-  // bit-for-bit the same gameplay geometry.
-  if(this.highFidelity&&!options.authored){
+  // Rooms 12–15 use the authored GLB wall/floor modules everywhere. The
+  // normalized source mesh is instanced, so this replaces the visible
+  // white-box shell without changing its collision boxes or portal frames.
+  const highFidelity=this.highFidelity||(this.game.levelIndex>=11&&this.game.levelIndex<=14);
+  if(highFidelity&&!options.authored){
    const n=options.normal||[0,0,1];
    options={...options,authored:true,kind:options.kind||(Math.abs(n[1]||0)>.9?'floor':'wall')};
   }
