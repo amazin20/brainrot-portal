@@ -9,7 +9,7 @@ import {resolvePortalPlacement} from '../src/game/LabPortals.js';
 const V=(...p)=>new THREE.Vector3(...p),g=await createHeadlessGame();
 await g.selectLevel(10,false);
 test('single-room cleanup adds no campaign entries or new asset dependency',()=>{
- assert.equal(CAMPAIGN.length,12);assert.equal(g.firstLevel.id,'stored-wind');
+ assert.equal(CAMPAIGN.length,15);assert.equal(g.firstLevel.id,'stored-wind');
  assert.deepEqual(g.firstLevel.fixtures.map(f=>f.id).sort(),[31,35]);
  assert.ok(!CAMPAIGN[10].assets.includes(39),'Unrelated cable reel is removed from this room only');
  assert.ok(!CAMPAIGN.some(room=>room.assets.includes(39)),'Retired winch rooms are not loaded into the active campaign');

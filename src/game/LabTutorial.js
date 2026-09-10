@@ -1,7 +1,7 @@
 /** Free controls/concept introductions. These never conceal rules behind ads.
  * Optional paid-by-ad hints in the menu explain solutions separately. */
 export class LabTutorial {
-  constructor(game){this.game=game;this.seen=new Set();this.enabled=true;this.active=null;this.feedback=null;}
+  constructor(game){this.game=game;this.seen=new Set();this.enabled=true;this.active=null;this.feedback=null;this.conceptStarted=new Map();}
   explain(text){this.feedback={text,until:this.game.visualTime+3.5};}
   select(){
     const g=this.game,l=g.firstLevel,p=g.playerPosition;if(!l)return null;const mobile=globalThis.matchMedia?.('(pointer:coarse)')?.matches===true;
@@ -15,6 +15,11 @@ export class LabTutorial {
     if(g.levelIndex>0&&near(g.cargo?.position)&&!this.seen.has('carry'))return ['carry','E','Возьми друга. Ещё раз E — поставить. С другом на руках стрелять нельзя.',!!g.heldCube];
     const pad=l.pads?.find(pad=>near(pad.position));
     if(pad&&!this.seen.has('weight'))return ['weight','↓','Вес свободного предмета нажимает платформу. Светлый центр пригоден для портала.',l.cargoOnAnyPad()];
+    const concept=l.conceptLesson,id=l.id+'-concept';
+    if(concept&&!this.seen.has(id)&&p.distanceTo(new p.constructor(...concept.position))<(concept.range??9)){
+      if(!this.conceptStarted.has(id))this.conceptStarted.set(id,g.visualTime);
+      return [id,concept.key,concept.text,g.visualTime-this.conceptStarted.get(id)>9];
+    }
     if(g.levelIndex===2&&!this.seen.has('momentum'))return ['momentum','↘','Высота даёт скорость падения. Портал сохраняет скорость и меняет её направление.',g.teleportCount>0];
     if(l.lifts?.length&&pad&&!this.seen.has('load-lift'))return ['load-lift','↕','Вес друга удерживает подъёмник. Без нагрузки он опускается; верхняя галерея остаётся на месте.',l.lifts.some(lift=>lift.y>4.8)];
     const action=l.nearbyInteraction?.();

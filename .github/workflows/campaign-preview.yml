@@ -1,18 +1,18 @@
-name: Room 12 layout preview
+name: Interlaced campaign layout preview
 
-# Fast visual iteration only. The seven verified campaign jobs remain the
+# Fast visual iteration only. The full verified campaign jobs remain the
 # release gate; this workflow cannot publish or replace their evidence.
 on:
   push:
     branches:
-      - feature/folded-junction-v28
+      - feature/interlaced-campaign-v29
   workflow_dispatch:
 
 permissions:
   contents: read
 
 concurrency:
-  group: room12-layout-preview-${{ github.ref }}
+  group: interlaced-layout-preview-${{ github.ref }}
   cancel-in-progress: true
 
 env:
@@ -20,9 +20,13 @@ env:
 
 jobs:
   layout:
-    name: Ordinary room 12 route and native milestone stills
+    name: Ordinary room ${{ matrix.room }} route and native milestone stills
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        room: [12, 13, 14, 15]
     steps:
       - uses: actions/checkout@v4
         with:
@@ -36,15 +40,15 @@ jobs:
           npm ci
           npm install --no-save --package-lock=false puppeteer-core@24.16.0
           npm run build
-          node scripts/stamp-build.mjs v28-folded-junction
+          node scripts/stamp-build.mjs v29-interlaced-campaign
       - name: Capture the ordinary route without video frame sampling
         env:
-          NESI_FIRST: '12'
-          NESI_LAST: '12'
+          NESI_FIRST: ${{ matrix.room }}
+          NESI_LAST: ${{ matrix.room }}
           NESI_UI: '0'
           NESI_CAPTURE_PUZZLE: '0'
         run: |
-          npm run preview -- --host 127.0.0.1 --port 4173 >room12-preview.log 2>&1 &
+          npm run preview -- --host 127.0.0.1 --port 4173 >interlaced-preview.log 2>&1 &
           for i in {1..30}; do curl -fsS http://127.0.0.1:4173/ >/dev/null && break; sleep 1; done
           curl -fsS http://127.0.0.1:4173/ >/dev/null
           export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
@@ -53,10 +57,10 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: room12-layout-preview
+          name: interlaced-layout-preview-${{ matrix.room }}
           path: |
             smoke-artifacts/
-            room12-preview.log
+            interlaced-preview.log
             dist/build-info.json
           if-no-files-found: error
           retention-days: 7

@@ -154,6 +154,15 @@ export class LabCamera {
     const step = Math.min(Math.max(Number.isFinite(dt) ? dt : 0, 0), 0.1);
     this.lastTarget.copy(target);
     this.playerPivot.copy(target).y += 1.32;
+    // Clipping only bridges the lens that still trails a traveller emerging
+    // in front of an exit. Walking around the panel onto its back side ends
+    // that transit even if the lens never crossed the plane itself. Keeping
+    // the old plane there would discard the traveller and the whole room.
+    const exit = this.portalExit;
+    if (exit && this.playerPivot.dot(exit.normal) - exit.position.dot(exit.normal) < -.6) {
+      this.portalExit = null;
+      this.mainClippingPlanes.length = 0;
+    }
     this.goal.copy(this.playerPivot);
     const speed = velocity ? Math.hypot(velocity.x, velocity.z) : 0;
     // Less than half a metre of anticipation. The camera has no head bob, roll,
@@ -225,9 +234,11 @@ export class LabCamera {
     // alternative against the same walls and near-plane volume. This is camera
     // collision only; neither the player nor its aim controls are moved.
     const directDistance = this.desired.distanceTo(this.playerPivot);
+    this.lookPoint.copy(this.focus).addScaledVector(this.forward, 16);
     const avoidGoal = new THREE.Vector3();
     let escapePosition = null;
-    if (directDistance < (this.avoidanceActive ? 4.1 : 3.1) && this.blockers.length) {
+    if ((directDistance < (this.avoidanceActive ? 4.1 : 3.1)
+      || this.camera.position.distanceTo(this.playerPivot) < 3.1) && this.blockers.length) {
       const direct = this.desired.clone().sub(this.playerPivot);
       let best = null, bestScore = Infinity;
       for (const height of [2.5, 4, 5.5]) for (const side of [0, 1.8, -1.8]) {
@@ -237,15 +248,15 @@ export class LabCamera {
         this.constrain(this.playerPivot, candidate);
         const clearance = candidate.distanceTo(this.playerPivot);
         if (clearance < 3.2) continue;
-        const score = candidate.distanceToSquared(this.desired)
+        const score = this.framingPenalty(candidate) * 100
+          + candidate.distanceToSquared(this.desired)
           + candidate.distanceToSquared(this.camera.position) * .15;
         if (score < bestScore) { bestScore = score; best = candidate; }
       }
-      // Beneath a ceiling or immediately after a high wall exit every upward
-      // escape can be blocked even though there is ample room beside the body.
-      // Only in that case search a short lateral ring. Every candidate keeps
-      // the same near-plane sweep; an unavailable escape never ignores a wall.
-      if (!best) {
+      // Beneath a ceiling or after a high wall exit the upward escape can be
+      // blocked, or leave the traveller below the picture. Try a lateral ring
+      // in either case. Every candidate retains the same near-plane sweep.
+      if (!best || this.framingPenalty(best) > 0) {
         const lateral = this.right.clone().setY(0).normalize();
         if (lateral.lengthSq() < .01) lateral.set(1, 0, 0);
         const along = new THREE.Vector3().crossVectors(lateral, UP);
@@ -257,7 +268,8 @@ export class LabCamera {
           candidate.y += height;
           this.constrain(this.playerPivot, candidate);
           if (candidate.distanceTo(this.playerPivot) < 2.4) continue;
-          const score = candidate.distanceToSquared(this.desired)
+          const score = this.framingPenalty(candidate) * 100
+            + candidate.distanceToSquared(this.desired)
             + candidate.distanceToSquared(this.camera.position) * .15;
           if (score < bestScore) { bestScore = score; best = candidate; }
         }
@@ -308,6 +320,23 @@ export class LabCamera {
     this.camera.updateMatrixWorld();
     this.updatePortalClipping();
     return this;
+  }
+
+  // An escape must retain the traveller in the lens, not merely leave space
+  // around the body. In a narrow flight channel an upward route can be clear
+  // while pointing above the character. Score the same unchanged look point
+  // from every swept position; no orbit or weapon aim is substituted.
+  framingPenalty(position) {
+    const forward = this.lookPoint.clone().sub(position).normalize();
+    const right = new THREE.Vector3().crossVectors(forward, this.viewUp).normalize();
+    const up = new THREE.Vector3().crossVectors(right, forward).normalize();
+    const subject = this.playerPivot.clone().sub(position);
+    const depth = subject.dot(forward);
+    if (depth <= .1) return 100;
+    const height = depth * Math.tan(THREE.MathUtils.degToRad(this.camera.fov / 2));
+    const x = Math.abs(subject.dot(right)) / (height * this.camera.aspect);
+    const y = Math.abs(subject.dot(up)) / height;
+    return Math.max(0, x - .7) ** 2 + Math.max(0, y - .6) ** 2;
   }
 
   updatePortalClipping() {

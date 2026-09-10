@@ -460,7 +460,9 @@ export class LabGame {
     const checkpoint = this.firstLevel?.spawn ?? CHAMBERS[this.stage].start;
     this.playerPosition.fromArray(checkpoint.toArray?.() ?? checkpoint); this.playerVelocity.set(0, 0, 0);
     this.previousPlayerPosition.copy(this.playerPosition);
-    this.playerGrounded = true; this.yaw = 0; this.pitch = -.15; this.facing = this.previousFacing = Math.PI; this.launchTime = 0;
+    const view = this.firstLevel?.spawnView;
+    this.playerGrounded = true; this.yaw = view?.yaw ?? 0; this.pitch = view?.pitch ?? -.15;
+    this.facing = this.previousFacing = Math.PI + this.yaw; this.launchTime = 0;
     this.portalVisualOffset.set(0, 0, 0); this.portalVisualRotation.identity();
     this.playerGroup.position.copy(this.playerPosition); this.playerGroup.rotation.y = this.facing;
     this.aimingTime = 0; this.aimHeld = false; this.motion = null;

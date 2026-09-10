@@ -36,6 +36,7 @@ test('the ordinary folded junction route keeps the camera outside the player and
     game.camera.aspect = 1.6; game.camera.updateProjectionMatrix();
     const update = game.updateVisuals;
     let minimum = Infinity, frames = 0;
+    let crossingFrames = 0, unseenFrames = 0, longestUnseen = 0;
     game.updateVisuals = function (...args) {
       update.apply(this, args); frames++;
       const distance = this.camera.position.distanceTo(this.cameraRig.playerPivot);
@@ -45,10 +46,24 @@ test('the ordinary folded junction route keeps the camera outside the player and
         assert.ok(this.camera.position.z < 17.01,
           `The ordinary boom escaped through an entrance wall at frame ${frames}`);
       }
+      // Ordinary floor-to-wall flight, with the real collision escape and
+      // transported horizon. The previous upward escape hid the whole body
+      // for 0.6 seconds despite maintaining a safe boom distance.
+      if (this.teleportCount === 3 && crossingFrames < 60) {
+        crossingFrames++;
+        const subject = this.cameraRig.playerPivot.clone().project(this.camera);
+        const visible = Math.abs(subject.x) < 1 && Math.abs(subject.y) < 1
+          && subject.z > -1 && subject.z < 1;
+        unseenFrames = visible ? 0 : unseenFrames + 1;
+        longestUnseen = Math.max(longestUnseen, unseenFrames);
+      }
     };
     const report = await runV8Journey(game);
     assert.equal(report.pass, true); assert.equal(report.resets + report.respawns, 0);
     assert.ok(frames > 2000); assert.ok(minimum >= 2.2);
+    assert.equal(crossingFrames, 60, 'The ordinary route did not reach its lateral flight');
+    assert.ok(longestUnseen <= 8,
+      `The collision escape hid the traveller for ${longestUnseen / 60} seconds`);
   } finally { game.physics.dispose(); game.portals.dispose(); }
 });
 
