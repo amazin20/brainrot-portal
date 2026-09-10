@@ -8,6 +8,7 @@ import {ROOM13_SPEC,buildRoom13} from './LabPortalRoom13.js';
 import {ROOM14_SPEC,buildRoom14} from './LabPortalRoom14.js';
 import {ROOM15_SPEC,buildRoom15} from './LabPortalRoom15.js';
 import {finishAdvancedRoom} from './LabAdvancedArchitecture.js';
+import {finishCounterweightArchitecture} from './LabRoom13Architecture.js';
 
 // Preserve the verified introductory rooms; extend the public registry once.
 export const CAMPAIGN=Object.freeze([...INTRODUCTORY_CAMPAIGN,...EXTENDED_CAMPAIGN.slice(0,3),...WORKSHOP_CAMPAIGN.slice(0,3).map((room,i)=>i===2?{...room,assets:room.assets.filter(id=>id!==39),accent:0x83cfc7,description:'Направь воздух от вентилятора к приводу двери.',hints:['Круглый вентилятор слева создаёт поток. Привод с решёткой дальше по залу принимает воздух передней стороной.','Воздух толкает тебя и друга. Попав в переднюю решётку приёмника, поток сам запускает дверь; кабель показывает связь.','Соедини правую стену напротив вентилятора с другим участком правой стены напротив привода. Включи вентилятор: когда поток попадёт в приёмник, дверь откроется автоматически. Забери друга и пройди в открывшуюся дверь.']}:room),ROOM12_SPEC,ROOM13_SPEC,ROOM14_SPEC,ROOM15_SPEC]);
@@ -15,7 +16,7 @@ export function buildLabCampaignLevel(game,index){
  if(!Number.isInteger(index)||index<0||index>=CAMPAIGN.length)throw new RangeError('Unknown campaign course');
  if(index===10)return buildReadableWindRoom(game,CAMPAIGN[index]);
  if(index===11)return buildRoom12(game,index);
- if(index===12)return finishAdvancedRoom(buildRoom13(game,index));
+ if(index===12)return finishCounterweightArchitecture(finishAdvancedRoom(buildRoom13(game,index)));
  if(index===13)return finishAdvancedRoom(buildRoom14(game,index));
  if(index===14)return finishAdvancedRoom(buildRoom15(game,index));
  if(index>=8)return buildWorkshopCampaign(game,index);

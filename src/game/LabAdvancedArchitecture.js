@@ -21,7 +21,7 @@ export function finishAdvancedRoom(level){
  if(level.index===12)level.spawnView={yaw:1.55,pitch:.12};
  if(level.index===14)level.spawnView={yaw:1.45,pitch:.10};
  level.conceptLesson=[
-  {position:level.panels['mirror-cradle']?.getFrame().center.toArray()??spawn,key:'↔',text:'Луч проходит через порталы и отражается от зеркала. Вес меняет угол отражения.'},
+  {position:spawn,range:13,key:'↔',text:'Вес двигает связанные кабины. Луч через порталы отпускает тормоз; без света высота сохраняется.'},
   {position:spawn,range:13,key:'↔',text:'Твёрдый свет держит вес. Переставляя портал, ты переносишь и опору.'},
   {position:spawn,range:13,key:'↔',text:'Поток удерживает вес и проходит через порталы. Обратное направление тянет предметы назад.'},
  ][level.index-12];
