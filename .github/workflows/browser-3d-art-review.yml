@@ -1,0 +1,74 @@
+name: Browser 3D art review
+on:
+  push:
+    branches: [art/browser-3d-environment-v31]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: browser-3d-art-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: '${{ github.sha }}'}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Source, art neutrality and package checks
+        run: |
+          node --test tests/lab-browser-3d-art.test.js
+          npm run check
+          node scripts/v8-package-check.mjs
+          npm run build
+          echo "Relevant optimized GLB source assets:"
+          ls -lh public/models/runtime/model-{19-lift-platform,23-floor-tile,24-wall-panel,29-pressure-platform,31-wind-generator,35-shutter-fan,37-extension-bridge}.glb
+          du -sh dist
+      - uses: actions/upload-artifact@v4
+        with:
+          name: browser-3d-build
+          path: dist/
+          retention-days: 7
+  browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        room: [12,13,14,15]
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: '${{ github.sha }}'}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: |
+          npm ci
+          npm install --no-save --package-lock=false puppeteer-core@24.16.0
+          npm run build
+      - name: Ordinary route in actual WebGL
+        env:
+          NESI_FIRST: '${{ matrix.room }}'
+          NESI_LAST: '${{ matrix.room }}'
+          NESI_UI: '0'
+          NESI_CAPTURE_PUZZLE: '0'
+        run: |
+          npm run preview -- --host 127.0.0.1 --port 4173 >browser-3d-preview.log 2>&1 &
+          for i in {1..30}; do curl -fsS http://127.0.0.1:4173/ >/dev/null && break; sleep 1; done
+          curl -fsS http://127.0.0.1:4173/ >/dev/null
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+          node scripts/v8-browser.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: browser-3d-room-${{ matrix.room }}
+          path: |
+            smoke-artifacts/
+            browser-3d-preview.log
+          retention-days: 7
