@@ -71,7 +71,10 @@ export async function runV8Journey(game,{onMilestone=()=>{},scenario=null}={}) {
       await scenario({game,level,walk,wait,aim,until,pickup,enter,mark,frame,worldMove,stop});
       report.pass=true;report.kind='recovery';report.teleports=game.teleportCount;return report;
     }
-    if(index===11){
+    if(index>=12){
+      const journeys=await Promise.all([import('./LabRoom13Journey.js'),import('./LabRoom14Journey.js'),import('./LabRoom15Journey.js')]);
+      await journeys[index-12]['runRoom'+(index+1)]({game,level,walk,wait,aim,until,pickup,enter,mark,frame,worldMove,stop});
+    }else if(index===11){
       const {runRoom12}=await import('./LabPortalRoom12.js');
       await runRoom12({game,level,walk,wait,aim,until,pickup,enter,mark,frame,worldMove,stop});
     }else if(index>=8){

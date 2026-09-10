@@ -12,6 +12,14 @@ function flag(name,fallback){
  return /^(true|1)$/i.test(value);
 }
 const checkUI=flag('NESI_UI',first===1),capturePuzzle=flag('NESI_CAPTURE_PUZZLE',true);
+// Native excerpts from observable milestones of the same ordinary routes.
+// These windows never change the route, the camera or any physical state.
+const capturePlans={
+ 12:[['crossing flight',150]],
+ 13:[['live weight turns the mirror',90],['weighted ray lifts the crossing',90],['the return side of the light',90]],
+ 14:[['first woven crossing',90],['folded upper return',90],['perpendicular light crossing',90]],
+ 15:[['reverse freight extraction',90],['ascending countercurrent',90],['airborne lane exchange',90]],
+};
 const expectedIds=[...new Set(CAMPAIGN.slice(first-1,last).flatMap(level=>level.assets))].sort((a,b)=>a-b);
 const expectedFiles=ALL_LAB_ASSETS.filter(asset=>expectedIds.includes(asset.id)).map(asset=>asset.file).sort();
 assert.equal(expectedFiles.length,expectedIds.length,'Every selected course dependency must exist in the source asset catalog');
@@ -50,18 +58,19 @@ try{
  if(first===1){assert.equal(report.initial.models,4);assert.equal(report.initial.audioState,'running');}
  for(let index=first-1;index<last;index++){
    if(index>first-1){await clickMenu('#play-again-button');await page.waitForFunction(i=>window.__NESI_DEMO_GAME__?.levelIndex===i&&window.__NESI_DEMO_GAME__.state==='playing',{},index);await shot(`level-${index+1}-start`);}
-   const captured=await page.evaluate(async capturePuzzle=>{
+   const clipRequests=capturePlans[index+1]||[];
+   const captured=await page.evaluate(async ({capturePuzzle,clipRequests})=>{
      const g=window.__NESI_DEMO_GAME__,original=g.render,originalVisuals=g.updateVisuals,images=[],clips=[];
-     const requests=new Map([['folded underpass',90],['shared shaft delivery',90],['crossing flight',150]]);
+     const requests=new Map(clipRequests);
      let active=null;
      g.render=function(){original.call(this);if(this.levelIndex>=5&&this.state==='playing')images.push(this.renderer.domElement.toDataURL('image/png'));};
      window.__NESI_CAPTURE_LEVEL_MARK__=mark=>{
-       if(!capturePuzzle||g.levelIndex!==11||!requests.has(mark.name))return;
+       if(!capturePuzzle||!requests.has(mark.name))return;
        active={name:mark.name,maxFrames:requests.get(mark.name),startElapsed:g.elapsed,step:0,frames:[]};clips.push(active);
      };
      // Sample the same ordinary route at 15 simulation Hz. Markers merely
      // select recording windows; they cannot move the player or camera.
-     if(capturePuzzle&&g.levelIndex===11)g.updateVisuals=function(...args){
+     if(capturePuzzle&&requests.size)g.updateVisuals=function(...args){
        const result=originalVisuals.apply(this,args);
        if(active&&active.frames.length<active.maxFrames&&args[0]>0&&this.state==='playing'&&active.step++%4===0){
          original.call(this);active.frames.push(this.renderer.domElement.toDataURL('image/png'));
@@ -73,24 +82,24 @@ try{
      catch(error){return {failure:String(error),images,clips,
        width:g.renderer.domElement.width,height:g.renderer.domElement.height};}
      finally{g.render=original;g.updateVisuals=originalVisuals;delete window.__NESI_CAPTURE_LEVEL_MARK__;}
-   },capturePuzzle);
+   },{capturePuzzle,clipRequests});
    captured.images.forEach((image,k)=>fs.writeFileSync(`${out}/level-${index+1}-mechanic-${k+1}.png`,Buffer.from(image.split(',')[1],'base64')));
    if(captured.failure)throw Error(captured.failure);
-   if(capturePuzzle&&index===11){
-     assert.deepEqual(captured.clips.map(c=>c.name),['folded underpass','shared shaft delivery','crossing flight']);
+   if(capturePuzzle&&clipRequests.length){
+     assert.deepEqual(captured.clips.map(c=>c.name),clipRequests.map(([name])=>name),`Room ${index+1} must record each agreed physical milestone`);
      for(const clip of captured.clips){
-       const directory='room-12-'+clip.name.replaceAll(' ','-');fs.mkdirSync(`${out}/${directory}`,{recursive:true});
+       const directory=`room-${index+1}-`+clip.name.replaceAll(' ','-');fs.mkdirSync(`${out}/${directory}`,{recursive:true});
        assert.ok(clip.frames.length>=24,`Record a readable interval of ${clip.name}`);
        clip.frames.forEach((image,k)=>fs.writeFileSync(`${out}/${directory}/${String(k).padStart(3,'0')}.png`,Buffer.from(image.split(',')[1],'base64')));
-       report.puzzleClips.push({name:clip.name,directory,frames:clip.frames.length,simulationFps:15,startElapsed:clip.startElapsed,width:captured.width,height:captured.height,
+       report.puzzleClips.push({level:index+1,name:clip.name,directory,frames:clip.frames.length,simulationFps:15,startElapsed:clip.startElapsed,width:captured.width,height:captured.height,
          method:'Every fourth 60 Hz update within the same ordinary route, selected by observable milestones; standard third-person camera'});
      }
    }
    const result=captured.route;report.routes.push(result);console.log('Browser course',index+1,'passed',result.frames,'frames');assert.ok(result.pass&&result.resets===0&&result.respawns===0);
    assert.equal(await page.$eval('#level-number',e=>e.textContent),String(index+1));
    assert.equal(await page.$('#quick-hint'),null);assert.equal(await page.$('#quick-settings'),null);await shot(`level-${index+1}-complete`);
-   // Preserve legacy art inspection separately. The new portal chamber uses
-   // their normal-camera route milestones and sampled movement above.
+   // Preserve rooms1–11 art inspection separately. Rooms12–15 use their
+   // standard-camera route milestones and sampled movement above.
    if(index<11){
    // Art-only overview: camera changes are explicitly not passage evidence.
    await page.evaluate(()=>{const g=window.__NESI_DEMO_GAME__,l=g.firstLevel;g.cameraRig.restoreProjection?.();g.camera.updateProjectionMatrix();

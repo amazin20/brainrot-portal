@@ -16,7 +16,7 @@ jobs:
     with:
       revision: ${{ github.sha }}
       # The identical candidate tree already has the full reviewed video.
-      # Run every WebGL route again without re-encoding its 330 PNG excerpts.
+      # Run all fifteen WebGL routes again without re-encoding their video excerpts.
       record_puzzle: false
   deploy:
     if: github.ref == 'refs/heads/main'
@@ -44,9 +44,9 @@ jobs:
           import assert from 'node:assert/strict';
           const info=JSON.parse(fs.readFileSync('dist/build-info.json','utf8'));
           assert.equal(info.commit,process.env.BUILD_COMMIT);
-          assert.equal(info.version,'v28-folded-junction');
+          assert.equal(info.version,'v29-interlaced-campaign');
           assert.equal(info.run,process.env.GITHUB_RUN_ID);
-          assert.equal(info.levels,12);
+          assert.equal(info.levels,15);
           assert.equal(info.verified,true);
           NODE
       - uses: actions/configure-pages@v5

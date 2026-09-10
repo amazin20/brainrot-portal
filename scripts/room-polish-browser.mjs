@@ -1,3 +1,4 @@
+import {CAMPAIGN} from '../src/game/LabCampaignLevels.js';
 import fs from 'node:fs';
 import assert from 'node:assert/strict';
 import puppeteer from 'puppeteer-core';
@@ -7,7 +8,7 @@ const report={pass:false,errors:[],note:'In-room views and ordinary-control rout
 try{
  const page=await browser.newPage();page.setDefaultTimeout(90000);await page.setViewport({width:1280,height:800});page.on('pageerror',e=>report.errors.push(e.message));
  await page.goto('http://127.0.0.1:4173/?debug=1&level=11',{waitUntil:'networkidle2'});await page.waitForFunction(()=>window.__NESI_DEMO_GAME__?.state==='ready');
- assert.equal(await page.$$eval('#level-select option',e=>e.length),12);
+ assert.equal(await page.$$eval('#level-select option',e=>e.length),CAMPAIGN.length);
  await page.click('#play-button');await page.waitForFunction(()=>window.__NESI_DEMO_GAME__.state==='playing');
  await page.evaluate(()=>{const g=window.__NESI_DEMO_GAME__;g.renderer.setAnimationLoop(null);g.resetRun(true);g.updateVisuals(1/60,1);g.render();});
  await page.screenshot({path:out+'/start.png'});

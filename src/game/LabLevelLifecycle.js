@@ -1,6 +1,9 @@
 /** Dispose generated level resources without disposing the shared GLB cache.
  * WebGL renderer, input, audio and loaded files are reused between levels. */
 export function disposeLabLevel(game) {
+  // Portal-routed supports own live collider pools. Release those while the
+  // old physics world and its registries still exist.
+  game.firstLevel?.dispose?.();
   const sharedGeometry=new Set(),sharedMaterials=new Set();
   for(const source of game.assets.values()) source.traverse(node=>{
     if(node.geometry)sharedGeometry.add(node.geometry);
