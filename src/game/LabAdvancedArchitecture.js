@@ -16,6 +16,10 @@ export function finishAdvancedRoom(level){
  const world=level.world,palette=PALETTES[level.index-12];
  if(!palette||!world)return level;
  const spawn=level.spawn.toArray?.()??level.spawn;
+ // Arrival views look along the real shared courts, with room behind the
+ // camera boom, instead of pressing it against the southern boundary wall.
+ if(level.index===12)level.spawnView={yaw:1.55,pitch:.12};
+ if(level.index===14)level.spawnView={yaw:1.45,pitch:.10};
  level.conceptLesson=[
   {position:level.panels['mirror-cradle']?.getFrame().center.toArray()??spawn,key:'↔',text:'Луч проходит через порталы и отражается от зеркала. Вес меняет угол отражения.'},
   {position:spawn,range:13,key:'↔',text:'Твёрдый свет держит вес. Переставляя портал, ты переносишь и опору.'},

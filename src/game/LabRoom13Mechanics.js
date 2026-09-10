@@ -5,6 +5,7 @@ import {V,tracePortalRay,rayTouches,beamDrawing,ringDevice} from './LabPuzzleMec
 export function opticalLift(k,name,p,{top=12,width=4,depth=4}={}){
  const w=k.world,g=k.game,group=new THREE.Group();w.root.add(group);group.position.fromArray(p);
  const surface=w.surface({name,position:[0,0,0],normal:[0,1,0],width,height:depth,parent:group,moving:true});
+ const backingCollider=g.colliders.find(c=>c.mesh===surface.backing);if(backingCollider)backingCollider.kinematic=true;
  const floor={minX:p[0]-width/2,maxX:p[0]+width/2,minZ:p[2]-depth/2,maxZ:p[2]+depth/2,y:p[1],mesh:surface.mesh,enabled:true};g.floors.push(floor);w.floors.push(floor);
  w.box([0,-.25,0],[width,.4,depth],w.materials.trim,false,group);
  for(const x of [p[0]-width/2-.28,p[0]+width/2+.28])w.box([x,(p[1]+top)/2,p[2]+depth/2+.3],[.18,top-p[1]+1,.2],w.materials.trim);
@@ -16,6 +17,7 @@ export function opticalLift(k,name,p,{top=12,width=4,depth=4}={}){
   const on=g.playerGrounded&&Math.abs(g.playerPosition.y-old)<.2&&g.playerPosition.x>floor.minX-.1&&g.playerPosition.x<floor.maxX+.1&&g.playerPosition.z>floor.minZ-.1&&g.playerPosition.z<floor.maxZ+.1;
   if(on){g.playerPosition.y+=y-old;g.previousPlayerPosition.y+=y-old;}
   group.position.y=y;car.position.y=y;floor.y=y;car.progress=(y-p[1])/(top-p[1]);group.updateWorldMatrix(true,true);surface.collider.box.setFromObject(surface.mesh);g.physics?.updateStaticBox(surface.mesh.uuid,surface.collider.box,dt);
+  if(backingCollider){backingCollider.box.setFromObject(surface.backing);g.physics?.updateStaticBox(surface.backing.uuid,backingCollider.box,dt);}
  },reset(){car.velocity=0;car.powered=false;group.position.y=p[1];floor.y=p[1];car.position.y=p[1];car.progress=0;car.update(0);}};
  k.ticks.push(dt=>car.update(dt));k.resets.push(()=>car.reset());k.state[name]=car;return car;
 }

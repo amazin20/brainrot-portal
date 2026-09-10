@@ -11,6 +11,8 @@ export function buildRoom15(game,index=14){
  const deck=(name,x0,x1,z0,z1,y)=>{w.floor(x0,x1,z0,z1,y,{name});w.box([(x0+x1)/2,y-.3,(z0+z1)/2],[x1-x0,.3,z1-z0],w.materials.trim);};
  // Every low court is either the emitter lane, recovery path or lift well.
  deck('Emitter and return court',-21,21,8,19,0);
+ const restShelf=w.floor(-12,-8,16.5,19,.18,{name:'Source rest shelf'});
+ restShelf.mesh.material=restShelf.mesh.material.clone();restShelf.mesh.material.color.setHex(0x8b9b83);
  deck('Lift well and retrieval court',-12,1,-5,8,0);
  deck('North recovery passage',-21,21,-19,-5,0);
  deck('West return underpass',-21,-12,-5,8,0);
@@ -19,11 +21,11 @@ export function buildRoom15(game,index=14){
  // A visible freight pocket with a low throat. The initial body lies beyond
  // the throat; a traveller cannot carry it back through that 1.55m opening.
  // The rear well shares the north recovery foundation.
- deck('Freight pocket',-19,-10,-11,-7,2);
- w.box([-14.5,1,-9],[9,2,4],w.materials.wall);
+ deck('Freight pocket',-19,-10,-13,-7,2);
+ w.box([-14.5,1,-10],[9,2,6],w.materials.wall);
  for(const x of [-19,-10])w.box([x,6,-12.5],[.3,8,11],w.materials.wall);
  w.box([-14.5,7.8,-12.5],[9,.3,11],w.materials.wall);
- w.box([-14.5,5.575,-10],[9,4.05,.4],w.materials.wall);
+ w.box([-14.5,5.575,-10.5],[9,4.05,5],w.materials.wall);
  // Observation slot permits portal fire and shows the trapped friend.
  w.box([-14.5,1,-6.8],[9,2,.3],w.materials.wall);
  w.box([-14.5,6.6,-6.8],[9,2.4,.3],w.materials.wall);
@@ -60,7 +62,7 @@ export function buildRoom15(game,index=14){
  k.state.funnel=funnel;
  k.control('reverse',[-14,0,17],()=>{funnel.reversed=!funnel.reversed;},'E — изменить направление потока');
  k.forces.push(()=>{if(game.heldCube||!game.physics?.cargoBody)return;const b=game.physics.cargoBody,a=funnel.acceleration(V(b.position.x,b.position.y,b.position.z),V(b.velocity.x,b.velocity.y,b.velocity.z),.5);if(a.lengthSq()){b.wakeUp();b.force.x+=a.x*b.mass;b.force.y+=a.y*b.mass;b.force.z+=a.z*b.mass;}});
- const level=k.finish([-10,0,17],[-14.5,2.6,-8.7],[14,14,-12],{workshop:k,portalPuzzle:true,cargoOnAnyPad:()=>cargoLoadsPlate(game.cargo,game.heldCube,k.panels.perch.getFrame()),playerAcceleration:(p,v)=>funnel.acceleration(p.clone().add(V(0,1.2,0)),v,.46,{centering:.8,damping:2})});
+ const level=k.finish([-10,0,17],[-14.5,2.6,-8.7],[14,14,-12],{workshop:k,portalPuzzle:true,cargoOnAnyPad:()=>[restShelf,k.panels.perch].some(a=>cargoLoadsPlate(game.cargo,game.heldCube,a.getFrame())),playerAcceleration:(p,v)=>funnel.acceleration(p.clone().add(V(0,1.2,0)),v,.46,{centering:.8,damping:2})});
  level.puzzleGeometry={footprint:42*38,cargoThroatHeight:1.55,goalHeight:14,portalRoles:{intake:'routes both push and pull from the real emitter',freight:'extracts the original friend through a low throat',lift:'raises player and friend into the shared observation pocket',perch:'holds the friend for retrieval after the crossing',crossing:'carries the player transversely above the dividing spine',receiver:'retrieves the friend from the upper perch'},orders:['cargo-first','scout-first'],deductions:['reverse a routed field to extract cargo','leave a vertical field at the useful height','reroute a field using a new viewpoint','separate travellers then reunite through a floor pair']};
  return level;
 }

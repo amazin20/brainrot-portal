@@ -58,3 +58,27 @@ test('the low cargo throat blocks a standing or jumping player capsule',async()=
   }
  }
 });
+
+test('jumping and reaching from the rear well cannot extract the friend through the extended duct',async()=>{
+ await game.selectLevel(14,false);game.resetRun(true);
+ const original=game.cargo,body=game.physics.cargoBody,oldMove=game.input.getMove;
+ // Adversarial entry pose only: all subsequent movement, jumps, interactions
+ // and the companion's wandering are the production simulation.
+ game.playerPosition.set(-14.5,0,-14);game.previousPlayerPosition.copy(game.playerPosition);
+ game.playerGrounded=true;game.yaw=game.facing=0;
+ game.input.getMove=()=>new THREE.Vector2(0,1);game.input.keys.add('ShiftLeft');
+ let maxHeight=0,closest=Infinity;
+ try{
+  for(let frame=0;frame<720;frame++){
+   if(frame%90===0)game.input.jumpQueued=true;
+   game.updatePlaying(1/120);game.interact();
+   maxHeight=Math.max(maxHeight,game.playerPosition.y);
+   closest=Math.min(closest,game.playerPosition.clone().add(V(0,1.1,0)).distanceTo(game.cargo.position));
+   assert.equal(!!game.heldCube,false,`Jump-grab bypass: ${game.playerPosition.toArray()} / friend ${game.cargo.position.toArray()}`);
+   assert.equal(game.cargo,original);assert.equal(game.physics.cargoBody,body);
+  }
+ }finally{game.input.getMove=oldMove;game.input.keys.clear();}
+ assert.ok(maxHeight>1.4,'The reach attempt must exercise full production jumps');
+ assert.ok(closest>2.25,`The duct does not provide enough separation from the rear well: ${closest}`);
+ assert.equal(game.teleportCount,0);
+});

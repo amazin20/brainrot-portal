@@ -1,14 +1,15 @@
 export async function runRoom14(d,{order='cargo-first'}={}){
+ if(!['cargo-first','scout-first'].includes(order))throw new RangeError('Unknown room14 action order');
  const {game,level,walk,wait,aim,until,pickup,enter,mark}=d,p=level.panels;
  aim(0,p.access.getFrame().center);aim(1,p['weave-west'].getFrame().center);
  if(order==='cargo-first'){walk(-14,12);pickup();}
  enter(p.access);walk(-16.5,0);mark('light landing reached');
- if(game.heldCube){game.interact();wait(.8);}aim(0,p['light-source'].getFrame().center);wait(.4);if(order==='cargo-first'){walk(game.cargo.position.x-1,1.4);pickup();}mark('first woven crossing');
- wait(.2);game.input.jumpQueued=true;walk(game.playerPosition.x,level.state.lightBridge.segments[1].a.z);wait(.4);walk(-1.5,0);mark('stable island reached');
+ if(game.heldCube){walk(-16.5,1.6);game.interact();wait(.8);}aim(0,p['light-source'].getFrame().center);wait(.4);if(order==='cargo-first'){walk(game.cargo.position.x-1,2);pickup();}mark('first woven crossing');
+ walk(-15.5,level.state.lightBridge.segments[1].a.z+1.55);wait(.2);game.input.jumpQueued=true;walk(-15.5,level.state.lightBridge.segments[1].a.z);wait(.4);walk(-1.5,0);mark('stable island reached');
  if(order==='scout-first'){
   walk(-2,2.5);aim(0,p['return-floor'].getFrame().center);aim(1,p['island-floor'].getFrame().center);
   walk(0,0);until(()=>game.playerPosition.y<3,5,'Scouting return did not descend');
-  walk(game.cargo.position.x-1,game.cargo.position.z);aim(0,p.access.getFrame().center);aim(1,p['weave-west'].getFrame().center);pickup();enter(p.access);walk(-16.5,0);game.interact();wait(.8);aim(0,p['light-source'].getFrame().center);wait(.4);walk(game.cargo.position.x-1,1.4);pickup();wait(.2);game.input.jumpQueued=true;walk(game.playerPosition.x,level.state.lightBridge.segments[1].a.z);wait(.4);walk(-1.5,0);
+  walk(game.cargo.position.x-1,game.cargo.position.z);aim(0,p.access.getFrame().center);aim(1,p['weave-west'].getFrame().center);pickup();enter(p.access);walk(-16.5,1.6);game.interact();wait(.8);aim(0,p['light-source'].getFrame().center);wait(.4);walk(game.cargo.position.x-1,2);pickup();walk(-15.5,level.state.lightBridge.segments[1].a.z+1.55);wait(.2);game.input.jumpQueued=true;walk(-15.5,level.state.lightBridge.segments[1].a.z);wait(.4);walk(-1.5,0);
  }
  // A narrow full-height fold admits the player, while the friend waits on
  // the stable island. The upper receiver must first be used for cargo.
@@ -24,6 +25,6 @@ export async function runRoom14(d,{order='cargo-first'}={}){
  // aperture passes shots and light but excludes the complete player capsule.
  walk(-1.5,-2.3);walk(-2.85,-2.3);walk(-2.85,1.5);aim(0,p['light-source'].getFrame().center);wait(.4);
  walk(-1.5,0);walk(-1.5,-12.7);walk(1.5,-12.7);wait(.2);game.input.jumpQueued=true;walk(3,-12.7);wait(.2);game.input.jumpQueued=true;walk(3,-7);
- walk(game.cargo.position.x-1,game.cargo.position.z);pickup();mark('perpendicular light crossing');
+ {const centre=level.state.lightBridge.segments[1].a.x;walk(centre+(game.cargo.position.x>=centre?1.51:-1.51),game.cargo.position.z);wait(.35);for(let n=0;n<5&&!game.heldCube;n++){walk(game.playerPosition.x,game.cargo.position.z);game.interact();if(!game.heldCube)wait(.2);}if(!game.heldCube)pickup();else wait(.55);}mark('perpendicular light crossing');
  wait(.2);game.input.jumpQueued=true;walk(level.state.lightBridge.segments[1].a.x,game.playerPosition.z);wait(.4);walk(3,-25.6);until(()=>game.state==='won',3,'Both travellers did not reach the far bay');
 }

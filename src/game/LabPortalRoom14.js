@@ -1,6 +1,6 @@
 import {Workshop} from './LabWorkshopKit.js';
 import {createLightBridge} from './LabLightBridge.js';
-export const ROOM14_SPEC={id:'light-weave',title:'Световая вязь',concept:'Переплести мост, опору и стену одним потоком твёрдого света',description:'Опора меняет направление вместе с порталами. Найди место для вас обоих.',hints:['Свет держит вес. Его путь меняется вместе с парой порталов.','Сначала найди устойчивый остров: мост исчезнет, когда ты изменишь его маршрут.','Высота портала определяет высоту моста; вертикальный поток становится стеной.'],accent:0x7ed6e2,assets:[1,2,11,23,24]};
+export const ROOM14_SPEC={id:'light-weave',title:'Световая вязь',concept:'Переплести мост, опору и стену одним потоком твёрдого света',description:'Опора меняет направление вместе с порталами. Найди место для вас обоих.',hints:['Свет держит вес, но мост использует ту же пару порталов, что и вы. Ищи устойчивый остров.','В узком перегибе вы не пройдёте вместе. Верхняя ниша может принять друга отдельно.','Оставь друга на полу острова. Подготовь верхний приёмник и отправь его через напольный портал. Затем с нижнего острова верни свет в источник и поднимись за другом.'],accent:0x7ed6e2,assets:[1,2,11,23,24]};
 export function buildRoom14(game,index=13){
  const k=new Workshop(game,ROOM14_SPEC,index),w=k.world;
  k.bounds={minX:-20,maxX:20,minZ:-28,maxZ:16};k.ceiling=25;w.walls(k.bounds,25,-1);
@@ -10,7 +10,7 @@ export function buildRoom14(game,index=13){
  deck('South return court',-20,20,6,16,0);deck('West recovery passage',-20,-12,-28,6,0);deck('Crossing recovery',-12,12,-14,6,0);
  w.box([16,12.5,-11],[8,25,34],w.materials.wall);deck('North crossing catch',0,12,-28,-14,-3);for(let i=0;i<12;i++){const z=-20+i*.5;deck('Catch return stair',9,12,z,z+.5,-3+(i+1)*.25);}w.box([-6,12.5,-21],[12,25,14],w.materials.wall);
  deck('West light landing',-19,-13,-3,3,6);w.box([-18.7,3,0],[.5,6,6],w.materials.wall);
- deck('Central weaving island',-3,3,-3,3,7.4);
+ deck('Central weaving island',-3,3,-3,3,7.4);w.box([0,7.8,2.95],[6,.8,.2],w.materials.wall);
  for(const x of [-3.15,.15])w.box([x,16.2,-7.5],[.3,17.6,9],w.materials.wall);
  for(const [x,wide] of [[-2.53,.94],[-.47,.94]])w.box([x,16.2,-3.25],[wide,17.6,.5],w.materials.wall);
  // Its folded stair returns above the first bridge. Neither crossing has a
@@ -38,7 +38,7 @@ export function buildRoom14(game,index=13){
  const bridge=createLightBridge(k,{origin:[-10,5.1,-7],direction:[0,0,-1],span:[1,0,0],width:2.1,name:'Woven solid light'});
  w.box([-10,5.1,-6.75],[2.4,.45,.5],w.materials.trim);w.box([-10,5.1,-6.97],[2.2,.12,.08],w.materials.accent,false);w.box([-10,2.5,-8.8],[5.6,5,.35],w.materials.wall);w.box([-10,16.1,-8.8],[5.6,17.8,.35],w.materials.wall);
  const level=k.finish([-15,0,12],[-13,.55,12],[3.5,13.4,-25.6],{workshop:k,portalPuzzle:true,dispose:()=>bridge.dispose()});
- level.puzzleGeometry={footprint:1760,safeFloor:0,goalHeight:13.4,portalRoles:{access:'return access to the light landing','weave-west':'first bridge across the lower crossing','light-source':'capture the physical light sheet','weave-north':'perpendicular upper bridge across the deep north','return-floor':'turn the sheet into a wall and return below','island-floor':'independent cargo retrieval and recovery from the stable island'},orders:['cargo-first','scout-first']};
+ level.puzzleGeometry={footprint:1760,safeFloor:0,goalHeight:13.4,portalRoles:{access:'return access to the light landing','weave-west':'first bridge across the lower crossing','light-source':'capture the physical light sheet','weave-north':'perpendicular upper bridge across the deep north','return-floor':'turn the sheet into a wall and return below','island-floor':'required independent cargo delivery from the stable island'},deductions:['one portal pair serves both support and transport','the narrow fold requires independent cargo delivery','restore the emitter from a lower sight and reuse the upper route'],orders:['cargo-first','scout-first']};
  return level;
 }
 export {runRoom14} from './LabRoom14Journey.js';

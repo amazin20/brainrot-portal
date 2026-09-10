@@ -25,21 +25,23 @@ export function room15Ascend(d,{carry=false}={}){
  stop();until(()=>game.playerGrounded,6,'Upper pocket landing');check(Math.abs(game.playerPosition.y-12)<.2,'Wrong upper pocket: '+game.playerPosition.toArray());
  walk(-5,2.5);if(carry){game.interact();d.wait(.6);}mark('upper pocket and new viewpoint');
 }
-export function room15Cross(d){
+export function room15Cross(d,{release='portal'}={}){
  const {game,level,walk,aim,frame,worldMove,stop,until,mark}=d,p=level.panels;
  walk(-5,1);aim(1,p.crossing.getFrame().center);
  // Return through the same open shaft; the old vertical field has been spent.
  walk(-8,3.5);for(let n=0;n<180;n++){worldMove(0,1);frame();if(game.playerPosition.z>6.1)break;}stop();until(()=>game.playerGrounded&&game.playerPosition.y<1,6,'Descent to source lane');
- walk(-20,6);walk(-20,18.3);walk(15,18.3);walk(16,17);const before=game.teleportCount;for(let n=0;n<300&&game.teleportCount===before;n++){worldMove(.25,-.6);frame();}stop();check(game.teleportCount>before,'Source lane entry missed');mark('airborne lane exchange');
- until(()=>game.playerPosition.x>11,8,'Transverse field stalled');
+ walk(-20,6);walk(-20,18.3);walk(15,18.3);walk(16,17);const before=game.teleportCount;for(let n=0;n<300&&game.teleportCount===before;n++){worldMove(.25,-.6);frame();}stop();check(game.teleportCount>before,'Source lane entry missed');
+ until(()=>game.playerPosition.x>2,8,'Transverse field capture');mark('airborne lane exchange');
+ until(()=>game.playerPosition.x>8,8,'Transverse field stalled');
+ if(release==='portal'){aim(0,p.receiver.getFrame().center);frame();mark('field released over the receiver');}
  // Leaving the visible cylinder is a physical fall, not a scripted landing.
- for(let n=0;n<150;n++){worldMove(0,1);frame();if(game.playerPosition.z>-9.2)break;}
+ if(release==='steer')for(let n=0;n<150;n++){worldMove(0,1);frame();if(game.playerPosition.z>-9.2)break;}
  stop();until(()=>game.playerGrounded&&Math.abs(game.playerPosition.y-14)<.2,6,'Receiver landing');mark('landed above the dividing spine');
 }
 export async function runRoom15(d,{order='cargo-first'}={}){
  check(['cargo-first','scout-first'].includes(order),'Unknown room15 order');
  if(order==='scout-first'){
-  room15Ascend(d);room15Cross(d);d.mark('scout finds the empty receiver');
+  room15Ascend(d);room15Cross(d,{release:'steer'});d.mark('scout finds the empty receiver');
   d.walk(9,-7.6);for(let n=0;n<130;n++){d.worldMove(0,1);d.frame();if(d.game.playerPosition.z>-5)break;}d.stop();d.until(()=>d.game.playerGrounded&&d.game.playerPosition.y<1,5,'Scout lower return');d.walk(9,-18);d.walk(-2.25,-18);d.walk(-2.25,9);d.walk(-8,9);d.walk(-20,9);d.walk(-20,18.3);d.walk(-12,18.3);d.walk(-12,17);
  }
  room15Extract(d);room15Ascend(d,{carry:true});room15Cross(d);

@@ -19,12 +19,12 @@ export function buildRoom13(game,index=12){
  deck('North upper observation',-13,-7,-16,-13,12);deck('South upper observation',-13,-7,13,16,12);
  deck('North suspended gallery',-7,8,-16,-13,12);
  deck('South suspended gallery',-7,15,13,16,12);
- deck('Exit side gallery',12,15,7,13,12);deck('Receiving chamber',7,15,1,7,12);
+ deck('Exit side gallery',12,15,7,13,12);deck('Receiving chamber',7,15,.3,7,12);
  // The entrance to the receiving chamber turns back behind a full opaque wall.
  w.box([9.5,11.2,8],[5,21.6,.45],w.materials.wall);
  w.box([6.8,5.8,4],[.4,11.6,8],w.materials.wall);
  w.box([6.8,18.25,4],[.4,7.5,8],w.materials.wall);
- w.box([6.8,13.05,1.5],[.4,2.9,3],w.materials.wall);
+ w.box([6.8,13.05,2],[.4,2.9,4],w.materials.wall);
  w.box([6.8,13.05,7.5],[.4,2.9,1],w.materials.wall);
  w.box([12.2,16.4,3],[.35,8.8,4],w.materials.wall);
  w.box([8.6,17,3.8],[3.6,10,.3],w.materials.wall);
