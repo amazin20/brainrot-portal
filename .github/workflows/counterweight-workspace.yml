@@ -1,0 +1,30 @@
+name: Counterweight development workspace
+on:
+  push:
+    branches: [feature/counterweight-loop-v30]
+    paths: [.github/workflows/counterweight-workspace.yml]
+permissions:
+  contents: read
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Export this exact source revision and locked dependencies
+        run: |
+          git rev-parse HEAD > workspace-revision.txt
+          tar --exclude=.git --exclude=qa --exclude=smoke-artifacts -czf /tmp/counterweight-workspace.tar.gz .
+      - uses: actions/upload-artifact@v4
+        with:
+          name: counterweight-workspace
+          path: /tmp/counterweight-workspace.tar.gz
+          retention-days: 1
+          if-no-files-found: error
