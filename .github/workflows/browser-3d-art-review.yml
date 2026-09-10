@@ -26,13 +26,29 @@ jobs:
           npm run check
           node scripts/v8-package-check.mjs
           npm run build
-          echo "Relevant optimized GLB source assets:"
-          ls -lh public/models/runtime/model-{19-lift-platform,23-floor-tile,24-wall-panel,29-pressure-platform,31-wind-generator,35-shutter-fan,37-extension-bridge}.glb
+      - name: Browser-3D-artist GLB budget and structure audit
+        run: |
+          mkdir -p qa/browser-3d-art
+          python3 .agents/skills/browser-3d-artist/scripts/test_audit_glb.py
+          for file in \
+            model-19-lift-platform.glb \
+            model-23-floor-tile.glb \
+            model-24-wall-panel.glb \
+            model-29-pressure-platform.glb \
+            model-31-wind-generator.glb \
+            model-35-shutter-fan.glb \
+            model-37-extension-bridge.glb; do
+              python3 .agents/skills/browser-3d-artist/scripts/audit_glb.py \
+                "public/models/runtime/$file" \
+                --out "qa/browser-3d-art/${file%.glb}.json"
+          done
           du -sh dist
       - uses: actions/upload-artifact@v4
         with:
           name: browser-3d-build
-          path: dist/
+          path: |
+            dist/
+            qa/browser-3d-art/
           retention-days: 7
   browser:
     runs-on: ubuntu-latest
