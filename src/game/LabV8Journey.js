@@ -32,7 +32,7 @@ export async function runV8Journey(game,{onMilestone=()=>{},scenario=null}={}) {
     }
     stop();assert(game.state==='won'||Math.hypot(game.playerPosition.x-x,game.playerPosition.z-z)<.3,`Walk timed out at ${game.playerPosition.toArray()} target ${x},${z}`);
   }
-  function aim(index,point){
+  function look(point){
     stop();
     for(let n=0;n<240;n++){
       game.scene.updateMatrixWorld(true);
@@ -42,6 +42,9 @@ export async function runV8Journey(game,{onMilestone=()=>{},scenario=null}={}) {
       game.yaw-=THREE.MathUtils.clamp(ndc.x,-1,1)*.22;
       game.pitch=THREE.MathUtils.clamp(game.pitch+THREE.MathUtils.clamp(ndc.y,-1,1)*.19,-1.15,1.15);frame();
     }
+  }
+  function aim(index,point){
+    look(point);
     const okay=game.firePortal(index);
     assert(okay,'Shot input was not accepted');
     until(()=>game.portalShots.queue.length===0&&game.portalShots.active.length===0,2,'Portal charge did not finish');
@@ -68,12 +71,12 @@ export async function runV8Journey(game,{onMilestone=()=>{},scenario=null}={}) {
   try {
     wait(.5);
     if(scenario){
-      await scenario({game,level,walk,wait,aim,until,pickup,enter,mark,frame,worldMove,stop});
+      await scenario({game,level,walk,wait,aim,look,until,pickup,enter,mark,frame,worldMove,stop});
       report.pass=true;report.kind='recovery';report.teleports=game.teleportCount;return report;
     }
     if(index>=12){
       const journeys=await Promise.all([import('./LabRoom13Journey.js'),import('./LabRoom14Journey.js'),import('./LabRoom15Journey.js')]);
-      await journeys[index-12]['runRoom'+(index+1)]({game,level,walk,wait,aim,until,pickup,enter,mark,frame,worldMove,stop});
+      await journeys[index-12]['runRoom'+(index+1)]({game,level,walk,wait,aim,look,until,pickup,enter,mark,frame,worldMove,stop});
     }else if(index===11){
       const {runRoom12}=await import('./LabPortalRoom12.js');
       await runRoom12({game,level,walk,wait,aim,until,pickup,enter,mark,frame,worldMove,stop});

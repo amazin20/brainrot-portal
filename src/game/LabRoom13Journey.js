@@ -20,7 +20,11 @@ export async function runRoom13(d,{order='cargo-first',interruptPower=false}={})
   walk(7,-18);until(()=>game.playerGrounded&&game.playerPosition.y<.1,5,'Northern return drop');walk(-8.5,-18);walk(-8.5,16);mark('scout returns below the mirror');
  }
  room13Access(d);
- walk(-16,-15.2);walk(-16,-12);walk(-12,-6);walk(-12,-2);walk(-14,3);walk(-10,3);mark('live weight turns the mirror');walk(-10,.85);wait(.7);game.interact();wait(1.8);check(s.optical.loaded,'Friend did not load the real mirror cradle');
+ walk(-16,-15.2);walk(-16,-12);walk(-12,-6);walk(-12,-2);walk(-14,3);walk(-10,3);
+ // Use ordinary mouse orbit to inspect the mirror before placing its load;
+ // retaining the earlier steep access shot would keep looking at the ceiling.
+ d.look(p['mirror-cradle'].getFrame().center.clone().add({x:0,y:2,z:0}));
+ mark('live weight turns the mirror');walk(-10,.85);wait(.7);game.interact();wait(1.8);check(s.optical.loaded,'Friend did not load the real mirror cradle');
  room13Light(d);check(s.optical.receivers[1],'Portal ray did not reach southern optical receiver: '+JSON.stringify(s.optical.segments.map(x=>({a:x.a.toArray(),b:x.b.toArray(),kind:x.kind}))));
  if(interruptPower){
   const high=game.playerPosition.y;

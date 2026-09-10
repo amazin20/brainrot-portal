@@ -15,13 +15,14 @@ export function buildRoom14(game,index=13){
  for(const [x,wide] of [[-2.53,.94],[-.47,.94]])w.box([x,16.2,-3.25],[wide,17.6,.5],w.materials.wall);
  // Its folded stair returns above the first bridge. Neither crossing has a
  // walkable substitute; stable islands let the pair be transported separately.
- for(let i=0;i<20;i++){const z=-3-i*.45,y=7.4+(i+1)*.23;deck('Folded stair',-3,0,z-.45,z,y);}deck('North stair turn',-3,6,-14,-12,12);deck('Receiver approach',0,6,-12,-4.4,12);
- // Low sights are physically screened; only the upper return reveals the face.
- w.box([3,6,-4.2],[6,12,.4],w.materials.wall);
- for(const x of [-.2,6.2])w.box([x,17,-7],[.4,10,6.4],w.materials.wall);
- w.box([3,12,-10.2],[6,1.6,.4],w.materials.wall);deck('Receiver outer toe',0,6,-11.4,-10.8,12.27);deck('Receiver outer lip',0,6,-10.8,-10.4,12.54);deck('Receiver inner toe',0,6,-9.6,-9,12.27);deck('Receiver inner lip',0,6,-10,-9.6,12.54);
- w.box([3,20.1,-10.2],[6,8.2,.4],w.materials.wall);
- w.box([3,17.5,-4.05],[6,11,.3],w.materials.wall);
+ for(let i=0;i<20;i++){const z=-3-i*.45,y=7.4+(i+1)*.23;deck('Folded stair',-3,0,z-.45,z,y);}deck('North stair turn',-3,7.5,-14,-12,12);deck('Receiver approach',0,7.5,-12,-2.9,12);
+ // The receiving pocket has room to turn with a companion and camera. Its
+ // low northern sights stay screened; only the upper return reveals the face.
+ w.box([3.75,6,-2.7],[7.5,12,.4],w.materials.wall);
+ for(const x of [-.2,7.7])w.box([x,17,-6.25],[.4,10,7.9],w.materials.wall);
+ w.box([3.75,12,-10.2],[7.5,1.6,.4],w.materials.wall);deck('Receiver outer toe',0,7.5,-11.4,-10.8,12.27);deck('Receiver outer lip',0,7.5,-10.8,-10.4,12.54);deck('Receiver inner toe',0,7.5,-9.6,-9,12.27);deck('Receiver inner lip',0,7.5,-10,-9.6,12.54);
+ w.box([3.75,20.1,-10.2],[7.5,8.2,.4],w.materials.wall);
+ w.box([3.75,17.5,-2.55],[7.5,11,.3],w.materials.wall);
  deck('Far receiving bay',0,7,-27.5,-24,13.4);w.box([3.5,6.6,-25.75],[7,13.2,3.5],w.materials.wall);
  w.box([3.5,14.4,-27.35],[7,2,.3],w.materials.wall);
  // An overlooked return alcove turns the same light sheet upright. It is a
@@ -30,7 +31,7 @@ export function buildRoom14(game,index=13){
  k.panel('access',[-19.97,2.3,12],[1,0,0],5.6,4.6);
  k.panel('weave-west',[-18.5,8.3,0],[1,0,0],5.6,4.6);
  k.panel('light-source',[-10,6,-10],[0,0,1],5.6,4.6);
- k.panel('weave-north',[3,14.3,-4.3],[0,0,-1],5.6,4.6);
+ k.panel('weave-north',[3,14.3,-2.8],[0,0,-1],5.6,4.6);
  k.panel('return-floor',[-9,.025,10],[0,1,0],5.6,5.6);
  // This floor is an alternate recovery route from the central island and a
  // launch into the high receiver when paired after reaching its northern view.

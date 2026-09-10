@@ -25,6 +25,6 @@ export async function runRoom14(d,{order='cargo-first'}={}){
  // aperture passes shots and light but excludes the complete player capsule.
  walk(-1.5,-2.3);walk(-2.85,-2.3);walk(-2.85,1.5);aim(0,p['light-source'].getFrame().center);wait(.4);
  walk(-1.5,0);walk(-1.5,-12.7);walk(1.5,-12.7);wait(.2);game.input.jumpQueued=true;walk(3,-12.7);wait(.2);game.input.jumpQueued=true;walk(3,-7);
- {const centre=level.state.lightBridge.segments[1].a.x;walk(centre+(game.cargo.position.x>=centre?1.51:-1.51),game.cargo.position.z);wait(.35);for(let n=0;n<5&&!game.heldCube;n++){walk(game.playerPosition.x,game.cargo.position.z);game.interact();if(!game.heldCube)wait(.2);}if(!game.heldCube)pickup();else wait(.55);}mark('perpendicular light crossing');
+ {const centre=level.state.lightBridge.segments[1].a.x;walk(centre+(game.cargo.position.x>=centre?1.51:-1.51),game.cargo.position.z);wait(.35);for(let n=0;n<5&&!game.heldCube;n++){walk(game.playerPosition.x,game.cargo.position.z);game.interact();if(!game.heldCube)wait(.2);}if(!game.heldCube)pickup();else wait(.55);}walk(game.playerPosition.x,-7);mark('perpendicular light crossing');
  wait(.2);game.input.jumpQueued=true;walk(level.state.lightBridge.segments[1].a.x,game.playerPosition.z);wait(.4);walk(3,-25.6);until(()=>game.state==='won',3,'Both travellers did not reach the far bay');
 }
