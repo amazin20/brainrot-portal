@@ -9,11 +9,15 @@ after(()=>{game.physics.dispose();game.portals.dispose();});
 
 for(const room of [12,13,14,15])test(`room ${room} browser-3d art is detailed but gameplay-neutral`,async()=>{
  await game.selectLevel(room-1,false);
- const level=game.firstLevel,art=level.browser3DArt;
+ const level=game.firstLevel,art=level.browser3DArt,premium=level.premiumBrowser3DArt;
  assert.ok(art&&art.userData.visualOnly,'advanced room must have the visual-only art root');
  assert.equal(art.userData.version,31);
  assert.ok(art.userData.stats.portalFrames>=4,'portal machinery frames should cover authored targets');
  assert.ok(art.userData.stats.deckBraces>=2,'raised architecture should have real under-deck engineering');
+ assert.ok(premium&&premium.userData.visualOnly,'premium environment layer must remain visual-only');
+ assert.equal(premium.userData.version,32);
+ assert.ok(premium.userData.stats.instances>30,'large placeholder blocks must receive real modular GLB cladding');
+ assert.ok(premium.userData.stats.batches>=1&&premium.userData.stats.sourceBoxes>=1);
 
  // High-fidelity rooms use the optimized source GLB tile geometry through
  // instancing, not hundreds of independent copies and not the white-box tile.
