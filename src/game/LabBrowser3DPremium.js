@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import {ArchitecturalBatch,architecturalMaterials,clipArchitecturalRect} from './LabArchitecturalModels.js';
+import {advancedRoomPalette} from './LabAdvancedArchitecture.js';
 
 const V=(x=0,y=0,z=0)=>new THREE.Vector3(x,y,z);
 const Z=V(0,0,1);
@@ -20,6 +21,8 @@ function addArchitecturalCladding(level,root){
   const w=level.world,g=level.game,batch=new ArchitecturalBatch(root,architecturalMaterials(level.spec?.accent));
   w.root.updateWorldMatrix(true,true);
   const inverse=w.root.matrixWorld.clone().invert(),portals=portalFrames(level);
+  const palette=level.index>=15?advancedRoomPalette(level.index):null;
+  const tone=(color,cadence)=>new THREE.Color(color).multiplyScalar(cadence===0?.94:1).getHex();
   let instances=0,sourceBoxes=0,sourceSurfaces=0,serviceBands=0,ventPanels=0;
   const coverage=[];
   const face=(matrix,width,height,{kind='wall',solid=false,seed=0}={})=>{
@@ -39,7 +42,7 @@ function addArchitecturalCladding(level,root){
         const x=(rect.x0+rect.x1)/2,y=(rect.y0+rect.y1)/2,pw=rect.x1-rect.x0-.035,ph=rect.y1-rect.y0-.035;
         if(pw<.10||ph<.10)continue;
         const cadence=(ix+iy*3+seed)%7;
-        const color=floor?(cadence===0?0x7b898b:0x879194):ceiling?(cadence===0?0x7c888b:0x909c9f):solid?(cadence===0?0x809093:0x75868a):(cadence===0?0x9aa5a5:0x89999d);
+        const color=palette?tone(floor?(frame.center.y>5?palette.high:palette.low):ceiling?palette.low:palette.wall,cadence):floor?(cadence===0?0x7b898b:0x879194):ceiling?(cadence===0?0x7c888b:0x909c9f):solid?(cadence===0?0x809093:0x75868a):(cadence===0?0x9aa5a5:0x89999d);
         batch.add('frame',local,[x,y,front-.030],[pw,ph,.052]);
         // The folded lip is exposed around a slightly smaller coated field.
         const inset=Math.min(.085,pw*.1,ph*.1);
@@ -111,24 +114,25 @@ function addArchitecturalCladding(level,root){
 
 function finishMaterials(level){
   const w=level.world,m=w.root.userData.browserArtMaterials;
+  const palette=level.index>=15?advancedRoomPalette(level.index):null;
   const finish=(mat,color,roughness,metalness)=>{
     if(!mat)return;mat.color?.setHex(color);mat.roughness=roughness;mat.metalness=metalness;
     if(mat.emissive){mat.emissive.setHex(0x000000);mat.emissiveIntensity=0;}
     // The original coarse scratches were normal noise at the gameplay camera.
     mat.bumpMap=null;mat.bumpScale=0;mat.roughnessMap=null;mat.needsUpdate=true;
   };
-  finish(w.materials.wall,0x65767c,.74,.08);
-  finish(w.materials.floor,0x7b898d,.72,.10);
-  finish(w.materials.trim,0x4b6068,.66,.12);
+  finish(w.materials.wall,palette?.wall??0x65767c,.74,.08);
+  finish(w.materials.floor,palette?.low??0x7b898d,.72,.10);
+  finish(w.materials.trim,palette?.trim??0x4b6068,.66,.12);
   if(m){
-    finish(m.graphite,0x77868c,.66,.12);finish(m.steel,0x89979b,.48,.38);finish(m.blackSteel,0x42555f,.62,.22);
+    finish(m.graphite,palette?.wall??0x77868c,.66,.12);finish(m.steel,palette?.low??0x89979b,.48,.38);finish(m.blackSteel,palette?.trim??0x42555f,.62,.22);
     // White ceramic is the sole portal target color. Its canonical material
     // and every surface/frame remain intact; remove only the coarse bump.
     m.ceramic.bumpMap=null;m.ceramic.bumpScale=0;m.ceramic.roughnessMap=null;
     m.ceramic.roughness=.60;m.ceramic.metalness=.015;m.ceramic.needsUpdate=true;
   }
-  level.game.scene.background=new THREE.Color(0x354852);
-  if(level.game.scene.fog)level.game.scene.fog.color.setHex(0x354852);
+  level.game.scene.background=new THREE.Color(palette?.sky??0x354852);
+  if(level.game.scene.fog)level.game.scene.fog.color.setHex(palette?.sky??0x354852);
 }
 
 function addLighting(level,root){
@@ -144,7 +148,7 @@ function addLighting(level,root){
 }
 
 export function applyPremiumBrowser3DArt(level){
-  if(!level?.world||level.index<11||level.index>14)return level;
+  if(!level?.world||level.index<11||level.index>19)return level;
   level.game=level.game||level.workshop?.game||level.world.game;
   finishMaterials(level);
   const root=new THREE.Group();root.name='Premium browser 3D environment layer';root.userData.visualOnly=true;root.userData.version=33;level.world.root.add(root);

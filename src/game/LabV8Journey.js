@@ -1,6 +1,11 @@
 import * as THREE from 'three';
 const V=(x=0,y=0,z=0)=>new THREE.Vector3(x,y,z);
 const assert=(condition,message)=>{if(!condition)throw new Error(message);};
+const advancedJourneys=[
+ ()=>import('./LabRoom13Journey.js'),()=>import('./LabRoom14Journey.js'),()=>import('./LabRoom15Journey.js'),
+ ()=>import('./LabRoom16Journey.js'),()=>import('./LabRoom17Journey.js'),()=>import('./LabRoom18Journey.js'),
+ ()=>import('./LabRoom19Journey.js'),()=>import('./LabRoom20Journey.js'),
+];
 /** Test driver uses the public movement vector, interaction button and camera
  * controls. Actor positions, portal positions, mechanism targets and win flags
  * are never assigned by the route. Run only in a debug build or Node test. */
@@ -75,8 +80,8 @@ export async function runV8Journey(game,{onMilestone=()=>{},scenario=null}={}) {
       report.pass=true;report.kind='recovery';report.teleports=game.teleportCount;return report;
     }
     if(index>=12){
-      const journeys=await Promise.all([import('./LabRoom13Journey.js'),import('./LabRoom14Journey.js'),import('./LabRoom15Journey.js')]);
-      await journeys[index-12]['runRoom'+(index+1)]({game,level,walk,wait,aim,look,until,pickup,enter,mark,frame,worldMove,stop});
+      const journey=await advancedJourneys[index-12]();
+      await journey['runRoom'+(index+1)]({game,level,walk,wait,aim,look,until,pickup,enter,mark,frame,worldMove,stop});
     }else if(index===11){
       const {runRoom12}=await import('./LabPortalRoom12.js');
       await runRoom12({game,level,walk,wait,aim,until,pickup,enter,mark,frame,worldMove,stop});

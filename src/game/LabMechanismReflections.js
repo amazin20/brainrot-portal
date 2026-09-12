@@ -33,6 +33,7 @@ function isMachinedMesh(node){
 }
 
 function isOpticalMirror(node,level){
+  if(level.index>=15&&node.userData?.mechanismMirror===true)return true;
   if(level.index!==12||!level.workshop?.state?.optical)return false;
   const p=node.geometry?.parameters,mat=node.material;
   // weightedOptics owns this unique unregistered .11 x 2.4 x 2.2 slab.
@@ -42,7 +43,7 @@ function isOpticalMirror(node,level){
 }
 
 export function applyMechanismReflections(level){
-  if(!level?.world||level.index<11||level.index>14||level.mechanismReflections)return level;
+  if(!level?.world||level.index<11||level.index>19||level.mechanismReflections)return level;
   const owner=level.world.root.userData.browserArtMaterials?.ceramic;
   if(!owner)return level;
   const targets=[];

@@ -36,3 +36,19 @@ test('adding rooms13–15 preserves accepted room12 completion, hints and user s
  assert.deepEqual(reloaded.value.hints,{6:2,11:3,12:1,13:1,14:1});
  assert.equal(JSON.parse(data.get('brainrot-portal.preferences.v24')).campaignRevision,'folded-junction-v28');
 });
+
+test('appending rooms16–20 preserves all accepted progress and persists the new rooms without migration',()=>{
+ const accepted=Array.from({length:15},(_,index)=>index),hints={0:1,11:3,12:2,14:1};
+ const data=new Map([['brainrot-portal.preferences.v24',JSON.stringify({campaignRevision:'folded-junction-v28',
+  quality:'low',volume:.25,muted:true,tutorial:false,completed:accepted,hints})]]);
+ const storage={getItem:key=>data.get(key),setItem:(key,value)=>data.set(key,value)};
+ const preferences=new LabPreferences(storage);
+ assert.deepEqual(preferences.value.completed,accepted);assert.deepEqual(preferences.value.hints,hints);
+ for(let index=15;index<20;index++){preferences.complete(index);preferences.unlockHint(index);}
+ const reloaded=new LabPreferences(storage);
+ assert.deepEqual(reloaded.value.completed,Array.from({length:20},(_,index)=>index));
+ assert.deepEqual(reloaded.value.hints,{...hints,15:1,16:1,17:1,18:1,19:1});
+ assert.equal(reloaded.value.quality,'low');assert.equal(reloaded.value.volume,.25);
+ assert.equal(reloaded.value.muted,true);assert.equal(reloaded.value.tutorial,false);
+ assert.equal(JSON.parse(data.get('brainrot-portal.preferences.v24')).campaignRevision,'folded-junction-v28');
+});

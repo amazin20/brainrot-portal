@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import {createMachinedProjector,createMachinedTurbine,createMachinedChassis,createMachinedGimbal} from './LabMachinedModels.js';
+import {applyAdvancedMechanismArt} from './LabAdvancedMechanismArt.js';
 
 const V=(x=0,y=0,z=0)=>new THREE.Vector3(x,y,z);
 const Q=new THREE.Quaternion();
@@ -277,12 +278,13 @@ function addRoomMechanisms(level,m){
 }
 
 export function upgradeBrowser3DArt(level){
-  if(!level?.world||level.index<11||level.index>14)return level;
+  if(!level?.world||level.index<11||level.index>19)return level;
   level.game=level.game||level.workshop?.game;
   const m=materials(level);enhanceWorldMaterials(level,m);
   const root=new THREE.Group();root.name='Browser 3D artist environment pass';root.userData.visualOnly=true;root.userData.version=31;level.world.root.add(root);
   const deck=addDeckEngineering(level,root,m),portalFrames=addPortalFrames(level,root,m),conduits=addShellConduits(level,root,m);
   if(level.index===13)addLightProjector(level.world,{position:[-10,5.1,-7],direction:[0,0,-1],radius:1.1,accent:level.spec?.accent});
   addRoomMechanisms(level,m);
+  if(level.index>=15)applyAdvancedMechanismArt(level);
   root.userData.stats={deckBraces:deck.braces,deckLamps:deck.lamps,portalFrames,conduits};level.browser3DArt=root;return level;
 }
