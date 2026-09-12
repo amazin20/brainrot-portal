@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import * as THREE from 'three';
 import {createHeadlessGame} from '../scripts/lab-headless.mjs';
 
-const EXPECTED_IMPORTED=new Map([[12,[]],[13,[19,29]],[14,[37]],[15,[]]]);
+const EXPECTED_IMPORTED=new Map([[12,[]],[13,[19,29]],[14,[]],[15,[]]]);
 const game=await createHeadlessGame();
 after(()=>{game.physics.dispose();game.portals.dispose();});
 
@@ -52,6 +52,7 @@ for(const room of [12,13,14,15])test(`room ${room} browser-3d art is detailed bu
 
  const ids=new Set();level.world.root.traverse(n=>{if(Number.isInteger(n.userData?.assetId))ids.add(n.userData.assetId);});
  for(const id of EXPECTED_IMPORTED.get(room))assert.ok(ids.has(id),`room ${room} must use imported mechanism asset ${id}`);
+ if(room===14)assert.ok(!ids.has(37),'legacy bridge shell must not hide the projector lens');
  if(room===15){
   assert.ok(level.world.root.getObjectByName('transfer-rotor'),'the actual machined turbine replaces both overlapping legacy models');
   assert.ok(!ids.has(31)&&!ids.has(35),'redundant fan shells must not hide the turbine blades');
@@ -70,6 +71,8 @@ test('room 13 machinery stays upright below its moving deck and pressure surface
   const normal=surface.getFrame().normal;
   const up=new THREE.Vector3(0,1,0).applyQuaternion(model.getWorldQuaternion(new THREE.Quaternion()));
   assert.ok(up.dot(normal)>1-1e-8,'Y-up imported mechanism must align with its deck normal');
+  const chassis=surface.group.getObjectByName('Browser 3D machine chassis');
+  if(chassis)assert.ok(new THREE.Box3().setFromObject(chassis).max.y<surface.getFrame().center.y-.04,'machined chassis must not project into the standing surface');
   const bounds=new THREE.Box3().setFromObject(model);
   assert.ok(bounds.max.y<surface.getFrame().center.y-.029,'mechanism housing must remain behind the walking and portal plane');
  }

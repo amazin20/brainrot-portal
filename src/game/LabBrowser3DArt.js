@@ -202,11 +202,6 @@ function addShellConduits(level,root,m){
   return count;
 }
 
-function imported(level,id,size,position,yaw=0){
-  if(!level.game?.assets?.has(id))return null;
-  const art=polishImportedModel(level.game.model(id,size));art.position.fromArray(position);art.rotation.y=yaw;art.name=`Browser 3D imported mechanism ${id}`;level.world.root.add(art);return art;
-}
-
 function fitBelowSurface(art,surface,gap=.04){
   if(!art||!surface)return;
   art.updateWorldMatrix(true,true);const b=new THREE.Box3().setFromObject(art);
@@ -224,6 +219,7 @@ function addRoomMechanisms(level,m){
       const art=polishImportedModel(level.game.model(19,4.25));art.name=`${name} / real lift chassis`;fitBelowSurface(art,surface,.08);
       const frame=addMachineFrame(surface.group,{width:4,depth:4,height:.62,y:-.40,accent:level.spec?.accent});
       frame.quaternion.setFromUnitVectors(UP,V(0,0,1));
+      frame.position.set(0,0,-.40);
     }
     const pad=level.panels?.['mirror-cradle'];if(pad){const art=polishImportedModel(level.game.model(29,4.15));art.name='mirror cradle / real pressure mechanism';fitBelowSurface(art,pad);}
     // The authored bezel belongs to the existing optical pivot: it follows the
@@ -243,7 +239,14 @@ function addRoomMechanisms(level,m){
     for(const z of [-11,11])for(const x of [-12.3,-7.7])addGuideTower(level.world.root,{x,z,height:7,baseY:5.5});
   }
   if(level.index===13){
-    const bridge=imported(level,37,3.4,[-10,4.65,-6.6],0);if(bridge)bridge.rotation.x=.04;
+    // The machined projector replaces the original flat source cover in
+    // rendering only. Keep the original body and blocker registrations intact.
+    level.world.root.traverse(node=>{
+      const p=node.geometry?.parameters;
+      const cover=p?.width===2.4&&p.height===.45&&p.depth===.5&&node.position.equals(V(-10,5.1,-6.75));
+      const strip=p?.width===2.2&&p.height===.12&&p.depth===.08&&node.position.equals(V(-10,5.1,-6.97));
+      if(node.isMesh&&(cover||strip)){node.material=node.material.clone();node.material.visible=false;}
+    });
   }
   if(level.index===14){
     const housing=addFunnelEmitter(level.world,{position:[-17,1.9,14],direction:[1,0,0],radius:2.15,accent:level.spec?.accent});

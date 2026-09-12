@@ -14,7 +14,7 @@ import {applyMechanismReflections} from './LabMechanismReflections.js';
 
 const withArtAssets=(spec,...extra)=>({...spec,assets:[...new Set([...spec.assets,...extra])]});
 const ROOM13_ART_SPEC=withArtAssets(ROOM13_SPEC,19,29);
-const ROOM14_ART_SPEC=withArtAssets(ROOM14_SPEC,37);
+const ROOM14_ART_SPEC=ROOM14_SPEC;
 const ROOM15_ART_SPEC=ROOM15_SPEC;
 const finishBrowserArt=level=>applyMechanismReflections(applyPremiumBrowser3DArt(upgradeBrowser3DArt(level)));
 
