@@ -237,7 +237,7 @@ function addRoomMechanisms(level,m){
       const gimbal=addOpticalGimbal(level.world.root,{accent:level.spec?.accent});
       gimbal.position.copy(mirrorPivot.position);gimbal.rotation.y=Math.PI/2;
       const ring=gimbal.getObjectByName('optical-ring');
-      if(ring){ring.removeFromParent();ring.rotation.y=Math.PI/2;mirrorPivot.add(ring);}
+      if(ring){ring.removeFromParent();ring.userData.source='src/game/LabMachinedModels.js';ring.rotation.y=Math.PI/2;mirrorPivot.add(ring);}
     }
     addLightProjector(level.world,{position:[14,8,-12],direction:[1,0,0],radius:.44,accent:level.spec?.accent});
     for(const z of [-11,11])for(const x of [-12.3,-7.7])addGuideTower(level.world.root,{x,z,height:7,baseY:5.5});
@@ -246,11 +246,12 @@ function addRoomMechanisms(level,m){
     const bridge=imported(level,37,3.4,[-10,4.65,-6.6],0);if(bridge)bridge.rotation.x=.04;
   }
   if(level.index===14){
-    imported(level,31,4.25,[-17,.35,14],-Math.PI/2);
-    const turbine=imported(level,35,2.75,[-16.8,.55,14],-Math.PI/2);if(turbine)turbine.scale.multiplyScalar(.92);
     const housing=addFunnelEmitter(level.world,{position:[-17,1.9,14],direction:[1,0,0],radius:2.15,accent:level.spec?.accent});
     const field=level.workshop?.state.funnel;
     if(field){
+      // Replace the old opaque shell only in rendering. Its existing physical
+      // backplate and every blocker registration remain unchanged.
+      const shellMaterial=field.housing.material.clone();shellMaterial.visible=false;field.housing.material=shellMaterial;
       const rotor=housing.getObjectByName('transfer-rotor');
       const signals=new Set();housing.traverse(n=>{if(n.isMesh&&n.material?.name==='Recessed signal glass')signals.add(n.material);});
       let angle=0,speed=0,previous=0;

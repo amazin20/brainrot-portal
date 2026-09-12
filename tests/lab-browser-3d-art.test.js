@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import * as THREE from 'three';
 import {createHeadlessGame} from '../scripts/lab-headless.mjs';
 
-const EXPECTED_IMPORTED=new Map([[12,[]],[13,[19,29]],[14,[37]],[15,[31,35]]]);
+const EXPECTED_IMPORTED=new Map([[12,[]],[13,[19,29]],[14,[37]],[15,[]]]);
 const game=await createHeadlessGame();
 after(()=>{game.physics.dispose();game.portals.dispose();});
 
@@ -52,6 +52,10 @@ for(const room of [12,13,14,15])test(`room ${room} browser-3d art is detailed bu
 
  const ids=new Set();level.world.root.traverse(n=>{if(Number.isInteger(n.userData?.assetId))ids.add(n.userData.assetId);});
  for(const id of EXPECTED_IMPORTED.get(room))assert.ok(ids.has(id),`room ${room} must use imported mechanism asset ${id}`);
+ if(room===15){
+  assert.ok(level.world.root.getObjectByName('transfer-rotor'),'the actual machined turbine replaces both overlapping legacy models');
+  assert.ok(!ids.has(31)&&!ids.has(35),'redundant fan shells must not hide the turbine blades');
+ }
 
  const bounds=new THREE.Box3().setFromObject(level.world.root),size=bounds.getSize(new THREE.Vector3());
  assert.ok([...size.toArray()].every(Number.isFinite));assert.ok(size.x>10&&size.z>10);

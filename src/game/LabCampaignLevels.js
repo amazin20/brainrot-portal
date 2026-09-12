@@ -10,12 +10,13 @@ import {ROOM15_SPEC,buildRoom15} from './LabPortalRoom15.js';
 import {finishAdvancedRoom} from './LabAdvancedArchitecture.js';
 import {upgradeBrowser3DArt} from './LabBrowser3DArt.js';
 import {applyPremiumBrowser3DArt} from './LabBrowser3DPremium.js';
+import {applyMechanismReflections} from './LabMechanismReflections.js';
 
 const withArtAssets=(spec,...extra)=>({...spec,assets:[...new Set([...spec.assets,...extra])]});
 const ROOM13_ART_SPEC=withArtAssets(ROOM13_SPEC,19,29);
 const ROOM14_ART_SPEC=withArtAssets(ROOM14_SPEC,37);
-const ROOM15_ART_SPEC=withArtAssets(ROOM15_SPEC,31,35);
-const finishBrowserArt=level=>applyPremiumBrowser3DArt(upgradeBrowser3DArt(level));
+const ROOM15_ART_SPEC=ROOM15_SPEC;
+const finishBrowserArt=level=>applyMechanismReflections(applyPremiumBrowser3DArt(upgradeBrowser3DArt(level)));
 
 // Preserve the verified introductory rooms; extend the public registry once.
 export const CAMPAIGN=Object.freeze([...INTRODUCTORY_CAMPAIGN,...EXTENDED_CAMPAIGN.slice(0,3),...WORKSHOP_CAMPAIGN.slice(0,3).map((room,i)=>i===2?{...room,assets:room.assets.filter(id=>id!==39),accent:0x83cfc7,description:'Направь воздух от вентилятора к приводу двери.',hints:['Круглый вентилятор слева создаёт поток. Привод с решёткой дальше по залу принимает воздух передней стороной.','Воздух толкает тебя и друга. Попав в переднюю решётку приёмника, поток сам запускает дверь; кабель показывает связь.','Соедини правую стену напротив вентилятора с другим участком правой стены напротив привода. Включи вентилятор: когда поток попадёт в приёмник, дверь откроется автоматически. Забери друга и пройди в открывшуюся дверь.']}:room),ROOM12_SPEC,ROOM13_ART_SPEC,ROOM14_ART_SPEC,ROOM15_ART_SPEC]);
