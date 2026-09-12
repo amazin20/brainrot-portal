@@ -7,7 +7,7 @@ on:
         required: true
         type: string
       record_puzzle:
-        description: Record room12 camera repair and new rooms13–15; all ordinary routes always run
+        description: Record native movement in rooms12–20; all twenty ordinary routes always run
         required: false
         default: true
         type: boolean
@@ -19,7 +19,9 @@ jobs:
   source:
     name: Source tests and deployable package
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    # The retained 15-room suite took 14m37s locally before this expansion.
+    # Keep every test and allow build/install overhead plus the new routes.
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
         with:
@@ -33,7 +35,7 @@ jobs:
         run: |
           npm run check
           node scripts/v8-package-check.mjs
-          node scripts/stamp-build.mjs v29-interlaced-campaign
+          node scripts/stamp-build.mjs v35-interlaced-campaign
       - name: Preserve the exact deployable package
         uses: actions/upload-artifact@v4
         with:
@@ -43,9 +45,9 @@ jobs:
           retention-days: 14
 
   physics:
-    name: All fifteen routes, bypass checks and recovery
+    name: All twenty routes, bypass checks and recovery
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
         with:
@@ -76,7 +78,7 @@ jobs:
   browser:
     name: WebGL rooms ${{ matrix.first }}–${{ matrix.last }}
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 30
     strategy:
       fail-fast: false
       matrix:
@@ -87,6 +89,11 @@ jobs:
           - {first: 13, last: 13, ui: '0'}
           - {first: 14, last: 14, ui: '0'}
           - {first: 15, last: 15, ui: '0'}
+          - {first: 16, last: 16, ui: '0'}
+          - {first: 17, last: 17, ui: '0'}
+          - {first: 18, last: 18, ui: '0'}
+          - {first: 19, last: 19, ui: '0'}
+          - {first: 20, last: 20, ui: '0'}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -100,7 +107,7 @@ jobs:
           npm ci
           npm install --no-save --package-lock=false puppeteer-core@24.16.0
           npm run build
-          node scripts/stamp-build.mjs v29-interlaced-campaign
+          node scripts/stamp-build.mjs v35-interlaced-campaign
       - name: Verify ordinary routes in actual WebGL
         env:
           NESI_FIRST: ${{ matrix.first }}
@@ -140,7 +147,7 @@ jobs:
           npm ci
           npm install --no-save --package-lock=false puppeteer-core@24.16.0
           npm run build
-          node scripts/stamp-build.mjs v29-interlaced-campaign
+          node scripts/stamp-build.mjs v35-interlaced-campaign
       - name: Verify actual mouse shots and ordinary floor/wall traversal
         run: |
           npm run preview -- --host 127.0.0.1 --port 4173 >input-preview.log 2>&1 &
@@ -179,9 +186,9 @@ jobs:
           npm ci
           npm install --no-save --package-lock=false puppeteer-core@24.16.0
           npm run build
-          node scripts/stamp-build.mjs v29-interlaced-campaign
+          node scripts/stamp-build.mjs v35-interlaced-campaign
           npm run build -- --mode yandex --outDir dist-yandex
-          node scripts/stamp-build.mjs v29-interlaced-campaign dist-yandex
+          node scripts/stamp-build.mjs v35-interlaced-campaign dist-yandex
       - name: Verify physical video regressions and advertising contract
         run: |
           npm run preview -- --host 127.0.0.1 --port 4173 >sdk-preview.log 2>&1 &

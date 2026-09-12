@@ -19,6 +19,11 @@ const capturePlans={
  13:[['live weight turns the mirror',90],['weighted ray lifts the crossing',90],['the return side of the light',90]],
  14:[['first woven crossing',90],['folded upper return',90],['perpendicular light crossing',90]],
  15:[['reverse freight extraction',90],['ascending countercurrent',90],['airborne lane exchange',90]],
+ 16:[['borrowed floor crossing',90],['counterweight descent',90],['light returns above the well',90]],
+ 17:[['the address leaves its first berth',90],['the brake holds an empty carriage',90],['the same portal reveals another shore',90]],
+ 18:[['freight crosses the low throat',90],['spent portal turns the ascent',90],['return flight behind the entrance',90]],
+ 19:[['light crosses the sealed chamber',90],['air takes the open duct',90],['inertia carries the return',90]],
+ 20:[['loaded mirror raises the first crossing',90],['cargo exchange changes the live optical branch',90],['final field transfer over the shared hub',90]],
 };
 const expectedIds=[...new Set(CAMPAIGN.slice(first-1,last).flatMap(level=>level.assets))].sort((a,b)=>a-b);
 const expectedFiles=ALL_LAB_ASSETS.filter(asset=>expectedIds.includes(asset.id)).map(asset=>asset.file).sort();
@@ -98,7 +103,7 @@ try{
    const result=captured.route;report.routes.push(result);console.log('Browser course',index+1,'passed',result.frames,'frames');assert.ok(result.pass&&result.resets===0&&result.respawns===0);
    assert.equal(await page.$eval('#level-number',e=>e.textContent),String(index+1));
    assert.equal(await page.$('#quick-hint'),null);assert.equal(await page.$('#quick-settings'),null);await shot(`level-${index+1}-complete`);
-   // Preserve rooms1–11 art inspection separately. Rooms12–15 use their
+   // Preserve rooms1–11 art inspection separately. Rooms12 onward use their
    // standard-camera route milestones and sampled movement above.
    if(index<11){
    // Art-only overview: camera changes are explicitly not passage evidence.

@@ -5,7 +5,7 @@ name: Interlaced campaign layout preview
 on:
   push:
     branches:
-      - feature/interlaced-campaign-v29
+      - feature/campaign-16-20-v35
   workflow_dispatch:
 
 permissions:
@@ -22,11 +22,11 @@ jobs:
   layout:
     name: Ordinary room ${{ matrix.room }} route and native milestone stills
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 20
     strategy:
       fail-fast: false
       matrix:
-        room: [12, 13, 14, 15]
+        room: [16, 17, 18, 19, 20]
     steps:
       - uses: actions/checkout@v4
         with:
@@ -40,7 +40,7 @@ jobs:
           npm ci
           npm install --no-save --package-lock=false puppeteer-core@24.16.0
           npm run build
-          node scripts/stamp-build.mjs v29-interlaced-campaign
+          node scripts/stamp-build.mjs v35-interlaced-campaign
       - name: Capture the ordinary route without video frame sampling
         env:
           NESI_FIRST: ${{ matrix.room }}

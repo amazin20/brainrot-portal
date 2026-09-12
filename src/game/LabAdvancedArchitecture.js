@@ -4,12 +4,21 @@ const PALETTES=[
  {wall:0x74807b,low:0x83918d,high:0xb9a184,edge:0xd6b889},
  {wall:0x707f8b,low:0x8696a2,high:0xa49fb5,edge:0x9bcddd},
  {wall:0x687f79,low:0x829c91,high:0xb5b08c,edge:0xa4dbca},
+ {wall:0x71817a,low:0x87928a,high:0xb3a387,edge:0xd5bb83,trim:0x4d6258,sky:0x384b46},
+ {wall:0x73828f,low:0x8796a1,high:0xa6acc0,edge:0xa8cde1,trim:0x506170,sky:0x384956},
+ {wall:0x877c76,low:0x999088,high:0xb5a791,edge:0xdfbb96,trim:0x685952,sky:0x4b423c},
+ {wall:0x778584,low:0x8e9b97,high:0xb1af96,edge:0xc8d59d,trim:0x4f6562,sky:0x3a4d4b},
+ {wall:0x7c7d8d,low:0x9294a1,high:0xb6a8b4,edge:0xd4bbd2,trim:0x5b5a70,sky:0x414154},
 ];
 const DIGITS={
+ '0':['111','101','101','101','111'],
  '1':['010','110','010','010','111'],'2':['110','001','010','100','111'],
  '3':['110','001','010','001','110'],'4':['101','101','111','001','001'],
  '5':['111','100','110','001','110'],
+ '6':['111','100','111','101','111'],'7':['111','001','010','010','010'],
+ '8':['111','101','111','101','111'],'9':['111','101','111','001','111'],
 };
+export const advancedRoomPalette=index=>PALETTES[index-12];
 /** Finishes follow existing structural faces. No new collision, target,
  * light source or per-frame work; powered surfaces keep their own material. */
 export function finishAdvancedRoom(level){
@@ -20,7 +29,7 @@ export function finishAdvancedRoom(level){
  // camera boom, instead of pressing it against the southern boundary wall.
  if(level.index===12)level.spawnView={yaw:1.55,pitch:.12};
  if(level.index===14)level.spawnView={yaw:1.45,pitch:.10};
- level.conceptLesson=[
+ if(level.index<15)level.conceptLesson=[
   {position:level.panels['mirror-cradle']?.getFrame().center.toArray()??spawn,key:'↔',text:'Луч проходит через порталы и отражается от зеркала. Вес меняет угол отражения.'},
   {position:spawn,range:13,key:'↔',text:'Твёрдый свет держит вес. Переставляя портал, ты переносишь и опору.'},
   {position:spawn,range:13,key:'↔',text:'Поток удерживает вес и проходит через порталы. Обратное направление тянет предметы назад.'},
