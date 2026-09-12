@@ -39,7 +39,6 @@ export function buildRoom16(game,index=15){
  deck('Far return destination',-20,-12,-13,-7,13.4);
  w.box([-16,6.6,-10],[8,13.2,6],w.materials.wall);
  deck('Destination landing apron',-20,-12,-7,-5.5,13.4);
- w.box([-16,6.6,-6.25],[8,13.2,1.5],w.materials.wall);
  // The light source sits in a sight duct, offset from every walking route.
  w.box([-9.7,7.15,-10],[.35,14.3,6],w.materials.wall);
  w.box([-9.7,22.6,-10],[.35,8.8,6],w.materials.wall);
