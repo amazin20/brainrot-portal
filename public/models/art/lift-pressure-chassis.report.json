@@ -1,0 +1,60 @@
+{
+  "name": "lift-pressure-chassis",
+  "file": "lift-pressure-chassis.glb",
+  "bytes": 160632,
+  "sha256": "48d3bcb3876c1811ba17cf49ec16163d0fd8033ceba2f7ef1953fba3df51b9e6",
+  "source": "src/game/LabMachinedModels.js",
+  "sourceSha256": "736059de26fb90060f5c957a3ce6b595afba91ec607fafcfc9df5946561f0506",
+  "reproducibleCommand": "node scripts/export-machined-models.mjs",
+  "generator": {
+    "three": "180",
+    "node": "v24.19.0"
+  },
+  "options": {
+    "width": 4,
+    "depth": 4,
+    "height": 0.62,
+    "y": -0.34,
+    "accent": 8314600
+  },
+  "contract": "Deck local origin; body is below surface. Attach to original moving surface group.",
+  "vertices": 5300,
+  "triangles": 4788,
+  "primitives": 4,
+  "materials": 4,
+  "textures": 0,
+  "bones": 0,
+  "animations": 0,
+  "bounds": {
+    "min": [
+      -2,
+      -0.6989999973773957,
+      -1.9399999380111694
+    ],
+    "max": [
+      2,
+      -0.011999990940094019,
+      1.9399999380111694
+    ]
+  },
+  "nonFinite": 0,
+  "zeroArea": 0,
+  "nonUnitNormals": 0,
+  "requiredExtensions": [],
+  "externalResources": [],
+  "fileBudgetBytes": 4000000,
+  "units": "metres",
+  "upAxis": "+Y",
+  "originalDesign": true,
+  "geometryCheck": "pass",
+  "roundTripImport": "pass",
+  "fullValidation": {
+    "status": "pass",
+    "version": "2.0.0-dev.3.10",
+    "errors": 0,
+    "warnings": 0
+  },
+  "browserVisualCheck": "not_tested_by_exporter",
+  "integrationCheck": "not_tested_by_exporter",
+  "hardwarePerformance": "not_tested"
+}

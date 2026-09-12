@@ -1,0 +1,56 @@
+{
+  "name": "optical-trunnion-gimbal",
+  "file": "optical-trunnion-gimbal.glb",
+  "bytes": 178932,
+  "sha256": "e1f5e7be4a1c776ee257279601dd6a4e52dfd10381e30dae2f3c18dd54edf550",
+  "source": "src/game/LabMachinedModels.js",
+  "sourceSha256": "736059de26fb90060f5c957a3ce6b595afba91ec607fafcfc9df5946561f0506",
+  "reproducibleCommand": "node scripts/export-machined-models.mjs",
+  "generator": {
+    "three": "180",
+    "node": "v24.19.0"
+  },
+  "options": {
+    "accent": 16763001
+  },
+  "contract": "Mirror optical center; clear aperture radius 1.66m. optical-ring follows existing mirror yaw; optical-cradle stays stationary.",
+  "vertices": 5248,
+  "triangles": 7640,
+  "primitives": 7,
+  "materials": 4,
+  "textures": 0,
+  "bones": 0,
+  "animations": 0,
+  "bounds": {
+    "min": [
+      -1.940000057220459,
+      -2.734999895095825,
+      -0.6050000190734863
+    ],
+    "max": [
+      1.940000057220459,
+      1.940000057220459,
+      0.6049999594688416
+    ]
+  },
+  "nonFinite": 0,
+  "zeroArea": 0,
+  "nonUnitNormals": 0,
+  "requiredExtensions": [],
+  "externalResources": [],
+  "fileBudgetBytes": 4000000,
+  "units": "metres",
+  "upAxis": "+Y",
+  "originalDesign": true,
+  "geometryCheck": "pass",
+  "roundTripImport": "pass",
+  "fullValidation": {
+    "status": "pass",
+    "version": "2.0.0-dev.3.10",
+    "errors": 0,
+    "warnings": 0
+  },
+  "browserVisualCheck": "not_tested_by_exporter",
+  "integrationCheck": "not_tested_by_exporter",
+  "hardwarePerformance": "not_tested"
+}

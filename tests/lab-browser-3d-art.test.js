@@ -23,6 +23,25 @@ for(const room of [12,13,14,15])test(`room ${room} browser-3d art is detailed bu
  // instancing, not hundreds of independent copies and not the white-box tile.
  const detailedSurfaces=level.world.surfaces.filter(s=>s.group.children.some(n=>n.isInstancedMesh&&n.geometry!==level.world.tileGeometry));
  assert.equal(detailedSurfaces.length,level.world.surfaces.length);
+ for(const surface of level.world.surfaces.filter(s=>s.portal))surface.group.traverse(node=>{
+  if(node.isInstancedMesh&&node.userData.portalTile)assert.equal(node.material,level.world.materials.ceramic,'portal tiles must use the canonical readable ceramic');
+ });
+
+ for(const surface of Object.values(level.panels)){
+  const frame=surface.group.getObjectByName(`Portal machinery frame / ${surface.name}`);
+  assert.ok(frame,'every portal surface retains its own machinery frame');
+  const rest=surface.group.position.clone();surface.group.position.add(new THREE.Vector3(.31,.57,-.23));
+  const pose=surface.getFrame(),expected=pose.center.clone().addScaledVector(pose.normal,-.12);
+  assert.ok(frame.getWorldPosition(new THREE.Vector3()).distanceTo(expected)<1e-8,'frame must follow its moving portal panel');
+  surface.group.position.copy(rest);surface.group.updateWorldMatrix(true,true);
+  const inverse=surface.group.matrixWorld.clone().invert();
+  frame.traverse(node=>{
+   if(!node.isMesh)return;
+   node.geometry.computeBoundingBox();
+   const bounds=node.geometry.boundingBox.clone().applyMatrix4(inverse.clone().multiply(node.matrixWorld));
+   assert.ok(bounds.max.x<=-surface.width/2||bounds.min.x>=surface.width/2||bounds.max.y<=-surface.height/2||bounds.min.y>=surface.height/2,'decorative frame must leave the entire usable aperture clear');
+  });
+ }
 
  const visual=[];level.world.root.traverse(n=>{if(n.userData?.visualOnly)visual.push(n);});
  const visualMeshes=new Set();for(const node of visual)node.traverse(n=>{if(n.isMesh)visualMeshes.add(n);});
@@ -36,4 +55,27 @@ for(const room of [12,13,14,15])test(`room ${room} browser-3d art is detailed bu
 
  const bounds=new THREE.Box3().setFromObject(level.world.root),size=bounds.getSize(new THREE.Vector3());
  assert.ok([...size.toArray()].every(Number.isFinite));assert.ok(size.x>10&&size.z>10);
+});
+
+test('room 13 machinery stays upright below its moving deck and pressure surface',async()=>{
+ await game.selectLevel(12,false);
+ const level=game.firstLevel;
+ for(const [surfaceName,modelName] of [['north-cage','north-cage / real lift chassis'],['south-cage','south-cage / real lift chassis'],['mirror-cradle','mirror cradle / real pressure mechanism']]){
+  const surface=level.world.surfaces.find(s=>s.name===surfaceName),model=surface.group.getObjectByName(modelName);
+  assert.ok(model);
+  const normal=surface.getFrame().normal;
+  const up=new THREE.Vector3(0,1,0).applyQuaternion(model.getWorldQuaternion(new THREE.Quaternion()));
+  assert.ok(up.dot(normal)>1-1e-8,'Y-up imported mechanism must align with its deck normal');
+  const bounds=new THREE.Box3().setFromObject(model);
+  assert.ok(bounds.max.y<surface.getFrame().center.y-.029,'mechanism housing must remain behind the walking and portal plane');
+ }
+});
+
+test('changing rooms releases the procedural art textures once',async()=>{
+ await game.selectLevel(11,false);
+ const textures=game.firstLevel.world.root.userData.browserArtMaterials.textures;
+ const disposed=textures.map(()=>0);
+ textures.forEach((texture,i)=>texture.addEventListener('dispose',()=>disposed[i]++));
+ await game.selectLevel(12,false);
+ assert.deepEqual(disposed,[1,1]);
 });

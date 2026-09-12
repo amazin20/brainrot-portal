@@ -1,137 +1,154 @@
 import * as THREE from 'three';
+import {ArchitecturalBatch,architecturalMaterials,clipArchitecturalRect} from './LabArchitecturalModels.js';
 
 const V=(x=0,y=0,z=0)=>new THREE.Vector3(x,y,z);
+const Z=V(0,0,1);
 
-function tuneMaterial(source){
-  // Keep the actual optimized GLB geometry but normalize its old placeholder
-  // texture treatment. The source map had high-contrast scratches that read
-  // as broken normals at gameplay distance. Clean manufactured panels retain
-  // relief from the mesh itself and use a restrained industrial finish.
-  const m=new THREE.MeshStandardMaterial({
-    color:0x66727a,roughness:.58,metalness:.22,
-    emissive:0x111a20,emissiveIntensity:.18,
-  });
-  if(source?.vertexColors)m.vertexColors=true;
-  return m;
+function portalFrames(level){
+  const surfaces=new Set([...Object.values(level.panels||{}),...level.world.surfaces.filter(s=>s.portal)]);
+  return [...surfaces].filter(s=>s?.getFrame).map(s=>s.getFrame());
 }
 
-function overlapsPortal(level,center,normal){
-  for(const panel of Object.values(level.panels||{})){
-    if(!panel?.getFrame)continue;
-    const f=panel.getFrame(),alignment=Math.abs(normal.dot(f.normal));
-    if(alignment<.985)continue;
-    const rel=center.clone().sub(f.center),plane=Math.abs(rel.dot(f.normal));
-    if(plane>.28)continue;
-    if(Math.abs(rel.dot(f.right))<f.halfWidth+.38&&Math.abs(rel.dot(f.up))<f.halfHeight+.38)return true;
-  }
-  return false;
+function frameFromMatrix(matrix){
+  return {center:V().setFromMatrixPosition(matrix),right:V(1,0,0).transformDirection(matrix),up:V(0,1,0).transformDirection(matrix),normal:Z.clone().transformDirection(matrix)};
 }
 
-/**
- * Skins the large collision-safe structural masses with the repository's real
- * optimized wall-panel GLB (asset 24). Collision, portal targets, floor records
- * and the authored room coordinates are never touched. Panels are batched into
- * one InstancedMesh per source submesh, so thousands of visible modules do not
- * become thousands of draw calls.
- */
-function addRealPanelCladding(level,root){
-  const w=level.world,g=level.game||w.game;
-  if(!g.assets?.has(24))return {instances:0,batches:0,sourceBoxes:0};
-  const template=w.template(24);if(!template?.length)return {instances:0,batches:0,sourceBoxes:0};
-  const buckets=template.map(()=>[]),materials=template.map(part=>tuneMaterial(part.material));
+/** The shell has a few architectural scales: full-height bays, folded metal
+ * cassettes, then occasional service hatches. Fine details never become extra
+ * gameplay objects. All front faces stay within 20 mm of the existing plane. */
+function addArchitecturalCladding(level,root){
+  const w=level.world,g=level.game,batch=new ArchitecturalBatch(root,architecturalMaterials(level.spec?.accent));
   w.root.updateWorldMatrix(true,true);
-  const rootInv=w.root.matrixWorld.clone().invert(),normalMatrix=new THREE.Matrix3(),q=new THREE.Quaternion(),scale=new THREE.Vector3(),pos=new THREE.Vector3();
-  let instances=0,sourceBoxes=0;
-  const facesFor=p=>[
-    {axis:'z',sign:1,width:p.width,height:p.height,offset:p.depth/2-.038,rotation:0},
-    {axis:'z',sign:-1,width:p.width,height:p.height,offset:-p.depth/2+.038,rotation:Math.PI},
-    {axis:'x',sign:1,width:p.depth,height:p.height,offset:p.width/2-.038,rotation:Math.PI/2},
-    {axis:'x',sign:-1,width:p.depth,height:p.height,offset:-p.width/2+.038,rotation:-Math.PI/2},
-  ];
+  const inverse=w.root.matrixWorld.clone().invert(),portals=portalFrames(level);
+  let instances=0,sourceBoxes=0,sourceSurfaces=0,serviceBands=0,ventPanels=0;
+  const coverage=[];
+  const face=(matrix,width,height,{kind='wall',solid=false,seed=0}={})=>{
+    const frame=frameFromMatrix(matrix),local=inverse.clone().multiply(matrix);
+    const floor=kind==='floor',ceiling=kind==='ceiling';
+    const cols=Math.max(1,Math.ceil(width/(floor?3.25:ceiling?5.4:4.8)));
+    const rows=Math.max(1,Math.ceil(height/(floor?3.25:ceiling?5.4:3.2)));
+    const cw=width/cols,ch=height/rows;
+    // Solids already have their own opaque front; stand the finish 8 mm out.
+    // Tiled surfaces have a recessed backing and the replacement ends 4 mm
+    // behind the collision plane, including stairs and walking decks.
+    const front=solid?.008:-.004;
+    for(let ix=0;ix<cols;ix++)for(let iy=0;iy<rows;iy++){
+      const module={x0:-width/2+cw*ix,x1:-width/2+cw*(ix+1),y0:-height/2+ch*iy,y1:-height/2+ch*(iy+1)};
+      const pieces=clipArchitecturalRect(module,frame,portals);
+      for(const rect of pieces){
+        const x=(rect.x0+rect.x1)/2,y=(rect.y0+rect.y1)/2,pw=rect.x1-rect.x0-.035,ph=rect.y1-rect.y0-.035;
+        if(pw<.10||ph<.10)continue;
+        const cadence=(ix+iy*3+seed)%7;
+        const color=floor?(cadence===0?0x7b898b:0x879194):ceiling?(cadence===0?0x7c888b:0x909c9f):solid?(cadence===0?0x809093:0x75868a):(cadence===0?0x9aa5a5:0x89999d);
+        batch.add('frame',local,[x,y,front-.030],[pw,ph,.052]);
+        // The folded lip is exposed around a slightly smaller coated field.
+        const inset=Math.min(.085,pw*.1,ph*.1);
+        batch.add('coat',local,[x,y,front-.008],[pw-inset*2,ph-inset*2,.016],{color});
+        instances++;
+        coverage.push({center:frame.center.clone().addScaledVector(frame.right,x).addScaledVector(frame.up,y).toArray(),right:frame.right.toArray(),up:frame.up.toArray(),normal:frame.normal.toArray(),halfWidth:pw/2,halfHeight:ph/2,front});
+        const complete=pieces.length===1&&pw>2.2&&ph>1.5;
+        if(!complete||floor)continue;
+        // Two stamped locks explain how each large wall cassette is mounted.
+        for(const sx of [-1,1])batch.add('steel',local,[x+sx*(pw/2-.17),y+ph/2-.16,front+.002],[.036,.036,.008],{geometry:'bolt'});
+        if(ceiling)continue;
+        // Infrequent recessed ventilation cartridges have a dark well,
+        // six actual louvers, a folded rim and a small removable end cap.
+        if((ix+iy*2+seed)%6===1&&pw>2.8&&ph>2){
+          const vw=Math.min(1.50,pw*.44),vh=.40,vy=y-ph/2+.43;
+          batch.add('steel',local,[x,vy,front+.001],[vw+.075,vh+.08,.008]);
+          batch.add('recess',local,[x,vy,front+.006],[vw,vh,.006]);
+          for(let slat=0;slat<6;slat++)batch.add('frame',local,[x,vy-vh*.39+slat*vh*.156,front+.009],[vw-.065,.018,.006],{geometry:'box'});
+          ventPanels++;
+        }
+        // Every third bay has an upper service shoulder. It belongs to the
+        // panel, so clipping the panel also clips its integrated fixture.
+        if(iy%3===2&&ix%2===0&&pw>3){
+          const by=y+ph*.29,bw=Math.min(2.2,pw-.6);
+          batch.add('recess',local,[x,by,front+.002],[bw,.19,.008]);
+          batch.add('steel',local,[x,by-.044,front+.006],[bw-.10,.045,.007],{geometry:'box'});
+          batch.add('lamp',local,[x,by+.025,front+.009],[bw-.18,.035,.005],{geometry:'box'});
+          serviceBands++;
+        }
+      }
+    }
+  };
+
+  for(const surface of w.surfaces){
+    if(surface.portal||surface.collider?.kinematic||surface.group.userData.keepMaterial)continue;
+    const f=surface.getFrame(),floor=f.normal.y>.9,ceiling=f.normal.y<-.9;
+    // Keep narrow stair treads in the established authored kit; the material
+    // treatment below still cleans them without another layer of geometry.
+    if(floor&&Math.min(surface.width,surface.height)<.6)continue;
+    surface.group.updateWorldMatrix(true,false);
+    face(surface.group.matrixWorld,surface.width,surface.height,{kind:floor?'floor':ceiling?'ceiling':'wall',seed:sourceSurfaces++});
+    // The old GLB stays available to the existing surface/asset contract, but
+    // is not rendered under the cassette and does not double the triangles.
+    for(const node of surface.group.children)if(node.isInstancedMesh&&!node.userData.portalTile){node.visible=false;node.userData.replacedByArchitecturalCassette=true;}
+  }
+
   for(const collider of g.colliders){
     const mesh=collider.mesh,p=mesh?.geometry?.parameters;
     if(!mesh?.visible||mesh.userData?.collisionProxy||collider.kinematic||!p||![p.width,p.height,p.depth].every(Number.isFinite))continue;
-    // Thin rails, ledges and already-detailed props keep their own shape.
+    if(mesh.material!==w.materials.wall&&mesh.material!==w.materials.trim)continue;
     if(p.height<1.5||Math.max(p.width,p.depth)<2.5)continue;
-    mesh.updateWorldMatrix(true,false);normalMatrix.getNormalMatrix(mesh.matrixWorld);sourceBoxes++;
-    for(const face of facesFor(p)){
-      if(face.width<1.2||face.height<1.4)continue;
-      const cols=Math.max(1,Math.ceil(face.width/2.65)),rows=Math.max(1,Math.ceil(face.height/2.65));
-      const cw=face.width/cols,ch=face.height/rows;
-      q.setFromAxisAngle(V(0,1,0),face.rotation);
-      for(let ix=0;ix<cols;ix++)for(let iy=0;iy<rows;iy++){
-        const horizontal=-face.width/2+cw*(ix+.5),vertical=-face.height/2+ch*(iy+.5);
-        if(face.axis==='z')pos.set(horizontal,vertical,face.offset);else pos.set(face.offset,vertical,-horizontal*face.sign);
-        const worldCenter=pos.clone().applyMatrix4(mesh.matrixWorld);
-        const localNormal=face.axis==='z'?V(0,0,face.sign):V(face.sign,0,0),worldNormal=localNormal.applyMatrix3(normalMatrix).normalize();
-        if(overlapsPortal(level,worldCenter,worldNormal))continue;
-        scale.set(cw-.07,ch-.07,.075);
-        const local=new THREE.Matrix4().compose(pos,q,scale),base=rootInv.clone().multiply(mesh.matrixWorld).multiply(local);
-        template.forEach((part,i)=>buckets[i].push(base.clone().multiply(part.matrix)));
-        instances++;
-      }
+    mesh.updateWorldMatrix(true,false);sourceBoxes++;
+    const sides=[
+      {at:[0,0,p.depth/2],normal:[0,0,1],width:p.width},
+      {at:[0,0,-p.depth/2],normal:[0,0,-1],width:p.width},
+      {at:[p.width/2,0,0],normal:[1,0,0],width:p.depth},
+      {at:[-p.width/2,0,0],normal:[-1,0,0],width:p.depth},
+    ];
+    for(const side of sides){
+      if(side.width<.6)continue;
+      const rotation=new THREE.Quaternion().setFromUnitVectors(Z,V(...side.normal));
+      const matrix=mesh.matrixWorld.clone().multiply(new THREE.Matrix4().compose(V(...side.at),rotation,V(1,1,1)));
+      face(matrix,side.width,p.height,{solid:true,seed:sourceBoxes});
     }
   }
-  buckets.forEach((matrices,i)=>{
-    if(!matrices.length)return;
-    const mesh=new THREE.InstancedMesh(template[i].geometry,materials[i],matrices.length);
-    mesh.name='Real GLB structural panel cladding';mesh.userData.visualOnly=true;mesh.receiveShadow=true;
-    matrices.forEach((matrix,j)=>mesh.setMatrixAt(j,matrix));mesh.computeBoundingBox();mesh.computeBoundingSphere();root.add(mesh);
-  });
-  return {instances,batches:buckets.filter(b=>b.length).length,sourceBoxes};
+  root.userData.architecturalCoverage=coverage;
+  return {instances,sourceBoxes,sourceSurfaces,serviceBands,ventPanels,...batch.finish()};
+}
+
+function finishMaterials(level){
+  const w=level.world,m=w.root.userData.browserArtMaterials;
+  const finish=(mat,color,roughness,metalness)=>{
+    if(!mat)return;mat.color?.setHex(color);mat.roughness=roughness;mat.metalness=metalness;
+    if(mat.emissive){mat.emissive.setHex(0x000000);mat.emissiveIntensity=0;}
+    // The original coarse scratches were normal noise at the gameplay camera.
+    mat.bumpMap=null;mat.bumpScale=0;mat.roughnessMap=null;mat.needsUpdate=true;
+  };
+  finish(w.materials.wall,0x65767c,.74,.08);
+  finish(w.materials.floor,0x7b898d,.72,.10);
+  finish(w.materials.trim,0x4b6068,.66,.12);
+  if(m){
+    finish(m.graphite,0x77868c,.66,.12);finish(m.steel,0x89979b,.48,.38);finish(m.blackSteel,0x42555f,.62,.22);
+    // White ceramic is the sole portal target color. Its canonical material
+    // and every surface/frame remain intact; remove only the coarse bump.
+    m.ceramic.bumpMap=null;m.ceramic.bumpScale=0;m.ceramic.roughnessMap=null;
+    m.ceramic.roughness=.60;m.ceramic.metalness=.015;m.ceramic.needsUpdate=true;
+  }
+  level.game.scene.background=new THREE.Color(0x354852);
+  if(level.game.scene.fog)level.game.scene.fog.color.setHex(0x354852);
 }
 
 function addLighting(level,root){
+  // LabGame already owns the shadow key and a 2.5-strength hemisphere.
+  // Stacking two more ambient lights and point lights flattened the model
+  // relief, while costing another light evaluation in every portal pass.
+  // A single restrained cool rim retains the broad diffuse material tones.
   const b=level.bounds||level.workshop?.bounds||{minX:-20,maxX:20,minZ:-20,maxZ:20};
   const ceiling=level.workshop?.ceiling??level.ceiling??24,cx=(b.minX+b.maxX)/2,cz=(b.minZ+b.maxZ)/2;
-  const ambient=new THREE.AmbientLight(0xdce9ec,1.55);ambient.name='Soft industrial bounce';root.add(ambient);
-  const hemi=new THREE.HemisphereLight(0xf4fbff,0x34434b,1.75);hemi.name='Ceiling bounce';root.add(hemi);
-  const key=new THREE.DirectionalLight(0xfff2d6,1.35);key.name='Warm service key';key.position.set(cx-8,ceiling-2,cz+7);key.castShadow=false;
-  const target=new THREE.Object3D();target.position.set(cx,Math.max(4,ceiling*.38),cz);root.add(target);key.target=target;root.add(key);
-  const accent=level.spec?.accent??0x88d9df;
-  const points=[[-.23,.34],[.28,-.21]].map(([dx,dz],i)=>{
-    const light=new THREE.PointLight(accent,i?4.2:5.0,20,2);light.name='Mechanism readability fill';light.position.set(THREE.MathUtils.lerp(b.minX,b.maxX,.5+dx),ceiling*.48,THREE.MathUtils.lerp(b.minZ,b.maxZ,.5+dz));light.castShadow=false;root.add(light);return light;
-  });
-  return {ambient,hemi,key,points};
-}
-
-function brightenBackings(level){
-  const w=level.world,m=w.root.userData.browserArtMaterials;
-  if(m){
-    m.graphite.color.setHex(0x56636c);m.steel.color.setHex(0x89969c);m.blackSteel.color.setHex(0x303b43);m.ceramic.color.setHex(0xf8f5ec);
-    for(const mat of [m.graphite,m.steel,m.blackSteel]){
-      if('emissive' in mat){mat.emissive.setHex(0x172229);mat.emissiveIntensity=.28;}
-      if('roughness' in mat)mat.roughness=Math.min(mat.roughness,.58);
-      mat.needsUpdate=true;
-    }
-    m.ceramic.needsUpdate=true;
-  }
-  if(w.materials.wall?.color){w.materials.wall.color.setHex(0x56626b);w.materials.wall.emissive?.setHex(0x1d2930);w.materials.wall.emissiveIntensity=.24;w.materials.wall.needsUpdate=true;}
-  if(w.materials.floor?.color){w.materials.floor.color.setHex(0x626e73);w.materials.floor.emissive?.setHex(0x182126);w.materials.floor.emissiveIntensity=.16;w.materials.floor.needsUpdate=true;}
-  if(w.materials.trim?.color){w.materials.trim.color.setHex(0x36434c);w.materials.trim.emissive?.setHex(0x11191e);w.materials.trim.emissiveIntensity=.12;w.materials.trim.needsUpdate=true;}
-  level.game.scene.background=new THREE.Color(0x2a3740);
-  if(level.game.scene.fog)level.game.scene.fog.color.setHex(0x2a3740);
-}
-
-function addServiceBands(level,root){
-  const b=level.bounds||level.workshop?.bounds;if(!b)return 0;
-  const mat=new THREE.MeshStandardMaterial({color:0x46545d,metalness:.58,roughness:.42,emissive:0x11191d,emissiveIntensity:.14}),lamp=new THREE.MeshBasicMaterial({color:level.spec?.accent??0x8fdde2});
-  const geom=new THREE.BoxGeometry(1,1,1),items=[];
-  const add=(p,s,m)=>items.push({p,s,m});
-  const y=(level.workshop?.ceiling??level.ceiling??24)*.72;
-  for(const x of [b.minX+.16,b.maxX-.16])for(let z=b.minZ+2;z<b.maxZ-2;z+=5.2){add([x,y,z],[.11,.42,3.4],mat);add([x+(x<0?.06:-.06),y,z],[.018,.07,2.5],lamp);}
-  for(const z of [b.minZ+.16,b.maxZ-.16])for(let x=b.minX+2;x<b.maxX-2;x+=5.2){add([x,y-.75,z],[3.4,.42,.11],mat);add([x,y-.75,z+(z<0?.06:-.06)],[2.5,.07,.018],lamp);}
-  const byMat=new Map();for(const item of items){if(!byMat.has(item.m))byMat.set(item.m,[]);byMat.get(item.m).push(item);}
-  for(const [material,list] of byMat){const im=new THREE.InstancedMesh(geom,material,list.length),matrix=new THREE.Matrix4(),q=new THREE.Quaternion(),s=new THREE.Vector3(),p=new THREE.Vector3();im.name='Industrial service bands';im.userData.visualOnly=true;list.forEach((it,i)=>{matrix.compose(p.fromArray(it.p),q,s.fromArray(it.s));im.setMatrixAt(i,matrix);});im.computeBoundingSphere();root.add(im);}
-  return items.length;
+  const fill=new THREE.DirectionalLight(0xd8ecf5,.80);fill.name='Architectural edge fill';fill.position.set(cx+16,ceiling*.68,cz-12);fill.castShadow=false;
+  const target=new THREE.Object3D();target.position.set(cx,ceiling*.24,cz);root.add(target);fill.target=target;root.add(fill);
+  return {directionalLights:1,pointLights:0};
 }
 
 export function applyPremiumBrowser3DArt(level){
   if(!level?.world||level.index<11||level.index>14)return level;
   level.game=level.game||level.workshop?.game||level.world.game;
-  brightenBackings(level);
+  finishMaterials(level);
   const root=new THREE.Group();root.name='Premium browser 3D environment layer';root.userData.visualOnly=true;root.userData.version=33;level.world.root.add(root);
-  const cladding=addRealPanelCladding(level,root),serviceBands=addServiceBands(level,root);addLighting(level,root);
-  root.userData.stats={...cladding,serviceBands};level.premiumBrowser3DArt=root;
+  const cladding=addArchitecturalCladding(level,root),lighting=addLighting(level,root);
+  root.userData.stats={...cladding,...lighting};level.premiumBrowser3DArt=root;
   return level;
 }

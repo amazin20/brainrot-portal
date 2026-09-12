@@ -1,0 +1,57 @@
+{
+  "name": "transfer-field-turbine",
+  "file": "transfer-field-turbine.glb",
+  "bytes": 334508,
+  "sha256": "2fab2ff1262e741d2a5910066fdfe812ab6fd3605298b4de61e6c9542392e5a1",
+  "source": "src/game/LabMachinedModels.js",
+  "sourceSha256": "736059de26fb90060f5c957a3ce6b595afba91ec607fafcfc9df5946561f0506",
+  "reproducibleCommand": "node scripts/export-machined-models.mjs",
+  "generator": {
+    "three": "180",
+    "node": "v24.19.0"
+  },
+  "options": {
+    "radius": 2.15,
+    "accent": 8314600
+  },
+  "contract": "Field origin, forward +Z. transfer-rotor rotates about local Z, independently of its fixed duct.",
+  "vertices": 10105,
+  "triangles": 14236,
+  "primitives": 6,
+  "materials": 4,
+  "textures": 0,
+  "bones": 0,
+  "animations": 0,
+  "bounds": {
+    "min": [
+      -2.5686011612415314,
+      -2.5686011612415314,
+      -1.1825000256299971
+    ],
+    "max": [
+      2.5686011612415314,
+      2.5686011612415314,
+      0.27090000435709954
+    ]
+  },
+  "nonFinite": 0,
+  "zeroArea": 0,
+  "nonUnitNormals": 0,
+  "requiredExtensions": [],
+  "externalResources": [],
+  "fileBudgetBytes": 4000000,
+  "units": "metres",
+  "upAxis": "+Y",
+  "originalDesign": true,
+  "geometryCheck": "pass",
+  "roundTripImport": "pass",
+  "fullValidation": {
+    "status": "pass",
+    "version": "2.0.0-dev.3.10",
+    "errors": 0,
+    "warnings": 0
+  },
+  "browserVisualCheck": "not_tested_by_exporter",
+  "integrationCheck": "not_tested_by_exporter",
+  "hardwarePerformance": "not_tested"
+}

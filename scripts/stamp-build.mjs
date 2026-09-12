@@ -11,7 +11,7 @@ assert.equal(execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),c
 assert.equal(version,'v29-interlaced-campaign','Unexpected publication version');
 assert.equal(CAMPAIGN.length,15,'Unexpected campaign size');
 assert.ok(fs.existsSync(path.join(directory,'index.html')),'Stamp an existing production package');
-const info={commit,version,levels:CAMPAIGN.length,verified:true,
+const info={commit,version,artVersion:'v34-machined-environment',levels:CAMPAIGN.length,verified:true,
  repository:process.env.GITHUB_REPOSITORY,run:process.env.GITHUB_RUN_ID};
 fs.writeFileSync(path.join(directory,'build-info.json'),JSON.stringify(info,null,2)+'\n');
 console.log(`Stamped ${directory}: ${version} / ${commit}`);

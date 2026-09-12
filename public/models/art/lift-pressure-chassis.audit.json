@@ -1,0 +1,45 @@
+{
+  "inspection_status": "pass",
+  "production_ready": null,
+  "budget_bytes": 4000000,
+  "runtime_files": [
+    {
+      "path": "/workspace/scratch/9ec00ebc2e4d/brainrot-portal/public/models/art/lift-pressure-chassis.glb",
+      "bytes": 160632
+    }
+  ],
+  "total_runtime_bytes": 160632,
+  "total_runtime_mb_decimal": 0.160632,
+  "within_budget": true,
+  "errors": [],
+  "not_checked": [
+    "full Khronos glTF validation",
+    "decoded accessor values and compression integrity",
+    "visual quality and deformation",
+    "animation playback and blending",
+    "image dimensions and GPU memory",
+    "runtime draw calls and FPS",
+    "physics, gameplay and target-loader compatibility",
+    "companion file contents (only their byte sizes are counted)"
+  ],
+  "main_glb": {
+    "sha256": "48d3bcb3876c1811ba17cf49ec16163d0fd8033ceba2f7ef1953fba3df51b9e6",
+    "bytes": 160632,
+    "bin_chunk_bytes": 155928,
+    "unknown_chunk_types": []
+  },
+  "declared_geometry": {
+    "triangles_sum_over_mesh_primitives": 4788,
+    "position_counts_sum_over_primitives_not_unique_vertices": 5300,
+    "mesh_definitions": 4,
+    "primitive_definitions_not_runtime_draw_calls": 4
+  },
+  "material_definitions": 4,
+  "image_definitions": 0,
+  "texture_definitions": 0,
+  "skin_joint_counts": [],
+  "has_secondary_joint_attributes": false,
+  "animations": [],
+  "required_extensions": [],
+  "warnings": []
+}
