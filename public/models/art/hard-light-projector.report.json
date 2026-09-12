@@ -1,0 +1,57 @@
+{
+  "name": "hard-light-projector",
+  "file": "hard-light-projector.glb",
+  "bytes": 331924,
+  "sha256": "7ed6b08a8f15de454fff1e128384ba5f0ba76b921dad1a10ace3849b52454685",
+  "source": "src/game/LabMachinedModels.js",
+  "sourceSha256": "736059de26fb90060f5c957a3ce6b595afba91ec607fafcfc9df5946561f0506",
+  "reproducibleCommand": "node scripts/export-machined-models.mjs",
+  "generator": {
+    "three": "180",
+    "node": "v24.19.0"
+  },
+  "options": {
+    "radius": 1.15,
+    "accent": 8317423
+  },
+  "contract": "Optical origin, forward +Z; casing extends behind origin.",
+  "vertices": 10384,
+  "triangles": 12976,
+  "primitives": 4,
+  "materials": 4,
+  "textures": 0,
+  "bones": 0,
+  "animations": 0,
+  "bounds": {
+    "min": [
+      -1.321157032251358,
+      -1.232800030708313,
+      -0.7659000098705291
+    ],
+    "max": [
+      1.321157032251358,
+      1.232800030708313,
+      0.03910000212490558
+    ]
+  },
+  "nonFinite": 0,
+  "zeroArea": 0,
+  "nonUnitNormals": 0,
+  "requiredExtensions": [],
+  "externalResources": [],
+  "fileBudgetBytes": 4000000,
+  "units": "metres",
+  "upAxis": "+Y",
+  "originalDesign": true,
+  "geometryCheck": "pass",
+  "roundTripImport": "pass",
+  "fullValidation": {
+    "status": "pass",
+    "version": "2.0.0-dev.3.10",
+    "errors": 0,
+    "warnings": 0
+  },
+  "browserVisualCheck": "not_tested_by_exporter",
+  "integrationCheck": "not_tested_by_exporter",
+  "hardwarePerformance": "not_tested"
+}
