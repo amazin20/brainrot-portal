@@ -39,7 +39,7 @@ export function buildRoom17(game,index=16){
  const caliper=new THREE.Group();caliper.position.set(17.7,7.45,12.6);w.root.add(caliper);
  const shoe=w.box([0,0,0],[.38,.7,.85],w.materials.trim,false,caliper),lamp=w.box([0,.48,0],[.28,.1,.45],w.materials.accent.clone(),false,caliper);
  k.renders.push(()=>{shoe.position.x=mover.locked?-.18:.18;lamp.material.color.setHex(mover.locked?0xffbe69:0xb3ddd4);});
- k.wire([[-17,.1,20],[-21,.1,20],[-21,.1,8],[-17,6.3,8]],()=>pad.loaded()||pad.player());
+ k.wire([[-17,.1,20],[-21,.1,20],[-21,.1,8],[-21,6.3,8],[-17,6.3,8]],()=>pad.loaded()||pad.player());
  k.wire([[20,7.2,18],[20,7.2,13],[17.7,7.2,13]],()=>mover.locked);
  for(let i=0;i<12;i++){const z=4+i*.5;deck('East recovery sight stair',20,24,z,z+.5,(i+1)*.25);}
  deck('East recovery sight shelf',20,24,10,12,3);

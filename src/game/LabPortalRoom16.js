@@ -31,7 +31,7 @@ export function buildRoom16(game,index=15){
  const pad=k.pad('counterweight',[0,2,0],4.6,4.6);
  const lift=opticalLift(k,'counterweight-lift',[12,2,0],{top:13.4,width:4.6,depth:4.6});
  k.ticks.push(()=>{lift.powered=pad.loaded()||pad.player();});
- k.wire([[0,2.3,3.35],[0,2.3,4],[10,2.3,4],[12,2.3,2.5]],()=>pad.loaded()||pad.player());
+ k.wire([[0,2.3,3.35],[0,2.3,4],[10,2.3,4],[12,2.3,4],[12,2.3,2.5]],()=>pad.loaded()||pad.player());
  deck('Upper lift disembarkation',9,15,2.3,4.1,13.4);
  const upperShelf=deck('Upper returning observation gallery',-17,15,4.1,7.5,13.4);
  deck('East upper service walk',15,21,-13,7.5,13.4);
