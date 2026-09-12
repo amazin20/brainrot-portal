@@ -14,23 +14,25 @@ function flag(name,fallback){
 const checkUI=flag('NESI_UI',first===1),capturePuzzle=flag('NESI_CAPTURE_PUZZLE',true);
 // Native excerpts from observable milestones of the same ordinary routes.
 // These windows never change the route, the camera or any physical state.
+// The new rooms supply three four-second windows each; the full ordinary
+// route still executes. Bound software-render recording separately from play.
 const capturePlans={
  12:[['crossing flight',150]],
  13:[['live weight turns the mirror',90],['weighted ray lifts the crossing',90],['the return side of the light',90]],
  14:[['first woven crossing',90],['folded upper return',90],['perpendicular light crossing',90]],
  15:[['reverse freight extraction',90],['ascending countercurrent',90],['airborne lane exchange',90]],
- 16:[['borrowed floor crossing',90],['counterweight descent',90],['light returns above the well',90]],
- 17:[['the address leaves its first berth',90],['the brake holds an empty carriage',90],['the same portal reveals another shore',90]],
- 18:[['freight crosses the low throat',90],['spent portal turns the ascent',90],['return flight behind the entrance',90]],
- 19:[['light crosses the sealed chamber',90],['air takes the open duct',90],['inertia carries the return',90]],
- 20:[['loaded mirror raises the first crossing',90],['cargo exchange changes the live optical branch',90],['final field transfer over the shared hub',90]],
+ 16:[['borrowed floor crossing',60],['counterweight descent',60],['light returns above the well',60]],
+ 17:[['the address leaves its first berth',60],['the brake holds an empty carriage',60],['the same portal reveals another shore',60]],
+ 18:[['freight crosses the low throat',60],['spent portal turns the ascent',60],['return flight behind the entrance',60]],
+ 19:[['light crosses the sealed chamber',60],['air takes the open duct',60],['inertia carries the return',60]],
+ 20:[['loaded mirror raises the first crossing',60],['cargo exchange changes the live optical branch',60],['final field transfer over the shared hub',60]],
 };
 const expectedIds=[...new Set(CAMPAIGN.slice(first-1,last).flatMap(level=>level.assets))].sort((a,b)=>a-b);
 const expectedFiles=ALL_LAB_ASSETS.filter(asset=>expectedIds.includes(asset.id)).map(asset=>asset.file).sort();
 assert.equal(expectedFiles.length,expectedIds.length,'Every selected course dependency must exist in the source asset catalog');
 function startUrl(level){const url=new URL(root);url.searchParams.set('debug','1');url.searchParams.set('level',String(level));return url.href;}
 fs.mkdirSync(out,{recursive:true});
-const browser=await puppeteer.launch({executablePath:process.env.CHROME_PATH||'/usr/bin/google-chrome',headless:true,timeout:60000,protocolTimeout:720000,
+const browser=await puppeteer.launch({executablePath:process.env.CHROME_PATH||'/usr/bin/google-chrome',headless:true,timeout:60000,protocolTimeout:1500000,
  args:['--no-sandbox','--disable-dev-shm-usage','--use-angle=swiftshader','--enable-unsafe-swiftshader']});
 const page=await browser.newPage();await page.setViewport({width:1280,height:800});page.setDefaultTimeout(120000);
 const errors=[],requests=[];page.on('pageerror',e=>errors.push(e.message));page.on('request',r=>{if(r.url().includes('.glb'))requests.push(r.url());});
