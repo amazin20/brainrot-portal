@@ -52,3 +52,21 @@ test('appending rooms16–20 preserves all accepted progress and persists the ne
  assert.equal(reloaded.value.muted,true);assert.equal(reloaded.value.tutorial,false);
  assert.equal(JSON.parse(data.get('brainrot-portal.preferences.v24')).campaignRevision,'folded-junction-v28');
 });
+
+test('v36 completion of all twenty rooms survives room21 without inventing new completion',()=>{
+ const accepted=Array.from({length:20},(_,i)=>i),key='brainrot-portal.preferences.v24';
+ const data=new Map([[key,JSON.stringify({campaignRevision:'folded-junction-v28',completed:accepted,quality:'low',volume:.2})]]);
+ const storage={getItem:key=>data.get(key),setItem:(key,value)=>data.set(key,value)};
+ const p=new LabPreferences(storage);assert.deepEqual(p.value.completed,accepted);assert.ok(!p.value.completed.includes(20));
+ p.complete(19);assert.deepEqual(p.value.completed,accepted);p.complete(20);
+ const reloaded=new LabPreferences(storage);assert.deepEqual(reloaded.value.completed,[...accepted,20]);
+ assert.equal(reloaded.value.quality,'low');assert.equal(reloaded.value.volume,.2);
+});
+for(const invalid of [false,true])test(`failed ${invalid?'JSON parsing':'storage read'} cannot silently overwrite existing progress`,()=>{
+ const original=invalid?'{damaged-data':JSON.stringify({campaignRevision:'folded-junction-v28',completed:[0,19]});
+ let value=original,writes=0;
+ const storage={getItem:()=>{if(!invalid)throw new Error('temporary read failure');return value;},setItem:(_,v)=>{writes++;value=v;}};
+ const p=new LabPreferences(storage);p.save({volume:.4});p.complete(0);
+ assert.equal(p.readFailed,true);assert.equal(p.value.volume,.4);assert.ok(p.value.completed.includes(0));
+ assert.equal(writes,0);assert.equal(value,original);
+});

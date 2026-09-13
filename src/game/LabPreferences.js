@@ -12,8 +12,11 @@ export function sanitizePreferences(value={}) {
 }
 export class LabPreferences {
   constructor(storage){
-    this.storage=storage;let saved={};
-    try{saved=JSON.parse(storage?.getItem(KEY)||storage?.getItem(LEGACY_KEY)||'{}')||{};}catch{}
+    this.storage=storage;this.readFailed=false;let saved={};
+    try{
+      saved=JSON.parse(storage?.getItem(KEY)||storage?.getItem(LEGACY_KEY)||'{}');
+      if(!saved||typeof saved!=='object'||Array.isArray(saved))throw new TypeError('Invalid preferences record');
+    }catch{this.readFailed=true;saved={};}
     this.value=sanitizePreferences(saved);
     if(saved.campaignRevision!==CAMPAIGN_REVISION){
       // Rooms 1–11 and personal settings survive each chamber replacement.
@@ -23,7 +26,9 @@ export class LabPreferences {
       this.save();
     }
   }
-  save(changes={}){this.value=sanitizePreferences({...this.value,...changes});try{this.storage?.setItem(KEY,JSON.stringify({...this.value,campaignRevision:CAMPAIGN_REVISION}));}catch{/* Storage may be disabled; session settings still work. */}return this.value;}
+  // A failed read must not be turned into an empty progress write. Session
+  // changes remain usable; a new successful load is required before persistence.
+  save(changes={}){this.value=sanitizePreferences({...this.value,...changes});try{if(!this.readFailed)this.storage?.setItem(KEY,JSON.stringify({...this.value,campaignRevision:CAMPAIGN_REVISION}));}catch{/* Storage may be disabled; session settings still work. */}return this.value;}
   complete(index){this.save({completed:[...this.value.completed,index]});}
   unlockHint(index){this.save({hints:{...this.value.hints,[index]:Math.min(3,(this.value.hints[index]||0)+1)}});}
 }

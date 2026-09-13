@@ -1,3 +1,4 @@
+import {ROOM21_SPEC,buildRoom21} from './LabPortalRoom21.js';
 import {buildReadableWindRoom} from './LabWindRoom.js';
 import {WORKSHOP_CAMPAIGN,buildWorkshopCampaign} from './LabWorkshopCampaign.js';
 import {addExplorationSurfaces} from './LabExplorationSurfaces.js';
@@ -26,8 +27,8 @@ export const finishBrowserArt=level=>{
  if(level.index<11)level.spec??={...CAMPAIGN[level.index],accent:level.world.palette.accent};
  return applyMechanismReflections(applyPremiumBrowser3DArt(upgradeBrowser3DArt(level)));
 };
-const NEW_CAMPAIGN=[ROOM16_SPEC,ROOM17_SPEC,ROOM18_SPEC,ROOM19_SPEC,ROOM20_SPEC];
-const NEW_BUILDERS=[buildRoom16,buildRoom17,buildRoom18,buildRoom19,buildRoom20];
+const NEW_CAMPAIGN=[ROOM16_SPEC,ROOM17_SPEC,ROOM18_SPEC,ROOM19_SPEC,ROOM20_SPEC,ROOM21_SPEC];
+const NEW_BUILDERS=[buildRoom16,buildRoom17,buildRoom18,buildRoom19,buildRoom20,buildRoom21];
 
 // Preserve the verified introductory rooms; extend the public registry once.
 export const CAMPAIGN=Object.freeze([...INTRODUCTORY_CAMPAIGN,...EXTENDED_CAMPAIGN.slice(0,3),...WORKSHOP_CAMPAIGN.slice(0,3).map((room,i)=>i===2?{...room,assets:room.assets.filter(id=>id!==39),accent:0x83cfc7,description:'Направь воздух от вентилятора к приводу двери.',hints:['Круглый вентилятор слева создаёт поток. Привод с решёткой дальше по залу принимает воздух передней стороной.','Воздух толкает тебя и друга. Попав в переднюю решётку приёмника, поток сам запускает дверь; кабель показывает связь.','Соедини правую стену напротив вентилятора с другим участком правой стены напротив привода. Включи вентилятор: когда поток попадёт в приёмник, дверь откроется автоматически. Забери друга и пройди в открывшуюся дверь.']}:room),ROOM12_SPEC,ROOM13_ART_SPEC,ROOM14_ART_SPEC,ROOM15_ART_SPEC,...NEW_CAMPAIGN]);
