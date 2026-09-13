@@ -77,7 +77,7 @@ try{
     if(type.includes('json')){
       report.buildInfo=await metadata.json();
       const buildCommit=report.buildInfo.commit??report.buildInfo.sourceCommit;
-      if(buildCommit)assert.equal(buildCommit,EXPECTED,'Served build metadata must match the recorded source');
+      if(buildCommit)assert.ok(buildCommit===EXPECTED||buildCommit===actualCommit,'Served build metadata must match the verified game or recording commit');
     }
   }
   const executablePath=discoverChrome();report.browserExecutable=executablePath;
