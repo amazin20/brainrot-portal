@@ -8,7 +8,7 @@ import puppeteer from 'puppeteer-core';
 const variant = process.env.W03_ROUTE || 'cargo-first';
 assert.ok(['cargo-first', 'scout-first', 'recovery'].includes(variant));
 const part = Number(process.env.W03_PART || 0), parts = Number(process.env.W03_PARTS || 1);
-assert.ok(Number.isInteger(parts) && parts >= 1 && parts <= 8);
+assert.ok(Number.isInteger(parts) && parts >= 1 && parts <= 16);
 assert.ok(Number.isInteger(part) && part >= 0 && part < parts);
 const options = variant === 'recovery' ? { recovery: true } : { order: variant };
 const out = process.env.EVIDENCE_OUT || `smoke-artifacts/w03-${variant}/part-${part}`;
@@ -21,7 +21,7 @@ const report = { part, parts, commit: process.env.BUILD_COMMIT || null, variant,
     note: 'Silent recording of every second sequential native game frame. Simulation playback is normal speed, not wall-clock rendering speed.' },
   errors: [], frames: [], milestones: [], models: [] };
 const browser = await puppeteer.launch({ executablePath: process.env.CHROME_PATH || '/usr/bin/google-chrome',
-  headless: true, protocolTimeout: 1500000, args: ['--no-sandbox', '--disable-dev-shm-usage', '--use-angle=swiftshader', '--enable-unsafe-swiftshader'] });
+  headless: true, protocolTimeout: 1680000, args: ['--no-sandbox', '--disable-dev-shm-usage', '--use-angle=swiftshader', '--enable-unsafe-swiftshader'] });
 try {
   const page = await browser.newPage(); page.setDefaultTimeout(120000);
   await page.setViewport({ width: 1280, height: 720, deviceScaleFactor: 1 });
