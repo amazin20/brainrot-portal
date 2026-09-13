@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import {mergeGeometries} from 'three/addons/utils/BufferGeometryUtils.js';
 import {createMachinedProjector,createMachinedTurbine,createMachinedChassis,createMachinedGimbal} from './LabMachinedModels.js';
 import {applyAdvancedMechanismArt} from './LabAdvancedMechanismArt.js';
 import {applyEarlyMechanismArt} from './LabEarlyMechanismArt.js';
@@ -76,6 +77,26 @@ function beam(parent,a,b,r,mat,segments=8){
   mesh.position.copy(a).add(b).multiplyScalar(.5);mesh.quaternion.setFromUnitVectors(UP,d.clone().normalize());mesh.receiveShadow=true;parent.add(mesh);return mesh;
 }
 function box(parent,p,s,mat){const m=new THREE.Mesh(new THREE.BoxGeometry(...s),mat);m.position.fromArray(p);m.receiveShadow=true;parent.add(m);return m;}
+// Static decoration shares one submission per material. A frame remains a
+// child of its moving surface, so batching does not merge different pivots.
+function batchStaticDetails(root){
+  const groups=new Map();
+  for(const mesh of [...root.children]){
+    if(!mesh.isMesh||mesh.isInstancedMesh||Array.isArray(mesh.material))continue;
+    mesh.updateMatrix();
+    if(!groups.has(mesh.material))groups.set(mesh.material,[]);
+    groups.get(mesh.material).push(mesh);
+  }
+  for(const [material,meshes] of groups){
+    if(meshes.length<2)continue;
+    const copies=meshes.map(mesh=>mesh.geometry.clone().applyMatrix4(mesh.matrix));
+    const geometry=mergeGeometries(copies,false);copies.forEach(g=>g.dispose());
+    if(!geometry)throw new Error('Static architectural details must share compatible attributes');
+    const mesh=new THREE.Mesh(geometry,material);mesh.receiveShadow=true;
+    mesh.name='Batched architectural fittings';mesh.userData.visualOnly=true;root.add(mesh);
+    meshes.forEach(old=>{old.removeFromParent();old.geometry.dispose();});
+  }
+}
 function cylinder(parent,p,r,h,mat,axis='y',segments=14){
   const m=new THREE.Mesh(new THREE.CylinderGeometry(r,r,h,segments),mat);m.position.fromArray(p);
   if(axis==='x')m.rotation.z=Math.PI/2;else if(axis==='z')m.rotation.x=Math.PI/2;m.receiveShadow=true;parent.add(m);return m;
@@ -155,27 +176,40 @@ function enhanceWorldMaterials(level,m){
 }
 
 function addDeckEngineering(level,root,m){
+  const early=level.index<11;
+  const details=early?new THREE.Group():root;
+  if(early){details.name='Attached under-deck engineering';details.userData.visualOnly=true;root.add(details);}
   const ground=level.index<11?Math.min(...level.world.floors.map(f=>f.y))+.5:1.5;
   const floors=level.world.surfaces.filter(s=>s.floor&&!s.collider.kinematic&&s.floor.y>ground&&!/stair/i.test(s.name));
   let braces=0,lamps=0;
   for(const s of floors){
     const f=s.floor,w=f.maxX-f.minX,d=f.maxZ-f.minZ;if(w<2||d<2)continue;
     const y=f.y-.42,longX=w>=d,span=longX?w:d,count=Math.max(1,Math.min(5,Math.ceil(span/6)));
+    const strut=(a,b,material)=>{
+      beam(details,a,b,.035,material,6);
+      if(early)for(const p of [a,b]){
+        // End hangers meet the actual recessed deck backing. They explain
+        // how the diagonals carry the slab instead of floating beneath it.
+        beam(details,p,[p[0],f.y-.11,p[2]],.04,m.blackSteel,6);
+        box(details,[p[0],f.y-.14,p[2]],[.18,.055,.18],m.steel);
+      }
+    };
     for(let i=0;i<count;i++){
       const u=-span/2+span*(i+.5)/count;
       if(longX){
         const cx=(f.minX+f.maxX)/2+u;
-        beam(root,[cx-w/count*.42,y-.15,f.minZ+.18],[cx+w/count*.42,y+.15,f.maxZ-.18],.035,m.blackSteel,6);
-        beam(root,[cx-w/count*.42,y+.15,f.maxZ-.18],[cx+w/count*.42,y-.15,f.minZ+.18],.035,m.steel,6);
+        strut([cx-w/count*.42,y-.15,f.minZ+.18],[cx+w/count*.42,y+.15,f.maxZ-.18],m.blackSteel);
+        strut([cx-w/count*.42,y+.15,f.maxZ-.18],[cx+w/count*.42,y-.15,f.minZ+.18],m.steel);
       }else{
         const cz=(f.minZ+f.maxZ)/2+u;
-        beam(root,[f.minX+.18,y-.15,cz-d/count*.42],[f.maxX-.18,y+.15,cz+d/count*.42],.035,m.blackSteel,6);
-        beam(root,[f.maxX-.18,y-.15,cz-d/count*.42],[f.minX+.18,y+.15,cz+d/count*.42],.035,m.steel,6);
+        strut([f.minX+.18,y-.15,cz-d/count*.42],[f.maxX-.18,y+.15,cz+d/count*.42],m.blackSteel);
+        strut([f.maxX-.18,y-.15,cz-d/count*.42],[f.minX+.18,y+.15,cz+d/count*.42],m.steel);
       }
       braces+=2;
     }
-    if(w>4.5){box(root,[(f.minX+f.maxX)/2,f.y-.31,f.minZ+.035],[Math.min(w-1,5.2),.028,.03],m.lamp);lamps++;}
+    if(w>4.5){box(details,[(f.minX+f.maxX)/2,f.y-.31,f.minZ+.035],[Math.min(w-1,5.2),.028,.03],m.lamp);lamps++;}
   }
+  if(early)batchStaticDetails(details);
   return{braces,lamps};
 }
 
@@ -191,6 +225,7 @@ function addPortalFrames(level,root,m){
     for(const x of [-w/2-pad,w/2+pad])box(group,[x,0,0],[.18,h+.5,depth],m.steel);
     for(const y of [-h/2-pad,h/2+pad])box(group,[0,y,0],[w+.5,.18,depth],m.blackSteel);
     for(const sx of [-1,1])for(const sy of [-1,1])cylinder(group,[sx*(w/2+.18),sy*(h/2+.18),.02],.075,.07,m.brass,'z',8);
+    if(level.index<11)batchStaticDetails(group);
     count++;
   }
   return count;
