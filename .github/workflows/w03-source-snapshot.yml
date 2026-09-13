@@ -1,0 +1,22 @@
+name: W03 exact source snapshot
+on:
+  push:
+    branches: [ci/w00-workspace-snapshot]
+    paths: [.github/workflows/w03-source-snapshot.yml]
+permissions:
+  contents: read
+jobs:
+  source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: 4d179a004458ccf06c1ba6514837507d553234cb
+          persist-credentials: false
+      - run: git archive HEAD -o /tmp/w03-source.tar
+      - uses: actions/upload-artifact@v4
+        with:
+          name: w03-exact-source
+          path: /tmp/w03-source.tar
+          retention-days: 1
