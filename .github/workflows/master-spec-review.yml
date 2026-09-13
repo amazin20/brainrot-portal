@@ -1,0 +1,50 @@
+name: Master spec review
+on:
+  push:
+    branches: [feature/master-spec-w00-w03]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: master-spec-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  baseline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Install browser verification dependency without changing the lockfile
+        run: npm install --no-save --package-lock=false puppeteer-core@24.16.0
+      - name: Preserve reproducible source workspace (no credentials or git metadata)
+        run: |
+          node -e "require('fs').writeFileSync('REVIEW_REVISION.json', JSON.stringify({commit:process.env.GITHUB_SHA,node:process.version,platform:process.platform},null,2))"
+          tar --exclude='./.git' -czf /tmp/master-spec-workspace.tar.gz .
+      - uses: actions/upload-artifact@v4
+        with:
+          name: master-spec-workspace
+          path: /tmp/master-spec-workspace.tar.gz
+          retention-days: 3
+          if-no-files-found: error
+      - name: Run all existing and new source tests, then build
+        run: |
+          set -o pipefail
+          npm run check 2>&1 | tee master-spec-check.log
+          node scripts/v8-package-check.mjs 2>&1 | tee master-spec-package.log
+      - name: Preserve actual check results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: master-spec-check-results
+          path: |
+            master-spec-check.log
+            master-spec-package.log
+            REVIEW_REVISION.json
+          retention-days: 14
