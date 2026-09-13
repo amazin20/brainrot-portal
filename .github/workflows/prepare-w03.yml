@@ -1,0 +1,52 @@
+name: Prepare reviewed W03 source
+on:
+  push:
+    branches: [ci/w00-workspace-snapshot]
+    paths: [.github/workflows/prepare-w03.yml, 'maintenance/w03-source-*.b64']
+permissions:
+  contents: write
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Preserve the reviewed compressed source patch outside checkout
+        run: |
+          mkdir /tmp/w03-payload
+          cp maintenance/w03-source-*.b64 /tmp/w03-payload/
+          python3 - <<'PY'
+          import base64, hashlib, lzma
+          from pathlib import Path
+          parts = sorted(Path('/tmp/w03-payload').glob('w03-source-*.b64'))
+          assert len(parts) == 5
+          data = lzma.decompress(base64.b64decode(''.join(p.read_text() for p in parts), validate=True))
+          assert hashlib.sha256(data).hexdigest() == '7f2144a6a9257f9ea047e9a5fde4c9b3dac7a49fe47177107bc1f041fe079195'
+          Path('/tmp/w03.patch').write_bytes(data)
+          PY
+      - uses: actions/checkout@v4
+        with:
+          ref: 4d179a004458ccf06c1ba6514837507d553234cb
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Recreate the exact locally tested candidate
+        run: |
+          git apply --index /tmp/w03.patch
+          git diff --cached --check
+          test "$(git write-tree)" = 4cd92d4d2dbd2df07a2581334a169e78d34f42d5
+          npm ci
+          node --test tests/lab-room21.test.js tests/lab-preferences-migration.test.js
+          npm run build
+          node scripts/v8-package-check.mjs
+      - name: Commit only reviewed source to an isolated result branch
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'W03: add gravity-pocket room21 with reversible routes and save read protection' -m 'Exact source tree from the local 552-test passing candidate. Both preparation orders, a failed-launch recovery and launch offsets pass production physics. Browser evidence and full campaign CI remain separate acceptance checks. Original room layouts and character assets are unchanged.'
+          git push origin HEAD:refs/heads/ci/w03-reviewed-result
+          git rev-parse HEAD
+          git rev-parse HEAD^{tree}
