@@ -42,11 +42,13 @@ jobs:
           node --test tests/lab-room21.test.js tests/lab-preferences-migration.test.js
           npm run build
           node scripts/v8-package-check.mjs
-      - name: Commit only reviewed source to an isolated result branch
+      - name: Commit only ordinary source; workflows are applied separately by the authorized connector
         run: |
+          git restore --source=HEAD --staged --worktree .github/workflows/
+          test "$(git write-tree)" = caa9339fc276020cea1f4b83db3c55d10e8e118d
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git commit -m 'W03: add gravity-pocket room21 with reversible routes and save read protection' -m 'Exact source tree from the local 552-test passing candidate. Both preparation orders, a failed-launch recovery and launch offsets pass production physics. Browser evidence and full campaign CI remain separate acceptance checks. Original room layouts and character assets are unchanged.'
+          git commit -m 'W03: add gravity-pocket room21 with reversible routes and save read protection' -m 'Reviewed source subset; workflow changes must be added separately to restore exact tested tree 4cd92d4d2dbd2df07a2581334a169e78d34f42d5. This transport branch is not a publishable candidate. Original room layouts and character assets are unchanged.'
           git push origin HEAD:refs/heads/ci/w03-reviewed-result
           git rev-parse HEAD
           git rev-parse HEAD^{tree}
