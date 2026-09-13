@@ -4,14 +4,43 @@ on:
     branches: [recording/level20-v36]
 permissions:
   contents: read
+concurrency:
+  group: level20-video-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
-  record:
+  stop_previous_capture:
+    name: Stop superseded single-process recording
     runs-on: ubuntu-latest
-    timeout-minutes: 90
+    timeout-minutes: 2
+    permissions:
+      actions: write
+    steps:
+      - name: Cancel only our superseded recording run
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          revision=$(gh api "repos/$GH_REPO/actions/runs/34746369420" --jq '.head_sha')
+          test "$revision" = '30d4df8e02605b426752f444558db4df9f1a36d3'
+          status=$(gh api "repos/$GH_REPO/actions/runs/34746369420" --jq '.status')
+          if [ "$status" != 'completed' ]; then
+            gh api --method POST "repos/$GH_REPO/actions/runs/34746369420/cancel"
+          fi
+  record:
+    name: Record frames part ${{ matrix.shard }} of 20
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    strategy:
+      fail-fast: false
+      max-parallel: 20
+      matrix:
+        shard: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
     env:
       GAME_COMMIT: 1ee48a5383db71227773e54bfce92e1d7ff1cf32
-      BUILD_COMMIT: 1ee48a5383db71227773e54bfce92e1d7ff1cf32
       CAPTURE_FPS: '30'
+      SHARD_INDEX: ${{ matrix.shard }}
+      SHARD_COUNT: '20'
+      EXPECTED_ROUTE_UPDATES: '6884'
       OUTPUT_VIDEO: video/level-20-walkthrough.mp4
       OUTPUT_REPORT: video/level20-record-report.json
       PLAYWRIGHT_MODULE: playwright-core
@@ -27,24 +56,44 @@ jobs:
           cache: npm
       - name: Prepare exact game and recording tools
         run: |
-          git diff --exit-code "$GAME_COMMIT" -- src public package.json package-lock.json vite.config.js
+          git diff --exit-code "$GAME_COMMIT" -- src public index.html package.json package-lock.json vite.config.js
           npm ci
           npm install --no-save --package-lock=false playwright-core@1.62.1
-          sudo apt-get update -qq
-          sudo apt-get install -y ffmpeg
+          command -v ffmpeg || { sudo apt-get update -qq && sudo apt-get install -y ffmpeg; }
           npm run build
           BUILD_COMMIT="$GITHUB_SHA" node scripts/stamp-build.mjs v36-unified-campaign-art
-      - name: Record full ordinary room 20 route
+      - name: Record assigned continuous frames from the whole ordinary route
         run: |
           mkdir -p video
           npm run preview -- --host 127.0.0.1 --port 4173 >video/preview.log 2>&1 &
           for i in {1..30}; do curl -fsS http://127.0.0.1:4173/ >/dev/null && break; sleep 1; done
           curl -fsS http://127.0.0.1:4173/ >/dev/null
           export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
-          node scripts/record-level20.mjs
-      - name: Preserve walkthrough and route evidence
+          node scripts/record-level20-sharded.mjs
+      - name: Preserve continuous part and route evidence
         if: always()
         uses: actions/upload-artifact@v4
+        with:
+          name: level20-part-${{ matrix.shard }}
+          path: video/
+          if-no-files-found: error
+          retention-days: 14
+  assemble:
+    name: Assemble and verify complete walkthrough
+    needs: record
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: level20-part-*
+          path: input
+      - name: Verify all continuous ranges and assemble the MP4
+        run: |
+          command -v ffmpeg || { sudo apt-get update -qq && sudo apt-get install -y ffmpeg; }
+          python3 scripts/assemble-level20-video.py
+      - uses: actions/upload-artifact@v4
         with:
           name: level20-full-walkthrough-v36
           path: video/
