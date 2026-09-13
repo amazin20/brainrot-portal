@@ -1,7 +1,9 @@
 import * as THREE from 'three';
 
 export class InputController {
-  constructor({ joystick, joystickKnob, jumpButton }) {
+  constructor({ joystick, joystickKnob, jumpButton, isActive = () => true }) {
+    this.isActive = isActive;
+    this.disposed = false;
     this.keys = new Set();
     this.mobileMove = new THREE.Vector2();
     this.jumpQueued = false;
@@ -14,6 +16,9 @@ export class InputController {
     this.listeners = [];
 
     this.onKeyDown = (event) => {
+      if (this.disposed || !this.isActive()) return;
+      // A held key must be released and pressed again after a reset.
+      if (event.repeat && !this.keys.has(event.code)) return;
       if (['Space', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(event.code)) event.preventDefault();
       this.keys.add(event.code);
       if (event.code === 'Space' && !event.repeat) this.jumpQueued = true;
@@ -60,6 +65,8 @@ export class InputController {
   }
 
   dispose() {
+    if (this.disposed) return;
+    this.disposed = true;
     for (const { target, type, listener, options } of this.listeners) {
       target.removeEventListener(type, listener, options);
     }
@@ -87,24 +94,32 @@ export class InputController {
       this.resetStick();
     };
     this.listen(this.joystick, 'pointerdown', (event) => {
-      if (this.joystickPointer !== null) return;
+      if (this.disposed || !this.isActive() || this.joystickPointer !== null) return;
       this.joystickPointer = event.pointerId;
-      this.joystick.setPointerCapture?.(event.pointerId);
+      try { this.joystick.setPointerCapture?.(event.pointerId); }
+      catch (error) {
+        this.resetStick();
+        if (!['NotFoundError', 'InvalidStateError'].includes(error.name)) throw error;
+        return;
+      }
       updateStick(event);
     });
     this.listen(this.joystick, 'pointermove', (event) => {
+      if (this.disposed || !this.isActive()) { this.resetStick(); return; }
       if (this.joystickPointer === event.pointerId) updateStick(event);
     });
     this.listen(this.joystick, 'pointerup', endStick);
     this.listen(this.joystick, 'pointercancel', endStick);
     this.listen(this.joystick, 'lostpointercapture', endStick);
     this.listen(this.jumpButton, 'pointerdown', (event) => {
+      if (this.disposed || !this.isActive()) return;
       event.preventDefault();
       this.jumpQueued = true;
     });
   }
 
   getMove() {
+    if (this.disposed || !this.isActive()) return new THREE.Vector2();
     const x = (this.keys.has('KeyD') || this.keys.has('ArrowRight') ? 1 : 0)
       - (this.keys.has('KeyA') || this.keys.has('ArrowLeft') ? 1 : 0) + this.mobileMove.x;
     const z = (this.keys.has('KeyS') || this.keys.has('ArrowDown') ? 1 : 0)
@@ -114,7 +129,7 @@ export class InputController {
     return move;
   }
 
-  consumeJump() { const queued = this.jumpQueued; this.jumpQueued = false; return queued; }
-  consumeRestart() { const queued = this.restartQueued; this.restartQueued = false; return queued; }
-  consumePause() { const queued = this.pauseQueued; this.pauseQueued = false; return queued; }
+  consumeJump() { const queued = this.jumpQueued; this.jumpQueued = false; return queued && !this.disposed && this.isActive(); }
+  consumeRestart() { const queued = this.restartQueued; this.restartQueued = false; return queued && !this.disposed && this.isActive(); }
+  consumePause() { const queued = this.pauseQueued; this.pauseQueued = false; return queued && !this.disposed && this.isActive(); }
 }
