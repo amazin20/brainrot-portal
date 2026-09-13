@@ -1,6 +1,8 @@
 import * as THREE from 'three';
 import {createMachinedProjector,createMachinedTurbine,createMachinedChassis,createMachinedGimbal} from './LabMachinedModels.js';
 import {applyAdvancedMechanismArt} from './LabAdvancedMechanismArt.js';
+import {applyEarlyMechanismArt} from './LabEarlyMechanismArt.js';
+import {architecturalCeiling} from './LabEarlyArchitecture.js';
 
 const V=(x=0,y=0,z=0)=>new THREE.Vector3(x,y,z);
 const Q=new THREE.Quaternion();
@@ -153,7 +155,8 @@ function enhanceWorldMaterials(level,m){
 }
 
 function addDeckEngineering(level,root,m){
-  const floors=level.world.surfaces.filter(s=>s.floor&&!s.collider.kinematic&&s.floor.y>1.5&&!/stair/i.test(s.name));
+  const ground=level.index<11?Math.min(...level.world.floors.map(f=>f.y))+.5:1.5;
+  const floors=level.world.surfaces.filter(s=>s.floor&&!s.collider.kinematic&&s.floor.y>ground&&!/stair/i.test(s.name));
   let braces=0,lamps=0;
   for(const s of floors){
     const f=s.floor,w=f.maxX-f.minX,d=f.maxZ-f.minZ;if(w<2||d<2)continue;
@@ -194,7 +197,7 @@ function addPortalFrames(level,root,m){
 }
 
 function addShellConduits(level,root,m){
-  const b=level.bounds||level.workshop?.bounds;if(!b)return 0;const top=(level.workshop?.ceiling??level.ceiling??20)-1.1;
+  const b=level.bounds||level.workshop?.bounds;if(!b)return 0;const top=architecturalCeiling(level)-1.1;
   const paths=[[V(b.minX+.18,top,b.minZ+2),V(b.minX+.18,top,b.maxZ-2)],[V(b.maxX-.18,top-.65,b.minZ+3),V(b.maxX-.18,top-.65,b.maxZ-3)]];
   let count=0;
   for(const [a,z] of paths)for(let o=-1;o<=1;o++){
@@ -278,13 +281,14 @@ function addRoomMechanisms(level,m){
 }
 
 export function upgradeBrowser3DArt(level){
-  if(!level?.world||level.index<11||level.index>19)return level;
-  level.game=level.game||level.workshop?.game;
+  if(!level?.world||level.index<0||level.index>19||level.browser3DArt)return level;
+  level.game=level.game||level.workshop?.game||level.world.game;
   const m=materials(level);enhanceWorldMaterials(level,m);
   const root=new THREE.Group();root.name='Browser 3D artist environment pass';root.userData.visualOnly=true;root.userData.version=31;level.world.root.add(root);
   const deck=addDeckEngineering(level,root,m),portalFrames=addPortalFrames(level,root,m),conduits=addShellConduits(level,root,m);
   if(level.index===13)addLightProjector(level.world,{position:[-10,5.1,-7],direction:[0,0,-1],radius:1.1,accent:level.spec?.accent});
   addRoomMechanisms(level,m);
+  if(level.index<11)applyEarlyMechanismArt(level);
   if(level.index>=15)applyAdvancedMechanismArt(level);
   root.userData.stats={deckBraces:deck.braces,deckLamps:deck.lamps,portalFrames,conduits};level.browser3DArt=root;return level;
 }

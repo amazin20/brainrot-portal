@@ -33,7 +33,7 @@ function isMachinedMesh(node){
 }
 
 function isOpticalMirror(node,level){
-  if(level.index>=15&&node.userData?.mechanismMirror===true)return true;
+  if((level.index<11||level.index>=15)&&node.userData?.mechanismMirror===true)return true;
   if(level.index!==12||!level.workshop?.state?.optical)return false;
   const p=node.geometry?.parameters,mat=node.material;
   // weightedOptics owns this unique unregistered .11 x 2.4 x 2.2 slab.
@@ -43,11 +43,13 @@ function isOpticalMirror(node,level){
 }
 
 export function applyMechanismReflections(level){
-  if(!level?.world||level.index<11||level.index>19||level.mechanismReflections)return level;
+  if(!level?.world||level.index<0||level.index>19||level.mechanismReflections)return level;
   const owner=level.world.root.userData.browserArtMaterials?.ceramic;
   if(!owner)return level;
   const targets=[];
-  level.world.root.traverse(node=>{
+  // The introductory lift and original articulated fixtures live directly
+  // under the scene. Only explicitly marked machinery receives this map.
+  (level.index<11?level.game.scene:level.world.root).traverse(node=>{
     if(!node.isMesh)return;
     const mirror=isOpticalMirror(node,level),machined=isMachinedMesh(node);
     if(mirror||machined)targets.push({node,mirror});

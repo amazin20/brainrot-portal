@@ -11,7 +11,7 @@ function flag(name,fallback){
  assert.match(value,/^(true|false|1|0)$/i,`${name} must be true/false or 1/0`);
  return /^(true|1)$/i.test(value);
 }
-const checkUI=flag('NESI_UI',first===1),capturePuzzle=flag('NESI_CAPTURE_PUZZLE',true);
+const checkUI=flag('NESI_UI',first===1),capturePuzzle=flag('NESI_CAPTURE_PUZZLE',true),captureEarly=flag('NESI_CAPTURE_EARLY',false);
 // Native excerpts from observable milestones of the same ordinary routes.
 // These windows never change the route, the camera or any physical state.
 // The new rooms supply three four-second windows each; the full ordinary
@@ -27,6 +27,14 @@ const capturePlans={
  19:[['light crosses the sealed chamber',60],['air takes the open duct',60],['inertia carries the return',60]],
  20:[['loaded mirror raises the first crossing',60],['cargo exchange changes the live optical branch',60],['final field transfer over the shared hub',60]],
 };
+// Small art-review excerpts from actual early-room mechanism motion. The
+// ordinary route remains the sole writer of movement and interaction input.
+const earlyPlans={
+ 1:'ordinary portal approach',2:'pressure leaf begins its travel',3:'gravity accelerates the crossing',
+ 4:'lift begins its travel',5:'launch panel begins its tilt',6:'calibration mirror turns',
+ 7:'loaded balance rotates',8:'updraft impeller accelerates',9:'spring receives its falling load',
+ 10:'freight deck extends',11:'receiver flywheel accelerates',
+};
 const expectedIds=[...new Set(CAMPAIGN.slice(first-1,last).flatMap(level=>level.assets))].sort((a,b)=>a-b);
 const expectedFiles=ALL_LAB_ASSETS.filter(asset=>expectedIds.includes(asset.id)).map(asset=>asset.file).sort();
 assert.equal(expectedFiles.length,expectedIds.length,'Every selected course dependency must exist in the source asset catalog');
@@ -37,7 +45,7 @@ const browser=await puppeteer.launch({executablePath:process.env.CHROME_PATH||'/
 const page=await browser.newPage();await page.setViewport({width:1280,height:800});page.setDefaultTimeout(120000);
 const errors=[],requests=[];page.on('pageerror',e=>errors.push(e.message));page.on('request',r=>{if(r.url().includes('.glb'))requests.push(r.url());});
 const report={renderer:'CI Chromium / SwiftShader; NOT a user-device FPS benchmark',baseUrl:root,range:{first,last},ui:checkUI,
- capturePuzzle,puzzleClips:[],routes:[],errors};
+ capturePuzzle,captureEarly,puzzleClips:[],renderSamples:[],routes:[],errors};
 const ready=()=>page.waitForFunction(()=>window.__NESI_DEMO_GAME__?.state==='ready');
 const shot=name=>page.screenshot({path:`${out}/${name}.png`});
 async function clickMenu(selector){
@@ -65,12 +73,25 @@ try{
  if(first===1){assert.equal(report.initial.models,4);assert.equal(report.initial.audioState,'running');}
  for(let index=first-1;index<last;index++){
    if(index>first-1){await clickMenu('#play-again-button');await page.waitForFunction(i=>window.__NESI_DEMO_GAME__?.levelIndex===i&&window.__NESI_DEMO_GAME__.state==='playing',{},index);await shot(`level-${index+1}-start`);}
-   const clipRequests=capturePlans[index+1]||[];
-   const captured=await page.evaluate(async ({capturePuzzle,clipRequests})=>{
-     const g=window.__NESI_DEMO_GAME__,original=g.render,originalVisuals=g.updateVisuals,images=[],clips=[];
+   const earlyName=captureEarly?earlyPlans[index+1]:null;
+   const clipRequests=earlyName?[[earlyName,45]]:capturePlans[index+1]||[];
+   const captured=await page.evaluate(async ({capturePuzzle,clipRequests,earlyName})=>{
+     const g=window.__NESI_DEMO_GAME__,original=g.render,originalVisuals=g.updateVisuals,images=[],clips=[],renderSamples=[];
      const requests=new Map(clipRequests);
      let active=null;
-     g.render=function(){original.call(this);if(this.levelIndex>=5&&this.state==='playing')images.push(this.renderer.domElement.toDataURL('image/png'));};
+     const renderSample=()=>{
+       const renderer=g.renderer,draw=renderer.render;let passes=0;
+       renderer.render=function(...args){passes++;return draw.apply(this,args);};
+       const started=performance.now();
+       try{original.call(g);}finally{renderer.render=draw;}
+       const info=renderer.info;
+       renderSamples.push({level:g.levelIndex+1,elapsed:g.elapsed,player:g.playerPosition.toArray(),
+         camera:{position:g.camera.position.toArray(),quaternion:g.camera.quaternion.toArray(),projection:g.camera.projectionMatrix.toArray()},
+         portals:g.portals.portals.map(p=>p?{position:p.position.toArray()}:null),passes,
+         calls:info.render.calls,triangles:info.render.triangles,lines:info.render.lines,points:info.render.points,
+         geometries:info.memory.geometries,textures:info.memory.textures,softwareRenderMs:performance.now()-started});
+     };
+     g.render=function(){renderSample();if(this.state==='playing')images.push(this.renderer.domElement.toDataURL('image/png'));};
      window.__NESI_CAPTURE_LEVEL_MARK__=mark=>{
        if(!capturePuzzle||!requests.has(mark.name))return;
        active={name:mark.name,maxFrames:requests.get(mark.name),startElapsed:g.elapsed,step:0,frames:[]};clips.push(active);
@@ -79,17 +100,28 @@ try{
      // select recording windows; they cannot move the player or camera.
      if(capturePuzzle&&requests.size)g.updateVisuals=function(...args){
        const result=originalVisuals.apply(this,args);
+       if(earlyName&&!clips.length){
+         const l=this.firstLevel,s=l.state??{},room=this.levelIndex+1;
+         const moving=room===1?this.elapsed>.4:room===2?l.pads[0]?.progress>.025:
+           room===3?this.heldCube&&this.playerPosition.z<5.2:room===4?l.lift?.y>.025:
+           room===5?l.receiverPanel?.progress>.025:room===6?s.mirror>.025:
+           room===7?s.loaded&&Math.abs(s.angle)>.025:room===8?s.fanSpeed>.2:
+           room===9?s.piston?.compression>.002:room===10?s.freight?.progress>.025:
+           room===11?s.flywheel?.wheel?.omega>.2:false;
+         if(moving)window.__NESI_CAPTURE_LEVEL_MARK__({name:earlyName});
+       }
        if(active&&active.frames.length<active.maxFrames&&args[0]>0&&this.state==='playing'&&active.step++%4===0){
          original.call(this);active.frames.push(this.renderer.domElement.toDataURL('image/png'));
        }
        return result;
      };
-     try{return {route:await window.__NESI_RUN_LEVEL_ROUTE__(),images,clips,
+     try{return {route:await window.__NESI_RUN_LEVEL_ROUTE__(),images,clips,renderSamples,
        width:g.renderer.domElement.width,height:g.renderer.domElement.height};}
-     catch(error){return {failure:String(error),images,clips,
+     catch(error){return {failure:String(error),images,clips,renderSamples,
        width:g.renderer.domElement.width,height:g.renderer.domElement.height};}
      finally{g.render=original;g.updateVisuals=originalVisuals;delete window.__NESI_CAPTURE_LEVEL_MARK__;}
-   },{capturePuzzle,clipRequests});
+   },{capturePuzzle,clipRequests,earlyName});
+   report.renderSamples.push(...captured.renderSamples);
    captured.images.forEach((image,k)=>fs.writeFileSync(`${out}/level-${index+1}-mechanic-${k+1}.png`,Buffer.from(image.split(',')[1],'base64')));
    if(captured.failure)throw Error(captured.failure);
    if(capturePuzzle&&clipRequests.length){

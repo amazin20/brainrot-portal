@@ -1,0 +1,98 @@
+name: Early chamber graphics comparison
+
+# Review evidence only; the full campaign verification remains the release gate.
+on:
+  push:
+    branches: [feature/early-art-v36]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: early-art-review-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  compare:
+    name: Room ${{ matrix.room }} before and after in native WebGL
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        room: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Build the exact upgraded revision
+        env:
+          BUILD_COMMIT: ${{ github.sha }}
+        run: |
+          npm ci
+          npm install --no-save --package-lock=false puppeteer-core@24.16.0
+          npm run build
+          node scripts/stamp-build.mjs v36-unified-campaign-art
+      - uses: actions/checkout@v4
+        with:
+          ref: 3d9e1d22f6765aac53140fb5ee49d0334109c80b
+          path: baseline
+      - name: Build the accepted v35 baseline
+        working-directory: baseline
+        env:
+          BUILD_COMMIT: 3d9e1d22f6765aac53140fb5ee49d0334109c80b
+        run: |
+          ln -s ../node_modules node_modules
+          npm run build
+          node scripts/stamp-build.mjs v35-interlaced-campaign
+      - name: Run the same ordinary route and camera in both builds
+        env:
+          NESI_FIRST: ${{ matrix.room }}
+          NESI_LAST: ${{ matrix.room }}
+          NESI_UI: '0'
+        run: |
+          npm run preview -- --host 127.0.0.1 --port 4173 >early-after.log 2>&1 &
+          npm --prefix baseline run preview -- --host 127.0.0.1 --port 4174 >early-before.log 2>&1 &
+          for i in {1..30}; do curl -fsS http://127.0.0.1:4173/ >/dev/null && curl -fsS http://127.0.0.1:4174/ >/dev/null && break; sleep 1; done
+          curl -fsS http://127.0.0.1:4173/ >/dev/null
+          curl -fsS http://127.0.0.1:4174/ >/dev/null
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+          PAGE_URL=http://127.0.0.1:4174/ EVIDENCE_OUT=early-art/before NESI_CAPTURE_PUZZLE=0 NESI_CAPTURE_EARLY=0 node scripts/v8-browser.mjs
+          EVIDENCE_OUT=early-art/after NESI_CAPTURE_PUZZLE=1 NESI_CAPTURE_EARLY=1 node scripts/v8-browser.mjs
+      - name: Verify matching camera poses and preserve measured rendering cost
+        run: |
+          node --input-type=module <<'JS'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const read=phase=>JSON.parse(fs.readFileSync(`early-art/${phase}/report.json`));
+          const before=read('before'),after=read('after');
+          assert.ok(before.pass&&after.pass);
+          assert.deepEqual(after.routes,before.routes,'Graphics must retain the exact ordinary route and physical milestones');
+          assert.equal(after.renderSamples.length,before.renderSamples.length);
+          const samples=before.renderSamples.map((prior,i)=>{
+            const next=after.renderSamples[i];
+            for(const key of ['player','camera','portals'])assert.deepEqual(next[key],prior[key],`Matched native ${key}, sample ${i}`);
+            return {sample:i,elapsed:next.elapsed,before:{passes:prior.passes,calls:prior.calls,triangles:prior.triangles},after:{passes:next.passes,calls:next.calls,triangles:next.triangles}};
+          });
+          const result={pass:true,baseRevision:'3d9e1d22f6765aac53140fb5ee49d0334109c80b',revision:process.env.GITHUB_SHA,renderer:after.renderer,samples};
+          fs.writeFileSync('early-art/comparison.json',JSON.stringify(result,null,2));
+          console.log(JSON.stringify(result,null,2));
+          JS
+      - name: Preserve native screenshots, movement frames and comparison
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: early-art-room-${{ matrix.room }}
+          path: |
+            early-art/
+            early-before.log
+            early-after.log
+            dist/build-info.json
+            baseline/dist/build-info.json
+          if-no-files-found: error
+          retention-days: 7

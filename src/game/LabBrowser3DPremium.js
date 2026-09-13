@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import {ArchitecturalBatch,architecturalMaterials,clipArchitecturalRect} from './LabArchitecturalModels.js';
 import {advancedRoomPalette} from './LabAdvancedArchitecture.js';
+import {earlyRoomPalette,architecturalCeiling} from './LabEarlyArchitecture.js';
 
 const V=(x=0,y=0,z=0)=>new THREE.Vector3(x,y,z);
 const Z=V(0,0,1);
@@ -21,7 +22,7 @@ function addArchitecturalCladding(level,root){
   const w=level.world,g=level.game,batch=new ArchitecturalBatch(root,architecturalMaterials(level.spec?.accent));
   w.root.updateWorldMatrix(true,true);
   const inverse=w.root.matrixWorld.clone().invert(),portals=portalFrames(level);
-  const palette=level.index>=15?advancedRoomPalette(level.index):null;
+  const palette=level.index<11?earlyRoomPalette(level.index):level.index>=15?advancedRoomPalette(level.index):null;
   const tone=(color,cadence)=>new THREE.Color(color).multiplyScalar(cadence===0?.94:1).getHex();
   let instances=0,sourceBoxes=0,sourceSurfaces=0,serviceBands=0,ventPanels=0;
   const coverage=[];
@@ -114,7 +115,7 @@ function addArchitecturalCladding(level,root){
 
 function finishMaterials(level){
   const w=level.world,m=w.root.userData.browserArtMaterials;
-  const palette=level.index>=15?advancedRoomPalette(level.index):null;
+  const palette=level.index<11?earlyRoomPalette(level.index):level.index>=15?advancedRoomPalette(level.index):null;
   const finish=(mat,color,roughness,metalness)=>{
     if(!mat)return;mat.color?.setHex(color);mat.roughness=roughness;mat.metalness=metalness;
     if(mat.emissive){mat.emissive.setHex(0x000000);mat.emissiveIntensity=0;}
@@ -141,14 +142,14 @@ function addLighting(level,root){
   // relief, while costing another light evaluation in every portal pass.
   // A single restrained cool rim retains the broad diffuse material tones.
   const b=level.bounds||level.workshop?.bounds||{minX:-20,maxX:20,minZ:-20,maxZ:20};
-  const ceiling=level.workshop?.ceiling??level.ceiling??24,cx=(b.minX+b.maxX)/2,cz=(b.minZ+b.maxZ)/2;
+  const ceiling=architecturalCeiling(level,24),cx=(b.minX+b.maxX)/2,cz=(b.minZ+b.maxZ)/2;
   const fill=new THREE.DirectionalLight(0xd8ecf5,.80);fill.name='Architectural edge fill';fill.position.set(cx+16,ceiling*.68,cz-12);fill.castShadow=false;
   const target=new THREE.Object3D();target.position.set(cx,ceiling*.24,cz);root.add(target);fill.target=target;root.add(fill);
   return {directionalLights:1,pointLights:0};
 }
 
 export function applyPremiumBrowser3DArt(level){
-  if(!level?.world||level.index<11||level.index>19)return level;
+  if(!level?.world||level.index<0||level.index>19||level.premiumBrowser3DArt)return level;
   level.game=level.game||level.workshop?.game||level.world.game;
   finishMaterials(level);
   const root=new THREE.Group();root.name='Premium browser 3D environment layer';root.userData.visualOnly=true;root.userData.version=33;level.world.root.add(root);

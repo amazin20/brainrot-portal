@@ -19,7 +19,7 @@ try{
   catch(error){console.log('Publication propagation:',String(error));}
   await wait(5000);
  }
- assert.equal(info?.commit,expected);assert.equal(info?.levels,CAMPAIGN.length);assert.equal(info?.version,'v35-interlaced-campaign');assert.equal(info?.levels,20);assert.equal(info?.artVersion,'v34-machined-environment');report.build=info;
+ assert.equal(info?.commit,expected);assert.equal(info?.levels,CAMPAIGN.length);assert.equal(info?.version,'v36-unified-campaign-art');assert.equal(info?.levels,20);assert.equal(info?.artVersion,'v36-complete-machined-environment');report.build=info;
  const response=await fetch(base+'models/runtime/manifest.json?revision='+expected);assert.ok(response.ok);const manifest=await response.json();
  assert.deepEqual(manifest.models.map(m=>m.id).sort((a,b)=>a-b),[...CAMPAIGN_ASSET_IDS]);
  const source=JSON.parse(fs.readFileSync('public/models/runtime/manifest.json','utf8'));
@@ -31,16 +31,16 @@ try{
  }
  browser=await puppeteer.launch({executablePath:process.env.CHROME_PATH||'/usr/bin/google-chrome',headless:true,protocolTimeout:720000,args:['--no-sandbox','--disable-dev-shm-usage','--use-angle=swiftshader','--enable-unsafe-swiftshader']});
  const page=await browser.newPage();page.setDefaultTimeout(120000);await page.setViewport({width:960,height:600});page.on('pageerror',e=>report.errors.push(e.message));
- // All twenty routes passed before deployment. Probe each new chamber using its production
- // driver. Debug hooks only issue ordinary movement, aim, fire and use input.
- for(let level=16;level<=CAMPAIGN.length;level++){
+ // All twenty routes passed before deployment. Probe the eleven changed rooms
+ // and the final room on the public package with ordinary production input.
+ for(const level of [...Array.from({length:11},(_,i)=>i+1),20]){
   await page.goto(base+'?debug=1&level='+level+'&revision='+expected,{waitUntil:'networkidle2'});
   await page.waitForFunction(()=>window.__NESI_DEMO_GAME__?.state==='ready');
   assert.equal(await page.$$eval('#level-select option',a=>a.length),CAMPAIGN.length);
   assert.equal(await page.title(),'БРЕЙНРОТ ПОРТАЛ — физическая 3D-головоломка');
   await page.click('#play-button');await page.waitForFunction(()=>window.__NESI_DEMO_GAME__.state==='playing'&&window.__NESI_DEMO_GAME__.performanceMonitor.stats.fps>0);
-  const puzzle=await page.evaluate(()=>{const l=window.__NESI_DEMO_GAME__.firstLevel;return {id:l.id,portalPuzzle:l.portalPuzzle,terminals:l.terminals.length,bounds:l.bounds};});
-  assert.equal(puzzle.id,CAMPAIGN[level-1].id);assert.equal(puzzle.portalPuzzle,true);
+  const puzzle=await page.evaluate(()=>{const l=window.__NESI_DEMO_GAME__.firstLevel;return {id:l.id,portalPuzzle:l.portalPuzzle,terminals:l.terminals?.length??0,bounds:l.bounds};});
+  assert.equal(puzzle.id,CAMPAIGN[level-1].id);if(level===20)assert.equal(puzzle.portalPuzzle,true);
   report.puzzles.push({level,...puzzle});
   await page.screenshot({path:`live-evidence/room-${level}-public-start.png`});
   const route=await page.evaluate(()=>window.__NESI_RUN_LEVEL_ROUTE__());
@@ -55,6 +55,6 @@ try{
  assert.equal(report.portalEdge.pass,true);
  report.flightAudio=await runFlightAudioBrowser({browser,baseUrl:base,out:'live-evidence/flight-audio',capture:false});
  assert.equal(report.flightAudio.pass,true);report.pass=true;
- console.log('LIVE VERIFIED',expected,'v35: БРЕЙНРОТ ПОРТАЛ, 20 rooms, ordinary routes16–20, campaign wrap, live model hashes and room9 jump/turn portal regressions');
+ console.log('LIVE VERIFIED',expected,'v36: БРЕЙНРОТ ПОРТАЛ, 20 rooms, ordinary routes1–11 and20, campaign wrap, live model hashes and room9 jump/turn portal regressions');
 }catch(error){report.error=String(error);throw error;}
 finally{fs.writeFileSync('live-evidence/report.json',JSON.stringify(report,null,2));await browser?.close();}
