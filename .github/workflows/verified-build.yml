@@ -35,7 +35,7 @@ jobs:
         run: |
           npm run check
           node scripts/v8-package-check.mjs
-          node scripts/stamp-build.mjs v35-interlaced-campaign
+          node scripts/stamp-build.mjs v36-unified-campaign-art
       - name: Preserve the exact deployable package
         uses: actions/upload-artifact@v4
         with:
@@ -107,7 +107,7 @@ jobs:
           npm ci
           npm install --no-save --package-lock=false puppeteer-core@24.16.0
           npm run build
-          node scripts/stamp-build.mjs v35-interlaced-campaign
+          node scripts/stamp-build.mjs v36-unified-campaign-art
       - name: Verify ordinary routes in actual WebGL
         env:
           NESI_FIRST: ${{ matrix.first }}
@@ -147,7 +147,7 @@ jobs:
           npm ci
           npm install --no-save --package-lock=false puppeteer-core@24.16.0
           npm run build
-          node scripts/stamp-build.mjs v35-interlaced-campaign
+          node scripts/stamp-build.mjs v36-unified-campaign-art
       - name: Verify actual mouse shots and ordinary floor/wall traversal
         run: |
           npm run preview -- --host 127.0.0.1 --port 4173 >input-preview.log 2>&1 &
@@ -186,9 +186,9 @@ jobs:
           npm ci
           npm install --no-save --package-lock=false puppeteer-core@24.16.0
           npm run build
-          node scripts/stamp-build.mjs v35-interlaced-campaign
+          node scripts/stamp-build.mjs v36-unified-campaign-art
           npm run build -- --mode yandex --outDir dist-yandex
-          node scripts/stamp-build.mjs v35-interlaced-campaign dist-yandex
+          node scripts/stamp-build.mjs v36-unified-campaign-art dist-yandex
       - name: Verify physical video regressions and advertising contract
         run: |
           npm run preview -- --host 127.0.0.1 --port 4173 >sdk-preview.log 2>&1 &

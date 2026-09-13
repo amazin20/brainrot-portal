@@ -23,7 +23,7 @@ export function buildExtendedCampaign(game,index){
  if(index===6)return buildBalanceChamber(game,spec);
  const world=new LabTileWorld(game,PALETTES[index-5]),terminals=[],panels={},fixtures=[];
  let time=0,goal,bounds,spawn,cargoSpawn,update=()=>{},reset=()=>{},render=()=>{},applyCargoForces,playerAcceleration,mechanicalContact=()=>false;
- const state={};
+ const state={},mechanismArt={};
  const patch=(name,p,n,w=4,h=4,parent=world.root,moving=false)=>(panels[name]=world.patch(name,p,n,w,h,parent,moving));
  const console=(p,fn,kind,lesson)=>consoleNode(world,terminals,p,fn,kind,lesson);
  const lowFriction=mesh=>{const b=game.physics?.solids.get(mesh.uuid)?.body;if(b)b.material.friction=.055;};
@@ -43,6 +43,7 @@ export function buildExtendedCampaign(game,index){
   const mirror=ringDevice(world,[0,2.1,-8],[0,0,1],0xf0d694,.85);
   world.box([0,.9,-8],[.25,1.8,.25]);
   const sensor=ringDevice(world,[9.7,2.1,-8],[-1,0,0],0xa38b6b,.55);
+  mechanismArt.earlyOptics={emitter,mirror,sensor};
   const ray=beamDrawing(world),door=gate(world,-13,24,10);
   const reflector={position:V(0,2.1,-8),normal:V(1,0,0),radius:.83};
   state.mirror=0;state.target=0;state.lit=false;state.door=door;
@@ -127,7 +128,7 @@ export function buildExtendedCampaign(game,index){
  }
  world.root.userData.distinctConcept=spec.concept;
  const near=()=>terminals.filter(t=>terminalAccessible(game,t)).sort((a,b)=>a.position.distanceToSquared(game.playerPosition)-b.position.distanceToSquared(game.playerPosition))[0];
- const level={id:spec.id,title:`${index+1} / ${spec.title}`,index,bounds,spawn,cargoSpawn,goal,world,structure:world.root,panels,terminals,state,pads:[],gates:state.door?[state.door]:[],fixtures,floors:world.floors,bridges:[],lift:null,receiverPanel:null,launchPad:null,momentum:true,hints:spec.hints,
+ const level={id:spec.id,title:`${index+1} / ${spec.title}`,index,bounds,spawn,cargoSpawn,goal,world,structure:world.root,panels,terminals,state,mechanismArt,pads:[],gates:state.door?[state.door]:[],fixtures,floors:world.floors,bridges:[],lift:null,receiverPanel:null,launchPad:null,momentum:true,hints:spec.hints,
   update(dt){time+=dt;update(dt);},reset(){time=0;reset();update(0);},renderUpdate(a=1){render(a);},applyCargoForces,playerAcceleration,
   interact(){const t=near();if(!t)return false;t.action();game.companionAnimator?.trigger?.('curiosity');return true;},
   nearbyInteraction(){const t=near();return t?{kind:t.kind,label:'E',text:t.lesson}:null;},cargoOnAnyPad:mechanicalContact,getLaunch:()=>null,getObjective:()=>spec.description,

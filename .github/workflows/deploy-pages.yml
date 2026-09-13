@@ -44,8 +44,8 @@ jobs:
           import assert from 'node:assert/strict';
           const info=JSON.parse(fs.readFileSync('dist/build-info.json','utf8'));
           assert.equal(info.commit,process.env.BUILD_COMMIT);
-          assert.equal(info.version,'v35-interlaced-campaign');
-          assert.equal(info.artVersion,'v34-machined-environment');
+          assert.equal(info.version,'v36-unified-campaign-art');
+          assert.equal(info.artVersion,'v36-complete-machined-environment');
           assert.equal(info.run,process.env.GITHUB_RUN_ID);
           assert.equal(info.levels,20);
           assert.equal(info.verified,true);
