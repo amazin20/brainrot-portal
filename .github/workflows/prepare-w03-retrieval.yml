@@ -1,0 +1,50 @@
+name: Prepare reviewed W03 retrieval repair
+on:
+  push:
+    branches: [ci/w00-workspace-snapshot]
+    paths: [.github/workflows/prepare-w03-retrieval.yml, maintenance/w03-retrieval.b64]
+permissions:
+  contents: write
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Verify reviewed patch
+        run: |
+          python3 - <<'PY'
+          import base64, hashlib, lzma
+          from pathlib import Path
+          data = lzma.decompress(base64.b64decode(Path('maintenance/w03-retrieval.b64').read_text(), validate=True))
+          assert hashlib.sha256(data).hexdigest() == '3e55eb126eb248b8af78b3ab63a2c44325c01ff8bcc0eb61550dd4a22d7cd12e'
+          Path('/tmp/w03-retrieval.patch').write_bytes(data)
+          PY
+      - uses: actions/checkout@v4
+        with:
+          ref: 49dbd6d686f957b74e1451570b105afbc2e7e917
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Apply exact source and rerun regressions
+        run: |
+          git apply --index /tmp/w03-retrieval.patch
+          git diff --cached --check
+          test "$(git write-tree)" = f65940b1951013785e72d546425c13976f4dcda5
+          npm ci
+          node --test tests/lab-room21.test.js tests/lab-preferences-migration.test.js tests/w03-capture-assembly.test.js
+          npm run build
+          node scripts/v8-package-check.mjs
+      - name: Transfer ordinary source only; workflow update belongs to authorized connector
+        run: |
+          git restore --source=HEAD --staged --worktree .github/workflows/
+          test "$(git write-tree)" = f425c7017fc81f63c59faee7bc9c735d54b2cc3a
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'W03: keep displaced freight retrievable from a broad visible inspection edge' -m 'Widen/lower receiving pad, open inspection edge, use ordinary walking to sight actual landing. Six full displaced routes and save tests pass. Start view improved only in room21. Native segmented recording has strict full-state and pose verification; workflow update is separate.'
+          git push origin HEAD:refs/heads/ci/w03-retrieval-result
+          git rev-parse HEAD
+          git rev-parse HEAD^{tree}
