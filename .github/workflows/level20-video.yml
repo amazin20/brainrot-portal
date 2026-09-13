@@ -1,0 +1,52 @@
+name: Full level 20 walkthrough video
+on:
+  push:
+    branches: [recording/level20-v36]
+permissions:
+  contents: read
+jobs:
+  record:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    env:
+      GAME_COMMIT: 1ee48a5383db71227773e54bfce92e1d7ff1cf32
+      BUILD_COMMIT: 1ee48a5383db71227773e54bfce92e1d7ff1cf32
+      CAPTURE_FPS: '30'
+      OUTPUT_VIDEO: video/level-20-walkthrough.mp4
+      OUTPUT_REPORT: video/level20-record-report.json
+      PLAYWRIGHT_MODULE: playwright-core
+      GAME_SOURCE_DIR: .
+      CAPTURE_CHECKFRAMES_DIR: video/checkframes
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Prepare exact game and recording tools
+        run: |
+          git diff --exit-code "$GAME_COMMIT" -- src public package.json package-lock.json vite.config.js
+          npm ci
+          npm install --no-save --package-lock=false playwright-core@1.62.1
+          sudo apt-get update -qq
+          sudo apt-get install -y ffmpeg
+          npm run build
+          node scripts/stamp-build.mjs v36-unified-campaign-art
+      - name: Record full ordinary room 20 route
+        run: |
+          mkdir -p video
+          npm run preview -- --host 127.0.0.1 --port 4173 >video/preview.log 2>&1 &
+          for i in {1..30}; do curl -fsS http://127.0.0.1:4173/ >/dev/null && break; sleep 1; done
+          curl -fsS http://127.0.0.1:4173/ >/dev/null
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+          node scripts/record-level20.mjs
+      - name: Preserve walkthrough and route evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: level20-full-walkthrough-v36
+          path: video/
+          if-no-files-found: error
+          retention-days: 14
