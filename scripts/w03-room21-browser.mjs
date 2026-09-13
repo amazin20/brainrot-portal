@@ -60,7 +60,7 @@ try {
         node.position.toArray(), node.quaternion.toArray(), node.scale.toArray(), node.morphTargetInfluences || null]));
       const visual = { nodes, camera: [g.camera.position.toArray(), g.camera.quaternion.toArray(),
         g.camera.up.toArray(), g.camera.projectionMatrix.toArray()], time: g.visualTime,
-        portals: g.portals.portals.map(p => p ? [p.position.toArray(), p.normal.toArray(), p.up.toArray()] : null) };
+        portals: g.portals.portals.map(p => p ? [p.position.toArray(), p.normal.toArray(), p.quaternion.toArray()] : null) };
       return crypto.subtle.digest('SHA-256', text.encode(JSON.stringify(visual))).then(bytes =>
         Array.from(new Uint8Array(bytes), n => n.toString(16).padStart(2, '0')).join(''));
     };
