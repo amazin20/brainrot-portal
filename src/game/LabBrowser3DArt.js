@@ -316,7 +316,7 @@ function addRoomMechanisms(level,m){
 }
 
 export function upgradeBrowser3DArt(level){
-  if(!level?.world||level.index<0||level.index>19||level.browser3DArt)return level;
+  if(!level?.world||level.index<0||level.index>20||level.browser3DArt)return level;
   level.game=level.game||level.workshop?.game||level.world.game;
   const m=materials(level);enhanceWorldMaterials(level,m);
   const root=new THREE.Group();root.name='Browser 3D artist environment pass';root.userData.visualOnly=true;root.userData.version=31;level.world.root.add(root);

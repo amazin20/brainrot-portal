@@ -1,0 +1,52 @@
+name: W03 full gravity-pocket routes
+on:
+  push:
+    branches: [feature/w03-gravity-pocket]
+permissions:
+  contents: read
+jobs:
+  route:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        variant: [cargo-first, scout-first, recovery]
+    env:
+      BUILD_COMMIT: ${{ github.sha }}
+      W03_ROUTE: ${{ matrix.variant }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Source and room21 regression checks
+        run: |
+          npm ci
+          node --test tests/lab-room21.test.js tests/lab-preferences-migration.test.js
+          npm install --no-save --package-lock=false puppeteer-core@24.16.0
+          npm run build
+          node scripts/v8-package-check.mjs
+          node scripts/stamp-build.mjs
+      - name: Record full ordinary route at normal simulation speed
+        run: |
+          command -v ffmpeg || { sudo apt-get update && sudo apt-get install -y ffmpeg; }
+          python3 -m http.server 4173 --bind 127.0.0.1 --directory dist > /tmp/w03.log 2>&1 &
+          for i in {1..30}; do curl -fsS http://127.0.0.1:4173/ >/dev/null && break; sleep 1; done
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+          node scripts/w03-room21-browser.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: w03-room21-${{ matrix.variant }}
+          path: |
+            smoke-artifacts/w03-*/*.json
+            smoke-artifacts/w03-*/*.mp4
+            smoke-artifacts/w03-*/*.png
+            smoke-artifacts/w03-*/*.jpg
+            dist/build-info.json
+          if-no-files-found: error
+          retention-days: 14
