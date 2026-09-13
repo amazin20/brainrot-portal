@@ -73,13 +73,17 @@ export function buildRoom21(game, index = 20) {
   w.box([4, 11.4, 8.75], [.18, 6.4, 5.5], glass);
   for (const z of [6, 11.5]) w.box([3.9, 11.4, z], [.24, 6.4, .13], w.materials.trim);
 
-  deck('Low freight throat', 3.6, 7, 0, 6, 7.4);
+  deck('Low freight throat', 3.6, 4.8, 0, 6, 7.4);
   // Only the thick bulkhead forms the low ceiling; the receiving pocket is open above.
-  deck('Permanent cargo pocket', 7, 13.4, 0, 6, 7.4);
-  const cradle = k.pad('freight-cradle', [10, 7.4, 3], 6.4, 6);
-  w.box([8.5, 8.0, -.15], [10, 1.2, .3], w.materials.wall);
-  w.box([8.5, 9.0, 6.15], [10, 3.2, .3], w.materials.wall);
-  w.box([13.55, 9.0, 3], [.3, 3.2, 6], w.materials.wall);
+  // The broad pad extends beyond the normal landing envelope so a displaced
+  // cargo still has space for an entire return aperture, not merely its own box.
+  // Its unloaded top is below the throat floor: a slow cargo meets a downward
+  // step, never an unintended raised lip that arrests it before the load area.
+  deck('Permanent cargo pocket', 4.8, 16, 0, 9, 7.2);
+  const cradle = k.pad('freight-cradle', [10.4, 7.2, 4.5], 11.2, 9);
+  w.box([9.75, 8.0, -.15], [12.5, 1.2, .3], w.materials.wall);
+  w.box([9.75, 9.0, 9.15], [12.5, 3.2, .3], w.materials.wall);
+  w.box([16.15, 9.0, 4.5], [.3, 3.2, 9], w.materials.wall);
 
   // The load keeps the guard inside its visible lower housing. Removing the
   // same load restores it; a traveller already on the permanent niche is safe.
@@ -107,10 +111,10 @@ export function buildRoom21(game, index = 20) {
   k.wire([[10, 7.15, 3], [5, 7.15, 3], [5, 7.15, 10.7], [4.7, 14.7, 10.7]], () => gate.loaded);
 
   deck('High receiving niche', 5.8, 20, -13, -2, 12);
-  for (const [x, width] of [[7.05, 2.5], [16.8, 6.4]])
+  for (const [x, width] of [[5.95, .3], [18.0, 4.0]])
     w.box([x, 12.65, -1.85], [width, 1.3, .3], w.materials.wall);
   // An intentional open inspection edge exposes the freight floor below.
-  w.box([10.95, 12.04, -1.94], [5.3, .08, .12], w.materials.trim);
+  w.box([11.05, 12.04, -1.94], [9.9, .08, .12], w.materials.trim);
   w.box([12.9, 12.65, -13.15], [14.2, 1.3, .3], w.materials.wall);
   // The ceramic faces away from all departure galleries. Its solid back and
   // the permanent niche floor block premature shots from above and below.
@@ -118,10 +122,10 @@ export function buildRoom21(game, index = 20) {
   k.panel('receiving-return', [8.01, 14.3, -10], [1, 0, 0], 5.4, 4.6);
 
   const authoredArt = addRoom21Art(k, gate);
-  const level = k.finish([0, 7, 15], [-2, 7.55, 15], [14, 12, -5], {
+  const level = k.finish([0, 7, 12.8], [-2, 7.55, 15], [14, 12, -5], {
     authoredArt, workshop: k, spec: ROOM21_SPEC, portalPuzzle: true,
   });
-  level.spawnView = { yaw: -.47, pitch: .12 };
+  level.spawnView = { yaw: -.60, pitch: .08 };
   level.conceptLesson = { position: [0, 7, 15], range: 8, key: '↗',
     text: 'Высота даёт скорость, поверхность меняет её направление. Нижний обход возвращает к новой попытке.' };
   level.puzzleGeometry = {

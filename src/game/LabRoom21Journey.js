@@ -61,7 +61,10 @@ export async function runRoom21(d, { order = 'cargo-first', recovery = false, la
   room21Climb(d); room21Fling(d, { launchOffset });
   const { game, level, walk, aim, wait, until, pickup, mark } = d;
   walk(11, -7); aim(1, level.panels['receiving-return'].getFrame().center);
-  walk(11.5, -2.6);
+  // Walk along the open inspection edge to see the actual landing, not a fixed
+  // point that only works when the cargo hits the exact centre of its pocket.
+  const viewingX = Math.max(6.55, Math.min(15.45, game.cargo.position.x));
+  walk(viewingX, -3.2); walk(viewingX, -2.35);
   aim(0, game.cargo.position.clone().setY(level.panels['freight-cradle'].getFrame().center.y));
   until(() => game.cargo.position.y > 12, 6, 'Original cargo did not reach the permanent niche');
   mark('new line of sight releases the same cargo and restores the guard');

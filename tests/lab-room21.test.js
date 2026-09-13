@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import * as THREE from 'three';
 import { createHeadlessGame } from '../scripts/lab-headless.mjs';
 import { runV8Journey } from '../src/game/LabV8Journey.js';
-import { room21Climb } from '../src/game/LabRoom21Journey.js';
+import { room21Climb, runRoom21 } from '../src/game/LabRoom21Journey.js';
 import { CAMPAIGN } from '../src/game/LabCampaignLevels.js';
 
 const game = await createHeadlessGame();
@@ -23,6 +23,17 @@ for (const options of [
   const scout = marks.findIndex(s => s.includes('high source reached'));
   assert.ok(options.order === 'scout-first' ? scout < freight : freight < scout);
   if (options.recovery) assert.ok(marks.some(s => s.includes('failed flight lands safely')));
+});
+
+for (const x of [-.30, 0, .30]) for (const z of [-.12, .12]) test(`displaced freight remains retrievable through joint exit x=${x}, edge=${z}`, async () => {
+  const report = await runV8Journey(game, { scenario: async d => {
+    // Perturb ordinary walking/edge choices only. No actor transforms assigned.
+    const walk = d.walk;
+    d.walk = (tx, tz, seconds) => walk(tx === -10 ? tx + x : tx, tz === 11.65 ? tz + z : tz, seconds);
+    await runRoom21(d);
+    assert.equal(game.state, 'won'); assert.equal(game.firstLevel.isWon(), true);
+  } });
+  assert.equal(report.resets, 0); assert.equal(report.respawns, 0);
 });
 
 test('carrying the only load through the high route cannot erase the physical closed guard', async () => {
