@@ -1,0 +1,51 @@
+name: W03 room21 native routes
+on:
+  push:
+    branches: [feature/w03-gravity-pocket]
+permissions:
+  contents: read
+jobs:
+  room21:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        scenario: [cargo-first, scout-first, recovery]
+    env:
+      BUILD_COMMIT: ${{ github.sha }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: |
+          npm ci
+          npm install --no-save --package-lock=false puppeteer-core@24.16.0
+          npm run build
+          node scripts/v8-package-check.mjs
+          node scripts/stamp-build.mjs v37-gravity-pocket
+      - name: Exact native route with complete sequential silent video
+        env:
+          W03_SCENARIO: ${{ matrix.scenario }}
+          W03_VIDEO: '1'
+        run: |
+          command -v ffmpeg || { sudo apt-get update && sudo apt-get install -y ffmpeg; }
+          npm run preview -- --host 127.0.0.1 --port 4173 > /tmp/w03-preview.log 2>&1 &
+          for i in {1..30}; do curl -fsS http://127.0.0.1:4173/ >/dev/null && break; sleep 1; done
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+          node scripts/w03-browser.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: w03-room21-${{ matrix.scenario }}
+          path: |
+            smoke-artifacts/w03-*/report.json
+            smoke-artifacts/w03-*/*.png
+            smoke-artifacts/w03-*/*.mp4
+            dist/build-info.json
+          if-no-files-found: error
+          retention-days: 14

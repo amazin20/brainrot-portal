@@ -1,0 +1,44 @@
+name: W03 prepare exact reviewed source
+on:
+  push:
+    branches: [ci/w00-workspace-snapshot]
+    paths: [.github/workflows/w03-prepare-reviewed.yml, maintenance/apply-w03.py, 'maintenance/w03/**']
+permissions:
+  contents: write
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - run: |
+          cp -a maintenance/w03 /tmp/w03-payload
+          cp maintenance/apply-w03.py /tmp/apply-w03.py
+      - uses: actions/checkout@v4
+        with:
+          ref: 4d179a004458ccf06c1ba6514837507d553234cb
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Recreate exactly the local candidate, never maintenance history
+        run: |
+          python3 /tmp/apply-w03.py
+          git add src scripts tests docs .github/workflows
+          git diff --cached --check
+          git ls-files -s
+          test "$(git write-tree)" = 40fa665895d9664e4a50d0c44a3fc06bcb0426d2
+          npm ci
+          node --test tests/room21-gravity-pocket.test.js
+          npm run build
+          node scripts/v8-package-check.mjs
+      - name: Save the tested source to a dedicated result branch
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'W03: add gravity pocket, independent routes and local recovery' -m 'Exact reviewed candidate source. Preserve rooms1-20 geometry and original characters. Include21 in all campaign gates; native video review and full regression remain required.'
+          git push origin HEAD:refs/heads/ci/w03-reviewed-result
+          git rev-parse HEAD
+          git rev-parse HEAD^{tree}

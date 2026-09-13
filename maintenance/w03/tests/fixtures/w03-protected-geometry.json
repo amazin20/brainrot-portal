@@ -1,0 +1,127 @@
+{
+  "commit": "4d179a004458ccf06c1ba6514837507d553234cb",
+  "tree": "b5ec992c30a100b6ae80b74afbbaf7d94cf07bb5",
+  "scope": "Gameplay geometry before W03; original registry rooms1-20.",
+  "rooms": [
+    {
+      "id": "two-banks",
+      "colliders": 36,
+      "floors": 14,
+      "sha256": "64affc7c6c10eb7811e656a60961d501627fef70d42b5e6c9b873123fedafb94"
+    },
+    {
+      "id": "return-path",
+      "colliders": 29,
+      "floors": 2,
+      "sha256": "bf7c2ddd2c6d489092d6a52c9cd57e4ff01d19fa8a543129626e26776ed6c37c"
+    },
+    {
+      "id": "fall-fling",
+      "colliders": 33,
+      "floors": 24,
+      "sha256": "80d7525ff823ab209504d9bbc3379e99862c4b81e49bf00a3332decd53fc31b6"
+    },
+    {
+      "id": "moving-address",
+      "colliders": 15,
+      "floors": 3,
+      "sha256": "f91915d4b4fed17f816be6afbba62a0bef56f456094aa89089868d66754f38e8"
+    },
+    {
+      "id": "choose-angle",
+      "colliders": 37,
+      "floors": 23,
+      "sha256": "070d2cc62001bddb0eb516662c000154cd60a7d4f0bb17550e2c8c72928502e2"
+    },
+    {
+      "id": "crossed-light",
+      "colliders": 32,
+      "floors": 1,
+      "sha256": "c73811b8ca129fd601bd629f923b628ce3a37a3db03c3c8245fa28e78ba053c9"
+    },
+    {
+      "id": "moment-arm",
+      "colliders": 174,
+      "floors": 55,
+      "sha256": "bc2e5237a02833b5b1569c7593c5c298d6027866d0a3ea4d43f4dbfe9a7640fc"
+    },
+    {
+      "id": "wind-column",
+      "colliders": 18,
+      "floors": 2,
+      "sha256": "9b1cbebda01c89a826b449a9b3dd9076f7646aea2c36469d184a73db658b87db"
+    },
+    {
+      "id": "spring-mail",
+      "colliders": 49,
+      "floors": 3,
+      "sha256": "dcfa4daa15af2ed6317e85213d2635000fd74f39574e66100c1749dda0e2389b"
+    },
+    {
+      "id": "freight-ferry",
+      "colliders": 66,
+      "floors": 12,
+      "sha256": "5083d79f6dda5e4748ec5ca5dda70816016a74b50e463f73f70122d18ec34437"
+    },
+    {
+      "id": "stored-wind",
+      "colliders": 25,
+      "floors": 1,
+      "sha256": "a79d713fe4a44ebd1e2cb7fd35d2f6beb9c918c2d9418b28784e4eb7976afe07"
+    },
+    {
+      "id": "folded-junction",
+      "colliders": 152,
+      "floors": 59,
+      "sha256": "9fd52ec531c2cda3e6fb7de0f72fe9921ab57eff0188b0e1b1433b2a5a6e7305"
+    },
+    {
+      "id": "optical-paradox",
+      "colliders": 102,
+      "floors": 37,
+      "sha256": "68a1a868986275a9fcef452d9abb1353746ac2e3ed658c6ae425edede967d1b3"
+    },
+    {
+      "id": "light-weave",
+      "colliders": 192,
+      "floors": 117,
+      "sha256": "f2b2a3d7bac1cea3e2fdc6820e0ddf2a8ef432e143d38ac850e4056e1c114fed"
+    },
+    {
+      "id": "countercurrent-weave",
+      "colliders": 53,
+      "floors": 11,
+      "sha256": "7008c278e1eb38366ea36fbe7e568ce47f2ba2c29f3d7de6e3a8ab9011d177e2"
+    },
+    {
+      "id": "vanishing-support",
+      "colliders": 205,
+      "floors": 123,
+      "sha256": "2a6a39ab206026e06a6c9c16be9552a732dd8f078f8ad6bd92ce3120a1a8f891"
+    },
+    {
+      "id": "shifting-berth",
+      "colliders": 154,
+      "floors": 66,
+      "sha256": "8d902f66d51af8fb83ca8ae71a1f1d1bc5b46b9dcddbd5332ccb7a520858a536"
+    },
+    {
+      "id": "double-bottom",
+      "colliders": 187,
+      "floors": 140,
+      "sha256": "1e18c8c8fd8a3da201612a2eb5381aa171df1f1dc8b0b42d263cb84d73ddd4f6"
+    },
+    {
+      "id": "glass-air-inertia",
+      "colliders": 47,
+      "floors": 6,
+      "sha256": "574f985b2376d451a09c388167e3db0464f08d98c70ddaafd92b80860d5b9790"
+    },
+    {
+      "id": "braided-exchange",
+      "colliders": 46,
+      "floors": 12,
+      "sha256": "f28c43cde5f3fd8ffae0f28a70cb59aa068edb5b55b67451eee95b449cca6b29"
+    }
+  ]
+}
