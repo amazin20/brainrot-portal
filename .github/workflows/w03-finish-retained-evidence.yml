@@ -1,0 +1,149 @@
+name: W03 complete retained evidence
+on:
+  push:
+    branches: [ci/w00-workspace-snapshot]
+    paths: [.github/workflows/w03-finish-retained-evidence.yml]
+permissions:
+  contents: read
+  actions: read
+env:
+  BUILD_COMMIT: bd0cc8c6f79e4772fb2a1d6d8dd807d2b8d8d6c7
+jobs:
+  source:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: bd0cc8c6f79e4772fb2a1d6d8dd807d2b8d8d6c7
+          persist-credentials: false
+      - run: |
+          git archive --format=tar.gz HEAD -o pr31-source.tar.gz
+          git rev-parse HEAD > pr31-source.commit
+          sha256sum pr31-source.tar.gz > pr31-source.sha256
+      - uses: actions/upload-artifact@v4
+        with:
+          name: pr31-reviewed-source
+          path: |
+            pr31-source.tar.gz
+            pr31-source.commit
+            pr31-source.sha256
+          retention-days: 1
+  retained:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        variant: [cargo-first, recovery]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: bd0cc8c6f79e4772fb2a1d6d8dd807d2b8d8d6c7
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: actions/download-artifact@v4
+        with:
+          run-id: 34762622264
+          github-token: ${{ github.token }}
+          pattern: w03-frames-${{ matrix.variant }}-*
+          path: /tmp/retained
+      - name: Verify all original state, pose and image hashes before assembly
+        env:
+          VARIANT: ${{ matrix.variant }}
+        run: |
+          mkdir -p /tmp/parts
+          for n in 0 1 2 3 4 5; do mv "/tmp/retained/w03-frames-${VARIANT}-${n}" "/tmp/parts/part-${n}"; done
+          node --test tests/w03-capture-assembly.test.js
+          command -v ffmpeg || { sudo apt-get update && sudo apt-get install -y ffmpeg; }
+          node scripts/w03-assemble-capture.mjs /tmp/parts "evidence/${VARIANT}"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: room21-complete-${{ matrix.variant }}
+          path: |
+            evidence/**/*.json
+            evidence/**/*.mp4
+            evidence/**/milestone-*.jpg
+          if-no-files-found: error
+          retention-days: 14
+  scout:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        part: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+    env:
+      W03_ROUTE: scout-first
+      W03_PART: ${{ matrix.part }}
+      W03_PARTS: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: bd0cc8c6f79e4772fb2a1d6d8dd807d2b8d8d6c7
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: |
+          npm ci
+          node --test tests/w03-capture-assembly.test.js
+          npm install --no-save --package-lock=false puppeteer-core@24.16.0
+          npm run build
+          node scripts/stamp-build.mjs
+      - name: Smaller recording strides, unchanged game and visual settings
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('scripts/w03-room21-browser.mjs')
+          s=p.read_text()
+          assert 'parts <= 8' in s and 'protocolTimeout: 1500000' in s
+          p.write_text(s.replace('parts <= 8','parts <= 16').replace('protocolTimeout: 1500000','protocolTimeout: 1680000'))
+          PY
+          test "$(git diff --name-only)" = scripts/w03-room21-browser.mjs
+          git diff --exit-code -- src public index.html package-lock.json
+          python3 -m http.server 4173 --bind 127.0.0.1 --directory dist >/tmp/w03-scout.log 2>&1 &
+          for i in {1..30}; do curl -fsS http://127.0.0.1:4173/ >/dev/null && break; sleep 1; done
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+          node scripts/w03-room21-browser.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: scout-native-part-${{ matrix.part }}
+          path: smoke-artifacts/w03-scout-first/part-${{ matrix.part }}/
+          if-no-files-found: error
+          retention-days: 3
+  scout_movie:
+    needs: scout
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: bd0cc8c6f79e4772fb2a1d6d8dd807d2b8d8d6c7
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: scout-native-part-*
+          path: /tmp/scout
+      - run: |
+          mkdir -p /tmp/parts
+          for n in {0..11}; do mv "/tmp/scout/scout-native-part-${n}" "/tmp/parts/part-${n}"; done
+          command -v ffmpeg || { sudo apt-get update && sudo apt-get install -y ffmpeg; }
+          node scripts/w03-assemble-capture.mjs /tmp/parts evidence/scout-first
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: room21-complete-scout-first
+          path: |
+            evidence/**/*.json
+            evidence/**/*.mp4
+            evidence/**/milestone-*.jpg
+          if-no-files-found: error
+          retention-days: 14
