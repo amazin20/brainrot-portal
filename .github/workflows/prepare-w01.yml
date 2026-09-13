@@ -1,0 +1,47 @@
+name: Prepare reviewed W01 source
+on:
+  push:
+    branches: [ci/w00-workspace-snapshot]
+    paths: [.github/workflows/prepare-w01.yml, maintenance/apply-w01.py]
+permissions:
+  contents: write
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Keep only the explicit reviewed payload outside checkout
+        run: |
+          mkdir -p /tmp/w01-payload
+          cp --parents src/game/LabControls.js tests/lab-control-lifecycle.test.js scripts/w01-controls-browser.mjs docs/W01_CONTROL_LIFECYCLE.md maintenance/apply-w01.py /tmp/w01-payload
+      - uses: actions/checkout@v4
+        with:
+          ref: 7ffcf1c2216c4cf347de05b5c29e591cb807c816
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Recreate and verify the exact locally tested source tree
+        run: |
+          python3 /tmp/w01-payload/maintenance/apply-w01.py
+          cp -a /tmp/w01-payload/src/. src/
+          cp -a /tmp/w01-payload/tests/. tests/
+          cp -a /tmp/w01-payload/scripts/. scripts/
+          cp -a /tmp/w01-payload/docs/. docs/
+          git add src/game/InputController.js src/game/LabGame.js src/main.js src/game/LabControls.js tests/lab-control-lifecycle.test.js scripts/w01-controls-browser.mjs docs/W01_CONTROL_LIFECYCLE.md
+          git diff --cached --check
+          test "$(git write-tree)" = 282e96455a14f646c2c2192fbc101f0c0363f2f2
+          npm ci
+          node --test tests/input-focus-recovery.test.js tests/lab-control-lifecycle.test.js
+          npm run build
+      - name: Save only source to an isolated result branch
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'W01: unify pause recovery, multi-touch ownership and input lifecycle' -m 'Exact reviewed source tree; 27 targeted tests and build verified. Protected room geometry and physics parameters remain unchanged.'
+          git push origin HEAD:refs/heads/ci/w01-reviewed-result
+          git rev-parse HEAD
+          git rev-parse HEAD^{tree}
