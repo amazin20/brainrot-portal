@@ -12,9 +12,12 @@ jobs:
       fail-fast: false
       matrix:
         variant: [cargo-first, scout-first, recovery]
+        part: [0, 1, 2, 3, 4, 5]
     env:
       BUILD_COMMIT: ${{ github.sha }}
       W03_ROUTE: ${{ matrix.variant }}
+      W03_PART: ${{ matrix.part }}
+      W03_PARTS: 6
     steps:
       - uses: actions/checkout@v4
         with:
@@ -23,17 +26,16 @@ jobs:
         with:
           node-version: 22
           cache: npm
-      - name: Source and room21 regression checks
+      - name: Build the exact candidate (full source regression is a separate mandatory workflow)
         run: |
           npm ci
-          node --test tests/lab-room21.test.js tests/lab-preferences-migration.test.js
+          node --test tests/w03-capture-assembly.test.js
           npm install --no-save --package-lock=false puppeteer-core@24.16.0
           npm run build
           node scripts/v8-package-check.mjs
           node scripts/stamp-build.mjs
-      - name: Record full ordinary route at normal simulation speed
+      - name: Replay the full route; draw its assigned native frame stride
         run: |
-          command -v ffmpeg || { sudo apt-get update && sudo apt-get install -y ffmpeg; }
           python3 -m http.server 4173 --bind 127.0.0.1 --directory dist > /tmp/w03.log 2>&1 &
           for i in {1..30}; do curl -fsS http://127.0.0.1:4173/ >/dev/null && break; sleep 1; done
           export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
@@ -41,12 +43,44 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with:
+          name: w03-frames-${{ matrix.variant }}-${{ matrix.part }}
+          path: smoke-artifacts/w03-${{ matrix.variant }}/part-${{ matrix.part }}/
+          if-no-files-found: error
+          retention-days: 3
+  assemble:
+    needs: route
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        variant: [cargo-first, scout-first, recovery]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: w03-frames-${{ matrix.variant }}-*
+          path: /tmp/w03-frames
+      - name: Verify all state/pose traces and every native image, then encode in frame order
+        env:
+          VARIANT: ${{ matrix.variant }}
+        run: |
+          mkdir -p /tmp/w03-parts
+          for part in 0 1 2 3 4 5; do mv "/tmp/w03-frames/w03-frames-${VARIANT}-${part}" "/tmp/w03-parts/part-${part}"; done
+          command -v ffmpeg || { sudo apt-get update && sudo apt-get install -y ffmpeg; }
+          node scripts/w03-assemble-capture.mjs /tmp/w03-parts "smoke-artifacts/w03-${VARIANT}"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
           name: w03-room21-${{ matrix.variant }}
           path: |
             smoke-artifacts/w03-*/*.json
             smoke-artifacts/w03-*/*.mp4
-            smoke-artifacts/w03-*/*.png
             smoke-artifacts/w03-*/*.jpg
-            dist/build-info.json
           if-no-files-found: error
           retention-days: 14
