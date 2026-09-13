@@ -11,6 +11,7 @@ export class InputController {
     this.joystickKnob = joystickKnob;
     this.jumpButton = jumpButton;
     this.joystickPointer = null;
+    this.listeners = [];
 
     this.onKeyDown = (event) => {
       if (['Space', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(event.code)) event.preventDefault();
@@ -20,10 +21,50 @@ export class InputController {
       if (event.code === 'Escape' && !event.repeat) this.pauseQueued = true;
     };
     this.onKeyUp = (event) => this.keys.delete(event.code);
-    window.addEventListener('keydown', this.onKeyDown, { passive: false });
-    window.addEventListener('keyup', this.onKeyUp);
+    this.onBlur = () => this.reset();
+    this.onVisibilityChange = () => { if (document.hidden) this.reset(); };
+    this.listen(window, 'keydown', this.onKeyDown, { passive: false });
+    this.listen(window, 'keyup', this.onKeyUp);
+    this.listen(window, 'blur', this.onBlur);
+    this.listen(document, 'visibilitychange', this.onVisibilityChange);
 
     this.setupTouch();
+  }
+
+  listen(target, type, listener, options) {
+    target.addEventListener(type, listener, options);
+    this.listeners.push({ target, type, listener, options });
+  }
+
+  resetStick() {
+    const pointer = this.joystickPointer;
+    // Clear ownership first: release can synchronously trigger lostpointercapture.
+    this.joystickPointer = null;
+    this.mobileMove.set(0, 0);
+    this.joystickKnob.style.transform = 'translate(0, 0)';
+    if (pointer === null) return;
+    try {
+      if (!this.joystick.hasPointerCapture || this.joystick.hasPointerCapture(pointer)) {
+        this.joystick.releasePointerCapture?.(pointer);
+      }
+    } catch (error) {
+      // A cancelled pointer may already have been removed by the browser.
+      if (error.name !== 'NotFoundError' && error.name !== 'InvalidStateError') throw error;
+    }
+  }
+
+  reset() {
+    this.keys.clear();
+    this.jumpQueued = this.restartQueued = this.pauseQueued = false;
+    this.resetStick();
+  }
+
+  dispose() {
+    for (const { target, type, listener, options } of this.listeners) {
+      target.removeEventListener(type, listener, options);
+    }
+    this.listeners.length = 0;
+    this.reset();
   }
 
   setupTouch() {
@@ -32,6 +73,8 @@ export class InputController {
       const centerX = rect.left + rect.width / 2;
       const centerY = rect.top + rect.height / 2;
       const max = rect.width * 0.31;
+      // Hidden/resizing controls must not introduce NaN into player movement.
+      if (!(max > 0)) { this.resetStick(); return; }
       let dx = event.clientX - centerX;
       let dy = event.clientY - centerY;
       const length = Math.hypot(dx, dy) || 1;
@@ -41,22 +84,21 @@ export class InputController {
     };
     const endStick = (event) => {
       if (this.joystickPointer !== event.pointerId) return;
-      this.joystickPointer = null;
-      this.mobileMove.set(0, 0);
-      this.joystickKnob.style.transform = 'translate(0, 0)';
-      this.joystick.releasePointerCapture?.(event.pointerId);
+      this.resetStick();
     };
-    this.joystick.addEventListener('pointerdown', (event) => {
+    this.listen(this.joystick, 'pointerdown', (event) => {
+      if (this.joystickPointer !== null) return;
       this.joystickPointer = event.pointerId;
       this.joystick.setPointerCapture?.(event.pointerId);
       updateStick(event);
     });
-    this.joystick.addEventListener('pointermove', (event) => {
+    this.listen(this.joystick, 'pointermove', (event) => {
       if (this.joystickPointer === event.pointerId) updateStick(event);
     });
-    this.joystick.addEventListener('pointerup', endStick);
-    this.joystick.addEventListener('pointercancel', endStick);
-    this.jumpButton.addEventListener('pointerdown', (event) => {
+    this.listen(this.joystick, 'pointerup', endStick);
+    this.listen(this.joystick, 'pointercancel', endStick);
+    this.listen(this.joystick, 'lostpointercapture', endStick);
+    this.listen(this.jumpButton, 'pointerdown', (event) => {
       event.preventDefault();
       this.jumpQueued = true;
     });
