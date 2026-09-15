@@ -1,0 +1,129 @@
+name: W03 complete retained and long-route evidence
+on:
+  push:
+    branches: [ci/20260915-resume-source]
+    paths: [.github/workflows/w03-finish-capture.yml]
+permissions:
+  contents: read
+  actions: read
+env:
+  BUILD_COMMIT: bd0cc8c6f79e4772fb2a1d6d8dd807d2b8d8d6c7
+jobs:
+  retained:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    strategy:
+      fail-fast: false
+      matrix:
+        variant: [cargo-first, recovery]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: bd0cc8c6f79e4772fb2a1d6d8dd807d2b8d8d6c7
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ github.token }}
+          run-id: 34762622264
+          pattern: w03-frames-${{ matrix.variant }}-*
+          path: /tmp/retained
+      - name: Require complete identical state and pose traces, then assemble original frames
+        env:
+          VARIANT: ${{ matrix.variant }}
+        run: |
+          mkdir -p /tmp/w03-parts
+          for part in 0 1 2 3 4 5; do mv "/tmp/retained/w03-frames-${VARIANT}-${part}" "/tmp/w03-parts/part-${part}"; done
+          command -v ffmpeg || { sudo apt-get update && sudo apt-get install -y ffmpeg; }
+          node scripts/w03-assemble-capture.mjs /tmp/w03-parts "smoke-artifacts/w03-${VARIANT}"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: w03-complete-${{ matrix.variant }}
+          path: |
+            smoke-artifacts/w03-*/*.json
+            smoke-artifacts/w03-*/*.mp4
+            smoke-artifacts/w03-*/*.jpg
+          if-no-files-found: error
+          retention-days: 14
+  scout:
+    runs-on: ubuntu-latest
+    timeout-minutes: 28
+    strategy:
+      fail-fast: false
+      matrix:
+        part: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+    env:
+      W03_ROUTE: scout-first
+      W03_PART: ${{ matrix.part }}
+      W03_PARTS: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: bd0cc8c6f79e4772fb2a1d6d8dd807d2b8d8d6c7
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Keep exact gameplay, change only capture stride validation
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('scripts/w03-room21-browser.mjs')
+          s=p.read_text()
+          assert s.count('parts <= 8') == 1
+          p.write_text(s.replace('parts <= 8', 'parts <= 12'))
+          PY
+          test "$(git diff --name-only)" = scripts/w03-room21-browser.mjs
+          npm ci
+          node --test tests/w03-capture-assembly.test.js
+          npm install --no-save --package-lock=false puppeteer-core@24.16.0
+          npm run build
+          node scripts/stamp-build.mjs
+      - name: Every worker completes the original route, retaining its assigned native frames
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 --directory dist >/tmp/w03.log 2>&1 &
+          for i in {1..30}; do curl -fsS http://127.0.0.1:4173/ >/dev/null && break; sleep 1; done
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+          node scripts/w03-room21-browser.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: scout-native-${{ matrix.part }}
+          path: smoke-artifacts/w03-scout-first/part-${{ matrix.part }}/
+          if-no-files-found: error
+          retention-days: 3
+  scout-assembly:
+    needs: scout
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: bd0cc8c6f79e4772fb2a1d6d8dd807d2b8d8d6c7
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: scout-native-*
+          path: /tmp/scout-native
+      - run: |
+          mkdir -p /tmp/w03-parts
+          for part in {0..11}; do mv "/tmp/scout-native/scout-native-${part}" "/tmp/w03-parts/part-${part}"; done
+          command -v ffmpeg || { sudo apt-get update && sudo apt-get install -y ffmpeg; }
+          node scripts/w03-assemble-capture.mjs /tmp/w03-parts smoke-artifacts/w03-scout-first
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: w03-complete-scout-first
+          path: |
+            smoke-artifacts/w03-scout-first/*.json
+            smoke-artifacts/w03-scout-first/*.mp4
+            smoke-artifacts/w03-scout-first/*.jpg
+          if-no-files-found: error
+          retention-days: 14
