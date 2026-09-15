@@ -1,0 +1,94 @@
+name: Room21 R2 complete native recording
+on:
+  push:
+    branches: [ci/room21-r2-film]
+    paths: [.github/workflows/room21-r2-film.yml]
+permissions:
+  contents: read
+env:
+  BUILD_COMMIT: 5627638668ab9436ccca49389685c917e78ddc73
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    timeout-minutes: 28
+    strategy:
+      fail-fast: false
+      matrix:
+        part: [0, 1, 2, 3, 4, 5, 6, 7]
+    env:
+      W03_PART: ${{ matrix.part }}
+      W03_PARTS: 8
+      W03_ROUTE: cargo-first
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: 5627638668ab9436ccca49389685c917e78ddc73
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Build exact game before installing capture tooling
+        run: |
+          npm ci
+          npm run build
+          node scripts/v8-package-check.mjs
+          npm install --no-save --package-lock=false puppeteer-core@24.16.0
+      - name: Set a disclosed existing low quality preset in the fresh review browser
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('scripts/w03-room21-browser.mjs');s=p.read_text()
+          anchor="  await page.goto(url.href, { waitUntil: 'networkidle2' });"
+          assert s.count(anchor)==1
+          s=s.replace(anchor,"  await page.evaluateOnNewDocument(() => { localStorage.setItem('brainrot-portal.preferences.v24', JSON.stringify({quality:'low',volume:.65,muted:true,tutorial:true,campaignRevision:'folded-junction-v28',completed:[],hints:{}})); });\n"+anchor)
+          s=s.replace('for (const id of [1, 2, 11, 23, 24])', 'for (const id of [1, 2, 11, 19, 22, 23, 24, 31, 35])')
+          s=s.replace("renderer: 'Chromium WebGL / SwiftShader: not a physical-device performance measurement'", "renderer: 'Chromium WebGL / SwiftShader, existing LOW quality preset, 1280x720 at pixelRatio 1, silent. Not a physical-device performance measurement'")
+          p.write_text(s)
+          PY
+          test "$(git diff --name-only)" = scripts/w03-room21-browser.mjs
+      - name: Replay entire ordinary route and retain native frames assigned to this worker
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 --directory dist >/tmp/room21-r2-film.log 2>&1 &
+          for i in {1..30}; do curl -fsS http://127.0.0.1:4173/ >/dev/null && break; sleep 1; done
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+          node scripts/w03-room21-browser.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: r2-native-${{ matrix.part }}
+          path: smoke-artifacts/w03-cargo-first/part-${{ matrix.part }}/
+          if-no-files-found: error
+          retention-days: 3
+  assemble:
+    needs: capture
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: 5627638668ab9436ccca49389685c917e78ddc73
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: r2-native-*
+          path: /tmp/r2-native
+      - name: Require matching physics and visual traces, no missing frame indexes
+        run: |
+          mkdir -p /tmp/r2-parts
+          for part in {0..7}; do mv "/tmp/r2-native/r2-native-${part}" "/tmp/r2-parts/part-${part}"; done
+          command -v ffmpeg || { sudo apt-get update && sudo apt-get install -y ffmpeg; }
+          node scripts/w03-assemble-capture.mjs /tmp/r2-parts smoke-artifacts/room21-r2-film
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: room21-r2-full-film
+          path: |
+            smoke-artifacts/room21-r2-film/*.json
+            smoke-artifacts/room21-r2-film/*.mp4
+            smoke-artifacts/room21-r2-film/*.jpg
+          if-no-files-found: error
+          retention-days: 14
