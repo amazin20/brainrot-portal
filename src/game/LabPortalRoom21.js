@@ -86,6 +86,7 @@ export function buildRoom21(game, index = 20) {
   deck('Permanent cargo pocket', 4.8, 16, 0, 9, 7.2);
   const seat = w.surface({ name: 'dark freight tray', position: [10.4, 7.38, 4.5],
     normal: [0, 1, 0], width: 11.2, height: 9, portal: false, authored: true, kind: 'floor' });
+  seat.group.userData.keepMaterial = true; // Never dress the metal load tray as pale ceramic.
   const cradle = { surface: seat, position: V(10.4, 7.2, 4.5),
     loaded: () => cargoLoadsPlate(game.cargo, game.heldCube, seat.getFrame()) };
   k.pads.push(cradle); k.state.freightSeat = cradle;

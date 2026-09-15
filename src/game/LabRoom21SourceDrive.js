@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { V, rayTouches } from './LabWorkshopKit.js';
+import { dressRoom21Bridge } from './LabRoom21BridgeArt.js';
 
 /** Room-local composition of the existing airflow, turbine, guided deck and
  * endpoint latch. The signal comes from a traced air path, not portal names.
@@ -38,5 +39,6 @@ export function addRoom21SourceDrive(k) {
     const force=fan.acceleration(game.cargo.position,game.cargo.velocity).multiplyScalar(body.mass);
     body.force.x+=force.x;body.force.y+=force.y;body.force.z+=force.z;
   });
+  state.presentation=dressRoom21Bridge(k,bridge);
   k.state.sourceDrive=state;return state;
 }

@@ -104,3 +104,18 @@ test('first receiving niche is no longer the goal; real joint arrival is still s
  game.cargo.position.copy(l.goal.position).y+=.4;assert.equal(l.isWon(),true);
  game.playerGrounded=false;assert.equal(l.isWon(),false);
 });
+
+test('source gantry stays grounded while its accurate twelve-metre deck and ropes follow the slider',()=>{
+ game.resetRun(true);const drive=game.firstLevel.state.sourceDrive,p=drive.presentation,bridge=drive.bridge;
+ const before=new THREE.Box3().setFromObject(p.frame);
+ assert.ok(Math.abs(before.min.y-.08)<1e-6);assert.ok(before.min.z>17);
+ assert.equal(bridge.art.art.visible,false);assert.equal(game.firstLevel.state.freightSeat.surface.group.userData.keepMaterial,true);
+ for(const y of [0,3.5,7]){
+  bridge.group.position.y=y;p.render();game.scene.updateMatrixWorld(true);
+  assert.ok(new THREE.Box3().setFromObject(p.frame).equals(before));
+  const deck=new THREE.Box3().setFromObject(p.chassis);
+  assert.ok(Math.abs(deck.max.y-(y-.1))<1e-5);
+  for(const rope of p.ropes)assert.ok(Math.abs(rope.mesh.scale.y-(rope.top.y-y+.15))<1e-6);
+ }
+ game.resetRun(true);
+});
