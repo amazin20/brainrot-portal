@@ -2,9 +2,13 @@ import test,{after} from 'node:test';
 import assert from 'node:assert/strict';
 import * as THREE from 'three';
 import {createHeadlessGame} from '../scripts/lab-headless.mjs';
+import {ROOM21_SPEC} from '../src/game/LabPortalRoom21.js';
 import {installRoom21Aim} from '../src/game/LabRoom21Journey.js';
 import {runV8Journey} from '../src/game/LabV8Journey.js';
-const g=await createHeadlessGame();await g.selectLevel(20,false);
+const g=await createHeadlessGame();
+// Model cache intentionally contains ONLY this room's declared dependencies.
+for(const id of g.assets.keys())if(!ROOM21_SPEC.assets.includes(id))g.assets.delete(id);
+await g.selectLevel(20,false);
 after(()=>{g.physics.dispose();g.portals.dispose();});
 for(const opts of [{order:'cargo-first'},{order:'brake-first'},{recovery:true},{offset:-.3},{offset:.3}])
  test(`new cassette room full ordinary journey ${JSON.stringify(opts)}`,async()=>{
