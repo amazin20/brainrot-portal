@@ -1,0 +1,103 @@
+name: Isolated room21 concept preview
+on:
+  push:
+    branches: [ci/room21-clean-slate-source]
+    paths: [.github/workflows/cassette-preview.yml]
+permissions:
+  contents: read
+  actions: read
+  pages: write
+  id-token: write
+concurrency:
+  group: pages
+  cancel-in-progress: false
+jobs:
+  preview:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}preview/room21/
+    env:
+      SOURCE: 8141fd96489cc3cf16814c1348806409f7c83276
+      ROOT_SOURCE: a8f23d20f6687ec2602152af90356b93eecbfc27
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: 8141fd96489cc3cf16814c1348806409f7c83276
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Require three completed native routes for this exact source
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api repos/amazin20/brainrot-portal/actions/runs/35037597197 > /tmp/review.json
+          node --input-type=module <<'JS'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const r=JSON.parse(fs.readFileSync('/tmp/review.json','utf8'));
+          assert.equal(r.head_sha,process.env.SOURCE);assert.equal(r.conclusion,'success');
+          JS
+      - name: Build and check committed prototype, without uncommitted art patches
+        run: |
+          npm ci
+          node --test tests/lab-room21.test.js
+          node scripts/clean-ray-audit.mjs
+          node scripts/clean-slate-shortcuts.mjs
+          npm run build
+          node scripts/v8-package-check.mjs
+      - uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ github.token }}
+          run-id: 35023724127
+          name: campaign-browser
+          path: /tmp/preserved-root
+      - name: Add prototype only under preview/room21 and fingerprint original root
+        run: |
+          node --input-type=module <<'JS'
+          import fs from 'node:fs';import path from 'node:path';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';
+          const root='/tmp/preserved-root';const old=JSON.parse(fs.readFileSync(root+'/build-info.json','utf8'));
+          assert.equal(old.commit,process.env.ROOT_SOURCE);assert.equal(old.verified,true);
+          const hashes={};function scan(dir){for(const e of fs.readdirSync(dir,{withFileTypes:true})){const p=path.join(dir,e.name);if(e.isDirectory())scan(p);else hashes[path.relative(root,p)]=createHash('sha256').update(fs.readFileSync(p)).digest('hex');}}scan(root);
+          const dest=root+'/preview/room21';fs.mkdirSync(dest,{recursive:true});fs.cpSync('dist',dest,{recursive:true});
+          let html=fs.readFileSync(dest+'/index.html','utf8');assert.ok(html.includes('v37 · 21 уровень'));
+          html=html.replace('v37 · 21 уровень','Новая 21-я · проверка концепции');fs.writeFileSync(dest+'/index.html',html);
+          fs.writeFileSync(dest+'/build-info.json',JSON.stringify({commit:process.env.SOURCE,version:'room21-cassette-prototype',levels:21,verified:false,status:'prototype-preview',nativeRoutesRun:35037597197,rootUnchanged:process.env.ROOT_SOURCE,humanAcceptance:false,fullVideo:false},null,2));
+          for(const [p,h]of Object.entries(hashes))assert.equal(createHash('sha256').update(fs.readFileSync(root+'/'+p)).digest('hex'),h);
+          fs.mkdirSync('preview-evidence',{recursive:true});fs.writeFileSync('preview-evidence/preserved-root-hashes.json',JSON.stringify(hashes,null,2));
+          JS
+      - name: Stop if another change has reached main
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: test "$(gh api repos/amazin20/brainrot-portal/git/ref/heads/main --jq .object.sha)" = "$ROOT_SOURCE"
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: /tmp/preserved-root
+      - uses: actions/deploy-pages@v4
+        id: deploy
+      - name: Verify both public revisions and play the isolated public preview
+        env:
+          SITE: ${{ steps.deploy.outputs.page_url }}
+        run: |
+          node --input-type=module <<'JS'
+          import assert from 'node:assert/strict';import fs from 'node:fs';import {setTimeout as wait}from'node:timers/promises';
+          const root=process.env.SITE.endsWith('/')?process.env.SITE:process.env.SITE+'/';let preview,base;
+          for(let i=0;i<24;i++){const opts={headers:{'Cache-Control':'no-cache'},signal:AbortSignal.timeout(20000)};try{base=await(await fetch(root+'build-info.json?check='+Date.now(),opts)).json();preview=await(await fetch(root+'preview/room21/build-info.json?check='+Date.now(),opts)).json();if(preview.commit===process.env.SOURCE)break;}catch{}await wait(5000);}
+          assert.equal(base.commit,process.env.ROOT_SOURCE);assert.equal(preview.commit,process.env.SOURCE);assert.equal(preview.status,'prototype-preview');
+          fs.writeFileSync('preview-evidence/public-revisions.json',JSON.stringify({root:base,preview},null,2));
+          JS
+          npm install --no-save --package-lock=false puppeteer-core@24.16.0
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+          PAGE_URL="${SITE%/}/preview/room21/" GITHUB_SHA="$SOURCE" ORDER=cargo-first node scripts/clean-slate-browser.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cassette-public-preview-evidence
+          path: |
+            preview-evidence/
+            smoke-artifacts/clean-slate*/
+          retention-days: 7
+          if-no-files-found: error
