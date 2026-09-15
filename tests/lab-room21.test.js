@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import * as THREE from 'three';
 import { createHeadlessGame } from '../scripts/lab-headless.mjs';
 import { runV8Journey } from '../src/game/LabV8Journey.js';
-import { room21Climb, runRoom21 } from '../src/game/LabRoom21Journey.js';
+import { room21Climb, room21PrepareSource, room21Aim, runRoom21 } from '../src/game/LabRoom21Journey.js';
 import { CAMPAIGN } from '../src/game/LabCampaignLevels.js';
 
 const game = await createHeadlessGame();
@@ -20,7 +20,7 @@ for (const options of [
   assert.equal(game.firstLevel.isWon(), true); assert.ok(game.playerGrounded);
   const marks = report.milestones.map(mark => mark.name);
   const freight = marks.findIndex(s => s.includes('same cargo loads'));
-  const scout = marks.findIndex(s => s.includes('high source reached'));
+  const scout = marks.findIndex(s => s.includes('mechanical brake retains'));
   assert.ok(options.order === 'scout-first' ? scout < freight : freight < scout);
   if (options.recovery) assert.ok(marks.some(s => s.includes('failed flight lands safely')));
 });
@@ -38,13 +38,21 @@ for (const x of [-.30, 0, .30]) for (const z of [-.12, .12]) test(`displaced fre
 
 test('carrying the only load through the high route cannot erase the physical closed guard', async () => {
   await runV8Journey(game, { scenario: d => {
+    room21PrepareSource(d);
     const p = game.firstLevel.panels;
     d.walk(0, 14); d.walk(0, -1);
     d.walk(-6, -1); d.walk(-6, 5); d.aim(0, p['shared-drop'].getFrame().center.clone().setZ(10.8));
     d.walk(-6, -1); d.walk(0, -1); d.walk(0, 14);
-    d.walk(-10, 11.65); d.aim(1, p['rising-out'].getFrame().center);
+    // Bring the cargo with ordinary commands to the retained source, then
+    // put it on safe floor while changing the exit, and pick it up again.
+    d.walk(-10,14); d.aim(1,p['source-carriage'].getFrame().center);
     d.walk(game.cargo.position.x + 1, game.cargo.position.z); d.pickup();
-    room21Climb(d); d.walk(-10, 11.65);
+    d.walk(-10,11.65); const access=game.teleportCount;
+    for(let n=0;n<300&&game.playerGrounded;n++){d.worldMove(0,-.12);d.frame();}
+    d.until(()=>game.teleportCount>access,5,'Carried source access');d.until(()=>game.playerGrounded,6,'Source landing');
+    d.walk(-10,14);d.look(new THREE.Vector3(-9,18,14));d.wait(.5);game.interact();d.wait(.5);
+    d.walk(-10,11.65);room21Aim(d,1,p['rising-out'].getFrame().center);
+    d.walk(game.cargo.position.x+1,game.cargo.position.z);d.pickup();d.walk(-10,11.65);
     const before = game.teleportCount;
     for (let i = 0; i < 300 && game.playerGrounded; i++) { d.worldMove(0, -.12); d.frame(); }
     d.stop(); d.until(() => game.teleportCount > before, 4, 'Carried launch');
@@ -112,7 +120,7 @@ test('art follows the load-controlled guard without expanding its collider or to
   }
   assert.equal(gate.mesh.children.length, childCount);
   game.resetRun(true);
-  assert.deepEqual(CAMPAIGN[20].assets, [1, 2, 11, 23, 24]);
+  assert.deepEqual(CAMPAIGN[20].assets, [1, 2, 11, 19, 22, 23, 24, 31, 35]);
 });
 
 test('room21 victory checks only real joint arrival, never a visited-panel or stage checklist', () => {
