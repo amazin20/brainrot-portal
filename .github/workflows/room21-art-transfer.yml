@@ -1,0 +1,37 @@
+name: Apply exact reviewed room21 art source
+on:
+  push:
+    branches: [ci/room21-art-transfer]
+permissions:
+  contents: write
+jobs:
+  reviewed-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - run: cp maintenance/room21-art.patch /tmp/room21-art.patch
+      - uses: actions/checkout@v4
+        with:
+          ref: 88aa2c85249c7e44dcccca800df348b17890562d
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Apply reviewed patch and require the exact locally tested tree
+        run: |
+          git apply --index /tmp/room21-art.patch
+          git diff --cached --check
+          test "$(git write-tree)" = ceaf80da68250bc916be59fe0d18c7d6daeba45e
+          npm ci
+          node --test --test-name-pattern='nine supplied|source gantry' tests/lab-workshop-regression.test.js tests/lab-room21.test.js
+          npm run build
+          node scripts/v8-package-check.mjs
+      - name: Keep candidate in isolated result branch, not main
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'Room21: grounded bridge gantry and distinct structural floor finishes' -m 'Exact reviewed source tree ceaf80da. Local targeted 33/33; full CI remains required. Original assets and room1-20 content unchanged.'
+          git push origin HEAD:refs/heads/ci/room21-art-reviewed-result

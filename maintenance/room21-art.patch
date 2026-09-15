@@ -1,0 +1,140 @@
+diff --git a/src/game/LabAdvancedArchitecture.js b/src/game/LabAdvancedArchitecture.js
+index 86bfbe9..39c480b 100644
+--- a/src/game/LabAdvancedArchitecture.js
++++ b/src/game/LabAdvancedArchitecture.js
+@@ -9,7 +9,7 @@ const PALETTES=[
+  {wall:0x877c76,low:0x999088,high:0xb5a791,edge:0xdfbb96,trim:0x685952,sky:0x4b423c},
+  {wall:0x778584,low:0x8e9b97,high:0xb1af96,edge:0xc8d59d,trim:0x4f6562,sky:0x3a4d4b},
+  {wall:0x7c7d8d,low:0x9294a1,high:0xb6a8b4,edge:0xd4bbd2,trim:0x5b5a70,sky:0x414154},
+- {wall:0x6c807f,low:0x869993,high:0xc2b395,edge:0xe7cca3,trim:0x44605f,sky:0x455e61},
++ {wall:0x6c807f,low:0x869993,high:0x6b898b,edge:0xe7cca3,trim:0x44605f,sky:0x455e61},
+ ];
+ const DIGITS={
+  '0':['111','101','101','101','111'],
+diff --git a/src/game/LabPortalRoom21.js b/src/game/LabPortalRoom21.js
+index fd4a95a..9d66088 100644
+--- a/src/game/LabPortalRoom21.js
++++ b/src/game/LabPortalRoom21.js
+@@ -86,6 +86,7 @@ export function buildRoom21(game, index = 20) {
+   deck('Permanent cargo pocket', 4.8, 16, 0, 9, 7.2);
+   const seat = w.surface({ name: 'dark freight tray', position: [10.4, 7.38, 4.5],
+     normal: [0, 1, 0], width: 11.2, height: 9, portal: false, authored: true, kind: 'floor' });
++  seat.group.userData.keepMaterial = true; // Never dress the metal load tray as pale ceramic.
+   const cradle = { surface: seat, position: V(10.4, 7.2, 4.5),
+     loaded: () => cargoLoadsPlate(game.cargo, game.heldCube, seat.getFrame()) };
+   k.pads.push(cradle); k.state.freightSeat = cradle;
+diff --git a/src/game/LabRoom21BridgeArt.js b/src/game/LabRoom21BridgeArt.js
+new file mode 100644
+index 0000000..9c0b999
+--- /dev/null
++++ b/src/game/LabRoom21BridgeArt.js
+@@ -0,0 +1,51 @@
++import * as THREE from 'three';
++import { createMachinedChassis } from './LabMachinedModels.js';
++
++const V=(x=0,y=0,z=0)=>new THREE.Vector3(x,y,z);
++/** Room-local gantry adaptation. Reuse the imported fixed frame, not an entire
++ * ten-metre lift travelling underneath a four-metre-wide bridge. The source
++ * asset/cache is untouched. Ropes and the actual deck follow the slider pose. */
++export function dressRoom21Bridge(k,bridge){
++ const root=new THREE.Group();root.name='Source bridge · stationary gantry and suspended chassis';
++ root.userData.source='src/game/LabRoom21BridgeArt.js';k.world.root.add(root);
++ const frame=bridge.art.art.getObjectByName('Frame');
++ if(!frame)throw Error('Source lift is missing its fixed frame');
++ k.world.root.updateWorldMatrix(true,true);root.attach(frame);
++ let box=new THREE.Box3().setFromObject(frame),center=box.getCenter(V());
++ frame.position.y+=.08-box.min.y;frame.position.z+=20-center.z;
++ frame.updateWorldMatrix(true,true);box.setFromObject(frame);
++ // The gantry stands behind the travel deck; its broad housing is solid.
++ const housing=k.game.collisionProxy(box);housing.mesh.name='Source gantry / housing';
++ bridge.art.art.visible=false; // Only the detached fixed frame is reused here.
++ const chassis=createMachinedChassis({width:12,depth:4,height:.62,y:0,accent:k.spec.accent});
++ chassis.name='Twelve-metre suspended source deck';
++ chassis.position.y=-new THREE.Box3().setFromObject(chassis).max.y-.10;
++ bridge.group.add(chassis);
++ const steel=new THREE.MeshStandardMaterial({color:0x6e888e,metalness:.7,roughness:.34});
++ const ropeMat=new THREE.MeshStandardMaterial({color:0x30484f,metalness:.6,roughness:.49});
++ const ropes=[],drums=[];
++ const rod=(a,b,radius,material)=>{
++  const mesh=new THREE.Mesh(new THREE.CylinderGeometry(radius,radius,1,12),material);
++  root.add(mesh);align(mesh,a,b);return mesh;
++ };
++ function align(mesh,a,b){const delta=b.clone().sub(a);mesh.position.copy(a).add(b).multiplyScalar(.5);
++  mesh.scale.y=Math.max(.001,delta.length());mesh.quaternion.setFromUnitVectors(V(0,1,0),delta.normalize());}
++ for(const z of [13.75,17.25]){
++  rod(V(-33.3,8.3,z),V(-20.7,8.3,z),.11,steel);
++  for(const x of [-32.6,-21.4]){
++   const top=V(x,8.16,z),bottom=V(x,bridge.position.y-.15,z);
++   ropes.push({mesh:rod(top,bottom,.045,ropeMat),top,x,z});
++   const drum=new THREE.Mesh(new THREE.CylinderGeometry(.22,.22,.25,20),steel);
++   drum.position.set(x,8.28,z);drum.rotation.x=Math.PI/2;root.add(drum);drums.push(drum);
++  }
++ }
++ // Cross braces connect front winding beam to the original rear gantry.
++ for(const x of [-29.6,-24.4])rod(V(x,box.max.y-.15,18.3),V(x,8.3,13.75),.09,steel);
++ const render=()=>{
++  for(const rope of ropes)align(rope.mesh,rope.top,V(rope.x,bridge.group.position.y-.15,rope.z));
++  for(const drum of drums)drum.rotation.y=bridge.group.position.y/.22;
++ };
++ k.renders.push(render);k.resets.push(render);render();
++ const fixedPose=frame.matrixWorld.clone();root.userData.colliderIndependent=true;
++ return {root,frame,housing,chassis,ropes,render,fixedPose};
++}
+diff --git a/src/game/LabRoom21SourceDrive.js b/src/game/LabRoom21SourceDrive.js
+index 1bdcbd9..d363880 100644
+--- a/src/game/LabRoom21SourceDrive.js
++++ b/src/game/LabRoom21SourceDrive.js
+@@ -1,5 +1,6 @@
+ import * as THREE from 'three';
+ import { V, rayTouches } from './LabWorkshopKit.js';
++import { dressRoom21Bridge } from './LabRoom21BridgeArt.js';
+ 
+ /** Room-local composition of the existing airflow, turbine, guided deck and
+  * endpoint latch. The signal comes from a traced air path, not portal names.
+@@ -38,5 +39,6 @@ export function addRoom21SourceDrive(k) {
+     const force=fan.acceleration(game.cargo.position,game.cargo.velocity).multiplyScalar(body.mass);
+     body.force.x+=force.x;body.force.y+=force.y;body.force.z+=force.z;
+   });
++  state.presentation=dressRoom21Bridge(k,bridge);
+   k.state.sourceDrive=state;return state;
+ }
+diff --git a/tests/lab-room21.test.js b/tests/lab-room21.test.js
+index 19e9460..7c4a629 100644
+--- a/tests/lab-room21.test.js
++++ b/tests/lab-room21.test.js
+@@ -104,3 +104,18 @@ test('first receiving niche is no longer the goal; real joint arrival is still s
+  game.cargo.position.copy(l.goal.position).y+=.4;assert.equal(l.isWon(),true);
+  game.playerGrounded=false;assert.equal(l.isWon(),false);
+ });
++
++test('source gantry stays grounded while its accurate twelve-metre deck and ropes follow the slider',()=>{
++ game.resetRun(true);const drive=game.firstLevel.state.sourceDrive,p=drive.presentation,bridge=drive.bridge;
++ const before=new THREE.Box3().setFromObject(p.frame);
++ assert.ok(Math.abs(before.min.y-.08)<1e-6);assert.ok(before.min.z>17);
++ assert.equal(bridge.art.art.visible,false);assert.equal(game.firstLevel.state.freightSeat.surface.group.userData.keepMaterial,true);
++ for(const y of [0,3.5,7]){
++  bridge.group.position.y=y;p.render();game.scene.updateMatrixWorld(true);
++  assert.ok(new THREE.Box3().setFromObject(p.frame).equals(before));
++  const deck=new THREE.Box3().setFromObject(p.chassis);
++  assert.ok(Math.abs(deck.max.y-(y-.1))<1e-5);
++  for(const rope of p.ropes)assert.ok(Math.abs(rope.mesh.scale.y-(rope.top.y-y+.15))<1e-6);
++ }
++ game.resetRun(true);
++});
+diff --git a/tests/lab-workshop-regression.test.js b/tests/lab-workshop-regression.test.js
+index e21a1fa..219f646 100644
+--- a/tests/lab-workshop-regression.test.js
++++ b/tests/lab-workshop-regression.test.js
+@@ -20,8 +20,10 @@ test('nine supplied derived GLBs have full binary length, exact hashes, frame an
+   let count=0;model.traverse(m=>{if(!m.isMesh)return;count+=m.geometry.index.count/3;for(const value of m.geometry.attributes.position.array)assert.ok(Number.isFinite(value));assert.ok(m.geometry.attributes.color,'Original source colors are retained as baked vertex colors');});
+   assert.ok(count>500&&count<7500);
+   // Archived mechanisms retain their verified source models, but only the
+-  // fan, spring, drive and extension bridge serve the retained campaign.
+-  assert.equal(CAMPAIGN.some(l=>l.assets.includes(a.id)),[31,32,35,37].includes(a.id));
++  // fan, spring, drive and extension bridge serve retained rooms 1–20.
++  assert.equal(CAMPAIGN.slice(0,20).some(l=>l.assets.includes(a.id)),[31,32,35,37].includes(a.id));
++  // Room21's lifted source bridge additionally uses the original frame 33.
++  assert.equal(CAMPAIGN.some(l=>l.assets.includes(a.id)),[31,32,33,35,37].includes(a.id));
+  }
+ });
+ test('an idle flywheel cannot do work against a positive load or create stored energy',()=>{
