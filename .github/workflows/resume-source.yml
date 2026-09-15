@@ -1,0 +1,28 @@
+name: Resume exact W03 source
+on:
+  push:
+    branches: [ci/20260915-resume-source]
+    paths: [.github/workflows/resume-source.yml]
+permissions:
+  contents: read
+jobs:
+  source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: bd0cc8c6f79e4772fb2a1d6d8dd807d2b8d8d6c7
+          persist-credentials: false
+      - run: |
+          git archive --format=tar.gz HEAD > /tmp/w03-source.tar.gz
+          git rev-parse HEAD > /tmp/w03-source-commit.txt
+          git rev-parse HEAD^{tree} >> /tmp/w03-source-commit.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: exact-w03-source
+          path: |
+            /tmp/w03-source.tar.gz
+            /tmp/w03-source-commit.txt
+          retention-days: 3
+          if-no-files-found: error
