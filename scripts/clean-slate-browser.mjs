@@ -18,7 +18,7 @@ try{
   const g=window.__NESI_DEMO_GAME__,frames=[];
   // Use the shipped production route helper; no direct actor or mechanism edits.
   window.__NESI_CAPTURE_LEVEL_MARK__=m=>{
-   g.render();frames.push({name:m.name,image:g.renderer.domElement.toDataURL('image/png'),player:m.player,cargo:m.cargo});
+   g.render();frames.push({name:m.name,image:g.renderer.domElement.toDataURL('image/png'),player:m.player,cargo:m.cargo,camera:g.camera.position.toArray(),cassette:g.firstLevel.cassette.height});
   };
   let route;
   try{route=await window.__NESI_RUN_LEVEL_ROUTE__(order==='recovery'?{recovery:true}:{order});}
@@ -26,7 +26,7 @@ try{
   return {route,frames};
  },order);
  report.route=result.route;
- report.milestones=result.frames.map((f,i)=>{const file=`${String(i).padStart(2,'0')}.png`;fs.writeFileSync(path.join(out,file),Buffer.from(f.image.split(',')[1],'base64'));return {name:f.name,file,player:f.player,cargo:f.cargo};});
+ report.milestones=result.frames.map((f,i)=>{const file=`${String(i).padStart(2,'0')}.png`;fs.writeFileSync(path.join(out,file),Buffer.from(f.image.split(',')[1],'base64'));return {name:f.name,file,player:f.player,cargo:f.cargo,camera:f.camera,cassette:f.cassette};});
  await page.screenshot({path:path.join(out,'complete.png')});
  assert.ok(result.route.pass);assert.equal(result.route.resets,0);assert.equal(result.route.respawns,0);assert.deepEqual(report.errors,[]);report.pass=true;
 }catch(e){report.failure=e.stack;if(page){await page.screenshot({path:path.join(out,'failure.png')}).catch(()=>{});report.startup=await page.evaluate(()=>({state:document.documentElement.dataset.runtimeState,error:document.querySelector('#error-detail')?.textContent})).catch(()=>null);}throw e;}

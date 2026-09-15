@@ -75,10 +75,10 @@ export async function runRoom21(d,{order='cargo-first',recovery=false,offset=0}=
  if(recovery){game.clearPortals();wait(.3);walk(-1.9,-6);aim(1,level.panels['moving-cassette'].getFrame().center);mark('erased pair restored from permanent service pocket, with same cargo and load');}
  walk(0,-3.1);aim(0,level.panels['shared-well'].getFrame().center.clone().setZ(-1.5));
  mark('move only the entry to the service fall while the friend still supports the low exit');
- walk(18,-5);walk(18,7.6);walk(15,7.6);
+ walk(21,-5);walk(21,7.6);walk(18,7.6);
  walk(game.cargo.position.x+1,game.cargo.position.z);pickup();
  mark('cargo recovered; the same prepared exit rises with its surface');
- walk(15,7.6);walk(18,7.6);walk(18,-5);walk(0,-5);
+ walk(18,7.6);walk(21,7.6);walk(21,-5);walk(0,-5);
  until(()=>level.cassette.height>level.cassette.high-.01,6,'Unloaded cassette failed to rise');
  room21Fall(d,{fromService:true});
  check(game.playerPosition.y>17.9,'Upper balcony missed '+game.playerPosition.toArray());
