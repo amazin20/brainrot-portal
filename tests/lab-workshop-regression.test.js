@@ -20,8 +20,10 @@ test('nine supplied derived GLBs have full binary length, exact hashes, frame an
   let count=0;model.traverse(m=>{if(!m.isMesh)return;count+=m.geometry.index.count/3;for(const value of m.geometry.attributes.position.array)assert.ok(Number.isFinite(value));assert.ok(m.geometry.attributes.color,'Original source colors are retained as baked vertex colors');});
   assert.ok(count>500&&count<7500);
   // Archived mechanisms retain their verified source models, but only the
-  // fan, spring, drive and extension bridge serve the retained campaign.
-  assert.equal(CAMPAIGN.some(l=>l.assets.includes(a.id)),[31,32,35,37].includes(a.id));
+  // fan, spring, drive and extension bridge serve retained rooms 1–20.
+  assert.equal(CAMPAIGN.slice(0,20).some(l=>l.assets.includes(a.id)),[31,32,35,37].includes(a.id));
+  // Room21's lifted source bridge additionally uses the original frame 33.
+  assert.equal(CAMPAIGN.some(l=>l.assets.includes(a.id)),[31,32,33,35,37].includes(a.id));
  }
 });
 test('an idle flywheel cannot do work against a positive load or create stored energy',()=>{
