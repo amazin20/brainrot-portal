@@ -1,0 +1,23 @@
+name: Room21 clean-slate source
+on:
+  push:
+    branches: [ci/room21-clean-slate-source]
+    paths: [.github/workflows/clean-slate-source.yml]
+permissions:
+  contents: read
+jobs:
+  source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: a8f23d20f6687ec2602152af90356b93eecbfc27
+          persist-credentials: false
+      - run: git archive --format=tar.gz HEAD > /tmp/room21-base.tar.gz
+      - uses: actions/upload-artifact@v4
+        with:
+          name: room21-base-source
+          path: /tmp/room21-base.tar.gz
+          retention-days: 3
+          if-no-files-found: error
