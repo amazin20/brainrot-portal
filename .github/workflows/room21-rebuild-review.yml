@@ -1,0 +1,47 @@
+name: Room21 rebuilt two-pass review
+on:
+  push:
+    branches: [feature/room21-two-pass-rebuild]
+permissions:
+  contents: read
+jobs:
+  routes:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      matrix:
+        variant: [cargo-first, source-first, recovery]
+    env:
+      BUILD_COMMIT: ${{ github.sha }}
+      ROOM21_ORDER: ${{ matrix.variant }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: |
+          npm ci
+          npm run build
+          node scripts/v8-package-check.mjs
+          npm install --no-save --package-lock=false puppeteer-core@24.16.0
+          command -v ffmpeg || { sudo apt-get update && sudo apt-get install -y ffmpeg; }
+      - name: Verify complete physical route in real WebGL and capture native evidence
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 --directory dist >/tmp/rebuild-http.log 2>&1 &
+          for i in {1..30}; do curl -fsS http://127.0.0.1:4173/ >/dev/null && break; sleep 1; done
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+          node scripts/room21-rebuild-browser.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: room21-rebuild-${{ matrix.variant }}
+          path: |
+            smoke-artifacts/room21-rebuild-*/*.json
+            smoke-artifacts/room21-rebuild-*/*.png
+            smoke-artifacts/room21-rebuild-*/*.mp4
+          if-no-files-found: error
+          retention-days: 14
