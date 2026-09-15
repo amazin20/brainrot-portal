@@ -40,7 +40,7 @@ jobs:
           npm ci
           npm install --no-save --package-lock=false puppeteer-core@24.16.0
           npm run build
-          node scripts/stamp-build.mjs v36-unified-campaign-art
+          node scripts/stamp-build.mjs v37-gravity-pocket-candidate
       - name: Capture the ordinary route without video frame sampling
         env:
           NESI_FIRST: ${{ matrix.room }}

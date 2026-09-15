@@ -4,12 +4,12 @@ const assert=(condition,message)=>{if(!condition)throw new Error(message);};
 const advancedJourneys=[
  ()=>import('./LabRoom13Journey.js'),()=>import('./LabRoom14Journey.js'),()=>import('./LabRoom15Journey.js'),
  ()=>import('./LabRoom16Journey.js'),()=>import('./LabRoom17Journey.js'),()=>import('./LabRoom18Journey.js'),
- ()=>import('./LabRoom19Journey.js'),()=>import('./LabRoom20Journey.js'),
+ ()=>import('./LabRoom19Journey.js'),()=>import('./LabRoom20Journey.js'),()=>import('./LabRoom21Journey.js'),
 ];
 /** Test driver uses the public movement vector, interaction button and camera
  * controls. Actor positions, portal positions, mechanism targets and win flags
  * are never assigned by the route. Run only in a debug build or Node test. */
-export async function runV8Journey(game,{onMilestone=()=>{},scenario=null}={}) {
+export async function runV8Journey(game,{onMilestone=()=>{},scenario=null,journeyOptions={}}={}) {
   const oldMove=game.input.getMove,move=new THREE.Vector2();game.input.getMove=()=>move.clone();
   game.resetRun(true);const level=game.firstLevel,index=game.levelIndex;
   const identity=game.cargo.group.uuid,body=game.physics.cargoBody.id,report={level:index+1,id:level.id,pass:false,milestones:[],respawns:0,resets:0,frames:0};
@@ -81,7 +81,7 @@ export async function runV8Journey(game,{onMilestone=()=>{},scenario=null}={}) {
     }
     if(index>=12){
       const journey=await advancedJourneys[index-12]();
-      await journey['runRoom'+(index+1)]({game,level,walk,wait,aim,look,until,pickup,enter,mark,frame,worldMove,stop});
+      await journey['runRoom'+(index+1)]({game,level,walk,wait,aim,look,until,pickup,enter,mark,frame,worldMove,stop},journeyOptions);
     }else if(index===11){
       const {runRoom12}=await import('./LabPortalRoom12.js');
       await runRoom12({game,level,walk,wait,aim,until,pickup,enter,mark,frame,worldMove,stop});

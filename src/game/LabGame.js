@@ -3,8 +3,9 @@ import { sweepBox } from './LabSweep.js';
 import { cargoLoadsPlate } from './LabPlateContact.js';
 import * as THREE from 'three';
 import { InputController } from './InputController.js';
+import { LabControls } from './LabControls.js';
 import { AudioController } from './AudioController.js';
-import { LabCamera, CAMERA_PITCH_MIN, CAMERA_PITCH_MAX } from './LabCamera.js';
+import { LabCamera } from './LabCamera.js';
 import { LabPortalActors } from './LabPortalActors.js';
 import { LabPlayerAnimator } from './LabPlayerAnimator.js';
 import { LabHeldDevice } from './LabHeldDevice.js';
@@ -34,8 +35,8 @@ export const CHAMBERS = [
 ];
 
 export class LabGame {
-  constructor({ container, touch, onProgress = () => {}, onReady = () => {}, onHud = () => {}, onToast = () => {}, onPause = () => {}, onWin = () => {}, onRestartRequest = null }) {
-    this.container = container; this.touch = touch;
+  constructor({ container, touch, debug = false, onProgress = () => {}, onReady = () => {}, onHud = () => {}, onToast = () => {}, onPause = () => {}, onWin = () => {}, onRestartRequest = null }) {
+    this.container = container; this.touch = touch; this.debug = debug;
     this.callbacks = { onProgress, onReady, onHud, onToast, onPause, onWin, onRestartRequest };
     this.assets = new Map(); this.failures = [];
     this.colliders = []; this.cameraBlockers = []; this.aimBlockers = []; this.portalPanels = [];
@@ -59,7 +60,7 @@ export class LabGame {
 
   async init() {
     this.createScene();
-    this.input = new InputController(this.touch); this.audio = new AudioController();
+    this.input = new InputController({ ...this.touch, isActive: () => this.state === 'playing' && !this.externalBlocked }); this.audio = new AudioController();
     this.setupControls();
     await this.loadAssets();
     this.callbacks.onProgress({ percent: 92, label: 'Настраиваем движения и физику' });
@@ -266,7 +267,7 @@ export class LabGame {
     if (!Number.isInteger(index) || index < 0 || index >= CAMPAIGN.length) throw new RangeError('Unknown campaign level');
     this.portalShots?.cancelBuffered('level-change');
     this.audio?.flight?.(0,true);
-    this.state = 'loading'; this.renderer?.setAnimationLoop(null); this.input?.keys.clear();
+    this.state = 'loading'; this.renderer?.setAnimationLoop(null); this.resetInput();
     this.audio?.motor?.(false);
     this.levelIndex = index;
     if (CAMPAIGN[index].assets.some(id => !this.assets.has(id))) await this.loadAssets();
@@ -290,40 +291,30 @@ export class LabGame {
     const mobile = document.createElement('div'); mobile.className = 'lab-mobile';
     for (const [label, action] of [['①', () => this.firePortal(0)], ['②', () => this.firePortal(1)], ['E', () => this.interact()], ['Пауза', () => this.togglePause(true)]]) {
       const button = document.createElement('button'); button.textContent = label;
-      button.addEventListener('pointerdown', e => { e.preventDefault(); action(); }); mobile.appendChild(button);
+      this.controls.listen(button, 'pointerdown', e => { e.preventDefault(); if (this.controls.active) action(); }); mobile.appendChild(button);
     }
     document.body.appendChild(mobile);
-    this.fpsElement = document.createElement('output'); this.fpsElement.className = 'lab-fps'; this.fpsElement.setAttribute('aria-label', 'Частота кадров'); document.body.appendChild(this.fpsElement);
+    if (this.debug) {
+      this.fpsElement = document.createElement('output'); this.fpsElement.className = 'lab-fps'; this.fpsElement.setAttribute('aria-label', 'Частота кадров'); document.body.appendChild(this.fpsElement);
+    }
     this.tutorialElement = document.createElement('div'); this.tutorialElement.className = 'lab-tutorial'; this.tutorialElement.innerHTML = '<kbd></kbd><span></span>'; document.body.appendChild(this.tutorialElement);
   }
 
   setupControls() {
-    const canvas = this.renderer.domElement;
-    canvas.addEventListener('contextmenu', e => e.preventDefault());
-    canvas.addEventListener('pointerdown', e => {
-      if (this.state !== 'playing' || e.pointerType === 'touch') return;
-      if (document.pointerLockElement !== canvas) { canvas.requestPointerLock?.()?.catch?.(() => {}); return; }
-      if (e.button === 0 || e.button === 2) this.firePortal(e.button === 0 ? 0 : 1);
-    });
-    addEventListener('mousemove', e => {
-      if (document.pointerLockElement !== canvas || this.state !== 'playing') return;
-      this.yaw -= e.movementX * .002; this.pitch = THREE.MathUtils.clamp(this.pitch - e.movementY * .0018, CAMERA_PITCH_MIN, CAMERA_PITCH_MAX);
-    });
-    let lastTouch = null;
-    canvas.addEventListener('pointerdown', e => { if (e.pointerType === 'touch') lastTouch = { x: e.clientX, y: e.clientY, id: e.pointerId }; });
-    canvas.addEventListener('pointermove', e => {
-      if (!lastTouch || lastTouch.id !== e.pointerId || this.state !== 'playing') return;
-      this.yaw -= (e.clientX - lastTouch.x) * .005;
-      this.pitch = THREE.MathUtils.clamp(this.pitch - (e.clientY - lastTouch.y) * .004, CAMERA_PITCH_MIN, CAMERA_PITCH_MAX);
-      lastTouch = { x: e.clientX, y: e.clientY, id: e.pointerId };
-    });
-    canvas.addEventListener('pointerup', () => { lastTouch = null; });
-    addEventListener('keydown', e => {
-      if (e.repeat || this.state !== 'playing') return;
-      if (e.code === 'KeyE') this.interactQueued = true;
-      if (e.code === 'KeyV') { this.animator?.trigger?.('celebrate'); this.companionAnimator?.trigger?.('celebrate'); }
-    });
-    addEventListener('blur', () => { this.input.keys.clear(); if (this.state === 'playing') this.togglePause(true); });
+    this.controls?.dispose();
+    this.controls = new LabControls(this);
+  }
+
+  resetInput() {
+    if (this.input?.reset) this.input.reset();
+    else this.input?.keys.clear(); // Small physics fixtures supply only keys.
+    this.controls?.reset();
+    this.interactQueued = false; this.jumpBuffer = 0;
+  }
+
+  disposeControls() {
+    this.resetInput();
+    this.controls?.dispose(); this.input?.dispose();
   }
 
   isActiveBlocker(object) {
@@ -467,7 +458,7 @@ export class LabGame {
     this.playerGroup.position.copy(this.playerPosition); this.playerGroup.rotation.y = this.facing;
     this.aimingTime = 0; this.aimHeld = false; this.motion = null;
     this.animator.reset(); this.heldDevice.reset(); this.cameraRig.reset(this.playerPosition, this.yaw, this.pitch);
-    this.input?.keys.clear(); this.accumulator = 0;
+    this.resetInput(); this.accumulator = 0;
 
   }
 
@@ -475,11 +466,11 @@ export class LabGame {
     if (this.externalBlocked || !['playing', 'paused'].includes(this.state)) return;
     const paused = force ?? this.state === 'playing';
     // Repeated blur/pointer-lock notifications must not rebuild an open hint menu.
-    if ((this.state === 'paused') === paused) { if (paused) document.exitPointerLock?.(); return; }
+    if ((this.state === 'paused') === paused) { this.resetInput(); if (paused) document.exitPointerLock?.(); return; }
     this.state = paused ? 'paused' : 'playing';
     if (paused) this.portalShots?.cancelBuffered('paused');
     if (paused) this.audio?.flight?.(0,true);
-    this.input.keys.clear(); this.lastFrame = performance.now(); this.accumulator = 0;
+    this.resetInput(); this.lastFrame = performance.now(); this.accumulator = 0;
     if (paused) document.exitPointerLock?.(); else this.renderer.domElement.requestPointerLock?.()?.catch?.(() => {});
     this.callbacks.onPause(paused);
   }
@@ -494,16 +485,18 @@ export class LabGame {
     }
     if (this.state === 'playing' && !this.externalBlocked) {
       this.accumulator += dt;
-      while (this.accumulator + 1e-10 >= FIXED_STEP) {
+      while (this.state === 'playing' && !this.externalBlocked && this.accumulator + 1e-10 >= FIXED_STEP) {
         this.updatePlaying(FIXED_STEP); this.accumulator = Math.max(0, this.accumulator - FIXED_STEP);
       }
     }
     this.updateVisuals(this.state === 'paused' || this.externalBlocked ? 0 : dt, this.accumulator / FIXED_STEP);
     this.render(); this.renderFrames++;
-    if (this.fpsElement && now - (this.lastUiUpdate ?? 0) > 180) {
+    if (this.tutorialElement && now - (this.lastUiUpdate ?? 0) > 180) {
       this.lastUiUpdate = now; const stats = this.performanceMonitor.stats;
+      if (this.fpsElement) {
       this.fpsElement.textContent = stats.fps ? `${Math.round(stats.fps)} FPS · ${stats.frameMs.toFixed(1)} мс` : 'FPS …';
       this.fpsElement.title = `1% low: ${stats.low1Fps.toFixed(0)} FPS; p99: ${stats.p99Ms.toFixed(1)} ms; ${stats.calls} draws; ${stats.triangles} triangles`;
+      }
       const lesson = this.tutorial.update();
       this.tutorialElement.hidden = !lesson;
       if (lesson) { this.tutorialElement.querySelector('kbd').textContent = lesson.key; this.tutorialElement.querySelector('span').textContent = lesson.text; }

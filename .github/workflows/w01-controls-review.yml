@@ -1,0 +1,50 @@
+name: W01 native touch and pause review
+on:
+  push:
+    branches: [feature/w01-input-recovery]
+permissions:
+  contents: read
+jobs:
+  compare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      BUILD_COMMIT: ${{ github.sha }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Build baseline and candidate with their unchanged lockfile
+        run: |
+          npm ci
+          npm install --no-save --package-lock=false puppeteer-core@24.16.0
+          npm run build
+          mkdir /tmp/brainrot-before
+          git archive 7ffcf1c2216c4cf347de05b5c29e591cb807c816 | tar -xf - -C /tmp/brainrot-before
+          cmp package-lock.json /tmp/brainrot-before/package-lock.json
+          ln -s "$PWD/node_modules" /tmp/brainrot-before/node_modules
+          (cd /tmp/brainrot-before && npm run build)
+      - name: Record real native browser frames and check gestures
+        run: |
+          command -v ffmpeg || { sudo apt-get update && sudo apt-get install -y ffmpeg; }
+          python3 -m http.server 4173 --bind 127.0.0.1 --directory /tmp/brainrot-before/dist > /tmp/w01-before.log 2>&1 &
+          python3 -m http.server 4174 --bind 127.0.0.1 --directory dist > /tmp/w01-after.log 2>&1 &
+          for i in {1..30}; do curl -fsS http://127.0.0.1:4174/ >/dev/null && curl -fsS http://127.0.0.1:4173/ >/dev/null && break; sleep 1; done
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+          SOURCE_COMMIT=7ffcf1c2216c4cf347de05b5c29e591cb807c816 PAGE_URL=http://127.0.0.1:4173/ W01_TAG=before W01_EXPECT_FIXED=0 W01_CAPTURE=1 node scripts/w01-controls-browser.mjs
+          SOURCE_COMMIT="$GITHUB_SHA" PAGE_URL=http://127.0.0.1:4174/ W01_TAG=after W01_CAPTURE=1 node scripts/w01-controls-browser.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: w01-controls-comparison
+          path: |
+            smoke-artifacts/w01/*.json
+            smoke-artifacts/w01/*.mp4
+            smoke-artifacts/w01/*.png
+          if-no-files-found: error
+          retention-days: 14
