@@ -11,7 +11,16 @@ export function dressRoom21Bridge(k,bridge){
  const frame=bridge.art.art.getObjectByName('Frame');
  if(!frame)throw Error('Source lift is missing its fixed frame');
  k.world.root.updateWorldMatrix(true,true);root.attach(frame);
- let box=new THREE.Box3().setFromObject(frame),center=box.getCenter(V());
+ // A low rear housing was an unintended intermediate jump platform between
+ // the two disconnected seven-metre balconies. Raise the *visible frame*, not
+ // an invisible collision cap; the collision proxy is rebuilt from this mesh.
+ // Only this instance is scaled. The cached original model stays untouched.
+ let box=new THREE.Box3().setFromObject(frame);
+ const originalHeight=box.max.y-box.min.y;
+ if(!(originalHeight>0))throw Error('Source gantry has no measurable height');
+ frame.scale.y*=12/originalHeight;
+ frame.updateWorldMatrix(true,true);box.setFromObject(frame);
+ const center=box.getCenter(V());
  frame.position.y+=.08-box.min.y;frame.position.z+=20-center.z;
  frame.updateWorldMatrix(true,true);box.setFromObject(frame);
  // The gantry stands behind the travel deck; its broad housing is solid.
