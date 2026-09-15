@@ -53,8 +53,7 @@ export function buildRoom21(game,index=20) {
   }
   // The open south edge of the service pocket is a new, lower fall source.
   // The start has its own visible open drop lip; neither is an invisible trigger.
-  w.box([-8.4,10.65,7.85],[10.8,1.3,.22],w.materials.trim); // Open inspection sightline at the west end.
-  w.box([-19,10.65,13],[.20,1.3,10],w.materials.trim);
+  w.box([-7.5,10.65,7.85],[9,1.3,.22],w.materials.trim); // Open inspection sightline at the west end.
 
   const entry=k.panel('departure-entry',[-14.8,12,14],[1,0,0],5.6,4.6);
   const inspection=k.panel('brake-bay',[-16,6,-15.8],[0,0,1],5.6,4.6);

@@ -25,8 +25,9 @@ export function installRoom21Aim(d) {
 
 export function room21Brake(d) {
  const {game,level,walk,aim,enter,wait,mark}=d;
- walk(-14,13);
+ walk(-10,14);
  aim(0,level.panels['departure-entry'].getFrame().center);
+ walk(-14,13);
  aim(1,level.panels['brake-bay'].getFrame().center);
  enter(level.panels['departure-entry']);
  mark('inspection bay reached by ordinary portal traversal');
