@@ -1,0 +1,53 @@
+name: Room21 airborne-shot regression
+on:
+  push:
+    branches: [fix/room21-airborne-shot]
+permissions:
+  contents: read
+jobs:
+  compare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Check candidate and build exact before/after packages
+        run: |
+          npm ci
+          node --test tests/lab-room21.test.js tests/lab-room21-air-shot.test.js
+          npm run build
+          node scripts/v8-package-check.mjs
+          npm install --no-save --package-lock=false puppeteer-core@24.16.0
+          mkdir -p /tmp/air-shot-before
+          git archive 16f9755c95540e1c58238d7b5d0d628c348e88e1 | tar -xf - -C /tmp/air-shot-before
+          cmp package-lock.json /tmp/air-shot-before/package-lock.json
+          ln -s "$PWD/node_modules" /tmp/air-shot-before/node_modules
+          (cd /tmp/air-shot-before && npm run build)
+          mkdir -p dist/__review__ /tmp/air-shot-before/dist/__review__
+          cp scripts/room21-air-shot-scenario.mjs dist/__review__/
+          cp scripts/room21-air-shot-scenario.mjs /tmp/air-shot-before/dist/__review__/
+      - name: Native shot excerpts and complete attempts on both versions
+        run: |
+          command -v ffmpeg || { sudo apt-get update && sudo apt-get install -y ffmpeg; }
+          python3 -m http.server 4173 --bind 127.0.0.1 --directory /tmp/air-shot-before/dist >/tmp/air-before.log 2>&1 &
+          python3 -m http.server 4174 --bind 127.0.0.1 --directory dist >/tmp/air-after.log 2>&1 &
+          for i in {1..30}; do curl -fsS http://127.0.0.1:4173/ >/dev/null && curl -fsS http://127.0.0.1:4174/ >/dev/null && break; sleep 1; done
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+          SOURCE_COMMIT=16f9755c95540e1c58238d7b5d0d628c348e88e1 REVIEW_TAG=before REVIEW_DIST=/tmp/air-shot-before/dist PAGE_URL=http://127.0.0.1:4173/ EXPECT_BLOCKED=0 node scripts/room21-air-shot-browser.mjs
+          SOURCE_COMMIT="$GITHUB_SHA" REVIEW_TAG=after REVIEW_DIST=dist PAGE_URL=http://127.0.0.1:4174/ EXPECT_BLOCKED=1 node scripts/room21-air-shot-browser.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: room21-air-shot-comparison
+          path: |
+            smoke-artifacts/air-shot-*/*.json
+            smoke-artifacts/air-shot-*/*.mp4
+            smoke-artifacts/air-shot-*/*.png
+          retention-days: 14
+          if-no-files-found: error
