@@ -46,7 +46,8 @@ try{
   }
   g.scene.traverse(o=>{if(o.isLight){const light=o.clone();o.getWorldPosition(light.position);review.add(light);if(light.target)review.add(light.target);}});
   // Omit normal HUD in this labelled inspection, without altering any game state.
-  for(const e of [...document.body.children])if(e!==g.renderer.domElement)e.style.visibility='hidden';
+  for(const e of [...document.body.children])if(!e.contains(g.renderer.domElement))e.style.visibility='hidden';
+  if(getComputedStyle(g.renderer.domElement).visibility!=='visible')throw Error('Inspection canvas hidden by an ancestor');
   const label=document.createElement('div');label.style.cssText='position:fixed;left:22px;top:18px;right:22px;padding:12px 16px;border-radius:8px;background:#132a35eb;color:#f3f7ef;font:18px system-ui;z-index:999;pointer-events:none';
   label.textContent=`${tag==='before'?'ДО':'ПОСЛЕ'} · Подвес кассеты · технический разрез, корпус скрыт · не прохождение`;document.body.append(label);
   const status=document.createElement('div');status.style.cssText='position:fixed;left:22px;bottom:22px;padding:8px 14px;background:#132a35eb;color:#f3f7ef;font:17px system-ui;z-index:999';document.body.append(status);
