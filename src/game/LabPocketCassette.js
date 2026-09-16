@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { attachPocketLoadLink } from './LabPocketLoadLink.js';
+import { createPocketSuspension } from './LabPocketSuspension.js';
 import {RoundedBoxGeometry} from 'three/addons/geometries/RoundedBoxGeometry.js';
 /** Reduced counterweighted actuator, driven only by real cargo contact and brake.
  * Not a dynamic mass/energy solver. No selected object IDs, portal or victory flags.
@@ -49,21 +50,13 @@ export function buildPocketCassette(k,seat) {
  part([-5,26.5,-6],[.65,5,9.4]);
  // Edge rails around the output bays do not occupy their flight aperture.
  for(const y of [6,15,18,24])part([-4.64,y,-6],[.06,.10,9.25],accent,false);
- const weight=part([-11.9,4,-6],[.7,4,5.5],metal,false);
+ const suspension=createPocketSuspension({shell,metal,accent});w.root.add(suspension.root);
  const brake=part([-13.3,6.5,-10],[.8,.24,1.2],accent,false);
- const ropes=[],wheels=[];
- for(const z of [-9.65,-2.35]){
-  const r=w.box([-10,20,z],[.055,1,.055],metal,false);ropes.push(r);
-  const wheel=new THREE.Mesh(new THREE.TorusGeometry(.28,.065,8,24),accent);
-  wheel.rotation.y=Math.PI/2;wheel.position.set(-10,24.05,z);w.root.add(wheel);wheels.push(wheel);
- }
  let height=high,previous=high;
- const state={face,root,low,high,height,braked:true,loaded:false,
+ const state={face,root,low,high,height,braked:true,loaded:false,suspension,
   toggleBrake(){state.braked=!state.braked;g.audio?.mechanism?.('switch');},
-  pose(y){root.position.y=y;root.updateWorldMatrix(true,true);weight.position.y=4+(high-y)*.78;
+  pose(y){root.position.y=y;root.updateWorldMatrix(true,true);suspension.pose(y);
    brake.position.x=state.braked?-13:-13.8;
-   for(const r of ropes){const length=24-y;r.position.y=y+length/2;r.scale.y=Math.max(.01,length);}
-   for(const wheel of wheels)wheel.rotation.x=(high-y)/.28;
   },
  };
  k.ticks.push(dt=>{
