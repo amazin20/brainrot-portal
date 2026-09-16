@@ -41,9 +41,11 @@ try{
     const load=link.loaded;
     if(!active&&load!==lastLoad&&clips.length<2){active={kind:load?'load':'unload',frames:[...ring],remaining:110};clips.push(active);}
     lastLoad=load;
-    // Only retain image frames around two actual contact transitions.
+    // Start pre-roll only after the free cargo enters its actual freight portal.
+    // Brake-bay traversal and idle walking are still simulated, not re-rendered.
+    const nearLoading=clips.length===0&&g.physics.portalTransports>0;
     const nearRemoval=clips.length===1&&g.playerPosition.y<6.5&&g.playerPosition.x>10;
-    if(active||clips.length===0||nearRemoval){
+    if(active||nearLoading||nearRemoval){
      const frame=inspect();ring.push(frame);if(ring.length>30)ring.shift();
      if(active){active.frames.push(frame);if(--active.remaining===0)active=null;}
     }else ring.length=0;
@@ -68,6 +70,7 @@ try{
  for(const clip of result.clips){
   assert.equal(clip.remaining,0,'Incomplete visual window');
   assert.ok(clip.frames.length>=110); // 110 consecutive post-event frames, plus available pre-roll.
+  for(let i=1;i<clip.frames.length;i++)assert.ok(Math.abs(clip.frames[i].elapsed-clip.frames[i-1].elapsed-1/30)<1e-6,'Nonconsecutive native samples');
   const last=clip.frames.at(-1);assert.equal(last.load,clip.kind==='load');
   assert.ok(clip.kind==='load'?last.indication>.999:last.indication<.001);
   report.clips.push({kind:clip.kind,frames:clip.frames.length,first:clip.frames[0].elapsed,last:last.elapsed,
