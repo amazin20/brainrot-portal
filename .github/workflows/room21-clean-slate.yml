@@ -1,0 +1,45 @@
+name: Room21 clean-slate cassette review
+on:
+  push:
+    branches: [feature/room21-clean-slate]
+permissions:
+  contents: read
+jobs:
+  routes:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    strategy:
+      fail-fast: false
+      matrix:
+        order: [cargo-first, brake-first, recovery]
+    env:
+      ORDER: ${{ matrix.order }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Check exact room and generate the production bundle
+        run: |
+          node --test tests/lab-room21.test.js
+          node scripts/clean-ray-audit.mjs
+          npm run build
+          node scripts/v8-package-check.mjs
+          npm install --no-save --package-lock=false puppeteer-core@24.16.0
+      - name: Full ordinary route with native milestone screenshots
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 --directory dist >/tmp/clean-slate-http.log 2>&1 &
+          for i in {1..30}; do curl -fsS http://127.0.0.1:4173/ >/dev/null && break; sleep 1; done
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+          node scripts/clean-slate-browser.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: room21-clean-slate-${{ matrix.order }}
+          path: smoke-artifacts/clean-slate*/
+          retention-days: 7
+          if-no-files-found: error
