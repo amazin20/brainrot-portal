@@ -1,0 +1,28 @@
+name: P03 exact source
+on:
+  push:
+    branches: [ci/p03-exact-source-20260917]
+    paths: [.github/workflows/p03-exact-source.yml]
+permissions:
+  contents: read
+jobs:
+  source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: 91ea2ff95107e6dcc4dc5b847795b5af0dccd50b
+          persist-credentials: false
+      - run: |
+          git archive --format=tar.gz HEAD > /tmp/p03-source.tar.gz
+          git rev-parse HEAD > /tmp/p03-source-commit.txt
+          git rev-parse HEAD^{tree} >> /tmp/p03-source-commit.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: p03-source
+          path: |
+            /tmp/p03-source.tar.gz
+            /tmp/p03-source-commit.txt
+          if-no-files-found: error
+          retention-days: 3
