@@ -1,0 +1,38 @@
+name: P02 exact development workspace
+on:
+  push:
+    branches: [ci/p02-workspace]
+    paths: [.github/workflows/p02-workspace.yml]
+permissions:
+  contents: read
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: 130685f42054f1e0a0b6fa8574c9a60e8e70bb58
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - name: Archive tracked source and dependencies without Git metadata
+        run: |
+          mkdir -p /tmp/p02-workspace
+          git archive HEAD | tar -xf - -C /tmp/p02-workspace
+          cp -a node_modules /tmp/p02-workspace/
+          git rev-parse HEAD > /tmp/p02-commit.txt
+          git rev-parse HEAD^{tree} >> /tmp/p02-commit.txt
+          tar -czf /tmp/p02-workspace.tar.gz -C /tmp/p02-workspace .
+          sha256sum /tmp/p02-workspace.tar.gz
+      - uses: actions/upload-artifact@v4
+        with:
+          name: p02-workspace
+          path: |
+            /tmp/p02-workspace.tar.gz
+            /tmp/p02-commit.txt
+          if-no-files-found: error
+          retention-days: 1
