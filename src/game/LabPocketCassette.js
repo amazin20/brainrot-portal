@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { attachPocketLoadLink } from './LabPocketLoadLink.js';
 import {RoundedBoxGeometry} from 'three/addons/geometries/RoundedBoxGeometry.js';
 /** Reduced counterweighted actuator, driven only by real cargo contact and brake.
  * Not a dynamic mass/energy solver. No selected object IDs, portal or victory flags.
@@ -74,7 +75,9 @@ export function buildPocketCassette(k,seat) {
  });
  k.renders.push(alpha=>state.pose(THREE.MathUtils.lerp(previous,height,alpha)));
  k.resets.push(()=>{height=previous=high;state.height=high;state.braked=true;state.loaded=false;state.pose(high);});
- state.pose(high);return state;
+ state.pose(high);
+ attachPocketLoadLink(k,seat);
+ return state;
 }
 
 /** Mounted arrival marker, not another portal or interactive machine. */

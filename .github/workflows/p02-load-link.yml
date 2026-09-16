@@ -1,0 +1,47 @@
+name: P02 load linkage native review
+on:
+  push:
+    branches: [feature/p02-load-link]
+permissions:
+  contents: read
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      BUILD_COMMIT: ${{ github.sha }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Read-only presentation contract and retained routes
+        run: |
+          node --test tests/lab-pocket-load-link.test.js tests/lab-room21.test.js tests/lab-room21-air-shot.test.js
+          npm run build
+          node scripts/v8-package-check.mjs
+          node scripts/export-pocket-load-link.mjs
+          npm install --no-save --package-lock=false puppeteer-core@24.16.0
+      - name: Actual route with native load and removal excerpts
+        run: |
+          command -v ffmpeg || { sudo apt-get update && sudo apt-get install -y ffmpeg; }
+          python3 -m http.server 4173 --bind 127.0.0.1 --directory dist >/tmp/p02-http.log 2>&1 &
+          for i in {1..30}; do curl -fsS http://127.0.0.1:4173/ >/dev/null && break; sleep 1; done
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+          node scripts/p02-load-link-browser.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: p02-load-link-evidence
+          path: |
+            smoke-artifacts/p02/*.json
+            smoke-artifacts/p02/*.mp4
+            smoke-artifacts/p02/*.png
+            smoke-artifacts/p02/*.jpg
+            smoke-artifacts/p02-export/*
+          retention-days: 14
+          if-no-files-found: error
