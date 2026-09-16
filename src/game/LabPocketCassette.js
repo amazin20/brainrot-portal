@@ -52,7 +52,8 @@ export function buildPocketCassette(k,seat) {
  }
  let height=high,previous=high;
  const state={face,root,low,high,height,braked:true,loaded:false,
-  toggleBrake(){state.braked=!state.braked;g.audio?.mechanism?.('switch');},
+  // The console interaction owns sound; the actuator only changes its state.
+  toggleBrake(){state.braked=!state.braked;},
   pose(y){root.position.y=y;root.updateWorldMatrix(true,true);weight.position.y=4+(high-y)*.78;
    brake.position.x=state.braked?-13:-13.8;
    for(const r of ropes){const length=24-y;r.position.y=y+length/2;r.scale.y=Math.max(.01,length);}

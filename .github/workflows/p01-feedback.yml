@@ -1,0 +1,45 @@
+name: P01 brake feedback before and after
+on:
+  push:
+    branches: [feature/p01-brake-feedback]
+permissions:
+  contents: read
+jobs:
+  compare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Test feedback and build exact candidate and baseline
+        run: |
+          npm ci
+          node --test tests/lab-pocket-feedback.test.js tests/lab-room21.test.js
+          npm run build
+          npm install --no-save --package-lock=false puppeteer-core@24.16.0
+          mkdir -p /tmp/p01-before
+          git archive 16f9755c95540e1c58238d7b5d0d628c348e88e1 | tar -xf - -C /tmp/p01-before
+          cmp package-lock.json /tmp/p01-before/package-lock.json
+          ln -s "$PWD/node_modules" /tmp/p01-before/node_modules
+          (cd /tmp/p01-before && npm run build)
+      - name: Native browser interaction and four observed states
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 --directory /tmp/p01-before/dist > /tmp/p01-before.log 2>&1 &
+          python3 -m http.server 4174 --bind 127.0.0.1 --directory dist > /tmp/p01-after.log 2>&1 &
+          for i in {1..30}; do curl -fsS http://127.0.0.1:4173/ >/dev/null && curl -fsS http://127.0.0.1:4174/ >/dev/null && break; sleep 1; done
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+          SOURCE_COMMIT=16f9755c95540e1c58238d7b5d0d628c348e88e1 P01_TAG=before P01_FIXED=0 PAGE_URL=http://127.0.0.1:4173/ DIST_DIR=/tmp/p01-before/dist node scripts/p01-feedback-browser.mjs
+          SOURCE_COMMIT="$GITHUB_SHA" P01_TAG=after PAGE_URL=http://127.0.0.1:4174/ node scripts/p01-feedback-browser.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: p01-feedback-evidence
+          path: smoke-artifacts/p01-*/
+          if-no-files-found: error
+          retention-days: 14

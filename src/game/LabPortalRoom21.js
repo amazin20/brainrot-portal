@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { Workshop } from './LabWorkshopKit.js';
 import { cargoLoadsPlate } from './LabPlateContact.js';
 import { buildPocketCassette, addPocketExitMarker } from './LabPocketCassette.js';
+import { createPocketBrakeFeedback } from './LabPocketFeedback.js';
 
 export const ROOM21_SPEC = {
   id: 'gravity-pocket', title: 'Гравитационный карман',
@@ -88,11 +89,12 @@ export function buildRoom21(game,index=20) {
 
   const cassette=buildPocketCassette(k,cargoSeat);
   k.state.cassette=cassette;
-  k.control('cassette-brake',[-16.7,4,-12.2],()=>cassette.toggleBrake(),
-    'Тормоз кассеты. Груз опускает её; противовес поднимает освобождённую поверхность.');
+  const brakeControl=k.control('cassette-brake',[-16.7,4,-12.2],()=>cassette.toggleBrake(), 'Тормоз кассеты.');
+  const brakeFeedback=createPocketBrakeFeedback(game,cassette,cargoSeat,brakeControl);
   addPocketExitMarker(k,[12,18,-8]);
   const level=k.finish([-9,10,13],[-4,10.55,13],[12,18,-8],{
     workshop:k,spec:ROOM21_SPEC,portalPuzzle:true,cassette,
+    getContextLesson:()=>brakeFeedback.contextLesson(),
     puzzleGeometry:{revision:'clean-slate-cassette-1',footprint:44*36,
       occupiedHeights:[3.1,4,7,10,18],orders:['cargo-first','brake-first'],
       noProgressFlags:true,oneMechanism:true,sourceHeights:[10,7],
