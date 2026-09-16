@@ -35,7 +35,13 @@ export function buildPocketCassette(k,seat) {
  for(const z of [-9,-3])part([-12.8,11,z],[.25,13,.13],metal);
  for(const y of [4.5,17.5])part([-12.8,y,-6],[.25,.13,6],metal);
  part([-9,12,-10.7],[8.3,24,.55]);
- part([-9,18,-1.3],[8.3,12,.55]);
+ // Continue the visible side return past the outlet rim. The former flush
+ // corner admitted a diagonal airborne shot into the raised face through the
+ // lower opening, skipping both preparations. This is solid casing, not an
+ // invisible blocker or a state-dependent portal veto. The flight apertures,
+ // moving face and all actuator/portal rules keep their original dimensions.
+ const sideReturn=part([-7.6,18,-1.3],[11.1,12,.55]);
+ sideReturn.name='Cassette upper side return / solid';
  // Two output mouths are literal openings in one continuous dark casing.
  part([-5,3,-6],[.65,6,9.4]);
  part([-5,16.5,-6],[.65,3,9.4]);
