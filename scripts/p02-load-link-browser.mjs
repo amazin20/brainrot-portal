@@ -25,7 +25,7 @@ try{
   if(!link)throw Error('No P02 load link in this build');
   const visual=g.updateVisuals,render=g.render,ring=[],clips=[],milestones=[];
   const observer=new g.camera.constructor(43,16/9,.1,130);
-  observer.position.set(1.7,16.5,24);observer.lookAt(-.5,11.9,2.7);
+  observer.position.set(1.7,14.8,17.9);observer.lookAt(-1.5,11.7,2.5);
   let tick=0,lastLoad=false,active=null;
   const inspect=()=>{
    const original=g.camera,portalCamera=g.portals.camera;
@@ -42,8 +42,11 @@ try{
     if(!active&&load!==lastLoad&&clips.length<2){active={kind:load?'load':'unload',frames:[...ring],remaining:110};clips.push(active);}
     lastLoad=load;
     // Only retain image frames around two actual contact transitions.
-    const frame=inspect();ring.push(frame);if(ring.length>30)ring.shift();
-    if(active){active.frames.push(frame);if(--active.remaining===0)active=null;}
+    const nearRemoval=clips.length===1&&g.playerPosition.y<6.5&&g.playerPosition.x>10;
+    if(active||clips.length===0||nearRemoval){
+     const frame=inspect();ring.push(frame);if(ring.length>30)ring.shift();
+     if(active){active.frames.push(frame);if(--active.remaining===0)active=null;}
+    }else ring.length=0;
    }
    return value;
   };
@@ -64,7 +67,7 @@ try{
  report.clips=[];
  for(const clip of result.clips){
   assert.equal(clip.remaining,0,'Incomplete visual window');
-  assert.ok(clip.frames.length>=120);
+  assert.ok(clip.frames.length>=110); // 110 consecutive post-event frames, plus available pre-roll.
   const last=clip.frames.at(-1);assert.equal(last.load,clip.kind==='load');
   assert.ok(clip.kind==='load'?last.indication>.999:last.indication<.001);
   report.clips.push({kind:clip.kind,frames:clip.frames.length,first:clip.frames[0].elapsed,last:last.elapsed,
