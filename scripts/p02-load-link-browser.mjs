@@ -30,7 +30,7 @@ try{
   const inspect=()=>{
    const original=g.camera,portalCamera=g.portals.camera;
    try{g.camera=observer;g.portals.camera=observer;render.call(g);
-    return {image:g.renderer.domElement.toDataURL('image/jpeg',.87),elapsed:g.elapsed,load:link.loaded,
+    return {image:g.renderer.domElement.toDataURL('image/jpeg',.87),elapsed:g.elapsed/1000,load:link.loaded,
      indication:link.value,brake:g.firstLevel.cassette.braked,height:g.firstLevel.cassette.height,
      player:g.playerPosition.toArray(),cargo:g.cargo.position.toArray(),calls:g.renderer.info.render.calls};
    }finally{g.camera=original;g.portals.camera=portalCamera;}
@@ -39,12 +39,14 @@ try{
    const value=visual.apply(this,args);
    if(args[0]>0&&g.state==='playing'&&tick++%2===0){
     const load=link.loaded;
-    if(!active&&load!==lastLoad&&clips.length<2){active={kind:load?'load':'unload',frames:[...ring],remaining:110};clips.push(active);}
+    const loading=clips.length===0&&load&&!lastLoad;
+    const removing=clips.length===1&&!load&&Boolean(g.heldCube);
+    if(!active&&(loading||removing)){active={kind:loading?'load':'unload',frames:[...ring],remaining:150};clips.push(active);}
     lastLoad=load;
     // Start pre-roll only after the free cargo enters its actual freight portal.
     // Brake-bay traversal and idle walking are still simulated, not re-rendered.
     const nearLoading=clips.length===0&&g.physics.portalTransports>0;
-    const nearRemoval=clips.length===1&&g.playerPosition.y<6.5&&g.playerPosition.x>10;
+    const nearRemoval=clips.length===1&&g.playerPosition.distanceTo(g.cargo.position)<3.5;
     if(active||nearLoading||nearRemoval){
      const frame=inspect();ring.push(frame);if(ring.length>30)ring.shift();
      if(active){active.frames.push(frame);if(--active.remaining===0)active=null;}
@@ -69,7 +71,7 @@ try{
  report.clips=[];
  for(const clip of result.clips){
   assert.equal(clip.remaining,0,'Incomplete visual window');
-  assert.ok(clip.frames.length>=110); // 110 consecutive post-event frames, plus available pre-roll.
+  assert.ok(clip.frames.length>=150); // Five seconds after contact or actual pickup, plus available pre-roll.
   for(let i=1;i<clip.frames.length;i++)assert.ok(Math.abs(clip.frames[i].elapsed-clip.frames[i-1].elapsed-1/30)<1e-6,'Nonconsecutive native samples');
   const last=clip.frames.at(-1);assert.equal(last.load,clip.kind==='load');
   assert.ok(clip.kind==='load'?last.indication>.999:last.indication<.001);
