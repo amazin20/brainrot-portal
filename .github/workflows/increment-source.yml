@@ -1,0 +1,29 @@
+name: Exact incremental-work source
+on:
+  push:
+    branches: [ci/20260916-increment-source]
+    paths: [.github/workflows/increment-source.yml]
+permissions:
+  contents: read
+jobs:
+  source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: 16f9755c95540e1c58238d7b5d0d628c348e88e1
+          persist-credentials: false
+      - name: Export tracked files only
+        run: |
+          git archive --format=tar.gz HEAD > /tmp/increment-source.tar.gz
+          git rev-parse HEAD > /tmp/increment-source-commit.txt
+          git rev-parse HEAD^{tree} >> /tmp/increment-source-commit.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: increment-source
+          path: |
+            /tmp/increment-source.tar.gz
+            /tmp/increment-source-commit.txt
+          retention-days: 3
+          if-no-files-found: error
