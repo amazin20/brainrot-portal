@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { CAMERA_PITCH_MIN, CAMERA_PITCH_MAX } from './LabCamera.js';
+import { room21ReceiverApproach } from './LabRoom21Retrieval.js';
 const check=(c,m)=>{if(!c)throw Error(m);};
 
 // Local driver uses the actual player camera range, including downward aiming.
@@ -76,7 +77,9 @@ export async function runRoom21(d,{order='cargo-first',recovery=false,offset=0}=
  walk(0,-3.1);aim(0,level.panels['shared-well'].getFrame().center.clone().setZ(-1.5));
  mark('move only the entry to the service fall while the friend still supports the low exit');
  walk(21,-5);walk(21,7.6);walk(18,7.6);
- walk(game.cargo.position.x+1,game.cargo.position.z);pickup();
+ // Approach the load from inside the tray, not inside its corner post.
+ // This changes only the ordinary route's walking target, never actor poses.
+ walk(...room21ReceiverApproach(game.cargo.position));pickup();
  mark('cargo recovered; the same prepared exit rises with its surface');
  walk(18,7.6);walk(21,7.6);walk(21,-5);walk(0,-5);
  until(()=>level.cassette.height>level.cassette.high-.01,6,'Unloaded cassette failed to rise');
