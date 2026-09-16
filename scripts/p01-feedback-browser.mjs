@@ -24,7 +24,8 @@ try {
   await page.evaluate(() => window.__NESI_DEMO_GAME__.renderer.setAnimationLoop(null));
   const refresh = async () => {
     await new Promise(resolve => setTimeout(resolve, 220));
-    await page.evaluate(() => { const g = window.__NESI_DEMO_GAME__; g.updateVisuals(1 / 60, 1); g.render(); });
+    // The existing animate() loop owns HUD refresh; updateVisuals alone does not.
+    await page.evaluate(() => window.__NESI_DEMO_GAME__.animate(performance.now()));
   };
   for (const loaded of [false, true]) {
     const approach = await page.evaluate(async ({ routeURL, roomURL, loaded }) => {
