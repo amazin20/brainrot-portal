@@ -27,23 +27,31 @@ export function buildPocketCassette(k,seat) {
   part([-10,.18,z],[1.2,.36,1.2],shell);
  }
  part([-10,24.3,-6],[2.4,.5,9.2],metal);
- // Rear inspection window: the weight can be seen from the brake bay, but
- // actual glass collision still closes the housing. Its frame is structural.
- part([-12.8,2.25,-6],[.65,4.5,9]);
- part([-12.8,20.75,-6],[.65,6.5,9]);
- for(const z of [-9.75,-2.25])part([-12.8,11,z],[.65,13,1.5]);
- const pane=w.box([-12.8,11,-6],[.14,13,6],glass);
- pane.name='Counterweight inspection glass / solid';
- for(const z of [-9,-3])part([-12.8,11,z],[.25,13,.13],metal);
- for(const y of [4.5,17.5])part([-12.8,y,-6],[.25,.13,6],metal);
- part([-9,12,-10.7],[8.3,24,.55]);
- // Continue the visible side return past the outlet rim. The former flush
- // corner admitted a diagonal airborne shot into the raised face through the
- // lower opening, skipping both preparations. This is solid casing, not an
- // invisible blocker or a state-dependent portal veto. The flight apertures,
- // moving face and all actuator/portal rules keep their original dimensions.
- const sideReturn=part([-7.6,18,-1.3],[11.1,12,.55]);
- sideReturn.name='Cassette upper side return / solid';
+ // The oblique square's backing reaches x=-14.15. Recess the central
+ // inspection window, not the whole side jamb: a full rectangular expansion
+ // would obstruct the established shot from the departure gallery to the brake.
+ // This folded profile changes real visible skins AND their collisions.
+ const rearX=-14.35, cheekLeft=rearX-.07, cheekRight=-12.475;
+ const casing=(name,p,size,mat=shell)=>{
+  const mesh=part(p,size,mat);mesh.name=name;
+  mesh.userData.cassetteEnclosure=true;return mesh;
+ };
+ casing('Cassette rear plinth / solid',[rearX,2.25,-6],[.14,4.5,6]);
+ casing('Cassette rear header / solid',[rearX,20.75,-6],[.14,6.5,6]);
+ // Side pockets stay on their previous x axis, supporting the existing guides.
+ for(const z of [-10.0875,-1.9125])
+  casing('Cassette rear window jamb / solid',[-12.8,12,z],[.65,24,2.175]);
+ const pane=w.box([rearX,11,-6],[.14,13,6],glass);
+ pane.name='Counterweight inspection glass / solid';pane.userData.cassetteEnclosure=true;
+ for(const z of [-9,-3]){
+  casing('Cassette rear folded cheek / solid',[(cheekLeft+cheekRight)/2,12,z],[cheekRight-cheekLeft,24,.16]);
+  casing('Cassette rear vertical glazing rail / solid',[rearX-.025,11,z],[.14,13,.13],metal);
+ }
+ for(const y of [4.5,17.5])casing('Cassette rear horizontal glazing rail / solid',[rearX-.025,y,-6],[.14,.13,6],metal);
+ // Both side skins clear the moving rim by >15 cm. Their x extents and the
+ // protected return at x=-2.05 remain unchanged. No invisible shot veto.
+ casing('Cassette north enclosure / solid',[-9,12,-10.9],[8.3,24,.55]);
+ casing('Cassette upper side return / solid',[-7.6,18,-1.1],[11.1,12,.55]);
  // Two output mouths are literal openings in one continuous dark casing.
  part([-5,3,-6],[.65,6,9.4]);
  part([-5,16.5,-6],[.65,3,9.4]);
