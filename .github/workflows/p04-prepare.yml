@@ -1,0 +1,47 @@
+name: P04A exact reviewed source transfer
+on:
+  push:
+    branches: [ci/p04-source-transfer-20260917]
+permissions:
+  contents: write
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Retain only the explicit reviewed payload
+        run: |
+          mkdir -p /tmp/p04-payload
+          cp --parents maintenance/p04-camera.patch tests/lab-camera-exit-plane.test.js docs/passes/P04A.md scripts/p04-exit-camera-browser.mjs .github/workflows/p04-exit-camera.yml /tmp/p04-payload
+      - uses: actions/checkout@v4
+        with:
+          ref: 909882910e4d2fcab82c9af8407344dba653f98c
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Recreate the exact immutable local candidate
+        run: |
+          git apply --check /tmp/p04-payload/maintenance/p04-camera.patch
+          git apply /tmp/p04-payload/maintenance/p04-camera.patch
+          cp -a /tmp/p04-payload/tests/. tests/
+          cp -a /tmp/p04-payload/docs/. docs/
+          cp -a /tmp/p04-payload/scripts/. scripts/
+          cp -a /tmp/p04-payload/.github/. .github/
+          git add src/game/LabCamera.js tests/lab-camera-exit-plane.test.js docs/passes/P04A.md scripts/p04-exit-camera-browser.mjs .github/workflows/p04-exit-camera.yml
+          git diff --cached --check
+          test "$(git write-tree)" = 45281e430e9bcccf56fedc6c695a8d51d2a1f5df
+          npm ci
+          node --test tests/lab-camera-exit-plane.test.js
+          npm run build
+      - name: Save only reviewed source on a separate result branch
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'P04A: preserve the inclined trailing lens until its discard plane retires' -m 'Exact reviewed source tree. One runtime camera file; no geometry, actor, physical, FOV or control changes. Full campaign and native before/after checks required before publication. Later upper-aperture framing remains a separate P04B issue.'
+          git push origin HEAD:refs/heads/ci/p04-prepared-result-20260917
+          git rev-parse HEAD
+          git rev-parse HEAD^{tree}
