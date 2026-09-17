@@ -1,0 +1,36 @@
+name: P04B exact offline source
+on:
+  push:
+    branches: [ci/p04b-source-20260917]
+    paths: [.github/workflows/p04b-source.yml]
+permissions:
+  contents: read
+jobs:
+  source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: 489ba611f2d15d433b0229e1051527e3eab9f64d
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - name: Tracked source only, no git credentials or environment dump
+        run: |
+          mkdir -p /tmp/p04b-source
+          git archive HEAD | tar -xf - -C /tmp/p04b-source
+          cp -a node_modules /tmp/p04b-source/
+          git rev-parse HEAD > /tmp/p04b-source/SNAPSHOT_COMMIT.txt
+          git rev-parse HEAD^{tree} > /tmp/p04b-source/SNAPSHOT_TREE.txt
+          tar -czf /tmp/p04b-source.tar.gz -C /tmp/p04b-source .
+          sha256sum /tmp/p04b-source.tar.gz
+      - uses: actions/upload-artifact@v4
+        with:
+          name: p04b-exact-source
+          path: /tmp/p04b-source.tar.gz
+          retention-days: 3
+          if-no-files-found: error
