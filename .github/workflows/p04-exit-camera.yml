@@ -1,0 +1,52 @@
+name: P04A exit-lens native comparison
+on:
+  push:
+    branches: [feature/p04-exit-camera]
+permissions:
+  contents: read
+jobs:
+  compare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        tag: [before, after]
+    env:
+      BUILD_COMMIT: ${{ github.sha }}
+      P04_TAG: ${{ matrix.tag }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Build immutable baseline or candidate with identical capture script
+        run: |
+          cp scripts/p04-exit-camera-browser.mjs /tmp/p04-exit-camera-browser.mjs
+          if [ "$P04_TAG" = before ]; then git checkout --detach 909882910e4d2fcab82c9af8407344dba653f98c; fi
+          cp /tmp/p04-exit-camera-browser.mjs scripts/
+          npm ci
+          npm run build
+          npm install --no-save --package-lock=false puppeteer-core@24.16.0
+          echo "SOURCE_COMMIT=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
+      - name: Ordinary input route, exact meshes, 30 Hz native frames
+        run: |
+          command -v ffmpeg || { sudo apt-get update && sudo apt-get install -y ffmpeg; }
+          python3 -m http.server 4173 --bind 127.0.0.1 --directory dist >/tmp/p04-http.log 2>&1 &
+          for i in {1..30}; do curl -fsS http://127.0.0.1:4173/ >/dev/null && break; sleep 1; done
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+          node scripts/p04-exit-camera-browser.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: p04-camera-${{ matrix.tag }}
+          path: |
+            smoke-artifacts/p04/*.json
+            smoke-artifacts/p04/*.mp4
+            smoke-artifacts/p04/*.jpg
+          if-no-files-found: error
+          retention-days: 14
