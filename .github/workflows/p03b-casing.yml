@@ -1,0 +1,70 @@
+name: P03B rear casing native comparison
+on:
+  push:
+    branches: [feature/p03b-casing-clearance]
+permissions:
+  contents: read
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    strategy:
+      fail-fast: false
+      matrix:
+        tag: [before, after]
+    env:
+      P03B_TAG: ${{ matrix.tag }}
+      BUILD_COMMIT: ${{ github.sha }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Check candidate and prepare exact comparison source
+        run: |
+          npm ci
+          node --test tests/lab-pocket-casing.test.js
+          npm install --no-save --package-lock=false puppeteer-core@24.16.0
+          if [ "$P03B_TAG" = before ]; then
+            mkdir -p /tmp/p03b-before
+            git archive 4cb3f9733b7703853aa92f20ecaa67ef343d7710 | tar -xf - -C /tmp/p03b-before
+            cmp package-lock.json /tmp/p03b-before/package-lock.json
+            ln -s "$PWD/node_modules" /tmp/p03b-before/node_modules
+            mkdir -p /tmp/p03b-before/scripts/lib
+            cp scripts/lib/pocket-clearance.mjs /tmp/p03b-before/scripts/lib/
+            cp scripts/p03b-clearance-report.mjs /tmp/p03b-before/scripts/
+            export EVIDENCE_OUT="$PWD/smoke-artifacts/p03b"
+            (cd /tmp/p03b-before && SOURCE_COMMIT=4cb3f9733b7703853aa92f20ecaa67ef343d7710 node scripts/p03b-clearance-report.mjs)
+            (cd /tmp/p03b-before && npm run build)
+          else
+            node scripts/p03b-clearance-report.mjs
+            npm run build
+          fi
+      - name: Native complete casing inspection and ordinary start view
+        run: |
+          command -v ffmpeg || { sudo apt-get update && sudo apt-get install -y ffmpeg; }
+          if [ "$P03B_TAG" = before ]; then
+            directory=/tmp/p03b-before/dist
+            export SOURCE_COMMIT=4cb3f9733b7703853aa92f20ecaa67ef343d7710
+          else
+            directory=dist
+            export SOURCE_COMMIT="$GITHUB_SHA"
+          fi
+          python3 -m http.server 4173 --bind 127.0.0.1 --directory "$directory" >/tmp/p03b-http.log 2>&1 &
+          for i in {1..30}; do curl -fsS http://127.0.0.1:4173/ >/dev/null && break; sleep 1; done
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+          node scripts/p03b-casing-browser.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: p03b-casing-${{ matrix.tag }}
+          path: |
+            smoke-artifacts/p03b/*.json
+            smoke-artifacts/p03b/*.png
+            smoke-artifacts/p03b/*.mp4
+          if-no-files-found: error
+          retention-days: 14
