@@ -45,9 +45,9 @@ export function buildPocketCassette(k,seat) {
  pane.name='Counterweight inspection glass / solid';pane.userData.cassetteEnclosure=true;
  for(const z of [-9,-3]){
   casing('Cassette rear folded cheek / solid',[(cheekLeft+cheekRight)/2,12,z],[cheekRight-cheekLeft,24,.16]);
-  casing('Cassette rear vertical glazing rail / solid',[rearX,11,z],[.14,13,.13],metal);
+  casing('Cassette rear vertical glazing rail / solid',[rearX-.025,11,z],[.14,13,.13],metal);
  }
- for(const y of [4.5,17.5])casing('Cassette rear horizontal glazing rail / solid',[rearX,y,-6],[.14,.13,6],metal);
+ for(const y of [4.5,17.5])casing('Cassette rear horizontal glazing rail / solid',[rearX-.025,y,-6],[.14,.13,6],metal);
  // Both side skins clear the moving rim by >15 cm. Their x extents and the
  // protected return at x=-2.05 remain unchanged. No invisible shot veto.
  casing('Cassette north enclosure / solid',[-9,12,-10.9],[8.3,24,.55]);
