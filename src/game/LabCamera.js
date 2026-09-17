@@ -219,8 +219,11 @@ export class LabCamera {
     if (belowFocus < -.65) this.desired.addScaledVector(this.viewUp, -.65 - belowFocus);
     // The rigidly transported view is exact at dt=0. On subsequent frames
     // gravity still defines the physical floor even while the visual horizon
-    // is rolling back: a rotated viewUp must not put the boom underground.
-    if (step > 0 && this.blockers.length && this.portalUpOrientation.angleTo(IDENTITY) > .01) {
+    // is rolling back. An inclined trailing exit lens is the exception: its back-side
+    // geometry is discarded, so forcing it up to the upright traveller would
+    // prematurely break the rigid view and retire the exit plane.
+    const inclinedExitClip = this.isInclinedExitLens();
+    if (step > 0 && !inclinedExitClip && this.blockers.length && this.portalUpOrientation.angleTo(IDENTITY) > .01) {
       this.desired.y = Math.max(this.desired.y, target.y + .67);
     }
     for (const object of this.blockers) object.updateWorldMatrix(true, true);
@@ -318,7 +321,19 @@ export class LabCamera {
     this.camera.up.copy(this.viewUp);
     this.camera.lookAt(this.lookPoint);
     this.camera.updateMatrixWorld();
+    const wasClipped = this.isInclinedExitLens();
     this.updatePortalClipping();
+    // A surface ignored by the exit's discard plane is solid again as soon
+    // as that plane retires. Sweep in the NEW render state in this same frame,
+    // not one update later (also covers looking away / a removed exit).
+    if (wasClipped && !this.mainClippingPlanes.length
+      && this.constrain(this.playerPivot, this.camera.position)) {
+      this.obstructed = true;
+      this.distance = this.camera.position.distanceTo(this.focus);
+      this.distanceVelocity = 0;
+      this.camera.lookAt(this.lookPoint);
+      this.camera.updateMatrixWorld();
+    }
     return this;
   }
 
@@ -368,6 +383,17 @@ export class LabCamera {
       && this.camera.getWorldDirection(this.clipDirection).dot(this.portalExit.normal) > .04;
   }
 
+  // During an inclined exit-lens phase, use the same world discard plane for camera
+  // contacts as for the main render; physical actor collision is unchanged.
+  isInclinedExitLens() {
+    const vertical = Math.abs(this.portalExit?.normal.y ?? 0);
+    return this.mainClippingPlanes.length > 0 && vertical > .001 && vertical < .999;
+  }
+
+  clipsPortalHit(point) {
+    return !!point && this.isInclinedExitLens() && this.mainClippingPlanes.some(plane => plane.distanceToPoint(point) < 0);
+  }
+
   constrain(origin, position) {
     this.castDirection.copy(position).sub(origin);
     const distance = this.castDirection.length();
@@ -388,7 +414,8 @@ export class LabCamera {
         .addScaledVector(this.castUp, y * radius);
       this.raycaster.set(this.castOrigin, this.castDirection);
       const hits = this.raycaster.intersectObjects(this.blockers, true);
-      const hit = hits.find(candidate => this.isBlocker(candidate.object, candidate));
+      const hit = hits.find(candidate => !this.clipsPortalHit(candidate.point)
+        && this.isBlocker(candidate.object, candidate));
       if (hit) safeDistance = Math.min(safeDistance, Math.max(0, hit.distance - radius - 0.035));
     }
     if (safeDistance >= distance) return false;
