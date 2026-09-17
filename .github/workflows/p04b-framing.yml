@@ -1,0 +1,54 @@
+name: P04B full silhouette native comparison
+on:
+  push:
+    branches: [feature/p04b-silhouette]
+permissions:
+  contents: read
+jobs:
+  compare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        tag: [before, after]
+    env:
+      BUILD_COMMIT: ${{ github.sha }}
+      P04_TAG: ${{ matrix.tag }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Same capture script and dependency lock on both immutable versions
+        run: |
+          cp scripts/p04b-framing-browser.mjs /tmp/p04b-framing-browser.mjs
+          cp package-lock.json /tmp/p04b-lock.json
+          if [ "$P04_TAG" = before ]; then git checkout --detach 489ba611f2d15d433b0229e1051527e3eab9f64d; fi
+          cmp package-lock.json /tmp/p04b-lock.json
+          cp /tmp/p04b-framing-browser.mjs scripts/
+          npm ci
+          npm run build
+          npm install --no-save --package-lock=false puppeteer-core@24.16.0
+          echo "SOURCE_COMMIT=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
+      - name: Complete ordinary route and consecutive native exit windows
+        run: |
+          command -v ffmpeg || { sudo apt-get update && sudo apt-get install -y ffmpeg; }
+          python3 -m http.server 4173 --bind 127.0.0.1 --directory dist >/tmp/p04b-http.log 2>&1 &
+          for i in {1..30}; do curl -fsS http://127.0.0.1:4173/ >/dev/null && break; sleep 1; done
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+          node scripts/p04b-framing-browser.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: p04b-framing-${{ matrix.tag }}
+          path: |
+            smoke-artifacts/p04b/*.json
+            smoke-artifacts/p04b/*.mp4
+            smoke-artifacts/p04b/*.jpg
+          retention-days: 14
+          if-no-files-found: error

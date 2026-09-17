@@ -1,0 +1,47 @@
+name: P04B exact reviewed source transfer
+on:
+  push:
+    branches: [ci/p04b-source-20260917]
+    paths: [.github/workflows/p04b-prepare.yml, maintenance/apply-p04b.py, maintenance/p04b-camera.patch]
+permissions:
+  contents: write
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Retain the explicit reviewed payload only
+        run: |
+          mkdir /tmp/p04b-payload
+          cp --parents maintenance/p04b-camera.patch maintenance/apply-p04b.py tests/lab-camera-silhouette.test.js docs/passes/P04B.md .github/workflows/p04b-framing.yml /tmp/p04b-payload/
+      - uses: actions/checkout@v4
+        with:
+          ref: 489ba611f2d15d433b0229e1051527e3eab9f64d
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Require the exact immutable locally tested tree
+        run: |
+          python3 /tmp/p04b-payload/maintenance/apply-p04b.py
+          cp /tmp/p04b-payload/tests/lab-camera-silhouette.test.js tests/
+          cp /tmp/p04b-payload/docs/passes/P04B.md docs/passes/
+          cp /tmp/p04b-payload/.github/workflows/p04b-framing.yml .github/workflows/
+          git add src/game/LabCamera.js tests/lab-camera-silhouette.test.js scripts/p04b-framing-browser.mjs docs/passes/P04B.md .github/workflows/p04b-framing.yml
+          git diff --cached --check
+          git ls-files -s src/game/LabCamera.js tests/lab-camera-silhouette.test.js scripts/p04b-framing-browser.mjs docs/passes/P04B.md .github/workflows/p04b-framing.yml
+          test "$(git write-tree)" = b2aff0b3e61afb03e5d88f86df01262dcf154a91
+          npm ci
+          node --test tests/lab-camera-silhouette.test.js
+          npm run build
+      - name: Preserve source on an isolated new result branch
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'P04B: retain the full traveller silhouette during inclined camera recovery' -m 'Exact reviewed tree verified. No actor, level geometry, physical rule, orbit input, FOV target or save changes. Native comparison and full campaign CI remain mandatory before publication.'
+          git push origin HEAD:refs/heads/ci/p04b-reviewed-result-20260917
+          git rev-parse HEAD
+          git rev-parse HEAD^{tree}
