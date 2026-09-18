@@ -1,0 +1,50 @@
+name: Transfer exact campaign portal candidate
+on:
+  push:
+    branches: [ci/perf-portals-source-c47364]
+permissions:
+  contents: write
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Retain explicit payload only
+        run: |
+          mkdir /tmp/portal-payload
+          cp --parents maintenance/portal-runtime.patch maintenance/portal-cleanup.patch src/game/LabPortalRenderCulling.js tests/lab-portal-performance.test.js scripts/perf-portals-campaign.mjs scripts/perf-portals-browser.mjs docs/passes/P09B_PORTAL_PIPELINE.md .github/workflows/perf-portals-review.yml /tmp/portal-payload/
+      - uses: actions/checkout@v4
+        with:
+          ref: c47364e8ec30872ed26dd64cbe2c852fcf2e7456
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Recreate exact reviewed tree, test and build
+        run: |
+          git apply --check /tmp/portal-payload/maintenance/portal-runtime.patch
+          git apply /tmp/portal-payload/maintenance/portal-runtime.patch
+          cp -a /tmp/portal-payload/src/. src/
+          cp -a /tmp/portal-payload/tests/. tests/
+          cp -a /tmp/portal-payload/scripts/. scripts/
+          cp -a /tmp/portal-payload/docs/. docs/
+          cp /tmp/portal-payload/.github/workflows/perf-portals-review.yml .github/workflows/
+          git apply --check /tmp/portal-payload/maintenance/portal-cleanup.patch
+          git apply /tmp/portal-payload/maintenance/portal-cleanup.patch
+          git add src/game/LabGame.js src/game/LabPortals.js src/game/LabPortalRenderCulling.js tests/lab-portal-performance.test.js scripts/perf-portals-campaign.mjs scripts/perf-portals-browser.mjs docs/passes/P09B_PORTAL_PIPELINE.md .github/workflows/perf-portals-review.yml
+          git diff --cached --check
+          test "$(git write-tree)" = d6446b7b9e5c7788c24d5b1241dea58358d459fd
+          npm ci
+          node --test tests/lab-portal-performance.test.js tests/lab-portals.test.js tests/lab-moving-portals.test.js tests/lab-portal-actors.test.js
+          npm run build
+      - name: Preserve source in isolated review branch
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'P09B: optimize campaign portal views, queries and resource reuse' -m 'Exact reviewed tree; original models, physics, portal resolution and cadence retained. Full campaign/native review and public verification remain required.'
+          git push origin HEAD:refs/heads/ci/perf-portals-reviewed
+          git rev-parse HEAD
+          git rev-parse HEAD^{tree}

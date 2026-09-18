@@ -1,0 +1,84 @@
+diff --git a/docs/passes/P09B_PORTAL_PIPELINE.md b/docs/passes/P09B_PORTAL_PIPELINE.md
+index f7dd3ec..c569dff 100644
+--- a/docs/passes/P09B_PORTAL_PIPELINE.md
++++ b/docs/passes/P09B_PORTAL_PIPELINE.md
+@@ -7,7 +7,7 @@ User request: optimize the whole game and portals/traversal, inspect previously
+ 1. **Portal rendering:** the existing scissor limited pixels but not scene submissions. `LabPortalRenderCulling` conservatively excludes rigid leaf meshes wholly outside the same aperture rectangle, with a two-pixel guard. Its cropped matrix is used ONLY to cull: the actual optical projection, full viewport, shader UVs, HDR, MSAA, recursion, resolution and every-frame refresh are unchanged. It uses the same aggregate renderer bounds for instancing. Skinning, morph/displacement/custom shaders, render callbacks, never-culled objects and meshes with descendants keep the full path. Visibility and scene matrix-update policy are restored in `finally`. A forced shadow refresh bypasses culling so casters are not removed. This is not guessed occlusion or lower quality.
+ 2. **Backing-wall queries during movement/carry/portal contacts:** execute the exact existing world-axis rejection before creating a portal-local eight-corner box. Acceptance predicate and tolerances remain the same. No nearby wall or capsule check is skipped by an arbitrary distance threshold.
+ 3. **Repeated portal synchronization:** reuse the last computed frame only when the complete anchor transform, local anchor values, resulting frame and group pose are unchanged. Moving/rotating supports, render interpolation and external frame/anchor edits invalidate it. Physics snapshots still commit independently each fixed step; no interpolation sample becomes physical history.
+-4. **Repeated shots / first-use resources:** keep two bounded portal visual slots. Replacing/clearing a portal no longer disposes and recreates its three geometries/materials. `prepare()` attaches the two hidden visuals during the existing loading/compile phase, without making portals logically present. A new placement still creates a fresh logical frame and anchor/history. Clearing detaches both visuals; final disposal releases all six geometries/materials and three render targets exactly once. This does not claim that every possible driver shader variant or upload stall is eliminated.
++4. **Repeated shots / first-use resources:** keep two bounded portal visual slots. Replacing/clearing a portal no longer disposes and recreates its three geometries/materials. `prepare()` attaches the two hidden visuals during the existing loading/compile phase, without making portals logically present. Compile-only nodes are detached in `finally` afterwards (including a compilation failure); the bounded resources, not extra scene traversal, are retained. A new placement still creates a fresh logical frame and anchor/history. Clearing detaches both visuals; final disposal releases all six geometries/materials and three render targets exactly once. This does not claim that every possible driver shader variant or upload stall is eliminated.
+ 
+ Runtime files: `LabPortals.js`, new `LabPortalRenderCulling.js`, and two `LabGame.js` calls to prepare during loading. No original model, material appearance, light, quality default, room geometry, collider shape, portal size/direction, velocity/impulse, controller, save or puzzle rule change. P09A camera broad phase and the readable receiver remain. The separate camera-continuity defect is not fixed by this optimization.
+ 
+@@ -24,3 +24,5 @@ The local browser was blocked by administrator policy; no policy or network rest
+ ## Audit and remaining scope
+ 
+ The initial complete CPU audit also highlights room10 and contact-heavy mechanisms: their cost is not identical to portal rendering. Repeated static-mask setters waking cargo and the remaining interpolation/first-use variants warrant separate investigation rather than silently changing sleep/physics semantics in an optimization-only patch. No claim that every bug is found, every memory counter plateaus, or every device has zero dropped frames. Device model/GPU/browser and real frame traces are still required by the specification. Do not turn fixed-simulation movie fps or fewer triangles into that guarantee.
++
++The first full-suite candidate failed nine existing scene-workload contracts: hidden compile-only portal nodes remained attached after loading. The retained fix detaches them in `finally` after compilation, rather than weakening those existing tests or excluding them from counts. It adds a dedicated lifecycle regression. Full-suite status is rechecked on this corrected tree.
+diff --git a/src/game/LabGame.js b/src/game/LabGame.js
+index 3ec6fce..ec9dcfe 100644
+--- a/src/game/LabGame.js
++++ b/src/game/LabGame.js
+@@ -72,7 +72,8 @@ export class LabGame {
+     await new Promise(requestAnimationFrame);
+     const compileStart = performance.now();
+     this.portalActors.prepare(); this.portals.prepare();
+-    await this.renderer.compileAsync(this.scene, this.camera);
++    try { await this.renderer.compileAsync(this.scene, this.camera); }
++    finally { this.portals.finishPreparation(); }
+     this.render();
+     this.loadingProfile.firstFrameMs = performance.now() - compileStart;
+     this.callbacks.onProgress({ percent: 100, label: 'Можно отправляться' });
+@@ -273,7 +274,8 @@ export class LabGame {
+     if (CAMPAIGN[index].assets.some(id => !this.assets.has(id))) await this.loadAssets();
+     disposeLabLevel(this); this.buildLevel();
+     this.portalActors.prepare(); this.portals.prepare();
+-    if (this.renderer?.compileAsync) await this.renderer.compileAsync(this.scene, this.camera);
++    try { if (this.renderer?.compileAsync) await this.renderer.compileAsync(this.scene, this.camera); }
++    finally { this.portals.finishPreparation(); }
+     this.performanceMonitor.reset(); this.accumulator = 0; this.lastFrame = performance.now();
+     this.state = playing ? 'playing' : 'ready'; this.emitHud();
+     this.renderer?.setAnimationLoop(this.animate);
+diff --git a/src/game/LabPortals.js b/src/game/LabPortals.js
+index 9c98a79..35f40f0 100644
+--- a/src/game/LabPortals.js
++++ b/src/game/LabPortals.js
+@@ -516,6 +516,14 @@ export class LabPortals {
+     }
+   }
+ 
++  // The compile-only nodes must not become part of the persistent room
++  // scene. Retain their resources, not an extra traversal on every frame.
++  finishPreparation() {
++    for (let index = 0; index < 2; index++) {
++      if (!this.portals[index]) this.visuals[index]?.group.removeFromParent();
++    }
++  }
++
+   place(index, position, normal, preferredUp) {
+     if (index !== 0 && index !== 1) throw new Error('Portal index must be 0 or 1');
+     if (this.disposed) throw new Error('Portal renderer is disposed');
+diff --git a/tests/lab-portal-performance.test.js b/tests/lab-portal-performance.test.js
+index 8fdb17c..e6650dd 100644
+--- a/tests/lab-portal-performance.test.js
++++ b/tests/lab-portal-performance.test.js
+@@ -143,3 +143,17 @@ test('replacing a portal resets recycled visibility and texture without reusing
+   assert.deepEqual(next.position.toArray(),[9,5,3]);p.syncMovingSurfaces();assert.deepEqual(next.position.toArray(),[9,5,3]);
+  }finally{p.dispose();}
+ });
++
++
++test('compile-only portal nodes detach afterwards without disposing resources or hiding active frames',()=>{
++ const scene=new THREE.Scene(),p=new LabPortals({scene});
++ try{
++  p.prepare();assert.equal(scene.children.length,2);
++  const geometry=p.visuals[0].surface.geometry;
++  p.finishPreparation();p.finishPreparation();assert.equal(scene.children.length,0);
++  const frame=p.place(0,new V(),new V(0,0,1));
++  p.prepare();p.finishPreparation();assert.equal(scene.children.length,1);
++  assert.equal(frame.group.parent,scene);assert.equal(frame.group.visible,true);
++  assert.equal(frame.surface.geometry,geometry);assert.equal(p.ready,false);
++ }finally{p.dispose();}
++});

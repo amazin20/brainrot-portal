@@ -1,0 +1,82 @@
+name: Campaign portal performance and visual equivalence
+on:
+  push:
+    branches: [perf/campaign-portals]
+permissions:
+  contents: read
+jobs:
+  compare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 28
+    env:
+      BASE: c47364e8ec30872ed26dd64cbe2c852fcf2e7456
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Same locked dependencies, immutable baseline, identical probes
+        run: |
+          npm ci
+          node --test tests/lab-portal-performance.test.js
+          mkdir /tmp/portal-base
+          git archive "$BASE" | tar -xf - -C /tmp/portal-base
+          cmp package-lock.json /tmp/portal-base/package-lock.json
+          ln -s "$PWD/node_modules" /tmp/portal-base/node_modules
+          cp scripts/perf-portals-campaign.mjs scripts/perf-portals-browser.mjs /tmp/portal-base/scripts/
+      - name: All 21 ordinary routes and two resource cycles on each version
+        run: |
+          ROOT="$PWD"
+          (cd /tmp/portal-base && SOURCE_COMMIT="$BASE" EVIDENCE_OUT="$ROOT/smoke-artifacts/portal-before" node --expose-gc scripts/perf-portals-campaign.mjs)
+          SOURCE_COMMIT="$GITHUB_SHA" EVIDENCE_OUT=smoke-artifacts/portal-after node --expose-gc scripts/perf-portals-campaign.mjs
+          node --input-type=module <<'JS'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const a=JSON.parse(fs.readFileSync('smoke-artifacts/portal-before/audit.json')),b=JSON.parse(fs.readFileSync('smoke-artifacts/portal-after/audit.json'));
+          assert.ok(a.pass&&b.pass);assert.equal(a.routes.length,21);assert.equal(b.routes.length,21);
+          for(let i=0;i<21;i++)assert.equal(a.routes[i].digest,b.routes[i].digest,`changed route ${i+1}`);
+          JS
+      - name: Production WebGL at unchanged graphical settings
+        run: |
+          npm install --no-save --package-lock=false puppeteer-core@24.16.0
+          npm run build
+          (cd /tmp/portal-base && npm run build)
+          command -v ffmpeg || { sudo apt-get update && sudo apt-get install -y ffmpeg; }
+          python3 -m http.server 4173 --bind 127.0.0.1 --directory /tmp/portal-base/dist >/tmp/portal-before.log 2>&1 &
+          python3 -m http.server 4174 --bind 127.0.0.1 --directory dist >/tmp/portal-after.log 2>&1 &
+          for i in {1..30}; do curl -fsS http://127.0.0.1:4173/ >/dev/null && curl -fsS http://127.0.0.1:4174/ >/dev/null && break; sleep 1; done
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+          SOURCE_COMMIT="$BASE" PERF_TAG=before PAGE_URL=http://127.0.0.1:4173/ node scripts/perf-portals-browser.mjs
+          SOURCE_COMMIT="$GITHUB_SHA" PERF_TAG=after PAGE_URL=http://127.0.0.1:4174/ node scripts/perf-portals-browser.mjs
+          node --input-type=module <<'JS'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const root='smoke-artifacts/portal-browser/',a=JSON.parse(fs.readFileSync(root+'before.json')),b=JSON.parse(fs.readFileSync(root+'after.json'));
+          assert.ok(a.pass&&b.pass);const rows=[];
+          for(let i=0;i<a.levels.length;i++){
+            const x=a.levels[i],y=b.levels[i];assert.equal(x.level,y.level);assert.equal(x.traceDigest,y.traceDigest);
+            assert.deepEqual(x.frames.map(f=>f.tick),y.frames.map(f=>f.tick));
+            for(let j=0;j<x.frames.length;j++){
+              const m=x.frames[j],n=y.frames[j];assert.ok(n.render.calls<=m.render.calls);assert.ok(n.render.triangles<=m.render.triangles);
+              rows.push({level:x.level,name:m.name,before:m.render,after:n.render,identicalPixels:m.hash===n.hash,timingsBefore:m.times,timingsAfter:n.times});
+            }
+          }
+          assert.ok(rows.some(r=>r.after.triangles<r.before.triangles));
+          const result={rows,allPixelsEqual:rows.every(r=>r.identicalPixels),nested:{before:a.nestedFixture,after:b.nestedFixture},
+            scope:'Pixel hashes retained for inspection; timings are a synchronized software-renderer experiment, not hardware FPS.'};
+          fs.writeFileSync(root+'comparison.json',JSON.stringify(result,null,2));
+          JS
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: campaign-portal-performance
+          path: |
+            smoke-artifacts/portal-before/*.json
+            smoke-artifacts/portal-after/*.json
+            smoke-artifacts/portal-browser/*.json
+            smoke-artifacts/portal-browser/*.png
+            smoke-artifacts/portal-browser/*.mp4
+          retention-days: 14
+          if-no-files-found: error
