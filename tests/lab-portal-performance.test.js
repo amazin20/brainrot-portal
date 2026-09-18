@@ -175,3 +175,16 @@ test('replacing an exit retires the old logical scene root even though GPU resou
   rig.updatePortalClipping();assert.equal(rig.portalExit,null);assert.equal(rig.mainClippingPlanes.length,0);
  }finally{p.dispose();}
 });
+
+
+test('refraction and scene override preserve the full background submission path',()=>{
+ const f=viewFixture(),side=f.add(5,0,-10),glass=f.add(0,0,-8);
+ glass.material.dispose();glass.material=new THREE.MeshPhysicalMaterial({transmission:.5});
+ try{
+  f.start();assert.equal(side.visible,true);assert.equal(f.culling.hidden.length,0);f.culling.end();
+  glass.material.transmission=0;f.scene.overrideMaterial=new THREE.MeshBasicMaterial();
+  f.start();assert.equal(side.visible,true);assert.equal(f.culling.hidden.length,0);f.culling.end();
+  f.scene.overrideMaterial.dispose();f.scene.overrideMaterial=null;
+  f.start();assert.equal(side.visible,false);
+ }finally{f.dispose();}
+});

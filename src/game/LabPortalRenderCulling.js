@@ -25,7 +25,7 @@ export class LabPortalRenderCulling {
   begin(scene, camera, rect, width, height, reversedDepth = false) {
     if (this.active) throw new Error('Portal culling is already active');
     this.tested = 0;
-    if (!this.enabled) return;
+    if (!this.enabled || scene.overrideMaterial) return;
     const { x, y, width: w, height: h } = rect;
     if (![x, y, w, h, width, height].every(Number.isFinite)
       || w <= 0 || h <= 0 || width <= 0 || height <= 0) return;
@@ -44,7 +44,15 @@ export class LabPortalRenderCulling {
     // World matrices are refreshed by the caller with the same policy as
     // WebGLRenderer, before traversal. InstancedMesh bounds follow Three's
     // own aggregate bounds; never test an individual instance independently.
+    let transmission = false;
     scene.traverseVisible(object => {
+      // Refraction uses an auxiliary full-view background pass. An off-scissor
+      // object can still contribute through glass: keep its complete scene.
+      if (object.isMesh) {
+        if (Array.isArray(object.material)) {
+          for (const material of object.material) if (material?.transmission > 0) transmission = true;
+        } else if (object.material?.transmission > 0) transmission = true;
+      }
       if (!object.isMesh || !object.frustumCulled || object.isSkinnedMesh
         || object.children.length) return;
       for (const key in object.geometry?.morphAttributes) if (object.geometry.morphAttributes[key]?.length) return;
@@ -56,9 +64,10 @@ export class LabPortalRenderCulling {
       this.tested++;
       if (!this.frustum.intersectsObject(object)) {
         this.hidden.push(object);
-        object.visible = false;
       }
     });
+    if (transmission) { this.hidden.length = 0; this.active = false; return; }
+    for (const object of this.hidden) object.visible = false;
   }
 
   end() {
