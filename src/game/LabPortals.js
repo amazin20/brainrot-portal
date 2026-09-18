@@ -529,14 +529,23 @@ export class LabPortals {
     if (this.disposed) throw new Error('Portal renderer is disposed');
     const frame = makePortalFrame(position, normal, preferredUp);
     this._remove(index);
-    const visual = this._visual(index), {group,surface,rim,halo} = visual;
+    const visual = this._visual(index);
+    if (visual.used) {
+      // Transit cameras retain the old frame until its root is detached.
+      // Pool GPU meshes/materials, never the logical root used as a liveness
+      // token: otherwise a replacement would resurrect an old exit plane.
+      const group = new THREE.Group(); group.name = visual.group.name;
+      group.add(visual.surface, visual.rim, visual.halo); visual.group = group;
+    }
+    visual.used = true;
+    const {group,surface,rim,halo} = visual;
     group.position.copy(frame.position).addScaledVector(frame.normal, .036);
     group.quaternion.copy(frame.quaternion);
     group.visible = surface.visible = rim.visible = halo.visible = true;
     surface.material.uniforms.view.value = this.targets[index].texture;
     surface.material.uniforms.linked.value = 0;
     this.scene.add(group);
-    Object.assign(frame, visual);
+    Object.assign(frame, {group,surface,rim,halo});
     this.portals[index] = frame;
     if (this.physicsFrames) this.physicsFrames[index] = this._physicsSnapshot(frame);
     return frame;

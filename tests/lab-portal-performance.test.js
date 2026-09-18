@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import * as THREE from 'three';
 import {LabPortals,makePortalFrame,portalIntersectsBox,portalBacksCollider} from '../src/game/LabPortals.js';
+import {LabCamera} from '../src/game/LabCamera.js';
 import {LabPortalRenderCulling} from '../src/game/LabPortalRenderCulling.js';
 const V=THREE.Vector3;
 let seed=98321;const rand=()=>((seed=(Math.imul(seed,1664525)+1013904223)>>>0)/4294967296);
@@ -155,5 +156,22 @@ test('compile-only portal nodes detach afterwards without disposing resources or
   p.prepare();p.finishPreparation();assert.equal(scene.children.length,1);
   assert.equal(frame.group.parent,scene);assert.equal(frame.group.visible,true);
   assert.equal(frame.surface.geometry,geometry);assert.equal(p.ready,false);
+ }finally{p.dispose();}
+});
+
+
+test('replacing an exit retires the old logical scene root even though GPU resources are pooled',()=>{
+ const scene=new THREE.Scene(),camera=new THREE.PerspectiveCamera(62,16/9,.1,100);
+ const p=new LabPortals({scene,camera}),rig=new LabCamera({camera});
+ const exit=p.place(1,new V(),new V(0,0,1));
+ const oldRoot=exit.group,oldMaterial=exit.surface.material,oldGeometry=exit.surface.geometry;
+ camera.position.set(0,0,-1);camera.lookAt(0,0,1);camera.updateMatrixWorld(true);
+ rig.portalExit=exit;rig.updatePortalClipping();assert.equal(rig.mainClippingPlanes.length,1);
+ try{
+  const replacement=p.place(1,new V(10,0,0),new V(0,0,1));
+  assert.notEqual(replacement.group,oldRoot,'A stale exit must not borrow the live replacement scene root');
+  assert.equal(oldRoot.parent,null);assert.equal(replacement.group.parent,scene);
+  assert.equal(replacement.surface.material,oldMaterial);assert.equal(replacement.surface.geometry,oldGeometry);
+  rig.updatePortalClipping();assert.equal(rig.portalExit,null);assert.equal(rig.mainClippingPlanes.length,0);
  }finally{p.dispose();}
 });
