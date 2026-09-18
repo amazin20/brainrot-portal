@@ -1,0 +1,28 @@
+name: Performance exact source
+on:
+  push:
+    branches: [ci/perf-source-ae949365]
+    paths: [.github/workflows/perf-source.yml]
+permissions:
+  contents: read
+jobs:
+  source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ae949365fe690421e7d1972d284cdc8ea6785eb8
+          persist-credentials: false
+      - run: |
+          git archive --format=tar.gz HEAD > /tmp/perf-source.tar.gz
+          git rev-parse HEAD > /tmp/perf-commit.txt
+          git rev-parse HEAD^{tree} >> /tmp/perf-commit.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: perf-exact-source
+          path: |
+            /tmp/perf-source.tar.gz
+            /tmp/perf-commit.txt
+          retention-days: 3
+          if-no-files-found: error
