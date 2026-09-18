@@ -59,6 +59,7 @@ export class LabCamera {
     this.portalUpOrientation = new THREE.Quaternion();
     this.viewUp = UP.clone();
     this.portalExit = null;
+    this.inclinedFraming = false;
     this.portalClipPlane = new THREE.Plane();
     this.mainClippingPlanes = [];
     this.yaw = 0;
@@ -81,6 +82,7 @@ export class LabCamera {
     this.portalOrientation.identity();
     this.portalUpOrientation.identity();
     this.portalExit = null;
+    this.inclinedFraming = false;
     this.mainClippingPlanes.length = 0;
     this.avoidance.set(0, 0, 0); this.avoidanceVelocity.set(0, 0, 0); this.avoidanceActive = false;
     this.yaw = yaw;
@@ -141,6 +143,8 @@ export class LabCamera {
     this.camera.up.applyQuaternion(rotation);
     this.camera.updateMatrixWorld(true);
     this.camera.updateProjectionMatrix();
+    const vertical = Math.abs(exit?.normal?.y ?? 0);
+    this.inclinedFraming = vertical > .001 && vertical < .999;
     this.portalExit = clipExit && exit?.normal ? exit : null;
     this.updatePortalClipping();
     const controls = new THREE.Euler().setFromQuaternion(control, 'YXZ');
@@ -197,6 +201,9 @@ export class LabCamera {
     // Gravity returns the horizon gradually; there is no one-frame roll snap.
     this.portalOrientation.slerp(IDENTITY, 1 - Math.exp(-3.8 * step));
     this.portalUpOrientation.slerp(IDENTITY, 1 - Math.exp(-3.8 * step));
+    // Keep composition recovery until the transported horizon settles, even
+    // after the exit discard plane has gone. Flat transfers/reset clear it.
+    if (this.portalUpOrientation.angleTo(IDENTITY) < .01) this.inclinedFraming = false;
     this.orbitQuaternion.setFromEuler(this.euler.set(this.pitch, this.yaw, 0, 'YXZ')).premultiply(this.portalOrientation);
     this.forward.set(0, 0, -1).applyQuaternion(this.orbitQuaternion);
     this.right.set(1, 0, 0).applyQuaternion(this.orbitQuaternion);
@@ -244,16 +251,22 @@ export class LabCamera {
       || this.camera.position.distanceTo(this.playerPivot) < 3.1) && this.blockers.length) {
       const direct = this.desired.clone().sub(this.playerPivot);
       let best = null, bestScore = Infinity;
-      for (const height of [2.5, 4, 5.5]) for (const side of [0, 1.8, -1.8]) {
+      const longitudinal = this.forward.clone().setY(0).normalize();
+      const heights = this.inclinedFraming ? [2.5, 3, 4, 5.5] : [2.5, 4, 5.5];
+      const advances = this.inclinedFraming ? [0, .6, 1.2] : [0];
+      // A tilted return makes right non-horizontal. A side-only search can
+      // jump to the opposite shoulder at an aperture. Also sample short
+      // gravity-horizontal advances; every endpoint uses the same sweep.
+      for (const height of heights) for (const side of [0, 1.8, -1.8]) for (const ahead of advances) {
         const candidate = this.playerPivot.clone().addScaledVector(direct, .7)
-          .addScaledVector(this.right, side);
+          .addScaledVector(this.right, side).addScaledVector(longitudinal, ahead);
         candidate.y = Math.max(candidate.y, this.playerPivot.y + height);
         this.constrain(this.playerPivot, candidate);
         const clearance = candidate.distanceTo(this.playerPivot);
         if (clearance < 3.2) continue;
         const score = this.framingPenalty(candidate) * 100
           + candidate.distanceToSquared(this.desired)
-          + candidate.distanceToSquared(this.camera.position) * .15;
+          + candidate.distanceToSquared(this.camera.position) * (this.inclinedFraming ? 3 : .15);
         if (score < bestScore) { bestScore = score; best = candidate; }
       }
       // Beneath a ceiling or after a high wall exit the upward escape can be
@@ -263,7 +276,7 @@ export class LabCamera {
         const lateral = this.right.clone().setY(0).normalize();
         if (lateral.lengthSq() < .01) lateral.set(1, 0, 0);
         const along = new THREE.Vector3().crossVectors(lateral, UP);
-        for (const height of [0, -1.5, 1.5]) for (let sector = 0; sector < 8; sector++) {
+        for (const height of (this.inclinedFraming ? [0, -1.5, 1.5, 3, 4.5, 5.5] : [0, -1.5, 1.5])) for (let sector = 0; sector < 8; sector++) {
           const angle = sector * Math.PI / 4;
           const candidate = this.playerPivot.clone()
             .addScaledVector(lateral, Math.cos(angle) * 3.6)
@@ -273,7 +286,7 @@ export class LabCamera {
           if (candidate.distanceTo(this.playerPivot) < 2.4) continue;
           const score = this.framingPenalty(candidate) * 100
             + candidate.distanceToSquared(this.desired)
-            + candidate.distanceToSquared(this.camera.position) * .15;
+            + candidate.distanceToSquared(this.camera.position) * (this.inclinedFraming ? 3 : .15);
           if (score < bestScore) { bestScore = score; best = candidate; }
         }
       }
@@ -345,13 +358,29 @@ export class LabCamera {
     const forward = this.lookPoint.clone().sub(position).normalize();
     const right = new THREE.Vector3().crossVectors(forward, this.viewUp).normalize();
     const up = new THREE.Vector3().crossVectors(right, forward).normalize();
-    const subject = this.playerPivot.clone().sub(position);
-    const depth = subject.dot(forward);
-    if (depth <= .1) return 100;
-    const height = depth * Math.tan(THREE.MathUtils.degToRad(this.camera.fov / 2));
-    const x = Math.abs(subject.dot(right)) / (height * this.camera.aspect);
-    const y = Math.abs(subject.dot(up)) / height;
-    return Math.max(0, x - .7) ** 2 + Math.max(0, y - .6) ** 2;
+    if (!this.inclinedFraming) {
+      const subject = this.playerPivot.clone().sub(position);
+      const depth = subject.dot(forward);
+      if (depth <= .1) return 100;
+      const height = depth * Math.tan(THREE.MathUtils.degToRad(this.camera.fov / 2));
+      const x = Math.abs(subject.dot(right)) / (height * this.camera.aspect);
+      const y = Math.abs(subject.dot(up)) / height;
+      return Math.max(0, x - .7) ** 2 + Math.max(0, y - .6) ** 2;
+    }
+    // Test the vertical subject envelope, not only the chest pivot: an
+    // overhead orbit can retain the pivot while cutting the head/backpack.
+    let penalty = 0;
+    const subject = new THREE.Vector3();
+    for (const y of [-1.32, 0, 1.32]) {
+      subject.copy(this.playerPivot).addScaledVector(UP, y).sub(position);
+      const depth = subject.dot(forward);
+      if (depth <= .1) return 100;
+      const height = depth * Math.tan(THREE.MathUtils.degToRad(this.camera.fov / 2));
+      const x = (Math.abs(subject.dot(right)) + .65) / (height * this.camera.aspect);
+      const v = (Math.abs(subject.dot(up)) + .2) / height;
+      penalty += Math.max(0, x - .9) ** 2 + Math.max(0, v - .9) ** 2;
+    }
+    return penalty;
   }
 
   updatePortalClipping() {
