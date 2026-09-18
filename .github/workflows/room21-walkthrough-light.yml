@@ -1,0 +1,100 @@
+name: Room21 complete walkthrough light graphics
+on:
+  push:
+    branches: [capture/room21-full-d93eecb]
+    paths: [.github/workflows/room21-walkthrough-light.yml]
+permissions:
+  contents: read
+env:
+  BUILD_COMMIT: d93eecb9505a7370f9828c5ef4270144d709f571
+jobs:
+  record:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      matrix:
+        part: [0, 1, 2, 3, 4, 5, 6, 7]
+    env:
+      W03_PART: ${{ matrix.part }}
+      W03_PARTS: 8
+      W03_ROUTE: cargo-first
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: d93eecb9505a7370f9828c5ef4270144d709f571
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Use existing low-quality preferences, unchanged game and complete route
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('scripts/w03-room21-browser.mjs');s=p.read_text()
+          old='guardProgress: g.firstLevel.state.freightGuard.progress';assert s.count(old)==1
+          s=s.replace(old,'cassetteHeight: g.firstLevel.cassette.height')
+          old="  await page.waitForFunction(() => window.__NESI_DEMO_GAME__?.state === 'ready');";assert s.count(old)==1
+          s=s.replace(old,old+"\n  await page.evaluate(()=>window.__NESI_PREFS__.save({quality:'low'}));\n  await page.reload({waitUntil:'networkidle2'});\n"+old+"\n  assert.equal(await page.evaluate(()=>window.__NESI_PREFS__.value.quality),'low');\n  report.video.quality='low';")
+          old='      await Promise.all(writes);';assert s.count(old)==1
+          s=s.replace(old,'      for (let n=0;n<90;n++) g.updateVisuals(1/60,1);\n'+old)
+          p.write_text(s)
+          PY
+          test "$(git diff --name-only)" = scripts/w03-room21-browser.mjs
+          npm ci
+          npm run build
+          npm install --no-save --package-lock=false puppeteer-core@24.16.0
+      - name: Retain complete native gameplay frames at 1280x720
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 --directory dist >/tmp/walkthrough-http.log 2>&1 &
+          for i in {1..30}; do curl -fsS http://127.0.0.1:4173/ >/dev/null && break; sleep 1; done
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+          node scripts/w03-room21-browser.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: light-frames-${{ matrix.part }}
+          path: smoke-artifacts/w03-cargo-first/part-${{ matrix.part }}/
+          compression-level: 0
+          retention-days: 2
+          if-no-files-found: error
+  assemble:
+    needs: record
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: d93eecb9505a7370f9828c5ef4270144d709f571
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: light-frames-*
+          path: /tmp/recorded
+      - name: Check every frame, state, pose and complete joint victory before assembly
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('scripts/w03-assemble-capture.mjs');s=p.read_text()
+          assert s.count("'guardProgress'")==1
+          p.write_text(s.replace("'guardProgress'","'cassetteHeight'"))
+          PY
+          mkdir -p /tmp/parts
+          for part in {0..7}; do mv "/tmp/recorded/light-frames-${part}" "/tmp/parts/part-${part}"; done
+          command -v ffmpeg || { sudo apt-get update && sudo apt-get install -y ffmpeg; }
+          node scripts/w03-assemble-capture.mjs /tmp/parts smoke-artifacts/walkthrough
+          cp smoke-artifacts/walkthrough/cargo-first.mp4 smoke-artifacts/walkthrough/room21-full-walkthrough.mp4
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: room21-full-walkthrough-light
+          path: |
+            smoke-artifacts/walkthrough/room21-full-walkthrough.mp4
+            smoke-artifacts/walkthrough/report.json
+            smoke-artifacts/walkthrough/milestone-*.jpg
+          retention-days: 14
+          if-no-files-found: error
