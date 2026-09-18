@@ -1,0 +1,103 @@
+name: Room21 complete user walkthrough
+on:
+  push:
+    branches: [capture/room21-full-d93eecb]
+    paths: [.github/workflows/room21-full-walkthrough.yml]
+permissions:
+  contents: read
+env:
+  BUILD_COMMIT: d93eecb9505a7370f9828c5ef4270144d709f571
+jobs:
+  record:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      matrix:
+        part: [0, 1, 2, 3]
+    env:
+      W03_PART: ${{ matrix.part }}
+      W03_PARTS: 4
+      W03_ROUTE: cargo-first
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: d93eecb9505a7370f9828c5ef4270144d709f571
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Adapt only the retained recording script to the current cassette state
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('scripts/w03-room21-browser.mjs')
+          s=p.read_text()
+          old='guardProgress: g.firstLevel.state.freightGuard.progress'
+          assert s.count(old)==1
+          s=s.replace(old,'cassetteHeight: g.firstLevel.cassette.height')
+          old='      await Promise.all(writes);'
+          assert s.count(old)==1
+          s=s.replace(old,"      // Keep the real final joint victory and its celebration, not a still frame.\n      for (let n=0;n<90;n++) g.updateVisuals(1/60,1);\n"+old)
+          p.write_text(s)
+          PY
+          test "$(git diff --name-only)" = scripts/w03-room21-browser.mjs
+          npm ci
+          npm run build
+          npm install --no-save --package-lock=false puppeteer-core@24.16.0
+      - name: Run full ordinary route, retain disjoint native 30Hz frames
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 --directory dist >/tmp/walkthrough-http.log 2>&1 &
+          for i in {1..30}; do curl -fsS http://127.0.0.1:4173/ >/dev/null && break; sleep 1; done
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+          node scripts/w03-room21-browser.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: walkthrough-frames-${{ matrix.part }}
+          path: smoke-artifacts/w03-cargo-first/part-${{ matrix.part }}/
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 2
+  assemble:
+    needs: record
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: d93eecb9505a7370f9828c5ef4270144d709f571
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: walkthrough-frames-*
+          path: /tmp/recorded
+      - name: Require all state and animation traces to match before interleaving
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('scripts/w03-assemble-capture.mjs');s=p.read_text()
+          assert s.count("'guardProgress'")==1
+          p.write_text(s.replace("'guardProgress'","'cassetteHeight'"))
+          PY
+          mkdir -p /tmp/parts
+          for part in 0 1 2 3; do mv "/tmp/recorded/walkthrough-frames-${part}" "/tmp/parts/part-${part}"; done
+          command -v ffmpeg || { sudo apt-get update && sudo apt-get install -y ffmpeg; }
+          node scripts/w03-assemble-capture.mjs /tmp/parts smoke-artifacts/walkthrough
+          cp smoke-artifacts/walkthrough/cargo-first.mp4 smoke-artifacts/walkthrough/room21-full-walkthrough.mp4
+          ffprobe -v error -show_entries stream=width,height,r_frame_rate,nb_frames -show_entries format=duration -of json smoke-artifacts/walkthrough/room21-full-walkthrough.mp4 > smoke-artifacts/walkthrough/media.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: room21-full-walkthrough
+          path: |
+            smoke-artifacts/walkthrough/room21-full-walkthrough.mp4
+            smoke-artifacts/walkthrough/report.json
+            smoke-artifacts/walkthrough/media.json
+            smoke-artifacts/walkthrough/milestone-*.jpg
+          if-no-files-found: error
+          retention-days: 14
