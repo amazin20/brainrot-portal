@@ -1,0 +1,51 @@
+name: Transfer exact camera performance candidate
+on:
+  push:
+    branches: [ci/perf-source-ae949365]
+    paths: [.github/workflows/perf-prepare.yml, maintenance/perf-camera.patch]
+permissions:
+  contents: write
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Retain only explicit reviewed source payload
+        run: |
+          mkdir /tmp/perf-payload
+          cp --parents maintenance/perf-camera.patch src/game/LabCameraBroadPhase.js tests/lab-camera-broad-phase.test.js scripts/perf-camera-route.mjs scripts/perf-camera-browser.mjs docs/passes/P09_CAMERA_CPU.md .github/workflows/perf-camera-review.yml /tmp/perf-payload/
+      - uses: actions/checkout@v4
+        with:
+          ref: ae949365fe690421e7d1972d284cdc8ea6785eb8
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Reconstruct and require exact locally tested source tree
+        run: |
+          git apply --check /tmp/perf-payload/maintenance/perf-camera.patch
+          git apply /tmp/perf-payload/maintenance/perf-camera.patch
+          cp -a /tmp/perf-payload/src/. src/
+          cp -a /tmp/perf-payload/tests/. tests/
+          cp -a /tmp/perf-payload/scripts/. scripts/
+          cp -a /tmp/perf-payload/docs/. docs/
+          cp /tmp/perf-payload/.github/workflows/perf-camera-review.yml .github/workflows/
+          git add src/game/LabCamera.js src/game/LabCameraBroadPhase.js tests/lab-camera-broad-phase.test.js scripts/perf-camera-route.mjs scripts/perf-camera-browser.mjs docs/passes/P09_CAMERA_CPU.md .github/workflows/perf-camera-review.yml
+          git diff --cached --check
+          git ls-files -s src/game/LabCamera.js src/game/LabCameraBroadPhase.js tests/lab-camera-broad-phase.test.js scripts/perf-camera-route.mjs scripts/perf-camera-browser.mjs docs/passes/P09_CAMERA_CPU.md .github/workflows/perf-camera-review.yml
+          test "$(git write-tree)" = f4feeda461e6430d000359462209436f239db691
+          npm ci
+          node --test tests/lab-camera-broad-phase.test.js
+          npm run build
+          node scripts/v8-package-check.mjs
+      - name: Save only tested source to an isolated result branch
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'P09A: cull redundant camera ray candidates without changing the view' -m 'Exact reviewed source tree; targeted broad-phase equivalence tests and build passed. Full campaign and browser performance comparison remain mandatory before publication. No geometry, physics, quality, model or save changes.'
+          git push origin HEAD:refs/heads/ci/perf-camera-reviewed-ae949365
+          git rev-parse HEAD
+          git rev-parse HEAD^{tree}

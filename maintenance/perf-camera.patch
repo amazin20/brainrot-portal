@@ -1,0 +1,59 @@
+diff --git a/src/game/LabCamera.js b/src/game/LabCamera.js
+index 28ca193..09cf5cd 100644
+--- a/src/game/LabCamera.js
++++ b/src/game/LabCamera.js
+@@ -1,4 +1,5 @@
+ import * as THREE from 'three';
++import { LabCameraBroadPhase } from './LabCameraBroadPhase.js';
+ import { portalTransformMatrix, portalBacksCollider } from './LabPortals.js';
+ 
+ const UP = new THREE.Vector3(0, 1, 0);
+@@ -53,6 +54,8 @@ export class LabCamera {
+     this.avoidanceVelocity = new THREE.Vector3();
+     this.avoidanceActive = false;
+     this.raycaster = new THREE.Raycaster();
++    this.broadPhase = new LabCameraBroadPhase();
++    this.rayHits = [];
+     this.euler = new THREE.Euler(0, 0, 0, 'YXZ');
+     this.orbitQuaternion = new THREE.Quaternion();
+     this.portalOrientation = new THREE.Quaternion();
+@@ -76,6 +79,7 @@ export class LabCamera {
+   }
+ 
+   reset(target, yaw = 0, pitch = -0.2) {
++    this.broadPhase.clear(); this.rayHits.length = 0;
+     this.focus.copy(target).y += 1.32;
+     this.lastTarget.copy(target);
+     this.focusVelocity.set(0, 0, 0);
+@@ -235,6 +239,8 @@ export class LabCamera {
+     }
+     for (const object of this.blockers) object.updateWorldMatrix(true, true);
+ 
++    this.broadPhase.begin(this.blockers);
++    try {
+     // Resolve both the smoothed pivot and the actual player. The latter matters
+     // when crossing a doorway: a lagging focus must never see through its wall.
+     this.obstructed = this.constrain(this.focus, this.desired);
+@@ -348,6 +354,7 @@ export class LabCamera {
+       this.camera.updateMatrixWorld();
+     }
+     return this;
++    } finally { this.broadPhase.end(); this.rayHits.length = 0; }
+   }
+ 
+   // An escape must retain the traveller in the lens, not merely leave space
+@@ -438,11 +445,13 @@ export class LabCamera {
+     let safeDistance = distance;
+     this.raycaster.near = 0;
+     this.raycaster.far = distance + radius;
++    const candidates = this.broadPhase.select(this.blockers, origin, this.castDirection, distance, radius);
+     for (const [x, y] of SAMPLE_OFFSETS) {
+       this.castOrigin.copy(origin).addScaledVector(this.castRight, x * radius)
+         .addScaledVector(this.castUp, y * radius);
+       this.raycaster.set(this.castOrigin, this.castDirection);
+-      const hits = this.raycaster.intersectObjects(this.blockers, true);
++      this.rayHits.length = 0;
++      const hits = this.raycaster.intersectObjects(candidates, true, this.rayHits);
+       const hit = hits.find(candidate => !this.clipsPortalHit(candidate.point)
+         && this.isBlocker(candidate.object, candidate));
+       if (hit) safeDistance = Math.min(safeDistance, Math.max(0, hit.distance - radius - 0.035));

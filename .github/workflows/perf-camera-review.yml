@@ -1,0 +1,79 @@
+name: Camera performance and unchanged view
+on:
+  push:
+    branches: [perf/camera-broad-phase]
+permissions:
+  contents: read
+jobs:
+  compare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      BASE: ae949365fe690421e7d1972d284cdc8ea6785eb8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Prepare identical locked dependencies and capture scripts
+        run: |
+          npm ci
+          mkdir /tmp/perf-base
+          git archive "$BASE" | tar -xf - -C /tmp/perf-base
+          cmp package-lock.json /tmp/perf-base/package-lock.json
+          ln -s "$PWD/node_modules" /tmp/perf-base/node_modules
+          cp scripts/perf-camera-route.mjs scripts/perf-camera-browser.mjs /tmp/perf-base/scripts/
+      - name: CPU before and after, serial runs without a renderer
+        run: |
+          ROOT="$PWD"
+          (cd /tmp/perf-base && SOURCE_COMMIT="$BASE" PERF_RUNS=2 EVIDENCE_OUT="$ROOT/smoke-artifacts/perf-before" node scripts/perf-camera-route.mjs)
+          SOURCE_COMMIT="$GITHUB_SHA" PERF_RUNS=2 EVIDENCE_OUT=smoke-artifacts/perf-after node scripts/perf-camera-route.mjs
+          node --input-type=module <<'JS'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const a=JSON.parse(fs.readFileSync('smoke-artifacts/perf-before/cpu-21.json'));
+          const b=JSON.parse(fs.readFileSync('smoke-artifacts/perf-after/cpu-21.json'));
+          for(const r of [...a.runs,...b.runs])assert.equal(r.digest,a.runs[0].digest);
+          assert.ok(b.runs.every(r=>r.rootVisits.total<a.runs[0].rootVisits.total*.05));
+          // Timings are measured and retained, never made a flaky correctness assertion.
+          JS
+      - name: Browser builds, same low graphics and all gameplay
+        run: |
+          npm install --no-save --package-lock=false puppeteer-core@24.16.0
+          npm run build
+          (cd /tmp/perf-base && npm run build)
+          command -v ffmpeg || { sudo apt-get update && sudo apt-get install -y ffmpeg; }
+          python3 -m http.server 4173 --bind 127.0.0.1 --directory /tmp/perf-base/dist > /tmp/perf-base.log 2>&1 &
+          python3 -m http.server 4174 --bind 127.0.0.1 --directory dist > /tmp/perf-after.log 2>&1 &
+          for i in {1..30}; do curl -fsS http://127.0.0.1:4173/ >/dev/null && curl -fsS http://127.0.0.1:4174/ >/dev/null && break; sleep 1; done
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+          SOURCE_COMMIT="$BASE" PERF_TAG=before PAGE_URL=http://127.0.0.1:4173/ node scripts/perf-camera-browser.mjs
+          SOURCE_COMMIT="$GITHUB_SHA" PERF_TAG=after PAGE_URL=http://127.0.0.1:4174/ node scripts/perf-camera-browser.mjs
+          node --input-type=module <<'JS'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const a=JSON.parse(fs.readFileSync('smoke-artifacts/perf-browser/before.json'));
+          const b=JSON.parse(fs.readFileSync('smoke-artifacts/perf-browser/after.json'));
+          assert.ok(a.pass&&b.pass);assert.equal(a.traceDigest,b.traceDigest);
+          assert.deepEqual(a.frames.map(f=>f.tick),b.frames.map(f=>f.tick));
+          assert.deepEqual(a.frames.map(f=>f.render),b.frames.map(f=>f.render));
+          fs.writeFileSync('smoke-artifacts/perf-browser/comparison.json',JSON.stringify({traceIdentical:true,
+            imageFramesEqual:a.frames.every((f,i)=>f.pixelHash===b.frames[i].pixelHash),
+            before:a.cameraMs,after:b.cameraMs,beforeAvoid:a.avoidingCameraMs,afterAvoid:b.avoidingCameraMs,
+            scope:'CPU render-code timing on Chromium/SwiftShader, not user FPS or device acceptance'},null,2));
+          JS
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: camera-performance-evidence
+          path: |
+            smoke-artifacts/perf-before/*.json
+            smoke-artifacts/perf-after/*.json
+            smoke-artifacts/perf-browser/*.json
+            smoke-artifacts/perf-browser/*.png
+            smoke-artifacts/perf-browser/*.jpg
+            smoke-artifacts/perf-browser/*.mp4
+          if-no-files-found: error
+          retention-days: 14
