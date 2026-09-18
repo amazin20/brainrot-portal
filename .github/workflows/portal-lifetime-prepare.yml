@@ -1,0 +1,37 @@
+name: Portal replacement lifetime verified transfer
+on:
+  push:
+    branches: [ci/perf-portals-lifetime]
+permissions:
+  contents: write
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - run: cp maintenance/portal-lifetime.patch /tmp/portal-lifetime.patch
+      - uses: actions/checkout@v4
+        with:
+          ref: deb67ea05cd47132667c92a1d06de346576f4ed7
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Preserve an exact forward-only correction to the reviewed candidate
+        run: |
+          git apply --check /tmp/portal-lifetime.patch
+          git apply /tmp/portal-lifetime.patch
+          git add src/game/LabPortals.js tests/lab-portal-performance.test.js docs/passes/P09B_PORTAL_PIPELINE.md
+          git diff --cached --check
+          test "$(git write-tree)" = d71bcad1987d6888d8db9a50e8de33ca785431fa
+          npm ci
+          node --test tests/lab-portal-performance.test.js tests/lab-portals.test.js tests/lab-moving-portals.test.js tests/lab-portal-actors.test.js
+          npm run build
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'Retire old logical exits while pooling portal GPU resources' -m 'Candidate-only replace-during-transit regression reproduced and fixed. Exact source tree and57 targeted tests checked; full campaign/native gates still mandatory.'
+          git push origin HEAD:refs/heads/ci/perf-portals-reviewed-lifetime
+          git rev-parse HEAD

@@ -1,0 +1,73 @@
+diff --git a/docs/passes/P09B_PORTAL_PIPELINE.md b/docs/passes/P09B_PORTAL_PIPELINE.md
+index c569dff..7cc3d55 100644
+--- a/docs/passes/P09B_PORTAL_PIPELINE.md
++++ b/docs/passes/P09B_PORTAL_PIPELINE.md
+@@ -26,3 +26,5 @@ The local browser was blocked by administrator policy; no policy or network rest
+ The initial complete CPU audit also highlights room10 and contact-heavy mechanisms: their cost is not identical to portal rendering. Repeated static-mask setters waking cargo and the remaining interpolation/first-use variants warrant separate investigation rather than silently changing sleep/physics semantics in an optimization-only patch. No claim that every bug is found, every memory counter plateaus, or every device has zero dropped frames. Device model/GPU/browser and real frame traces are still required by the specification. Do not turn fixed-simulation movie fps or fewer triangles into that guarantee.
+ 
+ The first full-suite candidate failed nine existing scene-workload contracts: hidden compile-only portal nodes remained attached after loading. The retained fix detaches them in `finally` after compilation, rather than weakening those existing tests or excluding them from counts. It adds a dedicated lifecycle regression. Full-suite status is rechecked on this corrected tree.
++
++The extended replace-during-transit regression exposed a candidate-only lifetime hazard: pooling the scene root could resurrect an old camera exit-plane reference when that slot was reused. The retained implementation pools GPU meshes/materials but creates a fresh lightweight logical root per placement; the old frame root stays detached. The regression fails on the first pooled version and passes after the fix. This is not presented as a pre-existing released-game bug.
+diff --git a/src/game/LabPortals.js b/src/game/LabPortals.js
+index 35f40f0..70639ed 100644
+--- a/src/game/LabPortals.js
++++ b/src/game/LabPortals.js
+@@ -529,14 +529,23 @@ export class LabPortals {
+     if (this.disposed) throw new Error('Portal renderer is disposed');
+     const frame = makePortalFrame(position, normal, preferredUp);
+     this._remove(index);
+-    const visual = this._visual(index), {group,surface,rim,halo} = visual;
++    const visual = this._visual(index);
++    if (visual.used) {
++      // Transit cameras retain the old frame until its root is detached.
++      // Pool GPU meshes/materials, never the logical root used as a liveness
++      // token: otherwise a replacement would resurrect an old exit plane.
++      const group = new THREE.Group(); group.name = visual.group.name;
++      group.add(visual.surface, visual.rim, visual.halo); visual.group = group;
++    }
++    visual.used = true;
++    const {group,surface,rim,halo} = visual;
+     group.position.copy(frame.position).addScaledVector(frame.normal, .036);
+     group.quaternion.copy(frame.quaternion);
+     group.visible = surface.visible = rim.visible = halo.visible = true;
+     surface.material.uniforms.view.value = this.targets[index].texture;
+     surface.material.uniforms.linked.value = 0;
+     this.scene.add(group);
+-    Object.assign(frame, visual);
++    Object.assign(frame, {group,surface,rim,halo});
+     this.portals[index] = frame;
+     if (this.physicsFrames) this.physicsFrames[index] = this._physicsSnapshot(frame);
+     return frame;
+diff --git a/tests/lab-portal-performance.test.js b/tests/lab-portal-performance.test.js
+index e6650dd..cae3b0a 100644
+--- a/tests/lab-portal-performance.test.js
++++ b/tests/lab-portal-performance.test.js
+@@ -2,6 +2,7 @@ import test from 'node:test';
+ import assert from 'node:assert/strict';
+ import * as THREE from 'three';
+ import {LabPortals,makePortalFrame,portalIntersectsBox,portalBacksCollider} from '../src/game/LabPortals.js';
++import {LabCamera} from '../src/game/LabCamera.js';
+ import {LabPortalRenderCulling} from '../src/game/LabPortalRenderCulling.js';
+ const V=THREE.Vector3;
+ let seed=98321;const rand=()=>((seed=(Math.imul(seed,1664525)+1013904223)>>>0)/4294967296);
+@@ -157,3 +158,20 @@ test('compile-only portal nodes detach afterwards without disposing resources or
+   assert.equal(frame.surface.geometry,geometry);assert.equal(p.ready,false);
+  }finally{p.dispose();}
+ });
++
++
++test('replacing an exit retires the old logical scene root even though GPU resources are pooled',()=>{
++ const scene=new THREE.Scene(),camera=new THREE.PerspectiveCamera(62,16/9,.1,100);
++ const p=new LabPortals({scene,camera}),rig=new LabCamera({camera});
++ const exit=p.place(1,new V(),new V(0,0,1));
++ const oldRoot=exit.group,oldMaterial=exit.surface.material,oldGeometry=exit.surface.geometry;
++ camera.position.set(0,0,-1);camera.lookAt(0,0,1);camera.updateMatrixWorld(true);
++ rig.portalExit=exit;rig.updatePortalClipping();assert.equal(rig.mainClippingPlanes.length,1);
++ try{
++  const replacement=p.place(1,new V(10,0,0),new V(0,0,1));
++  assert.notEqual(replacement.group,oldRoot,'A stale exit must not borrow the live replacement scene root');
++  assert.equal(oldRoot.parent,null);assert.equal(replacement.group.parent,scene);
++  assert.equal(replacement.surface.material,oldMaterial);assert.equal(replacement.surface.geometry,oldGeometry);
++  rig.updatePortalClipping();assert.equal(rig.portalExit,null);assert.equal(rig.mainClippingPlanes.length,0);
++ }finally{p.dispose();}
++});
