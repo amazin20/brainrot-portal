@@ -71,8 +71,9 @@ export class LabGame {
     this.callbacks.onProgress({ percent: 95, label: 'Готовим первый кадр' });
     await new Promise(requestAnimationFrame);
     const compileStart = performance.now();
-    this.portalActors.prepare();
-    await this.renderer.compileAsync(this.scene, this.camera);
+    this.portalActors.prepare(); this.portals.prepare();
+    try { await this.renderer.compileAsync(this.scene, this.camera); }
+    finally { this.portals.finishPreparation(); }
     this.render();
     this.loadingProfile.firstFrameMs = performance.now() - compileStart;
     this.callbacks.onProgress({ percent: 100, label: 'Можно отправляться' });
@@ -272,8 +273,9 @@ export class LabGame {
     this.levelIndex = index;
     if (CAMPAIGN[index].assets.some(id => !this.assets.has(id))) await this.loadAssets();
     disposeLabLevel(this); this.buildLevel();
-    this.portalActors.prepare();
-    if (this.renderer?.compileAsync) await this.renderer.compileAsync(this.scene, this.camera);
+    this.portalActors.prepare(); this.portals.prepare();
+    try { if (this.renderer?.compileAsync) await this.renderer.compileAsync(this.scene, this.camera); }
+    finally { this.portals.finishPreparation(); }
     this.performanceMonitor.reset(); this.accumulator = 0; this.lastFrame = performance.now();
     this.state = playing ? 'playing' : 'ready'; this.emitHud();
     this.renderer?.setAnimationLoop(this.animate);
