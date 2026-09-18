@@ -1,0 +1,28 @@
+name: P04 continuation exact source
+on:
+  push:
+    branches: [ci/p04b-source-20260917]
+    paths: [.github/workflows/p04c-source.yml]
+permissions:
+  contents: read
+jobs:
+  source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: 3e18ca63e694bd6aa09dec57c81f839869728dc3
+          persist-credentials: false
+      - run: |
+          git archive --format=tar.gz HEAD > /tmp/p04c-source.tar.gz
+          git rev-parse HEAD > /tmp/p04c-commit.txt
+          git rev-parse HEAD^{tree} >> /tmp/p04c-commit.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: p04c-source
+          path: |
+            /tmp/p04c-source.tar.gz
+            /tmp/p04c-commit.txt
+          retention-days: 3
+          if-no-files-found: error
