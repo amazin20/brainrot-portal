@@ -36,7 +36,7 @@ jobs:
           git add src/game/LabCamera.js src/game/LabCameraBroadPhase.js tests/lab-camera-broad-phase.test.js scripts/perf-camera-route.mjs scripts/perf-camera-browser.mjs docs/passes/P09_CAMERA_CPU.md .github/workflows/perf-camera-review.yml
           git diff --cached --check
           git ls-files -s src/game/LabCamera.js src/game/LabCameraBroadPhase.js tests/lab-camera-broad-phase.test.js scripts/perf-camera-route.mjs scripts/perf-camera-browser.mjs docs/passes/P09_CAMERA_CPU.md .github/workflows/perf-camera-review.yml
-          test "$(git write-tree)" = f4feeda461e6430d000359462209436f239db691
+          test "$(git write-tree)" = 8acf42e0b53910795c8ffb9b2158ac0787793504
           npm ci
           node --test tests/lab-camera-broad-phase.test.js
           npm run build

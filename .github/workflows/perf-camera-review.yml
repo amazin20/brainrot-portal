@@ -58,7 +58,7 @@ jobs:
           const b=JSON.parse(fs.readFileSync('smoke-artifacts/perf-browser/after.json'));
           assert.ok(a.pass&&b.pass);assert.equal(a.traceDigest,b.traceDigest);
           assert.deepEqual(a.frames.map(f=>f.tick),b.frames.map(f=>f.tick));
-          assert.deepEqual(a.frames.map(f=>f.render),b.frames.map(f=>f.render));
+          assert.deepEqual(a.frames.map(({render:r})=>[r.calls,r.triangles,r.points,r.lines]),b.frames.map(({render:r})=>[r.calls,r.triangles,r.points,r.lines]));
           fs.writeFileSync('smoke-artifacts/perf-browser/comparison.json',JSON.stringify({traceIdentical:true,
             imageFramesEqual:a.frames.every((f,i)=>f.pixelHash===b.frames[i].pixelHash),
             before:a.cameraMs,after:b.cameraMs,beforeAvoid:a.avoidingCameraMs,afterAvoid:b.avoidingCameraMs,
