@@ -3,6 +3,8 @@ import assert from 'node:assert/strict';
 import * as THREE from 'three';
 import {createPocketReceiverModel,attachPocketReceiver} from '../src/game/LabPocketReceiver.js';
 import {createHeadlessGame} from '../scripts/lab-headless.mjs';
+import {runV8Journey} from '../src/game/LabV8Journey.js';
+import {installRoom21Aim} from '../src/game/LabRoom21Journey.js';
 const dispose=root=>{const gg=new Set(),mm=new Set();root.traverse(o=>{if(o.geometry)gg.add(o.geometry);if(o.material)mm.add(o.material)});gg.forEach(g=>g.dispose());mm.forEach(m=>m.dispose());};
 
 test('full-area deck uses five meshes, no textures/lights and less than 2000 triangles',()=>{
@@ -11,7 +13,8 @@ test('full-area deck uses five meshes, no textures/lights and less than 2000 tri
   for(const a of Object.values(o.geometry.attributes))assert.ok(a.array.every(Number.isFinite));
   assert.ok(!Object.values(o.material).some(v=>v?.isTexture));assert.equal(o.castShadow,false);
  });
- assert.equal(meshes,5);assert.ok(triangles<2000);assert.ok(bounds.max.z<1e-7); // Float32 geometry tolerance, no raised physical lip.assert.ok(bounds.min.z>=-.101);
+ assert.equal(meshes,5);assert.ok(triangles<2000);assert.ok(bounds.max.z<1e-7); // Float32 geometry tolerance, no raised physical lip.
+ assert.ok(bounds.min.z>=-.101);
  assert.ok(Math.abs(bounds.min.x+6.25)<1e-6&&Math.abs(bounds.max.x-6.25)<1e-6);assert.ok(Math.abs(bounds.min.y+4)<1e-6&&Math.abs(bounds.max.y-4)<1e-6);
  for(const value of [0,.5,1]){m.set(value);assert.equal(m.needles[0].rotation.z,.85-1.7*value);assert.equal(m.needles[0].rotation.z,m.needles[1].rotation.z);}
  for(const value of [-1,2,NaN,Infinity])assert.throws(()=>m.set(value));dispose(m.root);
@@ -69,4 +72,22 @@ test('restart keeps the same cargo body and clears load display; leaving release
  const geos=new Set(),freed=new Set();model.root.traverse(o=>{if(o.geometry)geos.add(o.geometry)});geos.forEach(q=>q.addEventListener('dispose',()=>freed.add(q)));
  await g.selectLevel(0,false);assert.equal(freed.size,geos.size);await g.selectLevel(20,false);
  let n=0;g.scene.traverse(o=>{if(o.name==='Cargo receiver / full-area weighing deck')n++});assert.equal(n,1);
+});
+
+
+test('ordinary pre-delivery approach gives a direct view onto the deck through framed glass',async()=>{
+ let visible=0;
+ const result=await runV8Journey(g,{scenario:d=>{
+  installRoom21Aim(d);d.walk(0,7.85);d.look(new THREE.Vector3(12.5,3.10,8.5));g.scene.updateMatrixWorld(true);
+  const blockers=g.aimBlockers.filter(m=>!g.firstLevel.state.receiverObservation.panes.includes(m));
+  // Optical sample skips only the two declared transparent panes. All other
+  // actual blockers remain; this numerical view test is not a human playtest.
+  for(let x=8;x<=18;x+=2)for(let z=2.6;z<10;z+=.8){
+   const p=new THREE.Vector3(x,3.101,z),v=p.clone().sub(g.camera.position),n=p.clone().project(g.camera);
+   const ray=new THREE.Raycaster(g.camera.position,v.clone().normalize(),.01,v.length()-.02);
+   if(!ray.intersectObjects(blockers,true).length&&Math.abs(n.x)<1&&Math.abs(n.y)<1)visible++;
+  }
+  assert.equal(g.firstLevel.state.cargoSeat.loaded(),false);assert.equal(g.teleportCount,0);assert.equal(g.heldCube,null);
+ }});
+ assert.ok(result.pass&&result.resets===0&&result.respawns===0);assert.ok(visible>=8,`Only ${visible} deck samples are visible`);
 });
