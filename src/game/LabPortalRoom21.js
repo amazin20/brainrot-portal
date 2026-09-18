@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { Workshop } from './LabWorkshopKit.js';
 import { cargoLoadsPlate } from './LabPlateContact.js';
 import { buildPocketCassette, addPocketExitMarker } from './LabPocketCassette.js';
+import { attachPocketReceiver, buildReceiverObservationBand } from './LabPocketReceiver.js';
 
 export const ROOM21_SPEC = {
   id: 'gravity-pocket', title: 'Гравитационный карман',
@@ -73,10 +74,11 @@ export function buildRoom21(game,index=20) {
   game.floors.push({minX:7,maxX:19.5,minZ:2,maxZ:10,y:3.10,mesh:tray.mesh,enabled:true});
   const cargoSeat={surface:tray,loaded:()=>cargoLoadsPlate(game.cargo,game.heldCube,tray.getFrame())};
   k.pads.push(cargoSeat); k.state.cargoSeat=cargoSeat;
+  attachPocketReceiver(k,cargoSeat);
   // A full-height structural wall separates the balcony and cargo chamber.
   // The only low opening is 2.1 m high: wider than the friend, shorter than a standing player.
   w.box([5.5,2.55,6],[.7,5.1,8],w.materials.wall);
-  w.box([5.5,11.7,6],[.7,9.0,8],w.materials.wall);
+  buildReceiverObservationBand(k);
   w.box([5.5,8,14.5],[.7,16,9],w.materials.wall);
   w.box([5.5,8,1],[.7,16,2],w.materials.wall);
   // Upper equipment casing is solid, so its low inner ceiling is not a shortcut roof.

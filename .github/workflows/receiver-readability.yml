@@ -1,0 +1,55 @@
+name: Receiver readable deck and native contact review
+on:
+  push:
+    branches: [fix/room21-readable-receiver]
+permissions:
+  contents: read
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    strategy:
+      fail-fast: false
+      matrix:
+        tag: [before, after]
+    env:
+      RECEIVER_TAG: ${{ matrix.tag }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Keep one capture script and the same locked dependencies
+        run: |
+          cp scripts/receiver-readability-browser.mjs /tmp/receiver-review.mjs
+          cp package-lock.json /tmp/receiver-lock.json
+          if [ "$RECEIVER_TAG" = before ]; then git checkout --detach d93eecb9505a7370f9828c5ef4270144d709f571; fi
+          cmp package-lock.json /tmp/receiver-lock.json
+          cp /tmp/receiver-review.mjs scripts/receiver-readability-browser.mjs
+          npm ci
+          if [ "$RECEIVER_TAG" = after ]; then node --test tests/lab-pocket-receiver.test.js; fi
+          npm run build
+          npm install --no-save --package-lock=false puppeteer-core@24.16.0
+          echo "SOURCE_COMMIT=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
+      - name: Ordinary pre-delivery view and full route with contact excerpts
+        run: |
+          command -v ffmpeg || { sudo apt-get update && sudo apt-get install -y ffmpeg; }
+          python3 -m http.server 4173 --bind 127.0.0.1 --directory dist > /tmp/receiver-http.log 2>&1 &
+          for i in {1..30}; do curl -fsS http://127.0.0.1:4173/ >/dev/null && break; sleep 1; done
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+          node scripts/receiver-readability-browser.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: receiver-review-${{ matrix.tag }}
+          path: |
+            smoke-artifacts/receiver/*.json
+            smoke-artifacts/receiver/*.png
+            smoke-artifacts/receiver/*.jpg
+            smoke-artifacts/receiver/*.mp4
+          retention-days: 14
+          if-no-files-found: error
