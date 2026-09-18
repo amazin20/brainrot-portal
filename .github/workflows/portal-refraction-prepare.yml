@@ -1,0 +1,36 @@
+name: Portal auxiliary pass safety transfer
+on:
+  push:
+    branches: [ci/perf-portals-refraction]
+permissions:
+  contents: write
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - run: cp maintenance/portal-refraction.patch /tmp/portal-refraction.patch
+      - uses: actions/checkout@v4
+        with:
+          ref: b243971acd9fea01b8163c7f6fc8b1ab9f7ec05d
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: |
+          git apply --check /tmp/portal-refraction.patch
+          git apply /tmp/portal-refraction.patch
+          git add src/game/LabPortalRenderCulling.js tests/lab-portal-performance.test.js docs/passes/P09B_PORTAL_PIPELINE.md
+          git diff --cached --check
+          test "$(git write-tree)" = 52cc28b4d9483ce5177f13b899c643ada3d19c5d
+          npm ci
+          node --test tests/lab-portal-performance.test.js tests/lab-portals.test.js tests/lab-moving-portals.test.js tests/lab-portal-actors.test.js
+          npm run build
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'Preserve complete refraction backgrounds and override passes' -m 'Conservative fallback for auxiliary-render semantics; no active transmissive mesh in current21 campaign scenes. Exact reviewed tree checked. Native and campaign gates retained.'
+          git push origin HEAD:refs/heads/ci/perf-portals-reviewed-refraction
+          git rev-parse HEAD
