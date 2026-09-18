@@ -7,7 +7,7 @@ import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
  * All relief ends below the original collision plane; the deck never depresses.
  * Runtime geometry is batched; the two small mechanical needles alone move. */
 export function createPocketReceiverModel(width = 12.5, depth = 8) {
-  if (![width, depth].every(n => Number.isFinite(n) && n >= 4)) throw new RangeError('Receiver dimensions must be at least 4 m');
+  if (![width, depth].every(Number.isFinite) || width < 10 || depth < 8) throw new RangeError('This receiver layout needs at least 10 by 8 m');
   const root = new THREE.Group(); root.name = 'Cargo receiver / full-area weighing deck';
   root.userData.keepMaterial = true;
   root.userData.source = 'src/game/LabPocketReceiver.js';
@@ -38,12 +38,12 @@ export function createPocketReceiverModel(width = 12.5, depth = 8) {
   for (const x of [-hx+.13, hx-.13]) box([.26, depth, .015], [x, 0, -.0105], materials.mark);
   for (const y of [-hy+.13, hy-.13]) box([width-.52, .26, .015], [0, y, -.0105], materials.mark);
   for (const x of [-hx+.45, hx-.45]) {
-    box([.34, depth-.60, .012], [x, 0, -.014], materials.metal);
-    for (let y=-hy+.6; y<hy-.45; y+=.65) box([.34,.17,.004],[x,y,-.006],materials.body,.32);
+    box([.34, depth-.60, .012], [x, 0, -.009], materials.metal);
+    for (let y=-hy+.6; y<hy-.45; y+=.65) box([.34,.17,.004],[x,y,-.004],materials.body,.32);
   }
   // Broad cross-ribs are inset surface details, not a stack of floating shelves.
   for (let x=-hx+1.35; x<hx-1; x+=1.2) {
-    box([.07,depth-1.25,.008],[x,0,-.010],materials.metal);
+    box([.07,depth-1.25,.008],[x,0,-.007],materials.metal);
     for (const y of [-hy+.78,hy-.78]) bake(new THREE.CylinderGeometry(.055,.055,.012,8).rotateX(Math.PI/2),materials.metal,[x,y,-.009]);
   }
   // Same weight-and-support silhouette as the cable sender, with an actual hole
@@ -65,7 +65,7 @@ export function createPocketReceiverModel(width = 12.5, depth = 8) {
   const needles=[];
   for (const x of [-hx+1.65,hx-1.65]) {
     const y=hy-1.2;
-    box([1.50,1.48,.014],[x,y,-.012],materials.body);
+    box([1.50,1.48,.014],[x,y,-.009],materials.body);
     for(const a of [-.85,0,.85])box([.07,.19,.003],[x+Math.sin(a)*.58,y+Math.cos(a)*.58,-.0015],materials.mark,-a);
     box([.30,.05,.003],[x-.52,y+.40,-.0015],materials.metal);
     box([.30,.15,.003],[x+.52,y+.40,-.0015],materials.mark);
