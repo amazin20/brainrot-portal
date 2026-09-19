@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { SHOT_COLORS as colors, createChargeSlot, createImpactSlot, renderCharge, renderImpact } from './LabPortalShotVisuals.js';
+import { findVelocityAimTarget } from './LabVelocityAssist.js';
 const V=()=>new THREE.Vector3();
 export const VELOCITY_SHOT_PROFILE=Object.freeze({prepare:.035,cooldown:.1,minFlight:.02,maxFlight:.09,speed:2200,range:200});
 /** Visible portal charges. Swept impacts run on the simulation clock and use
@@ -20,7 +21,7 @@ export class LabPortalShots {
   // Keep only one such click, with its own target, during the last 80 ms.
   const blocked=![0,1].includes(index)?'channel':g.state!=='playing'?'paused':g.externalBlocked?'external':g.heldCube?'hands-full':this.buffered?'buffer-full':busy&&!g.epicMode&&remaining>.08?(this.cooldown>0?'cooldown':'preparing'):null;
   if(blocked){this.lastRequest={accepted:false,index,reason:blocked};return false;}
-  const point=this.captureTarget();
+  const point=this.captureTarget(index);
   const facing=Math.atan2(point.x-g.playerPosition.x,point.z-g.playerPosition.z);
   const turn=Math.abs(Math.atan2(Math.sin(facing-g.facing),Math.cos(facing-g.facing)));
   const sequence=++this.serial[index];
@@ -36,8 +37,19 @@ export class LabPortalShots {
   this.lastRequest={accepted:true,index,sequence,epoch:this.epoch,...(busy?{buffered:true}:{})};
   return true;
  }
- captureTarget(){
+ getAssistTarget(index){
+  const g=this.game;if(!g.epicMode)return null;
+  g.scene.updateMatrixWorld(true);g.camera.updateWorldMatrix(true,false);
+  const target=findVelocityAimTarget(g,index,(origin,direction,distance)=>{
+   this.ray.set(origin,direction);this.ray.near=0;this.ray.far=distance;
+   return this.firstHit();
+  });
+  this.ray.far=Infinity;return target;
+ }
+ captureTarget(index){
   const g=this.game;
+  const assisted=this.getAssistTarget(index);
+  if(assisted)return assisted.point.clone();
   g.scene.updateMatrixWorld(true);g.camera.updateWorldMatrix(true,false);
   this.ray.near=0;this.ray.far=g.epicMode?VELOCITY_SHOT_PROFILE.range:Infinity;
   this.ray.setFromCamera(new THREE.Vector2(),g.camera);
@@ -95,7 +107,7 @@ export class LabPortalShots {
   // across the world toward a stale pre-entry target. Already flying charges
   // keep their immutable world path and sequence; no portal changes mid-call.
   if(s.velocityMode&&(g.teleportCount??0)!==s.requestTeleportCount){
-   s.point=this.captureTarget();s.rebasedAfterTransit=true;
+   s.point=this.captureTarget(s.index);s.rebasedAfterTransit=true;
    s.facing=Math.atan2(s.point.x-g.playerPosition.x,s.point.z-g.playerPosition.z);
    g.shotFacing=s.facing;g.shotAimPoint=s.point.clone();
   }

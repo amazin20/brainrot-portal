@@ -10,7 +10,7 @@ import {runFlightAudioBrowser} from './flight-audio-browser.mjs';
 const base=(process.env.PAGE_URL||'').replace(/\/$/,'')+'/',expected=process.env.GITHUB_SHA;
 assert.ok(base.startsWith('https://')&&expected,'Public URL and expected revision are required');
 fs.mkdirSync('live-evidence',{recursive:true});
-const report={pass:false,expected,base,models:[],puzzles:[],routes:[],errors:[]};
+const report={pass:false,expected,base,models:[],puzzles:[],routes:[],velocityChapters:[],errors:[]};
 let browser;
 try{
  let info;
@@ -54,7 +54,25 @@ try{
  report.portalEdge=await runPortalEdgeBrowser({browser,baseUrl:base,out:'live-evidence/portal-edge',capture:false});
  assert.equal(report.portalEdge.pass,true);
  report.flightAudio=await runFlightAudioBrowser({browser,baseUrl:base,out:'live-evidence/flight-audio',capture:false});
- assert.equal(report.flightAudio.pass,true);report.pass=true;
- console.log('LIVE VERIFIED',expected,'v37 candidate: БРЕЙНРОТ ПОРТАЛ, 21 rooms, ordinary routes1–11 and20–21, campaign wrap, live model hashes and room9 jump/turn portal regressions');
+ assert.equal(report.flightAudio.pass,true);
+ const velocity=await browser.newPage();velocity.setDefaultTimeout(120000);await velocity.setViewport({width:960,height:600});
+ velocity.on('pageerror',e=>report.errors.push(e.message));
+ for(const chapter of [1,2]){
+  await velocity.goto(base+'?debug=1&mode=velocity&chapter='+chapter+'&revision='+expected,{waitUntil:'networkidle2'});
+  await velocity.waitForFunction(()=>window.__NESI_DEMO_GAME__?.state==='ready');
+  const result=await velocity.evaluate(async()=>{
+   const before=[...window.__NESI_PREFS__.value.completed];
+   const route=await window.__NESI_RUN_VELOCITY_ROUTE__({renderFps:30});
+   const g=window.__NESI_DEMO_GAME__;
+   return {route,chapter:g.velocityChapter,state:g.state,contextLost:g.renderer.getContext().isContextLost(),
+    campaignBefore:before,campaignAfter:[...window.__NESI_PREFS__.value.completed]};
+  });
+  assert.equal(result.chapter,chapter);assert.equal(result.state,'won');assert.equal(result.contextLost,false);
+  assert.equal(result.route.pass,true);assert.equal(result.route.teleports,chapter===1?3:4);
+  assert.equal(result.route.companionFinishedTogether,true);assert.deepEqual(result.campaignAfter,result.campaignBefore);
+  report.velocityChapters.push(result);await velocity.screenshot({path:`live-evidence/velocity-chapter-${chapter}-public-complete.png`});
+ }
+ await velocity.close();assert.deepEqual(report.errors,[]);report.pass=true;
+ console.log('LIVE VERIFIED',expected,'v37 candidate: БРЕЙНРОТ ПОРТАЛ, 21 rooms, ordinary routes1–11 and20–21, campaign wrap, live model hashes, room9 regressions, and both speed chapters completed with the companion');
 }catch(error){report.error=String(error);throw error;}
 finally{fs.writeFileSync('live-evidence/report.json',JSON.stringify(report,null,2));await browser?.close();}

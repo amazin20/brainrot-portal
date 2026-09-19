@@ -26,7 +26,9 @@
         <p class="lead">Падение становится разгоном, стена — продолжением пути. Продумай маршрут, меняй порталы и доставь брейнрота к выходу. Светлые плиты принимают портал. Тёмные — нет.</p>
         <label class="setting-row">Уровень <select id="level-select"></select></label>
         <button id="play-button" class="primary-button">Отправиться вместе <span aria-hidden="true">↗</span></button>
-        <a id="velocity-link" class="velocity-link" href="?mode=velocity">ПРЕДЕЛ · скоростная арена <span>↗</span></a>
+        <a id="velocity-link" class="velocity-link" href="?mode=velocity&chapter=1">ПРЕДЕЛ · вместе в поток <span>↗</span></a>
+        <nav id="velocity-chapters" class="velocity-chapters" aria-label="Скоростные главы"></nav>
+        <p id="velocity-chapter-note" class="velocity-chapter-note">Скоростные главы между испытаниями: после 10-го и 20-го уровней.</p>
         <div class="control-grid" aria-label="Управление">
           <span><kbd>WASD</kbd> движение</span><span><kbd>Мышь</kbd> камера</span>
           <span><kbd class="blue">ЛКМ</kbd> синий проход</span><span><kbd class="amber">ПКМ</kbd> янтарный проход</span>
@@ -49,9 +51,15 @@
         <button id="pause-button" class="icon-button" aria-label="Приостановить игру">Пауза</button>
       </div>
     </header>
-    <nav class="play-tools" aria-label="Меню игры"><span id="level-number" class="level-number" aria-label="Текущий уровень">1</span></nav>
+    <nav class="play-tools" aria-label="Меню игры"><span id="level-number" class="level-number" aria-label="Текущий уровень">1</span><button id="velocity-pause" class="velocity-pause" aria-label="Приостановить игру">Пауза</button></nav>
     <div id="toast" class="toast" role="status" aria-live="polite"></div>
-    <aside class="velocity-hud" aria-label="Скоростная арена"><span class="velocity-kicker">ПРЕДЕЛ / <strong id="velocity-stage">РАЗГОН</strong></span><p id="velocity-objective"></p></aside>
+    <aside class="velocity-hud" aria-label="Текущий участок маршрута">
+      <span class="velocity-kicker">ПРЕДЕЛ / <strong id="velocity-stage">ВМЕСТЕ В ПОТОК</strong></span>
+      <p id="velocity-objective"></p>
+      <div class="velocity-status"><span id="velocity-companion">Друг рядом</span><span id="velocity-checkpoint">Старт</span></div>
+      <div id="velocity-focus-hint" class="velocity-focus-hint"><kbd>Q</kbd><span>Удерживай: больше времени на прицеливание</span></div>
+    </aside>
+    <div id="velocity-target" class="velocity-target" hidden aria-hidden="true"><i class="velocity-target-symbol"></i><span id="velocity-target-label"></span></div>
     <div class="velocity-speed" aria-label="Скорость"><strong id="velocity-speed-value">0</strong><span>км/ч</span></div>
     <section id="pause-screen" class="screen modal-screen" aria-labelledby="pause-title" aria-hidden="true">
       <div class="modal-card">
@@ -61,6 +69,8 @@
         <label class="setting-row">Уровень <select id="settings-level-select" aria-label="Перейти к уровню"></select></label>
         <button id="resume-button" class="primary-button">Продолжить <span aria-hidden="true">→</span></button>
         <button id="restart-button" class="secondary-button">Начать уровень заново</button>
+        <button id="velocity-full-restart" class="secondary-button" hidden>Вся глава сначала</button>
+        <a id="velocity-campaign-exit" class="secondary-button velocity-campaign-exit" href="?level=1" hidden>Вернуться к головоломкам</a>
         <button id="hint-button" class="secondary-button">Подсказка</button>
         <section id="hint-detail" hidden aria-live="polite"><div id="hint-text"></div><button id="hint-unlock" class="secondary-button">Открыть подсказку</button><p id="ad-status" class="muted"></p></section>
         <button id="level-menu-button" class="secondary-button">Выбрать другой уровень</button>
@@ -77,6 +87,8 @@
         <h2 id="win-title">Вместе<br />получилось<span>.</span></h2>
         <p class="muted">Испытание пройдено. Друг с тобой.</p>
         <button id="play-again-button" class="primary-button">Погулять ещё <span aria-hidden="true">↻</span></button>
+        <button id="win-secondary-button" class="secondary-button" hidden>Следующий уровень →</button>
+        <a id="win-campaign-link" class="text-link" href="?level=1" hidden>Вернуться к головоломкам</a>
       </div>
     </section>
     <section id="error-screen" class="screen modal-screen" role="alert" aria-labelledby="error-title" aria-hidden="true">
@@ -91,6 +103,7 @@
     <div id="mobile-controls" class="mobile-controls" aria-hidden="true" inert>
       <div id="joystick" class="joystick" role="group" aria-label="Джойстик движения"><div id="joystick-knob"></div></div>
       <button id="velocity-sprint" class="velocity-sprint" aria-label="Удерживать для разгона">РАЗГОН</button>
+      <button id="velocity-focus" class="velocity-focus" aria-label="Удерживать для замедления прицеливания">ФОКУС</button>
       <button id="jump-button" class="jump-button" aria-label="Прыжок">↑<span>ПРЫЖОК</span></button>
     </div>
     <noscript><p class="no-script">Для этой 3D-игры нужен JavaScript. Включи его в браузере и обнови страницу.</p></noscript>
