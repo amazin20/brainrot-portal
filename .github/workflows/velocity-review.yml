@@ -1,0 +1,66 @@
+name: Epic velocity WebGL review
+on:
+  push:
+    branches: [feature/epic-velocity]
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  velocity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      BUILD_COMMIT: ${{ github.sha }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Physics, responsive projectiles and campaign regression checks
+        run: |
+          node --test tests/lab-kinetic-movement.test.js tests/lab-epic-feel.test.js tests/lab-velocity-shots.test.js tests/lab-shot-collision.test.js tests/lab-room21.test.js
+          npm run build
+          node scripts/stamp-build.mjs v37-gravity-pocket-candidate
+          npm install --no-save --package-lock=false puppeteer-core@24.16.0
+      - name: Production WebGL route and continuous simulation-frame video
+        run: |
+          command -v ffmpeg || { sudo apt-get update && sudo apt-get install -y ffmpeg; }
+          python3 -m http.server 4173 --bind 127.0.0.1 --directory dist >/tmp/velocity-http.log 2>&1 &
+          for i in {1..30}; do curl -fsS http://127.0.0.1:4173/ >/dev/null && break; sleep 1; done
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+          node scripts/velocity-browser.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: epic-velocity-evidence-${{ github.sha }}
+          path: |
+            smoke-artifacts/velocity/report.json
+            smoke-artifacts/velocity/menu.png
+            smoke-artifacts/velocity/start.png
+            smoke-artifacts/velocity/crossing-1.png
+            smoke-artifacts/velocity/crossing-2.png
+            smoke-artifacts/velocity/complete.png
+            smoke-artifacts/velocity/velocity-run.mp4
+          if-no-files-found: error
+          retention-days: 14
+      - name: Save curated review artifacts to a unique evidence branch
+        if: always()
+        run: |
+          set -euo pipefail
+          VELOCITY_ROOT="$PWD"
+          VELOCITY_REF="evidence/epic-velocity-${GITHUB_SHA:0:12}-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          VELOCITY_EVIDENCE="$(mktemp -d /tmp/velocity-evidence.XXXXXX)"
+          git worktree add --detach "$VELOCITY_EVIDENCE" HEAD
+          git -C "$VELOCITY_EVIDENCE" switch --orphan "$VELOCITY_REF"
+          for file in report.json menu.png start.png crossing-1.png crossing-2.png complete.png velocity-run.mp4; do
+            if test -f "$VELOCITY_ROOT/smoke-artifacts/velocity/$file"; then
+              cp "$VELOCITY_ROOT/smoke-artifacts/velocity/$file" "$VELOCITY_EVIDENCE/$file"
+              git -C "$VELOCITY_EVIDENCE" add -- "$file"
+            fi
+          done
+          if git -C "$VELOCITY_EVIDENCE" diff --cached --quiet; then exit 0; fi
+          git -C "$VELOCITY_EVIDENCE" -c user.name='github-actions[bot]' -c user.email='41898282+github-actions[bot]@users.noreply.github.com' commit -m "Velocity review evidence for $GITHUB_SHA"
+          git -C "$VELOCITY_EVIDENCE" push origin "HEAD:refs/heads/$VELOCITY_REF"
+          echo "Review artifacts: $VELOCITY_REF" >> "$GITHUB_STEP_SUMMARY"

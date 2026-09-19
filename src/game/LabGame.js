@@ -1,4 +1,6 @@
+import { LabEpicDirector } from './LabEpicDirector.js';
 import { LabPortalShots } from './LabPortalShots.js';
+import { updateKineticVelocity, limitKineticSpeed, sweepKineticBody } from './LabKineticMovement.js';
 import { sweepBox } from './LabSweep.js';
 import { cargoLoadsPlate } from './LabPlateContact.js';
 import * as THREE from 'three';
@@ -241,6 +243,9 @@ export class LabGame {
     this.heldDevice = new LabHeldDevice({ model: this.weapon, bones: this.animator.bones, playerRoot: this.playerGroup });
     this.cameraRig = new LabCamera({ camera: this.camera, blockers: this.cameraBlockers,
       isBlocker: (object, hit) => this.isCameraBlocker(object, hit) });
+    this.cameraRig.configureEpic?.({ enabled: Boolean(this.epicMode), dynamicFov: this.epicOptions?.dynamicFov !== false });
+    this.camera.far = this.epicMode ? 500 : 130; this.camera.updateProjectionMatrix();
+    if (this.epicMode && !this.epicDirector) this.epicDirector = new LabEpicDirector({ container: this.container, audio: this.audio, options: this.epicOptions });
     this.portals = new LabPortals({ scene: this.scene, renderer: this.renderer, camera: this.camera, maxResolution: this.quality.portalResolution, samples: 2 });
     const group = new THREE.Group(); group.name = 'Persistent brainrot companion';
     const visual = new THREE.Group(); const brainrot = this.model(2, .82);
@@ -391,6 +396,10 @@ export class LabGame {
   }
 
   placeOnPanel(index, panel, hitPoint = panel.userData.center) {
+    // Relay pads advertise one fixed aperture with painted brackets. Acquiring
+    // any part of that pad is enough during a fast flight; the camera stays
+    // entirely under player control. Campaign surfaces retain free placement.
+    if (this.epicMode && panel.userData.velocitySnapCenter) hitPoint = panel.userData.center;
     const normal = panel.userData.portalFrame?.()?.normal ?? panel.userData.normal;
     const preferredUp = normal && Math.abs(normal.y) > .6
       ? new THREE.Vector3(0, 0, -1).applyAxisAngle(UP, this.yaw) : undefined;
@@ -417,6 +426,7 @@ export class LabGame {
   start() { this.audio.unlock(); this.resetRun(true); this.renderer.domElement.requestPointerLock?.()?.catch?.(() => {}); }
   restart() { this.resetRun(true); this.callbacks.onPause(false); }
   resetRun(playing = true) {
+    this.epicDirector?.reset(); this.kinetic = null; this.slideHeld = false; this.epicLastTeleport = 0; this.epicWasGrounded = true;
     this.audio?.flight?.(0,true);
     for (const id of this.portalCargoColliders) this.physics.setStaticEnabled(id, true);
     this.portalCargoColliders.clear();
@@ -497,7 +507,7 @@ export class LabGame {
       this.fpsElement.textContent = stats.fps ? `${Math.round(stats.fps)} FPS · ${stats.frameMs.toFixed(1)} мс` : 'FPS …';
       this.fpsElement.title = `1% low: ${stats.low1Fps.toFixed(0)} FPS; p99: ${stats.p99Ms.toFixed(1)} ms; ${stats.calls} draws; ${stats.triangles} triangles`;
       }
-      const lesson = this.tutorial.update();
+      const lesson = this.epicMode ? (this.tutorial.enabled ? this.firstLevel.getLesson?.() : null) : this.tutorial.update();
       this.tutorialElement.hidden = !lesson;
       if (lesson) { this.tutorialElement.querySelector('kbd').textContent = lesson.key; this.tutorialElement.querySelector('span').textContent = lesson.text; }
     }
@@ -539,46 +549,54 @@ export class LabGame {
     const move = this.input.getMove();
     const aiming = this.isAiming();
     const sprint = (this.input.keys.has('ShiftLeft') || this.input.keys.has('ShiftRight')) && !aiming;
-    const speed = this.heldCube ? (sprint ? 4.5 : 2.9) : aiming ? 2.55 : sprint ? 5.0 : 3.3;
-    const desired = new THREE.Vector3(move.x, 0, move.y).applyAxisAngle(UP, this.yaw).multiplyScalar(speed);
-    const acceleration = this.playerGrounded ? (move.lengthSq() ? 10.5 : 15) : 3;
-    if (this.playerGrounded || !this.firstLevel?.momentum) {
-      this.playerVelocity.x = THREE.MathUtils.damp(this.playerVelocity.x, desired.x, acceleration, dt);
-      this.playerVelocity.z = THREE.MathUtils.damp(this.playerVelocity.z, desired.z, acceleration, dt);
+    if (this.epicMode) {
+      updateKineticVelocity(this, dt, move, { sprint, aiming });
     } else {
-      // Air control is an acceleration, not a velocity reset. A portal fling
-      // retains its energy when no movement key is pressed.
-      const steer = desired.clone().multiplyScalar(1 / Math.max(speed, .001));
-      this.playerVelocity.addScaledVector(steer, dt * 2.8);
-    }
-    if (this.launchTime > 0) {
-      this.playerVelocity.x = this.launchVector?.x ?? 0;
-      this.playerVelocity.z = this.launchVector?.z ?? -10;
-    }
-    this.coyoteTime = this.playerGrounded ? .1 : Math.max(0, this.coyoteTime - dt);
-    this.jumpBuffer = this.input.consumeJump() ? .12 : Math.max(0, this.jumpBuffer - dt);
-    if (this.jumpBuffer > 0 && this.coyoteTime > 0 && !(this.jumpWindup > 0)) {
-      this.jumpWindup = this.playerGrounded ? .05 : dt;
-      this.coyoteTime = this.jumpBuffer = 0; this.animator.triggerJump?.();
-    }
-    if (this.jumpWindup > 0) {
-      this.jumpWindup = Math.max(0, this.jumpWindup - dt);
-      if (this.jumpWindup < 1e-8) {
-        this.jumpWindup = 0; this.playerVelocity.y = 7.8; this.playerGrounded = false;
-        this.audio.jump();
+      const speed = this.heldCube ? (sprint ? 4.5 : 2.9) : aiming ? 2.55 : sprint ? 5.0 : 3.3;
+      const desired = new THREE.Vector3(move.x, 0, move.y).applyAxisAngle(UP, this.yaw).multiplyScalar(speed);
+      const acceleration = this.playerGrounded ? (move.lengthSq() ? 10.5 : 15) : 3;
+      if (this.playerGrounded || !this.firstLevel?.momentum) {
+        this.playerVelocity.x = THREE.MathUtils.damp(this.playerVelocity.x, desired.x, acceleration, dt);
+        this.playerVelocity.z = THREE.MathUtils.damp(this.playerVelocity.z, desired.z, acceleration, dt);
+      } else {
+        // Air control is an acceleration, not a velocity reset. A portal fling
+        // retains its energy when no movement key is pressed.
+        const steer = desired.clone().multiplyScalar(1 / Math.max(speed, .001));
+        this.playerVelocity.addScaledVector(steer, dt * 2.8);
+      }
+      if (this.launchTime > 0) {
+        this.playerVelocity.x = this.launchVector?.x ?? 0;
+        this.playerVelocity.z = this.launchVector?.z ?? -10;
+      }
+      this.coyoteTime = this.playerGrounded ? .1 : Math.max(0, this.coyoteTime - dt);
+      this.jumpBuffer = this.input.consumeJump() ? .12 : Math.max(0, this.jumpBuffer - dt);
+      if (this.jumpBuffer > 0 && this.coyoteTime > 0 && !(this.jumpWindup > 0)) {
+        this.jumpWindup = this.playerGrounded ? .05 : dt;
+        this.coyoteTime = this.jumpBuffer = 0; this.animator.triggerJump?.();
+      }
+      if (this.jumpWindup > 0) {
+        this.jumpWindup = Math.max(0, this.jumpWindup - dt);
+        if (this.jumpWindup < 1e-8) {
+          this.jumpWindup = 0; this.playerVelocity.y = 7.8; this.playerGrounded = false;
+          this.audio.jump();
+        }
       }
     }
     const field=this.firstLevel?.playerAcceleration?.(this.playerPosition,this.playerVelocity);
     this.windStrength=field?Math.min(1,field.length()/55):0;
     if(field){this.playerVelocity.addScaledVector(field,dt);if(field.y>19.5)this.playerGrounded=false;}
     this.playerVelocity.y -= 19.5 * dt;
+    if (this.epicMode) limitKineticSpeed(this.playerVelocity);
+    const kineticImpact = Math.max(0, -this.playerVelocity.y);
     this.playerPosition.addScaledVector(this.playerVelocity, dt);
+    const sweptGroundContact = this.epicMode
+      ? sweepKineticBody(this, this.playerPosition, previous, this.playerVelocity, PLAYER_RADIUS, PLAYER_HEIGHT) : false;
     this.constrainPortalThroat(this.playerPosition, previous, this.playerVelocity);
     const center = this.playerPosition.clone().addScaledVector(UP, CENTER_HEIGHT);
     const previousCenter = previous.clone().addScaledVector(UP, CENTER_HEIGHT);
     const teleport = this.portals.tryTeleport(center, previousCenter, this.playerVelocity, PLAYER_RADIUS);
-    this.groundedByCollider = false;
-    const downwardImpact = Math.max(0, -this.playerVelocity.y);
+    this.groundedByCollider = sweptGroundContact;
+    const downwardImpact = this.epicMode ? kineticImpact : Math.max(0, -this.playerVelocity.y);
     if (teleport) {
       const entry = this.portals.portals[teleport.entryIndex], exit = this.portals.portals[teleport.exitIndex];
       const transportedVisual = transformPortalPoint(this.playerGroup.position, entry, exit);
@@ -602,6 +620,15 @@ export class LabGame {
       }
       this.playerPosition.copy(teleport.position).addScaledVector(UP, -CENTER_HEIGHT);
       this.playerVelocity.copy(teleport.velocity);
+      if (this.epicMode) {
+        // Resume the residual movement in the destination world. This catches
+        // thin obstacles immediately outside the exit at full fling speed.
+        const exitStart = transformPortalPoint(teleport.crossingPoint, entry, exit)
+          .add(teleport.position.clone().sub(teleport.unadjustedPosition)).addScaledVector(UP, -CENTER_HEIGHT);
+        this.groundedByCollider = sweepKineticBody(this, this.playerPosition, exitStart,
+          this.playerVelocity, PLAYER_RADIUS, PLAYER_HEIGHT, { portalLimit: false });
+        this.playerGrounded = false;
+      }
       // A launcher impulse belongs to the traveller frame too. Keeping the old
       // world-space impulse forced the next tick backwards into the exit wall.
       if (this.launchTime > 0 && this.launchVector) this.launchVector.applyQuaternion(teleport.rotation);
@@ -643,6 +670,10 @@ export class LabGame {
       this.facing += this.heldCube ? THREE.MathUtils.clamp(turn, -8 * dt, 8 * dt) : turn;
     }
     const directionScale = planar > .01 ? 1 / planar : 0;
+    if (this.epicMode && this.kinetic) {
+      this.kinetic.speed = this.playerVelocity.length(); this.kinetic.planarSpeed = planar;
+      this.kinetic.sliding &&= this.playerGrounded;
+    }
     this.motion = {
       speed: planar, turnRate: Math.atan2(Math.sin(this.facing - priorFacing), Math.cos(this.facing - priorFacing)) / Math.max(dt, .001),
       moveForward: (this.playerVelocity.x * Math.sin(this.facing) + this.playerVelocity.z * Math.cos(this.facing)) * directionScale,
@@ -1057,7 +1088,7 @@ export class LabGame {
     gripVisual.updateWorldMatrix(true, true);
     gripVisual.localToWorld(this.carryGripTargets.left.set(-.20, -.015, -.20));
     gripVisual.localToWorld(this.carryGripTargets.right.set(.20, -.015, -.20));
-    this.animator.update({ dt: visualDt, ...(this.motion ?? {}), velocity: this.playerVelocity, grounded: this.playerGrounded,
+    this.animator.update({ dt: visualDt, ...(this.motion ?? {}), epic: Boolean(this.epicMode), sliding: Boolean(this.kinetic?.sliding), velocity: this.playerVelocity, grounded: this.playerGrounded,
       carrying: Boolean(this.heldCube), carryGripTargets: this.heldCube ? this.carryGripTargets : null,
       lookTarget: this.playerPosition.distanceTo(this.cargo.position) < 3.2 ? this.cargo.group.position : null,
       sampleGround: (x, z, maxY) => this.sampleFootSupport(x, z, maxY),
@@ -1087,7 +1118,13 @@ export class LabGame {
     const barrierProgress = THREE.MathUtils.lerp(barrier.previousProgress ?? barrier.progress, barrier.progress, blend);
     barrier.mechanism?.update(barrierProgress, this.visualTime);
     }
-    this.cameraRig.update({ dt: visualDt, target: this.playerGroup.position, yaw: this.yaw, pitch: this.pitch, velocity: this.playerVelocity, aiming: this.isAiming() });
+    this.cameraRig.update({ dt: visualDt, target: this.playerGroup.position, yaw: this.yaw, pitch: this.pitch, velocity: this.playerVelocity, aiming: this.isAiming(), epic: Boolean(this.epicMode), dynamicFov: this.epicOptions?.dynamicFov !== false });
+    if (this.epicDirector) {
+      if (this.teleportCount > (this.epicLastTeleport || 0)) this.epicDirector.portal(this.lastPortalTravel?.speed || this.playerVelocity.length(), this.teleportCount);
+      if (this.playerGrounded && this.epicWasGrounded === false) this.epicDirector.land(this.lastLanding || 0);
+      this.epicLastTeleport = this.teleportCount; this.epicWasGrounded = this.playerGrounded;
+      this.epicDirector.update({dt: visualDt, velocity: this.playerVelocity, grounded: this.playerGrounded, active: this.state === 'playing' && !this.externalBlocked, enabled: Boolean(this.epicMode)});
+    }
     this.camera.getWorldDirection(this.cameraForward);
     this.updateAimHint(visualDt);
     // The light and shadow frustum stay fixed across the complete level.
@@ -1117,7 +1154,7 @@ export class LabGame {
   }
 
   diagnostics() {
-    return { levelIndex: this.levelIndex, checkpoints: false, performance: this.performanceMonitor.stats, state: this.state, modelsLoaded: this.assets.size, missingModels: this.failures, thirdPerson: true, stage: this.stage,
+    return { epicMode: Boolean(this.epicMode), velocityRun: this.velocityRun ? {...this.velocityRun} : null, levelIndex: this.levelIndex, checkpoints: false, performance: this.performanceMonitor.stats, state: this.state, modelsLoaded: this.assets.size, missingModels: this.failures, thirdPerson: true, stage: this.stage,
       portalsReady: this.portals.ready, teleportCount: this.teleportCount, cameraDistance: this.camera.position.distanceTo(this.playerPosition),
       animation: this.animator.diagnostics, device: this.heldDevice.diagnostics, aiming: this.isAiming(),
       cargo: { identity: this.cargo.group.uuid, count: this.cubes.length, position: this.cargo.position.toArray(), held: Boolean(this.heldCube), visible: this.cargo.group.visible, physics: this.physics.sample(1), animation: this.companionAnimator.diagnostics,

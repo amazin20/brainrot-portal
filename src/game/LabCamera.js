@@ -31,7 +31,7 @@ function spring(value, velocity, goal, frequency, dt) {
  * This module never changes player meshes, materials, or the renderer.
  */
 export class LabCamera {
-  constructor({ camera, blockers = [], isBlocker = () => true }) {
+  constructor({ camera, blockers = [], isBlocker = () => true, epic = false, dynamicFov = true }) {
     this.camera = camera;
     this.blockers = blockers;
     this.isBlocker = isBlocker;
@@ -76,6 +76,16 @@ export class LabCamera {
     this.aimBlendVelocity = 0;
     this.initialized = false;
     this.obstructed = false;
+    this.epicMode = !!epic;
+    this.dynamicFov = dynamicFov !== false;
+    this.epicFraming = 0;
+    this.epicFramingVelocity = 0;
+  }
+
+  configureEpic({ enabled = this.epicMode, dynamicFov = this.dynamicFov } = {}) {
+    this.epicMode = !!enabled;
+    this.dynamicFov = dynamicFov !== false;
+    return this;
   }
 
   reset(target, yaw = 0, pitch = -0.2) {
@@ -98,7 +108,8 @@ export class LabCamera {
     this.fovVelocity = 0;
     this.aimBlend = 0;
     this.aimBlendVelocity = 0;
-    this.camera.fov = 62;
+    this.epicFraming = this.epicFramingVelocity = 0;
+    this.camera.fov = this.epicMode ? 68 : 62;
     this.camera.updateProjectionMatrix();
     this.initialized = true;
     return this.update({ dt: 0, target, yaw, pitch });
@@ -155,7 +166,10 @@ export class LabCamera {
     return { yaw: controls.y, pitch: THREE.MathUtils.clamp(pitch, CAMERA_PITCH_MIN, CAMERA_PITCH_MAX), rotation };
   }
 
-  update({ dt, target, yaw, pitch, velocity, aiming = false, teleported = false }) {
+  update({ dt, target, yaw, pitch, velocity, aiming = false, teleported = false,
+    epic = this.epicMode, dynamicFov = this.dynamicFov }) {
+    this.epicMode = !!epic;
+    this.dynamicFov = dynamicFov !== false;
     if (!this.initialized || teleported || this.lastTarget.distanceToSquared(target) > 64) {
       return this.reset(target, yaw, pitch);
     }
@@ -173,6 +187,14 @@ export class LabCamera {
     }
     this.goal.copy(this.playerPivot);
     const speed = velocity ? Math.hypot(velocity.x, velocity.z) : 0;
+    // Full physical speed includes vertical dives and launches. This changes
+    // composition only: the control ray, horizon, recoil and capsule stay intact.
+    const flightSpeed = velocity ? Math.hypot(...['x', 'y', 'z'].map(axis =>
+      Number.isFinite(velocity[axis]) ? velocity[axis] : 0)) : 0;
+    const epicSpeed = epic ? THREE.MathUtils.smoothstep(flightSpeed, 8, 36) : 0;
+    [this.epicFraming, this.epicFramingVelocity] = spring(
+      this.epicFraming, this.epicFramingVelocity, epic ? .35 + (dynamicFov ? epicSpeed * .8 : 0) : 0, 7, step,
+    );
     // Less than half a metre of anticipation. The camera has no head bob, roll,
     // shake, or vertical velocity look-ahead, keeping jumps readable and calm.
     if (speed > 0.001) {
@@ -196,7 +218,9 @@ export class LabCamera {
     [this.aimBlend, this.aimBlendVelocity] = spring(
       this.aimBlend, this.aimBlendVelocity, aiming ? 1 : 0, 12, step,
     );
-    const fovGoal = aiming ? 59.5 : 62 + THREE.MathUtils.clamp((speed - 4) * 0.4, 0, 2.2);
+    const fovGoal = epic
+      ? (this.dynamicFov ? (aiming ? 64 + epicSpeed * 6 : 68 + epicSpeed * 14) : 68)
+      : aiming ? 59.5 : 62 + THREE.MathUtils.clamp((speed - 4) * 0.4, 0, 2.2);
     const oldFov = this.camera.fov;
     [this.camera.fov, this.fovVelocity] = spring(oldFov, this.fovVelocity, fovGoal, 7, step);
     if (Math.abs(oldFov - this.camera.fov) > 0.00001) this.camera.updateProjectionMatrix();
@@ -212,7 +236,8 @@ export class LabCamera {
     this.forward.set(0, 0, -1).applyQuaternion(this.orbitQuaternion);
     this.right.set(1, 0, 0).applyQuaternion(this.orbitQuaternion);
     this.viewUp.copy(UP).applyQuaternion(this.portalUpOrientation);
-    const length = THREE.MathUtils.lerp(6.5, 5.7, this.aimBlend);
+    const length = THREE.MathUtils.lerp(6.5, 5.7, this.aimBlend)
+      + this.epicFraming * (1 - .65 * this.aimBlend);
     // Near a vertical downward shot the normal shoulder creates a lateral
     // blind spot directly below the traveller. Follow the already-smoothed
     // orbit into an overhead view; ordinary walking/aiming keeps its shoulder.

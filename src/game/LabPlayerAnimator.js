@@ -5,7 +5,7 @@ import {
   LAB_PLAYER_BONE as BASE_BONE,
   createLabPlayerRig as createBaseRig,
   resolveLabPlayerSkin as resolveBaseSkin,
-  solveLabArm,
+  solveLabArm, solveLabLeg,
 } from './LabPlayerAnimatorBase.js';
 export {sampleLabFootCycle, sampleLabJumpPose, solveLabLeg, solveLabArm} from './LabPlayerAnimatorBase.js';
 
@@ -64,16 +64,18 @@ export class LabPlayerAnimator extends BaseAnimator{
     this.headBefore=new THREE.Quaternion();this.headTarget=new THREE.Euler();this.headQuaternion=new THREE.Quaternion();
     this.freeBefore={ArmL:new THREE.Quaternion(),ForearmL:new THREE.Quaternion(),HandL:new THREE.Quaternion()};
     this.freeEuler=new THREE.Euler();this.freeTarget=new THREE.Quaternion();
+    this.epicBefore=Object.fromEntries(['Body','ThighL','ThighR','ShinL','ShinR','FootL','FootR'].map(name=>[name,new THREE.Quaternion()]));
+    this.epicTarget=new THREE.Quaternion();
     this.reset();
   }
   reset(){
-    super.reset();this.flightBrace=0;this.windBrace=0;this.operateTime=2;this.landingChest=0;
+    super.reset();this.flightBrace=0;this.windBrace=0;this.epicBrace=0;this.epicSlide=0;this.epicSprint=0;this.operateTime=2;this.landingChest=0;
     this.groundFollow={forward:0,right:0,forwardVelocity:0,rightVelocity:0};
     if(this.bones.Chest){this.bones.Chest.quaternion.identity();this.basePose?.Chest?.identity();this.bones.Chest.position.copy(this.rig.rest.Chest);this.rig.mesh.updateWorldMatrix(true,true);this.rig.skeleton.update();this.snapCarrierToBody();}
   }
   triggerOperate(){this.operateTime=0;}
   update(input={}){super.update(input);this.basePose.Chest.copy(this.bones.Chest.quaternion);}
-  get diagnostics(){return {...super.diagnostics,boneCount:LAB_PLAYER_JOINTS.length,profile:'grounded-follow-through-v27',chestIndependent:true,windBrace:this.windBrace,landingChest:this.landingChest,groundFollow:{...this.groundFollow}};}
+  get diagnostics(){return {...super.diagnostics,boneCount:LAB_PLAYER_JOINTS.length,profile:'grounded-follow-through-v27',chestIndependent:true,windBrace:this.windBrace,landingChest:this.landingChest,groundFollow:{...this.groundFollow},epicMotion:{sprint:this.epicSprint,slide:this.epicSlide,flight:this.epicBrace}};}
   stepGroundedFollowThrough(dt,grounded){
     // The pelvis responds first; the upper pack/ribs lag behind its acceleration
     // and settle once after a stop or reversal. These accelerations already come
@@ -93,6 +95,7 @@ export class LabPlayerAnimator extends BaseAnimator{
   stepPose(input){
     this.headBefore.copy(this.bones.Head.quaternion);
     for(const name of Object.keys(this.freeBefore))this.freeBefore[name].copy(this.bones[name].quaternion);
+    for(const name of Object.keys(this.epicBefore))this.epicBefore[name].copy(this.bones[name].quaternion);
     super.stepPose(input);
     const dt=input.dt||0,run=smooth(2.5,5.7,this.speed),moving=this.moveBlend*(1-this.airBlend)*(1-.78*this.landingSupport);
     this.stepGroundedFollowThrough(dt,input.grounded!==false&&!input.phase);
@@ -101,11 +104,39 @@ export class LabPlayerAnimator extends BaseAnimator{
     this.operateTime=Math.min(2,(this.operateTime??2)+dt);
     const operate=Math.sin(Math.PI*Math.min(1,this.operateTime/1.1))**2*(1-this.carryBlend)*(1-this.aimBlend);
     const cadence=this.gait*Math.PI*2,body=this.jointTargets.Body,relaxed=(1-.8*this.aimBlend)*(1-.55*this.carryBlend);
+    const onGround=input.grounded!==false&&!input.phase;
+    this.epicSlide=THREE.MathUtils.damp(this.epicSlide||0,input.epic&&input.sliding&&onGround?1:0,12,dt);
+    this.epicSprint=THREE.MathUtils.damp(this.epicSprint||0,input.epic&&onGround?smooth(5.5,12,input.speed||0)*(1-this.epicSlide):0,10,dt);
+    if(this.epicSlide>1e-7||this.epicSprint>1e-7){
+      const precision=1-.7*this.aimBlend;
+      body.x+=.13*this.epicSprint*precision+.25*this.epicSlide*(1-.4*this.carryBlend);
+      body.z*=1-.85*this.epicSlide;
+      this.bones.Body.position.z+=.052*this.epicSlide;
+      this.bones.Body.position.x*=1-this.epicSlide;
+      // Boots skim in an asymmetric crouch. Disable world pinning while
+      // sliding so the short source legs cannot repeatedly lock and whip free.
+      const compression=this.bones.Body.position.z-this.rig.rest.Body.z;
+      for(const side of ['L','R']){
+        const leg=solveLabLeg(side==='L'?.075:-.015,.177-compression);
+        for(const [joint,angle] of [['Thigh',leg.hip],['Shin',leg.knee],['Foot',leg.ankle]]){
+          const pose=this.jointTargets[`${joint}${side}`];
+          pose.x=THREE.MathUtils.lerp(pose.x,angle,this.epicSlide);
+          pose.y*=1-this.epicSlide;pose.z*=1-this.epicSlide;
+        }
+        this.footContact[side]*=1-this.epicSlide;
+      }
+      for(const name of Object.keys(this.epicBefore)){
+        this.epicTarget.setFromEuler(this.jointTargets[name]);
+        const rate=name==='Body'?12:THREE.MathUtils.lerp(18,12,this.airBlend);
+        this.bones[name].quaternion.copy(this.epicBefore[name]).slerp(this.epicTarget,1-Math.exp(-rate*dt));
+      }
+    }
     this.chestTarget.set(-body.x*.32+.018*this.carryBlend+Math.sin(this.elapsed*1.6)*.006*this.idleBlend+this.airBlend*.045*(1-this.ascentBlend),
       -body.y*.45+Math.sin(cadence-.45)*.040*moving*relaxed,
       -Math.sin(cadence-.22)*.155*moving*relaxed+this.turn*.016);
     this.chestTarget.x+=followForward;
     this.chestTarget.y+=followRight;
+    this.chestTarget.x+=.04*this.epicSprint*(1-.8*this.aimBlend)-.07*this.epicSlide;
     // The pelvis receives impact first; ribs and the rigid backpack follow a
     // beat later, then the head compensates below. The lag is elapsed-time
     // based and affects only bones, so the camera and carry contact stay stable.
@@ -115,8 +146,12 @@ export class LabPlayerAnimator extends BaseAnimator{
     const flightSpeed=Math.hypot(...['x','y','z'].map(axis=>Number.isFinite(input.velocity?.[axis])?input.velocity[axis]:0));
     const flight=this.airBlend*smooth(6,14,flightSpeed);
     this.flightBrace=THREE.MathUtils.damp(this.flightBrace||0,flight,9,dt);
+    this.epicBrace=THREE.MathUtils.damp(this.epicBrace||0,input.epic?this.airBlend*smooth(10,34,flightSpeed):0,9,dt);
     this.windBrace=THREE.MathUtils.damp(this.windBrace||0,THREE.MathUtils.clamp(input.windStrength||0,0,1),7,dt);
     this.chestTarget.x+=.075*this.flightBrace*(1-.65*this.carryBlend)+.07*this.windBrace;
+    // A compact flight silhouette at real launch speed. Only existing joints
+    // move; the authored mesh, backpack and held-device aim remain unchanged.
+    this.chestTarget.x+=.14*this.epicBrace*(1-.8*this.aimBlend)*(1-.6*this.carryBlend);
     this.chestTarget.z+=.035*Math.sin(this.elapsed*3.1)*this.windBrace;
     this.chestTarget.y-=this.turn*.018*this.flightBrace;
     this.chestQuaternion.setFromEuler(this.chestTarget);
@@ -136,6 +171,10 @@ export class LabPlayerAnimator extends BaseAnimator{
         this.freeEuler.x-=followForward*.7*free;
         this.freeEuler.y-=followRight*.85*free;
         this.freeEuler.z-=.10*this.flightBrace*free+.16*gesture+.12*operate;
+        this.freeEuler.x-=.24*this.epicBrace*free;
+        this.freeEuler.z-=.14*this.epicBrace*free;
+        this.freeEuler.x-=.18*this.epicSlide*free;
+        this.freeEuler.z-=.17*this.epicSlide*free;
       }else if(name==='ForearmL')this.freeEuler.x-=.24*this.windBrace*free+.32*operate+.19*gesture+.05*moving*free*(1-Math.cos(cadence-.4));
       else this.freeEuler.y+=.16*operate+.10*gesture*Math.sin((cycle-3)*5);
       this.freeTarget.setFromEuler(this.freeEuler);
