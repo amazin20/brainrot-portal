@@ -6,6 +6,8 @@ export const PORTAL_HALF_WIDTH = 1.18;
 export const PORTAL_HALF_HEIGHT = 1.58;
 const PORTAL_CLIP_OFFSET = 0.025;
 const PORTAL_OUTER_SCALE = 1.10;
+const validPortalSize = size => size === undefined || (size !== null
+  && [size.width, size.height].every(value => Number.isFinite(value) && value >= .25 && value <= 5));
 
 function boxCorners(box) {
   const result = [];
@@ -79,11 +81,13 @@ export function portalFramesOverlap(a, b, gap = 0.06) {
 }
 
 /** Planar surface metadata: world `center`, world `normal`, optional world
- * `portalUp`, and optional `portalBounds: { halfWidth, halfHeight }`. Without
- * explicit bounds the mesh's transformed geometry supplies them. */
+ * `portalUp`, optional `portalBounds: { halfWidth, halfHeight }`, and opt-in
+ * `portalSize: { width, height }` (half dimensions, used by velocity relays).
+ * Without explicit bounds the mesh's transformed geometry supplies them. */
 export function resolvePortalPlacement(panel, hitPoint, { otherPortal = null, blockers = [], margin = 0.02, clampToFit = true, preferredUp } = {}) {
   const metadata = panel?.userData;
   if (!metadata?.portalable || metadata.portalForbidden) return { ok: false, reason: 'forbidden' };
+  if (!validPortalSize(metadata.portalSize)) return { ok: false, reason: 'size' };
   const movingFrame = typeof metadata.portalFrame === 'function' ? metadata.portalFrame() : null;
   const data = movingFrame ? { ...metadata, center: movingFrame.center, normal: movingFrame.normal,
     portalUp: movingFrame.up, portalBounds: { halfWidth: movingFrame.halfWidth, halfHeight: movingFrame.halfHeight } } : metadata;
@@ -91,7 +95,7 @@ export function resolvePortalPlacement(panel, hitPoint, { otherPortal = null, bl
   // Surface bounds stay in the authored panel frame. Rotating a floor portal
   // must not rotate the rectangular panel's bounds along with the aperture.
   const surfaceFrame = makePortalFrame(data.center, data.normal, data.portalUp);
-  const frame = makePortalFrame(data.center, data.normal, preferredUp || data.portalUp);
+  const frame = makePortalFrame(data.center, data.normal, preferredUp || data.portalUp, data.portalSize);
   let bounds;
   if (data.portalBounds) {
     const { halfWidth, halfHeight } = data.portalBounds;
@@ -150,7 +154,8 @@ export function resolvePortalPlacement(panel, hitPoint, { otherPortal = null, bl
 }
 
 /** The normal always points out of the supporting wall and into the room. */
-export function makePortalFrame(position, normal, preferredUp = WORLD_UP) {
+export function makePortalFrame(position, normal, preferredUp = WORLD_UP, size) {
+  if (!validPortalSize(size)) throw new RangeError('Portal half dimensions must be finite numbers from 0.25 to 5 metres');
   const z = normal.clone();
   if (z.lengthSq() < 1e-10) throw new Error('A portal needs a nonzero surface normal');
   z.normalize();
@@ -162,7 +167,7 @@ export function makePortalFrame(position, normal, preferredUp = WORLD_UP) {
   return {
     position: position.clone(), normal: z,
     quaternion: new THREE.Quaternion().setFromRotationMatrix(new THREE.Matrix4().makeBasis(x, y, z)),
-    width: PORTAL_HALF_WIDTH, height: PORTAL_HALF_HEIGHT,
+    width: size?.width ?? PORTAL_HALF_WIDTH, height: size?.height ?? PORTAL_HALF_HEIGHT,
   };
 }
 
@@ -418,7 +423,7 @@ export class LabPortals {
     const placement = resolvePortalPlacement(panel, hitPoint, { ...options, otherPortal: this.portals[1 - index] });
     if (!placement.ok) return placement;
     const up = new THREE.Vector3(0, 1, 0).applyQuaternion(placement.frame.quaternion);
-    const frame = this.place(index, placement.position, placement.normal, up);
+    const frame = this.place(index, placement.position, placement.normal, up, placement.frame);
     frame.surfaceId = panel.uuid;
     this.attachToSurface(index, placement.anchor);
     return { ...placement, frame };
@@ -447,7 +452,7 @@ export class LabPortals {
       anchor.object.updateWorldMatrix(true, false);
       const matrix = anchor.object.matrixWorld;
       const updated = makePortalFrame(anchor.position.clone().applyMatrix4(matrix),
-        anchor.normal.clone().transformDirection(matrix), anchor.up.clone().transformDirection(matrix));
+        anchor.normal.clone().transformDirection(matrix), anchor.up.clone().transformDirection(matrix), frame);
       frame.position.copy(updated.position); frame.normal.copy(updated.normal); frame.quaternion.copy(updated.quaternion);
       frame.group.position.copy(frame.position).addScaledVector(frame.normal, .036);
       frame.group.quaternion.copy(frame.quaternion);
@@ -455,9 +460,9 @@ export class LabPortals {
     }
   }
 
-  place(index, position, normal, preferredUp) {
+  place(index, position, normal, preferredUp, size) {
     if (index !== 0 && index !== 1) throw new Error('Portal index must be 0 or 1');
-    const frame = makePortalFrame(position, normal, preferredUp);
+    const frame = makePortalFrame(position, normal, preferredUp, size);
     this._remove(index);
     const color = index === 0 ? 0x38bcff : 0xffb74b;
     const group = new THREE.Group();

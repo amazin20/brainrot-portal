@@ -1,14 +1,14 @@
 name: Epic velocity WebGL review
 on:
   push:
-    branches: [feature/epic-velocity]
+    branches: [feature/epic-velocity, feature/velocity-chapters]
   workflow_dispatch:
 permissions:
   contents: write
 jobs:
   velocity:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 40
     env:
       BUILD_COMMIT: ${{ github.sha }}
     steps:
@@ -20,7 +20,8 @@ jobs:
       - run: npm ci
       - name: Physics, responsive projectiles and campaign regression checks
         run: |
-          node --test tests/lab-kinetic-movement.test.js tests/lab-epic-feel.test.js tests/lab-velocity-shots.test.js tests/lab-shot-collision.test.js tests/lab-room21.test.js
+          node --test tests/lab-kinetic-movement.test.js tests/lab-epic-feel.test.js tests/lab-velocity-*.test.js tests/lab-shot-collision.test.js tests/lab-room21.test.js
+          node scripts/velocity-route.mjs
           npm run build
           node scripts/stamp-build.mjs v37-gravity-pocket-candidate
           npm install --no-save --package-lock=false puppeteer-core@24.16.0
@@ -42,6 +43,10 @@ jobs:
             smoke-artifacts/velocity/crossing-1.png
             smoke-artifacts/velocity/crossing-2.png
             smoke-artifacts/velocity/complete.png
+            smoke-artifacts/velocity/chapter-2-complete.png
+            smoke-artifacts/velocity/mobile.png
+            smoke-artifacts/velocity/mobile-start.png
+            smoke-artifacts/velocity/mobile-failure.png
             smoke-artifacts/velocity/velocity-run.mp4
           if-no-files-found: error
           retention-days: 14
@@ -54,7 +59,7 @@ jobs:
           VELOCITY_EVIDENCE="$(mktemp -d /tmp/velocity-evidence.XXXXXX)"
           git worktree add --detach "$VELOCITY_EVIDENCE" HEAD
           git -C "$VELOCITY_EVIDENCE" switch --orphan "$VELOCITY_REF"
-          for file in report.json menu.png start.png crossing-1.png crossing-2.png complete.png velocity-run.mp4; do
+          for file in report.json menu.png start.png crossing-1.png crossing-2.png complete.png chapter-2-complete.png mobile.png mobile-start.png mobile-failure.png velocity-run.mp4; do
             if test -f "$VELOCITY_ROOT/smoke-artifacts/velocity/$file"; then
               cp "$VELOCITY_ROOT/smoke-artifacts/velocity/$file" "$VELOCITY_EVIDENCE/$file"
               git -C "$VELOCITY_EVIDENCE" add -- "$file"
