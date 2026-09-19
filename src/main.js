@@ -5,6 +5,8 @@ import {LabPreferences,QUALITY_PRESETS,applyLabQuality} from './game/LabPreferen
 import {LabPlatform,loadYandexSDK} from './game/LabPlatform.js';
 const $=s=>document.querySelector(s),query=new URLSearchParams(location.search);
 const debug=query.get('debug')==='1'||query.get('smoke')==='1';
+const velocityMode=query.get('mode')==='velocity';
+const motionReduced=globalThis.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
 const yandex=import.meta.env.MODE==='yandex';
 let storage;try{storage=localStorage;}catch{}
 const preferences=new LabPreferences(storage),holds=new Set();
@@ -22,7 +24,7 @@ function diagnostics(){const d=game.diagnostics();Object.assign(document.documen
   if(debug)window.__NESI_DEMO_DIAGNOSTICS__={...d,settings:preferences.value,adBusy:platform?.busy};return d;}
 function failure(error){console.error(error);clearInput();game.renderer?.setAnimationLoop(null);game.state='error';setState('error');hideScreens();$('#error-detail').textContent=error?.message||String(error);screen('error-screen',true);}
 function choices(){for(const selector of ['#level-select','#settings-level-select']){const e=$(selector),old=e.value;e.replaceChildren();CAMPAIGN.forEach((l,i)=>{const option=document.createElement('option');option.value=i;option.textContent=`${String(i+1).padStart(2,'0')} · ${l.title}${preferences.value.completed.includes(i)?' ✓':''}`;e.append(option);});e.value=old||String(game.levelIndex);}}
-function pauseInfo(){ $('#settings-level-select').value=String(game.levelIndex);$('#pause-course').textContent=`${game.levelIndex+1} / ${CAMPAIGN.length} · ${CAMPAIGN[game.levelIndex].title}`;$('#hint-detail').hidden=true;}
+function pauseInfo(){ $('#settings-level-select').value=String(game.levelIndex);$('#pause-course').textContent=velocityMode?'ПРЕДЕЛ · скоростная арена':`${game.levelIndex+1} / ${CAMPAIGN.length} · ${CAMPAIGN[game.levelIndex].title}`;$('#hint-detail').hidden=true;}
 function showHints(){
   const count=preferences.value.hints[game.levelIndex]||0;$('#hint-detail').hidden=false;$('#hint-text').replaceChildren();
   CAMPAIGN[game.levelIndex].hints.slice(0,count).forEach((text,i)=>{const p=document.createElement('p');p.textContent=`${i+1}. ${text}`;$('#hint-text').append(p);});
@@ -38,6 +40,13 @@ const game=new LabGame({debug,container:$('#game'),touch:{joystick:$('#joystick'
     if(debug){window.__NESI_DEMO_GAME__=game;window.__NESI_PLATFORM__=platform;window.__NESI_PREFS__=preferences;
       window.__NESI_RUN_LEVEL_ROUTE__=async(options={})=>{const {runV8Journey}=await import('./game/LabV8Journey.js');game.renderer.setAnimationLoop(null);hideScreens();setState('playing');
         try{return await runV8Journey(game,{journeyOptions:options,onMilestone:mark=>{game.render();window.__NESI_CAPTURE_LEVEL_MARK__?.(mark);}});}finally{game.render();clearInput();setState(game.state);diagnostics();}};
+      window.__NESI_RUN_VELOCITY_ROUTE__=async(options={})=>{
+        if(!game.epicMode)throw Error('Velocity mode is required');
+        const {runVelocityJourney}=await import('./game/LabVelocityEvidence.js');
+        game.renderer.setAnimationLoop(null);hideScreens();setState('playing');
+        try{return await runVelocityJourney(game,{...options,onFrame:sample=>window.__NESI_CAPTURE_VELOCITY_FRAME__?.(sample)});}
+        finally{game.render();clearInput();setState(game.state);diagnostics();}
+      };
       window.__NESI_RUN_PORTAL_EDGE_ROUTE__=async(options={})=>{
         const {runPortalEdgeJourney}=await import('./game/LabPortalEdgeJourney.js');
         game.renderer.setAnimationLoop(null);hideScreens();setState('playing');
@@ -61,16 +70,22 @@ const game=new LabGame({debug,container:$('#game'),touch:{joystick:$('#joystick'
         finally{game.render();clearInput();setState(game.state);diagnostics();}
       };}
     $('#play-button').focus({preventScroll:true});if(query.get('smoke')==='1')enterLevel(game.levelIndex,'initial');},
-  onHud:({chamber,objective,hasCargo,portalsReady})=>{$('#level-number').textContent=String(game.levelIndex+1);$('#chamber').textContent=chamber;$('#objective').textContent=objective||'';$('#cargo-status').textContent=hasCargo?'Друг на руках':'Друг ждёт';$('#portal-status').textContent=portalsReady?'Связаны':'Два портала';},
+  onHud:({chamber,objective,hasCargo,portalsReady})=>{if(velocityMode){$('#velocity-objective').textContent=objective||'';$('#velocity-stage').textContent=game.velocityRun?.name||'Разгон';$('#velocity-speed-value').textContent=String(Math.round(game.playerVelocity.length()*3.6));}$('#level-number').textContent=String(game.levelIndex+1);$('#chamber').textContent=chamber;$('#objective').textContent=objective||'';$('#cargo-status').textContent=hasCargo?'Друг на руках':'Друг ждёт';$('#portal-status').textContent=portalsReady?'Связаны':'Два портала';},
   onToast:message=>{if(/Сначала|не помещается|препятствие|белую|Раздвинь|свободное|лицевую/.test(message))game.tutorial.explain(message);},
   onPause:paused=>{clearInput();screen('pause-screen',paused);setState(paused?'paused':'playing');if(paused){pauseInfo();$('#resume-button').focus({preventScroll:true});}},
   onRestartRequest:()=>restartLevel(),
-  onWin:()=>{preferences.complete(game.levelIndex);choices();clearInput();setState('won');screen('win-screen',true);
+  onWin:()=>{if(!velocityMode)preferences.complete(game.levelIndex);choices();clearInput();setState('won');screen('win-screen',true);
     const last=game.levelIndex===CAMPAIGN.length-1;$('#play-again-button').textContent=last?'К первому испытанию ↻':'Следующий уровень →';
-    $('#win-screen .muted').textContent=last?'Все доступные испытания завершены. Друг добрался вместе с тобой.':'Получилось! Следующее испытание добавит новую идею.';diagnostics();},
+    $('#win-screen .muted').textContent=last?'Все доступные испытания завершены. Друг добрался вместе с тобой.':'Получилось! Следующее испытание добавит новую идею.';
+    if(velocityMode){$('#win-title').innerHTML='Ещё<br />быстрее<span>.</span>';$('#win-screen .eyebrow').textContent='ПРЕДЕЛ ПРОЙДЕН';$('#play-again-button').textContent='Ещё один разгон ↻';$('#win-screen .muted').textContent=`Пиковая скорость ${Math.round((game.velocityRun?.peakSpeed||0)*3.6)} км/ч · переходов ${game.teleportCount} · выстрелов в полёте ${game.velocityRun?.airborneShots||0}`;}diagnostics();},
 });
+game.epicMode=velocityMode;
+game.epicOptions={dynamicFov:!motionReduced,speedLines:!motionReduced,reducedMotion:motionReduced};
+try{const saved=JSON.parse(storage?.getItem('brainrot-portal.velocity-effects')||'null');if(saved)for(const key of ['dynamicFov','speedLines'])if(typeof saved[key]==='boolean')game.epicOptions[key]=saved[key];}catch{}
+if(game.epicOptions.speedLines)game.epicOptions.reducedMotion=false;
+document.body.dataset.gameMode=velocityMode?'velocity':'campaign';
 game.quality={...QUALITY_PRESETS[preferences.value.quality]};game.tutorial.enabled=preferences.value.tutorial;
-const requested=Number(query.get('level')||1)-1;game.levelIndex=Number.isInteger(requested)&&CAMPAIGN[requested]?requested:0;
+const requested=velocityMode?0:Number(query.get('level')||1)-1;game.levelIndex=Number.isInteger(requested)&&CAMPAIGN[requested]?requested:0;
 choices();$('#level-select').value=String(game.levelIndex);
 async function enterLevel(index,reason='next'){
   if(entering||holds.size)return;entering=true;clearInput();game.audio?.unlock();
@@ -90,7 +105,7 @@ async function restartLevel(){
 }
 function resume(){if(holds.size)return;game.audio.unlock();game.togglePause(false);game.renderer.setAnimationLoop(game.animate);}
 $('#play-button').addEventListener('click',()=>enterLevel(Number($('#level-select').value),game.state==='ready'&&!preferences.value.completed.length?'initial':'next'));
-$('#play-again-button').addEventListener('click',()=>enterLevel((game.levelIndex+1)%CAMPAIGN.length));
+$('#play-again-button').addEventListener('click',()=>velocityMode?restartLevel():enterLevel((game.levelIndex+1)%CAMPAIGN.length));
 $('#resume-button').addEventListener('click',resume);$('#restart-button').addEventListener('click',restartLevel);
 for(const id of ['pause-button'])$('#'+id).addEventListener('click',()=>game.togglePause(true));
 $('#hint-button').hidden=!debug;
@@ -119,7 +134,7 @@ addEventListener('keydown',event=>{
 addEventListener('blur',()=>hold('focus',true));addEventListener('focus',()=>hold('focus',false));
 document.addEventListener('visibilitychange',()=>{hold('hidden',document.hidden);if(document.hidden&&game.state==='playing'&&!game.externalBlocked)game.togglePause(true);});
 // A bfcache visit keeps the one live controller; a discarded page detaches it.
-addEventListener('pagehide',event=>{hold('page',true);if(!event.persisted){game.renderer?.setAnimationLoop(null);game.disposeControls();platform?.dispose();game.audio?.dispose();}});
+addEventListener('pagehide',event=>{hold('page',true);if(!event.persisted){game.renderer?.setAnimationLoop(null);game.disposeControls();game.epicDirector?.dispose();platform?.dispose();game.audio?.dispose();}});
 addEventListener('pageshow',event=>{if(event.persisted)hold('page',false);});
 addEventListener('contextmenu',event=>event.preventDefault());
 addEventListener('error',event=>{if(event.error)failure(event.error);});
@@ -127,5 +142,33 @@ addEventListener('unhandledrejection',event=>{if(/pointer.?lock|user gesture|doc
 async function boot(){
   let sdk=null;if(yandex)try{sdk=await loadYandexSDK();}catch(error){console.warn('SDK unavailable; game remains playable',error);}
   platform=new LabPlatform({sdk,demo:!yandex,hold});hideScreens();screen('loading',true);setState('loading');await game.init();
+}
+function setVelocityEffects(){
+  for(const [id,key] of [['velocity-fov','dynamicFov'],['velocity-lines','speedLines']]){
+    const input=$('#'+id);input.checked=game.epicOptions[key];input.addEventListener('change',()=>{
+      game.epicOptions[key]=input.checked;if(key==='speedLines'&&input.checked)game.epicOptions.reducedMotion=false;game.epicDirector?.configure(game.epicOptions);
+      game.cameraRig?.configureEpic?.({enabled:velocityMode,dynamicFov:game.epicOptions.dynamicFov});
+      try{storage?.setItem('brainrot-portal.velocity-effects',JSON.stringify(game.epicOptions));}catch{}
+    });
+  }
+}
+setVelocityEffects();
+if(velocityMode){
+  document.title='БРЕЙНРОТ ПОРТАЛ · ПРЕДЕЛ';
+  $('#game-title').innerHTML='БЫСТРЕЕ.<br /><span>ЕЩЁ БЫСТРЕЕ.</span>';
+  $('#start-screen .brand').textContent='БРЕЙНРОТ ПОРТАЛ / ПРЕДЕЛ';
+  $('#start-screen .hero-meta').innerHTML='<span>СКОРОСТНАЯ АРЕНА</span><span>ИМПУЛЬС БЕЗ ПОТЕРЬ</span>';
+  $('#start-screen .lead').textContent='Разгонись. Нырни в портал. Уже в полёте открой следующий. Свяжи пролёты над бездной и доберись до финиша.';
+  $('#play-button').innerHTML='Войти в поток <span aria-hidden="true">↗</span>';
+  $('#velocity-link').textContent='← Вернуться к головоломкам';$('#velocity-link').href='?level=1';
+  for(const id of ['level-select','settings-level-select'])$('#'+id).closest('label').hidden=true;
+  $('#start-screen .control-grid').innerHTML='<span><kbd>WASD</kbd> движение</span><span><kbd>SHIFT</kbd> разгон</span><span><kbd class="blue">ЛКМ</kbd> синий портал</span><span><kbd class="amber">ПКМ</kbd> янтарный портал</span><span><kbd>SPACE</kbd> прыжок</span><span><kbd>C</kbd> скольжение</span><span><kbd>R</kbd> новый разгон</span><span><kbd>ESC</kbd> пауза</span>';
+  $('#start-screen .mobile-note').textContent='Слева — движение. Справа — прыжок и два портала. Проведи пальцем по сцене, чтобы прицелиться. Разгон — отдельной кнопкой.';
+  $('#loading .muted').textContent='Готовим скоростную арену.';
+  $('#start-screen .start-caption')?.remove();
+  const sprint=$('#velocity-sprint');
+  sprint.addEventListener('pointerdown',e=>{if(game.state!=='playing')return;e.preventDefault();sprint.setPointerCapture(e.pointerId);game.input.keys.add('ShiftLeft');});
+  const release=()=>game.input?.keys.delete('ShiftLeft');
+  for(const type of ['pointerup','pointercancel','lostpointercapture'])sprint.addEventListener(type,release);
 }
 boot().catch(failure);

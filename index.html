@@ -26,6 +26,7 @@
         <p class="lead">Падение становится разгоном, стена — продолжением пути. Продумай маршрут, меняй порталы и доставь брейнрота к выходу. Светлые плиты принимают портал. Тёмные — нет.</p>
         <label class="setting-row">Уровень <select id="level-select"></select></label>
         <button id="play-button" class="primary-button">Отправиться вместе <span aria-hidden="true">↗</span></button>
+        <a id="velocity-link" class="velocity-link" href="?mode=velocity">ПРЕДЕЛ · скоростная арена <span>↗</span></a>
         <div class="control-grid" aria-label="Управление">
           <span><kbd>WASD</kbd> движение</span><span><kbd>Мышь</kbd> камера</span>
           <span><kbd class="blue">ЛКМ</kbd> синий проход</span><span><kbd class="amber">ПКМ</kbd> янтарный проход</span>
@@ -50,6 +51,8 @@
     </header>
     <nav class="play-tools" aria-label="Меню игры"><span id="level-number" class="level-number" aria-label="Текущий уровень">1</span></nav>
     <div id="toast" class="toast" role="status" aria-live="polite"></div>
+    <aside class="velocity-hud" aria-label="Скоростная арена"><span class="velocity-kicker">ПРЕДЕЛ / <strong id="velocity-stage">РАЗГОН</strong></span><p id="velocity-objective"></p></aside>
+    <div class="velocity-speed" aria-label="Скорость"><strong id="velocity-speed-value">0</strong><span>км/ч</span></div>
     <section id="pause-screen" class="screen modal-screen" aria-labelledby="pause-title" aria-hidden="true">
       <div class="modal-card">
         <span class="eyebrow">МОЖНО ПЕРЕДОХНУТЬ</span>
@@ -64,6 +67,7 @@
         <label class="setting-row"><span>Обучение внизу экрана</span><input id="tutorial-toggle" type="checkbox" checked></label>
         <label class="setting-row"><span>Выключить звук</span><input id="mute-toggle" type="checkbox"></label>
         <label class="setting-row">Громкость <input id="volume-control" type="range" min="0" max="100" value="65" aria-label="Громкость"></label>
+        <div class="velocity-settings"><label class="setting-row"><span>Расширение обзора на скорости</span><input id="velocity-fov" type="checkbox" checked></label><label class="setting-row"><span>Графические эффекты скорости</span><input id="velocity-lines" type="checkbox" checked></label></div>
         <label class="setting-row">Графика <select id="quality-select"><option value="low">Лёгкая</option><option value="balanced" selected>Сбалансированная</option><option value="high">Высокая</option></select></label>
       </div>
     </section>
@@ -86,6 +90,7 @@
     </section>
     <div id="mobile-controls" class="mobile-controls" aria-hidden="true" inert>
       <div id="joystick" class="joystick" role="group" aria-label="Джойстик движения"><div id="joystick-knob"></div></div>
+      <button id="velocity-sprint" class="velocity-sprint" aria-label="Удерживать для разгона">РАЗГОН</button>
       <button id="jump-button" class="jump-button" aria-label="Прыжок">↑<span>ПРЫЖОК</span></button>
     </div>
     <noscript><p class="no-script">Для этой 3D-игры нужен JavaScript. Включи его в браузере и обнови страницу.</p></noscript>

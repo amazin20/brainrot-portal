@@ -194,3 +194,27 @@ body[data-external-pause="true"] .play-tools,body[data-external-pause="true"] .l
 
 /* The level readout is not a button. Hints remain in the Esc pause menu. */
 .level-number{align-self:center;padding:8px 12px;border-radius:8px;background:#152128d9;color:#e6eff1;font-size:13px;font-weight:700;letter-spacing:.09em;pointer-events:none;user-select:none;}
+
+/* The velocity arena owns its UI; campaign progress and presentation stay local. */
+[hidden] { display: none !important; }
+.velocity-link { display:flex; justify-content:space-between; align-items:center; margin-top:12px; padding:14px 18px; border:1px solid #83deec55; border-radius:12px; color:#bceff4; font-size:13px; font-weight:650; text-decoration:none; background:#32bcc713; }
+.velocity-link:hover { background:#32bcc72b; border-color:#83deec; }
+.velocity-hud,.velocity-settings,.velocity-sprint { display:none; }
+body[data-game-mode="velocity"] { --cyan:#76ecff; --coral:#ff765f; }
+body[data-game-mode="velocity"] .hero-panel { width:min(620px,53vw); }
+body[data-game-mode="velocity"] .hero-panel h1 { font-size:clamp(48px,6.5vw,92px); font-style:italic; font-weight:850; letter-spacing:-.065em; }
+body[data-game-mode="velocity"] .lead { max-width:420px; }
+body[data-game-mode="velocity"] .velocity-settings { display:block; }
+body[data-game-mode="velocity"][data-play-state="playing"] .velocity-hud { display:block; position:fixed; z-index:16; top:24px; left:26px; width:min(420px,55vw); pointer-events:none; text-shadow:0 2px 12px #000; }
+.velocity-kicker { font:700 10px/1.6 'Segoe UI',sans-serif; letter-spacing:.2em; color:#74eaff; }
+.velocity-kicker strong { color:#fff; }
+.velocity-hud p { margin-top:9px; padding-left:12px; border-left:2px solid #76ecff; color:#eafaff; font-size:13px; line-height:1.55; }
+body[data-game-mode="velocity"] .lab-tutorial { max-width:min(620px,calc(100vw - 180px)); background:#091727dd; border:1px solid #75dcfa3b; }
+@media (pointer:coarse) { body[data-game-mode="velocity"] .velocity-sprint { display:block; pointer-events:auto; border:1px solid #8af0ff99; border-radius:10px; color:#c4f6ff; background:#112c46c9; padding:14px 12px; margin-left:auto; margin-right:16px; font-size:10px; } }
+@media (max-width:700px) { body[data-game-mode="velocity"] .hero-panel { width:100%; } body[data-game-mode="velocity"] .hero-panel h1 { font-size:clamp(40px,10vw,70px); } body[data-game-mode="velocity"][data-play-state="playing"] .velocity-hud { top:14px;left:15px;width:60vw; } .velocity-hud p {font-size:11px;} }
+
+.velocity-speed {display:none;}
+body[data-game-mode="velocity"][data-play-state="playing"] .velocity-speed {display:flex;position:fixed;z-index:16;bottom:36px;right:28px;align-items:baseline;gap:8px;pointer-events:none;text-shadow:0 2px 16px #071629;}
+.velocity-speed strong {font-size:42px;line-height:1;font-style:italic;font-weight:800;font-variant-numeric:tabular-nums;color:#defcff;}
+.velocity-speed span {font-size:11px;color:#91b6c5;}
+@media(pointer:coarse){body[data-game-mode="velocity"][data-play-state="playing"] .velocity-speed{bottom:220px;right:25px}.velocity-speed strong{font-size:28px}}

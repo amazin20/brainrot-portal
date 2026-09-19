@@ -14,6 +14,7 @@ assert.ok(fs.existsSync(path.join(directory,'index.html')),'Stamp an existing pr
 const info={commit,version,artVersion:'v37-gravity-pocket-machined',levels:CAMPAIGN.length,verified:true,status:'technical-candidate',
  verificationScope:'Automated source/package checks; route jobs gate publication',
  acceptance:{humanPlaytest:false,physicalDeviceBenchmark:false,liveYandex:false},
+ features:{velocityArena:'velocity-1',velocityEntry:'?mode=velocity'},
  repository:process.env.GITHUB_REPOSITORY,run:process.env.GITHUB_RUN_ID};
 fs.writeFileSync(path.join(directory,'build-info.json'),JSON.stringify(info,null,2)+'\n');
 console.log(`Stamped ${directory}: ${version} / ${commit}`);

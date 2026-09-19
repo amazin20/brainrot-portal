@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { SHOT_COLORS as colors, createChargeSlot, createImpactSlot, renderCharge, renderImpact } from './LabPortalShotVisuals.js';
 const V=()=>new THREE.Vector3();
+export const VELOCITY_SHOT_PROFILE=Object.freeze({prepare:.035,cooldown:.1,minFlight:.02,maxFlight:.09,speed:2200,range:200});
 /** Visible portal charges. Swept impacts run on the simulation clock and use
  * live blockers (including moved doors); drawing never advances a charge.
  * A rejected hit preserves the previous portal. No camera/physics actor writes. */
@@ -17,26 +18,37 @@ export class LabPortalShots {
   const remaining=Math.max(this.cooldown,this.queue[0]?.delay??0),busy=remaining>0||this.queue.length>0;
   // A discrete click just before the weapon is ready is intentional input.
   // Keep only one such click, with its own target, during the last 80 ms.
-  const blocked=![0,1].includes(index)?'channel':g.state!=='playing'?'paused':g.externalBlocked?'external':g.heldCube?'hands-full':this.buffered?'buffer-full':busy&&remaining>.08?(this.cooldown>0?'cooldown':'preparing'):null;
+  const blocked=![0,1].includes(index)?'channel':g.state!=='playing'?'paused':g.externalBlocked?'external':g.heldCube?'hands-full':this.buffered?'buffer-full':busy&&!g.epicMode&&remaining>.08?(this.cooldown>0?'cooldown':'preparing'):null;
   if(blocked){this.lastRequest={accepted:false,index,reason:blocked};return false;}
-  g.scene.updateMatrixWorld(true);g.camera.updateWorldMatrix(true,false);this.ray.near=0;this.ray.far=Infinity;this.ray.setFromCamera(new THREE.Vector2(),g.camera);
-  const hit=this.firstHit(),point=hit?.point.clone()||this.ray.ray.at(65,V());
+  const point=this.captureTarget();
   const facing=Math.atan2(point.x-g.playerPosition.x,point.z-g.playerPosition.z);
   const turn=Math.abs(Math.atan2(Math.sin(facing-g.facing),Math.cos(facing-g.facing)));
   const sequence=++this.serial[index];
   // A click during the windup must not restart it forever. Once accepted,
   // a charge keeps its target and completes its visible flight independently.
-  const wait=Math.max(.23,Math.min(.30,turn/14),g.heldDevice?.holsterProgress*.32||0);
-  const shot={index,sequence,epoch:this.epoch,point,facing,delay:wait,bufferedInput:busy};
+  const wait=g.epicMode?Math.max(VELOCITY_SHOT_PROFILE.prepare,g.heldDevice?.holsterProgress*.32||0)
+    :Math.max(.23,Math.min(.30,turn/14),g.heldDevice?.holsterProgress*.32||0);
+  const shot={index,sequence,epoch:this.epoch,point,facing,delay:wait,bufferedInput:busy,
+    velocityMode:!!g.epicMode,wasAirborne:g.playerGrounded===false,requestTime:this.time,
+    requestTeleportCount:g.teleportCount??0};
   if(busy){this.buffered=shot;this.lastOutcome={state:'buffered',index,sequence,epoch:this.epoch};}
   else this.prepare(shot);
   this.lastRequest={accepted:true,index,sequence,epoch:this.epoch,...(busy?{buffered:true}:{})};
   return true;
  }
+ captureTarget(){
+  const g=this.game;
+  g.scene.updateMatrixWorld(true);g.camera.updateWorldMatrix(true,false);
+  this.ray.near=0;this.ray.far=g.epicMode?VELOCITY_SHOT_PROFILE.range:Infinity;
+  this.ray.setFromCamera(new THREE.Vector2(),g.camera);
+  const hit=this.firstHit(),point=hit?.point.clone()||this.ray.ray.at(g.epicMode?VELOCITY_SHOT_PROFILE.range:65,V());
+  this.ray.far=Infinity;
+  return point;
+ }
  prepare(shot){
-  this.cooldown=.20;this.queue.push(shot);
+  this.cooldown=shot.velocityMode?VELOCITY_SHOT_PROFILE.cooldown:.20;this.queue.push(shot);
   this.lastOutcome={state:'preparing',index:shot.index,sequence:shot.sequence,epoch:shot.epoch};
-  this.game.shotFacing=shot.facing;this.game.shotPoseTime=shot.delay+.38;this.game.shotAimPoint=shot.point.clone();
+  this.game.shotFacing=shot.facing;this.game.shotPoseTime=shot.delay+(shot.velocityMode ? .18 : .38);this.game.shotAimPoint=shot.point.clone();
  }
  cancelBuffered(reason){
   const canceled=this.buffered||this.queue.find(s=>s.bufferedInput);
@@ -78,6 +90,15 @@ export class LabPortalShots {
   if(g.heldCube||(s.epoch??this.epoch)!==this.epoch||!this.root.parent){
    this.lastOutcome={state:'canceled',reason:g.heldCube?'hands-full':'superseded',index:s.index,sequence:s.sequence,epoch:s.epoch};return;
   }
+  // A not-yet-fired click belongs to the traveller. After a transit, resolve
+  // that buffered input from the transported camera instead of shooting back
+  // across the world toward a stale pre-entry target. Already flying charges
+  // keep their immutable world path and sequence; no portal changes mid-call.
+  if(s.velocityMode&&(g.teleportCount??0)!==s.requestTeleportCount){
+   s.point=this.captureTarget();s.rebasedAfterTransit=true;
+   s.facing=Math.atan2(s.point.x-g.playerPosition.x,s.point.z-g.playerPosition.z);
+   g.shotFacing=s.facing;g.shotAimPoint=s.point.clone();
+  }
   const origin=g.heldDevice?.emitter?.getWorldPosition(V())||g.playerPosition.clone().add(new THREE.Vector3(0,1.4,0));
   // A long barrel can touch a wall although the player capsule is outside.
   // Start on the near side in that case: never spawn a charge beyond a wall.
@@ -92,8 +113,11 @@ export class LabPortalShots {
   if(distance<.001){this.lastOutcome={state:'canceled',reason:'muzzle-contact',index:s.index,sequence:s.sequence,epoch:s.epoch};g.callbacks?.onToast?.('Перед стволом нужно свободное место');g.audio?.rejectShot?.(s.index);return;}direction.normalize();
   const slot=this.pool.find(p=>!this.active.some(a=>a.slot===p));if(!slot){this.lastOutcome={state:'canceled',reason:'capacity',index:s.index,sequence:s.sequence,epoch:s.epoch};return;}
   // Use the animated muzzle, or its near-side constrained point at contact.
-  const speed=distance/THREE.MathUtils.clamp(distance/75,.055,.65);
-  const shot={...s,epoch:this.epoch,slot,start:origin.clone(),position:origin.clone(),previous:origin.clone(),direction,speed,travel:0,range:Math.min(85,distance+5)};
+  const profile=VELOCITY_SHOT_PROFILE;
+  const speed=distance/(s.velocityMode?THREE.MathUtils.clamp(distance/profile.speed,profile.minFlight,profile.maxFlight)
+    :THREE.MathUtils.clamp(distance/75,.055,.65));
+  const shot={...s,epoch:this.epoch,slot,start:origin.clone(),position:origin.clone(),previous:origin.clone(),direction,speed,travel:0,
+    range:Math.min(s.velocityMode?profile.range:85,distance+5),launchTeleportCount:g.teleportCount??0};
   this.active.push(shot);this.lastOutcome={state:'flying',index:s.index,sequence:s.sequence,epoch:this.epoch};
   slot.material.color.setHex(colors[s.index]);slot.group.visible=true;
   g.animator?.triggerShot?.(1.25);g.heldDevice?.fire(s.index);g.audio?.shot?.(s.index);
@@ -111,7 +135,12 @@ export class LabPortalShots {
    if(frame.normal&&normal.dot(frame.normal)>.15&&shot.direction.dot(frame.normal)<-.02)valid=g.placeOnPanel(shot.index,hit.object,hit.point);
    else reason='back-face';
   }
-  if(valid){reason='placed';this.placedSerial[shot.index]=shot.sequence;}
+  if(valid){
+   reason='placed';this.placedSerial[shot.index]=shot.sequence;
+   g.firstLevel?.recordShot?.(shot.index,hit.object,{wasAirborne:shot.wasAirborne,requestTime:shot.requestTime,
+    impactTime:this.time,requestTeleportCount:shot.requestTeleportCount,launchTeleportCount:shot.launchTeleportCount,
+    rebasedAfterTransit:!!shot.rebasedAfterTransit});
+  }
   if(reason==='surface')g.callbacks?.onToast?.('Заряд попал в препятствие. Нужна свободная белая поверхность');
   if(reason==='back-face')g.callbacks?.onToast?.('Установи проход на лицевую поверхность панели');
   if(reason==='miss')g.callbacks?.onToast?.('Заряд рассеялся: поверхность слишком далеко');
