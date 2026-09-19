@@ -27,6 +27,13 @@ const PLAYER_RADIUS = 0.43;
 const CENTER_HEIGHT = PLAYER_HEIGHT / 2;
 const CUBE_RADIUS = 0.39;
 const FIXED_STEP = 1 / 120;
+// A floor opening first meets the rounded foot of the capsule, not its
+// widest middle. Requiring the full radius at first contact creates a flat
+// invisible support across an otherwise visibly open rim.
+function floorCapsuleSlice(distance, radius, halfHeight) {
+  const capDistance = Math.max(0, distance - (halfHeight - radius));
+  return Math.sqrt(Math.max(0, radius * radius - capDistance * capDistance));
+}
 const CARGO_START = [4.6, 0.6, 15.2];
 export const CHAMBERS = [
   { name: '01 / МОСТ ДЛЯ ДВОИХ', start: [0, 0, 18], end: -3, button: [3.5, 0, 1.2], cube: CARGO_START, panels: [[-11.65, 1.6, 15, 1], [-11.65, 1.6, 1, 1]], objective: 'Доберитесь до следующей комнаты вместе.' },
@@ -380,6 +387,7 @@ export class LabGame {
 
   clearPortals() {
     if (this.externalBlocked || this.state !== 'playing') return false;
+    this.portalFootContact = this.portalFootExit = null;
     this.portals.clear(); this.portalSurfaceIds = [null, null];
     for (const id of this.portalCargoColliders) this.physics.setStaticEnabled(id,
       this.colliders.find(c => c.mesh.uuid === id)?.enabled !== false);
@@ -454,6 +462,7 @@ export class LabGame {
     this.playerPosition.fromArray(checkpoint.toArray?.() ?? checkpoint); this.playerVelocity.set(0, 0, 0);
     this.previousPlayerPosition.copy(this.playerPosition);
     const view = this.firstLevel?.spawnView;
+    this.portalFootContact = this.portalFootExit = null;
     this.playerGrounded = true; this.yaw = view?.yaw ?? 0; this.pitch = view?.pitch ?? -.15;
     this.facing = this.previousFacing = Math.PI + this.yaw; this.launchTime = 0;
     this.portalVisualOffset.set(0, 0, 0); this.portalVisualRotation.identity();
@@ -582,7 +591,9 @@ export class LabGame {
     this.groundedByCollider = false;
     const downwardImpact = Math.max(0, -this.playerVelocity.y);
     if (teleport) {
+      this.portalFootContact = null;
       const entry = this.portals.portals[teleport.entryIndex], exit = this.portals.portals[teleport.exitIndex];
+      this.portalFootExit = exit.normal.y > 1 - 1e-8 ? exit : null;
       const transportedVisual = transformPortalPoint(this.playerGroup.position, entry, exit);
       const transportedQ = this.playerGroup.quaternion.clone().premultiply(teleport.rotation);
       const oldYaw = this.yaw, oldPitch = this.pitch;
@@ -630,7 +641,7 @@ export class LabGame {
     if (this.playerGrounded && !wasGrounded && downwardImpact > 1) {
       this.animator.triggerLanding(downwardImpact); this.audio.land?.(downwardImpact); this.lastLanding = downwardImpact;
     }
-    const floor = this.floorHeight(this.playerPosition.x, this.playerPosition.z, Math.max(previous.y, this.playerPosition.y) + .38, true);
+    const floor = this.floorHeight(this.playerPosition.x, this.playerPosition.z, Math.max(previous.y, this.playerPosition.y) + .38, true, this.playerPosition.y);
     if (floor !== null && previous.y >= floor - .38 && this.playerPosition.y <= floor + .008 && this.playerVelocity.y <= 0) {
       const impact = -this.playerVelocity.y;
       this.playerPosition.y = floor; this.playerVelocity.y = 0; this.playerGrounded = true;
@@ -652,13 +663,13 @@ export class LabGame {
     };
   }
 
-  floorHeight(x, z, maxY = Infinity, throughPortals = false) {
+  floorHeight(x, z, maxY = Infinity, throughPortals = false, feetY = null) {
     let height = null;
     for (const f of this.floors) {
       const y = f.heightAt ? f.heightAt(x,z) : (f.y ?? 0);
       if(y===null)continue;
       if (throughPortals && f.mesh && this.portalOpensCollider({ mesh: f.mesh,
-        box: this.colliders.find(c => c.mesh === f.mesh)?.box }, new THREE.Vector3(x, y + CENTER_HEIGHT, z), PLAYER_RADIUS)) continue;
+        box: this.colliders.find(c => c.mesh === f.mesh)?.box }, new THREE.Vector3(x, (this.portalFootContact ? (feetY ?? y) : y) + CENTER_HEIGHT, z), PLAYER_RADIUS, CENTER_HEIGHT)) continue;
       if (f.enabled !== false && y <= maxY + .001 && x >= f.minX && x <= f.maxX && z >= f.minZ && z <= f.maxZ) height = height === null ? y : Math.max(height, y);
     }
     for (const ramp of this.ramps) {
@@ -675,15 +686,37 @@ export class LabGame {
   // ever crossing either portal. Sweep to the rim and remove only the outward
   // contact velocity; gravity and the ordinary centre-plane transfer continue.
   constrainPortalThroat(position, previous, velocity) {
-    if (!this.portals.ready) return;
+    if (!this.portals.ready) { this.portalFootContact = this.portalFootExit = null; return; }
+    if (!this.portals.portals.includes(this.portalFootContact)) this.portalFootContact = null;
+    // Do not turn a safe rim landing after emergence into an involuntary
+    // return trip. The ordinary crossing still works; passive foot contact
+    // rearms once this traveller has left the exit's footprint, not a timer.
+    if (this.portalFootExit && (!this.portals.portals.includes(this.portalFootExit)
+      || !pointInsidePortal(this.portalFootExit, previous, -PLAYER_RADIUS))) this.portalFootExit = null;
     for (const portal of this.portals.portals) {
       if (portal.normal.y < .65) continue;
       const inverse = portal.quaternion.clone().invert();
       const before = previous.clone().addScaledVector(UP, CENTER_HEIGHT).sub(portal.position).applyQuaternion(inverse);
       const extent = PLAYER_RADIUS + (CENTER_HEIGHT - PLAYER_RADIUS) * portal.normal.y;
-      if (before.z <= 0 || before.z >= extent - .008) continue;
-      const width = portal.width - PLAYER_RADIUS, height = portal.height - PLAYER_RADIUS;
-      const inside = p => (p.x / width) ** 2 + (p.y / height) ** 2;
+      // Preserve the established moving-entry throat. A resting capsule on
+      // the visible lip (or a portal newly opened under its feet) instead
+      // begins contact at its rounded foot, not a fictitious flat disc.
+      if (!this.portalFootContact && this.portalFootExit !== portal && this.playerGrounded && velocity.y <= 0
+        && Math.hypot(velocity.x, velocity.z) < .1 && portal.normal.y > 1 - 1e-8
+        && Math.abs(before.z - CENTER_HEIGHT) < .04
+        && pointInsidePortal(portal, previous.clone().addScaledVector(UP, CENTER_HEIGHT), .04)
+        && !pointInsidePortal(portal, previous.clone().addScaledVector(UP, CENTER_HEIGHT), PLAYER_RADIUS)) {
+        this.portalFootContact = portal;
+      }
+      if (this.portalFootContact === portal && (before.z <= 0 || before.z > CENTER_HEIGHT + .06
+        || !pointInsidePortal(portal, previous.clone().addScaledVector(UP, CENTER_HEIGHT), 0))) this.portalFootContact = null;
+      const roundedFoot = this.portalFootContact === portal;
+      if (before.z <= 0 || before.z >= extent + (roundedFoot ? .04 : -.008)) continue;
+      const radiusAt = p => roundedFoot ? floorCapsuleSlice(p.z, PLAYER_RADIUS, CENTER_HEIGHT) : PLAYER_RADIUS;
+      const inside = p => {
+        const r = radiusAt(p);
+        return (p.x / (portal.width - r)) ** 2 + (p.y / (portal.height - r)) ** 2;
+      };
       if (inside(before) > 1 + 1e-8) continue;
       const after = position.clone().addScaledVector(UP, CENTER_HEIGHT).sub(portal.position).applyQuaternion(inverse);
       if (inside(after) <= 1) continue;
@@ -695,9 +728,17 @@ export class LabGame {
         if (inside(contact) <= 1) low = middle; else high = middle;
       }
       contact.copy(before).lerp(after, Math.max(0, low - 1e-6));
-      const correction = new THREE.Vector3(contact.x - after.x, contact.y - after.y, 0).applyQuaternion(portal.quaternion);
-      position.add(correction);
-      const normal = new THREE.Vector3(contact.x / (width * width), contact.y / (height * height), 0)
+      const correction = contact.clone().sub(after);
+      if (!roundedFoot) correction.z = 0;
+      position.add(correction.applyQuaternion(portal.quaternion));
+      const r = radiusAt(contact), width = portal.width - r, height = portal.height - r;
+      // The normal of the capsule/rim constraint has an upward component at
+      // the rounded foot. Gravity projected along it slides the capsule into
+      // the throat; no centre snap, extra impulse or attraction is applied.
+      const slope = roundedFoot && contact.z > CENTER_HEIGHT - PLAYER_RADIUS && r > 1e-8
+        ? -(contact.z - (CENTER_HEIGHT - PLAYER_RADIUS)) / r : 0;
+      const normal = new THREE.Vector3(contact.x / (width * width), contact.y / (height * height),
+        slope * (contact.x * contact.x / width ** 3 + contact.y * contact.y / height ** 3))
         .normalize().applyQuaternion(portal.quaternion);
       const outward = velocity.dot(normal);
       if (outward > 0) velocity.addScaledVector(normal, -outward);
@@ -718,11 +759,15 @@ export class LabGame {
     return height === null ? null : { height, normal };
   }
 
-  portalOpensCollider(collider, center, radius) {
+  portalOpensCollider(collider, center, radius, capsuleHalfHeight = 0) {
     if (!this.portals.ready) return false;
     return this.portals.portals.some((portal, index) => {
-      if (!portal || !this.portals.isInsideAperture(index, center, radius)) return false;
-      const planeDistance = Math.abs(center.clone().sub(portal.position).dot(portal.normal));
+      if (!portal) return false;
+      const signedDistance = center.clone().sub(portal.position).dot(portal.normal);
+      const apertureRadius = capsuleHalfHeight && this.portalFootContact === portal && signedDistance > 0
+        ? floorCapsuleSlice(signedDistance, radius, capsuleHalfHeight) : radius;
+      if (!this.portals.isInsideAperture(index, center, apertureRadius)) return false;
+      const planeDistance = Math.abs(signedDistance);
       if (planeDistance > radius + .7 + Math.abs(portal.normal.y) * CENTER_HEIGHT) return false;
       // The aperture opens both its thin white panel and the structural wall behind it.
       return collider.mesh.uuid === this.portalSurfaceIds[index]
@@ -760,7 +805,7 @@ export class LabGame {
       const dx = position.x - nearestX, dz = position.z - nearestZ;
       if (dx * dx + dz * dz >= contactRadius * contactRadius) continue;
       const center = position.clone().addScaledVector(UP, height / 2);
-      if (allowPortals && this.portalOpensCollider(collider, center, Math.min(radius, PLAYER_RADIUS))) continue;
+      if (allowPortals && this.portalOpensCollider(collider, center, Math.min(radius, PLAYER_RADIUS), height / 2)) continue;
       if (velocity.y <= 0 && previous.y >= b.max.y - .035) {
         position.y = b.max.y; velocity.y = 0; this.groundedByCollider = true; continue;
       }

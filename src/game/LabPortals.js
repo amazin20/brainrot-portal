@@ -90,7 +90,7 @@ export function portalFramesOverlap(a, b, gap = 0.06) {
 /** Planar surface metadata: world `center`, world `normal`, optional world
  * `portalUp`, and optional `portalBounds: { halfWidth, halfHeight }`. Without
  * explicit bounds the mesh's transformed geometry supplies them. */
-export function resolvePortalPlacement(panel, hitPoint, { otherPortal = null, blockers = [], margin = 0.02, clampToFit = true, preferredUp } = {}) {
+export function resolvePortalPlacement(panel, hitPoint, { otherPortal = null, blockers = [], margin = 0.02, clampToFit = true, preferredUp, fitFloorEdge = true } = {}) {
   const metadata = panel?.userData;
   if (!metadata?.portalable || metadata.portalForbidden) return { ok: false, reason: 'forbidden' };
   const movingFrame = typeof metadata.portalFrame === 'function' ? metadata.portalFrame() : null;
@@ -152,7 +152,24 @@ export function resolvePortalPlacement(panel, hitPoint, { otherPortal = null, bl
     const box = blocker.box || new THREE.Box3().setFromObject(mesh);
     // Supporting walls are behind the plane. The first 8 cm are a skin allowance;
     // a pillar or closed door in front still prevents an unusable opening.
-    if (portalIntersectsBox(frame, box, .08, .85)) return { ok: false, reason: 'obstructed' };
+    if (portalIntersectsBox(frame, box, .08, .85)) {
+      // A wall panel may extend a few centimetres beneath its adjacent floor.
+      // The existing edge clamp used the panel rectangle alone and left low
+      // shots embedded in that floor. Fit the rim just above that same edge,
+      // then run EVERY ordinary clearance/overlap check again. Never search
+      // for a remote opening or move past a real mid-panel obstruction.
+      const upright = Math.abs(frame.normal.y) < 1e-8
+        && new THREE.Vector3(0, 1, 0).applyQuaternion(surfaceFrame.quaternion).y > .999999;
+      const panelBottom = surfaceFrame.position.y + bounds.minY;
+      const lift = box.max.y + frame.height * PORTAL_OUTER_SCALE + margin + .001 - frame.position.y;
+      if (fitFloorEdge && clampToFit && upright && box.max.y >= panelBottom - .04
+        && box.max.y <= panelBottom + .45 && lift > 0 && lift <= .5) {
+        const fitted = resolvePortalPlacement(panel, frame.position.clone().add(new THREE.Vector3(0, lift, 0)),
+          { otherPortal, blockers, margin, clampToFit: false, preferredUp, fitFloorEdge: false });
+        if (fitted.ok) return { ...fitted, adjusted: true, fittedToFloor: true };
+      }
+      return { ok: false, reason: 'obstructed' };
+    }
   }
   return { ok: true, frame, position: frame.position, normal: frame.normal, adjusted, bounds,
     anchor: movingFrame?.anchor || panel };
