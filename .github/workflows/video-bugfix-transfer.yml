@@ -1,0 +1,45 @@
+name: Transfer verified user-video bug fixes
+on:
+  push:
+    branches: [ci/video-bugfix-transfer-20260919]
+permissions:
+  contents: write
+jobs:
+  transfer:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Retain explicit patch and four new reviewed files only
+        run: |
+          mkdir /tmp/video-payload
+          cp --parents maintenance/video-portal-runtime.patch tests/lab-video-portal-regressions.test.js scripts/video-portal-bugs-browser.mjs docs/passes/VIDEO_PORTAL_BUGS_20260919.md .github/workflows/video-portal-bugs.yml /tmp/video-payload/
+      - uses: actions/checkout@v4
+        with:
+          ref: 0d85241922073fcb31f76a419281355b4f60d7bd
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Require the exact local tree and preserve existing regressions
+        run: |
+          git apply --check /tmp/video-payload/maintenance/video-portal-runtime.patch
+          git apply /tmp/video-payload/maintenance/video-portal-runtime.patch
+          cp -a /tmp/video-payload/tests/. tests/
+          cp -a /tmp/video-payload/scripts/. scripts/
+          cp -a /tmp/video-payload/docs/. docs/
+          cp /tmp/video-payload/.github/workflows/video-portal-bugs.yml .github/workflows/
+          git add src/game/LabGame.js src/game/LabPortals.js tests/lab-video-portal-regressions.test.js scripts/video-portal-bugs-browser.mjs docs/passes/VIDEO_PORTAL_BUGS_20260919.md .github/workflows/video-portal-bugs.yml
+          git diff --cached --check
+          git ls-files -s src/game/LabGame.js src/game/LabPortals.js tests/lab-video-portal-regressions.test.js scripts/video-portal-bugs-browser.mjs docs/passes/VIDEO_PORTAL_BUGS_20260919.md .github/workflows/video-portal-bugs.yml
+          test "$(git write-tree)" = ca9c1f9b685ef5a625a629174fac23e5a3a02d8a
+          npm ci
+          node --test tests/lab-video-portal-regressions.test.js tests/lab-room18.test.js tests/lab-portals.test.js tests/lab-moving-portals.test.js tests/lab-portal-edge-regression.test.js
+          npm run build
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'Fix resting floor-portal rim contact and low wall placement from user video' -m 'Exact local tree verified, preserve room18 return and all existing portal regressions. No model or room changes. Native comparison, full campaign and publication checks still mandatory.'
+          git push origin HEAD:refs/heads/ci/video-bugs-reviewed-20260919
+          git rev-parse HEAD
