@@ -1,4 +1,5 @@
 import { LabEpicDirector } from './LabEpicDirector.js';
+import { LabVelocityCompanion } from './LabVelocityCompanion.js';
 import { LabPortalShots } from './LabPortalShots.js';
 import { updateKineticVelocity, limitKineticSpeed, sweepKineticBody } from './LabKineticMovement.js';
 import { sweepBox } from './LabSweep.js';
@@ -259,6 +260,7 @@ export class LabGame {
     for (const collider of this.colliders) this.physics.addStaticBox(collider.mesh.uuid, collider.box, { kinematic: Boolean(collider.kinematic) });
     for (const ramp of this.ramps) this.physics.addStaticRamp(ramp.id, ramp);
     this.physics.createCargo({ position: this.cargo.position, size: CUBE_RADIUS * 2, mass: 3.2 });
+    this.velocityCompanion = this.epicMode ? new LabVelocityCompanion(this) : null;
     this.companionBehavior = new LabCompanionBehavior(this.physics);
     this.portalActors = new LabPortalActors({ scene: this.scene, portals: this.portals });
     this.portalActors.register(this.playerGroup, { radius: 1.5, centerOffset: [0, 1.2, 0] });
@@ -314,7 +316,7 @@ export class LabGame {
     if (this.input?.reset) this.input.reset();
     else this.input?.keys.clear(); // Small physics fixtures supply only keys.
     this.controls?.reset();
-    this.interactQueued = false; this.jumpBuffer = 0;
+    this.interactQueued = false; this.jumpBuffer = 0; this.velocityFocus = false;
   }
 
   disposeControls() {
@@ -349,6 +351,7 @@ export class LabGame {
 
   firePortal(index) {
     if(this.heldCube){this.callbacks.onToast('Сначала поставь друга [E]');return false;}
+    if (this.epicMode) index = this.firstLevel?.getRequiredShotSlot?.() ?? index;
     return this.portalShots?.request(index)??false;
   }
 
@@ -383,6 +386,7 @@ export class LabGame {
 
   clearPortals() {
     if (this.externalBlocked || this.state !== 'playing') return false;
+    if (this.epicMode && this.firstLevel?.restoreCheckpoint) return this.restartCheckpoint();
     this.portals.clear(); this.portalSurfaceIds = [null, null];
     for (const id of this.portalCargoColliders) this.physics.setStaticEnabled(id,
       this.colliders.find(c => c.mesh.uuid === id)?.enabled !== false);
@@ -401,7 +405,7 @@ export class LabGame {
     // entirely under player control. Campaign surfaces retain free placement.
     if (this.epicMode && panel.userData.velocitySnapCenter) hitPoint = panel.userData.center;
     const normal = panel.userData.portalFrame?.()?.normal ?? panel.userData.normal;
-    const preferredUp = normal && Math.abs(normal.y) > .6
+    const preferredUp = this.epicMode && panel.userData.portalUp ? panel.userData.portalUp : normal && Math.abs(normal.y) > .6
       ? new THREE.Vector3(0, 0, -1).applyAxisAngle(UP, this.yaw) : undefined;
     const result = this.portals.placeOnPanel(index, panel, hitPoint, { blockers: this.colliders, preferredUp });
     if (!result.ok) {
@@ -425,7 +429,39 @@ export class LabGame {
 
   start() { this.audio.unlock(); this.resetRun(true); this.renderer.domElement.requestPointerLock?.()?.catch?.(() => {}); }
   restart() { this.resetRun(true); this.callbacks.onPause(false); }
+  restartCheckpoint(reason) {
+    if (!this.epicMode || !this.firstLevel?.restoreCheckpoint) { this.restart(); return true; }
+    const checkpoint = this.firstLevel.restoreCheckpoint();
+    if (!checkpoint?.position) return false;
+    this.state = 'playing';
+    this.portalShots?.reset(); this.heldCube = null; this.portalCooldown = 0;
+    this.launchTime = 0; this.kinetic = null; this.slideHeld = false; this.velocityFocus = false;
+    this.aimHeld = false; this.aimingTime = 0; this.lastLanding = 0; this.windStrength = 0; this.lastCompanionState = null;
+    if (this.cargoLaunchFrictionSuppress) this.physics.cargoBody.material.friction = 1;
+    this.cargoLaunchFrictionSuppress = false;
+    this.jumpBuffer = this.coyoteTime = this.jumpWindup = 0; this.interactQueued = false;
+    this.shotPoseTime = 0; this.shotAimPoint = null;
+    for (const id of this.portalCargoColliders) this.physics.setStaticEnabled(id,
+      this.colliders.find(c => c.mesh.uuid === id)?.enabled !== false);
+    this.portalCargoColliders.clear();
+    this.playerPosition.copy(checkpoint.position); this.playerVelocity.set(0, 0, 0);
+    this.previousPlayerPosition.copy(this.playerPosition); this.playerGrounded = true;
+    this.yaw = checkpoint.yaw ?? 0; this.pitch = checkpoint.pitch ?? -.15;
+    this.facing = this.previousFacing = Math.PI + this.yaw;
+    this.portalVisualOffset.set(0, 0, 0); this.portalVisualRotation.identity(); this.motion = null;
+    this.playerGroup.position.copy(this.playerPosition); this.playerGroup.rotation.y = this.facing;
+    this.animator.reset(); this.heldDevice.reset(); this.cameraRig.reset(this.playerPosition, this.yaw, this.pitch);
+    this.companionAnimator.reset(); this.companionRig?.reset(); this.companionBehavior?.reset();
+    this.velocityCompanion?.recover({ connected: checkpoint.connected ?? true });
+    this.cargoPortalCooldown = 0; this.cargoLaunchCooldown = 0;
+    this.epicDirector?.reset(); this.epicLastTeleport = this.teleportCount; this.epicWasGrounded = true;
+    this.audio?.flight?.(0, true); this.resetInput(); this.accumulator = 0;
+    this.callbacks.onPause(false); this.emitHud();
+    this.callbacks.onToast(typeof reason === 'string' ? reason : 'Контрольная площадка. Брейнрот рядом — попробуй ещё раз.');
+    return true;
+  }
   resetRun(playing = true) {
+    this.velocityCompanion?.reset(); this.velocityFocus = false;
     this.epicDirector?.reset(); this.kinetic = null; this.slideHeld = false; this.epicLastTeleport = 0; this.epicWasGrounded = true;
     this.audio?.flight?.(0,true);
     for (const id of this.portalCargoColliders) this.physics.setStaticEnabled(id, true);
@@ -454,8 +490,8 @@ export class LabGame {
   }
 
   respawn(announce = true) {
-    // There are no checkpoints. An actual out-of-bounds failure restarts this
-    // level with the same companion instance and all mechanisms reset together.
+    if (announce && this.epicMode && this.firstLevel?.restoreCheckpoint) { this.restartCheckpoint(); return; }
+    // Ordinary puzzle rooms retain their complete-room restart semantics.
     if (announce && this.firstLevel) { this.resetRun(true); return; }
     if (this.heldCube) { this.physics.release(); this.heldCube = null; }
     const checkpoint = this.firstLevel?.spawn ?? CHAMBERS[this.stage].start;
@@ -485,6 +521,11 @@ export class LabGame {
     this.callbacks.onPause(paused);
   }
 
+  getVelocityTimeScale() {
+    return this.epicMode && this.state === 'playing' && !this.externalBlocked
+      && !this.playerGrounded && this.input?.keys?.has('KeyQ') ? .28 : 1;
+  }
+
   animate(now) {
     const frameMs = Math.max(0, now - this.lastFrame);
     const dt = Math.min(.1, frameMs / 1000); this.lastFrame = now;
@@ -493,13 +534,16 @@ export class LabGame {
     if (!this.externalBlocked && this.state === 'playing' && this.input.consumeRestart()) {
       if(this.callbacks.onRestartRequest)this.callbacks.onRestartRequest();else this.restart();
     }
+    const timeScale = this.getVelocityTimeScale(); this.velocityFocus = timeScale < 1;
+    const simulationDt = dt * timeScale;
     if (this.state === 'playing' && !this.externalBlocked) {
-      this.accumulator += dt;
+      this.accumulator += simulationDt;
       while (this.state === 'playing' && !this.externalBlocked && this.accumulator + 1e-10 >= FIXED_STEP) {
         this.updatePlaying(FIXED_STEP); this.accumulator = Math.max(0, this.accumulator - FIXED_STEP);
       }
     }
-    this.updateVisuals(this.state === 'paused' || this.externalBlocked ? 0 : dt, this.accumulator / FIXED_STEP);
+    const blocked = this.state === 'paused' || this.externalBlocked;
+    this.updateVisuals(blocked ? 0 : simulationDt, this.accumulator / FIXED_STEP, blocked ? 0 : dt);
     this.render(); this.renderFrames++;
     if (this.tutorialElement && now - (this.lastUiUpdate ?? 0) > 180) {
       this.lastUiUpdate = now; const stats = this.performanceMonitor.stats;
@@ -605,7 +649,7 @@ export class LabGame {
       const capsuleExtent = PLAYER_RADIUS + (CENTER_HEIGHT - PLAYER_RADIUS) * Math.abs(exit.normal.y);
       const clearance = capsuleExtent + .025 - teleport.position.clone().sub(exit.position).dot(exit.normal);
       if (clearance > 0) teleport.position.addScaledVector(exit.normal, clearance);
-      if (this.heldCube) {
+      if (this.heldCube || this.velocityCompanion?.connected) {
         const exitShift = teleport.position.clone().sub(transformPortalPoint(center, entry, exit));
         const cargoPosition = transformPortalPoint(this.cargo.position, entry, exit).add(exitShift);
         const cargoClearance = CUBE_RADIUS * Math.sqrt(3) + .06 - cargoPosition.clone().sub(exit.position).dot(exit.normal);
@@ -617,6 +661,7 @@ export class LabGame {
         this.cargo.position.copy(cargoPosition);
         this.companionBehavior?.reanchor(cargoPosition); this.cargoPortalCooldown = .07;
         this.companionAnimator.trigger('portal');
+        this.velocityCompanion?.onPortalTransport(teleport.rotation);
       }
       this.playerPosition.copy(teleport.position).addScaledVector(UP, -CENTER_HEIGHT);
       this.playerVelocity.copy(teleport.velocity);
@@ -820,6 +865,7 @@ export class LabGame {
 
   interact() {
     if (this.externalBlocked || this.state !== 'playing') return false;
+    if (this.epicMode && this.velocityCompanion) return this.velocityCompanion.interact();
     // E puts down a held friend. Nearby controls must not steal pickup input.
     if (this.heldCube) return this.toggleCube();
     const hand = this.playerPosition.clone().addScaledVector(UP, 1.1);
@@ -916,7 +962,7 @@ export class LabGame {
     if (this.portals.ready) {
       for (const collider of this.colliders) if (collider.enabled &&
         (this.portalOpensCollider(collider, this.cargo.position, CUBE_RADIUS) ||
-          (this.heldCube && this.portalOpensCollider(collider, this.playerPosition.clone().addScaledVector(UP, 1.2), PLAYER_RADIUS)))) {
+          ((this.heldCube || this.velocityCompanion?.connected) && this.portalOpensCollider(collider, this.playerPosition.clone().addScaledVector(UP, 1.2), PLAYER_RADIUS)))) {
         nextPortalColliders.add(collider.mesh.uuid);
         this.physics.setStaticEnabled(collider.mesh.uuid, false);
       }
@@ -925,13 +971,13 @@ export class LabGame {
       this.physics.setStaticEnabled(id, this.colliders.find(c => c.mesh.uuid === id)?.enabled !== false);
     }
     this.portalCargoColliders = nextPortalColliders;
-    this.companionBehavior?.update(dt, { held: Boolean(this.heldCube),
+    this.companionBehavior?.update(dt, { held: Boolean(this.heldCube || this.velocityCompanion?.connected),
       onPad: this.firstLevel ? this.firstLevel.cargoOnAnyPad() : this.cargoOnPad(this.mechanisms.chargePad.position) || CHAMBERS.some(c => this.cargoOnPad(c.button)),
       canMove: (p, nx, nz) => this.companionCanStep(p, nx, nz) });
     const cargoLaunch = this.firstLevel ? this.firstLevel.getLaunch(this.cargo.position)
       : Math.hypot(this.cargo.position.x, this.cargo.position.z + 31.5) < 1.05
         ? { velocity: new THREE.Vector3(0, 10, -10), duration: 1.15 } : null;
-    if (!this.heldCube && this.physics.grounded && (this.cargoLaunchCooldown ?? 0) <= 0 && cargoLaunch) {
+    if (!this.heldCube && !this.velocityCompanion?.connected && this.physics.grounded && (this.cargoLaunchCooldown ?? 0) <= 0 && cargoLaunch) {
       this.physics.cargoBody.velocity.copy(cargoLaunch.velocity); this.physics.cargoBody.wakeUp();
       this.physics.cargoBody.material.friction = 0; this.cargoLaunchFrictionSuppress = true;
       this.cargoLaunchCooldown = cargoLaunch.duration + .1; this.companionAnimator.trigger('startle');
@@ -939,9 +985,10 @@ export class LabGame {
     this.cargoLaunchCooldown = Math.max(0, (this.cargoLaunchCooldown ?? 0) - dt);
     this.firstLevel?.applyCargoForces?.(dt);
     this.physics.setPlayerProxy({ position: this.playerPosition, radius: PLAYER_RADIUS, height: PLAYER_HEIGHT, velocity: this.playerVelocity }, dt);
+    this.velocityCompanion?.update(dt);
     this.physics.step(dt);
     let sample = this.physics.sample(1);
-    if (!this.heldCube) {
+    if (!this.heldCube && !this.velocityCompanion?.connected) {
       const travel = this.portals.tryTeleport(new THREE.Vector3().copy(sample.position), beforeStep,
         new THREE.Vector3().copy(sample.velocity), CUBE_RADIUS);
       if (travel) {
@@ -957,7 +1004,7 @@ export class LabGame {
       }
     }
     this.cargo.position.copy(sample.position); this.cargo.velocity.copy(sample.velocity); this.cargo.quaternion.copy(sample.quaternion);
-    if (this.firstLevel && this.cargo.position.y < -12) this.resetRun(true);
+    if (this.firstLevel && this.cargo.position.y < -12) this.epicMode ? this.restartCheckpoint() : this.resetRun(true);
   }
 
   companionCanStep(position, nx, nz) {
@@ -1057,7 +1104,7 @@ export class LabGame {
     pad.art.position.y = (pad.baseY ?? pad.position.y) - pad.compression * .014;
   }
 
-  updateVisuals(dt, alpha = 1) {
+  updateVisuals(dt, alpha = 1, cameraDt = dt) {
     this.audio?.flight?.(this.playerVelocity.length(),this.playerGrounded||this.state!=='playing'||this.externalBlocked);
     const active = this.state === 'playing' || this.state === 'won' || this.state === 'ready';
     const visualDt = active ? dt : 0;
@@ -1079,10 +1126,10 @@ export class LabGame {
     }
     this.companionAnimator.update({ dt: visualDt, elapsed: this.visualTime, speed: cargo.velocity.length(),
       velocity: cargo.velocity, angularVelocity: cargo.angularVelocity, impact: cargo.impact,
-      grounded: cargo.grounded, carrying: Boolean(this.heldCube), curious: this.playerPosition.distanceTo(this.cargo.position) < 2.5, celebrating:this.state==='won' });
+      grounded: cargo.grounded, carrying: Boolean(this.heldCube || this.velocityCompanion?.connected), curious: this.playerPosition.distanceTo(this.cargo.position) < 2.5, celebrating:this.state==='won' });
     this.companionRig?.update({ dt: visualDt, elapsed: this.visualTime, speed: Math.hypot(cargo.velocity.x, cargo.velocity.z),
       velocity: cargo.velocity,
-      grounded: cargo.grounded, carrying: Boolean(this.heldCube), recovering: this.companionBehavior?.state === 'getting_up',
+      grounded: cargo.grounded, carrying: Boolean(this.heldCube || this.velocityCompanion?.connected), recovering: this.companionBehavior?.state === 'getting_up',
       tumbling: !cargo.grounded || cargo.angularVelocity.length() > 3, celebrating:this.state==='won', reaction:this.companionAnimator.reactionClip });
     const gripVisual = this.cargo.visual ?? this.cargo.group;
     gripVisual.updateWorldMatrix(true, true);
@@ -1118,7 +1165,7 @@ export class LabGame {
     const barrierProgress = THREE.MathUtils.lerp(barrier.previousProgress ?? barrier.progress, barrier.progress, blend);
     barrier.mechanism?.update(barrierProgress, this.visualTime);
     }
-    this.cameraRig.update({ dt: visualDt, target: this.playerGroup.position, yaw: this.yaw, pitch: this.pitch, velocity: this.playerVelocity, aiming: this.isAiming(), epic: Boolean(this.epicMode), dynamicFov: this.epicOptions?.dynamicFov !== false });
+    this.cameraRig.update({ dt: active ? cameraDt : 0, target: this.playerGroup.position, yaw: this.yaw, pitch: this.pitch, velocity: this.playerVelocity, aiming: this.isAiming(), epic: Boolean(this.epicMode), dynamicFov: this.epicOptions?.dynamicFov !== false });
     if (this.epicDirector) {
       if (this.teleportCount > (this.epicLastTeleport || 0)) this.epicDirector.portal(this.lastPortalTravel?.speed || this.playerVelocity.length(), this.teleportCount);
       if (this.playerGrounded && this.epicWasGrounded === false) this.epicDirector.land(this.lastLanding || 0);
@@ -1129,8 +1176,11 @@ export class LabGame {
     this.updateAimHint(visualDt);
     // The light and shadow frustum stay fixed across the complete level.
     this.portals.update(this.visualTime); this.portalShots?.render(blend);
-    const nearbyAction = this.firstLevel?.nearbyInteraction?.();
+    this.velocityCompanion?.renderUpdate(this.visualTime);
+    const nearbyAction = this.velocityCompanion?.prompt || this.firstLevel?.nearbyInteraction?.();
     this.prompt.textContent = (typeof nearbyAction === 'string' ? nearbyAction : nearbyAction?.label) || (this.nearbyTerminal() ? 'E — включить мост' : this.heldCube ? 'E — отпустить брейнрота' : this.playerPosition.distanceTo(this.cargo.position) < 2.25 ? 'E — взять брейнрота' : '');
+    if (this.velocityCompanion?.connected && !nearbyAction) this.prompt.textContent = '';
+    this.onVelocityFrame?.();
   }
 
   render() {
@@ -1147,14 +1197,14 @@ export class LabGame {
 
   emitHud() {
     this.callbacks.onHud({ chamber: this.firstLevel ? this.firstLevel.title : CHAMBERS[this.stage].name, objective: this.firstLevel?.getObjective() ?? CHAMBERS[this.stage].objective,
-      hasCargo: Boolean(this.heldCube), portalsReady: Boolean(this.portals?.ready), stage: this.stage,
-      friendStatus: this.heldCube ? 'Друг на руках' : this.companionBehavior?.state === 'getting_up' ? 'Друг поднимается'
+      hasCargo: Boolean(this.heldCube || this.velocityCompanion?.connected), portalsReady: Boolean(this.portals?.ready), stage: this.stage,
+      friendStatus: this.velocityCompanion?.connected ? 'Друг летит рядом' : this.heldCube ? 'Друг на руках' : this.companionBehavior?.state === 'getting_up' ? 'Друг поднимается'
         : this.companionBehavior?.state === 'waiting_on_pad' ? 'Друг держит плиту'
           : this.companionBehavior?.state === 'wandering' ? 'Друг исследует рядом' : 'Друг рядом' });
   }
 
   diagnostics() {
-    return { epicMode: Boolean(this.epicMode), velocityRun: this.velocityRun ? {...this.velocityRun} : null, levelIndex: this.levelIndex, checkpoints: false, performance: this.performanceMonitor.stats, state: this.state, modelsLoaded: this.assets.size, missingModels: this.failures, thirdPerson: true, stage: this.stage,
+    return { epicMode: Boolean(this.epicMode), velocityRun: this.velocityRun ? {...this.velocityRun} : null, velocityCompanion: this.velocityCompanion?.diagnostics ?? null, velocityFocus: Boolean(this.velocityFocus), levelIndex: this.levelIndex, checkpoints: Boolean(this.epicMode), performance: this.performanceMonitor.stats, state: this.state, modelsLoaded: this.assets.size, missingModels: this.failures, thirdPerson: true, stage: this.stage,
       portalsReady: this.portals.ready, teleportCount: this.teleportCount, cameraDistance: this.camera.position.distanceTo(this.playerPosition),
       animation: this.animator.diagnostics, device: this.heldDevice.diagnostics, aiming: this.isAiming(),
       cargo: { identity: this.cargo.group.uuid, count: this.cubes.length, position: this.cargo.position.toArray(), held: Boolean(this.heldCube), visible: this.cargo.group.visible, physics: this.physics.sample(1), animation: this.companionAnimator.diagnostics,

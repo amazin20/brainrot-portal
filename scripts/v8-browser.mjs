@@ -72,7 +72,12 @@ try{
  assert.ok(report.initial.oldHudHidden);
  if(first===1){assert.equal(report.initial.models,4);assert.equal(report.initial.audioState,'running');}
  for(let index=first-1;index<last;index++){
-   if(index>first-1){await clickMenu('#play-again-button');await page.waitForFunction(i=>window.__NESI_DEMO_GAME__?.levelIndex===i&&window.__NESI_DEMO_GAME__.state==='playing',{},index);await shot(`level-${index+1}-start`);}
+   if(index>first-1){
+     // Optional speed chapters have their own complete WebGL journey. The
+     // ordinary-room suite follows the visible campaign continuation button.
+     const next=[10,20].includes(index)?'#win-secondary-button':'#play-again-button';
+     await clickMenu(next);await page.waitForFunction(i=>window.__NESI_DEMO_GAME__?.levelIndex===i&&window.__NESI_DEMO_GAME__.state==='playing',{},index);await shot(`level-${index+1}-start`);
+   }
    const earlyName=captureEarly?earlyPlans[index+1]:null;
    const clipRequests=earlyName?[[earlyName,45]]:capturePlans[index+1]||[];
    const captured=await page.evaluate(async ({capturePuzzle,clipRequests,earlyName})=>{

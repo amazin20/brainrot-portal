@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { sweepBox } from './LabSweep.js';
+import { applyVelocityFlightAssist } from './LabVelocityAssist.js';
 
 // Separate, opt-in tuning: the puzzle campaign retains its authored timing.
 export const KINETIC_MOVEMENT = Object.freeze({
@@ -72,6 +73,7 @@ export function updateKineticVelocity(game, dt, move, { sprint = false } = {}) {
     game.animator.triggerJump?.();
     game.audio.jump();
   }
+  state.guidance = Boolean(applyVelocityFlightAssist(game, dt));
   limitKineticSpeed(velocity);
   state.speed = velocity.length();
   state.planarSpeed = Math.hypot(velocity.x, velocity.z);

@@ -1,16 +1,9 @@
 import * as THREE from 'three';
 import { LabTileWorld } from './LabTileWorldBase.js';
+import { buildVelocityScenery } from './LabVelocityScenery.js';
 
 const V=(x=0,y=0,z=0)=>new THREE.Vector3(x,y,z);
 const CYAN=0x64faff, ORANGE=0xffb554, WHITE=0xe9f7ff;
-const STEPS=[
- 'SHIFT + W — разгон. Сойди в светящийся колодец; отпусти W в падении.',
- 'В полёте: ПКМ в панель 03, затем ЛКМ в 02. Белая панель центрирует проход. Лети в 02.',
- 'Ещё быстрее: ПКМ в панель 05, затем ЛКМ в 04. Лети в 04.',
- 'Держи импульс. Приземлись на светящийся финишный мост.',
- 'Цепь замкнута. R — ещё один заезд.',
-];
-
 /** A separate, authored momentum course. Every transfer goes through the same
  * swept portal/capsule solver as the campaign. No route event sets position or
  * velocity. The starting intake's visible induction collar centers a fall in
@@ -94,65 +87,83 @@ export function buildVelocityArena(game){
   return p;
  }
 
- // A generous high runway builds anticipation before the 44 m gravity fall.
- platform(-5,5,-4,32,44,'44 m acceleration runway');
- platform(-5,5,29,37,44,'companion observation terrace');
- for(const x of [-5.15,5.15]){
-  box([x,44.65,14],[.2,1.3,36],mats.dark,true);
-  box([x,45.32,14],[.11,.07,36],mats.white);
-  for(let z=-2;z<34;z+=5)box([x,34,z],[.5,20,.5],mats.metal);
+ const chapter=Number(game.velocityChapter)===2?2:1;
+ const count=chapter===2?4:3,drop=chapter===2?44:32,spacing=chapter===2?52:38;
+ const stationShift=chapter===2?34:16,baseY=chapter===2?130:90,stepY=chapter===2?14:12;
+ const exitForward=chapter===2?70:63,upward=chapter===2?.70:.60;
+ const stations=Array.from({length:count+1},(_,i)=>({
+  index:i,center:V(i*spacing,baseY-stepY*i,i%2?stationShift:0),forward:V(0,0,i%2?1:-1),
+  halfWidth:11,back:24,front:16,
+ }));
+ const segments=[];
+ const stationContains=(station,p,margin=0)=>Math.abs(p.x-station.center.x)<=station.halfWidth-margin
+  &&p.clone().sub(station.center).dot(station.forward)>=-station.back+margin
+  &&p.clone().sub(station.center).dot(station.forward)<=station.front-margin
+  &&p.y>=station.center.y-.15&&p.y<station.center.y+2.4;
+ for(const station of stations){
+  const c=station.center,d=station.forward.z;
+  const z0=Math.min(c.z-d*station.back,c.z+d*station.front),z1=Math.max(c.z-d*station.back,c.z+d*station.front);
+  platform(c.x-station.halfWidth,c.x+station.halfWidth,z0,z1,c.y,`Safe station ${station.index+1}`);
+  for(const side of [-1,1]){
+   box([c.x+side*station.halfWidth,c.y+.52,(z0+z1)/2],[.18,1.04,z1-z0],mats.dark,true);
+   box([c.x+side*station.halfWidth,c.y+1.1,(z0+z1)/2],[.12,.06,z1-z0],mats.white);
+  }
+  for(let along=-18;along<15;along+=4){
+   const z=c.z+d*along;
+   beam([c.x-1.5,c.y+.04,z-d],[c.x,c.y+.04,z+d],.12,mats.cyan);
+   beam([c.x+1.5,c.y+.04,z-d],[c.x,c.y+.04,z+d],.12,mats.cyan);
+  }
+  label(station.index===count?'ВЫ ДОБРАЛИСЬ ВМЕСТЕ':`${station.index+1} / БЕЗОПАСНАЯ ПЛОЩАДКА`,[c.x,c.y+6,c.z-6*d],15);
+  for(const side of [-1,1])beam([c.x+side*10,c.y-24,c.z],[c.x+side*10,c.y-.7,c.z],.55,mats.metal);
  }
- for(let z=0;z<30;z+=4){
-  beam([-1.6,44.03,z+1.2],[0,44.03,z],.10,mats.cyan);beam([1.6,44.03,z+1.2],[0,44.03,z],.10,mats.cyan);
+ for(let i=0;i<count;i++){
+  const station=stations[i],next=stations[i+1],c=station.center,d=station.forward.z;
+  const intakeCenter=V(c.x,c.y-drop,c.z+d*24);
+  const exitCenter=V(next.center.x,c.y+3,c.z+d*exitForward);
+  const intake=panel(`intake${i+1}`,intakeCenter.toArray(),[0,1,0],`${i+1} / ВХОД`,'cyan',9,10);
+  const exit=panel(`exit${i+1}`,exitCenter.toArray(),[0,upward,-d*Math.sqrt(1-upward*upward)],`${i+1} / ВЫХОД`,'orange',9,10);
+  intake.mesh.userData.portalSize={width:2.2,height:2.8};exit.mesh.userData.portalSize={width:2.2,height:2.8};
+  intake.mesh.userData.portalUp=V(0,0,-d);
+  game.floors.push({minX:c.x-4.5,maxX:c.x+4.5,minZ:intakeCenter.z-5,maxZ:intakeCenter.z+5,y:intakeCenter.y,mesh:intake.mesh,enabled:true});
+  const landing={center:next.center.clone(),halfWidth:next.halfWidth,halfLength:20,y:next.center.y,
+   contains:p=>stationContains(next,p)};
+  const segment={index:i,start:c.clone(),spawn:c.clone(),spawnView:{yaw:d===-1?0:Math.PI,pitch:-.08},
+   runway:{...station,center:c.clone(),y:c.y},intake,exit,landing,drop};
+  segments.push(segment);
+  // Open induction collars visibly explain the small correction towards the
+  // large blue aperture; the fall keeps its full gravity-generated energy.
+  for(let offset=0;offset<=drop;offset+=8){
+   const y=c.y-offset;
+   const light=ring([c.x,y,intakeCenter.z],5.3,[0,1,0],'white',.09);
+   light.material=new THREE.MeshBasicMaterial({color:WHITE,transparent:true,opacity:.3});
+   light.userData.segment=i;shaftLights.push(light);
+  }
+  for(const side of [-1,1])beam([c.x+side*5.6,c.y-drop-2,intakeCenter.z],[c.x+side*5.6,c.y+2,intakeCenter.z],.22,mats.metal);
+  label('СИНИЙ ВХОД УЖЕ ГОТОВ',[c.x,c.y+2,intakeCenter.z],9);
+  label('ОДИН КЛИК → ВЫХОД',[exitCenter.x,exitCenter.y+8,exitCenter.z],11,'#ffd49c');
+  const normal=exit.normal;
+  const speed=Math.sqrt(2*19.5*(drop+1.2)),vx=normal.z*speed,vy=normal.y*speed;
+  const flightDuration=(vy+Math.sqrt(vy*vy+39*(exitCenter.y-next.center.y)))/19.5;
+  for(let k=1;k<=5;k++){
+   const t=k*flightDuration/6;
+   const point=exitCenter.clone().addScaledVector(normal,speed*t).add(V(0,-9.75*t*t,0));
+   const o=ring(point.toArray(),6.3,[0,vy-19.5*t,vx],'white',.14);
+   o.material=new THREE.MeshBasicMaterial({color:WHITE,transparent:true,opacity:.28});
+   const arc=new THREE.Mesh(new THREE.TorusGeometry(6.7,.08,4,24,Math.PI*.58),mats.white);
+   arc.position.copy(o.position);arc.quaternion.copy(o.quaternion);root.add(arc);
+   guides.push({o,arc,stage:i,order:k,baseRotation:o.quaternion.clone()});
+  }
+  const back=exitCenter.clone().addScaledVector(normal,-1.4);
+  ring(back.toArray(),6.1,normal.toArray(),'orange',.16);
+  // Huge open gantries give parallax while keeping all solid beams away from
+  // the actual trajectory, the portal throat and the landing deck.
+  for(const side of [-1,1])beam([back.x+side*8,back.y-27,back.z],[back.x+side*8,back.y+13,back.z],.65,mats.metal);
+  beam([back.x-8,back.y+13,back.z],[back.x+8,back.y+13,back.z],.65,mats.metal);
  }
- label('FASTER / FASTER / FASTER',[0,50,-10],18,'#e9f8ff');
- label('SHIFT + W',[0,45.8,5],5.5);
- label('01  /  ПАДЕНИЕ = СКОРОСТЬ',[0,42,-12.5],8);
- // The shaft collar is deliberately open: falling and portal aiming are visible.
- for(const y of [3,11,19,27,35,43]){
-  const light=ring([0,y,-8],4.5,[0,1,0],'white',.10);
-  light.material=new THREE.MeshBasicMaterial({color:WHITE,transparent:true,opacity:.35});shaftLights.push(light);
-  for(const x of [-4.8,4.8])box([x,y,-8],[.15,.25,9.6],mats.metal);
- }
- for(const x of [-4.8,4.8])for(const z of [-12.8,-3.2])beam([x,-1,z],[x,44,z],.23,mats.metal);
- const intake=panel('intake',[0,.025,-8],[0,1,0],'01','cyan',8,8);
- game.floors.push({minX:-4,maxX:4,minZ:-12,maxZ:-4,y:.025,mesh:intake.mesh,enabled:true});
- panel('launch1',[0,18,-42],[0,.6,.8],'↑','orange');
- panel('catch1',[0,17.3,46],[0,0,-1],'02','cyan',9,12);
- panel('launch2',[-24,48,46],[.8074,.59,0],'03','orange');
- panel('catch2',[42,23.3,46],[-1,0,0],'04','cyan',9,12);
- panel('launch3',[42,59,84],[0,.59,-.8074],'05','orange');
-
- // Large mechanical cradles make the suspended panels read as machinery.
- for(const name of ['launch1','catch1','launch2','catch2','launch3']){
-  const p=panels[name],c=p.group.position;
-  const n=p.normal,back=c.clone().addScaledVector(n,-1.4);
-  box([back.x,Math.max(1,back.y*.5),back.z],[2.2,Math.max(2,back.y),2.2],mats.dark);
-  for(const dx of [-2.8,2.8])beam([back.x+dx,0,back.z],[back.x+dx,c.y+1,back.z],.32,mats.metal);
-  ring(back.toArray(),5.8,n.toArray(),name.startsWith('launch')?'orange':'cyan',.16);
- }
- // Flight rings are guides, never invisible portals or collision gates.
- for(const [p,r,n] of [
-  [[0,36,-20],5,[0,0,1]],[[0,35,9],6,[0,0,1]],[[0,26,32],5,[0,0,1]],
-  [[-6,46,46],5,[1,0,0]],[[16,38,46],6,[1,0,0]],[[34,28,46],5,[1,0,0]],
-  [[42,57,62],6,[0,0,1]],[[42,50,37],7,[0,0,1]],[[42,37,10],6,[0,0,1]],
- ]){
-  const index=guides.length,stage=1+Math.floor(index/3);
-  const o=ring(p,r,n,'white',.14);
-  o.material=new THREE.MeshBasicMaterial({color:WHITE,transparent:true,opacity:.22});
-  const arc=new THREE.Mesh(new THREE.TorusGeometry(r+.43,.085,4,24,Math.PI*.56),mats.white);
-  arc.position.copy(o.position);arc.quaternion.copy(o.quaternion);root.add(arc);
-  guides.push({o,arc,stage,order:index%3,baseRotation:o.quaternion.clone()});
-  ring(p,r+.43,n,'white',.025);
- }
- platform(30,54,-24,14,35,'finish bridge');
- for(let z=-20;z<14;z+=8){
-  box([42,35.035,z],[18,.05,.25],mats.white);
-  beam([32,35,z],[32,46,z],.26,mats.metal);beam([52,35,z],[52,46,z],.26,mats.metal);
-  beam([32,46,z],[52,46,z],.3,mats.metal);
- }
- label('VELOCITY / COMPLETE',[42,48,-22],17,'#dffaff');
- const goal=world.goal([42,35,-6],[20,30]);
+ const finalStation=stations[count],goal={position:finalStation.center,contains:p=>stationContains(finalStation,p)};
+ const scenery=buildVelocityScenery({root,segments,chapter,game});
+ label(chapter===2?'ПРЕДЕЛ II / КАСКАД':'ПРЕДЕЛ I / ВМЕСТЕ В ПОТОК',[0,baseY+13,9],23,'#f0fbff');
+ label('E — ЗАКРЕПИТЬ ДРУГА',[0,baseY+2,2],8,'#ffd49c');
  // A remote reactor and sparse towers give real parallax and vertical scale.
  for(let i=0;i<20;i++){
   const angle=i*Math.PI*2/20,r=135+(i%3)*13,x=35+Math.cos(angle)*r,z=-30+Math.sin(angle)*r,h=40+(i*17%73);
@@ -199,41 +210,84 @@ export function buildVelocityArena(game){
   burst.group.visible=true;
  }
 
- let time=0,seeded=false;
- const run={stage:0,name:'РАЗГОН',chain:0,speed:0,peakSpeed:0,airborneShots:0,shots:0,finished:false,elapsed:0,transfers:[],validRoute:true};
+ let time=0,seeded=false,segmentIndex=0,inFlight=false,finished=false,landingPause=0,strandedTime=0;
+ const run={chapter,segments:count,segment:0,stage:0,name:'ЗАКРЕПИ ДРУГА',phase:'attach',chain:0,
+  speed:0,peakSpeed:0,airborneShots:0,shots:0,finished:false,elapsed:0,transfers:[],checkpoints:0,retries:0,validRoute:true};
  game.velocityRun=run;
- const names=['РАЗГОН','ВОЗДУШНАЯ СВЯЗЬ','ВТОРОЙ ИМПУЛЬС','ФИНИШНЫЙ ПОЛЁТ','ЦЕПЬ ЗАМКНУТА'];
+ const current=()=>segments[Math.min(segmentIndex,count-1)];
+ const connected=()=>Boolean(game.velocityCompanion?.connected);
+ const exitReady=()=>game.portalSurfaceIds?.[1]===current().exit.mesh.uuid&&Boolean(game.portals?.ready);
  function seed(){
-  if(seeded||!game.portals)return;
-  seeded=true;
-  for(const [slot,name] of [[0,'intake'],[1,'launch1']]){
-   const mesh=panels[name].mesh;
-   const placed=game.portals.placeOnPanel(slot,mesh,mesh.userData.center,{blockers:game.colliders,preferredUp:mesh.userData.portalUp});
-   seeded=seeded&&placed.ok;if(placed.ok)game.portalSurfaceIds[slot]=mesh.uuid;
-  }
+  if(seeded||!game.portals||finished)return;
+  const mesh=current().intake.mesh;
+  const placed=game.portals.placeOnPanel(0,mesh,mesh.userData.center,{blockers:game.colliders,preferredUp:mesh.userData.portalUp});
+  seeded=placed.ok;if(placed.ok)game.portalSurfaceIds[0]=mesh.uuid;
+ }
+ function clearSegment(){
+  seeded=false;inFlight=false;landingPause=0;strandedTime=0;
+  game.portalShots?.reset();game.portals?.clear();if(game.portalSurfaceIds)game.portalSurfaceIds=[null,null];seed();
+ }
+ function getCheckpoint(){
+  const station=stations[Math.min(segmentIndex,count)],d=station.forward.z;
+  return {position:station.center.clone(),yaw:d===-1?0:Math.PI,pitch:-.08,connected:connected(),index:segmentIndex};
+ }
+ function restoreCheckpoint(){
+  run.retries++;finished=false;run.finished=false;clearSegment();refresh();return getCheckpoint();
  }
  function reset(){
-  time=0;seeded=false;renderClock=0;lastVisualTime=null;nextBurst=0;
+  time=0;segmentIndex=0;finished=false;renderClock=0;lastVisualTime=null;nextBurst=0;
   for(const b of bursts){b.started=-Infinity;b.group.visible=false;b.material.opacity=0;}
-  Object.assign(run,{stage:0,name:names[0],chain:0,speed:0,peakSpeed:0,airborneShots:0,shots:0,finished:false,elapsed:0,transfers:[],validRoute:true});seed();
+  Object.assign(run,{segment:0,stage:0,name:'ЗАКРЕПИ ДРУГА',phase:'attach',chain:0,speed:0,peakSpeed:0,
+   airborneShots:0,shots:0,finished:false,elapsed:0,transfers:[],checkpoints:0,retries:0,validRoute:true});clearSegment();
+ }
+ function refresh(){
+  run.segment=segmentIndex;run.stage=segmentIndex;
+  run.phase=finished?'complete':!connected()?'attach':inFlight?'flight':!exitReady()?'prepare':'dive';
+  run.name=finished?'ВМЕСТЕ НА ФИНИШЕ':run.phase==='attach'?'ЗАКРЕПИ ДРУГА':run.phase==='prepare'?'ОТКРОЙ ВЫХОД':run.phase==='flight'?'ЛЕТИ ПО КОЛЬЦАМ':'СИНИЙ ВХОД';
  }
  function onTeleport(travel){
   const from=game.portals.portals[travel.entryIndex]?.surfaceId,to=game.portals.portals[travel.exitIndex]?.surfaceId;
-  const routes=[['intake','launch1'],['catch1','launch2'],['catch2','launch3']];
-  const expected=routes[run.stage];
-  if(expected&&from===panels[expected[0]].mesh.uuid&&to===panels[expected[1]].mesh.uuid){
-   run.stage++;run.chain++;run.name=names[run.stage];run.transfers.push({from:expected[0],to:expected[1],speed:travel.velocity.length(),time:time});
-   impact(expected[1],travel.velocity.length());
-   game.callbacks?.onToast?.(STEPS[run.stage]);
-   game.emitHud?.();
-  }else{run.validRoute=false;game.callbacks?.onToast?.('Связь ушла с маршрута. R — быстрый рестарт.');}
+  const segment=current();
+  if(connected()&&!inFlight&&from===segment.intake.mesh.uuid&&to===segment.exit.mesh.uuid){
+   inFlight=true;run.chain++;run.transfers.push({segment:segmentIndex,from:`intake${segmentIndex+1}`,to:`exit${segmentIndex+1}`,speed:travel.velocity.length(),time});
+   impact(`exit${segmentIndex+1}`,travel.velocity.length());refresh();
+   game.callbacks?.onToast?.('Отпусти движение — импульс донесёт вас до светящейся площадки.');game.emitHud?.();
+  }else game.restartCheckpoint?.('Повтори этот участок: друг и синий вход должны быть готовы.');
  }
  function recordShot(index,mesh,info={}){
-  run.shots++;if(info.wasAirborne??!game.playerGrounded)run.airborneShots++;
+  if(index!==1||mesh!==current().exit.mesh)return;
+  run.shots++;if(info.wasAirborne??!game.playerGrounded)run.airborneShots++;refresh();
  }
  function update(dt){
   seed();if(game.state==='playing'){time+=dt;run.elapsed=time;}
   run.speed=game.playerVelocity?.length()??0;run.peakSpeed=Math.max(run.peakSpeed,run.speed);
+  if(game.state==='playing'&&!finished){
+   if(inFlight&&game.playerGrounded&&current().landing.contains(game.playerPosition)&&game.velocityCompanion?.isNear(game.playerPosition,3)){
+    landingPause+=dt;
+    if(landingPause>.06){
+     segmentIndex++;run.checkpoints=segmentIndex;inFlight=false;
+     if(segmentIndex>=count){finished=true;run.finished=true;}
+     else clearSegment();
+     game.audio?.checkpoint?.();game.callbacks?.onToast?.(finished?'Вы добрались вместе!':`Площадка ${segmentIndex+1} сохранена. Спокойно открой следующий выход.`);game.emitHud?.();
+    }
+   }else landingPause=0;
+   const s=current();
+   const stranded=!inFlight&&game.playerGrounded&&game.playerPosition.y<s.start.y-4;
+   strandedTime=stranded?strandedTime+dt:0;
+   if(strandedTime>.35)
+    game.restartCheckpoint?.(connected()?'Сначала открой янтарный выход с безопасной площадки.':'Сначала закрепи брейнрота клавишей E.');
+   else if(game.playerPosition.y<s.intake.group.position.y-8||game.playerPosition.y<8)
+    game.restartCheckpoint?.('Не страшно — повторяем только этот участок.');
+  }
+  refresh();
+ }
+ function getGuidance(){
+  refresh();const s=current(),checkpointLabel=`Площадка ${Math.min(segmentIndex+1,count+1)} / ${count+1}`;
+  if(finished)return {title:'ВЫ ДОБРАЛИСЬ ВМЕСТЕ',text:'Брейнрот рядом. Скоростная глава пройдена!',target:goal.position.clone(),kind:'complete',slot:null,focus:Boolean(game.velocityFocus),checkpointLabel,companionConnected:connected()};
+  if(!connected())return {title:'СНАЧАЛА ЗАКРЕПИ ДРУГА',text:'Подойди к брейнроту и нажми E. Стабилизатор держит его рядом, а руки остаются свободными.',target:game.cargo?.position?.clone()||V(-1.7,baseY+.6,1),kind:'friend',slot:null,focus:Boolean(game.velocityFocus),checkpointLabel,companionConnected:false};
+  if(inFlight)return {title:'ЛЕТИТЕ ВМЕСТЕ',text:'Отпусти W — скорость уже набрана. Кольца ведут на широкую площадку; A / D слегка правят курс.',target:s.landing.center.clone().add(V(0,2,0)),kind:'land',slot:null,focus:Boolean(game.velocityFocus),checkpointLabel,companionConnected:true};
+  if(!exitReady())return {title:'ОТКРОЙ ЯНТАРНЫЙ ВЫХОД',text:'Наведи взгляд на янтарную панель и нажми ЛКМ. Синий вход уже установлен. Можно целиться с площадки.',target:s.exit.group.position.clone(),kind:'shoot',slot:1,focus:Boolean(game.velocityFocus),checkpointLabel,companionConnected:true};
+  return {title:'БЕГИ В СИНИЙ КОЛОДЕЦ',text:'Выход готов. W + Shift по стрелкам к синему колодцу. В падении отпусти W — кольца помогут попасть во вход.',target:s.intake.group.position.clone(),kind:'fly',slot:0,focus:Boolean(game.velocityFocus),checkpointLabel,companionConnected:true};
  }
  function renderUpdate(_alpha=1,visualTime){
   // Physics calls this without a visual time to restore moving supports.
@@ -243,16 +297,17 @@ export function buildVelocityArena(game){
   const step=lastVisualTime===null?0:THREE.MathUtils.clamp(visualTime-lastVisualTime,0,.1);
   lastVisualTime=visualTime;
   if(active&&motion)renderClock+=step;
-  const stage=Math.min(3,run.stage),strength=Math.min(1,(run.speed||0)/52);
+  const stage=Math.min(count-1,run.segment),strength=Math.min(1,(run.speed||0)/52);
+  scenery.update(renderClock,stage);
   const phase=renderClock*(.58+stage*.14+strength*.15);
   for(const a of animated)if(a.spin)a.o.rotation.z=motion?renderClock*a.spin:0;
   coreMaterial.opacity=.42+stage*.14;
   outlines.material.opacity=.38+stage*.105;
   for(let i=0;i<shaftLights.length;i++){
-   const wave=motion&&active&&stage===0?(Math.cos((phase+i/shaftLights.length)*Math.PI*2)+1)*.5:0;
-   shaftLights[i].material.opacity=stage===0?.3+wave*.5:.15;
+   const wave=motion&&active&&shaftLights[i].userData.segment===stage?(Math.cos((phase+i/shaftLights.length)*Math.PI*2)+1)*.5:0;
+   shaftLights[i].material.opacity=shaftLights[i].userData.segment===stage?.3+wave*.5:.15;
   }
-  const targetNames=stage===0?['intake']:stage===1?['catch1','launch2']:stage===2?['catch2','launch3']:[];
+  const targetNames=finished?[]:[`intake${stage+1}`,`exit${stage+1}`];
   for(const light of relayLights){
    const target=targetNames.includes(light.name);
    const pulse=target&&motion&&active?.08*Math.sin(phase*Math.PI*2):0;
@@ -292,27 +347,32 @@ export function buildVelocityArena(game){
   }
  }
  function isWon(){
-  const won=run.validRoute&&run.stage>=3&&game.playerGrounded&&goal.contains(game.playerPosition)&&run.airborneShots>=4;
-  if(won){run.stage=4;run.name=names[4];run.finished=true;}
-  return won;
+  return finished&&game.playerGrounded&&goal.contains(game.playerPosition)&&Boolean(game.velocityCompanion?.isNear(game.playerPosition,3));
  }
  function playerAcceleration(p,v){
-  if(run.stage!==0||p.y>43.9||p.y<.5||Math.abs(p.x)>4.7||p.z<-14||p.z>-.8)return null;
-  // A visibly marked induction shaft damps only lateral drift; it never adds
-  // vertical energy or snaps the player to the portal.
-  return V(THREE.MathUtils.clamp(-p.x*28-v.x*10,-80,80),0,THREE.MathUtils.clamp((-8-p.z)*28-v.z*10,-80,80));
+  const s=current(),c=s.intake.group.position;
+  // The luminous station floor physically brakes excess landing speed; normal
+  // sprinting remains untouched and the player can take time to aim again.
+  if(game.playerGrounded&&Math.hypot(v.x,v.z)>15.5&&stations.some(st=>stationContains(st,p)))
+   return V(-v.x*8,0,-v.z*8);
+  if(inFlight||finished||p.y>s.start.y-.03||p.y<c.y-.5||Math.abs(p.x-c.x)>9||Math.abs(p.z-c.z)>17)return null;
+  return V(THREE.MathUtils.clamp((c.x-p.x)*20-v.x*8,-80,80),0,THREE.MathUtils.clamp((c.z-p.z)*20-v.z*8,-80,80));
  }
- const hints=[STEPS[0],STEPS[1],STEPS[2]];
  function dispose(){
   if(disposed)return;disposed=true;
+  scenery.dispose();
   for(const b of bursts){b.group.visible=false;b.started=-Infinity;b.fragments.dispose();}
   signTextures.forEach(t=>t.dispose());
-  // Every geometry/material stays attached for the shared level disposer,
-  // which deduplicates resources across pooled rings, beams and fragments.
  }
- return {id:'velocity-relay',title:'VELOCITY / FASTER FASTER',index:0,world,structure:root,spawn:[0,44,27],spawnView:{yaw:0,pitch:-.08},cargoSpawn:[3,44.55,33],
-  bounds:{minX:-170,maxX:220,minZ:-220,maxZ:170},panels,pads:[],gates:[],bridges:[],terminals:[],fixtures,floors:world.floors,launchPad:null,lift:null,receiverPanel:null,momentum:true,
-  update,reset,renderUpdate,onTeleport,recordShot,playerAcceleration,isWon,goal,hints,dispose,getLesson:()=>({key:`velocity-${run.stage}`,text:STEPS[run.stage]}),getObjective:()=>STEPS[run.stage],getLaunch:()=>null,
-  interact:()=>false,nearbyInteraction:()=>null,cargoOnAnyPad:()=>false,
-  diagnostics:()=>({id:'velocity-relay',mode:'velocity',solo:true,realPortalPhysics:true,intakeDrop:44,...run,panels:Object.fromEntries(Object.entries(panels).map(([name,p])=>[name,{position:p.group.position.toArray(),normal:p.normal.toArray()}]))})};
+ return {id:`velocity-chapter-${chapter}`,title:chapter===2?'ПРЕДЕЛ II / КАСКАД':'ПРЕДЕЛ I / ВМЕСТЕ В ПОТОК',index:0,chapter,world,structure:root,
+  spawn:stations[0].center.toArray(),spawnView:{yaw:0,pitch:-.08},cargoSpawn:[-1.7,baseY+.6,1],
+  bounds:{minX:-170,maxX:spacing*count+180,minZ:-200,maxZ:220},segments,stations,panels,pads:[],gates:[],bridges:[],terminals:[],fixtures,
+  floors:world.floors,launchPad:null,lift:null,receiverPanel:null,momentum:true,
+  update,reset,renderUpdate,onTeleport,recordShot,playerAcceleration,isWon,goal,dispose,getCheckpoint,restoreCheckpoint,getGuidance,
+  getShotTargets:()=>finished||inFlight?[]:[{panel:current().exit.mesh,slot:1}],getRequiredShotSlot:()=>1,
+  getFlightTarget:()=>finished||inFlight?null:{panel:current().intake.mesh,slot:0},
+  getLesson:()=>({key:`velocity-${chapter}-${run.phase}`,text:getGuidance().text}),getObjective:()=>getGuidance().text,getLaunch:()=>null,
+  interact:()=>false,nearbyInteraction:()=>game.velocityCompanion?.prompt||null,cargoOnAnyPad:()=>false,
+  diagnostics:()=>({id:`velocity-chapter-${chapter}`,mode:'velocity',solo:false,realPortalPhysics:true,intakeDrop:drop,...run,
+   companion:game.velocityCompanion?.diagnostics,checkpoint:getCheckpoint(),scenery:scenery.diagnostics,panels:Object.fromEntries(Object.entries(panels).map(([name,p])=>[name,{position:p.group.position.toArray(),normal:p.normal.toArray()}]))})};
 }
