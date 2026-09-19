@@ -161,7 +161,9 @@ if(velocityMode){
   $('#start-screen .lead').textContent='Разгонись. Нырни в портал. Уже в полёте открой следующий. Свяжи пролёты над бездной и доберись до финиша.';
   $('#play-button').innerHTML='Войти в поток <span aria-hidden="true">↗</span>';
   $('#velocity-link').textContent='← Вернуться к головоломкам';$('#velocity-link').href='?level=1';
-  for(const id of ['level-select','settings-level-select'])$('#'+id).closest('label').hidden=true;
+  for(const id of ['level-select','settings-level-select','tutorial-toggle'])$('#'+id).closest('label').hidden=true;
+  for(const id of ['level-number','level-menu-button','hint-button'])$('#'+id).hidden=true;
+  $('#restart-button').textContent='Начать разгон заново';
   $('#start-screen .control-grid').innerHTML='<span><kbd>WASD</kbd> движение</span><span><kbd>SHIFT</kbd> разгон</span><span><kbd class="blue">ЛКМ</kbd> синий портал</span><span><kbd class="amber">ПКМ</kbd> янтарный портал</span><span><kbd>SPACE</kbd> прыжок</span><span><kbd>C</kbd> скольжение</span><span><kbd>R</kbd> новый разгон</span><span><kbd>ESC</kbd> пауза</span>';
   $('#start-screen .mobile-note').textContent='Слева — движение. Справа — прыжок и два портала. Проведи пальцем по сцене, чтобы прицелиться. Разгон — отдельной кнопкой.';
   $('#loading .muted').textContent='Готовим скоростную арену.';

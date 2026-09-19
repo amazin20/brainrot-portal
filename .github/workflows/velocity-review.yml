@@ -22,6 +22,7 @@ jobs:
         run: |
           node --test tests/lab-kinetic-movement.test.js tests/lab-epic-feel.test.js tests/lab-velocity-shots.test.js tests/lab-shot-collision.test.js tests/lab-room21.test.js
           npm run build
+          node scripts/stamp-build.mjs v37-gravity-pocket-candidate
           npm install --no-save --package-lock=false puppeteer-core@24.16.0
       - name: Production WebGL route and continuous simulation-frame video
         run: |

@@ -209,7 +209,8 @@ body[data-game-mode="velocity"][data-play-state="playing"] .velocity-hud { displ
 .velocity-kicker { font:700 10px/1.6 'Segoe UI',sans-serif; letter-spacing:.2em; color:#74eaff; }
 .velocity-kicker strong { color:#fff; }
 .velocity-hud p { margin-top:9px; padding-left:12px; border-left:2px solid #76ecff; color:#eafaff; font-size:13px; line-height:1.55; }
-body[data-game-mode="velocity"] .lab-tutorial { max-width:min(620px,calc(100vw - 180px)); background:#091727dd; border:1px solid #75dcfa3b; }
+/* The current route instruction already appears once in the velocity HUD. */
+body[data-game-mode="velocity"] .lab-tutorial { display:none; }
 @media (pointer:coarse) { body[data-game-mode="velocity"] .velocity-sprint { display:block; pointer-events:auto; border:1px solid #8af0ff99; border-radius:10px; color:#c4f6ff; background:#112c46c9; padding:14px 12px; margin-left:auto; margin-right:16px; font-size:10px; } }
 @media (max-width:700px) { body[data-game-mode="velocity"] .hero-panel { width:100%; } body[data-game-mode="velocity"] .hero-panel h1 { font-size:clamp(40px,10vw,70px); } body[data-game-mode="velocity"][data-play-state="playing"] .velocity-hud { top:14px;left:15px;width:60vw; } .velocity-hud p {font-size:11px;} }
 

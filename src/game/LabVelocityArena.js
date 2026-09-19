@@ -225,6 +225,7 @@ export function buildVelocityArena(game){
    run.stage++;run.chain++;run.name=names[run.stage];run.transfers.push({from:expected[0],to:expected[1],speed:travel.velocity.length(),time:time});
    impact(expected[1],travel.velocity.length());
    game.callbacks?.onToast?.(STEPS[run.stage]);
+   game.emitHud?.();
   }else{run.validRoute=false;game.callbacks?.onToast?.('Связь ушла с маршрута. R — быстрый рестарт.');}
  }
  function recordShot(index,mesh,info={}){

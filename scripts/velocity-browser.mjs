@@ -40,6 +40,11 @@ try{
  assert.equal(report.pause.visible,true);assert.equal(report.pause.keys,0);
  await page.click('#resume-button');await page.waitForFunction(()=>window.__NESI_DEMO_GAME__.state==='playing');
  await page.evaluate(()=>{const g=window.__NESI_DEMO_GAME__;g.renderer.setAnimationLoop(null);g.resetRun(true);g.updateVisuals(1/60,1);g.render();});
+ await page.waitForFunction(()=>getComputedStyle(document.querySelector('#pause-screen')).opacity==='0');
+ const velocityUi=await page.evaluate(()=>({levelHidden:document.querySelector('#level-number').hidden,
+  tutorialHidden:getComputedStyle(document.querySelector('.lab-tutorial')).display==='none',
+  levelMenuHidden:document.querySelector('#level-menu-button').hidden}));
+ assert.ok(velocityUi.levelHidden&&velocityUi.tutorialHidden&&velocityUi.levelMenuHidden);report.velocityUi=velocityUi;
  await page.screenshot({path:path.join(out,'start.png')});report.screenshots.push('start.png');
 
  const crossings=new Set();
@@ -49,6 +54,7 @@ try{
   report.frames.push({index,time:data.time,position:data.position,speed:data.speed,teleports:data.teleports,
    stage:data.stage,fov:data.fov,drawCalls:data.drawCalls});
   if([1,2].includes(data.teleports)&&!crossings.has(data.teleports)){
+   assert.equal(data.hudStage,data.stageName,'The current flight instruction must update on the crossing frame');
    crossings.add(data.teleports);const file=`crossing-${data.teleports}.png`;
    await page.screenshot({path:path.join(out,file)});report.screenshots.push(file);
   }
@@ -63,7 +69,8 @@ try{
    const motion=g.epicDirector?.canvas;if(motion&&motion.style.display!=='none')ctx.drawImage(motion,0,0,1280,720);
    await window.__NESI_WRITE_VELOCITY_FRAME__({image:output.toDataURL('image/jpeg',.88),time,
     position:g.playerPosition.toArray(),speed:g.playerVelocity.length(),teleports:g.teleportCount,
-    stage:g.velocityRun?.stage,fov:g.camera.fov,drawCalls:g.renderer.info.render.calls});
+    stage:g.velocityRun?.stage,stageName:g.velocityRun?.name,hudStage:document.querySelector('#velocity-stage').textContent,
+    fov:g.camera.fov,drawCalls:g.renderer.info.render.calls});
   };
   try{
    const route=await window.__NESI_RUN_VELOCITY_ROUTE__();
