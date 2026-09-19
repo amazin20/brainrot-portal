@@ -113,7 +113,7 @@ export function buildVelocityArena(game){
    beam([c.x-1.5,c.y+.04,z-d],[c.x,c.y+.04,z+d],.12,mats.cyan);
    beam([c.x+1.5,c.y+.04,z-d],[c.x,c.y+.04,z+d],.12,mats.cyan);
   }
-  label(station.index===count?'ВЫ ДОБРАЛИСЬ ВМЕСТЕ':`${station.index+1} / БЕЗОПАСНАЯ ПЛОЩАДКА`,[c.x,c.y+6,c.z-6*d],15);
+  label(station.index===count?'ВЫ ДОБРАЛИСЬ ВМЕСТЕ':`${station.index+1} / ПЛОЩАДКА`,[c.x,c.y+8,c.z-6*d],10);
   for(const side of [-1,1])beam([c.x+side*10,c.y-24,c.z],[c.x+side*10,c.y-.7,c.z],.55,mats.metal);
  }
  for(let i=0;i<count;i++){
@@ -163,7 +163,6 @@ export function buildVelocityArena(game){
  const finalStation=stations[count],goal={position:finalStation.center,contains:p=>stationContains(finalStation,p)};
  const scenery=buildVelocityScenery({root,segments,chapter,game});
  label(chapter===2?'ПРЕДЕЛ II / КАСКАД':'ПРЕДЕЛ I / ВМЕСТЕ В ПОТОК',[0,baseY+13,9],23,'#f0fbff');
- label('E — ЗАКРЕПИТЬ ДРУГА',[0,baseY+2,2],8,'#ffd49c');
  // A remote reactor and sparse towers give real parallax and vertical scale.
  for(let i=0;i<20;i++){
   const angle=i*Math.PI*2/20,r=135+(i%3)*13,x=35+Math.cos(angle)*r,z=-30+Math.sin(angle)*r,h=40+(i*17%73);
@@ -252,7 +251,10 @@ export function buildVelocityArena(game){
    inFlight=true;run.chain++;run.transfers.push({segment:segmentIndex,from:`intake${segmentIndex+1}`,to:`exit${segmentIndex+1}`,speed:travel.velocity.length(),time});
    impact(`exit${segmentIndex+1}`,travel.velocity.length());refresh();
    game.callbacks?.onToast?.('Отпусти движение — импульс донесёт вас до светящейся площадки.');game.emitHud?.();
-  }else game.restartCheckpoint?.('Повтори этот участок: друг и синий вход должны быть готовы.');
+  }else {
+   game.restartCheckpoint?.('Повтори этот участок: друг и синий вход должны быть готовы.');
+   return false;
+  }
  }
  function recordShot(index,mesh,info={}){
   if(index!==1||mesh!==current().exit.mesh)return;

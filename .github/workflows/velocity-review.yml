@@ -45,6 +45,8 @@ jobs:
             smoke-artifacts/velocity/complete.png
             smoke-artifacts/velocity/chapter-2-complete.png
             smoke-artifacts/velocity/mobile.png
+            smoke-artifacts/velocity/mobile-start.png
+            smoke-artifacts/velocity/mobile-failure.png
             smoke-artifacts/velocity/velocity-run.mp4
           if-no-files-found: error
           retention-days: 14
@@ -57,7 +59,7 @@ jobs:
           VELOCITY_EVIDENCE="$(mktemp -d /tmp/velocity-evidence.XXXXXX)"
           git worktree add --detach "$VELOCITY_EVIDENCE" HEAD
           git -C "$VELOCITY_EVIDENCE" switch --orphan "$VELOCITY_REF"
-          for file in report.json menu.png start.png crossing-1.png crossing-2.png complete.png chapter-2-complete.png mobile.png velocity-run.mp4; do
+          for file in report.json menu.png start.png crossing-1.png crossing-2.png complete.png chapter-2-complete.png mobile.png mobile-start.png mobile-failure.png velocity-run.mp4; do
             if test -f "$VELOCITY_ROOT/smoke-artifacts/velocity/$file"; then
               cp "$VELOCITY_ROOT/smoke-artifacts/velocity/$file" "$VELOCITY_EVIDENCE/$file"
               git -C "$VELOCITY_EVIDENCE" add -- "$file"

@@ -5,6 +5,7 @@ import {LabPreferences,QUALITY_PRESETS,applyLabQuality} from './game/LabPreferen
 import {LabPlatform,loadYandexSDK} from './game/LabPlatform.js';
 import {Vector3} from 'three';
 import {VELOCITY_CHAPTERS,LabVelocityProgress,getVelocityInterlude,velocityChapterURL,readVelocityRoute} from './game/LabVelocityChapters.js';
+import {bindVelocityHoldButton} from './game/LabVelocityHoldButton.js';
 const $=s=>document.querySelector(s),query=new URLSearchParams(location.search);
 const debug=query.get('debug')==='1'||query.get('smoke')==='1';
 const velocityMode=query.get('mode')==='velocity';
@@ -13,13 +14,13 @@ const touchControls=globalThis.matchMedia?.('(pointer: coarse)').matches ?? fals
 const motionReduced=globalThis.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
 const yandex=import.meta.env.MODE==='yandex';
 let storage;try{storage=localStorage;}catch{}
-const preferences=new LabPreferences(storage),holds=new Set();
+const preferences=new LabPreferences(storage),holds=new Set(),velocityHoldButtons=[];
 const velocityProgress=new LabVelocityProgress(storage);
 const screens=['loading','start-screen','pause-screen','win-screen','error-screen'];
 let platform,entering=false,hintBusy=false;
 function screen(id,visible){const e=$('#'+id);e.classList.toggle('screen--active',visible);e.setAttribute('aria-hidden',String(!visible));e.inert=!visible;}
 function hideScreens(){screens.forEach(id=>screen(id,false));}
-function clearInput(){game.resetInput();}
+function clearInput(){game.resetInput();for(const button of velocityHoldButtons)button.reset();}
 function syncActivity(){const active=game.state==='playing'&&!holds.size;platform?.gameplay(active);game.audio?.block('menu',game.state!=='playing'&&game.state!=='won');game.audio?.block('external',holds.size>0);}
 function setState(state){document.body.dataset.playState=state;document.documentElement.dataset.runtimeState=state;
   const mobile=$('#mobile-controls'),active=state==='playing';mobile.classList.toggle('mobile-controls--active',active);mobile.inert=!active;mobile.setAttribute('aria-hidden',String(!active));
@@ -166,7 +167,7 @@ async function enterLevel(index,reason='next'){
 async function restartLevel({full=false}={}){
   if(entering||holds.size)return;entering=true;clearInput();
   try{if(game.state==='playing')game.togglePause(true);await platform?.interstitial('restart');
-    hideScreens();if(velocityMode&&!full&&game.restartCheckpoint)game.restartCheckpoint();else game.restart();game.audio.unlock();game.renderer.setAnimationLoop(game.animate);setState('playing');game.renderer.domElement.requestPointerLock?.()?.catch?.(()=>{});
+    hideScreens();if(velocityMode&&!full&&game.restartCheckpoint)game.restartCheckpoint();else game.restart();game.audio.unlock();game.renderer.setAnimationLoop(game.animate);setState('playing');game.requestPointerLock();
   }catch(error){failure(error);}finally{entering=false;}
 }
 function resume(){if(holds.size)return;game.audio.unlock();game.togglePause(false);game.renderer.setAnimationLoop(game.animate);}
@@ -206,7 +207,7 @@ addEventListener('keydown',event=>{
 addEventListener('blur',()=>hold('focus',true));addEventListener('focus',()=>hold('focus',false));
 document.addEventListener('visibilitychange',()=>{hold('hidden',document.hidden);if(document.hidden&&game.state==='playing'&&!game.externalBlocked)game.togglePause(true);});
 // A bfcache visit keeps the one live controller; a discarded page detaches it.
-addEventListener('pagehide',event=>{hold('page',true);if(!event.persisted){game.renderer?.setAnimationLoop(null);game.disposeControls();game.epicDirector?.dispose();platform?.dispose();game.audio?.dispose();}});
+addEventListener('pagehide',event=>{hold('page',true);if(!event.persisted){for(const button of velocityHoldButtons)button.dispose();game.renderer?.setAnimationLoop(null);game.disposeControls();game.epicDirector?.dispose();platform?.dispose();game.audio?.dispose();}});
 addEventListener('pageshow',event=>{if(event.persisted)hold('page',false);});
 addEventListener('contextmenu',event=>event.preventDefault());
 addEventListener('error',event=>{if(event.error)failure(event.error);});
@@ -247,10 +248,8 @@ if(velocityMode){
   $('#loading .muted').textContent='Готовим маршрут для вас двоих.';
   $('#start-screen .start-caption')?.remove();
   for(const [id,key] of [['velocity-sprint','ShiftLeft'],['velocity-focus','KeyQ']]){
-    const button=$('#'+id);
-    button.addEventListener('pointerdown',e=>{if(game.state!=='playing'||holds.size)return;e.preventDefault();button.setPointerCapture(e.pointerId);game.input.keys.add(key);});
-    const release=()=>game.input?.keys.delete(key);
-    for(const type of ['pointerup','pointercancel','lostpointercapture'])button.addEventListener(type,release);
+    velocityHoldButtons.push(bindVelocityHoldButton($('#'+id),{key,getInput:()=>game.input,
+      isActive:()=>game.state==='playing'&&!holds.size&&!game.externalBlocked}));
   }
 
   // One world-space destination, rendered by the game's existing frame loop.

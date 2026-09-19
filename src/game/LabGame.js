@@ -427,7 +427,14 @@ export class LabGame {
       ? 'Обе руки заняты · E — поставить' : '';
   }
 
-  start() { this.audio.unlock(); this.resetRun(true); this.renderer.domElement.requestPointerLock?.()?.catch?.(() => {}); }
+  requestPointerLock() {
+    // Automatic mouse lock prevents touch pointer capture in Chromium. Touch
+    // camera/joystick/hold controls own their fingers without locking a mouse.
+    if (globalThis.matchMedia?.('(pointer: coarse)').matches) return false;
+    this.renderer?.domElement.requestPointerLock?.()?.catch?.(() => {});
+    return true;
+  }
+  start() { this.audio.unlock(); this.resetRun(true); this.requestPointerLock(); }
   restart() { this.resetRun(true); this.callbacks.onPause(false); }
   restartCheckpoint(reason) {
     if (!this.epicMode || !this.firstLevel?.restoreCheckpoint) { this.restart(); return true; }
@@ -517,7 +524,7 @@ export class LabGame {
     if (paused) this.portalShots?.cancelBuffered('paused');
     if (paused) this.audio?.flight?.(0,true);
     this.resetInput(); this.lastFrame = performance.now(); this.accumulator = 0;
-    if (paused) document.exitPointerLock?.(); else this.renderer.domElement.requestPointerLock?.()?.catch?.(() => {});
+    if (paused) document.exitPointerLock?.(); else this.requestPointerLock();
     this.callbacks.onPause(paused);
   }
 
@@ -683,7 +690,9 @@ export class LabGame {
       if (Math.hypot(facing.x, facing.z) > .001) this.facing = Math.atan2(facing.x, facing.z);
       this.portalCooldown = .07; this.teleportCount++;
       this.lastPortalTravel = { entry: teleport.entryIndex, exit: teleport.exitIndex, speed: teleport.velocity.length() };
-      this.firstLevel?.onTeleport?.(teleport);
+      // A speed chapter can recover an unprepared crossing immediately. Its
+      // restored camera and pose must not receive the abandoned transit below.
+      if (this.firstLevel?.onTeleport?.(teleport) === false) return;
       this.previousPlayerPosition.copy(this.playerPosition); this.previousFacing = this.facing;
       previous.copy(this.playerPosition);
       this.animator.groundContact?.reset();

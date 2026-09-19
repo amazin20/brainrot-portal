@@ -13,8 +13,85 @@ const report={commit:process.env.BUILD_COMMIT||null,pass:false,errors:[],console
  scope:'Production WebGL build; native menu, E companion connection, movement, Q and pause inputs, then both chapters through production physics and real coarse-aim projectiles. Chapter 1 video is continuous at 30 simulation frames/second. SwiftShader rendering speed is not device FPS. No video audio track.'};
 const browser=await puppeteer.launch({executablePath:process.env.CHROME_PATH||'/usr/bin/google-chrome',headless:true,
  protocolTimeout:1200000,args:['--no-sandbox','--disable-dev-shm-usage','--use-angle=swiftshader','--enable-unsafe-swiftshader']});
+async function verifyMobile(){
+ const mobile=await browser.newPage();mobile.setDefaultTimeout(120000);
+ await mobile.setViewport({width:390,height:844,deviceScaleFactor:1,isMobile:true,hasTouch:true});
+ mobile.on('pageerror',error=>report.errors.push(error.message));
+ const mobileURL=new URL(url);mobileURL.searchParams.set('chapter','1');mobileURL.searchParams.delete('return');
+ report.mobile={pass:false};
+ const screenshot=async name=>{await mobile.screenshot({path:path.join(out,name)});report.screenshots.push(name);};
+ try{
+  await mobile.goto(mobileURL.href,{waitUntil:'networkidle2'});
+  await mobile.waitForFunction(()=>window.__NESI_DEMO_GAME__?.state==='ready');
+  await mobile.evaluate(()=>{
+   const describe=element=>element?element.id||element.className||element.tagName:null;
+   window.__VELOCITY_MOBILE_EVENTS__=[];
+   window.__VELOCITY_MOBILE_STATE__=()=>{
+    const g=window.__NESI_DEMO_GAME__,button=document.querySelector('#velocity-focus'),r=button.getBoundingClientRect();
+    return {state:g?.state,externalBlocked:g?.externalBlocked,keys:[...g.input.keys],
+     visibility:document.visibilityState,activeElement:describe(document.activeElement),
+     pointerLockElement:describe(document.pointerLockElement),externalPause:document.body.dataset.externalPause,
+     focus:{x:r.x+r.width/2,y:r.y+r.height/2,left:r.left,right:r.right,top:r.top,bottom:r.bottom,
+      hit:describe(document.elementFromPoint(r.x+r.width/2,r.y+r.height/2))}};
+   };
+   const record=(event,phase)=>{
+    const events=window.__VELOCITY_MOBILE_EVENTS__;if(events.length>=160)return;
+    events.push({type:event.type,phase,target:describe(event.target),pointerType:event.pointerType,
+     pointerId:event.pointerId,buttons:event.buttons,clientX:event.clientX,clientY:event.clientY,
+     touches:event.touches?[...event.touches].map(t=>({identifier:t.identifier,x:t.clientX,y:t.clientY})):undefined,
+     defaultPrevented:event.defaultPrevented,time:performance.now(),...window.__VELOCITY_MOBILE_STATE__()});
+   };
+   for(const type of ['pointerdown','pointerup','pointercancel','gotpointercapture','lostpointercapture','touchstart','touchend','touchcancel']){
+    window.addEventListener(type,event=>{record(event,'capture');setTimeout(()=>record(event,'after-dispatch'),0);},true);
+   }
+  });
+  await mobile.$eval('#play-button',button=>button.scrollIntoView({block:'center'}));
+  await mobile.click('#play-button');await mobile.waitForFunction(()=>window.__NESI_DEMO_GAME__.state==='playing');
+  Object.assign(report.mobile,await mobile.evaluate(()=>{
+   const selectors=['#joystick','#velocity-sprint','#velocity-focus','#jump-button','#velocity-pause',
+    '.lab-mobile button:nth-child(1)','.lab-mobile button:nth-child(3)'];
+   return {coarse:matchMedia('(pointer:coarse)').matches,width:innerWidth,height:innerHeight,
+    afterStart:window.__VELOCITY_MOBILE_STATE__(),
+    controls:selectors.map(selector=>{const element=document.querySelector(selector),r=element.getBoundingClientRect();
+     const x=r.x+r.width/2,y=r.y+r.height/2,top=document.elementFromPoint(x,y);
+     return {selector,x,y,left:r.left,right:r.right,top:r.top,bottom:r.bottom,width:r.width,height:r.height,
+      visible:getComputedStyle(element).display!=='none',hit:element===top||element.contains(top)};})};
+  }));
+  await screenshot('mobile-start.png');
+  assert.equal(report.mobile.coarse,true);assert.equal(report.mobile.controls.length,7);
+  assert.equal(report.mobile.afterStart.pointerLockElement,null,'Touch controls must not acquire desktop pointer lock');
+  for(const c of report.mobile.controls){assert.ok(c.visible&&c.width>0&&c.height>0&&c.hit,`Mobile control inaccessible: ${c.selector}`);
+   assert.ok(c.left>=0&&c.top>=0&&c.right<=390&&c.bottom<=844,`Mobile control outside viewport: ${c.selector}`);}
+  for(let i=0;i<report.mobile.controls.length;i++)for(let j=i+1;j<report.mobile.controls.length;j++){
+   const a=report.mobile.controls[i],b=report.mobile.controls[j];
+   assert.ok(a.right<=b.left||b.right<=a.left||a.bottom<=b.top||b.bottom<=a.top,`Overlapping mobile controls: ${a.selector}, ${b.selector}`);
+  }
+  const friend=report.mobile.controls.find(c=>c.selector==='.lab-mobile button:nth-child(3)');
+  await mobile.touchscreen.tap(friend.x,friend.y);await mobile.waitForFunction(()=>window.__NESI_DEMO_GAME__.velocityCompanion.connected);
+  report.mobile.beforeFocus=await mobile.evaluate(()=>window.__VELOCITY_MOBILE_STATE__());
+  await screenshot('mobile.png');
+  const focus=report.mobile.beforeFocus.focus;
+  await mobile.touchscreen.touchStart(focus.x,focus.y);
+  await mobile.waitForFunction(()=>window.__NESI_DEMO_GAME__.input.keys.has('KeyQ'),{timeout:10000});
+  report.mobile.duringFocus=await mobile.evaluate(()=>window.__VELOCITY_MOBILE_STATE__());
+  await mobile.touchscreen.touchEnd();
+  await mobile.waitForFunction(()=>!window.__NESI_DEMO_GAME__.input.keys.has('KeyQ'),{timeout:10000});
+  report.mobile.afterRelease=await mobile.evaluate(()=>window.__VELOCITY_MOBILE_STATE__());
+  assert.equal(report.mobile.duringFocus.state,'playing');assert.equal(report.mobile.duringFocus.pointerLockElement,null);
+  assert.deepEqual(report.errors,[]);report.mobile.pass=true;
+ }catch(error){
+  report.mobile.error=error.stack;
+  await screenshot('mobile-failure.png').catch(()=>{});throw error;
+ }finally{
+  report.mobile.events=await mobile.evaluate(()=>window.__VELOCITY_MOBILE_EVENTS__||[]).catch(()=>[]);
+  report.mobile.final=await mobile.evaluate(()=>window.__VELOCITY_MOBILE_STATE__?.()).catch(()=>null);
+  await mobile.touchscreen.touchEnd().catch(()=>{});await mobile.close();
+ }
+}
 let page;
 try{
+ // Run native touch checks before the expensive continuous WebGL recording.
+ await verifyMobile();
  page=await browser.newPage();page.setDefaultTimeout(120000);await page.setViewport({width:1280,height:720,deviceScaleFactor:1});
  page.on('pageerror',error=>report.errors.push(error.message));
  page.on('console',message=>{if(message.type()==='error')report.consoleErrors.push(message.text());});
@@ -119,36 +196,6 @@ try{
  assert.match(report.chapter2.continueLabel,/21/);
  await page.screenshot({path:path.join(out,'chapter-2-complete.png')});report.screenshots.push('chapter-2-complete.png');
 
- const mobile=await browser.newPage();mobile.setDefaultTimeout(120000);
- await mobile.setViewport({width:390,height:844,deviceScaleFactor:1,isMobile:true,hasTouch:true});
- mobile.on('pageerror',error=>report.errors.push(error.message));
- url.searchParams.set('chapter','1');url.searchParams.delete('return');
- await mobile.goto(url.href,{waitUntil:'networkidle2'});
- await mobile.waitForFunction(()=>window.__NESI_DEMO_GAME__?.state==='ready');
- await mobile.$eval('#play-button',button=>button.scrollIntoView({block:'center'}));
- await mobile.click('#play-button');await mobile.waitForFunction(()=>window.__NESI_DEMO_GAME__.state==='playing');
- report.mobile=await mobile.evaluate(()=>{
-  const selectors=['#joystick','#velocity-sprint','#velocity-focus','#jump-button','#velocity-pause',
-   '.lab-mobile button:nth-child(1)','.lab-mobile button:nth-child(3)'];
-  return {coarse:matchMedia('(pointer:coarse)').matches,width:innerWidth,height:innerHeight,
-   controls:selectors.map(selector=>{const element=document.querySelector(selector),r=element.getBoundingClientRect();
-    const x=r.x+r.width/2,y=r.y+r.height/2,top=document.elementFromPoint(x,y);
-    return {selector,x,y,left:r.left,right:r.right,top:r.top,bottom:r.bottom,width:r.width,height:r.height,
-     visible:getComputedStyle(element).display!=='none',hit:element===top||element.contains(top)};})};
- });
- assert.equal(report.mobile.coarse,true);assert.equal(report.mobile.controls.length,7);
- for(const c of report.mobile.controls){assert.ok(c.visible&&c.width>0&&c.height>0&&c.hit,`Mobile control inaccessible: ${c.selector}`);
-  assert.ok(c.left>=0&&c.top>=0&&c.right<=390&&c.bottom<=844,`Mobile control outside viewport: ${c.selector}`);}
- for(let i=0;i<report.mobile.controls.length;i++)for(let j=i+1;j<report.mobile.controls.length;j++){
-  const a=report.mobile.controls[i],b=report.mobile.controls[j];
-  assert.ok(a.right<=b.left||b.right<=a.left||a.bottom<=b.top||b.bottom<=a.top,`Overlapping mobile controls: ${a.selector}, ${b.selector}`);
- }
- const friend=report.mobile.controls.find(c=>c.selector==='.lab-mobile button:nth-child(3)');
- await mobile.touchscreen.tap(friend.x,friend.y);await mobile.waitForFunction(()=>window.__NESI_DEMO_GAME__.velocityCompanion.connected);
- const focus=report.mobile.controls.find(c=>c.selector==='#velocity-focus');
- await mobile.touchscreen.touchStart(focus.x,focus.y);await mobile.waitForFunction(()=>window.__NESI_DEMO_GAME__.input.keys.has('KeyQ'));
- await mobile.touchscreen.touchEnd();await mobile.waitForFunction(()=>!window.__NESI_DEMO_GAME__.input.keys.has('KeyQ'));
- await mobile.screenshot({path:path.join(out,'mobile.png')});report.screenshots.push('mobile.png');await mobile.close();
  assert.deepEqual(report.errors,[]);
  report.pass=true;
 }catch(error){report.error=error.stack;throw error;}

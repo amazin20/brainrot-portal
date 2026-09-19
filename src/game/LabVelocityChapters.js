@@ -5,7 +5,7 @@ export const VELOCITY_CHAPTERS = Object.freeze([
   Object.freeze({ chapter: 1, id: 'velocity-flow-v1', title: 'Вместе в поток', afterLevel: 10, returnLevel: 11,
     description: 'Освой первый разгон вместе с другом. Широкие порталы, световой маршрут и площадки для передышки.' }),
   Object.freeze({ chapter: 2, id: 'velocity-cascade-v1', title: 'Каскад', afterLevel: 20, returnLevel: 21,
-    description: 'Длиннее пролёты, выше скорость. Свяжи порталы на лету — друг проходит весь маршрут вместе с тобой.' }),
+    description: 'Длиннее пролёты, выше скорость. Открывай выходы с площадок и разгоняйся — друг летит рядом весь маршрут.' }),
 ]);
 
 export function getVelocityChapter(value = 1) {
