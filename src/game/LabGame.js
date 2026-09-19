@@ -720,14 +720,24 @@ export class LabGame {
       if (inside(before) > 1 + 1e-8) continue;
       const after = position.clone().addScaledVector(UP, CENTER_HEIGHT).sub(portal.position).applyQuaternion(inverse);
       if (inside(after) <= 1) continue;
-      let low = 0, high = 1;
       const contact = before.clone();
-      for (let n = 0; n < 24; n++) {
-        const middle = (low + high) / 2;
-        contact.copy(before).lerp(after, middle);
-        if (inside(contact) <= 1) low = middle; else high = middle;
+      if (roundedFoot) {
+        // Resolve the rim at the new gravity depth. Truncating the entire
+        // step at a curved contact can pin the position while tangent
+        // velocity keeps accumulating. A lateral non-penetration correction
+        // preserves gravity's vertical step and cannot add potential energy.
+        contact.copy(after);
+        const scale = (1 - 1e-9) / Math.sqrt(inside(after));
+        contact.x *= scale; contact.y *= scale;
+      } else {
+        let low = 0, high = 1;
+        for (let n = 0; n < 24; n++) {
+          const middle = (low + high) / 2;
+          contact.copy(before).lerp(after, middle);
+          if (inside(contact) <= 1) low = middle; else high = middle;
+        }
+        contact.copy(before).lerp(after, Math.max(0, low - 1e-6));
       }
-      contact.copy(before).lerp(after, Math.max(0, low - 1e-6));
       const correction = contact.clone().sub(after);
       if (!roundedFoot) correction.z = 0;
       position.add(correction.applyQuaternion(portal.quaternion));

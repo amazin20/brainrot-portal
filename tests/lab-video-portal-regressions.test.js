@@ -136,3 +136,22 @@ test('the low wall shot from the user-video location is fired and traversed by n
     assert.ok(result.pass);assert.equal(result.respawns+result.resets,0);
   }finally{g.physics.dispose();g.portals.dispose();}
 });
+
+
+test('resting rim contact does not pin position and accumulate kinetic energy before transfer',async()=>{
+  const g=await createHeadlessGame();await g.selectLevel(20,false);
+  try{
+    for(const angle of [0,Math.PI/2,Math.PI,Math.PI*1.5]){
+      floorFixture(g,angle);
+      const initial=19.5*g.playerPosition.y;let previous=g.playerPosition.clone(),stuck=0;
+      for(let tick=0;tick<240&&!g.teleportCount;tick++){
+        g.updatePlaying(1/120);if(g.teleportCount)break;
+        const energy=19.5*g.playerPosition.y+.5*g.playerVelocity.lengthSq();
+        assert.ok(energy<=initial+1e-6,`contact injected energy ${energy-initial}`);
+        if(g.portalFootContact&&g.playerVelocity.length()>.3&&g.playerPosition.distanceTo(previous)<1e-6)stuck++;
+        previous.copy(g.playerPosition);
+      }
+      assert.equal(g.teleportCount,1);assert.equal(stuck,0,'Tangent speed must not charge behind an immobile position');
+    }
+  }finally{g.physics.dispose();g.portals.dispose();}
+});
