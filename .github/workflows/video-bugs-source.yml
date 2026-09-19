@@ -1,0 +1,28 @@
+name: Exact source for user video regressions
+on:
+  push:
+    branches: [ci/video-bugs-source-20260919]
+    paths: [.github/workflows/video-bugs-source.yml]
+permissions:
+  contents: read
+jobs:
+  source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: 0d85241922073fcb31f76a419281355b4f60d7bd
+          persist-credentials: false
+      - run: |
+          git archive --format=tar.gz HEAD > /tmp/video-bugs-source.tar.gz
+          git rev-parse HEAD > /tmp/video-bugs-commit.txt
+          git rev-parse HEAD^{tree} >> /tmp/video-bugs-commit.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: video-bugs-source
+          path: |
+            /tmp/video-bugs-source.tar.gz
+            /tmp/video-bugs-commit.txt
+          retention-days: 3
+          if-no-files-found: error
