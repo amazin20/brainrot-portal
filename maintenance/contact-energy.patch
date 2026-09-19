@@ -1,0 +1,72 @@
+diff --git a/docs/passes/VIDEO_PORTAL_BUGS_20260919.md b/docs/passes/VIDEO_PORTAL_BUGS_20260919.md
+index f185fa2..62163b2 100644
+--- a/docs/passes/VIDEO_PORTAL_BUGS_20260919.md
++++ b/docs/passes/VIDEO_PORTAL_BUGS_20260919.md
+@@ -23,3 +23,5 @@ The actual low shot at[-14.8,10.5,14], fired by the ordinary input driver from t
+ New regressions cover resting contact at four rim orientations and30/60/120Hz grouping, rotated apertures, a250ms display interval, unlinked/solid floor, stale contact after replacement/reset, bounded same-panel fitting and a normal-input wall passage. Parameterized fixtures are not complete campaign playthroughs. Existing38 portal/moving/edge tests passed after the retained correction; full campaign/source CI and native evidence are separate requirements.
+ 
+ Native workflow records before/after at1280x720,30encoded fps,low graphics,without sound. Floor starts from a labelled numerical fixture in the complete room; wall footage uses ordinary walk/aim/fire after reset. Do not call either a full level walkthrough or a hardware-FPS measurement. Full regular WebGL verification1–21 remains mandatory. No model, room-layout, graphics-quality, save, portal impulse or camera patch is hidden in these two fixes. CPU/GPU optimization is separately described in P09B_PORTAL_PIPELINE.md. Zero frame drops on unnamed hardware cannot be certified by the runner.
++
++A further mechanical-energy check caught a candidate-only issue before publication: truncating the whole step at the curved rim briefly pinned position while tangential velocity accumulated. At the long-axis rim, unit-mass pre-transfer energy increased by about2.22J. The retained solver instead resolves lateral penetration at the new gravity depth, then removes outward contact velocity. It neither lifts the actor during contact nor boosts its velocity. Four rim directions now transfer without pinned moving frames or energy above the initial value (1e-6 tolerance, before the separately declared portal exit clearance). The new regression fails on005a932c and passes after this correction. This is not claimed as a defect of the previously published release.
+diff --git a/src/game/LabGame.js b/src/game/LabGame.js
+index 92ef841..fc9380f 100644
+--- a/src/game/LabGame.js
++++ b/src/game/LabGame.js
+@@ -720,14 +720,24 @@ export class LabGame {
+       if (inside(before) > 1 + 1e-8) continue;
+       const after = position.clone().addScaledVector(UP, CENTER_HEIGHT).sub(portal.position).applyQuaternion(inverse);
+       if (inside(after) <= 1) continue;
+-      let low = 0, high = 1;
+       const contact = before.clone();
+-      for (let n = 0; n < 24; n++) {
+-        const middle = (low + high) / 2;
+-        contact.copy(before).lerp(after, middle);
+-        if (inside(contact) <= 1) low = middle; else high = middle;
++      if (roundedFoot) {
++        // Resolve the rim at the new gravity depth. Truncating the entire
++        // step at a curved contact can pin the position while tangent
++        // velocity keeps accumulating. A lateral non-penetration correction
++        // preserves gravity's vertical step and cannot add potential energy.
++        contact.copy(after);
++        const scale = (1 - 1e-9) / Math.sqrt(inside(after));
++        contact.x *= scale; contact.y *= scale;
++      } else {
++        let low = 0, high = 1;
++        for (let n = 0; n < 24; n++) {
++          const middle = (low + high) / 2;
++          contact.copy(before).lerp(after, middle);
++          if (inside(contact) <= 1) low = middle; else high = middle;
++        }
++        contact.copy(before).lerp(after, Math.max(0, low - 1e-6));
+       }
+-      contact.copy(before).lerp(after, Math.max(0, low - 1e-6));
+       const correction = contact.clone().sub(after);
+       if (!roundedFoot) correction.z = 0;
+       position.add(correction.applyQuaternion(portal.quaternion));
+diff --git a/tests/lab-video-portal-regressions.test.js b/tests/lab-video-portal-regressions.test.js
+index 4d9ff08..c6f174e 100644
+--- a/tests/lab-video-portal-regressions.test.js
++++ b/tests/lab-video-portal-regressions.test.js
+@@ -136,3 +136,22 @@ test('the low wall shot from the user-video location is fired and traversed by n
+     assert.ok(result.pass);assert.equal(result.respawns+result.resets,0);
+   }finally{g.physics.dispose();g.portals.dispose();}
+ });
++
++
++test('resting rim contact does not pin position and accumulate kinetic energy before transfer',async()=>{
++  const g=await createHeadlessGame();await g.selectLevel(20,false);
++  try{
++    for(const angle of [0,Math.PI/2,Math.PI,Math.PI*1.5]){
++      floorFixture(g,angle);
++      const initial=19.5*g.playerPosition.y;let previous=g.playerPosition.clone(),stuck=0;
++      for(let tick=0;tick<240&&!g.teleportCount;tick++){
++        g.updatePlaying(1/120);if(g.teleportCount)break;
++        const energy=19.5*g.playerPosition.y+.5*g.playerVelocity.lengthSq();
++        assert.ok(energy<=initial+1e-6,`contact injected energy ${energy-initial}`);
++        if(g.portalFootContact&&g.playerVelocity.length()>.3&&g.playerPosition.distanceTo(previous)<1e-6)stuck++;
++        previous.copy(g.playerPosition);
++      }
++      assert.equal(g.teleportCount,1);assert.equal(stuck,0,'Tangent speed must not charge behind an immobile position');
++    }
++  }finally{g.physics.dispose();g.portals.dispose();}
++});

@@ -1,0 +1,36 @@
+name: Verify non-charging capsule rim contact
+on:
+  push:
+    branches: [ci/contact-energy-20260919]
+permissions:
+  contents: write
+jobs:
+  transfer:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - run: cp maintenance/contact-energy.patch /tmp/contact-energy.patch
+      - uses: actions/checkout@v4
+        with:
+          ref: 005a932c80af319116189cdc474d996aca3d3616
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: |
+          git apply --check /tmp/contact-energy.patch
+          git apply /tmp/contact-energy.patch
+          git add src/game/LabGame.js tests/lab-video-portal-regressions.test.js docs/passes/VIDEO_PORTAL_BUGS_20260919.md
+          git diff --cached --check
+          test "$(git write-tree)" = 78c9c29b0b9ce4ecb2e15560f1efee3e53818cc0
+          npm ci
+          node --test tests/lab-video-portal-regressions.test.js tests/lab-room18.test.js tests/lab-portals.test.js tests/lab-moving-portals.test.js tests/lab-portal-edge-regression.test.js
+          npm run build
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'Prevent contact velocity charging at a curved floor portal lip' -m 'Candidate-only energy regression caught before publication. Lateral non-penetration at the gravity depth, original moving throat untouched. Exact reviewed tree checked; full campaign and native gates retained.'
+          git push origin HEAD:refs/heads/ci/contact-energy-reviewed-20260919
+          git rev-parse HEAD
