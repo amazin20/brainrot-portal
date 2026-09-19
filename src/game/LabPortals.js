@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { LabPortalRenderCulling } from './LabPortalRenderCulling.js';
 
 const WORLD_UP = new THREE.Vector3(0, 1, 0);
 const HALF_TURN = new THREE.Quaternion().setFromAxisAngle(WORLD_UP, Math.PI);
@@ -20,10 +21,9 @@ function boxInPortalFrame(frame, box) {
   return new THREE.Box3().setFromPoints(boxCorners(box).map(point => point.sub(frame.position).applyQuaternion(inverse)));
 }
 
-/** Does a world-space box occupy the aperture within a signed depth interval?
- * Used both for placement clearance and for identifying a backing wall. */
-export function portalIntersectsBox(frame, box, minDepth = -0.7, maxDepth = 0.08, padding = 0) {
-  if (!box || box.isEmpty()) return false;
+// The original axis rejection is shared with backing-wall queries. Running
+// it first avoids allocating/translating eight corners for distant colliders.
+function portalBoxBroadPhase(frame, box, minDepth, maxDepth, padding = 0) {
   // Reject on the box's own axes before expanding it into portal space. A long
   // room wall becomes an enormous local AABB under a diagonal floor portal and
   // used to block an opening several metres away. The ellipse's support on an
@@ -38,6 +38,14 @@ export function portalIntersectsBox(frame, box, minDepth = -0.7, maxDepth = 0.08
       + Math.abs(frame.normal[axis]) * halfDepth;
     if (center + extent < box.min[axis] || center - extent > box.max[axis]) return false;
   }
+  return true;
+}
+
+/** Does a world-space box occupy the aperture within a signed depth interval?
+ * Used both for placement clearance and for identifying a backing wall. */
+export function portalIntersectsBox(frame, box, minDepth = -0.7, maxDepth = 0.08, padding = 0) {
+  if (!box || box.isEmpty()) return false;
+  if (!portalBoxBroadPhase(frame, box, minDepth, maxDepth, padding)) return false;
   const local = boxInPortalFrame(frame, box);
   if (local.max.z < minDepth || local.min.z > maxDepth) return false;
   const x = THREE.MathUtils.clamp(0, local.min.x, local.max.x);
@@ -49,6 +57,7 @@ export function portalIntersectsBox(frame, box, minDepth = -0.7, maxDepth = 0.08
  * aperture's lower edge or a freestanding obstacle must stay collidable. */
 export function portalBacksCollider(frame, box, maxDepth = .7) {
   if (!box || box.isEmpty()) return false;
+  if (!portalBoxBroadPhase(frame, box, -maxDepth, .08)) return false;
   const local = boxInPortalFrame(frame, box);
   return local.max.z <= .08 && local.max.z >= -maxDepth && local.min.z < .08
     && portalIntersectsBox(frame, box, -maxDepth, .08);
@@ -81,7 +90,7 @@ export function portalFramesOverlap(a, b, gap = 0.06) {
 /** Planar surface metadata: world `center`, world `normal`, optional world
  * `portalUp`, and optional `portalBounds: { halfWidth, halfHeight }`. Without
  * explicit bounds the mesh's transformed geometry supplies them. */
-export function resolvePortalPlacement(panel, hitPoint, { otherPortal = null, blockers = [], margin = 0.02, clampToFit = true, preferredUp } = {}) {
+export function resolvePortalPlacement(panel, hitPoint, { otherPortal = null, blockers = [], margin = 0.02, clampToFit = true, preferredUp, fitFloorEdge = true } = {}) {
   const metadata = panel?.userData;
   if (!metadata?.portalable || metadata.portalForbidden) return { ok: false, reason: 'forbidden' };
   const movingFrame = typeof metadata.portalFrame === 'function' ? metadata.portalFrame() : null;
@@ -143,7 +152,24 @@ export function resolvePortalPlacement(panel, hitPoint, { otherPortal = null, bl
     const box = blocker.box || new THREE.Box3().setFromObject(mesh);
     // Supporting walls are behind the plane. The first 8 cm are a skin allowance;
     // a pillar or closed door in front still prevents an unusable opening.
-    if (portalIntersectsBox(frame, box, .08, .85)) return { ok: false, reason: 'obstructed' };
+    if (portalIntersectsBox(frame, box, .08, .85)) {
+      // A wall panel may extend a few centimetres beneath its adjacent floor.
+      // The existing edge clamp used the panel rectangle alone and left low
+      // shots embedded in that floor. Fit the rim just above that same edge,
+      // then run EVERY ordinary clearance/overlap check again. Never search
+      // for a remote opening or move past a real mid-panel obstruction.
+      const upright = Math.abs(frame.normal.y) < 1e-8
+        && new THREE.Vector3(0, 1, 0).applyQuaternion(surfaceFrame.quaternion).y > .999999;
+      const panelBottom = surfaceFrame.position.y + bounds.minY;
+      const lift = box.max.y + frame.height * PORTAL_OUTER_SCALE + margin + .001 - frame.position.y;
+      if (fitFloorEdge && clampToFit && upright && box.max.y >= panelBottom - .04
+        && box.max.y <= panelBottom + .45 && lift > 0 && lift <= .5) {
+        const fitted = resolvePortalPlacement(panel, frame.position.clone().add(new THREE.Vector3(0, lift, 0)),
+          { otherPortal, blockers, margin, clampToFit: false, preferredUp, fitFloorEdge: false });
+        if (fitted.ok) return { ...fitted, adjusted: true, fittedToFloor: true };
+      }
+      return { ok: false, reason: 'obstructed' };
+    }
   }
   return { ok: true, frame, position: frame.position, normal: frame.normal, adjusted, bounds,
     anchor: movingFrame?.anchor || panel };
@@ -369,6 +395,8 @@ export class LabPortals {
     this.renderer = renderer;
     this.camera = camera;
     this.portals = [null, null];
+    this.visuals = [null, null];
+    this.disposed = false;
     this.physicsFrames = null;
     this.committedPhysicsFrames = null;
     this.maxResolution = maxResolution;
@@ -379,6 +407,7 @@ export class LabPortals {
     this.virtualCamera = new THREE.PerspectiveCamera();
     this.nestedCamera = new THREE.PerspectiveCamera();
     this._rendering = false;
+    this.renderCulling = new LabPortalRenderCulling();
     this.diagnostics = { cadence: 'every-render-frame', passes: 0, visible: 0, nested: 0, width: 1, height: 1, samples: options.samples, hdr: options.type === THREE.HalfFloatType };
   }
 
@@ -446,41 +475,94 @@ export class LabPortals {
       const anchor = frame.anchor;
       anchor.object.updateWorldMatrix(true, false);
       const matrix = anchor.object.matrixWorld;
+      const cached = anchor.synchronized;
+      if (cached && cached.matrix.equals(matrix) && cached.position.equals(frame.position)
+        && cached.normal.equals(frame.normal) && cached.quaternion.equals(frame.quaternion)
+        && cached.localPosition.equals(anchor.position) && cached.localNormal.equals(anchor.normal)
+        && cached.localUp.equals(anchor.up) && cached.groupPosition.equals(frame.group.position)
+        && cached.quaternion.equals(frame.group.quaternion)) continue;
       const updated = makePortalFrame(anchor.position.clone().applyMatrix4(matrix),
         anchor.normal.clone().transformDirection(matrix), anchor.up.clone().transformDirection(matrix));
       frame.position.copy(updated.position); frame.normal.copy(updated.normal); frame.quaternion.copy(updated.quaternion);
+      if (!cached) anchor.synchronized = { matrix: matrix.clone(), position: frame.position.clone(),
+        normal: frame.normal.clone(), quaternion: frame.quaternion.clone(),
+        localPosition: anchor.position.clone(), localNormal: anchor.normal.clone(), localUp: anchor.up.clone(),
+        groupPosition: frame.position.clone().addScaledVector(frame.normal, .036) };
+      else { cached.matrix.copy(matrix); cached.position.copy(frame.position);
+        cached.normal.copy(frame.normal); cached.quaternion.copy(frame.quaternion);
+        cached.localPosition.copy(anchor.position); cached.localNormal.copy(anchor.normal); cached.localUp.copy(anchor.up);
+        cached.groupPosition.copy(frame.position).addScaledVector(frame.normal, .036); }
       frame.group.position.copy(frame.position).addScaledVector(frame.normal, .036);
       frame.group.quaternion.copy(frame.quaternion);
       frame.group.updateMatrixWorld(true);
     }
   }
 
-  place(index, position, normal, preferredUp) {
-    if (index !== 0 && index !== 1) throw new Error('Portal index must be 0 or 1');
-    const frame = makePortalFrame(position, normal, preferredUp);
-    this._remove(index);
+  _visual(index) {
+    if (this.disposed) throw new Error('Portal renderer is disposed');
+    if (this.visuals[index]) return this.visuals[index];
     const color = index === 0 ? 0x38bcff : 0xffb74b;
     const group = new THREE.Group();
     group.name = index === 0 ? 'Lab aperture A' : 'Lab aperture B';
-    group.position.copy(frame.position).addScaledVector(frame.normal, 0.036);
-    group.quaternion.copy(frame.quaternion);
     const material = portalSurface(color, this.targets[index].texture);
     const surface = new THREE.Mesh(new THREE.CircleGeometry(1, 128), material);
-    surface.scale.set(frame.width, frame.height, 1);
+    surface.scale.set(PORTAL_HALF_WIDTH, PORTAL_HALF_HEIGHT, 1);
     surface.renderOrder = 2;
     group.add(surface);
     const rim = new THREE.Mesh(new THREE.RingGeometry(1.002, 1.043, 128), new THREE.MeshBasicMaterial({ color }));
-    rim.scale.set(frame.width, frame.height, 1);
+    rim.scale.set(PORTAL_HALF_WIDTH, PORTAL_HALF_HEIGHT, 1);
     rim.position.z = 0.008;
     group.add(rim);
     const halo = new THREE.Mesh(new THREE.RingGeometry(1.04, 1.10, 128), new THREE.MeshBasicMaterial({
       color, transparent: true, opacity: 0.13, depthWrite: false, blending: THREE.AdditiveBlending,
     }));
-    halo.scale.set(frame.width, frame.height, 1);
+    halo.scale.set(PORTAL_HALF_WIDTH, PORTAL_HALF_HEIGHT, 1);
     halo.position.z = 0.003;
     group.add(halo);
+    group.visible = false;
+    return this.visuals[index] = { group, surface, rim, halo };
+  }
+
+  /** Keep exactly two visual slots alive across placement/clear. Preparing the
+   * hidden surfaces during level loading lets the existing compileAsync see
+   * their materials; geometry/programs are not retired on every new shot. */
+  prepare() {
+    for (let index = 0; index < 2; index++) {
+      const visual = this._visual(index);
+      if (!this.portals[index]) { visual.group.visible = false; this.scene.add(visual.group); }
+    }
+  }
+
+  // The compile-only nodes must not become part of the persistent room
+  // scene. Retain their resources, not an extra traversal on every frame.
+  finishPreparation() {
+    for (let index = 0; index < 2; index++) {
+      if (!this.portals[index]) this.visuals[index]?.group.removeFromParent();
+    }
+  }
+
+  place(index, position, normal, preferredUp) {
+    if (index !== 0 && index !== 1) throw new Error('Portal index must be 0 or 1');
+    if (this.disposed) throw new Error('Portal renderer is disposed');
+    const frame = makePortalFrame(position, normal, preferredUp);
+    this._remove(index);
+    const visual = this._visual(index);
+    if (visual.used) {
+      // Transit cameras retain the old frame until its root is detached.
+      // Pool GPU meshes/materials, never the logical root used as a liveness
+      // token: otherwise a replacement would resurrect an old exit plane.
+      const group = new THREE.Group(); group.name = visual.group.name;
+      group.add(visual.surface, visual.rim, visual.halo); visual.group = group;
+    }
+    visual.used = true;
+    const {group,surface,rim,halo} = visual;
+    group.position.copy(frame.position).addScaledVector(frame.normal, .036);
+    group.quaternion.copy(frame.quaternion);
+    group.visible = surface.visible = rim.visible = halo.visible = true;
+    surface.material.uniforms.view.value = this.targets[index].texture;
+    surface.material.uniforms.linked.value = 0;
     this.scene.add(group);
-    Object.assign(frame, { group, surface, rim, halo });
+    Object.assign(frame, {group,surface,rim,halo});
     this.portals[index] = frame;
     if (this.physicsFrames) this.physicsFrames[index] = this._physicsSnapshot(frame);
     return frame;
@@ -490,16 +572,17 @@ export class LabPortals {
     const frame = this.portals[index];
     if (!frame) return;
     frame.group.removeFromParent();
-    frame.group.traverse((object) => {
-      object.geometry?.dispose();
-      object.material?.dispose();
-    });
+    frame.group.visible = false;
+    frame.surface.material.uniforms.linked.value = 0;
     this.portals[index] = null;
     if (this.physicsFrames) this.physicsFrames[index] = null;
     if (this.committedPhysicsFrames) this.committedPhysicsFrames[index] = null;
   }
 
-  clear() { this._remove(0); this._remove(1); }
+  clear() {
+    this._remove(0); this._remove(1);
+    for (const visual of this.visuals) visual?.group.removeFromParent();
+  }
 
   isInsideAperture(index, position, radius = 0.45) {
     return !!this.portals[index] && pointInsidePortal(this.portals[index], position, radius);
@@ -560,13 +643,32 @@ export class LabPortals {
     renderer.setScissor(rect.x, rect.y, rect.width, rect.height);
     renderer.setScissorTest(true);
     renderer.clear();
-    renderer.render(this.scene, camera);
-    this.diagnostics.passes++;
+    const autoWorld = this.scene.matrixWorldAutoUpdate;
+    try {
+      // Refresh once here instead of again inside WebGLRenderer; restore its
+      // normal update policy even when culling or the render itself throws.
+      if (autoWorld) this.scene.updateMatrixWorld();
+      this.scene.matrixWorldAutoUpdate = false;
+      // A forced shadow refresh must see every caster. Normally portal passes
+      // reuse the shadow map and the main view updates it as before.
+      if (!renderer.shadowMap.needsUpdate) {
+        this.renderCulling.begin(this.scene, camera, rect, target.width, target.height,
+          renderer.capabilities?.reversedDepthBuffer || false);
+        this.diagnostics.culledMeshes += this.renderCulling.hidden.length;
+        this.diagnostics.testedMeshes += this.renderCulling.tested;
+      }
+      renderer.render(this.scene, camera);
+      this.diagnostics.passes++;
+    } finally {
+      this.renderCulling.end();
+      this.scene.matrixWorldAutoUpdate = autoWorld;
+    }
   }
 
   render(time = 0) {
     this.update(time);
     this.diagnostics.passes = 0; this.diagnostics.visible = 0; this.diagnostics.nested = 0;
+    this.diagnostics.culledMeshes = 0; this.diagnostics.testedMeshes = 0;
     if (!this.ready || !this.renderer || !this.camera || this._rendering) return;
     const renderer = this.renderer;
     const targetBefore = renderer.getRenderTarget();
@@ -638,7 +740,16 @@ export class LabPortals {
     }
   }
 
-  dispose() { this.clear(); this.targets.forEach((target) => target.dispose()); this.bounceTarget.dispose(); }
+  dispose() {
+    if (this.disposed) return;
+    this.clear(); this.renderCulling.end();
+    for (const visual of this.visuals) visual?.group.traverse(object => {
+      object.geometry?.dispose(); object.material?.dispose();
+    });
+    this.visuals.fill(null);
+    this.targets.forEach(target => target.dispose()); this.bounceTarget.dispose();
+    this.disposed = true;
+  }
 }
 
 export default LabPortals;

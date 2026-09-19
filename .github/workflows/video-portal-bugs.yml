@@ -1,0 +1,51 @@
+name: User video floor rim and low wall shot
+on:
+  push:
+    branches: [perf/campaign-portals]
+permissions:
+  contents: read
+jobs:
+  native:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    strategy:
+      fail-fast: false
+      matrix:
+        tag: [before, after]
+    env:
+      BUG_TAG: ${{ matrix.tag }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Identical probe at exact before and after source
+        run: |
+          cp scripts/video-portal-bugs-browser.mjs /tmp/video-bug-probe.mjs
+          if [ "$BUG_TAG" = before ]; then git checkout --detach c47364e8ec30872ed26dd64cbe2c852fcf2e7456; fi
+          cp /tmp/video-bug-probe.mjs scripts/video-portal-bugs-browser.mjs
+          npm ci
+          npm run build
+          npm install --no-save --package-lock=false puppeteer-core@24.16.0
+          echo "SOURCE_COMMIT=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
+      - name: Native symptom reproductions and current ordinary input
+        run: |
+          command -v ffmpeg || { sudo apt-get update && sudo apt-get install -y ffmpeg; }
+          python3 -m http.server 4173 --bind 127.0.0.1 --directory dist >/tmp/video-bugs-http.log 2>&1 &
+          for i in {1..30}; do curl -fsS http://127.0.0.1:4173/ >/dev/null && break; sleep 1; done
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+          node scripts/video-portal-bugs-browser.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: video-portal-bugs-${{ matrix.tag }}
+          path: |
+            smoke-artifacts/video-portals/*.json
+            smoke-artifacts/video-portals/*.jpg
+            smoke-artifacts/video-portals/*.mp4
+          retention-days: 14
+          if-no-files-found: error
