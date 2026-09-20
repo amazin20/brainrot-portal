@@ -402,7 +402,7 @@ test('scissor contains the projected aperture while preserving screen-space samp
   const { portals, camera, calls } = renderFixture({ recursion: false });
   portals.render(0);
   const call = calls[0];
-  assert.deepEqual(call.viewport.toArray(), [0, 0, 1280, 720]);
+  assert.deepEqual(call.viewport.toArray(), call.scissor.toArray(), 'crop lens renders exactly the aperture rectangle');
   assert.equal(call.scissorTest, true);
   assert.ok(call.scissor.z < 1280 && call.scissor.w < 720);
   const frame = portals.portals[0];

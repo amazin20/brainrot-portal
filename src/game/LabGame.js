@@ -74,6 +74,7 @@ export class LabGame {
     this.callbacks.onProgress({ percent: 95, label: 'Готовим первый кадр' });
     await new Promise(requestAnimationFrame);
     const compileStart = performance.now();
+    this.portals.prepare();
     this.portalActors.prepare();
     await this.renderer.compileAsync(this.scene, this.camera);
     this.render();
@@ -279,6 +280,7 @@ export class LabGame {
     this.levelIndex = index;
     if (CAMPAIGN[index].assets.some(id => !this.assets.has(id))) await this.loadAssets();
     disposeLabLevel(this); this.buildLevel();
+    this.portals.prepare();
     this.portalActors.prepare();
     if (this.renderer?.compileAsync) await this.renderer.compileAsync(this.scene, this.camera);
     this.performanceMonitor.reset(); this.accumulator = 0; this.lastFrame = performance.now();
@@ -1195,13 +1197,23 @@ export class LabGame {
   render() {
     if (this.renderer.info) { this.renderer.info.autoReset = false; this.renderer.info.reset(); }
     this.portalActors?.update();
-    this.portals.render(this.visualTime);
+    // All cameras render the same animated pose. Updating every object again
+    // for each portal/nested view multiplies CPU matrix work without changing
+    // that pose. Anchored portal groups still update explicitly when synced.
+    const sceneAutoUpdate = this.scene?.matrixWorldAutoUpdate;
+    if (sceneAutoUpdate) this.scene.updateMatrixWorld();
+    if (this.scene) this.scene.matrixWorldAutoUpdate = false;
     // Only the main lens needs its transitional world plane. Applying it while
     // drawing the portal textures would clip unrelated destination chambers.
     const previousClipping = this.renderer.clippingPlanes;
-    this.renderer.clippingPlanes = this.cameraRig.mainClippingPlanes;
-    try { this.renderer.render(this.scene, this.camera); }
-    finally { this.renderer.clippingPlanes = previousClipping; }
+    try {
+      this.portals.render(this.visualTime);
+      this.renderer.clippingPlanes = this.cameraRig.mainClippingPlanes;
+      this.renderer.render(this.scene, this.camera);
+    } finally {
+      this.renderer.clippingPlanes = previousClipping;
+      if (this.scene) this.scene.matrixWorldAutoUpdate = sceneAutoUpdate;
+    }
   }
 
   emitHud() {

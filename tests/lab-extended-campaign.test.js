@@ -3,8 +3,8 @@ import assert from 'node:assert/strict';
 import {createHeadlessGame} from '../scripts/lab-headless.mjs';
 import {CAMPAIGN} from '../src/game/LabCampaignLevels.js';
 const g=await createHeadlessGame();
-test('twenty-one-course registry preserves accepted rooms and gives every later room a distinct spatial premise',async()=>{
- assert.equal(CAMPAIGN.length,21);assert.equal(CAMPAIGN[11].id,'folded-junction');
+test('twenty-six-course registry preserves accepted rooms and gives every later room a distinct spatial premise',async()=>{
+ assert.equal(CAMPAIGN.length,26);assert.equal(CAMPAIGN[11].id,'folded-junction');
  assert.deepEqual(CAMPAIGN.slice(12,15).map(room=>room.id),['optical-paradox','light-weave','countercurrent-weave']);
  const ids=[],concepts=[],shapes=[];
  for(let i=5;i<CAMPAIGN.length;i++){

@@ -149,7 +149,7 @@ function addLighting(level,root){
 }
 
 export function applyPremiumBrowser3DArt(level){
-  if(!level?.world||level.index<0||level.index>20||level.premiumBrowser3DArt)return level;
+  if(!level?.world||level.index<0||level.index>25||level.premiumBrowser3DArt)return level;
   level.game=level.game||level.workshop?.game||level.world.game;
   finishMaterials(level);
   const root=new THREE.Group();root.name='Premium browser 3D environment layer';root.userData.visualOnly=true;root.userData.version=33;level.world.root.add(root);

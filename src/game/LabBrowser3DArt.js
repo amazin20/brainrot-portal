@@ -177,10 +177,16 @@ function enhanceWorldMaterials(level,m){
 
 function addDeckEngineering(level,root,m){
   const early=level.index<11;
-  const details=early?new THREE.Group():root;
-  if(early){details.name='Attached under-deck engineering';details.userData.visualOnly=true;root.add(details);}
+  const batched=early||level.index>=21;
+  const details=batched?new THREE.Group():root;
+  if(batched){details.name='Attached under-deck engineering';details.userData.visualOnly=true;root.add(details);}
   const ground=level.index<11?Math.min(...level.world.floors.map(f=>f.y))+.5:1.5;
-  const floors=level.world.surfaces.filter(s=>s.floor&&!s.collider.kinematic&&s.floor.y>ground&&!/stair/i.test(s.name));
+  const portalDecks=level.index>=21?level.world.surfaces.filter(s=>s.portal&&s.floor).map(s=>s.floor):[];
+  // New shafts and cargo wells need the underside of their full aperture
+  // open too. A diagonal brace beneath the panel would obscure its view even
+  // though it never enters collision. Keep such decks free of cross-bracing.
+  const overlapsAperture=f=>portalDecks.some(p=>Math.abs(p.y-f.y)<.35&&p.minX<f.maxX&&p.maxX>f.minX&&p.minZ<f.maxZ&&p.maxZ>f.minZ);
+  const floors=level.world.surfaces.filter(s=>s.floor&&!s.collider.kinematic&&s.floor.y>ground&&!/stair/i.test(s.name)&&!overlapsAperture(s.floor));
   let braces=0,lamps=0;
   for(const s of floors){
     const f=s.floor,w=f.maxX-f.minX,d=f.maxZ-f.minZ;if(w<2||d<2)continue;
@@ -209,7 +215,7 @@ function addDeckEngineering(level,root,m){
     }
     if(w>4.5){box(details,[(f.minX+f.maxX)/2,f.y-.31,f.minZ+.035],[Math.min(w-1,5.2),.028,.03],m.lamp);lamps++;}
   }
-  if(early)batchStaticDetails(details);
+  if(batched)batchStaticDetails(details);
   return{braces,lamps};
 }
 
@@ -225,7 +231,7 @@ function addPortalFrames(level,root,m){
     for(const x of [-w/2-pad,w/2+pad])box(group,[x,0,0],[.18,h+.5,depth],m.steel);
     for(const y of [-h/2-pad,h/2+pad])box(group,[0,y,0],[w+.5,.18,depth],m.blackSteel);
     for(const sx of [-1,1])for(const sy of [-1,1])cylinder(group,[sx*(w/2+.18),sy*(h/2+.18),.02],.075,.07,m.brass,'z',8);
-    if(level.index<11)batchStaticDetails(group);
+    if(level.index<11||level.index>=21)batchStaticDetails(group);
     count++;
   }
   return count;
@@ -316,8 +322,9 @@ function addRoomMechanisms(level,m){
 }
 
 export function upgradeBrowser3DArt(level){
-  if(!level?.world||level.index<0||level.index>20||level.browser3DArt)return level;
+  if(!level?.world||level.index<0||level.index>25||level.browser3DArt)return level;
   level.game=level.game||level.workshop?.game||level.world.game;
+  if(level.index>=21)level.spec??=level.workshop?.spec;
   const m=materials(level);enhanceWorldMaterials(level,m);
   const root=new THREE.Group();root.name='Browser 3D artist environment pass';root.userData.visualOnly=true;root.userData.version=31;level.world.root.add(root);
   const deck=addDeckEngineering(level,root,m),portalFrames=addPortalFrames(level,root,m),conduits=addShellConduits(level,root,m);
@@ -325,5 +332,6 @@ export function upgradeBrowser3DArt(level){
   addRoomMechanisms(level,m);
   if(level.index<11)applyEarlyMechanismArt(level);
   if(level.index>=15)applyAdvancedMechanismArt(level);
+  if(level.index>=21)batchStaticDetails(root);
   root.userData.stats={deckBraces:deck.braces,deckLamps:deck.lamps,portalFrames,conduits};level.browser3DArt=root;return level;
 }

@@ -12,3 +12,7 @@ jobs:
     uses: ./.github/workflows/verified-build.yml
     with:
       revision: ${{ github.event.pull_request.head.sha || github.sha }}
+      # Every ordinary WebGL route and its native milestone stills always run.
+      # Full motion review lives in the dedicated review workflows; re-encode
+      # legacy excerpts only for an explicitly dispatched verification run.
+      record_puzzle: ${{ github.event_name == 'workflow_dispatch' }}
