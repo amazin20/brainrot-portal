@@ -6,7 +6,8 @@ on:
 permissions:
   contents: write
 concurrency:
-  group: campaign26-review-${{ github.ref }}
+  # Keep immutable earlier room evidence finishing while a scoped follow-up runs.
+  group: campaign26-review-${{ github.ref }}-${{ github.sha }}
   cancel-in-progress: true
 env:
   BUILD_COMMIT: ${{ github.sha }}
@@ -18,7 +19,9 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        room: [22, 23, 24, 25, 26]
+        # Rooms 22-25 retain their complete e45a3279 evidence. This follow-up
+        # changes only room26's coplanar deck partition and re-records that room.
+        room: [26]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4

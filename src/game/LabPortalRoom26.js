@@ -23,10 +23,12 @@ export function buildRoom26(game,index=25){
  // Each permanent platform is lower than the next inaccessible floor. The
  // lower foundation catches both bodies and never changes puzzle state.
  deck('First shaft retaining balcony',-16,-8,-1,6.8,8);
- deck('West folded service gallery',-24,-16,-18,5,8);
+ deck('West folded service gallery',-24,-16,-16,5,8);
  deck('North service gallery',-24,18,-23,-16,8);
- deck('Relay approach',10.5,18,-23,-5,8);
- deck('Upper inspection dock',4,18,-23,-11,16);
+ deck('Relay approach',10.5,18,-16,-5,8);
+ // Disjoint deck rectangles keep the same floor union without coplanar art.
+ deck('Upper inspection dock',4,14.5,-23,-11,16);
+ deck('Upper inspection north wing',14.5,18,-23,-19,16);
  deck('Crossflow side retaining dock',14.5,19,-19,2,16);
  deck('Upper north retaining link',-24,4,-23,-19,16);
  deck('Return observation arm',-24,-20,-19,12,16);
