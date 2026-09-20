@@ -1,33 +1,19 @@
-// Speed chapters are interludes, not numbered campaign chambers. Their save
-// record must never overwrite the campaign's completed rooms or hint history.
+// Preserved prototype data for the future numbered room 30. No public mode or
+// interlude is registered. Keep legacy progress isolated and readable; publishing
+// the future room must not silently mark it complete from these old records.
+export const VELOCITY_CAMPAIGN_RESERVATION = Object.freeze({
+  level: 30, title: 'ПРЕДЕЛ', status: 'reserved', publicMode: false,
+});
 export const VELOCITY_PROGRESS_KEY = 'brainrot-portal.velocity-chapters.v1';
 export const VELOCITY_CHAPTERS = Object.freeze([
-  Object.freeze({ chapter: 1, id: 'velocity-flow-v1', title: 'Вместе в поток', afterLevel: 10, returnLevel: 11,
+  Object.freeze({ chapter: 1, id: 'velocity-flow-v1', title: 'Вместе в поток',
     description: 'Освой первый разгон вместе с другом. Широкие порталы, световой маршрут и площадки для передышки.' }),
-  Object.freeze({ chapter: 2, id: 'velocity-cascade-v1', title: 'Каскад', afterLevel: 20, returnLevel: 21,
+  Object.freeze({ chapter: 2, id: 'velocity-cascade-v1', title: 'Каскад',
     description: 'Длиннее пролёты, выше скорость. Открывай выходы с площадок и разгоняйся — друг летит рядом весь маршрут.' }),
 ]);
 
 export function getVelocityChapter(value = 1) {
   return VELOCITY_CHAPTERS.find(chapter => chapter.chapter === Number(value)) || VELOCITY_CHAPTERS[0];
-}
-
-export function getVelocityInterlude(completedRoomIndex) {
-  if (!Number.isInteger(completedRoomIndex)) return null;
-  return VELOCITY_CHAPTERS.find(chapter => chapter.afterLevel === completedRoomIndex + 1) || null;
-}
-
-export function velocityChapterURL(value, { returnToCampaign = false } = {}) {
-  const chapter = getVelocityChapter(value);
-  return `?mode=velocity&chapter=${chapter.chapter}${returnToCampaign ? `&return=${chapter.returnLevel}` : ''}`;
-}
-
-export function readVelocityRoute(query) {
-  const params = typeof query === 'string' ? new URLSearchParams(query) : query;
-  const chapter = getVelocityChapter(params?.get('chapter'));
-  // Accept only the matching campaign return, never arbitrary destinations.
-  const returnLevel = params?.get('return') === String(chapter.returnLevel) ? chapter.returnLevel : null;
-  return { chapter, returnLevel };
 }
 
 export function sanitizeVelocityProgress(value) {

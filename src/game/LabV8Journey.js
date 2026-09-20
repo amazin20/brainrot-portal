@@ -5,6 +5,8 @@ const advancedJourneys=[
  ()=>import('./LabRoom13Journey.js'),()=>import('./LabRoom14Journey.js'),()=>import('./LabRoom15Journey.js'),
  ()=>import('./LabRoom16Journey.js'),()=>import('./LabRoom17Journey.js'),()=>import('./LabRoom18Journey.js'),
  ()=>import('./LabRoom19Journey.js'),()=>import('./LabRoom20Journey.js'),()=>import('./LabRoom21Journey.js'),
+ ()=>import('./LabRoom22Journey.js'),()=>import('./LabRoom23Journey.js'),()=>import('./LabRoom24Journey.js'),
+ ()=>import('./LabRoom25Journey.js'),()=>import('./LabRoom26Journey.js'),
 ];
 /** Test driver uses the public movement vector, interaction button and camera
  * controls. Actor positions, portal positions, mechanism targets and win flags

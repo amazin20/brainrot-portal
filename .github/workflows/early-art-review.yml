@@ -37,7 +37,7 @@ jobs:
           npm ci
           npm install --no-save --package-lock=false puppeteer-core@24.16.0
           npm run build
-          node scripts/stamp-build.mjs v37-gravity-pocket-candidate
+          node scripts/stamp-build.mjs v38-campaign-26
       - uses: actions/checkout@v4
         with:
           ref: 3d9e1d22f6765aac53140fb5ee49d0334109c80b

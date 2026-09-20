@@ -1,30 +1,71 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { getVelocityChapter, getVelocityInterlude, velocityChapterURL, readVelocityRoute,
+import {readFileSync} from 'node:fs';
+import { VELOCITY_CAMPAIGN_RESERVATION, VELOCITY_CHAPTERS,
   LabVelocityProgress, VELOCITY_PROGRESS_KEY } from '../src/game/LabVelocityChapters.js';
+import {readCampaignRoute,nextCampaignLevel} from '../src/game/LabCampaignRoute.js';
+import {LabPreferences} from '../src/game/LabPreferences.js';
 
-test('speed interludes follow rooms 10 and 20 without renumbering the campaign', () => {
-  for (let index = 0; index < 21; index++) {
-    const chapter = getVelocityInterlude(index);
-    if (index === 9 || index === 19) {
-      assert.equal(chapter.chapter, index === 9 ? 1 : 2);
-      assert.equal(chapter.returnLevel, index + 2);
-    } else assert.equal(chapter, null);
+test('the speed prototype is reserved for room 30 and has no campaign interludes', () => {
+  assert.equal(VELOCITY_CAMPAIGN_RESERVATION.level, 30);
+  assert.equal(VELOCITY_CAMPAIGN_RESERVATION.status, 'reserved');
+  assert.equal(VELOCITY_CAMPAIGN_RESERVATION.publicMode, false);
+  for (const prototype of VELOCITY_CHAPTERS) {
+    assert.equal(prototype.afterLevel, undefined);
+    assert.equal(prototype.returnLevel, undefined);
   }
-  assert.equal(getVelocityInterlude('9'), null);
+  for (let index = 0; index < 25; index++) assert.equal(nextCampaignLevel(index, 26), index + 1);
+  assert.equal(nextCampaignLevel(25, 26), 0);
+  assert.equal(nextCampaignLevel(99, 26), 0);
 });
 
-test('chapter deep links return only to the matching next room', () => {
+test('old speed links open the campaign menu and retain valid continuation bookmarks', () => {
   for (const chapter of [1, 2]) {
-    const direct = readVelocityRoute(velocityChapterURL(chapter));
-    assert.equal(direct.chapter.chapter, chapter); assert.equal(direct.returnLevel, null);
-    const interlude = readVelocityRoute(velocityChapterURL(chapter, { returnToCampaign: true }));
-    assert.equal(interlude.returnLevel, chapter * 10 + 1);
+    const route = readCampaignRoute(`?mode=velocity&chapter=${chapter}&v=old`, 26);
+    assert.equal(route.levelIndex, 0);
+    assert.equal(route.legacyVelocityLink, true);
+    assert.equal(route.search, '?v=old');
+    const returning = readCampaignRoute(`?mode=velocity&chapter=${chapter}&return=${chapter * 10 + 1}&debug=1`, 26);
+    assert.equal(returning.levelIndex, chapter * 10);
+    assert.equal(new URLSearchParams(returning.search).get('debug'), '1');
+    assert.equal(new URLSearchParams(returning.search).get('mode'), null);
   }
-  for (const link of ['?chapter=1&return=21', '?chapter=2&return=https://example.com', '?chapter=999&return=999', '?chapter=1&return=11.0']) {
-    assert.equal(readVelocityRoute(link).returnLevel, null);
+  for (const link of ['?mode=velocity&chapter=1&return=21', '?mode=velocity&chapter=2&return=https://example.com', '?mode=velocity&chapter=1&return=11.0']) {
+    assert.equal(readCampaignRoute(link, 26).levelIndex, 0);
   }
-  assert.equal(getVelocityChapter(-1).chapter, 1);
+  assert.equal(readCampaignRoute('?mode=velocity&chapter=2&return=21&level=22',26).levelIndex,21);
+});
+
+test('public level links accept only available numbered rooms', () => {
+  for (let level=1;level<=26;level++) assert.equal(readCampaignRoute(`?level=${level}`,26).levelIndex,level-1);
+  for (const level of ['0','27','30','-1','2.5','Infinity','NaN']) {
+    assert.equal(readCampaignRoute(`?level=${level}`,26).levelIndex,0);
+  }
+  assert.deepEqual(readCampaignRoute('',26),{levelIndex:0,legacyVelocityLink:false,search:''});
+});
+
+test('public menu and entry expose only the campaign', () => {
+  const html=readFileSync(new URL('../index.html',import.meta.url),'utf8');
+  const main=readFileSync(new URL('../src/main.js',import.meta.url),'utf8');
+  assert.doesNotMatch(html,/mode=velocity|velocity-link|velocity-chapters|Скоростные главы/);
+  assert.doesNotMatch(main,/getVelocityInterlude|velocityChapterURL|__NESI_RUN_VELOCITY_ROUTE__/);
+  assert.match(main,/game\.epicMode=false/);
+  assert.match(main,/nextCampaignLevel\(game\.levelIndex,CAMPAIGN\.length\)/);
+});
+
+test('adding numbered rooms preserves existing campaign and retired prototype progress', () => {
+  const old={campaignRevision:'folded-junction-v28',completed:[0,9,19,20],hints:{9:1,20:2},quality:'low',volume:.4,muted:true,tutorial:false};
+  const speed='{"completed":["velocity-flow-v1","velocity-cascade-v1"]}';
+  const records=new Map([['brainrot-portal.preferences.v24',JSON.stringify(old)],[VELOCITY_PROGRESS_KEY,speed]]);
+  const storage={getItem:key=>records.get(key),setItem:(key,value)=>records.set(key,value)};
+  const prefs=new LabPreferences(storage);
+  assert.deepEqual(prefs.value.completed,old.completed);
+  assert.deepEqual(prefs.value.hints,old.hints);
+  assert.equal(prefs.value.quality,'low');
+  for(let index=21;index<=25;index++)prefs.complete(index);
+  assert.deepEqual(new LabPreferences(storage).value.completed,[0,9,19,20,21,22,23,24,25]);
+  assert.equal(records.get(VELOCITY_PROGRESS_KEY),speed);
+  assert.equal(new LabPreferences(storage).value.completed.includes(29),false);
 });
 
 test('chapter completion never reads or changes campaign save data', () => {

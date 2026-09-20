@@ -43,7 +43,7 @@ function isOpticalMirror(node,level){
 }
 
 export function applyMechanismReflections(level){
-  if(!level?.world||level.index<0||level.index>19||level.mechanismReflections)return level;
+  if(!level?.world||level.index<0||level.index===20||level.index>25||level.mechanismReflections)return level;
   const owner=level.world.root.userData.browserArtMaterials?.ceramic;
   if(!owner)return level;
   const targets=[];

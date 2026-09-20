@@ -44,10 +44,10 @@ jobs:
           import assert from 'node:assert/strict';
           const info=JSON.parse(fs.readFileSync('dist/build-info.json','utf8'));
           assert.equal(info.commit,process.env.BUILD_COMMIT);
-          assert.equal(info.version,'v37-gravity-pocket-candidate');
-          assert.equal(info.artVersion,'v37-gravity-pocket-machined');
+          assert.equal(info.version,'v38-campaign-26');
+          assert.equal(info.artVersion,'v38-campaign-machined');
           assert.equal(info.run,process.env.GITHUB_RUN_ID);
-          assert.equal(info.levels,21);
+          assert.equal(info.levels,26);
           assert.equal(info.verified,true);
           NODE
       - uses: actions/configure-pages@v5

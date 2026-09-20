@@ -1,0 +1,105 @@
+name: Campaign 22-26 and rendering comparison
+on:
+  push:
+    branches: [feature/campaign-22-26-performance]
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: campaign26-review-${{ github.ref }}
+  cancel-in-progress: true
+env:
+  BUILD_COMMIT: ${{ github.sha }}
+jobs:
+  rooms:
+    name: Complete room ${{ matrix.room }} video and physical route
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    strategy:
+      fail-fast: false
+      matrix:
+        room: [22, 23, 24, 25, 26]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Build the exact reviewed source
+        run: |
+          npm ci
+          npm install --no-save --package-lock=false puppeteer-core@24.16.0
+          npm run build
+          node scripts/stamp-build.mjs v38-campaign-26
+      - name: Record the complete ordinary input route
+        env:
+          NESI_FIRST: ${{ matrix.room }}
+          NESI_LAST: ${{ matrix.room }}
+          NESI_UI: '0'
+          NESI_CAPTURE_PUZZLE: '0'
+          NESI_CAPTURE_FULL: '1'
+        run: |
+          command -v ffmpeg || { sudo apt-get update && sudo apt-get install -y ffmpeg; }
+          npm run preview -- --host 127.0.0.1 --port 4173 >campaign26-preview.log 2>&1 &
+          for i in {1..30}; do curl -fsS http://127.0.0.1:4173/ >/dev/null && break; sleep 1; done
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+          node scripts/v8-browser.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: campaign26-room-${{ matrix.room }}
+          path: |
+            smoke-artifacts/*.json
+            smoke-artifacts/*.png
+            smoke-artifacts/*.jpg
+            smoke-artifacts/*.mp4
+            campaign26-preview.log
+          retention-days: 14
+      - name: Preserve reviewable media independently of artifact expiry
+        if: always()
+        env:
+          REVIEW_KIND: room${{ matrix.room }}
+        run: bash scripts/preserve-campaign-evidence.sh smoke-artifacts
+  rendering:
+    name: Same-route rendering before and after
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    env:
+      BASE: 062738ababd35fb554fd5e0a5d573614774c33f1
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Prepare identical locked dependencies and both builds
+        run: |
+          npm ci
+          npm install --no-save --package-lock=false puppeteer-core@24.16.0
+          mkdir /tmp/campaign-render-base
+          git archive "$BASE" | tar -xf - -C /tmp/campaign-render-base
+          cmp package-lock.json /tmp/campaign-render-base/package-lock.json
+          ln -s "$PWD/node_modules" /tmp/campaign-render-base/node_modules
+          (cd /tmp/campaign-render-base && npm run build)
+          npm run build
+      - name: Compare actual WebGL frames and rendering work
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 --directory /tmp/campaign-render-base/dist >/tmp/render-before.log 2>&1 &
+          python3 -m http.server 4174 --bind 127.0.0.1 --directory dist >/tmp/render-after.log 2>&1 &
+          for i in {1..30}; do curl -fsS http://127.0.0.1:4173/ >/dev/null && curl -fsS http://127.0.0.1:4174/ >/dev/null && break; sleep 1; done
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+          SOURCE_COMMIT="$BASE" PERF_TAG=before PAGE_URL=http://127.0.0.1:4173/ node scripts/perf-render-browser.mjs
+          SOURCE_COMMIT="$GITHUB_SHA" PERF_TAG=after PAGE_URL=http://127.0.0.1:4174/ REFERENCE_REPORT="$PWD/smoke-artifacts/render-browser/before.json" node scripts/perf-render-browser.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: campaign26-render-comparison
+          path: smoke-artifacts/render-browser/
+          retention-days: 14
+      - name: Preserve comparison frames and metrics
+        if: always()
+        env:
+          REVIEW_KIND: render
+        run: bash scripts/preserve-campaign-evidence.sh smoke-artifacts/render-browser

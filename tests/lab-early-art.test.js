@@ -27,7 +27,12 @@ for(const expected of baseline.rooms)test(`room ${expected.level} retains the ac
   'Authored colliders, portal frames, support geometry, camera blockers or interaction state changed');
  const workload=sceneWorkload(assets),level=assets.firstLevel;
  if(expected.level>11){
-  assert.deepEqual(workload,expected.workload,'The already accepted later rooms must keep their source-scene workload');
+  assert.equal(workload.triangles,expected.workload.triangles,'Batching must retain every visible source triangle');
+  assert.equal(workload.lights,expected.workload.lights,'Batching must retain the lighting');
+  // Two hidden, preallocated portal visuals add six materials. They avoid
+  // allocation/compilation at the first shot and are not architectural art.
+  assert.equal(workload.materials,expected.workload.materials+6,'Only the reusable portal materials may be added');
+  assert.ok(workload.visibleMeshes<=expected.workload.visibleMeshes,'Static batching must not add visible draw objects');
   assert.equal(level.earlyMechanismArt,undefined,'Early-room details leaked into a later room');
  }else{
   assert.ok(level.browser3DArt?.userData.visualOnly&&level.premiumBrowser3DArt?.userData.visualOnly);

@@ -283,6 +283,18 @@ export function portalTargetSize(width, height, maxResolution = 1280) {
   return { width: Math.max(1, Math.round(w * scale)), height: Math.max(1, Math.round(h * scale)) };
 }
 
+/** Restrict the virtual lens to the aperture's pixels, preserving their exact
+ * positions in the full-size texture. A scissor alone saves fragment work but
+ * still submits every mesh in the full virtual view. Cropping x/y clip space
+ * also gives Three's normal frustum culler the aperture's four side planes.
+ * The oblique z/w rows stay intact, including at floor and moving portals. */
+export function cropPortalProjection(projection, rect, width, height, target = new THREE.Matrix4()) {
+  const sx = width / rect.width, sy = height / rect.height;
+  const ox = (width - 2 * rect.x - rect.width) / rect.width;
+  const oy = (height - 2 * rect.y - rect.height) / rect.height;
+  return target.set(sx, 0, 0, ox, 0, sy, 0, oy, 0, 0, 1, 0, 0, 0, 0, 1).multiply(projection);
+}
+
 /** Conservative screen-space bounds, including portals intersecting the eye's
  * near plane. A bounding rectangle encloses the entire elliptical aperture. */
 export function portalViewportRect(frame, camera, width, height) {
@@ -329,7 +341,8 @@ function targetOptions(renderer, sampleCount) {
 
 function portalSurface(color, texture) {
   return new THREE.ShaderMaterial({
-    uniforms: { view: { value: texture }, tint: { value: new THREE.Color(color) }, linked: { value: 0 }, time: { value: 0 } },
+    uniforms: { view: { value: texture }, tint: { value: new THREE.Color(color) }, linked: { value: 0 }, time: { value: 0 },
+      viewUvTransform: { value: new THREE.Vector4(0, 0, 1, 1) } },
     vertexShader: `
       varying vec2 apertureUv;
       varying vec4 screenPosition;
@@ -344,10 +357,12 @@ function portalSurface(color, texture) {
       uniform vec3 tint;
       uniform float linked;
       uniform float time;
+      uniform vec4 viewUvTransform;
       varying vec2 apertureUv;
       varying vec4 screenPosition;
       void main() {
         vec2 screenUv = screenPosition.xy / screenPosition.w * 0.5 + 0.5;
+        screenUv = screenUv * viewUvTransform.zw + viewUvTransform.xy;
         float radial = length((apertureUv - 0.5) * 2.0);
         float edge = smoothstep(0.92, 1.0, radial);
         vec3 dormant = tint * (0.10 + 0.05 * radial) + vec3(0.012, 0.018, 0.028);
@@ -383,11 +398,28 @@ export class LabPortals {
     this.bounceTarget = new THREE.WebGLRenderTarget(1, 1, { ...options, samples: 0 });
     this.virtualCamera = new THREE.PerspectiveCamera();
     this.nestedCamera = new THREE.PerspectiveCamera();
+    this._passProjection = new THREE.Matrix4();
+    this._passProjectionInverse = new THREE.Matrix4();
+    this._croppedProjection = new THREE.Matrix4();
+    this._visuals = [this._createVisual(0), this._createVisual(1)];
     this._rendering = false;
     this.diagnostics = { cadence: 'every-render-frame', passes: 0, visible: 0, nested: 0, width: 1, height: 1, samples: options.samples, hdr: options.type === THREE.HalfFloatType };
   }
 
   get ready() { return this.portals.every(Boolean); }
+
+  /** Compile the two reusable portal materials and allocate framebuffers while
+   * the level is loading, instead of during its first shot or traversal. */
+  prepare() {
+    for (const visual of this._visuals) if (!visual.group.parent) this.scene.add(visual.group);
+    const size = this.renderer?.getDrawingBufferSize?.(new THREE.Vector2());
+    if (!size) return;
+    const { width, height } = portalTargetSize(size.x, size.y, this.maxResolution);
+    for (const target of [...this.targets, this.bounceTarget]) {
+      if (target.width !== width || target.height !== height) target.setSize(width, height);
+      this.renderer.initRenderTarget?.(target);
+    }
+  }
 
   _physicsSnapshot(frame) {
     return frame ? { frame, pose: {
@@ -460,30 +492,37 @@ export class LabPortals {
     }
   }
 
-  place(index, position, normal, preferredUp, size) {
-    if (index !== 0 && index !== 1) throw new Error('Portal index must be 0 or 1');
-    const frame = makePortalFrame(position, normal, preferredUp, size);
-    this._remove(index);
+  _createVisual(index) {
     const color = index === 0 ? 0x38bcff : 0xffb74b;
     const group = new THREE.Group();
     group.name = index === 0 ? 'Lab aperture A' : 'Lab aperture B';
-    group.position.copy(frame.position).addScaledVector(frame.normal, 0.036);
-    group.quaternion.copy(frame.quaternion);
+    group.userData.portalRenderResource = true;
+    group.visible = false;
     const material = portalSurface(color, this.targets[index].texture);
     const surface = new THREE.Mesh(new THREE.CircleGeometry(1, 128), material);
-    surface.scale.set(frame.width, frame.height, 1);
     surface.renderOrder = 2;
     group.add(surface);
     const rim = new THREE.Mesh(new THREE.RingGeometry(1.002, 1.043, 128), new THREE.MeshBasicMaterial({ color }));
-    rim.scale.set(frame.width, frame.height, 1);
     rim.position.z = 0.008;
     group.add(rim);
     const halo = new THREE.Mesh(new THREE.RingGeometry(1.04, 1.10, 128), new THREE.MeshBasicMaterial({
       color, transparent: true, opacity: 0.13, depthWrite: false, blending: THREE.AdditiveBlending,
     }));
-    halo.scale.set(frame.width, frame.height, 1);
     halo.position.z = 0.003;
     group.add(halo);
+    for (const mesh of [surface, rim, halo]) mesh.userData.portalRenderResource = true;
+    return { group, surface, rim, halo };
+  }
+
+  place(index, position, normal, preferredUp, size) {
+    if (index !== 0 && index !== 1) throw new Error('Portal index must be 0 or 1');
+    const frame = makePortalFrame(position, normal, preferredUp, size);
+    this._remove(index);
+    const { group, surface, rim, halo } = this._visuals[index];
+    group.visible = true;
+    group.position.copy(frame.position).addScaledVector(frame.normal, 0.036);
+    group.quaternion.copy(frame.quaternion);
+    for (const mesh of [surface, rim, halo]) mesh.scale.set(frame.width, frame.height, 1);
     this.scene.add(group);
     Object.assign(frame, { group, surface, rim, halo });
     this.portals[index] = frame;
@@ -494,11 +533,8 @@ export class LabPortals {
   _remove(index) {
     const frame = this.portals[index];
     if (!frame) return;
+    frame.group.visible = false;
     frame.group.removeFromParent();
-    frame.group.traverse((object) => {
-      object.geometry?.dispose();
-      object.material?.dispose();
-    });
     this.portals[index] = null;
     if (this.physicsFrames) this.physicsFrames[index] = null;
     if (this.committedPhysicsFrames) this.committedPhysicsFrames[index] = null;
@@ -560,13 +596,32 @@ export class LabPortals {
 
   _draw(target, camera, rect) {
     const renderer = this.renderer;
-    renderer.setRenderTarget(target);
-    renderer.setViewport(0, 0, target.width, target.height);
-    renderer.setScissor(rect.x, rect.y, rect.width, rect.height);
-    renderer.setScissorTest(true);
-    renderer.clear();
-    renderer.render(this.scene, camera);
-    this.diagnostics.passes++;
+    this._passProjection.copy(camera.projectionMatrix);
+    this._passProjectionInverse.copy(camera.projectionMatrixInverse);
+    cropPortalProjection(this._passProjection, rect, target.width, target.height, this._croppedProjection);
+    camera.projectionMatrix.copy(this._croppedProjection);
+    camera.projectionMatrixInverse.copy(camera.projectionMatrix).invert();
+    // A nested portal samples a full-screen texture. Undo the local viewport's
+    // UV normalization so it still looks up the very same destination pixel.
+    for (const visual of this._visuals) visual.surface.material.uniforms.viewUvTransform.value
+      .set(rect.x / target.width, rect.y / target.height, rect.width / target.width, rect.height / target.height);
+    try {
+      renderer.setRenderTarget(target);
+      // These renderer setters use logical pixels even for offscreen targets.
+      // The aperture bounds are physical attachment pixels; avoid applying DPR
+      // twice on high-density screens (which crops and stretches portal views).
+      const ratio = renderer.getPixelRatio?.() || 1;
+      renderer.setViewport(rect.x / ratio, rect.y / ratio, rect.width / ratio, rect.height / ratio);
+      renderer.setScissor(rect.x / ratio, rect.y / ratio, rect.width / ratio, rect.height / ratio);
+      renderer.setScissorTest(true);
+      renderer.clear();
+      renderer.render(this.scene, camera);
+      this.diagnostics.passes++;
+    } finally {
+      camera.projectionMatrix.copy(this._passProjection);
+      camera.projectionMatrixInverse.copy(this._passProjectionInverse);
+      for (const visual of this._visuals) visual.surface.material.uniforms.viewUvTransform.value.set(0, 0, 1, 1);
+    }
   }
 
   render(time = 0) {
@@ -643,7 +698,14 @@ export class LabPortals {
     }
   }
 
-  dispose() { this.clear(); this.targets.forEach((target) => target.dispose()); this.bounceTarget.dispose(); }
+  dispose() {
+    this.clear();
+    for (const visual of this._visuals) {
+      visual.group.removeFromParent();
+      visual.group.traverse(object => { object.geometry?.dispose(); object.material?.dispose(); });
+    }
+    this.targets.forEach((target) => target.dispose()); this.bounceTarget.dispose();
+  }
 }
 
 export default LabPortals;

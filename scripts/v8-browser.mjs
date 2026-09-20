@@ -1,5 +1,7 @@
 import fs from 'node:fs';
 import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
+import {execFileSync} from 'node:child_process';
 import puppeteer from 'puppeteer-core';
 import {CAMPAIGN} from '../src/game/LabCampaignLevels.js';
 import {ALL_LAB_ASSETS} from '../src/game/labAssets.js';
@@ -11,7 +13,7 @@ function flag(name,fallback){
  assert.match(value,/^(true|false|1|0)$/i,`${name} must be true/false or 1/0`);
  return /^(true|1)$/i.test(value);
 }
-const checkUI=flag('NESI_UI',first===1),capturePuzzle=flag('NESI_CAPTURE_PUZZLE',true),captureEarly=flag('NESI_CAPTURE_EARLY',false);
+const checkUI=flag('NESI_UI',first===1),capturePuzzle=flag('NESI_CAPTURE_PUZZLE',true),captureEarly=flag('NESI_CAPTURE_EARLY',false),captureFull=flag('NESI_CAPTURE_FULL',false);
 // Native excerpts from observable milestones of the same ordinary routes.
 // These windows never change the route, the camera or any physical state.
 // The new rooms supply three four-second windows each; the full ordinary
@@ -42,10 +44,19 @@ function startUrl(level){const url=new URL(root);url.searchParams.set('debug','1
 fs.mkdirSync(out,{recursive:true});
 const browser=await puppeteer.launch({executablePath:process.env.CHROME_PATH||'/usr/bin/google-chrome',headless:true,timeout:60000,protocolTimeout:1500000,
  args:['--no-sandbox','--disable-dev-shm-usage','--use-angle=swiftshader','--enable-unsafe-swiftshader']});
-const page=await browser.newPage();await page.setViewport({width:1280,height:800});page.setDefaultTimeout(120000);
+const page=await browser.newPage();await page.setViewport(captureFull?{width:960,height:600,deviceScaleFactor:1}:{width:1280,height:800});page.setDefaultTimeout(120000);
 const errors=[],requests=[];page.on('pageerror',e=>errors.push(e.message));page.on('request',r=>{if(r.url().includes('.glb'))requests.push(r.url());});
 const report={renderer:'CI Chromium / SwiftShader; NOT a user-device FPS benchmark',baseUrl:root,range:{first,last},ui:checkUI,
- capturePuzzle,captureEarly,puzzleClips:[],renderSamples:[],routes:[],errors};
+ capturePuzzle,captureEarly,captureFull,puzzleClips:[],fullRoutes:[],renderSamples:[],routes:[],errors};
+const nativeFrames=new Map(),sha=bytes=>createHash('sha256').update(bytes).digest('hex');
+if(captureFull)await page.exposeFunction('__NESI_WRITE_ROUTE_FRAME__',(level,index,image,state)=>{
+ const frames=nativeFrames.get(level);assert.ok(frames,'Unexpected native capture room');
+ assert.equal(index,frames.length,'Native frame delivery must stay sequential');
+ const bytes=Buffer.from(image.split(',')[1],'base64');
+ fs.writeFileSync(`${out}/level-${level}-frames/${String(index).padStart(6,'0')}.jpg`,bytes);
+ frames.push({index,...state,sha256:sha(bytes)});
+ if(frames.length%150===0)console.log('Continuous route capture',level,frames.length,'frames');
+});
 const ready=()=>page.waitForFunction(()=>window.__NESI_DEMO_GAME__?.state==='ready');
 const shot=name=>page.screenshot({path:`${out}/${name}.png`});
 async function clickMenu(selector){
@@ -73,17 +84,15 @@ try{
  if(first===1){assert.equal(report.initial.models,4);assert.equal(report.initial.audioState,'running');}
  for(let index=first-1;index<last;index++){
    if(index>first-1){
-     // Optional speed chapters have their own complete WebGL journey. The
-     // ordinary-room suite follows the visible campaign continuation button.
-     const next=[10,20].includes(index)?'#win-secondary-button':'#play-again-button';
-     await clickMenu(next);await page.waitForFunction(i=>window.__NESI_DEMO_GAME__?.levelIndex===i&&window.__NESI_DEMO_GAME__.state==='playing',{},index);await shot(`level-${index+1}-start`);
+     await clickMenu('#play-again-button');await page.waitForFunction(i=>window.__NESI_DEMO_GAME__?.levelIndex===i&&window.__NESI_DEMO_GAME__.state==='playing',{},index);await shot(`level-${index+1}-start`);
    }
    const earlyName=captureEarly?earlyPlans[index+1]:null;
    const clipRequests=earlyName?[[earlyName,45]]:capturePlans[index+1]||[];
-   const captured=await page.evaluate(async ({capturePuzzle,clipRequests,earlyName})=>{
-     const g=window.__NESI_DEMO_GAME__,original=g.render,originalVisuals=g.updateVisuals,images=[],clips=[],renderSamples=[];
+   if(captureFull){nativeFrames.set(index+1,[]);fs.mkdirSync(`${out}/level-${index+1}-frames`,{recursive:true});}
+   const captured=await page.evaluate(async ({capturePuzzle,captureFull,clipRequests,earlyName})=>{
+     const g=window.__NESI_DEMO_GAME__,original=g.render,originalVisuals=g.updateVisuals,images=[],clips=[],renderSamples=[],writes=[],fullMilestones=[];
      const requests=new Map(clipRequests);
-     let active=null;
+     let active=null,visualFrame=0,fullIndex=0,lastCaptureState=null;
      const renderSample=()=>{
        const renderer=g.renderer,draw=renderer.render;let passes=0;
        renderer.render=function(...args){passes++;return draw.apply(this,args);};
@@ -98,12 +107,13 @@ try{
      };
      g.render=function(){renderSample();if(this.state==='playing')images.push(this.renderer.domElement.toDataURL('image/png'));};
      window.__NESI_CAPTURE_LEVEL_MARK__=mark=>{
+       if(captureFull)fullMilestones.push({...mark,encodedFrame:Math.max(0,fullIndex-1)});
        if(!capturePuzzle||!requests.has(mark.name))return;
        active={name:mark.name,maxFrames:requests.get(mark.name),startElapsed:g.elapsed,step:0,frames:[]};clips.push(active);
      };
      // Sample the same ordinary route at 15 simulation Hz. Markers merely
      // select recording windows; they cannot move the player or camera.
-     if(capturePuzzle&&requests.size)g.updateVisuals=function(...args){
+     if(captureFull||(capturePuzzle&&requests.size))g.updateVisuals=function(...args){
        const result=originalVisuals.apply(this,args);
        if(earlyName&&!clips.length){
          const l=this.firstLevel,s=l.state??{},room=this.levelIndex+1;
@@ -118,14 +128,29 @@ try{
        if(active&&active.frames.length<active.maxFrames&&args[0]>0&&this.state==='playing'&&active.step++%4===0){
          original.call(this);active.frames.push(this.renderer.domElement.toDataURL('image/png'));
        }
+       if(captureFull&&args[0]>0){
+         if(visualFrame%4===0){
+           original.call(this);lastCaptureState=this.state;
+           writes.push(window.__NESI_WRITE_ROUTE_FRAME__(this.levelIndex+1,fullIndex++,this.renderer.domElement.toDataURL('image/jpeg',.86),
+             {visualFrame,elapsed:this.elapsed,state:this.state,player:this.playerPosition.toArray(),cargo:this.cargo.position.toArray(),
+              cargoBodyId:this.physics.cargoBody.id,teleports:this.teleportCount}));
+         }
+         visualFrame++;
+       }
        return result;
      };
-     try{return {route:await window.__NESI_RUN_LEVEL_ROUTE__(),images,clips,renderSamples,
-       width:g.renderer.domElement.width,height:g.renderer.domElement.height};}
-     catch(error){return {failure:String(error),images,clips,renderSamples,
+     try{
+       const route=await window.__NESI_RUN_LEVEL_ROUTE__();
+       // Include the first normally sampled victory frame. This advances only
+       // the completed presentation; there are no actor/camera/state writes.
+       for(let n=0;captureFull&&n<4&&g.state==='won'&&lastCaptureState!=='won';n++)g.updateVisuals(1/60,1);
+       await Promise.all(writes);
+       return {route,images,clips,renderSamples,fullMilestones,fullFrames:fullIndex,
+         width:g.renderer.domElement.width,height:g.renderer.domElement.height};}
+     catch(error){await Promise.allSettled(writes);return {failure:String(error),images,clips,renderSamples,
        width:g.renderer.domElement.width,height:g.renderer.domElement.height};}
      finally{g.render=original;g.updateVisuals=originalVisuals;delete window.__NESI_CAPTURE_LEVEL_MARK__;}
-   },{capturePuzzle,clipRequests,earlyName});
+   },{capturePuzzle,captureFull,clipRequests,earlyName});
    report.renderSamples.push(...captured.renderSamples);
    captured.images.forEach((image,k)=>fs.writeFileSync(`${out}/level-${index+1}-mechanic-${k+1}.png`,Buffer.from(image.split(',')[1],'base64')));
    if(captured.failure)throw Error(captured.failure);
@@ -140,6 +165,21 @@ try{
      }
    }
    const result=captured.route;report.routes.push(result);console.log('Browser course',index+1,'passed',result.frames,'frames');assert.ok(result.pass&&result.resets===0&&result.respawns===0);
+   if(captureFull){
+     const level=index+1,frames=nativeFrames.get(level),directory=`${out}/level-${level}-frames`,file=`level-${level}-route.mp4`;
+     assert.equal(frames.length,captured.fullFrames);assert.ok(frames.length>60,'The recording must contain a complete meaningful route');
+     assert.equal(frames[0].visualFrame,0);assert.equal(frames.at(-1).state,'won','The continuous recording must end with both at the exit');
+     assert.equal(new Set(frames.map(f=>f.cargoBodyId)).size,1,'Recorded companion body identity must remain unchanged');
+     for(let n=1;n<frames.length;n++)assert.equal(frames[n].visualFrame-frames[n-1].visualFrame,4,'A continuous route must not omit a capture tick');
+     for(const [n,mark] of captured.fullMilestones.entries()){
+       fs.copyFileSync(`${directory}/${String(mark.encodedFrame).padStart(6,'0')}.jpg`,`${out}/level-${level}-milestone-${String(n).padStart(2,'0')}.jpg`);
+     }
+     execFileSync('ffmpeg',['-y','-loglevel','error','-framerate','15','-i',`${directory}/%06d.jpg`,'-c:v','libx264','-preset','fast','-crf','21','-pix_fmt','yuv420p','-movflags','+faststart',`${out}/${file}`]);
+     report.fullRoutes.push({level,file,width:captured.width,height:captured.height,encodedFps:15,physicsHz:120,visualHz:60,
+       durationSeconds:frames.length/15,sha256:sha(fs.readFileSync(`${out}/${file}`)),frames,milestones:captured.fullMilestones,
+       method:'Every fourth sequential 60 Hz visual frame of the complete input-only route, normal simulation speed, standard third-person camera; silent WebGL recording, not hardware FPS.'});
+     fs.rmSync(directory,{recursive:true});
+   }
    assert.equal(await page.$eval('#level-number',e=>e.textContent),String(index+1));
    assert.equal(await page.$('#quick-hint'),null);assert.equal(await page.$('#quick-settings'),null);await shot(`level-${index+1}-complete`);
    // Preserve rooms1–11 art inspection separately. Rooms12 onward use their

@@ -10,7 +10,7 @@ import {runFlightAudioBrowser} from './flight-audio-browser.mjs';
 const base=(process.env.PAGE_URL||'').replace(/\/$/,'')+'/',expected=process.env.GITHUB_SHA;
 assert.ok(base.startsWith('https://')&&expected,'Public URL and expected revision are required');
 fs.mkdirSync('live-evidence',{recursive:true});
-const report={pass:false,expected,base,models:[],puzzles:[],routes:[],velocityChapters:[],errors:[]};
+const report={pass:false,expected,base,models:[],puzzles:[],routes:[],campaignTransitions:[],legacyLinks:[],errors:[]};
 let browser;
 try{
  let info;
@@ -19,7 +19,7 @@ try{
   catch(error){console.log('Publication propagation:',String(error));}
   await wait(5000);
  }
- assert.equal(info?.commit,expected);assert.equal(info?.levels,CAMPAIGN.length);assert.equal(info?.version,'v37-gravity-pocket-candidate');assert.equal(info?.levels,21);assert.equal(info?.artVersion,'v37-gravity-pocket-machined');report.build=info;
+ assert.equal(info?.commit,expected);assert.equal(info?.levels,CAMPAIGN.length);assert.equal(info?.version,'v38-campaign-26');assert.equal(info?.levels,26);assert.equal(info?.artVersion,'v38-campaign-machined');report.build=info;
  const response=await fetch(base+'models/runtime/manifest.json?revision='+expected);assert.ok(response.ok);const manifest=await response.json();
  assert.deepEqual(manifest.models.map(m=>m.id).sort((a,b)=>a-b),[...CAMPAIGN_ASSET_IDS]);
  const source=JSON.parse(fs.readFileSync('public/models/runtime/manifest.json','utf8'));
@@ -31,9 +31,9 @@ try{
  }
  browser=await puppeteer.launch({executablePath:process.env.CHROME_PATH||'/usr/bin/google-chrome',headless:true,protocolTimeout:720000,args:['--no-sandbox','--disable-dev-shm-usage','--use-angle=swiftshader','--enable-unsafe-swiftshader']});
  const page=await browser.newPage();page.setDefaultTimeout(120000);await page.setViewport({width:960,height:600});page.on('pageerror',e=>report.errors.push(e.message));
- // All twenty-one routes passed before deployment. Probe the eleven changed rooms
- // and the final room on the public package with ordinary production input.
- for(const level of [...Array.from({length:11},(_,i)=>i+1),20,21]){
+ // All twenty-six routes pass the deployment gate. Recheck the early rooms,
+ // previous ending and five additions through the published production package.
+ for(const level of [...Array.from({length:11},(_,i)=>i+1),20,21,22,23,24,25,26]){
   await page.goto(base+'?debug=1&level='+level+'&revision='+expected,{waitUntil:'networkidle2'});
   await page.waitForFunction(()=>window.__NESI_DEMO_GAME__?.state==='ready');
   assert.equal(await page.$$eval('#level-select option',a=>a.length),CAMPAIGN.length);
@@ -46,33 +46,37 @@ try{
   const route=await page.evaluate(()=>window.__NESI_RUN_LEVEL_ROUTE__());
   assert.ok(route.pass&&route.respawns===0&&route.resets===0);assert.equal(route.level,level);report.routes.push(route);
   await page.screenshot({path:`live-evidence/room-${level}-public-complete.png`});
+  if(level===10||level===20){
+   await page.waitForFunction(()=>!document.pointerLockElement&&getComputedStyle(document.querySelector('#win-screen')).opacity==='1');
+   await page.locator('#play-again-button').click();
+   await page.waitForFunction(index=>window.__NESI_DEMO_GAME__.levelIndex===index&&window.__NESI_DEMO_GAME__.state==='playing',{},level);
+   const continuation=await page.evaluate(()=>({level:window.__NESI_DEMO_GAME__.levelIndex+1,epicMode:window.__NESI_DEMO_GAME__.epicMode}));
+   assert.equal(continuation.level,level+1);assert.equal(continuation.epicMode,false);
+   report.campaignTransitions.push({from:level,to:continuation.level,primaryButton:true});
+  }
  }
  await page.waitForFunction(()=>!document.pointerLockElement&&getComputedStyle(document.querySelector('#win-screen')).opacity==='1');await page.locator('#play-again-button').click();
  await page.waitForFunction(()=>window.__NESI_DEMO_GAME__.levelIndex===0&&window.__NESI_DEMO_GAME__.state==='playing');
  assert.equal(await page.$eval('#level-number',e=>e.textContent),'1');
- await page.screenshot({path:'live-evidence/campaign-wrap-to-room-1.png'});assert.deepEqual(report.errors,[]);await page.close();
+ report.campaignTransitions.push({from:26,to:1,primaryButton:true});
+ await page.screenshot({path:'live-evidence/campaign-wrap-to-room-1.png'});assert.deepEqual(report.errors,[]);
+ for(const {query,level} of [{query:'mode=velocity&chapter=1',level:1},{query:'mode=velocity&chapter=2&return=21',level:21}]){
+  await page.goto(base+'?debug=1&'+query+'&revision='+expected,{waitUntil:'networkidle2'});
+  await page.waitForFunction(()=>window.__NESI_DEMO_GAME__?.state==='ready');
+  const migrated=await page.evaluate(()=>({level:window.__NESI_DEMO_GAME__.levelIndex+1,epicMode:window.__NESI_DEMO_GAME__.epicMode,
+   mode:document.body.dataset.gameMode,velocityControls:document.querySelectorAll('[id^="velocity-"]').length,
+   oldRouteHook:typeof window.__NESI_RUN_VELOCITY_ROUTE__,url:location.href}));
+  assert.equal(migrated.level,level);assert.equal(migrated.epicMode,false);assert.equal(migrated.mode,'campaign');
+  assert.equal(migrated.velocityControls,0);assert.equal(migrated.oldRouteHook,'undefined');
+  for(const key of ['mode','chapter','return'])assert.equal(new URL(migrated.url).searchParams.has(key),false);
+  report.legacyLinks.push({query,...migrated});
+ }
+ await page.close();
  report.portalEdge=await runPortalEdgeBrowser({browser,baseUrl:base,out:'live-evidence/portal-edge',capture:false});
  assert.equal(report.portalEdge.pass,true);
  report.flightAudio=await runFlightAudioBrowser({browser,baseUrl:base,out:'live-evidence/flight-audio',capture:false});
  assert.equal(report.flightAudio.pass,true);
- const velocity=await browser.newPage();velocity.setDefaultTimeout(120000);await velocity.setViewport({width:960,height:600});
- velocity.on('pageerror',e=>report.errors.push(e.message));
- for(const chapter of [1,2]){
-  await velocity.goto(base+'?debug=1&mode=velocity&chapter='+chapter+'&revision='+expected,{waitUntil:'networkidle2'});
-  await velocity.waitForFunction(()=>window.__NESI_DEMO_GAME__?.state==='ready');
-  const result=await velocity.evaluate(async()=>{
-   const before=[...window.__NESI_PREFS__.value.completed];
-   const route=await window.__NESI_RUN_VELOCITY_ROUTE__({renderFps:30});
-   const g=window.__NESI_DEMO_GAME__;
-   return {route,chapter:g.velocityChapter,state:g.state,contextLost:g.renderer.getContext().isContextLost(),
-    campaignBefore:before,campaignAfter:[...window.__NESI_PREFS__.value.completed]};
-  });
-  assert.equal(result.chapter,chapter);assert.equal(result.state,'won');assert.equal(result.contextLost,false);
-  assert.equal(result.route.pass,true);assert.equal(result.route.teleports,chapter===1?3:4);
-  assert.equal(result.route.companionFinishedTogether,true);assert.deepEqual(result.campaignAfter,result.campaignBefore);
-  report.velocityChapters.push(result);await velocity.screenshot({path:`live-evidence/velocity-chapter-${chapter}-public-complete.png`});
- }
- await velocity.close();assert.deepEqual(report.errors,[]);report.pass=true;
- console.log('LIVE VERIFIED',expected,'v37 candidate: БРЕЙНРОТ ПОРТАЛ, 21 rooms, ordinary routes1–11 and20–21, campaign wrap, live model hashes, room9 regressions, and both speed chapters completed with the companion');
+ assert.deepEqual(report.errors,[]);report.pass=true;
+ console.log('LIVE VERIFIED',expected,'v38 campaign: БРЕЙНРОТ ПОРТАЛ, 26 rooms, ordinary routes1–11 and20–26, direct campaign transitions10→11/20→21/26→1, live model hashes, room9 regressions, and all five new rooms completed with the companion');
 }catch(error){report.error=String(error);throw error;}
 finally{fs.writeFileSync('live-evidence/report.json',JSON.stringify(report,null,2));await browser?.close();}

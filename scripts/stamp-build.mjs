@@ -4,17 +4,17 @@ import assert from 'node:assert/strict';
 import {execFileSync} from 'node:child_process';
 import {CAMPAIGN} from '../src/game/LabCampaignLevels.js';
 
-const [version='v37-gravity-pocket-candidate',directory='dist']=process.argv.slice(2);
+const [version='v38-campaign-26',directory='dist']=process.argv.slice(2);
 const commit=process.env.BUILD_COMMIT||process.env.GITHUB_SHA;
 assert.match(commit||'',/^[a-f0-9]{40}$/,'Build metadata requires the exact checked-out commit SHA');
 assert.equal(execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),commit,'Metadata must describe the checked-out source');
-assert.equal(version,'v37-gravity-pocket-candidate','Unexpected publication version');
-assert.equal(CAMPAIGN.length,21,'Unexpected campaign size');
+assert.equal(version,'v38-campaign-26','Unexpected publication version');
+assert.equal(CAMPAIGN.length,26,'Unexpected campaign size');
 assert.ok(fs.existsSync(path.join(directory,'index.html')),'Stamp an existing production package');
-const info={commit,version,artVersion:'v37-gravity-pocket-machined',levels:CAMPAIGN.length,verified:true,status:'technical-candidate',
+const info={commit,version,artVersion:'v38-campaign-machined',levels:CAMPAIGN.length,verified:true,status:'technical-candidate',
  verificationScope:'Automated source/package checks; route jobs gate publication',
  acceptance:{humanPlaytest:false,physicalDeviceBenchmark:false,liveYandex:false},
- features:{velocityArena:'velocity-1',velocityEntry:'?mode=velocity'},
+ features:{campaignRooms:26,predelReservedLevel:30,separateVelocityMode:false},
  repository:process.env.GITHUB_REPOSITORY,run:process.env.GITHUB_RUN_ID};
 fs.writeFileSync(path.join(directory,'build-info.json'),JSON.stringify(info,null,2)+'\n');
 console.log(`Stamped ${directory}: ${version} / ${commit}`);
