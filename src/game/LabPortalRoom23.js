@@ -9,10 +9,10 @@ export function buildRoom23(game,index=22){
  deck('West permanent disembarkation',-16,-6,-4,-.5,10);
  deck('Folded middle return',-20,20,-12,-4,10);
  deck('East permanent disembarkation',5,16,-4,-.5,10);
- deck('East side boarding ledge',5,8,-4,6,10);
+ deck('East side boarding ledge',5,8,-.5,6,10);
  // The middle receiving pocket faces away from the low start; the upper
  // gallery is the first view that can see the floor inside its casing.
- deck('Freight storage pocket',-3,3,-11,-5,10);
+ // The folded middle return is also the structural floor beneath this pocket.
  block([0,11.0,-4.8],[6.4,2,.35]);block([0,11.0,-11.2],[6.4,2,.35]);
  const pocket=k.panel('middle-pocket',[0,10.025,-8],[0,1,0],5.6,5.6);
  const balance=buildRoom23Balance(k);
@@ -23,8 +23,8 @@ export function buildRoom23(game,index=22){
  for(const x of [7.65,14.35])block([x,24.5,.8],[.3,9,5.5]);
  // Low floor views into the upper arrival are sealed. The reverse wall
  // receiver can be seen only after riding the unloaded car to its top stop.
- deck('High car exit apron',7,17,6.6,10,20);
- deck('Upper return around the shaft',15,22,-19,10,20);
+ deck('High car exit apron',7,15,6.6,10,20);
+ deck('Upper return around the shaft',15,22,-17,10,20);
  deck('High receiving gallery',-5,22,-23,-17,20);
  block([14.8,9.9,-3.5],[.35,19.8,27]);
  block([0,14.5,-17],[10,29,.4]);block([-5.2,14.5,-20],[.4,29,6]);block([5.2,9.9,-20],[.4,19.8,6]);block([5.2,26.5,-20],[.4,5,6]);

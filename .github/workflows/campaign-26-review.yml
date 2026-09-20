@@ -13,15 +13,16 @@ env:
   BUILD_COMMIT: ${{ github.sha }}
 jobs:
   rooms:
-    name: Complete room ${{ matrix.room }} video and physical route
+    name: Room ${{ matrix.room }} complete route and deck motion review
     runs-on: ubuntu-latest
     timeout-minutes: 40
     strategy:
       fail-fast: false
       matrix:
-        # Rooms 22-25 retain their complete e45a3279 evidence. This follow-up
-        # changes only room26's coplanar deck partition and re-records that room.
-        room: [26]
+        # Full recordings exist at e45a3279; the final room26 full recording
+        # continues at 0d6e01be. These exact-union deck patches need complete
+        # input routes plus focused native motion at the corrected joins.
+        room: [22, 23, 24]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -34,13 +35,13 @@ jobs:
           npm install --no-save --package-lock=false puppeteer-core@24.16.0
           npm run build
           node scripts/stamp-build.mjs v38-campaign-26
-      - name: Record the complete ordinary input route
+      - name: Run the complete route and inspect corrected deck joins
         env:
           NESI_FIRST: ${{ matrix.room }}
           NESI_LAST: ${{ matrix.room }}
           NESI_UI: '0'
-          NESI_CAPTURE_PUZZLE: '0'
-          NESI_CAPTURE_FULL: '1'
+          NESI_CAPTURE_PUZZLE: '1'
+          NESI_CAPTURE_FULL: '0'
         run: |
           command -v ffmpeg || { sudo apt-get update && sudo apt-get install -y ffmpeg; }
           npm run preview -- --host 127.0.0.1 --port 4173 >campaign26-preview.log 2>&1 &

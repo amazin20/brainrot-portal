@@ -16,7 +16,7 @@ export function buildRoom22(game,index=21){
  deck('Permanent observation gallery',3,22,-24,8,7);
  // A genuine stair from the far side of the closed ground throat.
  for(let i=0;i<28;i++){const z=22-i*.5;deck('Freight inspection stair',16,21,z-.5,z,(i+1)*.25);block([18.5,(i+1)*.125,z-.25],[5,(i+1)*.25,.5]);}
- deck('Upper stair arrival',12,21,7,8,7);
+ // The last stair already meets the observation gallery; no coplanar overlay.
  for(let i=0;i<12;i++){const z=-11-i*.5;deck('Reverse inspection stair',9,15,z-.5,z,7+(i+1)*.25);}
  deck('Reverse high viewpoint',3,22,-24,-17,10);
  block([12,3.5,-8],[20,7,.65]);block([12,19.1,-8],[20,9.8,.65]);

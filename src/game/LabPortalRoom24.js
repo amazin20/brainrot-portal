@@ -20,7 +20,9 @@ export function buildRoom24(game,index=23){
  k.panel('air-delivery',[-5,2.3,-5],[1,0,0],5.6,4.6);
  k.panel('freight-receiver',[0,10.3,-15.4],[-1,0,0],3.4,4.6);
  w.box([-2,10,-10.8],[12,20,.35],w.materials.wall);
- deck('Cargo inspection return',-16,2,-9.5,-6.5,8);deck('Sealed chamber observation',-2,2,-6.5,-2,8);
+ // Partition the fixed return around the gallery: same floor union, one
+ // visible ceramic/metal layer at every point of their shared height.
+ deck('Cargo inspection return',-16,-8,-9.5,-6.5,8);deck('Cargo inspection junction',-8,2,-8,-6.5,8);deck('Sealed chamber observation',-2,2,-6.5,-2,8);
  const fan=k.fan('compressor',[-18,2.3,12],[1,0,0],{radius:.85});fan.enabled=true;k.resets.push(()=>{fan.enabled=true;});
  const lift=k.slider('pressure-lift',[-14,0,-10],[-14,8,-10],{width:4,depth:4,portal:false,asset:19,assetSize:3});
  const ferry=k.slider('pressure-ferry',[8,8,-5],[8,8,10],{width:4,depth:6,portal:false,asset:19,assetSize:3.3});
