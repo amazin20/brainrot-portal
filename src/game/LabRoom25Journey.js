@@ -12,7 +12,9 @@ export async function runRoom25(d,{order='weight-first',interruptLight=false}={}
  if(order==='weight-first')await load();
  walk(-7,6);walk(17,6);walk(17,12);aim(0,p['light-intake'].getFrame().center);aim(0,p['light-intake'].getFrame().center.clone().add(p['light-intake'].getFrame().center.clone().sub(game.portals.portals[0].position)));
  if(order==='light-first')await load();
- walk(17,6);walk(-20,6);walk(-20,-10);walk(-14,-10);aim(1,p['lower-relay'].getFrame().center);wait(.2);check(s.optical.receivers[0],JSON.stringify(s.optical.segments.map(x=>({a:x.a.toArray(),b:x.b.toArray(),kind:x.kind}))));until(()=>game.playerPosition.y>8.97,18,'First shadow lift did not rise');
+ // Sight the relay from the rear-left quarter of the actual car. From
+ // its centre the shoulder muzzle can intersect the front guide column.
+ walk(17,6);walk(-20,6);walk(-20,-10);walk(-14,-10);walk(-15.2,-10.7);aim(1,p['lower-relay'].getFrame().center);wait(.2);check(s.optical.receivers[0],JSON.stringify(s.optical.segments.map(x=>({a:x.a.toArray(),b:x.b.toArray(),kind:x.kind}))));until(()=>game.playerPosition.y>8.97,18,'First shadow lift did not rise');
  walk(-14,-13);walk(-6,-13);walk(-3,-14.5);mark('permanent gallery keeps height after losing light');
  aim(1,p['freight-receiver'].getFrame().center);walk(-7,-13);walk(-14,-13);walk(-14,-10);walk(-7,-10);walk(-7,7.9);aim(0,p['shadow-counterweight'].getFrame().center);until(()=>game.cargo.position.y>9,8,'Cargo did not leave original counterweight');wait(1.6);
  check(!s.optical.loaded,'Retrieved friend must release the real shutter load');mark('cargo retrieval opens the other beam');

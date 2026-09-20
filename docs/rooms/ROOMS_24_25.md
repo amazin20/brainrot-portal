@@ -58,6 +58,8 @@ keeps the camera and muzzle clear of the return hood during the intended shot.
 Verification:
 
 - Weight-first and source-first input routes, both retaining the same body.
+- Full routes at 16:9 and 1.6 aspect ratios. The first relay is sighted
+  from the car's rear-left quarter, clear of its real front guide column.
 - Real interruption/restoration of the second optical circuit, then finish.
 - With the counterweight empty, a complete source/relay portal pair terminates
   on the first opaque shutter and leaves the first lift at its lower stop.
