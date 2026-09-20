@@ -3,7 +3,7 @@ import * as THREE from 'three';
 /** Batch only immutable, non-interactive surface finishes. The original
  * collision/aim meshes, authored frames and moving surfaces retain identity.
  * Spatial buckets keep distant stairs independently culled in portal views. */
-export function batchStaticSurfaceFinishes(level, {cellSize=12}={}) {
+export function batchStaticSurfaceFinishes(level, {cellSize=4}={}) {
   if (!level?.world || level.staticSurfaceBatches) return level;
   const world=level.world, game=level.game??world.game;
   const protectedMeshes=new Set([
@@ -21,6 +21,11 @@ export function batchStaticSurfaceFinishes(level, {cellSize=12}={}) {
     for (const mesh of meshes) {
       if (!mesh?.visible || protectedMeshes.has(mesh) || Array.isArray(mesh.material)
         || mesh.material?.transparent || mesh.material?.visible===false) continue;
+      // Keep detailed imported treads independently culled. Combining their
+      // bounds saves a draw but submits thousands of hidden vertices whenever
+      // any neighbouring step enters the camera. Cheap backings benefit most.
+      const triangles=(mesh.geometry.index?.count??mesh.geometry.attributes.position?.count??0)/3;
+      if(mesh.isInstancedMesh&&triangles>256)continue;
       const p=mesh.geometry.parameters;
       const simpleBox=mesh.geometry.type==='BoxGeometry'&&p.widthSegments===1&&p.heightSegments===1&&p.depthSegments===1;
       const geometry=simpleBox?unitBox:mesh.geometry;

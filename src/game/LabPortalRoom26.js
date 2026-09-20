@@ -77,13 +77,13 @@ export function buildRoom26(game,index=25){
  const crossing=buildTransferFunnel(k,{origin:[12,19.7,-22],direction:[0,0,1],radius:2.25,speed:6});
  crossing.reversed=true;k.resets.push(()=>{crossing.reversed=true;});
  k.state.liftFlow=lift;k.state.crossingFlow=crossing;
- const reverse=k.control('crossflow-reverse',[5,16,-14],()=>{crossing.reversed=!crossing.reversed;},'E — реверс поперечного потока');
+ const reverse=k.control('crossflow-reverse',[17,16,-16],()=>{crossing.reversed=!crossing.reversed;},'E — реверс поперечного потока');
  const fields=[lift,crossing];
  k.forces.push(()=>{if(game.heldCube||!game.physics?.cargoBody)return;const b=game.physics.cargoBody,a=crossflowAcceleration(fields,V(b.position.x,b.position.y,b.position.z),V(b.velocity.x,b.velocity.y,b.velocity.z),.5);if(a.lengthSq()){b.wakeUp();b.force.x+=a.x*b.mass;b.force.y+=a.y*b.mass;b.force.z+=a.z*b.mass;}});
  const level=k.finish([-19,0,10],[-20,.55,17],[17,16,19],{workshop:k,portalPuzzle:true,playerAcceleration:(p,v)=>crossflowAcceleration(fields,p.clone().add(V(0,1.2,0)),v,.46,{centering:.8,damping:2}),cargoOnAnyPad:()=>load.loaded()||cargoLoadsPlate(game.cargo,game.heldCube,relay.getFrame())});
  level.mechanismArt={turbines:fields};
  level.puzzleGeometry={footprint:48*48,goalHeight:16,safeFloor:0,noProgressFlags:true,orders:['load-first','inspect-first'],portalRoles:{'pressure-intake':'collect the stream behind the real load-operated shutter','first-shaft':'retain the first eight metres on a permanent balcony','relay-shaft':'reuse the source from a second elevated floor','valve-load':'the original companion both powers the shutter and becomes the final retrieval source','freight-receiver':'retrieve the load after preserving the final height'},deductions:['a live load opens an actual air obstruction','a fixed balcony retains height after a portal changes','the second floor is visible only from the attained gallery','a crossing flow can carry the observer past the intended retaining dock','the power source is also the cargo to retrieve through the same pair','removing the load closes only its physical air branch','the independent perpendicular stream carries both travellers across the last closed spine']};
- level.conceptLesson={position:[5,16,-14],range:4,key:'↔',text:'Поперечный поток независим от нижней заслонки. Реверс меняет силу; он не переносит тебя мгновенно.'};
+ level.conceptLesson={position:[17,16,-16],range:4,key:'↔',text:'Поперечный поток независим от нижней заслонки. Реверс меняет силу; он не переносит тебя мгновенно.'};
  return level;
 }
 export {runRoom26} from './LabRoom26Journey.js';

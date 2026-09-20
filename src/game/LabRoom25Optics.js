@@ -19,6 +19,7 @@ export function buildRoom25Optics(k,pad,first,second){
   first.powered=state.receivers[0];second.powered=state.receivers[1];lamps.forEach((l,i)=>l.glow.material.color.setHex(state.receivers[i]?0xffe8ab:0x645b4d));
  });
  k.resets.push(()=>{state.travel=0;state.loaded=false;state.receivers=[false,false];});k.state.optical=state;
+ k.wire([[-7,.6,12],[-11,.6,12],[-11,.6,-6],[-11,6.3,-6],[11,6.3,-6],[11,11.3,-6]],()=>state.loaded);
  k.wire([[-7,1,-6],[-7,1,-10],[-14,1,-10]],()=>state.receivers[0]);k.wire([[18,9.5,-6],[18,9.5,-10],[16,9.5,-10]],()=>state.receivers[1]);
  return state;
 }

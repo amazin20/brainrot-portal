@@ -3,6 +3,7 @@ import path from 'node:path';
 import assert from 'node:assert/strict';
 import crypto from 'node:crypto';
 import puppeteer from 'puppeteer-core';
+import {compareRenderTraces} from './lib/compare-render-traces.mjs';
 
 // Run this SAME script against the immutable baseline and candidate builds.
 // Fixed input route, camera poses and graphics settings. SwiftShader timings
@@ -54,7 +55,8 @@ try{
   finally{game.updateVisuals=visual;game.scene.updateMatrixWorld=sceneUpdate;}
  },tag==='after');
  assert.ok(data.route.pass);assert.equal(data.route.resets+data.route.respawns,0);assert.ok(data.samples.length>=6);
- report.route=data.route;report.quality=data.quality;report.traceDigest=crypto.createHash('sha256').update(JSON.stringify(data.trace)).digest('hex');
+ report.route=data.route;report.quality=data.quality;report.trace=data.trace;
+ report.traceDigest=crypto.createHash('sha256').update(JSON.stringify(data.trace)).digest('hex');
  for(const [index,{image,...sample}] of data.samples.entries()){
   const filename=`${tag}-${String(index).padStart(2,'0')}-${sample.reason}.png`,bytes=Buffer.from(image.split(',')[1],'base64');
   fs.writeFileSync(path.join(out,filename),bytes);report.samples.push({...sample,filename,pixelHash:crypto.createHash('sha256').update(bytes).digest('hex')});
@@ -64,7 +66,7 @@ try{
  report.totalSceneUpdates=report.samples.reduce((sum,s)=>sum+s.sceneUpdates,0);
  if(tag==='after'){
   // The viewport setters use logical pixels even for a render target. Exercise
-  // the corrected high-DPI path in WebGL at the very same final world pose.
+  // the corrected high-DPI path at an identical pose with a live portal.
   const dpi=data.dpi;assert.ok(dpi?.visible>0,'DPR check must contain a live portal');
   let sum=0,changed=0;
   for(let i=0;i<dpi.before.length;i++){if(i%4===3)continue;const delta=Math.abs(dpi.before[i]-dpi.after[i]);sum+=delta;if(delta>32)changed++;}
@@ -74,12 +76,13 @@ try{
  }
  if(process.env.REFERENCE_REPORT){
   const before=JSON.parse(fs.readFileSync(process.env.REFERENCE_REPORT,'utf8'));
-  assert.equal(report.traceDigest,before.traceDigest,'same physics and camera trajectory');
+  const trajectory=compareRenderTraces(before.trace,report.trace);
   assert.equal(report.samples.length,before.samples.length,'same sampled instants');
   report.comparison={drawReduction:1-report.totalDraws/before.totalDraws,triangleReduction:1-report.totalTriangles/before.totalTriangles,
-   sceneUpdateReduction:1-report.totalSceneUpdates/before.totalSceneUpdates,pixels:[]};
+   sceneUpdateReduction:1-report.totalSceneUpdates/before.totalSceneUpdates,trajectory,pixels:[]};
   for(let i=0;i<report.samples.length;i++){
-   const a=before.samples[i],b=report.samples[i];assert.equal(a.tick,b.tick);assert.deepEqual(a.pose,b.pose);
+   const a=before.samples[i],b=report.samples[i];assert.equal(a.tick,b.tick);assert.equal(a.reason,b.reason);
+   compareRenderTraces([a.pose],[b.pose]);
    let sum=0,changed=0,max=0;
    for(let k=0;k<a.pixels.length;k++){if(k%4===3)continue;const delta=Math.abs(a.pixels[k]-b.pixels[k]);sum+=delta;if(delta>32)changed++;max=Math.max(max,delta);}
    const mean=sum/(128*72*3),largeDifferenceFraction=changed/(128*72*3);

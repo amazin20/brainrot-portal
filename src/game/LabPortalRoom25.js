@@ -12,13 +12,13 @@ export function buildRoom25(game,index=24){
  k.panel('freight-receiver',[0,11.3,-15.4],[-1,0,0],3.4,4.6);
  k.panel('upper-relay',[5,11.3,-6],[1,0,0],5.6,4.6);
  k.panel('return-entry',[19.9,20.3,-15.4],[-1,0,0],3.4,4.6);
- k.panel('home',[-20.7,13.2,20],[1,0,0],5.6,4.6);
+ k.panel('home',[-17,13.6,23],[1,0,0],3.4,4.6);
  const first=opticalLift(k,'shadow-lift',[-14,0,-10],{top:9,width:4,depth:4});
  const second=opticalLift(k,'relay-lift',[16,9,-10],{top:18,width:4,depth:4});
  deck('Permanent shadow landing',-18,-8,-18,-12,9);deck('Upper optical exchange',-8,20,-18,-12,9);
- deck('Relay observation arm',6,20,-12,-8,9);deck('High reverse overlook',11,20,-18,-9,18);
+ deck('Relay observation arm',6,20,-12,-8,9);deck('High reverse overlook',11,20,-18,-9,18);deck('High inspection prow',11,14,-9,-5,18);
  deck('Shadow inspection bridge',-16,-5,-11,-8,9);deck('Counterweight inspection arm',-9,-5,-8,8,9);
- w.box([-2,18,-12],[12,18,.3],w.materials.wall);w.box([17,13.5,-12],[6,27,.3],w.materials.wall);w.box([11.1,13.5,-15],[.3,27,6],w.materials.wall);
+ w.box([-2,18,-12],[12,18,.3],w.materials.wall);w.box([17,13.5,-12],[6,27,.3],w.materials.wall);w.box([11.1,13.5,-13.75],[.3,27,8.5],w.materials.wall);
  // Opaque base and raised side screens hide the upper receiver from every
  // lower-floor firing angle. The two paths meet on occupied galleries.
  w.box([4,4.5,-12],[32,9,.3],w.materials.wall);
@@ -27,7 +27,7 @@ export function buildRoom25(game,index=24){
  w.box([-8.2,13.5,-16],[.3,27,4],w.materials.wall);
  // The second relay is behind its own solid backing; only the east side
  // of the first gallery gives a valid shot onto its front face.
- w.box([4.8,13.5,-6],[.3,27,6],w.materials.wall);
+ w.box([4.8,7,-6],[.3,14,6],w.materials.wall);
  // Exit lies behind the arrival view. Its 1.35m sight slit passes a shot
  // from the high overlook, never a standing player or a low-floor aim.
  deck('Home receiving chamber',-22,-11,15,25,7);

@@ -59,3 +59,11 @@ test('hidden authored surfaces are not made visible by a batch outside their gro
  assert.deepEqual(vertices(level.world.root),before);
  assert.equal(hidden.backing.userData.staticBatchSource,undefined);
 });
+test('detailed imported treads retain independent frustum culling',()=>{
+ const {level,surface}=fixture(),a=surface(1),b=surface(3);
+ const detailed=new THREE.SphereGeometry(1,32,24),meshes=[];
+ for(const s of [a,b]){const mesh=s.group.children.find(n=>n.isInstancedMesh);mesh.geometry=detailed;meshes.push(mesh);}
+ batchStaticSurfaceFinishes(level);
+ assert.ok(meshes.every(m=>m.visible&&!m.userData.staticBatchSource));
+ assert.ok(level.staticSurfaceBatches.userData.stats.savedDraws>0,'Cheap backings are still consolidated');
+});

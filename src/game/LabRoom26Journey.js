@@ -18,8 +18,8 @@ export async function runRoom26(d,{inspectFirst=false,reverse=false,firstFall=fa
  walk(12,-14);walk(7,-14);aim(1,p['freight-receiver'].getFrame().center);walk(12,-14);walk(12,-21);walk(-22,-21);walk(-22,11.85);walk(-20.25,11.85);aim(0,p['valve-load'].getFrame().center);
  until(()=>game.cargo.position.y>16,8,'Borrowed portals did not retrieve the original load');wait(1);
  check(!s.load.loaded(),'Retrieval must unload the real lower plate');mark('borrow the lift portals to recover their own power source');
- walk(-22,11);walk(-22,-21);walk(12,-21);walk(12,-14);walk(7,-14);walk(6.2,-14);game.interact();wait(.25);check(!s.crossingFlow.reversed,'Upper valve must reverse the return stream');if(reverse){game.interact();wait(.25);check(s.crossingFlow.reversed,'Reverse control did not change force');game.interact();wait(.25);}
- walk(6,game.cargo.position.z);pickup();walk(7,-14);walk(16,-14);
+ walk(-22,11);walk(-22,-21);walk(12,-21);walk(12,-14);walk(17,-14.8);game.interact();wait(.25);check(!s.crossingFlow.reversed,'Upper valve must reverse the return stream');if(reverse){game.interact();wait(.25);check(s.crossingFlow.reversed,'Reverse control did not change force');game.interact();wait(.25);}
+ walk(12,-14);walk(7,-14);walk(6,game.cargo.position.z);pickup();walk(7,-14);walk(16,-14);
  walk(12,-14);game.input.jumpQueued=true;until(()=>game.playerPosition.z>14,12,'Upper stream did not transport both travellers');
  for(let n=0;n<300&&game.playerPosition.x<16.3;n++){d.worldMove(1,0);d.frame();}d.stop();walk(17,18);until(()=>game.playerGrounded,6,'Far dock landing');walk(17,19);until(()=>game.state==='won',5,'Foundry joint arrival');mark('both travellers cross the independent return stream');
 }
