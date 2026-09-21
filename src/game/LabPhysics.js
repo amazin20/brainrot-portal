@@ -1,5 +1,6 @@
+import {LabStaticAwareSAP} from './LabStaticAwareSAP.js';
 import { sweepBox } from './LabSweep.js';
-import { Body, Box, ConvexPolyhedron, Material, Quaternion, SAPBroadphase, Sphere, Vec3, World } from 'cannon-es';
+import { Body, Box, ConvexPolyhedron, Material, Quaternion, Sphere, Vec3, World } from 'cannon-es';
 
 const SOLID = 1, CARGO = 2, PLAYER = 4;
 const EPSILON = 1e-10;
@@ -86,7 +87,7 @@ export class LabPhysics {
     this.maxFrame = Math.max(fixedStep, maxFrame);
     this.accumulator = 0;
     this.world = new World({ gravity: new Vec3(0, gravity, 0), allowSleep: true });
-    this.world.broadphase = new SAPBroadphase(this.world);
+    this.world.broadphase = new LabStaticAwareSAP(this.world);
     this.world.solver.iterations = 18;
     this.world.solver.tolerance = 1e-8;
     Object.assign(this.world.defaultContactMaterial, {
