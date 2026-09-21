@@ -1,0 +1,31 @@
+name: Solid models reproducible workspace
+on:
+  push:
+    branches: [fix/solid-models-20260921]
+    paths: [.github/workflows/solid-models-workspace.yml]
+permissions:
+  contents: read
+jobs:
+  workspace:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: |
+          npm ci
+          npm install --no-save --package-lock=false puppeteer-core@24.16.0
+          mkdir -p /tmp/solid-models-workspace/runtime
+          cp -a "$(dirname "$(dirname "$(command -v node)")")/." /tmp/solid-models-workspace/runtime/
+          git rev-parse HEAD > /tmp/solid-models-workspace/SOURCE_COMMIT
+          tar --exclude=.git -czf /tmp/solid-models-workspace/project.tar.gz .
+          tar -C /tmp/solid-models-workspace -czf /tmp/solid-models-workspace/runtime.tar.gz runtime
+          rm -rf /tmp/solid-models-workspace/runtime
+      - uses: actions/upload-artifact@v4
+        with:
+          name: solid-models-workspace
+          path: /tmp/solid-models-workspace/
+          retention-days: 2
