@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import {RoundedBoxGeometry} from 'three/addons/geometries/RoundedBoxGeometry.js';
-import {ArchitecturalBatch,architecturalMaterials,clipArchitecturalRect} from './LabArchitecturalModels.js';
+import {ArchitecturalBatch,architecturalMaterials,architecturalCassetteGeometry,clipArchitecturalRect} from './LabArchitecturalModels.js';
 import {advancedRoomPalette} from './LabAdvancedArchitecture.js';
 import {earlyRoomPalette,architecturalCeiling} from './LabEarlyArchitecture.js';
 import {getChapterVisualProfile,chapterSurfaceColor,keepsAuthoredMaterial} from './LabChapterArt.js';
@@ -26,6 +26,8 @@ function addArchitecturalCladding(level,root){
   const batch=new ArchitecturalBatch(root,materials);
   const singleSkin=level.index>=23;
   if(singleSkin){
+    batch.geometry.dispose();
+    batch.geometry=architecturalCassetteGeometry({corner:.006,inset:.004});
     // One closed mesh owns the visible surface. The dark folded shoulder is
     // vertex colour, not a second plane four millimetres behind the paint.
     const position=batch.geometry.attributes.position,colors=[];

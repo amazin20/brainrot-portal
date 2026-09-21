@@ -173,11 +173,35 @@ function buildPontoon(width,depth,style='lagoon'){
 function buildSolarObservatory(){
  const a=new SolidAssembly('Solar observatory crown','launch');
  a.turned([[0,-5.6],[2.4,-5.6],[3,-5],[2.4,-4.4],[1.9,-4.4],[1.9,-1.1],[3.7,-.7],[4,-.1],[4,.4],[3.7,.8],[0,.8]],1);
- a.turned([[0,.80],[3.65,.80],[3.8,1],[3.6,1.45],[2.9,1.95],[0,2.2]],2);
+ // The original hub envelope remains unchanged; a stepped receiver replaces
+ // the undifferentiated cap. Each collar and lens is a closed solid volume.
+ a.bounds(new THREE.Box3(V(-3.8,.8,-3.8),V(3.8,2.2,3.8)));
+ a.turned([[0,.80],[3.65,.80],[3.8,1],[3.70,1.25],[3.1,1.35],[0,1.35]],2,[0,0,0],Q(),false);
+ a.turned([[0,1.34],[2.90,1.34],[3.02,1.43],[3.02,1.65],[2.85,1.73],[0,1.73]],1,[0,0,0],Q(),false);
+ a.turned([[0,1.74],[2.58,1.74],[2.70,1.84],[2.62,2.04],[1.6,2.16],[0,2.20]],2,[0,0,0],Q(),false);
+ for(let i=0;i<12;i++){
+  const t=i*Math.PI/6;
+  a.add(new THREE.CylinderGeometry(.115,.115,.10,6),1,[Math.cos(t)*3.35,1.35,Math.sin(t)*3.35],Q(),[1,1,1],false);
+ }
  for(let i=0;i<8;i++){
-  const t=i*Math.PI/4,shape=new THREE.Shape();shape.moveTo(2.9,-.65);shape.lineTo(4.3,-1.0);shape.bezierCurveTo(7.5,-1.55,10.9,-1.2,12,-.25);shape.lineTo(11.4,.70);shape.bezierCurveTo(8.3,1.4,5,1.35,3,.60);shape.closePath();
-  const g=new THREE.ExtrudeGeometry(shape,{depth:.38,steps:1,bevelEnabled:true,bevelSize:.08,bevelThickness:.06,bevelSegments:2,curveSegments:10});g.rotateX(-Math.PI/2);
-  const q=Q().setFromAxisAngle(V(0,1,0),-t);a.add(g,0,[0,0,0],q);
+  const t=i*Math.PI/4,q=Q().setFromAxisAngle(V(0,1,0),-t);
+  const outline=new THREE.Shape();outline.moveTo(2.9,-.65);outline.lineTo(4.3,-1.0);outline.bezierCurveTo(7.5,-1.55,10.9,-1.2,12,-.25);outline.lineTo(11.4,.70);outline.bezierCurveTo(8.3,1.4,5,1.35,3,.60);outline.closePath();
+  const options={depth:.38,steps:1,bevelEnabled:true,bevelSize:.08,bevelThickness:.06,bevelSegments:2,curveSegments:10};
+  // Retain the exact old closed-fin envelope, independent of its finish.
+  const envelope=new THREE.ExtrudeGeometry(outline,options);envelope.rotateX(-Math.PI/2);envelope.applyQuaternion(q);envelope.computeBoundingBox();a.bounds(envelope.boundingBox);envelope.dispose();
+  const fieldPoints=outline.getPoints(10).map(p=>new THREE.Vector2(7.4+(p.x-7.4)*.79,p.y*.64));
+  const field=new THREE.Shape(fieldPoints),opening=new THREE.Path(fieldPoints.slice().reverse());opening.closePath();outline.holes.push(opening);
+  const frame=new THREE.ExtrudeGeometry(outline,options);frame.rotateX(-Math.PI/2);a.add(frame,0,[0,0,0],q,[1,1,1],false);
+  // The collector top is recessed 15 cm below the frame lip, not painted on
+  // another full face. This removes the coincident-skin failure mode entirely.
+  const plate=new THREE.ExtrudeGeometry(field,{...options,depth:.18,bevelSize:.02,bevelThickness:.02,bevelSegments:1});plate.rotateX(-Math.PI/2);a.add(plate,1,[0,.05,0],q,[1,1,1],false);
+  for(const x of [5.25,6.7,8.15,9.6]){
+   const p=V(x,.285,0).applyQuaternion(q);
+   a.add(new THREE.BoxGeometry(.052,.07,1.08),2,p.toArray(),q,[1,1,1],false);
+  }
+  const hinge=V(3.65,.37,0).applyQuaternion(q);
+  a.add(new RoundedBoxGeometry(.62,.35,1.05,2,.06),1,hinge.toArray(),q,[1,1,1],false);
+  for(const z of [-.35,.35])a.add(new THREE.CylinderGeometry(.095,.095,.06,6),2,V(3.65,.57,z).applyQuaternion(q).toArray(),Q(),[1,1,1],false);
   a.beam([Math.cos(t)*2.1,-2.2,Math.sin(t)*2.1],[Math.cos(t)*8.2,-.30,Math.sin(t)*8.2],.18,1);
  }
  a.arc(13.4,.40,.48,1,[0,-.25,0],Q().setFromAxisAngle(V(1,0,0),Math.PI/2));

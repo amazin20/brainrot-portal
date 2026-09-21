@@ -5,10 +5,11 @@ const V=(x=0,y=0,z=0)=>new THREE.Vector3(x,y,z);
 /** A folded sheet-metal cassette, with clipped corners and an actual bevel.
  * Forty-eight triangles replace the tessellated sculpted tile. Normals are
  * split at the folds; the broad face stays flat under grazing light. */
-export function architecturalCassetteGeometry(){
-  const points=[[-.465,-.5],[.465,-.5],[.5,-.465],[.5,.465],[.465,.5],[-.465,.5],[-.5,.465],[-.5,-.465]];
+export function architecturalCassetteGeometry({corner=.035,inset=.012}={}){
+  const c=.5-corner;
+  const points=[[-c,-.5],[c,-.5],[.5,-c],[.5,c],[c,.5],[-c,.5],[-.5,c],[-.5,-c]];
   const ring=(z,inset=0)=>points.map(([x,y])=>[x*(1-inset*2),y*(1-inset*2),z]);
-  const back=ring(-.5),shoulder=ring(.1),front=ring(.5,.012),vertices=[],uv=[];
+  const back=ring(-.5),shoulder=ring(.1),front=ring(.5,inset),vertices=[],uv=[];
   const tri=(a,b,c)=>{for(const p of [a,b,c]){vertices.push(...p);uv.push(p[0]+.5,p[1]+.5);}};
   for(let i=0;i<8;i++){
     const j=(i+1)%8;
