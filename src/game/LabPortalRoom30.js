@@ -24,7 +24,8 @@ export function buildRoom30(game,index=29){
  deck('Sunward arrival island',183,218,2,42,28);
  // A screen hides the final outlet from every ground-supported point in the
  // opening hub. The two first arcs arrive on opposite sides of its near end.
- w.box([120,46,-63],[1.1,92,84],w.materials.wall);
+ const sightlineScreen=w.box([120,46,-63],[1.1,92,84],new THREE.MeshStandardMaterial({color:0x326caf,roughness:.58,metalness:.14}));
+ sightlineScreen.userData.keepMaterial=true;
  // Walk around either side of this planted observatory; the two wings reveal
  // two different first-flight receivers, not two copies of an interaction.
  w.box([-1,56,7],[16,8,12],w.materials.wall);

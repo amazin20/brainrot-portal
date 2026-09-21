@@ -18,7 +18,9 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        room: [24, 27, 28, 29, 30]
+        # All five rooms have complete native routes and mechanism excerpts at
+        # 789f30fc7dab. Only the finale's distant screen material changed.
+        room: [30]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
