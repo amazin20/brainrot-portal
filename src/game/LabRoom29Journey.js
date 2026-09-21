@@ -1,12 +1,13 @@
 const check=(condition,message)=>{if(!condition)throw new Error(message);};
-export async function runRoom29(d,{carryRoute=false,recover=false}={}){
+export async function runRoom29(d,{carryRoute=false,recover=false,undercroft=false}={}){
  const {game,level,walk,look,aim,wait,until,pickup,enter,mark}=d,p=level.panels,s=level.state.gravity;
+ if(undercroft){walk(-14,2);walk(-20,2);walk(-20,-8);walk(-3,-8);mark('the northern undercroft loops back without a reset');walk(-20,-8);walk(-20,2);walk(-14,2);}
  const promenade=()=>{walk(-14,4);walk(-18,4);walk(-18,18);walk(-8,18);walk(-8,6);walk(15,6);};
- if(carryRoute){walk(game.cargo.position.x+1,game.cargo.position.z);pickup();promenade();walk(12,5.5);look(p['observatory-return'].getFrame().center);game.interact();wait(1);mark('the long ground path keeps both travellers together');}
+ if(carryRoute){walk(game.cargo.position.x+1,game.cargo.position.z);pickup();promenade();walk(10,8.5);look(p['observatory-return'].getFrame().center);game.interact();wait(1);mark('the long ground path keeps both travellers together');}
  else{
   walk(game.cargo.position.x+1,game.cargo.position.z);pickup();walk(-12,11.5);look(p['root-ceiling'].getFrame().center.clone().setY(2));walk(-12,9.4);game.interact();wait(1);
-  walk(-5,11);game.interact();wait(.3);check(s.source.up,'The visible source crystal did not reverse');
-  walk(0,12);aim(0,p['root-ceiling'].getFrame().center);promenade();
+  walk(-5,11);look(p['root-ceiling'].getFrame().center.clone().setY(5));mark('the root crystal reverses and the free companion rises');game.interact();wait(3);check(s.source.up,'The visible source crystal did not reverse');
+  promenade();walk(-5,5);aim(0,p['root-ceiling'].getFrame().center);
   walk(9,5);aim(1,p['crown-ceiling'].getFrame().center);
   until(()=>game.cargo.position.x>14.8&&game.cargo.position.y>15,18,'Friend did not cross the inverted ceiling garden');mark('the companion crosses a passage too low for its observer');
   if(recover){walk(16,5.5);game.interact();until(()=>game.cargo.position.y<10,8,'Reversal did not return friend to its receiving floor');game.interact();until(()=>game.cargo.position.y>15,8,'The same body could not revisit the ceiling');mark('reversing twice is recoverable without resetting either traveller');}

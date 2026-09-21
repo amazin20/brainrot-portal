@@ -27,7 +27,8 @@ export class LabPortalShots {
   const sequence=++this.serial[index];
   // A click during the windup must not restart it forever. Once accepted,
   // a charge keeps its target and completes its visible flight independently.
-  const wait=(g.kineticMode ?? g.epicMode)?Math.max(VELOCITY_SHOT_PROFILE.prepare,g.heldDevice?.holsterProgress*.32||0)
+  const fastWindup=(g.kineticMode ?? g.epicMode)&&(!g.firstLevel?.kineticCourse||!g.playerGrounded);
+  const wait=fastWindup?Math.max(VELOCITY_SHOT_PROFILE.prepare,g.heldDevice?.holsterProgress*.32||0)
     :Math.max(.23,Math.min(.30,turn/14),g.heldDevice?.holsterProgress*.32||0);
   const shot={index,sequence,epoch:this.epoch,point,facing,delay:wait,bufferedInput:busy,
     velocityMode:!!(g.kineticMode ?? g.epicMode),wasAirborne:g.playerGrounded===false,requestTime:this.time,

@@ -20,7 +20,9 @@ export function buildRoom29Gravity(k){
  const fields=[source,crown],matrix=new THREE.Matrix4();
  const geom=new THREE.ConeGeometry(.13,.43,4),material=new THREE.MeshBasicMaterial({color:0xe7e884});
  const arrows=new THREE.InstancedMesh(geom,material,40);arrows.userData.keepMaterial=true;arrows.frustumCulled=false;w.root.add(arrows);
+ let previousDirections='';
  k.ticks.push(()=>{
+  const directions=fields.map(f=>Number(f.up)).join('');if(directions===previousDirections)return;previousDirections=directions;
   let index=0;
   for(const f of fields)for(let n=0;n<20;n++){
    const y=f.bounds.min.y+1+(n%5)*((f.bounds.max.y-f.bounds.min.y-2)/4),angle=Math.floor(n/5)*Math.PI/2;

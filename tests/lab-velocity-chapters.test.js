@@ -1,15 +1,15 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import { VELOCITY_CAMPAIGN_RESERVATION, VELOCITY_CHAPTERS,
+import { CAMPAIGN_FINALE, VELOCITY_CHAPTERS,
   LabVelocityProgress, VELOCITY_PROGRESS_KEY } from '../src/game/LabVelocityChapters.js';
 import {readCampaignRoute,nextCampaignLevel} from '../src/game/LabCampaignRoute.js';
 import {LabPreferences} from '../src/game/LabPreferences.js';
 
-test('the speed prototype is reserved for room 30 and has no campaign interludes', () => {
-  assert.equal(VELOCITY_CAMPAIGN_RESERVATION.level, 30);
-  assert.equal(VELOCITY_CAMPAIGN_RESERVATION.status, 'reserved');
-  assert.equal(VELOCITY_CAMPAIGN_RESERVATION.publicMode, false);
+test('room 30 is the numbered finale with no campaign interludes', () => {
+  assert.equal(CAMPAIGN_FINALE.level, 30);
+  assert.equal(CAMPAIGN_FINALE.status, 'available');
+  assert.equal(CAMPAIGN_FINALE.publicMode, false);
   for (const prototype of VELOCITY_CHAPTERS) {
     assert.equal(prototype.afterLevel, undefined);
     assert.equal(prototype.returnLevel, undefined);
@@ -62,8 +62,8 @@ test('adding numbered rooms preserves existing campaign and retired prototype pr
   assert.deepEqual(prefs.value.completed,old.completed);
   assert.deepEqual(prefs.value.hints,old.hints);
   assert.equal(prefs.value.quality,'low');
-  for(let index=21;index<=25;index++)prefs.complete(index);
-  assert.deepEqual(new LabPreferences(storage).value.completed,[0,9,19,20,21,22,23,24,25]);
+  for(let index=21;index<=28;index++)prefs.complete(index);
+  assert.deepEqual(new LabPreferences(storage).value.completed,[0,9,19,20,21,22,23,24,25,26,27,28]);
   assert.equal(records.get(VELOCITY_PROGRESS_KEY),speed);
   assert.equal(new LabPreferences(storage).value.completed.includes(29),false);
 });

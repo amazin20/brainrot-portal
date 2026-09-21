@@ -41,7 +41,7 @@ for(const [profile,index] of [['garden',23],['carnival',26],['lagoon',27],['inve
  finish(level);
  assert.deepEqual(gameplayContract(game),before,'colour/finish work changed the authored gameplay contract');
  assert.equal(game.scene.background.getHex(),p.sky);assert.equal(game.scene.fog.color.getHex(),p.sky);
- assert.equal(game.scene.fog.near,64);assert.equal(game.scene.fog.far,120,'room-specific visibility belongs to its lifecycle');
+ assert.equal(game.scene.fog.near,profile==='launch'?180:64);assert.equal(game.scene.fog.far,profile==='launch'?420:120);
  assert.equal(world.materials.wall.color.getHex(),p.wall);assert.equal(world.materials.floor.color.getHex(),p.low);
  assert.equal(level.chapterArt.profile,profile);assert.equal(level.chapterArt.perFrameCallbacks,0);
  assert.equal(level.workshop.ticks.length,counts.ticks);assert.equal(level.workshop.renders.length,counts.renders);
@@ -53,6 +53,7 @@ for(const [profile,index] of [['garden',23],['carnival',26],['lagoon',27],['inve
  const premium=level.premiumBrowser3DArt;
  assert.equal(premium.userData.stats.pointLights,0);assert.equal(premium.userData.stats.directionalLights,1);
  assert.equal(premium.userData.stats.ventPanels,0);assert.equal(level.browser3DArt.userData.stats.conduits,0);
+ assert.equal(level.browser3DArt.userData.stats.deckBraces,0,'open garden silhouettes must not inherit industrial wire diagonals');
  assert.ok(premium.userData.stats.batches<=2,'colour blocking uses the existing frame and coat batches');
  const coat=premium.children.find(node=>node.isInstancedMesh&&node.name==='Architectural coat / cassette'),colors=new Set(),c=new THREE.Color();
  for(let i=0;i<coat.count;i++){coat.getColorAt(i,c);colors.add(c.getHex());}

@@ -13,13 +13,14 @@ export function buildRoom29(game,index=28){
  w.floor(4,22,-22,-7,9,{name:'Receiving citrus garden'});
  // A wall has two superimposed, human-readable routes: a narrow viewing
  // aperture at eye level and a low cargo gallery immediately below the crown.
- w.box([-8,10.5,0],[28,21,.5],w.materials.wall);
+ w.box([-6,10.5,0],[24,21,.5],w.materials.wall);w.box([-20,12.1,0],[4,17.8,.5],w.materials.wall);
  w.box([21,10.5,0],[2,21,.5],w.materials.wall);
  w.box([13,3.5,0],[14,7,.5],w.materials.wall);
  w.box([13,16.15,0],[14,9.7,.5],w.materials.wall);
  // Wide stepped promenade bends twice; its landings expose new sight lines.
  w.stairs(-21,-16,5,15,0,3);w.floor(-21,-16,15,17,3,{name:'West turn landing'});w.floor(-21,-6,17,20,3,{name:'First promenade landing'});
- for(let i=0;i<12;i++)w.floor(-11,-6,7+i*10/12,7+(i+1)*10/12,6-i*.25,{name:'Folded promenade tread'});w.floor(-11,19,3,7,6,{name:'Observation ribbon'});
+ for(let i=0;i<12;i++)w.floor(-11,-6,7+i*10/12,7+(i+1)*10/12,6-i*.25,{name:'Folded promenade tread'});w.floor(-11,-6,3,7,6,{name:'Observation ribbon root'});w.floor(-6,19,3,11,6,{name:'Observation ribbon'});
+ w.box([6.5,6.28,3.05],[25,.56,.12],w.materials.trim);w.box([6.5,6.28,10.95],[25,.56,.12],w.materials.trim);
  
  // Safe lower access to the first stair and an obvious airy south overlook.
  w.box([-14,3.4,17.8],[3,.25,.5],w.materials.trim,false);
@@ -44,7 +45,11 @@ export function buildRoom29(game,index=28){
  for(const [x,y,z,mat] of [[-12,.26,8,lilac],[-12,15.82,8,citrus],[16,9.27,-13,citrus],[16,15.85,-13,lilac]]){const mesh=new THREE.Mesh(ringGeo,mat);mesh.rotation.x=Math.PI/2;mesh.position.set(x,y,z);mesh.userData.keepMaterial=true;w.root.add(mesh);}
  const crystalGeo=new THREE.OctahedronGeometry(1,0);
  for(const [x,z] of [[-19,-14],[-15,-7],[-3,15],[3,14],[20,17]])for(const ceiling of [false,true]){const mesh=new THREE.Mesh(crystalGeo,ceiling?citrus:sapphire);mesh.position.set(x,ceiling?18:1.9,z);mesh.scale.set(.85,ceiling?2.1:1.7,.85);mesh.userData.keepMaterial=true;w.root.add(mesh);}
- const level=k.finish([-3,0,19],[-16,.55,10],[17,9,-13],{workshop:k,portalPuzzle:true,visualProfile:'inversion'});
+ const leaves=new THREE.InstancedMesh(new THREE.OctahedronGeometry(1,0),sapphire,32),leafMatrix=new THREE.Matrix4();leaves.userData.keepMaterial=true;
+ for(let i=0;i<32;i++){const mirrored=i>=16,n=i%16,angle=n*Math.PI*(3-Math.sqrt(5)),radius=1.6+(n%4)*.5;leafMatrix.compose(V(-1+Math.cos(angle)*radius,mirrored?18.2-(n%4)*.48:1.8+(n%4)*.48,16+Math.sin(angle)*radius),new THREE.Quaternion().setFromEuler(new THREE.Euler(.2,angle,.35)),V(1.25,.22,.62));leaves.setMatrixAt(i,leafMatrix);}
+ leaves.computeBoundingBox();leaves.computeBoundingSphere();w.root.add(leaves);
+ const level=k.finish([2,0,15.5],[-13.5,.55,12.5],[17,9,-13],{workshop:k,portalPuzzle:true,visualProfile:'inversion'});
+ level.spawnView={yaw:.55,pitch:-.15};
  level.puzzleGeometry={footprint:44*44,goalHeight:9,safeFloor:0,noProgressFlags:true,orders:['split-ceiling-route','carry-observation-route'],portalRoles:{'root-ceiling':'launch the original free companion against ordinary gravity','crown-ceiling':'receive the small body in a low ceiling passage','observatory-return':'the human-scale return from the observation garden','garden-return':'a high receiver visible only through the observation aperture'},deductions:['gravity changes the free companion, not the observer','the same landmark is both a floor and a ceiling','a low upper passage connects the companion route to an otherwise isolated garden','the observation ribbon reveals a different portal route','one pair can be borrowed after the ceiling traveller has reached solid support','reversing a finite field brings the same body back down'],gravityChangesPlayer:false};
  return level;
 }

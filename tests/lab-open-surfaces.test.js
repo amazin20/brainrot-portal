@@ -25,7 +25,14 @@ test('retained surfaces stay intact and every new ceramic has an explicit physic
    }
   }
   const luminance=c=>.2126*c.r+.7152*c.g+.0722*c.b;
-  assert.ok(luminance(l.world.materials.ceramic.color)>luminance(l.world.materials.wall.color)*3);
+  const ceramic=l.world.materials.ceramic.color,wall=l.world.materials.wall.color;
+  if(l.chapterArt){
+   // The new worlds deliberately use bright saturated construction colours.
+   // Ivory remains lighter and achromatic without forcing grey/dark walls.
+   assert.ok(luminance(ceramic)>.8&&luminance(ceramic)>luminance(wall)+.15);
+   assert.ok(Math.max(wall.r,wall.g,wall.b)-Math.min(wall.r,wall.g,wall.b)>.12);
+   assert.ok(Math.max(ceramic.r,ceramic.g,ceramic.b)-Math.min(ceramic.r,ceramic.g,ceramic.b)<.12);
+  }else assert.ok(luminance(ceramic)>luminance(wall)*3);
   for(const a of l.world.surfaces.filter(s=>s.portal))a.group.traverse(o=>{
    if(o.isInstancedMesh&&o.userData.portalTile)assert.equal(o.material,l.world.materials.ceramic,'A gray authored albedo must not disguise portalability');
   });

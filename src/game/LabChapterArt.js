@@ -55,7 +55,11 @@ export function finishChapterArt(level){
  if(!profile||level.chapterArt)return level;
  const world=level.world,game=level.game??world.game;
  game.scene.background=new THREE.Color(profile.sky);
- if(game.scene.fog)game.scene.fog.color.setHex(profile.sky);
+ if(game.scene.fog){
+  game.scene.fog.color.setHex(profile.sky);
+  game.scene.fog.near=profile.id==='launch'?180:64;
+  game.scene.fog.far=profile.id==='launch'?420:120;
+ }
  world.materials.ceramic.color.setHex(0xf4f1e8);
  level.chapterArt=Object.freeze({profile:profile.id,openSky:world.visualProfile?.openSky===true,dominant:profile.wall,secondary:profile.secondary,portalCeramic:0xf4f1e8,extraLights:0,perFrameCallbacks:0});
  world.root.userData.chapterArt=level.chapterArt;

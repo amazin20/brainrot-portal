@@ -329,7 +329,10 @@ export function upgradeBrowser3DArt(level){
   if(level.index>=21)level.spec??=level.workshop?.spec;
   const m=materials(level);enhanceWorldMaterials(level,m);
   const root=new THREE.Group();root.name='Browser 3D artist environment pass';root.userData.visualOnly=true;root.userData.version=31;level.world.root.add(root);
-  const deck=addDeckEngineering(level,root,m),portalFrames=addPortalFrames(level,root,m),conduits=getChapterVisualProfile(level)?0:addShellConduits(level,root,m);
+  // Coloured gardens author solid plinths and rounded supports themselves.
+  // The industrial diagonals read as stray wires beneath their open walkways.
+  const chapter=getChapterVisualProfile(level);
+  const deck=chapter?{braces:0,lamps:0}:addDeckEngineering(level,root,m),portalFrames=addPortalFrames(level,root,m),conduits=chapter?0:addShellConduits(level,root,m);
   if(level.index===13)addLightProjector(level.world,{position:[-10,5.1,-7],direction:[0,0,-1],radius:1.1,accent:level.spec?.accent});
   addRoomMechanisms(level,m);
   if(level.index<11)applyEarlyMechanismArt(level);

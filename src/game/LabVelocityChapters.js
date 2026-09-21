@@ -1,8 +1,7 @@
-// Preserved prototype data for the future numbered room 30. No public mode or
-// interlude is registered. Keep legacy progress isolated and readable; publishing
-// the future room must not silently mark it complete from these old records.
-export const VELOCITY_CAMPAIGN_RESERVATION = Object.freeze({
-  level: 30, title: 'ПРЕДЕЛ', status: 'reserved', publicMode: false,
+// Finale 30 belongs to the numbered campaign. Retired prototype progress stays
+// isolated and readable; it never marks the campaign finale complete.
+export const CAMPAIGN_FINALE = Object.freeze({
+  level: 30, title: 'ПРЕДЕЛ', status: 'available', publicMode: false,
 });
 export const VELOCITY_PROGRESS_KEY = 'brainrot-portal.velocity-chapters.v1';
 export const VELOCITY_CHAPTERS = Object.freeze([

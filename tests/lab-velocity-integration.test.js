@@ -34,11 +34,13 @@ test('missing an exit, retrying, and missing a checkpoint route retain earned pr
 });
 
 test('focus changes simulation time only while playing airborne in a speed chapter',()=>{
- const g={epicMode:true,state:'playing',playerGrounded:false,externalBlocked:false,input:{keys:new Set(['KeyQ'])}};
+ const g=Object.assign(Object.create(LabGame.prototype),{epicMode:true,state:'playing',playerGrounded:false,externalBlocked:false,input:{keys:new Set(['KeyQ'])}});
  const scale=()=>LabGame.prototype.getVelocityTimeScale.call(g);
  assert.equal(scale(),.28);
  for(const [key,value] of [['epicMode',false],['state','paused'],['playerGrounded',true],['externalBlocked',true]]){
   const previous=g[key];g[key]=value;assert.equal(scale(),1,key);g[key]=previous;
  }
  g.input.keys.clear();assert.equal(scale(),1);
+ g.epicMode=false;g.firstLevel={kineticCourse:true};g.input.keys.add('KeyQ');assert.equal(scale(),.28);
+ g.firstLevel={};assert.equal(scale(),1,'Leaving the numbered finale restores ordinary simulation time');
 });

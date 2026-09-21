@@ -234,6 +234,8 @@ export class LabGame {
 
 
   buildLevel() {
+    // A large sky course must not leave its long-range fog in later rooms.
+    this.scene.fog = new THREE.Fog(0xb3ced6, 64, 120);
     const previousRoots = new Set(this.scene.children);
     this.firstLevel = buildLabCampaignLevel(this, this.levelIndex);
     this.mechanisms = this.firstLevel;

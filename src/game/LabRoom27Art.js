@@ -21,6 +21,7 @@ export function dressRoom27(k){
  for(const [x,z,y] of [[7.1,8.5,8],[16.8,8.5,8],[22.6,13.5,8],[22.6,-20.5,8],[10.3,-17.5,8],[-24.4,-5.4,8],[-24.4,5.4,8],[-9.6,-5.4,8],[-9.6,5.4,8],[6.4,-21.5,16],[9.6,-13,16]]){
   beam([x,0,z],[x,y-.22,z],.35);beam([x,Math.max(.5,y-3),z],[x+.9,y-.25,z],.18);
  }
+ for(const z of [-5.5,5.5])beam([-24.5,8,z],[-24.5,14,z],.3);
  const mesh=new THREE.InstancedMesh(new THREE.BoxGeometry(1,1,1),blue,boxes.length),matrix=new THREE.Matrix4();boxes.forEach((b,i)=>{matrix.compose(b.p,b.q,b.s);mesh.setMatrixAt(i,matrix);});mesh.name='Instanced blue structural bridgework';mesh.computeBoundingSphere();root.add(mesh);
  // Four large enamel belt drums make direction controls feel connected to
  // an actual common transmission. They avoid rotating per-object matrices.
@@ -29,7 +30,6 @@ export function dressRoom27(k){
  drums.computeBoundingSphere();drumCaps.computeBoundingSphere();root.add(drums,drumCaps);
  // The receiving island has its own asymmetric marquee, visible throughout
  // the city. Its horizontal opening frames the eventual landing direction.
- for(const z of [-5.5,5.5])beam([-24.5,8,z],[-24.5,14,z],.3);
  const marquee=new THREE.Mesh(new THREE.BoxGeometry(1,1,1),pink);marquee.position.set(-24.5,14,0);marquee.scale.set(.65,1.15,12.2);root.add(marquee);
- return {root,staticDrawCalls:10,hasAnimatedArt:false};
+ return {root,staticDrawCalls:9,hasAnimatedArt:false};
 }

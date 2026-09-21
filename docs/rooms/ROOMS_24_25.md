@@ -5,35 +5,52 @@ original dynamic companion, ordinary portal shots/carry/movement, production
 colliders, and `Workshop.finish`'s joint grounded arrival predicate. No collected
 stage bits or hidden win checklist unlock the exit.
 
-## 24 — Обратное давление
+## 24 — Сад поворотных дверей (redesigned)
 
-The compressor at the low court feeds a separate reservoir only when its real
-portal-traced air ray reaches the round receiver. Pressure is bounded, leaks,
-and is consumed by actual cylinder/ferry displacement. A closed cylinder valve
-holds its current extension; closing it never creates air or movement.
+The old pressure reservoir, compressor and ferry have been removed. This is
+an open-sky garden with coral, mint and gold courtyard walls, topiary,
+a freestanding stair/pergola and a gold receiving pavilion. The central
+ceramic door orbits around an offset hinge: a quarter turn moves the same
+physical portal eight metres behind the courtyard divider and rotates its
+outward direction by ninety degrees. The visible overhead arm and ground
+orbit inlay explain the architectural motion.
 
-The first ascent reveals a folded service gallery. Isolating the raised
-cylinder retains that access while the same pair is borrowed for cargo. A
-separate observation arm looks down into the glass chamber. The companion
-falls through the chamber's floor portal and emerges into the upper freight
-pocket. Opening the crossing valve then spends the reservoir on the real
-moving ferry. The friend may ride that ferry freely, without being held.
+There are two materially different portal strategies:
 
-Four ceramic surfaces each have one clear physical role: source capture,
-reservoir delivery, chamber extraction, and upper freight reception. The
-freight receiver faces sideways behind a solid baffle; no valid standing/jump
-shot from the lower court can skip the first ascent. The lower court catches
-falls, and the low recall control can vent/return the first cylinder.
+- **Carry through the balcony.** Enter the unturned door with the original
+  friend, park them in the south balcony, discover its manual worm drive,
+  move the entrance portal onto that balcony, turn the retained exit around
+  the corner, and carry the friend directly into the west conservatory.
+- **Use the live counterweight.** Leave the original friend on the lower
+  garden planter. Their real weight turns the door. Enter the west courtyard,
+  engage its brake, and use the observation branch to replace the entrance
+  with a portal beneath the original weight. The friend emerges through the
+  same moving ceramic, while the real brake holds the unloaded door.
 
-Verification:
+These are alternative solutions, not different orders of the same checklist.
+The west court branches towards the planter observation window and the
+folded stair. Its reverse pergola gives a comfortable view of the pavilion's
+ceramic face, which is physically hidden from the lower recovery court.
+The final receiver has a broad 6.4 by 5 metre face. Shallow planter kerbs
+retain a loose companion on both working balconies without altering physics.
 
-- Complete production-input route, no resets or respawns, same cargo body.
-- Source deliberately interrupted and restored through ordinary shots.
-- Sixty-second pause after the pair is borrowed; isolated lift stays raised
-  and the stored air still completes the loaded crossing.
-- Finite pressure accounting: zero pressure without feed; charging, leakage,
-  and displacement expenditure; no negative pressure.
-- Independent early sightline/bypass scan in the campaign QA suite.
+Every state is a physical actuator condition (door angle, loaded planter,
+manual drive and brake). Joint grounded arrival of the same dynamic companion
+is sufficient for completion; no visited-room or solved-stage bits exist.
+Deleting the pair is recoverable from the permanent west gallery. If the
+player also falls, the low release handwheel disengages the drive and brake:
+the unloaded door returns to its original visible face and can be reached
+again through normal portal placement. There are no respawn checkpoints.
+
+Verification in `tests/lab-room24-garden.test.js`:
+
+- Both full strategies at 16:9 and 1.6, using production movement, camera,
+  interaction, projectiles and portal traversal, with the original body.
+- A portal keeps its frame identity through the complete eight-metre orbit.
+- Erased-pair recovery and a separate fall plus erased-pair recovery route.
+- Brake arrest, reversal, repeated reset and moving collision alignment.
+- No overlapping coplanar floor footprints.
+- The independent campaign QA suite scans early floor and jump sightlines.
 
 ## 25 — Обратная сторона тени
 
@@ -70,9 +87,8 @@ Verification:
 
 ## Presentation and runtime cost
 
-The rooms reuse shipped models/materials. Room24 has the existing compressor
-and freight-deck assets; it does not layer a second generic lift chassis over
-them. Room25 has two optical lift models and one optical source. Fixed geometry
+The rooms reuse shipped models/materials. Room24 uses the shipped architectural modules with a lightweight articulated
+ceramic door and shared low-poly topiary geometry; it adds no model downloads. Room25 has two optical lift models and one optical source. Fixed geometry
 is ordinary instanced architecture. Neither room creates a full-screen effect,
 particle swarm, additional render pass, or a recurring GLB load.
 

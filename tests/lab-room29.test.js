@@ -6,7 +6,7 @@ import {runV8Journey} from '../src/game/LabV8Journey.js';
 import {runRoom29} from '../src/game/LabRoom29Journey.js';
 import {inversionAcceleration} from '../src/game/LabRoom29Gravity.js';
 const game=await createHeadlessGame();after(()=>{game.physics.dispose();game.portals.dispose();});
-for(const [name,options,aspect] of [['ceiling and floor split',{},16/9],['carry the observation route',{carryRoute:true},1.6],['reversible ceiling recovery',{recover:true},1.6]])test(`room29 ${name}`,async()=>{
+for(const [name,options,aspect] of [['ceiling split 16:9',{},16/9],['ceiling split 16:10',{},1.6],['carry observation 16:9',{carryRoute:true},16/9],['carry observation 16:10',{carryRoute:true},1.6],['reversible ceiling recovery',{recover:true,undercroft:true},1.6]])test(`room29 ${name}`,async()=>{
  await game.selectLevel(28,false);game.camera.aspect=aspect;game.camera.updateProjectionMatrix();const body=game.physics.cargoBody;
  const report=await runV8Journey(game,{scenario:d=>runRoom29(d,options)});
  assert.equal(report.pass,true);assert.equal(game.state,'won');assert.equal(game.physics.cargoBody,body);assert.equal(report.respawns+report.resets,0);

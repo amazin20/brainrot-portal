@@ -2,18 +2,20 @@ import * as THREE from 'three';
 import {Workshop,V} from './LabWorkshopKit.js';
 import {buildRoom28Tides} from './LabRoom28Tides.js';
 import {configureChapterWorld} from './LabChapterArt.js';
+import {buildRoom28Art} from './LabRoom28Art.js';
 
 export const ROOM28_SPEC={id:'tidal-observatory',title:'Обсерватория приливов',concept:'Один объём воды меняет географию двух островов',description:'У воды нет лишнего объёма. Найди высоту, на которой острова встретятся.',accent:0x3de6d1,assets:[1,2,11,19,22,23,24],hints:['Нижние коллекторы уравнивают уровни. Высокое устье переливает почти всё в один бассейн.','Средняя арка и верхняя обсерватория — разные пути. Пустой бассейн тоже становится проходом.','Белое устье внутри кораллового колодца видно с его понтона. Перенеси туда воду из другого бассейна уже после посадки.']};
 
 export function buildRoom28(game,index=27){
  const k=new Workshop(game,ROOM28_SPEC,index),w=k.world;
  configureChapterWorld(w,'lagoon',{openSky:true});
- k.bounds={minX:-26,maxX:26,minZ:-23,maxZ:23};k.ceiling=23;
- w.walls(k.bounds,23,-1);w.floor(-26,26,-23,23,0,{name:'Safe lagoon foundation'});
+ k.bounds={minX:-26,maxX:26,minZ:-23,maxZ:23};k.ceiling=17;
+ w.walls(k.bounds,14,-1);w.floor(-26,26,-23,23,0,{name:'Safe lagoon foundation'});
  const deck=(name,x0,x1,z0,z1,y)=>w.floor(x0,x1,z0,z1,y,{name});
  // Two ways onto the same archipelago: an equal tide meets the lower garden,
  // or a full tide reaches the observatory and its descending promenade.
  deck('Equal tide landing',8,19,4,8,3);
+ deck('Low tide recovery stair',19.2,20.4,-1.5,1.5,.3);deck('Low tide recovery landing',18.1,19.2,-1.5,1.5,.6);
  deck('Garden over the lagoon',-8,8,4,8,3);
  deck('Coral middle landing',-10,-8,-2,8,3);
  deck('Observatory tide landing',10,20,-9,-4,5.3);
@@ -48,8 +50,9 @@ export function buildRoom28(game,index=27){
  const a=k.slider('coral-float',[-14,0,0],[-14,6,0],{width:8.8,depth:10.8,portal:false,asset:19,assetSize:3.2});
  const b=k.slider('lagoon-float',[14,0,0],[14,6,0],{width:8.8,depth:7.8,portal:false,asset:19,assetSize:3.2});
  const tide=buildRoom28Tides(k,{a,b,ports:[{panel:lowA,basin:0},{panel:lowB,basin:1},{panel:highA,basin:0},{panel:overflow,basin:0},{panel:highB,basin:1}]});
+ buildRoom28Art(k);
  const level=k.finish([0,0,17],[3,.55,16],[-22,5.3,0],{workshop:k,portalPuzzle:true});
- level.puzzleGeometry={footprint:52*46,goalHeight:5.3,noProgressFlags:true,safeFloor:0,orders:['equal-tide-garden','full-tide-observatory'],fluid:tide,portalRoles:{'coral-low':'withdraw water from the west basin','lagoon-low':'equalize both basins or return the eastern reserve','lagoon-fall':'pour freely above the eastern tide','coral-fall':'refill the west basin from inside its newly accessible well'},deductions:['water volume moves instead of appearing','a low connection stops at equal heights','a high outlet changes the equilibrium and exposes another route','the drained basin is an entrance instead of a failure','the same portal pair can restore the occupied west island']};
+ level.puzzleGeometry={footprint:52*46,goalHeight:5.3,noProgressFlags:true,safeFloor:0,orders:['equal-tide-garden','full-tide-observatory'],fluid:tide,portalRoles:{'coral-overflow':'refill the west island from the lower recovery garden','coral-low':'withdraw water from the west basin','lagoon-low':'equalize both basins or return the eastern reserve','lagoon-fall':'pour freely above the eastern tide','coral-fall':'refill the west basin from inside its newly accessible well'},deductions:['water volume moves instead of appearing','a low connection stops at equal heights','a high outlet changes the equilibrium and exposes another route','the drained basin is an entrance instead of a failure','the same portal pair can restore the occupied west island']};
  return level;
 }
 export {runRoom28} from './LabRoom28Journey.js';

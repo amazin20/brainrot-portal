@@ -23,8 +23,8 @@ export function buildRoom27Conveyors(k){
  }
  function contact(p,radius=0){return bands.find(b=>b.active&&Math.abs(p.y-b.y)<.18&&Math.abs(p.x-b.x)<b.width/2-radius*.35&&p.z>b.z0-.1&&p.z<b.z1+.1);}
  function acceleration(p,v,{cargo=false,grounded=true}={}){
-  if(!grounded)return V();const b=contact(p,cargo?.5:.46);if(!b)return V();
-  const target=system.braked?0:b.speed*(system.reversed?1:-1),a=V();
+  if(!grounded||system.braked)return V();const b=contact(p,cargo?.5:.46);if(!b)return V();
+  const target=b.speed*(system.reversed?1:-1),a=V();
   // Finite contact traction overcomes ordinary walking damping. Steering
   // across the belt remains untouched, so the broad side alcoves are usable.
   a.z=THREE.MathUtils.clamp((target-v.z)*(cargo?35:95),-2200,2200);
