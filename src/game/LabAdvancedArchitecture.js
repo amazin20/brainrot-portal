@@ -62,7 +62,7 @@ export function finishAdvancedRoom(level){
   });
  }
  for(const {floor:f,name} of floors){
-  if(f.y<1||/stair|step/i.test(name))continue;
+  if(level.index>=23||f.y<1||/stair|step/i.test(name))continue;
   for(const [axis,at,a,b,side] of [['x',f.minX,f.minZ,f.maxZ,-1],['x',f.maxX,f.minZ,f.maxZ,1],['z',f.minZ,f.minX,f.maxX,-1],['z',f.maxZ,f.minX,f.maxX,1]]){
    const n=Math.max(1,Math.ceil((b-a)/4)),span=(b-a)/n;
    for(let i=0;i<n;i++){

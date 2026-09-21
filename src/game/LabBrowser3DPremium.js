@@ -1,5 +1,6 @@
 import * as THREE from 'three';
-import {ArchitecturalBatch,architecturalMaterials,clipArchitecturalRect} from './LabArchitecturalModels.js';
+import {RoundedBoxGeometry} from 'three/addons/geometries/RoundedBoxGeometry.js';
+import {ArchitecturalBatch,architecturalMaterials,architecturalCassetteGeometry,clipArchitecturalRect} from './LabArchitecturalModels.js';
 import {advancedRoomPalette} from './LabAdvancedArchitecture.js';
 import {earlyRoomPalette,architecturalCeiling} from './LabEarlyArchitecture.js';
 import {getChapterVisualProfile,chapterSurfaceColor,keepsAuthoredMaterial} from './LabChapterArt.js';
@@ -23,6 +24,17 @@ function addArchitecturalCladding(level,root){
   const w=level.world,g=level.game,profile=getChapterVisualProfile(level),materials=architecturalMaterials(profile?.edge??level.spec?.accent);
   if(profile){materials.frame.color.setHex(profile.trim);materials.recess.color.setHex(profile.trim);materials.coat.roughness=.62;materials.coat.metalness=.035;}
   const batch=new ArchitecturalBatch(root,materials);
+  const singleSkin=level.index>=23;
+  if(singleSkin){
+    batch.geometry.dispose();
+    batch.geometry=architecturalCassetteGeometry({corner:.006,inset:.004});
+    // One closed mesh owns the visible surface. The dark folded shoulder is
+    // vertex colour, not a second plane four millimetres behind the paint.
+    const position=batch.geometry.attributes.position,colors=[];
+    for(let i=0;i<position.count;i++){const value=position.getZ(i)>.49?1:.56;colors.push(value,value,value);}
+    batch.geometry.setAttribute('color',new THREE.Float32BufferAttribute(colors,3));
+    materials.coat.vertexColors=true;materials.coat.roughnessMap=null;
+  }
   w.root.updateWorldMatrix(true,true);
   const inverse=w.root.matrixWorld.clone().invert(),portals=portalFrames(level);
   const palette=profile??(level.index<11?earlyRoomPalette(level.index):level.index>=15?advancedRoomPalette(level.index):null);
@@ -47,14 +59,15 @@ function addArchitecturalCladding(level,root){
         if(pw<.10||ph<.10)continue;
         const cadence=(ix+iy*3+seed)%7;
         const color=profile?chapterSurfaceColor(profile,{kind,frame,role}):palette?tone(floor?(frame.center.y>5?palette.high:palette.low):ceiling?palette.low:palette.wall,cadence):floor?(cadence===0?0x7b898b:0x879194):ceiling?(cadence===0?0x7c888b:0x909c9f):solid?(cadence===0?0x809093:0x75868a):(cadence===0?0x9aa5a5:0x89999d);
-        batch.add('frame',local,[x,y,front-.030],[pw,ph,.052]);
+        if(!singleSkin)batch.add('frame',local,[x,y,front-.030],[pw,ph,.052]);
         // The folded lip is exposed around a slightly smaller coated field.
         const inset=Math.min(.085,pw*.1,ph*.1);
-        batch.add('coat',local,[x,y,front-.008],[pw-inset*2,ph-inset*2,.016],{color});
+        if(singleSkin)batch.add('coat',local,[x,y,front-.040],[pw,ph,.080],{color});
+        else batch.add('coat',local,[x,y,front-.008],[pw-inset*2,ph-inset*2,.016],{color});
         instances++;
         coverage.push({center:frame.center.clone().addScaledVector(frame.right,x).addScaledVector(frame.up,y).toArray(),right:frame.right.toArray(),up:frame.up.toArray(),normal:frame.normal.toArray(),halfWidth:pw/2,halfHeight:ph/2,front});
         const complete=pieces.length===1&&pw>2.2&&ph>1.5;
-        if(!complete||floor||profile)continue;
+        if(!complete||floor||profile||singleSkin)continue;
         // Two stamped locks explain how each large wall cassette is mounted.
         for(const sx of [-1,1])batch.add('steel',local,[x+sx*(pw/2-.17),y+ph/2-.16,front+.002],[.036,.036,.008],{geometry:'bolt'});
         if(ceiling)continue;
@@ -81,11 +94,11 @@ function addArchitecturalCladding(level,root){
   };
 
   for(const surface of w.surfaces){
-    if(surface.portal||surface.collider?.kinematic||keepsAuthoredMaterial(surface.group))continue;
+    if(surface.portal||surface.collider?.kinematic||keepsAuthoredMaterial(surface.group)||surface.group.children.some(n=>n.isInstancedMesh&&keepsAuthoredMaterial(n)))continue;
     const f=surface.getFrame(),floor=f.normal.y>.9,ceiling=f.normal.y<-.9;
     // Keep narrow stair treads in the established authored kit; the material
     // treatment below still cleans them without another layer of geometry.
-    if(floor&&Math.min(surface.width,surface.height)<.6)continue;
+    if(!singleSkin&&floor&&Math.min(surface.width,surface.height)<.6)continue;
     surface.group.updateWorldMatrix(true,false);
     face(surface.group.matrixWorld,surface.width,surface.height,{kind:floor?'floor':ceiling?'ceiling':'wall',seed:sourceSurfaces++,role:surface.group.userData.chapterColorRole});
     // The old GLB stays available to the existing surface/asset contract, but
@@ -99,6 +112,15 @@ function addArchitecturalCladding(level,root){
     if(mesh.material!==w.materials.wall&&mesh.material!==w.materials.trim)continue;
     if(p.height<1.5||Math.max(p.width,p.depth)<2.5)continue;
     mesh.updateWorldMatrix(true,false);sourceBoxes++;
+    if(singleSkin){
+      // Finish the actual solid, not four paper-thin copies on top of it.
+      // Physical dimensions, registry identities and ray targets are unchanged.
+      const old=mesh.geometry;
+      mesh.geometry=new RoundedBoxGeometry(p.width,p.height,p.depth,2,Math.min(.065,p.width*.12,p.height*.12,p.depth*.12));
+      mesh.userData.singleSkinSolid=true;
+      // The original geometry is retained for level ownership/cleanup.
+      old.dispose();continue;
+    }
     const sides=[
       {at:[0,0,p.depth/2],normal:[0,0,1],width:p.width},
       {at:[0,0,-p.depth/2],normal:[0,0,-1],width:p.width},

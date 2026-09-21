@@ -12,8 +12,10 @@ export function buildRoom27Conveyors(k){
  function belt(name,x,z0,z1,y,{speed=27,width=4.6,color=0x24bfc5}={}){
   const b={name,x,z0,z1,y,width,speed,direction:V(0,0,-1),active:true};bands.push(b);
   const deck=w.floor(x-width/2,x+width/2,z0,z1,y,{name});
+  deck.group.userData.keepMaterial=true;
   deck.group.traverse(o=>{if(o.isMesh&&!o.userData.collisionProxy){o.material=rubber;o.userData.keepMaterial=true;}});
-  for(const side of [-1,1])preserve(w.box([x+side*(width/2+.14),y-.24,(z0+z1)/2],[.2,.48,z1-z0],frame,false));
+  for(const side of [-1,1])preserve(w.box([x+side*(width/2+.14),y-.24,(z0+z1)/2],[.2,.48,z1-z0],frame,true));
+  g.collisionProxy(new THREE.Box3(V(x-width/2,y-.40,z0),V(x+width/2,y-.08,z1)));
   const count=Math.ceil((z1-z0)/.72),rollers=new THREE.InstancedMesh(new THREE.CylinderGeometry(.16,.16,width,8),rollerMaterial,count),m=new THREE.Matrix4(),q=new THREE.Quaternion().setFromAxisAngle(V(0,0,1),Math.PI/2);
   for(let i=0;i<count;i++){m.compose(V(x,y-.23,z0+(i+.5)*(z1-z0)/count),q,V(1,1,1));rollers.setMatrixAt(i,m);}
   rollers.name=name+' visible underside rollers';preserve(rollers);w.root.add(rollers);rollers.computeBoundingSphere();

@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import {createGuideRing,createCrystal,createPlanter,placeSolidModel} from './LabSolidModels.js';
 import {Workshop,V} from './LabWorkshopKit.js';
 import {configureChapterWorld} from './LabChapterArt.js';
 import {buildRoom29Gravity} from './LabRoom29Gravity.js';
@@ -39,15 +40,15 @@ export function buildRoom29(game,index=28){
  k.control('root-reverse',[-5,0,12],()=>{gravity.source.up=!gravity.source.up;},'E — перевернуть притяжение корневого сада');
  k.control('crown-reverse-upper',[17,6,5.5],()=>{gravity.crown.up=!gravity.crown.up;},'E — перевернуть притяжение потолочного сада');
  k.control('crown-reverse-inside',[18,9,-8.5],()=>{gravity.crown.up=!gravity.crown.up;},'E — вернуть друга на землю');
- // Broad sculptural rings make paired landmarks readable without more lights.
- const lilac=new THREE.MeshStandardMaterial({color:0x9c75de,roughness:.55}),citrus=new THREE.MeshStandardMaterial({color:0xe9d865,roughness:.57}),sapphire=new THREE.MeshStandardMaterial({color:0x527ec9,roughness:.5});
- const ringGeo=new THREE.TorusGeometry(3.2,.24,6,32);
- for(const [x,y,z,mat] of [[-12,.26,8,lilac],[-12,15.82,8,citrus],[16,9.27,-13,citrus],[16,15.85,-13,lilac]]){const mesh=new THREE.Mesh(ringGeo,mat);mesh.rotation.x=Math.PI/2;mesh.position.set(x,y,z);mesh.userData.keepMaterial=true;w.root.add(mesh);}
- const crystalGeo=new THREE.OctahedronGeometry(1,0);
- for(const [x,z] of [[-19,-14],[-15,-7],[-3,15],[3,14],[20,17]])for(const ceiling of [false,true]){const mesh=new THREE.Mesh(crystalGeo,ceiling?citrus:sapphire);mesh.position.set(x,ceiling?18:1.9,z);mesh.scale.set(.85,ceiling?2.1:1.7,.85);mesh.userData.keepMaterial=true;w.root.add(mesh);}
- const leaves=new THREE.InstancedMesh(new THREE.OctahedronGeometry(1,0),sapphire,32),leafMatrix=new THREE.Matrix4();leaves.userData.keepMaterial=true;
- for(let i=0;i<32;i++){const mirrored=i>=16,n=i%16,angle=n*Math.PI*(3-Math.sqrt(5)),radius=1.6+(n%4)*.5;leafMatrix.compose(V(-1+Math.cos(angle)*radius,mirrored?18.2-(n%4)*.48:1.8+(n%4)*.48,16+Math.sin(angle)*radius),new THREE.Quaternion().setFromEuler(new THREE.Euler(.2,angle,.35)),V(1.25,.22,.62));leaves.setMatrixAt(i,leafMatrix);}
- leaves.computeBoundingBox();leaves.computeBoundingSphere();w.root.add(leaves);
+ // Grounded equipment has closed manufactured housings and collision.
+ const horizontal=new THREE.Quaternion().setFromAxisAngle(V(1,0,0),Math.PI/2);
+ for(const p of [[-12,-.035,8],[-12,15.82,8],[16,8.965,-13],[16,15.85,-13]])
+  placeSolidModel(k,createGuideRing(3.2,'inversion',.24,.12),p,{quaternion:horizontal});
+ for(const [x,z] of [[-19,-14],[-15,-7],[-3,15],[3,14],[20,17]])for(const ceiling of [false,true])
+  placeSolidModel(k,createCrystal(),[x,ceiling?20.1:0,z],{quaternion:new THREE.Quaternion().setFromAxisAngle(V(1,0,0),ceiling?Math.PI:0)});
+ // Keep the investigation space between landmarks free; no scattered low-poly shards.
+ placeSolidModel(k,createPlanter('inversion'),[-1,0,18],{scale:1.2});
+ placeSolidModel(k,createPlanter('inversion'),[-1,20.8,18],{scale:1.2,quaternion:new THREE.Quaternion().setFromAxisAngle(V(1,0,0),Math.PI)});
  const level=k.finish([2,0,15.5],[-13.5,.55,12.5],[17,9,-13],{workshop:k,portalPuzzle:true,visualProfile:'inversion'});
  level.spawnView={yaw:.55,pitch:-.15};
  level.puzzleGeometry={footprint:44*44,goalHeight:9,safeFloor:0,noProgressFlags:true,orders:['split-ceiling-route','carry-observation-route'],portalRoles:{'root-ceiling':'launch the original free companion against ordinary gravity','crown-ceiling':'receive the small body in a low ceiling passage','observatory-return':'the human-scale return from the observation garden','garden-return':'a high receiver visible only through the observation aperture'},deductions:['gravity changes the free companion, not the observer','the same landmark is both a floor and a ceiling','a low upper passage connects the companion route to an otherwise isolated garden','the observation ribbon reveals a different portal route','one pair can be borrowed after the ceiling traveller has reached solid support','reversing a finite field brings the same body back down'],gravityChangesPlayer:false};

@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import {Workshop} from './LabWorkshopKit.js';
 import {configureChapterWorld} from './LabChapterArt.js';
+import {createPlanter,placeSolidModel} from './LabSolidModels.js';
 import {buildGardenDoor} from './LabRoom24Garden.js';
 export const ROOM24_SPEC={id:'garden-of-turning-doors',title:'Сад поворотных дверей',concept:'Портал помнит дверь, а не направление; один поворот открывает другой сад',description:'У каждого сада есть лицевая и обратная сторона. Посмотри, что меняется вместе с дверью и что остаётся на месте.',accent:0xffc75b,assets:[1,2,11,22,23,24],hints:['Одна керамическая дверь смотрит в два разных двора. Портал поворачивается вместе с ней.','Дверь можно повернуть двумя способами: грузом снизу или ручным приводом на южном балконе. Тормоз удерживает её настоящее положение.','Подними друга через его опору. Северная лестница меняет ракурс: за стеной видна обратная сторона жёлтого павильона.']};
 export function buildRoom24(game,index=23){
@@ -40,12 +41,10 @@ export function buildRoom24(game,index=23){
  k.panel('garden-entry',[18,2.1,23.6],[0,0,-1],6.4,5);
  k.panel('pavilion-receiver',[23.6,17.3,-18],[-1,0,0],6.4,5);
  const door=buildGardenDoor(k,pad);
- // Low-poly topiary and bright pots create a garden silhouette, kept away
- // from all walking, portal and aiming volumes. One shared mesh per colour.
- const leaf=new THREE.MeshStandardMaterial({color:0x53a776,roughness:1}),pot=new THREE.MeshStandardMaterial({color:0xd56e5f,roughness:.9});
- const leafGeometry=new THREE.IcosahedronGeometry(1.45,0);
- const positions=[[22,0,18],[21,0,-7],[-21,0,7],[11,0,14],[20,0,8],[-20,0,17],[-21,6,-1],[-22,11,-20],[20,15,-14]];
- for(const [x,y,z] of positions){block([x,y+.6,z],[1.8,1.2,1.8],pot);const m=new THREE.Mesh(leafGeometry,leaf);m.userData.keepMaterial=true;m.position.set(x,y+2.2,z);w.root.add(m);}
+ // A manufactured planter, recessed soil and thick botanical blades share
+ // the same explicit physical envelope; no more non-solid foliage blobs.
+ for(const p of [[22,0,18],[21,0,-7],[-21,0,7],[11,0,14],[20,0,8],[-20,0,17],[-22.5,6,-1],[-22,11,-20],[20,15,-14]])
+  placeSolidModel(k,createPlanter('garden'),p);
  for(const x of [-23,-17])block([x,13,-19],[.24,6,.24],yellow);for(const z of [-22,-19,-16])block([-20,15.8,z],[6.4,.24,.32],yellow);
  const level=k.finish([15,0,18],[11,.55,18],[16,15,-18],{workshop:k,spec:ROOM24_SPEC,portalPuzzle:true,gardenDoor:door});
  level.spawnView={yaw:.4,pitch:-.1};level.puzzleGeometry={footprint:2304,occupiedHeights:[0,6,11,15],goalHeight:15,orders:['carry-through','counterweight'],noProgressFlags:true,portalRoles:{'balcony-entry':'manual route from the south balcony through the orbiting door','garden-counterweight':'the original weight becomes its own return aperture','garden-entry':'stable entrance below the rotating door','revolving-door':'one persistent portal changes the courtyard it faces','pavilion-receiver':'a high reverse view into the gold pavilion'},deductions:['a portal retains the moving architectural face','a worm drive or a live counterweight can move the same doorway to a separate courtyard','the courtyard brake preserves orientation after the weight leaves','a floor aperture recovers that same weight','the folded stair exposes the pavilion from its reverse side']};
