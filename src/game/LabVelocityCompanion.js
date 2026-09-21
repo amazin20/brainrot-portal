@@ -45,7 +45,7 @@ export class LabVelocityCompanion {
 
   canConnect() {
     const game = this.game, body = this.physics?.cargoBody;
-    if (this.disposed || !game.epicMode || !body || game.heldCube || game.externalBlocked || game.state !== 'playing') return false;
+    if (this.disposed || !(game.kineticMode ?? game.epicMode) || !body || game.heldCube || game.externalBlocked || game.state !== 'playing') return false;
     if (this.connected) return true;
     const origin = game.playerPosition.clone().addScaledVector(UP, 1.1);
     const delta = new THREE.Vector3().copy(body.position).sub(origin), distance = delta.length();
@@ -152,7 +152,7 @@ export class LabVelocityCompanion {
   renderUpdate(time = 0) {
     if (this.disposed) return;
     const game = this.game;
-    this.visual.visible = Boolean(game.epicMode && game.cargo);
+    this.visual.visible = Boolean((game.kineticMode ?? game.epicMode) && game.cargo);
     if (!this.visual.visible) return;
     const point = game.cargo.group?.position ?? game.cargo.position;
     const motion = game.epicOptions?.reducedMotion !== true;

@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import {ArchitecturalBatch,architecturalMaterials,clipArchitecturalRect} from './LabArchitecturalModels.js';
 import {advancedRoomPalette} from './LabAdvancedArchitecture.js';
 import {earlyRoomPalette,architecturalCeiling} from './LabEarlyArchitecture.js';
+import {getChapterVisualProfile,chapterSurfaceColor,keepsAuthoredMaterial} from './LabChapterArt.js';
 
 const V=(x=0,y=0,z=0)=>new THREE.Vector3(x,y,z);
 const Z=V(0,0,1);
@@ -19,18 +20,20 @@ function frameFromMatrix(matrix){
  * cassettes, then occasional service hatches. Fine details never become extra
  * gameplay objects. All front faces stay within 20 mm of the existing plane. */
 function addArchitecturalCladding(level,root){
-  const w=level.world,g=level.game,batch=new ArchitecturalBatch(root,architecturalMaterials(level.spec?.accent));
+  const w=level.world,g=level.game,profile=getChapterVisualProfile(level),materials=architecturalMaterials(profile?.edge??level.spec?.accent);
+  if(profile){materials.frame.color.setHex(profile.trim);materials.recess.color.setHex(profile.trim);materials.coat.roughness=.62;materials.coat.metalness=.035;}
+  const batch=new ArchitecturalBatch(root,materials);
   w.root.updateWorldMatrix(true,true);
   const inverse=w.root.matrixWorld.clone().invert(),portals=portalFrames(level);
-  const palette=level.index<11?earlyRoomPalette(level.index):level.index>=15?advancedRoomPalette(level.index):null;
+  const palette=profile??(level.index<11?earlyRoomPalette(level.index):level.index>=15?advancedRoomPalette(level.index):null);
   const tone=(color,cadence)=>new THREE.Color(color).multiplyScalar(cadence===0?.94:1).getHex();
   let instances=0,sourceBoxes=0,sourceSurfaces=0,serviceBands=0,ventPanels=0;
   const coverage=[];
-  const face=(matrix,width,height,{kind='wall',solid=false,seed=0}={})=>{
+  const face=(matrix,width,height,{kind='wall',solid=false,seed=0,role}={})=>{
     const frame=frameFromMatrix(matrix),local=inverse.clone().multiply(matrix);
     const floor=kind==='floor',ceiling=kind==='ceiling';
-    const cols=Math.max(1,Math.ceil(width/(floor?3.25:ceiling?5.4:4.8)));
-    const rows=Math.max(1,Math.ceil(height/(floor?3.25:ceiling?5.4:3.2)));
+    const cols=Math.max(1,Math.ceil(width/(profile?(floor?6.5:8):floor?3.25:ceiling?5.4:4.8)));
+    const rows=Math.max(1,Math.ceil(height/(profile?(floor?6.5:6):floor?3.25:ceiling?5.4:3.2)));
     const cw=width/cols,ch=height/rows;
     // Solids already have their own opaque front; stand the finish 8 mm out.
     // Tiled surfaces have a recessed backing and the replacement ends 4 mm
@@ -43,7 +46,7 @@ function addArchitecturalCladding(level,root){
         const x=(rect.x0+rect.x1)/2,y=(rect.y0+rect.y1)/2,pw=rect.x1-rect.x0-.035,ph=rect.y1-rect.y0-.035;
         if(pw<.10||ph<.10)continue;
         const cadence=(ix+iy*3+seed)%7;
-        const color=palette?tone(floor?(frame.center.y>5?palette.high:palette.low):ceiling?palette.low:palette.wall,cadence):floor?(cadence===0?0x7b898b:0x879194):ceiling?(cadence===0?0x7c888b:0x909c9f):solid?(cadence===0?0x809093:0x75868a):(cadence===0?0x9aa5a5:0x89999d);
+        const color=profile?chapterSurfaceColor(profile,{kind,frame,role}):palette?tone(floor?(frame.center.y>5?palette.high:palette.low):ceiling?palette.low:palette.wall,cadence):floor?(cadence===0?0x7b898b:0x879194):ceiling?(cadence===0?0x7c888b:0x909c9f):solid?(cadence===0?0x809093:0x75868a):(cadence===0?0x9aa5a5:0x89999d);
         batch.add('frame',local,[x,y,front-.030],[pw,ph,.052]);
         // The folded lip is exposed around a slightly smaller coated field.
         const inset=Math.min(.085,pw*.1,ph*.1);
@@ -51,7 +54,7 @@ function addArchitecturalCladding(level,root){
         instances++;
         coverage.push({center:frame.center.clone().addScaledVector(frame.right,x).addScaledVector(frame.up,y).toArray(),right:frame.right.toArray(),up:frame.up.toArray(),normal:frame.normal.toArray(),halfWidth:pw/2,halfHeight:ph/2,front});
         const complete=pieces.length===1&&pw>2.2&&ph>1.5;
-        if(!complete||floor)continue;
+        if(!complete||floor||profile)continue;
         // Two stamped locks explain how each large wall cassette is mounted.
         for(const sx of [-1,1])batch.add('steel',local,[x+sx*(pw/2-.17),y+ph/2-.16,front+.002],[.036,.036,.008],{geometry:'bolt'});
         if(ceiling)continue;
@@ -78,21 +81,21 @@ function addArchitecturalCladding(level,root){
   };
 
   for(const surface of w.surfaces){
-    if(surface.portal||surface.collider?.kinematic||surface.group.userData.keepMaterial)continue;
+    if(surface.portal||surface.collider?.kinematic||keepsAuthoredMaterial(surface.group))continue;
     const f=surface.getFrame(),floor=f.normal.y>.9,ceiling=f.normal.y<-.9;
     // Keep narrow stair treads in the established authored kit; the material
     // treatment below still cleans them without another layer of geometry.
     if(floor&&Math.min(surface.width,surface.height)<.6)continue;
     surface.group.updateWorldMatrix(true,false);
-    face(surface.group.matrixWorld,surface.width,surface.height,{kind:floor?'floor':ceiling?'ceiling':'wall',seed:sourceSurfaces++});
+    face(surface.group.matrixWorld,surface.width,surface.height,{kind:floor?'floor':ceiling?'ceiling':'wall',seed:sourceSurfaces++,role:surface.group.userData.chapterColorRole});
     // The old GLB stays available to the existing surface/asset contract, but
     // is not rendered under the cassette and does not double the triangles.
-    for(const node of surface.group.children)if(node.isInstancedMesh&&!node.userData.portalTile){node.visible=false;node.userData.replacedByArchitecturalCassette=true;}
+    for(const node of surface.group.children)if(node.isInstancedMesh&&!node.userData.portalTile&&!keepsAuthoredMaterial(node)){node.visible=false;node.userData.replacedByArchitecturalCassette=true;}
   }
 
   for(const collider of g.colliders){
     const mesh=collider.mesh,p=mesh?.geometry?.parameters;
-    if(!mesh?.visible||mesh.userData?.collisionProxy||collider.kinematic||!p||![p.width,p.height,p.depth].every(Number.isFinite))continue;
+    if(!mesh?.visible||mesh.userData?.collisionProxy||keepsAuthoredMaterial(mesh)||collider.kinematic||!p||![p.width,p.height,p.depth].every(Number.isFinite))continue;
     if(mesh.material!==w.materials.wall&&mesh.material!==w.materials.trim)continue;
     if(p.height<1.5||Math.max(p.width,p.depth)<2.5)continue;
     mesh.updateWorldMatrix(true,false);sourceBoxes++;
@@ -106,7 +109,7 @@ function addArchitecturalCladding(level,root){
       if(side.width<.6)continue;
       const rotation=new THREE.Quaternion().setFromUnitVectors(Z,V(...side.normal));
       const matrix=mesh.matrixWorld.clone().multiply(new THREE.Matrix4().compose(V(...side.at),rotation,V(1,1,1)));
-      face(matrix,side.width,p.height,{solid:true,seed:sourceBoxes});
+      face(matrix,side.width,p.height,{solid:true,seed:sourceBoxes,role:mesh.userData.chapterColorRole});
     }
   }
   root.userData.architecturalCoverage=coverage;
@@ -115,7 +118,7 @@ function addArchitecturalCladding(level,root){
 
 function finishMaterials(level){
   const w=level.world,m=w.root.userData.browserArtMaterials;
-  const palette=level.index<11?earlyRoomPalette(level.index):level.index>=15?advancedRoomPalette(level.index):null;
+  const profile=getChapterVisualProfile(level),palette=profile??(level.index<11?earlyRoomPalette(level.index):level.index>=15?advancedRoomPalette(level.index):null);
   const finish=(mat,color,roughness,metalness)=>{
     if(!mat)return;mat.color?.setHex(color);mat.roughness=roughness;mat.metalness=metalness;
     if(mat.emissive){mat.emissive.setHex(0x000000);mat.emissiveIntensity=0;}
@@ -143,13 +146,14 @@ function addLighting(level,root){
   // A single restrained cool rim retains the broad diffuse material tones.
   const b=level.bounds||level.workshop?.bounds||{minX:-20,maxX:20,minZ:-20,maxZ:20};
   const ceiling=architecturalCeiling(level,24),cx=(b.minX+b.maxX)/2,cz=(b.minZ+b.maxZ)/2;
-  const fill=new THREE.DirectionalLight(0xd8ecf5,.80);fill.name='Architectural edge fill';fill.position.set(cx+16,ceiling*.68,cz-12);fill.castShadow=false;
+  const profile=getChapterVisualProfile(level);
+  const fill=new THREE.DirectionalLight(profile?.fill??0xd8ecf5,.80);fill.name='Architectural edge fill';fill.position.set(cx+16,ceiling*.68,cz-12);fill.castShadow=false;
   const target=new THREE.Object3D();target.position.set(cx,ceiling*.24,cz);root.add(target);fill.target=target;root.add(fill);
   return {directionalLights:1,pointLights:0};
 }
 
 export function applyPremiumBrowser3DArt(level){
-  if(!level?.world||level.index<0||level.index>25||level.premiumBrowser3DArt)return level;
+  if(!level?.world||level.index<0||level.index>29||level.premiumBrowser3DArt)return level;
   level.game=level.game||level.workshop?.game||level.world.game;
   finishMaterials(level);
   const root=new THREE.Group();root.name='Premium browser 3D environment layer';root.userData.visualOnly=true;root.userData.version=33;level.world.root.add(root);

@@ -22,10 +22,10 @@ export class LabTileWorld extends StructuralWorld{
   this.materials.ceramic.emissiveIntensity=.16;
  }
  surface(options){
-  // Rooms 12–26 use the authored GLB wall/floor modules everywhere. The
+  // Rooms 12–30 use the authored GLB wall/floor modules everywhere. The
   // normalized source mesh is instanced, so this replaces the visible
   // white-box shell without changing its collision boxes or portal frames.
-  const highFidelity=this.highFidelity||(this.game.levelIndex>=11&&this.game.levelIndex<=25);
+  const highFidelity=this.highFidelity||(this.game.levelIndex>=11&&this.game.levelIndex<=29);
   if(highFidelity&&!options.authored){
    const n=options.normal||[0,0,1];
    options={...options,authored:true,kind:options.kind||(Math.abs(n[1]||0)>.9?'floor':'wall')};
@@ -46,14 +46,14 @@ export class LabTileWorld extends StructuralWorld{
   this.game.scene.background=new THREE.Color(this.palette.sky);
   if(this.game.scene.fog)this.game.scene.fog.color.setHex(this.palette.sky);
   this.game.materials.wall.color.setHex(this.palette.wall);
-  this.surface({name:'Non-portal ceiling tiles',position:[(minX+maxX)/2,height+.34,(minZ+maxZ)/2],
+  if(!this.visualProfile?.openSky)this.surface({name:'Non-portal ceiling tiles',position:[(minX+maxX)/2,height+.34,(minZ+maxZ)/2],
     normal:[0,-1,0],width:maxX-minX,height:maxZ-minZ});
   for(const x of [minX+.04,maxX-.04]){
    this.box([x,base+.12,(minZ+maxZ)/2],[.09,.24,maxZ-minZ],this.materials.trim,false);
    this.box([x,height-.13,(minZ+maxZ)/2],[.10,.18,maxZ-minZ],this.materials.trim,false);
   }
   // Recessed luminous trays belong to the lighting system, not puzzle props.
-  for(let z=minZ+2;z<maxZ;z+=7){
+  if(!this.visualProfile?.openSky)for(let z=minZ+2;z<maxZ;z+=7){
    this.box([(minX+maxX)/2,height+.02,z],[Math.min(6,maxX-minX-1),.08,.42],this.materials.trim,false);
    this.box([(minX+maxX)/2,height-.025,z],[Math.min(5.8,maxX-minX-1.2),.02,.29],this.materials.lamp,false);
   }

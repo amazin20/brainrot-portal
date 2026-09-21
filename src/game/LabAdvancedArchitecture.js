@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import {getChapterVisualProfile,chapterSurfaceColor,keepsAuthoredMaterial} from './LabChapterArt.js';
 
 const PALETTES=[
  {wall:0x74807b,low:0x83918d,high:0xb9a184,edge:0xd6b889},
@@ -30,7 +31,7 @@ export const advancedRoomPalette=index=>PALETTES[index-12];
 /** Finishes follow existing structural faces. No new collision, target,
  * light source or per-frame work; powered surfaces keep their own material. */
 export function finishAdvancedRoom(level){
- const world=level.world,palette=PALETTES[level.index-12];
+ const world=level.world,profile=getChapterVisualProfile(level),palette=profile??PALETTES[level.index-12];
  if(!palette||!world)return level;
  const spawn=level.spawn.toArray?.()??level.spawn;
  // Arrival views look along the real shared courts, with room behind the
@@ -44,18 +45,18 @@ export function finishAdvancedRoom(level){
  ][level.index-12];
  const root=new THREE.Group();root.name='Interlaced chamber architectural finishes';root.userData.visualOnly=true;world.root.add(root);
  world.materials.wall.color.setHex(palette.wall);world.materials.wall.emissive.setHex(palette.wall);world.materials.wall.emissiveIntensity=.045;
- world.materials.trim.color.setHex(0x526762);world.materials.trim.roughness=.85;world.materials.trim.metalness=.1;
- world.materials.trim.emissive.setHex(0x526762);world.materials.trim.emissiveIntensity=.10;
+ world.materials.trim.color.setHex(profile?.trim??0x526762);world.materials.trim.roughness=.85;world.materials.trim.metalness=.1;
+ world.materials.trim.emissive.setHex(profile?.trim??0x526762);world.materials.trim.emissiveIntensity=.10;
  const material=new THREE.MeshStandardMaterial({color:0xffffff,roughness:.87,metalness:.08});
  const tint=new THREE.Color(),solid=[],lamps=[];
  const add=(list,p,s,color)=>list.push({p,s,color});
  const floors=world.surfaces.filter(s=>s.floor&&!s.portal&&!s.collider.kinematic);
  for(const surface of world.surfaces){
-  if(surface.portal||surface.collider.kinematic||surface.group.userData.keepMaterial)continue;
-  const y=surface.getFrame().center.y;
-  const color=Math.abs(surface.normal.y)>.9?(y>5?palette.high:palette.low):palette.wall;
+  if(surface.portal||surface.collider.kinematic||keepsAuthoredMaterial(surface.group))continue;
+  const frame=surface.getFrame(),y=frame.center.y;
+  const color=profile?chapterSurfaceColor(profile,{kind:surface.normal.y>.9?'floor':surface.normal.y<-.9?'ceiling':'wall',frame,role:surface.group.userData.chapterColorRole}):Math.abs(surface.normal.y)>.9?(y>5?palette.high:palette.low):palette.wall;
   surface.group.traverse(mesh=>{
-   if(!mesh.isInstancedMesh||mesh.userData.portalTile||mesh.count===0)return;mesh.material=material;
+   if(!mesh.isInstancedMesh||mesh.userData.portalTile||mesh.count===0||keepsAuthoredMaterial(mesh))return;mesh.material=material;
    for(let i=0;i<mesh.count;i++)mesh.setColorAt(i,tint.setHex(color).multiplyScalar(i%7===0?.975:1));
    if(mesh.instanceColor)mesh.instanceColor.needsUpdate=true;
   });

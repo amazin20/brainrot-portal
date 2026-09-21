@@ -61,6 +61,8 @@ export class LabGame {
     this.animate = this.animate.bind(this);
   }
 
+  get kineticMode() { return Boolean(this.epicMode || this.firstLevel?.kineticCourse); }
+
   async init() {
     this.createScene();
     this.input = new InputController({ ...this.touch, isActive: () => this.state === 'playing' && !this.externalBlocked }); this.audio = new AudioController();
@@ -245,9 +247,9 @@ export class LabGame {
     this.heldDevice = new LabHeldDevice({ model: this.weapon, bones: this.animator.bones, playerRoot: this.playerGroup });
     this.cameraRig = new LabCamera({ camera: this.camera, blockers: this.cameraBlockers,
       isBlocker: (object, hit) => this.isCameraBlocker(object, hit) });
-    this.cameraRig.configureEpic?.({ enabled: Boolean(this.epicMode), dynamicFov: this.epicOptions?.dynamicFov !== false });
-    this.camera.far = this.epicMode ? 500 : 130; this.camera.updateProjectionMatrix();
-    if (this.epicMode && !this.epicDirector) this.epicDirector = new LabEpicDirector({ container: this.container, audio: this.audio, options: this.epicOptions });
+    this.cameraRig.configureEpic?.({ enabled: this.kineticMode, dynamicFov: this.epicOptions?.dynamicFov !== false });
+    this.camera.far = this.kineticMode ? 500 : 130; this.camera.updateProjectionMatrix();
+    if (this.kineticMode && !this.epicDirector) this.epicDirector = new LabEpicDirector({ container: this.container, audio: this.audio, options: this.epicOptions });
     this.portals = new LabPortals({ scene: this.scene, renderer: this.renderer, camera: this.camera, maxResolution: this.quality.portalResolution, samples: 2 });
     const group = new THREE.Group(); group.name = 'Persistent brainrot companion';
     const visual = new THREE.Group(); const brainrot = this.model(2, .82);
@@ -261,7 +263,7 @@ export class LabGame {
     for (const collider of this.colliders) this.physics.addStaticBox(collider.mesh.uuid, collider.box, { kinematic: Boolean(collider.kinematic) });
     for (const ramp of this.ramps) this.physics.addStaticRamp(ramp.id, ramp);
     this.physics.createCargo({ position: this.cargo.position, size: CUBE_RADIUS * 2, mass: 3.2 });
-    this.velocityCompanion = this.epicMode ? new LabVelocityCompanion(this) : null;
+    this.velocityCompanion = this.kineticMode ? new LabVelocityCompanion(this) : null;
     this.companionBehavior = new LabCompanionBehavior(this.physics);
     this.portalActors = new LabPortalActors({ scene: this.scene, portals: this.portals });
     this.portalActors.register(this.playerGroup, { radius: 1.5, centerOffset: [0, 1.2, 0] });
@@ -405,9 +407,9 @@ export class LabGame {
     // Relay pads advertise one fixed aperture with painted brackets. Acquiring
     // any part of that pad is enough during a fast flight; the camera stays
     // entirely under player control. Campaign surfaces retain free placement.
-    if (this.epicMode && panel.userData.velocitySnapCenter) hitPoint = panel.userData.center;
+    if (this.kineticMode && panel.userData.velocitySnapCenter) hitPoint = panel.userData.center;
     const normal = panel.userData.portalFrame?.()?.normal ?? panel.userData.normal;
-    const preferredUp = this.epicMode && panel.userData.portalUp ? panel.userData.portalUp : normal && Math.abs(normal.y) > .6
+    const preferredUp = this.kineticMode && panel.userData.portalUp ? panel.userData.portalUp : normal && Math.abs(normal.y) > .6
       ? new THREE.Vector3(0, 0, -1).applyAxisAngle(UP, this.yaw) : undefined;
     const result = this.portals.placeOnPanel(index, panel, hitPoint, { blockers: this.colliders, preferredUp });
     if (!result.ok) {
@@ -531,7 +533,7 @@ export class LabGame {
   }
 
   getVelocityTimeScale() {
-    return this.epicMode && this.state === 'playing' && !this.externalBlocked
+    return this.kineticMode && this.state === 'playing' && !this.externalBlocked
       && !this.playerGrounded && this.input?.keys?.has('KeyQ') ? .28 : 1;
   }
 
@@ -602,7 +604,7 @@ export class LabGame {
     const move = this.input.getMove();
     const aiming = this.isAiming();
     const sprint = (this.input.keys.has('ShiftLeft') || this.input.keys.has('ShiftRight')) && !aiming;
-    if (this.epicMode) {
+    if (this.kineticMode) {
       updateKineticVelocity(this, dt, move, { sprint, aiming });
     } else {
       const speed = this.heldCube ? (sprint ? 4.5 : 2.9) : aiming ? 2.55 : sprint ? 5.0 : 3.3;
@@ -639,17 +641,17 @@ export class LabGame {
     this.windStrength=field?Math.min(1,field.length()/55):0;
     if(field){this.playerVelocity.addScaledVector(field,dt);if(field.y>19.5)this.playerGrounded=false;}
     this.playerVelocity.y -= 19.5 * dt;
-    if (this.epicMode) limitKineticSpeed(this.playerVelocity);
+    if (this.kineticMode) limitKineticSpeed(this.playerVelocity);
     const kineticImpact = Math.max(0, -this.playerVelocity.y);
     this.playerPosition.addScaledVector(this.playerVelocity, dt);
-    const sweptGroundContact = this.epicMode
+    const sweptGroundContact = this.kineticMode
       ? sweepKineticBody(this, this.playerPosition, previous, this.playerVelocity, PLAYER_RADIUS, PLAYER_HEIGHT) : false;
     this.constrainPortalThroat(this.playerPosition, previous, this.playerVelocity);
     const center = this.playerPosition.clone().addScaledVector(UP, CENTER_HEIGHT);
     const previousCenter = previous.clone().addScaledVector(UP, CENTER_HEIGHT);
     const teleport = this.portals.tryTeleport(center, previousCenter, this.playerVelocity, PLAYER_RADIUS);
     this.groundedByCollider = sweptGroundContact;
-    const downwardImpact = this.epicMode ? kineticImpact : Math.max(0, -this.playerVelocity.y);
+    const downwardImpact = this.kineticMode ? kineticImpact : Math.max(0, -this.playerVelocity.y);
     if (teleport) {
       const entry = this.portals.portals[teleport.entryIndex], exit = this.portals.portals[teleport.exitIndex];
       const transportedVisual = transformPortalPoint(this.playerGroup.position, entry, exit);
@@ -674,7 +676,7 @@ export class LabGame {
       }
       this.playerPosition.copy(teleport.position).addScaledVector(UP, -CENTER_HEIGHT);
       this.playerVelocity.copy(teleport.velocity);
-      if (this.epicMode) {
+      if (this.kineticMode) {
         // Resume the residual movement in the destination world. This catches
         // thin obstacles immediately outside the exit at full fling speed.
         const exitStart = transformPortalPoint(teleport.crossingPoint, entry, exit)
@@ -726,7 +728,7 @@ export class LabGame {
       this.facing += this.heldCube ? THREE.MathUtils.clamp(turn, -8 * dt, 8 * dt) : turn;
     }
     const directionScale = planar > .01 ? 1 / planar : 0;
-    if (this.epicMode && this.kinetic) {
+    if (this.kineticMode && this.kinetic) {
       this.kinetic.speed = this.playerVelocity.length(); this.kinetic.planarSpeed = planar;
       this.kinetic.sliding &&= this.playerGrounded;
     }
@@ -876,7 +878,10 @@ export class LabGame {
 
   interact() {
     if (this.externalBlocked || this.state !== 'playing') return false;
-    if (this.epicMode && this.velocityCompanion) return this.velocityCompanion.interact();
+    if (this.kineticMode && this.velocityCompanion) {
+      if (this.firstLevel?.kineticCourse && this.firstLevel.interact?.()) return true;
+      return this.velocityCompanion.interact();
+    }
     // E puts down a held friend. Nearby controls must not steal pickup input.
     if (this.heldCube) return this.toggleCube();
     const hand = this.playerPosition.clone().addScaledVector(UP, 1.1);
@@ -1146,7 +1151,7 @@ export class LabGame {
     gripVisual.updateWorldMatrix(true, true);
     gripVisual.localToWorld(this.carryGripTargets.left.set(-.20, -.015, -.20));
     gripVisual.localToWorld(this.carryGripTargets.right.set(.20, -.015, -.20));
-    this.animator.update({ dt: visualDt, ...(this.motion ?? {}), epic: Boolean(this.epicMode), sliding: Boolean(this.kinetic?.sliding), velocity: this.playerVelocity, grounded: this.playerGrounded,
+    this.animator.update({ dt: visualDt, ...(this.motion ?? {}), epic: this.kineticMode, sliding: Boolean(this.kinetic?.sliding), velocity: this.playerVelocity, grounded: this.playerGrounded,
       carrying: Boolean(this.heldCube), carryGripTargets: this.heldCube ? this.carryGripTargets : null,
       lookTarget: this.playerPosition.distanceTo(this.cargo.position) < 3.2 ? this.cargo.group.position : null,
       sampleGround: (x, z, maxY) => this.sampleFootSupport(x, z, maxY),
@@ -1176,12 +1181,12 @@ export class LabGame {
     const barrierProgress = THREE.MathUtils.lerp(barrier.previousProgress ?? barrier.progress, barrier.progress, blend);
     barrier.mechanism?.update(barrierProgress, this.visualTime);
     }
-    this.cameraRig.update({ dt: active ? cameraDt : 0, target: this.playerGroup.position, yaw: this.yaw, pitch: this.pitch, velocity: this.playerVelocity, aiming: this.isAiming(), epic: Boolean(this.epicMode), dynamicFov: this.epicOptions?.dynamicFov !== false });
+    this.cameraRig.update({ dt: active ? cameraDt : 0, target: this.playerGroup.position, yaw: this.yaw, pitch: this.pitch, velocity: this.playerVelocity, aiming: this.isAiming(), epic: this.kineticMode, dynamicFov: this.epicOptions?.dynamicFov !== false });
     if (this.epicDirector) {
       if (this.teleportCount > (this.epicLastTeleport || 0)) this.epicDirector.portal(this.lastPortalTravel?.speed || this.playerVelocity.length(), this.teleportCount);
       if (this.playerGrounded && this.epicWasGrounded === false) this.epicDirector.land(this.lastLanding || 0);
       this.epicLastTeleport = this.teleportCount; this.epicWasGrounded = this.playerGrounded;
-      this.epicDirector.update({dt: visualDt, velocity: this.playerVelocity, grounded: this.playerGrounded, active: this.state === 'playing' && !this.externalBlocked, enabled: Boolean(this.epicMode)});
+      this.epicDirector.update({dt: visualDt, velocity: this.playerVelocity, grounded: this.playerGrounded, active: this.state === 'playing' && !this.externalBlocked, enabled: this.kineticMode});
     }
     this.camera.getWorldDirection(this.cameraForward);
     this.updateAimHint(visualDt);

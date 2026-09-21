@@ -14,34 +14,34 @@ test('the speed prototype is reserved for room 30 and has no campaign interludes
     assert.equal(prototype.afterLevel, undefined);
     assert.equal(prototype.returnLevel, undefined);
   }
-  for (let index = 0; index < 25; index++) assert.equal(nextCampaignLevel(index, 26), index + 1);
-  assert.equal(nextCampaignLevel(25, 26), 0);
-  assert.equal(nextCampaignLevel(99, 26), 0);
+  for (let index = 0; index < 29; index++) assert.equal(nextCampaignLevel(index, 30), index + 1);
+  assert.equal(nextCampaignLevel(29, 30), 0);
+  assert.equal(nextCampaignLevel(99, 30), 0);
 });
 
 test('old speed links open the campaign menu and retain valid continuation bookmarks', () => {
   for (const chapter of [1, 2]) {
-    const route = readCampaignRoute(`?mode=velocity&chapter=${chapter}&v=old`, 26);
+    const route = readCampaignRoute(`?mode=velocity&chapter=${chapter}&v=old`, 30);
     assert.equal(route.levelIndex, 0);
     assert.equal(route.legacyVelocityLink, true);
     assert.equal(route.search, '?v=old');
-    const returning = readCampaignRoute(`?mode=velocity&chapter=${chapter}&return=${chapter * 10 + 1}&debug=1`, 26);
+    const returning = readCampaignRoute(`?mode=velocity&chapter=${chapter}&return=${chapter * 10 + 1}&debug=1`, 30);
     assert.equal(returning.levelIndex, chapter * 10);
     assert.equal(new URLSearchParams(returning.search).get('debug'), '1');
     assert.equal(new URLSearchParams(returning.search).get('mode'), null);
   }
   for (const link of ['?mode=velocity&chapter=1&return=21', '?mode=velocity&chapter=2&return=https://example.com', '?mode=velocity&chapter=1&return=11.0']) {
-    assert.equal(readCampaignRoute(link, 26).levelIndex, 0);
+    assert.equal(readCampaignRoute(link, 30).levelIndex, 0);
   }
-  assert.equal(readCampaignRoute('?mode=velocity&chapter=2&return=21&level=22',26).levelIndex,21);
+  assert.equal(readCampaignRoute('?mode=velocity&chapter=2&return=21&level=22',30).levelIndex,21);
 });
 
 test('public level links accept only available numbered rooms', () => {
-  for (let level=1;level<=26;level++) assert.equal(readCampaignRoute(`?level=${level}`,26).levelIndex,level-1);
-  for (const level of ['0','27','30','-1','2.5','Infinity','NaN']) {
-    assert.equal(readCampaignRoute(`?level=${level}`,26).levelIndex,0);
+  for (let level=1;level<=30;level++) assert.equal(readCampaignRoute(`?level=${level}`,30).levelIndex,level-1);
+  for (const level of ['0','31','100','-1','2.5','Infinity','NaN']) {
+    assert.equal(readCampaignRoute(`?level=${level}`,30).levelIndex,0);
   }
-  assert.deepEqual(readCampaignRoute('',26),{levelIndex:0,legacyVelocityLink:false,search:''});
+  assert.deepEqual(readCampaignRoute('',30),{levelIndex:0,legacyVelocityLink:false,search:''});
 });
 
 test('public menu and entry expose only the campaign', () => {

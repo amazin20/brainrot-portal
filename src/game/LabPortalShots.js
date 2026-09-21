@@ -19,7 +19,7 @@ export class LabPortalShots {
   const remaining=Math.max(this.cooldown,this.queue[0]?.delay??0),busy=remaining>0||this.queue.length>0;
   // A discrete click just before the weapon is ready is intentional input.
   // Keep only one such click, with its own target, during the last 80 ms.
-  const blocked=![0,1].includes(index)?'channel':g.state!=='playing'?'paused':g.externalBlocked?'external':g.heldCube?'hands-full':this.buffered?'buffer-full':busy&&!g.epicMode&&remaining>.08?(this.cooldown>0?'cooldown':'preparing'):null;
+  const blocked=![0,1].includes(index)?'channel':g.state!=='playing'?'paused':g.externalBlocked?'external':g.heldCube?'hands-full':this.buffered?'buffer-full':busy&&!(g.kineticMode ?? g.epicMode)&&remaining>.08?(this.cooldown>0?'cooldown':'preparing'):null;
   if(blocked){this.lastRequest={accepted:false,index,reason:blocked};return false;}
   const point=this.captureTarget(index);
   const facing=Math.atan2(point.x-g.playerPosition.x,point.z-g.playerPosition.z);
@@ -27,10 +27,10 @@ export class LabPortalShots {
   const sequence=++this.serial[index];
   // A click during the windup must not restart it forever. Once accepted,
   // a charge keeps its target and completes its visible flight independently.
-  const wait=g.epicMode?Math.max(VELOCITY_SHOT_PROFILE.prepare,g.heldDevice?.holsterProgress*.32||0)
+  const wait=(g.kineticMode ?? g.epicMode)?Math.max(VELOCITY_SHOT_PROFILE.prepare,g.heldDevice?.holsterProgress*.32||0)
     :Math.max(.23,Math.min(.30,turn/14),g.heldDevice?.holsterProgress*.32||0);
   const shot={index,sequence,epoch:this.epoch,point,facing,delay:wait,bufferedInput:busy,
-    velocityMode:!!g.epicMode,wasAirborne:g.playerGrounded===false,requestTime:this.time,
+    velocityMode:!!(g.kineticMode ?? g.epicMode),wasAirborne:g.playerGrounded===false,requestTime:this.time,
     requestTeleportCount:g.teleportCount??0};
   if(busy){this.buffered=shot;this.lastOutcome={state:'buffered',index,sequence,epoch:this.epoch};}
   else this.prepare(shot);
@@ -38,7 +38,7 @@ export class LabPortalShots {
   return true;
  }
  getAssistTarget(index){
-  const g=this.game;if(!g.epicMode)return null;
+  const g=this.game;if(!(g.kineticMode ?? g.epicMode))return null;
   g.scene.updateMatrixWorld(true);g.camera.updateWorldMatrix(true,false);
   const target=findVelocityAimTarget(g,index,(origin,direction,distance)=>{
    this.ray.set(origin,direction);this.ray.near=0;this.ray.far=distance;
@@ -51,9 +51,9 @@ export class LabPortalShots {
   const assisted=this.getAssistTarget(index);
   if(assisted)return assisted.point.clone();
   g.scene.updateMatrixWorld(true);g.camera.updateWorldMatrix(true,false);
-  this.ray.near=0;this.ray.far=g.epicMode?VELOCITY_SHOT_PROFILE.range:Infinity;
+  this.ray.near=0;this.ray.far=(g.kineticMode ?? g.epicMode)?VELOCITY_SHOT_PROFILE.range:Infinity;
   this.ray.setFromCamera(new THREE.Vector2(),g.camera);
-  const hit=this.firstHit(),point=hit?.point.clone()||this.ray.ray.at(g.epicMode?VELOCITY_SHOT_PROFILE.range:65,V());
+  const hit=this.firstHit(),point=hit?.point.clone()||this.ray.ray.at((g.kineticMode ?? g.epicMode)?VELOCITY_SHOT_PROFILE.range:65,V());
   this.ray.far=Infinity;
   return point;
  }

@@ -32,7 +32,7 @@ const capturePlans={
  20:[['loaded mirror raises the first crossing',60],['cargo exchange changes the live optical branch',60],['final field transfer over the shared hub',60]],
  22:[['inspection stair joins the permanent gallery',60]],
  23:[['original load rests outside either moving car',60],['upper apron joins the returning gallery',60]],
- 24:[['portal pair retrieves the original friend',60]],
+ 24:[['the same aperture starts its courtyard orbit',45]],
 };
 // Small art-review excerpts from actual early-room mechanism motion. The
 // ordinary route remains the sole writer of movement and interaction input.
