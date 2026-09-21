@@ -1,0 +1,29 @@
+name: Solid model source staging
+on:
+  push:
+    branches: [fix/solid-models-20260921]
+    paths: [.github/workflows/solid-source-import.yml]
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Resolve the uploaded public source archive
+        run: |
+          mkdir -p staging
+          python3 - <<'PY'
+          import urllib.request,re,pathlib
+          u='https://firestorage.ai/ja/f/Fk5AuPYDgpq4'
+          data=urllib.request.urlopen(u,timeout=30).read().decode()
+          pathlib.Path('staging/share.html').write_text(data)
+          print('Page bytes:',len(data))
+          print('LINKS',re.findall(r'(?:href|src)=[\"\']([^\"\']+)',data))
+          for m in re.finditer('download|y0A683oollzCExXY|solid-models-source',data):print(data[max(0,m.start()-100):m.start()+250])
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: solid-source-staging
+          path: staging/
+          retention-days: 1
