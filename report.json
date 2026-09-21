@@ -1,0 +1,611 @@
+{
+  "renderer": "CI Chromium / SwiftShader; NOT a user-device FPS benchmark",
+  "baseUrl": "http://127.0.0.1:4173/",
+  "range": {
+    "first": 30,
+    "last": 30
+  },
+  "ui": false,
+  "capturePuzzle": true,
+  "captureEarly": false,
+  "captureFull": false,
+  "puzzleClips": [
+    {
+      "level": 30,
+      "name": "room30 first flight prepared",
+      "directory": "room-30-room30-first-flight-prepared",
+      "frames": 45,
+      "simulationFps": 15,
+      "startElapsed": 10700.000000000064,
+      "width": 1280,
+      "height": 800,
+      "method": "Every fourth 60 Hz update within the same ordinary route, selected by observable milestones; standard third-person camera"
+    },
+    {
+      "level": 30,
+      "name": "room30 final flight prepared",
+      "directory": "room-30-room30-final-flight-prepared",
+      "frames": 45,
+      "simulationFps": 15,
+      "startElapsed": 33683.33333333169,
+      "width": 1280,
+      "height": 800,
+      "method": "Every fourth 60 Hz update within the same ordinary route, selected by observable milestones; standard third-person camera"
+    }
+  ],
+  "fullRoutes": [],
+  "renderSamples": [
+    {
+      "level": 30,
+      "elapsed": 10700.000000000064,
+      "player": [
+        -22.61483065904631,
+        52,
+        -32.0087044852647
+      ],
+      "camera": {
+        "position": [
+          -28.745902402344228,
+          53.14010423381107,
+          -28.663036716393197
+        ],
+        "quaternion": [
+          0.010781876267820017,
+          -0.5694342194316097,
+          0.0074696780557067894,
+          0.8219322507325059
+        ],
+        "projection": [
+          0.9266006053204624,
+          0,
+          0,
+          0,
+          0,
+          1.4825609685127399,
+          0,
+          0,
+          0,
+          0,
+          -1.0004000800160033,
+          -1,
+          0,
+          0,
+          -0.20004000800160032,
+          0
+        ]
+      },
+      "portals": [
+        {
+          "position": [
+            0,
+            16,
+            -32.00000000000001
+          ]
+        },
+        {
+          "position": [
+            60,
+            55.00000000000001,
+            -61.99999999999999
+          ]
+        }
+      ],
+      "passes": 2,
+      "calls": 159,
+      "triangles": 1218214,
+      "lines": 26,
+      "points": 0,
+      "geometries": 118,
+      "textures": 17,
+      "softwareRenderMs": 4758.300000000003
+    },
+    {
+      "level": 30,
+      "elapsed": 21833.33333333302,
+      "player": [
+        59.995434239386945,
+        40,
+        26.075000252042596
+      ],
+      "camera": {
+        "position": [
+          67.76381917573484,
+          44.553482551494746,
+          24.263928469513846
+        ],
+        "quaternion": [
+          0.009943300520335383,
+          0.6522025636348998,
+          -0.008560258570664527,
+          0.7579311767806033
+        ],
+        "projection": [
+          0.7193468991021763,
+          0,
+          0,
+          0,
+          0,
+          1.1509550385634824,
+          0,
+          0,
+          0,
+          0,
+          -1.0004000800160033,
+          -1,
+          0,
+          0,
+          -0.20004000800160032,
+          0
+        ]
+      },
+      "portals": [
+        {
+          "position": [
+            0,
+            16,
+            -32.00000000000001
+          ]
+        },
+        {
+          "position": [
+            60,
+            55.00000000000001,
+            -61.99999999999999
+          ]
+        }
+      ],
+      "passes": 2,
+      "calls": 113,
+      "triangles": 1031508,
+      "lines": 26,
+      "points": 0,
+      "geometries": 142,
+      "textures": 20,
+      "softwareRenderMs": 4.100000000005821
+    },
+    {
+      "level": 30,
+      "elapsed": 26383.333333332357,
+      "player": [
+        49.113806467303995,
+        40,
+        24.030186524156402
+      ],
+      "camera": {
+        "position": [
+          55.64907453423278,
+          43.742405248699946,
+          23.47816831351036
+        ],
+        "quaternion": [
+          -0.13093519397998465,
+          0.6725051184117654,
+          0.12263519950818748,
+          0.7180205070393103
+        ],
+        "projection": [
+          0.9266006053108133,
+          0,
+          0,
+          0,
+          0,
+          1.4825609684973013,
+          0,
+          0,
+          0,
+          0,
+          -1.0004000800160033,
+          -1,
+          0,
+          0,
+          -0.20004000800160032,
+          0
+        ]
+      },
+      "portals": [
+        {
+          "position": [
+            0,
+            16,
+            -32.00000000000001
+          ]
+        },
+        {
+          "position": [
+            60,
+            55.00000000000001,
+            -61.99999999999999
+          ]
+        }
+      ],
+      "passes": 2,
+      "calls": 105,
+      "triangles": 1027652,
+      "lines": 26,
+      "points": 0,
+      "geometries": 142,
+      "textures": 20,
+      "softwareRenderMs": 2.8999999999941792
+    },
+    {
+      "level": 30,
+      "elapsed": 33683.33333333169,
+      "player": [
+        43.68405735620353,
+        40,
+        45.00520056818688
+      ],
+      "camera": {
+        "position": [
+          38.68228659642408,
+          41.197924997264295,
+          49.883770670563464
+        ],
+        "quaternion": [
+          0.007937244356333254,
+          -0.452119466302039,
+          0.0040234671780755024,
+          0.8919130002722543
+        ],
+        "projection": [
+          0.9266006053204618,
+          0,
+          0,
+          0,
+          0,
+          1.482560968512739,
+          0,
+          0,
+          0,
+          0,
+          -1.0004000800160033,
+          -1,
+          0,
+          0,
+          -0.20004000800160032,
+          0
+        ]
+      },
+      "portals": [
+        {
+          "position": [
+            60,
+            6,
+            44.99999999999999
+          ]
+        },
+        {
+          "position": [
+            200,
+            43.00000000000001,
+            -68
+          ]
+        }
+      ],
+      "passes": 2,
+      "calls": 159,
+      "triangles": 1241492,
+      "lines": 26,
+      "points": 0,
+      "geometries": 153,
+      "textures": 20,
+      "softwareRenderMs": 3.6000000000058208
+    },
+    {
+      "level": 30,
+      "elapsed": 43700.00000000127,
+      "player": [
+        200.00477435902405,
+        28,
+        16.29076848452175
+      ],
+      "camera": {
+        "position": [
+          192.4207672878514,
+          32.557472109368504,
+          12.804497889968186
+        ],
+        "quaternion": [
+          0.00513035954945455,
+          -0.8164619412972528,
+          0.0072708044689070985,
+          0.5773306792700259
+        ],
+        "projection": [
+          0.7197193469435625,
+          0,
+          0,
+          0,
+          0,
+          1.1515509551097,
+          0,
+          0,
+          0,
+          0,
+          -1.0004000800160033,
+          -1,
+          0,
+          0,
+          -0.20004000800160032,
+          0
+        ]
+      },
+      "portals": [
+        {
+          "position": [
+            60,
+            6,
+            44.99999999999999
+          ]
+        },
+        {
+          "position": [
+            200,
+            43,
+            -68
+          ]
+        }
+      ],
+      "passes": 1,
+      "calls": 44,
+      "triangles": 323150,
+      "lines": 13,
+      "points": 0,
+      "geometries": 153,
+      "textures": 20,
+      "softwareRenderMs": 1
+    },
+    {
+      "level": 30,
+      "elapsed": 44541.666666668185,
+      "player": [
+        200.0005408515168,
+        28,
+        29.333700893360167
+      ],
+      "camera": {
+        "position": [
+          193.01569325886433,
+          29.195372101337885,
+          27.18414706666415
+        ],
+        "quaternion": [
+          0.005143789125537129,
+          -0.8159697021613445,
+          0.0072618320370215,
+          0.5780261692896135
+        ],
+        "projection": [
+          0.8847980410952284,
+          0,
+          0,
+          0,
+          0,
+          1.4156768657523655,
+          0,
+          0,
+          0,
+          0,
+          -1.0004000800160033,
+          -1,
+          0,
+          0,
+          -0.20004000800160032,
+          0
+        ]
+      },
+      "portals": [
+        {
+          "position": [
+            60,
+            6,
+            44.99999999999999
+          ]
+        },
+        {
+          "position": [
+            200,
+            43,
+            -68
+          ]
+        }
+      ],
+      "passes": 1,
+      "calls": 40,
+      "triangles": 322286,
+      "lines": 13,
+      "points": 0,
+      "geometries": 153,
+      "textures": 20,
+      "softwareRenderMs": 1
+    },
+    {
+      "level": 30,
+      "elapsed": 44541.666666668185,
+      "player": [
+        200.0005408515168,
+        28,
+        29.333700893360167
+      ],
+      "camera": {
+        "position": [
+          193.01569325886433,
+          29.195372101337885,
+          27.18414706666415
+        ],
+        "quaternion": [
+          0.005143789125537129,
+          -0.8159697021613445,
+          0.0072618320370215,
+          0.5780261692896135
+        ],
+        "projection": [
+          0.8847980410952284,
+          0,
+          0,
+          0,
+          0,
+          1.4156768657523655,
+          0,
+          0,
+          0,
+          0,
+          -1.0004000800160033,
+          -1,
+          0,
+          0,
+          -0.20004000800160032,
+          0
+        ]
+      },
+      "portals": [
+        {
+          "position": [
+            60,
+            6,
+            44.99999999999999
+          ]
+        },
+        {
+          "position": [
+            200,
+            43,
+            -68
+          ]
+        }
+      ],
+      "passes": 1,
+      "calls": 40,
+      "triangles": 322286,
+      "lines": 13,
+      "points": 0,
+      "geometries": 153,
+      "textures": 20,
+      "softwareRenderMs": 0.5
+    }
+  ],
+  "routes": [
+    {
+      "level": 30,
+      "id": "sunward-limit",
+      "pass": true,
+      "milestones": [
+        {
+          "name": "room30 first flight prepared",
+          "player": [
+            -22.61483065904631,
+            52,
+            -32.0087044852647
+          ],
+          "cargo": [
+            -22.82123836500846,
+            53.18,
+            -31.11461508318041
+          ],
+          "teleports": 0
+        },
+        {
+          "name": "north-south physical arc reaches the shared island",
+          "player": [
+            59.995434239386945,
+            40,
+            26.075000252042596
+          ],
+          "cargo": [
+            60.85545360565848,
+            41.18000002444959,
+            25.754984026786957
+          ],
+          "teleports": 1
+        },
+        {
+          "name": "turning the real outlet changes the last ballistic arc",
+          "player": [
+            49.113806467303995,
+            40,
+            24.030186524156402
+          ],
+          "cargo": [
+            49.73425211258934,
+            41.18,
+            23.35413386256379
+          ],
+          "teleports": 1
+        },
+        {
+          "name": "room30 final flight prepared",
+          "player": [
+            43.68405735620353,
+            40,
+            45.00520056818688
+          ],
+          "cargo": [
+            44.29213303451589,
+            41.18,
+            45.692400662369764
+          ],
+          "teleports": 1
+        },
+        {
+          "name": "the original travellers cross the final gap with conserved momentum",
+          "player": [
+            200.00477435902405,
+            28,
+            16.29076848452175
+          ],
+          "cargo": [
+            200.8647527650991,
+            29.180000006996064,
+            15.97064836286126
+          ],
+          "teleports": 2
+        },
+        {
+          "name": "both at exit",
+          "player": [
+            200.0005408515168,
+            28,
+            29.333700893360167
+          ],
+          "cargo": [
+            200.86064465692345,
+            29.18,
+            29.01394289037912
+          ],
+          "teleports": 2
+        }
+      ],
+      "respawns": 0,
+      "resets": 0,
+      "frames": 2673,
+      "teleports": 2
+    }
+  ],
+  "errors": [],
+  "initial": {
+    "models": 6,
+    "fps": "1 FPS · 1313.3 мс",
+    "oldHudHidden": true,
+    "audioState": "running"
+  },
+  "assets": {
+    "ids": [
+      1,
+      2,
+      11,
+      22,
+      23,
+      24
+    ],
+    "files": [
+      "model-01-player.glb",
+      "model-02-cargo.glb",
+      "model-11-portal-gun.glb",
+      "model-22-terminal.glb",
+      "model-23-floor-tile.glb",
+      "model-24-wall-panel.glb"
+    ],
+    "requests": 6
+  },
+  "pass": true
+}
