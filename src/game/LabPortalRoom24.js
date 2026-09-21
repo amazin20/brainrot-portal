@@ -43,7 +43,7 @@ export function buildRoom24(game,index=23){
  const door=buildGardenDoor(k,pad);
  // A manufactured planter, recessed soil and thick botanical blades share
  // the same explicit physical envelope; no more non-solid foliage blobs.
- for(const p of [[22,0,18],[21,0,-7],[-21,0,7],[11,0,14],[20,0,8],[-20,0,17],[-21,6,-1],[-22,11,-20],[20,15,-14]])
+ for(const p of [[22,0,18],[21,0,-7],[-21,0,7],[11,0,14],[20,0,8],[-20,0,17],[-22.5,6,-1],[-22,11,-20],[20,15,-14]])
   placeSolidModel(k,createPlanter('garden'),p);
  for(const x of [-23,-17])block([x,13,-19],[.24,6,.24],yellow);for(const z of [-22,-19,-16])block([-20,15.8,z],[6.4,.24,.32],yellow);
  const level=k.finish([15,0,18],[11,.55,18],[16,15,-18],{workshop:k,spec:ROOM24_SPEC,portalPuzzle:true,gardenDoor:door});
