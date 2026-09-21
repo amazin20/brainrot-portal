@@ -13,7 +13,7 @@ const GRAVITY = new THREE.Vector3(0, -19.5, 0);
  * the weapon's real first-blocker query, including its tilted support rules.
  * Returned points guide a visible charge; they never install a portal. */
 export function findVelocityAimTarget(game, slot, trace) {
-  if (!game.epicMode || ![0, 1].includes(slot) || typeof trace !== 'function') return null;
+  if (!(game.kineticMode ?? game.epicMode) || ![0, 1].includes(slot) || typeof trace !== 'function') return null;
   const targets = game.firstLevel?.getShotTargets?.() || [];
   const camera = game.camera;
   if (!camera || !targets.length) return null;
@@ -55,7 +55,7 @@ function arrivalTime(distance, velocity, acceleration) {
  * wall/capsule collision and the exact portal aperture fully authoritative.
  * No position, camera, portal or level-progression state is changed. */
 export function applyVelocityFlightAssist(game, dt) {
-  if (!game.epicMode || game.playerGrounded || !game.portals?.ready || !(dt > 0)) return null;
+  if (!(game.kineticMode ?? game.epicMode) || game.playerGrounded || !game.portals?.ready || !(dt > 0)) return null;
   const target = game.firstLevel?.getFlightTarget?.();
   if (!target?.panel || ![0, 1].includes(target.slot)
     || game.portalSurfaceIds?.[target.slot] !== target.panel.uuid) return null;

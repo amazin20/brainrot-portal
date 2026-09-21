@@ -5,6 +5,11 @@ import {ROOM23_SPEC,buildRoom23} from './LabPortalRoom23.js';
 import {ROOM24_SPEC,buildRoom24} from './LabPortalRoom24.js';
 import {ROOM25_SPEC,buildRoom25} from './LabPortalRoom25.js';
 import {ROOM26_SPEC,buildRoom26} from './LabPortalRoom26.js';
+import {ROOM27_SPEC,buildRoom27} from './LabPortalRoom27.js';
+import {ROOM28_SPEC,buildRoom28} from './LabPortalRoom28.js';
+import {ROOM29_SPEC,buildRoom29} from './LabPortalRoom29.js';
+import {ROOM30_SPEC,buildRoom30} from './LabPortalRoom30.js';
+import {finishChapterArt} from './LabChapterArt.js';
 import {buildReadableWindRoom} from './LabWindRoom.js';
 import {WORKSHOP_CAMPAIGN,buildWorkshopCampaign} from './LabWorkshopCampaign.js';
 import {addExplorationSurfaces} from './LabExplorationSurfaces.js';
@@ -32,10 +37,10 @@ const ROOM15_ART_SPEC=ROOM15_SPEC;
 export const finishBrowserArt=level=>{
  level.game??=level.world.game;
  if(level.index<11)level.spec??={...CAMPAIGN[level.index],accent:level.world.palette.accent};
- return batchStaticSurfaceFinishes(applyMechanismReflections(applyPremiumBrowser3DArt(upgradeBrowser3DArt(level))));
+ return batchStaticSurfaceFinishes(finishChapterArt(applyMechanismReflections(applyPremiumBrowser3DArt(upgradeBrowser3DArt(level)))));
 };
-const NEW_CAMPAIGN=[ROOM16_SPEC,ROOM17_SPEC,ROOM18_SPEC,ROOM19_SPEC,ROOM20_SPEC,ROOM21_SPEC,ROOM22_SPEC,ROOM23_SPEC,ROOM24_SPEC,ROOM25_SPEC,ROOM26_SPEC];
-const NEW_BUILDERS=[buildRoom16,buildRoom17,buildRoom18,buildRoom19,buildRoom20,buildRoom21,buildRoom22,buildRoom23,buildRoom24,buildRoom25,buildRoom26];
+const NEW_CAMPAIGN=[ROOM16_SPEC,ROOM17_SPEC,ROOM18_SPEC,ROOM19_SPEC,ROOM20_SPEC,ROOM21_SPEC,ROOM22_SPEC,ROOM23_SPEC,ROOM24_SPEC,ROOM25_SPEC,ROOM26_SPEC,ROOM27_SPEC,ROOM28_SPEC,ROOM29_SPEC,ROOM30_SPEC];
+const NEW_BUILDERS=[buildRoom16,buildRoom17,buildRoom18,buildRoom19,buildRoom20,buildRoom21,buildRoom22,buildRoom23,buildRoom24,buildRoom25,buildRoom26,buildRoom27,buildRoom28,buildRoom29,buildRoom30];
 
 // Preserve the verified introductory rooms; extend the public registry once.
 export const CAMPAIGN=Object.freeze([...INTRODUCTORY_CAMPAIGN,...EXTENDED_CAMPAIGN.slice(0,3),...WORKSHOP_CAMPAIGN.slice(0,3).map((room,i)=>i===2?{...room,assets:room.assets.filter(id=>id!==39),accent:0x83cfc7,description:'Направь воздух от вентилятора к приводу двери.',hints:['Круглый вентилятор слева создаёт поток. Привод с решёткой дальше по залу принимает воздух передней стороной.','Воздух толкает тебя и друга. Попав в переднюю решётку приёмника, поток сам запускает дверь; кабель показывает связь.','Соедини правую стену напротив вентилятора с другим участком правой стены напротив привода. Включи вентилятор: когда поток попадёт в приёмник, дверь откроется автоматически. Забери друга и пройди в открывшуюся дверь.']}:room),ROOM12_SPEC,ROOM13_ART_SPEC,ROOM14_ART_SPEC,ROOM15_ART_SPEC,...NEW_CAMPAIGN]);

@@ -4,6 +4,7 @@ import {createMachinedProjector,createMachinedTurbine,createMachinedChassis,crea
 import {applyAdvancedMechanismArt} from './LabAdvancedMechanismArt.js';
 import {applyEarlyMechanismArt} from './LabEarlyMechanismArt.js';
 import {architecturalCeiling} from './LabEarlyArchitecture.js';
+import {getChapterVisualProfile,keepsAuthoredMaterial} from './LabChapterArt.js';
 
 const V=(x=0,y=0,z=0)=>new THREE.Vector3(x,y,z);
 const Q=new THREE.Quaternion();
@@ -37,7 +38,7 @@ function materials(level){
   const rubber=new THREE.MeshStandardMaterial({color:0x171a1c,roughness:.9,metalness:.02});
   const brass=new THREE.MeshStandardMaterial({color:0xb48750,roughness:.31,metalness:.76,roughnessMap:metalNoise});
   const hazard=new THREE.MeshStandardMaterial({color:0xd2a344,roughness:.62,metalness:.18});
-  const lamp=new THREE.MeshBasicMaterial({color:level.spec?.accent??0xa8e5df,toneMapped:true});
+  const lamp=new THREE.MeshBasicMaterial({color:getChapterVisualProfile(level)?.edge??level.spec?.accent??0xa8e5df,toneMapped:true});
   const glass=new THREE.MeshPhysicalMaterial({color:0x8db9c5,roughness:.12,metalness:.05,transmission:.28,transparent:true,opacity:.32,depthWrite:false,clearcoat:.9,clearcoatRoughness:.08});
   const set={ceramic,graphite,steel,blackSteel,rubber,brass,hazard,lamp,glass,textures:[ceramicNoise,metalNoise]};
   // The level lifecycle owns generated materials, but deliberately leaves
@@ -53,7 +54,7 @@ function materials(level){
 export function polishImportedModel(root,{metalBoost=.18}={}){
   const cache=new WeakMap();
   root.traverse(node=>{
-    if(!node.isMesh)return;
+    if(!node.isMesh||(keepsAuthoredMaterial(node)&&!node.userData.portalTile))return;
     node.castShadow=false;node.receiveShadow=true;
     const list=Array.isArray(node.material)?node.material:[node.material];
     const converted=list.map(source=>{
@@ -169,8 +170,9 @@ function enhanceWorldMaterials(level,m){
   Object.assign(w.materials.trim,{roughness:.38,metalness:.68,roughnessMap:m.textures[1],bumpMap:m.textures[1],bumpScale:.002});
   for(const mat of [w.materials.ceramic,w.materials.wall,w.materials.floor,w.materials.trim])mat.needsUpdate=true;
   for(const s of w.surfaces){
+    if(keepsAuthoredMaterial(s.group)&&!s.portal)continue;
     const target=s.portal?m.ceramic:Math.abs(s.normal.y)>.9?m.steel:m.graphite;
-    s.group.traverse(node=>{if(node.isInstancedMesh&&!node.userData.portalTile&&!s.portal)node.material=target;if(node.isInstancedMesh&&node.userData.portalTile)node.material=m.ceramic;});
+    s.group.traverse(node=>{if(node.isInstancedMesh&&!node.userData.portalTile&&!s.portal&&!keepsAuthoredMaterial(node))node.material=target;if(node.isInstancedMesh&&node.userData.portalTile)node.material=m.ceramic;});
     if(s.backing?.material)s.backing.material=m.blackSteel;
   }
 }
@@ -322,12 +324,15 @@ function addRoomMechanisms(level,m){
 }
 
 export function upgradeBrowser3DArt(level){
-  if(!level?.world||level.index<0||level.index>25||level.browser3DArt)return level;
+  if(!level?.world||level.index<0||level.index>29||level.browser3DArt)return level;
   level.game=level.game||level.workshop?.game||level.world.game;
   if(level.index>=21)level.spec??=level.workshop?.spec;
   const m=materials(level);enhanceWorldMaterials(level,m);
   const root=new THREE.Group();root.name='Browser 3D artist environment pass';root.userData.visualOnly=true;root.userData.version=31;level.world.root.add(root);
-  const deck=addDeckEngineering(level,root,m),portalFrames=addPortalFrames(level,root,m),conduits=addShellConduits(level,root,m);
+  // Coloured gardens author solid plinths and rounded supports themselves.
+  // The industrial diagonals read as stray wires beneath their open walkways.
+  const chapter=getChapterVisualProfile(level);
+  const deck=chapter?{braces:0,lamps:0}:addDeckEngineering(level,root,m),portalFrames=addPortalFrames(level,root,m),conduits=chapter?0:addShellConduits(level,root,m);
   if(level.index===13)addLightProjector(level.world,{position:[-10,5.1,-7],direction:[0,0,-1],radius:1.1,accent:level.spec?.accent});
   addRoomMechanisms(level,m);
   if(level.index<11)applyEarlyMechanismArt(level);

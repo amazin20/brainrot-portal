@@ -14,11 +14,12 @@ import {applyPremiumBrowser3DArt} from '../src/game/LabBrowser3DPremium.js';
 import {applyMechanismReflections} from '../src/game/LabMechanismReflections.js';
 import {architecturalRectOverlapsPortal} from '../src/game/LabArchitecturalModels.js';
 import {gameplayContract} from './helpers/lab-art-contract.js';
+import {CHAPTER_VISUAL_PROFILES,getChapterVisualProfile,finishChapterArt} from '../src/game/LabChapterArt.js';
 
 const assets=await createHeadlessGame();
 after(()=>{assets.physics.dispose();assets.portals.dispose();});
 const builders=[buildRoom22,buildRoom23,buildRoom24,buildRoom25,buildRoom26];
-const accents=[0xa2d2bd,0xd9bb87,0xc8bc87,0xcab48c,0xe2ad79];
+const accents=[0xa2d2bd,0xd9bb87,CHAPTER_VISUAL_PROFILES.garden.edge,0xcab48c,0xe2ad79];
 const V=(...values)=>new THREE.Vector3(...values);
 function rawRoom(room){
  const game=new LabGame({container:null,touch:false});
@@ -40,10 +41,10 @@ for(let room=22;room<=26;room++)test(`room ${room} premium art preserves physica
  const oldNodes=new Set();world.root.traverse(node=>oldNodes.add(node));
  const before=gameplayContract(game);
  const registries=Object.fromEntries(['colliders','portalPanels','floors','cameraBlockers','aimBlockers'].map(key=>[key,[...game[key]]]));
- finishAdvancedRoom(level);upgradeBrowser3DArt(level);applyPremiumBrowser3DArt(level);applyMechanismReflections(level);
+ finishAdvancedRoom(level);upgradeBrowser3DArt(level);applyPremiumBrowser3DArt(level);applyMechanismReflections(level);finishChapterArt(level);
  assert.deepEqual(gameplayContract(game),before,'art must not change physics, frames, viewing gaps or state');
  for(const [key,items] of Object.entries(registries))assert.deepEqual(game[key],items,`${key} identity/order changed`);
- const palette=advancedRoomPalette(room-1);
+ const palette=getChapterVisualProfile(level)??advancedRoomPalette(room-1);
  assert.equal(palette.edge,accents[room-22]);
  assert.equal(world.root.userData.browserArtMaterials.lamp.color.getHex(),accents[room-22]);
  assert.equal(world.materials.wall.color.getHex(),palette.wall);
@@ -72,6 +73,12 @@ for(let room=22;room<=26;room++)test(`room ${room} premium art preserves physica
    assert.ok(new THREE.Box3().setFromObject(chassis).max.y<surface.getFrame().center.y-.075,'chassis must stay behind the moving portal plane');
   }
  }
+ if(room===24){
+  assert.equal(level.chapterArt.profile,'garden');
+  assert.equal(level.chapterArt.openSky,true);
+  assert.equal(premium.userData.stats.ventPanels,0);
+  for(const z of [-20,-18,-16])for(const y of [11.5,13,14.8])artRayClear(addedMeshes,[-4.7,y,z],[1,0,0],1.4);
+ }
  if(room===25){
   for(const z of [16,20,24])for(const y of [14.35,14.9,15.4])artRayClear(addedMeshes,[-11.4,y,z],[1,0,0],1.2);
   assert.equal(level.advancedMechanismArt.userData.stats.projectors,1);
@@ -90,6 +97,6 @@ for(let room=22;room<=26;room++)test(`room ${room} premium art preserves physica
  assert.equal(world.root.children.length,children);assert.equal(level.workshop.ticks.length,ticks);assert.equal(level.workshop.renders.length,renders);
 });
 
-test('all five appended chambers have different industrial palettes',()=>{
- assert.equal(new Set(Array.from({length:5},(_,i)=>advancedRoomPalette(21+i).wall)).size,5);
+test('rooms 22–26 retain distinct palettes including the redesigned garden',()=>{
+ assert.equal(new Set(Array.from({length:5},(_,i)=>i===2?CHAPTER_VISUAL_PROFILES.garden.wall:advancedRoomPalette(21+i).wall)).size,5);
 });

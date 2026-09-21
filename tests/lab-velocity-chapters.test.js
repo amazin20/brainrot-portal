@@ -1,47 +1,47 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import { VELOCITY_CAMPAIGN_RESERVATION, VELOCITY_CHAPTERS,
+import { CAMPAIGN_FINALE, VELOCITY_CHAPTERS,
   LabVelocityProgress, VELOCITY_PROGRESS_KEY } from '../src/game/LabVelocityChapters.js';
 import {readCampaignRoute,nextCampaignLevel} from '../src/game/LabCampaignRoute.js';
 import {LabPreferences} from '../src/game/LabPreferences.js';
 
-test('the speed prototype is reserved for room 30 and has no campaign interludes', () => {
-  assert.equal(VELOCITY_CAMPAIGN_RESERVATION.level, 30);
-  assert.equal(VELOCITY_CAMPAIGN_RESERVATION.status, 'reserved');
-  assert.equal(VELOCITY_CAMPAIGN_RESERVATION.publicMode, false);
+test('room 30 is the numbered finale with no campaign interludes', () => {
+  assert.equal(CAMPAIGN_FINALE.level, 30);
+  assert.equal(CAMPAIGN_FINALE.status, 'available');
+  assert.equal(CAMPAIGN_FINALE.publicMode, false);
   for (const prototype of VELOCITY_CHAPTERS) {
     assert.equal(prototype.afterLevel, undefined);
     assert.equal(prototype.returnLevel, undefined);
   }
-  for (let index = 0; index < 25; index++) assert.equal(nextCampaignLevel(index, 26), index + 1);
-  assert.equal(nextCampaignLevel(25, 26), 0);
-  assert.equal(nextCampaignLevel(99, 26), 0);
+  for (let index = 0; index < 29; index++) assert.equal(nextCampaignLevel(index, 30), index + 1);
+  assert.equal(nextCampaignLevel(29, 30), 0);
+  assert.equal(nextCampaignLevel(99, 30), 0);
 });
 
 test('old speed links open the campaign menu and retain valid continuation bookmarks', () => {
   for (const chapter of [1, 2]) {
-    const route = readCampaignRoute(`?mode=velocity&chapter=${chapter}&v=old`, 26);
+    const route = readCampaignRoute(`?mode=velocity&chapter=${chapter}&v=old`, 30);
     assert.equal(route.levelIndex, 0);
     assert.equal(route.legacyVelocityLink, true);
     assert.equal(route.search, '?v=old');
-    const returning = readCampaignRoute(`?mode=velocity&chapter=${chapter}&return=${chapter * 10 + 1}&debug=1`, 26);
+    const returning = readCampaignRoute(`?mode=velocity&chapter=${chapter}&return=${chapter * 10 + 1}&debug=1`, 30);
     assert.equal(returning.levelIndex, chapter * 10);
     assert.equal(new URLSearchParams(returning.search).get('debug'), '1');
     assert.equal(new URLSearchParams(returning.search).get('mode'), null);
   }
   for (const link of ['?mode=velocity&chapter=1&return=21', '?mode=velocity&chapter=2&return=https://example.com', '?mode=velocity&chapter=1&return=11.0']) {
-    assert.equal(readCampaignRoute(link, 26).levelIndex, 0);
+    assert.equal(readCampaignRoute(link, 30).levelIndex, 0);
   }
-  assert.equal(readCampaignRoute('?mode=velocity&chapter=2&return=21&level=22',26).levelIndex,21);
+  assert.equal(readCampaignRoute('?mode=velocity&chapter=2&return=21&level=22',30).levelIndex,21);
 });
 
 test('public level links accept only available numbered rooms', () => {
-  for (let level=1;level<=26;level++) assert.equal(readCampaignRoute(`?level=${level}`,26).levelIndex,level-1);
-  for (const level of ['0','27','30','-1','2.5','Infinity','NaN']) {
-    assert.equal(readCampaignRoute(`?level=${level}`,26).levelIndex,0);
+  for (let level=1;level<=30;level++) assert.equal(readCampaignRoute(`?level=${level}`,30).levelIndex,level-1);
+  for (const level of ['0','31','100','-1','2.5','Infinity','NaN']) {
+    assert.equal(readCampaignRoute(`?level=${level}`,30).levelIndex,0);
   }
-  assert.deepEqual(readCampaignRoute('',26),{levelIndex:0,legacyVelocityLink:false,search:''});
+  assert.deepEqual(readCampaignRoute('',30),{levelIndex:0,legacyVelocityLink:false,search:''});
 });
 
 test('public menu and entry expose only the campaign', () => {
@@ -62,8 +62,8 @@ test('adding numbered rooms preserves existing campaign and retired prototype pr
   assert.deepEqual(prefs.value.completed,old.completed);
   assert.deepEqual(prefs.value.hints,old.hints);
   assert.equal(prefs.value.quality,'low');
-  for(let index=21;index<=25;index++)prefs.complete(index);
-  assert.deepEqual(new LabPreferences(storage).value.completed,[0,9,19,20,21,22,23,24,25]);
+  for(let index=21;index<=28;index++)prefs.complete(index);
+  assert.deepEqual(new LabPreferences(storage).value.completed,[0,9,19,20,21,22,23,24,25,26,27,28]);
   assert.equal(records.get(VELOCITY_PROGRESS_KEY),speed);
   assert.equal(new LabPreferences(storage).value.completed.includes(29),false);
 });

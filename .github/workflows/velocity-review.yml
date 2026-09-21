@@ -1,5 +1,5 @@
 name: Reserved room30 prototype checks
-# ПРЕДЕЛ is retained as an internal prototype for future campaign room30.
+# Retired speed prototypes remain internal; campaign room30 is published separately.
 # It has no public mode URL; do not probe the retired standalone UI.
 on:
   workflow_dispatch:

@@ -84,7 +84,7 @@ const game=new LabGame({debug,container:$('#game'),touch:{joystick:$('#joystick'
   onRestartRequest:()=>restartLevel(),
   onWin:showVictory,
 });
-// ПРЕДЕЛ is reserved for room 30; all current public entries use the campaign.
+// ПРЕДЕЛ is the campaign finale at room 30; every public entry uses the campaign.
 game.epicMode=false;
 document.body.dataset.gameMode='campaign';
 game.quality={...QUALITY_PRESETS[preferences.value.quality]};game.tutorial.enabled=preferences.value.tutorial;

@@ -1,24 +1,22 @@
+import {installRoom21Aim} from './LabRoom21Journey.js';
 const check=(p,m)=>{if(!p)throw Error(m);};
-function feed(d){
- const p=d.level.panels['air-intake'],target=p.getFrame().center.clone();
- for(let n=0;n<4;n++){d.aim(0,target);d.wait(.15);if(d.level.state.pneumatic.feed)return;target.add(p.getFrame().center.clone().sub(d.game.portals.portals[0].position));}
- check(false,'Actual compressor stream missed the intake');
-}
-export async function runRoom24(d,{order='charge-first',interruptFeed=false,storageDelay=0}={}){
- const {game,level,walk,aim,wait,until,pickup,mark}=d,p=level.panels,s=level.state;
- walk(-7,15);walk(-7,-5);walk(-2,-2);aim(1,p['air-delivery'].getFrame().center);
- walk(-2,-1);walk(-7,-1);walk(-7,15);walk(-16,15);walk(-16,-10);walk(-14,-10);feed(d);
- if(interruptFeed){wait(2);aim(0,p['air-intake'].getFrame().center.clone().add({x:0,y:0,z:2}));wait(.4);check(!s.pneumatic.feed,'A missed aperture must interrupt the real supply');feed(d);}
- until(()=>game.playerPosition.y>7.97,20,'Pressure lift did not rise');mark('stored air raises the occupied cylinder');
- walk(-14,-14.5);walk(-12.6,-14.5);if(order==='charge-first')until(()=>s.pneumatic.pressure>9.8,18,'Charge before isolating the cylinder');game.interact();check(!s.pneumatic.liftValve,'Cylinder valve did not isolate');
- if(order==='isolate-first')mark('isolation precedes full charge');
- until(()=>s.pneumatic.pressure>9.8,18,'Accumulator failed to fill');mark('closed cylinder retains the first crossing');
- walk(-11,-12.9);walk(-7,-12.9);walk(-4,-13);aim(1,p['freight-receiver'].getFrame().center);
- walk(-7,-12.9);walk(-14,-12.9);walk(-14,-8);walk(0,-8);walk(0,-2.65);aim(0,p['sealed-cargo'].getFrame().center);until(()=>game.cargo.position.y>8,7,'Original friend did not reach upper freight pocket');wait(1.8);
- check(!s.pneumatic.feed,'Borrowed pair must stop pneumatic charging');check(s['pressure-lift'].position.y>7.9,'Isolated cylinder lost height');
- if(storageDelay)wait(storageDelay);mark('portal pair retrieves the original friend');
- walk(0,-8);walk(-14,-8);walk(-14,-12.9);walk(-7,-12.9);walk(game.cargo.position.x-1,game.cargo.position.z);pickup();
- walk(-3,-12);walk(8,-12);walk(8,-9.8);walk(8.2,-6.3);game.interact();wait(.4);walk(9.15,-6.6);game.interact();check(s.pneumatic.bridgeValve,'Crossing valve did not open');mark('boarded pressure car beside the free friend');mark('finite reserve carries both travellers');
- until(()=>s['pressure-ferry'].progress>.997,30,'Reservoir did not carry the loaded crossing');
- wait(1);walk(game.cargo.position.x-.8,game.cargo.position.z);mark('far pressure dock pickup');pickup();walk(8,14.4);walk(17,17);until(()=>game.state==='won',3,'Both travellers missed the pressure dock');
+export async function runRoom24(d,{route='carry-through',recovery=false}={}){
+ installRoom21Aim(d);const {game,level,walk,wait,until,pickup,enter,mark}=d,p=level.panels,door=level.gardenDoor;
+ check(['carry-through','counterweight'].includes(route),'Unknown garden route');
+ walk(0,22);d.aim(1,p['revolving-door'].getFrame().center);walk(18,19);d.aim(0,p['garden-entry'].getFrame().center);walk(11,18);pickup();
+ if(route==='carry-through'){
+  walk(18,20);enter(p['garden-entry']);until(()=>game.playerGrounded,4,'South garden landing missed');walk(1,3);d.look(game.playerPosition.clone().setZ(5));wait(.3);game.interact();wait(.7);walk(2,3.5);d.aim(0,p['balcony-entry'].getFrame().center);walk(3.7,5);d.look(p['revolving-door'].getFrame().center);mark('the same aperture starts its courtyard orbit');check(game.interact(),'Manual worm drive missed');check(door.manualTurn,'Manual drive did not engage');until(()=>door.angle<-1.56,6,'Manual drive did not turn door');mark('carried friend explores south balcony and the manual turning drive');walk(game.cargo.position.x-.9,game.cargo.position.z);pickup();enter(p['balcony-entry']);
+ }else{
+  walk(8,20);walk(-12,20);walk(-12,15);d.look(p['garden-counterweight'].getFrame().center.clone().setY(2));walk(-12,12.7);wait(.5);game.interact();wait(1.2);check(level.workshop.pads[0].loaded(),'Original friend missed the turning planter');until(()=>door.angle<-1.56,6,'Weighted door did not turn');mark('original weight turns the portal into a different courtyard');walk(-12,20);walk(18,20);enter(p['garden-entry']);
+ }
+ until(()=>game.playerGrounded,4,'West garden arrival did not land');check(game.playerPosition.y>5.9,'Wrong garden height');walk(-8,-8);
+ if(route==='counterweight'){
+  walk(-10,-7.2);check(game.interact(),'Garden brake missed');check(door.braked,'Garden brake did not engage');mark('west garden brake holds the real rotating door');walk(-12,-6.5);walk(-20,-6.5);walk(-20,1.5);walk(-12,2.65);d.aim(0,p['garden-counterweight'].getFrame().center);until(()=>game.cargo.position.y>6.1,6,'Garden cargo return missed');wait(1.5);check(!door.loaded&&door.angle<-1.56,'The brake failed to retain its angle after unloading');mark('the same portal pair lifts its original counterweight');walk(-12,1.5);walk(-20,1.5);walk(-20,-8);
+ }
+ if(game.heldCube){walk(-8,-10);walk(-12,-10);d.look(game.playerPosition.clone().setX(-16));wait(.3);game.interact();wait(.6);walk(-12,-7);walk(-20,-7);walk(-20,-8);}
+ if(recovery==='ground-return'){
+  walk(-12,-7);walk(-12,-2);until(()=>game.playerGrounded&&game.playerPosition.y<.2,4,'Garden recovery floor missed');game.clearPortals();walk(-12,8);walk(9,8);walk(8.3,15);check(game.interact(),'Low garden release missed');until(()=>door.angle>-.01,6,'Low release failed to return the unloaded door');mark('fall and erased pair recovered through the low mechanical release');
+  walk(0,22);d.aim(1,p['revolving-door'].getFrame().center);walk(18,19);d.aim(0,p['garden-entry'].getFrame().center);enter(p['garden-entry']);walk(2,3.5);d.aim(0,p['balcony-entry'].getFrame().center);walk(3.7,5);check(game.interact(),'Recovery crank missed');until(()=>door.angle<-1.56,6,'Recovery orbit failed');enter(p['balcony-entry']);walk(-8,-8);
+ }else if(recovery){game.clearPortals();wait(.2);walk(-7,-8);d.aim(1,p['revolving-door'].getFrame().center);mark('erased pair restored from the permanent garden');}
+ walk(-20,-8);walk(-20,-18);check(game.playerPosition.y>10.9,'Garden reverse perch missed');d.aim(0,p['pavilion-receiver'].getFrame().center);mark('folded garden stair reveals the yellow pavilion');walk(-20,-7);walk(-7,-8);walk(game.cargo.position.x-.9,game.cargo.position.z);pickup();enter(p['revolving-door']);walk(16,-18);until(()=>game.state==='won',4,'Garden joint arrival missed');mark('original companion joins the final garden');
 }

@@ -54,7 +54,7 @@ function animateTurbine(workshop,field,housing){
  * Rendering only: no new body, blocker, floor, target or actuator state. */
 export function applyAdvancedMechanismArt(level){
   // Room 21 keeps its accepted cassette presentation; appended rooms opt in.
-  if(!level?.world||level.index<15||level.index===20||level.index>25||level.advancedMechanismArt)return level;
+  if(!level?.world||level.index<15||level.index===20||level.index>29||level.advancedMechanismArt)return level;
   const contract=level.mechanismArt??{},world=level.world,workshop=level.workshop;
   const root=new THREE.Group();root.name='Advanced chamber machined mechanisms';root.userData.visualOnly=true;world.root.add(root);
   const accent=level.spec?.accent??workshop?.spec?.accent??0x7edee8;

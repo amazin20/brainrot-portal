@@ -19,7 +19,7 @@ try{
   catch(error){console.log('Publication propagation:',String(error));}
   await wait(5000);
  }
- assert.equal(info?.commit,expected);assert.equal(info?.levels,CAMPAIGN.length);assert.equal(info?.version,'v38-campaign-26');assert.equal(info?.levels,26);assert.equal(info?.artVersion,'v38-campaign-machined');report.build=info;
+ assert.equal(info?.commit,expected);assert.equal(info?.levels,CAMPAIGN.length);assert.equal(info?.version,'v39-campaign-30');assert.equal(info?.levels,30);assert.equal(info?.artVersion,'v39-chromatic-worlds');report.build=info;
  const response=await fetch(base+'models/runtime/manifest.json?revision='+expected);assert.ok(response.ok);const manifest=await response.json();
  assert.deepEqual(manifest.models.map(m=>m.id).sort((a,b)=>a-b),[...CAMPAIGN_ASSET_IDS]);
  const source=JSON.parse(fs.readFileSync('public/models/runtime/manifest.json','utf8'));
@@ -31,9 +31,9 @@ try{
  }
  browser=await puppeteer.launch({executablePath:process.env.CHROME_PATH||'/usr/bin/google-chrome',headless:true,protocolTimeout:720000,args:['--no-sandbox','--disable-dev-shm-usage','--use-angle=swiftshader','--enable-unsafe-swiftshader']});
  const page=await browser.newPage();page.setDefaultTimeout(120000);await page.setViewport({width:960,height:600});page.on('pageerror',e=>report.errors.push(e.message));
- // All twenty-six routes pass the deployment gate. Recheck the early rooms,
- // previous ending and five additions through the published production package.
- for(const level of [...Array.from({length:11},(_,i)=>i+1),20,21,22,23,24,25,26]){
+ // All thirty routes pass the deployment gate. Recheck public transitions,
+ // the rebuilt garden, new rooms and finale through the published package.
+ for(const level of [1,9,10,20,24,26,27,28,29,30]){
   await page.goto(base+'?debug=1&level='+level+'&revision='+expected,{waitUntil:'networkidle2'});
   await page.waitForFunction(()=>window.__NESI_DEMO_GAME__?.state==='ready');
   assert.equal(await page.$$eval('#level-select option',a=>a.length),CAMPAIGN.length);
@@ -46,7 +46,7 @@ try{
   const route=await page.evaluate(()=>window.__NESI_RUN_LEVEL_ROUTE__());
   assert.ok(route.pass&&route.respawns===0&&route.resets===0);assert.equal(route.level,level);report.routes.push(route);
   await page.screenshot({path:`live-evidence/room-${level}-public-complete.png`});
-  if(level===10||level===20){
+  if(level===10||level===20||level===26){
    await page.waitForFunction(()=>!document.pointerLockElement&&getComputedStyle(document.querySelector('#win-screen')).opacity==='1');
    await page.locator('#play-again-button').click();
    await page.waitForFunction(index=>window.__NESI_DEMO_GAME__.levelIndex===index&&window.__NESI_DEMO_GAME__.state==='playing',{},level);
@@ -58,7 +58,7 @@ try{
  await page.waitForFunction(()=>!document.pointerLockElement&&getComputedStyle(document.querySelector('#win-screen')).opacity==='1');await page.locator('#play-again-button').click();
  await page.waitForFunction(()=>window.__NESI_DEMO_GAME__.levelIndex===0&&window.__NESI_DEMO_GAME__.state==='playing');
  assert.equal(await page.$eval('#level-number',e=>e.textContent),'1');
- report.campaignTransitions.push({from:26,to:1,primaryButton:true});
+ report.campaignTransitions.push({from:30,to:1,primaryButton:true});
  await page.screenshot({path:'live-evidence/campaign-wrap-to-room-1.png'});assert.deepEqual(report.errors,[]);
  for(const {query,level} of [{query:'mode=velocity&chapter=1',level:1},{query:'mode=velocity&chapter=2&return=21',level:21}]){
   await page.goto(base+'?debug=1&'+query+'&revision='+expected,{waitUntil:'networkidle2'});
@@ -77,6 +77,6 @@ try{
  report.flightAudio=await runFlightAudioBrowser({browser,baseUrl:base,out:'live-evidence/flight-audio',capture:false});
  assert.equal(report.flightAudio.pass,true);
  assert.deepEqual(report.errors,[]);report.pass=true;
- console.log('LIVE VERIFIED',expected,'v38 campaign: БРЕЙНРОТ ПОРТАЛ, 26 rooms, ordinary routes1–11 and20–26, direct campaign transitions10→11/20→21/26→1, live model hashes, room9 regressions, and all five new rooms completed with the companion');
+ console.log('LIVE VERIFIED',expected,'v39 campaign: 30 rooms; public ordinary routes 1,9,10,20,24,26–30; transitions 10→11,20→21,26→27,30→1; live model hashes; room9 regressions; original companion present at every finish');
 }catch(error){report.error=String(error);throw error;}
 finally{fs.writeFileSync('live-evidence/report.json',JSON.stringify(report,null,2));await browser?.close();}

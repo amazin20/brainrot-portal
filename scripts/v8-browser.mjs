@@ -32,7 +32,11 @@ const capturePlans={
  20:[['loaded mirror raises the first crossing',60],['cargo exchange changes the live optical branch',60],['final field transfer over the shared hub',60]],
  22:[['inspection stair joins the permanent gallery',60]],
  23:[['original load rests outside either moving car',60],['upper apron joins the returning gallery',60]],
- 24:[['portal pair retrieves the original friend',60]],
+ 24:[['the same aperture starts its courtyard orbit',45]],
+ 27:[['ready to ride the saffron belt into the sky well',45],['ready for the upper conveyor crossing',45]],
+ 28:[['the collector opens and the lagoon begins to rise',45],['the occupied coral island begins its return tide',45]],
+ 29:[['the root crystal reverses and the free companion rises',45]],
+ 30:[['room30 first flight prepared',45],['room30 final flight prepared',45]],
 };
 // Small art-review excerpts from actual early-room mechanism motion. The
 // ordinary route remains the sole writer of movement and interaction input.

@@ -87,7 +87,7 @@ export class LabTileWorld {
     this.surface({position:[(minX+maxX)/2,cy,minZ],width:maxX-minX,height:h});
     this.surface({position:[(minX+maxX)/2,cy,maxZ],normal:[0,0,-1],width:maxX-minX,height:h});
     // Roof beams carry the ceiling lights, leaving a readable skylight.
-    for(let z=minZ+2;z<maxZ;z+=7) {
+    if(!this.visualProfile?.openSky)for(let z=minZ+2;z<maxZ;z+=7) {
       this.box([(minX+maxX)/2,height+.18,z],[maxX-minX,.18,.22],this.materials.trim,false);
       this.box([(minX+maxX)/2,height+.075,z],[Math.min(6,maxX-minX-1),.025,.13],this.materials.lamp,false);
     }

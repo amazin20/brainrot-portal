@@ -1061,6 +1061,1529 @@
       "resets": 0,
       "frames": 6654,
       "teleports": 1
+    },
+    {
+      "level": 16,
+      "id": "vanishing-support",
+      "pass": true,
+      "milestones": [
+        {
+          "name": "borrowed floor crossing",
+          "player": [
+            -17.453744966297666,
+            6,
+            2.7542887259312114
+          ],
+          "cargo": [
+            -17.783235812093558,
+            7.060001170969211,
+            3.3944729036003234
+          ],
+          "teleports": 1
+        },
+        {
+          "name": "companion waits on borrowed support",
+          "player": [
+            -1.2209620309569518,
+            7.440147567414827,
+            0.00004530530593802128
+          ],
+          "cargo": [
+            -0.49843506044359137,
+            7.830145276775733,
+            -0.0014691934732317666
+          ],
+          "teleports": 1
+        },
+        {
+          "name": "counterweight descent",
+          "player": [
+            12.000000045898885,
+            2,
+            1.8911148778340494
+          ],
+          "cargo": [
+            -0.4984344079827928,
+            7.830145713738775,
+            -0.0014692107353939624
+          ],
+          "teleports": 1
+        },
+        {
+          "name": "permanent gallery above the spent support",
+          "player": [
+            0.09264029486772309,
+            13.425000001490117,
+            4.274363359874594
+          ],
+          "cargo": [
+            -0.49843317375302615,
+            2.515000000212355,
+            -0.0014696408884387474
+          ],
+          "teleports": 1
+        },
+        {
+          "name": "light returns above the well",
+          "player": [
+            18.101366445609465,
+            14.3,
+            -7.401439758573917
+          ],
+          "cargo": [
+            17.38147742708403,
+            15.35268720732333,
+            -7.3883143850654704
+          ],
+          "teleports": 1
+        },
+        {
+          "name": "false floor understood",
+          "player": [
+            -15.995347259735638,
+            13.4,
+            -7.379249004167159
+          ],
+          "cargo": [
+            -15.975048708791652,
+            14.450539277339503,
+            -6.65945176703246
+          ],
+          "teleports": 1
+        },
+        {
+          "name": "both at exit",
+          "player": [
+            -15.995347259735638,
+            13.4,
+            -7.379249004167159
+          ],
+          "cargo": [
+            -15.975048708791652,
+            14.450539277339503,
+            -6.65945176703246
+          ],
+          "teleports": 1
+        }
+      ],
+      "respawns": 0,
+      "resets": 0,
+      "frames": 5598,
+      "teleports": 1
+    },
+    {
+      "level": 17,
+      "id": "shifting-berth",
+      "pass": true,
+      "milestones": [
+        {
+          "name": "the address leaves its first berth",
+          "player": [
+            -16.999854333775314,
+            0.1250000000839817,
+            20.87690929616507
+          ],
+          "cargo": [
+            -16.999750620657093,
+            0.5149981488344667,
+            19.92624382842117
+          ],
+          "teleports": 0
+        },
+        {
+          "name": "the brake holds an empty carriage",
+          "player": [
+            18.994977544089718,
+            7,
+            17.997196336412944
+          ],
+          "cargo": [
+            -16.999750620657093,
+            0.5149981488344667,
+            19.92624382842117
+          ],
+          "teleports": 1
+        },
+        {
+          "name": "the same portal reveals another shore",
+          "player": [
+            18.994311842217858,
+            7,
+            17.99681890332505
+          ],
+          "cargo": [
+            12.993282151707856,
+            7.527983827030488,
+            11.468104536009141
+          ],
+          "teleports": 3
+        },
+        {
+          "name": "a new sight replaces the arrival portal",
+          "player": [
+            -16.003283950920338,
+            14,
+            -30.50002533694606
+          ],
+          "cargo": [
+            -13.043795685683863,
+            7.389998146961896,
+            10.753309783116144
+          ],
+          "teleports": 3
+        },
+        {
+          "name": "both at exit",
+          "player": [
+            -15.821112639916095,
+            17,
+            -20.03138900931862
+          ],
+          "cargo": [
+            -15.817546393296132,
+            18.05044173501171,
+            -20.751381621680746
+          ],
+          "teleports": 4
+        }
+      ],
+      "respawns": 0,
+      "resets": 0,
+      "frames": 6027,
+      "teleports": 4
+    },
+    {
+      "level": 18,
+      "id": "double-bottom",
+      "pass": true,
+      "milestones": [
+        {
+          "name": "freight crosses the low throat",
+          "player": [
+            1.499344555127968,
+            8,
+            9.0777418294109
+          ],
+          "cargo": [
+            -11.486958737894707,
+            13.264926289688427,
+            -17.509999999999998
+          ],
+          "teleports": 0
+        },
+        {
+          "name": "same well from the upper return",
+          "player": [
+            1.3950429963091429,
+            20,
+            11.002173238265181
+          ],
+          "cargo": [
+            -10.32111569404791,
+            11.389998147813596,
+            -5.904674351556866
+          ],
+          "teleports": 0
+        },
+        {
+          "name": "spent portal turns the ascent",
+          "player": [
+            12.180795913861754,
+            18.581770833333383,
+            6.2416958817632695
+          ],
+          "cargo": [
+            -10.32111569404791,
+            11.389998147813596,
+            -5.904674351556866
+          ],
+          "teleports": 1
+        },
+        {
+          "name": "return flight behind the entrance",
+          "player": [
+            -19.902331673689,
+            11,
+            -3.9998717838597933
+          ],
+          "cargo": [
+            -20.622333397120904,
+            12.052804013965735,
+            -3.9968396674958373
+          ],
+          "teleports": 2
+        },
+        {
+          "name": "both at exit",
+          "player": [
+            13.570443880175294,
+            7,
+            26.988699012709457
+          ],
+          "cargo": [
+            13.236311903957425,
+            8.067607114568517,
+            26.350927017425175
+          ],
+          "teleports": 3
+        }
+      ],
+      "respawns": 0,
+      "resets": 0,
+      "frames": 7481,
+      "teleports": 3
+    },
+    {
+      "level": 19,
+      "id": "glass-air-inertia",
+      "pass": true,
+      "milestones": [
+        {
+          "name": "light crosses the sealed chamber",
+          "player": [
+            -14.008305338442025,
+            0.022916666666666665,
+            -8.000245788703074
+          ],
+          "cargo": [
+            -5.601029186301111e-7,
+            0.4149981478125567,
+            9.399124875339166e-7
+          ],
+          "teleports": 0
+        },
+        {
+          "name": "the reverse side of the service wall",
+          "player": [
+            0.9823044602416352,
+            8,
+            -9.102383332931119
+          ],
+          "cargo": [
+            -5.601029186301111e-7,
+            0.4149981478125567,
+            9.399124875339166e-7
+          ],
+          "teleports": 0
+        },
+        {
+          "name": "air takes the open duct",
+          "player": [
+            0.998688136260246,
+            8,
+            -9.007590421711866
+          ],
+          "cargo": [
+            -5.601029186301111e-7,
+            0.4149981478125567,
+            9.399124875339166e-7
+          ],
+          "teleports": 0
+        },
+        {
+          "name": "friend reaches the ferry independently",
+          "player": [
+            -0.016446163213933208,
+            8,
+            -5.128181329826127
+          ],
+          "cargo": [
+            7.970474678389094,
+            8.38999772078665,
+            -3.2652734068479115
+          ],
+          "teleports": 0
+        },
+        {
+          "name": "inertia carries the return",
+          "player": [
+            10.106134424454082,
+            8,
+            -4.705476697712268
+          ],
+          "cargo": [
+            7.969927898429393,
+            8.389998147812804,
+            -4.05055987514994
+          ],
+          "teleports": 0
+        },
+        {
+          "name": "both at exit",
+          "player": [
+            13.913413986102404,
+            8,
+            12.057284582376774
+          ],
+          "cargo": [
+            14.564748866452367,
+            9.067850915837722,
+            12.364348747705288
+          ],
+          "teleports": 0
+        }
+      ],
+      "respawns": 0,
+      "resets": 0,
+      "frames": 4934,
+      "teleports": 0
+    },
+    {
+      "level": 20,
+      "id": "braided-exchange",
+      "pass": true,
+      "milestones": [
+        {
+          "name": "loaded mirror raises the first crossing",
+          "player": [
+            -10.699781395207932,
+            3.9068055555555747,
+            12.000039153253548
+          ],
+          "cargo": [
+            -11.995792093507115,
+            0.5149981478154578,
+            0.1072939021913685
+          ],
+          "teleports": 0
+        },
+        {
+          "name": "cargo exchange changes the live optical branch",
+          "player": [
+            -15.992087366855253,
+            8.00000000149012,
+            -4.000020089715744
+          ],
+          "cargo": [
+            -18.079481534591373,
+            8.485000036007724,
+            2.6755244151297775
+          ],
+          "teleports": 0
+        },
+        {
+          "name": "a new view of the original counterweight",
+          "player": [
+            -5.062489603102813,
+            16,
+            -14.38700273443905
+          ],
+          "cargo": [
+            -18.062046093352844,
+            8.464694563970065,
+            6.833891226228176
+          ],
+          "teleports": 0
+        },
+        {
+          "name": "original load rests in the final pocket",
+          "player": [
+            -15.200001261359105,
+            22,
+            -14.700892101582767
+          ],
+          "cargo": [
+            -11.780181350569398,
+            23.10324108074446,
+            -16.851445018791086
+          ],
+          "teleports": 0
+        },
+        {
+          "name": "final field transfer over the shared hub",
+          "player": [
+            -10.290970270798656,
+            22.025000001490113,
+            -17.97982715053738
+          ],
+          "cargo": [
+            -9.588531308751874,
+            23.079301904559465,
+            -18.137879450817348
+          ],
+          "teleports": 0
+        },
+        {
+          "name": "steering across the suspended return",
+          "player": [
+            -7.492864390221463,
+            22.30376992878463,
+            -8.941414559129878
+          ],
+          "cargo": [
+            -7.4762150204970785,
+            23.363769468384987,
+            -8.221527293241659
+          ],
+          "teleports": 0
+        },
+        {
+          "name": "the original companion crosses the whole exchange",
+          "player": [
+            -0.07964994927812141,
+            20,
+            3.1530790794089154
+          ],
+          "cargo": [
+            0.639070513711863,
+            21.076786758056056,
+            3.1093306346420637
+          ],
+          "teleports": 0
+        },
+        {
+          "name": "both at exit",
+          "player": [
+            -0.07964994927812141,
+            20,
+            3.1530790794089154
+          ],
+          "cargo": [
+            0.639070513711863,
+            21.076786758056056,
+            3.1093306346420637
+          ],
+          "teleports": 0
+        }
+      ],
+      "respawns": 0,
+      "resets": 0,
+      "frames": 6903,
+      "teleports": 0
+    },
+    {
+      "level": 21,
+      "id": "gravity-pocket",
+      "pass": true,
+      "milestones": [
+        {
+          "name": "same free cargo falls through the low freight mouth",
+          "player": [
+            -0.0001538034674601437,
+            10.000000001490118,
+            7.880103081932058
+          ],
+          "cargo": [
+            -4.539999999999998,
+            8.648412157050815,
+            6.034700959954227
+          ],
+          "teleports": 0
+        },
+        {
+          "name": "cargo weight holds receiver; delivery survives a portal change",
+          "player": [
+            -0.0001538034673515556,
+            10.000000001490118,
+            7.880103081910807
+          ],
+          "cargo": [
+            10.056787226132165,
+            3.5202938687153464,
+            5.9331026295866796
+          ],
+          "teleports": 0
+        },
+        {
+          "name": "inspection bay reached by ordinary portal traversal",
+          "player": [
+            -15.96607233778777,
+            4,
+            -15.112227398962213
+          ],
+          "cargo": [
+            11.417920922596629,
+            3.4899981470314074,
+            5.071281770015592
+          ],
+          "teleports": 1
+        },
+        {
+          "name": "physical cassette brake released",
+          "player": [
+            -15.50150423743951,
+            4,
+            -12.20939898273247
+          ],
+          "cargo": [
+            11.417920922596629,
+            3.4899981470314074,
+            5.071281770015592
+          ],
+          "teleports": 1
+        },
+        {
+          "name": "portal installed on the actual lowered moving ceramic",
+          "player": [
+            0.0018583600786578308,
+            10.000000001490118,
+            7.849040808674088
+          ],
+          "cargo": [
+            11.41791914489484,
+            3.489998147031556,
+            5.071291448314086
+          ],
+          "teleports": 2
+        },
+        {
+          "name": "departure fall through the lowered cassette",
+          "player": [
+            -9.479203543457231,
+            3.809813056592279,
+            -5.936752790713104
+          ],
+          "cargo": [
+            11.417918672941004,
+            3.489998147031556,
+            5.071294017763258
+          ],
+          "teleports": 3
+        },
+        {
+          "name": "permanent landing",
+          "player": [
+            6.087200806036091,
+            7,
+            -6.582556133144991
+          ],
+          "cargo": [
+            11.417918307442926,
+            3.489998147031556,
+            5.07129600763743
+          ],
+          "teleports": 3
+        },
+        {
+          "name": "move only the entry to the service fall while the friend still supports the low exit",
+          "player": [
+            0.005971897291162924,
+            7,
+            -3.1030614936182026
+          ],
+          "cargo": [
+            11.417916504792212,
+            3.489998147031556,
+            5.071305821774193
+          ],
+          "teleports": 3
+        },
+        {
+          "name": "cargo recovered; the same prepared exit rises with its surface",
+          "player": [
+            12.42761388144242,
+            3.1,
+            5.0757356935472
+          ],
+          "cargo": [
+            11.772361912664318,
+            4.160002433935192,
+            4.777331846467804
+          ],
+          "teleports": 3
+        },
+        {
+          "name": "lower service fall through the raised SAME exit",
+          "player": [
+            -9.025295560256943,
+            15.388345440383024,
+            -5.385322873215423
+          ],
+          "cargo": [
+            -9.384905372612634,
+            16.58448555262502,
+            -5.995936934227865
+          ],
+          "teleports": 4
+        },
+        {
+          "name": "permanent landing",
+          "player": [
+            2.4334090684877565,
+            18,
+            -5.910448350096973
+          ],
+          "cargo": [
+            3.1530520601848777,
+            19.07682993291516,
+            -5.934354582687073
+          ],
+          "teleports": 4
+        },
+        {
+          "name": "both on upper permanent balcony",
+          "player": [
+            9.916579132720761,
+            18,
+            -7.518706805187939
+          ],
+          "cargo": [
+            10.620224142656287,
+            19.076499244407003,
+            -7.671555456342448
+          ],
+          "teleports": 4
+        },
+        {
+          "name": "both at exit",
+          "player": [
+            9.916579132720761,
+            18,
+            -7.518706805187939
+          ],
+          "cargo": [
+            10.620224142656287,
+            19.076499244407003,
+            -7.671555456342448
+          ],
+          "teleports": 4
+        }
+      ],
+      "respawns": 0,
+      "resets": 0,
+      "frames": 5200,
+      "teleports": 4
+    },
+    {
+      "level": 22,
+      "id": "opposed-freight-lock",
+      "pass": true,
+      "milestones": [
+        {
+          "name": "original cargo opens ground passage and closes upper inspection",
+          "player": [
+            -12.000043154690744,
+            0.12500000000000017,
+            1.0295509221237347
+          ],
+          "cargo": [
+            -11.99900222250272,
+            0.5149981478133412,
+            0.309416634578263
+          ],
+          "teleports": 0
+        },
+        {
+          "name": "inspection stair joins the permanent gallery",
+          "player": [
+            18.002131599754033,
+            7,
+            7.60589950877007
+          ],
+          "cargo": [
+            -11.999002722582276,
+            0.5149981478137947,
+            0.3094174299244161
+          ],
+          "teleports": 0
+        },
+        {
+          "name": "permanent gallery retains height while the same cargo reverses both shutters",
+          "player": [
+            3.55761938096581,
+            7,
+            0.005135871038233944
+          ],
+          "cargo": [
+            19.386852706987447,
+            7.527544854911438,
+            3.2960235920676215
+          ],
+          "teleports": 0
+        },
+        {
+          "name": "reverse high slot reveals the receiving chamber",
+          "player": [
+            12.00000303476108,
+            10,
+            -17.998873010404683
+          ],
+          "cargo": [
+            19.243889958062933,
+            7.389998147101817,
+            2.40851885050747
+          ],
+          "teleports": 0
+        },
+        {
+          "name": "original companion and traveller exit through the reverse side",
+          "player": [
+            -16.087365158845017,
+            14,
+            -18.034948733099387
+          ],
+          "cargo": [
+            -15.367300605048042,
+            15.045057359263017,
+            -18.033205907359047
+          ],
+          "teleports": 1
+        },
+        {
+          "name": "both at exit",
+          "player": [
+            -16.087365158845017,
+            14,
+            -18.034948733099387
+          ],
+          "cargo": [
+            -15.367300605048042,
+            15.045057359263017,
+            -18.033205907359047
+          ],
+          "teleports": 1
+        }
+      ],
+      "respawns": 0,
+      "resets": 0,
+      "frames": 3474,
+      "teleports": 1
+    },
+    {
+      "level": 23,
+      "id": "counterweight-reversal",
+      "pass": true,
+      "milestones": [
+        {
+          "name": "original freight loads the opposite coupled carriage",
+          "player": [
+            -12.896094631230227,
+            0.3784970853640171,
+            2.999998830387811
+          ],
+          "cargo": [
+            11.344932969016563,
+            20.06104157867773,
+            0.057690102571985424
+          ],
+          "teleports": 0
+        },
+        {
+          "name": "permanent gallery preserves first ascent and brake clamps both cars",
+          "player": [
+            8.29266665299675,
+            10.025,
+            5.503549436834683
+          ],
+          "cargo": [
+            11.337518753534168,
+            10.469585846820369,
+            0.8405515129442406
+          ],
+          "teleports": 0
+        },
+        {
+          "name": "original load rests outside either moving car",
+          "player": [
+            0.021254069709924644,
+            10.025000001490117,
+            -8.000055205008884
+          ],
+          "cargo": [
+            -0.6987433137984531,
+            10.414998147813696,
+            -7.998185176531909
+          ],
+          "teleports": 0
+        },
+        {
+          "name": "upper apron joins the returning gallery",
+          "player": [
+            10.931071757513884,
+            20,
+            7.933988845623299
+          ],
+          "cargo": [
+            -0.6987429072182736,
+            10.41499814781423,
+            -7.998185187404108
+          ],
+          "teleports": 0
+        },
+        {
+          "name": "same cargo retrieved from permanent middle pocket",
+          "player": [
+            10.000345407397178,
+            20,
+            -17.11102041959717
+          ],
+          "cargo": [
+            -2.5492252335700245,
+            20.397981862674744,
+            -19.88487420759492
+          ],
+          "teleports": 0
+        },
+        {
+          "name": "both travellers reach the high reverse gallery",
+          "player": [
+            1.50156172887792,
+            20,
+            -19.918364003411273
+          ],
+          "cargo": [
+            -1.772229489489262,
+            20.389998147812914,
+            -19.884816239034777
+          ],
+          "teleports": 0
+        },
+        {
+          "name": "both at exit",
+          "player": [
+            1.50156172887792,
+            20,
+            -19.918364003411273
+          ],
+          "cargo": [
+            -1.772229489489262,
+            20.389998147812914,
+            -19.884816239034777
+          ],
+          "teleports": 0
+        }
+      ],
+      "respawns": 0,
+      "resets": 0,
+      "frames": 5331,
+      "teleports": 0
+    },
+    {
+      "level": 24,
+      "id": "garden-of-turning-doors",
+      "pass": true,
+      "milestones": [
+        {
+          "name": "the same aperture starts its courtyard orbit",
+          "player": [
+            3.6963722279973403,
+            6,
+            4.996801467105623
+          ],
+          "cargo": [
+            1.19912530396156,
+            6.389998146251847,
+            4.854691254114366
+          ],
+          "teleports": 1
+        },
+        {
+          "name": "carried friend explores south balcony and the manual turning drive",
+          "player": [
+            3.6963722279973403,
+            6,
+            4.996801467105623
+          ],
+          "cargo": [
+            1.2222173015086222,
+            6.389998147776363,
+            4.9102572588981195
+          ],
+          "teleports": 1
+        },
+        {
+          "name": "folded garden stair reveals the yellow pavilion",
+          "player": [
+            -20.000006305726583,
+            11.010000005364418,
+            -17.99474368703218
+          ],
+          "cargo": [
+            -13.705245745137725,
+            6.389998147033814,
+            -9.28284884145864
+          ],
+          "teleports": 2
+        },
+        {
+          "name": "original companion joins the final garden",
+          "player": [
+            18.078345209055946,
+            15,
+            -17.955041874132487
+          ],
+          "cargo": [
+            17.35843028456121,
+            16.07111159794503,
+            -17.9664294707382
+          ],
+          "teleports": 3
+        },
+        {
+          "name": "both at exit",
+          "player": [
+            18.078345209055946,
+            15,
+            -17.955041874132487
+          ],
+          "cargo": [
+            17.35843028456121,
+            16.07111159794503,
+            -17.9664294707382
+          ],
+          "teleports": 3
+        }
+      ],
+      "respawns": 0,
+      "resets": 0,
+      "frames": 4400,
+      "teleports": 3
+    },
+    {
+      "level": 25,
+      "id": "opposed-shadows",
+      "pass": true,
+      "milestones": [
+        {
+          "name": "one weight moves two opposite shadows",
+          "player": [
+            -7.000035352537197,
+            0.12500000000000003,
+            12.72533488171225
+          ],
+          "cargo": [
+            -7.010627968430129,
+            0.5149981478050742,
+            12.005292623839004
+          ],
+          "teleports": 0
+        },
+        {
+          "name": "permanent gallery keeps height after losing light",
+          "player": [
+            -3.0886772290494853,
+            9,
+            -14.454738538004943
+          ],
+          "cargo": [
+            -7.010628458776517,
+            0.5149981478056914,
+            12.005293427377696
+          ],
+          "teleports": 0
+        },
+        {
+          "name": "cargo retrieval opens the other beam",
+          "player": [
+            -6.999983832516918,
+            9,
+            7.892954304747303
+          ],
+          "cargo": [
+            -1.8804602377881305,
+            9.389998148363055,
+            -14.626479483142132
+          ],
+          "teleports": 0
+        },
+        {
+          "name": "reverse overlook reveals the starting room",
+          "player": [
+            15.903426311035625,
+            18,
+            -14.500452427033546
+          ],
+          "cargo": [
+            16.623419614562536,
+            19.062348848131084,
+            -14.497956397038351
+          ],
+          "teleports": 0
+        },
+        {
+          "name": "both at exit",
+          "player": [
+            -14.073672606947012,
+            7,
+            22.51576221825858
+          ],
+          "cargo": [
+            -13.927753126914201,
+            8.072347414057411,
+            21.810686770494133
+          ],
+          "teleports": 1
+        }
+      ],
+      "respawns": 0,
+      "resets": 0,
+      "frames": 7551,
+      "teleports": 1
+    },
+    {
+      "level": 26,
+      "id": "crossflow-foundry",
+      "pass": true,
+      "milestones": [
+        {
+          "name": "the original load opens a real air shutter",
+          "player": [
+            -17.000281558394565,
+            0.12500000000000003,
+            22.028420751220633
+          ],
+          "cargo": [
+            -17.10521426266831,
+            0.5149981476580665,
+            21.07538569590518
+          ],
+          "teleports": 0
+        },
+        {
+          "name": "the first permanent gallery preserves height",
+          "player": [
+            -12.003565854645213,
+            8,
+            2.1051423319073432
+          ],
+          "cargo": [
+            -16.95559561006703,
+            0.5149981470430831,
+            20.404324860596976
+          ],
+          "teleports": 0
+        },
+        {
+          "name": "crossing streams expose the upper retaining dock",
+          "player": [
+            15.996345122563827,
+            16,
+            -14.103415648878135
+          ],
+          "cargo": [
+            -16.95559561006703,
+            0.5149981470430831,
+            20.404324860596976
+          ],
+          "teleports": 0
+        },
+        {
+          "name": "borrow the lift portals to recover their own power source",
+          "player": [
+            -20.249400180579443,
+            16,
+            11.852195488659172
+          ],
+          "cargo": [
+            6.997880055062361,
+            16.389997246188276,
+            -16.949623405624415
+          ],
+          "teleports": 0
+        },
+        {
+          "name": "both travellers cross the independent return stream",
+          "player": [
+            16.776567524741118,
+            16,
+            20.993971669050985
+          ],
+          "cargo": [
+            16.835788059405935,
+            17.073311989971575,
+            20.276399501375128
+          ],
+          "teleports": 0
+        },
+        {
+          "name": "both at exit",
+          "player": [
+            16.776567524741118,
+            16,
+            20.993971669050985
+          ],
+          "cargo": [
+            16.835788059405935,
+            17.073311989971575,
+            20.276399501375128
+          ],
+          "teleports": 0
+        }
+      ],
+      "respawns": 0,
+      "resets": 0,
+      "frames": 8266,
+      "teleports": 0
+    },
+    {
+      "level": 27,
+      "id": "conveyor-city",
+      "pass": true,
+      "milestones": [
+        {
+          "name": "ready to ride the saffron belt into the sky well",
+          "player": [
+            -12.904518448385915,
+            0,
+            16.99994211206855
+          ],
+          "cargo": [
+            -13.624516584905114,
+            1.0551497034507558,
+            16.99854434319471
+          ],
+          "teleports": 0
+        },
+        {
+          "name": "the ground belt turns horizontal speed into height",
+          "player": [
+            4.036958363288048,
+            4.136468698433268,
+            8.178207039408477
+          ],
+          "cargo": [
+            4.051709294909326,
+            0.940454133269271,
+            8.28098853363823
+          ],
+          "teleports": 1
+        },
+        {
+          "name": "height is retained on the side street",
+          "player": [
+            12.590107923315218,
+            8.08000000149012,
+            8.593838637599397
+          ],
+          "cargo": [
+            13.309567303104306,
+            9.154268849812778,
+            8.62203221525221
+          ],
+          "teleports": 1
+        },
+        {
+          "name": "the upper return reveals the reverse side of the high outlet",
+          "player": [
+            6.003325094162126,
+            16,
+            0.0001040453105539859
+          ],
+          "cargo": [
+            7.582726703333586,
+            8.389998146950221,
+            8.095787157035636
+          ],
+          "teleports": 1
+        },
+        {
+          "name": "ready for the upper conveyor crossing",
+          "player": [
+            15.198872792400508,
+            8,
+            11.000242302493422
+          ],
+          "cargo": [
+            15.918880408144044,
+            9.060241550902415,
+            11.003782009771319
+          ],
+          "teleports": 1
+        },
+        {
+          "name": "belt momentum becomes the final bridge",
+          "player": [
+            -20.9592398252674,
+            8,
+            -0.24150899462655337
+          ],
+          "cargo": [
+            -10.584689243864926,
+            13.807714010880261,
+            -0.24270397164949986
+          ],
+          "teleports": 2
+        },
+        {
+          "name": "both at exit",
+          "player": [
+            -20.08025567973179,
+            8,
+            -0.088349506884059
+          ],
+          "cargo": [
+            -19.36128785101713,
+            9.043046029185787,
+            -0.04895136544667809
+          ],
+          "teleports": 2
+        }
+      ],
+      "respawns": 0,
+      "resets": 0,
+      "frames": 5859,
+      "teleports": 2
+    },
+    {
+      "level": 28,
+      "id": "tidal-observatory",
+      "pass": true,
+      "milestones": [
+        {
+          "name": "the collector opens and the lagoon begins to rise",
+          "player": [
+            14.028795786056662,
+            0,
+            -0.000040419970938084626
+          ],
+          "cargo": [
+            13.308797075297065,
+            0.38999828017575877,
+            0.0009702577305761992
+          ],
+          "teleports": 0
+        },
+        {
+          "name": "equal tides reveal the middle garden",
+          "player": [
+            14.028795786056662,
+            2.9479288291125956,
+            -0.000040419970938084626
+          ],
+          "cargo": [
+            13.308802461168476,
+            3.2790564453349895,
+            0.0009700688153483558
+          ],
+          "teleports": 0
+        },
+        {
+          "name": "the tide changes which coral doorway is usable",
+          "player": [
+            -12.907969745442278,
+            3.052071170887406,
+            -0.0003456579016669987
+          ],
+          "cargo": [
+            -13.627960075330122,
+            4.110714401241417,
+            0.0028392108018777075
+          ],
+          "teleports": 0
+        },
+        {
+          "name": "the occupied coral island begins its return tide",
+          "player": [
+            -12.978453475808946,
+            3.052071170887406,
+            -0.00008095881865929847
+          ],
+          "cargo": [
+            -13.698448099649617,
+            3.442069318701587,
+            0.0026228908301518905
+          ],
+          "teleports": 0
+        },
+        {
+          "name": "the same water returns beneath both travellers",
+          "player": [
+            -12.978453475808946,
+            5.2016522743950375,
+            -0.00008095881865929824
+          ],
+          "cargo": [
+            -13.698442556524054,
+            5.591649209587088,
+            0.0026227384089528845
+          ],
+          "teleports": 0
+        },
+        {
+          "name": "both at exit",
+          "player": [
+            -19.917704812522672,
+            5.3,
+            -0.0000027348140472294073
+          ],
+          "cargo": [
+            -20.637697584352832,
+            6.346837876333873,
+            0.01084099966984434
+          ],
+          "teleports": 0
+        }
+      ],
+      "respawns": 0,
+      "resets": 0,
+      "frames": 4342,
+      "teleports": 0
+    },
+    {
+      "level": 29,
+      "id": "inverted-orchard",
+      "pass": true,
+      "milestones": [
+        {
+          "name": "the root crystal reverses and the free companion rises",
+          "player": [
+            -5.007049389076199,
+            0,
+            10.99841927876706
+          ],
+          "cargo": [
+            -12.24231566553845,
+            0.3899985553556533,
+            8.530433605263704
+          ],
+          "teleports": 0
+        },
+        {
+          "name": "the companion crosses a passage too low for its observer",
+          "player": [
+            8.991320064757538,
+            6,
+            4.999999940671308
+          ],
+          "cargo": [
+            14.804248781386729,
+            15.140027844140445,
+            -12.94484418499002
+          ],
+          "teleports": 0
+        },
+        {
+          "name": "borrow the pair for the independent grounded route",
+          "player": [
+            17.156671249193586,
+            9,
+            -18.4830444896867
+          ],
+          "cargo": [
+            15.384684403521945,
+            15.835001448208606,
+            -12.971720521050043
+          ],
+          "teleports": 1
+        },
+        {
+          "name": "the two versions of the garden meet at the same physical exit",
+          "player": [
+            17.291136209257257,
+            9,
+            -11.024003582204063
+          ],
+          "cargo": [
+            15.38470263536758,
+            9.38999854142151,
+            -12.971719844936512
+          ],
+          "teleports": 1
+        },
+        {
+          "name": "both at exit",
+          "player": [
+            17.291136209257257,
+            9,
+            -11.024003582204063
+          ],
+          "cargo": [
+            15.38470263536758,
+            9.38999854142151,
+            -12.971719844936512
+          ],
+          "teleports": 1
+        }
+      ],
+      "respawns": 0,
+      "resets": 0,
+      "frames": 4191,
+      "teleports": 1
+    },
+    {
+      "level": 30,
+      "id": "sunward-limit",
+      "pass": true,
+      "milestones": [
+        {
+          "name": "room30 first flight prepared",
+          "player": [
+            -22.614830659046316,
+            52,
+            -32.00870448526471
+          ],
+          "cargo": [
+            -22.821238365008444,
+            53.18,
+            -31.114615083180414
+          ],
+          "teleports": 0
+        },
+        {
+          "name": "north-south physical arc reaches the shared island",
+          "player": [
+            59.995434239386945,
+            40,
+            26.075000252042596
+          ],
+          "cargo": [
+            60.85545360565848,
+            41.18000002444959,
+            25.754984026786957
+          ],
+          "teleports": 1
+        },
+        {
+          "name": "turning the real outlet changes the last ballistic arc",
+          "player": [
+            49.11380606714092,
+            40,
+            24.030186276865205
+          ],
+          "cargo": [
+            49.73425695335792,
+            41.18,
+            23.354138425161985
+          ],
+          "teleports": 1
+        },
+        {
+          "name": "room30 final flight prepared",
+          "player": [
+            43.68405735920022,
+            40,
+            45.005200567853514
+          ],
+          "cargo": [
+            44.29213306260557,
+            41.18,
+            45.69240063983261
+          ],
+          "teleports": 1
+        },
+        {
+          "name": "the original travellers cross the final gap with conserved momentum",
+          "player": [
+            200.00477435902414,
+            28,
+            16.290768484521475
+          ],
+          "cargo": [
+            200.86475276509918,
+            29.180000006996064,
+            15.970648362860997
+          ],
+          "teleports": 2
+        },
+        {
+          "name": "both at exit",
+          "player": [
+            200.00054085151683,
+            28,
+            29.333700893359886
+          ],
+          "cargo": [
+            200.8606446569235,
+            29.18,
+            29.01394289037885
+          ],
+          "teleports": 2
+        }
+      ],
+      "respawns": 0,
+      "resets": 0,
+      "frames": 2689,
+      "teleports": 2
     }
   ]
 }
