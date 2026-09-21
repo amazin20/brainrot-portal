@@ -1,0 +1,91 @@
+{
+  "renderer": "CI Chromium / SwiftShader; NOT a user-device FPS benchmark",
+  "baseUrl": "http://127.0.0.1:4173/",
+  "range": {
+    "first": 30,
+    "last": 30
+  },
+  "ui": false,
+  "capturePuzzle": true,
+  "captureEarly": false,
+  "captureFull": false,
+  "puzzleClips": [],
+  "fullRoutes": [],
+  "renderSamples": [
+    {
+      "level": 30,
+      "elapsed": 9716.666666666659,
+      "player": [
+        -22.628794064713183,
+        52,
+        -32.01831637461712
+      ],
+      "camera": {
+        "position": [
+          -26.276331147744937,
+          59.16815991565683,
+          -30.858982425270735
+        ],
+        "quaternion": [
+          -0.3540143425944368,
+          -0.601207904890327,
+          -0.3365384271225028,
+          0.6324276934201444
+        ],
+        "projection": [
+          0.9266006053204624,
+          0,
+          0,
+          0,
+          0,
+          1.4825609685127399,
+          0,
+          0,
+          0,
+          0,
+          -1.0004000800160033,
+          -1,
+          0,
+          0,
+          -0.20004000800160032,
+          0
+        ]
+      },
+      "portals": [
+        null,
+        null
+      ],
+      "passes": 1,
+      "calls": 57,
+      "triangles": 839978,
+      "lines": 8,
+      "points": 0,
+      "geometries": 49,
+      "textures": 17,
+      "softwareRenderMs": 6829.29999999993
+    }
+  ],
+  "routes": [],
+  "errors": [],
+  "initial": {
+    "models": 6,
+    "fps": "1 FPS · 969.4 мс",
+    "oldHudHidden": true,
+    "audioState": "running"
+  },
+  "failure": {
+    "error": "Error: Error: Portal impact rejected at 0,16,-32: {\"valid\":false,\"index\":0,\"position\":[-22.74218687105182,52.000000001490115,-32.91586993181251],\"sequence\":1,\"surface\":\"West well viewing balcony / collision\",\"reason\":\"surface\"}",
+    "state": {
+      "level": 29,
+      "state": "playing",
+      "focused": true,
+      "hidden": false,
+      "locked": true,
+      "body": "playing",
+      "win": "screen modal-screen",
+      "pause": "screen modal-screen",
+      "button": "Погулять ещё ↻",
+      "error": ""
+    }
+  }
+}
