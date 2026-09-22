@@ -10,6 +10,7 @@ import { LabControls } from './LabControls.js';
 import { AudioController } from './AudioController.js';
 import { LabCamera } from './LabCamera.js';
 import { LabPortalActors } from './LabPortalActors.js';
+import { warmPortalRendering } from './LabPortalWarmup.js';
 import { LabPlayerAnimator } from './LabPlayerAnimator.js';
 import { LabHeldDevice } from './LabHeldDevice.js';
 import { LabPortals, portalBacksCollider, transformPortalPoint, pointInsidePortal } from './LabPortals.js';
@@ -79,6 +80,7 @@ export class LabGame {
     this.portals.prepare();
     this.portalActors.prepare();
     await this.renderer.compileAsync(this.scene, this.camera);
+    await warmPortalRendering(this);
     this.render();
     this.loadingProfile.firstFrameMs = performance.now() - compileStart;
     this.callbacks.onProgress({ percent: 100, label: 'Можно отправляться' });
@@ -286,7 +288,7 @@ export class LabGame {
     disposeLabLevel(this); this.buildLevel();
     this.portals.prepare();
     this.portalActors.prepare();
-    if (this.renderer?.compileAsync) await this.renderer.compileAsync(this.scene, this.camera);
+    if (this.renderer?.compileAsync) {await this.renderer.compileAsync(this.scene, this.camera);await warmPortalRendering(this);}
     this.performanceMonitor.reset(); this.accumulator = 0; this.lastFrame = performance.now();
     this.state = playing ? 'playing' : 'ready'; this.emitHud();
     this.renderer?.setAnimationLoop(this.animate);
@@ -346,13 +348,13 @@ export class LabGame {
     if (!hit || !this.portals?.ready) return true;
     const collider = this.colliders.find(c => c.mesh === object);
     const box = collider?.box ?? new THREE.Box3().setFromObject(object);
-    if (this.cameraRig?.clipsPortalBacking?.(box)) return false;
+    if (this.cameraRig?.clipsPortalBacking?.(box, object.uuid)) return false;
     // A camera is not a traveller: letting its boom pass through an entry
     // aperture before the player crosses puts it outside the room, looking at
     // the solid back of that same wall. Only a transported exit lens is exempt.
     const direction = this.cameraRig.raycaster.ray.direction;
     return !this.portals.portals.some(p => p && direction.dot(p.normal) >= -.00001
-      && pointInsidePortal(p, hit.point, .04) && portalBacksCollider(p, box));
+      && pointInsidePortal(p, hit.point, .04) && (p.backingIds?.has(object.uuid) || portalBacksCollider(p, box)));
   }
 
   firePortal(index) {
@@ -747,10 +749,10 @@ export class LabGame {
     let height = null;
     for (const f of this.floors) {
       const y = f.heightAt ? f.heightAt(x,z) : (f.y ?? 0);
-      if(y===null)continue;
+      if(y===null || f.enabled===false || y>maxY+.001 || x<f.minX || x>f.maxX || z<f.minZ || z>f.maxZ)continue;
       if (throughPortals && f.mesh && this.portalOpensCollider({ mesh: f.mesh,
         box: this.colliders.find(c => c.mesh === f.mesh)?.box }, new THREE.Vector3(x, y + CENTER_HEIGHT, z), PLAYER_RADIUS)) continue;
-      if (f.enabled !== false && y <= maxY + .001 && x >= f.minX && x <= f.maxX && z >= f.minZ && z <= f.maxZ) height = height === null ? y : Math.max(height, y);
+      height = height === null ? y : Math.max(height, y);
     }
     for (const ramp of this.ramps) {
       if (x < ramp.minX || x > ramp.maxX || z < ramp.minZ || z > ramp.maxZ) continue;
@@ -817,6 +819,7 @@ export class LabGame {
       if (planeDistance > radius + .7 + Math.abs(portal.normal.y) * CENTER_HEIGHT) return false;
       // The aperture opens both its thin white panel and the structural wall behind it.
       return collider.mesh.uuid === this.portalSurfaceIds[index]
+        || portal.backingIds?.has(collider.mesh.uuid)
         || (collider.portalOwner && collider.portalOwner.userData.portalColliderId === this.portalSurfaceIds[index])
         || portalBacksCollider(portal, collider.box);
     });

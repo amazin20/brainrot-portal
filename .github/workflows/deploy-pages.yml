@@ -78,6 +78,14 @@ jobs:
         run: |
           export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
           node scripts/open-browser-review.mjs
+      - name: Verify the reported horizontal portal and cold shader work on the public site
+        env:
+          PAGE_URL: ${{ steps.deployment.outputs.page_url }}
+          BUILD_COMMIT: ${{ github.sha }}
+          RECORD: '0'
+        run: |
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+          node scripts/portal-regression-browser.mjs
       - name: Preserve evidence from the public site itself
         if: always()
         uses: actions/upload-artifact@v4
@@ -86,4 +94,5 @@ jobs:
           path: |
             live-evidence/
             qa/open-browser/
+            qa/portal-regression/
           retention-days: 14

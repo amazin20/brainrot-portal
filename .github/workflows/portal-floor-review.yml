@@ -1,0 +1,38 @@
+name: Horizontal portal regression
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [fix/portal-traversal-performance-20260922]
+    paths: [.github/workflows/portal-floor-review.yml]
+permissions:
+  contents: read
+jobs:
+  floor:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: |
+          npm ci
+          npm install --no-save --package-lock=false puppeteer-core@24.16.0
+          npm run build
+          BUILD_COMMIT="$(git rev-parse HEAD)" node scripts/stamp-build.mjs v39-campaign-30
+          npm run preview -- --host 127.0.0.1 --port 4173 >floor-preview.log 2>&1 &
+          for i in {1..30}; do curl -fsS http://127.0.0.1:4173/ >/dev/null && break; sleep 1; done
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+          BUILD_COMMIT="$(git rev-parse HEAD)" node scripts/portal-regression-browser.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: portal-floor-native
+          path: |
+            qa/portal-regression/
+            floor-preview.log
+          retention-days: 14
