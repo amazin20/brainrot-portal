@@ -1,0 +1,47 @@
+name: Apply verified cabin recovery correction
+on:
+  push:
+    branches: [feat/laboratory-chapter-31-33]
+    paths: [.github/workflows/research-recall-fix.yml]
+permissions:
+  contents: write
+jobs:
+  source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Correct only the reproduced source behavior and retain its negative reproduction as a route
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          def change(file,old,new):
+            p=Path(file);s=p.read_text();assert old in s,(file,old);p.write_text(s.replace(old,new))
+          p='src/game/LabResearchChambers.js'
+          change(p,'()=>{drive.heights[0]=0;lower.stations[1].y=0;}','()=>{drive.gear=0;drive.heights[0]=0;lower.stations[1].y=0;}')
+          change(p,'()=>{drive.heights[1]=6;upper.stations[1].y=6;}','()=>{drive.gear=1;drive.heights[1]=6;upper.stations[1].y=6;}')
+          change(p,'E — опустить первую кабину к служебному этажу.','E — вернуть первую кабину и включить передачу I.')
+          change(p,'E — опустить вторую кабину к промежуточной галерее.','E — вернуть вторую кабину и включить передачу II.')
+          change('src/game/LabResearchJourney.js',"runResearch32(d,{route='powered-ascent'}={})","runResearch32(d,{route='powered-ascent',recover=false}={})")
+          change('src/game/LabResearchJourney.js',"check(g.interact()&&l.drive.gear===1,'Transmission selector missed');collect(d);", """check(g.interact()&&l.drive.gear===1,'Transmission selector missed');
+           if(recover){
+            walk(12,1);until(()=>g.playerGrounded&&g.playerPosition.y<.1,5,'Intermediate gallery fall missed');
+            walk(12,9);walk(-14,9);walk(-14.6,8);check(g.interact(),'Lower recall terminal missed');
+            until(()=>a.position.y<.03,5,'First cabin was not recalled to the real floor');
+            walk(-8,9);walk(-8,2);until(()=>a.position.y>5.98,25,'First cabin cannot recover a traveller after selecting the other gear');
+            walk(3,1);walk(6.3,2.5);check(g.interact()&&l.drive.gear===1,'Restored selector missed');
+            mark('Falling after changing the transmission still allows a physical return to the companion');
+           }
+           collect(d);""")
+          change('tests/lab-research-chapter.test.js','[32,{},16/9]','[32,{},16/9],[32,{recover:true},16/9]')
+          change('scripts/research-browser.mjs',"const options=process.env.ALTERNATE==='1'","const options=process.env.RECOVERY==='1'?{recover:true}:process.env.ALTERNATE==='1'")
+          PY
+          git diff --exit-code -- .github
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add src/game/LabResearchChambers.js src/game/LabResearchJourney.js tests/lab-research-chapter.test.js scripts/research-browser.mjs
+          if git diff --cached --name-only | grep '^.github/'; then exit 1; fi
+          git commit -m 'Allow physical return after changing cabin transmission and falling to service floor'
+          git push origin HEAD:feat/laboratory-chapter-31-33
+          git rev-parse HEAD
+          git rev-parse HEAD^{tree}
