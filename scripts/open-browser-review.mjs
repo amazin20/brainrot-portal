@@ -50,7 +50,7 @@ try{
   const after=await page.evaluate(()=>({classic:localStorage.getItem('brainrot-portal.preferences.v24'),legacy:localStorage.getItem('nesi.preferences.v8')}));assert.deepEqual(after,before,'Original campaign save changed');
   assert.deepEqual(errors,[],'Browser page errors');
   // Inspect the assembled environment separately. This is not a route camera.
-  await page.evaluate(room=>{const g=window.__NESI_DEMO_GAME__;const views={24:[[67,56,83],[0,13,0]],28:[[75,48,69],[0,10,-3]],30:[[-93,85,101],[9,24,0]]};g.cameraRig.restoreProjection?.();g.camera.position.fromArray(views[room][0]);g.camera.lookAt(...views[room][1]);g.camera.updateMatrixWorld(true);g.render();},room);
+  await page.evaluate(room=>{const g=window.__NESI_DEMO_GAME__;const views={24:[[49,47,45],[0,13,-4]],28:[[26,16,17],[-2,5,-8]],30:[[-58,76,48],[13,29,0]]};g.cameraRig.restoreProjection?.();g.camera.position.fromArray(views[room][0]);g.camera.lookAt(...views[room][1]);g.camera.updateMatrixWorld(true);g.render();},room);
   await page.screenshot({path:path.join(out,`${room}-overview.png`)});
   const report={room,url:url.href,source:info.commit,route,errors,saveIsolated:true,overview:'separately positioned art-inspection camera',...evidence};
   fs.writeFileSync(path.join(out,`${room}-report.json`),JSON.stringify(report,null,2));reports.push({room,pass:true,frames:evidence.frames.length,source:info.commit});

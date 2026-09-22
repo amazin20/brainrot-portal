@@ -92,7 +92,7 @@ export class OpenChamber extends Workshop{
   
   for(const sx of [-1,1])for(const sz of [-1,1])this.block([x+sx*(width/2-1.1),y-.83,z+sz*(depth/2-.32)],[1.0,.08,.07],'light',false);
   if(rail)for(const side of ['north','east','west','south'])this.rail(x0,x1,z0,z1,y,side);
-  return {mesh:deck,collider,floor:f,name};
+  return {mesh:deck,collider,floor:f,name,record};
  }
  rail(x0,x1,z0,z1,y,side){
   const alongX=side==='north'||side==='south',start=alongX?x0:z0,end=alongX?x1:z1,at=side==='north'?z0:side==='south'?z1:side==='east'?x1:x0;
