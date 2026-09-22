@@ -79,3 +79,14 @@ test('render warmup restores render state and culling even when compilation thro
  await assert.rejects(warmPortalPipeline({scene,renderer:r,portals:{targets:[{}]},camera:{}}),/driver failure/);
  assert.equal(current,target);assert.equal(r.clippingPlanes,clipping);assert.equal(r.shadowMap.autoUpdate,true);assert.equal(mesh.frustumCulled,true);assert.equal(testFlag,false);assert.deepEqual(scissor.toArray(),[2,3,400,300]);
 });
+
+test('sleeping cargo wakes when its reused light support moves away, not for unchanged or distant solids',()=>{
+ const p=new LabPhysics();p.addStaticBox('support',{min:[-3,6.8,-2],max:[3,7.4,2]});
+ p.addStaticBox('remote',{min:[40,-1,-2],max:[42,0,2]});
+ const b=p.createCargo({position:[0,7.8,0]});for(let i=0;i<600;i++)p.step(1/120);
+ assert.equal(p.sample().sleeping,true);
+ p.updateStaticBox('support',{min:[-3,6.8,-2],max:[3,7.4,2]});assert.equal(p.sample().sleeping,true);
+ p.updateStaticBox('remote',{min:[45,-1,-2],max:[47,0,2]});assert.equal(p.sample().sleeping,true);
+ p.updateStaticBox('support',{min:[10,6.8,-2],max:[16,7.4,2]});assert.equal(p.sample().sleeping,false);
+ for(let i=0;i<120;i++)p.step(1/120);assert.ok(b.position.y<2);p.dispose();
+});

@@ -169,9 +169,19 @@ export class LabPhysics {
     if (item.kind === 'ramp') throw new TypeError('A ramp cannot be reshaped as an axis-aligned box');
     const { half, center } = dimensions(bounds), { body } = item;
     const nextMask = enabled ? CARGO : 0;
+    const resized = half.distanceSquared(item.half) > EPSILON;
+    const moved = center.distanceSquared(item.target) > EPSILON;
+    // A reused light-bridge body can move away while remaining enabled. Wake
+    // the sleeping body whose old support changes, not every cargo every tick.
+    if ((resized || moved) && this.cargoBody?.sleepState === Body.SLEEPING) {
+      const p = this.cargoBody.position, margin = this.cargoSize * .87 + .06;
+      const nearby = (c, h) => Math.abs(p.x-c.x) <= h.x+margin
+        && Math.abs(p.y-c.y) <= h.y+margin && Math.abs(p.z-c.z) <= h.z+margin;
+      if (nearby(body.position, item.half) || nearby(center, half)) this.cargoBody.wakeUp();
+    }
     if (body.collisionFilterMask !== nextMask) this.cargoBody?.wakeUp();
     body.collisionFilterMask = nextMask;
-    if (half.distanceSquared(item.half) > EPSILON) {
+    if (resized) {
       body.removeShape(body.shapes[0]);
       body.addShape(new Box(half));
       item.half.copy(half);
