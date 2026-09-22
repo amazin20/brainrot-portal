@@ -1,0 +1,58 @@
+name: Uphill jump regression recording
+on:
+  push:
+    branches: [fix/player-exploration-20260922]
+    paths: [.github/workflows/exploration-jump-review.yml]
+permissions:
+  contents: read
+jobs:
+  ramp:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: |
+          npm ci
+          npm install --no-save --package-lock=false puppeteer-core@24.16.0
+          npm run build
+          BUILD_COMMIT="$(git rev-parse HEAD)" node scripts/stamp-build.mjs
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
+          npm run preview -- --host 127.0.0.1 --port 4173 >ramp-preview.log 2>&1 &
+          for i in {1..30}; do curl -fsS http://127.0.0.1:4173/ >/dev/null && break; sleep 1; done
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+          node --input-type=module <<'JS'
+          import fs from 'node:fs';import assert from 'node:assert/strict';import puppeteer from 'puppeteer-core';
+          fs.mkdirSync('qa/ramp-frames',{recursive:true});
+          const browser=await puppeteer.launch({executablePath:process.env.CHROME_PATH,headless:true,protocolTimeout:240000,args:['--no-sandbox','--disable-dev-shm-usage','--use-angle=swiftshader','--enable-unsafe-swiftshader']});
+          try{const p=await browser.newPage();p.setDefaultTimeout(180000);await p.setViewport({width:1280,height:720});const errors=[];p.on('pageerror',e=>errors.push(String(e)));
+          await p.goto('http://127.0.0.1:4173/?edition=open&debug=1&level=30',{waitUntil:'networkidle2'});await p.waitForFunction(()=>window.__NESI_DEMO_GAME__?.state==='ready');await p.click('#play-button');
+          const data=await p.evaluate(()=>{const g=window.__NESI_DEMO_GAME__;g.renderer.setAnimationLoop(null);g.resetRun(true);const r=g.ramps[0],z=-8;
+          const height=z=>r.lowY+(r.highY-r.lowY)*(r.highAt==='minZ'?(r.maxZ-z)/(r.maxZ-r.minZ):(z-r.minZ)/(r.maxZ-r.minZ));
+          g.playerPosition.set(-46,height(z),z);g.previousPlayerPosition.copy(g.playerPosition);g.playerVelocity.set(0,0,-15);g.playerGrounded=true;g.yaw=0;g.pitch=-.2;g.cameraRig.reset(g.playerPosition,g.yaw,g.pitch);
+          g.input.keys.add('ShiftLeft');g.input.keys.add('KeyW');g.input.jumpQueued=true;
+          const input=g.input.getMove().toArray(),frames=[],trace=[];let minimum=0,left=false,landed=false;
+          for(let i=0;i<360;i++){g.updatePlaying(1/120);g.updateVisuals(1/120,1);left ||= !g.playerGrounded;landed ||= left&&g.playerGrounded;
+           if(g.playerPosition.z>=r.minZ&&g.playerPosition.z<=r.maxZ)minimum=Math.min(minimum,g.playerPosition.y-height(g.playerPosition.z));
+           if(i%8===0){g.render();frames.push(g.renderer.domElement.toDataURL('image/png').split(',')[1]);trace.push({tick:i,p:g.playerPosition.toArray(),grounded:g.playerGrounded});}}
+          return{frames,trace,input,minimum,left,landed,kind:'Explicit staged reproduction start on the real ramp, followed by actual W+Shift+jump input and normal physics. 15 captured frames/s, not a device FPS measurement.'};});
+          assert.deepEqual(errors,[]);assert.deepEqual(data.input,[0,-1]);assert.ok(data.left&&data.landed);assert.ok(data.minimum>=-.001);
+          data.frames.forEach((f,i)=>fs.writeFileSync('qa/ramp-frames/'+String(i).padStart(5,'0')+'.png',Buffer.from(f,'base64')));delete data.frames;data.build=JSON.parse(fs.readFileSync('dist/build-info.json'));fs.writeFileSync('qa/ramp-reproduction.json',JSON.stringify(data,null,2));
+          }finally{await browser.close();}
+          JS
+          ffmpeg -y -framerate 15 -i qa/ramp-frames/%05d.png -c:v libx264 -crf 20 -pix_fmt yuv420p -movflags +faststart qa/uphill-jump.mp4
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: uphill-jump-native
+          path: |
+            qa/ramp-reproduction.json
+            qa/uphill-jump.mp4
+            qa/ramp-frames/00000.png
+            qa/ramp-frames/00010.png
+            qa/ramp-frames/00030.png
+            ramp-preview.log
+          retention-days: 14
