@@ -29,6 +29,20 @@ export class CommunicatingLifts{
  }
 }
 
+/** Explain the physical reason, including experiments that do not transfer water.
+ * Portal colour and prescribed route order do not determine this feedback. */
+export function hydraulicConnectionText(levels,ends,flowToEast=0){
+ if(!ends?.[0]||!ends?.[1])return 'НЕТ СОЕДИНЕНИЯ';
+ if(ends[0].basin===ends[1].basin)return 'ОБА ОТВЕРСТИЯ В РЕЗЕРВУАРЕ '+(ends[0].basin?'Б':'А');
+ const heads=ends.map(e=>Math.max(0,levels[e.basin]-e.sill));
+ if(Math.abs(flowToEast)<.005){
+  if(Math.max(...heads)<.001)return 'ВОДА НИЖЕ ОБОИХ ОТВЕРСТИЙ';
+  if(Math.abs(heads[0]-heads[1])<.025)return 'ДАВЛЕНИЕ У ОТВЕРСТИЙ ВЫРОВНЕНО';
+  return 'ПОТОК ЗАМЕДЛЯЕТСЯ';
+ }
+ return flowToEast>0?'ВОДА: А → Б':'ВОДА: Б → А';
+}
+
 function glazedLift(k,x,name){
  const car=k.carrier(name,[[x,0,-12],[x,8,-12]],{width:12,depth:12,portal:false});
  const glass=new THREE.MeshStandardMaterial({name:'Hydraulic inspection glazing',color:0x6ad6cc,roughness:.16,transparent:true,opacity:.16,depthWrite:false});
@@ -59,6 +73,7 @@ export function buildOpenHydraulics(game,index=27){
  for(const [i,x]of [[0,-5],[1,5]])for(const [kind,y]of [['low',2.85],['high',10.85]]){
   const panel=k.panel((i?'east':'west')+'-'+kind,[x,y,-18],[0,0,1],8,5.8);ports.push({basin:i,panel,kind});
   k.block([x,y,-18.7],[9.2,7,.8],'shell');
+  sign(k,`${i?'Б':'А'} / ${kind==='low'?'НИЖНЕЕ':'ВЕРХНЕЕ'} СОЕДИНЕНИЕ`,[x,y+3.13,-17.84],[0,0,1],7.6,.42);
   const basinX=i?14:-14;
   k.geometry(new THREE.CylinderGeometry(.32,.32,Math.abs(basinX-x),16),'metal',[(basinX+x)/2,y,-20],Q().setFromAxisAngle(V(0,0,1),Math.PI/2),{solid:true,name:'Reservoir feed manifold'});
   k.geometry(new THREE.CylinderGeometry(.32,.32,5,16),'shell',[basinX,y,-17.5],Q().setFromAxisAngle(V(1,0,0),Math.PI/2),{solid:true,name:'Continuous reservoir connection'});
@@ -73,12 +88,12 @@ export function buildOpenHydraulics(game,index=27){
  const endpoint=p=>{if(!p)return null;const spec=ports.find(e=>e.panel.mesh.uuid===p.surfaceId);if(!spec)return null;
   const right=V(1,0,0).applyQuaternion(p.quaternion),up=V(0,1,0).applyQuaternion(p.quaternion);
   return{basin:spec.basin,sill:Math.max(0,p.position.y-Math.hypot(right.y*p.width,up.y*p.height))};};
- let connected=false,flowToEast=0;
- k.ticks.unshift(dt=>{const ends=game.portals.portals.map(endpoint);connected=ends.length===2&&ends.every(Boolean)&&ends[0].basin!==ends[1].basin;
+ let connected=false,flowToEast=0,latestEnds=[null,null];
+ k.ticks.unshift(dt=>{const ends=game.portals.portals.map(endpoint);latestEnds=ends;connected=ends.length===2&&ends.every(Boolean)&&ends[0].basin!==ends[1].basin;
   tides.step(dt,connected?ends:null);flowToEast=connected?tides.flow*(ends[0].basin===0?1:-1):0;[a,b].forEach((f,i)=>{f.stations[1].y=tides.levels[i];f.target=1;f.speed=14;});});
  k.resets.push(()=>{tides.reset();for(const [i,f]of [a,b].entries()){f.stations[0].y=f.stations[1].y=tides.levels[i];f.reset();}});
  for(const d of k.decks.filter(d=>d.y>=4))reinforceDeck(k,d,{legs:false});
- const stateText=()=>!connected?'НЕТ СОЕДИНЕНИЯ':Math.abs(tides.flow)<.005?'ПОТОК ОСТАНОВИЛСЯ':flowToEast>0?'ВОДА: А → Б':'ВОДА: Б → А';
+ const stateText=()=>hydraulicConnectionText(tides.levels,latestEnds,flowToEast);
  const status=labInstrument(k,[0,15,-18.98],{width:20,height:2,read:()=>stateText()+'\nБЕЛЫЕ ОТВЕРСТИЯ СОЕДИНЯЮТСЯ ПОРТАЛАМИ'});
  k.block([0,13.2,.3],[54,.55,.6],'dark');for(const x of [-26,26])k.column(x,.3,-2,13.5,.45);
  for(const x of [-14,14])k.block([x,11.8,.50],[10.3,2.3,.24],'dark',false);

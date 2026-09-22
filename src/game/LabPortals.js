@@ -377,8 +377,10 @@ function portalSurface(color, texture) {
         float radial = length((apertureUv - 0.5) * 2.0);
         float edge = smoothstep(0.92, 1.0, radial);
         vec3 dormant = tint * (0.10 + 0.05 * radial) + vec3(0.012, 0.018, 0.028);
-        vec3 destination = texture2D(view, clamp(screenUv, vec2(0.001), vec2(0.999))).rgb;
-        vec3 result = mix(dormant, destination, linked);
+        vec3 result = dormant;
+        // A lone aperture has no destination yet. Do not sample an unrendered
+        // HDR attachment only to multiply its value by zero afterwards.
+        if (linked > 0.5) result = texture2D(view, clamp(screenUv, vec2(0.001), vec2(0.999))).rgb;
         result += tint * edge * 0.12;
         gl_FragColor = vec4(result, 1.0);
         #include <tonemapping_fragment>

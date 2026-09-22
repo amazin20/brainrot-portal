@@ -32,13 +32,16 @@ The existing complete routes remain required, with no reduced win assertions.
 
 Prepare real canvas, HDR render-target, transported-camera global clipping and
 split-character material variants during loading. A compile call alone cannot
-stand in for initializing those renderer paths. The warmup uses 1-pixel scissored
-draws, leaves gameplay/portals untouched, and restores render state even on error.
+stand in for initializing those renderer paths. The warmup uses tiny scissored draws, explicitly exercises the hidden portal/shot
+material pools on a covered pixel, and awaits an asynchronous GPU fence. It leaves
+gameplay/portals untouched and restores render state even on error.
 Actual portal resolution, MSAA, recursion, frequency, camera and visible materials
 are not reduced. The full native before/after profile is needed to quantify this;
 this document is not a promise of the user's device FPS.
 
-Unchanged static masks no longer wake the cargo or invalidate broadphase. Portal
+Unchanged static masks no longer wake the cargo or invalidate broadphase. A sleeping
+cargo still wakes when a nearby reused support moves/resizes or a mask changes;
+the regression includes the classic light-bridge recovery. Portal
 bounds use equivalent centre/extent arithmetic instead of eight allocated corners,
 and floor queries reject unrelated decks before aperture calculations.
 
@@ -53,7 +56,7 @@ Room 28 is now a 60 by 47 metre enclosed laboratory, rather than a 128 by 98 met
 open-sky footprint. The exit is visibly above reservoir A. Two 12 metre platforms,
 a shared 4 metre gallery, a finite 8 metre water budget and a real return ramp make
 the cause/effect inspectable. Instruments display actual A/B heights and actual
-flow direction, including disconnected/stopped states. Colour of a portal is not
+flow direction, including disconnected, dry, equal-pressure and same-reservoir states. Colour of a portal is not
 a progress flag. Breaking the connection preserves the water. Both equal-head and
 full-transfer approaches are supported and separately tested.
 
