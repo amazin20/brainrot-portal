@@ -1,0 +1,28 @@
+name: Player exploration workspace
+on:
+  push:
+    branches: [fix/player-exploration-20260922]
+    paths: [.github/workflows/exploration-workspace.yml]
+permissions:
+  contents: read
+jobs:
+  workspace:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: |
+          npm ci
+          npm install --no-save --package-lock=false puppeteer-core@24.16.0
+          mkdir -p /tmp/exploration
+          git rev-parse HEAD > /tmp/exploration/SOURCE_COMMIT
+          tar --exclude=.git -czf /tmp/exploration/project.tar.gz .
+      - uses: actions/upload-artifact@v4
+        with:
+          name: player-exploration-workspace
+          path: /tmp/exploration/
+          retention-days: 2
