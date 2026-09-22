@@ -76,12 +76,12 @@ export class OpenChamber extends Workshop{
  deck(name,x0,x1,z0,z1,y,{color='floor',rail=false}={}){
   if(x1-x0<OPEN_METRICS.walkway||z1-z0<OPEN_METRICS.walkway)throw new RangeError('A new walkable deck must provide at least 8 m in both axes: '+name);
   const width=x1-x0,depth=z1-z0,x=(x0+x1)/2,z=(z0+z1)/2;
-  const firstEnvelope=this.envelopes.length;
   const deck=this.block([x,y-.30,z],[width,.60,depth],color,true,this.world.root,.035);
   deck.name=name;const collider=this.envelopes.at(-1);
-  const f={minX:x0,maxX:x1,minZ:z0,maxZ:z1,y,mesh:collider.mesh,enabled:true};this.game.floors.push(f);this.world.floors.push(f);const record={name,...f,backingIds:[]};this.decks.push(record);
+  const f={minX:x0,maxX:x1,minZ:z0,maxZ:z1,y,mesh:collider.mesh,enabled:true};this.game.floors.push(f);this.world.floors.push(f);const record={name,...f,portalBackingColliders:[collider]};this.decks.push(record);
   // The chassis is below the running surface, not another almost-coplanar skin.
   this.block([x,y-.90,z],[width-.65,1.0,depth-.65],'dark');
+  record.portalBackingColliders.push(this.envelopes.at(-1));
   for(const side of [-1,1]){
    this.block([x+side*(width/2-.20),y-.84,z],[.20,.38,depth-.8],'shell');
    this.block([x,y-.84,z+side*(depth/2-.20)],[width-.8,.38,.20],'shell');
@@ -92,7 +92,6 @@ export class OpenChamber extends Workshop{
   
   for(const sx of [-1,1])for(const sz of [-1,1])this.block([x+sx*(width/2-1.1),y-.83,z+sz*(depth/2-.32)],[1.0,.08,.07],'light',false);
   if(rail)for(const side of ['north','east','west','south'])this.rail(x0,x1,z0,z1,y,side);
-  record.backingIds.push(...this.envelopes.slice(firstEnvelope).filter(c=>c.box.max.y<=y+.02).map(c=>c.mesh.uuid));
   return {mesh:deck,collider,floor:f,name,record};
  }
  rail(x0,x1,z0,z1,y,side){
@@ -135,7 +134,8 @@ export class OpenChamber extends Workshop{
  loadPad(name,p,size=8){
   const surface=this.panel(name,[p[0],p[1]+.18,p[2]],[0,1,0],size,size);
   const f={minX:p[0]-size/2,maxX:p[0]+size/2,minZ:p[2]-size/2,maxZ:p[2]+size/2,y:p[1]+.18,mesh:surface.mesh,enabled:true};this.game.floors.push(f);
-  const pad={surface,position:V(...p),loaded:()=>cargoLoadsPlate(this.game.cargo,this.game.heldCube,surface.getFrame())};this.pads.push(pad);
+  const hostDeck=this.decks.find(d=>Math.abs(d.y-p[1])<.001&&p[0]-size/2>=d.minX&&p[0]+size/2<=d.maxX&&p[2]-size/2>=d.minZ&&p[2]+size/2<=d.maxZ);
+  const pad={surface,hostDeck,position:V(...p),loaded:()=>cargoLoadsPlate(this.game.cargo,this.game.heldCube,surface.getFrame())};this.pads.push(pad);
   return pad;
  }
  ramp(name,x0,x1,z0,z1,y0,y1){
@@ -208,14 +208,11 @@ export class OpenChamber extends Workshop{
   this.routes.push({name:'recovery promenade',width:10,headroom:20});
  }
  finishOpen(spawn,cargo,goal,extra={}){
-  // A floor portal cuts the actual supporting deck assembly, including its
-  // deep chassis. Never globally enlarge the wall-depth tolerance: a separate
-  // floor, railing or machine below must remain a real obstacle.
-  for(const surface of this.world.surfaces){
-   if(!surface.portal)continue;const f=surface.getFrame();if(f.normal.y<.999)continue;
-   const decks=this.decks.filter(d=>f.center.x>=d.minX&&f.center.x<=d.maxX&&f.center.z>=d.minZ&&f.center.z<=d.maxZ&&f.center.y-d.y>=-.04&&f.center.y-d.y<.5);
-   surface.mesh.userData.portalBackingIds=[...new Set(decks.flatMap(d=>d.backingIds))];
-  }
+  // Pads can sit on a multi-layer deck: register its OWN skin, chassis and
+  // closed hull, never nearby pillars or other platforms. The common portal
+  // solver still requires the actor to fit the aperture and its throat depth.
+  for(const pad of this.pads)if(pad.hostDeck)pad.surface.mesh.userData.portalBackingIds=
+   pad.hostDeck.portalBackingColliders.map(c=>c.mesh.uuid);
   const level=super.finish(spawn,cargo,goal,{workshop:this,spec:this.spec,portalPuzzle:true,openChamber:true,viewDistance:380,...extra});
   level.spawnView??={yaw:0,pitch:-.02};level.clearance={minimumWalkway:8,minimumLanding:12,minimumHeadroom:7,decks:this.decks.map(({name,minX,maxX,minZ,maxZ,y})=>({name,minX,maxX,minZ,maxZ,y})),routes:this.routes};
   level.dispose=()=>this.restoreLight();

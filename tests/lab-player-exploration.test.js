@@ -5,7 +5,6 @@ import {LabGame} from '../src/game/LabGame.js';
 import {LabPortals,makePortalFrame,pointInsidePortal,portalIntersectsBox,portalBacksCollider} from '../src/game/LabPortals.js';
 import {LabPhysics,sampleRampSurface} from '../src/game/LabPhysics.js';
 import {sweepRampContact} from '../src/game/LabRampContact.js';
-import {warmPortalPipeline} from '../src/game/LabRenderWarmup.js';
 const V=(...v)=>new THREE.Vector3(...v);
 function fixture(epic=true){
  const g=new LabGame({container:null,touch:false}),move=new THREE.Vector2();
@@ -44,7 +43,7 @@ test('grounded downhill follows the support; jump still detaches from it',()=>{
 });
 test('an explicit supporting hull opens only inside its aperture; an unrelated floor underneath does not',()=>{
  const g=fixture(false),support=box(g,[-6,-2.5,-6],[6,-.58,6]),other=box(g,[-6,-3.5,-6],[6,-3,6]);
- g.portals.place(0,V(0,.18,0),V(0,1,0));g.portals.place(1,V(20,4,0),V(0,0,1));g.portals.portals[0].backingIds=[support.mesh.uuid];
+ g.portals.place(0,V(0,.18,0),V(0,1,0));g.portals.place(1,V(20,4,0),V(0,0,1));g.portals.portals[0].backingIds=new Set([support.mesh.uuid]);
  assert.equal(g.portalOpensCollider(support,V(0,0,0),.43),true);
  assert.equal(g.portalOpensCollider(support,V(4,0,0),.43),false);
  assert.equal(g.portalOpensCollider(other,V(0,0,0),.43),false);g.portals.dispose();
@@ -71,13 +70,6 @@ test('an unchanged static collision mask does not wake cargo or dirty broadphase
  for(let i=0;i<1000;i++)LabPhysics.prototype.setStaticEnabled.call(g,'hull',true);
  assert.equal(wakes,previous);assert.equal(g.world.broadphase.dirty,false);
  LabPhysics.prototype.setStaticEnabled.call(g,'hull',false);assert.equal(wakes,previous+1);assert.equal(g.world.broadphase.dirty,true);
-});
-test('render warmup restores render state and culling even when compilation throws',async()=>{
- const scene=new THREE.Scene(),mesh=new THREE.Mesh(new THREE.BoxGeometry(),new THREE.MeshBasicMaterial());scene.add(mesh);
- const clipping=[],viewport=new THREE.Vector4(2,3,400,300),scissor=viewport.clone(),target={name:'original'};
- let current=target,testFlag=false;const r={clippingPlanes:clipping,shadowMap:{autoUpdate:true,needsUpdate:false},info:{programs:[]},getRenderTarget:()=>current,getViewport:v=>v.copy(viewport),getScissor:v=>v.copy(scissor),getScissorTest:()=>testFlag,setRenderTarget:t=>{current=t;},setViewport:v=>viewport.copy(v),setScissor:(...a)=>{if(a[0]?.isVector4)scissor.copy(a[0]);else scissor.set(...a);},setScissorTest:b=>testFlag=b,render:()=>{throw Error('synthetic driver failure');}};
- await assert.rejects(warmPortalPipeline({scene,renderer:r,portals:{targets:[{}]},camera:{}}),/driver failure/);
- assert.equal(current,target);assert.equal(r.clippingPlanes,clipping);assert.equal(r.shadowMap.autoUpdate,true);assert.equal(mesh.frustumCulled,true);assert.equal(testFlag,false);assert.deepEqual(scissor.toArray(),[2,3,400,300]);
 });
 
 test('sleeping cargo wakes when its reused light support moves away, not for unchanged or distant solids',()=>{

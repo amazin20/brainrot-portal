@@ -5,7 +5,7 @@ async function room(n){game??=await createHeadlessGame();game.chamberEdition='op
 for(const angle of [0,45,90,135,180,225,270,315])test(`actual room 24: approach a shifted floor aperture from ${angle} degrees`,async()=>{
  const g=await room(24),pad=g.firstLevel.panels['ground-load'],car=g.firstLevel.car.panel,c=pad.getFrame().center.clone().add(new THREE.Vector3(.65,0,-.55));
  for(const [i,s,p]of [[0,pad,c],[1,car,car.getFrame().center]]){const result=g.portals.placeOnPanel(i,s.mesh,p);assert.equal(result.ok,true);g.portalSurfaceIds[i]=s.mesh.uuid;}
- assert.ok(g.portals.portals[0].backingIds.length>1,'The deep deck must be owned, not globally ignored');
+ assert.ok(g.portals.portals[0].backingIds.size>1,'The deep deck must be owned, not globally ignored');
  const a=angle*Math.PI/180;g.playerPosition.set(c.x+Math.cos(a)*3,.2,c.z+Math.sin(a)*3);g.previousPlayerPosition.copy(g.playerPosition);g.playerVelocity.set(0,0,0);g.yaw=0;
  g.input.getMove=()=>{const dx=c.x-g.playerPosition.x,dz=c.z-g.playerPosition.z;return Math.hypot(dx,dz)<.15?new THREE.Vector2():new THREE.Vector2(dx,dz).normalize().multiplyScalar(.55);};
  for(let i=0;i<600&&!g.teleportCount;i++)g.updatePlaying(1/120);

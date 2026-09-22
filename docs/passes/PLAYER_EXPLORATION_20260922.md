@@ -1,6 +1,9 @@
 # Player exploration repair — 22 September 2026
 
-Baseline: published cb882f9b3e6dc200dedd3ab05a4b3fb0fa9f7faa.
+Original reproduction: cb882f9b3e6dc200dedd3ab05a4b3fb0fa9f7faa.
+Integrated with concurrently published portal fix 436c184622377f7d311880fd17d54168d383957a.
+Its Set-based backing ownership, shader warmup, saved-quality guard and all original
+source/native/public regressions are preserved, rather than overwritten.
 Scope: shared portal/character controller; open-edition rooms 24, 28, 30.
 The other 27 layouts are not rebuilt. Original character/cargo/gun GLBs stay unchanged.
 
@@ -30,14 +33,17 @@ The existing complete routes remain required, with no reduced win assertions.
 
 ## Portal rendering
 
-Prepare real canvas, HDR render-target, transported-camera global clipping and
-split-character material variants during loading. A compile call alone cannot
-stand in for initializing those renderer paths. The warmup uses tiny scissored draws, explicitly exercises the hidden portal/shot
-material pools on a covered pixel, and awaits an asynchronous GPU fence. It leaves
-gameplay/portals untouched and restores render state even on error.
-Actual portal resolution, MSAA, recursion, frequency, camera and visible materials
-are not reduced. The full native before/after profile is needed to quantify this;
-this document is not a promise of the user's device FPS.
+The published `LabPortalWarmup.js` path from PR56 remains authoritative: canvas,
+HDR output, global/local clipping and depth shadow variants are prepared behind
+loading. Its saved-quality guard is retained so `onReady` does not destroy the
+already warmed shadow target. A second independent warmup implementation was
+removed during integration rather than running duplicate preloads.
+
+Two earlier isolated comparisons on the old baseline reduced paired-view shader
+work but did NOT eliminate the very first software-driver stall. They are not
+advertised as elimination of all freezes. Final native tests require zero in-play
+shader links and successful actual floor entry, reverse exit and original cargo.
+Graphics resolution, refresh frequency, MSAA and recursion are not reduced.
 
 Unchanged static masks no longer wake the cargo or invalidate broadphase. A sleeping
 cargo still wakes when a nearby reused support moves/resizes or a mask changes;

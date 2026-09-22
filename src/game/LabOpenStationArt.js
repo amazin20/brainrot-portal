@@ -40,7 +40,7 @@ function closedHull(width,depth){
 export function reinforceDeck(k,deck,{legs=true}={}){
  const {minX,maxX,minZ,maxZ,y}=deck,w=maxX-minX,d=maxZ-minZ,x=(minX+maxX)/2,z=(minZ+maxZ)/2;
  k.geometry(closedHull(w-.18,d-.18),'shell',[x,y,z],Q(),{solid:true,name:'Closed load-bearing hull / '+deck.name});
- deck.backingIds?.push(k.envelopes.at(-1).mesh.uuid);
+ deck.portalBackingColliders?.push(k.envelopes.at(-1));
  // Factory access ribs sit on the hull's vertical band, not on its walking face.
  for(let p=minX+2.4;p<maxX-1;p+=2.8)for(const s of [-1,1]){
   k.block([p,y-1.05,z+s*(d/2-.37)],[1.75,.46,.16],'dark',false);
