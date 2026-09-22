@@ -1,4 +1,4 @@
-name: Wire and inspect research chapter
+name: Native research review without repository writes
 on:
   push:
     branches: [feat/laboratory-chapter-31-33]
@@ -6,38 +6,7 @@ on:
 permissions:
   contents: read
 jobs:
-  wire:
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-    permissions:
-      contents: write
-    outputs:
-      revision: ${{ steps.commit.outputs.revision }}
-    steps:
-      - uses: actions/checkout@v4
-      - name: Append the new registry entries and extend existing release gates
-        run: python3 .github/research-wire.py
-      - name: Commit the readable integration to this branch only
-        id: commit
-        run: |
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add src/game scripts tests docs .github
-          git diff --cached --stat
-          git commit -m "Integrate laboratory rooms31–33 and extend every campaign release count"
-          git push origin HEAD:feat/laboratory-chapter-31-33
-          echo "revision=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
-          mkdir -p /tmp/research-source
-          git rev-parse HEAD > /tmp/research-source/COMMIT
-          git rev-parse HEAD^{tree} > /tmp/research-source/TREE
-          git archive --format=tar.gz HEAD > /tmp/research-source/source.tar.gz
-      - uses: actions/upload-artifact@v4
-        with:
-          name: research-integrated-source
-          path: /tmp/research-source/
-          retention-days: 3
   native:
-    needs: wire
     runs-on: ubuntu-latest
     timeout-minutes: 20
     strategy:
@@ -45,12 +14,26 @@ jobs:
       matrix:
         room: [31, 32, 33]
     env:
-      BUILD_COMMIT: ${{ needs.wire.outputs.revision }}
       ROOMS: ${{ matrix.room }}
     steps:
       - uses: actions/checkout@v4
+      - name: Prepare and identify the local test tree without pushing repository changes
+        run: |
+          python3 .github/research-wire.py
+          git config user.name 'Local verification snapshot'
+          git config user.email 'local-verification@example.invalid'
+          git add src/game scripts tests docs .github
+          git commit -m 'Local research verification snapshot (not pushed)'
+          echo "BUILD_COMMIT=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
+          mkdir -p qa/research-source
+          git rev-parse HEAD > qa/research-source/COMMIT
+          git rev-parse HEAD^{tree} > qa/research-source/TREE
+          git archive --format=tar.gz HEAD > qa/research-source/source.tar.gz
+      - uses: actions/upload-artifact@v4
         with:
-          ref: ${{ needs.wire.outputs.revision }}
+          name: research-source-${{ matrix.room }}
+          path: qa/research-source/
+          retention-days: 3
       - uses: actions/setup-node@v4
         with:
           node-version: 22
