@@ -1,55 +1,20 @@
-name: Horizontal portal native verification
+name: Horizontal portal regression
 on:
+  pull_request:
+    branches: [main]
   push:
     branches: [fix/portal-traversal-performance-20260922]
     paths: [.github/workflows/portal-floor-review.yml]
 permissions:
   contents: read
 jobs:
-  hook:
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-    permissions:
-      contents: write
-    outputs:
-      revision: ${{ steps.commit.outputs.revision }}
-    steps:
-      - uses: actions/checkout@v4
-      - name: Add the diagnostic entry beside the existing route hooks
-        run: |
-          python3 - <<'PY'
-          from pathlib import Path
-          p=Path('src/main.js');s=p.read_text()
-          key='      window.__NESI_RUN_PORTAL_EDGE_ROUTE__=async(options={})=>{'
-          addition="""      window.__NESI_RUN_FLOOR_PORTAL_ROUTE__=async(options={})=>{
-                  const {runPortalFloorJourney}=await import('./game/LabPortalFloorJourney.js');
-                  game.renderer.setAnimationLoop(null);hideScreens();setState('playing');
-                  try{return await runPortalFloorJourney(game,{...options,onMilestone:mark=>{game.render();window.__NESI_CAPTURE_LEVEL_MARK__?.(mark);}});}
-                  finally{game.render();clearInput();setState(game.state);diagnostics();}
-                };
-          """
-          # Normalize the embedded Python indentation to the existing JS block.
-          addition='\n'.join(line[8:] if i>0 and line.startswith('        ') else line for i,line in enumerate(addition.split('\n')))
-          assert s.count(key)==1
-          assert '__NESI_RUN_FLOOR_PORTAL_ROUTE__' not in s
-          p.write_text(s.replace(key,addition+key))
-          PY
-      - id: commit
-        run: |
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add src/main.js
-          git commit -m 'Expose ordinary floor regression only in diagnostic mode'
-          git push origin HEAD:fix/portal-traversal-performance-20260922
-          echo "revision=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
   floor:
-    needs: hook
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ needs.hook.outputs.revision }}
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
       - uses: actions/setup-node@v4
         with:
           node-version: 22
