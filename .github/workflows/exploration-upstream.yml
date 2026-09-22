@@ -1,0 +1,25 @@
+name: Read published portal repair
+on:
+  push:
+    branches: [fix/player-exploration-20260922]
+    paths: [.github/workflows/exploration-upstream.yml]
+permissions:
+  contents: read
+jobs:
+  source:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: 436c184622377f7d311880fd17d54168d383957a
+          fetch-depth: 2
+      - run: |
+          mkdir -p /tmp/published-repair
+          git diff cb882f9b3e6dc200dedd3ab05a4b3fb0fa9f7faa HEAD > /tmp/published-repair/upstream.patch
+          git rev-parse HEAD > /tmp/published-repair/COMMIT
+          sha256sum /tmp/published-repair/upstream.patch > /tmp/published-repair/SHA256
+      - uses: actions/upload-artifact@v4
+        with:
+          name: published-portal-repair
+          path: /tmp/published-repair/
+          retention-days: 2
