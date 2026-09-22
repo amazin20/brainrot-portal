@@ -45,7 +45,7 @@ for(let number=22;number<=30;number++)test(`room ${number}: victory requires the
  game.resetRun(true);assert.equal(level.isWon(),false);assert.equal(game.physics.cargoBody,body);assert.equal(game.cargo.group.uuid,identity);
 });
 
-test('numbered finale returns to room 1 with ordinary camera, light, fog and companion lifecycle',async()=>{
+test('former finale clears kinetic effects into room31; new finale returns to room1',async()=>{
  // Supply the production scene fog omitted by the headless rendering stub.
  game.scene.fog=new THREE.Fog(0xb3ced6,64,120);
  await game.selectLevel(0,false);
@@ -59,8 +59,15 @@ test('numbered finale returns to room 1 with ordinary camera, light, fog and com
  // catches retained flashes/FOV after a real kinetic presentation update.
  director.update({dt:.1,velocity:new THREE.Vector3(32,9,0),grounded:false,active:true,enabled:true});
  director.portal(34,2);assert.ok(director.amount>0&&director.portalPulse>0);
- const next=nextCampaignLevel(game.levelIndex,CAMPAIGN.length);assert.equal(next,0);
+ const next=nextCampaignLevel(game.levelIndex,CAMPAIGN.length);assert.equal(next,30);
  await game.selectLevel(next,false);game.updateVisuals(1/60);
+ assert.equal(game.levelIndex,30);assert.equal(game.kineticMode,false);assert.equal(game.velocityCompanion,null);
+ assert.equal(director.amount,0);assert.equal(director.portalPulse,0);assert.equal(director.enabled,false);
+ assert.ok(finaleRoots.every(n=>n.parent===null));
+ assert.ok(finaleLights.every(n=>!lights().includes(n)));
+ for(const number of [32,33])await game.selectLevel(number-1,false);
+ assert.equal(nextCampaignLevel(game.levelIndex,CAMPAIGN.length),0);
+ await game.selectLevel(0,false);game.updateVisuals(1/60);
  assert.equal(game.levelIndex,0);assert.equal(game.kineticMode,false);assert.equal(game.velocityCompanion,null);
  assert.equal(game.camera.far,130);assert.equal(game.cameraRig.epicMode,false);assert.equal(game.cameraRig.epicFraming,0);
  assert.equal(game.velocityFocus,false);assert.equal(game.kinetic,null);

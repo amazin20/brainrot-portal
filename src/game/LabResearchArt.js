@@ -10,6 +10,8 @@ export class ResearchChamber extends OpenChamber {
  constructor(game,spec,index,theme,bounds,base,roof){
   super(game,spec,index,theme);this.bounds=bounds;this.ceiling=roof;this.base=base;
   encloseLab(this,{base,roof});
+  // Report the actual room wall, not the brighter paint on machine housings.
+  this.world.root.traverse(o=>{if(o.isMesh&&o.material?.name==='Structural laboratory wall')this.world.materials.wall=o.material;});
   const foundation=this.envelopes[0];
   const service=this.deck('Continuous service and recovery floor',bounds.minX+1,bounds.maxX-1,bounds.minZ+1,bounds.maxZ-1,base,{color:'dark'});
   service.record.portalBackingColliders.push(foundation);

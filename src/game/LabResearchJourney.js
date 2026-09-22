@@ -25,7 +25,7 @@ export function runResearch32(d,{route='powered-ascent'}={}){
  d.aim(0,p['air-source'].getFrame().center);walk(-26,6);walk(-26,-20);d.aim(1,p['turbine-feed'].getFrame().center);
  until(()=>l.drive.flow,2,'Air did not reach the receiver');mark('A geometric air path spins the receiver');
  // Wait on the ordinary floor, then recall the real cabin with its terminal.
- if(route==='stored-energy'){wait(12);g.clearPortals();check(l.drive.wheel.omega>15,'Insufficient stored mechanical energy');mark('Disconnecting the portals leaves the flywheel rotating');}
+ if(route==='stored-energy'){wait(12);d.aim(0,p['service-return'].getFrame().center);walk(-26,-21.5);walk(-19,-21.5);const before=g.teleportCount;g.input.jumpQueued=true;for(let i=0;i<180&&g.teleportCount===before;i++){d.worldMove(0,-1);d.frame();}d.stop();check(g.teleportCount>before,'Service return jump missed');wait(.7);g.clearPortals();check(l.drive.wheel.omega>15,'Insufficient stored mechanical energy');mark('The same portals become a service shortcut while stored motion remains');}
  walk(-26,9);walk(-18,10);collect(d);walk(-8,9);walk(-8,2);
  until(()=>a.position.y>5.98,25,'First drive did not reach gallery');walk(3,1);mark('Worm drive holds the first landing without an artificial checkpoint');
  walk(3,0);release(d);walk(6.3,2.5);check(g.interact()&&l.drive.gear===1,'Transmission selector missed');collect(d);

@@ -12,7 +12,7 @@ for(const [n,options,aspect] of [[31,{},16/9],[31,{route:'scout-first',recover:t
   const g=await room(n);g.camera.aspect=aspect;g.camera.updateProjectionMatrix();
   const r=await runV8Journey(g,{journeyOptions:options});
   assert.equal(r.pass,true);assert.equal(r.resets,0);assert.equal(r.respawns,0);assert.equal(g.state,'won');
-  assert.equal(r.id,RESEARCH_SPECS[n-31].id);assert.equal(r.teleports,n===33?2:0);
+  assert.equal(r.id,RESEARCH_SPECS[n-31].id);assert.equal(r.teleports,n===33?2:n===32&&options.route==='stored-energy'?1:0);
   if(n===32&&options.route==='stored-energy'){assert.equal(g.portals.ready,false);assert.ok(g.firstLevel.drive.wheel.omega>0);}
  });
 }

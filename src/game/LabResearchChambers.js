@@ -38,7 +38,7 @@ export function buildResearch31(game,index=30){
  const dispose=l.dispose;l.dispose=()=>{light.dispose();dispose();};
  l.getObjective=()=>routeText()+'. На центральном острове мост можно перестроить.';
  l.getContextLesson=()=>['light-sheet-rule','ЛКМ / ПКМ','Свет проходит через те же порталы. Пока меняешь связь, стой на сплошной постоянной площадке. Внизу есть обратный путь.',false];
- l.puzzleGeometry={orders:['carry-first','scout-first'],footprint:58*48,goalHeight:6,noProgressFlags:true,sourceCount:1,recoveryFloor:-4};return l;
+ l.puzzleGeometry={orders:['carry-first','scout-first'],footprint:58*48,goalHeight:6,noProgressFlags:true,sourceCount:1,recoveryFloor:-4,portalRoles:{'light-source':'intercept the single light sheet before its solid wall','west-bridge':'route the sheet across the first gap and back to service','north-bridge':'turn the same sheet toward the exit from permanent footing'}};return l;
 }
 
 /** Mechanical energy storage with a worm-drive transmission. A stopped drive
@@ -71,6 +71,7 @@ export function buildResearch32(game,index=31){
  const drive=new StoredMotionDrive();
  k.panel('air-source',[19,3,9],[0,0,1]);
  k.panel('turbine-feed',[-19,3,-23],[0,0,1]);
+ k.panel('service-return',[-24.5,2.1,12],[0,0,-1]);
  const fan=k.projector([19,3,15],[0,0,-1],{rotating:true,radius:1.25});
  const wheel=k.projector([-19,3,-15],[0,0,-1],{radius:1.9});
  // Air reaches the front grille, not the box behind it. This ray is shared
@@ -102,7 +103,7 @@ export function buildResearch32(game,index=31){
  const l=k.finishResearch([2,0,16],[-.2,.6,14],[4,12,-23],{drive,cabins:[lower,upper],spawnView:{yaw:0,pitch:-.12}});
  l.getObjective=()=>`${drive.flow?'Воздух приводит маховик.':'Соедини поток с приёмной решёткой.'} Передача ${drive.gear?'II':'I'}; кабины ${lower.position.y.toFixed(1)} / ${upper.position.y.toFixed(1)} м.`;
  l.getContextLesson=()=>['stored-motion-rule','ЛКМ / ПКМ','Воздух проходит через порталы. Кабина движется, когда на ней есть вес. Маховик сохраняет вращение, а передача удерживает высоту.',false];
- l.puzzleGeometry={orders:['powered-ascent','stored-energy'],footprint:56*52,goalHeight:12,noProgressFlags:true,recoveryFloor:0};return l;
+ l.puzzleGeometry={orders:['powered-ascent','stored-energy'],footprint:56*52,goalHeight:12,noProgressFlags:true,recoveryFloor:0,portalRoles:{'air-source':'intercept air from the physical fan','turbine-feed':'turn the air toward the front grille or return through the same opening','service-return':'low service shortcut after disconnecting the air circuit'}};return l;
 }
 
 export function buildResearch33(game,index=32){
@@ -126,7 +127,6 @@ export function buildResearch33(game,index=32){
  k.block([5,11.25,10],[2,14.5,28],'shell');
  k.block([5,0,6],[2,8,20],'shell');
  k.label('СЛУЖЕБНЫЙ ПРОХОД',[6.05,4.7,20],[1,0,0],7,.7);
-
  // The first tilted aperture launches across +X. Receiving area includes its
  // complete conservative ballistic envelope, with a clear recovery floor below.
  k.deck('Intermediate flight apron',6,22,-14,-6,15);
@@ -139,6 +139,6 @@ export function buildResearch33(game,index=32){
  k.label('ПАДЕНИЕ → ИМПУЛЬС',[0,28,-29.28],[0,0,1],25,1.8);
 
  const l=k.finishResearch([-22,0,19],[-24,.6,17],[-4,22,17],{fallPads:[pit,second],outlets:[outlet,last],spawnView:{yaw:.15,pitch:-.12}});
- l.puzzleGeometry={orders:['carry-first','explore-and-return'],footprint:64*56,goalHeight:22,noProgressFlags:true,recoveryFloor:-4};return l;
+ l.puzzleGeometry={orders:['carry-first','explore-and-return'],footprint:64*56,goalHeight:22,noProgressFlags:true,recoveryFloor:-4,portalRoles:{'first-fall':'receive the first gravitational drop from the access balcony','first-outlet':'turn the first falling momentum toward the intermediate gallery','second-fall':'recover the second fall below the inspection apron','second-outlet':'reverse the second impulse toward the high final gallery'}};return l;
 }
 export const RESEARCH_BUILDERS=[buildResearch31,buildResearch32,buildResearch33];
