@@ -21,7 +21,7 @@ import { LabCompanionBehavior } from './LabCompanionBehavior.js';
 import { LabCompanionRig } from './LabCompanionRig.js';
 import { LabPerformance } from './LabPerformance.js';
 import { LabTutorial } from './LabTutorial.js';
-import { buildLabCampaignLevel, CAMPAIGN } from './LabCampaignLevels.js';
+import { buildLabCampaignLevel, CAMPAIGN, campaignSpec } from './LabCampaignLevels.js';
 import { disposeLabLevel } from './LabLevelLifecycle.js';
 
 const UP = new THREE.Vector3(0, 1, 0);
@@ -119,7 +119,7 @@ export class LabGame {
   }
 
   async loadAssets() {
-    const missing = ALL_LAB_ASSETS.filter(a => CAMPAIGN[this.levelIndex].assets.includes(a.id) && !this.assets.has(a.id));
+    const missing = ALL_LAB_ASSETS.filter(a => campaignSpec(this,this.levelIndex).assets.includes(a.id) && !this.assets.has(a.id));
     if (!missing.length) return;
     const result = await loadLabModels({ renderer: this.renderer, onProgress: this.callbacks.onProgress, models: missing });
     for (const [id, model] of result.assets) this.assets.set(id, model);
@@ -250,7 +250,7 @@ export class LabGame {
     this.cameraRig = new LabCamera({ camera: this.camera, blockers: this.cameraBlockers,
       isBlocker: (object, hit) => this.isCameraBlocker(object, hit) });
     this.cameraRig.configureEpic?.({ enabled: this.kineticMode, dynamicFov: this.epicOptions?.dynamicFov !== false });
-    this.camera.far = this.kineticMode ? 500 : 130; this.camera.updateProjectionMatrix();
+    this.camera.far = this.firstLevel.viewDistance ?? (this.kineticMode ? 500 : 130); this.camera.updateProjectionMatrix();
     if (this.kineticMode && !this.epicDirector) this.epicDirector = new LabEpicDirector({ container: this.container, audio: this.audio, options: this.epicOptions });
     this.portals = new LabPortals({ scene: this.scene, renderer: this.renderer, camera: this.camera, maxResolution: this.quality.portalResolution, samples: 2 });
     const group = new THREE.Group(); group.name = 'Persistent brainrot companion';
@@ -282,7 +282,7 @@ export class LabGame {
     this.state = 'loading'; this.renderer?.setAnimationLoop(null); this.resetInput();
     this.audio?.motor?.(false);
     this.levelIndex = index;
-    if (CAMPAIGN[index].assets.some(id => !this.assets.has(id))) await this.loadAssets();
+    if (campaignSpec(this,index).assets.some(id => !this.assets.has(id))) await this.loadAssets();
     disposeLabLevel(this); this.buildLevel();
     this.portals.prepare();
     this.portalActors.prepare();
@@ -609,7 +609,9 @@ export class LabGame {
     if (this.kineticMode) {
       updateKineticVelocity(this, dt, move, { sprint, aiming });
     } else {
-      const speed = this.heldCube ? (sprint ? 4.5 : 2.9) : aiming ? 2.55 : sprint ? 5.0 : 3.3;
+      const speed = this.firstLevel?.openChamber
+        ? (this.heldCube ? (sprint ? 7.2 : 4.8) : aiming ? 3.8 : sprint ? 11 : 6.5)
+        : this.heldCube ? (sprint ? 4.5 : 2.9) : aiming ? 2.55 : sprint ? 5.0 : 3.3;
       const desired = new THREE.Vector3(move.x, 0, move.y).applyAxisAngle(UP, this.yaw).multiplyScalar(speed);
       const acceleration = this.playerGrounded ? (move.lengthSq() ? 10.5 : 15) : 3;
       if (this.playerGrounded || !this.firstLevel?.momentum) {
