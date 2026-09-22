@@ -1,0 +1,57 @@
+name: Research chapter native recording
+on:
+  pull_request:
+    paths:
+      - 'src/game/LabResearch*.js'
+      - 'src/game/LabLightBridge.js'
+      - 'scripts/research-browser.mjs'
+      - '.github/workflows/research-review.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        room: [31, 32, 33]
+    env:
+      BUILD_COMMIT: ${{ github.event.pull_request.head.sha || github.sha }}
+      ROOMS: ${{ matrix.room }}
+      RECORD: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.BUILD_COMMIT }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: |
+          npm ci
+          npm install --no-save --package-lock=false puppeteer-core@24.16.0
+          npm run build
+          node scripts/stamp-build.mjs v40-laboratory-33
+      - name: Record ordinary movement and inspect the final source
+        run: |
+          npm run preview -- --host 127.0.0.1 --port 4173 >research-preview.log 2>&1 &
+          for i in {1..30}; do curl -fsS http://127.0.0.1:4173/ >/dev/null && break; sleep 1; done
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+          node scripts/research-browser.mjs
+          RECORD=0 ALTERNATE=1 OUT_DIR=qa/research-alternative node scripts/research-browser.mjs
+          if [ "$ROOMS" = "32" ]; then
+            RECORD=0 RECOVERY=1 OUT_DIR=qa/research-recovery node scripts/research-browser.mjs
+          fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: research-recording-${{ matrix.room }}
+          path: |
+            qa/research-browser/
+            qa/research-alternative/
+            qa/research-recovery/
+            research-preview.log
+            dist/build-info.json
+          retention-days: 14

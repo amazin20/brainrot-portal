@@ -7,7 +7,7 @@ on:
         required: true
         type: string
       record_puzzle:
-        description: Record native movement in rooms12–20; all thirty ordinary routes always run
+        description: Record native movement in rooms12–20; all thirty-three ordinary routes always run
         required: false
         default: true
         type: boolean
@@ -35,7 +35,7 @@ jobs:
         run: |
           npm run check
           node scripts/v8-package-check.mjs
-          node scripts/stamp-build.mjs v39-campaign-30
+          node scripts/stamp-build.mjs v40-laboratory-33
       - name: Preserve the exact deployable package
         uses: actions/upload-artifact@v4
         with:
@@ -45,7 +45,7 @@ jobs:
           retention-days: 14
 
   physics:
-    name: All thirty routes, bypass checks and recovery
+    name: All thirty-three routes, bypass checks and recovery
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
@@ -104,6 +104,7 @@ jobs:
           - {first: 28, last: 28, ui: '0'}
           - {first: 29, last: 29, ui: '0'}
           - {first: 30, last: 30, ui: '0'}
+          - {first: 31, last: 33, ui: '0'}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -117,7 +118,7 @@ jobs:
           npm ci
           npm install --no-save --package-lock=false puppeteer-core@24.16.0
           npm run build
-          node scripts/stamp-build.mjs v39-campaign-30
+          node scripts/stamp-build.mjs v40-laboratory-33
       - name: Verify ordinary routes in actual WebGL
         env:
           NESI_FIRST: ${{ matrix.first }}
@@ -159,7 +160,7 @@ jobs:
           npm ci
           npm install --no-save --package-lock=false puppeteer-core@24.16.0
           npm run build
-          node scripts/stamp-build.mjs v39-campaign-30
+          node scripts/stamp-build.mjs v40-laboratory-33
       - name: Verify actual mouse shots and ordinary floor/wall traversal
         run: |
           npm run preview -- --host 127.0.0.1 --port 4173 >input-preview.log 2>&1 &
@@ -198,9 +199,9 @@ jobs:
           npm ci
           npm install --no-save --package-lock=false puppeteer-core@24.16.0
           npm run build
-          node scripts/stamp-build.mjs v39-campaign-30
+          node scripts/stamp-build.mjs v40-laboratory-33
           npm run build -- --mode yandex --outDir dist-yandex
-          node scripts/stamp-build.mjs v39-campaign-30 dist-yandex
+          node scripts/stamp-build.mjs v40-laboratory-33 dist-yandex
       - name: Verify physical video regressions and advertising contract
         run: |
           npm run preview -- --host 127.0.0.1 --port 4173 >sdk-preview.log 2>&1 &
@@ -252,7 +253,7 @@ jobs:
           npm ci
           npm install --no-save --package-lock=false puppeteer-core@24.16.0
           npm run build
-          node scripts/stamp-build.mjs v39-campaign-30
+          node scripts/stamp-build.mjs v40-laboratory-33
       - name: Verify the distinct three-room edition through the real HTTP UI
         env:
           ROOM: ${{ matrix.room }}
@@ -269,4 +270,45 @@ jobs:
           path: |
             qa/open-browser/
             open-preview.log
+          retention-days: 14
+
+  research:
+    name: Research room ${{ matrix.room }} with alternative and recovery routes
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        room: [31, 32, 33]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.revision }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: |
+          npm ci
+          npm install --no-save --package-lock=false puppeteer-core@24.16.0
+          npm run build
+          node scripts/stamp-build.mjs v40-laboratory-33
+      - name: Ordinary solution and alternative exploration in native WebGL
+        env:
+          ROOMS: ${{ matrix.room }}
+          RECORD: ${{ inputs.record_puzzle && '1' || '0' }}
+        run: |
+          npm run preview -- --host 127.0.0.1 --port 4173 >research-preview.log 2>&1 &
+          for i in {1..30}; do curl -fsS http://127.0.0.1:4173/ >/dev/null && break; sleep 1; done
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+          node scripts/research-browser.mjs
+          RECORD=0 ALTERNATE=1 OUT_DIR=qa/research-alternative node scripts/research-browser.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: research-chapter-${{ matrix.room }}
+          path: |
+            qa/research-browser/
+            qa/research-alternative/
+            research-preview.log
           retention-days: 14

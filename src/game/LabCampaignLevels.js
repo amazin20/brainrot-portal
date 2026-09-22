@@ -1,3 +1,4 @@
+import {RESEARCH_BUILDERS,RESEARCH_SPECS} from './LabResearchChambers.js';
 import {OPEN_BUILDERS,OPEN_SPECS} from './LabOpenChambers.js';
 import {buildVelocityArena} from './LabVelocityArena.js';
 import {ROOM21_SPEC,buildRoom21} from './LabPortalRoom21.js';
@@ -44,9 +45,10 @@ const NEW_CAMPAIGN=[ROOM16_SPEC,ROOM17_SPEC,ROOM18_SPEC,ROOM19_SPEC,ROOM20_SPEC,
 const NEW_BUILDERS=[buildRoom16,buildRoom17,buildRoom18,buildRoom19,buildRoom20,buildRoom21,buildRoom22,buildRoom23,buildRoom24,buildRoom25,buildRoom26,buildRoom27,buildRoom28,buildRoom29,buildRoom30];
 
 // Preserve the verified introductory rooms; extend the public registry once.
-export const CAMPAIGN=Object.freeze([...INTRODUCTORY_CAMPAIGN,...EXTENDED_CAMPAIGN.slice(0,3),...WORKSHOP_CAMPAIGN.slice(0,3).map((room,i)=>i===2?{...room,assets:room.assets.filter(id=>id!==39),accent:0x83cfc7,description:'Направь воздух от вентилятора к приводу двери.',hints:['Круглый вентилятор слева создаёт поток. Привод с решёткой дальше по залу принимает воздух передней стороной.','Воздух толкает тебя и друга. Попав в переднюю решётку приёмника, поток сам запускает дверь; кабель показывает связь.','Соедини правую стену напротив вентилятора с другим участком правой стены напротив привода. Включи вентилятор: когда поток попадёт в приёмник, дверь откроется автоматически. Забери друга и пройди в открывшуюся дверь.']}:room),ROOM12_SPEC,ROOM13_ART_SPEC,ROOM14_ART_SPEC,ROOM15_ART_SPEC,...NEW_CAMPAIGN]);
+export const CAMPAIGN=Object.freeze([...INTRODUCTORY_CAMPAIGN,...EXTENDED_CAMPAIGN.slice(0,3),...WORKSHOP_CAMPAIGN.slice(0,3).map((room,i)=>i===2?{...room,assets:room.assets.filter(id=>id!==39),accent:0x83cfc7,description:'Направь воздух от вентилятора к приводу двери.',hints:['Круглый вентилятор слева создаёт поток. Привод с решёткой дальше по залу принимает воздух передней стороной.','Воздух толкает тебя и друга. Попав в переднюю решётку приёмника, поток сам запускает дверь; кабель показывает связь.','Соедини правую стену напротив вентилятора с другим участком правой стены напротив привода. Включи вентилятор: когда поток попадёт в приёмник, дверь откроется автоматически. Забери друга и пройди в открывшуюся дверь.']}:room),ROOM12_SPEC,ROOM13_ART_SPEC,ROOM14_ART_SPEC,ROOM15_ART_SPEC,...NEW_CAMPAIGN,...RESEARCH_SPECS]);
 export function buildLabCampaignLevel(game,index){
  if(!Number.isInteger(index)||index<0||index>=CAMPAIGN.length)throw new RangeError('Unknown campaign course');
+ if(index>=30)return RESEARCH_BUILDERS[index-30](game,index);
  if(game.chamberEdition==='open'&&OPEN_BUILDERS[index])return OPEN_BUILDERS[index](game,index);
  if(game.epicMode&&index===0)return buildVelocityArena(game);
  if(index===10)return finishBrowserArt(buildReadableWindRoom(game,CAMPAIGN[index]));

@@ -39,7 +39,7 @@ function showVictory(){
   $('#win-title').innerHTML='Вместе<br />получилось<span>.</span>';
   $('#win-screen .eyebrow').textContent='ДРУГ ТОЖЕ ДОБРАЛСЯ';
   $('#play-again-button').textContent=last?'К первому испытанию ↻':'Следующий уровень →';
-  $('#win-screen .muted').textContent=last?(openEdition.enabled?'Пройдены три пересобранных уровня этой версии.':'Все доступные испытания завершены. Друг добрался вместе с тобой.'):'Получилось! Следующее испытание добавит новую идею.';
+  $('#win-screen .muted').textContent=last?(openEdition.enabled?'Пройдены все испытания этой версии.':'Все доступные испытания завершены. Друг добрался вместе с тобой.'):'Получилось! Следующее испытание добавит новую идею.';
   diagnostics();
 }
 function showHints(){
@@ -92,7 +92,7 @@ finally{game.render();clearInput();setState(game.state);diagnostics();}
   onRestartRequest:()=>restartLevel(),
   onWin:showVictory,
 });
-// ПРЕДЕЛ is the campaign finale at room 30; every public entry uses the campaign.
+// Every public entry uses the same campaign; the review edition has isolated saves.
 game.epicMode=false;
 game.chamberEdition=openEdition.enabled?'open':'classic';
 document.body.dataset.chamberEdition=game.chamberEdition;
