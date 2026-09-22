@@ -57,6 +57,12 @@ const game=new LabGame({debug,container:$('#game'),touch:{joystick:$('#joystick'
     if(debug){window.__NESI_DEMO_GAME__=game;window.__NESI_PLATFORM__=platform;window.__NESI_PREFS__=preferences;
       window.__NESI_RUN_LEVEL_ROUTE__=async(options={})=>{const {runV8Journey}=await import('./game/LabV8Journey.js');game.renderer.setAnimationLoop(null);hideScreens();setState('playing');
         try{return await runV8Journey(game,{journeyOptions:options,onMilestone:mark=>{game.render();window.__NESI_CAPTURE_LEVEL_MARK__?.(mark);}});}finally{game.render();clearInput();setState(game.state);diagnostics();}};
+      window.__NESI_RUN_FLOOR_PORTAL_ROUTE__=async(options={})=>{
+const {runPortalFloorJourney}=await import('./game/LabPortalFloorJourney.js');
+game.renderer.setAnimationLoop(null);hideScreens();setState('playing');
+try{return await runPortalFloorJourney(game,{...options,onMilestone:mark=>{game.render();window.__NESI_CAPTURE_LEVEL_MARK__?.(mark);}});}
+finally{game.render();clearInput();setState(game.state);diagnostics();}
+      };
       window.__NESI_RUN_PORTAL_EDGE_ROUTE__=async(options={})=>{
         const {runPortalEdgeJourney}=await import('./game/LabPortalEdgeJourney.js');
         game.renderer.setAnimationLoop(null);hideScreens();setState('playing');
