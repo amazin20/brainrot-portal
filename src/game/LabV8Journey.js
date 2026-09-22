@@ -83,7 +83,10 @@ export async function runV8Journey(game,{onMilestone=()=>{},scenario=null,journe
       await scenario({game,level,walk,wait,aim,look,until,pickup,enter,mark,frame,worldMove,stop});
       report.pass=true;report.kind='recovery';report.teleports=game.teleportCount;return report;
     }
-    if(index>=12){
+    if(level.openChamber){
+      const {runOpenJourney}=await import('./LabOpenJourney.js');
+      await runOpenJourney({game,level,walk,wait,aim,look,until,pickup,enter,mark,frame,worldMove,stop},journeyOptions);
+    }else if(index>=12){
       const journey=await advancedJourneys[index-12]();
       await journey['runRoom'+(index+1)]({game,level,walk,wait,aim,look,until,pickup,enter,mark,frame,worldMove,stop},journeyOptions);
     }else if(index===11){
