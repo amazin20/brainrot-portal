@@ -1,0 +1,57 @@
+name: Resume human lab verification
+on:
+  push:
+    branches: [review/resume-human-lab-20260922]
+    paths: [.github/workflows/resume-human-lab.yml]
+permissions:
+  contents: read
+jobs:
+  source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: 4c357dab7877ce56a1f70460a7c2281c2579bdb4
+      - run: |
+          mkdir -p /tmp/human-lab-source
+          git rev-parse HEAD > /tmp/human-lab-source/SOURCE_COMMIT
+          git archive --format=tar.gz HEAD > /tmp/human-lab-source/source.tar.gz
+      - uses: actions/upload-artifact@v4
+        with:
+          name: human-lab-exact-source
+          path: /tmp/human-lab-source/
+          retention-days: 3
+  floor:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      BUILD_COMMIT: 4c357dab7877ce56a1f70460a7c2281c2579bdb4
+      RECORD: '0'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: 4c357dab7877ce56a1f70460a7c2281c2579bdb4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: |
+          npm ci
+          npm install --no-save --package-lock=false puppeteer-core@24.16.0
+          npm run build
+          node scripts/stamp-build.mjs v39-campaign-30
+      - name: Floor entry, return, same companion and shader regression
+        run: |
+          npm run preview -- --host 127.0.0.1 --port 4173 > /tmp/human-lab-preview.log 2>&1 &
+          for i in {1..30}; do curl -fsS http://127.0.0.1:4173/ >/dev/null && break; sleep 1; done
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+          node scripts/portal-regression-browser.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: resumed-floor-exact-head
+          path: |
+            qa/portal-regression/
+            /tmp/human-lab-preview.log
+          retention-days: 14
