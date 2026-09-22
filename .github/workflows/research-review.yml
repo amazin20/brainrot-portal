@@ -41,6 +41,9 @@ jobs:
           export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
           node scripts/research-browser.mjs
           RECORD=0 ALTERNATE=1 OUT_DIR=qa/research-alternative node scripts/research-browser.mjs
+          if [ "$ROOMS" = "32" ]; then
+            RECORD=0 RECOVERY=1 OUT_DIR=qa/research-recovery node scripts/research-browser.mjs
+          fi
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -48,6 +51,7 @@ jobs:
           path: |
             qa/research-browser/
             qa/research-alternative/
+            qa/research-recovery/
             research-preview.log
             dist/build-info.json
           retention-days: 14
