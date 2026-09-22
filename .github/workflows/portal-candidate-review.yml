@@ -1,0 +1,179 @@
+name: Portal candidate native review
+on:
+  push:
+    branches: [fix/portal-traversal-performance-20260922]
+    paths: [.github/workflows/portal-candidate-review.yml]
+permissions:
+  contents: read
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write
+    outputs:
+      revision: ${{ steps.commit.outputs.revision }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Apply locally reproduced source changes
+        run: |
+          cat > /tmp/portal-runtime.patch <<'PATCH'
+          diff --git a/src/game/LabCamera.js b/src/game/LabCamera.js
+          --- a/src/game/LabCamera.js
+          +++ b/src/game/LabCamera.js
+          @@ -441,4 +441,4 @@
+             // passage and collapse the lens into the character. Other walls still block.
+          -  clipsPortalBacking(box) {
+          -    return !!this.portalExit && portalBacksCollider(this.portalExit, box)
+          +  clipsPortalBacking(box, colliderId) {
+          +    return !!this.portalExit && (this.portalExit.backingIds?.has(colliderId) || portalBacksCollider(this.portalExit, box))
+                 && this.camera.getWorldDirection(this.clipDirection).dot(this.portalExit.normal) > .04;
+          diff --git a/src/game/LabGame.js b/src/game/LabGame.js
+          --- a/src/game/LabGame.js
+          +++ b/src/game/LabGame.js
+          @@ -12,2 +12,3 @@
+           import { LabPortalActors } from './LabPortalActors.js';
+          +import { warmPortalRendering } from './LabPortalWarmup.js';
+           import { LabPlayerAnimator } from './LabPlayerAnimator.js';
+          @@ -81,2 +82,3 @@
+               await this.renderer.compileAsync(this.scene, this.camera);
+          +    await warmPortalRendering(this);
+               this.render();
+          @@ -288,3 +290,3 @@
+               this.portalActors.prepare();
+          -    if (this.renderer?.compileAsync) await this.renderer.compileAsync(this.scene, this.camera);
+          +    if (this.renderer?.compileAsync) {await this.renderer.compileAsync(this.scene, this.camera);await warmPortalRendering(this);}
+               this.performanceMonitor.reset(); this.accumulator = 0; this.lastFrame = performance.now();
+          @@ -348,3 +350,3 @@
+               const box = collider?.box ?? new THREE.Box3().setFromObject(object);
+          -    if (this.cameraRig?.clipsPortalBacking?.(box)) return false;
+          +    if (this.cameraRig?.clipsPortalBacking?.(box, object.uuid)) return false;
+               // A camera is not a traveller: letting its boom pass through an entry
+          @@ -354,3 +356,3 @@
+               return !this.portals.portals.some(p => p && direction.dot(p.normal) >= -.00001
+          -      && pointInsidePortal(p, hit.point, .04) && portalBacksCollider(p, box));
+          +      && pointInsidePortal(p, hit.point, .04) && (p.backingIds?.has(object.uuid) || portalBacksCollider(p, box)));
+             }
+          @@ -749,6 +751,6 @@
+                 const y = f.heightAt ? f.heightAt(x,z) : (f.y ?? 0);
+          -      if(y===null)continue;
+          +      if(y===null || f.enabled===false || y>maxY+.001 || x<f.minX || x>f.maxX || z<f.minZ || z>f.maxZ)continue;
+                 if (throughPortals && f.mesh && this.portalOpensCollider({ mesh: f.mesh,
+                   box: this.colliders.find(c => c.mesh === f.mesh)?.box }, new THREE.Vector3(x, y + CENTER_HEIGHT, z), PLAYER_RADIUS)) continue;
+          -      if (f.enabled !== false && y <= maxY + .001 && x >= f.minX && x <= f.maxX && z >= f.minZ && z <= f.maxZ) height = height === null ? y : Math.max(height, y);
+          +      height = height === null ? y : Math.max(height, y);
+               }
+          @@ -819,2 +821,3 @@
+                 return collider.mesh.uuid === this.portalSurfaceIds[index]
+          +        || portal.backingIds?.has(collider.mesh.uuid)
+                   || (collider.portalOwner && collider.portalOwner.userData.portalColliderId === this.portalSurfaceIds[index])
+          diff --git a/src/game/LabOpenArchitecture.js b/src/game/LabOpenArchitecture.js
+          --- a/src/game/LabOpenArchitecture.js
+          +++ b/src/game/LabOpenArchitecture.js
+          @@ -80,5 +80,6 @@
+             deck.name=name;const collider=this.envelopes.at(-1);
+          -  const f={minX:x0,maxX:x1,minZ:z0,maxZ:z1,y,mesh:collider.mesh,enabled:true};this.game.floors.push(f);this.world.floors.push(f);this.decks.push({name,...f});
+          +  const f={minX:x0,maxX:x1,minZ:z0,maxZ:z1,y,mesh:collider.mesh,enabled:true};this.game.floors.push(f);this.world.floors.push(f);const record={name,...f,portalBackingColliders:[collider]};this.decks.push(record);
+             // The chassis is below the running surface, not another almost-coplanar skin.
+             this.block([x,y-.90,z],[width-.65,1.0,depth-.65],'dark');
+          +  record.portalBackingColliders.push(this.envelopes.at(-1));
+             for(const side of [-1,1]){
+          @@ -135,3 +136,4 @@
+             const f={minX:p[0]-size/2,maxX:p[0]+size/2,minZ:p[2]-size/2,maxZ:p[2]+size/2,y:p[1]+.18,mesh:surface.mesh,enabled:true};this.game.floors.push(f);
+          -  const pad={surface,position:V(...p),loaded:()=>cargoLoadsPlate(this.game.cargo,this.game.heldCube,surface.getFrame())};this.pads.push(pad);
+          +  const hostDeck=this.decks.find(d=>Math.abs(d.y-p[1])<.001&&p[0]-size/2>=d.minX&&p[0]+size/2<=d.maxX&&p[2]-size/2>=d.minZ&&p[2]+size/2<=d.maxZ);
+          +  const pad={surface,hostDeck,position:V(...p),loaded:()=>cargoLoadsPlate(this.game.cargo,this.game.heldCube,surface.getFrame())};this.pads.push(pad);
+             return pad;
+          @@ -208,2 +210,7 @@
+            finishOpen(spawn,cargo,goal,extra={}){
+          +  // Pads can sit on a multi-layer deck: register its OWN skin, chassis and
+          +  // closed hull, never nearby pillars or other platforms. The common portal
+          +  // solver still requires the actor to fit the aperture and its throat depth.
+          +  for(const pad of this.pads)if(pad.hostDeck)pad.surface.mesh.userData.portalBackingIds=
+          +   pad.hostDeck.portalBackingColliders.map(c=>c.mesh.uuid);
+             const level=super.finish(spawn,cargo,goal,{workshop:this,spec:this.spec,portalPuzzle:true,openChamber:true,viewDistance:380,...extra});
+          diff --git a/src/game/LabOpenStationArt.js b/src/game/LabOpenStationArt.js
+          --- a/src/game/LabOpenStationArt.js
+          +++ b/src/game/LabOpenStationArt.js
+          @@ -46,2 +46,3 @@
+            k.geometry(closedHull(w-.18,d-.18),'shell',[x,y,z],Q(),{solid:true,name:'Closed load-bearing hull / '+deck.name});
+          + deck.portalBackingColliders?.push(k.envelopes.at(-1));
+            // Factory access ribs sit on the hull's vertical band, not on its walking face.
+          diff --git a/src/game/LabPortals.js b/src/game/LabPortals.js
+          --- a/src/game/LabPortals.js
+          +++ b/src/game/LabPortals.js
+          @@ -53,4 +53,13 @@
+             if (!box || box.isEmpty()) return false;
+          -  const local = boxInPortalFrame(frame, box);
+          -  return local.max.z <= .08 && local.max.z >= -maxDepth && local.min.z < .08
+          +  // Project the AABB onto the portal normal first. This is exactly the z
+          +  // interval of the eight transformed corners, without allocating those
+          +  // corners for every actor/collider pair at 120 physics steps per second.
+          +  const nx=frame.normal.x,ny=frame.normal.y,nz=frame.normal.z;
+          +  const centre=((box.min.x+box.max.x)*.5-frame.position.x)*nx
+          +    +((box.min.y+box.max.y)*.5-frame.position.y)*ny
+          +    +((box.min.z+box.max.z)*.5-frame.position.z)*nz;
+          +  const extent=(box.max.x-box.min.x)*.5*Math.abs(nx)
+          +    +(box.max.y-box.min.y)*.5*Math.abs(ny)+(box.max.z-box.min.z)*.5*Math.abs(nz);
+          +  const front=centre+extent;
+          +  return front <= .08 && front >= -maxDepth && centre-extent < .08
+               && portalIntersectsBox(frame, box, -maxDepth, .08);
+          @@ -459,2 +468,3 @@
+               frame.surfaceId = panel.uuid;
+          +    frame.backingIds = new Set(panel.userData.portalBackingIds || []);
+               this.attachToSurface(index, placement.anchor);
+          diff --git a/src/game/LabPreferences.js b/src/game/LabPreferences.js
+          --- a/src/game/LabPreferences.js
+          +++ b/src/game/LabPreferences.js
+          @@ -40,4 +40,9 @@
+             if(game.renderer){game.renderer.setPixelRatio(Math.min(dpr,profile.pixelRatio));game.renderer.setSize(innerWidth,innerHeight);game.renderer.shadowMap.enabled=profile.shadows;}
+          -  if(game.keyLight){game.keyLight.castShadow=profile.shadows;game.keyLight.shadow.mapSize.set(profile.shadowSize,profile.shadowSize);
+          -    game.keyLight.shadow.map?.dispose();game.keyLight.shadow.map=null;game.keyLight.shadow.needsUpdate=true;}
+          +  if(game.keyLight){game.keyLight.castShadow=profile.shadows;
+          +    const shadow=game.keyLight.shadow;
+          +    // onReady reapplies the saved preset. Do not discard the shadow target
+          +    // just warmed during loading when its dimensions have not changed.
+          +    if(shadow.mapSize.x!==profile.shadowSize||shadow.mapSize.y!==profile.shadowSize){
+          +      shadow.mapSize.set(profile.shadowSize,profile.shadowSize);shadow.map?.dispose();shadow.map=null;shadow.needsUpdate=true;
+          +    }}
+             if(game.portals)game.portals.maxResolution=profile.portalResolution;
+          PATCH
+          git apply --check /tmp/portal-runtime.patch
+          git apply /tmp/portal-runtime.patch
+      - name: Commit source on the repair branch
+        id: commit
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add src/game
+          git commit -m 'Fix owned floor backing and warm actual portal rendering variants during loading'
+          git push origin HEAD:fix/portal-traversal-performance-20260922
+          echo "revision=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+  profile:
+    needs: apply
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.apply.outputs.revision }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: |
+          npm ci
+          npm install --no-save --package-lock=false puppeteer-core@24.16.0
+          npm run dev -- --host 127.0.0.1 --port 4173 >portal-preview.log 2>&1 &
+          for i in {1..30}; do curl -fsS http://127.0.0.1:4173/ >/dev/null && break; sleep 1; done
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+          export PROFILE_SOURCE="$(git rev-parse HEAD)"
+          PROFILE_LABEL=after node scripts/portal-profile.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: portal-profile-after
+          path: |
+            qa/portal-profile/
+            portal-preview.log
+          retention-days: 14
