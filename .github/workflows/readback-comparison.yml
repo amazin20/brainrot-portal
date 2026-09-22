@@ -1,0 +1,56 @@
+name: Portal pixel completion comparison
+on:
+  push:
+    branches: [review/portal-readback-20260922]
+    paths: [.github/workflows/readback-comparison.yml]
+permissions:
+  contents: read
+jobs:
+  compare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: cb882f9b3e6dc200dedd3ab05a4b3fb0fa9f7faa
+          path: baseline
+      - uses: actions/checkout@v4
+        with:
+          ref: 760f64eb4ad9e96b97b68936133968b4d45263b9
+          path: candidate
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install identical locked runtime dependencies
+        run: |
+          (cd baseline && npm ci)
+          (cd candidate && npm ci && npm install --no-save --package-lock=false puppeteer-core@24.16.0)
+      - name: Enforce pixel completion, rather than interpreting command submission as GPU time
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('candidate/scripts/portal-profile.mjs');s=p.read_text()
+          assert 'gl.finish();samples.push' in s
+          s=s.replace('gl.finish();samples.push','gl.readPixels(0,0,1,1,gl.RGBA,gl.UNSIGNED_BYTE,new Uint8Array(4));samples.push')
+          s=s.replace('Synchronous renderer CPU submission plus gl.finish GPU completion in software WebGL; not real-device RAF FPS','Render submission followed by synchronous pixel readback; same-runner software WebGL; not real-device RAF FPS')
+          p.write_text(s)
+          PY
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+          ROOT="$PWD"
+          for VERSION in baseline candidate; do
+            cd "$ROOT/$VERSION"
+            node node_modules/vite/bin/vite.js --host 127.0.0.1 --port 4173 >"$ROOT/$VERSION-preview.log" 2>&1 &
+            SERVER_PID=$!
+            for i in {1..30}; do curl -fsS http://127.0.0.1:4173/ >/dev/null && break; sleep 1; done
+            PROFILE_SOURCE="$(git rev-parse HEAD)" PROFILE_LABEL="$VERSION" OUT_DIR="$ROOT/results" node "$ROOT/candidate/scripts/portal-profile.mjs"
+            kill "$SERVER_PID"
+            wait "$SERVER_PID" || true
+          done
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: portal-pixel-completion-comparison
+          path: |
+            results/
+            *-preview.log
+          retention-days: 14
