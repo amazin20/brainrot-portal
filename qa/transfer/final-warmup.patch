@@ -1,0 +1,219 @@
+diff --git a/docs/passes/PLAYER_EXPLORATION_20260922.md b/docs/passes/PLAYER_EXPLORATION_20260922.md
+index f9e38e4..2eb1397 100644
+--- a/docs/passes/PLAYER_EXPLORATION_20260922.md
++++ b/docs/passes/PLAYER_EXPLORATION_20260922.md
+@@ -32,13 +32,16 @@ The existing complete routes remain required, with no reduced win assertions.
+ 
+ Prepare real canvas, HDR render-target, transported-camera global clipping and
+ split-character material variants during loading. A compile call alone cannot
+-stand in for initializing those renderer paths. The warmup uses 1-pixel scissored
+-draws, leaves gameplay/portals untouched, and restores render state even on error.
++stand in for initializing those renderer paths. The warmup uses tiny scissored draws, explicitly exercises the hidden portal/shot
++material pools on a covered pixel, and awaits an asynchronous GPU fence. It leaves
++gameplay/portals untouched and restores render state even on error.
+ Actual portal resolution, MSAA, recursion, frequency, camera and visible materials
+ are not reduced. The full native before/after profile is needed to quantify this;
+ this document is not a promise of the user's device FPS.
+ 
+-Unchanged static masks no longer wake the cargo or invalidate broadphase. Portal
++Unchanged static masks no longer wake the cargo or invalidate broadphase. A sleeping
++cargo still wakes when a nearby reused support moves/resizes or a mask changes;
++the regression includes the classic light-bridge recovery. Portal
+ bounds use equivalent centre/extent arithmetic instead of eight allocated corners,
+ and floor queries reject unrelated decks before aperture calculations.
+ 
+@@ -53,7 +56,7 @@ Room 28 is now a 60 by 47 metre enclosed laboratory, rather than a 128 by 98 met
+ open-sky footprint. The exit is visibly above reservoir A. Two 12 metre platforms,
+ a shared 4 metre gallery, a finite 8 metre water budget and a real return ramp make
+ the cause/effect inspectable. Instruments display actual A/B heights and actual
+-flow direction, including disconnected/stopped states. Colour of a portal is not
++flow direction, including disconnected, dry, equal-pressure and same-reservoir states. Colour of a portal is not
+ a progress flag. Breaking the connection preserves the water. Both equal-head and
+ full-transfer approaches are supported and separately tested.
+ 
+diff --git a/scripts/open-browser-review.mjs b/scripts/open-browser-review.mjs
+index b2b786e..bf3f999 100644
+--- a/scripts/open-browser-review.mjs
++++ b/scripts/open-browser-review.mjs
+@@ -50,7 +50,7 @@ try{
+   const after=await page.evaluate(()=>({classic:localStorage.getItem('brainrot-portal.preferences.v24'),legacy:localStorage.getItem('nesi.preferences.v8')}));assert.deepEqual(after,before,'Original campaign save changed');
+   assert.deepEqual(errors,[],'Browser page errors');
+   // Inspect the assembled environment separately. This is not a route camera.
+-  await page.evaluate(room=>{const g=window.__NESI_DEMO_GAME__;const views={24:[[67,56,83],[0,13,0]],28:[[75,48,69],[0,10,-3]],30:[[-93,85,101],[9,24,0]]};g.cameraRig.restoreProjection?.();g.camera.position.fromArray(views[room][0]);g.camera.lookAt(...views[room][1]);g.camera.updateMatrixWorld(true);g.render();},room);
++  await page.evaluate(room=>{const g=window.__NESI_DEMO_GAME__;const views={24:[[49,47,45],[0,13,-4]],28:[[26,16,17],[-2,5,-8]],30:[[-58,76,48],[13,29,0]]};g.cameraRig.restoreProjection?.();g.camera.position.fromArray(views[room][0]);g.camera.lookAt(...views[room][1]);g.camera.updateMatrixWorld(true);g.render();},room);
+   await page.screenshot({path:path.join(out,`${room}-overview.png`)});
+   const report={room,url:url.href,source:info.commit,route,errors,saveIsolated:true,overview:'separately positioned art-inspection camera',...evidence};
+   fs.writeFileSync(path.join(out,`${room}-report.json`),JSON.stringify(report,null,2));reports.push({room,pass:true,frames:evidence.frames.length,source:info.commit});
+diff --git a/scripts/profile-exploration.mjs b/scripts/profile-exploration.mjs
+index 0ff07a4..4a650cb 100644
+--- a/scripts/profile-exploration.mjs
++++ b/scripts/profile-exploration.mjs
+@@ -2,7 +2,7 @@ import puppeteer from 'puppeteer-core';import fs from 'node:fs';
+ const out=process.env.OUT||'qa/portal-profile',url=process.env.PAGE_URL||'http://127.0.0.1:4173/';fs.mkdirSync(out,{recursive:true});
+ const browser=await puppeteer.launch({executablePath:process.env.CHROME_PATH||'/usr/bin/chromium',headless:true,protocolTimeout:240000,args:['--no-sandbox','--disable-dev-shm-usage','--use-angle=swiftshader','--enable-unsafe-swiftshader']});
+ try{const page=await browser.newPage();await page.setViewport({width:1280,height:720});page.setDefaultTimeout(180000);const errors=[];page.on('pageerror',e=>errors.push(String(e)));await page.goto(url+'?edition=open&debug=1&level=24',{waitUntil:'networkidle2'});await page.waitForFunction(()=>window.__NESI_DEMO_GAME__?.state==='ready');await page.click('#play-button');
+-const result=await page.evaluate(async()=>{const g=window.__NESI_DEMO_GAME__;g.renderer.setAnimationLoop(null);const rows=[];function draw(label,n=1){for(let i=0;i<n;i++){const before=g.renderer.info.programs.length,t=performance.now();g.updateVisuals(1/60,1);g.render();g.renderer.getContext().finish();rows.push({label,i,ms:performance.now()-t,newPrograms:g.renderer.info.programs.length-before,programs:g.renderer.info.programs.length,...g.renderer.info.render,...g.portals.diagnostics});}}
++const result=await page.evaluate(async()=>{const g=window.__NESI_DEMO_GAME__;g.renderer.setAnimationLoop(null);const rows=[];function draw(label,n=1){for(let i=0;i<n;i++){const before=g.renderer.info.programs.length,t=performance.now();g.updateVisuals(1/60,1);g.render();g.renderer.getContext().finish();rows.push({label,i,ms:performance.now()-t,newPrograms:g.renderer.info.programs.length-before,createdPrograms:g.renderer.info.programs.slice(before).map(p=>({id:p.id,name:p.name,key:p.cacheKey})),programs:g.renderer.info.programs.length,...g.renderer.info.render,...g.portals.diagnostics});}}
+ draw('initial',5);for(const[i,name]of[[1,'postal-carriage'],[0,'ground-load']]){const p=g.firstLevel.panels[name];g.portals.placeOnPanel(i,p.mesh,p.getFrame().center);g.portalSurfaceIds[i]=p.mesh.uuid;draw('place-'+i,5);}
+ g.playerPosition.set(9,.18,31);g.previousPlayerPosition.copy(g.playerPosition);g.playerVelocity.set(0,0,0);g.yaw=0;g.pitch=-.55;g.cameraRig.reset(g.playerPosition,g.yaw,g.pitch);draw('near-floor',5);
+ for(let i=0;i<120;i++){g.updatePlaying(1/120);if(i%10===0)draw('traverse-'+i);}
+diff --git a/src/game/LabOpenHydraulics.js b/src/game/LabOpenHydraulics.js
+index 29dddd4..c13f4d5 100644
+--- a/src/game/LabOpenHydraulics.js
++++ b/src/game/LabOpenHydraulics.js
+@@ -29,6 +29,20 @@ export class CommunicatingLifts{
+  }
+ }
+ 
++/** Explain the physical reason, including experiments that do not transfer water.
++ * Portal colour and prescribed route order do not determine this feedback. */
++export function hydraulicConnectionText(levels,ends,flowToEast=0){
++ if(!ends?.[0]||!ends?.[1])return 'НЕТ СОЕДИНЕНИЯ';
++ if(ends[0].basin===ends[1].basin)return 'ОБА ОТВЕРСТИЯ В РЕЗЕРВУАРЕ '+(ends[0].basin?'Б':'А');
++ const heads=ends.map(e=>Math.max(0,levels[e.basin]-e.sill));
++ if(Math.abs(flowToEast)<.005){
++  if(Math.max(...heads)<.001)return 'ВОДА НИЖЕ ОБОИХ ОТВЕРСТИЙ';
++  if(Math.abs(heads[0]-heads[1])<.025)return 'ДАВЛЕНИЕ У ОТВЕРСТИЙ ВЫРОВНЕНО';
++  return 'ПОТОК ЗАМЕДЛЯЕТСЯ';
++ }
++ return flowToEast>0?'ВОДА: А → Б':'ВОДА: Б → А';
++}
++
+ function glazedLift(k,x,name){
+  const car=k.carrier(name,[[x,0,-12],[x,8,-12]],{width:12,depth:12,portal:false});
+  const glass=new THREE.MeshStandardMaterial({name:'Hydraulic inspection glazing',color:0x6ad6cc,roughness:.16,transparent:true,opacity:.16,depthWrite:false});
+@@ -59,6 +73,7 @@ export function buildOpenHydraulics(game,index=27){
+  for(const [i,x]of [[0,-5],[1,5]])for(const [kind,y]of [['low',2.85],['high',10.85]]){
+   const panel=k.panel((i?'east':'west')+'-'+kind,[x,y,-18],[0,0,1],8,5.8);ports.push({basin:i,panel,kind});
+   k.block([x,y,-18.7],[9.2,7,.8],'shell');
++  sign(k,`${i?'Б':'А'} / ${kind==='low'?'НИЖНЕЕ':'ВЕРХНЕЕ'} СОЕДИНЕНИЕ`,[x,y+3.13,-17.84],[0,0,1],7.6,.42);
+   const basinX=i?14:-14;
+   k.geometry(new THREE.CylinderGeometry(.32,.32,Math.abs(basinX-x),16),'metal',[(basinX+x)/2,y,-20],Q().setFromAxisAngle(V(0,0,1),Math.PI/2),{solid:true,name:'Reservoir feed manifold'});
+   k.geometry(new THREE.CylinderGeometry(.32,.32,5,16),'shell',[basinX,y,-17.5],Q().setFromAxisAngle(V(1,0,0),Math.PI/2),{solid:true,name:'Continuous reservoir connection'});
+@@ -73,12 +88,12 @@ export function buildOpenHydraulics(game,index=27){
+  const endpoint=p=>{if(!p)return null;const spec=ports.find(e=>e.panel.mesh.uuid===p.surfaceId);if(!spec)return null;
+   const right=V(1,0,0).applyQuaternion(p.quaternion),up=V(0,1,0).applyQuaternion(p.quaternion);
+   return{basin:spec.basin,sill:Math.max(0,p.position.y-Math.hypot(right.y*p.width,up.y*p.height))};};
+- let connected=false,flowToEast=0;
+- k.ticks.unshift(dt=>{const ends=game.portals.portals.map(endpoint);connected=ends.length===2&&ends.every(Boolean)&&ends[0].basin!==ends[1].basin;
++ let connected=false,flowToEast=0,latestEnds=[null,null];
++ k.ticks.unshift(dt=>{const ends=game.portals.portals.map(endpoint);latestEnds=ends;connected=ends.length===2&&ends.every(Boolean)&&ends[0].basin!==ends[1].basin;
+   tides.step(dt,connected?ends:null);flowToEast=connected?tides.flow*(ends[0].basin===0?1:-1):0;[a,b].forEach((f,i)=>{f.stations[1].y=tides.levels[i];f.target=1;f.speed=14;});});
+  k.resets.push(()=>{tides.reset();for(const [i,f]of [a,b].entries()){f.stations[0].y=f.stations[1].y=tides.levels[i];f.reset();}});
+  for(const d of k.decks.filter(d=>d.y>=4))reinforceDeck(k,d,{legs:false});
+- const stateText=()=>!connected?'НЕТ СОЕДИНЕНИЯ':Math.abs(tides.flow)<.005?'ПОТОК ОСТАНОВИЛСЯ':flowToEast>0?'ВОДА: А → Б':'ВОДА: Б → А';
++ const stateText=()=>hydraulicConnectionText(tides.levels,latestEnds,flowToEast);
+  const status=labInstrument(k,[0,15,-18.98],{width:20,height:2,read:()=>stateText()+'\nБЕЛЫЕ ОТВЕРСТИЯ СОЕДИНЯЮТСЯ ПОРТАЛАМИ'});
+  k.block([0,13.2,.3],[54,.55,.6],'dark');for(const x of [-26,26])k.column(x,.3,-2,13.5,.45);
+  for(const x of [-14,14])k.block([x,11.8,.50],[10.3,2.3,.24],'dark',false);
+diff --git a/src/game/LabPortals.js b/src/game/LabPortals.js
+index d0f0659..023feb3 100644
+--- a/src/game/LabPortals.js
++++ b/src/game/LabPortals.js
+@@ -377,8 +377,10 @@ function portalSurface(color, texture) {
+         float radial = length((apertureUv - 0.5) * 2.0);
+         float edge = smoothstep(0.92, 1.0, radial);
+         vec3 dormant = tint * (0.10 + 0.05 * radial) + vec3(0.012, 0.018, 0.028);
+-        vec3 destination = texture2D(view, clamp(screenUv, vec2(0.001), vec2(0.999))).rgb;
+-        vec3 result = mix(dormant, destination, linked);
++        vec3 result = dormant;
++        // A lone aperture has no destination yet. Do not sample an unrendered
++        // HDR attachment only to multiply its value by zero afterwards.
++        if (linked > 0.5) result = texture2D(view, clamp(screenUv, vec2(0.001), vec2(0.999))).rgb;
+         result += tint * edge * 0.12;
+         gl_FragColor = vec4(result, 1.0);
+         #include <tonemapping_fragment>
+diff --git a/src/game/LabRenderWarmup.js b/src/game/LabRenderWarmup.js
+index 4c2813b..b5fb4b0 100644
+--- a/src/game/LabRenderWarmup.js
++++ b/src/game/LabRenderWarmup.js
+@@ -3,7 +3,7 @@ import * as THREE from 'three';
+ /** Prepare the actual canvas/HDR, global-plane and split-actor variants during
+  * loading. compileAsync alone doesn't initialize WebGLClipping's per-material
+  * state, and compiling to the canvas doesn't compile the linear HDR program.
+- * The one-pixel draws initialize those real renderer paths before player input.
++ * Tiny covered-pixel draws initialize those real paths before player input.
+  * No portal is placed and no physical body, camera or quality setting changes. */
+ export async function warmPortalPipeline(game){
+  const r=game.renderer;if(!r?.getRenderTarget||!r?.render)return;
+@@ -11,6 +11,14 @@ export async function warmPortalPipeline(game){
+  const viewport=r.getViewport(new THREE.Vector4()),scissor=r.getScissor(new THREE.Vector4()),scissorTest=r.getScissorTest();
+  const clipping=r.clippingPlanes,shadowAuto=r.shadowMap.autoUpdate,shadowNeeds=r.shadowMap.needsUpdate;
+  const actors=[...(game.portalActors?.actors||[])],nodes=[];
++ const quads=new THREE.Scene();quads.fog=game.scene.fog;
++ const quadCamera=new THREE.OrthographicCamera(-1,1,1,-1,.01,5);
++ const geometry=new THREE.PlaneGeometry(2,2),quad=new THREE.Mesh(geometry,null);
++ quad.position.z=-1;quad.frustumCulled=false;quads.add(quad);
++ const portalMaterials=(game.portals?._visuals||[]).flatMap(v=>[v.surface.material,v.rim.material,v.halo.material]);
++ const effectMaterials=[];game.portalShots?.root?.traverse(o=>{if(o.material)effectMaterials.push(...(Array.isArray(o.material)?o.material:[o.material]));});
++ const poolMaterials=[...new Set([...portalMaterials,...effectMaterials])];
++ const links=new Map(portalMaterials.filter(m=>m.uniforms?.linked).map(m=>[m,m.uniforms.linked.value]));
+  const neutral=new THREE.Plane(new THREE.Vector3(0,1,0),100000);
+  const started=performance.now(),before=r.info?.programs?.length||0;
+  try{
+@@ -28,17 +36,44 @@ export async function warmPortalPipeline(game){
+     }else game.portalActors._restore(a);
+    }
+    for(const [out,plane]of [[null,false],[game.portals.targets[0],false],[null,true]]){
+-    r.setRenderTarget(out);r.setScissor(0,0,1,1);r.setScissorTest(true);
++    r.setRenderTarget(out);r.setViewport(0,0,8,8);r.setScissor(0,0,8,8);r.setScissorTest(true);
+     r.clippingPlanes=plane?[neutral]:[];
+     r.render(game.scene,game.camera);
+     await new Promise(resolve=>setTimeout(resolve,0));
+    }
+   }
++  // Hidden portal/charge pools are not rasterized by scene warmup. Exercise
++  // their real materials on a covered pixel, including the HDR sampler. This
++  // primes driver pipelines too, not just Three's program objects. No portal,
++  // charge, actor pose, camera or simulation state is staged in the live scene.
++  r.clippingPlanes=[];
++  for(const target of game.portals.targets||[]){r.setRenderTarget(target);r.setScissorTest(false);r.clear?.();}
++  for(const [out,plane]of [[null,false],[game.portals.bounceTarget,false],[null,true]]){
++   if(out===undefined)continue;
++   r.setRenderTarget(out);r.setViewport(0,0,8,8);r.setScissor(0,0,1,1);r.setScissorTest(true);r.clippingPlanes=plane?[neutral]:[];
++   for(const material of poolMaterials){
++    quad.material=material;if(links.has(material))material.uniforms.linked.value=1;
++    r.render(quads,quadCamera);await new Promise(resolve=>setTimeout(resolve,0));
++   }
++  }
++  // Keep asynchronous driver work behind the loading screen instead of the
++  // first click. WebGL2 fences avoid a blocking gl.finish on the UI thread.
++  const gl=r.getContext?.();
++  if(gl?.fenceSync&&gl.clientWaitSync){
++   const sync=gl.fenceSync(gl.SYNC_GPU_COMMANDS_COMPLETE,0);gl.flush();
++   if(sync)try{for(let i=0;i<15000&&!gl.isContextLost();i++){
++    const result=gl.clientWaitSync(sync,0,0);
++    if(result===gl.ALREADY_SIGNALED||result===gl.CONDITION_SATISFIED||result===gl.WAIT_FAILED)break;
++    await new Promise(resolve=>setTimeout(resolve,8));
++   }}finally{gl.deleteSync(sync);}
++  }
+  }finally{
++  for(const [material,value]of links)material.uniforms.linked.value=value;
++  geometry.dispose();quad.removeFromParent();
+   for(const a of actors)game.portalActors._restore(a);
+   for(const [o,value]of nodes)o.frustumCulled=value;
+   r.clippingPlanes=clipping;r.shadowMap.autoUpdate=shadowAuto;r.shadowMap.needsUpdate=shadowNeeds||shadowAuto;
+   r.setRenderTarget(target,face,mip);r.setViewport(viewport);r.setScissor(scissor);r.setScissorTest(scissorTest);
+  }
+- game.portalWarmup={ms:performance.now()-started,programsPrepared:(r.info?.programs?.length||0)-before,scope:'canvas, HDR portal views, transported camera and split actors'};
++ game.portalWarmup={ms:performance.now()-started,programsPrepared:(r.info?.programs?.length||0)-before,scope:'canvas, HDR portal views, transported camera, split actors and covered-pixel portal/charge pools'};
+ }
+diff --git a/tests/lab-hydraulic-feedback.test.js b/tests/lab-hydraulic-feedback.test.js
+new file mode 100644
+index 0000000..180b73f
+--- /dev/null
++++ b/tests/lab-hydraulic-feedback.test.js
+@@ -0,0 +1,13 @@
++import test from 'node:test';
++import assert from 'node:assert/strict';
++import {hydraulicConnectionText} from '../src/game/LabOpenHydraulics.js';
++test('hydraulic instruments explain disconnected, self-loop, dry and balanced attempts',()=>{
++ assert.equal(hydraulicConnectionText([8,0],[null,null]),'НЕТ СОЕДИНЕНИЯ');
++ assert.match(hydraulicConnectionText([8,0],[{basin:0,sill:0},{basin:0,sill:8}]),/РЕЗЕРВУАРЕ А/);
++ assert.match(hydraulicConnectionText([4,4],[{basin:0,sill:8},{basin:1,sill:8}]),/НИЖЕ ОБОИХ/);
++ assert.match(hydraulicConnectionText([4,4],[{basin:0,sill:0},{basin:1,sill:0}]),/ВЫРОВНЕНО/);
++ for(const ends of [[{basin:0,sill:0},{basin:1,sill:8}],[{basin:1,sill:8},{basin:0,sill:0}]]){
++  assert.equal(hydraulicConnectionText([8,0],ends,.1),'ВОДА: А → Б');
++  assert.equal(hydraulicConnectionText([0,8],ends,-.1),'ВОДА: Б → А');
++ }
++});
