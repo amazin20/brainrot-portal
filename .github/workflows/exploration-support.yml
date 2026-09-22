@@ -1,0 +1,32 @@
+name: Sleeping support regression repair
+on:
+  push:
+    branches: [fix/player-exploration-20260922]
+    paths: [.github/workflows/exploration-support.yml]
+permissions:
+  contents: write
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Apply the exact regression-tested source delta
+        run: |
+          echo '9b3fbaef0fdc0377904d9c25885fd44e8ee11c6f6c8be29e63e6ac8312297559  qa/transfer/support-wake.patch' | sha256sum -c -
+          git apply --check qa/transfer/support-wake.patch
+          git apply qa/transfer/support-wake.patch
+          rm qa/transfer/support-wake.patch
+          npm ci
+          node --test tests/lab-player-exploration.test.js tests/lab-room16-journey.test.js tests/lab-room16-recovery.test.js
+      - name: Commit only the source delta and its regression
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add src/game/LabPhysics.js tests/lab-player-exploration.test.js qa/transfer/support-wake.patch
+          git commit -m "Wake sleeping cargo when its reused support moves away; preserve unchanged-mask fast path"
+          git push origin HEAD:fix/player-exploration-20260922
