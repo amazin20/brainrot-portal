@@ -38,14 +38,15 @@ export function runOpenJourney(d,options={}){
 export function runOpenHydraulics(d,{route='equal-head',interrupt=false}={}){
  installRoom21Aim(d);const {game:g,level:l,walk,wait,until,pickup,mark}=d,p=l.panels,[a,b]=l.floats;
  const aim=(i,s)=>d.aim(i,wallTarget(s));
- aim(0,p['west-low']);walk(24,28.4);pickup();walk(28,12);walk(28,-1);
- g.interact();wait(1.5);aim(1,p[route==='full-east'?'east-high':'east-low']);
- if(interrupt){wait(.5);g.clearPortals();walk(28,2);const before=[...l.tides.levels];wait(2);check(before.every((v,i)=>v===l.tides.levels[i]),'Disconnected water moved');aim(0,p['west-low']);aim(1,p[route==='full-east'?'east-high':'east-low']);}
- until(()=>b.position.y>(route==='full-east'?11.7:5.98),36,'East hydraulic deck did not rise');wait(.5);mark('water selects the east landing height');
- collect(d);walk(27,2);walk(16,2);walk(-16,2);walk(-28,2);until(()=>g.playerGrounded,5,'West reservoir landing failed');
- g.interact();wait(1.3);if(route==='full-east')aim(1,p['east-low']);aim(0,p['west-high']);
- until(()=>a.position.y>11.7,36,'Return flow did not lift the west square');wait(.5);mark('the same finite water returns beneath both travellers');
- collect(d);walk(-43,0);walk(-48,0);until(()=>g.state==='won',3,'Western destination not completed');
+ walk(12,11.4);pickup();walk(14,-9);g.interact();wait(1.5);
+ aim(0,p['west-low']);aim(1,p[route==='full-east'?'east-high':'east-low']);
+ if(interrupt){wait(.5);g.clearPortals();const before=[...l.tides.levels];wait(2);check(before.every((v,i)=>v===l.tides.levels[i]),'Disconnected water moved');aim(0,p['west-low']);aim(1,p[route==='full-east'?'east-high':'east-low']);}
+ until(()=>b.position.y>(route==='full-east'?7.7:3.98),30,'East hydraulic deck did not rise');wait(.5);mark('visible level gauges follow the real transferred water');
+ collect(d);walk(14,-3);walk(5,-3);walk(-5,-3);walk(-14,-3);until(()=>g.playerGrounded,5,'West reservoir landing failed');
+ walk(-14,-9);g.interact();wait(1.3);aim(1,p['east-low']);aim(0,p['west-high']);
+ until(()=>a.position.y>7.7,30,'West hydraulic deck did not rise');wait(.5);mark('flow reverses and raises the exit-side reservoir');
+ collect(d);walk(-24,-4);until(()=>g.state==='won',4,'Joint hydraulic exit failed');
+ mark('both original travellers leave via the raised western deck');
 }
 
 export function runOpenLaunch(d){

@@ -164,6 +164,7 @@ export class LabPortalActors {
     const pairNodes = (source, destination) => {
       actor.pairs.push({ source, destination, children: source.children.slice() });
       destination.frustumCulled = false;
+      if(source.isLight)destination.visible=false;
       if (source.material) {
         const original = source.material;
         let record = reusable.get(source);

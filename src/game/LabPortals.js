@@ -18,8 +18,18 @@ function boxCorners(box) {
 }
 
 function boxInPortalFrame(frame, box) {
-  const inverse = frame.quaternion.clone().invert();
-  return new THREE.Box3().setFromPoints(boxCorners(box).map(point => point.sub(frame.position).applyQuaternion(inverse)));
+  // Bounds of a rotated AABB are the transformed centre plus |R|*halfExtent.
+  // This is the same eight-corner bound without allocating/translating corners
+  // for every collider, traveller and fixed physics step.
+  const q=frame.quaternion,x=q.x,y=q.y,z=q.z,w=q.w;
+  const ax=[1-2*(y*y+z*z),2*(x*y+w*z),2*(x*z-w*y)];
+  const ay=[2*(x*y-w*z),1-2*(x*x+z*z),2*(y*z+w*x)];
+  const az=[2*(x*z+w*y),2*(y*z-w*x),1-2*(x*x+y*y)];
+  const cx=(box.min.x+box.max.x)*.5-frame.position.x,cy=(box.min.y+box.max.y)*.5-frame.position.y,cz=(box.min.z+box.max.z)*.5-frame.position.z;
+  const hx=(box.max.x-box.min.x)*.5,hy=(box.max.y-box.min.y)*.5,hz=(box.max.z-box.min.z)*.5;
+  const bound=a=>{const c=a[0]*cx+a[1]*cy+a[2]*cz,e=Math.abs(a[0])*hx+Math.abs(a[1])*hy+Math.abs(a[2])*hz;return[c-e,c+e];};
+  const a=bound(ax),b=bound(ay),c=bound(az);
+  return new THREE.Box3(new THREE.Vector3(a[0],b[0],c[0]),new THREE.Vector3(a[1],b[1],c[1]));
 }
 
 /** Does a world-space box occupy the aperture within a signed depth interval?
@@ -51,9 +61,9 @@ export function portalIntersectsBox(frame, box, minDepth = -0.7, maxDepth = 0.08
  * aperture's lower edge or a freestanding obstacle must stay collidable. */
 export function portalBacksCollider(frame, box, maxDepth = .7) {
   if (!box || box.isEmpty()) return false;
+  if(!portalIntersectsBox(frame,box,-maxDepth,.08))return false;
   const local = boxInPortalFrame(frame, box);
-  return local.max.z <= .08 && local.max.z >= -maxDepth && local.min.z < .08
-    && portalIntersectsBox(frame, box, -maxDepth, .08);
+  return local.max.z <= .08 && local.max.z >= -maxDepth && local.min.z < .08;
 }
 
 /** True only when coplanar portal rims overlap. Separating-axis tests also
@@ -192,10 +202,11 @@ export function transformPortalDirection(direction, entry, exit, target = new TH
 
 /** Conservative aperture erosion by capsule radius; caller checks wall depth. */
 export function pointInsidePortal(frame, point, radius = 0) {
-  const local = point.clone().sub(frame.position).applyQuaternion(frame.quaternion.clone().invert());
-  const width = frame.width - radius;
-  const height = frame.height - radius;
-  return width > 0 && height > 0 && (local.x / width) ** 2 + (local.y / height) ** 2 <= 1;
+  const q=frame.quaternion,dx=point.x-frame.position.x,dy=point.y-frame.position.y,dz=point.z-frame.position.z;
+  const x=dx*(1-2*(q.y*q.y+q.z*q.z))+dy*2*(q.x*q.y+q.w*q.z)+dz*2*(q.x*q.z-q.w*q.y);
+  const y=dx*2*(q.x*q.y-q.w*q.z)+dy*(1-2*(q.x*q.x+q.z*q.z))+dz*2*(q.y*q.z+q.w*q.x);
+  const width=frame.width-radius,height=frame.height-radius;
+  return width>0&&height>0&&(x/width)**2+(y/height)**2<=1;
 }
 
 /** Swept front-to-back crossing, independent of camera and frame-rate. */
@@ -457,6 +468,7 @@ export class LabPortals {
     const up = new THREE.Vector3(0, 1, 0).applyQuaternion(placement.frame.quaternion);
     const frame = this.place(index, placement.position, placement.normal, up, placement.frame);
     frame.surfaceId = panel.uuid;
+    frame.backingIds = panel.userData.portalBackingIds || null;
     this.attachToSurface(index, placement.anchor);
     return { ...placement, frame };
   }

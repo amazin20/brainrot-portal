@@ -14,7 +14,7 @@ assert.ok(fs.existsSync(path.join(directory,'index.html')),'Stamp an existing pr
 const info={commit,version,artVersion:'v39-chromatic-worlds',levels:CAMPAIGN.length,verified:true,status:'technical-candidate',
  verificationScope:'Automated source/package checks; route jobs gate publication',
  acceptance:{humanPlaytest:false,physicalDeviceBenchmark:false,liveYandex:false},
- features:{campaignRooms:30,campaignFinaleLevel:30,separateVelocityMode:false,openChamberReview:{version:'open-chambers-v1',query:'edition=open',rooms:[24,28,30],separateSave:true}},
+ features:{campaignRooms:30,campaignFinaleLevel:30,separateVelocityMode:false,openChamberReview:{version:'human-laboratory-v2',query:'edition=open',rooms:[24,28,30],separateSave:true}},
  repository:process.env.GITHUB_REPOSITORY,run:process.env.GITHUB_RUN_ID};
 fs.writeFileSync(path.join(directory,'build-info.json'),JSON.stringify(info,null,2)+'\n');
 console.log(`Stamped ${directory}: ${version} / ${commit}`);

@@ -3,6 +3,8 @@ import { LabVelocityCompanion } from './LabVelocityCompanion.js';
 import { LabPortalShots } from './LabPortalShots.js';
 import { updateKineticVelocity, limitKineticSpeed, sweepKineticBody } from './LabKineticMovement.js';
 import { sweepBox } from './LabSweep.js';
+import {resolveRampMotion,followRampGround} from './LabRampContact.js';
+import {warmPortalPipeline} from './LabRenderWarmup.js';
 import { cargoLoadsPlate } from './LabPlateContact.js';
 import * as THREE from 'three';
 import { InputController } from './InputController.js';
@@ -79,6 +81,7 @@ export class LabGame {
     this.portals.prepare();
     this.portalActors.prepare();
     await this.renderer.compileAsync(this.scene, this.camera);
+    await warmPortalPipeline(this);
     this.render();
     this.loadingProfile.firstFrameMs = performance.now() - compileStart;
     this.callbacks.onProgress({ percent: 100, label: 'Можно отправляться' });
@@ -287,6 +290,7 @@ export class LabGame {
     this.portals.prepare();
     this.portalActors.prepare();
     if (this.renderer?.compileAsync) await this.renderer.compileAsync(this.scene, this.camera);
+    await warmPortalPipeline(this);
     this.performanceMonitor.reset(); this.accumulator = 0; this.lastFrame = performance.now();
     this.state = playing ? 'playing' : 'ready'; this.emitHud();
     this.renderer?.setAnimationLoop(this.animate);
@@ -346,13 +350,13 @@ export class LabGame {
     if (!hit || !this.portals?.ready) return true;
     const collider = this.colliders.find(c => c.mesh === object);
     const box = collider?.box ?? new THREE.Box3().setFromObject(object);
-    if (this.cameraRig?.clipsPortalBacking?.(box)) return false;
+    if (this.cameraRig?.clipsPortalBacking?.(box,object.uuid)) return false;
     // A camera is not a traveller: letting its boom pass through an entry
     // aperture before the player crosses puts it outside the room, looking at
     // the solid back of that same wall. Only a transported exit lens is exempt.
     const direction = this.cameraRig.raycaster.ray.direction;
     return !this.portals.portals.some(p => p && direction.dot(p.normal) >= -.00001
-      && pointInsidePortal(p, hit.point, .04) && portalBacksCollider(p, box));
+      && pointInsidePortal(p, hit.point, .04) && (p.backingIds?.includes(object.uuid)||portalBacksCollider(p, box)));
   }
 
   firePortal(index) {
@@ -415,7 +419,7 @@ export class LabGame {
       ? new THREE.Vector3(0, 0, -1).applyAxisAngle(UP, this.yaw) : undefined;
     const result = this.portals.placeOnPanel(index, panel, hitPoint, { blockers: this.colliders, preferredUp });
     if (!result.ok) {
-      this.callbacks.onToast(result.reason === 'overlap' ? 'Раздвинь проходы немного дальше'
+      this.callbacks.onToast(result.reason === 'overlap' ? 'Здесь уже другой портал. Перенеси его цвет или выбери место рядом'
         : result.reason === 'obstructed' ? 'Перед проходом нужно свободное место'
           : 'Здесь проход не помещается. Выбери свободную белую панель');
       return false;
@@ -649,12 +653,13 @@ export class LabGame {
     const kineticImpact = Math.max(0, -this.playerVelocity.y);
     this.playerPosition.addScaledVector(this.playerVelocity, dt);
     const sweptGroundContact = this.kineticMode
-      ? sweepKineticBody(this, this.playerPosition, previous, this.playerVelocity, PLAYER_RADIUS, PLAYER_HEIGHT) : false;
+      ? sweepKineticBody(this, this.playerPosition, previous, this.playerVelocity, PLAYER_RADIUS, PLAYER_HEIGHT) : resolveRampMotion(this,this.playerPosition,previous,this.playerVelocity,PLAYER_RADIUS,PLAYER_HEIGHT);
+    const rampSupport=followRampGround(this,this.playerPosition,previous,this.playerVelocity,wasGrounded);
     this.constrainPortalThroat(this.playerPosition, previous, this.playerVelocity);
     const center = this.playerPosition.clone().addScaledVector(UP, CENTER_HEIGHT);
     const previousCenter = previous.clone().addScaledVector(UP, CENTER_HEIGHT);
     const teleport = this.portals.tryTeleport(center, previousCenter, this.playerVelocity, PLAYER_RADIUS);
-    this.groundedByCollider = sweptGroundContact;
+    this.groundedByCollider = sweptGroundContact || rampSupport;
     const downwardImpact = this.kineticMode ? kineticImpact : Math.max(0, -this.playerVelocity.y);
     if (teleport) {
       const entry = this.portals.portals[teleport.entryIndex], exit = this.portals.portals[teleport.exitIndex];
@@ -746,6 +751,7 @@ export class LabGame {
   floorHeight(x, z, maxY = Infinity, throughPortals = false) {
     let height = null;
     for (const f of this.floors) {
+      if(f.enabled===false||x<f.minX||x>f.maxX||z<f.minZ||z>f.maxZ)continue;
       const y = f.heightAt ? f.heightAt(x,z) : (f.y ?? 0);
       if(y===null)continue;
       if (throughPortals && f.mesh && this.portalOpensCollider({ mesh: f.mesh,
@@ -812,11 +818,13 @@ export class LabGame {
   portalOpensCollider(collider, center, radius) {
     if (!this.portals.ready) return false;
     return this.portals.portals.some((portal, index) => {
-      if (!portal || !this.portals.isInsideAperture(index, center, radius)) return false;
-      const planeDistance = Math.abs(center.clone().sub(portal.position).dot(portal.normal));
+      if (!portal) return false;
+      const planeDistance = Math.abs((center.x-portal.position.x)*portal.normal.x+(center.y-portal.position.y)*portal.normal.y+(center.z-portal.position.z)*portal.normal.z);
       if (planeDistance > radius + .7 + Math.abs(portal.normal.y) * CENTER_HEIGHT) return false;
+      if (!this.portals.isInsideAperture(index, center, radius)) return false;
       // The aperture opens both its thin white panel and the structural wall behind it.
-      return collider.mesh.uuid === this.portalSurfaceIds[index]
+      return portal.backingIds?.includes(collider.mesh.uuid)
+        || collider.mesh.uuid === this.portalSurfaceIds[index]
         || (collider.portalOwner && collider.portalOwner.userData.portalColliderId === this.portalSurfaceIds[index])
         || portalBacksCollider(portal, collider.box);
     });
@@ -855,7 +863,7 @@ export class LabGame {
       if (velocity.y <= 0 && previous.y >= b.max.y - .035) {
         position.y = b.max.y; velocity.y = 0; this.groundedByCollider = true; continue;
       }
-      if (this.playerGrounded && velocity.y <= 0 && b.max.y - previous.y <= .37 && b.max.y - previous.y > 0) {
+      if (this.playerGrounded && b.max.y - previous.y <= .37 && b.max.y - previous.y > 0) {
         position.y = b.max.y; velocity.y = 0; this.groundedByCollider = true; continue;
       }
       if (velocity.y > 0 && previous.y + height <= b.min.y + .02) {

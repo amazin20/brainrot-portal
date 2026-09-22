@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { sweepBox } from './LabSweep.js';
+import {sweepRampContact} from './LabRampContact.js';
 import { applyVelocityFlightAssist } from './LabVelocityAssist.js';
 
 // Separate, opt-in tuning: the puzzle campaign retains its authored timing.
@@ -120,11 +121,25 @@ export function sweepKineticBody(game, position, previous, velocity, radius, hei
       center.copy(hitPosition).y += height / 2;
       if (game.portalOpensCollider(collider, center, radius)) continue;
       // Preserve the existing grounded step-up affordance for small lips.
-      if (hit.axis !== 'y' && game.playerGrounded && velocity.y <= 0
+      if (hit.axis !== 'y' && game.playerGrounded
         && box.max.y > from.y && box.max.y - from.y <= .37) continue;
       if (!contact || hit.t < contact.t) contact = hit;
     }
+    for(const ramp of game.ramps||[]){
+      const hit=sweepRampContact(ramp,from,target,radius,height);
+      if(hit&&hit.t<=portalFraction+1e-8&&(!contact||hit.t<contact.t))contact=hit;
+    }
     if (!contact) { from.copy(target); break; }
+    if(contact.normal){
+      from.lerp(target,contact.t).addScaledVector(contact.normal,.0001);
+      const remaining=delta.multiplyScalar(1-contact.t),inward=remaining.dot(contact.normal);
+      if(inward<0)remaining.addScaledVector(contact.normal,-inward);
+      target.copy(from).add(remaining);
+      const normalSpeed=velocity.dot(contact.normal);
+      if(normalSpeed<0)velocity.addScaledVector(contact.normal,-normalSpeed);
+      grounded ||= contact.kind==='ramp-top';
+      continue;
+    }
     from.lerp(target, contact.t);
     from[contact.axis] += contact.sign * .0001;
     const remaining = delta.multiplyScalar(1 - contact.t);

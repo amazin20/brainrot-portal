@@ -1,3 +1,4 @@
+import {encloseLab} from './LabHumanLab.js';
 import * as THREE from 'three';
 import {RoundedBoxGeometry} from 'three/addons/geometries/RoundedBoxGeometry.js';
 import {SolidAssembly,placeSolidModel} from './LabSolidModels.js';
@@ -25,12 +26,7 @@ export function applyDeckFinish(k){
 }
 
 export function addSky(k){
- const geometry=new THREE.SphereGeometry(285,48,24),pos=geometry.attributes.position,colors=[];
- const top=new THREE.Color(0x2c91c5),horizon=new THREE.Color(0x99cfe4),lower=new THREE.Color(0x527997);
- for(let i=0;i<pos.count;i++){const h=pos.getY(i)/285,c=h>0?horizon.clone().lerp(top,Math.pow(h,.55)):horizon.clone().lerp(lower,Math.min(1,-h*2));colors.push(c.r,c.g,c.b);}
- geometry.setAttribute('color',new THREE.Float32BufferAttribute(colors,3));
- const mat=new THREE.MeshBasicMaterial({vertexColors:true,side:THREE.BackSide,depthWrite:false,fog:false});
- const sky=new THREE.Mesh(geometry,mat);sky.name='Gradient atmosphere';sky.position.y=30;sky.renderOrder=-1000;k.world.root.add(sky);
+ encloseLab(k,{base:k.spec.id==='open-communicating-lifts'?-2:-9,roof:k.ceiling});
 }
 
 function closedHull(width,depth){
@@ -44,6 +40,7 @@ function closedHull(width,depth){
 export function reinforceDeck(k,deck,{legs=true}={}){
  const {minX,maxX,minZ,maxZ,y}=deck,w=maxX-minX,d=maxZ-minZ,x=(minX+maxX)/2,z=(minZ+maxZ)/2;
  k.geometry(closedHull(w-.18,d-.18),'shell',[x,y,z],Q(),{solid:true,name:'Closed load-bearing hull / '+deck.name});
+ deck.backingIds?.push(k.envelopes.at(-1).mesh.uuid);
  // Factory access ribs sit on the hull's vertical band, not on its walking face.
  for(let p=minX+2.4;p<maxX-1;p+=2.8)for(const s of [-1,1]){
   k.block([p,y-1.05,z+s*(d/2-.37)],[1.75,.46,.16],'dark',false);
@@ -114,7 +111,7 @@ function hoistHead(k,car){
 }
 
 export function finishOrbitalArchitecture(k,car){
- addSky(k);addHangarEnvelope(k);
+ encloseLab(k,{base:-9,roof:55,bounds:{minX:-56,maxX:56,minZ:-50,maxZ:54}});
  const decks=k.decks.filter(d=>d.name==='Departure plaza'||d.name==='Western sorting terrace'||d.name==='Eastern destination terrace');
  decks.forEach(d=>reinforceDeck(k,d));
  tractionMachine(k,car);hoistHead(k,car);

@@ -190,7 +190,9 @@ export class LabPhysics {
   setStaticEnabled(id, enabled) {
     const item = this.solids.get(id);
     if (!item) return false;
-    item.body.collisionFilterMask = enabled ? CARGO : 0;
+    const mask=enabled?CARGO:0;
+    if(item.body.collisionFilterMask===mask)return true;
+    item.body.collisionFilterMask = mask;
     this.world.broadphase.dirty = true;
     this.cargoBody?.wakeUp();
     return true;
