@@ -51,8 +51,17 @@ export function portalIntersectsBox(frame, box, minDepth = -0.7, maxDepth = 0.08
  * aperture's lower edge or a freestanding obstacle must stay collidable. */
 export function portalBacksCollider(frame, box, maxDepth = .7) {
   if (!box || box.isEmpty()) return false;
-  const local = boxInPortalFrame(frame, box);
-  return local.max.z <= .08 && local.max.z >= -maxDepth && local.min.z < .08
+  // Project the AABB onto the portal normal first. This is exactly the z
+  // interval of the eight transformed corners, without allocating those
+  // corners for every actor/collider pair at 120 physics steps per second.
+  const nx=frame.normal.x,ny=frame.normal.y,nz=frame.normal.z;
+  const centre=((box.min.x+box.max.x)*.5-frame.position.x)*nx
+    +((box.min.y+box.max.y)*.5-frame.position.y)*ny
+    +((box.min.z+box.max.z)*.5-frame.position.z)*nz;
+  const extent=(box.max.x-box.min.x)*.5*Math.abs(nx)
+    +(box.max.y-box.min.y)*.5*Math.abs(ny)+(box.max.z-box.min.z)*.5*Math.abs(nz);
+  const front=centre+extent;
+  return front <= .08 && front >= -maxDepth && centre-extent < .08
     && portalIntersectsBox(frame, box, -maxDepth, .08);
 }
 
@@ -457,6 +466,7 @@ export class LabPortals {
     const up = new THREE.Vector3(0, 1, 0).applyQuaternion(placement.frame.quaternion);
     const frame = this.place(index, placement.position, placement.normal, up, placement.frame);
     frame.surfaceId = panel.uuid;
+    frame.backingIds = new Set(panel.userData.portalBackingIds || []);
     this.attachToSurface(index, placement.anchor);
     return { ...placement, frame };
   }

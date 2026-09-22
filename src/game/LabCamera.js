@@ -439,8 +439,8 @@ export class LabCamera {
   // already in front. That one backing surface is removed by the world
   // clipping plane, so colliding the boom with it would contradict the rendered
   // passage and collapse the lens into the character. Other walls still block.
-  clipsPortalBacking(box) {
-    return !!this.portalExit && portalBacksCollider(this.portalExit, box)
+  clipsPortalBacking(box, colliderId) {
+    return !!this.portalExit && (this.portalExit.backingIds?.has(colliderId) || portalBacksCollider(this.portalExit, box))
       && this.camera.getWorldDirection(this.clipDirection).dot(this.portalExit.normal) > .04;
   }
 

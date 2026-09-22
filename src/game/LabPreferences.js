@@ -38,8 +38,13 @@ export const QUALITY_PRESETS=Object.freeze({low:{pixelRatio:1,portalResolution:6
 export function applyLabQuality(game,key,dpr=globalThis.devicePixelRatio||1){
   const profile=QUALITY_PRESETS[key]||QUALITY_PRESETS.balanced;game.quality={...profile};
   if(game.renderer){game.renderer.setPixelRatio(Math.min(dpr,profile.pixelRatio));game.renderer.setSize(innerWidth,innerHeight);game.renderer.shadowMap.enabled=profile.shadows;}
-  if(game.keyLight){game.keyLight.castShadow=profile.shadows;game.keyLight.shadow.mapSize.set(profile.shadowSize,profile.shadowSize);
-    game.keyLight.shadow.map?.dispose();game.keyLight.shadow.map=null;game.keyLight.shadow.needsUpdate=true;}
+  if(game.keyLight){game.keyLight.castShadow=profile.shadows;
+    const shadow=game.keyLight.shadow;
+    // onReady reapplies the saved preset. Do not discard the shadow target
+    // just warmed during loading when its dimensions have not changed.
+    if(shadow.mapSize.x!==profile.shadowSize||shadow.mapSize.y!==profile.shadowSize){
+      shadow.mapSize.set(profile.shadowSize,profile.shadowSize);shadow.map?.dispose();shadow.map=null;shadow.needsUpdate=true;
+    }}
   if(game.portals)game.portals.maxResolution=profile.portalResolution;
   game.performanceMonitor?.reset();
 }
