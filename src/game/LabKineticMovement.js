@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { sweepBox } from './LabSweep.js';
-import {sweepRampContact} from './LabRampContact.js';
+import {sweepRampContact,canStepAcrossRampEnd} from './LabRampContact.js';
 import { applyVelocityFlightAssist } from './LabVelocityAssist.js';
 
 // Separate, opt-in tuning: the puzzle campaign retains its authored timing.
@@ -21,6 +21,7 @@ export function updateKineticVelocity(game, dt, move, { sprint = false } = {}) {
   const wish = new THREE.Vector3(move.x, 0, move.y).applyAxisAngle(new THREE.Vector3(0, 1, 0), game.yaw);
   if (inputLength > 0) wish.normalize();
   let speed = Math.hypot(velocity.x, velocity.z);
+  const startingSpeed = speed;
   const slideHeld = Boolean(game.slideHeld || keys.has('KeyC'));
   state.sliding = game.playerGrounded && slideHeld && speed > KINETIC_MOVEMENT.slideMinimum;
   state.sprinting = sprint && inputLength > 0 && !state.sliding;
@@ -57,7 +58,10 @@ export function updateKineticVelocity(game, dt, move, { sprint = false } = {}) {
   }
   // With no airborne input these assignments retain both planar components.
   if (game.playerGrounded || inputLength || state.sliding) {
-    if (speed <= .3 && reverse) nextHeading = desiredHeading;
+    // Decide a near-rest direction from the incoming speed, not the speed
+    // after this tick's acceleration. A tiny gravity-induced downhill drift
+    // otherwise accelerates away from uphill input, brakes next tick, and loops.
+    if (reverse && (startingSpeed <= .3 || speed <= .3)) nextHeading = desiredHeading;
     velocity.x = Math.sin(nextHeading) * speed;
     velocity.z = Math.cos(nextHeading) * speed;
   }
@@ -127,7 +131,7 @@ export function sweepKineticBody(game, position, previous, velocity, radius, hei
     }
     for(const ramp of game.ramps||[]){
       const hit=sweepRampContact(ramp,from,target,radius,height);
-      if(hit&&hit.t<=portalFraction+1e-8&&(!contact||hit.t<contact.t))contact=hit;
+      if(hit&&!canStepAcrossRampEnd(hit,from,target,game.playerGrounded)&&hit.t<=portalFraction+1e-8&&(!contact||hit.t<contact.t))contact=hit;
     }
     if (!contact) { from.copy(target); break; }
     if(contact.normal){

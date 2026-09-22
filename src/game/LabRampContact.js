@@ -44,6 +44,20 @@ export function sweepRampContact(ramp,from,to,radius,height){
  return closest;
 }
 
+/** Apply the same small, grounded step policy as ordinary deck edges.
+ * The radius-expanded ramp end is not a wall above its actual endpoint height.
+ * In particular a traveller returning from a flush landing must be able to
+ * descend. Airborne/underside approaches retain the full closed collision. */
+export function canStepAcrossRampEnd(contact,from,to,grounded){
+ if(!grounded||contact.kind!=='ramp-end')return false;
+ const r=contact.ramp,edge=contact.normal.z>0?r.maxZ:r.minZ;
+ const endHeight=sampleRampSurface(r,edge).height;
+ const targetHeight=sampleRampSurface(r,THREE.MathUtils.clamp(to.z,r.minZ,r.maxZ)).height;
+ return Math.abs(endHeight-from.y)<=.37
+  && Math.abs(targetHeight-from.y)<=.37
+  && to.y>=targetHeight-.37;
+}
+
 /** Non-kinetic rooms use the same ramp contacts, without changing their wall
  * controller. Do not rewind or teleport a player who starts below a ramp. */
 export function resolveRampMotion(game,position,previous,velocity,radius,height){
@@ -52,7 +66,7 @@ export function resolveRampMotion(game,position,previous,velocity,radius,height)
  for(let i=0;i<4;i++){
   const delta=target.clone().sub(from);if(delta.lengthSq()<1e-14)break;
   let contact=null;
-  for(const ramp of game.ramps){const hit=sweepRampContact(ramp,from,target,radius,height);if(hit&&(!contact||hit.t<contact.t))contact=hit;}
+  for(const ramp of game.ramps){const hit=sweepRampContact(ramp,from,target,radius,height);if(hit&&!canStepAcrossRampEnd(hit,from,target,game.playerGrounded)&&(!contact||hit.t<contact.t))contact=hit;}
   if(!contact){from.copy(target);break;}
   from.lerp(target,contact.t).addScaledVector(contact.normal,.0001);
   const remaining=delta.multiplyScalar(1-contact.t),inward=remaining.dot(contact.normal);
