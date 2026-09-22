@@ -36,7 +36,7 @@ try{
    };
    window.__RESEARCH_RESTORE__=()=>{g.updateVisuals=update;gl.linkProgram=link;e.newPrograms=links;};
   },{room,record:process.env.RECORD!=='0'});
-  const options=process.env.ALTERNATE==='1'?(room===31?{route:'scout-first',recover:true}:room===32?{route:'stored-energy'}:{recover:true}):{};
+  const options=process.env.RECOVERY==='1'?{recover:true}:process.env.ALTERNATE==='1'?(room===31?{route:'scout-first',recover:true}:room===32?{route:'stored-energy'}:{recover:true}):{};
   let route;try{route=await page.evaluate(async o=>window.__NESI_RUN_LEVEL_ROUTE__(o),options);}finally{await page.evaluate(()=>window.__RESEARCH_RESTORE__());}
   assert.equal(route.pass,true);assert.equal(route.resets,0);assert.equal(route.respawns,0);assert.equal(route.level,room);assert.deepEqual(errors,[]);
   assert.equal(await page.evaluate(()=>localStorage.getItem('brainrot-portal.preferences.v24')),before);

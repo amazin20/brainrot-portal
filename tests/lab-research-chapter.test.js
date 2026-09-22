@@ -8,7 +8,7 @@ import {resolvePortalPlacement} from '../src/game/LabPortals.js';
 import {RESEARCH_SPECS,StoredMotionDrive} from '../src/game/LabResearchChambers.js';
 let shared;
 async function room(n){shared??=await createHeadlessGame();shared.chamberEdition='open';await shared.selectLevel(n-1,false);return shared;}
-for(const [n,options,aspect] of [[31,{},16/9],[31,{route:'scout-first',recover:true},16/10],[32,{},16/9],[32,{route:'stored-energy'},16/10],[32,{route:'stored-energy'},16/9],[33,{},16/9],[33,{recover:true},16/10]]){
+for(const [n,options,aspect] of [[31,{},16/9],[31,{route:'scout-first',recover:true},16/10],[32,{},16/9],[32,{recover:true},16/9],[32,{route:'stored-energy'},16/10],[32,{route:'stored-energy'},16/9],[33,{},16/9],[33,{recover:true},16/10]]){
  test(`research ${n}: ordinary inputs, original companion, options ${JSON.stringify(options)} at ${aspect}`,async()=>{
   const g=await room(n);g.camera.aspect=aspect;g.camera.updateProjectionMatrix();
   const r=await runV8Journey(g,{journeyOptions:options});

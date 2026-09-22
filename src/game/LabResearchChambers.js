@@ -90,8 +90,8 @@ export function buildResearch32(game,index=31){
  k.control('transmission',[7.7,6,2.5],()=>{drive.gear=1-drive.gear;},'E — переключить передачу I / II. Червячная передача удерживает другой подъёмник.');
  // Both routes use the same mechanisms. The lower recall is a visible machine
  // control, not an invisible reset of the player or companion.
- k.control('lower-return',[-16,0,8],()=>{drive.heights[0]=0;lower.stations[1].y=0;},'E — опустить первую кабину к служебному этажу.');
- k.control('upper-return',[7.7,6,-4],()=>{drive.heights[1]=6;upper.stations[1].y=6;},'E — опустить вторую кабину к промежуточной галерее.');
+ k.control('lower-return',[-16,0,8],()=>{drive.gear=0;drive.heights[0]=0;lower.stations[1].y=0;},'E — вернуть первую кабину и включить передачу I.');
+ k.control('upper-return',[7.7,6,-4],()=>{drive.gear=1;drive.heights[1]=6;upper.stations[1].y=6;},'E — вернуть вторую кабину и включить передачу II.');
  for(const x of [-19,19])k.block([x,1.15,x<0?-16.4:16.4],[4.8,2.3,3.1],'dark');
  // A continuous visible shaft and two gearboxes show where stored motion goes.
  k.geometry(new THREE.CylinderGeometry(.22,.22,14,20),'metal',[-12,3,-17],Q().setFromAxisAngle(V(0,0,1),Math.PI/2),{solid:true});

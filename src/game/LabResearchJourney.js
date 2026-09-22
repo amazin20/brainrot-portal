@@ -20,7 +20,7 @@ export function runResearch31(d,{route='carry-first',recover=false}={}){
  release(d);d.aim(1,p['north-bridge'].getFrame().center);wait(.3);collect(d);walk(4,1);walk(4,-20);
  until(()=>g.state==='won',3,'Light relay joint exit missed');mark('The same source now leads in a perpendicular direction');
 }
-export function runResearch32(d,{route='powered-ascent'}={}){
+export function runResearch32(d,{route='powered-ascent',recover=false}={}){
  preciseAim(d);const {game:g,level:l,walk,wait,mark,until}=d,p=l.panels,[a,b]=l.cabins;
  d.aim(0,p['air-source'].getFrame().center);walk(-26,6);walk(-26,-20);d.aim(1,p['turbine-feed'].getFrame().center);
  until(()=>l.drive.flow,2,'Air did not reach the receiver');mark('A geometric air path spins the receiver');
@@ -28,7 +28,16 @@ export function runResearch32(d,{route='powered-ascent'}={}){
  if(route==='stored-energy'){wait(12);d.aim(0,p['service-return'].getFrame().center);walk(-26,-21.5);walk(-19,-21.5);const before=g.teleportCount;g.input.jumpQueued=true;for(let i=0;i<180&&g.teleportCount===before;i++){d.worldMove(0,-1);d.frame();}d.stop();check(g.teleportCount>before,'Service return jump missed');wait(.7);g.clearPortals();check(l.drive.wheel.omega>15,'Insufficient stored mechanical energy');mark('The same portals become a service shortcut while stored motion remains');}
  walk(-26,9);walk(-18,10);collect(d);walk(-8,9);walk(-8,2);
  until(()=>a.position.y>5.98,25,'First drive did not reach gallery');walk(3,1);mark('Worm drive holds the first landing without an artificial checkpoint');
- walk(3,0);release(d);walk(6.3,2.5);check(g.interact()&&l.drive.gear===1,'Transmission selector missed');collect(d);
+ walk(3,0);release(d);walk(6.3,2.5);check(g.interact()&&l.drive.gear===1,'Transmission selector missed');
+ if(recover){
+  walk(12,1);until(()=>g.playerGrounded&&g.playerPosition.y<.1,5,'Intermediate gallery fall missed');
+  walk(12,9);walk(-14,9);walk(-14.6,8);check(g.interact(),'Lower recall terminal missed');
+  until(()=>a.position.y<.03,5,'First cabin was not recalled to the real floor');
+  walk(-8,9);walk(-8,2);until(()=>a.position.y>5.98,25,'First cabin cannot recover a traveller after selecting the other gear');
+  walk(3,1);walk(6.3,2.5);check(g.interact()&&l.drive.gear===1,'Restored selector missed');
+  mark('Falling after changing the transmission still allows a physical return to the companion');
+ }
+ collect(d);
  walk(4,-6);walk(4,-12);until(()=>b.position.y>11.98,35,'Second drive did not reach upper gallery');
  walk(4,-23);until(()=>g.state==='won',3,'Stored-motion joint finish missed');mark('Stored rotation powers the second mechanism; both travellers arrive');
 }
