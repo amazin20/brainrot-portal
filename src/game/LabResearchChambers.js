@@ -71,7 +71,7 @@ export function buildResearch32(game,index=31){
  const drive=new StoredMotionDrive();
  k.panel('air-source',[19,3,9],[0,0,1]);
  k.panel('turbine-feed',[-19,3,-23],[0,0,1]);
- k.panel('service-return',[-24.5,2.1,12],[0,0,-1]);
+ k.panel('service-return',[-24.5,2.4,12],[0,0,-1]);
  const fan=k.projector([19,3,15],[0,0,-1],{rotating:true,radius:1.25});
  const wheel=k.projector([-19,3,-15],[0,0,-1],{radius:1.9});
  // Air reaches the front grille, not the box behind it. This ray is shared

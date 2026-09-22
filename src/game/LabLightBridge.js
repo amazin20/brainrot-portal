@@ -2,10 +2,27 @@ import * as THREE from 'three';
 import {tracePortalRay} from './LabPuzzleMechanics.js';
 import {transformPortalDirection} from './LabPortals.js';
 const V=(x=0,y=0,z=0)=>new THREE.Vector3(x,y,z);
+/** Intersect a transverse sheet with the actual elliptical aperture. This is
+ * geometry, not a centre-shot requirement: off-centre shots trim the sheet. */
+export function clipPortalRibbon(frame,point,across,low,high,margin=.035){
+ const inverse=frame.quaternion.clone().invert(),p=point.clone().sub(frame.position).applyQuaternion(inverse),d=across.clone().applyQuaternion(inverse);
+ const w=frame.width-margin,h=frame.height-margin;
+ if(w<=0||h<=0)return null;
+ const a=(d.x/w)**2+(d.y/h)**2,b=2*(p.x*d.x/(w*w)+p.y*d.y/(h*h)),c=(p.x/w)**2+(p.y/h)**2-1;
+ if(a<1e-12)return c<=0?[low,high]:null;
+ const disc=b*b-4*a*c;if(disc<0)return null;
+ const root=Math.sqrt(disc),lo=Math.max(low,(-b-root)/(2*a)),hi=Math.min(high,(-b+root)/(2*a));
+ return hi>lo+.001?[lo,hi]:null;
+}
+function clipSolidRibbon(frame,point,across,normal,low,high){
+ // Clip both faces of the visible 14 cm thick sheet, not just its centre ray.
+ for(const offset of [0,-.14]){const interval=clipPortalRibbon(frame,point.clone().addScaledVector(normal,offset),across,low,high);if(!interval)return null;[low,high]=interval;}
+ return [low,high];
+}
 /** A sheet follows actual portal rays. Each visible box is the exact box used
  * by the player, cargo, camera and muzzle. Rotated floor apertures form a thin
  * stepped curtain rather than filling their entire diagonal bounding box. */
-export function createLightBridge(kit,{origin,direction,span=[0,0,1],width=2.2,length=90,name='Solid light bridge'}={}){
+export function createLightBridge(kit,{origin,direction,span=[0,0,1],width=2.2,length=90,name='Solid light bridge',clipToAperture=Boolean(kit.clipLightApertures)}={}){
  const game=kit.game,w=kit.world,material=new THREE.MeshStandardMaterial({color:0x76e5e8,emissive:0x2295a0,emissiveIntensity:.65,roughness:.4,metalness:.15,transparent:true,opacity:.82});
  const subdivisions=12,segmentLimit=6;
  const pieces=Array.from({length:segmentLimit*subdivisions},(_,i)=>{
@@ -19,9 +36,9 @@ export function createLightBridge(kit,{origin,direction,span=[0,0,1],width=2.2,l
  const bridge={pieces,segments:[],update(){
   if(disposed)return;
   bridge.segments=tracePortalRay(game,V(...origin),V(...direction),{length,medium:'solid-light'});
-  const key=bridge.segments.flatMap(s=>[...s.a.toArray(),...s.b.toArray(),s.kind]).join(':')+'|'+(game.portals?.ready?game.portals.portals.map(p=>p.quaternion.toArray().join(',')).join('|'):'off');
+  const key=bridge.segments.flatMap(s=>[...s.a.toArray(),...s.b.toArray(),s.kind]).join(':')+'|'+(game.portals?.ready?game.portals.portals.map(p=>(clipToAperture?[...p.position.toArray(),...p.quaternion.toArray(),p.width,p.height]:p.quaternion.toArray()).join(',')).join('|'):'off');
   if(key===signature&&game.physics===bridge.physicsOwner)return;signature=key;bridge.physicsOwner=game.physics;
-  const active=new Set();let across=V(...span).normalize();
+  const active=new Set();let across=V(...span).normalize(),low=-width/2,high=width/2;
   for(let i=0;i<Math.min(segmentLimit,bridge.segments.length);i++){
    const s=bridge.segments[i];if(s.length<=.06)continue;
    const normal=new THREE.Vector3().crossVectors(s.direction,across).normalize();if(normal.y<0)normal.negate();
@@ -29,14 +46,19 @@ export function createLightBridge(kit,{origin,direction,span=[0,0,1],width=2.2,l
    // Every step is visible; collision never covers the empty corners between it.
    const n=Math.max(Math.abs(across.x),Math.abs(across.y),Math.abs(across.z))>.999999?1:subdivisions;
    for(let j=0;j<n;j++){
-    const idx=j===0?i:segmentLimit+i*(subdivisions-1)+j-1,p=pieces[idx],strip=width/n;
+    const idx=j===0?i:segmentLimit+i*(subdivisions-1)+j-1,p=pieces[idx],strip=(high-low)/n;
     active.add(idx);p.mesh.visible=p.collider.enabled=true;p.floor.enabled=false;
     const size=V(Math.abs(s.direction.x)*s.length+Math.abs(across.x)*strip+Math.abs(normal.x)*.14,Math.abs(s.direction.y)*s.length+Math.abs(across.y)*strip+Math.abs(normal.y)*.14,Math.abs(s.direction.z)*s.length+Math.abs(across.z)*strip+Math.abs(normal.z)*.14);
-    p.mesh.position.copy(s.a).add(s.b).multiplyScalar(.5).addScaledVector(across,(j+.5)*strip-width/2).addScaledVector(normal,-.07);p.mesh.scale.copy(size);p.mesh.updateMatrixWorld(true);p.collider.box.setFromObject(p.mesh);
+    p.mesh.position.copy(s.a).add(s.b).multiplyScalar(.5).addScaledVector(across,low+(j+.5)*strip).addScaledVector(normal,-.07);p.mesh.scale.copy(size);p.mesh.updateMatrixWorld(true);p.collider.box.setFromObject(p.mesh);
     if(Math.abs(normal.y)>.99){const b=p.collider.box;p.floor.minX=b.min.x;p.floor.maxX=b.max.x;p.floor.minZ=b.min.z;p.floor.maxZ=b.max.z;p.floor.y=b.max.y;p.floor.enabled=true;}
     game.physics?.updateStaticBox(p.mesh.uuid,p.collider.box,0,true);
    }
-   if(s.kind==='portal'&&game.portals.ready){const ps=game.portals.portals;const j=ps[0].position.distanceTo(s.b)<ps[1].position.distanceTo(s.b)?0:1;across=transformPortalDirection(across,ps[j],ps[1-j]).normalize();}
+   if(s.kind==='portal'&&game.portals.ready){
+    const ps=game.portals.portals,j=ps[0].position.distanceTo(s.b)<ps[1].position.distanceTo(s.b)?0:1;
+    if(clipToAperture){const interval=clipSolidRibbon(ps[j],s.b,across,normal,low,high);if(!interval)break;[low,high]=interval;}
+    across=transformPortalDirection(across,ps[j],ps[1-j]).normalize();
+    if(clipToAperture&&bridge.segments[i+1]){const next=bridge.segments[i+1],nextNormal=V().crossVectors(next.direction,across).normalize();if(nextNormal.y<0)nextNormal.negate();const interval=clipSolidRibbon(ps[1-j],next.a,across,nextNormal,low,high);if(!interval)break;[low,high]=interval;}
+   }
   }
   pieces.forEach((p,i)=>{if(active.has(i))return;p.mesh.visible=p.collider.enabled=p.floor.enabled=false;game.physics?.setStaticEnabled(p.mesh.uuid,false);});
  },dispose(){

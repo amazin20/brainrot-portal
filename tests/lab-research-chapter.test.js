@@ -4,10 +4,11 @@ import * as THREE from 'three';
 import {createHeadlessGame} from '../scripts/lab-headless.mjs';
 import {runV8Journey} from '../src/game/LabV8Journey.js';
 import {CAMPAIGN,campaignSpec} from '../src/game/LabCampaignLevels.js';
+import {resolvePortalPlacement} from '../src/game/LabPortals.js';
 import {RESEARCH_SPECS,StoredMotionDrive} from '../src/game/LabResearchChambers.js';
 let shared;
 async function room(n){shared??=await createHeadlessGame();shared.chamberEdition='open';await shared.selectLevel(n-1,false);return shared;}
-for(const [n,options,aspect] of [[31,{},16/9],[31,{route:'scout-first',recover:true},16/10],[32,{},16/9],[32,{route:'stored-energy'},16/10],[33,{},16/9],[33,{recover:true},16/10]]){
+for(const [n,options,aspect] of [[31,{},16/9],[31,{route:'scout-first',recover:true},16/10],[32,{},16/9],[32,{route:'stored-energy'},16/10],[32,{route:'stored-energy'},16/9],[33,{},16/9],[33,{recover:true},16/10]]){
  test(`research ${n}: ordinary inputs, original companion, options ${JSON.stringify(options)} at ${aspect}`,async()=>{
   const g=await room(n);g.camera.aspect=aspect;g.camera.updateProjectionMatrix();
   const r=await runV8Journey(g,{journeyOptions:options});
@@ -60,4 +61,13 @@ test('final chamber has a physical low service opening without removing the high
  g.scene.updateMatrixWorld(true);
  assert.equal(ray.intersectObjects(g.aimBlockers,true).filter(h=>g.isActiveBlocker(h.object)).length,0);
  ray.set(new THREE.Vector3(0,8,10),new THREE.Vector3(1,0,0));assert.ok(ray.intersectObjects(g.aimBlockers,true).some(h=>g.isActiveBlocker(h.object)&&h.distance<9));
+});
+
+test('service portal accepts modest aim error without its lower rim entering the physical floor',async()=>{
+ const g=await room(32),surface=g.firstLevel.panels['service-return'],frame=surface.getFrame();
+ for(const x of [-.2,0,.2])for(const y of [-.2,-.002,0,.2]){
+  const placement=resolvePortalPlacement(surface.mesh,frame.center.clone().add(new THREE.Vector3(x,y,0)),{blockers:g.colliders});
+  assert.equal(placement.ok,true,`Aim offset ${x}/${y}: ${placement.reason}`);
+  assert.ok(placement.position.y-placement.frame.height>0);
+ }
 });

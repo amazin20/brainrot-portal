@@ -8,7 +8,7 @@ const V=(...p)=>new THREE.Vector3(...p),Q=()=>new THREE.Quaternion();
  * Only structural parts get collision. Every floor has its own closed chassis. */
 export class ResearchChamber extends OpenChamber {
  constructor(game,spec,index,theme,bounds,base,roof){
-  super(game,spec,index,theme);this.bounds=bounds;this.ceiling=roof;this.base=base;
+  super(game,spec,index,theme);this.bounds=bounds;this.ceiling=roof;this.base=base;this.clipLightApertures=true;
   encloseLab(this,{base,roof});
   // Report the actual room wall, not the brighter paint on machine housings.
   this.world.root.traverse(o=>{if(o.isMesh&&o.material?.name==='Structural laboratory wall')this.world.materials.wall=o.material;});
