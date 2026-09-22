@@ -31,13 +31,13 @@ export function buildResearch31(game,index=30){
   if(!projected)return 'СВЕТ УПИРАЕТСЯ В ПАНЕЛЬ / СВЯЗЬ НЕ СОБРАНА';
   const dy=Math.abs(projected.a.y-6);return dy>.38?'МОСТ НЕ НА УРОВНЕ НАСТИЛА / ИЗМЕНИ ВЫСОТУ ПОРТАЛА':Math.abs(projected.direction.z)>.8?'МОСТ К ВЫХОДНОЙ ГАЛЕРЕЕ':'МОСТ К ПОСТОЯННОЙ ПЛОЩАДКЕ';
  };
- k.display([4,15,-24.8],()=>routeText()+'\nСВЕТ — ВРЕМЕННАЯ ОПОРА / ТЁМНЫЙ НАСТИЛ — ПОСТОЯННЫЙ',21,2);
+ k.display([4,15,-24.8],()=>routeText()+'\nСВЕТ — ВРЕМЕННАЯ ОПОРА / СПЛОШНОЙ НАСТИЛ — ПОСТОЯННЫЙ',21,2);
  k.label('31 / СВЕТОВАЯ РАЗВЯЗКА',[-28.32,12,12],[1,0,0],11,1.4);
  k.label('СЛУЖЕБНЫЙ ВОЗВРАТ',[ -18.4,-.8,-17.2],[0,0,1],9,.8);
  const l=k.finishResearch([-21,6,15],[-23,6.6,13],[4,6,-20],{light,spawnView:{yaw:.4,pitch:-.04}});
  const dispose=l.dispose;l.dispose=()=>{light.dispose();dispose();};
  l.getObjective=()=>routeText()+'. На центральном острове мост можно перестроить.';
- l.getContextLesson=()=>['light-sheet-rule','ЛКМ / ПКМ','Свет проходит через те же порталы. Пока меняешь связь, стой на тёмном постоянном настиле. Внизу есть обратный путь.',false];
+ l.getContextLesson=()=>['light-sheet-rule','ЛКМ / ПКМ','Свет проходит через те же порталы. Пока меняешь связь, стой на сплошной постоянной площадке. Внизу есть обратный путь.',false];
  l.puzzleGeometry={orders:['carry-first','scout-first'],footprint:58*48,goalHeight:6,noProgressFlags:true,sourceCount:1,recoveryFloor:-4};return l;
 }
 

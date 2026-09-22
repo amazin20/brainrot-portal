@@ -20,7 +20,7 @@ try{
   await page.waitForFunction(()=>window.__NESI_DEMO_GAME__?.state==='ready');
   const info=await page.evaluate(async()=>{const r=await fetch('build-info.json',{cache:'no-store'});if(!r.ok)throw new Error('Build identity unavailable');return r.json();});
   if(process.env.BUILD_COMMIT)assert.equal(info.commit,process.env.BUILD_COMMIT,'Wrong production revision');
-  const menu=await page.$$eval('#level-select option',items=>items.map(o=>Number(o.value)));assert.deepEqual(menu,[23,27,29]);
+  const menu=await page.$$eval('#level-select option',items=>items.map(o=>Number(o.value)));assert.deepEqual(menu,[23,27,29,30,31,32]);
   const before=await page.evaluate(()=>({classic:localStorage.getItem('brainrot-portal.preferences.v24'),legacy:localStorage.getItem('nesi.preferences.v8')}));
   await page.click('#play-button');await page.waitForFunction(()=>window.__NESI_DEMO_GAME__?.state==='playing');
   await page.evaluate(()=>window.__NESI_DEMO_GAME__.renderer.setAnimationLoop(null));

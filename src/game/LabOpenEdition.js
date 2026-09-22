@@ -1,6 +1,6 @@
-/** The three rebuilt rooms are an explicit review edition. Neither selecting
+/** The rebuilt rooms and the research chapter form an explicit review edition. Neither selecting
  * this edition nor completing it reads or writes the original campaign save. */
-export const OPEN_ROOM_INDICES=Object.freeze([23,27,29]);
+export const OPEN_ROOM_INDICES=Object.freeze([23,27,29,30,31,32]);
 export function readOpenEdition(query){
  const params=new URLSearchParams(query),enabled=params.get('edition')==='open',index=Number(params.get('level'))-1;
  return {enabled,levelIndex:OPEN_ROOM_INDICES.includes(index)?index:OPEN_ROOM_INDICES[0]};

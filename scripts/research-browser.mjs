@@ -45,6 +45,7 @@ try{
   for(const [i,f]of evidence.frames.entries()){fs.writeFileSync(path.join(dir,String(i).padStart(5,'0')+'.png'),Buffer.from(f.png,'base64'));delete f.png;}
   for(const [i,m]of evidence.marks.entries()){fs.writeFileSync(path.join(out,`${room}-mark-${i}.png`),Buffer.from(m.png,'base64'));delete m.png;}
   // A separately labelled inspection camera is NOT route evidence.
+  await page.evaluate(()=>{document.querySelectorAll('.screen').forEach(e=>e.classList.remove('screen--active'));});
   await page.evaluate(room=>{const g=window.__NESI_DEMO_GAME__,v={31:[[24,15,17],[-6,5,-7]],32:[[23,18,18],[-4,5,-10]],33:[[28,27,24],[-4,9,-3]]}[room];g.cameraRig.restoreProjection?.();g.camera.position.fromArray(v[0]);g.camera.lookAt(...v[1]);g.camera.updateMatrixWorld(true);g.render();},room);
   await page.screenshot({path:path.join(out,`${room}-inspection.png`)});
   const report={source:build.commit,room,url:url.href,route,options,errors,saveIsolated:true,...evidence,
