@@ -15,11 +15,11 @@ jobs:
       revision: ${{ steps.commit.outputs.revision }}
     steps:
       - uses: actions/checkout@v4
-      - name: Apply the readable integration diff with exact checksum
+      - name: Apply source changes only; workflow changes use the authorized connector
         run: |
           echo '584500ef66e1a5551854b1dd8aec9693709f3696d7240ac46ac91657d4be3dbd  .rebuild/open-integration.patch' | sha256sum -c -
-          git apply --check --unidiff-zero .rebuild/open-integration.patch
-          git apply --unidiff-zero .rebuild/open-integration.patch
+          git apply --check --unidiff-zero --exclude='.github/workflows/*' .rebuild/open-integration.patch
+          git apply --unidiff-zero --exclude='.github/workflows/*' .rebuild/open-integration.patch
           python3 - <<'PY'
           import subprocess
           expected={
@@ -40,14 +40,14 @@ jobs:
             assert actual==sha,(name,actual,sha)
           print('All new source files match the locally tested bytes.')
           PY
-          rm .rebuild/open-integration.patch .github/workflows/open-integrate.yml
-      - name: Preserve final readable source on the rebuild branch only
+          rm .rebuild/open-integration.patch .github/workflows/open-integrate.yml .github/workflows/rebuild-source.yml
+      - name: Preserve integrated source on the rebuild branch
         id: commit
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add -u
-          git commit -m 'Integrate three spacious rebuilt chambers with isolated saves and additive release gates'
+          git commit -m 'Integrate three spacious rebuilt chambers with isolated saves'
           git push origin HEAD:rebuild/open-chambers-20260922
           echo "revision=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
   review:

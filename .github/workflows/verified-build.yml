@@ -230,3 +230,43 @@ jobs:
           path: dist-yandex/
           if-no-files-found: error
           retention-days: 14
+
+  open-chambers:
+    name: Rebuilt open chamber ${{ matrix.room }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        room: [24, 28, 30]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.revision }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Build the exact candidate, with unchanged original assets
+        run: |
+          npm ci
+          npm install --no-save --package-lock=false puppeteer-core@24.16.0
+          npm run build
+          node scripts/stamp-build.mjs v39-campaign-30
+      - name: Verify the distinct three-room edition through the real HTTP UI
+        env:
+          ROOM: ${{ matrix.room }}
+          RECORD: '0'
+        run: |
+          npm run preview -- --host 127.0.0.1 --port 4173 >open-preview.log 2>&1 &
+          for i in {1..30}; do curl -fsS http://127.0.0.1:4173/ >/dev/null && break; sleep 1; done
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+          node scripts/open-browser-review.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: open-chambers-${{ matrix.room }}
+          path: |
+            qa/open-browser/
+            open-preview.log
+          retention-days: 14

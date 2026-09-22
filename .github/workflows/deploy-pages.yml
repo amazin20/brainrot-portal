@@ -70,10 +70,20 @@ jobs:
         run: |
           export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
           node scripts/verify-public.mjs
+      - name: Verify the published open-chamber edition, not just the legacy menu
+        env:
+          PAGE_URL: ${{ steps.deployment.outputs.page_url }}
+          BUILD_COMMIT: ${{ github.sha }}
+          RECORD: '0'
+        run: |
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+          node scripts/open-browser-review.mjs
       - name: Preserve evidence from the public site itself
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: public-site-verification
-          path: live-evidence/
+          path: |
+            live-evidence/
+            qa/open-browser/
           retention-days: 14
