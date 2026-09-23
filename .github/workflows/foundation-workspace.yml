@@ -1,0 +1,31 @@
+name: Foundation exact workspace
+on:
+  push:
+    branches: [review/foundation-workspace-20260923]
+    paths: [.github/workflows/foundation-workspace.yml]
+permissions:
+  contents: read
+jobs:
+  source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: 711a47fa70afbfb97dc4bd69f0b88b9b5b65b45e
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: |
+          npm ci
+          npm install --no-save --package-lock=false puppeteer-core@24.16.0
+          mkdir -p /tmp/foundation-workspace
+          git rev-parse HEAD > /tmp/foundation-workspace/SOURCE_COMMIT
+          git archive --format=tar.gz HEAD > /tmp/foundation-workspace/source.tar.gz
+          tar -czf /tmp/foundation-workspace/dependencies.tar.gz node_modules
+      - uses: actions/upload-artifact@v4
+        with:
+          name: foundation-exact-workspace
+          path: /tmp/foundation-workspace/
+          retention-days: 3
