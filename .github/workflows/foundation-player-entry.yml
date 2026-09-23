@@ -3,6 +3,9 @@ on:
   push:
     branches: [review/foundation-workspace-20260923]
     paths: [.github/workflows/foundation-player-entry.yml]
+concurrency:
+  group: foundation-first-entry-review
+  cancel-in-progress: true
 permissions:
   contents: read
 jobs:
@@ -42,7 +45,7 @@ jobs:
             const build=await page.evaluate(async()=>await (await fetch('build-info.json',{cache:'no-store'})).json());assert.equal(build.commit,process.env.BUILD_COMMIT);
             assert.deepEqual(await page.$$eval('#level-select option',a=>a.map(o=>Number(o.value))),[0,1,2,3,4]);
             await page.click('#play-button');
-            await page.waitForFunction(()=>{const e=document.querySelector('.lab-tutorial');return window.__NESI_DEMO_GAME__?.state==='playing'&&e&&!e.hidden&&getComputedStyle(e).display!=='none'&&e.textContent.includes('Пройди');});
+            await page.waitForFunction(()=>{const e=document.querySelector('.lab-tutorial');return window.__NESI_DEMO_GAME__?.state==='playing'&&e&&!e.hidden&&getComputedStyle(e).display!=='none'&&/пройди/i.test(e.textContent);});
             const start=await page.evaluate(()=>({position:window.__NESI_DEMO_GAME__.playerPosition.toArray(),lesson:document.querySelector('.lab-tutorial').textContent}));
             await page.screenshot({path:'qa/first-entry/01-real-tutorial.png'});
             await page.keyboard.down('KeyW');
@@ -53,7 +56,7 @@ jobs:
             assert.equal(after.edition,'foundation');assert.equal(after.state,'playing');assert.notEqual(after.lesson,start.lesson);assert.deepEqual(errors,[]);
             await page.screenshot({path:'qa/first-entry/02-after-real-w.png'});
             fs.writeFileSync('qa/first-entry/report.json',JSON.stringify({source:build.commit,pass:true,start,after,errors,method:'Actual Play button and keyboard W events, live animation loop. No scene-position, velocity, state or tutorial assignment. Not a human fun or device-FPS benchmark.'},null,2));
-          }finally{await page.keyboard.up('KeyW').catch(()=>{});await browser.close();}
+          }catch(error){await page.screenshot({path:'qa/first-entry/failure.png'}).catch(()=>{});throw error;}finally{await page.keyboard.up('KeyW').catch(()=>{});await browser.close();}
           JS
       - uses: actions/upload-artifact@v4
         if: always()
