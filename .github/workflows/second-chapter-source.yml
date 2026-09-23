@@ -1,0 +1,31 @@
+name: Second chapter exact source
+on:
+  push:
+    branches: [review/second-chapter-source]
+    paths: [.github/workflows/second-chapter-source.yml]
+permissions:
+  contents: read
+jobs:
+  source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: e9fefd03726e706b3fd6e55775e52fd112bd146d
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: |
+          npm ci
+          npm install --no-save --package-lock=false puppeteer-core@24.16.0
+          mkdir -p /tmp/chapter-source
+          git rev-parse HEAD > /tmp/chapter-source/SOURCE_COMMIT
+          tar --exclude=.git -czf /tmp/chapter-source/source.tar.gz .
+      - uses: actions/upload-artifact@v4
+        with:
+          name: second-chapter-source
+          path: /tmp/chapter-source/
+          retention-days: 3
