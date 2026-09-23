@@ -1,0 +1,75 @@
+name: Foundation touch and ordinary entry
+on:
+  push:
+    branches: [review/foundation-workspace-20260923]
+    paths: [.github/workflows/foundation-mobile-entry.yml]
+permissions:
+  contents: read
+jobs:
+  entry:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      BUILD_COMMIT: e9fefd03726e706b3fd6e55775e52fd112bd146d
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: e9fefd03726e706b3fd6e55775e52fd112bd146d
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: |
+          npm ci
+          npm install --no-save --package-lock=false puppeteer-core@24.16.0
+          npm run build
+          node scripts/stamp-build.mjs v40-laboratory-33
+      - name: Ordinary release UI and real touch drag in the first room
+        run: |
+          npm run preview -- --host 127.0.0.1 --port 4173 >touch-preview.log 2>&1 &
+          for i in {1..30}; do curl -fsS http://127.0.0.1:4173/ >/dev/null && break; sleep 1; done
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+          node --input-type=module <<'JS'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          import puppeteer from 'puppeteer-core';
+          const out='qa/touch-entry';fs.mkdirSync(out,{recursive:true});
+          const browser=await puppeteer.launch({executablePath:process.env.CHROME_PATH,headless:true,protocolTimeout:240000,args:['--no-sandbox','--disable-dev-shm-usage','--use-angle=swiftshader','--enable-unsafe-swiftshader']});
+          const report={source:process.env.BUILD_COMMIT,pass:false,errors:[],missing:[]};let page,stage='desktop';
+          const make=async viewport=>{const p=await browser.newPage();await p.bringToFront();p.setDefaultTimeout(150000);await p.setViewport(viewport);p.on('pageerror',e=>report.errors.push(String(e)));p.on('response',r=>{if(r.status()>=400)report.missing.push({status:r.status(),url:r.url()});});return p;};
+          try{
+            page=await make({width:1280,height:720});
+            await page.goto('http://127.0.0.1:4173/',{waitUntil:'networkidle2'});
+            await page.waitForFunction(()=>document.body.dataset.playState==='ready');
+            assert.equal(await page.evaluate(()=>typeof window.__NESI_DEMO_GAME__),'undefined');
+            const build=await page.evaluate(async()=>await(await fetch('build-info.json',{cache:'no-store'})).json());assert.equal(build.commit,process.env.BUILD_COMMIT);
+            await page.locator('#play-button').click();
+            await page.waitForFunction(()=>document.body.dataset.playState==='playing'&&!document.querySelector('.lab-tutorial').hidden);
+            await page.screenshot({path:out+'/desktop-release-first-room.png'});report.releaseUI=true;await page.close();
+            stage='touch-start';page=await make({width:390,height:844,deviceScaleFactor:1,isMobile:true,hasTouch:true});
+            await page.goto('http://127.0.0.1:4173/?debug=1',{waitUntil:'networkidle2'});
+            await page.waitForFunction(()=>window.__NESI_DEMO_GAME__?.state==='ready');
+            assert.equal(await page.evaluate(()=>matchMedia('(pointer:coarse)').matches),true);
+            await page.$eval('#play-button',e=>e.scrollIntoView({block:'center'}));
+            const button=await page.$eval('#play-button',e=>{const r=e.getBoundingClientRect();return {x:r.x+r.width/2,y:r.y+r.height/2};});
+            await page.touchscreen.tap(button.x,button.y);
+            await page.waitForFunction(()=>window.__NESI_DEMO_GAME__?.state==='playing'&&!document.querySelector('.lab-tutorial').hidden);
+            assert.match(await page.$eval('.lab-tutorial kbd',e=>e.textContent),/◉/);
+            const before=await page.evaluate(()=>window.__NESI_DEMO_GAME__.playerPosition.toArray());
+            const stick=await page.$eval('#joystick',e=>{const r=e.getBoundingClientRect();return {x:r.x+r.width/2,y:r.y+r.height/2,w:r.width,h:r.height};});assert.ok(stick.w>0&&stick.h>0);
+            stage='touch-move';const finger=await page.touchscreen.touchStart(stick.x,stick.y);
+            try{await finger.move(stick.x,stick.y-stick.h*.3);await page.waitForFunction(p=>{const q=window.__NESI_DEMO_GAME__.playerPosition;return Math.hypot(q.x-p[0],q.z-p[2])>1.8;},{timeout:60000},before);}finally{await finger.end();}
+            await page.waitForFunction(()=>window.__NESI_DEMO_GAME__.tutorial.seen.has('foundation-move'));
+            const after=await page.evaluate(()=>({position:window.__NESI_DEMO_GAME__.playerPosition.toArray(),stick:window.__NESI_DEMO_GAME__.input.mobileMove.toArray(),state:window.__NESI_DEMO_GAME__.state}));assert.deepEqual(after.stick,[0,0]);assert.equal(after.state,'playing');
+            await page.screenshot({path:out+'/mobile-after-touch-movement.png'});report.touch={before,after,stick};assert.deepEqual(report.errors,[]);report.pass=true;
+            report.method='Ordinary no-debug desktop first entry and real touchstart/move/end on a 390x844 emulated coarse-pointer viewport. No actor pose, velocity, input-state or simulation-loop assignment. Not physical-phone FPS or a complete mobile campaign playtest.';
+          }catch(error){report.stage=stage;report.error=String(error);await page?.screenshot({path:out+'/failure.png'}).catch(()=>{});throw error;}finally{fs.writeFileSync(out+'/report.json',JSON.stringify(report,null,2));console.log(JSON.stringify(report));await browser.close();}
+          JS
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: foundation-release-and-touch-entry
+          path: |
+            qa/touch-entry/
+            touch-preview.log
+          retention-days: 14
