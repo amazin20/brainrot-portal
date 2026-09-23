@@ -1,0 +1,93 @@
+diff --git a/README.md b/README.md
+index 8a607a0..4dff64d 100644
+--- a/README.md
++++ b/README.md
+@@ -4 +4,2 @@
+-Реестр содержит 33 испытания. Уровни 1–30 сохраняют свои номера и сохранения.
++Новая кампания содержит семь испытаний; отдельный архив содержит 33 прежних уровня.
++Архивные номера и сохранения не изменены.
+@@ -8 +9 @@
+-Обычный вход теперь открывает пять новых испытаний с отдельным прогрессом:
++Обычный вход открывает семь испытаний с отдельным от архива, но непрерывным прогрессом:
+@@ -12 +13,10 @@
+-Это новый первый блок, не перенумерованные 31–33 и не переделка всех 33 комнат.
++После первой главы: **6 — Вес решения** и **7 — Смена назначения**.
++
++Шестой связывает две кабины одним противовесом и общим тормозом: можно подняться
++на одной стороне или спуститься на другой, затем вернуть того же спутника.
++Седьмой меняет назначение портальной пары — свет, переход к подвижному причалу,
++снова свет. Твёрдая площадка сохраняет спутника, нижний пульт и лестница
++восстанавливают путь даже после перемещения панели и потери обеих связей.
++
++Это не перенумерованные 31–33 и не переделка всего архива. Сохранения первой
++пятёрки продолжаются без смены ключа; кнопка после пятого открывает шестой.
+@@ -15 +25 @@
+-доступны через `?edition=classic&level=1`; новые первые пять не наследуют старые
++доступны через `?edition=classic&level=1`; новая кампания не наследует архивные
+@@ -17 +27,2 @@
+-Подробности и воспроизведение: `docs/passes/FOUNDATION_FIRST_FIVE.md`.
++Подробности: `docs/passes/FOUNDATION_FIRST_FIVE.md`, `docs/passes/SECOND_CHAPTER_6_7.md`.
++`?level=6` открывает продолжение; после седьмого обозначен конец доступных двух глав.
+diff --git a/scripts/stamp-build.mjs b/scripts/stamp-build.mjs
+index 2e9015d..55de1d0 100644
+--- a/scripts/stamp-build.mjs
++++ b/scripts/stamp-build.mjs
+@@ -17 +17 @@ const info={commit,version,artVersion:'v40-research-laboratory',levels:CAMPAIGN.
+- features:{defaultEdition:'foundation',foundation:{version:'foundation-v1',rooms:[1,2,3,4,5],separateSave:true},archiveQuery:'edition=classic',campaignRooms:33,campaignFinaleLevel:33,separateVelocityMode:false,openChamberReview:{version:'research-laboratory-v3',query:'edition=open',rooms:[24,28,30,31,32,33],separateSave:true}},
++ features:{defaultEdition:'foundation',foundation:{version:'foundation-v1',rooms:[1,2,3,4,5,6,7],separateSave:true},archiveQuery:'edition=classic',campaignRooms:33,campaignFinaleLevel:33,separateVelocityMode:false,openChamberReview:{version:'research-laboratory-v3',query:'edition=open',rooms:[24,28,30,31,32,33],separateSave:true}},
+diff --git a/src/game/LabFoundationChambers.js b/src/game/LabFoundationChambers.js
+index 95c4de7..72ad100 100644
+--- a/src/game/LabFoundationChambers.js
++++ b/src/game/LabFoundationChambers.js
+@@ -0,0 +1 @@
++import {SECOND_CHAPTER_SPECS,SECOND_CHAPTER_BUILDERS} from './LabSecondChapter.js';
+@@ -18,0 +20 @@ export const FOUNDATION_SPECS=Object.freeze([
++ ...SECOND_CHAPTER_SPECS,
+@@ -165 +167 @@ export function buildFoundation5(g,index=4){
+-export const FOUNDATION_BUILDERS=[buildFoundation1,buildFoundation2,buildFoundation3,buildFoundation4,buildFoundation5];
++export const FOUNDATION_BUILDERS=[buildFoundation1,buildFoundation2,buildFoundation3,buildFoundation4,buildFoundation5,...SECOND_CHAPTER_BUILDERS];
+diff --git a/src/game/LabFoundationEdition.js b/src/game/LabFoundationEdition.js
+index 3b631f9..733120c 100644
+--- a/src/game/LabFoundationEdition.js
++++ b/src/game/LabFoundationEdition.js
+@@ -3 +3 @@
+-export const FOUNDATION_INDICES=Object.freeze([0,1,2,3,4]);
++export const FOUNDATION_INDICES=Object.freeze([0,1,2,3,4,5,6]);
+@@ -6,2 +6,2 @@ export function readFoundationEdition(query){
+- const enabled=edition==='foundation'||(!edition&&p.get('mode')!=='velocity'&&!(level>5));
+- return {enabled,levelIndex:Number.isInteger(level)&&level>=1&&level<=5?level-1:0};
++ const enabled=edition==='foundation'||(!edition&&p.get('mode')!=='velocity'&&!(level>7));
++ return {enabled,levelIndex:Number.isInteger(level)&&level>=1&&level<=7?level-1:0};
+@@ -13 +13 @@ export function foundationStorage(storage){
+-export const nextFoundationLevel=index=>index>=0&&index<4?index+1:0;
++export const nextFoundationLevel=index=>index>=0&&index<6?index+1:0;
+diff --git a/src/game/LabFoundationJourney.js b/src/game/LabFoundationJourney.js
+index 8c5ce50..41b5dfb 100644
+--- a/src/game/LabFoundationJourney.js
++++ b/src/game/LabFoundationJourney.js
+@@ -0,0 +1 @@
++import {runSecondChapter} from './LabSecondChapterJourney.js';
+@@ -59,0 +61 @@ export function runFoundationJourney(d,options={}){
++ if(d.level.index>=5)return runSecondChapter(d,options);
+diff --git a/src/main.js b/src/main.js
+index 495d4c9..aeb29ad 100644
+--- a/src/main.js
++++ b/src/main.js
+@@ -43 +43 @@ function showVictory(){
+-  $('#win-screen .muted').textContent=last?(foundationEdition.enabled?'Первая глава завершена. В меню отдельно доступны прежние испытания.':openEdition.enabled?'Пройдены все испытания этой версии.':'Все доступные испытания завершены. Друг добрался вместе с тобой.'):'Получилось! Следующее испытание добавит новую идею.';
++  $('#win-screen .muted').textContent=last?(foundationEdition.enabled?'Две главы завершены. Новая кампания пока содержит семь испытаний; архив доступен отдельно.':openEdition.enabled?'Пройдены все испытания этой версии.':'Все доступные испытания завершены. Друг добрался вместе с тобой.'):(foundationEdition.enabled&&game.levelIndex===4?'Первая глава завершена. Дальше — противовес и перестройка маршрутов.':'Получилось! Следующее испытание продолжает эксперимент.');
+@@ -104 +104 @@ choices();$('#level-select').value=String(game.levelIndex);
+-$('#campaign-count').textContent=foundationEdition.enabled?'Новая кампания · первые 5 испытаний':openEdition.enabled?`${OPEN_ROOM_INDICES.length} лабораторных испытаний · отдельная версия`:`Архив · ${CAMPAIGN.length} испытания`;
++$('#campaign-count').textContent=foundationEdition.enabled?'Новая кампания · 7 испытаний · две главы':openEdition.enabled?`${OPEN_ROOM_INDICES.length} лабораторных испытаний · отдельная версия`:`Архив · ${CAMPAIGN.length} испытания`;
+diff --git a/tests/lab-foundation.test.js b/tests/lab-foundation.test.js
+index 2d92b08..d9fc6fa 100644
+--- a/tests/lab-foundation.test.js
++++ b/tests/lab-foundation.test.js
+@@ -16 +16 @@ test('root starts a separate first chapter; explicit archives and later bookmark
+- for(const n of [1,2,3,4,5])assert.deepEqual(readFoundationEdition('?level='+n),{enabled:true,levelIndex:n-1});
++ for(const n of [1,2,3,4,5,6,7])assert.deepEqual(readFoundationEdition('?level='+n),{enabled:true,levelIndex:n-1});
+@@ -18,2 +18,2 @@ test('root starts a separate first chapter; explicit archives and later bookmark
+- assert.deepEqual(FOUNDATION_INDICES.map(nextFoundationLevel),[1,2,3,4,0]);
+- assert.equal(CAMPAIGN.length,33);assert.equal(new Set(FOUNDATION_SPECS.map(s=>s.id)).size,5);
++ assert.deepEqual(FOUNDATION_INDICES.map(nextFoundationLevel),[1,2,3,4,5,6,0]);
++ assert.equal(CAMPAIGN.length,33);assert.equal(new Set(FOUNDATION_SPECS.map(s=>s.id)).size,7);
