@@ -1,0 +1,54 @@
+name: Published entry audit
+on:
+  push:
+    branches: [review/second-chapter-source]
+    paths: [.github/workflows/public-entry-audit.yml]
+permissions:
+  contents: read
+jobs:
+  entry:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ecaf56e62ecf142bf42716832cfa59033b1b2695
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: |
+          npm ci
+          npm install --no-save --package-lock=false puppeteer-core@24.16.0
+      - name: Inspect three real menu-to-game entries without changing the published site
+        run: |
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+          node --input-type=module <<'JS'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          import puppeteer from 'puppeteer-core';
+          const expected='e9fefd03726e706b3fd6e55775e52fd112bd146d',base='https://amazin20.github.io/brainrot-portal/';
+          const out='qa/public-entry';fs.mkdirSync(out,{recursive:true});const results=[];
+          const browser=await puppeteer.launch({executablePath:process.env.CHROME_PATH,headless:true,protocolTimeout:240000,args:['--no-sandbox','--disable-dev-shm-usage','--use-angle=swiftshader','--enable-unsafe-swiftshader']});
+          try{for(let attempt=0;attempt<3;attempt++){
+            const page=await browser.newPage();page.setDefaultTimeout(120000);await page.setViewport({width:960,height:600});const errors=[];page.on('pageerror',e=>errors.push(String(e)));
+            try{
+              await page.goto(base+'?edition=classic&debug=1&level=28&entry-audit='+attempt,{waitUntil:'networkidle2'});
+              await page.waitForFunction(()=>window.__NESI_DEMO_GAME__?.state==='ready');
+              const info=await page.evaluate(async()=>await(await fetch('build-info.json',{cache:'no-store'})).json());assert.equal(info.commit,expected);
+              assert.equal(await page.$$eval('#level-select option',a=>a.length),33);
+              await page.locator('#play-button').click();
+              await page.waitForFunction(()=>window.__NESI_DEMO_GAME__?.state==='playing'&&window.__NESI_DEMO_GAME__.performanceMonitor.stats.fps>0);
+              const state=await page.evaluate(()=>({state:window.__NESI_DEMO_GAME__.state,level:window.__NESI_DEMO_GAME__.levelIndex+1,edition:window.__NESI_DEMO_GAME__.chamberEdition}));
+              assert.equal(state.level,28);assert.equal(state.edition,'classic');assert.deepEqual(errors,[]);
+              await page.screenshot({path:`${out}/${attempt}-playing.png`});results.push({attempt,source:info.commit,pass:true,...state,errors});
+            }catch(error){await page.screenshot({path:`${out}/${attempt}-failure.png`}).catch(()=>{});results.push({attempt,pass:false,error:String(error),errors});throw error;}finally{await page.close();}
+          }}finally{fs.writeFileSync(out+'/report.json',JSON.stringify({probe:'ecaf56e62ecf142bf42716832cfa59033b1b2695',publishedSource:expected,results,scope:'Actual Play clicks, same readiness assertions as the release gate. No scene mutation. No claim of reproducing the historical intermittent failure.'},null,2));await browser.close();}
+          JS
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: published-entry-audit
+          path: qa/public-entry/
+          retention-days: 14
