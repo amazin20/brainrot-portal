@@ -16,7 +16,7 @@ export async function runFlightAudioBrowser({browser,baseUrl='http://127.0.0.1:4
   const page=await browser.newPage();page.setDefaultTimeout(120000);
   page.on('pageerror',error=>report.errors.push(String(error)));
   try{
-    const url=new URL(baseUrl);url.searchParams.set('debug','1');url.searchParams.set('level','1');
+    const url=new URL(baseUrl);url.searchParams.set('edition','classic');url.searchParams.set('debug','1');url.searchParams.set('level','1');
     await page.goto(url.href,{waitUntil:'networkidle2'});
     await page.waitForFunction(()=>window.__NESI_DEMO_GAME__?.state==='ready');
     await page.evaluate(()=>{

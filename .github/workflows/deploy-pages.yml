@@ -86,6 +86,15 @@ jobs:
         run: |
           export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
           node scripts/portal-regression-browser.mjs
+      - name: Verify the new default campaign on the published site
+        env:
+          PAGE_URL: ${{ steps.deployment.outputs.page_url }}
+          BUILD_COMMIT: ${{ github.sha }}
+          RECORD: '0'
+          ONLY_NORMAL: '1'
+        run: |
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+          node scripts/foundation-browser.mjs
       - name: Preserve evidence from the public site itself
         if: always()
         uses: actions/upload-artifact@v4
@@ -95,4 +104,5 @@ jobs:
             live-evidence/
             qa/open-browser/
             qa/portal-regression/
+            qa/foundation-browser/
           retention-days: 14

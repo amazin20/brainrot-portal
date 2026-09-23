@@ -4,16 +4,17 @@ import {CAMPAIGN,campaignSpec} from './game/LabCampaignLevels.js';
 import {LabPreferences,QUALITY_PRESETS,applyLabQuality} from './game/LabPreferences.js';
 import {LabPlatform,loadYandexSDK} from './game/LabPlatform.js';
 import {readCampaignRoute,nextCampaignLevel} from './game/LabCampaignRoute.js';
+import {FOUNDATION_INDICES,readFoundationEdition,foundationStorage,nextFoundationLevel} from './game/LabFoundationEdition.js';
 import {OPEN_ROOM_INDICES,readOpenEdition,nextOpenRoom,openEditionStorage} from './game/LabOpenEdition.js';
 const $=s=>document.querySelector(s),query=new URLSearchParams(location.search);
 const debug=query.get('debug')==='1'||query.get('smoke')==='1';
-const campaignRoute=readCampaignRoute(query,CAMPAIGN.length),openEdition=readOpenEdition(query);
-const availableRooms=openEdition.enabled?OPEN_ROOM_INDICES:CAMPAIGN.map((_,i)=>i);
+const campaignRoute=readCampaignRoute(query,CAMPAIGN.length),openEdition=readOpenEdition(query),foundationEdition=readFoundationEdition(query);
+const availableRooms=foundationEdition.enabled?FOUNDATION_INDICES:openEdition.enabled?OPEN_ROOM_INDICES:CAMPAIGN.map((_,i)=>i);
 // Retired speed-mode links return to the campaign without reloading or touching saves.
 if(campaignRoute.legacyVelocityLink)history.replaceState(history.state,'',location.pathname+campaignRoute.search+location.hash);
 const yandex=import.meta.env.MODE==='yandex';
 let storage;try{storage=localStorage;}catch{}
-const preferences=new LabPreferences(openEdition.enabled?openEditionStorage(storage):storage),holds=new Set();
+const preferences=new LabPreferences(foundationEdition.enabled?foundationStorage(storage):openEdition.enabled?openEditionStorage(storage):storage),holds=new Set();
 const screens=['loading','start-screen','pause-screen','win-screen','error-screen'];
 const hudNodes={level:$('#level-number'),chamber:$('#chamber'),objective:$('#objective'),cargo:$('#cargo-status'),portals:$('#portal-status')};
 function hudText(key,value){const node=hudNodes[key];if(node.textContent!==value)node.textContent=value;}
@@ -35,11 +36,11 @@ function pauseInfo(){ $('#settings-level-select').value=String(game.levelIndex);
 function showVictory(){
   preferences.complete(game.levelIndex);
   choices();clearInput();setState('won');screen('win-screen',true);
-  const last=game.levelIndex===CAMPAIGN.length-1;
+  const last=game.levelIndex===availableRooms.at(-1);
   $('#win-title').innerHTML='Вместе<br />получилось<span>.</span>';
   $('#win-screen .eyebrow').textContent='ДРУГ ТОЖЕ ДОБРАЛСЯ';
   $('#play-again-button').textContent=last?'К первому испытанию ↻':'Следующий уровень →';
-  $('#win-screen .muted').textContent=last?(openEdition.enabled?'Пройдены все испытания этой версии.':'Все доступные испытания завершены. Друг добрался вместе с тобой.'):'Получилось! Следующее испытание добавит новую идею.';
+  $('#win-screen .muted').textContent=last?(foundationEdition.enabled?'Первая глава завершена. В меню отдельно доступны прежние испытания.':openEdition.enabled?'Пройдены все испытания этой версии.':'Все доступные испытания завершены. Друг добрался вместе с тобой.'):'Получилось! Следующее испытание добавит новую идею.';
   diagnostics();
 }
 function showHints(){
@@ -94,14 +95,20 @@ finally{game.render();clearInput();setState(game.state);diagnostics();}
 });
 // Every public entry uses the same campaign; the review edition has isolated saves.
 game.epicMode=false;
-game.chamberEdition=openEdition.enabled?'open':'classic';
+game.chamberEdition=foundationEdition.enabled?'foundation':openEdition.enabled?'open':'classic';
 document.body.dataset.chamberEdition=game.chamberEdition;
 document.body.dataset.gameMode='campaign';
 game.quality={...QUALITY_PRESETS[preferences.value.quality]};game.tutorial.enabled=preferences.value.tutorial;
-game.levelIndex=openEdition.enabled?openEdition.levelIndex:campaignRoute.levelIndex;
+game.levelIndex=foundationEdition.enabled?foundationEdition.levelIndex:openEdition.enabled?openEdition.levelIndex:campaignRoute.levelIndex;
 choices();$('#level-select').value=String(game.levelIndex);
-$('#campaign-count').textContent=openEdition.enabled?'3 пересобранных уровня · отдельная версия':`${CAMPAIGN.length} уровней`;
-if(openEdition.enabled){$('#start-screen .brand').textContent='ОТКРЫТЫЕ ПРОСТРАНСТВА · ПЕРЕСБОРКА';$('#start-screen .lead').textContent='Три новые планировки: подвесной причал, гидравлические площади и полёт за энергоблок. Прогресс старой кампании хранится отдельно.';}
+$('#campaign-count').textContent=foundationEdition.enabled?'Новая кампания · первые 5 испытаний':openEdition.enabled?`${OPEN_ROOM_INDICES.length} лабораторных испытаний · отдельная версия`:`Архив · ${CAMPAIGN.length} испытания`;
+if(foundationEdition.enabled){$('#start-screen .brand').textContent='НОВАЯ КАМПАНИЯ · ОТ ОТКРЫТИЯ К ЭКСПЕРИМЕНТУ';$('#start-screen .lead').textContent='Начни с простой связи. Узнай, что умеют свет, движение и высота. Здесь можно пробовать, ошибаться и возвращаться за другом. Каждая комната добавляет новую идею.';}
+else if(openEdition.enabled){$('#start-screen .brand').textContent='ЛАБОРАТОРНЫЕ ИСПЫТАНИЯ';$('#start-screen .lead').textContent='Камеры 24, 28, 30 и 31–33. Эта подборка и новая первая глава хранят прогресс отдельно от архива.';}
+const editionNav=document.createElement('nav');editionNav.className='edition-navigation';editionNav.setAttribute('aria-label','Версии кампании');
+for(const [id,text,href]of [['foundation','Новая кампания · с начала','?edition=foundation&level=1'],['open','Лабораторная глава 31–33','?edition=open&level=31'],['classic','Архив · 33 испытания','?edition=classic&level=1']]){
+ if(game.chamberEdition===id)continue;const a=document.createElement('a');a.textContent=text;a.href=href;editionNav.append(a);
+}
+$('#start-screen .hero-footer').before(editionNav);
 async function enterLevel(index,reason='next'){
   if(entering||holds.size||!availableRooms.includes(index))return;entering=true;clearInput();game.audio?.unlock();
   try{
@@ -120,7 +127,7 @@ async function restartLevel(){
 }
 function resume(){if(holds.size)return;game.audio.unlock();game.togglePause(false);game.renderer.setAnimationLoop(game.animate);}
 $('#play-button').addEventListener('click',()=>enterLevel(Number($('#level-select').value),game.state==='ready'&&!preferences.value.completed.length?'initial':'next'));
-$('#play-again-button').addEventListener('click',()=>enterLevel(openEdition.enabled?nextOpenRoom(game.levelIndex):nextCampaignLevel(game.levelIndex,CAMPAIGN.length)));
+$('#play-again-button').addEventListener('click',()=>enterLevel(foundationEdition.enabled?nextFoundationLevel(game.levelIndex):openEdition.enabled?nextOpenRoom(game.levelIndex):nextCampaignLevel(game.levelIndex,CAMPAIGN.length)));
 $('#resume-button').addEventListener('click',resume);$('#restart-button').addEventListener('click',restartLevel);
 $('#pause-button').addEventListener('click',()=>game.togglePause(true));
 $('#hint-button').hidden=!debug;

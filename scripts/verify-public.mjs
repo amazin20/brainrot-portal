@@ -34,7 +34,7 @@ try{
  // All thirty-three routes pass the deployment gate. Recheck public transitions,
  // the rebuilt garden, new rooms and finale through the published package.
  for(const level of [1,9,10,20,24,26,27,28,29,30,31,32,33]){
-  await page.goto(base+'?debug=1&level='+level+'&revision='+expected,{waitUntil:'networkidle2'});
+  await page.goto(base+'?edition=classic&debug=1&level='+level+'&revision='+expected,{waitUntil:'networkidle2'});
   await page.waitForFunction(()=>window.__NESI_DEMO_GAME__?.state==='ready');
   assert.equal(await page.$$eval('#level-select option',a=>a.length),CAMPAIGN.length);
   assert.equal(await page.title(),'БРЕЙНРОТ ПОРТАЛ — физическая 3D-головоломка');

@@ -83,7 +83,10 @@ export async function runV8Journey(game,{onMilestone=()=>{},scenario=null,journe
       await scenario({game,level,walk,wait,aim,look,until,pickup,enter,mark,frame,worldMove,stop});
       report.pass=true;report.kind='recovery';report.teleports=game.teleportCount;return report;
     }
-    if(level.researchChamber){
+    if(level.foundationChamber){
+      const {runFoundationJourney}=await import('./LabFoundationJourney.js');
+      await runFoundationJourney({game,level,walk,wait,aim,look,until,pickup,enter,mark,frame,worldMove,stop},journeyOptions);
+    }else if(level.researchChamber){
       const {runResearchJourney}=await import('./LabResearchJourney.js');
       await runResearchJourney({game,level,walk,wait,aim,look,until,pickup,enter,mark,frame,worldMove,stop},journeyOptions);
     }else if(level.openChamber){

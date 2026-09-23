@@ -199,3 +199,5 @@ body[data-external-pause="true"] .play-tools,body[data-external-pause="true"] .l
 [hidden] { display:none !important; }
 .start-screen {overflow-y:auto;align-items:safe center;touch-action:pan-y;}
 @media(max-height:820px){.start-screen {align-items:start;}}
+
+.edition-navigation{display:flex;flex-wrap:wrap;gap:.5rem 1.2rem;margin:1.1rem 0;font-size:.82rem}.edition-navigation a{color:var(--muted,#bfd5d7);text-underline-offset:.25em}.edition-navigation a:hover,.edition-navigation a:focus-visible{color:#fff}
