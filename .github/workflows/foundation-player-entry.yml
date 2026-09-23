@@ -1,0 +1,65 @@
+name: Foundation human-facing entry
+on:
+  push:
+    branches: [review/foundation-workspace-20260923]
+    paths: [.github/workflows/foundation-player-entry.yml]
+permissions:
+  contents: read
+jobs:
+  entry:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      BUILD_COMMIT: 11555221dfbc0d4deb9c11a4d188b7891f1cf6ac
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: 11555221dfbc0d4deb9c11a4d188b7891f1cf6ac
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: |
+          npm ci
+          npm install --no-save --package-lock=false puppeteer-core@24.16.0
+          npm run build
+          node scripts/stamp-build.mjs v40-laboratory-33
+      - name: A fresh user sees and completes the movement lesson through real keyboard events
+        run: |
+          npm run preview -- --host 127.0.0.1 --port 4173 >entry-preview.log 2>&1 &
+          for i in {1..30}; do curl -fsS http://127.0.0.1:4173/ >/dev/null && break; sleep 1; done
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+          node --input-type=module <<'JS'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          import puppeteer from 'puppeteer-core';
+          fs.mkdirSync('qa/first-entry',{recursive:true});
+          const browser=await puppeteer.launch({executablePath:process.env.CHROME_PATH,headless:true,protocolTimeout:180000,args:['--no-sandbox','--disable-dev-shm-usage','--use-angle=swiftshader','--enable-unsafe-swiftshader']});
+          const page=await browser.newPage();await page.setViewport({width:1280,height:720});page.setDefaultTimeout(120000);const errors=[];page.on('pageerror',e=>errors.push(String(e)));
+          try{
+            await page.goto('http://127.0.0.1:4173/?debug=1',{waitUntil:'networkidle2'});
+            await page.waitForFunction(()=>window.__NESI_DEMO_GAME__?.state==='ready');
+            const build=await page.evaluate(async()=>await (await fetch('build-info.json',{cache:'no-store'})).json());assert.equal(build.commit,process.env.BUILD_COMMIT);
+            assert.deepEqual(await page.$$eval('#level-select option',a=>a.map(o=>Number(o.value))),[0,1,2,3,4]);
+            await page.click('#play-button');
+            await page.waitForFunction(()=>{const e=document.querySelector('.lab-tutorial');return window.__NESI_DEMO_GAME__?.state==='playing'&&e&&!e.hidden&&getComputedStyle(e).display!=='none'&&e.textContent.includes('Пройди');});
+            const start=await page.evaluate(()=>({position:window.__NESI_DEMO_GAME__.playerPosition.toArray(),lesson:document.querySelector('.lab-tutorial').textContent}));
+            await page.screenshot({path:'qa/first-entry/01-real-tutorial.png'});
+            await page.keyboard.down('KeyW');
+            await page.waitForFunction(p=>{const q=window.__NESI_DEMO_GAME__.playerPosition;return Math.hypot(q.x-p[0],q.z-p[2])>1.8;},{timeout:60000},start.position);
+            await page.keyboard.up('KeyW');
+            await page.waitForFunction(()=>window.__NESI_DEMO_GAME__.tutorial.seen.has('foundation-move'));
+            const after=await page.evaluate(()=>({position:window.__NESI_DEMO_GAME__.playerPosition.toArray(),lesson:document.querySelector('.lab-tutorial').textContent,edition:window.__NESI_DEMO_GAME__.chamberEdition,state:window.__NESI_DEMO_GAME__.state}));
+            assert.equal(after.edition,'foundation');assert.equal(after.state,'playing');assert.notEqual(after.lesson,start.lesson);assert.deepEqual(errors,[]);
+            await page.screenshot({path:'qa/first-entry/02-after-real-w.png'});
+            fs.writeFileSync('qa/first-entry/report.json',JSON.stringify({source:build.commit,pass:true,start,after,errors,method:'Actual Play button and keyboard W events, live animation loop. No scene-position, velocity, state or tutorial assignment. Not a human fun or device-FPS benchmark.'},null,2));
+          }finally{await page.keyboard.up('KeyW').catch(()=>{});await browser.close();}
+          JS
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: foundation-real-player-entry
+          path: |
+            qa/first-entry/
+            entry-preview.log
+          retention-days: 14
