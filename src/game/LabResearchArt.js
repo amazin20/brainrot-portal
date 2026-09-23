@@ -23,11 +23,22 @@ export class ResearchChamber extends OpenChamber {
   // Wide light sheets have real wide apertures, not collision beyond the rim.
   s.mesh.userData.portalSize={width:2.8,height:2.1};return s;
  }
+ /** Mount wall signage in front of the actual protruding structural ribs.
+  * Free-standing labels keep their authored location. No depth-test bypass. */
+ signagePosition(p,n){
+  const out=[...p],b=this.bounds,clearance=1.36;
+  if(n[0]>.99&&p[0]<b.minX+clearance)out[0]=b.minX+clearance;
+  if(n[0]<-.99&&p[0]>b.maxX-clearance)out[0]=b.maxX-clearance;
+  if(n[2]>.99&&p[2]<b.minZ+clearance)out[2]=b.minZ+clearance;
+  if(n[2]<-.99&&p[2]>b.maxZ-clearance)out[2]=b.maxZ-clearance;
+  return out;
+ }
  display(p,read,width=12,height=1.8,normal=[0,0,1]){
+  p=this.signagePosition(p,normal);
   const n=V(...normal);this.block(V(...p).addScaledVector(n,-.19).toArray(),normal[0]?[.28,height+.3,width+.3]:[width+.3,height+.3,.28],'dark');
   return labInstrument(this,p,{read,width,height,normal});
  }
- label(text,p,n=[0,0,1],w=7,h=.8){sign(this,text,p,n,w,h);}
+ label(text,p,n=[0,0,1],w=7,h=.8){sign(this,text,this.signagePosition(p,n),n,w,h);}
  projector(p,normal,{radius=1.05,rotating=false}={}){
   const n=V(...normal),q=Q().setFromUnitVectors(V(0,0,1),n),root=new THREE.Group();root.position.fromArray(p);root.quaternion.copy(q);this.world.root.add(root);
   const cylQ=Q().setFromAxisAngle(V(1,0,0),Math.PI/2);

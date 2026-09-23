@@ -15,7 +15,7 @@ try{
      showRewardedVideo:({callbacks:c})=>{window.__adLog.push('rewarded');c.onOpen();setTimeout(()=>{if(window.__reward){c.onRewarded();c.onRewarded();}c.onClose();},100);}}
    })};`});else r.continue();
  });
- await page.goto('http://127.0.0.1:4174/?debug=1',{waitUntil:'networkidle2'});
+ await page.goto('http://127.0.0.1:4174/?edition=classic&debug=1',{waitUntil:'networkidle2'});
  await page.waitForFunction(()=>window.__NESI_DEMO_GAME__?.state==='ready');
  assert.equal(await page.evaluate(()=>window.__NESI_PLATFORM__.demo),false);
  await page.evaluate(()=>{

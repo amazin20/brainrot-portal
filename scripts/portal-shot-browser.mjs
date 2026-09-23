@@ -150,6 +150,7 @@ export async function runPortalShotBrowser({ browser, baseUrl = 'http://127.0.0.
 
   try {
     const url = new URL(baseUrl);
+    url.searchParams.set('edition', 'classic');
     url.searchParams.set('debug', '1');
     url.searchParams.set('level', '1');
     await page.goto(url.href, { waitUntil: 'networkidle2' });
