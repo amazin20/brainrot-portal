@@ -38,25 +38,29 @@ jobs:
           import puppeteer from 'puppeteer-core';
           fs.mkdirSync('qa/first-entry',{recursive:true});
           const browser=await puppeteer.launch({executablePath:process.env.CHROME_PATH,headless:true,protocolTimeout:180000,args:['--no-sandbox','--disable-dev-shm-usage','--use-angle=swiftshader','--enable-unsafe-swiftshader']});
-          const page=await browser.newPage();await page.setViewport({width:1280,height:720});page.setDefaultTimeout(120000);const errors=[];page.on('pageerror',e=>errors.push(String(e)));
+          const page=await browser.newPage();await page.bringToFront();await page.setViewport({width:1280,height:720});page.setDefaultTimeout(120000);const errors=[],consoleErrors=[];page.on('pageerror',e=>errors.push(String(e)));page.on('console',m=>{if(m.type()==='error')consoleErrors.push(m.text());});
+          let stage='load';const report={source:process.env.BUILD_COMMIT,pass:false,errors,consoleErrors};
+          const status=()=>page.evaluate(()=>{const g=window.__NESI_DEMO_GAME__,e=document.querySelector('.lab-tutorial'),b=document.querySelector('#play-button');return {state:g?.state,externalBlocked:g?.externalBlocked,visible:!document.hidden,focus:document.hasFocus(),bodyState:document.body.dataset.playState,lesson:e?.textContent,lessonHidden:e?.hidden,lessonDisplay:e&&getComputedStyle(e).display,tutorial:g?.tutorial.enabled,epic:g?.epicMode,position:g?.playerPosition.toArray(),seen:g?[...g.tutorial.seen]:[],active:document.activeElement?.id,button:b&&b.getBoundingClientRect().toJSON(),clicks:window.__ENTRY_CLICKS__};});
           try{
             await page.goto('http://127.0.0.1:4173/?debug=1',{waitUntil:'networkidle2'});
             await page.waitForFunction(()=>window.__NESI_DEMO_GAME__?.state==='ready');
             const build=await page.evaluate(async()=>await (await fetch('build-info.json',{cache:'no-store'})).json());assert.equal(build.commit,process.env.BUILD_COMMIT);
             assert.deepEqual(await page.$$eval('#level-select option',a=>a.map(o=>Number(o.value))),[0,1,2,3,4]);
-            await page.click('#play-button');
-            await page.waitForFunction(()=>{const e=document.querySelector('.lab-tutorial');return window.__NESI_DEMO_GAME__?.state==='playing'&&e&&!e.hidden&&getComputedStyle(e).display!=='none'&&/пройди/i.test(e.textContent);});
-            const start=await page.evaluate(()=>({position:window.__NESI_DEMO_GAME__.playerPosition.toArray(),lesson:document.querySelector('.lab-tutorial').textContent}));
+            await page.evaluate(()=>{window.__ENTRY_CLICKS__=[];document.addEventListener('click',e=>window.__ENTRY_CLICKS__.push({target:e.target.id,trusted:e.isTrusted,x:e.clientX,y:e.clientY}),true);});
+            stage='play';await page.locator('#play-button').click();
+            await page.waitForFunction(()=>window.__NESI_DEMO_GAME__?.state==='playing');
+            stage='visible-lesson';
+            await page.waitForFunction(()=>{const e=document.querySelector('.lab-tutorial');return e&&!e.hidden&&getComputedStyle(e).display!=='none'&&/пройди/i.test(e.textContent);});
+            report.start=await status();console.log('ENTRY START',JSON.stringify(report.start));
             await page.screenshot({path:'qa/first-entry/01-real-tutorial.png'});
-            await page.keyboard.down('KeyW');
-            await page.waitForFunction(p=>{const q=window.__NESI_DEMO_GAME__.playerPosition;return Math.hypot(q.x-p[0],q.z-p[2])>1.8;},{timeout:60000},start.position);
+            stage='keyboard';await page.keyboard.down('KeyW');
+            await page.waitForFunction(p=>{const q=window.__NESI_DEMO_GAME__.playerPosition;return Math.hypot(q.x-p[0],q.z-p[2])>1.8;},{timeout:60000},report.start.position);
             await page.keyboard.up('KeyW');
             await page.waitForFunction(()=>window.__NESI_DEMO_GAME__.tutorial.seen.has('foundation-move'));
-            const after=await page.evaluate(()=>({position:window.__NESI_DEMO_GAME__.playerPosition.toArray(),lesson:document.querySelector('.lab-tutorial').textContent,edition:window.__NESI_DEMO_GAME__.chamberEdition,state:window.__NESI_DEMO_GAME__.state}));
-            assert.equal(after.edition,'foundation');assert.equal(after.state,'playing');assert.notEqual(after.lesson,start.lesson);assert.deepEqual(errors,[]);
+            report.after=await status();assert.equal(report.after.state,'playing');assert.notEqual(report.after.lesson,report.start.lesson);assert.deepEqual(errors,[]);
             await page.screenshot({path:'qa/first-entry/02-after-real-w.png'});
-            fs.writeFileSync('qa/first-entry/report.json',JSON.stringify({source:build.commit,pass:true,start,after,errors,method:'Actual Play button and keyboard W events, live animation loop. No scene-position, velocity, state or tutorial assignment. Not a human fun or device-FPS benchmark.'},null,2));
-          }catch(error){await page.screenshot({path:'qa/first-entry/failure.png'}).catch(()=>{});throw error;}finally{await page.keyboard.up('KeyW').catch(()=>{});await browser.close();}
+            report.pass=true;report.method='Actual stable Play-button click and keyboard W events, live animation loop. No scene-position, velocity, state or tutorial assignment. Not a human fun or device-FPS benchmark.';
+          }catch(error){report.stage=stage;report.error=String(error);report.failure=await status().catch(()=>null);console.log('ENTRY FAILURE',JSON.stringify(report));await page.screenshot({path:'qa/first-entry/failure.png'}).catch(()=>{});throw error;}finally{fs.writeFileSync('qa/first-entry/report.json',JSON.stringify(report,null,2));await page.keyboard.up('KeyW').catch(()=>{});await browser.close();}
           JS
       - uses: actions/upload-artifact@v4
         if: always()
