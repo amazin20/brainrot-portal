@@ -1,0 +1,27 @@
+name: Apply readable foundation integration
+on:
+  push:
+    branches: [feat/foundation-first-five]
+    paths: [.github/workflows/foundation-integrate.yml]
+permissions:
+  contents: write
+jobs:
+  integrate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify and apply the readable UI and routing changes
+        run: |
+          echo '284e84aa0b10acc2a1902434162ace2612998dad0d5bd4aac1dd6e33f5600de7  .staging/foundation-integration.patch' | sha256sum -c -
+          git apply --unidiff-zero --check .staging/foundation-integration.patch
+          git apply --unidiff-zero .staging/foundation-integration.patch
+          rm .staging/foundation-integration.patch .github/workflows/foundation-integrate.yml
+          rmdir .staging
+          git add -A
+          echo "FINAL_TREE=$(git write-tree)"
+          git diff --cached --check
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m "Integrate a distinct first-five campaign as the default; retain the full archive and its tests"
+          git push origin HEAD:feat/foundation-first-five
