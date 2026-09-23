@@ -1,3 +1,4 @@
+import {SECOND_CHAPTER_SPECS,SECOND_CHAPTER_BUILDERS} from './LabSecondChapter.js';
 import * as THREE from 'three';
 import {ResearchChamber} from './LabResearchArt.js';
 import {createLightBridge} from './LabLightBridge.js';
@@ -16,6 +17,7 @@ export const FOUNDATION_SPECS=Object.freeze([
  ['Наклонный щит меняет направление скорости, но сам не разгоняет.','Сравни шаг в напольный портал и падение в него с верхней площадки.','Пандус ведёт к высоте для перелёта. Перед падением подготовь оба портала и возьми друга.']),
  spec('borrowed-power','Одной парой','The same two apertures must serve air, retained motion and a projected path in different orders.','Воздух, маховик и свет делят одну пару порталов. Ищи то, что сохраняется после разрыва связи.',0xddb271,
  ['Воздух должен попасть в лицевую решётку маховика. Кабина движется под весом.','Маховик ещё вращается без подачи, а червячный привод удерживает высоту.','Освободив пару, перенаправь свет через разрыв. Можно сначала подняться, а можно заранее подготовить мост и использовать запас вращения.']),
+ ...SECOND_CHAPTER_SPECS,
 ]);
 
 function finish(k,spawn,cargo,goal,extra,learning){
@@ -162,4 +164,4 @@ export function buildFoundation5(g,index=4){
  const l=finish(k,[2,0,18],[-1,.6,15],[18,6,-17],{drive,cabin,light,spawnView:{yaw:.25,pitch:-.14}},
   {introduces:['stored mechanical energy'],combines:['portals','load','light','persistent support'],routes:['lift-then-bridge','bridge-before-lift','fall-and-recall'],roles:{'air-source':'capture fan flow','air-receiver':'drive front grille','light-source':'capture projection with the now available pair','light-exit':'turn the projection across the final gap'}});ownLight(l,light);return l;
 }
-export const FOUNDATION_BUILDERS=[buildFoundation1,buildFoundation2,buildFoundation3,buildFoundation4,buildFoundation5];
+export const FOUNDATION_BUILDERS=[buildFoundation1,buildFoundation2,buildFoundation3,buildFoundation4,buildFoundation5,...SECOND_CHAPTER_BUILDERS];

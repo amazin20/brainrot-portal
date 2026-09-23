@@ -1,3 +1,4 @@
+import {runSecondChapter} from './LabSecondChapterJourney.js';
 import * as THREE from 'three';
 import {installRoom21Aim} from './LabRoom21Journey.js';
 const check=(ok,message)=>{if(!ok)throw new Error(message);};
@@ -57,5 +58,6 @@ function fifth(d,{alternate=false,recover=false}={}){
  walk(-20,-17);walk(18,-17);mark('The same pair now carries a solid path, not air');
 }
 export function runFoundationJourney(d,options={}){
+ if(d.level.index>=5)return runSecondChapter(d,options);
  installRoom21Aim(d);const fn=[first,second,third,fourth,fifth][d.level.index];check(fn,'Unknown foundation room');return fn(d,options);
 }

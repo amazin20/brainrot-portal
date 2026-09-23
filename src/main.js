@@ -40,7 +40,7 @@ function showVictory(){
   $('#win-title').innerHTML='Вместе<br />получилось<span>.</span>';
   $('#win-screen .eyebrow').textContent='ДРУГ ТОЖЕ ДОБРАЛСЯ';
   $('#play-again-button').textContent=last?'К первому испытанию ↻':'Следующий уровень →';
-  $('#win-screen .muted').textContent=last?(foundationEdition.enabled?'Первая глава завершена. В меню отдельно доступны прежние испытания.':openEdition.enabled?'Пройдены все испытания этой версии.':'Все доступные испытания завершены. Друг добрался вместе с тобой.'):'Получилось! Следующее испытание добавит новую идею.';
+  $('#win-screen .muted').textContent=last?(foundationEdition.enabled?'Две главы завершены. Новая кампания пока содержит семь испытаний; архив доступен отдельно.':openEdition.enabled?'Пройдены все испытания этой версии.':'Все доступные испытания завершены. Друг добрался вместе с тобой.'):(foundationEdition.enabled&&game.levelIndex===4?'Первая глава завершена. Дальше — противовес и перестройка маршрутов.':'Получилось! Следующее испытание продолжает эксперимент.');
   diagnostics();
 }
 function showHints(){
@@ -101,7 +101,7 @@ document.body.dataset.gameMode='campaign';
 game.quality={...QUALITY_PRESETS[preferences.value.quality]};game.tutorial.enabled=preferences.value.tutorial;
 game.levelIndex=foundationEdition.enabled?foundationEdition.levelIndex:openEdition.enabled?openEdition.levelIndex:campaignRoute.levelIndex;
 choices();$('#level-select').value=String(game.levelIndex);
-$('#campaign-count').textContent=foundationEdition.enabled?'Новая кампания · первые 5 испытаний':openEdition.enabled?`${OPEN_ROOM_INDICES.length} лабораторных испытаний · отдельная версия`:`Архив · ${CAMPAIGN.length} испытания`;
+$('#campaign-count').textContent=foundationEdition.enabled?'Новая кампания · 7 испытаний · две главы':openEdition.enabled?`${OPEN_ROOM_INDICES.length} лабораторных испытаний · отдельная версия`:`Архив · ${CAMPAIGN.length} испытания`;
 if(foundationEdition.enabled){$('#start-screen .brand').textContent='НОВАЯ КАМПАНИЯ · ОТ ОТКРЫТИЯ К ЭКСПЕРИМЕНТУ';$('#start-screen .lead').textContent='Начни с простой связи. Узнай, что умеют свет, движение и высота. Здесь можно пробовать, ошибаться и возвращаться за другом. Каждая комната добавляет новую идею.';}
 else if(openEdition.enabled){$('#start-screen .brand').textContent='ЛАБОРАТОРНЫЕ ИСПЫТАНИЯ';$('#start-screen .lead').textContent='Камеры 24, 28, 30 и 31–33. Эта подборка и новая первая глава хранят прогресс отдельно от архива.';}
 const editionNav=document.createElement('nav');editionNav.className='edition-navigation';editionNav.setAttribute('aria-label','Версии кампании');
