@@ -3,6 +3,7 @@ on:
   pull_request:
     paths:
       - 'src/game/LabFoundation*.js'
+      - 'src/game/LabSecondChapter*.js'
       - 'src/main.js'
       - 'scripts/foundation-browser.mjs'
       - '.github/workflows/foundation-review.yml'
@@ -16,7 +17,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        room: [1, 2, 3, 4, 5]
+        room: [1, 2, 3, 4, 5, 6, 7]
     env:
       BUILD_COMMIT: ${{ github.event.pull_request.head.sha || github.sha }}
     steps:
@@ -32,7 +33,7 @@ jobs:
           npm install --no-save --package-lock=false puppeteer-core@24.16.0
           npm run build
           node scripts/stamp-build.mjs v40-laboratory-33
-      - name: Capture the playable first chapter with ordinary and exploratory input
+      - name: Capture the playable campaign with ordinary and exploratory input
         env:
           ROOMS: ${{ matrix.room }}
           RECORD: '1'
