@@ -86,3 +86,30 @@ test('moving optical windows keep their actual frames, thickness and light colli
   }
  }
 });
+
+test('each cabin leaves four-metre end routes around its portal, not a narrow ledge',async()=>{
+ const g=await make(6);
+ for(const c of g.firstLevel.cabins){
+  const f=c.panel.getFrame();
+  assert.ok(c.floor.maxZ-(f.center.z+c.panel.width/2)>=4-1e-7);
+  assert.ok((f.center.z-c.panel.width/2)-c.floor.minZ>=4-1e-7);
+ }
+});
+test('run, jump and return on both directions of the closed service stair without reset',async()=>{
+ const g=await make(7);let jumps=0,samples=0;
+ const report=await runV8Journey(g,{scenario:d=>{
+  d.walk(-21,24);
+  for(const direction of [1,-1,1,-1]){
+   for(let frame=0;frame<360;frame++){
+    if(frame%45===0&&g.playerGrounded){g.input.jumpQueued=true;jumps++;}
+    g.input.keys.add('ShiftLeft');d.worldMove(direction,Math.sin(frame*.08)*.05);d.frame();
+    const p=g.playerPosition;assert.ok(p.y>=-.02);
+    if(p.x>-14&&p.x<-4){const top=.25*(1+Math.floor((-4-p.x)/.5));assert.ok(p.y>=top-.26,`Under stairs at ${p.toArray()}`);samples++;}
+    if(direction>0&&p.x>1||direction<0&&p.x<-20)break;
+   }
+   d.stop();d.wait(.6);
+  }
+  assert.ok(jumps>=8&&samples>50);assert.ok(g.playerPosition.y>=4.9);
+ }});
+ assert.equal(report.pass,true);assert.equal(report.teleports,0);assert.equal(report.resets,0);assert.equal(report.respawns,0);
+});

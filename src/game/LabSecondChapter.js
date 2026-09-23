@@ -67,10 +67,10 @@ function balanceRig(k,cars,balance){
 }
 export function buildFoundation6(g,index=5){
  const k=new ResearchChamber(g,SECOND_CHAPTER_SPECS[0],index,'optical',{minX:-28,maxX:28,minZ:-23,maxZ:24},0,21);
- const a=k.carrier('balance-west',[[-16,0,-4],[-16,8,-4]],{width:16,depth:12});
- const b=k.carrier('balance-east',[[16,8,3],[16,0,3]],{width:16,depth:12});
+ const a=k.carrier('balance-west',[[-16,0,-4],[-16,8,-4]],{width:16,depth:16});
+ const b=k.carrier('balance-east',[[16,8,3],[16,0,3]],{width:16,depth:16});
  a.speed=b.speed=12;
- for(const [c,side]of [[a,1],[b,-1]]){c.panel.group.position.set(side*4,2.35,6);c.panel.group.quaternion.setFromUnitVectors(V(0,0,1),V(side,0,0));c.panel.sync(0);}
+ for(const [c,side]of [[a,1],[b,-1]]){c.panel.group.position.set(side*4,2.35,8);c.panel.group.quaternion.setFromUnitVectors(V(0,0,1),V(side,0,0));c.panel.sync(0);}
  k.deck('Upper exit and maintenance gallery',-24,4,-21,-4,8);
  k.panel('service-entry',[-26.3,2.5,15],[1,0,0],8,5.2);
  const balance=new CounterweightBalance();
@@ -137,7 +137,7 @@ export function buildFoundation7(g,index=6){
  k.label('ОБХОД К ЛИЦЕВОЙ СТОРОНЕ',[3,6.4,5.3],[0,0,1],9,.6);
  k.label('СЛУЖЕБНЫЙ ВОЗВРАТ',[-16.8,2,-11],[1,0,0],9,.75);
  const l=finish(k,[-21,5,17],[-24,5.6,16],[14,5,-14],{stage,light,shuttle,relay:portal,introduces:[],routes:['cargo-with-you','scout-then-return','extinguish-and-return'],spawnView:{yaw:.3,pitch:-.06}},
-  'Панель на рельсе переносит и свет, и тебя. Прежде чем менять её адрес, найди постоянную опору и осмотри обе стороны центрального шкафа.',
+  'На каретке есть низкая панель для света и панель на высоте шага. Обе едут вместе. Меняй связь с постоянной опоры и осмотри обе стороны центрального шкафа.',
   {'light-source':'intercept the one projector when a bridge is needed','light-shuttle':'low optical window travels between two real docks','travel-shuttle':'upper pedestrian window on the same rail carriage','relay-return':'reachable only from the working side, found by walking around the cabinet'});
  const dispose=l.dispose;l.dispose=()=>{light.dispose();dispose();};return l;
 }

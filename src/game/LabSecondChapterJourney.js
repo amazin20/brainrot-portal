@@ -5,31 +5,31 @@ function release(d){d.stop();d.wait(.25);check(d.game.interact()&&!d.game.heldCu
 export function runCounterweight(d,{alternate=false,recover=false}={}){
  const {game:g,level:l,walk,wait,until,enter,mark}=d,[a,b]=l.cabins,p=l.panels;
  d.aim(0,p['service-entry'].getFrame().center);d.aim(1,b.panel.getFrame().center);
- collect(d);enter(p['service-entry']);walk(10,14);walk(20,14);walk(20,8);release(d);
+ collect(d);enter(p['service-entry']);walk(10,17);walk(20,17);walk(20,8);release(d);
  if(alternate){
   walk(17.4,12);check(g.interact()&&!l.balance.braked,'East brake missed');
   until(()=>b.position.y<.025,35,'Loaded counterweight did not descend');
   check(g.interact()&&l.balance.braked,'East brake did not hold');
   mark('Travellers descend together, raising their destination on the other cable end');
-  walk(10,16);d.aim(0,a.panel.getFrame().center);walk(20,16);collect(d);walk(20,14);walk(10,14);enter(b.panel);
+  walk(10,16);d.aim(0,a.panel.getFrame().center);walk(20,16);collect(d);walk(20,17);walk(10,17);enter(b.panel);
  }else{
-  walk(20,14);walk(10,14);enter(b.panel);walk(-20,12);walk(-20,5);walk(-17.4,5);
+  walk(20,17);walk(10,17);enter(b.panel);walk(-20,12);walk(-20,5);walk(-17.4,5);
   check(g.interact()&&!l.balance.braked,'West brake missed');
   until(()=>a.position.y>7.975,45,'Companion counterweight did not lift the player');
   check(g.interact()&&l.balance.braked,'West brake did not hold');
   mark('The original companion acts as counterweight; the player rides the opposite cabin');
   if(recover){
-   walk(-20,7);walk(-6,7);until(()=>g.playerGrounded&&g.playerPosition.y<.1,5,'Fall to service floor missed');
+   walk(-20,10);walk(-6,10);until(()=>g.playerGrounded&&g.playerPosition.y<.1,5,'Fall to service floor missed');
    walk(6,18);walk(16,18);collect(d);release(d);walk(20,17);walk(8,17);
    d.aim(0,p['service-entry'].getFrame().center);d.aim(1,a.panel.getFrame().center);
    walk(20,17);collect(d);walk(20,17);walk(-8,18);enter(p['service-entry']);
    mark('Service-floor fall retrieves the same companion and returns through the raised cabin');
   }else{
-   walk(-20,7);walk(-10,7);d.aim(0,a.panel.getFrame().center);enter(a.panel);walk(10,14);walk(20,14);collect(d);walk(20,14);walk(10,14);enter(b.panel);
+   walk(-20,10);walk(-10,10);d.aim(0,a.panel.getFrame().center);enter(a.panel);walk(10,17);walk(20,17);collect(d);walk(20,17);walk(10,17);enter(b.panel);
    mark('The brake holds the raised cabin while its counterweight is retrieved through the moving pair');
   }
  }
- walk(-10,7);walk(-22,7);walk(-22,-12);walk(-7,-15);
+ walk(-10,10);walk(-22,10);walk(-22,-12);walk(-7,-15);
  until(()=>g.state==='won',3,'Counterweight joint finish missed');
 }
 export function runLightAddress(d,{alternate=false,recover=false}={}){
