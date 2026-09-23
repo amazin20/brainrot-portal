@@ -11,7 +11,7 @@ const base=(process.env.PAGE_URL||'').replace(/\/$/,'')+'/',expected=process.env
 assert.ok(base.startsWith('https://')&&expected,'Public URL and expected revision are required');
 fs.mkdirSync('live-evidence',{recursive:true});
 const report={pass:false,expected,base,models:[],puzzles:[],routes:[],campaignTransitions:[],legacyLinks:[],errors:[]};
-let browser;
+let browser,page;
 try{
  let info;
  for(let attempt=0;attempt<30;attempt++){
@@ -30,19 +30,23 @@ try{
   report.models.push({id:model.id,bytes:bytes.length,verified:true});
  }
  browser=await puppeteer.launch({executablePath:process.env.CHROME_PATH||'/usr/bin/google-chrome',headless:true,protocolTimeout:720000,args:['--no-sandbox','--disable-dev-shm-usage','--use-angle=swiftshader','--enable-unsafe-swiftshader']});
- const page=await browser.newPage();page.setDefaultTimeout(120000);await page.setViewport({width:960,height:600});page.on('pageerror',e=>report.errors.push(e.message));
+ page=await browser.newPage();page.setDefaultTimeout(120000);await page.setViewport({width:960,height:600});page.on('pageerror',e=>report.errors.push(e.message));
  // All thirty-three routes pass the deployment gate. Recheck public transitions,
  // the rebuilt garden, new rooms and finale through the published package.
  for(const level of [1,9,10,20,24,26,27,28,29,30,31,32,33]){
+  report.stage={level,step:'loading'};
   await page.goto(base+'?edition=classic&debug=1&level='+level+'&revision='+expected,{waitUntil:'networkidle2'});
   await page.waitForFunction(()=>window.__NESI_DEMO_GAME__?.state==='ready');
   assert.equal(await page.$$eval('#level-select option',a=>a.length),CAMPAIGN.length);
   assert.equal(await page.title(),'БРЕЙНРОТ ПОРТАЛ — физическая 3D-головоломка');
-  await page.click('#play-button');await page.waitForFunction(()=>window.__NESI_DEMO_GAME__.state==='playing'&&window.__NESI_DEMO_GAME__.performanceMonitor.stats.fps>0);
+  report.stage={level,step:'ordinary Play click'};
+  // Wait for the animated button to become stable, without bypassing real input.
+  await page.locator('#play-button').click();await page.waitForFunction(()=>window.__NESI_DEMO_GAME__.state==='playing'&&window.__NESI_DEMO_GAME__.performanceMonitor.stats.fps>0);
   const puzzle=await page.evaluate(()=>{const l=window.__NESI_DEMO_GAME__.firstLevel;return {id:l.id,portalPuzzle:l.portalPuzzle,terminals:l.terminals?.length??0,bounds:l.bounds};});
   assert.equal(puzzle.id,CAMPAIGN[level-1].id);if(level>=20)assert.equal(puzzle.portalPuzzle,true);
   report.puzzles.push({level,...puzzle});
   await page.screenshot({path:`live-evidence/room-${level}-public-start.png`});
+  report.stage={level,step:'ordinary route'};
   const route=await page.evaluate(()=>window.__NESI_RUN_LEVEL_ROUTE__());
   assert.ok(route.pass&&route.respawns===0&&route.resets===0);assert.equal(route.level,level);report.routes.push(route);
   await page.screenshot({path:`live-evidence/room-${level}-public-complete.png`});
@@ -78,5 +82,13 @@ try{
  assert.equal(report.flightAudio.pass,true);
  assert.deepEqual(report.errors,[]);report.pass=true;
  console.log('LIVE VERIFIED',expected,'v40 campaign: 33 rooms; public ordinary routes 1,9,10,20,24,26–33; transitions 10→11,20→21,26→27,30→31,33→1; live model hashes; room9 regressions; original companion present at every finish');
-}catch(error){report.error=String(error);throw error;}
+}catch(error){
+ report.error=String(error);
+ if(page&&!page.isClosed()){
+  report.failure=await page.evaluate(()=>({url:location.href,state:window.__NESI_DEMO_GAME__?.state,level:window.__NESI_DEMO_GAME__?.levelIndex,
+   fps:window.__NESI_DEMO_GAME__?.performanceMonitor?.stats?.fps,activeScreens:[...document.querySelectorAll('.screen--active')].map(e=>e.id)})).catch(e=>({probeError:String(e)}));
+  await page.screenshot({path:'live-evidence/failure.png'}).catch(()=>{});
+ }
+ throw error;
+}
 finally{fs.writeFileSync('live-evidence/report.json',JSON.stringify(report,null,2));await browser?.close();}
