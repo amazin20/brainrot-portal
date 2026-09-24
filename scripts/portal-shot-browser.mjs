@@ -231,8 +231,25 @@ export async function runPortalShotBrowser({ browser, baseUrl = 'http://127.0.0.
       } };
     });
 
-    await page.click('#play-button');
-    await page.waitForFunction(() => window.__NESI_DEMO_GAME__.state === 'playing');
+    // A slow software WebGL frame can make the menu visible in the DOM before
+    // its hit target is promoted above the canvas. Wait for the actual target
+    // before sending a trusted click, and retry a swallowed menu click only
+    // while the game still reports ready. Do not fake the subsequent shots.
+    for (let attempt = 0; attempt < 3; attempt++) {
+      await page.waitForFunction(() => {
+        const button = document.querySelector('#play-button');
+        const rect = button?.getBoundingClientRect();
+        return rect?.width > 0 && rect?.height > 0 &&
+          document.elementFromPoint(rect.left + rect.width / 2, rect.top + rect.height / 2) === button;
+      }, null, { timeout: 30000 });
+      await page.locator('#play-button').click();
+      const started = await page.waitForFunction(() =>
+        ['playing', 'error'].includes(window.__NESI_DEMO_GAME__?.state),
+      null, { timeout: 12000 }).then(() => true, () => false);
+      if (started) break;
+    }
+    assert.equal(await page.evaluate(() => window.__NESI_DEMO_GAME__.state), 'playing',
+      'A trusted Play-button click must start the actual game');
     await page.waitForFunction(() => window.__NESI_DEMO_GAME__.renderFrames > 3);
     // Play itself normally acquires pointer lock. If the browser has deferred
     // that request, its ordinary first canvas click must only acquire the lock.
