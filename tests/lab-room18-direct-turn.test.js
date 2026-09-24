@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {createHeadlessGame} from '../scripts/lab-headless.mjs';
 import {runV8Journey} from '../src/game/LabV8Journey.js';
 
-for(const [edition,aspect] of [['classic',16/9],['foundation',9/16]]){
+for(const [edition,aspect] of [['classic',16/9],['foundation',1.6],['foundation',9/16]]){
  test(`room18 ${edition}: freight opens a sight shutter for a direct pre-addressed flight at ${aspect}`,async()=>{
   const game=await createHeadlessGame();
   try{

@@ -11,7 +11,7 @@ export const FOUNDATION_SPECS=Object.freeze([
  spec('solid-light','Свет под ногами','The portal carries a useful surface, not only the traveller.','Проектор светит в керамику. Найди способ продолжить его дорогу.',0x70d9e4,
  ['Посмотри, куда упирается свет от проектора.','Вход перехватывает свет, а выход задаёт направление моста.','Можно идти прямо или использовать твёрдый служебный остров, чтобы переставить мост. Снизу есть пандус.'],[1,2,11]),
  spec('moving-address','Адрес в движении','An aperture keeps the moving surface; riding and returning to the entrance are both legitimate.','Служебная кабина ходит между галереями. Её портал — такой же пассажир.',0xefbd75,
- ['Портал в кабине перемещается вместе с ней.','Кабиной управляют пульт на её настиле и пульт на левой галерее.','Можно ехать вместе с другом или отправить пустую кабину, вернуться к нижнему входу и пройти через него.']),
+ ['Портал в кабине перемещается вместе с ней.','Кабиной управляют пульт на её настиле и пульт на левой галерее.','Можно ехать вместе с другом, отправить его одного с боковой галереи или послать пустую кабину. Нижний вход всегда ведёт в её новое положение.']),
  spec('earned-momentum','Цена высоты','Discover the difference between entering a portal and entering with falling speed.','Высота падения превращается в полёт. Низкий этаж не наказывает за пробу.',0xdd8376,
  ['Наклонный щит меняет направление скорости, но сам не разгоняет.','Сравни шаг в напольный портал и падение в него с верхней площадки.','Пандус ведёт к высоте для перелёта. Перед падением подготовь оба портала и возьми друга.'],[1,2,11]),
  spec('borrowed-power','Одной парой','The same two apertures must serve air, retained motion and a projected path in different orders.','Воздух, маховик и свет делят одну пару порталов. Ищи то, что сохраняется после разрыва связи.',0xddb271,
@@ -125,25 +125,42 @@ export function buildFoundation3(g,index=2){
  k.deck('Left control gallery',-27,-5,-22,-10,6);
  k.deck('Right receiving gallery',5,27,-22,-10,10);
  const c=k.carrier('travelling-address',[[-16,6,-10],[16,10,-10]],{width:20,depth:12});c.speed=4;c.panel.group.position.z=6;c.panel.sync(0);
+ // The car carries its own continuous edge markings; the fixed docks use a
+ // different livery. Their alignment tells the player which surface moves.
+ for(const x of [-8.8,8.8])k.block([x,.035,6],[.16,.035,10.4],'light',false,c.group,.012);
+ for(const z of [1.1,10.9])k.block([0,.035,z],[17.4,.035,.16],'light',false,c.group,.012);
  k.panel('dispatch-entry',[-27.4,2.5,12],[1,0,0]);
  const t=cabinConsole(k,c,[3,0,10]);
- k.control('gallery-destination',[-21,6,-17],()=>{c.target=1-c.target;},'E — послать кабину к другому причалу. Внутри не обязательно оставаться.');
+ k.control('gallery-destination',[-21,6,-17],()=>{c.target=1-c.target;},'E — отправить кабину. Можно оставить на ней свободного друга, а самому вернуться к нижнему порталу.');
+ // Painted paths live a few centimetres above the real decks. They are
+ // surface markings, never collision proxies or phantom stepping stones.
+ for(const z of [11.35,12.65])k.block([-21.8,.035,z],[8,.035,.10],'light',false);
+ for(const [x,y] of [[-16,6],[16,10]]){
+  k.block([x,y+.04,-19],[8,.035,.12],'light',false);
+  k.block([x,y+4,-23.26],[11,.50,.18],'secondary');
+  k.block([x,y+3.55,-23.13],[9,.10,.12],'light',false);
+ }
+ k.label('01 / ОТПРАВКА',[-16,10.7,-23.1],[0,0,1],9,.70);
+ k.label('02 / ПРИЁМ', [16,14.7,-23.1],[0,0,1],9,.70);
+ k.label('ВХОД В КАБИНУ',[-26.9,6.5,12],[1,0,0],8,.62);
  // Rails are overhead real structures, not platforms across the flight lane.
  for(const z of [-8,0]){k.block([0,17,z],[54,.8,.7],'dark');for(const x of [-27,27])k.support(x,z,17,.5);}
  // Four driven hangers connect the actual cabin to the travelling hoists.
  const hangers=[];
  for(const dx of [-9.4,9.4])for(const z of [-8,0]){
-  const mesh=k.geometry(new THREE.CylinderGeometry(.075,.075,1,10),'metal',[0,0,0],new THREE.Quaternion(),{batch:false,name:'Tensioned carriage suspension'});
+  const mesh=k.geometry(new THREE.CylinderGeometry(.16,.16,1,10),'metal',[0,0,0],new THREE.Quaternion(),{batch:false,name:'Tensioned carriage suspension'});
   const trolley=k.block([0,17.55,z],[1.4,.5,1.1],'shell',false);
   const bin=k.artBins.get(trolley.material);bin.splice(bin.indexOf(trolley),1);
+  const wheel=k.geometry(new THREE.CylinderGeometry(.48,.48,.20,14),'metal',[0,17.55,z+.60],new THREE.Quaternion().setFromAxisAngle(V(1,0,0),Math.PI/2),{batch:false,name:'Carriage rail roller'});
   const collider=g.collisionProxy(new THREE.Box3().setFromObject(mesh),{kinematic:true});
-  hangers.push({mesh,trolley,collider,dx,z});
+  hangers.push({mesh,trolley,wheel,collider,dx,z});
  }
- const syncHangers=(position,dt,physical)=>{for(const h of hangers){const low=position.y-.3,high=16.65;h.mesh.scale.y=high-low;h.mesh.position.set(position.x+h.dx,(high+low)/2,h.z);h.trolley.position.x=position.x+h.dx;h.mesh.updateMatrixWorld(true);if(physical)g.syncCollision(h.collider,new THREE.Box3().setFromObject(h.mesh),dt);}};
+ const syncHangers=(position,dt,physical)=>{for(const h of hangers){const low=position.y-.3,high=16.65;h.mesh.scale.y=high-low;h.mesh.position.set(position.x+h.dx,(high+low)/2,h.z);h.trolley.position.x=h.wheel.position.x=position.x+h.dx;h.wheel.rotation.z=position.x*.25;h.mesh.updateMatrixWorld(true);if(physical)g.syncCollision(h.collider,new THREE.Box3().setFromObject(h.mesh),dt);}};
  k.ticks.push(dt=>syncHangers(c.position,dt,true));k.renders.push(()=>syncHangers(c.group.position,0,false));k.resets.push(()=>syncHangers(c.position,0,true));syncHangers(c.position,0,true);
- k.display([0,20,-23.25],()=>`ПРИЧАЛ ${c.target?'II':'I'} / ${c.at(c.target)?'КАБИНА ОСТАНОВЛЕНА':'КАБИНА ДВИЖЕТСЯ'}\nПОРТАЛ ПРИКРЕПЛЁН К ПАНЕЛИ, А НЕ К МЕСТУ`,23,1.8);title(k,2,[0,22,-23.25],22);
+ const looseCargoAboard=()=>{const p=g.cargo?.position,f=c.floor;return p&&!g.heldCube&&p.x>f.minX+.3&&p.x<f.maxX-.3&&p.z>f.minZ+.3&&p.z<f.maxZ-.3&&Math.abs(p.y-f.y)<1.5;};
+ k.display([0,14,-23.25],()=>`ПРИЧАЛ ${c.target?'II':'I'} / ${c.at(c.target)?'КАБИНА ОСТАНОВЛЕНА':'КАБИНА ДВИЖЕТСЯ'}\n${looseCargoAboard()?'ГРУЗ НА БОРТУ /':'ГРУЗ НЕ ЗАГРУЖЕН /'} ПОРТАЛ ЕДЕТ С КАБИНОЙ`,19,2.0);title(k,2,[0,19,-23.25],22);
  const l=finish(k,[-16,0,16],[-19,.6,13],[16,10,-17],{car:c,cabinTerminal:t,spawnView:{yaw:0,pitch:-.13}},
-  {introduces:['moving portal anchor'],routes:['ride-with-companion','send-empty-and-return'],roles:{'travelling-address':'the same aperture follows its physical carrier','dispatch-entry':'stable return to the floor'}});return l;
+  {introduces:['moving portal anchor'],routes:['ride-with-companion','send-empty-and-return','dispatch-companion-first'],roles:{'travelling-address':'the same aperture follows its physical carrier and its original cargo','dispatch-entry':'stable lower address reaches the current car position'}});return l;
 }
 export function buildFoundation4(g,index=3){
  const k=new ResearchChamber(g,FOUNDATION_SPECS[3],index,'kinetic',{minX:-32,maxX:26,minZ:-26,maxZ:25},-4,30);
@@ -159,7 +176,12 @@ export function buildFoundation4(g,index=3){
  const pit=k.loadPad('fall-entry',[-17,-4,-6],10);
  const outlet=k.panel('inclined-exit',[-8,10,-11],[.435889894,.9,0],9,7);
  k.support(-9,-16.3,8.8,.42);k.support(-9,-5.7,8.8,.42);
+ // The receiving wall is the visible braking surface for the portal flight.
+ // Deep, solid ribs make its scale and impact direction legible from the air.
  k.block([24.6,21,-15],[1,12,19],'secondary');
+ for(const z of [-22,-18,-14,-10,-6])k.block([23.92,21,z],[.32,10,.35],'dark');
+ for(const y of [16.6,25.4])k.block([23.90,y,-15],[.34,.28,18.5],'metal');
+ k.label('ПРИЁМ / +15 м',[23.7,19,-16],[-1,0,0],9,.9);
  // A height ruler is on a solid chute wall; no invisible bonus or checkpoint.
  for(const y of [0,4,8,12])k.label(`${y+4} м ПАДЕНИЯ`,[-31.18,y+2,-7],[1,0,0],7,.6);
  k.label('ПРИЁМНАЯ ГАЛЕРЕЯ',[15,17,-24.18],[0,0,1],12,.8);title(k,3,[0,26,-25.25],24);

@@ -42,6 +42,16 @@ export function buildExtendedCampaign(game,index){
   world.box([-10,.95,6],[.3,1.9,.3]);
   const mirror=ringDevice(world,[0,2.1,-8],[0,0,1],0xf0d694,.85);
   world.box([0,.9,-8],[.25,1.8,.25]);
+  // The working reflector sits directly behind the shoulder camera on the
+  // approach. A larger bearing turns with that same reflector, while raised
+  // signal strips on the two actual receivers remain visible above the actor.
+  // These fittings have no collision or beam occlusion of their own.
+  const opticMetal=new THREE.MeshBasicMaterial({color:0x566574});
+  const opticAmber=new THREE.MeshBasicMaterial({color:0xefbf75});
+  const mirrorHalo=new THREE.Mesh(new THREE.TorusGeometry(1.23,.055,8,32),opticAmber);
+  mirrorHalo.name='Mirror bearing / follows real reflector';mirror.group.add(mirrorHalo);
+  for(const x of [-1.4,1.4])world.box([x,2.1,-8],[.13,2.85,.13],opticMetal,false);
+  world.box([0,3.55,-8],[3.0,.16,.18],opticMetal,false);
   // The unturned reflector lets the beam continue to a visible service
   // receiver. Its wired outside servo offers a second, optical-first order;
   // without a real portal-routed beam the relay cannot rotate the mirror.
@@ -50,6 +60,10 @@ export function buildExtendedCampaign(game,index){
   world.box([1.5,.16,-10.5],[3,.07,.06],relayMaterial,false);
   world.box([3,.16,-9.25],[.06,.07,2.5],relayMaterial,false);
   const sensor=ringDevice(world,[9.7,2.1,-8],[-1,0,0],0xa38b6b,.55);
+  const pilotBeacon=new THREE.MeshBasicMaterial({color:0xb28d6c});
+  const exitBeacon=new THREE.MeshBasicMaterial({color:0xa38b6b});
+  world.box([0,4.15,-10.5],[.16,1.45,.15],pilotBeacon,false);
+  world.box([9.7,4.15,-8],[.16,1.45,.15],exitBeacon,false);
   mechanismArt.earlyOptics={emitter,mirror,pilot,sensor};
   const ray=beamDrawing(world),door=gate(world,-13,24,10);
   const reflector={position:V(0,2.1,-8),normal:V(1,0,0),radius:.83};
@@ -66,6 +80,8 @@ export function buildExtendedCampaign(game,index){
    state.segments=tracePortalRay(game,V(-9.8,2.1,6),V(1,0,0),{reflectors:[reflector]});state.pilotLit=rayTouches(state.segments,V(0,2.1,-10.5),.30);
    state.lit=rayTouches(state.segments,V(9.7,2.1,-8));pilot.glow.material.color.setHex(state.pilotLit?0xb5f0c1:0xb28d6c);
    relayMaterial.color.setHex(state.pilotLit?0xb5f0c1:0xb28d6c);
+   pilotBeacon.color.setHex(state.pilotLit?0xb5f0c1:0xb28d6c);
+   exitBeacon.color.setHex(state.lit?0x9af4bd:0xa38b6b);
    sensor.glow.material.color.setHex(state.lit?0x9af4bd:0xa38b6b);ray.update(state.segments);door.update(state.lit,dt,time);};
   reset=()=>{state.mirror=state.target=0;state.pilotLit=state.lit=false;door.reset();};render=a=>door.render(a,time);
  }else if(index===7){

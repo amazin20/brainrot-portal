@@ -1,6 +1,7 @@
 import test,{after} from 'node:test';
 import assert from 'node:assert/strict';
-import {Room28TideVolumes} from '../src/game/LabRoom28Tides.js';
+import * as THREE from 'three';
+import {Room28TideVolumes,room28FlowStatus} from '../src/game/LabRoom28Tides.js';
 import {createHeadlessGame} from '../scripts/lab-headless.mjs';
 import {runV8Journey} from '../src/game/LabV8Journey.js';
 
@@ -15,15 +16,43 @@ test('communicating tide volumes conserve water and stop at the physical apertur
  for(let i=0;i<600;i++){tide.step(.037,i%2?pour:equal);assert.ok(Math.abs(tide.levels[0]+tide.levels[1]-6)<1e-10);assert.ok(tide.levels.every(n=>n>=0&&n<=6));}
 });
 
+test('the in-world meter explains actual disconnection, conservation and equilibrium',()=>{
+ const a={basin:0,sill:.5},b={basin:1,sill:.5};
+ assert.equal(room28FlowStatus([6,0],null,0),'КОНТУР РАЗОМКНУТ');
+ assert.equal(room28FlowStatus([6,0],[a,{basin:0,sill:8}],0),'ОБА УСТЬЯ: БАССЕЙН А');
+ assert.equal(room28FlowStatus([6,0],[a,b],.3),'ВОДА: А → Б');
+ assert.equal(room28FlowStatus([0,6],[a,b],-.3),'ВОДА: Б → А');
+ assert.equal(room28FlowStatus([3,3],[a,b],0),'ДАВЛЕНИЕ ВЫРОВНЕНО');
+ assert.equal(room28FlowStatus([3,3],[{basin:0,sill:8},{basin:1,sill:8}],0),'ВОДА НИЖЕ ОБОИХ УСТЬЕВ');
+});
+
 const game=await createHeadlessGame();after(()=>{game.physics.dispose();game.portals.dispose();});
 for(const aspect of [1.6,16/9])for(const options of [{},{route:'full-tide-observatory'},{recoverFall:true},{interrupt:true}]){
  test(`room28 physical water route ${aspect} ${JSON.stringify(options)}`,async()=>{
   await game.selectLevel(27,false);game.camera.aspect=aspect;game.camera.updateProjectionMatrix();const body=game.physics.cargoBody,identity=game.cargo.group.uuid;
+  const art=game.firstLevel.tidalPresentation;
+  for(const basin of ['A','B']){
+   const backing=game.firstLevel.world.root.getObjectByName(`Basin ${basin} gauge backing`);
+   assert.ok(backing,`Missing basin ${basin} gauge backing`);
+   const box=new THREE.Box3().setFromObject(backing);
+   assert.ok(box.min.x>game.firstLevel.bounds.minX+.2&&box.max.x<game.firstLevel.bounds.maxX-.2,
+    `Basin ${basin} instrument clips the room's side wall`);
+   assert.ok(box.min.y>7,'The basin readout must clear the recovery walkway');
+  }
+  assert.ok(art.pipes.colliders.length>=4,'Visible plumbing must have physical envelopes');
+  assert.match(art.readouts.status.text,/КОНТУР РАЗОМКНУТ/);
+  assert.match(art.readouts.status.text,/А \+ Б = 6\.0 м ВОДЫ/);
+  assert.match(art.readouts.gauges[0].text,/А \/ 6\.0 м/);
+  assert.match(art.readouts.gauges[1].text,/Б \/ 0\.0 м/);
+  assert.ok(Math.abs(art.readouts.columns[0].scale.y-6)<1e-10);
+  assert.ok(art.readouts.columns[1].scale.y<.02);
   let firstHeights=null,returnObserved=false;
   const report=await runV8Journey(game,{journeyOptions:options,onMilestone(mark){
    const s=game.firstLevel.state;assert.ok(Math.abs(s.tides.levels[0]+s.tides.levels[1]-6)<1e-8);
    if(mark.name==='equal tides reveal the middle garden'||mark.name==='a full tide reveals the observatory'){
     firstHeights=[...s.tides.levels];assert.equal(game.heldCube,null);assert.ok(Math.abs(game.cargo.position.y-s['lagoon-float'].position.y)<.9);
+    assert.ok(Math.abs(art.readouts.columns[1].scale.y-s.tides.levels[1])<.02,'Visible meter follows the actual eastern basin');
+    assert.ok(Math.abs(art.readouts.columns[0].scale.y-s.tides.levels[0])<.02,'Visible meter follows the actual western basin');
    }
    if(mark.name==='the same water returns beneath both travellers'){
     returnObserved=true;assert.equal(game.heldCube,null);assert.ok(game.playerPosition.y>5.19);assert.ok(Math.abs(game.cargo.position.y-s['coral-float'].position.y)<.9);

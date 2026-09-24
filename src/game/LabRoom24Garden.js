@@ -1,5 +1,9 @@
 import * as THREE from 'three';
 import {SolidAssembly,placeSolidModel} from './LabSolidModels.js';
+const segmentedBeam=(assembly,start,end,segments,radius,material)=>{
+ const a=new THREE.Vector3(...start),b=new THREE.Vector3(...end);
+ for(let i=0;i<segments;i++)assembly.beam(a.clone().lerp(b,i/segments).toArray(),a.clone().lerp(b,(i+1)/segments).toArray(),radius,material);
+};
 /** A reversible weighted door. The angle is the actual architectural pose,
  * and its ceramic retains the same portal frame throughout the turn. */
 export function buildGardenDoor(k,pad){
@@ -9,11 +13,23 @@ export function buildGardenDoor(k,pad){
  // slab has one collider; remove the immobile duplicate from the registry.
  const duplicate=game.colliders.find(c=>c.mesh===panel.backing);if(duplicate)game.colliders.splice(game.colliders.indexOf(duplicate),1);
  const arm=new SolidAssembly('Garden door cantilever','garden');
- arm.box([-4,5.4,3.9],[7,.55,.65],0,.09);
- arm.beam([0,5.4,0],[-4,5.4,4],.19,1);
- arm.beam([0,6.25,0],[-4,5.55,4],.09,1);
+ // The dark segmented collar belongs to the turning assembly and has its
+ // own short collision envelopes. The empty middle remains a real opening;
+ // neither a decorative full-box proxy nor a fixed ring may cover the portal.
+ arm.arc(4.43,.25,.48,1,[-4,2.1,3.88]);
+ arm.arc(4.70,.075,.14,2,[-4,2.1,4.20],new THREE.Quaternion(),0,Math.PI*2,false);
+ arm.box([-4,5.4,3.9],[7,.55,.65],1,.09);
+ arm.box([-4,5.09,4.28],[6.65,.08,.09],2,.025,false);
+ // Short collision envelopes follow the diagonals instead of filling the
+ // empty triangle between the rotor hub and the door with one huge AABB.
+ segmentedBeam(arm,[0,5.4,0],[-4,5.4,4],6,.19,1);
+ segmentedBeam(arm,[0,6.25,0],[-4,5.55,4],6,.09,1);
  arm.turned([[0,5.20],[.46,5.20],[.54,5.30],[.54,5.90],[.46,6],[0,6]],1);
- for(const x of [-7.45,-.55])arm.box([x,2.12,3.87],[.32,5.30,.38],0,.055);
+ for(const x of [-7.45,-.55]){
+  arm.box([x,2.12,3.87],[.32,5.30,.38],1,.055);
+  arm.box([x,2.12,4.125],[.075,4.95,.055],2,.018,false);
+ }
+ for(const x of [-6.6,-4,-1.4])arm.box([x,5.68,3.9],[.26,.22,.78],0,.055);
  const armBinding=placeSolidModel(k,arm.finish(),[0,0,0],{parent:group,kinematic:true});
  // The ceramic and the collision proxy share the fixed-step group. Render a
  // copy of the non-interactive cantilever between ticks, never that group:
@@ -24,6 +40,11 @@ export function buildGardenDoor(k,pad){
  // The original column's support volume is retained; its flat shell is replaced.
  const column=new SolidAssembly('Garden door pedestal','garden');
  column.turned([[0,0],[.48,0],[.55,.25],[.35,.55],[.35,10.9],[.50,11],[.50,11.4],[0,11.4]],1);
+ for(const y of [5.45,6.2,10.95])column.turned([[.36,y-.13],[.68,y-.13],[.73,y-.04],[.73,y+.07],[.64,y+.13],[.36,y+.13]],0);
+ for(let i=0;i<8;i++){
+  const a=i*Math.PI/4;
+  column.box([Math.cos(a)*.51,6.43,Math.sin(a)*.51],[.09,.25,.09],2,.02,false);
+ }
  placeSolidModel(k,column.finish(),[4,0,-4]);
  const arc=[];for(let i=0;i<=24;i++){const a=Math.PI*.75+i*Math.PI/48;arc.push(new THREE.Vector3(4+Math.cos(a)*Math.sqrt(32),.027,-4+Math.sin(a)*Math.sqrt(32)));}
  const guide=new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(arc),24,.035,4,false),w.materials.accent);guide.name='Inlaid orbit of the garden door';w.root.add(guide);

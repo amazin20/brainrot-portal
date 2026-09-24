@@ -46,6 +46,15 @@ test('room30 shell fits the real flight course and still screens the last outlet
  assert.equal(l.puzzleGeometry.footprint,278*160);
  const service=l.world.floors.find(f=>f.mesh.name==='Lower hangar service deck');
  assert.ok(service);assert.deepEqual([service.minX,service.maxX,service.minZ,service.maxZ],[b.minX,b.maxX,b.minZ,b.maxZ]);
+ const roof=l.world.root.getObjectByName('Solid hangar roof');
+ assert.ok(roof,'Flight hall must have an actual ceiling');
+ roof.updateWorldMatrix(true,false);
+ const roofBottom=new THREE.Box3().setFromObject(roof).min.y;
+ const highestCollar=Math.max(...l.launchArt.paths.flatMap(path=>path.rings.map(ring=>{
+  ring.updateWorldMatrix(true,false);return new THREE.Box3().setFromObject(ring).max.y;
+ })));
+ assert.ok(roofBottom-highestCollar>5,'The highest real flight collar needs clear headroom');
+ assert.ok(roofBottom-highestCollar<20,'The roof must frame the flown course rather than a huge empty void');
  for(const floor of l.world.floors){
   assert.ok(floor.minX>=b.minX&&floor.maxX<=b.maxX,`Floor outside hangar X: ${floor.mesh.name}`);
   assert.ok(floor.minZ>=b.minZ&&floor.maxZ<=b.maxZ,`Floor outside hangar Z: ${floor.mesh.name}`);

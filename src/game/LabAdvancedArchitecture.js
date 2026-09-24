@@ -7,7 +7,9 @@ const PALETTES=[
  {wall:0x687f79,low:0x829c91,high:0xb5b08c,edge:0xa4dbca},
  {wall:0x71817a,low:0x87928a,high:0xb3a387,edge:0xd5bb83,trim:0x4d6258,sky:0x384b46},
  {wall:0x73828f,low:0x8796a1,high:0xa6acc0,edge:0xa8cde1,trim:0x506170,sky:0x384956},
- {wall:0x877c76,low:0x999088,high:0xb5a791,edge:0xdfbb96,trim:0x685952,sky:0x4b423c},
+ // Room 18: the freight ascent and return pier retain their own large-bay
+ // tones, while the enclosing double-height shaft remains cool steel.
+ {wall:0x526b73,low:0x779194,high:0x91a8ae,freight:0xb99c75,return:0x83ada8,upper:0x8da5b1,edge:0xe0b681,trim:0x38545d,sky:0x364d55},
  {wall:0x778584,low:0x8e9b97,high:0xb1af96,edge:0xc8d59d,trim:0x4f6562,sky:0x3a4d4b},
  {wall:0x7c7d8d,low:0x9294a1,high:0xb6a8b4,edge:0xd4bbd2,trim:0x5b5a70,sky:0x414154},
  {wall:0x6c807f,low:0x869993,high:0x6b898b,edge:0xe7cca3,trim:0x44605f,sky:0x455e61},
@@ -54,7 +56,9 @@ export function finishAdvancedRoom(level){
  for(const surface of world.surfaces){
   if(surface.portal||surface.collider.kinematic||keepsAuthoredMaterial(surface.group))continue;
   const frame=surface.getFrame(),y=frame.center.y;
-  const color=profile?chapterSurfaceColor(profile,{kind:surface.normal.y>.9?'floor':surface.normal.y<-.9?'ceiling':'wall',frame,role:surface.group.userData.chapterColorRole}):Math.abs(surface.normal.y)>.9?(y>5?palette.high:palette.low):palette.wall;
+  const role=surface.group.userData.chapterColorRole;
+  const color=profile?chapterSurfaceColor(profile,{kind:surface.normal.y>.9?'floor':surface.normal.y<-.9?'ceiling':'wall',frame,role}):
+   role&&Number.isFinite(palette[role])?palette[role]:Math.abs(surface.normal.y)>.9?(y>5?palette.high:palette.low):palette.wall;
   surface.group.traverse(mesh=>{
    if(!mesh.isInstancedMesh||mesh.userData.portalTile||mesh.count===0||keepsAuthoredMaterial(mesh))return;mesh.material=material;
    for(let i=0;i<mesh.count;i++)mesh.setColorAt(i,tint.setHex(color).multiplyScalar(i%7===0?.975:1));

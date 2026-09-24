@@ -9,22 +9,25 @@ export function buildRoom30(game,index=29){
  const k=new Workshop(game,ROOM30_SPEC,index),w=k.world;configureChapterWorld(w,'launch');
  // Keep the shell around the actual two launch arcs, their islands and the
  // lower recovery route. The flight panels retain their original coordinates.
- k.bounds={minX:-50,maxX:228,minZ:-88,maxZ:72};k.ceiling=115;
+ k.bounds={minX:-50,maxX:228,minZ:-88,maxZ:72};k.ceiling=84;
  const hangarWidth=k.bounds.maxX-k.bounds.minX,hangarDepth=k.bounds.maxZ-k.bounds.minZ;
  const hangarCenter=[(k.bounds.minX+k.bounds.maxX)/2,(k.bounds.minZ+k.bounds.maxZ)/2];
- const roof=w.box([hangarCenter[0],116,hangarCenter[1]],[hangarWidth+2,2,hangarDepth+2],w.materials.wall);
+ // Both ballistic paths peak below 70 m (the guide collars below 77 m).
+ // Closing the unused thirty metres above them makes this feel like a working
+ // launch hall instead of an empty painted skybox, without narrowing a shot.
+ const roof=w.box([hangarCenter[0],k.ceiling+1,hangarCenter[1]],[hangarWidth+2,2,hangarDepth+2],w.materials.wall);
  roof.name='Solid hangar roof';
  for(const x of [k.bounds.minX-.7,k.bounds.maxX+.7]){
-  const side=w.box([x,57.5,hangarCenter[1]],[1.4,117,hangarDepth+2],w.materials.wall);
+  const side=w.box([x,k.ceiling/2,hangarCenter[1]],[1.4,k.ceiling+2,hangarDepth+2],w.materials.wall);
   side.name='Solid hangar side wall';
  }
  for(const z of [k.bounds.minZ-.7,k.bounds.maxZ+.7]){
-  const end=w.box([hangarCenter[0],57.5,z],[hangarWidth+2,117,1.4],w.materials.wall);
+  const end=w.box([hangarCenter[0],k.ceiling/2,z],[hangarWidth+2,k.ceiling+2,1.4],w.materials.wall);
   end.name='Solid hangar end wall';
  }
  for(const z of [-76,-42,-8,26,60]){
-  w.box([hangarCenter[0],113.4,z],[hangarWidth,1.2,1.0],w.materials.trim);
-  w.box([hangarCenter[0],112.75,z],[44,.12,.65],w.materials.lamp,false);
+  w.box([hangarCenter[0],k.ceiling-2.6,z],[hangarWidth,1.2,1.0],w.materials.trim);
+  w.box([hangarCenter[0],k.ceiling-3.25,z],[44,.12,.65],w.materials.lamp,false);
  }
  const deck=(name,x0,x1,z0,z1,y)=>w.floor(x0,x1,z0,z1,y,{name});
  // A continuous physical service deck catches misses. Returning from it uses the

@@ -58,7 +58,11 @@ function addArchitecturalCladding(level,root){
         const x=(rect.x0+rect.x1)/2,y=(rect.y0+rect.y1)/2,pw=rect.x1-rect.x0-.035,ph=rect.y1-rect.y0-.035;
         if(pw<.10||ph<.10)continue;
         const cadence=(ix+iy*3+seed)%7;
-        const color=profile?chapterSurfaceColor(profile,{kind,frame,role}):palette?tone(floor?(frame.center.y>5?palette.high:palette.low):ceiling?palette.low:palette.wall,cadence):floor?(cadence===0?0x7b898b:0x879194):ceiling?(cadence===0?0x7c888b:0x909c9f):solid?(cadence===0?0x809093:0x75868a):(cadence===0?0x9aa5a5:0x89999d);
+        const color=profile?chapterSurfaceColor(profile,{kind,frame,role}):
+          role&&Number.isFinite(palette?.[role])?tone(palette[role],cadence):
+          palette?tone(floor?(frame.center.y>5?palette.high:palette.low):ceiling?palette.low:palette.wall,cadence):
+          floor?(cadence===0?0x7b898b:0x879194):ceiling?(cadence===0?0x7c888b:0x909c9f):
+          solid?(cadence===0?0x809093:0x75868a):(cadence===0?0x9aa5a5:0x89999d);
         if(!singleSkin)batch.add('frame',local,[x,y,front-.030],[pw,ph,.052]);
         // The folded lip is exposed around a slightly smaller coated field.
         const inset=Math.min(.085,pw*.1,ph*.1);

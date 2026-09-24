@@ -3,7 +3,50 @@ import {Workshop} from './LabWorkshopKit.js';
 import {opticalLift} from './LabRoom13Mechanics.js';
 import {buildRoom25Optics} from './LabRoom25Optics.js';
 import {cargoLoadsPlate} from './LabPlateContact.js';
+import {SolidAssembly} from './LabSolidModels.js';
 export const ROOM25_SPEC={id:'opposed-shadows',title:'Обратная сторона тени',concept:'Один противовес открывает первый луч и перекрывает второй',description:'Свету мешает сама машина. Друг должен уйти с опоры, прежде чем откроется следующая высота.',accent:0xcab48c,assets:[1,2,11,22,23,24],hints:['Две тёмные заслонки связаны одним противовесом. Груз сдвигает их в противоположные стороны.','Сначала сохрани достигнутую высоту на неподвижной галерее. Снятый с опоры друг меняет настоящий путь света.','Освещённый первый приёмник питает также привод весовой платформы. С верхней галереи можно поднять её вместе с другом и забрать его с бокового балкона или переправить через порталы.']};
+
+/** Large structural bays and the real 9m/18m deck edges form an optical
+ * instrument, not a sequence of indistinguishable white corridors. Everything
+ * here is thin finish against existing physical walls or below actual floors.
+ * There are no free-standing, visible-but-passable columns in the walkway. */
+function finishShadowHall(k){
+ const w=k.world,a=new SolidAssembly('Opposed shadows / instrument hall finish','launch');
+ a.materials[0].color.setHex(0x778995);a.materials[1].color.setHex(0x304550);
+ a.materials[2].color.setHex(0xd6ae70);a.materials[3].color.setHex(0x44555e);
+ const plate=(p,s,material=1)=>a.box(p,s,material,.025,false);
+ // The same weight operates shutters at opposite heights. Vertical bays
+ // behind them give each a recognizable motor well rather than a flat wall.
+ for(const x of [-11.7,-6.55,-1.4,3.75,8.9,14.05,19.7])plate([x,4.5,-11.765],[.18,8.7,.18]);
+ plate([4,8.82,-11.76],[31.8,.26,.18]);
+ for(const x of [-7.7,-2.1,3.55])plate([x,18.0,-11.765],[.18,17.2,.18]);
+ for(const x of [14.35,17,19.65])plate([x,18.0,-11.765],[.18,17.2,.18]);
+ plate([-2,26.50,-11.755],[11.8,.36,.20]);
+ plate([17,26.50,-11.755],[5.9,.36,.20]);
+ // Matching soffits visually connect permanent landings without painting
+ // over portal ceramic or adding walkable platforms at false heights.
+ for(const [p,s] of [
+  [[1,8.80,-11.945],[37.7,.28,.17]],
+  [[13,8.80,-7.96],[13.8,.28,.17]],
+  [[15.5,17.80,-8.95],[8.7,.27,.17]],
+  [[-13,8.80,-17.94],[9.8,.25,.17]],
+ ])plate(p,s,1);
+ for(const [p,s] of [
+  [[1,8.88,-11.845],[37.5,.045,.055]],
+  [[13,8.88,-7.865],[13.7,.045,.055]],
+  [[15.5,17.88,-8.855],[8.6,.045,.055]],
+ ])plate(p,s,2);
+ // Recessed four-corner seat around the actual freight plate. It is flush
+ // with the floor and outside the ceramic mouth, so carrying a friend onto
+ // the counterweight remains unrestricted.
+ for(const sx of [-1,1])for(const sz of [-1,1]){
+  const x=-7+sx*3.05,z=12+sz*3.05;
+  plate([x,.012,z+sz*.28],[.12,.018,.62],3);
+  plate([x+sx*.28,.012,z],[.62,.018,.12],2);
+ }
+ const model=a.finish();model.userData.visualOnly=true;model.userData.solidModel=false;delete model.userData.collisionParts;w.root.add(model);
+ return model;
+}
 export function buildRoom25(game,index=24){
  const k=new Workshop(game,ROOM25_SPEC,index),w=k.world;k.shell({minX:-22,maxX:22,minZ:-22,maxZ:25},27);w.highFidelity=true;
  const deck=(name,a,b,c,d,y)=>w.floor(a,b,c,d,y,{name});
@@ -68,7 +111,9 @@ export function buildRoom25(game,index=24){
   if(optical.receivers[0]&&pad.loaded())hoist.target=9;
  },'E — свет нижнего приёмника поднимает весовую платформу к боковому балкону');
  for(const x of [-9.6,-4.4])w.box([x,4.5,12],[.12,9,.15],w.materials.trim,false);
+ const shadowHall=finishShadowHall(k);
  const level=k.finish([-17,0,10],[-15,.55,9],[-16,7,22],{workshop:k,portalPuzzle:true,cargoOnAnyPad:()=>cargoLoadsPlate(game.cargo,game.heldCube,pad.surface.getFrame())});
+ level.shadowHall=shadowHall;
  level.mechanismArt={projectors:[{position:optical.source.toArray(),direction:optical.direction.toArray(),radius:.5}],liftSurfaces:['shadow-lift','relay-lift']};
  level.conceptLesson={position:[-7,0,12],range:4,key:'E',text:'Две заслонки соединены с одной опорой. Нагрузка освобождает один луч и перекрывает другой.'};
  level.puzzleGeometry={footprint:2068,goalHeight:7,orders:['portal-freight-transfer','receiver-powered-plate-hoist'],noProgressFlags:true,sightSlot:{x:-10.8,minY:14.2,maxY:15.55},portalRoles:{'light-intake':'one source for both physical optical circuits','lower-relay':'illuminate the first lift only after its shutter clears','shadow-counterweight':'weight opens the first beam, then leaves through this floor or rises on its receiver-powered hoist','freight-receiver':'retain the same original companion above the first crossing','upper-relay':'the second optical circuit is clear only when the counterweight is unloaded','return-entry':'return from the high reverse overlook','home':'reach the back of the start through its high sight slit'},deductions:['cargo removes a real opaque obstruction','leave a powered car on a permanent ledge','the first live receiver can raise the loaded counterweight itself','retrieval reverses two connected shutters','reuse the source through the upper relay after cargo retrieval','higher observation exposes the back of the starting room']};

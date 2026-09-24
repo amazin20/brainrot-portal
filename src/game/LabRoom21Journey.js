@@ -56,6 +56,11 @@ export function room21Fall(d,{fromService=false}={}) {
  const before=game.teleportCount;
  for(let i=0;i<360&&game.playerGrounded;i++){worldMove(0,fromService?.15:-.15);frame();}
  stop();until(()=>game.teleportCount>before,5,'Well entry missed');
+ // The lens is rigidly carried through an inclined portal. Give its gravity-
+ // relative horizon a few normal frames to recover while the player is still
+ // airborne; the flight milestone then shows the destination instead of the
+ // underside of the portal in the very first crossing frame.
+ for(let i=0;i<11&&game.state==='playing'&&!game.playerGrounded;i++)frame();
  mark(fromService?'lower service fall through the raised SAME exit':'departure fall through the lowered cassette');
  until(()=>game.playerGrounded,8,'Cassette flight never landed');
  mark('permanent landing');
@@ -82,6 +87,9 @@ export async function runRoom21(d,{order='cargo-first',recovery=false,offset=0,r
  }else{
   walk(0,-3.1);aim(0,level.panels['shared-well'].getFrame().center.clone().setZ(-1.5));
   mark('move only the entry to the service fall while the friend still supports the low exit');
+  // After a downward portal shot, turn back toward the receiver before
+  // crossing its gallery. Navigation should show the cargo rather than floor.
+  d.look(new THREE.Vector3(15,3.5,5));
  }
  walk(21,-5);walk(21,7.6);walk(18,7.6);
  // Approach the load from inside the tray, not inside its corner post.

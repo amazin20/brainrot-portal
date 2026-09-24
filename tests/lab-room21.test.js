@@ -20,6 +20,26 @@ for(const opts of [{order:'cargo-first'},{order:'brake-first'},{recovery:true},{
   assert.equal(g.firstLevel.state.cargoSeat.loaded(),false);assert.ok(g.heldCube);
   assert.equal(g.firstLevel.cassette.height,g.firstLevel.cassette.high);
  });
+test('ordinary room21 flight and receiver milestones retain a readable camera',async()=>{
+ const seen=new Set();
+ const result=await runV8Journey(g,{onMilestone:m=>{
+  const first=m.name==='departure fall through the lowered cassette';
+  const second=m.name==='lower service fall through the raised SAME exit';
+  const receiver=m.name==='cargo recovered; the same prepared exit rises with its surface';
+  if(!first&&!second&&!receiver)return;
+  seen.add(m.name);
+  if(first||second){
+   assert.equal(g.playerGrounded,false,'flight frame must still show an airborne crossing');
+   assert.ok(g.cameraRig.viewUp.y>.05,'flight frame is still upside down');
+   assert.ok(g.camera.position.y>g.playerPosition.y-1,'flight lens is beneath the room');
+  }else assert.ok(g.pitch>-.8,'the receiver is hidden by the old downward portal aim');
+  const chest=g.playerPosition.clone().add(new THREE.Vector3(0,1.2,0)).project(g.camera);
+  assert.ok(Math.abs(chest.x)<.8&&Math.abs(chest.y)<.8&&chest.z>-1&&chest.z<1,
+   `the traveller is outside the ${m.name} frame: ${chest.toArray()}`);
+ }});
+ assert.equal(result.pass,true);
+ assert.equal(seen.size,3);
+});
 test('service car is a distinct passenger solution powered by the same cargo counterweight',async()=>{
  let lower,upper;
  const r=await runV8Journey(g,{journeyOptions:{route:'service-car'},onMilestone:m=>{

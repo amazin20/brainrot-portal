@@ -7,16 +7,50 @@ export function buildRoom18(game,index=17){
  const k=new Workshop(game,ROOM18_SPEC,index),w=k.world;
  k.bounds={minX:-24,maxX:24,minZ:-24,maxZ:29};k.ceiling=30;
  w.walls(k.bounds,30,-1);w.floor(-24,24,-24,29,0,{name:'Continuous return foundation'});
- w.materials.wall.color.setHex(0x44545b);w.materials.floor.color.setHex(0x74817f);
- const deck=(name,x0,x1,z0,z1,y)=>w.floor(x0,x1,z0,z1,y,{name});
+ // The later premium architectural pass reads these roles when it replaces
+ // visible structural tiles. White portal ceramics keep their exact frames.
+ const roleFor=(name,y)=>/freight|loading|foundation stair/i.test(name)?'freight':
+  /rising east|upper|same well/i.test(name)||y>=19?'upper':
+  /receiv|return|catch|inspection/i.test(name)?'return':null;
+ const role=(mesh,tone)=>{if(tone)mesh.userData.chapterColorRole=tone;return mesh;};
+ const deck=(name,x0,x1,z0,z1,y)=>{
+  const surface=w.floor(x0,x1,z0,z1,y,{name});
+  const tone=roleFor(name,y);role(surface.group,tone);
+  // Above the launch, a shallow side fascia avoids reducing the narrowly
+  // timed cross-shaft shot corridor just beneath the upper walkway.
+  if(y>0&&y<19&&!/stair|ris(?:e|ing)/i.test(name))
+   role(w.box([(x0+x1)/2,y-.24,(z0+z1)/2],[x1-x0,.34,z1-z0],w.materials.trim),tone);
+  return surface;
+ };
  const block=(p,s)=>w.box(p,s,w.materials.wall);
- const stair=(name,x0,x1,z0,z1,low,high)=>{const n=Math.ceil((high-low)/.25);for(let i=0;i<n;i++){const za=z0+(z1-z0)*i/n,zb=z0+(z1-z0)*(i+1)/n;deck(name,x0,x1,Math.min(za,zb),Math.max(za,zb),low+(high-low)*(i+1)/n);}};
+ const stair=(name,x0,x1,z0,z1,low,high)=>{
+  const n=Math.ceil((high-low)/.25);
+  for(let i=0;i<n;i++){
+   const za=z0+(z1-z0)*i/n,zb=z0+(z1-z0)*(i+1)/n;
+   const y=low+(high-low)*(i+1)/n;
+   // A solid riser under every tread makes the long climbing route a real
+   // stair, including the visible underside and the recoverable landings.
+   deck(name,x0,x1,Math.min(za,zb),Math.max(za,zb),y);
+   role(w.box([(x0+x1)/2,(low+y)/2,(za+zb)/2],[x1-x0,y-low,Math.abs(zb-za)],w.materials.wall),roleFor(name,y));
+  }
+ };
  // The loading floor and upper corridor share a well, but never a shortcut to the receiver.
  deck('Freight loading floor',-5,5,9,15,8);deck('Loading crosswalk',-21,22,15,18,8);
+ // Load paths lead into the return foundation, instead of looking like
+ // weightless floating boards. Leave the common well and walking lanes open.
+ for(const x of [-4.7,4.7])for(const z of [9.4,14.6])role(block([x,3.72,z],[.46,7.44,.46]),'freight');
+ for(const x of [-17,-8,9,17])role(block([x,3.72,17.72],[.46,7.44,.46]),'freight');
+ role(w.box([0,7.5,14.7],[10,.45,.38],w.materials.trim),'freight');
+ for(const z of [15.3,17.7])role(w.box([.5,7.42,z],[43,.46,.24],w.materials.trim),'freight');
  stair('Return foundation stair',-21,-18,28,18,0,8);
  stair('Rising east service corridor',18,22,15,-15,8,20);
  deck('Upper north turn',-3,22,-18,-15,20);deck('Upper return corridor',-3,-.3,-15,9,20);
  deck('Same well upper lip',-4,4,9,13,20);
+ // Outer-edge girders attach the upper U-shaped walk to the existing
+ // enclosing wall. The west flight slot below its inner edge stays open.
+ for(const z of [-17.75,-15.25])role(w.box([9.5,19.15,z],[25,.32,.2],w.materials.trim),'upper');
+ role(w.box([-2.92,19.15,-3],[.15,.32,24],w.materials.trim),'upper');
+ role(w.box([0,19.15,12.92],[8,.32,.12],w.materials.trim),'upper');
  for(const x of [17.8,22.2])block([x,19,-1],[.3,22,32]);
  // The 1.5m waist-height sight gaps pass rays, but never the 2.4m capsule.
  for(const x of [-3.2,.2])block([x,23.05,-3.75],[.3,3.1,22.5]);
@@ -42,6 +76,9 @@ export function buildRoom18(game,index=17){
  w.box([-12,11.025,-4.5],[5.8,.045,6.8],w.materials.accent,false);
  const shelf={center:V(-12,11,-4.5),normal:V(0,1,0),right:V(1,0,0),up:V(0,0,1),halfWidth:3,halfHeight:3.5};
  const sightShutter={loaded:false,progress:0,mesh:sightShutterMesh,collider:sightShutterCollider};
+ // A visible, powered conduit connects the actual freight plate to its
+ // sight shutter. It follows the existing structural face and adds no gate.
+ k.wire([[-12,11.15,-4.5],[-15.15,11.15,-4.5],[-15.15,20.25,-4.5],[-15.15,20.25,3.95],[-13.7,20.25,3.95]],()=>sightShutter.loaded);
  k.ticks.push(dt=>{
   sightShutter.loaded=cargoLoadsPlate(game.cargo,game.heldCube,shelf);
   sightShutter.progress=THREE.MathUtils.damp(sightShutter.progress,sightShutter.loaded?1:0,12,dt);

@@ -46,6 +46,23 @@ export function buildSpringMailRoom(k,{baseWalls,closedExit}) {
   }
   w.box([0,10.8,-8.2],[7,.28,.28]);
   w.box([0,10.8,-1.8],[7,.28,.28]);
+  // The rear gantry and the horizontal supplied ram are the two visible
+  // landmarks of the falling load. Status on the actual rear truss follows
+  // the physical latch; a tall indicator above the grounded ram shows its
+  // compression from the entrance without suggesting a second target.
+  const idle=0xc49358,active=0x83e4c4;
+  const trussLamp=new THREE.MeshBasicMaterial({color:idle});
+  const ramLamp=new THREE.MeshBasicMaterial({color:idle});
+  w.box([0,10.81,-8.02],[3.3,.11,.10],trussLamp,false);
+  const compressionBar=w.box([-5.55,3.35,-5],[.15,2.6,.15],ramLamp,false);
+  w.box([-5.55,1.97,-5],[.37,.12,.37],w.materials.trim,false);
+  k.ticks.push(()=>{
+    const compressed=Math.min(1,spring.compression/.72);
+    trussLamp.color.setHex(spring.latched?active:idle);
+    ramLamp.color.setHex(spring.latched?active:idle);
+    compressionBar.scale.y=.12+.88*compressed;
+    compressionBar.position.y=2.05+1.3*compressionBar.scale.y;
+  });
   // Visible corner guides explain where the protective glass retracts.
   for(const x of [-1.94,1.94])for(const z of [-6.94,-3.06]) {
     w.box([x,1.9,z],[.12,3.8,.12]);

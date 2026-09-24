@@ -48,3 +48,22 @@ test('foundation room 1 updates its guidance after the player dispatches the ori
   assert.equal(collectionHint?.id,'foundation-collect');
  }finally{game.physics?.dispose();game.portals?.dispose();}
 });
+
+test('foundation room 3 can dispatch its loose companion first and reverse the same loaded carriage',async()=>{
+ const game=await createHeadlessGame();
+ try{
+  game.chamberEdition='foundation';await game.selectLevel(2,false);
+  const cargo=game.cargo,body=game.physics.cargoBody;
+  for(const options of [{recover:true},{freight:true},{freight:true,returnCargo:true}]){
+   const report=await runV8Journey(game,{journeyOptions:options});
+   assert.equal(report.pass,true);assert.equal(game.state,'won');
+   assert.equal(report.resets+report.respawns,0);
+   assert.equal(game.cargo,cargo);assert.equal(game.physics.cargoBody,body);
+   if(options.freight){
+    assert.ok(report.milestones.some(m=>m.name.startsWith('Loaded car reaches the far berth')));
+    assert.ok(report.milestones.some(m=>m.name.startsWith('Lower portal joins the loaded car')));
+   }else assert.ok(report.milestones.some(m=>m.name.startsWith('The dry service incline returns')));
+   assert.equal(report.milestones.some(m=>m.name.startsWith('Loaded car and original companion return')),!!options.returnCargo);
+  }
+ }finally{game.physics?.dispose();game.portals?.dispose();}
+});

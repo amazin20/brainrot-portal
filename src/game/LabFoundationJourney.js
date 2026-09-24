@@ -39,7 +39,7 @@ function second(d,{alternate=false,recover=false}={}){
  if(recover){walk(-17,8);walk(-2,8);g.clearPortals();until(()=>g.playerGrounded&&g.playerPosition.y< -2.9,5,'Expected real fall after extinguishing bridge');walk(-10,-15);walk(-18,-15);walk(-18,4);walk(-16,15);connect();mark('Bridge loss has a dry recovery, without reset');}
  collect(d);walk(-17,8);walk(16,8);
 }
-function third(d,{alternate=false,recover=false}={}){
+function third(d,{alternate=false,recover=false,freight=false,returnCargo=false}={}){
  const {game:g,level:l,walk,wait,until,mark,enter}=d,c=l.car;
  // Target near walking height within the large ceramic sheet, not its top.
  const target=c.panel.getFrame().center.clone().addScaledVector(c.panel.getFrame().up,0);
@@ -50,7 +50,29 @@ function third(d,{alternate=false,recover=false}={}){
   check(g.playerPosition.y>-.1&&g.cargo.position.y>.3,'The return incline did not reunite both travellers');
   mark('The dry service incline returns from a missed departure without resetting either traveller');
  }
- if(alternate){
+ if(freight){
+  collect(d);enter(l.panels['dispatch-entry']);walk(-18,-3);release(d);
+  const f=c.floor,p=g.cargo.position;
+  check(!g.heldCube&&p.x>f.minX+.3&&p.x<f.maxX-.3&&p.z>f.minZ+.3&&p.z<f.maxZ-.3&&Math.abs(p.y-f.y)<1.5,
+   'Original loose companion must be staged on the moving carriage');
+  walk(-10,-2);walk(-10,-16);walk(-19,-16);walk(-19.6,-17);
+  check(g.interact(),'The side dispatch cannot send the loaded car');
+  until(()=>c.at(1),15,'The companion cargo did not reach the far berth');
+  check(g.cargo.position.x>5&&g.cargo.position.y>10,'The original companion did not ride the car without the player');
+  mark('Loaded car reaches the far berth while the player remains on the departure gallery');
+  if(returnCargo){
+   check(g.interact(),'The side dispatch cannot reverse the loaded car');
+   until(()=>c.at(0),15,'The loaded car failed to return to its original berth');
+   check(g.cargo.position.x< -5&&g.cargo.position.y>6,'The companion did not travel back aboard the same car');
+   mark('Loaded car and original companion return to the first berth without a reset');
+   check(g.interact(),'The side dispatch cannot send the car out again');
+   until(()=>c.at(1),15,'The car failed to make its second loaded trip');
+  }
+  walk(-3,-15);until(()=>g.playerGrounded&&g.playerPosition.y<-2.9,5,'Dry service return missed');
+  walk(-10,-8);walk(-19,-8);walk(-19,12);walk(-16,12);
+  enter(l.panels['dispatch-entry']);collect(d);
+  mark('Lower portal joins the loaded car at its new address without resetting either traveller');
+ }else if(alternate){
   enter(l.panels['dispatch-entry']);walk(-10,-2);walk(-10,-16);walk(-19,-16);walk(-19.6,-17);check(g.interact(),'Remote carriage control missed');until(()=>c.at(1),15,'Empty cabin failed to change berth');
   walk(-3,-15);until(()=>g.playerGrounded&&g.playerPosition.y<-2.9,5,'Observation fall missed');walk(-10,-8);walk(-19,-8);walk(-19,12);walk(-16,12);collect(d);
   mark('The original entry now points at the unoccupied destination cabin');enter(l.panels['dispatch-entry']);

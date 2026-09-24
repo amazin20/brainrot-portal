@@ -54,6 +54,46 @@ export function buildRoom30Art(level){
   const t=i*Math.PI/6;steel.beam([200+Math.cos(t)*8.2,43+Math.sin(t)*8.2,32],[200+Math.cos(t)*9.5,43+Math.sin(t)*9.5,32],.20,2);
  }
  for(const [x,z] of [[-44,-65],[-42,53],[25,59],[112,59],[208,59],[218,-76]])placeSolidModel(k,createPlanter('launch'),[x,0,z],{parent:root,scale:2.5});
+ // The old hall exposed almost eighty metres of featureless orange wall from
+ // the first launch deck. These bays sit against its existing solid shell,
+ // above the unreachable service floor, so their decorative relief cannot be
+ // mistaken for a new invisible path or block a portal shot. All bays merge
+ // into the same four material draws as the structural model.
+ const {minX,maxX,minZ,maxZ}=level.bounds;
+ for(const z of [minZ+.85,maxZ-.85])for(let x=minX+6;x<maxX-25;x+=24){
+  steel.box([x,52,z],[.72,58,.9],1,.1,false);
+  steel.box([x+11.7,76,z],[23.3,.62,.85],1,.09,false);
+  steel.box([x+11.7,35,z],[23.3,.62,.85],1,.09,false);
+  steel.box([x+11.7,55,z],[20,10,.40],3,.1,false);
+  steel.box([x+11.7,61,z+.22],[17,.24,.12],2,.025,false);
+ }
+ for(const x of [minX+.85,maxX-.85])for(let z=minZ+9;z<maxZ-23;z+=22){
+  steel.box([x,52,z],[.9,58,.72],1,.1,false);
+  steel.box([x,76,z+10.7],[.85,.62,21.3],1,.09,false);
+  steel.box([x,35,z+10.7],[.85,.62,21.3],1,.09,false);
+  steel.box([x,55,z+10.7],[.40,10,18],3,.1,false);
+  steel.box([x+.22,61,z+10.7],[.12,.24,15],2,.025,false);
+ }
+ // The large sightline screen remains one solid obstruction; recessed service
+ // cells and longitudinal ribs show its construction on both visible faces.
+ for(const side of [-1,1])for(const z of [-78,-64,-50,-36]){
+  const x=120+side*.72;
+  steel.box([x,55,z],[.35,50,.82],1,.07,false);
+  steel.box([x,61,z+6.6],[.22,13,12.4],3,.07,false);
+  steel.box([x+side*.18,69,z+6.6],[.12,.25,10.4],2,.02,false);
+ }
+ // Paired enamel rims belong to the actual three arrival floors. The north
+ // and east alternatives keep their different directions and their own
+ // outlet controls; these borders provide an overview while retaining the
+ // original flat walkable surface and cargo contacts.
+ for(const [x0,x1,z0,z1,y,material] of [
+  [-23.5,28,-22,26,52,2],[44,80,-3,35,40,2],
+  [95,138,-3,35,40,1],[183,218,2,42,28,2],
+ ]){
+  const centerX=(x0+x1)/2,centerZ=(z0+z1)/2;
+  for(const z of [z0+.24,z1-.24])steel.box([centerX,y+.035,z],[x1-x0-.48,.055,.21],material,.02,false);
+  for(const x of [x0+.24,x1-.24])steel.box([x,y+.035,centerZ],[.21,.055,z1-z0-.48],material,.02,false);
+ }
  placeSolidModel(k,steel.finish(),[0,0,0],{parent:root});
  const moving=(k.solidModels??[]).filter(b=>b.colliders[0]?.kinematic);
  const update=()=>{for(const path of paths)if(path.name==='final'||path.name==='east-final')posePath(path);};

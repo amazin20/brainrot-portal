@@ -1,14 +1,30 @@
 import * as THREE from 'three';
 import {V,tracePortalRay,rayTouches,beamDrawing,ringDevice} from './LabPuzzleMechanics.js';
+import {SolidAssembly} from './LabSolidModels.js';
 /** One weight translates two opposed opaque shutters. Receiver illumination
  * is traced through their real kinematic collision boxes at every tick. */
 export function buildRoom25Optics(k,pad,first,second){
  const w=k.world,g=k.game,source=V(18,3,16),direction=V(-1,0,0),receivers=[V(-7,3,-6),V(18,11.3,-6)];
- const drawing=beamDrawing(w,0xffd894,.032),lamps=receivers.map(p=>ringDevice(w,p.toArray(),[-1,0,0],0xc2a677,.65));
+ // A physical beam becomes readable in the long gallery and through a portal;
+ // its endpoints are still the exact same traced light segments.
+ const drawing=beamDrawing(w,0xffd894,.075),lamps=receivers.map(p=>ringDevice(w,p.toArray(),[-1,0,0],0xc2a677,.84));
+ const bladeFinish=new THREE.MeshStandardMaterial({color:0x324650,metalness:.43,roughness:.48});
  const blades=[{base:V(-11,3,-6),sign:1},{base:V(11,11.3,2),sign:-1}].map(({base,sign})=>{
-  const mesh=w.box(base.toArray(),[.4,6,5],w.materials.wall,false);
+  const mesh=w.box(base.toArray(),[.4,6,5],bladeFinish,false);
+  mesh.userData.keepMaterial=true;
   const collider={mesh,box:new THREE.Box3().setFromObject(mesh),enabled:true,kinematic:true};g.colliders.push(collider);g.cameraBlockers.push(mesh);g.aimBlockers.push(mesh);
-  w.box([base.x,base.y-3.2,-2],[.2,.2,13],w.materials.trim,false);
+  // Ribbed enamel is mounted on the very shutter that blocks the real ray.
+  // The thin face details sit within its swept .4 × 6 × 5 collision volume.
+  const a=new SolidAssembly(sign>0?'Lower counterweighted shutter':'Upper counterweighted shutter','launch');
+  a.materials[1].color.setHex(0x263f4a);a.materials[2].color.setHex(0xd7ad66);
+  for(const x of [-.191,.191]){
+   for(const z of [-2.24,2.24])a.box([x,0,z],[.018,5.72,.16],1,.006,false);
+   for(const y of [-2.4,-.8,.8,2.4])a.box([x,y,0],[.018,.045,4.55],2,.006,false);
+  }
+  const finish=a.finish();finish.userData.solidModel=false;delete finish.userData.collisionParts;finish.userData.visualOnly=true;mesh.add(finish);
+  // Two fixed rails show the eight-metre reversed strokes, even while the
+  // shutter is resting. They never cross the playable opening or act as walls.
+  for(const z of [-8,3])w.box([base.x,base.y-3.05,z],[.08,.09,1.3],w.materials.trim,false);
   return {mesh,collider,base,sign};
  });
  const state={source,direction,segments:[],receivers:[false,false],loaded:false,travel:0,blades};

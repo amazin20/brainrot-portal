@@ -53,6 +53,24 @@ test('garden floors have distinct heights or non-overlapping footprints',async()
  }
 });
 
+test('the new greenhouse is physical while its wall finish leaves all three fixed portal mouths clear',async()=>{
+ await g.selectLevel(23,false);
+ const level=g.firstLevel,art=level.gardenAtelier;
+ assert.equal(art.facade.userData.visualOnly,true);
+ assert.equal(art.facade.userData.collisionParts,undefined,'Thin wall finish must not create invisible route barriers');
+ const binding=level.workshop.solidModels.find(entry=>entry.model===art.roof);
+ assert.ok(binding?.colliders.length>10,'The conservatory roof needs actual short physical supports');
+ for(const collider of binding.colliders){
+  assert.ok(g.colliders.includes(collider));
+  assert.ok(g.physics.solids.has(collider.mesh.uuid),'Every visible roof support must own a physics body');
+ }
+ for(const name of ['garden-entry','balcony-entry','pavilion-receiver']){
+  const panel=level.panels[name],frame=panel.getFrame();
+  const origin=frame.center.clone().addScaledVector(frame.normal,4);
+  assert.ok(acceptsPortalShot(g,origin,frame.center,panel),`${name} decoration obscured an intended front-face shot`);
+ }
+});
+
 test('a fall and erased pair can be recovered from the real lower court while the same companion waits above',async()=>{
  await g.selectLevel(23,false);g.camera.aspect=1.6;g.camera.updateProjectionMatrix();const body=g.physics.cargoBody;
  const report=await runV8Journey(g,{journeyOptions:{route:'carry-through',recovery:'ground-return'}});

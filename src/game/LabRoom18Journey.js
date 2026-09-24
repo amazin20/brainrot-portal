@@ -25,10 +25,16 @@ export function room18Climb(d,{direct=false}={}){
  const {walk,aim,level,mark}=d;
  walk(0,16.5);walk(20,16.5);walk(20,-17.5);walk(-1.5,-17.5);walk(-1.5,-14);walk(-.3,-14);
  if(!direct)aim(1,level.panels.rebound.getFrame().center);
- walk(-1.5,-14);if(direct){if(d.game.camera.aspect<1){walk(-1.5,-8);d.look(level.panels.turn.getFrame().center);}walk(-1.5,5);}
+ walk(-1.5,-14);if(direct){
+  if(d.game.camera.aspect<1){walk(-1.5,-8);d.look(level.panels.turn.getFrame().center);}
+  // At 16:10 the camera clips the high sight baffle from the west edge.
+  // Move across the same permanent walkway to its unobstructed east edge.
+  walk(d.game.camera.aspect>=1&&d.game.camera.aspect<1.7?-.6:-1.5,5);
+ }
  if(direct){
   check(level.state.sightShutter.loaded&&level.state.sightShutter.progress>.95,'Original freight has not opened the upper sight shutter');
-  aim(1,level.panels.turn.getFrame().center);
+  const turn=level.panels.turn.getFrame().center;
+  aim(1,d.game.camera.aspect>=1&&d.game.camera.aspect<1.7?turn.clone().add(V(0,-1.3,0)):turn);
   walk(-1.5,11);walk(1.5,11);
   mark('freight holds the sight shutter open while the turn is addressed from the upper lip');
  }else{walk(-1.5,11);walk(1.5,11);mark('same well from the upper return');}
@@ -60,11 +66,14 @@ export function room18Return(d,{order='portal-first'}={}){
   // Keep the original friend on permanent support while the observer climbs
   // to the sight line and changes the other portal to the hidden exit.
   walk(4,-2);walk(-12,-2);walk(-14.85,-2);aim(0,V(-20,.025,-1.2));
-  walk(game.cargo.position.x-1,game.cargo.position.z);pickup();walk(-12,-2);walk(4,-2);walk(4,0);
+  walk(game.cargo.position.x-1,game.cargo.position.z);pickup();walk(-12,-2);walk(7,0);
+  // Stop before placing the live body. Releasing straight out of a walk
+  // preserves the hand's lateral velocity and can send it off the gallery.
+  wait(.4);
   check(game.interact()&&!game.heldCube,'Companion could not be staged on the real gallery');wait(1);
   check(game.cargo.position.y>10.9,'The staged companion fell off the return gallery');
   mark('retrieve and stage the original companion before addressing the hidden exit');
-  walk(4,25);aim(1,level.panels.home.getFrame().center);
+  walk(4,0);walk(4,25);aim(1,level.panels.home.getFrame().center);
   mark('hidden exit addressed after securing the companion on permanent support');
   walk(4,0);walk(game.cargo.position.x+1,game.cargo.position.z);pickup();walk(-12,-2);
  }else{
