@@ -34,7 +34,7 @@
 
 ## Открыть игру
 
-Проверенная кампания из 30 уровней: [Играть в браузере](https://brainrot-portal-route-preview.ivan-gavrish-a.chatgpt.site/) (сборка `95d9f3a`).
+30 испытаний кампании и архив из 33 уровней: [Играть в браузере](https://brainrot-portal-route-preview.ivan-gavrish-a.chatgpt.site/) (сборка `2962ecc`, CI `36050216810`).
 Предыдущая публикация GitHub Pages: [Открыть](https://amazin20.github.io/brainrot-portal/).
 
 `?edition=classic&level=31` открывает архивное испытание 31.
