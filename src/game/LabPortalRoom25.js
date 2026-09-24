@@ -37,6 +37,18 @@ function finishShadowHall(k,optical){
  for(const x of [14.35,17,19.65])plate([x,18.0,-11.765],[.18,17.2,.18]);
  plate([-2,26.50,-11.755],[11.8,.36,.20]);
  plate([17,26.50,-11.755],[5.9,.36,.20]);
+ // The gallery sees the south face of this opaque upper screen. Divide its
+ // actual backing into enamel bays and trace the optical conduit along its
+ // foot; all trim is shallow finish against the screen's existing collider.
+ for(const x of [-6,-2,2]){
+  plate([x,18.0,-12.164],[3.48,17.42,.012],0);
+  for(const y of [10.45,14.85,19.25,23.65])plate([x,y,-12.175],[3.25,.15,.008],1);
+  plate([x,17.3,-12.175],[.095,15.65,.008],3);
+ }
+ for(const x of [-7.84,-4.02,-.02,3.84])plate([x,18.0,-12.176],[.12,17.60,.008],1);
+ for(const y of [9.35,26.62])plate([-2,y,-12.176],[11.70,.16,.008],1);
+ plate([-2,10.05,-12.186],[11.28,.075,.008],2);
+ for(const x of [-5.98,-1.98,2.02])plate([x,10.05,-12.192],[.34,.17,.008],2);
  // The reverse face of the upper screen is exactly what the player sees
  // while lining up the final relay. Give that real opaque screen a deep
  // instrument casing and live lower/upper receiver indicators.
