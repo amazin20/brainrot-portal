@@ -75,6 +75,34 @@ jobs:
             qa/video-after.json
           retention-days: 14
 
+  route-matrix:
+    name: Puzzle route matrix (${{ matrix.edition }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        edition: [foundation, classic, open]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.revision }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Complete canonical and established alternate routes
+        run: |
+          mkdir -p qa/route-matrix
+          node scripts/qa-campaign-routes.mjs --edition=${{ matrix.edition }} --json=qa/route-matrix/${{ matrix.edition }}.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: campaign-route-matrix-${{ matrix.edition }}
+          path: qa/route-matrix/${{ matrix.edition }}.json
+          retention-days: 14
+
   browser:
     name: WebGL rooms ${{ matrix.first }}–${{ matrix.last }}
     runs-on: ubuntu-latest
@@ -314,13 +342,13 @@ jobs:
           retention-days: 14
 
   foundation:
-    name: New first chapter room ${{ matrix.room }} and exploratory return
+    name: Campaign opening room ${{ matrix.room }} and end transition
     runs-on: ubuntu-latest
     timeout-minutes: 25
     strategy:
       fail-fast: false
       matrix:
-        room: [1, 2, 3, 4, 5]
+        room: [1, 2, 3, 4, 5, 30]
     steps:
       - uses: actions/checkout@v4
         with:
@@ -337,7 +365,7 @@ jobs:
       - name: Default public entry, ordinary and alternative inputs, saved progress and next button
         env:
           ROOMS: ${{ matrix.room }}
-          RECORD: ${{ inputs.record_puzzle && '1' || '0' }}
+          RECORD: ${{ inputs.record_puzzle && matrix.room <= 5 && '1' || '0' }}
         run: |
           npm run preview -- --host 127.0.0.1 --port 4173 >foundation-preview.log 2>&1 &
           for i in {1..30}; do curl -fsS http://127.0.0.1:4173/ >/dev/null && break; sleep 1; done

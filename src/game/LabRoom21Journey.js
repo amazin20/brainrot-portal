@@ -60,10 +60,11 @@ export function room21Fall(d,{fromService=false}={}) {
  until(()=>game.playerGrounded,8,'Cassette flight never landed');
  mark('permanent landing');
 }
-export async function runRoom21(d,{order='cargo-first',recovery=false,offset=0}={}) {
+export async function runRoom21(d,{order='cargo-first',recovery=false,offset=0,route='portal-return'}={}) {
  installRoom21Aim(d);
  const {game,level,walk,aim,until,pickup,mark,wait}=d;
  check(['cargo-first','brake-first'].includes(order),'Unknown preparation order');
+ check(['portal-return','service-car'].includes(route),'Unknown cassette route');
  check(Number.isFinite(offset)&&Math.abs(offset)<=.3,'Reviewed offset range');
  if(order==='cargo-first'){room21Freight(d,{offset});room21Brake(d);}else{room21Brake(d);room21Freight(d,{offset});}
  until(()=>level.cassette.height<level.cassette.low+.01,6,'Cassette did not lower');
@@ -74,16 +75,31 @@ export async function runRoom21(d,{order='cargo-first',recovery=false,offset=0}=
  room21Fall(d);
  check(game.playerPosition.y>6.9&&game.playerPosition.y<7.2,'First landing is not the service pocket '+game.playerPosition.toArray());
  if(recovery){game.clearPortals();wait(.3);walk(-1.9,-6);aim(1,level.panels['moving-cassette'].getFrame().center);mark('erased pair restored from permanent service pocket, with same cargo and load');}
- walk(0,-3.1);aim(0,level.panels['shared-well'].getFrame().center.clone().setZ(-1.5));
- mark('move only the entry to the service fall while the friend still supports the low exit');
+ if(route==='service-car'){
+  walk(19.8,-11);check(game.interact(),'Service brake interaction missed');wait(.3);
+  check(level.cassette.braked&&level.serviceCar.floor.y<7.05,'Passenger car did not hold at service height');
+  mark('service brake holds both linked decks before cargo recovery');
+ }else{
+  walk(0,-3.1);aim(0,level.panels['shared-well'].getFrame().center.clone().setZ(-1.5));
+  mark('move only the entry to the service fall while the friend still supports the low exit');
+ }
  walk(21,-5);walk(21,7.6);walk(18,7.6);
  // Approach the load from inside the tray, not inside its corner post.
  // This changes only the ordinary route's walking target, never actor poses.
  walk(...room21ReceiverApproach(game.cargo.position));pickup();
  mark('cargo recovered; the same prepared exit rises with its surface');
- walk(18,7.6);walk(21,7.6);walk(21,-5);walk(0,-5);
- until(()=>level.cassette.height>level.cassette.high-.01,6,'Unloaded cassette failed to rise');
- room21Fall(d,{fromService:true});
+ walk(18,7.6);walk(21,7.6);walk(21,-5);
+ if(route==='service-car'){
+  walk(24,-8);walk(25,-8);
+  check(level.serviceCar.contact,'Passenger car did not sense the carried companion');
+  until(()=>level.serviceCar.floor.y>17.99,7,'Shared counterweight did not raise passenger car');
+  mark('same counterweight carries player and cargo to upper balcony without second portal fall');
+  walk(22,-8);
+ }else{
+  walk(0,-5);
+  until(()=>level.cassette.height>level.cassette.high-.01,6,'Unloaded cassette failed to rise');
+  room21Fall(d,{fromService:true});
+ }
  check(game.playerPosition.y>17.9,'Upper balcony missed '+game.playerPosition.toArray());
  walk(12,-8);until(()=>game.state==='won',3,'Joint upper arrival');
  mark('both on upper permanent balcony');

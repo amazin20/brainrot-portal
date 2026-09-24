@@ -9,7 +9,7 @@ export const FOUNDATION_SPECS=Object.freeze([
  spec('first-connection','По ту сторону','One visible height difference teaches a linked pair and bringing a companion.','Выход близко, но этаж выше. Светлая керамика соединяет разные места.',0x64cec2,
  ['Светлая плита над галереей находится на другом этаже.','Создай пару: один портал рядом с собой, другой — над галереей.','Возьми друга клавишей E и пройди через связь. На руках стрелять нельзя — друга можно поставить обратно.']),
  spec('solid-light','Свет под ногами','The portal carries a useful surface, not only the traveller.','Проектор светит в керамику. Найди способ продолжить его дорогу.',0x70d9e4,
- ['Посмотри, куда упирается свет от проектора.','Вход перехватывает свет, а выход задаёт направление моста.','Белая плита за твоей площадкой направлена через разрыв. Если ошибёшься, снизу есть пандус.']),
+ ['Посмотри, куда упирается свет от проектора.','Вход перехватывает свет, а выход задаёт направление моста.','Можно идти прямо или использовать твёрдый служебный остров, чтобы переставить мост. Снизу есть пандус.']),
  spec('moving-address','Адрес в движении','An aperture keeps the moving surface; riding and returning to the entrance are both legitimate.','Служебная кабина ходит между галереями. Её портал — такой же пассажир.',0xefbd75,
  ['Портал в кабине перемещается вместе с ней.','Кабиной управляют пульт на её настиле и пульт на левой галерее.','Можно ехать вместе с другом или отправить пустую кабину, вернуться к нижнему входу и пройти через него.']),
  spec('earned-momentum','Цена высоты','Discover the difference between entering a portal and entering with falling speed.','Высота падения превращается в полёт. Низкий этаж не наказывает за пробу.',0xdd8376,
@@ -61,6 +61,13 @@ function flowMotor(k,{fanAt,sourceAt,receiverAt,wheelAt,cabin}){
 export function buildFoundation1(g,index=0){
  const k=new ResearchChamber(g,FOUNDATION_SPECS[0],index,'orbital',{minX:-18,maxX:18,minZ:-18,maxZ:18},0,14);
  k.deck('Upper observation and exit gallery',-16,16,-16,-6,4);
+ // The side freight platform lets a curious player bring the original friend
+ // upstairs after scouting alone. Its dispatch console is reachable only from
+ // the upper gallery, so the paired portals remain essential to both routes.
+ k.deck('Upper freight landing',1,13,-6,2,4);
+ const hoist=k.carrier('companion-hoist',[[7,0,2],[7,4,2]],{width:12,depth:12,portal:false});
+ hoist.speed=2.5;
+ k.control('freight-dispatch',[11,4,-12],()=>{hoist.target=1;},'E — поднять служебную платформу. Груз можно подготовить до перехода через портал.');
  k.panel('near-left',[-16.4,2.5,6],[1,0,0],8,5.2);
  k.panel('near-right',[16.4,2.5,6],[-1,0,0],8,5.2);
  k.panel('upper-view',[0,6.5,-16.25],[0,0,1],8,5.2);
@@ -68,17 +75,25 @@ export function buildFoundation1(g,index=0){
  k.label('ГАЛЕРЕЯ / +4 м',[10,5,-5.83],[0,0,1],7,.65);
  k.label('КЕРАМИКА = ПОРТАЛ',[-17.16,6.3,6],[1,0,0],9,.65);
  title(k,0,[0,11,-17.26],20);
- const l=finish(k,[0,0,12],[-4,.6,9],[7,4,-11],{spawnView:{yaw:0,pitch:-.08}},
-  {introduces:['linked pair','carry'],routes:['left-entry','right-entry','scout-and-return'],roles:{'near-left':'reachable left entry','near-right':'equivalent right entry, not a wrong answer','upper-view':'higher connected gallery'}});
+ const l=finish(k,[0,0,12],[-4,.6,9],[7,4,-11],{spawnView:{yaw:0,pitch:-.08},cargoHoist:hoist},
+  {introduces:['linked pair','carry'],routes:['carry-through-pair','stage-freight-then-dispatch'],roles:{'near-left':'reachable left entry','near-right':'equivalent right entry, not a wrong answer','upper-view':'higher connected gallery'}});
  return l;
 }
 export function buildFoundation2(g,index=1){
  const k=new ResearchChamber(g,FOUNDATION_SPECS[1],index,'current',{minX:-27,maxX:24,minZ:-20,maxZ:20},-3,17);
  k.deck('Projector observation deck',-22,-10,2,18,3);
+ k.deck('Service-side bridge approach',-14,-6,-12,-4,3);
+ k.deck('Service-side link',-10,-2,-4,4,3);
  k.deck('Receiving laboratory deck',4,22,2,14,3);
+ // This permanent island supports both travellers while they repurpose the
+ // same projected bridge. The direct projected crossing stays a valid route.
+ k.deck('Solid bridge-switching island',4,12,-13,-5,3);
  k.ramp('Dry lower return',-22,-14,-12,2,-3,3);
  k.panel('light-source',[-3,3.75,-14],[-1,0,0],8,4.82);
  k.panel('light-exit',[-25.4,3.75,8],[1,0,0],8,4.82);
+ k.panel('service-exit',[-25.4,3.75,-9],[1,0,0],8,4.82);
+ k.panel('island-turn',[8,3.75,-14.3],[0,0,1],8,4.82);
+ k.support(8,-14.3,1.5,.65);
  k.projector([-12,3.20,-14],[1,0,0],{radius:.8});k.support(-13,-14,2.3,.5);
  k.block([-7,.8,-14],[10,.6,2.4],'dark');
  for(const z of [-18.3,-9.7])k.support(-2.6,z,2,.35);
@@ -86,7 +101,7 @@ export function buildFoundation2(g,index=1){
  k.display([7,11,-19.25],()=>light.segments.length>1?'ПРОЕКЦИЯ СОЕДИНЕНА':'СВЕТ ОСТАНАВЛИВАЕТСЯ НА КЕРАМИКЕ',20,1.35);
  k.label('СЛУЖЕБНЫЙ ВОЗВРАТ',[-13.2,-.7,-12],[1,0,0],10,.65);title(k,1,[0,14,-19.25],22);
  const l=finish(k,[-16,3,15],[-19,3.6,13],[16,3,8],{light,spawnView:{yaw:.4,pitch:-.07}},
-  {introduces:['light as support'],routes:['carry-first','scout-and-extinguish'],roles:{'light-source':'intercept the projector','light-exit':'project across the actual gap'}});ownLight(l,light);return l;
+  {introduces:['light as support'],routes:['direct-light-crossing','island-switching'],roles:{'light-source':'intercept the projector','light-exit':'direct projection across the main gap','service-exit':'project to the permanent island','island-turn':'turn the same projection from the island toward the exit'}});ownLight(l,light);return l;
 }
 function cabinConsole(k,c,local){
  const at=c.position.clone().add(V(...local));const t=k.control('cabin-destination',at.toArray(),()=>{c.target=1-c.target;},'E — другой причал. Портал и пассажиры едут вместе.');
@@ -127,6 +142,9 @@ export function buildFoundation4(g,index=3){
  k.deck('High drop deck',-30,-14,-20,-12,14);
  k.ramp('Fall-height access',-29,-21,-12,8,14,0);
  k.deck('Receiving apron',6,24,-24,-6,15);
+ // A broad, real receiving shelf catches a separately launched companion.
+ // It joins the main apron, so sending the companion first is a valid order.
+ k.deck('Companion receiving shelf',-3,9,-18,-9,15);
  k.ramp('Recovery ascent',16,24,-4,15,-4,0);
  k.deck('Southern return',-14,24,15,23,0);
  const pit=k.loadPad('fall-entry',[-17,-4,-6],10);
@@ -137,7 +155,7 @@ export function buildFoundation4(g,index=3){
  for(const y of [0,4,8,12])k.label(`${y+4} м ПАДЕНИЯ`,[-31.18,y+2,-7],[1,0,0],7,.6);
  k.label('ПРИЁМНАЯ ГАЛЕРЕЯ',[15,17,-24.18],[0,0,1],12,.8);title(k,3,[0,26,-25.25],24);
  const l=finish(k,[-22,0,19],[-24,.6,17],[16,15,-17],{fallPad:pit,outlet,spawnView:{yaw:.15,pitch:-.12}},
-  {introduces:['falling momentum'],routes:['carry-first','miss-and-rebuild'],roles:{'fall-entry':'receives genuine falling speed','inclined-exit':'turns momentum toward the raised receiving apron'}});return l;
+  {introduces:['falling momentum'],routes:['carry-together','companion-first'],recovery:['miss-and-rebuild'],roles:{'fall-entry':'receives genuine falling speed','inclined-exit':'turns momentum toward the raised receiving apron'}});return l;
 }
 export function buildFoundation5(g,index=4){
  const k=new ResearchChamber(g,FOUNDATION_SPECS[4],index,'gravity',{minX:-33,maxX:30,minZ:-27,maxZ:25},0,23);

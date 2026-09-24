@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { Workshop, Flywheel, V, tracePortalRay } from './LabWorkshopKit.js';
 import { airAcceleration } from './LabAirForces.js';
 import { LabAirflowVisual } from './LabAirflowVisual.js';
+import { cargoLoadsPlate } from './LabPlateContact.js';
 
 /** Room 11 only. No new device, game rule or campaign entry.
  * Existing source meshes, air tracing, inertia and door actuator are retained.
@@ -94,11 +95,35 @@ export function buildReadableWindRoom(game, spec) {
   const turbineArt = k.staticFixture(35, [-5.4, 0, -5], 3.3, Math.PI / 2);
   turbineArt.art.userData.gameplayRole = 'Drive: receives airflow at the front grille and powers the door';
   const turbineBox = new THREE.Box3().setFromObject(turbineArt.art);
-  const housing = game.colliders.find(c => c.box.equals(turbineBox));
+  const housing = game.colliders.at(-1);
   const inlet = V(turbineBox.max.x + .025, 2.1, -5);
   const wheel = new Flywheel();
   const turbine = { art: turbineArt, wheel, position: inlet, normal: V(1, 0, 0), power: false, clutch: false, housing };
   k.state.flywheel = turbine;
+
+  // The original companion can turn the receiving grille toward a second
+  // physical air path. Its load rests on the actual floor; the turntable and
+  // receiver housing rotate together and keep one synchronized collision box.
+  const plateFrame = { center: V(-5.2, 0, -1.4), normal: V(0, 1, 0),
+    right: V(1, 0, 0), up: V(0, 0, 1), halfWidth: 1.25, halfHeight: 1.25 };
+  const plateMaterial = new THREE.MeshStandardMaterial({ color: 0x9d8269, roughness: .55, metalness: .22 });
+  const plate = w.box([-5.2, .012, -1.4], [2.5, .024, 2.5], plateMaterial, false);
+  const driveTurn = { plate, angle: 0, loaded: () => cargoLoadsPlate(game.cargo, game.heldCube, plateFrame) };
+  k.state.driveTurn = driveTurn;
+  housing.kinematic = true;
+  k.ticks.push(dt => {
+    const target = driveTurn.loaded() ? Math.PI : 0;
+    driveTurn.angle = THREE.MathUtils.damp(driveTurn.angle, target, 5, dt);
+    turbineArt.art.rotation.y = Math.PI / 2 + driveTurn.angle;
+    turbineArt.art.updateWorldMatrix(true, true);
+    const bounds = new THREE.Box3().setFromObject(turbineArt.art);
+    game.syncCollision(housing, bounds, dt);
+    const reversed = driveTurn.angle > Math.PI / 2;
+    inlet.set(reversed ? bounds.min.x - .025 : bounds.max.x + .025, 2.1, -5);
+    turbine.normal.set(reversed ? -1 : 1, 0, 0);
+    plateMaterial.color.setHex(driveTurn.loaded() ? 0x78d4bc : 0x9d8269);
+  });
+  k.wire([[-5.2,.052,-1.4],[-5.2,.052,-3.2],[-5.2,.052,-4.3]],() => driveTurn.loaded());
 
   // Keep the existing exit and physical latch. Remove the unrelated loose
   // cable reel and hovering progress stick; neither explained the old device.
@@ -126,7 +151,8 @@ export function buildReadableWindRoom(game, spec) {
     const strength = fan.rotorSpeed / 12;
     fan.segments = strength > .005 ? tracePortalRay(game, origin, fan.direction, { medium: 'air', length: 80 }) : [];
     airflow.step(dt, strength); airflow.setPath(fan.segments, game.portals?.portals || []);
-    turbine.power = receivesFrontAir(fan.segments, inlet, turbine.normal, 1.0);
+    const ready = Math.min(driveTurn.angle, Math.PI - driveTurn.angle) < .04;
+    turbine.power = ready && receivesFrontAir(fan.segments, inlet, turbine.normal, 1.0);
     wheel.step(turbine.power ? 24 * strength : 0, !ratchet.engaged ? 2.2 : 0, dt);
     if (wheel.work > 70) ratchet.engaged = true;
     ratchet.progress = THREE.MathUtils.damp(ratchet.progress, ratchet.engaged ? 1 : 0, 6, dt);
@@ -142,9 +168,19 @@ export function buildReadableWindRoom(game, spec) {
   k.resets.push(() => {
     fan.enabled = false;fan.touchingFriend=false; fan.segments = []; turbine.power = false; turbine.clutch = true; wheel.reset();
     ratchet.engaged = false; ratchet.progress = previousPawl = previousAngle = 0;
+    driveTurn.angle = 0; turbineArt.art.rotation.y = Math.PI / 2;
+    turbineArt.art.updateWorldMatrix(true, true);
+    game.syncCollision(housing, new THREE.Box3().setFromObject(turbineArt.art), 0);
+    inlet.set(new THREE.Box3().setFromObject(turbineArt.art).max.x + .025, 2.1, -5);
+    turbine.normal.set(1, 0, 0); plateMaterial.color.setHex(0x9d8269);
     fan.rotorSpeed = fan.angle = 0; blowerArt.spin(0); pawl.rotation.z = 0; airflow.reset();
   });
   const level = k.finish([-1, 0, 8], [1.5, .55, 7.5], [0, 0, -16], { workshop: k, readability: { inlet, housing, dust, airflow, pawl, fanControl } });
+  level.hints = [
+    spec.hints[0] + ' Пластина у приёмника поворачивает его, когда на ней стоит друг.',
+    spec.hints[1] + ' Поверни приёмник и попробуй пустить поток от левой стены.',
+    spec.hints[2] + ' Другой путь: оставь друга на пластине и направь воздух через правую стену к левой, затем вернись за ним.',
+  ];
   // Context comes from the nearby existing control, not instructions painted
   // on the wall or a central overlay. No solution markers or forced ordering.
   level.getContextLesson = () => {

@@ -32,6 +32,32 @@ test('an interrupted occupied car falls under its counterweight and the entire e
  assert.equal(game.state,'won');assert.equal(report.resets+report.respawns,0);
  const lost=report.milestones.find(m=>m.name==='occupied exchange car loses the real ray');assert.ok(lost);assert.ok(lost.player[1]<.1&&lost.cargo[1]<1);
 });
+test('early return route carries the loaded optical branch upward before moving the original cargo',async()=>{
+ await game.selectLevel(19,false);game.camera.aspect=16/9;game.camera.updateProjectionMatrix();
+ const body=game.physics.cargoBody,seen=[];
+ const r=await runV8Journey(game,{journeyOptions:{route:'early-return'},onMilestone:m=>{
+  seen.push(m.name);
+  const s=game.firstLevel.state;
+  if(m.name==='player reaches upper gallery before moving cargo from original mirror'){
+   assert.equal(s.optical.loaded,true);assert.deepEqual(s.optical.receivers,[false,true]);
+   assert.equal(s['second-cage'].powered,false);assert.ok(m.player[1]>15.9);
+   assert.ok(m.cargo[1]<1,'cargo remains on its original plate');
+  }
+  if(m.name==='real ray interruption lowers the loaded return car'){
+   assert.equal(s.optical.loaded,true);assert.deepEqual(s.optical.receivers,[false,false]);
+   assert.ok(s['return-cage'].position.y<16.01);
+  }
+  if(m.name==='player rides return car while original cargo stays on ground mirror'){
+   assert.equal(s.optical.loaded,true);assert.deepEqual(s.optical.receivers,[false,true]);
+   assert.ok(m.player[1]>21.9&&m.cargo[1]<1);
+  }
+ }});
+ assert.equal(r.pass,true);assert.equal(game.state,'won');assert.equal(r.resets+r.respawns,0);
+ assert.equal(game.physics.cargoBody,body);assert.ok(game.heldCube);
+ assert.ok(seen.includes('original load rests in the final pocket'));
+ assert.ok(!seen.includes('cargo exchange changes the live optical branch'));
+ assert.ok(!seen.includes('a new view of the original counterweight'));
+});
 test('both freight pockets retain the original free body after their flywheels coast down completely',async()=>{
  await game.selectLevel(19,false);game.camera.aspect=16/9;game.camera.updateProjectionMatrix();let pauses=0;
  const report=await runV8Journey(game,{scenario:d=>runRoom20({...d,mark(name){

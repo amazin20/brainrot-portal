@@ -97,6 +97,19 @@ export function buildFreightBridgeRoom(k,{baseWalls,closedExit}) {
   }
   k.panel('loading-dock',[-11.7,bankY+2.1,3.8],[1,0,0],5.8);
   k.panel('unloading-dock',[8.65,bankY+2.1,1.5],[-1,0,0],5.8);
+  // The lower loading floor and the receiver's overhead service opening
+  // provide a second cargo route. An empty bridge must still be fully extended
+  // before the real receiving contact can release the hood.
+  k.panel('dock-feed-floor',[-2.9,.025,9.5],[0,1,0],4,4);
+  k.panel('dock-feed-ceiling',[2.5,5.9,1.5],[0,-1,0],4,4);
+  // Four real hangers tie the overhead ceramic panel to the chamber ceiling.
+  // Its open centre remains clear for the incoming friend and for portal shots.
+  for(const x of [.44,4.56])for(const z of [-.56,3.56])
+    w.box([x,8.98,z],[.16,6.04,.16],w.materials.trim);
+  for(const y of [6.02,11.88]){
+    for(const z of [-.56,3.56])w.box([2.5,y,z],[4.28,.16,.16],w.materials.trim);
+    for(const x of [.44,4.56])w.box([x,y,1.5],[.16,.16,4.28],w.materials.trim);
+  }
 
   const slabBox=new THREE.Box3(),matrix=new THREE.Matrix4(),rotation=new THREE.Matrix4();
   function bounds(s){
@@ -148,7 +161,12 @@ export function buildFreightBridgeRoom(k,{baseWalls,closedExit}) {
   k.resets.push(()=>lock.engaged=false);
   const hood=[];
   for(const [p,size] of [
-    [[3.8,bankY+1.34,1.5],[8.8,.12,3.0]],
+    // A narrow hatch admits the original box even at its carried rotation.
+    // The low hood still prevents a standing player from entering the bay.
+    [[.675,bankY+1.34,1.5],[2.55,.12,3.0]],
+    [[5.625,bankY+1.34,1.5],[5.15,.12,3.0]],
+    [[2.5,bankY+1.34,.475],[1.10,.12,.95]],
+    [[2.5,bankY+1.34,2.525],[1.10,.12,.95]],
     [[3.8,bankY+.65,-.01],[8.8,1.3,.10]],[[3.8,bankY+.65,3.01],[8.8,1.3,.10]],
     [[8.2,bankY+.65,1.5],[.12,1.3,3.0]],
   ])hood.push(glassLift(k,p,size,3.8,()=>lock.engaged));

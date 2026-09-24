@@ -32,7 +32,7 @@ test('the unweighted physical mirror drives the north branch and cannot power th
 });
 test('every ceramic has a role and fixed structural floors do not overlap at the same height',async()=>{
  await game.selectLevel(12,false);const l=game.firstLevel;
- assert.deepEqual(Object.keys(l.puzzleGeometry.portalRoles).sort(),Object.keys(l.panels).sort());assert.equal(Object.keys(l.panels).length,6);
+ assert.deepEqual(Object.keys(l.puzzleGeometry.portalRoles).sort(),Object.keys(l.panels).sort());assert.equal(Object.keys(l.panels).length,7);
  const fixed=l.world.surfaces.filter(s=>s.floor&&!s.collider.kinematic).map(s=>s.floor);
  for(let i=0;i<fixed.length;i++)for(let j=i+1;j<fixed.length;j++){
   const a=fixed[i],b=fixed[j];if(Math.abs(a.y-b.y)>.001)continue;

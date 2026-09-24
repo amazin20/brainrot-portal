@@ -36,13 +36,44 @@ export function room18Flight(d,{aimDelayFrames=0}={}){
  until(()=>game.teleportCount>=before+2,4,'Rebound missed its return');until(()=>game.playerGrounded,5,'Transverse gallery landing');
  check(game.playerPosition.y>10.9&&game.playerPosition.y<11.1&&game.playerPosition.x>-4,'Turning gallery missed '+game.playerPosition.toArray());
 }
-export function room18Return(d){
- const {game,level,walk,aim,pickup,mark,frame,worldMove,stop,until}=d;
- walk(12,0);walk(4,0);walk(4,25);aim(1,level.panels.home.getFrame().center);
- walk(4,0);walk(4,-2);walk(-12,-2);walk(-14.85,-2);aim(0,V(-20,.025,-1.2));
- walk(game.cargo.position.x-1,game.cargo.position.z);pickup();walk(-12,-4);walk(-20,-4);mark('return flight behind the entrance');
+export function room18Return(d,{order='portal-first'}={}){
+ const {game,level,walk,aim,pickup,wait,mark,frame,worldMove,stop,until}=d;
+ check(['portal-first','retrieve-first','send-ahead'].includes(order),'Unknown return-gallery route');
+ walk(12,0);walk(4,0);
+ if(order==='retrieve-first'){
+  // Keep the original friend on permanent support while the observer climbs
+  // to the sight line and changes the other portal to the hidden exit.
+  walk(4,-2);walk(-12,-2);walk(-14.85,-2);aim(0,V(-20,.025,-1.2));
+  walk(game.cargo.position.x-1,game.cargo.position.z);pickup();walk(-12,-2);walk(4,-2);walk(4,0);
+  check(game.interact()&&!game.heldCube,'Companion could not be staged on the real gallery');wait(1);
+  check(game.cargo.position.y>10.9,'The staged companion fell off the return gallery');
+  mark('retrieve and stage the original companion before addressing the hidden exit');
+  walk(4,25);aim(1,level.panels.home.getFrame().center);
+  mark('hidden exit addressed after securing the companion on permanent support');
+  walk(4,0);walk(game.cargo.position.x+1,game.cargo.position.z);pickup();walk(-12,-2);
+ }else{
+  walk(4,25);aim(1,level.panels.home.getFrame().center);
+  walk(4,0);walk(4,-2);walk(-12,-2);walk(-14.85,-2);aim(0,V(-20,.025,order==='send-ahead'?0:-1.2));
+  walk(game.cargo.position.x-1,game.cargo.position.z);pickup();
+ }
+ walk(-12,-4);walk(order==='send-ahead'?-21.2:-20,-4);mark('return flight behind the entrance');
+ if(order==='send-ahead'){
+  // The already prepared medium well becomes a separate freight flight. The
+  // player stays on the lip until the original companion reaches safe ground.
+  for(let n=0;n<90&&game.playerPosition.z< -3.35;n++){worldMove(0,1);frame();}stop();
+  check(game.playerPosition.y>10.9&&game.heldCube,'Companion must launch from the real return lip');
+  const delivered=game.physics.portalTransports;
+  check(game.interact()&&!game.heldCube,'Could not send the original companion ahead');
+  until(()=>game.physics.portalTransports>delivered,5,'The companion missed the medium return portal');
+  until(()=>game.physics.grounded&&game.cargo.position.y>7,6,'Companion missed the hidden receiving floor');
+  mark('original companion reaches the hidden exit ahead of the player');
+ }
  const before=game.teleportCount;walk(-20,-3.15);
  for(let n=0;n<300&&game.teleportCount===before;n++){worldMove(0,.3);frame();}stop();check(game.teleportCount>before,'Medium return missed its well');
- until(()=>game.playerGrounded,5,'Hidden exit landing');walk(12.5,25);until(()=>game.state==='won',3,'Reunited behind the entrance');
+ until(()=>game.playerGrounded,5,'Hidden exit landing');walk(12.5,25);
+ if(order==='send-ahead'&&game.state==='playing'){
+  walk(game.cargo.position.x-1,game.cargo.position.z);pickup();walk(12.5,25);
+ }
+ until(()=>game.state==='won',3,'Reunited behind the entrance');
 }
-export async function runRoom18(d,{aimDelayFrames=0}={}){room18Freight(d);room18Climb(d);room18Flight(d,{aimDelayFrames});room18Return(d);}
+export async function runRoom18(d,{aimDelayFrames=0,order='portal-first'}={}){room18Freight(d);room18Climb(d);room18Flight(d,{aimDelayFrames});room18Return(d,{order});}

@@ -14,6 +14,17 @@ for(const index of [8,9])test(`rebuilt room ${index+1} completes with normal con
  assert.equal(game.state,'won');assert.equal(game.heldCube,game.cargo);
 });
 
+for(const aspect of [1.6,16/9])test(`room 9: carrying the original friend through the wall into the spring drop wins at aspect ${aspect}`,async()=>{
+ await game.selectLevel(8,false);game.camera.aspect=aspect;game.camera.updateProjectionMatrix();
+ const cargo=game.cargo,body=game.physics.cargoBody;
+ const report=await runV8Journey(game,{journeyOptions:{route:'carried-front-drop'}});
+ assert.equal(report.pass,true);assert.equal(report.resets+report.respawns,0);
+ assert.equal(game.state,'won');assert.equal(game.cargo,cargo);assert.equal(game.physics.cargoBody,body);
+ assert.ok(report.teleports>=1,'The player must carry the friend through the front-wall portal');
+ assert.ok(report.milestones.some(m=>m.name==='carried friend through front wall then dropped onto spring'));
+ assert.equal(game.firstLevel.workshop.state.piston.latched,true);
+});
+
 test('the raised spring cup requires falling momentum, not a gently resting load',async()=>{
  await game.selectLevel(8,false);game.resetRun(true);
  const s=game.firstLevel.workshop.state.piston;

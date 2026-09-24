@@ -8,9 +8,9 @@ import {runV8Journey} from '../src/game/LabV8Journey.js';
 const game = await createHeadlessGame();
 after(() => { game.physics.dispose(); game.portals.dispose(); });
 
-test('all six junction ceramics accept complete portals at their visible edges and corners', async () => {
+test('all seven junction ceramics accept complete portals at their visible edges and corners', async () => {
   await game.selectLevel(11, false); game.scene.updateMatrixWorld(true);
-  assert.equal(Object.keys(game.firstLevel.panels).length, 6);
+  assert.equal(Object.keys(game.firstLevel.panels).length, 7);
   for (const [name, panel] of Object.entries(game.firstLevel.panels)) {
     const frame = panel.getFrame(), bounds = panel.mesh.userData.portalBounds;
     const orientation = panel.mesh.getWorldQuaternion(new THREE.Quaternion());

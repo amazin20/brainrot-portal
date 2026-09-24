@@ -34,16 +34,20 @@ function inspectRocker(d) {
   }
 }
 
-export async function runBalanceJourney(d) {
+export async function runBalanceJourney(d, { order } = {}) {
   const { game, level, walk, wait, aim, until, frame, worldMove, stop, mark, pickup } = d;
   check(level.index === 6, 'The inertial rocker route requires room 7');
   const p = level.panels;
 
   // Prepare the floor address from the safe lower service passage, then
   // return to the visible load tray with the same physical companion.
-  walk(-11.7, 8); walk(-11.7, -10.8);
-  aim(0, p['balance-drop'].getFrame().center);
-  walk(-11.7, 8); walk(6, 12.6); collect(d); loadingApproach(d);
+  const loadFirst = order === 'load-first';
+  if (!loadFirst) {
+    walk(-11.7, 8); walk(-11.7, -10.8);
+    aim(0, p['balance-drop'].getFrame().center);
+    walk(-11.7, 8);
+  }
+  walk(6, 12.6); collect(d); loadingApproach(d);
   walk(0, 2.4);
   for (let n = 0; n < 12; n++) { worldMove(0, .18); frame(); }
   stop(); wait(.25); game.interact();
@@ -53,24 +57,53 @@ export async function runBalanceJourney(d) {
   inspectRocker(d); wait(1.5);
   until(() => level.state.angle > .36, 8, 'The far load did not establish the launch angle');
   mark('loaded friend sets the moving portal launch angle');
+  if (loadFirst) {
+    check(!game.portals.ready, 'The moving rocker was loaded before the portal pair was prepared');
+    walk(-11.7, 8); walk(-11.7, -10.8);
+    aim(0, p['balance-drop'].getFrame().center);
+    mark('floor portal prepared after the physical rocker tilted');
+    walk(-11.7, 8);
+  }
   // Use the open aisle west of the dock column so the ordinary shoulder
   // camera and muzzle both have a clear line at 16:10 as well as 16:9.
   walk(-5.5, 6); aim(1, p['balance-launch'].getFrame().center);
 
-  // Climb the enclosed stair. The last slow walk preserves a modest horizontal
-  // speed over the floor address; ordinary inertia continues during the fall.
-  walk(-11.7, 8); walk(-15.5, 8); walk(-15.5, 5.8); walk(-15.5, -11.1);
-  walk(-11.7, -11.25); walk(-11.7, -12);
-  const before = game.teleportCount;
-  for (let n = 0; n < 240 && game.teleportCount === before; n++) {
-    worldMove(0, -.43);
-    frame();
+  const flyFromTower=label=>{
+    // Climb the enclosed stair. Gravity, the tilted face and the actor's
+    // actual load determine the exit velocity in each flight.
+    walk(-11.7, 8); walk(-15.5, 8); walk(-15.5, 5.8); walk(-15.5, -11.1);
+    walk(-11.7, -11.25); walk(-11.7, -12);
+    const before = game.teleportCount;
+    for (let n = 0; n < 240 && game.teleportCount === before; n++) {
+      worldMove(0, -.43);
+      frame();
+    }
+    stop(); check(game.teleportCount > before, 'The fall missed its prepared floor portal');
+    mark(label==='first'?'gravity speed redirected by the tilting portal':`${label} gravity speed redirected by the tilting portal`);
+    until(() => game.playerGrounded, 5, 'The redirected flight did not land');
+    check(game.playerPosition.y > 8.1 && game.playerPosition.z > 7.2, 'The flight missed the upper receiving balcony');
+    mark(label==='first'?'landed on the upper receiving balcony':`${label} landed on the upper receiving balcony`);
+  };
+  flyFromTower('first');
+
+  if(order==='braked-return'){
+    walk(1.4,8.3);check(game.interact()&&level.state.braked,'The receiving dock brake did not grip the axle');
+    const lockedAngle=level.state.angle;check(lockedAngle>.34,'The loaded rocker did not reach the intended launch angle');
+    mark('upper dock brake holds the real tilted axle after the first launch');
+    walk(1.4,7.45);
+    for(let n=0;n<100&&game.playerGrounded;n++){worldMove(0,-1);frame();}stop();
+    check(!game.playerGrounded,'Could not leave the upper dock for the load tray');
+    until(()=>game.playerGrounded&&game.playerPosition.y<3.4,5,'The service return did not land below the receiving dock');
+    loadingApproach(d);collect(d);
+    check(game.heldCube&&Math.abs(level.state.angle-lockedAngle)<.01,
+      'Taking the friend must leave the braked launch face aimed at the dock');
+    mark('friend removed from the rocker without a retrieval portal');
+    game.input.jumpQueued=true;walk(0,5.4);
+    until(()=>game.playerGrounded&&game.playerPosition.y<.1,3,'Could not leave the braked rocker');
+    flyFromTower('second loaded');
+    check(game.heldCube&&game.teleportCount>=2,'The original friend missed the second physical flight');
+    walk(0,12.3);return;
   }
-  stop(); check(game.teleportCount > before, 'The fall missed its prepared floor portal');
-  mark('gravity speed redirected by the tilting portal');
-  until(() => game.playerGrounded, 5, 'The redirected flight did not land');
-  check(game.playerPosition.y > 8.1 && game.playerPosition.z > 7.2, 'The flight missed the upper receiving balcony');
-  mark('landed on the upper receiving balcony');
 
   // This horizontal receiver is hidden by its own solid floor from every
   // lower approach. The player can now repurpose the pair to retrieve cargo.

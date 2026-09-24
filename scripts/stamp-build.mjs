@@ -14,7 +14,7 @@ assert.ok(fs.existsSync(path.join(directory,'index.html')),'Stamp an existing pr
 const info={commit,version,artVersion:'v40-research-laboratory',levels:CAMPAIGN.length,verified:true,status:'technical-candidate',
  verificationScope:'Automated source/package checks; route jobs gate publication',
  acceptance:{humanPlaytest:false,physicalDeviceBenchmark:false,liveYandex:false},
- features:{defaultEdition:'foundation',foundation:{version:'foundation-v1',rooms:[1,2,3,4,5],separateSave:true},archiveQuery:'edition=classic',campaignRooms:33,campaignFinaleLevel:33,separateVelocityMode:false,openChamberReview:{version:'research-laboratory-v3',query:'edition=open',rooms:[24,28,30,31,32,33],separateSave:true}},
+ features:{defaultEdition:'foundation',foundation:{version:'foundation-v1',rooms:Array.from({length:30},(_,i)=>i+1),redesignedOpening:[1,2,3,4,5],separateSave:true},archiveQuery:'edition=classic',campaignRooms:33,campaignFinaleLevel:33,separateVelocityMode:false,openChamberReview:{version:'research-laboratory-v3',query:'edition=open',rooms:[24,28,30,31,32,33],separateSave:true}},
  repository:process.env.GITHUB_REPOSITORY,run:process.env.GITHUB_RUN_ID};
 fs.writeFileSync(path.join(directory,'build-info.json'),JSON.stringify(info,null,2)+'\n');
 console.log(`Stamped ${directory}: ${version} / ${commit}`);

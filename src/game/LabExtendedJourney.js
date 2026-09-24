@@ -3,26 +3,67 @@ export {runBalanceJumpAttempt} from './LabBalanceJourney.js';
 /** Authored positive solutions. Only ordinary walking, aiming, interaction and
  * elapsed simulation are used: no actor teleports, assigned actuator targets,
  * forced success, disabled collision or test-only forces. */
-export async function runExtendedStages(d){
+export async function runExtendedStages(d,{order}={}){
  const {game,level,walk,wait,aim,until,pickup,enter,mark,frame,worldMove,stop}=d;
  const check=(v,m)=>{if(!v)throw Error(m);};
  const drop=()=>{wait(.25);game.interact();check(!game.heldCube,'Could not put friend down');wait(1);};
  const collect=()=>{const c=game.cargo.position;walk(c.x,c.z+1.05);if(game.state!=='won')pickup();};
  if(level.index===5){
-  aim(0,level.panels['cab-entry'].getFrame().center);
-  walk(-3,0);walk(-3,-4.5);aim(1,level.panels['cab-inner'].getFrame().center);
-  walk(-3,4);enter(level.panels['cab-entry']);mark('entered calibration cabin through its service sightline');
-  walk(-7.8,-4.6);game.interact();until(()=>level.state.mirror>.995,4,'Mirror did not turn');
-  enter(level.panels['cab-inner']);walk(-7,9);aim(0,level.panels['light-intake'].getFrame().center);
-  walk(4,-5.5);aim(1,level.panels['light-outlet'].getFrame().center);
+  if(order==='light-first'){
+   // The pilot receiver supplies a physical reason for the outside servo to
+   // turn the same mirror. Both apertures remain in place through the turn.
+   walk(-7,9);aim(0,level.panels['light-intake'].getFrame().center);
+   walk(4,-5.5);aim(1,level.panels['light-outlet'].getFrame().center);
+   until(()=>level.state.pilotLit,3,'Unturned beam did not reach the pilot receiver');
+   check(!level.state.lit&&level.state.target===0,'Pilot must precede the real exit receiver');
+   mark('unturned optical path lights the pilot receiver before the mirror turns');
+   walk(3,-7);check(game.interact(),'Outside mirror servo cannot be used');
+  }else{
+   aim(0,level.panels['cab-entry'].getFrame().center);
+   walk(-3,0);walk(-3,-4.5);aim(1,level.panels['cab-inner'].getFrame().center);
+   walk(-3,4);enter(level.panels['cab-entry']);mark('entered calibration cabin through its service sightline');
+   walk(-7.8,-4.6);game.interact();until(()=>level.state.mirror>.995,4,'Mirror did not turn');
+   enter(level.panels['cab-inner']);walk(-7,9);aim(0,level.panels['light-intake'].getFrame().center);
+   walk(4,-5.5);aim(1,level.panels['light-outlet'].getFrame().center);
+  }
   until(()=>level.state.lit,4,'Light did not reach receiver');mark('beam physically traversed pair and reflected to receiver');
   collect();walk(4,-10);walk(0,-10);walk(0,-16.3);
  }else if(level.index===6){
-  await runBalanceJourney(d);
+  await runBalanceJourney(d,{order});
  }else if(level.index===7){
+  if(order==='wind-through'){
+   // The fan can also carry the travellers into the wall aperture. They
+   // emerge inside the upward plume instead of approaching it on foot.
+   aim(0,level.panels['air-intake'].getFrame().center);
+   walk(0,3);aim(1,level.panels['air-up'].getFrame().center);
+   walk(6,10);game.interact();wait(.5);check(level.state.enabled,'Fan not enabled');
+   collect();check(game.heldCube,'The original friend must travel through the wind portal');
+   const before=game.teleportCount;
+   for(let n=0;n<100&&game.playerPosition.z<6.95&&game.teleportCount===before;n++){worldMove(0,1);frame();}stop();
+   check(game.playerPosition.z>6.5&&game.playerPosition.z<7.5&&game.playerPosition.x<8.5,
+    'Travellers did not enter the horizontal wind centerline');
+   mark('both travellers enter the horizontal fan stream before the wall portal');
+   let peakX=game.playerPosition.x;
+   until(()=>{peakX=Math.max(peakX,game.playerPosition.x);return game.teleportCount>before;},3,
+    'Horizontal air did not send the travellers through its portal');
+   check(peakX>8.5&&game.playerPosition.y<5&&game.playerVelocity.y>0,
+    'The stopped player did not ride the fan into the portal and emerge upward');
+   mark('fan alone pushes both travellers through the wall portal into the vertical plume');
+   for(let n=0;n<360&&!(game.playerGrounded&&game.playerPosition.y>6.9);n++){worldMove(0,-1);frame();}stop();
+   check(game.playerGrounded&&game.playerPosition.y>6.9,'Ballistic wind launch missed the upper gallery');
+   walk(0,-9);return;
+  }
+  // Both orders use the same fan and portal pair: the live plume can be
+  // routed through an existing pair or the pair can be built around a live fan.
+  if(order==='air-first'){
+   walk(6,10);game.interact();wait(.5);check(level.state.enabled,'Fan not enabled');
+   check(!game.portals.ready,'The fan-first route must begin without a portal pair');
+   mark('fan running before portals route its air');
+   walk(6,11.5);walk(1,11.5);walk(1,5.8);
+  }
   aim(0,level.panels['air-intake'].getFrame().center);
   walk(0,3);aim(1,level.panels['air-up'].getFrame().center);
-  walk(6,10);game.interact();wait(.5);check(level.state.enabled,'Fan not enabled');
+  if(order!=='air-first'){walk(6,10);game.interact();wait(.5);check(level.state.enabled,'Fan not enabled');}
   collect();walk(0,4);walk(0,1.3);
   until(()=>game.playerPosition.y>8.3,6,'Updraft did not lift player');mark('sustained portal-routed air supports both travellers');
   for(let n=0;n<300&&!(game.playerGrounded&&game.playerPosition.y>6.9);n++){worldMove(0,-1);frame();}stop();

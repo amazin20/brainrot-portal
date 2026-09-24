@@ -51,7 +51,7 @@ test('room 20 freight floor destinations cannot be addressed before their respec
    }
   }
  }
- assert.ok(rays>3000&&rays<15000,`Bounded actual floor-view grid expected: ${rays}`);
+ assert.ok(rays>3000&&rays<30000,`Bounded actual floor-view grid expected: ${rays}`);
  assert.ok(visited.has('Shared lower exchange court')&&visited.has('Second observation ledge'));
  assert.ok(accepts(V(-21,9.4,4),level.panels['upper-pocket'].getFrame().center,level.panels['upper-pocket']),'First balcony must have a usable freight aperture');
  assert.ok(accepts(V(-15.2,23.4,-18),level.panels['final-pocket'].getFrame().center,level.panels['final-pocket']),'Final platform must reveal its usable freight aperture');

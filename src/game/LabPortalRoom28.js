@@ -8,7 +8,7 @@ export const ROOM28_SPEC={id:'tidal-observatory',title:'Обсерватория
 
 export function buildRoom28(game,index=27){
  const k=new Workshop(game,ROOM28_SPEC,index),w=k.world;
- configureChapterWorld(w,'lagoon',{openSky:true});
+ configureChapterWorld(w,'lagoon');
  k.bounds={minX:-26,maxX:26,minZ:-23,maxZ:23};k.ceiling=17;
  w.walls(k.bounds,14,-1);w.floor(-26,26,-23,23,0,{name:'Safe lagoon foundation'});
  const deck=(name,x0,x1,z0,z1,y)=>w.floor(x0,x1,z0,z1,y,{name});

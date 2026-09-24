@@ -5,7 +5,7 @@ import {tracePortalRay,rayTouches,beamDrawing} from './LabPuzzleMechanics.js';
 
 const V=(...p)=>new THREE.Vector3(...p),Q=()=>new THREE.Quaternion();
 export const RESEARCH_SPECS=Object.freeze([
- {id:'research-light-interchange',title:'Световая развязка',concept:'Одна проекция становится двумя разными дорогами. Перестрой путь, оставаясь на настоящей опоре.',description:'Выход виден через разрыв. Проектор один; белые панели меняют направление его моста. Нижний этаж возвращает к началу.',accent:0x76e5e8,assets:[1,2,11,22,23,24],hints:['Портал напротив проектора переносит не только тебя, но и его свет. Мост выходит из второго портала.','В центре есть постоянная площадка. На ней можно безопасно переставить второй портал и изменить направление моста.','На выходной площадке нет керамики. До неё ведёт свет от панели на обратной стороне центральной развязки.']},
+ {id:'research-light-interchange',title:'Световая развязка',concept:'Одна проекция становится двумя разными дорогами. Перестрой путь, оставаясь на настоящей опоре.',description:'Выход виден через разрыв. Проектор один; белые панели меняют направление его моста. Нижний этаж возвращает к началу.',accent:0x76e5e8,assets:[1,2,11,22,23,24],hints:['Портал напротив проектора переносит не только тебя, но и его свет. Мост выходит из второго портала.','В центре есть постоянная площадка. На ней можно безопасно переставить второй портал и изменить направление моста.','На выходной площадке нет керамики. До неё ведёт свет от панели на обратной стороне центральной развязки. Напольный адрес у старта позволяет доставить спутника на остров отдельно.']},
  {id:'research-stored-motion',title:'Запас хода',concept:'Порталы передают воздух; маховик сохраняет движение, а механический тормоз — положение.',description:'Два механизма используют один воздушный поток. Наблюдай за маховиком: его движение не исчезает вместе с порталом.',accent:0xffcf7b,assets:[1,2,11,22,23,24],hints:['Вентилятор дует в белую панель. Из второго портала воздух должен попасть в круглую приёмную решётку.','Маховик продолжает крутиться после разрыва связи. Червячный привод удерживает уже поднятую кабину.','На промежуточной галерее переключи передачу на второй подъёмник. Подготовь поток заранее или используй запас вращения.']},
  {id:'research-return-vector',title:'Обратный вектор',concept:'Один и тот же перепад высоты работает дважды: первый полёт открывает ракурс для обратного.',description:'Приёмная галерея выше старта. Угол белого щита задаёт направление, а глубина падения — высоту полёта. Внизу есть обратный путь.',accent:0xf8a782,assets:[1,2,11,22,23,24],hints:['Широкий пандус ведёт к первому падению. Сначала посмотри, куда направлен наклонный щит.','На средней галерее видна обратная сторона второй приёмной панели. С нижнего этажа её закрывает настоящий корпус.','Спутника можно перенести в руках. Перед перестановкой связи оставь его на настоящем настиле; при промахе внизу есть служебный возврат.']},
 ]);
@@ -22,6 +22,13 @@ export function buildResearch31(game,index=30){
  // The island's far cheek terminates the first bridge. It is visible, opaque,
  // and leaves its northern and southern routes genuinely open.
  k.block([10.6,10.2,8],[1.2,8.4,11.2],'secondary');
+ // The first light bridge is also a sight line back to the entry floor. Its
+ // optional floor aperture sends the original loose companion to a receiving
+ // face on the island; the player can cross alone and restore the light pair.
+ k.panel('entry-dispatch',[-22.6,6.025,13],[0,1,0],7,7);
+ k.panel('island-receiver',[9.91,9.6,8],[-1,0,0],7,5.8);
+ k.label('ГРУЗОВОЙ АДРЕС',[-23.8,6.06,16],[0,1,0],6,.65);
+ k.label('ПРИЁМНИК ОСТРОВА',[9.82,12.9,8],[-1,0,0],7,.65);
  k.projector([-23,6.12,-12],[1,0,0],{radius:.85});k.support(-24,-12,4.2,.6);
  // A service gantry carries the projector, but is not a walking shortcut.
  k.block([-19.8,3.6,-12],[9,.7,2.8],'dark');k.support(-16.5,-12,3.2,.6);
@@ -38,7 +45,7 @@ export function buildResearch31(game,index=30){
  const dispose=l.dispose;l.dispose=()=>{light.dispose();dispose();};
  l.getObjective=()=>routeText()+'. На центральном острове мост можно перестроить.';
  l.getContextLesson=()=>['light-sheet-rule','ЛКМ / ПКМ','Свет проходит через те же порталы. Пока меняешь связь, стой на сплошной постоянной площадке. Внизу есть обратный путь.',false];
- l.puzzleGeometry={orders:['carry-first','scout-first'],footprint:58*48,goalHeight:6,noProgressFlags:true,sourceCount:1,recoveryFloor:-4,portalRoles:{'light-source':'intercept the single light sheet before its solid wall','west-bridge':'route the sheet across the first gap and back to service','north-bridge':'turn the same sheet toward the exit from permanent footing'}};return l;
+ l.puzzleGeometry={orders:['carry-first','island-freight'],footprint:58*48,goalHeight:6,noProgressFlags:true,sourceCount:1,recoveryFloor:-4,portalRoles:{'light-source':'intercept the single light sheet before its solid wall','west-bridge':'route the sheet across the first gap and back to service','north-bridge':'turn the same sheet toward the exit from permanent footing','entry-dispatch':'send the original free companion from its entry floor before the player crosses','island-receiver':'receive that companion on permanent island decking without carrying it across the first light bridge'}};return l;
 }
 
 /** Mechanical energy storage with a worm-drive transmission. A stopped drive
@@ -113,6 +120,10 @@ export function buildResearch33(game,index=32){
  k.deck('First drop balcony',-30,-14,-20,-12,14);
  k.ramp('First launch access',-29,-21,-12,8,14,0);
  k.deck('Intermediate inspection gallery',6,22,-26,-14,15);
+ // Joined to the inspection gallery, this short shelf catches the original
+ // companion when it takes the first portal separately. Its smaller launch
+ // speed lands it before the player, so the normal apron alone is too short.
+ k.deck('Companion receiving shelf',-3,9,-18,-9,15);
  k.deck('Exit-side return gallery',-12,4,8,24,22);
  k.ramp('Recovery return',20,28,-4,16,-4,0);
  k.deck('Southern service return',-14,28,16,24,0);
@@ -139,6 +150,6 @@ export function buildResearch33(game,index=32){
  k.label('ПАДЕНИЕ → ИМПУЛЬС',[0,28,-29.28],[0,0,1],25,1.8);
 
  const l=k.finishResearch([-22,0,19],[-24,.6,17],[-4,22,17],{fallPads:[pit,second],outlets:[outlet,last],spawnView:{yaw:.15,pitch:-.12}});
- l.puzzleGeometry={orders:['carry-first','explore-and-return'],footprint:64*56,goalHeight:22,noProgressFlags:true,recoveryFloor:-4,portalRoles:{'first-fall':'receive the first gravitational drop from the access balcony','first-outlet':'turn the first falling momentum toward the intermediate gallery','second-fall':'recover the second fall below the inspection apron','second-outlet':'reverse the second impulse toward the high final gallery'}};return l;
+ l.puzzleGeometry={orders:['carry-first','companion-first'],footprint:64*56,goalHeight:22,noProgressFlags:true,recoveryFloor:-4,portalRoles:{'first-fall':'receive the first gravitational drop from the access balcony','first-outlet':'turn the first falling momentum toward the intermediate gallery','second-fall':'recover the second fall below the inspection apron','second-outlet':'reverse the second impulse toward the high final gallery'}};return l;
 }
 export const RESEARCH_BUILDERS=[buildResearch31,buildResearch32,buildResearch33];

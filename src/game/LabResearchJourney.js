@@ -10,6 +10,26 @@ const V=(...p)=>new THREE.Vector3(...p),check=(c,m)=>{if(!c)throw Error(m);};
 function collect(d){const p=d.game.cargo.position;d.walk(p.x+1.35,p.z);d.pickup();}
 export function runResearch31(d,{route='carry-first',recover=false}={}){
  preciseAim(d);const {game:g,level:l,walk,wait,mark,until}=d,p=l.panels;
+ check(['carry-first','scout-first','island-freight'].includes(route),'Unknown light-interchange route');
+ if(route==='island-freight'){
+  // Dispatch the loose original companion from its starting floor to the
+  // permanent island. The player then builds and crosses a light bridge alone.
+  walk(-21,15);d.aim(1,p['island-receiver'].getFrame().center);
+  const sent=g.physics.portalTransports;
+  d.aim(0,p['entry-dispatch'].getFrame().center);
+  until(()=>g.physics.portalTransports>sent,6,'Original companion did not enter its floor portal');
+  until(()=>g.physics.grounded&&g.cargo.position.y>6,6,'Companion did not land on permanent island');
+  check(g.playerPosition.x<-16&&!g.heldCube,'Player must remain on the entry gallery during freight dispatch');
+  mark('original companion reaches the island before the light crossing');
+  d.aim(0,p['light-source'].getFrame().center);d.aim(1,p['west-bridge'].getFrame().center);wait(.4);
+  check(l.light.segments.length>1,'Solo light crossing was not built');
+  walk(-19,8);walk(4,8);walk(4,5);
+  check(g.physics.grounded&&g.cargo.position.y>6,'Freight must remain on the independent island deck');
+  collect(d);mark('player and original companion reunite after separate routes');
+  release(d);d.aim(1,p['north-bridge'].getFrame().center);wait(.3);collect(d);walk(4,1);walk(4,-20);
+  until(()=>g.state==='won',3,'Independent freight light relay missed');mark('perpendicular light bridge joins both travellers at exit');
+  return;
+ }
  if(recover){walk(-14,17);until(()=>g.playerGrounded,5,'Service floor missed');check(g.playerPosition.y<-3.9,'Did not exercise a real fall');walk(-16,-20);walk(-23,-20);walk(-23,5);walk(-21,15);mark('Service ramp returns to the actual start without a reset');}
  d.aim(0,p['light-source'].getFrame().center);d.aim(1,p['west-bridge'].getFrame().center);wait(.4);
  check(l.light.segments.length>1,'No routed light sheet');
@@ -43,12 +63,27 @@ export function runResearch32(d,{route='powered-ascent',recover=false}={}){
 }
 export function runResearch33(d,{route='carry-first',recover=false}={}){
  preciseAim(d);const {game:g,level:l,walk,wait,mark,until,worldMove,frame,stop}=d,p=l.panels;
+ check(['carry-first','companion-first'].includes(route),'Unknown return-vector route');
  if(recover){walk(-10,12);until(()=>g.playerGrounded&&g.playerPosition.y<-3.5,4,'Recovery floor missed');walk(2,-8);walk(25,-8);walk(25,21);walk(-22,20);check(g.playerPosition.y>-.01,'Return ramp failed');mark('Service floor and dry return explored before the first flight');}
  walk(-17,12);d.aim(0,p['first-fall'].getFrame().center);
- collect(d);walk(-25,9);walk(-25,-16);walk(-20,-16);release(d);walk(-15,-13.4);d.aim(1,p['first-outlet'].getFrame().center);collect(d);walk(-17,-12.1);wait(.4);const before=g.teleportCount;
- for(let i=0;i<180&&g.playerGrounded;i++){worldMove(0,1);frame();}stop();
+ if(route==='companion-first'){
+  walk(-25,9);walk(-25,-16);walk(-15,-13.4);d.aim(1,p['first-outlet'].getFrame().center);
+  walk(-25,-16);walk(-25,9);walk(-24,17);collect(d);walk(-25,9);walk(-25,-16);walk(-17,-15);
+  for(let n=0;n<120&&g.playerPosition.z<-12.8;n++){worldMove(0,1);frame();}stop();
+  check(g.playerPosition.y>13.9&&g.heldCube,'Companion launch must begin from the real high balcony');
+  const cargoTransports=g.physics.portalTransports;
+  check(g.interact()&&!g.heldCube,'Could not release the companion toward the first well');
+  until(()=>g.physics.portalTransports>cargoTransports,5,'Companion missed the first portal');
+  until(()=>g.physics.grounded&&g.cargo.position.y>15.2,6,'Companion missed the permanent intermediate gallery');
+  mark('The original companion reaches the intermediate gallery before the player');
+  walk(-17,-12.1);wait(.4);
+ }else{
+  collect(d);walk(-25,9);walk(-25,-16);walk(-20,-16);release(d);walk(-15,-13.4);d.aim(1,p['first-outlet'].getFrame().center);collect(d);walk(-17,-12.1);wait(.4);
+ }
+ const before=g.teleportCount;for(let i=0;i<180&&g.playerGrounded;i++){worldMove(0,1);frame();}stop();
  until(()=>g.teleportCount>before,5,'First fall aperture missed');until(()=>g.playerGrounded,6,'First receiving gallery missed');
  check(g.playerPosition.y>14.9,'First flight did not reach the actual raised gallery');mark('First impulse reaches a new view of the return outlet');
+ if(route==='companion-first'){collect(d);mark('Reunited with the original companion after separate first flights');}
  walk(14,-11);release(d);walk(14,-6.5);d.aim(0,p['second-fall'].getFrame().center);d.aim(1,p['second-outlet'].getFrame().center);collect(d);walk(14,-6.1);wait(.3);
  const second=g.teleportCount;for(let i=0;i<180&&g.playerGrounded;i++){worldMove(0,1);frame();}stop();
  until(()=>g.teleportCount>second,5,'Second falling aperture missed');until(()=>g.playerGrounded,6,'Return receiving gallery missed');

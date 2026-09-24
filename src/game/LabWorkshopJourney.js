@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 /** Positive playthroughs issue the same movement, aim and E interactions as a
  * player. No actor/body transform, mechanism state or success flag is assigned. */
-export async function runWorkshopJourney(d){
+export async function runWorkshopJourney(d,{route='floor-feed'}={}){
  const {game,level,walk,wait,aim,until,pickup,enter,mark,frame,worldMove,stop}=d;
  const k=level.workshop,s=k.state,p=level.panels,index=game.levelIndex;
  const assert=(ok,text)=>{if(!ok)throw Error(text);};
@@ -23,27 +23,72 @@ export async function runWorkshopJourney(d){
   }
  }
  if(index===8){
-  shot(1,'drop-ceiling');floorFeed('loading-floor',new THREE.Vector3(0,2,-5));until(()=>s.piston.latched,7,'Piston did not catch impact');mark('gravity compressed the physical spring');
-  // Inspect the supplied horizontal ram and its linkage from the rear aisle
-  // using ordinary walking and camera controls before collecting the friend.
-  walk(2.6,-2);walk(2.6,-8.9);walk(-3,-8.9);
-  lookAt(new THREE.Vector3(-3.2,1.35,-5));mark('inspected spring linkage and guard slot');
-  walk(2.6,-8.9);walk(2.6,-2);
-  walk(-4,-2);walk(game.cargo.position.x,-2.7);walk(game.cargo.position.x,-3.32);pickup();
-  walk(2.6,-2.7);walk(2.6,-7.6);groundExit();
+  if(route==='carried-front-drop'){
+   // The player carries the original companion through the rear wall and
+   // releases it above the cup. The canonical route instead sends the loose
+   // companion from the loading floor while the player stays below.
+   aim(1,new THREE.Vector3(0,10.6,-6));shot(0,'work-front');walk(0,8.7);pickup();walk(0,13.2);
+   const before=game.teleportCount;
+   for(let n=0;n<180&&game.teleportCount===before;n++){worldMove(0,1);frame();}
+   stop();assert(game.teleportCount>before,'Carried entrance did not transport both actors');
+   for(let n=0;n<5;n++)frame();game.interact();assert(!game.heldCube,'Companion was not released above the spring');
+   until(()=>s.piston.latched,5,'The carried drop did not compress the spring');mark('carried friend through front wall then dropped onto spring');
+   wait(3);walk(0,-2.6);walk(2.3,-2.6);walk(2.3,-3.3);pickup();
+   walk(2.6,-7.5);groundExit();
+  }else{
+   assert(route==='floor-feed',`Unknown spring-mail route: ${route}`);
+   shot(1,'drop-ceiling');floorFeed('loading-floor',new THREE.Vector3(0,2,-5));until(()=>s.piston.latched,7,'Piston did not catch impact');mark('gravity compressed the physical spring');
+   // Inspect the supplied horizontal ram and its linkage from the rear aisle
+   // using ordinary walking and camera controls before collecting the friend.
+   walk(2.6,-2);walk(2.6,-8.9);walk(-3,-8.9);
+   lookAt(new THREE.Vector3(-3.2,1.35,-5));mark('inspected spring linkage and guard slot');
+   walk(2.6,-8.9);walk(2.6,-2);
+   walk(-4,-2);walk(game.cargo.position.x,-2.7);walk(game.cargo.position.x,-3.32);pickup();
+   walk(2.6,-2.7);walk(2.6,-7.6);groundExit();
+  }
  }else if(index===9){
-  collect();walk(-9.5,11);walk(-9.5,5.6);walk(-5.4,5.6);walk(-2.9,4.7);put(-1.55,1.5);walk(-2.9,4.7);
-  lever('dispatch',.1);lookAt(new THREE.Vector3(.5,2,1.5));until(()=>s['dock-lock'].engaged,10,'Loaded bridge did not latch dock');mark('same cargo carried by the extending deck');
-  // Step clear of the dispatch console before sighting across the room: the
-  // persistent shoulder camera must obey its foreground collision too.
-  walk(-2.8,4.7);shot(1,'unloading-dock');
-  walk(-5.4,5.6);walk(-8.2,5.6);walk(-9.7,4.2);
-  shot(0,'loading-dock');enter(p['loading-dock']);collect();
-  walk(5.2,4.2);lookAt(new THREE.Vector3(7.6,1.84,.5));mark('inspected the receiver cable across the bank');
-  walk(7,-2.5);wait(1);groundExit();
+  if(route==='cargo-chute'){
+   // Extend the mechanism empty, then send the same loose companion through
+   // a floor-to-ceiling hatch into its receiving bay. The freight deck is still
+   // required as a physical bridge to retrieve it on the far bank.
+   walk(-9.5,11);walk(-9.5,5.6);walk(-5.4,5.6);walk(-5.4,4.7);game.interact();wait(5);
+   assert(s.freight.progress>.98&&!s['dock-lock'].engaged,'Empty bridge should not open the cargo hood');
+   mark('the bridge extends empty, leaving the protected receiving tray closed');
+   walk(-5.4,5.6);walk(-9.5,5.6);walk(-9.5,11);
+   aim(1,new THREE.Vector3(2.61,5.9,1.61));aim(0,new THREE.Vector3(-3.55,.025,9.5));
+   walk(-5.5,9.5);pickup();walk(-4.28,9.5);wait(.2);game.interact();
+   until(()=>s['dock-lock'].engaged,5,'The ceiling hatch did not receive the original companion');
+   mark('the loose friend passed through the ceiling hatch onto the live receiver');wait(1.5);
+   walk(-9.5,11);walk(-9.5,5.6);walk(-5.4,5.6);walk(-2.9,4.7);
+   walk(-1.55,1.5);walk(2.3,1.5);pickup();
+   walk(5.2,4.2);walk(7,-2.5);walk(7,-9.5);walk(0,-9.5);walk(0,-16);
+  }else{
+   assert(route==='floor-feed',`Unknown freight-ferry route: ${route}`);
+   collect();walk(-9.5,11);walk(-9.5,5.6);walk(-5.4,5.6);walk(-2.9,4.7);put(-1.55,1.5);walk(-2.9,4.7);
+   lever('dispatch',.1);lookAt(new THREE.Vector3(.5,2,1.5));until(()=>s['dock-lock'].engaged,10,'Loaded bridge did not latch dock');mark('same cargo carried by the extending deck');
+   // Step clear of the dispatch console before sighting across the room: the
+   // persistent shoulder camera must obey its foreground collision too.
+   walk(-2.8,4.7);shot(1,'unloading-dock');
+   walk(-5.4,5.6);walk(-8.2,5.6);walk(-9.7,4.2);
+   shot(0,'loading-dock');enter(p['loading-dock']);collect();
+   walk(5.2,4.2);lookAt(new THREE.Vector3(7.6,1.84,.5));mark('inspected the receiver cable across the bank');
+   walk(7,-2.5);wait(1);groundExit();
+  }
  }else if(index===10){
-  shot(0,'wind-intake');shot(1,'wind-outlet');lever('fan-switch',8);
-  until(()=>s.ratchet.engaged,15,'Wind did not do mechanical work');mark('air spun flywheel and lifted ratchet');collect();groundExit();
+  if(route==='turntable-air'){
+   shot(0,'wind-intake');collect();put(-5.2,-1.4);
+   until(()=>s.driveTurn.loaded()&&s.driveTurn.angle>3.08,4,'The original friend did not turn the receiving grille');
+   mark('friend turned the physical receiver to face the west wall');
+   walk(-3.5,-1);aim(1,new THREE.Vector3(-13.975,2.3,-5));
+   lever('fan-switch',8);
+   until(()=>s.ratchet.engaged,15,'Westward air did not work on the reversed drive');
+   mark('west-wall stream spun the reversed receiver and opened the door');
+   collect();walk(0,-1.4);groundExit();
+  }else{
+   assert(route==='floor-feed',`Unknown stored-wind route: ${route}`);
+   shot(0,'wind-intake');shot(1,'wind-outlet');lever('fan-switch',8);
+   until(()=>s.ratchet.engaged,15,'Wind did not do mechanical work');mark('air spun flywheel and lifted ratchet');collect();groundExit();
+  }
  }else if(index===11){
   shot(0,'work-front');shot(1,'carousel');lever('rotation',3);enter(p['work-front']);mark('moving portal served cargo balcony');collect();enter(p.carousel);put(-5,10);
   lever('rotation',3);collect();enter(p['work-front']);walk(0,-9);

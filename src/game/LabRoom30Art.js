@@ -52,7 +52,7 @@ export function buildRoom30Art(level){
  for(let i=0;i<12;i++){
   const t=i*Math.PI/6;steel.beam([200+Math.cos(t)*8.2,43+Math.sin(t)*8.2,32],[200+Math.cos(t)*9.5,43+Math.sin(t)*9.5,32],.20,2);
  }
- for(const [x,z] of [[-59,-65],[-57,53],[25,64],[112,63],[208,65],[224,-89]])placeSolidModel(k,createPlanter('launch'),[x,0,z],{parent:root,scale:2.5});
+ for(const [x,z] of [[-44,-65],[-42,53],[25,59],[112,59],[208,59],[218,-76]])placeSolidModel(k,createPlanter('launch'),[x,0,z],{parent:root,scale:2.5});
  placeSolidModel(k,steel.finish(),[0,0,0],{parent:root});
  const moving=(k.solidModels??[]).filter(b=>b.colliders[0]?.kinematic);
  const update=()=>{for(const path of paths)if(path.name==='final')posePath(path);};

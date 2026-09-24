@@ -40,7 +40,7 @@ function showVictory(){
   $('#win-title').innerHTML='Вместе<br />получилось<span>.</span>';
   $('#win-screen .eyebrow').textContent='ДРУГ ТОЖЕ ДОБРАЛСЯ';
   $('#play-again-button').textContent=last?'К первому испытанию ↻':'Следующий уровень →';
-  $('#win-screen .muted').textContent=last?(foundationEdition.enabled?'Первая глава завершена. В меню отдельно доступны прежние испытания.':openEdition.enabled?'Пройдены все испытания этой версии.':'Все доступные испытания завершены. Друг добрался вместе с тобой.'):'Получилось! Следующее испытание добавит новую идею.';
+  $('#win-screen .muted').textContent=last?(foundationEdition.enabled?'Пройдены все 30 испытаний кампании. Архив и лабораторные комнаты доступны отдельно.':openEdition.enabled?'Пройдены все испытания этой версии.':'Все доступные испытания завершены. Друг добрался вместе с тобой.'):'Получилось! Следующее испытание добавит новую идею.';
   diagnostics();
 }
 function showHints(){
@@ -101,11 +101,11 @@ document.body.dataset.gameMode='campaign';
 game.quality={...QUALITY_PRESETS[preferences.value.quality]};game.tutorial.enabled=preferences.value.tutorial;
 game.levelIndex=foundationEdition.enabled?foundationEdition.levelIndex:openEdition.enabled?openEdition.levelIndex:campaignRoute.levelIndex;
 choices();$('#level-select').value=String(game.levelIndex);
-$('#campaign-count').textContent=foundationEdition.enabled?'Новая кампания · первые 5 испытаний':openEdition.enabled?`${OPEN_ROOM_INDICES.length} лабораторных испытаний · отдельная версия`:`Архив · ${CAMPAIGN.length} испытания`;
-if(foundationEdition.enabled){$('#start-screen .brand').textContent='НОВАЯ КАМПАНИЯ · ОТ ОТКРЫТИЯ К ЭКСПЕРИМЕНТУ';$('#start-screen .lead').textContent='Начни с простой связи. Узнай, что умеют свет, движение и высота. Здесь можно пробовать, ошибаться и возвращаться за другом. Каждая комната добавляет новую идею.';}
+$('#campaign-count').textContent=foundationEdition.enabled?'Кампания · 30 испытаний':openEdition.enabled?`${OPEN_ROOM_INDICES.length} лабораторных испытаний · отдельная версия`:`Архив · ${CAMPAIGN.length} испытания`;
+if(foundationEdition.enabled){$('#start-screen .brand').textContent='КАМПАНИЯ · ОТ ОТКРЫТИЯ К ЭКСПЕРИМЕНТУ';$('#start-screen .lead').textContent='Первые пять комнат знакомят с порталами, светом и движением. Затем можно пройти остальные испытания исследовательского комплекса.';}
 else if(openEdition.enabled){$('#start-screen .brand').textContent='ЛАБОРАТОРНЫЕ ИСПЫТАНИЯ';$('#start-screen .lead').textContent='Камеры 24, 28, 30 и 31–33. Эта подборка и новая первая глава хранят прогресс отдельно от архива.';}
 const editionNav=document.createElement('nav');editionNav.className='edition-navigation';editionNav.setAttribute('aria-label','Версии кампании');
-for(const [id,text,href]of [['foundation','Новая кампания · с начала','?edition=foundation&level=1'],['open','Лабораторная глава 31–33','?edition=open&level=31'],['classic','Архив · 33 испытания','?edition=classic&level=1']]){
+for(const [id,text,href]of [['foundation','Кампания · с начала','?edition=foundation&level=1'],['open','Лабораторная глава 31–33','?edition=open&level=31'],['classic','Архив · 33 испытания','?edition=classic&level=1']]){
  if(game.chamberEdition===id)continue;const a=document.createElement('a');a.textContent=text;a.href=href;editionNav.append(a);
 }
 $('#start-screen .hero-footer').before(editionNav);

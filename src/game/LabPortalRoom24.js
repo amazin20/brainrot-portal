@@ -5,7 +5,7 @@ import {createPlanter,placeSolidModel} from './LabSolidModels.js';
 import {buildGardenDoor} from './LabRoom24Garden.js';
 export const ROOM24_SPEC={id:'garden-of-turning-doors',title:'Сад поворотных дверей',concept:'Портал помнит дверь, а не направление; один поворот открывает другой сад',description:'У каждого сада есть лицевая и обратная сторона. Посмотри, что меняется вместе с дверью и что остаётся на месте.',accent:0xffc75b,assets:[1,2,11,22,23,24],hints:['Одна керамическая дверь смотрит в два разных двора. Портал поворачивается вместе с ней.','Дверь можно повернуть двумя способами: грузом снизу или ручным приводом на южном балконе. Тормоз удерживает её настоящее положение.','Подними друга через его опору. Северная лестница меняет ракурс: за стеной видна обратная сторона жёлтого павильона.']};
 export function buildRoom24(game,index=23){
- const k=new Workshop(game,ROOM24_SPEC,index),w=k.world;configureChapterWorld(w,'garden',{openSky:true});k.bounds={minX:-24,maxX:24,minZ:-24,maxZ:24};k.ceiling=25;w.highFidelity=true;
+ const k=new Workshop(game,ROOM24_SPEC,index),w=k.world;configureChapterWorld(w,'garden');k.bounds={minX:-24,maxX:24,minZ:-24,maxZ:24};k.ceiling=25;w.highFidelity=true;
  w.materials.wall.color.setHex(0xf2bb93);w.materials.floor.color.setHex(0x79bbb0);w.materials.trim.color.setHex(0x386c6b);w.materials.ceramic.color.setHex(0xfff4d9);w.walls(k.bounds,25,-1);
  const deck=(name,x0,x1,z0,z1,y)=>w.floor(x0,x1,z0,z1,y,{name});
  const block=(p,s,m=w.materials.wall)=>{const mesh=w.box(p,s,m);mesh.userData.keepMaterial=true;return mesh;};

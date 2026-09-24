@@ -5,7 +5,7 @@
     {
       "level": 1,
       "id": "two-banks",
-      "contract": "aa8a7a2b46377cdd413a317e739ce02c95584129e2298ce8bb384b6e9c249423",
+      "contract": "f7d0a1cf06866906794bf11ec8db8a8a72bb27bbab6b34c61e5e58abffbb818e",
       "workload": {
         "nodes": 324,
         "meshes": 235,
@@ -19,7 +19,7 @@
     {
       "level": 2,
       "id": "return-path",
-      "contract": "4d20e7b300fd98718cf9979847d24cd2b6fff9c4cc961507a6bc91305c4dccf2",
+      "contract": "56aa0f37c7a6e9baa3bcab372fe6319d061b49d89a7498ca5f5a47a8dc03468c",
       "workload": {
         "nodes": 364,
         "meshes": 235,
@@ -33,7 +33,7 @@
     {
       "level": 3,
       "id": "fall-fling",
-      "contract": "3b06a287ca4c41860c93a75eb817be16967f8565ae8cc955b000a12edc5c5a3e",
+      "contract": "9c255ae575598c6b034736477f0b0ac68a69737613bd26aa77a0f0354c1bc87c",
       "workload": {
         "nodes": 386,
         "meshes": 251,
@@ -47,7 +47,7 @@
     {
       "level": 4,
       "id": "moving-address",
-      "contract": "82d9ca03965dca27bdad064f595d027948d076d9a4d54bcdc31067b976c362e4",
+      "contract": "5d1faacc6eb4397a2623f7605ca72f81816941395b61987fd6a5614bcf4da284",
       "workload": {
         "nodes": 313,
         "meshes": 193,
@@ -61,7 +61,7 @@
     {
       "level": 5,
       "id": "choose-angle",
-      "contract": "4be0932663d3533c1cc6408618d2d9c99cb94cac957a175ed9dae00910051d0f",
+      "contract": "2a24a4eb91554d63fcec4a220489ea69c01a20ec670c836c2db59efccc32abb2",
       "workload": {
         "nodes": 396,
         "meshes": 253,
@@ -75,7 +75,7 @@
     {
       "level": 6,
       "id": "crossed-light",
-      "contract": "91d3bd700ba9c102a0d1a4c9e3708f5f6dc045fc1ea10947c87bc7b0560b9183",
+      "contract": "19f7a1c07c362be94d57711a63e8b358289ade0903b0a2a4a9ca3a0f65c06f2a",
       "workload": {
         "nodes": 397,
         "meshes": 266,
@@ -89,7 +89,7 @@
     {
       "level": 7,
       "id": "moment-arm",
-      "contract": "416803ec949d8c117399b3bc6fefb820378641bdcb4ed1caf04f9c321914a362",
+      "contract": "7f136085a5e25c3ab9d7289fd67431851244f27c68652e925bcee4a2876e0094",
       "workload": {
         "nodes": 761,
         "meshes": 586,
@@ -131,7 +131,7 @@
     {
       "level": 10,
       "id": "freight-ferry",
-      "contract": "6dc72c1d8385eaf5224f272d797873ce2727ad9368e2aebffa5a17b06a93d3b8",
+      "contract": "1c010a850e52c8010bb11044078194867bb5ae430734b88322fea932e8e14b63",
       "workload": {
         "nodes": 442,
         "meshes": 304,
@@ -145,7 +145,7 @@
     {
       "level": 11,
       "id": "stored-wind",
-      "contract": "9e30c9c05edd51b41ba0e82c31d613283e7e84e949072981b39025ea69011233",
+      "contract": "ac808ff726db5171e5b373d45d39829f61dc316fba1b780730c450d1ec2ffdc2",
       "workload": {
         "nodes": 371,
         "meshes": 238,
@@ -159,12 +159,12 @@
     {
       "level": 12,
       "id": "folded-junction",
-      "contract": "4315eb0251e1902689606d4ebf79c4e60cadeffddaddd528453ad56a7256e707",
+      "contract": "ab93d749d7fe141cc2c3942c284821ce75276c0885bc6163a480fed0eb29d34e",
       "workload": {
         "nodes": 748,
         "meshes": 565,
         "visibleMeshes": 365,
-        "triangles": 1423790,
+        "triangles": 1495978,
         "lights": 3,
         "materials": 61,
         "geometries": 429
@@ -173,12 +173,12 @@
     {
       "level": 13,
       "id": "optical-paradox",
-      "contract": "d68d6644e87aa2be46dc8fdda4be1fde14ae90453897f77cd9032d1870296ae2",
+      "contract": "e2abfc2a3ed15200691f8edec1ba9d8bc4819285d11d51fbee9bd1ba01ecb98f",
       "workload": {
         "nodes": 799,
         "meshes": 613,
         "visibleMeshes": 427,
-        "triangles": 1053254,
+        "triangles": 1131590,
         "lights": 3,
         "materials": 84,
         "geometries": 490
@@ -187,12 +187,12 @@
     {
       "level": 14,
       "id": "light-weave",
-      "contract": "5565880cfb50adba8c9677c47f1b642cc274dc3b7fd007b058036a0b24a5f2b8",
+      "contract": "85ecd27422e0288b4dbe650bb939dc51ce117b82fd9e1eb727c4b26f058bad58",
       "workload": {
         "nodes": 721,
         "meshes": 551,
         "visibleMeshes": 298,
-        "triangles": 1364090,
+        "triangles": 1454474,
         "lights": 3,
         "materials": 68,
         "geometries": 430
@@ -201,7 +201,7 @@
     {
       "level": 15,
       "id": "countercurrent-weave",
-      "contract": "673ee396b65d0691707108589904492ac3a6cd08cefa5a7d5be12e7c037b66ec",
+      "contract": "8204ffc1bed02cf8aa2e27e44c03e3e5d086d47d1b0d8905f135a0e80767ea68",
       "workload": {
         "nodes": 520,
         "meshes": 366,
@@ -215,14 +215,14 @@
     {
       "level": 16,
       "id": "vanishing-support",
-      "contract": "b8d9c51f293163a8d79a55009effcc2460fe810e1804bfaa41291632438f7b36",
+      "contract": "b283a3f71091fbf5ac002233a677eae62909507b812cd5df42b9e51658634ec2",
       "workload": {
         "nodes": 799,
         "meshes": 620,
-        "visibleMeshes": 358,
-        "triangles": 1321026,
+        "visibleMeshes": 376,
+        "triangles": 1454452,
         "lights": 3,
-        "materials": 71,
+        "materials": 73,
         "geometries": 490
       }
     },
@@ -243,7 +243,7 @@
     {
       "level": 18,
       "id": "double-bottom",
-      "contract": "6db91f326013b444a81cf7d60da55e60e4c427b1d33c9afe058abd23d318a84d",
+      "contract": "75f0f4422750098afc0240b049b7465acf9036989703f4ae09e8f707014df79d",
       "workload": {
         "nodes": 1081,
         "meshes": 816,
@@ -271,12 +271,12 @@
     {
       "level": 20,
       "id": "braided-exchange",
-      "contract": "cf93c1e3d4de1315496a1ad26a88b113b3a30239f50d5594be354e806f0287a6",
+      "contract": "a7da271c89384234725a482eade3976160b4de292dc7a1ed7f6dca511b26827b",
       "workload": {
         "nodes": 662,
         "meshes": 460,
-        "visibleMeshes": 284,
-        "triangles": 944436,
+        "visibleMeshes": 379,
+        "triangles": 1227412,
         "lights": 3,
         "materials": 104,
         "geometries": 332
