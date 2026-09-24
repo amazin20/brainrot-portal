@@ -10,7 +10,7 @@ const routes=[
  [24,[{route:'carry-through'},{route:'counterweight'}]],
  [27,[{gravityReturn:false},{gravityReturn:true}]],
  [28,[{},{route:'full-tide-observatory'}]],
- [29,[{},{carryRoute:true}]],
+ [29,[{},{gardenCatch:true}]],
  [30,[{},{east:true}]],
 ];
 for(const [number,options] of routes)for(const [variant,journeyOptions] of options.entries())

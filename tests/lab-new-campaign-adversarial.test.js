@@ -21,7 +21,8 @@ const restricted=[
  {level:26,panel:'freight-receiver',maxFloorY:8.5},
  {level:27,panel:'upper-intake',maxFloorY:.5},
  {level:27,panel:'reverse-outlet',maxFloorY:.5},
- {level:30,panel:'sunward-outlet',maxFloorY:52.5,excludeSurfaces:['Shared observation island','Island well viewing balcony','Second dive lip','Sunward arrival island']},
+ {level:30,panel:'sunward-outlet',maxFloorY:52.5,excludeSurfaces:['Shared observation island','Island well viewing balcony','Second dive lip','Eastern observation island','Eastern well viewing balcony','Eastern second dive lip','Sunward arrival island']},
+ {level:30,panel:'east-sunward-outlet',maxFloorY:52.5,excludeSurfaces:['Shared observation island','Island well viewing balcony','Second dive lip','Eastern observation island','Eastern well viewing balcony','Eastern second dive lip','Sunward arrival island']},
 ];
 for(const config of restricted)test(`room ${config.level}: early floor/jump viewpoints cannot place a shortcut portal on ${config.panel}`,async()=>{
  await game.selectLevel(config.level-1,false);game.resetRun(true);
@@ -100,7 +101,7 @@ test('room 30: a slow first-well exit cannot drop directly onto the final island
  const result=await runV8Journey(game,{scenario:d=>{
   const p=d.level.panels;
   d.walk(-21.5,16);game.interact();d.wait(.3);assert.ok(game.velocityCompanion.connected);
-  d.walk(-25,13);d.walk(-25,-32);d.aim(1,p['east-arc'].getFrame().center);
+  d.walk(-25,13);d.walk(-25,-32);d.walk(-22,22);d.walk(25,22);d.aim(1,p['east-arc'].getFrame().center);d.walk(-22,22);
   d.walk(-25,-17);d.walk(0,-17);
   for(let n=0;n<240&&game.playerGrounded;n++){d.worldMove(0,-1);game.input.keys.add('ShiftLeft');d.frame();}
   d.stop();d.until(()=>game.playerGrounded,9,'First well must safely catch a dive before its portal exists');

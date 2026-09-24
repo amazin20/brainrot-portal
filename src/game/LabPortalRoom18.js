@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import {Workshop} from './LabWorkshopKit.js';
 import {cargoLoadsPlate} from './LabPlateContact.js';
 const V=(x=0,y=0,z=0)=>new THREE.Vector3(x,y,z);
-export const ROOM18_SPEC={id:'double-bottom',title:'Двойное дно',concept:'Два этажа одной шахты и обратный путь через собственный грузовой маршрут',description:'Выход остался за спиной. Один колодец ещё не закончил свою работу.',accent:0xd4b378,assets:[1,2,11,23,24],hints:['Высота — свойство маршрута. Одна и та же шахта может дать два разных пути.','В низком канале пройдёт друг. Лестница возвращается к той же шахте выше; за подъёмом скрыт поперечный путь.','Отправь друга через низкий канал. С верхнего края падай в пару напольных порталов, затем замени потраченный вход на боковую поверхность в полёте. С новой галереи осмотри выход с обратной стороны и вернись за другом.']};
+export const ROOM18_SPEC={id:'double-bottom',title:'Двойное дно',concept:'Два этажа одной шахты и обратный путь через собственный грузовой маршрут',description:'Выход остался за спиной. Один колодец ещё не закончил свою работу.',accent:0xd4b378,assets:[1,2,11,23,24],hints:['Высота — свойство маршрута. Одна и та же шахта может дать два разных пути.','В низком канале пройдёт друг. Его вес на приёмной полке приподнимает заслонку обзора у верхнего края.','После грузового канала можно заранее направить падение к поперечному выходу через открытую заслонку. Или использовать отражающий напольный портал и перенаправить его уже в полёте.']};
 export function buildRoom18(game,index=17){
  const k=new Workshop(game,ROOM18_SPEC,index),w=k.world;
  k.bounds={minX:-24,maxX:24,minZ:-24,maxZ:29};k.ceiling=30;
@@ -22,14 +22,42 @@ export function buildRoom18(game,index=17){
  for(const x of [-3.2,.2])block([x,23.05,-3.75],[.3,3.1,22.5]);
  block([9.5,22.3,-18.2],[25.5,4.6,.3]);block([9.5,22.3,-14.8],[18.5,4.6,.3]);
  block([0,22.3,13.2],[8.4,4.6,.3]);block([-4.2,22.3,11],[.3,4.6,4.5]);
- // This suspended divider hides the transverse exit until the rebound changes the viewpoint.
- block([-13.7,24.75,4.2],[20.6,10.5,.4]);
+ // This suspended divider normally hides the transverse exit. Weight on the
+ // actual freight shelf retracts only a low sight shutter. Its 1.3 m opening
+ // passes a shot but cannot admit the complete standing player capsule.
+ block([-13.7,25.4,4.2],[20.6,9.2,.4]);
+ const sightShutterMesh=block([-13.7,20.15,4.2],[20.6,1.3,.4]);
+ const sightShutterCollider=game.colliders.find(c=>c.mesh===sightShutterMesh);
  // A cargo corridor: tall launch pocket, then one physically low throat.
  deck('Freight receiving shelf',-15,-9,-18,-1,11);
+ // Exposed rollers keep a weakly delivered companion moving through the low
+ // throat, independent of portal yaw or aspect ratio. Their force acts on the
+ // original free rigid body and stops before the shelf's pressure inset.
+ for(let z=-17;z< -7.5;z+=.8)w.box([-12,11.025,z],[5.4,.05,.09],w.materials.trim,false);
+ k.forces.push(()=>{
+  const b=game.physics?.cargoBody,p=game.cargo?.position;
+  if(!b||!p||game.heldCube||p.x< -14.8||p.x> -9.2||p.y<10.8||p.y>12.7||p.z< -18||p.z> -7.2)return;
+  if(b.velocity.z<3.2){b.force.z+=b.mass*22;b.wakeUp();}
+ });
+ w.box([-12,11.025,-4.5],[5.8,.045,6.8],w.materials.accent,false);
+ const shelf={center:V(-12,11,-4.5),normal:V(0,1,0),right:V(1,0,0),up:V(0,0,1),halfWidth:3,halfHeight:3.5};
+ const sightShutter={loaded:false,progress:0,mesh:sightShutterMesh,collider:sightShutterCollider};
+ k.ticks.push(dt=>{
+  sightShutter.loaded=cargoLoadsPlate(game.cargo,game.heldCube,shelf);
+  sightShutter.progress=THREE.MathUtils.damp(sightShutter.progress,sightShutter.loaded?1:0,12,dt);
+  sightShutterMesh.position.y=20.15+1.55*sightShutter.progress;
+  sightShutterMesh.updateMatrixWorld(true);
+  game.syncCollision(sightShutterCollider,new THREE.Box3().setFromObject(sightShutterMesh),dt);
+ });
+ k.resets.push(()=>{sightShutter.loaded=false;sightShutter.progress=0;sightShutterMesh.position.y=20.15;sightShutterMesh.updateMatrixWorld(true);game.syncCollision(sightShutterCollider,new THREE.Box3().setFromObject(sightShutterMesh),0);});
+ k.state.sightShutter=sightShutter;
  block([-15.2,8,-11.5],[.3,16,13]);block([-8.8,8,-11.5],[.3,16,13]);
  block([-12,7.5,-18.2],[6.6,15,.3]);
  block([-12,15.025,-10.5],[6.4,4.75,.3]); // Bottom 12.65, cargo fits, player capsule does not.
  block([-12,18,-11.5],[6.6,.3,13]);
+ // The upper duct screens the turn from the north corridor. Its only early
+ // upper-floor sight is the shutter above the loaded freight shelf.
+ block([-11.8,21.3,-4],[5.8,6.6,1.2]);
  // The turning gallery doubles back along the exterior of the freight tunnel.
  deck('Perpendicular receiver',-4,17,-3,3,11);
  deck('Reverse freight gallery',-9,-4,-3,-1,11);
@@ -69,8 +97,8 @@ export function buildRoom18(game,index=17){
  k.panel('turn',[-23.45,18.7,0],[1,0,0],5.6,3.8);
  k.panel('return-well',[-20,.025,0],[0,1,0],6,6);
  k.panel('home',[12.5,14.2,19.03],[0,0,1],5.6,4.6);
- const shelves=[{center:V(-12,11,-4.5),normal:V(0,1,0),right:V(1,0,0),up:V(0,0,1),halfWidth:3,halfHeight:3.5},{center:V(0,8,14),normal:V(0,1,0),right:V(1,0,0),up:V(0,0,1),halfWidth:5,halfHeight:4}];
+ const shelves=[shelf,{center:V(0,8,14),normal:V(0,1,0),right:V(1,0,0),up:V(0,0,1),halfWidth:5,halfHeight:4}];
  const level=k.finish([0,8,15],[1.8,8.55,14],[12.5,7,25],{workshop:k,portalPuzzle:true,cargoOnAnyPad:()=>shelves.some(f=>cargoLoadsPlate(game.cargo,game.heldCube,f))});
- level.puzzleGeometry={safeFloor:0,freightHeight:8,dropHeight:20,goalHeight:7,normalGaps:0,cargoWindow:{z:-10.5,minY:11,maxY:12.65},launchWindow:{x:-15.9,minY:15.4,maxY:21.5},footprint:48*53,portalRoles:{'shared-well':'one drop for cargo and player','rebound':'vertical change of viewpoint','freight':'cargo-only delivery','turn':'perpendicular access to the reverse gallery','return-well':'medium return for a carried or separately released companion','home':'exit behind the original entrance'},deductions:['one shaft has two energy states','separate the travellers through a low cargo throat','replace the spent portal during ascent','approach the freight receiver from its reverse gallery','shoot into the exit from a later sight slot','carry the companion on the final flight or send it ahead through the same physical portal'],orders:['carry-together','send-ahead']};
+ level.puzzleGeometry={safeFloor:0,freightHeight:8,dropHeight:20,goalHeight:7,normalGaps:0,cargoWindow:{z:-10.5,minY:11,maxY:12.65},launchWindow:{x:-15.9,minY:15.4,maxY:21.5},footprint:48*53,portalRoles:{'shared-well':'one drop for cargo and player','rebound':'vertical change of viewpoint','freight':'cargo-only delivery and load for the sight shutter','turn':'perpendicular access to the reverse gallery, pre-addressed while the freight load opens the sight shutter or reached during a rebound','return-well':'medium return for a carried or separately released companion','home':'exit behind the original entrance'},deductions:['one shaft has two energy states','separate the travellers through a low cargo throat','the original companion opens a low upper-lip sight line','choose a pre-addressed direct fall or retarget during the rebound','approach the freight receiver from its reverse gallery','shoot into the exit from a later sight slot','carry the companion on the final flight or send it ahead through the same physical portal'],orders:['carry-together','send-ahead','direct-turn']};
  return level;
 }

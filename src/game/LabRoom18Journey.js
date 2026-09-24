@@ -21,10 +21,26 @@ export function room18Freight(d){
  const before=game.physics.portalTransports;game.interact();until(()=>game.physics.portalTransports>before,5,'Cargo enters the common well');
  mark('freight crosses the low throat');until(()=>game.cargo.position.z>-7.8&&game.cargo.position.y>10.9,5,'Cargo crosses its low throat');wait(2);
 }
-export function room18Climb(d){
+export function room18Climb(d,{direct=false}={}){
  const {walk,aim,level,mark}=d;
  walk(0,16.5);walk(20,16.5);walk(20,-17.5);walk(-1.5,-17.5);walk(-1.5,-14);walk(-.3,-14);
- aim(1,level.panels.rebound.getFrame().center);walk(-1.5,-14);walk(-1.5,11);walk(1.5,11);mark('same well from the upper return');
+ if(!direct)aim(1,level.panels.rebound.getFrame().center);
+ walk(-1.5,-14);if(direct){if(d.game.camera.aspect<1){walk(-1.5,-8);d.look(level.panels.turn.getFrame().center);}walk(-1.5,5);}
+ if(direct){
+  check(level.state.sightShutter.loaded&&level.state.sightShutter.progress>.95,'Original freight has not opened the upper sight shutter');
+  aim(1,level.panels.turn.getFrame().center);
+  walk(-1.5,11);walk(1.5,11);
+  mark('freight holds the sight shutter open while the turn is addressed from the upper lip');
+ }else{walk(-1.5,11);walk(1.5,11);mark('same well from the upper return');}
+}
+export function room18DirectFlight(d){
+ const {game,walk,worldMove,frame,stop,until,mark}=d;
+ walk(1.5,9.15);const before=game.teleportCount;
+ for(let n=0;n<300&&game.teleportCount===before;n++){worldMove(0,-.15);frame();}stop();
+ check(game.teleportCount===before+1,'Direct upper fall missed the shared well');
+ until(()=>game.playerGrounded,5,'Direct transverse gallery landing');
+ check(game.playerPosition.y>10.9&&game.playerPosition.y<11.1&&game.playerPosition.x>-4,'Direct turn missed its permanent receiving gallery '+game.playerPosition.toArray());
+ mark('pre-addressed single flight reaches the transverse gallery without a rebound shot');
 }
 export function room18Flight(d,{aimDelayFrames=0}={}){
  const {game,level,walk,worldMove,frame,stop,until,mark}=d;
@@ -76,4 +92,12 @@ export function room18Return(d,{order='portal-first'}={}){
  }
  until(()=>game.state==='won',3,'Reunited behind the entrance');
 }
-export async function runRoom18(d,{aimDelayFrames=0,order='portal-first'}={}){room18Freight(d);room18Climb(d);room18Flight(d,{aimDelayFrames});room18Return(d,{order});}
+export async function runRoom18(d,{aimDelayFrames=0,order='portal-first'}={}){
+ check(['portal-first','retrieve-first','send-ahead','direct-turn'].includes(order),'Unknown double-bottom route');
+ room18Freight(d);
+ if(order==='direct-turn'){
+  room18Climb(d,{direct:true});room18DirectFlight(d);room18Return(d,{order:'portal-first'});
+ }else{
+  room18Climb(d);room18Flight(d,{aimDelayFrames});room18Return(d,{order});
+ }
+}

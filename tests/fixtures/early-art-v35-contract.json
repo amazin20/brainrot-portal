@@ -243,15 +243,15 @@
     {
       "level": 18,
       "id": "double-bottom",
-      "contract": "75f0f4422750098afc0240b049b7465acf9036989703f4ae09e8f707014df79d",
+      "contract": "495cee8e15d88a34a0da3a91743b624d78e6bd93ff2ae04445f27b39ff8f56e8",
       "workload": {
-        "nodes": 1081,
-        "meshes": 816,
-        "visibleMeshes": 478,
-        "triangles": 1920530,
+        "nodes": 1127,
+        "meshes": 859,
+        "visibleMeshes": 391,
+        "triangles": 1920902,
         "lights": 3,
         "materials": 61,
-        "geometries": 600
+        "geometries": 622
       }
     },
     {

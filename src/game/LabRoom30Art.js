@@ -34,14 +34,15 @@ export function buildRoom30Art(level){
    mesh.quaternion.setFromUnitVectors(V(0,0,1),normal.clone().multiplyScalar(speed).add(V(0,-19.5*t,0)).normalize());
   }
  };
- for(const [name,panel,drop,landingY,style] of [['north',f.north,36,40,'launch'],['east',f.east,36,40,'lagoon'],['final',f.final,34,28,'launch']]){
+ for(const [name,panel,drop,landingY,style] of [['north',f.north,36,40,'launch'],['east',f.east,36,40,'lagoon'],['final',f.final,34,28,'launch'],['east-final',f.eastFinal,34,28,'lagoon']]){
   const path={name,panel,drop,landingY,rings:[],bindings:[]};
-  for(let i=0;i<(name==='final'?8:6);i++){const model=createGuideRing(name==='final'?7:6,style);root.add(model);path.rings.push(model);}
+  const lastArc=name==='final'||name==='east-final';
+  for(let i=0;i<(lastArc?8:6);i++){const model=createGuideRing(lastArc?7:6,style);root.add(model);path.rings.push(model);}
   posePath(path);
-  for(const model of path.rings){const position=model.position.toArray(),quaternion=model.quaternion.clone();path.bindings.push(placeSolidModel(k,model,position,{parent:root,quaternion,kinematic:name==='final'}));}
+  for(const model of path.rings){const position=model.position.toArray(),quaternion=model.quaternion.clone();path.bindings.push(placeSolidModel(k,model,position,{parent:root,quaternion,kinematic:lastArc}));}
   // Receiver collars live in the same local frame as their physical panel.
-  placeSolidModel(k,createGuideRing(7.5,style,.44,.65),[0,0,-1.3],{parent:panel.group,kinematic:name==='final'});
-  paths.push(path);clearances.push({name,radius:name==='final'?6.6:5.6});
+  placeSolidModel(k,createGuideRing(7.5,style,.44,.65),[0,0,-1.3],{parent:panel.group,kinematic:lastArc});
+  paths.push(path);clearances.push({name,radius:lastArc?6.6:5.6});
  }
  for(const x of [183,218]){
   steel.box([x,39,32],[2,22,3],0,.25);
@@ -55,7 +56,7 @@ export function buildRoom30Art(level){
  for(const [x,z] of [[-44,-65],[-42,53],[25,59],[112,59],[208,59],[218,-76]])placeSolidModel(k,createPlanter('launch'),[x,0,z],{parent:root,scale:2.5});
  placeSolidModel(k,steel.finish(),[0,0,0],{parent:root});
  const moving=(k.solidModels??[]).filter(b=>b.colliders[0]?.kinematic);
- const update=()=>{for(const path of paths)if(path.name==='final')posePath(path);};
+ const update=()=>{for(const path of paths)if(path.name==='final'||path.name==='east-final')posePath(path);};
  // The final outlet actuator has already run when this callback executes.
  // Decorative rings no longer move in render-only time with stale colliders.
  k.ticks.push(dt=>{update();for(const binding of moving)binding.sync(dt);});
