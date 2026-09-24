@@ -3,14 +3,14 @@ const V=(x=0,y=0,z=0)=>new THREE.Vector3(x,y,z);
 /** A moving contact surface. The room supplies tangential friction only while
  * the real feet/body touch a belt; neither positions nor portal speed are set. */
 export function buildRoom27Conveyors(k){
- const {game:g,world:w}=k,bands=[],system={bands,reversed:true,braked:false,phase:0};
+ const {game:g,world:w}=k,bands=[],system={bands,reversed:true,braked:false};
  const rubber=new THREE.MeshStandardMaterial({color:0x156e91,roughness:.72,metalness:.12});
  const frame=new THREE.MeshStandardMaterial({color:0xffb938,roughness:.46,metalness:.3});
  const rollerMaterial=new THREE.MeshStandardMaterial({color:0x64dbd3,roughness:.38,metalness:.34});
  const stripes=new THREE.MeshStandardMaterial({color:0xffd467,roughness:.5,metalness:.18});
  const preserve=mesh=>{mesh.userData.keepMaterial=true;return mesh;};
  function belt(name,x,z0,z1,y,{speed=27,width=4.6,color=0x24bfc5}={}){
-  const b={name,x,z0,z1,y,width,speed,direction:V(0,0,-1),active:true};bands.push(b);
+  const b={name,x,z0,z1,y,width,speed,direction:V(0,0,-1),active:true,offset:0,renderFrom:0,renderStep:0};bands.push(b);
   const deck=w.floor(x-width/2,x+width/2,z0,z1,y,{name});
   deck.group.userData.keepMaterial=true;
   deck.group.traverse(o=>{if(o.isMesh&&!o.userData.collisionProxy){o.material=rubber;o.userData.keepMaterial=true;}});
@@ -20,7 +20,8 @@ export function buildRoom27Conveyors(k){
   for(let i=0;i<count;i++){m.compose(V(x,y-.23,z0+(i+.5)*(z1-z0)/count),q,V(1,1,1));rollers.setMatrixAt(i,m);}
   rollers.name=name+' visible underside rollers';preserve(rollers);w.root.add(rollers);rollers.computeBoundingSphere();
   const slats=new THREE.InstancedMesh(new THREE.BoxGeometry(width-.3,.025,.1),stripes,count);slats.name=name+' travelling belt slats';preserve(slats);w.root.add(slats);slats.frustumCulled=false;
-  k.renders.push(()=>{for(let i=0;i<count;i++){const z=z0+((i+.5)*(z1-z0)/count+system.phase*(system.reversed?1:-1))%(z1-z0);m.makeTranslation(x,y+.017,z<z0?z+(z1-z0):z);slats.setMatrixAt(i,m);}slats.instanceMatrix.needsUpdate=true;});
+  k.renders.push((alpha=1)=>{const length=z1-z0,offset=((b.renderFrom+b.renderStep*alpha)%length+length)%length;
+   for(let i=0;i<count;i++){const z=z0+((i+.5)*length/count+offset)%length;m.makeTranslation(x,y+.017,z);slats.setMatrixAt(i,m);}slats.instanceMatrix.needsUpdate=true;});
   return b;
  }
  function contact(p,radius=0){return bands.find(b=>b.active&&Math.abs(p.y-b.y)<.18&&Math.abs(p.x-b.x)<b.width/2-radius*.35&&p.z>b.z0-.1&&p.z<b.z1+.1);}
@@ -33,8 +34,11 @@ export function buildRoom27Conveyors(k){
   return a;
  }
  system.belt=belt;system.contact=contact;system.acceleration=acceleration;
- k.ticks.push(dt=>{if(!system.braked)system.phase+=dt*6;});
+ // Keep the visible travelling surface at the same speed as its traction.
+ // Integrating per belt also preserves the slat position when a control
+ // reverses direction; changing the sign of elapsed time would make it jump.
+ k.ticks.push(dt=>{for(const b of bands){const length=b.z1-b.z0;b.renderFrom=b.offset;b.renderStep=system.braked?0:(system.reversed?1:-1)*b.speed*dt;b.offset=((b.offset+b.renderStep)%length+length)%length;}});
  k.forces.push(()=>{if(g.heldCube||!g.physics?.cargoBody)return;const b=g.physics.cargoBody,p=V(b.position.x,b.position.y-.5,b.position.z),v=V(b.velocity.x,b.velocity.y,b.velocity.z),a=acceleration(p,v,{cargo:true,grounded:Math.abs(v.y)<1});if(a.lengthSq()){b.wakeUp();b.force.z+=a.z*b.mass;}});
- k.resets.push(()=>{system.reversed=true;system.braked=false;system.phase=0;});
+ k.resets.push(()=>{system.reversed=true;system.braked=false;for(const b of bands)b.offset=b.renderFrom=b.renderStep=0;});
  k.state.conveyors=system;return system;
 }

@@ -117,7 +117,7 @@
     {
       "level": 9,
       "id": "spring-mail",
-      "contract": "fea18383839e660beb50b7a2bcd6619df912442357cf09e91b865b128d0949f7",
+      "contract": "adff0e9096733750246f57d40167e36b23e817f74f47a93686c52b06cfef3034",
       "workload": {
         "nodes": 398,
         "meshes": 268,
@@ -131,7 +131,7 @@
     {
       "level": 10,
       "id": "freight-ferry",
-      "contract": "1c010a850e52c8010bb11044078194867bb5ae430734b88322fea932e8e14b63",
+      "contract": "6cb58c509dc8b7c3f6d803f02ac3e7439e2d9669d6aadac32548edd9a1cc68f4",
       "workload": {
         "nodes": 442,
         "meshes": 304,
@@ -215,12 +215,12 @@
     {
       "level": 16,
       "id": "vanishing-support",
-      "contract": "b283a3f71091fbf5ac002233a677eae62909507b812cd5df42b9e51658634ec2",
+      "contract": "2372659e3395bb7e0f6ec3ed09f7a4dbc465afcd98778285981c43d791b1842d",
       "workload": {
         "nodes": 799,
         "meshes": 620,
         "visibleMeshes": 376,
-        "triangles": 1454452,
+        "triangles": 1438488,
         "lights": 3,
         "materials": 73,
         "geometries": 490
@@ -271,12 +271,12 @@
     {
       "level": 20,
       "id": "braided-exchange",
-      "contract": "a7da271c89384234725a482eade3976160b4de292dc7a1ed7f6dca511b26827b",
+      "contract": "68c7d98684df7b357576ccfbb4157dd57eafcce31908ba3ccef29fc32d84dfc1",
       "workload": {
         "nodes": 662,
         "meshes": 460,
         "visibleMeshes": 379,
-        "triangles": 1227412,
+        "triangles": 1227352,
         "lights": 3,
         "materials": 104,
         "geometries": 332

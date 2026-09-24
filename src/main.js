@@ -130,8 +130,7 @@ $('#play-button').addEventListener('click',()=>enterLevel(Number($('#level-selec
 $('#play-again-button').addEventListener('click',()=>enterLevel(foundationEdition.enabled?nextFoundationLevel(game.levelIndex):openEdition.enabled?nextOpenRoom(game.levelIndex):nextCampaignLevel(game.levelIndex,CAMPAIGN.length)));
 $('#resume-button').addEventListener('click',resume);$('#restart-button').addEventListener('click',restartLevel);
 $('#pause-button').addEventListener('click',()=>game.togglePause(true));
-$('#hint-button').hidden=!debug;
-$('#hint-button').addEventListener('click',()=>{if(debug)showHints();});
+$('#hint-button').addEventListener('click',showHints);
 $('#hint-unlock').addEventListener('click',async()=>{
   if(hintBusy||holds.size||(preferences.value.hints[game.levelIndex]||0)>=3)return;
   hintBusy=true;const index=game.levelIndex;showHints();

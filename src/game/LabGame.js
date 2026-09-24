@@ -265,6 +265,9 @@ export class LabGame {
     this.companionAnimator = new LabCompanionAnimator({ visual });
     this.companionRig = new LabCompanionRig(brainrot);
     this.physics = new LabPhysics({ fixedStep: FIXED_STEP });
+    // All level builders have finished registering their solids. Camera and
+    // portal rays hit these frequently in rooms with thousands of envelopes.
+    this.indexColliders();
     for (const collider of this.colliders) this.physics.addStaticBox(collider.mesh.uuid, collider.box, { kinematic: Boolean(collider.kinematic) });
     for (const ramp of this.ramps) this.physics.addStaticRamp(ramp.id, ramp);
     this.physics.createCargo({ position: this.cargo.position, size: CUBE_RADIUS * 2, mass: 3.2 });
@@ -333,12 +336,30 @@ export class LabGame {
     this.controls?.dispose(); this.input?.dispose();
   }
 
+  indexColliders() {
+    this.colliderByMesh = new WeakMap(this.colliders.map(c => [c.mesh, c]));
+    this.colliderById = new Map(this.colliders.map(c => [c.mesh.uuid, c]));
+    this.colliderIndexSize = this.colliders.length;
+  }
+
+  colliderForMesh(mesh) {
+    if (!this.colliderByMesh) return this.colliders.find(c => c.mesh === mesh);
+    if (this.colliderIndexSize !== this.colliders.length) this.indexColliders();
+    return this.colliderByMesh.get(mesh);
+  }
+
+  colliderForId(id) {
+    if (!this.colliderById) return this.colliders.find(c => c.mesh.uuid === id);
+    if (this.colliderIndexSize !== this.colliders.length) this.indexColliders();
+    return this.colliderById.get(id);
+  }
+
   isActiveBlocker(object) {
     // Visibility is independent of collision: invisible proxies deliberately
     // protect authored meshes. Disabled fields, however, must stop blocking all
     // interaction, carry and camera rays as soon as their physical field opens.
     for (let node = object; node; node = node.parent) {
-      const collider = this.colliders.find(candidate => candidate.mesh === node);
+      const collider = this.colliderForMesh(node);
       if (collider) return collider.enabled !== false;
     }
     return true;
@@ -347,7 +368,7 @@ export class LabGame {
   isCameraBlocker(object, hit) {
     if (!this.isActiveBlocker(object)) return false;
     if (!hit || !this.portals?.ready) return true;
-    const collider = this.colliders.find(c => c.mesh === object);
+    const collider = this.colliderForMesh(object);
     const box = collider?.box ?? new THREE.Box3().setFromObject(object);
     if (this.cameraRig?.clipsPortalBacking?.(box, object.uuid)) return false;
     // A camera is not a traveller: letting its boom pass through an entry
@@ -398,7 +419,7 @@ export class LabGame {
     if (this.epicMode && this.firstLevel?.restoreCheckpoint) return this.restartCheckpoint();
     this.portals.clear(); this.portalSurfaceIds = [null, null];
     for (const id of this.portalCargoColliders) this.physics.setStaticEnabled(id,
-      this.colliders.find(c => c.mesh.uuid === id)?.enabled !== false);
+      this.colliderForId(id)?.enabled !== false);
     this.portalCargoColliders.clear();
     this.callbacks.onToast('Пара сброшена. Один портал можно оставить под брейнротом, второй открыть позже.');
     return true;
@@ -458,7 +479,7 @@ export class LabGame {
     this.jumpBuffer = this.coyoteTime = this.jumpWindup = 0; this.interactQueued = false;
     this.shotPoseTime = 0; this.shotAimPoint = null;
     for (const id of this.portalCargoColliders) this.physics.setStaticEnabled(id,
-      this.colliders.find(c => c.mesh.uuid === id)?.enabled !== false);
+      this.colliderForId(id)?.enabled !== false);
     this.portalCargoColliders.clear();
     this.playerPosition.copy(checkpoint.position); this.playerVelocity.set(0, 0, 0);
     this.previousPlayerPosition.copy(this.playerPosition); this.playerGrounded = true;
@@ -713,6 +734,13 @@ export class LabGame {
         this.yaw = controls.yaw; this.pitch = controls.pitch;
       } else this.cameraRig.reset(this.playerPosition, this.yaw, this.pitch);
       this.portalVisualOffset.copy(transportedVisual).sub(this.playerPosition);
+      // A collision-safe exit may move the physical body several metres from
+      // the transformed entry pose. Letting that entire difference decay on
+      // the rendered avatar hides it inside the floor or portal backing.
+      // Keep only a short, forward-side visual ease after the crossing.
+      this.portalVisualOffset.clampLength(0, .65);
+      const behindExit = this.portalVisualOffset.dot(exit.normal);
+      if (behindExit < 0) this.portalVisualOffset.addScaledVector(exit.normal, -behindExit);
       const upright = new THREE.Quaternion().setFromAxisAngle(UP, this.facing);
       this.portalVisualRotation.copy(transportedQ).multiply(upright.invert());
       if(this.audio.travel)this.audio.travel(teleport.velocity.length());else this.audio.tone(620, .12, 'triangle', .035);
@@ -754,7 +782,7 @@ export class LabGame {
       const y = f.heightAt ? f.heightAt(x,z) : (f.y ?? 0);
       if(y===null || y>maxY+.001)continue;
       if (throughPortals && f.mesh && this.portalOpensCollider({ mesh: f.mesh,
-        box: this.colliders.find(c => c.mesh === f.mesh)?.box }, new THREE.Vector3(x, y + CENTER_HEIGHT, z), PLAYER_RADIUS)) continue;
+        box: this.colliderForMesh(f.mesh)?.box }, new THREE.Vector3(x, y + CENTER_HEIGHT, z), PLAYER_RADIUS)) continue;
       height = height === null ? y : Math.max(height, y);
     }
     for (const ramp of this.ramps) {
@@ -995,7 +1023,7 @@ export class LabGame {
       }
     }
     for (const id of this.portalCargoColliders) if (!nextPortalColliders.has(id)) {
-      this.physics.setStaticEnabled(id, this.colliders.find(c => c.mesh.uuid === id)?.enabled !== false);
+      this.physics.setStaticEnabled(id, this.colliderForId(id)?.enabled !== false);
     }
     this.portalCargoColliders = nextPortalColliders;
     this.companionBehavior?.update(dt, { held: Boolean(this.heldCube || this.velocityCompanion?.connected),

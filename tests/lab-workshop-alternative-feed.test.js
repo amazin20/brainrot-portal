@@ -7,7 +7,8 @@ const game=await createHeadlessGame();
 game.chamberEdition='classic';
 after(()=>{game.physics.dispose();game.portals.dispose();});
 
-test('empty bridge, overhead portal delivery, and the same cargo complete room 10',async()=>{
+for(const [edition,aspect] of [['classic',9/16],['foundation',1.6],['classic',16/9]])test(`empty bridge and overhead cargo delivery complete ${edition} room 10 at aspect ${aspect}`,async()=>{
+ game.chamberEdition=edition;game.camera.aspect=aspect;game.camera.updateProjectionMatrix();
  await game.selectLevel(9,false);
  const cargo=game.cargo,body=game.physics.cargoBody,events=[];
  const report=await runV8Journey(game,{

@@ -263,6 +263,30 @@ try{
  // Narrow-screen controls and settings remain inside viewport.
  await page.setViewport({width:390,height:844,isMobile:true,hasTouch:true,deviceScaleFactor:1});await page.reload({waitUntil:'networkidle2'});await ready();
  await page.click('#play-button');await page.evaluate(()=>document.exitPointerLock?.());await page.waitForFunction(()=>!document.pointerLockElement);if(await page.evaluate(()=>window.__NESI_DEMO_GAME__.state==='playing'))await page.keyboard.press('Escape');await shot('mobile-settings');assert.equal(await page.$eval('#settings-level-select',e=>!!e.getBoundingClientRect().width),true);
+ // The public campaign has no debug bridge. Hints must remain reachable from
+ // the real pause menu and expose all three hints without changing levels.
+ const publicUrl=new URL(root);publicUrl.search='?edition=foundation&level=1';
+ // The debug UI check above unlocked a hint in this same test browser.
+ await page.evaluate(()=>localStorage.clear());
+ await page.setViewport({width:1280,height:800,isMobile:false,hasTouch:false,deviceScaleFactor:1});
+ await page.goto(publicUrl.href,{waitUntil:'networkidle2'});
+ await page.waitForFunction(()=>document.body.dataset.playState==='ready');
+ assert.equal(await page.evaluate(()=>window.__NESI_DEMO_GAME__),undefined);
+ await page.click('#play-button');await page.waitForFunction(()=>document.body.dataset.playState==='playing');
+ await page.evaluate(()=>document.exitPointerLock?.());await page.waitForFunction(()=>!document.pointerLockElement);
+ if(await page.evaluate(()=>document.body.dataset.playState==='playing'))await page.keyboard.press('Escape');
+ await page.waitForFunction(()=>document.body.dataset.playState==='paused');
+ assert.ok(await page.$eval('#hint-button',e=>!e.hidden&&!!e.getBoundingClientRect().width));
+ await page.click('#hint-button');
+ for(let hint=1;hint<=3;hint++){
+   await page.waitForFunction(()=>!document.querySelector('#hint-unlock').disabled);
+   await page.click('#hint-unlock');
+   await page.waitForFunction(count=>document.querySelectorAll('#hint-text p').length===count,{},hint);
+   assert.equal(await page.$eval('#hint-text p:last-child',e=>e.textContent),`${hint}. ${CAMPAIGN[0].hints[hint-1]}`);
+ }
+ assert.ok(await page.$eval('#hint-unlock',e=>e.hidden));
+ assert.equal(await page.$eval('#level-select',e=>Number(e.value)),0);
+ report.publicHints={edition:'foundation',debug:false,level:1,unlocked:3,visible:true};
  }
  assert.deepEqual(errors,[]);
  assert.equal(report.routes.length,last-first+1);report.pass=true;

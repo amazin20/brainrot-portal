@@ -121,7 +121,7 @@ export class LabPhysics {
       collisionFilterGroup: SOLID, collisionFilterMask: enabled ? CARGO : 0,
     });
     body.labId = id;
-    this.solids.set(id, { body, half, target: center.clone(), remaining: 0 });
+    this.solids.set(id, { body, half, target: center.clone(), remaining: 0, inWorld: true });
     this.world.addBody(body);
     return body;
   }
@@ -157,7 +157,7 @@ export class LabPhysics {
       body.addShape(new ConvexPolyhedron({ vertices, faces }), segmentCenter.vsub(center));
     }
     body.labId = id;
-    this.solids.set(id, { body, half, target: center.clone(), remaining: 0, kind: 'ramp', profile: samples });
+    this.solids.set(id, { body, half, target: center.clone(), remaining: 0, kind: 'ramp', profile: samples, inWorld: true });
     this.world.addBody(body); this.cargoBody?.wakeUp();
     return body;
   }
@@ -211,9 +211,45 @@ export class LabPhysics {
   removeStaticBox(id) {
     const item = this.solids.get(id);
     if (!item) return false;
-    this.world.removeBody(item.body); this.solids.delete(id);
+    if (item.inWorld) this.world.removeBody(item.body);
+    this.solids.delete(id);
     this.cargoBody?.wakeUp();
     return true;
+  }
+
+  /** Cannon still integrates every static body in a large room. Keep the full
+   * authored colliders for players, rays and swept cargo, while simulating only
+   * static solids within reach of the cargo. A portal transfer updates the
+   * cargo pose before the next fixed step, which reactivates its destination.
+   * Kinematic bodies remain live so their movement can push the cargo. */
+  _streamDistantStatic() {
+    if (this.solids.size < 750) {
+      // If a large level removes enough solids at runtime, restore ordinary
+      // world registration for the remaining bodies before leaving this path.
+      if (this.streamingStatic) for (const item of this.solids.values()) if (!item.inWorld) {
+        this.world.addBody(item.body); item.inWorld = true;
+      }
+      this.streamingStatic = false;
+      return;
+    }
+    if (!this.cargoBody) return;
+    this.streamingStatic = true;
+    const cargo = this.cargoBody.position;
+    // Covers the greatest possible substep travel, the entire carried box,
+    // and a generous margin for sweeping and collision solver contacts.
+    const reach = Math.max(12, this.maxLinearSpeed * this.maxFrame + this.cargoSize);
+    for (const item of this.solids.values()) {
+      if (item.body.type !== Body.STATIC) continue;
+      const p = item.body.position, h = item.half;
+      const near = Math.abs(p.x - cargo.x) <= h.x + reach
+        && Math.abs(p.y - cargo.y) <= h.y + reach
+        && Math.abs(p.z - cargo.z) <= h.z + reach;
+      if (near && !item.inWorld) {
+        this.world.addBody(item.body); item.inWorld = true;
+      } else if (!near && item.inWorld) {
+        this.world.removeBody(item.body); item.inWorld = false;
+      }
+    }
   }
 
   createCargo({ position = [0, .41, 0], size = .78, mass = 3.2, quaternion, velocity, angularVelocity } = {}) {
@@ -460,6 +496,7 @@ export class LabPhysics {
     if (!Number.isFinite(dt) || dt < 0) throw new RangeError('Physics dt must be finite and nonnegative');
     this.accumulator += Math.min(this.maxFrame, dt);
     while (this.accumulator + EPSILON >= this.fixedStep) {
+      this._streamDistantStatic();
       for (const item of this.solids.values()) this._advanceKinematic(item, this.fixedStep);
       if (this.playerProxy) this._advanceKinematic(this.playerProxy, this.fixedStep);
       if (this.releasePlayerGrace && !this._overlapsPlayer()) {

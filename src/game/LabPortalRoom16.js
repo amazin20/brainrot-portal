@@ -15,7 +15,10 @@ export function buildRoom16(game,index=15){
  w.box([-17.5,2.8,0],[7,5.6,6],w.materials.wall);
  // The slit through the crossing island is a sight duct. From the lift the
  // well ceiling is visible through it; the original middle path stays solid.
- deck('Dry crossing island',4,9,-3,.2,7.4);
+ // Meet the cargo ledge at its edge instead of drawing the same walking tile
+ // twice under its southwest corner.
+ deck('Dry crossing island',4,8,-3,.2,7.4);
+ deck('Dry crossing island',8,9,-1.5,.2,7.4);
  deck('Dry crossing island',4,9,1.65,3,7.4);
  deck('Dry crossing island',4,4.3,.2,1.65,7.4);
  deck('Dry crossing island',7.1,9,.2,1.65,7.4);
@@ -35,8 +38,9 @@ export function buildRoom16(game,index=15){
  // lift dock while the light still supports the original companion.
  for(let i=0;i<22;i++)deck('Descending island return',5,9,3+i*.43,3+(i+1)*.43,7.4-(i+1)*5.4/22);
  deck('Descending stair landing',5,15,12.46,14,2);
- deck('Dry lift approach',9,15,2,13,2);
- for(let i=0;i<8;i++)deck('Lower service stair',11,15,13+i*.4,13+(i+1)*.4,2-(i+1)*.25);
+ deck('Dry lift approach',9,15,2,12.46,2);
+ // The lower court supplies the last tread at y=0.
+ for(let i=0;i<7;i++)deck('Lower service stair',11,15,13+i*.4,13+(i+1)*.4,2-(i+1)*.25);
  deck('Counterweight basin',-3,3,-3,3,2);
  // The well is reached by gravity, not by carrying through a doorway. Its
  // roof overhang hides the plate from low and lateral portal sight lines.

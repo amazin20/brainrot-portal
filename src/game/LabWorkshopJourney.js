@@ -55,7 +55,7 @@ export async function runWorkshopJourney(d,{route='floor-feed'}={}){
    assert(s.freight.progress>.98&&!s['dock-lock'].engaged,'Empty bridge should not open the cargo hood');
    mark('the bridge extends empty, leaving the protected receiving tray closed');
    walk(-5.4,5.6);walk(-9.5,5.6);walk(-9.5,11);
-   aim(1,new THREE.Vector3(2.61,5.9,1.61));aim(0,new THREE.Vector3(-3.55,.025,9.5));
+   aim(1,new THREE.Vector3(2.9,5.9,1.2));aim(0,new THREE.Vector3(-3.55,.025,9.5));
    walk(-5.5,9.5);pickup();walk(-4.28,9.5);wait(.2);game.interact();
    until(()=>s['dock-lock'].engaged,5,'The ceiling hatch did not receive the original companion');
    mark('the loose friend passed through the ceiling hatch onto the live receiver');wait(1.5);

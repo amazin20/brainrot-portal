@@ -15,6 +15,12 @@ export function buildGardenDoor(k,pad){
  arm.turned([[0,5.20],[.46,5.20],[.54,5.30],[.54,5.90],[.46,6],[0,6]],1);
  for(const x of [-7.45,-.55])arm.box([x,2.12,3.87],[.32,5.30,.38],0,.055);
  const armBinding=placeSolidModel(k,arm.finish(),[0,0,0],{parent:group,kinematic:true});
+ // The ceramic and the collision proxy share the fixed-step group. Render a
+ // copy of the non-interactive cantilever between ticks, never that group:
+ // its frame is also the raycast target and the mounted portal's anchor.
+ const visualArm=armBinding.model.clone(true);visualArm.name='Garden door interpolated cantilever';
+ visualArm.userData.solidModel=false;delete visualArm.userData.collisionParts;
+ visualArm.position.copy(group.position);w.root.add(visualArm);armBinding.model.visible=false;
  // The original column's support volume is retained; its flat shell is replaced.
  const column=new SolidAssembly('Garden door pedestal','garden');
  column.turned([[0,0],[.48,0],[.55,.25],[.35,.55],[.35,10.9],[.50,11],[.50,11.4],[0,11.4]],1);
@@ -22,10 +28,10 @@ export function buildGardenDoor(k,pad){
  const arc=[];for(let i=0;i<=24;i++){const a=Math.PI*.75+i*Math.PI/48;arc.push(new THREE.Vector3(4+Math.cos(a)*Math.sqrt(32),.027,-4+Math.sin(a)*Math.sqrt(32)));}
  const guide=new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(arc),24,.035,4,false),w.materials.accent);guide.name='Inlaid orbit of the garden door';w.root.add(guide);
  let previous=0;
- const door={group,panel,angle:0,target:0,braked:false,loaded:false,manualTurn:false,rate:Math.PI/6,
+ const door={group,panel,visualArm,angle:0,target:0,braked:false,loaded:false,manualTurn:false,rate:Math.PI/6,
   update(dt){previous=this.angle;this.loaded=pad.loaded();this.target=this.loaded||this.manualTurn?-Math.PI/2:0;if(!this.braked)this.angle+=THREE.MathUtils.clamp(this.target-this.angle,-this.rate*dt,this.rate*dt);group.rotation.y=this.angle;group.updateWorldMatrix(true,true);panel.collider.box.setFromObject(panel.mesh);game.physics?.updateStaticBox(panel.mesh.uuid,panel.collider.box,dt);armBinding.sync(dt);},
-  reset(){this.angle=previous=0;this.braked=false;this.loaded=false;this.manualTurn=false;this.update(0);},
-  render(alpha){group.rotation.y=THREE.MathUtils.lerp(previous,this.angle,alpha);},
+  reset(){this.angle=previous=0;this.braked=false;this.loaded=false;this.manualTurn=false;visualArm.rotation.y=0;this.update(0);},
+  render(alpha){visualArm.rotation.y=THREE.MathUtils.lerp(previous,this.angle,alpha);},
  };
  k.state.gardenDoor=door;k.ticks.push(dt=>door.update(dt));k.renders.push(a=>door.render(a));k.resets.push(()=>door.reset());
  k.control('garden-home',[7,0,15],()=>{door.manualTurn=false;door.braked=false;},'E — отпустить привод и тормоз двери');

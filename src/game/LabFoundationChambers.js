@@ -4,16 +4,16 @@ import {createLightBridge} from './LabLightBridge.js';
 import {StoredMotionDrive} from './LabResearchChambers.js';
 import {tracePortalRay,rayTouches,beamDrawing} from './LabPuzzleMechanics.js';
 const V=(...p)=>new THREE.Vector3(...p);
-const spec=(id,title,concept,description,accent,hints)=>({id:'foundation-'+id,title,concept,description,accent,assets:[1,2,11,22,23,24],hints});
+const spec=(id,title,concept,description,accent,hints,assets=[1,2,11,22])=>({id:'foundation-'+id,title,concept,description,accent,assets,hints});
 export const FOUNDATION_SPECS=Object.freeze([
  spec('first-connection','По ту сторону','One visible height difference teaches a linked pair and bringing a companion.','Выход близко, но этаж выше. Светлая керамика соединяет разные места.',0x64cec2,
  ['Светлая плита над галереей находится на другом этаже.','Создай пару: один портал рядом с собой, другой — над галереей.','Возьми друга клавишей E и пройди через связь. На руках стрелять нельзя — друга можно поставить обратно.']),
  spec('solid-light','Свет под ногами','The portal carries a useful surface, not only the traveller.','Проектор светит в керамику. Найди способ продолжить его дорогу.',0x70d9e4,
- ['Посмотри, куда упирается свет от проектора.','Вход перехватывает свет, а выход задаёт направление моста.','Можно идти прямо или использовать твёрдый служебный остров, чтобы переставить мост. Снизу есть пандус.']),
+ ['Посмотри, куда упирается свет от проектора.','Вход перехватывает свет, а выход задаёт направление моста.','Можно идти прямо или использовать твёрдый служебный остров, чтобы переставить мост. Снизу есть пандус.'],[1,2,11]),
  spec('moving-address','Адрес в движении','An aperture keeps the moving surface; riding and returning to the entrance are both legitimate.','Служебная кабина ходит между галереями. Её портал — такой же пассажир.',0xefbd75,
  ['Портал в кабине перемещается вместе с ней.','Кабиной управляют пульт на её настиле и пульт на левой галерее.','Можно ехать вместе с другом или отправить пустую кабину, вернуться к нижнему входу и пройти через него.']),
  spec('earned-momentum','Цена высоты','Discover the difference between entering a portal and entering with falling speed.','Высота падения превращается в полёт. Низкий этаж не наказывает за пробу.',0xdd8376,
- ['Наклонный щит меняет направление скорости, но сам не разгоняет.','Сравни шаг в напольный портал и падение в него с верхней площадки.','Пандус ведёт к высоте для перелёта. Перед падением подготовь оба портала и возьми друга.']),
+ ['Наклонный щит меняет направление скорости, но сам не разгоняет.','Сравни шаг в напольный портал и падение в него с верхней площадки.','Пандус ведёт к высоте для перелёта. Перед падением подготовь оба портала и возьми друга.'],[1,2,11]),
  spec('borrowed-power','Одной парой','The same two apertures must serve air, retained motion and a projected path in different orders.','Воздух, маховик и свет делят одну пару порталов. Ищи то, что сохраняется после разрыва связи.',0xddb271,
  ['Воздух должен попасть в лицевую решётку маховика. Кабина движется под весом.','Маховик ещё вращается без подачи, а червячный привод удерживает высоту.','Освободив пару, перенаправь свет через разрыв. Можно сначала подняться, а можно заранее подготовить мост и использовать запас вращения.']),
 ]);
@@ -30,8 +30,17 @@ function lesson(g,l){
  if(n===0&&!seen.has('foundation-move'))return ['foundation-move',globalThis.matchMedia?.('(pointer:coarse)')?.matches?'◉':'W A S D','Осмотрись и пройди несколько шагов. Выход и белые плиты можно увидеть с пола.',g.playerPosition.distanceTo(V(...l.spawn))>1.5];
  if(!g.heldCube&&near&&!seen.has('foundation-carry'))return ['foundation-carry','E','Это твой спутник. E — взять или поставить. Перед выстрелом поставь его на твёрдую площадку.',Boolean(g.heldCube)];
  if(g.heldCube){seen.add('foundation-carry');return ['foundation-carrying','E',n===0?'Друг у тебя. Через связанную пару можно пройти вместе. E — поставить.':'Друг у тебя. Перед работой с пушкой или пультом поставь его на постоянный настил.',false];}
- if(n===0&&!g.portals.ready)return ['foundation-pair','ЛКМ · ПКМ','Две кнопки создают два конца одной связи. Светлая керамика принимает портал; окрашенный корпус — нет.',false];
- if(n===0)return ['foundation-cross','↔','Посмотри сквозь портал: там другой этаж. Связь работает в обе стороны — можно вернуться за другом.',false];
+ if(n===0){
+  if(!g.portals.ready)return ['foundation-pair','ЛКМ · ПКМ','Две кнопки создают два конца одной связи. Светлая керамика принимает портал; окрашенный корпус — нет.',false];
+  if(g.teleportCount===0)return ['foundation-cross','↔','Посмотри сквозь портал: там другой этаж. Связь работает в обе стороны — можно вернуться за другом.',false];
+  if(!near&&l.cargoHoist?.target===1&&g.cargo.position.y>1)return l.cargoHoist.at(1)
+   ?['foundation-collect','E','Друг поднялся на платформе. Подойди к нему и возьми E.',false]
+   :['foundation-hoist-moving','↗','Платформа поднимает друга. Дождись её на верхнем этаже.',false];
+  const action=l.nearbyInteraction?.();
+  if(action&&l.cargoHoist?.target===0)return [action.kind,'E',action.text,false];
+  if(!near&&g.cargo.position.y<2)return ['foundation-reunite','↔','Друг остался внизу. Вернись через портал или подними его грузовой платформой.',false];
+  return null;
+ }
  const messages=[null,['СВЕТ','Свет проходит через порталы и держит вес. Разрыв связи убирает мост, но не твёрдые площадки.'],['E','Кабина управляется пультом. При смене причала портал остаётся на её панели. Не нужно торопиться.'],['ПАДЕНИЕ','Портал сохраняет скорость. Направление задаёт наклон щита, а разгон даёт высота падения.'],['НАБЛЮДАЙ','Кабина поднимается под весом. Маховик сохраняет вращение, а привод — высоту. Свет и воздух используют ту же пару.']];
  const m=messages[n];return ['foundation-rule-'+n,m[0],m[1],false];
 }

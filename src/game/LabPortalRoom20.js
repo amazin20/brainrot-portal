@@ -20,12 +20,12 @@ export function buildRoom20(game,index=19){
  // A connected side stair reaches the return-car gallery while the original
  // cargo still weights the ground mirror. Its western lane stays clear of
  // both floor-portal apertures and the canonical shots.
- deck('Western step apron',-23.5,-21.5,-10,-9,8);
+ deck('Western step apron',-23.5,-22,-10,-9,8);
  for(let i=0;i<32;i++)deck('Western return-gallery steps',-23.4,-22.1,-9+i*.6,-8.4+i*.6,8+(i+1)*.25);
- deck('Upper stair arrival',-23.4,-20.8,10.2,11,16);
+ deck('Upper stair arrival',-23.4,-21.5,10.2,11,16);
  deck('Upper connecting gallery',-21.5,-19,-2,11,16);
  deck('Momentum receiving gallery',-20.5,-15.1,-17,-2,16);
- deck('Momentum landing',-20.5,-15.1,-2,1.2,16);
+ deck('Momentum landing',-19,-15.1,-2,1.2,16);
  // A stable freight pocket on the balcony is also a real portal-bearing floor.
  const pocket=k.panel('upper-pocket',[-18,8.025,4],[0,1,0],4,9);
  deck('Second observation ledge',-15,-6,-19,-14,16);

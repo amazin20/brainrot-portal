@@ -51,6 +51,15 @@ export function buildSpringMailRoom(k,{baseWalls,closedExit}) {
     w.box([x,1.9,z],[.12,3.8,.12]);
     w.box([x,.12,z],[.36,.24,.36]);
   }
+  // A visible service sensor lowers the safety glass for a traveller who
+  // lands inside without setting the spring. They can carry the companion
+  // back out and try the same gravity drop again.
+  const serviceOccupied=()=>{
+    const p=k.game.playerPosition;
+    return k.game.playerGrounded&&Math.abs(p.x)<1.85&&Math.abs(p.z+5)<2.25&&p.y>.8&&p.y<4;
+  };
+  const serviceLamp=w.box([0,3.25,-6.82],[1.3,.07,.12],new THREE.MeshBasicMaterial({color:0xcba06d}),false);
+  k.ticks.push(()=>serviceLamp.material.color.setHex(serviceOccupied()?0x82e5cb:0xcba06d));
   const guards=[];
   // The grounded machine stops before the left glass. Its working crank
   // passes through an open-top slot, measured over the complete .72 m stroke.
@@ -62,13 +71,32 @@ export function buildSpringMailRoom(k,{baseWalls,closedExit}) {
     [[-1.94,1.14,-6.15],[.08,2.28,.32]],
     [[1.94,1.8,-5],[.08,3.6,3.88]],
     [[0,1.8,-6.94],[3.88,3.6,.08]],[[0,1.8,-3.06],[3.88,3.6,.08]],
-  ]) guards.push(glassLift(k,p,size,-3.75,()=>spring.latched));
+  ]) guards.push(glassLift(k,p,size,-3.75,()=>spring.latched||serviceOccupied()));
   k.state.springGuards=guards;
   // A low service tread raises the player's hands above the compressed cup's
   // rim. Retrieval is an ordinary E interaction after the glass retracts.
   w.box([0,.08,-3.05],[3.4,.16,1.3],w.materials.trim);
   w.floor(-1.7,1.7,-3.7,-2.4,.28);
-  k.control('release',[-5.8,0,-1.8],()=>spring.reset(),'E — освободить защёлку. Пружина вернёт приёмную чашу.');
+  // The latch cannot be released while the original loose load remains in
+  // the guarded cup: raising the cup and closing its glass would seal the
+  // companion inside. The player can use the service tread to retrieve it,
+  // then deliberately rearm the spring with this same release lever.
+  const occupiedCup=()=>{
+    const c=k.game.cargo?.position;
+    return !!c&&!k.game.heldCube&&Math.abs(c.x)<1.8&&Math.abs(c.z+5)<1.8&&c.y>.4&&c.y<4;
+  };
+  const release=k.control('release',[-5.8,0,-1.8],()=>{
+    if(spring.latched&&occupiedCup()){
+      k.game.callbacks.onToast?.('Сначала забери друга из чаши');
+      return;
+    }
+    spring.reset();
+  },'E — освободить защёлку. Пружина вернёт приёмную чашу.');
+  k.ticks.push(()=>{
+    release.lesson=spring.latched&&occupiedCup()
+      ?'Сначала забери друга из чаши; затем освободи защёлку.'
+      :'E — освободить защёлку. Пружина вернёт приёмную чашу.';
+  });
   closedExit(()=>spring.latched);
   k.wire([[1.6,.07,-5],[4.4,.07,-5],[4.4,.07,-11.5],[0,.07,-11.5]],()=>spring.latched);
   k.state.presentation={kind:'spring-and-bell-crank',cupRest:1.9,ceiling:10.6};
@@ -161,12 +189,17 @@ export function buildFreightBridgeRoom(k,{baseWalls,closedExit}) {
   k.resets.push(()=>lock.engaged=false);
   const hood=[];
   for(const [p,size] of [
-    // A narrow hatch admits the original box even at its carried rotation.
-    // The low hood still prevents a standing player from entering the bay.
-    [[.675,bankY+1.34,1.5],[2.55,.12,3.0]],
-    [[5.625,bankY+1.34,1.5],[5.15,.12,3.0]],
-    [[2.5,bankY+1.34,.475],[1.10,.12,.95]],
-    [[2.5,bankY+1.34,2.525],[1.10,.12,.95]],
+    // The freight hatch clears the original box through its full rotated
+    // footprint across camera aspects. A raised glass well around the opening
+    // admits a falling load while keeping a jumping traveller on the roof.
+    [[.5,bankY+1.34,1.5],[2.2,.12,3.0]],
+    [[5.8,bankY+1.34,1.5],[4.8,.12,3.0]],
+    [[2.5,bankY+1.34,.225],[1.8,.12,.45]],
+    [[2.5,bankY+1.34,2.625],[1.8,.12,.75]],
+    [[1.54,bankY+2.30,1.35],[.12,1.8,1.92]],
+    [[3.46,bankY+2.30,1.35],[.12,1.8,1.92]],
+    [[2.5,bankY+2.30,.39],[1.92,1.8,.12]],
+    [[2.5,bankY+2.30,2.31],[1.92,1.8,.12]],
     [[3.8,bankY+.65,-.01],[8.8,1.3,.10]],[[3.8,bankY+.65,3.01],[8.8,1.3,.10]],
     [[8.2,bankY+.65,1.5],[.12,1.3,3.0]],
   ])hood.push(glassLift(k,p,size,3.8,()=>lock.engaged));

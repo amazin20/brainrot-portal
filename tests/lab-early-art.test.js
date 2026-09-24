@@ -21,7 +21,7 @@ after(()=>disposeLabLevel(assets));
 const V=(...p)=>new THREE.Vector3(...p);
 const registries=['colliders','floors','portalPanels','cameraBlockers','aimBlockers'];
 
-for(const expected of baseline.rooms)test(`room ${expected.level} retains the accepted v35 physical and interaction contract`,async()=>{
+for(const expected of baseline.rooms)test(`room ${expected.level} matches the audited physical and interaction contract`,async()=>{
  if(assets.levelIndex!==expected.level-1)await assets.selectLevel(expected.level-1,false);
  assert.equal(digest(gameplayContract(assets)),expected.contract,
   'Authored colliders, portal frames, support geometry, camera blockers or interaction state changed');
