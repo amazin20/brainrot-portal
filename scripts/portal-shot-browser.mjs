@@ -241,11 +241,11 @@ export async function runPortalShotBrowser({ browser, baseUrl = 'http://127.0.0.
         const rect = button?.getBoundingClientRect();
         return rect?.width > 0 && rect?.height > 0 &&
           document.elementFromPoint(rect.left + rect.width / 2, rect.top + rect.height / 2) === button;
-      }, null, { timeout: 30000 });
+      }, { timeout: 30000 });
       await page.locator('#play-button').click();
       const started = await page.waitForFunction(() =>
         ['playing', 'error'].includes(window.__NESI_DEMO_GAME__?.state),
-      null, { timeout: 12000 }).then(() => true, () => false);
+      { timeout: 12000 }).then(() => true, () => false);
       if (started) break;
     }
     assert.equal(await page.evaluate(() => window.__NESI_DEMO_GAME__.state), 'playing',

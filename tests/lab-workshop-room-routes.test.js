@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import * as THREE from 'three';
 import {createHeadlessGame} from '../scripts/lab-headless.mjs';
 import {runV8Journey} from '../src/game/LabV8Journey.js';
+import {runWorkshopJourney} from '../src/game/LabWorkshopJourney.js';
 
 const game=await createHeadlessGame();
 after(()=>{game.physics.dispose();game.portals.dispose();});
@@ -65,4 +66,22 @@ test('the receiving panel refuses an early portal whose aperture intersects the 
   assert.equal(d.level.workshop.state['dock-lock'].engaged,false);
   assert.equal(game.state,'playing');
  }});
+});
+
+for(const edition of ['foundation','classic'])test(`${edition} room 10 recovers from an empty bridge trip, then wins with the original cargo`,async()=>{
+ game.chamberEdition=edition;await game.selectLevel(9,false);
+ const cargo=game.cargo,body=game.physics.cargoBody;
+ const report=await runV8Journey(game,{scenario:async d=>{
+  const bridge=d.level.workshop.state.freight,lock=d.level.workshop.state['dock-lock'];
+  d.walk(-9.5,11);d.walk(-9.5,5.6);d.walk(-5.4,5.6);d.walk(-5.4,4.7);
+  game.interact();d.wait(5);
+  assert.ok(bridge.progress>.98);assert.equal(lock.engaged,false);
+  game.interact();d.wait(5);
+  assert.ok(bridge.progress<.02);assert.equal(lock.engaged,false);
+  d.walk(-5.4,5.6);d.walk(-9.5,5.6);d.walk(-9.5,11);
+  await runWorkshopJourney(d);
+  assert.equal(game.state,'won');
+ }});
+ assert.equal(report.pass,true);assert.equal(report.resets+report.respawns,0);
+ assert.equal(game.cargo,cargo);assert.equal(game.physics.cargoBody,body);
 });
