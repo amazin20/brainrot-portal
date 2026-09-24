@@ -4,6 +4,7 @@ import {createHash} from 'node:crypto';
 import {execFileSync} from 'node:child_process';
 import puppeteer from 'puppeteer-core';
 import {CAMPAIGN} from '../src/game/LabCampaignLevels.js';
+import {FOUNDATION_SPECS} from '../src/game/LabFoundationChambers.js';
 import {ALL_LAB_ASSETS} from '../src/game/labAssets.js';
 const root=process.env.PAGE_URL||'http://127.0.0.1:4173/',out=process.env.EVIDENCE_OUT||'smoke-artifacts';
 const first=Number(process.env.NESI_FIRST??1),last=Number(process.env.NESI_LAST??CAMPAIGN.length);
@@ -282,7 +283,7 @@ try{
    await page.waitForFunction(()=>!document.querySelector('#hint-unlock').disabled);
    await page.click('#hint-unlock');
    await page.waitForFunction(count=>document.querySelectorAll('#hint-text p').length===count,{},hint);
-   assert.equal(await page.$eval('#hint-text p:last-child',e=>e.textContent),`${hint}. ${CAMPAIGN[0].hints[hint-1]}`);
+   assert.equal(await page.$eval('#hint-text p:last-child',e=>e.textContent),`${hint}. ${FOUNDATION_SPECS[0].hints[hint-1]}`);
  }
  assert.ok(await page.$eval('#hint-unlock',e=>e.hidden));
  assert.equal(await page.$eval('#level-select',e=>Number(e.value)),0);
