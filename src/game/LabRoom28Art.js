@@ -20,11 +20,11 @@ function buildCollectorManifolds(k,labels){
  }
  const binding=placeSolidModel(k,pipes.finish());
  for(const [name,label,x,y,z] of [
-  ['coral-low','А / НИЖНЕЕ УСТЬЕ',-14,5.8,8.38],
-  ['lagoon-low','Б / НИЖНЕЕ УСТЬЕ',14,5.8,-4.28],
-  ['coral-fall','А / ВЕРХНИЙ СЛИВ',-14,13.25,-5.25],
-  ['lagoon-fall','Б / ВЕРХНИЙ СЛИВ',14,13.25,-5.25],
-  ['coral-overflow','А / ВОЗВРАТ',-14,13.25,6.65],
+  ['coral-low','А · НИЗ',-14,5.8,8.38],
+  ['lagoon-low','Б · НИЗ',14,5.8,-4.28],
+  ['coral-fall','А · СЛИВ',-14,13.25,-5.25],
+  ['lagoon-fall','Б · СЛИВ',14,13.25,-5.25],
+  ['coral-overflow','А · ВОЗВРАТ',-14,13.25,6.65],
  ]){
   sign(labels,label,[x,y,z],[0,0,1],name==='coral-overflow'?7:8,.66);
  }
@@ -32,8 +32,7 @@ function buildCollectorManifolds(k,labels){
 }
 
 /** Solid freestanding housings, engraved datum marks and live fill columns.
- * Readings are duplicated on the nearby apparatus so looking at a basin is
- * enough to infer why a portal experiment stopped. */
+ * The central instrument explains flow; local meters show only their basin. */
 function buildTideGauges(k,tide,labels){
  const {game,world:w}=k,fillMat=new THREE.MeshBasicMaterial({color:0x5df3dd,toneMapped:false});
  const material={dark:w.materials.trim,metal:w.materials.wall,white:w.materials.lamp};
@@ -56,21 +55,40 @@ function buildTideGauges(k,tide,labels){
   backing.name=`Basin ${i?'B':'A'} gauge backing`;
   const display=labInstrument(labels,[meterX,8.40,12.31],{
    width:7.1,height:1.84,name:`Basin ${i?'B':'A'} live water-level gauge`,
-   read:()=>`${i?'Б':'А'} / ${tide.levels[i].toFixed(1)} м\n${i?'ПРИЛИВНОЙ ПОНТОН':'КОРАЛЛОВЫЙ КОЛОДЕЦ'}`,
+   read:()=>`${i?'Б':'А'} / ${tide.levels[i].toFixed(1)} м`,
   });gauges.push(display);
  }
- // The shared meter is suspended from a real gantry. A return walk passes
- // beneath it and remains clear even when the water is drained.
- for(const x of [-9.5,9.5])block([x,4.5,12],[.44,9,.62]);
- block([0,9.05,12],[19.5,.5,.75],'metal');
- block([0,7.25,12.12],[18.4,2.95,.46]);
- const status=labInstrument(labels,[0,7.25,12.39],{
-  width:17.7,height:2.55,name:'Conserved tidal circuit and live flow status',
-  read:()=>`${room28FlowStatus(tide.levels,tide.connection,tide.flow)}\nА + Б = ${tide.total.toFixed(1)} м ВОДЫ`,
+ // The opening camera faces this real rear wall. Place the shared reading in
+ // its clear upper bay, above the central walkway, instead of overhead at the
+ // spawn where it was outside the third-person camera's vertical field.
+ const farBacking=block([0,10.45,-22.22],[20.4,4.35,.43]);
+ farBacking.name='Tidal circuit rear-wall backing';
+ const status=labInstrument(labels,[0,10.45,-21.96],{
+  width:19.7,height:4.05,name:'Conserved tidal circuit and live flow status',
+  read:()=>`А ${tide.levels[0].toFixed(1)} + Б ${tide.levels[1].toFixed(1)} = ${tide.total.toFixed(1)} м\n${room28FlowStatus(tide.levels,tide.connection,tide.flow)}`,
  });
- const updateColumns=()=>columns.forEach((bar,i)=>{const h=Math.max(.015,tide.levels[i]);bar.scale.y=h;bar.position.y=.35+h/2;});
+ // Close readings sit beside the high mouths seen during both branches. The
+ // ruler below each display shows the same real water height as the basin.
+ // Their housings remain outside the portal faces and walking clearances.
+ const localColumns=[],localReadouts=[];
+ for(const [i,x] of [[0,-7.6],[1,21.3]]){
+  block([x,3.35,-5.28],[1.15,6.8,.44]);
+  const bar=game.box(x,.35,-5.00,.36,1,.09,fillMat,{parent:w.root,solid:false,camera:false,aim:false});
+  bar.name=`Basin ${i?'B':'A'} near-mouth water column`;bar.userData.keepMaterial=true;bar.castShadow=false;localColumns.push(bar);
+  for(const height of [0,3,5.3])block([x,height+.30,-4.91],[.68,.095,.06],'white',false);
+  block([x,7.45,-5.28],[.42,1.45,.44]);
+  const backing=block([x,9.6,-5.35],[5.6,2.15,.43]);
+  backing.name=`Basin ${i?'B':'A'} near-mouth readout backing`;
+  localReadouts.push(labInstrument(labels,[x,9.6,-5.09],{
+   width:5.35,height:1.93,name:`Basin ${i?'B':'A'} near-mouth live status`,
+   read:()=>`${i?'Б':'А'} / ${tide.levels[i].toFixed(1)} м`,
+  }));
+ }
+ const updateColumns=()=>[columns,localColumns].forEach(group=>group.forEach((bar,i)=>{
+  const h=Math.max(.015,tide.levels[i]);bar.scale.y=h;bar.position.y=.35+h/2;
+ }));
  k.ticks.push(updateColumns);k.renders.push(updateColumns);updateColumns();
- return {gauges,status,columns};
+ return {gauges,status,columns,localColumns,localReadouts};
 }
 
 /** A small visible current at the receiving portal. The stream exists only

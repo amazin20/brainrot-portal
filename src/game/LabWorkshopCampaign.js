@@ -16,6 +16,10 @@ export function buildWorkshopCampaign(game,index){
  const closedExit=condition=>{const d=k.door(-12);k.ticks.push(dt=>d.update(condition(),dt,k.time));return d;};
  const latch=(name,p,condition)=>{const art=w.box([p[0],p[1],p[2]],[.6,.2,.7],w.materials.accent,false);const state={engaged:false};k.state[name]=state;k.ticks.push(()=>{if(condition())state.engaged=true;art.rotation.z=state.engaged?-.6:0;});k.resets.push(()=>state.engaged=false);return state;};
  if(index===8){
+  // Start off centre: the original spring bed appears left of the actor and
+  // the friend remains visible on the approach. The receiving cup no longer
+  // sits directly behind the actor on the room centre line.
+  spawn=[3,0,10];
   buildSpringMailRoom(k,{baseWalls,closedExit});
  }else if(index===9){
   // Arrive beside the stair approach so the ordinary starting camera shows
@@ -29,5 +33,7 @@ export function buildWorkshopCampaign(game,index){
   k.ticks.unshift(()=>t.power=fan.touch(t.position));const lock=latch('ratchet',[2,1,-9.5],()=>t.wheel.work>70);closedExit(()=>lock.engaged);
   k.wire([[1,1,-8],[5,1,-8],[5,.07,-11.5],[0,.07,-11.5]],()=>t.clutch);
  }
- const level=k.finish(spawn,cargo,goal);level.workshop=k;return level;
+ const level=k.finish(spawn,cargo,goal);
+ if(index===8)level.spawnView={yaw:-.10,pitch:-.15};
+ level.workshop=k;return level;
 }

@@ -97,7 +97,10 @@ export function room18Return(d,{order='portal-first'}={}){
  for(let n=0;n<300&&game.teleportCount===before;n++){worldMove(0,.3);frame();}stop();check(game.teleportCount>before,'Medium return missed its well');
  until(()=>game.playerGrounded,5,'Hidden exit landing');walk(12.5,25);
  if(order==='send-ahead'&&game.state==='playing'){
-  walk(game.cargo.position.x-1,game.cargo.position.z);pickup();walk(12.5,25);
+  walk(game.cargo.position.x-1,game.cargo.position.z);
+  // The reunited pair can already satisfy the real goal while approaching
+  // the companion, especially in portrait framing. No pickup follows a win.
+  if(game.state==='playing'){pickup();walk(12.5,25);}
  }
  until(()=>game.state==='won',3,'Reunited behind the entrance');
 }

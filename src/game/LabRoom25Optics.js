@@ -7,19 +7,20 @@ export function buildRoom25Optics(k,pad,first,second){
  const w=k.world,g=k.game,source=V(18,3,16),direction=V(-1,0,0),receivers=[V(-7,3,-6),V(18,11.3,-6)];
  // A physical beam becomes readable in the long gallery and through a portal;
  // its endpoints are still the exact same traced light segments.
- const drawing=beamDrawing(w,0xffd894,.075),lamps=receivers.map(p=>ringDevice(w,p.toArray(),[-1,0,0],0xc2a677,.84));
+ const drawing=beamDrawing(w,0xffbe55,.12),lamps=receivers.map(p=>ringDevice(w,p.toArray(),[-1,0,0],0xc2a677,.96));
  const bladeFinish=new THREE.MeshStandardMaterial({color:0x324650,metalness:.43,roughness:.48});
  const blades=[{base:V(-11,3,-6),sign:1},{base:V(11,11.3,2),sign:-1}].map(({base,sign})=>{
   const mesh=w.box(base.toArray(),[.4,6,5],bladeFinish,false);
   mesh.userData.keepMaterial=true;
   const collider={mesh,box:new THREE.Box3().setFromObject(mesh),enabled:true,kinematic:true};g.colliders.push(collider);g.cameraBlockers.push(mesh);g.aimBlockers.push(mesh);
   // Ribbed enamel is mounted on the very shutter that blocks the real ray.
-  // The thin face details sit within its swept .4 × 6 × 5 collision volume.
+  // Its shallow surface finish projects just 4 cm beyond that solid blade.
   const a=new SolidAssembly(sign>0?'Lower counterweighted shutter':'Upper counterweighted shutter','launch');
-  a.materials[1].color.setHex(0x263f4a);a.materials[2].color.setHex(0xd7ad66);
-  for(const x of [-.191,.191]){
-   for(const z of [-2.24,2.24])a.box([x,0,z],[.018,5.72,.16],1,.006,false);
-   for(const y of [-2.4,-.8,.8,2.4])a.box([x,y,0],[.018,.045,4.55],2,.006,false);
+  a.materials[0].color.setHex(0x507b86);a.materials[1].color.setHex(0x263f4a);a.materials[2].color.setHex(0xe5b864);
+  for(const signX of [-1,1]){
+   a.box([signX*.211,0,0],[.018,4.9,3.92],0,.006,false);
+   for(const z of [-2.24,2.24])a.box([signX*.224,0,z],[.024,5.72,.16],1,.006,false);
+   for(const y of [-2.4,0,2.4])a.box([signX*.231,y,0],[.018,.12,4.55],2,.006,false);
   }
   const finish=a.finish();finish.userData.solidModel=false;delete finish.userData.collisionParts;finish.userData.visualOnly=true;mesh.add(finish);
   // Two fixed rails show the eight-metre reversed strokes, even while the

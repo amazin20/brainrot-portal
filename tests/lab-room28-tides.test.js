@@ -38,21 +38,44 @@ for(const aspect of [1.6,16/9])for(const options of [{},{route:'full-tide-observ
    assert.ok(box.min.x>game.firstLevel.bounds.minX+.2&&box.max.x<game.firstLevel.bounds.maxX-.2,
     `Basin ${basin} instrument clips the room's side wall`);
    assert.ok(box.min.y>7,'The basin readout must clear the recovery walkway');
+   const near=game.firstLevel.world.root.getObjectByName(`Basin ${basin} near-mouth readout backing`);
+   assert.ok(near,`Missing basin ${basin} near-mouth reading`);
+   const nearBox=new THREE.Box3().setFromObject(near);
+   assert.ok(nearBox.min.x>game.firstLevel.bounds.minX+.2&&nearBox.max.x<game.firstLevel.bounds.maxX-.2);
+   assert.ok(nearBox.min.y>8.45,'Local reading must clear the occupied floating deck');
+   const outlet=game.firstLevel.panels[basin==='A'?'coral-fall':'lagoon-fall'];
+   const face=outlet.getFrame().center.x,half=outlet.width/2;
+   assert.ok(nearBox.min.x>face+half+.15,
+    'Local reading must leave the portal face unobstructed');
   }
+  const rear=game.firstLevel.world.root.getObjectByName('Tidal circuit rear-wall backing');
+  const rearBox=new THREE.Box3().setFromObject(rear);
+  assert.ok(rearBox.min.x>game.firstLevel.bounds.minX+.2&&rearBox.max.x<game.firstLevel.bounds.maxX-.2);
+  assert.ok(rearBox.min.y>8,'Rear circuit meter must sit above the garden');
   assert.ok(art.pipes.colliders.length>=4,'Visible plumbing must have physical envelopes');
   assert.match(art.readouts.status.text,/КОНТУР РАЗОМКНУТ/);
-  assert.match(art.readouts.status.text,/А \+ Б = 6\.0 м ВОДЫ/);
+  assert.match(art.readouts.status.text,/А 6\.0 \+ Б 0\.0 = 6\.0 м/);
   assert.match(art.readouts.gauges[0].text,/А \/ 6\.0 м/);
   assert.match(art.readouts.gauges[1].text,/Б \/ 0\.0 м/);
+  assert.equal(art.readouts.localReadouts[0].text,'А / 6.0 м');
+  assert.equal(art.readouts.localReadouts[1].text,'Б / 0.0 м');
   assert.ok(Math.abs(art.readouts.columns[0].scale.y-6)<1e-10);
   assert.ok(art.readouts.columns[1].scale.y<.02);
   let firstHeights=null,returnObserved=false;
   const report=await runV8Journey(game,{journeyOptions:options,onMilestone(mark){
    const s=game.firstLevel.state;assert.ok(Math.abs(s.tides.levels[0]+s.tides.levels[1]-6)<1e-8);
+   if(mark.name==='the east gauge and receiving current show the moving tide'){
+    assert.ok(Math.abs(s.tides.flow)>.006);
+    assert.ok(art.current.ring.visible,'The current should be visible at the actual receiving portal');
+    assert.match(art.readouts.status.text,/ВОДА: А → Б/);
+    assert.equal(art.readouts.localReadouts[1].text,`Б / ${s.tides.levels[1].toFixed(1)} м`);
+   }
    if(mark.name==='equal tides reveal the middle garden'||mark.name==='a full tide reveals the observatory'){
     firstHeights=[...s.tides.levels];assert.equal(game.heldCube,null);assert.ok(Math.abs(game.cargo.position.y-s['lagoon-float'].position.y)<.9);
     assert.ok(Math.abs(art.readouts.columns[1].scale.y-s.tides.levels[1])<.02,'Visible meter follows the actual eastern basin');
     assert.ok(Math.abs(art.readouts.columns[0].scale.y-s.tides.levels[0])<.02,'Visible meter follows the actual western basin');
+    assert.ok(Math.abs(art.readouts.localColumns[1].scale.y-s.tides.levels[1])<.02,'Local waterline follows the actual eastern basin');
+    assert.ok(Math.abs(art.readouts.localColumns[0].scale.y-s.tides.levels[0])<.02,'Local waterline follows the actual western basin');
    }
    if(mark.name==='the same water returns beneath both travellers'){
     returnObserved=true;assert.equal(game.heldCube,null);assert.ok(game.playerPosition.y>5.19);assert.ok(Math.abs(game.cargo.position.y-s['coral-float'].position.y)<.9);

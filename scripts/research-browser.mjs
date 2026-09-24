@@ -21,7 +21,15 @@ try{
   assert.equal(build.levels,33);
   assert.deepEqual(await page.$$eval('#level-select option',a=>a.map(o=>Number(o.value))),[23,27,29,30,31,32]);
   const before=await page.evaluate(()=>localStorage.getItem('brainrot-portal.preferences.v24'));
-  await page.click('#play-button');await page.waitForFunction(()=>window.__NESI_DEMO_GAME__?.state==='playing');
+  await page.click('#play-button');let startupTimeout=null;
+  try{await page.waitForFunction(()=>['playing','error'].includes(window.__NESI_DEMO_GAME__?.state));}
+  catch(error){startupTimeout=String(error);}
+  const startup=await page.evaluate(()=>({state:window.__NESI_DEMO_GAME__?.state,error:document.querySelector('#error-detail')?.textContent,
+   missingModels:window.__NESI_DEMO_GAME__?.failures}));
+  if(startupTimeout||startup.state!=='playing'){
+   await page.screenshot({path:path.join(out,`${room}-startup-error.png`)});
+   throw new Error(`Research room ${room} failed to start: ${JSON.stringify({startupTimeout,...startup,pageErrors:errors})}`);
+  }
   await page.evaluate(()=>{const g=window.__NESI_DEMO_GAME__;g.renderer.setAnimationLoop(null);g.render();});
   await page.screenshot({path:path.join(out,`${room}-start.png`)});
   await page.evaluate(({room,record})=>{

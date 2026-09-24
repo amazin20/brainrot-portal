@@ -58,6 +58,12 @@ test('the new greenhouse is physical while its wall finish leaves all three fixe
  const level=g.firstLevel,art=level.gardenAtelier;
  assert.equal(art.facade.userData.visualOnly,true);
  assert.equal(art.facade.userData.collisionParts,undefined,'Thin wall finish must not create invisible route barriers');
+ const door=level.gardenDoor,rear=door.reverseCassette,depth=new THREE.Box3();
+ assert.equal(rear.parent,door.group,'The reverse face must turn with the physical door');
+ assert.equal(rear.userData.visualOnly,true);
+ assert.equal(rear.userData.collisionParts,undefined,'The reverse face must reuse the ceramic collider');
+ rear.traverse(node=>{if(node.isMesh){node.geometry.computeBoundingBox();depth.union(node.geometry.boundingBox);}});
+ assert.ok(depth.min.z>=3.799&&depth.max.z<=4,'Reverse relief must remain inside the moving door envelope');
  const binding=level.workshop.solidModels.find(entry=>entry.model===art.roof);
  assert.ok(binding?.colliders.length>10,'The conservatory roof needs actual short physical supports');
  for(const collider of binding.colliders){

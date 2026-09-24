@@ -80,6 +80,7 @@ export async function runRoom21(d,{order='cargo-first',recovery=false,offset=0,r
  room21Fall(d);
  check(game.playerPosition.y>6.9&&game.playerPosition.y<7.2,'First landing is not the service pocket '+game.playerPosition.toArray());
  if(recovery){game.clearPortals();wait(.3);walk(-1.9,-6);aim(1,level.panels['moving-cassette'].getFrame().center);mark('erased pair restored from permanent service pocket, with same cargo and load');}
+ let returnView;
  if(route==='service-car'){
   walk(19.8,-11);check(game.interact(),'Service brake interaction missed');wait(.3);
   check(level.cassette.braked&&level.serviceCar.floor.y<7.05,'Passenger car did not hold at service height');
@@ -87,15 +88,23 @@ export async function runRoom21(d,{order='cargo-first',recovery=false,offset=0,r
  }else{
   walk(0,-3.1);aim(0,level.panels['shared-well'].getFrame().center.clone().setZ(-1.5));
   mark('move only the entry to the service fall while the friend still supports the low exit');
-  // After a downward portal shot, turn back toward the receiver before
-  // crossing its gallery. Navigation should show the cargo rather than floor.
-  d.look(new THREE.Vector3(15,3.5,5));
+  returnView={yaw:game.yaw,pitch:game.pitch};
  }
  walk(21,-5);walk(21,7.6);walk(18,7.6);
  // Approach the load from inside the tray, not inside its corner post.
  // This changes only the ordinary route's walking target, never actor poses.
  walk(...room21ReceiverApproach(game.cargo.position));pickup();
+ if(returnView)d.look(new THREE.Vector3(15,3.5,5));
  mark('cargo recovered; the same prepared exit rises with its surface');
+ if(returnView){
+  // Ordinary look input turns back toward the already prepared lower entrance.
+  // Retain its original approach angle through the second portal crossing.
+  for(let n=24;n>0;n--){
+   const dyaw=Math.atan2(Math.sin(returnView.yaw-game.yaw),Math.cos(returnView.yaw-game.yaw));
+   game.yaw+=dyaw/n;game.pitch+=(returnView.pitch-game.pitch)/n;d.frame();
+  }
+  wait(.3);
+ }
  walk(18,7.6);walk(21,7.6);walk(21,-5);
  if(route==='service-car'){
   walk(24,-8);walk(25,-8);

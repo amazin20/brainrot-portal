@@ -5,6 +5,13 @@ export async function runRoom28(d,{route='equal-tide-garden',recoverFall=false,i
  const collect=()=>{walk(game.cargo.position.x+1,game.cargo.position.z);pickup();};
  walk(-14,13);aim(0,p['coral-low'].getFrame().center);walk(3,17);pickup();
  walk(21,13);walk(21,0);walk(14,0);release();mark('the collector opens and the lagoon begins to rise');aim(1,p[route==='full-tide-observatory'?'lagoon-fall':'lagoon-low'].getFrame().center);
+ if(!interrupt){
+  // Glance at the actual near-mouth gauge after a real shot while the water
+  // still moves. This is ordinary player camera movement, not a staged view.
+  wait(.3);look(p['lagoon-fall'].getFrame().center.clone().set(18.5,5.5,-5.2));
+  check(Math.abs(s.tides.flow)>.006,'The receiving tide stopped before its visible flow check');
+  mark('the east gauge and receiving current show the moving tide');
+ }
  if(interrupt){wait(.25);game.clearPortals();const stopped=s.tides.levels[1];wait(3);check(Math.abs(s.tides.levels[1]-stopped)<1e-8,'Disconnected collectors created water');mark('a broken connection holds both tides');walk(14,2.5);walk(21,2.5);walk(21,13);walk(-14,13);aim(0,p['coral-low'].getFrame().center);walk(21,13);walk(21,0);walk(14,0);aim(1,p['lagoon-low'].getFrame().center);}
  until(()=>s['lagoon-float'].position.y>(route==='full-tide-observatory'?5.25:2.90),40,'Eastern tide did not reach the chosen landing');wait(3);
  mark(route==='full-tide-observatory'?'a full tide reveals the observatory':'equal tides reveal the middle garden');

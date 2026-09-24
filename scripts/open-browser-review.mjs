@@ -22,7 +22,15 @@ try{
   if(process.env.BUILD_COMMIT)assert.equal(info.commit,process.env.BUILD_COMMIT,'Wrong production revision');
   const menu=await page.$$eval('#level-select option',items=>items.map(o=>Number(o.value)));assert.deepEqual(menu,[23,27,29,30,31,32]);
   const before=await page.evaluate(()=>({classic:localStorage.getItem('brainrot-portal.preferences.v24'),legacy:localStorage.getItem('nesi.preferences.v8')}));
-  await page.click('#play-button');await page.waitForFunction(()=>window.__NESI_DEMO_GAME__?.state==='playing');
+  await page.click('#play-button');let startupTimeout=null;
+  try{await page.waitForFunction(()=>['playing','error'].includes(window.__NESI_DEMO_GAME__?.state));}
+  catch(error){startupTimeout=String(error);}
+  const startup=await page.evaluate(()=>({state:window.__NESI_DEMO_GAME__?.state,error:document.querySelector('#error-detail')?.textContent,
+   missingModels:window.__NESI_DEMO_GAME__?.failures}));
+  if(startupTimeout||startup.state!=='playing'){
+   await page.screenshot({path:path.join(out,`${room}-startup-error.png`)});
+   throw new Error(`Open room ${room} failed to start: ${JSON.stringify({startupTimeout,...startup,pageErrors:errors})}`);
+  }
   await page.evaluate(()=>window.__NESI_DEMO_GAME__.renderer.setAnimationLoop(null));
   await page.select('#quality-select','high');
   await page.evaluate(()=>window.__NESI_DEMO_GAME__.render());

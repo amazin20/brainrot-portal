@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import {ResearchChamber} from './LabResearchArt.js';
+import {labInstrument} from './LabHumanLab.js';
 import {createLightBridge} from './LabLightBridge.js';
 import {StoredMotionDrive} from './LabResearchChambers.js';
 import {tracePortalRay,rayTouches,beamDrawing} from './LabPuzzleMechanics.js';
@@ -125,6 +126,27 @@ export function buildFoundation3(g,index=2){
  k.deck('Left control gallery',-27,-5,-22,-10,6);
  k.deck('Right receiving gallery',5,27,-22,-10,10);
  const c=k.carrier('travelling-address',[[-16,6,-10],[16,10,-10]],{width:20,depth:12});c.speed=4;c.panel.group.position.z=6;c.panel.sync(0);
+ // Four closed uprights and a travelling head frame carry the corner loads
+ // into the overhead trolleys. The side guards are part of the same moving
+ // collision volume; the open middle keeps the portal and both exits usable.
+ const carStructure=[];
+ const carPart=(p,size,finish)=>{
+  const mesh=k.block(p,size,finish,false,c.group);
+  c.group.updateWorldMatrix(true,true);
+  const collider=g.collisionProxy(new THREE.Box3().setFromObject(mesh),{kinematic:true});
+  carStructure.push({mesh,collider});return mesh;
+ };
+ for(const x of [-9.25,9.25]){
+  for(const z of [2,10])carPart([x,3,z],[.65,6,.65],'shell');
+  carPart([x,6.18,6],[.70,.70,8.7],'dark');
+  carPart([x,1.22,6],[.42,2.05,7.1],'dark');
+ }
+ for(const z of [2,10])carPart([0,6.18,z],[18.8,.70,.72],'shell');
+ const syncCarStructure=dt=>{
+  c.group.updateWorldMatrix(true,true);
+  for(const part of carStructure)g.syncCollision(part.collider,new THREE.Box3().setFromObject(part.mesh),dt);
+ };
+ k.ticks.push(syncCarStructure);k.resets.push(()=>syncCarStructure(0));
  // The car carries its own continuous edge markings; the fixed docks use a
  // different livery. Their alignment tells the player which surface moves.
  for(const x of [-8.8,8.8])k.block([x,.035,6],[.16,.035,10.4],'light',false,c.group,.012);
@@ -132,9 +154,14 @@ export function buildFoundation3(g,index=2){
  k.panel('dispatch-entry',[-27.4,2.5,12],[1,0,0]);
  const t=cabinConsole(k,c,[3,0,10]);
  k.control('gallery-destination',[-21,6,-17],()=>{c.target=1-c.target;},'E — отправить кабину. Можно оставить на ней свободного друга, а самому вернуться к нижнему порталу.');
+ // Two broad inlaid loading tracks frame the real floor approach from the
+ // lower portal to the cab. They break up the empty foreground in the opening
+ // camera without suggesting a second walkable surface or adding draw calls.
+ for(const x of [-22,-10])k.block([x,.035,16.2],[.55,.035,10.8],'secondary',false);
+ k.block([-16,.035,20.7],[12.5,.035,.55],'secondary',false);
  // Painted paths live a few centimetres above the real decks. They are
  // surface markings, never collision proxies or phantom stepping stones.
- for(const z of [11.35,12.65])k.block([-21.8,.035,z],[8,.035,.10],'light',false);
+ for(const z of [11.35,12.65])k.block([-20,.035,z],[13,.035,.38],'secondary',false);
  for(const [x,y] of [[-16,6],[16,10]]){
   k.block([x,y+.04,-19],[8,.035,.12],'light',false);
   k.block([x,y+4,-23.26],[11,.50,.18],'secondary');
@@ -155,11 +182,43 @@ export function buildFoundation3(g,index=2){
   const collider=g.collisionProxy(new THREE.Box3().setFromObject(mesh),{kinematic:true});
   hangers.push({mesh,trolley,wheel,collider,dx,z});
  }
- const syncHangers=(position,dt,physical)=>{for(const h of hangers){const low=position.y-.3,high=16.65;h.mesh.scale.y=high-low;h.mesh.position.set(position.x+h.dx,(high+low)/2,h.z);h.trolley.position.x=h.wheel.position.x=position.x+h.dx;h.wheel.rotation.z=position.x*.25;h.mesh.updateMatrixWorld(true);if(physical)g.syncCollision(h.collider,new THREE.Box3().setFromObject(h.mesh),dt);}};
+ const syncHangers=(position,dt,physical)=>{for(const h of hangers){const low=position.y+6.2,high=16.65;h.mesh.scale.y=Math.max(.2,high-low);h.mesh.position.set(position.x+h.dx,(high+low)/2,h.z);h.trolley.position.x=h.wheel.position.x=position.x+h.dx;h.wheel.rotation.z=position.x*.25;h.mesh.updateMatrixWorld(true);if(physical)g.syncCollision(h.collider,new THREE.Box3().setFromObject(h.mesh),dt);}};
  k.ticks.push(dt=>syncHangers(c.position,dt,true));k.renders.push(()=>syncHangers(c.group.position,0,false));k.resets.push(()=>syncHangers(c.position,0,true));syncHangers(c.position,0,true);
  const looseCargoAboard=()=>{const p=g.cargo?.position,f=c.floor;return p&&!g.heldCube&&p.x>f.minX+.3&&p.x<f.maxX-.3&&p.z>f.minZ+.3&&p.z<f.maxZ-.3&&Math.abs(p.y-f.y)<1.5;};
- k.display([0,14,-23.25],()=>`ПРИЧАЛ ${c.target?'II':'I'} / ${c.at(c.target)?'КАБИНА ОСТАНОВЛЕНА':'КАБИНА ДВИЖЕТСЯ'}\n${looseCargoAboard()?'ГРУЗ НА БОРТУ /':'ГРУЗ НЕ ЗАГРУЖЕН /'} ПОРТАЛ ЕДЕТ С КАБИНОЙ`,19,2.0);title(k,2,[0,19,-23.25],22);
- const l=finish(k,[-16,0,16],[-19,.6,13],[16,10,-17],{car:c,cabinTerminal:t,spawnView:{yaw:0,pitch:-.13}},
+ // Keep the original wall instrument's physical backing in the same place.
+ // Its picture sits higher and to the right, clear of the moving car's frame
+ // in the opening view; the lower carriage readout reports the loose load.
+ k.block([0,13,-22.83],[19.3,2.8,.28],'dark');
+ k.block([12,17.3,-22.83],[17.3,2.5,.28],'dark',false);
+ labInstrument(k,[12,17.3,-22.64],{read:()=>c.at(c.target)?`КАБИНА У ПРИЧАЛА ${c.target?'II':'I'}`:`В ПУТИ К ПРИЧАЛУ ${c.target?'II':'I'}`,width:17,height:2.2,name:'Station berth and motion readout'});
+ title(k,2,[0,21,-23.25],22);
+ const canvas=globalThis.document?.createElement?.('canvas');
+ if(canvas?.getContext){
+  canvas.width=1024;canvas.height=144;
+  const ctx=canvas.getContext('2d');
+  if(ctx){
+   const texture=new THREE.CanvasTexture(canvas);texture.anisotropy=4;
+   k.ownedTextures??=[];k.ownedTextures.push(texture);
+   const material=new THREE.MeshBasicMaterial({map:texture,toneMapped:false});
+   // Hang the front readout from the solid chassis below the deck lip. In the
+   // opening view it occupies a separate row below the distant wall screen.
+   k.block([5.5,-1.27,11.89],[8.0,.95,.70],'dark',false,c.group);
+   k.geometry(new THREE.PlaneGeometry(7.65,.69),material,[5.5,-1.27,12.26],new THREE.Quaternion(),{parent:c.group,batch:false,name:'Carriage front berth and cargo readout'});
+   k.geometry(new THREE.PlaneGeometry(6.6,1.15),material,[-9.00,2.0,3.4],new THREE.Quaternion().setFromUnitVectors(V(0,0,1),V(1,0,0)),
+    {parent:c.group,batch:false,name:'Carriage side berth and cargo readout'});
+   let previous='';
+   const repaint=()=>{
+    const reading=`${c.at(c.target)?'ПРИЧАЛ':'В ПУТИ →'} ${c.target?'II':'I'}   /   ${looseCargoAboard()?'ГРУЗ':'ПУСТО'}`;
+    if(reading===previous)return;
+    previous=reading;ctx.fillStyle='#102b35';ctx.fillRect(0,0,1024,144);
+    ctx.fillStyle=looseCargoAboard()?'#9bf0c8':'#f3d18e';ctx.fillRect(0,0,22,144);
+    ctx.textAlign='center';ctx.textBaseline='middle';ctx.font='700 74px sans-serif';ctx.fillStyle='#fff4dd';
+    ctx.fillText(reading,512,76,960);texture.needsUpdate=true;
+   };
+   k.ticks.push(repaint);repaint();
+  }
+ }
+ const l=finish(k,[-16,0,16],[-19,.6,13],[16,10,-17],{car:c,cabinTerminal:t,spawnView:{yaw:0,pitch:.06}},
   {introduces:['moving portal anchor'],routes:['ride-with-companion','send-empty-and-return','dispatch-companion-first'],roles:{'travelling-address':'the same aperture follows its physical carrier and its original cargo','dispatch-entry':'stable lower address reaches the current car position'}});return l;
 }
 export function buildFoundation4(g,index=3){
@@ -176,15 +235,19 @@ export function buildFoundation4(g,index=3){
  const pit=k.loadPad('fall-entry',[-17,-4,-6],10);
  const outlet=k.panel('inclined-exit',[-8,10,-11],[.435889894,.9,0],9,7);
  k.support(-9,-16.3,8.8,.42);k.support(-9,-5.7,8.8,.42);
- // The receiving wall is the visible braking surface for the portal flight.
- // Deep, solid ribs make its scale and impact direction legible from the air.
- k.block([24.6,21,-15],[1,12,19],'secondary');
- for(const z of [-22,-18,-14,-10,-6])k.block([23.92,21,z],[.32,10,.35],'dark');
- for(const y of [16.6,25.4])k.block([23.90,y,-15],[.34,.28,18.5],'metal');
- k.label('ПРИЁМ / +15 м',[23.7,19,-16],[-1,0,0],9,.9);
+ // Four broad arrestor plates visibly divide the braking wall into bays.
+ // Their closed steel faces and recessed chassis are both physical, while
+ // their seams point across the apron instead of drawing attention offscreen.
+ k.block([24.6,21,-15],[1,12,19],'dark');
+ for(const [z,finish] of [[-21.8,'metal'],[-17.3,'shell'],[-12.8,'metal'],[-8.3,'shell']]){
+  k.block([23.84,21,z],[.38,8.7,3.75],finish);
+  k.block([23.58,21,z],[.16,5.2,.15],'dark');
+ }
+ for(const z of [-24,-19.5,-15,-10.5,-6])k.block([23.48,21,z],[.50,10.4,.35],'dark');
+ for(const y of [16.5,25.5])k.block([23.48,y,-15],[.50,.36,18.5],'metal');
  // A height ruler is on a solid chute wall; no invisible bonus or checkpoint.
  for(const y of [0,4,8,12])k.label(`${y+4} м ПАДЕНИЯ`,[-31.18,y+2,-7],[1,0,0],7,.6);
- k.label('ПРИЁМНАЯ ГАЛЕРЕЯ',[15,17,-24.18],[0,0,1],12,.8);title(k,3,[0,26,-25.25],24);
+ k.label('ПРИЁМ / +15 м',[15,17.3,-24.18],[0,0,1],13,1.1);title(k,3,[0,26,-25.25],24);
  const l=finish(k,[-22,0,19],[-24,.6,17],[16,15,-17],{fallPad:pit,outlet,spawnView:{yaw:.15,pitch:-.12}},
   {introduces:['falling momentum'],routes:['carry-together','companion-first'],recovery:['miss-and-rebuild'],roles:{'fall-entry':'receives genuine falling speed','inclined-exit':'turns momentum toward the raised receiving apron'}});return l;
 }

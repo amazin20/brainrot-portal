@@ -30,7 +30,9 @@ test('room18 turn is hidden from the upper approach until the original freight l
   const report=await runV8Journey(game,{scenario:d=>{
    const {walk,until,level}=d;
    walk(6,14);until(()=>game.playerGrounded,3,'Foundation landing');walk(6,8);walk(1,21);walk(1,28);walk(-19.5,28);walk(-19.5,16.5);
-   walk(20,16.5);walk(20,-17.5);walk(-1.5,-17.5);walk(-1.5,-14);walk(-1.5,6);
+   // The west-crosswalk arrival leaves the shoulder camera beside the upper
+   // baffle at x=-1.5. Two steps left reach the shutter's true sight slot.
+   walk(20,16.5);walk(20,-17.5);walk(-1.5,-17.5);walk(-1.5,-14);walk(-2,5);
    assert.equal(level.state.sightShutter.loaded,false);
    assert.throws(()=>d.aim(1,level.panels.turn.getFrame().center),/Portal impact rejected/);
    assert.equal(game.portalShots.lastImpact.valid,false);

@@ -36,6 +36,16 @@ export function buildRoom18(game,index=17){
  };
  // The loading floor and upper corridor share a well, but never a shortcut to the receiver.
  deck('Freight loading floor',-5,5,9,15,8);deck('Loading crosswalk',-21,22,15,18,8);
+ // In the first view the shared well is below the loading deck. Recessed
+ // guide strips make its near lip and the cargo's approach legible without
+ // adding a rail that could catch a thrown companion or intercept a shot.
+ const guide=new THREE.MeshBasicMaterial({color:0xf1c566});
+ for(const x of [.65,2.65]){
+  const strip=w.box([x,8.027,11.75],[.09,.018,5.45],guide,false);
+  strip.userData.visualOnly=true;
+ }
+ const lipMark=w.box([0,8.032,9.07],[9.25,.018,.11],guide,false);
+ lipMark.userData.visualOnly=true;
  // Load paths lead into the return foundation, instead of looking like
  // weightless floating boards. Leave the common well and walking lanes open.
  for(const x of [-4.7,4.7])for(const z of [9.4,14.6])role(block([x,3.72,z],[.46,7.44,.46]),'freight');
@@ -135,7 +145,16 @@ export function buildRoom18(game,index=17){
  k.panel('return-well',[-20,.025,0],[0,1,0],6,6);
  k.panel('home',[12.5,14.2,19.03],[0,0,1],5.6,4.6);
  const shelves=[shelf,{center:V(0,8,14),normal:V(0,1,0),right:V(1,0,0),up:V(0,0,1),halfWidth:5,halfHeight:4}];
- const level=k.finish([0,8,15],[1.8,8.55,14],[12.5,7,25],{workshop:k,portalPuzzle:true,cargoOnAnyPad:()=>shelves.some(f=>cargoLoadsPlate(game.cargo,game.heldCube,f))});
+ const level=k.finish([-7,8,16.5],[1.8,8.55,14],[12.5,7,25],{workshop:k,portalPuzzle:true,cargoOnAnyPad:()=>shelves.some(f=>cargoLoadsPlate(game.cargo,game.heldCube,f))});
+ // Arrive on the supported west crosswalk: the loading deck, companion,
+ // open lower foundation and a second route are all visible in the WebGL view.
+ level.spawnView={yaw:-1.15,pitch:-.28};
+ level.getContextLesson=()=>{
+  const id='room18-freight-shaft';
+  if(game.tutorial?.seen.has(id))return null;
+  const moved=game.playerPosition.distanceToSquared(V(...level.spawn))>9;
+  return [id,'↘','Жёлтые направляющие ведут к шахте. Медный провод связывает грузовую полку с верхней заслонкой.',moved||game.portals.ready];
+ };
  level.puzzleGeometry={safeFloor:0,freightHeight:8,dropHeight:20,goalHeight:7,normalGaps:0,cargoWindow:{z:-10.5,minY:11,maxY:12.65},launchWindow:{x:-15.9,minY:15.4,maxY:21.5},footprint:48*53,portalRoles:{'shared-well':'one drop for cargo and player','rebound':'vertical change of viewpoint','freight':'cargo-only delivery and load for the sight shutter','turn':'perpendicular access to the reverse gallery, pre-addressed while the freight load opens the sight shutter or reached during a rebound','return-well':'medium return for a carried or separately released companion','home':'exit behind the original entrance'},deductions:['one shaft has two energy states','separate the travellers through a low cargo throat','the original companion opens a low upper-lip sight line','choose a pre-addressed direct fall or retarget during the rebound','approach the freight receiver from its reverse gallery','shoot into the exit from a later sight slot','carry the companion on the final flight or send it ahead through the same physical portal'],orders:['carry-together','send-ahead','direct-turn']};
  return level;
 }

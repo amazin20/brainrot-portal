@@ -141,6 +141,27 @@ test('mouse sensitivity and portal button mapping stay unchanged; shooting does 
   assert.deepEqual(f.shots, [0, 1]); assert.equal(f.game.yaw, -.1); assert.ok(Math.abs(f.game.pitch + .168) < 1e-12);
 });
 
+test('pointer-lock cursor recenter does not swing the camera, while the first real move still works', t => {
+  const f = fixture(t);
+  f.scope.emit('mousemove', { movementX: 289, movementY: 571, timeStamp: 1000 });
+  f.doc.pointerLockElement = f.canvas;
+  f.doc.emit('pointerlockchange', { timeStamp: 1002 });
+  f.scope.emit('mousemove', { movementX: -289, movementY: -571, timeStamp: 1003 });
+  assert.equal(f.game.yaw, 0); assert.equal(f.game.pitch, -.15);
+  f.scope.emit('mousemove', { movementX: 15, movementY: -8, timeStamp: 1004 });
+  assert.equal(f.game.yaw, -.03);
+  assert.ok(Math.abs(f.game.pitch + .1356) < 1e-12);
+
+  f.doc.pointerLockElement = null;
+  f.doc.emit('pointerlockchange', { timeStamp: 2000 });
+  f.scope.emit('mousemove', { movementX: 10, movementY: 10, timeStamp: 2001 });
+  f.doc.pointerLockElement = f.canvas;
+  f.doc.emit('pointerlockchange', { timeStamp: 2002 });
+  f.scope.emit('mousemove', { movementX: 3, movementY: 2, timeStamp: 2003 });
+  assert.equal(f.game.yaw, -.036);
+  assert.ok(Math.abs(f.game.pitch + .1392) < 1e-12);
+});
+
 test('ending an uncaptured gesture outside the canvas still releases it', t => {
   const f = fixture(t); f.canvas.setPointerCapture = undefined;
   f.look('pointerdown', 1); f.scope.emit('pointerup', { pointerId: 1 });

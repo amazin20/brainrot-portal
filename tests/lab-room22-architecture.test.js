@@ -3,12 +3,14 @@ import assert from 'node:assert/strict';
 import * as THREE from 'three';
 import {createHeadlessGame} from '../scripts/lab-headless.mjs';
 import {runV8Journey} from '../src/game/LabV8Journey.js';
+import {CAMPAIGN_ASSET_IDS} from '../src/game/labAssets.js';
 
 test('room22 visibly joins both shutters to one physical winch without closing their routes',async()=>{
  const game=await createHeadlessGame();
  try{
   await game.selectLevel(21,false);
   const level=game.firstLevel,{winch,conduitNames,signals,bands,staticBatches,staticSourceDraws}=level.freightArchitecture;
+  assert.ok(CAMPAIGN_ASSET_IDS.includes(39),'The production package must include the room-22 winch');
   assert.ok(staticSourceDraws>=20&&staticBatches.length<=4,'Fixed room-22 machinery is batched into at most four material draws');
   assert.equal(staticBatches.reduce((sum,batch)=>sum+batch.count,0),staticSourceDraws);
   assert.ok(level.spec.assets.includes(39),'The real winch model must load with this room');
@@ -17,6 +19,13 @@ test('room22 visibly joins both shutters to one physical winch without closing t
   assert.equal(west.floor.maxX,east.floor.minX,'The two coloured courts join without a floor gap');
   assert.equal(west.group.userData.keepMaterial,true);
   assert.equal(east.group.userData.keepMaterial,true);
+  const colouredDecks=level.world.surfaces.filter(surface=>surface.floor&&surface.group.userData.keepMaterial);
+  const deckTriangles=colouredDecks.reduce((sum,surface)=>sum+surface.group.children
+   .filter(node=>node.isInstancedMesh)
+   .reduce((tiles,node)=>tiles+(node.geometry.index?.count??node.geometry.attributes.position.count)/3*node.count,0),0);
+  assert.equal(colouredDecks.length,5);
+  assert.ok(deckTriangles<40000,`The five coloured courts must stay in the cheap folded-sheet visual kit (${deckTriangles} tris)`);
+  assert.notEqual(west.group.children.find(node=>node.isInstancedMesh).material.color.getHex(),east.group.children.find(node=>node.isInstancedMesh).material.color.getHex());
   assert.ok(winch.art.getObjectByName('Moving'),'The winch uses its articulated GLB source');
   assert.ok(game.colliders.some(entry=>entry.mesh.userData.collisionProxy&&entry.box.intersectsBox(new THREE.Box3().setFromObject(winch.art))),'The winch has a matching physical housing');
 

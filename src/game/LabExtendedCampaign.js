@@ -28,7 +28,10 @@ export function buildExtendedCampaign(game,index){
  const console=(p,fn,kind,lesson)=>consoleNode(world,terminals,p,fn,kind,lesson);
  const lowFriction=mesh=>{const b=game.physics?.solids.get(mesh.uuid)?.body;if(b)b.material.friction=.055;};
  if(index===5){
-  bounds={minX:-12,maxX:12,minZ:-19,maxZ:13};spawn=[2,0,10];cargoSpawn=[1,.55,9];
+  // The right-hand approach sees around the unplaced light-outlet slab to the
+  // true reflector and outside relay. It also leaves a full camera boom behind
+  // the actor and keeps the same companion nearby for either action order.
+  bounds={minX:-12,maxX:12,minZ:-19,maxZ:13};spawn=[8,0,5];cargoSpawn=[8,.55,7];
   world.walls(bounds,10);world.floor(-12,12,-19,13);
   patch('cab-entry',[-11.8,2.1,9],[1,0,0]);patch('cab-inner',[-9.8,2.1,-4.5],[1,0,0]);
   // A real low service slot admits sightlines, not a standing player.
@@ -36,7 +39,22 @@ export function buildExtendedCampaign(game,index){
   for(const z of [-7,-2])world.box([-7.5,5,z],[5,10,.25]);
   world.box([-10.05,5,-4.5],[.25,10,5]);
   for(const y of [1.25,2.8])world.box([-4.84,y,-4.5],[.06,.06,5],world.materials.accent,false);
-  patch('light-intake',[11.8,2.1,6],[-1,0,0]);
+  const intake=patch('light-intake',[11.8,2.1,6],[-1,0,0]);
+  // The inlet is a ten-metre portalable surface. Finish that actual span,
+  // rather than suggesting a smaller aperture inside its usable collider.
+  // These shallow fittings neither block the camera nor steal portal shots.
+  intake.group.traverse(mesh=>{if(mesh.isInstancedMesh&&mesh.userData.portalTile){
+   mesh.material=mesh.material.clone();mesh.material.color.setHex(0xb8cdd0);
+   mesh.material.emissive.setHex(0x31545b);mesh.material.emissiveIntensity=.1;
+  }});
+  const inletTrim=new THREE.MeshBasicMaterial({color:0x508d98});
+  const inletLight=new THREE.MeshBasicMaterial({color:0x93e3e6});
+  const inletDetail=(p,s,m)=>game.box(...p,...s,m,{camera:false,aim:false,parent:world.root});
+  for(const z of [.95,11.05])inletDetail([11.67,2.1,z],[.06,4.25,.10],inletTrim);
+  for(const y of [.02,4.18])inletDetail([11.67,y,6],[.06,.09,10.2],inletTrim);
+  for(const z of [2,4,6,8,10]){
+   inletDetail([11.65,4.18,z],[.07,.13,.45],inletLight);
+  }
   patch('light-outlet',[0,2.1,-3],[0,0,-1]);
   const emitter=ringDevice(world,[-10,2.1,6],[1,0,0],0x7ee5e9,.6);
   world.box([-10,.95,6],[.3,1.9,.3]);
@@ -55,7 +73,7 @@ export function buildExtendedCampaign(game,index){
   // The unturned reflector lets the beam continue to a visible service
   // receiver. Its wired outside servo offers a second, optical-first order;
   // without a real portal-routed beam the relay cannot rotate the mirror.
-  const pilot=ringDevice(world,[0,2.1,-10.5],[0,0,1],0xb28d6c,.40);
+  const pilot=ringDevice(world,[0,2.1,-10.5],[0,0,1],0xb28d6c,.55);
   const relayMaterial=new THREE.MeshBasicMaterial({color:0xb28d6c});
   world.box([1.5,.16,-10.5],[3,.07,.06],relayMaterial,false);
   world.box([3,.16,-9.25],[.06,.07,2.5],relayMaterial,false);
@@ -77,7 +95,7 @@ export function buildExtendedCampaign(game,index){
   relayLamp.position.copy(relay.position).add(V(0,.77,0));world.root.add(relayLamp);
   goal=world.goal([0,0,-16.3],[4.6,4]);
   update=dt=>{state.mirror=THREE.MathUtils.damp(state.mirror,state.target,5,dt);const angle=state.mirror*Math.PI/4;reflector.normal.set(Math.cos(angle),0,Math.sin(angle));mirror.group.quaternion.setFromUnitVectors(V(0,0,1),reflector.normal);
-   state.segments=tracePortalRay(game,V(-9.8,2.1,6),V(1,0,0),{reflectors:[reflector]});state.pilotLit=rayTouches(state.segments,V(0,2.1,-10.5),.30);
+   state.segments=tracePortalRay(game,V(-9.8,2.1,6),V(1,0,0),{reflectors:[reflector]});state.pilotLit=rayTouches(state.segments,V(0,2.1,-10.5),.47);
    state.lit=rayTouches(state.segments,V(9.7,2.1,-8));pilot.glow.material.color.setHex(state.pilotLit?0xb5f0c1:0xb28d6c);
    relayMaterial.color.setHex(state.pilotLit?0xb5f0c1:0xb28d6c);
    pilotBeacon.color.setHex(state.pilotLit?0xb5f0c1:0xb28d6c);
@@ -166,5 +184,6 @@ export function buildExtendedCampaign(game,index){
   nearbyInteraction(){const t=near();return t?{kind:t.kind,label:'E',text:t.kind==='mirror-relay'&&!state.pilotLit&&!state.target?'Малый приёмник не освещён. Проведи к нему луч через порталы.':t.lesson}:null;},cargoOnAnyPad:mechanicalContact,getLaunch:()=>null,getObjective:()=>spec.description,
   isWon:()=>game.playerGrounded&&goal.contains(game.playerPosition)&&!!game.cargo&&goal.contains(game.cargo.position)&&game.playerPosition.distanceTo(game.cargo.position)<3.3,
   diagnostics:()=>({level:index+1,id:spec.id,concept:spec.concept,uniqueTopology:true,noCheckpoints:true,portalSurfaces:game.portalPanels.length,goal:goal.position.toArray(),lit:state.lit,angle:state.angle,torque:state.torque,fan:state.enabled,piston:state.piston?.compression,latched:state.piston?.latched})};
+ if(index===5)level.spawnView={yaw:.12,pitch:-.15};
  return level;
 }

@@ -12,6 +12,25 @@ export function buildGardenDoor(k,pad){
  // surface() creates a second static backing proxy. A moving architectural
  // slab has one collider; remove the immobile duplicate from the registry.
  const duplicate=game.colliders.find(c=>c.mesh===panel.backing);if(duplicate)game.colliders.splice(game.colliders.indexOf(duplicate),1);
+ // The back of the ceramic is a closed, manufactured cassette. Its shallow
+ // ribs stay inside the ceramic's own moving collision envelope (z=3.8..4)
+ // and turn with that envelope. The front remains the clear portal face.
+ const rear=new SolidAssembly('Garden door / reverse cassette','garden');
+ rear.materials[0].color.setHex(0x9c695e);
+ rear.materials[1].color.setHex(0x26464b);
+ rear.materials[2].color.setHex(0xd9b777);
+ rear.materials[3].color.setHex(0x628578);
+ rear.box([-4,2.1,3.847],[6.12,4.79,.016],1,.005,false);
+ for(const x of [-5.94,-4,-2.06]){
+  rear.box([x,2.10,3.831],[1.77,4.36,.012],0,.004,false);
+  rear.box([x,2.10,3.818],[1.40,3.82,.010],3,.003,false);
+  for(const y of [.86,1.93,3.00])rear.box([x,y,3.807],[1.44,.08,.010],1,.003,false);
+ }
+ for(const x of [-7.01,-4.97,-3.03,-.99])rear.box([x,2.1,3.807],[.10,4.48,.010],1,.003,false);
+ for(const y of [-.28,4.48])rear.box([-4,y,3.807],[6.08,.09,.010],1,.003,false);
+ rear.arc(.49,.10,.016,2,[-4,2.10,3.808],new THREE.Quaternion(),0,Math.PI*2,false);
+ rear.box([-4,2.10,3.808],[.25,.25,.016],1,.003,false);
+ const reverseCassette=rear.finish();reverseCassette.userData.visualOnly=true;reverseCassette.userData.solidModel=false;delete reverseCassette.userData.collisionParts;group.add(reverseCassette);
  const arm=new SolidAssembly('Garden door cantilever','garden');
  // The dark segmented collar belongs to the turning assembly and has its
  // own short collision envelopes. The empty middle remains a real opening;
@@ -49,7 +68,7 @@ export function buildGardenDoor(k,pad){
  const arc=[];for(let i=0;i<=24;i++){const a=Math.PI*.75+i*Math.PI/48;arc.push(new THREE.Vector3(4+Math.cos(a)*Math.sqrt(32),.027,-4+Math.sin(a)*Math.sqrt(32)));}
  const guide=new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(arc),24,.035,4,false),w.materials.accent);guide.name='Inlaid orbit of the garden door';w.root.add(guide);
  let previous=0;
- const door={group,panel,visualArm,angle:0,target:0,braked:false,loaded:false,manualTurn:false,rate:Math.PI/6,
+ const door={group,panel,reverseCassette,visualArm,angle:0,target:0,braked:false,loaded:false,manualTurn:false,rate:Math.PI/6,
   update(dt){previous=this.angle;this.loaded=pad.loaded();this.target=this.loaded||this.manualTurn?-Math.PI/2:0;if(!this.braked)this.angle+=THREE.MathUtils.clamp(this.target-this.angle,-this.rate*dt,this.rate*dt);group.rotation.y=this.angle;group.updateWorldMatrix(true,true);panel.collider.box.setFromObject(panel.mesh);game.physics?.updateStaticBox(panel.mesh.uuid,panel.collider.box,dt);armBinding.sync(dt);},
   reset(){this.angle=previous=0;this.braked=false;this.loaded=false;this.manualTurn=false;visualArm.rotation.y=0;this.update(0);},
   render(alpha){visualArm.rotation.y=THREE.MathUtils.lerp(previous,this.angle,alpha);},

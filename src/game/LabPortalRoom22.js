@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import {Workshop} from './LabWorkshopKit.js';
 import {buildRoom22Shutters} from './LabRoom22Mechanics.js';
+import {architecturalCassetteGeometry} from './LabArchitecturalModels.js';
 export const ROOM22_SPEC={id:'opposed-freight-lock',title:'Обратная сторона шлюза',concept:'Один груз меняет два прохода в противоположных направлениях; постоянная высота позволяет забрать источник нагрузки',description:'Нижний проход и верхний обзор связаны одним противовесом. Найди место, где можно сохранить высоту и вернуть друга.',accent:0xa2d2bd,assets:[1,2,11,22,23,24,39],hints:['Кабели связывают белую грузовую опору с двумя противоположными створками.','Верхняя галерея не зависит от груза. Из её окна видна та самая опора внизу.','Верни друга с грузовой плиты на галерею, чтобы открыть верхний обзор. У высокой пары можно либо пройти вместе, либо сначала отправить друга с грузовой ступени.']};
 
 /** A single continuous machine, not three unrelated glowing puzzle markers.
@@ -97,14 +98,27 @@ function buildFreightArchitecture(k,shutters){
 
 export function buildRoom22(game,index=21){
  const k=new Workshop(game,ROOM22_SPEC,index),w=k.world;w.highFidelity=true;k.bounds={minX:-22,maxX:22,minZ:-24,maxZ:24};k.ceiling=24;w.walls(k.bounds,24,-1);
+ // Keep the coloured courts in the same inexpensive folded-sheet visual kit
+ // as premium cladding. A retained full-detail GLB floor tile is ~8000 tris:
+ // multiplied across this room's 763 visible tiles it overwhelmed WebGL.
+ const deckGeometry=architecturalCassetteGeometry({corner:.006,inset:.004});
  const deck=(name,x0,x1,z0,z1,y,color=null)=>{
   const surface=w.floor(x0,x1,z0,z1,y,{name});
   if(color){
-   // The existing authored floor is the colour field, not a coplanar skin.
-   // The art pipeline respects this material and the original collider.
+   // Replace only display geometry; the floor and its collider retain their
+   // original extent, and no second coplanar skin is drawn over the tiles.
    const coat=new THREE.MeshStandardMaterial({color,roughness:.73,metalness:.13});
    surface.group.userData.keepMaterial=true;
-   surface.group.traverse(node=>{if(node.isInstancedMesh&&!node.userData.portalTile)node.material=coat;});
+   const tiles=surface.group.children.find(node=>node.isInstancedMesh&&!node.userData.portalTile);
+   if(!tiles)throw new Error(`Missing coloured court tiles: ${name}`);
+   const width=x1-x0,height=z1-z0,cols=Math.ceil(width/2),rows=Math.ceil(height/2),cw=width/cols,ch=height/rows;
+   const matrix=new THREE.Matrix4(),position=new THREE.Vector3(),scale=new THREE.Vector3(cw-.035,ch-.035,.10),rotation=new THREE.Quaternion();
+   tiles.geometry=deckGeometry;tiles.material=coat;
+   let i=0;for(let x=0;x<cols;x++)for(let z=0;z<rows;z++){
+    matrix.compose(position.set(-width/2+cw*(x+.5),-height/2+ch*(z+.5),-.05),rotation,scale);
+    tiles.setMatrixAt(i++,matrix);
+   }
+   tiles.instanceMatrix.needsUpdate=true;tiles.computeBoundingBox();tiles.computeBoundingSphere();
   }
   w.box([(x0+x1)/2,y-.25,(z0+z1)/2],[x1-x0,.30,z1-z0],w.materials.trim);
  };

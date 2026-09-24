@@ -54,8 +54,18 @@ export function buildSpringMailRoom(k,{baseWalls,closedExit}) {
   const trussLamp=new THREE.MeshBasicMaterial({color:idle});
   const ramLamp=new THREE.MeshBasicMaterial({color:idle});
   w.box([0,10.81,-8.02],[3.3,.11,.10],trussLamp,false);
+  // The vertical readout is fixed to the supplied ram's side bearing by a
+  // short conduit. Its dark enclosure makes the changing travel legible and
+  // prevents the light from reading as an unrelated floating strip.
+  w.box([-5.55,3.35,-5.15],[.55,2.88,.22],w.materials.trim,false);
   const compressionBar=w.box([-5.55,3.35,-5],[.15,2.6,.15],ramLamp,false);
+  w.box([-5.55,4.83,-5.13],[.68,.18,.30],w.materials.trim,false);
   w.box([-5.55,1.97,-5],[.37,.12,.37],w.materials.trim,false);
+  const conduitFrom=V(-4.58,1.25,-5),conduitTo=V(-5.55,1.97,-5);
+  const conduitDelta=conduitTo.clone().sub(conduitFrom);
+  const conduit=new THREE.Mesh(new THREE.CylinderGeometry(.085,.085,conduitDelta.length(),8),w.materials.trim);
+  conduit.position.copy(conduitFrom).add(conduitTo).multiplyScalar(.5);
+  conduit.quaternion.setFromUnitVectors(V(0,1,0),conduitDelta.normalize());w.root.add(conduit);
   k.ticks.push(()=>{
     const compressed=Math.min(1,spring.compression/.72);
     trussLamp.color.setHex(spring.latched?active:idle);

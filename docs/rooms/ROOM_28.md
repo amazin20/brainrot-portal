@@ -52,6 +52,13 @@ portal only while water moves. The player can compare the height of the middle
 garden with the observatory, try either collector and infer which connection
 reaches each landing. These instruments explain cause and effect in the room;
 they neither prescribe a portal placement nor set any completion state.
+After native screenshot review, the shared meter is mounted on the visible
+rear wall above the crossing, and each basin has an additional live meter and
+waterline beside its upper collector. The original perimeter gauges remain for
+close inspection. All read from the same conserved simulation; no screen or
+waterline is a fabricated progress marker. The upper collectors, status boards
+and narrow pipework have separate physical clearances from the white shooting
+faces and the walking route.
 
 Coral crowns identify the west well; golden and cobalt armillary rings mark the
 upper optional route. Broad aquamarine slab foundations give the walking islands
@@ -72,7 +79,10 @@ status distinguishes reverse flow, equal pressure and a dry collector.
 Motion review milestones:
 
 * `the collector opens and the lagoon begins to rise`
+* `the east gauge and receiving current show the moving tide`
 * `the occupied coral island begins its return tide`
 
-Each occurs immediately before the final shot begins its real flow; a capture
-continuing through subsequent frames records the actual mechanism in motion.
+The new middle marker uses ordinary player looking after the receiving shot
+while the original six-unit tide is still moving. The other two markers occur
+before their final shots; continuing capture through subsequent frames records
+the actual mechanism in motion. No actor or camera position is staged.

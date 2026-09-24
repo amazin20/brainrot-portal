@@ -75,7 +75,7 @@
     {
       "level": 6,
       "id": "crossed-light",
-      "contract": "ea5469e52564833c71019db0f5faa17e236f475d6f5083151fe73be0b048e1fe",
+      "contract": "fd152f1e808af5d9b91b942694004ecc3f202222f8795b2c3368d7fff4939b90",
       "workload": {
         "nodes": 397,
         "meshes": 266,
@@ -117,7 +117,7 @@
     {
       "level": 9,
       "id": "spring-mail",
-      "contract": "18b9d163892d209270cb2ee85ff861fff5c004f6e960504d8e0c14c1d39ab71d",
+      "contract": "a31e722eba210023d74f37e6e8af95025655346c84d545cecd949ab8c6a3bf48",
       "workload": {
         "nodes": 398,
         "meshes": 268,
@@ -243,15 +243,15 @@
     {
       "level": 18,
       "id": "double-bottom",
-      "contract": "283643c7eeb3fee2409df4a30d34651ebf4fe9d094cd9a8407daf0308f8d3a98",
+      "contract": "3dd3b4f25ee7fa68801090eb98c947cb94b88f168d18e92a05c9d943eb94f640",
       "workload": {
-        "nodes": 1280,
-        "meshes": 1012,
-        "visibleMeshes": 544,
-        "triangles": 2027090,
+        "nodes": 1283,
+        "meshes": 1015,
+        "visibleMeshes": 547,
+        "triangles": 2027126,
         "lights": 3,
-        "materials": 62,
-        "geometries": 775
+        "materials": 63,
+        "geometries": 778
       }
     },
     {

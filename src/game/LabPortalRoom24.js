@@ -34,6 +34,21 @@ function buildGardenAtelier(k,panels){
   const z=-8-i*.5,y=6+(i+1)*.25;
   veneer([-20.5,y+.013,z-.458],[4.7,.018,.048],i%5===4?2:1);
  }
+ // The western face of the sight baffle reads as a three-bay shutter above
+ // an open observation slot. All cladding lies against the existing blocks:
+ // the gap between y=11.3 and y=15 stays completely unobstructed.
+ for(const z of [-21.18,-18,-14.82]){
+  veneer([-4.194,18.75,z],[.032,7.06,2.92],3);
+  for(const y of [16.15,18.72,21.29])veneer([-4.214,y,z],[.026,.105,2.66],1);
+  veneer([-4.223,18.75,z-1.29],[.025,6.63,.035],2);
+ }
+ for(const z of [-22.79,-19.59,-16.41,-13.21])veneer([-4.226,18.75,z],[.040,7.33,.12],1);
+ for(const y of [15.12,22.37])veneer([-4.222,y,-18],[.042,.13,9.7],2);
+ // A real sill and lintel identify the view opening without filling it.
+ veneer([-4.205,11.20,-18],[.035,.13,9.68],2);
+ veneer([-4.205,15.10,-18],[.035,.12,9.68],2);
+ for(const z of [-22.72,-18,-13.28])veneer([-4.197,5.65,z],[.032,11.12,.17],1);
+ for(const y of [1.42,5.62,9.82])veneer([-4.191,y,-18],[.027,.10,9.65],3);
  const shell=facade.finish();shell.userData.visualOnly=true;shell.userData.solidModel=false;delete shell.userData.collisionParts;w.root.add(shell);
 
  const frames=new THREE.Group();frames.name='Recessed fixed-portal doorways';frames.userData.visualOnly=true;w.root.add(frames);

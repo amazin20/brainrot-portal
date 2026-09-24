@@ -11,8 +11,9 @@ final high pair or send it ahead from the connected freight step.
 ## What changed in the visual revision
 
 - The full-size continuous floor is now two abutting structural surfaces.
-  Cool west freight tiles and warm east service tiles use their existing
-  authored floor mesh and colliders, without a second paint layer.
+  Cool west freight tiles and warm east service tiles use inexpensive folded
+  cassettes in the existing instanced floor surfaces, without a second paint
+  layer or any change to floor collision.
 - An articulated 28 KB cable winch has a real collision proxy, a fixed press
   gantry and a sheathed overhead link to both shutter mouths. The drum angle
   follows the real pad-driven shutter position, including reversal.
@@ -22,6 +23,9 @@ final high pair or send it ahead from the connected freight step.
   not block portal aiming or third-person camera rays.
 - Fixed machine casings and inlays are drawn in four instanced material batches;
   their separate hidden meshes remain available to collision and ray tests.
+- Five coloured decks draw 36,624 triangles together; the room's total visible
+  scene fell from 7.91 million to 1.84 million triangles in the same headless
+  scene count after replacing the retained source GLB tiles with folded sheets.
 - Upper and lower inspection apertures keep their original size. The cargo
   loading shelf, ordinary return stairs and shared low recovery court remain
   physically connected; no hidden checkpoint or additional puzzle object was
