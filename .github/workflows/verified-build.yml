@@ -314,13 +314,13 @@ jobs:
           retention-days: 14
 
   foundation:
-    name: New first chapter room ${{ matrix.room }} and exploratory return
+    name: New campaign room ${{ matrix.room }} and exploratory return
     runs-on: ubuntu-latest
     timeout-minutes: 25
     strategy:
       fail-fast: false
       matrix:
-        room: [1, 2, 3, 4, 5]
+        room: [1, 2, 3, 4, 5, 6, 7]
     steps:
       - uses: actions/checkout@v4
         with:

@@ -13,10 +13,10 @@ const make=async n=>{const g=await createHeadlessGame();g.chamberEdition='founda
 
 test('root starts a separate first chapter; explicit archives and later bookmarks keep their meaning',()=>{
  for(const q of ['', '?debug=1', '?edition=foundation'])assert.deepEqual(readFoundationEdition(q),{enabled:true,levelIndex:0});
- for(const n of [1,2,3,4,5])assert.deepEqual(readFoundationEdition('?level='+n),{enabled:true,levelIndex:n-1});
+ for(const n of [1,2,3,4,5,6,7])assert.deepEqual(readFoundationEdition('?level='+n),{enabled:true,levelIndex:n-1});
  for(const q of ['?edition=classic&level=1','?edition=open&level=31','?level=31','?mode=velocity'])assert.equal(readFoundationEdition(q).enabled,false);
- assert.deepEqual(FOUNDATION_INDICES.map(nextFoundationLevel),[1,2,3,4,0]);
- assert.equal(CAMPAIGN.length,33);assert.equal(new Set(FOUNDATION_SPECS.map(s=>s.id)).size,5);
+ assert.deepEqual(FOUNDATION_INDICES.map(nextFoundationLevel),[1,2,3,4,5,6,0]);
+ assert.equal(CAMPAIGN.length,33);assert.equal(new Set(FOUNDATION_SPECS.map(s=>s.id)).size,7);
  assert.ok(FOUNDATION_SPECS.every(s=>!CAMPAIGN.some(c=>s.id===c.id)));
 });
 test('new progression cannot inherit or overwrite archive solutions, hints or saves',()=>{
