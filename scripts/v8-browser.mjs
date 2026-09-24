@@ -83,14 +83,14 @@ try{
  await page.goto(startUrl(first),{waitUntil:'networkidle2'});await ready();
  assert.equal(await page.$$eval('#level-select option',a=>a.length),CAMPAIGN.length);
  assert.equal(await page.title(),'БРЕЙНРОТ ПОРТАЛ — физическая 3D-головоломка');
- if(first===1)assert.equal(requests.length,4);
+ if(first===1)assert.equal(requests.length,CAMPAIGN[0].assets.length);
  await shot('menu');await page.click('#play-button');await page.waitForFunction(()=>window.__NESI_DEMO_GAME__.state==='playing');
  if(first===1)await page.waitForFunction(()=>window.__NESI_DEMO_GAME__.performanceMonitor.stats.fps>0);
  await shot(`level-${first}-start`);
  report.initial=await page.evaluate(()=>({models:window.__NESI_DEMO_GAME__.assets.size,fps:document.querySelector('.lab-fps').textContent,
   oldHudHidden:getComputedStyle(document.querySelector('#hud')).display==='none',audioState:window.__NESI_DEMO_GAME__.audio.context?.state}));
  assert.ok(report.initial.oldHudHidden);
- if(first===1){assert.equal(report.initial.models,4);assert.equal(report.initial.audioState,'running');}
+ if(first===1){assert.equal(report.initial.models,CAMPAIGN[0].assets.length);assert.equal(report.initial.audioState,'running');}
  for(let index=first-1;index<last;index++){
    if(index>first-1){
      await clickMenu('#play-again-button');await page.waitForFunction(i=>window.__NESI_DEMO_GAME__?.levelIndex===i&&window.__NESI_DEMO_GAME__.state==='playing',{},index);await shot(`level-${index+1}-start`);
