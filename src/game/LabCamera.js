@@ -371,13 +371,16 @@ export class LabCamera {
     // the body in view during the brief gravity-relative horizon recovery.
     // The lens, mouse controls and portal clipping remain untouched.
     const tilt = this.viewUp.angleTo(UP);
-    if (step > 0 && tilt > .7 && this.framingPenalty(this.camera.position) > .15)
+    // Other portal rotations can invert the horizon during an airborne shot;
+    // their preserved aim must not receive this quarter-turn correction.
+    if (step > 0 && Math.abs(tilt - Math.PI / 2) < .2
+      && this.framingPenalty(this.camera.position) > .02)
       this.portalFramingActive = true;
     if (tilt < .1) this.portalFramingActive = false;
     if (step > 0 && this.portalFramingActive) {
       const assist = .92 * THREE.MathUtils.smoothstep(tilt, .1, 1.3);
       if (assist > 0) {
-        this.portalFramingPoint.copy(this.playerPivot).addScaledVector(this.forward, 2);
+        this.portalFramingPoint.copy(this.playerPivot).addScaledVector(this.forward, .8);
         this.lookPoint.lerp(this.portalFramingPoint, assist);
       }
     }

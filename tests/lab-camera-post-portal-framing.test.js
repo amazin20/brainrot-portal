@@ -6,7 +6,7 @@ import { runV8Journey } from '../src/game/LabV8Journey.js';
 import { LabCamera } from '../src/game/LabCamera.js';
 import { makePortalFrame, transformPortalPoint } from '../src/game/LabPortals.js';
 
-const headNdc = (game, point) => point.clone().add(new THREE.Vector3(0, 1.2, 0)).project(game.camera);
+const bodyNdc = (game, point, height) => point.clone().add(new THREE.Vector3(0, height, 0)).project(game.camera);
 const inFrame = point => Math.abs(point.x) < .9 && Math.abs(point.y) < .9 && point.z > -1 && point.z < 1;
 
 test('classic floor-to-wall flights frame the original traveller on their first rendered frame', async () => {
@@ -23,9 +23,10 @@ test('classic floor-to-wall flights frame the original traveller on their first 
         updateVisuals.apply(this, args);
         if (this.teleportCount !== 1 || samples.length >= 10) return;
         samples.push({
-          physical: headNdc(this, this.playerPosition),
-          visual: headNdc(this, this.playerGroup.position),
-          assist: this.cameraRig.portalFramingActive,
+          physical: bodyNdc(this, this.playerPosition, 1.2),
+          visual: bodyNdc(this, this.playerGroup.position, 1.2),
+          feet: bodyNdc(this, this.playerGroup.position, 0),
+          head: bodyNdc(this, this.playerGroup.position, 2.4),
         });
       };
       try {
@@ -35,10 +36,12 @@ test('classic floor-to-wall flights frame the original traveller on their first 
         assert.equal(report.resets + report.respawns, 0);
         assert.equal(samples.length, 10, `level ${index + 1} did not cross the first portal`);
         for (const [frame, sample] of samples.entries()) {
-          assert.equal(sample.assist, true, `level ${index + 1} frame ${frame + 1} lost recovery framing`);
-          assert.ok(inFrame(sample.physical), `level ${index + 1} frame ${frame + 1} physical head: ${sample.physical.toArray()}`);
-          assert.ok(inFrame(sample.visual), `level ${index + 1} frame ${frame + 1} rendered head: ${sample.visual.toArray()}`);
+          assert.ok(inFrame(sample.physical), `level ${index + 1} frame ${frame + 1} physical chest: ${sample.physical.toArray()}`);
+          assert.ok(inFrame(sample.visual), `level ${index + 1} frame ${frame + 1} rendered chest: ${sample.visual.toArray()}`);
+          assert.ok(inFrame(sample.head), `level ${index + 1} frame ${frame + 1} rendered head: ${sample.head.toArray()}`);
         }
+        assert.ok(inFrame(samples[0].feet),
+          `level ${index + 1} first rendered frame cut off the traveller's feet: ${samples[0].feet.toArray()}`);
       } finally {
         game.updateVisuals = updateVisuals;
       }
