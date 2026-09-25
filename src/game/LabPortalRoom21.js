@@ -15,6 +15,55 @@ export const ROOM21_SPEC = {
     'Освободи тормоз, доставь друга в приёмник и поставь портал на опустившуюся кассету. Сервисная площадка позволяет забрать друга и вернуться в нижний вход, пока тот же выход поднимается. Можно также удержать связанную пассажирскую платформу сервисным тормозом и подняться вместе с другом.'],
 };
 
+/** The stationary counterweight return and receiver head form the two largest
+ * silhouettes at spawn. Their flat graphite skins made the machinery look like
+ * missing geometry. These shallow, batched panels stay outside the collision,
+ * camera and aiming registries; the follower dial and its cable remain visible. */
+function dressCounterweightHousing(world) {
+  const materials={
+    enamel:new THREE.MeshStandardMaterial({name:'Counterweight mineral enamel',color:0x70868a,roughness:.72,metalness:.14}),
+    alloy:new THREE.MeshStandardMaterial({name:'Counterweight alloy edging',color:0xa8bbb5,roughness:.46,metalness:.36}),
+    recess:new THREE.MeshStandardMaterial({name:'Counterweight vent graphite',color:0x394d53,roughness:.82,metalness:.10}),
+    signal:new THREE.MeshBasicMaterial({name:'Counterweight warm status line',color:0xdfb66b}),
+  };
+  const batches=new Map(Object.values(materials).map(mat=>[mat,[]]));
+  const detail=(material,at,size)=>batches.get(material).push({at,size});
+  const {enamel,alloy,recess,signal}=materials;
+  // The original return occupies x -13.15..-2.05, y 12..24, with its front
+  // at z -.825. Leave a dark recess around the actual follower dial at y 14.
+  for(const x of [-11.15,-3.95])detail(enamel,[x,18,-.755],[3.25,10.6,.065]);
+  detail(enamel,[-7.55,20.1,-.755],[3.35,6.4,.065]);
+  for(const x of [-11.15,-7.55,-3.95]){
+    const low=x===-7.55?17.05:13.05;
+    detail(alloy,[x,low,-.713],[3.02,.085,.045]);
+    detail(recess,[x,x===-7.55?21.5:20.8,-.709],[2.68,.48,.055]);
+    for(const offset of [-.85,-.35,.15,.65])detail(alloy,[x+offset,x===-7.55?21.5:20.8,-.668],[.07,.31,.022]);
+  }
+  // One lit datum follows the fixed lip of the moving cassette housing. It
+  // cannot be mistaken for a portalable surface or a new interactive control.
+  detail(signal,[-7.55,12.26,-.716],[10.1,.075,.035]);
+  for(const x of [-12.65,-2.45])detail(alloy,[x,18,-.692],[.105,10.85,.06]);
+
+  // The receiver upper wall sits at x 5.15, above the framed observation
+  // windows. Split its broad near face into service access plates without
+  // adding a surface across either window or the freight opening below.
+  for(const z of [3.35,6,8.65]){
+    detail(enamel,[5.065,12.55,z],[.065,5.35,2.35]);
+    detail(recess,[5.012,14.35,z],[.035,.38,1.72]);
+    for(const dz of [-.55,-.18,.19,.56])detail(alloy,[4.984,14.35,z+dz],[.025,.19,.055]);
+    detail(signal,[4.998,10.21,z],[.026,.075,2.00]);
+  }
+  for(const z of [2.04,4.67,7.33,9.96])detail(alloy,[5.002,12.55,z],[.036,5.66,.095]);
+  const unit=new THREE.BoxGeometry(1,1,1),matrix=new THREE.Matrix4(),position=new THREE.Vector3(),scale=new THREE.Vector3(),rotation=new THREE.Quaternion();
+  for(const [material,items] of batches){
+    const mesh=new THREE.InstancedMesh(unit,material,items.length);
+    mesh.name=`Counterweight and receiver housing / ${material.name}`;
+    items.forEach(({at,size},i)=>mesh.setMatrixAt(i,matrix.compose(position.fromArray(at),rotation,scale.fromArray(size))));
+    mesh.instanceMatrix.needsUpdate=true;mesh.computeBoundingSphere();
+    mesh.castShadow=false;mesh.receiveShadow=false;world.root.add(mesh);
+  }
+}
+
 /** Complete replacement, not another extension of the old two-pass layout.
  * Five portalable faces, one load-operated cassette, three occupied heights.
  * The engine's gravity, cargo body, placement and win rules are unchanged. */
@@ -95,6 +144,7 @@ export function buildRoom21(game,index=20) {
 
   const cassette=buildPocketCassette(k,cargoSeat);
   k.state.cassette=cassette;
+  dressCounterweightHousing(w);
   const serviceCar=buildRoom21ServiceCar(k,cassette,cargoSeat);
   k.control('cassette-brake',[-16.7,4,-12.2],()=>cassette.toggleBrake(),
     'Тормоз кассеты. Груз опускает её; противовес поднимает освобождённую поверхность.');

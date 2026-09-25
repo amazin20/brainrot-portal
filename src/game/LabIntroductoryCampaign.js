@@ -23,6 +23,69 @@ const PALETTES=[
   {wall:0x566d76,floor:0x728481,accent:0xffdc89,sky:0xddd6c7},
 ];
 
+/** The first crossing needs a legible silhouette from the spawn camera. These
+ * fittings attach to the two bank edges, the ceiling and the non-portal end
+ * wall. Keep every mesh outside collision and portal ray registries. */
+function furnishFirstCrossing(world){
+  const root=new THREE.Group();root.name='Two banks / integrated architectural fittings';root.userData.visualOnly=true;
+  world.root.add(root);
+  const materials={
+    frame:new THREE.MeshStandardMaterial({color:0x30464c,roughness:.55,metalness:.43}),
+    enamel:new THREE.MeshStandardMaterial({color:0xd8d7c9,roughness:.55,metalness:.13}),
+    copper:new THREE.MeshStandardMaterial({color:0xc99557,roughness:.48,metalness:.36}),
+    signal:new THREE.MeshBasicMaterial({color:0x74dfd0,toneMapped:true}),
+  };
+  const elements=new Map(Object.keys(materials).map(key=>[key,[]]));
+  const part=(kind,position,size)=>elements.get(kind).push({position,size});
+
+  // Two unmistakable shore lines. All feet are set into the existing bank
+  // tiles; the continuous portalable floor of the trench stays uncovered.
+  for(const side of [-1,1]){
+    const z=side*4.32;
+    part('frame',[0,.028,z],[11.35,.055,.42]);
+    part(side>0?'copper':'signal',[0,.068,z+side*.06],[10.9,.018,.065]);
+    for(const x of [-5.28,5.28]){
+      part('enamel',[x,.085,z],[.22,.04,.30]);
+      part('copper',[x,.110,z],[.12,.013,.19]);
+    }
+  }
+
+  // A paired load-bearing arch traces the open drop without occupying the
+  // ceramic side-wall targets. The upper members join the actual roof.
+  for(const z of [-3.92,3.92]){
+    for(const side of [-1,1]){
+      const x=side*5.76;
+      part('frame',[x,5.59,z],[.37,6.50,.35]);
+      part('enamel',[x-side*.12,5.75,z],[.075,5.55,.15]);
+      part('copper',[x-side*.15,7.72,z],[.05,.24,.24]);
+    }
+    part('frame',[0,8.96,z],[11.8,.76,.45]);
+    part('signal',[0,8.55,z+.20],[9.9,.035,.05]);
+  }
+
+  // The receiving bank gets a distinctive fixed instrument face, bonded to
+  // its sealed end wall. Two coloured traces depict the two linked shores.
+  part('enamel',[0,5.30,-13.88],[8.4,2.9,.28]);
+  part('frame',[0,5.30,-13.70],[7.8,2.38,.11]);
+  for(const side of [-1,1]){
+    part(side<0?'copper':'signal',[side*1.90,5.55,-13.62],[2.72,.11,.025]);
+    for(let i=0;i<3;i++)part(side<0?'copper':'signal',[side*(.91+i*.91),5.20,-13.62],[.065,.22,.025]);
+  }
+  part('enamel',[0,5.55,-13.62],[.17,.55,.025]);
+  for(const x of [-3.98,3.98])part('signal',[x,5.30,-13.62],[.055,2.30,.025]);
+
+  const geometry=new THREE.BoxGeometry(1,1,1),matrix=new THREE.Matrix4(),center=new THREE.Vector3(),size=new THREE.Vector3(),rotation=new THREE.Quaternion();
+  for(const [kind,pieces] of elements){
+    const mesh=new THREE.InstancedMesh(geometry,materials[kind],pieces.length);
+    mesh.name=`Two banks / ${kind}`;mesh.userData.visualOnly=true;
+    pieces.forEach(({position,size:dimensions},index)=>{
+      mesh.setMatrixAt(index,matrix.compose(center.fromArray(position),rotation,size.fromArray(dimensions)));
+    });
+    mesh.instanceMatrix.needsUpdate=true;mesh.computeBoundingBox();mesh.computeBoundingSphere();root.add(mesh);
+  }
+  return root;
+}
+
 /** Five authored layouts, not one room repeated with new props. No random
  * topology, progress checkpoints, fake gravity boosters, or invisible wins. */
 export function buildLabCampaignLevel(game,index) {
@@ -88,6 +151,7 @@ export function buildLabCampaignLevel(game,index) {
     const trench=patch('trench-floor',[0,-2.982,1.35],[0,1,0],4,4);
     game.floors.push({minX:-2,maxX:2,minZ:-.65,maxZ:3.35,y:-2.982,mesh:trench.mesh,enabled:true});
     goal=world.goal([0,0,-11.5],[4.8,3.5]);
+    furnishFirstCrossing(world);
   } else if(index===1) {
     bounds={minX:-8,maxX:8,minZ:-16,maxZ:16};spawn=[3,0,11];cargoSpawn=[.2,.55,9];
     world.walls(bounds,6);world.floor(-8,8,-16,16);

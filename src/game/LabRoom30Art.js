@@ -13,7 +13,7 @@ function buildRouteConsole(name){
  a.materials[3].color.setHex(0x294a5d);
  // All relief remains inside the existing four-by-nine-metre plinth. Its
  // exposed face looks toward the player at positive Z.
- a.box([0,0,0],[4.04,4.04,9.04],1,.11,false);
+ a.box([0,0,0],[4.04,4.04,9.04],0,.11,false);
  for(const x of [-1.88,1.88]){
   a.box([x,.05,0],[.18,3.65,8.8],0,.04,false);
   for(const z of [-3.8,0,3.8])a.box([x,.70,z],[.22,.16,.42],2,.03,false);
@@ -40,15 +40,19 @@ function buildRouteConsole(name){
 
 function buildLaunchCore(){
  const a=new SolidAssembly('Twin-route launch core','launch');
- a.materials[0].color.setHex(0xd9e6e5);
- a.materials[1].color.setHex(0x183a52);
+ a.materials[0].color.setHex(0xf2dec5);
+ a.materials[0].emissive.setHex(0x57432f);
+ a.materials[0].emissiveIntensity=.16;
+ a.materials[1].color.setHex(0x285267);
  a.materials[2].color.setHex(0xffd37c);
- a.materials[3].color.setHex(0x294a5d);
+ a.materials[3].color.setHex(0x4d7988);
+ a.materials[3].emissive.setHex(0x193647);
+ a.materials[3].emissiveIntensity=.16;
  // The eight-metre core is already solid in the puzzle. Only the exposed
  // machinery above that existing collision volume needs its own envelopes.
- a.box([0,0,0],[16.1,8.08,12.1],1,.15,false);
+ a.box([0,0,0],[16.1,8.08,12.1],0,.15,false);
  for(const x of [-7.76,7.76])for(const z of [-5.75,5.75]){
-  a.box([x,0,z],[.45,8.0,.42],0,.06,false);
+  a.box([x,0,z],[.45,8.0,.42],1,.06,false);
   a.box([x,3.88,z],[.72,.25,.72],2,.04,false);
  }
  for(const side of [-1,1]){
@@ -59,6 +63,20 @@ function buildLaunchCore(){
     a.box([x,y,z+side*.08],[3.1,.06,.08],0,.015,false);
   }
   a.box([0,3.38,z+side*.08],[14.6,.16,.10],2,.02,false);
+  a.box([0,-3.38,z+side*.08],[14.6,.16,.10],2,.02,false);
+ }
+ // The player starts west of the machine and sees its side from very close
+ // range. Match the front's three readable bays on both side faces: a light
+ // enamel shell, inset blue cells and continuous warm framing at eye height.
+ for(const side of [-1,1]){
+  const x=side*8.10;
+  for(const z of [-3.5,0,3.5]){
+   a.box([x,-.18,z],[.14,4.8,2.45],3,.055,false);
+   for(const y of [-1.76,-.90,-.04,.82,1.68])
+    a.box([x+side*.085,y,z],[.075,.055,2.15],0,.015,false);
+  }
+  for(const y of [-3.42,3.42])a.box([x+side*.085,y,0],[.10,.19,10.8],2,.025,false);
+  for(const z of [-5.25,-1.75,1.75,5.25])a.box([x+side*.09,0,z],[.11,7.0,.20],1,.025,false);
  }
  // Ceiling-facing collectors connect the hub machine to the overhead
  // catwalk; four clear arms frame the well instead of a decorative crown.
@@ -79,9 +97,9 @@ export function buildRoom30Art(level){
  const root=new THREE.Group();root.name='Sunward launch laboratory architecture';root.userData.keepMaterial=true;world.root.add(root);
  const steel=new SolidAssembly('Launch hall structure, cladding and flight markers','launch');
  steel.materials[0].color.setHex(0xd9e6e5);
- steel.materials[1].color.setHex(0x183a52);
+ steel.materials[1].color.setHex(0x285267);
  steel.materials[2].color.setHex(0xffd37c);
- steel.materials[3].color.setHex(0x294a5d);
+ steel.materials[3].color.setHex(0x4d7988);
  for(const floor of world.floors){if(floor.y<20||!floor.mesh)continue;const {minX,maxX,minZ,maxZ,y}=floor;
   // Real broad soffits replace thin floating edge strips. The walking plane is unchanged.
   steel.box([(minX+maxX)/2,y-.42,(minZ+maxZ)/2],[maxX-minX,.64,maxZ-minZ],1,.08);

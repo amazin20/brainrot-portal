@@ -82,7 +82,8 @@ function buildGardenAtelier(k,panels){
   for(const edge of [-3.75,3.75])veneer([x+edge,18.5,-23.82],[.16,8.65,.035],1);
   veneer([x,22.83,-23.79],[8.12,.13,.035],2);
  }
- const shell=facade.finish();shell.userData.visualOnly=true;shell.userData.solidModel=false;delete shell.userData.collisionParts;w.root.add(shell);
+ const shell=facade.finish();shell.userData.visualOnly=true;shell.userData.solidModel=false;delete shell.userData.collisionParts;
+ shell.traverse(node=>{if(node.isMesh)node.castShadow=false;});w.root.add(shell);
 
  // A suspended conservatory canopy makes the courtyard a complete interior.
  // It stays above every accessible level, so the overhead framing cannot
@@ -106,7 +107,12 @@ function buildGardenAtelier(k,panels){
  const flat=new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(1,0,0),Math.PI/2);
  canopy.arc(7.35,.28,.14,1,[4,23.12,-4],flat,0,Math.PI*2,false);
  for(let n=0;n<4;n++)canopy.arc(7.35,.09,.11,2,[4,23.04,-4],flat,n*Math.PI/2+.10,Math.PI*.37,false);
- const canopyModel=canopy.finish();canopyModel.userData.visualOnly=true;canopyModel.userData.solidModel=false;delete canopyModel.userData.collisionParts;w.root.add(canopyModel);
+ const canopyModel=canopy.finish();canopyModel.userData.visualOnly=true;canopyModel.userData.solidModel=false;delete canopyModel.userData.collisionParts;
+ // The narrow overhead members produced aliased, repeating shadow bands on
+ // the yellow pavilion and floor. Their modeled depth supplies the silhouette;
+ // omitting only their shadow-map draw removes the visible shimmer in motion.
+ canopyModel.traverse(node=>{if(node.isMesh)node.castShadow=false;});
+ w.root.add(canopyModel);
 
  const frames=new THREE.Group();frames.name='Recessed fixed-portal doorways';frames.userData.visualOnly=true;w.root.add(frames);
  for(const [panel,highlight] of [[panels['garden-entry'],false],[panels['balcony-entry'],false],[panels['pavilion-receiver'],true]]){
@@ -120,6 +126,7 @@ function buildGardenAtelier(k,panels){
   a.box([0,hh+.25,.03],[panel.width+.87,.24,.20],1,.035,false);
   a.box([0,hh+.40,.11],[panel.width*.46,.06,.07],2,.015,false);
   const model=a.finish();model.userData.visualOnly=true;model.userData.solidModel=false;delete model.userData.collisionParts;
+  model.traverse(node=>{if(node.isMesh)node.castShadow=false;});
   model.position.copy(f.center).addScaledVector(f.normal,.04);
   model.quaternion.setFromRotationMatrix(new THREE.Matrix4().makeBasis(f.right,f.up,f.normal));
   frames.add(model);
@@ -143,6 +150,10 @@ function buildGardenAtelier(k,panels){
  }
  for(const x of [9.05,16.05,23.05])roof.beam([x,x===16.05?21.48:19.95,-22.4],[x,x===16.05?21.48:19.95,-12.85],.15,1);
  const binding=placeSolidModel(k,roof.finish());
+ // The rafters are thinner than a shadow-map pixel at courtyard distance.
+ // Their real collision and silhouette remain, while the main shell supplies
+ // the room's stable shadows.
+ binding.model.traverse(node=>{if(node.isMesh)node.castShadow=false;});
  return {facade:shell,frames,roof:binding.model,canopy:canopyModel};
 }
 export function buildRoom24(game,index=23){
