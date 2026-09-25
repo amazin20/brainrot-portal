@@ -10,7 +10,10 @@ permissions:
 jobs:
   floor:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    # Two full native WebGL routes each render at 15 capture frames/s. The
+    # first route takes about seven minutes on the CI software renderer; leave
+    # enough time for the second route and artifact upload as well.
+    timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
         with:

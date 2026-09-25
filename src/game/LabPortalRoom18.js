@@ -2,34 +2,109 @@ import * as THREE from 'three';
 import {Workshop} from './LabWorkshopKit.js';
 import {cargoLoadsPlate} from './LabPlateContact.js';
 const V=(x=0,y=0,z=0)=>new THREE.Vector3(x,y,z);
-export const ROOM18_SPEC={id:'double-bottom',title:'Двойное дно',concept:'Два этажа одной шахты и обратный путь через собственный грузовой маршрут',description:'Выход остался за спиной. Один колодец ещё не закончил свою работу.',accent:0xd4b378,assets:[1,2,11,23,24],hints:['Высота — свойство маршрута. Одна и та же шахта может дать два разных пути.','В низком канале пройдёт друг. Лестница возвращается к той же шахте выше; за подъёмом скрыт поперечный путь.','Отправь друга через низкий канал. С верхнего края падай в пару напольных порталов, затем замени потраченный вход на боковую поверхность в полёте. С новой галереи осмотри выход с обратной стороны и вернись за другом.']};
+export const ROOM18_SPEC={id:'double-bottom',title:'Двойное дно',concept:'Два этажа одной шахты и обратный путь через собственный грузовой маршрут',description:'Выход остался за спиной. Один колодец ещё не закончил свою работу.',accent:0xd4b378,assets:[1,2,11,23,24],hints:['Высота — свойство маршрута. Одна и та же шахта может дать два разных пути.','В низком канале пройдёт друг. Его вес на приёмной полке приподнимает заслонку обзора у верхнего края.','После грузового канала можно заранее направить падение к поперечному выходу через открытую заслонку. Или использовать отражающий напольный портал и перенаправить его уже в полёте.']};
 export function buildRoom18(game,index=17){
  const k=new Workshop(game,ROOM18_SPEC,index),w=k.world;
  k.bounds={minX:-24,maxX:24,minZ:-24,maxZ:29};k.ceiling=30;
  w.walls(k.bounds,30,-1);w.floor(-24,24,-24,29,0,{name:'Continuous return foundation'});
- w.materials.wall.color.setHex(0x44545b);w.materials.floor.color.setHex(0x74817f);
- const deck=(name,x0,x1,z0,z1,y)=>w.floor(x0,x1,z0,z1,y,{name});
+ // The later premium architectural pass reads these roles when it replaces
+ // visible structural tiles. White portal ceramics keep their exact frames.
+ const roleFor=(name,y)=>/freight|loading|foundation stair/i.test(name)?'freight':
+  /rising east|upper|same well/i.test(name)||y>=19?'upper':
+  /receiv|return|catch|inspection/i.test(name)?'return':null;
+ const role=(mesh,tone)=>{if(tone)mesh.userData.chapterColorRole=tone;return mesh;};
+ const deck=(name,x0,x1,z0,z1,y)=>{
+  const surface=w.floor(x0,x1,z0,z1,y,{name});
+  const tone=roleFor(name,y);role(surface.group,tone);
+  // Above the launch, a shallow side fascia avoids reducing the narrowly
+  // timed cross-shaft shot corridor just beneath the upper walkway.
+  if(y>0&&y<19&&!/stair|ris(?:e|ing)/i.test(name))
+   role(w.box([(x0+x1)/2,y-.24,(z0+z1)/2],[x1-x0,.34,z1-z0],w.materials.trim),tone);
+  return surface;
+ };
  const block=(p,s)=>w.box(p,s,w.materials.wall);
- const stair=(name,x0,x1,z0,z1,low,high)=>{const n=Math.ceil((high-low)/.25);for(let i=0;i<n;i++){const za=z0+(z1-z0)*i/n,zb=z0+(z1-z0)*(i+1)/n;deck(name,x0,x1,Math.min(za,zb),Math.max(za,zb),low+(high-low)*(i+1)/n);}};
+ const stair=(name,x0,x1,z0,z1,low,high)=>{
+  const n=Math.ceil((high-low)/.25);
+  for(let i=0;i<n;i++){
+   const za=z0+(z1-z0)*i/n,zb=z0+(z1-z0)*(i+1)/n;
+   const y=low+(high-low)*(i+1)/n;
+   // A solid riser under every tread makes the long climbing route a real
+   // stair, including the visible underside and the recoverable landings.
+   deck(name,x0,x1,Math.min(za,zb),Math.max(za,zb),y);
+   role(w.box([(x0+x1)/2,(low+y)/2,(za+zb)/2],[x1-x0,y-low,Math.abs(zb-za)],w.materials.wall),roleFor(name,y));
+  }
+ };
  // The loading floor and upper corridor share a well, but never a shortcut to the receiver.
  deck('Freight loading floor',-5,5,9,15,8);deck('Loading crosswalk',-21,22,15,18,8);
+ // In the first view the shared well is below the loading deck. Recessed
+ // guide strips make its near lip and the cargo's approach legible without
+ // adding a rail that could catch a thrown companion or intercept a shot.
+ const guide=new THREE.MeshBasicMaterial({color:0xf1c566});
+ for(const x of [.65,2.65]){
+  const strip=w.box([x,8.027,11.75],[.09,.018,5.45],guide,false);
+  strip.userData.visualOnly=true;
+ }
+ const lipMark=w.box([0,8.032,9.07],[9.25,.018,.11],guide,false);
+ lipMark.userData.visualOnly=true;
+ // Load paths lead into the return foundation, instead of looking like
+ // weightless floating boards. Leave the common well and walking lanes open.
+ for(const x of [-4.7,4.7])for(const z of [9.4,14.6])role(block([x,3.72,z],[.46,7.44,.46]),'freight');
+ for(const x of [-17,-8,9,17])role(block([x,3.72,17.72],[.46,7.44,.46]),'freight');
+ role(w.box([0,7.5,14.7],[10,.45,.38],w.materials.trim),'freight');
+ for(const z of [15.3,17.7])role(w.box([.5,7.42,z],[43,.46,.24],w.materials.trim),'freight');
  stair('Return foundation stair',-21,-18,28,18,0,8);
  stair('Rising east service corridor',18,22,15,-15,8,20);
  deck('Upper north turn',-3,22,-18,-15,20);deck('Upper return corridor',-3,-.3,-15,9,20);
  deck('Same well upper lip',-4,4,9,13,20);
+ // Outer-edge girders attach the upper U-shaped walk to the existing
+ // enclosing wall. The west flight slot below its inner edge stays open.
+ for(const z of [-17.75,-15.25])role(w.box([9.5,19.15,z],[25,.32,.2],w.materials.trim),'upper');
+ role(w.box([-2.92,19.15,-3],[.15,.32,24],w.materials.trim),'upper');
+ role(w.box([0,19.15,12.92],[8,.32,.12],w.materials.trim),'upper');
  for(const x of [17.8,22.2])block([x,19,-1],[.3,22,32]);
  // The 1.5m waist-height sight gaps pass rays, but never the 2.4m capsule.
  for(const x of [-3.2,.2])block([x,23.05,-3.75],[.3,3.1,22.5]);
  block([9.5,22.3,-18.2],[25.5,4.6,.3]);block([9.5,22.3,-14.8],[18.5,4.6,.3]);
  block([0,22.3,13.2],[8.4,4.6,.3]);block([-4.2,22.3,11],[.3,4.6,4.5]);
- // This suspended divider hides the transverse exit until the rebound changes the viewpoint.
- block([-13.7,24.75,4.2],[20.6,10.5,.4]);
+ // This suspended divider normally hides the transverse exit. Weight on the
+ // actual freight shelf retracts only a low sight shutter. Its 1.3 m opening
+ // passes a shot but cannot admit the complete standing player capsule.
+ block([-13.7,25.4,4.2],[20.6,9.2,.4]);
+ const sightShutterMesh=block([-13.7,20.15,4.2],[20.6,1.3,.4]);
+ const sightShutterCollider=game.colliders.find(c=>c.mesh===sightShutterMesh);
  // A cargo corridor: tall launch pocket, then one physically low throat.
  deck('Freight receiving shelf',-15,-9,-18,-1,11);
+ // Exposed rollers keep a weakly delivered companion moving through the low
+ // throat, independent of portal yaw or aspect ratio. Their force acts on the
+ // original free rigid body and stops before the shelf's pressure inset.
+ for(let z=-17;z< -7.5;z+=.8)w.box([-12,11.025,z],[5.4,.05,.09],w.materials.trim,false);
+ k.forces.push(()=>{
+  const b=game.physics?.cargoBody,p=game.cargo?.position;
+  if(!b||!p||game.heldCube||p.x< -14.8||p.x> -9.2||p.y<10.8||p.y>12.7||p.z< -18||p.z> -7.2)return;
+  if(b.velocity.z<3.2){b.force.z+=b.mass*22;b.wakeUp();}
+ });
+ w.box([-12,11.025,-4.5],[5.8,.045,6.8],w.materials.accent,false);
+ const shelf={center:V(-12,11,-4.5),normal:V(0,1,0),right:V(1,0,0),up:V(0,0,1),halfWidth:3,halfHeight:3.5};
+ const sightShutter={loaded:false,progress:0,mesh:sightShutterMesh,collider:sightShutterCollider};
+ // A visible, powered conduit connects the actual freight plate to its
+ // sight shutter. It follows the existing structural face and adds no gate.
+ k.wire([[-12,11.15,-4.5],[-15.15,11.15,-4.5],[-15.15,20.25,-4.5],[-15.15,20.25,3.95],[-13.7,20.25,3.95]],()=>sightShutter.loaded);
+ k.ticks.push(dt=>{
+  sightShutter.loaded=cargoLoadsPlate(game.cargo,game.heldCube,shelf);
+  sightShutter.progress=THREE.MathUtils.damp(sightShutter.progress,sightShutter.loaded?1:0,12,dt);
+  sightShutterMesh.position.y=20.15+1.55*sightShutter.progress;
+  sightShutterMesh.updateMatrixWorld(true);
+  game.syncCollision(sightShutterCollider,new THREE.Box3().setFromObject(sightShutterMesh),dt);
+ });
+ k.resets.push(()=>{sightShutter.loaded=false;sightShutter.progress=0;sightShutterMesh.position.y=20.15;sightShutterMesh.updateMatrixWorld(true);game.syncCollision(sightShutterCollider,new THREE.Box3().setFromObject(sightShutterMesh),0);});
+ k.state.sightShutter=sightShutter;
  block([-15.2,8,-11.5],[.3,16,13]);block([-8.8,8,-11.5],[.3,16,13]);
  block([-12,7.5,-18.2],[6.6,15,.3]);
  block([-12,15.025,-10.5],[6.4,4.75,.3]); // Bottom 12.65, cargo fits, player capsule does not.
  block([-12,18,-11.5],[6.6,.3,13]);
+ // The upper duct screens the turn from the north corridor. Its only early
+ // upper-floor sight is the shutter above the loaded freight shelf.
+ block([-11.8,21.3,-4],[5.8,6.6,1.2]);
  // The turning gallery doubles back along the exterior of the freight tunnel.
  deck('Perpendicular receiver',-4,17,-3,3,11);
  deck('Reverse freight gallery',-9,-4,-3,-1,11);
@@ -69,8 +144,17 @@ export function buildRoom18(game,index=17){
  k.panel('turn',[-23.45,18.7,0],[1,0,0],5.6,3.8);
  k.panel('return-well',[-20,.025,0],[0,1,0],6,6);
  k.panel('home',[12.5,14.2,19.03],[0,0,1],5.6,4.6);
- const shelves=[{center:V(-12,11,-4.5),normal:V(0,1,0),right:V(1,0,0),up:V(0,0,1),halfWidth:3,halfHeight:3.5},{center:V(0,8,14),normal:V(0,1,0),right:V(1,0,0),up:V(0,0,1),halfWidth:5,halfHeight:4}];
- const level=k.finish([0,8,15],[1.8,8.55,14],[12.5,7,25],{workshop:k,portalPuzzle:true,cargoOnAnyPad:()=>shelves.some(f=>cargoLoadsPlate(game.cargo,game.heldCube,f))});
- level.puzzleGeometry={safeFloor:0,freightHeight:8,dropHeight:20,goalHeight:7,normalGaps:0,cargoWindow:{z:-10.5,minY:11,maxY:12.65},launchWindow:{x:-15.9,minY:15.4,maxY:21.5},footprint:48*53,portalRoles:{'shared-well':'one drop for cargo and player','rebound':'vertical change of viewpoint','freight':'cargo-only delivery','turn':'perpendicular access to the reverse gallery','return-well':'medium return fall carrying cargo','home':'exit behind the original entrance'},deductions:['one shaft has two energy states','separate the travellers through a low cargo throat','replace the spent portal during ascent','approach the freight receiver from its reverse gallery','shoot into the exit from a later sight slot','bring the same cargo back through a third fall'],orders:['cargo-first']};
+ const shelves=[shelf,{center:V(0,8,14),normal:V(0,1,0),right:V(1,0,0),up:V(0,0,1),halfWidth:5,halfHeight:4}];
+ const level=k.finish([-7,8,16.5],[1.8,8.55,14],[12.5,7,25],{workshop:k,portalPuzzle:true,cargoOnAnyPad:()=>shelves.some(f=>cargoLoadsPlate(game.cargo,game.heldCube,f))});
+ // Arrive on the supported west crosswalk: the loading deck, companion,
+ // open lower foundation and a second route are all visible in the WebGL view.
+ level.spawnView={yaw:-1.15,pitch:-.28};
+ level.getContextLesson=()=>{
+  const id='room18-freight-shaft';
+  if(game.tutorial?.seen.has(id))return null;
+  const moved=game.playerPosition.distanceToSquared(V(...level.spawn))>9;
+  return [id,'↘','Жёлтые направляющие ведут к шахте. Медный провод связывает грузовую полку с верхней заслонкой.',moved||game.portals.ready];
+ };
+ level.puzzleGeometry={safeFloor:0,freightHeight:8,dropHeight:20,goalHeight:7,normalGaps:0,cargoWindow:{z:-10.5,minY:11,maxY:12.65},launchWindow:{x:-15.9,minY:15.4,maxY:21.5},footprint:48*53,portalRoles:{'shared-well':'one drop for cargo and player','rebound':'vertical change of viewpoint','freight':'cargo-only delivery and load for the sight shutter','turn':'perpendicular access to the reverse gallery, pre-addressed while the freight load opens the sight shutter or reached during a rebound','return-well':'medium return for a carried or separately released companion','home':'exit behind the original entrance'},deductions:['one shaft has two energy states','separate the travellers through a low cargo throat','the original companion opens a low upper-lip sight line','choose a pre-addressed direct fall or retarget during the rebound','approach the freight receiver from its reverse gallery','shoot into the exit from a later sight slot','carry the companion on the final flight or send it ahead through the same physical portal'],orders:['carry-together','send-ahead','direct-turn']};
  return level;
 }

@@ -4,6 +4,7 @@ import {createHash} from 'node:crypto';
 import {execFileSync} from 'node:child_process';
 import puppeteer from 'puppeteer-core';
 import {CAMPAIGN} from '../src/game/LabCampaignLevels.js';
+import {FOUNDATION_SPECS} from '../src/game/LabFoundationChambers.js';
 import {ALL_LAB_ASSETS} from '../src/game/labAssets.js';
 const root=process.env.PAGE_URL||'http://127.0.0.1:4173/',out=process.env.EVIDENCE_OUT||'smoke-artifacts';
 const first=Number(process.env.NESI_FIRST??1),last=Number(process.env.NESI_LAST??CAMPAIGN.length);
@@ -83,14 +84,14 @@ try{
  await page.goto(startUrl(first),{waitUntil:'networkidle2'});await ready();
  assert.equal(await page.$$eval('#level-select option',a=>a.length),CAMPAIGN.length);
  assert.equal(await page.title(),'БРЕЙНРОТ ПОРТАЛ — физическая 3D-головоломка');
- if(first===1)assert.equal(requests.length,4);
+ if(first===1)assert.equal(requests.length,CAMPAIGN[0].assets.length);
  await shot('menu');await page.click('#play-button');await page.waitForFunction(()=>window.__NESI_DEMO_GAME__.state==='playing');
  if(first===1)await page.waitForFunction(()=>window.__NESI_DEMO_GAME__.performanceMonitor.stats.fps>0);
  await shot(`level-${first}-start`);
  report.initial=await page.evaluate(()=>({models:window.__NESI_DEMO_GAME__.assets.size,fps:document.querySelector('.lab-fps').textContent,
   oldHudHidden:getComputedStyle(document.querySelector('#hud')).display==='none',audioState:window.__NESI_DEMO_GAME__.audio.context?.state}));
  assert.ok(report.initial.oldHudHidden);
- if(first===1){assert.equal(report.initial.models,4);assert.equal(report.initial.audioState,'running');}
+ if(first===1){assert.equal(report.initial.models,CAMPAIGN[0].assets.length);assert.equal(report.initial.audioState,'running');}
  for(let index=first-1;index<last;index++){
    if(index>first-1){
      await clickMenu('#play-again-button');await page.waitForFunction(i=>window.__NESI_DEMO_GAME__?.levelIndex===i&&window.__NESI_DEMO_GAME__.state==='playing',{},index);await shot(`level-${index+1}-start`);
@@ -263,6 +264,30 @@ try{
  // Narrow-screen controls and settings remain inside viewport.
  await page.setViewport({width:390,height:844,isMobile:true,hasTouch:true,deviceScaleFactor:1});await page.reload({waitUntil:'networkidle2'});await ready();
  await page.click('#play-button');await page.evaluate(()=>document.exitPointerLock?.());await page.waitForFunction(()=>!document.pointerLockElement);if(await page.evaluate(()=>window.__NESI_DEMO_GAME__.state==='playing'))await page.keyboard.press('Escape');await shot('mobile-settings');assert.equal(await page.$eval('#settings-level-select',e=>!!e.getBoundingClientRect().width),true);
+ // The public campaign has no debug bridge. Hints must remain reachable from
+ // the real pause menu and expose all three hints without changing levels.
+ const publicUrl=new URL(root);publicUrl.search='?edition=foundation&level=1';
+ // The debug UI check above unlocked a hint in this same test browser.
+ await page.evaluate(()=>localStorage.clear());
+ await page.setViewport({width:1280,height:800,isMobile:false,hasTouch:false,deviceScaleFactor:1});
+ await page.goto(publicUrl.href,{waitUntil:'networkidle2'});
+ await page.waitForFunction(()=>document.body.dataset.playState==='ready');
+ assert.equal(await page.evaluate(()=>window.__NESI_DEMO_GAME__),undefined);
+ await page.click('#play-button');await page.waitForFunction(()=>document.body.dataset.playState==='playing');
+ await page.evaluate(()=>document.exitPointerLock?.());await page.waitForFunction(()=>!document.pointerLockElement);
+ if(await page.evaluate(()=>document.body.dataset.playState==='playing'))await page.keyboard.press('Escape');
+ await page.waitForFunction(()=>document.body.dataset.playState==='paused');
+ assert.ok(await page.$eval('#hint-button',e=>!e.hidden&&!!e.getBoundingClientRect().width));
+ await page.click('#hint-button');
+ for(let hint=1;hint<=3;hint++){
+   await page.waitForFunction(()=>!document.querySelector('#hint-unlock').disabled);
+   await page.click('#hint-unlock');
+   await page.waitForFunction(count=>document.querySelectorAll('#hint-text p').length===count,{},hint);
+   assert.equal(await page.$eval('#hint-text p:last-child',e=>e.textContent),`${hint}. ${FOUNDATION_SPECS[0].hints[hint-1]}`);
+ }
+ assert.ok(await page.$eval('#hint-unlock',e=>e.hidden));
+ assert.equal(await page.$eval('#level-select',e=>Number(e.value)),0);
+ report.publicHints={edition:'foundation',debug:false,level:1,unlocked:3,visible:true};
  }
  assert.deepEqual(errors,[]);
  assert.equal(report.routes.length,last-first+1);report.pass=true;

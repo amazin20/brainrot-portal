@@ -1,5 +1,5 @@
 const check=(condition,message)=>{if(!condition)throw new Error(message);};
-export async function runRoom29(d,{carryRoute=false,recover=false,undercroft=false}={}){
+export async function runRoom29(d,{carryRoute=false,recover=false,undercroft=false,gardenCatch=false}={}){
  const {game,level,walk,look,aim,wait,until,pickup,enter,mark}=d,p=level.panels,s=level.state.gravity;
  if(undercroft){walk(-14,2);walk(-20,2);walk(-20,-8);walk(-3,-8);mark('the northern undercroft loops back without a reset');walk(-20,-8);walk(-20,2);walk(-14,2);}
  const promenade=()=>{walk(-14,4);walk(-18,4);walk(-18,18);walk(-8,18);walk(-8,6);walk(15,6);};
@@ -7,14 +7,27 @@ export async function runRoom29(d,{carryRoute=false,recover=false,undercroft=fal
  else{
   walk(game.cargo.position.x+1,game.cargo.position.z);pickup();walk(-12,11.5);look(p['root-ceiling'].getFrame().center.clone().setY(2));walk(-12,9.4);game.interact();wait(1);
   walk(-5,11);look(p['root-ceiling'].getFrame().center.clone().setY(5));mark('the root crystal reverses and the free companion rises');game.interact();wait(3);check(s.source.up,'The visible source crystal did not reverse');
-  promenade();walk(-5,5);aim(0,p['root-ceiling'].getFrame().center);
-  walk(9,5);aim(1,p['crown-ceiling'].getFrame().center);
-  until(()=>game.cargo.position.x>14.8&&game.cargo.position.y>15,18,'Friend did not cross the inverted ceiling garden');mark('the companion crosses a passage too low for its observer');
+  promenade();
+  if(gardenCatch){
+   // Reverse the second field *before* the traveller arrives and send the
+   // upward-moving body from the root ceiling to the garden wall. Its first
+   // field supplies the launch; the reversed crown catches it on the floor.
+   walk(16,5.5);game.interact();wait(.5);check(!s.crown.up,'Garden catch requires downward crown gravity');
+   mark('crown gravity reversed before the travelling friend arrives');
+  }
+  walk(-5,5);aim(0,p['root-ceiling'].getFrame().center);
+  walk(9,5);aim(1,p[gardenCatch?'garden-return':'crown-ceiling'].getFrame().center);
+  if(gardenCatch){
+   until(()=>game.cargo.position.x>14.8&&game.cargo.position.z< -7&&game.cargo.position.y<10.8,18,'Friend did not land from the root-to-garden portal');
+   mark('reversed crown gravity catches the directly routed traveller on the garden floor');
+  }else{
+   until(()=>game.cargo.position.x>14.8&&game.cargo.position.y>15,18,'Friend did not cross the inverted ceiling garden');mark('the companion crosses a passage too low for its observer');
+  }
   if(recover){walk(16,5.5);game.interact();until(()=>game.cargo.position.y<10,8,'Reversal did not return friend to its receiving floor');game.interact();until(()=>game.cargo.position.y>15,8,'The same body could not revisit the ceiling');mark('reversing twice is recoverable without resetting either traveller');}
  }
  walk(15,5);aim(1,p['garden-return'].getFrame().center);walk(-8,6.5);aim(0,p['observatory-return'].getFrame().center);
  if(carryRoute){walk(game.cargo.position.x+1,game.cargo.position.z);pickup();}
  enter(p['observatory-return']);until(()=>game.playerGrounded&&game.playerPosition.y>8.8,5,'Observer did not reach receiving garden');mark('borrow the pair for the independent grounded route');
- if(!carryRoute){walk(18,-9.5);game.interact();until(()=>game.cargo.position.y<10,8,'The crown did not release its traveller');walk(game.cargo.position.x+1,game.cargo.position.z);if(game.state==='playing')pickup();}
+ if(!carryRoute){if(!gardenCatch){walk(18,-9.5);game.interact();until(()=>game.cargo.position.y<10,8,'The crown did not release its traveller');}walk(game.cargo.position.x+1,game.cargo.position.z);if(game.state==='playing')pickup();}
  walk(17,-13);until(()=>game.state==='won',5,'The two garden routes did not meet');mark('the two versions of the garden meet at the same physical exit');
 }

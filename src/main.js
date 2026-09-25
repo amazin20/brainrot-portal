@@ -3,6 +3,7 @@ import {LabGame} from './game/LabGame.js';
 import {CAMPAIGN,campaignSpec} from './game/LabCampaignLevels.js';
 import {LabPreferences,QUALITY_PRESETS,applyLabQuality} from './game/LabPreferences.js';
 import {LabPlatform,loadYandexSDK} from './game/LabPlatform.js';
+import {holdInterruptedGame,settleInterruptedGame} from './game/LabPageLifecycle.js';
 import {readCampaignRoute,nextCampaignLevel} from './game/LabCampaignRoute.js';
 import {FOUNDATION_INDICES,readFoundationEdition,foundationStorage,nextFoundationLevel} from './game/LabFoundationEdition.js';
 import {OPEN_ROOM_INDICES,readOpenEdition,nextOpenRoom,openEditionStorage} from './game/LabOpenEdition.js';
@@ -18,7 +19,7 @@ const preferences=new LabPreferences(foundationEdition.enabled?foundationStorage
 const screens=['loading','start-screen','pause-screen','win-screen','error-screen'];
 const hudNodes={level:$('#level-number'),chamber:$('#chamber'),objective:$('#objective'),cargo:$('#cargo-status'),portals:$('#portal-status')};
 function hudText(key,value){const node=hudNodes[key];if(node.textContent!==value)node.textContent=value;}
-let platform,entering=false,hintBusy=false;
+let platform,entering=false,hintBusy=false,pendingInterruption=false;
 function screen(id,visible){const e=$('#'+id);e.classList.toggle('screen--active',visible);e.setAttribute('aria-hidden',String(!visible));e.inert=!visible;}
 function hideScreens(){screens.forEach(id=>screen(id,false));}
 function clearInput(){game.resetInput();}
@@ -26,8 +27,15 @@ function syncActivity(){const active=game.state==='playing'&&!holds.size;platfor
 function setState(state){document.body.dataset.playState=state;document.documentElement.dataset.runtimeState=state;
   const mobile=$('#mobile-controls'),active=state==='playing';mobile.classList.toggle('mobile-controls--active',active);mobile.inert=!active;mobile.setAttribute('aria-hidden',String(!active));
   syncActivity();}
-function hold(reason,on){on?holds.add(reason):holds.delete(reason);game.externalBlocked=holds.size>0;
+function hold(reason,on,deferPause=false){pendingInterruption ||= deferPause;
+  on?holds.add(reason):holds.delete(reason);game.externalBlocked=holds.size>0;
+  if(!on)pendingInterruption=settleInterruptedGame(game,game.externalBlocked,pendingInterruption);
   clearInput();game.accumulator=0;game.lastFrame=performance.now();document.body.dataset.externalPause=String(holds.size>0);syncActivity();}
+function reconcileFocus(){
+  // A click proves the document is active even if a transient blur never
+  // delivered its matching focus event. Keep real hidden/ad holds intact.
+  if(holds.has('focus')&&!document.hidden&&document.hasFocus())hold('focus',false);
+}
 function diagnostics(){const d=game.diagnostics();Object.assign(document.documentElement.dataset,{gameReady:String(d.modelsLoaded>0&&!d.missingModels.length),modelsLoaded:String(d.modelsLoaded),levelIndex:String(game.levelIndex)});
   if(debug)window.__NESI_DEMO_DIAGNOSTICS__={...d,settings:preferences.value,adBusy:platform?.busy};return d;}
 function failure(error){console.error(error);clearInput();game.renderer?.setAnimationLoop(null);game.state='error';setState('error');hideScreens();$('#error-detail').textContent=error?.message||String(error);screen('error-screen',true);}
@@ -40,7 +48,7 @@ function showVictory(){
   $('#win-title').innerHTML='Вместе<br />получилось<span>.</span>';
   $('#win-screen .eyebrow').textContent='ДРУГ ТОЖЕ ДОБРАЛСЯ';
   $('#play-again-button').textContent=last?'К первому испытанию ↻':'Следующий уровень →';
-  $('#win-screen .muted').textContent=last?(foundationEdition.enabled?'Первая глава завершена. В меню отдельно доступны прежние испытания.':openEdition.enabled?'Пройдены все испытания этой версии.':'Все доступные испытания завершены. Друг добрался вместе с тобой.'):'Получилось! Следующее испытание добавит новую идею.';
+  $('#win-screen .muted').textContent=last?(foundationEdition.enabled?'Пройдены все 30 испытаний кампании. Архив и лабораторные комнаты доступны отдельно.':openEdition.enabled?'Пройдены все испытания этой версии.':'Все доступные испытания завершены. Друг добрался вместе с тобой.'):'Получилось! Следующее испытание добавит новую идею.';
   diagnostics();
 }
 function showHints(){
@@ -101,15 +109,16 @@ document.body.dataset.gameMode='campaign';
 game.quality={...QUALITY_PRESETS[preferences.value.quality]};game.tutorial.enabled=preferences.value.tutorial;
 game.levelIndex=foundationEdition.enabled?foundationEdition.levelIndex:openEdition.enabled?openEdition.levelIndex:campaignRoute.levelIndex;
 choices();$('#level-select').value=String(game.levelIndex);
-$('#campaign-count').textContent=foundationEdition.enabled?'Новая кампания · первые 5 испытаний':openEdition.enabled?`${OPEN_ROOM_INDICES.length} лабораторных испытаний · отдельная версия`:`Архив · ${CAMPAIGN.length} испытания`;
-if(foundationEdition.enabled){$('#start-screen .brand').textContent='НОВАЯ КАМПАНИЯ · ОТ ОТКРЫТИЯ К ЭКСПЕРИМЕНТУ';$('#start-screen .lead').textContent='Начни с простой связи. Узнай, что умеют свет, движение и высота. Здесь можно пробовать, ошибаться и возвращаться за другом. Каждая комната добавляет новую идею.';}
+$('#campaign-count').textContent=foundationEdition.enabled?'Кампания · 30 испытаний':openEdition.enabled?`${OPEN_ROOM_INDICES.length} лабораторных испытаний · отдельная версия`:`Архив · ${CAMPAIGN.length} испытания`;
+if(foundationEdition.enabled){$('#start-screen .brand').textContent='КАМПАНИЯ · ОТ ОТКРЫТИЯ К ЭКСПЕРИМЕНТУ';$('#start-screen .lead').textContent='Первые пять комнат знакомят с порталами, светом и движением. Затем можно пройти остальные испытания исследовательского комплекса.';}
 else if(openEdition.enabled){$('#start-screen .brand').textContent='ЛАБОРАТОРНЫЕ ИСПЫТАНИЯ';$('#start-screen .lead').textContent='Камеры 24, 28, 30 и 31–33. Эта подборка и новая первая глава хранят прогресс отдельно от архива.';}
 const editionNav=document.createElement('nav');editionNav.className='edition-navigation';editionNav.setAttribute('aria-label','Версии кампании');
-for(const [id,text,href]of [['foundation','Новая кампания · с начала','?edition=foundation&level=1'],['open','Лабораторная глава 31–33','?edition=open&level=31'],['classic','Архив · 33 испытания','?edition=classic&level=1']]){
+for(const [id,text,href]of [['foundation','Кампания · с начала','?edition=foundation&level=1'],['open','Лабораторная глава 31–33','?edition=open&level=31'],['classic','Архив · 33 испытания','?edition=classic&level=1']]){
  if(game.chamberEdition===id)continue;const a=document.createElement('a');a.textContent=text;a.href=href;editionNav.append(a);
 }
 $('#start-screen .hero-footer').before(editionNav);
 async function enterLevel(index,reason='next'){
+  reconcileFocus();
   if(entering||holds.size||!availableRooms.includes(index))return;entering=true;clearInput();game.audio?.unlock();
   try{
     // All interstitials are tied to an explicit menu transition, never a timer during play.
@@ -120,18 +129,18 @@ async function enterLevel(index,reason='next'){
   }catch(error){failure(error);}finally{entering=false;}
 }
 async function restartLevel(){
+  reconcileFocus();
   if(entering||holds.size)return;entering=true;clearInput();
   try{if(game.state==='playing')game.togglePause(true);await platform?.interstitial('restart');
     hideScreens();game.restart();game.audio.unlock();game.renderer.setAnimationLoop(game.animate);setState('playing');game.requestPointerLock();
   }catch(error){failure(error);}finally{entering=false;}
 }
-function resume(){if(holds.size)return;game.audio.unlock();game.togglePause(false);game.renderer.setAnimationLoop(game.animate);}
+function resume(){reconcileFocus();if(holds.size)return;game.audio.unlock();game.togglePause(false);game.renderer.setAnimationLoop(game.animate);}
 $('#play-button').addEventListener('click',()=>enterLevel(Number($('#level-select').value),game.state==='ready'&&!preferences.value.completed.length?'initial':'next'));
 $('#play-again-button').addEventListener('click',()=>enterLevel(foundationEdition.enabled?nextFoundationLevel(game.levelIndex):openEdition.enabled?nextOpenRoom(game.levelIndex):nextCampaignLevel(game.levelIndex,CAMPAIGN.length)));
 $('#resume-button').addEventListener('click',resume);$('#restart-button').addEventListener('click',restartLevel);
 $('#pause-button').addEventListener('click',()=>game.togglePause(true));
-$('#hint-button').hidden=!debug;
-$('#hint-button').addEventListener('click',()=>{if(debug)showHints();});
+$('#hint-button').addEventListener('click',showHints);
 $('#hint-unlock').addEventListener('click',async()=>{
   if(hintBusy||holds.size||(preferences.value.hints[game.levelIndex]||0)>=3)return;
   hintBusy=true;const index=game.levelIndex;showHints();
@@ -153,10 +162,10 @@ addEventListener('keydown',event=>{
   if(game.state==='paused'&&['Escape','KeyR'].includes(event.code)){event.preventDefault();event.stopImmediatePropagation();if(!event.repeat)(event.code==='KeyR'?restartLevel():resume());}
   else if(game.state!=='playing'&&['Escape','KeyR','Space'].includes(event.code))event.stopImmediatePropagation();
 },true);
-addEventListener('blur',()=>hold('focus',true));addEventListener('focus',()=>hold('focus',false));
-document.addEventListener('visibilitychange',()=>{hold('hidden',document.hidden);if(document.hidden&&game.state==='playing'&&!game.externalBlocked)game.togglePause(true);});
+addEventListener('blur',()=>holdInterruptedGame(game,hold,'focus'));addEventListener('focus',()=>hold('focus',false));
+document.addEventListener('visibilitychange',()=>{if(document.hidden)holdInterruptedGame(game,hold,'hidden');else hold('hidden',false);});
 // A bfcache visit keeps the one live controller; a discarded page detaches it.
-addEventListener('pagehide',event=>{hold('page',true);if(!event.persisted){game.renderer?.setAnimationLoop(null);game.disposeControls();game.epicDirector?.dispose();platform?.dispose();game.audio?.dispose();}});
+addEventListener('pagehide',event=>{holdInterruptedGame(game,hold,'page');if(!event.persisted){game.renderer?.setAnimationLoop(null);game.disposeControls();game.epicDirector?.dispose();platform?.dispose();game.audio?.dispose();}});
 addEventListener('pageshow',event=>{if(event.persisted)hold('page',false);});
 addEventListener('contextmenu',event=>event.preventDefault());
 addEventListener('error',event=>{if(event.error)failure(event.error);});

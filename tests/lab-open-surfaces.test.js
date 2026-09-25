@@ -15,7 +15,9 @@ test('retained surfaces stay intact and every new ceramic has an explicit physic
    assert.ok(l.world.surfaces.some(s=>s.portal&&s.width>=5.5));
   }else{
    const roles=l.puzzleGeometry.portalRoles,panels=Object.keys(l.panels);
-   if(i===11)assert.equal(panels.length,6,'The accepted compact junction must retain its six panels');
+   if(i===11)assert.deepEqual(panels.slice().sort(),
+    ['access-low','access-high','shared-drop','return','cargo','final','entry-freight'].sort(),
+    'The compact junction retains its six original panels and the physical entry freight address');
    else assert.ok(panels.length>=3,`Course ${i+1} needs portal reconfiguration choices`);
    assert.deepEqual(Object.keys(roles).sort(),panels.sort(),'Every ceramic needs an explicit puzzle or recovery role');
    assert.equal(l.world.surfaces.filter(s=>s.portal).length,panels.length,'No unaccounted portal surface is hidden outside the declared roles');

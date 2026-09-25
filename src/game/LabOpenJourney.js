@@ -49,8 +49,9 @@ export function runOpenHydraulics(d,{route='equal-head',interrupt=false}={}){
  mark('both original travellers leave via the raised western deck');
 }
 
-export function runOpenLaunch(d){
+export function runOpenLaunch(d,{route='airborne-double-rewire'}={}){
  installRoom21Aim(d);const {game:g,level:l,walk,wait,until,frame,worldMove,stop,mark}=d,p=l.panels;
+ check(['airborne-double-rewire','ceiling-descent'].includes(route),'Unknown open launch route');
  walk(-31,29.6);check(g.interact()&&g.velocityCompanion.connected,'Original companion not connected');
  walk(-18,16.15);d.aim(0,p['fall-court'].getFrame().center);
  walk(-45,20);walk(-46,-49,30);walk(-34,-49);walk(-34,8,30);walk(-26,17.65);d.aim(1,p['inclined-outlet'].getFrame().center);mark('two prepared apertures share the real falling impulse');walk(-26,3);wait(.6);
@@ -78,8 +79,12 @@ export function runOpenLaunch(d){
  for(let i=0;i<480&&g.playerGrounded;i++){worldMove(0,-.12);frame();}stop();
  until(()=>g.teleportCount>before,5,'Falling portal missed');mark('54-metre fall exits the inclined dish');
  airShot(0,p['far-catch'].getFrame().center);
- until(()=>g.playerPosition.x>33,4,'The outside face was not reached');
- airShot(1,wallTarget(p['terminal-outlet']));mark('both endpoints rewired with ordinary airborne shots');
+ mark('far catch opens on the exterior flight');
+ until(()=>g.playerPosition.x>33,4,'The outside face was not reached');mark('exterior viewpoint reveals terminal addresses');
+ const terminal=route==='ceiling-descent'?p['terminal-ceiling']:p['terminal-outlet'];
+ airShot(1,route==='ceiling-descent'?terminal.getFrame().center:wallTarget(terminal));
+ check(g.portalSurfaceIds[1]===terminal.mesh.uuid,'Terminal shot reached another surface');
+ mark(route==='ceiling-descent'?'ceiling exit converts shared flight into an overhead approach':'both endpoints rewired with ordinary airborne shots');
  until(()=>g.teleportCount>before+1,4,'Far catch missed');mark('distant screen transfers the same two travellers');
  until(()=>g.playerGrounded,4,'Upper receiving plaza missed');wait(1.1);walk(64,-20);until(()=>g.state==='won',4,'Upper joint arrival failed');
 }

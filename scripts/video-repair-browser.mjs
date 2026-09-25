@@ -8,10 +8,23 @@ let page;
 const image=(name,data)=>fs.writeFileSync(`${out}/${name}.png`,Buffer.from(data.split(',')[1],'base64'));
 try{
  page=await browser.newPage();await page.setViewport({width:960,height:600});page.setDefaultTimeout(120000);
+ await page.evaluateOnNewDocument(()=>{
+  window.__NESI_UI_EVENTS__=[];
+  for(const type of ['click','focus','blur','visibilitychange'])
+   addEventListener(type,event=>window.__NESI_UI_EVENTS__.push({type,target:event.target?.id||event.target?.nodeName,hidden:document.hidden,focused:document.hasFocus(),time:performance.now()}),true);
+ });
  page.on('pageerror',e=>report.errors.push(String(e)));page.on('console',e=>{if(e.type()==='error'&&!e.text().startsWith('Failed to load resource:'))report.errors.push(e.text());});
  page.on('response',r=>{if(r.status()>=400)report.networkFailures.push({url:r.url(),status:r.status()});});
  await page.goto('http://127.0.0.1:4173/?debug=1&level=11',{waitUntil:'networkidle2'});await page.waitForFunction(()=>window.__NESI_DEMO_GAME__?.state==='ready');
- await page.click('#play-button');await page.waitForFunction(()=>window.__NESI_DEMO_GAME__.state==='playing');
+ const uiState=()=>page.evaluate(()=>({state:window.__NESI_DEMO_GAME__?.state,levelIndex:window.__NESI_DEMO_GAME__?.levelIndex,
+  edition:window.__NESI_DEMO_GAME__?.chamberEdition,selectedLevel:document.querySelector('#level-select')?.value,
+  externalBlocked:window.__NESI_DEMO_GAME__?.externalBlocked,externalPause:document.body.dataset.externalPause,
+  playState:document.body.dataset.playState,hidden:document.hidden,focused:document.hasFocus(),
+  activeElement:document.activeElement?.id,playButtonInert:document.querySelector('#play-button')?.inert,
+  events:window.__NESI_UI_EVENTS__}));
+ report.startup={beforeClick:await uiState()};
+ await page.click('#play-button');report.startup.afterClick=await uiState();
+ await page.waitForFunction(()=>window.__NESI_DEMO_GAME__.state==='playing',{timeout:30000});
  await page.evaluate(()=>{const g=window.__NESI_DEMO_GAME__;g.renderer.setAnimationLoop(null);});
  const controls=await page.evaluate(()=>({mobile:[...document.querySelectorAll('.lab-mobile button')].map(e=>e.textContent),hint:document.querySelector('.control-grid').textContent}));
  assert.ok(!controls.mobile.some(t=>t==='◎'||t==='X'));assert.ok(!controls.hint.includes('удерживать прицел')&&!controls.hint.includes('сбросить пару'));report.controls=controls;
@@ -59,5 +72,10 @@ try{
  const optional=new Set(['/favicon.ico','/.well-known/appspecific/com.chrome.devtools.json']);report.optionalRequests=report.networkFailures.filter(r=>r.status===404&&optional.has(new URL(r.url).pathname));
  assert.deepEqual(report.networkFailures.filter(r=>!report.optionalRequests.includes(r)),[]);assert.deepEqual(report.errors,[]);report.pass=true;
  console.log('Video repair production WebGL passed',JSON.stringify({...report,networkFailures:undefined}));
-}catch(error){report.error=String(error);await page?.screenshot({path:out+'/failure.png'}).catch(()=>{});throw error;}
+}catch(error){report.error=String(error);if(page)report.startup={...report.startup,onFailure:await page.evaluate(()=>({state:window.__NESI_DEMO_GAME__?.state,
+ levelIndex:window.__NESI_DEMO_GAME__?.levelIndex,externalBlocked:window.__NESI_DEMO_GAME__?.externalBlocked,
+ externalPause:document.body.dataset.externalPause,playState:document.body.dataset.playState,
+ selectedLevel:document.querySelector('#level-select')?.value,hidden:document.hidden,focused:document.hasFocus(),
+ activeElement:document.activeElement?.id,events:window.__NESI_UI_EVENTS__})).catch(e=>({evaluationError:String(e)}))};
+ await page?.screenshot({path:out+'/failure.png'}).catch(()=>{});throw error;}
 finally{fs.writeFileSync(out+'/report.json',JSON.stringify(report,null,2));await browser.close();}

@@ -13,6 +13,8 @@ export class LabControls {
     this.canvas = game.renderer.domElement;
     this.listeners = [];
     this.lookPointer = null;
+    this.lastUnlockedMotion = null;
+    this.pendingLockRebound = null;
     this.disposed = false;
     const canvas = this.canvas;
 
@@ -35,8 +37,28 @@ export class LabControls {
       }
       if (event.button === 0 || event.button === 2) game.firePortal(event.button === 0 ? 0 : 1);
     });
+    this.listen(doc, 'pointerlockchange', event => {
+      this.pendingLockRebound = doc.pointerLockElement === canvas && this.lastUnlockedMotion
+        ? { ...this.lastUnlockedMotion, lockedAt: event.timeStamp } : null;
+      this.lastUnlockedMotion = null;
+    });
     this.listen(scope, 'mousemove', event => {
-      if (!this.active || doc.pointerLockElement !== canvas) return;
+      if (doc.pointerLockElement !== canvas) {
+        if (event.movementX || event.movementY) {
+          this.lastUnlockedMotion = { x: event.movementX, y: event.movementY };
+        }
+        return;
+      }
+      if (!this.active) return;
+      // Chromium can report the move to the Play button again in reverse when
+      // pointer lock centers the cursor. Match only that immediate rebound;
+      // a different first movement is genuine camera input.
+      const rebound = this.pendingLockRebound;
+      if (rebound && (event.movementX || event.movementY)) {
+        this.pendingLockRebound = null;
+        if (event.movementX === -rebound.x && event.movementY === -rebound.y &&
+            event.timeStamp >= rebound.lockedAt && event.timeStamp - rebound.lockedAt < 250) return;
+      }
       game.yaw -= event.movementX * .002;
       game.pitch = clampPitch(game.pitch - event.movementY * .0018);
     });

@@ -3,7 +3,7 @@ import {Workshop,V} from './LabWorkshopKit.js';
 import {buildTransferFunnel} from './LabTransferFunnel.js';
 import {cargoLoadsPlate} from './LabPlateContact.js';
 
-export const ROOM26_SPEC={id:'crossflow-foundry',title:'Перекрёстная тяга',concept:'Два пересекающихся потока, один живой груз и дважды заимствованная портальная магистраль',description:'Сохрани высоту, освободи магистраль и забери того, кто держит её открытой.',accent:0xe2ad79,assets:[1,2,11,22,23,24],hints:['Заслонка открыта, пока плита нагружена. Один и тот же поток можно направить в разные шахты.','Постоянная галерея сохраняет достигнутую высоту, когда порталы меняют назначение. Второй белый пол виден сверху.','Наверху освободи пару от подъёмного потока и извлеки друга прямо из его опоры. Поперечный поток останется работающим; его реверс находится на верхнем причале.']};
+export const ROOM26_SPEC={id:'crossflow-foundry',title:'Перекрёстная тяга',concept:'Два пересекающихся потока, один живой груз и дважды заимствованная портальная магистраль',description:'Сохрани высоту, освободи магистраль и забери того, кто держит её открытой.',accent:0xe2ad79,assets:[1,2,11,22,23,24],hints:['Заслонка открыта, пока плита нагружена. Один и тот же поток можно направить в разные шахты.','Постоянная галерея сохраняет достигнутую высоту, когда порталы меняют назначение. Второй белый пол виден сверху.','Наверху извлеки друга из опоры. Поперечный поток может перевезти вас вместе или доставить свободного друга на высокий приёмный настил первым.']};
 
 /** Add real field accelerations while cancelling gravity only once where two
  * visible streams intersect. There is no attachment or position correction. */
@@ -33,6 +33,10 @@ export function buildRoom26(game,index=25){
  deck('Upper north retaining link',-24,4,-23,-19,16);
  deck('Return observation arm',-24,-20,-19,12,16);
  deck('Far receiving dock',6,20,13,23,16);
+ // The free companion can arrive on this high collector in the transverse
+ // current. Joined steps let the player meet it without a second portal.
+ const collector=deck('Far air freight collector',10,14,20,24,19.35);
+ for(let i=0;i<11;i++)deck('Collector service steps',14+i*.5,14+(i+1)*.5,20,23,19.35-(i+1)*.29);
  // Tall bulkheads hide the second up-facing ceramic until the observer has
  // walked around the first gallery. They cannot be jumped from the foundation.
  w.box([-6,12,-8],[.4,24,16],w.materials.wall);
@@ -82,9 +86,9 @@ export function buildRoom26(game,index=25){
  const reverse=k.control('crossflow-reverse',[17,16,-16],()=>{crossing.reversed=!crossing.reversed;},'E — реверс поперечного потока');
  const fields=[lift,crossing];
  k.forces.push(()=>{if(game.heldCube||!game.physics?.cargoBody)return;const b=game.physics.cargoBody,a=crossflowAcceleration(fields,V(b.position.x,b.position.y,b.position.z),V(b.velocity.x,b.velocity.y,b.velocity.z),.5);if(a.lengthSq()){b.wakeUp();b.force.x+=a.x*b.mass;b.force.y+=a.y*b.mass;b.force.z+=a.z*b.mass;}});
- const level=k.finish([-19,0,10],[-20,.55,17],[17,16,19],{workshop:k,portalPuzzle:true,playerAcceleration:(p,v)=>crossflowAcceleration(fields,p.clone().add(V(0,1.2,0)),v,.46,{centering:.8,damping:2}),cargoOnAnyPad:()=>load.loaded()||cargoLoadsPlate(game.cargo,game.heldCube,relay.getFrame())});
+ const level=k.finish([-19,0,10],[-20,.55,17],[17,16,19],{workshop:k,portalPuzzle:true,playerAcceleration:(p,v)=>crossflowAcceleration(fields,p.clone().add(V(0,1.2,0)),v,.46,{centering:.8,damping:2}),cargoOnAnyPad:()=>load.loaded()||cargoLoadsPlate(game.cargo,game.heldCube,relay.getFrame())||cargoLoadsPlate(game.cargo,game.heldCube,collector.getFrame())});
  level.mechanismArt={turbines:fields};
- level.puzzleGeometry={footprint:48*48,goalHeight:16,safeFloor:0,noProgressFlags:true,orders:['load-first','inspect-first'],portalRoles:{'pressure-intake':'collect the stream behind the real load-operated shutter','first-shaft':'retain the first eight metres on a permanent balcony','relay-shaft':'reuse the source from a second elevated floor','valve-load':'the original companion both powers the shutter and becomes the final retrieval source','freight-receiver':'retrieve the load after preserving the final height'},deductions:['a live load opens an actual air obstruction','a fixed balcony retains height after a portal changes','the second floor is visible only from the attained gallery','a crossing flow can carry the observer past the intended retaining dock','the power source is also the cargo to retrieve through the same pair','removing the load closes only its physical air branch','the independent perpendicular stream carries both travellers across the last closed spine']};
+ level.puzzleGeometry={footprint:48*48,goalHeight:16,safeFloor:0,noProgressFlags:true,orders:['carry-in-current','send-free-companion-first'],portalRoles:{'pressure-intake':'collect the stream behind the real load-operated shutter','first-shaft':'retain the first eight metres on a permanent balcony','relay-shaft':'reuse the source from a second elevated floor','valve-load':'the original companion both powers the shutter and becomes the final retrieval source','freight-receiver':'retrieve the load after preserving the final height'},deductions:['a live load opens an actual air obstruction','a fixed balcony retains height after a portal changes','the second floor is visible only from the attained gallery','a crossing flow can carry the observer past the intended retaining dock','the power source is also the cargo to retrieve through the same pair','removing the load closes only its physical air branch','the independent perpendicular stream carries both travellers together or separately to the air freight collector']};
  level.conceptLesson={position:[17,16,-16],range:4,key:'↔',text:'Поперечный поток независим от нижней заслонки. Реверс меняет силу; он не переносит тебя мгновенно.'};
  return level;
 }

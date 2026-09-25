@@ -40,6 +40,26 @@ traversal from replacing the water puzzle. Early sightlines to the inner high
 outlet are allowed where geometry permits; the initial dry east basin has no
 water to send, and the elevated goal still requires boarding the island.
 
+The default campaign room now labels the **A coral well** and **B lagoon** at
+their separate collectors. Real manifold pipes run behind those apertures and
+join their own basin, without blocking the white shooting faces or changing the
+hydraulic simulation. Two freestanding instruments have physical housings,
+live rising columns and 0, 3 and 5.3 metre marks. A shared meter shows that
+the two heights always total six units, the actual direction of flow, and the
+reason an experiment has stopped (broken connection, same basin, dry mouth or
+equal pressure). A small transparent current appears at the actual receiving
+portal only while water moves. The player can compare the height of the middle
+garden with the observatory, try either collector and infer which connection
+reaches each landing. These instruments explain cause and effect in the room;
+they neither prescribe a portal placement nor set any completion state.
+After native screenshot review, the shared meter is mounted on the visible
+rear wall above the crossing, and each basin has an additional live meter and
+waterline beside its upper collector. The original perimeter gauges remain for
+close inspection. All read from the same conserved simulation; no screen or
+waterline is a fabricated progress marker. The upper collectors, status boards
+and narrow pipework have separate physical clearances from the white shooting
+faces and the walking route.
+
 Coral crowns identify the west well; golden and cobalt armillary rings mark the
 upper optional route. Broad aquamarine slab foundations give the walking islands
 visible thickness. Two transparent equal-sized water volumes and the actual
@@ -52,12 +72,17 @@ are merged into five material batches, with no new light or texture.
 disconnection, frame-rate independence, and eight input-driven routes: two
 solutions, interrupted flow and a recovered fall, each at 16:10 and 16:9.
 Each route checks the same original companion body, free cargo riding both
-moving floors, physical joint arrival and zero resets/respawns.
+moving floors, physical joint arrival and zero resets/respawns. The same tests
+now verify that the visible gauges follow the actual volume and the in-world
+status distinguishes reverse flow, equal pressure and a dry collector.
 
 Motion review milestones:
 
 * `the collector opens and the lagoon begins to rise`
+* `the east gauge and receiving current show the moving tide`
 * `the occupied coral island begins its return tide`
 
-Each occurs immediately before the final shot begins its real flow; a capture
-continuing through subsequent frames records the actual mechanism in motion.
+The new middle marker uses ordinary player looking after the receiving shot
+while the original six-unit tide is still moving. The other two markers occur
+before their final shots; continuing capture through subsequent frames records
+the actual mechanism in motion. No actor or camera position is staged.

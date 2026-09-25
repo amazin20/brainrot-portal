@@ -10,8 +10,16 @@ after(()=>{game.physics.dispose();game.portals.dispose();});
 for(const aspect of [1.6,16/9])for(const gravityReturn of [false,true])test(`room27: ${gravityReturn?'gravity return':'upper belt'} is a complete original-cargo route at aspect ${aspect}`,async()=>{
  game.camera.aspect=aspect;game.camera.updateProjectionMatrix();await game.selectLevel(26,false);
  const body=game.physics.cargoBody,id=game.cargo.group.uuid;
- const report=await runV8Journey(game,{scenario:d=>runRoom27(d,{gravityReturn})});
+ let framedAfterLaunch=false;
+ const report=await runV8Journey(game,{scenario:d=>runRoom27(d,{gravityReturn}),onMilestone:mark=>{
+  if(!gravityReturn&&aspect===1.6&&mark.name==='the ground belt turns horizontal speed into height'){
+   framedAfterLaunch=true;
+   assert.ok(game.playerGroup.position.distanceTo(game.playerPosition)<.75,
+    'The post-portal avatar must stay beside its real body instead of being drawn under the belt');
+  }
+ }});
  assert.equal(game.state,'won');assert.equal(report.pass,true);assert.equal(report.resets+report.respawns,0);
+ if(!gravityReturn&&aspect===1.6)assert.ok(framedAfterLaunch);
  assert.equal(game.physics.cargoBody,body);assert.equal(game.cargo.group.uuid,id);assert.ok(game.physics.portalTransports>=2);
  assert.ok(report.milestones.some(m=>m.name===(gravityReturn?'the observation loop supplies an alternative gravity-powered bridge':'belt momentum becomes the final bridge')));
  assert.ok(game.firstLevel.goal.contains(game.playerPosition)&&game.firstLevel.goal.contains(game.cargo.position));
@@ -32,6 +40,26 @@ test('room27: contact traction is tangent-only, reversible and absent in air or 
  assert.equal(s.acceleration(p,v,{grounded:false}).lengthSq(),0);
  assert.equal(s.acceleration(new THREE.Vector3(-7,.08,0),v).lengthSq(),0);
  s.braked=true;assert.equal(s.acceleration(p,v).lengthSq(),0);
+});
+
+test('room27: both visible belts match their own traction speeds without jumping on reverse or brake',async()=>{
+ await game.selectLevel(26,false);game.resetRun(true);
+ const level=game.firstLevel,s=level.state.conveyors,matrix=new THREE.Matrix4(),dt=.01;
+ const slats=s.bands.map(b=>level.world.root.getObjectByName(b.name+' travelling belt slats'));
+ const positions=()=>slats.map(mesh=>{mesh.getMatrixAt(3,matrix);return matrix.elements[14];});
+ level.renderUpdate(1);const start=positions();
+ level.update(dt);level.renderUpdate(.5);const halfway=positions();
+ s.bands.forEach((b,i)=>assert.ok(Math.abs(halfway[i]-start[i]-b.speed*dt/2)<1e-4,`${b.name} slats do not interpolate between fixed steps`));
+ level.renderUpdate(1);const outbound=positions();
+ s.bands.forEach((b,i)=>assert.ok(Math.abs(outbound[i]-start[i]-b.speed*dt)<1e-4,`${b.name} slats lag behind their traction`));
+ s.braked=true;level.update(dt);level.renderUpdate(1);
+ assert.deepEqual(positions(),outbound,'Braking must freeze the picture along with the physical belt');
+ s.reversed=false;s.braked=false;level.renderUpdate(1);
+ assert.deepEqual(positions(),outbound,'Reversing must not teleport slats');
+ level.update(dt);level.renderUpdate(1);
+ positions().forEach((z,i)=>assert.ok(Math.abs(z-start[i])<1e-4,`${s.bands[i].name} does not reverse at its physical speed`));
+ game.resetRun(true);level.renderUpdate(1);
+ positions().forEach((z,i)=>assert.ok(Math.abs(z-start[i])<1e-4,`${s.bands[i].name} did not reset its visible slats`));
 });
 
 test('room27: the original unheld cargo is accelerated by actual belt contact and stops on the ordinary side plaza',async()=>{

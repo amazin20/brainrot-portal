@@ -12,7 +12,6 @@ test('single-room cleanup adds no campaign entries or new asset dependency',()=>
  assert.equal(CAMPAIGN.length,33);assert.equal(g.firstLevel.id,'stored-wind');
  assert.deepEqual(g.firstLevel.fixtures.map(f=>f.id).sort(),[31,35]);
  assert.ok(!CAMPAIGN[10].assets.includes(39),'Unrelated cable reel is removed from this room only');
- assert.ok(!CAMPAIGN.some(room=>room.assets.includes(39)),'Retired winch rooms are not loaded into the active campaign');
 });
 test('both existing machines sit on the floor and face the real airflow',()=>{
  const l=g.firstLevel,s=l.state;

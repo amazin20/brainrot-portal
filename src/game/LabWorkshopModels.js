@@ -78,6 +78,10 @@ export function buildExtensionBridgeModel(game, parent, {
       size: V(width, thickness, length / Math.cos(rotationX) + .006), rotationX });
   }
   const center = V(0, localHeight(0, (start + end) / 2), (start + end) / 2);
+  // The moving deck translates horizontally; its height range cannot change
+  // with bridge progress. Sample that range once from the source mesh, then
+  // transform only the four rectangle corners for subsequent bounds queries.
+  let verticalBounds = null;
   const deck = { width, depth, center, mesh: moving.children[0], slabs, start, end,
     heightAt: worldHeight,
     bounds() {
@@ -85,8 +89,11 @@ export function buildExtensionBridgeModel(game, parent, {
       const box = new THREE.Box3();
       for (const x of [-width / 2, width / 2]) for (const z of [start, end]) {
         const p = V(x, 0, z).applyMatrix4(moving.matrixWorld);
-        p.y = worldHeight(p.x, p.z); box.expandByPoint(p);
+        if (!verticalBounds) p.y = worldHeight(p.x, p.z);
+        box.expandByPoint(p);
       }
+      if (!verticalBounds) verticalBounds = [box.min.y, box.max.y];
+      else [box.min.y, box.max.y] = verticalBounds;
       return box;
     },
   };

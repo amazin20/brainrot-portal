@@ -4,7 +4,7 @@ import * as THREE from 'three';
  * hydrostatic head determine the sign and the maximum possible transfer. */
 export class Room28TideVolumes{
  constructor(){this.reset();}
- reset(){this.levels=[6,0];this.total=6;this.flow=0;this.transferred=0;}
+ reset(){this.levels=[6,0];this.total=6;this.flow=0;this.transferred=0;this.connection=null;}
  step(dt,connection=null){
   if(!Number.isFinite(dt)||dt<0)throw new RangeError('Nonnegative finite time required');
   this.flow=0;if(!connection||connection[0].basin===connection[1].basin||!dt)return;
@@ -23,6 +23,20 @@ export class Room28TideVolumes{
   }
   this.flow=moved/dt;
  }
+}
+
+/** The apparatus reports the hydraulic cause, including failed experiments.
+ * `flow` is signed from the first placed portal toward the second. */
+export function room28FlowStatus(levels,connection,flow=0){
+ if(!connection?.[0]||!connection?.[1])return 'КОНТУР РАЗОМКНУТ';
+ const [a,b]=connection;
+ if(a.basin===b.basin)return `ОБА УСТЬЯ: БАССЕЙН ${a.basin?'Б':'А'}`;
+ const towardB=flow*(a.basin===0?1:-1);
+ if(Math.abs(towardB)>.005)return towardB>0?'ВОДА: А → Б':'ВОДА: Б → А';
+ const ha=Math.max(0,levels[a.basin]-a.sill),hb=Math.max(0,levels[b.basin]-b.sill);
+ if(Math.max(ha,hb)<.025)return 'ВОДА НИЖЕ ОБОИХ УСТЬЕВ';
+ if(Math.abs(ha-hb)<.035)return 'ДАВЛЕНИЕ ВЫРОВНЕНО';
+ return 'ПОТОК ЗАМЕДЛЯЕТСЯ';
 }
 
 export function buildRoom28Tides(k,{a,b,ports}){

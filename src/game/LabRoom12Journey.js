@@ -22,7 +22,7 @@ export function room12Access(d,{carry=false,wandering=false}={}){
  aim(0,p['access-low'].getFrame().center);aim(1,p['access-high'].getFrame().center);
  if(carry){
   walk(-14.5,14.5);walk(11,14.5);
-  if(wandering)walk(game.cargo.position.x-.9,game.cargo.position.z);else walk(11,11);
+  walk(game.cargo.position.x-.9,game.cargo.position.z);
   pickup();walk(11,14.5);walk(-14.5,14.5);walk(-14.5,12);
  }
  enter(p['access-low']);until(()=>game.playerGrounded,3,'Shared ledge landing');mark('folded underpass');
@@ -65,7 +65,23 @@ export function room12DockReturn(d){
  walk(4,12);walk(10,14.5);mark('scout returns through the lower passage');
 }
 export async function runRoom12(d,{order='cargo-first'}={}){
- check(order==='cargo-first'||order==='scout-first','Unknown route order');
+ check(['cargo-first','scout-first','remote-freight'].includes(order),'Unknown route order');
+ if(order==='remote-freight'){
+  const {game,level,walk,aim,until,mark}=d,p=level.panels;
+  room12Access(d);
+  check(game.cargo.position.y<1&&!game.heldCube,'Remote route must leave the original companion at the entrance');
+  walk(-15,-8);walk(-9,-8);aim(1,p.cargo.getFrame().center.clone().add({x:.7,y:0,z:0}));
+  walk(-15,-8);walk(-15,14);walk(-8,14);walk(-7.8,12.3);
+  const before=game.physics.portalTransports;
+  aim(0,p['entry-freight'].getFrame().center);
+  until(()=>game.physics.portalTransports>before&&game.cargo.position.y>8.9,6,'Original friend did not cross the remote freight address');
+  mark('companion delivered directly from the entrance to the receiving dock');
+  walk(-15,14);walk(-15,-8);walk(-9,-7.2);aim(0,V(-10,.025,9.8));
+  room12Climb(d);room12Fling(d);
+  walk(THREE.MathUtils.clamp(game.cargo.position.x-1.1,8,14),THREE.MathUtils.clamp(game.cargo.position.z,1.5,7));
+  if(game.state==='playing')d.pickup();walk(10,4);until(()=>game.state==='won',3,'Remote freight reunion');
+  mark('player joins remotely delivered companion');return;
+ }
  if(order==='scout-first'){
   room12Access(d);
   d.walk(-9,-7.2);d.aim(0,V(-10,.025,9.8));

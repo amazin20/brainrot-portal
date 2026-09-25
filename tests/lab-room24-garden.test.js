@@ -4,6 +4,7 @@ import * as THREE from 'three';
 import {createHeadlessGame} from '../scripts/lab-headless.mjs';
 import {runV8Journey} from '../src/game/LabV8Journey.js';
 import {runRoom24} from '../src/game/LabRoom24Journey.js';
+import {acceptsPortalShot} from '../scripts/lib/puzzle-sightline-scan.mjs';
 const g=await createHeadlessGame();after(()=>{g.physics.dispose();g.portals.dispose();});
 for(const route of ['carry-through','counterweight'])for(const aspect of [1.6,16/9])test(`garden ${route} keeps the original companion through real portals at aspect ${aspect}`,async()=>{
  await g.selectLevel(23,false);g.camera.aspect=aspect;g.camera.updateProjectionMatrix();const body=g.physics.cargoBody;let capture;
@@ -26,12 +27,53 @@ test('garden brake arrests the actual architectural pose and release reverses it
  door.manualTurn=true;for(let i=0;i<240;i++)door.update(1/60);const end=door.panel.getFrame();assert.ok(end.center.distanceTo(initial.center)>7.99);assert.ok(end.normal.x<-.999);assert.equal(door.panel.collider.kinematic,true);
  g.resetRun(true);assert.equal(door.manualTurn,false);assert.equal(door.braked,false);assert.equal(door.angle,0);
 });
+test('garden render interpolation keeps the live ceramic, raycast and collision at one fixed-step pose',async()=>{
+ await g.selectLevel(23,false);g.resetRun(true);
+ const level=g.firstLevel,door=level.gardenDoor;door.manualTurn=true;
+ for(let i=0;i<20;i++){
+  const previous=door.angle;door.update(1/120);
+  const fixed=door.panel.getFrame();
+  level.renderUpdate(.5);
+  const drawn=door.panel.getFrame(),collider=new THREE.Box3().setFromObject(door.panel.mesh);
+  assert.ok(drawn.center.distanceTo(fixed.center)<1e-8,'The moving portal frame drifted between fixed ticks');
+  assert.ok(drawn.normal.distanceTo(fixed.normal)<1e-8);
+  assert.ok(collider.equals(door.panel.collider.box),'The visible ceramic and collider disagree');
+  assert.ok(Math.abs(door.visualArm.rotation.y-(previous+door.angle)/2)<1e-8,
+   'The non-interactive arm must still interpolate smoothly');
+  const origin=drawn.center.clone().addScaledVector(drawn.normal,5);
+  assert.ok(acceptsPortalShot(g,origin,drawn.center,door.panel),'A valid front-face shot missed the physical ceramic');
+ }
+});
 test('garden floors have distinct heights or non-overlapping footprints',async()=>{
  await g.selectLevel(23,false);const surfaces=g.firstLevel.world.surfaces.filter(s=>s.floor);
  for(let i=0;i<surfaces.length;i++)for(let j=i+1;j<surfaces.length;j++){
   const a=surfaces[i].floor,b=surfaces[j].floor;if(Math.abs(a.y-b.y)>.0001)continue;
   const dx=Math.min(a.maxX,b.maxX)-Math.max(a.minX,b.minX),dz=Math.min(a.maxZ,b.maxZ)-Math.max(a.minZ,b.minZ);
   assert.ok(dx<=.0001||dz<=.0001,`${surfaces[i].name} overlaps ${surfaces[j].name}`);
+ }
+});
+
+test('the new greenhouse is physical while its wall finish leaves all three fixed portal mouths clear',async()=>{
+ await g.selectLevel(23,false);
+ const level=g.firstLevel,art=level.gardenAtelier;
+ assert.equal(art.facade.userData.visualOnly,true);
+ assert.equal(art.facade.userData.collisionParts,undefined,'Thin wall finish must not create invisible route barriers');
+ const door=level.gardenDoor,rear=door.reverseCassette,depth=new THREE.Box3();
+ assert.equal(rear.parent,door.group,'The reverse face must turn with the physical door');
+ assert.equal(rear.userData.visualOnly,true);
+ assert.equal(rear.userData.collisionParts,undefined,'The reverse face must reuse the ceramic collider');
+ rear.traverse(node=>{if(node.isMesh){node.geometry.computeBoundingBox();depth.union(node.geometry.boundingBox);}});
+ assert.ok(depth.min.z>=3.799&&depth.max.z<=4,'Reverse relief must remain inside the moving door envelope');
+ const binding=level.workshop.solidModels.find(entry=>entry.model===art.roof);
+ assert.ok(binding?.colliders.length>10,'The conservatory roof needs actual short physical supports');
+ for(const collider of binding.colliders){
+  assert.ok(g.colliders.includes(collider));
+  assert.ok(g.physics.solids.has(collider.mesh.uuid),'Every visible roof support must own a physics body');
+ }
+ for(const name of ['garden-entry','balcony-entry','pavilion-receiver']){
+  const panel=level.panels[name],frame=panel.getFrame();
+  const origin=frame.center.clone().addScaledVector(frame.normal,4);
+  assert.ok(acceptsPortalShot(g,origin,frame.center,panel),`${name} decoration obscured an intended front-face shot`);
  }
 });
 

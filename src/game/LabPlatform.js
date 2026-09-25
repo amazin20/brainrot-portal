@@ -49,7 +49,7 @@ export class LabPlatform {
       // Never run this watchdog after onOpen: it must not resume under a real ad.
       const timer=setTimeout(()=>finish('timeout',false),this.timeout);
       const callbacks={
-        onOpen:()=>{opened=true;clearTimeout(timer);lock(true);},
+        onOpen:()=>{if(settled)return;opened=true;clearTimeout(timer);lock(true);},
         onRewarded:()=>{if(!settled&&!earned){earned=true;onReward();}},
         onClose:wasShown=>{if(settled){lock(false);return;}finish('closed',rewarded?opened:!!wasShown);},
         onError:()=>{if(settled){lock(false);return;}finish('error',opened);},

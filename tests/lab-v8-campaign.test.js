@@ -2,12 +2,12 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import * as THREE from 'three';
 import {createHeadlessGame} from '../scripts/lab-headless.mjs';
-import {CAMPAIGN} from '../src/game/LabCampaignLevels.js';
+import {CAMPAIGN,campaignSpec} from '../src/game/LabCampaignLevels.js';
 import {CAMPAIGN_ASSET_IDS} from '../src/game/labAssets.js';
 import {sampleLabFootCycle} from '../src/game/LabPlayerAnimator.js';
 const g=await createHeadlessGame();
 test('v8 five courses have distinct geometry, declared purposeful assets and readable portal surfaces',async()=>{
- assert.ok(CAMPAIGN.length>=5);assert.equal(CAMPAIGN[0].assets.length,4);assert.deepEqual([...new Set(CAMPAIGN.flatMap(l=>l.assets))].sort((a,b)=>a-b),[...CAMPAIGN_ASSET_IDS]);
+ assert.ok(CAMPAIGN.length>=5);assert.deepEqual(CAMPAIGN[0].assets,[1,2,11,23,24]);assert.deepEqual([...new Set(CAMPAIGN.flatMap(l=>l.assets))].sort((a,b)=>a-b),[...CAMPAIGN_ASSET_IDS]);
  const layouts=new Set();
  for(let i=0;i<5;i++){
   if(i!==g.levelIndex)await g.selectLevel(i,false);const l=g.firstLevel;
@@ -18,8 +18,19 @@ test('v8 five courses have distinct geometry, declared purposeful assets and rea
  }
  assert.equal(layouts.size,5);
 });
+test('the opening room manifests include every model used during browser startup',async()=>{
+ const previousEdition=g.chamberEdition,model=g.model;
+ try{
+  for(const edition of ['classic','foundation'])for(let i=0;i<5;i++){
+   const used=new Set();g.chamberEdition=edition;
+   g.model=function(id,...args){used.add(id);return model.call(this,id,...args);};
+   await g.selectLevel(i,false);
+   for(const id of used)assert.ok(campaignSpec(g,i).assets.includes(id),`${edition} room ${i+1} omitted startup model ${id}`);
+  }
+ }finally{g.model=model;g.chamberEdition=previousEdition;}
+});
 test('v8 low first level contains no lift, weight switch or unexplained furniture',async()=>{
- await g.selectLevel(0,false);const l=g.firstLevel;assert.equal(l.pads.length,0);assert.equal(l.fixtures.length,0);assert.equal(l.terminals.length,0);assert.equal(l.lift,null);assert.equal(l.world.surfaces.filter(s=>s.portal).length,6);
+ await g.selectLevel(0,false);const l=g.firstLevel;assert.equal(l.pads.length,0);assert.equal(l.fixtures.length,0);assert.equal(l.terminals.length,0);assert.equal(l.lift,null);assert.equal(l.world.surfaces.filter(s=>s.portal).length,7);
 });
 test('v8 gravity fling retains momentum with no input, not airborne velocity damping',()=>{
  g.resetRun(true);g.playerPosition.set(0,6,0);g.previousPlayerPosition.copy(g.playerPosition);g.playerGrounded=false;g.playerVelocity.set(8,0,0);

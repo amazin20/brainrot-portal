@@ -44,7 +44,20 @@ test('v8 late callbacks cannot release the lock of a newer advert',async()=>{
  const old=f.callbacks;assert.equal((await expired).reason,'timeout');
  f.platform.timeout=1000;const current=f.platform.hint(()=>{}),next=f.callbacks;next.onOpen();
  old.onClose();assert.deepEqual(f.holds.at(-1),['ad',true]);assert.equal(f.platform.busy,true);
- old.onOpen();next.onClose();await current;assert.deepEqual(f.holds.at(-1),['ad',true]);
- assert.equal((await f.platform.interstitial('next')).reason,'busy');
- old.onClose();assert.deepEqual(f.holds.at(-1),['ad',false]);
+ old.onOpen();next.onClose();await current;assert.deepEqual(f.holds.at(-1),['ad',false]);
+ assert.equal(f.platform.adLocks.size,0);
+});
+
+test('late SDK onOpen after timeout or close cannot create a permanent ad lock',async()=>{
+ const f=fixture();f.platform.timeout=5;let rewards=0;
+ const expired=f.platform.hint(()=>rewards++),old=f.callbacks;
+ assert.equal((await expired).reason,'timeout');
+ const current=f.platform.hint(()=>rewards++),next=f.callbacks;next.onOpen();
+ old.onOpen();old.onRewarded();old.onClose();
+ assert.equal(f.platform.busy,true);assert.deepEqual(f.holds.at(-1),['ad',true]);assert.equal(rewards,0);
+ next.onRewarded();next.onRewarded();next.onClose();
+ assert.equal((await current).rewarded,true);assert.equal(rewards,1);
+ assert.equal(f.platform.adLocks.size,0);assert.deepEqual(f.holds.at(-1),['ad',false]);
+ old.onOpen();next.onOpen();
+ assert.equal(f.platform.adLocks.size,0,'a closed SDK callback cannot re-lock the game');
 });

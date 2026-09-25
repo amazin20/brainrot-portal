@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import {OpenChamber} from './LabOpenArchitecture.js';
 import {addSky,applyDeckFinish,reinforceDeck,sign} from './LabOpenStationArt.js';
 const V=(...v)=>new THREE.Vector3(...v),Q=()=>new THREE.Quaternion();
-export const LAUNCH_SPEC={id:'open-horizon-rewire',title:'За горизонтом',concept:'Разгон открывает ракурс. Во время одного полёта поменяй оба конца пути.',description:'Закрепи друга клавишей E. С высокой площадки набери скорость; за энергоблоком откроется новый ракурс.',accent:0xffaa54,assets:[1,2,11,22,23,24],hints:['Низкий спуск не даёт нужной дальности. Подъём широким пандусом меняет запас энергии, а наклонный выход — направление.','До полёта выпускная панель спрятана за энергоблоком. В полёте сначала перенеси вход на дальний экран, затем выход — на верхний причал.','На нижней площади нет тупика: широкий пандус возвращает к началу. Закреплённый друг проходит порталы вместе с тобой, руки остаются свободными.']};
+export const LAUNCH_SPEC={id:'open-horizon-rewire',title:'За горизонтом',concept:'Разгон открывает ракурс. Во время одного полёта поменяй оба конца пути.',description:'Закрепи друга клавишей E. С высокой площадки набери скорость; за энергоблоком откроется новый ракурс.',accent:0xffaa54,assets:[1,2,11,22,23,24],hints:['Низкий спуск не даёт нужной дальности. Подъём широким пандусом меняет запас энергии, а наклонный выход — направление.','До полёта выпускная панель спрятана за энергоблоком. В полёте сначала перенеси вход на дальний экран, затем выбери выход: боковой причал или потолок над площадью.','На нижней площади нет тупика: широкий пандус возвращает к началу. Закреплённый друг проходит порталы вместе с тобой, руки остаются свободными.']};
 export function buildOpenLaunch(game,index=29){
  const k=new OpenChamber(game,LAUNCH_SPEC,index,'launch');k.bounds={minX:-64,maxX:98,minZ:-60,maxZ:56};k.ceiling=82;addSky(k);
  k.deck('Lower rescue square',-62,96,-58,54,-9,{color:'dark'});
@@ -17,6 +17,11 @@ export function buildOpenLaunch(game,index=29){
  k.panel('far-catch',[80,20.5,26],[-1,0,0],18,18);
  k.deck('Upper terminal square',52,78,-34,-6,26);
  k.panel('terminal-outlet',[77.8,28.85,-20],[-1,0,0],10,5.8);
+ // The same distant entry can terminate through an overhead ceramic. Its
+ // backed ceiling redirects the shared horizontal flight into the upper
+ // square from above, changing the actual terminal trajectory and landing.
+ k.block([70,34,-15],[12,1.2,12],'secondary',true);
+ k.panel('terminal-ceiling',[70,33.35,-15],[0,-1,0],10,10);
  // The building is a large authored spatial turn, not a corridor or a hidden
  // completion flag. Its normal silhouette occludes the final face from ascent.
  k.block([23,29,-20],[14,78,80],'dark',true,k.world.root,.18);
@@ -46,5 +51,5 @@ export function buildOpenLaunch(game,index=29){
  applyDeckFinish(k);
  const l=k.finishOpen([-29,8,31],[-31,.6+8,28],[64,26,-20],{kineticCourse:true,launchSurface:launch,spawnView:{yaw:-.25,pitch:-.16}});
  l.getContextLesson=()=>{if(!game.velocityCompanion?.connected&&game.playerPosition.distanceTo(game.cargo.position)<4.5)return ['open-tether','E','Закрепи друга: он полетит рядом, а руки останутся свободными для выстрелов.',false];if(!game.playerGrounded&&game.playerVelocity.length()>12)return ['open-flight-focus','Q','Удерживай Q, чтобы замедлить полёт и точнее переставить порталы.',false];return null;};
- l.puzzleGeometry={orders:['airborne-double-rewire'],launchHeight:54,goalHeight:26,noProgressFlags:true,minimumFlightSpan:90};return l;
+ l.puzzleGeometry={orders:['airborne-double-rewire','ceiling-descent'],launchHeight:54,goalHeight:26,noProgressFlags:true,minimumFlightSpan:90};return l;
 }

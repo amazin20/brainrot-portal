@@ -21,10 +21,32 @@ export function room18Freight(d){
  const before=game.physics.portalTransports;game.interact();until(()=>game.physics.portalTransports>before,5,'Cargo enters the common well');
  mark('freight crosses the low throat');until(()=>game.cargo.position.z>-7.8&&game.cargo.position.y>10.9,5,'Cargo crosses its low throat');wait(2);
 }
-export function room18Climb(d){
+export function room18Climb(d,{direct=false}={}){
  const {walk,aim,level,mark}=d;
  walk(0,16.5);walk(20,16.5);walk(20,-17.5);walk(-1.5,-17.5);walk(-1.5,-14);walk(-.3,-14);
- aim(1,level.panels.rebound.getFrame().center);walk(-1.5,-14);walk(-1.5,11);walk(1.5,11);mark('same well from the upper return');
+ if(!direct)aim(1,level.panels.rebound.getFrame().center);
+ walk(-1.5,-14);if(direct){
+  if(d.game.camera.aspect<1){walk(-1.5,-8);d.look(level.panels.turn.getFrame().center);}
+  // At 16:10 the camera clips the high sight baffle from the west edge.
+  // Move across the same permanent walkway to its unobstructed east edge.
+  walk(d.game.camera.aspect>=1&&d.game.camera.aspect<1.7?-.6:-1.5,5);
+ }
+ if(direct){
+  check(level.state.sightShutter.loaded&&level.state.sightShutter.progress>.95,'Original freight has not opened the upper sight shutter');
+  const turn=level.panels.turn.getFrame().center;
+  aim(1,d.game.camera.aspect>=1&&d.game.camera.aspect<1.7?turn.clone().add(V(0,-1.3,0)):turn);
+  walk(-1.5,11);walk(1.5,11);
+  mark('freight holds the sight shutter open while the turn is addressed from the upper lip');
+ }else{walk(-1.5,11);walk(1.5,11);mark('same well from the upper return');}
+}
+export function room18DirectFlight(d){
+ const {game,walk,worldMove,frame,stop,until,mark}=d;
+ walk(1.5,9.15);const before=game.teleportCount;
+ for(let n=0;n<300&&game.teleportCount===before;n++){worldMove(0,-.15);frame();}stop();
+ check(game.teleportCount===before+1,'Direct upper fall missed the shared well');
+ until(()=>game.playerGrounded,5,'Direct transverse gallery landing');
+ check(game.playerPosition.y>10.9&&game.playerPosition.y<11.1&&game.playerPosition.x>-4,'Direct turn missed its permanent receiving gallery '+game.playerPosition.toArray());
+ mark('pre-addressed single flight reaches the transverse gallery without a rebound shot');
 }
 export function room18Flight(d,{aimDelayFrames=0}={}){
  const {game,level,walk,worldMove,frame,stop,until,mark}=d;
@@ -36,13 +58,58 @@ export function room18Flight(d,{aimDelayFrames=0}={}){
  until(()=>game.teleportCount>=before+2,4,'Rebound missed its return');until(()=>game.playerGrounded,5,'Transverse gallery landing');
  check(game.playerPosition.y>10.9&&game.playerPosition.y<11.1&&game.playerPosition.x>-4,'Turning gallery missed '+game.playerPosition.toArray());
 }
-export function room18Return(d){
- const {game,level,walk,aim,pickup,mark,frame,worldMove,stop,until}=d;
- walk(12,0);walk(4,0);walk(4,25);aim(1,level.panels.home.getFrame().center);
- walk(4,0);walk(4,-2);walk(-12,-2);walk(-14.85,-2);aim(0,V(-20,.025,-1.2));
- walk(game.cargo.position.x-1,game.cargo.position.z);pickup();walk(-12,-4);walk(-20,-4);mark('return flight behind the entrance');
+export function room18Return(d,{order='portal-first'}={}){
+ const {game,level,walk,aim,pickup,wait,mark,frame,worldMove,stop,until}=d;
+ check(['portal-first','retrieve-first','send-ahead'].includes(order),'Unknown return-gallery route');
+ walk(12,0);walk(4,0);
+ if(order==='retrieve-first'){
+  // Keep the original friend on permanent support while the observer climbs
+  // to the sight line and changes the other portal to the hidden exit.
+  walk(4,-2);walk(-12,-2);walk(-14.85,-2);aim(0,V(-20,.025,-1.2));
+  walk(game.cargo.position.x-1,game.cargo.position.z);pickup();walk(-12,-2);walk(7,0);
+  // Stop before placing the live body. Releasing straight out of a walk
+  // preserves the hand's lateral velocity and can send it off the gallery.
+  wait(.4);
+  check(game.interact()&&!game.heldCube,'Companion could not be staged on the real gallery');wait(1);
+  check(game.cargo.position.y>10.9,'The staged companion fell off the return gallery');
+  mark('retrieve and stage the original companion before addressing the hidden exit');
+  walk(4,0);walk(4,25);aim(1,level.panels.home.getFrame().center);
+  mark('hidden exit addressed after securing the companion on permanent support');
+  walk(4,0);walk(game.cargo.position.x+1,game.cargo.position.z);pickup();walk(-12,-2);
+ }else{
+  walk(4,25);aim(1,level.panels.home.getFrame().center);
+  walk(4,0);walk(4,-2);walk(-12,-2);walk(-14.85,-2);aim(0,V(-20,.025,order==='send-ahead'?0:-1.2));
+  walk(game.cargo.position.x-1,game.cargo.position.z);pickup();
+ }
+ walk(-12,-4);walk(order==='send-ahead'?-21.2:-20,-4);mark('return flight behind the entrance');
+ if(order==='send-ahead'){
+  // The already prepared medium well becomes a separate freight flight. The
+  // player stays on the lip until the original companion reaches safe ground.
+  for(let n=0;n<90&&game.playerPosition.z< -3.35;n++){worldMove(0,1);frame();}stop();
+  check(game.playerPosition.y>10.9&&game.heldCube,'Companion must launch from the real return lip');
+  const delivered=game.physics.portalTransports;
+  check(game.interact()&&!game.heldCube,'Could not send the original companion ahead');
+  until(()=>game.physics.portalTransports>delivered,5,'The companion missed the medium return portal');
+  until(()=>game.physics.grounded&&game.cargo.position.y>7,6,'Companion missed the hidden receiving floor');
+  mark('original companion reaches the hidden exit ahead of the player');
+ }
  const before=game.teleportCount;walk(-20,-3.15);
  for(let n=0;n<300&&game.teleportCount===before;n++){worldMove(0,.3);frame();}stop();check(game.teleportCount>before,'Medium return missed its well');
- until(()=>game.playerGrounded,5,'Hidden exit landing');walk(12.5,25);until(()=>game.state==='won',3,'Reunited behind the entrance');
+ until(()=>game.playerGrounded,5,'Hidden exit landing');walk(12.5,25);
+ if(order==='send-ahead'&&game.state==='playing'){
+  walk(game.cargo.position.x-1,game.cargo.position.z);
+  // The reunited pair can already satisfy the real goal while approaching
+  // the companion, especially in portrait framing. No pickup follows a win.
+  if(game.state==='playing'){pickup();walk(12.5,25);}
+ }
+ until(()=>game.state==='won',3,'Reunited behind the entrance');
 }
-export async function runRoom18(d,{aimDelayFrames=0}={}){room18Freight(d);room18Climb(d);room18Flight(d,{aimDelayFrames});room18Return(d);}
+export async function runRoom18(d,{aimDelayFrames=0,order='portal-first'}={}){
+ check(['portal-first','retrieve-first','send-ahead','direct-turn'].includes(order),'Unknown double-bottom route');
+ room18Freight(d);
+ if(order==='direct-turn'){
+  room18Climb(d,{direct:true});room18DirectFlight(d);room18Return(d,{order:'portal-first'});
+ }else{
+  room18Climb(d);room18Flight(d,{aimDelayFrames});room18Return(d,{order});
+ }
+}

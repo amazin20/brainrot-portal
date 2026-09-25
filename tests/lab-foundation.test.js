@@ -14,10 +14,24 @@ const make=async n=>{const g=await createHeadlessGame();g.chamberEdition='founda
 test('root starts a separate first chapter; explicit archives and later bookmarks keep their meaning',()=>{
  for(const q of ['', '?debug=1', '?edition=foundation'])assert.deepEqual(readFoundationEdition(q),{enabled:true,levelIndex:0});
  for(const n of [1,2,3,4,5])assert.deepEqual(readFoundationEdition('?level='+n),{enabled:true,levelIndex:n-1});
- for(const q of ['?edition=classic&level=1','?edition=open&level=31','?level=31','?mode=velocity'])assert.equal(readFoundationEdition(q).enabled,false);
- assert.deepEqual(FOUNDATION_INDICES.map(nextFoundationLevel),[1,2,3,4,0]);
+ for(const n of [6,30])assert.deepEqual(readFoundationEdition('?edition=foundation&level='+n),{enabled:true,levelIndex:n-1});
+ for(const q of ['?edition=classic&level=1','?edition=open&level=31','?level=6','?level=31','?mode=velocity'])assert.equal(readFoundationEdition(q).enabled,false);
+ assert.deepEqual(FOUNDATION_INDICES,Array.from({length:30},(_,i)=>i));
+ assert.deepEqual(FOUNDATION_INDICES.map(nextFoundationLevel),[...Array.from({length:29},(_,i)=>i+1),0]);
  assert.equal(CAMPAIGN.length,33);assert.equal(new Set(FOUNDATION_SPECS.map(s=>s.id)).size,5);
  assert.ok(FOUNDATION_SPECS.every(s=>!CAMPAIGN.some(c=>s.id===c.id)));
+});
+test('foundation continues into the existing sixth room without changing its builder or archive progress',async()=>{
+ const game=await make(6);
+ assert.equal(game.firstLevel.id,CAMPAIGN[5].id);
+ assert.equal(campaignSpec(game,5).id,CAMPAIGN[5].id);
+ assert.equal(game.firstLevel.foundationChamber,undefined);
+ const data=new Map(),storage={getItem:key=>data.get(key),setItem:(key,value)=>data.set(key,value)};
+ const archive=new LabPreferences(storage);archive.complete(5);const before=new Map(data);
+ const campaign=new LabPreferences(foundationStorage(storage));campaign.complete(4);campaign.complete(5);campaign.complete(29);
+ for(const [key,value]of before)assert.equal(data.get(key),value);
+ assert.deepEqual(new LabPreferences(foundationStorage(storage)).value.completed,[4,5,29]);
+ assert.deepEqual(new LabPreferences(storage).value.completed,[5]);
 });
 test('new progression cannot inherit or overwrite archive solutions, hints or saves',()=>{
  const data=new Map(),storage={getItem:k=>data.get(k),setItem:(k,v)=>data.set(k,v)};
@@ -36,7 +50,7 @@ for(let n=1;n<=5;n++)test(`new room ${n}: alternative exploration and return`,as
  const g=await make(n),report=await runV8Journey(g,{journeyOptions:{alternate:true}});
  assert.equal(report.pass,true);assert.equal(report.resets,0);assert.equal(report.respawns,0);
 });
-for(const n of [1,5])test(`new room ${n}: leave original companion, return and complete without reset`,async()=>{
+for(const n of [1,3,5])test(`new room ${n}: leave original companion, return and complete without reset`,async()=>{
  const g=await make(n),report=await runV8Journey(g,{journeyOptions:{recover:true}});
  assert.equal(report.pass,true);assert.equal(report.resets,0);assert.equal(report.respawns,0);
 });

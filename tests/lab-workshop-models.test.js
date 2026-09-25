@@ -54,6 +54,38 @@ test('the bridge moves its entire original span while its broad cassette stays b
   assert.throws(() => buildExtensionBridgeModel(game, parent, { stroke: 10 }), RangeError);
 });
 
+test('bridge bounds match source-mesh raycasts across positions, headings and travel without repeated raycasts', () => {
+  const headings = [0, Math.PI / 2, -.4], positions = [[-2, .4, 3], [2, .8, -3]];
+  let sample = null;
+  for (const position of positions) for (const yaw of headings) {
+    const item = buildExtensionBridgeModel(game, new THREE.Group(), { position, yaw });
+    sample ??= item;
+    for (const progress of [0, .125, .25, .5, .75, .875, 1]) {
+      item.setProgress(progress); item.moving.updateWorldMatrix(true, true);
+      const expected = new THREE.Box3();
+      for (const x of [-item.deck.width / 2, item.deck.width / 2])
+        for (const z of [item.deck.start, item.deck.end]) {
+          const p = V(x, 0, z).applyMatrix4(item.moving.matrixWorld);
+          p.y = item.deck.heightAt(p.x, p.z);
+          expected.expandByPoint(p);
+        }
+      const actual = item.deck.bounds();
+      assert.ok(actual.min.distanceTo(expected.min) < 1e-10, `Minimum drift at ${yaw}, ${progress}`);
+      assert.ok(actual.max.distanceTo(expected.max) < 1e-10, `Maximum drift at ${yaw}, ${progress}`);
+    }
+  }
+  const intersect = THREE.Raycaster.prototype.intersectObjects;
+  let rays = 0;
+  try {
+    THREE.Raycaster.prototype.intersectObjects = function (...args) { rays++; return intersect.apply(this, args); };
+    for (const progress of [0, .25, .5, .75, 1]) {
+      sample.setProgress(progress);
+      sample.deck.bounds();
+    }
+  } finally { THREE.Raycaster.prototype.intersectObjects = intersect; }
+  assert.equal(rays, 0, 'Repeated bounds queries should not scan source triangles');
+});
+
 test('bridge physics slices track the actual source deck profile through the full travel and yaw', () => {
   for (const yaw of [0, Math.PI / 2, -.4]) {
     const item = buildExtensionBridgeModel(game, new THREE.Group(), { position: [2, .8, -3], yaw });

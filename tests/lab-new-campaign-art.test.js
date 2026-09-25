@@ -75,7 +75,7 @@ for(let room=22;room<=26;room++)test(`room ${room} premium art preserves physica
  }
  if(room===24){
   assert.equal(level.chapterArt.profile,'garden');
-  assert.equal(level.chapterArt.openSky,true);
+  assert.equal(level.chapterArt.openSky,false);
   assert.equal(premium.userData.stats.ventPanels,0);
   for(const z of [-20,-18,-16])for(const y of [11.5,13,14.8])artRayClear(addedMeshes,[-4.7,y,z],[1,0,0],1.4);
  }

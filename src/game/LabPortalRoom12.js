@@ -1,8 +1,9 @@
 import * as THREE from 'three';
 import {Workshop} from './LabWorkshopKit.js';
 import {buildRoom12Architecture} from './LabRoom12Architecture.js';
+import {cargoLoadsPlate} from './LabPlateContact.js';
 const V=(x=0,y=0,z=0)=>new THREE.Vector3(x,y,z);
-export const ROOM12_SPEC={id:'folded-junction',title:'Узел падений',concept:'Шесть поверхностей, два путешественника и пересекающиеся пути в одном узле',description:'Выход рядом — этажом выше. Найди путь для себя и друга.',hints:['Одна шахта может отправить вас в разные стороны. Посмотри, куда ведут пространства над головой и под ногами.','Низкий проход подходит свободному другу. Верхний уступ и грузовой край используют один и тот же пол.','Подготовь доставку друга через низкий проём. Падение с верхнего уступа в пару напольных порталов даст новый ракурс. В воздухе перенеси потраченный вход на высокую боковую стену. Путь можно сначала исследовать самому.'],accent:0xd8b77b,assets:[1,2,11,23,24]};
+export const ROOM12_SPEC={id:'folded-junction',title:'Узел падений',concept:'Шесть поверхностей, два путешественника и пересекающиеся пути в одном узле',description:'Выход рядом — этажом выше. Найди путь для себя и друга.',hints:['Одна шахта может отправить вас в разные стороны. Посмотри, куда ведут пространства над головой и под ногами.','Низкий проход подходит свободному другу. Верхний уступ и грузовой край используют один и тот же пол.','Подготовь доставку друга через низкий проём или выстрелом под него из верхней грузовой галереи. Роликовый приёмник довезёт его до причала. Падение с верхнего уступа в пару напольных порталов даст новый ракурс.'],accent:0xd8b77b,assets:[1,2,11,23,24]};
 /** Three interwoven levels, six functional ceramics and no progression latch. */
 export function buildRoom12(game,index=11){
  const k=new Workshop(game,ROOM12_SPEC,index),w=k.world;
@@ -54,6 +55,17 @@ export function buildRoom12(game,index=11){
  w.box([-2.5,7.5,2.5],[5,15,7],w.materials.wall);
  deck('Receiving dock',7,15,-2,8,9);
  deck('Freight throat floor',7,13,-9,-2,9);
+ // The visible rollers move only a loose companion along the cargo-size
+ // throat. Their real horizontal impulse carries either freight origin into
+ // the walkable receiving dock while the player finds another crossing.
+ for(let z=-8.5;z<1.5;z+=.75)w.box([10,9.025,z],[5.5,.05,.11],w.materials.accent,false);
+ k.forces.push(()=>{
+  if(game.heldCube||!game.physics?.cargoBody)return;
+  const b=game.physics.cargoBody;
+  if(b.position.x>7.2&&b.position.x<12.8&&b.position.y>9.1&&b.position.y<11.8&&b.position.z>-9&&b.position.z<1.5){
+   b.force.z+=b.mass*Math.max(0,3.1-b.velocity.z)*16;b.wakeUp();
+  }
+ });
  // Dock foundations also mask freight from the lower return passage.
  w.box([10,4.4,-8.8],[6,8.8,.4],w.materials.wall);
  w.box([7.15,4.4,-5.5],[.3,8.8,7],w.materials.wall);
@@ -76,14 +88,21 @@ export function buildRoom12(game,index=11){
  k.panel('shared-drop',[-10,.025,9],[0,1,0],6,6);
  k.panel('return',[4,.025,3],[0,1,0],5.4,6);
  k.panel('cargo',[10,11.35,-9],[0,0,1],5.6,4.6);
+ // The entry freight ceramic stays visible from the far edge of the first
+ // upper lip, allowing the original load to be routed without carrying it.
+ const entryFreight=k.panel('entry-freight',[12,.025,11.5],[0,1,0],6,6);
  // The receiving flight must pass below the enclosed upper walk with the
  // entire capsule, including when portal entry offsets add vertical motion.
  k.panel('final',[-17.5,20.5,3],[1,0,0],5.6,4.6);
  buildRoom12Architecture(w);
- const level=k.finish([10,0,11],[12,.55,11],[10,9,4],{workshop:k,portalPuzzle:true});
+ const level=k.finish([10,0,11],[12,.55,11],[10,9,4],{workshop:k,portalPuzzle:true,cargoOnAnyPad:()=>cargoLoadsPlate(game.cargo,game.heldCube,entryFreight.getFrame())});
+ // Face the folded lower court and both visible portal approaches at arrival.
+ // The default north-facing boom was trapped under the overhead freight deck
+ // and filled the first frame with the underside of the upper walk.
+ level.spawnView={yaw:1.2,pitch:-.15};
  level.puzzleGeometry={safeFloor:0,dropHeight:18,freightHeight:7,goalHeight:9,normalGaps:0,cargoWindow:{z:.4,minY:9,maxY:10.55},launchWindow:{x:-9,minY:18.5,maxY:24},returnSightWindow:{z:11.3,x:[3.5,6.5],y:[17.5,19.6]},footprint:36*32,
-  portalRoles:{'access-low':'enter and return to folded ledge','access-high':'shared observation and freight route','shared-drop':'both cargo drop and player energy','return':'viewpoint, second fall and recovery','cargo':'independent rigid-body delivery','final':'perpendicular flight and recovery'},
-  deductions:['reuse one shaft for two travellers','read intersecting routes in section','change the spent portal while airborne'],orders:['cargo-first','scout-first']};
+  portalRoles:{'access-low':'enter and return to folded ledge','access-high':'shared observation and freight route','shared-drop':'both cargo drop and player energy','return':'viewpoint, second fall and recovery','cargo':'independent rigid-body delivery','entry-freight':'send the untouched original companion directly from the entry through a distant sight','final':'perpendicular flight and recovery'},
+  deductions:['reuse one shaft for two travellers','read intersecting routes in section','change the spent portal while airborne','a remote aperture can replace the high freight lip as the cargo origin'],orders:['cargo-first','remote-freight']};
  return level;
 }
 export {runRoom12} from './LabRoom12Journey.js';

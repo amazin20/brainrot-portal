@@ -4,16 +4,16 @@ import { LabPressurePlatform, LabRotatingPanel } from './LabArticulatedProps.js'
 import { createArchitecturalGate } from './LabArchitecturalGate.js';
 const V=(x=0,y=0,z=0)=>new THREE.Vector3(x,y,z);
 export const CAMPAIGN = Object.freeze([
-  {id:'two-banks',title:'Два берега',description:'Только движение и два связанных портала.',assets:[1,2,11,24],concept:'Связь пространства',
-    hints:['Светлая керамика принимает портал. Тёмный металл — нет.','Один портал оставь на своём берегу, другой создай на дальнем.','Войди в ближний портал и подойди к другу в отмеченной зоне.']},
-  {id:'return-path',title:'Обратный путь',description:'Вес открывает дверь. Портал возвращает друга.',assets:[1,2,11,24,29],concept:'Вес и независимый путь',
-    hints:['Плита опускается только под свободно стоящим другом. На руках его вес не нажимает плиту.','Светлый центр нажимной плиты тоже принимает портал. Вход можно подготовить заранее.','Оставь один портал в плите, поставь друга, пройди дверь. За поворотом создай выход и забери его.']},
+  {id:'two-banks',title:'Два берега',description:'Только движение и два связанных портала.',assets:[1,2,11,23,24],concept:'Связь пространства',
+    hints:['Светлая керамика принимает портал. Тёмный металл — нет.','Один портал оставь на своём берегу или на дне рва, другой создай на дальнем.','Войди в ближний портал либо спрыгни в портал на дне рва и подойди к другу.']},
+  {id:'return-path',title:'Обратный путь',description:'Вес открывает дверь. Портал возвращает друга.',assets:[1,2,11,23,24,29],concept:'Вес и независимый путь',
+    hints:['Плита опускается только под свободно стоящим другом. На руках его вес не нажимает плиту.','Светлый центр нажимной плиты тоже принимает портал. Вход можно подготовить заранее.','Пройди открытую дверь и создай выход за поворотом, чтобы забрать друга; либо направь выход в потолочную вентиляцию до перехода. Тогда друг уйдёт первым, а ты попадёшь за закрывшуюся дверь через плиту с бокового балкона.']},
   {id:'fall-fling',title:'Падение — это разгон',description:'Высота превращается в скорость, а портал меняет её направление.',assets:[1,2,11,23,24],concept:'Сохранение скорости',
-    hints:['Простой шаг в напольный портал не даст нужной скорости. Посмотри на высоту балкона.','Напольный вход принимает скорость падения; боковой выход превращает её в полёт.','Свяжи белую плиту внизу с боковой стеной. Возьми друга и упади в портал с верхнего края.']},
+    hints:['Простой шаг в напольный портал не даст нужной скорости. Посмотри на высоту балкона.','Напольный вход принимает скорость падения; боковой выход превращает её в полёт.','Свяжи белую плиту с боковой стеной. Можно пройти с другом вместе или сперва отправить его с края на соединённую приёмную полку, подняться обратно по лестнице и затем прыгнуть самому.']},
   {id:'moving-address',title:'Подвижный адрес',description:'Портал остаётся на своей плите, даже когда она движется.',assets:[1,2,11,24,19,22],concept:'Движущийся портал',
-    hints:['Белая панель закреплена на подъёмнике. Портал поедет вместе с ней.','Терминал вызывает подъёмник вверх или вниз. Два положения устойчивы, спешить не нужно.','Создай портал на подъёмнике и на стене рядом. Подними его терминалом, возьми друга, войди в ближний портал.']},
+    hints:['Белая панель закреплена на подъёмнике. Портал поедет вместе с ней.','Терминалы снаружи и на платформе вызывают подъёмник вверх или вниз.','Создай портал на подъёмнике и на стене рядом. Подними платформу заранее или зайди с другом на платформу и поднимись вместе с ним.']},
   {id:'choose-angle',title:'Угол решает',description:'Соедини падение, поворот панели и выход на высокий остров.',assets:[1,2,11,23,28,22],concept:'Направление импульса',
-    hints:['Высокий остров не достигается горизонтальным вылетом. Скорости мало без правильного направления.','Терминал наклоняет выходную панель. Портал должен смотреть немного вверх.','Подготовь вход на дне шахты и выход на поворотной панели. Наклони панель, возьми друга и упади во вход с балкона.']},
+    hints:['Высокий остров не достигается горизонтальным вылетом. Скорости мало без правильного направления.','Терминал наклоняет выходную панель. Белый потолок над островом тоже принимает портал.','Подготовь вход на дне шахты. Наклонённая панель запускает тебя к острову; потолочный выход позволяет спуститься сверху. Возьми друга и войди во вход с балкона.']},
 ]);
 const PALETTES=[
   {wall:0x507683,floor:0x597b85,accent:0x80e6d3,sky:0xc5dde2},
@@ -41,8 +41,8 @@ export function buildLabCampaignLevel(game,index) {
   };
   function terminal(position,action) {
     const art=prop('controls a moving mechanism',22,1.5,position);
-    game.collisionProxy(new THREE.Box3().setFromObject(art));
-    const t={position:V(...position).add(V(0,.8,0)),art,action};terminals.push(t);return t;
+    const collider=game.collisionProxy(new THREE.Box3().setFromObject(art));
+    const t={position:V(...position).add(V(0,.8,0)),art,collider,action};terminals.push(t);return t;
   }
   function pressure(x,y,z) {
     const art=prop('weight switch and floor-portal surface',29,5.7,[x,y,z]),mechanism=new LabPressurePlatform(art);
@@ -83,11 +83,23 @@ export function buildLabCampaignLevel(game,index) {
     world.walls(bounds,6,-3.5);world.floor(-6,6,4,15);world.floor(-6,6,-14,-4);world.floor(-6,6,-4,4,-3);
     world.stairs(3.5,5.8,.1,4.1,-3,0);
     patch('entry',[-5.8,2.1,9],[1,0,0]);patch('exit',[-5.8,2.1,-9],[1,0,0]);
+    // The trench is already three metres deep. Its second portalable floor
+    // gives a falling route across the same gap without adding a jump boost.
+    const trench=patch('trench-floor',[0,-2.982,1.35],[0,1,0],4,4);
+    game.floors.push({minX:-2,maxX:2,minZ:-.65,maxZ:3.35,y:-2.982,mesh:trench.mesh,enabled:true});
     goal=world.goal([0,0,-11.5],[4.8,3.5]);
   } else if(index===1) {
     bounds={minX:-8,maxX:8,minZ:-16,maxZ:16};spawn=[3,0,11];cargoSpawn=[.2,.55,9];
     world.walls(bounds,6);world.floor(-8,8,-16,16);
     const pad=pressure(-4,0,5);doorway(0,pad);
+    // The balcony gives a standing traveller enough drop to enter the plate
+    // after their companion has left it. The ceiling exit places both on the
+    // far side even when the unweighted door closes.
+    world.stairs(-4.5,-2.5,7.5,10.5,0,2);
+    world.floor(-6,-3,10.5,11.5,2,{name:'balcony stair landing'});
+    world.floor(-7,-5,4,11,2,{name:'plate descent balcony'});
+    world.box([0,3.66,-2],[4,.2,4]);
+    patch('vent-ceiling',[0,3.45,-1.8],[0,-1,0],4,4);
     world.surface({name:'corner baffle',position:[-3,3,-4],width:10,height:6});
     world.surface({name:'corner baffle back',position:[-3,3,-4.22],normal:[0,0,-1],width:10,height:6});
     patch('receiver',[7.8,2.1,-9],[-1,0,0]);goal=world.goal([0,0,-12.5],[4.8,4.0]);
@@ -100,6 +112,11 @@ export function buildLabCampaignLevel(game,index) {
     world.floor(-4,-3,3,4.5,5);world.floor(-6.5,-3,12.5,14,0);
     const input=patch('fall',[0,.018,0],[0,1,0],4,4);game.floors.push({minX:-2,maxX:2,minZ:-2,maxZ:2,y:.018,mesh:input.mesh,enabled:true});
     patch('fling',[-6.8,4.2,-11],[1,0,0],4,4);
+    // A supported ledge catches freight sent through the portal alone. Its
+    // far end joins the original island, so the traveller can retrieve the
+    // same free companion after making the stronger personal jump.
+    world.floor(-4,1.2,-13,-9,1,{name:'connected freight catch ledge'});
+    for(const x of [-3.6,.8])world.box([x,.5,-11],[.2,1,.2]);
     world.floor(.3,7,-14,-8.6,1);goal=world.goal([4.7,1,-11.2],[3.8,4]);
   } else if(index===3) {
     bounds={minX:-6,maxX:6,minZ:-16,maxZ:15};spawn=[0,0,9.5];cargoSpawn=[-1.4,.55,8];
@@ -118,6 +135,10 @@ export function buildLabCampaignLevel(game,index) {
     // Guide rails are supports, not separate interactables.
     for(const x of [-2.65,2.65])world.box([x,3,-7.7],[.14,10,.14]);
     terminal([3.5,0,6],()=>{lift.target=lift.target>0?0:5;game.audio?.mechanism?.('switch');});
+    // A control on the actual car lets a traveller portal into it at floor
+    // level, set down the companion, and ride the moving destination upward.
+    const aboardControl=terminal([1,0,-5],()=>{lift.target=lift.target>0?0:5;game.audio?.mechanism?.('switch');});
+    group.attach(aboardControl.art);lift.aboardControl=aboardControl;
     goal=world.goal([0,5,-12.5],[4.6,4]);
   } else {
     bounds={minX:-11,maxX:14,minZ:-10,maxZ:14};spawn=[-6,5,-3];cargoSpawn=[-4.8,5.55,-2];
@@ -125,6 +146,10 @@ export function buildLabCampaignLevel(game,index) {
     for(let i=0;i<18;i++)world.floor(-10.8,-9,5.5-i*.5,6-i*.5,(i+1)*5/18);
     world.floor(-10.8,-9,-3.5,-2.8,5);
     const input=patch('fall',[-6,.018,5],[0,1,0],4,4);game.floors.push({minX:-8,maxX:-4,minZ:3,maxZ:7,y:.018,mesh:input.mesh,enabled:true});
+    // A second physical exit opens in the roof directly above the receiving
+    // island: falling vertically here solves the crossing without the angled
+    // launch. The default route still uses the rotating wall panel.
+    patch('island-ceiling',[9,10.8,9.7],[0,-1,0],4,4);
     const art=prop('changes exit momentum direction',28,7.5,[9,0,-5],Math.PI);
     const mechanism=new LabRotatingPanel(art,{angle:Math.PI*35/180});
     // Align the hinge's portal face with the desired launch origin.
@@ -162,6 +187,7 @@ export function buildLabCampaignLevel(game,index) {
       if(game.physics)game.moveMechanism(lift,Math.abs(next-lift.target)<.002?lift.target:next,dt);
       lift.panel.group.updateWorldMatrix(true,true);lift.panel.collider.box.setFromObject(lift.panel.mesh);
       game.physics?.updateStaticBox(lift.panel.mesh.uuid,lift.panel.collider.box,dt);
+      if(lift.aboardControl){const c=lift.aboardControl;c.position.copy(c.art.getWorldPosition(V())).add(V(0,.8,0));sync(c.collider,new THREE.Box3().setFromObject(c.art),dt);}
       game.audio?.motor?.(Math.abs(lift.y-lift.target)>.01);
     }
     if(receiverPanel) {

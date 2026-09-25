@@ -13,9 +13,36 @@ try {
   if(e.text().startsWith('Failed to load resource:'))report.resourceMessages.push({text:e.text(),location:e.location()});
   else report.errors.push(e.text());
  });
+ const launchState=()=>page.evaluate(()=>({
+  state:window.__NESI_DEMO_GAME__?.state??null,
+  selectedLevel:document.querySelector('#level-select')?.value??null,
+  activeScreen:document.querySelector('.screen--active')?.id??null,
+  hasFocus:document.hasFocus(),visibility:document.visibilityState,
+  externalPause:document.body.dataset.externalPause??null,
+  errorDetail:document.querySelector('#error-detail')?.textContent??null,
+  loadedModels:window.__NESI_DEMO_GAME__?.assets?.size??null,
+ }));
  await page.goto('http://127.0.0.1:4173/?debug=1&level=11',{waitUntil:'networkidle2'});
- await page.waitForFunction(()=>window.__NESI_DEMO_GAME__?.state==='ready');await page.click('#play-button');
- await page.waitForFunction(()=>window.__NESI_DEMO_GAME__?.state==='playing');
+ await page.waitForFunction(()=>window.__NESI_DEMO_GAME__?.state==='ready');
+ await page.bringToFront();
+ await page.waitForFunction(()=>document.hasFocus()&&!document.hidden,{timeout:10000});
+ report.beforePlay=await launchState();
+ // Chromium can dispatch blur while the page remains the active document.
+ // The Play click must reconcile that stale focus lock and enter the room.
+ await page.evaluate(()=>dispatchEvent(new Event('blur')));
+ report.staleFocusProbe=await launchState();
+ assert.equal(report.staleFocusProbe.externalPause,'true');
+ assert.equal(report.staleFocusProbe.hasFocus,true);
+ await page.click('#play-button');
+ try{
+  await page.waitForFunction(()=>['playing','error'].includes(window.__NESI_DEMO_GAME__?.state),{timeout:30000});
+ }catch(error){
+  report.afterPlay=await launchState();
+  await page.screenshot({path:out+'/launch-failure.png'}).catch(()=>{});
+  throw new Error(`Room 11 Play did not start: ${JSON.stringify(report.afterPlay)}`,{cause:error});
+ }
+ report.afterPlay=await launchState();
+ assert.equal(report.afterPlay.state,'playing',`Room 11 launch failed: ${JSON.stringify(report.afterPlay)}`);
  await page.evaluate(()=>{const g=window.__NESI_DEMO_GAME__;g.renderer.setAnimationLoop(null);g.render();});
  await page.screenshot({path:out+'/start.png'});
  report.roles=await page.evaluate(()=>{const l=window.__NESI_DEMO_GAME__.firstLevel;return {fan:l.state.blower.art.id,drive:l.state.flywheel.art.id,effect:l.readability.airflow.mesh.name};});

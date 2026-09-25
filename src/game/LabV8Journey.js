@@ -97,16 +97,36 @@ export async function runV8Journey(game,{onMilestone=()=>{},scenario=null,journe
       await journey['runRoom'+(index+1)]({game,level,walk,wait,aim,look,until,pickup,enter,mark,frame,worldMove,stop},journeyOptions);
     }else if(index===11){
       const {runRoom12}=await import('./LabPortalRoom12.js');
-      await runRoom12({game,level,walk,wait,aim,until,pickup,enter,mark,frame,worldMove,stop});
+      await runRoom12({game,level,walk,wait,aim,until,pickup,enter,mark,frame,worldMove,stop},journeyOptions);
     }else if(index>=8){
       const {runWorkshopJourney}=await import('./LabWorkshopJourney.js');
-      await runWorkshopJourney({game,level,walk,wait,aim,until,pickup,enter,mark,frame,worldMove,stop});
+      await runWorkshopJourney({game,level,walk,wait,aim,until,pickup,enter,mark,frame,worldMove,stop},journeyOptions);
     }else if(index>=5){
       const {runExtendedStages}=await import('./LabExtendedJourney.js');
-      await runExtendedStages({game,level,walk,wait,aim,until,pickup,enter,mark,frame,worldMove,stop});
+      await runExtendedStages({game,level,walk,wait,aim,until,pickup,enter,mark,frame,worldMove,stop},journeyOptions);
     }else if(index===0){
-      aim(0,level.panels.entry.getFrame().center);aim(1,level.panels.exit.getFrame().center);
-      enter(level.panels.entry);mark('crossed the trench');walk(0,-11.5);
+      if(journeyOptions.route==='trench-drop'){
+        const {runTrenchDrop}=await import('./LabIntroductoryAlternates.js');
+        runTrenchDrop({game,level,walk,wait,aim,look,until,pickup,enter,mark,frame,worldMove,stop});
+      }else{
+        aim(0,level.panels.entry.getFrame().center);aim(1,level.panels.exit.getFrame().center);
+        enter(level.panels.entry);mark('crossed the trench');walk(0,-11.5);
+      }
+    }else if(index===1&&journeyOptions.route==='cargo-first-vent'){
+      aim(0,level.pads[0].mechanism.getPortalFrame().center);
+      walk(.2,10);pickup();walk(-4,6);wait(.3);game.interact();wait(1.5);
+      assert(level.gates[0].opened,'Companion weight did not open the original gate');
+      walk(0,2);aim(1,level.panels['vent-ceiling'].getFrame().center);wait(.7);
+      assert(game.cargo.position.z<0&&!level.gates[0].opened,'Cargo must cross before the unweighted gate closes');
+      mark('companion crosses first and the real weighted gate closes');
+      for(const [x,z] of [[0,7.3],[-3.5,7.3],[-3.5,10.3],[-5.3,10.8],[-6,8],[-6,5]])walk(x,z);
+      const before=game.teleportCount;
+      for(let n=0;n<30;n++){worldMove(1,0);frame();}stop();
+      until(()=>game.teleportCount>before,4,'Player did not follow through the original plate');wait(.5);
+      assert(!level.gates[0].opened&&game.playerPosition.z<0,'Player must join cargo without reopening the gate');
+      mark('player follows through the floor portal after the gate closes');
+      walk(game.cargo.position.x+.7,game.cargo.position.z);pickup();
+      walk(-2.5,-2.7);walk(3,-2.7);walk(5,-3.1);walk(5,-7);walk(0,-12.5);
     }else if(index===1){
       aim(0,level.pads[0].mechanism.getPortalFrame().center);
       walk(.2,10.0);pickup();walk(-4,6.0);wait(.3);game.interact();wait(1.5);
@@ -114,13 +134,39 @@ export async function runV8Journey(game,{onMilestone=()=>{},scenario=null,journe
       walk(0,2);walk(0,-3.1);walk(5,-3.1);walk(5,-7);
       aim(1,level.panels.receiver.getFrame().center);wait(1.5);mark('retrieved friend through floor');
       const c=game.cargo.position;walk(c.x-1,c.z);pickup();walk(0,-12.5);
+    }else if(index===2&&journeyOptions.route==='send-friend-first'){
+      walk(0,2.5);aim(0,level.panels.fall.getFrame().center);aim(1,level.panels.fling.getFrame().center);
+      walk(1.2,7.5);pickup();walk(0,1.5);look(level.panels.fall.getFrame().center);
+      game.interact();wait(3);
+      assert(!game.heldCube&&game.cargo.position.x<-1&&game.cargo.position.y>1.3,
+        'Original free companion must land on the connected freight ledge first');
+      assert(game.playerPosition.y<.1,'Player must remain below while companion waits across the gap');
+      mark('free companion arrives on freight ledge before player travels');
+      walk(0,13);walk(-5,13);
+      for(let n=0;n<18;n++)walk(-5.2,12.25-n*.5);
+      walk(-3.5,4);fallFromEdge(2.35,-1);
+      assert(game.playerPosition.y>.9&&game.cargo.position.y>1.3,'Player must independently reach companion on opposite island');
+      mark('player makes the later velocity crossing to retrieve original companion');
+      walk(game.cargo.position.x+.8,game.cargo.position.z);pickup();walk(4.7,-11.2);
     }else if(index===2){
       walk(0,2.5);aim(0,level.panels.fall.getFrame().center);aim(1,level.panels.fling.getFrame().center);
       walk(1.2,7.5);pickup();walk(0,5);fallFromEdge(2.35,-1);walk(4.7,-11.2);
     }else if(index===3){
-      aim(0,level.panels.entry.getFrame().center);aim(1,level.panels.lift.getFrame().center);
-      walk(3.5,7.3);game.interact();until(()=>level.lift.y>4.98,10,'Lift did not rise');mark('portal rises with its panel');
-      walk(-1.4,9);pickup();enter(level.panels.entry);assert(game.playerPosition.y>4.9,'Wrong lift exit height');walk(0,-12.5);
+      if(journeyOptions.route==='ride-lift'){
+        const {runRideLift}=await import('./LabIntroductoryAlternates.js');
+        runRideLift({game,level,walk,wait,aim,look,until,pickup,enter,mark,frame,worldMove,stop});
+      }else{
+        aim(0,level.panels.entry.getFrame().center);aim(1,level.panels.lift.getFrame().center);
+        walk(3.5,7.3);game.interact();until(()=>level.lift.y>4.98,10,'Lift did not rise');mark('portal rises with its panel');
+        walk(-1.4,9);pickup();enter(level.panels.entry);assert(game.playerPosition.y>4.9,'Wrong lift exit height');walk(0,-12.5);
+      }
+    }else if(index===4&&journeyOptions.route==='roof-drop'){
+      walk(-6,2.4);aim(0,level.panels.fall.getFrame().center);
+      aim(1,level.panels['island-ceiling'].getFrame().center);
+      walk(-4.8,-1);pickup();walk(-6,1);fallFromEdge(2.65,1);
+      assert(level.receiverPanel.progress<.01,'Roof crossing must leave angled launcher idle');
+      mark('vertical roof exit reaches island without changing launcher angle');
+      walk(9,9.7);
     }else{
       walk(-6,2.4);aim(0,level.panels.fall.getFrame().center);aim(1,level.receiverPanel.mechanism.getPortalFrame().center);
       walk(-6.7,-3.65);game.interact();until(()=>level.receiverPanel.progress>.99,5,'Panel did not tilt');mark('exit tilted upward');

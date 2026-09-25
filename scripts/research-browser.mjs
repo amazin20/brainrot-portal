@@ -21,7 +21,31 @@ try{
   assert.equal(build.levels,33);
   assert.deepEqual(await page.$$eval('#level-select option',a=>a.map(o=>Number(o.value))),[23,27,29,30,31,32]);
   const before=await page.evaluate(()=>localStorage.getItem('brainrot-portal.preferences.v24'));
-  await page.click('#play-button');await page.waitForFunction(()=>window.__NESI_DEMO_GAME__?.state==='playing');
+  const startupStatus=()=>page.evaluate(()=>({state:window.__NESI_DEMO_GAME__?.state,
+   level:window.__NESI_DEMO_GAME__?.levelIndex,externalBlocked:window.__NESI_DEMO_GAME__?.externalBlocked,
+   focused:document.hasFocus(),visibility:document.visibilityState,playState:document.body.dataset.playState,
+   menuActive:document.querySelector('#start-screen')?.classList.contains('screen--active'),
+   buttonDisabled:document.querySelector('#play-button')?.disabled,platformBusy:window.__NESI_PLATFORM__?.busy,
+   error:document.querySelector('#error-detail')?.textContent,
+   missingModels:window.__NESI_DEMO_DIAGNOSTICS__?.missingModels}));
+  const launchAttempts=[];
+  for(let attempt=1;attempt<=3;attempt++){
+   // A focus/visibility hold can swallow a click while several CI browsers run at once.
+   // Retry only if the real menu is still ready; never click twice during loading or play.
+   const beforeClick=await startupStatus();if(beforeClick.state!=='ready')break;
+   await page.bringToFront();await page.focus('#play-button');await page.click('#play-button');
+   try{await page.waitForFunction(()=>window.__NESI_DEMO_GAME__?.state!=='ready',{timeout:12000});}catch(error){if(error.name!=='TimeoutError')throw error;}
+   const afterClick=await startupStatus();launchAttempts.push({attempt,beforeClick,afterClick});
+   if(afterClick.state!=='ready')break;
+  }
+  let startupTimeout=null;
+  try{await page.waitForFunction(()=>['playing','error'].includes(window.__NESI_DEMO_GAME__?.state),{timeout:180000});}
+  catch(error){startupTimeout=String(error);}
+  const startup=await startupStatus();
+  if(startupTimeout||startup.state!=='playing'){
+   await page.screenshot({path:path.join(out,`${room}-startup-error.png`)});
+   throw new Error(`Research room ${room} failed to start: ${JSON.stringify({startupTimeout,...startup,launchAttempts,pageErrors:errors})}`);
+  }
   await page.evaluate(()=>{const g=window.__NESI_DEMO_GAME__;g.renderer.setAnimationLoop(null);g.render();});
   await page.screenshot({path:path.join(out,`${room}-start.png`)});
   await page.evaluate(({room,record})=>{
@@ -48,7 +72,7 @@ try{
   await page.evaluate(()=>{document.querySelectorAll('.screen').forEach(e=>e.classList.remove('screen--active'));});
   await page.evaluate(room=>{const g=window.__NESI_DEMO_GAME__,v={31:[[24,15,17],[-6,5,-7]],32:[[23,18,18],[-4,5,-10]],33:[[28,27,24],[-4,9,-3]]}[room];g.cameraRig.restoreProjection?.();g.camera.position.fromArray(v[0]);g.camera.lookAt(...v[1]);g.camera.updateMatrixWorld(true);g.render();},room);
   await page.screenshot({path:path.join(out,`${room}-inspection.png`)});
-  const report={source:build.commit,room,url:url.href,route,options,errors,saveIsolated:true,...evidence,
+  const report={source:build.commit,room,url:url.href,route,options,errors,launchAttempts,saveIsolated:true,...evidence,
    recording:'15 frames per simulated second, excerpts only; not hardware FPS or a human playtest',inspection:'separately positioned art camera'};
   fs.writeFileSync(path.join(out,`${room}-report.json`),JSON.stringify(report,null,2));
   results.push({room,pass:true,programs:evidence.newPrograms,frames:evidence.frames.length,source:build.commit});console.log('RESEARCH VERIFIED',JSON.stringify(results.at(-1)));await page.close();

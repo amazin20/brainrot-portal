@@ -8,7 +8,7 @@ export const ROOM28_SPEC={id:'tidal-observatory',title:'Обсерватория
 
 export function buildRoom28(game,index=27){
  const k=new Workshop(game,ROOM28_SPEC,index),w=k.world;
- configureChapterWorld(w,'lagoon',{openSky:true});
+ configureChapterWorld(w,'lagoon');
  k.bounds={minX:-26,maxX:26,minZ:-23,maxZ:23};k.ceiling=17;
  w.walls(k.bounds,14,-1);w.floor(-26,26,-23,23,0,{name:'Safe lagoon foundation'});
  const deck=(name,x0,x1,z0,z1,y)=>w.floor(x0,x1,z0,z1,y,{name});
@@ -50,8 +50,10 @@ export function buildRoom28(game,index=27){
  const a=k.slider('coral-float',[-14,0,0],[-14,6,0],{width:8.8,depth:10.8,portal:false,asset:19,assetSize:3.2});
  const b=k.slider('lagoon-float',[14,0,0],[14,6,0],{width:8.8,depth:7.8,portal:false,asset:19,assetSize:3.2});
  const tide=buildRoom28Tides(k,{a,b,ports:[{panel:lowA,basin:0},{panel:lowB,basin:1},{panel:highA,basin:0},{panel:overflow,basin:0},{panel:highB,basin:1}]});
- buildRoom28Art(k);
+ const art=buildRoom28Art(k,tide);
  const level=k.finish([0,0,17],[3,.55,16],[-22,5.3,0],{workshop:k,portalPuzzle:true});
+ level.tidalPresentation=art;
+ const dispose=level.dispose;level.dispose=()=>{art.dispose();dispose?.();};
  level.puzzleGeometry={footprint:52*46,goalHeight:5.3,noProgressFlags:true,safeFloor:0,orders:['equal-tide-garden','full-tide-observatory'],fluid:tide,portalRoles:{'coral-overflow':'refill the west island from the lower recovery garden','coral-low':'withdraw water from the west basin','lagoon-low':'equalize both basins or return the eastern reserve','lagoon-fall':'pour freely above the eastern tide','coral-fall':'refill the west basin from inside its newly accessible well'},deductions:['water volume moves instead of appearing','a low connection stops at equal heights','a high outlet changes the equilibrium and exposes another route','the drained basin is an entrance instead of a failure','the same portal pair can restore the occupied west island']};
  return level;
 }

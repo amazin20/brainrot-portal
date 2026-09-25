@@ -3,6 +3,7 @@ import { Workshop } from './LabWorkshopKit.js';
 import { cargoLoadsPlate } from './LabPlateContact.js';
 import { buildPocketCassette, addPocketExitMarker } from './LabPocketCassette.js';
 import { attachPocketReceiver, buildReceiverObservationBand } from './LabPocketReceiver.js';
+import { buildRoom21ServiceCar } from './LabRoom21ServiceCar.js';
 
 export const ROOM21_SPEC = {
   id: 'gravity-pocket', title: 'Гравитационный карман',
@@ -11,7 +12,7 @@ export const ROOM21_SPEC = {
   accent: 0x9bc8c3, assets: [1,2,11,22,23,24],
   hints: ['Груз и механический тормоз независимо удерживают подвижную кассету.',
     'Нижнее окно ведёт в сервисный карман. Там есть постоянная опора и доступ к другу.',
-    'Освободи тормоз, доставь друга в приёмник и поставь портал на опустившуюся кассету. Сервисная площадка позволяет забрать друга и упасть во вход снова, пока тот же выход поднимается.'],
+    'Освободи тормоз, доставь друга в приёмник и поставь портал на опустившуюся кассету. Сервисная площадка позволяет забрать друга и вернуться в нижний вход, пока тот же выход поднимается. Можно также удержать связанную пассажирскую платформу сервисным тормозом и подняться вместе с другом.'],
 };
 
 /** Complete replacement, not another extension of the old two-pass layout.
@@ -20,7 +21,7 @@ export const ROOM21_SPEC = {
 export function buildRoom21(game,index=20) {
   const k=new Workshop(game,ROOM21_SPEC,index), w=k.world;
   w.highFidelity=true;
-  k.bounds={minX:-20,maxX:24,minZ:-17,maxZ:19}; k.ceiling=29;
+  k.bounds={minX:-20,maxX:29,minZ:-17,maxZ:19}; k.ceiling=29;
   w.walls(k.bounds,k.ceiling,-1);
   const floor=(name,x0,x1,z0,z1,y)=>{
     const s=w.floor(x0,x1,z0,z1,y,{name});
@@ -43,10 +44,12 @@ export function buildRoom21(game,index=20) {
   floor('Recovery stair arrival',-18.5,-15,17,18,10);
   floor('Brake inspection bay',-19,-13,-16,-10.5,4);
   floor('Permanent service pocket',-2,23,-14,-3,7);
+  floor('Service car lower boarding finger',22,24.2,-10,-6,7);
   // The receiver-side inspection apron closes the underside sightline; the
   // central service fall at x0 remains open and the east stair is unobstructed.
   floor('Receiver inspection apron',6,19.3,-3,1.5,7);
   floor('Upper arrival balcony',-2,23,-14,-3,18);
+  floor('Service car upper landing finger',22,24.2,-10,-6,18);
   stair('Cargo service stair',19.5,23,7,-3,3,7);
   floor('Retrieval landing',19.5,23,7,10,3.1);
   for(const x of [-12,-3])w.box([x,4.85,16.8],[.7,9.7,.7],w.materials.trim);
@@ -55,7 +58,9 @@ export function buildRoom21(game,index=20) {
   for(const x of [21.8])for(const z of [-12.8,-4.2])w.box([x,8.8,z],[.7,17.6,.7],w.materials.trim);
   for(const y of [7,18]) {
     for(const z of [-14.1])w.box([10.5,y+.65,z],[25,1.3,.20],w.materials.trim);
-    w.box([23.1,y+.65,-8.5],[.20,1.3,11],w.materials.trim);
+    // The guarded east edge has a real boarding aperture to the linked car.
+    w.box([23.1,y+.65,-12],[.20,1.3,4],w.materials.trim);
+    w.box([23.1,y+.65,-4.5],[.20,1.3,3],w.materials.trim);
   }
   // The open south edge of the service pocket is a new, lower fall source.
   // The start has its own visible open drop lip; neither is an invisible trigger.
@@ -90,13 +95,14 @@ export function buildRoom21(game,index=20) {
 
   const cassette=buildPocketCassette(k,cargoSeat);
   k.state.cassette=cassette;
+  const serviceCar=buildRoom21ServiceCar(k,cassette,cargoSeat);
   k.control('cassette-brake',[-16.7,4,-12.2],()=>cassette.toggleBrake(),
     'Тормоз кассеты. Груз опускает её; противовес поднимает освобождённую поверхность.');
   addPocketExitMarker(k,[12,18,-8]);
   const level=k.finish([-9,10,13],[-4,10.55,13],[12,18,-8],{
-    workshop:k,spec:ROOM21_SPEC,portalPuzzle:true,cassette,
+    workshop:k,spec:ROOM21_SPEC,portalPuzzle:true,cassette,serviceCar,
     puzzleGeometry:{revision:'clean-slate-cassette-1',footprint:44*36,
-      occupiedHeights:[3.1,4,7,10,18],orders:['cargo-first','brake-first'],
+      occupiedHeights:[3.1,4,7,10,18],orders:['cargo-first','brake-first'],routes:['portal-return','service-car'],
       noProgressFlags:true,oneMechanism:true,sourceHeights:[10,7],
       cargoWindow:{minY:5.1,maxY:7.2},
       portalRoles:{'departure-entry':'round trip to brake bay','brake-bay':'independent brake preparation',

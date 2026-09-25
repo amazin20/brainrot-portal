@@ -2,12 +2,26 @@ import {installRoom21Aim} from './LabRoom21Journey.js';
 const check=(v,m)=>{if(!v)throw Error(m);};
 export async function runRoom23(d,{order='receiver-first',recovery=false}={}){
  installRoom21Aim(d);const {game,level,walk,wait,mark,until,pickup}=d,p=level.panels,b=level.balance;
- check(['receiver-first','floor-first'].includes(order),'Unknown counterweight preparation order');
- walk(-16,3);if(order==='floor-first')d.aim(0,p['west-load-car'].getFrame().center);
- d.aim(1,p['freight-throat'].getFrame().center);if(order!=='floor-first')d.aim(0,p['west-load-car'].getFrame().center);
- walk(-12.8,3);until(()=>b.loaded,8,'Freight did not reach the distant counterweight car');mark('original freight loads the opposite coupled carriage');
- until(()=>game.playerPosition.y>9.9,20,'Near counterweight ascent');walk(-11,-2);walk(-11,-8);walk(6,-8);walk(6,5.5);walk(8.4,5.5);check(game.interact(),'Middle transmission brake missed');check(b.braked,'Counterweight brake not engaged');mark('permanent gallery preserves first ascent and brake clamps both cars');
- walk(game.cargo.position.x-1,game.cargo.position.z);pickup();walk(8.4,5.5);walk(6,5.5);walk(6,-8);walk(0,-8);d.look(game.playerPosition.clone().setZ(-20));wait(.4);game.interact();wait(1.5);check(!game.heldCube,'Cargo was not placed in permanent storage');
+ check(['receiver-first','floor-first','coupled-west-first'].includes(order),'Unknown counterweight preparation order');
+ if(order==='coupled-west-first'){
+  walk(-12.4,10);walk(-12.4,3.8);walk(-13.2,4.75);check(b.west.loaded(),'The original load must occupy the near carriage');
+  check(game.interact()&&b.coupling==='west','West-side mechanical coupling missed');
+  mark('west coupling carries original companion and player on the same first carriage');
+  until(()=>game.playerPosition.y>9.9,20,'Occupied west carriage failed to rise');
+ }else{
+  walk(-16,3);if(order==='floor-first')d.aim(0,p['west-load-car'].getFrame().center);
+  d.aim(1,p['freight-throat'].getFrame().center);if(order!=='floor-first')d.aim(0,p['west-load-car'].getFrame().center);
+  walk(-12.8,3);until(()=>b.loaded,8,'Freight did not reach the distant counterweight car');mark('original freight loads the opposite coupled carriage');
+  until(()=>game.playerPosition.y>9.9,20,'Near counterweight ascent');
+ }
+ walk(-11,-2);walk(-11,-8);walk(6,-8);walk(6,5.5);walk(8.4,5.5);check(game.interact(),'Middle transmission brake missed');check(b.braked,'Counterweight brake not engaged');mark('permanent gallery preserves first ascent and brake clamps both cars');
+ if(order==='coupled-west-first'){
+  walk(6,5.5);walk(6,-8);walk(-11,-8);walk(-11,-2);
+ }
+ walk(game.cargo.position.x-1,game.cargo.position.z);pickup();
+ if(order==='coupled-west-first'){walk(-11,-2);walk(-11,-8);}
+ else {walk(8.4,5.5);walk(6,5.5);walk(6,-8);}
+ walk(0,-8);d.look(game.playerPosition.clone().setZ(-20));wait(.4);game.interact();wait(1.5);check(!game.heldCube,'Cargo was not placed in permanent storage');
  mark('original load rests outside either moving car');
  if(recovery){game.clearPortals();wait(.4);mark('portal pair erased while both fixed cargo pocket and braked car remain recoverable');}
  walk(6,-8);walk(6,5.5);walk(8.4,5.5);check(game.interact(),'Return brake release missed');check(!b.braked,'Counterweight brake remained engaged');

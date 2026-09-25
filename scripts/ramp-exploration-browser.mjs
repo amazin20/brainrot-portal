@@ -17,7 +17,37 @@ try{
  await page.goto(url.href,{waitUntil:'networkidle2'});await page.waitForFunction(()=>window.__NESI_DEMO_GAME__?.state==='ready');
  const build=await page.evaluate(async()=>{const r=await fetch('build-info.json',{cache:'no-store'});return r.json();});
  if(process.env.BUILD_COMMIT)assert.equal(build.commit,process.env.BUILD_COMMIT);
- await page.click('#play-button');await page.waitForFunction(()=>window.__NESI_DEMO_GAME__?.state==='playing');
+ let playAttempts=0;
+ try{
+  // Software WebGL can expose ready before the menu has finished becoming
+  // the browser's hit target. Use trusted clicks only when Play is on top.
+  for(;playAttempts<3;playAttempts++){
+   if(await page.evaluate(()=>window.__NESI_DEMO_GAME__?.state)!=='ready')break;
+   await page.waitForFunction(()=>{
+    const button=document.querySelector('#play-button'),screen=button?.closest('.screen'),rect=button?.getBoundingClientRect();
+    return screen?.classList.contains('screen--active')&&!screen.inert&&getComputedStyle(screen).opacity==='1'&&
+      rect?.width>0&&rect?.height>0&&document.elementFromPoint(rect.left+rect.width/2,rect.top+rect.height/2)===button;
+   },{timeout:30000});
+   await page.locator('#play-button').click();
+   if(await page.waitForFunction(()=>window.__NESI_DEMO_GAME__?.state!=='ready',{timeout:12000}).then(()=>true,()=>false))break;
+  }
+  await page.waitForFunction(()=>['playing','error'].includes(window.__NESI_DEMO_GAME__?.state),{timeout:180000});
+  assert.equal(await page.evaluate(()=>window.__NESI_DEMO_GAME__?.state),'playing');
+ }catch(error){
+  const diagnostic=await page.evaluate(()=>{
+   const button=document.querySelector('#play-button'),screen=button?.closest('.screen'),rect=button?.getBoundingClientRect();
+   const target=rect&&document.elementFromPoint(rect.left+rect.width/2,rect.top+rect.height/2);
+   return {state:window.__NESI_DEMO_GAME__?.state,bodyState:document.body.dataset.playState,
+    externalBlocked:window.__NESI_DEMO_GAME__?.externalBlocked,pointerLocked:!!document.pointerLockElement,
+    screenActive:screen?.classList.contains('screen--active'),screenInert:screen?.inert,
+    screenOpacity:screen&&getComputedStyle(screen).opacity,target:target?.id||target?.tagName,
+    buttonRect:rect&&{x:rect.x,y:rect.y,width:rect.width,height:rect.height},
+    errorText:document.querySelector('#error-detail')?.textContent};
+  }).catch(e=>({captureFailure:String(e)}));
+  fs.writeFileSync(path.join(out,'play-failure.json'),JSON.stringify({attempts:playAttempts,diagnostic,errors,failure:String(error.stack||error)},null,2));
+  await page.screenshot({path:path.join(out,'play-failure.png')}).catch(()=>{});
+  throw error;
+ }
  const result=await page.evaluate(async({source,modulePath,record})=>{
   const g=window.__NESI_DEMO_GAME__;g.renderer.setAnimationLoop(null);
   // Serialize our reviewed scenario, not a second, subtly different recorder.

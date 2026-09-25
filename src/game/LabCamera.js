@@ -45,6 +45,7 @@ export class LabCamera {
     this.desired = new THREE.Vector3();
     this.boomDirection = new THREE.Vector3();
     this.lookPoint = new THREE.Vector3();
+    this.portalFramingPoint = new THREE.Vector3();
     this.castDirection = new THREE.Vector3();
     this.castRight = new THREE.Vector3();
     this.castUp = new THREE.Vector3();
@@ -62,6 +63,7 @@ export class LabCamera {
     this.portalUpOrientation = new THREE.Quaternion();
     this.viewUp = UP.clone();
     this.portalExit = null;
+    this.portalFramingActive = false;
     this.inclinedFraming = false;
     this.portalClipPlane = new THREE.Plane();
     this.mainClippingPlanes = [];
@@ -96,6 +98,7 @@ export class LabCamera {
     this.portalOrientation.identity();
     this.portalUpOrientation.identity();
     this.portalExit = null;
+    this.portalFramingActive = false;
     this.inclinedFraming = false;
     this.mainClippingPlanes.length = 0;
     this.avoidance.set(0, 0, 0); this.avoidanceVelocity.set(0, 0, 0); this.avoidanceActive = false;
@@ -161,6 +164,7 @@ export class LabCamera {
     const vertical = Math.abs(exit?.normal?.y ?? 0);
     this.inclinedFraming = vertical > .001 && vertical < .999;
     this.portalExit = clipExit && exit?.normal ? exit : null;
+    this.portalFramingActive = false;
     this.updatePortalClipping();
     const controls = new THREE.Euler().setFromQuaternion(control, 'YXZ');
     return { yaw: controls.y, pitch: THREE.MathUtils.clamp(pitch, CAMERA_PITCH_MIN, CAMERA_PITCH_MAX), rotation };
@@ -362,6 +366,24 @@ export class LabCamera {
       this.avoidance.copy(avoidGoal); this.avoidanceVelocity.set(0, 0, 0);
     }
     this.lookPoint.copy(this.focus).addScaledVector(this.forward, 16);
+    // A floor/wall transfer can leave the rigidly transported view aimed at
+    // the ceiling while the traveller is already through the aperture. Keep
+    // the body in view during the brief gravity-relative horizon recovery.
+    // The lens, mouse controls and portal clipping remain untouched.
+    const tilt = this.viewUp.angleTo(UP);
+    // Other portal rotations can invert the horizon during an airborne shot;
+    // their preserved aim must not receive this quarter-turn correction.
+    if (step > 0 && Math.abs(tilt - Math.PI / 2) < .2
+      && this.framingPenalty(this.camera.position) > .02)
+      this.portalFramingActive = true;
+    if (tilt < .1) this.portalFramingActive = false;
+    if (step > 0 && this.portalFramingActive) {
+      const assist = .92 * THREE.MathUtils.smoothstep(tilt, .1, 1.3);
+      if (assist > 0) {
+        this.portalFramingPoint.copy(this.playerPivot).addScaledVector(this.forward, .8);
+        this.lookPoint.lerp(this.portalFramingPoint, assist);
+      }
+    }
     this.camera.up.copy(this.viewUp);
     this.camera.lookAt(this.lookPoint);
     this.camera.updateMatrixWorld();

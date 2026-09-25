@@ -46,11 +46,47 @@ export function buildSpringMailRoom(k,{baseWalls,closedExit}) {
   }
   w.box([0,10.8,-8.2],[7,.28,.28]);
   w.box([0,10.8,-1.8],[7,.28,.28]);
+  // The rear gantry and the horizontal supplied ram are the two visible
+  // landmarks of the falling load. Status on the actual rear truss follows
+  // the physical latch; a tall indicator above the grounded ram shows its
+  // compression from the entrance without suggesting a second target.
+  const idle=0xc49358,active=0x83e4c4;
+  const trussLamp=new THREE.MeshBasicMaterial({color:idle});
+  const ramLamp=new THREE.MeshBasicMaterial({color:idle});
+  w.box([0,10.81,-8.02],[3.3,.11,.10],trussLamp,false);
+  // The vertical readout is fixed to the supplied ram's side bearing by a
+  // short conduit. Its dark enclosure makes the changing travel legible and
+  // prevents the light from reading as an unrelated floating strip.
+  w.box([-5.55,3.35,-5.15],[.55,2.88,.22],w.materials.trim,false);
+  const compressionBar=w.box([-5.55,3.35,-5],[.15,2.6,.15],ramLamp,false);
+  w.box([-5.55,4.83,-5.13],[.68,.18,.30],w.materials.trim,false);
+  w.box([-5.55,1.97,-5],[.37,.12,.37],w.materials.trim,false);
+  const conduitFrom=V(-4.58,1.25,-5),conduitTo=V(-5.55,1.97,-5);
+  const conduitDelta=conduitTo.clone().sub(conduitFrom);
+  const conduit=new THREE.Mesh(new THREE.CylinderGeometry(.085,.085,conduitDelta.length(),8),w.materials.trim);
+  conduit.position.copy(conduitFrom).add(conduitTo).multiplyScalar(.5);
+  conduit.quaternion.setFromUnitVectors(V(0,1,0),conduitDelta.normalize());w.root.add(conduit);
+  k.ticks.push(()=>{
+    const compressed=Math.min(1,spring.compression/.72);
+    trussLamp.color.setHex(spring.latched?active:idle);
+    ramLamp.color.setHex(spring.latched?active:idle);
+    compressionBar.scale.y=.12+.88*compressed;
+    compressionBar.position.y=2.05+1.3*compressionBar.scale.y;
+  });
   // Visible corner guides explain where the protective glass retracts.
   for(const x of [-1.94,1.94])for(const z of [-6.94,-3.06]) {
     w.box([x,1.9,z],[.12,3.8,.12]);
     w.box([x,.12,z],[.36,.24,.36]);
   }
+  // A visible service sensor lowers the safety glass for a traveller who
+  // lands inside without setting the spring. They can carry the companion
+  // back out and try the same gravity drop again.
+  const serviceOccupied=()=>{
+    const p=k.game.playerPosition;
+    return k.game.playerGrounded&&Math.abs(p.x)<1.85&&Math.abs(p.z+5)<2.25&&p.y>.8&&p.y<4;
+  };
+  const serviceLamp=w.box([0,3.25,-6.82],[1.3,.07,.12],new THREE.MeshBasicMaterial({color:0xcba06d}),false);
+  k.ticks.push(()=>serviceLamp.material.color.setHex(serviceOccupied()?0x82e5cb:0xcba06d));
   const guards=[];
   // The grounded machine stops before the left glass. Its working crank
   // passes through an open-top slot, measured over the complete .72 m stroke.
@@ -62,13 +98,32 @@ export function buildSpringMailRoom(k,{baseWalls,closedExit}) {
     [[-1.94,1.14,-6.15],[.08,2.28,.32]],
     [[1.94,1.8,-5],[.08,3.6,3.88]],
     [[0,1.8,-6.94],[3.88,3.6,.08]],[[0,1.8,-3.06],[3.88,3.6,.08]],
-  ]) guards.push(glassLift(k,p,size,-3.75,()=>spring.latched));
+  ]) guards.push(glassLift(k,p,size,-3.75,()=>spring.latched||serviceOccupied()));
   k.state.springGuards=guards;
   // A low service tread raises the player's hands above the compressed cup's
   // rim. Retrieval is an ordinary E interaction after the glass retracts.
   w.box([0,.08,-3.05],[3.4,.16,1.3],w.materials.trim);
   w.floor(-1.7,1.7,-3.7,-2.4,.28);
-  k.control('release',[-5.8,0,-1.8],()=>spring.reset(),'E — освободить защёлку. Пружина вернёт приёмную чашу.');
+  // The latch cannot be released while the original loose load remains in
+  // the guarded cup: raising the cup and closing its glass would seal the
+  // companion inside. The player can use the service tread to retrieve it,
+  // then deliberately rearm the spring with this same release lever.
+  const occupiedCup=()=>{
+    const c=k.game.cargo?.position;
+    return !!c&&!k.game.heldCube&&Math.abs(c.x)<1.8&&Math.abs(c.z+5)<1.8&&c.y>.4&&c.y<4;
+  };
+  const release=k.control('release',[-5.8,0,-1.8],()=>{
+    if(spring.latched&&occupiedCup()){
+      k.game.callbacks.onToast?.('Сначала забери друга из чаши');
+      return;
+    }
+    spring.reset();
+  },'E — освободить защёлку. Пружина вернёт приёмную чашу.');
+  k.ticks.push(()=>{
+    release.lesson=spring.latched&&occupiedCup()
+      ?'Сначала забери друга из чаши; затем освободи защёлку.'
+      :'E — освободить защёлку. Пружина вернёт приёмную чашу.';
+  });
   closedExit(()=>spring.latched);
   k.wire([[1.6,.07,-5],[4.4,.07,-5],[4.4,.07,-11.5],[0,.07,-11.5]],()=>spring.latched);
   k.state.presentation={kind:'spring-and-bell-crank',cupRest:1.9,ceiling:10.6};
@@ -97,6 +152,19 @@ export function buildFreightBridgeRoom(k,{baseWalls,closedExit}) {
   }
   k.panel('loading-dock',[-11.7,bankY+2.1,3.8],[1,0,0],5.8);
   k.panel('unloading-dock',[8.65,bankY+2.1,1.5],[-1,0,0],5.8);
+  // The lower loading floor and the receiver's overhead service opening
+  // provide a second cargo route. An empty bridge must still be fully extended
+  // before the real receiving contact can release the hood.
+  k.panel('dock-feed-floor',[-2.9,.025,9.5],[0,1,0],4,4);
+  k.panel('dock-feed-ceiling',[2.5,5.9,1.5],[0,-1,0],4,4);
+  // Four real hangers tie the overhead ceramic panel to the chamber ceiling.
+  // Its open centre remains clear for the incoming friend and for portal shots.
+  for(const x of [.44,4.56])for(const z of [-.56,3.56])
+    w.box([x,8.98,z],[.16,6.04,.16],w.materials.trim);
+  for(const y of [6.02,11.88]){
+    for(const z of [-.56,3.56])w.box([2.5,y,z],[4.28,.16,.16],w.materials.trim);
+    for(const x of [.44,4.56])w.box([x,y,1.5],[.16,.16,4.28],w.materials.trim);
+  }
 
   const slabBox=new THREE.Box3(),matrix=new THREE.Matrix4(),rotation=new THREE.Matrix4();
   function bounds(s){
@@ -148,7 +216,17 @@ export function buildFreightBridgeRoom(k,{baseWalls,closedExit}) {
   k.resets.push(()=>lock.engaged=false);
   const hood=[];
   for(const [p,size] of [
-    [[3.8,bankY+1.34,1.5],[8.8,.12,3.0]],
+    // The freight hatch clears the original box through its full rotated
+    // footprint across camera aspects. A raised glass well around the opening
+    // admits a falling load while keeping a jumping traveller on the roof.
+    [[.5,bankY+1.34,1.5],[2.2,.12,3.0]],
+    [[5.8,bankY+1.34,1.5],[4.8,.12,3.0]],
+    [[2.5,bankY+1.34,.225],[1.8,.12,.45]],
+    [[2.5,bankY+1.34,2.625],[1.8,.12,.75]],
+    [[1.54,bankY+2.30,1.35],[.12,1.8,1.92]],
+    [[3.46,bankY+2.30,1.35],[.12,1.8,1.92]],
+    [[2.5,bankY+2.30,.39],[1.92,1.8,.12]],
+    [[2.5,bankY+2.30,2.31],[1.92,1.8,.12]],
     [[3.8,bankY+.65,-.01],[8.8,1.3,.10]],[[3.8,bankY+.65,3.01],[8.8,1.3,.10]],
     [[8.2,bankY+.65,1.5],[.12,1.3,3.0]],
   ])hood.push(glassLift(k,p,size,3.8,()=>lock.engaged));

@@ -11,7 +11,7 @@ export function buildBalanceChamber(game,spec){
  const world=new LabTileWorld(game,{wall:0x52616a,floor:0x75838a,accent:0x99cfbb,sky:0x637681});
  world.materials.wall.color.setHex(0x52616a);world.materials.floor.color.setHex(0x75838a);world.materials.trim.color.setHex(0x30434d);
  const bounds={minX:-18.5,maxX:14,minZ:-18.5,maxZ:19},spawn=[8,0,12.5],cargoSpawn=[6,.55,11.5];
- const panels={},terminals=[],fixtures=[],state={angle:0,previousAngle:0,omega:0,torque:0,counterIndex:2,counterZ:-1.2};
+ const panels={},terminals=[],fixtures=[],state={angle:0,previousAngle:0,omega:0,torque:0,counterIndex:2,counterZ:-1.2,braked:false};
  world.walls(bounds,16);world.floor(-18.5,14,-18.5,19);
  const patch=(name,p,n,w,h,parent=world.root,moving=false)=>(panels[name]=world.patch(name,p,n,w,h,parent,moving));
  // Treads are ordered in positive Z and have positive tile dimensions. Each
@@ -98,6 +98,15 @@ export function buildBalanceChamber(game,spec){
  state.collider=support[0];state.support=support;
  const counterPositions=[-2.8,-2,-1.2],inertia=100,spring=190,damping=60;
  consoleNode(world,terminals,[4.8,3.3,4.3],()=>{state.counterIndex=(state.counterIndex+1)%3;game.audio?.mechanism?.('switch');},'balance','E — передвинуть противовес. Чем длиннее его плечо, тем сильнее он опускает пустой конец.');
+ // A visible jaw locks the same physical axle after the first landing. Its
+ // cable terminates at a switch on the otherwise isolated receiving dock.
+ const brakeJaw=world.box([2.42,2.75,0],[.5,.45,.38],world.materials.accent,false);
+ world.box([3.13,5.4,9.3],[.06,6.4,.06],world.materials.trim,false);
+ world.box([2.75,8.55,4.7],[.06,.06,9.3],world.materials.trim,false);
+ world.box([2.75,5.65,0],[.06,5.8,.06],world.materials.trim,false);
+ world.box([2.6,2.75,0],[.35,.06,.06],world.materials.trim,false);
+ consoleNode(world,terminals,[1.4,8.2,9.2],()=>{state.braked=!state.braked;game.audio?.mechanism?.('switch');},'balance-brake',
+  'E — опустить тормоз качелей. Он сохранит наклон, пока ты забираешь друга и повторяешь полёт.');
  function topFrame(c){const f=c.floor,part=moving.find(x=>x.collider===c).part;return{center:rig.moving.localToWorld(V(part.center.x,c.surfaceOffset,part.center.z)),normal:V(0,Math.cos(state.angle),Math.sin(state.angle)),right:V(1,0,0),up:V(0,-Math.sin(state.angle),Math.cos(state.angle)),halfWidth:part.size.x/2,halfHeight:part.size.z/2};}
  function cargoContact(){if(!game.cargo||game.heldCube)return null;for(const c of support){const f=topFrame(c),r=game.cargo.position.clone().sub(rig.root.position),v=V(0,-state.omega*r.z,state.omega*r.y);if(cargoLoadsPlate({...game.cargo,velocity:game.cargo.velocity.clone().sub(v)},false,f))return f;}return null;}
  function pose(angle,dt=0){rig.setAngle(angle);rig.setCounterweight(state.counterZ);rig.root.updateWorldMatrix(true,true);
@@ -123,19 +132,20 @@ export function buildBalanceChamber(game,spec){
   state.counterZ=THREE.MathUtils.damp(state.counterZ,counterPositions[state.counterIndex],2.4,dt);
   const loaded=!!cargoContact(),cargoMoment=loaded?(game.physics?.cargoBody?.mass||3.2)*rig.moving.worldToLocal(game.cargo.position.clone()).z:0;
   state.loaded=loaded;state.torque=19.5*Math.cos(state.angle)*(L.counterweight.mass*state.counterZ+cargoMoment+(aboard?travellerMass*localZ:0));
-  state.omega+=(state.torque-spring*state.angle-damping*state.omega)/inertia*dt;
-  state.angle+=state.omega*dt;
+  if(state.braked){state.omega=0;state.brakeReaction=state.torque-spring*state.angle;}
+  else{state.omega+=(state.torque-spring*state.angle-damping*state.omega)/inertia*dt;state.angle+=state.omega*dt;state.brakeReaction=0;}
   if(Math.abs(state.angle)>L.maxAngle){state.angle=THREE.MathUtils.clamp(state.angle,-L.maxAngle,L.maxAngle);if(Math.sign(state.omega)===Math.sign(state.angle))state.omega*=-.10;}
+  brakeJaw.position.y=state.braked?2.23:2.75;
   pose(state.angle,dt);
   if(aboard&&dt){const y=floor.heightAt(game.playerPosition.x,game.playerPosition.z);if(y!==null){game.playerPosition.y+=y-py;game.previousPlayerPosition.y+=y-py;}}
  }
  const near=()=>terminals.filter(t=>terminalAccessible(game,t)).sort((a,b)=>a.position.distanceToSquared(game.playerPosition)-b.position.distanceToSquared(game.playerPosition))[0];
  world.root.userData.distinctConcept=spec.concept;
  return{id:spec.id,index:6,title:`7 / ${spec.title}`,bounds,spawn,cargoSpawn,goal,world,structure:world.root,panels,terminals,state,fixtures,pads:[],gates:[],floors:world.floors,bridges:[],lift:null,receiverPanel:null,launchPad:null,momentum:true,hints:spec.hints,
-  update,reset(){Object.assign(state,{angle:0,previousAngle:0,omega:0,torque:0,counterIndex:2,counterZ:-1.2,lastPlayerContact:undefined,lastPlayerVy:0,lastPlayerZ:0,lastPlayerMass:0});pose(0);},
+  update,reset(){Object.assign(state,{angle:0,previousAngle:0,omega:0,torque:0,counterIndex:2,counterZ:-1.2,braked:false,brakeReaction:0,lastPlayerContact:undefined,lastPlayerVy:0,lastPlayerZ:0,lastPlayerMass:0});brakeJaw.position.y=2.75;pose(0);},
   renderUpdate(a=1){rig.setAngle(THREE.MathUtils.lerp(state.previousAngle,state.angle,a));rig.setCounterweight(state.counterZ);},
   interact(){const t=near();if(!t)return false;t.action();game.companionAnimator?.trigger?.('curiosity');return true;},nearbyInteraction(){const t=near();return t?{kind:t.kind,label:'E',text:t.lesson}:null;},
   cargoOnAnyPad:()=>!!cargoContact(),getLaunch:()=>null,getObjective:()=>spec.description,
   isWon:()=>game.playerGrounded&&goal.contains(game.playerPosition)&&!!game.cargo&&goal.contains(game.cargo.position)&&game.playerPosition.distanceTo(game.cargo.position)<3.3,
-  diagnostics:()=>({level:7,id:spec.id,concept:spec.concept,uniqueTopology:true,noCheckpoints:true,portalSurfaces:game.portalPanels.length,goal:goal.position.toArray(),angle:state.angle,omega:state.omega,torque:state.torque,counterZ:state.counterZ,loaded:state.loaded})};
+  diagnostics:()=>({level:7,id:spec.id,concept:spec.concept,uniqueTopology:true,noCheckpoints:true,portalSurfaces:game.portalPanels.length,goal:goal.position.toArray(),angle:state.angle,omega:state.omega,torque:state.torque,counterZ:state.counterZ,loaded:state.loaded,braked:state.braked,brakeReaction:state.brakeReaction})};
 }

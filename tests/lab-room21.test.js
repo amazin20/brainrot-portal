@@ -20,6 +20,45 @@ for(const opts of [{order:'cargo-first'},{order:'brake-first'},{recovery:true},{
   assert.equal(g.firstLevel.state.cargoSeat.loaded(),false);assert.ok(g.heldCube);
   assert.equal(g.firstLevel.cassette.height,g.firstLevel.cassette.high);
  });
+test('ordinary room21 flight and receiver milestones retain a readable camera',async()=>{
+ const seen=new Set();
+ const result=await runV8Journey(g,{onMilestone:m=>{
+  const first=m.name==='departure fall through the lowered cassette';
+  const second=m.name==='lower service fall through the raised SAME exit';
+  const receiver=m.name==='cargo recovered; the same prepared exit rises with its surface';
+  if(!first&&!second&&!receiver)return;
+  seen.add(m.name);
+  if(first||second){
+   assert.equal(g.playerGrounded,false,'flight frame must still show an airborne crossing');
+   assert.ok(g.cameraRig.viewUp.y>.05,'flight frame is still upside down');
+   assert.ok(g.camera.position.y>g.playerPosition.y-1,'flight lens is beneath the room');
+  }else assert.ok(g.pitch>-.8,'the receiver is hidden by the old downward portal aim');
+  const chest=g.playerPosition.clone().add(new THREE.Vector3(0,1.2,0)).project(g.camera);
+  assert.ok(Math.abs(chest.x)<.8&&Math.abs(chest.y)<.8&&chest.z>-1&&chest.z<1,
+   `the traveller is outside the ${m.name} frame: ${chest.toArray()}`);
+ }});
+ assert.equal(result.pass,true);
+ assert.equal(seen.size,3);
+});
+test('service car is a distinct passenger solution powered by the same cargo counterweight',async()=>{
+ let lower,upper;
+ const r=await runV8Journey(g,{journeyOptions:{route:'service-car'},onMilestone:m=>{
+  if(m.name==='service brake holds both linked decks before cargo recovery'){
+   lower=m;assert.equal(g.firstLevel.cassette.braked,true);
+   assert.ok(g.firstLevel.state.cargoSeat.loaded());
+   assert.ok(Math.abs(g.firstLevel.serviceCar.floor.y-7)<.05);
+  }
+  if(m.name==='same counterweight carries player and cargo to upper balcony without second portal fall'){
+   upper=m;assert.equal(g.firstLevel.cassette.braked,false);
+   assert.equal(g.firstLevel.state.cargoSeat.loaded(),false);
+   assert.ok(g.firstLevel.serviceCar.contact);
+   assert.ok(Math.abs(g.firstLevel.serviceCar.floor.y-18)<.05);
+  }
+ }});
+ assert.ok(lower&&upper);assert.equal(lower.teleports,upper.teleports);
+ assert.equal(r.teleports,3);assert.equal(r.resets+r.respawns,0);
+ assert.equal(g.state,'won');assert.ok(g.heldCube);
+});
 test('reset preserves one original cargo and returns brake and cassette to their actual initial configuration',()=>{
  const id=g.physics.cargoBody.id;for(let i=0;i<10;i++){g.resetRun(true);const c=g.firstLevel.cassette;assert.equal(c.braked,true);assert.equal(c.height,c.high);assert.equal(g.physics.cargoBody.id,id);assert.equal(g.firstLevel.isWon(),false);}
 });

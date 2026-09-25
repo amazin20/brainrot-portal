@@ -7,9 +7,9 @@ import {LabTileWorld} from './LabTileWorld.js';
 import {cargoLoadsPlate} from './LabPlateContact.js';
 import {V,inRect,tracePortalRay,rayTouches,beamDrawing,glass,wall,gate,consoleNode,terminalAccessible,ringDevice,rotorDevice,integrateBalance,impactPiston} from './LabPuzzleMechanics.js';
 export const EXTENDED_CAMPAIGN=Object.freeze([
- {id:'crossed-light',title:'Перекрёстный свет',description:'Калибровочная кабина, зеркало и свет, проходящий через порталы.',assets:[1,2,11,22,24],concept:'Оптика',hints:['Свет проходит через связанную пару так же, как предмет. Серебристый диск отражает луч.','До отражателя нельзя дотянуться снаружи кабины, но в её окне видна портальная панель.','Сначала войди в кабину и поверни зеркало. Вернись, свяжи панель напротив излучателя с панелью перед зеркалом. Свет должен попасть в круглый приёмник.']},
- {id:'moment-arm',title:'Инерционный балансир',description:'Друг наклоняет портал на качели. Используй скорость падения, чтобы попасть на верхнюю площадку.',assets:[1,2,11,22,23,24],concept:'Масса, плечо и направление импульса',hints:['Вес друга и расстояние до оси определяют наклон качели. Направление выхода портала меняется вместе с настилом.','Оставь друга на ближнем плече. Свяжи пол башни с поднявшимся дальним настилом и спустись через портал с верхней площадки башни.','После перелёта поставь выход на пол верхнего дока, а вход — под другом на качели. Забери друга; при промахе пол и лестница позволяют повторить попытку.']},
- {id:'wind-column',title:'Ветер за углом',description:'Перенаправь воздушную струю и поймай восходящий поток.',assets:[1,2,11,22,23,24,31],concept:'Сила воздушного потока',hints:['Вентилятор создаёт постоянную силу, а не разовый прыжок. Частицы показывают направление воздуха.','Напольный выход превратит горизонтальную струю в восходящую. Высокая площадка находится сбоку от потока.','Свяжи панель напротив вентилятора с плитой внизу шахты. Включи нагнетание, возьми друга, войди в поток и на высоте уйди к верхней площадке.']},
+ {id:'crossed-light',title:'Перекрёстный свет',description:'Калибровочная кабина, зеркало и свет, проходящий через порталы.',assets:[1,2,11,22,24],concept:'Оптика',hints:['Свет проходит через связанную пару так же, как предмет. Серебристый диск отражает луч.','Ручной привод стоит в кабине. Снаружи есть второй пульт; его провод идёт к малому приёмнику за зеркалом.','Можно сначала войти в кабину и повернуть зеркало или сначала направить свет через порталы на малый приёмник, затем включить наружный привод.']},
+ {id:'moment-arm',title:'Инерционный балансир',description:'Друг наклоняет портал на качели. Используй скорость падения, чтобы попасть на верхнюю площадку.',assets:[1,2,11,22,23,24],concept:'Масса, плечо и направление импульса',hints:['Вес друга и расстояние до оси определяют наклон качели. Направление выхода портала меняется вместе с настилом.','Оставь друга на ближнем плече. Свяжи пол башни с поднявшимся дальним настилом и спустись через портал с верхней площадки башни.','После перелёта переправь друга через новую пару или затормози ось с верхнего дока, спустись за ним и повтори полёт вдвоём. Тормоз сохраняет действительный угол качелей.']},
+ {id:'wind-column',title:'Ветер за углом',description:'Перенаправь воздушную струю и поймай восходящий поток.',assets:[1,2,11,22,23,24,31],concept:'Сила воздушного потока',hints:['Вентилятор создаёт постоянную силу, а не разовый прыжок. Частицы показывают направление воздуха.','Напольный выход превратит горизонтальную струю в восходящую. Высокая площадка находится сбоку от потока.','Свяжи панель напротив вентилятора с плитой внизу шахты. Можно войти в восходящий поток рядом с плитой или взять друга и встать на пути горизонтальной струи: она сама доставит вас через настенный портал в вертикальный поток.']},
  {id:'impact-workshop',title:'Работа удара',description:'Ролики разгоняют груз. Его импульс сжимает пружину и защёлкивает затвор.',assets:[1,2,11,22,24],concept:'Кинетическая энергия и упругость',hints:['Пружинный затвор находится в низком канале. Слабого толчка недостаточно сжать пружину до защёлки.','Ролики придают другу скорость. Портальная пара должна направить этот импульс в торец поршня.','Настрой пару с выхода роликов в канал перед поршнем, включи движение вперёд и отпусти друга на загрузочном столе. После удара откроется крышка канала — забери друга.']},
  {id:'vector-vault',title:'Векторный сейф',description:'Управляй полем в закрытом лабиринте и подготовь путь извлечения друга.',assets:[1,2,11,22,23,24],concept:'Дистанционное управление силами',hints:['Под стеклом действует направленное поле. Оно толкает свободного друга по стрелке, но не переносит его мгновенно.','Сначала рассмотри проходы сверху и подготовь портал в открытом колодце. Крышка не пропускает руки.','На терминале меняй направление: вправо, к дальней стене, влево, к дальней стене, вправо, к колодцу. Свяжи дно колодца с панелью на верхней галерее.']},
 ]);
@@ -28,7 +28,10 @@ export function buildExtendedCampaign(game,index){
  const console=(p,fn,kind,lesson)=>consoleNode(world,terminals,p,fn,kind,lesson);
  const lowFriction=mesh=>{const b=game.physics?.solids.get(mesh.uuid)?.body;if(b)b.material.friction=.055;};
  if(index===5){
-  bounds={minX:-12,maxX:12,minZ:-19,maxZ:13};spawn=[2,0,10];cargoSpawn=[1,.55,9];
+  // The right-hand approach sees around the unplaced light-outlet slab to the
+  // true reflector and outside relay. It also leaves a full camera boom behind
+  // the actor and keeps the same companion nearby for either action order.
+  bounds={minX:-12,maxX:12,minZ:-19,maxZ:13};spawn=[8,0,5];cargoSpawn=[8,.55,7];
   world.walls(bounds,10);world.floor(-12,12,-19,13);
   patch('cab-entry',[-11.8,2.1,9],[1,0,0]);patch('cab-inner',[-9.8,2.1,-4.5],[1,0,0]);
   // A real low service slot admits sightlines, not a standing player.
@@ -36,22 +39,69 @@ export function buildExtendedCampaign(game,index){
   for(const z of [-7,-2])world.box([-7.5,5,z],[5,10,.25]);
   world.box([-10.05,5,-4.5],[.25,10,5]);
   for(const y of [1.25,2.8])world.box([-4.84,y,-4.5],[.06,.06,5],world.materials.accent,false);
-  patch('light-intake',[11.8,2.1,6],[-1,0,0]);
+  const intake=patch('light-intake',[11.8,2.1,6],[-1,0,0]);
+  // The inlet is a ten-metre portalable surface. Finish that actual span,
+  // rather than suggesting a smaller aperture inside its usable collider.
+  // These shallow fittings neither block the camera nor steal portal shots.
+  intake.group.traverse(mesh=>{if(mesh.isInstancedMesh&&mesh.userData.portalTile){
+   mesh.material=mesh.material.clone();mesh.material.color.setHex(0xb8cdd0);
+   mesh.material.emissive.setHex(0x31545b);mesh.material.emissiveIntensity=.1;
+  }});
+  const inletTrim=new THREE.MeshBasicMaterial({color:0x508d98});
+  const inletLight=new THREE.MeshBasicMaterial({color:0x93e3e6});
+  const inletDetail=(p,s,m)=>game.box(...p,...s,m,{camera:false,aim:false,parent:world.root});
+  for(const z of [.95,11.05])inletDetail([11.67,2.1,z],[.06,4.25,.10],inletTrim);
+  for(const y of [.02,4.18])inletDetail([11.67,y,6],[.06,.09,10.2],inletTrim);
+  for(const z of [2,4,6,8,10]){
+   inletDetail([11.65,4.18,z],[.07,.13,.45],inletLight);
+  }
   patch('light-outlet',[0,2.1,-3],[0,0,-1]);
   const emitter=ringDevice(world,[-10,2.1,6],[1,0,0],0x7ee5e9,.6);
   world.box([-10,.95,6],[.3,1.9,.3]);
   const mirror=ringDevice(world,[0,2.1,-8],[0,0,1],0xf0d694,.85);
   world.box([0,.9,-8],[.25,1.8,.25]);
+  // The working reflector sits directly behind the shoulder camera on the
+  // approach. A larger bearing turns with that same reflector, while raised
+  // signal strips on the two actual receivers remain visible above the actor.
+  // These fittings have no collision or beam occlusion of their own.
+  const opticMetal=new THREE.MeshBasicMaterial({color:0x566574});
+  const opticAmber=new THREE.MeshBasicMaterial({color:0xefbf75});
+  const mirrorHalo=new THREE.Mesh(new THREE.TorusGeometry(1.23,.055,8,32),opticAmber);
+  mirrorHalo.name='Mirror bearing / follows real reflector';mirror.group.add(mirrorHalo);
+  for(const x of [-1.4,1.4])world.box([x,2.1,-8],[.13,2.85,.13],opticMetal,false);
+  world.box([0,3.55,-8],[3.0,.16,.18],opticMetal,false);
+  // The unturned reflector lets the beam continue to a visible service
+  // receiver. Its wired outside servo offers a second, optical-first order;
+  // without a real portal-routed beam the relay cannot rotate the mirror.
+  const pilot=ringDevice(world,[0,2.1,-10.5],[0,0,1],0xb28d6c,.55);
+  const relayMaterial=new THREE.MeshBasicMaterial({color:0xb28d6c});
+  world.box([1.5,.16,-10.5],[3,.07,.06],relayMaterial,false);
+  world.box([3,.16,-9.25],[.06,.07,2.5],relayMaterial,false);
   const sensor=ringDevice(world,[9.7,2.1,-8],[-1,0,0],0xa38b6b,.55);
-  mechanismArt.earlyOptics={emitter,mirror,sensor};
+  const pilotBeacon=new THREE.MeshBasicMaterial({color:0xb28d6c});
+  const exitBeacon=new THREE.MeshBasicMaterial({color:0xa38b6b});
+  world.box([0,4.15,-10.5],[.16,1.45,.15],pilotBeacon,false);
+  world.box([9.7,4.15,-8],[.16,1.45,.15],exitBeacon,false);
+  mechanismArt.earlyOptics={emitter,mirror,pilot,sensor};
   const ray=beamDrawing(world),door=gate(world,-13,24,10);
   const reflector={position:V(0,2.1,-8),normal:V(1,0,0),radius:.83};
-  state.mirror=0;state.target=0;state.lit=false;state.door=door;
+  state.mirror=0;state.target=0;state.pilotLit=false;state.lit=false;state.door=door;
   console([-8,0,-5.8],()=>{state.target=state.target?0:1;game.audio?.mechanism?.('switch');},'mirror','E — повернуть зеркало. Луч отражается от диска и проходит через порталы.');
+  const relay=console([3,0,-8],()=>{
+   if(!state.pilotLit&&!state.target)return;
+   state.target=state.target?0:1;game.audio?.mechanism?.('switch');
+  },'mirror-relay','E — луч питает привод зеркала. После поворота фиксатор удерживает угол.');
+  const relayLamp=new THREE.Mesh(new THREE.SphereGeometry(.18,12,8),relayMaterial);
+  relayLamp.position.copy(relay.position).add(V(0,.77,0));world.root.add(relayLamp);
   goal=world.goal([0,0,-16.3],[4.6,4]);
   update=dt=>{state.mirror=THREE.MathUtils.damp(state.mirror,state.target,5,dt);const angle=state.mirror*Math.PI/4;reflector.normal.set(Math.cos(angle),0,Math.sin(angle));mirror.group.quaternion.setFromUnitVectors(V(0,0,1),reflector.normal);
-   state.segments=tracePortalRay(game,V(-9.8,2.1,6),V(1,0,0),{reflectors:[reflector]});state.lit=rayTouches(state.segments,V(9.7,2.1,-8));sensor.glow.material.color.setHex(state.lit?0x9af4bd:0xa38b6b);ray.update(state.segments);door.update(state.lit,dt,time);};
-  reset=()=>{state.mirror=state.target=0;state.lit=false;door.reset();};render=a=>door.render(a,time);
+   state.segments=tracePortalRay(game,V(-9.8,2.1,6),V(1,0,0),{reflectors:[reflector]});state.pilotLit=rayTouches(state.segments,V(0,2.1,-10.5),.47);
+   state.lit=rayTouches(state.segments,V(9.7,2.1,-8));pilot.glow.material.color.setHex(state.pilotLit?0xb5f0c1:0xb28d6c);
+   relayMaterial.color.setHex(state.pilotLit?0xb5f0c1:0xb28d6c);
+   pilotBeacon.color.setHex(state.pilotLit?0xb5f0c1:0xb28d6c);
+   exitBeacon.color.setHex(state.lit?0x9af4bd:0xa38b6b);
+   sensor.glow.material.color.setHex(state.lit?0x9af4bd:0xa38b6b);ray.update(state.segments);door.update(state.lit,dt,time);};
+  reset=()=>{state.mirror=state.target=0;state.pilotLit=state.lit=false;door.reset();};render=a=>door.render(a,time);
  }else if(index===7){
   bounds={minX:-10,maxX:10,minZ:-13,maxZ:13};spawn=[1,0,5.8];cargoSpawn=[2.2,.55,4.5];world.walls(bounds,15);world.floor(-10,10,-13,13);
   world.floor(-4.2,4.2,-13,-3.1,7);goal=world.goal([0,7,-9],[4.8,4.5]);
@@ -131,8 +181,13 @@ export function buildExtendedCampaign(game,index){
  const level={id:spec.id,title:`${index+1} / ${spec.title}`,index,bounds,spawn,cargoSpawn,goal,world,structure:world.root,panels,terminals,state,mechanismArt,pads:[],gates:state.door?[state.door]:[],fixtures,floors:world.floors,bridges:[],lift:null,receiverPanel:null,launchPad:null,momentum:true,hints:spec.hints,
   update(dt){time+=dt;update(dt);},reset(){time=0;reset();update(0);},renderUpdate(a=1){render(a);},applyCargoForces,playerAcceleration,
   interact(){const t=near();if(!t)return false;t.action();game.companionAnimator?.trigger?.('curiosity');return true;},
-  nearbyInteraction(){const t=near();return t?{kind:t.kind,label:'E',text:t.lesson}:null;},cargoOnAnyPad:mechanicalContact,getLaunch:()=>null,getObjective:()=>spec.description,
+  nearbyInteraction(){const t=near();return t?{kind:t.kind,label:'E',text:t.kind==='mirror-relay'&&!state.pilotLit&&!state.target?'Малый приёмник не освещён. Проведи к нему луч через порталы.':t.lesson}:null;},cargoOnAnyPad:mechanicalContact,getLaunch:()=>null,getObjective:()=>spec.description,
   isWon:()=>game.playerGrounded&&goal.contains(game.playerPosition)&&!!game.cargo&&goal.contains(game.cargo.position)&&game.playerPosition.distanceTo(game.cargo.position)<3.3,
   diagnostics:()=>({level:index+1,id:spec.id,concept:spec.concept,uniqueTopology:true,noCheckpoints:true,portalSurfaces:game.portalPanels.length,goal:goal.position.toArray(),lit:state.lit,angle:state.angle,torque:state.torque,fan:state.enabled,piston:state.piston?.compression,latched:state.piston?.latched})};
+ if(index===5)level.spawnView={yaw:.12,pitch:-.15};
+ // The default straight-ahead view put the actual fan completely offscreen
+ // and left only the column's back wall visible. Frame the real impeller,
+ // lower air shaft and receiving gallery together at first entry.
+ if(index===7)level.spawnView={yaw:.75,pitch:-.15};
  return level;
 }

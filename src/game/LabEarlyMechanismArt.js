@@ -142,6 +142,47 @@ export function applyEarlyMechanismArt(level){
     const ring=collar(mount,V(-.00096,.39807,.437),.38,'Air machine / bolted intake collar');
     ring.userData.fixedIntake=true;
   }
+  if(level.index===7){
+    // The room-eight entrance used to show a nearly featureless back wall:
+    // the supplied blower was cropped out and the actual floor exit read as
+    // an ordinary tile. Mark the source-to-wall line and the *existing* open
+    // air shaft with recessed, non-colliding fittings. The column changes
+    // colour only when a real traced segment climbs through its floor portal.
+    const route=new THREE.Group();route.name='Wind column / source and shaft fittings';
+    route.userData.visualOnly=true;root.add(route);
+    const muted=0x456c75,lit=0x8de6d9;
+    const trackMaterial=new THREE.MeshBasicMaterial({color:muted,side:THREE.DoubleSide});
+    const shaftMaterial=new THREE.MeshBasicMaterial({color:muted,side:THREE.DoubleSide});
+    const track=new THREE.InstancedMesh(new THREE.BoxGeometry(.44,.018,.055),trackMaterial,12);
+    track.name='Wind column / six forward floor chevrons';track.userData.visualOnly=true;
+    const matrix=new THREE.Matrix4(),q=new THREE.Quaternion(),s=V(1,1,1);
+    for(let i=0;i<6;i++)for(const sign of [-1,1]){
+      q.setFromAxisAngle(V(0,1,0),sign*.65);
+      matrix.compose(V(-4.2+i*2.15,.048,7+sign*.135),q,s);
+      track.setMatrixAt(i*2+(sign+1)/2,matrix);
+    }
+    track.instanceMatrix.needsUpdate=true;route.add(track);
+    const guide=new THREE.InstancedMesh(new THREE.BoxGeometry(.11,.54,.06),shaftMaterial,12);
+    guide.name='Wind column / shaft edge gauges';guide.userData.visualOnly=true;
+    const rail=new THREE.InstancedMesh(new THREE.BoxGeometry(.16,9,.13),
+      new THREE.MeshStandardMaterial({color:0x405d66,roughness:.45,metalness:.45}),2);
+    rail.name='Wind column / continuous shaft edge rails';rail.userData.visualOnly=true;
+    for(const [i,sign] of [-1,1].entries()){
+      matrix.compose(V(sign*3.23,5.05,2.68),new THREE.Quaternion(),s);
+      rail.setMatrixAt(i,matrix);
+    }
+    rail.instanceMatrix.needsUpdate=true;route.add(rail);
+    for(let i=0;i<6;i++)for(const sign of [-1,1]){
+      matrix.compose(V(sign*3.23,1.65+i*1.43,2.79),new THREE.Quaternion(),s);
+      guide.setMatrixAt(i*2+(sign+1)/2,matrix);
+    }
+    guide.instanceMatrix.needsUpdate=true;route.add(guide);
+    renders.push(()=>{
+      const segments=level.state.segments??[];
+      trackMaterial.color.setHex(level.state.fanSpeed>.5?lit:muted);
+      shaftMaterial.color.setHex(segments.some(part=>part.direction.y>.72)?lit:muted);
+    });
+  }
   const spring=level.state?.piston;
   if(level.index===8&&spring?.top){
     const mount=follow(spring.top,'Spring press / moving impact chassis');

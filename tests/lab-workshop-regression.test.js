@@ -19,9 +19,9 @@ test('nine supplied derived GLBs have full binary length, exact hashes, frame an
   assert.ok(model.getObjectByName('Frame'));assert.ok(model.getObjectByName('Moving'));
   let count=0;model.traverse(m=>{if(!m.isMesh)return;count+=m.geometry.index.count/3;for(const value of m.geometry.attributes.position.array)assert.ok(Number.isFinite(value));assert.ok(m.geometry.attributes.color,'Original source colors are retained as baked vertex colors');});
   assert.ok(count>500&&count<7500);
-  // Archived mechanisms retain their verified source models, but only the
-  // fan, spring, drive and extension bridge serve the retained campaign.
-  assert.equal(CAMPAIGN.some(l=>l.assets.includes(a.id)),[31,32,35,37].includes(a.id));
+  // Archived mechanisms retain their verified source models; room 22 now
+  // uses the compact winch along with the campaign's other active machines.
+  assert.equal(CAMPAIGN.some(l=>l.assets.includes(a.id)),[31,32,35,37,39].includes(a.id));
  }
 });
 test('an idle flywheel cannot do work against a positive load or create stored energy',()=>{

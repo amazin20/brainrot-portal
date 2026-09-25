@@ -4,7 +4,7 @@ import {configureChapterWorld} from './LabChapterArt.js';
 import {dressRoom27} from './LabRoom27Art.js';
 export const ROOM27_SPEC={id:'conveyor-city',title:'Город обратных лент',concept:'Скорость движущегося пола становится высотой, а затем мостом; два обхода раскрывают оборотную сторону одного города',description:'Лента умеет больше, чем возить груз. Найди, куда может уйти её скорость.',accent:0xffb938,assets:[1,2,11,22,23,24],hints:['На цветной ленте движешься и ты, и оставленный друг. Белый пол внизу можно рассмотреть с обеих сторон.','Портал сохраняет скорость. Боковая галерея позволяет сохранить высоту, когда пара понадобится для другого пути.','Верхний обход открывает обратную сторону высокой белой стены. На дальнем острове нет портальной панели: туда нужно принести скорость с другой ленты.']};
 export function buildRoom27(game,index=26){
- const k=new Workshop(game,ROOM27_SPEC,index),w=k.world;configureChapterWorld(w,'carnival',{openSky:true});w.highFidelity=true;k.bounds={minX:-26,maxX:24,minZ:-25,maxZ:23};k.ceiling=29;w.walls(k.bounds,29,-1);
+ const k=new Workshop(game,ROOM27_SPEC,index),w=k.world;configureChapterWorld(w,'carnival');w.highFidelity=true;k.bounds={minX:-26,maxX:24,minZ:-25,maxZ:23};k.ceiling=29;w.walls(k.bounds,29,-1);
  const deck=(name,x0,x1,z0,z1,y)=>w.floor(x0,x1,z0,z1,y,{name});
  const block=(p,s)=>w.box(p,s,w.materials.wall);
  deck('City shared recovery plaza',-26,24,-25,23,0);
