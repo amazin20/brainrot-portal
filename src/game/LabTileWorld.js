@@ -48,10 +48,29 @@ export class LabTileWorld extends StructuralWorld{
   this.game.materials.wall.color.setHex(this.palette.wall);
   if(!this.visualProfile?.openSky)this.surface({name:'Non-portal ceiling tiles',position:[(minX+maxX)/2,height+.34,(minZ+maxZ)/2],
     normal:[0,-1,0],width:maxX-minX,height:maxZ-minZ});
+  // Preserve the original border ray targets; room camera/aim contracts use
+  // these even though they have no physics bodies. The larger frame below is
+  // strictly visual and must not replace the registered geometry.
   for(const x of [minX+.04,maxX-.04]){
    this.box([x,base+.12,(minZ+maxZ)/2],[.09,.24,maxZ-minZ],this.materials.trim,false);
    this.box([x,height-.13,(minZ+maxZ)/2],[.10,.18,maxZ-minZ],this.materials.trim,false);
   }
+  // A continuous perimeter frame makes the shell read as a built room rather
+  // than a set of tiled planes. It sits on the border, clear of every puzzle
+  // panel and upper route. One instanced draw call; no collision or aim proxy.
+  const cx=(minX+maxX)/2,cz=(minZ+maxZ)/2,w=maxX-minX,d=maxZ-minZ;
+  const elements=[];
+  for(const x of [minX+.14,maxX-.14])for(const [y,h] of [[base+.36,.30],[height-.48,.26]])
+   elements.push([[x,y,cz],[.24,h,d-.48]]);
+  for(const z of [minZ+.14,maxZ-.14])for(const [y,h] of [[base+.36,.30],[height-.48,.26]])
+   elements.push([[cx,y,z],[w-.48,h,.24]]);
+  for(const x of [minX+.14,maxX-.14])for(const z of [minZ+.14,maxZ-.14])
+   elements.push([[x,(base+height)/2,z],[.29,height-base-.44,.29]]);
+  const frame=new THREE.InstancedMesh(new THREE.BoxGeometry(1,1,1),this.materials.trim,elements.length);
+  frame.name='Continuous floor, ceiling and corner frame';frame.receiveShadow=true;
+  const matrix=new THREE.Matrix4(),center=new THREE.Vector3(),scale=new THREE.Vector3();
+  elements.forEach(([p,s],i)=>frame.setMatrixAt(i,matrix.compose(center.fromArray(p),new THREE.Quaternion(),scale.fromArray(s))));
+  frame.instanceMatrix.needsUpdate=true;frame.computeBoundingSphere();this.root.add(frame);
   // Recessed luminous trays belong to the lighting system, not puzzle props.
   if(!this.visualProfile?.openSky)for(let z=minZ+2;z<maxZ;z+=7){
    this.box([(minX+maxX)/2,height+.02,z],[Math.min(6,maxX-minX-1),.08,.42],this.materials.trim,false);

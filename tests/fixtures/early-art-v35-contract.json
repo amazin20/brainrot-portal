@@ -1,5 +1,5 @@
 {
-  "revision": "3d9e1d22f6765aac53140fb5ee49d0334109c80b",
+  "revision": "visual-redesign-2026-09-25",
   "precision": 1e-9,
   "rooms": [
     {
@@ -164,7 +164,7 @@
         "nodes": 748,
         "meshes": 565,
         "visibleMeshes": 365,
-        "triangles": 1495978,
+        "triangles": 1496122,
         "lights": 3,
         "materials": 61,
         "geometries": 429
@@ -178,7 +178,7 @@
         "nodes": 799,
         "meshes": 613,
         "visibleMeshes": 427,
-        "triangles": 1131590,
+        "triangles": 1131734,
         "lights": 3,
         "materials": 84,
         "geometries": 490
@@ -192,7 +192,7 @@
         "nodes": 721,
         "meshes": 551,
         "visibleMeshes": 298,
-        "triangles": 1454474,
+        "triangles": 1454618,
         "lights": 3,
         "materials": 68,
         "geometries": 430
@@ -205,8 +205,8 @@
       "workload": {
         "nodes": 520,
         "meshes": 366,
-        "visibleMeshes": 211,
-        "triangles": 721976,
+        "visibleMeshes": 212,
+        "triangles": 722120,
         "lights": 3,
         "materials": 72,
         "geometries": 274
@@ -220,7 +220,7 @@
         "nodes": 799,
         "meshes": 620,
         "visibleMeshes": 376,
-        "triangles": 1438488,
+        "triangles": 1438632,
         "lights": 3,
         "materials": 73,
         "geometries": 490
@@ -234,7 +234,7 @@
         "nodes": 811,
         "meshes": 614,
         "visibleMeshes": 411,
-        "triangles": 1679702,
+        "triangles": 1679846,
         "lights": 3,
         "materials": 71,
         "geometries": 474
@@ -247,8 +247,8 @@
       "workload": {
         "nodes": 1283,
         "meshes": 1015,
-        "visibleMeshes": 547,
-        "triangles": 2027126,
+        "visibleMeshes": 548,
+        "triangles": 2027270,
         "lights": 3,
         "materials": 63,
         "geometries": 778
@@ -261,8 +261,8 @@
       "workload": {
         "nodes": 508,
         "meshes": 354,
-        "visibleMeshes": 205,
-        "triangles": 733891,
+        "visibleMeshes": 206,
+        "triangles": 734035,
         "lights": 3,
         "materials": 85,
         "geometries": 261
@@ -276,7 +276,7 @@
         "nodes": 662,
         "meshes": 460,
         "visibleMeshes": 379,
-        "triangles": 1227352,
+        "triangles": 1227496,
         "lights": 3,
         "materials": 104,
         "geometries": 332

@@ -68,6 +68,66 @@ function flowMotor(k,{fanAt,sourceAt,receiverAt,wheelAt,cabin}){
  return drive;
 }
 
+/** The opening room is a two-storey transfer bay, not another anonymous tile
+ * corridor. These are non-colliding cladding pieces attached to existing
+ * walls, deck chassis and the actual freight platform. The three porcelain
+ * targets, the open floor and both approaches to the gallery remain clear. */
+function dressFirstConnection(k,hoist){
+ // The standard recovery deck is rendered with a graphite top in every
+ // chamber. Here it covers the entire opening floor, and it is coplanar with
+ // the parked hoist. Replace only this room's visible top with a mineral deck
+ // whose four pieces stop at the moving platform's actual 12 x 12 footprint.
+ // Keep the original full-sized collision deck: the lower level stays solid
+ // beneath the hoist even while it is upstairs.
+ const service=k.world.root.getObjectByName('Continuous service and recovery floor');
+ const bin=k.artBins.get(service?.material),index=bin?.indexOf(service)??-1;
+ if(index<0)throw new Error('Opening room is missing its physical service floor');
+ bin.splice(index,1);service.removeFromParent();service.geometry.dispose();
+ const inset=.075;
+ const slabs=[
+  [-17,1-inset,-17,17], [13+inset,17,-17,17],
+  [1-inset,13+inset,-17,2-inset], [1-inset,13+inset,14+inset,17],
+ ];
+ for(const [x0,x1,z0,z1]of slabs)k.block([(x0+x1)/2,-.30,(z0+z1)/2],[x1-x0,.60,z1-z0],'floor',false,k.world.root,.035);
+ const dock=k.block([7,-.30,8],[12,.60,12],'floor',false,k.world.root,.035);
+ const dockBin=k.artBins.get(dock.material),dockIndex=dockBin.indexOf(dock);
+ dockBin.splice(dockIndex,1);dock.visible=false;
+ k.renders.push(()=>{dock.visible=hoist.group.position.y>.12;});
+ k.resets.push(()=>{dock.visible=false;});
+
+ // A single warm arrival gate fills the rear wall behind the higher portal.
+ // Its shallow backing sits behind the working porcelain at z=-16.25, while
+ // the title mounts in front of the backing, above the portal's upper edge.
+ k.block([0,8.1,-16.65],[20,9.1,.35],'dark',false);
+ for(const x of [-10.1,10.1]){
+  k.block([x,8.1,-16.38],[1.2,9.1,.46],'secondary',false);
+  k.block([x,8.1,-16.08],[.13,7.2,.065],'light',false);
+ }
+ k.block([0,12.47,-16.38],[21.2,.85,.47],'secondary',false);
+ k.block([0,12.02,-16.07],[15.5,.095,.08],'light',false);
+
+ // The upper gallery is carried by a deep enamel fascia at its existing front
+ // lip; the clear space underneath stays the same height and remains open.
+ k.block([0,2.94,-5.49],[30.8,.96,.28],'secondary',false);
+ k.block([0,3.54,-5.38],[30.8,.16,.34],'metal',false);
+ for(const x of [-14.3,14.3]){
+  k.block([x,2.94,-5.32],[.86,.83,.12],'dark',false);
+  k.block([x,2.94,-5.22],[.13,.61,.075],'light',false);
+ }
+ k.block([0,2.94,-5.31],[7.5,.26,.075],'light',false);
+
+ // Overhead side rails identify the two equivalent lower portal bays. They
+ // are above the porcelain sheets, set back toward the existing side walls.
+ for(const x of [-16.86,16.86]){
+  k.block([x,7.2,6],[.22,.96,11.2],'secondary',false);
+  k.block([x>0?x-.14:x+.14,6.56,6],[.055,.08,10.0],'light',false);
+ }
+
+ // The contrasting sill belongs to the original moving freight deck, so the
+ // visible colour travels with the platform and never indicates a new route.
+ k.block([0,-.42,.02],[11.35,.62,.23],'secondary',false,hoist.group,.04);
+}
+
 export function buildFoundation1(g,index=0){
  const k=new ResearchChamber(g,FOUNDATION_SPECS[0],index,'orbital',{minX:-18,maxX:18,minZ:-18,maxZ:18},0,14);
  k.deck('Upper observation and exit gallery',-16,16,-16,-6,4);
@@ -81,10 +141,11 @@ export function buildFoundation1(g,index=0){
  k.panel('near-left',[-16.4,2.5,6],[1,0,0],8,5.2);
  k.panel('near-right',[16.4,2.5,6],[-1,0,0],8,5.2);
  k.panel('upper-view',[0,6.5,-16.25],[0,0,1],8,5.2);
+ dressFirstConnection(k,hoist);
  // The under-gallery is a real reachable room, not empty space behind a wall.
  k.label('ГАЛЕРЕЯ / +4 м',[10,5,-5.83],[0,0,1],7,.65);
  k.label('КЕРАМИКА = ПОРТАЛ',[-17.16,6.3,6],[1,0,0],9,.65);
- title(k,0,[0,11,-17.26],20);
+ title(k,0,[0,11,-16.18],20);
  const l=finish(k,[0,0,12],[-4,.6,9],[7,4,-11],{spawnView:{yaw:0,pitch:-.08},cargoHoist:hoist},
   {introduces:['linked pair','carry'],routes:['carry-through-pair','stage-freight-then-dispatch'],roles:{'near-left':'reachable left entry','near-right':'equivalent right entry, not a wrong answer','upper-view':'higher connected gallery'}});
  return l;

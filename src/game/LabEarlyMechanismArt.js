@@ -15,6 +15,23 @@ function bearing(radius,accent,name){
   return ring;
 }
 
+// Machined masters share materials globally. Copy only the tiny inset glass
+// on a moving/interactive fixture; changing its tint must never recolour an
+// unrelated machine, another room, or the canonical source model.
+function independentSignalGlass(root){
+  const copies=new Map();
+  root.traverse(node=>{
+    if(!node.isMesh)return;
+    const isolate=material=>{
+      if(material?.name!=='Recessed signal glass')return material;
+      if(!copies.has(material))copies.set(material,material.clone());
+      return copies.get(material);
+    };
+    node.material=Array.isArray(node.material)?node.material.map(isolate):isolate(node.material);
+  });
+  return [...copies.values()];
+}
+
 function finishMaterials(art,cache){
   art?.traverse(node=>{
     if(!node.isMesh||node.userData?.collisionProxy||node.userData?.portalTile||node.userData?.portalable)return;
@@ -45,6 +62,7 @@ export function applyEarlyMechanismArt(level){
   const accent=level.spec?.accent??level.world.materials.accent?.color?.getHex()??0x8bd9d2;
   const stats={projectors:0,gimbals:0,liftChassis:0,bearings:0,serviceSkins:0};
   const followers=[],renders=[],materials=new Map(),inverse=new THREE.Matrix4();
+  const signalIdle=new THREE.Color(0xc4a37e),signalActive=new THREE.Color(0x84f3cc);
   const follow=(target,name)=>{
     const mount=new THREE.Group();mount.name=name;mount.matrixAutoUpdate=false;
     mount.userData={visualOnly:true,followsNode:target.name||name};root.add(mount);
@@ -75,6 +93,15 @@ export function applyEarlyMechanismArt(level){
     for(const sx of [-1,1])for(const sz of [-1,1])collar(mount,
       V(sx*(box.max.x-box.min.x)*.431,box.max.y-.018,sz*(box.max.z-box.min.z)*.431),
       .145,'Pressure platform / recessed service bearing',V(0,1,0));
+    const signals=independentSignalGlass(mount);
+    renders.push(()=>{
+      const load=THREE.MathUtils.clamp(pad.progress??0,0,1);
+      for(const material of signals){
+        material.color.lerpColors(signalIdle,signalActive,load);
+        material.emissive.copy(material.color);
+        material.emissiveIntensity=.20+load*.42;
+      }
+    });
   }
   if(level.lift){
     const mount=follow(level.lift.group,'Early lift / moving chassis mount');
@@ -141,6 +168,15 @@ export function applyEarlyMechanismArt(level){
     // clearance from the complete swept source impeller.
     const ring=collar(mount,V(-.00096,.39807,.437),.38,'Air machine / bolted intake collar');
     ring.userData.fixedIntake=true;
+    const signals=independentSignalGlass(ring);
+    renders.push(()=>{
+      const load=THREE.MathUtils.clamp((level.state?.fanSpeed??0)/12,0,1);
+      for(const material of signals){
+        material.color.lerpColors(signalIdle,signalActive,load);
+        material.emissive.copy(material.color);
+        material.emissiveIntensity=.2+load*.45;
+      }
+    });
   }
   if(level.index===7){
     // The room-eight entrance used to show a nearly featureless back wall:

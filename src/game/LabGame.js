@@ -91,29 +91,32 @@ export class LabGame {
   }
 
   createScene() {
-    this.scene = new THREE.Scene(); this.scene.background = new THREE.Color(0xaac9d4);
-    this.scene.fog = new THREE.Fog(0xb3ced6, 64, 120);
+    this.scene = new THREE.Scene(); this.scene.background = new THREE.Color(0x263844);
+    this.scene.fog = new THREE.Fog(0x263844, 64, 120);
     this.camera = new THREE.PerspectiveCamera(57, innerWidth / innerHeight, 0.1, 130);
     this.renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' });
     this.renderer.setPixelRatio(Math.min(devicePixelRatio, this.quality.pixelRatio));
     this.renderer.setSize(innerWidth, innerHeight);
     this.renderer.outputColorSpace = THREE.SRGBColorSpace;
-    this.renderer.toneMapping = THREE.ACESFilmicToneMapping; this.renderer.toneMappingExposure = 1.05;
+    this.renderer.toneMapping = THREE.ACESFilmicToneMapping; this.renderer.toneMappingExposure = .93;
     this.renderer.shadowMap.enabled = this.quality.shadows !== false; this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     this.renderer.localClippingEnabled = true;
     this.container.appendChild(this.renderer.domElement);
-    this.scene.add(new THREE.HemisphereLight(0xe7f5ff, 0x9aa7ac, 2.5));
-    this.keyLight = new THREE.DirectionalLight(0xfff0d9, 2.1);
+    // Broad ambient light previously flattened the shaped panels and clipped
+    // the warm highlights. A softer sky/ground fill leaves the directional
+    // light to describe the folded metal, ceramic and character silhouette.
+    this.scene.add(new THREE.HemisphereLight(0xe6f1f2, 0x435464, 1.45));
+    this.keyLight = new THREE.DirectionalLight(0xffe5bf, 2.45);
     this.keyLight.position.set(-7, 30, 14); this.keyLight.target.position.set(0, 0, -14.5); this.keyLight.castShadow = true;
     this.keyLight.shadow.mapSize.set(this.quality.shadowSize || 1024, this.quality.shadowSize || 1024);
     Object.assign(this.keyLight.shadow.camera, { left: -20, right: 20, top: 48, bottom: -48, near: 1, far: 100 });
     this.keyLight.shadow.bias = -0.00015; this.keyLight.shadow.normalBias = 0.04;
     this.scene.add(this.keyLight, this.keyLight.target);
     this.materials = {
-      wall: new THREE.MeshStandardMaterial({ color: 0xe3ebe5, roughness: .87 }),
-      floor: new THREE.MeshStandardMaterial({ color: 0xd2dfdc, roughness: .9 }),
-      dark: new THREE.MeshStandardMaterial({ color: 0x456879, roughness: .78, metalness: .05 }),
-      trim: new THREE.MeshStandardMaterial({ color: 0x475563, roughness: .48, metalness: .4 }),
+      wall: new THREE.MeshStandardMaterial({ color: 0xb5c1bb, roughness: .81 }),
+      floor: new THREE.MeshStandardMaterial({ color: 0xa7b6b1, roughness: .88 }),
+      dark: new THREE.MeshStandardMaterial({ color: 0x304451, roughness: .74, metalness: .1 }),
+      trim: new THREE.MeshStandardMaterial({ color: 0x303e49, roughness: .54, metalness: .28 }),
       cyan: new THREE.MeshBasicMaterial({ color: 0x50dfff }),
       amber: new THREE.MeshBasicMaterial({ color: 0xffc168 }),
       glass: new THREE.MeshStandardMaterial({ color: 0x60a9bf, transparent: true, opacity: .16, roughness: .35, depthWrite: false }),
@@ -238,7 +241,7 @@ export class LabGame {
 
   buildLevel() {
     // A large sky course must not leave its long-range fog in later rooms.
-    this.scene.fog = new THREE.Fog(0xb3ced6, 64, 120);
+    this.scene.fog = new THREE.Fog(0x263844, 64, 120);
     const previousRoots = new Set(this.scene.children);
     this.firstLevel = buildLabCampaignLevel(this, this.levelIndex);
     this.mechanisms = this.firstLevel;

@@ -8,13 +8,15 @@ import {cargoLoadsPlate} from './LabPlateContact.js';
 const V=(...v)=>new THREE.Vector3(...v),Q=()=>new THREE.Quaternion(),UP=V(0,1,0),Z=V(0,0,1);
 export const OPEN_METRICS=Object.freeze({walkway:8,landing:12,headroom:7,carriage:12,portalWidth:7.6,portalHeight:5.8});
 export const OPEN_PALETTES=Object.freeze({
- orbital:{paint:0x167f89,accent:0xf6ad49,secondary:0xde6c4d,floor:0x7caaa9,sky:0xaacedd},
- optical:{paint:0xe09b44,accent:0x70e4ed,secondary:0x2c7882,floor:0xcfd1ba,sky:0xb1d7e6},
- current:{paint:0x376ab2,accent:0xffc26b,secondary:0x259a91,floor:0xbacacd,sky:0xaacbdc},
- kinetic:{paint:0xc85156,accent:0xf5c863,secondary:0x357eaa,floor:0xc5cecb,sky:0xb3d9e6},
- tidal:{paint:0x24948b,accent:0xffb47a,secondary:0xcd694a,floor:0x78b3b3,sky:0xa9d8e4},
- gravity:{paint:0x635caf,accent:0xedd276,secondary:0x328995,floor:0xc2c6d1,sky:0xbacbe5},
- launch:{paint:0xca6b35,accent:0x87e1e6,secondary:0x34699d,floor:0x9caab2,sky:0xb8d9e6},
+ // Saturated enamel marks whole machine families; the walking mineral is
+ // lighter and less chromatic so ceramic portal targets stay unmistakable.
+ orbital:{paint:0x477f81,accent:0xf1b965,secondary:0xb87967,floor:0xa6b2a7,sky:0x293c48},
+ optical:{paint:0xb78a58,accent:0x75d7dd,secondary:0x518997,floor:0xb8b3a3,sky:0x2f3b47},
+ current:{paint:0x587ca3,accent:0xf5c479,secondary:0x44978c,floor:0xabb9b7,sky:0x283c4b},
+ kinetic:{paint:0xb36c72,accent:0xeac675,secondary:0x5885a5,floor:0xb5b6ac,sky:0x333b4a},
+ tidal:{paint:0x4f9993,accent:0xf4b98a,secondary:0xbd7f65,floor:0x9db6b0,sky:0x28424b},
+ gravity:{paint:0x7974a9,accent:0xe8d18d,secondary:0x4f929c,floor:0xb4b2bd,sky:0x343a52},
+ launch:{paint:0xb47f55,accent:0x85d7dc,secondary:0x507fa1,floor:0xb6b1a6,sky:0x30404c},
 });
 
 function reflectionTexture(){
@@ -23,8 +25,8 @@ function reflectionTexture(){
   const v=y/height,u=x/width,sky=Math.max(0,Math.sin((v-.5)*Math.PI));
   const window=Math.exp(-(((u-.30)/.075)**2)-(((v-.72)/.19)**4));
   const other=Math.exp(-(((u-.78)/.12)**4)-(((v-.61)/.16)**4));
-  const i=(y*width+x)*4,t=.16+.48*sky+.35*window+.18*other;
-  data[i]=Math.min(255,255*t*.94);data[i+1]=Math.min(255,255*t);data[i+2]=Math.min(255,255*t*1.04);data[i+3]=255;
+  const i=(y*width+x)*4,t=.13+.34*sky+.30*window+.15*other;
+  data[i]=Math.min(255,255*t*1.07);data[i+1]=Math.min(255,255*t*1.02);data[i+2]=Math.min(255,255*t*.94);data[i+3]=255;
  }
  const t=new THREE.DataTexture(data,width,height);t.mapping=THREE.EquirectangularReflectionMapping;
  t.colorSpace=THREE.LinearSRGBColorSpace;t.magFilter=t.minFilter=THREE.LinearFilter;t.needsUpdate=true;return t;
@@ -37,10 +39,10 @@ export class OpenChamber extends Workshop{
   super(game,spec,index);this.theme=theme;this.colors=OPEN_PALETTES[theme];this.routes=[];this.decks=[];this.artBins=new Map();this.envelopes=[];
   const w=this.world,p=this.colors;w.root.name='Open chamber / '+spec.title;w.root.userData.keepMaterial=true;
   this.env=reflectionTexture();
-  const material=(name,color,roughness,metalness=0)=>new THREE.MeshStandardMaterial({name,color,roughness,metalness,envMap:this.env,envMapIntensity:.75});
-  this.m={shell:material('Powder-coated structural shell',p.paint,.37),secondary:material('Secondary enamel',p.secondary,.40),
-   floor:material('Honed mineral walking deck',p.floor,.79),dark:material('Recessed graphite frame',0x283c48,.51,.15),
-   metal:material('Brushed bearing alloy',0xa8b5b9,.29,1),ceramic:material('Portal porcelain',0xf8f4dd,.28),
+  const material=(name,color,roughness,metalness=0)=>new THREE.MeshStandardMaterial({name,color,roughness,metalness,envMap:this.env,envMapIntensity:.52});
+  this.m={shell:material('Powder-coated structural shell',p.paint,.59,.11),secondary:material('Secondary enamel',p.secondary,.54,.10),
+   floor:material('Honed mineral walking deck',p.floor,.80,.04),dark:material('Recessed graphite frame',0x263946,.56,.25),
+   metal:material('Brushed bearing alloy',0xabb5b2,.39,.75),ceramic:material('Portal porcelain',0xf8f4dd,.48,.03),
    rubber:material('Rubber isolation gasket',0x172a32,.88),light:new THREE.MeshBasicMaterial({name:'Inset light source',color:p.accent}),
    white:new THREE.MeshBasicMaterial({name:'Warm service light',color:0xffefc7})};
   Object.assign(w.materials,{wall:this.m.shell,floor:this.m.floor,ceramic:this.m.ceramic,trim:this.m.dark,accent:this.m.light,lamp:this.m.white});
@@ -54,8 +56,8 @@ export class OpenChamber extends Workshop{
   const g=this.game,key=g.keyLight,hemis=[];
   g.scene.traverse(n=>{if(n.isHemisphereLight)hemis.push({n,intensity:n.intensity,color:n.color.clone(),ground:n.groundColor.clone()});});
   this.oldLighting={hemis,key:key&&{color:key.color.clone(),intensity:key.intensity,position:key.position.clone(),target:key.target.position.clone(),camera:Object.fromEntries(['left','right','top','bottom','near','far'].map(k=>[k,key.shadow.camera[k]]))}};
-  for(const {n}of hemis){n.intensity=1.65;n.color.setHex(0xd5edff);n.groundColor.setHex(0x577481);}
-  if(key){key.color.setHex(0xffe4bb);key.intensity=3.2;key.position.set(-38,74,38);key.target.position.set(0,8,0);Object.assign(key.shadow.camera,{left:-80,right:80,top:80,bottom:-80,near:1,far:200});key.shadow.camera.updateProjectionMatrix();}
+  for(const {n}of hemis){n.intensity=1.20;n.color.setHex(0xdde9e8);n.groundColor.setHex(0x3b5160);}
+  if(key){key.color.setHex(0xffe1b7);key.intensity=2.65;key.position.set(-38,74,38);key.target.position.set(0,8,0);Object.assign(key.shadow.camera,{left:-80,right:80,top:80,bottom:-80,near:1,far:200});key.shadow.camera.updateProjectionMatrix();}
  }
  restoreLight(){
   for(const {n,intensity,color,ground}of this.oldLighting.hemis){n.intensity=intensity;n.color.copy(color);n.groundColor.copy(ground);}

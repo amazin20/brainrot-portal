@@ -15,8 +15,10 @@ export class ResearchChamber extends OpenChamber {
   const foundation=this.envelopes[0];
   const service=this.deck('Continuous service and recovery floor',bounds.minX+1,bounds.maxX-1,bounds.minZ+1,bounds.maxZ-1,base,{color:'dark'});
   service.record.portalBackingColliders.push(foundation);
-  game.scene.fog=new THREE.Fog(0x344954,90,160);
-  this.m.shell.color.lerp(new THREE.Color(0xd2e0df),.14);
+  // These are roofed rooms: blue distance haze previously made the far wall
+  // look like open sky and flattened the purpose-built mechanical silhouettes.
+  game.scene.fog=new THREE.Fog(0x40525a,170,360);
+  this.m.shell.color.lerp(new THREE.Color(0xc5d2c8),.12);
  }
  panel(name,p,n,w=8,h=5.8,parent=this.world.root,moving=false){
   const s=super.panel(name,p,n,w,h,parent,moving);

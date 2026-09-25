@@ -2,42 +2,41 @@ import * as THREE from 'three';
 
 const V=(x=0,y=0,z=0)=>new THREE.Vector3(x,y,z);
 
-/** A folded sheet-metal cassette, with clipped corners and an actual bevel.
- * Forty-eight triangles replace the tessellated sculpted tile. Normals are
- * split at the folds; the broad face stays flat under grazing light. */
+/** Clipped, folded sheet metal with a satin face and shaded edge.
+ * The folds are part of the one opaque mesh: overlapping planes on large
+ * rooms used to shimmer, especially through portals. */
 export function architecturalCassetteGeometry({corner=.035,inset=.012}={}){
   const c=.5-corner;
   const points=[[-c,-.5],[c,-.5],[.5,-c],[.5,c],[c,.5],[-c,.5],[-.5,c],[-.5,-c]];
   const ring=(z,inset=0)=>points.map(([x,y])=>[x*(1-inset*2),y*(1-inset*2),z]);
-  const back=ring(-.5),shoulder=ring(.1),front=ring(.5,inset),vertices=[],uv=[];
-  const tri=(a,b,c)=>{for(const p of [a,b,c]){vertices.push(...p);uv.push(p[0]+.5,p[1]+.5);}};
+  const back=ring(-.5),shoulder=ring(.1),front=ring(.5,inset);
+  const vertices=[],uv=[],colors=[];
+  const tri=(a,b,c,tints=[1,1,1])=>{for(const [i,p] of [a,b,c].entries()){
+    vertices.push(...p);uv.push(p[0]+.5,p[1]+.5);
+    colors.push(tints[i],tints[i],tints[i]);
+  }};
   for(let i=0;i<8;i++){
     const j=(i+1)%8;
     tri([0,0,.5],front[i],front[j]);tri([0,0,-.5],back[j],back[i]);
-    tri(back[i],back[j],shoulder[j]);tri(back[i],shoulder[j],shoulder[i]);
-    tri(shoulder[i],shoulder[j],front[j]);tri(shoulder[i],front[j],front[i]);
+    tri(back[i],back[j],shoulder[j],[.55,.55,.70]);tri(back[i],shoulder[j],shoulder[i],[.55,.70,.70]);
+    tri(shoulder[i],shoulder[j],front[j],[.70,.70,1]);tri(shoulder[i],front[j],front[i],[.70,1,1]);
   }
   const geometry=new THREE.BufferGeometry();
   geometry.setAttribute('position',new THREE.Float32BufferAttribute(vertices,3));
   geometry.setAttribute('uv',new THREE.Float32BufferAttribute(uv,2));
+  geometry.setAttribute('color',new THREE.Float32BufferAttribute(colors,3));
   geometry.computeVertexNormals();geometry.computeBoundingBox();geometry.computeBoundingSphere();
   geometry.name='Folded architectural cassette / 48 triangles';return geometry;
 }
 
 export function architecturalMaterials(accent){
-  // Low-amplitude roughness variation, with no high-frequency normal noise.
-  // Coated sheet is dielectric: the previous metallic black shell relied on
-  // an environment map that the game does not have, and lost its midtones.
-  const data=new Uint8Array(64*64*4);let seed=1907;
-  for(let i=0;i<data.length;i+=4){seed=(seed*1664525+1013904223)>>>0;const value=244+(seed%9);data[i]=data[i+1]=data[i+2]=value;data[i+3]=255;}
-  const roughness=new THREE.DataTexture(data,64,64,THREE.RGBAFormat);
-  roughness.wrapS=roughness.wrapT=THREE.RepeatWrapping;roughness.colorSpace=THREE.NoColorSpace;roughness.needsUpdate=true;
-  const coat=new THREE.MeshStandardMaterial({color:0xffffff,roughness:.68,metalness:.08,roughnessMap:roughness});
-  const frame=new THREE.MeshStandardMaterial({color:0x46555c,roughness:.58,metalness:.18});
-  const steel=new THREE.MeshStandardMaterial({color:0x9ca8ab,roughness:.42,metalness:.36});
+  // Continuous finishes avoid a repeating grain at every cassette boundary.
+  // The geometry supplies the broad bevel shading, even without reflections.
+  const coat=new THREE.MeshStandardMaterial({color:0xffffff,roughness:.62,metalness:.075,vertexColors:true});
+  const frame=new THREE.MeshStandardMaterial({color:0x394e5c,roughness:.52,metalness:.24});
+  const steel=new THREE.MeshStandardMaterial({color:0xaab5af,roughness:.38,metalness:.42});
   const recess=new THREE.MeshStandardMaterial({color:0x293940,roughness:.84,metalness:.04});
   const lamp=new THREE.MeshBasicMaterial({color:accent??0xaddfe2,toneMapped:true});
-  coat.addEventListener('dispose',()=>roughness.dispose());
   return {coat,frame,steel,recess,lamp};
 }
 

@@ -1,13 +1,13 @@
 import * as THREE from 'three';
 
-// Each chapter has one dominant construction colour, one complementary family,
-// warm walking decks and a dark coloured frame. Ivory belongs to portals only.
+// Each chapter uses broad enamel fields against warm mineral decks. The dark
+// structural frame separates silhouettes; ivory remains exclusive to portals.
 export const CHAPTER_VISUAL_PROFILES=Object.freeze({
- garden:Object.freeze({id:'garden',title:'Поворотный сад',wall:0xf18a79,secondary:0x70c6ad,low:0xd5b98b,high:0x5bafa2,trim:0x286c74,ceiling:0xeacb91,edge:0xf4d568,sky:0x9bd8e9,fill:0xffedcd}),
- carnival:Object.freeze({id:'carnival',title:'Кинетический карнавал',wall:0xdc6f99,secondary:0x44c4c6,low:0xddc68e,high:0xd58c75,trim:0x31578f,ceiling:0xe7ce9d,edge:0xffdf79,sky:0xa6deed,fill:0xffe9cf}),
- lagoon:Object.freeze({id:'lagoon',title:'Обсерватория приливов',wall:0x62c9bf,secondary:0xe89179,low:0x8cb8cb,high:0x499eae,trim:0x285c90,ceiling:0xa8d3d8,edge:0xe0e796,sky:0x9dd8ee,fill:0xffefd4}),
- inversion:Object.freeze({id:'inversion',title:'Перевёрнутый сад',wall:0xa58bd5,secondary:0x657dce,low:0xbba5cc,high:0xd7be67,trim:0x4c4b85,ceiling:0xc3b1de,edge:0xe6dd77,sky:0xc3c2eb,fill:0xffedd8}),
- launch:Object.freeze({id:'launch',title:'Парк запуска',wall:0xed946c,secondary:0x5d8fd5,low:0xcebd92,high:0x60b4c1,trim:0x315c98,ceiling:0xbed9dc,edge:0xffdc6b,sky:0xa0dbf0,fill:0xffedce}),
+ garden:Object.freeze({id:'garden',title:'Поворотный сад',wall:0xc6a993,secondary:0x5f9e90,low:0xabb8ae,high:0x7eaa9d,trim:0x2c4953,ceiling:0xb8b5a5,edge:0xf3c272,sky:0x2a414d,fill:0xffe9cb}),
+ carnival:Object.freeze({id:'carnival',title:'Кинетический карнавал',wall:0xb98e9e,secondary:0x5c99a2,low:0xb6ad9a,high:0xb27f76,trim:0x34475b,ceiling:0xbbb2ae,edge:0xf7c779,sky:0x303e4d,fill:0xffe4d0}),
+ lagoon:Object.freeze({id:'lagoon',title:'Обсерватория приливов',wall:0x80afb0,secondary:0xbb8b7a,low:0x95aebb,high:0x578f9a,trim:0x2a4c61,ceiling:0xa8b9b7,edge:0xebc87b,sky:0x294453,fill:0xffedce}),
+ inversion:Object.freeze({id:'inversion',title:'Перевёрнутый сад',wall:0xa392b5,secondary:0x7286b4,low:0xaea6b1,high:0xb6a473,trim:0x3a3d61,ceiling:0xb1a6bd,edge:0xe9d17f,sky:0x353a51,fill:0xffe7d1}),
+ launch:Object.freeze({id:'launch',title:'Парк запуска',wall:0xbf907b,secondary:0x6a95b5,low:0xb7ac9c,high:0x71a6aa,trim:0x304e65,ceiling:0xabb9bb,edge:0xf4c66f,sky:0x2a4352,fill:0xffe7c8}),
 });
 
 export function getChapterVisualProfile(levelOrWorld){

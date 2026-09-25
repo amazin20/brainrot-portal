@@ -1,13 +1,105 @@
 import * as THREE from 'three';
-import {SolidAssembly,createGuideRing,createPlanter,createSolarObservatory,placeSolidModel} from './LabSolidModels.js';
+import {SolidAssembly,createGuideRing,placeSolidModel} from './LabSolidModels.js';
 const V=(...p)=>new THREE.Vector3(...p),Q=()=>new THREE.Quaternion();
+
+// The opening hub has three existing physical cores. Dress those exact
+// footprints as launch equipment, so the player sees what the structures do
+// instead of ornamental planters perched on featureless collision boxes.
+function buildRouteConsole(name){
+ const a=new SolidAssembly(name,'launch');
+ a.materials[0].color.setHex(0xd9e6e5);
+ a.materials[1].color.setHex(0x183a52);
+ a.materials[2].color.setHex(0xffd37c);
+ a.materials[3].color.setHex(0x294a5d);
+ // All relief remains inside the existing four-by-nine-metre plinth. Its
+ // exposed face looks toward the player at positive Z.
+ a.box([0,0,0],[4.04,4.04,9.04],0,.11,false);
+ for(const x of [-1.88,1.88]){
+  a.box([x,.05,0],[.18,3.65,8.8],0,.04,false);
+  for(const z of [-3.8,0,3.8])a.box([x,.70,z],[.22,.16,.42],2,.03,false);
+ }
+ a.box([0,1.88,0],[4.2,.24,9.3],0,.07,false);
+ a.box([0,.15,4.57],[3.42,2.82,.11],3,.04,false);
+ a.box([0,.10,4.64],[2.96,2.38,.045],1,.015,false);
+ // Two rising flight paths form a physical schematic, visible before the
+ // player chooses either launch bowl. No text texture or HUD is required.
+ for(const side of [-1,1]){
+  const coords=[[-1.20,-.82],[-.56,-.34],[.05,.12],[.68,.55],[1.16,.82]];
+  for(let i=1;i<coords.length;i++){
+   const [x0,y0]=coords[i-1],[x1,y1]=coords[i];
+   const dx=x1-x0,dy=y1-y0,len=Math.hypot(dx,dy);
+   const segment=new THREE.BoxGeometry(len,.085,.06);
+   segment.rotateZ(Math.atan2(dy,dx)*side);
+   a.add(segment,2,[side*(x0+x1)/2,(y0+y1)/2,4.69],Q(),[1,1,1],false);
+  }
+  a.box([side*1.23,.78,4.72],[.18,.25,.09],0,.025,false);
+ }
+ for(const z of [-3.5,-1.6,1.6,3.5])a.box([0,-1.86,z],[3.8,.16,.14],2,.025,false);
+ return a.finish();
+}
+
+function buildLaunchCore(){
+ const a=new SolidAssembly('Twin-route launch core','launch');
+ a.materials[0].color.setHex(0xf2dec5);
+ a.materials[0].emissive.setHex(0x57432f);
+ a.materials[0].emissiveIntensity=.16;
+ a.materials[1].color.setHex(0x285267);
+ a.materials[2].color.setHex(0xffd37c);
+ a.materials[3].color.setHex(0x4d7988);
+ a.materials[3].emissive.setHex(0x193647);
+ a.materials[3].emissiveIntensity=.16;
+ // The eight-metre core is already solid in the puzzle. Only the exposed
+ // machinery above that existing collision volume needs its own envelopes.
+ a.box([0,0,0],[16.1,8.08,12.1],0,.15,false);
+ for(const x of [-7.76,7.76])for(const z of [-5.75,5.75]){
+  a.box([x,0,z],[.45,8.0,.42],1,.06,false);
+  a.box([x,3.88,z],[.72,.25,.72],2,.04,false);
+ }
+ for(const side of [-1,1]){
+  const z=side*6.09;
+  for(const x of [-4.7,0,4.7]){
+   a.box([x,-.18,z],[3.65,5.1,.13],3,.06,false);
+   for(const y of [-1.9,-1.2,-.5,.2,.9,1.6])
+    a.box([x,y,z+side*.08],[3.1,.06,.08],0,.015,false);
+  }
+  a.box([0,3.38,z+side*.08],[14.6,.16,.10],2,.02,false);
+  a.box([0,-3.38,z+side*.08],[14.6,.16,.10],2,.02,false);
+ }
+ // The player starts west of the machine and sees its side from very close
+ // range. Match the front's three readable bays on both side faces: a light
+ // enamel shell, inset blue cells and continuous warm framing at eye height.
+ for(const side of [-1,1]){
+  const x=side*8.10;
+  for(const z of [-3.5,0,3.5]){
+   a.box([x,-.18,z],[.14,4.8,2.45],3,.055,false);
+   for(const y of [-1.76,-.90,-.04,.82,1.68])
+    a.box([x+side*.085,y,z],[.075,.055,2.15],0,.015,false);
+  }
+  for(const y of [-3.42,3.42])a.box([x+side*.085,y,0],[.10,.19,10.8],2,.025,false);
+  for(const z of [-5.25,-1.75,1.75,5.25])a.box([x+side*.09,0,z],[.11,7.0,.20],1,.025,false);
+ }
+ // Ceiling-facing collectors connect the hub machine to the overhead
+ // catwalk; four clear arms frame the well instead of a decorative crown.
+ for(const x of [-5.3,5.3])for(const z of [-3.7,3.7]){
+  a.box([x,7.1,z],[.75,6.4,.75],1,.08);
+  a.box([x,10.25,z],[1.28,.24,1.28],2,.06);
+ }
+ for(const z of [-3.7,3.7])a.box([0,10.2,z],[12,.35,.88],0,.06);
+ a.box([0,11.0,0],[9.6,1.10,5.7],1,.11);
+ for(const x of [-4.2,-2.1,0,2.1,4.2])a.box([x,11.6,0],[.20,.11,5.1],2,.02,false);
+ return a.finish();
+}
 
 /** Manufactured launch structures. The segmented collars are solid at their
  * rims, open in their centres and synchronized with the actual outlet pose. */
 export function buildRoom30Art(level){
  const {world,flightGeometry:f,state,workshop:k}=level;
- const root=new THREE.Group();root.name='Sunward launch park landmarks';root.userData.keepMaterial=true;world.root.add(root);
- const steel=new SolidAssembly('Launch park trusses and tower fins','launch');
+ const root=new THREE.Group();root.name='Sunward launch laboratory architecture';root.userData.keepMaterial=true;world.root.add(root);
+ const steel=new SolidAssembly('Launch hall structure, cladding and flight markers','launch');
+ steel.materials[0].color.setHex(0xd9e6e5);
+ steel.materials[1].color.setHex(0x285267);
+ steel.materials[2].color.setHex(0xffd37c);
+ steel.materials[3].color.setHex(0x4d7988);
  for(const floor of world.floors){if(floor.y<20||!floor.mesh)continue;const {minX,maxX,minZ,maxZ,y}=floor;
   // Real broad soffits replace thin floating edge strips. The walking plane is unchanged.
   steel.box([(minX+maxX)/2,y-.42,(minZ+maxZ)/2],[maxX-minX,.64,maxZ-minZ],1,.08);
@@ -17,8 +109,11 @@ export function buildRoom30Art(level){
    steel.beam([x,y-12,z],[x+(x<(minX+maxX)/2?5:-5),y-.7,z],.21,1);
   }
  }
- placeSolidModel(k,createSolarObservatory(),[-1,65.6,7],{parent:root});
- for(const p of [[-21,56,-6],[19,56,8]])placeSolidModel(k,createPlanter('launch'),p,{parent:root,scale:1.4});
+ placeSolidModel(k,buildLaunchCore(),[-1,56,7],{parent:root});
+ for(const p of [[-21,54,-6],[19,54,8]]){
+  const routeConsole=buildRouteConsole('Launch path console');
+  routeConsole.position.fromArray(p);root.add(routeConsole);
+ }
  const horizontal=Q().setFromAxisAngle(V(1,0,0),-Math.PI/2);
  for(const well of f.wells){const c=well.panel.getFrame().center;
   for(let y=c.y+4;y<well.top;y+=7)placeSolidModel(k,createGuideRing(5.7,'lagoon',.19,.28),[c.x,y,c.z],{parent:root,quaternion:horizontal});
@@ -53,26 +148,27 @@ export function buildRoom30Art(level){
  for(let i=0;i<12;i++){
   const t=i*Math.PI/6;steel.beam([200+Math.cos(t)*8.2,43+Math.sin(t)*8.2,32],[200+Math.cos(t)*9.5,43+Math.sin(t)*9.5,32],.20,2);
  }
- for(const [x,z] of [[-44,-65],[-42,53],[25,59],[112,59],[208,59],[218,-76]])placeSolidModel(k,createPlanter('launch'),[x,0,z],{parent:root,scale:2.5});
- // The old hall exposed almost eighty metres of featureless orange wall from
- // the first launch deck. These bays sit against its existing solid shell,
- // above the unreachable service floor, so their decorative relief cannot be
- // mistaken for a new invisible path or block a portal shot. All bays merge
- // into the same four material draws as the structural model.
+ // Recessed machine bays turn the enormous blank walls into the enclosing
+ // structure of a working launch hall. The relief is inset against the
+ // existing shell and has no collision or portal surfaces.
  const {minX,maxX,minZ,maxZ}=level.bounds;
- for(const z of [minZ+.85,maxZ-.85])for(let x=minX+6;x<maxX-25;x+=24){
-  steel.box([x,52,z],[.72,58,.9],1,.1,false);
-  steel.box([x+11.7,76,z],[23.3,.62,.85],1,.09,false);
-  steel.box([x+11.7,35,z],[23.3,.62,.85],1,.09,false);
-  steel.box([x+11.7,55,z],[20,10,.40],3,.1,false);
-  steel.box([x+11.7,61,z+.22],[17,.24,.12],2,.025,false);
+ for(const [z,towardRoom] of [[minZ+.20,1],[maxZ-.20,-1]])for(let x=minX+6;x<maxX-25;x+=24){
+  steel.box([x,52,z],[1.1,57,1.65],1,.12,false);
+  steel.box([x+11.7,77,z],[23.2,1.35,1.5],0,.08,false);
+  steel.box([x+11.7,27,z],[23.2,1.2,1.5],0,.08,false);
+  steel.box([x+11.7,51,z],[21.2,37,.36],3,.12,false);
+  for(const offset of [-9.0,9.0])steel.box([x+11.7+offset,51,z+towardRoom*.24],[.35,37,.30],0,.04,false);
+  for(const y of [36,52,67])steel.box([x+11.7,y,z+towardRoom*.31],[17.5,.15,.23],2,.025,false);
+  steel.box([x+11.7,72,z+towardRoom*.28],[19,.54,.26],0,.045,false);
  }
- for(const x of [minX+.85,maxX-.85])for(let z=minZ+9;z<maxZ-23;z+=22){
-  steel.box([x,52,z],[.9,58,.72],1,.1,false);
-  steel.box([x,76,z+10.7],[.85,.62,21.3],1,.09,false);
-  steel.box([x,35,z+10.7],[.85,.62,21.3],1,.09,false);
-  steel.box([x,55,z+10.7],[.40,10,18],3,.1,false);
-  steel.box([x+.22,61,z+10.7],[.12,.24,15],2,.025,false);
+ for(const [x,towardRoom] of [[minX+.20,1],[maxX-.20,-1]])for(let z=minZ+9;z<maxZ-23;z+=22){
+  steel.box([x,52,z],[1.65,57,1.1],1,.12,false);
+  steel.box([x,77,z+10.7],[1.5,1.35,21.1],0,.08,false);
+  steel.box([x,27,z+10.7],[1.5,1.2,21.1],0,.08,false);
+  steel.box([x,51,z+10.7],[.36,37,19],3,.12,false);
+  for(const offset of [-8,8])steel.box([x+towardRoom*.24,51,z+10.7+offset],[.30,37,.32],0,.04,false);
+  for(const y of [36,52,67])steel.box([x+towardRoom*.31,y,z+10.7],[.23,.15,15.3],2,.025,false);
+  steel.box([x+towardRoom*.28,72,z+10.7],[.26,.54,17.4],0,.045,false);
  }
  // The large sightline screen remains one solid obstruction; recessed service
  // cells and longitudinal ribs show its construction on both visible faces.
