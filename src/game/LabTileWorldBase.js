@@ -54,7 +54,13 @@ export class LabTileWorld {
     }
     // A dark recessed backing seals the seams. Its front is behind the tile
     // faces: no coincident surface, no lift-style z-fighting.
-    const backing=this.game.box(0,0,-.105,width,height,.08,this.materials.trim,{parent:group,camera:false,aim:false});
+    // Raised walking decks expose their backs to the room below. A near-black
+    // trim backing used to read as a missing roof, with light brace wires on
+    // an empty slab. Keep only non-portal, upward-facing decks in mineral
+    // structural paint; portal mouths retain the dark recessed throat.
+    const walkingUnderside=!portal&&n.y>.9;
+    const backing=this.game.box(0,0,-.105,width,height,.08,walkingUnderside?this.materials.floor:this.materials.trim,{parent:group,camera:false,aim:false});
+    backing.userData.walkingUnderside=walkingUnderside;
     const mesh=this.game.box(0,0,-.10,width,height,.20,this.materials.trim,{parent:group,solid:false,camera:false,aim:false});
     mesh.visible=false;mesh.userData.collisionProxy=true;mesh.name=name+' / collision';
     group.updateWorldMatrix(true,true);

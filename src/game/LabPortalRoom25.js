@@ -12,8 +12,8 @@ export const ROOM25_SPEC={id:'opposed-shadows',title:'Обратная стор�
  * There are no free-standing, visible-but-passable columns in the walkway. */
 function finishShadowHall(k,optical){
  const w=k.world,a=new SolidAssembly('Opposed shadows / instrument hall finish','launch');
- a.materials[0].color.setHex(0x778995);a.materials[1].color.setHex(0x304550);
- a.materials[2].color.setHex(0xd6ae70);a.materials[3].color.setHex(0x44555e);
+ a.materials[0].color.setHex(0x89b5bf);a.materials[1].color.setHex(0x263d52);
+ a.materials[2].color.setHex(0xffcb68);a.materials[3].color.setHex(0x426b77);
  const plate=(p,s,material=1)=>a.box(p,s,material,.025,false);
  // The west exterior face dominates the opening shot. Its source-kit tile
  // mesh alone used 2.15 million triangles and was drawn again inside portal
@@ -87,6 +87,29 @@ function finishShadowHall(k,optical){
   plate([x,.012,z+sz*.28],[.12,.018,.62],3);
   plate([x+sx*.28,.012,z],[.62,.018,.12],2);
  }
+ // Two shallow floor tracks guide the eye from the machine entrance to its
+ // actual lifts, without claiming that the counterweight is walkable beyond
+ // its plate. They are below player collision tolerance and not colliders.
+ for(const x of [-14,16])for(const z of [-12,-8])
+  plate([x,.018,z],[3.55,.018,.050],2);
+ for(const x of [-15.75,-12.25,14.25,17.75])
+  plate([x,.018,-10],[.050,.018,3.92],1);
+ // The suspended optical ceiling is deliberately unlike the conservatory:
+ // enclosed dark instrument wells, large paired lenses and an amber datum
+ // line give the two lifts a shared silhouette. All geometry sits above the
+ // 18 m overlook, with no new aim blockers or misleading collision proxies.
+ for(const x of [-14,16]){
+  plate([x,26.51,-10],[5.6,.16,10.4],1);
+  plate([x,26.34,-10],[4.8,.12,8.8],3);
+  for(const z of [-13.2,-11.1,-9,-6.9]){
+   plate([x,26.24,z],[3.8,.025,.15],2);
+   plate([x,26.19,z],[2.9,.025,.07],0);
+  }
+ }
+ for(const z of [-19.5,0,16.5]){
+  plate([0,26.64,z],[42,.27,.25],1);
+  for(const x of [-17,-7,3,13])plate([x,26.46,z],[5.7,.035,.09],2);
+ }
  const model=a.finish();model.userData.visualOnly=true;model.userData.solidModel=false;delete model.userData.collisionParts;w.root.add(model);
  const indicatorMaterials=[0,1].map(()=>new THREE.MeshBasicMaterial({color:0x263943}));
  for(const [i,x,y] of [[0,15.75,18.55],[1,18.25,19.65]]){
@@ -98,9 +121,11 @@ function finishShadowHall(k,optical){
 }
 export function buildRoom25(game,index=24){
  const k=new Workshop(game,ROOM25_SPEC,index),w=k.world;k.shell({minX:-22,maxX:22,minZ:-22,maxZ:25},27);w.highFidelity=true;
+ w.materials.wall.color.setHex(0x9eb4b8);w.materials.floor.color.setHex(0x78969a);
+ w.materials.trim.color.setHex(0x294254);w.materials.lamp.color.setHex(0xffd99a);
  const deck=(name,a,b,c,d,y)=>w.floor(a,b,c,d,y,{name});
- const baffle=new THREE.MeshStandardMaterial({color:0x49636e,roughness:.63,metalness:.16});
- const returnWall=new THREE.MeshStandardMaterial({color:0x58727a,roughness:.73,metalness:.09});
+ const baffle=new THREE.MeshStandardMaterial({color:0x406775,roughness:.63,metalness:.16});
+ const returnWall=new THREE.MeshStandardMaterial({color:0x698b94,roughness:.73,metalness:.09});
  const backedScreen=(position,size,material=baffle)=>{
   const mesh=w.box(position,size,material);mesh.userData.keepMaterial=true;return mesh;
  };

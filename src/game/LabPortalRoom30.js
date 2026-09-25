@@ -53,8 +53,8 @@ export function buildRoom30(game,index=29){
  const sightlineScreen=w.box([120,46,-53],[1.1,92,64],new THREE.MeshStandardMaterial({color:0x326caf,roughness:.58,metalness:.14}));
  sightlineScreen.name='Hub-to-outlet sightline screen';
  sightlineScreen.userData.keepMaterial=true;
- // Walk around either side of this planted observatory to see the first
- // receivers, which now carry the pair to separate observation islands.
+ // The enclosed launch core divides the initial sightlines. Walking around
+ // either side reveals two different receivers and their observation islands.
  w.box([-1,56,7],[16,8,12],w.materials.wall);
  w.box([-21,54,-6],[4,4,9],w.materials.trim);
  w.box([19,54,8],[4,4,9],w.materials.trim);

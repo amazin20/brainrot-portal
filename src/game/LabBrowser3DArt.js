@@ -173,7 +173,10 @@ function enhanceWorldMaterials(level,m){
     if(keepsAuthoredMaterial(s.group)&&!s.portal)continue;
     const target=s.portal?m.ceramic:Math.abs(s.normal.y)>.9?m.steel:m.graphite;
     s.group.traverse(node=>{if(node.isInstancedMesh&&!node.userData.portalTile&&!s.portal&&!keepsAuthoredMaterial(node))node.material=target;if(node.isInstancedMesh&&node.userData.portalTile)node.material=m.ceramic;});
-    if(s.backing?.material)s.backing.material=m.blackSteel;
+    // Load decks carry an authored, lit underside. Repainting every backing
+    // black made a suspended floor read as an unlit hole from below. Portal
+    // panels and vertical wall reveals keep their recessed dark backing.
+    if(s.backing?.material)s.backing.material=s.backing.userData.walkingUnderside?m.steel:m.blackSteel;
   }
 }
 
@@ -193,6 +196,33 @@ function addDeckEngineering(level,root,m){
   for(const s of floors){
     const f=s.floor,w=f.maxX-f.minX,d=f.maxZ-f.minZ;if(w<2||d<2)continue;
     const y=f.y-.42,longX=w>=d,span=longX?w:d,count=Math.max(1,Math.min(5,Math.ceil(span/6)));
+    if(batched){
+      // The old wire-diameter X braces traversed a broad dark underside and
+      // looked like stray geometry. These opaque, shallow longitudinal load
+      // rails and regularly spaced crossmembers end inside the actual slab.
+      // A portal-bearing deck is filtered above, so its aperture stays open.
+      const midX=(f.minX+f.maxX)/2,midZ=(f.minZ+f.maxZ)/2;
+      const edge=.26,crossSpan=(longX?d:w)-edge*2;
+      for(const side of [-1,1]){
+        const p=longX?[midX,y,midZ+side*(d/2-edge)]:[midX+side*(w/2-edge),y,midZ];
+        box(details,p,longX?[w-edge*2,.29,.22]:[.22,.29,d-edge*2],m.steel);
+        braces++;
+      }
+      for(let i=0;i<count;i++){
+        const offset=(i+.5)*span/count-span/2;
+        const p=longX?[midX+offset,y-.07,midZ]:[midX,y-.07,midZ+offset];
+        box(details,p,longX?[.28,.22,crossSpan]:[crossSpan,.22,.28],m.blackSteel);
+        braces++;
+      }
+      if(w>4.5){
+        // A single inset strip belongs to the leading rail. It is under the
+        // load frame, not an extra light or a nearly coplanar floor skin.
+        const p=longX?[midX,y-.158,f.minZ+edge]:[f.minX+edge,y-.158,midZ];
+        box(details,p,longX?[Math.min(w-1,5.2),.018,.075]:[.075,.018,Math.min(d-1,5.2)],m.lamp);
+        lamps++;
+      }
+      continue;
+    }
     const strut=(a,b,material)=>{
       beam(details,a,b,.035,material,6);
       if(early)for(const p of [a,b]){

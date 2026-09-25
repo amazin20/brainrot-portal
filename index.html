@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <meta name="theme-color" content="#12272d" />
+    <meta name="theme-color" content="#15262b" />
     <meta name="description" content="БРЕЙНРОТ ПОРТАЛ — 3D-головоломка от третьего лица. Исследуйте пространство, сохраняйте импульс и меняйте порталы на лету. Доставьте брейнрота к выходу вместе." />
     <title>БРЕЙНРОТ ПОРТАЛ — физическая 3D-головоломка</title>
   </head>
@@ -12,31 +12,35 @@
     <section id="loading" class="screen screen--active" aria-live="polite" aria-labelledby="loading-title">
       <div class="loading-card">
         <span class="brand">БРЕЙНРОТ ПОРТАЛ</span>
-        <h1 id="loading-title">Скоро<br />отправляемся<span>.</span></h1>
-        <p class="muted">Собираем лабораторию и загружаем модели.</p>
+        <h1 id="loading-title">Открываем<br /><span>лабораторию.</span></h1>
+        <p class="muted">Готовим комнаты к исследованию.</p>
         <div id="loading-progress" class="progress-track" role="progressbar" aria-label="Загрузка моделей" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div id="loading-bar"></div></div>
         <div class="loading-row"><span id="loading-label">Подготовка сцены</span><strong id="loading-percent">0%</strong></div>
       </div>
     </section>
     <section id="start-screen" class="screen start-screen" aria-labelledby="game-title" aria-hidden="true">
       <div class="hero-panel">
-        <span class="brand">ПОРТАЛЫ <i></i> ФИЗИКА <i></i> ОДИН ДРУГ</span>
-        <h1 id="game-title">БРЕЙНРОТ<br /><span>ПОРТАЛ</span></h1>
-        <div class="hero-meta"><span id="campaign-count">Кампания · 30 испытаний</span><span>Исследуй пространство</span><span>Действуй в нужный момент</span></div>
-        <p class="lead">Падение становится разгоном, стена — продолжением пути. Продумай маршрут, меняй порталы и доставь брейнрота к выходу. Светлые плиты принимают портал. Тёмные — нет.</p>
-        <label class="setting-row">Уровень <select id="level-select"></select></label>
-        <button id="play-button" class="primary-button">Отправиться вместе <span aria-hidden="true">↗</span></button>
-        <div class="control-grid" aria-label="Управление">
-          <span><kbd>WASD</kbd> движение</span><span><kbd>Мышь</kbd> камера</span>
-          <span><kbd class="blue">ЛКМ</kbd> синий проход</span><span><kbd class="amber">ПКМ</kbd> янтарный проход</span>
-          <span><kbd>E</kbd> друг / терминал</span><span><kbd>V</kbd> помахать рукой</span>
-          <span><kbd>Space</kbd> прыжок</span><span><kbd>Shift</kbd> бег</span>
-          
+        <div class="hero-top"><span class="brand">ПОРТАЛЫ · ФИЗИКА · ОДИН ДРУГ</span><span class="hero-index" aria-hidden="true">01 / ∞</span></div>
+        <h1 id="game-title">БРЕЙНРОТ<br /><span>ПОРТАЛ<span class="title-dot">.</span></span></h1>
+        <div class="hero-meta"><span id="campaign-count">Кампания · 30 испытаний</span><span class="hero-signal">НАЙДИ СВОЙ ПУТЬ</span></div>
+        <p class="lead">Стена может стать выходом. Падение — разгоном. Исследуй комнату, соедини порталы и выведи друга.</p>
+        <div class="start-actions">
+          <label class="setting-row" for="level-select">Выбери комнату <select id="level-select"></select></label>
+          <button id="play-button" class="primary-button">Начать испытание <span aria-hidden="true">↗</span></button>
         </div>
-        <p class="mobile-note">Слева — движение. Проведи по правой стороне экрана, чтобы повернуть камеру.</p>
-        <div class="hero-footer"><span class="desktop-note">Esc — пауза · R — заново</span></div>
+        <details class="controls-disclosure">
+          <summary>Как играть <span aria-hidden="true">↗</span></summary>
+          <div class="control-grid" aria-label="Управление">
+            <span><kbd>WASD</kbd> движение</span><span><kbd>Мышь</kbd> камера</span>
+            <span><kbd class="blue">ЛКМ</kbd> синий портал</span><span><kbd class="amber">ПКМ</kbd> оранжевый портал</span>
+            <span><kbd>E</kbd> друг / терминал</span><span><kbd>V</kbd> помахать рукой</span>
+            <span><kbd>Space</kbd> прыжок</span><span><kbd>Shift</kbd> бег</span>
+          </div>
+          <p class="mobile-note">Слева — движение. Проведи по правой стороне экрана, чтобы повернуть камеру.</p>
+        </details>
+        <div class="hero-footer"><span class="desktop-note">ESC — ПАУЗА <i aria-hidden="true"></i> R — ЗАНОВО</span><span>ЭКСПЕРИМЕНТЫ ПРИВЕТСТВУЮТСЯ</span></div>
       </div>
-      <div class="start-caption" aria-hidden="true"><span class="caption-line"></span>ИССЛЕДУЙ. ПРОБУЙ. ПОМОГАЙ ДРУГУ.</div>
+      <div class="start-caption" aria-hidden="true"><span class="caption-line"></span>КАЖДАЯ ПОВЕРХНОСТЬ — ВОЗМОЖНОСТЬ</div>
     </section>
     <header id="hud" class="hud" aria-hidden="true" inert>
       <div class="objective-card">
@@ -51,20 +55,25 @@
     <nav class="play-tools" aria-label="Меню игры"><span id="level-number" class="level-number" aria-label="Текущий уровень">1</span></nav>
     <div id="toast" class="toast" role="status" aria-live="polite"></div>
     <section id="pause-screen" class="screen modal-screen" aria-labelledby="pause-title" aria-hidden="true">
-      <div class="modal-card">
-        <span class="eyebrow">МОЖНО ПЕРЕДОХНУТЬ</span>
+      <div class="modal-card pause-card">
+        <span class="eyebrow">ИСПЫТАНИЕ ПРИОСТАНОВЛЕНО</span>
         <h2 id="pause-title">Пауза<span>.</span></h2>
         <p class="muted" id="pause-course">Продолжим с того же места.</p>
-        <label class="setting-row">Уровень <select id="settings-level-select" aria-label="Перейти к уровню"></select></label>
-        <button id="resume-button" class="primary-button">Продолжить <span aria-hidden="true">→</span></button>
-        <button id="restart-button" class="secondary-button">Начать уровень заново</button>
-        <button id="hint-button" class="secondary-button">Подсказка</button>
-        <section id="hint-detail" hidden aria-live="polite"><div id="hint-text"></div><button id="hint-unlock" class="secondary-button">Открыть подсказку</button><p id="ad-status" class="muted"></p></section>
-        <button id="level-menu-button" class="secondary-button">Выбрать другой уровень</button>
-        <label class="setting-row"><span>Обучение внизу экрана</span><input id="tutorial-toggle" type="checkbox" checked></label>
-        <label class="setting-row"><span>Выключить звук</span><input id="mute-toggle" type="checkbox"></label>
-        <label class="setting-row">Громкость <input id="volume-control" type="range" min="0" max="100" value="65" aria-label="Громкость"></label>
-        <label class="setting-row">Графика <select id="quality-select"><option value="low">Лёгкая</option><option value="balanced" selected>Сбалансированная</option><option value="high">Высокая</option></select></label>
+        <div class="pause-actions">
+          <button id="resume-button" class="primary-button">Вернуться в комнату <span aria-hidden="true">→</span></button>
+          <button id="restart-button" class="secondary-button">Начать заново <span aria-hidden="true">↻</span></button>
+          <button id="hint-button" class="secondary-button">Подсказка <span aria-hidden="true">?</span></button>
+          <section id="hint-detail" hidden aria-live="polite"><div id="hint-text"></div><button id="hint-unlock" class="secondary-button">Открыть подсказку</button><p id="ad-status" class="muted"></p></section>
+        </div>
+        <div class="settings-panel">
+          <span class="settings-title">ПАРАМЕТРЫ ИГРЫ</span>
+          <label class="setting-row">Комната <select id="settings-level-select" aria-label="Перейти к уровню"></select></label>
+          <label class="setting-row"><span>Подсказки управления</span><input id="tutorial-toggle" type="checkbox" checked></label>
+          <label class="setting-row"><span>Выключить звук</span><input id="mute-toggle" type="checkbox"></label>
+          <label class="setting-row">Громкость <input id="volume-control" type="range" min="0" max="100" value="65" aria-label="Громкость"></label>
+          <label class="setting-row">Графика <select id="quality-select"><option value="low">Лёгкая</option><option value="balanced" selected>Сбалансированная</option><option value="high">Высокая</option></select></label>
+        </div>
+        <button id="level-menu-button" class="text-button">К выбору комнаты <span aria-hidden="true">↗</span></button>
       </div>
     </section>
     <section id="win-screen" class="screen modal-screen" aria-labelledby="win-title" aria-hidden="true">
