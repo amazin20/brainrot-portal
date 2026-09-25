@@ -103,7 +103,7 @@
     {
       "level": 8,
       "id": "wind-column",
-      "contract": "f31a739cd4e1c5cdc16e7b6cb106cdaeb4611678728b9f662f9aa9fc31b16ecc",
+      "contract": "2371dcd45b9fcf2c418b5dc9947d5ddf602c938dfb2c6d6ecd6bc0c0ebcc97ab",
       "workload": {
         "nodes": 319,
         "meshes": 199,
@@ -159,7 +159,7 @@
     {
       "level": 12,
       "id": "folded-junction",
-      "contract": "ab93d749d7fe141cc2c3942c284821ce75276c0885bc6163a480fed0eb29d34e",
+      "contract": "20ece20aede20228e156d07d70d2cfef19581800669cd3fc3f7d691218b74398",
       "workload": {
         "nodes": 748,
         "meshes": 565,

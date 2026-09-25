@@ -96,6 +96,10 @@ export function buildRoom12(game,index=11){
  k.panel('final',[-17.5,20.5,3],[1,0,0],5.6,4.6);
  buildRoom12Architecture(w);
  const level=k.finish([10,0,11],[12,.55,11],[10,9,4],{workshop:k,portalPuzzle:true,cargoOnAnyPad:()=>cargoLoadsPlate(game.cargo,game.heldCube,entryFreight.getFrame())});
+ // Face the folded lower court and both visible portal approaches at arrival.
+ // The default north-facing boom was trapped under the overhead freight deck
+ // and filled the first frame with the underside of the upper walk.
+ level.spawnView={yaw:1.2,pitch:-.15};
  level.puzzleGeometry={safeFloor:0,dropHeight:18,freightHeight:7,goalHeight:9,normalGaps:0,cargoWindow:{z:.4,minY:9,maxY:10.55},launchWindow:{x:-9,minY:18.5,maxY:24},returnSightWindow:{z:11.3,x:[3.5,6.5],y:[17.5,19.6]},footprint:36*32,
   portalRoles:{'access-low':'enter and return to folded ledge','access-high':'shared observation and freight route','shared-drop':'both cargo drop and player energy','return':'viewpoint, second fall and recovery','cargo':'independent rigid-body delivery','entry-freight':'send the untouched original companion directly from the entry through a distant sight','final':'perpendicular flight and recovery'},
   deductions:['reuse one shaft for two travellers','read intersecting routes in section','change the spent portal while airborne','a remote aperture can replace the high freight lip as the cargo origin'],orders:['cargo-first','remote-freight']};

@@ -185,5 +185,9 @@ export function buildExtendedCampaign(game,index){
   isWon:()=>game.playerGrounded&&goal.contains(game.playerPosition)&&!!game.cargo&&goal.contains(game.cargo.position)&&game.playerPosition.distanceTo(game.cargo.position)<3.3,
   diagnostics:()=>({level:index+1,id:spec.id,concept:spec.concept,uniqueTopology:true,noCheckpoints:true,portalSurfaces:game.portalPanels.length,goal:goal.position.toArray(),lit:state.lit,angle:state.angle,torque:state.torque,fan:state.enabled,piston:state.piston?.compression,latched:state.piston?.latched})};
  if(index===5)level.spawnView={yaw:.12,pitch:-.15};
+ // The default straight-ahead view put the actual fan completely offscreen
+ // and left only the column's back wall visible. Frame the real impeller,
+ // lower air shaft and receiving gallery together at first entry.
+ if(index===7)level.spawnView={yaw:.75,pitch:-.15};
  return level;
 }

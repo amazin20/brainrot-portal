@@ -3,6 +3,7 @@ import {LabGame} from './game/LabGame.js';
 import {CAMPAIGN,campaignSpec} from './game/LabCampaignLevels.js';
 import {LabPreferences,QUALITY_PRESETS,applyLabQuality} from './game/LabPreferences.js';
 import {LabPlatform,loadYandexSDK} from './game/LabPlatform.js';
+import {holdInterruptedGame,settleInterruptedGame} from './game/LabPageLifecycle.js';
 import {readCampaignRoute,nextCampaignLevel} from './game/LabCampaignRoute.js';
 import {FOUNDATION_INDICES,readFoundationEdition,foundationStorage,nextFoundationLevel} from './game/LabFoundationEdition.js';
 import {OPEN_ROOM_INDICES,readOpenEdition,nextOpenRoom,openEditionStorage} from './game/LabOpenEdition.js';
@@ -18,7 +19,7 @@ const preferences=new LabPreferences(foundationEdition.enabled?foundationStorage
 const screens=['loading','start-screen','pause-screen','win-screen','error-screen'];
 const hudNodes={level:$('#level-number'),chamber:$('#chamber'),objective:$('#objective'),cargo:$('#cargo-status'),portals:$('#portal-status')};
 function hudText(key,value){const node=hudNodes[key];if(node.textContent!==value)node.textContent=value;}
-let platform,entering=false,hintBusy=false;
+let platform,entering=false,hintBusy=false,pendingInterruption=false;
 function screen(id,visible){const e=$('#'+id);e.classList.toggle('screen--active',visible);e.setAttribute('aria-hidden',String(!visible));e.inert=!visible;}
 function hideScreens(){screens.forEach(id=>screen(id,false));}
 function clearInput(){game.resetInput();}
@@ -26,7 +27,9 @@ function syncActivity(){const active=game.state==='playing'&&!holds.size;platfor
 function setState(state){document.body.dataset.playState=state;document.documentElement.dataset.runtimeState=state;
   const mobile=$('#mobile-controls'),active=state==='playing';mobile.classList.toggle('mobile-controls--active',active);mobile.inert=!active;mobile.setAttribute('aria-hidden',String(!active));
   syncActivity();}
-function hold(reason,on){on?holds.add(reason):holds.delete(reason);game.externalBlocked=holds.size>0;
+function hold(reason,on,deferPause=false){pendingInterruption ||= deferPause;
+  on?holds.add(reason):holds.delete(reason);game.externalBlocked=holds.size>0;
+  if(!on)pendingInterruption=settleInterruptedGame(game,game.externalBlocked,pendingInterruption);
   clearInput();game.accumulator=0;game.lastFrame=performance.now();document.body.dataset.externalPause=String(holds.size>0);syncActivity();}
 function diagnostics(){const d=game.diagnostics();Object.assign(document.documentElement.dataset,{gameReady:String(d.modelsLoaded>0&&!d.missingModels.length),modelsLoaded:String(d.modelsLoaded),levelIndex:String(game.levelIndex)});
   if(debug)window.__NESI_DEMO_DIAGNOSTICS__={...d,settings:preferences.value,adBusy:platform?.busy};return d;}
@@ -152,10 +155,10 @@ addEventListener('keydown',event=>{
   if(game.state==='paused'&&['Escape','KeyR'].includes(event.code)){event.preventDefault();event.stopImmediatePropagation();if(!event.repeat)(event.code==='KeyR'?restartLevel():resume());}
   else if(game.state!=='playing'&&['Escape','KeyR','Space'].includes(event.code))event.stopImmediatePropagation();
 },true);
-addEventListener('blur',()=>hold('focus',true));addEventListener('focus',()=>hold('focus',false));
-document.addEventListener('visibilitychange',()=>{hold('hidden',document.hidden);if(document.hidden&&game.state==='playing'&&!game.externalBlocked)game.togglePause(true);});
+addEventListener('blur',()=>holdInterruptedGame(game,hold,'focus'));addEventListener('focus',()=>hold('focus',false));
+document.addEventListener('visibilitychange',()=>{if(document.hidden)holdInterruptedGame(game,hold,'hidden');else hold('hidden',false);});
 // A bfcache visit keeps the one live controller; a discarded page detaches it.
-addEventListener('pagehide',event=>{hold('page',true);if(!event.persisted){game.renderer?.setAnimationLoop(null);game.disposeControls();game.epicDirector?.dispose();platform?.dispose();game.audio?.dispose();}});
+addEventListener('pagehide',event=>{holdInterruptedGame(game,hold,'page');if(!event.persisted){game.renderer?.setAnimationLoop(null);game.disposeControls();game.epicDirector?.dispose();platform?.dispose();game.audio?.dispose();}});
 addEventListener('pageshow',event=>{if(event.persisted)hold('page',false);});
 addEventListener('contextmenu',event=>event.preventDefault());
 addEventListener('error',event=>{if(event.error)failure(event.error);});

@@ -15,17 +15,16 @@ function finishShadowHall(k,optical){
  a.materials[0].color.setHex(0x778995);a.materials[1].color.setHex(0x304550);
  a.materials[2].color.setHex(0xd6ae70);a.materials[3].color.setHex(0x44555e);
  const plate=(p,s,material=1)=>a.box(p,s,material,.025,false);
- // The west exterior face dominated the opening shot. Keep the authored tile
- // relief, change its finish to a cool machine-hall enamel, and give every
- // projecting rib a real collider attached to that already solid wall.
+ // The west exterior face dominates the opening shot. Its source-kit tile
+ // mesh alone used 2.15 million triangles and was drawn again inside portal
+ // views. Let the ordinary premium cassette replace that hidden tile mesh;
+ // the low-poly enamel bays below preserve the intended cool machine finish.
  const west=w.surfaces.find(surface=>surface.getFrame().normal.x>.9&&Math.abs(surface.getFrame().center.x+22)<.1);
- if(west){
-  west.group.userData.keepMaterial=true;
-  const enamel=new THREE.MeshStandardMaterial({color:0x547280,roughness:.71,metalness:.12});
-  west.group.traverse(node=>{if(node.isInstancedMesh&&!node.userData.portalTile)node.material=enamel;});
- }
  const westRibs=new SolidAssembly('West hall wall / physical machine ribs','launch');
+ westRibs.materials[0].color.setHex(0x547280);
  westRibs.materials[1].color.setHex(0x2f4854);
+ if(west)for(const z of [-18,-10,-2,6,14,21])
+  westRibs.box([-21.93,12.4,z],[.012,23.4,7],0,.003,false);
  for(const z of [-20,-12,-4,4,12,20])westRibs.box([-21.88,12.4,z],[.28,24.5,.25],1,.045);
  for(const y of [1.7,8.7,17.8,24.5])westRibs.box([-21.88,y,1.5],[.26,.22,45.5],1,.045);
  placeSolidModel(k,westRibs.finish());

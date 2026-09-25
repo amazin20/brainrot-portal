@@ -187,6 +187,30 @@ test('reinstalling controls does not duplicate actions; final teardown is idempo
   assert.equal(f.canvas.captures.size, 0);
 });
 
+test('mobile portal, interaction and pause buttons keep exactly one handler after controls are reinstalled', t => {
+  const f = fixture(t), buttons = Array.from({ length: 4 }, () => new Target());
+  let interactions = 0;
+  f.game.interact = () => { interactions++; return true; };
+  f.game.mobileActionButtons = [
+    { button: buttons[0], action: () => f.game.firePortal(0) },
+    { button: buttons[1], action: () => f.game.firePortal(1) },
+    { button: buttons[2], action: () => f.game.interact() },
+    { button: buttons[3], action: () => f.game.togglePause(true) },
+  ];
+  f.game.setupControls();
+  for (const button of buttons.slice(0, 3)) button.emit('pointerdown');
+  assert.deepEqual(f.shots, [0, 1]); assert.equal(interactions, 1);
+
+  f.game.setupControls();
+  for (const button of buttons.slice(0, 3)) button.emit('pointerdown');
+  assert.deepEqual(f.shots, [0, 1, 0, 1]); assert.equal(interactions, 2);
+  buttons[3].emit('pointerdown'); assert.equal(f.game.state, 'paused');
+  for (const button of buttons) button.emit('pointerdown');
+  assert.deepEqual(f.shots, [0, 1, 0, 1]); assert.equal(interactions, 2);
+  f.game.togglePause(false); f.game.disposeControls();
+  for (const button of buttons) assert.equal(button.count(), 0);
+});
+
 for (const stop of ['won', 'external']) test(`fixed-step loop stops immediately after ${stop} instead of executing more gameplay`, t => {
   const f = fixture(t); let steps = 0;
   f.game.updatePlaying = () => { steps++; if (stop === 'won') f.game.state = 'won'; else f.game.externalBlocked = true; };

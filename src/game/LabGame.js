@@ -308,11 +308,18 @@ export class LabGame {
     this.prompt = document.createElement('div'); this.prompt.className = 'lab-prompt'; document.body.appendChild(this.prompt);
     this.surfaceHint = document.createElement('div'); this.surfaceHint.className = 'lab-surface-hint'; document.body.appendChild(this.surfaceHint);
     const mobile = document.createElement('div'); mobile.className = 'lab-mobile';
-    for (const [label, action] of [['①', () => this.firePortal(0)], ['②', () => this.firePortal(1)], ['E', () => this.interact()], ['Пауза', () => this.togglePause(true)]]) {
+    this.mobileActionButtons = [];
+    for (const [label, description, action] of [
+      ['①', 'Голубой портал', () => this.firePortal(0)],
+      ['②', 'Оранжевый портал', () => this.firePortal(1)],
+      ['E', 'Взять или поставить друга, использовать механизм', () => this.interact()],
+      ['Пауза', 'Приостановить игру', () => this.togglePause(true)],
+    ]) {
       const button = document.createElement('button'); button.textContent = label;
-      this.controls.listen(button, 'pointerdown', e => { e.preventDefault(); if (this.controls.active) action(); }); mobile.appendChild(button);
+      button.setAttribute('aria-label', description);
+      this.mobileActionButtons.push({ button, action }); mobile.appendChild(button);
     }
-    document.body.appendChild(mobile);
+    document.body.appendChild(mobile); this.bindMobileActions();
     if (this.debug) {
       this.fpsElement = document.createElement('output'); this.fpsElement.className = 'lab-fps'; this.fpsElement.setAttribute('aria-label', 'Частота кадров'); document.body.appendChild(this.fpsElement);
     }
@@ -322,6 +329,16 @@ export class LabGame {
   setupControls() {
     this.controls?.dispose();
     this.controls = new LabControls(this);
+    this.bindMobileActions();
+  }
+
+  bindMobileActions() {
+    for (const { button, action } of this.mobileActionButtons ?? []) {
+      this.controls.listen(button, 'pointerdown', event => {
+        event.preventDefault();
+        if (this.controls.active) action();
+      });
+    }
   }
 
   resetInput() {

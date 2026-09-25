@@ -3,7 +3,8 @@ export async function runRoom30(d,{east=false,recovery=false,inspectFirst=false}
  const {game,level,walk,wait,aim,until,look,mark,frame,worldMove,stop}=d,p=level.panels;
  // Commands below are normal camera, movement, E and actual charge requests.
  // No mechanism values, bodies, portal frames or progression flags are set.
- walk(-21.5,16);game.interact();wait(.3);check(game.velocityCompanion?.connected,'The original friend did not connect');
+ // Find the actual companion instead of depending on the exact start point.
+ walk(game.cargo.position.x-1.5,game.cargo.position.z);game.interact();wait(.3);check(game.velocityCompanion?.connected,'The original friend did not connect');
  if(inspectFirst){walk(-26,-13);look(p['north-arc'].getFrame().center);walk(-22,13);walk(-22,22);walk(25,22);look(p['east-arc'].getFrame().center);mark('both launch wings reveal physically different trajectories');}
  const approach=(x,z)=>{for(let n=0;n<1200;n++){const dx=x-game.playerPosition.x,dz=z-game.playerPosition.z,d=Math.hypot(dx,dz);if(d<.07&&Math.hypot(game.playerVelocity.x,game.playerVelocity.z)<.35){stop();wait(.2);return;}const pace=Math.min(.5,d*.35);worldMove(dx/Math.max(d,.001)*pace,dz/Math.max(d,.001)*pace);frame();}throw Error('Viewing rim approach failed at '+game.playerPosition.toArray());};
  const prepare=()=>{

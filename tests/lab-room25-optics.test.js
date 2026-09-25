@@ -28,3 +28,19 @@ test('room25 an unweighted physical shutter blocks the actual source and leaves 
 test('room25 shutter render and collision positions agree after repeated reset and fixed updates',()=>{
  for(let n=0;n<4;n++){g.resetRun(true);for(let i=0;i<60;i++)g.updatePlaying(1/120);for(const b of g.firstLevel.state.optical.blades)assert.ok(b.collider.box.equals(new THREE.Box3().setFromObject(b.mesh)));assert.equal(g.firstLevel.state.optical.travel,0);}
 });
+test('room25 west hall keeps its enamel finish without rendering the million-triangle source wall through portals',async()=>{
+ await g.selectLevel(24,false);const w=g.firstLevel.world;
+ const west=w.surfaces.find(s=>!s.portal&&s.getFrame().normal.x>.9&&Math.abs(s.getFrame().center.x+22)<.1);
+ assert.ok(west);
+ assert.ok(west.group.children.some(n=>n.isInstancedMesh&&!n.userData.portalTile&&!n.visible),
+  'The source wall tiles should be replaced by the premium cassette');
+ const ribs=w.root.getObjectByName('West hall wall / physical machine ribs');
+ assert.ok(ribs?.children.some(n=>n.isMesh&&n.material.color.getHex()===0x547280),
+  'The actual west wall still needs the coloured enamel bays');
+ assert.ok(g.firstLevel.workshop.solidModels.some(binding=>binding.model===ribs&&binding.colliders.length>0),
+  'Its projecting machine ribs still need physical collision');
+ let sceneTriangles=0;w.root.traverse(n=>{
+  if(n.isMesh&&n.visible)sceneTriangles+=(n.geometry.index?.count??n.geometry.attributes.position?.count??0)/3*(n.count??1);
+ });
+ assert.ok(sceneTriangles<700000,`Room25 source art is still too dense for repeated portal views: ${sceneTriangles}`);
+});

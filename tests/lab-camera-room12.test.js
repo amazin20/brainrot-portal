@@ -34,6 +34,12 @@ test('the ordinary folded junction route keeps the camera outside the player and
   try {
     await game.selectLevel(11, false);
     game.camera.aspect = 1.6; game.camera.updateProjectionMatrix();
+    // The first view includes the original companion and a distant portal
+    // approach. A north-facing boom used to frame only overhead deck backs.
+    const companion = game.cargo.position.clone().project(game.camera);
+    const approach = game.firstLevel.panels['access-low'].getFrame().center.project(game.camera);
+    assert.ok(Math.abs(companion.x) < .65 && Math.abs(companion.y) < .85 && companion.z < 1);
+    assert.ok(Math.abs(approach.x) < .85 && Math.abs(approach.y) < .85 && approach.z < 1);
     const update = game.updateVisuals;
     let minimum = Infinity, frames = 0;
     let crossingFrames = 0, unseenFrames = 0, longestUnseen = 0;

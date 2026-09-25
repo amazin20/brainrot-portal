@@ -30,6 +30,12 @@ for(const [name,aspect,options] of [
 
 test('room30 has a shared physical finish and no route checklist or preset portals',async()=>{
  await game.selectLevel(29,false);game.resetRun(true);const l=game.firstLevel;
+ const garden=l.world.floors.find(f=>f.y===52&&f.minX===-23.5&&f.maxX===28&&f.minZ===-22&&f.maxZ===26);
+ assert.ok(garden);
+ for(const [label,point] of [['player',l.spawn],['companion',l.cargoSpawn]]){
+  assert.ok(point[0]>=garden.minX+4&&point[0]<=garden.maxX-4&&point[2]>=garden.minZ+4&&point[2]<=garden.maxZ-4,
+   `${label} starts too close to the high launch-garden drop`);
+ }
  assert.equal(l.puzzleGeometry.noProgressFlags,true);assert.deepEqual(l.puzzleGeometry.firstRoutes,['north-arc','east-arc']);
  assert.equal(game.portals.ready,false);assert.deepEqual(game.portalSurfaceIds,[null,null]);assert.equal(game.portalPanels.length,9);
  assert.equal(ROOM30_SPEC.title,'Предел');assert.equal(l.launchArt.paths.length,4);

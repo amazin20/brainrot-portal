@@ -34,9 +34,10 @@
 
 ## Открыть игру
 
-Публичное демо: https://amazin20.github.io/brainrot-portal/
+30 испытаний кампании и архив из 33 уровней: [Играть на GitHub Pages](https://amazin20.github.io/brainrot-portal/).
+Дополнительная проверенная сборка: [Открыть на ChatGPT Site](https://brainrot-portal-route-preview.ivan-gavrish-a.chatgpt.site/) (коммит `51b1d64`, CI `36072921610`).
 
-`?level=31` открывает новое испытание в основной кампании.
+`?edition=classic&level=31` открывает архивное испытание 31.
 `?edition=open&level=31` открывает его в версии с отдельными сохранениями:
 24, 28, 30, 31, 32, 33. Это не переделка всех старых уровней.
 Проверенный опубликованный коммит указан в `build-info.json`.
