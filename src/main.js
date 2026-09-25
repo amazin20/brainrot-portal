@@ -31,6 +31,11 @@ function hold(reason,on,deferPause=false){pendingInterruption ||= deferPause;
   on?holds.add(reason):holds.delete(reason);game.externalBlocked=holds.size>0;
   if(!on)pendingInterruption=settleInterruptedGame(game,game.externalBlocked,pendingInterruption);
   clearInput();game.accumulator=0;game.lastFrame=performance.now();document.body.dataset.externalPause=String(holds.size>0);syncActivity();}
+function reconcileFocus(){
+  // A click proves the document is active even if a transient blur never
+  // delivered its matching focus event. Keep real hidden/ad holds intact.
+  if(holds.has('focus')&&!document.hidden&&document.hasFocus())hold('focus',false);
+}
 function diagnostics(){const d=game.diagnostics();Object.assign(document.documentElement.dataset,{gameReady:String(d.modelsLoaded>0&&!d.missingModels.length),modelsLoaded:String(d.modelsLoaded),levelIndex:String(game.levelIndex)});
   if(debug)window.__NESI_DEMO_DIAGNOSTICS__={...d,settings:preferences.value,adBusy:platform?.busy};return d;}
 function failure(error){console.error(error);clearInput();game.renderer?.setAnimationLoop(null);game.state='error';setState('error');hideScreens();$('#error-detail').textContent=error?.message||String(error);screen('error-screen',true);}
@@ -113,6 +118,7 @@ for(const [id,text,href]of [['foundation','Кампания · с начала',
 }
 $('#start-screen .hero-footer').before(editionNav);
 async function enterLevel(index,reason='next'){
+  reconcileFocus();
   if(entering||holds.size||!availableRooms.includes(index))return;entering=true;clearInput();game.audio?.unlock();
   try{
     // All interstitials are tied to an explicit menu transition, never a timer during play.
@@ -123,12 +129,13 @@ async function enterLevel(index,reason='next'){
   }catch(error){failure(error);}finally{entering=false;}
 }
 async function restartLevel(){
+  reconcileFocus();
   if(entering||holds.size)return;entering=true;clearInput();
   try{if(game.state==='playing')game.togglePause(true);await platform?.interstitial('restart');
     hideScreens();game.restart();game.audio.unlock();game.renderer.setAnimationLoop(game.animate);setState('playing');game.requestPointerLock();
   }catch(error){failure(error);}finally{entering=false;}
 }
-function resume(){if(holds.size)return;game.audio.unlock();game.togglePause(false);game.renderer.setAnimationLoop(game.animate);}
+function resume(){reconcileFocus();if(holds.size)return;game.audio.unlock();game.togglePause(false);game.renderer.setAnimationLoop(game.animate);}
 $('#play-button').addEventListener('click',()=>enterLevel(Number($('#level-select').value),game.state==='ready'&&!preferences.value.completed.length?'initial':'next'));
 $('#play-again-button').addEventListener('click',()=>enterLevel(foundationEdition.enabled?nextFoundationLevel(game.levelIndex):openEdition.enabled?nextOpenRoom(game.levelIndex):nextCampaignLevel(game.levelIndex,CAMPAIGN.length)));
 $('#resume-button').addEventListener('click',resume);$('#restart-button').addEventListener('click',restartLevel);
