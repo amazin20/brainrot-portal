@@ -100,7 +100,9 @@ test('room 30: a slow first-well exit cannot drop directly onto the final island
  await game.selectLevel(29,false);
  const result=await runV8Journey(game,{scenario:d=>{
   const p=d.level.panels;
-  d.walk(-21.5,16);game.interact();d.wait(.3);assert.ok(game.velocityCompanion.connected);
+  // Pick up the real companion at the room's current safe start, independent
+  // of where that start sits relative to the launch-garden edge.
+  d.walk(game.cargo.position.x-1.5,game.cargo.position.z);game.interact();d.wait(.3);assert.ok(game.velocityCompanion.connected);
   d.walk(-25,13);d.walk(-25,-32);d.walk(-22,22);d.walk(25,22);d.aim(1,p['east-arc'].getFrame().center);d.walk(-22,22);
   d.walk(-25,-17);d.walk(0,-17);
   for(let n=0;n<240&&game.playerGrounded;n++){d.worldMove(0,-1);game.input.keys.add('ShiftLeft');d.frame();}
