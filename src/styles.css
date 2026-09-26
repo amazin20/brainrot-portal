@@ -199,4 +199,17 @@ body[data-external-pause='true'] .play-tools, body[data-external-pause='true'] .
   .hero-footer { display: none; }
   .modal-card { max-height: calc(100dvh - 20px); }
 }
+/* Landscape phones need the primary action above the fold, not beneath
+   a desktop-sized title and introduction. Secondary links remain scrollable. */
+@media (max-height: 520px) and (min-width: 561px) {
+  .start-screen { padding: max(12px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) max(12px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left)); }
+  .hero-panel { width: min(740px, 100%); padding: 20px 24px; display: grid; grid-template-columns: minmax(0, .95fr) minmax(0, 1.05fr); column-gap: 24px; }
+  .hero-top { grid-column: 1 / -1; }
+  .hero-panel h1 { grid-column: 1; grid-row: 2; font-size: clamp(29px, 4.4vw, 37px); }
+  .hero-meta { grid-column: 1; grid-row: 3; margin-top: 12px; }
+  .hero-signal, .hero-panel .lead { display: none; }
+  .start-actions { grid-column: 2; grid-row: 2 / 4; align-self: center; margin-top: 16px; }
+  .controls-disclosure, .edition-navigation { grid-column: 1 / -1; }
+  .start-caption { display: none; }
+}
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition-duration: 0s !important; scroll-behavior: auto !important; } }
