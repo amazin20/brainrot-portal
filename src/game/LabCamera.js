@@ -171,7 +171,8 @@ export class LabCamera {
   }
 
   update({ dt, target, yaw, pitch, velocity, aiming = false, teleported = false,
-    epic = this.epicMode, dynamicFov = this.dynamicFov }) {
+    epic = this.epicMode, dynamicFov = this.dynamicFov, rampFraming = false }) {
+    this.rampFraming = rampFraming;
     this.epicMode = !!epic;
     this.dynamicFov = dynamicFov !== false;
     if (!this.initialized || teleported || this.lastTarget.distanceToSquared(target) > 64) {
@@ -412,7 +413,7 @@ export class LabCamera {
     const forward = this.lookPoint.clone().sub(position).normalize();
     const right = new THREE.Vector3().crossVectors(forward, this.viewUp).normalize();
     const up = new THREE.Vector3().crossVectors(right, forward).normalize();
-    if (!this.inclinedFraming) {
+    if (!this.inclinedFraming && !this.rampFraming) {
       const subject = this.playerPivot.clone().sub(position);
       const depth = subject.dot(forward);
       if (depth <= .1) return 100;
@@ -421,8 +422,8 @@ export class LabCamera {
       const y = Math.abs(subject.dot(up)) / height;
       return Math.max(0, x - .7) ** 2 + Math.max(0, y - .6) ** 2;
     }
-    // Test the vertical subject envelope, not only the chest pivot: an
-    // overhead orbit can retain the pivot while cutting the head/backpack.
+    // Test the full envelope on ordinary slopes as well as portal exits.
+    // A chest-only score admitted uphill views that cut off the head/backpack.
     let penalty = 0;
     const subject = new THREE.Vector3();
     for (const y of [-1.32, 0, 1.32]) {

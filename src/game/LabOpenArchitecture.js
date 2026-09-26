@@ -223,9 +223,20 @@ export class OpenChamber extends Workshop{
  flush(){
   this.world.root.updateWorldMatrix(true,true);
   for(const [mat,meshes] of this.artBins){
-   if(!meshes.length)continue;const gs=meshes.map(m=>{const g=m.geometry.index?m.geometry.toNonIndexed():m.geometry.clone();g.applyMatrix4(m.matrixWorld);return g;});
-   const g=mergeGeometries(gs,false);gs.forEach(g=>g.dispose());if(!g)throw new Error('Static assembly could not be merged');g.computeBoundingSphere();
-   const mesh=new THREE.Mesh(g,mat);mesh.name='Manufactured architecture / '+mat.name;mesh.receiveShadow=true;mesh.castShadow=!mat.transparent;this.world.root.add(mesh);
+   // Preserve authored shadow flags. Combining decorative strips with solid
+   // walls used to turn every strip into a shadow caster, undoing the explicit
+   // anti-shimmer choices made by the room builders.
+   const groups=new Map();
+   for(const mesh of meshes){
+    const key=`${mesh.castShadow}:${mesh.receiveShadow}`;
+    const group=groups.get(key)||[];group.push(mesh);groups.set(key,group);
+   }
+   for(const group of groups.values()){
+    const gs=group.map(m=>{const g=m.geometry.index?m.geometry.toNonIndexed():m.geometry.clone();g.applyMatrix4(m.matrixWorld);return g;});
+    const g=mergeGeometries(gs,false);gs.forEach(g=>g.dispose());if(!g)throw new Error('Static assembly could not be merged');g.computeBoundingSphere();
+    const mesh=new THREE.Mesh(g,mat);mesh.name='Manufactured architecture / '+mat.name;
+    mesh.receiveShadow=group[0].receiveShadow;mesh.castShadow=group[0].castShadow;this.world.root.add(mesh);
+   }
    for(const m of meshes){m.removeFromParent();m.geometry.dispose();}
   }
   this.artBins.clear();

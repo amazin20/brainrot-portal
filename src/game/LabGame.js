@@ -1240,7 +1240,13 @@ export class LabGame {
     const barrierProgress = THREE.MathUtils.lerp(barrier.previousProgress ?? barrier.progress, barrier.progress, blend);
     barrier.mechanism?.update(barrierProgress, this.visualTime);
     }
-    this.cameraRig.update({ dt: active ? cameraDt : 0, target: this.playerGroup.position, yaw: this.yaw, pitch: this.pitch, velocity: this.playerVelocity, aiming: this.isAiming(), epic: this.kineticMode, dynamicFov: this.epicOptions?.dynamicFov !== false });
+    // On and just above a slope, preserve the full silhouette when the boom
+    // retracts against rising terrain. Keep ordinary portal aiming unchanged.
+    const subject = this.playerGroup.position;
+    const rampFraming = this.ramps.some(r => subject.x >= r.minX - 1 && subject.x <= r.maxX + 1
+      && subject.z >= r.minZ - 1 && subject.z <= r.maxZ + 1
+      && Math.abs(subject.y - sampleRampSurface(r, subject.z).height) < 3.5);
+    this.cameraRig.update({ dt: active ? cameraDt : 0, rampFraming, target: this.playerGroup.position, yaw: this.yaw, pitch: this.pitch, velocity: this.playerVelocity, aiming: this.isAiming(), epic: this.kineticMode, dynamicFov: this.epicOptions?.dynamicFov !== false });
     if (this.epicDirector) {
       if (this.teleportCount > (this.epicLastTeleport || 0)) this.epicDirector.portal(this.lastPortalTravel?.speed || this.playerVelocity.length(), this.teleportCount);
       if (this.playerGrounded && this.epicWasGrounded === false) this.epicDirector.land(this.lastLanding || 0);

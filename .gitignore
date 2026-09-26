@@ -9,3 +9,4 @@ review-preview/models/
 __pycache__/
 *.pyc
 smoke-artifacts/
+dist-yandex/
