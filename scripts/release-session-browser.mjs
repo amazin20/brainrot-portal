@@ -8,7 +8,7 @@ const result={checks:[],errors:[]};
 try{
  const page=await browser.newPage();page.setDefaultTimeout(180000);await page.setViewport({width:1280,height:720});
  page.on('pageerror',e=>result.errors.push(String(e)));
- const visit=async search=>{await page.goto(root+search);await page.waitForFunction(()=>document.documentElement.dataset.runtimeState==='ready');};
+ const visit=async search=>{await page.goto(root+search);await page.waitForFunction(()=>document.documentElement.dataset.runtimeState==='ready' && getComputedStyle(document.querySelector('#start-screen')).opacity==='1');};
  await visit('?edition=foundation&level=2&debug=1');
  await page.click('#play-button');await page.waitForFunction(()=>document.body.dataset.playState==='playing');
  assert.equal(await page.evaluate(()=>window.__NESI_PREFS__.value.resumeLevel),1);
@@ -27,9 +27,12 @@ try{
  assert.equal(await page.evaluate(()=>window.__NESI_PREFS__.value.resumeLevel),1);
  await visit('');assert.equal(await page.$eval('#level-select',e=>e.value),'1');result.checks.push('ordinary victory persists the next room');
  await page.setViewport({width:844,height:390,isMobile:true,hasTouch:true});
+ // Changing mobile emulation can reload Chromium: await the actual menu again.
+ await visit('');
  await page.screenshot({path:out+'/resume-mobile.png'});
- const box=await page.$eval('#play-button',e=>{const r=e.getBoundingClientRect();return {left:r.left,right:r.right,width:innerWidth};});
- assert.ok(box.left>=0&&box.right<=box.width);result.checks.push('landscape mobile play control fits viewport');
+ const box=await page.$eval('#play-button',e=>{const r=e.getBoundingClientRect();return {left:r.left,right:r.right,top:r.top,bottom:r.bottom,width:innerWidth,height:innerHeight};});
+ assert.ok(box.left>=0&&box.right<=box.width&&box.top>=0&&box.bottom<=box.height);
+ assert.equal(await page.$eval('#start-screen',e=>e.inert),false);result.checks.push('landscape mobile play control fits viewport');
  await visit('?debug=1');await page.click('#play-button');await page.waitForFunction(()=>document.body.dataset.playState==='playing');
  const supported=await page.evaluate(()=>{const gl=window.__NESI_DEMO_GAME__.renderer.getContext(),ext=gl.getExtension('WEBGL_lose_context');ext?.loseContext();return !!ext;});
  assert.ok(supported);await page.waitForFunction(()=>document.body.dataset.playState==='error');
