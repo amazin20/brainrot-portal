@@ -23,6 +23,10 @@ try{
   activeElement:document.activeElement?.id,playButtonInert:document.querySelector('#play-button')?.inert,
   events:window.__NESI_UI_EVENTS__}));
  report.startup={beforeClick:await uiState()};
+ await page.waitForFunction(()=>{
+  const button=document.querySelector('#play-button'),screen=button.closest('.screen'),r=button.getBoundingClientRect();
+  return !screen.inert&&getComputedStyle(screen).opacity==='1'&&document.elementFromPoint(r.left+r.width/2,r.top+r.height/2)===button;
+ });
  await page.click('#play-button');report.startup.afterClick=await uiState();
  await page.waitForFunction(()=>window.__NESI_DEMO_GAME__.state==='playing',{timeout:30000});
  await page.evaluate(()=>{const g=window.__NESI_DEMO_GAME__;g.renderer.setAnimationLoop(null);});

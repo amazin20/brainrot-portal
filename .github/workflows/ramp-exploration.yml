@@ -2,6 +2,8 @@ name: Ordinary ramp exploration
 on:
   pull_request:
     paths:
+      - 'src/game/LabCamera.js'
+      - 'scripts/qa-ramp-framing.mjs'
       - 'src/game/LabRampContact.js'
       - 'src/game/LabKineticMovement.js'
       - 'src/game/LabOpenLaunch.js'
@@ -29,6 +31,7 @@ jobs:
           npm ci
           npm install --no-save --package-lock=false puppeteer-core@24.16.0
           npm run build
+          node scripts/qa-ramp-framing.mjs
           node scripts/stamp-build.mjs v40-laboratory-33
       - name: Explore the real inclines from spawn and return without resets
         run: |

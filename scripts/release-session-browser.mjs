@@ -1,0 +1,45 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import puppeteer from 'puppeteer-core';
+const out='qa/release-session';fs.mkdirSync(out,{recursive:true});
+const root=process.env.PAGE_URL||'http://127.0.0.1:4173/';
+const browser=await puppeteer.launch({executablePath:process.env.CHROME_PATH||'/usr/bin/chromium',headless:true,args:['--no-sandbox','--disable-dev-shm-usage','--use-angle=swiftshader','--enable-unsafe-swiftshader']});
+const result={checks:[],errors:[]};
+try{
+ const page=await browser.newPage();page.setDefaultTimeout(180000);await page.setViewport({width:1280,height:720});
+ page.on('pageerror',e=>result.errors.push(String(e)));
+ const visit=async search=>{await page.goto(root+search);await page.waitForFunction(()=>document.documentElement.dataset.runtimeState==='ready' && getComputedStyle(document.querySelector('#start-screen')).opacity==='1');};
+ await visit('?edition=foundation&level=2&debug=1');
+ await page.click('#play-button');await page.waitForFunction(()=>document.body.dataset.playState==='playing');
+ assert.equal(await page.evaluate(()=>window.__NESI_PREFS__.value.resumeLevel),1);
+ await visit('');
+ assert.equal(await page.$eval('#level-select',e=>e.value),'1');
+ assert.match(await page.$eval('#play-button',e=>e.textContent),/Продолжить/);
+ assert.equal(await page.$eval('#hint-button',e=>getComputedStyle(e).display),'none');
+ assert.equal(await page.evaluate(()=>!!window.__NESI_DEMO_GAME__),false);
+ await page.screenshot({path:out+'/resume-desktop.png'});result.checks.push('normal entry resumes room 2; no debug globals or solution button');
+ await visit('?edition=foundation&level=1&debug=1');
+ assert.equal(await page.$eval('#level-select',e=>e.value),'0');
+ const completedBefore=await page.evaluate(()=>window.__NESI_PREFS__.value.completed);
+ assert.deepEqual(completedBefore,[]);result.checks.push('explicit room link wins without granting completion');
+ await page.click('#play-button');await page.waitForFunction(()=>document.body.dataset.playState==='playing');
+ const route=await page.evaluate(()=>window.__NESI_RUN_LEVEL_ROUTE__());assert.equal(route.pass,true);
+ assert.equal(await page.evaluate(()=>window.__NESI_PREFS__.value.resumeLevel),1);
+ await visit('');assert.equal(await page.$eval('#level-select',e=>e.value),'1');result.checks.push('ordinary victory persists the next room');
+ await page.setViewport({width:844,height:390,isMobile:true,hasTouch:true});
+ // Changing mobile emulation can reload Chromium: await the actual menu again.
+ await visit('');
+ await page.screenshot({path:out+'/resume-mobile.png'});
+ const box=await page.$eval('#play-button',e=>{const r=e.getBoundingClientRect();return {left:r.left,right:r.right,top:r.top,bottom:r.bottom,width:innerWidth,height:innerHeight};});
+ assert.ok(box.left>=0&&box.right<=box.width&&box.top>=0&&box.bottom<=box.height);
+ assert.equal(await page.$eval('#start-screen',e=>e.inert),false);result.checks.push('landscape mobile play control fits viewport');
+ await visit('?debug=1');await page.click('#play-button');await page.waitForFunction(()=>document.body.dataset.playState==='playing');
+ const supported=await page.evaluate(()=>{const gl=window.__NESI_DEMO_GAME__.renderer.getContext(),ext=gl.getExtension('WEBGL_lose_context');ext?.loseContext();return !!ext;});
+ assert.ok(supported);await page.waitForFunction(()=>document.body.dataset.playState==='error');
+ assert.equal(await page.$eval('#error-screen',e=>e.inert),false);
+ assert.match(await page.$eval('#error-detail',e=>e.textContent),/3D/);
+ await page.screenshot({path:out+'/graphics-recovery.png'});
+ await page.click('#reload-button');await page.waitForFunction(()=>document.documentElement.dataset.runtimeState==='ready');
+ assert.equal(await page.$eval('#level-select',e=>e.value),'1');result.checks.push('lost WebGL context has a working reload and retained room');
+ assert.deepEqual(result.errors,[]);result.pass=true;
+}finally{fs.writeFileSync(out+'/report.json',JSON.stringify(result,null,2));await browser.close();}

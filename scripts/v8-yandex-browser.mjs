@@ -23,6 +23,10 @@ try{
   for(const type of ['pointerdown','pointerup','click','pointerlockchange'])document.addEventListener(type,e=>window.__uiTrace.push({type,target:e.target?.id,x:e.clientX,y:e.clientY,lock:!!document.pointerLockElement,state:window.__NESI_DEMO_GAME__?.state}),true);
   new MutationObserver(()=>window.__uiTrace.push({type:'hint-visibility',hidden:document.querySelector('#hint-detail').hidden})).observe(document.querySelector('#hint-detail'),{attributes:true,attributeFilter:['hidden']});
  });
+ await page.waitForFunction(()=>{
+  const button=document.querySelector('#play-button'),screen=button.closest('.screen'),r=button.getBoundingClientRect();
+  return !screen.inert&&getComputedStyle(screen).opacity==='1'&&document.elementFromPoint(r.left+r.width/2,r.top+r.height/2)===button;
+ });
  await page.click('#play-button');
  await page.waitForFunction(()=>window.__NESI_DEMO_GAME__?.state==='playing'&&window.__NESI_DEMO_GAME__.performanceMonitor.stats.fps>0);
  await page.evaluate(()=>document.exitPointerLock?.());await page.waitForFunction(()=>!document.pointerLockElement);

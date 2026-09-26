@@ -53,11 +53,15 @@ try{
   // Serialize our reviewed scenario, not a second, subtly different recorder.
   const scenario=(0,eval)('('+source+')');
   const {runV8Journey}=await import(modulePath);const frames=[],marks=[];let exploration;
+  const framing={samples:0,outside:0,maxOverflow:0};
   const shot=()=>{g.render();return g.renderer.domElement.toDataURL('image/png').split(',')[1];};
   const report=await runV8Journey(g,{scenario:d=>{exploration=scenario(d,sample=>{
+   let overflow=0;
+   for(const y of [-.4,1.2,2.9]){const point=g.playerPosition.clone();point.y+=y;point.project(g.camera);overflow=Math.max(overflow,Math.abs(point.x)-1,Math.abs(point.y)-1,point.z>1?1:0);}
+   framing.samples++;if(overflow>0)framing.outside++;framing.maxOverflow=Math.max(framing.maxOverflow,overflow);
    if(record&&sample.frame%4===0)frames.push({...sample,png:shot()});
   });},onMilestone:mark=>marks.push({...mark,png:shot()})});
-  return {report,exploration,frames,marks,quality:g.quality,final:g.playerPosition.toArray()};
+  return {report,exploration,framing,frames,marks,quality:g.quality,final:g.playerPosition.toArray()};
  },{source:runRampExploration.toString(),modulePath:new URL('assets/'+bundle,base).href,record:process.env.RECORD!=='0'});
  assert.equal(result.report.pass,true);assert.equal(result.report.resets,0);assert.equal(result.report.respawns,0);assert.equal(result.report.teleports,0);
  assert.ok(result.exploration.jumps>=6);assert.ok(result.exploration.minimumSurfaceGap>=-.015);assert.deepEqual(errors,[]);
@@ -68,5 +72,6 @@ try{
   scope:'Continuous ordinary-input exploration from spawn. No staged actor placement; not a puzzle walkthrough or a physical-device FPS measurement.',
   recording:'15 frames per simulated second, four two-second excerpts; intermediate walking is in the trace but not in the video.'};
  fs.writeFileSync(path.join(out,'report.json'),JSON.stringify(evidence,null,2));
+ assert.equal(result.framing.samples,480);assert.equal(result.framing.outside,0,'Expanded animated subject envelope leaves the native viewport');
  console.log('RAMP EXPLORATION',JSON.stringify({pass:true,...result.exploration,frames:result.frames.length,source:build.commit}));
 }finally{await browser.close();}
