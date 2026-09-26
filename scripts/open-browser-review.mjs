@@ -40,6 +40,10 @@ try{
   await page.waitForFunction(()=>document.hasFocus()&&!document.hidden,{timeout:10000});
   await page.evaluate(()=>{window.__OPEN_PLAY_CLICKED__=0;document.querySelector('#play-button')?.addEventListener('click',()=>window.__OPEN_PLAY_CLICKED__++,{once:true});});
   const beforePlay=await launchState(page);
+  await page.waitForFunction(()=>{
+   const button=document.querySelector('#play-button'),screen=button.closest('.screen'),r=button.getBoundingClientRect();
+   return !screen.inert&&getComputedStyle(screen).opacity==='1'&&document.elementFromPoint(r.left+r.width/2,r.top+r.height/2)===button;
+  });
   await page.click('#play-button');let startupTimeout=null;
   try{await page.waitForFunction(()=>['playing','error'].includes(window.__NESI_DEMO_GAME__?.state));}
   catch(error){startupTimeout=String(error);}

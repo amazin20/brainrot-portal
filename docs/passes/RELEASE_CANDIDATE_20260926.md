@@ -17,7 +17,7 @@ This is a technical candidate, not a claim of final player or platform acceptanc
 - Saved-resume and migration tests: 14/14 passing.
 - Camera regression suite: 56/56 passing, including ordinary room-12/13/14 routes, portal exits, aiming and collision sweeps.
 - Room-30 ramp exploration: 480 samples; 0 outside-frame samples after repair. This is geometric projection evidence, not native WebGL visual acceptance.
-- Production build and 14-model package validation pass before the final session-recovery change; final rebuild and full suite are running.
+- Complete local source suite: 1054/1054 passing on the initial session/camera candidate. Both production modes and the 14-model package check pass. Subsequent camera-margin changes receive focused regression and latest-head CI checks.
 - Added `release-session-browser.mjs` to the required verification workflow for a real room-1 victory, reload, explicit links, ordinary UI, landscape mobile layout and WebGL-loss recovery.
 - Native local browser execution is unavailable: the browser installation download was not a valid archive. Browser checks and captures must pass in CI before publication.
 
@@ -30,3 +30,11 @@ This is a technical candidate, not a claim of final player or platform acceptanc
 5. Live Yandex SDK/ad lifecycle validation and moderation package review. Build mode alone does not establish platform acceptance.
 
 Reproduce locally: `npm run check`, `node scripts/v8-package-check.mjs`, `node scripts/qa-ramp-framing.mjs`.
+
+## Native-review follow-up
+
+The first native ramp capture exposed animated boots near the bottom edge despite the original 0–2.5 m projection envelope passing. The regression now checks -0.4–2.9 m, both headlessly and in the native recorder. Escape planning starts on a projected framing risk and the damped response recovers earlier on slopes. The expanded reproduction goes from 7/480 clipped samples to 0/480; latest native evidence is required.
+
+Two CI failures were captured before gameplay: the automated clicks hit the canvas while the menu was appearing (the logged Play click count remained zero; no game errors). Open-room, carry/wind and SDK-contract scripts now wait for the visible menu and verify the real hit target before a trusted click. They do not assign game state or bypass controls.
+
+The landscape menu places the room selector and Play beside the title. The session recorder awaits Chromium's mobile-emulation reload and verifies both viewport axes rather than capturing a loading screen.

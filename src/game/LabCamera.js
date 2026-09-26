@@ -284,7 +284,8 @@ export class LabCamera {
     const avoidGoal = new THREE.Vector3();
     let escapePosition = null;
     if ((directDistance < (this.avoidanceActive ? 4.1 : 3.1)
-      || this.camera.position.distanceTo(this.playerPivot) < 3.1) && this.blockers.length) {
+      || this.camera.position.distanceTo(this.playerPivot) < 3.1
+      || (this.rampFraming && this.framingPenalty(this.desired) > .005)) && this.blockers.length) {
       const direct = this.desired.clone().sub(this.playerPivot);
       let best = null, bestScore = Infinity;
       const longitudinal = this.forward.clone().setY(0).normalize();
@@ -331,7 +332,9 @@ export class LabCamera {
     } else this.avoidanceActive = false;
     for (const axis of ['x', 'y', 'z']) {
       [this.avoidance[axis], this.avoidanceVelocity[axis]] = spring(
-        this.avoidance[axis], this.avoidanceVelocity[axis], avoidGoal[axis], 16, step);
+        // Rising terrain closes the boom quickly. Keep a damped response but
+        // recover before animated boots move below the bottom of the lens.
+        this.avoidance[axis], this.avoidanceVelocity[axis], avoidGoal[axis], this.rampFraming ? 36 : 16, step);
     }
     if (this.avoidance.lengthSq() > .00001) {
       this.desired.add(this.avoidance);
@@ -424,9 +427,10 @@ export class LabCamera {
     }
     // Test the full envelope on ordinary slopes as well as portal exits.
     // A chest-only score admitted uphill views that cut off the head/backpack.
+    // Slopes reserve another .4 m for animated boots and jump poses.
     let penalty = 0;
     const subject = new THREE.Vector3();
-    for (const y of [-1.32, 0, 1.32]) {
+    for (const y of (this.rampFraming ? [-1.72, 0, 1.72] : [-1.32, 0, 1.32])) {
       subject.copy(this.playerPivot).addScaledVector(UP, y).sub(position);
       const depth = subject.dot(forward);
       if (depth <= .1) return 100;
