@@ -14,8 +14,16 @@ test('reload resumes the last successfully started room without granting complet
 test('victory persists the next room and final victory keeps the final room',()=>{
  const s=storage(),p=new LabPreferences(s);p.complete(4);p.save({resumeLevel:nextResumeLevel(4,FOUNDATION_INDICES)});
  assert.equal(new LabPreferences(s).value.resumeLevel,5);
- assert.equal(nextResumeLevel(29,FOUNDATION_INDICES),29);
+ assert.equal(nextResumeLevel(29,FOUNDATION_INDICES),30);
+ assert.equal(nextResumeLevel(39,FOUNDATION_INDICES),39);
  assert.equal(nextResumeLevel(OPEN_ROOM_INDICES[0],OPEN_ROOM_INDICES),OPEN_ROOM_INDICES[1]);
+});
+test('completed previous finale resumes at the new room 31 without changing archive or manual links',()=>{
+ const old={completed:Array.from({length:30},(_,i)=>i),resumeLevel:29};
+ assert.equal(resumeCampaignLevel('',old,FOUNDATION_INDICES,0),30);
+ assert.equal(resumeCampaignLevel('level=30',old,FOUNDATION_INDICES,29),29);
+ assert.equal(resumeCampaignLevel('',old,Array.from({length:33},(_,i)=>i),0),29);
+ assert.equal(resumeCampaignLevel('',{completed:old.completed.slice(0,29),resumeLevel:29},FOUNDATION_INDICES,0),29);
 });
 test('explicit links and retired velocity links override saved resume',()=>{
  const p={completed:[0],resumeLevel:12};
@@ -23,7 +31,7 @@ test('explicit links and retired velocity links override saved resume',()=>{
 });
 test('old saves resume first uncompleted room; scattered completions never skip puzzles',()=>{
  assert.equal(resumeCampaignLevel('',{completed:[0,1,20]},FOUNDATION_INDICES,0),2);
- assert.equal(resumeCampaignLevel('',{completed:[...FOUNDATION_INDICES]},FOUNDATION_INDICES,0),29);
+ assert.equal(resumeCampaignLevel('',{completed:[...FOUNDATION_INDICES]},FOUNDATION_INDICES,0),39);
  assert.equal(resumeCampaignLevel('',{completed:[]},OPEN_ROOM_INDICES,OPEN_ROOM_INDICES[0]),OPEN_ROOM_INDICES[0]);
 });
 test('resume stays isolated across campaign, archive and research',()=>{
@@ -32,7 +40,7 @@ test('resume stays isolated across campaign, archive and research',()=>{
  assert.equal(new LabPreferences(s).value.resumeLevel,8);
  assert.equal(new LabPreferences(foundationStorage(s)).value.resumeLevel,16);
  assert.equal(new LabPreferences(openEditionStorage(s)).value.resumeLevel,31);
- assert.equal(resumeCampaignLevel('',o.value,FOUNDATION_INDICES,0),0);
+ assert.equal(resumeCampaignLevel('',new LabPreferences(foundationStorage(s)).value,FOUNDATION_INDICES,0),16);
 });
 test('invalid resume data is sanitized; blocked storage keeps session progress usable',()=>{
  for(const value of [-1,100,2.2,'4',null,Infinity]){

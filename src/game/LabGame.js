@@ -24,6 +24,7 @@ import { LabCompanionRig } from './LabCompanionRig.js';
 import { LabPerformance } from './LabPerformance.js';
 import { LabTutorial } from './LabTutorial.js';
 import { buildLabCampaignLevel, CAMPAIGN, campaignSpec } from './LabCampaignLevels.js';
+import { FOUNDATION_INDICES } from './LabFoundationEdition.js';
 import { disposeLabLevel } from './LabLevelLifecycle.js';
 
 const UP = new THREE.Vector3(0, 1, 0);
@@ -285,7 +286,8 @@ export class LabGame {
   }
 
   async selectLevel(index, playing = true) {
-    if (!Number.isInteger(index) || index < 0 || index >= CAMPAIGN.length) throw new RangeError('Unknown campaign level');
+    const length=this.chamberEdition==='foundation'?FOUNDATION_INDICES.length:CAMPAIGN.length;
+    if (!Number.isInteger(index) || index < 0 || index >= length) throw new RangeError('Unknown campaign level');
     this.portalShots?.cancelBuffered('level-change');
     this.audio?.flight?.(0,true);
     this.state = 'loading'; this.renderer?.setAnimationLoop(null); this.resetInput();

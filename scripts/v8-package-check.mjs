@@ -1,7 +1,11 @@
-import fs from 'node:fs';import assert from 'node:assert/strict';import {CAMPAIGN_ASSET_IDS} from '../src/game/labAssets.js';import {CAMPAIGN} from '../src/game/LabCampaignLevels.js';
+import fs from 'node:fs';import assert from 'node:assert/strict';import {CAMPAIGN_ASSET_IDS} from '../src/game/labAssets.js';import {CAMPAIGN,FOUNDATION_LATE_SPECS} from '../src/game/LabCampaignLevels.js';
 const root=process.argv[2]||'dist',manifest=JSON.parse(fs.readFileSync(root+'/models/runtime/manifest.json'));
 assert.equal(CAMPAIGN.length,33);assert.equal(CAMPAIGN[11].id,'folded-junction');assert.equal(CAMPAIGN[14].id,'countercurrent-weave');
 assert.equal(CAMPAIGN[20].id,'gravity-pocket');
+assert.equal(FOUNDATION_LATE_SPECS.length,10);
+assert.equal(new Set(FOUNDATION_LATE_SPECS.map(room=>room.id)).size,10);
+assert.ok(FOUNDATION_LATE_SPECS.every(room=>!CAMPAIGN.some(classic=>classic.id===room.id)));
+assert.ok(FOUNDATION_LATE_SPECS.every(room=>room.assets.every(id=>CAMPAIGN_ASSET_IDS.includes(id))));
 assert.equal(new Set(CAMPAIGN.map(room=>room.id)).size,CAMPAIGN.length,'Campaign identifiers must be unique');
 assert.deepEqual([...new Set(CAMPAIGN.flatMap(room=>room.assets))].sort((a,b)=>a-b),[...CAMPAIGN_ASSET_IDS]);
 assert.deepEqual(manifest.models.map(m=>m.id).sort((a,b)=>a-b),[...CAMPAIGN_ASSET_IDS]);
