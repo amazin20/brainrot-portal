@@ -9,16 +9,32 @@ export const POST_A_SPECS=Object.freeze([
  {id:'post-cross-lock',title:'Обратный шлюз',concept:'Один груз меняет состояние двух настоящих створок: первую открывает, вторую освобождает.',description:'Один груз удерживает входной шлюз. Проход за ним есть, но у выхода створки работают наоборот.',accent:0xffc57c,assets,hints:['Положи друга на напольную платформу у входа: откроются первые створки.','За створками простреливается обратная сторона платформы. Верни друга через порталы, тогда выходной шлюз освободится.','Если вернёшься до извлечения друга, первая дверь удерживает проход, пока ты находишься в проёме.']},
  {id:'post-switchyard',title:'Стрелочная',concept:'Два разных весовых причала у одной кабины; промежуточный док нужен, чтобы изменить направление.',description:'Одна каретка связывает два берега, но второй маршрут начинается только на неподвижной пересадке.',accent:0x8bc9f5,assets,hints:['Помести друга на первый причал. Вес перемещает широкую каретку к острову.','Закрепи каретку у промежуточной галереи и выведи друга напольным порталом со старой платформы.','Перемести его на второй причал острова. После пересадки оставайся на каретке и возвращай его с нового адреса.']},
  {id:'post-counterweight',title:'Противовес',concept:'Две противоположные площадки связаны грузом и механическим стопором; остановить на нужной высоте можно вручную.',description:'Когда друг нагружает противовес, левый настил идёт вверх, а правый вниз. Стопор сохраняет достигнутую высоту.',accent:0xd9bded,assets,hints:['Встань на левую площадку; перенеси спутника на правую грузовую платформу.','На промежуточной галерее зажми стопор. Если убрать груз раньше, обе платформы вернутся.','Напольный портал правой платформы позволяет достать друга после фиксации механизма. Затем доберитесь к выходу вместе.']},
- {id:'post-air-switch',title:'Переадресация',concept:'Непрерывный поток проходит настоящие порталы; два приёмника последовательно открывают разные физические шлюзы.',description:'Поток от вентилятора может питать только один приёмник за раз. В безопасной средней галерее перестрой его путь.',accent:0x9ce7ed,assets,hints:['Соедини источник воздуха с первой приёмной решёткой: первый шлюз откроется, пока поступает поток.','Оставь друга у входа, пройди на постоянную середину и перемести выходной портал на вторую решётку.','Первый шлюз закроется за тобой, второй откроется. Напольный адрес у входа вернёт друга через порталы.']},
+ {id:'post-air-switch',title:'Переадресация',concept:'Непрерывный поток проходит настоящие порталы; два приёмника последовательно открывают разные физические шлюзы.',description:'Поток от вентилятора может питать только один приёмник за раз. В безопасной средней галерее перестрой его путь.',accent:0x9ce7ed,assets,hints:['Соедини источник воздуха с первой приёмной решёткой: первый шлюз откроется, пока поступает поток.','Оставь друга у входа, пройди на постоянную середину и зафиксируй открытый первый шлюз. Затем перемести выходной портал на вторую решётку.','Первый шлюз останется открытым на фиксаторе, второй откроется от нового потока. Напольный адрес у входа вернёт друга через порталы.']},
 ]);
 
 function finish(k,spawn,cargo,goal,extra,geometry){
  const l=k.finishResearch(spawn,cargo,goal,{postCampaign:true,...extra});
+ // Finish first: it installs the common floor texture and bakes world UVs on
+ // every deck, including moving ones, before any material is specialized.
+ for(const carrier of k.priorityCarriers??[]){
+  const deck=carrier.group.children.find(child=>child.isMesh&&child.material===k.m.floor);
+  if(!deck)throw new Error(`Missing moving floor for ${carrier.name}`);
+  deck.material=deck.material.clone();
+  deck.material.polygonOffset=true;
+  deck.material.polygonOffsetFactor=-2;
+  deck.material.polygonOffsetUnits=-2;
+ }
  l.puzzleGeometry={noProgressFlags:true,recoveryFloor:k.base,footprint:(k.bounds.maxX-k.bounds.minX)*(k.bounds.maxZ-k.bounds.minZ),...geometry};
  return l;
 }
 function dockReadout(k,p,read){k.display(p,read,15,1.8);}
 function finalSign(k,n,text,p){k.label(`${n} / ${text}`,p,[0,0,1],15,1.05);}
+function prioritizeCarrierDeck(k,carrier){
+ // A carriage must remain level with its stationary dock for walkable entry.
+ // Give its deck a stable draw order where their top faces physically meet.
+ // The mesh and its collision box stay at the original elevation.
+ (k.priorityCarriers??=[]).push(carrier);
+}
 function undercarriage(k,car,top){
  // Cab suspension tracks are metal machine parts; the broad opening remains
  // traversable, while the deck and its moving collision remain authoritative.
@@ -39,6 +55,7 @@ export function buildPost31(game,index=30){
  const call=k.loadPad('entry-weight',[-18,0,12],8);
  const first=k.carrier('first-dock',[[-12,0,-9],[0,6,-9]],{width:12,depth:12,portal:false});first.speed=2.3;first.braked=true;
  const second=k.carrier('last-dock',[[8,6,-18],[8,10,-18]],{width:12,depth:12,portal:false});second.speed=2.2;
+ prioritizeCarrierDeck(k,first);prioritizeCarrierDeck(k,second);
  k.ticks.unshift(()=>{first.target=call.loaded()?1:0;});
  k.ticks.unshift(()=>{const p=game.playerPosition,f=second.floor;if(game.playerGrounded&&Math.abs(p.y-f.y)<.15&&p.x>8.3&&p.x<f.maxX-.4&&p.z<-10&&p.z>f.minZ+.4)second.target=1;});
  k.resets.push(()=>{first.braked=true;});
@@ -85,6 +102,7 @@ export function buildPost33(game,index=32){
  k.ramp('West return to departure',-25,-17,-12,2,-4,0);
  const near=k.loadPad('branch-a',[-18,0,12],8),far=k.loadPad('branch-b',[1,6,0],8);
  const car=k.carrier('switch-carriage',[[-13,0,-10],[0,6,-10],[15,6,-10]],{width:12,depth:12,portal:false});car.speed=3.2;car.braked=true;
+ prioritizeCarrierDeck(k,car);
  // Pads have immediate mechanical priority. The shunt brake keeps the car
  // where it stands while the passenger removes the load and changes address.
  k.ticks.unshift(()=>{car.target=far.loaded()?2:near.loaded()?1:0;});
@@ -113,8 +131,10 @@ export function buildPost34(game,index=33){
  const mass=k.loadPad('right-weight',[14,0,15],8);
  const left=k.carrier('west-counterweight',[[-15,0,-9],[-15,8,-9]],{width:12,depth:12,portal:false});
  const right=k.carrier('east-counterweight',[[15,8,-9],[15,0,-9]],{width:12,depth:12,portal:false});
+ prioritizeCarrierDeck(k,left);prioritizeCarrierDeck(k,right);
  left.speed=right.speed=2.0;let locked=true;
  k.ticks.unshift(()=>{left.target=right.target=mass.loaded()?1:0;left.braked=right.braked=locked;});
+ k.resets.push(()=>{locked=true;});
  k.control('clamp',[-20,8,-19],()=>{locked=!locked;},'E — фиксатор останавливает оба настоящих настила.');
  k.control('start-counterweight',[-17,0,1.7],()=>{locked=false;},'E — отпустить противовес после погрузки.');
  k.panel('west-receiver',[-7.5,10.85,-15],[-1,0,0]);

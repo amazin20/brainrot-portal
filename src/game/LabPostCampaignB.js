@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import {RoundedBoxGeometry} from 'three/addons/geometries/RoundedBoxGeometry.js';
 import {ResearchChamber} from './LabResearchArt.js';
 import {StoredMotionDrive} from './LabResearchChambers.js';
 import {createLightBridge} from './LabLightBridge.js';
@@ -10,7 +11,7 @@ export const POST_B_SPECS=Object.freeze([
  {id:'post-wind-light-relay',title:'Перестановка в пролёте',concept:'Мотор хранит движение, а два портала приходится освободить для последовательных световых мостов.',description:'Подними кабину направленным потоком, а затем перестрой световой путь на твёрдой развязке.',accent:0x82d9d5,assets:[1,2,11,22,23,24],hints:['Вентилятор и передняя решётка мотора смотрят на разные керамические панели.','Поднятая кабина удерживается механической передачей даже после смены порталов.','На твёрдой промежуточной площадке переставь дальний портал: только один световой мост может работать в каждый момент.']},
  {id:'post-three-berths',title:'Три причала',concept:'Портальная панель едет с одной настоящей кабиной между тремя доками. Промежуточный пульт открывает последний перегон.',description:'Войди в кабину через неподвижный портал, высадись у среднего дока и отправь её к последнему.',accent:0xe4ae74,assets:[1,2,11,22,23,24],hints:['Портал остаётся на борту подвижной кабины. Сначала доберись до первого причала.','Боковой пульт отправляет кабину к средней галерее. На самой галерее расположен следующий пульт.','Можно перевезти друга вместе с собой или сначала отправить на кабине и встретить через неподвижный портал.']},
  {id:'post-separated-freight',title:'Два маршрута',concept:'Один путешественник прыгает через шахту, другой ждёт на настоящем грузовом подъёмнике. Пульт находится только после перелёта.',description:'Отправь спутника на грузовую платформу, пройди в другое крыло к месту падения и запусти подъёмник с дальнего балкона.',accent:0xf0bc86,assets:[1,2,11,22,23,24],hints:['Спутник может ехать на пустой грузовой платформе, если поставить его на её настоящий настил.','Пульт подъёмника находится у высокой приёмной галереи. Туда ведёт балкон падения и наклонный портальный выход.','При промахе нижний сервисный ярус и настоящий широкий подъём возвращают к исходному балкону.']},
- {id:'post-two-projectors',title:'Смена источника',concept:'Мосты строятся двумя настоящими проекторами в противоположных направлениях, но одной портальной парой.',description:'Сначала достигни постоянной галереи. Затем используй второй источник, чтобы повернуть к выходу.',accent:0x9ccadd,assets:[1,2,11,22,23,24],hints:['Первый проектор подсвечивает левую панель. Его луч нужно вывести к промежуточному настилу.','Перестановку делай только на твёрдом промежуточном настиле. Отключение первого моста не удаляет его.','Обрати внимание на второй проектор на галерее: его луч должен выйти из панели у поворота к выходу.']},
+ {id:'post-two-projectors',title:'Смена источника',concept:'Мосты строятся двумя настоящими проекторами в противоположных направлениях, но одной портальной парой.',description:'Сначала достигни постоянной галереи. Затем используй второй источник, чтобы повернуть к выходу.',accent:0x9ccadd,assets:[1,2,11,22,23,24],hints:['Первый проектор подсвечивает левую панель. Его луч нужно вывести к промежуточному настилу.','Перестановку делай только на твёрдом промежуточном настиле: первый мост исчезнет, когда переставишь порталы.','Обрати внимание на второй проектор на галерее: его луч должен выйти из панели у поворота к выходу.']},
  {id:'post-station-heart',title:'Сердце станции',concept:'Движение и свет одновременно делят одну пару порталов; груз открывает физический финишный причал.',description:'Разгони маховик потоком, поднимись к промежуточному доку и перенаправь источник света через последний разрыв.',accent:0xf4ca81,assets:[1,2,11,22,23,24],hints:['Поток через порталы вращает маховик. Пассажиры нагружают подъёмник.','После подъёма мотор удерживает высоту: переставь пару порталов для проекции моста.','Последний участок начинается на постоянной площадке; спутник должен прийти к выходу вместе с тобой.']},
 ]);
 
@@ -37,6 +38,36 @@ function motor(k,{fanAt,sourceAt,receiverAt,wheelAt,cabin}){
  k.renders.push(()=>{wheel.rotor.rotation.z=drive.wheel.angle;});
  k.resets.push(()=>{drive.reset();cabin.stations[0].y=cabin.stations[1].y=0;cabin.reset();});
  return drive;
+}
+
+/** A wall-mounted readout of the real motor and exit ratchet. It sits behind
+ * the upper switching deck, outside every walking and portal surface. */
+function stationHeart(k,drive,latched){
+ const root=new THREE.Group();root.name='Station heart / guarded drive';root.position.set(0,13,-26.25);k.world.root.add(root);
+ const face=new THREE.Quaternion().setFromAxisAngle(V(1,0,0),Math.PI/2),flat=new THREE.Quaternion();
+ const part=(geometry,material,p,q=flat,parent=root,name='Station heart assembly')=>
+  k.geometry(geometry,material,p,q,{parent,batch:false,name});
+ part(new THREE.CylinderGeometry(4.3,4.3,.24,48),'dark',[0,0,-.14],face);
+ part(new THREE.CylinderGeometry(4.04,4.04,.13,48),'shell',[0,0,.04],face);
+ part(new THREE.CylinderGeometry(3.68,3.68,.10,48),'dark',[0,0,.15],face);
+ part(new THREE.TorusGeometry(4.08,.24,8,48),'metal',[0,0,.22]);
+ part(new THREE.TorusGeometry(3.48,.10,6,48),'light',[0,0,.23]);
+ for(let i=0;i<12;i++){
+  const angle=i*Math.PI/6;
+  part(new RoundedBoxGeometry(.55,.92,.24,2,.08),'metal',[Math.sin(angle)*3.78,Math.cos(angle)*3.78,.34],
+   new THREE.Quaternion().setFromAxisAngle(V(0,0,1),-angle));
+ }
+ const rotor=new THREE.Group();rotor.name='Driven heart rotor';root.add(rotor);
+ for(let i=0;i<8;i++){
+  const angle=i*Math.PI/4;
+  part(new RoundedBoxGeometry(.48,2.48,.26,2,.09),'secondary',[Math.sin(angle)*2.13,Math.cos(angle)*2.13,.29],
+   new THREE.Quaternion().setFromAxisAngle(V(0,0,1),-angle),rotor,'Station heart rotor blade');
+ }
+ part(new THREE.CylinderGeometry(1.05,1.05,.27,32),'metal',[0,0,.43],face,rotor);
+ const status=new THREE.MeshBasicMaterial({name:'Station exit ratchet indicator',color:0xf0ba6a,toneMapped:false});
+ part(new THREE.TorusGeometry(.73,.11,8,32),status,[0,0,.62],flat,rotor,'Exit ratchet indicator');
+ const restore=k.restoreLight.bind(k);k.restoreLight=()=>{status.dispose();restore();};
+ k.renders.push(()=>{rotor.rotation.z=drive.wheel.angle;status.color.setHex(latched()?0x86e6c7:0xf0ba6a);});
 }
 
 /** 36: an elevated motor feed, then two orthogonal light routes. The player
@@ -180,6 +211,7 @@ export function buildPost40(g,index=39){
  const shutter=k.block([12.9,9,-17],[.85,6,14],'secondary',false);
  const shutterCollider=g.collisionProxy(new THREE.Box3().setFromObject(shutter),{kinematic:true});
  let ratchet=false,shutterHeight=9;
+ stationHeart(k,drive,()=>ratchet);
  k.ticks.push(dt=>{
   if(plate.loaded())ratchet=true;
   shutterHeight=THREE.MathUtils.damp(shutterHeight,ratchet?17:9,5,dt);

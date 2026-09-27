@@ -99,3 +99,31 @@ test('38: manufactured walking decks have no overlapping coplanar top faces',asy
   assert.ok(overlapX<.001||overlapZ<.001,`${a.name} and ${b.name} would shimmer across ${overlapX} × ${overlapZ} m`);
  }
 });
+
+test('36–40: restarting after the exit restores cargo and physical mechanisms',async()=>{
+ for(let number=36;number<=40;number++){
+  const game=await room(number),l=game.firstLevel,body=game.physics.cargoBody.id;
+  const report=await runV8Journey(game);
+  assert.equal(report.pass,true);
+  if(number===39){
+   assert.equal(l.first.segments.length,1,'Rerouting extinguishes the first crossing');
+   assert.ok(l.first.pieces.slice(1).every(p=>!p.mesh.visible&&!p.collider.enabled&&!p.floor.enabled));
+   assert.ok(l.second.segments.length>1,'The final crossing uses the second projector');
+  }
+  game.resetRun(true);
+  assert.equal(game.state,'playing',`Room ${number} remained won after restart`);
+  assert.equal(game.physics.cargoBody.id,body,`Room ${number} replaced its companion`);
+  assert.ok(game.cargo.position.distanceTo(new THREE.Vector3(...l.cargoSpawn))<.001);
+  assert.equal(game.portals.ready,false);
+  const lift=l.cabin||l.car||l.freight;
+  if(lift)assert.ok(lift.at(0),`Room ${number} lift did not return to its starting station`);
+  if(l.drive){assert.equal(l.drive.heights[0],0);assert.equal(l.drive.wheel.omega,0);}
+  if(l.shutter){
+   assert.equal(l.shutter.position.y,9);
+   assert.ok(new THREE.Box3().setFromObject(l.shutter).equals(l.shutterCollider.box));
+  }
+  if(l.second)assert.equal(l.second.segments.length,1,'Second bridge remained connected after restart');
+  game.updatePlaying(1/60);
+  assert.equal(game.state,'playing',`Room ${number} won again immediately after restart`);
+ }
+});

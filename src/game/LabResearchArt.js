@@ -13,7 +13,21 @@ export class ResearchChamber extends OpenChamber {
   // Report the actual room wall, not the brighter paint on machine housings.
   this.world.root.traverse(o=>{if(o.isMesh&&o.material?.name==='Structural laboratory wall')this.world.materials.wall=o.material;});
   const foundation=this.envelopes[0];
-  const service=this.deck('Continuous service and recovery floor',bounds.minX+1,bounds.maxX-1,bounds.minZ+1,bounds.maxZ-1,base,{color:'dark'});
+  // The large recovery floor occupies much of the frame in late campaign
+  // rooms. A near-black machine frame made it read as an unlit void, hiding
+  // the physical return route beneath the raised platforms. Give that one
+  // surface its own matte enamel, distinct from the lighter upper decks.
+  const newCampaignRoom=game.chamberEdition==='foundation'&&index>=30;
+  if(newCampaignRoom){
+   this.m.service=new THREE.MeshStandardMaterial({
+    name:'Foundation service floor',
+    color:new THREE.Color(0x7c8c8b).lerp(new THREE.Color(this.colors.paint),.13),
+    roughness:.92,metalness:.02,
+   });
+   const restore=this.restoreLight.bind(this);
+   this.restoreLight=()=>{this.m.service.dispose();restore();};
+  }
+  const service=this.deck('Continuous service and recovery floor',bounds.minX+1,bounds.maxX-1,bounds.minZ+1,bounds.maxZ-1,base,{color:newCampaignRoom?'service':'dark'});
   service.record.portalBackingColliders.push(foundation);
   // These are roofed rooms: blue distance haze previously made the far wall
   // look like open sky and flattened the purpose-built mechanical silhouettes.
