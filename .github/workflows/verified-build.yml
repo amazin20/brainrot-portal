@@ -44,6 +44,18 @@ jobs:
           if-no-files-found: error
           retention-days: 14
 
+      - name: Build the separate Yandex moderation candidate
+        run: |
+          npm run build:yandex
+          node scripts/v8-package-check.mjs dist-yandex
+          node scripts/stamp-build.mjs v40-laboratory-33 dist-yandex
+      - uses: actions/upload-artifact@v4
+        with:
+          name: yandex-moderation-candidate
+          path: dist-yandex/
+          if-no-files-found: error
+          retention-days: 14
+
   physics:
     name: All thirty-three routes, bypass checks and recovery
     runs-on: ubuntu-latest
@@ -378,4 +390,35 @@ jobs:
           path: |
             qa/foundation-browser/
             foundation-preview.log
+          retention-days: 14
+
+  release-session:
+    name: Resume, mobile menu and graphics recovery
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.revision }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: |
+          npm ci
+          npm install --no-save --package-lock=false puppeteer-core@24.16.0
+          npm run build
+      - name: Verify real browser session lifecycle
+        run: |
+          npm run preview -- --host 127.0.0.1 --port 4173 >release-session-preview.log 2>&1 &
+          for i in {1..30}; do curl -fsS http://127.0.0.1:4173/ >/dev/null && break; sleep 1; done
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+          node scripts/release-session-browser.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: release-session
+          path: |
+            qa/release-session/
+            release-session-preview.log
           retention-days: 14

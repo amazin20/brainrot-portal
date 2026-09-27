@@ -7,8 +7,11 @@ import {holdInterruptedGame,settleInterruptedGame} from './game/LabPageLifecycle
 import {readCampaignRoute,nextCampaignLevel} from './game/LabCampaignRoute.js';
 import {FOUNDATION_INDICES,readFoundationEdition,foundationStorage,nextFoundationLevel} from './game/LabFoundationEdition.js';
 import {OPEN_ROOM_INDICES,readOpenEdition,nextOpenRoom,openEditionStorage} from './game/LabOpenEdition.js';
+import {resumeCampaignLevel,nextResumeLevel} from './game/LabResume.js';
 const $=s=>document.querySelector(s),query=new URLSearchParams(location.search);
 const debug=query.get('debug')==='1'||query.get('smoke')==='1';
+// Player-facing puzzles keep control tutorials, without solution-hint buttons.
+$('#hint-button').hidden=!debug;
 const campaignRoute=readCampaignRoute(query,CAMPAIGN.length),openEdition=readOpenEdition(query),foundationEdition=readFoundationEdition(query);
 const availableRooms=foundationEdition.enabled?FOUNDATION_INDICES:openEdition.enabled?OPEN_ROOM_INDICES:CAMPAIGN.map((_,i)=>i);
 // Retired speed-mode links return to the campaign without reloading or touching saves.
@@ -19,7 +22,7 @@ const preferences=new LabPreferences(foundationEdition.enabled?foundationStorage
 const screens=['loading','start-screen','pause-screen','win-screen','error-screen'];
 const hudNodes={level:$('#level-number'),chamber:$('#chamber'),objective:$('#objective'),cargo:$('#cargo-status'),portals:$('#portal-status')};
 function hudText(key,value){const node=hudNodes[key];if(node.textContent!==value)node.textContent=value;}
-let platform,entering=false,hintBusy=false,pendingInterruption=false;
+let platform,entering=false,hintBusy=false,pendingInterruption=false,sessionStarted=false;
 function screen(id,visible){const e=$('#'+id);e.classList.toggle('screen--active',visible);e.setAttribute('aria-hidden',String(!visible));e.inert=!visible;}
 function hideScreens(){screens.forEach(id=>screen(id,false));}
 function clearInput(){game.resetInput();}
@@ -43,6 +46,7 @@ function choices(){for(const selector of ['#level-select','#settings-level-selec
 function pauseInfo(){ $('#settings-level-select').value=String(game.levelIndex);$('#pause-course').textContent=`${game.levelIndex+1} · ${campaignSpec(game,game.levelIndex).title}`;$('#hint-detail').hidden=true;}
 function showVictory(){
   preferences.complete(game.levelIndex);
+  preferences.save({resumeLevel:nextResumeLevel(game.levelIndex,availableRooms)});
   choices();clearInput();setState('won');screen('win-screen',true);
   const last=game.levelIndex===availableRooms.at(-1);
   $('#win-title').innerHTML='Вместе<br />получилось<span>.</span>';
@@ -62,6 +66,9 @@ function showHints(){
 const game=new LabGame({debug,container:$('#game'),touch:{joystick:$('#joystick'),joystickKnob:$('#joystick-knob'),jumpButton:$('#jump-button')},
   onProgress:p=>{const n=Math.max(0,Math.min(100,p.percent||0));$('#loading-bar').style.width=n+'%';$('#loading-percent').textContent=n+'%';$('#loading-label').textContent=p.label||'Загрузка';$('#loading-progress').setAttribute('aria-valuenow',String(n));},
   onReady:()=>{hideScreens();setState('ready');screen('start-screen',true);platform?.ready();
+    game.renderer.domElement.addEventListener('webglcontextlost',event=>{
+      event.preventDefault();failure(new Error('Браузер остановил 3D-графику. Нажми «Повторить загрузку»: прогресс комнат сохранён. Текущая комната начнётся заново.'));
+    });
     game.audio.configure(preferences.value);applyLabQuality(game,preferences.value.quality);diagnostics();
     if(debug){window.__NESI_DEMO_GAME__=game;window.__NESI_PLATFORM__=platform;window.__NESI_PREFS__=preferences;
       window.__NESI_RUN_LEVEL_ROUTE__=async(options={})=>{const {runV8Journey}=await import('./game/LabV8Journey.js');game.renderer.setAnimationLoop(null);hideScreens();setState('playing');
@@ -108,7 +115,13 @@ document.body.dataset.chamberEdition=game.chamberEdition;
 document.body.dataset.gameMode='campaign';
 game.quality={...QUALITY_PRESETS[preferences.value.quality]};game.tutorial.enabled=preferences.value.tutorial;
 game.levelIndex=foundationEdition.enabled?foundationEdition.levelIndex:openEdition.enabled?openEdition.levelIndex:campaignRoute.levelIndex;
+game.levelIndex=resumeCampaignLevel(query,preferences.value,availableRooms,game.levelIndex);
 choices();$('#level-select').value=String(game.levelIndex);
+function updateStartAction(){
+ const index=Number($('#level-select').value),saved=preferences.value.resumeLevel===index;
+ $('#play-button').textContent=`${saved?'Продолжить':'Начать'} · комната ${index+1} →`;
+}
+$('#level-select').addEventListener('change',updateStartAction);updateStartAction();
 $('#campaign-count').textContent=foundationEdition.enabled?'Кампания · 30 испытаний':openEdition.enabled?`${OPEN_ROOM_INDICES.length} лабораторных испытаний · отдельная версия`:`Архив · ${CAMPAIGN.length} испытания`;
 if(foundationEdition.enabled){$('#start-screen .brand').textContent='КАМПАНИЯ · ОТ ОТКРЫТИЯ К ЭКСПЕРИМЕНТУ';$('#start-screen .lead').textContent='Первые пять комнат знакомят с порталами, светом и движением. Затем можно пройти остальные испытания исследовательского комплекса.';}
 else if(openEdition.enabled){$('#start-screen .brand').textContent='ЛАБОРАТОРНЫЕ ИСПЫТАНИЯ';$('#start-screen .lead').textContent='Камеры 24, 28, 30 и 31–33. Эта подборка и новая первая глава хранят прогресс отдельно от архива.';}
@@ -125,7 +138,7 @@ async function enterLevel(index,reason='next'){
     if(reason!=='initial')await platform?.interstitial('next');
     hideScreens();screen('loading',true);game.state='loading';setState('loading');
     if(index!==game.levelIndex)await game.selectLevel(index,false);
-    game.start();game.renderer.setAnimationLoop(game.animate);hideScreens();setState('playing');$('#level-select').value=String(index);$('#settings-level-select').value=String(index);diagnostics();
+    game.start();sessionStarted=true;preferences.save({resumeLevel:index});game.renderer.setAnimationLoop(game.animate);hideScreens();setState('playing');$('#level-select').value=String(index);$('#settings-level-select').value=String(index);updateStartAction();diagnostics();
   }catch(error){failure(error);}finally{entering=false;}
 }
 async function restartLevel(){
@@ -136,7 +149,7 @@ async function restartLevel(){
   }catch(error){failure(error);}finally{entering=false;}
 }
 function resume(){reconcileFocus();if(holds.size)return;game.audio.unlock();game.togglePause(false);game.renderer.setAnimationLoop(game.animate);}
-$('#play-button').addEventListener('click',()=>enterLevel(Number($('#level-select').value),game.state==='ready'&&!preferences.value.completed.length?'initial':'next'));
+$('#play-button').addEventListener('click',()=>enterLevel(Number($('#level-select').value),sessionStarted?'next':'initial'));
 $('#play-again-button').addEventListener('click',()=>enterLevel(foundationEdition.enabled?nextFoundationLevel(game.levelIndex):openEdition.enabled?nextOpenRoom(game.levelIndex):nextCampaignLevel(game.levelIndex,CAMPAIGN.length)));
 $('#resume-button').addEventListener('click',resume);$('#restart-button').addEventListener('click',restartLevel);
 $('#pause-button').addEventListener('click',()=>game.togglePause(true));

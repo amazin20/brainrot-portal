@@ -1,3 +1,4 @@
+import {mapDeckUV} from './LabDeckUV.js';
 import {encloseLab} from './LabHumanLab.js';
 import * as THREE from 'three';
 import {RoundedBoxGeometry} from 'three/addons/geometries/RoundedBoxGeometry.js';
@@ -19,9 +20,7 @@ export function applyDeckFinish(k){
  map.generateMipmaps=true;map.minFilter=THREE.LinearMipmapLinearFilter;map.magFilter=THREE.LinearFilter;map.anisotropy=4;map.needsUpdate=true;
  k.m.floor.map=map;k.m.floor.needsUpdate=true;
  k.world.root.updateWorldMatrix(true,true);
- k.world.root.traverse(m=>{if(!m.isMesh||m.material!==k.m.floor)return;const p=m.geometry.attributes.position,uv=m.geometry.attributes.uv;
-  if(!uv)return;for(let i=0;i<p.count;i++){const v=V().fromBufferAttribute(p,i);uv.setXY(i,(v.x+m.position.x)/6,(v.z+m.position.z)/6);}uv.needsUpdate=true;
- });
+ k.world.root.traverse(m=>{if(m.isMesh&&m.material===k.m.floor)mapDeckUV(m);});
  k.ownedTextures??=[];k.ownedTextures.push(map);
 }
 

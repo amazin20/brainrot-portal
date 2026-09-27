@@ -3,6 +3,9 @@ on:
   pull_request:
     paths:
       - 'src/game/LabFoundation*.js'
+      - 'src/game/LabDeckUV.js'
+      - 'src/game/LabOpenArchitecture.js'
+      - 'src/game/LabOpenStationArt.js'
       - 'src/main.js'
       - 'scripts/foundation-browser.mjs'
       - '.github/workflows/foundation-review.yml'

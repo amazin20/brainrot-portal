@@ -171,7 +171,8 @@ export class LabCamera {
   }
 
   update({ dt, target, yaw, pitch, velocity, aiming = false, teleported = false,
-    epic = this.epicMode, dynamicFov = this.dynamicFov }) {
+    epic = this.epicMode, dynamicFov = this.dynamicFov, rampFraming = false }) {
+    this.rampFraming = rampFraming;
     this.epicMode = !!epic;
     this.dynamicFov = dynamicFov !== false;
     if (!this.initialized || teleported || this.lastTarget.distanceToSquared(target) > 64) {
@@ -283,7 +284,8 @@ export class LabCamera {
     const avoidGoal = new THREE.Vector3();
     let escapePosition = null;
     if ((directDistance < (this.avoidanceActive ? 4.1 : 3.1)
-      || this.camera.position.distanceTo(this.playerPivot) < 3.1) && this.blockers.length) {
+      || this.camera.position.distanceTo(this.playerPivot) < 3.1
+      || (this.rampFraming && this.framingPenalty(this.desired) > .005)) && this.blockers.length) {
       const direct = this.desired.clone().sub(this.playerPivot);
       let best = null, bestScore = Infinity;
       const longitudinal = this.forward.clone().setY(0).normalize();
@@ -330,7 +332,9 @@ export class LabCamera {
     } else this.avoidanceActive = false;
     for (const axis of ['x', 'y', 'z']) {
       [this.avoidance[axis], this.avoidanceVelocity[axis]] = spring(
-        this.avoidance[axis], this.avoidanceVelocity[axis], avoidGoal[axis], 16, step);
+        // Rising terrain closes the boom quickly. Keep a damped response but
+        // recover before animated boots move below the bottom of the lens.
+        this.avoidance[axis], this.avoidanceVelocity[axis], avoidGoal[axis], this.rampFraming ? 36 : 16, step);
     }
     if (this.avoidance.lengthSq() > .00001) {
       this.desired.add(this.avoidance);
@@ -412,7 +416,7 @@ export class LabCamera {
     const forward = this.lookPoint.clone().sub(position).normalize();
     const right = new THREE.Vector3().crossVectors(forward, this.viewUp).normalize();
     const up = new THREE.Vector3().crossVectors(right, forward).normalize();
-    if (!this.inclinedFraming) {
+    if (!this.inclinedFraming && !this.rampFraming) {
       const subject = this.playerPivot.clone().sub(position);
       const depth = subject.dot(forward);
       if (depth <= .1) return 100;
@@ -421,11 +425,12 @@ export class LabCamera {
       const y = Math.abs(subject.dot(up)) / height;
       return Math.max(0, x - .7) ** 2 + Math.max(0, y - .6) ** 2;
     }
-    // Test the vertical subject envelope, not only the chest pivot: an
-    // overhead orbit can retain the pivot while cutting the head/backpack.
+    // Test the full envelope on ordinary slopes as well as portal exits.
+    // A chest-only score admitted uphill views that cut off the head/backpack.
+    // Slopes reserve another .4 m for animated boots and jump poses.
     let penalty = 0;
     const subject = new THREE.Vector3();
-    for (const y of [-1.32, 0, 1.32]) {
+    for (const y of (this.rampFraming ? [-1.72, 0, 1.72] : [-1.32, 0, 1.32])) {
       subject.copy(this.playerPivot).addScaledVector(UP, y).sub(position);
       const depth = subject.dot(forward);
       if (depth <= .1) return 100;
