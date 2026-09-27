@@ -107,15 +107,17 @@ export function buildPost37(g,index=36){
  * The two paths are spatially and mechanically separate until the last dock. */
 export function buildPost38(g,index=37){
  const k=new ResearchChamber(g,POST_B_SPECS[2],index,'kinetic',{minX:-30,maxX:30,minZ:-28,maxZ:25},-4,29);
- k.deck('East freight entrance',2,21,6,23,0);
+ k.deck('East freight entrance',6,21,6,23,0);
  k.deck('Cross-lab feeder',-14,6,8,17,0);
- k.deck('West observation court',-27,-12,7,23,0);
+ k.deck('West observation court',-27,-14,7,23,0);
  k.deck('West acceleration balcony',-27,-14,-21,-11,14);
  k.ramp('West launch approach',-26,-18,-11,7,14,0);
  k.deck('North flight catch',5,23,-25,-15,15);
- k.deck('Catch shelf',-4,8,-19,-9,15);
+ k.deck('Catch shelf',-4,5,-19,-9,15);
  k.deck('Catch apron',5,23,-15,-6,15);
- k.deck('Distant freight unloading dock',4,20,-12,-4,15);
+ // The freight floor itself docks flush with the apron at z=-6. Fixed decks
+ // meet only along their edges; overlapping tops would shimmer in WebGL.
+ k.block([11,15.05,-6.3],[11,.06,.18],'secondary',false);
  k.ramp('Lower service return',21,29,-4,17,-4,0);
  const pit=k.loadPad('well-entry',[-17,-4,-1.8],9);
  const outlet=k.panel('angle-outlet',[-8,10,-11],[.435889894,.9,0],9,7);

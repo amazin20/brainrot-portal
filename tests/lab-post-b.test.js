@@ -88,3 +88,14 @@ test('40: closed shutter physically blocks held companion before plate is loaded
  }});
  assert.equal(report.respawns,0);assert.equal(report.resets,0);
 });
+
+test('38: manufactured walking decks have no overlapping coplanar top faces',async()=>{
+ const game=await room(38),decks=game.firstLevel.workshop.decks;
+ for(let i=0;i<decks.length;i++)for(let j=i+1;j<decks.length;j++){
+  const a=decks[i],b=decks[j];
+  if(Math.abs(a.y-b.y)>.001)continue;
+  const overlapX=Math.min(a.maxX,b.maxX)-Math.max(a.minX,b.minX);
+  const overlapZ=Math.min(a.maxZ,b.maxZ)-Math.max(a.minZ,b.minZ);
+  assert.ok(overlapX<.001||overlapZ<.001,`${a.name} and ${b.name} would shimmer across ${overlapX} × ${overlapZ} m`);
+ }
+});

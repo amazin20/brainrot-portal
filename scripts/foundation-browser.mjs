@@ -65,8 +65,8 @@ try{
     const caseKind=index===0?'canonical':room===34&&options.route==='explore-service-first'?'service-recovery':'alternate';
     await page.evaluate(({room,record})=>{
      const g=window.__NESI_DEMO_GAME__,update=g.updateVisuals.bind(g),gl=g.renderer.getContext(),link=gl.linkProgram.bind(gl);let frame=0,links=0,previousTeleports=g.teleportCount,remaining=0;
-     const e=window.__FOUNDATION_EVIDENCE__={frames:[],marks:[],newPrograms:0,capture:{videoFramesPerSecond:15,preRollFramesPerSecond:5,portalWindows:0,teleportEvents:[]}};
-     const intro=[],preRoll=[];
+     const e=window.__FOUNDATION_EVIDENCE__={frames:[],marks:[],newPrograms:0,capture:{videoFramesPerSecond:15,portalWindows:0,teleportEvents:[]}};
+     const intro=[];
      const shot=()=>({frame,position:g.playerPosition.toArray(),cargo:g.cargo.position.toArray(),teleports:g.teleportCount,png:g.renderer.domElement.toDataURL('image/png').split(',')[1]});
      gl.linkProgram=(...a)=>{links++;return link(...a);};
      window.__NESI_CAPTURE_LEVEL_MARK__=m=>e.marks.push({...m,...shot()});
@@ -75,7 +75,10 @@ try{
       if(record&&room>=31&&g.teleportCount>previousTeleports){
        e.capture.teleportEvents.push({frame,teleports:g.teleportCount});
        if(e.capture.portalWindows<2&&e.frames.length<72){
-        e.frames.push(...preRoll);e.capture.portalWindows++;remaining=27;
+        // Record the actual crossing frame. A few opening frames serve as
+        // preroll only when the crossing happens during that bounded capture.
+        if(frame<190)e.frames.push(...intro.slice(-6));
+        e.capture.portalWindows++;remaining=27;g.render();e.frames.push(shot());
        }
       }
       previousTeleports=g.teleportCount;
@@ -84,8 +87,7 @@ try{
        if(intro.length<45||remaining>0){g.render();const image=shot();
         if(intro.length<45)intro.push(image);
         if(remaining>0&&e.frames.length<96){e.frames.push(image);remaining--;}
-        preRoll.push(image);if(preRoll.length>12)preRoll.shift();
-       }else if(frame%12===0){g.render();preRoll.push(shot());if(preRoll.length>12)preRoll.shift();}
+       }
       }else if(active&&e.frames.length<60){g.render();e.frames.push(shot());}
      };
      window.__FOUNDATION_RESTORE__=()=>{
@@ -115,7 +117,7 @@ try{
      else{assert.equal(ffmpeg.status,0,`ffmpeg failed: ${ffmpeg.stderr||ffmpeg.error}`);video=mp4;}
     }
     const result={room,caseKind,options,source:info.commit,url:url.href,route,routeError:routeError?String(routeError):null,errors,...e,video,
-     recording:'Native production WebGL with simulated route input; 15 sampled frames per simulated second during movement segments, 5 around the waiting period before a portal event. This is neither a human playtest nor a device FPS benchmark.'};
+     recording:'Native production WebGL with simulated route input; 15 sampled frames per simulated second during bounded opening and portal segments. This is neither a human playtest nor a device FPS benchmark.'};
     fs.writeFileSync(path.join(out,`${room}-${index}-report.json`),JSON.stringify(result,null,2));
     if(routeError)throw routeError;
     assert.equal(route.pass,true);assert.equal(route.level,room);assert.equal(route.resets,0);assert.equal(route.respawns,0);assert.deepEqual(errors,[]);
@@ -127,6 +129,7 @@ try{
    // The real victory control advances room 30 into 31 and wraps after room 40.
    await page.waitForFunction(()=>!document.pointerLockElement&&getComputedStyle(document.querySelector('#win-screen')).opacity==='1');
    if(room===40)assert.match(await page.$eval('#win-screen .muted',e=>e.textContent),/40 испытаний кампании/);
+   await page.screenshot({path:path.join(out,`${room}-win.png`)});
    await page.locator('#play-again-button').click();
    await page.waitForFunction(next=>window.__NESI_DEMO_GAME__?.state==='playing'&&window.__NESI_DEMO_GAME__.levelIndex===next,{},room===40?0:room);
    await page.evaluate(()=>{const g=window.__NESI_DEMO_GAME__;g.renderer.setAnimationLoop(null);g.render();});
