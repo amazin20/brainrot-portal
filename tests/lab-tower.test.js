@@ -117,6 +117,8 @@ test('Tower restart, failure and re-entry always return to the foot with zero co
   assert.equal(game.cargo,companion);assert.equal(game.physics.cargoBody.id,body);
   assert.deepEqual(level.getTowerMetrics().stageEvents,[]);
   for(let index=0;index<3;index++)completeFixture(game,index);
+  probe(game,2,5,0);
+  assert.equal(level.completedStages,3,'Walking back onto a retained flight must remain ordinary exploration');
   probe(game,3,2,0,-4);
   assert.equal(level.completedStages,0,'A fall cannot resume the last passed stage');
   assert.ok(game.playerPosition.distanceTo(level.spawn)<1e-9);
@@ -138,6 +140,15 @@ test('Tower streams bounded live geometry and releases its old collision and ren
   let geometry;root.traverse(node=>{geometry??=node.geometry;});
   let disposed=false;geometry.addEventListener('dispose',()=>{disposed=true;});
   for(let index=0;index<64;index++){
+   for(const n of [-1.8,0,1.8]){
+    let previous=TOWER_STAGES[index].baseY;
+    for(let s=.03;s<TOWER_SIDE;s+=.17){
+     const [x,,z]=towerPoint(index,s,n),height=game.floorHeight(x,z,TOWER_STAGES[index].baseY+2.001);
+     assert.notEqual(height,null,`Missing physical walking surface on stage ${index+1} at ${s}, ${n}`);
+     assert.ok(height>=previous-.001&&height-previous<=.251,'A stair or corner must not contain a drop or an unwalkable riser');
+     previous=height;
+    }
+   }
    completeFixture(game,index);
    const metrics=level.getTowerMetrics();
    assert.ok(metrics.residentStages<=12,'Streaming cannot retain every already visited flight');

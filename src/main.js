@@ -52,7 +52,7 @@ function showVictory(){
   $('#win-title').innerHTML='Вместе<br />получилось<span>.</span>';
   $('#win-screen .eyebrow').textContent='ДРУГ ТОЖЕ ДОБРАЛСЯ';
   $('#play-again-button').textContent=last?'К первому испытанию ↻':'Следующий уровень →';
-  $('#win-screen .muted').textContent=last?(foundationEdition.enabled?'Пройдены все 41 испытание кампании и 500 этапов Башни без чекпоинтов. Друг добрался до самой вершины.':openEdition.enabled?'Пройдены все испытания этой версии.':'Все доступные испытания завершены. Друг добрался вместе с тобой.'):foundationEdition.enabled&&game.levelIndex===39?'Впереди финальная Башня: 500 этапов за один заход. Без чекпоинтов.':'Получилось! Следующее испытание добавит новую идею.';
+  $('#win-screen .muted').textContent=last?(foundationEdition.enabled?'Пройдено 41 испытание кампании, включая 500 этапов Башни без чекпоинтов. Друг добрался до самой вершины.':openEdition.enabled?'Пройдены все испытания этой версии.':'Все доступные испытания завершены. Друг добрался вместе с тобой.'):foundationEdition.enabled&&game.levelIndex===39?'Впереди финальная Башня: 500 этапов за один заход. Без чекпоинтов.':'Получилось! Следующее испытание добавит новую идею.';
   if(game.firstLevel?.tower){$('#win-title').innerHTML='Башня<br />покорена<span>.</span>';$('#win-screen .eyebrow').textContent='500 / 500 · ОДНИМ ЗАХОДОМ';}
   diagnostics();
 }

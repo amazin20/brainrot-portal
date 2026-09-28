@@ -34,7 +34,7 @@ export function validateTowerEvidence(evidence) {
   assert.ok(Math.abs(observed.physicsSeconds - observed.simulatedSeconds) <= 1 / 60 + 1e-6, 'Physics and visual simulation clocks diverged');
   assert.equal(observed.physicsSteps, route.physicsSteps);
   assert.ok(Math.abs(observed.simulatedSeconds - route.simulatedSeconds) < .02, 'Reported duration disagrees with observed simulation');
-  assert.ok(Math.abs(observed.distanceMeters - route.distanceTravelled) < Math.max(2, observed.distanceMeters * .01), 'Reported distance disagrees with observed movement');
+  assert.ok(Math.abs(observed.distanceMeters - route.distanceTravelled) < .02, 'Reported distance disagrees with observed 120 Hz movement');
   let previousFrame = -1;
   for (const [index, event] of observed.stageEvents.entries()) {
     assert.equal(event.stage, index + 1, 'Every stage must complete once, in chronological order');
@@ -128,7 +128,7 @@ export async function runTowerVerification({out = process.env.OUT_DIR || 'qa/tow
       const bodyId = game.physics.cargoBody.id;
       const observed = {first: null, last: null, frames: 0, physicsSteps: 0, physicsSeconds: 0, simulatedSeconds: 0, distanceMeters: 0,
         activeSeconds: 0, movingSeconds: 0, maxIdleSeconds: 0, maxStationarySeconds: 0, resetCalls: 0, respawnCalls: 0, cargoResetCalls: 0, stageEvents: [], telemetry: []};
-      let previousPosition = game.playerPosition.clone(), previousYaw = game.yaw, previousPitch = game.pitch;
+      let previousVisualPosition = game.playerPosition.clone(), previousYaw = game.yaw, previousPitch = game.pitch;
       let previousStage = 0, idleSeconds = 0, stationarySeconds = 0, batch = [], encodedFrames = 0;
       let middleSaved = false, maxQueuedFrames = 0, lastCapture = null;
       const composed = document.createElement('canvas');
@@ -158,9 +158,21 @@ export async function runTowerVerification({out = process.env.OUT_DIR || 'qa/tow
       game.physics.resetCargo = function (...args) { observed.cargoResetCalls++; return originals.cargoReset.apply(this, args); };
       game.updatePlaying = function (dt, ...args) {
         check(Math.abs(dt - 1 / settings.physicsHz) < 1e-10, 'Physics must advance at exactly 120 Hz');
+        const before = game.playerPosition.clone();
+        const result = originals.physics.call(this, dt, ...args);
         observed.physicsSteps++;
         observed.physicsSeconds += dt;
-        return originals.physics.call(this, dt, ...args);
+        // Measure every physical segment. Combining two physics steps into a
+        // visual-frame chord undercounts stairs, landings and direction changes.
+        observed.distanceMeters += before.distanceTo(game.playerPosition);
+        if (level.completedStages !== previousStage) {
+          check(level.completedStages === previousStage + 1, 'Stage chronology skipped or moved backwards');
+          observed.stageEvents.push({stage: level.completedStages, frame: observed.frames, physicsStep: observed.physicsSteps,
+            simulatedSeconds: observed.physicsSeconds, distanceMeters: observed.distanceMeters,
+            player: game.playerPosition.toArray(), cargo: game.cargo.position.toArray()});
+          previousStage = level.completedStages;
+        }
+        return result;
       };
       game.updateVisuals = function (dt, ...args) {
         const result = originals.visual.call(this, dt, ...args);
@@ -168,11 +180,10 @@ export async function runTowerVerification({out = process.env.OUT_DIR || 'qa/tow
         check(Math.abs(dt - 1 / settings.visualHz) < 1e-10, 'Visual simulation must advance at exactly 60 Hz');
         check(game.levelIndex === 40 && game.physics.cargoBody.id === bodyId, 'Room or original companion changed');
         check(['playing', 'won'].includes(game.state), 'Tower left active gameplay');
-        const distance = previousPosition.distanceTo(game.playerPosition);
+        const distance = previousVisualPosition.distanceTo(game.playerPosition);
         const aim = Math.abs(Math.atan2(Math.sin(game.yaw - previousYaw), Math.cos(game.yaw - previousYaw))) + Math.abs(game.pitch - previousPitch);
         const moving = distance > .0001;
         const active = moving || aim > .0001;
-        observed.distanceMeters += distance;
         observed.activeSeconds += active ? dt : 0;
         observed.movingSeconds += moving ? dt : 0;
         idleSeconds = active ? 0 : idleSeconds + dt;
@@ -180,16 +191,11 @@ export async function runTowerVerification({out = process.env.OUT_DIR || 'qa/tow
         observed.maxIdleSeconds = Math.max(observed.maxIdleSeconds, idleSeconds);
         observed.maxStationarySeconds = Math.max(observed.maxStationarySeconds, stationarySeconds);
         check(idleSeconds <= 5 + 1e-6, 'More than five seconds passed without actual movement or aiming');
-        previousPosition.copy(game.playerPosition); previousYaw = game.yaw; previousPitch = game.pitch;
+        previousVisualPosition.copy(game.playerPosition); previousYaw = game.yaw; previousPitch = game.pitch;
         observed.simulatedSeconds += dt;
         const current = state();
         observed.first ??= current; observed.last = current;
-        if (level.completedStages !== previousStage) {
-          check(level.completedStages === previousStage + 1, 'Stage chronology skipped or moved backwards');
-          observed.stageEvents.push({stage: level.completedStages, frame: observed.frames, simulatedSeconds: observed.simulatedSeconds,
-            distanceMeters: observed.distanceMeters, player: current.player, cargo: current.cargo});
-          previousStage = level.completedStages;
-        }
+        check(level.completedStages === previousStage, 'Stage completion changed outside the physics update');
         if (record && observed.frames % settings.stride === 0) {
           game.render();
           batch.push({index: encodedFrames++, image: jpeg(), state: current});
