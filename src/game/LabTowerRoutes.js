@@ -234,6 +234,7 @@ export function towerDeckRoute(deck,spec={}){
   walk:(x,z,extra={})=>add('walk',x,z,extra),
   drop:()=>add('drop'),pickup:()=>add('pickup'),use:()=>add('use'),
   pause:(seconds=.4)=>add('wait',0,0,{seconds}),
+  until:(field,value=true,seconds=.5)=>add('until',0,0,{field,value,seconds}),
   shot:(slot,panel)=>add('shoot',0,0,{slot,aim:position(panel==='input'?-6:6,panel==='B'?3:-3,2.0)}),
   enter:(panel='A')=>add('enter',6,panel==='B'?3:-3,{normal:Object.freeze([-1,0,0]),seconds:4}),
  };
@@ -300,7 +301,11 @@ export function towerDeckRoute(deck,spec={}){
    r.use();r.pause(.8);r.pickup();r.walk(0,7);break;
 
   case 4: // Mirror braid: mechanical orientation then two receiver circuits.
-   r.walk(0,1.4);r.drop();r.walk(0,4.2);r.use();
+   // Put the companion behind the centre lane before using the console. A
+   // forward throw from z=1.4 can roll into the console interaction radius
+   // and cause E to pick it up instead of turning the mirror.
+   r.walk(0,-4,{sprint:false});r.pause(.4);r.drop();r.pause(.4);
+   r.walk(-3,-4);r.walk(-3,4.2);r.walk(0,4.2);r.use();r.until('controlOn');
    r.walk(0,-1.2);r.shot(0,'input');r.shot(1,'A');r.pause(.8);
    r.walk(0,1);r.shot(1,'B');r.pause(.6);
    r.pickup();r.walk(0,7);break;
