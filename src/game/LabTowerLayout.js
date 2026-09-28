@@ -1,62 +1,91 @@
-/** Pure, deterministic geometry contract for the final ascent.
- * No clocks, actor mutations, random generation, or checkpoint locations.
- * s runs forward along one square side; n runs toward the outside of the shaft.
+import {towerRoute,TOWER_ROUTE_REACTORS} from './LabTowerRoutes.js';
+
+/** The tower is six connected storeys, each with three independently explorable
+ * machine wings. A wing is a substantial puzzle, not a counter on a corridor.
+ * The old 500 repeated floor switches are intentionally gone.
  */
-export const TOWER_STAGE_COUNT = 500;
-export const TOWER_SIDE = 14;
-export const TOWER_RISE = 2;
-export const TOWER_HALF_WIDTH = 2.2;
-export const TOWER_ENTRY_S = 1;
-export const TOWER_EXIT_S = 12.8;
-// A traveller can finish the preceding corner at n = -2, which is already
-// s = 2 on the next flight. This band includes that ordinary route; it is not
-// a required centre-line marker or a checkpoint.
-export const TOWER_ENTRY_MAX_S = 2.4;
-export const TOWER_MANDATORY_DISTANCE = TOWER_STAGE_COUNT * (TOWER_EXIT_S - TOWER_ENTRY_MAX_S);
-export const TOWER_MINIMUM_SECONDS = TOWER_MANDATORY_DISTANCE / 5;
-const CORNERS = [[0,0],[14,0],[14,-14],[0,-14]];
-const DIRECTIONS = [[1,0],[0,-1],[-1,0],[0,1]];
-const PATTERNS = [
- {name:'ЛЕВЫЙ КОНТУР',plates:[[4.8,-1.22]],path:[[1.5,0],[3.3,-1.22],[4.8,-1.22],[6.5,0]],blocks:[]},
- {name:'ПРАВЫЙ КОНТУР',plates:[[4.8,1.22]],path:[[1.5,0],[3.3,1.22],[4.8,1.22],[6.5,0]],blocks:[]},
- {name:'ЗМЕЙКА',plates:[[5.5,-1.22]],path:[[1.5,0],[2.6,1.3],[3.9,1.3],[3.98,-1.3],[4.8,-1.3],[5.5,-1.22],[6.5,0]],blocks:[[3.1,-.95,2.45,0.34,3.3],[4.85,.95,2.45,.34,3.3]]},
- {name:'ДВОЙНАЯ ЦЕПЬ',plates:[[3,-1.22],[5.3,1.22]],path:[[1.5,0],[3,-1.22],[4.1,0],[5.3,1.22],[6.5,0]],blocks:[]},
- {name:'ОБХОД СЛЕВА',plates:[[5.3,-1.22]],path:[[1.5,0],[2.5,-1.4],[4.7,-1.4],[5.3,-1.22],[6.5,0]],blocks:[[3.65,0,1.7,1.45,3.4]]},
- {name:'ОБХОД СПРАВА',plates:[[5.3,1.22]],path:[[1.5,0],[2.5,1.4],[4.7,1.4],[5.3,1.22],[6.5,0]],blocks:[[3.65,0,1.7,1.45,3.4]]},
- {name:'ПЕРЕКРЁСТНЫЕ ЛОПАСТИ',plates:[[5.5,1.22]],path:[[1.5,0],[2.6,-1.3],[3.9,-1.3],[3.98,1.3],[4.8,1.3],[5.5,1.22],[6.5,0]],blocks:[[3.1,.95,2.45,.34,3.3],[4.85,-.95,2.45,.34,3.3]]},
- {name:'СТУПЕНЧАТЫЙ ПРИВОД',plates:[[5.2,-1.22]],path:[[1.5,0],[3,-1.22],[4.25,-1.22],[5.2,-1.22],[6.5,0]],blocks:[[3.7,0,4.38,.7,.3]]},
- {name:'ПЕРЕПРЫГНИ БАЛКУ',plates:[[5.5,1.22]],path:[[1.5,0],[2.45,0],[3.05,0,'jump'],[4.9,0],[5.5,1.22],[6.5,0]],blocks:[[3.9,0,4.38,.32,.64]]},
- {name:'ДВА РЕГУЛЯТОРА',plates:[[3,1.22],[5.3,-1.22]],path:[[1.5,0],[3,1.22],[4.1,0],[5.3,-1.22],[6.5,0]],blocks:[]},
- {name:'ВНЕШНЯЯ ГАЛЕРЕЯ',plates:[[4.8,1.25]],path:[[1.5,0],[2.6,1.4],[4.8,1.25],[5.6,1.4],[6.5,0]],blocks:[[4.1,-.65,2.6,2.2,3.4]]},
- {name:'ВНУТРЕННЯЯ ГАЛЕРЕЯ',plates:[[4.8,-1.25]],path:[[1.5,0],[2.6,-1.4],[4.8,-1.25],[5.6,-1.4],[6.5,0]],blocks:[[4.1,.65,2.6,2.2,3.4]]},
+export const TOWER_STAGE_COUNT=18;
+export const TOWER_DECK_COUNT=6;
+export const TOWER_RISE=8;
+export const TOWER_SIDE=42;
+export const TOWER_HALF_WIDTH=6.2;
+export const TOWER_ENTRY_S=2;
+export const TOWER_ENTRY_MAX_S=3;
+export const TOWER_EXIT_S=38;
+// There is no honest distance-only lower bound for a portal puzzle. The
+// recorded, input-driven playthrough is the source of elapsed-time evidence.
+export const TOWER_MANDATORY_DISTANCE=0;
+export const TOWER_MINIMUM_SECONDS=0;
+
+const BRANCHES=Object.freeze([
+ Object.freeze({id:'east',name:'ВОСТОК',origin:[10,0],direction:[1,0]}),
+ Object.freeze({id:'west',name:'ЗАПАД',origin:[-10,0],direction:[-1,0]}),
+ Object.freeze({id:'north',name:'СЕВЕР',origin:[0,-10],direction:[0,-1]}),
+]);
+
+// Each recipe has a different physical dependency, not a differently coloured
+// version of one switch. `order` is the order in which signals may latch; a
+// solved wing stays solved for the remainder of this attempt only.
+const PUZZLES=[
+ {id:'prism',name:'ПРИЗМАТИЧЕСКИЙ УЗЕЛ',family:'optics',requirements:['mirror','beamA'],order:['mirror','beamA']},
+ {id:'freight',name:'ПРОТИВОВЕСНЫЙ ДОК',family:'freight',requirements:['cargo','control'],order:['cargo','control']},
+ {id:'exchange',name:'ОБРАТНЫЙ ПРОХОД',family:'portal',requirements:['beamA','transit'],order:['beamA','transit']},
+ {id:'turbine',name:'МАСТЕРСКАЯ ТУРБИНЫ',family:'pneumatic',requirements:['airA','cargo'],order:['airA','cargo']},
+ {id:'double-prism',name:'ДВА ПРИЁМНИКА',family:'optics',requirements:['beamA','beamB'],order:['beamA','beamB']},
+ {id:'levitator',name:'ГРУЗОВОЙ ЛЕВИТАТОР',family:'gravity',requirements:['gravity','control'],order:['gravity','control']},
+ {id:'battery',name:'СВЕТ И МАССА',family:'hybrid',requirements:['cargo','beamA'],order:['cargo','beamA']},
+ {id:'windway',name:'ВОЗДУШНЫЙ ПЕРЕХОД',family:'pneumatic',requirements:['airA','transit'],order:['airA','transit']},
+ {id:'vault',name:'РАЗГОННЫЙ СЕЙФ',family:'kinetic',requirements:['beamA','kinetic'],order:['beamA','kinetic']},
+ {id:'magnet',name:'МАГНИТНАЯ ОПТИКА',family:'gravity',requirements:['gravity','beamA'],order:['gravity','beamA']},
+ {id:'press',name:'ПРЕСС И ПРОТИВОВЕС',family:'kinetic',requirements:['cargo','kinetic'],order:['cargo','kinetic']},
+ {id:'refraction',name:'ПЕРЕСТРОЙКА ЛУЧА',family:'optics',requirements:['mirror','beamA','beamB'],order:['mirror','beamA','beamB']},
+ {id:'storm',name:'ГРОЗОВОЙ КОЛЛЕКТОР',family:'pneumatic',requirements:['airA','beamB'],order:['airA','beamB']},
+ {id:'relay',name:'ОБМЕН ПИТАНИЕМ',family:'portal',requirements:['transit','cargo','control'],order:['transit','cargo','control']},
+ {id:'balance',name:'ПЛАВУЧИЙ БАЛАНС',family:'gravity',requirements:['cargo','gravity'],order:['cargo','gravity']},
+ {id:'confluence',name:'СЛИЯНИЕ ПОТОКОВ',family:'hybrid',requirements:['mirror','beamA','airA'],order:['mirror','beamA','airA']},
+ {id:'crown-drive',name:'ПРИВОД КОРОНЫ',family:'hybrid',requirements:['cargo','beamB','kinetic'],order:['cargo','beamB','kinetic']},
+ {id:'last-aperture',name:'ПОСЛЕДНЯЯ АПЕРТУРА',family:'finale',requirements:['gravity','transit','airA'],order:['gravity','transit','airA']},
 ];
-export function towerHeight(stage,s) {
- const base=typeof stage==='number'?stage*TOWER_RISE:stage.baseY;
- if(s<7.8)return base;
- if(s>=11)return base+TOWER_RISE;
- return base+Math.min(8,Math.floor((s-7.8)/.4)+1)*.25;
+
+const pick=stage=>typeof stage==='number'?{index:stage,deck:Math.floor(stage/3),branch:stage%3}:stage;
+export function towerHeight(stage){return pick(stage).deck*TOWER_RISE;}
+/** s is distance into a wing; n points to the wing's left wall. */
+export function towerPoint(stage,s,n=0,y){
+ const item=pick(stage),branch=BRANCHES[item.branch],[dx,dz]=branch.direction;
+ return [branch.origin[0]+dx*s-dz*n,y??item.baseY??towerHeight(item),branch.origin[1]+dz*s+dx*n];
 }
-export function towerPoint(stage,s,n=0,y) {
- const i=typeof stage==='number'?stage:stage.index,q=i%4,[x,z]=CORNERS[q],[dx,dz]=DIRECTIONS[q];
- return [x+dx*s-dz*n,y??towerHeight(i,s),z+dz*s+dx*n];
+export function towerCoordinates(stage,position){
+ const item=pick(stage),branch=BRANCHES[item.branch],[dx,dz]=branch.direction;
+ const x=position.x??position[0],z=position.z??position[2];
+ return {s:(x-branch.origin[0])*dx+(z-branch.origin[1])*dz,
+  n:(x-branch.origin[0])*-dz+(z-branch.origin[1])*dx};
 }
-export function towerCoordinates(stage,position) {
- const i=typeof stage==='number'?stage:stage.index,[x,z]=CORNERS[i%4],[dx,dz]=DIRECTIONS[i%4];
- const px=position.x??position[0],pz=position.z??position[2];
- return {s:(px-x)*dx+(pz-z)*dz,n:(px-x)*-dz+(pz-z)*dx};
-}
-export const TOWER_STAGES = Object.freeze(Array.from({length:TOWER_STAGE_COUNT},(_,index)=>{
- const pattern=PATTERNS[index%PATTERNS.length];
- const descriptor={index,number:index+1,sector:Math.floor(index/20),baseY:index*TOWER_RISE,
-  direction:Object.freeze([...DIRECTIONS[index%4]]),pattern:pattern.name,patternIndex:index%PATTERNS.length,
-  plates:pattern.plates.map(([s,n])=>Object.freeze({s,n,position:Object.freeze(towerPoint(index,s,n))})),
-  obstacles:pattern.blocks.map(([s,n,width,depth,height])=>Object.freeze({s,n,width,depth,height})),
-  entry:Object.freeze(towerPoint(index,TOWER_ENTRY_S)),exit:Object.freeze(towerPoint(index,TOWER_EXIT_S)),
-  // Walking these actual route points is sufficient; progression is exclusively
-  // the live level's collision/plate sensors, never a journey instruction.
-  waypoints:[...pattern.path.map(([s,n,action])=>({position:towerPoint(index,s,n),...(action?{action}:{}),s,n})),
-   ...[7.15,7.65,8.25,9.05,9.85,10.65,11.5,TOWER_EXIT_S+.12].map(s=>({position:towerPoint(index,s),s,n:0}))],
+
+const freezePosition=p=>Object.freeze(p);
+
+export const TOWER_STAGES=Object.freeze(PUZZLES.map((puzzle,index)=>{
+ const deck=Math.floor(index/3),branch=index%3,baseY=deck*TOWER_RISE;
+ const reactorN=TOWER_ROUTE_REACTORS[puzzle.id]??0;
+ const descriptor={index,number:index+1,id:puzzle.id,deck,branch,sector:deck,baseY,reactorN,
+  direction:Object.freeze([...BRANCHES[branch].direction]),branchName:BRANCHES[branch].name,
+  name:puzzle.name,pattern:puzzle.name,patternIndex:index,
+  puzzle:Object.freeze({...puzzle,requirements:Object.freeze([...puzzle.requirements]),order:Object.freeze([...puzzle.order])}),
+  entry:freezePosition(towerPoint(index,2)),reactor:freezePosition(towerPoint(index,38,reactorN)),exit:freezePosition(towerPoint(index,38,reactorN)),
+  panelInput:freezePosition(towerPoint(index,8,6.04,baseY+2.4)),
+  panelOutputA:freezePosition(towerPoint(index,14,-6.04,baseY+2.4)),
+  panelOutputB:freezePosition(towerPoint(index,20,-6.04,baseY+2.4)),
+  cargoPad:freezePosition(towerPoint(index,5.1,0,baseY)),
+  control:freezePosition(towerPoint(index,5,-2,baseY+.9)),
  };
- descriptor.waypoints=Object.freeze(descriptor.waypoints.map(p=>Object.freeze({...p,position:Object.freeze(p.position)})));
+ descriptor.route=towerRoute(descriptor);
+ descriptor.waypoints=Object.freeze(descriptor.route.filter(a=>a.kind==='walk').map(a=>Object.freeze({position:a.target})));
  return Object.freeze(descriptor);
 }));
+
+export const TOWER_DECKS=Object.freeze(Array.from({length:TOWER_DECK_COUNT},(_,deck)=>Object.freeze({
+ deck,baseY:deck*TOWER_RISE,branchIds:Object.freeze(TOWER_STAGES.slice(deck*3,deck*3+3).map(s=>s.id)),
+ stairEntry:freezePosition([0,deck*TOWER_RISE,10.2]),
+ stairExit:freezePosition([0,(deck+1)*TOWER_RISE,34]),
+ upperReturn:freezePosition([8,(deck+1)*TOWER_RISE,34]),
+ upperHub:freezePosition([8,(deck+1)*TOWER_RISE,7]),
+})));

@@ -1,17 +1,17 @@
-name: Verify and record Tower 500
+name: Verify and record the rebuilt Tower
 on:
   push:
-    branches: [feature/tower-500]
+    branches: [feature/tower-rebuild]
   workflow_dispatch:
     inputs:
       record:
-        description: Record the complete 500-stage Tower after verification
+        description: Record the complete rebuilt Tower after verification
         type: boolean
-        default: true
+        default: false
 permissions:
   contents: read
 concurrency:
-  group: tower-500-${{ github.ref }}
+  group: tower-rebuild-${{ github.ref }}
   cancel-in-progress: true
 env:
   BUILD_COMMIT: ${{ github.sha }}
@@ -31,12 +31,12 @@ jobs:
       - name: Test and build the exact candidate
         run: |
           npm ci
-          node --test tests/lab-tower.test.js tests/lab-tower-transitions.test.js tests/lab-resume.test.js
+          node --test tests/lab-tower.test.js tests/lab-tower-mechanisms.test.js tests/lab-tower-transitions.test.js tests/lab-tower-evidence.test.js tests/lab-resume.test.js
           npm run build
           node scripts/v8-package-check.mjs
-          node scripts/stamp-build.mjs v42-tower-500
+          node scripts/stamp-build.mjs v43-tower-rebuild
           npm install --no-save --package-lock=false puppeteer-core@24.16.0
-      - name: Complete all 500 stages in production WebGL
+      - name: Complete eighteen wings and six central keystones in production WebGL
         run: |
           npm run preview -- --host 127.0.0.1 --port 4173 >tower-preview.log 2>&1 &
           for i in {1..30}; do curl -fsS http://127.0.0.1:4173/build-info.json >/dev/null && break; sleep 1; done
@@ -60,7 +60,7 @@ jobs:
             tower-preview.log
           retention-days: 14
   record:
-    name: One continuous Tower walkthrough (500 stages, at least 15 minutes)
+    name: One continuous Tower walkthrough (eighteen wings, six keystones, at least 15 minutes)
     needs: verify
     if: (github.event_name == 'workflow_dispatch' && inputs.record) || (github.event_name == 'push' && contains(github.event.head_commit.message, '[record-tower]'))
     runs-on: ubuntu-latest

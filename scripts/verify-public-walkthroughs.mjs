@@ -32,11 +32,13 @@ for(let start=0;start<41;start+=5){
    assert.equal(entry.provenance.verificationRunId,approval.verificationRunId);
   }else{
    assert.equal(entry.sourceCommit,manifest.sourceCommit);
-   assert.equal(entry.stages,500);assert.equal(entry.checkpoints,false);
+   assert.equal(entry.stages,18);assert.equal(entry.decks,6);assert.equal(entry.branchesPerDeck,3);assert.equal(entry.keystones,6);
+   assert.equal(entry.checkpoints,false);
    assert.equal(entry.continuous,true);
    assert.ok(entry.durationSeconds>=900);assert.ok(entry.activeSeconds>=900);
-   assert.ok(entry.movingSeconds>=900);
-   assert.ok(entry.maxIdleSeconds<=5);assert.ok(entry.distanceMeters>2500);
+   assert.ok(entry.activeInputSeconds>=900);assert.ok(entry.movingSeconds>0);
+   assert.ok(entry.teleports>0);
+   assert.ok(entry.maxIdleSeconds<=5);assert.ok(entry.distanceMeters>90);
   }
   const url=new URL(entry.src,base);
   const partial=await fetch(url,{headers:{Range:'bytes=0-1023'},cache:'no-store'});

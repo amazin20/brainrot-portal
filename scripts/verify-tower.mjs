@@ -1,4 +1,4 @@
-/** Verify the real 500-stage Tower through the production browser route.
+/** Verify the rebuilt Tower through the production browser route.
  * The observer measures the simulation itself, independently of route reports.
  * Import runTowerVerification from the recorder to capture that same run.
  */
@@ -6,9 +6,10 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import {pathToFileURL} from 'node:url';
-import puppeteer from 'puppeteer-core';
+import {TOWER_STAGES} from '../src/game/LabTowerLayout.js';
+import {KEYSTONE_SPECS} from '../src/game/LabTowerKeystones.js';
 
-export const TOWER_CAPTURE = Object.freeze({level: 41, stages: 500, width: 854, height: 480, visualHz: 60, physicsHz: 120, stride: 5, fps: 12});
+export const TOWER_CAPTURE = Object.freeze({level: 41, stages: 18, decks: 6, branchesPerDeck: 3, keystones: 6, width: 854, height: 480, visualHz: 60, physicsHz: 120, stride: 5, fps: 12});
 
 export function validateTowerEvidence(evidence) {
   const {route, observed} = evidence;
@@ -21,36 +22,79 @@ export function validateTowerEvidence(evidence) {
   assert.equal(observed.first.completedStages, 0);
   assert.equal(observed.last.completedStages, TOWER_CAPTURE.stages);
   assert.equal(observed.stageEvents.length, TOWER_CAPTURE.stages);
+  assert.equal(observed.keystoneEvents.length, TOWER_CAPTURE.keystones);
   assert.equal(observed.resetCalls, 0);
   assert.equal(observed.respawnCalls, 0);
   assert.equal(observed.cargoResetCalls, 0);
-  assert.ok(observed.simulatedSeconds >= 900, `Tower must take at least 15 simulation minutes, got ${observed.simulatedSeconds}s`);
+  assert.ok(observed.simulatedSeconds >= 900, `Complete Tower route must take at least 15 simulation minutes, got ${observed.simulatedSeconds}s`);
   assert.ok(observed.activeSeconds >= 900, `At least 15 minutes must contain real movement or aim input, got ${observed.activeSeconds}s`);
-  assert.ok(observed.movingSeconds >= 900, `At least 15 minutes must contain actual travel, got ${observed.movingSeconds}s`);
-  assert.ok(route.activeMovementSeconds >= 900, 'The input route must report at least 15 minutes of active movement');
+  assert.ok(observed.movingSeconds > 0, 'The route must traverse the actual Tower');
+  assert.ok(route.activeInputSeconds >= 900, 'The ordinary input route must contain at least 15 minutes of movement, aiming or puzzle actions');
   assert.ok(route.maxIdleSeconds <= 5 && route.maxNoInputSeconds <= 5, 'The route must have no AFK segment');
   assert.ok(observed.maxIdleSeconds <= 5, `Idle gap exceeded five seconds: ${observed.maxIdleSeconds}s`);
   assert.ok(observed.distanceMeters > TOWER_CAPTURE.stages * 5, 'The full journey must cover real physical distance');
+  assert.ok(observed.teleports > 0, 'A portal-focused Tower route must physically traverse portals');
+  assert.equal(route.teleports, observed.teleports, 'Route and independent observer disagree on portal transfers');
+  assert.ok(route.shots > 0 && route.interactions > 1, 'The route must use the portal gun and manipulate puzzle mechanisms');
   assert.ok(Math.abs(observed.physicsSeconds - observed.simulatedSeconds) <= 1 / 60 + 1e-6, 'Physics and visual simulation clocks diverged');
   assert.equal(observed.physicsSteps, route.physicsSteps);
   assert.ok(Math.abs(observed.simulatedSeconds - route.simulatedSeconds) < .02, 'Reported duration disagrees with observed simulation');
   assert.ok(Math.abs(observed.distanceMeters - route.distanceTravelled) < .02, 'Reported distance disagrees with observed 120 Hz movement');
   let previousFrame = -1;
+  const branchKeys = new Set(), solvedIds = new Set();
+  const authoredById = new Map(TOWER_STAGES.map(stage => [stage.id, stage]));
   for (const [index, event] of observed.stageEvents.entries()) {
-    assert.equal(event.stage, index + 1, 'Every stage must complete once, in chronological order');
+    assert.equal(event.stage, index + 1, 'Each puzzle completion must be counted once in chronological order');
+    assert.ok(typeof event.id === 'string' && event.id.length > 0, 'Each puzzle wing needs a stable id');
+    assert.ok(Number.isInteger(event.deck) && event.deck >= 0 && event.deck < TOWER_CAPTURE.decks, 'Invalid puzzle deck');
+    assert.ok(Number.isInteger(event.branch) && event.branch >= 0 && event.branch < TOWER_CAPTURE.branchesPerDeck, 'Invalid puzzle branch');
+    assert.ok(!solvedIds.has(event.id), 'A puzzle wing was counted more than once');
+    solvedIds.add(event.id);
+    branchKeys.add(`${event.deck}:${event.branch}`);
     assert.ok(event.frame > previousFrame, 'Stage completion frames must increase');
     assert.ok(event.simulatedSeconds > 0 && event.simulatedSeconds <= observed.simulatedSeconds + 1e-6);
     previousFrame = event.frame;
   }
+  assert.equal(branchKeys.size, TOWER_CAPTURE.stages, 'The complete route must solve all three distinct branches on every deck');
+  assert.deepEqual(solvedIds, new Set(TOWER_STAGES.map(stage => stage.id)), 'The route must solve the exact eighteen authored puzzles');
+  for (const event of observed.stageEvents) {
+    const authored = authoredById.get(event.id);
+    assert.ok(authored && authored.deck === event.deck && authored.branch === event.branch, 'Puzzle identity must match its authored deck and branch');
+  }
   assert.equal(route.stageEvents.length, TOWER_CAPTURE.stages);
   assert.deepEqual(route.stageEvents.map(event => event.stage), observed.stageEvents.map(event => event.stage));
+  assert.deepEqual(route.stageEvents.map(event => event.id), observed.stageEvents.map(event => event.id));
   assert.equal(evidence.gameMetrics.completedStages, TOWER_CAPTURE.stages);
   assert.equal(evidence.gameMetrics.totalStages, TOWER_CAPTURE.stages);
   assert.equal(evidence.gameMetrics.checkpoints, false);
+  assert.deepEqual(evidence.gameMetrics.solvedIds, observed.stageEvents.map(event => event.id));
+  assert.deepEqual(evidence.gameMetrics.deckRelays, [true,true,true,true,true,true]);
+  assert.equal(evidence.gameMetrics.relayEvents.length, TOWER_CAPTURE.decks);
+  assert.deepEqual(new Set(evidence.gameMetrics.relayEvents.map(event => event.deck)), new Set([0,1,2,3,4,5]));
+  assert.deepEqual(evidence.gameMetrics.keystoneSolved, [true,true,true,true,true,true]);
+  assert.equal(evidence.gameMetrics.keystoneEvents.length, TOWER_CAPTURE.keystones);
+  assert.equal(route.keystoneEvents.length, TOWER_CAPTURE.keystones);
+  const keystoneIds = new Set(), keystoneDecks = new Set();
+  for (const event of observed.keystoneEvents) {
+    assert.ok(typeof event.id === 'string' && event.id.length > 0 && !keystoneIds.has(event.id), 'Each keystone must have a unique identity');
+    assert.ok(Number.isInteger(event.deck) && event.deck >= 0 && event.deck < TOWER_CAPTURE.decks && !keystoneDecks.has(event.deck), 'Each deck needs its own keystone completion');
+    assert.equal(event.id, KEYSTONE_SPECS[event.deck].id, 'Keystone identity must match the authored machine for this deck');
+    keystoneIds.add(event.id); keystoneDecks.add(event.deck);
+    const wings = observed.stageEvents.filter(wing => wing.deck === event.deck);
+    const relay = evidence.gameMetrics.relayEvents.find(item => item.deck === event.deck);
+    assert.equal(wings.length, TOWER_CAPTURE.branchesPerDeck);
+    assert.ok(relay && event.simulatedSeconds > relay.seconds && event.simulatedSeconds > Math.max(...wings.map(wing => wing.simulatedSeconds)), 'Keystone must follow the three live wings and their relay');
+  }
+  assert.deepEqual([...keystoneDecks].sort(), [0,1,2,3,4,5]);
+  assert.deepEqual(route.keystoneEvents.map(event => [event.deck,event.id]), observed.keystoneEvents.map(event => [event.deck,event.id]));
+  assert.deepEqual(evidence.gameMetrics.keystoneEvents.map(event => [event.deck,event.id]), observed.keystoneEvents.map(event => [event.deck,event.id]));
+  assert.deepEqual(evidence.gameMetrics.stageEvents.map(event => event.id), observed.stageEvents.map(event => event.id));
+  assert.equal(evidence.gameMetrics.teleports, observed.teleports);
   assert.deepEqual(evidence.errors, []);
 }
 
 export async function runTowerVerification({out = process.env.OUT_DIR || 'qa/tower-verification', record = false, writeBatch = null} = {}) {
+  const {default: puppeteer} = await import('puppeteer-core');
   out = path.resolve(out);
   fs.mkdirSync(out, {recursive: true});
   const errors = [];
@@ -73,8 +117,8 @@ export async function runTowerVerification({out = process.env.OUT_DIR || 'qa/tow
     });
     await page.exposeFunction('__NESI_TOWER_PROGRESS__', snapshot => {
       const stage = snapshot.completedStages;
-      if (stage >= lastProgress + 10 || stage === 500 || lastProgress === -1) {
-        console.log(`Tower ${stage}/500; simulation ${snapshot.simulatedSeconds.toFixed(1)}s; distance ${snapshot.distanceMeters.toFixed(1)}m; ${snapshot.encodedFrames} captured frames`);
+      if (stage >= lastProgress + 3 || stage === TOWER_CAPTURE.stages || lastProgress === -1) {
+        console.log(`Tower ${stage}/${TOWER_CAPTURE.stages}; simulation ${snapshot.simulatedSeconds.toFixed(1)}s; distance ${snapshot.distanceMeters.toFixed(1)}m; ${snapshot.encodedFrames} captured frames`);
         lastProgress = stage;
       }
     });
@@ -95,7 +139,7 @@ export async function runTowerVerification({out = process.env.OUT_DIR || 'qa/tow
       return response.json();
     });
     assert.equal(info.levels, 41);
-    assert.equal(info.version, 'v42-tower-500');
+    assert.equal(info.version, 'v43-tower-rebuild');
     assert.equal(info.features.defaultEdition, 'foundation');
     if (process.env.BUILD_COMMIT) assert.equal(info.commit, process.env.BUILD_COMMIT);
     assert.equal(await page.$eval('#level-select', element => Number(element.value)), 40);
@@ -171,13 +215,13 @@ export async function runTowerVerification({out = process.env.OUT_DIR || 'qa/tow
       const level = game.firstLevel;
       const check = (condition, message) => { if (!condition) throw Error(message); };
       check(game.chamberEdition === 'foundation' && game.levelIndex === 40, 'Wrong campaign or room');
-      check(level.towerChallenge === true && level.totalStages === 500 && level.completedStages === 0, 'Tower must begin before stage one');
+      check(level.towerChallenge === true && level.totalStages === settings.stages && level.completedStages === 0, 'Tower must begin before the first puzzle wing');
       const originals = {visual: game.updateVisuals, physics: game.updatePlaying, reset: game.resetRun, respawn: game.respawn, cargoReset: game.physics.resetCargo, flush: window.__NESI_TOWER_FLUSH_FRAMES__};
-      const bodyId = game.physics.cargoBody.id;
+      const bodyId = game.physics.cargoBody.id, initialTeleports = game.teleportCount;
       const observed = {first: null, last: null, frames: 0, physicsSteps: 0, physicsSeconds: 0, simulatedSeconds: 0, distanceMeters: 0,
-        activeSeconds: 0, movingSeconds: 0, maxIdleSeconds: 0, maxStationarySeconds: 0, resetCalls: 0, respawnCalls: 0, cargoResetCalls: 0, stageEvents: [], telemetry: []};
+        activeSeconds: 0, movingSeconds: 0, maxIdleSeconds: 0, maxStationarySeconds: 0, resetCalls: 0, respawnCalls: 0, cargoResetCalls: 0, teleports: 0, stageEvents: [], keystoneEvents: [], telemetry: []};
       let previousVisualPosition = game.playerPosition.clone(), previousYaw = game.yaw, previousPitch = game.pitch;
-      let previousStage = 0, idleSeconds = 0, stationarySeconds = 0, batch = [], encodedFrames = 0;
+      let previousStage = 0, previousKeystone = 0, idleSeconds = 0, stationarySeconds = 0, batch = [], encodedFrames = 0;
       let middleSaved = false, maxQueuedFrames = 0, lastCapture = null;
       const composed = document.createElement('canvas');
       composed.width = settings.width; composed.height = settings.height;
@@ -192,7 +236,12 @@ export async function runTowerVerification({out = process.env.OUT_DIR || 'qa/tow
         context.fillStyle = 'rgba(8, 17, 23, .88)'; context.fillRect(14, 14, 266, 66);
         context.fillStyle = '#91e8e1'; context.font = 'bold 12px sans-serif'; context.fillText('БАШНЯ · БЕЗ ЧЕКПОИНТОВ', 26, 33);
         context.fillStyle = '#ffffff'; context.font = 'bold 20px sans-serif';
-        context.fillText(game.state === 'won' ? '500 / 500 · ФИНИШ' : `ЭТАП ${Math.min(500, level.completedStages + 1)} / 500`, 26, 60);
+        const metrics = level.getTowerMetrics();
+        const pendingKeystone = metrics.deckRelays.findIndex((ready, deck) => ready && !metrics.keystoneSolved[deck]);
+        const progress = game.state === 'won' ? 'ВЕРШИНА · ФИНИШ' : pendingKeystone >= 0
+          ? `УЗЕЛ ${pendingKeystone + 1} / ${settings.keystones}`
+          : `КРЫЛО ${Math.min(settings.stages, level.completedStages + 1)} / ${settings.stages}`;
+        context.fillText(progress, 26, 60);
         const seconds = Math.floor(observed.simulatedSeconds);
         const clock = `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, '0')}`;
         context.fillStyle = 'rgba(8, 17, 23, .88)'; context.fillRect(settings.width - 108, 14, 94, 40);
@@ -210,15 +259,27 @@ export async function runTowerVerification({out = process.env.OUT_DIR || 'qa/tow
         const result = originals.physics.call(this, dt, ...args);
         observed.physicsSteps++;
         observed.physicsSeconds += dt;
+        observed.teleports = game.teleportCount - initialTeleports;
         // Measure every physical segment. Combining two physics steps into a
         // visual-frame chord undercounts stairs, landings and direction changes.
         observed.distanceMeters += before.distanceTo(game.playerPosition);
         if (level.completedStages !== previousStage) {
           check(level.completedStages === previousStage + 1, 'Stage chronology skipped or moved backwards');
-          observed.stageEvents.push({stage: level.completedStages, frame: observed.frames, physicsStep: observed.physicsSteps,
+          const event = level.getTowerMetrics().stageEvents.at(-1);
+          check(event?.stage === level.completedStages, 'Live puzzle event must match the observed completion');
+          observed.stageEvents.push({stage: level.completedStages, id: event.id, deck: event.deck, branch: event.branch, frame: observed.frames, physicsStep: observed.physicsSteps,
             simulatedSeconds: observed.physicsSeconds, distanceMeters: observed.distanceMeters,
             player: game.playerPosition.toArray(), cargo: game.cargo.position.toArray()});
           previousStage = level.completedStages;
+        }
+        const keystones = level.getTowerMetrics().keystoneEvents;
+        if (keystones.length !== previousKeystone) {
+          check(keystones.length === previousKeystone + 1, 'Keystone chronology skipped or moved backwards');
+          const event = keystones.at(-1);
+          observed.keystoneEvents.push({deck: event.deck, id: event.id, frame: observed.frames,
+            physicsStep: observed.physicsSteps, simulatedSeconds: observed.physicsSeconds,
+            player: game.playerPosition.toArray(), cargo: game.cargo.position.toArray()});
+          previousKeystone = keystones.length;
         }
         return result;
       };
@@ -258,7 +319,7 @@ export async function runTowerVerification({out = process.env.OUT_DIR || 'qa/tow
       };
       window.__NESI_TOWER_FLUSH_FRAMES__ = async () => {
         if (batch.length) { const pending = batch; batch = []; await window.__NESI_TOWER_WRITE_BATCH__(pending); }
-        if (!middleSaved && level.completedStages >= 250) { await still('middle'); middleSaved = true; }
+        if (!middleSaved && level.completedStages >= settings.stages / 2) { await still('middle'); middleSaved = true; }
         await window.__NESI_TOWER_PROGRESS__({completedStages: level.completedStages, simulatedSeconds: observed.simulatedSeconds, distanceMeters: observed.distanceMeters, encodedFrames});
       };
       try {
@@ -298,8 +359,9 @@ export async function runTowerVerification({out = process.env.OUT_DIR || 'qa/tow
     validateTowerEvidence(evidence);
     assert.equal(result.width, TOWER_CAPTURE.width); assert.equal(result.height, TOWER_CAPTURE.height);
     await page.screenshot({path: path.join(out, 'tower-win.png')});
-    console.log('TOWER VERIFIED', JSON.stringify({sourceCommit: info.commit, stages: 500, simulatedSeconds: result.observed.simulatedSeconds,
-      activeSeconds: result.observed.activeSeconds, distanceMeters: result.observed.distanceMeters, maxIdleSeconds: result.observed.maxIdleSeconds}));
+    console.log('TOWER VERIFIED', JSON.stringify({sourceCommit: info.commit, wings: TOWER_CAPTURE.stages, simulatedSeconds: result.observed.simulatedSeconds,
+      activeSeconds: result.observed.activeSeconds, distanceMeters: result.observed.distanceMeters,
+      teleports: result.observed.teleports, maxIdleSeconds: result.observed.maxIdleSeconds}));
     return evidence;
   } catch (error) {
     const details = page ? await page.evaluate(() => window.__NESI_TOWER_LAST_FAILURE__ || null).catch(() => null) : null;

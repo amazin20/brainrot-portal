@@ -43,7 +43,7 @@ try{
   catch(error){console.log('Publication propagation:',String(error));}
   await wait(5000);
  }
- assert.equal(info?.commit,expected);assert.equal(info?.levels,FOUNDATION_INDICES.length);assert.equal(info?.version,'v42-tower-500');assert.equal(info?.artVersion,'v42-tower-500');assert.equal(info?.features.archiveRooms,CAMPAIGN.length);assert.deepEqual(info?.features.tower,{level:41,stages:500,checkpoints:false,minimumActiveSeconds:900,totalRise:1000,query:'edition=foundation&level=41'});report.build=info;
+ assert.equal(info?.commit,expected);assert.equal(info?.levels,FOUNDATION_INDICES.length);assert.equal(info?.version,'v43-tower-rebuild');assert.equal(info?.artVersion,'v43-tower-rebuild');assert.equal(info?.features.archiveRooms,CAMPAIGN.length);assert.deepEqual(info?.features.tower,{level:41,stages:18,decks:6,branchesPerDeck:3,keystones:6,checkpoints:false,minimumActiveSeconds:900,query:'edition=foundation&level=41'});report.build=info;
  report.stage='live-model-hashes';
  const response=await fetch(base+'models/runtime/manifest.json?revision='+expected);assert.ok(response.ok);const manifest=await response.json();
  assert.deepEqual(manifest.models.map(m=>m.id).sort((a,b)=>a-b),[...CAMPAIGN_ASSET_IDS]);
@@ -110,7 +110,7 @@ try{
  report.flightAudio=await runFlightAudioBrowser({browser,baseUrl:base,out:'live-evidence/flight-audio',capture:false});
  assert.equal(report.flightAudio.pass,true);
  assert.deepEqual(report.errors,[]);report.pass=true;report.stage='completed';
- console.log('LIVE VERIFIED',expected,'v42 campaign: 41 default rooms with the 500-stage Tower, archived 33 rooms; tested archive routes 1,9,10,20,24,26–33, ordinary default routes via foundation-browser and Tower via its separate full-route verifier; live model hashes and original companion at every finish');
+ console.log('LIVE VERIFIED',expected,'v43 campaign: 41 default rooms with the rebuilt eighteen-wing Tower, archived 33 rooms; tested archive routes 1,9,10,20,24,26–33, ordinary default routes via foundation-browser and Tower via its separate full-route verifier; live model hashes and original companion at every finish');
 }catch(error){
  report.error=String(error);report.errorStack=error.stack;
  if(page&&!page.isClosed()){

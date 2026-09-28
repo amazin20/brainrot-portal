@@ -85,7 +85,7 @@
       nodes.video.src = new URL(entry.src, location.href).href;
       nodes.video.poster = new URL(entry.poster, location.href).href;
       nodes.video.load();
-      nodes.message.textContent = level === 41 ? 'Башня: все 500 этапов без чекпоинтов. Непрерывное автоматическое прохождение через обычное управление, в реальном темпе игры.' : `Прохождение комнаты ${level}. Нажми Play или выбери другую комнату.`;
+      nodes.message.textContent = level === 41 ? 'Башня без чекпоинтов. Непрерывное прохождение через обычное управление и физику игры, в реальном темпе.' : `Прохождение комнаты ${level}. Нажми Play или выбери другую комнату.`;
       if (play) nodes.video.play().catch(() => {});
     } else {
       nodes.video.hidden = true;

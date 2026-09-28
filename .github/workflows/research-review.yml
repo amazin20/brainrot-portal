@@ -33,7 +33,7 @@ jobs:
           npm ci
           npm install --no-save --package-lock=false puppeteer-core@24.16.0
           npm run build
-          node scripts/stamp-build.mjs v42-tower-500
+          node scripts/stamp-build.mjs v43-tower-rebuild
       - name: Record ordinary movement and inspect the final source
         run: |
           npm run preview -- --host 127.0.0.1 --port 4173 >research-preview.log 2>&1 &

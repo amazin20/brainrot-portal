@@ -142,7 +142,7 @@ function parseArgs(argv){
 async function main(){
  const opts=parseArgs(process.argv.slice(2));
  const selected=opts.edition==='all'?editions:[opts.edition];
- // The 500-stage Tower has a dedicated complete active-run verifier and recording.
+ // The rebuilt Tower has a dedicated complete active-run verifier and recording.
  const indices={foundation:FOUNDATION_INDICES.filter(index=>index<40),classic:CAMPAIGN.map((_,i)=>i),open:OPEN_ROOM_INDICES};
  assert.ok(selected.some(edition=>indices[edition].some(index=>!opts.levels||opts.levels.has(index+1))),
   'No selectable levels match the requested edition and --levels');
@@ -205,7 +205,7 @@ async function main(){
  const output={generatedAt:new Date().toISOString(),...git(),edition:opts.edition,canonicalOnly:opts.canonicalOnly,kind:opts.kind,summary,rows,gaps,limitations:[
   'Headless physics and scripted production inputs cannot verify visibility, usability, aesthetics, performance or human discoverability.',
   'One successful path and one scripted alternative do not prove every possible route avoids softlocks or shortcuts.',
-  'This ordinary-room matrix covers foundation 1–40; the 500-stage final room 41 is verified separately. Classic 1–33 and open review 24, 28, 30–33 require an explicit edition.',
+  'This ordinary-room matrix covers foundation 1–40; the rebuilt final Tower 41 is verified separately. Classic 1–33 and open review 24, 28, 30–33 require an explicit edition.',
  ]};
  save(output);
  console.log(`Routes: ${summary.pass}/${summary.total} passed, ${summary.fail} failed; distinct-solution evidence gaps: ${gaps.length}.`);

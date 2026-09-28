@@ -36,7 +36,7 @@ assert.ok(frameCount >= 900 * TOWER_CAPTURE.fps, 'A full recording must last at 
 assert.equal(firstFrame.visualFrame, 0);
 assert.equal(firstFrame.completedStages, 0);
 assert.equal(lastFrame.state, 'won');
-assert.equal(lastFrame.completedStages, 500);
+assert.equal(lastFrame.completedStages, TOWER_CAPTURE.stages);
 // Samples begin at visual index zero. A victory between regular samples needs
 // the next 12 Hz sample, and the MP4 includes that final frame's display period.
 // Derive the exact frame count rather than mistaking this small tail for slowmo.
@@ -70,9 +70,9 @@ const report = {level: 41, title: evidence.title, sourceCommit: evidence.sourceC
   frameCount, fps: 12, width: TOWER_CAPTURE.width, height: TOWER_CAPTURE.height, durationSeconds, captureTailSeconds,
   firstFrame, lastFrame, milestones: evidence.observed.stageEvents, maxQueuedFrames: evidence.maxQueuedFrames, sha256: hash.digest('hex'), bytes,
   video: 'level-41.mp4', poster: 'level-41.jpg', stills: ['tower-start.jpg', 'tower-middle.jpg', 'tower-finish.jpg'],
-  overlay: 'Stage count and elapsed simulation time from the actual captured frame; no checkpoints.',
-  method: 'Complete ordinary-input Tower route, native WebGL canvas with factual stage/time overlay, continuous 12 fps samples from 60 Hz visuals and 120 Hz physics at 1× simulation speed. Silent. Not human playtest or hardware FPS.'};
+  overlay: 'Wing or central keystone progress and elapsed simulation time from the actual captured frame; no checkpoints.',
+  method: 'Complete ordinary-input Tower puzzle route, native WebGL canvas with factual progress/time overlay, continuous 12 fps samples from 60 Hz visuals and 120 Hz physics at 1× simulation speed. Silent. Not human playtest or hardware FPS.'};
 fs.writeFileSync(path.join(out, 'level-41.json'), JSON.stringify(report, null, 2) + '\n');
 fs.rmSync(frameDir, {recursive: true});
-console.log('TOWER VIDEO VERIFIED', JSON.stringify({sourceCommit: report.sourceCommit, stages: 500, durationSeconds: report.durationSeconds,
+console.log('TOWER VIDEO VERIFIED', JSON.stringify({sourceCommit: report.sourceCommit, wings: TOWER_CAPTURE.stages, durationSeconds: report.durationSeconds,
   frameCount, bytes, sha256: report.sha256, wallSeconds: (Date.now() - started) / 1000}));

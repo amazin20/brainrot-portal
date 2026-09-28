@@ -4,6 +4,7 @@ import {createHash} from 'node:crypto';
 import {execFileSync} from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
+import {TOWER_STAGES} from '../src/game/LabTowerLayout.js';
 
 const source=path.resolve(process.env.INPUT_DIR||'qa/walkthrough-input');
 const dist=path.resolve(process.env.DIST_DIR||'dist');
@@ -20,6 +21,7 @@ assert.equal(createHash('sha256').update(JSON.stringify(approval.originalManifes
 assert.equal(approval.originalManifest.levels.length,40);
 const hashFile=async file=>{const hash=createHash('sha256');for await(const chunk of fs.createReadStream(file))hash.update(chunk);return hash.digest('hex');};
 const width=854,height=480,fps=12;
+const keystoneIds=['spectrum','counterbalance','crosswind','inversion','braid','crown'];
 const levels=[];let totalVideoBytes=0;
 fs.mkdirSync(target,{recursive:true});
 for(const level of expected){
@@ -48,22 +50,56 @@ for(const level of expected){
  }
  if(level===41){
   assert.equal(record.reused,undefined,'The final Tower must be freshly filmed from this exact revision');
-  assert.equal(record.route.stagesCompleted,500);
-  assert.equal(record.route.stageEvents.length,500);
-  assert.equal(record.gameMetrics.totalStages,500);
-  assert.equal(record.gameMetrics.completedStages,500);
+  assert.equal(record.version,'v43-tower-rebuild','An older Tower recording cannot be used for this release');
+  assert.equal(record.route.stagesCompleted,18);
+  assert.equal(record.route.stageEvents.length,18);
+  assert.equal(record.gameMetrics.totalStages,18);
+  assert.equal(record.gameMetrics.completedStages,18);
+  assert.equal(new Set(record.gameMetrics.solvedIds).size,18);
+  assert.deepEqual(record.gameMetrics.deckRelays,[true,true,true,true,true,true]);
+  assert.equal(record.gameMetrics.relayEvents.length,6);
+  assert.equal(new Set(record.gameMetrics.relayEvents.map(event=>event.deck)).size,6);
+  assert.deepEqual(record.gameMetrics.keystoneSolved,[true,true,true,true,true,true]);
+  assert.equal(record.gameMetrics.keystoneEvents.length,6);
+  assert.equal(record.route.keystoneEvents.length,6);
+  assert.equal(record.observed.keystoneEvents.length,6);
+  assert.deepEqual(record.route.keystoneEvents.map(event=>[event.deck,event.id]),record.observed.keystoneEvents.map(event=>[event.deck,event.id]));
+  assert.deepEqual(record.gameMetrics.keystoneEvents.map(event=>[event.deck,event.id]),record.observed.keystoneEvents.map(event=>[event.deck,event.id]));
+  for(const [deck,event] of record.observed.keystoneEvents.entries()){
+   assert.equal(event.deck,deck,'The six central puzzles must be solved in ascending deck order');
+   assert.equal(event.id,keystoneIds[deck],'The central puzzle identity must match its authored deck');
+   const wings=record.observed.stageEvents.filter(wing=>wing.deck===deck);
+   const relay=record.gameMetrics.relayEvents.find(item=>item.deck===deck);
+   assert.equal(wings.length,3,'Each central puzzle needs all three authored wings');
+   assert.ok(relay&&event.simulatedSeconds>relay.seconds&&event.simulatedSeconds>Math.max(...wings.map(wing=>wing.simulatedSeconds)),
+    'The central puzzle must follow its live wing relay');
+  }
+  assert.equal(new Set(record.observed.stageEvents.map(({deck,branch})=>`${deck}:${branch}`)).size,18);
+  assert.deepEqual(new Set(record.observed.stageEvents.map(event=>event.id)),new Set(TOWER_STAGES.map(stage=>stage.id)));
+  for(const [index,event] of record.observed.stageEvents.entries()){
+   assert.equal(event.stage,index+1,'The wing counter must advance exactly once per puzzle');
+   const authored=TOWER_STAGES.find(stage=>stage.id===event.id);
+   assert.equal(event.deck,authored.deck);assert.equal(event.branch,authored.branch);
+  }
+  assert.deepEqual(record.route.stageEvents.map(event=>event.id),record.observed.stageEvents.map(event=>event.id));
+  assert.deepEqual(record.gameMetrics.solvedIds,record.observed.stageEvents.map(event=>event.id));
+  assert.ok(record.route.shots>0&&record.route.interactions>1,'Tower route must use portals and puzzle controls');
   assert.equal(record.gameMetrics.checkpoints,false);
   assert.equal(record.firstFrame.completedStages,0);
-  assert.equal(record.lastFrame.completedStages,500);
+  assert.equal(record.lastFrame.completedStages,18);
   assert.ok(record.durationSeconds>=900,'Tower video must last at least fifteen minutes');
-  assert.ok(record.observed.activeSeconds>=900,'Tower must contain fifteen minutes of actual movement');
-  assert.ok(record.observed.movingSeconds>=900,'Tower may not replace fifteen movement minutes with stationary aiming');
+  assert.ok(record.observed.activeSeconds>=900,'Tower must contain fifteen minutes of movement or aiming');
+  assert.ok(record.route.activeInputSeconds>=900,'Tower input route must actively solve puzzles for fifteen minutes');
+  assert.ok(record.observed.movingSeconds>0,'Tower video must show physical movement');
   assert.ok(record.observed.simulatedSeconds>=900);
   assert.ok(Math.abs(record.durationSeconds-record.observed.simulatedSeconds)<=1,'Video may not be slowed or padded');
-  assert.ok(record.observed.distanceMeters>2500,'Tower recording must traverse the actual course');
+  assert.ok(record.observed.distanceMeters>90,'Tower recording must traverse all eighteen physical wings');
   assert.ok(record.observed.maxIdleSeconds<=5,'Tower recording contains a prolonged idle interval');
+  assert.ok(record.route.maxIdleSeconds<=5&&record.route.maxNoInputSeconds<=5,'Tower input route contains a prolonged idle interval');
   for(const key of ['resetCalls','respawnCalls','cargoResetCalls'])assert.equal(record.observed[key],0,`Tower ${key}`);
-  assert.equal(record.observed.stageEvents.length,500);
+  assert.equal(record.observed.stageEvents.length,18);
+  assert.ok(record.observed.teleports>0,'The Tower recording must include a real portal transfer');
+  assert.equal(record.gameMetrics.teleports,record.observed.teleports);
  }
  assert.equal(record.fps,fps);assert.equal(record.width,width);assert.equal(record.height,height);
  assert.ok(Number.isInteger(record.frameCount)&&record.frameCount>60);
@@ -92,8 +128,9 @@ for(const level of expected){
   poster:`walkthroughs/${record.poster}`,durationSeconds:record.durationSeconds,
   width,height,fps,bytes:movieBytes,sha256:record.sha256,sourceCommit:record.sourceCommit,
   ...(record.reused?{reused:true,provenance:record.provenance}:{continuous:true}),
-  ...(level===41?{stages:500,checkpoints:false,activeSeconds:record.observed.activeSeconds,movingSeconds:record.observed.movingSeconds,
-   maxIdleSeconds:record.observed.maxIdleSeconds,distanceMeters:record.observed.distanceMeters}:{} )});
+  ...(level===41?{stages:18,decks:6,branchesPerDeck:3,keystones:6,checkpoints:false,activeSeconds:record.observed.activeSeconds,
+   activeInputSeconds:record.route.activeInputSeconds,movingSeconds:record.observed.movingSeconds,
+   teleports:record.observed.teleports,maxIdleSeconds:record.observed.maxIdleSeconds,distanceMeters:record.observed.distanceMeters}:{} )});
 }
 // GitHub Pages published sites must stay substantially under one gigabyte.
 // Keep a deliberately strict video budget: a future bloated level fails the

@@ -1,4 +1,4 @@
-/** The numbered campaign ends with the continuous 500-stage Tower.
+/** The numbered campaign ends with the continuous final Tower.
  * Explicit archive links and unqualified later bookmarks retain their old meaning. */
 export const FOUNDATION_INDICES=Object.freeze(Array.from({length:41},(_,index)=>index));
 export function readFoundationEdition(query){

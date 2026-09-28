@@ -1,251 +1,680 @@
 import * as THREE from 'three';
 import {
- TOWER_STAGE_COUNT,TOWER_SIDE,TOWER_RISE,TOWER_HALF_WIDTH,TOWER_ENTRY_S,TOWER_ENTRY_MAX_S,TOWER_EXIT_S,
- TOWER_MANDATORY_DISTANCE,TOWER_MINIMUM_SECONDS,TOWER_STAGES,towerPoint,towerCoordinates,
+ TOWER_STAGE_COUNT,TOWER_DECK_COUNT,TOWER_RISE,TOWER_STAGES,TOWER_DECKS,
+ towerPoint,towerCoordinates,
 } from './LabTowerLayout.js';
+import {TOWER_ROUTE_OBSTACLES,towerDeckRoute} from './LabTowerRoutes.js';
+import {createTowerMechanism} from './LabTowerMechanisms.js';
+import {createTowerKeystones,KEYSTONE_FEED_MODES,KEYSTONE_SPECS} from './LabTowerKeystones.js';
+import {decorateTower} from './LabTowerArt.js';
 
 const V=(x=0,y=0,z=0)=>new THREE.Vector3(x,y,z);
-const clamp=THREE.MathUtils.clamp;
+const UP=V(0,1,0);
+const near=(a,b,r)=>a.distanceToSquared(b)<r*r;
+const feedLabel=Object.freeze({beamA:'луч A',beamB:'луч B',airA:'воздушный поток',
+ cargo:'груз',gravityCargo:'груз в подъёмнике',kinetic:'разгон',transit:'проход через портал'});
 export const TOWER_SPEC=Object.freeze({
- id:'tower-of-five-hundred',name:'БАШНЯ ПЯТИСОТ',title:'БАШНЯ ПЯТИСОТ',
- description:'500 последовательных испытаний вокруг километровой шахты. Друг поднимается вместе с тобой. Ошибка возвращает к подножию. Контрольных точек нет.',
- assets:[1,2,11],accent:0x57d3d3,
- hints:['Цветные напольные контакты питают ближайшую створку. Пройди по каждому контакту.','Поднимайся по лестницам; низкую поперечную балку нужно перепрыгнуть. Друг должен быть рядом.','Это одно непрерывное восхождение: перезапуск или падение обнуляет все 500 этапов.'],
+ id:'tower-of-the-breach',name:'БАШНЯ РАЗЛОМА',title:'БАШНЯ РАЗЛОМА',
+ description:'Шесть ярусов, 18 машинных крыльев и шесть центральных узлов. Исследуй ветви каждого яруса в своём порядке, затем свяжи их механизмы в центре и открой лестницу. Ошибка возвращает к подножию; контрольных точек нет.',
+ assets:[1,2,11],accent:0x61d5d4,
+ hints:[
+  'Следи за проводами от механизмов к внутренней створке. Свет и воздух проходят сквозь настоящую пару порталов; для выстрела сначала поставь друга.',
+  'В каждом ярусе три машинных крыла. Открытые створки остаются открытыми до конца попытки; порядок обхода выбираешь сам.',
+  'После трёх крыльев соедини их выходы в центральном узле. Только его решение откроет южный переход; коронная комната находится за восточным шлюзом боковой галереи. Падение и рестарт обнуляют всю башню.',
+ ],
 });
 
-/** One physical, continuous tower. The nearby collision window is streamed,
- * but the route and stage state are fixed. No stage can respawn the player.
- * Stage progression observes only input-driven production physics positions.
+/** A persistent, physical world: all rooms stay built so a portal, a beam or
+ * the one original companion never refers to an unloaded collision surface.
+ * Eighteen real puzzle rooms are bounded enough to keep this cheaper and more
+ * robust than streaming the old 500 near-identical corridor segments.
  */
 export function buildTowerLevel(game,index=40){
- const root=new THREE.Group();root.name='The final tower — one continuous 500-stage ascent';game.scene.add(root);
- const unit=new THREE.BoxGeometry(1,1,1);
- const colors=Array.from({length:25},(_,i)=>new THREE.Color().setHSL((.49+i*.071)%1,.56,.57));
- const matte=(color,roughness=.72,metalness=.12)=>new THREE.MeshStandardMaterial({color,roughness,metalness});
- const m={shell:matte(0x263c4c),core:matte(0x314c5b),deck:matte(0xa7bfc6,.86,.05),
-  step:matte(0xc5d6d6),trim:matte(0x17313f,.52,.38),ivory:matte(0xe8e9dc),
-  glass:matte(0x3e7181,.45,.28),pressed:new THREE.MeshBasicMaterial({color:0x86f4b3}),
-  waiting:new THREE.MeshBasicMaterial({color:0xffc16e}),lamp:new THREE.MeshBasicMaterial({color:0xffefd0}),
-  accents:colors.map(color=>matte(color,.54,.22)),glows:colors.map(color=>new THREE.MeshBasicMaterial({color})),
+ const root=new THREE.Group();root.name='The final tower / connected machine wings';game.scene.add(root);
+ const unit=new THREE.BoxGeometry(1,1,1),materials=[];
+ const mat=(color,roughness=.69,metalness=.21,emissive=0)=>{
+  const m=new THREE.MeshStandardMaterial({color,roughness,metalness,emissive,emissiveIntensity:emissive?.18:0});materials.push(m);return m;
  };
+ const glowing=color=>{const m=new THREE.MeshBasicMaterial({color});materials.push(m);return m;};
+ const palettes=[0x44c2d8,0xffb05d,0xa59afa,0x73d3a9,0xe99ab4,0xf4d66e].map(c=>({accent:mat(c,.43,.35),glow:glowing(c)}));
+ const m={shell:mat(0x263b48),dark:mat(0x172f3c),floor:mat(0x9bb6c1,.84,.08),step:mat(0xb8d0d0,.78,.10),
+  portal:mat(0xf2f5e8,.54,.07,0x515f5b),glass:mat(0x345a6c,.32,.25),ivory:mat(0xd5e7e7),
+  amber:glowing(0xffbf71),mint:glowing(0x88ffbc),red:glowing(0xff7070),light:glowing(0xfff6d9)};
+ m.trim=m.dark;
  const background=game.scene.background?.clone?.()??game.scene.background;
- const globalObjects={colliders:[],floors:[],meshes:[]};
- const resident=new Map();const states=Array.from({length:TOWER_STAGE_COUNT},()=>({entered:false,plates:[],opened:false}));
- let completed=0,won=false,disposed=false,elapsed=0,activeSeconds=0,distanceMeters=0,idle=0,longestIdle=0,failures=0;
- let lastPosition=null,lastCompletion=0;const stageEvents=[];
+ const fog=game.scene.fog?.clone?.()??game.scene.fog;
  const lightPose=game.keyLight?{position:game.keyLight.position.clone(),target:game.keyLight.target.position.clone()}:null;
- game.scene.background=new THREE.Color(0x354e60);
- game.scene.fog=new THREE.Fog(0x354e60,65,170);
+ game.scene.background=new THREE.Color(0x334b58);game.scene.fog=new THREE.Fog(0x334b58,65,175);
+ const all={meshes:[],colliders:[],floors:[]},rooms=[],stairs=[],keystonePanels=[];
+ const crownGeometries=[];let crownCore=null,serviceGate=null;
+ const globalOwner={group:root,meshes:[],colliders:[],floors:[]};
+ const stageStates=TOWER_STAGES.map(()=>({signals:Object.create(null),solved:false,gateOpen:false,
+  gateProgress:0,controlOn:false,entered:false,latestBeam:false,latestAir:false,cargoContact:false}));
+ const relays=Array(TOWER_DECK_COUNT).fill(false),relayEvents=[],stageEvents=[];
+ const keystoneSolved=Array(TOWER_DECK_COUNT).fill(false),keystoneEvents=[];
+ let completed=0,elapsed=0,activeSeconds=0,distanceMeters=0,longestIdle=0,idle=0,
+  lastPosition=null,won=false,disposed=false,failures=0,highestDeck=0,lastCompletion=0;
 
- function registerBox(owner,parent,position,size,material,{solid=true,camera=solid,aim=solid,visible=true}={}){
-  const mesh=new THREE.Mesh(unit,material);mesh.position.fromArray(position);mesh.scale.fromArray(size);
-  mesh.receiveShadow=true;mesh.visible=visible;parent.add(mesh);mesh.updateWorldMatrix(true,false);owner.meshes.push(mesh);
-  if(solid){const c={mesh,box:new THREE.Box3().setFromObject(mesh),enabled:true};owner.colliders.push(c);game.colliders.push(c);
+ function registerBox(owner,parent,position,size,material,{solid=true,camera=solid,aim=solid,visible=true,kinematic=false}={}){
+  const mesh=new THREE.Mesh(unit,material);mesh.name='Tower structural member';mesh.position.fromArray(position);mesh.scale.fromArray(size);
+  mesh.visible=visible;mesh.receiveShadow=true;parent.add(mesh);mesh.updateWorldMatrix(true,false);
+  owner.meshes.push(mesh);all.meshes.push(mesh);
+  if(solid){
+   const collider={mesh,box:new THREE.Box3().setFromObject(mesh),enabled:true,kinematic};
    if(!visible)mesh.userData.collisionProxy=true;
-   if(game.physics&&!game.physics.solids.has(mesh.uuid))game.physics.addStaticBox(mesh.uuid,c.box);
+   owner.colliders.push(collider);all.colliders.push(collider);game.colliders.push(collider);
+   if(game.physics&&!game.physics.solids.has(mesh.uuid))game.physics.addStaticBox(mesh.uuid,collider.box,{kinematic});
   }
   if(camera)game.cameraBlockers.push(mesh);if(aim)game.aimBlockers.push(mesh);
   return mesh;
  }
- function box(stage,s,n,y,width,height,depth,material,options){
-  const p=towerPoint(stage.definition,s,n,stage.definition.baseY+y),[dx,dz]=stage.definition.direction;
-  return registerBox(stage,stage.group,p,[Math.abs(dx)*depth+Math.abs(dz)*width,height,Math.abs(dz)*depth+Math.abs(dx)*width],material,options);
+ function worldBox(owner,position,size,material,options){return registerBox(owner,owner.group??root,position,size,material,options);}
+ function floor(owner,x0,x1,z0,z1,y,material=m.floor){
+  const mesh=worldBox(owner,[(x0+x1)/2,y-.2,(z0+z1)/2],[x1-x0,.4,z1-z0],material);
+  const f={minX:x0,maxX:x1,minZ:z0,maxZ:z1,y,mesh,enabled:true};game.floors.push(f);owner.floors.push(f);all.floors.push(f);return mesh;
  }
- function floor(stage,s0,s1,y,width=TOWER_HALF_WIDTH*2,material=m.deck){
-  const mesh=box(stage,(s0+s1)/2,0,y-.22,width,.44,s1-s0,material);
-  const b=stage.colliders.at(-1).box;
-  const f={minX:b.min.x,maxX:b.max.x,minZ:b.min.z,maxZ:b.max.z,y:stage.definition.baseY+y,mesh,enabled:true};
-  game.floors.push(f);stage.floors.push(f);return mesh;
+ function localBox(room,s,n,y,along,height,across,material,options){
+  const [dx,dz]=room.definition.direction,p=towerPoint(room.definition,s,n,room.definition.baseY+y);
+  return worldBox(room,p,[Math.abs(dx)*along+Math.abs(dz)*across,height,Math.abs(dz)*along+Math.abs(dx)*across],material,options);
  }
- // A sealed architectural shaft, rather than disconnected floating platforms.
- // The global walls remain physical while floor modules stream with the player.
- const top=TOWER_STAGE_COUNT*TOWER_RISE+8,center=(top-2)/2;
- for(const [p,s] of [
-  [[-2.5,center,-7],[.6,top+2,19.6]],[[16.5,center,-7],[.6,top+2,19.6]],
-  [[7,center,2.5],[19.6,top+2,.6]],[[7,center,-16.5],[19.6,top+2,.6]],
+ function localFloor(room,s0,s1,n0,n1,y,material=m.floor){
+  const corners=[towerPoint(room.definition,s0,n0),towerPoint(room.definition,s0,n1),
+   towerPoint(room.definition,s1,n0),towerPoint(room.definition,s1,n1)];
+  floor(room,Math.min(...corners.map(p=>p[0])),Math.max(...corners.map(p=>p[0])),
+   Math.min(...corners.map(p=>p[2])),Math.max(...corners.map(p=>p[2])),room.definition.baseY+y,material);
+ }
+ function localSide(room,n,s0,s1,y0,y1,material=m.shell,options){
+  return localBox(room,(s0+s1)/2,n,(y0+y1)/2,s1-s0,y1-y0,.32,material,options);
+ }
+ function panel(room,s,sign,key){
+  const def=room.definition,y=def.baseY+2.4;
+  // The registered front plane lies 16 cm ahead of the solid backing.
+  const mesh=localBox(room,s,sign*6.2,2.4,4.4,4.6,.32,m.portal);
+  mesh.name=`${def.id} / ${key} / ivory portal face`;
+  const [dx,dz]=def.direction,normal=V(sign*dz,0,-sign*dx);
+  const center=V(...towerPoint(def,s,sign*6.04,y));
+  game.markPortalSurface(mesh,center,normal,2.2,2.3);
+  mesh.userData.portalColliderId=mesh.uuid;
+  mesh.userData.towerWing=def.id;
+  room.panels[key]=mesh;
+  for(const offset of [-2.24,2.24])localBox(room,s+offset,sign*6.015,2.4,.065,4.75,.025,palettes[def.deck].glow,{solid:false,camera:false,aim:false});
+  localBox(room,s,sign*6.2,6.3,4.4,3.2,.32,m.shell);
+  localBox(room,s,sign*6.2,.05,4.4,.10,.32,m.shell);
+  return mesh;
+ }
+ function makeKeystonePanel(deck,key,position,normal,width=4.4,height=4.6){
+  const front=V(...position),n=V(...normal).normalize(),center=front.clone().addScaledVector(n,-.16);
+  if(Math.abs(n.y)>.001||Math.max(Math.abs(n.x),Math.abs(n.z))<.999)throw new Error('Tower hub panel needs one axis-aligned wall face');
+  const size=Math.abs(n.x)>.9?[.32,height,width]:[width,height,.32];
+  const mesh=worldBox(globalOwner,center.toArray(),size,m.portal);
+  mesh.name=`Tower keystone ${deck+1} / ${key} / ivory portal face`;
+  game.markPortalSurface(mesh,front,n,width/2,height/2);
+  mesh.userData.portalColliderId=mesh.uuid;mesh.userData.towerKeystone=deck;
+  keystonePanels.push(mesh);return mesh;
+ }
+ function gate(room,s,material){
+  const panels=[];
+  for(const sign of [-1,1]){
+   const leaf=localBox(room,s,sign*3.05,3.72,.20,7.43,6.1,material,{solid:false,camera:false,aim:false});
+   const stripe=localBox(room,s-.12,sign*3.05,4.18,.035,.08,5.8,palettes[room.definition.deck].glow,{solid:false,camera:false,aim:false});
+   panels.push({mesh:leaf,sign,n:3.05,y:3.72},{mesh:stripe,sign,n:3.05,y:4.18});
+  }
+  const proxy=localBox(room,s,0,3.76,.28,7.52,12.25,m.dark,{visible:false});
+  const collider=room.colliders.at(-1);return {panels,proxy,collider,progress:0,s,room};
+ }
+ function setGate(gate,progress){
+  gate.progress=progress;
+  const {room,s}=gate;
+  for(const part of gate.panels){
+   const p=towerPoint(room.definition,s,part.sign*(part.n+progress*6.4),room.definition.baseY+part.y);
+   part.mesh.position.fromArray(p);
+  }
+  const enabled=progress<.85;
+  if(gate.collider.enabled!==enabled){gate.collider.enabled=enabled;game.physics?.setStaticEnabled(gate.proxy.uuid,enabled);}
+ }
+ function navigableGallery(room){
+  const def=room.definition,c=palettes[def.deck],offset=def.reactorN;
+  // These walls change a room's usable cross-section. Every opening is a
+  // physical passage at least 4 m wide, including the double switchbacks.
+  for(const baffle of TOWER_ROUTE_OBSTACLES[def.id]??[]){
+   localBox(room,baffle.s,baffle.n,baffle.height/2,baffle.along,baffle.height,baffle.across,m.shell);
+   localBox(room,baffle.s-.03,baffle.n,baffle.height-.04,baffle.along+.04,.08,baffle.across+.06,c.accent,{solid:false,camera:false,aim:false});
+   const gap=baffle.n<0?4.4:-4.4;
+   localBox(room,baffle.s,gap,.025,.09,.05,2.4,c.glow,{solid:false,camera:false,aim:false});
+  }
+  // An offset reactor gallery gives each wing a differently shaped final
+  // chamber. The player can inspect the relay through the open central aisle.
+  if(Math.abs(offset)>2){
+   const opposite=-Math.sign(offset);
+   localBox(room,37.2,opposite*5.0,2.25,4.8,4.5,2.05,m.dark);
+   for(const s of [31,36])localBox(room,s,Math.sign(offset)*5.72,4.3,.22,6.5,.22,c.accent,{solid:false,camera:false,aim:false});
+  }
+ }
 
- ])registerBox(globalObjects,root,p,s,m.shell);
- registerBox(globalObjects,root,[7,center,-7],[9.55,top+2,9.55],m.core,{visible:false});
- const shaftGlass=new THREE.MeshStandardMaterial({color:0x80c8df,transparent:true,opacity:.16,roughness:.25,metalness:.1,depthWrite:false,side:THREE.DoubleSide});
- for(const [p,s]of [[[2.226,center,-7],[.018,top+2,9.54]],[[11.774,center,-7],[.018,top+2,9.54]],[[7,center,-2.226],[9.54,top+2,.018]],[[7,center,-11.774],[9.54,top+2,.018]]])registerBox(globalObjects,root,p,s,shaftGlass,{solid:false});
- for(const x of [3.0,11.0])for(const z of [-3.0,-11.0])registerBox(globalObjects,root,[x,center,z],[.34,top+2,.34],m.core,{solid:false});
- for(const x of [3.22,10.78])for(const z of [-3.22,-10.78])registerBox(globalObjects,root,[x,center,z],[.07,top+2,.07],m.glows[0],{solid:false});
- const shaftRings=new THREE.InstancedMesh(unit,m.ivory,126*4),ringMatrix=new THREE.Matrix4();
- for(let ring=0;ring<126;ring++)for(let side=0;side<4;side++){const positions=[[7,ring*8-1,-3],[7,ring*8-1,-11],[3,ring*8-1,-7],[11,ring*8-1,-7]],size=side<2?[8.3,.18,.18]:[.18,.18,8.3];ringMatrix.compose(V(...positions[side]),new THREE.Quaternion(),V(...size));shaftRings.setMatrixAt(ring*4+side,ringMatrix);}
- shaftRings.computeBoundingSphere();root.add(shaftRings);
- // Repeated shaft mullions share one geometry; no uploaded actor is changed.
- for(const [x,z]of [[-2.13,2.13],[16.13,2.13],[-2.13,-16.13],[16.13,-16.13]])
-  registerBox(globalObjects,root,[x,center,z],[.13,top+2,.13],m.lamp,{solid:false});
+ function buildWing(definition){
+  const group=new THREE.Group();group.name=`Wing ${definition.number} / ${definition.name}`;root.add(group);
+  const room={definition,group,meshes:[],colliders:[],floors:[],panels:{},mechanism:null,gate:null,
+   glow:null,plate:null,reactor:null,control:null};
+  const c=palettes[definition.deck],state=stageStates[definition.index];
+  localFloor(room,0,42,-6.25,6.25,0);
+  localBox(room,21,0,7.72,42,.18,12.75,m.shell);
+  if(definition.deck===0&&definition.branch===2){
+   localSide(room,6.2,0,1.3,0,7.6);localSide(room,6.2,4.1,5.8,0,7.6);
+   localSide(room,6.2,1.3,4.1,3.8,7.6);
+  }else localSide(room,6.2,0,5.8,0,7.6);
+  panel(room,8,1,'input');
+  localSide(room,6.2,10.2,42,0,7.6);
+  if(definition.deck===0&&definition.branch===0){
+   localSide(room,-6.2,0,1.3,0,7.6);localSide(room,-6.2,4.1,11.8,0,7.6);
+   localSide(room,-6.2,1.3,4.1,3.8,7.6);
+  }else localSide(room,-6.2,0,11.8,0,7.6);
+  panel(room,14,-1,'outputA');
+  localSide(room,-6.2,16.2,17.8,0,7.6);
+  panel(room,20,-1,'outputB');
+  localSide(room,-6.2,22.2,42,0,7.6);
+  localBox(room,42,0,3.8,.35,7.6,12.7,m.shell);
+  room.gate=gate(room,28,c.accent);
+  // The tray receives the *real* rigid companion; it never spawns a stand-in.
+  localBox(room,5.1,0,.018,4.0,.036,4.0,m.dark,{solid:false,camera:false,aim:false});
+  room.plate=localBox(room,5.1,0,.044,3.8,.018,3.8,m.amber,{solid:false,camera:false,aim:false});
+  // Console is offset from its reachable standing point (s=5,n=-2): the
+  // player cannot walk through its visible, collidable housing.
+  room.control=localBox(room,5,-3.5,.65,.92,1.3,.85,c.accent);
+  localBox(room,5,-3.5,1.31,.74,.055,.70,m.amber,{solid:false,camera:false,aim:false});
+  localBox(room,38,definition.reactorN,.018,3.6,.036,3.6,m.dark,{solid:false,camera:false,aim:false});
+  room.reactor=localBox(room,38,definition.reactorN,.043,3.25,.025,3.25,c.glow,{solid:false,camera:false,aim:false});
+  for(const side of [-1.85,1.85])localBox(room,38,definition.reactorN+side,1.25,.22,2.5,.22,m.ivory,{solid:false,camera:false,aim:false});
+  for(const s of [3,27,35])for(const n of [-5.8,5.8]){
+   localBox(room,s,n,6.95,.20,.35,.20,m.ivory,{solid:false,camera:false,aim:false});
+   localBox(room,s,n,6.45,.11,.60,.11,c.glow,{solid:false,camera:false,aim:false});
+  }
+  navigableGallery(room);
+  room.mechanism=createTowerMechanism({game,definition,group,
+   box:(position,size,material,options={})=>worldBox(room,position,size,material,{solid:false,camera:false,aim:false,...options}),
+   materials:{...m,accent:c.accent,glow:c.glow}});
+  rooms.push(room);
+  if(state.gateOpen)setGate(room.gate,1);return room;
+ }
 
- function buildStage(i){
-  const definition=TOWER_STAGES[i],state=states[i],group=new THREE.Group();group.name=`Tower stage ${i+1}: ${definition.pattern}`;root.add(group);
-  const stage={definition,state,group,colliders:[],floors:[],meshes:[],plateMeshes:[],gatePanels:[],gateProgress:state.opened?1:0};
-  const accent=m.accents[definition.sector],glow=m.glows[definition.sector];
-  // The eight risers are 25 cm: below the production 37 cm step-up limit.
-  floor(stage,0,7.8,0);
-  for(let k=0;k<8;k++)floor(stage,7.8+k*.4,7.8+(k+1)*.4,(k+1)*.25,4.4,k%2?m.step:m.deck);
-  floor(stage,11,14,2);
-  // The square corner landing joins consecutive sides at exactly equal height.
-  floor(stage,-2.2,0,0);
-  // These solid ceiling trays prevent the next winding from being reached by
-  // jumping. Their undersides are well above the 2.4 m character on the top step.
-  box(stage,7,0,5.65,4.42,.32,9.55,m.shell);
-  for(const n of [-2.12,2.12]){
-   box(stage,7,n,5.39,.14,.12,9.25,m.ivory,{solid:false});
-   box(stage,7,n,5.30,.065,.035,9.0,m.lamp,{solid:false});
-   box(stage,4.15,n,.16,.09,.28,6.7,accent,{solid:false});
-   box(stage,12.05,n,2.16,.09,.28,2.3,accent,{solid:false});
+ function deckShell(deck){
+  const y=deck*TOWER_RISE,c=palettes[deck];
+  floor(globalOwner,-10,10,-10,10,y);
+  if(deck===TOWER_DECK_COUNT-1)worldBox(globalOwner,[0,y+7.73,0],[20,.18,20],m.shell);
+  const wall=(position,size)=>worldBox(globalOwner,position,size,m.shell);
+  // Three wing mouths and two different south openings: one for climbing,
+  // one for returning from the previous storey's upper gallery.
+  for(const z of [-8,8]){
+   wall([9.86,y+3.8,z],[.28,7.6,4]);wall([-9.86,y+3.8,z],[.28,7.6,4]);
   }
-  // Recessed folded panels give each circuit a readable material rhythm.
-  for(const s of [2.8,5.0,7.2,9.4,11.6])for(const n of [-2.185,2.185]){
-   box(stage,s,n,3.6,.035,1.45,1.75,accent,{solid:false});
-   box(stage,s,n,4.41,.055,.07,1.8,m.ivory,{solid:false});
+  for(const x of [-8,8])wall([x,y+3.8,-9.86],[4,7.6,.28]);
+  wall([-7,y+3.8,9.86],[6,7.6,.28]);
+  if(deck===0)wall([7,y+3.8,9.86],[6,7.6,.28]);
+  else wall([4.9,y+3.8,9.86],[.55,7.6,.28]);
+  // The crown leaves by the upper return gallery at x=8. Close the central
+  // mouth above the previous flight rather than flooring over its headroom.
+  if(deck===TOWER_DECK_COUNT-1)wall([.25,y+3.8,9.86],[9.5,7.6,.28]);
+  // A different mechanical colour from each relay runs along the central
+  // hub's actually powered cables. They are recessed, never white targets.
+  for(let branch=0;branch<3;branch++){
+   const orientation=branch===0?[6.4,.09,0]:branch===1?[-6.4,.09,0]:[0,.09,-6.4];
+   worldBox(globalOwner,[orientation[0],y+orientation[1],orientation[2]],branch===2?[.15,.025,7]:[7,.025,.15],c.glow,{solid:false,camera:false,aim:false});
   }
-  // Gate frame and leaves are visibly tied to the live floor contacts.
-  const gateS=6.8;
-  for(const n of [-2.05,2.05])box(stage,gateS,n,2.45,.18,4.9,.42,m.trim);
-  box(stage,gateS,0,4.98,4.3,.18,.46,accent);
-  for(const side of [-1,1]){
-   const panel=box(stage,gateS,side*1.025,2.42,2.04,4.82,.13,m.ivory,{solid:false});
-   const stripe=box(stage,gateS-.083,side*1.025,3.60,1.8,.19,.025,glow,{solid:false});
-   stage.gatePanels.push({mesh:panel,side,s:gateS,y:2.42},{mesh:stripe,side,s:gateS-.083,y:3.60});
+  for(const x of [-8.9,8.9])for(const z of [-8.9,8.9]){
+   worldBox(globalOwner,[x,y+3.8,z],[.28,7.5,.28],m.ivory,{solid:false,camera:false,aim:false});
+   worldBox(globalOwner,[x,y+7.15,z],[.10,.22,.10],c.glow,{solid:false,camera:false,aim:false});
   }
-  stage.gateProxy=box(stage,gateS,0,2.42,4.0,4.84,.18,m.trim,{visible:false});
-  stage.gateCollider=stage.colliders.at(-1);
-  stage.gateCollider.enabled=!state.opened;
-  if(game.physics)game.physics.setStaticEnabled(stage.gateProxy.uuid,!state.opened);
-  definition.plates.forEach((plate,p)=>{
-   box(stage,plate.s,plate.n,.032,1.22,.064,1.08,m.trim,{solid:false});
-   const lit=box(stage,plate.s,plate.n,.068,1.04,.025,.9,state.plates[p]?m.pressed:m.waiting,{solid:false});
-   stage.plateMeshes.push(lit);
-   // The cable lies in a recessed edge raceway, away from the walking surface.
-   box(stage,(plate.s+gateS)/2,plate.n,.10,.032,.022,gateS-plate.s,m.waiting,{solid:false});
-  });
-  for(const obstacle of definition.obstacles){
-   box(stage,obstacle.s,obstacle.n,obstacle.height/2,obstacle.width,obstacle.height,obstacle.depth,accent);
-   box(stage,obstacle.s,obstacle.n,obstacle.height+.02,obstacle.width,.04,obstacle.depth+.04,m.ivory,{solid:false});
-   if(obstacle.height<1)box(stage,obstacle.s-.02,obstacle.n,obstacle.height+.045,obstacle.width-.12,.024,.13,m.waiting,{solid:false});
-  }
-  // Readable end seam and elevated landing: an observed stage finish, never a
-  // checkpoint. The next winding is still part of the same physical level.
-  box(stage,TOWER_EXIT_S,0,2.018,4.12,.036,.14,glow,{solid:false});
-  box(stage,11.75,0,5.40,2.8,.055,.15,m.lamp,{solid:false});
-  if(i===TOWER_STAGE_COUNT-1){
-   const gold=m.glows[24];
-   for(const n of [-1.86,1.86]){
-    box(stage,13.35,n,3.85,.20,3.7,.34,m.ivory,{solid:false});
-    box(stage,13.13,n,3.85,.065,3.45,.055,gold,{solid:false});
+ }
+ function buildStair(deck){
+  const y=deck*TOWER_RISE,group=new THREE.Group();group.name=`Tower stair ${deck+1}`;root.add(group);
+  const owner={group,meshes:[],colliders:[],floors:[]};
+  if(deck<TOWER_DECK_COUNT-1)floor(owner,-4.0,4.0,9.75,11.2,y);
+  if(deck===TOWER_DECK_COUNT-1){
+   // Deck 5 already has the deck-4 return gallery x=5.1..11.2 at y=40.
+   // A second central floor here would become a low ceiling above the last
+   // ascending flight and trap the player beneath its treads. Instead a
+   // separately gated crown chamber branches east of that clear gallery.
+   floor(owner,11.0,21.0,24,36.8,y);
+   worldBox(owner,[21.16,y+3.8,30.4],[.32,7.6,13.1],m.shell);
+   worldBox(owner,[16.1,y+3.8,23.85],[10.2,7.6,.3],m.shell);
+   worldBox(owner,[16.1,y+3.8,36.95],[10.2,7.6,.3],m.shell);
+   worldBox(owner,[16.1,y+7.72,30.4],[10.2,.18,13.1],m.shell);
+   worldBox(owner,[17,y+.025,30],[3.5,.05,3.5],m.dark,{solid:false,camera:false,aim:false});
+   // The last goal has a visible six-feed machine, suspended clear of both
+   // travellers. Its lit core follows the real sixth keystone, not a timer.
+   const crownMaterial=mat(0x7f6952,.24,.63,0x4f311a);
+   const orbGeometry=new THREE.IcosahedronGeometry(.70,1),ringGeometry=new THREE.TorusGeometry(1.34,.065,9,48);
+   const floorRingGeometry=new THREE.TorusGeometry(1.53,.07,9,48);
+   const cableGeometry=new THREE.CylinderGeometry(.035,.035,1,7);
+   crownGeometries.push(orbGeometry,ringGeometry,floorRingGeometry,cableGeometry);
+   const assembly=new THREE.Group();assembly.name='Tower crown / sixfold core';
+   assembly.position.set(17,y+5.65,30);group.add(assembly);
+   const orb=new THREE.Mesh(orbGeometry,crownMaterial);orb.name='Original companion crown receiver';assembly.add(orb);
+   const rings=[];
+   for(const [axis,angle]of [['x',0],['y',Math.PI/3],['z',Math.PI/5]]){
+    const ring=new THREE.Mesh(ringGeometry,m.ivory);ring.rotation[axis]=angle;assembly.add(ring);rings.push(ring);
    }
-   box(stage,13.35,0,5.75,3.94,.28,.44,m.ivory,{solid:false});
-   box(stage,13.10,0,5.78,3.65,.085,.055,m.waiting,{solid:false});
-   box(stage,13.50,0,7.1,1.1,1.1,1.1,m.waiting,{solid:false});
-   box(stage,13.50,0,9.8,.13,4.2,.13,m.lamp,{solid:false});
-   box(stage,13.50,0,12.0,3.3,.12,3.3,m.lamp,{solid:false});
+   const floorRing=new THREE.Mesh(floorRingGeometry,crownMaterial);
+   floorRing.rotation.x=-Math.PI/2;floorRing.position.set(17,y+.085,30);group.add(floorRing);
+   for(let i=0;i<6;i++){
+    const angle=i*Math.PI/3;
+    const a=V(17+Math.cos(angle)*3.1,y+7.46,30+Math.sin(angle)*3.1);
+    const b=V(17+Math.cos(angle)*.72,y+5.9,30+Math.sin(angle)*.72);
+    const cable=new THREE.Mesh(cableGeometry,palettes[i].glow);
+    cable.position.copy(a).add(b).multiplyScalar(.5);
+    cable.quaternion.setFromUnitVectors(UP,b.clone().sub(a).normalize());
+    cable.scale.y=a.distanceTo(b);group.add(cable);
+   }
+   crownCore={assembly,rings,material:crownMaterial};
+  }else{
+   const count=32,length=24/count;
+   for(let i=0;i<count;i++){
+    const z0=11.2+i*length,z1=z0+length,top=y+(i+1)*.25;
+    floor(owner,-4,4,z0,z1,top,i%2?m.step:m.floor);
+   }
+   // One continuous pair of real collision walls per stair. Their upper
+   // edge meets the next storey instead of overlapping its return corridor.
+   for(const x of [-4.25,4.25])worldBox(owner,[x,y+4,21.9],[.30,8,22.5],m.shell);
+   floor(owner,-4.0,11.2,35.2,36.8,y+8);
+   floor(owner,5.1,11.2,9.5,36.8,y+8);
+   for(const x of [5,11.3])worldBox(owner,[x,y+9.85,20.8],[.22,3.7,22.7],m.shell);
+   worldBox(owner,[8.2,y+11.2,21],[5.9,.16,24],m.shell);
   }
-  resident.set(i,stage);setGate(stage,stage.gateProgress);batchStage(stage);return stage;
+  const leaves=[];
+  const crown=deck===TOWER_DECK_COUNT-1;
+  for(const sign of [-1,1]){
+   const pos=crown?[12,y+3.78,34.3+sign*1.1]:[sign*2.04,y+3.78,11.45];
+   const leaf=worldBox(owner,pos,crown?[.30,7.55,2.2]:[4.08,7.55,.30],palettes[deck].accent,{solid:false,camera:false,aim:false});
+   worldBox(owner,crown?[12,y+3.8,34.3+sign*2.22]:[sign*3.95,y+3.8,11.45],
+    crown?[.42,7.55,.18]:[.18,7.55,.42],m.dark);
+   leaves.push({mesh:leaf,sign,pos});
+  }
+  const proxy=worldBox(owner,crown?[12,y+3.76,34.3]:[0,y+3.76,11.45],
+   crown?[.31,7.52,4.42]:[7.85,7.52,.31],m.dark,{visible:false});
+  const gateCollider=owner.colliders.at(-1);
+  const stair={deck,owner,leaves,proxy,collider:gateCollider,progress:0,crown};stairs.push(stair);
+  for(const z of [15,24,33])for(const x of crown?[5.3,10.9]:[-3.9,3.9]){
+   worldBox(owner,[x,y+3,z],[.08,.30,.4],palettes[deck].glow,{solid:false,camera:false,aim:false});
+  }
+  return stair;
  }
- function batchStage(stage){
-  const dynamic=new Set([...stage.plateMeshes,...stage.gatePanels.map(p=>p.mesh)]),groups=new Map();
-  for(const mesh of stage.meshes)if(mesh.visible&&!dynamic.has(mesh)){
-   if(!groups.has(mesh.material))groups.set(mesh.material,[]);groups.get(mesh.material).push(mesh);
+ function setStairGate(stair,progress){
+  stair.progress=progress;
+  for(const {mesh,sign,pos}of stair.leaves)mesh.position.set(
+   pos[0]+(stair.crown?0:sign*4.7*progress),pos[1],pos[2]+(stair.crown?sign*4.7*progress:0));
+  const enabled=progress<.85;
+  if(stair.collider.enabled!==enabled){stair.collider.enabled=enabled;game.physics?.setStaticEnabled(stair.proxy.uuid,enabled);}
+ }
+ function buildServiceLink(){
+  // An optional, grounded east-to-north passage curls around the hub's NE
+  // corner. Both mouths are in the first four metres of their wing, far
+  // before either reactor gate. Its own gate charges from the *live* first
+  // central feed, so it never offers an early shortcut to an unsolved wing.
+  floor(globalOwner,6.0,14.4,-14.4,-6.0,0);
+  worldBox(globalOwner,[14.55,3.8,-10.25],[.30,7.6,8.5],m.shell);
+  worldBox(globalOwner,[10.25,3.8,-14.55],[8.5,7.6,.30],m.shell);
+  worldBox(globalOwner,[10.25,7.72,-10.25],[8.6,.18,8.6],m.shell);
+  for(const [x,z,sx,sz]of [[12.5,-7.4,.12,2.3],[11.4,-12.4,3.2,.12]]){
+   worldBox(globalOwner,[x,.06,z],[sx,.025,sz],m.amber,{solid:false,camera:false,aim:false});
   }
-  stage.batches=[];
+  for(const [x,z,alongX]of [[14.35,-8.1,false],[8.1,-14.35,true]]){
+   const size=alongX?[1.9,1.3,.08]:[.08,1.3,1.9];
+   worldBox(globalOwner,[x,5.8,z],size,palettes[0].accent,{solid:false,camera:false,aim:false});
+  }
+  const leaves=[];
+  for(const sign of [-1,1]){
+   const pos=[12.2+sign*1.1,3.77,-10.10];
+   const mesh=worldBox(globalOwner,pos,[2.2,7.54,.30],palettes[0].accent,{solid:false,camera:false,aim:false});
+   mesh.name='Tower service link / powered leaf';leaves.push({mesh,pos,sign});
+  }
+  const indicator=worldBox(globalOwner,[12.2,.075,-9.40],[3.9,.025,.12],m.amber,
+   {solid:false,camera:false,aim:false});
+  indicator.name='Tower service link / live beam indicator';
+  const proxy=worldBox(globalOwner,[12.2,3.76,-10.10],[4.42,7.52,.32],m.dark,{visible:false});
+  proxy.name='Tower service link / physical interlock';
+  serviceGate={leaves,indicator,proxy,collider:globalOwner.colliders.at(-1),progress:0};
+ }
+ function setServiceGate(progress){
+  if(!serviceGate)return;
+  serviceGate.progress=progress;
+  for(const {mesh,pos,sign}of serviceGate.leaves)mesh.position.set(pos[0]+sign*3.3*progress,pos[1],pos[2]);
+  const enabled=progress<.85;
+  if(serviceGate.collider.enabled!==enabled){serviceGate.collider.enabled=enabled;
+   game.physics?.setStaticEnabled(serviceGate.proxy.uuid,enabled);}
+ }
+
+ for(let deck=0;deck<TOWER_DECK_COUNT;deck++){
+  deckShell(deck);
+  for(const stage of TOWER_STAGES.slice(deck*3,deck*3+3))buildWing(stage);
+  buildStair(deck);
+ }
+ buildServiceLink();
+ const keystones=createTowerKeystones({game,root,rooms,materials:m,makePanel:makeKeystonePanel,
+  box:(position,size,material,options={})=>worldBox(globalOwner,position,size,material,
+   {solid:false,camera:false,aim:false,...options})});
+ const towerArt=decorateTower({root,rooms,stairs});
+ const dynamic=new Set([
+  ...rooms.flatMap(room=>[room.plate,room.reactor,...room.gate.panels.map(p=>p.mesh)]),
+  ...stairs.flatMap(stair=>stair.leaves.map(leaf=>leaf.mesh)),
+  ...serviceGate.leaves.map(leaf=>leaf.mesh),serviceGate.indicator,
+  ...keystones.dynamicMeshes,
+ ]);
+ const kinematicMeshes=new Set(all.colliders.filter(c=>c.kinematic).map(c=>c.mesh));
+ const batches=[];
+ function batchStaticArchitecture(){
+  root.updateWorldMatrix(true,true);
+  const groups=new Map();
+  for(const mesh of all.meshes){
+   if(!mesh.visible||dynamic.has(mesh)||kinematicMeshes.has(mesh)||mesh.userData.portalable)continue;
+   if(!groups.has(mesh.material))groups.set(mesh.material,[]);
+   groups.get(mesh.material).push(mesh);
+  }
   for(const [material,meshes]of groups){
-   const batch=new THREE.InstancedMesh(unit,material,meshes.length);batch.name='Batched tower architectural modules';batch.receiveShadow=true;
-   meshes.forEach((mesh,i)=>{mesh.updateMatrix();batch.setMatrixAt(i,mesh.matrix);mesh.visible=false;mesh.userData.collisionProxy=true;mesh.matrixAutoUpdate=false;});
-   batch.computeBoundingSphere();stage.group.add(batch);stage.batches.push(batch);
+   const batch=new THREE.InstancedMesh(unit,material,meshes.length);
+   batch.name='Tower batched static architecture';batch.receiveShadow=true;
+   meshes.forEach((mesh,i)=>{
+    mesh.updateWorldMatrix(true,false);
+    batch.setMatrixAt(i,mesh.matrixWorld);
+    mesh.visible=false;mesh.userData.collisionProxy=true;
+   });
+   batch.instanceMatrix.needsUpdate=true;batch.computeBoundingSphere();root.add(batch);batches.push(batch);
   }
  }
- function removeMatching(array,set){let write=0;for(const value of array)if(!set.has(value))array[write++]=value;array.length=write;}
- function removeStage(i){
-  const stage=resident.get(i);if(!stage)return;
-  for(const c of stage.colliders)game.physics?.removeStaticBox(c.mesh.uuid);
-  const meshes=new Set(stage.meshes),colliders=new Set(stage.colliders),floors=new Set(stage.floors);
-  removeMatching(game.colliders,colliders);removeMatching(game.floors,floors);
-  removeMatching(game.cameraBlockers,meshes);removeMatching(game.aimBlockers,meshes);
-  for(const batch of stage.batches??[])batch.dispose();
-  stage.group.removeFromParent();resident.delete(i);
+ batchStaticArchitecture();
+ game.indexColliders?.();
+
+ function stageForPlayer(){
+  const p=game.playerPosition;
+  const deck=THREE.MathUtils.clamp(Math.floor((p.y+.2)/TOWER_RISE),0,TOWER_DECK_COUNT-1);
+  for(const def of TOWER_STAGES.slice(deck*3,deck*3+3)){
+   const {s,n}=towerCoordinates(def,p);
+   if(s>0&&s<42&&Math.abs(n)<6.6)return def;
+  }
+  return null;
  }
- function streamAround(i){
-  // Six real stage modules at most. Preserve the current two approaches,
-  // and the next winding's overhead slabs before the actor can reach them.
-  const first=Math.max(0,i-2),last=Math.min(TOWER_STAGE_COUNT-1,first+5);
-  for(const key of [...resident.keys()])if(key<first||key>last)removeStage(key);
-  for(let n=first;n<=last;n++)if(!resident.has(n))buildStage(n);
-  game.indexColliders?.();
+ function stageNearby(definition,position){
+  if(!position||Math.abs(position.y-definition.baseY)>8)return false;
+  const {s,n}=towerCoordinates(definition,position);
+  return s>-1&&s<43&&Math.abs(n)<7;
  }
- function setGate(stage,progress){
-  stage.gateProgress=progress;
-  for(const part of stage.gatePanels){const p=towerPoint(stage.definition,part.s,part.side*(1.025+progress*2.18),stage.definition.baseY+part.y);part.mesh.position.fromArray(p);}
-  const enabled=progress<.92;
-  if(stage.gateCollider.enabled!==enabled){stage.gateCollider.enabled=enabled;game.physics?.setStaticEnabled(stage.gateProxy.uuid,enabled);}
+ function enteredControl(room){
+  const control=V(...room.definition.control),hand=game.playerPosition.clone().addScaledVector(UP,.9);
+  if(hand.distanceTo(control)>2.35)return false;
+  const origin=hand,delta=control.clone().sub(origin),distance=delta.length(),ray=new THREE.Ray(origin,delta.normalize());
+  return !game.colliders.some(c=>{
+   if(c.enabled===false||c.mesh===room.control)return false;
+   const hit=ray.intersectBox(c.box,V());return hit&&hit.distanceTo(origin)<distance-.08;
+  });
  }
- function failure(){if(disposed||game.state!=='playing')return;failures++;game.callbacks?.onToast?.('Срыв. Башня начинается заново: контрольных точек нет.');game.resetRun(true);}
+ function latch(definition,signal,active){
+  const state=stageStates[definition.index],order=definition.puzzle.order;
+  if(!active||state.signals[signal]||!order.includes(signal))return false;
+  const prior=order.slice(0,order.indexOf(signal));
+  if(prior.some(s=>!state.signals[s]))return false;
+  state.signals[signal]=true;
+  game.audio?.mechanism?.('switch');
+  if(signal==='gravity'&&!definition.puzzle.requirements.includes('control')){
+   rooms[definition.index].mechanism.setControl(true); // vent so the same cargo can be collected
+  }
+  return true;
+ }
+ function setWingSolved(room){
+  const def=room.definition,state=stageStates[def.index];
+  if(state.solved)return;
+  state.solved=true;state.gateOpen=true;completed++;game.completedStages=completed;
+  const event={stage:completed,id:def.id,deck:def.deck,branch:def.branch,
+   seconds:elapsed,stageSeconds:elapsed-lastCompletion,position:game.playerPosition.toArray(),distanceMeters};
+  stageEvents.push(event);lastCompletion=elapsed;
+  room.reactor.material=m.mint;
+  game.callbacks?.onToast?.(`${def.name}: машинное крыло подключено. Осталось ${TOWER_STAGE_COUNT-completed}.`);
+  if(TOWER_STAGES.slice(def.deck*3,def.deck*3+3).every(s=>stageStates[s.index].solved)){
+   relays[def.deck]=true;relayEvents.push({deck:def.deck,seconds:elapsed});
+   game.callbacks?.onToast?.('Три линии поданы в центральный узел. Соедини их, чтобы открыть лестницу.');
+  }
+ }
+ function failure(){
+  if(disposed||game.state!=='playing')return;
+  failures++;
+  game.callbacks?.onToast?.('Срыв. Вся Башня начинается заново — контрольных точек нет.');
+  game.resetRun(true);
+ }
  function reset(){
-  completed=0;game.completedStages=0;won=false;elapsed=activeSeconds=distanceMeters=idle=longestIdle=0;lastPosition=null;lastCompletion=0;stageEvents.length=0;
-  for(const state of states){state.entered=false;state.plates=[];state.opened=false;}
-  streamAround(0);
-  for(const stage of resident.values()){
-   for(const mesh of stage.plateMeshes)mesh.material=m.waiting;
-   setGate(stage,0);
+  completed=0;won=false;elapsed=activeSeconds=distanceMeters=longestIdle=idle=0;
+  lastCompletion=0;lastPosition=null;highestDeck=0;
+  stageEvents.length=0;relayEvents.length=0;relays.fill(false);game.completedStages=0;
+  keystoneEvents.length=0;keystoneSolved.fill(false);keystones.reset();
+  for(const [i,state]of stageStates.entries()){
+   state.signals=Object.create(null);state.solved=state.gateOpen=state.entered=state.controlOn=false;
+   state.transit=false;state.controlComplete=false;
+   state.gateProgress=0;state.latestBeam=state.latestAir=state.cargoContact=false;
+   const room=rooms[i];room.mechanism.reset();setGate(room.gate,0);
+   room.plate.material=m.amber;room.reactor.material=palettes[room.definition.deck].glow;
   }
+  for(const stair of stairs)setStairGate(stair,0);
+  setServiceGate(0);serviceGate.indicator.material=m.amber;
+  if(crownCore){crownCore.material.color.setHex(0x7f6952);crownCore.material.emissive.setHex(0x4f311a);
+   crownCore.material.emissiveIntensity=.18;crownCore.assembly.rotation.y=0;
+   crownCore.rings[1].rotation.x=0;crownCore.rings[2].rotation.z=Math.PI/5;}
  }
  function update(dt){
   if(disposed||won||game.state!=='playing')return;
-  const p=game.playerPosition,stage=TOWER_STAGES[Math.min(completed,499)],local=towerCoordinates(stage,p);
+  towerArt.update(dt);
+  if(crownCore){crownCore.assembly.rotation.y+=dt*.23;
+   crownCore.rings[1].rotation.x+=dt*.31;crownCore.rings[2].rotation.z-=dt*.27;}
   elapsed+=dt;
-  if(lastPosition){const d=p.distanceTo(lastPosition);if(d<3){distanceMeters+=d;if(d>dt*.15){activeSeconds+=dt;idle=0;}else{idle+=dt;longestIdle=Math.max(longestIdle,idle);}}}
+  const p=game.playerPosition,cargo=game.cargo?.position;
+  if(lastPosition){
+   const d=p.distanceTo(lastPosition);
+   if(d<3){distanceMeters+=d;if(d>dt*.15){activeSeconds+=dt;idle=0;}else{idle+=dt;longestIdle=Math.max(longestIdle,idle);}}
+  }
   lastPosition??=p.clone();lastPosition.copy(p);
-  const oldestFloor=Math.max(0,completed-2)*TOWER_RISE;
-  if(p.y<oldestFloor-2.6||game.cargo.position.y<oldestFloor-3.0){failure();return;}
-  // A completed climb cannot fall onto a retired winding and continue from
-  // there. The beginning is the only recovery state.
-  if(p.x< -2.7||p.x>16.7||p.z< -16.7||p.z>2.7){failure();return;}
-  const state=states[completed],live=resident.get(completed);
-  if(!state||!live)return;
-  // Both edges accept an ordinary jump. Requiring grounded contact made a
-  // valid corner cut or leap miss an invisible sensor and strand a closed gate.
-  // Ordered plates and the solid route remain mandatory; the wider entry band
-  // is included in the conservative distance bound in LabTowerLayout.
-  if(!state.entered&&local.s>=TOWER_ENTRY_S&&local.s<=TOWER_ENTRY_MAX_S&&Math.abs(local.n)<2&&p.y>=stage.baseY-.1&&p.y<=stage.baseY+2.5)state.entered=true;
-  if(state.entered)stage.plates.forEach((plate,n)=>{
-   if(!state.plates[n]&&Math.abs(local.s-plate.s)<.57&&Math.abs(local.n-plate.n)<.59&&Math.abs(p.y-stage.baseY)<.48&&game.playerGrounded){
-    state.plates[n]=true;live.plateMeshes[n].material=m.pressed;
+  highestDeck=Math.max(highestDeck,Math.min(5,Math.floor((p.y+.12)/TOWER_RISE)));
+  if(p.y<highestDeck*TOWER_RISE-2.6||cargo.y<highestDeck*TOWER_RISE-3.2
+   ||Math.abs(p.x)>55||p.z>38||p.z< -55||Math.abs(cargo.x)>55||cargo.z>38||cargo.z< -55){failure();return;}
+
+  for(const room of rooms){
+   const def=room.definition,state=stageStates[def.index];
+   if(!stageNearby(def,p)&&!stageNearby(def,cargo))continue;
+   state.entered=true;
+   const actual=room.mechanism.update(dt)||{};
+   state.latestBeam=Boolean(actual.beamA||actual.beamB);state.latestAir=Boolean(actual.airA);
+   room.plate.material=game.cargoOnPad?.(V(...def.cargoPad),2.0)?m.mint:m.amber;
+   const cargoLoaded=game.cargoOnPad?.(V(...def.cargoPad),2.0);
+   const {s,n}=towerCoordinates(def,p);
+   const kinetic=s>21.7&&s<23.1&&Math.abs(n)<2.4&&game.playerGrounded
+    &&game.playerVelocity.x*def.direction[0]+game.playerVelocity.z*def.direction[1]>3.75;
+   const raw={cargo:!!cargoLoaded,beamA:!!actual.beamA,beamB:!!actual.beamB,
+    airA:!!actual.airA,gravity:!!actual.gravity,kinetic,transit:!!state.transit,
+    mirror:!!state.controlOn,control:!!state.controlComplete};
+   const alreadyLatched={...state.signals};
+   const freshCargo=raw.cargo&&!state.cargoContact;
+   state.cargoContact=raw.cargo;
+   // Re-evaluate in the authored causal order so simultaneous physical
+   // contacts still require their actual prior power source, never a timer.
+   for(const signal of def.puzzle.order){
+    const prerequisites=def.puzzle.order.slice(0,def.puzzle.order.indexOf(signal));
+    const active=signal==='cargo'?freshCargo&&prerequisites.every(s=>alreadyLatched[s]):raw[signal];
+    latch(def,signal,active);
    }
-  });
-  state.opened=state.entered&&stage.plates.every((_,n)=>state.plates[n]);
-  setGate(live,Math.min(1,live.gateProgress+(state.opened?dt*10:0)));
-  if(state.entered&&state.opened&&local.s>=TOWER_EXIT_S&&local.s<15.1&&Math.abs(local.n)<2&&p.y>=stage.baseY+1.82&&p.y<=stage.baseY+4.5
-   &&game.cargo.position.distanceTo(p)<3.5){
-   completed++;game.completedStages=completed;
-   const event={stage:completed,seconds:elapsed,stageSeconds:elapsed-lastCompletion,position:p.toArray(),distanceMeters};
-   stageEvents.push(event);lastCompletion=elapsed;
-   if(completed===TOWER_STAGE_COUNT){won=true;return;}
-   streamAround(completed);
+   if(def.puzzle.requirements.every(signal=>state.signals[signal]))state.gateOpen=true;
+   state.gateProgress=THREE.MathUtils.damp(state.gateProgress,state.gateOpen?1:0,5,dt);
+   if(Math.abs(state.gateProgress-(state.gateOpen?1:0))<.002)state.gateProgress=state.gateOpen?1:0;
+   setGate(room.gate,state.gateProgress);
+   if(state.gateOpen&&s>36.2&&s<40&&Math.abs(n-def.reactorN)<1.75&&game.playerGrounded
+    &&p.y>=def.baseY-.12&&p.y<def.baseY+.28
+    &&cargo&&cargo.distanceTo(p)<3.2)setWingSolved(room);
+  }
+  const solved=keystones.update(dt,relays);
+  for(let deck=0;deck<TOWER_DECK_COUNT;deck++)if(solved[deck]&&!keystoneSolved[deck]){
+   keystoneSolved[deck]=true;
+   keystoneEvents.push({deck,id:KEYSTONE_SPECS[deck].id,seconds:elapsed,position:p.toArray()});
+   if(deck===TOWER_DECK_COUNT-1&&crownCore){crownCore.material.color.setHex(0xb8ffe6);
+    crownCore.material.emissive.setHex(0x41efbd);crownCore.material.emissiveIntensity=.85;}
+   game.callbacks?.onToast?.(deck===TOWER_DECK_COUNT-1?
+    'Коронный узел запитан. Восточный шлюз боковой галереи открыт.':'Центральный узел запитан. Южная лестница открыта.');
+  }
+  const linkPowered=keystones.getState(0).feeds[0];
+  serviceGate.indicator.material=linkPowered?m.mint:m.amber;
+  const linkProgress=THREE.MathUtils.damp(serviceGate.progress,linkPowered?1:0,5,dt);
+  setServiceGate(Math.abs(linkProgress-(linkPowered?1:0))<.002?(linkPowered?1:0):linkProgress);
+  for(const stair of stairs){
+   const target=keystoneSolved[stair.deck]?1:0;
+   const progress=THREE.MathUtils.damp(stair.progress,target,5,dt);
+   setStairGate(stair,Math.abs(progress-target)<.002?target:progress);
+  }
+  if(keystoneSolved.every(Boolean)&&p.y>=5*TOWER_RISE-.15&&p.y<5*TOWER_RISE+.4
+   &&Math.abs(p.x-17)<1.8&&p.z>28.3&&p.z<31.7&&cargo.distanceTo(p)<3.2){won=true;}
+ }
+ function onTeleport(event){
+  const entry=game.portals?.portals?.[event.entryIndex],exit=game.portals?.portals?.[event.exitIndex];
+  if(!entry||!exit)return;
+  for(const room of rooms){
+   const ids=Object.values(room.panels).map(mesh=>mesh.uuid);
+   if(!ids.includes(entry.surfaceId)||!ids.includes(exit.surfaceId))continue;
+   // A crossing is an event, not a permanent request that can be redeemed
+   // after some unrelated prerequisite is powered later.
+   if(latch(room.definition,'transit',true))stageStates[room.definition.index].transit=true;
+   break;
   }
  }
- function metrics(){return {completedStages:completed,totalStages:TOWER_STAGE_COUNT,activeSeconds,distanceMeters,longestIdleSeconds:longestIdle,
-  elapsedSeconds:elapsed,failures,checkpoints:false,mandatoryDistanceMeters:TOWER_MANDATORY_DISTANCE,minimumSpeedrunSeconds:TOWER_MINIMUM_SECONDS,
-  residentStages:resident.size,colliders:game.colliders.length,stageEvents:stageEvents.map(event=>({...event}))};}
- streamAround(0);
- const level={id:TOWER_SPEC.id,title:'41 / '+TOWER_SPEC.title,spec:TOWER_SPEC,index,game,tower:true,towerChallenge:true,totalStages:TOWER_STAGE_COUNT,
-  towerStages:TOWER_STAGES,towerRoute:TOWER_STAGES,routeStages:TOWER_STAGES,
-  spawn:V(...towerPoint(0,.08,0)),cargoSpawn:V(...towerPoint(0,.7,.82,.6)),spawnView:{yaw:-Math.PI/2,pitch:-.14},
-  contextHandlesCarry:true,getContextLesson:()=>['tower-'+Math.min(completed,499),TOWER_STAGES[Math.min(completed,499)].patternIndex===8?'ПРОБЕЛ':'W A S D',game.heldCube?(TOWER_STAGES[Math.min(completed,499)].patternIndex===8?'Перепрыгни низкую балку. Нажми напольный контакт и продолжай подъём.':'Пройди по золотым напольным контактам, обойди перегородки и поднимись выше.'): 'Возьми друга клавишей E. Все 500 этапов нужно пройти за один подъём.',false],
-  viewDistance:170,terminals:[],pads:[],gates:[],panels:{},launchPad:null,
+ function interact(){
+  const def=stageForPlayer();
+  if(!def){const deck=Math.min(TOWER_DECK_COUNT-1,Math.max(0,Math.floor((game.playerPosition.y+.2)/TOWER_RISE)));
+   return keystones.interact(deck);}
+  const room=rooms[def.index];if(!enteredControl(room))return false;
+  const state=stageStates[def.index],needs=def.puzzle.requirements;
+  if(needs.includes('mirror')){
+   state.controlOn=!state.controlOn;room.mechanism.setControl(state.controlOn);
+   latch(def,'mirror',state.controlOn);
+  }else if(needs.includes('gravity')){
+   if(!state.signals.gravity)return false;
+   state.controlOn=true;room.mechanism.setControl(true);
+   state.controlComplete=true;latch(def,'control',true);
+  }else{
+   if(needs.includes('control')&&def.puzzle.order.slice(0,-1).some(s=>!state.signals[s]))return false;
+   state.controlOn=!state.controlOn;room.mechanism.setControl(state.controlOn);
+   state.controlComplete=state.controlOn;latch(def,'control',state.controlOn);
+  }
+  game.audio?.mechanism?.('switch');
+  return true;
+ }
+ function metrics(){return {
+  completedStages:completed,totalStages:TOWER_STAGE_COUNT,solvedIds:stageEvents.map(e=>e.id),
+  stageEvents:stageEvents.map(e=>({...e,position:[...e.position]})),deckRelays:[...relays],
+  relayEvents:relayEvents.map(e=>({...e})),keystoneSolved:[...keystoneSolved],
+  keystoneEvents:keystoneEvents.map(e=>({...e,position:[...e.position]})),checkpoints:false,
+  activeSeconds,distanceMeters,longestIdleSeconds:longestIdle,elapsedSeconds:elapsed,
+  failures,teleports:game.teleportCount,residentStages:disposed?0:rooms.length,colliders:game.colliders.length,
+  portalSurfaces:game.portalPanels.filter(p=>p.userData.towerWing||p.userData.towerKeystone!=null).length,
+ };}
+
+ const terminals=[...rooms.map(room=>({
+  position:V(...towerPoint(room.definition,5,-2.9,room.definition.baseY+.9)),
+  kind:'tower-console',room,
+ })),...keystones.terminals];
+ const keystoneRoutes=TOWER_DECKS.map(({deck})=>towerDeckRoute(deck,{
+  stages:TOWER_STAGES.slice(deck*3,deck*3+3),feedModes:KEYSTONE_FEED_MODES[deck],
+ }));
+ const deckRoutes=TOWER_DECKS.map(({deck,baseY})=>deck===TOWER_DECK_COUNT-1?[]:[
+  {kind:'walk',target:[0,baseY,7]},
+  {kind:'walk',target:[0,baseY,10.2]},
+  {kind:'walk',target:[0,baseY+8,34.9],timeout:55},
+  {kind:'walk',target:[8,baseY+8,35.7]},
+  {kind:'walk',target:[8,baseY+8,8]},
+  {kind:'walk',target:[0,baseY+8,0]},
+ ]);
+ const finalRoute=[{kind:'walk',target:[0,40,7]},
+  {kind:'walk',target:[8,40,7]},
+  {kind:'walk',target:[8,40,34],timeout:45},
+  {kind:'walk',target:[11.1,40,34.3]},
+  {kind:'walk',target:[14,40,34.3]},
+  {kind:'walk',target:[17,40,30]}];
+ const level={id:TOWER_SPEC.id,index,game,title:'41 / '+TOWER_SPEC.title,spec:TOWER_SPEC,
+  tower:true,towerChallenge:true,totalStages:TOWER_STAGE_COUNT,towerStages:TOWER_STAGES,
+  towerRoute:TOWER_STAGES,routeStages:TOWER_STAGES,keystoneRoutes,deckRoutes,finalRoute,
+  spawn:V(0,0,0),cargoSpawn:V(1.1,.57,.25),spawnView:{yaw:-Math.PI/2,pitch:-.14},
+  contextHandlesCarry:true,viewDistance:180,terminals,pads:[],gates:[],panels:{},launchPad:null,
   get completedStages(){return completed;},get progress(){return completed;},
-  getTowerMetrics:metrics,diagnostics:()=>({id:TOWER_SPEC.id,tower:true,portalPuzzle:false,...metrics()}),
-  getObjective:()=>`ЭТАП ${Math.min(completed+1,500)} / 500 · ${TOWER_STAGES[Math.min(completed,499)].pattern} · БЕЗ КОНТРОЛЬНЫХ ТОЧЕК`,
-  nearbyInteraction:()=>completed===0&&game.playerPosition.distanceTo(game.cargo.position)<2.4&&!game.heldCube?'E — возьми друга: подниматься нужно вместе':'',
-  interact:()=>false,cargoOnAnyPad:()=>false,getLaunch:()=>null,isWon:()=>won,reset,update,
-  renderUpdate(){
-   if(game.keyLight){const y=game.playerPosition?.y??0;game.keyLight.position.set(-7,y+24,14);game.keyLight.target.position.set(7,y+3,-7);game.keyLight.target.updateMatrixWorld();}
+  getTowerMetrics:metrics,
+  getTowerKeystoneState:deck=>keystones.getState(deck),
+  getTowerServiceState:()=>({unlocked:keystones.getState(0).feeds[0],open:!serviceGate.collider.enabled}),
+  getTowerStageState(i){
+   const def=TOWER_STAGES[i],state=stageStates[i];if(!def||!state)return null;
+   return {id:def.id,deck:def.deck,branch:def.branch,signals:{...state.signals},
+    gateOpen:state.gateOpen,solved:state.solved,entered:state.entered,controlOn:state.controlOn};
   },
-  dispose(){disposed=true;game.scene.background=background;if(lightPose){game.keyLight.position.copy(lightPose.position);game.keyLight.target.position.copy(lightPose.target);}
-   for(const key of [...resident.keys()])removeStage(key);
-   shaftRings.dispose();shaftGlass.dispose();
-   for(const material of Object.values(m).flat())material.dispose();
-   unit.dispose();
+  getObjective(){
+   const def=stageForPlayer();
+   if(def){const state=stageStates[def.index];
+    return `${def.name} · ${Object.keys(state.signals).length}/${def.puzzle.requirements.length} звеньев · КРЫЛЬЯ ${completed}/${TOWER_STAGE_COUNT}`;}
+   const deck=Math.min(TOWER_DECK_COUNT-1,Math.floor((game.playerPosition.y+.2)/TOWER_RISE));
+   const solved=TOWER_STAGES.slice(deck*3,deck*3+3).filter(s=>stageStates[s.index].solved).length;
+   return keystoneSolved[deck]?(deck===5?'КОРОНА ПИТАЕТСЯ · ВОСТОЧНЫЙ ШЛЮЗ БОКОВОЙ ГАЛЕРЕИ':'ЛЕСТНИЦА ОТКРЫТА · ПОДНИМАЙСЯ ВДВОЁМ'):
+    relays[deck]?(()=>{
+     const state=keystones.getState(deck),next=state.feeds.indexOf(false);
+     if(next>=0){const feed=state.feedModes[next],wing=TOWER_STAGES[deck*3+feed.branch];
+      return `${state.name} · ${next}/${state.feeds.length} · ${wing.branchName}: ${feedLabel[feed.mode]}`;}
+     return `${state.name} · ЦЕНТРАЛЬНАЯ СБОРКА ${Object.keys(state.signals).length}/${KEYSTONE_SPECS[deck].sequence.length}`;
+    })():
+    `ЯРУС ${deck+1}/6 · ИССЛЕДУЙ ТРИ КРЫЛА (${solved}/3) · БЕЗ КОНТРОЛЬНЫХ ТОЧЕК`;
+  },
+  getContextLesson(){
+   const def=stageForPlayer();if(!def){const deck=Math.min(5,Math.max(0,Math.floor((game.playerPosition.y+.2)/TOWER_RISE)));
+    if(deck===0&&game.playerPosition.x>6&&game.playerPosition.x<14.5
+     &&game.playerPosition.z< -6&&game.playerPosition.z> -14.5){
+     return ['tower-service','W A S D',serviceGate.collider.enabled?
+      'Сервисный переход между востоком и севером заперт. Первый живой луч центрального узла питает его створку.':
+      'Сервисный переход открыт: северное крыло доступно через соседний машинный отсек.',false];
+    }
+    const state=keystones.getState(deck),feed=state?.feedModes[state?.feeds.indexOf(false)];
+    return ['tower-hub','W A S D',relays[deck]?(feed?
+     `Следующий вход: ${TOWER_STAGES[deck*3+feed.branch].branchName}. Проведи живой сигнал «${feedLabel[feed.mode]}» до гнезда за створкой.`:
+     `Гнёзда заряжены. Исследуй центральный узел «${state.name}»: его приёмники, груз и приводы связаны с настоящими порталами.`):
+     'Выбери одно из трёх машинных крыльев. Открой их в любом порядке.',false];}
+   const state=stageStates[def.index],key=def.puzzle.requirements.some(r=>['beamA','beamB','airA','transit'].includes(r))?'ЛКМ · ПКМ':'E';
+   return [`tower-${def.id}`,key,state.solved?'Питание этого крыла уже поступает в центральный узел.':
+    `${def.name}: проследи связь механизма со створкой. Поставь друга перед выстрелом; после решения забери его.`,false];
+  },
+  nearbyInteraction(){
+   const def=stageForPlayer(),room=def&&rooms[def.index];
+   if(room&&!game.heldCube&&enteredControl(room))return {kind:'tower-console',label:'E',text:'Переключить настоящий привод крыла'};
+   if(!def&&!game.heldCube){const deck=Math.min(5,Math.max(0,Math.floor((game.playerPosition.y+.2)/TOWER_RISE)));
+    const action=keystones.nearbyInteraction(deck);if(action)return action;}
+   return !game.heldCube&&game.cargo&&near(game.playerPosition,game.cargo.position,2.2)?'E — взять друга':'';
+  },
+  interact,cargoOnAnyPad:()=>TOWER_STAGES.some(s=>game.cargoOnPad?.(V(...s.cargoPad),2))
+   ||[1,3,5].some(deck=>game.cargoOnPad?.(V(0,deck*TOWER_RISE,deck===1||deck===5?-5.5:0),1.45)),
+  getLaunch:()=>null,isWon:()=>won,reset,update,onTeleport,
+  playerAcceleration(position,velocity){
+   const central=keystones.playerAcceleration(position,velocity);if(central?.lengthSq?.()>0)return central;
+   for(const room of rooms)if(stageNearby(room.definition,position)){
+    const a=room.mechanism.playerAcceleration?.(position,velocity);if(a?.lengthSq?.()>0)return a;
+   }
+   return V();
+  },
+  applyCargoForces(dt){
+   keystones.applyCargoForces(dt);
+   for(const room of rooms)if(stageNearby(room.definition,game.cargo?.position))room.mechanism.applyCargoForces?.(dt);
+  },
+  diagnostics:()=>({id:TOWER_SPEC.id,tower:true,portalPuzzle:true,...metrics()}),
+  renderUpdate(){
+   if(game.keyLight){const y=game.playerPosition?.y??0;game.keyLight.position.set(-18,y+23,15);
+    game.keyLight.target.position.set(0,y+3,-3);game.keyLight.target.updateMatrixWorld();}
+  },
+  dispose(){
+   if(disposed)return;disposed=true;game.scene.background=background;game.scene.fog=fog;
+   if(lightPose){game.keyLight.position.copy(lightPose.position);game.keyLight.target.position.copy(lightPose.target);}
+   towerArt.dispose();
+   keystones.dispose();
+   for(const room of rooms)room.mechanism.dispose?.();
+   for(const collider of all.colliders)game.physics?.removeStaticBox(collider.mesh.uuid);
+   const remove=(array,removed)=>{const set=new Set(removed);let write=0;
+    for(const value of array)if(!set.has(value))array[write++]=value;array.length=write;};
+   remove(game.colliders,all.colliders);remove(game.floors,all.floors);
+   remove(game.cameraBlockers,all.meshes);remove(game.aimBlockers,all.meshes);
+   remove(game.portalPanels,[...rooms.flatMap(room=>Object.values(room.panels)),...keystonePanels]);
+   root.removeFromParent();batches.forEach(batch=>batch.dispose());
+   unit.dispose();crownGeometries.forEach(geometry=>geometry.dispose());materials.forEach(material=>material.dispose());
+   game.indexColliders?.();
   },
  };
  return level;

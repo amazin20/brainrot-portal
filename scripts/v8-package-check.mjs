@@ -4,7 +4,7 @@ const root=process.argv[2]||'dist',manifest=JSON.parse(fs.readFileSync(root+'/mo
 assert.equal(CAMPAIGN.length,33);assert.equal(CAMPAIGN[11].id,'folded-junction');assert.equal(CAMPAIGN[14].id,'countercurrent-weave');
 assert.equal(CAMPAIGN[20].id,'gravity-pocket');
 assert.equal(FOUNDATION_LATE_SPECS.length,11);
-assert.equal(FOUNDATION_LATE_SPECS.at(-1),TOWER_SPEC,'The 500-stage Tower must be the campaign finale');
+assert.equal(FOUNDATION_LATE_SPECS.at(-1),TOWER_SPEC,'The rebuilt Tower must be the campaign finale');
 assert.equal(new Set(FOUNDATION_LATE_SPECS.map(room=>room.id)).size,11);
 assert.ok(FOUNDATION_LATE_SPECS.every(room=>!CAMPAIGN.some(classic=>classic.id===room.id)));
 assert.ok(FOUNDATION_LATE_SPECS.every(room=>room.assets.every(id=>CAMPAIGN_ASSET_IDS.includes(id))));
