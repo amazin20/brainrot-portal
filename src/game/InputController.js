@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 
 export class InputController {
-  constructor({ joystick, joystickKnob, jumpButton, isActive = () => true }) {
+  constructor({ joystick, joystickKnob, jumpButton, sprintButton, isActive = () => true }) {
     this.isActive = isActive;
     this.disposed = false;
     this.keys = new Set();
@@ -12,6 +12,8 @@ export class InputController {
     this.joystick = joystick;
     this.joystickKnob = joystickKnob;
     this.jumpButton = jumpButton;
+    this.sprintButton = sprintButton;
+    this.mobileSprint = false;
     this.joystickPointer = null;
     this.listeners = [];
 
@@ -61,6 +63,8 @@ export class InputController {
   reset() {
     this.keys.clear();
     this.jumpQueued = this.restartQueued = this.pauseQueued = false;
+    this.mobileSprint = false;
+    this.sprintButton?.setAttribute('aria-pressed', 'false');
     this.resetStick();
   }
 
@@ -116,6 +120,16 @@ export class InputController {
       event.preventDefault();
       this.jumpQueued = true;
     });
+    if (this.sprintButton) {
+      this.sprintButton.setAttribute('aria-pressed', 'false');
+      // Toggle instead of requiring a third finger while aiming and jumping.
+      // The same reset path as movement clears it after pauses or focus loss.
+      this.listen(this.sprintButton, 'click', () => {
+        if (this.disposed || !this.isActive()) return;
+        this.mobileSprint = !this.mobileSprint;
+        this.sprintButton.setAttribute('aria-pressed', String(this.mobileSprint));
+      });
+    }
   }
 
   getMove() {

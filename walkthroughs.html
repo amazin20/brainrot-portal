@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#101b20" />
+    <meta name="description" content="Видеопрохождения всех 40 комнат БРЕЙНРОТ ПОРТАЛ. Выберите комнату, смотрите запись и открывайте уровень в браузере." />
+    <title>Прохождения 40 комнат — БРЕЙНРОТ ПОРТАЛ</title>
+    <link rel="stylesheet" href="./walkthroughs.css" />
+    <script src="./walkthroughs.js" defer></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="./" aria-label="БРЕЙНРОТ ПОРТАЛ — открыть игру"><span class="brand-symbol" aria-hidden="true">↗</span> БРЕЙНРОТ <span>ПОРТАЛ</span></a>
+      <a class="game-link" href="./">Открыть игру <span aria-hidden="true">↗</span></a>
+    </header>
+
+    <main class="layout">
+      <div class="intro">
+        <div class="eyebrow"><span class="pulse" aria-hidden="true"></span> АРХИВ ЛАБОРАТОРИИ <span class="line" aria-hidden="true"></span> 40 КОМНАТ</div>
+        <h1>Каждый выход<br /><em>нашёлся.</em></h1>
+        <p>Все прохождения основной кампании. Выбери комнату, чтобы посмотреть запись, или открой её сразу в игре.</p>
+      </div>
+
+      <section class="theater" aria-labelledby="watch-heading">
+        <div class="section-heading"><span id="watch-index" class="eyebrow">ВЫБЕРИ КОМНАТУ</span><span id="duration" class="duration"></span></div>
+        <h2 id="watch-heading">Прохождения</h2>
+        <div class="player-frame" id="player-frame">
+          <video id="video" controls playsinline preload="none" aria-label="Видеопрохождение выбранной комнаты" hidden></video>
+          <div class="player-empty" id="player-empty"><span class="empty-icon" aria-hidden="true">▶</span><span id="empty-message">Загружаем список записей…</span></div>
+        </div>
+        <p id="player-message" class="player-message" role="status" aria-live="polite">Выбери номер комнаты справа.</p>
+        <div class="player-actions">
+          <a id="play-level" class="primary-button" href="./?edition=foundation&amp;level=1">Играть в эту комнату <span aria-hidden="true">↗</span></a>
+          <button id="copy-link" class="subtle-button" type="button">Скопировать ссылку на видео</button>
+          <button id="next-level" class="subtle-button" type="button">Следующая комната <span aria-hidden="true">→</span></button>
+        </div>
+      </section>
+
+      <section class="catalog" aria-labelledby="catalog-heading">
+        <div class="catalog-heading"><div><span class="eyebrow">МАРШРУТ</span><h2 id="catalog-heading">Комнаты <span id="ready-count">0 / 40</span></h2></div><span class="catalog-note">Нажми на номер для просмотра</span></div>
+        <div id="level-list" class="level-list" aria-label="Список видеопрохождений"></div>
+      </section>
+    </main>
+
+    <footer>БРЕЙНРОТ ПОРТАЛ <span>·</span> Порталы, физика и один друг</footer>
+  </body>
+</html>

@@ -651,7 +651,7 @@ export class LabGame {
     const wasGrounded = this.playerGrounded;
     const move = this.input.getMove();
     const aiming = this.isAiming();
-    const sprint = (this.input.keys.has('ShiftLeft') || this.input.keys.has('ShiftRight')) && !aiming;
+    const sprint = (this.input.keys.has('ShiftLeft') || this.input.keys.has('ShiftRight') || this.input.mobileSprint) && !aiming;
     if (this.kineticMode) {
       updateKineticVelocity(this, dt, move, { sprint, aiming });
     } else {
