@@ -1,0 +1,82 @@
+name: Verify existing publication
+
+# Resume post-deployment checks without rebuilding, recording, or deploying.
+on:
+  push:
+    branches: [codex/resume-public-verification]
+    paths:
+      - '.github/workflows/verify-published.yml'
+      - 'scripts/verify-public.mjs'
+  workflow_dispatch:
+    inputs:
+      revision:
+        description: Exact commit already served by GitHub Pages
+        type: string
+        required: true
+        default: '8f63b6270b97fd0f1cb9d0cd9b07ef31bc3af4f6'
+
+permissions:
+  contents: read
+concurrency:
+  group: verify-existing-publication
+  cancel-in-progress: false
+env:
+  BUILD_COMMIT: ${{ inputs.revision || '8f63b6270b97fd0f1cb9d0cd9b07ef31bc3af4f6' }}
+  PAGE_URL: https://amazin20.github.io/brainrot-portal/
+  RECORD: '0'
+jobs:
+  verify:
+    name: Public ${{ matrix.check }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - check: archive routes and transitions
+            script: scripts/verify-public.mjs
+          - check: open chambers
+            script: scripts/open-browser-review.mjs
+          - check: horizontal portals
+            script: scripts/portal-regression-browser.mjs
+          - check: default campaign
+            script: scripts/foundation-browser.mjs
+          - check: 40 videos and gallery
+            script: scripts/verify-public-walkthroughs.mjs
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Confirm the probe uses the published game source
+        run: |
+          git cat-file -e "$BUILD_COMMIT^{commit}"
+          git diff --exit-code "$BUILD_COMMIT" HEAD -- src public index.html walkthroughs.html walkthroughs.js walkthroughs.css package.json package-lock.json vite.config.js
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install browser verifier
+        run: |
+          npm ci
+          npm install --no-save --package-lock=false puppeteer-core@24.16.0
+      - name: Verify the existing public revision
+        env:
+          PROBE_SCRIPT: ${{ matrix.script }}
+          ROOMS: ${{ matrix.check == 'default campaign' && '1,30,31,35,40' || '' }}
+          ONLY_NORMAL: '1'
+        run: |
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+          node "$PROBE_SCRIPT"
+      - name: Preserve public verification evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: public-${{ strategy.job-index }}
+          path: |
+            live-evidence/
+            qa/public-walkthroughs/
+            qa/open-browser/
+            qa/portal-regression/
+            qa/foundation-browser/
+          if-no-files-found: error
+          retention-days: 14
