@@ -26,7 +26,9 @@ const bytesHash=file=>createHash('sha256').update(fs.readFileSync(file)).digest(
 let frameCount=0,firstFrame=null,lastFrame=null,cargoBodyId=null;
 const errors=[];
 const browser=await puppeteer.launch({
- executablePath:process.env.CHROME_PATH||'/usr/bin/google-chrome',headless:true,protocolTimeout:1800000,
+ // A single browser call contains the complete route and can exceed 30 min
+ // for the longest chambers under software WebGL rendering on CI.
+ executablePath:process.env.CHROME_PATH||'/usr/bin/google-chrome',headless:true,protocolTimeout:5400000,
  args:['--no-sandbox','--disable-dev-shm-usage','--use-angle=swiftshader','--enable-unsafe-swiftshader'],
 });
 try{
