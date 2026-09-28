@@ -87,6 +87,24 @@ const classicAlternates={
 // The new campaign reuses the archive builders for rooms 6–30. Keep their
 // tested input routes without extending the five foundation-specific routes.
 for(let n=6;n<=30;n++)if(classicAlternates[n])foundationAlternates[n]=classicAlternates[n];
+// These post-campaign variants follow different physical orders with the same
+// original companion. Add a room only after its route driver has passed.
+Object.assign(foundationAlternates,{
+ 31:[{name:'empty-upper-first',options:{route:'empty-upper-first'},source:'src/game/LabPostJourneyA.js'},
+  {name:'loaded-dock-recovery',kind:'recovery',exercisesRecovery:true,options:{recover:true},source:'tests/lab-post-a.test.js'}],
+  32:[{name:'prepare-return-first',options:{route:'prepare-return-first'},source:'src/game/LabPostJourneyA.js'}],
+  33:[{name:'friend-before-passenger',options:{route:'friend-before-passenger'},source:'src/game/LabPostJourneyA.js'}],
+  34:[{name:'service-first',kind:'recovery',exercisesRecovery:true,options:{route:'explore-service-first'},source:'src/game/LabPostJourneyA.js'}],
+  35:[{name:'carry-after-first-latch',options:{route:'carry-after-first-latch'},source:'src/game/LabPostJourneyA.js'}],
+ 36:[{name:'prepare-light-first',options:{route:'prepare-light-first'},source:'src/game/LabPostJourneyB.js'},
+  {name:'missed-lift-recovery',kind:'recovery',exercisesRecovery:true,options:{recover:true},source:'tests/lab-post-b.test.js'}],
+  37:[{name:'dispatch-cargo-first',options:{route:'dispatch-cargo-first'},source:'src/game/LabPostJourneyB.js'}],
+ 38:[{name:'send-freight-early',options:{route:'send-freight-early'},source:'src/game/LabPostJourneyB.js'},
+  {name:'lower-floor-recovery',kind:'recovery',exercisesRecovery:true,options:{recover:true},source:'tests/lab-post-b.test.js'}],
+ 39:[{name:'scout-first',kind:'exploration',options:{route:'scout-first'},source:'src/game/LabPostJourneyB.js'},
+  {name:'service-ascent-recovery',kind:'recovery',exercisesRecovery:true,options:{recover:true},source:'tests/lab-post-b.test.js'}],
+ 40:[{name:'bridge-prepared-first',options:{route:'bridge-prepared-first'},source:'src/game/LabPostJourneyB.js'}],
+});
 const openAlternates={
  24:[{name:'ride-first',options:{route:'ride-first'},source:'src/game/LabOpenJourney.js'},
   {name:'ride-first-recovery',kind:'recovery',options:{route:'ride-first',recover:true},source:'tests/lab-open-chambers.test.js'}],
@@ -110,7 +128,7 @@ function parseArgs(argv){
     if(match){assert.ok(Number(match[1])<=Number(match[2]),`Descending level range: ${token}`);return Array.from({length:Number(match[2])-Number(match[1])+1},(_,i)=>Number(match[1])+i);}
     return [Number(token)];
    }));
-   assert.ok([...opts.levels].every(n=>Number.isInteger(n)&&n>=1&&n<=CAMPAIGN.length),'--levels must be a comma-separated set of 1–33 or ranges');
+   assert.ok([...opts.levels].every(n=>Number.isInteger(n)&&n>=1&&n<=40),'--levels must be a comma-separated set of 1–40 or ranges');
   }else if(arg.startsWith('--json='))opts.json=arg.slice('--json='.length);
   else throw new Error(`Unknown argument ${arg}`);
  }
@@ -186,7 +204,7 @@ async function main(){
  const output={generatedAt:new Date().toISOString(),...git(),edition:opts.edition,canonicalOnly:opts.canonicalOnly,kind:opts.kind,summary,rows,gaps,limitations:[
   'Headless physics and scripted production inputs cannot verify visibility, usability, aesthetics, performance or human discoverability.',
   'One successful path and one scripted alternative do not prove every possible route avoids softlocks or shortcuts.',
-  'The default foundation campaign exposes rooms 1–30; classic 1–33 and open review 24, 28, 30–33 require an explicit edition.',
+  'The default foundation campaign exposes rooms 1–40; classic 1–33 and open review 24, 28, 30–33 require an explicit edition.',
  ]};
  save(output);
  console.log(`Routes: ${summary.pass}/${summary.total} passed, ${summary.fail} failed; distinct-solution evidence gaps: ${gaps.length}.`);

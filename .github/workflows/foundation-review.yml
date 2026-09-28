@@ -3,6 +3,8 @@ on:
   pull_request:
     paths:
       - 'src/game/LabFoundation*.js'
+      - 'src/game/LabPostCampaign*.js'
+      - 'src/game/LabPostJourney*.js'
       - 'src/game/LabDeckUV.js'
       - 'src/game/LabOpenArchitecture.js'
       - 'src/game/LabOpenStationArt.js'
@@ -34,7 +36,7 @@ jobs:
           npm ci
           npm install --no-save --package-lock=false puppeteer-core@24.16.0
           npm run build
-          node scripts/stamp-build.mjs v40-laboratory-33
+          node scripts/stamp-build.mjs v41-campaign-40
       - name: Capture the playable first chapter with ordinary and exploratory input
         env:
           ROOMS: ${{ matrix.room }}

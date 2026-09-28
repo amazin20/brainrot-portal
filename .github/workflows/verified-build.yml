@@ -7,7 +7,7 @@ on:
         required: true
         type: string
       record_puzzle:
-        description: Record native movement in rooms12–20; all thirty-three ordinary routes always run
+        description: Record native movement in rooms12–20; archive33 and default40 ordinary routes always run
         required: false
         default: true
         type: boolean
@@ -35,7 +35,7 @@ jobs:
         run: |
           npm run check
           node scripts/v8-package-check.mjs
-          node scripts/stamp-build.mjs v40-laboratory-33
+          node scripts/stamp-build.mjs v41-campaign-40
       - name: Preserve the exact deployable package
         uses: actions/upload-artifact@v4
         with:
@@ -48,7 +48,7 @@ jobs:
         run: |
           npm run build:yandex
           node scripts/v8-package-check.mjs dist-yandex
-          node scripts/stamp-build.mjs v40-laboratory-33 dist-yandex
+          node scripts/stamp-build.mjs v41-campaign-40 dist-yandex
       - uses: actions/upload-artifact@v4
         with:
           name: yandex-moderation-candidate
@@ -158,7 +158,7 @@ jobs:
           npm ci
           npm install --no-save --package-lock=false puppeteer-core@24.16.0
           npm run build
-          node scripts/stamp-build.mjs v40-laboratory-33
+          node scripts/stamp-build.mjs v41-campaign-40
       - name: Verify ordinary routes in actual WebGL
         env:
           NESI_FIRST: ${{ matrix.first }}
@@ -200,7 +200,7 @@ jobs:
           npm ci
           npm install --no-save --package-lock=false puppeteer-core@24.16.0
           npm run build
-          node scripts/stamp-build.mjs v40-laboratory-33
+          node scripts/stamp-build.mjs v41-campaign-40
       - name: Verify actual mouse shots and ordinary floor/wall traversal
         run: |
           npm run preview -- --host 127.0.0.1 --port 4173 >input-preview.log 2>&1 &
@@ -239,9 +239,9 @@ jobs:
           npm ci
           npm install --no-save --package-lock=false puppeteer-core@24.16.0
           npm run build
-          node scripts/stamp-build.mjs v40-laboratory-33
+          node scripts/stamp-build.mjs v41-campaign-40
           npm run build -- --mode yandex --outDir dist-yandex
-          node scripts/stamp-build.mjs v40-laboratory-33 dist-yandex
+          node scripts/stamp-build.mjs v41-campaign-40 dist-yandex
       - name: Verify physical video regressions and advertising contract
         run: |
           npm run preview -- --host 127.0.0.1 --port 4173 >sdk-preview.log 2>&1 &
@@ -293,7 +293,7 @@ jobs:
           npm ci
           npm install --no-save --package-lock=false puppeteer-core@24.16.0
           npm run build
-          node scripts/stamp-build.mjs v40-laboratory-33
+          node scripts/stamp-build.mjs v41-campaign-40
       - name: Verify the distinct three-room edition through the real HTTP UI
         env:
           ROOM: ${{ matrix.room }}
@@ -332,7 +332,7 @@ jobs:
           npm ci
           npm install --no-save --package-lock=false puppeteer-core@24.16.0
           npm run build
-          node scripts/stamp-build.mjs v40-laboratory-33
+          node scripts/stamp-build.mjs v41-campaign-40
       - name: Ordinary solution and alternative exploration in native WebGL
         env:
           ROOMS: ${{ matrix.room }}
@@ -373,7 +373,7 @@ jobs:
           npm ci
           npm install --no-save --package-lock=false puppeteer-core@24.16.0
           npm run build
-          node scripts/stamp-build.mjs v40-laboratory-33
+          node scripts/stamp-build.mjs v41-campaign-40
       - name: Default public entry, ordinary and alternative inputs, saved progress and next button
         env:
           ROOMS: ${{ matrix.room }}
@@ -387,6 +387,53 @@ jobs:
         if: always()
         with:
           name: foundation-chapter-${{ matrix.room }}
+          path: |
+            qa/foundation-browser/
+            foundation-preview.log
+          retention-days: 14
+
+  new-foundation:
+    name: New campaign rooms ${{ matrix.first }}–${{ matrix.last }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - {first: 31, last: 32, rooms: '31,32'}
+          - {first: 33, last: 34, rooms: '33,34'}
+          - {first: 35, last: 36, rooms: '35,36'}
+          - {first: 37, last: 38, rooms: '37,38'}
+          - {first: 39, last: 40, rooms: '39,40'}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.revision }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Build the exact candidate for native review
+        run: |
+          npm ci
+          npm install --no-save --package-lock=false puppeteer-core@24.16.0
+          npm run build
+          node scripts/stamp-build.mjs v41-campaign-40
+      - name: Verify playable routes and subsequent room transitions in WebGL
+        env:
+          ROOMS: ${{ matrix.rooms }}
+          RECORD: '1'
+          POST_ALTERNATES: '{"31":{"route":"empty-upper-first"},"32":{"route":"prepare-return-first"},"33":{"route":"friend-before-passenger"},"34":{"route":"explore-service-first"},"35":{"route":"carry-after-first-latch"},"36":{"route":"prepare-light-first"},"37":{"route":"dispatch-cargo-first"},"38":{"route":"send-freight-early"},"39":{"route":"scout-first"},"40":{"route":"bridge-prepared-first"}}'
+        run: |
+          npm run preview -- --host 127.0.0.1 --port 4173 >foundation-preview.log 2>&1 &
+          for i in {1..30}; do curl -fsS http://127.0.0.1:4173/ >/dev/null && break; sleep 1; done
+          curl -fsS http://127.0.0.1:4173/ >/dev/null
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+          node scripts/foundation-browser.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: foundation-chapter-${{ matrix.first }}-${{ matrix.last }}
           path: |
             qa/foundation-browser/
             foundation-preview.log

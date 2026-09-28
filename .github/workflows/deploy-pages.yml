@@ -16,7 +16,7 @@ jobs:
     with:
       revision: ${{ github.sha }}
       # The identical candidate tree already has the full reviewed video.
-      # Run all thirty-three WebGL routes again without re-encoding their video excerpts.
+      # Run all archived routes and the 40-room default campaign again.
       record_puzzle: false
   deploy:
     if: github.ref == 'refs/heads/main'
@@ -44,10 +44,11 @@ jobs:
           import assert from 'node:assert/strict';
           const info=JSON.parse(fs.readFileSync('dist/build-info.json','utf8'));
           assert.equal(info.commit,process.env.BUILD_COMMIT);
-          assert.equal(info.version,'v40-laboratory-33');
-          assert.equal(info.artVersion,'v40-research-laboratory');
+          assert.equal(info.version,'v41-campaign-40');
+          assert.equal(info.artVersion,'v41-campaign-40');
           assert.equal(info.run,process.env.GITHUB_RUN_ID);
-          assert.equal(info.levels,33);
+          assert.equal(info.levels,40);
+          assert.equal(info.features.archiveRooms,33);
           assert.equal(info.verified,true);
           NODE
       - uses: actions/configure-pages@v5
@@ -90,6 +91,7 @@ jobs:
         env:
           PAGE_URL: ${{ steps.deployment.outputs.page_url }}
           BUILD_COMMIT: ${{ github.sha }}
+          ROOMS: '1,30,31,35,40'
           RECORD: '0'
           ONLY_NORMAL: '1'
         run: |

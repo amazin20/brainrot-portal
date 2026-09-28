@@ -4,6 +4,7 @@ import {createHash} from 'node:crypto';
 import {setTimeout as wait} from 'node:timers/promises';
 import puppeteer from 'puppeteer-core';
 import {CAMPAIGN} from '../src/game/LabCampaignLevels.js';
+import {FOUNDATION_INDICES} from '../src/game/LabFoundationEdition.js';
 import {CAMPAIGN_ASSET_IDS} from '../src/game/labAssets.js';
 import {runPortalEdgeBrowser} from './portal-edge-browser.mjs';
 import {runFlightAudioBrowser} from './flight-audio-browser.mjs';
@@ -19,7 +20,7 @@ try{
   catch(error){console.log('Publication propagation:',String(error));}
   await wait(5000);
  }
- assert.equal(info?.commit,expected);assert.equal(info?.levels,CAMPAIGN.length);assert.equal(info?.version,'v40-laboratory-33');assert.equal(info?.levels,33);assert.equal(info?.artVersion,'v40-research-laboratory');report.build=info;
+ assert.equal(info?.commit,expected);assert.equal(info?.levels,FOUNDATION_INDICES.length);assert.equal(info?.version,'v41-campaign-40');assert.equal(info?.artVersion,'v41-campaign-40');assert.equal(info?.features.archiveRooms,CAMPAIGN.length);report.build=info;
  const response=await fetch(base+'models/runtime/manifest.json?revision='+expected);assert.ok(response.ok);const manifest=await response.json();
  assert.deepEqual(manifest.models.map(m=>m.id).sort((a,b)=>a-b),[...CAMPAIGN_ASSET_IDS]);
  const source=JSON.parse(fs.readFileSync('public/models/runtime/manifest.json','utf8'));
@@ -77,6 +78,6 @@ try{
  report.flightAudio=await runFlightAudioBrowser({browser,baseUrl:base,out:'live-evidence/flight-audio',capture:false});
  assert.equal(report.flightAudio.pass,true);
  assert.deepEqual(report.errors,[]);report.pass=true;
- console.log('LIVE VERIFIED',expected,'v40 campaign: 33 rooms; public ordinary routes 1,9,10,20,24,26–33; transitions 10→11,20→21,26→27,30→31,33→1; live model hashes; room9 regressions; original companion present at every finish');
+ console.log('LIVE VERIFIED',expected,'v41 campaign: 40 default rooms, archived 33 rooms; tested archive routes 1,9,10,20,24,26–33, default routes via foundation-browser; live model hashes and original companion at every finish');
 }catch(error){report.error=String(error);throw error;}
 finally{fs.writeFileSync('live-evidence/report.json',JSON.stringify(report,null,2));await browser?.close();}

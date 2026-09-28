@@ -19,8 +19,11 @@ export function applyDeckFinish(k){
  const map=new THREE.DataTexture(data,n,n);map.colorSpace=THREE.SRGBColorSpace;map.wrapS=map.wrapT=THREE.RepeatWrapping;
  map.generateMipmaps=true;map.minFilter=THREE.LinearMipmapLinearFilter;map.magFilter=THREE.LinearFilter;map.anisotropy=4;map.needsUpdate=true;
  k.m.floor.map=map;k.m.floor.needsUpdate=true;
+ // The campaign recovery deck uses the same single-surface, mip-filtered
+ // construction marks. Reusing the texture adds no second texture upload.
+ if(k.m.service){k.m.service.map=map;k.m.service.needsUpdate=true;}
  k.world.root.updateWorldMatrix(true,true);
- k.world.root.traverse(m=>{if(m.isMesh&&m.material===k.m.floor)mapDeckUV(m);});
+ k.world.root.traverse(m=>{if(m.isMesh&&(m.material===k.m.floor||m.material===k.m.service))mapDeckUV(m);});
  k.ownedTextures??=[];k.ownedTextures.push(map);
 }
 
