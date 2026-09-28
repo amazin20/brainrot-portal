@@ -65,6 +65,7 @@ for await (const chunk of fs.createReadStream(movie)) hash.update(chunk);
 const bytes = fs.statSync(movie).size;
 assert.equal(Number(probe.format.size), bytes);
 const report = {level: 41, title: evidence.title, sourceCommit: evidence.sourceCommit, edition: 'foundation', version: evidence.version,
+  graphicsPreset: evidence.graphicsPreset, graphicsBenchmark: evidence.graphicsBenchmark,
   route: evidence.route, observed: evidence.observed, gameMetrics: evidence.gameMetrics, continuous: true,
   frameCount, fps: 12, width: TOWER_CAPTURE.width, height: TOWER_CAPTURE.height, durationSeconds, captureTailSeconds,
   firstFrame, lastFrame, milestones: evidence.observed.stageEvents, maxQueuedFrames: evidence.maxQueuedFrames, sha256: hash.digest('hex'), bytes,

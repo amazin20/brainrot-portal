@@ -107,6 +107,54 @@ export async function runTowerVerification({out = process.env.OUT_DIR || 'qa/tow
       const menu = document.querySelector('#start-screen');
       return menu && !menu.inert && getComputedStyle(menu).opacity === '1';
     });
+    const graphicsBenchmark = [];
+    if (record) {
+      // Use the game's ordinary graphics control. Benchmark before Play, with
+      // no physics updates, to measure the software renderer plus JPEG readback.
+      await page.evaluate(() => {
+        const game = window.__NESI_DEMO_GAME__;
+        if (game.state !== 'ready') throw Error('Graphics benchmark must precede gameplay');
+        game.renderer.setAnimationLoop(null);
+      });
+      try {
+        for (const preset of ['balanced', 'low']) {
+          await page.select('#quality-select', preset);
+          graphicsBenchmark.push(await page.evaluate(preset => {
+            const game = window.__NESI_DEMO_GAME__;
+            const initial = {elapsed: game.elapsed, stages: game.firstLevel.completedStages, player: game.playerPosition.toArray()};
+            if (game.state !== 'ready') throw Error('Benchmark cannot advance a started run');
+            const canvas = document.createElement('canvas');
+            canvas.width = game.renderer.domElement.width; canvas.height = game.renderer.domElement.height;
+            const context = canvas.getContext('2d', {alpha: false});
+            const capture = () => {
+              game.render(); context.drawImage(game.renderer.domElement, 0, 0);
+              canvas.toDataURL('image/jpeg', .84);
+            };
+            capture(); // Warm the newly selected shader variant before timing.
+            const samples = [];
+            for (let frame = 0; frame < 12; frame++) {
+              const started = performance.now(); capture(); samples.push(performance.now() - started);
+            }
+            const after = {elapsed: game.elapsed, stages: game.firstLevel.completedStages, player: game.playerPosition.toArray()};
+            if (game.state !== 'ready' || JSON.stringify(initial) !== JSON.stringify(after)) throw Error('Graphics benchmark changed gameplay state');
+            samples.sort((a, b) => a - b);
+            return {preset, width: canvas.width, height: canvas.height, frames: 12, warmupFrames: 1,
+              shadows: game.renderer.shadowMap.enabled, medianFrameMs: (samples[5] + samples[6]) / 2,
+              meanFrameMs: samples.reduce((sum, ms) => sum + ms, 0) / samples.length};
+          }, preset));
+        }
+      } finally {
+        await page.evaluate(() => window.__NESI_DEMO_GAME__.renderer.setAnimationLoop(window.__NESI_DEMO_GAME__.animate));
+      }
+      for (const result of graphicsBenchmark) {
+        assert.equal(result.width, TOWER_CAPTURE.width); assert.equal(result.height, TOWER_CAPTURE.height);
+      }
+      assert.equal(graphicsBenchmark[1].shadows, false, 'The normal low graphics preset must disable shadows');
+      console.log('TOWER GRAPHICS BENCHMARK', JSON.stringify({results: graphicsBenchmark,
+        medianSpeedup: graphicsBenchmark[0].medianFrameMs / graphicsBenchmark[1].medianFrameMs, selected: 'low'}));
+    }
+    const graphicsPreset = await page.$eval('#quality-select', element => element.value);
+    if (record) assert.equal(graphicsPreset, 'low');
     for (let attempt = 0; attempt < 3; attempt++) {
       if (await page.evaluate(() => window.__NESI_DEMO_GAME__.state !== 'ready')) break;
       await page.bringToFront();
@@ -244,7 +292,7 @@ export async function runTowerVerification({out = process.env.OUT_DIR || 'qa/tow
         else delete window.__NESI_TOWER_FLUSH_FRAMES__;
       }
     }, {record, settings: TOWER_CAPTURE});
-    const evidence = {...result, sourceCommit: info.commit, version: info.version, title, url: url.href, errors,
+    const evidence = {...result, sourceCommit: info.commit, version: info.version, title, url: url.href, errors, graphicsPreset, graphicsBenchmark,
       method: 'Ordinary scripted input through production physics, 60 Hz visual and 120 Hz physics simulation. Not a human playtest or a hardware FPS benchmark.'};
     fs.writeFileSync(path.join(out, 'tower-evidence.json'), JSON.stringify(evidence, null, 2) + '\n');
     validateTowerEvidence(evidence);
