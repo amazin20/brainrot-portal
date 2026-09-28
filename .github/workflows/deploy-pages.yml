@@ -63,6 +63,12 @@ jobs:
           assert.equal(info.features.archiveRooms,33);
           assert.equal(info.verified,true);
           NODE
+      - name: Install media verifier
+        run: |
+          if ! command -v ffprobe >/dev/null; then
+            sudo apt-get update -qq
+            sudo apt-get install -y --no-install-recommends ffmpeg
+          fi
       - name: Verify all 40 complete MP4s and assemble the browser gallery
         run: node scripts/assemble-walkthroughs.mjs
       - uses: actions/configure-pages@v5

@@ -77,6 +77,10 @@ jobs:
         run: |
           npm ci
           npm install --no-save --package-lock=false puppeteer-core@24.16.0
+          if ! command -v ffmpeg >/dev/null || ! command -v ffprobe >/dev/null; then
+            sudo apt-get update -qq
+            sudo apt-get install -y --no-install-recommends ffmpeg
+          fi
           command -v ffmpeg
           command -v ffprobe
       - uses: actions/download-artifact@v4
@@ -126,6 +130,12 @@ jobs:
           pattern: walkthrough-level-*
           path: qa/walkthrough-input
           merge-multiple: true
+      - name: Install media verifier
+        run: |
+          if ! command -v ffprobe >/dev/null; then
+            sudo apt-get update -qq
+            sudo apt-get install -y --no-install-recommends ffmpeg
+          fi
       - name: Verify and assemble the two representative full recordings
         env:
           EXPECTED_LEVELS: '1,40'
