@@ -37,7 +37,15 @@ assert.equal(firstFrame.visualFrame, 0);
 assert.equal(firstFrame.completedStages, 0);
 assert.equal(lastFrame.state, 'won');
 assert.equal(lastFrame.completedStages, 500);
-assert.ok(Math.abs(frameCount / TOWER_CAPTURE.fps - evidence.observed.simulatedSeconds) < .1, 'Encoded time must remain 1× simulation time');
+// Samples begin at visual index zero. A victory between regular samples needs
+// the next 12 Hz sample, and the MP4 includes that final frame's display period.
+// Derive the exact frame count rather than mistaking this small tail for slowmo.
+const expectedFrames = Math.ceil((evidence.observed.frames - 1) / TOWER_CAPTURE.stride) + 1;
+assert.equal(frameCount, expectedFrames, 'Capture must end at the first regular sample showing victory');
+const durationSeconds = frameCount / TOWER_CAPTURE.fps;
+const captureTailSeconds = durationSeconds - evidence.observed.simulatedSeconds;
+assert.ok(captureTailSeconds >= -1e-6 && captureTailSeconds <= 2 / TOWER_CAPTURE.fps + 1 / TOWER_CAPTURE.physicsHz + 1e-6,
+  'Encoded time must remain 1× simulation time, with at most two final frame intervals');
 fs.copyFileSync(path.join(frameDir, '000000.jpg'), path.join(out, 'level-41.jpg'));
 console.log(`Encoding ${frameCount} complete Tower frames at ${TOWER_CAPTURE.fps} fps`);
 execFileSync('ffmpeg', ['-hide_banner', '-loglevel', 'warning', '-y', '-framerate', String(TOWER_CAPTURE.fps),
@@ -58,7 +66,7 @@ const bytes = fs.statSync(movie).size;
 assert.equal(Number(probe.format.size), bytes);
 const report = {level: 41, title: evidence.title, sourceCommit: evidence.sourceCommit, edition: 'foundation', version: evidence.version,
   route: evidence.route, observed: evidence.observed, gameMetrics: evidence.gameMetrics, continuous: true,
-  frameCount, fps: 12, width: TOWER_CAPTURE.width, height: TOWER_CAPTURE.height, durationSeconds: frameCount / 12,
+  frameCount, fps: 12, width: TOWER_CAPTURE.width, height: TOWER_CAPTURE.height, durationSeconds, captureTailSeconds,
   firstFrame, lastFrame, milestones: evidence.observed.stageEvents, maxQueuedFrames: evidence.maxQueuedFrames, sha256: hash.digest('hex'), bytes,
   video: 'level-41.mp4', poster: 'level-41.jpg', stills: ['tower-start.jpg', 'tower-middle.jpg', 'tower-finish.jpg'],
   overlay: 'Stage count and elapsed simulation time from the actual captured frame; no checkpoints.',

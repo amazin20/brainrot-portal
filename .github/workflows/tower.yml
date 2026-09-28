@@ -12,7 +12,7 @@ permissions:
   contents: read
 concurrency:
   group: tower-500-${{ github.ref }}
-  cancel-in-progress: false
+  cancel-in-progress: true
 env:
   BUILD_COMMIT: ${{ github.sha }}
 jobs:
