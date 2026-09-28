@@ -1,0 +1,42 @@
+name: Diagnostic Tower renderer benchmark
+on:
+  push:
+    branches: [diagnostic/tower-renderer]
+permissions:
+  contents: read
+concurrency:
+  group: diagnostic-tower-renderer-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  benchmark:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      BUILD_COMMIT: ${{ github.sha }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Build the isolated diagnostic candidate
+        run: |
+          npm ci
+          npm run build
+          npm install --no-save --package-lock=false puppeteer-core@24.16.0
+      - name: Compare 12 frozen-scene render and JPEG samples per profile
+        run: |
+          npm run preview -- --host 127.0.0.1 --port 4173 >benchmark-preview.log 2>&1 &
+          for i in {1..30}; do curl -fsS http://127.0.0.1:4173/ >/dev/null && break; sleep 1; done
+          curl -fsS http://127.0.0.1:4173/ >/dev/null
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+          node scripts/benchmark-tower-renderer.mjs
+      - name: Preserve timings and comparison stills only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tower-renderer-benchmark
+          path: |
+            qa/tower-renderer-benchmark/
+            benchmark-preview.log
+          retention-days: 3
