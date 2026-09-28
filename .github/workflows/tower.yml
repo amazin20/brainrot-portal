@@ -31,7 +31,7 @@ jobs:
       - name: Test and build the exact candidate
         run: |
           npm ci
-          node --test tests/lab-tower.test.js tests/lab-resume.test.js
+          node --test tests/lab-tower.test.js tests/lab-tower-transitions.test.js tests/lab-resume.test.js
           npm run build
           node scripts/v8-package-check.mjs
           node scripts/stamp-build.mjs v42-tower-500

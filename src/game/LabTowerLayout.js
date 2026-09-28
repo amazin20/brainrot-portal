@@ -8,7 +8,10 @@ export const TOWER_RISE = 2;
 export const TOWER_HALF_WIDTH = 2.2;
 export const TOWER_ENTRY_S = 1;
 export const TOWER_EXIT_S = 12.8;
-export const TOWER_ENTRY_MAX_S = 1.12;
+// A traveller can finish the preceding corner at n = -2, which is already
+// s = 2 on the next flight. This band includes that ordinary route; it is not
+// a required centre-line marker or a checkpoint.
+export const TOWER_ENTRY_MAX_S = 2.4;
 export const TOWER_MANDATORY_DISTANCE = TOWER_STAGE_COUNT * (TOWER_EXIT_S - TOWER_ENTRY_MAX_S);
 export const TOWER_MINIMUM_SECONDS = TOWER_MANDATORY_DISTANCE / 5;
 const CORNERS = [[0,0],[14,0],[14,-14],[0,-14]];

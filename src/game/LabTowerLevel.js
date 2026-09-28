@@ -203,7 +203,11 @@ export function buildTowerLevel(game,index=40){
   if(p.x< -2.7||p.x>16.7||p.z< -16.7||p.z>2.7){failure();return;}
   const state=states[completed],live=resident.get(completed);
   if(!state||!live)return;
-  if(!state.entered&&local.s>=TOWER_ENTRY_S&&local.s<=TOWER_ENTRY_MAX_S&&Math.abs(local.n)<2&&Math.abs(p.y-stage.baseY)<.45&&game.playerGrounded)state.entered=true;
+  // Both edges accept an ordinary jump. Requiring grounded contact made a
+  // valid corner cut or leap miss an invisible sensor and strand a closed gate.
+  // Ordered plates and the solid route remain mandatory; the wider entry band
+  // is included in the conservative distance bound in LabTowerLayout.
+  if(!state.entered&&local.s>=TOWER_ENTRY_S&&local.s<=TOWER_ENTRY_MAX_S&&Math.abs(local.n)<2&&p.y>=stage.baseY-.1&&p.y<=stage.baseY+2.5)state.entered=true;
   if(state.entered)stage.plates.forEach((plate,n)=>{
    if(!state.plates[n]&&Math.abs(local.s-plate.s)<.57&&Math.abs(local.n-plate.n)<.59&&Math.abs(p.y-stage.baseY)<.48&&game.playerGrounded){
     state.plates[n]=true;live.plateMeshes[n].material=m.pressed;
@@ -211,7 +215,7 @@ export function buildTowerLevel(game,index=40){
   });
   state.opened=state.entered&&stage.plates.every((_,n)=>state.plates[n]);
   setGate(live,Math.min(1,live.gateProgress+(state.opened?dt*10:0)));
-  if(state.entered&&state.opened&&local.s>=TOWER_EXIT_S&&local.s<15.1&&Math.abs(local.n)<2&&p.y>=stage.baseY+1.82&&p.y<stage.baseY+2.35&&game.playerGrounded
+  if(state.entered&&state.opened&&local.s>=TOWER_EXIT_S&&local.s<15.1&&Math.abs(local.n)<2&&p.y>=stage.baseY+1.82&&p.y<=stage.baseY+4.5
    &&game.cargo.position.distanceTo(p)<3.5){
    completed++;game.completedStages=completed;
    const event={stage:completed,seconds:elapsed,stageSeconds:elapsed-lastCompletion,position:p.toArray(),distanceMeters};
