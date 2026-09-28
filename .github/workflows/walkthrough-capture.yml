@@ -1,0 +1,142 @@
+name: Record complete foundation walkthroughs
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/walkthrough-capture.yml'
+      - 'scripts/record-foundation-walkthrough.mjs'
+      - 'scripts/assemble-walkthroughs.mjs'
+      - 'scripts/verify-public-walkthroughs.mjs'
+      - 'walkthroughs.*'
+      - 'src/**'
+  workflow_call:
+    inputs:
+      revision:
+        type: string
+        required: true
+      pilot:
+        type: boolean
+        default: false
+  workflow_dispatch:
+    inputs:
+      pilot:
+        description: 'Record only rooms 1 and 40 to measure time and size'
+        type: boolean
+        default: true
+      revision:
+        description: 'Exact commit to record; blank uses this workflow revision'
+        type: string
+        required: false
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    outputs:
+      commit: ${{ steps.commit.outputs.sha }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.revision || github.event.pull_request.head.sha || github.sha }}
+      - id: commit
+        run: echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Build the exact production candidate once
+        env:
+          BUILD_COMMIT: ${{ steps.commit.outputs.sha }}
+        run: |
+          npm ci
+          npm run build
+          node scripts/stamp-build.mjs v41-campaign-40
+      - uses: actions/upload-artifact@v4
+        with:
+          name: walkthrough-build
+          path: dist/
+          retention-days: 14
+  capture:
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      max-parallel: 20
+      matrix:
+        level: ${{ fromJSON((github.event_name == 'pull_request' || inputs.pilot) && '[1,40]' || '[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40]') }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.build.outputs.commit }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install locked runtime and browser driver
+        run: |
+          npm ci
+          npm install --no-save --package-lock=false puppeteer-core@24.16.0
+          if ! command -v ffmpeg >/dev/null || ! command -v ffprobe >/dev/null; then
+            sudo apt-get update -qq
+            sudo apt-get install -y --no-install-recommends ffmpeg
+          fi
+          command -v ffmpeg
+          command -v ffprobe
+      - uses: actions/download-artifact@v4
+        with:
+          name: walkthrough-build
+          path: dist/
+      - name: Complete and film this room in production WebGL
+        env:
+          LEVEL: ${{ matrix.level }}
+          BUILD_COMMIT: ${{ needs.build.outputs.commit }}
+        run: |
+          npm run preview -- --host 127.0.0.1 --port 4173 >walkthrough-preview.log 2>&1 &
+          for i in {1..30}; do curl -fsS http://127.0.0.1:4173/ >/dev/null && break; sleep 1; done
+          curl -fsS http://127.0.0.1:4173/build-info.json >/dev/null
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+          node scripts/record-foundation-walkthrough.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: walkthrough-level-${{ matrix.level }}
+          path: |
+            qa/walkthroughs/*.mp4
+            qa/walkthroughs/*.json
+            qa/walkthroughs/*.jpg
+          retention-days: 14
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: walkthrough-failure-${{ matrix.level }}
+          path: walkthrough-preview.log
+          retention-days: 14
+  pilot-review:
+    if: github.event_name == 'pull_request' || inputs.pilot
+    needs: [build, capture]
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.build.outputs.commit }}
+      - uses: actions/download-artifact@v4
+        with:
+          name: walkthrough-build
+          path: dist/
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: walkthrough-level-*
+          path: qa/walkthrough-input
+          merge-multiple: true
+      - name: Install media verifier
+        run: |
+          if ! command -v ffprobe >/dev/null; then
+            sudo apt-get update -qq
+            sudo apt-get install -y --no-install-recommends ffmpeg
+          fi
+      - name: Verify and assemble the two representative full recordings
+        env:
+          EXPECTED_LEVELS: '1,40'
+        run: node scripts/assemble-walkthroughs.mjs

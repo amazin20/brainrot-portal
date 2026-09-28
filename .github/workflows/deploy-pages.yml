@@ -18,9 +18,15 @@ jobs:
       # The identical candidate tree already has the full reviewed video.
       # Run all archived routes and the 40-room default campaign again.
       record_puzzle: false
+  walkthroughs:
+    needs: checks
+    uses: ./.github/workflows/walkthrough-capture.yml
+    with:
+      revision: ${{ github.sha }}
+      pilot: false
   deploy:
     if: github.ref == 'refs/heads/main'
-    needs: checks
+    needs: [checks, walkthroughs]
     runs-on: ubuntu-latest
     timeout-minutes: 60
     environment:
@@ -35,6 +41,12 @@ jobs:
         with:
           name: campaign-browser
           path: dist
+      - name: Download 40 recordings from this same workflow run
+        uses: actions/download-artifact@v4
+        with:
+          pattern: walkthrough-level-*
+          path: qa/walkthrough-input
+          merge-multiple: true
       - name: Confirm the package belongs to this revision
         env:
           BUILD_COMMIT: ${{ github.sha }}
@@ -51,6 +63,14 @@ jobs:
           assert.equal(info.features.archiveRooms,33);
           assert.equal(info.verified,true);
           NODE
+      - name: Install media verifier
+        run: |
+          if ! command -v ffprobe >/dev/null; then
+            sudo apt-get update -qq
+            sudo apt-get install -y --no-install-recommends ffmpeg
+          fi
+      - name: Verify all 40 complete MP4s and assemble the browser gallery
+        run: node scripts/assemble-walkthroughs.mjs
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
@@ -65,6 +85,13 @@ jobs:
         run: |
           npm ci
           npm install --no-save --package-lock=false puppeteer-core@24.16.0
+      - name: Verify 40 public MP4 ranges and gallery playback/seek in Chromium
+        env:
+          PAGE_URL: ${{ steps.deployment.outputs.page_url }}
+          BUILD_COMMIT: ${{ github.sha }}
+        run: |
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+          node scripts/verify-public-walkthroughs.mjs
       - name: Verify public revision, live model hashes and ordinary gameplay
         env:
           PAGE_URL: ${{ steps.deployment.outputs.page_url }}
@@ -104,6 +131,7 @@ jobs:
           name: public-site-verification
           path: |
             live-evidence/
+            qa/public-walkthroughs/
             qa/open-browser/
             qa/portal-regression/
             qa/foundation-browser/

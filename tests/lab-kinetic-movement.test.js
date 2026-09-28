@@ -55,6 +55,21 @@ test('epic cruise and sprint accelerate to 7.8 / 15 m/s; release and reverse inp
   }
 });
 
+test('touch sprint selects the same kinetic and ordinary movement speeds as desktop Shift', () => {
+  for (const epic of [true, false]) {
+    const game = fixture({ epic }); game.move.set(0, -1);
+    game.input.mobileSprint = true;
+    run(game, epic ? 1 : 3);
+    assert.ok(Math.abs(-game.playerVelocity.z - (epic ? 15 : 5)) < 1e-7);
+    game.input.mobileSprint = false;
+    run(game, epic ? 1 : 3);
+    if (epic) assert.ok(-game.playerVelocity.z < 14.41 && -game.playerVelocity.z > 7.8,
+      'kinetic movement must preserve earned speed briefly after sprint is turned off');
+    else assert.ok(Math.abs(-game.playerVelocity.z - 3.3) < 1e-7);
+    game.portals.dispose();
+  }
+});
+
 test('airborne momentum remains exact with no input, while steering changes heading without collapsing speed', () => {
   const game = fixture({ ground: false }); game.playerVelocity.set(30, 0, -20);
   const before = game.playerVelocity.clone(); run(game, .5);

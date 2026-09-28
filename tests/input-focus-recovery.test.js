@@ -19,6 +19,7 @@ class Vector2 {
 class Target {
   constructor() {
     this.listeners = new Map(); this.captures = new Set(); this.style = {};
+    this.attributes = new Map();
     this.rect = { left: 0, top: 0, width: 100, height: 100 };
   }
   addEventListener(type, listener) {
@@ -36,16 +37,18 @@ class Target {
     if (this.captures.delete(id)) this.emit('lostpointercapture', { pointerId: id });
   }
   getBoundingClientRect() { return this.rect; }
+  setAttribute(name, value) { this.attributes.set(name, String(value)); }
+  getAttribute(name) { return this.attributes.get(name); }
   listenerCount() { return [...this.listeners.values()].reduce((sum, listeners) => sum + listeners.size, 0); }
 }
 
 function fixture() {
   const window = new Target(), document = new Target(); document.hidden = false;
-  const joystick = new Target(), joystickKnob = new Target(), jumpButton = new Target();
+  const joystick = new Target(), joystickKnob = new Target(), jumpButton = new Target(), sprintButton = new Target();
   const context = vm.createContext({ THREE: { Vector2 }, window, document });
   vm.runInContext(isolatedSource, context, { filename: 'InputController.js' });
-  const input = new context.InputController({ joystick, joystickKnob, jumpButton });
-  return { input, window, document, joystick, joystickKnob, jumpButton };
+  const input = new context.InputController({ joystick, joystickKnob, jumpButton, sprintButton });
+  return { input, window, document, joystick, joystickKnob, jumpButton, sprintButton };
 }
 
 function startStick(f, pointerId = 1) {
@@ -56,7 +59,28 @@ function assertNeutral(f) {
   assert.equal(f.input.getMove().lengthSq(), 0);
   assert.equal(f.input.joystickPointer, null);
   assert.equal(f.joystickKnob.style.transform, 'translate(0, 0)');
+  assert.equal(f.input.mobileSprint, false);
+  assert.equal(f.sprintButton.getAttribute('aria-pressed'), 'false');
 }
+
+test('touch sprint toggles without another finger, remains available during jumps, and resets on pause/blur', () => {
+  const f = fixture();
+  startStick(f);
+  f.sprintButton.emit('click');
+  assert.equal(f.input.mobileSprint, true);
+  assert.equal(f.sprintButton.getAttribute('aria-pressed'), 'true');
+  f.jumpButton.emit('pointerdown');
+  assert.equal(f.input.consumeJump(), true);
+  assert.equal(f.input.mobileSprint, true);
+  f.sprintButton.emit('click');
+  assert.equal(f.input.mobileSprint, false);
+  f.sprintButton.emit('click');
+  f.window.emit('blur');
+  assertNeutral(f);
+  f.sprintButton.emit('click');
+  f.input.reset();
+  assertNeutral(f);
+});
 
 test('blur clears keyboard, touch movement, capture and queued one-shot input', () => {
   const f = fixture(); startStick(f);
@@ -143,8 +167,8 @@ test('touch jump and keyboard one-shot actions remain consumable exactly once', 
 
 test('dispose removes every controller listener and can be repeated', () => {
   const f = fixture(); startStick(f); f.input.dispose(); f.input.dispose();
-  for (const target of [f.window, f.document, f.joystick, f.jumpButton]) assert.equal(target.listenerCount(), 0);
-  f.window.emit('keydown', { code: 'KeyW' }); f.jumpButton.emit('pointerdown');
+  for (const target of [f.window, f.document, f.joystick, f.jumpButton, f.sprintButton]) assert.equal(target.listenerCount(), 0);
+  f.window.emit('keydown', { code: 'KeyW' }); f.jumpButton.emit('pointerdown'); f.sprintButton.emit('click');
   f.joystick.emit('pointerdown', { pointerId: 2, clientX: 81, clientY: 50 });
   assertNeutral(f); assert.equal(f.input.consumeJump(), false);
 });

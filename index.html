@@ -27,6 +27,7 @@
         <div class="start-actions">
           <label class="setting-row" for="level-select">Выбери комнату <select id="level-select"></select></label>
           <button id="play-button" class="primary-button">Начать испытание <span aria-hidden="true">↗</span></button>
+          <a class="walkthrough-link" href="./walkthroughs.html">Смотреть прохождения 40 комнат <span aria-hidden="true">↗</span></a>
         </div>
         <details class="controls-disclosure">
           <summary>Как играть <span aria-hidden="true">↗</span></summary>
@@ -95,7 +96,10 @@
     </section>
     <div id="mobile-controls" class="mobile-controls" aria-hidden="true" inert>
       <div id="joystick" class="joystick" role="group" aria-label="Джойстик движения"><div id="joystick-knob"></div></div>
-      <button id="jump-button" class="jump-button" aria-label="Прыжок">↑<span>ПРЫЖОК</span></button>
+      <div class="touch-actions">
+        <button id="sprint-button" class="sprint-button" aria-label="Бег" aria-pressed="false">»<span>БЕГ</span></button>
+        <button id="jump-button" class="jump-button" aria-label="Прыжок">↑<span>ПРЫЖОК</span></button>
+      </div>
     </div>
     <noscript><p class="no-script">Для этой 3D-игры нужен JavaScript. Включи его в браузере и обнови страницу.</p></noscript>
     <script type="module" src="/src/main.js"></script>
