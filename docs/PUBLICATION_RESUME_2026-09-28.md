@@ -22,7 +22,9 @@ The overall workflow is red because the subsequent `scripts/verify-public.mjs` t
 - Checker now waits for the active menu and true click target, uses trusted locator input, separately waits for playing/FPS, and captures failure stage/state/screenshot.
 - A read-only workflow checks the existing public version without rebuilding, recording, or deploying.
 - Verification run: https://github.com/amazin20/brainrot-portal/actions/runs/36382749405
-- At checkpoint creation, the gallery job has passed; the other four checks are running. Read their current state before taking further action.
+- Final result: all five jobs succeeded on 2026-09-28; the last job completed at 05:55:05 UTC. The workflow conclusion is success. The previous failure point was passed, including archive routes 29–33, continuation/wrap, portal-edge and flight/audio checks.
+- Public checks passed: all 40 videos/gallery; open rooms 24,28,30; default rooms 1,30,31,35,40; both horizontal-portal routes; archive routes/transitions and model hashes.
+- Final main remained `8f63b6270b97fd0f1cb9d0cd9b07ef31bc3af4f6`. This continuation created no new publication and did not regenerate any gameplay video.
 - Syntax, whitespace, workflow YAML, unchanged gameplay source guard, and a separate code review passed.
 
 ## Avoid duplicates
@@ -34,3 +36,6 @@ The old checkout at /workspace/scratch/6ae4beaa919d/brainrot-portal is from Sept
 The videos are complete automated solutions using ordinary simulated movement, aiming, portal firing, and interaction. They are not a human playtest or a hardware FPS measurement. Format: 854×480, H.264/yuv420p, 12 fps, silent, simulation-time speed. Canvas capture omits DOM HUD/tutorial/crosshair/win overlays. Completion is independently validated by won state, continuous capture, zero in-route resets/respawns, source identity, hashes, and ffprobe.
 
 The cloud browser in this session could play gallery videos but could not create a WebGL context. Runtime gameplay verification is therefore done by the existing GitHub Chromium probes; do not claim an interactive human-style playthrough from this browser.
+
+## Visual follow-up
+All 40 published posters were inspected. No blank/corrupt frame or absent player was found. Room 17 has an excessively close/low first-frame preview that crops the upper body; choose a clearer existing-video frame in the next gallery update. Similar starting compositions in rooms 31 and 33 are distinct images and rooms.
