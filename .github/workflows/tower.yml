@@ -1,0 +1,113 @@
+name: Verify and record Tower 500
+on:
+  push:
+    branches: [feature/tower-500]
+  workflow_dispatch:
+    inputs:
+      record:
+        description: Record the complete 500-stage Tower after verification
+        type: boolean
+        default: true
+permissions:
+  contents: read
+concurrency:
+  group: tower-500-${{ github.ref }}
+  cancel-in-progress: false
+env:
+  BUILD_COMMIT: ${{ github.sha }}
+jobs:
+  verify:
+    name: Exact Tower source, production package and full browser route
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Test and build the exact candidate
+        run: |
+          npm ci
+          node --test tests/lab-tower.test.js tests/lab-resume.test.js
+          npm run build
+          node scripts/v8-package-check.mjs
+          node scripts/stamp-build.mjs v42-tower-500
+          npm install --no-save --package-lock=false puppeteer-core@24.16.0
+      - name: Complete all 500 stages in production WebGL
+        run: |
+          npm run preview -- --host 127.0.0.1 --port 4173 >tower-preview.log 2>&1 &
+          for i in {1..30}; do curl -fsS http://127.0.0.1:4173/build-info.json >/dev/null && break; sleep 1; done
+          curl -fsS http://127.0.0.1:4173/build-info.json >/dev/null
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+          node scripts/verify-tower.mjs
+      - name: Preserve the verified Tower build
+        uses: actions/upload-artifact@v4
+        with:
+          name: tower-browser
+          path: dist/
+          if-no-files-found: error
+          retention-days: 14
+      - name: Preserve route metrics and browser screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tower-verification
+          path: |
+            qa/tower-verification/
+            tower-preview.log
+          retention-days: 14
+  record:
+    name: One continuous Tower walkthrough (500 stages, at least 15 minutes)
+    needs: verify
+    if: (github.event_name == 'workflow_dispatch' && inputs.record) || (github.event_name == 'push' && contains(github.event.head_commit.message, '[record-tower]'))
+    runs-on: ubuntu-latest
+    timeout-minutes: 295
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install the locked runtime and media tools
+        run: |
+          npm ci
+          npm install --no-save --package-lock=false puppeteer-core@24.16.0
+          if ! command -v ffmpeg >/dev/null || ! command -v ffprobe >/dev/null; then
+            sudo apt-get update -qq
+            sudo apt-get install -y --no-install-recommends ffmpeg
+          fi
+      - uses: actions/download-artifact@v4
+        with:
+          name: tower-browser
+          path: dist/
+      - name: Record only level 41 from the already verified package
+        run: |
+          npm run preview -- --host 127.0.0.1 --port 4173 >tower-record-preview.log 2>&1 &
+          for i in {1..30}; do curl -fsS http://127.0.0.1:4173/build-info.json >/dev/null && break; sleep 1; done
+          curl -fsS http://127.0.0.1:4173/build-info.json >/dev/null
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+          node scripts/record-tower-walkthrough.mjs
+      - name: Place recording diagnostics beside the Tower artifact files
+        if: always()
+        run: |
+          mkdir -p qa/tower-walkthrough
+          if [ -f tower-record-preview.log ]; then
+            cp tower-record-preview.log qa/tower-walkthrough/
+          fi
+      - name: Preserve the complete Tower video, metrics and first/middle/final frames
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tower-walkthrough
+          path: |
+            qa/tower-walkthrough/*.mp4
+            qa/tower-walkthrough/*.json
+            qa/tower-walkthrough/*.jpg
+            qa/tower-walkthrough/*.png
+            qa/tower-walkthrough/*.log
+          retention-days: 14

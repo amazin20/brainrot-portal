@@ -1,25 +1,12 @@
-name: Record complete foundation walkthroughs
+name: Manually re-record legacy foundation walkthroughs
+# Historical capture tool only. Publication reuses the approved forty videos.
+# No push/PR trigger and no deploy caller: editing the Tower cannot start a
+# second forty-room recording or an independent publication.
 on:
-  pull_request:
-    paths:
-      - '.github/workflows/walkthrough-capture.yml'
-      - 'scripts/record-foundation-walkthrough.mjs'
-      - 'scripts/assemble-walkthroughs.mjs'
-      - 'scripts/verify-public-walkthroughs.mjs'
-      - 'walkthroughs.*'
-      - 'src/**'
-  workflow_call:
-    inputs:
-      revision:
-        type: string
-        required: true
-      pilot:
-        type: boolean
-        default: false
   workflow_dispatch:
     inputs:
       pilot:
-        description: 'Record only rooms 1 and 40 to measure time and size'
+        description: 'Explicitly re-record legacy rooms 1 and 40 (false re-records all 40)'
         type: boolean
         default: true
       revision:
@@ -37,7 +24,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ inputs.revision || github.event.pull_request.head.sha || github.sha }}
+          ref: ${{ inputs.revision || github.sha }}
       - id: commit
         run: echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
       - uses: actions/setup-node@v4
@@ -50,7 +37,7 @@ jobs:
         run: |
           npm ci
           npm run build
-          node scripts/stamp-build.mjs v41-campaign-40
+          node scripts/stamp-build.mjs v42-tower-500
       - uses: actions/upload-artifact@v4
         with:
           name: walkthrough-build
@@ -64,7 +51,7 @@ jobs:
       fail-fast: false
       max-parallel: 20
       matrix:
-        level: ${{ fromJSON((github.event_name == 'pull_request' || inputs.pilot) && '[1,40]' || '[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40]') }}
+        level: ${{ fromJSON(inputs.pilot && '[1,40]' || '[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40]') }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -113,7 +100,7 @@ jobs:
           path: walkthrough-preview.log
           retention-days: 14
   pilot-review:
-    if: github.event_name == 'pull_request' || inputs.pilot
+    if: inputs.pilot
     needs: [build, capture]
     runs-on: ubuntu-latest
     timeout-minutes: 10

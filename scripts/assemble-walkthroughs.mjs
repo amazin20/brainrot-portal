@@ -1,4 +1,4 @@
-/** Publish only a complete, verified set of default-campaign walkthroughs. */
+/** Publish the approved forty recordings and one freshly verified Tower run. */
 import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
 import {execFileSync} from 'node:child_process';
@@ -8,13 +8,16 @@ import path from 'node:path';
 const source=path.resolve(process.env.INPUT_DIR||'qa/walkthrough-input');
 const dist=path.resolve(process.env.DIST_DIR||'dist');
 const target=path.join(dist,'walkthroughs');
-const expected=(process.env.EXPECTED_LEVELS||Array.from({length:40},(_,i)=>i+1).join(','))
+const expected=(process.env.EXPECTED_LEVELS||Array.from({length:41},(_,i)=>i+1).join(','))
  .split(',').map(Number).sort((a,b)=>a-b);
-assert.ok(expected.length>0&&expected.every(n=>Number.isInteger(n)&&n>=1&&n<=40));
+assert.ok(expected.length>0&&expected.every(n=>Number.isInteger(n)&&n>=1&&n<=41));
 assert.equal(new Set(expected).size,expected.length,'Level list must be unique');
 const build=JSON.parse(fs.readFileSync(path.join(dist,'build-info.json'),'utf8'));
 assert.equal(build.features.defaultEdition,'foundation');
-assert.equal(build.levels,40);
+assert.equal(build.levels,41);
+const approval=JSON.parse(fs.readFileSync('docs/approved-walkthroughs-40.json','utf8'));
+assert.equal(createHash('sha256').update(JSON.stringify(approval.originalManifest,null,2)+'\n').digest('hex'),approval.manifestSha256,'Approved manifest pin changed');
+assert.equal(approval.originalManifest.levels.length,40);
 const hashFile=async file=>{const hash=createHash('sha256');for await(const chunk of fs.createReadStream(file))hash.update(chunk);return hash.digest('hex');};
 const width=854,height=480,fps=12;
 const levels=[];let totalVideoBytes=0;
@@ -22,21 +25,51 @@ fs.mkdirSync(target,{recursive:true});
 for(const level of expected){
  const stem=`level-${String(level).padStart(2,'0')}`;
  const record=JSON.parse(fs.readFileSync(path.join(source,`${stem}.json`),'utf8'));
- assert.equal(record.sourceCommit,build.commit,`Stale recording of room ${level}`);
  assert.equal(record.level,level);
  assert.equal(record.edition,'foundation');
- assert.equal(record.route?.pass,true);
- assert.equal(record.route.level,level);
- assert.equal(record.route.resets,0);assert.equal(record.route.respawns,0);
- assert.equal(record.continuous,true);
- assert.equal(record.firstFrame.visualFrame,0);
- assert.equal(record.lastFrame.state,'won');
+ if(record.reused){
+  assert.ok(level<=40,'Only the forty approved recordings may be reused');
+  const approved=approval.originalManifest.levels[level-1];
+  assert.equal(record.sourceCommit,approval.originalManifest.sourceCommit);
+  for(const key of ['level','title','src','durationSeconds','width','height','fps','bytes','sha256']){
+   assert.equal(record[key],approved[key],`Reused room ${level} differs from approved ${key}`);
+  }
+  assert.deepEqual(record.provenance,{kind:'approved-existing-recording',manifestSha256:approval.manifestSha256,
+   captureRunId:approval.captureRunId,verificationRunId:approval.verificationRunId});
+ }else{
+  assert.equal(record.sourceCommit,build.commit,`Stale recording of room ${level}`);
+  assert.equal(record.route?.pass,true);
+  assert.equal(record.route.level,level);
+  assert.equal(record.route.resets,0);assert.equal(record.route.respawns,0);
+  assert.equal(record.continuous,true);
+  assert.equal(record.firstFrame.visualFrame,0);
+  assert.equal(record.lastFrame.state,'won');
+  assert.ok(record.milestones?.length>0);
+ }
+ if(level===41){
+  assert.equal(record.reused,undefined,'The final Tower must be freshly filmed from this exact revision');
+  assert.equal(record.route.stagesCompleted,500);
+  assert.equal(record.route.stageEvents.length,500);
+  assert.equal(record.gameMetrics.totalStages,500);
+  assert.equal(record.gameMetrics.completedStages,500);
+  assert.equal(record.gameMetrics.checkpoints,false);
+  assert.equal(record.firstFrame.completedStages,0);
+  assert.equal(record.lastFrame.completedStages,500);
+  assert.ok(record.durationSeconds>=900,'Tower video must last at least fifteen minutes');
+  assert.ok(record.observed.activeSeconds>=900,'Tower must contain fifteen minutes of actual movement');
+  assert.ok(record.observed.movingSeconds>=900,'Tower may not replace fifteen movement minutes with stationary aiming');
+  assert.ok(record.observed.simulatedSeconds>=900);
+  assert.ok(Math.abs(record.durationSeconds-record.observed.simulatedSeconds)<=1,'Video may not be slowed or padded');
+  assert.ok(record.observed.distanceMeters>2500,'Tower recording must traverse the actual course');
+  assert.ok(record.observed.maxIdleSeconds<=5,'Tower recording contains a prolonged idle interval');
+  for(const key of ['resetCalls','respawnCalls','cargoResetCalls'])assert.equal(record.observed[key],0,`Tower ${key}`);
+  assert.equal(record.observed.stageEvents.length,500);
+ }
  assert.equal(record.fps,fps);assert.equal(record.width,width);assert.equal(record.height,height);
  assert.ok(Number.isInteger(record.frameCount)&&record.frameCount>60);
  assert.ok(Math.abs(record.durationSeconds-record.frameCount/fps)<.001);
  assert.equal(record.video,`${stem}.mp4`);assert.equal(record.poster,`${stem}.jpg`);
  assert.ok(typeof record.title==='string'&&record.title.trim().length>1);
- assert.ok(record.milestones?.length>0);
  const movie=path.join(source,record.video),poster=path.join(source,record.poster);
  const movieBytes=fs.statSync(movie).size;
  assert.equal(record.bytes,movieBytes);
@@ -57,7 +90,10 @@ for(const level of expected){
  totalVideoBytes+=movieBytes;
  levels.push({level,title:record.title,src:`walkthroughs/${record.video}`,
   poster:`walkthroughs/${record.poster}`,durationSeconds:record.durationSeconds,
-  width,height,fps,bytes:movieBytes,sha256:record.sha256});
+  width,height,fps,bytes:movieBytes,sha256:record.sha256,sourceCommit:record.sourceCommit,
+  ...(record.reused?{reused:true,provenance:record.provenance}:{continuous:true}),
+  ...(level===41?{stages:500,checkpoints:false,activeSeconds:record.observed.activeSeconds,movingSeconds:record.observed.movingSeconds,
+   maxIdleSeconds:record.observed.maxIdleSeconds,distanceMeters:record.observed.distanceMeters}:{} )});
 }
 // GitHub Pages published sites must stay substantially under one gigabyte.
 // Keep a deliberately strict video budget: a future bloated level fails the

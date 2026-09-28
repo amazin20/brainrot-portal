@@ -4,19 +4,22 @@ import assert from 'node:assert/strict';
 import {execFileSync} from 'node:child_process';
 import {CAMPAIGN} from '../src/game/LabCampaignLevels.js';
 import {FOUNDATION_INDICES} from '../src/game/LabFoundationEdition.js';
+import {TOWER_STAGE_COUNT,TOWER_RISE,TOWER_MINIMUM_SECONDS} from '../src/game/LabTowerLayout.js';
 
-const [version='v41-campaign-40',directory='dist']=process.argv.slice(2);
+const [version='v42-tower-500',directory='dist']=process.argv.slice(2);
 const commit=process.env.BUILD_COMMIT||process.env.GITHUB_SHA;
 assert.match(commit||'',/^[a-f0-9]{40}$/,'Build metadata requires the exact checked-out commit SHA');
 assert.equal(execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),commit,'Metadata must describe the checked-out source');
-assert.equal(version,'v41-campaign-40','Unexpected publication version');
+assert.equal(version,'v42-tower-500','Unexpected publication version');
 assert.equal(CAMPAIGN.length,33,'Unexpected campaign size');
-assert.equal(FOUNDATION_INDICES.length,40,'Unexpected default campaign size');
+assert.equal(FOUNDATION_INDICES.length,41,'Unexpected default campaign size');
+assert.equal(TOWER_STAGE_COUNT,500,'The final Tower must have exactly 500 mandatory stages');
+assert.ok(TOWER_MINIMUM_SECONDS>=900,'Tower physical-distance bound must exceed fifteen active minutes');
 assert.ok(fs.existsSync(path.join(directory,'index.html')),'Stamp an existing production package');
-const info={commit,version,artVersion:'v41-campaign-40',levels:FOUNDATION_INDICES.length,verified:true,status:'technical-candidate',
+const info={commit,version,artVersion:'v42-tower-500',levels:FOUNDATION_INDICES.length,verified:true,status:'technical-candidate',
  verificationScope:'Automated source/package checks; route jobs gate publication',
  acceptance:{humanPlaytest:false,physicalDeviceBenchmark:false,liveYandex:false},
- features:{defaultEdition:'foundation',foundation:{version:'foundation-v2',rooms:FOUNDATION_INDICES.map(i=>i+1),redesignedOpening:[1,2,3,4,5],newChapter:[31,32,33,34,35,36,37,38,39,40],separateSave:true},archiveQuery:'edition=classic',archiveRooms:CAMPAIGN.length,campaignRooms:FOUNDATION_INDICES.length,campaignFinaleLevel:40,separateVelocityMode:false,openChamberReview:{version:'research-laboratory-v3',query:'edition=open',rooms:[24,28,30,31,32,33],separateSave:true}},
+ features:{defaultEdition:'foundation',foundation:{version:'foundation-v3',rooms:FOUNDATION_INDICES.map(i=>i+1),redesignedOpening:[1,2,3,4,5],newChapter:[31,32,33,34,35,36,37,38,39,40],separateSave:true},archiveQuery:'edition=classic',archiveRooms:CAMPAIGN.length,campaignRooms:FOUNDATION_INDICES.length,campaignFinaleLevel:41,tower:{level:41,stages:TOWER_STAGE_COUNT,checkpoints:false,minimumActiveSeconds:900,totalRise:TOWER_STAGE_COUNT*TOWER_RISE,query:'edition=foundation&level=41'},separateVelocityMode:false,openChamberReview:{version:'research-laboratory-v3',query:'edition=open',rooms:[24,28,30,31,32,33],separateSave:true}},
  repository:process.env.GITHUB_REPOSITORY,run:process.env.GITHUB_RUN_ID};
 fs.writeFileSync(path.join(directory,'build-info.json'),JSON.stringify(info,null,2)+'\n');
 console.log(`Stamped ${directory}: ${version} / ${commit}`);

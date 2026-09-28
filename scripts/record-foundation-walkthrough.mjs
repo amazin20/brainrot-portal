@@ -57,7 +57,7 @@ try{
  const info=await page.evaluate(async()=>{const response=await fetch('build-info.json',{cache:'no-store'});assertResponse(response);return response.json();
   function assertResponse(response){if(!response.ok)throw Error(`Build-info HTTP ${response.status}`);}});
  assert.equal(info.features.defaultEdition,'foundation');
- assert.equal(info.levels,40);
+ assert.equal(info.levels,41);
  if(process.env.BUILD_COMMIT)assert.equal(info.commit,process.env.BUILD_COMMIT);
  assert.equal(await page.evaluate(()=>window.__NESI_DEMO_GAME__.chamberEdition),'foundation');
  assert.equal(await page.$eval('#level-select',element=>Number(element.value)),level-1);

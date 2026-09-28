@@ -1,12 +1,12 @@
-/** The numbered campaign adds ten new rooms after the original finale.
+/** The numbered campaign ends with the continuous 500-stage Tower.
  * Explicit archive links and unqualified later bookmarks retain their old meaning. */
-export const FOUNDATION_INDICES=Object.freeze(Array.from({length:40},(_,index)=>index));
+export const FOUNDATION_INDICES=Object.freeze(Array.from({length:41},(_,index)=>index));
 export function readFoundationEdition(query){
  const p=new URLSearchParams(query),edition=p.get('edition'),level=Number(p.get('level')||1);
  // Unqualified 6–33 links predate this edition and remain archive links.
- // Rooms 34–40 have never existed in the archive, so direct links open the
+ // Rooms 34–41 have never existed in the archive, so direct links open the
  // new default campaign without requiring a special query parameter.
- const enabled=edition==='foundation'||(!edition&&p.get('mode')!=='velocity'&&(!(level>5)||(level>=34&&level<=40)));
+ const enabled=edition==='foundation'||(!edition&&p.get('mode')!=='velocity'&&(!(level>5)||(level>=34&&level<=FOUNDATION_INDICES.length)));
  return {enabled,levelIndex:Number.isInteger(level)&&level>=1&&level<=FOUNDATION_INDICES.length?level-1:0};
 }
 export function foundationStorage(storage){

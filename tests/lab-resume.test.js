@@ -15,7 +15,8 @@ test('victory persists the next room and final victory keeps the final room',()=
  const s=storage(),p=new LabPreferences(s);p.complete(4);p.save({resumeLevel:nextResumeLevel(4,FOUNDATION_INDICES)});
  assert.equal(new LabPreferences(s).value.resumeLevel,5);
  assert.equal(nextResumeLevel(29,FOUNDATION_INDICES),30);
- assert.equal(nextResumeLevel(39,FOUNDATION_INDICES),39);
+ assert.equal(nextResumeLevel(40,FOUNDATION_INDICES),40);
+ assert.equal(nextResumeLevel(39,FOUNDATION_INDICES),40);
  assert.equal(nextResumeLevel(OPEN_ROOM_INDICES[0],OPEN_ROOM_INDICES),OPEN_ROOM_INDICES[1]);
 });
 test('completed previous finale resumes at the new room 31 without changing archive or manual links',()=>{
@@ -25,13 +26,19 @@ test('completed previous finale resumes at the new room 31 without changing arch
  assert.equal(resumeCampaignLevel('',old,Array.from({length:33},(_,i)=>i),0),29);
  assert.equal(resumeCampaignLevel('',{completed:old.completed.slice(0,29),resumeLevel:29},FOUNDATION_INDICES,0),29);
 });
+test('completed forty-room finale resumes at the Tower without granting a stage checkpoint',()=>{
+ const previous={completed:Array.from({length:40},(_,i)=>i),resumeLevel:39};
+ assert.equal(resumeCampaignLevel('',previous,FOUNDATION_INDICES,0),40);
+ assert.equal(resumeCampaignLevel('level=40',previous,FOUNDATION_INDICES,39),39);
+ assert.equal(resumeCampaignLevel('',{completed:previous.completed.slice(0,39),resumeLevel:39},FOUNDATION_INDICES,0),39);
+});
 test('explicit links and retired velocity links override saved resume',()=>{
  const p={completed:[0],resumeLevel:12};
  for(const q of ['level=1','level=bad','mode=velocity&return=21'])assert.equal(resumeCampaignLevel(q,p,FOUNDATION_INDICES,0),0);
 });
 test('old saves resume first uncompleted room; scattered completions never skip puzzles',()=>{
  assert.equal(resumeCampaignLevel('',{completed:[0,1,20]},FOUNDATION_INDICES,0),2);
- assert.equal(resumeCampaignLevel('',{completed:[...FOUNDATION_INDICES]},FOUNDATION_INDICES,0),39);
+ assert.equal(resumeCampaignLevel('',{completed:[...FOUNDATION_INDICES]},FOUNDATION_INDICES,0),40);
  assert.equal(resumeCampaignLevel('',{completed:[]},OPEN_ROOM_INDICES,OPEN_ROOM_INDICES[0]),OPEN_ROOM_INDICES[0]);
 });
 test('resume stays isolated across campaign, archive and research',()=>{

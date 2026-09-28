@@ -18,7 +18,7 @@ try{
   await page.goto(url.href,{waitUntil:'networkidle2'});await page.waitForFunction(()=>window.__NESI_DEMO_GAME__?.state==='ready');
   const build=await page.evaluate(async()=>{const r=await fetch('build-info.json',{cache:'no-store'});return r.json();});
   if(process.env.BUILD_COMMIT)assert.equal(build.commit,process.env.BUILD_COMMIT);
-  assert.equal(build.levels,40);
+  assert.equal(build.levels,41);
   assert.deepEqual(await page.$$eval('#level-select option',a=>a.map(o=>Number(o.value))),[23,27,29,30,31,32]);
   const before=await page.evaluate(()=>localStorage.getItem('brainrot-portal.preferences.v24'));
   const startupStatus=()=>page.evaluate(()=>({state:window.__NESI_DEMO_GAME__?.state,

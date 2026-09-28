@@ -28,11 +28,11 @@ try{
   await page.goto(url.href,{waitUntil:'networkidle2'});await page.waitForFunction(()=>window.__NESI_DEMO_GAME__?.state==='ready');
   const info=await page.evaluate(async()=>{const r=await fetch('build-info.json',{cache:'no-store'});return r.json();});
   if(process.env.BUILD_COMMIT)assert.equal(info.commit,process.env.BUILD_COMMIT);
-  assert.equal(info.features.defaultEdition,'foundation');assert.deepEqual(info.features.foundation.rooms,Array.from({length:40},(_,i)=>i+1));
+  assert.equal(info.features.defaultEdition,'foundation');assert.deepEqual(info.features.foundation.rooms,Array.from({length:41},(_,i)=>i+1));
   assert.equal(await page.evaluate(()=>window.__NESI_DEMO_GAME__.chamberEdition),'foundation');
-  assert.deepEqual(await page.$$eval('#level-select option',a=>a.map(e=>Number(e.value))),Array.from({length:40},(_,i)=>i));
+  assert.deepEqual(await page.$$eval('#level-select option',a=>a.map(e=>Number(e.value))),Array.from({length:41},(_,i)=>i));
   assert.equal(await page.$eval('#level-select',e=>Number(e.value)),room-1);
-  assert.match(await page.$eval('#campaign-count',e=>e.textContent),/40 испытаний/);
+  assert.match(await page.$eval('#campaign-count',e=>e.textContent),/41 испытание/);
   const saved=await page.evaluate(()=>({classic:localStorage.getItem('brainrot-portal.preferences.v24'),legacy:localStorage.getItem('nesi.preferences.v8'),open:localStorage.getItem('brainrot-open-rebuild-v1:brainrot-portal.preferences.v24')}));
   await page.screenshot({path:path.join(out,`${room}-menu.png`)});
   await page.waitForFunction(()=>{
@@ -126,15 +126,16 @@ try{
     console.log('FOUNDATION VERIFIED',JSON.stringify(summaries.at(-1)));
    }
    const after=await page.evaluate(()=>({classic:localStorage.getItem('brainrot-portal.preferences.v24'),legacy:localStorage.getItem('nesi.preferences.v8'),open:localStorage.getItem('brainrot-open-rebuild-v1:brainrot-portal.preferences.v24')}));assert.deepEqual(after,saved,'Another edition save changed');
-   // The real victory control advances room 30 into 31 and wraps after room 40.
+   // The real victory control advances room 30 into 31 and room 40 into the Tower.
+   // Tower completion and its final wrap are covered by the separate full-route verifier.
    await page.waitForFunction(()=>!document.pointerLockElement&&getComputedStyle(document.querySelector('#win-screen')).opacity==='1');
-   if(room===40)assert.match(await page.$eval('#win-screen .muted',e=>e.textContent),/40 испытаний кампании/);
+   if(room===40)assert.match(await page.$eval('#play-again-button',e=>e.textContent),/следующ|башн/i);
    await page.screenshot({path:path.join(out,`${room}-win.png`)});
    await page.locator('#play-again-button').click();
-   await page.waitForFunction(next=>window.__NESI_DEMO_GAME__?.state==='playing'&&window.__NESI_DEMO_GAME__.levelIndex===next,{},room===40?0:room);
+   await page.waitForFunction(next=>window.__NESI_DEMO_GAME__?.state==='playing'&&window.__NESI_DEMO_GAME__.levelIndex===next,{},room);
    await page.evaluate(()=>{const g=window.__NESI_DEMO_GAME__;g.renderer.setAnimationLoop(null);g.render();});
    await page.screenshot({path:path.join(out,`${room}-next.png`)});
-   fs.writeFileSync(path.join(out,`${room}-ui.json`),JSON.stringify({source:info.commit,defaultEntry:unqualified,saveIsolated:true,transition:{from:room,to:room===40?1:room+1},errors},null,2));
+   fs.writeFileSync(path.join(out,`${room}-ui.json`),JSON.stringify({source:info.commit,defaultEntry:unqualified,saveIsolated:true,transition:{from:room,to:room+1},errors},null,2));
   }catch(error){await page.screenshot({path:path.join(out,`${room}-failure.png`)});throw error;}finally{await page.close();}
  }
 }finally{await browser.close();fs.writeFileSync(path.join(out,'summary.json'),JSON.stringify(summaries,null,2));}

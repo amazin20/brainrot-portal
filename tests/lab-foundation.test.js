@@ -14,15 +14,15 @@ const make=async n=>{const g=await createHeadlessGame();g.chamberEdition='founda
 test('root starts a separate first chapter; explicit archives and later bookmarks keep their meaning',()=>{
  for(const q of ['', '?debug=1', '?edition=foundation'])assert.deepEqual(readFoundationEdition(q),{enabled:true,levelIndex:0});
  for(const n of [1,2,3,4,5])assert.deepEqual(readFoundationEdition('?level='+n),{enabled:true,levelIndex:n-1});
- for(const n of [34,40])assert.deepEqual(readFoundationEdition('?level='+n),{enabled:true,levelIndex:n-1});
- for(const n of [6,30,31,40])assert.deepEqual(readFoundationEdition('?edition=foundation&level='+n),{enabled:true,levelIndex:n-1});
+ for(const n of [34,40,41])assert.deepEqual(readFoundationEdition('?level='+n),{enabled:true,levelIndex:n-1});
+ for(const n of [6,30,31,40,41])assert.deepEqual(readFoundationEdition('?edition=foundation&level='+n),{enabled:true,levelIndex:n-1});
  for(const q of ['?edition=classic&level=1','?edition=open&level=31','?level=6','?level=31','?mode=velocity'])assert.equal(readFoundationEdition(q).enabled,false);
- assert.deepEqual(FOUNDATION_INDICES,Array.from({length:40},(_,i)=>i));
- assert.deepEqual(FOUNDATION_INDICES.map(nextFoundationLevel),[...Array.from({length:39},(_,i)=>i+1),0]);
+ assert.deepEqual(FOUNDATION_INDICES,Array.from({length:41},(_,i)=>i));
+ assert.deepEqual(FOUNDATION_INDICES.map(nextFoundationLevel),[...Array.from({length:40},(_,i)=>i+1),0]);
  assert.equal(CAMPAIGN.length,33);assert.equal(new Set(FOUNDATION_SPECS.map(s=>s.id)).size,5);
  assert.ok(FOUNDATION_SPECS.every(s=>!CAMPAIGN.some(c=>s.id===c.id)));
- assert.equal(FOUNDATION_LATE_SPECS.length,10);
- assert.equal(new Set(FOUNDATION_LATE_SPECS.map(s=>s.id)).size,10);
+ assert.equal(FOUNDATION_LATE_SPECS.length,11);
+ assert.equal(new Set(FOUNDATION_LATE_SPECS.map(s=>s.id)).size,11);
  assert.ok(FOUNDATION_LATE_SPECS.every(s=>!CAMPAIGN.some(c=>s.id===c.id)));
 });
 test('foundation continues into the existing sixth room without changing its builder or archive progress',async()=>{

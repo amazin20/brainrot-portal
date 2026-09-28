@@ -52,7 +52,8 @@ function showVictory(){
   $('#win-title').innerHTML='Вместе<br />получилось<span>.</span>';
   $('#win-screen .eyebrow').textContent='ДРУГ ТОЖЕ ДОБРАЛСЯ';
   $('#play-again-button').textContent=last?'К первому испытанию ↻':'Следующий уровень →';
-  $('#win-screen .muted').textContent=last?(foundationEdition.enabled?'Пройдены все 40 испытаний кампании. Архив и лабораторные комнаты доступны отдельно.':openEdition.enabled?'Пройдены все испытания этой версии.':'Все доступные испытания завершены. Друг добрался вместе с тобой.'):'Получилось! Следующее испытание добавит новую идею.';
+  $('#win-screen .muted').textContent=last?(foundationEdition.enabled?'Пройдены все 41 испытание кампании и 500 этапов Башни без чекпоинтов. Друг добрался до самой вершины.':openEdition.enabled?'Пройдены все испытания этой версии.':'Все доступные испытания завершены. Друг добрался вместе с тобой.'):foundationEdition.enabled&&game.levelIndex===39?'Впереди финальная Башня: 500 этапов за один заход. Без чекпоинтов.':'Получилось! Следующее испытание добавит новую идею.';
+  if(game.firstLevel?.tower){$('#win-title').innerHTML='Башня<br />покорена<span>.</span>';$('#win-screen .eyebrow').textContent='500 / 500 · ОДНИМ ЗАХОДОМ';}
   diagnostics();
 }
 function showHints(){
@@ -102,7 +103,10 @@ finally{game.render();clearInput();setState(game.state);diagnostics();}
         finally{game.render();clearInput();setState(game.state);diagnostics();}
       };}
     $('#play-button').focus({preventScroll:true});if(query.get('smoke')==='1')enterLevel(game.levelIndex,'initial');},
-  onHud:({chamber,objective,hasCargo,portalsReady})=>{hudText('level',String(game.levelIndex+1));hudText('chamber',chamber);hudText('objective',objective||'');hudText('cargo',game.velocityCompanion?.connected?'Друг закреплён':hasCargo?'Друг на руках':'Друг ждёт');hudText('portals',portalsReady?'Связаны':'Два портала');},
+  onHud:({chamber,objective,hasCargo,portalsReady})=>{hudText('level',String(game.levelIndex+1));hudText('chamber',chamber);hudText('objective',objective||'');hudText('cargo',game.velocityCompanion?.connected?'Друг закреплён':hasCargo?'Друг на руках':'Друг ждёт');hudText('portals',portalsReady?'Связаны':'Два портала');
+    const clock=$('#tower-run-clock');clock.hidden=!game.firstLevel?.tower;
+    if(!clock.hidden){const seconds=Math.floor(game.elapsed/1000);clock.textContent=`${String(Math.floor(seconds/60)).padStart(2,'0')}:${String(seconds%60).padStart(2,'0')} · Без чекпоинтов`;}
+  },
   onToast:message=>{if(/Сначала|не помещается|препятствие|белую|Раздвинь|свободное|лицевую/.test(message))game.tutorial.explain(message);},
   onPause:paused=>{clearInput();screen('pause-screen',paused);setState(paused?'paused':'playing');if(paused){pauseInfo();$('#resume-button').focus({preventScroll:true});}},
   onRestartRequest:()=>restartLevel(),
@@ -119,14 +123,16 @@ game.levelIndex=resumeCampaignLevel(query,preferences.value,availableRooms,game.
 choices();$('#level-select').value=String(game.levelIndex);
 function updateStartAction(){
  const index=Number($('#level-select').value),saved=preferences.value.resumeLevel===index;
- $('#play-button').textContent=`${saved?'Продолжить':'Начать'} · комната ${index+1} →`;
+ const tower=foundationEdition.enabled&&index===40;
+ $('#tower-start-note').hidden=!tower;
+ $('#play-button').textContent=tower?'Начать башню с основания →':`${saved?'Продолжить':'Начать'} · комната ${index+1} →`;
 }
 $('#level-select').addEventListener('change',updateStartAction);updateStartAction();
-$('#campaign-count').textContent=foundationEdition.enabled?'Кампания · 40 испытаний':openEdition.enabled?`${OPEN_ROOM_INDICES.length} лабораторных испытаний · отдельная версия`:`Архив · ${CAMPAIGN.length} испытания`;
-if(foundationEdition.enabled){$('#start-screen .brand').textContent='КАМПАНИЯ · ОТ ОТКРЫТИЯ К ЭКСПЕРИМЕНТУ';$('#start-screen .lead').textContent='Первые пять комнат знакомят с порталами, светом и движением. Затем можно пройти остальные испытания исследовательского комплекса.';}
+$('#campaign-count').textContent=foundationEdition.enabled?'Кампания · 41 испытание':openEdition.enabled?`${OPEN_ROOM_INDICES.length} лабораторных испытаний · отдельная версия`:`Архив · ${CAMPAIGN.length} испытания`;
+if(foundationEdition.enabled){$('#start-screen .brand').textContent='КАМПАНИЯ · ОТ ОТКРЫТИЯ К ВЕРШИНЕ';$('#start-screen .lead').textContent='Исследуй 40 комнат с порталами, светом и движением. Финал — огромная башня из 500 этапов без единого чекпоинта.';}
 else if(openEdition.enabled){$('#start-screen .brand').textContent='ЛАБОРАТОРНЫЕ ИСПЫТАНИЯ';$('#start-screen .lead').textContent='Камеры 24, 28, 30 и 31–33. Эта подборка и новая первая глава хранят прогресс отдельно от архива.';}
 const editionNav=document.createElement('nav');editionNav.className='edition-navigation';editionNav.setAttribute('aria-label','Версии кампании');
-for(const [id,text,href]of [['foundation','Кампания · с начала','?edition=foundation&level=1'],['open','Лабораторная глава 31–33','?edition=open&level=31'],['classic','Архив · 33 испытания','?edition=classic&level=1']]){
+for(const [id,text,href]of [['tower','Финальная башня · 500 этапов','?edition=foundation&level=41'],['foundation','Кампания · с начала','?edition=foundation&level=1'],['open','Лабораторная глава 31–33','?edition=open&level=31'],['classic','Архив · 33 испытания','?edition=classic&level=1']]){
  if(game.chamberEdition===id)continue;const a=document.createElement('a');a.textContent=text;a.href=href;editionNav.append(a);
 }
 $('#start-screen .hero-footer').before(editionNav);

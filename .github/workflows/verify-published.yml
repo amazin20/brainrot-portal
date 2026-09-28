@@ -2,18 +2,12 @@ name: Verify existing publication
 
 # Resume post-deployment checks without rebuilding, recording, or deploying.
 on:
-  push:
-    branches: [codex/resume-public-verification]
-    paths:
-      - '.github/workflows/verify-published.yml'
-      - 'scripts/verify-public.mjs'
   workflow_dispatch:
     inputs:
       revision:
         description: Exact commit already served by GitHub Pages
         type: string
         required: true
-        default: '8f63b6270b97fd0f1cb9d0cd9b07ef31bc3af4f6'
 
 permissions:
   contents: read
@@ -21,7 +15,7 @@ concurrency:
   group: verify-existing-publication
   cancel-in-progress: false
 env:
-  BUILD_COMMIT: ${{ inputs.revision || '8f63b6270b97fd0f1cb9d0cd9b07ef31bc3af4f6' }}
+  BUILD_COMMIT: ${{ inputs.revision }}
   PAGE_URL: https://amazin20.github.io/brainrot-portal/
   RECORD: '0'
 jobs:
@@ -41,7 +35,7 @@ jobs:
             script: scripts/portal-regression-browser.mjs
           - check: default campaign
             script: scripts/foundation-browser.mjs
-          - check: 40 videos and gallery
+          - check: 41 videos and gallery
             script: scripts/verify-public-walkthroughs.mjs
     steps:
       - uses: actions/checkout@v4

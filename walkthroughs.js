@@ -1,6 +1,6 @@
 (() => {
   'use strict';
-  const TOTAL = 40;
+  const TOTAL = 41;
   const entries = new Map();
   const nodes = {
     list: document.querySelector('#level-list'),
@@ -28,7 +28,7 @@
 
   function safeEntry(value) {
     if (!value || !Number.isInteger(value.level) || value.level < 1 || value.level > TOTAL) return null;
-    // The public manifest is only allowed to reference one of our 40 packaged files.
+    // The public manifest is only allowed to reference one of our 41 packaged files.
     if (value.src !== `walkthroughs/level-${String(value.level).padStart(2, '0')}.mp4`) return null;
     const poster = `walkthroughs/level-${String(value.level).padStart(2, '0')}.jpg`;
     if (value.poster !== poster) return null;
@@ -85,7 +85,7 @@
       nodes.video.src = new URL(entry.src, location.href).href;
       nodes.video.poster = new URL(entry.poster, location.href).href;
       nodes.video.load();
-      nodes.message.textContent = `Прохождение комнаты ${level}. Нажми Play или выбери другую комнату.`;
+      nodes.message.textContent = level === 41 ? 'Башня: все 500 этапов без чекпоинтов. Непрерывное автоматическое прохождение через обычное управление, в реальном темпе игры.' : `Прохождение комнаты ${level}. Нажми Play или выбери другую комнату.`;
       if (play) nodes.video.play().catch(() => {});
     } else {
       nodes.video.hidden = true;
@@ -117,7 +117,7 @@
   fetch('./walkthroughs/manifest.json', { cache: 'no-store' })
     .then(response => { if (!response.ok) throw new Error('manifest unavailable'); return response.json(); })
     .then(manifest => {
-      if (manifest.version !== 1 || !Array.isArray(manifest.levels)) throw new Error('invalid manifest');
+      if (![1, 2].includes(manifest.version) || !Array.isArray(manifest.levels)) throw new Error('invalid manifest');
       for (const item of manifest.levels) {
         const entry = safeEntry(item);
         if (entry) entries.set(entry.level, entry);

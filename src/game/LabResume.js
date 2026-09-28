@@ -4,9 +4,12 @@ export function resumeCampaignLevel(query, preferences, availableRooms, requeste
   if (params.has('level') || params.get('mode') === 'velocity') return requestedLevel;
   // The previous campaign stopped at room 30 and saved its own index after
   // victory. Move that exact completed finale into the newly added chapter.
-  if (availableRooms.length === 40 && availableRooms[29] === 29 && availableRooms[30] === 30 &&
+  if (availableRooms.length >= 40 && availableRooms[29] === 29 && availableRooms[30] === 30 &&
       preferences.resumeLevel === 29 && !preferences.completed.includes(30) &&
       availableRooms.slice(0, 30).every(index => preferences.completed.includes(index))) return 30;
+  if (availableRooms.length === 41 && availableRooms[40] === 40 &&
+      preferences.resumeLevel === 39 && !preferences.completed.includes(40) &&
+      availableRooms.slice(0, 40).every(index => preferences.completed.includes(index))) return 40;
   if (availableRooms.includes(preferences.resumeLevel)) return preferences.resumeLevel;
   // Old saves have completion only. Do not skip unplayed rooms when a player
   // used the selector to try a later puzzle.
