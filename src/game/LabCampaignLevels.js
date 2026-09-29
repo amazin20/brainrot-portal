@@ -2,7 +2,7 @@ import {FOUNDATION_BUILDERS,FOUNDATION_SPECS} from './LabFoundationChambers.js';
 import {RESEARCH_BUILDERS,RESEARCH_SPECS} from './LabResearchChambers.js';
 import {POST_A_BUILDERS,POST_A_SPECS} from './LabPostCampaignA.js';
 import {POST_B_BUILDERS,POST_B_SPECS} from './LabPostCampaignB.js';
-import {TOWER_SPEC,buildTowerLevel} from './LabTowerLevel.js';
+import {TOWER_SPEC,buildTowerLevel} from './LabSingularityLevel.js';
 import {OPEN_BUILDERS,OPEN_SPECS} from './LabOpenChambers.js';
 import {buildVelocityArena} from './LabVelocityArena.js';
 import {ROOM21_SPEC,buildRoom21} from './LabPortalRoom21.js';

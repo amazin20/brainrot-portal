@@ -16,6 +16,7 @@ const advancedJourneys=[
 export async function runV8Journey(game,{onMilestone=()=>{},scenario=null,journeyOptions={}}={}) {
   // The tower proof starts at the normal Play spawn and must count every reset.
   // Dispatch before the legacy fixture reset used by the shorter room probes.
+  if(game.firstLevel?.singularity){const {runSingularityJourney}=await import('./LabSingularityJourney.js');return runSingularityJourney(game,{onMilestone,...journeyOptions});}
   if(game.firstLevel?.towerChallenge){
     assert(!scenario,'A tower proof must use its complete ordinary-input route');
     const {runTowerJourney}=await import('./LabTowerJourney.js');
