@@ -1,0 +1,69 @@
+name: Audit alternate Tower routes (no publication)
+on:
+  push:
+    branches: [qa/tower-independent-routes-d7cf471]
+    paths:
+      - .github/workflows/tower-alternatives.yml
+      - scripts/verify-tower-alternatives.mjs
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: tower-independent-audit-d7cf471
+  cancel-in-progress: false
+env:
+  TOWER_SOURCE_COMMIT: d7cf4716d0d060ca83b76612664ec0eea738f58a
+jobs:
+  alternatives:
+    name: Independent wing orders, both freight paths and public attempt reset
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install locked runtime and browser driver
+        run: |
+          npm ci
+          npm install --no-save --package-lock=false puppeteer-core@24.16.0
+          node --check scripts/verify-tower-alternatives.mjs
+      - name: Reuse the existing exact Tower package (never rebuild or record)
+        uses: actions/download-artifact@v4
+        with:
+          name: tower-browser
+          run-id: 36528709569
+          github-token: ${{ github.token }}
+          path: dist
+      - name: Pin the original package identity
+        run: |
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const info = JSON.parse(fs.readFileSync('dist/build-info.json', 'utf8'));
+          assert.equal(info.commit, process.env.TOWER_SOURCE_COMMIT);
+          assert.equal(info.version, 'v44-tower-variety');
+          assert.equal(info.run, '36528709569');
+          assert.equal(info.features.tower.checkpoints, false);
+          NODE
+      - name: Check five additional branch orders and public restart/reload behavior
+        run: |
+          npm run preview -- --host 127.0.0.1 --port 4173 >tower-alternatives-preview.log 2>&1 &
+          for i in {1..30}; do curl -fsS http://127.0.0.1:4173/build-info.json >/dev/null && break; sleep 1; done
+          curl -fsS http://127.0.0.1:4173/build-info.json >/dev/null
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+          node scripts/verify-tower-alternatives.mjs
+      - name: Preserve all route evidence, screenshots and failures
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tower-independent-route-audit
+          path: |
+            qa/tower-alternatives/
+            tower-alternatives-preview.log
+          if-no-files-found: warn
+          retention-days: 14
