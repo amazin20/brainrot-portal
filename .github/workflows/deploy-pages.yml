@@ -2,6 +2,13 @@ name: Deploy verified portal game
 on:
   push:
     branches: [main]
+    # Isolated-preview tooling deploys only existing verified artifacts and has
+    # its own workflow. Any actual game change still runs this full release gate.
+    paths-ignore:
+      - scripts/assemble-singularity-preview.mjs
+      - scripts/verify-singularity-preview.mjs
+      - .github/workflows/publish-singularity-preview.yml
+      - tools/singularity-preview-release.json
   workflow_dispatch:
 permissions:
   contents: read
