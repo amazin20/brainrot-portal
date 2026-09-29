@@ -37,7 +37,7 @@ jobs:
         run: |
           npm ci
           npm run build
-          node scripts/stamp-build.mjs v43-tower-rebuild
+          node scripts/stamp-build.mjs v44-tower-variety
       - uses: actions/upload-artifact@v4
         with:
           name: walkthrough-build

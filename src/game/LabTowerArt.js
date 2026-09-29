@@ -1,7 +1,6 @@
 import * as THREE from 'three';
 import {RoundedBoxGeometry} from 'three/addons/geometries/RoundedBoxGeometry.js';
 import {towerPoint} from './LabTowerLayout.js';
-import {TOWER_ROUTE_OBSTACLES} from './LabTowerRoutes.js';
 
 // The reliefs sit on the room side of the solid wall by at most 17 cm. The
 // existing wall and ceiling remain their collision backings; there is no
@@ -12,11 +11,17 @@ const BOX_ROT=new THREE.Quaternion();
 const DISC_ROT=new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(1,0,0),Math.PI/2);
 const FLOOR_ROT=new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(1,0,0),Math.PI/2);
 const SPIN_AXIS=new THREE.Vector3(0,0,1);
+const DECK_LANGUAGE=['prism','foundry','orbits','lattice','storm','crown'];
 
-function wallBasis(def){
+function wallBasis(def,sign=1){
  const [dx,dz]=def.direction;
  return new THREE.Quaternion().setFromRotationMatrix(new THREE.Matrix4().makeBasis(
-  new THREE.Vector3(-dx,0,-dz),UP,new THREE.Vector3(dz,0,-dx)));
+  new THREE.Vector3(-dx*sign,0,-dz*sign),UP,new THREE.Vector3(dz*sign,0,-dx*sign)));
+}
+function endBasis(def){
+ const [dx,dz]=def.direction;
+ return new THREE.Quaternion().setFromRotationMatrix(new THREE.Matrix4().makeBasis(
+  new THREE.Vector3(-dz,0,dx),UP,new THREE.Vector3(-dx,0,-dz)));
 }
 
 /** Browser-sized architectural finish for the final Tower. All fixed pieces
@@ -41,6 +46,7 @@ export function decorateTower({root,rooms,stairs=[]}){
   alloy:new THREE.MeshStandardMaterial({name:'Tower satin alloy',color:0xb2c8ca,metalness:.73,roughness:.30}),
   porcelain:new THREE.MeshStandardMaterial({name:'Tower ceramic porcelain',color:0xd7e6e2,metalness:.15,roughness:.55}),
   recess:new THREE.MeshStandardMaterial({name:'Tower recessed optical glass',color:0x244758,metalness:.52,roughness:.23}),
+  shadow:new THREE.MeshStandardMaterial({name:'Tower deep machine cavities',color:0x101e29,metalness:.28,roughness:.76}),
   accent:new THREE.MeshStandardMaterial({name:'Tower anodised colour',color:0xffffff,metalness:.50,roughness:.34}),
   signal:new THREE.MeshBasicMaterial({name:'Tower signal glass',color:0xffffff,toneMapped:false}),
  };
@@ -58,10 +64,9 @@ export function decorateTower({root,rooms,stairs=[]}){
  const tint=(def)=>new THREE.Color(DECK_COLOURS[def.deck]).offsetHSL((def.branch-1)*.036,0,.005);
 
  /** Stage wall coordinates: X points toward the hub; +Z faces the player. */
- function wall(def,s,y){
+ function face(def,origin,q){
   // The solid wall's inner face is n=6.04. Recess the base 3 cm behind it;
   // the deepest signal ring projects less than 17 cm into the chamber.
-  const q=wallBasis(def),origin=new THREE.Vector3(...towerPoint(def,s,6.07,def.baseY+y));
   const place=(geometry,material,x,up,z,sx,sy,sz,color=0xffffff,angle=0)=>{
    const local=v(x,up,z).applyQuaternion(q).add(origin);
    const rot=q.clone().multiply(new THREE.Quaternion().setFromAxisAngle(v(0,0,1),angle));
@@ -84,6 +89,14 @@ export function decorateTower({root,rooms,stairs=[]}){
    }
   };
   return {place,rail,ring,dot,polygon,q,origin};
+ }
+ function wall(def,s,y,sign=1){
+  return face(def,new THREE.Vector3(...towerPoint(def,s,sign*6.07,def.baseY+y)),wallBasis(def,sign));
+ }
+ function terminus(def,y){
+  // The end wall has a real backing at s=41.825. Its reliefs face the
+  // player and never enter the reactor's four-metre approach.
+  return face(def,new THREE.Vector3(...towerPoint(def,41.82,0,def.baseY+y)),endBasis(def));
  }
 
  // Each graphic traces the working dependency, not an arbitrary number stamp.
@@ -196,49 +209,235 @@ export function decorateTower({root,rooms,stairs=[]}){
   signature(def,mini,c);
  }
 
- function baffleGuides(def,c){
-  const [dx,dz]=def.direction,d=v(dx,0,dz),across=v(-dz,0,dx);
-  for(const b of TOWER_ROUTE_OBSTACLES[def.id]??[]){
-   const gapSide=b.n<0?1:-1,edge=b.n+gapSide*b.across/2;
-   // The real slab occupies the wall's entire lower height. Keep this
-   // high-contrast metal reveal above the actors and against its solid edge.
-   const edgePoint=new THREE.Vector3(...towerPoint(def,b.s,edge,def.baseY+5.24));
-   piece(def.deck,'box','alloy',edgePoint,wallBasis(def),v(.62,4.14,.12));
-   const signalPoint=new THREE.Vector3(...towerPoint(def,b.s-.32,edge-gapSide*.14,def.baseY+5.16));
-   piece(def.deck,'box','signal',signalPoint,wallBasis(def),v(.028,3.72,.065),c);
-   for(const forward of [-1,1]){
-    // A backed arrow on both sides makes the actual 4 m side passage legible
-    // on entry and on the return trip. Both signs sit on the slab, y>3.5.
-    const q=new THREE.Quaternion().setFromRotationMatrix(new THREE.Matrix4().makeBasis(
-     across.clone().multiplyScalar(forward),UP,d.clone().multiplyScalar(-forward)));
-    const point=new THREE.Vector3(...towerPoint(def,b.s-forward*.33,b.n,def.baseY+4.91));
-    const add=(shape,mat,x,y,z,sx,sy,sz,color=0xffffff,angle=0)=>{
-     const p=v(x,y,z).applyQuaternion(q).add(point);
-     const r=q.clone().multiply(new THREE.Quaternion().setFromAxisAngle(v(0,0,1),angle));
-     piece(def.deck,shape,mat,p,r,v(sx,sy,sz),color);
-    };
-    const line=(x0,y0,x1,y1,width,mat='signal',color=c)=>{
-     const ax=x1-x0,ay=y1-y0;
-     add('box',mat,(x0+x1)/2,(y0+y1)/2,.125,Math.hypot(ax,ay),width,.045,color,Math.atan2(ay,ax));
-    };
-    add('casing','graphite',0,0,-.025,3.35,2.42,.10);
-    add('casing','alloy',0,0,.038,3.18,2.25,.055);
-    add('casing','recess',0,0,.076,3.02,2.08,.026);
-    const side=gapSide*forward;
-    line(-.95*side,0,.88*side,0,.15);
-    line(.88*side,0,.25*side,.51,.13);
-    line(.88*side,0,.25*side,-.51,.13);
-    for(const x of [-1.36,1.36])for(const y of [-.91,.91])
-     add('box','porcelain',x,y,.13,.12,.12,.06);
+ // Each storey has a different construction rhythm. These are wall-backed
+ // reliefs, never blocks in the player's path. Their silhouettes stay clear
+ // of the portal ceramics on s=8, 14 and 20.
+ function wallBay(def,s,sign,serial,c){
+  const g=wall(def,s,4.36,sign),{place,rail,ring,dot,polygon}=g;
+  const kind=DECK_LANGUAGE[def.deck],shift=(def.branch-1)*.21;
+  place('casing','graphite',0,0,-.025,3.42,4.77,.10);
+  place('casing','alloy',0,0,.037,3.22,4.56,.055);
+  place('casing','shadow',0,0,.073,2.96,4.30,.025);
+  for(const x of [-1.48,1.48])for(const y of [-2.12,2.12])
+   place('box','porcelain',x,y,.113,.10,.10,.032);
+  for(const y of [-2.04,2.04])rail(-1.20,y,1.20,y,'accent',.075,.125,c);
+  const L=(x0,y0,x1,y1,w=.075)=>rail(x0,y0,x1,y1,'signal',w,.15,c);
+  switch(kind){
+   case 'prism': {
+    const lean=(serial%2?1:-1)*.26+shift;
+    for(const scale of [.67,.94,1.2]){
+     L(lean,1.53*scale,lean-1.05*scale,-.92*scale);
+     L(lean-1.05*scale,-.92*scale,lean+1.05*scale,-.92*scale);
+     L(lean+1.05*scale,-.92*scale,lean,1.53*scale);
+    }
+    ring(lean,-.15,.22,'porcelain');break;
+   }
+   case 'foundry':
+    for(const radius of [.45,.79,1.11])ring(shift,0,radius,radius===.79?'signal':'alloy',c);
+    for(let i=0;i<8;i++){
+     const a=(i+serial*.25)*Math.PI/4;
+     L(shift+Math.cos(a)*1.12,Math.sin(a)*1.12,
+      shift+Math.cos(a)*1.40,Math.sin(a)*1.40,.12);
+    }
+    for(const y of [-1.69,1.69])L(-1.17,y,1.17,y,.14);
+    break;
+   case 'orbits':
+    for(const [x,y,r] of [[-.35,0,1.14],[.34,.36,.78],[.45,-.62,.47]])
+     ring(x+shift,y,r,'signal',c);
+    for(const [x,y] of [[-.95,.6],[.76,1.17],[.39,-1.26]])
+     dot(x+shift,y,.13,'porcelain');
+    L(-1.23,-1.75,.88,1.74,.11);break;
+   case 'lattice':
+    for(let i=0;i<5;i++){
+     const y=-1.63+i*.81,flip=(i+serial+def.branch)%2?1:-1;
+     L(-1.27,y,.0,y+flip*.49,.105);
+     L(0,y+flip*.49,1.27,y,.105);
+    }
+    for(const x of [-1.27,1.27])rail(x,-1.78,x,1.78,'alloy',.12,.13);
+    break;
+   case 'storm':
+    for(let i=0;i<3;i++){
+     const x=-.91+i*.90+shift;
+     L(x-.12,1.74,x+.27,.49,.11);
+     L(x+.27,.49,x-.20,-.24,.13);
+     L(x-.20,-.24,x+.19,-1.57,.11);
+    }
+    for(const y of [-1.8,1.8])rail(-1.25,y,1.25,y,'alloy',.12,.12);
+    break;
+   case 'crown':
+    polygon(7,1.31,'alloy',Math.PI/2);
+    for(let i=0;i<7;i++){
+     const a=(i+.5)*Math.PI*2/7;
+     L(Math.cos(a)*.55,Math.sin(a)*.55,
+      Math.cos(a)*1.32,Math.sin(a)*1.32,.12);
+    }
+    ring(0,0,.43,'signal',c);dot(0,0,.15,'porcelain');break;
+  }
+  // A different number of charged terminals identifies the wing even when
+  // several rooms share the same storey's material language.
+  for(let i=0;i<def.branch+1;i++)
+   dot(-.70+i*.70,-1.89,.077,'signal',c);
+ }
+
+ function overheadLine(def,s0,n0,s1,n1,material,c,width=.06,y=7.41,height=.036){
+  const a=v(...towerPoint(def,s0,n0,def.baseY+y));
+  const b=v(...towerPoint(def,s1,n1,def.baseY+y));
+  const delta=b.clone().sub(a),q=new THREE.Quaternion().setFromUnitVectors(v(1,0,0),delta.clone().normalize());
+  piece(def.deck,'box',material,a.add(b).multiplyScalar(.5),q,v(delta.length(),height,width),c);
+ }
+ function ceilingLanguage(def,c){
+  for(const s of [5.7,12.8,21.6,29.8,37.5]){
+   // Shallow soffits sit immediately below the solid ceiling. Their open
+   // centers leave the mechanisms and white portal faces visually distinct.
+   const p=v(...towerPoint(def,s,0,def.baseY+7.54));
+   piece(def.deck,'casing','graphite',p,wallBasis(def),v(.22,.17,11.75));
+   p.y-=.12;
+   piece(def.deck,'box','accent',p,wallBasis(def),v(.075,.026,10.88),c);
+  }
+  for(const s of [13.1,22.0,35.1]){
+   const p=v(...towerPoint(def,s,0,def.baseY+7.54));
+   piece(def.deck,'disc','shadow',p,BOX_ROT,v(2.55,.15,2.55));
+   const ringAt=(radius,material='signal')=>
+    piece(def.deck,'fineRing',material,
+     v(p.x,def.baseY+7.39,p.z),FLOOR_ROT,v(radius,radius,1),c);
+   const R=(u0,n0,u1,n1,w=.08)=>overheadLine(def,s+u0,n0,s+u1,n1,'signal',c,w,7.38);
+   switch(DECK_LANGUAGE[def.deck]){
+    case 'prism':
+     for(const size of [.85,1.62])for(let j=0;j<3;j++){
+      const a=j*2*Math.PI/3+Math.PI/2,b=(j+1)*2*Math.PI/3+Math.PI/2;
+      R(Math.cos(a)*size,Math.sin(a)*size,Math.cos(b)*size,Math.sin(b)*size);
+     }break;
+    case 'foundry':
+     ringAt(.75);ringAt(1.58,'alloy');
+     for(let j=0;j<8;j++){const a=j*Math.PI/4;
+      R(Math.cos(a)*1.13,Math.sin(a)*1.13,Math.cos(a)*1.92,Math.sin(a)*1.92,.13);
+     }break;
+    case 'orbits':
+     for(const [u,n,r] of [[-.55,0,1.10],[.50,.44,.86],[.57,-.75,.47]])
+      piece(def.deck,'fineRing','signal',
+       v(...towerPoint(def,s+u,n,def.baseY+7.38)),FLOOR_ROT,v(r,r,1),c);
+     break;
+    case 'lattice':
+     for(let j=-2;j<=2;j++){R(-1.6,j*.48,.1,(j+.5)*.42);R(.1,(j+.5)*.42,1.6,j*.48);}
+     break;
+    case 'storm':
+     for(let j=-1;j<=1;j++){
+      const n=j*.72;R(-1.7,n-.27,-.4,n+.25,.10);
+      R(-.4,n+.25,.40,n-.22,.12);R(.40,n-.22,1.7,n+.29,.10);
+     }break;
+    case 'crown':
+     ringAt(.52);
+     for(let j=0;j<9;j++){const a=j*2*Math.PI/9;
+      R(Math.cos(a)*.56,Math.sin(a)*.56,Math.cos(a)*1.91,Math.sin(a)*1.91,.11);
+     }break;
+   }
+  }
+ }
+ function floorLanguage(def,course,c){
+  // These short markings sit on the actual course. A continuous line in the
+  // original aisle would now lead through the annex's solid partition, while
+  // a flat line over the causeway would disappear inside its real risers.
+  if(course.topology==='momentum-shaft'){
+   // Repeated transverse marks lead to the catwalk lip and reveal the raised
+   // receiving shelf. Their height follows those two real support surfaces.
+   for(const s of [11.8,13.2,14.6])overheadLine(def,s,-1.8,s,1.8,'signal',c,.085,5.02,.012);
+   for(const s of [23.4,25.2,27,29])overheadLine(def,s,3.55,s,5.55,'signal',c,.07,2.07,.012);
+   return;
+  }
+  if(course.topology==='raised-causeway'||course.topology==='broken-skybridge'){
+   for(const tread of course.solids.filter(item=>item.role==='step')){
+    const y=tread.y+tread.height/2;
+    overheadLine(def,tread.s-tread.along*.42,-tread.across*.43,
+     tread.s-tread.along*.42,tread.across*.43,'graphite',0xffffff,.19,y+.010,.012);
+    overheadLine(def,tread.s-tread.along*.42,-tread.across*.43,
+     tread.s-tread.along*.42,tread.across*.43,'signal',c,.056,y+.021,.012);
+   }
+   if(course.topology==='broken-skybridge'){
+    // Trace only supported pieces of the high catwalk. A floating cable over
+    // its missing span would falsely suggest that walking across is safe.
+    for(const [s0,n0,s1,n1]of [[30,13.6,30,20.7],
+     [30.1,20.8,32.03,20.8],[34.11,20.8,35.9,20.8],
+     [36,20.7,36,13.6]]){
+     overheadLine(def,s0,n0,s1,n1,'graphite',0xffffff,.19,1.213,.012);
+     overheadLine(def,s0,n0,s1,n1,'signal',c,.056,1.224,.012);
+    }
+   }
+   return;
+  }
+  const points=[{s:28.65,n:0},...course.waypoints];
+  for(let i=1;i<points.length;i++){
+   const a=points[i-1],b=points[i],ds=b.s-a.s,dn=b.n-a.n;
+   const length=Math.hypot(ds,dn);
+   if(length<.7)continue;
+   // A pair of inset dashes suggests the route without drawing a false
+   // continuous cable over machine housings or through walls.
+   const u0=.34,u1=.69,offset=.22;
+   for(const side of [-1,1]){
+    const ns=side*offset*ds/length,ss=-side*offset*dn/length;
+    overheadLine(def,a.s+ds*u0+ss,a.n+dn*u0+ns,
+     a.s+ds*u1+ss,a.n+dn*u1+ns,'graphite',0xffffff,.19,.010,.012);
+    overheadLine(def,a.s+ds*u0+ss,a.n+dn*u0+ns,
+     a.s+ds*u1+ss,a.n+dn*u1+ns,'signal',c,.055,.021,.012);
    }
   }
  }
 
+ function wingTerminus(def,c){
+  const g=terminus(def,4.05),{place,rail,ring,dot}=g;
+  place('casing','graphite',0,0,-.036,10.20,6.74,.10);
+  place('casing','alloy',0,0,.034,9.88,6.48,.056);
+  place('casing','shadow',0,0,.078,9.55,6.18,.027);
+  for(const x of [-4.65,4.65])for(const y of [-2.97,2.97])
+   dot(x,y,.11,'porcelain');
+  for(const y of [-2.83,2.83])rail(-4.37,y,4.37,y,'accent',.095,.125,c);
+  // Unlike the side-wall signature, the terminus shows the actual dependency
+  // graph: the required inputs converge on the center and feed the exit.
+  const requirements=def.puzzle.requirements;
+  for(let i=0;i<requirements.length;i++){
+   const y=(i-(requirements.length-1)/2)*1.42;
+   const radius=.38+(requirements[i].length%3)*.09;
+   ring(-2.76,y,radius,'signal',c,.13);
+   dot(-2.76,y,.11,'porcelain');
+   rail(-2.34,y,-.62,y*.49,'alloy',.12,.13);
+   rail(-2.10,y,-.59,y*.49,'signal',.043,.155,c);
+  }
+  ring(0,0,.94,'alloy');ring(0,0,.70,'signal',c,.15);
+  dot(0,0,.23,'porcelain');
+  for(let i=0;i<5+def.branch;i++){
+   const a=-Math.PI*.55+i*Math.PI*.18;
+   rail(.95*Math.cos(a),.95*Math.sin(a),
+    1.32*Math.cos(a),1.32*Math.sin(a),'signal',.10,.15,c);
+  }
+  rail(.76,0,3.70,0,'alloy',.22,.13);
+  rail(1.22,0,3.70,0,'signal',.070,.157,c);
+  for(const x of [2.05,2.84,3.64])dot(x,0,.085,'porcelain');
+ }
+
  const rotors=[];
- function wing(def){
-  const c=tint(def),entry=wall(def,17,4.85);
+ function wing(room){
+  const {definition:def,course}=room,c=tint(def),entry=wall(def,17,4.85);
+  const backed=(s,sign,halfWidth=.3)=>!course.wallGaps.some(gap=>
+   gap.sign===sign&&s+halfWidth>gap.s0&&s-halfWidth<gap.s1);
   entranceBadge(def,c);
-  baffleGuides(def,c);
+  for(const [i,s] of [12.2,22.2,39.0].entries())if(backed(s,1,1.82))wallBay(def,s,1,i,c);
+  for(const [i,s] of [7.6,31.5].entries())if(backed(s,-1,1.82)&&!(def.id==='balance'&&s===7.6))
+   wallBay(def,s,-1,i+3,c);
+  for(const sign of [-1,1]){
+   const gaps=course.wallGaps.filter(gap=>gap.sign===sign).sort((a,b)=>a.s0-b.s0);
+   let cursor=2.8;
+   for(const gap of [...gaps,{s0:39.2,s1:39.2}]){
+    const end=Math.min(39.2,gap.s0-.04),length=end-cursor;
+    if(length>.15){
+     const line=wall(def,(cursor+end)/2,6.84,sign);
+     line.rail(-length/2,0,length/2,0,'graphite',.29,.07);
+     line.rail(-length/2+.12,-.11,length/2-.12,-.11,'accent',.052,.125,c);
+    }
+    cursor=Math.max(cursor,gap.s1+.04);
+   }
+  }
+  ceilingLanguage(def,c);
+  floorLanguage(def,course,c);
+  wingTerminus(def,c);
   // Layered die-cast case, inset optical glass, satin retaining strips and
   // recessed fasteners. The back is inside the already solid side wall.
   entry.place('casing','graphite',0,0,-.025,4.72,3.63,.12);
@@ -260,6 +459,7 @@ export function decorateTower({root,rooms,stairs=[]}){
    side.rail(-7.05,y,8.87,y,'accent',.033,.12,c);
   }
   for(const s of [.8,11.3,25.3,31.2,36.7,40.5]){
+   if(!backed(s,1))continue;
    const frame=wall(def,s,5.4);
    frame.place('casing','alloy',0,0,-.035,.37,4.20,.09);
    frame.place('box','graphite',0,0,.025,.19,3.94,.08);
@@ -274,7 +474,8 @@ export function decorateTower({root,rooms,stairs=[]}){
   }
   // The solved gallery has its own recessed medallion; it reinforces the
   // direction toward the actual reactor without pretending to be a switch.
-  const exit=wall(def,34.1,5.0);
+  const exit=backed(34.1,1,1.03)?wall(def,34.1,5.0):null;
+  if(exit){
   exit.place('casing','graphite',0,0,-.025,2.05,1.84,.10);
   exit.ring(0,0,.69,'accent',c,.11);
   exit.ring(0,0,.46,'signal',c,.13);
@@ -282,8 +483,9 @@ export function decorateTower({root,rooms,stairs=[]}){
    const a=i*2*Math.PI/5;
    exit.dot(Math.cos(a)*.92,Math.sin(a)*.80,.055,'porcelain');
   }
+  }
  }
- rooms.forEach(room=>wing(room.definition));
+ rooms.forEach(wing);
 
  // Six stacked switchyards get a large, low-profile annulus under their real
  // floor/roof slabs. At floor level only light inlays touch the walking area.

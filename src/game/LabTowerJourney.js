@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import {towerCoordinates} from './LabTowerLayout.js';
 
 const DT=1/120,UP=new THREE.Vector3(0,1,0);
 const check=(condition,message)=>{if(!condition)throw new Error(message);};
@@ -10,18 +11,19 @@ const angle=value=>Math.atan2(Math.sin(value),Math.cos(value));
  * route may choose a different order for the three independent wings on each
  * deck. It never assigns an actor pose, a portal, a mechanism state or victory.
  */
-export async function runTowerJourney(game,{onMilestone=()=>{},branchOrder=[0,1,2],stopAfterDeck=null,stopAfterTransitionDeck=null}={}){
+export async function runTowerJourney(game,{onMilestone=()=>{},branchOrder=[0,1,2],stopAfterDeck=null,stopAfterTransitionDeck=null,stopAfterStage=null,enforceDuration=true,freightRoute='hoist'}={}){
  const level=game.firstLevel,stages=level.towerStages;
  check(level?.towerChallenge&&Array.isArray(stages)&&stages.length===level.totalStages,'The Tower must expose its authored wings');
  check(game.state==='playing'&&!game.externalBlocked,'Start through the normal Play control');
  check(level.completedStages===0,'A recording must begin before the first wing');
  check(game.playerPosition.distanceTo(level.spawn)<2,'A recording must begin at the ordinary spawn');
  check(branchOrder.length===3&&new Set(branchOrder).size===3&&branchOrder.every(b=>Number.isInteger(b)&&b>=0&&b<3),'Each deck needs one visit to each of its three branches');
+ check(['hoist','carry'].includes(freightRoute),'Freight route must use a physical hoist or carry stair');
  const report={level:game.levelIndex+1,id:level.id,kind:'continuous-tower',pass:false,
   frames:0,physicsSteps:0,simulatedSeconds:0,durationSeconds:0,activeMovementSeconds:0,activeInputSeconds:0,
   distanceTravelled:0,distance:0,maxIdleSeconds:0,maxNoInputSeconds:0,stagesCompleted:0,
-  respawns:0,resets:0,cargoResets:0,teleports:0,jumps:0,interactions:0,shots:0,cameraTurnRadians:0,
-  stageEvents:[],keystoneEvents:[],telemetry:[],inputEvents:[],milestones:[],branchOrder:[...branchOrder],
+  respawns:0,resets:0,cargoResets:0,teleports:0,jumps:0,flings:[],interactions:0,shots:0,cameraTurnRadians:0,
+  stageEvents:[],keystoneEvents:[],ascentEvents:[],telemetry:[],inputEvents:[],milestones:[],branchOrder:[...branchOrder],
   method:'Authored route with ordinary movement, jump, E and portal shots; 120 Hz production physics and 60 Hz visuals. No actor placement, puzzle-state assignment, checkpoint or initial reset.'};
  const original={move:game.input.getMove,respawn:game.respawn,resetRun:game.resetRun,resetCargo:game.physics.resetCargo};
  const move=new THREE.Vector2(),identity=game.cargo.group.uuid,body=game.physics.cargoBody.id;
@@ -162,7 +164,8 @@ export async function runTowerJourney(game,{onMilestone=()=>{},branchOrder=[0,1,
    case 'drop':case 'use':await interact(action.kind);break;
    case 'wait':await wait(action.seconds??.2,label);break;
    case 'until':await until(()=>{
-    const state=stage.keystoneDeck==null?level.getTowerStageState(stage.index):level.getTowerKeystoneState(stage.keystoneDeck);
+    const state=action.interlock?level.getTowerInterlockState():
+     stage.keystoneDeck==null?level.getTowerStageState(stage.index):level.getTowerKeystoneState(stage.keystoneDeck);
     return state?.[action.field]===action.value;
    },action.seconds??4,label);break;
    case 'enter':{
@@ -173,6 +176,39 @@ export async function runTowerJourney(game,{onMilestone=()=>{},branchOrder=[0,1,
      worldMove(-normal.x,-normal.z);await frame();
     }
     stop();check(game.teleportCount>before,`Portal crossing failed at ${label}`);break;
+   }
+   case 'floorEnter':{
+    await walk(action.approach,{label:`${label}: intake approach`,tolerance:.25});
+    const before=game.teleportCount,target=new THREE.Vector3(...action.target);
+    for(let n=0;n<(action.seconds??5)*60&&game.teleportCount===before;n++){
+     const dx=target.x-game.playerPosition.x,dz=target.z-game.playerPosition.z;
+     viewToward(dx,dz);worldMove(dx, dz);await frame();
+    }
+    stop();check(game.teleportCount>before,`Crown floor portal crossing failed at ${label}`);break;
+   }
+   case 'fling':{
+    const before=game.teleportCount,[dx,dz]=action.direction;
+    check(game.playerGrounded&&game.playerPosition.y>4.7,`Fling must start on the high catwalk at ${label}`);
+    for(let n=0;n<5*60&&game.teleportCount===before;n++){
+     const target=new THREE.Vector3(...action.target);
+     viewToward(target.x-game.playerPosition.x,target.z-game.playerPosition.z);
+     worldMove(dx,dz);game.input.keys.delete('ShiftLeft');await frame();
+    }
+    stop();game.input.keys.delete('ShiftLeft');
+    check(game.teleportCount===before+1,`Gravity did not carry the player through the floor portal at ${label}`);
+    const speed=game.lastPortalTravel?.speed??0;
+    check(speed>11.5,`Floor-to-wall crossing lacked momentum (${speed.toFixed(2)} m/s)`);
+    const wing=stages[action.wingIndex];
+    const landed=()=>{
+     const local=towerCoordinates(wing,game.playerPosition);
+     return game.playerGrounded&&Math.abs(game.playerPosition.y-wing.baseY-2.05)<.16
+      &&local.s>22.2&&local.s<30.9&&local.n>3.35&&local.n<5.65;
+    };
+    for(let n=0;n<3*60&&!landed();n++)await frame();
+    check(landed()&&level.getTowerStageState(wing.index)?.signals.kinetic,
+     `Fling missed the raised physical shelf at ${label}: ${game.playerPosition.toArray()}`);
+    report.flings.push({...snapshot(),stageId:wing.id,speed,landing:game.playerPosition.toArray()});
+    break;
    }
    default:throw new Error(`Unknown Tower route action ${action.kind} in ${stage.id}`);
   }
@@ -186,12 +222,15 @@ export async function runTowerJourney(game,{onMilestone=()=>{},branchOrder=[0,1,
    for(const branch of branchOrder){
     const stage=stages.find(stage=>stage.deck===deck&&stage.branch===branch);
     check(stage,`Missing Tower wing ${deck}/${branch}`);
-    for(const action of stage.route)await perform(action,stage);
+    const route=stage.id==='freight'&&freightRoute==='carry'?level.freightAlternateRoute:stage.route;
+    for(const action of route)await perform(action,stage);
     check(level.getTowerStageState(stage.index)?.solved,`Wing ${stage.id} route did not solve its physical puzzle`);
     check(level.completedStages===report.stageEvents.length,`Wing ${stage.id} did not produce one completion event`);
     mark(`Solved ${stage.name} through live controls`);
     await globalThis.__NESI_TOWER_FLUSH_FRAMES__?.(snapshot());
+    if(stopAfterStage===stage.id){report.partial=true;break;}
    }
+   if(report.partial)break;
    check(Array.isArray(level.keystoneRoutes?.[deck])&&level.keystoneRoutes[deck].length>0,
     `Deck ${deck+1} needs a substantial central keystone route`);
    const keystone={id:`keystone-${deck+1}`,keystoneDeck:deck,index:stages.length+deck,name:`Deck ${deck+1} keystone`};
@@ -203,6 +242,13 @@ export async function runTowerJourney(game,{onMilestone=()=>{},branchOrder=[0,1,
    if(stopAfterDeck===deck){report.partial=true;break;}
    mark(`Deck ${deck+1} relays connected`);
    for(const action of level.deckRoutes?.[deck]??[])await perform(action,{id:`deck-${deck+1}`,index:stages.length,name:'Deck transition'});
+   if(deck<5){
+    const ascent=level.towerAscents[deck];
+    check(Math.abs(game.playerPosition.y-(deck+1)*8)<.25&&game.playerGrounded,
+     `The ${ascent.name} ascent did not reach a grounded upper hub`);
+    report.ascentEvents.push({deck,name:ascent.name,...snapshot()});
+    mark(`Ascended deck ${deck+1} by ${ascent.name}`);
+   }
    if(stopAfterTransitionDeck===deck){report.partial=true;break;}
   }
   if(!report.partial){
@@ -217,7 +263,8 @@ export async function runTowerJourney(game,{onMilestone=()=>{},branchOrder=[0,1,
    check(report.stageEvents.length===stages.length,'A wing was omitted from the uninterrupted route');
    check(report.keystoneEvents.length===decks.length,'A central keystone was omitted from the uninterrupted route');
    check(report.teleports>0&&report.shots>0,'The redesigned Tower route must use real portals');
-   check(report.activeInputSeconds>=900,'The complete Tower speedrun must contain at least fifteen minutes of active play');
+   report.meetsMinimumActiveSeconds=report.activeInputSeconds>=900;
+   if(enforceDuration)check(report.meetsMinimumActiveSeconds,'The complete Tower speedrun must contain at least fifteen minutes of active play');
    check(report.maxNoInputSeconds<=5,'The Tower route contains an AFK segment');
    check(Math.abs(report.gameElapsedSeconds-report.simulatedSeconds)<.02,'The Tower simulation clock diverged');
    report.pass=true;mark('Every Tower wing and the crown completed in one attempt');

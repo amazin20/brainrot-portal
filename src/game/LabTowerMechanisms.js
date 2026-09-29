@@ -63,6 +63,7 @@ function tracedLine(group,colour,width,owned){
  * `box` registers its permanent housings with that stage's collision owner. */
 export function createTowerMechanism({game,definition,group,box,materials}){
  const required=new Set(definition.puzzle.requirements),hasMirror=required.has('mirror');
+ const isBalance=definition.id==='balance';
  const hasOptics=required.has('beamA')||required.has('beamB')||hasMirror;
  const hasAir=required.has('airA'),hasGravity=required.has('gravity');
  const direction=V(definition.direction[0],0,definition.direction[1]);
@@ -71,7 +72,7 @@ export function createTowerMechanism({game,definition,group,box,materials}){
  const owned=[],drawables=new THREE.Group();drawables.name=`${definition.id} live machinery`;
  group.add(drawables);
  const solidBox=(point,size,material)=>box(point,size,material,{solid:true,camera:true,aim:true});
- const signals={beamA:false,beamB:false,airA:false,gravity:false};
+ const signals={beamA:false,beamB:false,airA:false,gravity:false,bridgeCatch:false};
  const input=position(8,-5.05),beamDirection=across.clone();
  const mirrorPosition=position(14,1.2);
  const mirrorNormalOn=across.clone().sub(direction).normalize();
@@ -150,6 +151,7 @@ export function createTowerMechanism({game,definition,group,box,materials}){
  }
 
  let control=false,mirrorAngle=0,turbineOmega=0,turbineAngle=0,gravityContact=false,gravityArmed=false;
+ let escortArmed=false,bridgeApproach=false,bridgeFlight=false,returned=false;
  const getSignals=()=>({...signals});
  function setControl(active){control=Boolean(active);}
  function activePortalled(segments){return segments.some(segment=>segment.kind==='portal');}
@@ -174,9 +176,16 @@ export function createTowerMechanism({game,definition,group,box,materials}){
    const reflector=hasMirror?[{position:mirrorPosition,normal:mirrorNormalOff.clone().lerp(mirrorNormalOn,mirrorAngle).normalize(),radius:.80}]:[];
    const segments=tracePortalRay(game,input,beamDirection,{length:89,bounces:8,reflectors:reflector,medium:'light'});
    const portalCrossed=activePortalled(segments);
-   signals.beamA=portalCrossed&&towerReceiverHit(segments,beamReceiverA);
-   signals.beamB=portalCrossed&&towerReceiverHit(segments,beamReceiverB);
-   beam.update(segments);projector.set(portalCrossed);
+   // Battery's two separated sockets supply alternate projector circuits.
+   // The original cargo must stay on each socket while its matching receiver
+   // is lit. The first circuit extends a real bridge to the second socket.
+   const battery=definition.id==='battery';
+   const inletPowered=!battery||Boolean(game.cargoOnPad?.(V(...definition.cargoPad),2.0));
+   const outletPowered=!battery||Boolean(game.cargoOnPad?.(V(...definition.batteryOutput),1.35));
+   const sourcePowered=inletPowered||outletPowered;
+   signals.beamA=inletPowered&&portalCrossed&&towerReceiverHit(segments,beamReceiverA);
+   signals.beamB=outletPowered&&portalCrossed&&towerReceiverHit(segments,beamReceiverB);
+   beam.update(sourcePowered?segments:[]);projector.set(sourcePowered&&portalCrossed);
    beamReceiverA.set(signals.beamA);beamReceiverB.set(signals.beamB);
   }
   if(hasAir){
@@ -197,6 +206,25 @@ export function createTowerMechanism({game,definition,group,box,materials}){
    signals.gravity=gravityContact;
    coil.set(gravityContact);
   }
+  if(isBalance){
+   const p=towerCoordinates(definition,game.playerPosition),body=game.physics?.cargoBody;
+   const local=body&&towerCoordinates(definition,body.position);
+   if(gravityContact&&!game.heldCube&&game.playerGrounded&&p.s>10.45&&p.s<12.5
+    &&p.n< -2.6&&p.n> -4.8)escortArmed=true;
+   if(gravityContact&&escortArmed&&!game.heldCube&&local&&local.s>7&&local.s<11.3
+    &&local.n< -5.0&&local.n> -6.4&&body.position.y>definition.baseY+2.9)
+    bridgeApproach=true;
+   if(bridgeApproach&&gravityContact&&escortArmed&&!game.heldCube&&local&&local.s>8.2&&local.s<12.8
+    &&local.n< -6.6&&body.position.y>definition.baseY+2.9)bridgeFlight=true;
+   // A token proximity event cannot finish the bridge. The original Cannon
+   // body must physically settle on the elevated catch after crossing the
+   // side opening while the player has travelled the separate escort lane.
+   if(bridgeFlight&&!game.heldCube&&local&&Math.abs(local.s-11.1)<.86
+    &&Math.abs(local.n+9.25)<.90&&body.position.y>=definition.baseY+3.53
+    &&body.position.y<definition.baseY+4.32
+    &&Math.hypot(body.velocity.x,body.velocity.y,body.velocity.z)<2.2)
+    signals.bridgeCatch=true;
+  }
   return getSignals();
  }
  function airAcceleration(p,v){
@@ -205,8 +233,15 @@ export function createTowerMechanism({game,definition,group,box,materials}){
   if(local.s<13.2||local.s>24.2||Math.abs(local.n)>3.3
    ||p.y<definition.baseY+.3||p.y>definition.baseY+5.5)return V();
   const along=v.dot(direction);
-  return direction.clone().multiplyScalar(clamp(13-along*1.5,0,18))
+  const force=direction.clone().multiplyScalar(clamp(13-along*1.5,0,18))
    .addScaledVector(across,clamp(-local.n*1.2-v.dot(across)*.5,-5,5));
+  // Windway's duct angles the live portal-fed current upward. Its 3.5 m
+  // baffle cannot be cleared by the ordinary jump (7.8 m/s takeoff against
+  // 19.5 m/s² gravity); the player's full body and the original free cargo
+  // receive the same force while inside the real capture lane.
+  if(definition.id==='windway'&&local.s>14.2&&local.s<19.6&&Math.abs(local.n)<2.8
+   &&p.y<definition.baseY+4.75)force.y=clamp(49-v.y*5,0,49);
+  return force;
  }
  function playerAcceleration(point,velocity){return airAcceleration(point.clone().addScaledVector(UP,1.1),velocity);}
  function applyCargoForces(){
@@ -245,17 +280,36 @@ export function createTowerMechanism({game,definition,group,box,materials}){
     body.wakeUp();
    }
   }
+  if(isBalance&&gravityContact){
+   const local=towerCoordinates(definition,body.position);
+   if(signals.bridgeCatch&&returned)return;
+   let s,n,y;
+   if(signals.bridgeCatch){s=10.05;n=0;y=definition.baseY+3.72;
+    if(local.n>-.95&&Math.abs(local.s-s)<.95){returned=true;return;}
+   }else if(escortArmed){s=11.1;n=-9.25;y=definition.baseY+3.74;}
+   else{s=5.1;n=0;y=definition.baseY+3.72;}
+   const vs=body.velocity.x*direction.x+body.velocity.z*direction.z;
+   const vn=body.velocity.x*across.x+body.velocity.z*across.z;
+   const towardS=clamp((s-local.s)*25-vs*9,-55,55);
+   const towardN=clamp((n-local.n)*25-vn*9,-65,65);
+   const vertical=clamp(19.5+(y-body.position.y)*28-body.velocity.y*9,-30,66);
+   const planar=direction.clone().multiplyScalar(towardS).addScaledVector(across,towardN);
+   body.force.x+=body.mass*planar.x;body.force.z+=body.mass*planar.z;
+   body.force.y+=body.mass*vertical;body.wakeUp();
+  }
   if(hasAir){
    const acceleration=airAcceleration(V(body.position.x,body.position.y,body.position.z),
     V(body.velocity.x,body.velocity.y,body.velocity.z));
    if(acceleration.lengthSq()){
     body.force.x+=body.mass*acceleration.x;
+    body.force.y+=body.mass*acceleration.y;
     body.force.z+=body.mass*acceleration.z;body.wakeUp();
    }
   }
  }
  function reset(){
   control=false;mirrorAngle=0;turbineOmega=turbineAngle=0;gravityContact=gravityArmed=false;
+  escortArmed=bridgeApproach=bridgeFlight=returned=false;
   Object.keys(signals).forEach(key=>{signals[key]=false;});
   beam?.update([]);air?.update([]);
   beamReceiverA.set(false);beamReceiverB.set(false);turbine.set(false);coil?.set(false);
@@ -272,5 +326,5 @@ export function createTowerMechanism({game,definition,group,box,materials}){
  }
  reset();
  return {update,getSignals,setControl,reset,dispose,playerAcceleration,applyCargoForces,
-  get state(){return {mirrorAngle,turbineOmega,gravityContact,gravityArmed,control,...signals};}};
+  get state(){return {mirrorAngle,turbineOmega,gravityContact,gravityArmed,escortArmed,bridgeApproach,bridgeFlight,returned,control,...signals};}};
 }

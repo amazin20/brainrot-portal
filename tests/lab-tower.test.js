@@ -50,7 +50,7 @@ test('Tower authors 18 distinct puzzle wings in six decks with three free-order 
   if(requirements.some(signal=>['beamA','beamB','airA','transit'].includes(signal)))
    assert.ok(kinds.has('shoot'),`Wing ${stage.id} must fire an actual portal`);
   if(requirements.includes('transit'))
-   assert.ok(kinds.has('enter'),`Wing ${stage.id} must cross a portal, not just place it`);
+   assert.ok(kinds.has('enter')||kinds.has('fling'),`Wing ${stage.id} must cross a portal, not just place it`);
   if(requirements.some(signal=>['cargo','gravity'].includes(signal)))
    assert.ok(kinds.has('drop')&&kinds.has('pickup'),`Wing ${stage.id} must place and recover the companion`);
   if(requirements.some(signal=>['mirror','control'].includes(signal)))
@@ -72,6 +72,7 @@ test('Every deck authors a different central puzzle with ordered live feeds from
  assert.equal(KEYSTONE_FEED_MODES.length,6);
  assert.equal(new Set(KEYSTONE_SPECS.map(spec=>spec.id)).size,6);
  assert.equal(new Set(KEYSTONE_SPECS.map(spec=>JSON.stringify(spec.sequence))).size,6);
+ const centralRoutes=new Set();
  for(let deck=0;deck<6;deck++){
   const feeds=KEYSTONE_FEED_MODES[deck],stages=TOWER_STAGES.filter(stage=>stage.deck===deck);
   const route=towerDeckRoute(deck,{feedModes:feeds,stages});
@@ -79,11 +80,16 @@ test('Every deck authors a different central puzzle with ordered live feeds from
   assert.ok(feeds.length>=2&&feeds.length<=3,'A keystone must depend on multiple distinct wings');
   assert.equal(new Set(feeds.map(feed=>feed.branch)).size,feeds.length);
   assert.ok(feeds.every(feed=>stages.some(stage=>stage.branch===feed.branch)));
-  assert.ok(route.length>=25,`Deck ${deck+1} needs a substantial authored route`);
+  assert.ok(route.length>=10,`Deck ${deck+1} needs a physical central solution`);
   assert.ok(route.some(action=>action.kind==='walk'));
   assert.ok(route.some(action=>['shoot','drop','use','enter'].includes(action.kind)),
    `Deck ${deck+1} must demand actual puzzle interaction`);
+  assert.ok(route.filter(action=>action.kind==='walk').every(action=>
+   Math.abs(action.target[0])<=10&&Math.abs(action.target[2])<=10),
+   `Deck ${deck+1} must not send the player down cleared wings again`);
+  centralRoutes.add(route.map(action=>action.kind).join(','));
  }
+ assert.equal(centralRoutes.size,6,'Each deck needs a distinct central input sequence');
 });
 
 test('An untouched reactor, roof shortcut and idle time cannot advance any wing',async()=>{
@@ -138,7 +144,7 @@ test('The crown return gallery stays open while its side chamber is physically g
 
 // Deliberate position fixtures isolate the causal interlock. This is not a
 // traversed route or a duration claim; the journey test covers real input.
-test('Freight control needs the original companion on its pad before it can power the gate',async()=>{
+test('Freight gate needs lower load, console, upper delivery and recovery of the original companion',async()=>{
  const game=await tower(),level=game.firstLevel,stage=TOWER_STAGES[1];
  try{
   at(game,towerPoint(stage,5,-2.9),{cargo:false});
@@ -151,6 +157,17 @@ test('Freight control needs the original companion on its pad before it can powe
   assert.equal(game.interact(),true,'The same cargo now powers the reachable console');
   at(game,towerPoint(stage,6,-2.9),{cargo:false});
   assert.equal(level.getTowerStageState(stage.index).signals.control,true);
+  assert.equal(level.getTowerStageState(stage.index).gateOpen,false,
+   'The old lower pad and console alone cannot open the new warehouse');
+  const receiver=level.getTowerFreightState().receiver;
+  at(game,receiver);
+  assert.equal(level.getTowerStageState(stage.index).signals.delivery,true,
+   'The same original cargo must physically settle at the elevated receiver');
+  assert.equal(level.getTowerStageState(stage.index).gateOpen,false,
+   'The player must recover the load before the main gate opens');
+  game.heldCube=game.cargo;
+  at(game,receiver,{cargo:false});
+  assert.equal(level.getTowerStageState(stage.index).signals.recovered,true);
   assert.equal(level.getTowerStageState(stage.index).gateOpen,true);
   assert.equal(level.completedStages,0,'Opening a gate is not the reactor completion');
   assert.equal(level.getTowerMetrics().deckRelays[0],false,'One wing cannot open the deck stair');
@@ -171,29 +188,25 @@ test('Prism lever alone does not fabricate the portal-linked optical signal',asy
  }finally{dispose(game);}
 });
 
-test('An early portal crossing cannot be redeemed after the exchange beam powers up',async()=>{
+test('The exchange shaft refuses a walking-speed portal crossing at its elevated receiver',async()=>{
  const game=await tower(),level=game.firstLevel,stage=TOWER_STAGES[2];
  try{
   const panel=key=>game.portalPanels.find(mesh=>mesh.userData.towerWing===stage.id
    &&mesh.name.includes(`/ ${key} /`));
   const input=panel('input'),output=panel('outputA');
   assert.ok(input&&output);
-  // Immediate panel placement and the crossing callback isolate the ordered
-  // sensor contract; the separate journey test exercises actual gun input.
   assert.equal(game.placeOnPanel(0,input,input.userData.center),true);
   assert.equal(game.placeOnPanel(1,output,output.userData.center),true);
-  level.onTeleport({entryIndex:1,exitIndex:0});
-  assert.notEqual(level.getTowerStageState(stage.index).signals.transit,true);
-  at(game,towerPoint(stage,11,0),{cargo:false});
-  for(let step=0;step<120&&!level.getTowerStageState(stage.index).signals.beamA;step++)
-   level.update(1/120);
-  assert.equal(level.getTowerStageState(stage.index).signals.beamA,true);
-  assert.notEqual(level.getTowerStageState(stage.index).signals.transit,true,
-   'The earlier crossing is not saved as a future transit request');
-  assert.equal(level.getTowerStageState(stage.index).gateOpen,false);
-  level.onTeleport({entryIndex:1,exitIndex:0});
-  level.update(1/120);
+  // This fixture isolates the sensor; the separate journey test crosses the
+  // real portal with ordinary controls and the original physical companion.
+  level.onTeleport({entryIndex:0,exitIndex:1,velocity:new THREE.Vector3(2,0,0)});
+  at(game,towerPoint(stage,24,4.7,stage.baseY+2.05),{cargo:false});
   assert.equal(level.getTowerStageState(stage.index).signals.transit,true);
+  assert.notEqual(level.getTowerStageState(stage.index).signals.kinetic,true);
+  assert.equal(level.getTowerStageState(stage.index).gateOpen,false);
+  level.onTeleport({entryIndex:0,exitIndex:1,velocity:new THREE.Vector3(16,0,0)});
+  at(game,towerPoint(stage,24,4.7,stage.baseY+2.05),{cargo:false});
+  assert.equal(level.getTowerStageState(stage.index).signals.kinetic,true);
   assert.equal(level.getTowerStageState(stage.index).gateOpen,true);
  }finally{dispose(game);}
 });

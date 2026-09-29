@@ -1,14 +1,15 @@
 import * as THREE from 'three';
 import {tracePortalRay} from './LabPuzzleMechanics.js';
-import {towerCoordinates,towerPoint} from './LabTowerLayout.js';
+import {towerPoint} from './LabTowerLayout.js';
 import {towerReceiverHit} from './LabTowerMechanisms.js';
 
 const V=(x=0,y=0,z=0)=>new THREE.Vector3(x,y,z);
 const UP=V(0,1,0),clamp=THREE.MathUtils.clamp;
 
-/** Ordered electrical feeds beyond the three already solved wing gates.
- * Every contact needs a fresh, live physical output rather than the wing's
- * stored success bit. Different decks route through different branches. */
+/** Linked wings carry the electrical feeds to each deck's central machine.
+ * The feed is captured from the wing's physically latched causal signals at
+ * its reactor, when that wing is solved. The branches can be solved in any
+ * order and do not need to be replayed after the third reactor opens. */
 export const KEYSTONE_FEED_MODES=Object.freeze([
  [{branch:0,mode:'beamA',s:34,n:0},{branch:2,mode:'transit',s:30,n:0},{branch:1,mode:'cargo',s:33,n:0}],
  [{branch:1,mode:'beamB',s:34,n:0},{branch:0,mode:'airA',s:31,n:0}],
@@ -52,10 +53,10 @@ function line(group,color,resources){
  });}};
 }
 
-/** Six central machines and their real electrical links into the wing rooms.
+/** Six central machines and their electrical links into the wing rooms.
  * This helper never changes player/cargo poses, portals or game progression.
- * A deck remains locked until all three wing gates are solved and its own
- * feed network plus local physical puzzle have been completed. */
+ * A deck remains locked until all three wing reactors have physically been
+ * solved and the central machine's own physical puzzle has been completed. */
 export function createTowerKeystones({game,root,box,makePanel,materials,rooms}){
  const resources=[],states=[],terminals=[],dynamicMeshes=[];
  let lastTeleport=game.teleportCount??0;
@@ -166,19 +167,24 @@ export function createTowerKeystones({game,root,box,makePanel,materials,rooms}){
   state.core=core;states.push(state);
  }
 
- function wingCurrent(feed,room,state){
-  const live=room.mechanism?.getSignals?.()??{};
-  switch(feed.mode){
-   case 'beamA':case 'beamB':case 'airA':return !!live[feed.mode];
-   case 'cargo':return !game.heldCube&&!!game.cargoOnPad?.(V(...room.definition.cargoPad),2);
-   case 'gravityCargo':return !!live.gravity&&!game.heldCube&&!!game.cargoOnPad?.(V(...room.definition.cargoPad),2);
-   case 'kinetic':{
-    const d=room.definition.direction,v=game.playerVelocity;
-    return game.playerGrounded&&v.x*d[0]+v.z*d[1]>3.8;
-   }
-   case 'transit':return !!state.wingTransit?.[feed.branch];
-   default:return false;
-  }
+ /** Called only after Level has witnessed the original companion and player at
+  * an opened wing reactor. The level's signals were latched from real rays,
+  * cargo contacts, speed and portal crossings while that wing was played.
+  * Validate the entire wing recipe as well as this feed's source, so a single
+  * early output can never charge a deck before its reactor is solved. */
+ function armFeedsForSolvedWing(room,signals){
+  const definition=room?.definition,deck=definition?.deck;
+  if(!Number.isInteger(deck)||deck<0||deck>=states.length||rooms[definition.index]!==room)return false;
+  const requirements=definition.puzzle?.requirements;
+  if(!requirements?.length||!requirements.every(name=>signals?.[name]))return false;
+  const state=states[deck];let charged=false;
+  state.fixtures.forEach(({feed,room:source,tile,beacon},index)=>{
+   if(source!==room||state.feeds[index])return;
+   const sources=feed.mode==='gravityCargo'?['cargo','gravity']:[feed.mode];
+   if(!sources.every(name=>requirements.includes(name)&&signals[name]))return;
+   state.feeds[index]=true;tile.material=materials.mint;beacon.set(true);charged=true;
+  });
+  return charged;
  }
  function hubSignal(state,name,condition){
   if(condition)state.signals[name]=true;
@@ -227,31 +233,12 @@ export function createTowerKeystones({game,root,box,makePanel,materials,rooms}){
   if(!entry||!exit)return;
   for(const state of states){
    const d=state.deck;if(!ready[d])continue;
-   for(const [index,feed]of KEYSTONE_FEED_MODES[d].entries()){
-    if(feed.mode!=='transit'||state.feeds[index]||state.feeds.slice(0,index).some(value=>!value))continue;
-    const room=wing(d,feed.branch),ids=new Set(Object.values(room.panels).map(panel=>panel.uuid));
-    if(ids.has(entry)&&ids.has(exit))(state.wingTransit??={})[feed.branch]=true;
-   }
    const priorHubSignal=d===3?state.signals.gravity:d===5?state.signals.momentum:false;
    if(priorHubSignal&&state.feeds.every(Boolean)){
     const ids=new Set(Object.values(state.panels).map(panel=>panel.uuid));
     if(ids.has(entry)&&ids.has(exit))state.transit=true;
    }
   }
- }
- function chargeFeeds(state){
-  const p=game.playerPosition;
-  for(const [index,fixture]of state.fixtures.entries()){
-   if(state.feeds[index]||state.feeds.slice(0,index).some(value=>!value))continue;
-   const {feed,room}=fixture,local=towerCoordinates(room.definition,p);
-   const atSocket=game.playerGrounded&&Math.abs(local.s-feed.s)<.90&&Math.abs(local.n-feed.n)<1.3
-    &&Math.abs(p.y-room.definition.baseY)<.3;
-   if(atSocket&&wingCurrent(feed,room,state))state.feeds[index]=true;
-  }
-  state.fixtures.forEach(({tile,beacon},i)=>{
-   tile.material=state.feeds[i]?materials.mint:materials.amber;
-   beacon.set(state.feeds[i]);
-  });
  }
  function weight(state){return !game.heldCube&&!!game.cargoOnPad?.(state.cargoPad,1.45);}
  function playerPlate(state){const p=game.playerPosition,q=state.playerPad;
@@ -273,7 +260,6 @@ export function createTowerKeystones({game,root,box,makePanel,materials,rooms}){
    // A solved relay stays latched for this uninterrupted attempt. Its portal
    // rays need no further collision tracing on the subsequent five decks.
    if(!state.ready||state.solved)continue;
-   chargeFeeds(state);
    if(!state.feeds.every(Boolean))continue;
    const s=state.signals;
    if(d===0){
@@ -322,7 +308,7 @@ export function createTowerKeystones({game,root,box,makePanel,materials,rooms}){
   for(const state of states){
    state.ready=state.solved=state.consoleOn=state.transit=state.gravityArmed=state.gravityContact=false;
    state.angular=state.rotorSpeed=state.rotorAngle=0;state.airLive=false;
-   state.wingTransit=Object.create(null);state.signals=Object.create(null);state.feeds.fill(false);
+   state.signals=Object.create(null);state.feeds.fill(false);
    state.beam?.update([]);state.air?.update([]);state.receiverA?.set(false);state.receiverB?.set(false);
    state.turbine?.set(false);state.upper?.set(false);state.core.set(false);
    if(state.blades)state.blades.rotation.z=0;
@@ -407,6 +393,6 @@ export function createTowerKeystones({game,root,box,makePanel,materials,rooms}){
   }
  }
  reset();
- return {update,reset,dispose,interact,nearbyInteraction,getState,terminals,dynamicMeshes,
+ return {update,reset,dispose,interact,nearbyInteraction,getState,armFeedsForSolvedWing,terminals,dynamicMeshes,
   getControlPositions:()=>terminals.map(t=>t.position),playerAcceleration,applyCargoForces};
 }

@@ -73,8 +73,8 @@ jobs:
           import assert from 'node:assert/strict';
           const info=JSON.parse(fs.readFileSync('dist/build-info.json','utf8'));
           assert.equal(info.commit,process.env.BUILD_COMMIT);
-          assert.equal(info.version,'v43-tower-rebuild');
-          assert.equal(info.artVersion,'v43-tower-rebuild');
+          assert.equal(info.version,'v44-tower-variety');
+          assert.equal(info.artVersion,'v44-tower-variety');
           assert.equal(info.run,process.env.GITHUB_RUN_ID);
           assert.equal(info.levels,41);
           assert.equal(info.features.archiveRooms,33);

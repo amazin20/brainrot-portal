@@ -50,7 +50,7 @@ for(const level of expected){
  }
  if(level===41){
   assert.equal(record.reused,undefined,'The final Tower must be freshly filmed from this exact revision');
-  assert.equal(record.version,'v43-tower-rebuild','An older Tower recording cannot be used for this release');
+  assert.equal(record.version,'v44-tower-variety','An older Tower recording cannot be used for this release');
   assert.equal(record.route.stagesCompleted,18);
   assert.equal(record.route.stageEvents.length,18);
   assert.equal(record.gameMetrics.totalStages,18);
