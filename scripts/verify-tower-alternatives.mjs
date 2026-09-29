@@ -9,14 +9,15 @@ const expectedCommit = process.env.TOWER_SOURCE_COMMIT;
 assert.match(expectedCommit || '', /^[a-f0-9]{40}$/, 'Pin the original game commit');
 fs.mkdirSync(out, {recursive: true});
 const cases = [
-  {id: 'reverse-full-hoist', branchOrder: [2, 1, 0], freightRoute: 'hoist'},
+  {id: 'reverse-full-hoist', branchOrder: [2, 1, 0], freightRoute: 'hoist', correctHubApproach: true},
   {id: 'west-first-full-carry', branchOrder: [1, 0, 2], freightRoute: 'carry'},
   {id: 'east-north-west-first-deck', branchOrder: [0, 2, 1], stopAfterDeck: 0},
   {id: 'west-north-east-first-deck', branchOrder: [1, 2, 0], stopAfterDeck: 0},
   {id: 'north-east-west-first-deck', branchOrder: [2, 0, 1], stopAfterDeck: 0},
 ];
 const summary = {sourceCommit: expectedCommit, auditCommit: process.env.GITHUB_SHA || null,
-  method: 'Ordinary scripted movement, jump, interaction and portal shots through the unchanged production artifact. Not a human playtest, video or minimum-time proof.',
+  method: 'Ordinary scripted movement, jump, interaction and portal shots through the unchanged production artifact. The reverse planner includes one explicit hub-aisle waypoint; geometry, collision, actors, puzzle state and win rules are unchanged. Not a human playtest, video or minimum-time proof.',
+  priorAudit: {run: '36532822061', reverseFailure: 'The direct scripted approach intersected the back of the fifth hub portal panel; the later run approaches through the open central aisle.', resetFailure: 'Desktop hides the mobile pause button; the later run restores the ordinary animation loop and uses Escape.'},
   cases: [], pass: false};
 const browser = await puppeteer.launch({
   executablePath: process.env.CHROME_PATH || '/usr/bin/google-chrome', headless: true,
@@ -78,14 +79,23 @@ try {
       const evidence = await page.evaluate(async options => {
         const game = window.__NESI_DEMO_GAME__;
         const companion = game.cargo, bodyId = game.physics.cargoBody.id;
+        const originalRoutes = game.firstLevel.keystoneRoutes;
+        const plannerCorrection = options.correctHubApproach ? {
+          deck: 4, addedAction: {kind: 'walk', target: [0, 32, 0]},
+          purpose: 'Approach the mirror hub through its open centre, not diagonally through the solid portal backplate.'
+        } : null;
+        // This edits only the automation's list of ordinary input goals. No
+        // collision, actor pose, puzzle signal, level geometry or win rule changes.
+        if (plannerCorrection) game.firstLevel.keystoneRoutes = originalRoutes.map((route, deck) =>
+          deck === plannerCorrection.deck ? [plannerCorrection.addedAction, ...route] : route);
         try {
           const report = await window.__NESI_RUN_LEVEL_ROUTE__(options);
-          return {report, sameCompanion: companion === game.cargo, sameBody: bodyId === game.physics.cargoBody.id,
+          return {report, plannerCorrection, sameCompanion: companion === game.cargo, sameBody: bodyId === game.physics.cargoBody.id,
             state: game.state, metrics: game.firstLevel.getTowerMetrics()};
         } catch (error) {
           return {error: String(error), report: error.towerReport || null,
             state: game.state, metrics: game.firstLevel.getTowerMetrics()};
-        }
+        } finally { game.firstLevel.keystoneRoutes = originalRoutes; }
       }, result.options);
       result.evidence = evidence;
       assert.equal(evidence.error, undefined, evidence.error);
@@ -116,8 +126,20 @@ try {
       await page.screenshot({path: path.join(out, `${scenario.id}.png`)});
       if (partial) {
         // Test public controls after the completed partial route, not by assigning state.
-        await page.click('#pause-button');
+        // The debug route pauses rendering, whereas keyboard input is consumed
+        // by the ordinary animation loop. Resume that loop, not game state.
+        await page.evaluate(() => {
+          const game = window.__NESI_DEMO_GAME__;
+          game.renderer.setAnimationLoop(game.animate);
+        });
+        await page.bringToFront();
+        await page.keyboard.press('Escape');
         await page.waitForFunction(() => window.__NESI_DEMO_GAME__.state === 'paused');
+        await page.waitForSelector('#restart-button', {visible: true});
+        await page.waitForFunction(() => {
+          const button = document.querySelector('#restart-button');
+          return button && !button.disabled && !button.closest('[inert]');
+        });
         await page.click('#restart-button');
         await page.waitForFunction(() => window.__NESI_DEMO_GAME__.state === 'playing');
         result.restart = await snapshot(page); assertFresh(result.restart);
@@ -138,7 +160,8 @@ try {
       const r = result.evidence?.report;
       summary.cases.push({id: result.id, pass: result.pass, error: result.error || null,
         stages: r?.stagesCompleted ?? null, simulatedSeconds: r?.simulatedSeconds ?? null,
-        activeInputSeconds: r?.activeInputSeconds ?? null, teleports: r?.teleports ?? null,
+        activeInputSeconds: r?.activeInputSeconds ?? null, teleports: r?.failure?.teleports ?? r?.teleports ?? null,
+        plannerCorrection: result.evidence?.plannerCorrection || null,
         branchOrder: scenario.branchOrder, freightRoute: scenario.freightRoute || 'hoist',
         publicRestartVerified: Boolean(result.restart && result.pass), reloadVerified: Boolean(result.reload && result.pass),
         wallSeconds: result.wallSeconds});
