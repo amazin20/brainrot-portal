@@ -5,11 +5,11 @@ import {pourVolumes} from '../src/game/LabSingularityLevel.js';
 import {createHeadlessGame} from '../scripts/lab-headless.mjs';
 import {runSingularityJourney} from '../src/game/LabSingularityJourney.js';
 
-test('Singularity has twelve authored rules and eight independently accessible ground halls',()=>{
+test('Singularity has thirteen authored rules and nine independently accessible halls',()=>{
  assert.equal(validateSingularityLayout(),true);
- assert.equal(SINGULARITY_ROOMS.length,12);
- assert.equal(new Set(SINGULARITY_ROOMS.map(r=>r.rule)).size,12);
- assert.equal(SINGULARITY_ROOMS.filter(r=>r.requires.length===0).length,8);
+ assert.equal(SINGULARITY_ROOMS.length,13);
+ assert.equal(new Set(SINGULARITY_ROOMS.map(r=>r.rule)).size,13);
+ assert.equal(SINGULARITY_ROOMS.filter(r=>r.requires.length===0).length,9);
  assert.equal(new Set(SINGULARITY_ROOMS.filter(r=>r.requires.length).map(r=>r.at[1])).size,4);
  assert.ok(SINGULARITY_ROOMS.every(r=>r.w>=34&&r.d>=32));
 });
@@ -44,4 +44,19 @@ test('The actual first puzzle, whole-attempt reset and disposal retain the origi
   assert.equal(game.cargo,companion);assert.equal(game.physics.cargoBody.id,body);assert.ok(game.playerPosition.distanceTo(level.spawn)<.01);
   const panels=[...game.portalPanels];level.dispose();assert.ok(panels.every(p=>!game.portalPanels.includes(p)));
  }finally{level.dispose();game.physics.dispose();game.portals.dispose();}
+});
+
+test('Thirteen different machines and the real crown are reachable in one ordinary-input attempt',async()=>{
+ const game=await createHeadlessGame();game.chamberEdition='foundation';await game.selectLevel(40,true);
+ try {
+  const report=await runSingularityJourney(game);
+  assert.equal(report.pass,true);assert.equal(game.state,'won');assert.equal(report.sameCompanion,true);
+  assert.equal(report.resets+report.respawns+report.cargoResets,0);
+  assert.equal(report.metrics.completedStages,SINGULARITY_ROOMS.length);
+  assert.deepEqual(new Set(report.metrics.solvedIds),new Set(SINGULARITY_ROOMS.map(r=>r.id)));
+  assert.equal(new Set(report.metrics.events.map(e=>e.rule)).size,SINGULARITY_ROOMS.length);
+  assert.ok(report.teleports>=8);assert.ok(report.shots>=15);
+  assert.ok(report.activeSeconds>=900,'The measured full authored route must contain fifteen active minutes, not idle padding');
+  assert.equal(report.metrics.checkpoints,false);
+ } finally {game.firstLevel.dispose();game.physics.dispose();game.portals.dispose();}
 });

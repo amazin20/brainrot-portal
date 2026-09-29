@@ -30,6 +30,7 @@ export async function runSingularityJourney(game,{onMilestone=()=>{},stopAfter=n
  async function walk(p,{sprint=true,tolerance=.22,timeout=90}={}){
   p=p.toArray?.()??p;report.actions.push({kind:'walk',target:p,frame:report.frames});let best=Infinity,stuck=0;
   for(let i=0;i<timeout*60;i++){
+   if(game.state==='won'){stop();return;}
    const dx=p[0]-game.playerPosition.x,dz=p[2]-game.playerPosition.z,d=Math.hypot(dx,dz);
    if(d<tolerance&&Math.abs(p[1]-game.playerPosition.y)<.65){stop();return;}
    if(d<best-.005){best=d;stuck=0;}else stuck++;
@@ -101,20 +102,21 @@ export async function runSingularityJourney(game,{onMilestone=()=>{},stopAfter=n
   async archive(){await travel(level.rooms.get('archive').door);await use('archive:slide-a');await walk(P('archive',12,-13));await walk(P('archive',-7,-13));await use('archive:slide-b');await walk(P('archive',-5,-13));await walk(P('archive',-5,7));await walk(P('archive',-15,7));await until(()=>level.getTowerMetrics().solvedIds.includes('archive'),2,'Archive did not align');await walk(P('archive',-5,7));await walk(P('archive',-5,-13));await walk(P('archive',12,-13));await leave('archive',[P('archive',14,0)]);},
   async migrant(){await travel(level.rooms.get('migrant').door);await walk(P('migrant',-12,12));await shoot(0,st('migrant').intake.center);await walk(P('migrant',-13,0));await shoot(1,st('migrant').moving.frame().center);await use('migrant:rail');
    await walk(P('migrant',-12,12));await until(()=>st('migrant').travel>.99,7,'Rail did not reach far end');await enter(st('migrant').intake);await walk(P('migrant',12,10,3));await until(()=>level.getTowerMetrics().solvedIds.includes('migrant'),2,'Moving portal arrival not registered');await enter(st('migrant').moving);await walk(P('migrant',-12,12));await leave('migrant',[P('migrant',-12,0)]);},
+  async parallax(){await travel(level.rooms.get('parallax').door);await walk(P('parallax',-18,-10));await use('parallax:near');await walk(P('parallax',-18,-15));await walk(P('parallax',7,-15));await walk(P('parallax',7,8));await use('parallax:middle');await walk(P('parallax',10,10));await walk(P('parallax',10,16));await walk(P('parallax',-18,16));await walk(st('parallax').pad);await look(st('parallax').target);await until(()=>level.getTowerMetrics().solvedIds.includes('parallax'),3,'The three sight windows did not align');await leave('parallax');},
   async inertia(){await travel(level.rooms.get('inertia').door);await walk(P('inertia',-22,12));await walk(P('inertia',-22,-4));await shoot(0,st('inertia').intake.center);await walk(P('inertia',-22,12));await walk(P('inertia',-10,12));await shoot(1,st('inertia').outlet.center);await walk(P('inertia',-27,10));await walk(P('inertia',-27,-14,12));await walk(P('inertia',-1,-14,12));await walk(P('inertia',-1,-11.35,12),{sprint:false,tolerance:.06});
    const before=game.teleportCount;for(let i=0;i<8*60&&game.teleportCount===before;i++){worldMove(0,.42);await frame();}stop();check(game.teleportCount>before,'Falling intake missed');await until(()=>game.playerGrounded,6,'Fling did not land');await walk(P('inertia',21,0,-3.5));await until(()=>level.getTowerMetrics().solvedIds.includes('inertia'),2,'Momentum proof missing');await walk(P('inertia',25,3,-3.5));await walk(P('inertia',25,13));await leave('inertia',[P('inertia',0,13)]);},
-  async inversion(){await travel(level.rooms.get('inversion').door);await walk(P('inversion',10,-12));await use('inversion:polarity');await walk(P('inversion',0,0));await jump();
+  async inversion(){await travel(level.rooms.get('inversion').door);await use('inversion:polarity');await walk(P('inversion',10,0));await walk(P('inversion',0,0));await jump();
    await until(()=>game.playerPosition.y>69.6,6,'Gravity ascent did not rise');for(let i=0;i<5*60&&game.playerPosition.z<P('inversion',0,10)[2];i++){worldMove(0,1);await frame();}stop();await until(()=>game.playerGrounded,6,'Upper inversion landing missed');await walk(P('inversion',9,12,14));await until(()=>level.getTowerMetrics().solvedIds.includes('inversion'),2,'Inversion incomplete');},
  };
  try{
-  const sequence=order??['orrery','optics','reservoir','transmission','echo','accumulator','drydock','magnet','archive','migrant','inertia','inversion'];
+  const sequence=order??['orrery','parallax','optics','reservoir','transmission','echo','accumulator','drydock','magnet','archive','migrant','inertia','inversion'];
   for(const id of sequence){check(routines[id],'Unknown route '+id);mark('Start '+id);await routines[id]();check(level.getTowerMetrics().solvedIds.includes(id),'Missing solved machine '+id);mark('Solved '+id);await globalThis.__SINGULARITY_FLUSH__?.();if(stopAfter===id){report.partial=true;break;}}
   if(!report.partial){
    // The final retrieval is a real two-way portal path to the original body.
    await walk(P('inversion',12,10,14));await shoot(0,level.panels.upperPortal.center);
-   await walk(P('inversion',15,0,14));await shoot(1,level.panels.basePortal.center);await enter(level.panels.upperPortal);
+   await walk(P('inversion',18.7,.25,14),{tolerance:.1});await shoot(1,level.panels.basePortal.center);await enter(level.panels.upperPortal);
    await walk([2,0,12]);await pickup();await enter(level.panels.basePortal);await walk(P('inversion',12,10,14));await dropAt(P('inversion',12,10,14));
-   await walk(P('inversion',15,0,14));await shoot(1,level.panels.crownPortal.center);await walk(P('inversion',12,10,14));await pickup();await enter(level.panels.upperPortal);await walk([0,72,5]);await until(()=>game.state==='won',3,'Crown joint arrival failed');report.pass=true;mark('Crown completed with original companion');
+   await walk(P('inversion',18.7,.25,14),{tolerance:.1});await shoot(1,level.panels.crownPortal.center);await walk(P('inversion',12,10,14));await pickup();await enter(level.panels.upperPortal);await walk([0,72,5]);await until(()=>game.state==='won',3,'Crown joint arrival failed');report.pass=true;mark('Crown completed with original companion');
   }
   report.seconds=report.physicsSteps/120;report.teleports=game.teleportCount;report.metrics=level.getTowerMetrics();report.sameCompanion=game.cargo===companion&&game.physics.cargoBody.id===body;return report;
  }catch(error){report.seconds=report.physicsSteps/120;report.failure={error:String(error),...S()};report.metrics=level.getTowerMetrics();error.singularityReport=report;throw error;}

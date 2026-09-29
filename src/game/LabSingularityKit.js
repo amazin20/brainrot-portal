@@ -12,9 +12,9 @@ export class SingularityKit {
   this.game=game;this.root=new THREE.Group();this.root.name='SINGULARITY / continuous machine cathedral';game.scene.add(this.root);
   this.meshes=[];this.colliders=[];this.floors=[];this.panels=[];this.terminals=[];this.geometries=new Set();this.materials=new Set();this.static=[];this.batches=[];this.textures=[];
   this.cube=this.geo(new THREE.BoxGeometry(1,1,1));this.round=this.geo(new RoundedBoxGeometry(1,1,1,2,.09));
-  this.cylinder=this.geo(new THREE.CylinderGeometry(1,1,1,24));
-  this.m={steel:this.mat(0x334957,.52,.55),dark:this.mat(0x152d3b,.72,.24),floor:this.mat(0x8aa9b8,.84,.1),
-   wall:this.mat(0x3e5d6c,.7,.22),ivory:this.mat(0xf2e9d4,.48,.15),copper:this.mat(0xd89c60,.38,.65),
+  this.torusCache=new Map();this.cylinder=this.geo(new THREE.CylinderGeometry(1,1,1,24));
+  this.m={steel:this.mat(0x516b7c,.52,.35),dark:this.mat(0x152d3b,.72,.24),floor:this.mat(0xb2c9d3,.84,.05),
+   wall:this.mat(0x839fae,.7,.08),ivory:this.mat(0xf2e9d4,.48,.15),copper:this.mat(0xd89c60,.38,.65),
    cyan:this.mat(0x61dcea,.3,.3,0x17434b),mint:this.mat(0x88efb8,.35,.2,0x26472c),rose:this.mat(0xf198be,.44,.2),
    violet:this.mat(0xb5a5ed,.4,.3),lamp:this.mat(0xffedc2,1,0,0xffedc2,true),idle:this.mat(0xdab074,1,0,0xdab074,true),
    live:this.mat(0x87f4c8,1,0,0x87f4c8,true),ceramic:this.mat(0xf4f4eb,.58,.08,0x303b37)};
@@ -76,12 +76,16 @@ export class SingularityKit {
  control(id,p,action,text,material=this.m.copper){
   const casing=this.box([p[0],p[1]+.62,p[2]],[.88,1.24,.7],this.m.dark,{round:true});
   const head=this.box([p[0],p[1]+1.28,p[2]],[.78,.17,.64],material,{round:true});
-  const t={id,kind:id,position:V(p[0],p[1]+1,p[2]),collider:casing.userData.collider,action,lesson:text,art:casing,head};
+  for(const x of [-.22,0,.22])this.decor([p[0]+x,p[1]+1.39,p[2]-.13],[.08,.035,.09],this.m.ivory);
+  const screen=this.mesh(this.cube,this.m.cyan,[p[0],p[1]+1.39,p[2]+.10],[.5,.018,.18],{dynamic:true});
+  const actuator=this.mesh(this.round,this.m.copper,[p[0]+.28,p[1]+1.51,p[2]+.13],[.08,.32,.08],{dynamic:true});
+  const wrapped=()=>{const result=action();if(result!==false){actuator.rotation.x=actuator.rotation.x<0?.35:-.35;screen.material=screen.material===this.m.live?this.m.cyan:this.m.live;}return result;};
+  const t={id,kind:id,position:V(p[0],p[1]+1,p[2]),collider:casing.userData.collider,action:wrapped,lesson:text,art:casing,head};
   this.terminals.push(t);return t;
  }
  nearest(){return this.terminals.filter(t=>terminalAccessible(this.game,t)).sort((a,b)=>a.position.distanceToSquared(this.game.playerPosition)-b.position.distanceToSquared(this.game.playerPosition))[0];}
  ring(p,r,m=this.m.copper,{normal=[0,1,0],tube=.12,dynamic=false}={}){
-  const mesh=this.mesh(this.geo(new THREE.TorusGeometry(r,tube,8,48)),m,p,[1,1,1],{dynamic});mesh.quaternion.setFromUnitVectors(Z,V(...normal));return mesh;
+  const key=`${r}:${tube}`;if(!this.torusCache.has(key))this.torusCache.set(key,this.geo(new THREE.TorusGeometry(r,tube,8,40)));const mesh=this.mesh(this.torusCache.get(key),m,p,[1,1,1],{dynamic});mesh.quaternion.setFromUnitVectors(Z,V(...normal));return mesh;
  }
  gear(p,r,teeth=18,m=this.m.copper){
   const group=new THREE.Group();group.position.fromArray(p);this.root.add(group);
