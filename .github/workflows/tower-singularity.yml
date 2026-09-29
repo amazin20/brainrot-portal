@@ -38,6 +38,7 @@ jobs:
           const config=JSON.parse(fs.readFileSync('tools/tower-transfer.json','utf8'));
           const out=path.resolve('qa/source-transfer');
           const browser=await puppeteer.launch({executablePath:process.env.CHROME_PATH,headless:true,args:['--no-sandbox','--disable-dev-shm-usage']});
+          let timeout;
           try{
             const page=await browser.newPage();page.setDefaultTimeout(60000);
             const client=await browser.target().createCDPSession();
@@ -49,26 +50,24 @@ jobs:
             });
             await page.goto(config.shareUrl,{waitUntil:'networkidle2'});
             await page.screenshot({path:path.join(out,'download-page.png')});
-            fs.writeFileSync(path.join(out,'download-page.html'),await page.content());
             const controls=await page.evaluate(()=>Array.from(document.querySelectorAll('a,button')).map((e,i)=>({i,text:e.textContent.trim(),href:e.getAttribute('href'),title:e.getAttribute('title')})));
             fs.writeFileSync(path.join(out,'controls.json'),JSON.stringify(controls,null,2));
-            console.log('Download controls',JSON.stringify(controls));
             const control=controls.find(c=>/download|ダウンロード/i.test(c.text+' '+c.title));
-            if(!control)throw Error('No public download control was found; source inspection was preserved');
+            if(!control)throw Error('No public download control was found');
             await page.evaluate(i=>document.querySelectorAll('a,button')[i].click(),control.i);
-            await Promise.race([complete,new Promise((_,reject)=>setTimeout(()=>reject(Error('Source download timed out')),90000))]);
+            await Promise.race([complete,new Promise((_,reject)=>{timeout=setTimeout(()=>reject(Error('Source download timed out')),90000);})]);
             const bytes=fs.readFileSync(downloaded),sha=createHash('sha256').update(bytes).digest('hex');
             if(sha!==config.archiveSha256)throw Error(`Source archive hash mismatch: ${sha}`);
             fs.writeFileSync('/tmp/tower-source.zip',bytes);
             console.log('SOURCE SHA256 VERIFIED',sha);
-          }finally{await browser.close();}
+          }finally{clearTimeout(timeout);await browser.close();}
           JS
           node /tmp/transfer.mjs
       - name: Expand only the approved readable game files
         run: |
           python3 - <<'PY'
           import zipfile,pathlib
-          allowed={'src/game/LabSingularityKit.js','src/game/LabSingularityLayout.js','src/game/LabSingularityLevel.js','src/game/LabSingularityJourney.js','src/game/LabCampaignLevels.js','src/game/LabV8Journey.js','scripts/singularity-browser.mjs','tests/lab-singularity.test.js','docs/TOWER_SINGULARITY.md'}
+          allowed={'src/game/LabSingularityKit.js','src/game/LabSingularityArt.js','src/game/LabSingularityLayout.js','src/game/LabSingularityLevel.js','src/game/LabSingularityJourney.js','src/game/LabCampaignLevels.js','src/game/LabV8Journey.js','scripts/singularity-browser.mjs','tests/lab-singularity.test.js','docs/TOWER_SINGULARITY.md'}
           with zipfile.ZipFile('/tmp/tower-source.zip') as z:
             assert set(z.namelist())==allowed, 'Unexpected source path'
             assert sum(i.file_size for i in z.infolist())<500000, 'Oversized source package'
@@ -81,43 +80,60 @@ jobs:
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add src/game/LabSingularity*.js src/game/LabCampaignLevels.js src/game/LabV8Journey.js scripts/singularity-browser.mjs tests/lab-singularity.test.js docs/TOWER_SINGULARITY.md
-          if ! git diff --cached --quiet; then git commit -m 'Implement the authored Singularity Tower candidate'; fi
+          if ! git diff --cached --quiet; then git commit -m 'Implement the complete thirteen-machine Singularity Tower'; fi
           test "$(git ls-remote origin refs/heads/feature/tower-singularity | cut -f1)" = '${{ github.sha }}'
           git push origin HEAD:refs/heads/feature/tower-singularity
           echo "BUILD_COMMIT=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
-      - name: Test new mechanisms and build the actual production package
+          echo "TOWER_MODE=$(node -p "JSON.parse(require('fs').readFileSync('tools/tower-transfer.json')).mode")" >> "$GITHUB_ENV"
+      - name: Test all thirteen new mechanisms and build the actual production package
         run: |
           node --test --test-concurrency=2 tests/lab-singularity.test.js tests/lab-resume.test.js
           npm run build
           node scripts/v8-package-check.mjs
           node --input-type=module <<'JS'
           import fs from 'node:fs';
-          const info={commit:process.env.BUILD_COMMIT,version:'v45-singularity',artVersion:'v45-singularity',run:process.env.GITHUB_RUN_ID,levels:41,verified:false,verificationScope:'Singularity candidate; inspect the attached route evidence',features:{defaultEdition:'foundation',archiveRooms:33,tower:{stages:12,checkpoints:false,layout:'continuous-cathedral',uniqueRules:12}}};
+          import {SINGULARITY_ROOMS} from './src/game/LabSingularityLayout.js';
+          const info={commit:process.env.BUILD_COMMIT,version:'v45-singularity',artVersion:'v45-singularity',run:process.env.GITHUB_RUN_ID,levels:41,verified:false,verificationScope:'New Tower candidate; consult the exact route and media evidence',features:{defaultEdition:'foundation',archiveRooms:33,tower:{stages:SINGULARITY_ROOMS.length,checkpoints:false,layout:'continuous-cathedral',uniqueRules:new Set(SINGULARITY_ROOMS.map(r=>r.rule)).size}}};
           fs.writeFileSync('dist/build-info.json',JSON.stringify(info,null,2)+'\n');
           JS
-      - name: Inspect the real browser rendering and optionally complete the route
+      - name: Inspect the browser rendering and verify the entire production route
         run: |
           npm run preview -- --host 127.0.0.1 --port 4173 >qa/singularity-preview.log 2>&1 &
           for i in {1..30}; do curl -fsS http://127.0.0.1:4173/build-info.json >/dev/null && break; sleep 1; done
           curl -fsS http://127.0.0.1:4173/build-info.json >/dev/null
           OUT_DIR=qa/singularity-inspection node scripts/singularity-browser.mjs
-          MODE=$(node -p "JSON.parse(require('fs').readFileSync('tools/tower-transfer.json')).mode")
-          if [ "$MODE" = verify ]; then ROUTE=1 OUT_DIR=qa/singularity-route node scripts/singularity-browser.mjs; fi
-          if [ "$MODE" = record ]; then
-            command -v ffmpeg >/dev/null || (sudo apt-get update -qq && sudo apt-get install -y --no-install-recommends ffmpeg)
-            RECORD=1 OUT_DIR=qa/singularity-recording node scripts/singularity-browser.mjs
-          fi
-      - name: Preserve exact new Tower package
-        if: always()
+          if [ "$TOWER_MODE" != inspect ]; then ROUTE=1 OUT_DIR=qa/singularity-route node scripts/singularity-browser.mjs; fi
+      - name: Preserve the exact new Tower package before recording
         uses: actions/upload-artifact@v4
         with:
           name: singularity-browser
           path: dist/
+          if-no-files-found: error
           retention-days: 14
-      - name: Preserve source identity, real screenshots and route/video evidence
+      - name: Preserve independently reviewable native images and full route metrics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: singularity-native-verification
+          path: |
+            qa/singularity-inspection/
+            qa/singularity-route/
+            qa/singularity-preview.log
+          retention-days: 14
+      - name: Record one continuous new Tower walkthrough from that exact package
+        if: env.TOWER_MODE == 'record'
+        run: |
+          command -v ffmpeg >/dev/null || (sudo apt-get update -qq && sudo apt-get install -y --no-install-recommends ffmpeg)
+          RECORD=1 OUT_DIR=qa/singularity-recording node scripts/singularity-browser.mjs
+      - name: Preserve all new video, metrics and source-transfer evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: singularity-evidence
-          path: qa/
+          path: |
+            qa/singularity-inspection/
+            qa/singularity-route/
+            qa/singularity-recording/
+            qa/source-transfer/
+            qa/singularity-preview.log
           retention-days: 14
