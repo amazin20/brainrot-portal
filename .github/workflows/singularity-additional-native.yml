@@ -1,0 +1,36 @@
+name: Public Tower alternate route and reload
+on:
+  push:
+    branches: [qa/singularity-render-options]
+    paths: [.github/workflows/singularity-additional-native.yml, scripts/singularity-additional-native.mjs]
+permissions:
+  contents: read
+concurrency:
+  group: singularity-additional-native
+  cancel-in-progress: false
+jobs:
+  route:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: |
+          npm ci
+          npm install --no-save --package-lock=false puppeteer-core@24.16.0
+      - name: Use the published exact game and ordinary actions
+        run: |
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+          node --check scripts/singularity-additional-native.mjs
+          node scripts/singularity-additional-native.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: singularity-public-alternate
+          path: qa/singularity-additional/
+          retention-days: 14
