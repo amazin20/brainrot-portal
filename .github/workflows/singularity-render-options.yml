@@ -1,0 +1,48 @@
+name: Tower render options (benchmark only)
+on:
+  push:
+    branches: [qa/singularity-render-options]
+    paths: [.github/workflows/singularity-render-options.yml, scripts/singularity-render-options.mjs]
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: singularity-render-options
+  cancel-in-progress: false
+jobs:
+  benchmark:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: |
+          npm ci
+          npm install --no-save --package-lock=false puppeteer-core@24.16.0
+          if ! command -v Xvfb >/dev/null; then sudo apt-get update -qq && sudo apt-get install -y --no-install-recommends xvfb xauth libgl1-mesa-dri; fi
+      - uses: actions/download-artifact@v4
+        with:
+          name: singularity-browser
+          run-id: 36548392160
+          github-token: ${{ github.token }}
+          path: dist
+      - name: Compare real render cost without recording or publication
+        run: |
+          npm run preview -- --host 127.0.0.1 --port 4173 >render-preview.log 2>&1 &
+          for i in {1..30}; do curl -fsS http://127.0.0.1:4173/build-info.json >/dev/null && break; sleep 1; done
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+          node --check scripts/singularity-render-options.mjs
+          xvfb-run -a -s '-screen 0 1280x720x24' node scripts/singularity-render-options.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: singularity-render-options
+          path: |
+            qa/render-options/
+            render-preview.log
+          retention-days: 7
