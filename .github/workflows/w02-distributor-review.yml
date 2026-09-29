@@ -1,0 +1,48 @@
+name: W02 physical distributor prototype
+on:
+  push:
+    branches: [feature/w02-inertial-distributor]
+permissions:
+  contents: read
+jobs:
+  prototype:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      BUILD_COMMIT: ${{ github.sha }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Real rigid-body tests and parameter matrix
+        run: |
+          mkdir -p smoke-artifacts/w02
+          node --test tests/distributor-prototype.test.js | tee smoke-artifacts/w02/tests.txt
+          node scripts/w02-distributor-report.mjs
+      - name: Build isolated WebGL fixture, not the public campaign
+        run: |
+          npm install --no-save --package-lock=false puppeteer-core@24.16.0
+          npx vite build --config vite.prototype.config.js
+          command -v ffmpeg || { sudo apt-get update && sudo apt-get install -y ffmpeg; }
+      - name: Native browser prototype movie
+        run: |
+          python3 -m http.server 4175 --bind 127.0.0.1 --directory prototype-dist > /tmp/w02.log 2>&1 &
+          for i in {1..30}; do curl -fsS http://127.0.0.1:4175/prototype-distributor.html >/dev/null && break; sleep 1; done
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+          node scripts/w02-distributor-browser.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: w02-distributor-evidence
+          path: |
+            smoke-artifacts/w02/*.json
+            smoke-artifacts/w02/*.txt
+            smoke-artifacts/w02/*.mp4
+            smoke-artifacts/w02/*.png
+          if-no-files-found: error
+          retention-days: 14
