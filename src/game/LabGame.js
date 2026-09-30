@@ -314,15 +314,15 @@ export class LabGame {
     this.surfaceHint = document.createElement('div'); this.surfaceHint.className = 'lab-surface-hint'; document.body.appendChild(this.surfaceHint);
     const mobile = document.createElement('div'); mobile.className = 'lab-mobile';
     this.mobileActionButtons = [];
-    for (const [label, description, action] of [
+    for (const [label, description, action, activation = 'pointerdown'] of [
       ['①', 'Голубой портал', () => this.firePortal(0)],
       ['②', 'Оранжевый портал', () => this.firePortal(1)],
       ['E', 'Взять или поставить друга, использовать механизм', () => this.interact()],
-      ['Пауза', 'Приостановить игру', () => this.togglePause(true)],
+      ['Пауза', 'Приостановить игру', () => this.togglePause(true), 'click'],
     ]) {
       const button = document.createElement('button'); button.textContent = label;
       button.setAttribute('aria-label', description);
-      this.mobileActionButtons.push({ button, action }); mobile.appendChild(button);
+      this.mobileActionButtons.push({ button, action, activation }); mobile.appendChild(button);
     }
     document.body.appendChild(mobile); this.bindMobileActions();
     if (this.debug) {
@@ -338,8 +338,12 @@ export class LabGame {
   }
 
   bindMobileActions() {
-    for (const { button, action } of this.mobileActionButtons ?? []) {
-      this.controls.listen(button, 'pointerdown', event => {
+    for (const { button, action, activation = 'pointerdown' } of this.mobileActionButtons ?? []) {
+      // Opening a menu on touch pointerdown moves the target before touchend.
+      // Chromium can then click the newly exposed "choose room" control.
+      // Pause changes the screen only after the original tap has completed;
+      // shooting and interaction retain their immediate pointerdown response.
+      this.controls.listen(button, activation, event => {
         event.preventDefault();
         if (this.controls.active) action();
       });

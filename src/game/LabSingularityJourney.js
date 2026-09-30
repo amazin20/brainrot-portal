@@ -3,7 +3,7 @@ import {V} from './LabSingularityKit.js';
 const check=(p,m)=>{if(!p)throw Error(m);},UP=V(0,1,0),angle=x=>Math.atan2(Math.sin(x),Math.cos(x));
 /** Read-only route planning plus ordinary movement, E, jump and aimed shots.
  * The driver never sets an actor position, velocity, portal or puzzle signal. */
-export async function runSingularityJourney(game,{onMilestone=()=>{},stopAfter=null,order=null,onFrame=null}={}){
+export async function runSingularityJourney(game,{onMilestone=()=>{},stopAfter=null,order=null,onFrame=null,annexVariant='direct'}={}){
  const level=game.firstLevel;check(level.singularity&&game.state==='playing','Start the new Tower through Play');
  check(level.completedStages===0,'A route must start with an untouched attempt');
  const original={move:game.input.getMove,reset:game.resetRun,respawn:game.respawn,cargoReset:game.physics.resetCargo};
@@ -27,12 +27,12 @@ export async function runSingularityJourney(game,{onMilestone=()=>{},stopAfter=n
  }
  async function wait(s){stop();for(let i=0;i<Math.ceil(s*60);i++)await frame();}
  async function until(predicate,seconds,label){stop();for(let i=0;i<seconds*60;i++){if(predicate())return;await frame();}check(predicate(),`${label}: ${JSON.stringify(S())}`);}
- async function walk(p,{sprint=true,tolerance=.22,timeout=90}={}){
+ async function walk(p,{sprint=true,tolerance=.22,timeout=90,followFloor=false}={}){
   p=p.toArray?.()??p;report.actions.push({kind:'walk',target:p,frame:report.frames});let best=Infinity,stuck=0;
   for(let i=0;i<timeout*60;i++){
    if(game.state==='won'){stop();return;}
    const dx=p[0]-game.playerPosition.x,dz=p[2]-game.playerPosition.z,d=Math.hypot(dx,dz);
-   if(d<tolerance&&Math.abs(p[1]-game.playerPosition.y)<.65){stop();return;}
+   if(d<tolerance&&(followFloor||Math.abs(p[1]-game.playerPosition.y)<.65)){stop();return;}
    if(d<best-.005){best=d;stuck=0;}else stuck++;
    check(stuck<260,`Blocked walking to ${p}; at ${game.playerPosition.toArray()}`);
    turn(dx,dz);if(sprint)game.input.keys.add('ShiftLeft');else game.input.keys.delete('ShiftLeft');
@@ -99,6 +99,24 @@ export async function runSingularityJourney(game,{onMilestone=()=>{},stopAfter=n
    await until(()=>level.getTowerMetrics().solvedIds.includes('transmission'),6,'Flywheel speed unstable');await leave('transmission',[P('transmission',13,0)]);},
   async accumulator(){await travel(level.rooms.get('accumulator').door);await walk(P('accumulator',-10,-11));await shoot(0,st('accumulator').input.center);await walk(P('accumulator',-10,19));await walk(P('accumulator',12,19));await shoot(1,st('accumulator').output.center);
    await walk(P('accumulator',-10,19));await walk(st('accumulator').pad);await until(()=>st('accumulator').charge>.99,3,'Capacitor did not charge');await enter(st('accumulator').input);await use('accumulator:discharge');await walk(P('accumulator',12,19));await walk(P('accumulator',-10,19));await leave('accumulator',[P('accumulator',-10,0)]);},
+  async manifold(){await travel(level.rooms.get('manifold').door);await walk(P('manifold',18,10));
+   if(annexVariant==='alternate'){
+    await use('manifold:duct-a');await use('manifold:duct-a',{approach:false});await use('manifold:duct-c');
+   }else{await use('manifold:duct-a');await use('manifold:duct-b');await use('manifold:duct-b',{approach:false});}
+   await until(()=>st('manifold').pressure>.99,3,'Connected ducts did not feed turbine');await walk(P('manifold',-12,12));await walk(P('manifold',-21,12));
+   await until(()=>level.getTowerMetrics().solvedIds.includes('manifold'),2,'Receiver bay not reached');await leave('manifold',[P('manifold',-12,12),P('manifold',18,12),P('manifold',20,0)]);},
+  async eclipse(){await travel(level.rooms.get('eclipse').door);await walk(P('eclipse',18,18));
+   const countA=annexVariant==='alternate'?3:1,countB=annexVariant==='alternate'?2:4;
+   await use('eclipse:screen-a');for(let i=1;i<countA;i++)await use('eclipse:screen-a',{approach:false});
+   await walk(P('eclipse',11,19));await use('eclipse:screen-b');for(let i=1;i<countB;i++)await use('eclipse:screen-b',{approach:false});
+   await until(()=>st('eclipse').bridgeHeight>-.025,5,'Two shadows did not lift bridge');await walk(P('eclipse',-5,0));await walk(P('eclipse',-22,0));
+   await until(()=>level.getTowerMetrics().solvedIds.includes('eclipse'),2,'Shadow bridge endpoint not reached');await leave('eclipse',[P('eclipse',-5,0),P('eclipse',18,0)]);},
+  async fulcrum(){await travel(level.rooms.get('fulcrum').door);await walk(P('fulcrum',20,12));await use('fulcrum:clutch');
+   await walk(P('fulcrum',-15,0),{followFloor:true});await until(()=>st('fulcrum').travel<.01,6,'Long arm did not lower lever');
+   await walk(P('fulcrum',1,0),{followFloor:true});await until(()=>st('fulcrum').travel>.999,7,'Short arm did not raise traveller');
+   await use('fulcrum:brake');await walk(P('fulcrum',13,0,8));await until(()=>level.getTowerMetrics().solvedIds.includes('fulcrum'),2,'Lever upper gallery incomplete');
+   await use('fulcrum:brake');await walk(P('fulcrum',-15,0,8),{followFloor:true});await until(()=>st('fulcrum').travel<.01,8,'Lever return descent failed');
+   await walk(P('fulcrum',-15,8));await use('fulcrum:clutch');await leave('fulcrum',[P('fulcrum',20,12),P('fulcrum',20,0)]);},
   async archive(){await travel(level.rooms.get('archive').door);await use('archive:slide-a');await walk(P('archive',12,-13));await walk(P('archive',-7,-13));await use('archive:slide-b');await walk(P('archive',-5,-13));await walk(P('archive',-5,7));await walk(P('archive',-15,7));await until(()=>level.getTowerMetrics().solvedIds.includes('archive'),2,'Archive did not align');await walk(P('archive',-5,7));await walk(P('archive',-5,-13));await walk(P('archive',12,-13));await leave('archive',[P('archive',14,0)]);},
   async migrant(){await travel(level.rooms.get('migrant').door);await walk(P('migrant',-12,12));await shoot(0,st('migrant').intake.center);await walk(P('migrant',-13,0));await shoot(1,st('migrant').moving.frame().center);await use('migrant:rail');
    await walk(P('migrant',-12,12));await until(()=>st('migrant').travel>.99,7,'Rail did not reach far end');await enter(st('migrant').intake);await walk(P('migrant',12,10,3));await until(()=>level.getTowerMetrics().solvedIds.includes('migrant'),2,'Moving portal arrival not registered');await enter(st('migrant').moving);await walk(P('migrant',-12,12));await leave('migrant',[P('migrant',-12,0)]);},
@@ -109,7 +127,7 @@ export async function runSingularityJourney(game,{onMilestone=()=>{},stopAfter=n
    await until(()=>game.playerPosition.y>69.6,6,'Gravity ascent did not rise');for(let i=0;i<5*60&&game.playerPosition.z<P('inversion',0,10)[2];i++){worldMove(0,1);await frame();}stop();await until(()=>game.playerGrounded,6,'Upper inversion landing missed');await walk(P('inversion',9,12,14));await until(()=>level.getTowerMetrics().solvedIds.includes('inversion'),2,'Inversion incomplete');},
  };
  try{
-  const sequence=order??['orrery','parallax','optics','reservoir','transmission','echo','accumulator','drydock','magnet','archive','migrant','inertia','inversion'];
+  const sequence=order??['orrery','parallax','optics','reservoir','transmission','echo','accumulator','drydock','magnet','manifold','eclipse','fulcrum','archive','migrant','inertia','inversion'];
   for(const id of sequence){check(routines[id],'Unknown route '+id);mark('Start '+id);await routines[id]();check(level.getTowerMetrics().solvedIds.includes(id),'Missing solved machine '+id);mark('Solved '+id);await globalThis.__SINGULARITY_FLUSH__?.();if(stopAfter===id){report.partial=true;break;}}
   if(!report.partial){
    // The final retrieval is a real two-way portal path to the original body.

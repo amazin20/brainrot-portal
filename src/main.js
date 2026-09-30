@@ -8,7 +8,8 @@ import {readCampaignRoute,nextCampaignLevel} from './game/LabCampaignRoute.js';
 import {FOUNDATION_INDICES,readFoundationEdition,foundationStorage,nextFoundationLevel} from './game/LabFoundationEdition.js';
 import {OPEN_ROOM_INDICES,readOpenEdition,nextOpenRoom,openEditionStorage} from './game/LabOpenEdition.js';
 import {resumeCampaignLevel,nextResumeLevel} from './game/LabResume.js';
-import {TOWER_STAGE_COUNT,TOWER_DECK_COUNT} from './game/LabTowerLayout.js';
+import {SINGULARITY_ROOMS,SINGULARITY_SPEC} from './game/LabSingularityLayout.js';
+const singularityHallCount=SINGULARITY_ROOMS.length,singularityOpenHallCount=SINGULARITY_ROOMS.filter(room=>room.requires.length===0).length;
 const $=s=>document.querySelector(s),query=new URLSearchParams(location.search);
 const debug=query.get('debug')==='1'||query.get('smoke')==='1';
 // Player-facing puzzles keep control tutorials, without solution-hint buttons.
@@ -130,10 +131,10 @@ function updateStartAction(){
 }
 $('#level-select').addEventListener('change',updateStartAction);updateStartAction();
 $('#campaign-count').textContent=foundationEdition.enabled?'Кампания · 41 испытание':openEdition.enabled?`${OPEN_ROOM_INDICES.length} лабораторных испытаний · отдельная версия`:`Архив · ${CAMPAIGN.length} испытания`;
-if(foundationEdition.enabled){$('#start-screen .brand').textContent='КАМПАНИЯ · ОТ ОТКРЫТИЯ К ВЕРШИНЕ';$('#start-screen .lead').textContent=`Исследуй 40 комнат с порталами, светом и движением. Финал — Башня с ${TOWER_STAGE_COUNT} крыльями, ${TOWER_DECK_COUNT} центральными узлами и без чекпоинтов.`;}
+if(foundationEdition.enabled){$('#start-screen .brand').textContent='КАМПАНИЯ · ОТ ОТКРЫТИЯ К ВЕРШИНЕ';$('#start-screen .lead').textContent=`Исследуй 40 комнат с порталами, светом и движением. Финал — Башня Сингулярности: ${singularityHallCount} разных механизмов, ${singularityOpenHallCount} самостоятельных залов и вершина над реактором. Контрольных точек нет.`;}
 else if(openEdition.enabled){$('#start-screen .brand').textContent='ЛАБОРАТОРНЫЕ ИСПЫТАНИЯ';$('#start-screen .lead').textContent='Камеры 24, 28, 30 и 31–33. Эта подборка и новая первая глава хранят прогресс отдельно от архива.';}
 const editionNav=document.createElement('nav');editionNav.className='edition-navigation';editionNav.setAttribute('aria-label','Версии кампании');
-for(const [id,text,href]of [['tower',`Финальная башня · ${TOWER_STAGE_COUNT} крыльев и ${TOWER_DECK_COUNT} узлов`,'?edition=foundation&level=41'],['foundation','Кампания · с начала','?edition=foundation&level=1'],['open','Лабораторная глава 31–33','?edition=open&level=31'],['classic','Архив · 33 испытания','?edition=classic&level=1']]){
+for(const [id,text,href]of [['tower',`${SINGULARITY_SPEC.name} · ${singularityHallCount} механизмов · ${singularityOpenHallCount} самостоятельных залов`,'?edition=foundation&level=41'],['foundation','Кампания · с начала','?edition=foundation&level=1'],['open','Лабораторная глава 31–33','?edition=open&level=31'],['classic','Архив · 33 испытания','?edition=classic&level=1']]){
  if(game.chamberEdition===id)continue;const a=document.createElement('a');a.textContent=text;a.href=href;editionNav.append(a);
 }
 $('#start-screen .hero-footer').before(editionNav);

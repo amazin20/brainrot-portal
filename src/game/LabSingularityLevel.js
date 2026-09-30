@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import {SingularityKit,V,clamp} from './LabSingularityKit.js';
 import {SINGULARITY_ROOMS,SINGULARITY_SPEC,validateSingularityLayout} from './LabSingularityLayout.js';
 import {buildSingularityArt} from './LabSingularityArt.js';
+import {buildSingularityExpansion} from './LabSingularityExpansion.js';
 import {tracePortalRay,rayTouches} from './LabPuzzleMechanics.js';
 export {SINGULARITY_SPEC as TOWER_SPEC};
 const UP=V(0,1,0);
@@ -18,9 +19,9 @@ export function buildTowerLevel(game,index=40){
  const prior={background:game.scene.background,fog:game.scene.fog};
  game.scene.background=new THREE.Color(0x304656);game.scene.fog=new THREE.Fog(0x304656,110,330);
  const rooms=new Map(),machines=new Map(),events=[],solved=new Set(),gates=[],signs=[];
- let time=0,lastTransit=null,won=false,disposed=false;
+ let time=0,lastTransit=null,won=false,disposed=false,resetting=false;
  const point=(r,x,z=0,y=0)=>rooms.get(r).P(x,z,y);
- function complete(id,proof){if(solved.has(id))return;const r=SINGULARITY_ROOMS.find(r=>r.id===id);if(!r.requires.every(dep=>solved.has(dep)))return;
+ function complete(id,proof){if(resetting||solved.has(id))return;const r=SINGULARITY_ROOMS.find(r=>r.id===id);if(!r.requires.every(dep=>solved.has(dep)))return;
   solved.add(id);events.push({id,rule:r.rule,seconds:time,player:game.playerPosition.toArray(),cargo:game.cargo?.position.toArray(),proof});game.audio?.mechanism?.('switch');game.emitHud?.();}
  const available=id=>SINGULARITY_ROOMS.find(r=>r.id===id).requires.every(dep=>solved.has(dep));
  const standing=(p,r=1.2)=>game.playerGrounded&&close(game.playerPosition,p,r)&&Math.abs(game.playerPosition.y-p[1])<.3;
@@ -42,11 +43,11 @@ export function buildTowerLevel(game,index=40){
 
  // A load-bearing building surrounds the whole connected complex. Ground
  // galleries span a real maintenance undercroft rather than floating in sky.
- k.floor(-118,118,-126,126,-16,m.dark);
- for(const x of [-118,118])k.box([x,39,0],[1.4,110,252],m.wall);
- for(const z of [-126,126])k.box([0,39,z],[236,110,1.4],m.wall);
- k.box([0,94,0],[237,1,253],m.dark);
- for(const x of [-112,-38,38,112])for(const z of [-118,-66,66,118]){
+ k.floor(-194,118,-126,134,-16,m.dark);
+ for(const x of [-194,118])k.box([x,39,4],[1.4,110,260],m.wall);
+ for(const z of [-126,134])k.box([-38,39,z],[312,110,1.4],m.wall);
+ k.box([-38,94,4],[313,1,261],m.dark);
+ for(const x of [-188,-112,-38,38,112])for(const z of [-118,-66,66,128]){
   k.box([x,38,z],[1.5,108,1.5],m.steel);k.decor([x+.8,38,z],[.09,90,.18],m.cyan);
  }
  k.floor(-8,8,-87,73,0);k.floor(-37,37,-7,7,0);
@@ -79,14 +80,14 @@ export function buildTowerLevel(game,index=40){
   k.floor(r.b.x0,r.b.x1,r.b.z0,r.def.at[2]-5,y);k.floor(r.b.x0,r.b.x1,r.def.at[2]+5,r.b.z1,y);
   k.floor(r.def.at[0]-23,r.def.at[0]-18,r.b.z0,r.b.z1,y);k.floor(r.def.at[0]+18,r.def.at[0]+23,r.b.z0,r.b.z1,y);
   for(let i=0;i<3;i++){
-   const x=-12+i*12;k.ring(P(x,0,1.7),5.2,m[i===1?'copper':'violet'],{tube:.28});
+   const x=-12+i*12;k.ring(P(x,0,-.6),5.2,m[i===1?'copper':'violet'],{tube:.28});
    bridges.push(k.floor(r.def.at[0]+x-5.8,r.def.at[0]+x+5.8,r.def.at[2]-2,r.def.at[2]+2,y,m.ivory,{dynamic:true}));
    localControl(r,'orbit-'+i,-14+i*14,14,()=>{a[i]=(a[i]+1)%4;if(i<2)a[i+1]=(a[i+1]+1)%4;},`Повернуть орбиту ${i+1}; соседняя передача тоже сдвинется`);
   }
   for(const z of [-13,13])k.box(P(-18,z,8.5),[.5,17,16],m.wall);
   const telescope=k.drum(P(-20,-3.5,3),1.4,4.2,m.steel);k.ring(P(-20,-3.5,5.1),1.6,m.copper,{normal:[1,0,0],tube:.22});
   const finish=goal('orrery',P(-20,0),()=>a.every(v=>v%2===0),()=>({azimuths:[...a],crossed:true}));
-  register('orrery',{state:{azimuths:a},update(dt){a.forEach((v,i)=>{angles[i]=THREE.MathUtils.damp(angles[i],v,8,dt);const b=bridges[i];b.rotation.y=angles[i]*Math.PI/2;b.updateWorldMatrix(true,false);const c=b.userData.collider;c.box.setFromObject(b);game.physics?.updateStaticBox(b.uuid,c.box,dt,true);const f=b.userData.floor;f.minX=c.box.min.x;f.maxX=c.box.max.x;f.minZ=c.box.min.z;f.maxZ=c.box.max.z;f.enabled=Math.abs(angles[i]-v)<.025;});finish(dt);},reset(){a.splice(0,3,1,2,3);angles.splice(0,3,1,2,3);}});
+  register('orrery',{state:{azimuths:a},update(dt){a.forEach((v,i)=>{angles[i]=THREE.MathUtils.damp(angles[i],v,8,dt);const b=bridges[i];b.rotation.y=angles[i]*Math.PI/2;k.sync(b,dt);const c=b.userData.collider;const f=b.userData.floor;f.minX=c.box.min.x;f.maxX=c.box.max.x;f.minZ=c.box.min.z;f.maxZ=c.box.max.z;f.enabled=Math.abs(angles[i]-v)<.025;});finish(dt);},reset(){a.splice(0,3,1,2,3);angles.splice(0,3,1,2,3);}});
  }
  // 2. A true counterweight elevator; remove its source from a permanent ledge.
  {
@@ -114,7 +115,10 @@ export function buildTowerLevel(game,index=40){
   const r=rooms.get('optics'),{P}=r;base(r);let turned=false,angle=0,lit=0;const draw=beam();
   const intake=k.panel('quarry intake',P(-8,-5,2.4),[-1,0,0],5,4.8),outlet=k.panel('quarry output',P(17,5,2.4),[-1,0,0],5,4.8);
   k.box(P(-5,-8,4),[.55,8,16],m.steel);k.box(P(8,1,2.7),[10,5.4,.5],m.wall);
-  const mirror=k.box(P(0,5,2.4),[2.8,3.1,.12],m.ivory,{solid:false,dynamic:true});
+  const mirror=k.box(P(0,5,2.4),[2.8,3.1,.12],m.ivory,{dynamic:true});
+  // The explicit reflector plane below owns light propagation; its physical
+  // housing still blocks the player, cargo, camera and portal shots.
+  mirror.userData.collider.ignorePropagation=true;
   k.box(P(0,5,.7),[.5,1.4,.5],m.copper);
   const receiver=k.ring(P(0,-12,2.4),1,m.copper,{normal:[0,0,1],dynamic:true});k.box(P(0,-12,1),[.4,2,.4],m.steel);
   localControl(r,'mirror',-17,9,()=>{turned=!turned;},'Развернуть отражатель');
@@ -166,7 +170,7 @@ export function buildTowerLevel(game,index=40){
  {
   const r=rooms.get('magnet'),{P}=r;base(r);let magnet=-1,passed=false;const targets=[P(-12,0,4.8),P(0,11,4.8),P(12,0,4.8)];
   k.box(P(0,0,3),[7,6,13],m.steel);k.box(P(0,0,6.2),[8,.4,14],m.copper);
-  for(let i=0;i<3;i++){k.ring(targets[i],2,m[i===1?'copper':'cyan'],{normal:[1,0,0],tube:.24});k.box(P(-12+i*12,17,3),[.45,6,.45],m.steel);
+  for(let i=0;i<3;i++){k.ring(targets[i],3,m[i===1?'copper':'cyan'],{normal:[1,0,0],tube:.24,arc:Math.PI});k.box(P(-12+i*12,17,3),[.45,6,.45],m.steel);
    localControl(r,'coil-'+i,-14+i*14,-15,()=>{magnet=magnet===i?-1:i;},`Магнитная катушка ${i+1}`);}
   k.floor(r.def.at[0]+8,r.def.at[0]+18,r.def.at[2]-4,r.def.at[2]+4,4.2,m.ivory);
   k.stairs(P(18,17),P(18,3,4.2),3);
@@ -276,11 +280,15 @@ export function buildTowerLevel(game,index=40){
   const shaft=P(0,0);k.floor(r.def.at[0]-15,r.def.at[0]+15,r.def.at[2]+7,r.def.at[2]+17,69,m.ivory);
   k.corridor(P(10,10,14),P(17,0,14),4,{rails:false});
   for(const x of [-4,4])for(const z of [-4,4])k.box(P(x,z,9),[.5,18,.5],m.steel);
-  for(const y of [1,5,9,13,17])k.ring(P(0,0,y),5,m.violet,{tube:.13});
+  // The entry bearing sits below the deck; higher rings guide the real shaft.
+  // A chest-height lower bearing would seal the entrance once rings are solid.
+  for(const y of [-.5,5,9,13,17])k.ring(P(0,0,y),5,m.violet,{tube:.13});
   const disc=plate(shaft,6,m.violet);localControl(r,'polarity',10,-12,()=>{up=!up;},'Изменить полярность вертикального поля');
   const finish=goal('inversion',P(9,12,14),()=>rose,()=>({fieldAscent:true,permanentUpperGallery:true}));
   register('inversion',{state:{shaft,get up(){return up;},get rose(){return rose;}},acceleration(p,v){if(up&&Math.abs(p.x-shaft[0])<5&&Math.abs(p.z-shaft[2])<6&&p.y>55.2&&p.y<72)return V(clamp((shaft[0]-p.x)*2-v.x*.4,-5,5),31,0);return V();},update(dt){disc.material=up?m.live:m.violet;if(up&&!game.playerGrounded&&game.playerPosition.y>68&&close(game.playerPosition,P(0,0,14),6))rose=true;finish(dt);},reset(){up=rose=false;}});
  }
+ buildSingularityExpansion({game,k,rooms,complete,available,standing,loaded,localControl,sign,plate,goal,base,register,edges});
+
  // The crown is the destination of the entire connected machine, not a
  // thirteenth copy of a wing. Retrieve the original companion before arrival.
  k.floor(-14,14,-14,14,72,m.ivory);
@@ -291,9 +299,11 @@ export function buildTowerLevel(game,index=40){
  const upperPortal=k.panel('inversion upper return',point('inversion',12,15,16.4),[0,0,-1],5,4.8);
  const upperRest=point('inversion',12,10,14);plate(upperRest,3.5,m.copper);
  for(const dx of [-1.8,1.8])k.box([upperRest[0]+dx,upperRest[1]+.09,upperRest[2]],[.12,.18,3.7],m.copper);
- for(const y of [74,80,86])k.ring([0,y,0],11,m[y===80?'copper':'cyan'],{tube:.22});
+ // The lower crown bearing supports the deck from below, leaving the portal
+ // approach visible from the inversion gallery when the ring is physical.
+ for(const y of [71.4,80,86])k.ring([0,y,0],11,m[y===80?'copper':'cyan'],{tube:.22});
  for(const x of [-12,12])for(const z of [-12,12])k.box([x,45,z],[.7,90,.7],m.steel);
- const core=k.drum([0,80,0],2.5,3.2,m.cyan,{dynamic:true});
+ const core=k.drum([0,80,0],2.5,3.2,m.cyan,{dynamic:true,solid:true});
  const crownSign=sign('ВСЕ ЛИНИИ ДОЛЖНЫ ПИТАТЬ ВЕРШИНУ',[0,76,11.7],15,[0,0,-1]);
  const spawn=V(0,0,12),cargoSpawn=V(2,.57,12);
  function roomAt(p){return SINGULARITY_ROOMS.find(r=>Math.abs(p.x-r.at[0])<r.w/2+.8&&Math.abs(p.z-r.at[2])<r.d/2+.8&&p.y>r.at[1]-7&&p.y<r.at[1]+r.h+1);}
@@ -302,10 +312,22 @@ export function buildTowerLevel(game,index=40){
   for(const [id,mechanism]of machines)if(available(id))mechanism.update?.(dt);
   for(const g of gates){const open=available(g.id);g.progress=THREE.MathUtils.damp(g.progress,open?1:0,5,dt);g.parts.forEach((mesh,i)=>{const s=i?1:-1;const p=[g.r.door[0]+(g.side?0:s*(1.6+3.5*g.progress)),g.r.door[1]+2.35,g.r.door[2]+(g.side?s*(1.6+3.5*g.progress):0)];k.move(mesh,p,dt);});}
   core.rotation.y=time*.22;core.rotation.z=Math.sin(time*.4)*.06;
+  k.syncDynamic(dt);
   crownSign?.update(solved.size===SINGULARITY_ROOMS.length?'ЯДРО ГОТОВО · ВЕРНИТЕСЬ ВДВОЁМ':'ВЕРШИНА ЖДЁТ ОСТАВШИЕСЯ ЛИНИИ');
   if(solved.size===SINGULARITY_ROOMS.length&&standing([0,72,5],3)&&game.cargo&&Math.abs(game.cargo.position.y-72)<2&&game.cargo.position.distanceTo(game.playerPosition)<3.4)won=true;
  }
- function reset(){time=0;solved.clear();events.length=0;lastTransit=null;won=false;for(const machine of machines.values())machine.reset?.();gates.forEach(g=>{g.progress=0;});update(0);}
+ function reset(){
+  resetting=true;
+  try{
+   time=0;solved.clear();events.length=0;lastTransit=null;won=false;
+   for(const machine of machines.values())machine.reset?.();
+   k.resetControls();
+   // Restore physical poses even for halls whose dependency gates have just
+   // closed. A cleared logical flag must not leave an old open passage behind.
+   for(const machine of machines.values())machine.update?.(0);
+   gates.forEach(g=>{g.progress=0;});update(0);art.update();
+  }finally{resetting=false;}
+ }
  const art=buildSingularityArt({game,k,rooms,edges,solved});
  k.batch();
  const level={id:SINGULARITY_SPEC.id,index,game,spec:SINGULARITY_SPEC,title:'41 / '+SINGULARITY_SPEC.title,
@@ -314,7 +336,7 @@ export function buildTowerLevel(game,index=40){
   get completedStages(){return solved.size;},totalStages:SINGULARITY_ROOMS.length,get progress(){return solved.size;},getLaunch:()=>null,reset,update,isWon:()=>won,
   getTowerMetrics:()=>({id:SINGULARITY_SPEC.id,completedStages:solved.size,totalStages:SINGULARITY_ROOMS.length,solvedIds:[...solved],events:events.map(e=>({...e})),checkpoints:false,seconds:time,won}),
   getObjective(){const room=roomAt(game.playerPosition);if(room)return solved.has(room.id)?`${room.name} · МЕХАНИЗМ РАБОТАЕТ`:room.name;return game.playerPosition.y>68?'ВЕРШИНА · ВЕРНУТЬСЯ ВДВОЁМ':'МАШИННЫЙ СОБОР · ВЫБЕРИ СВОЙ МАРШРУТ';},
-  getContextLesson(){const room=roomAt(game.playerPosition);return ['singularity','E · ЛКМ · ПКМ',room?available(room.id)?room.hint:'Питание приходит из залов: '+room.requires.map(id=>SINGULARITY_ROOMS.find(r=>r.id===id).name).join(', '):'Девять самостоятельных залов доступны в любом порядке. Верхние проходы связаны с разными механизмами. Падение и перезапуск обнуляют всю попытку.',false];},
+  getContextLesson(){const room=roomAt(game.playerPosition);return ['singularity','E · ЛКМ · ПКМ',room?available(room.id)?room.hint:'Питание приходит из залов: '+room.requires.map(id=>SINGULARITY_ROOMS.find(r=>r.id===id).name).join(', '):'Самостоятельные нижние залы доступны в любом порядке. Западное крыло образует дополнительную петлю исследования. Верхние проходы связаны с разными механизмами. Падение и перезапуск обнуляют всю попытку.',false];},
   nearbyInteraction(){const t=k.nearest();return t?{kind:t.kind,label:'E',text:t.lesson}:null;},
   interact(){const t=k.nearest();if(!t)return false;const result=t.action();if(result===false)return false;game.audio?.mechanism?.('switch');game.animator?.triggerOperate?.();return true;},
   cargoOnAnyPad:()=>loaded(upperRest,1.6)||['drydock','magnet'].some(id=>{const r=roomAt(game.cargo?.position??V());return r?.id===id;}),

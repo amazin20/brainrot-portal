@@ -1,0 +1,155 @@
+name: Publish the verified primary game and Tower upgrade
+on:
+  push:
+    branches: [main]
+    paths: [tools/singularity-upgrade-release.json]
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: pages
+  cancel-in-progress: false
+env:
+  RELEASE_CONFIG: tools/singularity-upgrade-release.json
+jobs:
+  access:
+    name: Validate the pinned Tower upgrade release
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    environment:
+      name: github-pages
+    outputs:
+      mode: ${{ steps.config.outputs.mode }}
+      candidate: ${{ steps.config.outputs.candidate }}
+      base: ${{ steps.config.outputs.base }}
+      proof: ${{ steps.config.outputs.proof }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - id: config
+        run: |
+          node --input-type=module <<'JS'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          import {upgradePreviewPath} from './scripts/lib/singularity-upgrade-proof.mjs';
+          const c=JSON.parse(fs.readFileSync(process.env.RELEASE_CONFIG));
+          assert.ok(['probe','demo','complete'].includes(c.mode));assert.match(c.sourceCommit,/^[a-f0-9]{40}$/);assert.match(c.baseCommit,/^[a-f0-9]{40}$/);
+          assert.ok(Number.isSafeInteger(c.candidateRun)&&c.candidateRun>0&&Number.isSafeInteger(c.baseRun)&&c.baseRun>0);
+          assert.equal(c.baseCommit,'a74726ff1bfb22f21662d076fc47951b2bf368cd');assert.equal(c.baseRun,36509639087);
+          upgradePreviewPath(c);if(c.previousSourceCommit)assert.match(c.previousSourceCommit,/^[a-f0-9]{40}$/);
+          fs.appendFileSync(process.env.GITHUB_OUTPUT,`mode=${c.mode}\ncandidate=${c.candidateRun}\nbase=${c.candidateRun}\nproof=${c.mode==='complete'?'singularity-evidence':'singularity-native-verification'}\n`);
+          console.log(c.mode==='probe'?'Release configuration verified; no deployment':'Promote the exact verified package to the primary game and Tower permalink');
+          JS
+  assemble:
+    name: Promote the exact game and preserve approved campaign media
+    needs: access
+    if: needs.access.outputs.mode != 'probe'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - name: Verify successful direct-checkout candidate and current publication provenance
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs=require('node:fs');const c=JSON.parse(fs.readFileSync(process.env.RELEASE_CONFIG));const {owner,repo}=context.repo;
+            const run=(await github.rest.actions.getWorkflowRun({owner,repo,run_id:c.candidateRun})).data;
+            if(run.conclusion!=='success'||run.head_sha!==c.sourceCommit||run.path!=='.github/workflows/tower-upgrade.yml'||run.head_branch!=='upgrade/tower-41-visual-rooms')throw Error('Candidate must be the successful direct-checkout verification of the pinned source');
+            const jobs=await github.paginate(github.rest.actions.listJobsForWorkflowRun,{owner,repo,run_id:c.candidateRun,per_page:100});
+            const successfulStep=name=>jobs.some(j=>j.conclusion==='success'&&j.steps?.some(s=>s.name===name&&s.conclusion==='success'));
+            if(!successfulStep('Inspect the browser rendering and verify the entire production route'))throw Error('The complete native Tower route and UI did not pass');
+            if(c.mode==='complete'&&!successfulStep('Record one continuous upgraded Tower walkthrough from that exact package'))throw Error('The complete recording did not pass');
+            for(const edition of ['foundation','classic','open'])if(!jobs.some(j=>j.name===`All retained campaign routes (${edition})`&&j.conclusion==='success'))throw Error(`Retained ${edition} campaign route matrix did not pass`);
+            if(!jobs.some(j=>j.name==='Preserve the exact approved public campaign package'&&j.conclusion==='success'))throw Error('The exact original public package was not preserved by this candidate run');
+            const base=(await github.rest.actions.getWorkflowRun({owner,repo,run_id:c.baseRun})).data;
+            if(base.conclusion!=='success'||base.head_sha!==c.baseCommit||base.name!=='Deploy verified portal game')throw Error('Original campaign publication mismatch');
+            const root='https://amazin20.github.io/brainrot-portal/';
+            const current=await fetch(root+'build-info.json?verify='+Date.now());
+            if(!current.ok||![c.baseCommit,c.sourceCommit].includes((await current.json()).commit))throw Error('The public root changed; refresh the pinned base instead of overwriting it');
+            if(c.previousSourceCommit){const previous=await fetch(root+(c.previewPath||'tower-singularity')+'/preview-release.json?verify='+Date.now());if(!previous.ok)throw Error('Missing previous Tower publication');const p=await previous.json();if(![c.previousSourceCommit,c.sourceCommit].includes(p.sourceCommit))throw Error('The isolated Tower changed while this upgrade was being verified');}
+      - uses: actions/download-artifact@v4
+        with:
+          name: primary-game-base
+          run-id: ${{ needs.access.outputs.base }}
+          github-token: ${{ github.token }}
+          path: base-pages
+      - uses: actions/download-artifact@v4
+        with:
+          name: singularity-browser
+          run-id: ${{ needs.access.outputs.candidate }}
+          github-token: ${{ github.token }}
+          path: candidate
+      - uses: actions/download-artifact@v4
+        with:
+          name: ${{ needs.access.outputs.proof }}
+          run-id: ${{ needs.access.outputs.candidate }}
+          github-token: ${{ github.token }}
+          path: proof
+      - name: Promote exact candidate bytes and preserve the forty approved recordings
+        run: |
+          command -v ffprobe >/dev/null || (sudo apt-get update -qq && sudo apt-get install -y --no-install-recommends ffmpeg)
+          mkdir -p site
+          test "$(find base-pages -name '*.tar' | wc -l)" -eq 1
+          tar --no-same-owner -xf "$(find base-pages -name '*.tar')" -C site
+          node --check scripts/assemble-singularity-upgrade.mjs
+          node scripts/assemble-singularity-upgrade.mjs
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+      - uses: actions/upload-artifact@v4
+        with:
+          name: singularity-publication-assembly
+          path: publication-proof/
+          retention-days: 14
+  deploy:
+    name: Deploy and verify the actual public game upgrade
+    needs: [access, assemble]
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+      actions: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/deploy-pages@v4
+        id: deployment
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: |
+          npm ci
+          npm install --no-save --package-lock=false puppeteer-core@24.16.0
+          echo "CHROME_PATH=$(command -v google-chrome || command -v chromium)" >> "$GITHUB_ENV"
+      - uses: actions/download-artifact@v4
+        with:
+          name: singularity-browser
+          run-id: ${{ needs.access.outputs.candidate }}
+          github-token: ${{ github.token }}
+          path: candidate
+      - name: Verify primary-game bytes, desktop/mobile Play, reset/reload and all retained media
+        env:
+          PAGE_URL: ${{ steps.deployment.outputs.page_url }}
+        run: |
+          node --check scripts/verify-singularity-upgrade.mjs
+          node scripts/verify-singularity-upgrade.mjs
+      - name: Preserve public-site evidence even when verification fails
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: singularity-public-proof
+          path: publication-proof/
+          retention-days: 14

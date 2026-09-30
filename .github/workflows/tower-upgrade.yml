@@ -1,0 +1,185 @@
+name: Verify the upgraded Tower and retained campaign
+on:
+  push:
+    branches: [upgrade/tower-41-visual-rooms]
+  workflow_dispatch:
+    inputs:
+      record:
+        description: Record one continuous complete upgraded Tower walkthrough
+        type: boolean
+        default: true
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: tower-upgrade-${{ github.ref }}
+  cancel-in-progress: false
+env:
+  BUILD_COMMIT: ${{ github.sha }}
+jobs:
+  preserve-base:
+    name: Preserve the exact approved public campaign package
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - name: Verify the successful original public package provenance
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const {owner,repo}=context.repo;
+            const run=(await github.rest.actions.getWorkflowRun({owner,repo,run_id:36580171792})).data;
+            if(run.conclusion!=='success'||run.head_sha!=='a3878d7f17c69319178238db2106a6c41d87cd84'||run.path!=='.github/workflows/publish-singularity-preview.yml')throw Error('Original public package provenance mismatch');
+            const artifacts=await github.paginate(github.rest.actions.listWorkflowRunArtifacts,{owner,repo,run_id:36580171792,per_page:100});
+            const base=artifacts.filter(a=>a.name==='github-pages'&&a.id===11039257191&&!a.expired);if(base.length!==1)throw Error('The approved public Pages artifact is unavailable');
+      - uses: actions/download-artifact@v4
+        with:
+          name: github-pages
+          run-id: 36580171792
+          github-token: ${{ github.token }}
+          path: base-pages
+      - name: Verify the original root and every approved recording before preservation
+        run: node scripts/preserve-singularity-upgrade-base.mjs
+      - uses: actions/upload-artifact@v4
+        with:
+          name: primary-game-base
+          path: primary-game-base/
+          compression-level: 0
+          retention-days: 90
+  campaign:
+    name: All retained campaign routes (${{ matrix.edition }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        edition: [foundation, classic, open]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Complete the canonical, alternate and recovery routes
+        run: |
+          mkdir -p qa/campaign-upgrade
+          node scripts/qa-campaign-routes.mjs --edition=${{ matrix.edition }} --json=qa/campaign-upgrade/${{ matrix.edition }}.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: upgrade-campaign-${{ matrix.edition }}
+          path: qa/campaign-upgrade/
+          retention-days: 14
+  candidate:
+    name: Exact upgraded source, production WebGL and complete recording
+    needs: [campaign, preserve-base]
+    runs-on: ubuntu-latest
+    timeout-minutes: 295
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install the locked runtime and browser driver
+        run: |
+          npm ci
+          npm install --no-save --package-lock=false puppeteer-core@24.16.0
+          echo "CHROME_PATH=$(command -v google-chrome || command -v chromium)" >> "$GITHUB_ENV"
+          command -v ffmpeg >/dev/null || (sudo apt-get update -qq && sudo apt-get install -y --no-install-recommends ffmpeg)
+      - name: Test the retained source and upgraded mechanisms
+        run: |
+          git diff --check
+          npm test
+      - name: Build and stamp the exact checked-out upgraded source
+        run: |
+          npm run build
+          node scripts/v8-package-check.mjs
+          node --input-type=module <<'JS'
+          import fs from 'node:fs';import assert from 'node:assert/strict';import {execFileSync} from 'node:child_process';
+          import {SINGULARITY_ROOMS,validateSingularityLayout} from './src/game/LabSingularityLayout.js';
+          import {CAMPAIGN} from './src/game/LabCampaignLevels.js';
+          import {FOUNDATION_INDICES} from './src/game/LabFoundationEdition.js';
+          import {assertUpgradeInfo,UPGRADE_VERSION} from './scripts/lib/singularity-upgrade-proof.mjs';
+          assert.equal(execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),process.env.BUILD_COMMIT);
+          assert.equal(execFileSync('git',['status','--porcelain','--untracked-files=no'],{encoding:'utf8'}).trim(),'');
+          assert.equal(validateSingularityLayout(),true);
+          const rooms=SINGULARITY_ROOMS.map(({id,name,rule,requires})=>({id,name,rule,requires:[...requires]}));
+          const info={commit:process.env.BUILD_COMMIT,version:UPGRADE_VERSION,artVersion:UPGRADE_VERSION,run:process.env.GITHUB_RUN_ID,levels:FOUNDATION_INDICES.length,
+            verified:false,verificationScope:'Exact source and package; successful campaign routes, native Tower route, UI and recording evidence gate promotion to the primary game',
+            acceptance:{humanPlaytest:false,physicalDeviceBenchmark:false,liveYandex:false},
+            features:{defaultEdition:'foundation',archiveRooms:CAMPAIGN.length,foundation:{version:'foundation-v3',rooms:FOUNDATION_INDICES.map(i=>i+1),separateSave:true},
+              tower:{level:41,stages:rooms.length,independentHalls:rooms.filter(r=>!r.requires.length).length,rooms,uniqueRules:new Set(rooms.map(r=>r.rule)).size,
+                checkpoints:false,minimumActiveSeconds:900,layout:'continuous-cathedral',query:'edition=foundation&level=41'}}};
+          assertUpgradeInfo(info,SINGULARITY_ROOMS);fs.writeFileSync('dist/build-info.json',JSON.stringify(info,null,2)+'\n');
+          JS
+      - name: Inspect the browser rendering and verify the entire production route
+        run: |
+          mkdir -p qa
+          npm run preview -- --host 127.0.0.1 --port 4173 >qa/singularity-preview.log 2>&1 &
+          for i in {1..30}; do curl -fsS http://127.0.0.1:4173/build-info.json >/dev/null && break; sleep 1; done
+          curl -fsS http://127.0.0.1:4173/build-info.json >/dev/null
+          OUT_DIR=qa/singularity-inspection node scripts/singularity-browser.mjs
+          ROUTE=1 OUT_DIR=qa/singularity-route node scripts/singularity-browser.mjs
+      - name: Inspect the high graphics profile without changing game state
+        run: GRAPHICS_PRESET=high OUT_DIR=qa/singularity-high node scripts/singularity-browser.mjs
+      - name: Verify retained rooms in the exact production WebGL package
+        env:
+          ROOMS: '1,5,12,21,28,30,31,35,40'
+          RECORD: '0'
+          ONLY_NORMAL: '1'
+          OUT_DIR: qa/upgrade-retained-browser
+        run: node scripts/foundation-browser.mjs
+      - name: Preserve the exact upgraded Tower package before recording
+        run: |
+          node --input-type=module <<'JS'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const p='dist/build-info.json',info=JSON.parse(fs.readFileSync(p));assert.equal(info.commit,process.env.BUILD_COMMIT);
+          info.verified=true;info.verificationScope='Automated source tests, all campaign route matrices, production WebGL route, high graphics and desktop/mobile UI passed; complete continuous video gates primary publication';
+          fs.writeFileSync(p,JSON.stringify(info,null,2)+'\n');
+          JS
+      - name: Upload the exact verified upgraded package
+        uses: actions/upload-artifact@v4
+        with:
+          name: singularity-browser
+          path: dist/
+          if-no-files-found: error
+          retention-days: 14
+      - name: Preserve independently reviewable native images and full route metrics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: singularity-native-verification
+          path: |
+            qa/singularity-inspection/
+            qa/singularity-high/
+            qa/singularity-route/
+            qa/upgrade-retained-browser/
+            qa/singularity-preview.log
+          retention-days: 14
+      - name: Record one continuous upgraded Tower walkthrough from that exact package
+        if: github.event_name == 'push' || inputs.record
+        run: RECORD=1 OUT_DIR=qa/singularity-recording node scripts/singularity-browser.mjs
+      - name: Preserve the complete upgraded video and exact-source evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: singularity-evidence
+          path: |
+            qa/singularity-inspection/
+            qa/singularity-high/
+            qa/singularity-route/
+            qa/singularity-recording/
+            qa/upgrade-retained-browser/
+            qa/singularity-preview.log
+          retention-days: 14
