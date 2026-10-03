@@ -1,0 +1,9 @@
+{
+  "mode": "complete",
+  "sourceCommit": "ca7bfcb1a885923453c7f16a960fed9d6c73b13f",
+  "candidateRun": 37141429737,
+  "baseCommit": "a74726ff1bfb22f21662d076fc47951b2bf368cd",
+  "baseRun": 36509639087,
+  "previousSourceCommit": "b1bf88fb90b85e3b0786c651fcd2ba2edcf92696",
+  "previewPath": "tower-singularity"
+}
