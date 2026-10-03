@@ -47,7 +47,10 @@ export async function runSingularityJourney(game,{onMilestone=()=>{},stopAfter=n
  }
  async function look(p){stop();p=V(...(p.toArray?.()??p));for(let i=0;i<300;i++){
   game.scene.updateMatrixWorld(true);if(p.clone().sub(game.camera.position).dot(game.camera.getWorldDirection(V()))<0){game.yaw+=.16;await frame();continue;}
-  const q=p.clone().project(game.camera);if(i>20&&Math.abs(q.x)<.014&&Math.abs(q.y)<.014)return;
+  // A fixed screen tolerance becomes almost a metre on the final long shot.
+  // Converge to a world-scale target before pressing the ordinary fire input.
+  const q=p.clone().project(game.camera),tolerance=Math.min(.005,.035/Math.max(1,p.distanceTo(game.camera.position)));
+  if(i>20&&Math.abs(q.x)<tolerance&&Math.abs(q.y)<tolerance)return;
   game.yaw-=THREE.MathUtils.clamp(q.x,-1,1)*.21;game.pitch=THREE.MathUtils.clamp(game.pitch+THREE.MathUtils.clamp(q.y,-1,1)*.19,-1.15,1.15);await frame();
  }throw Error('Cannot aim at '+p.toArray());}
  async function shoot(slot,p){check(!game.heldCube,'Set companion down before firing');p=[...(p.toArray?.()??p)];const panel=game.portalPanels.find(a=>(a.userData.portalFrame?.()?.center??a.userData.center).distanceTo(V(...p))<.08);if(panel&&Math.abs((panel.userData.portalFrame?.()?.normal??panel.userData.normal).y)<.1)p[1]-=.4;await look(p);check(game.firePortal(slot),'Portal input rejected');report.shots++;report.actions.push({kind:'shoot',slot,...S()});await until(()=>!game.portalShots.queue.length&&!game.portalShots.active.length,4,'Unresolved shot');check(game.portalShots.lastImpact?.valid,'Invalid portal impact '+JSON.stringify(game.portalShots.lastImpact));}
