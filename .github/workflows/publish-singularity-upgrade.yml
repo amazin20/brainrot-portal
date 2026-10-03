@@ -19,8 +19,8 @@ jobs:
     if: >-
       github.ref == 'refs/heads/main' &&
       (github.event_name == 'workflow_dispatch' ||
-       (github.event.workflow_run.id == 37141429737 &&
-        github.event.workflow_run.head_sha == 'ca7bfcb1a885923453c7f16a960fed9d6c73b13f' &&
+       (github.event.workflow_run.id == 37142162076 &&
+        github.event.workflow_run.head_sha == '019c7195bf83dc29acaf09aeff7ae15f13431fa7' &&
         github.event.workflow_run.conclusion == 'success'))
     runs-on: ubuntu-latest
     timeout-minutes: 5
