@@ -23,7 +23,13 @@ export async function runSingularityJourney(game,{onMilestone=()=>{},stopAfter=n
   check(game.cargo===companion&&game.physics.cargoBody.id===body,'Companion identity changed');check(!report.resets&&!report.respawns&&!report.cargoResets,'A Tower attempt reset');
   if(onFrame)await onFrame({...S(),visualFrame:report.frames,cargoBodyId:body});
   if(globalThis.__SINGULARITY_FRAME__)await globalThis.__SINGULARITY_FRAME__({...S(),visualFrame:report.frames,cargoBodyId:body});
-  report.frames++;if(report.frames%120===0)await globalThis.__SINGULARITY_FLUSH__?.();
+  report.frames++;if(report.frames%120===0){
+   await globalThis.__SINGULARITY_FLUSH__?.();
+   // A long microtask-only route starves Chromium's canvas/GPU message pump.
+   // Let the browser retire canvas updates even when recording is disabled.
+   // This yields wall time only: every physics and animation frame is retained.
+   if(typeof window!=='undefined'&&typeof window.requestAnimationFrame==='function')await new Promise(resolve=>setTimeout(resolve,0));
+  }
  }
  async function wait(s){stop();for(let i=0;i<Math.ceil(s*60);i++)await frame();}
  async function until(predicate,seconds,label){stop();for(let i=0;i<seconds*60;i++){if(predicate())return;await frame();}check(predicate(),`${label}: ${JSON.stringify(S())}`);}

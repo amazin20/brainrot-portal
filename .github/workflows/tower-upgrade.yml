@@ -13,7 +13,9 @@ permissions:
   actions: read
 concurrency:
   group: tower-upgrade-${{ github.ref }}
-  cancel-in-progress: false
+  # Only superseded validation is cancelled; the separate Pages publication
+  # workflow still serialises deployments and verifies the exact candidate.
+  cancel-in-progress: true
 env:
   BUILD_COMMIT: ${{ github.sha }}
 jobs:
