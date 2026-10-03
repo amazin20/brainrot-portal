@@ -128,7 +128,20 @@ export async function runSingularityJourney(game,{onMilestone=()=>{},stopAfter=n
    await walk(P('migrant',-12,12));await until(()=>st('migrant').travel>.99,7,'Rail did not reach far end');await enter(st('migrant').intake);await walk(P('migrant',12,10,3));await until(()=>level.getTowerMetrics().solvedIds.includes('migrant'),2,'Moving portal arrival not registered');await enter(st('migrant').moving);await walk(P('migrant',-12,12));await leave('migrant',[P('migrant',-12,0)]);},
   async parallax(){await travel(level.rooms.get('parallax').door);await walk(P('parallax',-18,-10));await use('parallax:near');await walk(P('parallax',-18,-15));await walk(P('parallax',7,-15));await walk(P('parallax',7,8));await use('parallax:middle');await walk(P('parallax',10,10));await walk(P('parallax',10,16));await walk(P('parallax',-18,16));await walk(st('parallax').pad);await look(st('parallax').target);await until(()=>level.getTowerMetrics().solvedIds.includes('parallax'),3,'The three sight windows did not align');await leave('parallax');},
   async inertia(){await travel(level.rooms.get('inertia').door);await walk(P('inertia',-22,12));await walk(P('inertia',-22,-4));await shoot(0,st('inertia').intake.center);await walk(P('inertia',-22,12));await walk(P('inertia',-10,12));await shoot(1,st('inertia').outlet.center);await walk(P('inertia',-27,10));await walk(P('inertia',-27,-14,12));await walk(P('inertia',-1,-14,12));await walk(P('inertia',-1,-11.35,12),{sprint:false,tolerance:.06});
-   const before=game.teleportCount;for(let i=0;i<8*60&&game.teleportCount===before;i++){worldMove(0,.42);await frame();}stop();check(game.teleportCount>before,'Falling intake missed');await until(()=>game.playerGrounded,6,'Fling did not land');await walk(P('inertia',21,0,-3.5));await until(()=>level.getTowerMetrics().solvedIds.includes('inertia'),2,'Momentum proof missing');await walk(P('inertia',25,3,-3.5));await walk(P('inertia',25,13));await leave('inertia',[P('inertia',0,13)]);},
+   const before=game.teleportCount;
+   for(let i=0;i<8*60&&game.teleportCount===before;i++){
+    if(game.playerGrounded)worldMove(0,.42);
+    else{
+     // Aim placement is continuous: the actual aperture need not coincide
+     // exactly with the authored panel centre. Steer the falling traveller
+     // towards that visible opening through ordinary air-control input.
+     const entry=game.portals.portals[0].position,p=game.playerPosition,v=game.playerVelocity;
+     const steer=V((4*(entry.x-p.x)-3*v.x)/2.8,0,(4*(entry.z-p.z)-3*v.z)/2.8);
+     if(steer.length()>1)steer.normalize();worldMove(steer.x,steer.z);
+    }
+    await frame();
+   }
+   stop();check(game.teleportCount>before,'Falling intake missed: '+JSON.stringify({entry:game.portals.portals[0].position.toArray(),player:game.playerPosition.toArray()}));await until(()=>game.playerGrounded,6,'Fling did not land');await walk(P('inertia',21,0,-3.5));await until(()=>level.getTowerMetrics().solvedIds.includes('inertia'),2,'Momentum proof missing');await walk(P('inertia',25,3,-3.5));await walk(P('inertia',25,13));await leave('inertia',[P('inertia',0,13)]);},
   async inversion(){await travel(level.rooms.get('inversion').door);await use('inversion:polarity');await walk(P('inversion',10,0));await walk(P('inversion',0,0));await jump();
    await until(()=>game.playerPosition.y>69.6,6,'Gravity ascent did not rise');for(let i=0;i<5*60&&game.playerPosition.z<P('inversion',0,10)[2];i++){worldMove(0,1);await frame();}stop();await until(()=>game.playerGrounded,6,'Upper inversion landing missed');await walk(P('inversion',9,12,14));await until(()=>level.getTowerMetrics().solvedIds.includes('inversion'),2,'Inversion incomplete');},
  };
