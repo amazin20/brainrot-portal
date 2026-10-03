@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 
-export const UPGRADE_VERSION='v46-singularity';
+export const UPGRADE_VERSION='v47-singularity-polish';
 export function assertUpgradeInfo(info,expectedRooms=null){
  assert.match(info.commit,/^[a-f0-9]{40}$/);
  assert.equal(info.version,UPGRADE_VERSION);assert.equal(info.artVersion,UPGRADE_VERSION);assert.equal(info.levels,41);

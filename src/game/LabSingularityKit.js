@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import {RoundedBoxGeometry} from 'three/addons/geometries/RoundedBoxGeometry.js';
+import {mergeGeometries} from 'three/addons/utils/BufferGeometryUtils.js';
 import {terminalAccessible} from './LabPuzzleMechanics.js';
 export const V=(x=0,y=0,z=0)=>new THREE.Vector3(x,y,z);
 export const clamp=THREE.MathUtils.clamp;
@@ -20,7 +21,7 @@ function cylinderParts(radius,height){
 export class SingularityKit {
  constructor(game){
   this.game=game;this.root=new THREE.Group();this.root.name='SINGULARITY / continuous machine cathedral';game.scene.add(this.root);
-  this.meshes=[];this.colliders=[];this.floors=[];this.panels=[];this.terminals=[];this.controlResets=[];this.geometries=new Set();this.materials=new Set();this.static=[];this.dynamic=[];this.compounds=[];this.batches=[];this.textures=[];
+  this.meshes=[];this.colliders=[];this.floors=[];this.floorInlays=[];this.panels=[];this.terminals=[];this.controlResets=[];this.geometries=new Set();this.materials=new Set();this.static=[];this.dynamic=[];this.compounds=[];this.batches=[];this.textures=[];
   this.cube=this.geo(new THREE.BoxGeometry(1,1,1));this.round=this.geo(new RoundedBoxGeometry(1,1,1,2,.09));
   this.torusCache=new Map();this.cylinder=this.geo(new THREE.CylinderGeometry(1,1,1,24));
   this.m={steel:this.mat(0x516b7c,.52,.35),dark:this.mat(0x152d3b,.72,.24),floor:this.mat(0xb2c9d3,.84,.05),
@@ -191,7 +192,8 @@ export class SingularityKit {
   }
   function quad(out,a,b,c,d){out.push(...a,...b,...c,...a,...c,...d);}
   for(const [key,rects]of planes){
-   const y=Number(key),xs=[...new Set(rects.flatMap(r=>[r.minX,r.maxX]))].sort((a,b)=>a-b),zs=[...new Set(rects.flatMap(r=>[r.minZ,r.maxZ]))].sort((a,b)=>a-b);
+   const y=Number(key),inlays=this.floorInlays.filter(r=>Math.abs(r.y-y)<1e-5),
+    xs=[...new Set([...rects,...inlays].flatMap(r=>[r.minX,r.maxX]))].sort((a,b)=>a-b),zs=[...new Set([...rects,...inlays].flatMap(r=>[r.minZ,r.maxZ]))].sort((a,b)=>a-b);
    const cells=[];
    for(let ix=1;ix<xs.length;ix++){
     const x0=xs[ix-1],x1=xs[ix],cx=(x0+x1)/2,active=rects.filter(r=>cx>r.minX-1e-7&&cx<r.maxX+1e-7);
@@ -200,11 +202,32 @@ export class SingularityKit {
      const cz=(zs[iz-1]+zs[iz])/2;row.push(active.findLast(r=>cz>r.minZ-1e-7&&cz<r.maxZ+1e-7));
     }
    }
+   const finishes=cells.map((row,ix)=>row.map((owner,iz)=>{
+    if(!owner)return null;
+    const cx=(xs[ix]+xs[ix+1])/2,cz=(zs[iz]+zs[iz+1])/2,material=owner.mesh.material;
+    return inlays.findLast(r=>cx>r.minX&&cx<r.maxX&&cz>r.minZ&&cz<r.maxZ&&(!r.baseOnly||material===this.m.floor))?.material??material;
+   }));
+   // A finish in one room must not subdivide every distant floor into a grid.
+   // Coalesce matching cells into rectangles, preserving gaps and boundaries.
+   function surface(materialAt,underside=false){
+    const rectangles=[],open=new Map();
+    for(let ix=0;ix<cells.length;ix++)for(let iz=0;iz<zs.length-1;){
+     const material=materialAt(ix,iz);if(!material){iz++;continue;}
+     let end=iz+1;while(end<zs.length-1&&materialAt(ix,end)===material)end++;
+     const key=material.uuid+':'+iz+':'+end,previous=open.get(key);
+     if(previous&&previous.x1===xs[ix])previous.x1=xs[ix+1];
+     else{const rect={material,x0:xs[ix],x1:xs[ix+1],z0:zs[iz],z1:zs[end]};rectangles.push(rect);open.set(key,rect);}
+     iz=end;
+    }
+    for(const {material,x0,x1,z0,z1}of rectangles){const out=byMaterial.get(material)??[];byMaterial.set(material,out);
+     if(underside)quad(out,[x0,y-.4,z0],[x1,y-.4,z0],[x1,y-.4,z1],[x0,y-.4,z1]);
+     else quad(out,[x0,y,z0],[x0,y,z1],[x1,y,z1],[x1,y,z0]);
+    }
+   }
+   surface((ix,iz)=>finishes[ix][iz]);surface((ix,iz)=>cells[ix][iz]?.mesh.material,true);
    for(let ix=0;ix<cells.length;ix++)for(let iz=0;iz<zs.length-1;iz++){
      const owner=cells[ix][iz];if(!owner)continue;
      const x0=xs[ix],x1=xs[ix+1],z0=zs[iz],z1=zs[iz+1],material=owner.mesh.material,out=byMaterial.get(material)??[];byMaterial.set(material,out);
-     quad(out,[x0,y,z0],[x0,y,z1],[x1,y,z1],[x1,y,z0]);
-     quad(out,[x0,y-.4,z0],[x1,y-.4,z0],[x1,y-.4,z1],[x0,y-.4,z1]);
      // Only exposed boundaries have side walls. The old per-cell boxes
      // created coincident opposing faces through every internal junction.
      if(!cells[ix][iz-1])quad(out,[x0,y,z0],[x1,y,z0],[x1,y-.4,z0],[x0,y-.4,z0]);
@@ -220,12 +243,22 @@ export class SingularityKit {
   for(const mesh of this.meshes)if(!mesh.userData.collisionProxy)this.sync(mesh,0);
   for(const compound of this.compounds)this.sync(compound.owner,0);
   this.batchFloors();
-  this.root.updateWorldMatrix(true,true);const groups=new Map();
+  this.root.updateWorldMatrix(true,true);const groups=new Map(),architectural=new Map();
   for(const mesh of this.static){if(!mesh.visible)continue;
+   // Consistent world-space chamfers have different aspect ratios. Merge
+   // these static fittings by material so a better edge profile does not
+   // create a submission for every individual panel dimension.
+   const world=mesh.getWorldPosition(V()),cell=`:${Math.floor(world.x/64)}:${Math.floor(world.y/24)}:${Math.floor(world.z/64)}`;
+   if(mesh.geometry.userData.architecturalBatch){const key=mesh.material.uuid+cell,list=architectural.get(key)??[];list.push(mesh);architectural.set(key,list);continue;}
    // Torus and cylindrical detail is expensive. Keep each instance cloud
    // local so distant/off-screen rooms can be culled as independent groups.
-   const cell=mesh.geometry===this.cube||mesh.geometry===this.round||mesh.geometry.userData.architecturalBatch?'':`:${Math.floor(mesh.position.x/64)}:${Math.floor(mesh.position.y/24)}:${Math.floor(mesh.position.z/64)}`;
    const key=mesh.geometry.uuid+mesh.material.uuid+cell;const list=groups.get(key)??[];list.push(mesh);groups.set(key,list);
+  }
+  for(const meshes of architectural.values()){
+   const material=meshes[0].material;
+   const parts=meshes.map(mesh=>mesh.geometry.clone().applyMatrix4(mesh.matrixWorld)),geometry=this.geo(mergeGeometries(parts));parts.forEach(g=>g.dispose());
+   geometry.computeBoundingSphere();const batch=new THREE.Mesh(geometry,material);batch.name='Machined architectural construction / joined by finish';batch.receiveShadow=true;
+   meshes.forEach(mesh=>{mesh.visible=false;if(mesh.userData.collider)mesh.userData.collisionProxy=true;});this.root.add(batch);
   }
   for(const meshes of groups.values()){
    const batch=new THREE.InstancedMesh(meshes[0].geometry,meshes[0].material,meshes.length);batch.name='Instanced cathedral construction';batch.receiveShadow=true;

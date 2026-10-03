@@ -5,8 +5,10 @@ const UP=V(0,1,0),Z=V(0,0,1);
 // Closed machined box: six broad faces, twelve edge chamfers, eight clipped
 // corners. 44 triangles describe the silhouette without subdividing its face.
 // Apparatus still uses the kit's genuinely rounded casing where it is visible.
-function architecturalBevel(){
- const positions=[],normals=[],h=.44,outer=.5;
+function architecturalBevel(size=[1,1,1]){
+ // The chamfer is measured in metres. Scaling a unit bevel made the corners
+ // of a 50 m beam many metres wide while a thin fascia barely had an edge.
+ const positions=[],normals=[],outer=size.map(v=>v/2),radius=Math.min(.10,...size.map(v=>v*.20)),h=outer.map(v=>v-radius);
  function face(points,normal){
   const n=V(...normal).normalize(),cross=points[1].clone().sub(points[0]).cross(points[2].clone().sub(points[0]));
   if(cross.dot(n)<0)points.reverse();
@@ -14,13 +16,13 @@ function architecturalBevel(){
  }
  for(let axis=0;axis<3;axis++)for(const sign of [-1,1]){
   const other=[0,1,2].filter(i=>i!==axis),points=[];
-  for(const [a,b]of [[-h,-h],[h,-h],[h,h],[-h,h]]){const p=V();p.setComponent(axis,sign*outer);p.setComponent(other[0],a);p.setComponent(other[1],b);points.push(p);}const n=[0,0,0];n[axis]=sign;face(points,n);
+  for(const [sa,sb]of [[-1,-1],[1,-1],[1,1],[-1,1]]){const p=V();p.setComponent(axis,sign*outer[axis]);p.setComponent(other[0],sa*h[other[0]]);p.setComponent(other[1],sb*h[other[1]]);points.push(p);}const n=[0,0,0];n[axis]=sign;face(points,n);
  }
  for(let free=0;free<3;free++)for(const sa of [-1,1])for(const sb of [-1,1]){
   const [a,b]=[0,1,2].filter(i=>i!==free),points=[];
-  for(const [av,bv,fv]of [[outer,h,-h],[h,outer,-h],[h,outer,h],[outer,h,h]]){const p=V();p.setComponent(a,av*sa);p.setComponent(b,bv*sb);p.setComponent(free,fv);points.push(p);}const n=[0,0,0];n[a]=sa;n[b]=sb;face(points,n);
+  for(const [edge,fs]of [[0,-1],[1,-1],[1,1],[0,1]]){const p=V();p.setComponent(a,(edge?h[a]:outer[a])*sa);p.setComponent(b,(edge?outer[b]:h[b])*sb);p.setComponent(free,h[free]*fs);points.push(p);}const n=[0,0,0];n[a]=sa;n[b]=sb;face(points,n);
  }
- for(const sx of [-1,1])for(const sy of [-1,1])for(const sz of [-1,1])face([V(sx*outer,sy*h,sz*h),V(sx*h,sy*outer,sz*h),V(sx*h,sy*h,sz*outer)],[sx,sy,sz]);
+ for(const sx of [-1,1])for(const sy of [-1,1])for(const sz of [-1,1])face([V(sx*outer[0],sy*h[1],sz*h[2]),V(sx*h[0],sy*outer[1],sz*h[2]),V(sx*h[0],sy*h[1],sz*outer[2])],[sx,sy,sz]);
  const geometry=new THREE.BufferGeometry();geometry.setAttribute('position',new THREE.Float32BufferAttribute(positions,3));geometry.setAttribute('normal',new THREE.Float32BufferAttribute(normals,3));geometry.computeBoundingBox();geometry.computeBoundingSphere();geometry.userData.architecturalBatch=true;return geometry;
 }
 
@@ -28,7 +30,7 @@ function architecturalBevel(){
  * the existing machine volume. Large added cases retain collision. Permanent
  * labels share one atlas/draw call; repeated fittings share geometry batches. */
 export function buildSingularityArt({game,k,rooms,edges,solved}){
- const m=k.m,updates=[],lights=[];
+ const m=k.m,updates=[];
  const enamel=k.mat(0xe3eee8,.82,.08),chalk=k.mat(0xf1e9d5,.86,.04),ink=k.mat(0x243d50,.86,.10),
   graphite=k.mat(0x435f70,.79,.16),brass=k.mat(0xdfae72,.70,.28),gasket=k.mat(0x182e3b,.96,.02),
   cool=k.mat(0x83c8d7,.80,.10),warm=k.mat(0xf3c074,.84,.08);
@@ -39,8 +41,12 @@ export function buildSingularityArt({game,k,rooms,edges,solved}){
  const ringGeometry=k.geo(new THREE.TorusGeometry(1,.07,6,36)),heavyRingGeometry=k.geo(new THREE.TorusGeometry(1,.13,6,36)),horseshoeGeometry=k.geo(new THREE.TorusGeometry(1,.07,6,18,Math.PI));
  const pipeGeometryCache=new Map([[1,k.cylinder]]);
  // Large architectural panels need an edge chamfer, not prop subdivisions.
- const bevel=k.geo(architecturalBevel());
- function box(p,s,material=enamel,{solid=false,round=false,dynamic=false}={}){return k.mesh(round?bevel:k.cube,material,p,s,{solid,dynamic});}
+ const bevels=new Map();
+ function box(p,s,material=enamel,{solid=false,round=false,dynamic=false}={}){
+  if(!round)return k.mesh(k.cube,material,p,s,{solid,dynamic});
+  const key=s.map(v=>v.toFixed(4)).join(':');if(!bevels.has(key))bevels.set(key,k.geo(architecturalBevel(s)));
+  return k.mesh(bevels.get(key),material,p,[1,1,1],{solid,dynamic});
+ }
  function pipe(a,b,r=.12,material=brass,{solid=false}={}){
   const va=V(...a),vb=V(...b),d=vb.clone().sub(va),length=d.length(),segments=Math.max(1,Math.ceil(length/12));
   // Extremely long, thin side triangles produced MSAA/clipping precision dots
@@ -57,7 +63,7 @@ export function buildSingularityArt({game,k,rooms,edges,solved}){
  function bearing(p,r,normal=[0,0,1],material=enamel){
   cap(p,r,.16,gasket,normal);ring(V(...p).addScaledVector(V(...normal),.13).toArray(),r*.92,material,{normal,heavy:true});cap(V(...p).addScaledVector(V(...normal),.19).toArray(),r*.39,.17,brass,normal);
  }
- function child(parent,geometry,material,p,s){const mesh=new THREE.Mesh(geometry,material);mesh.position.fromArray(p);mesh.scale.fromArray(s);mesh.receiveShadow=true;parent.add(mesh);k.meshes.push(mesh);if(!parent.userData.collider?.kinematic)k.static.push(mesh);return mesh;}
+ function child(parent,geometry,material,p,s){const mesh=new THREE.Mesh(geometry,material);mesh.position.fromArray(p);mesh.scale.fromArray(s);mesh.receiveShadow=true;parent.add(mesh);k.meshes.push(mesh);if(!parent.userData.collider?.kinematic&&!parent.userData.compound?.dynamic)k.static.push(mesh);return mesh;}
 
  // Wide labels carry information inside the architecture. The changing puzzle
  // monitors stay in level code. No fine hatch pattern, floor arrows or extra HUD.
@@ -108,6 +114,20 @@ export function buildSingularityArt({game,k,rooms,edges,solved}){
  }
  for(const r of rooms.values()){
   const {def:d,P}=r,[,y]=d.at,id=identities[d.id]??{band:m[d.color]??cool,profile:'service',sub:'ИССЛЕДОВАТЕЛЬСКИЙ КОНТУР / ОТДЕЛЬНЫЙ МЕХАНИЗМ'},color=id.band;
+  // Broad cast-in finishes establish a readable working area at player height.
+  // These replace floor triangles in the union, never sit on top as decals;
+  // authored pits, moving decks and white portal surfaces remain untouched.
+  const inlay=(x0,x1,z0,z1,material)=>k.floorInlays.push({minX:r.b.x0+x0,maxX:r.b.x1-x1,minZ:r.b.z0+z0,maxZ:r.b.z1-z1,y,material,baseOnly:true});
+  inlay(.7,.7,.7,.7,graphite);
+  inlay(1.5,1.5,1.5,1.5,id.profile==='hydraulic'||id.profile==='coil'?cool:chalk);
+  inlay(2.1,2.1,2.1,2.1,m.floor);
+  // A recessed service apron frames each entrance without implying a route
+  // through the puzzle or painting over its mechanically meaningful pieces.
+  const apron=4.2;
+  if(d.entry==='n')inlay(2.1,2.1,2.1,d.d-apron,graphite);
+  else if(d.entry==='s')inlay(2.1,2.1,d.d-apron,2.1,graphite);
+  else if(d.entry==='w')inlay(2.1,d.w-apron,2.1,2.1,graphite);
+  else inlay(d.w-apron,2.1,2.1,2.1,graphite);
   for(const side of ['n','s','w','e']){
    const length=side==='w'||side==='e'?d.d:d.w,bays=Math.max(3,Math.round(length/9)),step=length/bays;
    for(let i=0;i<bays;i++){
@@ -212,8 +232,37 @@ export function buildSingularityArt({game,k,rooms,edges,solved}){
   // the player's approach rather than a floating box or a new walking obstacle.
   const {P,def}=rooms.get('fulcrum');pipe(P(0,2,9.65),P(0,2,def.h-1.3),.16,graphite);
  }
+ if(rooms.has('manifold')){
+  const r=rooms.get('manifold'),{P}=r;
+  // The control wheels now belong to recognisable valve bodies, supported
+  // above the walking envelope. Each projecting barrel has real contacts.
+  for(const [x,z,radius]of [[12,-11,.74],[0,-11,.74],[-7,3,.74],[21,-11,1.35],[-21,-11,1.45]]){
+   const barrel=k.drum(P(x,z-.62,4),radius,.9,enamel);barrel.quaternion.setFromUnitVectors(UP,Z);
+   bearing(P(x,z-.14,4),radius*.88,[0,0,1]);
+   ring(P(x,z-.98,4),radius,graphite,{normal:[0,0,1],heavy:true});
+   for(const s of [-1,1])box(P(x+s*radius*.65,z-.6,4-radius*.66),[.20,.34,.68],graphite,{round:true});
+  }
+  // Finish the back of the pressure chamber facing the player, with the
+  // existing solid partition behind every panel. Leave its real door clear.
+  for(const z of [-19,-10,-1,20]){
+   box(P(-16.63,z,5.2),[.12,8.4,z===20?3.8:7.8],enamel,{round:true});
+   box(P(-16.54,z,2.2),[.06,.7,z===20?3.2:7.2],cool);
+  }
+ }
+ if(rooms.has('eclipse')){
+  const r=rooms.get('eclipse');
+  for(const mesh of k.meshes.filter(o=>o.userData.collider?.kinematic&&o.material===m.dark&&o.scale.x===.6&&o.scale.y===5&&o.position.x>r.b.x0&&o.position.x<r.b.x1)){
+   // Child details follow the exact shutter transform in both directions.
+   // Keep the cast frame within its collision silhouette and shadow outline.
+   for(const side of [-1,1]){
+    child(mesh,k.cube,enamel,[side*.48,0,0],[.025,.88,.88]);
+    child(mesh,k.cube,gasket,[side*.495,0,0],[.01,.66,.66]);
+    child(mesh,k.cube,brass,[side*.502,.35,0],[.012,.025,.70]);
+   }
+  }
+ }
  // Terminal fascia stays inside the physical case, with the same interaction.
  for(const t of k.terminals){if(!t.art)continue;child(t.art,k.round,enamel,[0,.01,.49],[.75,.64,.035]);child(t.art,k.round,gasket,[0,.06,.515],[.54,.32,.024]);child(t.art,k.cube,cool,[-.12,.08,.532],[.20,.04,.015]);child(t.art,k.cube,brass,[.12,-.04,.532],[.16,.08,.015]);}
- finishPlaques();const fill=new THREE.HemisphereLight(0xd7eff8,0x547184,.42);game.scene.add(fill);lights.push(fill);
- return {update(){updates.forEach(f=>f());},dispose(){lights.forEach(l=>{l.removeFromParent();l.dispose?.();});}};
+ finishPlaques();
+ return {update(){updates.forEach(f=>f());},dispose(){}};
 }

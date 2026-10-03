@@ -16,7 +16,16 @@ export function pourVolumes(volumes,capacities,from,to){
 /** A new level, not an extension of the old Tower's repeated recipe loop. */
 export function buildTowerLevel(game,index=40){
  validateSingularityLayout();const k=new SingularityKit(game),m=k.m;
- const prior={background:game.scene.background,fog:game.scene.fog};
+ const skyLights=game.scene.children.filter(light=>light.isHemisphereLight),key=game.keyLight;
+ const prior={background:game.scene.background,fog:game.scene.fog,sky:skyLights.map(light=>({light,intensity:light.intensity})),
+  key:key&&{color:key.color.clone(),intensity:key.intensity,position:key.position.clone(),target:key.target.position.clone(),
+   shadow:Object.fromEntries(['left','right','top','bottom','near','far'].map(name=>[name,key.shadow.camera[name]]))}};
+ // Fixed broad lighting describes the actual machined forms on every quality
+ // profile. A strong all-direction fill previously washed out their relief.
+ skyLights.forEach(light=>light.intensity=.92);
+ if(key){key.color.setHex(0xffe6c2);key.intensity=2.7;key.position.set(-80,150,75);key.target.position.set(-35,35,0);
+  Object.assign(key.shadow.camera,{left:-180,right:180,top:160,bottom:-160,near:1,far:380});key.shadow.camera.updateProjectionMatrix();key.shadow.needsUpdate=true;}
+ const sideFill=new THREE.DirectionalLight(0xb7dcf2,.68);sideFill.position.set(120,70,-70);sideFill.target.position.set(-30,25,0);game.scene.add(sideFill,sideFill.target);
  game.scene.background=new THREE.Color(0x304656);game.scene.fog=new THREE.Fog(0x304656,110,330);
  const rooms=new Map(),machines=new Map(),events=[],solved=new Set(),gates=[],signs=[];
  let time=0,lastTransit=null,won=false,disposed=false,resetting=false;
@@ -30,6 +39,8 @@ export function buildTowerLevel(game,index=40){
   if(typeof document?.createElement!=='function')return null;
   const canvas=document.createElement('canvas');canvas.width=1024;canvas.height=192;
   const ctx=canvas.getContext('2d');if(!ctx)return null;const texture=new THREE.CanvasTexture(canvas);texture.colorSpace=THREE.SRGBColorSpace;
+  texture.generateMipmaps=true;texture.minFilter=THREE.LinearMipmapLinearFilter;texture.magFilter=THREE.LinearFilter;
+  texture.anisotropy=Math.min(8,game.renderer?.capabilities?.getMaxAnisotropy?.()??4);
   const material=new THREE.MeshBasicMaterial({map:texture,side:THREE.DoubleSide});k.materials.add(material);
   const mesh=k.mesh(k.geo(new THREE.PlaneGeometry(width,width*192/1024)),material,p,[1,1,1],{dynamic:true});mesh.quaternion.setFromUnitVectors(V(0,0,1),V(...normal));
   let previous='';const update=t=>{if(t===previous)return;previous=t;ctx.fillStyle='#1b303a';ctx.fillRect(0,0,1024,192);ctx.strokeStyle='#8cd9db';ctx.lineWidth=5;ctx.strokeRect(5,5,1014,182);ctx.font='bold 46px sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillStyle='#f5eacb';ctx.fillText(t,512,96,980);texture.needsUpdate=true;};update(text);signs.push({texture,update});return {mesh,update};
@@ -343,7 +354,11 @@ export function buildTowerLevel(game,index=40){
   playerAcceleration(p,v){return machines.get('inversion').acceleration(p,v);},applyCargoForces(){machines.get('magnet').force();},
   onTeleport(event){const r=roomAt(game.playerPosition);lastTransit={id:r?.id??'atrium',seconds:time};if(r?.id==='inertia')machines.get('inertia').transit();return true;},
   renderUpdate(){art.update();},diagnostics(){return {...this.getTowerMetrics(),uniqueRules:SINGULARITY_ROOMS.map(r=>r.rule),rooms:SINGULARITY_ROOMS.length,portalSurfaces:k.panels.length};},
-  dispose(){if(disposed)return;disposed=true;art.dispose();signs.forEach(s=>s.texture.dispose());k.dispose();game.scene.background=prior.background;game.scene.fog=prior.fog;},
+  dispose(){if(disposed)return;disposed=true;art.dispose();signs.forEach(s=>s.texture.dispose());k.dispose();sideFill.removeFromParent();sideFill.target.removeFromParent();sideFill.dispose();
+   prior.sky.forEach(({light,intensity})=>light.intensity=intensity);
+   if(key&&prior.key){const saved=prior.key;key.color.copy(saved.color);key.intensity=saved.intensity;key.position.copy(saved.position);key.target.position.copy(saved.target);
+    Object.assign(key.shadow.camera,saved.shadow);key.shadow.camera.updateProjectionMatrix();key.shadow.needsUpdate=true;}
+   game.scene.background=prior.background;game.scene.fog=prior.fog;},
  };
  return level;
 }

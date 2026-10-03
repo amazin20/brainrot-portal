@@ -467,26 +467,32 @@ export class LabPhysics {
     if (!body || !previous) return;
     // Contact solver is primary. A small inscribed-volume sweep only catches
     // solver tunnelling under a kinematic player or a blocked carry target.
-    // Disabled portal backing walls and real moving/tilted mechanisms are not
-    // converted into AABBs here. This never restarts the level or changes body id.
+    // Axis-aligned moving mechanisms are swept in their relative frame too:
+    // a sliding wall can pass completely over a still body between endpoints.
+    // Disabled portal backing and tilted mechanisms retain their own contacts.
+    // This never restarts the level or changes the persistent cargo body id.
     const r = this.cargoSize * .48;
     for (let pass = 0; pass < 3; pass++) {
       let first = null;
-      const low={x:Math.min(previous.x,body.position.x),y:Math.min(previous.y,body.position.y),z:Math.min(previous.z,body.position.z)};
-      const high={x:Math.max(previous.x,body.position.x),y:Math.max(previous.y,body.position.y),z:Math.max(previous.z,body.position.z)};
+      const staticLow={x:Math.min(previous.x,body.position.x),y:Math.min(previous.y,body.position.y),z:Math.min(previous.z,body.position.z)};
+      const staticHigh={x:Math.max(previous.x,body.position.x),y:Math.max(previous.y,body.position.y),z:Math.max(previous.z,body.position.z)};
       for (const {body: solid, half, kind} of this.solids.values()) {
-        if (!solid.collisionFilterMask || solid.type !== Body.STATIC || kind === 'ramp'
+        if (!solid.collisionFilterMask || (solid.type !== Body.STATIC && solid.type !== Body.KINEMATIC) || kind === 'ramp'
           || Math.abs(solid.quaternion.w) < .999999) continue;
+        const moving=solid.type===Body.KINEMATIC&&solid.position.distanceSquared(solid.previousPosition)>EPSILON;
+        const from=moving?{x:previous.x+solid.position.x-solid.previousPosition.x,y:previous.y+solid.position.y-solid.previousPosition.y,z:previous.z+solid.position.z-solid.previousPosition.z}:previous;
+        const low=moving?{x:Math.min(from.x,body.position.x),y:Math.min(from.y,body.position.y),z:Math.min(from.z,body.position.z)}:staticLow;
+        const high=moving?{x:Math.max(from.x,body.position.x),y:Math.max(from.y,body.position.y),z:Math.max(from.z,body.position.z)}:staticHigh;
         if(high.x<solid.position.x-half.x-r||low.x>solid.position.x+half.x+r||high.y<solid.position.y-half.y-r||low.y>solid.position.y+half.y+r||high.z<solid.position.z-half.z-r||low.z>solid.position.z+half.z+r)continue;
         const min = {x: solid.position.x-half.x-r, y: solid.position.y-half.y-r, z: solid.position.z-half.z-r};
         const max = {x: solid.position.x+half.x+r, y: solid.position.y+half.y+r, z: solid.position.z+half.z+r};
-        const hit = sweepBox(previous, body.position, min, max);
-        if (hit && (!first || hit.t < first.t)) first = hit;
+        const hit = sweepBox(from, body.position, min, max);
+        if (hit && (!first || hit.t < first.t)) first = {...hit,from,solid};
       }
       if (!first) break;
-      const key=first.axis, delta=body.position[key]-previous[key];
-      body.position[key]=previous[key]+delta*first.t+first.sign*.0001;
-      if(body.velocity[key]*first.sign<0)body.velocity[key]=0;
+      const key=first.axis, delta=body.position[key]-first.from[key];
+      body.position[key]=first.from[key]+delta*first.t+first.sign*.0001;
+      if((body.velocity[key]-first.solid.velocity[key])*first.sign<0)body.velocity[key]=first.solid.velocity[key];
       if(key==='y'&&first.sign>0)this.sweepSupported=true;
       this.sweptContacts=(this.sweptContacts||0)+1;body.aabbNeedsUpdate=true;
     }

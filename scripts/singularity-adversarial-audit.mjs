@@ -45,13 +45,19 @@ export function auditSingularityContacts(game) {
   }
   const owners=[];level.structure.traverse(o=>{if(o.userData.compound)owners.push(o);});
   for(const owner of owners){
-   if(owner.name!=='Open machine ring')continue;
+   if(!['Open machine ring','Open horseshoe coil'].includes(owner.name))continue;
    const centre=owner.position,normal=vector(0,0,1).applyQuaternion(owner.quaternion),radius=owner.geometry.parameters?.radius;
-   if(!radius||radius<1.7||Math.abs(normal.y)>.01)continue;
-   const selected=owner.userData.compound.parts.map(p=>p.collider),start=centre.clone().addScaledVector(normal,1.2);start.y=centre.y-1.2;
-   const result=resolveProbe(selected,start.toArray(),normal.clone().negate().toArray(),40),distance=result.clone().sub(centre).dot(normal),pass=distance<-.8;
-   report.apertures.push({name:owner.name,centre:centre.toArray(),radius,pass,distance});
+   // Include horizontal lift bearings and open magnetic horseshoes. The old
+   // vertical-only/name-only filter selected no authored player-size rings,
+   // allowing an empty report to claim its aperture audit had passed.
+   if(!radius||radius<1.5)continue;
+   const selected=owner.userData.compound.parts.map(p=>p.collider),offset=vector(0,-1.2,0),start=centre.clone().addScaledVector(normal,2.1).add(offset);
+   const result=resolveProbe(selected,start.toArray(),normal.clone().negate().toArray(),70),distance=result.clone().sub(offset).sub(centre).dot(normal),pass=distance<-1.9;
+   const angle=Math.min(Math.PI/2,(owner.geometry.parameters.arc??Math.PI*2)/2),radial=vector(Math.cos(angle)*radius,Math.sin(angle)*radius,0).applyQuaternion(owner.quaternion),rimCentre=centre.clone().add(radial);
+   const rimStart=rimCentre.clone().addScaledVector(normal,2.1).add(offset),rim=resolveProbe(selected,rimStart.toArray(),normal.clone().negate().toArray(),70),rimDistance=rim.clone().sub(offset).sub(rimCentre).dot(normal),rimPass=rimDistance>.42;
+   report.apertures.push({name:owner.name,centre:centre.toArray(),normal:normal.toArray(),radius,pass,rimPass,distance,rimDistance});
    if(!pass)fail('filled-ring-aperture',{centre:centre.toArray(),radius,distance});
+   if(!rimPass)fail('non-solid-ring-rim',{centre:centre.toArray(),radius,rimDistance});
   }
   for(const room of level.rooms.values())if(room.def.requires.length){
    const closed=room.def.requires.some(id=>!level.getTowerMetrics().solvedIds.includes(id));

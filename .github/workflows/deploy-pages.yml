@@ -1,7 +1,8 @@
-name: Deploy verified portal game
+name: Archived eighteen-wing Tower publication
+# The active campaign is promoted only by publish-singularity-upgrade.yml.
+# Retain this historical workflow for its original publication provenance;
+# an ordinary main push must never start a second, obsolete Pages release.
 on:
-  push:
-    branches: [main]
   workflow_dispatch:
 permissions:
   contents: read

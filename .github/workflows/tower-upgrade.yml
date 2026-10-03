@@ -1,7 +1,7 @@
 name: Verify the upgraded Tower and retained campaign
 on:
   push:
-    branches: [upgrade/tower-41-visual-rooms]
+    branches: [upgrade/tower-41-final]
   workflow_dispatch:
     inputs:
       record:
@@ -26,19 +26,26 @@ jobs:
         with:
           ref: ${{ github.sha }}
           persist-credentials: false
-      - name: Verify the successful original public package provenance
+      - name: Verify the successful original public package and preserved recovery provenance
         uses: actions/github-script@v7
         with:
           script: |
             const {owner,repo}=context.repo;
             const run=(await github.rest.actions.getWorkflowRun({owner,repo,run_id:36580171792})).data;
             if(run.conclusion!=='success'||run.head_sha!=='a3878d7f17c69319178238db2106a6c41d87cd84'||run.path!=='.github/workflows/publish-singularity-preview.yml')throw Error('Original public package provenance mismatch');
-            const artifacts=await github.paginate(github.rest.actions.listWorkflowRunArtifacts,{owner,repo,run_id:36580171792,per_page:100});
-            const base=artifacts.filter(a=>a.name==='github-pages'&&a.id===11039257191&&!a.expired);if(base.length!==1)throw Error('The approved public Pages artifact is unavailable');
+            // Pages artifacts expire after one day. The successful preservation
+            // job kept the exact original archive for ninety days before expiry.
+            const recovery=(await github.rest.actions.getWorkflowRun({owner,repo,run_id:36684488873})).data;
+            if(recovery.head_sha!=='6df8adf1e84ca7ada59c9945fba3fcb8ad8fa5ad'||recovery.path!=='.github/workflows/tower-upgrade.yml'||recovery.head_branch!=='upgrade/tower-41-visual-rooms')throw Error('Preserved base source mismatch');
+            const job=(await github.rest.actions.getJobForWorkflowRun({owner,repo,job_id:109787093144})).data;
+            if(job.run_id!==recovery.id||job.name!=='Preserve the exact approved public campaign package'||job.conclusion!=='success')throw Error('Original base preservation did not pass');
+            const artifacts=await github.paginate(github.rest.actions.listWorkflowRunArtifacts,{owner,repo,run_id:recovery.id,per_page:100});
+            const base=artifacts.filter(a=>a.name==='primary-game-base'&&a.id===11083032002&&!a.expired);
+            if(base.length!==1||base[0].digest!=='sha256:8a9dfead92da552118203dac3ece789db939851629a4136b8b1c4d83c73f134b')throw Error('The exact preserved public base is unavailable');
       - uses: actions/download-artifact@v4
         with:
-          name: github-pages
-          run-id: 36580171792
+          name: primary-game-base
+          run-id: 36684488873
           github-token: ${{ github.token }}
           path: base-pages
       - name: Verify the original root and every approved recording before preservation
@@ -49,6 +56,25 @@ jobs:
           path: primary-game-base/
           compression-level: 0
           retention-days: 90
+          if-no-files-found: error
+  source:
+    name: Source tests for every retained game regression
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Test the retained source and upgraded mechanisms
+        run: |
+          git diff --check
+          npm test
   campaign:
     name: All retained campaign routes (${{ matrix.edition }})
     runs-on: ubuntu-latest
@@ -79,7 +105,7 @@ jobs:
           retention-days: 14
   candidate:
     name: Exact upgraded source, production WebGL and complete recording
-    needs: [campaign, preserve-base]
+    needs: [source, campaign, preserve-base]
     runs-on: ubuntu-latest
     timeout-minutes: 295
     steps:
@@ -97,32 +123,11 @@ jobs:
           npm install --no-save --package-lock=false puppeteer-core@24.16.0
           echo "CHROME_PATH=$(command -v google-chrome || command -v chromium)" >> "$GITHUB_ENV"
           command -v ffmpeg >/dev/null || (sudo apt-get update -qq && sudo apt-get install -y --no-install-recommends ffmpeg)
-      - name: Test the retained source and upgraded mechanisms
-        run: |
-          git diff --check
-          npm test
       - name: Build and stamp the exact checked-out upgraded source
         run: |
           npm run build
           node scripts/v8-package-check.mjs
-          node --input-type=module <<'JS'
-          import fs from 'node:fs';import assert from 'node:assert/strict';import {execFileSync} from 'node:child_process';
-          import {SINGULARITY_ROOMS,validateSingularityLayout} from './src/game/LabSingularityLayout.js';
-          import {CAMPAIGN} from './src/game/LabCampaignLevels.js';
-          import {FOUNDATION_INDICES} from './src/game/LabFoundationEdition.js';
-          import {assertUpgradeInfo,UPGRADE_VERSION} from './scripts/lib/singularity-upgrade-proof.mjs';
-          assert.equal(execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),process.env.BUILD_COMMIT);
-          assert.equal(execFileSync('git',['status','--porcelain','--untracked-files=no'],{encoding:'utf8'}).trim(),'');
-          assert.equal(validateSingularityLayout(),true);
-          const rooms=SINGULARITY_ROOMS.map(({id,name,rule,requires})=>({id,name,rule,requires:[...requires]}));
-          const info={commit:process.env.BUILD_COMMIT,version:UPGRADE_VERSION,artVersion:UPGRADE_VERSION,run:process.env.GITHUB_RUN_ID,levels:FOUNDATION_INDICES.length,
-            verified:false,verificationScope:'Exact source and package; successful campaign routes, native Tower route, UI and recording evidence gate promotion to the primary game',
-            acceptance:{humanPlaytest:false,physicalDeviceBenchmark:false,liveYandex:false},
-            features:{defaultEdition:'foundation',archiveRooms:CAMPAIGN.length,foundation:{version:'foundation-v3',rooms:FOUNDATION_INDICES.map(i=>i+1),separateSave:true},
-              tower:{level:41,stages:rooms.length,independentHalls:rooms.filter(r=>!r.requires.length).length,rooms,uniqueRules:new Set(rooms.map(r=>r.rule)).size,
-                checkpoints:false,minimumActiveSeconds:900,layout:'continuous-cathedral',query:'edition=foundation&level=41'}}};
-          assertUpgradeInfo(info,SINGULARITY_ROOMS);fs.writeFileSync('dist/build-info.json',JSON.stringify(info,null,2)+'\n');
-          JS
+          node scripts/stamp-singularity-upgrade.mjs
       - name: Inspect the browser rendering and verify the entire production route
         run: |
           mkdir -p qa

@@ -15,6 +15,7 @@ env:
 jobs:
   access:
     name: Validate the pinned Tower upgrade release
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     timeout-minutes: 5
     environment:
@@ -59,9 +60,10 @@ jobs:
           script: |
             const fs=require('node:fs');const c=JSON.parse(fs.readFileSync(process.env.RELEASE_CONFIG));const {owner,repo}=context.repo;
             const run=(await github.rest.actions.getWorkflowRun({owner,repo,run_id:c.candidateRun})).data;
-            if(run.conclusion!=='success'||run.head_sha!==c.sourceCommit||run.path!=='.github/workflows/tower-upgrade.yml'||run.head_branch!=='upgrade/tower-41-visual-rooms')throw Error('Candidate must be the successful direct-checkout verification of the pinned source');
+            if(run.conclusion!=='success'||run.head_sha!==c.sourceCommit||run.path!=='.github/workflows/tower-upgrade.yml'||run.head_branch!=='upgrade/tower-41-final')throw Error('Candidate must be the successful direct-checkout verification of the pinned source');
             const jobs=await github.paginate(github.rest.actions.listJobsForWorkflowRun,{owner,repo,run_id:c.candidateRun,per_page:100});
             const successfulStep=name=>jobs.some(j=>j.conclusion==='success'&&j.steps?.some(s=>s.name===name&&s.conclusion==='success'));
+            if(!jobs.some(j=>j.name==='Source tests for every retained game regression'&&j.conclusion==='success')||!successfulStep('Test the retained source and upgraded mechanisms'))throw Error('The full retained source regression suite did not pass');
             if(!successfulStep('Inspect the browser rendering and verify the entire production route'))throw Error('The complete native Tower route and UI did not pass');
             if(c.mode==='complete'&&!successfulStep('Record one continuous upgraded Tower walkthrough from that exact package'))throw Error('The complete recording did not pass');
             for(const edition of ['foundation','classic','open'])if(!jobs.some(j=>j.name===`All retained campaign routes (${edition})`&&j.conclusion==='success'))throw Error(`Retained ${edition} campaign route matrix did not pass`);
@@ -124,6 +126,7 @@ jobs:
         with:
           ref: ${{ github.sha }}
           persist-credentials: false
+      - uses: actions/configure-pages@v5
       - uses: actions/deploy-pages@v4
         id: deployment
       - uses: actions/setup-node@v4

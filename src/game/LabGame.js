@@ -883,7 +883,27 @@ export class LabGame {
     });
   }
 
-  resolveBody(position, previous, velocity, radius, height, allowPortals = false) {
+  resolveBody(position, previous, velocity, radius, height, allowPortals = false, substep = false) {
+    // A fling or a long frame can put both endpoints outside a thin wall.
+    // Sample the actual capsule path with its ordinary rounded contacts:
+    // sweeping an expanded square here would seal diagonal drum/ring gaps.
+    // Vertical contacts already span the complete body height, so they need
+    // fewer subdivisions than narrow lateral contacts.
+    const dx = position.x - previous.x, dy = position.y - previous.y, dz = position.z - previous.z;
+    const steps = substep ? 1 : Math.ceil(Math.max(Math.hypot(dx, dz) / (radius * .5), Math.abs(dy) / (height * .5)));
+    if (steps > 1) {
+      const resolved = previous.clone(), before = previous.clone(), advance = new THREE.Vector3(dx / steps, dy / steps, dz / steps);
+      for (let step = 0; step < steps; step++) {
+        before.copy(resolved); resolved.add(advance);
+        LabGame.prototype.resolveBody.call(this, resolved, before, velocity, radius, height, allowPortals, true);
+        // Once a normal component is arrested, the remaining travel must not
+        // keep driving into that face with a now-zero velocity (especially a
+        // ceiling, whose upward-contact branch has already consumed it).
+        for (const axis of ['x', 'y', 'z']) if (Math.abs(velocity[axis]) < 1e-10
+          && Math.abs(resolved[axis] - before[axis] - advance[axis]) > 1e-8) advance[axis] = 0;
+      }
+      position.copy(resolved); return;
+    }
     for (let iteration = 0; iteration < 3; iteration++) for (const collider of this.colliders) {
       if (!collider.enabled || (collider.walkablePlane && !collider.solidUnderside)) continue;
       // A walkable moving top is not an empty volume from below. Its floor
