@@ -92,13 +92,27 @@ export const runPost33=runInverseSpring;
 export const runPost34=runCreative34;
 
 export function runPost35(d,{route='dispatch-after-rewire'}={}){
- preciseAim(d);check(['dispatch-after-rewire','carry-after-first-latch'].includes(route),'Unknown 35 route');
+ preciseAim(d);check(['dispatch-after-rewire','carry-after-first-latch','carry-with-live-flow'].includes(route),'Unknown 35 route');
  const {game:g,level:l,walk,until,mark}=d,p=l.panels;
  collect(d);load(d,l.dispatch);walk(0,21);
  shot(d,0,p['air-origin']);shot(d,1,p['first-receiver']);
  until(()=>l.powered()[0]&&l.first.progress>.9,5,'Flow did not open first physical sluice');
  check(!l.powered()[1]&&l.second.progress<.1,'Wrong receiver energized');
  mark('A real portal ray drives only the first sluice');
+ if(route==='carry-with-live-flow'){
+  // Both physical airflow causes are still needed. Bringing the original
+  // cargo through the first live door removes the need to keep it open for
+  // a later return; leaving the final flow connected removes its latch too.
+  collect(d);walk(0,11);walk(0,1);release(d);
+  check(g.cargo.position.z<9&&!l.dispatch.loaded(),'The original companion did not reach the stable middle court');
+  mark('Original cargo crosses the first live airflow doorway before readdressing');
+  shot(d,1,p['second-receiver']);
+  until(()=>l.powered()[1]&&l.second.progress>.9,5,'Second live airflow failed to open the exit');
+  check(!l.isFirstLatched()&&!l.isLatched(),'The live-flow route must leave both real latches unused');
+  collect(d);walk(0,-4);walk(0,-20);until(()=>g.state==='won',3,'Original pair missed the live-flow exit');
+  check(l.powered()[1]&&g.physics.portalTransports===0,'The supported faster route must retain real final airflow');
+  mark('Both travellers finish with actual airflow retained and neither latch used');return;
+ }
  walk(0,11);walk(0,0);use(d,-6,1.3,'First door latch');check(l.isFirstLatched(),'First real latch was not engaged');
  if(route==='carry-after-first-latch'){
   walk(0,0);walk(0,11);walk(0,17);collect(d);walk(0,11);walk(0,1);release(d);

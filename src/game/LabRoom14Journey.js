@@ -1,9 +1,6 @@
 export async function runRoom14(d,{order='cargo-first'}={}){
  if(!['cargo-first','scout-first','remote-companion'].includes(order))throw new RangeError('Unknown room14 action order');
- const {game,level,walk,wait,aim,until,pickup,enter,mark}=d,p=level.panels;
- // The compact shoulder view uses a different ordinary release/observation
- // approach; both still dispatch the same free friend through the narrow fold.
- const compactScout=order==='scout-first'&&game.camera.aspect<1.7;
+ const {game,level,walk,wait,aim,look,until,pickup,enter,mark}=d,p=level.panels;
  if(order==='remote-companion'){
   // Set the original friend down inside the visible dispatch area before
   // leaving it below for the first light crossing. Use a settled northward
@@ -18,9 +15,12 @@ export async function runRoom14(d,{order='cargo-first'}={}){
  walk(-15.5,level.state.lightBridge.segments[1].a.z+1.55);wait(.2);game.input.jumpQueued=true;walk(-15.5,level.state.lightBridge.segments[1].a.z);wait(.4);walk(-1.5,0);mark('stable island reached');
  if(order==='remote-companion'){
   if(game.heldCube||game.cargo.position.y>1)throw Error('The first crossing must leave the original companion at the entry');
+  // Aim from permanent footing after removing the old projected curtain.
+  // The unweighted stair remains down until the same cargo reaches the island.
+  game.clearPortals();wait(.2);
   walk(-2.2,-2.2);
   aim(1,p['island-receiver'].getFrame().center);
-  walk(-1.5,-8.5);
+  walk(-2.4,2.3);
   const before=game.physics.portalTransports;
   aim(0,game.cargo.position.clone().setY(p['entry-dispatch'].getFrame().center.y));
   until(()=>game.physics.portalTransports>before&&game.cargo.position.y>7.8,6,'Entry floor did not route the original friend to the island');
@@ -34,17 +34,17 @@ export async function runRoom14(d,{order='cargo-first'}={}){
  }
  // A narrow full-height fold admits the player, while the friend waits on
  // the stable island. The upper receiver must first be used for cargo.
- walk(-.8,0);
- if(order==='remote-companion'||compactScout){walk(-.8,-.8);wait(.4);}
+ walk(-2.65,0);walk(-2,0);wait(.4);
  game.interact();wait(.7);mark('friend waits on the island');
+ until(()=>level.state.counterweightStair.offset>-.01,5,'The island load did not raise the physical folded stair');
  walk(-1.5,0);walk(-1.5,-12.7);walk(1.5,-12.7);wait(.2);game.input.jumpQueued=true;walk(3,-12.7);wait(.2);game.input.jumpQueued=true;walk(3,-7);mark('folded upper return');
  aim(1,p['weave-north'].getFrame().center);
- wait(.2);game.input.jumpQueued=true;walk(4.7,-12.7);wait(.2);game.input.jumpQueued=true;walk(1.1,-12.7);walk(-1.5,-12.7);walk(order==='remote-companion'?-1.25:-1.5,-8.5);
- if(compactScout)walk(-1.05,-8.5);
+ wait(.2);game.input.jumpQueued=true;walk(4.7,-12.7);wait(.2);game.input.jumpQueued=true;walk(1.1,-12.7);walk(-1.5,-12.7);walk(-1.7,-8.5);
  const deliveryBefore=game.physics.portalTransports;
  aim(0,game.cargo.position.clone().setY(7.425));
  until(()=>game.physics.portalTransports>deliveryBefore&&game.cargo.position.y>11.8,5,'Friend did not travel independently');
  wait(1.2);mark('independent upper delivery');
+ until(()=>level.state.counterweightStair.offset>-.01,5,'The upper receiving load did not hold the physical folded stair');
  // Return down the fold for the low sight through the emitter housing. Its
  // aperture passes shots and light but excludes the complete player capsule.
  walk(-1.5,-2.3);walk(-2.85,-2.3);walk(-2.85,1.5);aim(0,p['light-source'].getFrame().center);wait(.4);

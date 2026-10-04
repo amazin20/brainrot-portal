@@ -15,7 +15,7 @@ const rooms=SINGULARITY_ROOMS.map(({id,name,rule,requires})=>({id,name,rule,requ
 const info={commit,version:UPGRADE_VERSION,artVersion:UPGRADE_VERSION,run:process.env.GITHUB_RUN_ID||null,levels:FOUNDATION_INDICES.length,
  verified:false,verificationScope:'Exact source and package; source, campaign, production WebGL, UI and continuous video gate publication',
  acceptance:{humanPlaytest:false,physicalDeviceBenchmark:false,liveYandex:false},
- features:{defaultEdition:'foundation',archiveRooms:CAMPAIGN.length,foundation:{version:'creative-campaign-v4',rooms:FOUNDATION_INDICES.map(i=>i+1),rebuiltRooms:[31,32,33,34,36,37,39,40,41],closedShortcutRooms:[16],separateSave:true},
+ features:{defaultEdition:'foundation',archiveRooms:CAMPAIGN.length,foundation:{version:'creative-campaign-v4',rooms:FOUNDATION_INDICES.map(i=>i+1),rebuiltRooms:[31,32,33,34,36,37,39,40,41],closedShortcutRooms:[14,16,32,41],physicsClosingApertureRecovery:true,separateSave:true},
   tower:{level:41,stages:rooms.length,independentHalls:rooms.filter(r=>!r.requires.length).length,rooms,
    title:SINGULARITY_SPEC.name,uniqueRules:new Set(rooms.map(r=>r.rule)).size,checkpoints:false,layout:'folded-vertical-castle',query:'edition=foundation&level=41'}}};
 assertUpgradeInfo(info,SINGULARITY_ROOMS);fs.writeFileSync(path.join(directory,'build-info.json'),JSON.stringify(info,null,2)+'\n');

@@ -63,8 +63,27 @@ export function buildPost32(game,index=31){
  const dispatch=k.loadPad('shadow-dispatch',[0,0,16],8);
  const relay=k.panel('shadow-mouth',[-22,1.325,-1],[1,0,0],4,2.14);
  relay.mesh.userData.portalSize={width:1.6,height:.94};
- const source=k.panel('double-ray-intake',[14,1.325,17],[1,0,0],4,2.14);
+ const sourceHeight=2;
+ const source=k.panel('double-ray-intake',[14,1.325+sourceHeight,17],[1,0,0],4,2.14);
  source.mesh.userData.portalSize={width:1.6,height:.94};
+ // The two incoming rays run inside a manufactured optical trunk. Without
+ // this housing, a companion left beside the source could cast the required
+ // lower shadow before the shared portal and bypass the freight laboratory.
+ // The .70 m middle sight slot admits a camera/charge line; its .55 m inner
+ // width excludes the complete .78 m rigid cargo. The elevated source leaves
+ // the portal's first metre of clearance above a loose floor-standing body.
+ // The portal transform returns the two light axes to .55 and 2.10 m in the
+ // receiving hood, so that original cargo route and its optics are unchanged.
+ const sourceTrunk=[];
+ const trunkPart=(p,size,material,name)=>{const part=k.block(p,size,material);part.name=name;sourceTrunk.push(part);};
+ for(const z of [16.65,17.35]){
+  trunkPart([18.3,1.5,z],[6.6,3.0,.15],'dark','Source optical trunk / lower solid cheek');
+  trunkPart([18.3,4.25,z],[6.6,1.1,.15],'shell','Source optical trunk / upper solid cheek');
+ }
+ trunkPart([18.3,4.90,17],[6.6,.20,.85],'shell','Source optical trunk / closed roof');
+ trunkPart([21.6,2.45,17],[.18,4.9,.85],'dark','Source optical trunk / closed source end');
+ for(const x of [15.2,18.3,21.4])trunkPart([x,4.83,17],[.10,.10,.85],'metal','Source optical trunk / upper retaining brace');
+ k.label('ЗАЩИЩЁННЫЙ ВХОД / ДВЕ ВЫСОТЫ',[18.3,5.6,17.45],[0,0,1],9,.6);
  const hood=freightHood(k,{x0:-20,x1:-14,z0:-3,z1:1,ceiling:2.8,name:'ГРУЗ / ДВЕ ВЫСОТЫ'});
  k.block([-24,7,-1],[.5,14,4.5],'shell');
  k.block([-19,7,-3],[10,14,.4],'shell');
@@ -78,13 +97,13 @@ export function buildPost32(game,index=31){
  // The shallow end stop catches cargo below the lower optical axis. It does
  // not itself cast the required shadow at y=.55.
  k.block([-17.8,.15,-1],[.22,.30,3.7],'metal');
- k.projector([21,1.325,17],[-1,0,0],{radius:1.05});
+ k.projector([21,1.325+sourceHeight,17],[-1,0,0],{radius:1.05});
  const sensors=[V(-17,.55,-1),V(-17,2.10,-1)];
  for(const [i,s]of sensors.entries())k.projector(s.toArray(),[-1,0,0],{radius:i?.28:.20});
  const drawings=[beamDrawing(k.world,0xf4bc7a,.045),beamDrawing(k.world,0x8ce4ed,.045)];
  const diaphragm=gate(k.world,-8,52,14),optics={raw:[false,false],shadow:[false,false],valid:false,latched:false};
  k.ticks.push(dt=>{
-  const paths=[.55,2.10].map(y=>tracePortalRay(game,V(20.96,y,17),V(-1,0,0),{length:100}));
+  const paths=[.55,2.10].map(y=>tracePortalRay(game,V(20.96,y+sourceHeight,17),V(-1,0,0),{length:100}));
   optics.raw=paths.map((segments,i)=>rayTouches(segments,sensors[i],.22));
   optics.shadow=paths.map(segments=>cargoOccludes(game,segments));
   optics.valid=optics.raw[0]&&optics.raw[1]&&optics.shadow[0]&&!optics.shadow[1];
@@ -97,7 +116,7 @@ export function buildPost32(game,index=31){
  k.renders.push(a=>diaphragm.render(a,k.time));
  dockReadout(k,[0,10.6,-24.1],()=>`ВЕРХНИЙ ${optics.raw[1]&&!optics.shadow[1]?'СВЕТ':'НЕТ СВЕТА'} / НИЖНИЙ ${optics.shadow[0]?'ТЕНЬ ДРУГА':'СВЕТ'} / ${optics.latched?'ФИКСАТОР':'ЖИВАЯ ДИАФРАГМА'}`);
  finalSign(k,32,'ТОНКАЯ ТЕНЬ',[0,12.5,24.2]);
- return finish(k,[-6,0,20],[-9,.6,18],[0,0,-19],{dispatch,relay,source,hood,diaphragm,optics,access,spawnView:{yaw:0,pitch:-.05}},
+ return finish(k,[-6,0,20],[-9,.6,18],[0,0,-19],{dispatch,relay,source,sourceTrunk,hood,diaphragm,optics,access,spawnView:{yaw:0,pitch:-.05}},
   {orders:['freight-before-light','inspect-optics-first'],portalRoles:{'shadow-dispatch':'transport the original opaque small rigid body into a low passage','shadow-mouth':'a shared aperture for freight and two light heights','double-ray-intake':'borrow both portals for two geometric parallel rays'},deductions:['the observer cannot enter the cargo-height hood','one small opaque body blocks only the lower ray','moving the portal pair from cargo to light leaves cargo on real support','the differential receiver moves a real door','the door can be mechanically retained before retrieving its own optical obstruction']});
 }
 

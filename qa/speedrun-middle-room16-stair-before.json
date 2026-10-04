@@ -1,0 +1,142 @@
+{
+  "scope": "Finite new input-only speedrun attacks in production simulation. No actor transforms, mechanism targets, progress flags or win flags assigned. Headless physics evidence, not a renderer or human playtest.",
+  "source": {
+    "commit": "bcbbce85d42af8c263e47cf9012a89fe7bce5b86",
+    "gameSourcesSha256": "55083301de6ddc2f7fdfc6a9a859aece4f3b31750c946441fa4f88f9c36864e0",
+    "gameCoreSha256": "e68764384a42d26e2e0bcd3213ffe7b8fbc4ca0755abe29d8dcaf4360eac4776",
+    "started": "2026-10-04T09:36:33.740Z",
+    "finishedGameSourcesSha256": "55083301de6ddc2f7fdfc6a9a859aece4f3b31750c946441fa4f88f9c36864e0",
+    "unchangedDuringRun": true,
+    "finished": "2026-10-04T09:36:41.022Z"
+  },
+  "rooms": [
+    {
+      "number": 16,
+      "attacks": [
+        {
+          "name": "reverse-service-stair-roof-drop-skips-projected-delivery",
+          "completed": true,
+          "simulationFinishedWithoutDriverError": true,
+          "frames": 5231,
+          "error": null,
+          "observed": {
+            "frames": 1029,
+            "physicsSteps": 10461,
+            "maxY": 15.6,
+            "forceSteps": 0,
+            "loadedSteps": 1781,
+            "shots": [],
+            "obstacles": [],
+            "stairArrival": {
+              "player": [
+                7.0146373288913955,
+                7.4,
+                2.550061008354328
+              ],
+              "cargo": [
+                6.974677269861923,
+                8.450897714431353,
+                3.2689485887811203
+              ],
+              "held": true,
+              "teleports": 0,
+              "cargoTransports": 0,
+              "won": false
+            },
+            "roofArrival": {
+              "player": [
+                2.4762521507687407,
+                6.874999997019768,
+                0.08226732299741299
+              ],
+              "cargo": [
+                3.091786715014161,
+                7.940465667761925,
+                0.4557813369178696
+              ],
+              "held": true,
+              "teleports": 0,
+              "cargoTransports": 0,
+              "won": false
+            },
+            "roofRelease": {
+              "player": [
+                2.333422779392505,
+                6.874999997019768,
+                -0.05127785850811744
+              ],
+              "cargo": [
+                2.8354346643623796,
+                7.919755997169552,
+                -0.5675086032487001
+              ],
+              "held": false,
+              "teleports": 0,
+              "cargoTransports": 0,
+              "won": false
+            },
+            "unprojectedAscent": {
+              "player": [
+                12.24993646261219,
+                13.300819136708064,
+                -0.0004110869686226233
+              ],
+              "cargo": [
+                0.7559399757198557,
+                2.5149982368656887,
+                -1.4436975328172883
+              ],
+              "held": false,
+              "teleports": 0,
+              "cargoTransports": 0,
+              "won": false
+            },
+            "upperCargoExit": {
+              "player": [
+                0.0028163931985257713,
+                13.425000001490117,
+                4.250740921091946
+              ],
+              "cargo": [
+                0.10533874055140835,
+                13.91468099384654,
+                6.753742048383527
+              ],
+              "held": false,
+              "teleports": 0,
+              "cargoTransports": 1,
+              "won": false
+            }
+          },
+          "state": {
+            "player": [
+              -16.006920021999463,
+              13.4,
+              -7.17214370275261
+            ],
+            "cargo": [
+              -16.01322089723165,
+              14.476572737753079,
+              -6.452120319600425
+            ],
+            "held": true,
+            "teleports": 0,
+            "cargoTransports": 1,
+            "won": true
+          },
+          "outcome": "completed-requires-causal-review"
+        }
+      ],
+      "suspectedShortcuts": [
+        "reverse-service-stair-roof-drop-skips-projected-delivery"
+      ]
+    }
+  ],
+  "counts": {
+    "levels": 1,
+    "attempts": 1,
+    "completed": 1,
+    "blockedWithCompletedDriver": 0,
+    "driverOrSetupErrors": 0
+  }
+}

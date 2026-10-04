@@ -34,8 +34,15 @@ export function buildRoom16(game,index=15){
  for(let i=0;i<22;i++)deck('Descending island return',5,9,3+i*.43,3+(i+1)*.43,7.4-(i+1)*5.4/22);
  deck('Descending stair landing',5,15,12.46,14,2);
  deck('Dry lift approach',9,15,2,12.46,2);
- // The lower court supplies the last tread at y=0.
- for(let i=0;i<7;i++)deck('Lower service stair',11,15,13+i*.4,13+(i+1)*.4,2-(i+1)*.25);
+ // This is the retaining end of the elevated service dock, reached by
+ // descending from the island. Ground-facing footholds formerly let a
+ // traveller carry the original weight up the same stairs, throw it from
+ // the well rim, and jump onto the rising car without any portal or light.
+ // The visible two-metre plinth preserves the dock's descent and boarding
+ // floor while removing that reverse climb from the recovery court.
+ deck('Raised service retaining dock',11,15,14,15.8,2);
+ const retaining=w.box([13,.925,14.9],[3.82,1.85,1.62],w.materials.wall);
+ retaining.name='Service dock retaining plinth';
  deck('Counterweight basin',-3,3,-3,3,2);
  // The well is reached by gravity, not by carrying through a doorway. Its
  // roof overhang hides the plate from low and lateral portal sight lines.

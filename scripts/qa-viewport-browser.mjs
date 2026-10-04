@@ -15,12 +15,12 @@ const save=()=>fs.writeFileSync(path.join(out,'report.json'),JSON.stringify(repo
 let server,browser;
 async function bounded(promise,ms,label){let timer;try{return await Promise.race([promise,new Promise((_,reject)=>{timer=setTimeout(()=>reject(Error(`${label} timed out after ${ms}ms`)),ms);})]);}finally{clearTimeout(timer);}}
 async function closeOwnedBrowser(){const old=browser;browser=undefined;if(!old)return;try{await bounded(old.close(),3000,'Owned Chrome close');}catch{const child=old.process();if(child?.exitCode===null){try{process.kill(-child.pid,'SIGKILL');}catch{child.kill('SIGKILL');}}}}
-async function waitScreen(page,id){await page.waitForFunction(id=>{const e=document.getElementById(id);return e&&!e.inert&&e.classList.contains('screen--active')&&getComputedStyle(e).opacity==='1'&&getComputedStyle(e).visibility==='visible';},{timeout:60000},id);}
+async function waitScreen(page,id){await page.waitForFunction(id=>{const e=document.getElementById(id);return e&&!e.inert&&e.classList.contains('screen--active')&&getComputedStyle(e).opacity==='1'&&getComputedStyle(e).visibility==='visible';},{timeout:20000},id);}
 async function scrollAndWaitHit(page,selector){
  await page.$eval(selector,e=>e.scrollIntoView({block:'center',inline:'nearest',behavior:'instant'}));
- await page.waitForFunction(selector=>{const e=document.querySelector(selector);if(!e||e.closest('[inert]'))return false;const r=e.getBoundingClientRect();return r.width>0&&r.height>0&&r.x>=0&&r.y>=0&&r.x+r.width<=innerWidth+.5&&r.y+r.height<=innerHeight+.5&&e.contains(document.elementFromPoint(r.x+r.width/2,r.y+r.height/2));},{timeout:60000},selector);
+ await page.waitForFunction(selector=>{const e=document.querySelector(selector);if(!e||e.closest('[inert]'))return false;const r=e.getBoundingClientRect();return r.width>0&&r.height>0&&r.x>=0&&r.y>=0&&r.x+r.width<=innerWidth+.5&&r.y+r.height<=innerHeight+.5&&e.contains(document.elementFromPoint(r.x+r.width/2,r.y+r.height/2));},{timeout:20000},selector);
 }
-async function waitTutorial(page){await page.waitForFunction(()=>{const e=document.querySelector('.lab-tutorial');return window.__NESI_DEMO_GAME__?.state==='playing'&&e&&!e.hidden&&getComputedStyle(e).display!=='none'&&e.textContent.trim();},{timeout:60000});}
+async function waitTutorial(page){await page.waitForFunction(()=>{const e=document.querySelector('.lab-tutorial');return window.__NESI_DEMO_GAME__?.state==='playing'&&e&&!e.hidden&&getComputedStyle(e).display!=='none'&&e.textContent.trim();},{timeout:20000});}
 async function diagnose(page){return await bounded(page.evaluate(()=>{
  const rect=e=>{if(!e)return null;const r=e.getBoundingClientRect(),hit=document.elementFromPoint(r.x+r.width/2,r.y+r.height/2),s=getComputedStyle(e);return {x:r.x,y:r.y,width:r.width,height:r.height,hidden:e.hidden,inert:!!e.closest('[inert]'),display:s.display,visibility:s.visibility,opacity:s.opacity,hit:!!hit&&e.contains(hit),hitElement:hit?{tag:hit.tagName,id:hit.id,className:String(hit.className)}:null};};
  const g=window.__NESI_DEMO_GAME__;
@@ -39,41 +39,43 @@ try{
  for(const profile of profiles){
   browser=await puppeteer.launch({executablePath:process.env.CHROME_PATH||'/usr/bin/chromium',headless:true,protocolTimeout:180000,
    args:['--no-sandbox','--disable-dev-shm-usage','--use-angle=swiftshader','--enable-unsafe-swiftshader']});
-  const page=await browser.newPage();page.setDefaultTimeout(60000);
+  const page=await browser.newPage();page.setDefaultTimeout(180000);
   const errors=[];page.on('pageerror',e=>errors.push(String(e)));
   await page.setViewport({width:profile.sizes[0][0],height:profile.sizes[0][1],deviceScaleFactor:1,isMobile:profile.mobile,hasTouch:profile.mobile});
-  await page.evaluateOnNewDocument(()=>localStorage.setItem('brainrot-foundation-v1:brainrot-portal.preferences.v24',JSON.stringify({quality:'low',muted:true,tutorial:true})));
+  await page.evaluateOnNewDocument(()=>{
+   localStorage.setItem('brainrot-foundation-v1:brainrot-portal.preferences.v24',JSON.stringify({quality:'low',muted:true,tutorial:true}));
+   window.__VIEWPORT_INPUT_TRACE__=[];
+   for(const type of ['pointerdown','pointerup','click'])document.addEventListener(type,e=>{
+    window.__VIEWPORT_INPUT_TRACE__.push({type,target:e.target.id||e.target.getAttribute?.('aria-label')||e.target.tagName,pointerType:e.pointerType||null,x:e.clientX,y:e.clientY,state:document.body?.dataset.playState});
+    if(window.__VIEWPORT_INPUT_TRACE__.length>100)window.__VIEWPORT_INPUT_TRACE__.shift();
+   },true);
+  });
   const url=new URL(process.env.PAGE_URL||'http://127.0.0.1:4184/');url.search='?edition=foundation&level=1&debug=1';
   report.active={profile:profile.name,phase:'opening'};save();
   await page.goto(url.href,{waitUntil:'domcontentloaded'});
   await page.waitForFunction(()=>window.__NESI_DEMO_GAME__?.state==='ready');
   await page.$eval('#play-button',e=>e.scrollIntoView({block:'center'}));
   await page.waitForFunction(()=>{const b=document.querySelector('#play-button'),r=b.getBoundingClientRect();return b.contains(document.elementFromPoint(r.x+r.width/2,r.y+r.height/2));});
-  await page.click('#play-button');await page.waitForFunction(()=>window.__NESI_DEMO_GAME__?.state==='playing');
+  if(profile.mobile)await page.tap('#play-button');else await page.click('#play-button');await page.waitForFunction(()=>window.__NESI_DEMO_GAME__?.state==='playing');
   await waitTutorial(page);
   for(let sizeIndex=0;sizeIndex<profile.sizes.length;sizeIndex++){
    const [width,height]=profile.sizes[sizeIndex];
    await page.setViewport({width,height,deviceScaleFactor:1,isMobile:profile.mobile,hasTouch:profile.mobile});
    for(const quality of ['low','balanced','high']){
-    const row={profile:profile.name,sizeIndex,width,height,quality,pass:false,timings:{}};
+    const row={profile:profile.name,sizeIndex,width,height,quality,pass:false};
     report.active={...row,phase:'changing-quality'};save();
-    async function phase(name,action){
-     row.phase=name;report.active.phase=name;report.active.phaseStartedAt=new Date().toISOString();save();
-     const start=performance.now();try{return await action();}finally{row.timings[name]={milliseconds:Number((performance.now()-start).toFixed(1))};save();}
-    }
     try{
-     await phase('pause-ready',async()=>{
-      if(profile.mobile)await page.click('.lab-mobile button:last-child');else await page.keyboard.press('Escape');
-      await page.waitForFunction(()=>window.__NESI_DEMO_GAME__?.state==='paused');await waitScreen(page,'pause-screen');
-     });
-     await phase('quality-select',async()=>{
-      await scrollAndWaitHit(page,'#quality-select');
-      row.qualityControl=await page.$eval('#quality-select',e=>{const r=e.getBoundingClientRect(),hit=document.elementFromPoint(r.x+r.width/2,r.y+r.height/2);return {visible:r.width>0&&r.height>0,hit:e.contains(hit),rect:{x:r.x,y:r.y,width:r.width,height:r.height},hitElement:hit?{tag:hit.tagName,id:hit.id}:null};});
-      assert.equal(row.qualityControl.visible,true);assert.equal(row.qualityControl.hit,true);await page.select('#quality-select',quality);
-     });
-     await phase('resume',async()=>{await scrollAndWaitHit(page,'#resume-button');await page.click('#resume-button');await page.waitForFunction(()=>window.__NESI_DEMO_GAME__?.state==='playing');});
-     await phase('tutorial',()=>waitTutorial(page));
-     await phase('buffer-ready',()=>page.waitForFunction(()=>{const g=window.__NESI_DEMO_GAME__,r=g.renderer.domElement.getBoundingClientRect();return Math.abs(g.camera.aspect-r.width/r.height)<1e-5&&Math.abs(g.renderer.domElement.width-r.width*g.renderer.getPixelRatio())<=1&&Math.abs(g.renderer.domElement.height-r.height*g.renderer.getPixelRatio())<=1;}));
+     if(profile.mobile)await page.tap('.lab-mobile button:last-child');else await page.keyboard.press('Escape');
+     await page.waitForFunction(()=>window.__NESI_DEMO_GAME__?.state==='paused');
+     await waitScreen(page,'pause-screen');
+     await scrollAndWaitHit(page,'#quality-select');
+     row.qualityControl=await page.$eval('#quality-select',e=>{const r=e.getBoundingClientRect(),hit=document.elementFromPoint(r.x+r.width/2,r.y+r.height/2);return {visible:r.width>0&&r.height>0,hit:e.contains(hit),rect:{x:r.x,y:r.y,width:r.width,height:r.height},hitElement:hit?{tag:hit.tagName,id:hit.id}:null};});
+     assert.equal(row.qualityControl.visible,true);assert.equal(row.qualityControl.hit,true);
+     await page.select('#quality-select',quality);
+     await scrollAndWaitHit(page,'#resume-button');
+     if(profile.mobile)await page.tap('#resume-button');else await page.click('#resume-button');await page.waitForFunction(()=>window.__NESI_DEMO_GAME__?.state==='playing');
+     await waitTutorial(page);
+     await page.waitForFunction(()=>{const g=window.__NESI_DEMO_GAME__,r=g.renderer.domElement.getBoundingClientRect();return Math.abs(g.camera.aspect-r.width/r.height)<1e-5&&Math.abs(g.renderer.domElement.width-r.width*g.renderer.getPixelRatio())<=1&&Math.abs(g.renderer.domElement.height-r.height*g.renderer.getPixelRatio())<=1;});
      row.metrics=await page.evaluate(()=>{
       const g=window.__NESI_DEMO_GAME__,canvas=g.renderer.domElement;
       const rect=e=>{const r=e.getBoundingClientRect();return {x:r.x,y:r.y,width:r.width,height:r.height};};
@@ -98,17 +100,15 @@ try{
      assert.ok(m.tutorial&&m.tutorial.text.trim(),'Production tutorial must be visible');assert.ok(m.overlaps.every(o=>o.area===0),'Tutorial overlaps an action');
      assert.deepEqual(errors,[]);row.pass=true;
     }catch(error){
-     row.error=String(error);report.errors.push({profile:profile.name,width,height,quality,error:String(error)});row.failureDOM=await diagnose(page);
-     if(quality==='high'&&String(error).includes('Timeout'))row.stopRequested='High graphics did not settle within the finite software UI bound';
+     row.error=String(error);report.errors.push({profile:profile.name,width,height,quality,error:String(error)});row.failureDOM=await diagnose(page);row.inputTrace=await page.evaluate(()=>window.__VIEWPORT_INPUT_TRACE__);
      // Recover only with the visible production button. The failed assertion
      // remains failed; the next row gets an independent native UI attempt.
-     if(!row.stopRequested&&row.failureDOM.state==='paused'){
+     if(row.failureDOM.state==='paused'){
       try{await waitScreen(page,'pause-screen');await scrollAndWaitHit(page,'#resume-button');await page.click('#resume-button');await page.waitForFunction(()=>window.__NESI_DEMO_GAME__?.state==='playing');await waitTutorial(page);row.recovery={method:'native visible Resume click',state:'playing'};}
       catch(error){row.recovery={method:'native visible Resume click',error:String(error),DOM:await diagnose(page)};}
      }
     }
     report.rows.push(row);save();console.log(`${row.pass?'PASS':'FAIL'} viewport ${profile.name} ${width}x${height} ${quality}: ${row.error||`${row.metrics.buffer.width}x${row.metrics.buffer.height}, ${row.metrics.actions.length} actions`}`);
-    if(row.stopRequested)throw Error(`${row.stopRequested}: ${profile.name} ${width}x${height} ${row.phase}`);
    }
   }
   if(process.env.CAPTURE!=='0'){

@@ -151,6 +151,138 @@ jobs:
             qa/yandex-package.json
             artifacts/brainrot-portal-yandex.zip
           retention-days: 30
+  novel-speedrun:
+    name: Novel speedrun attacks (${{ matrix.group }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - group: core
+            script: qa-speedrun-core-new.mjs
+            args: --room31
+          - group: early
+            script: qa-speedrun-early-new.mjs
+            rooms: '1,2,3,4,5,6,7,8,9,10,11,12,13,14'
+          - group: middle
+            script: qa-speedrun-middle-new.mjs
+            rooms: '15,16,17,18,19,20,21,22,23,24,25,26,27,28'
+          - group: late
+            script: qa-speedrun-late-new.mjs
+            args: --levels=29-40 --out=qa/novel-speedrun/report.json
+          - group: castle-canonical
+            script: qa-speedrun-castle-new.mjs
+            cases: canonical-full-journey,canonical-independent-order
+          - group: castle-early
+            script: qa-speedrun-castle-new.mjs
+            cases: sluice-empty-gap-jump,sluice-empty-east-rim,freight-separated-cargo-transit,freight-cargo-service-sill-hop,freight-airborne-cargo-service-slit,optics-no-reflector-pair,optics-reflector-double-toggle,hoist-no-lift-ride-exterior-stairs,hoist-no-portals-exterior-cargo
+          - group: castle-middle
+            script: qa-speedrun-castle-new.mjs
+            cases: archive-controls-spam-wall-pinch,flywheel-wrong-ratio-max-crank,flywheel-unloaded-overspeed,magnet-direct-last-coil,migrant-no-rail-portal-push,migrant-readdress-moving-transit
+          - group: castle-late
+            script: qa-speedrun-castle-new.mjs
+            cases: pendulum-catch-before-a,inertia-west-wall-end-landing,inertia-cargo-west-wall-end,crown-out-of-order-high-gallery,crown-held-socket-contact
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Pin the exact source and every novel attack harness
+        run: |
+          mkdir -p qa/novel-speedrun
+          test "$(git rev-parse HEAD)" = "$BUILD_COMMIT"
+          git rev-parse HEAD > qa/novel-speedrun/source-commit.txt
+          git ls-files -z src/game scripts/lib 'scripts/qa-speedrun-*.mjs' | xargs -0 sha256sum > qa/novel-speedrun/source-sha256.txt
+      - name: Run every assigned novel attack through production inputs or explicit core fixtures
+        env:
+          ROOMS: ${{ matrix.rooms }}
+          CASES: ${{ matrix.cases }}
+          OUT: qa/novel-speedrun/report.json
+          REPORT: qa/novel-speedrun/report.json
+        run: node scripts/${{ matrix.script }} ${{ matrix.args }}
+      - name: Require complete coverage and explicit physical outcome classification
+        env:
+          SPEEDRUN_GROUP: ${{ matrix.group }}
+          EXPECTED_ROOMS: ${{ matrix.rooms }}
+          EXPECTED_CASES: ${{ matrix.cases }}
+        run: |
+          sha256sum --quiet -c qa/novel-speedrun/source-sha256.txt
+          node --input-type=module <<'JS'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const q=JSON.parse(fs.readFileSync('qa/novel-speedrun/report.json'));
+          const group=process.env.SPEEDRUN_GROUP;
+          const expectedRooms=process.env.EXPECTED_ROOMS?.split(',').filter(Boolean).map(Number);
+          const sameSet=(actual,expected)=>assert.deepEqual([...actual].sort(),[...expected].sort());
+          if(group==='core'){
+            assert.equal(q.pass,true);assert.equal(q.results.length,8);assert.ok(q.results.every(r=>r.pass));
+            assert.equal(q.authoredLevelAttempt?.pass,true);assert.equal(q.authoredLevelAttempt.level,31);
+            assert.equal(q.authoredLevelAttempt.resets,0);assert.equal(q.authoredLevelAttempt.respawns,0);
+          }else if(group==='early'){
+            assert.equal(q.source.unchangedDuringRun,true);assert.equal(q.source.harnessUnchangedDuringRun,true);
+            assert.equal(q.counts.suspectedShortcuts,0);assert.equal(q.counts.setupOrDriverErrors,0);
+            assert.equal(q.counts.attacks,75);assert.equal(q.rooms.reduce((n,r)=>n+r.attacks.length,0),75);
+            sameSet(q.rooms.map(r=>r.number),expectedRooms);
+            for(const room of q.rooms){
+              assert.ok(room.attacks.length>=5);
+              for(const a of room.attacks){
+                if(a.completed){
+                  assert.equal(room.number,1);assert.equal(a.name,'highest-ceramic-edge-exit-clear-in-flight');
+                  assert.equal(a.outcome,'completed-with-required-introductory-pair');assert.ok(a.causalReview);assert.ok(a.teleports>0);
+                }else if(a.outcome==='blocked-within-finite-attempt')assert.equal(a.error,null);
+                else if(a.outcome==='blocked-by-shot-validation')assert.match(a.error,/Rejected shot/);
+                else if(a.outcome==='reset-aborted-physical-attempt')assert.match(a.error,/unexpected reset/);
+                else assert.fail(`Unclassified early outcome: room ${room.number}, ${a.name}, ${a.outcome}`);
+              }
+            }
+          }else if(group==='middle'){
+            assert.equal(q.source.unchangedDuringRun,true);assert.equal(q.counts.completed,0);assert.equal(q.counts.driverOrSetupErrors,0);
+            sameSet(q.rooms.map(r=>r.number),expectedRooms);
+            for(const room of q.rooms){assert.ok(room.attacks.length>=6);assert.ok(room.attacks.every(a=>!a.completed&&!a.error));}
+            assert.ok(q.rooms.find(r=>r.number===16).attacks.some(a=>a.name==='reverse-service-stair-roof-drop-skips-projected-delivery'));
+          }else if(group==='late'){
+            assert.equal(q.pass,true);assert.equal(q.fingerprint.drift,false);
+            sameSet(q.attemptedLevels,Array.from({length:12},(_,i)=>i+29));
+            assert.equal(q.results.length,42);
+            for(let level=29;level<=40;level++)assert.ok(q.results.filter(r=>r.level===level).length>=3);
+            const alternateName='carry-middle-cargo-keeps-second-flow-skips-both-latches';
+            const alternatives=q.results.filter(r=>r.name===alternateName);
+            assert.equal(alternatives.length,1);
+            for(const row of q.results){
+              assert.ok(!row.error);assert.equal(row.resets,0);assert.equal(row.respawns,0);
+              assert.equal(row.sameCompanion,true);assert.equal(row.sameCargoBody,true);
+              assert.equal(row.final.cargoUuid,row.originalCargoUuid);assert.equal(row.final.cargoBodyId,row.originalCargoBodyId);
+              if(row.name!==alternateName){assert.equal(row.outcome,'blocked');continue;}
+              assert.equal(row.level,35);assert.equal(row.outcome,'legitimate_alternative');
+              assert.equal(row.final.won,true);assert.equal(row.final.held,true);assert.equal(row.final.cargoTransports,0);
+              assert.equal(row.final.firstLatched,false);assert.equal(row.final.secondLatched,false);assert.deepEqual(row.final.airflow,[false,true]);
+              const firstCause=row.checkpoints.find(c=>c.state.airflow?.[0]===true&&c.state.airflow?.[1]===false&&c.state.first?.progress>.94);
+              const secondCause=row.checkpoints.find(c=>c.state.airflow?.[0]===false&&c.state.airflow?.[1]===true&&c.state.second?.progress>.94);
+              assert.ok(firstCause&&secondCause,'The accepted room 35 route must preserve both real portal-mediated airflow causes');
+              assert.ok(row.checkpoints.indexOf(firstCause)<row.checkpoints.indexOf(secondCause));
+            }
+          }else if(group.startsWith('castle-')){
+            assert.equal(q.pass,true);assert.equal(q.finished,true);assert.deepEqual(q.sourceDrift,[]);
+            sameSet(q.rows.map(r=>r.name),process.env.EXPECTED_CASES.split(','));
+            for(const row of q.rows){
+              assert.equal(row.executed,true);assert.equal(row.candidateBypass,false);assert.equal(row.sameCompanion,true);assert.equal(row.finiteActors,true);
+              if(row.name.startsWith('canonical-')){assert.equal(row.expectedWin,true);assert.equal(row.routeVerified,true);}
+              if(row.error)assert.ok((row.stoppedByPhysicalCollision&&row.inputAttackStarted)||row.endedByProductionDeath,`Unclassified castle error: ${row.name}`);
+            }
+          }else assert.fail(`Unknown speedrun group: ${group}`);
+          JS
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: creative-novel-speedrun-${{ matrix.group }}
+          path: qa/novel-speedrun/
+          retention-days: 30
+          if-no-files-found: error
   all-webgl:
     name: Complete production WebGL routes (${{ matrix.levels }})
     runs-on: ubuntu-latest
@@ -203,7 +335,7 @@ jobs:
           retention-days: 14
   candidate:
     name: Exact upgraded source, production WebGL and complete recording
-    needs: [source, campaign, preserve-base, adversarial, all-webgl]
+    needs: [source, campaign, preserve-base, adversarial, novel-speedrun, all-webgl]
     runs-on: ubuntu-latest
     timeout-minutes: 295
     steps:
@@ -272,7 +404,7 @@ jobs:
           retention-days: 14
       - name: Record one continuous upgraded Tower walkthrough from that exact package
         if: github.event_name == 'push' || inputs.record
-        run: RECORD=1 OUT_DIR=qa/singularity-recording node scripts/singularity-browser.mjs
+        run: RECORD=1 CAPTURE_FPS=4 CAPTURE_WIDTH=640 CAPTURE_HEIGHT=360 OUT_DIR=qa/singularity-recording node scripts/singularity-browser.mjs
       - name: Preserve the complete upgraded video and exact-source evidence
         if: always()
         uses: actions/upload-artifact@v4

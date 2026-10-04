@@ -1,0 +1,6214 @@
+{
+  "level": 41,
+  "edition": "foundation",
+  "version": "new-input-speedrun-castle-v1",
+  "backend": "production-headless-physics",
+  "sources": {
+    "LabSingularityLevel.js": "8304ad2ad99ecf9d13f0d953e337ab354f5cfecf468db1514a0ebd97c96eabf6",
+    "LabSingularityLayout.js": "74b14445d54f7e18141366fef2feb80e586df18b57a72092f803b6e039ee7de9",
+    "LabSingularityJourney.js": "2f78fa9a9497b27091642cb8f0f1bf9c0288a36794c474a04e6d0b3ba29b054a",
+    "LabGame.js": "e68764384a42d26e2e0bcd3213ffe7b8fbc4ca0755abe29d8dcaf4360eac4776",
+    "LabPhysics.js": "ef9f066fa8dd2069f71342cf61dbd57eb6e5ede548f5cd40e7947fb91af6eb2f",
+    "LabPortals.js": "ddc8a55c0d4983dee747c88510b81d52296a0a72988edc3172c6a212285b1d13"
+  },
+  "harnessSha256": "f40b8cf902ae32b4f7be96962b49ddd504de9cc4f712cd0b74c3610f90742821",
+  "limitations": [
+    "Finite ordinary-input tests do not prove every alternate route is absent.",
+    "An incomplete authentic prefix is a setup failure, not a tested blocked alternate route.",
+    "Headless physics provides no visual, FPS or human-playtest evidence."
+  ],
+  "rows": [
+    {
+      "name": "inertia-west-wall-end-landing",
+      "frames": 4785,
+      "shots": [],
+      "interactions": [],
+      "walks": [
+        {
+          "target": [
+            -23,
+            36,
+            33
+          ],
+          "start": {
+            "frame": 6,
+            "player": [
+              -23.171557141180784,
+              36,
+              33.099830574487434
+            ],
+            "cargo": [
+              2.3868368261283748,
+              36.38999829576034,
+              57.333951535132115
+            ],
+            "held": false,
+            "teleports": 4,
+            "state": "playing",
+            "solved": [
+              "freight",
+              "sluice",
+              "optics",
+              "hoist",
+              "archive",
+              "flywheel",
+              "magnet",
+              "migrant",
+              "pendulum"
+            ]
+          }
+        },
+        {
+          "target": [
+            -6,
+            36,
+            33
+          ],
+          "start": {
+            "frame": 6,
+            "player": [
+              -23.171557141180784,
+              36,
+              33.099830574487434
+            ],
+            "cargo": [
+              2.3868368261283748,
+              36.38999829576034,
+              57.333951535132115
+            ],
+            "held": false,
+            "teleports": 4,
+            "state": "playing",
+            "solved": [
+              "freight",
+              "sluice",
+              "optics",
+              "hoist",
+              "archive",
+              "flywheel",
+              "magnet",
+              "migrant",
+              "pendulum"
+            ]
+          }
+        },
+        {
+          "target": [
+            -6,
+            36,
+            39
+          ],
+          "start": {
+            "frame": 212,
+            "player": [
+              -6.211827831391436,
+              36,
+              33.00073151712015
+            ],
+            "cargo": [
+              2.4528390380467657,
+              36.38999829576036,
+              57.30844282658391
+            ],
+            "held": false,
+            "teleports": 4,
+            "state": "playing",
+            "solved": [
+              "freight",
+              "sluice",
+              "optics",
+              "hoist",
+              "archive",
+              "flywheel",
+              "magnet",
+              "migrant",
+              "pendulum"
+            ]
+          }
+        },
+        {
+          "target": [
+            0,
+            36,
+            39
+          ],
+          "start": {
+            "frame": 287,
+            "player": [
+              -5.992660375122801,
+              36,
+              38.7596606552419
+            ],
+            "cargo": [
+              2.9934966037999695,
+              36.38999830150717,
+              57.04991830793155
+            ],
+            "held": false,
+            "teleports": 4,
+            "state": "playing",
+            "solved": [
+              "freight",
+              "sluice",
+              "optics",
+              "hoist",
+              "archive",
+              "flywheel",
+              "magnet",
+              "migrant",
+              "pendulum"
+            ]
+          }
+        },
+        {
+          "target": [
+            0,
+            36,
+            -13
+          ],
+          "start": {
+            "frame": 362,
+            "player": [
+              -0.2427660036817069,
+              36,
+              39.00687376462264
+            ],
+            "cargo": [
+              3.359709984724094,
+              36.389998230483585,
+              56.87480723785437
+            ],
+            "held": false,
+            "teleports": 4,
+            "state": "playing",
+            "solved": [
+              "freight",
+              "sluice",
+              "optics",
+              "hoist",
+              "archive",
+              "flywheel",
+              "magnet",
+              "migrant",
+              "pendulum"
+            ]
+          }
+        },
+        {
+          "target": [
+            0,
+            36,
+            -52
+          ],
+          "start": {
+            "frame": 989,
+            "player": [
+              0.0005916000050605131,
+              36,
+              -12.76432961891667
+            ],
+            "cargo": [
+              4.5936632397252035,
+              36.38999814555203,
+              55.32512140405686
+            ],
+            "held": false,
+            "teleports": 4,
+            "state": "playing",
+            "solved": [
+              "freight",
+              "sluice",
+              "optics",
+              "hoist",
+              "archive",
+              "flywheel",
+              "magnet",
+              "migrant",
+              "pendulum"
+            ]
+          }
+        },
+        {
+          "target": [
+            -6,
+            36,
+            -52
+          ],
+          "start": {
+            "frame": 1459,
+            "player": [
+              -0.0000017653774507600334,
+              36,
+              -51.79832434957963
+            ],
+            "cargo": [
+              4.4386723326465685,
+              36.38999814621176,
+              54.601926218450494
+            ],
+            "held": false,
+            "teleports": 4,
+            "state": "playing",
+            "solved": [
+              "freight",
+              "sluice",
+              "optics",
+              "hoist",
+              "archive",
+              "flywheel",
+              "magnet",
+              "migrant",
+              "pendulum"
+            ]
+          }
+        },
+        {
+          "target": [
+            -6,
+            54,
+            18
+          ],
+          "start": {
+            "frame": 1534,
+            "player": [
+              -5.759961781387652,
+              36.22784810126582,
+              -52.00751776537275
+            ],
+            "cargo": [
+              4.763133926580998,
+              36.38999817230272,
+              54.44690661066801
+            ],
+            "held": false,
+            "teleports": 4,
+            "state": "playing",
+            "solved": [
+              "freight",
+              "sluice",
+              "optics",
+              "hoist",
+              "archive",
+              "flywheel",
+              "magnet",
+              "migrant",
+              "pendulum"
+            ]
+          }
+        },
+        {
+          "target": [
+            0,
+            54,
+            18
+          ],
+          "start": {
+            "frame": 2377,
+            "player": [
+              -6.000440080948974,
+              54,
+              17.764690833867604
+            ],
+            "cargo": [
+              3.5564003999800833,
+              36.389998697790354,
+              55.296949551926694
+            ],
+            "held": false,
+            "teleports": 4,
+            "state": "playing",
+            "solved": [
+              "freight",
+              "sluice",
+              "optics",
+              "hoist",
+              "archive",
+              "flywheel",
+              "magnet",
+              "migrant",
+              "pendulum"
+            ]
+          }
+        },
+        {
+          "target": [
+            0,
+            54,
+            -35
+          ],
+          "start": {
+            "frame": 2452,
+            "player": [
+              -0.23959415145623145,
+              54,
+              18.006887553247015
+            ],
+            "cargo": [
+              3.556397349775971,
+              36.38999818683692,
+              55.29694973393282
+            ],
+            "held": false,
+            "teleports": 4,
+            "state": "playing",
+            "solved": [
+              "freight",
+              "sluice",
+              "optics",
+              "hoist",
+              "archive",
+              "flywheel",
+              "magnet",
+              "migrant",
+              "pendulum"
+            ]
+          }
+        },
+        {
+          "target": [
+            -14,
+            54,
+            -35
+          ],
+          "start": {
+            "frame": 3091,
+            "player": [
+              0.000587093693651875,
+              54,
+              -34.76440792032954
+            ],
+            "cargo": [
+              3.8071855531000467,
+              36.38999817075404,
+              54.38272825847834
+            ],
+            "held": false,
+            "teleports": 4,
+            "state": "playing",
+            "solved": [
+              "freight",
+              "sluice",
+              "optics",
+              "hoist",
+              "archive",
+              "flywheel",
+              "magnet",
+              "migrant",
+              "pendulum"
+            ]
+          }
+        },
+        {
+          "target": [
+            -16,
+            54,
+            -23
+          ],
+          "start": {
+            "frame": 3262,
+            "player": [
+              -13.761396777704691,
+              54,
+              -35.002479179568574
+            ],
+            "cargo": [
+              3.847326845671482,
+              36.389998171129996,
+              54.394250525676405
+            ],
+            "held": false,
+            "teleports": 4,
+            "state": "playing",
+            "solved": [
+              "freight",
+              "sluice",
+              "optics",
+              "hoist",
+              "archive",
+              "flywheel",
+              "magnet",
+              "migrant",
+              "pendulum"
+            ]
+          }
+        },
+        {
+          "target": [
+            -16,
+            54,
+            -19
+          ],
+          "start": {
+            "frame": 3411,
+            "player": [
+              -15.966821710926883,
+              54,
+              -23.23293896366674
+            ],
+            "cargo": [
+              4.876094533068438,
+              36.3899981447617,
+              54.98487495611477
+            ],
+            "held": false,
+            "teleports": 4,
+            "state": "playing",
+            "solved": [
+              "freight",
+              "sluice",
+              "optics",
+              "hoist",
+              "archive",
+              "flywheel",
+              "magnet",
+              "migrant",
+              "pendulum"
+            ]
+          }
+        },
+        {
+          "target": [
+            -68,
+            54,
+            -19
+          ],
+          "start": {
+            "frame": 3461,
+            "player": [
+              -16.001647533529106,
+              54,
+              -19.202579146247214
+            ],
+            "cargo": [
+              5.089819188079345,
+              36.389998144761705,
+              55.107576129744956
+            ],
+            "held": false,
+            "teleports": 4,
+            "state": "playing",
+            "solved": [
+              "freight",
+              "sluice",
+              "optics",
+              "hoist",
+              "archive",
+              "flywheel",
+              "magnet",
+              "migrant",
+              "pendulum"
+            ]
+          }
+        },
+        {
+          "target": [
+            -68,
+            54,
+            -23
+          ],
+          "start": {
+            "frame": 4088,
+            "player": [
+              -67.7607254591116,
+              54,
+              -18.99930483111441
+            ],
+            "cargo": [
+              4.738308948011867,
+              36.38999818339052,
+              54.41357609829986
+            ],
+            "held": false,
+            "teleports": 4,
+            "state": "playing",
+            "solved": [
+              "freight",
+              "sluice",
+              "optics",
+              "hoist",
+              "archive",
+              "flywheel",
+              "magnet",
+              "migrant",
+              "pendulum"
+            ]
+          }
+        },
+        {
+          "target": [
+            -50,
+            54,
+            -22
+          ],
+          "start": {
+            "frame": 4139,
+            "player": [
+              -68.01283399399722,
+              54,
+              -22.75961183807262
+            ],
+            "cargo": [
+              4.5499647326265675,
+              36.38999818372416,
+              54.400967944698394
+            ],
+            "held": false,
+            "teleports": 4,
+            "state": "playing",
+            "solved": [
+              "freight",
+              "sluice",
+              "optics",
+              "hoist",
+              "archive",
+              "flywheel",
+              "magnet",
+              "migrant",
+              "pendulum"
+            ]
+          }
+        },
+        {
+          "target": [
+            -25,
+            50.5,
+            -35
+          ],
+          "start": {
+            "frame": 4532,
+            "player": [
+              -38.73575171063502,
+              50.5,
+              -33.104357125243695
+            ],
+            "cargo": [
+              4.476667749051243,
+              36.38999818354389,
+              54.39606143730622
+            ],
+            "held": false,
+            "teleports": 4,
+            "state": "playing",
+            "solved": [
+              "freight",
+              "sluice",
+              "optics",
+              "hoist",
+              "archive",
+              "flywheel",
+              "magnet",
+              "migrant",
+              "pendulum"
+            ]
+          }
+        }
+      ],
+      "trajectory": [
+        {
+          "frame": 120,
+          "player": [
+            -13.838183703315494,
+            36,
+            33.02706804662376
+          ],
+          "cargo": [
+            2.344689462798339,
+            36.38999829577947,
+            57.36015636716122
+          ],
+          "held": false,
+          "teleports": 4,
+          "state": "playing",
+          "solved": [
+            "freight",
+            "sluice",
+            "optics",
+            "hoist",
+            "archive",
+            "flywheel",
+            "magnet",
+            "migrant",
+            "pendulum"
+          ]
+        },
+        {
+          "frame": 240,
+          "player": [
+            -5.879902552984352,
+            36,
+            34.88016617440499
+          ],
+          "cargo": [
+            2.6546840255567905,
+            36.38999830316413,
+            57.211927246863
+          ],
+          "held": false,
+          "teleports": 4,
+          "state": "playing",
+          "solved": [
+            "freight",
+            "sluice",
+            "optics",
+            "hoist",
+            "archive",
+            "flywheel",
+            "magnet",
+            "migrant",
+            "pendulum"
+          ]
+        },
+        {
+          "frame": 360,
+          "player": [
+            -0.385541673912737,
+            36,
+            39.010907846079284
+          ],
+          "cargo": [
+            3.354360123829841,
+            36.38999823465431,
+            56.87736536341131
+          ],
+          "held": false,
+          "teleports": 4,
+          "state": "playing",
+          "solved": [
+            "freight",
+            "sluice",
+            "optics",
+            "hoist",
+            "archive",
+            "flywheel",
+            "magnet",
+            "migrant",
+            "pendulum"
+          ]
+        },
+        {
+          "frame": 480,
+          "player": [
+            0.10698533407616917,
+            36,
+            29.618786941406572
+          ],
+          "cargo": [
+            3.454589020698199,
+            36.38999820646046,
+            56.82943557086998
+          ],
+          "held": false,
+          "teleports": 4,
+          "state": "playing",
+          "solved": [
+            "freight",
+            "sluice",
+            "optics",
+            "hoist",
+            "archive",
+            "flywheel",
+            "magnet",
+            "migrant",
+            "pendulum"
+          ]
+        },
+        {
+          "frame": 600,
+          "player": [
+            0.0818825559284737,
+            36,
+            19.618818449409897
+          ],
+          "cargo": [
+            3.454589020698199,
+            36.38999820646046,
+            56.82943557086998
+          ],
+          "held": false,
+          "teleports": 4,
+          "state": "playing",
+          "solved": [
+            "freight",
+            "sluice",
+            "optics",
+            "hoist",
+            "archive",
+            "flywheel",
+            "magnet",
+            "migrant",
+            "pendulum"
+          ]
+        },
+        {
+          "frame": 720,
+          "player": [
+            0.05677977727822751,
+            36,
+            9.618849956934522
+          ],
+          "cargo": [
+            3.9634933867526545,
+            36.38999814476171,
+            56.15735247804738
+          ],
+          "held": false,
+          "teleports": 4,
+          "state": "playing",
+          "solved": [
+            "freight",
+            "sluice",
+            "optics",
+            "hoist",
+            "archive",
+            "flywheel",
+            "magnet",
+            "migrant",
+            "pendulum"
+          ]
+        },
+        {
+          "frame": 840,
+          "player": [
+            0.03167699862798138,
+            36,
+            -0.38111853554102104
+          ],
+          "cargo": [
+            4.484900235200245,
+            36.389998144761705,
+            55.46875798292246
+          ],
+          "held": false,
+          "teleports": 4,
+          "state": "playing",
+          "solved": [
+            "freight",
+            "sluice",
+            "optics",
+            "hoist",
+            "archive",
+            "flywheel",
+            "magnet",
+            "migrant",
+            "pendulum"
+          ]
+        },
+        {
+          "frame": 960,
+          "player": [
+            0.006574219977735404,
+            36,
+            -10.38108702801655
+          ],
+          "cargo": [
+            4.5936632397252035,
+            36.38999814555203,
+            55.32512140405686
+          ],
+          "held": false,
+          "teleports": 4,
+          "state": "playing",
+          "solved": [
+            "freight",
+            "sluice",
+            "optics",
+            "hoist",
+            "archive",
+            "flywheel",
+            "magnet",
+            "migrant",
+            "pendulum"
+          ]
+        },
+        {
+          "frame": 1080,
+          "player": [
+            -0.00027785345802148467,
+            36,
+            -20.25817298035548
+          ],
+          "cargo": [
+            4.519986899312909,
+            36.38999814476171,
+            54.981325823122305
+          ],
+          "held": false,
+          "teleports": 4,
+          "state": "playing",
+          "solved": [
+            "freight",
+            "sluice",
+            "optics",
+            "hoist",
+            "archive",
+            "flywheel",
+            "magnet",
+            "migrant",
+            "pendulum"
+          ]
+        },
+        {
+          "frame": 1200,
+          "player": [
+            -0.00019031812268178338,
+            36,
+            -30.258172969117147
+          ],
+          "cargo": [
+            4.4386723326465685,
+            36.38999814621176,
+            54.601926218450494
+          ],
+          "held": false,
+          "teleports": 4,
+          "state": "playing",
+          "solved": [
+            "freight",
+            "sluice",
+            "optics",
+            "hoist",
+            "archive",
+            "flywheel",
+            "magnet",
+            "migrant",
+            "pendulum"
+          ]
+        },
+        {
+          "frame": 1320,
+          "player": [
+            -0.00010278264445166164,
+            36,
+            -40.25817296873444
+          ],
+          "cargo": [
+            4.4386723326465685,
+            36.38999814621176,
+            54.601926218450494
+          ],
+          "held": false,
+          "teleports": 4,
+          "state": "playing",
+          "solved": [
+            "freight",
+            "sluice",
+            "optics",
+            "hoist",
+            "archive",
+            "flywheel",
+            "magnet",
+            "migrant",
+            "pendulum"
+          ]
+        },
+        {
+          "frame": 1440,
+          "player": [
+            -0.00001524716622153363,
+            36,
+            -50.258172968351886
+          ],
+          "cargo": [
+            4.4386723326465685,
+            36.38999814621176,
+            54.601926218450494
+          ],
+          "held": false,
+          "teleports": 4,
+          "state": "playing",
+          "solved": [
+            "freight",
+            "sluice",
+            "optics",
+            "hoist",
+            "archive",
+            "flywheel",
+            "magnet",
+            "migrant",
+            "pendulum"
+          ]
+        },
+        {
+          "frame": 1560,
+          "player": [
+            -6.123647322259334,
+            36.68354430379747,
+            -50.28030986969681
+          ],
+          "cargo": [
+            4.950590744340808,
+            36.38999817032182,
+            54.35734444704531
+          ],
+          "held": false,
+          "teleports": 4,
+          "state": "playing",
+          "solved": [
+            "freight",
+            "sluice",
+            "optics",
+            "hoist",
+            "archive",
+            "flywheel",
+            "magnet",
+            "migrant",
+            "pendulum"
+          ]
+        },
+        {
+          "frame": 1680,
+          "player": [
+            -6.109006068815208,
+            39.41772151898734,
+            -40.28502055538176
+          ],
+          "cargo": [
+            5.142020513125008,
+            36.389998171620206,
+            54.265755586676576
+          ],
+          "held": false,
+          "teleports": 4,
+          "state": "playing",
+          "solved": [
+            "freight",
+            "sluice",
+            "optics",
+            "hoist",
+            "archive",
+            "flywheel",
+            "magnet",
+            "migrant",
+            "pendulum"
+          ]
+        },
+        {
+          "frame": 1800,
+          "player": [
+            -6.090303857316937,
+            42.151898734177216,
+            -30.28503804403622
+          ],
+          "cargo": [
+            5.115288427927841,
+            36.38999814476171,
+            54.98842163135631
+          ],
+          "held": false,
+          "teleports": 4,
+          "state": "playing",
+          "solved": [
+            "freight",
+            "sluice",
+            "optics",
+            "hoist",
+            "archive",
+            "flywheel",
+            "magnet",
+            "migrant",
+            "pendulum"
+          ]
+        },
+        {
+          "frame": 1920,
+          "player": [
+            -6.0716016458150195,
+            44.88607594936709,
+            -20.285055532687103
+          ],
+          "cargo": [
+            5.090820296327737,
+            36.38999814476171,
+            55.649884729119044
+          ],
+          "held": false,
+          "teleports": 4,
+          "state": "playing",
+          "solved": [
+            "freight",
+            "sluice",
+            "optics",
+            "hoist",
+            "archive",
+            "flywheel",
+            "magnet",
+            "migrant",
+            "pendulum"
+          ]
+        },
+        {
+          "frame": 2040,
+          "player": [
+            -6.052899434313102,
+            47.620253164556964,
+            -10.285073021337986
+          ],
+          "cargo": [
+            5.088709791241347,
+            36.38999814629927,
+            55.7069409925357
+          ],
+          "held": false,
+          "teleports": 4,
+          "state": "playing",
+          "solved": [
+            "freight",
+            "sluice",
+            "optics",
+            "hoist",
+            "archive",
+            "flywheel",
+            "magnet",
+            "migrant",
+            "pendulum"
+          ]
+        },
+        {
+          "frame": 2160,
+          "player": [
+            -6.034197222811184,
+            50.35443037974684,
+            -0.28509050998902674
+          ],
+          "cargo": [
+            4.737477652339788,
+            36.38999814476171,
+            55.61296399739737
+          ],
+          "held": false,
+          "teleports": 4,
+          "state": "playing",
+          "solved": [
+            "freight",
+            "sluice",
+            "optics",
+            "hoist",
+            "archive",
+            "flywheel",
+            "magnet",
+            "migrant",
+            "pendulum"
+          ]
+        },
+        {
+          "frame": 2280,
+          "player": [
+            -6.015495011309275,
+            52.860759493670884,
+            9.714892001359924
+          ],
+          "cargo": [
+            3.8357088348226256,
+            36.38999814476171,
+            55.3716833331484
+          ],
+          "held": false,
+          "teleports": 4,
+          "state": "playing",
+          "solved": [
+            "freight",
+            "sluice",
+            "optics",
+            "hoist",
+            "archive",
+            "flywheel",
+            "magnet",
+            "migrant",
+            "pendulum"
+          ]
+        },
+        {
+          "frame": 2400,
+          "player": [
+            -4.530894703542198,
+            54,
+            18.118177364870558
+          ],
+          "cargo": [
+            3.5563976960507078,
+            36.389998186839776,
+            55.296949533420275
+          ],
+          "held": false,
+          "teleports": 4,
+          "state": "playing",
+          "solved": [
+            "freight",
+            "sluice",
+            "optics",
+            "hoist",
+            "archive",
+            "flywheel",
+            "magnet",
+            "migrant",
+            "pendulum"
+          ]
+        },
+        {
+          "frame": 2520,
+          "player": [
+            0.11907785354214992,
+            54,
+            12.785335686568539
+          ],
+          "cargo": [
+            3.556397349775971,
+            36.38999818683692,
+            55.29694973393282
+          ],
+          "held": false,
+          "teleports": 4,
+          "state": "playing",
+          "solved": [
+            "freight",
+            "sluice",
+            "optics",
+            "hoist",
+            "archive",
+            "flywheel",
+            "magnet",
+            "migrant",
+            "pendulum"
+          ]
+        },
+        {
+          "frame": 2640,
+          "player": [
+            0.09416085773502099,
+            54,
+            2.7853697582148147
+          ],
+          "cargo": [
+            3.0532126698136146,
+            36.38999830300267,
+            55.268618008066866
+          ],
+          "held": false,
+          "teleports": 4,
+          "state": "playing",
+          "solved": [
+            "freight",
+            "sluice",
+            "optics",
+            "hoist",
+            "archive",
+            "flywheel",
+            "magnet",
+            "migrant",
+            "pendulum"
+          ]
+        },
+        {
+          "frame": 2760,
+          "player": [
+            0.06924101019397967,
+            54,
+            -7.2145991917968795
+          ],
+          "cargo": [
+            2.6751287216336737,
+            36.38999829588723,
+            55.24733019235777
+          ],
+          "held": false,
+          "teleports": 4,
+          "state": "playing",
+          "solved": [
+            "freight",
+            "sluice",
+            "optics",
+            "hoist",
+            "archive",
+            "flywheel",
+            "magnet",
+            "migrant",
+            "pendulum"
+          ]
+        },
+        {
+          "frame": 2880,
+          "player": [
+            0.04432116265293479,
+            54,
+            -17.2145681418087
+          ],
+          "cargo": [
+            2.7228240362493894,
+            36.38999830636765,
+            55.21090349375633
+          ],
+          "held": false,
+          "teleports": 4,
+          "state": "playing",
+          "solved": [
+            "freight",
+            "sluice",
+            "optics",
+            "hoist",
+            "archive",
+            "flywheel",
+            "magnet",
+            "migrant",
+            "pendulum"
+          ]
+        },
+        {
+          "frame": 3000,
+          "player": [
+            0.019401315111890364,
+            54,
+            -27.214537091820166
+          ],
+          "cargo": [
+            3.484803309667246,
+            36.38999820388465,
+            54.62894598474592
+          ],
+          "held": false,
+          "teleports": 4,
+          "state": "playing",
+          "solved": [
+            "freight",
+            "sluice",
+            "optics",
+            "hoist",
+            "archive",
+            "flywheel",
+            "magnet",
+            "migrant",
+            "pendulum"
+          ]
+        },
+        {
+          "frame": 3120,
+          "player": [
+            -1.9641082315638232,
+            54,
+            -35.12212478472151
+          ],
+          "cargo": [
+            3.8157997210167682,
+            36.38999816708447,
+            54.376149834065416
+          ],
+          "held": false,
+          "teleports": 4,
+          "state": "playing",
+          "solved": [
+            "freight",
+            "sluice",
+            "optics",
+            "hoist",
+            "archive",
+            "flywheel",
+            "magnet",
+            "migrant",
+            "pendulum"
+          ]
+        },
+        {
+          "frame": 3240,
+          "player": [
+            -11.960731247466981,
+            54,
+            -35.021188789360295
+          ],
+          "cargo": [
+            3.8157996081334793,
+            36.38999816708447,
+            54.37615046582588
+          ],
+          "held": false,
+          "teleports": 4,
+          "state": "playing",
+          "solved": [
+            "freight",
+            "sluice",
+            "optics",
+            "hoist",
+            "archive",
+            "flywheel",
+            "magnet",
+            "migrant",
+            "pendulum"
+          ]
+        },
+        {
+          "frame": 3360,
+          "player": [
+            -15.372232830541082,
+            54,
+            -27.407277453718592
+          ],
+          "cargo": [
+            4.526109567147734,
+            36.38999814476172,
+            54.78394555903978
+          ],
+          "held": false,
+          "teleports": 4,
+          "state": "playing",
+          "solved": [
+            "freight",
+            "sluice",
+            "optics",
+            "hoist",
+            "archive",
+            "flywheel",
+            "magnet",
+            "migrant",
+            "pendulum"
+          ]
+        },
+        {
+          "frame": 3480,
+          "player": [
+            -17.143139598036317,
+            54,
+            -18.86538909403801
+          ],
+          "cargo": [
+            5.136574567031977,
+            36.389998144761705,
+            55.13441879733853
+          ],
+          "held": false,
+          "teleports": 4,
+          "state": "playing",
+          "solved": [
+            "freight",
+            "sluice",
+            "optics",
+            "hoist",
+            "archive",
+            "flywheel",
+            "magnet",
+            "migrant",
+            "pendulum"
+          ]
+        },
+        {
+          "frame": 3600,
+          "player": [
+            -27.126611461281776,
+            54,
+            -18.88124976501104
+          ],
+          "cargo": [
+            5.201013404711624,
+            36.389998145469825,
+            55.171413496315644
+          ],
+          "held": false,
+          "teleports": 4,
+          "state": "playing",
+          "solved": [
+            "freight",
+            "sluice",
+            "optics",
+            "hoist",
+            "archive",
+            "flywheel",
+            "magnet",
+            "migrant",
+            "pendulum"
+          ]
+        },
+        {
+          "frame": 3720,
+          "player": [
+            -37.12656925714175,
+            54,
+            -18.91030283303899
+          ],
+          "cargo": [
+            5.201641521173867,
+            36.38999814530326,
+            55.17063537697399
+          ],
+          "held": false,
+          "teleports": 4,
+          "state": "playing",
+          "solved": [
+            "freight",
+            "sluice",
+            "optics",
+            "hoist",
+            "archive",
+            "flywheel",
+            "magnet",
+            "migrant",
+            "pendulum"
+          ]
+        },
+        {
+          "frame": 3840,
+          "player": [
+            -47.126527053013845,
+            54,
+            -18.939355901079516
+          ],
+          "cargo": [
+            5.757648850518998,
+            36.38996370688986,
+            54.48183623635423
+          ],
+          "held": false,
+          "teleports": 4,
+          "state": "playing",
+          "solved": [
+            "freight",
+            "sluice",
+            "optics",
+            "hoist",
+            "archive",
+            "flywheel",
+            "magnet",
+            "migrant",
+            "pendulum"
+          ]
+        },
+        {
+          "frame": 3960,
+          "player": [
+            -57.12648484888594,
+            54,
+            -18.96840896912004
+          ],
+          "cargo": [
+            5.721393132548721,
+            36.3899981751885,
+            54.47938579878364
+          ],
+          "held": false,
+          "teleports": 4,
+          "state": "playing",
+          "solved": [
+            "freight",
+            "sluice",
+            "optics",
+            "hoist",
+            "archive",
+            "flywheel",
+            "magnet",
+            "migrant",
+            "pendulum"
+          ]
+        },
+        {
+          "frame": 4080,
+          "player": [
+            -67.12644264475857,
+            54,
+            -18.9974620371608
+          ],
+          "cargo": [
+            4.783692581574945,
+            36.389998183410455,
+            54.416614173144815
+          ],
+          "held": false,
+          "teleports": 4,
+          "state": "playing",
+          "solved": [
+            "freight",
+            "sluice",
+            "optics",
+            "hoist",
+            "archive",
+            "flywheel",
+            "magnet",
+            "migrant",
+            "pendulum"
+          ]
+        },
+        {
+          "frame": 4200,
+          "player": [
+            -63.37500596451598,
+            54,
+            -22.846680215439196
+          ],
+          "cargo": [
+            4.476667991093023,
+            36.38999818354024,
+            54.396061214416704
+          ],
+          "held": false,
+          "teleports": 4,
+          "state": "playing",
+          "solved": [
+            "freight",
+            "sluice",
+            "optics",
+            "hoist",
+            "archive",
+            "flywheel",
+            "magnet",
+            "migrant",
+            "pendulum"
+          ]
+        },
+        {
+          "frame": 4320,
+          "player": [
+            -53.39499281797008,
+            54,
+            -22.214916992436205
+          ],
+          "cargo": [
+            4.476667749051243,
+            36.38999818354389,
+            54.39606143730622
+          ],
+          "held": false,
+          "teleports": 4,
+          "state": "playing",
+          "solved": [
+            "freight",
+            "sluice",
+            "optics",
+            "hoist",
+            "archive",
+            "flywheel",
+            "magnet",
+            "migrant",
+            "pendulum"
+          ]
+        },
+        {
+          "frame": 4440,
+          "player": [
+            -45.39885820825849,
+            54,
+            -26.441250921160954
+          ],
+          "cargo": [
+            4.476667749051243,
+            36.38999818354389,
+            54.39606143730622
+          ],
+          "held": false,
+          "teleports": 4,
+          "state": "playing",
+          "solved": [
+            "freight",
+            "sluice",
+            "optics",
+            "hoist",
+            "archive",
+            "flywheel",
+            "magnet",
+            "migrant",
+            "pendulum"
+          ]
+        },
+        {
+          "frame": 4560,
+          "player": [
+            -36.36507297584065,
+            50.5,
+            -33.81783541921274
+          ],
+          "cargo": [
+            4.619208640627768,
+            36.38999817930672,
+            54.484636590737516
+          ],
+          "held": false,
+          "teleports": 4,
+          "state": "playing",
+          "solved": [
+            "freight",
+            "sluice",
+            "optics",
+            "hoist",
+            "archive",
+            "flywheel",
+            "magnet",
+            "migrant",
+            "pendulum"
+          ]
+        },
+        {
+          "frame": 4680,
+          "player": [
+            -26.418058943547628,
+            50.5,
+            -34.85303928621934
+          ],
+          "cargo": [
+            5.311774160280453,
+            36.38999814476171,
+            54.91499798728839
+          ],
+          "held": false,
+          "teleports": 4,
+          "state": "playing",
+          "solved": [
+            "freight",
+            "sluice",
+            "optics",
+            "hoist",
+            "archive",
+            "flywheel",
+            "magnet",
+            "migrant",
+            "pendulum"
+          ]
+        }
+      ],
+      "marks": [
+        {
+          "label": "Untouched spawn",
+          "frame": 6,
+          "player": [
+            0,
+            0,
+            54
+          ],
+          "cargo": [
+            2,
+            0.4644898819002271,
+            54
+          ],
+          "held": false,
+          "teleports": 0,
+          "state": "playing",
+          "solved": []
+        },
+        {
+          "label": "route: Start freight",
+          "source": "native-prefix",
+          "name": "Start freight",
+          "frame": 0,
+          "seconds": 0,
+          "player": [
+            0,
+            0,
+            54
+          ],
+          "cargo": [
+            2,
+            0.4644898819002271,
+            54
+          ],
+          "solved": [],
+          "state": "playing"
+        },
+        {
+          "label": "route: Solved freight",
+          "source": "native-prefix",
+          "name": "Solved freight",
+          "frame": 3479,
+          "seconds": 57.983333333333334,
+          "player": [
+            2.0002338942211453,
+            0,
+            54.932310313017034
+          ],
+          "cargo": [
+            2.0018420487109623,
+            0.3899982953442794,
+            54.21231240184639
+          ],
+          "solved": [
+            "freight"
+          ],
+          "state": "playing"
+        },
+        {
+          "label": "route: Start sluice",
+          "source": "native-prefix",
+          "name": "Start sluice",
+          "frame": 3479,
+          "seconds": 57.983333333333334,
+          "player": [
+            2.0002338942211453,
+            0,
+            54.932310313017034
+          ],
+          "cargo": [
+            2.0018420487109623,
+            0.3899982953442794,
+            54.21231240184639
+          ],
+          "solved": [
+            "freight"
+          ],
+          "state": "playing"
+        },
+        {
+          "label": "route: Entered sluice",
+          "source": "native-prefix",
+          "name": "Entered sluice",
+          "frame": 4241,
+          "seconds": 70.68333333333334,
+          "player": [
+            43.81800294418679,
+            0,
+            38.999999525503185
+          ],
+          "cargo": [
+            0.8043097261795192,
+            0.38999830227087184,
+            53.67049741818815
+          ],
+          "solved": [
+            "freight"
+          ],
+          "state": "playing"
+        },
+        {
+          "label": "route: Solved sluice",
+          "source": "native-prefix",
+          "name": "Solved sluice",
+          "frame": 7205,
+          "seconds": 120.08333333333333,
+          "player": [
+            21.17936715081547,
+            0,
+            38.992449804167265
+          ],
+          "cargo": [
+            0.8633706034745552,
+            0.3899982957603498,
+            53.228581089192076
+          ],
+          "solved": [
+            "freight",
+            "sluice"
+          ],
+          "state": "playing"
+        },
+        {
+          "label": "route: Start optics",
+          "source": "native-prefix",
+          "name": "Start optics",
+          "frame": 7205,
+          "seconds": 120.08333333333333,
+          "player": [
+            21.17936715081547,
+            0,
+            38.992449804167265
+          ],
+          "cargo": [
+            0.8633706034745552,
+            0.3899982957603498,
+            53.228581089192076
+          ],
+          "solved": [
+            "freight",
+            "sluice"
+          ],
+          "state": "playing"
+        },
+        {
+          "label": "route: Solved optics",
+          "source": "native-prefix",
+          "name": "Solved optics",
+          "frame": 10496,
+          "seconds": 174.93333333333334,
+          "player": [
+            -13.174807873332474,
+            0,
+            -41.00631979345235
+          ],
+          "cargo": [
+            1.340809870906871,
+            0.38999829162471633,
+            50.69775507790307
+          ],
+          "solved": [
+            "freight",
+            "sluice",
+            "optics"
+          ],
+          "state": "playing"
+        },
+        {
+          "label": "route: Start hoist",
+          "source": "native-prefix",
+          "name": "Start hoist",
+          "frame": 10496,
+          "seconds": 174.93333333333334,
+          "player": [
+            -13.174807873332474,
+            0,
+            -41.00631979345235
+          ],
+          "cargo": [
+            1.340809870906871,
+            0.38999829162471633,
+            50.69775507790307
+          ],
+          "solved": [
+            "freight",
+            "sluice",
+            "optics"
+          ],
+          "state": "playing"
+        },
+        {
+          "label": "route: Solved hoist",
+          "source": "native-prefix",
+          "name": "Solved hoist",
+          "frame": 17144,
+          "seconds": 285.73333333333335,
+          "player": [
+            2.000237723096289,
+            18,
+            54.93239211398227
+          ],
+          "cargo": [
+            2.0018021699453286,
+            18.38999829574895,
+            54.21239383972117
+          ],
+          "solved": [
+            "freight",
+            "sluice",
+            "optics",
+            "hoist"
+          ],
+          "state": "playing"
+        },
+        {
+          "label": "route: Start archive",
+          "source": "native-prefix",
+          "name": "Start archive",
+          "frame": 17144,
+          "seconds": 285.73333333333335,
+          "player": [
+            2.000237723096289,
+            18,
+            54.93239211398227
+          ],
+          "cargo": [
+            2.0018021699453286,
+            18.38999829574895,
+            54.21239383972117
+          ],
+          "solved": [
+            "freight",
+            "sluice",
+            "optics",
+            "hoist"
+          ],
+          "state": "playing"
+        },
+        {
+          "label": "route: Solved archive",
+          "source": "native-prefix",
+          "name": "Solved archive",
+          "frame": 19634,
+          "seconds": 327.23333333333335,
+          "player": [
+            -21.2082217467831,
+            18,
+            30.005607168506142
+          ],
+          "cargo": [
+            2.5931767920584763,
+            18.389998295893836,
+            56.63321853367593
+          ],
+          "solved": [
+            "freight",
+            "sluice",
+            "optics",
+            "hoist",
+            "archive"
+          ],
+          "state": "playing"
+        },
+        {
+          "label": "route: Start flywheel",
+          "source": "native-prefix",
+          "name": "Start flywheel",
+          "frame": 19634,
+          "seconds": 327.23333333333335,
+          "player": [
+            -21.2082217467831,
+            18,
+            30.005607168506142
+          ],
+          "cargo": [
+            2.5931767920584763,
+            18.389998295893836,
+            56.63321853367593
+          ],
+          "solved": [
+            "freight",
+            "sluice",
+            "optics",
+            "hoist",
+            "archive"
+          ],
+          "state": "playing"
+        },
+        {
+          "label": "route: Entered flywheel",
+          "source": "native-prefix",
+          "name": "Entered flywheel",
+          "frame": 21286,
+          "seconds": 354.76666666666665,
+          "player": [
+            -47.819504923064535,
+            18,
+            -36.99999031494093
+          ],
+          "cargo": [
+            2.2584684328665645,
+            18.38999829593888,
+            56.23729247961947
+          ],
+          "solved": [
+            "freight",
+            "sluice",
+            "optics",
+            "hoist",
+            "archive"
+          ],
+          "state": "playing"
+        },
+        {
+          "label": "route: Solved flywheel",
+          "source": "native-prefix",
+          "name": "Solved flywheel",
+          "frame": 22467,
+          "seconds": 374.45,
+          "player": [
+            -31.164447950278703,
+            18,
+            -37.007174072463314
+          ],
+          "cargo": [
+            1.4622926528050806,
+            18.38999829577383,
+            55.83744393092207
+          ],
+          "solved": [
+            "freight",
+            "sluice",
+            "optics",
+            "hoist",
+            "archive",
+            "flywheel"
+          ],
+          "state": "playing"
+        },
+        {
+          "label": "route: Start magnet",
+          "source": "native-prefix",
+          "name": "Start magnet",
+          "frame": 22467,
+          "seconds": 374.45,
+          "player": [
+            -31.164447950278703,
+            18,
+            -37.007174072463314
+          ],
+          "cargo": [
+            1.4622926528050806,
+            18.38999829577383,
+            55.83744393092207
+          ],
+          "solved": [
+            "freight",
+            "sluice",
+            "optics",
+            "hoist",
+            "archive",
+            "flywheel"
+          ],
+          "state": "playing"
+        },
+        {
+          "label": "route: Solved magnet",
+          "source": "native-prefix",
+          "name": "Solved magnet",
+          "frame": 31924,
+          "seconds": 532.0666666666667,
+          "player": [
+            2.0004274261212847,
+            36,
+            54.93640895813029
+          ],
+          "cargo": [
+            2.00008375561141,
+            36.38999829688737,
+            54.216409055819305
+          ],
+          "solved": [
+            "freight",
+            "sluice",
+            "optics",
+            "hoist",
+            "archive",
+            "flywheel",
+            "magnet"
+          ],
+          "state": "playing"
+        },
+        {
+          "label": "route: Start migrant",
+          "source": "native-prefix",
+          "name": "Start migrant",
+          "frame": 31924,
+          "seconds": 532.0666666666667,
+          "player": [
+            2.0004274261212847,
+            36,
+            54.93640895813029
+          ],
+          "cargo": [
+            2.00008375561141,
+            36.38999829688737,
+            54.216409055819305
+          ],
+          "solved": [
+            "freight",
+            "sluice",
+            "optics",
+            "hoist",
+            "archive",
+            "flywheel",
+            "magnet"
+          ],
+          "state": "playing"
+        },
+        {
+          "label": "route: Solved migrant",
+          "source": "native-prefix",
+          "name": "Solved migrant",
+          "frame": 40050,
+          "seconds": 667.5,
+          "player": [
+            2.000426586537806,
+            36,
+            54.93639141009904
+          ],
+          "cargo": [
+            2.0000908450506567,
+            36.38999829688787,
+            54.21639150311647
+          ],
+          "solved": [
+            "freight",
+            "sluice",
+            "optics",
+            "hoist",
+            "archive",
+            "flywheel",
+            "magnet",
+            "migrant"
+          ],
+          "state": "playing"
+        },
+        {
+          "label": "route: Start pendulum",
+          "source": "native-prefix",
+          "name": "Start pendulum",
+          "frame": 40050,
+          "seconds": 667.5,
+          "player": [
+            2.000426586537806,
+            36,
+            54.93639141009904
+          ],
+          "cargo": [
+            2.0000908450506567,
+            36.38999829688787,
+            54.21639150311647
+          ],
+          "solved": [
+            "freight",
+            "sluice",
+            "optics",
+            "hoist",
+            "archive",
+            "flywheel",
+            "magnet",
+            "migrant"
+          ],
+          "state": "playing"
+        },
+        {
+          "label": "route: Solved pendulum",
+          "source": "native-prefix",
+          "name": "Solved pendulum",
+          "frame": 44863,
+          "seconds": 747.7166666666667,
+          "player": [
+            -23.171557141180784,
+            36,
+            33.099830574487434
+          ],
+          "cargo": [
+            2.3868368261283748,
+            36.38999829576034,
+            57.333951535132115
+          ],
+          "solved": [
+            "freight",
+            "sluice",
+            "optics",
+            "hoist",
+            "archive",
+            "flywheel",
+            "magnet",
+            "migrant",
+            "pendulum"
+          ],
+          "state": "playing"
+        },
+        {
+          "label": "Authentic staged state",
+          "frame": 6,
+          "player": [
+            -23.171557141180784,
+            36,
+            33.099830574487434
+          ],
+          "cargo": [
+            2.3868368261283748,
+            36.38999829576034,
+            57.333951535132115
+          ],
+          "held": false,
+          "teleports": 4,
+          "state": "playing",
+          "solved": [
+            "freight",
+            "sluice",
+            "optics",
+            "hoist",
+            "archive",
+            "flywheel",
+            "magnet",
+            "migrant",
+            "pendulum"
+          ]
+        },
+        {
+          "label": "Attack finish",
+          "frame": 4785,
+          "player": [
+            -24.970577895988992,
+            50.5,
+            -35.003049163391125
+          ],
+          "cargo": [
+            5.4285166921118515,
+            36.389998145460055,
+            54.987541819936844
+          ],
+          "held": false,
+          "teleports": 4,
+          "state": "playing",
+          "solved": [
+            "freight",
+            "sluice",
+            "optics",
+            "hoist",
+            "archive",
+            "flywheel",
+            "magnet",
+            "migrant",
+            "pendulum",
+            "inertia"
+          ]
+        }
+      ],
+      "resets": 0,
+      "respawns": 0,
+      "cargoResets": 0,
+      "routePrefix": {
+        "id": "tower-singularity",
+        "level": 41,
+        "pass": false,
+        "frames": 44863,
+        "physicsSteps": 89726,
+        "seconds": 747.7166666666667,
+        "activeSeconds": 700.5666666663582,
+        "distance": 3237.8748500302013,
+        "shots": 8,
+        "jumps": 2,
+        "interactions": 44,
+        "resets": 0,
+        "respawns": 0,
+        "cargoResets": 0,
+        "milestones": [
+          {
+            "name": "Start freight",
+            "frame": 0,
+            "seconds": 0,
+            "player": [
+              0,
+              0,
+              54
+            ],
+            "cargo": [
+              2,
+              0.4644898819002271,
+              54
+            ],
+            "solved": [],
+            "state": "playing"
+          },
+          {
+            "name": "Solved freight",
+            "frame": 3479,
+            "seconds": 57.983333333333334,
+            "player": [
+              2.0002338942211453,
+              0,
+              54.932310313017034
+            ],
+            "cargo": [
+              2.0018420487109623,
+              0.3899982953442794,
+              54.21231240184639
+            ],
+            "solved": [
+              "freight"
+            ],
+            "state": "playing"
+          },
+          {
+            "name": "Start sluice",
+            "frame": 3479,
+            "seconds": 57.983333333333334,
+            "player": [
+              2.0002338942211453,
+              0,
+              54.932310313017034
+            ],
+            "cargo": [
+              2.0018420487109623,
+              0.3899982953442794,
+              54.21231240184639
+            ],
+            "solved": [
+              "freight"
+            ],
+            "state": "playing"
+          },
+          {
+            "name": "Entered sluice",
+            "frame": 4241,
+            "seconds": 70.68333333333334,
+            "player": [
+              43.81800294418679,
+              0,
+              38.999999525503185
+            ],
+            "cargo": [
+              0.8043097261795192,
+              0.38999830227087184,
+              53.67049741818815
+            ],
+            "solved": [
+              "freight"
+            ],
+            "state": "playing"
+          },
+          {
+            "name": "Solved sluice",
+            "frame": 7205,
+            "seconds": 120.08333333333333,
+            "player": [
+              21.17936715081547,
+              0,
+              38.992449804167265
+            ],
+            "cargo": [
+              0.8633706034745552,
+              0.3899982957603498,
+              53.228581089192076
+            ],
+            "solved": [
+              "freight",
+              "sluice"
+            ],
+            "state": "playing"
+          },
+          {
+            "name": "Start optics",
+            "frame": 7205,
+            "seconds": 120.08333333333333,
+            "player": [
+              21.17936715081547,
+              0,
+              38.992449804167265
+            ],
+            "cargo": [
+              0.8633706034745552,
+              0.3899982957603498,
+              53.228581089192076
+            ],
+            "solved": [
+              "freight",
+              "sluice"
+            ],
+            "state": "playing"
+          },
+          {
+            "name": "Solved optics",
+            "frame": 10496,
+            "seconds": 174.93333333333334,
+            "player": [
+              -13.174807873332474,
+              0,
+              -41.00631979345235
+            ],
+            "cargo": [
+              1.340809870906871,
+              0.38999829162471633,
+              50.69775507790307
+            ],
+            "solved": [
+              "freight",
+              "sluice",
+              "optics"
+            ],
+            "state": "playing"
+          },
+          {
+            "name": "Start hoist",
+            "frame": 10496,
+            "seconds": 174.93333333333334,
+            "player": [
+              -13.174807873332474,
+              0,
+              -41.00631979345235
+            ],
+            "cargo": [
+              1.340809870906871,
+              0.38999829162471633,
+              50.69775507790307
+            ],
+            "solved": [
+              "freight",
+              "sluice",
+              "optics"
+            ],
+            "state": "playing"
+          },
+          {
+            "name": "Solved hoist",
+            "frame": 17144,
+            "seconds": 285.73333333333335,
+            "player": [
+              2.000237723096289,
+              18,
+              54.93239211398227
+            ],
+            "cargo": [
+              2.0018021699453286,
+              18.38999829574895,
+              54.21239383972117
+            ],
+            "solved": [
+              "freight",
+              "sluice",
+              "optics",
+              "hoist"
+            ],
+            "state": "playing"
+          },
+          {
+            "name": "Start archive",
+            "frame": 17144,
+            "seconds": 285.73333333333335,
+            "player": [
+              2.000237723096289,
+              18,
+              54.93239211398227
+            ],
+            "cargo": [
+              2.0018021699453286,
+              18.38999829574895,
+              54.21239383972117
+            ],
+            "solved": [
+              "freight",
+              "sluice",
+              "optics",
+              "hoist"
+            ],
+            "state": "playing"
+          },
+          {
+            "name": "Solved archive",
+            "frame": 19634,
+            "seconds": 327.23333333333335,
+            "player": [
+              -21.2082217467831,
+              18,
+              30.005607168506142
+            ],
+            "cargo": [
+              2.5931767920584763,
+              18.389998295893836,
+              56.63321853367593
+            ],
+            "solved": [
+              "freight",
+              "sluice",
+              "optics",
+              "hoist",
+              "archive"
+            ],
+            "state": "playing"
+          },
+          {
+            "name": "Start flywheel",
+            "frame": 19634,
+            "seconds": 327.23333333333335,
+            "player": [
+              -21.2082217467831,
+              18,
+              30.005607168506142
+            ],
+            "cargo": [
+              2.5931767920584763,
+              18.389998295893836,
+              56.63321853367593
+            ],
+            "solved": [
+              "freight",
+              "sluice",
+              "optics",
+              "hoist",
+              "archive"
+            ],
+            "state": "playing"
+          },
+          {
+            "name": "Entered flywheel",
+            "frame": 21286,
+            "seconds": 354.76666666666665,
+            "player": [
+              -47.819504923064535,
+              18,
+              -36.99999031494093
+            ],
+            "cargo": [
+              2.2584684328665645,
+              18.38999829593888,
+              56.23729247961947
+            ],
+            "solved": [
+              "freight",
+              "sluice",
+              "optics",
+              "hoist",
+              "archive"
+            ],
+            "state": "playing"
+          },
+          {
+            "name": "Solved flywheel",
+            "frame": 22467,
+            "seconds": 374.45,
+            "player": [
+              -31.164447950278703,
+              18,
+              -37.007174072463314
+            ],
+            "cargo": [
+              1.4622926528050806,
+              18.38999829577383,
+              55.83744393092207
+            ],
+            "solved": [
+              "freight",
+              "sluice",
+              "optics",
+              "hoist",
+              "archive",
+              "flywheel"
+            ],
+            "state": "playing"
+          },
+          {
+            "name": "Start magnet",
+            "frame": 22467,
+            "seconds": 374.45,
+            "player": [
+              -31.164447950278703,
+              18,
+              -37.007174072463314
+            ],
+            "cargo": [
+              1.4622926528050806,
+              18.38999829577383,
+              55.83744393092207
+            ],
+            "solved": [
+              "freight",
+              "sluice",
+              "optics",
+              "hoist",
+              "archive",
+              "flywheel"
+            ],
+            "state": "playing"
+          },
+          {
+            "name": "Solved magnet",
+            "frame": 31924,
+            "seconds": 532.0666666666667,
+            "player": [
+              2.0004274261212847,
+              36,
+              54.93640895813029
+            ],
+            "cargo": [
+              2.00008375561141,
+              36.38999829688737,
+              54.216409055819305
+            ],
+            "solved": [
+              "freight",
+              "sluice",
+              "optics",
+              "hoist",
+              "archive",
+              "flywheel",
+              "magnet"
+            ],
+            "state": "playing"
+          },
+          {
+            "name": "Start migrant",
+            "frame": 31924,
+            "seconds": 532.0666666666667,
+            "player": [
+              2.0004274261212847,
+              36,
+              54.93640895813029
+            ],
+            "cargo": [
+              2.00008375561141,
+              36.38999829688737,
+              54.216409055819305
+            ],
+            "solved": [
+              "freight",
+              "sluice",
+              "optics",
+              "hoist",
+              "archive",
+              "flywheel",
+              "magnet"
+            ],
+            "state": "playing"
+          },
+          {
+            "name": "Solved migrant",
+            "frame": 40050,
+            "seconds": 667.5,
+            "player": [
+              2.000426586537806,
+              36,
+              54.93639141009904
+            ],
+            "cargo": [
+              2.0000908450506567,
+              36.38999829688787,
+              54.21639150311647
+            ],
+            "solved": [
+              "freight",
+              "sluice",
+              "optics",
+              "hoist",
+              "archive",
+              "flywheel",
+              "magnet",
+              "migrant"
+            ],
+            "state": "playing"
+          },
+          {
+            "name": "Start pendulum",
+            "frame": 40050,
+            "seconds": 667.5,
+            "player": [
+              2.000426586537806,
+              36,
+              54.93639141009904
+            ],
+            "cargo": [
+              2.0000908450506567,
+              36.38999829688787,
+              54.21639150311647
+            ],
+            "solved": [
+              "freight",
+              "sluice",
+              "optics",
+              "hoist",
+              "archive",
+              "flywheel",
+              "magnet",
+              "migrant"
+            ],
+            "state": "playing"
+          },
+          {
+            "name": "Solved pendulum",
+            "frame": 44863,
+            "seconds": 747.7166666666667,
+            "player": [
+              -23.171557141180784,
+              36,
+              33.099830574487434
+            ],
+            "cargo": [
+              2.3868368261283748,
+              36.38999829576034,
+              57.333951535132115
+            ],
+            "solved": [
+              "freight",
+              "sluice",
+              "optics",
+              "hoist",
+              "archive",
+              "flywheel",
+              "magnet",
+              "migrant",
+              "pendulum"
+            ],
+            "state": "playing"
+          }
+        ],
+        "actions": [
+          {
+            "kind": "walk",
+            "target": [
+              2,
+              0,
+              55.1
+            ],
+            "frame": 0
+          },
+          {
+            "kind": "walk",
+            "target": [
+              2.033260737743722,
+              0,
+              57
+            ],
+            "frame": 52
+          },
+          {
+            "kind": "walk",
+            "target": [
+              0,
+              0,
+              57
+            ],
+            "frame": 81
+          },
+          {
+            "kind": "walk",
+            "target": [
+              0,
+              0,
+              54
+            ],
+            "frame": 112
+          },
+          {
+            "kind": "walk",
+            "target": [
+              0,
+              0,
+              39
+            ],
+            "frame": 156
+          },
+          {
+            "kind": "walk",
+            "target": [
+              -6,
+              0,
+              39
+            ],
+            "frame": 358
+          },
+          {
+            "kind": "walk",
+            "target": [
+              -26,
+              0,
+              39
+            ],
+            "frame": 442
+          },
+          {
+            "kind": "walk",
+            "target": [
+              -31,
+              0,
+              52
+            ],
+            "frame": 711
+          },
+          {
+            "kind": "walk",
+            "target": [
+              -31,
+              0,
+              55
+            ],
+            "frame": 900
+          },
+          {
+            "kind": "walk",
+            "target": [
+              -31,
+              0,
+              52.85
+            ],
+            "frame": 963
+          },
+          {
+            "kind": "walk",
+            "target": [
+              -30,
+              0,
+              46
+            ],
+            "frame": 1115
+          },
+          {
+            "kind": "shoot",
+            "slot": 0,
+            "frame": 1234,
+            "seconds": 20.566666666666666,
+            "player": [
+              -29.99253293725303,
+              0,
+              45.94822599684318
+            ],
+            "cargo": [
+              -30.999683841535834,
+              0.38999814632326385,
+              52.21355787360946
+            ],
+            "solved": [],
+            "state": "playing"
+          },
+          {
+            "kind": "walk",
+            "target": [
+              -31,
+              0,
+              29
+            ],
+            "frame": 1252
+          },
+          {
+            "kind": "shoot",
+            "slot": 1,
+            "frame": 1500,
+            "seconds": 25,
+            "player": [
+              -31.003799469989556,
+              0,
+              28.936084279931134
+            ],
+            "cargo": [
+              -30.999683841535834,
+              0.38999814632326385,
+              52.21355787360946
+            ],
+            "solved": [],
+            "state": "playing"
+          },
+          {
+            "kind": "walk",
+            "target": [
+              -31,
+              0,
+              52
+            ],
+            "frame": 1532
+          },
+          {
+            "kind": "walk",
+            "target": [
+              -33.4,
+              0,
+              46
+            ],
+            "frame": 1834
+          },
+          {
+            "kind": "walk",
+            "target": [
+              -53,
+              0,
+              47
+            ],
+            "frame": 1975
+          },
+          {
+            "kind": "walk",
+            "target": [
+              -52.4,
+              0,
+              29
+            ],
+            "frame": 2217
+          },
+          {
+            "kind": "walk",
+            "target": [
+              -30,
+              0,
+              39
+            ],
+            "frame": 2513
+          },
+          {
+            "kind": "walk",
+            "target": [
+              -26,
+              0,
+              39
+            ],
+            "frame": 2628
+          },
+          {
+            "kind": "walk",
+            "target": [
+              -26,
+              0,
+              39
+            ],
+            "frame": 2684
+          },
+          {
+            "kind": "walk",
+            "target": [
+              -6,
+              0,
+              39
+            ],
+            "frame": 2684
+          },
+          {
+            "kind": "walk",
+            "target": [
+              0,
+              0,
+              39
+            ],
+            "frame": 2953
+          },
+          {
+            "kind": "walk",
+            "target": [
+              0,
+              0,
+              54
+            ],
+            "frame": 3035
+          },
+          {
+            "kind": "walk",
+            "target": [
+              2,
+              0,
+              57
+            ],
+            "frame": 3239
+          },
+          {
+            "kind": "walk",
+            "target": [
+              2,
+              0,
+              54.85
+            ],
+            "frame": 3314
+          },
+          {
+            "kind": "walk",
+            "target": [
+              0,
+              0,
+              54.932310313017034
+            ],
+            "frame": 3479
+          },
+          {
+            "kind": "walk",
+            "target": [
+              0,
+              0,
+              54
+            ],
+            "frame": 3507
+          },
+          {
+            "kind": "walk",
+            "target": [
+              0,
+              0,
+              39
+            ],
+            "frame": 3522
+          },
+          {
+            "kind": "walk",
+            "target": [
+              14,
+              0,
+              39
+            ],
+            "frame": 3705
+          },
+          {
+            "kind": "walk",
+            "target": [
+              21,
+              0,
+              39
+            ],
+            "frame": 3877
+          },
+          {
+            "kind": "walk",
+            "target": [
+              44,
+              0,
+              39
+            ],
+            "frame": 3963
+          },
+          {
+            "kind": "walk",
+            "target": [
+              29,
+              0,
+              39.5
+            ],
+            "frame": 4241
+          },
+          {
+            "kind": "use",
+            "id": "sluice:0-1",
+            "frame": 4427,
+            "seconds": 73.78333333333333,
+            "player": [
+              29.17447034800535,
+              0,
+              39.49424941388755
+            ],
+            "cargo": [
+              0.7618386742364214,
+              0.38999829312742534,
+              54.09990882968729
+            ],
+            "solved": [
+              "freight"
+            ],
+            "state": "playing"
+          },
+          {
+            "kind": "walk",
+            "target": [
+              44,
+              0,
+              39.5
+            ],
+            "frame": 4512
+          },
+          {
+            "kind": "use",
+            "id": "sluice:1-2",
+            "frame": 4696,
+            "seconds": 78.26666666666667,
+            "player": [
+              43.78348837828183,
+              0,
+              39.50002619528765
+            ],
+            "cargo": [
+              0.7115832437453704,
+              0.3899982957750226,
+              54.76409472782943
+            ],
+            "solved": [
+              "freight"
+            ],
+            "state": "playing"
+          },
+          {
+            "kind": "walk",
+            "target": [
+              59,
+              0,
+              39.5
+            ],
+            "frame": 4733
+          },
+          {
+            "kind": "use",
+            "id": "sluice:2-0",
+            "frame": 4916,
+            "seconds": 81.93333333333334,
+            "player": [
+              58.78389039125861,
+              0,
+              39.49999995007223
+            ],
+            "cargo": [
+              1.084683732889519,
+              0.38999829579515494,
+              55.66165044649445
+            ],
+            "solved": [
+              "freight"
+            ],
+            "state": "playing"
+          },
+          {
+            "kind": "walk",
+            "target": [
+              44,
+              0,
+              39.5
+            ],
+            "frame": 4953
+          },
+          {
+            "kind": "use",
+            "id": "sluice:1-2",
+            "frame": 5137,
+            "seconds": 85.61666666666666,
+            "player": [
+              44.195996048631784,
+              0,
+              39.50000000008695
+            ],
+            "cargo": [
+              0.9768313751794354,
+              0.38999829577383227,
+              56.413067337149
+            ],
+            "solved": [
+              "freight"
+            ],
+            "state": "playing"
+          },
+          {
+            "kind": "walk",
+            "target": [
+              59,
+              0,
+              39.5
+            ],
+            "frame": 5174
+          },
+          {
+            "kind": "use",
+            "id": "sluice:2-0",
+            "frame": 5358,
+            "seconds": 89.3,
+            "player": [
+              58.79358849314651,
+              0,
+              39.49999999999974
+            ],
+            "cargo": [
+              0.8755144287076275,
+              0.38999829374691597,
+              57.11894249360962
+            ],
+            "solved": [
+              "freight"
+            ],
+            "state": "playing"
+          },
+          {
+            "kind": "walk",
+            "target": [
+              44,
+              0,
+              39.5
+            ],
+            "frame": 5395
+          },
+          {
+            "kind": "use",
+            "id": "sluice:1-2",
+            "frame": 5579,
+            "seconds": 92.98333333333333,
+            "player": [
+              44.20101804247531,
+              0,
+              39.50000000000003
+            ],
+            "cargo": [
+              0.4837615817602286,
+              0.38999829149595144,
+              56.99553285006286
+            ],
+            "solved": [
+              "freight"
+            ],
+            "state": "playing"
+          },
+          {
+            "kind": "walk",
+            "target": [
+              29,
+              0,
+              39.5
+            ],
+            "frame": 5596
+          },
+          {
+            "kind": "use",
+            "id": "sluice:0-1",
+            "frame": 5779,
+            "seconds": 96.31666666666666,
+            "player": [
+              29.206882123772555,
+              0,
+              39.50000000000003
+            ],
+            "cargo": [
+              0.15128612321058627,
+              0.3899982917404931,
+              56.7866074233171
+            ],
+            "solved": [
+              "freight"
+            ],
+            "state": "playing"
+          },
+          {
+            "kind": "walk",
+            "target": [
+              44,
+              0,
+              39.5
+            ],
+            "frame": 5864
+          },
+          {
+            "kind": "use",
+            "id": "sluice:1-2",
+            "frame": 6048,
+            "seconds": 100.8,
+            "player": [
+              43.799233895113254,
+              0,
+              39.50000000000003
+            ],
+            "cargo": [
+              -0.1356290831019361,
+              0.3899982914533972,
+              56.540238514654526
+            ],
+            "solved": [
+              "freight"
+            ],
+            "state": "playing"
+          },
+          {
+            "kind": "walk",
+            "target": [
+              59,
+              0,
+              39.5
+            ],
+            "frame": 6073
+          },
+          {
+            "kind": "use",
+            "id": "sluice:2-0",
+            "frame": 6256,
+            "seconds": 104.26666666666667,
+            "player": [
+              58.79219981408019,
+              0,
+              39.50000000000003
+            ],
+            "cargo": [
+              -0.9638342399453876,
+              0.3899982957738263,
+              55.1834239587456
+            ],
+            "solved": [
+              "freight"
+            ],
+            "state": "playing"
+          },
+          {
+            "kind": "walk",
+            "target": [
+              44,
+              0,
+              51
+            ],
+            "frame": 6293
+          },
+          {
+            "kind": "walk",
+            "target": [
+              44,
+              0,
+              61
+            ],
+            "frame": 6524
+          },
+          {
+            "kind": "walk",
+            "target": [
+              44,
+              0,
+              51
+            ],
+            "frame": 6647
+          },
+          {
+            "kind": "walk",
+            "target": [
+              26,
+              0,
+              51
+            ],
+            "frame": 6773
+          },
+          {
+            "kind": "walk",
+            "target": [
+              26,
+              0,
+              39
+            ],
+            "frame": 6993
+          },
+          {
+            "kind": "walk",
+            "target": [
+              21,
+              0,
+              39
+            ],
+            "frame": 7141
+          },
+          {
+            "kind": "walk",
+            "target": [
+              21,
+              0,
+              39
+            ],
+            "frame": 7205
+          },
+          {
+            "kind": "walk",
+            "target": [
+              14,
+              0,
+              39
+            ],
+            "frame": 7205
+          },
+          {
+            "kind": "walk",
+            "target": [
+              0,
+              0,
+              39
+            ],
+            "frame": 7291
+          },
+          {
+            "kind": "walk",
+            "target": [
+              0,
+              0,
+              -41
+            ],
+            "frame": 7461
+          },
+          {
+            "kind": "walk",
+            "target": [
+              -13,
+              0,
+              -41
+            ],
+            "frame": 8425
+          },
+          {
+            "kind": "walk",
+            "target": [
+              -26,
+              0,
+              -29
+            ],
+            "frame": 8585
+          },
+          {
+            "kind": "walk",
+            "target": [
+              -63,
+              0,
+              -29
+            ],
+            "frame": 8800
+          },
+          {
+            "kind": "walk",
+            "target": [
+              -63,
+              0,
+              -30.5
+            ],
+            "frame": 9246
+          },
+          {
+            "kind": "use",
+            "id": "optics:mirror",
+            "frame": 9268,
+            "seconds": 154.46666666666667,
+            "player": [
+              -63.06566306423469,
+              0,
+              -30.32402333916288
+            ],
+            "cargo": [
+              0.42104107504026794,
+              0.3899983030084922,
+              53.62636664594549
+            ],
+            "solved": [
+              "freight",
+              "sluice"
+            ],
+            "state": "playing"
+          },
+          {
+            "kind": "walk",
+            "target": [
+              -62,
+              0,
+              -42
+            ],
+            "frame": 9285
+          },
+          {
+            "kind": "shoot",
+            "slot": 0,
+            "frame": 9543,
+            "seconds": 159.05,
+            "player": [
+              -61.999824238612156,
+              0,
+              -42.04313490611412
+            ],
+            "cargo": [
+              0.12435607545939986,
+              0.38999829575945405,
+              53.18331710370884
+            ],
+            "solved": [
+              "freight",
+              "sluice"
+            ],
+            "state": "playing"
+          },
+          {
+            "kind": "walk",
+            "target": [
+              -60,
+              0,
+              -29
+            ],
+            "frame": 9564
+          },
+          {
+            "kind": "walk",
+            "target": [
+              -43,
+              0,
+              -29
+            ],
+            "frame": 9726
+          },
+          {
+            "kind": "shoot",
+            "slot": 1,
+            "frame": 9964,
+            "seconds": 166.06666666666666,
+            "player": [
+              -42.93601751773197,
+              0,
+              -29.000603944675134
+            ],
+            "cargo": [
+              0.41641161543433025,
+              0.38999829576034983,
+              52.23456971642667
+            ],
+            "solved": [
+              "freight",
+              "sluice"
+            ],
+            "state": "playing"
+          },
+          {
+            "kind": "walk",
+            "target": [
+              -26,
+              0,
+              -29
+            ],
+            "frame": 10050
+          },
+          {
+            "kind": "walk",
+            "target": [
+              -18,
+              0,
+              -41
+            ],
+            "frame": 10257
+          },
+          {
+            "kind": "walk",
+            "target": [
+              -13,
+              0,
+              -41
+            ],
+            "frame": 10433
+          },
+          {
+            "kind": "walk",
+            "target": [
+              -13,
+              0,
+              -41
+            ],
+            "frame": 10496
+          },
+          {
+            "kind": "walk",
+            "target": [
+              0,
+              0,
+              -41
+            ],
+            "frame": 10496
+          },
+          {
+            "kind": "walk",
+            "target": [
+              0,
+              0,
+              39
+            ],
+            "frame": 10654
+          },
+          {
+            "kind": "walk",
+            "target": [
+              0,
+              0,
+              54
+            ],
+            "frame": 11618
+          },
+          {
+            "kind": "walk",
+            "target": [
+              1.8058180504893375,
+              0,
+              53.73801207998506
+            ],
+            "frame": 11800
+          },
+          {
+            "kind": "walk",
+            "target": [
+              0,
+              0,
+              53.747858196606565
+            ],
+            "frame": 11847
+          },
+          {
+            "kind": "walk",
+            "target": [
+              0,
+              0,
+              39
+            ],
+            "frame": 11875
+          },
+          {
+            "kind": "walk",
+            "target": [
+              14,
+              0,
+              39
+            ],
+            "frame": 12075
+          },
+          {
+            "kind": "walk",
+            "target": [
+              14,
+              0,
+              -39
+            ],
+            "frame": 12265
+          },
+          {
+            "kind": "walk",
+            "target": [
+              21,
+              0,
+              -39
+            ],
+            "frame": 13309
+          },
+          {
+            "kind": "walk",
+            "target": [
+              26,
+              0,
+              -50
+            ],
+            "frame": 13406
+          },
+          {
+            "kind": "walk",
+            "target": [
+              30,
+              0,
+              -50
+            ],
+            "frame": 13570
+          },
+          {
+            "kind": "walk",
+            "target": [
+              32.15,
+              0,
+              -50
+            ],
+            "frame": 13655
+          },
+          {
+            "kind": "walk",
+            "target": [
+              44,
+              0,
+              -46
+            ],
+            "frame": 13821
+          },
+          {
+            "kind": "walk",
+            "target": [
+              44,
+              0,
+              -39
+            ],
+            "frame": 13976
+          },
+          {
+            "kind": "walk",
+            "target": [
+              45,
+              0,
+              -40.5
+            ],
+            "frame": 14063
+          },
+          {
+            "kind": "use",
+            "id": "hoist:lift",
+            "frame": 14093,
+            "seconds": 234.88333333333333,
+            "player": [
+              44.84384425435301,
+              0,
+              -40.39368208590112
+            ],
+            "cargo": [
+              32.7768922741894,
+              0.42499814632307237,
+              -49.99995442460244
+            ],
+            "solved": [
+              "freight",
+              "sluice",
+              "optics"
+            ],
+            "state": "playing"
+          },
+          {
+            "kind": "walk",
+            "target": [
+              44,
+              18,
+              -29
+            ],
+            "frame": 14359
+          },
+          {
+            "kind": "walk",
+            "target": [
+              39,
+              18,
+              -29.5
+            ],
+            "frame": 14502
+          },
+          {
+            "kind": "use",
+            "id": "hoist:pawl",
+            "frame": 14566,
+            "seconds": 242.76666666666668,
+            "player": [
+              39.195041242199196,
+              18,
+              -29.472298579634256
+            ],
+            "cargo": [
+              32.7768922741894,
+              0.42499814632307237,
+              -49.99995442460244
+            ],
+            "solved": [
+              "freight",
+              "sluice",
+              "optics"
+            ],
+            "state": "playing"
+          },
+          {
+            "kind": "walk",
+            "target": [
+              32,
+              18,
+              -30
+            ],
+            "frame": 14583
+          },
+          {
+            "kind": "shoot",
+            "slot": 1,
+            "frame": 14694,
+            "seconds": 244.9,
+            "player": [
+              31.97358751366985,
+              18,
+              -30.001875394894867
+            ],
+            "cargo": [
+              32.7768922741894,
+              0.42499814632307237,
+              -49.99995442460244
+            ],
+            "solved": [
+              "freight",
+              "sluice",
+              "optics"
+            ],
+            "state": "playing"
+          },
+          {
+            "kind": "walk",
+            "target": [
+              32,
+              18,
+              -32.55
+            ],
+            "frame": 14714
+          },
+          {
+            "kind": "shoot",
+            "slot": 0,
+            "frame": 14787,
+            "seconds": 246.45,
+            "player": [
+              32.00033478498679,
+              18,
+              -32.58157833530719
+            ],
+            "cargo": [
+              32.7768922741894,
+              0.42499814632307237,
+              -49.99995442460244
+            ],
+            "solved": [
+              "freight",
+              "sluice",
+              "optics"
+            ],
+            "state": "playing"
+          },
+          {
+            "kind": "walk",
+            "target": [
+              31.869786922056647,
+              18,
+              -23.089904746595092
+            ],
+            "frame": 14866
+          },
+          {
+            "kind": "walk",
+            "target": [
+              26,
+              18,
+              -29
+            ],
+            "frame": 15005
+          },
+          {
+            "kind": "walk",
+            "target": [
+              26,
+              18,
+              -39
+            ],
+            "frame": 15161
+          },
+          {
+            "kind": "walk",
+            "target": [
+              21,
+              18,
+              -39
+            ],
+            "frame": 15298
+          },
+          {
+            "kind": "walk",
+            "target": [
+              21,
+              18,
+              -39
+            ],
+            "frame": 15368
+          },
+          {
+            "kind": "walk",
+            "target": [
+              14,
+              18,
+              -39
+            ],
+            "frame": 15368
+          },
+          {
+            "kind": "walk",
+            "target": [
+              14,
+              18,
+              35
+            ],
+            "frame": 15464
+          },
+          {
+            "kind": "walk",
+            "target": [
+              14,
+              18,
+              39
+            ],
+            "frame": 16454
+          },
+          {
+            "kind": "walk",
+            "target": [
+              0,
+              18,
+              39
+            ],
+            "frame": 16510
+          },
+          {
+            "kind": "walk",
+            "target": [
+              0,
+              18,
+              54
+            ],
+            "frame": 16700
+          },
+          {
+            "kind": "walk",
+            "target": [
+              2,
+              18,
+              57
+            ],
+            "frame": 16904
+          },
+          {
+            "kind": "walk",
+            "target": [
+              2,
+              18,
+              54.85
+            ],
+            "frame": 16979
+          },
+          {
+            "kind": "walk",
+            "target": [
+              0,
+              18,
+              54.93239211398227
+            ],
+            "frame": 17144
+          },
+          {
+            "kind": "walk",
+            "target": [
+              0,
+              18,
+              39
+            ],
+            "frame": 17172
+          },
+          {
+            "kind": "walk",
+            "target": [
+              -6,
+              18,
+              39
+            ],
+            "frame": 17367
+          },
+          {
+            "kind": "walk",
+            "target": [
+              -6,
+              18,
+              30
+            ],
+            "frame": 17443
+          },
+          {
+            "kind": "walk",
+            "target": [
+              -21,
+              18,
+              30
+            ],
+            "frame": 17555
+          },
+          {
+            "kind": "walk",
+            "target": [
+              -28,
+              18,
+              37.5
+            ],
+            "frame": 17739
+          },
+          {
+            "kind": "use",
+            "id": "archive:slide-a",
+            "frame": 17865,
+            "seconds": 297.75,
+            "player": [
+              -27.889519377403495,
+              18,
+              37.378572821991895
+            ],
+            "cargo": [
+              4.232316992941956,
+              18.389998184118973,
+              54.4313821650875
+            ],
+            "solved": [
+              "freight",
+              "sluice",
+              "optics",
+              "hoist"
+            ],
+            "state": "playing"
+          },
+          {
+            "kind": "walk",
+            "target": [
+              -30,
+              18,
+              23
+            ],
+            "frame": 17882
+          },
+          {
+            "kind": "walk",
+            "target": [
+              -47,
+              18,
+              23
+            ],
+            "frame": 18062
+          },
+          {
+            "kind": "walk",
+            "target": [
+              -47,
+              18,
+              17
+            ],
+            "frame": 18270
+          },
+          {
+            "kind": "walk",
+            "target": [
+              -49,
+              18,
+              17
+            ],
+            "frame": 18346
+          },
+          {
+            "kind": "walk",
+            "target": [
+              -49,
+              18,
+              17.5
+            ],
+            "frame": 18374
+          },
+          {
+            "kind": "use",
+            "id": "archive:slide-b",
+            "frame": 18385,
+            "seconds": 306.4166666666667,
+            "player": [
+              -49.12165839207346,
+              18,
+              17.34631282338211
+            ],
+            "cargo": [
+              4.866908438435661,
+              18.38999814476171,
+              55.14059560557568
+            ],
+            "solved": [
+              "freight",
+              "sluice",
+              "optics",
+              "hoist"
+            ],
+            "state": "playing"
+          },
+          {
+            "kind": "walk",
+            "target": [
+              -47,
+              18,
+              17
+            ],
+            "frame": 18402
+          },
+          {
+            "kind": "walk",
+            "target": [
+              -47,
+              18,
+              37
+            ],
+            "frame": 18432
+          },
+          {
+            "kind": "walk",
+            "target": [
+              -57,
+              18,
+              37
+            ],
+            "frame": 18676
+          },
+          {
+            "kind": "walk",
+            "target": [
+              -47,
+              18,
+              37
+            ],
+            "frame": 18800
+          },
+          {
+            "kind": "walk",
+            "target": [
+              -47,
+              18,
+              17
+            ],
+            "frame": 18926
+          },
+          {
+            "kind": "walk",
+            "target": [
+              -47,
+              18,
+              23
+            ],
+            "frame": 19170
+          },
+          {
+            "kind": "walk",
+            "target": [
+              -30,
+              18,
+              23
+            ],
+            "frame": 19248
+          },
+          {
+            "kind": "walk",
+            "target": [
+              -28,
+              18,
+              30
+            ],
+            "frame": 19456
+          },
+          {
+            "kind": "walk",
+            "target": [
+              -21,
+              18,
+              30
+            ],
+            "frame": 19547
+          },
+          {
+            "kind": "walk",
+            "target": [
+              -21,
+              18,
+              30
+            ],
+            "frame": 19634
+          },
+          {
+            "kind": "walk",
+            "target": [
+              -6,
+              18,
+              30
+            ],
+            "frame": 19634
+          },
+          {
+            "kind": "walk",
+            "target": [
+              -6,
+              18,
+              18
+            ],
+            "frame": 19816
+          },
+          {
+            "kind": "walk",
+            "target": [
+              0,
+              18,
+              18
+            ],
+            "frame": 19964
+          },
+          {
+            "kind": "walk",
+            "target": [
+              0,
+              18,
+              -37
+            ],
+            "frame": 20040
+          },
+          {
+            "kind": "walk",
+            "target": [
+              -31,
+              18,
+              -37
+            ],
+            "frame": 20704
+          },
+          {
+            "kind": "walk",
+            "target": [
+              -48,
+              18,
+              -37
+            ],
+            "frame": 21080
+          },
+          {
+            "kind": "walk",
+            "target": [
+              -48,
+              18,
+              -31.5
+            ],
+            "frame": 21286
+          },
+          {
+            "kind": "use",
+            "id": "flywheel:ratio",
+            "frame": 21356,
+            "seconds": 355.93333333333334,
+            "player": [
+              -48.00651482395161,
+              18,
+              -31.67749709019117
+            ],
+            "cargo": [
+              2.258468216073923,
+              18.389998295964492,
+              56.23729279356769
+            ],
+            "solved": [
+              "freight",
+              "sluice",
+              "optics",
+              "hoist",
+              "archive"
+            ],
+            "state": "playing"
+          },
+          {
+            "kind": "walk",
+            "target": [
+              -59,
+              18,
+              -30.5
+            ],
+            "frame": 21373
+          },
+          {
+            "kind": "use",
+            "id": "flywheel:crank",
+            "frame": 21509,
+            "seconds": 358.48333333333335,
+            "player": [
+              -58.79416647444391,
+              18,
+              -30.517676689994836
+            ],
+            "cargo": [
+              2.029148563549855,
+              18.389998295946246,
+              56.1826539655207
+            ],
+            "solved": [
+              "freight",
+              "sluice",
+              "optics",
+              "hoist",
+              "archive"
+            ],
+            "state": "playing"
+          },
+          {
+            "kind": "use",
+            "id": "flywheel:crank",
+            "frame": 21526,
+            "seconds": 358.76666666666665,
+            "player": [
+              -59.031624035516444,
+              18,
+              -30.49728417286424
+            ],
+            "cargo": [
+              1.8970088804564043,
+              18.389998295801252,
+              56.151169714854625
+            ],
+            "solved": [
+              "freight",
+              "sluice",
+              "optics",
+              "hoist",
+              "archive"
+            ],
+            "state": "playing"
+          },
+          {
+            "kind": "use",
+            "id": "flywheel:crank",
+            "frame": 21543,
+            "seconds": 359.05,
+            "player": [
+              -59.03501118571105,
+              18,
+              -30.4969932892299
+            ],
+            "cargo": [
+              1.7648691971592108,
+              18.389998295773832,
+              56.1196854641399
+            ],
+            "solved": [
+              "freight",
+              "sluice",
+              "optics",
+              "hoist",
+              "archive"
+            ],
+            "state": "playing"
+          },
+          {
+            "kind": "use",
+            "id": "flywheel:crank",
+            "frame": 21560,
+            "seconds": 359.3333333333333,
+            "player": [
+              -59.035059500813716,
+              18,
+              -30.496989139997716
+            ],
+            "cargo": [
+              1.6327295138620035,
+              18.38999829577383,
+              56.08820121342517
+            ],
+            "solved": [
+              "freight",
+              "sluice",
+              "optics",
+              "hoist",
+              "archive"
+            ],
+            "state": "playing"
+          },
+          {
+            "kind": "use",
+            "id": "flywheel:crank",
+            "frame": 21577,
+            "seconds": 359.6166666666667,
+            "player": [
+              -59.03506018999164,
+              18,
+              -30.49698908081209
+            ],
+            "cargo": [
+              1.5005898305647962,
+              18.38999829577383,
+              56.056716962710475
+            ],
+            "solved": [
+              "freight",
+              "sluice",
+              "optics",
+              "hoist",
+              "archive"
+            ],
+            "state": "playing"
+          },
+          {
+            "kind": "walk",
+            "target": [
+              -37,
+              18,
+              -30.5
+            ],
+            "frame": 21594
+          },
+          {
+            "kind": "use",
+            "id": "flywheel:clutch",
+            "frame": 21871,
+            "seconds": 364.51666666666665,
+            "player": [
+              -37.16620019443677,
+              18,
+              -30.505379537249837
+            ],
+            "cargo": [
+              0.4180005210567154,
+              18.389998295795145,
+              55.798774403754386
+            ],
+            "solved": [
+              "freight",
+              "sluice",
+              "optics",
+              "hoist",
+              "archive"
+            ],
+            "state": "playing"
+          },
+          {
+            "kind": "walk",
+            "target": [
+              -48,
+              18,
+              -23.5
+            ],
+            "frame": 21888
+          },
+          {
+            "kind": "use",
+            "id": "flywheel:brake",
+            "frame": 22049,
+            "seconds": 367.48333333333335,
+            "player": [
+              -47.84795341829308,
+              18,
+              -23.596187414562376
+            ],
+            "cargo": [
+              1.351155745406493,
+              18.389998296056095,
+              56.49661605384309
+            ],
+            "solved": [
+              "freight",
+              "sluice",
+              "optics",
+              "hoist",
+              "archive"
+            ],
+            "state": "playing"
+          },
+          {
+            "kind": "use",
+            "id": "flywheel:brake",
+            "frame": 22066,
+            "seconds": 367.76666666666665,
+            "player": [
+              -48.04119129818012,
+              18,
+              -23.473941640581778
+            ],
+            "cargo": [
+              1.4268769599612017,
+              18.389998296282556,
+              56.55324266422166
+            ],
+            "solved": [
+              "freight",
+              "sluice",
+              "optics",
+              "hoist",
+              "archive"
+            ],
+            "state": "playing"
+          },
+          {
+            "kind": "walk",
+            "target": [
+              -35,
+              18,
+              -37
+            ],
+            "frame": 22187
+          },
+          {
+            "kind": "walk",
+            "target": [
+              -31,
+              18,
+              -37
+            ],
+            "frame": 22416
+          },
+          {
+            "kind": "walk",
+            "target": [
+              -31,
+              18,
+              -37
+            ],
+            "frame": 22467
+          },
+          {
+            "kind": "walk",
+            "target": [
+              0,
+              18,
+              -37
+            ],
+            "frame": 22467
+          },
+          {
+            "kind": "walk",
+            "target": [
+              0,
+              18,
+              18
+            ],
+            "frame": 22841
+          },
+          {
+            "kind": "walk",
+            "target": [
+              0,
+              18,
+              39
+            ],
+            "frame": 23505
+          },
+          {
+            "kind": "walk",
+            "target": [
+              0,
+              18,
+              54
+            ],
+            "frame": 23759
+          },
+          {
+            "kind": "walk",
+            "target": [
+              0,
+              18,
+              39
+            ],
+            "frame": 23962
+          },
+          {
+            "kind": "walk",
+            "target": [
+              14,
+              18,
+              39
+            ],
+            "frame": 24166
+          },
+          {
+            "kind": "walk",
+            "target": [
+              14,
+              18,
+              35
+            ],
+            "frame": 24356
+          },
+          {
+            "kind": "walk",
+            "target": [
+              24,
+              18,
+              35
+            ],
+            "frame": 24413
+          },
+          {
+            "kind": "walk",
+            "target": [
+              30,
+              18,
+              35
+            ],
+            "frame": 24550
+          },
+          {
+            "kind": "walk",
+            "target": [
+              31,
+              18,
+              35
+            ],
+            "frame": 24632
+          },
+          {
+            "kind": "walk",
+            "target": [
+              33.15,
+              18,
+              35
+            ],
+            "frame": 24653
+          },
+          {
+            "kind": "walk",
+            "target": [
+              29,
+              18,
+              21
+            ],
+            "frame": 24819
+          },
+          {
+            "kind": "walk",
+            "target": [
+              30,
+              18,
+              21.5
+            ],
+            "frame": 24999
+          },
+          {
+            "kind": "use",
+            "id": "magnet:coil-0",
+            "frame": 25017,
+            "seconds": 416.95,
+            "player": [
+              29.843269081972668,
+              18,
+              21.35199774900888
+            ],
+            "cargo": [
+              33.77279571412302,
+              18.389998146323087,
+              35.00000396601154
+            ],
+            "solved": [
+              "freight",
+              "sluice",
+              "optics",
+              "hoist",
+              "archive",
+              "flywheel"
+            ],
+            "state": "playing"
+          },
+          {
+            "kind": "walk",
+            "target": [
+              30,
+              18,
+              25.5
+            ],
+            "frame": 25090
+          },
+          {
+            "kind": "use",
+            "id": "magnet:coil-1",
+            "frame": 25142,
+            "seconds": 419.03333333333336,
+            "player": [
+              30.00111534888564,
+              18,
+              25.299703802899646
+            ],
+            "cargo": [
+              33.989818523195865,
+              22.691659087832015,
+              35.0000001775549
+            ],
+            "solved": [
+              "freight",
+              "sluice",
+              "optics",
+              "hoist",
+              "archive",
+              "flywheel"
+            ],
+            "state": "playing"
+          },
+          {
+            "kind": "walk",
+            "target": [
+              27,
+              18,
+              25.5
+            ],
+            "frame": 25333
+          },
+          {
+            "kind": "walk",
+            "target": [
+              27,
+              18,
+              41.5
+            ],
+            "frame": 25373
+          },
+          {
+            "kind": "walk",
+            "target": [
+              30,
+              18,
+              41.5
+            ],
+            "frame": 25569
+          },
+          {
+            "kind": "use",
+            "id": "magnet:coil-2",
+            "frame": 25609,
+            "seconds": 426.81666666666666,
+            "player": [
+              29.822051720544515,
+              18,
+              41.51843344793461
+            ],
+            "cargo": [
+              45.99994666465602,
+              22.799999972505308,
+              45.99995264572687
+            ],
+            "solved": [
+              "freight",
+              "sluice",
+              "optics",
+              "hoist",
+              "archive",
+              "flywheel"
+            ],
+            "state": "playing"
+          },
+          {
+            "kind": "use",
+            "id": "magnet:coil-2",
+            "frame": 25756,
+            "seconds": 429.26666666666665,
+            "player": [
+              30.05229705192038,
+              18,
+              41.49855622224588
+            ],
+            "cargo": [
+              57.629268551528604,
+              22.799999999769277,
+              35.329213789132375
+            ],
+            "solved": [
+              "freight",
+              "sluice",
+              "optics",
+              "hoist",
+              "archive",
+              "flywheel"
+            ],
+            "state": "playing"
+          },
+          {
+            "kind": "walk",
+            "target": [
+              27,
+              18,
+              41.5
+            ],
+            "frame": 25834
+          },
+          {
+            "kind": "walk",
+            "target": [
+              27,
+              18,
+              21
+            ],
+            "frame": 25874
+          },
+          {
+            "kind": "walk",
+            "target": [
+              66.2,
+              18,
+              21
+            ],
+            "frame": 26124
+          },
+          {
+            "kind": "walk",
+            "target": [
+              66.2,
+              18,
+              53.8
+            ],
+            "frame": 26598
+          },
+          {
+            "kind": "walk",
+            "target": [
+              64,
+              18,
+              53.8
+            ],
+            "frame": 26995
+          },
+          {
+            "kind": "walk",
+            "target": [
+              64,
+              22.2,
+              38
+            ],
+            "frame": 27025
+          },
+          {
+            "kind": "walk",
+            "target": [
+              59,
+              22.2,
+              37
+            ],
+            "frame": 27218
+          },
+          {
+            "kind": "walk",
+            "target": [
+              57.65082187021674,
+              22.2,
+              36.36029836709436
+            ],
+            "frame": 27283
+          },
+          {
+            "kind": "walk",
+            "target": [
+              64,
+              22.2,
+              38
+            ],
+            "frame": 27328
+          },
+          {
+            "kind": "walk",
+            "target": [
+              64,
+              18,
+              53.8
+            ],
+            "frame": 27419
+          },
+          {
+            "kind": "walk",
+            "target": [
+              66.2,
+              18,
+              53.8
+            ],
+            "frame": 27606
+          },
+          {
+            "kind": "walk",
+            "target": [
+              66.2,
+              18,
+              21
+            ],
+            "frame": 27639
+          },
+          {
+            "kind": "walk",
+            "target": [
+              29,
+              18,
+              21
+            ],
+            "frame": 28080
+          },
+          {
+            "kind": "walk",
+            "target": [
+              29,
+              18,
+              35
+            ],
+            "frame": 28580
+          },
+          {
+            "kind": "walk",
+            "target": [
+              24,
+              18,
+              35
+            ],
+            "frame": 28770
+          },
+          {
+            "kind": "walk",
+            "target": [
+              24,
+              18,
+              35
+            ],
+            "frame": 28840
+          },
+          {
+            "kind": "walk",
+            "target": [
+              14,
+              18,
+              35
+            ],
+            "frame": 28840
+          },
+          {
+            "kind": "walk",
+            "target": [
+              14,
+              18,
+              39
+            ],
+            "frame": 28976
+          },
+          {
+            "kind": "walk",
+            "target": [
+              0,
+              18,
+              39
+            ],
+            "frame": 29033
+          },
+          {
+            "kind": "walk",
+            "target": [
+              0,
+              18,
+              57
+            ],
+            "frame": 29223
+          },
+          {
+            "kind": "walk",
+            "target": [
+              14,
+              18,
+              57
+            ],
+            "frame": 29467
+          },
+          {
+            "kind": "walk",
+            "target": [
+              14,
+              36,
+              -13
+            ],
+            "frame": 29657
+          },
+          {
+            "kind": "walk",
+            "target": [
+              0,
+              36,
+              -13
+            ],
+            "frame": 30594
+          },
+          {
+            "kind": "walk",
+            "target": [
+              0,
+              36,
+              39
+            ],
+            "frame": 30784
+          },
+          {
+            "kind": "walk",
+            "target": [
+              0,
+              36,
+              54
+            ],
+            "frame": 31481
+          },
+          {
+            "kind": "walk",
+            "target": [
+              2,
+              36,
+              57
+            ],
+            "frame": 31683
+          },
+          {
+            "kind": "walk",
+            "target": [
+              2,
+              36,
+              54.85
+            ],
+            "frame": 31759
+          },
+          {
+            "kind": "walk",
+            "target": [
+              0,
+              36,
+              54.93640895813029
+            ],
+            "frame": 31924
+          },
+          {
+            "kind": "walk",
+            "target": [
+              0,
+              36,
+              39
+            ],
+            "frame": 31952
+          },
+          {
+            "kind": "walk",
+            "target": [
+              0,
+              36,
+              -13
+            ],
+            "frame": 32147
+          },
+          {
+            "kind": "walk",
+            "target": [
+              14,
+              36,
+              -13
+            ],
+            "frame": 32773
+          },
+          {
+            "kind": "walk",
+            "target": [
+              14,
+              36,
+              -33
+            ],
+            "frame": 32945
+          },
+          {
+            "kind": "walk",
+            "target": [
+              26,
+              36,
+              -33
+            ],
+            "frame": 33189
+          },
+          {
+            "kind": "walk",
+            "target": [
+              31,
+              36,
+              -21
+            ],
+            "frame": 33337
+          },
+          {
+            "kind": "shoot",
+            "slot": 0,
+            "frame": 33602,
+            "seconds": 560.0333333333333,
+            "player": [
+              31.017063835362478,
+              36,
+              -20.957580996179654
+            ],
+            "cargo": [
+              -0.9259699812622938,
+              36.3899981454842,
+              52.963141416590936
+            ],
+            "solved": [
+              "freight",
+              "sluice",
+              "optics",
+              "hoist",
+              "archive",
+              "flywheel",
+              "magnet"
+            ],
+            "state": "playing"
+          },
+          {
+            "kind": "walk",
+            "target": [
+              30,
+              36,
+              -33
+            ],
+            "frame": 33620
+          },
+          {
+            "kind": "shoot",
+            "slot": 1,
+            "frame": 33809,
+            "seconds": 563.4833333333333,
+            "player": [
+              29.995470219961618,
+              36,
+              -33.053634302313
+            ],
+            "cargo": [
+              -0.6476049585388196,
+              36.389998144761705,
+              52.445994455813995
+            ],
+            "solved": [
+              "freight",
+              "sluice",
+              "optics",
+              "hoist",
+              "archive",
+              "flywheel",
+              "magnet"
+            ],
+            "state": "playing"
+          },
+          {
+            "kind": "walk",
+            "target": [
+              31,
+              36,
+              -44.5
+            ],
+            "frame": 33829
+          },
+          {
+            "kind": "use",
+            "id": "migrant:rail",
+            "frame": 33971,
+            "seconds": 566.1833333333333,
+            "player": [
+              30.98524311804898,
+              36,
+              -44.331849321664215
+            ],
+            "cargo": [
+              -0.626423082539776,
+              36.38999814557108,
+              52.40664372315624
+            ],
+            "solved": [
+              "freight",
+              "sluice",
+              "optics",
+              "hoist",
+              "archive",
+              "flywheel",
+              "magnet"
+            ],
+            "state": "playing"
+          },
+          {
+            "kind": "walk",
+            "target": [
+              31,
+              36,
+              -21
+            ],
+            "frame": 33988
+          },
+          {
+            "kind": "walk",
+            "target": [
+              31,
+              36,
+              -33
+            ],
+            "frame": 34343
+          },
+          {
+            "kind": "walk",
+            "target": [
+              26,
+              36,
+              -33
+            ],
+            "frame": 34492
+          },
+          {
+            "kind": "walk",
+            "target": [
+              26,
+              36,
+              -33
+            ],
+            "frame": 34556
+          },
+          {
+            "kind": "walk",
+            "target": [
+              14,
+              36,
+              -33
+            ],
+            "frame": 34556
+          },
+          {
+            "kind": "walk",
+            "target": [
+              14,
+              36,
+              -13
+            ],
+            "frame": 34702
+          },
+          {
+            "kind": "walk",
+            "target": [
+              0,
+              36,
+              -13
+            ],
+            "frame": 34946
+          },
+          {
+            "kind": "walk",
+            "target": [
+              0,
+              36,
+              39
+            ],
+            "frame": 35118
+          },
+          {
+            "kind": "walk",
+            "target": [
+              0,
+              36,
+              54
+            ],
+            "frame": 35746
+          },
+          {
+            "kind": "walk",
+            "target": [
+              0,
+              36,
+              39
+            ],
+            "frame": 35949
+          },
+          {
+            "kind": "walk",
+            "target": [
+              0,
+              36,
+              -13
+            ],
+            "frame": 36153
+          },
+          {
+            "kind": "walk",
+            "target": [
+              14,
+              36,
+              -13
+            ],
+            "frame": 36849
+          },
+          {
+            "kind": "walk",
+            "target": [
+              14,
+              36,
+              -33
+            ],
+            "frame": 37039
+          },
+          {
+            "kind": "walk",
+            "target": [
+              26,
+              36,
+              -33
+            ],
+            "frame": 37309
+          },
+          {
+            "kind": "walk",
+            "target": [
+              30.6,
+              36,
+              -21
+            ],
+            "frame": 37473
+          },
+          {
+            "kind": "walk",
+            "target": [
+              55,
+              39,
+              -23
+            ],
+            "frame": 37699
+          },
+          {
+            "kind": "walk",
+            "target": [
+              52.39999999999983,
+              39,
+              -33
+            ],
+            "frame": 37838
+          },
+          {
+            "kind": "walk",
+            "target": [
+              31,
+              36,
+              -21
+            ],
+            "frame": 38033
+          },
+          {
+            "kind": "walk",
+            "target": [
+              31,
+              36,
+              -33
+            ],
+            "frame": 38054
+          },
+          {
+            "kind": "walk",
+            "target": [
+              26,
+              36,
+              -33
+            ],
+            "frame": 38218
+          },
+          {
+            "kind": "walk",
+            "target": [
+              26,
+              36,
+              -33
+            ],
+            "frame": 38288
+          },
+          {
+            "kind": "walk",
+            "target": [
+              14,
+              36,
+              -33
+            ],
+            "frame": 38288
+          },
+          {
+            "kind": "walk",
+            "target": [
+              14,
+              36,
+              -13
+            ],
+            "frame": 38450
+          },
+          {
+            "kind": "walk",
+            "target": [
+              0,
+              36,
+              -13
+            ],
+            "frame": 38720
+          },
+          {
+            "kind": "walk",
+            "target": [
+              0,
+              36,
+              39
+            ],
+            "frame": 38910
+          },
+          {
+            "kind": "walk",
+            "target": [
+              0,
+              36,
+              54
+            ],
+            "frame": 39607
+          },
+          {
+            "kind": "walk",
+            "target": [
+              2,
+              36,
+              57
+            ],
+            "frame": 39809
+          },
+          {
+            "kind": "walk",
+            "target": [
+              2,
+              36,
+              54.85
+            ],
+            "frame": 39885
+          },
+          {
+            "kind": "walk",
+            "target": [
+              0,
+              36,
+              54.93639141009904
+            ],
+            "frame": 40050
+          },
+          {
+            "kind": "walk",
+            "target": [
+              0,
+              36,
+              39
+            ],
+            "frame": 40078
+          },
+          {
+            "kind": "walk",
+            "target": [
+              -6,
+              36,
+              39
+            ],
+            "frame": 40273
+          },
+          {
+            "kind": "walk",
+            "target": [
+              -6,
+              36,
+              33
+            ],
+            "frame": 40349
+          },
+          {
+            "kind": "walk",
+            "target": [
+              -23,
+              36,
+              33
+            ],
+            "frame": 40425
+          },
+          {
+            "kind": "walk",
+            "target": [
+              -24,
+              36,
+              14
+            ],
+            "frame": 40633
+          },
+          {
+            "kind": "walk",
+            "target": [
+              -65,
+              36,
+              14
+            ],
+            "frame": 40880
+          },
+          {
+            "kind": "walk",
+            "target": [
+              -65,
+              36,
+              21
+            ],
+            "frame": 41376
+          },
+          {
+            "kind": "walk",
+            "target": [
+              -65,
+              36,
+              21.5
+            ],
+            "frame": 41854
+          },
+          {
+            "kind": "use",
+            "id": "pendulum:catch-a",
+            "frame": 41863,
+            "seconds": 697.7166666666667,
+            "player": [
+              -64.99930083985738,
+              36,
+              21.2882016961451
+            ],
+            "cargo": [
+              1.524281244466973,
+              36.389998295794825,
+              56.10479365890248
+            ],
+            "solved": [
+              "freight",
+              "sluice",
+              "optics",
+              "hoist",
+              "archive",
+              "flywheel",
+              "magnet",
+              "migrant"
+            ],
+            "state": "playing"
+          },
+          {
+            "kind": "walk",
+            "target": [
+              -67,
+              36,
+              23
+            ],
+            "frame": 41880
+          },
+          {
+            "kind": "walk",
+            "target": [
+              -67,
+              36,
+              33
+            ],
+            "frame": 41914
+          },
+          {
+            "kind": "walk",
+            "target": [
+              -56,
+              36,
+              33
+            ],
+            "frame": 42088
+          },
+          {
+            "kind": "walk",
+            "target": [
+              -48,
+              36,
+              33
+            ],
+            "frame": 42201
+          },
+          {
+            "kind": "walk",
+            "target": [
+              -41,
+              36,
+              33
+            ],
+            "frame": 42719
+          },
+          {
+            "kind": "walk",
+            "target": [
+              -36,
+              42,
+              31.7
+            ],
+            "frame": 43019
+          },
+          {
+            "kind": "walk",
+            "target": [
+              -33,
+              42,
+              42.5
+            ],
+            "frame": 43727
+          },
+          {
+            "kind": "walk",
+            "target": [
+              -33,
+              42,
+              42.5
+            ],
+            "frame": 44167
+          },
+          {
+            "kind": "use",
+            "id": "pendulum:catch-b",
+            "frame": 44167,
+            "seconds": 736.1166666666667,
+            "player": [
+              -32.96562398288177,
+              42,
+              42.515869351054526
+            ],
+            "cargo": [
+              2.4655475020831163,
+              36.38999829577383,
+              55.74705152868174
+            ],
+            "solved": [
+              "freight",
+              "sluice",
+              "optics",
+              "hoist",
+              "archive",
+              "flywheel",
+              "magnet",
+              "migrant"
+            ],
+            "state": "playing"
+          },
+          {
+            "kind": "walk",
+            "target": [
+              -29,
+              42,
+              44
+            ],
+            "frame": 44184
+          },
+          {
+            "kind": "walk",
+            "target": [
+              -29,
+              36,
+              20
+            ],
+            "frame": 44239
+          },
+          {
+            "kind": "walk",
+            "target": [
+              -29,
+              36,
+              14
+            ],
+            "frame": 44487
+          },
+          {
+            "kind": "walk",
+            "target": [
+              -24,
+              36,
+              14
+            ],
+            "frame": 44551
+          },
+          {
+            "kind": "walk",
+            "target": [
+              -24,
+              36,
+              33
+            ],
+            "frame": 44615
+          },
+          {
+            "kind": "walk",
+            "target": [
+              -23,
+              36,
+              33
+            ],
+            "frame": 44847
+          }
+        ],
+        "maxIdleSeconds": 6.566666666666649,
+        "partial": true,
+        "teleports": 4,
+        "metrics": {
+          "id": "tower-singularity",
+          "completedStages": 9,
+          "totalStages": 11,
+          "solvedIds": [
+            "freight",
+            "sluice",
+            "optics",
+            "hoist",
+            "archive",
+            "flywheel",
+            "magnet",
+            "migrant",
+            "pendulum"
+          ],
+          "events": [
+            {
+              "id": "freight",
+              "rule": "sealed-freight-bay-with-carried-portal-crossing",
+              "seconds": 36.80833333333189,
+              "player": [
+                -53.02209668227982,
+                0,
+                45.72315399841355
+              ],
+              "cargo": [
+                -53.0009371576088,
+                1.076976903754432,
+                46.44288448876917
+              ],
+              "proof": {
+                "sameBody": true,
+                "carriedPortalCrossings": 1,
+                "physicalWall": true
+              }
+            },
+            {
+              "id": "sluice",
+              "rule": "conserved-hydraulic-head-and-recessed-span",
+              "seconds": 110.65833333336747,
+              "player": [
+                43.98189205918378,
+                0,
+                59.72180151375055
+              ],
+              "cargo": [
+                -1.0806660816220497,
+                0.3899982968018354,
+                54.232391622502185
+              ],
+              "proof": {
+                "conserved": 10,
+                "volumes": [
+                  4.9999999999999805,
+                  5.000000000000027,
+                  0
+                ],
+                "raisedSpan": true
+              }
+            },
+            {
+              "id": "optics",
+              "rule": "portal-ray-with-physical-reflector",
+              "seconds": 167.6000000000119,
+              "player": [
+                -42.93589356268924,
+                0,
+                -29.00060511471392
+              ],
+              "cargo": [
+                0.4716578150536815,
+                0.3899982957794743,
+                52.14353453425795
+              ],
+              "proof": {
+                "portalReflection": true,
+                "exposure": 1.0083333333333322
+              }
+            },
+            {
+              "id": "hoist",
+              "rule": "cargo-powered-hoist-upper-pawl-and-floor-transfer",
+              "seconds": 247.86666666660557,
+              "player": [
+                32.000334934569366,
+                18,
+                -32.58159243932016
+              ],
+              "cargo": [
+                31.86810128475063,
+                18.528579055037152,
+                -24.183894937673053
+              ],
+              "proof": {
+                "height": 18,
+                "locked": true,
+                "liftUsed": true,
+                "cargoPortalTransports": 3,
+                "upperCatcherLoaded": true
+              }
+            },
+            {
+              "id": "archive",
+              "rule": "two-sliding-load-bearing-walls-rewire-walkable-route",
+              "seconds": 313.2083333332128,
+              "player": [
+                -55.71105768099097,
+                18,
+                37.02187584816764
+              ],
+              "cargo": [
+                3.7383770385631503,
+                18.38999814476182,
+                55.99165000947796
+              ],
+              "proof": {
+                "eastMoved": true,
+                "crossMoved": true
+              }
+            },
+            {
+              "id": "flywheel",
+              "rule": "stored-rotational-energy-gearing-and-clutch",
+              "seconds": 369.87499999982793,
+              "player": [
+                -48.04398757524912,
+                18,
+                -23.472172665188587
+              ],
+              "cargo": [
+                1.6121463830610583,
+                18.38999829686617,
+                56.69179318391253
+              ],
+              "proof": {
+                "ratio": 0.6666666666666666,
+                "output": 5.564711324216725,
+                "stable": 2.008333333333329,
+                "energy": 870.9190909274776
+              }
+            },
+            {
+              "id": "magnet",
+              "rule": "free-physical-cargo-detour-around-magnetic-screen",
+              "seconds": 429.50833333310703,
+              "player": [
+                30.05229705192038,
+                18,
+                41.49855622224588
+              ],
+              "cargo": [
+                57.70107836476844,
+                22.63384550004242,
+                35.26031976101061
+              ],
+              "proof": {
+                "freeBodyDetour": true,
+                "magnet": -1,
+                "physicalCargoSlit": true
+              }
+            },
+            {
+              "id": "migrant",
+              "rule": "cargo-and-player-transport-on-translating-portal-carriage",
+              "seconds": 630.4833333329243,
+              "player": [
+                54.71736038634101,
+                39,
+                -24.262897491528626
+              ],
+              "cargo": [
+                54.86581430771502,
+                40.07686208048973,
+                -23.558322054855307
+              ],
+              "proof": {
+                "travel": 1,
+                "transportedOnMovingExit": true
+              }
+            },
+            {
+              "id": "pendulum",
+              "rule": "two-phase-moving-span-and-mechanical-catch",
+              "seconds": 736.2249999994948,
+              "player": [
+                -32.96562398288177,
+                42,
+                42.515869351054526
+              ],
+              "cargo": [
+                2.4655475020831163,
+                36.38999829577383,
+                55.74705152868174
+              ],
+              "proof": {
+                "twoPhysicalCatches": true,
+                "phase": 68.73750000000537,
+                "heights": [
+                  0,
+                  6
+                ]
+              }
+            }
+          ],
+          "checkpoints": false,
+          "seconds": 747.8166666661509,
+          "won": false,
+          "carriedPortalCrossings": {
+            "freight": 2,
+            "migrant": 2
+          }
+        },
+        "sameCompanion": true
+      },
+      "error": null,
+      "scope": "inertia-west-wall-end-landing",
+      "attackChecks": [
+        {
+          "label": "West-corner jump input",
+          "frame": 4462,
+          "player": [
+            -44.10249575951923,
+            54,
+            -27.737613118232368
+          ],
+          "cargo": [
+            4.476667749051243,
+            36.38999818354389,
+            54.39606143730622
+          ],
+          "held": false,
+          "teleports": 4,
+          "state": "playing",
+          "solved": [
+            "freight",
+            "sluice",
+            "optics",
+            "hoist",
+            "archive",
+            "flywheel",
+            "magnet",
+            "migrant",
+            "pendulum"
+          ]
+        },
+        {
+          "label": "West-corner diagonal landing",
+          "frame": 4532,
+          "player": [
+            -38.73575171063502,
+            50.5,
+            -33.104357125243695
+          ],
+          "cargo": [
+            4.476667749051243,
+            36.38999818354389,
+            54.39606143730622
+          ],
+          "held": false,
+          "teleports": 4,
+          "state": "playing",
+          "solved": [
+            "freight",
+            "sluice",
+            "optics",
+            "hoist",
+            "archive",
+            "flywheel",
+            "magnet",
+            "migrant",
+            "pendulum"
+          ]
+        },
+        {
+          "label": "Lower receiver reached around west end",
+          "frame": 4755,
+          "player": [
+            -24.970577970368698,
+            50.5,
+            -35.00304915568278
+          ],
+          "cargo": [
+            5.42851619702051,
+            36.389998145949406,
+            54.987541957610865
+          ],
+          "held": false,
+          "teleports": 4,
+          "state": "playing",
+          "solved": [
+            "freight",
+            "sluice",
+            "optics",
+            "hoist",
+            "archive",
+            "flywheel",
+            "magnet",
+            "migrant",
+            "pendulum",
+            "inertia"
+          ],
+          "flew": false,
+          "maxSpeed": 0,
+          "proof": {
+            "maxSpeed": 0,
+            "portalEntries": 0,
+            "landed": true
+          }
+        }
+      ],
+      "candidateBypass": true,
+      "executed": true,
+      "finish": {
+        "frame": 4785,
+        "player": [
+          -24.970577895988992,
+          50.5,
+          -35.003049163391125
+        ],
+        "cargo": [
+          5.4285166921118515,
+          36.389998145460055,
+          54.987541819936844
+        ],
+        "held": false,
+        "teleports": 4,
+        "state": "playing",
+        "solved": [
+          "freight",
+          "sluice",
+          "optics",
+          "hoist",
+          "archive",
+          "flywheel",
+          "magnet",
+          "migrant",
+          "pendulum",
+          "inertia"
+        ]
+      },
+      "metrics": {
+        "id": "tower-singularity",
+        "completedStages": 10,
+        "totalStages": 11,
+        "solvedIds": [
+          "freight",
+          "sluice",
+          "optics",
+          "hoist",
+          "archive",
+          "flywheel",
+          "magnet",
+          "migrant",
+          "pendulum",
+          "inertia"
+        ],
+        "events": [
+          {
+            "id": "freight",
+            "rule": "sealed-freight-bay-with-carried-portal-crossing",
+            "seconds": 36.80833333333189,
+            "player": [
+              -53.02209668227982,
+              0,
+              45.72315399841355
+            ],
+            "cargo": [
+              -53.0009371576088,
+              1.076976903754432,
+              46.44288448876917
+            ],
+            "proof": {
+              "sameBody": true,
+              "carriedPortalCrossings": 1,
+              "physicalWall": true
+            }
+          },
+          {
+            "id": "sluice",
+            "rule": "conserved-hydraulic-head-and-recessed-span",
+            "seconds": 110.65833333336747,
+            "player": [
+              43.98189205918378,
+              0,
+              59.72180151375055
+            ],
+            "cargo": [
+              -1.0806660816220497,
+              0.3899982968018354,
+              54.232391622502185
+            ],
+            "proof": {
+              "conserved": 10,
+              "volumes": [
+                4.9999999999999805,
+                5.000000000000027,
+                0
+              ],
+              "raisedSpan": true
+            }
+          },
+          {
+            "id": "optics",
+            "rule": "portal-ray-with-physical-reflector",
+            "seconds": 167.6000000000119,
+            "player": [
+              -42.93589356268924,
+              0,
+              -29.00060511471392
+            ],
+            "cargo": [
+              0.4716578150536815,
+              0.3899982957794743,
+              52.14353453425795
+            ],
+            "proof": {
+              "portalReflection": true,
+              "exposure": 1.0083333333333322
+            }
+          },
+          {
+            "id": "hoist",
+            "rule": "cargo-powered-hoist-upper-pawl-and-floor-transfer",
+            "seconds": 247.86666666660557,
+            "player": [
+              32.000334934569366,
+              18,
+              -32.58159243932016
+            ],
+            "cargo": [
+              31.86810128475063,
+              18.528579055037152,
+              -24.183894937673053
+            ],
+            "proof": {
+              "height": 18,
+              "locked": true,
+              "liftUsed": true,
+              "cargoPortalTransports": 3,
+              "upperCatcherLoaded": true
+            }
+          },
+          {
+            "id": "archive",
+            "rule": "two-sliding-load-bearing-walls-rewire-walkable-route",
+            "seconds": 313.2083333332128,
+            "player": [
+              -55.71105768099097,
+              18,
+              37.02187584816764
+            ],
+            "cargo": [
+              3.7383770385631503,
+              18.38999814476182,
+              55.99165000947796
+            ],
+            "proof": {
+              "eastMoved": true,
+              "crossMoved": true
+            }
+          },
+          {
+            "id": "flywheel",
+            "rule": "stored-rotational-energy-gearing-and-clutch",
+            "seconds": 369.87499999982793,
+            "player": [
+              -48.04398757524912,
+              18,
+              -23.472172665188587
+            ],
+            "cargo": [
+              1.6121463830610583,
+              18.38999829686617,
+              56.69179318391253
+            ],
+            "proof": {
+              "ratio": 0.6666666666666666,
+              "output": 5.564711324216725,
+              "stable": 2.008333333333329,
+              "energy": 870.9190909274776
+            }
+          },
+          {
+            "id": "magnet",
+            "rule": "free-physical-cargo-detour-around-magnetic-screen",
+            "seconds": 429.50833333310703,
+            "player": [
+              30.05229705192038,
+              18,
+              41.49855622224588
+            ],
+            "cargo": [
+              57.70107836476844,
+              22.63384550004242,
+              35.26031976101061
+            ],
+            "proof": {
+              "freeBodyDetour": true,
+              "magnet": -1,
+              "physicalCargoSlit": true
+            }
+          },
+          {
+            "id": "migrant",
+            "rule": "cargo-and-player-transport-on-translating-portal-carriage",
+            "seconds": 630.4833333329243,
+            "player": [
+              54.71736038634101,
+              39,
+              -24.262897491528626
+            ],
+            "cargo": [
+              54.86581430771502,
+              40.07686208048973,
+              -23.558322054855307
+            ],
+            "proof": {
+              "travel": 1,
+              "transportedOnMovingExit": true
+            }
+          },
+          {
+            "id": "pendulum",
+            "rule": "two-phase-moving-span-and-mechanical-catch",
+            "seconds": 736.2249999994948,
+            "player": [
+              -32.96562398288177,
+              42,
+              42.515869351054526
+            ],
+            "cargo": [
+              2.4655475020831163,
+              36.38999829577383,
+              55.74705152868174
+            ],
+            "proof": {
+              "twoPhysicalCatches": true,
+              "phase": 68.73750000000537,
+              "heights": [
+                0,
+                6
+              ]
+            }
+          },
+          {
+            "id": "inertia",
+            "rule": "real-fall-energy-portal-fling-to-lower-balcony",
+            "seconds": 825.7583333327467,
+            "player": [
+              -26.252280151164573,
+              50.5,
+              -34.87021979185359
+            ],
+            "cargo": [
+              5.317500849677643,
+              36.38999814476171,
+              54.91855656185881
+            ],
+            "proof": {
+              "maxSpeed": 0,
+              "portalEntries": 0,
+              "landed": true
+            }
+          }
+        ],
+        "checkpoints": false,
+        "seconds": 827.4666666660785,
+        "won": false,
+        "carriedPortalCrossings": {
+          "freight": 2,
+          "migrant": 2
+        }
+      },
+      "solvedDuringAttack": [
+        "inertia"
+      ],
+      "sameCompanion": true,
+      "frameSeconds": 79.75,
+      "finiteActors": true,
+      "wallSeconds": 310.491
+    }
+  ],
+  "sourcesAfter": {
+    "LabSingularityLevel.js": "8304ad2ad99ecf9d13f0d953e337ab354f5cfecf468db1514a0ebd97c96eabf6",
+    "LabSingularityLayout.js": "74b14445d54f7e18141366fef2feb80e586df18b57a72092f803b6e039ee7de9",
+    "LabSingularityJourney.js": "2f78fa9a9497b27091642cb8f0f1bf9c0288a36794c474a04e6d0b3ba29b054a",
+    "LabGame.js": "e68764384a42d26e2e0bcd3213ffe7b8fbc4ca0755abe29d8dcaf4360eac4776",
+    "LabPhysics.js": "ef9f066fa8dd2069f71342cf61dbd57eb6e5ede548f5cd40e7947fb91af6eb2f",
+    "LabPortals.js": "ddc8a55c0d4983dee747c88510b81d52296a0a72988edc3172c6a212285b1d13"
+  },
+  "sourceDrift": [],
+  "finished": true,
+  "bypasses": [
+    "inertia-west-wall-end-landing"
+  ],
+  "setupFailures": [],
+  "pass": false
+}

@@ -454,10 +454,13 @@ export class LabGame {
   clearPortals() {
     if (this.externalBlocked || this.state !== 'playing') return false;
     if (this.epicMode && this.firstLevel?.restoreCheckpoint) return this.restartCheckpoint();
+    const previousPortals = this.portals.portals.slice(), previousSurfaceIds = this.portalSurfaceIds.slice();
     this.portals.clear(); this.portalSurfaceIds = [null, null];
     for (const id of this.portalCargoColliders) this.physics.setStaticEnabled(id,
       this.colliderForId(id)?.enabled !== false);
     this.portalCargoColliders.clear();
+    this.recoverPlayerFromClosingPortals(previousPortals, previousSurfaceIds);
+    this.recoverCargoFromClosingPortals(previousPortals, previousSurfaceIds);
     this.callbacks.onToast('Пара сброшена. Один портал можно оставить под брейнротом, второй открыть позже.');
     return true;
   }
@@ -474,6 +477,7 @@ export class LabGame {
     const normal = panel.userData.portalFrame?.()?.normal ?? panel.userData.normal;
     const preferredUp = this.kineticMode && panel.userData.portalUp ? panel.userData.portalUp : normal && Math.abs(normal.y) > .6
       ? new THREE.Vector3(0, 0, -1).applyAxisAngle(UP, this.yaw) : undefined;
+    const previousPortals = this.portals.portals.slice(), previousSurfaceIds = this.portalSurfaceIds.slice();
     const result = this.portals.placeOnPanel(index, panel, hitPoint, { blockers: this.colliders, preferredUp });
     if (!result.ok) {
       this.callbacks.onToast(result.reason === 'overlap' ? 'Здесь уже другой портал. Перенеси его цвет или выбери место рядом'
@@ -482,8 +486,86 @@ export class LabGame {
       return false;
     }
     this.portalSurfaceIds[index] = panel.userData.portalColliderId ?? panel.uuid;
+    this.recoverPlayerFromClosingPortals(previousPortals, previousSurfaceIds);
+    this.recoverCargoFromClosingPortals(previousPortals, previousSurfaceIds);
     this.callbacks.onToast(this.portals.ready ? 'Пара связана. Войди в любой проход' : 'Первый проход готов. Установи второй');
     return true;
+  }
+
+  // Closing or relocating an aperture can restore a solid while the capsule's
+  // feet/head have entered it but its centre has not crossed. Resolve that
+  // shallow overlap along the old front normal. The generic box resolver would
+  // otherwise choose a distant lateral edge of a broad floor/ceiling and eject
+  // the player outside the room without any portal traversal.
+  recoverPlayerFromClosingPortals(previousPortals, previousSurfaceIds) {
+    if (!previousPortals.every(Boolean)
+      || previousPortals.some(p => !uprightCapsuleFitsPortal(p, PLAYER_HEIGHT, PLAYER_RADIUS))) return;
+    for (const [index, portal] of previousPortals.entries()) {
+      const center = this.playerPosition.clone().addScaledVector(UP, CENTER_HEIGHT);
+      const distance = center.clone().sub(portal.position).dot(portal.normal);
+      const extent = PLAYER_RADIUS + (CENTER_HEIGHT - PLAYER_RADIUS) * Math.abs(portal.normal.y);
+      if (distance <= 0 || distance >= extent + .025
+        || !pointInsidePortal(portal, center, PLAYER_RADIUS)) continue;
+      const closesUnderPlayer = this.colliders.some(c => {
+        if (c.enabled === false || !c.box) return false;
+        const owned = c.mesh.uuid === previousSurfaceIds[index] || portal.backingIds?.has(c.mesh.uuid)
+          || c.portalOwner?.userData.portalColliderId === previousSurfaceIds[index]
+          || portalBacksCollider(portal, c.box);
+        if (!owned || this.portalOpensCollider(c, center, PLAYER_RADIUS, PLAYER_HEIGHT)) return false;
+        const b = c.box;
+        if (this.playerPosition.y >= b.max.y - .001
+          || this.playerPosition.y + PLAYER_HEIGHT <= b.min.y + .001) return false;
+        const dx = this.playerPosition.x - THREE.MathUtils.clamp(this.playerPosition.x, b.min.x, b.max.x);
+        const dz = this.playerPosition.z - THREE.MathUtils.clamp(this.playerPosition.z, b.min.z, b.max.z);
+        return dx * dx + dz * dz < PLAYER_RADIUS * PLAYER_RADIUS;
+      });
+      if (!closesUnderPlayer) continue;
+      const correction = portal.normal.clone().multiplyScalar(extent + .025 - distance);
+      this.playerPosition.add(correction); this.previousPlayerPosition.add(correction);
+      this.playerGroup?.position.add(correction);
+      const inward = this.playerVelocity.dot(portal.normal);
+      if (inward < 0) this.playerVelocity.addScaledVector(portal.normal, -inward);
+    }
+  }
+
+  recoverCargoFromClosingPortals(previousPortals, previousSurfaceIds) {
+    const body = this.physics?.cargoBody;
+    if (!body || !previousPortals.every(Boolean)) return;
+    const carried = Boolean(this.heldCube || this.velocityCompanion?.connected);
+    for (const [index, portal] of previousPortals.entries()) {
+      const center = new THREE.Vector3().copy(body.position), quaternion = new THREE.Quaternion().copy(body.quaternion);
+      const distance = center.clone().sub(portal.position).dot(portal.normal);
+      const localNormal = portal.normal.clone().applyQuaternion(quaternion.clone().invert());
+      const extent = CUBE_RADIUS * (Math.abs(localNormal.x) + Math.abs(localNormal.y) + Math.abs(localNormal.z));
+      // A grip can straddle the plane before its owner's centre crosses. It
+      // still belongs on the owner's original side when that aperture closes.
+      const ownerStillInFront = carried && this.playerPosition.clone().addScaledVector(UP, CENTER_HEIGHT)
+        .sub(portal.position).dot(portal.normal) > 0;
+      if (distance >= extent + .025 || distance < -extent || (distance <= 0 && !ownerStillInFront)
+        || !orientedBoxFitsPortal(portal, center, quaternion, CUBE_RADIUS)) continue;
+      const closesUnderCargo = this.colliders.some(c => {
+        if (c.enabled === false || !c.box) return false;
+        const owned = c.mesh.uuid === previousSurfaceIds[index] || portal.backingIds?.has(c.mesh.uuid)
+          || c.portalOwner?.userData.portalColliderId === previousSurfaceIds[index]
+          || portalBacksCollider(portal, c.box);
+        if (!owned) return false;
+        const stillOpen = carried
+          ? this.portalOpensCollider(c, this.playerPosition.clone().addScaledVector(UP, CENTER_HEIGHT), PLAYER_RADIUS, PLAYER_HEIGHT)
+          : this.portalOpensCollider(c, center, CUBE_RADIUS, 0, quaternion);
+        return !stillOpen;
+      });
+      if (!closesUnderCargo) continue;
+      const correction = portal.normal.clone().multiplyScalar(extent + .025 - distance);
+      for (const key of ['x', 'y', 'z']) {
+        body.position[key] += correction[key];
+        if (this.physics.carryTarget) this.physics.carryTarget.position[key] += correction[key];
+      }
+      const inward = body.velocity.dot(portal.normal);
+      if (inward < 0) for (const key of ['x', 'y', 'z']) body.velocity[key] -= portal.normal[key] * inward;
+      body.previousPosition.copy(body.position); body.interpolatedPosition.copy(body.position);
+      body.aabbNeedsUpdate = true; body.wakeUp(); this.physics.world.broadphase.dirty = true;
+      this.cargo.position.copy(body.position);
+    }
   }
 
   updateAimHint() {
@@ -1066,7 +1148,8 @@ export class LabGame {
       const extent = new THREE.Vector3(e, CUBE_RADIUS + .035, e);
       const expanded=new THREE.Box3();
       for (let pass = 0; pass < 3; pass++) for (const c of this.colliders) {
-        if (c.enabled === false || c.walkablePlane || this.portalOpensCollider(c, origin, CUBE_RADIUS)) continue;
+        if (c.enabled === false || c.walkablePlane
+          || this.portalOpensCollider(c, this.playerPosition.clone().addScaledVector(UP, CENTER_HEIGHT), PLAYER_RADIUS, PLAYER_HEIGHT)) continue;
         if (c.frontPlane) {
           const f=c.frontPlane();if(target.clone().sub(f.center).dot(f.normal)>CUBE_RADIUS*Math.sqrt(3)+.05)continue;
         }
@@ -1102,7 +1185,7 @@ export class LabGame {
     }
     if (this.portals.ready) {
       for (const collider of this.colliders) if (collider.enabled &&
-        (this.portalOpensCollider(collider, this.cargo.position, CUBE_RADIUS, 0, this.physics.cargoBody.quaternion) ||
+        ((!this.heldCube && !this.velocityCompanion?.connected && this.portalOpensCollider(collider, this.cargo.position, CUBE_RADIUS, 0, this.physics.cargoBody.quaternion)) ||
           ((this.heldCube || this.velocityCompanion?.connected) && this.portalOpensCollider(collider, this.playerPosition.clone().addScaledVector(UP, 1.2), PLAYER_RADIUS, PLAYER_HEIGHT)))) {
         nextPortalColliders.add(collider.mesh.uuid);
         this.physics.setStaticEnabled(collider.mesh.uuid, false);

@@ -77,7 +77,18 @@ jobs:
             if(!successfulStep('Inspect the browser rendering and verify the entire production route'))throw Error('The complete native Tower route and UI did not pass');
             if(c.mode==='complete'&&!successfulStep('Record one continuous upgraded Tower walkthrough from that exact package'))throw Error('The complete recording did not pass');
             for(const edition of ['foundation','classic','open'])if(!jobs.some(j=>j.name===`All retained campaign routes (${edition})`&&j.conclusion==='success'))throw Error(`Retained ${edition} campaign route matrix did not pass`);
-            if(c.sourceBranch==='upgrade/creative-campaign-20261004'){if(!jobs.some(j=>j.name==='Fast-input attacks and Yandex production readiness'&&j.conclusion==='success'))throw Error('Creative input and SDK checks did not pass');const web=jobs.filter(j=>j.name.startsWith('Complete production WebGL routes ('));if(web.length!==4||web.some(j=>j.conclusion!=='success'))throw Error('Every ordinary room must complete in production WebGL');}
+            if(c.sourceBranch==='upgrade/creative-campaign-20261004'){
+              if(!jobs.some(j=>j.name==='Fast-input attacks and Yandex production readiness'&&j.conclusion==='success'))throw Error('Creative input and SDK checks did not pass');
+              const web=jobs.filter(j=>j.name.startsWith('Complete production WebGL routes ('));
+              if(web.length!==4||web.some(j=>j.conclusion!=='success'))throw Error('Every ordinary room must complete in production WebGL');
+              const groups=['core','early','middle','late','castle-canonical','castle-early','castle-middle','castle-late'];
+              const speedruns=jobs.filter(j=>j.name.startsWith('Novel speedrun attacks ('));
+              if(speedruns.length!==groups.length)throw Error('The complete novel speedrun matrix is missing');
+              for(const group of groups){
+                const matches=speedruns.filter(j=>j.name===`Novel speedrun attacks (${group})`);
+                if(matches.length!==1||matches[0].conclusion!=='success')throw Error(`Novel ${group} speedrun verification did not pass`);
+              }
+            }
             if(!jobs.some(j=>j.name==='Preserve the exact approved public campaign package'&&j.conclusion==='success'))throw Error('The exact original public package was not preserved by this candidate run');
             const base=(await github.rest.actions.getWorkflowRun({owner,repo,run_id:c.baseRun})).data;
             if(base.conclusion!=='success'||base.head_sha!==c.baseCommit||base.name!=='Deploy verified portal game')throw Error('Original campaign publication mismatch');

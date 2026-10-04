@@ -146,7 +146,19 @@ export function buildTowerLevel(game,index=40){
   const outlet=k.panel('hoist upper catcher',P(-12,17,20.4),[0,0,-1],4.8,4.8);
   localControl(r,'lift',1,0,()=>{if(!loaded(pad,1.5))return false;armed=!armed;return true;},'Подключить грузовую клеть');
   localControl(r,'pawl',-5,11,()=>{if(height>17.8&&game.playerPosition.y>17.6){locked=true;return true;}return false;},'Защёлкнуть верхний уловитель',18);
-  register('hoist',{state:{pad,intake,outlet,get height(){return height;},get locked(){return locked;}},update(dt){const load=loaded(pad,1.5);padVisual.material=load?m.live:m.idle;const target=(load&&armed)||locked?18:0;height+=clamp(target-height,-4*dt,4*dt);k.move(lift,P(0,0,height-.2),dt);k.move(weight,P(-7,0,22-height*.8),dt);if(standing(P(0,0,height),2)&&height>17.5)liftUsed=true;if(locked&&!game.heldCube&&game.cargo.position.y>18.2&&game.cargo.position.y<20&&Math.abs(game.cargo.position.x-(r.def.at[0]-12))<3&&game.physics.grounded)complete('hoist',{height,locked,liftUsed,cargoPortalTransports:game.physics.portalTransports});},reset(){height=0;locked=armed=liftUsed=false;}});
+  // The upper catcher is an actual receiving bay. Exterior stairs reach the
+  // pawl, but cannot replace the floor-to-upper cargo portal with hand delivery.
+  // Its small sight slit admits an aimed shot; cargo opens the service hatch
+  // from inside after settling on the visibly marked tray.
+  const receiver=P(-12,15,18);plate(receiver,3.8,m.copper);
+  for(const x of [-15,-9])k.box(P(x,16,21),[.5,6,8.5],m.steel);
+  k.box(P(-12,20.25,21),[6.5,6,.5],m.steel);k.box(P(-12,16,24.2),[6.5,.4,8.5],m.copper);
+  const hatchParts=[
+    {x:-14.1,y:21,w:1.8,h:6},{x:-9.9,y:21,w:1.8,h:6},
+    {x:-12,y:18.6,w:2.4,h:1.2},{x:-12,y:21.925,w:2.4,h:4.15},
+  ].map(p=>({...p,mesh:k.box(P(p.x,11.75,p.y),[p.w,p.h,.5],m.copper,{dynamic:true})}));
+  let catcherProgress=0;
+  register('hoist',{state:{pad,intake,outlet,receiver,get catcherProgress(){return catcherProgress;},get height(){return height;},get locked(){return locked;}},update(dt){const load=loaded(pad,1.5);padVisual.material=load?m.live:m.idle;const target=(load&&armed)||locked?18:0;height+=clamp(target-height,-4*dt,4*dt);k.move(lift,P(0,0,height-.2),dt);k.move(weight,P(-7,0,22-height*.8),dt);if(standing(P(0,0,height),2)&&height>17.5)liftUsed=true;if(locked&&loaded(receiver,2.2)&&game.physics.grounded)complete('hoist',{height,locked,liftUsed,cargoPortalTransports:game.physics.portalTransports,upperCatcherLoaded:true});catcherProgress=THREE.MathUtils.damp(catcherProgress,solved.has('hoist')?1:0,6,dt);for(const p of hatchParts)k.move(p.mesh,P(p.x,11.75,p.y+catcherProgress*8),dt);},reset(){height=catcherProgress=0;locked=armed=liftUsed=false;}});
  }
 // 3. The live ray is traced through geometry and portals, then reflected.
  {
@@ -241,6 +253,10 @@ export function buildTowerLevel(game,index=40){
   const outlet=k.panel('horizontal launch',P(-17,0,9.4),[1,0,0]);
   k.floor(r.def.at[0]+6,r.def.at[0]+26.7,r.def.at[2]-3,r.def.at[2]+4,50.5,m.ivory);
   k.box(P(27.5,-6.5,6.4),[.65,19,25],m.steel);
+  // The lower receiver's south wall joins the west approach. The old
+  // five-metre endpoint left a sprint-jump route around its corner, allowing
+  // the lower balcony to be reached without entering either portal.
+  k.box(P(-7.5,6,.5),[25,8,.55],m.wall);
   k.box(P(12.5,6,6.4),[15,19,.55],m.wall);k.box(P(25.75,6,6.4),[3.5,19,.55],m.wall);
   const returnDoor=k.box(P(22,6,6.4),[4,19,.55],m.copper,{dynamic:true});
   k.stairs(P(22,4,-3.5),P(22,13,0),3.6);
