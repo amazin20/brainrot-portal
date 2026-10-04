@@ -23,7 +23,7 @@ for(const [room,index] of [[16,15],[20,19]]){
 
 for(const edition of ['foundation','classic'])for(const [room,index,options] of [
  [16,15,{order:'cargo-first'}],
- [16,15,{order:'staged-portal'}],
+ [16,15,{order:'scout-first'}],
  [20,19,{route:'middle-cage'}],
  [20,19,{route:'early-return'}],
 ])test(`${edition} room ${room} ${Object.values(options)[0]} still completes with original cargo`,async()=>{

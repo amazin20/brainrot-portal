@@ -327,6 +327,76 @@ export class LabPhysics {
     return body;
   }
 
+  /** Resolve only the destination segment of an explicit portal transfer.
+   * The ordinary solver/CCD retain their existing contact shapes. A transferred
+   * box needs its full rotated extent here: the small inscribed guard cannot
+   * protect corners before the destination world's first contact step. Portal
+   * callers exempt only the actually opened entry/exit backing colliders. */
+  resolveCargoTransit(from, { ignoreIds = [] } = {}) {
+    const body = this.cargoBody;
+    if (!body) return null;
+    if (!from) throw new TypeError('A portal crossing segment start is required');
+    const start = vector(from), target = body.position.clone(), original = body.position.clone();
+    const ignored = new Set(ignoreIds), half = this.cargoSize / 2;
+    const axes = [new Vec3(1, 0, 0), new Vec3(0, 1, 0), new Vec3(0, 0, 1)]
+      .map(axis => body.quaternion.vmult(axis));
+    const extent = new Vec3(...['x', 'y', 'z'].map(key => half * axes.reduce((sum, axis) => sum + Math.abs(axis[key]), 0)));
+    const margin = .0001;
+    let contacts = 0;
+    for (let pass = 0; pass < 8; pass++) {
+      let first = null;
+      for (const [id, item] of this.solids) {
+        const solid = item.body;
+        if (ignored.has(id) || !solid.collisionFilterMask || item.kind === 'ramp'
+          || Math.abs(solid.quaternion.w) < .999999) continue;
+        const center = solid.type === Body.KINEMATIC && item.remaining > 0 ? item.target : solid.position;
+        const min = {}, max = {};
+        for (const key of ['x', 'y', 'z']) {
+          min[key] = center[key] - item.half[key] - extent[key];
+          max[key] = center[key] + item.half[key] + extent[key];
+        }
+        const inside = ['x', 'y', 'z'].every(key => start[key] > min[key] + 1e-8 && start[key] < max[key] - 1e-8);
+        let hit;
+        if (inside) {
+          // Exit clearance itself can initially overlap a nearby wall when the
+          // cargo is tilted. Use the nearest face instead of letting the next
+          // Cannon step choose an arbitrary side of that thin destination wall.
+          const faces = ['x', 'y', 'z'].flatMap(axis => [
+            { axis, sign: -1, face: min[axis], distance: start[axis] - min[axis] },
+            { axis, sign: 1, face: max[axis], distance: max[axis] - start[axis] },
+          ]).sort((a, b) => a.distance - b.distance);
+          hit = { ...faces[0], t: 0, overlap: true };
+        } else hit = sweepBox(start, target, min, max);
+        if (hit && (!first || hit.t < first.t)) first = { ...hit, solid };
+      }
+      if (!first) { start.copy(target); break; }
+      const key = first.axis;
+      if (first.overlap) {
+        const corrected = first.face + first.sign * margin;
+        start[key] = corrected;
+        // Preserve travel tangent to the contact, including a moving wall's
+        // endpoint displacement, but never continue towards its opposite face.
+        if ((target[key] - corrected) * first.sign < 0) target[key] = corrected;
+      } else {
+        const delta = target.vsub(start);
+        delta.scale(first.t, delta); start.vadd(delta, start);
+        start[key] += first.sign * margin;
+        target[key] = start[key];
+      }
+      if (body.velocity[key] * first.sign < 0) body.velocity[key] = 0;
+      contacts++;
+    }
+    body.position.copy(start);
+    const correction = body.position.vsub(original);
+    this.carryTarget?.position.vadd(correction, this.carryTarget.position);
+    // The transfer and its collision correction are one event, not a trail
+    // interpolated through the wall over the next display frame.
+    body.previousPosition.copy(body.position); body.interpolatedPosition.copy(body.position);
+    body.aabbNeedsUpdate = true; this.world.broadphase.dirty = true;
+    this.portalTransitContacts = (this.portalTransitContacts || 0) + contacts;
+    return { contacts, position: body.position.clone(), extent };
+  }
+
   setCarryTarget(position, { velocity, quaternion, angularVelocity, dt } = {}) {
     if (!this.cargoBody) return false;
     if (!position) { this.release(); return false; }

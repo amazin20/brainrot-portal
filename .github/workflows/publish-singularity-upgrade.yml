@@ -3,6 +3,10 @@ on:
   push:
     branches: [main]
     paths: [tools/singularity-upgrade-release.json]
+  workflow_run:
+    workflows: [Verify the upgraded Tower and retained campaign]
+    branches: [upgrade/tower-41-final]
+    types: [completed]
   workflow_dispatch:
 permissions:
   contents: read
@@ -15,7 +19,12 @@ env:
 jobs:
   access:
     name: Validate the pinned Tower upgrade release
-    if: github.ref == 'refs/heads/main'
+    if: >-
+      github.ref == 'refs/heads/main' &&
+      (github.event_name == 'push' || github.event_name == 'workflow_dispatch' ||
+       (github.event.workflow_run.id == 37142694358 &&
+        github.event.workflow_run.head_sha == '2e3f693a8e0ddbc0e143adfe3086bcb7d93ebc05' &&
+        github.event.workflow_run.conclusion == 'success'))
     runs-on: ubuntu-latest
     timeout-minutes: 5
     environment:
@@ -36,6 +45,7 @@ jobs:
           import fs from 'node:fs';import assert from 'node:assert/strict';
           import {upgradePreviewPath} from './scripts/lib/singularity-upgrade-proof.mjs';
           const c=JSON.parse(fs.readFileSync(process.env.RELEASE_CONFIG));
+          if(process.env.GITHUB_EVENT_NAME==='workflow_run'){const event=JSON.parse(fs.readFileSync(process.env.GITHUB_EVENT_PATH));assert.equal(event.workflow_run.id,c.candidateRun);assert.equal(event.workflow_run.head_sha,c.sourceCommit);assert.equal(event.workflow_run.conclusion,'success');}
           assert.ok(['probe','demo','complete'].includes(c.mode));assert.match(c.sourceCommit,/^[a-f0-9]{40}$/);assert.match(c.baseCommit,/^[a-f0-9]{40}$/);
           assert.ok(Number.isSafeInteger(c.candidateRun)&&c.candidateRun>0&&Number.isSafeInteger(c.baseRun)&&c.baseRun>0);
           assert.equal(c.baseCommit,'a74726ff1bfb22f21662d076fc47951b2bf368cd');assert.equal(c.baseRun,36509639087);
@@ -60,19 +70,20 @@ jobs:
           script: |
             const fs=require('node:fs');const c=JSON.parse(fs.readFileSync(process.env.RELEASE_CONFIG));const {owner,repo}=context.repo;
             const run=(await github.rest.actions.getWorkflowRun({owner,repo,run_id:c.candidateRun})).data;
-            if(run.conclusion!=='success'||run.head_sha!==c.sourceCommit||run.path!=='.github/workflows/tower-upgrade.yml'||run.head_branch!=='upgrade/tower-41-final')throw Error('Candidate must be the successful direct-checkout verification of the pinned source');
+            if(run.conclusion!=='success'||run.head_sha!==c.sourceCommit||run.path!=='.github/workflows/tower-upgrade.yml'||run.head_branch!==(c.sourceBranch||'upgrade/tower-41-final'))throw Error('Candidate must be the successful direct-checkout verification of the pinned source');
             const jobs=await github.paginate(github.rest.actions.listJobsForWorkflowRun,{owner,repo,run_id:c.candidateRun,per_page:100});
             const successfulStep=name=>jobs.some(j=>j.conclusion==='success'&&j.steps?.some(s=>s.name===name&&s.conclusion==='success'));
             if(!jobs.some(j=>j.name==='Source tests for every retained game regression'&&j.conclusion==='success')||!successfulStep('Test the retained source and upgraded mechanisms'))throw Error('The full retained source regression suite did not pass');
             if(!successfulStep('Inspect the browser rendering and verify the entire production route'))throw Error('The complete native Tower route and UI did not pass');
             if(c.mode==='complete'&&!successfulStep('Record one continuous upgraded Tower walkthrough from that exact package'))throw Error('The complete recording did not pass');
             for(const edition of ['foundation','classic','open'])if(!jobs.some(j=>j.name===`All retained campaign routes (${edition})`&&j.conclusion==='success'))throw Error(`Retained ${edition} campaign route matrix did not pass`);
+            if(c.sourceBranch==='upgrade/creative-campaign-20261004'){if(!jobs.some(j=>j.name==='Fast-input attacks and Yandex production readiness'&&j.conclusion==='success'))throw Error('Creative input and SDK checks did not pass');const web=jobs.filter(j=>j.name.startsWith('Complete production WebGL routes ('));if(web.length!==4||web.some(j=>j.conclusion!=='success'))throw Error('Every ordinary room must complete in production WebGL');}
             if(!jobs.some(j=>j.name==='Preserve the exact approved public campaign package'&&j.conclusion==='success'))throw Error('The exact original public package was not preserved by this candidate run');
             const base=(await github.rest.actions.getWorkflowRun({owner,repo,run_id:c.baseRun})).data;
             if(base.conclusion!=='success'||base.head_sha!==c.baseCommit||base.name!=='Deploy verified portal game')throw Error('Original campaign publication mismatch');
             const root='https://amazin20.github.io/brainrot-portal/';
             const current=await fetch(root+'build-info.json?verify='+Date.now());
-            if(!current.ok||![c.baseCommit,c.sourceCommit].includes((await current.json()).commit))throw Error('The public root changed; refresh the pinned base instead of overwriting it');
+            if(!current.ok||![c.baseCommit,c.previousSourceCommit,c.sourceCommit].filter(Boolean).includes((await current.json()).commit))throw Error('The public root changed; refresh the pinned base instead of overwriting it');
             if(c.previousSourceCommit){const previous=await fetch(root+(c.previewPath||'tower-singularity')+'/preview-release.json?verify='+Date.now());if(!previous.ok)throw Error('Missing previous Tower publication');const p=await previous.json();if(![c.previousSourceCommit,c.sourceCommit].includes(p.sourceCommit))throw Error('The isolated Tower changed while this upgrade was being verified');}
       - uses: actions/download-artifact@v4
         with:

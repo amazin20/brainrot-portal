@@ -104,7 +104,7 @@ export function sweepKineticBody(game, position, previous, velocity, radius, hei
     let contact = null;
     const predictedPortal = portalLimit && game.portals.ready
       ? game.portals.tryTeleport(target.clone().add(new THREE.Vector3(0, height / 2, 0)),
-        from.clone().add(new THREE.Vector3(0, height / 2, 0)), velocity, radius)
+        from.clone().add(new THREE.Vector3(0, height / 2, 0)), velocity, radius, { capsuleHeight: height })
       : null;
     const portalFraction = predictedPortal?.crossingFraction ?? 1;
     for (const collider of game.colliders) {
@@ -123,7 +123,7 @@ export function sweepKineticBody(game, position, previous, velocity, radius, hei
       if (!hit || hit.t > portalFraction + 1e-8 || velocity[hit.axis] * hit.sign >= 0) continue;
       hitPosition.copy(from).lerp(target, hit.t);
       center.copy(hitPosition).y += height / 2;
-      if (game.portalOpensCollider(collider, center, radius)) continue;
+      if (game.portalOpensCollider(collider, center, radius, height)) continue;
       // Preserve the existing grounded step-up affordance for small lips.
       if (hit.axis !== 'y' && game.playerGrounded
         && box.max.y > from.y && box.max.y - from.y <= .37) continue;

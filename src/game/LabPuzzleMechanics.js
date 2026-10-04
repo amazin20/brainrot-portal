@@ -53,7 +53,9 @@ export function glass(world,position,size){
 }
 export function wall(world,z,left,right,ceiling=10,gap=null){
  const blocks=gap?[[left,gap[0],0,ceiling],[gap[1],right,0,ceiling],[gap[0],gap[1],gap[2],ceiling]]:[[left,right,0,ceiling]];
- for(const [x0,x1,y0,y1]of blocks)if(x1>x0&&y1>y0)for(const sign of [-1,1])world.surface({name:'Sealed partition',position:[(x0+x1)/2,(y0+y1)/2,z+sign*.13],normal:[0,0,sign],width:x1-x0,height:y1-y0});
+ // A structural partition must not inherit an art kit's portalable default.
+ // Authored white targets are installed separately through panel()/patch().
+ for(const [x0,x1,y0,y1]of blocks)if(x1>x0&&y1>y0)for(const sign of [-1,1])world.surface({name:'Sealed partition',position:[(x0+x1)/2,(y0+y1)/2,z+sign*.13],normal:[0,0,sign],width:x1-x0,height:y1-y0,portal:false});
 }
 export function gate(world,z,roomWidth=24,ceiling=10){
  const game=world.game,g=createArchitecturalGate(world.game,{z,roomWidth,roomHeight:ceiling,constructWalls:false});wall(world,z,-roomWidth/2,roomWidth/2,ceiling,[-2.4,2.4,3.65]);

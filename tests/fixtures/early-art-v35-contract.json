@@ -1,6 +1,6 @@
 {
   "revision": "visual-redesign-2026-09-25",
-  "precision": 1e-9,
+  "precision": 1e-09,
   "rooms": [
     {
       "level": 1,
@@ -215,15 +215,28 @@
     {
       "level": 16,
       "id": "vanishing-support",
-      "contract": "2372659e3395bb7e0f6ec3ed09f7a4dbc465afcd98778285981c43d791b1842d",
+      "contract": "26f49671cad112a91b32f0f3cf6480a8086fc55c30a1cfc4a23e45a28ab2d04e",
       "workload": {
-        "nodes": 799,
-        "meshes": 620,
-        "visibleMeshes": 376,
-        "triangles": 1438632,
+        "nodes": 831,
+        "meshes": 646,
+        "visibleMeshes": 339,
+        "triangles": 1310674,
         "lights": 3,
-        "materials": 73,
-        "geometries": 490
+        "materials": 71,
+        "geometries": 509
+      },
+      "physicalAudit": {
+        "revision": "support-extinguishing-gravity-delivery-2026-10-04",
+        "reason": "Removed the staged cargo-injection deck, posts and two portal panels after an ordinary-input route bypassed extinguishing projected support. The collision and interaction digest still guards every remaining authored object.",
+        "excludedRuntimeMaterials": 6,
+        "allowedOrders": [
+          "cargo-first",
+          "scout-first"
+        ],
+        "absentPanels": [
+          "island-feed-floor",
+          "well-feed-ceiling"
+        ]
       }
     },
     {

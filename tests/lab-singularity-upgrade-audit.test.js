@@ -16,13 +16,13 @@ function capsulePath(game,start,direction,steps=80){
  return position;
 }
 
-test('expanded cathedral physically blocks room shells and locked doors while retaining real ring apertures',async()=>{
+test('folded castle physically blocks room shells and locked doors while retaining real ring apertures',async()=>{
  const game=await createHeadlessGame();game.chamberEdition='foundation';await game.selectLevel(40,true);
  try{
   const report=auditSingularityContacts(game);
-  assert.ok(report.contacts.length>=32,'Every added and original room must be contacted from both sides');
+  assert.ok(report.contacts.length>=22,'Every added and original room must be contacted from both sides');
   assert.ok(report.apertures.length>=3,'Open rings must retain their physical apertures');
-  assert.ok(report.dependencies.length>=4,'Probe all existing dependency doors');
+  assert.ok(report.dependencies.length>=8,'Probe all existing dependency doors');
   assert.equal(report.pass,true,JSON.stringify(report.failures));
  }finally{game.firstLevel.dispose();game.physics.dispose();game.portals.dispose();}
 });
@@ -60,7 +60,7 @@ test('a whole-run restart restores real archive wall poses after an ordinary sol
  const controlInitial=new Map(controlVisuals.map(o=>[o.uuid,{material:o.material,rotation:o.quaternion.clone()}]));
  try{
   assert.ok(dynamic.length>=2,'Capture actual sliding wall collisions');
-  const report=await runSingularityJourney(game,{order:['reservoir','echo','archive'],stopAfter:'archive'});
+  const report=await runSingularityJourney(game,{order:['freight','sluice','optics','hoist','archive'],stopAfter:'archive'});
   assert.equal(report.resets+report.respawns+report.cargoResets,0);assert.equal(level.machines.get('archive').state.A,true);assert.equal(level.machines.get('archive').state.B,true);
   assert.ok(dynamic.some(c=>[...c.box.min.toArray(),...c.box.max.toArray()].some((v,i)=>Math.abs(v-initial.get(c.mesh.uuid)[i])>1)),'The ordinary route must move an actual collision wall');
   game.resetRun(true);assert.equal(level.machines.get('archive').state.A,false);assert.equal(level.machines.get('archive').state.B,false);

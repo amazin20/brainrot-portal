@@ -244,29 +244,36 @@ test('A whole-attempt restart clears operated control visuals as well as mechani
  }finally{f.dispose();}
 });
 
-test('The authored inversion chamber admits grounded entry into the shaft without an accidental chest-height rim',()=>{
+test('The freight aiming aperture passes a ray but stops a complete ordinary capsule',()=>{
  const f=fixture(),{game}=f,oldDocument=globalThis.document;let level;
- try{
-  globalThis.document??={};game.markPortalSurface=LabGame.prototype.markPortalSurface;
-  level=buildTowerLevel(game);const room=level.rooms.get('inversion');
-  // Chamber access is a fixture precondition. This checks the real authored
-  // solids, independent of puzzle unlocks and the complete ordinary route.
-  for(let x=10;x>=0;x-=.1){
-   const p=V(...room.P(x,0)),before=V(...room.P(x+.1,0)),velocity=V(-5,0,0),expected=p.clone();
-   LabGame.prototype.resolveBody.call(game,p,before,velocity,.43,2.4);
-   assert.ok(p.distanceTo(expected)<1e-8,'An ordinary grounded approach must reach the inversion launch disc');
-  }
+ try{globalThis.document??={};game.markPortalSurface=LabGame.prototype.markPortalSurface;level=buildTowerLevel(game);const room=level.rooms.get('freight'),eye=V(...room.P(12,-10,2)),target=level.machines.get('freight').state.outlet.center.clone().add(V(0,-.4,0));
+  const first=rayHit(game,eye.toArray(),target.clone().sub(eye).normalize().toArray());assert.equal(first?.object,level.machines.get('freight').state.outlet.mesh);
+  const p=V(...room.P(-2,-10)),before=V(...room.P(2,-10)),velocity=V(-20,0,0);LabGame.prototype.resolveBody.call(game,p,before,velocity,.43,2.4,false);assert.ok(p.x>room.def.at[0]+.74,'The same narrow slit cannot admit a standing player');
  }finally{level?.dispose();f.dispose();if(oldDocument===undefined)delete globalThis.document;else globalThis.document=oldDocument;}
 });
 
-test('The authored crown receiver has a clear firing line from the inversion return gallery',()=>{
+test('The crown slit gives a real shot to the sealed receiver without a walkable bypass',()=>{
  const f=fixture(),{game}=f,oldDocument=globalThis.document;let level;
- try{
-  globalThis.document??={};game.markPortalSurface=LabGame.prototype.markPortalSurface;level=buildTowerLevel(game);
-  const eye=V(...level.rooms.get('inversion').P(18.7,.25,14)).add(V(0,1.4,0)),target=level.panels.crownPortal.center.clone().add(V(0,-.4,0));
-  game.scene.updateMatrixWorld(true);const ray=new THREE.Raycaster(eye,target.clone().sub(eye).normalize());
-  const first=ray.intersectObjects(game.aimBlockers,true).find(h=>(h.object.visible||h.object.userData.collisionProxy)&&game.isActiveBlocker(h.object));
-  assert.equal(first?.object,level.panels.crownPortal.mesh,'A supporting crown ring must not intercept the required return shot');
-  assert.ok(first.point.distanceTo(target)<1e-6,'The clear ray reaches the usable front of the actual portal panel');
+ try{globalThis.document??={};game.markPortalSurface=LabGame.prototype.markPortalSurface;level=buildTowerLevel(game);const room=level.rooms.get('crown'),eye=V(...room.P(12,-10,2)),target=level.panels.crownPortal.center.clone().add(V(0,-.4,0));
+  const first=rayHit(game,eye.toArray(),target.clone().sub(eye).normalize().toArray());assert.equal(first?.object,level.panels.crownPortal.mesh);assert.ok(first.point.distanceTo(target)<1e-6);
+  const p=V(...room.P(-2,-10)),before=V(...room.P(2,-10)),velocity=V(-20,0,0);LabGame.prototype.resolveBody.call(game,p,before,velocity,.43,2.4,false);assert.ok(p.x>room.def.at[0]+.77);
+ }finally{level?.dispose();f.dispose();if(oldDocument===undefined)delete globalThis.document;else globalThis.document=oldDocument;}
+});
+
+test('The upper magnetic receiver has a real floor at its displayed plate, and its freight slit rejects a standing player',()=>{
+ const f=fixture(),{game}=f,oldDocument=globalThis.document;let level;
+ try{globalThis.document??={};game.markPortalSurface=LabGame.prototype.markPortalSurface;game.ramps=[];level=buildTowerLevel(game);const room=level.rooms.get('magnet'),receiver=level.machines.get('magnet').state.receiver;
+  const height=LabGame.prototype.floorHeight.call(game,receiver[0],receiver[2],receiver[1]+.01);assert.equal(height,receiver[1]);
+  const support=game.floors.find(f=>f.y===height&&receiver[0]>=f.minX&&receiver[0]<=f.maxX&&receiver[2]>=f.minZ&&receiver[2]<=f.maxZ);assert.ok(support?.mesh?.userData.collider);assert.ok(Math.abs(support.mesh.userData.collider.box.max.y-height)<1e-8);
+  const p=V(...room.P(2,11,4.05)),before=V(...room.P(-2,11,4.05)),velocity=V(20,0,0);LabGame.prototype.resolveBody.call(game,p,before,velocity,.43,2.4,false);assert.ok(p.x<room.def.at[0]-.74,'An elevated cargo slit remains too short for the complete player capsule');
+ }finally{level?.dispose();f.dispose();if(oldDocument===undefined)delete globalThis.document;else globalThis.document=oldDocument;}
+});
+
+test('High glazed viewing bands retain visible transparency and real player, cargo, camera and aim contacts',()=>{
+ const f=fixture(),{game}=f,oldDocument=globalThis.document;let level;
+ try{globalThis.document??={};game.markPortalSurface=LabGame.prototype.markPortalSurface;level=buildTowerLevel(game);const panes=game.colliders.filter(c=>c.mesh.name==='Castle fixed glazed viewing band');assert.ok(panes.length>=25);
+  for(const c of panes){assert.equal(c.enabled,true);assert.ok(c.mesh.material.transparent&&c.mesh.material.opacity>0&&c.mesh.material.opacity<1);assert.ok(game.cameraBlockers.includes(c.mesh)&&game.aimBlockers.includes(c.mesh));}
+  const r=level.rooms.get('freight'),wall=r.b.z0;
+  for(const side of [-1,1]){const start=V(r.def.at[0]+7,7.2,wall+side*2),p=V(r.def.at[0]+7,7.2,wall-side*2),v=V(0,0,-side*20);LabGame.prototype.resolveBody.call(game,p,start,v,.43,2.4,false);assert.ok(side*(p.z-wall)>.48,'A complete capsule cannot fall through the viewing window');}
  }finally{level?.dispose();f.dispose();if(oldDocument===undefined)delete globalThis.document;else globalThis.document=oldDocument;}
 });

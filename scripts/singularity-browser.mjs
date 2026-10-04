@@ -7,7 +7,7 @@ import {createHash} from 'node:crypto';
 import puppeteer from 'puppeteer-core';
 import {SINGULARITY_ROOMS} from '../src/game/LabSingularityLayout.js';
 import {assertUpgradeInfo,assertUpgradeEvidence} from './lib/singularity-upgrade-proof.mjs';
-import {verifySingularityUI} from './lib/singularity-ui-check.mjs';
+import {verifySingularityUI,waitForStartMenu,playFromStartMenu} from './lib/singularity-ui-check.mjs';
 const out=path.resolve(process.env.OUT_DIR||'qa/singularity');fs.mkdirSync(out,{recursive:true});
 const record=process.env.RECORD==='1',route=record||process.env.ROUTE==='1',fps=12,stride=5;
 const graphicsPreset=process.env.GRAPHICS_PRESET||'low',routeOptions=JSON.parse(process.env.ROUTE_OPTIONS||'{}');
@@ -26,17 +26,17 @@ try{
   if(count%120===0)console.log('CAPTURE',count/fps,'seconds;',last.solved.length,'machines');
  });
  const url=new URL(process.env.PAGE_URL||'http://127.0.0.1:4173/');url.searchParams.set('level','41');url.searchParams.set('edition','foundation');url.searchParams.set('debug','1');
- await page.goto(url.href,{waitUntil:'networkidle2'});await page.waitForFunction(()=>window.__NESI_DEMO_GAME__?.state==='ready');
+ await page.goto(url.href,{waitUntil:'domcontentloaded'});await waitForStartMenu(page);
  const info=await page.evaluate(async()=>{const r=await fetch('build-info.json');if(!r.ok)throw Error('Missing build identity');return r.json();});
  if(process.env.BUILD_COMMIT)assert.equal(info.commit,process.env.BUILD_COMMIT);const tower=assertUpgradeInfo(info,SINGULARITY_ROOMS);
- await page.select('#quality-select',graphicsPreset);await page.waitForFunction(()=>{const m=document.querySelector('#start-screen');return m&&!m.inert&&getComputedStyle(m).opacity==='1';});await page.bringToFront();await page.click('#play-button');await page.waitForFunction(()=>window.__NESI_DEMO_GAME__.state==='playing');
+ await playFromStartMenu(page,false,graphicsPreset);
  await page.evaluate(()=>window.__NESI_DEMO_GAME__.renderer.setAnimationLoop(null));
  const renderBenchmark=await page.evaluate(()=>{const g=window.__NESI_DEMO_GAME__,before=[g.elapsed,...g.playerPosition.toArray(),g.firstLevel.completedStages];const c=document.createElement('canvas');c.width=960;c.height=540;const ctx=c.getContext('2d',{alpha:false});const render=()=>{g.render();ctx.drawImage(g.renderer.domElement,0,0,960,540);c.toDataURL('image/jpeg',.83);};render();const times=[];for(let i=0;i<8;i++){const t=performance.now();render();times.push(performance.now()-t);}const after=[g.elapsed,...g.playerPosition.toArray(),g.firstLevel.completedStages];if(JSON.stringify(before)!==JSON.stringify(after))throw Error('Render inspection advanced gameplay');return {timesMs:times,meanMs:times.reduce((s,x)=>s+x,0)/times.length,drawCalls:g.renderer.info.render.calls,triangles:g.renderer.info.render.triangles,method:'Software-renderer/readback cost at frozen ordinary start; not hardware FPS.'};});
  fs.writeFileSync(path.join(out,'render-benchmark.json'),JSON.stringify(renderBenchmark,null,2));console.log('RENDER COST',JSON.stringify(renderBenchmark));await page.screenshot({path:path.join(out,'ordinary-start.png')});
  if(!route){
   const samples=await page.evaluate(()=>{
    const g=window.__NESI_DEMO_GAME__,r=[...g.firstLevel.rooms.values()].map(r=>({id:r.def.id,position:[r.def.at[0]+Math.min(10,r.def.w*.2),r.def.at[1]+Math.min(9,r.def.h*.65),r.def.at[2]+Math.min(15,r.def.d*.35)],target:[...r.def.at]}));
-   const overrides={drydock:{position:[65,15,-57],target:[66,6,-30]},fulcrum:{position:[-168,13,93],target:[-173.5,5,75]},accumulator:{position:[47,8,117],target:[48,2,84]},archive:{position:[5,23,-29],target:[-12,18,-49]},echo:{position:[20,10,83],target:[-5,3,108]},reservoir:{position:[-87,12,48],target:[-88,4,27]}};for(const s of r)if(overrides[s.id])Object.assign(s,overrides[s.id]);r.unshift({id:'atrium',position:[6,35,48],target:[0,29,-3]});return r;
+   const overrides={freight:{position:[-29,7.4,53],target:[-48,4,33]},sluice:{position:[63,10,55],target:[42,5,29]},optics:{position:[-19,10,-28],target:[-49,4,-42]},hoist:{position:[62,22,-18],target:[42,12,-39]},archive:{position:[-25,27,44],target:[-47,23,29]},flywheel:{position:[-34,28,-21],target:[-48,23,-45]},magnet:{position:[65,29,51],target:[45,24,37]},migrant:{position:[56,45,-15],target:[38,40,-34]},pendulum:{position:[-26,51,52],target:[-52,42,33]},inertia:{position:[-17,68,-18],target:[-52,59,-39]},crown:{position:[-35,86,42],target:[-53,77,27]}};for(const s of r)if(overrides[s.id])Object.assign(s,overrides[s.id]);r.unshift({id:'atrium',position:[8,61,52],target:[0,28,-18]});return r;
   });
   for(const s of samples){await page.evaluate(s=>{const g=window.__NESI_DEMO_GAME__;g.camera.position.fromArray(s.position);g.camera.lookAt(...s.target);g.camera.fov=72;g.camera.updateProjectionMatrix();g.camera.updateWorldMatrix(true,false);g.render();},s);await page.screenshot({path:path.join(out,`inspection-${s.id}.png`)});}
   fs.writeFileSync(path.join(out,'inspection.json'),JSON.stringify({sourceCommit:info.commit,version:info.version,graphicsPreset,rooms:samples.map(s=>s.id),method:'Camera-only architectural inspections. These images do not assert a completed playthrough.',errors},null,2));

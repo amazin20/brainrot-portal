@@ -9,7 +9,11 @@
     "preview": "vite preview",
     "test": "node scripts/test-active-game.mjs",
     "check": "npm run test && npm run build",
-    "build:yandex": "vite build --mode yandex --outDir dist-yandex"
+    "build:yandex": "vite build --mode yandex --outDir dist-yandex",
+    "package:yandex": "node scripts/package-yandex.mjs --build",
+    "check:yandex-platform": "node scripts/check-yandex-platform.mjs",
+    "check:yandex-browser": "node scripts/check-yandex-browser.mjs",
+    "check:adversarial-core": "node scripts/qa-adversarial-core.mjs"
   },
   "dependencies": {
     "cannon-es": "0.20.0",

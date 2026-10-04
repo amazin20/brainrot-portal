@@ -31,13 +31,22 @@ export async function runWorkshopJourney(d,{route='floor-feed'}={}){
    const before=game.teleportCount;
    for(let n=0;n<180&&game.teleportCount===before;n++){worldMove(0,1);frame();}
    stop();assert(game.teleportCount>before,'Carried entrance did not transport both actors');
-   for(let n=0;n<5;n++)frame();game.interact();assert(!game.heldCube,'Companion was not released above the spring');
+   // The carried body's real turning velocity is inherited by release.
+   // Let the post-portal grip settle while both bodies are still falling;
+   // five fixed frames released the companion sideways during the turn.
+   until(()=>Math.hypot(game.cargo.velocity.x,game.cargo.velocity.z)<.7,1,'The carried drop has not settled above the spring');
+   assert(game.cargo.position.y>s.piston.restY+2,'The carried drop must retain genuine falling height');
+   game.interact();assert(!game.heldCube,'Companion was not released above the spring');
    until(()=>s.piston.latched,5,'The carried drop did not compress the spring');mark('carried friend through front wall then dropped onto spring');
-   wait(3);walk(0,-2.6);walk(2.3,-2.6);walk(2.3,-3.3);pickup();
-   walk(2.6,-7.5);groundExit();
+   wait(3);walk(0,-2.6);walk(game.cargo.position.x,-2.7);walk(game.cargo.position.x,-3.12);
+   // This wall-fed drop can stop at the far side of the compressed cup.
+   // Use the service tread and a normal jump onto its exposed plate rather
+   // than reaching from the old fixed collection point beside the glass.
+   game.input.jumpQueued=true;walk(game.cargo.position.x,-4.1);wait(.35);pickup();
+   walk(2.6,-2.7);walk(2.6,-7.5);groundExit();
   }else{
    assert(route==='floor-feed',`Unknown spring-mail route: ${route}`);
-   shot(1,'drop-ceiling');floorFeed('loading-floor',new THREE.Vector3(0,2,-5));until(()=>s.piston.latched,7,'Piston did not catch impact');mark('gravity compressed the physical spring');
+   shot(1,'drop-ceiling');mark('ceiling receiver prepared before loading floor delivery');floorFeed('loading-floor',new THREE.Vector3(0,2,-5));until(()=>s.piston.latched,7,'Piston did not catch impact');mark('gravity compressed the physical spring');
    // Inspect the supplied horizontal ram and its linkage from the rear aisle
    // using ordinary walking and camera controls before collecting the friend.
    walk(2.6,-2);walk(2.6,-8.9);walk(-3,-8.9);
@@ -86,7 +95,7 @@ export async function runWorkshopJourney(d,{route='floor-feed'}={}){
    collect();walk(0,-1.4);groundExit();
   }else{
    assert(route==='floor-feed',`Unknown stored-wind route: ${route}`);
-   shot(0,'wind-intake');shot(1,'wind-outlet');lever('fan-switch',8);
+   shot(0,'wind-intake');shot(1,'wind-outlet');mark('portal pair addresses the wind drive before fan power');lever('fan-switch',8);
    until(()=>s.ratchet.engaged,15,'Wind did not do mechanical work');mark('air spun flywheel and lifted ratchet');collect();groundExit();
   }
  }else if(index===11){

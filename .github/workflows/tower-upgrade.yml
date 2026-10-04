@@ -1,7 +1,7 @@
 name: Verify the upgraded Tower and retained campaign
 on:
   push:
-    branches: [upgrade/tower-41-final]
+    branches: [upgrade/tower-41-final, upgrade/creative-campaign-20261004]
   workflow_dispatch:
     inputs:
       record:
@@ -105,9 +105,102 @@ jobs:
           name: upgrade-campaign-${{ matrix.edition }}
           path: qa/campaign-upgrade/
           retention-days: 14
+  adversarial:
+    name: Fast-input attacks and Yandex production readiness
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: |
+          npm ci
+          npm install --no-save --package-lock=false puppeteer-core@24.16.0
+          echo "CHROME_PATH=$(command -v google-chrome || command -v chromium)" >> "$GITHUB_ENV"
+      - name: Probe ordinary physics with fast, failed-order and cargo-only portal attacks
+        run: |
+          node scripts/qa-adversarial-core.mjs
+          OUT=qa/adversarial-early.json node scripts/qa-adversarial-early.mjs
+          node --input-type=module -e "import fs from 'node:fs';import assert from 'node:assert/strict';const q=JSON.parse(fs.readFileSync('qa/adversarial-early.json'));assert.equal(q.counts.canonicalPassed,20);assert.equal(q.counts.attempted,98);assert.equal(q.counts.suspectedShortcuts,0);"
+          node scripts/qa-adversarial-late.mjs
+          node scripts/qa-sealed-partitions.mjs
+          node scripts/qa-pressure-room34.mjs
+          node scripts/qa-adversarial-castle-independent.mjs
+      - name: Build the nested-upload game and verify SDK lifecycle, mobile input and package size
+        run: |
+          npm run check:yandex-platform
+          npm run package:yandex
+          npm run check:yandex-browser
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: creative-adversarial-and-yandex
+          path: |
+            qa/adversarial-core.json
+            qa/adversarial-early.json
+            qa/adversarial-late.json
+            qa/sealed-partitions-adversarial.json
+            qa/pressure-room34-adversarial.json
+            qa/castle-independent/
+            qa/yandex-browser/
+            qa/yandex-package.json
+            artifacts/brainrot-portal-yandex.zip
+          retention-days: 30
+  all-webgl:
+    name: Complete production WebGL routes (${{ matrix.levels }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      matrix:
+        levels: ['1,2,3,4,5,6,7,8,9,10','11,12,13,14,15,16,17,18,19,20','21,22,23,24,25,26,27,28,29,30','31,32,33,34,35,36,37,38,39,40']
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: |
+          npm ci
+          npm install --no-save --package-lock=false puppeteer-core@24.16.0
+          echo "CHROME_PATH=$(command -v google-chrome || command -v chromium)" >> "$GITHUB_ENV"
+          npm run build
+      - name: Finish every assigned room with the original companion through production inputs
+        env:
+          LEVELS: ${{ matrix.levels }}
+          CASE: route
+          START_SERVER: '1'
+          SERVER_MODE: preview
+          PORT: '4173'
+          OUT_DIR: qa/creative-browser
+        run: node scripts/qa-creative-browser.mjs
+      - name: Check desktop and touch resizing under all graphics profiles
+        if: strategy.job-index == 0
+        env:
+          START_SERVER: '1'
+          SERVER_MODE: preview
+          PORT: '4184'
+          OUT_DIR: qa/creative-viewport-browser
+        run: node scripts/qa-viewport-browser.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: creative-WebGL-${{ strategy.job-index }}
+          path: |
+            qa/creative-browser/
+            qa/creative-viewport-browser/
+          retention-days: 14
   candidate:
     name: Exact upgraded source, production WebGL and complete recording
-    needs: [source, campaign, preserve-base]
+    needs: [source, campaign, preserve-base, adversarial, all-webgl]
     runs-on: ubuntu-latest
     timeout-minutes: 295
     steps:

@@ -25,6 +25,12 @@ for(const expected of baseline.rooms)test(`room ${expected.level} matches the au
  if(assets.levelIndex!==expected.level-1)await assets.selectLevel(expected.level-1,false);
  assert.equal(digest(gameplayContract(assets)),expected.contract,
   'Authored colliders, portal frames, support geometry, camera blockers or interaction state changed');
+ if(expected.physicalAudit){
+  assert.deepEqual(assets.firstLevel.puzzleGeometry.orders,expected.physicalAudit.allowedOrders,
+   'An added route must be physically audited before the art baseline can accept it');
+  for(const name of expected.physicalAudit.absentPanels)assert.equal(assets.firstLevel.panels[name],undefined,
+   `The audited gravity-delivery room must not regain ${name}`);
+ }
  const workload=sceneWorkload(assets),level=assets.firstLevel;
  if(expected.level>11){
   assert.equal(workload.triangles,expected.workload.triangles,'Batching must retain every visible source triangle');

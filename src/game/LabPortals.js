@@ -218,9 +218,42 @@ export function pointInsidePortal(frame, point, radius = 0) {
   return width>0&&height>0&&(x/width)**2+(y/height)**2<=1;
 }
 
+/** The whole rigid box must fit through the elliptical aperture. Its projected
+ * footprint is the convex hull of these eight corners, so testing each corner
+ * also contains every edge and face without changing the body's shape. */
+export function orientedBoxFitsPortal(frame, center, quaternion, halfSize = .39) {
+  if (!frame || !quaternion || !Number.isFinite(halfSize) || halfSize < 0
+    || !(frame.width > 0 && frame.height > 0)) return false;
+  const inverse = frame.quaternion.clone().invert();
+  const local = new THREE.Vector3().copy(center).sub(frame.position).applyQuaternion(inverse);
+  const relative = inverse.multiply(new THREE.Quaternion().copy(quaternion));
+  const axes = [new THREE.Vector3(halfSize, 0, 0), new THREE.Vector3(0, halfSize, 0),
+    new THREE.Vector3(0, 0, halfSize)].map(axis => axis.applyQuaternion(relative));
+  for (const x of [-1, 1]) for (const y of [-1, 1]) for (const z of [-1, 1]) {
+    const px = local.x + x * axes[0].x + y * axes[1].x + z * axes[2].x;
+    const py = local.y + x * axes[0].y + y * axes[1].y + z * axes[2].y;
+    if (!Number.isFinite(px) || !Number.isFinite(py)
+      || (px / frame.width) ** 2 + (py / frame.height) ** 2 > 1 + 1e-10) return false;
+  }
+  return true;
+}
+
+// Travellers remain upright after transport. A floor opening can therefore
+// admit a capsule that a cargo-only wall outlet cannot. Check both orientations
+// before opening either backing; a failed transfer must leave the floor solid.
+export function uprightCapsuleFitsPortal(frame, height, radius) {
+  if (!frame) return false;
+  const segment = Math.max(0, height / 2 - radius);
+  return pointInsidePortal(frame, frame.position.clone().add(new THREE.Vector3(0, segment, 0)), radius)
+    && pointInsidePortal(frame, frame.position.clone().add(new THREE.Vector3(0, -segment, 0)), radius);
+}
+
 /** Swept front-to-back crossing, independent of camera and frame-rate. */
 export function portalCrossing(entry, exit, position, previousPosition, velocity, radius = 0.45,
-  { exitClearance = radius + .025, previousEntry = entry } = {}) {
+  { exitClearance = radius + .025, previousEntry = entry, capsuleHeight = 0,
+    boxQuaternion = null, previousBoxQuaternion = boxQuaternion, boxHalfSize = .39 } = {}) {
+  if (capsuleHeight > 0 && (!uprightCapsuleFitsPortal(entry, capsuleHeight, radius)
+    || !uprightCapsuleFitsPortal(exit, capsuleHeight, radius))) return null;
   // The actor and its support both move during a physics step. Testing the old
   // actor against today's plane misses a releasing pressure pad that rises past
   // the old actor centre before gravity advances the body.
@@ -254,7 +287,23 @@ export function portalCrossing(entry, exit, position, previousPosition, velocity
   }
   const crossingPoint = previousPosition.clone().lerp(position, crossingFraction);
   if (!pointInsidePortal(interpolateFrame(crossingFraction), crossingPoint, radius)) return null;
-  const result = transformPortalPoint(position, entry, exit);
+  // A rigid transform preserves tangential offset, not aperture dimensions.
+  // The edge of a wide entry cannot deposit cargo beyond a smaller exit rim.
+  if (!pointInsidePortal(exit, transformPortalPoint(crossingPoint, crossingFrame, exit), radius)) return null;
+  if (boxQuaternion) {
+    const crossingQuaternion = new THREE.Quaternion().copy(boxQuaternion);
+    if (previousBoxQuaternion) {
+      const currentQuaternion = crossingQuaternion.clone();
+      crossingQuaternion.copy(previousBoxQuaternion).slerp(currentQuaternion, crossingFraction);
+    }
+    if (!orientedBoxFitsPortal(crossingFrame, crossingPoint, crossingQuaternion, boxHalfSize)) return null;
+    const destinationQuaternion = crossingQuaternion.premultiply(portalRotation(crossingFrame, exit));
+    if (!orientedBoxFitsPortal(exit, transformPortalPoint(crossingPoint, crossingFrame, exit),
+      destinationQuaternion, boxHalfSize)) return null;
+  }
+  const entryFrame = {position:crossingFrame.position.clone(),normal:crossingFrame.normal.clone(),
+    quaternion:crossingFrame.quaternion.clone(),width:entry.width,height:entry.height};
+  const result = transformPortalPoint(position, entryFrame, exit);
   const unadjustedPosition = result.clone();
   const exitDistance = result.clone().sub(exit.position).dot(exit.normal);
   const exitOffset = exit.normal.clone().multiplyScalar(Math.max(0, exitClearance - exitDistance));
@@ -262,8 +311,9 @@ export function portalCrossing(entry, exit, position, previousPosition, velocity
   return {
     position: result,
     unadjustedPosition, exitOffset, crossingPoint, crossingFraction,
-    velocity: transformPortalDirection(velocity, entry, exit),
-    rotation: portalRotation(entry, exit),
+    entryFrame,
+    velocity: transformPortalDirection(velocity, entryFrame, exit),
+    rotation: portalRotation(entryFrame, exit),
   };
 }
 
