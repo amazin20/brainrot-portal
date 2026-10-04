@@ -2,7 +2,7 @@ const KEY='brainrot-portal.preferences.v24';
 const LEGACY_KEY='nesi.preferences.v8';
 const CAMPAIGN_REVISION='folded-junction-v28';
 export const CREATIVE_CAMPAIGN_REVISION='creative-campaign-v48';
-export const CREATIVE_REPLACED_INDICES=Object.freeze([15,30,31,32,33,35,36,38,39,40]);
+export const CREATIVE_REPLACED_INDICES=Object.freeze([13,15,17,19,30,31,32,33,34,35,36,38,39,40]);
 export const DEFAULT_PREFERENCES=Object.freeze({quality:'balanced',volume:.65,muted:false,tutorial:true,completed:[],hints:{},resumeLevel:null});
 export function sanitizePreferences(value={}) {
   const safe=value&&typeof value==='object'?value:{};

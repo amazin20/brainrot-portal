@@ -3,7 +3,7 @@ import {Body,Box,Vec3,Material} from 'cannon-es';
 import {ResearchChamber} from './LabResearchArt.js';
 import {tracePortalRay,beamDrawing} from './LabPuzzleMechanics.js';
 import {airAcceleration} from './LabAirForces.js';
-import {freightHood,lateShutter} from './LabLateCampaignMechanisms.js';
+import {freightHood,lateShutter,movingMechanismBlock} from './LabLateCampaignMechanisms.js';
 const V=(...p)=>new THREE.Vector3(...p);
 
 function finish(k,spawn,cargo,goal,extra,roles,deductions){
@@ -47,7 +47,7 @@ export function buildFreightRake(game,index,spec){
  const bridge=k.carrier('rack-driven-crossing',[[-19,6,-1],[-6,6,-25]],{width:12,depth:12,portal:false});
  bridge.speed=200;
  const direction=V(13,0,-24),railCentre=V(-12.5,4.3,-13);for(const dx of [-4.8,4.8])k.geometry(new THREE.BoxGeometry(.16,.20,direction.length()+12),'metal',railCentre.clone().add(V(dx,0,0)).toArray(),new THREE.Quaternion().setFromUnitVectors(V(0,0,1),direction.clone().normalize()),{batch:false,name:'Inclined transverse bridge guide'});
- const mesh=k.block([-21,.62,8],[.36,1.24,2.8],'secondary',false);mesh.name='Cargo-driven rack contact';
+ const mesh=movingMechanismBlock(k,'Cargo-driven rack contact',[-21,.62,8],[.36,1.24,2.8]);
  const collider=game.collisionProxy(new THREE.Box3().setFromObject(mesh),{kinematic:true});
  const rack={body:null,owner:null,stroke:0,latched:false,mesh,collider,bridge,
   ensure(){if(!game.physics||this.owner===game.physics)return;this.owner=game.physics;game.physics.removeStaticBox(collider.mesh.uuid);

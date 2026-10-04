@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import {ResearchChamber} from './LabResearchArt.js';
 import {tracePortalRay,rayTouches,beamDrawing} from './LabPuzzleMechanics.js';
-import {cargoOccludes,lateShutter} from './LabLateCampaignMechanisms.js';
+import {cargoOccludes,lateShutter,movingMechanismBlock} from './LabLateCampaignMechanisms.js';
 const V=(...p)=>new THREE.Vector3(...p);
 export const THERMAL_MEMORY_SPEC={id:'post-thermal-memory',title:'Тепловая память',concept:'Луч нагревает расширительный шток. Перенаправление той же мощности открывает дальнюю дверь, но оставленный шток начинает остывать.',description:'Сохрани достаточно тепла, затем отдай питающий луч дальнему приёмнику. Вернуться к нагреву можно перестановкой портала выше световой оси.',accent:0xe6a477,assets:[1,2,11,22,23,24],hints:['Пока луч заканчивается на белом коллекторе, термометр растёт, шток расширяется и поднимает первую дверь.','Портал на коллекторе отбирает его мощность. Другой адрес выводит луч к дальнему приёмнику; первая дверь держится только запасённым теплом.','Если запас кончился, переставь портал на верх белого коллектора: луч снова нагреет шток. Двери не запоминают прохождение.']};
 
@@ -24,13 +24,16 @@ export function buildThermalMemory(g,index=38){
  const emitter=k.projector([16,3.2,17],[-1,0,0],{radius:.9});
  const receiver=k.projector([18,3.2,-5],[-1,0,0],{radius:.55});
  const first=partition(k,4),second=partition(k,-10);
- const rod=k.block([10,1.8,4],[3,.35,.35],'metal',false);rod.name='Continuously expanding thermal rod';
+ const rod=movingMechanismBlock(k,'Continuously expanding thermal rod',[10,1.8,4],[3,.35,.35],'metal');
  const sleeve=k.block([8.2,1.8,4],[.7,1.0,1.0],'shell');
- const pointer=k.block([11.5,1.8,4],[.25,.8,.8],'secondary',false);
+ const pointer=movingMechanismBlock(k,'Thermal expansion pointer',[11.5,1.8,4],[.25,.8,.8]);
  // The displayed amplification linkage and its thermal bar are alongside
  // the crossing, never across the walking aperture or a portal shot line.
  k.block([5.3,1.8,4],[4,.18,.18],'metal',false);
- const bar=k.block([-25.2,5.3,17],[.20,6,.4],'light',false);bar.name='Thermal energy thermometer';
+ const bar=movingMechanismBlock(k,'Thermal energy thermometer',[-25.2,5.3,17],[.20,6,.4],'light');
+ // The gauge's changing temperature color belongs to it alone. As an
+ // attached level mesh, this clone is disposed by disposeLabLevel's traversal.
+ bar.material=bar.material.clone();bar.material.name='Thermal energy thermometer color';
  const drawing=beamDrawing(k.world,0xf4b173,.045);
  const thermal={temperature:20,ambient:20,capacity:800,inputPower:32000,lossCoefficient:44,powered:false,remote:false,extension:0,segments:[],energy:0};
  k.ticks.push(dt=>{

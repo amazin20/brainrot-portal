@@ -129,6 +129,7 @@ function shortcutPair(d){
 }
 async function attempt(number,name,scenario){
  await g.selectLevel(number-1,false);
+ const originalCargo=g.cargo,originalBody=g.physics.cargoBody;
  let report,error;const observed={};
  try{report=await runV8Journey(g,{scenario:d=>scenario({...d,frame:()=>{
   // Read the same acceleration used by the player integrator. A diagonal
@@ -139,7 +140,7 @@ async function attempt(number,name,scenario){
   }
   d.frame();
  }})});}catch(e){error=e.message;}
- return {name,completed:g.state==='won',teleports:g.teleportCount,player:g.playerPosition.toArray(),cargo:g.cargo.position.toArray(),frames:report?.frames,error:error||null,observed};
+ return {name,completed:g.state==='won',teleports:g.teleportCount,player:g.playerPosition.toArray(),cargo:g.cargo.position.toArray(),frames:report?.frames,error:error||null,observed,resets:report?.resets,respawns:report?.respawns,sameCompanion:g.cargo===originalCargo,sameCargoBody:g.physics.cargoBody===originalBody};
 }
 
 try{
@@ -153,7 +154,13 @@ try{
    forceTowards(d,d.level.goal.position,14);d.wait(.4);
   }));
   item.attacks.push(await attempt(number,'initial-panel-shortcut-carry',shortcutPair));
-  const cut=stageCuts[number];
+  const creative=number===18||number===20;
+  if(creative){
+   const m=await import(`./lib/creative-room${number}-attacks.mjs`),attacks=m[`creative${number}EarlyAttacks`];
+   if(!Array.isArray(attacks)||attacks.length<3)throw Error('Missing replacement-room staged attacks: '+number);
+   for(const a of attacks)item.attacks.push(await attempt(number,a.name,a.run));
+  }
+  const cut=creative?null:stageCuts[number];
   if(cut)for(const kind of ['carry-sprint-jump','direct-portal-carry']){
    const attack=await attempt(number,`after-${cut.mark}:${kind}`,async d=>{
     await reachCut(d,cut);
@@ -167,7 +174,7 @@ try{
    });
    attack.requiredMechanicNotYetUsed=cut.missing;item.attacks.push(attack);
   }
-  if(number===20){
+  if(number===20&&!creative){
    const attack=await attempt(number,'final-deck-jump-around-suspension',async d=>{
     await reachCut(d,cut);approachStageCargo(d);collect(d);
     // The east end of the permanent final deck lies outside the visible
@@ -201,7 +208,7 @@ try{
    if(number===1&&attack.completed&&attack.teleports>0){
     attack.causalReview='Both travellers reached the upper gallery through the required paired portal; this is the introductory core mechanic.';
    }
-   if(number===20&&attack.completed&&attack.observed.finalSuspensionFrames>0){
+   if(number===20&&!creative&&attack.completed&&attack.observed.finalSuspensionFrames>0){
     attack.causalReview='The sprint route entered the required final suspension and used its real acceleration before landing in the offset bay.';
    }
   }

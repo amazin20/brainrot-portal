@@ -1,8 +1,12 @@
-import fs from 'node:fs';import assert from 'node:assert/strict';import {CAMPAIGN_ASSET_IDS} from '../src/game/labAssets.js';import {CAMPAIGN,FOUNDATION_LATE_SPECS} from '../src/game/LabCampaignLevels.js';
+import fs from 'node:fs';import assert from 'node:assert/strict';import {CAMPAIGN_ASSET_IDS} from '../src/game/labAssets.js';import {CAMPAIGN,FOUNDATION_LATE_SPECS,campaignSpec} from '../src/game/LabCampaignLevels.js';
 import {TOWER_SPEC} from '../src/game/LabSingularityLevel.js';
 const root=process.argv[2]||'dist',manifest=JSON.parse(fs.readFileSync(root+'/models/runtime/manifest.json'));
 assert.equal(CAMPAIGN.length,33);assert.equal(CAMPAIGN[11].id,'folded-junction');assert.equal(CAMPAIGN[14].id,'countercurrent-weave');
 assert.equal(CAMPAIGN[20].id,'gravity-pocket');
+const primary=Array.from({length:41},(_,i)=>campaignSpec({chamberEdition:'foundation'},i));
+assert.equal(new Set(primary.map(s=>s.id)).size,41,'Every primary room has its own active definition');
+assert.equal(primary[17].id,'conductive-cargo-circuit');assert.equal(primary[19].id,'foundation-portal-tension');
+assert.ok(primary.every(s=>s.assets.every(id=>CAMPAIGN_ASSET_IDS.includes(id))));
 assert.equal(FOUNDATION_LATE_SPECS.length,11);
 assert.equal(FOUNDATION_LATE_SPECS.at(-1),TOWER_SPEC,'The new Singularity Tower must be the campaign finale');
 assert.equal(new Set(FOUNDATION_LATE_SPECS.map(room=>room.id)).size,11);

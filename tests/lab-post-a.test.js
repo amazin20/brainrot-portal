@@ -6,7 +6,7 @@ import {runPostA} from '../src/game/LabPostJourneyA.js';
 import {POST_A_SPECS} from '../src/game/LabPostCampaignA.js';
 async function room(n){const g=await createHeadlessGame();g.chamberEdition='foundation';await g.selectLevel(n-1,false);return g;}
 function close(g){g.physics?.dispose();g.portals?.dispose();}
-const alternate={31:'inspect-rack-first',32:'inspect-optics-first',33:'aim-before-charge',34:'inspect-unsealed-first',35:'carry-after-first-latch'};
+const alternate={31:'inspect-rack-first',32:'inspect-optics-first',33:'aim-before-charge',34:'inspect-unsealed-first',35:'scout-before-second-latch'};
 for(let n=31;n<=35;n++)for(const route of [undefined,alternate[n]])test(`late room ${n}: ${route||'canonical'} uses the original physical companion`,async()=>{
  const g=await room(n),cargo=g.cargo,body=g.physics.cargoBody.id;
  try{const r=await runV8Journey(g,{journeyOptions:route?{route}:{}});assert.equal(r.pass,true);assert.equal(g.state,'won');assert.equal(r.resets+r.respawns,0);assert.equal(g.cargo,cargo);assert.equal(g.physics.cargoBody.id,body);assert.equal(g.firstLevel.id,POST_A_SPECS[n-31].id);assert.ok(g.firstLevel.workshop.enclosed);assert.ok(g.firstLevel.puzzleGeometry.noProgressFlags);
@@ -14,10 +14,12 @@ for(let n=31;n<=35;n++)for(const route of [undefined,alternate[n]])test(`late ro
   if(n===32)assert.ok(g.firstLevel.optics.latched);
   if(n===33)assert.ok(r.milestones.some(m=>m.name.includes('Real spring contact')));
   if(n===34){assert.equal(g.firstLevel.pressureState.mode,1);assert.ok(g.firstLevel.pressureState.pressure<95);}
+  if(n===35){assert.ok(g.firstLevel.isFirstLatched()&&g.firstLevel.isLatched());assert.equal(g.physics.portalTransports,1);assert.equal(g.firstLevel.goal.position.z,19);}
   g.resetRun(true);assert.equal(g.state,'playing');assert.equal(g.physics.cargoBody.id,body);assert.equal(g.portals.ready,false);
   if(n===31){assert.equal(g.firstLevel.rack.stroke,0);assert.equal(g.firstLevel.rack.latched,false);}
   if(n===32)assert.equal(g.firstLevel.optics.latched,false);
   if(n===33){assert.equal(g.firstLevel.spring.held,false);assert.equal(g.firstLevel.spring.compression,0);}
+  if(n===35){assert.equal(g.firstLevel.isFirstLatched(),false);assert.equal(g.firstLevel.isLatched(),false);assert.equal(g.cargo.position.z,-20);}
  }finally{close(g);}
 });
 test('31: air alone cannot move the guided mass or its mechanically linked crossing',async()=>{const g=await room(31);try{const r=await runV8Journey(g,{scenario:d=>{runPostA(d,{route:'inspect-rack-first',stopBeforeCargoDelivery:true});assert.ok(g.firstLevel.rack.stroke<.02);assert.ok(g.firstLevel.bridge.position.x<-18.9);assert.equal(g.physics.portalTransports,0);assert.equal(g.firstLevel.inspection.progress,0);assert.equal(g.state,'playing');}});assert.equal(r.resets+r.respawns,0);}finally{close(g);}});

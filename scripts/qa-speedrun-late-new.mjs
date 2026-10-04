@@ -36,7 +36,15 @@ const cases={
 32:[['upstream-source-shadow-skips-freight-dispatch',async(d,start,note)=>{d.walk(18,12);aimLateSurface(d,0,d.level.source);d.walk(-7,-1);aimLateSurface(d,1,d.level.relay);collect(d);d.walk(18,20);d.walk(16.6,18.0);start();bounded(d,15.4,17.06,4);release(d);d.wait(.2);note('Original cargo shadows the lower upstream source ray outside guarded receiving hood');if(d.level.optics.valid){dash(d,15.4,20);dash(d,13,20);dash(d,0,-12);dash(d,5.5,-13);assert.ok(d.game.interact(),'upstream ratchet action failed');note('Downstream diaphragm ratchet reached without any cargo portal transport');d.walk(0,-12);d.walk(0,4);d.walk(18,12);collect(d);d.walk(0,4);d.walk(0,-19);d.wait(.5);}else push(d,0,-12,4);}],['rotated-held-box-low-optical-slot',async(d,start,note)=>{collect(d);d.walk(-7,-1);start();for(const [x,z]of [[-12.7,-1],[-12.7,-1.9],[-12.7,-.1]]){bounded(d,x,z,5);d.look(V(-17,.55,-1));push(d,-18,-1,3);release(d);d.wait(.4);note('Yaw-rotated release at manufactured optical charge slot');if(!d.game.heldCube){const c=d.game.cargo.position;if(c.x> -14){try{collect(d);}catch(e){note('Cargo cannot be collected: '+e.message);break;}}else{note('Cargo crossed the protected hood without dispatch');break;}}} }]],
 33:[['cargo-self-compression-and-release-without-player-load',async(d,start,note)=>{d.walk(0,10);aimLateSurface(d,1,d.level.mouth);aimLateSurface(d,0,d.level.ceiling);collect(d);d.walk(-15,14);d.walk(-8,14);d.walk(-8,12.75);d.game.input.jumpQueued=true;d.wait(.2);assert.ok(d.game.interact()&&!d.game.heldCube);d.wait(.8);start();d.wait(4);note('Only original cargo loads spring, player stays off its bed');d.walk(3.5,6);for(let i=0;i<4;i++){assert.ok(d.game.interact());d.wait(1);}note('Repeated outside release without observer-supplied compression');if(d.level.door.progress>.9){bounded(d,0,-12,8);bounded(d,5.5,-13,5);d.game.interact();d.wait(3);bounded(d,-12,-12,5);try{collect(d);}catch(e){note(e.message);}bounded(d,0,-21,8);} }]],
 34:[['free-cargo-hand-feed-across-low-pressure-mouth',async(d,start,note)=>{collect(d);d.walk(-13,6.5);start();for(const z of [6.5,5.8,7.2]){bounded(d,-14.7,z,4);d.look(V(-17,.8,6.5));push(d,-17,z,2);release(d);d.wait(1);note('Rotated hand release through low cargo pressure inlet at z='+z);if(d.game.cargo.position.x< -15.5){note('Cargo entered sleeve without pressure-feed portal');break;}collect(d);}d.wait(5);bounded(d,-9,8.65,5);for(let i=0;i<2;i++){d.game.interact();d.wait(3);}push(d,0,-13,5);note('Tried valve discharge and closed human opening'); }]],
-35:[['closing-door-sprint-skips-both-physical-latches',async(d,start,note)=>{d.walk(0,21);aimLateSurface(d,0,d.level.panels['air-origin']);aimLateSurface(d,1,d.level.panels['first-receiver']);d.until(()=>d.level.first.progress>.94,5,'First gate opening');collect(d);d.walk(0,11);d.walk(0,0);release(d);aimLateSurface(d,1,d.level.panels['second-receiver']);d.until(()=>d.level.second.progress>.94,5,'Second gate opening');collect(d);start();d.game.clearPortals();push(d,0,-12,4,{jump:false});bounded(d,0,-20,7);note('Flow removed, sprint through closing second gate; neither latch used'); }]],
+35:[['closing-door-sprint-skips-both-physical-latches',async(d,start,note)=>{
+ d.walk(0,21);aimLateSurface(d,0,d.level.panels['air-origin']);aimLateSurface(d,1,d.level.panels['first-receiver']);d.until(()=>d.level.first.progress>.94,5,'First gate opening');
+ d.walk(0,11);d.walk(0,0);aimLateSurface(d,1,d.level.panels['second-receiver']);d.until(()=>d.level.second.progress>.94,5,'Second gate opening');
+ for(const [x,z]of [[0,-5],[0,-12],[8,-12],[8,-24.4],[0,-24.4]])d.walk(x,z);
+ start();assert.ok(d.game.clearPortals());
+ for(const [x,z]of [[8,-24.4],[8,-12],[0,-12]])d.walk(x,z);
+ push(d,0,0,8);note('Real flow removed at the far inspection stance; sprint-jump return meets the closing second sluice with neither latch retained');
+ assert.equal(d.level.isFirstLatched(),false);assert.equal(d.level.isLatched(),false);assert.ok(d.game.playerPosition.z<-7.4);assert.equal(d.game.physics.portalTransports,0);
+ }]],
 36:[['idle-rotor-cassette-corner-platform-jumps',async(d,start,note)=>{collect(d);d.walk(-12,-13);start();push(d,-4,-10,4);push(d,6,-6,4);bounded(d,19,-13,8);note('Upper corner jumps toward idle cassette and opposite gallery without momentum cargo strike');assert.ok(d.level.rotor.angle<.01); }]],
 37:[['magnetic-control-preselection-hand-feed-slots',async(d,start,note)=>{collect(d);d.walk(-16,7);start();for(const x of [-16,-16.4,-15.6]){bounded(d,x,5,5);d.look(V(-16,.65,2));push(d,x,2,2);release(d);d.wait(.8);note('Free original cargo release through low inspection slit at x='+x);if(d.game.cargo.position.z<4){note('Cargo reached guarded duct without feed portal');break;}try{collect(d);}catch(e){note('Cargo retrieval blocked by real slit: '+e.message);break;}}if(d.game.heldCube)release(d);for(const [x,z]of [[-9,5.2],[0,.2],[8,.2]]){if(bounded(d,x,z,5)){d.game.interact();d.wait(5);}}note('All three coils requested from accessible observer controls');push(d,0,-16,5); }]],
 38:[['lower-dispatch-sprint-jump-chase-ascending-freight',async(d,start,note)=>{collect(d);d.walk(11,6.8);d.walk(11,2);release(d);d.walk(17,13);start();assert.ok(d.game.interact(),'lower dispatch not within reach');note('Requested lower freight dispatch then chased its rising near lip');push(d,11,-4,5);d.wait(5);note('Cargo hoist attempted as player elevator instead of west gravity launch');if(d.game.playerPosition.y>14)bounded(d,16,-19,6); }]],
@@ -58,14 +66,18 @@ cases[32].push(['cargo-portal-into-raised-source-instead-of-shadow-hood',async(d
 }]);
 cases[35].push(['carry-middle-cargo-keeps-second-flow-skips-both-latches',async(d,start,note)=>{
  d.walk(0,21);aimLateSurface(d,0,d.level.panels['air-origin']);aimLateSurface(d,1,d.level.panels['first-receiver']);
- d.until(()=>d.level.first.progress>.94,5,'First gate opening');note('The first real portal-mediated airflow opens only the first door');collect(d);
- d.walk(0,11);d.walk(0,0);release(d);start();
+ d.until(()=>d.level.first.progress>.94,5,'First gate opening');note('The first real portal-mediated airflow opens only the first door');
+ d.walk(0,11);d.walk(0,0);
  aimLateSurface(d,1,d.level.panels['second-receiver']);d.until(()=>d.level.second.progress>.94,5,'Second gate opening');note('Readdressed real portal-mediated airflow opens the second door while first closes');
- collect(d);d.walk(0,-4);d.walk(0,-20);d.wait(.5);
- note('Both real air receivers used, but neither mechanical latch nor cargo portal delivery used');
+ for(const [x,z]of [[0,-5],[0,-12],[8,-12],[8,-24.4],[0,-24.4]])d.walk(x,z);
+ start();push(d,0,-20,4);assert.equal(d.game.interact(),false);assert.equal(d.game.heldCube,null);
+ note('The old live-flow carry attempt physically reaches the inspection louvers, which exclude both the observer and the same original sealed cargo');
+ d.walk(d.level.bay.aim[0],d.level.bay.aim[2]);aimLateSurface(d,0,d.level.panels['companion-address']);d.wait(2);
+ note('A genuine floor shot paired with the narrow second air grille cannot dispatch the rigid cargo; the live flow ends without a retained latch');
+ for(const [x,z]of [[8,-24.4],[8,-12],[0,-12]])d.walk(x,z);push(d,0,0,8);
  assert.equal(d.level.isFirstLatched(),false);assert.equal(d.level.isLatched(),false);
- assert.equal(d.game.physics.portalTransports,0);assert.deepEqual(d.level.powered(),[false,true]);
-}, {legitimate:true}]);
+ assert.equal(d.game.physics.portalTransports,0);assert.deepEqual(d.level.powered(),[false,false]);assert.ok(d.game.playerPosition.z<-7.4);
+}]);
 cases[37].push(['last-coil-only-after-physical-feed-skips-two-bend-controls',async(d,start,note)=>{
  d.walk(-16,7);aimLateSurface(d,1,d.level.mouth);collect(d);
  d.walk(-16,17);d.walk(-16,15.5);release(d);d.walk(-10,18);
@@ -90,13 +102,14 @@ cases[36].push(['dry-balcony-drop-on-rotor-without-portal-impulse',async(d,start
 // They also explore the real lower recovery flooring below raised puzzles.
 for(const n of Array.from({length:12},(_,i)=>29+i))for(const side of [-1,1]){
  cases[n].push([`${side<0?'west':'east'}-perimeter-foundation-and-wall-endaround`,async(d,start,note)=>{
-  collect(d);start();const b=d.level.bounds,x=side<0?b.minX+1.4:b.maxX-1.4;
+  if(n===35)start();else{collect(d);start();}const b=d.level.bounds,x=n===35?side*24.9:side<0?b.minX+1.4:b.maxX-1.4;
   const initial=d.game.playerPosition.z;
-  bounded(d,x,initial,5);push(d,x,b.minZ+1.4,4);
+  bounded(d,x,initial,5);if(n===35){d.wait(.8);assert.ok(d.game.playerPosition.y<-.5,'The actual 35 perimeter attack must descend to its lower chassis ledge');note('Native perimeter approach actually descends below the main deck onto its physical outer chassis ledge');}push(d,x,b.minZ+1.4,4);
   note('Sprint-jump against the '+(side<0?'western':'eastern')+' floor perimeter and north wall end');
   bounded(d,x,b.minZ+1.4,5);
   const goal=d.level.goal.position;push(d,goal.x,goal.z,4);bounded(d,goal.x,goal.z,5);
   note('Attempted to return from the perimeter or lower service floor directly to the joint goal');
+  if(n===35){assert.equal(d.game.heldCube,null);assert.equal(d.game.physics.portalTransports,0);assert.ok(d.game.cargo.position.z<-16);note('The original cargo remains inside the closed far bay; no pickup-at-spawn setup was assumed');}
  }]);
 }
 export {cases as lateSpeedrunAttacks};

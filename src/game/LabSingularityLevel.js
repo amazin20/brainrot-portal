@@ -6,6 +6,9 @@ import {tracePortalRay,rayTouches} from './LabPuzzleMechanics.js';
 export {SINGULARITY_SPEC as TOWER_SPEC};
 const UP=V(0,1,0),close=(p,q,r=1.25)=>Math.hypot(p.x-q[0],p.z-q[2])<r&&Math.abs(p.y-q[1])<1.5;
 export function pourVolumes(volumes,capacities,from,to){if(from===to||![from,to].every(i=>Number.isInteger(i)&&i>=0&&i<volumes.length))throw new RangeError('Invalid tank');const copy=[...volumes],amount=Math.max(0,Math.min(copy[from],capacities[to]-copy[to]));copy[from]-=amount;copy[to]+=amount;return copy;}
+// The catcher first leaves the side-wall rebate, then rolls into its left
+// cassette. Its upper edge stays below the roof throughout both strokes.
+export function hoistCatcherOffset(progress){const p=clamp(progress,0,1);return{x:-7*clamp((p-.2)/.8,0,1),z:-.75*clamp(p/.2,0,1)};}
 
 /** The folded castle is a complete replacement of the old sixteen halls.
  * Solids, real supported decks and ordinary portals own every transition. */
@@ -151,14 +154,26 @@ export function buildTowerLevel(game,index=40){
   // Its small sight slit admits an aimed shot; cargo opens the service hatch
   // from inside after settling on the visibly marked tray.
   const receiver=P(-12,15,18);plate(receiver,3.8,m.copper);
-  for(const x of [-15,-9])k.box(P(x,16,21),[.5,6,8.5],m.steel);
+  for(const x of [-15,-9])k.box(P(x,16.125,21),[.5,6,8.25],m.steel);
   k.box(P(-12,20.25,21),[6.5,6,.5],m.steel);k.box(P(-12,16,24.2),[6.5,.4,8.5],m.copper);
   const hatchParts=[
     {x:-14.1,y:21,w:1.8,h:6},{x:-9.9,y:21,w:1.8,h:6},
     {x:-12,y:18.6,w:2.4,h:1.2},{x:-12,y:21.925,w:2.4,h:4.15},
-  ].map(p=>({...p,mesh:k.box(P(p.x,11.75,p.y),[p.w,p.h,.5],m.copper,{dynamic:true})}));
+  ].map(p=>{const mesh=k.box(P(p.x,11.75,p.y),[p.w,p.h,.5],m.copper,{dynamic:true});mesh.name='Hoist catcher / service hatch';return{...p,mesh};});
+  const carriages=[-14.1,-9.9].map(x=>{const mesh=k.box(P(x,11.48,24.2),[.32,.4,.06],m.steel,{dynamic:true});mesh.name='Hoist catcher / runner';return{x,mesh};});
+  const support=(p,size,material=m.steel)=>{const mesh=k.box(P(...p),size,material);mesh.name='Hoist catcher / founded guide';return mesh;};
+  // The guide hangs from two founded cassette posts. The short orthogonal
+  // tracks cover the outward stroke; their mouths meet the horizontal rail.
+  support([-15.65,10.73,24.5],[13.7,.2,.24]);
+  for(const x of [-14.1,-9.9])support([x,11.105,24.5],[.32,.2,.99]);
+  for(const x of [-22.4,-16.2]){
+   support([x,11.5,12.35],[.3,24.7,.3]);
+   support([x,11.12,24.55],[.5,.3,.96],m.copper);
+   support([x,11.5,.18],[.8,.36,.65],m.copper);
+  }
+  support([-22.55,10.73,24.5],[.15,.35,.35],m.copper);
   let catcherProgress=0;
-  register('hoist',{state:{pad,intake,outlet,receiver,get catcherProgress(){return catcherProgress;},get height(){return height;},get locked(){return locked;}},update(dt){const load=loaded(pad,1.5);padVisual.material=load?m.live:m.idle;const target=(load&&armed)||locked?18:0;height+=clamp(target-height,-4*dt,4*dt);k.move(lift,P(0,0,height-.2),dt);k.move(weight,P(-7,0,22-height*.8),dt);if(standing(P(0,0,height),2)&&height>17.5)liftUsed=true;if(locked&&loaded(receiver,2.2)&&game.physics.grounded)complete('hoist',{height,locked,liftUsed,cargoPortalTransports:game.physics.portalTransports,upperCatcherLoaded:true});catcherProgress=THREE.MathUtils.damp(catcherProgress,solved.has('hoist')?1:0,6,dt);for(const p of hatchParts)k.move(p.mesh,P(p.x,11.75,p.y+catcherProgress*8),dt);},reset(){height=catcherProgress=0;locked=armed=liftUsed=false;}});
+  register('hoist',{state:{pad,intake,outlet,receiver,get catcherProgress(){return catcherProgress;},get height(){return height;},get locked(){return locked;}},update(dt){const load=loaded(pad,1.5);padVisual.material=load?m.live:m.idle;const target=(load&&armed)||locked?18:0;height+=clamp(target-height,-4*dt,4*dt);k.move(lift,P(0,0,height-.2),dt);k.move(weight,P(-7,0,22-height*.8),dt);if(standing(P(0,0,height),2)&&height>17.5)liftUsed=true;if(locked&&loaded(receiver,2.2)&&game.physics.grounded)complete('hoist',{height,locked,liftUsed,cargoPortalTransports:game.physics.portalTransports,upperCatcherLoaded:true});catcherProgress+=clamp((solved.has('hoist')?1:0)-catcherProgress,-.5*dt,.5*dt);const offset=hoistCatcherOffset(catcherProgress);for(const p of hatchParts)k.move(p.mesh,P(p.x+offset.x,11.75+offset.z,p.y),dt);for(const p of carriages)k.move(p.mesh,P(p.x+offset.x,11.48+offset.z,24.2),dt);},reset(){height=catcherProgress=0;locked=armed=liftUsed=false;}});
  }
 // 3. The live ray is traced through geometry and portals, then reflected.
  {

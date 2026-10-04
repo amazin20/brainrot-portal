@@ -76,7 +76,7 @@ if(video){
   frameCount:video.frames,bytes:video.bytes,sha256:video.sha256,continuous:true,activeSeconds:evidence.result.activeSeconds,teleports:evidence.result.teleports,maxIdleSeconds:evidence.result.maxIdleSeconds};
  assert.equal(hash(path.join(site,finale.src)),video.sha256);
 }
-const nextManifest={...previousManifest,supersededLevels:[16,31,32,33,34,36,37,39,40],sourceCommit:info.commit,retainedRecordingSourceCommit:previousManifest.sourceCommit,
+const nextManifest={...previousManifest,supersededLevels:[14,16,18,20,31,32,33,34,35,36,37,39,40],sourceCommit:info.commit,retainedRecordingSourceCommit:previousManifest.sourceCommit,
  levels:previousManifest.levels.map(r=>r.level===41?finale:r)};
 assert.deepEqual(nextManifest.levels.filter(r=>r.level<=40),retainedEntries,'Every retained gallery entry must keep its original values');
 fs.writeFileSync(path.join(site,'walkthroughs/manifest.json'),JSON.stringify(nextManifest,null,2)+'\n');

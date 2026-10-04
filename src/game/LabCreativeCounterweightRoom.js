@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import {Body,Box,Vec3,Material} from 'cannon-es';
 import {ResearchChamber} from './LabResearchArt.js';
-import {cargoOccludes} from './LabLateCampaignMechanisms.js';
+import {cargoOccludes,movingMechanismBlock} from './LabLateCampaignMechanisms.js';
 
 const V=(...p)=>new THREE.Vector3(...p),Q=()=>new THREE.Quaternion();
 export const CREATIVE_COUNTERWEIGHT_SPEC=Object.freeze({
@@ -15,7 +15,7 @@ export const CREATIVE_COUNTERWEIGHT_SPEC=Object.freeze({
 });
 
 function movingPart(k,name,p,size){
- const mesh=k.block(p,size,'secondary',false);mesh.name=name;
+ const mesh=movingMechanismBlock(k,name,p,size);
  const collider=k.game.collisionProxy(new THREE.Box3().setFromObject(mesh),{kinematic:true});
  const start=V(...p);
  return {mesh,collider,move(height,dt){mesh.position.copy(start);mesh.position.y+=height;mesh.updateWorldMatrix(true,false);k.game.syncCollision(collider,new THREE.Box3().setFromObject(mesh),dt);}};
@@ -55,7 +55,7 @@ export function buildCreative34(g,index=33){
  ])seat.push(movingPart(k,'Pneumatic vent seat',p,s));
  k.block([-17,3.6,2],[3.2,.3,1.3],'dark');
  for(const x of [-18.5,-15.5])k.block([x,2.55,2],[.16,2.4,.32],'metal');
- const doorMesh=k.block([0,2.2,-8],[5.4,4.4,.7],'secondary',false);doorMesh.name='Pressure-driven guided door';
+ const doorMesh=movingMechanismBlock(k,'Pressure-driven guided door',[0,2.2,-8],[5.4,4.4,.7]);
  const doorCollider=g.collisionProxy(new THREE.Box3().setFromObject(doorMesh),{kinematic:true});
  for(const y of [0,4.4])k.block([3.4,y,-8],[13,.18,1.1],'metal');
  const state={mode:0,pressure:0,coverage:0,seatTravel:0,doorBody:null,owner:null,doorTravel:0,
@@ -89,7 +89,7 @@ export function buildCreative34(g,index=33){
    this.pressure=THREE.MathUtils.clamp(this.pressure+(supply-leak*this.pressure-(this.mode===1?2.4:0))*dt,0,100);
    this.seatTravel=THREE.MathUtils.damp(this.seatTravel,this.mode!==0?2.2:0,5,dt);
    seat.forEach(part=>part.move(this.seatTravel,dt));
-   if(this.doorBody){this.doorTravel=this.doorBody.position.x;doorMesh.position.x=this.doorTravel;doorMesh.updateWorldMatrix(true,false);doorCollider.box.setFromObject(doorMesh);}
+   if(this.doorBody){this.doorTravel=this.doorBody.position.x;doorMesh.position.x=this.doorTravel;doorMesh.updateWorldMatrix(true,false);doorCollider.mesh.position.copy(doorMesh.position);doorCollider.mesh.updateWorldMatrix(true,false);doorCollider.box.setFromObject(doorMesh);}
   },reset(){this.ensure();this.mode=0;this.pressure=this.coverage=this.seatTravel=this.doorTravel=0;seat.forEach(part=>part.move(0,0));
    if(this.doorBody){this.doorBody.position.set(0,2.2,-8);this.doorBody.velocity.setZero();this.doorBody.force.setZero();this.doorBody.wakeUp();this.doorBody.aabbNeedsUpdate=true;}
    this.update(0);

@@ -126,7 +126,20 @@ jobs:
         run: |
           node scripts/qa-adversarial-core.mjs
           OUT=qa/adversarial-early.json node scripts/qa-adversarial-early.mjs
-          node --input-type=module -e "import fs from 'node:fs';import assert from 'node:assert/strict';const q=JSON.parse(fs.readFileSync('qa/adversarial-early.json'));assert.equal(q.counts.canonicalPassed,20);assert.equal(q.counts.attempted,98);assert.equal(q.counts.suspectedShortcuts,0);"
+          node --input-type=module <<'JS'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const q=JSON.parse(fs.readFileSync('qa/adversarial-early.json'));
+          assert.equal(q.counts.canonicalPassed,20);assert.equal(q.counts.attempted,99);assert.equal(q.counts.suspectedShortcuts,0);
+          for(const n of [18,20]){
+            const m=await import(`./scripts/lib/creative-room${n}-attacks.mjs`),attacks=m[`creative${n}EarlyAttacks`];
+            assert.equal(attacks.length,3);
+            for(const a of attacks){
+              const rows=q.rooms.find(r=>r.number===n).attacks.filter(r=>r.name===a.name);assert.equal(rows.length,1);
+              const r=rows[0];assert.equal(r.error,null);assert.equal(r.completed,false);
+              assert.equal(r.resets,0);assert.equal(r.respawns,0);assert.equal(r.sameCompanion,true);assert.equal(r.sameCargoBody,true);assert.ok(r.frames>0);
+            }
+          }
+          JS
           node scripts/qa-adversarial-late.mjs
           node scripts/qa-sealed-partitions.mjs
           node scripts/qa-pressure-room34.mjs
@@ -251,12 +264,16 @@ jobs:
               }
             }
           }else if(group==='middle'){
-            assert.equal(q.source.unchangedDuringRun,true);assert.equal(q.counts.attempts,85);assert.equal(q.rooms.reduce((n,r)=>n+r.attacks.length,0),85);assert.equal(q.counts.completed,0);assert.equal(q.counts.driverOrSetupErrors,0);
+            assert.equal(q.source.unchangedDuringRun,true);assert.equal(q.counts.attempts,87);assert.equal(q.rooms.reduce((n,r)=>n+r.attacks.length,0),87);assert.equal(q.counts.completed,0);assert.equal(q.counts.driverOrSetupErrors,0);
             sameSet(q.rooms.map(r=>r.number),expectedRooms);
             for(const room of q.rooms){
               assert.ok(room.attacks.length>=6);assert.equal(new Set(room.attacks.map(a=>a.name)).size,room.attacks.length);
               for(const row of room.attacks){
                 assert.equal(row.completed,false);assert.ok(!row.error);
+                if([18,20].includes(room.number)){
+                  assert.equal(row.sameCompanion,true);assert.equal(row.sameCargoBody,true);
+                  assert.equal(row.resets,0);assert.equal(row.respawns,0);assert.ok(row.frames>0&&row.observed.physicsSteps>0);
+                }
                 if(row.outcome==='cargo-unavailable-before-boost'){
                   assert.ok([15,19].includes(room.number));assert.equal(row.name,'drop-cargo-at-ledge-corner-jump-boost');
                   assert.ok(row.frames>0&&row.observed.physicsSteps>0);assert.equal(row.state.held,false);assert.ok(!row.observed.dropAt);
@@ -271,21 +288,13 @@ jobs:
             sameSet(q.attemptedLevels,Array.from({length:12},(_,i)=>i+29));
             assert.equal(q.results.length,42);
             for(let level=29;level<=40;level++)assert.ok(q.results.filter(r=>r.level===level).length>=3);
-            const alternateName='carry-middle-cargo-keeps-second-flow-skips-both-latches';
-            const alternatives=q.results.filter(r=>r.name===alternateName);
-            assert.equal(alternatives.length,1);
+            const formerBypass=q.results.filter(r=>r.name==='carry-middle-cargo-keeps-second-flow-skips-both-latches');
+            assert.equal(formerBypass.length,1);assert.equal(formerBypass[0].level,35);
             for(const row of q.results){
               assert.ok(!row.error);assert.equal(row.resets,0);assert.equal(row.respawns,0);
               assert.equal(row.sameCompanion,true);assert.equal(row.sameCargoBody,true);
               assert.equal(row.final.cargoUuid,row.originalCargoUuid);assert.equal(row.final.cargoBodyId,row.originalCargoBodyId);
-              if(row.name!==alternateName){assert.equal(row.outcome,'blocked');continue;}
-              assert.equal(row.level,35);assert.equal(row.outcome,'legitimate_alternative');
-              assert.equal(row.final.won,true);assert.equal(row.final.held,true);assert.equal(row.final.cargoTransports,0);
-              assert.equal(row.final.firstLatched,false);assert.equal(row.final.secondLatched,false);assert.deepEqual(row.final.airflow,[false,true]);
-              const firstCause=row.checkpoints.find(c=>c.state.airflow?.[0]===true&&c.state.airflow?.[1]===false&&c.state.first?.progress>.94);
-              const secondCause=row.checkpoints.find(c=>c.state.airflow?.[0]===false&&c.state.airflow?.[1]===true&&c.state.second?.progress>.94);
-              assert.ok(firstCause&&secondCause,'The accepted room 35 route must preserve both real portal-mediated airflow causes');
-              assert.ok(row.checkpoints.indexOf(firstCause)<row.checkpoints.indexOf(secondCause));
+              assert.equal(row.outcome,'blocked');assert.equal(row.final.won,false);
             }
           }else if(group.startsWith('castle-')){
             assert.equal(q.pass,true);assert.equal(q.finished,true);assert.deepEqual(q.sourceDrift,[]);
@@ -342,7 +351,21 @@ jobs:
           OUT_DIR: qa/creative-browser
         run: node scripts/qa-creative-browser.mjs
       - name: Require nonblank renderer images for every completed room
-        run: node --input-type=module -e "import fs from 'node:fs';import assert from 'node:assert/strict';const q=JSON.parse(fs.readFileSync('qa/creative-browser/report.json'));assert.equal(q.pass,true);assert.equal(q.capturePass,true);assert.equal(q.rows.length,10);"
+        run: |
+          node --input-type=module <<'JS'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const q=JSON.parse(fs.readFileSync('qa/creative-browser/report.json'));
+          assert.equal(q.pass,true);assert.equal(q.capturePass,true);assert.equal(q.rows.length,10);
+          for(const r of q.rows){
+            const c=r.captures.finish;assert.equal(c.ok,true);assert.equal(c.includesHTML,false);
+            assert.equal(c.method,'actual WebGL2 pixel-pack buffer');
+            assert.equal(c.frame.levelIndex,r.level-1);assert.equal(c.frame.state,'won');
+            assert.equal(c.frame.cargoUUID,r.start.cargoUUID);assert.equal(c.frame.cargoBodyId,r.start.cargoBodyId);
+            assert.equal(c.frame.cargoUUID,r.route.cargoUUID);assert.equal(c.frame.cargoBodyId,r.route.cargoBodyId);
+            assert.ok(c.renderer.calls>0&&c.renderer.triangles>0);
+            assert.ok(c.pixels.width>=100&&c.pixels.height>=100&&c.pixels.colors>=4&&c.pixels.maxChannelStd>=1);
+          }
+          JS
       - name: Check desktop and touch resizing under all graphics profiles
         if: strategy.job-index == 0
         env:

@@ -91,7 +91,11 @@ export async function runV8Journey(game,{onMilestone=()=>{},scenario=null,journe
       await scenario({game,level,walk,wait,aim,look,until,pickup,enter,mark,frame,worldMove,stop});
       report.pass=true;report.kind='recovery';report.teleports=game.teleportCount;return report;
     }
-    if(level.postCampaign){
+    if(level.creativeEarly){
+      const n=level.creativeEarly;assert([18,20].includes(n)&&n===index+1,'Unknown creative early room');
+      const journey=await import(`./LabCreativeRoom${n}Journey.js`);
+      await journey[`runCreative${n}`]({game,level,walk,wait,aim,look,until,pickup,enter,mark,frame,worldMove,stop},journeyOptions);
+    }else if(level.postCampaign){
       const controls={game,level,walk,wait,aim,look,until,pickup,enter,mark,frame,worldMove,stop};
       if(index<35){const {runPostA}=await import('./LabPostJourneyA.js');await runPostA(controls,journeyOptions);}
       else{const {runPostB}=await import('./LabPostJourneyB.js');await runPostB(controls,journeyOptions);}

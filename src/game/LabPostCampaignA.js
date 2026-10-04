@@ -13,7 +13,7 @@ export const POST_A_SPECS=Object.freeze([
  {id:'post-thin-shadow',title:'Тонкая тень',concept:'Маленький непрозрачный спутник перекрывает нижний луч, но пропускает верхний. Грузовой адрес и оптика занимают одну пару.',description:'Сначала доставь друга под низкий кожух. Затем сравни две настоящие тени и найди фиксатор за диафрагмой.',accent:0xffc57c,assets,hints:['Низкий кожух пропускает свободного друга, но не человека. Белый пол отправляет его в грузовой адрес.','Пара нужна уже для света: два луча идут через одно устье на разных высотах. Верхний должен достигнуть прибора, нижний — встретить корпус друга.','За открывшейся диафрагмой есть механический фиксатор. После него можно вернуть друга и пройти вдвоём.']},
  {id:'post-inverse-spring',title:'Обратная пружина',concept:'Сначала собственный вес наблюдателя сжимает настоящее пружинное ложе. Заряд выстреливает спутником вверх, а потолочный портал меняет направление.',description:'Сожми ложе, сохрани заряд механическим зажимом и загрузи друга. После отпускания он попадёт в низкий дальний приёмник.',accent:0x9dc8ed,assets,hints:['Вес человека сжимает видимую пружину сильнее веса друга. Зажим рядом с ложем сохраняет только достигнутое сжатие.','Сначала открой потолочный адрес и низкий грузовой выход. Поставь друга на сжатое ложе и отпусти пружину с наружного пульта.','Дальний приёмник открывает проход своим настоящим весом. По отдельной галерее доберись до фиксатора и забери того же друга.']},
  CREATIVE_COUNTERWEIGHT_SPEC,
- {id:'post-air-switch',title:'Переадресация',concept:'Непрерывный поток проходит настоящие порталы; два приёмника последовательно открывают разные физические шлюзы.',description:'Поток от вентилятора может питать только один приёмник за раз. В безопасной средней галерее перестрой его путь.',accent:0x9ce7ed,assets,hints:['Соедини источник воздуха с первой приёмной решёткой: первый шлюз откроется, пока поступает поток.','Оставь друга у входа, пройди на постоянную середину и зафиксируй открытый первый шлюз. Затем перемести выходной портал на вторую решётку.','Первый шлюз останется открытым на фиксаторе, второй откроется от нового потока. Напольный адрес у входа вернёт друга через порталы.']},
+ {id:'post-air-switch',title:'Возвратная магистраль',concept:'Одна пара сначала питает два настоящих воздушных шлюза, затем освобождает друга из закрытого грузового кожуха.',description:'Друг ждёт в дальнем закрытом отсеке. Зафиксируй оба открытых шлюза, отдай пару грузовому адресу и вернись с тем же другом к входу.',accent:0x9ce7ed,assets,hints:['Соедини вентилятор с первой узкой воздушной решёткой. Пройди на среднюю площадку и зафиксируй открытый первый шлюз.','Перенаправь поток во вторую решётку и зафиксируй второй шлюз. Подготовь грузовой выход на средней площадке: после этого поток прекратится.','Обойди дальний закрытый кожух. Через смотровую решётку открой белый пол под свободным другом; забери его на середине и вернись через оба удержанных шлюза.']},
 ]);
 
 function finish(k,spawn,cargo,goal,extra,geometry){
@@ -127,12 +127,36 @@ export function buildPost35(game,index=34){
  const k=new ResearchChamber(game,POST_A_SPECS[4],index,'optical',{minX:-26,maxX:26,minZ:-27,maxZ:25},-3,16);
  k.deck('Entry side',-24,24,9,23,0);
  k.deck('Stable recombination court',-24,24,-7,9,0);
- k.deck('Exit side',-24,24,-25,-7,0);
- const dispatch=k.loadPad('companion-address',[0,0,17],8),first=gate(k.world,9,56,16),second=gate(k.world,-7,56,16);
+ k.deck('Far freight inspection court',-24,24,-25,-7,0);
+ // The lower service floor is a recovery support, not an under-door route.
+ for(const z of [9,-7])k.block([0,-1.5,z],[56,3,.65],'dark');
+ const dispatch=k.loadPad('companion-address',[0,0,-20],6),first=gate(k.world,9,56,16),second=gate(k.world,-7,56,16);
+ dispatch.surface.mesh.userData.portalSize={width:1.8,height:1.4};
  const source=k.panel('air-origin',[19,3,17],[0,0,1]);
  const inlet=k.panel('first-receiver',[-19,3,17],[0,0,1]);
  const outlet=k.panel('second-receiver',[-19,3,-3],[0,0,1]);
- k.panel('center-return',[10,3,-3],[0,0,1]);
+ const returnMouth=k.panel('center-return',[10,3,-3],[0,0,1]);
+ // These manufactured grilles pass a ray, not either traveller. Leaving an
+ // entry grille paired with the middle freight mouth must not replace the
+ // mechanically retained return through the first door.
+ for(const grille of [source,inlet,outlet])grille.mesh.userData.portalSize={width:.5,height:.5};
+ returnMouth.mesh.userData.portalSize={width:.8,height:.8};
+ // Tall inspection slots admit real camera/muzzle parallax at different
+ // viewport aspects. Each .70 m width is below the .78 m minimum rigid cargo
+ // projection in every rotation; each intervening mullion is actual solid.
+ const bay={x0:-4.5,x1:4.5,z0:-23,z1:-16,roof:4.2,slits:[-2.07,-1.33,-.59,.15,.89,1.63,2.37].map(x=>({x0:x-.35,x1:x+.35,y0:.45,y1:3.75,z:-23})),aim:[0,0,-24.4],parts:[]};
+ const casing=(p,size,material,name)=>{const part=k.block(p,size,material);part.name=name;bay.parts.push(part);};
+ const bottom=-3,top=bay.roof,wallY=(bottom+top)/2,wallH=top-bottom;
+ casing([0,wallY,bay.z1],[9.35,wallH,.35],'shell','Freight III / opaque north wall');
+ for(const x of [bay.x0,bay.x1])casing([x,wallY,-19.5],[.35,wallH,7.35],'shell','Freight III / closed side');
+ casing([0,top,-19.5],[9.35,.36,7.35],'shell','Freight III / closed roof');
+ for(const [y0,y1]of [[bottom,.45],[3.75,top]])casing([0,(y0+y1)/2,bay.z0],[9.35,y1-y0,.12],'dark','Freight III / south inspection housing');
+ const mullions=[[-4.675,bay.slits[0].x0],...bay.slits.slice(1).map((s,i)=>[bay.slits[i].x1,s.x0]),[bay.slits.at(-1).x1,4.675]];
+ for(const [x0,x1]of mullions)casing([(x0+x1)/2,2.1,bay.z0],[x1-x0,3.3,.12],'metal','Freight III / solid inspection mullion');
+ for(const x of [bay.x0,bay.x1])k.block([x,top+.22,-19.5],[.12,.12,7.35],'metal',false);
+ k.label('ГРУЗ III / ЗАКРЫТЫЙ КОЖУХ',[0,4.7,-23.22],[0,0,-1],7,.55);
+ k.label('СМОТРОВЫЕ ЩЕЛИ / ТОЛЬКО ПРИЦЕЛ',[0,.2,-23.22],[0,0,-1],5.8,.3);
+ k.label('ГРУЗОВОЙ ВЫХОД / СЕРЕДИНА',[10,6.4,-2.75],[0,0,1],9,.6);
  const fan=k.projector([19,3,23],[0,0,-1],{rotating:true,radius:1.2});
  const wheelA=k.projector([-19,3,23],[0,0,-1],{rotating:true,radius:1.05});
  const wheelB=k.projector([-19,3,4],[0,0,-1],{rotating:true,radius:1.05});
@@ -148,10 +172,10 @@ export function buildPost35(game,index=34){
  k.control('second-latch',[6,0,-3.5],()=>{if(second.progress>.8)latched=!latched;},'E — зафиксировать открытые вторые створки перед перестановкой порталов.');
  k.label('ПОТОК / ШЛЮЗ I',[0,10.8,9.2],[0,0,-1],14,.8);
  k.label('ПОТОК / ШЛЮЗ II',[0,10.8,-6.8],[0,0,1],14,.8);
- dockReadout(k,[0,13.5,-26.1],()=>`ПРИЁМНИК I ${powered[0]?'В ПОТОКЕ':'БЕЗ ВОЗДУХА'} / ПРИЁМНИК II ${powered[1]?'В ПОТОКЕ':'БЕЗ ВОЗДУХА'}`);
- finalSign(k,35,'ПЕРЕАДРЕСАЦИЯ',[0,14.2,24]);
- return finish(k,[-5,0,19],[-8,.6,17],[0,0,-20],{first,second,dispatch,powered:()=>powered,isLatched:()=>latched,isFirstLatched:()=>firstLatched,spawnView:{yaw:0,pitch:-.08}},
-  {orders:['dispatch-after-rewire','carry-after-first-latch'],portalRoles:{'air-origin':'captures real fan ray','first-receiver':'opens first physical sluice while the fan connects','second-receiver':'opens second sluice after rerouting from stable middle court','companion-address':'loose companion can be dispatched through the floor aperture','center-return':'receives loose companion without reopening the first sluice'}});
+ dockReadout(k,[0,13.5,-26.1],()=>`I ${firstLatched?'ФИКСАТОР':powered[0]?'ПОТОК':'ЗАКРЫТ'} / II ${latched?'ФИКСАТОР':powered[1]?'ПОТОК':'ЗАКРЫТ'}`);
+ finalSign(k,35,'ВОЗВРАТНАЯ МАГИСТРАЛЬ',[0,14.2,24]);
+ return finish(k,[-5,0,19],[0,.6,-20],[0,0,19],{first,second,dispatch,bay,returnMouth,powered:()=>powered,isLatched:()=>latched,isFirstLatched:()=>firstLatched,spawnView:{yaw:0,pitch:-.08}},
+  {orders:['latches-before-freight','scout-before-second-latch'],portalRoles:{'air-origin':'captures a real fan ray through a traveller-excluding grille','first-receiver':'opens the first physical sluice; its entry-facing grille cannot be aimed from the middle','second-receiver':'opens the second physical sluice before the shared pair is borrowed for freight','companion-address':'the sole floor address under original loose cargo inside its opaque sealed far bay','center-return':'cargo-only receiving aperture on permanent middle support'},deductions:['both physical sluices need their own mechanical retention before airflow is disconnected','neither observer nor rigid cargo fits an air grille','opaque housing hides the far floor address from entry and middle courts','the observer aims through narrow sight slots without entering the closed cargo bay','the original free companion uses the same shared portal pair before both travellers return to entry']});
 }
 
 export const POST_A_BUILDERS=Object.freeze([buildPost31,buildPost32,buildPost33,buildPost34,buildPost35]);

@@ -1,9 +1,11 @@
+// Historical room18 flight contracts remain in the classic archive.
+// The primary foundation replacement has independent causal and route tests.
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {createHeadlessGame} from '../scripts/lab-headless.mjs';
 import {runV8Journey} from '../src/game/LabV8Journey.js';
 
-for(const [edition,aspect] of [['classic',16/9],['foundation',1.6],['foundation',9/16]]){
+for(const [edition,aspect] of [['classic',16/9],['classic',1.6],['classic',9/16]]){
  test(`room18 ${edition}: freight opens a sight shutter for a direct pre-addressed flight at ${aspect}`,async()=>{
   const game=await createHeadlessGame();
   try{
@@ -50,7 +52,7 @@ test('room18 turn is hidden from the upper approach until the original freight l
 test('room18 original rebound and send-ahead return still complete in portrait view',async()=>{
  const game=await createHeadlessGame();
  try{
-  game.chamberEdition='foundation';await game.selectLevel(17,false);game.camera.aspect=9/16;game.camera.updateProjectionMatrix();
+  game.chamberEdition='classic';await game.selectLevel(17,false);game.camera.aspect=9/16;game.camera.updateProjectionMatrix();
   for(const order of ['portal-first','send-ahead']){
    const cargo=game.cargo,body=game.physics.cargoBody;
    const report=await runV8Journey(game,{journeyOptions:{order}});

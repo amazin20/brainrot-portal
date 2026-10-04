@@ -18,8 +18,26 @@ async function run(number,kind,scenario){const g=await createHeadlessGame();g.ch
 for(const n of numbers){
  if(!attacksOnly)await run(n,'canonical');
  if(canonicalOnly)continue;
- await run(n,'carry-skips-load-sprint-jump',d=>{const g=d.game,goal=d.level.goal.position;pickup(d);const blocked=boundedWalk(d,goal.x,goal.z);g.input.keys.add('ShiftLeft');for(let i=0;i<200&&g.state==='playing';i++){if(i%40===0)g.input.jumpQueued=true;const v=goal.clone().sub(g.playerPosition);v.y=0;v.normalize();d.worldMove(v.x,v.z);d.frame();}d.stop();assert.equal(g.state,'playing','Carrying the original body directly must not replace the room mechanism');assert.ok(g.heldCube||g.velocityCompanion?.connected);d.mark(`Early direct carry, sprint and repeated jumps arrested${blocked?' by a real obstacle':''}`);});
- await run(n,'portal-to-finish-before-load',d=>{const g=d.game,goal=d.level.goal.position.clone();goal.y+=1.2;installRoom21Aim(d);d.look(goal);assert.ok(g.firePortal(1));d.until(()=>!g.portalShots.queue.length&&!g.portalShots.active.length,3,'Early finish charge did not resolve');const finishImpact={...g.portalShots.lastImpact};const floor=Object.values(d.level.panels).filter(p=>p.getFrame().normal.y>.95).sort((a,b)=>a.getFrame().center.distanceToSquared(g.playerPosition)-b.getFrame().center.distanceToSquared(g.playerPosition))[0];if(floor){try{d.aim(0,floor.getFrame().center);}catch(e){if(!/Rejected shot/.test(e.message))throw e;}}pickup(d);if(floor)boundedWalk(d,floor.getFrame().center.x,floor.getFrame().center.z);boundedWalk(d,goal.x,goal.z);assert.equal(g.state,'playing','Early finish-directed projectiles must not skip the causal route');d.mark(`Finish charge ${finishImpact.valid?'intercepted by '+finishImpact.surface:'rejected: '+finishImpact.reason}; actual travel remains incomplete`);});
+ await run(n,'carry-skips-load-sprint-jump',d=>{const g=d.game,goal=d.level.goal.position;
+ if(n===35){
+  const original=g.cargo,body=g.physics.cargoBody;
+  const blocked=boundedWalk(d,g.cargo.position.x+1.2,g.cargo.position.z);
+  assert.ok(blocked,'The closed physical first sluice must block the far cargo approach');
+  g.input.keys.add('ShiftLeft');for(let i=0;i<240;i++){if(i%40===0)g.input.jumpQueued=true;d.worldMove(0,-1);d.frame();}d.stop();
+  assert.equal(g.interact(),false);assert.equal(g.heldCube,null);
+  boundedWalk(d,goal.x,goal.z);assert.equal(g.state,'playing');assert.equal(g.cargo,original);assert.equal(g.physics.cargoBody,body);
+  assert.equal(g.physics.portalTransports,0);assert.equal(d.level.isFirstLatched(),false);assert.equal(d.level.isLatched(),false);
+  d.mark('Actual cargo approach and sprint-jump blocked by closed sluice before sealed far bay; early entry goal cannot complete without original cargo');return;
+ }
+ pickup(d);const blocked=boundedWalk(d,goal.x,goal.z);g.input.keys.add('ShiftLeft');for(let i=0;i<200&&g.state==='playing';i++){if(i%40===0)g.input.jumpQueued=true;const v=goal.clone().sub(g.playerPosition);v.y=0;v.normalize();d.worldMove(v.x,v.z);d.frame();}d.stop();assert.equal(g.state,'playing','Carrying the original body directly must not replace the room mechanism');assert.ok(g.heldCube||g.velocityCompanion?.connected);d.mark(`Early direct carry, sprint and repeated jumps arrested${blocked?' by a real obstacle':''}`);});
+ await run(n,'portal-to-finish-before-load',d=>{const g=d.game,goal=d.level.goal.position.clone();goal.y+=1.2;installRoom21Aim(d);d.look(goal);assert.ok(g.firePortal(1));d.until(()=>!g.portalShots.queue.length&&!g.portalShots.active.length,3,'Early finish charge did not resolve');const finishImpact={...g.portalShots.lastImpact};const floor=Object.values(d.level.panels).filter(p=>p.getFrame().normal.y>.95).sort((a,b)=>a.getFrame().center.distanceToSquared(g.playerPosition)-b.getFrame().center.distanceToSquared(g.playerPosition))[0];if(floor){try{d.aim(0,floor.getFrame().center);}catch(e){if(!/Rejected shot/.test(e.message))throw e;}}
+ if(n===35){
+  const blocked=boundedWalk(d,g.cargo.position.x+1.2,g.cargo.position.z);assert.ok(blocked);
+  assert.equal(g.interact(),false);assert.equal(g.state,'playing');assert.equal(g.physics.portalTransports,0);
+  assert.equal(d.level.isFirstLatched(),false);assert.equal(d.level.isLatched(),false);
+  d.mark('Real finish-directed shot and attempted far-floor shot cannot expose or collect the sealed original cargo through closed sluices');return;
+ }
+ pickup(d);if(floor)boundedWalk(d,floor.getFrame().center.x,floor.getFrame().center.z);boundedWalk(d,goal.x,goal.z);assert.equal(g.state,'playing','Early finish-directed projectiles must not skip the causal route');d.mark(`Finish charge ${finishImpact.valid?'intercepted by '+finishImpact.surface:'rejected: '+finishImpact.reason}; actual travel remains incomplete`);});
 }
 const stages={
  31:d=>{runPostA(d,{route:'inspect-rack-first',stopBeforeCargoDelivery:true});assert.ok(d.level.rack.stroke<.02);assert.equal(d.level.rack.latched,false);assert.equal(d.game.physics.portalTransports,0);d.mark('Empty airflow cannot perform mechanical rack work');},

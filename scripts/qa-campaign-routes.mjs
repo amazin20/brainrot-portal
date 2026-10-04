@@ -84,19 +84,22 @@ const classicAlternates={
  33:[{name:'companion-first',options:{route:'companion-first'},source:'tests/lab-late-causal-routes.test.js'},
   {name:'recovery',kind:'recovery',options:{recover:true},source:'tests/lab-research-chapter.test.js',borrowedFrom:'open edition'}],
 };
-// The new campaign reuses the archive builders for rooms 6–30. Keep their
+// Rooms 6–30 initially inherit archive routes; the rebuilt 18/20 registry below replaces those entries. Keep other
 // tested input routes without extending the five foundation-specific routes.
 for(let n=6;n<=30;n++)if(classicAlternates[n])foundationAlternates[n]=classicAlternates[n];
 // These post-campaign variants follow different physical orders with the same
 // original companion. Add a room only after its route driver has passed.
 Object.assign(foundationAlternates,{
+ 18:[{name:'power-before-contact',options:{route:'power-before-contact'},source:'tests/lab-creative-room18.test.js'},
+ {name:'reverse-partial-stroke',kind:'recovery',exercisesRecovery:true,options:{route:'reverse-partial-stroke'},source:'tests/lab-creative-room18.test.js'}],
+ 20:[{name:'scout-first',options:{order:'scout-first'},source:'tests/lab-creative-room20.test.js'},
+ {name:'erased-rope-recovery',kind:'recovery',exercisesRecovery:true,options:{recovery:true},source:'tests/lab-creative-room20.test.js'}],
  31:[{name:'inspect-rack-first',options:{route:'inspect-rack-first'},source:'src/game/LabPostJourneyA.js'}],
  32:[{name:'inspect-optics-first',options:{route:'inspect-optics-first'},source:'src/game/LabPostJourneyA.js'}],
  33:[{name:'aim-before-charge',options:{route:'aim-before-charge'},source:'src/game/LabPostJourneyA.js'}],
  34:[{name:'inspect-unsealed-first',options:{alternate:true},source:'src/game/LabCreativeCounterweightJourney.js'},
   {name:'early-discharge-recovery',kind:'recovery',exercisesRecovery:true,options:{recover:true},source:'scripts/qa-pressure-room34.mjs'}],
- 35:[{name:'carry-after-first-latch',options:{route:'carry-after-first-latch'},source:'src/game/LabPostJourneyA.js'},
-  {name:'carry-with-live-flow',options:{route:'carry-with-live-flow'},source:'tests/lab-room35-live-flow.test.js'}],
+ 35:[{name:'scout-before-second-latch',options:{route:'scout-before-second-latch'},source:'src/game/LabPostJourneyA.js'}],
  36:[{name:'scout-impact-first',options:{route:'scout-impact-first'},source:'src/game/LabCreativeFinalJourney.js'}],
  37:[{name:'prepare-fields-first',options:{route:'prepare-fields-first'},source:'src/game/LabCreativeFinalJourney.js'}],
  38:[{name:'send-freight-early',options:{route:'send-freight-early'},source:'src/game/LabPostJourneyB.js'},

@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import {Body,Box,Vec3,Material} from 'cannon-es';
 import {ResearchChamber} from './LabResearchArt.js';
 import {gate} from './LabPuzzleMechanics.js';
-import {lateShutter} from './LabLateCampaignMechanisms.js';
+import {lateShutter,movingMechanismBlock} from './LabLateCampaignMechanisms.js';
 const V=(...p)=>new THREE.Vector3(...p);
 
 /** An inverse spring: the observer supplies the compression before the
@@ -13,7 +13,7 @@ export function buildInverseSpring(g,index,spec){
  k.deck('West spring inspection promenade',-26,-14,-24,24,0);k.deck('East spring inspection promenade',-2,26,-24,24,0);k.deck('South spring loading court',-14,-2,12,24,0);k.deck('North spring receiver court',-14,-2,-24,0,0);
  k.block([0,-1.5,-8],[54,3,.65],'dark');
  const centre=V(-8,.65,6),size=V(12,.22,12);
- const plate=k.block(centre.toArray(),size.toArray(),'secondary',false);plate.name='Weight-compressed spring bed';
+ const plate=movingMechanismBlock(k,'Weight-compressed spring bed',centre.toArray(),size.toArray());
  const collider=g.collisionProxy(new THREE.Box3().setFromObject(plate),{kinematic:true});
  const floor={minX:-14,maxX:-2,minZ:0,maxZ:12,y:.76,mesh:plate,enabled:true};g.floors.push(floor);
  const spring={owner:null,body:null,floor,compression:0,held:false,holdY:centre.y,

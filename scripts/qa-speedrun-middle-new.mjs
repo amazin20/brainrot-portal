@@ -32,6 +32,7 @@ function state(d){
  if(s['inertial-ferry'])r.ferry=s['inertial-ferry'].progress;
  if(s.optical)r.optical={loaded:s.optical.loaded,lit:s.optical.lit,receivers:s.optical.receivers};
  if(s.sightShutter)r.sightShutter={loaded:s.sightShutter.loaded,progress:s.sightShutter.progress};
+ if(l.circuit)r.circuit={mode:l.circuit.mode,current:l.circuit.current,contacts:[...l.circuit.contacts],stroke:l.circuit.stroke};
  if(s.tides)r.tides={levels:[...s.tides.levels],flow:s.tides.flow,total:s.tides.levels.reduce((a,b)=>a+b,0)};
  if(s.conveyors)r.conveyors={reversed:s.conveyors.reversed,braked:s.conveyors.braked};
  return r;
@@ -107,11 +108,11 @@ function supportChain(d){
 }
 async function run(number,name,attack){
  if(process.env.KIND&&!process.env.KIND.split(',').some(kind=>name.includes(kind)))return null;
- await g.selectLevel(number-1,false);observed={frames:0,physicsSteps:0,maxY:g.playerPosition.y,forceSteps:0,loadedSteps:0,shots:[],obstacles:[]};let error=null,result=null;
+ await g.selectLevel(number-1,false);const originalCargo=g.cargo,originalBody=g.physics.cargoBody;observed={frames:0,physicsSteps:0,maxY:g.playerPosition.y,forceSteps:0,loadedSteps:0,shots:[],obstacles:[]};let error=null,result=null;
  const ordinaryUpdate=g.updatePlaying;
  g.updatePlaying=function(dt){const value=ordinaryUpdate.call(this,dt);observed.physicsSteps++;observed.maxY=Math.max(observed.maxY,g.playerPosition.y);if(g.firstLevel.playerAcceleration?.(g.playerPosition,g.playerVelocity)?.lengthSq()>.001)observed.forceSteps++;if(g.firstLevel.pads?.some(p=>p.loaded?.()))observed.loadedSteps++;return value;};
  try{result=await runV8Journey(g,{scenario:async base=>{const d={...base,frame:()=>step(base)};driver=d;if(number>=21)installRoom21Aim(d);await attack(d);}});}catch(e){error=e.message;}finally{g.updatePlaying=ordinaryUpdate;}
- const row={name,completed:g.state==='won',simulationFinishedWithoutDriverError:!error,frames:result?.frames||observed.frames,error,observed,state:state(driver||{level:g.firstLevel})};
+ const row={name,completed:g.state==='won',simulationFinishedWithoutDriverError:!error,frames:result?.frames||observed.frames,error,observed,state:state(driver||{level:g.firstLevel}),resets:result?.resets,respawns:result?.respawns,sameCompanion:g.cargo===originalCargo,sameCargoBody:g.physics.cargoBody===originalBody};
  row.outcome=error?'driver-or-setup-error':row.completed?'completed-requires-causal-review':name==='drop-cargo-at-ledge-corner-jump-boost'&&!observed.dropAt?'cargo-unavailable-before-boost':'blocked-in-finite-attempt';
  console.log('MIDDLE ATTACK',number,name,row.completed?'COMPLETED':error?'ERROR/BLOCKED':'BLOCKED');return row;
 }
@@ -160,6 +161,15 @@ async function room16ReverseServiceStair(d){
 try{
  for(const number of levels){
   const item={number,attacks:[]};
+  if(number===18||number===20){
+   const m=await import(`./lib/creative-room${number}-attacks.mjs`);
+   const attacks=m[`creative${number}Attacks`];
+   if(!Array.isArray(attacks)||attacks.length<7)throw Error('Missing complete replacement-room attacks: '+number);
+   for(const a of attacks){const row=await run(number,a.name,a.run);if(row)item.attacks.push(row);}
+   item.suspectedShortcuts=item.attacks.filter(a=>a.completed).map(a=>a.name);report.rooms.push(item);
+   fs.mkdirSync(path.dirname(output),{recursive:true});fs.writeFileSync(output,JSON.stringify(report,null,2)+'\n');
+   continue;
+  }
   // Both long exterior directions are tested. This tries diagonal joins,
   // stair undersides, outer-wall collision seams and goal-support undersides.
   for(const sign of [-1,1])item.attacks.push(await run(number,'outer-perimeter-diagonal-seam-rush-'+sign,d=>{

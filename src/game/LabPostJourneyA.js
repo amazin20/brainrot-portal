@@ -91,46 +91,35 @@ export function runPost32(d,{route='freight-before-light',stopBeforeRatchet=fals
 export const runPost33=runInverseSpring;
 export const runPost34=runCreative34;
 
-export function runPost35(d,{route='dispatch-after-rewire'}={}){
- preciseAim(d);check(['dispatch-after-rewire','carry-after-first-latch','carry-with-live-flow'].includes(route),'Unknown 35 route');
+export function runPost35(d,{route='latches-before-freight',stopAfter=null}={}){
+ preciseAim(d);check(['latches-before-freight','scout-before-second-latch'].includes(route),'Unknown 35 route');
  const {game:g,level:l,walk,until,mark}=d,p=l.panels;
- collect(d);load(d,l.dispatch);walk(0,21);
+ walk(0,21);
  shot(d,0,p['air-origin']);shot(d,1,p['first-receiver']);
  until(()=>l.powered()[0]&&l.first.progress>.9,5,'Flow did not open first physical sluice');
  check(!l.powered()[1]&&l.second.progress<.1,'Wrong receiver energized');
  mark('A real portal ray drives only the first sluice');
- if(route==='carry-with-live-flow'){
-  // Both physical airflow causes are still needed. Bringing the original
-  // cargo through the first live door removes the need to keep it open for
-  // a later return; leaving the final flow connected removes its latch too.
-  collect(d);walk(0,11);walk(0,1);release(d);
-  check(g.cargo.position.z<9&&!l.dispatch.loaded(),'The original companion did not reach the stable middle court');
-  mark('Original cargo crosses the first live airflow doorway before readdressing');
-  shot(d,1,p['second-receiver']);
-  until(()=>l.powered()[1]&&l.second.progress>.9,5,'Second live airflow failed to open the exit');
-  check(!l.isFirstLatched()&&!l.isLatched(),'The live-flow route must leave both real latches unused');
-  collect(d);walk(0,-4);walk(0,-20);until(()=>g.state==='won',3,'Original pair missed the live-flow exit');
-  check(l.powered()[1]&&g.physics.portalTransports===0,'The supported faster route must retain real final airflow');
-  mark('Both travellers finish with actual airflow retained and neither latch used');return;
- }
  walk(0,11);walk(0,0);use(d,-6,1.3,'First door latch');check(l.isFirstLatched(),'First real latch was not engaged');
- if(route==='carry-after-first-latch'){
-  walk(0,0);walk(0,11);walk(0,17);collect(d);walk(0,11);walk(0,1);release(d);
-  check(!l.dispatch.loaded()&&g.cargo.position.z<9,'Companion was not moved to the safe middle court');
-  mark('Original companion crosses the held first doorway on foot before airflow is redirected');
- }
+ mark('The first actual mechanical latch preserves the later entry return');if(stopAfter==='first-latch')return;
  shot(d,1,p['second-receiver']);
  until(()=>l.powered()[1]&&l.second.progress>.9,5,'Flow did not open second sluice');
- use(d,6,-5.1,'Second door latch');check(l.isLatched(),'Second mechanical latch was not engaged');
- mark('Stable middle court allows rerouting before cargo retrieval');
- if(route==='dispatch-after-rewire'){
-  walk(0,-5);walk(0,3);walk(0,0);shot(d,0,p['companion-address']);
-  until(()=>g.physics.grounded&&g.cargo.position.z<9,8,'Original companion did not enter the floor address');
-  check(l.second.progress>.9&&l.isLatched(),'Exit shut after genuine flow was disconnected');
-  mark('Cargo travels through the same pair after the flow is disconnected');
+ const visitBay=()=>{walk(0,-5);walk(0,-12);walk(8,-12);walk(8,-24.4);walk(l.bay.aim[0],l.bay.aim[2]);};
+ const leaveBay=()=>{walk(8,-24.4);walk(8,-12);walk(0,-12);walk(0,-5);};
+ if(route==='scout-before-second-latch'){
+  visitBay();d.look(p['companion-address'].getFrame().center);
+  check(!g.heldCube&&g.cargo.position.z<-16&&g.physics.portalTransports===0,'The scout must leave the original cargo inside its closed bay');
+  mark('The far sight window is inspected while the second actual airflow remains live');leaveBay();
  }
- collect(d);walk(0,-4);walk(0,-20);until(()=>g.state==='won',3,'Air-switch joint finish missed');
- mark('Mechanically retained door brings both travellers to exit');
+ use(d,6,-5.1,'Second door latch');check(l.isLatched(),'Second mechanical latch was not engaged');
+ mark('Both actual latches retain the sluices before the shared air pair is borrowed');if(stopAfter==='second-latch')return;
+ walk(0,0);shot(d,1,p['center-return']);
+ visitBay();if(stopAfter==='bay-aim')return;
+ const sent=g.physics.portalTransports;shot(d,0,p['companion-address']);
+ until(()=>g.physics.portalTransports>sent&&g.physics.grounded&&g.cargo.position.z>-7,8,'Original free cargo did not leave the sealed far bay through its floor aperture');
+ check(l.first.progress>.9&&l.second.progress>.9&&l.isFirstLatched()&&l.isLatched(),'The real sluices must remain on both mechanical latches after airflow ends');
+ mark('The original free companion leaves its sealed bay through the shared floor-to-middle pair');if(stopAfter==='freight')return;
+ leaveBay();walk(0,0);collect(d);walk(0,0);walk(0,11);walk(0,19);until(()=>g.state==='won',3,'Both original travellers did not return through the retained physical sluices');
+ mark('Both original travellers return to the entry through both retained sluices');
 }
 
 export const POST_A_ROUTES=Object.freeze([runPost31,runPost32,runPost33,runPost34,runPost35]);

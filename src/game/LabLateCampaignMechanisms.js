@@ -1,5 +1,12 @@
 import * as THREE from 'three';
+import {RoundedBoxGeometry} from 'three/addons/geometries/RoundedBoxGeometry.js';
 const V=(...p)=>new THREE.Vector3(...p);
+
+/** Same manufactured block as OpenChamber.block, kept outside the static
+ * assembly so its live pose and owned geometry survive the room flush. */
+export function movingMechanismBlock(k,name,p,size,material='secondary'){
+ return k.geometry(new RoundedBoxGeometry(...size,1,Math.min(.08,...size.map(x=>x*.18))),material,p,new THREE.Quaternion(),{solid:false,batch:false,name});
+}
 
 /** Intersect the actual rotated rigid cargo box, rather than a receiver ID,
  * a proximity flag or a square enlargement of its world-space bounds. */
@@ -33,7 +40,7 @@ export function clipCargoRay(game,segments){
 
 /** A displayed sliding shutter with the same physical box at every pose. */
 export function lateShutter(k,name,p,size,offset){
- const mesh=k.block(p,size,'secondary',false);mesh.name=name;
+ const mesh=movingMechanismBlock(k,name,p,size);
  const collider=k.game.collisionProxy(new THREE.Box3().setFromObject(mesh),{kinematic:true});
  const origin=V(...p),travel=V(...offset),state={mesh,collider,progress:0,target:false};
  state.update=dt=>{
