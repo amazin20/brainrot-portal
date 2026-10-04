@@ -58,6 +58,33 @@ try{
     args:['--no-sandbox','--disable-dev-shm-usage','--use-angle=swiftshader','--enable-unsafe-swiftshader','--no-zygote']});
   report.browser=await browser.version();page=await browser.newPage();page.setDefaultTimeout(180000);
   await page.setViewport({width:854,height:480,deviceScaleFactor:1});
+  async function waitScreen(id){
+    await page.waitForFunction(id=>{const e=document.getElementById(id),s=e&&getComputedStyle(e);
+      return !!e&&!e.inert&&e.classList.contains('screen--active')&&s.visibility==='visible'&&s.opacity==='1';},{timeout:20000},id);
+  }
+  async function visibleControl(selector){
+    await page.$eval(selector,e=>e.scrollIntoView({block:'center',inline:'nearest',behavior:'instant'}));
+    await page.waitForFunction(selector=>{const e=document.querySelector(selector);if(!e||e.closest('[inert]')||e.disabled)return false;
+      const r=e.getBoundingClientRect(),s=getComputedStyle(e);return r.width>0&&r.height>0&&s.visibility==='visible'&&s.display!=='none'
+        &&r.x>=0&&r.y>=0&&r.right<=innerWidth+.5&&r.bottom<=innerHeight+.5
+        &&e.contains(document.elementFromPoint(r.x+r.width/2,r.y+r.height/2));},{timeout:20000},selector);
+  }
+  async function clickControl(selector){await visibleControl(selector);await page.click(selector);}
+  async function waitPlayingUI(){
+    await page.waitForFunction(()=>window.__NESI_DEMO_GAME__?.state==='playing'
+      &&document.documentElement.dataset.runtimeState==='playing'&&document.body.dataset.playState==='playing'
+      &&[...document.querySelectorAll('.screen')].every(e=>{const s=getComputedStyle(e);
+        return e.inert&&!e.classList.contains('screen--active')&&s.visibility==='hidden'&&s.opacity==='0';}),{timeout:20000});
+  }
+  async function pauseWithKeyboard(){
+    await page.bringToFront();await waitPlayingUI();await page.keyboard.press('Escape');
+    // The resource run deliberately stops the display loop. Consume the real
+    // keyboard input through the original animation callback, before physics.
+    await page.evaluate(()=>{const g=window.__NESI_DEMO_GAME__;g.animate(performance.now());g.renderer.setAnimationLoop(null);});
+    await page.waitForFunction(()=>window.__NESI_DEMO_GAME__?.state==='paused'
+      &&document.body.dataset.playState==='paused'&&document.documentElement.dataset.runtimeState==='paused');
+    await waitScreen('pause-screen');
+  }
   page.on('pageerror',error=>report.errors.push(String(error)));
   page.on('requestfailed',request=>{if(!request.url().endsWith('/favicon.ico'))report.failedRequests.push({url:request.url(),error:request.failure()?.errorText});});
   page.on('response',response=>{if(response.status()>=400&&!response.url().endsWith('/favicon.ico'))report.errors.push(`${response.status()} ${response.url()}`);});
@@ -76,9 +103,7 @@ try{
   phase('ordinary-production-start');await page.goto(url.href,{waitUntil:'domcontentloaded'});
   await page.waitForFunction(()=>document.documentElement.dataset.runtimeState==='ready');
   assert.equal(await page.evaluate(()=>!!window.__NESI_DEMO_GAME__?.renderer),true,'Build has no existing QA harness; use the ordinary production build, not Yandex or modified source');
-  await page.bringToFront();await page.$eval('#play-button',node=>node.scrollIntoView({block:'center'}));
-  await page.waitForFunction(()=>{const b=document.querySelector('#play-button'),r=b.getBoundingClientRect();return !b.closest('.screen').inert&&b.contains(document.elementFromPoint(r.x+r.width/2,r.y+r.height/2));});
-  await page.click('#play-button');await page.waitForFunction(()=>window.__NESI_DEMO_GAME__?.state==='playing');
+  await page.bringToFront();await waitScreen('start-screen');await clickControl('#play-button');await waitPlayingUI();
   await page.evaluate(()=>window.__NESI_DEMO_GAME__.renderer.setAnimationLoop(null));
   async function warmRoom(level){
     return bounded(page.evaluate(async({level,warmFrames})=>{
@@ -146,8 +171,8 @@ try{
   // The actual win-screen button restores the ordinary playing UI and tears
   // down the fracture room. Direct controller selection alone would leave the
   // win overlay in front of the pause/restart controls tested below.
-  phase('ordinary-post-fracture-transition');await page.click('#play-again-button');
-  await page.waitForFunction(()=>window.__NESI_DEMO_GAME__?.state==='playing'&&window.__NESI_DEMO_GAME__.levelIndex===47);
+  phase('ordinary-post-fracture-transition');await waitScreen('win-screen');await clickControl('#play-again-button');await waitPlayingUI();
+  await page.waitForFunction(()=>window.__NESI_DEMO_GAME__.levelIndex===47);
   report.controls.fracture.ordinaryNextLevel=await page.evaluate(()=>{const g=window.__NESI_DEMO_GAME__;g.renderer.setAnimationLoop(null);return g.levelIndex+1;});
   assert.equal(report.controls.fracture.ordinaryNextLevel,48);save();
   phase('activated-fracture-disposal');report.controls.fracture.returned=await warmRoom(1);
@@ -162,32 +187,33 @@ try{
   assert.equal(report.controls.fracture.rebuiltStartup.constraints,report.controls.fracture.startup.constraints);
   assert.equal(report.controls.fracture.rebuiltStartup.sceneNodes,report.controls.fracture.startup.sceneNodes);
   await warmRoom(1);save();
-  phase('quality-switches');report.controls.quality=[];
+  phase('quality-switches');report.controls.quality=[];await pauseWithKeyboard();
   for(const quality of ['low','balanced','high','low']){
-    await page.select('#quality-select',quality);
+    await visibleControl('#quality-select');await page.select('#quality-select',quality);
     const sample=await page.evaluate(({quality,warmFrames})=>{const g=window.__NESI_DEMO_GAME__;g.renderer.setAnimationLoop(null);for(let n=0;n<warmFrames;n++)g.render();
       return {quality,profile:{...g.quality},shadows:g.renderer.shadowMap.enabled,counts:{...g.renderer.info.memory},contextLost:g.renderer.getContext().isContextLost(),calls:g.renderer.info.render.calls};},{quality,warmFrames});
     assert.equal(sample.contextLost,false);assert.ok(sample.calls>0);assert.equal(sample.shadows,quality!=='low');report.controls.quality.push(sample);save();
   }
-  phase('pause-freeze');await page.click('#pause-button');await page.waitForFunction(()=>window.__NESI_DEMO_GAME__.state==='paused');
+  phase('pause-freeze');await waitScreen('pause-screen');
   report.controls.pause=await page.evaluate(()=>{
     const g=window.__NESI_DEMO_GAME__;g.renderer.setAnimationLoop(null);
     const pose=()=>({elapsed:g.elapsed,visualTime:g.visualTime,player:g.playerPosition.toArray(),cargo:g.cargo.position.toArray(),quaternion:g.cargo.quaternion.toArray(),
       worldTime:g.physics.world.time,bodies:g.physics.world.bodies.map(b=>[b.id,...[b.position.x,b.position.y,b.position.z,b.quaternion.x,b.quaternion.y,b.quaternion.z,b.quaternion.w,b.velocity.x,b.velocity.y,b.velocity.z]])});
     const before=pose(),now=performance.now();g.lastFrame=now;
     for(let n=1;n<=3;n++)g.animate(now+n*100);
-    return {state:g.state,before,after:pose(),manualPausedFrames:3};
+    return {state:g.state,before,after:pose(),manualPausedFrames:3,
+      control:'Native desktop Escape; original animate consumes input while the display loop is stopped'};
   });
   assert.equal(report.controls.pause.state,'paused');assert.deepEqual(report.controls.pause.after,report.controls.pause.before,'Paused manual display frames advanced actors, physics or permitted visual time');save();
   phase('ordinary-restart');const original=await page.evaluate(()=>{const g=window.__NESI_DEMO_GAME__;return {level:g.levelIndex,cargoUUID:g.cargo.group.uuid,cargoBody:g.physics.cargoBody.id};});
-  await page.click('#restart-button');await page.waitForFunction(()=>window.__NESI_DEMO_GAME__.state==='playing');
+  await clickControl('#restart-button');await waitPlayingUI();
   report.controls.restart=await page.evaluate(()=>{const g=window.__NESI_DEMO_GAME__;g.renderer.setAnimationLoop(null);return {level:g.levelIndex,cargoUUID:g.cargo.group.uuid,cargoBody:g.physics.cargoBody.id,teleports:g.teleportCount,held:!!g.heldCube,elapsed:g.elapsed};});
   assert.equal(report.controls.restart.level,original.level);assert.equal(report.controls.restart.cargoUUID,original.cargoUUID);assert.equal(report.controls.restart.cargoBody,original.cargoBody);
   assert.equal(report.controls.restart.teleports,0);assert.equal(report.controls.restart.held,false);assert.ok(report.controls.restart.elapsed<2000);save();
   // Use the ordinary paused level control to persist a NONDEFAULT room. The
   // reload proof would be meaningless if it only returned to default room 1.
-  phase('context-recovery-room-selection');await page.click('#pause-button');await page.waitForFunction(()=>window.__NESI_DEMO_GAME__.state==='paused');
-  await page.select('#settings-level-select','11');await page.waitForFunction(()=>window.__NESI_DEMO_GAME__?.levelIndex===11&&window.__NESI_DEMO_GAME__.state==='playing');
+  phase('context-recovery-room-selection');await pauseWithKeyboard();await visibleControl('#settings-level-select');
+  await page.select('#settings-level-select','11');await waitPlayingUI();await page.waitForFunction(()=>window.__NESI_DEMO_GAME__.levelIndex===11);
   await page.evaluate(()=>window.__NESI_DEMO_GAME__.renderer.setAnimationLoop(null));
   report.controls.context={};phase('native-context-loss');
   report.controls.context.supported=await page.evaluate(()=>{
@@ -206,12 +232,12 @@ try{
     report.controls.context.nativeRestored=await page.evaluate(()=>({events:window.__RESOURCE_CONTEXT_EVENTS__,contextLost:window.__NESI_DEMO_GAME__.renderer.getContext().isContextLost(),applicationState:window.__NESI_DEMO_GAME__.state}));
     assert.equal(report.controls.context.nativeRestored.contextLost,false);
     report.controls.context.inPlaceApplicationRecovery=report.controls.context.nativeRestored.applicationState!=='error';
-    phase('ordinary-context-recovery-reload');await page.click('#reload-button');
+    phase('ordinary-context-recovery-reload');await waitScreen('error-screen');await clickControl('#reload-button');
     await page.waitForFunction(()=>document.documentElement.dataset.runtimeState==='ready'&&window.__NESI_DEMO_GAME__?.levelIndex===11);
     report.controls.context.reload=await page.evaluate(()=>({selectedLevel:document.querySelector('#level-select').value,state:window.__NESI_DEMO_GAME__.state,
       contextLost:window.__NESI_DEMO_GAME__.renderer.getContext().isContextLost(),errorScreenInert:document.querySelector('#error-screen').inert}));
     assert.equal(report.controls.context.reload.selectedLevel,'11');assert.equal(report.controls.context.reload.contextLost,false);assert.equal(report.controls.context.reload.errorScreenInert,true);
-    await page.click('#play-button');await page.waitForFunction(()=>window.__NESI_DEMO_GAME__.state==='playing');
+    await waitScreen('start-screen');await clickControl('#play-button');await waitPlayingUI();
     await page.evaluate(()=>{const g=window.__NESI_DEMO_GAME__;g.renderer.setAnimationLoop(null);g.render();});
     report.controls.context.final=await page.evaluate(()=>({level:window.__NESI_DEMO_GAME__.levelIndex+1,state:window.__NESI_DEMO_GAME__.state,calls:window.__NESI_DEMO_GAME__.renderer.info.render.calls,contextLost:window.__NESI_DEMO_GAME__.renderer.getContext().isContextLost()}));
     assert.equal(report.controls.context.final.level,12);assert.equal(report.controls.context.final.contextLost,false);assert.ok(report.controls.context.final.calls>0);
