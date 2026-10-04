@@ -236,14 +236,29 @@ jobs:
                   assert.equal(a.outcome,'completed-with-required-introductory-pair');assert.ok(a.causalReview);assert.ok(a.teleports>0);
                 }else if(a.outcome==='blocked-within-finite-attempt')assert.equal(a.error,null);
                 else if(a.outcome==='blocked-by-shot-validation')assert.match(a.error,/Rejected shot/);
-                else if(a.outcome==='reset-aborted-physical-attempt')assert.match(a.error,/unexpected reset/);
+                else if(a.outcome==='reset-aborted-physical-attempt'){
+                  assert.match(a.error,/unexpected reset/);assert.equal(a.evidence.scenarioStarted,true);assert.ok(Number.isFinite(a.frames)&&a.frames>0);
+                  const death=a.evidence.respawnEvents?.find(e=>e.scenarioStarted===true&&Number.isFinite(e.physicsStep)&&e.physicsStep>0&&Number.isFinite(e.simulationSeconds)&&e.simulationSeconds>0);
+                  assert.ok(death&&[death.player,death.cargo].every(p=>Array.isArray(p)&&p.length===3&&p.every(Number.isFinite)),'A physical death needs observed pre-reset actor poses after actual scenario input');
+                }
                 else assert.fail(`Unclassified early outcome: room ${room.number}, ${a.name}, ${a.outcome}`);
               }
             }
           }else if(group==='middle'){
-            assert.equal(q.source.unchangedDuringRun,true);assert.equal(q.counts.completed,0);assert.equal(q.counts.driverOrSetupErrors,0);
+            assert.equal(q.source.unchangedDuringRun,true);assert.equal(q.counts.attempts,85);assert.equal(q.rooms.reduce((n,r)=>n+r.attacks.length,0),85);assert.equal(q.counts.completed,0);assert.equal(q.counts.driverOrSetupErrors,0);
             sameSet(q.rooms.map(r=>r.number),expectedRooms);
-            for(const room of q.rooms){assert.ok(room.attacks.length>=6);assert.ok(room.attacks.every(a=>!a.completed&&!a.error));}
+            for(const room of q.rooms){
+              assert.ok(room.attacks.length>=6);assert.equal(new Set(room.attacks.map(a=>a.name)).size,room.attacks.length);
+              for(const row of room.attacks){
+                assert.equal(row.completed,false);assert.ok(!row.error);
+                if(row.outcome==='cargo-unavailable-before-boost'){
+                  assert.ok([15,19].includes(room.number));assert.equal(row.name,'drop-cargo-at-ledge-corner-jump-boost');
+                  assert.ok(row.frames>0&&row.observed.physicsSteps>0);assert.equal(row.state.held,false);assert.ok(!row.observed.dropAt);
+                  assert.ok(row.observed.obstacles.some(s=>/Blocked walking|Walk timed out/.test(s)),'A pickup-blocked approach needs observed physical movement obstacles');
+                  assert.ok(row.observed.obstacles.includes('Original cargo inaccessible from this physically reached stage'));
+                }else assert.equal(row.outcome,'blocked-in-finite-attempt');
+              }
+            }
             assert.ok(q.rooms.find(r=>r.number===16).attacks.some(a=>a.name==='reverse-service-stair-roof-drop-skips-projected-delivery'));
           }else if(group==='late'){
             assert.equal(q.pass,true);assert.equal(q.fingerprint.drift,false);
@@ -272,6 +287,11 @@ jobs:
             for(const row of q.rows){
               assert.equal(row.executed,true);assert.equal(row.candidateBypass,false);assert.equal(row.sameCompanion,true);assert.equal(row.finiteActors,true);
               if(row.name.startsWith('canonical-')){assert.equal(row.expectedWin,true);assert.equal(row.routeVerified,true);}
+              else{
+                assert.notEqual(row.expectedWin,true);assert.ok(Array.isArray(row.solvedDuringAttack));
+                const allowedId=({'freight-separated-cargo-transit':'freight','hoist-no-lift-ride-exterior-stairs':'hoist','migrant-readdress-moving-transit':'migrant'})[row.name];
+                assert.ok(row.solvedDuringAttack.every(id=>id===allowedId&&row.validAlternate===true),`Unexpected newly solved stage: ${row.name}`);
+              }
               if(row.error)assert.ok((row.stoppedByPhysicalCollision&&row.inputAttackStarted)||row.endedByProductionDeath,`Unclassified castle error: ${row.name}`);
             }
           }else assert.fail(`Unknown speedrun group: ${group}`);

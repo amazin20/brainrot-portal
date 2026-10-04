@@ -21,8 +21,8 @@ export async function runNewCastleCase(g, THREE, journey, name, {capture=async()
     r.observedProgress.push({frame:r.frames,completedStages:count,state:g.state,events});
   }
   g.input.getMove=()=>move.clone();
-  for(const key of ['reset','respawn'])g[key==='reset'?'resetRun':'respawn']=function(...args){r[key==='reset'?'resets':'respawns']++;return originals[key].apply(this,args);};
-  g.physics.resetCargo=function(...args){r.cargoResets++;return originals.cargoReset.apply(this,args);};
+  for(const key of ['reset','respawn'])g[key==='reset'?'resetRun':'respawn']=function(...args){r[key==='reset'?'resets':'respawns']++;observeProgress();return originals[key].apply(this,args);};
+  g.physics.resetCargo=function(...args){r.cargoResets++;observeProgress();return originals.cargoReset.apply(this,args);};
   const snap=()=>({frame:r.frames,player:g.playerPosition.toArray(),cargo:g.cargo.position.toArray(),held:!!g.heldCube,teleports:g.teleportCount,state:g.state,solved:l.getTowerMetrics().solvedIds});
   const P=(id,x,z=0,y=0)=>l.rooms.get(id).P(x,z,y), state=id=>l.machines.get(id).state;
   function stop(){move.set(0,0);g.input.keys.clear();}
@@ -68,11 +68,11 @@ export async function runNewCastleCase(g, THREE, journey, name, {capture=async()
       g.yaw-=Math.max(-1,Math.min(1,q.x))*.21;g.pitch=Math.max(-1.15,Math.min(1.15,g.pitch+Math.max(-1,Math.min(1,q.y))*.19));await frame();
     }throw Error('Aim did not converge '+target);
   }
-  async function shoot(slot,panel){
+  async function shoot(slot,panel,{required=true}={}){
     const f=panel.frame(),p=f.center.clone();if(Math.abs(f.normal.y)<.1)p.y-=.4;
     await look(p);const accepted=g.firePortal(slot);
     for(let i=0;i<240&&(g.portalShots.queue.length||g.portalShots.active.length);i++)await frame();
-    const result={slot,panel:panel.mesh.name,accepted,impact:g.portalShots.lastImpact,...snap()};r.shots.push(result);return accepted&&result.impact?.valid;
+    const result={slot,panel:panel.mesh.name,accepted,impact:g.portalShots.lastImpact,...snap()};r.shots.push(result);const valid=accepted&&result.impact?.valid;if(required&&!valid)throw Error('Setup portal shot rejected '+panel.mesh.name+' '+JSON.stringify(result.impact));return valid;
   }
   async function enter(panel){
     const f=panel.frame();await walk(f.center.clone().addScaledVector(f.normal,1.6).setY(f.center.y-2.4));
@@ -100,7 +100,7 @@ export async function runNewCastleCase(g, THREE, journey, name, {capture=async()
   async function use(id){
     const t=l.terminals.find(t=>t.id===id);if(!t)throw Error('Missing control '+id);
     await walk([t.position.x,t.position.y-1,t.position.z+(g.playerPosition.z<t.position.z?-1.5:1.5)]);
-    const accepted=g.interact();r.interactions.push({kind:'control',id,accepted,...snap()});await wait(.3);return accepted;
+    const accepted=g.interact();r.interactions.push({kind:'control',id,accepted,...snap()});await wait(.3);if(!accepted)throw Error('Setup control input rejected '+id);return accepted;
   }
   // Physical infrastructure graph only plans ordinary walking. Every edge is
   // executed against actual production collision; no solver signal is set.
@@ -149,10 +149,17 @@ export async function runNewCastleCase(g, THREE, journey, name, {capture=async()
     }else if(name==='freight-separated-cargo-transit'){
       await pickup();await travel(l.rooms.get('freight').door);await walk(P('freight',12,13));await dropAt(P('freight',12,13));
       await walk(P('freight',13,7));await shoot(0,state('freight').intake);await walk(P('freight',12,-10));await shoot(1,state('freight').outlet);
+      const beforePlayer=g.teleportCount,beforeCargo=g.physics.portalTransports;
       await walk(P('freight',12,13));await pickup();r.inputAttackStarted=true;await dropAt(P('freight',8,7),[-1,0]);
-      await force(P('freight',7,7),5,{jump:false});await enter(state('freight').intake);await walk(state('freight').receiver);
-      testMark('Separate free-body freight transit',{carried:l.getTowerMetrics().carriedPortalCrossings.freight??0});
-      r.candidateBypass=l.getTowerMetrics().solvedIds.includes('freight')&&!l.getTowerMetrics().carriedPortalCrossings.freight;
+      await force(P('freight',7,7),5,{jump:false});
+      if(g.teleportCount===beforePlayer)await enter(state('freight').intake);
+      r.actualPlayerPortalTransfer=g.teleportCount>beforePlayer;r.actualCargoPortalTransfer=g.physics.portalTransports>beforeCargo;
+      if(r.actualCargoPortalTransfer){await pickup();await walk(state('freight').receiver);await wait(.5);}
+      else{r.physicalCargoPortalRejected=true;}
+      const event=l.getTowerMetrics().events.find(e=>e.id==='freight');
+      r.actualFreightContact=!!event;r.validAlternate=!!event&&r.actualPlayerPortalTransfer&&r.actualCargoPortalTransfer;
+      testMark(r.validAlternate?'Separate player and free-cargo portal delivery completed':'Separate free-cargo portal attempt ended before receiver contact',{carried:l.getTowerMetrics().carriedPortalCrossings.freight??0,playerPortal:r.actualPlayerPortalTransfer,cargoPortal:r.actualCargoPortalTransfer,contact:r.actualFreightContact});
+      r.candidateBypass=!!event&&!r.validAlternate;
     }else if(name==='freight-airborne-cargo-service-slit'){
       await pickup();await travel(l.rooms.get('freight').door);await walk(P('freight',3,-10));await look(P('freight',-8,-10,1));
       r.inputAttackStarted=true;g.input.keys.add('ShiftLeft');worldMove(-1,0);g.input.jumpQueued=true;
@@ -171,21 +178,21 @@ export async function runNewCastleCase(g, THREE, journey, name, {capture=async()
       await walk(P('optics',-16,-1));await shoot(0,state('optics').intake);await walk(P('optics',-14,12));await walk(P('optics',3,12));await shoot(1,state('optics').outlet);await wait(3);
       testMark('Direct optical pair without final reflector alignment',{turned:state('optics').turned,lit:state('optics').lit});
     }else if(name==='hoist-no-lift-ride-exterior-stairs'||name==='hoist-no-portals-exterior-cargo'){
-      await stage(['freight']);await pickup();await travel(l.rooms.get('hoist').door);await walk(P('hoist',-18,-11));await dropAt(state('hoist').pad,[1,0]);
+      await stage(['freight']);const beforeCargo=g.physics.portalTransports;await pickup();await travel(l.rooms.get('hoist').door);await walk(P('hoist',-18,-11));await dropAt(state('hoist').pad,[1,0]);
       await walk(P('hoist',0,-7));await use('hoist:lift');await walk(P('hoist',-18,-7));await walk(l.rooms.get('hoist').door);
       await travel([l.rooms.get('hoist').door[0],18,l.rooms.get('hoist').door[2]]);await walk(P('hoist',-18,0,18));await walk(P('hoist',-18,10,18));await use('hoist:pawl');
       if(name==='hoist-no-portals-exterior-cargo'){
         await walk(P('hoist',-18,10,18));await walk(P('hoist',-18,0,18));await walk([l.rooms.get('hoist').door[0],18,l.rooms.get('hoist').door[2]]);await travel(l.rooms.get('hoist').door);await walk(P('hoist',-18,-11));await pickup();await walk(l.rooms.get('hoist').door);await travel([l.rooms.get('hoist').door[0],18,l.rooms.get('hoist').door[2]]);await walk(P('hoist',-18,0,18));await walk(P('hoist',-18,10,18));await dropAt(P('hoist',-12,10,18),[1,0]);await wait(2);
       }else{await walk(P('hoist',-12,9,18));await shoot(1,state('hoist').outlet);await walk(P('hoist',-12,6.45,18));await shoot(0,state('hoist').intake);await wait(7);}
       testMark('Reached upper latch by exterior stairs',{hoist:state('hoist').height,locked:state('hoist').locked,proof:l.getTowerMetrics().events.find(e=>e.id==='hoist')?.proof});
-      r.validAlternate=name==='hoist-no-lift-ride-exterior-stairs'&&l.getTowerMetrics().solvedIds.includes('hoist');r.candidateBypass=name==='hoist-no-portals-exterior-cargo'&&l.getTowerMetrics().solvedIds.includes('hoist');
+      r.actualCargoPortalTransfer=g.physics.portalTransports>beforeCargo;const event=l.getTowerMetrics().events.find(e=>e.id==='hoist');r.validAlternate=name==='hoist-no-lift-ride-exterior-stairs'&&!!event&&r.actualCargoPortalTransfer&&event.proof.upperCatcherLoaded;r.candidateBypass=!!event&&!r.validAlternate;
     }else if(name==='archive-controls-spam-wall-pinch'){
-      await stage(['sluice','optics']);await travel(l.rooms.get('archive').door);await use('archive:slide-a');await walk(P('archive',5,0));
-      for(let i=0;i<6;i++){await force(P('archive',-15,7),.4,{jump:true});const t=l.terminals.find(t=>t.id==='archive:slide-a');if(g.playerPosition.distanceTo(t.position)<3.3){g.interact();r.interactions.push({kind:'pinch-toggle',...snap()});}}
-      await force(P('archive',-15,7),10,{jump:true,skirt:true});testMark('Sliding archive wall pinch without B',{A:state('archive').A,B:state('archive').B});
+      await stage(['sluice','optics']);await travel(l.rooms.get('archive').door);await use('archive:slide-a');
+      for(let i=0;i<6;i++){const near=l.nearbyInteraction(),accepted=g.interact();r.interactions.push({kind:'rapid-slide-toggle',target:near?.kind??null,accepted,...snap()});if(!accepted||near?.kind!=='archive:slide-a')throw Error('Archive toggle setup did not address A');await wait(.08);}
+      await force(P('archive',-15,7),16,{jump:true,skirt:true});testMark('Rapid archive toggles followed by wall and corner jump attempts without B',{A:state('archive').A,B:state('archive').B});
     }else if(name==='flywheel-wrong-ratio-max-crank'||name==='flywheel-unloaded-overspeed'){
       await stage(['sluice','optics','archive']);await travel(l.rooms.get('flywheel').door);await walk(P('flywheel',0,0));
-      await use('flywheel:crank');for(let i=0;i<14;i++){g.interact();r.interactions.push({kind:'rapid-crank',...snap()});await wait(.11);}if(name.includes('wrong-ratio'))await use('flywheel:clutch');
+      await use('flywheel:crank');for(let i=0;i<14;i++){const near=l.nearbyInteraction(),accepted=g.interact();r.interactions.push({kind:'rapid-crank',target:near?.kind??null,accepted,...snap()});if(!accepted||near?.kind!=='flywheel:crank')throw Error('Flywheel crank setup did not address crank');await wait(.11);}if(name.includes('wrong-ratio'))await use('flywheel:clutch');
       await wait(6);testMark('Alternate wheel signal',{ratio:state('flywheel').ratio,output:state('flywheel').output,clutch:state('flywheel').clutch});
     }else if(name==='magnet-direct-last-coil'){
       await stage(['freight','hoist']);await pickup();await travel(l.rooms.get('magnet').door);await walk(P('magnet',-16,0));await dropAt(state('magnet').sender,[1,0]);
@@ -193,13 +200,13 @@ export async function runNewCastleCase(g, THREE, journey, name, {capture=async()
       testMark('Only final coil pulls original cargo',{magnet:state('magnet').magnet,passed:state('magnet').passed});
     }else if(name==='migrant-no-rail-portal-push'||name==='migrant-readdress-moving-transit'){
       await stage(first);await travel(l.rooms.get('migrant').door);await walk(P('migrant',-12,12));await shoot(0,state('migrant').intake);await walk(P('migrant',-13,0));await shoot(1,state('migrant').moving);
-      if(name.endsWith('moving-transit')){await use('migrant:rail');await walk(P('migrant',-12,12));await shoot(1,state('migrant').moving);testMark('Second shot after carriage moved',{travel:state('migrant').travel});}
-      await walk(P('migrant',-12,0));await walk(l.rooms.get('migrant').door);await travel([0,36,54]);await pickup();await travel(l.rooms.get('migrant').door);await enter(state('migrant').intake);
+      if(name.endsWith('moving-transit')){await use('migrant:rail');r.inputAttackStarted=true;r.readdressSucceeded=await shoot(1,state('migrant').moving,{required:false});r.physicalShotRejected=!r.readdressSucceeded;testMark(r.readdressSucceeded?'Portal successfully readdressed during real carriage movement':'Moving readdress shot hit physical obstruction; prior portal retained',{travel:state('migrant').travel,shot:r.shots.at(-1)});await walk(P('migrant',-12,12));}
+      await walk(P('migrant',-12,0));await walk(l.rooms.get('migrant').door);await travel([0,36,54]);await pickup();await travel(l.rooms.get('migrant').door);const beforePlayer=g.teleportCount,beforeCargo=g.physics.portalTransports;await enter(state('migrant').intake);
       await force(P('migrant',12,10,3),9,{jump:true,skirt:true});testMark('Carriage receiver attacked',{travel:state('migrant').travel});
-      if(name.endsWith('moving-transit'))r.candidateBypass=false; // valid moving portal addressing is a regression check
+      r.actualPlayerPortalTransfer=g.teleportCount>beforePlayer;r.actualCargoPortalTransfer=g.physics.portalTransports>beforeCargo;const event=l.getTowerMetrics().events.find(e=>e.id==='migrant');r.validAlternate=name.endsWith('moving-transit')&&!!event&&r.actualPlayerPortalTransfer&&r.actualCargoPortalTransfer&&event.proof.transportedOnMovingExit&&event.proof.travel>.98;
     }else if(name==='pendulum-catch-before-a'){
       await stage([...first,'migrant']);await travel(l.rooms.get('pendulum').door);await walk(P('pendulum',24,-19));await walk(P('pendulum',19,-19));
-      await force(P('pendulum',15,11,6),12,{jump:true,skirt:true,interact:true});testMark('Upper catch attacked before first catch',{A:state('pendulum').A,B:state('pendulum').B});
+      await force(P('pendulum',15,11,6),12,{jump:true,skirt:true,interact:true});testMark('Exterior approach to upper catch attempted before A; catch remained inaccessible',{A:state('pendulum').A,B:state('pendulum').B});
     }else if(name==='inertia-west-wall-end-landing'||name==='inertia-cargo-west-wall-end'){
       await stage([...first,'migrant','pendulum']);if(name.includes('cargo')){await travel([0,36,54]);await pickup();}await travel(l.rooms.get('inertia').door);await walk(P('inertia',30,12));await walk(P('inertia',30,16));await walk(P('inertia',-22,16));await walk(P('inertia',-22,12));await walk(P('inertia',-4,13));
       if(name.includes('cargo')){
@@ -214,7 +221,7 @@ export async function runNewCastleCase(g, THREE, journey, name, {capture=async()
       testMark('Lower receiver reached around west end',{flew:state('inertia').flew,maxSpeed:state('inertia').maxSpeed,proof:l.getTowerMetrics().events.find(e=>e.id==='inertia')?.proof});
       r.candidateBypass=l.getTowerMetrics().solvedIds.includes('inertia')&&!l.getTowerMetrics().events.find(e=>e.id==='inertia')?.proof?.portalEntries;
     }else if(name==='crown-out-of-order-high-gallery'){
-      await pickup();await travel([0,72,54]);const door=l.rooms.get('crown').door;await blockedWalk(door,'Closed crown');await force(P('crown',12,13),12,{jump:true,skirt:true});
+      await pickup();await travel([0,72,54]);const door=l.rooms.get('crown').door;try{await travel(door);}catch(e){if(!String(e).startsWith('Error: Blocked ')||g.playerPosition.distanceTo(V(...door))>1.15)throw e;r.expectedCollision={label:'Locked crown doorway reached by real galleries',error:String(e)};stop();}testMark('Locked crown doorway reached');await force(P('crown',12,13),12,{jump:true,skirt:true});
       testMark('Early crown door attacked with cargo');
     }else if(name==='crown-held-socket-contact'){
       await stage([...first,'migrant','pendulum','inertia']);await travel([0,36,54]);await pickup();await travel(l.rooms.get('crown').door);await walk(P('crown',12,13));await dropAt(P('crown',12,13));await walk(P('crown',13,7));await shoot(0,state('crown').intake);await walk(P('crown',12,-10));await shoot(1,state('crown').outlet);await walk(P('crown',12,13));await pickup();await enter(state('crown').intake);r.inputAttackStarted=true;await walk(state('crown').contact);await wait(2);testMark('Held cargo near contact, no independent socket');
@@ -222,7 +229,9 @@ export async function runNewCastleCase(g, THREE, journey, name, {capture=async()
     await wait(.5);r.executed=true;
   }catch(error){r.error=String(error);r.executed=false;if(r.inputAttackStarted&&String(error).startsWith('Error: Blocked ')){r.executed=true;r.stoppedByPhysicalCollision=true;}if(String(error)==='Error: Attack reset the attempt'&&!error.singularityReport){r.endedByProductionDeath=true;r.executed=!!r.inputAttackStarted;r.setupDeath=!r.inputAttackStarted;}if(error.singularityReport)r.routeFailure=error.singularityReport;}
   finally{
-    stop();r.finish=snap();r.metrics=l.getTowerMetrics();r.solvedDuringAttack=[...new Set([...r.finish.solved,...observedIds])].filter(id=>!(r.routePrefix?.metrics?.solvedIds??r.routeFailure?.metrics?.solvedIds??[]).includes(id));r.candidateBypass=Boolean(r.candidateBypass||(!r.expectedWin&&r.solvedDuringAttack.length&&!['migrant-readdress-moving-transit','hoist-no-lift-ride-exterior-stairs'].includes(name))||(!r.expectedWin&&r.finish.state==='won'));if(r.expectedWin)r.routeVerified=r.finish.state==='won'&&r.metrics.completedStages===11;r.sameCompanion=g.cargo===cargo&&g.physics.cargoBody.id===body;
+    stop();r.finish=snap();r.metrics=l.getTowerMetrics();r.solvedDuringAttack=r.routeFailure?[]:[...new Set([...r.finish.solved,...observedIds])].filter(id=>!(r.routePrefix?.metrics?.solvedIds??r.routeFailure?.metrics?.solvedIds??[]).includes(id));
+    const allowedAlternateId=r.validAlternate?({'freight-separated-cargo-transit':'freight','hoist-no-lift-ride-exterior-stairs':'hoist','migrant-readdress-moving-transit':'migrant'}[name]):null;r.allowedAlternateSolvedIds=allowedAlternateId?[allowedAlternateId]:[];r.unexpectedSolvedDuringAttack=r.solvedDuringAttack.filter(id=>id!==allowedAlternateId);
+    r.candidateBypass=Boolean(r.candidateBypass||(!r.expectedWin&&r.unexpectedSolvedDuringAttack.length)||(!r.expectedWin&&r.finish.state==='won'));if(r.expectedWin)r.routeVerified=r.finish.state==='won'&&r.metrics.completedStages===11;r.sameCompanion=g.cargo===cargo&&g.physics.cargoBody.id===body;
     r.frameSeconds=r.frames/60;r.totalSimulationSeconds=r.frameSeconds+(r.routePrefix?.seconds??r.routeFailure?.seconds??0);r.finiteActors=[...g.playerPosition.toArray(),...g.cargo.position.toArray(),...g.playerVelocity.toArray()].every(Number.isFinite);
     await mark('Attack finish');g.input.getMove=originals.move;g.resetRun=originals.reset;g.respawn=originals.respawn;g.physics.resetCargo=originals.cargoReset;
   }return r;

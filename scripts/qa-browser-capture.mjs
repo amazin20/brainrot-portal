@@ -17,7 +17,7 @@ function pixels(file){
 /** Capture the actual renderer. A timed-out CDP screenshot must neither hold
  * Puppeteer's screenshot mutex nor prevent the ordinary input route. Canvas
  * fallback explicitly excludes HTML overlays and verifies nonblank pixels. */
-export async function captureBrowserFrame(page,file,{timeoutMs=10000,canvasOnly=false}={}){
+export async function captureBrowserFrame(page,file,{timeoutMs=60000,canvasOnly=false}={}){
  const issues=[];let client;
  if(!canvasOnly){
  try{
@@ -32,8 +32,12 @@ export async function captureBrowserFrame(page,file,{timeoutMs=10000,canvasOnly=
  try{
   const shot=await bounded(page.evaluate(()=>{
    const g=window.__NESI_DEMO_GAME__;if(!g?.renderer)throw Error('No live game renderer for canvas capture');
-   g.render();const canvas=g.renderer.domElement;
-   return {data:canvas.toDataURL('image/jpeg',.85),width:canvas.width,height:canvas.height,
+   const before=[g.state,g.elapsed,...g.playerPosition.toArray(),...g.cargo.position.toArray()];
+   g.render();const source=g.renderer.domElement,canvas=document.createElement('canvas');
+   canvas.width=source.width;canvas.height=source.height;canvas.getContext('2d',{alpha:false}).drawImage(source,0,0);
+   const data=canvas.toDataURL('image/jpeg',.85);
+   if(JSON.stringify(before)!==JSON.stringify([g.state,g.elapsed,...g.playerPosition.toArray(),...g.cargo.position.toArray()]))throw Error('Readback advanced gameplay');
+   return {data,width:canvas.width,height:canvas.height,
     calls:g.renderer.info.render.calls,triangles:g.renderer.info.render.triangles};
   }),timeoutMs,'Actual WebGL canvas readback');
   if(!shot.data.startsWith('data:image/jpeg;base64,')||shot.calls<1||shot.triangles<1)throw Error('Renderer did not provide a real scene frame');
