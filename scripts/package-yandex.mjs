@@ -39,6 +39,7 @@ assert.equal(buildInfo.levels,51,'Package must contain the full 51-room candidat
 assert.equal(buildInfo.sourceInputsSha256,hash(JSON.stringify(inputsBefore)),'Package stamp must match the current build inputs');
 assert.ok(!output.startsWith(input+path.sep),'ZIP must be outside the game directory');
 const filenames=walk(input).map(filename=>path.relative(input,filename).split(path.sep).join('/')).sort();
+assert.equal(filenames.filter(filename=>/^assets\/index-[^/]+\.js$/.test(filename)).length,1,'Remove stale main bundles before packaging this candidate');
 assert.deepEqual(filenames.filter(filename=>/(^|\/)index\.html$/.test(filename)),['index.html']);
 assert.ok(filenames.length>5,'Game bundle is missing');
 assert.ok(!filenames.includes('sdk.js'),'The host-supplied /sdk.js must not be packaged');
