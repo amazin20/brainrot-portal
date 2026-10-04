@@ -13,6 +13,7 @@ import { AudioController } from './AudioController.js';
 import { LabCamera } from './LabCamera.js';
 import { LabPortalActors } from './LabPortalActors.js';
 import { warmPortalRendering } from './LabPortalWarmup.js';
+import { compileLabScene } from './LabSceneCompilation.js';
 import { LabPlayerAnimator } from './LabPlayerAnimator.js';
 import { LabHeldDevice } from './LabHeldDevice.js';
 import { LabPortals, portalBacksCollider, transformPortalPoint, pointInsidePortal, uprightCapsuleFitsPortal, orientedBoxFitsPortal, portalRotation } from './LabPortals.js';
@@ -84,7 +85,7 @@ export class LabGame {
     const compileStart = performance.now();
     this.portals.prepare();
     this.portalActors.prepare();
-    await this.renderer.compileAsync(this.scene, this.camera);
+    await compileLabScene(this.renderer,this.scene,this.camera);
     await warmPortalRendering(this);
     this.render();
     this.loadingProfile.firstFrameMs = performance.now() - compileStart;
@@ -312,7 +313,7 @@ export class LabGame {
     disposeLabLevel(this); this.buildLevel();
     this.portals.prepare();
     this.portalActors.prepare();
-    if (this.renderer?.compileAsync) {await this.renderer.compileAsync(this.scene, this.camera);await warmPortalRendering(this);}
+    if (this.renderer?.compileAsync) {await compileLabScene(this.renderer,this.scene,this.camera);await warmPortalRendering(this);}
     this.performanceMonitor.reset(); this.accumulator = 0; this.lastFrame = performance.now();
     this.state = playing ? 'playing' : 'ready'; this.emitHud();
     this.renderer?.setAnimationLoop(this.animate);
