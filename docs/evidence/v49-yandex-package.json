@@ -1,0 +1,125 @@
+{
+  "pass": true,
+  "scope": "Archive structure, files, hashes and 41-level model coverage; not live SDK, hardware FPS or moderation approval",
+  "sourceCommit": "14c6683cb4d2991dfd48be28fa38ccaa1fc015b7",
+  "workingTreeModified": false,
+  "workingTreeStatusScope": "tracked files only; generated untracked QA/artifacts excluded",
+  "builtFromCurrentSource": true,
+  "sourceInputFiles": 253,
+  "sourceInputsSha256": "3320e56f443dea25ffdcfb34fc36be9e35dd2cbb6a3b1a1aa26f45726071c29f",
+  "compressedBytes": 3988687,
+  "unpackedBytes": 5985850,
+  "limitBytes": 100000000,
+  "sha256": "0a7ecbcf0e555f72db9ec93643c82b80713c2acc937104962b002806403f279e",
+  "levels": 41,
+  "models": 14,
+  "modelBytes": 3290200,
+  "sdkScript": "/sdk.js supplied by the Yandex upload host, not included",
+  "files": [
+    {
+      "filename": "assets/index-CrZHvIik.js",
+      "bytes": 1601153,
+      "sha256": "80f0b9b5e2308261a2f3bb54caa6b6ee656985504e8b59a85d02e781fb0a8a5d"
+    },
+    {
+      "filename": "assets/index-DRc3SoOH.css",
+      "bytes": 18584,
+      "sha256": "a0d4cb7d4107b0a89c9314c3b12e63a2044899bc1419a9437fe52771d3952bf9"
+    },
+    {
+      "filename": "draco/draco_decoder.js",
+      "bytes": 719410,
+      "sha256": "30e4d486fa020737af10e3c56197693e5b904bdc05b8bfa5d7b06751dec6da04"
+    },
+    {
+      "filename": "draco/draco_decoder.wasm",
+      "bytes": 285747,
+      "sha256": "c55a594e8ffd18426d36b27fea9618af3df5e173640a3e56d46f09d76f0574f2"
+    },
+    {
+      "filename": "draco/draco_wasm_wrapper.js",
+      "bytes": 58763,
+      "sha256": "e8049906ef3f8f75d3456c22a3f31bfdfe5b5b5bd09ccdec613b9e9a49d554d8"
+    },
+    {
+      "filename": "index.html",
+      "bytes": 9572,
+      "sha256": "847d918dce9d2f231f84355f1fd00479d8fdef485da5cff3451f7491e7a4e3e7"
+    },
+    {
+      "filename": "models/runtime/manifest.json",
+      "bytes": 2421,
+      "sha256": "8806346ed3ac0fb096aa26321d5620c16a6a2a55f2523023fb21f6c4749fe2ed"
+    },
+    {
+      "filename": "models/runtime/model-01-player.glb",
+      "bytes": 549756,
+      "sha256": "e5b09ff0281377b679d6fdd505fa1ed89550bb662e94e7f593ed67ee50a66a91"
+    },
+    {
+      "filename": "models/runtime/model-02-cargo.glb",
+      "bytes": 510376,
+      "sha256": "65763c87e7f14cc807cffa8fc2adc364e8421dae819271a0c406a6b0d2c8c697"
+    },
+    {
+      "filename": "models/runtime/model-11-portal-gun.glb",
+      "bytes": 393116,
+      "sha256": "d8c76c41efbbf0a6d70e30ab5a7b70f49fd806e497f67ea06cb28f9f4edca1d7"
+    },
+    {
+      "filename": "models/runtime/model-19-lift-platform.glb",
+      "bytes": 404076,
+      "sha256": "afd039e831ff0baa514f076a505ffbb7c57dac2251959b3d858fc92dcf3d04b9"
+    },
+    {
+      "filename": "models/runtime/model-22-terminal.glb",
+      "bytes": 377108,
+      "sha256": "9e2f4ff758996f67596d3935041f632bafdf7e84efd4869341920b64a5919c26"
+    },
+    {
+      "filename": "models/runtime/model-23-floor-tile.glb",
+      "bytes": 103600,
+      "sha256": "0950bc6ef31bb28939087bad53695f21cde0b9fe5740394df202a0b242f77b0c"
+    },
+    {
+      "filename": "models/runtime/model-24-wall-panel.glb",
+      "bytes": 62448,
+      "sha256": "15aaca48f6e436d5e89abf7548c0fe43580bba8faff4619e476d3a6d306b004d"
+    },
+    {
+      "filename": "models/runtime/model-28-rotating-panel.glb",
+      "bytes": 366120,
+      "sha256": "3159916bad63903e73b8e660ce4aab8a3b1e38f1231152b68f3df63d6987ac4b"
+    },
+    {
+      "filename": "models/runtime/model-29-pressure-platform.glb",
+      "bytes": 390244,
+      "sha256": "ee65bd9706ad4f4658e54ec5ad8f6f45b24d9027e4e6072f162358a4c1b3291b"
+    },
+    {
+      "filename": "models/runtime/model-31-wind-generator.glb",
+      "bytes": 25768,
+      "sha256": "024f25db27e96e1efdaa5e200c13a665dee487e798338f86fef985feeae9019e"
+    },
+    {
+      "filename": "models/runtime/model-32-spring-ram.glb",
+      "bytes": 25400,
+      "sha256": "958d5ed533736d5779da078be20ae2b0e84212bfc3a00b456dc0106bc0a093d7"
+    },
+    {
+      "filename": "models/runtime/model-35-shutter-fan.glb",
+      "bytes": 27816,
+      "sha256": "8e11d5ab83250348f6e08f034ec87d82727162742d5a7be18f981fc523aa907a"
+    },
+    {
+      "filename": "models/runtime/model-37-extension-bridge.glb",
+      "bytes": 25764,
+      "sha256": "96173a9ef89375066b08fad8dff1928425863c6b4e6b8c0373c497448f109c55"
+    },
+    {
+      "filename": "models/runtime/model-39-cable-winch.glb",
+      "bytes": 28608,
+      "sha256": "301f148938ec83e2a8f4b45c7f9bdfd19fb40ca79d8fb9abc7601caf4fe0eafd"
+    }
+  ]
+}

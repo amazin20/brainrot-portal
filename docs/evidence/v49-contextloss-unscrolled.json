@@ -1,0 +1,216 @@
+{
+  "schema": 1,
+  "fixture": "Separate graceful context-loss error → native reload → URL-level ready scenario; not automatic WebGL restoration or gameplay evidence",
+  "runtime": "Chromium software WebGL / ANGLE SwiftShader",
+  "viewport": {
+    "width": 640,
+    "height": 360,
+    "deviceScaleFactor": 1
+  },
+  "sourceCommit": "14c6683cb4d2991dfd48be28fa38ccaa1fc015b7",
+  "startedAt": "2026-10-04T16:40:07.969Z",
+  "phase": "closed",
+  "status": "failed",
+  "url": "http://127.0.0.1:4198/?edition=foundation&level=1&debug=1",
+  "unexpectedPageErrors": [],
+  "consoleErrors": [
+    {
+      "phase": "loss-requested",
+      "message": "Error: Браузер остановил 3D-графику. Нажми «Повторить загрузку»: прогресс комнат сохранён. Текущая комната начнётся заново."
+    }
+  ],
+  "captures": [
+    {
+      "name": "preloss-level41",
+      "ok": true,
+      "method": "actual WebGL2 pixel-pack buffer",
+      "includesHTML": false,
+      "file": "/workspace/scratch/5c7196ff0296/graphics-lifecycle/context-loss/preloss-level41.jpg",
+      "pixels": {
+        "width": 640,
+        "height": 360,
+        "colors": 1138,
+        "maxChannelStd": 60.74923161359535
+      },
+      "renderer": {
+        "width": 640,
+        "height": 360,
+        "calls": 318,
+        "triangles": 222642
+      },
+      "frame": {
+        "levelIndex": 40,
+        "state": "ready",
+        "elapsed": 0,
+        "player": [
+          0,
+          0,
+          54
+        ],
+        "cargo": [
+          2,
+          0.57,
+          54
+        ],
+        "camera": [
+          1.3686144936430809,
+          2.0806850733932354,
+          60.308585624916795
+        ],
+        "cargoUUID": "cb994c3e-00bf-4d50-8040-7107dcb67035",
+        "cargoBodyId": 1636
+      },
+      "timings": {
+        "renderEnqueueMs": 5.200000002980232,
+        "pixelPackEnqueueMs": 1,
+        "copyMs": 1.699999999254942,
+        "flipAndEncodeMs": 56,
+        "queueToEncodedMs": 5979.099999997765,
+        "enqueueAwaitMs": 9.326794000000518,
+        "fenceWaitMs": 5919.029886,
+        "fencePolls": 59,
+        "copyAwaitMs": 59.70940900000096,
+        "totalMs": 5988.0716680000005
+      },
+      "progress": [
+        {
+          "phase": "entered-browser-task",
+          "browserElapsedMs": 0,
+          "nodeElapsedMs": 1.5151200000000244
+        },
+        {
+          "phase": "before-render",
+          "browserElapsedMs": 0.19999999925494194,
+          "nodeElapsedMs": 1.632978000001458
+        },
+        {
+          "phase": "after-render",
+          "browserElapsedMs": 5.5,
+          "nodeElapsedMs": 7.018105000001015
+        },
+        {
+          "phase": "before-readPixels",
+          "browserElapsedMs": 5.699999999254942,
+          "nodeElapsedMs": 7.121651999999813
+        },
+        {
+          "phase": "after-readPixels",
+          "browserElapsedMs": 5.699999999254942,
+          "nodeElapsedMs": 7.183165000000372
+        },
+        {
+          "phase": "after-enqueue",
+          "browserElapsedMs": 6.5,
+          "nodeElapsedMs": 9.244920000001002
+        }
+      ],
+      "issues": []
+    }
+  ],
+  "checks": [],
+  "cleanup": {
+    "browserClosed": true,
+    "serverClosed": true
+  },
+  "updatedAt": "2026-10-04T16:40:23.729Z",
+  "serverPID": 13,
+  "browserPID": 39,
+  "before": {
+    "url": "http://127.0.0.1:4198/?edition=foundation&level=1&debug=1",
+    "state": "ready",
+    "levelIndex": 40,
+    "elapsed": 0,
+    "quality": "low",
+    "contextLost": false,
+    "storage": {
+      "brainrot-foundation-v1:brainrot-portal.preferences.v24": "{\"quality\":\"low\",\"volume\":0.65,\"muted\":true,\"tutorial\":true,\"resumeLevel\":null,\"completed\":[],\"hints\":{},\"campaignRevision\":\"creative-campaign-v48\"}"
+    },
+    "unusedClassicOpenKeys": {
+      "brainrot-portal.preferences.v24": null,
+      "nesi.preferences.v8": null,
+      "brainrot-open-rebuild-v1:brainrot-portal.preferences.v24": null,
+      "brainrot-open-rebuild-v1:nesi.preferences.v8": null
+    },
+    "canvas": {
+      "width": 640,
+      "height": 360,
+      "pixelRatio": 1
+    },
+    "environment": {
+      "name": "Neutral laboratory broad-light probe",
+      "width": 128,
+      "height": 64
+    }
+  },
+  "preLoss": {
+    "url": "http://127.0.0.1:4198/?edition=foundation&level=1&debug=1",
+    "state": "ready",
+    "levelIndex": 40,
+    "elapsed": 0,
+    "quality": "low",
+    "contextLost": false,
+    "storage": {
+      "brainrot-foundation-v1:brainrot-portal.preferences.v24": "{\"quality\":\"low\",\"volume\":0.65,\"muted\":true,\"tutorial\":true,\"resumeLevel\":null,\"completed\":[],\"hints\":{},\"campaignRevision\":\"creative-campaign-v48\"}"
+    },
+    "unusedClassicOpenKeys": {
+      "brainrot-portal.preferences.v24": null,
+      "nesi.preferences.v8": null,
+      "brainrot-open-rebuild-v1:brainrot-portal.preferences.v24": null,
+      "brainrot-open-rebuild-v1:nesi.preferences.v8": null
+    },
+    "canvas": {
+      "width": 640,
+      "height": 360,
+      "pixelRatio": 1
+    },
+    "environment": {
+      "name": "Neutral laboratory broad-light probe",
+      "width": 128,
+      "height": 64
+    }
+  },
+  "lossRequest": {
+    "supported": true,
+    "kind": "WEBGL_lose_context.loseContext()",
+    "requestedAt": 14789.199999999255
+  },
+  "errorUI": {
+    "state": "error",
+    "contextLost": true,
+    "bodyState": "error",
+    "htmlState": "error",
+    "screen": {
+      "active": true,
+      "ariaHidden": "false",
+      "inert": false,
+      "visibility": "visible",
+      "opacity": "0.994609",
+      "pointerEvents": "auto",
+      "text": "ЗАГРУЗКА ОСТАНОВИЛАСЬ\nНе удалось\nоткрыть сцену.\n\nОбнови страницу. Если ошибка повторяется, пришли её текст — он ниже.\n\nБраузер остановил 3D-графику. Нажми «Повторить загрузку»: прогресс комнат сохранён. Текущая комната начнётся заново.\n\nПовторить загрузку\n↻"
+    },
+    "button": {
+      "text": "Повторить загрузку\n↻",
+      "disabled": false,
+      "inert": false,
+      "visibility": "visible",
+      "display": "flex",
+      "bounds": {
+        "x": 113,
+        "y": 351.71875,
+        "width": 414,
+        "height": 52
+      },
+      "hitAtCenter": false,
+      "center": {
+        "x": 320,
+        "y": 377.71875
+      }
+    }
+  },
+  "failure": {
+    "phase": "error-overlay-recorded",
+    "message": "Error: Loss did not produce visible/hittable expected reload UI",
+    "stack": "Error: Loss did not produce visible/hittable expected reload UI\n    at file:///workspace/scratch/5c7196ff0296/graphics-lifecycle/context-loss.mjs:46:338"
+  },
+  "completedAt": "2026-10-04T16:40:23.729Z"
+}

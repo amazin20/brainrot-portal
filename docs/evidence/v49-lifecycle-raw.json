@@ -1,0 +1,5714 @@
+{
+  "schema": 1,
+  "startedAt": "2026-10-04T16:36:02.490Z",
+  "phase": "closed",
+  "status": "failed",
+  "fixture": "Production menu level lifecycle fixture; not gameplay or hardware performance evidence",
+  "runtime": "Headless Chromium software WebGL / ANGLE SwiftShader",
+  "viewport": {
+    "width": 640,
+    "height": 360,
+    "deviceScaleFactor": 1
+  },
+  "expectedCommit": "14c6683cb4d2991dfd48be28fa38ccaa1fc015b7",
+  "actualCommit": "14c6683cb4d2991dfd48be28fa38ccaa1fc015b7",
+  "buildVersion": "v49-manufactured-light",
+  "distBefore": [
+    {
+      "file": "assets/index-DRc3SoOH.css",
+      "bytes": 18584,
+      "sha256": "a0d4cb7d4107b0a89c9314c3b12e63a2044899bc1419a9437fe52771d3952bf9"
+    },
+    {
+      "file": "assets/index-YJsgwOpN.js",
+      "bytes": 1609280,
+      "sha256": "6a0cd4ebd8bc45a84d3c8a0ba6086112f5923ef9cbcc86e292bbc73b8f4add41"
+    },
+    {
+      "file": "assets/LabAnimationJourney-BLsNz-kR.js",
+      "bytes": 3040,
+      "sha256": "4e2976e24ff13e1b65aa4ba169a339dd92a889c12b12e858e4981ab88fc573dc"
+    },
+    {
+      "file": "assets/LabCreativeRoom18Journey-VEE88QRn.js",
+      "bytes": 3303,
+      "sha256": "9e67a9422d7e1f022c906b2fe25ad43828d95bde3e6bbc49238d437a83a3f8c0"
+    },
+    {
+      "file": "assets/LabCreativeRoom20Journey-BfurEC_q.js",
+      "bytes": 3418,
+      "sha256": "61c9a0ddcf9e340df8fd04ddad091910ec41bb3ab822497d0abf5900421632fb"
+    },
+    {
+      "file": "assets/LabExtendedJourney-D2JssBIV.js",
+      "bytes": 9252,
+      "sha256": "2a4b2eb26d79c509de5ce399b64d0818da97b67fc101569ef2d6b7e8724e54ac"
+    },
+    {
+      "file": "assets/LabFoundationJourney-sAeOmipA.js",
+      "bytes": 9043,
+      "sha256": "9528b66830f7078d7f628fcfbe661847adc364b3b91d796d449796e9ffab17f0"
+    },
+    {
+      "file": "assets/LabIntroductoryAlternates-DcdsCClA.js",
+      "bytes": 1341,
+      "sha256": "a6451adc49d9c2f86f43455bfa4ced44d7166234f4fde82082990bf21f76cd5c"
+    },
+    {
+      "file": "assets/LabLateCampaignAim-Cj1Mf6uv.js",
+      "bytes": 753,
+      "sha256": "bfbe9d07f2f398535e0d37750ff27dd53fe6281e23a0b5535e928c5372425db0"
+    },
+    {
+      "file": "assets/LabOpenJourney-0OvCVdo4.js",
+      "bytes": 6285,
+      "sha256": "9a875b176e2b365268c30324d14bc9ebb977e7b0f088ee66dc8f661ae5e95072"
+    },
+    {
+      "file": "assets/LabPortalEdgeJourney-pix7wZyG.js",
+      "bytes": 2293,
+      "sha256": "3f7a5e42edff59df59b367ea773268c91f860b76664ad7f9dd24d3013998f108"
+    },
+    {
+      "file": "assets/LabPortalFloorJourney-DrR-jugQ.js",
+      "bytes": 1516,
+      "sha256": "a0057351d5939005fbf9a363f5c771d0783d2ab13b1a2bd5af49c993a5811010"
+    },
+    {
+      "file": "assets/LabPostJourneyA-AYkQjiOE.js",
+      "bytes": 14134,
+      "sha256": "6745e9c60a6c03b7d387c253889f3c36ce98fb25a2fb62a7de39efac407cdde9"
+    },
+    {
+      "file": "assets/LabPostJourneyB-D9VdgvP_.js",
+      "bytes": 10887,
+      "sha256": "f6302cf6bc3025c161f5241162efdecf90130cbf17bcb7614b789cf6946b469a"
+    },
+    {
+      "file": "assets/LabResearchJourney-DExV_kEA.js",
+      "bytes": 7650,
+      "sha256": "2ea5642edcd462ca93db26a2ba401b20c8500e488b7cf88fa2e475ddac647ba8"
+    },
+    {
+      "file": "assets/LabRoom13Journey-DpkZeNEo.js",
+      "bytes": 6194,
+      "sha256": "275c62befc9b95dc4c596810721ffba02b137b24ad14006e4769f1c7f21bc041"
+    },
+    {
+      "file": "assets/LabRoom14Journey-C0UfonIt.js",
+      "bytes": 3566,
+      "sha256": "78d7d18c3f30e1eeb07f563356dfdf3f6c54f20246c10efd9f6a00f7ecedc5f5"
+    },
+    {
+      "file": "assets/LabRoom15Journey-4wmPJd_u.js",
+      "bytes": 4604,
+      "sha256": "d69b22f05daa7e44da4af497ca7aae53d931944cd15438f11c8d177b83e39776"
+    },
+    {
+      "file": "assets/LabRoom16Journey-DcT0PHn1.js",
+      "bytes": 2534,
+      "sha256": "43814ce0e94d01e0e2b9152c6ea1c722073f13a019b2992525f6b0480fa97e74"
+    },
+    {
+      "file": "assets/LabRoom17Journey-C2EE7523.js",
+      "bytes": 3260,
+      "sha256": "b621bf8abcb99cec72e5a8b0ef53e4ef6a005e414141e9502855a2759ba02708"
+    },
+    {
+      "file": "assets/LabRoom18Journey-CvmYIfgs.js",
+      "bytes": 6065,
+      "sha256": "4199cc3e5b35aeac51bea0a358cef4dc162294031a7e586489231214903dea98"
+    },
+    {
+      "file": "assets/LabRoom19Journey-BVk2pOJ3.js",
+      "bytes": 3087,
+      "sha256": "edbd9e87a7c68f527a6a6d6794cfcb3a8de5780d1c656265ccf7910207066ab4"
+    },
+    {
+      "file": "assets/LabRoom20Journey-Dnjdo837.js",
+      "bytes": 5013,
+      "sha256": "84ee4a4debf18d555e80bbf468821d58576e6fcf805b34adcd2670e8502fc0fd"
+    },
+    {
+      "file": "assets/LabRoom21Journey-BWonBuH_.js",
+      "bytes": 5077,
+      "sha256": "5d86a4c3ec23736cf571c0e6f6d20964587108b2c8d737842b9d2f3a737a1edf"
+    },
+    {
+      "file": "assets/LabRoom22Journey-BBo6fazQ.js",
+      "bytes": 2624,
+      "sha256": "cc1490d7389b96492a6e84b4a677c97e4932802e09773bc72beddb179699dc54"
+    },
+    {
+      "file": "assets/LabRoom23Journey-CXcc-7DA.js",
+      "bytes": 2626,
+      "sha256": "9ae644d842fb65dd5c62f0932f7b7b40a2372f513dd80e708399b54bf0a8ac2d"
+    },
+    {
+      "file": "assets/LabRoom24Journey-BhxNKSNX.js",
+      "bytes": 3453,
+      "sha256": "22e2c1d4ea0b83f58ebf32517158780332fc7ed0a9e4ed2681cae1fa4963d723"
+    },
+    {
+      "file": "assets/LabRoom25Journey-Dsc4dFcD.js",
+      "bytes": 3447,
+      "sha256": "6494b0e4ae0b006dc8b303bf0639916cc2ac95d1ff700bde74e9f91629758e0c"
+    },
+    {
+      "file": "assets/LabRoom26Journey-D5Lhf6Yz.js",
+      "bytes": 4194,
+      "sha256": "f568e01fcbf2e28f9bf1d89aa1d8e83df957bb60ea13a63a77cab81b61577e74"
+    },
+    {
+      "file": "assets/LabRoom27Journey-CtMoXjWq.js",
+      "bytes": 3350,
+      "sha256": "ea4e62a0eed62998b64515b56db65142d1a7d3fb8d5c91b6e31653c5ef4422b5"
+    },
+    {
+      "file": "assets/LabRoom28Journey-BKtIeHL7.js",
+      "bytes": 2721,
+      "sha256": "00bcb74736a0de9b300d8ff110461041bb4a4d62091877b3ce680cc4dc7a25fc"
+    },
+    {
+      "file": "assets/LabRoom29Journey-FXLiWbZf.js",
+      "bytes": 2592,
+      "sha256": "625138692ba0641ed1ea63e7bb6ea332c70bf235ee3bc8b3cbd80456012e04ef"
+    },
+    {
+      "file": "assets/LabRoom30Journey-zAsFaYdh.js",
+      "bytes": 3762,
+      "sha256": "1d260d8e49e983b2f7a9c354898fe771c41df56434d67e203bd8fb51bbc8f925"
+    },
+    {
+      "file": "assets/LabSingularityJourney-DLYEIITK.js",
+      "bytes": 17459,
+      "sha256": "9b34bc8f62c782f43a79c3308077e962b0c3ec6004da31e4ffca708f0aabdf2d"
+    },
+    {
+      "file": "assets/LabTowerJourney-BGDf9NIV.js",
+      "bytes": 31405,
+      "sha256": "cc0f7be654a43ce0e1e13ffbf17506724653f0c79736826e3962323259960e10"
+    },
+    {
+      "file": "assets/LabV8Journey-Dr5BxIPU.js",
+      "bytes": 14253,
+      "sha256": "6300beef96dd6e0fb891aec67fda7e25b1b39f9f0550856c8c1b1fe164983df8"
+    },
+    {
+      "file": "assets/LabWorkshopJourney-Brw-3uAW.js",
+      "bytes": 7249,
+      "sha256": "f8de01990fca2652541077dd85407b9299d7ec20d6274112375742bad9985648"
+    },
+    {
+      "file": "build-info.json",
+      "bytes": 4394,
+      "sha256": "aa1ffb2a80467414c2b2fc6380a38a5b489305a2008df438316a22c6e439a77b"
+    },
+    {
+      "file": "draco/draco_decoder.js",
+      "bytes": 719410,
+      "sha256": "30e4d486fa020737af10e3c56197693e5b904bdc05b8bfa5d7b06751dec6da04"
+    },
+    {
+      "file": "draco/draco_decoder.wasm",
+      "bytes": 285747,
+      "sha256": "c55a594e8ffd18426d36b27fea9618af3df5e173640a3e56d46f09d76f0574f2"
+    },
+    {
+      "file": "draco/draco_wasm_wrapper.js",
+      "bytes": 58763,
+      "sha256": "e8049906ef3f8f75d3456c22a3f31bfdfe5b5b5bd09ccdec613b9e9a49d554d8"
+    },
+    {
+      "file": "index.html",
+      "bytes": 9736,
+      "sha256": "eb55218b70f6cb5f84ff2c82b31e5dff433ae5aa4a124b3d7e0e5420a52c6ace"
+    },
+    {
+      "file": "models/runtime/manifest.json",
+      "bytes": 2421,
+      "sha256": "8806346ed3ac0fb096aa26321d5620c16a6a2a55f2523023fb21f6c4749fe2ed"
+    },
+    {
+      "file": "models/runtime/model-01-player.glb",
+      "bytes": 549756,
+      "sha256": "e5b09ff0281377b679d6fdd505fa1ed89550bb662e94e7f593ed67ee50a66a91"
+    },
+    {
+      "file": "models/runtime/model-02-cargo.glb",
+      "bytes": 510376,
+      "sha256": "65763c87e7f14cc807cffa8fc2adc364e8421dae819271a0c406a6b0d2c8c697"
+    },
+    {
+      "file": "models/runtime/model-11-portal-gun.glb",
+      "bytes": 393116,
+      "sha256": "d8c76c41efbbf0a6d70e30ab5a7b70f49fd806e497f67ea06cb28f9f4edca1d7"
+    },
+    {
+      "file": "models/runtime/model-19-lift-platform.glb",
+      "bytes": 404076,
+      "sha256": "afd039e831ff0baa514f076a505ffbb7c57dac2251959b3d858fc92dcf3d04b9"
+    },
+    {
+      "file": "models/runtime/model-22-terminal.glb",
+      "bytes": 377108,
+      "sha256": "9e2f4ff758996f67596d3935041f632bafdf7e84efd4869341920b64a5919c26"
+    },
+    {
+      "file": "models/runtime/model-23-floor-tile.glb",
+      "bytes": 103600,
+      "sha256": "0950bc6ef31bb28939087bad53695f21cde0b9fe5740394df202a0b242f77b0c"
+    },
+    {
+      "file": "models/runtime/model-24-wall-panel.glb",
+      "bytes": 62448,
+      "sha256": "15aaca48f6e436d5e89abf7548c0fe43580bba8faff4619e476d3a6d306b004d"
+    },
+    {
+      "file": "models/runtime/model-28-rotating-panel.glb",
+      "bytes": 366120,
+      "sha256": "3159916bad63903e73b8e660ce4aab8a3b1e38f1231152b68f3df63d6987ac4b"
+    },
+    {
+      "file": "models/runtime/model-29-pressure-platform.glb",
+      "bytes": 390244,
+      "sha256": "ee65bd9706ad4f4658e54ec5ad8f6f45b24d9027e4e6072f162358a4c1b3291b"
+    },
+    {
+      "file": "models/runtime/model-31-wind-generator.glb",
+      "bytes": 25768,
+      "sha256": "024f25db27e96e1efdaa5e200c13a665dee487e798338f86fef985feeae9019e"
+    },
+    {
+      "file": "models/runtime/model-32-spring-ram.glb",
+      "bytes": 25400,
+      "sha256": "958d5ed533736d5779da078be20ae2b0e84212bfc3a00b456dc0106bc0a093d7"
+    },
+    {
+      "file": "models/runtime/model-35-shutter-fan.glb",
+      "bytes": 27816,
+      "sha256": "8e11d5ab83250348f6e08f034ec87d82727162742d5a7be18f981fc523aa907a"
+    },
+    {
+      "file": "models/runtime/model-37-extension-bridge.glb",
+      "bytes": 25764,
+      "sha256": "96173a9ef89375066b08fad8dff1928425863c6b4e6b8c0373c497448f109c55"
+    },
+    {
+      "file": "models/runtime/model-39-cable-winch.glb",
+      "bytes": 28608,
+      "sha256": "301f148938ec83e2a8f4b45c7f9bdfd19fb40ca79d8fb9abc7601caf4fe0eafd"
+    }
+  ],
+  "distAfter": [
+    {
+      "file": "assets/index-DRc3SoOH.css",
+      "bytes": 18584,
+      "sha256": "a0d4cb7d4107b0a89c9314c3b12e63a2044899bc1419a9437fe52771d3952bf9"
+    },
+    {
+      "file": "assets/index-YJsgwOpN.js",
+      "bytes": 1609280,
+      "sha256": "6a0cd4ebd8bc45a84d3c8a0ba6086112f5923ef9cbcc86e292bbc73b8f4add41"
+    },
+    {
+      "file": "assets/LabAnimationJourney-BLsNz-kR.js",
+      "bytes": 3040,
+      "sha256": "4e2976e24ff13e1b65aa4ba169a339dd92a889c12b12e858e4981ab88fc573dc"
+    },
+    {
+      "file": "assets/LabCreativeRoom18Journey-VEE88QRn.js",
+      "bytes": 3303,
+      "sha256": "9e67a9422d7e1f022c906b2fe25ad43828d95bde3e6bbc49238d437a83a3f8c0"
+    },
+    {
+      "file": "assets/LabCreativeRoom20Journey-BfurEC_q.js",
+      "bytes": 3418,
+      "sha256": "61c9a0ddcf9e340df8fd04ddad091910ec41bb3ab822497d0abf5900421632fb"
+    },
+    {
+      "file": "assets/LabExtendedJourney-D2JssBIV.js",
+      "bytes": 9252,
+      "sha256": "2a4b2eb26d79c509de5ce399b64d0818da97b67fc101569ef2d6b7e8724e54ac"
+    },
+    {
+      "file": "assets/LabFoundationJourney-sAeOmipA.js",
+      "bytes": 9043,
+      "sha256": "9528b66830f7078d7f628fcfbe661847adc364b3b91d796d449796e9ffab17f0"
+    },
+    {
+      "file": "assets/LabIntroductoryAlternates-DcdsCClA.js",
+      "bytes": 1341,
+      "sha256": "a6451adc49d9c2f86f43455bfa4ced44d7166234f4fde82082990bf21f76cd5c"
+    },
+    {
+      "file": "assets/LabLateCampaignAim-Cj1Mf6uv.js",
+      "bytes": 753,
+      "sha256": "bfbe9d07f2f398535e0d37750ff27dd53fe6281e23a0b5535e928c5372425db0"
+    },
+    {
+      "file": "assets/LabOpenJourney-0OvCVdo4.js",
+      "bytes": 6285,
+      "sha256": "9a875b176e2b365268c30324d14bc9ebb977e7b0f088ee66dc8f661ae5e95072"
+    },
+    {
+      "file": "assets/LabPortalEdgeJourney-pix7wZyG.js",
+      "bytes": 2293,
+      "sha256": "3f7a5e42edff59df59b367ea773268c91f860b76664ad7f9dd24d3013998f108"
+    },
+    {
+      "file": "assets/LabPortalFloorJourney-DrR-jugQ.js",
+      "bytes": 1516,
+      "sha256": "a0057351d5939005fbf9a363f5c771d0783d2ab13b1a2bd5af49c993a5811010"
+    },
+    {
+      "file": "assets/LabPostJourneyA-AYkQjiOE.js",
+      "bytes": 14134,
+      "sha256": "6745e9c60a6c03b7d387c253889f3c36ce98fb25a2fb62a7de39efac407cdde9"
+    },
+    {
+      "file": "assets/LabPostJourneyB-D9VdgvP_.js",
+      "bytes": 10887,
+      "sha256": "f6302cf6bc3025c161f5241162efdecf90130cbf17bcb7614b789cf6946b469a"
+    },
+    {
+      "file": "assets/LabResearchJourney-DExV_kEA.js",
+      "bytes": 7650,
+      "sha256": "2ea5642edcd462ca93db26a2ba401b20c8500e488b7cf88fa2e475ddac647ba8"
+    },
+    {
+      "file": "assets/LabRoom13Journey-DpkZeNEo.js",
+      "bytes": 6194,
+      "sha256": "275c62befc9b95dc4c596810721ffba02b137b24ad14006e4769f1c7f21bc041"
+    },
+    {
+      "file": "assets/LabRoom14Journey-C0UfonIt.js",
+      "bytes": 3566,
+      "sha256": "78d7d18c3f30e1eeb07f563356dfdf3f6c54f20246c10efd9f6a00f7ecedc5f5"
+    },
+    {
+      "file": "assets/LabRoom15Journey-4wmPJd_u.js",
+      "bytes": 4604,
+      "sha256": "d69b22f05daa7e44da4af497ca7aae53d931944cd15438f11c8d177b83e39776"
+    },
+    {
+      "file": "assets/LabRoom16Journey-DcT0PHn1.js",
+      "bytes": 2534,
+      "sha256": "43814ce0e94d01e0e2b9152c6ea1c722073f13a019b2992525f6b0480fa97e74"
+    },
+    {
+      "file": "assets/LabRoom17Journey-C2EE7523.js",
+      "bytes": 3260,
+      "sha256": "b621bf8abcb99cec72e5a8b0ef53e4ef6a005e414141e9502855a2759ba02708"
+    },
+    {
+      "file": "assets/LabRoom18Journey-CvmYIfgs.js",
+      "bytes": 6065,
+      "sha256": "4199cc3e5b35aeac51bea0a358cef4dc162294031a7e586489231214903dea98"
+    },
+    {
+      "file": "assets/LabRoom19Journey-BVk2pOJ3.js",
+      "bytes": 3087,
+      "sha256": "edbd9e87a7c68f527a6a6d6794cfcb3a8de5780d1c656265ccf7910207066ab4"
+    },
+    {
+      "file": "assets/LabRoom20Journey-Dnjdo837.js",
+      "bytes": 5013,
+      "sha256": "84ee4a4debf18d555e80bbf468821d58576e6fcf805b34adcd2670e8502fc0fd"
+    },
+    {
+      "file": "assets/LabRoom21Journey-BWonBuH_.js",
+      "bytes": 5077,
+      "sha256": "5d86a4c3ec23736cf571c0e6f6d20964587108b2c8d737842b9d2f3a737a1edf"
+    },
+    {
+      "file": "assets/LabRoom22Journey-BBo6fazQ.js",
+      "bytes": 2624,
+      "sha256": "cc1490d7389b96492a6e84b4a677c97e4932802e09773bc72beddb179699dc54"
+    },
+    {
+      "file": "assets/LabRoom23Journey-CXcc-7DA.js",
+      "bytes": 2626,
+      "sha256": "9ae644d842fb65dd5c62f0932f7b7b40a2372f513dd80e708399b54bf0a8ac2d"
+    },
+    {
+      "file": "assets/LabRoom24Journey-BhxNKSNX.js",
+      "bytes": 3453,
+      "sha256": "22e2c1d4ea0b83f58ebf32517158780332fc7ed0a9e4ed2681cae1fa4963d723"
+    },
+    {
+      "file": "assets/LabRoom25Journey-Dsc4dFcD.js",
+      "bytes": 3447,
+      "sha256": "6494b0e4ae0b006dc8b303bf0639916cc2ac95d1ff700bde74e9f91629758e0c"
+    },
+    {
+      "file": "assets/LabRoom26Journey-D5Lhf6Yz.js",
+      "bytes": 4194,
+      "sha256": "f568e01fcbf2e28f9bf1d89aa1d8e83df957bb60ea13a63a77cab81b61577e74"
+    },
+    {
+      "file": "assets/LabRoom27Journey-CtMoXjWq.js",
+      "bytes": 3350,
+      "sha256": "ea4e62a0eed62998b64515b56db65142d1a7d3fb8d5c91b6e31653c5ef4422b5"
+    },
+    {
+      "file": "assets/LabRoom28Journey-BKtIeHL7.js",
+      "bytes": 2721,
+      "sha256": "00bcb74736a0de9b300d8ff110461041bb4a4d62091877b3ce680cc4dc7a25fc"
+    },
+    {
+      "file": "assets/LabRoom29Journey-FXLiWbZf.js",
+      "bytes": 2592,
+      "sha256": "625138692ba0641ed1ea63e7bb6ea332c70bf235ee3bc8b3cbd80456012e04ef"
+    },
+    {
+      "file": "assets/LabRoom30Journey-zAsFaYdh.js",
+      "bytes": 3762,
+      "sha256": "1d260d8e49e983b2f7a9c354898fe771c41df56434d67e203bd8fb51bbc8f925"
+    },
+    {
+      "file": "assets/LabSingularityJourney-DLYEIITK.js",
+      "bytes": 17459,
+      "sha256": "9b34bc8f62c782f43a79c3308077e962b0c3ec6004da31e4ffca708f0aabdf2d"
+    },
+    {
+      "file": "assets/LabTowerJourney-BGDf9NIV.js",
+      "bytes": 31405,
+      "sha256": "cc0f7be654a43ce0e1e13ffbf17506724653f0c79736826e3962323259960e10"
+    },
+    {
+      "file": "assets/LabV8Journey-Dr5BxIPU.js",
+      "bytes": 14253,
+      "sha256": "6300beef96dd6e0fb891aec67fda7e25b1b39f9f0550856c8c1b1fe164983df8"
+    },
+    {
+      "file": "assets/LabWorkshopJourney-Brw-3uAW.js",
+      "bytes": 7249,
+      "sha256": "f8de01990fca2652541077dd85407b9299d7ec20d6274112375742bad9985648"
+    },
+    {
+      "file": "build-info.json",
+      "bytes": 4394,
+      "sha256": "aa1ffb2a80467414c2b2fc6380a38a5b489305a2008df438316a22c6e439a77b"
+    },
+    {
+      "file": "draco/draco_decoder.js",
+      "bytes": 719410,
+      "sha256": "30e4d486fa020737af10e3c56197693e5b904bdc05b8bfa5d7b06751dec6da04"
+    },
+    {
+      "file": "draco/draco_decoder.wasm",
+      "bytes": 285747,
+      "sha256": "c55a594e8ffd18426d36b27fea9618af3df5e173640a3e56d46f09d76f0574f2"
+    },
+    {
+      "file": "draco/draco_wasm_wrapper.js",
+      "bytes": 58763,
+      "sha256": "e8049906ef3f8f75d3456c22a3f31bfdfe5b5b5bd09ccdec613b9e9a49d554d8"
+    },
+    {
+      "file": "index.html",
+      "bytes": 9736,
+      "sha256": "eb55218b70f6cb5f84ff2c82b31e5dff433ae5aa4a124b3d7e0e5420a52c6ace"
+    },
+    {
+      "file": "models/runtime/manifest.json",
+      "bytes": 2421,
+      "sha256": "8806346ed3ac0fb096aa26321d5620c16a6a2a55f2523023fb21f6c4749fe2ed"
+    },
+    {
+      "file": "models/runtime/model-01-player.glb",
+      "bytes": 549756,
+      "sha256": "e5b09ff0281377b679d6fdd505fa1ed89550bb662e94e7f593ed67ee50a66a91"
+    },
+    {
+      "file": "models/runtime/model-02-cargo.glb",
+      "bytes": 510376,
+      "sha256": "65763c87e7f14cc807cffa8fc2adc364e8421dae819271a0c406a6b0d2c8c697"
+    },
+    {
+      "file": "models/runtime/model-11-portal-gun.glb",
+      "bytes": 393116,
+      "sha256": "d8c76c41efbbf0a6d70e30ab5a7b70f49fd806e497f67ea06cb28f9f4edca1d7"
+    },
+    {
+      "file": "models/runtime/model-19-lift-platform.glb",
+      "bytes": 404076,
+      "sha256": "afd039e831ff0baa514f076a505ffbb7c57dac2251959b3d858fc92dcf3d04b9"
+    },
+    {
+      "file": "models/runtime/model-22-terminal.glb",
+      "bytes": 377108,
+      "sha256": "9e2f4ff758996f67596d3935041f632bafdf7e84efd4869341920b64a5919c26"
+    },
+    {
+      "file": "models/runtime/model-23-floor-tile.glb",
+      "bytes": 103600,
+      "sha256": "0950bc6ef31bb28939087bad53695f21cde0b9fe5740394df202a0b242f77b0c"
+    },
+    {
+      "file": "models/runtime/model-24-wall-panel.glb",
+      "bytes": 62448,
+      "sha256": "15aaca48f6e436d5e89abf7548c0fe43580bba8faff4619e476d3a6d306b004d"
+    },
+    {
+      "file": "models/runtime/model-28-rotating-panel.glb",
+      "bytes": 366120,
+      "sha256": "3159916bad63903e73b8e660ce4aab8a3b1e38f1231152b68f3df63d6987ac4b"
+    },
+    {
+      "file": "models/runtime/model-29-pressure-platform.glb",
+      "bytes": 390244,
+      "sha256": "ee65bd9706ad4f4658e54ec5ad8f6f45b24d9027e4e6072f162358a4c1b3291b"
+    },
+    {
+      "file": "models/runtime/model-31-wind-generator.glb",
+      "bytes": 25768,
+      "sha256": "024f25db27e96e1efdaa5e200c13a665dee487e798338f86fef985feeae9019e"
+    },
+    {
+      "file": "models/runtime/model-32-spring-ram.glb",
+      "bytes": 25400,
+      "sha256": "958d5ed533736d5779da078be20ae2b0e84212bfc3a00b456dc0106bc0a093d7"
+    },
+    {
+      "file": "models/runtime/model-35-shutter-fan.glb",
+      "bytes": 27816,
+      "sha256": "8e11d5ab83250348f6e08f034ec87d82727162742d5a7be18f981fc523aa907a"
+    },
+    {
+      "file": "models/runtime/model-37-extension-bridge.glb",
+      "bytes": 25764,
+      "sha256": "96173a9ef89375066b08fad8dff1928425863c6b4e6b8c0373c497448f109c55"
+    },
+    {
+      "file": "models/runtime/model-39-cable-winch.glb",
+      "bytes": 28608,
+      "sha256": "301f148938ec83e2a8f4b45c7f9bdfd19fb40ca79d8fb9abc7601caf4fe0eafd"
+    }
+  ],
+  "method": {
+    "cycles": 10,
+    "levels": [
+      1,
+      20,
+      41
+    ],
+    "selection": "await g.selectLevel(level-1,false); stop animation loop again after ready",
+    "quality": "real #quality-select change while ready; low/balanced/high across cycles; all cycle endpoints level41/low",
+    "warmup": "1/high → 20/high → 41/low before capture0",
+    "graphicsCounters": "renderer.info.memory counts and program count; not real VRAM measurements",
+    "contextLoss": {
+      "attempted": false,
+      "reason": "Three renderer restores internally but application enters fatal reload-only error on loss; no application restore handler found in this production dist"
+    }
+  },
+  "rows": [
+    {
+      "label": "warmup-level1-high",
+      "levelRequested": 1,
+      "levelIndex": 0,
+      "state": "ready",
+      "qualityRequested": "high",
+      "qualitySelect": "high",
+      "qualitySettings": {
+        "pixelRatio": 1.75,
+        "portalResolution": 1280,
+        "shadowSize": 2048,
+        "shadows": true
+      },
+      "elapsed": 0,
+      "canvas": {
+        "width": 640,
+        "height": 360,
+        "pixelRatio": 1
+      },
+      "contextLost": false,
+      "memory": {
+        "geometries": 151,
+        "textures": 28
+      },
+      "programs": 76,
+      "render": {
+        "frame": 27,
+        "calls": 89,
+        "triangles": 352722,
+        "points": 0,
+        "lines": 0
+      },
+      "scene": {
+        "children": 88,
+        "totalObjects": 396,
+        "groupCount": 62,
+        "lightCount": 5,
+        "lights": [
+          {
+            "type": "HemisphereLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "DirectionalLight",
+            "name": "",
+            "castShadow": true
+          },
+          {
+            "type": "PointLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "DirectionalLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "PointLight",
+            "name": "",
+            "castShadow": false
+          }
+        ],
+        "uniqueMaterials": 69,
+        "uniqueGeometries": 220,
+        "mappedTextures": 17,
+        "levelRoots": 81,
+        "graphicsGroupCount": 1,
+        "graphicsGroupUUIDs": [
+          "47bce5de-49f7-4223-bc65-2028de72895d"
+        ],
+        "graphicsChildren": [
+          [
+            {
+              "type": "DirectionalLight",
+              "name": ""
+            },
+            {
+              "type": "Object3D",
+              "name": ""
+            },
+            {
+              "type": "Mesh",
+              "name": "Soft contact on actual support"
+            },
+            {
+              "type": "Mesh",
+              "name": "Soft contact on actual support"
+            }
+          ]
+        ],
+        "contactCount": 2,
+        "contactUUIDs": [
+          "13d961df-3744-49c6-9988-d26a8f2180b1",
+          "77d430fe-2037-4ebb-a9c5-7009d48f7cbd"
+        ],
+        "contactTextureUUIDs": [
+          "d54f8375-3ab5-4712-bdec-27744151c3aa"
+        ],
+        "contactVisualOnly": true
+      },
+      "environment": {
+        "uuid": "20f82711-1feb-419a-a7cc-dd79ac1c0d6f",
+        "name": "Neutral laboratory broad-light probe",
+        "width": 128,
+        "height": 64,
+        "intensity": 0.65,
+        "persistentObjectIdentity": true
+      },
+      "artLighting": {
+        "probe": "broad neutral radiance",
+        "probePixels": 8192,
+        "downloadBytes": 0,
+        "extraShadowLights": 0,
+        "contactDraws": 2,
+        "profile": "laboratory-enamel-and-nickel"
+      },
+      "contextEvents": [],
+      "errorScreenActive": false,
+      "measuredAt": "2026-10-04T16:36:09.205Z",
+      "checkFailures": []
+    },
+    {
+      "label": "warmup-level20-high",
+      "levelRequested": 20,
+      "levelIndex": 19,
+      "state": "ready",
+      "qualityRequested": "high",
+      "qualitySelect": "high",
+      "qualitySettings": {
+        "pixelRatio": 1.75,
+        "portalResolution": 1280,
+        "shadowSize": 2048,
+        "shadows": true
+      },
+      "elapsed": 0,
+      "canvas": {
+        "width": 640,
+        "height": 360,
+        "pixelRatio": 1
+      },
+      "contextLost": false,
+      "memory": {
+        "geometries": 142,
+        "textures": 29
+      },
+      "programs": 80,
+      "render": {
+        "frame": 33,
+        "calls": 72,
+        "triangles": 355102,
+        "points": 0,
+        "lines": 0
+      },
+      "scene": {
+        "children": 155,
+        "totalObjects": 449,
+        "groupCount": 58,
+        "lightCount": 5,
+        "lights": [
+          {
+            "type": "HemisphereLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "DirectionalLight",
+            "name": "",
+            "castShadow": true
+          },
+          {
+            "type": "PointLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "DirectionalLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "PointLight",
+            "name": "",
+            "castShadow": false
+          }
+        ],
+        "uniqueMaterials": 71,
+        "uniqueGeometries": 277,
+        "mappedTextures": 18,
+        "levelRoots": 148,
+        "graphicsGroupCount": 1,
+        "graphicsGroupUUIDs": [
+          "4aa4dc3f-0206-4578-82b7-de23227a8bac"
+        ],
+        "graphicsChildren": [
+          [
+            {
+              "type": "DirectionalLight",
+              "name": ""
+            },
+            {
+              "type": "Object3D",
+              "name": ""
+            },
+            {
+              "type": "Mesh",
+              "name": "Soft contact on actual support"
+            },
+            {
+              "type": "Mesh",
+              "name": "Soft contact on actual support"
+            }
+          ]
+        ],
+        "contactCount": 2,
+        "contactUUIDs": [
+          "f577985e-d330-43f3-95ea-5ba9b654930e",
+          "499d56c2-bc0f-4019-9074-0386d3be0f8a"
+        ],
+        "contactTextureUUIDs": [
+          "db2baf22-6f3b-4ee0-88e4-ddcfe32560b6"
+        ],
+        "contactVisualOnly": true
+      },
+      "environment": {
+        "uuid": "20f82711-1feb-419a-a7cc-dd79ac1c0d6f",
+        "name": "Neutral laboratory broad-light probe",
+        "width": 128,
+        "height": 64,
+        "intensity": 0.65,
+        "persistentObjectIdentity": true
+      },
+      "artLighting": {
+        "probe": "broad neutral radiance",
+        "probePixels": 8192,
+        "downloadBytes": 0,
+        "extraShadowLights": 0,
+        "contactDraws": 2,
+        "profile": "laboratory-enamel-and-nickel"
+      },
+      "contextEvents": [],
+      "errorScreenActive": false,
+      "measuredAt": "2026-10-04T16:36:11.194Z",
+      "checkFailures": []
+    },
+    {
+      "label": "warmup-level41-low",
+      "levelRequested": 41,
+      "levelIndex": 40,
+      "state": "ready",
+      "qualityRequested": "low",
+      "qualitySelect": "low",
+      "qualitySettings": {
+        "pixelRatio": 1,
+        "portalResolution": 640,
+        "shadowSize": 512,
+        "shadows": false
+      },
+      "elapsed": 0,
+      "canvas": {
+        "width": 640,
+        "height": 360,
+        "pixelRatio": 1
+      },
+      "contextLost": false,
+      "memory": {
+        "geometries": 178,
+        "textures": 56
+      },
+      "programs": 108,
+      "render": {
+        "frame": 39,
+        "calls": 318,
+        "triangles": 222642,
+        "points": 0,
+        "lines": 0
+      },
+      "scene": {
+        "children": 16,
+        "totalObjects": 2680,
+        "groupCount": 55,
+        "lightCount": 7,
+        "lights": [
+          {
+            "type": "HemisphereLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "DirectionalLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "HemisphereLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "DirectionalLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "PointLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "DirectionalLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "PointLight",
+            "name": "",
+            "castShadow": false
+          }
+        ],
+        "uniqueMaterials": 141,
+        "uniqueGeometries": 169,
+        "mappedTextures": 43,
+        "levelRoots": 9,
+        "graphicsGroupCount": 1,
+        "graphicsGroupUUIDs": [
+          "c17dfa34-31a8-40ac-a2fc-e356cd9dfe50"
+        ],
+        "graphicsChildren": [
+          [
+            {
+              "type": "DirectionalLight",
+              "name": ""
+            },
+            {
+              "type": "Object3D",
+              "name": ""
+            },
+            {
+              "type": "Mesh",
+              "name": "Soft contact on actual support"
+            },
+            {
+              "type": "Mesh",
+              "name": "Soft contact on actual support"
+            }
+          ]
+        ],
+        "contactCount": 2,
+        "contactUUIDs": [
+          "3d189ea0-62e9-4eea-a636-cbe8eca29938",
+          "b988b0b5-fab6-47a9-b3d5-b5a6a3269ad1"
+        ],
+        "contactTextureUUIDs": [
+          "e4e8d68f-900b-4387-a057-a6744b0c13c6"
+        ],
+        "contactVisualOnly": true
+      },
+      "environment": {
+        "uuid": "20f82711-1feb-419a-a7cc-dd79ac1c0d6f",
+        "name": "Neutral laboratory broad-light probe",
+        "width": 128,
+        "height": 64,
+        "intensity": 0.65,
+        "persistentObjectIdentity": true
+      },
+      "artLighting": {
+        "probe": "broad neutral radiance",
+        "probePixels": 8192,
+        "downloadBytes": 0,
+        "extraShadowLights": 0,
+        "contactDraws": 2,
+        "profile": "castle-mineral-and-gold"
+      },
+      "contextEvents": [],
+      "errorScreenActive": false,
+      "measuredAt": "2026-10-04T16:36:14.899Z",
+      "checkFailures": []
+    },
+    {
+      "label": "cycle1-level1-low",
+      "levelRequested": 1,
+      "levelIndex": 0,
+      "state": "ready",
+      "qualityRequested": "low",
+      "qualitySelect": "low",
+      "qualitySettings": {
+        "pixelRatio": 1,
+        "portalResolution": 640,
+        "shadowSize": 512,
+        "shadows": false
+      },
+      "elapsed": 0,
+      "canvas": {
+        "width": 640,
+        "height": 360,
+        "pixelRatio": 1
+      },
+      "contextLost": false,
+      "memory": {
+        "geometries": 151,
+        "textures": 27
+      },
+      "programs": 89,
+      "render": {
+        "frame": 46,
+        "calls": 74,
+        "triangles": 206502,
+        "points": 0,
+        "lines": 0
+      },
+      "scene": {
+        "children": 88,
+        "totalObjects": 396,
+        "groupCount": 62,
+        "lightCount": 5,
+        "lights": [
+          {
+            "type": "HemisphereLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "DirectionalLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "PointLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "DirectionalLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "PointLight",
+            "name": "",
+            "castShadow": false
+          }
+        ],
+        "uniqueMaterials": 69,
+        "uniqueGeometries": 220,
+        "mappedTextures": 17,
+        "levelRoots": 81,
+        "graphicsGroupCount": 1,
+        "graphicsGroupUUIDs": [
+          "050a1689-cfc0-4129-a40e-399fb104d7cd"
+        ],
+        "graphicsChildren": [
+          [
+            {
+              "type": "DirectionalLight",
+              "name": ""
+            },
+            {
+              "type": "Object3D",
+              "name": ""
+            },
+            {
+              "type": "Mesh",
+              "name": "Soft contact on actual support"
+            },
+            {
+              "type": "Mesh",
+              "name": "Soft contact on actual support"
+            }
+          ]
+        ],
+        "contactCount": 2,
+        "contactUUIDs": [
+          "05146da7-a525-49ed-8478-94ddeb08d5d6",
+          "a854f333-a53c-4505-8c7b-1aaef4dd92f1"
+        ],
+        "contactTextureUUIDs": [
+          "9415cda8-e79c-409b-857d-3cadfc69d835"
+        ],
+        "contactVisualOnly": true
+      },
+      "environment": {
+        "uuid": "20f82711-1feb-419a-a7cc-dd79ac1c0d6f",
+        "name": "Neutral laboratory broad-light probe",
+        "width": 128,
+        "height": 64,
+        "intensity": 0.65,
+        "persistentObjectIdentity": true
+      },
+      "artLighting": {
+        "probe": "broad neutral radiance",
+        "probePixels": 8192,
+        "downloadBytes": 0,
+        "extraShadowLights": 0,
+        "contactDraws": 2,
+        "profile": "laboratory-enamel-and-nickel"
+      },
+      "contextEvents": [],
+      "errorScreenActive": false,
+      "measuredAt": "2026-10-04T16:36:30.721Z",
+      "checkFailures": []
+    },
+    {
+      "label": "cycle1-level20-low",
+      "levelRequested": 20,
+      "levelIndex": 19,
+      "state": "ready",
+      "qualityRequested": "low",
+      "qualitySelect": "low",
+      "qualitySettings": {
+        "pixelRatio": 1,
+        "portalResolution": 640,
+        "shadowSize": 512,
+        "shadows": false
+      },
+      "elapsed": 0,
+      "canvas": {
+        "width": 640,
+        "height": 360,
+        "pixelRatio": 1
+      },
+      "contextLost": false,
+      "memory": {
+        "geometries": 142,
+        "textures": 28
+      },
+      "programs": 93,
+      "render": {
+        "frame": 52,
+        "calls": 60,
+        "triangles": 208442,
+        "points": 0,
+        "lines": 0
+      },
+      "scene": {
+        "children": 155,
+        "totalObjects": 449,
+        "groupCount": 58,
+        "lightCount": 5,
+        "lights": [
+          {
+            "type": "HemisphereLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "DirectionalLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "PointLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "DirectionalLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "PointLight",
+            "name": "",
+            "castShadow": false
+          }
+        ],
+        "uniqueMaterials": 71,
+        "uniqueGeometries": 277,
+        "mappedTextures": 18,
+        "levelRoots": 148,
+        "graphicsGroupCount": 1,
+        "graphicsGroupUUIDs": [
+          "78ff62a5-ab15-4093-bd22-ce325d54e5ae"
+        ],
+        "graphicsChildren": [
+          [
+            {
+              "type": "DirectionalLight",
+              "name": ""
+            },
+            {
+              "type": "Object3D",
+              "name": ""
+            },
+            {
+              "type": "Mesh",
+              "name": "Soft contact on actual support"
+            },
+            {
+              "type": "Mesh",
+              "name": "Soft contact on actual support"
+            }
+          ]
+        ],
+        "contactCount": 2,
+        "contactUUIDs": [
+          "dc192b43-1c05-491a-a755-e7bde6199721",
+          "c6f2b96e-9069-48f0-bea0-1c1d7d4f5c65"
+        ],
+        "contactTextureUUIDs": [
+          "69fc341e-a990-4d16-aaf0-ee5473aba741"
+        ],
+        "contactVisualOnly": true
+      },
+      "environment": {
+        "uuid": "20f82711-1feb-419a-a7cc-dd79ac1c0d6f",
+        "name": "Neutral laboratory broad-light probe",
+        "width": 128,
+        "height": 64,
+        "intensity": 0.65,
+        "persistentObjectIdentity": true
+      },
+      "artLighting": {
+        "probe": "broad neutral radiance",
+        "probePixels": 8192,
+        "downloadBytes": 0,
+        "extraShadowLights": 0,
+        "contactDraws": 2,
+        "profile": "laboratory-enamel-and-nickel"
+      },
+      "contextEvents": [],
+      "errorScreenActive": false,
+      "measuredAt": "2026-10-04T16:36:32.344Z",
+      "checkFailures": []
+    },
+    {
+      "label": "cycle1-level41-low",
+      "levelRequested": 41,
+      "levelIndex": 40,
+      "state": "ready",
+      "qualityRequested": "low",
+      "qualitySelect": "low",
+      "qualitySettings": {
+        "pixelRatio": 1,
+        "portalResolution": 640,
+        "shadowSize": 512,
+        "shadows": false
+      },
+      "elapsed": 0,
+      "canvas": {
+        "width": 640,
+        "height": 360,
+        "pixelRatio": 1
+      },
+      "contextLost": false,
+      "memory": {
+        "geometries": 178,
+        "textures": 56
+      },
+      "programs": 115,
+      "render": {
+        "frame": 58,
+        "calls": 318,
+        "triangles": 222642,
+        "points": 0,
+        "lines": 0
+      },
+      "scene": {
+        "children": 16,
+        "totalObjects": 2680,
+        "groupCount": 55,
+        "lightCount": 7,
+        "lights": [
+          {
+            "type": "HemisphereLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "DirectionalLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "HemisphereLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "DirectionalLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "PointLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "DirectionalLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "PointLight",
+            "name": "",
+            "castShadow": false
+          }
+        ],
+        "uniqueMaterials": 141,
+        "uniqueGeometries": 169,
+        "mappedTextures": 43,
+        "levelRoots": 9,
+        "graphicsGroupCount": 1,
+        "graphicsGroupUUIDs": [
+          "baec1dd5-670e-42ce-ac54-8358a10bc015"
+        ],
+        "graphicsChildren": [
+          [
+            {
+              "type": "DirectionalLight",
+              "name": ""
+            },
+            {
+              "type": "Object3D",
+              "name": ""
+            },
+            {
+              "type": "Mesh",
+              "name": "Soft contact on actual support"
+            },
+            {
+              "type": "Mesh",
+              "name": "Soft contact on actual support"
+            }
+          ]
+        ],
+        "contactCount": 2,
+        "contactUUIDs": [
+          "f002d32a-8e54-4941-80b3-648e53eac8a4",
+          "92b28efa-6b6b-4d9c-838f-5660d96df38c"
+        ],
+        "contactTextureUUIDs": [
+          "491c8ffc-c253-49a4-83e2-70414bdc5fb7"
+        ],
+        "contactVisualOnly": true
+      },
+      "environment": {
+        "uuid": "20f82711-1feb-419a-a7cc-dd79ac1c0d6f",
+        "name": "Neutral laboratory broad-light probe",
+        "width": 128,
+        "height": 64,
+        "intensity": 0.65,
+        "persistentObjectIdentity": true
+      },
+      "artLighting": {
+        "probe": "broad neutral radiance",
+        "probePixels": 8192,
+        "downloadBytes": 0,
+        "extraShadowLights": 0,
+        "contactDraws": 2,
+        "profile": "castle-mineral-and-gold"
+      },
+      "contextEvents": [],
+      "errorScreenActive": false,
+      "measuredAt": "2026-10-04T16:36:35.386Z",
+      "checkFailures": []
+    },
+    {
+      "label": "cycle2-level1-balanced",
+      "levelRequested": 1,
+      "levelIndex": 0,
+      "state": "ready",
+      "qualityRequested": "balanced",
+      "qualitySelect": "balanced",
+      "qualitySettings": {
+        "pixelRatio": 1.35,
+        "portalResolution": 896,
+        "shadowSize": 1024,
+        "shadows": true
+      },
+      "elapsed": 0,
+      "canvas": {
+        "width": 640,
+        "height": 360,
+        "pixelRatio": 1
+      },
+      "contextLost": false,
+      "memory": {
+        "geometries": 151,
+        "textures": 28
+      },
+      "programs": 93,
+      "render": {
+        "frame": 64,
+        "calls": 89,
+        "triangles": 352722,
+        "points": 0,
+        "lines": 0
+      },
+      "scene": {
+        "children": 88,
+        "totalObjects": 396,
+        "groupCount": 62,
+        "lightCount": 5,
+        "lights": [
+          {
+            "type": "HemisphereLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "DirectionalLight",
+            "name": "",
+            "castShadow": true
+          },
+          {
+            "type": "PointLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "DirectionalLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "PointLight",
+            "name": "",
+            "castShadow": false
+          }
+        ],
+        "uniqueMaterials": 69,
+        "uniqueGeometries": 220,
+        "mappedTextures": 17,
+        "levelRoots": 81,
+        "graphicsGroupCount": 1,
+        "graphicsGroupUUIDs": [
+          "5ef553bb-f4a8-4683-9bd0-ea18e294fdee"
+        ],
+        "graphicsChildren": [
+          [
+            {
+              "type": "DirectionalLight",
+              "name": ""
+            },
+            {
+              "type": "Object3D",
+              "name": ""
+            },
+            {
+              "type": "Mesh",
+              "name": "Soft contact on actual support"
+            },
+            {
+              "type": "Mesh",
+              "name": "Soft contact on actual support"
+            }
+          ]
+        ],
+        "contactCount": 2,
+        "contactUUIDs": [
+          "241a8898-f59e-4d25-b255-51310de32290",
+          "93f17219-48a9-4d93-9212-dab3249e52c5"
+        ],
+        "contactTextureUUIDs": [
+          "4c5da968-32cd-41c3-85d0-39c3b42c1d5d"
+        ],
+        "contactVisualOnly": true
+      },
+      "environment": {
+        "uuid": "20f82711-1feb-419a-a7cc-dd79ac1c0d6f",
+        "name": "Neutral laboratory broad-light probe",
+        "width": 128,
+        "height": 64,
+        "intensity": 0.65,
+        "persistentObjectIdentity": true
+      },
+      "artLighting": {
+        "probe": "broad neutral radiance",
+        "probePixels": 8192,
+        "downloadBytes": 0,
+        "extraShadowLights": 0,
+        "contactDraws": 2,
+        "profile": "laboratory-enamel-and-nickel"
+      },
+      "contextEvents": [],
+      "errorScreenActive": false,
+      "measuredAt": "2026-10-04T16:36:38.079Z",
+      "checkFailures": []
+    },
+    {
+      "label": "cycle2-level20-balanced",
+      "levelRequested": 20,
+      "levelIndex": 19,
+      "state": "ready",
+      "qualityRequested": "balanced",
+      "qualitySelect": "balanced",
+      "qualitySettings": {
+        "pixelRatio": 1.35,
+        "portalResolution": 896,
+        "shadowSize": 1024,
+        "shadows": true
+      },
+      "elapsed": 0,
+      "canvas": {
+        "width": 640,
+        "height": 360,
+        "pixelRatio": 1
+      },
+      "contextLost": false,
+      "memory": {
+        "geometries": 142,
+        "textures": 29
+      },
+      "programs": 97,
+      "render": {
+        "frame": 70,
+        "calls": 72,
+        "triangles": 355102,
+        "points": 0,
+        "lines": 0
+      },
+      "scene": {
+        "children": 155,
+        "totalObjects": 449,
+        "groupCount": 58,
+        "lightCount": 5,
+        "lights": [
+          {
+            "type": "HemisphereLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "DirectionalLight",
+            "name": "",
+            "castShadow": true
+          },
+          {
+            "type": "PointLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "DirectionalLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "PointLight",
+            "name": "",
+            "castShadow": false
+          }
+        ],
+        "uniqueMaterials": 71,
+        "uniqueGeometries": 277,
+        "mappedTextures": 18,
+        "levelRoots": 148,
+        "graphicsGroupCount": 1,
+        "graphicsGroupUUIDs": [
+          "68478518-fe1b-400b-bf1d-f0bd1e0059b3"
+        ],
+        "graphicsChildren": [
+          [
+            {
+              "type": "DirectionalLight",
+              "name": ""
+            },
+            {
+              "type": "Object3D",
+              "name": ""
+            },
+            {
+              "type": "Mesh",
+              "name": "Soft contact on actual support"
+            },
+            {
+              "type": "Mesh",
+              "name": "Soft contact on actual support"
+            }
+          ]
+        ],
+        "contactCount": 2,
+        "contactUUIDs": [
+          "2cdcb135-7b35-417f-8de4-5238bbb3fe8a",
+          "86da108f-ae28-4b5a-939b-7b8ffa1c257d"
+        ],
+        "contactTextureUUIDs": [
+          "bebcdf46-c9e9-491b-8f71-7f320b93b5fb"
+        ],
+        "contactVisualOnly": true
+      },
+      "environment": {
+        "uuid": "20f82711-1feb-419a-a7cc-dd79ac1c0d6f",
+        "name": "Neutral laboratory broad-light probe",
+        "width": 128,
+        "height": 64,
+        "intensity": 0.65,
+        "persistentObjectIdentity": true
+      },
+      "artLighting": {
+        "probe": "broad neutral radiance",
+        "probePixels": 8192,
+        "downloadBytes": 0,
+        "extraShadowLights": 0,
+        "contactDraws": 2,
+        "profile": "laboratory-enamel-and-nickel"
+      },
+      "contextEvents": [],
+      "errorScreenActive": false,
+      "measuredAt": "2026-10-04T16:36:40.167Z",
+      "checkFailures": []
+    },
+    {
+      "label": "cycle2-level41-low",
+      "levelRequested": 41,
+      "levelIndex": 40,
+      "state": "ready",
+      "qualityRequested": "low",
+      "qualitySelect": "low",
+      "qualitySettings": {
+        "pixelRatio": 1,
+        "portalResolution": 640,
+        "shadowSize": 512,
+        "shadows": false
+      },
+      "elapsed": 0,
+      "canvas": {
+        "width": 640,
+        "height": 360,
+        "pixelRatio": 1
+      },
+      "contextLost": false,
+      "memory": {
+        "geometries": 178,
+        "textures": 56
+      },
+      "programs": 117,
+      "render": {
+        "frame": 76,
+        "calls": 318,
+        "triangles": 222642,
+        "points": 0,
+        "lines": 0
+      },
+      "scene": {
+        "children": 16,
+        "totalObjects": 2680,
+        "groupCount": 55,
+        "lightCount": 7,
+        "lights": [
+          {
+            "type": "HemisphereLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "DirectionalLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "HemisphereLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "DirectionalLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "PointLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "DirectionalLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "PointLight",
+            "name": "",
+            "castShadow": false
+          }
+        ],
+        "uniqueMaterials": 141,
+        "uniqueGeometries": 169,
+        "mappedTextures": 43,
+        "levelRoots": 9,
+        "graphicsGroupCount": 1,
+        "graphicsGroupUUIDs": [
+          "d34cb042-bd76-403f-b4ad-f8931c14d9b5"
+        ],
+        "graphicsChildren": [
+          [
+            {
+              "type": "DirectionalLight",
+              "name": ""
+            },
+            {
+              "type": "Object3D",
+              "name": ""
+            },
+            {
+              "type": "Mesh",
+              "name": "Soft contact on actual support"
+            },
+            {
+              "type": "Mesh",
+              "name": "Soft contact on actual support"
+            }
+          ]
+        ],
+        "contactCount": 2,
+        "contactUUIDs": [
+          "97bc9f5d-70ba-4831-81b9-7a1fe272a232",
+          "4f0a06c9-4d61-4d25-a7fe-fd846fb782c6"
+        ],
+        "contactTextureUUIDs": [
+          "9ea7a808-aefe-4312-8f69-be5ae528c07f"
+        ],
+        "contactVisualOnly": true
+      },
+      "environment": {
+        "uuid": "20f82711-1feb-419a-a7cc-dd79ac1c0d6f",
+        "name": "Neutral laboratory broad-light probe",
+        "width": 128,
+        "height": 64,
+        "intensity": 0.65,
+        "persistentObjectIdentity": true
+      },
+      "artLighting": {
+        "probe": "broad neutral radiance",
+        "probePixels": 8192,
+        "downloadBytes": 0,
+        "extraShadowLights": 0,
+        "contactDraws": 2,
+        "profile": "castle-mineral-and-gold"
+      },
+      "contextEvents": [],
+      "errorScreenActive": false,
+      "measuredAt": "2026-10-04T16:36:43.427Z",
+      "checkFailures": []
+    },
+    {
+      "label": "cycle3-level1-high",
+      "levelRequested": 1,
+      "levelIndex": 0,
+      "state": "ready",
+      "qualityRequested": "high",
+      "qualitySelect": "high",
+      "qualitySettings": {
+        "pixelRatio": 1.75,
+        "portalResolution": 1280,
+        "shadowSize": 2048,
+        "shadows": true
+      },
+      "elapsed": 0,
+      "canvas": {
+        "width": 640,
+        "height": 360,
+        "pixelRatio": 1
+      },
+      "contextLost": false,
+      "memory": {
+        "geometries": 151,
+        "textures": 28
+      },
+      "programs": 93,
+      "render": {
+        "frame": 82,
+        "calls": 89,
+        "triangles": 352722,
+        "points": 0,
+        "lines": 0
+      },
+      "scene": {
+        "children": 88,
+        "totalObjects": 396,
+        "groupCount": 62,
+        "lightCount": 5,
+        "lights": [
+          {
+            "type": "HemisphereLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "DirectionalLight",
+            "name": "",
+            "castShadow": true
+          },
+          {
+            "type": "PointLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "DirectionalLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "PointLight",
+            "name": "",
+            "castShadow": false
+          }
+        ],
+        "uniqueMaterials": 69,
+        "uniqueGeometries": 220,
+        "mappedTextures": 17,
+        "levelRoots": 81,
+        "graphicsGroupCount": 1,
+        "graphicsGroupUUIDs": [
+          "2bf86cbb-19de-42a1-90fa-161045dadc41"
+        ],
+        "graphicsChildren": [
+          [
+            {
+              "type": "DirectionalLight",
+              "name": ""
+            },
+            {
+              "type": "Object3D",
+              "name": ""
+            },
+            {
+              "type": "Mesh",
+              "name": "Soft contact on actual support"
+            },
+            {
+              "type": "Mesh",
+              "name": "Soft contact on actual support"
+            }
+          ]
+        ],
+        "contactCount": 2,
+        "contactUUIDs": [
+          "2482cd55-86f2-4d93-a999-7a50bc1a077d",
+          "8f4cc1d6-1e87-4d72-8bbb-c063acb2af61"
+        ],
+        "contactTextureUUIDs": [
+          "a3ef1a62-fb18-4246-b672-4b962a1ecfcd"
+        ],
+        "contactVisualOnly": true
+      },
+      "environment": {
+        "uuid": "20f82711-1feb-419a-a7cc-dd79ac1c0d6f",
+        "name": "Neutral laboratory broad-light probe",
+        "width": 128,
+        "height": 64,
+        "intensity": 0.65,
+        "persistentObjectIdentity": true
+      },
+      "artLighting": {
+        "probe": "broad neutral radiance",
+        "probePixels": 8192,
+        "downloadBytes": 0,
+        "extraShadowLights": 0,
+        "contactDraws": 2,
+        "profile": "laboratory-enamel-and-nickel"
+      },
+      "contextEvents": [],
+      "errorScreenActive": false,
+      "measuredAt": "2026-10-04T16:36:46.169Z",
+      "checkFailures": []
+    },
+    {
+      "label": "cycle3-level20-high",
+      "levelRequested": 20,
+      "levelIndex": 19,
+      "state": "ready",
+      "qualityRequested": "high",
+      "qualitySelect": "high",
+      "qualitySettings": {
+        "pixelRatio": 1.75,
+        "portalResolution": 1280,
+        "shadowSize": 2048,
+        "shadows": true
+      },
+      "elapsed": 0,
+      "canvas": {
+        "width": 640,
+        "height": 360,
+        "pixelRatio": 1
+      },
+      "contextLost": false,
+      "memory": {
+        "geometries": 142,
+        "textures": 29
+      },
+      "programs": 97,
+      "render": {
+        "frame": 88,
+        "calls": 72,
+        "triangles": 355102,
+        "points": 0,
+        "lines": 0
+      },
+      "scene": {
+        "children": 155,
+        "totalObjects": 449,
+        "groupCount": 58,
+        "lightCount": 5,
+        "lights": [
+          {
+            "type": "HemisphereLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "DirectionalLight",
+            "name": "",
+            "castShadow": true
+          },
+          {
+            "type": "PointLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "DirectionalLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "PointLight",
+            "name": "",
+            "castShadow": false
+          }
+        ],
+        "uniqueMaterials": 71,
+        "uniqueGeometries": 277,
+        "mappedTextures": 18,
+        "levelRoots": 148,
+        "graphicsGroupCount": 1,
+        "graphicsGroupUUIDs": [
+          "6d08cb46-5506-40ff-a88a-807fe1591054"
+        ],
+        "graphicsChildren": [
+          [
+            {
+              "type": "DirectionalLight",
+              "name": ""
+            },
+            {
+              "type": "Object3D",
+              "name": ""
+            },
+            {
+              "type": "Mesh",
+              "name": "Soft contact on actual support"
+            },
+            {
+              "type": "Mesh",
+              "name": "Soft contact on actual support"
+            }
+          ]
+        ],
+        "contactCount": 2,
+        "contactUUIDs": [
+          "77dc6748-aa30-42ac-9e40-9931ef53d152",
+          "908e678c-0835-4c02-8495-f02e3e2dd0b0"
+        ],
+        "contactTextureUUIDs": [
+          "54bd70e3-08b6-43f1-8998-66868905d081"
+        ],
+        "contactVisualOnly": true
+      },
+      "environment": {
+        "uuid": "20f82711-1feb-419a-a7cc-dd79ac1c0d6f",
+        "name": "Neutral laboratory broad-light probe",
+        "width": 128,
+        "height": 64,
+        "intensity": 0.65,
+        "persistentObjectIdentity": true
+      },
+      "artLighting": {
+        "probe": "broad neutral radiance",
+        "probePixels": 8192,
+        "downloadBytes": 0,
+        "extraShadowLights": 0,
+        "contactDraws": 2,
+        "profile": "laboratory-enamel-and-nickel"
+      },
+      "contextEvents": [],
+      "errorScreenActive": false,
+      "measuredAt": "2026-10-04T16:36:50.308Z",
+      "checkFailures": []
+    },
+    {
+      "label": "cycle3-level41-low",
+      "levelRequested": 41,
+      "levelIndex": 40,
+      "state": "ready",
+      "qualityRequested": "low",
+      "qualitySelect": "low",
+      "qualitySettings": {
+        "pixelRatio": 1,
+        "portalResolution": 640,
+        "shadowSize": 512,
+        "shadows": false
+      },
+      "elapsed": 0,
+      "canvas": {
+        "width": 640,
+        "height": 360,
+        "pixelRatio": 1
+      },
+      "contextLost": false,
+      "memory": {
+        "geometries": 178,
+        "textures": 56
+      },
+      "programs": 117,
+      "render": {
+        "frame": 94,
+        "calls": 318,
+        "triangles": 222642,
+        "points": 0,
+        "lines": 0
+      },
+      "scene": {
+        "children": 16,
+        "totalObjects": 2680,
+        "groupCount": 55,
+        "lightCount": 7,
+        "lights": [
+          {
+            "type": "HemisphereLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "DirectionalLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "HemisphereLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "DirectionalLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "PointLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "DirectionalLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "PointLight",
+            "name": "",
+            "castShadow": false
+          }
+        ],
+        "uniqueMaterials": 141,
+        "uniqueGeometries": 169,
+        "mappedTextures": 43,
+        "levelRoots": 9,
+        "graphicsGroupCount": 1,
+        "graphicsGroupUUIDs": [
+          "11264a81-e941-4b32-92c0-4faa60138174"
+        ],
+        "graphicsChildren": [
+          [
+            {
+              "type": "DirectionalLight",
+              "name": ""
+            },
+            {
+              "type": "Object3D",
+              "name": ""
+            },
+            {
+              "type": "Mesh",
+              "name": "Soft contact on actual support"
+            },
+            {
+              "type": "Mesh",
+              "name": "Soft contact on actual support"
+            }
+          ]
+        ],
+        "contactCount": 2,
+        "contactUUIDs": [
+          "4ed0255d-d479-4262-a8fe-a51d80e03d26",
+          "1c677d0c-bfa7-4e05-adab-3a6f16876989"
+        ],
+        "contactTextureUUIDs": [
+          "31ce66f4-86f8-4a26-b22f-0527baa24f3c"
+        ],
+        "contactVisualOnly": true
+      },
+      "environment": {
+        "uuid": "20f82711-1feb-419a-a7cc-dd79ac1c0d6f",
+        "name": "Neutral laboratory broad-light probe",
+        "width": 128,
+        "height": 64,
+        "intensity": 0.65,
+        "persistentObjectIdentity": true
+      },
+      "artLighting": {
+        "probe": "broad neutral radiance",
+        "probePixels": 8192,
+        "downloadBytes": 0,
+        "extraShadowLights": 0,
+        "contactDraws": 2,
+        "profile": "castle-mineral-and-gold"
+      },
+      "contextEvents": [],
+      "errorScreenActive": false,
+      "measuredAt": "2026-10-04T16:36:54.742Z",
+      "checkFailures": []
+    },
+    {
+      "label": "cycle4-level1-low",
+      "levelRequested": 1,
+      "levelIndex": 0,
+      "state": "ready",
+      "qualityRequested": "low",
+      "qualitySelect": "low",
+      "qualitySettings": {
+        "pixelRatio": 1,
+        "portalResolution": 640,
+        "shadowSize": 512,
+        "shadows": false
+      },
+      "elapsed": 0,
+      "canvas": {
+        "width": 640,
+        "height": 360,
+        "pixelRatio": 1
+      },
+      "contextLost": false,
+      "memory": {
+        "geometries": 151,
+        "textures": 27
+      },
+      "programs": 91,
+      "render": {
+        "frame": 100,
+        "calls": 74,
+        "triangles": 206502,
+        "points": 0,
+        "lines": 0
+      },
+      "scene": {
+        "children": 88,
+        "totalObjects": 396,
+        "groupCount": 62,
+        "lightCount": 5,
+        "lights": [
+          {
+            "type": "HemisphereLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "DirectionalLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "PointLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "DirectionalLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "PointLight",
+            "name": "",
+            "castShadow": false
+          }
+        ],
+        "uniqueMaterials": 69,
+        "uniqueGeometries": 220,
+        "mappedTextures": 17,
+        "levelRoots": 81,
+        "graphicsGroupCount": 1,
+        "graphicsGroupUUIDs": [
+          "4be2f10d-138a-41ac-b6de-7fe0b11965ea"
+        ],
+        "graphicsChildren": [
+          [
+            {
+              "type": "DirectionalLight",
+              "name": ""
+            },
+            {
+              "type": "Object3D",
+              "name": ""
+            },
+            {
+              "type": "Mesh",
+              "name": "Soft contact on actual support"
+            },
+            {
+              "type": "Mesh",
+              "name": "Soft contact on actual support"
+            }
+          ]
+        ],
+        "contactCount": 2,
+        "contactUUIDs": [
+          "3af2fa26-4df9-4aae-bbac-a3a5041330cf",
+          "19654da1-fb7d-4f0e-b8ff-8bc43696d5af"
+        ],
+        "contactTextureUUIDs": [
+          "d44ff83a-6ad4-4fd9-b93b-6e687c38ac7c"
+        ],
+        "contactVisualOnly": true
+      },
+      "environment": {
+        "uuid": "20f82711-1feb-419a-a7cc-dd79ac1c0d6f",
+        "name": "Neutral laboratory broad-light probe",
+        "width": 128,
+        "height": 64,
+        "intensity": 0.65,
+        "persistentObjectIdentity": true
+      },
+      "artLighting": {
+        "probe": "broad neutral radiance",
+        "probePixels": 8192,
+        "downloadBytes": 0,
+        "extraShadowLights": 0,
+        "contactDraws": 2,
+        "profile": "laboratory-enamel-and-nickel"
+      },
+      "contextEvents": [],
+      "errorScreenActive": false,
+      "measuredAt": "2026-10-04T16:37:00.759Z",
+      "checkFailures": []
+    },
+    {
+      "label": "cycle4-level20-low",
+      "levelRequested": 20,
+      "levelIndex": 19,
+      "state": "ready",
+      "qualityRequested": "low",
+      "qualitySelect": "low",
+      "qualitySettings": {
+        "pixelRatio": 1,
+        "portalResolution": 640,
+        "shadowSize": 512,
+        "shadows": false
+      },
+      "elapsed": 0,
+      "canvas": {
+        "width": 640,
+        "height": 360,
+        "pixelRatio": 1
+      },
+      "contextLost": false,
+      "memory": {
+        "geometries": 142,
+        "textures": 28
+      },
+      "programs": 95,
+      "render": {
+        "frame": 106,
+        "calls": 60,
+        "triangles": 208442,
+        "points": 0,
+        "lines": 0
+      },
+      "scene": {
+        "children": 155,
+        "totalObjects": 449,
+        "groupCount": 58,
+        "lightCount": 5,
+        "lights": [
+          {
+            "type": "HemisphereLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "DirectionalLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "PointLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "DirectionalLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "PointLight",
+            "name": "",
+            "castShadow": false
+          }
+        ],
+        "uniqueMaterials": 71,
+        "uniqueGeometries": 277,
+        "mappedTextures": 18,
+        "levelRoots": 148,
+        "graphicsGroupCount": 1,
+        "graphicsGroupUUIDs": [
+          "73bb6a76-2ac1-4e28-addd-db67d9ff0b9b"
+        ],
+        "graphicsChildren": [
+          [
+            {
+              "type": "DirectionalLight",
+              "name": ""
+            },
+            {
+              "type": "Object3D",
+              "name": ""
+            },
+            {
+              "type": "Mesh",
+              "name": "Soft contact on actual support"
+            },
+            {
+              "type": "Mesh",
+              "name": "Soft contact on actual support"
+            }
+          ]
+        ],
+        "contactCount": 2,
+        "contactUUIDs": [
+          "b6629e49-08fd-44ad-9fc2-8b87c8b0b864",
+          "146fd72e-bdaa-4881-b8a2-d2ccf4e4782a"
+        ],
+        "contactTextureUUIDs": [
+          "f8ca4732-3163-498b-8ab2-06d316c916cd"
+        ],
+        "contactVisualOnly": true
+      },
+      "environment": {
+        "uuid": "20f82711-1feb-419a-a7cc-dd79ac1c0d6f",
+        "name": "Neutral laboratory broad-light probe",
+        "width": 128,
+        "height": 64,
+        "intensity": 0.65,
+        "persistentObjectIdentity": true
+      },
+      "artLighting": {
+        "probe": "broad neutral radiance",
+        "probePixels": 8192,
+        "downloadBytes": 0,
+        "extraShadowLights": 0,
+        "contactDraws": 2,
+        "profile": "laboratory-enamel-and-nickel"
+      },
+      "contextEvents": [],
+      "errorScreenActive": false,
+      "measuredAt": "2026-10-04T16:37:05.828Z",
+      "checkFailures": []
+    },
+    {
+      "label": "cycle4-level41-low",
+      "levelRequested": 41,
+      "levelIndex": 40,
+      "state": "ready",
+      "qualityRequested": "low",
+      "qualitySelect": "low",
+      "qualitySettings": {
+        "pixelRatio": 1,
+        "portalResolution": 640,
+        "shadowSize": 512,
+        "shadows": false
+      },
+      "elapsed": 0,
+      "canvas": {
+        "width": 640,
+        "height": 360,
+        "pixelRatio": 1
+      },
+      "contextLost": false,
+      "memory": {
+        "geometries": 178,
+        "textures": 56
+      },
+      "programs": 117,
+      "render": {
+        "frame": 112,
+        "calls": 318,
+        "triangles": 222642,
+        "points": 0,
+        "lines": 0
+      },
+      "scene": {
+        "children": 16,
+        "totalObjects": 2680,
+        "groupCount": 55,
+        "lightCount": 7,
+        "lights": [
+          {
+            "type": "HemisphereLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "DirectionalLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "HemisphereLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "DirectionalLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "PointLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "DirectionalLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "PointLight",
+            "name": "",
+            "castShadow": false
+          }
+        ],
+        "uniqueMaterials": 141,
+        "uniqueGeometries": 169,
+        "mappedTextures": 43,
+        "levelRoots": 9,
+        "graphicsGroupCount": 1,
+        "graphicsGroupUUIDs": [
+          "4230df3e-8c82-482c-803c-8dcbba4a1c72"
+        ],
+        "graphicsChildren": [
+          [
+            {
+              "type": "DirectionalLight",
+              "name": ""
+            },
+            {
+              "type": "Object3D",
+              "name": ""
+            },
+            {
+              "type": "Mesh",
+              "name": "Soft contact on actual support"
+            },
+            {
+              "type": "Mesh",
+              "name": "Soft contact on actual support"
+            }
+          ]
+        ],
+        "contactCount": 2,
+        "contactUUIDs": [
+          "3127bb14-9915-4870-b6ed-bfe48c51fc60",
+          "d60f2951-4f95-4d79-bf46-c00e6f969ecd"
+        ],
+        "contactTextureUUIDs": [
+          "b8ed856b-0c14-4604-a43e-86b57724d51b"
+        ],
+        "contactVisualOnly": true
+      },
+      "environment": {
+        "uuid": "20f82711-1feb-419a-a7cc-dd79ac1c0d6f",
+        "name": "Neutral laboratory broad-light probe",
+        "width": 128,
+        "height": 64,
+        "intensity": 0.65,
+        "persistentObjectIdentity": true
+      },
+      "artLighting": {
+        "probe": "broad neutral radiance",
+        "probePixels": 8192,
+        "downloadBytes": 0,
+        "extraShadowLights": 0,
+        "contactDraws": 2,
+        "profile": "castle-mineral-and-gold"
+      },
+      "contextEvents": [],
+      "errorScreenActive": false,
+      "measuredAt": "2026-10-04T16:37:14.196Z",
+      "checkFailures": []
+    },
+    {
+      "label": "cycle5-level1-balanced",
+      "levelRequested": 1,
+      "levelIndex": 0,
+      "state": "ready",
+      "qualityRequested": "balanced",
+      "qualitySelect": "balanced",
+      "qualitySettings": {
+        "pixelRatio": 1.35,
+        "portalResolution": 896,
+        "shadowSize": 1024,
+        "shadows": true
+      },
+      "elapsed": 0,
+      "canvas": {
+        "width": 640,
+        "height": 360,
+        "pixelRatio": 1
+      },
+      "contextLost": false,
+      "memory": {
+        "geometries": 151,
+        "textures": 28
+      },
+      "programs": 93,
+      "render": {
+        "frame": 118,
+        "calls": 89,
+        "triangles": 352722,
+        "points": 0,
+        "lines": 0
+      },
+      "scene": {
+        "children": 88,
+        "totalObjects": 396,
+        "groupCount": 62,
+        "lightCount": 5,
+        "lights": [
+          {
+            "type": "HemisphereLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "DirectionalLight",
+            "name": "",
+            "castShadow": true
+          },
+          {
+            "type": "PointLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "DirectionalLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "PointLight",
+            "name": "",
+            "castShadow": false
+          }
+        ],
+        "uniqueMaterials": 69,
+        "uniqueGeometries": 220,
+        "mappedTextures": 17,
+        "levelRoots": 81,
+        "graphicsGroupCount": 1,
+        "graphicsGroupUUIDs": [
+          "18a76625-e733-4592-ab9a-dbd97d23fb12"
+        ],
+        "graphicsChildren": [
+          [
+            {
+              "type": "DirectionalLight",
+              "name": ""
+            },
+            {
+              "type": "Object3D",
+              "name": ""
+            },
+            {
+              "type": "Mesh",
+              "name": "Soft contact on actual support"
+            },
+            {
+              "type": "Mesh",
+              "name": "Soft contact on actual support"
+            }
+          ]
+        ],
+        "contactCount": 2,
+        "contactUUIDs": [
+          "eb6621f4-2e44-4e66-8fcb-63dcdcd7319d",
+          "624f179e-2dce-47a6-b437-46daa23b8208"
+        ],
+        "contactTextureUUIDs": [
+          "d3d8049c-f0b5-469a-94dc-d2a7b9ecdb24"
+        ],
+        "contactVisualOnly": true
+      },
+      "environment": {
+        "uuid": "20f82711-1feb-419a-a7cc-dd79ac1c0d6f",
+        "name": "Neutral laboratory broad-light probe",
+        "width": 128,
+        "height": 64,
+        "intensity": 0.65,
+        "persistentObjectIdentity": true
+      },
+      "artLighting": {
+        "probe": "broad neutral radiance",
+        "probePixels": 8192,
+        "downloadBytes": 0,
+        "extraShadowLights": 0,
+        "contactDraws": 2,
+        "profile": "laboratory-enamel-and-nickel"
+      },
+      "contextEvents": [],
+      "errorScreenActive": false,
+      "measuredAt": "2026-10-04T16:37:19.817Z",
+      "checkFailures": []
+    },
+    {
+      "label": "cycle5-level20-balanced",
+      "levelRequested": 20,
+      "levelIndex": 19,
+      "state": "ready",
+      "qualityRequested": "balanced",
+      "qualitySelect": "balanced",
+      "qualitySettings": {
+        "pixelRatio": 1.35,
+        "portalResolution": 896,
+        "shadowSize": 1024,
+        "shadows": true
+      },
+      "elapsed": 0,
+      "canvas": {
+        "width": 640,
+        "height": 360,
+        "pixelRatio": 1
+      },
+      "contextLost": false,
+      "memory": {
+        "geometries": 142,
+        "textures": 29
+      },
+      "programs": 97,
+      "render": {
+        "frame": 124,
+        "calls": 72,
+        "triangles": 355102,
+        "points": 0,
+        "lines": 0
+      },
+      "scene": {
+        "children": 155,
+        "totalObjects": 449,
+        "groupCount": 58,
+        "lightCount": 5,
+        "lights": [
+          {
+            "type": "HemisphereLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "DirectionalLight",
+            "name": "",
+            "castShadow": true
+          },
+          {
+            "type": "PointLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "DirectionalLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "PointLight",
+            "name": "",
+            "castShadow": false
+          }
+        ],
+        "uniqueMaterials": 71,
+        "uniqueGeometries": 277,
+        "mappedTextures": 18,
+        "levelRoots": 148,
+        "graphicsGroupCount": 1,
+        "graphicsGroupUUIDs": [
+          "bf7fadf5-e490-4a31-abd1-0d5cd746ff77"
+        ],
+        "graphicsChildren": [
+          [
+            {
+              "type": "DirectionalLight",
+              "name": ""
+            },
+            {
+              "type": "Object3D",
+              "name": ""
+            },
+            {
+              "type": "Mesh",
+              "name": "Soft contact on actual support"
+            },
+            {
+              "type": "Mesh",
+              "name": "Soft contact on actual support"
+            }
+          ]
+        ],
+        "contactCount": 2,
+        "contactUUIDs": [
+          "8d335ebe-b74b-445f-8534-86dacdadcc66",
+          "0714ce98-014e-4095-8801-701065942d7c"
+        ],
+        "contactTextureUUIDs": [
+          "b75da6de-6cac-47c9-ad8c-71064304da17"
+        ],
+        "contactVisualOnly": true
+      },
+      "environment": {
+        "uuid": "20f82711-1feb-419a-a7cc-dd79ac1c0d6f",
+        "name": "Neutral laboratory broad-light probe",
+        "width": 128,
+        "height": 64,
+        "intensity": 0.65,
+        "persistentObjectIdentity": true
+      },
+      "artLighting": {
+        "probe": "broad neutral radiance",
+        "probePixels": 8192,
+        "downloadBytes": 0,
+        "extraShadowLights": 0,
+        "contactDraws": 2,
+        "profile": "laboratory-enamel-and-nickel"
+      },
+      "contextEvents": [],
+      "errorScreenActive": false,
+      "measuredAt": "2026-10-04T16:37:23.310Z",
+      "checkFailures": []
+    },
+    {
+      "label": "cycle5-level41-low",
+      "levelRequested": 41,
+      "levelIndex": 40,
+      "state": "ready",
+      "qualityRequested": "low",
+      "qualitySelect": "low",
+      "qualitySettings": {
+        "pixelRatio": 1,
+        "portalResolution": 640,
+        "shadowSize": 512,
+        "shadows": false
+      },
+      "elapsed": 0,
+      "canvas": {
+        "width": 640,
+        "height": 360,
+        "pixelRatio": 1
+      },
+      "contextLost": false,
+      "memory": {
+        "geometries": 178,
+        "textures": 56
+      },
+      "programs": 117,
+      "render": {
+        "frame": 130,
+        "calls": 318,
+        "triangles": 222642,
+        "points": 0,
+        "lines": 0
+      },
+      "scene": {
+        "children": 16,
+        "totalObjects": 2680,
+        "groupCount": 55,
+        "lightCount": 7,
+        "lights": [
+          {
+            "type": "HemisphereLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "DirectionalLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "HemisphereLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "DirectionalLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "PointLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "DirectionalLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "PointLight",
+            "name": "",
+            "castShadow": false
+          }
+        ],
+        "uniqueMaterials": 141,
+        "uniqueGeometries": 169,
+        "mappedTextures": 43,
+        "levelRoots": 9,
+        "graphicsGroupCount": 1,
+        "graphicsGroupUUIDs": [
+          "cc1f28ef-5003-4c06-b386-3440a62ca611"
+        ],
+        "graphicsChildren": [
+          [
+            {
+              "type": "DirectionalLight",
+              "name": ""
+            },
+            {
+              "type": "Object3D",
+              "name": ""
+            },
+            {
+              "type": "Mesh",
+              "name": "Soft contact on actual support"
+            },
+            {
+              "type": "Mesh",
+              "name": "Soft contact on actual support"
+            }
+          ]
+        ],
+        "contactCount": 2,
+        "contactUUIDs": [
+          "2be1e766-edbc-42b5-9850-28959679ec47",
+          "73976da7-a5c1-4af9-bb17-5e8b24ca2aa5"
+        ],
+        "contactTextureUUIDs": [
+          "d870a26f-ded0-466c-ab77-4a6986b8c16c"
+        ],
+        "contactVisualOnly": true
+      },
+      "environment": {
+        "uuid": "20f82711-1feb-419a-a7cc-dd79ac1c0d6f",
+        "name": "Neutral laboratory broad-light probe",
+        "width": 128,
+        "height": 64,
+        "intensity": 0.65,
+        "persistentObjectIdentity": true
+      },
+      "artLighting": {
+        "probe": "broad neutral radiance",
+        "probePixels": 8192,
+        "downloadBytes": 0,
+        "extraShadowLights": 0,
+        "contactDraws": 2,
+        "profile": "castle-mineral-and-gold"
+      },
+      "contextEvents": [],
+      "errorScreenActive": false,
+      "measuredAt": "2026-10-04T16:37:29.194Z",
+      "checkFailures": []
+    },
+    {
+      "label": "cycle6-level1-high",
+      "levelRequested": 1,
+      "levelIndex": 0,
+      "state": "ready",
+      "qualityRequested": "high",
+      "qualitySelect": "high",
+      "qualitySettings": {
+        "pixelRatio": 1.75,
+        "portalResolution": 1280,
+        "shadowSize": 2048,
+        "shadows": true
+      },
+      "elapsed": 0,
+      "canvas": {
+        "width": 640,
+        "height": 360,
+        "pixelRatio": 1
+      },
+      "contextLost": false,
+      "memory": {
+        "geometries": 151,
+        "textures": 28
+      },
+      "programs": 93,
+      "render": {
+        "frame": 136,
+        "calls": 89,
+        "triangles": 352722,
+        "points": 0,
+        "lines": 0
+      },
+      "scene": {
+        "children": 88,
+        "totalObjects": 396,
+        "groupCount": 62,
+        "lightCount": 5,
+        "lights": [
+          {
+            "type": "HemisphereLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "DirectionalLight",
+            "name": "",
+            "castShadow": true
+          },
+          {
+            "type": "PointLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "DirectionalLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "PointLight",
+            "name": "",
+            "castShadow": false
+          }
+        ],
+        "uniqueMaterials": 69,
+        "uniqueGeometries": 220,
+        "mappedTextures": 17,
+        "levelRoots": 81,
+        "graphicsGroupCount": 1,
+        "graphicsGroupUUIDs": [
+          "73af4c47-a216-4c24-9370-9b9a809c05d0"
+        ],
+        "graphicsChildren": [
+          [
+            {
+              "type": "DirectionalLight",
+              "name": ""
+            },
+            {
+              "type": "Object3D",
+              "name": ""
+            },
+            {
+              "type": "Mesh",
+              "name": "Soft contact on actual support"
+            },
+            {
+              "type": "Mesh",
+              "name": "Soft contact on actual support"
+            }
+          ]
+        ],
+        "contactCount": 2,
+        "contactUUIDs": [
+          "74a6f9ff-5bd9-4c6c-97c2-e150adf7a172",
+          "2371c4d4-ee0a-425f-8c8b-6cf71a548f0f"
+        ],
+        "contactTextureUUIDs": [
+          "f61c9c58-0f81-4ddd-bf4b-b4d0ea1d546b"
+        ],
+        "contactVisualOnly": true
+      },
+      "environment": {
+        "uuid": "20f82711-1feb-419a-a7cc-dd79ac1c0d6f",
+        "name": "Neutral laboratory broad-light probe",
+        "width": 128,
+        "height": 64,
+        "intensity": 0.65,
+        "persistentObjectIdentity": true
+      },
+      "artLighting": {
+        "probe": "broad neutral radiance",
+        "probePixels": 8192,
+        "downloadBytes": 0,
+        "extraShadowLights": 0,
+        "contactDraws": 2,
+        "profile": "laboratory-enamel-and-nickel"
+      },
+      "contextEvents": [],
+      "errorScreenActive": false,
+      "measuredAt": "2026-10-04T16:37:33.355Z",
+      "checkFailures": []
+    },
+    {
+      "label": "cycle6-level20-high",
+      "levelRequested": 20,
+      "levelIndex": 19,
+      "state": "ready",
+      "qualityRequested": "high",
+      "qualitySelect": "high",
+      "qualitySettings": {
+        "pixelRatio": 1.75,
+        "portalResolution": 1280,
+        "shadowSize": 2048,
+        "shadows": true
+      },
+      "elapsed": 0,
+      "canvas": {
+        "width": 640,
+        "height": 360,
+        "pixelRatio": 1
+      },
+      "contextLost": false,
+      "memory": {
+        "geometries": 142,
+        "textures": 29
+      },
+      "programs": 97,
+      "render": {
+        "frame": 142,
+        "calls": 72,
+        "triangles": 355102,
+        "points": 0,
+        "lines": 0
+      },
+      "scene": {
+        "children": 155,
+        "totalObjects": 449,
+        "groupCount": 58,
+        "lightCount": 5,
+        "lights": [
+          {
+            "type": "HemisphereLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "DirectionalLight",
+            "name": "",
+            "castShadow": true
+          },
+          {
+            "type": "PointLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "DirectionalLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "PointLight",
+            "name": "",
+            "castShadow": false
+          }
+        ],
+        "uniqueMaterials": 71,
+        "uniqueGeometries": 277,
+        "mappedTextures": 18,
+        "levelRoots": 148,
+        "graphicsGroupCount": 1,
+        "graphicsGroupUUIDs": [
+          "c3cdc9ce-2e12-4bcb-b19f-049bc6fa81a7"
+        ],
+        "graphicsChildren": [
+          [
+            {
+              "type": "DirectionalLight",
+              "name": ""
+            },
+            {
+              "type": "Object3D",
+              "name": ""
+            },
+            {
+              "type": "Mesh",
+              "name": "Soft contact on actual support"
+            },
+            {
+              "type": "Mesh",
+              "name": "Soft contact on actual support"
+            }
+          ]
+        ],
+        "contactCount": 2,
+        "contactUUIDs": [
+          "cde58cba-2b3b-4489-9c2f-29b6b4219702",
+          "75cb4d7d-ffa1-47a4-bcd2-08ef2115484a"
+        ],
+        "contactTextureUUIDs": [
+          "53f3d138-c32c-4b25-b449-ea16c61718cf"
+        ],
+        "contactVisualOnly": true
+      },
+      "environment": {
+        "uuid": "20f82711-1feb-419a-a7cc-dd79ac1c0d6f",
+        "name": "Neutral laboratory broad-light probe",
+        "width": 128,
+        "height": 64,
+        "intensity": 0.65,
+        "persistentObjectIdentity": true
+      },
+      "artLighting": {
+        "probe": "broad neutral radiance",
+        "probePixels": 8192,
+        "downloadBytes": 0,
+        "extraShadowLights": 0,
+        "contactDraws": 2,
+        "profile": "laboratory-enamel-and-nickel"
+      },
+      "contextEvents": [],
+      "errorScreenActive": false,
+      "measuredAt": "2026-10-04T16:37:40.073Z",
+      "checkFailures": []
+    },
+    {
+      "label": "cycle6-level41-low",
+      "levelRequested": 41,
+      "levelIndex": 40,
+      "state": "ready",
+      "qualityRequested": "low",
+      "qualitySelect": "low",
+      "qualitySettings": {
+        "pixelRatio": 1,
+        "portalResolution": 640,
+        "shadowSize": 512,
+        "shadows": false
+      },
+      "elapsed": 0,
+      "canvas": {
+        "width": 640,
+        "height": 360,
+        "pixelRatio": 1
+      },
+      "contextLost": false,
+      "memory": {
+        "geometries": 178,
+        "textures": 56
+      },
+      "programs": 117,
+      "render": {
+        "frame": 148,
+        "calls": 318,
+        "triangles": 222642,
+        "points": 0,
+        "lines": 0
+      },
+      "scene": {
+        "children": 16,
+        "totalObjects": 2680,
+        "groupCount": 55,
+        "lightCount": 7,
+        "lights": [
+          {
+            "type": "HemisphereLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "DirectionalLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "HemisphereLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "DirectionalLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "PointLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "DirectionalLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "PointLight",
+            "name": "",
+            "castShadow": false
+          }
+        ],
+        "uniqueMaterials": 141,
+        "uniqueGeometries": 169,
+        "mappedTextures": 43,
+        "levelRoots": 9,
+        "graphicsGroupCount": 1,
+        "graphicsGroupUUIDs": [
+          "28983752-4f62-44b1-ae93-7e0a776a6821"
+        ],
+        "graphicsChildren": [
+          [
+            {
+              "type": "DirectionalLight",
+              "name": ""
+            },
+            {
+              "type": "Object3D",
+              "name": ""
+            },
+            {
+              "type": "Mesh",
+              "name": "Soft contact on actual support"
+            },
+            {
+              "type": "Mesh",
+              "name": "Soft contact on actual support"
+            }
+          ]
+        ],
+        "contactCount": 2,
+        "contactUUIDs": [
+          "95d23f73-fef4-4a01-888c-b64486dcb3be",
+          "384be4a2-a0c2-46e5-b45a-0ddec3e20e2c"
+        ],
+        "contactTextureUUIDs": [
+          "c3f86083-d672-4ca2-bbd6-128124d6426b"
+        ],
+        "contactVisualOnly": true
+      },
+      "environment": {
+        "uuid": "20f82711-1feb-419a-a7cc-dd79ac1c0d6f",
+        "name": "Neutral laboratory broad-light probe",
+        "width": 128,
+        "height": 64,
+        "intensity": 0.65,
+        "persistentObjectIdentity": true
+      },
+      "artLighting": {
+        "probe": "broad neutral radiance",
+        "probePixels": 8192,
+        "downloadBytes": 0,
+        "extraShadowLights": 0,
+        "contactDraws": 2,
+        "profile": "castle-mineral-and-gold"
+      },
+      "contextEvents": [],
+      "errorScreenActive": false,
+      "measuredAt": "2026-10-04T16:37:45.509Z",
+      "checkFailures": []
+    },
+    {
+      "label": "cycle7-level1-low",
+      "levelRequested": 1,
+      "levelIndex": 0,
+      "state": "ready",
+      "qualityRequested": "low",
+      "qualitySelect": "low",
+      "qualitySettings": {
+        "pixelRatio": 1,
+        "portalResolution": 640,
+        "shadowSize": 512,
+        "shadows": false
+      },
+      "elapsed": 0,
+      "canvas": {
+        "width": 640,
+        "height": 360,
+        "pixelRatio": 1
+      },
+      "contextLost": false,
+      "memory": {
+        "geometries": 151,
+        "textures": 27
+      },
+      "programs": 91,
+      "render": {
+        "frame": 154,
+        "calls": 74,
+        "triangles": 206502,
+        "points": 0,
+        "lines": 0
+      },
+      "scene": {
+        "children": 88,
+        "totalObjects": 396,
+        "groupCount": 62,
+        "lightCount": 5,
+        "lights": [
+          {
+            "type": "HemisphereLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "DirectionalLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "PointLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "DirectionalLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "PointLight",
+            "name": "",
+            "castShadow": false
+          }
+        ],
+        "uniqueMaterials": 69,
+        "uniqueGeometries": 220,
+        "mappedTextures": 17,
+        "levelRoots": 81,
+        "graphicsGroupCount": 1,
+        "graphicsGroupUUIDs": [
+          "89b45b27-c21d-4090-a1fe-e3c15762b0cb"
+        ],
+        "graphicsChildren": [
+          [
+            {
+              "type": "DirectionalLight",
+              "name": ""
+            },
+            {
+              "type": "Object3D",
+              "name": ""
+            },
+            {
+              "type": "Mesh",
+              "name": "Soft contact on actual support"
+            },
+            {
+              "type": "Mesh",
+              "name": "Soft contact on actual support"
+            }
+          ]
+        ],
+        "contactCount": 2,
+        "contactUUIDs": [
+          "635838c9-7184-456a-ada7-fbf20021a7d1",
+          "4761b42c-2813-494e-a60c-fdfd4dbee422"
+        ],
+        "contactTextureUUIDs": [
+          "0aa8a4eb-d0a2-40ef-8b14-58fdb6f16ea6"
+        ],
+        "contactVisualOnly": true
+      },
+      "environment": {
+        "uuid": "20f82711-1feb-419a-a7cc-dd79ac1c0d6f",
+        "name": "Neutral laboratory broad-light probe",
+        "width": 128,
+        "height": 64,
+        "intensity": 0.65,
+        "persistentObjectIdentity": true
+      },
+      "artLighting": {
+        "probe": "broad neutral radiance",
+        "probePixels": 8192,
+        "downloadBytes": 0,
+        "extraShadowLights": 0,
+        "contactDraws": 2,
+        "profile": "laboratory-enamel-and-nickel"
+      },
+      "contextEvents": [],
+      "errorScreenActive": false,
+      "measuredAt": "2026-10-04T16:37:51.224Z",
+      "checkFailures": []
+    },
+    {
+      "label": "cycle7-level20-low",
+      "levelRequested": 20,
+      "levelIndex": 19,
+      "state": "ready",
+      "qualityRequested": "low",
+      "qualitySelect": "low",
+      "qualitySettings": {
+        "pixelRatio": 1,
+        "portalResolution": 640,
+        "shadowSize": 512,
+        "shadows": false
+      },
+      "elapsed": 0,
+      "canvas": {
+        "width": 640,
+        "height": 360,
+        "pixelRatio": 1
+      },
+      "contextLost": false,
+      "memory": {
+        "geometries": 142,
+        "textures": 28
+      },
+      "programs": 95,
+      "render": {
+        "frame": 160,
+        "calls": 60,
+        "triangles": 208442,
+        "points": 0,
+        "lines": 0
+      },
+      "scene": {
+        "children": 155,
+        "totalObjects": 449,
+        "groupCount": 58,
+        "lightCount": 5,
+        "lights": [
+          {
+            "type": "HemisphereLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "DirectionalLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "PointLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "DirectionalLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "PointLight",
+            "name": "",
+            "castShadow": false
+          }
+        ],
+        "uniqueMaterials": 71,
+        "uniqueGeometries": 277,
+        "mappedTextures": 18,
+        "levelRoots": 148,
+        "graphicsGroupCount": 1,
+        "graphicsGroupUUIDs": [
+          "ee52069b-a322-4f2e-9912-e63bae734f3d"
+        ],
+        "graphicsChildren": [
+          [
+            {
+              "type": "DirectionalLight",
+              "name": ""
+            },
+            {
+              "type": "Object3D",
+              "name": ""
+            },
+            {
+              "type": "Mesh",
+              "name": "Soft contact on actual support"
+            },
+            {
+              "type": "Mesh",
+              "name": "Soft contact on actual support"
+            }
+          ]
+        ],
+        "contactCount": 2,
+        "contactUUIDs": [
+          "0e701974-5276-4ac8-9eaa-d65b591810b2",
+          "4266c6f9-bb65-44f7-847c-cacb60027034"
+        ],
+        "contactTextureUUIDs": [
+          "bce0f3f5-0a64-4fb4-b6ad-5a571a10bc9d"
+        ],
+        "contactVisualOnly": true
+      },
+      "environment": {
+        "uuid": "20f82711-1feb-419a-a7cc-dd79ac1c0d6f",
+        "name": "Neutral laboratory broad-light probe",
+        "width": 128,
+        "height": 64,
+        "intensity": 0.65,
+        "persistentObjectIdentity": true
+      },
+      "artLighting": {
+        "probe": "broad neutral radiance",
+        "probePixels": 8192,
+        "downloadBytes": 0,
+        "extraShadowLights": 0,
+        "contactDraws": 2,
+        "profile": "laboratory-enamel-and-nickel"
+      },
+      "contextEvents": [],
+      "errorScreenActive": false,
+      "measuredAt": "2026-10-04T16:37:57.278Z",
+      "checkFailures": []
+    },
+    {
+      "label": "cycle7-level41-low",
+      "levelRequested": 41,
+      "levelIndex": 40,
+      "state": "ready",
+      "qualityRequested": "low",
+      "qualitySelect": "low",
+      "qualitySettings": {
+        "pixelRatio": 1,
+        "portalResolution": 640,
+        "shadowSize": 512,
+        "shadows": false
+      },
+      "elapsed": 0,
+      "canvas": {
+        "width": 640,
+        "height": 360,
+        "pixelRatio": 1
+      },
+      "contextLost": false,
+      "memory": {
+        "geometries": 178,
+        "textures": 56
+      },
+      "programs": 117,
+      "render": {
+        "frame": 166,
+        "calls": 318,
+        "triangles": 222642,
+        "points": 0,
+        "lines": 0
+      },
+      "scene": {
+        "children": 16,
+        "totalObjects": 2680,
+        "groupCount": 55,
+        "lightCount": 7,
+        "lights": [
+          {
+            "type": "HemisphereLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "DirectionalLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "HemisphereLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "DirectionalLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "PointLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "DirectionalLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "PointLight",
+            "name": "",
+            "castShadow": false
+          }
+        ],
+        "uniqueMaterials": 141,
+        "uniqueGeometries": 169,
+        "mappedTextures": 43,
+        "levelRoots": 9,
+        "graphicsGroupCount": 1,
+        "graphicsGroupUUIDs": [
+          "fb9ba58c-abf1-4173-ad61-f4e8fae25a4b"
+        ],
+        "graphicsChildren": [
+          [
+            {
+              "type": "DirectionalLight",
+              "name": ""
+            },
+            {
+              "type": "Object3D",
+              "name": ""
+            },
+            {
+              "type": "Mesh",
+              "name": "Soft contact on actual support"
+            },
+            {
+              "type": "Mesh",
+              "name": "Soft contact on actual support"
+            }
+          ]
+        ],
+        "contactCount": 2,
+        "contactUUIDs": [
+          "ec74d508-c94a-4f1e-80c3-29abeb6f07ea",
+          "c3b1412d-dd03-49cf-b504-94846b5d61c6"
+        ],
+        "contactTextureUUIDs": [
+          "377ee9ee-6cf2-42d1-aea8-8bbd1cfbd430"
+        ],
+        "contactVisualOnly": true
+      },
+      "environment": {
+        "uuid": "20f82711-1feb-419a-a7cc-dd79ac1c0d6f",
+        "name": "Neutral laboratory broad-light probe",
+        "width": 128,
+        "height": 64,
+        "intensity": 0.65,
+        "persistentObjectIdentity": true
+      },
+      "artLighting": {
+        "probe": "broad neutral radiance",
+        "probePixels": 8192,
+        "downloadBytes": 0,
+        "extraShadowLights": 0,
+        "contactDraws": 2,
+        "profile": "castle-mineral-and-gold"
+      },
+      "contextEvents": [],
+      "errorScreenActive": false,
+      "measuredAt": "2026-10-04T16:38:03.895Z",
+      "checkFailures": []
+    },
+    {
+      "label": "cycle8-level1-balanced",
+      "levelRequested": 1,
+      "levelIndex": 0,
+      "state": "ready",
+      "qualityRequested": "balanced",
+      "qualitySelect": "balanced",
+      "qualitySettings": {
+        "pixelRatio": 1.35,
+        "portalResolution": 896,
+        "shadowSize": 1024,
+        "shadows": true
+      },
+      "elapsed": 0,
+      "canvas": {
+        "width": 640,
+        "height": 360,
+        "pixelRatio": 1
+      },
+      "contextLost": false,
+      "memory": {
+        "geometries": 151,
+        "textures": 28
+      },
+      "programs": 93,
+      "render": {
+        "frame": 172,
+        "calls": 89,
+        "triangles": 352722,
+        "points": 0,
+        "lines": 0
+      },
+      "scene": {
+        "children": 88,
+        "totalObjects": 396,
+        "groupCount": 62,
+        "lightCount": 5,
+        "lights": [
+          {
+            "type": "HemisphereLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "DirectionalLight",
+            "name": "",
+            "castShadow": true
+          },
+          {
+            "type": "PointLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "DirectionalLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "PointLight",
+            "name": "",
+            "castShadow": false
+          }
+        ],
+        "uniqueMaterials": 69,
+        "uniqueGeometries": 220,
+        "mappedTextures": 17,
+        "levelRoots": 81,
+        "graphicsGroupCount": 1,
+        "graphicsGroupUUIDs": [
+          "02de45a4-f359-4e19-af42-ca7253175a43"
+        ],
+        "graphicsChildren": [
+          [
+            {
+              "type": "DirectionalLight",
+              "name": ""
+            },
+            {
+              "type": "Object3D",
+              "name": ""
+            },
+            {
+              "type": "Mesh",
+              "name": "Soft contact on actual support"
+            },
+            {
+              "type": "Mesh",
+              "name": "Soft contact on actual support"
+            }
+          ]
+        ],
+        "contactCount": 2,
+        "contactUUIDs": [
+          "2b50ba95-b9f4-48d5-8dad-0051d2b494e0",
+          "7bad7cf2-978f-463c-9d24-cb0b5ecdf8db"
+        ],
+        "contactTextureUUIDs": [
+          "0280e6fa-740d-497b-b2ab-18877d8b114f"
+        ],
+        "contactVisualOnly": true
+      },
+      "environment": {
+        "uuid": "20f82711-1feb-419a-a7cc-dd79ac1c0d6f",
+        "name": "Neutral laboratory broad-light probe",
+        "width": 128,
+        "height": 64,
+        "intensity": 0.65,
+        "persistentObjectIdentity": true
+      },
+      "artLighting": {
+        "probe": "broad neutral radiance",
+        "probePixels": 8192,
+        "downloadBytes": 0,
+        "extraShadowLights": 0,
+        "contactDraws": 2,
+        "profile": "laboratory-enamel-and-nickel"
+      },
+      "contextEvents": [],
+      "errorScreenActive": false,
+      "measuredAt": "2026-10-04T16:38:08.914Z",
+      "checkFailures": []
+    },
+    {
+      "label": "cycle8-level20-balanced",
+      "levelRequested": 20,
+      "levelIndex": 19,
+      "state": "ready",
+      "qualityRequested": "balanced",
+      "qualitySelect": "balanced",
+      "qualitySettings": {
+        "pixelRatio": 1.35,
+        "portalResolution": 896,
+        "shadowSize": 1024,
+        "shadows": true
+      },
+      "elapsed": 0,
+      "canvas": {
+        "width": 640,
+        "height": 360,
+        "pixelRatio": 1
+      },
+      "contextLost": false,
+      "memory": {
+        "geometries": 142,
+        "textures": 29
+      },
+      "programs": 97,
+      "render": {
+        "frame": 178,
+        "calls": 72,
+        "triangles": 355102,
+        "points": 0,
+        "lines": 0
+      },
+      "scene": {
+        "children": 155,
+        "totalObjects": 449,
+        "groupCount": 58,
+        "lightCount": 5,
+        "lights": [
+          {
+            "type": "HemisphereLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "DirectionalLight",
+            "name": "",
+            "castShadow": true
+          },
+          {
+            "type": "PointLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "DirectionalLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "PointLight",
+            "name": "",
+            "castShadow": false
+          }
+        ],
+        "uniqueMaterials": 71,
+        "uniqueGeometries": 277,
+        "mappedTextures": 18,
+        "levelRoots": 148,
+        "graphicsGroupCount": 1,
+        "graphicsGroupUUIDs": [
+          "1b6b0875-bc2e-440d-a985-65a6fc930935"
+        ],
+        "graphicsChildren": [
+          [
+            {
+              "type": "DirectionalLight",
+              "name": ""
+            },
+            {
+              "type": "Object3D",
+              "name": ""
+            },
+            {
+              "type": "Mesh",
+              "name": "Soft contact on actual support"
+            },
+            {
+              "type": "Mesh",
+              "name": "Soft contact on actual support"
+            }
+          ]
+        ],
+        "contactCount": 2,
+        "contactUUIDs": [
+          "20623160-0dd6-44b5-9b60-0765aa1d1eb4",
+          "1dc5cbb4-1178-406c-84fd-3a482b67e7e0"
+        ],
+        "contactTextureUUIDs": [
+          "2344b4f7-b9c9-4831-8714-6b2b2fd25b15"
+        ],
+        "contactVisualOnly": true
+      },
+      "environment": {
+        "uuid": "20f82711-1feb-419a-a7cc-dd79ac1c0d6f",
+        "name": "Neutral laboratory broad-light probe",
+        "width": 128,
+        "height": 64,
+        "intensity": 0.65,
+        "persistentObjectIdentity": true
+      },
+      "artLighting": {
+        "probe": "broad neutral radiance",
+        "probePixels": 8192,
+        "downloadBytes": 0,
+        "extraShadowLights": 0,
+        "contactDraws": 2,
+        "profile": "laboratory-enamel-and-nickel"
+      },
+      "contextEvents": [],
+      "errorScreenActive": false,
+      "measuredAt": "2026-10-04T16:38:12.669Z",
+      "checkFailures": []
+    },
+    {
+      "label": "cycle8-level41-low",
+      "levelRequested": 41,
+      "levelIndex": 40,
+      "state": "ready",
+      "qualityRequested": "low",
+      "qualitySelect": "low",
+      "qualitySettings": {
+        "pixelRatio": 1,
+        "portalResolution": 640,
+        "shadowSize": 512,
+        "shadows": false
+      },
+      "elapsed": 0,
+      "canvas": {
+        "width": 640,
+        "height": 360,
+        "pixelRatio": 1
+      },
+      "contextLost": false,
+      "memory": {
+        "geometries": 178,
+        "textures": 56
+      },
+      "programs": 117,
+      "render": {
+        "frame": 184,
+        "calls": 318,
+        "triangles": 222642,
+        "points": 0,
+        "lines": 0
+      },
+      "scene": {
+        "children": 16,
+        "totalObjects": 2680,
+        "groupCount": 55,
+        "lightCount": 7,
+        "lights": [
+          {
+            "type": "HemisphereLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "DirectionalLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "HemisphereLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "DirectionalLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "PointLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "DirectionalLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "PointLight",
+            "name": "",
+            "castShadow": false
+          }
+        ],
+        "uniqueMaterials": 141,
+        "uniqueGeometries": 169,
+        "mappedTextures": 43,
+        "levelRoots": 9,
+        "graphicsGroupCount": 1,
+        "graphicsGroupUUIDs": [
+          "6857cad8-efab-43db-828b-deb6bec169d3"
+        ],
+        "graphicsChildren": [
+          [
+            {
+              "type": "DirectionalLight",
+              "name": ""
+            },
+            {
+              "type": "Object3D",
+              "name": ""
+            },
+            {
+              "type": "Mesh",
+              "name": "Soft contact on actual support"
+            },
+            {
+              "type": "Mesh",
+              "name": "Soft contact on actual support"
+            }
+          ]
+        ],
+        "contactCount": 2,
+        "contactUUIDs": [
+          "0b2fdf9f-e63b-4e6e-b62a-b54828de50c6",
+          "56f5543a-25e8-407f-bb6e-f19888192606"
+        ],
+        "contactTextureUUIDs": [
+          "670344a3-bb9c-41c8-83ec-4209cb06c3de"
+        ],
+        "contactVisualOnly": true
+      },
+      "environment": {
+        "uuid": "20f82711-1feb-419a-a7cc-dd79ac1c0d6f",
+        "name": "Neutral laboratory broad-light probe",
+        "width": 128,
+        "height": 64,
+        "intensity": 0.65,
+        "persistentObjectIdentity": true
+      },
+      "artLighting": {
+        "probe": "broad neutral radiance",
+        "probePixels": 8192,
+        "downloadBytes": 0,
+        "extraShadowLights": 0,
+        "contactDraws": 2,
+        "profile": "castle-mineral-and-gold"
+      },
+      "contextEvents": [],
+      "errorScreenActive": false,
+      "measuredAt": "2026-10-04T16:38:17.626Z",
+      "checkFailures": []
+    },
+    {
+      "label": "cycle9-level1-high",
+      "levelRequested": 1,
+      "levelIndex": 0,
+      "state": "ready",
+      "qualityRequested": "high",
+      "qualitySelect": "high",
+      "qualitySettings": {
+        "pixelRatio": 1.75,
+        "portalResolution": 1280,
+        "shadowSize": 2048,
+        "shadows": true
+      },
+      "elapsed": 0,
+      "canvas": {
+        "width": 640,
+        "height": 360,
+        "pixelRatio": 1
+      },
+      "contextLost": false,
+      "memory": {
+        "geometries": 151,
+        "textures": 28
+      },
+      "programs": 93,
+      "render": {
+        "frame": 190,
+        "calls": 89,
+        "triangles": 352722,
+        "points": 0,
+        "lines": 0
+      },
+      "scene": {
+        "children": 88,
+        "totalObjects": 396,
+        "groupCount": 62,
+        "lightCount": 5,
+        "lights": [
+          {
+            "type": "HemisphereLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "DirectionalLight",
+            "name": "",
+            "castShadow": true
+          },
+          {
+            "type": "PointLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "DirectionalLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "PointLight",
+            "name": "",
+            "castShadow": false
+          }
+        ],
+        "uniqueMaterials": 69,
+        "uniqueGeometries": 220,
+        "mappedTextures": 17,
+        "levelRoots": 81,
+        "graphicsGroupCount": 1,
+        "graphicsGroupUUIDs": [
+          "8b0dd9aa-40e9-4bc4-a18d-9c42abb3435d"
+        ],
+        "graphicsChildren": [
+          [
+            {
+              "type": "DirectionalLight",
+              "name": ""
+            },
+            {
+              "type": "Object3D",
+              "name": ""
+            },
+            {
+              "type": "Mesh",
+              "name": "Soft contact on actual support"
+            },
+            {
+              "type": "Mesh",
+              "name": "Soft contact on actual support"
+            }
+          ]
+        ],
+        "contactCount": 2,
+        "contactUUIDs": [
+          "e1555250-0713-4114-a663-8cd52ad2a6ec",
+          "5a53535c-95bc-4be0-835a-6259cb19520c"
+        ],
+        "contactTextureUUIDs": [
+          "feafee64-eb7c-4a1d-ab19-c0b732d5b134"
+        ],
+        "contactVisualOnly": true
+      },
+      "environment": {
+        "uuid": "20f82711-1feb-419a-a7cc-dd79ac1c0d6f",
+        "name": "Neutral laboratory broad-light probe",
+        "width": 128,
+        "height": 64,
+        "intensity": 0.65,
+        "persistentObjectIdentity": true
+      },
+      "artLighting": {
+        "probe": "broad neutral radiance",
+        "probePixels": 8192,
+        "downloadBytes": 0,
+        "extraShadowLights": 0,
+        "contactDraws": 2,
+        "profile": "laboratory-enamel-and-nickel"
+      },
+      "contextEvents": [],
+      "errorScreenActive": false,
+      "measuredAt": "2026-10-04T16:38:22.576Z",
+      "checkFailures": []
+    },
+    {
+      "label": "cycle9-level20-high",
+      "levelRequested": 20,
+      "levelIndex": 19,
+      "state": "ready",
+      "qualityRequested": "high",
+      "qualitySelect": "high",
+      "qualitySettings": {
+        "pixelRatio": 1.75,
+        "portalResolution": 1280,
+        "shadowSize": 2048,
+        "shadows": true
+      },
+      "elapsed": 0,
+      "canvas": {
+        "width": 640,
+        "height": 360,
+        "pixelRatio": 1
+      },
+      "contextLost": false,
+      "memory": {
+        "geometries": 142,
+        "textures": 29
+      },
+      "programs": 97,
+      "render": {
+        "frame": 196,
+        "calls": 72,
+        "triangles": 355102,
+        "points": 0,
+        "lines": 0
+      },
+      "scene": {
+        "children": 155,
+        "totalObjects": 449,
+        "groupCount": 58,
+        "lightCount": 5,
+        "lights": [
+          {
+            "type": "HemisphereLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "DirectionalLight",
+            "name": "",
+            "castShadow": true
+          },
+          {
+            "type": "PointLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "DirectionalLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "PointLight",
+            "name": "",
+            "castShadow": false
+          }
+        ],
+        "uniqueMaterials": 71,
+        "uniqueGeometries": 277,
+        "mappedTextures": 18,
+        "levelRoots": 148,
+        "graphicsGroupCount": 1,
+        "graphicsGroupUUIDs": [
+          "105231b4-9bd0-4a40-8d1a-6383de7dd1f4"
+        ],
+        "graphicsChildren": [
+          [
+            {
+              "type": "DirectionalLight",
+              "name": ""
+            },
+            {
+              "type": "Object3D",
+              "name": ""
+            },
+            {
+              "type": "Mesh",
+              "name": "Soft contact on actual support"
+            },
+            {
+              "type": "Mesh",
+              "name": "Soft contact on actual support"
+            }
+          ]
+        ],
+        "contactCount": 2,
+        "contactUUIDs": [
+          "9d439daa-1af4-453c-a27b-ee418f6b37f4",
+          "e07e95b6-44e0-43a2-a6ba-703cfd49beff"
+        ],
+        "contactTextureUUIDs": [
+          "9e84efd5-bcb3-4382-9f51-b95c69c70cbb"
+        ],
+        "contactVisualOnly": true
+      },
+      "environment": {
+        "uuid": "20f82711-1feb-419a-a7cc-dd79ac1c0d6f",
+        "name": "Neutral laboratory broad-light probe",
+        "width": 128,
+        "height": 64,
+        "intensity": 0.65,
+        "persistentObjectIdentity": true
+      },
+      "artLighting": {
+        "probe": "broad neutral radiance",
+        "probePixels": 8192,
+        "downloadBytes": 0,
+        "extraShadowLights": 0,
+        "contactDraws": 2,
+        "profile": "laboratory-enamel-and-nickel"
+      },
+      "contextEvents": [],
+      "errorScreenActive": false,
+      "measuredAt": "2026-10-04T16:38:29.466Z",
+      "checkFailures": []
+    },
+    {
+      "label": "cycle9-level41-low",
+      "levelRequested": 41,
+      "levelIndex": 40,
+      "state": "ready",
+      "qualityRequested": "low",
+      "qualitySelect": "low",
+      "qualitySettings": {
+        "pixelRatio": 1,
+        "portalResolution": 640,
+        "shadowSize": 512,
+        "shadows": false
+      },
+      "elapsed": 0,
+      "canvas": {
+        "width": 640,
+        "height": 360,
+        "pixelRatio": 1
+      },
+      "contextLost": false,
+      "memory": {
+        "geometries": 178,
+        "textures": 56
+      },
+      "programs": 117,
+      "render": {
+        "frame": 202,
+        "calls": 318,
+        "triangles": 222642,
+        "points": 0,
+        "lines": 0
+      },
+      "scene": {
+        "children": 16,
+        "totalObjects": 2680,
+        "groupCount": 55,
+        "lightCount": 7,
+        "lights": [
+          {
+            "type": "HemisphereLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "DirectionalLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "HemisphereLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "DirectionalLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "PointLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "DirectionalLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "PointLight",
+            "name": "",
+            "castShadow": false
+          }
+        ],
+        "uniqueMaterials": 141,
+        "uniqueGeometries": 169,
+        "mappedTextures": 43,
+        "levelRoots": 9,
+        "graphicsGroupCount": 1,
+        "graphicsGroupUUIDs": [
+          "b4dc7b9e-e93c-4848-bf01-7ec0d352df82"
+        ],
+        "graphicsChildren": [
+          [
+            {
+              "type": "DirectionalLight",
+              "name": ""
+            },
+            {
+              "type": "Object3D",
+              "name": ""
+            },
+            {
+              "type": "Mesh",
+              "name": "Soft contact on actual support"
+            },
+            {
+              "type": "Mesh",
+              "name": "Soft contact on actual support"
+            }
+          ]
+        ],
+        "contactCount": 2,
+        "contactUUIDs": [
+          "ef5142c2-bcef-4ae4-8aca-5b3a97af6e33",
+          "a5cd6aa5-94b9-4517-ba2d-236f2dce968d"
+        ],
+        "contactTextureUUIDs": [
+          "195c4c86-0b33-4ba4-898c-253230003903"
+        ],
+        "contactVisualOnly": true
+      },
+      "environment": {
+        "uuid": "20f82711-1feb-419a-a7cc-dd79ac1c0d6f",
+        "name": "Neutral laboratory broad-light probe",
+        "width": 128,
+        "height": 64,
+        "intensity": 0.65,
+        "persistentObjectIdentity": true
+      },
+      "artLighting": {
+        "probe": "broad neutral radiance",
+        "probePixels": 8192,
+        "downloadBytes": 0,
+        "extraShadowLights": 0,
+        "contactDraws": 2,
+        "profile": "castle-mineral-and-gold"
+      },
+      "contextEvents": [],
+      "errorScreenActive": false,
+      "measuredAt": "2026-10-04T16:38:34.974Z",
+      "checkFailures": []
+    },
+    {
+      "label": "cycle10-level1-low",
+      "levelRequested": 1,
+      "levelIndex": 0,
+      "state": "ready",
+      "qualityRequested": "low",
+      "qualitySelect": "low",
+      "qualitySettings": {
+        "pixelRatio": 1,
+        "portalResolution": 640,
+        "shadowSize": 512,
+        "shadows": false
+      },
+      "elapsed": 0,
+      "canvas": {
+        "width": 640,
+        "height": 360,
+        "pixelRatio": 1
+      },
+      "contextLost": false,
+      "memory": {
+        "geometries": 151,
+        "textures": 27
+      },
+      "programs": 91,
+      "render": {
+        "frame": 208,
+        "calls": 74,
+        "triangles": 206502,
+        "points": 0,
+        "lines": 0
+      },
+      "scene": {
+        "children": 88,
+        "totalObjects": 396,
+        "groupCount": 62,
+        "lightCount": 5,
+        "lights": [
+          {
+            "type": "HemisphereLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "DirectionalLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "PointLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "DirectionalLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "PointLight",
+            "name": "",
+            "castShadow": false
+          }
+        ],
+        "uniqueMaterials": 69,
+        "uniqueGeometries": 220,
+        "mappedTextures": 17,
+        "levelRoots": 81,
+        "graphicsGroupCount": 1,
+        "graphicsGroupUUIDs": [
+          "a80662e4-6ea7-4f3f-8749-0f862dddf18a"
+        ],
+        "graphicsChildren": [
+          [
+            {
+              "type": "DirectionalLight",
+              "name": ""
+            },
+            {
+              "type": "Object3D",
+              "name": ""
+            },
+            {
+              "type": "Mesh",
+              "name": "Soft contact on actual support"
+            },
+            {
+              "type": "Mesh",
+              "name": "Soft contact on actual support"
+            }
+          ]
+        ],
+        "contactCount": 2,
+        "contactUUIDs": [
+          "38ee3165-2ee0-45a8-998f-a7567a4910c6",
+          "15c96acd-9bdb-48b1-8a35-5336a8c89f0a"
+        ],
+        "contactTextureUUIDs": [
+          "0b4d4e01-6c5d-4b1f-b375-8a9c19a1fe0e"
+        ],
+        "contactVisualOnly": true
+      },
+      "environment": {
+        "uuid": "20f82711-1feb-419a-a7cc-dd79ac1c0d6f",
+        "name": "Neutral laboratory broad-light probe",
+        "width": 128,
+        "height": 64,
+        "intensity": 0.65,
+        "persistentObjectIdentity": true
+      },
+      "artLighting": {
+        "probe": "broad neutral radiance",
+        "probePixels": 8192,
+        "downloadBytes": 0,
+        "extraShadowLights": 0,
+        "contactDraws": 2,
+        "profile": "laboratory-enamel-and-nickel"
+      },
+      "contextEvents": [],
+      "errorScreenActive": false,
+      "measuredAt": "2026-10-04T16:38:38.491Z",
+      "checkFailures": []
+    },
+    {
+      "label": "cycle10-level20-low",
+      "levelRequested": 20,
+      "levelIndex": 19,
+      "state": "ready",
+      "qualityRequested": "low",
+      "qualitySelect": "low",
+      "qualitySettings": {
+        "pixelRatio": 1,
+        "portalResolution": 640,
+        "shadowSize": 512,
+        "shadows": false
+      },
+      "elapsed": 0,
+      "canvas": {
+        "width": 640,
+        "height": 360,
+        "pixelRatio": 1
+      },
+      "contextLost": false,
+      "memory": {
+        "geometries": 142,
+        "textures": 28
+      },
+      "programs": 95,
+      "render": {
+        "frame": 214,
+        "calls": 60,
+        "triangles": 208442,
+        "points": 0,
+        "lines": 0
+      },
+      "scene": {
+        "children": 155,
+        "totalObjects": 449,
+        "groupCount": 58,
+        "lightCount": 5,
+        "lights": [
+          {
+            "type": "HemisphereLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "DirectionalLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "PointLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "DirectionalLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "PointLight",
+            "name": "",
+            "castShadow": false
+          }
+        ],
+        "uniqueMaterials": 71,
+        "uniqueGeometries": 277,
+        "mappedTextures": 18,
+        "levelRoots": 148,
+        "graphicsGroupCount": 1,
+        "graphicsGroupUUIDs": [
+          "92146af2-7aa9-4cf6-901f-5696617c84dd"
+        ],
+        "graphicsChildren": [
+          [
+            {
+              "type": "DirectionalLight",
+              "name": ""
+            },
+            {
+              "type": "Object3D",
+              "name": ""
+            },
+            {
+              "type": "Mesh",
+              "name": "Soft contact on actual support"
+            },
+            {
+              "type": "Mesh",
+              "name": "Soft contact on actual support"
+            }
+          ]
+        ],
+        "contactCount": 2,
+        "contactUUIDs": [
+          "ec386e46-1e98-4237-b75e-8fa7d546a15f",
+          "19e10b88-51e0-49ee-88bc-fefa2aab92b9"
+        ],
+        "contactTextureUUIDs": [
+          "525d57eb-78f8-40db-a7d5-5346852c32a1"
+        ],
+        "contactVisualOnly": true
+      },
+      "environment": {
+        "uuid": "20f82711-1feb-419a-a7cc-dd79ac1c0d6f",
+        "name": "Neutral laboratory broad-light probe",
+        "width": 128,
+        "height": 64,
+        "intensity": 0.65,
+        "persistentObjectIdentity": true
+      },
+      "artLighting": {
+        "probe": "broad neutral radiance",
+        "probePixels": 8192,
+        "downloadBytes": 0,
+        "extraShadowLights": 0,
+        "contactDraws": 2,
+        "profile": "laboratory-enamel-and-nickel"
+      },
+      "contextEvents": [],
+      "errorScreenActive": false,
+      "measuredAt": "2026-10-04T16:38:43.736Z",
+      "checkFailures": []
+    },
+    {
+      "label": "cycle10-level41-low",
+      "levelRequested": 41,
+      "levelIndex": 40,
+      "state": "ready",
+      "qualityRequested": "low",
+      "qualitySelect": "low",
+      "qualitySettings": {
+        "pixelRatio": 1,
+        "portalResolution": 640,
+        "shadowSize": 512,
+        "shadows": false
+      },
+      "elapsed": 0,
+      "canvas": {
+        "width": 640,
+        "height": 360,
+        "pixelRatio": 1
+      },
+      "contextLost": false,
+      "memory": {
+        "geometries": 178,
+        "textures": 56
+      },
+      "programs": 117,
+      "render": {
+        "frame": 220,
+        "calls": 318,
+        "triangles": 222642,
+        "points": 0,
+        "lines": 0
+      },
+      "scene": {
+        "children": 16,
+        "totalObjects": 2680,
+        "groupCount": 55,
+        "lightCount": 7,
+        "lights": [
+          {
+            "type": "HemisphereLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "DirectionalLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "HemisphereLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "DirectionalLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "PointLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "DirectionalLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "PointLight",
+            "name": "",
+            "castShadow": false
+          }
+        ],
+        "uniqueMaterials": 141,
+        "uniqueGeometries": 169,
+        "mappedTextures": 43,
+        "levelRoots": 9,
+        "graphicsGroupCount": 1,
+        "graphicsGroupUUIDs": [
+          "987f69d8-598a-454a-8d92-ba2ff7dfa738"
+        ],
+        "graphicsChildren": [
+          [
+            {
+              "type": "DirectionalLight",
+              "name": ""
+            },
+            {
+              "type": "Object3D",
+              "name": ""
+            },
+            {
+              "type": "Mesh",
+              "name": "Soft contact on actual support"
+            },
+            {
+              "type": "Mesh",
+              "name": "Soft contact on actual support"
+            }
+          ]
+        ],
+        "contactCount": 2,
+        "contactUUIDs": [
+          "a056586c-1f48-4dc3-b400-08a8fe24def3",
+          "407d285c-1911-4636-b50f-648618cfc9c0"
+        ],
+        "contactTextureUUIDs": [
+          "5607214d-5332-4702-abe5-0e242693cfc7"
+        ],
+        "contactVisualOnly": true
+      },
+      "environment": {
+        "uuid": "20f82711-1feb-419a-a7cc-dd79ac1c0d6f",
+        "name": "Neutral laboratory broad-light probe",
+        "width": 128,
+        "height": 64,
+        "intensity": 0.65,
+        "persistentObjectIdentity": true
+      },
+      "artLighting": {
+        "probe": "broad neutral radiance",
+        "probePixels": 8192,
+        "downloadBytes": 0,
+        "extraShadowLights": 0,
+        "contactDraws": 2,
+        "profile": "castle-mineral-and-gold"
+      },
+      "contextEvents": [],
+      "errorScreenActive": false,
+      "measuredAt": "2026-10-04T16:38:50.914Z",
+      "checkFailures": []
+    },
+    {
+      "label": "final-post-capture",
+      "levelRequested": 41,
+      "levelIndex": 40,
+      "state": "ready",
+      "qualityRequested": "low",
+      "qualitySelect": "low",
+      "qualitySettings": {
+        "pixelRatio": 1,
+        "portalResolution": 640,
+        "shadowSize": 512,
+        "shadows": false
+      },
+      "elapsed": 0,
+      "canvas": {
+        "width": 640,
+        "height": 360,
+        "pixelRatio": 1
+      },
+      "contextLost": false,
+      "memory": {
+        "geometries": 178,
+        "textures": 56
+      },
+      "programs": 117,
+      "render": {
+        "frame": 221,
+        "calls": 318,
+        "triangles": 222642,
+        "points": 0,
+        "lines": 0
+      },
+      "scene": {
+        "children": 16,
+        "totalObjects": 2680,
+        "groupCount": 55,
+        "lightCount": 7,
+        "lights": [
+          {
+            "type": "HemisphereLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "DirectionalLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "HemisphereLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "DirectionalLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "PointLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "DirectionalLight",
+            "name": "",
+            "castShadow": false
+          },
+          {
+            "type": "PointLight",
+            "name": "",
+            "castShadow": false
+          }
+        ],
+        "uniqueMaterials": 141,
+        "uniqueGeometries": 169,
+        "mappedTextures": 43,
+        "levelRoots": 9,
+        "graphicsGroupCount": 1,
+        "graphicsGroupUUIDs": [
+          "987f69d8-598a-454a-8d92-ba2ff7dfa738"
+        ],
+        "graphicsChildren": [
+          [
+            {
+              "type": "DirectionalLight",
+              "name": ""
+            },
+            {
+              "type": "Object3D",
+              "name": ""
+            },
+            {
+              "type": "Mesh",
+              "name": "Soft contact on actual support"
+            },
+            {
+              "type": "Mesh",
+              "name": "Soft contact on actual support"
+            }
+          ]
+        ],
+        "contactCount": 2,
+        "contactUUIDs": [
+          "a056586c-1f48-4dc3-b400-08a8fe24def3",
+          "407d285c-1911-4636-b50f-648618cfc9c0"
+        ],
+        "contactTextureUUIDs": [
+          "5607214d-5332-4702-abe5-0e242693cfc7"
+        ],
+        "contactVisualOnly": true
+      },
+      "environment": {
+        "uuid": "20f82711-1feb-419a-a7cc-dd79ac1c0d6f",
+        "name": "Neutral laboratory broad-light probe",
+        "width": 128,
+        "height": 64,
+        "intensity": 0.65,
+        "persistentObjectIdentity": true
+      },
+      "artLighting": {
+        "probe": "broad neutral radiance",
+        "probePixels": 8192,
+        "downloadBytes": 0,
+        "extraShadowLights": 0,
+        "contactDraws": 2,
+        "profile": "castle-mineral-and-gold"
+      },
+      "contextEvents": [],
+      "errorScreenActive": false,
+      "measuredAt": "2026-10-04T16:39:09.442Z",
+      "checkFailures": []
+    }
+  ],
+  "errors": [],
+  "consoleErrors": [],
+  "requestsFailed": [],
+  "captures": [
+    {
+      "name": "capture0-after-warmup",
+      "ok": true,
+      "method": "actual WebGL2 pixel-pack buffer",
+      "includesHTML": false,
+      "file": "/workspace/scratch/5c7196ff0296/graphics-lifecycle/capture0-after-warmup.jpg",
+      "pixels": {
+        "width": 640,
+        "height": 360,
+        "colors": 1139,
+        "maxChannelStd": 60.749710385431136
+      },
+      "renderer": {
+        "width": 640,
+        "height": 360,
+        "calls": 318,
+        "triangles": 222642
+      },
+      "frame": {
+        "levelIndex": 40,
+        "state": "ready",
+        "elapsed": 0,
+        "player": [
+          0,
+          0,
+          54
+        ],
+        "cargo": [
+          2,
+          0.57,
+          54
+        ],
+        "camera": [
+          1.3686144936430809,
+          2.0806850733932354,
+          60.308585624916795
+        ],
+        "cargoUUID": "592c9208-70a7-40d2-af89-c6d8682e27bf",
+        "cargoBodyId": 1859
+      },
+      "timings": {
+        "renderEnqueueMs": 4.099999997764826,
+        "pixelPackEnqueueMs": 0.8000000007450581,
+        "copyMs": 1.5,
+        "flipAndEncodeMs": 52.30000000074506,
+        "queueToEncodedMs": 13455.10000000149,
+        "enqueueAwaitMs": 11.776168000000325,
+        "fenceWaitMs": 13399.914608000001,
+        "fencePolls": 132,
+        "copyAwaitMs": 55.870412000000215,
+        "totalMs": 13467.569722
+      },
+      "progress": [
+        {
+          "phase": "entered-browser-task",
+          "browserElapsedMs": 0,
+          "nodeElapsedMs": 6.345190000000002
+        },
+        {
+          "phase": "before-render",
+          "browserElapsedMs": 0.4000000022351742,
+          "nodeElapsedMs": 6.489999000001262
+        },
+        {
+          "phase": "after-render",
+          "browserElapsedMs": 4.5,
+          "nodeElapsedMs": 10.755896000000575
+        },
+        {
+          "phase": "before-readPixels",
+          "browserElapsedMs": 4.600000001490116,
+          "nodeElapsedMs": 10.79725900000085
+        },
+        {
+          "phase": "after-readPixels",
+          "browserElapsedMs": 4.699999999254942,
+          "nodeElapsedMs": 10.839222000000518
+        },
+        {
+          "phase": "after-enqueue",
+          "browserElapsedMs": 5.300000000745058,
+          "nodeElapsedMs": 11.3314160000009
+        }
+      ],
+      "issues": []
+    },
+    {
+      "name": "capture-final",
+      "ok": true,
+      "method": "actual WebGL2 pixel-pack buffer",
+      "includesHTML": false,
+      "file": "/workspace/scratch/5c7196ff0296/graphics-lifecycle/capture-final.jpg",
+      "pixels": {
+        "width": 640,
+        "height": 360,
+        "colors": 1139,
+        "maxChannelStd": 60.749710385431136
+      },
+      "renderer": {
+        "width": 640,
+        "height": 360,
+        "calls": 318,
+        "triangles": 222642
+      },
+      "frame": {
+        "levelIndex": 40,
+        "state": "ready",
+        "elapsed": 0,
+        "player": [
+          0,
+          0,
+          54
+        ],
+        "cargo": [
+          2,
+          0.57,
+          54
+        ],
+        "camera": [
+          1.3686144936430809,
+          2.0806850733932354,
+          60.308585624916795
+        ],
+        "cargoUUID": "64d0f0b1-f5bd-4805-b3af-e0254ef5a229",
+        "cargoBodyId": 19679
+      },
+      "timings": {
+        "renderEnqueueMs": 3.600000001490116,
+        "pixelPackEnqueueMs": 0.30000000074505806,
+        "copyMs": 1.5999999977648258,
+        "flipAndEncodeMs": 24,
+        "queueToEncodedMs": 18455.89999999851,
+        "enqueueAwaitMs": 5.888968999992358,
+        "fenceWaitMs": 18429.48118600002,
+        "fencePolls": 182,
+        "copyAwaitMs": 27.223752999998396,
+        "totalMs": 18462.59894700002
+      },
+      "progress": [
+        {
+          "phase": "entered-browser-task",
+          "browserElapsedMs": 0.09999999776482582,
+          "nodeElapsedMs": 1.7953430000052322
+        },
+        {
+          "phase": "before-render",
+          "browserElapsedMs": 0.29999999701976776,
+          "nodeElapsedMs": 2.108657000004314
+        },
+        {
+          "phase": "after-render",
+          "browserElapsedMs": 3.899999998509884,
+          "nodeElapsedMs": 5.5818660000222735
+        },
+        {
+          "phase": "before-readPixels",
+          "browserElapsedMs": 4,
+          "nodeElapsedMs": 5.685041999997338
+        },
+        {
+          "phase": "after-readPixels",
+          "browserElapsedMs": 4.199999999254942,
+          "nodeElapsedMs": 5.760345000016969
+        },
+        {
+          "phase": "after-enqueue",
+          "browserElapsedMs": 4.199999999254942,
+          "nodeElapsedMs": 5.791533000010531
+        }
+      ],
+      "issues": []
+    }
+  ],
+  "checks": [
+    {
+      "name": "exact production dist commit",
+      "passed": true
+    },
+    {
+      "name": "10 production 1→20→41 ready-menu cycles",
+      "passed": true
+    },
+    {
+      "name": "same level41/low endpoint resource counts plateau from warmed baseline",
+      "passed": false,
+      "variation": [
+        {
+          "key": "programs",
+          "values": [
+            108,
+            115,
+            117,
+            117,
+            117,
+            117,
+            117,
+            117,
+            117,
+            117,
+            117,
+            117
+          ],
+          "baseline": 108,
+          "final": 117,
+          "min": 108,
+          "max": 117
+        }
+      ]
+    },
+    {
+      "name": "one graphics group/two visual-only contacts at every measured point",
+      "passed": true
+    },
+    {
+      "name": "persistent environment identity throughout fixture",
+      "passed": true
+    },
+    {
+      "name": "actual baseline and final pixel-pack captures",
+      "passed": true
+    },
+    {
+      "name": "no JS errors",
+      "passed": true
+    },
+    {
+      "name": "no console errors",
+      "passed": true
+    },
+    {
+      "name": "no context-loss events/application error screen",
+      "passed": true
+    }
+  ],
+  "cleanup": {
+    "browserClosed": true,
+    "serverClosed": true
+  },
+  "updatedAt": "2026-10-04T16:39:09.526Z",
+  "serverPID": 13,
+  "browserPID": 37,
+  "qualityOptions": [
+    "low",
+    "balanced",
+    "high"
+  ],
+  "environmentUUID": "20f82711-1feb-419a-a7cc-dd79ac1c0d6f",
+  "progress": {
+    "level": 41,
+    "quality": "low",
+    "textures": 56,
+    "geometries": 178,
+    "programs": 117,
+    "groups": 55,
+    "lights": 7,
+    "contacts": 2
+  },
+  "baseline": {
+    "label": "warmup-level41-low",
+    "levelRequested": 41,
+    "levelIndex": 40,
+    "state": "ready",
+    "qualityRequested": "low",
+    "qualitySelect": "low",
+    "qualitySettings": {
+      "pixelRatio": 1,
+      "portalResolution": 640,
+      "shadowSize": 512,
+      "shadows": false
+    },
+    "elapsed": 0,
+    "canvas": {
+      "width": 640,
+      "height": 360,
+      "pixelRatio": 1
+    },
+    "contextLost": false,
+    "memory": {
+      "geometries": 178,
+      "textures": 56
+    },
+    "programs": 108,
+    "render": {
+      "frame": 39,
+      "calls": 318,
+      "triangles": 222642,
+      "points": 0,
+      "lines": 0
+    },
+    "scene": {
+      "children": 16,
+      "totalObjects": 2680,
+      "groupCount": 55,
+      "lightCount": 7,
+      "lights": [
+        {
+          "type": "HemisphereLight",
+          "name": "",
+          "castShadow": false
+        },
+        {
+          "type": "DirectionalLight",
+          "name": "",
+          "castShadow": false
+        },
+        {
+          "type": "HemisphereLight",
+          "name": "",
+          "castShadow": false
+        },
+        {
+          "type": "DirectionalLight",
+          "name": "",
+          "castShadow": false
+        },
+        {
+          "type": "PointLight",
+          "name": "",
+          "castShadow": false
+        },
+        {
+          "type": "DirectionalLight",
+          "name": "",
+          "castShadow": false
+        },
+        {
+          "type": "PointLight",
+          "name": "",
+          "castShadow": false
+        }
+      ],
+      "uniqueMaterials": 141,
+      "uniqueGeometries": 169,
+      "mappedTextures": 43,
+      "levelRoots": 9,
+      "graphicsGroupCount": 1,
+      "graphicsGroupUUIDs": [
+        "c17dfa34-31a8-40ac-a2fc-e356cd9dfe50"
+      ],
+      "graphicsChildren": [
+        [
+          {
+            "type": "DirectionalLight",
+            "name": ""
+          },
+          {
+            "type": "Object3D",
+            "name": ""
+          },
+          {
+            "type": "Mesh",
+            "name": "Soft contact on actual support"
+          },
+          {
+            "type": "Mesh",
+            "name": "Soft contact on actual support"
+          }
+        ]
+      ],
+      "contactCount": 2,
+      "contactUUIDs": [
+        "3d189ea0-62e9-4eea-a636-cbe8eca29938",
+        "b988b0b5-fab6-47a9-b3d5-b5a6a3269ad1"
+      ],
+      "contactTextureUUIDs": [
+        "e4e8d68f-900b-4387-a057-a6744b0c13c6"
+      ],
+      "contactVisualOnly": true
+    },
+    "environment": {
+      "uuid": "20f82711-1feb-419a-a7cc-dd79ac1c0d6f",
+      "name": "Neutral laboratory broad-light probe",
+      "width": 128,
+      "height": 64,
+      "intensity": 0.65,
+      "persistentObjectIdentity": true
+    },
+    "artLighting": {
+      "probe": "broad neutral radiance",
+      "probePixels": 8192,
+      "downloadBytes": 0,
+      "extraShadowLights": 0,
+      "contactDraws": 2,
+      "profile": "castle-mineral-and-gold"
+    },
+    "contextEvents": [],
+    "errorScreenActive": false,
+    "measuredAt": "2026-10-04T16:36:14.899Z",
+    "checkFailures": []
+  },
+  "final": {
+    "label": "final-post-capture",
+    "levelRequested": 41,
+    "levelIndex": 40,
+    "state": "ready",
+    "qualityRequested": "low",
+    "qualitySelect": "low",
+    "qualitySettings": {
+      "pixelRatio": 1,
+      "portalResolution": 640,
+      "shadowSize": 512,
+      "shadows": false
+    },
+    "elapsed": 0,
+    "canvas": {
+      "width": 640,
+      "height": 360,
+      "pixelRatio": 1
+    },
+    "contextLost": false,
+    "memory": {
+      "geometries": 178,
+      "textures": 56
+    },
+    "programs": 117,
+    "render": {
+      "frame": 221,
+      "calls": 318,
+      "triangles": 222642,
+      "points": 0,
+      "lines": 0
+    },
+    "scene": {
+      "children": 16,
+      "totalObjects": 2680,
+      "groupCount": 55,
+      "lightCount": 7,
+      "lights": [
+        {
+          "type": "HemisphereLight",
+          "name": "",
+          "castShadow": false
+        },
+        {
+          "type": "DirectionalLight",
+          "name": "",
+          "castShadow": false
+        },
+        {
+          "type": "HemisphereLight",
+          "name": "",
+          "castShadow": false
+        },
+        {
+          "type": "DirectionalLight",
+          "name": "",
+          "castShadow": false
+        },
+        {
+          "type": "PointLight",
+          "name": "",
+          "castShadow": false
+        },
+        {
+          "type": "DirectionalLight",
+          "name": "",
+          "castShadow": false
+        },
+        {
+          "type": "PointLight",
+          "name": "",
+          "castShadow": false
+        }
+      ],
+      "uniqueMaterials": 141,
+      "uniqueGeometries": 169,
+      "mappedTextures": 43,
+      "levelRoots": 9,
+      "graphicsGroupCount": 1,
+      "graphicsGroupUUIDs": [
+        "987f69d8-598a-454a-8d92-ba2ff7dfa738"
+      ],
+      "graphicsChildren": [
+        [
+          {
+            "type": "DirectionalLight",
+            "name": ""
+          },
+          {
+            "type": "Object3D",
+            "name": ""
+          },
+          {
+            "type": "Mesh",
+            "name": "Soft contact on actual support"
+          },
+          {
+            "type": "Mesh",
+            "name": "Soft contact on actual support"
+          }
+        ]
+      ],
+      "contactCount": 2,
+      "contactUUIDs": [
+        "a056586c-1f48-4dc3-b400-08a8fe24def3",
+        "407d285c-1911-4636-b50f-648618cfc9c0"
+      ],
+      "contactTextureUUIDs": [
+        "5607214d-5332-4702-abe5-0e242693cfc7"
+      ],
+      "contactVisualOnly": true
+    },
+    "environment": {
+      "uuid": "20f82711-1feb-419a-a7cc-dd79ac1c0d6f",
+      "name": "Neutral laboratory broad-light probe",
+      "width": 128,
+      "height": 64,
+      "intensity": 0.65,
+      "persistentObjectIdentity": true
+    },
+    "artLighting": {
+      "probe": "broad neutral radiance",
+      "probePixels": 8192,
+      "downloadBytes": 0,
+      "extraShadowLights": 0,
+      "contactDraws": 2,
+      "profile": "castle-mineral-and-gold"
+    },
+    "contextEvents": [],
+    "errorScreenActive": false,
+    "measuredAt": "2026-10-04T16:39:09.442Z",
+    "checkFailures": []
+  },
+  "plateau": [
+    {
+      "key": "memory.textures",
+      "values": [
+        56,
+        56,
+        56,
+        56,
+        56,
+        56,
+        56,
+        56,
+        56,
+        56,
+        56,
+        56
+      ],
+      "baseline": 56,
+      "final": 56,
+      "min": 56,
+      "max": 56
+    },
+    {
+      "key": "memory.geometries",
+      "values": [
+        178,
+        178,
+        178,
+        178,
+        178,
+        178,
+        178,
+        178,
+        178,
+        178,
+        178,
+        178
+      ],
+      "baseline": 178,
+      "final": 178,
+      "min": 178,
+      "max": 178
+    },
+    {
+      "key": "programs",
+      "values": [
+        108,
+        115,
+        117,
+        117,
+        117,
+        117,
+        117,
+        117,
+        117,
+        117,
+        117,
+        117
+      ],
+      "baseline": 108,
+      "final": 117,
+      "min": 108,
+      "max": 117
+    },
+    {
+      "key": "scene.children",
+      "values": [
+        16,
+        16,
+        16,
+        16,
+        16,
+        16,
+        16,
+        16,
+        16,
+        16,
+        16,
+        16
+      ],
+      "baseline": 16,
+      "final": 16,
+      "min": 16,
+      "max": 16
+    },
+    {
+      "key": "scene.totalObjects",
+      "values": [
+        2680,
+        2680,
+        2680,
+        2680,
+        2680,
+        2680,
+        2680,
+        2680,
+        2680,
+        2680,
+        2680,
+        2680
+      ],
+      "baseline": 2680,
+      "final": 2680,
+      "min": 2680,
+      "max": 2680
+    },
+    {
+      "key": "scene.groupCount",
+      "values": [
+        55,
+        55,
+        55,
+        55,
+        55,
+        55,
+        55,
+        55,
+        55,
+        55,
+        55,
+        55
+      ],
+      "baseline": 55,
+      "final": 55,
+      "min": 55,
+      "max": 55
+    },
+    {
+      "key": "scene.lightCount",
+      "values": [
+        7,
+        7,
+        7,
+        7,
+        7,
+        7,
+        7,
+        7,
+        7,
+        7,
+        7,
+        7
+      ],
+      "baseline": 7,
+      "final": 7,
+      "min": 7,
+      "max": 7
+    },
+    {
+      "key": "scene.uniqueMaterials",
+      "values": [
+        141,
+        141,
+        141,
+        141,
+        141,
+        141,
+        141,
+        141,
+        141,
+        141,
+        141,
+        141
+      ],
+      "baseline": 141,
+      "final": 141,
+      "min": 141,
+      "max": 141
+    },
+    {
+      "key": "scene.uniqueGeometries",
+      "values": [
+        169,
+        169,
+        169,
+        169,
+        169,
+        169,
+        169,
+        169,
+        169,
+        169,
+        169,
+        169
+      ],
+      "baseline": 169,
+      "final": 169,
+      "min": 169,
+      "max": 169
+    },
+    {
+      "key": "scene.mappedTextures",
+      "values": [
+        43,
+        43,
+        43,
+        43,
+        43,
+        43,
+        43,
+        43,
+        43,
+        43,
+        43,
+        43
+      ],
+      "baseline": 43,
+      "final": 43,
+      "min": 43,
+      "max": 43
+    },
+    {
+      "key": "scene.levelRoots",
+      "values": [
+        9,
+        9,
+        9,
+        9,
+        9,
+        9,
+        9,
+        9,
+        9,
+        9,
+        9,
+        9
+      ],
+      "baseline": 9,
+      "final": 9,
+      "min": 9,
+      "max": 9
+    },
+    {
+      "key": "scene.graphicsGroupCount",
+      "values": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "baseline": 1,
+      "final": 1,
+      "min": 1,
+      "max": 1
+    },
+    {
+      "key": "scene.contactCount",
+      "values": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "baseline": 2,
+      "final": 2,
+      "min": 2,
+      "max": 2
+    }
+  ],
+  "distUnchanged": true,
+  "completedAt": "2026-10-04T16:39:09.526Z"
+}

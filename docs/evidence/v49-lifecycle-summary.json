@@ -1,0 +1,161 @@
+{
+  "schema": 1,
+  "status": "passed-scoped-software-graphics-lifecycle-and-graceful-reload",
+  "sourceCommit": "14c6683cb4d2991dfd48be28fa38ccaa1fc015b7",
+  "productionDistUnchangedAfterBothScenarios": true,
+  "lifecycle": {
+    "assessment": "assessment.json",
+    "rawReport": "report.json",
+    "cycles": 10,
+    "levelSequence": [
+      1,
+      20,
+      41
+    ],
+    "viewport": {
+      "width": 640,
+      "height": 360,
+      "deviceScaleFactor": 1
+    },
+    "endpointCounters": {
+      "textures": 56,
+      "geometries": 178,
+      "sceneChildren": 16,
+      "sceneObjects": 2680,
+      "sceneGroups": 55,
+      "sceneLights": 7,
+      "newGraphicsGroups": 1,
+      "contactMeshes": 2
+    },
+    "programSeriesIncludingWarmupAndFinal": [
+      108,
+      115,
+      117,
+      117,
+      117,
+      117,
+      117,
+      117,
+      117,
+      117,
+      117,
+      117
+    ],
+    "programPlateau": "117 in cycles3–10 after first2 cycles populate quality/material cache",
+    "errors": 0,
+    "consoleErrors": 0,
+    "requestsFailed": 0,
+    "persistentEnvironment": {
+      "environmentUUID": "20f82711-1feb-419a-a7cc-dd79ac1c0d6f",
+      "groupsPerScene": 1,
+      "contactsPerScene": 2,
+      "uniqueGraphicsGroupsAcross33Rebuilds": 33,
+      "uniqueContactTexturesAcross33Rebuilds": 33
+    },
+    "actualCaptures": [
+      "capture0-after-warmup.jpg",
+      "capture-final.jpg"
+    ],
+    "baselineFinalJpegsIdentical": true,
+    "originalRawGateFailureRetained": {
+      "rawStatus": "failed",
+      "failedGate": "strict program equality to baseline108",
+      "explanation": "This private-harness assertion was stricter than the requirement. Raw failure and full series remain unchanged; staged program cache warmup assessment is explicit."
+    }
+  },
+  "contextLoss": {
+    "status": "passed",
+    "report": "context-loss-native-scroll/report.json",
+    "forcedUsing": "standard WEBGL_lose_context extension",
+    "expectedError": "visible application error overlay/message; deliberate-loss console error classified expected",
+    "nativeRecovery": "one mouse wheel over scrollable modal, then native #reload-button click; no DOM scroll or state override",
+    "initialReloadBounds": {
+      "x": 113,
+      "y": 351.71875,
+      "width": 414,
+      "height": 52
+    },
+    "nativeWheelReloadBounds": {
+      "x": 113,
+      "y": 286.71875,
+      "width": 414,
+      "height": 52
+    },
+    "nativeWheelHit": true,
+    "postReload": {
+      "url": "http://127.0.0.1:4198/?edition=foundation&level=1&debug=1",
+      "state": "ready",
+      "level": 1,
+      "contextLost": false,
+      "quality": "low"
+    },
+    "storageExactlyPreserved": true,
+    "unusedClassicOpenKeysPreserved": true,
+    "captures": [
+      "context-loss-native-scroll/preloss-level41.jpg",
+      "context-loss-native-scroll/error-overlay.jpg",
+      "context-loss-native-scroll/postreload-url-level1.jpg"
+    ],
+    "originalUnscrolledAttemptRetained": {
+      "report": "context-loss/report.json",
+      "rawStatus": "failed",
+      "explanation": "Initial guard required unscrolled button center inside viewport. CSS intentionally supports scrolling; the separately bounded native-wheel attempt proves ordinary reachability and recovery. Initial failed report retained unmodified."
+    },
+    "automaticContextRestorationTested": false,
+    "unexpectedPageErrors": 0,
+    "unexpectedConsoleErrors": 0,
+    "expectedLossConsoleValidated": true
+  },
+  "cleanup": {
+    "reportsAllClaimBrowserServerClosed": true,
+    "processChecks": [
+      {
+        "scenario": "lifecycle",
+        "kind": "browser",
+        "pid": 37,
+        "aliveAtFinalCheck": false
+      },
+      {
+        "scenario": "lifecycle",
+        "kind": "server",
+        "pid": 13,
+        "aliveAtFinalCheck": false
+      },
+      {
+        "scenario": "context-initial-unscrolled",
+        "kind": "browser",
+        "pid": 39,
+        "aliveAtFinalCheck": false
+      },
+      {
+        "scenario": "context-initial-unscrolled",
+        "kind": "server",
+        "pid": 13,
+        "aliveAtFinalCheck": false
+      },
+      {
+        "scenario": "context-native-scroll",
+        "kind": "browser",
+        "pid": 40,
+        "aliveAtFinalCheck": false
+      },
+      {
+        "scenario": "context-native-scroll",
+        "kind": "server",
+        "pid": 14,
+        "aliveAtFinalCheck": false
+      }
+    ],
+    "allOwnProcessesExited": true
+  },
+  "limitations": [
+    "Ready-menu level selections, not user gameplay traversal.",
+    "renderer.info.memory allocation counts, not physical VRAM byte measurements.",
+    "One software browser/viewport, not hardware FPS, physical-device or human playtest evidence.",
+    "10cycles bound does not rule out slower leaks or resources not included in Three renderer counters.",
+    "Initial raw program-equality gate failed; that gate is preserved and superseded by explicitly documented staged warmup assessment.",
+    "Graceful error/reload recovery is validated, not automatic app restoration after webglcontextrestored.",
+    "Reload returns to level1 from the unchanged URL, not direct-selected level41.",
+    "Error action initially needs native scrolling at640×360, consistent with existing scrollable modal CSS."
+  ]
+}

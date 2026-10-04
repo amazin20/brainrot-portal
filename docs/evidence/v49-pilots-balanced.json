@@ -1,0 +1,603 @@
+{
+  "runtime": "Chromium software WebGL; hardware performance not tested",
+  "rows": [
+    {
+      "level": 1,
+      "errors": [],
+      "views": [
+        {
+          "kind": "start",
+          "capture": {
+            "ok": true,
+            "method": "actual WebGL2 pixel-pack buffer",
+            "includesHTML": false,
+            "file": "/workspace/scratch/5c7196ff0296/visual-balanced/1-start.jpg",
+            "pixels": {
+              "width": 960,
+              "height": 540,
+              "colors": 1211,
+              "maxChannelStd": 52.12105208097463
+            },
+            "renderer": {
+              "width": 960,
+              "height": 540,
+              "calls": 89,
+              "triangles": 352722
+            },
+            "frame": {
+              "levelIndex": 0,
+              "state": "playing",
+              "elapsed": 250.0000000000001,
+              "player": [
+                0,
+                0,
+                12
+              ],
+              "cargo": [
+                -4.00000004187978,
+                0.38933222152660285,
+                9.000000108297208
+              ],
+              "camera": [
+                1.0363717020071526,
+                1.7045275915195568,
+                16.79633644714937
+              ],
+              "cargoUUID": "50e295df-2cb0-4fba-8620-35466aed6f85",
+              "cargoBodyId": 77
+            },
+            "timings": {
+              "renderEnqueueMs": 1.8999999985098839,
+              "pixelPackEnqueueMs": 0.8000000007450581,
+              "copyMs": 5.599999997764826,
+              "flipAndEncodeMs": 354.30000000074506,
+              "queueToEncodedMs": 5368.300000000745,
+              "enqueueAwaitMs": 39.03929699999935,
+              "fenceWaitMs": 4988.667479000001,
+              "fencePolls": 43,
+              "copyAwaitMs": 364.91672199999994,
+              "totalMs": 5392.631009999999
+            },
+            "progress": [
+              {
+                "phase": "entered-browser-task",
+                "browserElapsedMs": 0.09999999776482582,
+                "nodeElapsedMs": 18.281433000000106
+              },
+              {
+                "phase": "before-render",
+                "browserElapsedMs": 0.19999999925494194,
+                "nodeElapsedMs": 18.378088999999818
+              },
+              {
+                "phase": "after-render",
+                "browserElapsedMs": 2.099999997764826,
+                "nodeElapsedMs": 38.62207599999965
+              },
+              {
+                "phase": "before-readPixels",
+                "browserElapsedMs": 2.199999999254942,
+                "nodeElapsedMs": 38.74637400000029
+              },
+              {
+                "phase": "after-readPixels",
+                "browserElapsedMs": 2.300000000745058,
+                "nodeElapsedMs": 38.835117999999966
+              },
+              {
+                "phase": "after-enqueue",
+                "browserElapsedMs": 2.899999998509884,
+                "nodeElapsedMs": 38.9209579999997
+              }
+            ],
+            "issues": []
+          }
+        },
+        {
+          "kind": "overview",
+          "capture": {
+            "ok": true,
+            "method": "actual WebGL2 pixel-pack buffer",
+            "includesHTML": false,
+            "file": "/workspace/scratch/5c7196ff0296/visual-balanced/1-overview.jpg",
+            "pixels": {
+              "width": 960,
+              "height": 540,
+              "colors": 1357,
+              "maxChannelStd": 57.038902856236724
+            },
+            "renderer": {
+              "width": 960,
+              "height": 540,
+              "calls": 96,
+              "triangles": 353326
+            },
+            "frame": {
+              "levelIndex": 0,
+              "state": "playing",
+              "elapsed": 250.0000000000001,
+              "player": [
+                0,
+                0,
+                12
+              ],
+              "cargo": [
+                -4.00000004187978,
+                0.38933222152660285,
+                9.000000108297208
+              ],
+              "camera": [
+                15,
+                10,
+                14
+              ],
+              "cargoUUID": "50e295df-2cb0-4fba-8620-35466aed6f85",
+              "cargoBodyId": 77
+            },
+            "timings": {
+              "renderEnqueueMs": 2.100000001490116,
+              "pixelPackEnqueueMs": 0.30000000074505806,
+              "copyMs": 2.599999997764826,
+              "flipAndEncodeMs": 12.700000002980232,
+              "queueToEncodedMs": 1496.800000000745,
+              "enqueueAwaitMs": 11.09867900000063,
+              "fenceWaitMs": 1475.6221370000003,
+              "fencePolls": 11,
+              "copyAwaitMs": 20.090807000000495,
+              "totalMs": 1506.8163609999992
+            },
+            "progress": [
+              {
+                "phase": "entered-browser-task",
+                "browserElapsedMs": 0,
+                "nodeElapsedMs": 3.748905000000377
+              },
+              {
+                "phase": "before-render",
+                "browserElapsedMs": 0.30000000074505806,
+                "nodeElapsedMs": 3.9415360000002693
+              },
+              {
+                "phase": "after-render",
+                "browserElapsedMs": 2.600000001490116,
+                "nodeElapsedMs": 10.702230999999301
+              },
+              {
+                "phase": "before-readPixels",
+                "browserElapsedMs": 2.699999999254942,
+                "nodeElapsedMs": 10.913891000000149
+              },
+              {
+                "phase": "after-readPixels",
+                "browserElapsedMs": 2.800000000745058,
+                "nodeElapsedMs": 10.954823000000033
+              },
+              {
+                "phase": "after-enqueue",
+                "browserElapsedMs": 2.800000000745058,
+                "nodeElapsedMs": 10.983705999999074
+              }
+            ],
+            "issues": []
+          }
+        }
+      ],
+      "metrics": {
+        "calls": 96,
+        "triangles": 353326,
+        "textures": 28,
+        "geometries": 151,
+        "colliders": 77,
+        "panels": 3,
+        "lighting": {
+          "probe": "broad neutral radiance",
+          "probePixels": 8192,
+          "downloadBytes": 0,
+          "extraShadowLights": 0,
+          "contactDraws": 2,
+          "profile": "laboratory-enamel-and-nickel"
+        }
+      }
+    },
+    {
+      "level": 20,
+      "errors": [],
+      "views": [
+        {
+          "kind": "start",
+          "capture": {
+            "ok": true,
+            "method": "actual WebGL2 pixel-pack buffer",
+            "includesHTML": false,
+            "file": "/workspace/scratch/5c7196ff0296/visual-balanced/20-start.jpg",
+            "pixels": {
+              "width": 960,
+              "height": 540,
+              "colors": 1046,
+              "maxChannelStd": 38.07082436718943
+            },
+            "renderer": {
+              "width": 960,
+              "height": 540,
+              "calls": 72,
+              "triangles": 355102
+            },
+            "frame": {
+              "levelIndex": 19,
+              "state": "playing",
+              "elapsed": 250.0000000000001,
+              "player": [
+                3,
+                0,
+                23
+              ],
+              "cargo": [
+                -3.00000004187978,
+                0.38933222152660285,
+                23.000000108297204
+              ],
+              "camera": [
+                4.254510894127102,
+                1.9014812193421022,
+                28.795416551985944
+              ],
+              "cargoUUID": "26fdf731-9ae4-4dd1-80fb-2d33a6ac7c8b",
+              "cargoBodyId": 144
+            },
+            "timings": {
+              "renderEnqueueMs": 1.6000000014901161,
+              "pixelPackEnqueueMs": 0.8000000007450581,
+              "copyMs": 4.5,
+              "flipAndEncodeMs": 51.5,
+              "queueToEncodedMs": 4324.79999999702,
+              "enqueueAwaitMs": 25.6366760000019,
+              "fenceWaitMs": 4267.669877,
+              "fencePolls": 41,
+              "copyAwaitMs": 58.448614000000816,
+              "totalMs": 4351.758523
+            },
+            "progress": [
+              {
+                "phase": "entered-browser-task",
+                "browserElapsedMs": 0,
+                "nodeElapsedMs": 23.38684700000158
+              },
+              {
+                "phase": "before-render",
+                "browserElapsedMs": 0.19999999925494194,
+                "nodeElapsedMs": 23.41774400000213
+              },
+              {
+                "phase": "after-render",
+                "browserElapsedMs": 1.800000000745058,
+                "nodeElapsedMs": 24.806823000002623
+              },
+              {
+                "phase": "before-readPixels",
+                "browserElapsedMs": 1.8999999985098839,
+                "nodeElapsedMs": 24.854565000001458
+              },
+              {
+                "phase": "after-readPixels",
+                "browserElapsedMs": 2,
+                "nodeElapsedMs": 25.009619000000384
+              },
+              {
+                "phase": "after-enqueue",
+                "browserElapsedMs": 2.600000001490116,
+                "nodeElapsedMs": 25.520070000002306
+              }
+            ],
+            "issues": []
+          }
+        },
+        {
+          "kind": "overview",
+          "capture": {
+            "ok": true,
+            "method": "actual WebGL2 pixel-pack buffer",
+            "includesHTML": false,
+            "file": "/workspace/scratch/5c7196ff0296/visual-balanced/20-overview.jpg",
+            "pixels": {
+              "width": 960,
+              "height": 540,
+              "colors": 1176,
+              "maxChannelStd": 61.97533073933376
+            },
+            "renderer": {
+              "width": 960,
+              "height": 540,
+              "calls": 69,
+              "triangles": 329798
+            },
+            "frame": {
+              "levelIndex": 19,
+              "state": "playing",
+              "elapsed": 250.0000000000001,
+              "player": [
+                3,
+                0,
+                23
+              ],
+              "cargo": [
+                -3.00000004187978,
+                0.38933222152660285,
+                23.000000108297204
+              ],
+              "camera": [
+                -20,
+                10,
+                24
+              ],
+              "cargoUUID": "26fdf731-9ae4-4dd1-80fb-2d33a6ac7c8b",
+              "cargoBodyId": 144
+            },
+            "timings": {
+              "renderEnqueueMs": 1.6000000014901161,
+              "pixelPackEnqueueMs": 0.19999999925494194,
+              "copyMs": 2.099999997764826,
+              "flipAndEncodeMs": 12.400000002235174,
+              "queueToEncodedMs": 1017.6000000014901,
+              "enqueueAwaitMs": 5.805272000001423,
+              "fenceWaitMs": 999.3455780000004,
+              "fencePolls": 10,
+              "copyAwaitMs": 16.79695999999967,
+              "totalMs": 1021.9501630000013
+            },
+            "progress": [
+              {
+                "phase": "entered-browser-task",
+                "browserElapsedMs": 0,
+                "nodeElapsedMs": 1.0447989999993297
+              },
+              {
+                "phase": "before-render",
+                "browserElapsedMs": 0.09999999776482582,
+                "nodeElapsedMs": 1.0810640000017884
+              },
+              {
+                "phase": "after-render",
+                "browserElapsedMs": 1.699999999254942,
+                "nodeElapsedMs": 5.665150000000722
+              },
+              {
+                "phase": "before-readPixels",
+                "browserElapsedMs": 1.7999999970197678,
+                "nodeElapsedMs": 5.729497000000265
+              },
+              {
+                "phase": "after-readPixels",
+                "browserElapsedMs": 1.7999999970197678,
+                "nodeElapsedMs": 5.748986999999033
+              },
+              {
+                "phase": "after-enqueue",
+                "browserElapsedMs": 1.8999999985098839,
+                "nodeElapsedMs": 5.769678000000567
+              }
+            ],
+            "issues": []
+          }
+        }
+      ],
+      "metrics": {
+        "calls": 69,
+        "triangles": 329798,
+        "textures": 29,
+        "geometries": 142,
+        "colliders": 143,
+        "panels": 2,
+        "lighting": {
+          "probe": "broad neutral radiance",
+          "probePixels": 8192,
+          "downloadBytes": 0,
+          "extraShadowLights": 0,
+          "contactDraws": 2,
+          "profile": "laboratory-enamel-and-nickel"
+        }
+      }
+    },
+    {
+      "level": 41,
+      "errors": [],
+      "views": [
+        {
+          "kind": "start",
+          "capture": {
+            "ok": true,
+            "method": "actual WebGL2 pixel-pack buffer",
+            "includesHTML": false,
+            "file": "/workspace/scratch/5c7196ff0296/visual-balanced/41-start.jpg",
+            "pixels": {
+              "width": 960,
+              "height": 540,
+              "colors": 1123,
+              "maxChannelStd": 60.69684068734676
+            },
+            "renderer": {
+              "width": 960,
+              "height": 540,
+              "calls": 320,
+              "triangles": 357642
+            },
+            "frame": {
+              "levelIndex": 40,
+              "state": "playing",
+              "elapsed": 250.0000000000001,
+              "player": [
+                0,
+                0,
+                54
+              ],
+              "cargo": [
+                1.99999986969319,
+                0.38991075418435306,
+                53.99999888625953
+              ],
+              "camera": [
+                1.3892489738943727,
+                2.092153855287108,
+                60.4036996150839
+              ],
+              "cargoUUID": "3b115f70-4877-477c-afce-6d75f7316d54",
+              "cargoBodyId": 1558
+            },
+            "timings": {
+              "renderEnqueueMs": 7.100000001490116,
+              "pixelPackEnqueueMs": 1,
+              "copyMs": 4.300000000745058,
+              "flipAndEncodeMs": 37.100000001490116,
+              "queueToEncodedMs": 5254.10000000149,
+              "enqueueAwaitMs": 77.10208000000057,
+              "fenceWaitMs": 5210.505037999999,
+              "fencePolls": 48,
+              "copyAwaitMs": 43.78851299999951,
+              "totalMs": 5331.398716000003
+            },
+            "progress": [
+              {
+                "phase": "entered-browser-task",
+                "browserElapsedMs": 0,
+                "nodeElapsedMs": 70.56441100000302
+              },
+              {
+                "phase": "before-render",
+                "browserElapsedMs": 0.10000000149011612,
+                "nodeElapsedMs": 70.6416879999997
+              },
+              {
+                "phase": "after-render",
+                "browserElapsedMs": 7.5,
+                "nodeElapsedMs": 76.8372589999999
+              },
+              {
+                "phase": "before-readPixels",
+                "browserElapsedMs": 7.699999999254942,
+                "nodeElapsedMs": 76.89489600000161
+              },
+              {
+                "phase": "after-readPixels",
+                "browserElapsedMs": 7.699999999254942,
+                "nodeElapsedMs": 76.91732000000047
+              },
+              {
+                "phase": "after-enqueue",
+                "browserElapsedMs": 8.5,
+                "nodeElapsedMs": 77.00633500000185
+              }
+            ],
+            "issues": []
+          }
+        },
+        {
+          "kind": "overview",
+          "capture": {
+            "ok": true,
+            "method": "actual WebGL2 pixel-pack buffer",
+            "includesHTML": false,
+            "file": "/workspace/scratch/5c7196ff0296/visual-balanced/41-overview.jpg",
+            "pixels": {
+              "width": 960,
+              "height": 540,
+              "colors": 1395,
+              "maxChannelStd": 46.11867974606651
+            },
+            "renderer": {
+              "width": 960,
+              "height": 540,
+              "calls": 306,
+              "triangles": 328024
+            },
+            "frame": {
+              "levelIndex": 40,
+              "state": "playing",
+              "elapsed": 250.0000000000001,
+              "player": [
+                0,
+                0,
+                54
+              ],
+              "cargo": [
+                1.99999986969319,
+                0.38991075418435306,
+                53.99999888625953
+              ],
+              "camera": [
+                23,
+                31,
+                33
+              ],
+              "cargoUUID": "3b115f70-4877-477c-afce-6d75f7316d54",
+              "cargoBodyId": 1558
+            },
+            "timings": {
+              "renderEnqueueMs": 7.599999997764826,
+              "pixelPackEnqueueMs": 0.4000000022351742,
+              "copyMs": 2.100000001490116,
+              "flipAndEncodeMs": 12.600000001490116,
+              "queueToEncodedMs": 1010.3000000007451,
+              "enqueueAwaitMs": 18.819166000001132,
+              "fenceWaitMs": 994.8579240000035,
+              "fencePolls": 10,
+              "copyAwaitMs": 17.380661999995937,
+              "totalMs": 1031.0598949999985
+            },
+            "progress": [
+              {
+                "phase": "entered-browser-task",
+                "browserElapsedMs": 0,
+                "nodeElapsedMs": 11.874672999998438
+              },
+              {
+                "phase": "before-render",
+                "browserElapsedMs": 0.19999999925494194,
+                "nodeElapsedMs": 11.893961999994644
+              },
+              {
+                "phase": "after-render",
+                "browserElapsedMs": 7.899999998509884,
+                "nodeElapsedMs": 18.55170199999702
+              },
+              {
+                "phase": "before-readPixels",
+                "browserElapsedMs": 8.100000001490116,
+                "nodeElapsedMs": 18.66141699999571
+              },
+              {
+                "phase": "after-readPixels",
+                "browserElapsedMs": 8.199999999254942,
+                "nodeElapsedMs": 18.67660999999498
+              },
+              {
+                "phase": "after-enqueue",
+                "browserElapsedMs": 8.300000000745058,
+                "nodeElapsedMs": 18.737952999996196
+              }
+            ],
+            "issues": []
+          }
+        }
+      ],
+      "metrics": {
+        "calls": 306,
+        "triangles": 328024,
+        "textures": 54,
+        "geometries": 177,
+        "colliders": 1558,
+        "panels": 14,
+        "lighting": {
+          "probe": "broad neutral radiance",
+          "probePixels": 8192,
+          "downloadBytes": 0,
+          "extraShadowLights": 0,
+          "contactDraws": 2,
+          "profile": "castle-mineral-and-gold"
+        }
+      }
+    }
+  ],
+  "sourceCommit": "14c6683cb4d2991dfd48be28fa38ccaa1fc015b7",
+  "graphicsPreset": "balanced",
+  "package": "Frozen production dist; source tree b74c461e6e6ce287a36265acaee78b539f3df5f1",
+  "scope": "Static start and matching architectural overview only; no gameplay or hardware FPS claim"
+}

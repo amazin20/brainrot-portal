@@ -1,0 +1,347 @@
+{
+  "schema": 1,
+  "status": "passed-scoped-lifecycle",
+  "sourceCommit": "14c6683cb4d2991dfd48be28fa38ccaa1fc015b7",
+  "sourceDistUnchanged": true,
+  "rawHarnessReport": "report.json",
+  "rawHarnessReportSha256": "2e02816a7bdedfffdf0eb92e1e4c3b013cf88bda15a13af661e45450866f42c6",
+  "criterionAdjustment": {
+    "originalRawStatus": "failed",
+    "originalGateRetainedUnmodified": true,
+    "reason": "Original private harness included strict equality of program count to a partially warmed baseline. Different quality/material variants are first used in cycles1–2. Parent explicitly accepted staged program-cache warmup while preserving this raw failed assertion. Texture/geometry and scene counters remain exactly equal from capture0 baseline across all10 cycle endpoints.",
+    "programSeriesFromBaselineThroughFinal": [
+      108,
+      115,
+      117,
+      117,
+      117,
+      117,
+      117,
+      117,
+      117,
+      117,
+      117,
+      117
+    ],
+    "programCycleSeries": [
+      115,
+      117,
+      117,
+      117,
+      117,
+      117,
+      117,
+      117,
+      117,
+      117
+    ],
+    "programBaseline": 108,
+    "programPlateauCycles": "3–10 (8 cycles)",
+    "programPlateauCount": 117,
+    "programTailPassed": true
+  },
+  "checks": [
+    {
+      "name": "all10 cycles and33 production level rebuild transitions completed",
+      "passed": true
+    },
+    {
+      "name": "texture/geometry and all scene counts exact plateau from warmed baseline across10cycle endpoints",
+      "passed": true,
+      "counters": [
+        {
+          "key": "memory.textures",
+          "values": [
+            56,
+            56,
+            56,
+            56,
+            56,
+            56,
+            56,
+            56,
+            56,
+            56,
+            56,
+            56
+          ],
+          "baseline": 56,
+          "final": 56,
+          "min": 56,
+          "max": 56
+        },
+        {
+          "key": "memory.geometries",
+          "values": [
+            178,
+            178,
+            178,
+            178,
+            178,
+            178,
+            178,
+            178,
+            178,
+            178,
+            178,
+            178
+          ],
+          "baseline": 178,
+          "final": 178,
+          "min": 178,
+          "max": 178
+        },
+        {
+          "key": "scene.children",
+          "values": [
+            16,
+            16,
+            16,
+            16,
+            16,
+            16,
+            16,
+            16,
+            16,
+            16,
+            16,
+            16
+          ],
+          "baseline": 16,
+          "final": 16,
+          "min": 16,
+          "max": 16
+        },
+        {
+          "key": "scene.totalObjects",
+          "values": [
+            2680,
+            2680,
+            2680,
+            2680,
+            2680,
+            2680,
+            2680,
+            2680,
+            2680,
+            2680,
+            2680,
+            2680
+          ],
+          "baseline": 2680,
+          "final": 2680,
+          "min": 2680,
+          "max": 2680
+        },
+        {
+          "key": "scene.groupCount",
+          "values": [
+            55,
+            55,
+            55,
+            55,
+            55,
+            55,
+            55,
+            55,
+            55,
+            55,
+            55,
+            55
+          ],
+          "baseline": 55,
+          "final": 55,
+          "min": 55,
+          "max": 55
+        },
+        {
+          "key": "scene.lightCount",
+          "values": [
+            7,
+            7,
+            7,
+            7,
+            7,
+            7,
+            7,
+            7,
+            7,
+            7,
+            7,
+            7
+          ],
+          "baseline": 7,
+          "final": 7,
+          "min": 7,
+          "max": 7
+        },
+        {
+          "key": "scene.uniqueMaterials",
+          "values": [
+            141,
+            141,
+            141,
+            141,
+            141,
+            141,
+            141,
+            141,
+            141,
+            141,
+            141,
+            141
+          ],
+          "baseline": 141,
+          "final": 141,
+          "min": 141,
+          "max": 141
+        },
+        {
+          "key": "scene.uniqueGeometries",
+          "values": [
+            169,
+            169,
+            169,
+            169,
+            169,
+            169,
+            169,
+            169,
+            169,
+            169,
+            169,
+            169
+          ],
+          "baseline": 169,
+          "final": 169,
+          "min": 169,
+          "max": 169
+        },
+        {
+          "key": "scene.mappedTextures",
+          "values": [
+            43,
+            43,
+            43,
+            43,
+            43,
+            43,
+            43,
+            43,
+            43,
+            43,
+            43,
+            43
+          ],
+          "baseline": 43,
+          "final": 43,
+          "min": 43,
+          "max": 43
+        },
+        {
+          "key": "scene.levelRoots",
+          "values": [
+            9,
+            9,
+            9,
+            9,
+            9,
+            9,
+            9,
+            9,
+            9,
+            9,
+            9,
+            9
+          ],
+          "baseline": 9,
+          "final": 9,
+          "min": 9,
+          "max": 9
+        },
+        {
+          "key": "scene.graphicsGroupCount",
+          "values": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "baseline": 1,
+          "final": 1,
+          "min": 1,
+          "max": 1
+        },
+        {
+          "key": "scene.contactCount",
+          "values": [
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2
+          ],
+          "baseline": 2,
+          "final": 2,
+          "min": 2,
+          "max": 2
+        }
+      ]
+    },
+    {
+      "name": "program cache reaches plateau117 after first2cycles",
+      "passed": true
+    },
+    {
+      "name": "group/contact texture replaced each level rebuild, persistent probe retained",
+      "passed": true
+    },
+    {
+      "name": "required baseline/final actual pixel-pack captures valid",
+      "passed": true
+    },
+    {
+      "name": "no JS/console/network/context errors",
+      "passed": true
+    },
+    {
+      "name": "production dist immutable and browser/server closed",
+      "passed": true
+    }
+  ],
+  "captureComparison": {
+    "sameRasterSize": true,
+    "pixelDifferenceBounds": null,
+    "capture0Sha256": "b14b251c4394342ee962bfba750eab67686428b1b8ff28179cb9368ff2b25e37",
+    "captureFinalSha256": "b14b251c4394342ee962bfba750eab67686428b1b8ff28179cb9368ff2b25e37"
+  },
+  "graphicsProbe": {
+    "environmentUUID": "20f82711-1feb-419a-a7cc-dd79ac1c0d6f",
+    "groupsPerScene": 1,
+    "contactsPerScene": 2,
+    "uniqueGraphicsGroupsAcross33Rebuilds": 33,
+    "uniqueContactTexturesAcross33Rebuilds": 33
+  },
+  "limitations": [
+    "Ready-menu level selections, not user gameplay traversal.",
+    "renderer.info.memory allocation counts, not physical VRAM byte measurements.",
+    "One software browser/viewport, not hardware FPS, physical-device or human playtest evidence.",
+    "10cycles bound does not rule out slower leaks or resources not included in Three renderer counters.",
+    "Initial raw program-equality gate failed; that gate is preserved and superseded by explicitly documented staged warmup assessment."
+  ]
+}
