@@ -19,6 +19,7 @@
   const initial = Number(new URLSearchParams(location.search).get('level'));
   let selected = Number.isInteger(initial) && initial >= 1 && initial <= TOTAL ? initial : 1;
   let loaded = false;
+  const supersededLevels = new Set();
 
   function clock(seconds) {
     if (!Number.isFinite(seconds) || seconds < 0) return '';
@@ -59,7 +60,7 @@
       dot.className = 'dot';
       dot.setAttribute('aria-hidden', 'true');
       label.className = 'label';
-      label.textContent = entry?.title || (loaded ? 'Нет записи' : 'Загрузка…');
+      label.textContent = (supersededLevels.has(level)?'АРХИВ / ':'')+(entry?.title || (loaded ? 'Нет записи' : 'Загрузка…'));
       button.append(number, dot, label);
       button.addEventListener('click', () => select(level, true));
       nodes.list.append(button);
@@ -85,7 +86,7 @@
       nodes.video.src = new URL(entry.src, location.href).href;
       nodes.video.poster = new URL(entry.poster, location.href).href;
       nodes.video.load();
-      nodes.message.textContent = level === 41 ? 'Башня без чекпоинтов. Непрерывное прохождение через обычное управление и физику игры, в реальном темпе.' : `Прохождение комнаты ${level}. Нажми Play или выбери другую комнату.`;
+      nodes.message.textContent = supersededLevels.has(level) ? 'Архив предыдущей версии. Эта комната полностью переработана; запись показывает прежний уровень.' : level === 41 ? 'Башня без чекпоинтов. Непрерывное прохождение через обычное управление и физику игры, в реальном темпе.' : `Прохождение комнаты ${level}. Нажми Play или выбери другую комнату.`;
       if (play) nodes.video.play().catch(() => {});
     } else {
       nodes.video.hidden = true;
@@ -118,6 +119,7 @@
     .then(response => { if (!response.ok) throw new Error('manifest unavailable'); return response.json(); })
     .then(manifest => {
       if (![1, 2].includes(manifest.version) || !Array.isArray(manifest.levels)) throw new Error('invalid manifest');
+      for(const level of manifest.supersededLevels||[])if(Number.isInteger(level))supersededLevels.add(level);
       for (const item of manifest.levels) {
         const entry = safeEntry(item);
         if (entry) entries.set(entry.level, entry);

@@ -3,10 +3,15 @@ import {
  TOWER_STAGE_COUNT,TOWER_DECK_COUNT,TOWER_RISE,TOWER_STAGES,TOWER_DECKS,
  towerPoint,towerCoordinates,
 } from './LabTowerLayout.js';
-import {TOWER_ROUTE_OBSTACLES,towerDeckRoute} from './LabTowerRoutes.js';
+import {towerDeckRoute,towerFreightCarryRoute} from './LabTowerRoutes.js';
+import {towerCourse} from './LabTowerCourses.js';
 import {createTowerMechanism} from './LabTowerMechanisms.js';
 import {createTowerKeystones,KEYSTONE_FEED_MODES,KEYSTONE_SPECS} from './LabTowerKeystones.js';
 import {decorateTower} from './LabTowerArt.js';
+import {buildTowerAscent,towerAscentRoute} from './LabTowerAscents.js';
+import {buildTowerCrown,towerCrownRoute} from './LabTowerCrown.js';
+import {createTowerInterlock,towerInterlockRoute} from './LabTowerInterlock.js';
+import {buildTowerFreight} from './LabTowerFreight.js';
 
 const V=(x=0,y=0,z=0)=>new THREE.Vector3(x,y,z);
 const UP=V(0,1,0);
@@ -20,7 +25,7 @@ export const TOWER_SPEC=Object.freeze({
  hints:[
   'Следи за проводами от механизмов к внутренней створке. Свет и воздух проходят сквозь настоящую пару порталов; для выстрела сначала поставь друга.',
   'В каждом ярусе три машинных крыла. Открытые створки остаются открытыми до конца попытки; порядок обхода выбираешь сам.',
-  'После трёх крыльев соедини их выходы в центральном узле. Только его решение откроет южный переход; коронная комната находится за восточным шлюзом боковой галереи. Падение и рестарт обнуляют всю башню.',
+  'После трёх крыльев соедини их выходы в центре. Четвёртый ярус продолжится через юго-западную машинную галерею; в короне дважды перестрой порталы и поднимись вместе с другом. Падение и рестарт обнуляют башню.',
  ],
 });
 
@@ -46,10 +51,11 @@ export function buildTowerLevel(game,index=40){
  const lightPose=game.keyLight?{position:game.keyLight.position.clone(),target:game.keyLight.target.position.clone()}:null;
  game.scene.background=new THREE.Color(0x334b58);game.scene.fog=new THREE.Fog(0x334b58,65,175);
  const all={meshes:[],colliders:[],floors:[]},rooms=[],stairs=[],keystonePanels=[];
- const crownGeometries=[];let crownCore=null,serviceGate=null;
+ const crownGeometries=[];let crownCore=null,crownTraversal=null,serviceGate=null;
  const globalOwner={group:root,meshes:[],colliders:[],floors:[]};
  const stageStates=TOWER_STAGES.map(()=>({signals:Object.create(null),solved:false,gateOpen:false,
-  gateProgress:0,controlOn:false,entered:false,latestBeam:false,latestAir:false,cargoContact:false}));
+  gateProgress:0,controlOn:false,entered:false,latestBeam:false,latestAir:false,cargoContact:false,
+  windwayJumped:false,windwayFlight:false,refractionEntry:false,refractionBend:false}));
  const relays=Array(TOWER_DECK_COUNT).fill(false),relayEvents=[],stageEvents=[];
  const keystoneSolved=Array(TOWER_DECK_COUNT).fill(false),keystoneEvents=[];
  let completed=0,elapsed=0,activeSeconds=0,distanceMeters=0,longestIdle=0,idle=0,
@@ -80,11 +86,24 @@ export function buildTowerLevel(game,index=40){
  function localFloor(room,s0,s1,n0,n1,y,material=m.floor){
   const corners=[towerPoint(room.definition,s0,n0),towerPoint(room.definition,s0,n1),
    towerPoint(room.definition,s1,n0),towerPoint(room.definition,s1,n1)];
-  floor(room,Math.min(...corners.map(p=>p[0])),Math.max(...corners.map(p=>p[0])),
+  return floor(room,Math.min(...corners.map(p=>p[0])),Math.max(...corners.map(p=>p[0])),
    Math.min(...corners.map(p=>p[2])),Math.max(...corners.map(p=>p[2])),room.definition.baseY+y,material);
  }
  function localSide(room,n,s0,s1,y0,y1,material=m.shell,options){
   return localBox(room,(s0+s1)/2,n,(y0+y1)/2,s1-s0,y1-y0,.32,material,options);
+ }
+ function sideWithCourseOpenings(room,sign,s0,s1){
+  let cursor=s0;
+  const refractionGaps=room.definition.id==='refraction'&&sign===1?
+   [{sign:1,s0:12.8,s1:15.6},{sign:1,s0:21.6,s1:24.4}]:[];
+  const freightMouths=room.definition.id==='freight'&&sign===1?
+   [{sign,s0:12.2,s1:16.8},{sign,s0:23.2,s1:27.0}]:[];
+  for(const gap of [...room.course.wallGaps,...refractionGaps,...freightMouths]
+   .filter(gap=>gap.sign===sign).sort((a,b)=>a.s0-b.s0)){
+   if(gap.s0>cursor)localSide(room,sign*6.2,cursor,gap.s0,0,7.6);
+   cursor=Math.max(cursor,gap.s1);
+  }
+  if(cursor<s1)localSide(room,sign*6.2,cursor,s1,0,7.6);
  }
  function panel(room,s,sign,key){
   const def=room.definition,y=def.baseY+2.4;
@@ -101,6 +120,61 @@ export function buildTowerLevel(game,index=40){
   localBox(room,s,sign*6.2,6.3,4.4,3.2,.32,m.shell);
   localBox(room,s,sign*6.2,.05,4.4,.10,.32,m.shell);
   return mesh;
+ }
+ function exchangeShaft(room){
+  const def=room.definition,c=palettes[def.deck];
+  // The entrance is a real segment of the load-bearing floor. No second
+  // continuous slab may catch a traveller underneath the open aperture.
+  localFloor(room,0,15.2,-6.25,6.25,0);
+  localFloor(room,15.2,20.8,-6.25,-2.8,0);
+  localFloor(room,15.2,20.8,2.8,6.25,0);
+  const intake=localFloor(room,15.2,20.8,-2.8,2.8,0,m.portal);
+  intake.name='exchange / input / floor portal';
+  game.markPortalSurface(intake,V(...towerPoint(def,18,0,def.baseY+.025)),UP,2.75,2.75);
+  intake.userData.portalColliderId=intake.uuid;intake.userData.towerWing=def.id;
+  room.panels.input=intake;
+  localFloor(room,20.8,42,-6.25,6.25,0);
+
+  // Two folded stair flights and a narrow overhead run create a five-metre
+  // fall. Every tread is registered as physical floor; this is not a launcher.
+  for(let i=0;i<30;i++){
+   const a=4+i*10.4/30,b=4+(i+1)*10.4/30;
+   localFloor(room,a,b,3.8,5.6,(i+1)*4/30,m.step);
+  }
+  localFloor(room,13.9,14.9,-5.6,5.6,4,m.step);
+  for(let i=0;i<30;i++){
+   const a=14.4-(i+1)*11.9/30,b=14.4-i*11.9/30;
+   localFloor(room,a,b,-5.6,-3.8,4+(i+1)/30,m.step);
+  }
+  localFloor(room,2,3.5,-5.6,1.3,5,m.step);
+  const lip=localFloor(room,3,15.5,-2.5,2.5,5,m.step);
+  // The registered floor supports feet; its exposed thin end must not act as
+  // a waist-height wall that prevents leaving the lip.
+  const lipCollider=room.colliders.find(c=>c.mesh===lip);
+  if(lipCollider)lipCollider.walkablePlane=true;
+  // A low exit lacks the range to reach this raised receiving gallery.
+  // The underside blocks walking and the gate remains beyond the landing.
+  localFloor(room,22.2,31,3.3,5.8,2.05,m.step);
+  for(let i=0;i<10;i++){
+   const a=31+i*.4,b=a+.4;
+   const tread=localFloor(room,a,b,3.3,5.8,2.05-(i+1)*2.05/10,m.step);
+   const collider=room.colliders.find(c=>c.mesh===tread);
+   if(collider)collider.walkablePlane=true;
+  }
+  localBox(room,24.8,3.25,1.03,5.3,2.05,.17,m.shell);
+  // Open railings above the raised floor advertise the landing but cannot be
+  // confused with a second invisible force or a hidden progression trigger.
+  for(const s of [22.2,30.8])localBox(room,s,3.45,3.0,.10,1.6,.10,c.accent);
+ }
+ function exchangeExit(room){
+  const def=room.definition;
+  const mesh=localBox(room,24,-6.2,4.5,4.4,4.6,.32,m.portal);
+  mesh.name='exchange / outputA / high wall portal';
+  const center=V(...towerPoint(def,24,-6.04,def.baseY+4.5));
+  const [dx,dz]=def.direction,normal=V(-dz,0,dx);
+  game.markPortalSurface(mesh,center,normal,2.2,2.3);
+  mesh.userData.portalColliderId=mesh.uuid;mesh.userData.towerWing=def.id;
+  room.panels.outputA=mesh;
  }
  function makeKeystonePanel(deck,key,position,normal,width=4.4,height=4.6){
   const front=V(...position),n=V(...normal).normalize(),center=front.clone().addScaledVector(n,-.16);
@@ -132,51 +206,117 @@ export function buildTowerLevel(game,index=40){
   const enabled=progress<.85;
   if(gate.collider.enabled!==enabled){gate.collider.enabled=enabled;game.physics?.setStaticEnabled(gate.proxy.uuid,enabled);}
  }
+ function setWindwayReturnGate(room,progress){
+  const shutter=room.windwayReturnGate;if(!shutter)return;
+  shutter.progress=progress;
+  shutter.leaf.position.fromArray(towerPoint(room.definition,18.4,4.75,
+   room.definition.baseY+1.75+progress*4.0));
+  const enabled=progress<.85;
+  if(shutter.collider.enabled!==enabled){shutter.collider.enabled=enabled;
+   game.physics?.setStaticEnabled(shutter.proxy.uuid,enabled);}
+ }
+ function setRefractionShutter(room,progress){
+  const shutter=room.refractionShutter;if(!shutter)return;
+  shutter.progress=progress;
+  shutter.pane.position.fromArray(towerPoint(room.definition,17.0,1.4,
+   room.definition.baseY+3.8+progress*5.0));
+  const enabled=progress<.85;
+  if(shutter.collider.enabled!==enabled){shutter.collider.enabled=enabled;
+   game.physics?.setStaticEnabled(shutter.pane.uuid,enabled);}
+ }
+ function setBatteryBridge(room,active){
+  const bridge=room.batteryBridge;if(!bridge)return;
+  if(bridge.floor.enabled===active)return;
+  bridge.floor.enabled=active;bridge.collider.enabled=active;
+  bridge.mesh.visible=active;
+  for(const rail of bridge.rails)rail.visible=active;
+  game.physics?.setStaticEnabled(bridge.mesh.uuid,active);
+ }
+ function setMagnetShutter(shutter,progress){
+  if(!shutter)return;
+  shutter.progress=progress;
+  // The leaf retracts sideways into the solid jamb, below the real roof.
+  shutter.leaf.position.fromArray(towerPoint(shutter.room.definition,
+   shutter.s+progress*3.25,shutter.n-progress*.55,shutter.room.definition.baseY+3.7));
+  const enabled=progress<.85;
+  if(shutter.collider.enabled!==enabled){shutter.collider.enabled=enabled;
+   game.physics?.setStaticEnabled(shutter.proxy.uuid,enabled);}
+ }
  function navigableGallery(room){
   const def=room.definition,c=palettes[def.deck],offset=def.reactorN;
-  // These walls change a room's usable cross-section. Every opening is a
-  // physical passage at least 4 m wide, including the double switchbacks.
-  for(const baffle of TOWER_ROUTE_OBSTACLES[def.id]??[]){
-   localBox(room,baffle.s,baffle.n,baffle.height/2,baffle.along,baffle.height,baffle.across,m.shell);
-   localBox(room,baffle.s-.03,baffle.n,baffle.height-.04,baffle.along+.04,.08,baffle.across+.06,c.accent,{solid:false,camera:false,aim:false});
-   const gap=baffle.n<0?4.4:-4.4;
-   localBox(room,baffle.s,gap,.025,.09,.05,2.4,c.glow,{solid:false,camera:false,aim:false});
-  }
+  // The six outer annexes extend the physical footprint through cut side
+  // walls. Their floors participate in ordinary collision and portal physics.
+  for(const item of room.course.floors)localFloor(room,item.s0,item.s1,item.n0,item.n1,item.y);
+  const materialsByRole={partition:m.shell,shell:m.shell,roof:m.dark,machine:c.accent,
+   pylon:m.dark,overhead:m.dark,parapet:m.shell,step:m.step};
+  for(const item of room.course.solids)localBox(room,item.s,item.n,item.y,
+   item.along,item.height,item.across,materialsByRole[item.role]??m.shell);
   // An offset reactor gallery gives each wing a differently shaped final
   // chamber. The player can inspect the relay through the open central aisle.
   if(Math.abs(offset)>2){
    const opposite=-Math.sign(offset);
-   localBox(room,37.2,opposite*5.0,2.25,4.8,4.5,2.05,m.dark);
-   for(const s of [31,36])localBox(room,s,Math.sign(offset)*5.72,4.3,.22,6.5,.22,c.accent,{solid:false,camera:false,aim:false});
+   // A side annex returns through this same aisle. Its architectural reveal
+   // cannot occupy the actual opening or trap the companion behind it.
+   if(room.course.topology!=='enclosed-annex'&&room.course.topology!=='accumulator-maze')
+    localBox(room,37.2,opposite*5.0,2.25,4.8,4.5,2.05,m.dark);
+   for(const s of [31,36])if(!room.course.wallGaps.some(gap=>
+    gap.sign===Math.sign(offset)&&s+.11>gap.s0&&s-.11<gap.s1))
+    localBox(room,s,Math.sign(offset)*5.72,4.3,.22,6.5,.22,c.accent,{solid:false,camera:false,aim:false});
   }
  }
 
  function buildWing(definition){
   const group=new THREE.Group();group.name=`Wing ${definition.number} / ${definition.name}`;root.add(group);
+  const course=towerCourse(definition);
   const room={definition,group,meshes:[],colliders:[],floors:[],panels:{},mechanism:null,gate:null,
-   glow:null,plate:null,reactor:null,control:null};
+   glow:null,plate:null,batteryOutputPlate:null,batteryBridge:null,reactor:null,control:null,
+   course:definition.id==='freight'?{...course,bounds:{minN:-6.25,maxN:25.8}}:course};
   const c=palettes[definition.deck],state=stageStates[definition.index];
-  localFloor(room,0,42,-6.25,6.25,0);
+  if(definition.id==='exchange')exchangeShaft(room);
+  else localFloor(room,0,42,-6.25,6.25,0);
   localBox(room,21,0,7.72,42,.18,12.75,m.shell);
   if(definition.deck===0&&definition.branch===2){
    localSide(room,6.2,0,1.3,0,7.6);localSide(room,6.2,4.1,5.8,0,7.6);
    localSide(room,6.2,1.3,4.1,3.8,7.6);
   }else localSide(room,6.2,0,5.8,0,7.6);
-  panel(room,8,1,'input');
-  localSide(room,6.2,10.2,42,0,7.6);
+  if(definition.id==='exchange')localSide(room,6.2,5.8,42,0,7.6);
+  else{panel(room,8,1,'input');
+   if(definition.id==='magnet'){
+    localSide(room,6.2,10.2,16.3,0,7.6);
+    localSide(room,6.2,19.0,26.0,0,7.6);
+    localSide(room,6.2,27.8,42,0,7.6);
+    localSide(room,6.2,16.3,19.0,5.2,7.6);
+    localSide(room,6.2,26.0,27.8,5.2,7.6);
+   }else sideWithCourseOpenings(room,1,10.2,42);
+  }
   if(definition.deck===0&&definition.branch===0){
    localSide(room,-6.2,0,1.3,0,7.6);localSide(room,-6.2,4.1,11.8,0,7.6);
    localSide(room,-6.2,1.3,4.1,3.8,7.6);
-  }else localSide(room,-6.2,0,11.8,0,7.6);
-  panel(room,14,-1,'outputA');
-  localSide(room,-6.2,16.2,17.8,0,7.6);
-  panel(room,20,-1,'outputB');
-  localSide(room,-6.2,22.2,42,0,7.6);
+  }else if(definition.id==='balance'){
+   // The original cargo crosses this upper aperture toward the exterior catch.
+   localSide(room,-6.2,0,6.9,0,7.6);
+   localSide(room,-6.2,11.2,11.8,0,7.6);
+   localSide(room,-6.2,6.9,11.2,0,2.45);
+   localSide(room,-6.2,6.9,11.2,5.15,7.6);
+  }else localSide(room,-6.2,0,definition.id==='exchange'?21.8:11.8,0,7.6);
+  if(definition.id==='exchange'){
+   exchangeExit(room);localSide(room,-6.2,26.2,42,0,7.6);
+  }else{
+   panel(room,14,-1,'outputA');
+   localSide(room,-6.2,16.2,17.8,0,7.6);
+   panel(room,20,-1,'outputB');
+   sideWithCourseOpenings(room,-1,22.2,42);
+  }
   localBox(room,42,0,3.8,.35,7.6,12.7,m.shell);
   room.gate=gate(room,28,c.accent);
   // The tray receives the *real* rigid companion; it never spawns a stand-in.
-  localBox(room,5.1,0,.018,4.0,.036,4.0,m.dark,{solid:false,camera:false,aim:false});
-  room.plate=localBox(room,5.1,0,.044,3.8,.018,3.8,m.amber,{solid:false,camera:false,aim:false});
+  const pad=definition.id==='battery'?{s:20.8,n:15.4,y:1.2}:{s:5.1,n:0,y:0};
+  localBox(room,pad.s,pad.n,pad.y+.018,4.0,.036,4.0,m.dark,{solid:false,camera:false,aim:false});
+  room.plate=localBox(room,pad.s,pad.n,pad.y+.044,3.8,.018,3.8,m.amber,{solid:false,camera:false,aim:false});
+  if(definition.id==='battery'){
+   localBox(room,30.5,15.15,1.218,3.4,.036,3.4,m.dark,{solid:false,camera:false,aim:false});
+   room.batteryOutputPlate=localBox(room,30.5,15.15,1.244,3.25,.018,3.25,m.amber,{solid:false,camera:false,aim:false});
+  }
   // Console is offset from its reachable standing point (s=5,n=-2): the
   // player cannot walk through its visible, collidable housing.
   room.control=localBox(room,5,-3.5,.65,.92,1.3,.85,c.accent);
@@ -185,10 +325,111 @@ export function buildTowerLevel(game,index=40){
   room.reactor=localBox(room,38,definition.reactorN,.043,3.25,.025,3.25,c.glow,{solid:false,camera:false,aim:false});
   for(const side of [-1.85,1.85])localBox(room,38,definition.reactorN+side,1.25,.22,2.5,.22,m.ivory,{solid:false,camera:false,aim:false});
   for(const s of [3,27,35])for(const n of [-5.8,5.8]){
+   if(room.course.wallGaps.some(gap=>gap.sign===Math.sign(n)&&s+.2>gap.s0&&s-.2<gap.s1))continue;
    localBox(room,s,n,6.95,.20,.35,.20,m.ivory,{solid:false,camera:false,aim:false});
    localBox(room,s,n,6.45,.11,.60,.11,c.glow,{solid:false,camera:false,aim:false});
   }
+  if(definition.id==='balance'){
+   // The source coil at (5.1,0) suspends the original rigid body. This small
+   // receiver exists outside the wing and above empty space; a missed cargo
+   // falls below the storey instead of landing on another corridor floor.
+   localBox(room,11.1,-9.25,3.17,2.2,.26,2.5,m.dark);
+   localBox(room,11.1,-9.25,3.34,1.75,.04,2.05,c.glow,{solid:false,camera:false,aim:false});
+   for(const s of [9.9,12.3])for(const n of [-10.67,-7.83])
+    localBox(room,s,n,2.65,.15,5.3,.15,m.ivory);
+   // Two visible rails trace the cargo's airborne diagonal. They sit above
+   // the player and never obstruct the free body's aperture.
+   localBox(room,9.1,-5.7,5.43,4.3,.12,.12,c.accent,{solid:false,camera:false,aim:false});
+   localBox(room,9.1,-10.6,5.43,4.3,.12,.12,c.accent,{solid:false,camera:false,aim:false});
+   localBox(room,9.5,-3.55,.018,5.1,.036,1.25,m.dark,{solid:false,camera:false,aim:false});
+   localBox(room,9.5,-3.55,.045,4.85,.02,1.05,c.glow,{solid:false,camera:false,aim:false});
+  }
+  if(definition.id==='magnet'){
+   // One room contains two solidly separated entrances: light through the A
+   // portal powers the first door, and a later B redirection opens the return
+   // door. The source cargo is carried through the outer equipment gallery.
+   localFloor(room,15.9,28.25,6.02,15.4,0);
+   localSide(room,15.25,15.9,28.25,0,7.6);
+   localBox(room,15.9,10.7,3.8,.32,7.6,9.3,m.shell);
+   localBox(room,28.25,10.7,3.8,.32,7.6,9.3,m.shell);
+   localBox(room,22.1,10.7,7.72,12.35,.18,9.4,m.dark);
+   localBox(room,19.6,8.3,2.45,.62,4.9,4.7,m.dark);
+   localBox(room,23.0,12.75,2.55,.62,5.1,4.75,c.accent);
+   for(const [s,height]of [[23.85,.30],[24.65,.60],[25.45,.90],[26.25,1.20]])
+    localBox(room,s,8.1,height/2,.80,height,3.4,m.step);
+   localBox(room,27.25,8.1,.60,1.20,1.2,3.4,m.dark);
+   // A separate stair in the original aisle meets the raised dock at the
+   // second opening, so both travellers can leave it without a jump.
+   for(const [n,height]of [[3.35,.30],[4.15,.60],[4.95,.90],[5.75,1.20]])
+    localBox(room,26.9,n,height/2,1.3,height,.80,m.step);
+   const dock=V(...towerPoint(definition,27.25,8.1,definition.baseY+1.2));
+   room.magnetDock=dock;
+   room.magnetDockLamp=localBox(room,27.25,8.1,1.215,1.0,.025,2.7,c.glow,
+    {solid:false,camera:false,aim:false});
+   const shutter=(s,n)=>{
+    const leaf=localBox(room,s,n,3.7,2.4,7.4,.26,c.accent,
+     {solid:false,camera:false,aim:false});
+    const proxy=localBox(room,s,n,3.7,2.55,7.4,.30,m.dark,{visible:false});
+    return {room,s,n,leaf,proxy,collider:room.colliders.at(-1),progress:0};
+   };
+   room.magnetEntry=shutter(17.75,6.9);
+   room.magnetExit=shutter(26.9,6.9);
+  }
   navigableGallery(room);
+  if(definition.id==='refraction'){
+   // A beam-transparent but player-solid pane divides the two optical bays.
+   // Light from the first reflected path reaches receiver A; neither the
+   // player, the original companion nor a portal shot can use that slit.
+   localBox(room,17,-2.95,3.8,.42,7.6,6.5,m.shell);
+   localBox(room,17,4.35,3.8,.42,7.6,3.7,m.shell);
+   const opticalGlass=mat(0x78beca,.24,.32);opticalGlass.transparent=true;
+   opticalGlass.opacity=.42;opticalGlass.depthWrite=false;
+   const pane=localBox(room,17,1.4,3.8,.44,7.6,2.2,opticalGlass);
+   pane.name='Refraction / retractable ray window';
+   const paneCollider=room.colliders.at(-1);paneCollider.opticallyTransparent=true;
+   room.refractionShutter={pane,collider:paneCollider,progress:0};
+   localBox(room,17,1.4,.035,.66,.035,2.0,c.glow,{solid:false,camera:false,aim:false});
+   // The side machine gallery connects two otherwise separate rooms. Two
+   // staggered collidable banks force a real change of path with the cargo.
+   localFloor(room,12.8,24.4,6.03,13.3,0);
+   localSide(room,13.38,12.65,24.55,0,7.6);
+   localBox(room,12.65,9.7,3.8,.32,7.6,7.25,m.shell);
+   localBox(room,24.55,9.7,3.8,.32,7.6,7.25,m.shell);
+   localBox(room,18.6,9.7,7.72,12.0,.18,7.5,m.dark);
+   localBox(room,16.8,10.2,1.55,1.6,3.1,2.5,c.accent);
+   localBox(room,21.0,7.8,1.60,1.6,3.2,2.5,m.dark);
+   for(const [s,n]of [[14.0,8.1],[16.5,7.6],[18.9,7.6],[19.4,10.5],[22.2,10.5],[23.1,8.0]])
+    localBox(room,s,n,.036,.28,.045,.28,c.glow,{solid:false,camera:false,aim:false});
+  }
+  if(definition.id==='freight')room.freight=buildTowerFreight({game,room,localBox,localFloor,
+   materials:{...m,accent:c.accent}});
+  if(room.course.batteryBridge){
+   const b=room.course.batteryBridge;
+   const mesh=localFloor(room,b.s0,b.s1,b.n0,b.n1,b.y,m.step);
+   mesh.name='Battery / beam charged transfer bridge';
+   const rails=[b.n0+.25,b.n1-.25].map(n=>localBox(room,(b.s0+b.s1)/2,n,b.y+.025,
+    b.s1-b.s0-.2,.05,.07,c.glow,{solid:false,camera:false,aim:false}));
+   room.batteryBridge={mesh,floor:room.floors.find(item=>item.mesh===mesh),
+    collider:room.colliders.find(item=>item.mesh===mesh),rails};
+   setBatteryBridge(room,false);
+  }
+  if(definition.id==='windway'){
+   // The solid spillway shields the reactor. A narrow return throat at its
+   // right end is physically locked until the player lands beyond the crest.
+   // The portal-fed duct is the only way forward before that landing.
+   const crest=localBox(room,18.4,-1.3,1.75,.72,3.5,9.4,m.shell);
+   crest.name='Windway / solid crosswind spillway';
+   localBox(room,18.4,-1.3,3.52,.77,.10,9.4,c.accent,{solid:false,camera:false,aim:false});
+   const leaf=localBox(room,18.4,4.75,1.75,.72,3.5,2.7,c.accent,
+    {solid:false,camera:false,aim:false});
+   leaf.name='Windway / landing released return shutter';
+   const proxy=localBox(room,18.4,4.75,1.75,.74,3.5,2.7,m.dark,{visible:false});
+   proxy.name='Windway / landing interlock';
+   room.windwayReturnGate={leaf,proxy,collider:room.colliders.at(-1),progress:0};
+   for(const s of [15.2,16.2,17.2])
+    localBox(room,s,0,.038,.14,.05,4.7,c.glow,{solid:false,camera:false,aim:false});
+   localBox(room,23,0,.058,3.2,.025,5.0,c.glow,{solid:false,camera:false,aim:false});
+  }
   room.mechanism=createTowerMechanism({game,definition,group,
    box:(position,size,material,options={})=>worldBox(room,position,size,material,{solid:false,camera:false,aim:false,...options}),
    materials:{...m,accent:c.accent,glow:c.glow}});
@@ -207,7 +448,11 @@ export function buildTowerLevel(game,index=40){
    wall([9.86,y+3.8,z],[.28,7.6,4]);wall([-9.86,y+3.8,z],[.28,7.6,4]);
   }
   for(const x of [-8,8])wall([x,y+3.8,-9.86],[4,7.6,.28]);
-  wall([-7,y+3.8,9.86],[6,7.6,.28]);
+  if(deck===3){
+   // The fourth hub's southwest opening leads into a sealed side machine.
+   wall([-9.25,y+3.8,9.86],[1.5,7.6,.28]);
+   wall([-4.45,y+3.8,9.86],[.9,7.6,.28]);
+  }else wall([-7,y+3.8,9.86],[6,7.6,.28]);
   if(deck===0)wall([7,y+3.8,9.86],[6,7.6,.28]);
   else wall([4.9,y+3.8,9.86],[.55,7.6,.28]);
   // The crown leaves by the upper return gallery at x=8. Close the central
@@ -227,18 +472,20 @@ export function buildTowerLevel(game,index=40){
  function buildStair(deck){
   const y=deck*TOWER_RISE,group=new THREE.Group();group.name=`Tower stair ${deck+1}`;root.add(group);
   const owner={group,meshes:[],colliders:[],floors:[]};
+  let ascent=null;
   if(deck<TOWER_DECK_COUNT-1)floor(owner,-4.0,4.0,9.75,11.2,y);
   if(deck===TOWER_DECK_COUNT-1){
    // Deck 5 already has the deck-4 return gallery x=5.1..11.2 at y=40.
    // A second central floor here would become a low ceiling above the last
    // ascending flight and trap the player beneath its treads. Instead a
    // separately gated crown chamber branches east of that clear gallery.
-   floor(owner,11.0,21.0,24,36.8,y);
-   worldBox(owner,[21.16,y+3.8,30.4],[.32,7.6,13.1],m.shell);
-   worldBox(owner,[16.1,y+3.8,23.85],[10.2,7.6,.3],m.shell);
-   worldBox(owner,[16.1,y+3.8,36.95],[10.2,7.6,.3],m.shell);
-   worldBox(owner,[16.1,y+7.72,30.4],[10.2,.18,13.1],m.shell);
-   worldBox(owner,[17,y+.025,30],[3.5,.05,3.5],m.dark,{solid:false,camera:false,aim:false});
+   crownTraversal=buildTowerCrown({game,owner,floor,
+    box:(target,position,size,material,options)=>worldBox(target,position,size,material,options),
+    materials:m,y});
+   worldBox(owner,[21.16,y+6.1,30.4],[.32,12.2,13.1],m.shell);
+   worldBox(owner,[16.1,y+6.1,23.85],[10.2,12.2,.3],m.shell);
+   worldBox(owner,[16.1,y+6.1,36.95],[10.2,12.2,.3],m.shell);
+   worldBox(owner,[16.1,y+12.23,30.4],[10.2,.18,13.1],m.shell);
    // The last goal has a visible six-feed machine, suspended clear of both
    // travellers. Its lit core follows the real sixth keystone, not a timer.
    const crownMaterial=mat(0x7f6952,.24,.63,0x4f311a);
@@ -247,18 +494,18 @@ export function buildTowerLevel(game,index=40){
    const cableGeometry=new THREE.CylinderGeometry(.035,.035,1,7);
    crownGeometries.push(orbGeometry,ringGeometry,floorRingGeometry,cableGeometry);
    const assembly=new THREE.Group();assembly.name='Tower crown / sixfold core';
-   assembly.position.set(17,y+5.65,30);group.add(assembly);
+   assembly.position.set(18.5,y+10.05,27.7);group.add(assembly);
    const orb=new THREE.Mesh(orbGeometry,crownMaterial);orb.name='Original companion crown receiver';assembly.add(orb);
    const rings=[];
    for(const [axis,angle]of [['x',0],['y',Math.PI/3],['z',Math.PI/5]]){
     const ring=new THREE.Mesh(ringGeometry,m.ivory);ring.rotation[axis]=angle;assembly.add(ring);rings.push(ring);
    }
    const floorRing=new THREE.Mesh(floorRingGeometry,crownMaterial);
-   floorRing.rotation.x=-Math.PI/2;floorRing.position.set(17,y+.085,30);group.add(floorRing);
+   floorRing.rotation.x=-Math.PI/2;floorRing.position.set(18.5,y+8.485,27.7);group.add(floorRing);
    for(let i=0;i<6;i++){
     const angle=i*Math.PI/3;
-    const a=V(17+Math.cos(angle)*3.1,y+7.46,30+Math.sin(angle)*3.1);
-    const b=V(17+Math.cos(angle)*.72,y+5.9,30+Math.sin(angle)*.72);
+    const a=V(18.5+Math.cos(angle)*2.1,y+12.0,27.7+Math.sin(angle)*2.1);
+    const b=V(18.5+Math.cos(angle)*.72,y+10.25,27.7+Math.sin(angle)*.72);
     const cable=new THREE.Mesh(cableGeometry,palettes[i].glow);
     cable.position.copy(a).add(b).multiplyScalar(.5);
     cable.quaternion.setFromUnitVectors(UP,b.clone().sub(a).normalize());
@@ -266,14 +513,8 @@ export function buildTowerLevel(game,index=40){
    }
    crownCore={assembly,rings,material:crownMaterial};
   }else{
-   const count=32,length=24/count;
-   for(let i=0;i<count;i++){
-    const z0=11.2+i*length,z1=z0+length,top=y+(i+1)*.25;
-    floor(owner,-4,4,z0,z1,top,i%2?m.step:m.floor);
-   }
-   // One continuous pair of real collision walls per stair. Their upper
-   // edge meets the next storey instead of overlapping its return corridor.
-   for(const x of [-4.25,4.25])worldBox(owner,[x,y+4,21.9],[.30,8,22.5],m.shell);
+   ascent=buildTowerAscent(deck,y,{owner,floor,
+    box:(owner,position,size,material)=>worldBox(owner,position,size,material),materials:m});
    floor(owner,-4.0,11.2,35.2,36.8,y+8);
    floor(owner,5.1,11.2,9.5,36.8,y+8);
    for(const x of [5,11.3])worldBox(owner,[x,y+9.85,20.8],[.22,3.7,22.7],m.shell);
@@ -291,7 +532,7 @@ export function buildTowerLevel(game,index=40){
   const proxy=worldBox(owner,crown?[12,y+3.76,34.3]:[0,y+3.76,11.45],
    crown?[.31,7.52,4.42]:[7.85,7.52,.31],m.dark,{visible:false});
   const gateCollider=owner.colliders.at(-1);
-  const stair={deck,owner,leaves,proxy,collider:gateCollider,progress:0,crown};stairs.push(stair);
+  const stair={deck,owner,leaves,proxy,collider:gateCollider,progress:0,crown,ascent};stairs.push(stair);
   for(const z of [15,24,33])for(const x of crown?[5.3,10.9]:[-3.9,3.9]){
    worldBox(owner,[x,y+3,z],[.08,.30,.4],palettes[deck].glow,{solid:false,camera:false,aim:false});
   }
@@ -348,14 +589,25 @@ export function buildTowerLevel(game,index=40){
   buildStair(deck);
  }
  buildServiceLink();
+ const interlock=createTowerInterlock({game,
+  box:(position,size,material,options)=>worldBox(globalOwner,position,size,material,options),
+  floor:(x0,x1,z0,z1,y)=>floor(globalOwner,x0,x1,z0,z1,y),
+  makePanel:(key,position,normal,width,height)=>makeKeystonePanel(3,key,position,normal,width,height),
+  materials:m});
  const keystones=createTowerKeystones({game,root,rooms,materials:m,makePanel:makeKeystonePanel,
   box:(position,size,material,options={})=>worldBox(globalOwner,position,size,material,
    {solid:false,camera:false,aim:false,...options})});
  const towerArt=decorateTower({root,rooms,stairs});
  const dynamic=new Set([
-  ...rooms.flatMap(room=>[room.plate,room.reactor,...room.gate.panels.map(p=>p.mesh)]),
+  ...rooms.flatMap(room=>[room.plate,room.batteryOutputPlate,room.batteryBridge?.mesh,
+   ...(room.batteryBridge?.rails??[]),room.reactor,...room.gate.panels.map(p=>p.mesh)]).filter(Boolean),
+  ...rooms.flatMap(room=>room.freight?.dynamicMeshes??[]),
+  ...rooms.map(room=>room.windwayReturnGate?.leaf).filter(Boolean),
+  ...rooms.map(room=>room.refractionShutter?.pane).filter(Boolean),
+  ...rooms.flatMap(room=>[room.magnetEntry?.leaf,room.magnetExit?.leaf].filter(Boolean)),
   ...stairs.flatMap(stair=>stair.leaves.map(leaf=>leaf.mesh)),
   ...serviceGate.leaves.map(leaf=>leaf.mesh),serviceGate.indicator,
+  ...interlock.dynamicMeshes,
   ...keystones.dynamicMeshes,
  ]);
  const kinematicMeshes=new Set(all.colliders.filter(c=>c.kinematic).map(c=>c.mesh));
@@ -387,14 +639,17 @@ export function buildTowerLevel(game,index=40){
   const deck=THREE.MathUtils.clamp(Math.floor((p.y+.2)/TOWER_RISE),0,TOWER_DECK_COUNT-1);
   for(const def of TOWER_STAGES.slice(deck*3,deck*3+3)){
    const {s,n}=towerCoordinates(def,p);
-   if(s>0&&s<42&&Math.abs(n)<6.6)return def;
+   const {minN,maxN}=rooms[def.index].course.bounds;
+   if(s>0&&s<42&&n>minN-.4&&n<(def.id==='magnet'?15.6:def.id==='refraction'?13.5:maxN)+.4)return def;
   }
   return null;
  }
  function stageNearby(definition,position){
   if(!position||Math.abs(position.y-definition.baseY)>8)return false;
   const {s,n}=towerCoordinates(definition,position);
-  return s>-1&&s<43&&Math.abs(n)<7;
+  const {minN,maxN}=rooms[definition.index].course.bounds;
+  return s>-1&&s<43&&n>(definition.id==='balance'?-12.1:minN-.7)
+   &&n<(definition.id==='magnet'?15.6:definition.id==='refraction'?13.5:maxN)+.7;
  }
  function enteredControl(room){
   const control=V(...room.definition.control),hand=game.playerPosition.clone().addScaledVector(UP,.9);
@@ -412,7 +667,7 @@ export function buildTowerLevel(game,index=40){
   if(prior.some(s=>!state.signals[s]))return false;
   state.signals[signal]=true;
   game.audio?.mechanism?.('switch');
-  if(signal==='gravity'&&!definition.puzzle.requirements.includes('control')){
+  if(signal==='gravity'&&!definition.puzzle.requirements.includes('control')&&definition.id!=='balance'){
    rooms[definition.index].mechanism.setControl(true); // vent so the same cargo can be collected
   }
   return true;
@@ -421,6 +676,7 @@ export function buildTowerLevel(game,index=40){
   const def=room.definition,state=stageStates[def.index];
   if(state.solved)return;
   state.solved=true;state.gateOpen=true;completed++;game.completedStages=completed;
+  keystones.armFeedsForSolvedWing(room,state.signals);
   const event={stage:completed,id:def.id,deck:def.deck,branch:def.branch,
    seconds:elapsed,stageSeconds:elapsed-lastCompletion,position:game.playerPosition.toArray(),distanceMeters};
   stageEvents.push(event);lastCompletion=elapsed;
@@ -428,7 +684,7 @@ export function buildTowerLevel(game,index=40){
   game.callbacks?.onToast?.(`${def.name}: машинное крыло подключено. Осталось ${TOWER_STAGE_COUNT-completed}.`);
   if(TOWER_STAGES.slice(def.deck*3,def.deck*3+3).every(s=>stageStates[s.index].solved)){
    relays[def.deck]=true;relayEvents.push({deck:def.deck,seconds:elapsed});
-   game.callbacks?.onToast?.('Три линии поданы в центральный узел. Соедини их, чтобы открыть лестницу.');
+   game.callbacks?.onToast?.('Три крыла питают центральный узел. Реши его задачу, чтобы открыть лестницу.');
   }
  }
  function failure(){
@@ -442,14 +698,24 @@ export function buildTowerLevel(game,index=40){
   lastCompletion=0;lastPosition=null;highestDeck=0;
   stageEvents.length=0;relayEvents.length=0;relays.fill(false);game.completedStages=0;
   keystoneEvents.length=0;keystoneSolved.fill(false);keystones.reset();
+  crownTraversal?.reset();
   for(const [i,state]of stageStates.entries()){
    state.signals=Object.create(null);state.solved=state.gateOpen=state.entered=state.controlOn=false;
    state.transit=false;state.controlComplete=false;
+   state.flingSpeed=0;state.flingAt=-Infinity;
    state.gateProgress=0;state.latestBeam=state.latestAir=state.cargoContact=false;
-   const room=rooms[i];room.mechanism.reset();setGate(room.gate,0);
-   room.plate.material=m.amber;room.reactor.material=palettes[room.definition.deck].glow;
+   state.windwayJumped=state.windwayFlight=false;
+   state.refractionEntry=state.refractionBend=false;
+   const room=rooms[i];room.mechanism.reset();room.freight?.reset();setGate(room.gate,0);
+   setWindwayReturnGate(room,0);
+   setRefractionShutter(room,0);
+   setMagnetShutter(room.magnetEntry,0);setMagnetShutter(room.magnetExit,0);
+   setBatteryBridge(room,false);
+   room.plate.material=m.amber;if(room.batteryOutputPlate)room.batteryOutputPlate.material=m.amber;
+   room.reactor.material=palettes[room.definition.deck].glow;
   }
   for(const stair of stairs)setStairGate(stair,0);
+  interlock.reset();
   setServiceGate(0);serviceGate.indicator.material=m.amber;
   if(crownCore){crownCore.material.color.setHex(0x7f6952);crownCore.material.emissive.setHex(0x4f311a);
    crownCore.material.emissiveIntensity=.18;crownCore.assembly.rotation.y=0;
@@ -478,13 +744,47 @@ export function buildTowerLevel(game,index=40){
    const actual=room.mechanism.update(dt)||{};
    state.latestBeam=Boolean(actual.beamA||actual.beamB);state.latestAir=Boolean(actual.airA);
    room.plate.material=game.cargoOnPad?.(V(...def.cargoPad),2.0)?m.mint:m.amber;
+   if(room.batteryOutputPlate)room.batteryOutputPlate.material=
+    game.cargoOnPad?.(V(...def.batteryOutput),1.35)?m.mint:m.amber;
    const cargoLoaded=game.cargoOnPad?.(V(...def.cargoPad),2.0);
    const {s,n}=towerCoordinates(def,p);
-   const kinetic=s>21.7&&s<23.1&&Math.abs(n)<2.4&&game.playerGrounded
-    &&game.playerVelocity.x*def.direction[0]+game.playerVelocity.z*def.direction[1]>3.75;
+   const kinetic=def.id==='exchange'
+    ?s>22.2&&s<30.9&&n>3.35&&n<5.65&&game.playerGrounded
+     &&Math.abs(p.y-(def.baseY+2.05))<.16&&state.flingSpeed>11.5&&elapsed-state.flingAt<1.2
+    :s>21.7&&s<23.1&&Math.abs(n)<2.4&&game.playerGrounded
+     &&game.playerVelocity.x*def.direction[0]+game.playerVelocity.z*def.direction[1]>3.75;
    const raw={cargo:!!cargoLoaded,beamA:!!actual.beamA,beamB:!!actual.beamB,
     airA:!!actual.airA,gravity:!!actual.gravity,kinetic,transit:!!state.transit,
-    mirror:!!state.controlOn,control:!!state.controlComplete};
+    mirror:!!state.controlOn,control:!!state.controlComplete,bridgeCatch:!!actual.bridgeCatch,
+    cargoDock:!!(room.magnetDock&&actual.beamA&&game.cargoOnPad?.(room.magnetDock,1.1))};
+   if(room.freight){
+    const cargoState=room.freight.update(state.controlComplete);
+    raw.delivery=cargoState.delivered;
+    raw.recovered=Boolean(game.heldCube===game.cargo&&state.signals.delivery
+     &&p.y>def.baseY+3.55&&p.y<def.baseY+4.45&&s>17&&s<24&&n>9&&n<23);
+   }
+   if(def.id==='battery')raw.batteryOutput=Boolean(room.batteryBridge?.floor.enabled
+    &&game.cargoOnPad?.(V(...def.batteryOutput),1.35));
+   if(def.id==='windway'){
+    const along=game.playerVelocity.x*def.direction[0]+game.playerVelocity.z*def.direction[1];
+    if(!state.windwayFlight&&(game.playerGrounded||!actual.airA))state.windwayJumped=false;
+    if(state.signals.transit&&actual.airA&&!game.playerGrounded&&s>11.8&&s<13.5
+     &&Math.abs(n)<3.2&&p.y>def.baseY+.02&&game.playerVelocity.y>7
+     &&cargo.distanceTo(p)<3.2)state.windwayJumped=true;
+    if(state.windwayJumped&&actual.airA&&!game.playerGrounded&&s>16.2&&s<20.4
+     &&Math.abs(n)<3.2&&p.y>def.baseY+2.55&&along>2.5&&cargo.distanceTo(p)<3.2)
+     state.windwayFlight=true;
+    raw.airLanding=state.windwayFlight&&game.playerGrounded&&s>21&&s<25.5
+     &&Math.abs(n)<4.2&&Math.abs(p.y-def.baseY)<.36&&cargo.distanceTo(p)<3.2;
+   }
+   if(def.id==='refraction'){
+    if(state.signals.beamA&&game.playerGrounded&&s>13&&s<16.1&&n>7
+     &&cargo.distanceTo(p)<3.2)state.refractionEntry=true;
+    if(state.refractionEntry&&game.playerGrounded&&s>18.8&&s<20.3&&n>9.4
+     &&cargo.distanceTo(p)<3.2)state.refractionBend=true;
+    raw.chamberTurn=state.refractionBend&&game.playerGrounded&&s>21.3&&s<24.4
+     &&n<5.7&&cargo.distanceTo(p)<3.2;
+   }
    const alreadyLatched={...state.signals};
    const freshCargo=raw.cargo&&!state.cargoContact;
    state.cargoContact=raw.cargo;
@@ -494,6 +794,19 @@ export function buildTowerLevel(game,index=40){
     const prerequisites=def.puzzle.order.slice(0,def.puzzle.order.indexOf(signal));
     const active=signal==='cargo'?freshCargo&&prerequisites.every(s=>alreadyLatched[s]):raw[signal];
     latch(def,signal,active);
+   }
+   if(room.batteryBridge)setBatteryBridge(room,Boolean(state.signals.beamA));
+   if(room.windwayReturnGate){const goal=state.signals.airLanding?1:0;
+    const progress=THREE.MathUtils.damp(room.windwayReturnGate.progress,goal,8,dt);
+    setWindwayReturnGate(room,Math.abs(progress-goal)<.002?goal:progress);}
+   if(room.refractionShutter){const goal=state.signals.beamB?1:0;
+    const progress=THREE.MathUtils.damp(room.refractionShutter.progress,goal,7,dt);
+    setRefractionShutter(room,Math.abs(progress-goal)<.002?goal:progress);}
+   for(const [shutter,signal]of [[room.magnetEntry,'beamA'],[room.magnetExit,'beamB']]){
+    if(!shutter)continue;
+    const goal=state.signals[signal]?1:0;
+    const progress=THREE.MathUtils.damp(shutter.progress,goal,7,dt);
+    setMagnetShutter(shutter,Math.abs(progress-goal)<.002?goal:progress);
    }
    if(def.puzzle.requirements.every(signal=>state.signals[signal]))state.gateOpen=true;
    state.gateProgress=THREE.MathUtils.damp(state.gateProgress,state.gateOpen?1:0,5,dt);
@@ -510,33 +823,43 @@ export function buildTowerLevel(game,index=40){
    if(deck===TOWER_DECK_COUNT-1&&crownCore){crownCore.material.color.setHex(0xb8ffe6);
     crownCore.material.emissive.setHex(0x41efbd);crownCore.material.emissiveIntensity=.85;}
    game.callbacks?.onToast?.(deck===TOWER_DECK_COUNT-1?
-    'Коронный узел запитан. Восточный шлюз боковой галереи открыт.':'Центральный узел запитан. Южная лестница открыта.');
+    'Коронный узел запитан. Восточный шлюз боковой галереи открыт.':deck===3?
+    'Центральный узел запитан. Исследуй юго-западную машинную галерею.':
+    'Центральный узел запитан. Южная лестница открыта.');
   }
+  interlock.update(dt,keystoneSolved[3]);
   const linkPowered=keystones.getState(0).feeds[0];
   serviceGate.indicator.material=linkPowered?m.mint:m.amber;
   const linkProgress=THREE.MathUtils.damp(serviceGate.progress,linkPowered?1:0,5,dt);
   setServiceGate(Math.abs(linkProgress-(linkPowered?1:0))<.002?(linkPowered?1:0):linkProgress);
   for(const stair of stairs){
-   const target=keystoneSolved[stair.deck]?1:0;
+   const target=keystoneSolved[stair.deck]&&(stair.deck!==3||interlock.getState().solved)?1:0;
    const progress=THREE.MathUtils.damp(stair.progress,target,5,dt);
    setStairGate(stair,Math.abs(progress-target)<.002?target:progress);
   }
-  if(keystoneSolved.every(Boolean)&&p.y>=5*TOWER_RISE-.15&&p.y<5*TOWER_RISE+.4
-   &&Math.abs(p.x-17)<1.8&&p.z>28.3&&p.z<31.7&&cargo.distanceTo(p)<3.2){won=true;}
+  if(keystoneSolved.every(Boolean)&&crownTraversal?.containsGoal(p,cargo,game.playerGrounded)){won=true;}
  }
  function onTeleport(event){
+  interlock.onTeleport(event);
   const entry=game.portals?.portals?.[event.entryIndex],exit=game.portals?.portals?.[event.exitIndex];
   if(!entry||!exit)return;
+  crownTraversal?.onTeleport(entry,exit,keystoneSolved.every(Boolean));
   for(const room of rooms){
    const ids=Object.values(room.panels).map(mesh=>mesh.uuid);
    if(!ids.includes(entry.surfaceId)||!ids.includes(exit.surfaceId))continue;
    // A crossing is an event, not a permanent request that can be redeemed
    // after some unrelated prerequisite is powered later.
    if(latch(room.definition,'transit',true))stageStates[room.definition.index].transit=true;
+   if(room.definition.id==='exchange'&&entry.surfaceId===room.panels.input.uuid
+    &&exit.surfaceId===room.panels.outputA.uuid){
+    const state=stageStates[room.definition.index];state.flingSpeed=event.velocity?.length?.()??0;
+    state.flingAt=elapsed;
+   }
    break;
   }
  }
  function interact(){
+  if(interlock.inside(game.playerPosition))return interlock.interact();
   const def=stageForPlayer();
   if(!def){const deck=Math.min(TOWER_DECK_COUNT-1,Math.max(0,Math.floor((game.playerPosition.y+.2)/TOWER_RISE)));
    return keystones.interact(deck);}
@@ -550,7 +873,8 @@ export function buildTowerLevel(game,index=40){
    state.controlOn=true;room.mechanism.setControl(true);
    state.controlComplete=true;latch(def,'control',true);
   }else{
-   if(needs.includes('control')&&def.puzzle.order.slice(0,-1).some(s=>!state.signals[s]))return false;
+   if(needs.includes('control')&&def.puzzle.order.slice(0,def.puzzle.order.indexOf('control'))
+    .some(s=>!state.signals[s]))return false;
    state.controlOn=!state.controlOn;room.mechanism.setControl(state.controlOn);
    state.controlComplete=state.controlOn;latch(def,'control',state.controlOn);
   }
@@ -564,7 +888,8 @@ export function buildTowerLevel(game,index=40){
   keystoneEvents:keystoneEvents.map(e=>({...e,position:[...e.position]})),checkpoints:false,
   activeSeconds,distanceMeters,longestIdleSeconds:longestIdle,elapsedSeconds:elapsed,
   failures,teleports:game.teleportCount,residentStages:disposed?0:rooms.length,colliders:game.colliders.length,
-  portalSurfaces:game.portalPanels.filter(p=>p.userData.towerWing||p.userData.towerKeystone!=null).length,
+  crownCrossings:crownTraversal?.crossings??0,
+  portalSurfaces:game.portalPanels.filter(p=>p.userData.towerWing||p.userData.towerKeystone!=null||p.userData.towerCrown).length,
  };}
 
  const terminals=[...rooms.map(room=>({
@@ -574,33 +899,37 @@ export function buildTowerLevel(game,index=40){
  const keystoneRoutes=TOWER_DECKS.map(({deck})=>towerDeckRoute(deck,{
   stages:TOWER_STAGES.slice(deck*3,deck*3+3),feedModes:KEYSTONE_FEED_MODES[deck],
  }));
- const deckRoutes=TOWER_DECKS.map(({deck,baseY})=>deck===TOWER_DECK_COUNT-1?[]:[
-  {kind:'walk',target:[0,baseY,7]},
-  {kind:'walk',target:[0,baseY,10.2]},
-  {kind:'walk',target:[0,baseY+8,34.9],timeout:55},
-  {kind:'walk',target:[8,baseY+8,35.7]},
-  {kind:'walk',target:[8,baseY+8,8]},
-  {kind:'walk',target:[0,baseY+8,0]},
- ]);
- const finalRoute=[{kind:'walk',target:[0,40,7]},
-  {kind:'walk',target:[8,40,7]},
-  {kind:'walk',target:[8,40,34],timeout:45},
-  {kind:'walk',target:[11.1,40,34.3]},
-  {kind:'walk',target:[14,40,34.3]},
-  {kind:'walk',target:[17,40,30]}];
+ const deckRoutes=TOWER_DECKS.map(({deck,baseY})=>Object.freeze([
+  ...(deck===3?towerInterlockRoute():[]),
+  ...towerAscentRoute(deck,baseY,stairs[deck].ascent?.path??[]),
+ ]));
+ const finalRoute=towerCrownRoute();
  const level={id:TOWER_SPEC.id,index,game,title:'41 / '+TOWER_SPEC.title,spec:TOWER_SPEC,
   tower:true,towerChallenge:true,totalStages:TOWER_STAGE_COUNT,towerStages:TOWER_STAGES,
+  // Keep the fall impulse through the Exchange outlet. Other wings retain
+  // their authored air controls after their own portal crossings.
+  get momentum(){return stageNearby(TOWER_STAGES[2],game.playerPosition);},
   towerRoute:TOWER_STAGES,routeStages:TOWER_STAGES,keystoneRoutes,deckRoutes,finalRoute,
+  freightAlternateRoute:towerFreightCarryRoute(TOWER_STAGES[1]),
+  towerAscents:Object.freeze(stairs.slice(0,5).map(stair=>stair.ascent)),
   spawn:V(0,0,0),cargoSpawn:V(1.1,.57,.25),spawnView:{yaw:-Math.PI/2,pitch:-.14},
   contextHandlesCarry:true,viewDistance:180,terminals,pads:[],gates:[],panels:{},launchPad:null,
   get completedStages(){return completed;},get progress(){return completed;},
   getTowerMetrics:metrics,
+  getTowerFreightState:()=>({sender:rooms[1].freight.sender.toArray(),
+   receiver:rooms[1].freight.receiver.toArray(),...rooms[1].freight.getState()}),
   getTowerKeystoneState:deck=>keystones.getState(deck),
   getTowerServiceState:()=>({unlocked:keystones.getState(0).feeds[0],open:!serviceGate.collider.enabled}),
+  getTowerInterlockState:interlock.getState,
   getTowerStageState(i){
    const def=TOWER_STAGES[i],state=stageStates[i];if(!def||!state)return null;
    return {id:def.id,deck:def.deck,branch:def.branch,signals:{...state.signals},
-    gateOpen:state.gateOpen,solved:state.solved,entered:state.entered,controlOn:state.controlOn};
+    bridgeCatch:!!state.signals.bridgeCatch,bridgeReturned:!!rooms[i].mechanism.state.returned,
+    gateOpen:state.gateOpen,solved:state.solved,entered:state.entered,controlOn:state.controlOn,
+    freightArmed:rooms[i].freight?.getState().armed??false,
+    freightDelivered:rooms[i].freight?.getState().delivered??false,
+    batteryBridgeOpen:rooms[i].batteryBridge?.floor.enabled??false,
+    cargoDock:!!state.signals.cargoDock};
   },
   getObjective(){
    const def=stageForPlayer();
@@ -608,7 +937,9 @@ export function buildTowerLevel(game,index=40){
     return `${def.name} · ${Object.keys(state.signals).length}/${def.puzzle.requirements.length} звеньев · КРЫЛЬЯ ${completed}/${TOWER_STAGE_COUNT}`;}
    const deck=Math.min(TOWER_DECK_COUNT-1,Math.floor((game.playerPosition.y+.2)/TOWER_RISE));
    const solved=TOWER_STAGES.slice(deck*3,deck*3+3).filter(s=>stageStates[s.index].solved).length;
-   return keystoneSolved[deck]?(deck===5?'КОРОНА ПИТАЕТСЯ · ВОСТОЧНЫЙ ШЛЮЗ БОКОВОЙ ГАЛЕРЕИ':'ЛЕСТНИЦА ОТКРЫТА · ПОДНИМАЙСЯ ВДВОЁМ'):
+   return keystoneSolved[deck]?(deck===5?'КОРОНА ПИТАЕТСЯ · НАЙДИ НАПОЛЬНЫЙ ВХОД И ВЕРХНИЙ ВЫХОД':
+    deck===3&&!interlock.getState().solved?'ЮГО-ЗАПАДНАЯ МАШИННАЯ ГАЛЕРЕЯ · ПРОВЕДИ ДРУГА ЧЕРЕЗ ПОРТАЛ':
+    'ЛЕСТНИЦА ОТКРЫТА · ПОДНИМАЙСЯ ВДВОЁМ'):
     relays[deck]?(()=>{
      const state=keystones.getState(deck),next=state.feeds.indexOf(false);
      if(next>=0){const feed=state.feedModes[next],wing=TOWER_STAGES[deck*3+feed.branch];
@@ -619,29 +950,48 @@ export function buildTowerLevel(game,index=40){
   },
   getContextLesson(){
    const def=stageForPlayer();if(!def){const deck=Math.min(5,Math.max(0,Math.floor((game.playerPosition.y+.2)/TOWER_RISE)));
+    if(interlock.inside(game.playerPosition))return ['tower-interlock','E · ЛКМ · ПКМ',
+     interlock.getState().solved?'Забери друга и вернись к центральной лестнице.':
+      interlock.getState().released?'Верни друга на западную плиту, а сам займи восточную. Обе линии нужны одновременно.':
+      'Смотровая щель пропускает выстрел, но не человека. Проведи друга к дальней плите, затем направь луч через боковой портал.',false];
+    if(deck===2&&game.playerPosition.z>12&&game.playerPosition.z<35&&Math.abs(game.playerPosition.x)<4)
+     return ['tower-broken-bridge','SHIFT · ПРОБЕЛ',
+      'В подъёме два настоящих разрыва. Разгонись и прыгни от края ступени; друг должен пройти вместе с тобой.',false];
     if(deck===0&&game.playerPosition.x>6&&game.playerPosition.x<14.5
      &&game.playerPosition.z< -6&&game.playerPosition.z> -14.5){
      return ['tower-service','W A S D',serviceGate.collider.enabled?
       'Сервисный переход между востоком и севером заперт. Первый живой луч центрального узла питает его створку.':
       'Сервисный переход открыт: северное крыло доступно через соседний машинный отсек.',false];
     }
+    if(deck===5&&keystoneSolved[5]&&game.playerPosition.x>11&&game.playerPosition.z>24)
+     return ['tower-crown','ЛКМ · ПКМ',
+      'Коронный приёмник расположен над двумя площадками. Свяжи белый пол с верхней стеной, поднимись вместе с другом и перестрой пару ещё раз.',false];
     const state=keystones.getState(deck),feed=state?.feedModes[state?.feeds.indexOf(false)];
-    return ['tower-hub','W A S D',relays[deck]?(feed?
-     `Следующий вход: ${TOWER_STAGES[deck*3+feed.branch].branchName}. Проведи живой сигнал «${feedLabel[feed.mode]}» до гнезда за створкой.`:
-     `Гнёзда заряжены. Исследуй центральный узел «${state.name}»: его приёмники, груз и приводы связаны с настоящими порталами.`):
+   return ['tower-hub','W A S D',relays[deck]?(feed?
+     `Питание ${TOWER_STAGES[deck*3+feed.branch].branchName} ещё не поступило: ${feedLabel[feed.mode]}.`:
+     `Крылья питают «${state.name}». Реши центральную задачу, чтобы открыть лестницу.`):
      'Выбери одно из трёх машинных крыльев. Открой их в любом порядке.',false];}
    const state=stageStates[def.index],key=def.puzzle.requirements.some(r=>['beamA','beamB','airA','transit'].includes(r))?'ЛКМ · ПКМ':'E';
+   if(def.id==='freight'&&towerCoordinates(def,game.playerPosition).n>6.3)
+    return ['tower-freight','E',
+     'Грузовой подъёмник подаёт друга наверх; две лестницы позволяют выбрать собственный путь. Взвесь его на верхней площадке и забери перед выходом.',false];
    return [`tower-${def.id}`,key,state.solved?'Питание этого крыла уже поступает в центральный узел.':
     `${def.name}: проследи связь механизма со створкой. Поставь друга перед выстрелом; после решения забери его.`,false];
   },
   nearbyInteraction(){
+   if(interlock.inside(game.playerPosition)&&!game.heldCube&&interlock.getState().loaded)
+    return {kind:'tower-interlock',label:'E',text:'Разблокировать заднюю створку'};
    const def=stageForPlayer(),room=def&&rooms[def.index];
    if(room&&!game.heldCube&&enteredControl(room))return {kind:'tower-console',label:'E',text:'Переключить настоящий привод крыла'};
    if(!def&&!game.heldCube){const deck=Math.min(5,Math.max(0,Math.floor((game.playerPosition.y+.2)/TOWER_RISE)));
     const action=keystones.nearbyInteraction(deck);if(action)return action;}
    return !game.heldCube&&game.cargo&&near(game.playerPosition,game.cargo.position,2.2)?'E — взять друга':'';
   },
-  interact,cargoOnAnyPad:()=>TOWER_STAGES.some(s=>game.cargoOnPad?.(V(...s.cargoPad),2))
+  interact,cargoOnAnyPad:()=>interlock.cargoOnAnyPad()
+   ||TOWER_STAGES.some(s=>game.cargoOnPad?.(V(...s.cargoPad),2)
+    ||s.batteryOutput&&game.cargoOnPad?.(V(...s.batteryOutput),1.35))
+   ||rooms[1].freight&&[rooms[1].freight.sender,rooms[1].freight.receiver].some(p=>game.cargoOnPad?.(p,1.5))
+   ||rooms.some(room=>room.magnetDock&&game.cargoOnPad?.(room.magnetDock,1.1))
    ||[1,3,5].some(deck=>game.cargoOnPad?.(V(0,deck*TOWER_RISE,deck===1||deck===5?-5.5:0),1.45)),
   getLaunch:()=>null,isWon:()=>won,reset,update,onTeleport,
   playerAcceleration(position,velocity){
@@ -653,7 +1003,9 @@ export function buildTowerLevel(game,index=40){
   },
   applyCargoForces(dt){
    keystones.applyCargoForces(dt);
-   for(const room of rooms)if(stageNearby(room.definition,game.cargo?.position))room.mechanism.applyCargoForces?.(dt);
+   for(const room of rooms)if(stageNearby(room.definition,game.cargo?.position)){
+    room.mechanism.applyCargoForces?.(dt);room.freight?.applyCargoForces?.(dt);
+   }
   },
   diagnostics:()=>({id:TOWER_SPEC.id,tower:true,portalPuzzle:true,...metrics()}),
   renderUpdate(){
@@ -664,6 +1016,7 @@ export function buildTowerLevel(game,index=40){
    if(disposed)return;disposed=true;game.scene.background=background;game.scene.fog=fog;
    if(lightPose){game.keyLight.position.copy(lightPose.position);game.keyLight.target.position.copy(lightPose.target);}
    towerArt.dispose();
+   interlock.dispose();
    keystones.dispose();
    for(const room of rooms)room.mechanism.dispose?.();
    for(const collider of all.colliders)game.physics?.removeStaticBox(collider.mesh.uuid);
@@ -671,7 +1024,7 @@ export function buildTowerLevel(game,index=40){
     for(const value of array)if(!set.has(value))array[write++]=value;array.length=write;};
    remove(game.colliders,all.colliders);remove(game.floors,all.floors);
    remove(game.cameraBlockers,all.meshes);remove(game.aimBlockers,all.meshes);
-   remove(game.portalPanels,[...rooms.flatMap(room=>Object.values(room.panels)),...keystonePanels]);
+   remove(game.portalPanels,[...rooms.flatMap(room=>Object.values(room.panels)),...keystonePanels,...(crownTraversal?.panels??[])]);
    root.removeFromParent();batches.forEach(batch=>batch.dispose());
    unit.dispose();crownGeometries.forEach(geometry=>geometry.dispose());materials.forEach(material=>material.dispose());
    game.indexColliders?.();

@@ -45,6 +45,28 @@ test('two receivers respond to their own optical path through placed portals',()
  }finally{h.dispose();}
 });
 
+test('battery projector only powers its real portal beam while the original cargo rests on the remote socket',()=>{
+ const h=harness(6);
+ try{
+  h.pair();
+  h.game.cargoOnPad=(target,radius)=>!h.game.heldCube
+   &&Math.hypot(h.game.cargo.position.x-target.x,h.game.cargo.position.z-target.z)<radius
+   &&h.game.cargo.position.y>target.y+.18&&h.game.cargo.position.y<target.y+.75;
+  assert.equal(h.mechanism.update(1/120).beamA,false);
+  h.game.cargo.position.fromArray(h.definition.cargoPad).add(new THREE.Vector3(0,.57,0));
+  assert.equal(h.mechanism.update(1/120).beamA,true);
+  h.game.heldCube=h.game.cargo;
+  assert.equal(h.mechanism.update(1/120).beamA,false,
+   'Merely carrying the companion over the socket must cut source power');
+  h.game.heldCube=null;
+  h.game.cargo.position.fromArray(h.definition.batteryOutput).add(new THREE.Vector3(0,.57,0));
+  h.pair('panelOutputB');
+  assert.equal(h.mechanism.update(1/120).beamA,false);
+  assert.equal(h.mechanism.getSignals().beamB,true,
+   'The far socket powers the other receiver through the retargeted real portal');
+ }finally{h.dispose();}
+});
+
 test('real reflected ray requires the rotatable mirror',()=>{
  const h=harness(0);
  try{
@@ -100,7 +122,7 @@ test('cargo gravity signal requires the real free body reaching the upper sensor
  }finally{h.dispose();}
 });
 
-test('central spectrum requires three live wing feeds and two actual portal ray paths',()=>{
+test('central spectrum stores physically solved wing outputs in any order, then needs real portal rays',()=>{
  const group=new THREE.Group(),colliders=[],rooms=TOWER_STAGES.map(definition=>({definition,
   panels:{input:new THREE.Group(),outputA:new THREE.Group()},
   mechanism:{getSignals:()=>({beamA:definition.index===0})}}));
@@ -128,16 +150,29 @@ test('central spectrum requires three live wing feeds and two actual portal ray 
   assert.deepEqual(KEYSTONE_SPECS.map(spec=>spec.id),
    ['spectrum','counterbalance','crosswind','inversion','braid','crown']);
   assert.deepEqual(KEYSTONE_FEED_MODES[0].map(f=>f.mode),['beamA','transit','cargo']);
-  const east=TOWER_STAGES[0],north=TOWER_STAGES[2],west=TOWER_STAGES[1];
+  const east=TOWER_STAGES[0],north=TOWER_STAGES[2];
   game.playerPosition.fromArray(towerPoint(east,34));k.update(1/120,ready);
+  assert.deepEqual(k.getState(0).feeds,[false,false,false],
+   'A live receiver and a player at the old socket cannot charge an unsolved reactor');
+  assert.equal(k.armFeedsForSolvedWing(rooms[0],{beamA:true}),false,
+   'The mirror prerequisite must have been solved too');
+  assert.equal(k.armFeedsForSolvedWing(rooms[0],{mirror:true,beamA:true}),true);
   assert.deepEqual(k.getState(0).feeds,[true,false,false]);
+  assert.equal(k.armFeedsForSolvedWing(rooms[1],{cargo:true,control:true}),false,
+   'The old lower tray and console cannot charge the deck without elevated delivery and recovery');
+  assert.equal(k.armFeedsForSolvedWing(rooms[1],{cargo:true,control:true,delivery:true,recovered:true}),true,
+   'The third authored feed can arrive before the second');
+  assert.deepEqual(k.getState(0).feeds,[true,false,true]);
   game.playerPosition.fromArray(towerPoint(north,30));
   game.portalSurfaceIds=[rooms[2].panels.input.uuid,rooms[2].panels.outputA.uuid];
   game.lastPortalTravel={entry:0,exit:1};game.teleportCount=1;
-  k.update(1/120,ready);assert.deepEqual(k.getState(0).feeds,[true,true,false]);
-  game.cargo.position.fromArray(towerPoint(west,5.1,0,west.baseY+.39));
-  game.playerPosition.fromArray(towerPoint(west,33));k.update(1/120,ready);
+  k.update(1/120,ready);
+  assert.deepEqual(k.getState(0).feeds,[true,false,true],
+   'A crossing at the old socket cannot substitute for the solved portal wing');
+  assert.equal(k.armFeedsForSolvedWing(rooms[2],{transit:true,kinetic:true}),true);
   assert.deepEqual(k.getState(0).feeds,[true,true,true]);
+  assert.equal(k.armFeedsForSolvedWing(rooms[2],{transit:true,kinetic:true}),false,
+   'The reactor cannot charge twice');
   const input=group.getObjectByName('keystone-spectrum-input');
   const outputA=group.getObjectByName('keystone-spectrum-outputA');
   const outputB=group.getObjectByName('keystone-spectrum-outputB');
@@ -149,6 +184,21 @@ test('central spectrum requires three live wing feeds and two actual portal ray 
   game.portals.portals[1]=makePortalFrame(outputB.userData.center,outputB.userData.normal);
   k.update(1/120,ready);assert.equal(k.getState(0).solved,true);
   k.reset();assert.deepEqual(k.getState(0).feeds,[false,false,false]);
+  for(let deck=0;deck<6;deck++){
+   for(const feed of KEYSTONE_FEED_MODES[deck]){
+    const source=rooms[deck*3+feed.branch],requirements=source.definition.puzzle.requirements;
+    const incomplete=Object.fromEntries(requirements.slice(0,-1).map(name=>[name,true]));
+    assert.equal(k.armFeedsForSolvedWing(source,incomplete),false,
+     `${source.definition.id} cannot energize its wire before every causal step`);
+    const complete=Object.fromEntries(requirements.map(name=>[name,true]));
+    assert.equal(k.armFeedsForSolvedWing(source,complete),true,
+     `${source.definition.id} must have an authored output wired into its keystone`);
+   }
+   assert.ok(k.getState(deck).feeds.every(Boolean),`Every authored wing output feeds deck ${deck+1}`);
+  }
+  k.reset();
+  for(let deck=0;deck<6;deck++)assert.ok(k.getState(deck).feeds.every(value=>!value),
+   'An interrupted attempt disconnects every latched physical output');
  }finally{k.dispose();group.traverse(object=>{if(object.isMesh&&object.material&&Object.values(materials).includes(object.material))object.geometry.dispose();});
   Object.values(materials).forEach(material=>material.dispose());}
 });
@@ -170,8 +220,12 @@ test('a keystone portal crossing before its gravity signal cannot satisfy transi
   mesh.userData.center=new THREE.Vector3(...p);mesh.userData.normal=normal;mesh.name=key;return mesh;};
  const k=createTowerKeystones({game,root,box,makePanel,materials,rooms}),ready=[false,false,false,true,false,false];
  try{
-  game.playerPosition.fromArray(towerPoint(TOWER_STAGES[11],34));k.update(1/120,ready);
-  game.playerPosition.fromArray(towerPoint(TOWER_STAGES[9],32));k.update(1/120,ready);
+  assert.equal(k.armFeedsForSolvedWing(rooms[11],{mirror:true,beamA:true}),false);
+  assert.equal(k.armFeedsForSolvedWing(rooms[11],{mirror:true,beamA:true,chamberTurn:true,beamB:true}),true);
+  assert.equal(k.armFeedsForSolvedWing(rooms[9],{gravity:true,beamA:true}),false,
+   'The magnet feed remains dark before its raised cargo dock and second shutter');
+  assert.equal(k.armFeedsForSolvedWing(rooms[9],
+   {gravity:true,beamA:true,cargoDock:true,beamB:true}),true);
   assert.deepEqual(k.getState(3).feeds,[true,true]);
   const input=root.getObjectByName('keystone-inversion-input');
   const output=root.getObjectByName('keystone-inversion-outputA');

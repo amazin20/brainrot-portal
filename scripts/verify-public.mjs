@@ -43,7 +43,7 @@ try{
   catch(error){console.log('Publication propagation:',String(error));}
   await wait(5000);
  }
- assert.equal(info?.commit,expected);assert.equal(info?.levels,FOUNDATION_INDICES.length);assert.equal(info?.version,'v43-tower-rebuild');assert.equal(info?.artVersion,'v43-tower-rebuild');assert.equal(info?.features.archiveRooms,CAMPAIGN.length);assert.deepEqual(info?.features.tower,{level:41,stages:18,decks:6,branchesPerDeck:3,keystones:6,checkpoints:false,minimumActiveSeconds:900,query:'edition=foundation&level=41'});report.build=info;
+ assert.equal(info?.commit,expected);assert.equal(info?.levels,FOUNDATION_INDICES.length);assert.equal(info?.version,'v44-tower-variety');assert.equal(info?.artVersion,'v44-tower-variety');assert.equal(info?.features.archiveRooms,CAMPAIGN.length);assert.deepEqual(info?.features.tower,{level:41,stages:18,decks:6,branchesPerDeck:3,keystones:6,checkpoints:false,minimumActiveSeconds:900,query:'edition=foundation&level=41'});report.build=info;
  report.stage='live-model-hashes';
  const response=await fetch(base+'models/runtime/manifest.json?revision='+expected);assert.ok(response.ok);const manifest=await response.json();
  assert.deepEqual(manifest.models.map(m=>m.id).sort((a,b)=>a-b),[...CAMPAIGN_ASSET_IDS]);

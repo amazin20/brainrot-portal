@@ -1,0 +1,114 @@
+{
+  "scope": "Explicit isolated production controller/physics fixtures. Initial poses and portal planes are setup; subsequent motion, clear input and successful/rejected replacement use production methods. These are stress regressions, not authored-level walkthroughs or exhaustive exploit proof. Counterfactual before-fix baseline: only clearPortals/placeOnPanel/updateCubes production methods come from the prior source; all fixture setup and observations are unchanged.",
+  "physicsHz": 120,
+  "pass": false,
+  "results": [
+    {
+      "id": "clear-floor-portal-during-partial-entry",
+      "pass": false,
+      "error": "AssertionError [ERR_ASSERTION]: partial entry recovers to the same front side"
+    },
+    {
+      "id": "clear-wall-and-ceiling-partial-entry",
+      "pass": false,
+      "error": "AssertionError [ERR_ASSERTION]: partial entry recovers to the same front side"
+    },
+    {
+      "id": "replace-floor-portal-during-partial-entry",
+      "pass": false,
+      "error": "AssertionError [ERR_ASSERTION]: partial entry recovers to the same front side"
+    },
+    {
+      "id": "replace-outlet-with-cargo-only-aperture-during-player-entry",
+      "pass": false,
+      "error": "AssertionError [ERR_ASSERTION]: partial entry recovers to the same front side"
+    },
+    {
+      "id": "rejected-replacement-and-clear-away-from-throat-do-not-move-actors",
+      "pass": true,
+      "evidence": {
+        "clearBefore": [
+          0,
+          2,
+          0
+        ],
+        "rejectedPartial": [
+          0,
+          -0.5607291666666652,
+          0
+        ],
+        "legitimateTeleports": 1
+      }
+    },
+    {
+      "id": "clear-floor-portal-while-free-cargo-straddles-backing",
+      "pass": true,
+      "evidence": {
+        "frames": 12,
+        "before": [
+          0,
+          0.2015419363122562,
+          0
+        ],
+        "after": [
+          0,
+          1.5583193356374914,
+          0
+        ],
+        "bodyId": 12,
+        "portalTransports": 0
+      }
+    },
+    {
+      "id": "held-cargo-cannot-enter-rejected-player-aperture-before-release-clear",
+      "pass": false,
+      "error": "AssertionError [ERR_ASSERTION]: a held box cannot protrude through a cargo-only backing before its blocked owner"
+    },
+    {
+      "id": "closing-valid-player-portal-recovers-a-straddling-held-box",
+      "pass": false,
+      "error": "AssertionError [ERR_ASSERTION]: the still-held box must be returned to the original front side before restoring contact"
+    }
+  ],
+  "baselineLabGameSha256": "5e0729400a8cf815f3ab5d4631de6e17794766ea74ff6a0391e0a7690dfad725",
+  "beforeFixFloorTrajectory": {
+    "fixture": "20 m broad floor, natural fall into linked portal, clear before centre crossing, one ordinary 120 Hz step",
+    "beforeClear": [
+      0,
+      -0.5607291666666652,
+      0
+    ],
+    "afterOneFrame": [
+      -10.4301,
+      -0.6446874999999984,
+      0
+    ],
+    "playerTeleports": 0
+  },
+  "beforeFixHeldCargoTrajectory": {
+    "fixture": "20 mm backing, downward gravity -19.5, held box pushed toward a cargo-only outlet before release+clear",
+    "gravity": -19.5,
+    "backingThickness": 0.02,
+    "minimumHeldZ": -0.09990000022351742,
+    "minimumFreeZ": -3.393173788601432,
+    "beforeRelease": {
+      "player": [
+        0,
+        3.8,
+        0.6200999997764826
+      ],
+      "cargo": [
+        8.817456953860943e-17,
+        4.859999999999999,
+        -0.09990000022351742
+      ]
+    },
+    "after": [
+      0.01084089078948701,
+      4.3459931179417595,
+      -3.393173788601432
+    ],
+    "playerTeleports": 0,
+    "cargoTransports": 0
+  }
+}

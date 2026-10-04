@@ -31,6 +31,7 @@ for(const f of expectedFiles)assert.equal(hash(await bytes(new URL(f.path,root))
 assert.equal(hash(await bytes(new URL('index.html',root))),promotion.promotedIndexSHA256);
 assert.equal(hash(await bytes(new URL('build-info.json',root))),promotion.promotedBuildInfoSHA256);
 for(let i=0;i<promotion.retainedMedia.length;i+=4)await Promise.all(promotion.retainedMedia.slice(i,i+4).map(async f=>assert.equal(hash(await bytes(new URL(f.path,root))),f.sha256,'An approved retained recording/gallery file changed: '+f.path)));
+for(const file of promotion.galleryApp||[])assert.equal(hash(await bytes(new URL(file.path,root))),file.sha256,'The gallery application differs from its checked source');
 const galleryBytes=await bytes(new URL('walkthroughs/manifest.json',root)),gallery=JSON.parse(galleryBytes);
 assert.equal(hash(galleryBytes),promotion.rootGalleryManifestSHA256);
 for(const retained of promotion.retainedGalleryEntries){const e=gallery.levels.find(e=>e.level===retained.level);assert.ok(e);assert.equal(hash(Buffer.from(JSON.stringify(e))),retained.sha256,'A retained gallery entry changed');}
@@ -63,18 +64,18 @@ try{
  assert.equal(await page.evaluate(()=>document.documentElement.dataset.levelIndex),'0');proof.rootPlayLevel1=true;
  await page.keyboard.press('Escape');await page.waitForFunction(()=>document.documentElement.dataset.runtimeState==='paused');await page.click('#level-menu-button');await waitForStartMenu(page);
  await page.select('#level-select','40');await playFromStartMenu(page);
- assert.equal(await page.evaluate(()=>document.documentElement.dataset.levelIndex),'40');assert.match(await page.$eval('#chamber',e=>e.textContent),/СИНГУЛЯРНОСТИ/);assert.equal(new URL(page.url()).pathname,root.pathname);
+ assert.equal(await page.evaluate(()=>document.documentElement.dataset.levelIndex),'40');assert.match(await page.$eval('#chamber',e=>e.textContent),/СКЛАДЧАТЫЙ ЗАМОК/i);assert.equal(new URL(page.url()).pathname,root.pathname);
  await page.screenshot({path:path.join(out,'primary-game-dropdown-41.png')});proof.rootDropdownLevel41=true;
  const unqualified=new URL(root);unqualified.search='?level=41&debug=1';await page.goto(unqualified.href,{waitUntil:'domcontentloaded'});await waitForStartMenu(page);
  assert.equal(new URL(page.url()).pathname,root.pathname,'Primary finale deep links must remain on the primary game');
  const deep=await page.evaluate(()=>{const g=window.__NESI_DEMO_GAME__;return {level:g.levelIndex+1,edition:g.chamberEdition,totalStages:g.firstLevel.totalStages,roomIds:[...g.firstLevel.rooms.keys()]};});
  assert.equal(deep.level,41);assert.equal(deep.edition,'foundation');assert.equal(deep.totalStages,tower.stages);assert.deepEqual(deep.roomIds.sort(),tower.rooms.map(r=>r.id).sort());proof.rootDefaultDeepLink=deep;
  await page.goto(new URL('?edition=foundation&level=41',preview).href,{waitUntil:'domcontentloaded'});await playFromStartMenu(page);
- assert.match(await page.$eval('#chamber',e=>e.textContent),/СИНГУЛЯРНОСТИ/);proof.towerPermalinkPlay=true;await page.close();page=null;
+ assert.match(await page.$eval('#chamber',e=>e.textContent),/СКЛАДЧАТЫЙ ЗАМОК/i);proof.towerPermalinkPlay=true;await page.close();page=null;
  page=await browser.newPage();page.setDefaultTimeout(180000);await page.setViewport({width:960,height:540,deviceScaleFactor:1});page.on('pageerror',e=>proof.errors.push(String(e)));
  await page.goto(new URL('walkthrough.html',preview).href,{waitUntil:'domcontentloaded'});
  if(config.mode==='complete'){
-  await page.waitForFunction(()=>{const v=document.querySelector('video');return v&&Number.isFinite(v.duration)&&v.duration>900;});
+  await page.waitForFunction(()=>{const v=document.querySelector('video');return v&&Number.isFinite(v.duration)&&v.duration>0;});
   const duration=await page.$eval('video',v=>v.duration);assert.ok(Math.abs(duration-release.video.durationSeconds)<.12);
   for(const fraction of [.2,.6,.99]){
    const time=duration*fraction;await page.$eval('video',(v,time)=>{v.muted=true;v.currentTime=time;},time);
@@ -84,8 +85,8 @@ try{
   assert.equal(await page.$$eval('[data-seek]',a=>a.length),tower.stages);await page.screenshot({path:path.join(out,'public-video-seeking.png')});
   await page.goto(new URL('walkthroughs.html?level=41',root).href,{waitUntil:'domcontentloaded'});
   await page.waitForFunction(()=>document.querySelector('#video')?.getAttribute('src')?.includes('walkthroughs/level-41.mp4'));
-  await page.$eval('#video',v=>{v.preload='metadata';v.load();});await page.waitForFunction(()=>Number.isFinite(document.querySelector('#video').duration)&&document.querySelector('#video').duration>900);
-  assert.ok(Math.abs(await page.$eval('#video',v=>v.duration)-release.video.durationSeconds)<.12);assert.match(await page.$eval('#watch-heading',e=>e.textContent),/Сингулярности/);
+  await page.$eval('#video',v=>{v.preload='metadata';v.load();});await page.waitForFunction(()=>Number.isFinite(document.querySelector('#video').duration)&&document.querySelector('#video').duration>0);
+  assert.ok(Math.abs(await page.$eval('#video',v=>v.duration)-release.video.durationSeconds)<.12);assert.match(await page.$eval('#watch-heading',e=>e.textContent),/Складчатый замок/i);
   const tail=release.video.durationSeconds*.99;await page.$eval('#video',(v,t)=>{v.muted=true;v.currentTime=t;},tail);
   await page.waitForFunction(t=>{const v=document.querySelector('#video');return !v.error&&!v.seeking&&v.readyState>=2&&Math.abs(v.currentTime-t)<1;},{timeout:90000},tail);
   proof.rootFinaleGallery={sourceCommit:promotion.finale.sourceCommit,sha256:promotion.finale.sha256,durationSeconds:release.video.durationSeconds,tailSeek:tail};

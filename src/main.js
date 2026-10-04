@@ -1,25 +1,29 @@
 import './styles.css';
 import {LabGame} from './game/LabGame.js';
 import {CAMPAIGN,campaignSpec} from './game/LabCampaignLevels.js';
-import {LabPreferences,QUALITY_PRESETS,applyLabQuality} from './game/LabPreferences.js';
+import {LabPreferences,QUALITY_PRESETS,applyLabQuality,CREATIVE_CAMPAIGN_REVISION,CREATIVE_REPLACED_INDICES} from './game/LabPreferences.js';
 import {LabPlatform,loadYandexSDK} from './game/LabPlatform.js';
+import {resolvePlatformLanguage} from './game/LabLocalization.js';
 import {holdInterruptedGame,settleInterruptedGame} from './game/LabPageLifecycle.js';
 import {readCampaignRoute,nextCampaignLevel} from './game/LabCampaignRoute.js';
 import {FOUNDATION_INDICES,readFoundationEdition,foundationStorage,nextFoundationLevel} from './game/LabFoundationEdition.js';
 import {OPEN_ROOM_INDICES,readOpenEdition,nextOpenRoom,openEditionStorage} from './game/LabOpenEdition.js';
 import {resumeCampaignLevel,nextResumeLevel} from './game/LabResume.js';
-import {TOWER_STAGE_COUNT,TOWER_DECK_COUNT} from './game/LabTowerLayout.js';
+import {SINGULARITY_ROOMS,SINGULARITY_SPEC} from './game/LabSingularityLayout.js';
+const singularityHallCount=SINGULARITY_ROOMS.length,singularityOpenHallCount=SINGULARITY_ROOMS.filter(room=>room.requires.length===0).length;
 const $=s=>document.querySelector(s),query=new URLSearchParams(location.search);
-const debug=query.get('debug')==='1'||query.get('smoke')==='1';
+const yandex=import.meta.env.MODE==='yandex';
+if(yandex)query.set('edition','foundation');
+const debug=!yandex&&(query.get('debug')==='1'||query.get('smoke')==='1');
 // Player-facing puzzles keep control tutorials, without solution-hint buttons.
 $('#hint-button').hidden=!debug;
 const campaignRoute=readCampaignRoute(query,CAMPAIGN.length),openEdition=readOpenEdition(query),foundationEdition=readFoundationEdition(query);
 const availableRooms=foundationEdition.enabled?FOUNDATION_INDICES:openEdition.enabled?OPEN_ROOM_INDICES:CAMPAIGN.map((_,i)=>i);
 // Retired speed-mode links return to the campaign without reloading or touching saves.
 if(campaignRoute.legacyVelocityLink)history.replaceState(history.state,'',location.pathname+campaignRoute.search+location.hash);
-const yandex=import.meta.env.MODE==='yandex';
 let storage;try{storage=localStorage;}catch{}
-const preferences=new LabPreferences(foundationEdition.enabled?foundationStorage(storage):openEdition.enabled?openEditionStorage(storage):storage),holds=new Set();
+const preferences=new LabPreferences(foundationEdition.enabled?foundationStorage(storage):openEdition.enabled?openEditionStorage(storage):storage,
+  foundationEdition.enabled?{campaignRevision:CREATIVE_CAMPAIGN_REVISION,replacedIndices:CREATIVE_REPLACED_INDICES}:{}),holds=new Set();
 const screens=['loading','start-screen','pause-screen','win-screen','error-screen'];
 const hudNodes={level:$('#level-number'),chamber:$('#chamber'),objective:$('#objective'),cargo:$('#cargo-status'),portals:$('#portal-status')};
 function hudText(key,value){const node=hudNodes[key];if(node.textContent!==value)node.textContent=value;}
@@ -103,7 +107,7 @@ finally{game.render();clearInput();setState(game.state);diagnostics();}
           onFrame:sample=>window.__NESI_CAPTURE_ANIMATION_FRAME__?.(sample)});}
         finally{game.render();clearInput();setState(game.state);diagnostics();}
       };}
-    $('#play-button').focus({preventScroll:true});if(query.get('smoke')==='1')enterLevel(game.levelIndex,'initial');},
+    $('#play-button').focus({preventScroll:true});if(debug&&query.get('smoke')==='1')enterLevel(game.levelIndex,'initial');},
   onHud:({chamber,objective,hasCargo,portalsReady})=>{hudText('level',String(game.levelIndex+1));hudText('chamber',chamber);hudText('objective',objective||'');hudText('cargo',game.velocityCompanion?.connected?'Друг закреплён':hasCargo?'Друг на руках':'Друг ждёт');hudText('portals',portalsReady?'Связаны':'Два портала');
     const clock=$('#tower-run-clock');clock.hidden=!game.firstLevel?.tower;
     if(!clock.hidden){const seconds=Math.floor(game.elapsed/1000);clock.textContent=`${String(Math.floor(seconds/60)).padStart(2,'0')}:${String(seconds%60).padStart(2,'0')} · Без чекпоинтов`;}
@@ -130,29 +134,30 @@ function updateStartAction(){
 }
 $('#level-select').addEventListener('change',updateStartAction);updateStartAction();
 $('#campaign-count').textContent=foundationEdition.enabled?'Кампания · 41 испытание':openEdition.enabled?`${OPEN_ROOM_INDICES.length} лабораторных испытаний · отдельная версия`:`Архив · ${CAMPAIGN.length} испытания`;
-if(foundationEdition.enabled){$('#start-screen .brand').textContent='КАМПАНИЯ · ОТ ОТКРЫТИЯ К ВЕРШИНЕ';$('#start-screen .lead').textContent=`Исследуй 40 комнат с порталами, светом и движением. Финал — Башня с ${TOWER_STAGE_COUNT} крыльями, ${TOWER_DECK_COUNT} центральными узлами и без чекпоинтов.`;}
+if(foundationEdition.enabled){$('#start-screen .brand').textContent='КАМПАНИЯ · ОТ ОТКРЫТИЯ К ВЕРШИНЕ';$('#start-screen .lead').textContent='Сорок комнат с порталами, светом и движением. Финал — Складчатый замок: пересекающиеся галереи и связанные механизмы. Доберись до вершины вместе с другом.';}
 else if(openEdition.enabled){$('#start-screen .brand').textContent='ЛАБОРАТОРНЫЕ ИСПЫТАНИЯ';$('#start-screen .lead').textContent='Камеры 24, 28, 30 и 31–33. Эта подборка и новая первая глава хранят прогресс отдельно от архива.';}
 const editionNav=document.createElement('nav');editionNav.className='edition-navigation';editionNav.setAttribute('aria-label','Версии кампании');
-for(const [id,text,href]of [['tower',`Финальная башня · ${TOWER_STAGE_COUNT} крыльев и ${TOWER_DECK_COUNT} узлов`,'?edition=foundation&level=41'],['foundation','Кампания · с начала','?edition=foundation&level=1'],['open','Лабораторная глава 31–33','?edition=open&level=31'],['classic','Архив · 33 испытания','?edition=classic&level=1']]){
+for(const [id,text,href]of [['tower',`${SINGULARITY_SPEC.name} · ${singularityHallCount} механизмов`,'?edition=foundation&level=41'],['foundation','Кампания · с начала','?edition=foundation&level=1']]){
  if(game.chamberEdition===id)continue;const a=document.createElement('a');a.textContent=text;a.href=href;editionNav.append(a);
 }
 $('#start-screen .hero-footer').before(editionNav);
 async function enterLevel(index,reason='next'){
   reconcileFocus();
   if(entering||holds.size||!availableRooms.includes(index))return;entering=true;clearInput();game.audio?.unlock();
+  if(yandex&&reason==='initial')void platform?.enterFullscreen();
   try{
     // All interstitials are tied to an explicit menu transition, never a timer during play.
     if(reason!=='initial')await platform?.interstitial('next');
     hideScreens();screen('loading',true);game.state='loading';setState('loading');
     if(index!==game.levelIndex)await game.selectLevel(index,false);
-    game.start();sessionStarted=true;preferences.save({resumeLevel:index});game.renderer.setAnimationLoop(game.animate);hideScreens();setState('playing');$('#level-select').value=String(index);$('#settings-level-select').value=String(index);updateStartAction();diagnostics();
+    game.start();if(holds.size)pendingInterruption=true;sessionStarted=true;preferences.save({resumeLevel:index});game.renderer.setAnimationLoop(game.animate);hideScreens();setState('playing');$('#level-select').value=String(index);$('#settings-level-select').value=String(index);updateStartAction();diagnostics();
   }catch(error){failure(error);}finally{entering=false;}
 }
 async function restartLevel(){
   reconcileFocus();
   if(entering||holds.size)return;entering=true;clearInput();
   try{if(game.state==='playing')game.togglePause(true);await platform?.interstitial('restart');
-    hideScreens();game.restart();game.audio.unlock();game.renderer.setAnimationLoop(game.animate);setState('playing');game.requestPointerLock();
+    hideScreens();game.restart();if(holds.size)pendingInterruption=true;game.audio.unlock();game.renderer.setAnimationLoop(game.animate);setState('playing');game.requestPointerLock();
   }catch(error){failure(error);}finally{entering=false;}
 }
 function resume(){reconcileFocus();if(holds.size)return;game.audio.unlock();game.togglePause(false);game.renderer.setAnimationLoop(game.animate);}
@@ -191,7 +196,9 @@ addEventListener('contextmenu',event=>event.preventDefault());
 addEventListener('error',event=>{if(event.error)failure(event.error);});
 addEventListener('unhandledrejection',event=>{if(/pointer.?lock|user gesture|document is not focused/i.test(String(event.reason))){event.preventDefault();return;}failure(event.reason);});
 async function boot(){
-  let sdk=null;if(yandex)try{sdk=await loadYandexSDK();}catch(error){console.warn('SDK unavailable; game remains playable',error);}
+  const sdk=yandex?await loadYandexSDK():null;
+  const locale=resolvePlatformLanguage(sdk);document.documentElement.lang=locale.activeLanguage;
+  document.documentElement.dataset.portalLanguage=locale.portalLanguage;
   platform=new LabPlatform({sdk,demo:!yandex,hold});hideScreens();screen('loading',true);setState('loading');await game.init();
 }
 boot().catch(failure);

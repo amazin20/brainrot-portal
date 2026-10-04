@@ -1,0 +1,90 @@
+{
+  "edition": "foundation",
+  "scope": "New finite input-only speedrun attack patterns; outcomes distinguish blocked physical attempts from setup failures. No absence-of-all-exploits claim.",
+  "source": {
+    "commit": "bcbbce85d42af8c263e47cf9012a89fe7bce5b86",
+    "started": "2026-10-04T09:32:47.009Z",
+    "gameSourcesSha256": "5993610bc86b2ac738769f1d04f1da24b636836325bd63d81ec1d581389ecf72",
+    "harnessSha256": "c54fa2375ceb4899c7abc1b5413456821d738a4ecf96019a64130d1163525086",
+    "foldHarnessSha256": "3d1587675c45bfe42ea02a850bb749f6f86e7026cded6ef914d55d39d3039f08",
+    "finishedGameSourcesSha256": "5993610bc86b2ac738769f1d04f1da24b636836325bd63d81ec1d581389ecf72",
+    "unchangedDuringRun": true,
+    "finishedHarnessSha256": "c54fa2375ceb4899c7abc1b5413456821d738a4ecf96019a64130d1163525086",
+    "finishedFoldHarnessSha256": "3d1587675c45bfe42ea02a850bb749f6f86e7026cded6ef914d55d39d3039f08",
+    "harnessUnchangedDuringRun": true,
+    "finished": "2026-10-04T09:32:54.325Z"
+  },
+  "rooms": [
+    {
+      "number": 14,
+      "title": "Световая вязь",
+      "attacks": [
+        {
+          "name": "carried-friend-fold-with-airborne-release-repickup",
+          "completed": true,
+          "outcome": "completed-needs-causal-review",
+          "frames": 4566,
+          "teleports": 1,
+          "player": [
+            2.9961067472470786,
+            13.44615004548583,
+            -23.6015688110154
+          ],
+          "cargo": [
+            2.9858696983534028,
+            14.514170105227308,
+            -24.32158294468081
+          ],
+          "error": null,
+          "evidence": {
+            "shots": [],
+            "maxY": 14.973650045485833,
+            "maxSpeed": 11.590515168059706,
+            "teleportPeak": 1,
+            "milestones": [
+              "light landing reached",
+              "first woven crossing",
+              "stable island reached"
+            ],
+            "reachedStableIsland": true,
+            "cargoTransportsBefore": 1,
+            "northFoldReached": true,
+            "cargoAtFold": [
+              -1.391995429041328,
+              14.32052604399911,
+              -11.764283815722148
+            ],
+            "heldAtFold": true,
+            "cargoTransportsAfterFold": 1,
+            "spanOffset": null,
+            "cargoAtReceiver": [
+              2.88220230797186,
+              13.060009909623796,
+              -6.314455641958469
+            ],
+            "playerAtReceiver": [
+              3.004210655643026,
+              12,
+              -7.024042812326107
+            ],
+            "heldAtReceiver": true,
+            "cargoTransportsAtFinish": 1
+          }
+        }
+      ],
+      "suspectedShortcuts": [
+        "carried-friend-fold-with-airborne-release-repickup"
+      ]
+    }
+  ],
+  "counts": {
+    "roomsAttempted": 1,
+    "attacks": 1,
+    "completedWithRequiredMechanic": 0,
+    "suspectedShortcuts": 1,
+    "incompleteApproaches": 0,
+    "blockedSpeculativeShots": 0,
+    "resetAbortedPhysicalAttempts": 0,
+    "setupOrDriverErrors": 0
+  }
+}

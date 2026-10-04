@@ -1,10 +1,11 @@
 import {Workshop} from './LabWorkshopKit.js';
 import {createLightBridge} from './LabLightBridge.js';
+import {createRoom14CounterweightStair} from './LabRoom14CounterweightStair.js';
 export const ROOM14_SPEC={id:'light-weave',title:'Световая вязь',concept:'Переплести мост, опору и стену одним потоком твёрдого света',description:'Опора меняет направление вместе с порталами. Найди место для вас обоих.',hints:['Свет держит вес, но мост использует ту же пару порталов, что и вы. Ищи устойчивый остров.','В узком перегибе вы не пройдёте вместе. Верхняя ниша может принять друга отдельно.','Оставь друга на полу острова. Подготовь верхний приёмник и отправь его через напольный портал. Затем с нижнего острова верни свет в источник и поднимись за другом.'],accent:0x7ed6e2,assets:[1,2,11,23,24]};
 export function buildRoom14(game,index=13){
  const k=new Workshop(game,ROOM14_SPEC,index),w=k.world;
  k.bounds={minX:-20,maxX:20,minZ:-28,maxZ:16};k.ceiling=25;w.walls(k.bounds,25,-1);
- const deck=(name,x0,x1,z0,z1,y)=>{w.floor(x0,x1,z0,z1,y,{name});w.box([(x0+x1)/2,y-.35,(z0+z1)/2],[x1-x0,.4,z1-z0],w.materials.trim);};
+ const deck=(name,x0,x1,z0,z1,y)=>{const surface=w.floor(x0,x1,z0,z1,y,{name}),casing=w.box([(x0+x1)/2,y-.35,(z0+z1)/2],[x1-x0,.4,z1-z0],w.materials.trim);return {surface,casing,baseY:y};};
  // A lower recovery ring serves the two crossings; the deep north is occupied
  // by the exit foundation rather than an empty walkable basement.
  deck('South return court',-20,20,6,16,0);deck('West recovery passage',-20,-12,-28,6,0);deck('Crossing recovery',-12,12,-14,6,0);
@@ -27,7 +28,8 @@ export function buildRoom14(game,index=13){
  for(const x of [-2.53,-.47])w.box([x,16.2,-3.25],[.94,17.6,.5],w.materials.wall);
  // Its folded stair returns above the first bridge. Neither crossing has a
  // walkable substitute; stable islands let the pair be transported separately.
- for(let i=0;i<20;i++){const z=-3-i*.45,y=7.4+(i+1)*.23;deck('Folded stair',-3,0,z-.45,z,y);}deck('North stair turn',-3,7.5,-14,-12,12);deck('Receiver approach',0,7.5,-12,-2.9,12);
+ const counterweightedSteps=[];
+ for(let i=0;i<20;i++){const z=-3-i*.45,y=7.4+(i+1)*.23,step=deck('Folded stair',-3,0,z-.45,z,y);if(i<14)counterweightedSteps.push(step);}deck('North stair turn',-3,7.5,-14,-12,12);deck('Receiver approach',0,7.5,-12,-2.9,12);
  // The receiving pocket has room to turn with a companion and camera. Its
  // low northern sights stay screened; only the upper return reveals the face.
  w.box([3.75,6,-2.7],[7.5,12,.4],w.materials.wall);
@@ -50,6 +52,10 @@ export function buildRoom14(game,index=13){
  k.panel('island-floor',[0,7.425,0],[0,1,0],5.6,5.6);
  k.panel('entry-dispatch',[-13,.025,12],[0,1,0],3.7,3.7);
  k.panel('island-receiver',[2.93,9.5,0],[-1,0,0],4.5,4.2);
+ // The free cargo must support either the island tray or receiving tray.
+ // A 6.3 m moving span physically drops when both are empty, closing the
+ // repeated jump/release/pickup bypass of the formerly static folded stair.
+ createRoom14CounterweightStair(k,counterweightedSteps);
  const bridge=createLightBridge(k,{origin:[-10,5.1,-7],direction:[0,0,-1],span:[1,0,0],width:2.1,name:'Woven solid light'});
  w.box([-10,5.1,-6.75],[2.4,.45,.5],w.materials.trim);w.box([-10,5.1,-6.97],[2.2,.12,.08],w.materials.accent,false);w.box([-10,2.5,-8.8],[5.6,5,.35],w.materials.wall);w.box([-10,16.1,-8.8],[5.6,17.8,.35],w.materials.wall);
  const level=k.finish([-15,0,12],[-13,.55,12],[3.5,13.4,-25.6],{workshop:k,portalPuzzle:true,dispose:()=>bridge.dispose()});

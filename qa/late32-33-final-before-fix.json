@@ -1,0 +1,481 @@
+{
+  "scope": "Finite new speedrun attacks using only walking, sprint/jump input, camera orientation, real projectiles, E interaction and clear-pair action; no actor/body/velocity/mechanism state is assigned. Setup failures are not passing attack evidence.",
+  "pass": false,
+  "attemptedLevels": [
+    32,
+    33
+  ],
+  "results": [
+    {
+      "level": 32,
+      "id": "post-thin-shadow",
+      "name": "upstream-source-shadow-skips-freight-dispatch",
+      "outcome": "bypass_candidate",
+      "checkpoints": [
+        {
+          "text": "Original cargo shadows the lower upstream source ray outside guarded receiving hood",
+          "state": {
+            "player": [
+              15.333544508682833,
+              0,
+              17.00371371365239
+            ],
+            "cargo": [
+              14.745652654744847,
+              0.389998157459152,
+              16.577926027191157
+            ],
+            "cargoQuaternion": [
+              3.399291935071721e-8,
+              0.8905575311290516,
+              -2.126654874919515e-8,
+              -0.45487062308894716
+            ],
+            "won": false,
+            "held": false,
+            "teleports": 0,
+            "cargoTransports": 0,
+            "optics": {
+              "raw": [
+                true,
+                true
+              ],
+              "shadow": [
+                true,
+                false
+              ],
+              "valid": true,
+              "latched": false
+            }
+          }
+        },
+        {
+          "text": "Downstream diaphragm ratchet reached without any cargo portal transport",
+          "state": {
+            "player": [
+              5.377034101451875,
+              0,
+              -13.018420954033372
+            ],
+            "cargo": [
+              14.666837447473911,
+              0.38999815668263504,
+              17.374804493953746
+            ],
+            "cargoQuaternion": [
+              -2.684571308874653e-8,
+              0.7163562716578096,
+              -2.614750393333796e-8,
+              0.6977346860064513
+            ],
+            "won": false,
+            "held": false,
+            "teleports": 0,
+            "cargoTransports": 0,
+            "optics": {
+              "raw": [
+                true,
+                true
+              ],
+              "shadow": [
+                true,
+                false
+              ],
+              "valid": true,
+              "latched": true
+            }
+          }
+        }
+      ],
+      "start": {
+        "player": [
+          15.333544687955806,
+          0,
+          17.00371384288965
+        ],
+        "cargo": [
+          14.745652606927571,
+          0.38999815303849605,
+          16.57792579797884
+        ],
+        "cargoQuaternion": [
+          3.3998201233554074e-8,
+          0.8905575313899184,
+          -2.1270043806050623e-8,
+          -0.4548706225782148
+        ],
+        "won": false,
+        "held": false,
+        "teleports": 0,
+        "cargoTransports": 0,
+        "optics": {
+          "raw": [
+            true,
+            true
+          ],
+          "shadow": [
+            true,
+            false
+          ],
+          "valid": true,
+          "latched": false
+        }
+      },
+      "frames": 2788,
+      "resets": 0,
+      "respawns": 0,
+      "final": {
+        "player": [
+          -0.012528533955934076,
+          0,
+          -17.016819204360925
+        ],
+        "cargo": [
+          -0.012480098341379697,
+          1.0718195132752701,
+          -17.736821387911704
+        ],
+        "cargoQuaternion": [
+          0,
+          -0.9999950114539061,
+          0,
+          -0.0031586496011005286
+        ],
+        "won": true,
+        "held": true,
+        "teleports": 0,
+        "cargoTransports": 0,
+        "optics": {
+          "raw": [
+            true,
+            true
+          ],
+          "shadow": [
+            false,
+            false
+          ],
+          "valid": false,
+          "latched": true
+        }
+      },
+      "seconds": 5.316
+    },
+    {
+      "level": 32,
+      "id": "post-thin-shadow",
+      "name": "rotated-held-box-low-optical-slot",
+      "outcome": "blocked",
+      "checkpoints": [
+        {
+          "text": "Yaw-rotated release at manufactured optical charge slot",
+          "state": {
+            "player": [
+              -13.394900002980233,
+              0,
+              -0.999511051215679
+            ],
+            "cargo": [
+              -13.397423354418212,
+              0.38999815824404865,
+              -0.998396205240634
+            ],
+            "cargoQuaternion": [
+              -2.5060328140618252e-8,
+              -0.7065839676779827,
+              3.103212672525466e-8,
+              0.7076292084280001
+            ],
+            "won": false,
+            "held": false,
+            "teleports": 0,
+            "cargoTransports": 0,
+            "optics": {
+              "raw": [
+                false,
+                false
+              ],
+              "shadow": [
+                false,
+                false
+              ],
+              "valid": false,
+              "latched": false
+            }
+          }
+        },
+        {
+          "text": "Yaw-rotated release at manufactured optical charge slot",
+          "state": {
+            "player": [
+              -13.394900002980233,
+              0,
+              -1.1477550873220068
+            ],
+            "cargo": [
+              -12.681728113625814,
+              0.38992881453670497,
+              -1.7181429015415626
+            ],
+            "cargoQuaternion": [
+              0.7064289471383968,
+              0.7064955436738343,
+              -0.030183020232382323,
+              -0.030185670501104975
+            ],
+            "won": false,
+            "held": false,
+            "teleports": 0,
+            "cargoTransports": 0,
+            "optics": {
+              "raw": [
+                false,
+                false
+              ],
+              "shadow": [
+                false,
+                false
+              ],
+              "valid": false,
+              "latched": false
+            }
+          }
+        },
+        {
+          "text": "Yaw-rotated release at manufactured optical charge slot",
+          "state": {
+            "player": [
+              -13.394900002980233,
+              0,
+              -0.8502747970452968
+            ],
+            "cargo": [
+              -12.68406807635609,
+              0.3898323682001331,
+              -0.2937091139470403
+            ],
+            "cargoQuaternion": [
+              0.028136110822310902,
+              -0.028143503000300878,
+              -0.7064592288361771,
+              0.7066340357631105
+            ],
+            "won": false,
+            "held": false,
+            "teleports": 0,
+            "cargoTransports": 0,
+            "optics": {
+              "raw": [
+                false,
+                false
+              ],
+              "shadow": [
+                false,
+                false
+              ],
+              "valid": false,
+              "latched": false
+            }
+          }
+        }
+      ],
+      "start": {
+        "player": [
+          -7.0034178615495986,
+          0,
+          -0.9267136340362049
+        ],
+        "cargo": [
+          -6.965736996437623,
+          1.048982365030144,
+          -1.6457321960883946
+        ],
+        "cargoQuaternion": [
+          0,
+          -0.9997285287878562,
+          0,
+          -0.023299543507727057
+        ],
+        "won": false,
+        "held": true,
+        "teleports": 0,
+        "cargoTransports": 0,
+        "optics": {
+          "raw": [
+            false,
+            false
+          ],
+          "shadow": [
+            false,
+            false
+          ],
+          "valid": false,
+          "latched": false
+        }
+      },
+      "frames": 1626,
+      "resets": 0,
+      "respawns": 0,
+      "final": {
+        "player": [
+          -11.260672815294482,
+          0,
+          -0.24449232486606476
+        ],
+        "cargo": [
+          -10.568159975483566,
+          1.0600529230056086,
+          -0.047449361538877244
+        ],
+        "cargoQuaternion": [
+          1.1163176620941672e-63,
+          0.6026067629734537,
+          -1.4814398659527485e-62,
+          0.7980382755348618
+        ],
+        "won": false,
+        "held": true,
+        "teleports": 0,
+        "cargoTransports": 0,
+        "optics": {
+          "raw": [
+            false,
+            false
+          ],
+          "shadow": [
+            false,
+            false
+          ],
+          "valid": false,
+          "latched": false
+        }
+      },
+      "seconds": 2.851
+    },
+    {
+      "level": 33,
+      "id": "post-inverse-spring",
+      "name": "cargo-self-compression-and-release-without-player-load",
+      "outcome": "blocked",
+      "checkpoints": [
+        {
+          "text": "Only original cargo loads spring, player stays off its bed",
+          "state": {
+            "player": [
+              -8.138035496749794,
+              0,
+              12.4301
+            ],
+            "cargo": [
+              -8.343983454382217,
+              1.1204159957238213,
+              11.063491842520211
+            ],
+            "cargoQuaternion": [
+              -5.867517339285506e-8,
+              -0.9906158713282212,
+              8.347941125935083e-9,
+              0.1366755116055017
+            ],
+            "won": false,
+            "held": false,
+            "teleports": 0,
+            "cargoTransports": 0,
+            "spring": {
+              "compression": 0.03344200820547116,
+              "held": false,
+              "loaded": true
+            }
+          }
+        },
+        {
+          "text": "Repeated outside release without observer-supplied compression",
+          "state": {
+            "player": [
+              3.630263782332907,
+              0,
+              5.8340408821853265
+            ],
+            "cargo": [
+              -8.343983432242972,
+              1.1393340214485346,
+              11.063492219635187
+            ],
+            "cargoQuaternion": [
+              -3.061258593896857e-8,
+              -0.9906158724062134,
+              4.355368803988049e-9,
+              0.13667550379228913
+            ],
+            "won": false,
+            "held": false,
+            "teleports": 0,
+            "cargoTransports": 0,
+            "spring": {
+              "compression": 0.0074261156359312075,
+              "held": false,
+              "loaded": true
+            }
+          }
+        }
+      ],
+      "start": {
+        "player": [
+          -8.137769003013682,
+          0,
+          12.4301
+        ],
+        "cargo": [
+          -8.34317600951402,
+          1.6100322716498854,
+          11.066522667434239
+        ],
+        "cargoQuaternion": [
+          1.3276129622390982e-7,
+          -0.9906158643100446,
+          -5.876723902472253e-8,
+          0.13667556247274879
+        ],
+        "won": false,
+        "held": false,
+        "teleports": 0,
+        "cargoTransports": 0,
+        "spring": {
+          "compression": 0.0001877168941324392,
+          "held": false,
+          "loaded": false
+        }
+      },
+      "frames": 1451,
+      "resets": 0,
+      "respawns": 0,
+      "final": {
+        "player": [
+          3.630263782332907,
+          0,
+          5.8340408821853265
+        ],
+        "cargo": [
+          -8.343983432242972,
+          1.1393340214485346,
+          11.063492219635187
+        ],
+        "cargoQuaternion": [
+          -3.061258593896857e-8,
+          -0.9906158724062134,
+          4.355368803988049e-9,
+          0.13667550379228913
+        ],
+        "won": false,
+        "held": false,
+        "teleports": 0,
+        "cargoTransports": 0,
+        "spring": {
+          "compression": 0.0074261156359312075,
+          "held": false,
+          "loaded": true
+        }
+      },
+      "seconds": 1.835
+    }
+  ]
+}

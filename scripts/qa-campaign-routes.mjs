@@ -40,7 +40,7 @@ const classicAlternates={
   {name:'scout-first',kind:'exploration',options:{order:'scout-first'},source:'tests/lab-room14-light-bridge.test.js'}],
  15:[{name:'carry-crossing',options:{order:'carry-crossing'},source:'tests/lab-room15-carry-crossing.test.js'},
   {name:'scout-first',kind:'exploration',options:{order:'scout-first'},source:'tests/lab-room15-journey.test.js'}],
- 16:[{name:'staged-portal',options:{order:'staged-portal'},source:'tests/lab-room16-alternate.test.js'},
+ 16:[{name:'scout-then-gravity-drop',options:{order:'scout-first'},source:'tests/lab-room16-alternate.test.js'},
   {name:'scout-first',kind:'exploration',options:{order:'scout-first',supportPause:20},source:'tests/lab-room16-journey.test.js'}],
  17:[{name:'cargo-first-momentum',options:{route:'cargo-first-momentum'},source:'tests/lab-room17-alternate.test.js'},
   {name:'scout-first',kind:'exploration',exercisesRecovery:true,options:{order:'scout-first',interruptBrake:true},source:'tests/lab-room17.test.js'}],
@@ -84,26 +84,29 @@ const classicAlternates={
  33:[{name:'companion-first',options:{route:'companion-first'},source:'tests/lab-late-causal-routes.test.js'},
   {name:'recovery',kind:'recovery',options:{recover:true},source:'tests/lab-research-chapter.test.js',borrowedFrom:'open edition'}],
 };
-// The new campaign reuses the archive builders for rooms 6–30. Keep their
+// Rooms 6–30 initially inherit archive routes; the rebuilt 18/20 registry below replaces those entries. Keep other
 // tested input routes without extending the five foundation-specific routes.
 for(let n=6;n<=30;n++)if(classicAlternates[n])foundationAlternates[n]=classicAlternates[n];
 // These post-campaign variants follow different physical orders with the same
 // original companion. Add a room only after its route driver has passed.
 Object.assign(foundationAlternates,{
- 31:[{name:'empty-upper-first',options:{route:'empty-upper-first'},source:'src/game/LabPostJourneyA.js'},
-  {name:'loaded-dock-recovery',kind:'recovery',exercisesRecovery:true,options:{recover:true},source:'tests/lab-post-a.test.js'}],
-  32:[{name:'prepare-return-first',options:{route:'prepare-return-first'},source:'src/game/LabPostJourneyA.js'}],
-  33:[{name:'friend-before-passenger',options:{route:'friend-before-passenger'},source:'src/game/LabPostJourneyA.js'}],
-  34:[{name:'service-first',kind:'recovery',exercisesRecovery:true,options:{route:'explore-service-first'},source:'src/game/LabPostJourneyA.js'}],
-  35:[{name:'carry-after-first-latch',options:{route:'carry-after-first-latch'},source:'src/game/LabPostJourneyA.js'}],
- 36:[{name:'prepare-light-first',options:{route:'prepare-light-first'},source:'src/game/LabPostJourneyB.js'},
-  {name:'missed-lift-recovery',kind:'recovery',exercisesRecovery:true,options:{recover:true},source:'tests/lab-post-b.test.js'}],
-  37:[{name:'dispatch-cargo-first',options:{route:'dispatch-cargo-first'},source:'src/game/LabPostJourneyB.js'}],
+ 18:[{name:'power-before-contact',options:{route:'power-before-contact'},source:'tests/lab-creative-room18.test.js'},
+ {name:'reverse-partial-stroke',kind:'recovery',exercisesRecovery:true,options:{route:'reverse-partial-stroke'},source:'tests/lab-creative-room18.test.js'}],
+ 20:[{name:'scout-first',options:{order:'scout-first'},source:'tests/lab-creative-room20.test.js'},
+ {name:'erased-rope-recovery',kind:'recovery',exercisesRecovery:true,options:{recovery:true},source:'tests/lab-creative-room20.test.js'}],
+ 31:[{name:'inspect-rack-first',options:{route:'inspect-rack-first'},source:'src/game/LabPostJourneyA.js'}],
+ 32:[{name:'inspect-optics-first',options:{route:'inspect-optics-first'},source:'src/game/LabPostJourneyA.js'}],
+ 33:[{name:'aim-before-charge',options:{route:'aim-before-charge'},source:'src/game/LabPostJourneyA.js'}],
+ 34:[{name:'inspect-unsealed-first',options:{alternate:true},source:'src/game/LabCreativeCounterweightJourney.js'},
+  {name:'early-discharge-recovery',kind:'recovery',exercisesRecovery:true,options:{recover:true},source:'scripts/qa-pressure-room34.mjs'}],
+ 35:[{name:'scout-before-second-latch',options:{route:'scout-before-second-latch'},source:'src/game/LabPostJourneyA.js'}],
+ 36:[{name:'scout-impact-first',options:{route:'scout-impact-first'},source:'src/game/LabCreativeFinalJourney.js'}],
+ 37:[{name:'prepare-fields-first',options:{route:'prepare-fields-first'},source:'src/game/LabCreativeFinalJourney.js'}],
  38:[{name:'send-freight-early',options:{route:'send-freight-early'},source:'src/game/LabPostJourneyB.js'},
   {name:'lower-floor-recovery',kind:'recovery',exercisesRecovery:true,options:{recover:true},source:'tests/lab-post-b.test.js'}],
- 39:[{name:'scout-first',kind:'exploration',options:{route:'scout-first'},source:'src/game/LabPostJourneyB.js'},
-  {name:'service-ascent-recovery',kind:'recovery',exercisesRecovery:true,options:{recover:true},source:'tests/lab-post-b.test.js'}],
- 40:[{name:'bridge-prepared-first',options:{route:'bridge-prepared-first'},source:'src/game/LabPostJourneyB.js'}],
+ 39:[{name:'receiver-first',options:{route:'receiver-first'},source:'src/game/LabPostJourneyB.js'},
+  {name:'cooling-recovery',kind:'recovery',exercisesRecovery:true,options:{recover:true},source:'tests/lab-post-b.test.js'}],
+ 40:[{name:'trim-then-balance',options:{route:'trim-then-balance'},source:'src/game/LabCreativeFinalJourney.js'}],
 });
 const openAlternates={
  24:[{name:'ride-first',options:{route:'ride-first'},source:'src/game/LabOpenJourney.js'},

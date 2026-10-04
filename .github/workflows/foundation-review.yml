@@ -36,7 +36,7 @@ jobs:
           npm ci
           npm install --no-save --package-lock=false puppeteer-core@24.16.0
           npm run build
-          node scripts/stamp-build.mjs v43-tower-rebuild
+          node scripts/stamp-build.mjs v44-tower-variety
       - name: Capture the playable first chapter with ordinary and exploratory input
         env:
           ROOMS: ${{ matrix.room }}

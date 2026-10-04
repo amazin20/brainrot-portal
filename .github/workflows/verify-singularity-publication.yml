@@ -1,11 +1,9 @@
 name: Verify the existing upgraded public game
 on:
-  push:
+  workflow_run:
+    workflows: [Publish the verified primary game and Tower upgrade]
     branches: [main]
-    paths:
-      - .github/workflows/verify-singularity-publication.yml
-      - scripts/verify-singularity-upgrade.mjs
-      - scripts/lib/singularity-ui-check.mjs
+    types: [completed]
   workflow_dispatch:
 permissions:
   contents: read
@@ -19,6 +17,7 @@ env:
 jobs:
   verify:
     name: Verify exact published bytes, ordinary controls and complete video
+    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
@@ -35,9 +34,21 @@ jobs:
             const {owner,repo}=context.repo;
             if(c.mode!=='complete'||!Number.isSafeInteger(c.candidateRun)||!/^[a-f0-9]{40}$/.test(c.sourceCommit))throw Error('Expected the pinned complete release');
             const run=(await github.rest.actions.getWorkflowRun({owner,repo,run_id:c.candidateRun})).data;
-            if(run.conclusion!=='success'||run.head_sha!==c.sourceCommit||run.path!=='.github/workflows/tower-upgrade.yml'||run.head_branch!=='upgrade/tower-41-final')throw Error('Candidate provenance mismatch');
+            if(run.conclusion!=='success'||run.head_sha!==c.sourceCommit||run.path!=='.github/workflows/tower-upgrade.yml'||run.head_branch!==(c.sourceBranch||'upgrade/tower-41-final'))throw Error('Candidate provenance mismatch');
             const jobs=await github.paginate(github.rest.actions.listJobsForWorkflowRun,{owner,repo,run_id:c.candidateRun,per_page:100});
             for(const name of ['Source tests for every retained game regression','Preserve the exact approved public campaign package',...['foundation','classic','open'].map(e=>`All retained campaign routes (${e})`)])if(!jobs.some(j=>j.name===name&&j.conclusion==='success'))throw Error('Missing successful verification: '+name);
+            if(c.sourceBranch==='upgrade/creative-campaign-20261004'){
+              if(!jobs.some(j=>j.name==='Fast-input attacks and Yandex production readiness'&&j.conclusion==='success'))throw Error('Creative input and SDK checks did not pass');
+              const web=jobs.filter(j=>j.name.startsWith('Complete production WebGL routes ('));
+              if(web.length!==4||web.some(j=>j.conclusion!=='success'))throw Error('Every ordinary room must complete in production WebGL');
+              const groups=['core','early','middle','late','castle-canonical','castle-early','castle-middle','castle-late'];
+              const speedruns=jobs.filter(j=>j.name.startsWith('Novel speedrun attacks ('));
+              if(speedruns.length!==groups.length)throw Error('The complete novel speedrun matrix is missing');
+              for(const group of groups){
+                const matches=speedruns.filter(j=>j.name===`Novel speedrun attacks (${group})`);
+                if(matches.length!==1||matches[0].conclusion!=='success')throw Error(`Novel ${group} speedrun verification did not pass`);
+              }
+            }
             for(const name of ['Inspect the browser rendering and verify the entire production route','Record one continuous upgraded Tower walkthrough from that exact package'])if(!jobs.some(j=>j.conclusion==='success'&&j.steps?.some(s=>s.name===name&&s.conclusion==='success')))throw Error('Missing successful verification: '+name);
             core.setOutput('run',String(c.candidateRun));
       - uses: actions/setup-node@v4

@@ -34,7 +34,7 @@ jobs:
           npm ci
           npm install --no-save --package-lock=false puppeteer-core@24.16.0
           npm run build
-          node scripts/stamp-build.mjs v43-tower-rebuild
+          node scripts/stamp-build.mjs v44-tower-variety
       - name: Run the complete route and inspect corrected deck joins
         env:
           NESI_FIRST: ${{ matrix.room }}

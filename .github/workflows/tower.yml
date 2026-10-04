@@ -31,10 +31,10 @@ jobs:
       - name: Test and build the exact candidate
         run: |
           npm ci
-          node --test tests/lab-tower.test.js tests/lab-tower-mechanisms.test.js tests/lab-tower-transitions.test.js tests/lab-tower-evidence.test.js tests/lab-resume.test.js
+          node --test --test-concurrency=2 tests/lab-tower.test.js tests/lab-tower-mechanisms.test.js tests/lab-tower-transitions.test.js tests/lab-tower-evidence.test.js tests/lab-tower-courses.test.js tests/lab-tower-ascents.test.js tests/lab-tower-crown.test.js tests/lab-tower-momentum.test.js tests/lab-tower-windway-flight.test.js tests/lab-tower-variety.test.js tests/lab-tower-interlock.test.js tests/lab-tower-balance.test.js tests/lab-tower-refraction-bays.test.js tests/lab-tower-freight.test.js tests/lab-tower-battery.test.js tests/lab-resume.test.js
           npm run build
           node scripts/v8-package-check.mjs
-          node scripts/stamp-build.mjs v43-tower-rebuild
+          node scripts/stamp-build.mjs v44-tower-variety
           npm install --no-save --package-lock=false puppeteer-core@24.16.0
       - name: Complete eighteen wings and six central keystones in production WebGL
         run: |

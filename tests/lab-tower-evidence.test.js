@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {validateTowerEvidence,TOWER_CAPTURE} from '../scripts/verify-tower.mjs';
+import {validateTowerEvidence,TOWER_CAPTURE,TOWER_COURSE_EXPECTED} from '../scripts/verify-tower.mjs';
 import {TOWER_STAGES} from '../src/game/LabTowerLayout.js';
 import {KEYSTONE_SPECS} from '../src/game/LabTowerKeystones.js';
 
@@ -21,6 +21,7 @@ function evidence(){
   teleports:2,shots:8,interactions:12,physicsSteps:115200,
   simulatedSeconds:960,distanceTravelled:1000,stageEvents:events.map(event=>({...event})),
   keystoneEvents:keystones.map(event=>({...event})),
+  flings:[{stageId:'exchange',speed:16.4,landing:[5.4,2.05,-33.4]}],
  };
  const observed={
   first:{completedStages:0},last:{completedStages:TOWER_CAPTURE.stages,state:'won'},
@@ -29,6 +30,7 @@ function evidence(){
   simulatedSeconds:960,physicsSeconds:960,physicsSteps:115200,
   activeSeconds:920,movingSeconds:910,maxIdleSeconds:1,
   distanceMeters:1000,teleports:2,
+  courseVisits:structuredClone(TOWER_COURSE_EXPECTED),
  };
  const gameMetrics={
   completedStages:TOWER_CAPTURE.stages,totalStages:TOWER_CAPTURE.stages,
@@ -91,6 +93,12 @@ for(const [name,change,reason] of [
  ['an AFK segment',item=>{
   item.route.maxNoInputSeconds=5.1;
  },/AFK segment/],
+ ['an unvisited side gallery',item=>{
+  item.observed.courseVisits.annex.pop();
+ },/physically traverse every annex space/],
+ ['an omitted momentum shaft landing',item=>{
+  item.observed.courseVisits.shaft.pop();
+ },/physically traverse every shaft space/],
  ['fewer than fifteen active minutes',item=>{
   item.observed.activeSeconds=899;
  },/15 minutes/],

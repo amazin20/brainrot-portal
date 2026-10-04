@@ -1,0 +1,139 @@
+name: New Tower source, physics and browser evidence
+on:
+  push:
+    branches: [feature/tower-singularity]
+    paths: [tools/tower-transfer.json]
+  workflow_dispatch:
+permissions:
+  contents: write
+  actions: read
+concurrency:
+  group: tower-singularity-candidate
+  cancel-in-progress: false
+jobs:
+  candidate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 150
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install locked runtime and browser driver
+        run: |
+          npm ci
+          npm install --no-save --package-lock=false puppeteer-core@24.16.0
+          echo "CHROME_PATH=$(command -v google-chrome || command -v chromium)" >> "$GITHUB_ENV"
+      - name: Retrieve the authored source through its public download control
+        run: |
+          mkdir -p qa/source-transfer
+          cat > /tmp/transfer.mjs <<'JS'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import {createHash} from 'node:crypto';
+          const {default:puppeteer}=await import(path.resolve('node_modules/puppeteer-core/lib/esm/puppeteer/puppeteer-core.js'));
+          const config=JSON.parse(fs.readFileSync('tools/tower-transfer.json','utf8'));
+          const out=path.resolve('qa/source-transfer');
+          const browser=await puppeteer.launch({executablePath:process.env.CHROME_PATH,headless:true,args:['--no-sandbox','--disable-dev-shm-usage']});
+          let timeout;
+          try{
+            const page=await browser.newPage();page.setDefaultTimeout(60000);
+            const client=await browser.target().createCDPSession();
+            await client.send('Browser.setDownloadBehavior',{behavior:'allowAndName',downloadPath:out,eventsEnabled:true});
+            let downloaded=null;
+            const complete=new Promise((resolve,reject)=>{
+              client.on('Browser.downloadWillBegin',event=>console.log('Source download',event.suggestedFilename));
+              client.on('Browser.downloadProgress',event=>{if(event.state==='completed'){downloaded=path.join(out,event.guid);resolve(downloaded);}if(event.state==='canceled')reject(Error('Source download canceled'));});
+            });
+            await page.goto(config.shareUrl,{waitUntil:'networkidle2'});
+            await page.screenshot({path:path.join(out,'download-page.png')});
+            const controls=await page.evaluate(()=>Array.from(document.querySelectorAll('a,button')).map((e,i)=>({i,text:e.textContent.trim(),href:e.getAttribute('href'),title:e.getAttribute('title')})));
+            fs.writeFileSync(path.join(out,'controls.json'),JSON.stringify(controls,null,2));
+            const control=controls.find(c=>/download|ダウンロード/i.test(c.text+' '+c.title));
+            if(!control)throw Error('No public download control was found');
+            await page.evaluate(i=>document.querySelectorAll('a,button')[i].click(),control.i);
+            await Promise.race([complete,new Promise((_,reject)=>{timeout=setTimeout(()=>reject(Error('Source download timed out')),90000);})]);
+            const bytes=fs.readFileSync(downloaded),sha=createHash('sha256').update(bytes).digest('hex');
+            if(sha!==config.archiveSha256)throw Error(`Source archive hash mismatch: ${sha}`);
+            fs.writeFileSync('/tmp/tower-source.zip',bytes);
+            console.log('SOURCE SHA256 VERIFIED',sha);
+          }finally{clearTimeout(timeout);await browser.close();}
+          JS
+          node /tmp/transfer.mjs
+      - name: Expand only the approved readable game files
+        run: |
+          python3 - <<'PY'
+          import zipfile,pathlib
+          allowed={'src/game/LabSingularityKit.js','src/game/LabSingularityArt.js','src/game/LabSingularityLayout.js','src/game/LabSingularityLevel.js','src/game/LabSingularityJourney.js','src/game/LabCampaignLevels.js','src/game/LabV8Journey.js','scripts/singularity-browser.mjs','tests/lab-singularity.test.js','docs/TOWER_SINGULARITY.md'}
+          with zipfile.ZipFile('/tmp/tower-source.zip') as z:
+            assert set(z.namelist())==allowed, 'Unexpected source path'
+            assert sum(i.file_size for i in z.infolist())<500000, 'Oversized source package'
+            for name in z.namelist():
+              content=z.read(name);content.decode('utf-8')
+              p=pathlib.Path(name);p.parent.mkdir(parents=True,exist_ok=True);p.write_bytes(content)
+          PY
+          git diff --check
+          for f in src/game/LabSingularity*.js scripts/singularity-browser.mjs; do node --check "$f"; done
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add src/game/LabSingularity*.js src/game/LabCampaignLevels.js src/game/LabV8Journey.js scripts/singularity-browser.mjs tests/lab-singularity.test.js docs/TOWER_SINGULARITY.md
+          if ! git diff --cached --quiet; then git commit -m 'Implement the complete thirteen-machine Singularity Tower'; fi
+          test "$(git ls-remote origin refs/heads/feature/tower-singularity | cut -f1)" = '${{ github.sha }}'
+          git push origin HEAD:refs/heads/feature/tower-singularity
+          echo "BUILD_COMMIT=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
+          echo "TOWER_MODE=$(node -p "JSON.parse(require('fs').readFileSync('tools/tower-transfer.json')).mode")" >> "$GITHUB_ENV"
+      - name: Test all thirteen new mechanisms and build the actual production package
+        run: |
+          node --test --test-concurrency=2 tests/lab-singularity.test.js tests/lab-resume.test.js
+          npm run build
+          node scripts/v8-package-check.mjs
+          node --input-type=module <<'JS'
+          import fs from 'node:fs';
+          import {SINGULARITY_ROOMS} from './src/game/LabSingularityLayout.js';
+          const info={commit:process.env.BUILD_COMMIT,version:'v45-singularity',artVersion:'v45-singularity',run:process.env.GITHUB_RUN_ID,levels:41,verified:false,verificationScope:'New Tower candidate; consult the exact route and media evidence',features:{defaultEdition:'foundation',archiveRooms:33,tower:{stages:SINGULARITY_ROOMS.length,checkpoints:false,layout:'continuous-cathedral',uniqueRules:new Set(SINGULARITY_ROOMS.map(r=>r.rule)).size}}};
+          fs.writeFileSync('dist/build-info.json',JSON.stringify(info,null,2)+'\n');
+          JS
+      - name: Inspect the browser rendering and verify the entire production route
+        run: |
+          npm run preview -- --host 127.0.0.1 --port 4173 >qa/singularity-preview.log 2>&1 &
+          for i in {1..30}; do curl -fsS http://127.0.0.1:4173/build-info.json >/dev/null && break; sleep 1; done
+          curl -fsS http://127.0.0.1:4173/build-info.json >/dev/null
+          OUT_DIR=qa/singularity-inspection node scripts/singularity-browser.mjs
+          if [ "$TOWER_MODE" != inspect ]; then ROUTE=1 OUT_DIR=qa/singularity-route node scripts/singularity-browser.mjs; fi
+      - name: Preserve the exact new Tower package before recording
+        uses: actions/upload-artifact@v4
+        with:
+          name: singularity-browser
+          path: dist/
+          if-no-files-found: error
+          retention-days: 14
+      - name: Preserve independently reviewable native images and full route metrics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: singularity-native-verification
+          path: |
+            qa/singularity-inspection/
+            qa/singularity-route/
+            qa/singularity-preview.log
+          retention-days: 14
+      - name: Record one continuous new Tower walkthrough from that exact package
+        if: env.TOWER_MODE == 'record'
+        run: |
+          command -v ffmpeg >/dev/null || (sudo apt-get update -qq && sudo apt-get install -y --no-install-recommends ffmpeg)
+          RECORD=1 OUT_DIR=qa/singularity-recording node scripts/singularity-browser.mjs
+      - name: Preserve all new video, metrics and source-transfer evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: singularity-evidence
+          path: |
+            qa/singularity-inspection/
+            qa/singularity-route/
+            qa/singularity-recording/
+            qa/source-transfer/
+            qa/singularity-preview.log
+          retention-days: 14

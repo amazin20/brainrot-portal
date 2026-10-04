@@ -14,7 +14,7 @@ import { LabPortalActors } from './LabPortalActors.js';
 import { warmPortalRendering } from './LabPortalWarmup.js';
 import { LabPlayerAnimator } from './LabPlayerAnimator.js';
 import { LabHeldDevice } from './LabHeldDevice.js';
-import { LabPortals, portalBacksCollider, transformPortalPoint, pointInsidePortal } from './LabPortals.js';
+import { LabPortals, portalBacksCollider, transformPortalPoint, pointInsidePortal, uprightCapsuleFitsPortal, orientedBoxFitsPortal, portalRotation } from './LabPortals.js';
 import { LabPhysics, sampleRampSurface } from './LabPhysics.js';
 import { loadLabModels } from './LabAssetLoader.js';
 import { ALL_LAB_ASSETS } from './labAssets.js';
@@ -94,10 +94,12 @@ export class LabGame {
   createScene() {
     this.scene = new THREE.Scene(); this.scene.background = new THREE.Color(0x263844);
     this.scene.fog = new THREE.Fog(0x263844, 64, 120);
-    this.camera = new THREE.PerspectiveCamera(57, innerWidth / innerHeight, 0.1, 130);
+    const viewport = () => ({ width: Math.max(1, this.container.clientWidth), height: Math.max(1, this.container.clientHeight) });
+    const initialViewport = viewport();
+    this.camera = new THREE.PerspectiveCamera(57, initialViewport.width / initialViewport.height, 0.1, 130);
     this.renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' });
     this.renderer.setPixelRatio(Math.min(devicePixelRatio, this.quality.pixelRatio));
-    this.renderer.setSize(innerWidth, innerHeight);
+    this.renderer.setSize(initialViewport.width, initialViewport.height);
     this.renderer.outputColorSpace = THREE.SRGBColorSpace;
     this.renderer.toneMapping = THREE.ACESFilmicToneMapping; this.renderer.toneMappingExposure = .93;
     this.renderer.shadowMap.enabled = this.quality.shadows !== false; this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
@@ -122,7 +124,14 @@ export class LabGame {
       amber: new THREE.MeshBasicMaterial({ color: 0xffc168 }),
       glass: new THREE.MeshStandardMaterial({ color: 0x60a9bf, transparent: true, opacity: .16, roughness: .35, depthWrite: false }),
     };
-    addEventListener('resize', () => { this.camera.aspect = innerWidth / innerHeight; this.camera.updateProjectionMatrix(); this.renderer.setSize(innerWidth, innerHeight); });
+    this.viewportResize = () => {
+      const { width, height } = viewport();
+      this.camera.aspect = width / height; this.camera.updateProjectionMatrix(); this.renderer.setSize(width, height);
+    };
+    addEventListener('resize', this.viewportResize);
+    if (typeof ResizeObserver !== 'undefined') {
+      this.viewportObserver = new ResizeObserver(this.viewportResize); this.viewportObserver.observe(this.container);
+    }
   }
 
   async loadAssets() {
@@ -314,15 +323,15 @@ export class LabGame {
     this.surfaceHint = document.createElement('div'); this.surfaceHint.className = 'lab-surface-hint'; document.body.appendChild(this.surfaceHint);
     const mobile = document.createElement('div'); mobile.className = 'lab-mobile';
     this.mobileActionButtons = [];
-    for (const [label, description, action] of [
+    for (const [label, description, action, activation = 'pointerdown'] of [
       ['①', 'Голубой портал', () => this.firePortal(0)],
       ['②', 'Оранжевый портал', () => this.firePortal(1)],
       ['E', 'Взять или поставить друга, использовать механизм', () => this.interact()],
-      ['Пауза', 'Приостановить игру', () => this.togglePause(true)],
+      ['Пауза', 'Приостановить игру', () => this.togglePause(true), 'click'],
     ]) {
       const button = document.createElement('button'); button.textContent = label;
       button.setAttribute('aria-label', description);
-      this.mobileActionButtons.push({ button, action }); mobile.appendChild(button);
+      this.mobileActionButtons.push({ button, action, activation }); mobile.appendChild(button);
     }
     document.body.appendChild(mobile); this.bindMobileActions();
     if (this.debug) {
@@ -338,8 +347,12 @@ export class LabGame {
   }
 
   bindMobileActions() {
-    for (const { button, action } of this.mobileActionButtons ?? []) {
-      this.controls.listen(button, 'pointerdown', event => {
+    for (const { button, action, activation = 'pointerdown' } of this.mobileActionButtons ?? []) {
+      // Opening a menu on touch pointerdown moves the target before touchend.
+      // Chromium can then click the newly exposed "choose room" control.
+      // Pause changes the screen only after the original tap has completed;
+      // shooting and interaction retain their immediate pointerdown response.
+      this.controls.listen(button, activation, event => {
         event.preventDefault();
         if (this.controls.active) action();
       });
@@ -354,6 +367,8 @@ export class LabGame {
   }
 
   disposeControls() {
+    this.viewportObserver?.disconnect();
+    if (this.viewportResize) removeEventListener('resize', this.viewportResize);
     this.resetInput();
     this.controls?.dispose(); this.input?.dispose();
   }
@@ -439,10 +454,13 @@ export class LabGame {
   clearPortals() {
     if (this.externalBlocked || this.state !== 'playing') return false;
     if (this.epicMode && this.firstLevel?.restoreCheckpoint) return this.restartCheckpoint();
+    const previousPortals = this.portals.portals.slice(), previousSurfaceIds = this.portalSurfaceIds.slice();
     this.portals.clear(); this.portalSurfaceIds = [null, null];
     for (const id of this.portalCargoColliders) this.physics.setStaticEnabled(id,
       this.colliderForId(id)?.enabled !== false);
     this.portalCargoColliders.clear();
+    this.recoverPlayerFromClosingPortals(previousPortals, previousSurfaceIds);
+    this.recoverCargoFromClosingPortals(previousPortals, previousSurfaceIds);
     this.callbacks.onToast('Пара сброшена. Один портал можно оставить под брейнротом, второй открыть позже.');
     return true;
   }
@@ -459,6 +477,7 @@ export class LabGame {
     const normal = panel.userData.portalFrame?.()?.normal ?? panel.userData.normal;
     const preferredUp = this.kineticMode && panel.userData.portalUp ? panel.userData.portalUp : normal && Math.abs(normal.y) > .6
       ? new THREE.Vector3(0, 0, -1).applyAxisAngle(UP, this.yaw) : undefined;
+    const previousPortals = this.portals.portals.slice(), previousSurfaceIds = this.portalSurfaceIds.slice();
     const result = this.portals.placeOnPanel(index, panel, hitPoint, { blockers: this.colliders, preferredUp });
     if (!result.ok) {
       this.callbacks.onToast(result.reason === 'overlap' ? 'Здесь уже другой портал. Перенеси его цвет или выбери место рядом'
@@ -467,8 +486,96 @@ export class LabGame {
       return false;
     }
     this.portalSurfaceIds[index] = panel.userData.portalColliderId ?? panel.uuid;
+    this.recoverPlayerFromClosingPortals(previousPortals, previousSurfaceIds);
+    this.recoverCargoFromClosingPortals(previousPortals, previousSurfaceIds);
     this.callbacks.onToast(this.portals.ready ? 'Пара связана. Войди в любой проход' : 'Первый проход готов. Установи второй');
     return true;
+  }
+
+  // Closing or relocating an aperture can restore a solid while the capsule's
+  // feet/head have entered it but its centre has not crossed. Resolve that
+  // shallow overlap along the old front normal. The generic box resolver would
+  // otherwise choose a distant lateral edge of a broad floor/ceiling and eject
+  // the player outside the room without any portal traversal.
+  recoverPlayerFromClosingPortals(previousPortals, previousSurfaceIds) {
+    if (!previousPortals.every(Boolean)
+      || previousPortals.some(p => !uprightCapsuleFitsPortal(p, PLAYER_HEIGHT, PLAYER_RADIUS))) return;
+    for (const [index, portal] of previousPortals.entries()) {
+      const center = this.playerPosition.clone().addScaledVector(UP, CENTER_HEIGHT);
+      const distance = center.clone().sub(portal.position).dot(portal.normal);
+      const extent = PLAYER_RADIUS + (CENTER_HEIGHT - PLAYER_RADIUS) * Math.abs(portal.normal.y);
+      if (distance <= 0 || distance >= extent + .025
+        || !pointInsidePortal(portal, center, PLAYER_RADIUS)) continue;
+      const closesUnderPlayer = this.colliders.some(c => {
+        if (c.enabled === false || !c.box) return false;
+        const owned = c.mesh.uuid === previousSurfaceIds[index] || portal.backingIds?.has(c.mesh.uuid)
+          || c.portalOwner?.userData.portalColliderId === previousSurfaceIds[index]
+          || portalBacksCollider(portal, c.box);
+        if (!owned || this.portalOpensCollider(c, center, PLAYER_RADIUS, PLAYER_HEIGHT)) return false;
+        const b = c.box;
+        if (this.playerPosition.y >= b.max.y - .001
+          || this.playerPosition.y + PLAYER_HEIGHT <= b.min.y + .001) return false;
+        const dx = this.playerPosition.x - THREE.MathUtils.clamp(this.playerPosition.x, b.min.x, b.max.x);
+        const dz = this.playerPosition.z - THREE.MathUtils.clamp(this.playerPosition.z, b.min.z, b.max.z);
+        return dx * dx + dz * dz < PLAYER_RADIUS * PLAYER_RADIUS;
+      });
+      if (!closesUnderPlayer) continue;
+      const correction = portal.normal.clone().multiplyScalar(extent + .025 - distance);
+      this.playerPosition.add(correction); this.previousPlayerPosition.add(correction);
+      this.playerGroup?.position.add(correction);
+      const inward = this.playerVelocity.dot(portal.normal);
+      if (inward < 0) this.playerVelocity.addScaledVector(portal.normal, -inward);
+    }
+  }
+
+  recoverCargoFromClosingPortals(previousPortals, previousSurfaceIds, { beforeRelease = false } = {}) {
+    const body = this.physics?.cargoBody;
+    if (!body || !previousPortals.every(Boolean)) return;
+    if (beforeRelease && !this.heldCube) return;
+    const carried = Boolean(this.heldCube || this.velocityCompanion?.connected);
+    for (const [index, portal] of previousPortals.entries()) {
+      const center = new THREE.Vector3().copy(body.position), quaternion = new THREE.Quaternion().copy(body.quaternion);
+      const distance = center.clone().sub(portal.position).dot(portal.normal);
+      const localNormal = portal.normal.clone().applyQuaternion(quaternion.clone().invert());
+      const extent = CUBE_RADIUS * (Math.abs(localNormal.x) + Math.abs(localNormal.y) + Math.abs(localNormal.z));
+      // A grip can straddle the plane before its owner's centre crosses. It
+      // still belongs on the owner's original side when that aperture closes.
+      const ownerCenter = this.playerPosition.clone().addScaledVector(UP, CENTER_HEIGHT);
+      const ownerStillInFront = carried && ownerCenter.clone().sub(portal.position).dot(portal.normal) > 0;
+      const ownsFrontSide = ownerStillInFront && pointInsidePortal(portal, ownerCenter, PLAYER_RADIUS)
+        && previousPortals.every(p => uprightCapsuleFitsPortal(p, PLAYER_HEIGHT, PLAYER_RADIUS));
+      // A grip may put the box's centre behind an open plane before its owner
+      // crosses. Start a release on the owner's side so the first free-body
+      // step has a continuous crossing path instead of an already-behind box.
+      if (beforeRelease && !ownsFrontSide) continue;
+      if (distance >= extent + .025 || (distance < -extent && !ownsFrontSide) || (distance <= 0 && !ownerStillInFront)
+        || !orientedBoxFitsPortal(portal, center, quaternion, CUBE_RADIUS)) continue;
+      const closesUnderCargo = this.colliders.some(c => {
+        if (c.enabled === false || !c.box) return false;
+        const owned = c.mesh.uuid === previousSurfaceIds[index] || portal.backingIds?.has(c.mesh.uuid)
+          || c.portalOwner?.userData.portalColliderId === previousSurfaceIds[index]
+          || portalBacksCollider(portal, c.box);
+        if (!owned) return false;
+        if (beforeRelease) return this.portalOpensCollider(c, ownerCenter, PLAYER_RADIUS, PLAYER_HEIGHT);
+        const stillOpen = carried
+          ? this.portalOpensCollider(c, this.playerPosition.clone().addScaledVector(UP, CENTER_HEIGHT), PLAYER_RADIUS, PLAYER_HEIGHT)
+          : this.portalOpensCollider(c, center, CUBE_RADIUS, 0, quaternion);
+        return !stillOpen;
+      });
+      if (!closesUnderCargo) continue;
+      const correction = portal.normal.clone().multiplyScalar(extent + .025 - distance);
+      for (const key of ['x', 'y', 'z']) {
+        body.position[key] += correction[key];
+        if (this.physics.carryTarget) this.physics.carryTarget.position[key] += correction[key];
+      }
+      const inward = body.velocity.dot(portal.normal);
+      // A still-open release retains earned momentum; a restored solid stops
+      // only its inward normal component as an ordinary contact would.
+      if (inward < 0 && !beforeRelease) for (const key of ['x', 'y', 'z']) body.velocity[key] -= portal.normal[key] * inward;
+      body.previousPosition.copy(body.position); body.interpolatedPosition.copy(body.position);
+      body.aabbNeedsUpdate = true; body.wakeUp(); this.physics.world.broadphase.dirty = true;
+      this.cargo.position.copy(body.position);
+    }
   }
 
   updateAimHint() {
@@ -683,6 +790,7 @@ export class LabGame {
         this.jumpWindup = Math.max(0, this.jumpWindup - dt);
         if (this.jumpWindup < 1e-8) {
           this.jumpWindup = 0; this.playerVelocity.y = 7.8; this.playerGrounded = false;
+          this.coyoteTime = 0; this.jumpBuffer = 0;
           this.audio.jump();
         }
       }
@@ -698,13 +806,26 @@ export class LabGame {
       ? sweepKineticBody(this, this.playerPosition, previous, this.playerVelocity, PLAYER_RADIUS, PLAYER_HEIGHT) : resolveRampMotion(this,this.playerPosition,previous,this.playerVelocity,PLAYER_RADIUS,PLAYER_HEIGHT);
     const rampSupport=followRampGround(this,this.playerPosition,previous,this.playerVelocity,wasGrounded);
     this.constrainPortalThroat(this.playerPosition, previous, this.playerVelocity);
+    this.groundedByCollider = sweptGroundContact || rampSupport;
+    if (!this.kineticMode) {
+      // Resolve the source segment before transporting. Geometry beyond the
+      // entry plane belongs to the abandoned room and cannot stop a fling.
+      const predicted = this.portals.tryTeleport(
+        this.playerPosition.clone().addScaledVector(UP, CENTER_HEIGHT),
+        previous.clone().addScaledVector(UP, CENTER_HEIGHT), this.playerVelocity, PLAYER_RADIUS, { capsuleHeight: PLAYER_HEIGHT });
+      if (predicted) {
+        const sourceEnd = predicted.crossingPoint.clone().addScaledVector(UP, -CENTER_HEIGHT);
+        const resolvedEnd = sourceEnd.clone();
+        this.resolveBody(resolvedEnd, previous, this.playerVelocity, PLAYER_RADIUS, PLAYER_HEIGHT, true);
+        if (resolvedEnd.distanceToSquared(sourceEnd) > 1e-10) this.playerPosition.copy(resolvedEnd);
+      } else this.resolveBody(this.playerPosition, previous, this.playerVelocity, PLAYER_RADIUS, PLAYER_HEIGHT, true);
+    }
     const center = this.playerPosition.clone().addScaledVector(UP, CENTER_HEIGHT);
     const previousCenter = previous.clone().addScaledVector(UP, CENTER_HEIGHT);
-    const teleport = this.portals.tryTeleport(center, previousCenter, this.playerVelocity, PLAYER_RADIUS);
-    this.groundedByCollider = sweptGroundContact || rampSupport;
-    const downwardImpact = this.kineticMode ? kineticImpact : Math.max(0, -this.playerVelocity.y);
+    const teleport = this.portals.tryTeleport(center, previousCenter, this.playerVelocity, PLAYER_RADIUS, { capsuleHeight: PLAYER_HEIGHT });
+    const downwardImpact = kineticImpact;
     if (teleport) {
-      const entry = this.portals.portals[teleport.entryIndex], exit = this.portals.portals[teleport.exitIndex];
+      const entry = teleport.entryFrame || this.portals.portals[teleport.entryIndex], exit = this.portals.portals[teleport.exitIndex];
       const transportedVisual = transformPortalPoint(this.playerGroup.position, entry, exit);
       const transportedQ = this.playerGroup.quaternion.clone().premultiply(teleport.rotation);
       const oldYaw = this.yaw, oldPitch = this.pitch;
@@ -720,20 +841,24 @@ export class LabGame {
           teleport.position.addScaledVector(exit.normal, cargoClearance);
         }
         this.physics.teleportCargo({ position: cargoPosition, rotation: teleport.rotation });
-        this.cargo.position.copy(cargoPosition);
-        this.companionBehavior?.reanchor(cargoPosition); this.cargoPortalCooldown = .07;
+        const ignoredBacking = new Set();
+        for (const collider of this.colliders) if (collider.enabled && this.portalOpensCollider(collider, cargoPosition, CUBE_RADIUS, 0, this.physics.cargoBody.quaternion)) ignoredBacking.add(collider.mesh.uuid);
+        this.physics.resolveCargoTransit(cargoPosition, { ignoreIds: ignoredBacking });
+        this.cargo.position.copy(this.physics.cargoBody.position);
+        this.companionBehavior?.reanchor(this.cargo.position); this.cargoPortalCooldown = .07;
         this.companionAnimator.trigger('portal');
         this.velocityCompanion?.onPortalTransport(teleport.rotation);
       }
       this.playerPosition.copy(teleport.position).addScaledVector(UP, -CENTER_HEIGHT);
       this.playerVelocity.copy(teleport.velocity);
-      if (this.kineticMode) {
+      {
         // Resume the residual movement in the destination world. This catches
         // thin obstacles immediately outside the exit at full fling speed.
         const exitStart = transformPortalPoint(teleport.crossingPoint, entry, exit)
           .add(teleport.position.clone().sub(teleport.unadjustedPosition)).addScaledVector(UP, -CENTER_HEIGHT);
-        this.groundedByCollider = sweepKineticBody(this, this.playerPosition, exitStart,
+        if (this.kineticMode) this.groundedByCollider = sweepKineticBody(this, this.playerPosition, exitStart,
           this.playerVelocity, PLAYER_RADIUS, PLAYER_HEIGHT, { portalLimit: false });
+        else this.resolveBody(this.playerPosition, exitStart, this.playerVelocity, PLAYER_RADIUS, PLAYER_HEIGHT, true);
         this.playerGrounded = false;
       }
       // A launcher impulse belongs to the traveller frame too. Keeping the old
@@ -766,7 +891,7 @@ export class LabGame {
       const upright = new THREE.Quaternion().setFromAxisAngle(UP, this.facing);
       this.portalVisualRotation.copy(transportedQ).multiply(upright.invert());
       if(this.audio.travel)this.audio.travel(teleport.velocity.length());else this.audio.tone(620, .12, 'triangle', .035);
-    } else this.resolveBody(this.playerPosition, previous, this.playerVelocity, PLAYER_RADIUS, PLAYER_HEIGHT, true);
+    } else if (this.kineticMode) this.resolveBody(this.playerPosition, previous, this.playerVelocity, PLAYER_RADIUS, PLAYER_HEIGHT, true);
     this.playerGrounded = Boolean(this.groundedByCollider);
     if (this.playerGrounded && !wasGrounded && downwardImpact > 1) {
       this.animator.triggerLanding(downwardImpact); this.audio.land?.(downwardImpact); this.lastLanding = downwardImpact;
@@ -804,7 +929,7 @@ export class LabGame {
       const y = f.heightAt ? f.heightAt(x,z) : (f.y ?? 0);
       if(y===null || y>maxY+.001)continue;
       if (throughPortals && f.mesh && this.portalOpensCollider({ mesh: f.mesh,
-        box: this.colliderForMesh(f.mesh)?.box }, new THREE.Vector3(x, y + CENTER_HEIGHT, z), PLAYER_RADIUS)) continue;
+        box: this.colliderForMesh(f.mesh)?.box }, new THREE.Vector3(x, y + CENTER_HEIGHT, z), PLAYER_RADIUS, PLAYER_HEIGHT)) continue;
       height = height === null ? y : Math.max(height, y);
     }
     for (const ramp of this.ramps) {
@@ -822,13 +947,15 @@ export class LabGame {
   // contact velocity; gravity and the ordinary centre-plane transfer continue.
   constrainPortalThroat(position, previous, velocity) {
     if (!this.portals.ready) return;
-    for (const portal of this.portals.portals) {
+    if (this.portals.portals.some(portal => !uprightCapsuleFitsPortal(portal, PLAYER_HEIGHT, PLAYER_RADIUS))) return;
+    for (const [index,portal] of this.portals.portals.entries()) {
       if (portal.normal.y < .65) continue;
       const inverse = portal.quaternion.clone().invert();
       const before = previous.clone().addScaledVector(UP, CENTER_HEIGHT).sub(portal.position).applyQuaternion(inverse);
       const extent = PLAYER_RADIUS + (CENTER_HEIGHT - PLAYER_RADIUS) * portal.normal.y;
       if (before.z <= 0 || before.z >= extent - .008) continue;
-      const width = portal.width - PLAYER_RADIUS, height = portal.height - PLAYER_RADIUS;
+      const exit=this.portals.portals[1-index];
+      const width = Math.min(portal.width,exit.width) - PLAYER_RADIUS, height = Math.min(portal.height,exit.height) - PLAYER_RADIUS;
       const inside = p => (p.x / width) ** 2 + (p.y / height) ** 2;
       if (inside(before) > 1 + 1e-8) continue;
       const after = position.clone().addScaledVector(UP, CENTER_HEIGHT).sub(portal.position).applyQuaternion(inverse);
@@ -864,13 +991,21 @@ export class LabGame {
     return height === null ? null : { height, normal };
   }
 
-  portalOpensCollider(collider, center, radius) {
+  portalOpensCollider(collider, center, radius, capsuleHeight = 0, boxQuaternion = null) {
     if (!this.portals.ready) return false;
+    if (capsuleHeight > 0 && this.portals.portals.some(portal => !uprightCapsuleFitsPortal(portal, capsuleHeight, radius))) return false;
     return this.portals.portals.some((portal, index) => {
       if (!portal) return false;
       const planeDistance = Math.abs((center.x-portal.position.x)*portal.normal.x+(center.y-portal.position.y)*portal.normal.y+(center.z-portal.position.z)*portal.normal.z);
       if (planeDistance > radius + .7 + Math.abs(portal.normal.y) * CENTER_HEIGHT) return false;
       if (!this.portals.isInsideAperture(index, center, radius)) return false;
+      const exit=this.portals.portals[1-index];
+      if (!pointInsidePortal(exit,transformPortalPoint(center,portal,exit),radius)) return false;
+      if(boxQuaternion){
+        const exitQ=new THREE.Quaternion().copy(boxQuaternion).premultiply(portalRotation(portal,exit));
+        if(!orientedBoxFitsPortal(portal,center,boxQuaternion,CUBE_RADIUS)
+          ||!orientedBoxFitsPortal(exit,transformPortalPoint(center,portal,exit),exitQ,CUBE_RADIUS))return false;
+      }
       // The aperture opens both its thin white panel and the structural wall behind it.
       return collider.mesh.uuid === this.portalSurfaceIds[index]
         || portal.backingIds?.has(collider.mesh.uuid)
@@ -879,7 +1014,27 @@ export class LabGame {
     });
   }
 
-  resolveBody(position, previous, velocity, radius, height, allowPortals = false) {
+  resolveBody(position, previous, velocity, radius, height, allowPortals = false, substep = false) {
+    // A fling or a long frame can put both endpoints outside a thin wall.
+    // Sample the actual capsule path with its ordinary rounded contacts:
+    // sweeping an expanded square here would seal diagonal drum/ring gaps.
+    // Vertical contacts already span the complete body height, so they need
+    // fewer subdivisions than narrow lateral contacts.
+    const dx = position.x - previous.x, dy = position.y - previous.y, dz = position.z - previous.z;
+    const steps = substep ? 1 : Math.ceil(Math.max(Math.hypot(dx, dz) / (radius * .5), Math.abs(dy) / (height * .5)));
+    if (steps > 1) {
+      const resolved = previous.clone(), before = previous.clone(), advance = new THREE.Vector3(dx / steps, dy / steps, dz / steps);
+      for (let step = 0; step < steps; step++) {
+        before.copy(resolved); resolved.add(advance);
+        LabGame.prototype.resolveBody.call(this, resolved, before, velocity, radius, height, allowPortals, true);
+        // Once a normal component is arrested, the remaining travel must not
+        // keep driving into that face with a now-zero velocity (especially a
+        // ceiling, whose upward-contact branch has already consumed it).
+        for (const axis of ['x', 'y', 'z']) if (Math.abs(velocity[axis]) < 1e-10
+          && Math.abs(resolved[axis] - before[axis] - advance[axis]) > 1e-8) advance[axis] = 0;
+      }
+      position.copy(resolved); return;
+    }
     for (let iteration = 0; iteration < 3; iteration++) for (const collider of this.colliders) {
       if (!collider.enabled || (collider.walkablePlane && !collider.solidUnderside)) continue;
       // A walkable moving top is not an empty volume from below. Its floor
@@ -908,7 +1063,7 @@ export class LabGame {
       const dx = position.x - nearestX, dz = position.z - nearestZ;
       if (dx * dx + dz * dz >= contactRadius * contactRadius) continue;
       const center = position.clone().addScaledVector(UP, height / 2);
-      if (allowPortals && this.portalOpensCollider(collider, center, Math.min(radius, PLAYER_RADIUS))) continue;
+      if (allowPortals && this.portalOpensCollider(collider, center, Math.min(radius, PLAYER_RADIUS), height)) continue;
       if (velocity.y <= 0 && previous.y >= b.max.y - .035) {
         position.y = b.max.y; velocity.y = 0; this.groundedByCollider = true; continue;
       }
@@ -962,6 +1117,7 @@ export class LabGame {
   toggleCube() {
     if (this.externalBlocked || this.state !== 'playing') return false;
     if (this.heldCube) {
+      this.recoverCargoFromClosingPortals(this.portals.portals, this.portalSurfaceIds, { beforeRelease: true });
       this.physics.release(); this.heldCube = null;
       this.animator.triggerInteraction('place'); this.companionAnimator.trigger('release');
       return true;
@@ -985,6 +1141,7 @@ export class LabGame {
     if (this.cargoLaunchFrictionSuppress) { this.physics.cargoBody.material.friction = 1; this.cargoLaunchFrictionSuppress = false; }
     this.cargoPortalCooldown = Math.max(0, (this.cargoPortalCooldown ?? 0) - dt);
     const beforeStep = this.cargo.position.clone();
+    const beforeQuaternion = new THREE.Quaternion().copy(this.physics.cargoBody.quaternion);
     if (this.heldCube) {
       const forward = new THREE.Vector3(Math.sin(this.facing), 0, Math.cos(this.facing));
       const walking = Math.min(1, Math.hypot(this.playerVelocity.x, this.playerVelocity.z) / 2.7);
@@ -1002,7 +1159,8 @@ export class LabGame {
       const extent = new THREE.Vector3(e, CUBE_RADIUS + .035, e);
       const expanded=new THREE.Box3();
       for (let pass = 0; pass < 3; pass++) for (const c of this.colliders) {
-        if (c.enabled === false || c.walkablePlane || this.portalOpensCollider(c, origin, CUBE_RADIUS)) continue;
+        if (c.enabled === false || c.walkablePlane
+          || this.portalOpensCollider(c, this.playerPosition.clone().addScaledVector(UP, CENTER_HEIGHT), PLAYER_RADIUS, PLAYER_HEIGHT)) continue;
         if (c.frontPlane) {
           const f=c.frontPlane();if(target.clone().sub(f.center).dot(f.normal)>CUBE_RADIUS*Math.sqrt(3)+.05)continue;
         }
@@ -1038,8 +1196,8 @@ export class LabGame {
     }
     if (this.portals.ready) {
       for (const collider of this.colliders) if (collider.enabled &&
-        (this.portalOpensCollider(collider, this.cargo.position, CUBE_RADIUS) ||
-          ((this.heldCube || this.velocityCompanion?.connected) && this.portalOpensCollider(collider, this.playerPosition.clone().addScaledVector(UP, 1.2), PLAYER_RADIUS)))) {
+        ((!this.heldCube && !this.velocityCompanion?.connected && this.portalOpensCollider(collider, this.cargo.position, CUBE_RADIUS, 0, this.physics.cargoBody.quaternion)) ||
+          ((this.heldCube || this.velocityCompanion?.connected) && this.portalOpensCollider(collider, this.playerPosition.clone().addScaledVector(UP, 1.2), PLAYER_RADIUS, PLAYER_HEIGHT)))) {
         nextPortalColliders.add(collider.mesh.uuid);
         this.physics.setStaticEnabled(collider.mesh.uuid, false);
       }
@@ -1067,8 +1225,10 @@ export class LabGame {
     let sample = this.physics.sample(1);
     if (!this.heldCube && !this.velocityCompanion?.connected) {
       const travel = this.portals.tryTeleport(new THREE.Vector3().copy(sample.position), beforeStep,
-        new THREE.Vector3().copy(sample.velocity), CUBE_RADIUS);
+        new THREE.Vector3().copy(sample.velocity), CUBE_RADIUS,
+        {boxQuaternion:new THREE.Quaternion().copy(sample.quaternion),previousBoxQuaternion:beforeQuaternion,boxHalfSize:CUBE_RADIUS});
       if (travel) {
+        const entry = travel.entryFrame || this.portals.portals[travel.entryIndex];
         const exit = this.portals.portals[travel.exitIndex];
         const q = new THREE.Quaternion().copy(sample.quaternion).premultiply(travel.rotation);
         const n = exit.normal.clone().applyQuaternion(q.clone().invert());
@@ -1076,8 +1236,52 @@ export class LabGame {
         const clear = extent + .07 - travel.position.clone().sub(exit.position).dot(exit.normal);
         if (clear > 0) travel.position.addScaledVector(exit.normal, clear);
         this.physics.teleportCargo({ position: travel.position, rotation: travel.rotation });
-        this.companionBehavior?.reanchor(travel.position); this.companionAnimator.trigger('portal');
-        this.cargoPortalCooldown = .07; sample = this.physics.sample(1);
+        const exitStart = transformPortalPoint(travel.crossingPoint, entry, exit)
+          .add(travel.position.clone().sub(travel.unadjustedPosition));
+        const ignoreIds = new Set();
+        for (const collider of this.colliders) if (collider.enabled && this.portalOpensCollider(collider, travel.position, CUBE_RADIUS, 0, this.physics.cargoBody.quaternion)) ignoreIds.add(collider.mesh.uuid);
+        this.physics.resolveCargoTransit(exitStart, { ignoreIds });
+        sample = this.physics.sample(1);
+        this.companionBehavior?.reanchor(new THREE.Vector3().copy(sample.position)); this.companionAnimator.trigger('portal');
+        this.cargoPortalCooldown = .07;
+      } else if (this.portals.ready) {
+        // The box can turn after its backing was opened at the start of this
+        // step. A rejected shape crossing must still contact the source plane;
+        // otherwise that temporary collision exemption becomes a wall bypass.
+        for (let index = 0; index < 2; index++) {
+          const entry = this.portals.portals[index], previous = this.portals.physicsFrames?.[index];
+          const previousEntry = previous?.frame === entry ? previous.pose : entry;
+          if (beforeStep.clone().sub(previousEntry.position).dot(previousEntry.normal) <= 0
+            || new THREE.Vector3().copy(sample.position).sub(entry.position).dot(entry.normal) > 0) continue;
+          const backing = this.colliders.filter(c => c.enabled !== false && this.portalCargoColliders.has(c.mesh.uuid)
+            && (c.mesh.uuid === this.portalSurfaceIds[index] || entry.backingIds?.has(c.mesh.uuid)
+              || c.portalOwner?.userData.portalColliderId === this.portalSurfaceIds[index]
+              || portalBacksCollider(entry, c.box)));
+          if (!backing.length) continue;
+          for (const collider of backing) {
+            this.physics.setStaticEnabled(collider.mesh.uuid, true);
+            this.portalCargoColliders.delete(collider.mesh.uuid);
+          }
+          const body = this.physics.cargoBody;
+          const localNormal = entry.normal.clone().applyQuaternion(new THREE.Quaternion().copy(body.quaternion).invert());
+          const extent = CUBE_RADIUS * (Math.abs(localNormal.x) + Math.abs(localNormal.y) + Math.abs(localNormal.z));
+          const distance = new THREE.Vector3().copy(body.position).sub(entry.position).dot(entry.normal);
+          const correction = Math.max(0, extent + .002 - distance);
+          body.position.x += entry.normal.x * correction;
+          body.position.y += entry.normal.y * correction;
+          body.position.z += entry.normal.z * correction;
+          const inward = body.velocity.x * entry.normal.x + body.velocity.y * entry.normal.y + body.velocity.z * entry.normal.z;
+          if (inward < 0) {
+            body.velocity.x -= entry.normal.x * inward;
+            body.velocity.y -= entry.normal.y * inward;
+            body.velocity.z -= entry.normal.z * inward;
+          }
+          body.previousPosition.copy(body.position); body.interpolatedPosition.copy(body.position);
+          body.aabbNeedsUpdate = true; this.physics.world.broadphase.dirty = true;
+          sample = this.physics.sample(1);
+          this.companionBehavior?.reanchor(new THREE.Vector3().copy(sample.position));
+          break;
+        }
       }
     }
     this.cargo.position.copy(sample.position); this.cargo.velocity.copy(sample.velocity); this.cargo.quaternion.copy(sample.quaternion);

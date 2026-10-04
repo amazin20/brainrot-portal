@@ -77,7 +77,9 @@ function third(d,{alternate=false,recover=false,freight=false,returnCargo=false}
   walk(-3,-15);until(()=>g.playerGrounded&&g.playerPosition.y<-2.9,5,'Observation fall missed');walk(-10,-8);walk(-19,-8);walk(-19,12);walk(-16,12);collect(d);
   mark('The original entry now points at the unoccupied destination cabin');enter(l.panels['dispatch-entry']);
  }else{
-  collect(d);enter(l.panels['dispatch-entry']);walk(-18,-3);release(d);walk(-14.5,0);check(g.interact(),'Moving cabin console missed');
+  collect(d);enter(l.panels['dispatch-entry']);walk(-18,-3);release(d);
+  mark('original friend is aboard the car before dispatch');
+  walk(-14.5,0);check(g.interact(),'Moving cabin console missed');
   until(()=>c.at(1),15,'Occupied cabin failed to reach berth');collect(d);mark('Both travellers and the attached portal rode the physical cabin');
  }
  walk(22,-2);walk(22,-17);walk(16,-17);
@@ -115,7 +117,7 @@ function fourth(d,{alternate=false,recover=false}={}){
  // Optional exploration is a real fall from the permanent balcony to the
  // service floor away from the aperture, then an ordinary return up the ramp.
  if(recover){g.clearPortals();walk(-11,2);until(()=>g.playerGrounded,6,'Side fall did not reach solid support');walk(12,-6);walk(20,-6);walk(20,19);walk(-23,19);walk(-17,12);d.aim(0,p['fall-entry'].getFrame().center);walk(-25,9);walk(-25,-16);walk(-15,-13.4);d.aim(1,p['inclined-exit'].getFrame().center);mark('A missed drop returns through the service floor and actual incline');}
- collect(d);walk(-17,-12.1);wait(.4);const before=g.teleportCount;
+ collect(d);mark('high departure prepared before the earned momentum flight');walk(-17,-12.1);wait(.4);const before=g.teleportCount;
  for(let i=0;i<180&&g.playerGrounded;i++){worldMove(0,1);frame();}stop();
  until(()=>g.teleportCount>before,5,'Falling aperture missed');until(()=>g.playerGrounded,6,'Receiving apron missed');
  check(g.playerPosition.y>14.9,'Insufficient genuine falling impulse');mark('Earned falling speed becomes height at the opposite gallery');walk(16,-17);

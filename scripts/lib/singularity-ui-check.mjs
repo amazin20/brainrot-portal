@@ -9,10 +9,11 @@ export async function waitForStartMenu(page){
 async function activate(page,selector,touch=false){
  await page.$eval(selector,e=>e.scrollIntoView({block:'center'}));
  await page.bringToFront();
+ await page.waitForFunction(selector=>{const e=document.querySelector(selector),r=e?.getBoundingClientRect();return !!r&&r.width>0&&r.height>0&&e.contains(document.elementFromPoint(r.x+r.width/2,r.y+r.height/2));},{},selector);
  if(touch)await page.tap(selector);else await page.click(selector);
 }
-export async function playFromStartMenu(page,touch=false){
- await waitForStartMenu(page);await page.select('#quality-select','low');await activate(page,'#play-button',touch);
+export async function playFromStartMenu(page,touch=false,quality='low'){
+ await waitForStartMenu(page);await page.select('#quality-select',quality);await activate(page,'#play-button',touch);
  await page.waitForFunction(()=>document.documentElement.dataset.runtimeState==='playing');
 }
 async function controlBounds(page,selectors){
@@ -31,7 +32,7 @@ export async function verifySingularityUI(browser,{url,info,out}){
   page=await browser.newPage();page.setDefaultTimeout(180000);await page.setViewport({width:960,height:540,deviceScaleFactor:1});monitor(page);
   await page.goto(ordinary.href,{waitUntil:'domcontentloaded'});await waitForStartMenu(page);await checkIdentity(page);
   assert.equal(await page.$eval('#level-select',e=>Number(e.value)),40);
-  assert.match(await page.$eval('#level-select option[value="40"]',e=>e.textContent),/СИНГУЛЯРНОСТИ/);
+  assert.match(await page.$eval('#level-select option[value="40"]',e=>e.textContent),/СКЛАДЧАТЫЙ ЗАМОК/i);
   assert.equal(await page.evaluate(()=>typeof window.__NESI_DEMO_GAME__),'undefined');proof.ordinaryMenu=true;
   await playFromStartMenu(page);proof.ordinaryPlay=true;await page.screenshot({path:path.join(out,'ordinary-desktop.png')});await page.close();page=null;
   for(const viewport of [{width:390,height:844},{width:844,height:390}]){
@@ -52,8 +53,8 @@ export async function verifySingularityUI(browser,{url,info,out}){
   const diagnostic=new URL(ordinary);diagnostic.searchParams.set('debug','1');page=await browser.newPage();page.setDefaultTimeout(180000);await page.setViewport({width:960,height:540,deviceScaleFactor:1});monitor(page);
   await page.goto(diagnostic.href,{waitUntil:'domcontentloaded'});await playFromStartMenu(page);
   const stages=await page.evaluate(()=>window.__NESI_DEMO_GAME__.firstLevel.totalStages);assert.equal(stages,info.features.tower.stages);proof.towerStages=stages;
-  const partial=await page.evaluate(async()=>window.__NESI_RUN_LEVEL_ROUTE__({order:['orrery'],stopAfter:'orrery'}));
-  assert.equal(partial.partial,true);assert.deepEqual(partial.metrics.solvedIds,['orrery']);assert.equal(partial.resets+partial.respawns+partial.cargoResets,0);
+  const partial=await page.evaluate(async()=>window.__NESI_RUN_LEVEL_ROUTE__({order:['freight'],stopAfter:'freight'}));
+  assert.equal(partial.partial,true);assert.deepEqual(partial.metrics.solvedIds,['freight']);assert.equal(partial.resets+partial.respawns+partial.cargoResets,0);
   // The deterministic route wrapper stops the render loop. Restore ordinary
   // live input before using the desktop's documented Escape pause action.
   await page.evaluate(()=>{const g=window.__NESI_DEMO_GAME__;g.renderer.setAnimationLoop(g.animate);});
@@ -61,7 +62,7 @@ export async function verifySingularityUI(browser,{url,info,out}){
   await activate(page,'#restart-button');await page.waitForFunction(()=>document.documentElement.dataset.runtimeState==='playing');
   const reset=await page.evaluate(()=>{const g=window.__NESI_DEMO_GAME__;return {atSpawn:g.playerPosition.distanceTo(g.firstLevel.spawn)<.5,solved:g.firstLevel.getTowerMetrics().solvedIds,checkpoints:g.firstLevel.getTowerMetrics().checkpoints};});
   assert.equal(reset.atSpawn,true);assert.deepEqual(reset.solved,[]);assert.equal(reset.checkpoints,false);proof.resetAfterSolvedPuzzle=true;
-  const second=await page.evaluate(async()=>window.__NESI_RUN_LEVEL_ROUTE__({order:['orrery'],stopAfter:'orrery'}));assert.deepEqual(second.metrics.solvedIds,['orrery']);
+  const second=await page.evaluate(async()=>window.__NESI_RUN_LEVEL_ROUTE__({order:['freight'],stopAfter:'freight'}));assert.deepEqual(second.metrics.solvedIds,['freight']);
   // Runtime readiness is the load contract. Audio/network activity after
   // unloading a live WebGL scene is not a reliable navigation-idle signal.
   await page.reload({waitUntil:'domcontentloaded'});await waitForStartMenu(page);

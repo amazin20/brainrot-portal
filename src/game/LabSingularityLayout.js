@@ -1,0 +1,23 @@
+/** One connected, load-bearing castle. The same atrium is crossed at five
+ * elevations and each wing returns to a different side of it. */
+export const SINGULARITY_ROOMS=Object.freeze([
+ {id:'freight',name:'ГРУЗОВОЙ ПЕРЕПЛЁТ',at:[-43,0,39],w:34,d:36,h:15,entry:'e',color:'copper',requires:[],rule:'sealed-freight-bay-with-carried-portal-crossing',hint:'Транспортный проём меньше человека. Белые приёмники находятся по разные стороны несущей стены.'},
+ {id:'sluice',name:'ЗАТВОРОВЫЙ ДВОР',at:[44,0,39],w:46,d:48,h:16,entry:'w',color:'mint',requires:[],rule:'conserved-hydraulic-head-and-recessed-span',hint:'Сосуды вмещают 10, 7 и 3. Весь запас должен разделиться между большими сосудами.'},
+ {id:'optics',name:'РАСКОЛОТЫЙ ФОНАРЬ',at:[-46,0,-41],w:66,d:34,h:16,entry:'e',color:'cyan',requires:[],rule:'portal-ray-with-physical-reflector',hint:'Фонарь, зеркало и дальний приёмник разделены настоящими перегородками. Проследи путь света.'},
+ {id:'hoist',name:'КОЛОДЕЦ ПРОТИВОВЕСА',at:[44,0,-39],w:46,d:54,h:27,entry:'w',color:'copper',requires:['freight'],rule:'cargo-powered-hoist-upper-pawl-and-floor-transfer',hint:'Один груз поднимает клеть. Верхний уловитель держит её после снятия нагрузки. У верхнего выхода есть свой белый приёмник.',upperDoor:18},
+ {id:'archive',name:'ПЕРЕКРЁСТНЫЙ АРХИВ',at:[-42,18,30],w:42,d:32,h:13,entry:'e',color:'rose',requires:['sluice','optics'],rule:'two-sliding-load-bearing-walls-rewire-walkable-route',hint:'Секции архива меняют сам проход. Не теряй из виду соседние галереи, когда поворачиваешь за шкаф.'},
+ {id:'flywheel',name:'МАХОВОЙ ХОР',at:[-48,18,-37],w:34,d:42,h:16,entry:'e',color:'copper',requires:['archive'],rule:'stored-rotational-energy-gearing-and-clutch',hint:'Нагрузка питается скоростью выходного вала. Передача меняет отношение скоростей, а тормоз расходует запас.'},
+ {id:'magnet',name:'ПОДВЕШЕННЫЙ ГРУЗ',at:[46,18,35],w:44,d:42,h:15,entry:'w',color:'violet',requires:['hoist'],rule:'free-physical-cargo-detour-around-magnetic-screen',hint:'У катушек разные области притяжения. Несущая перегородка разделяет отправитель и верхний уловитель.'},
+ {id:'migrant',name:'ПЕРЕЕЗЖАЮЩАЯ ДВЕРЬ',at:[43,36,-33],w:34,d:46,h:15,entry:'w',color:'mint',requires:['flywheel','magnet'],rule:'cargo-and-player-transport-on-translating-portal-carriage',hint:'Дверь остаётся на своей каретке. Дальний балкон выше галереи, а сквозь экран пешком не пройти.'},
+ {id:'pendulum',name:'РАЗОМКНУТАЯ СКРЕПА',at:[-48,36,33],w:50,d:46,h:22,entry:'e',color:'rose',requires:['migrant'],rule:'two-phase-moving-span-and-mechanical-catch',hint:'Два пролёта ходят в противофазе. У каждого есть настоящий уловитель, до которого нужно добраться.'},
+ {id:'inertia',name:'БАЛКОН ПАДЕНИЯ',at:[-46,54,-35],w:64,d:38,h:21,entry:'e',color:'cyan',requires:['pendulum'],rule:'real-fall-energy-portal-fling-to-lower-balcony',hint:'Верхняя лестница заканчивается над колодцем. Дальняя площадка находится ниже бокового выхода.'},
+ {id:'crown',name:'ДВОЙНАЯ СТЫКОВКА',at:[-48,72,27],w:32,d:38,h:19,entry:'e',color:'copper',requires:['freight','sluice','optics','hoist','archive','flywheel','magnet','migrant','pendulum','inertia'],rule:'original-cargo-and-player-in-sealed-crown-receiver',hint:'Вершина замка принимает две разные нагрузки: друга в гнезде и путешественника на соседнем контакте.'},
+].map(r=>Object.freeze({...r,at:Object.freeze(r.at),requires:Object.freeze(r.requires)})));
+export const SINGULARITY_SPEC=Object.freeze({id:'tower-singularity',name:'СКЛАДЧАТЫЙ ЗАМОК',title:'СКЛАДЧАТЫЙ ЗАМОК',
+ description:'Новый связанный замок вокруг глубокого атриума: пять высот, пересекающиеся галереи и один настоящий спутник. Несущие стены, грузовые уловители и портальные переходы соединяют одиннадцать разных механизмов. Контрольных точек нет.',
+ assets:[1,2,11],accent:0xe3b575,hints:['Галереи проходят над уже знакомыми залами и возвращают тебя к другой стороне атриума.','Одна пара порталов и один сохраняемый брейнрот участвуют в грузовом шлюзе, противовесе, магнитной доставке, подвижной двери и вершине.','Белые керамические приёмники принимают порталы. Перезапуск сбрасывает весь замок.']});
+export function validateSingularityLayout(rooms=SINGULARITY_ROOMS){
+ const ids=new Set(rooms.map(r=>r.id));if(ids.size!==rooms.length)throw Error('Duplicated room');
+ if(new Set(rooms.map(r=>r.rule)).size!==rooms.length)throw Error('Duplicated puzzle rule');
+ const visiting=new Set(),visited=new Set();function walk(id){if(visiting.has(id))throw Error('Cyclic dependency');if(visited.has(id))return;const r=rooms.find(r=>r.id===id);if(!r)throw Error('Missing dependency '+id);visiting.add(id);r.requires.forEach(walk);visiting.delete(id);visited.add(id);}rooms.forEach(r=>walk(r.id));return true;
+}

@@ -16,6 +16,7 @@ const advancedJourneys=[
 export async function runV8Journey(game,{onMilestone=()=>{},scenario=null,journeyOptions={}}={}) {
   // The tower proof starts at the normal Play spawn and must count every reset.
   // Dispatch before the legacy fixture reset used by the shorter room probes.
+  if(game.firstLevel?.singularity){const {runSingularityJourney}=await import('./LabSingularityJourney.js');return runSingularityJourney(game,{onMilestone,...journeyOptions});}
   if(game.firstLevel?.towerChallenge){
     assert(!scenario,'A tower proof must use its complete ordinary-input route');
     const {runTowerJourney}=await import('./LabTowerJourney.js');
@@ -90,7 +91,11 @@ export async function runV8Journey(game,{onMilestone=()=>{},scenario=null,journe
       await scenario({game,level,walk,wait,aim,look,until,pickup,enter,mark,frame,worldMove,stop});
       report.pass=true;report.kind='recovery';report.teleports=game.teleportCount;return report;
     }
-    if(level.postCampaign){
+    if(level.creativeEarly){
+      const n=level.creativeEarly;assert([18,20].includes(n)&&n===index+1,'Unknown creative early room');
+      const journey=await import(`./LabCreativeRoom${n}Journey.js`);
+      await journey[`runCreative${n}`]({game,level,walk,wait,aim,look,until,pickup,enter,mark,frame,worldMove,stop},journeyOptions);
+    }else if(level.postCampaign){
       const controls={game,level,walk,wait,aim,look,until,pickup,enter,mark,frame,worldMove,stop};
       if(index<35){const {runPostA}=await import('./LabPostJourneyA.js');await runPostA(controls,journeyOptions);}
       else{const {runPostB}=await import('./LabPostJourneyB.js');await runPostB(controls,journeyOptions);}

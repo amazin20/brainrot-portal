@@ -17,7 +17,7 @@ export class ResearchChamber extends OpenChamber {
   // rooms. A near-black machine frame made it read as an unlit void, hiding
   // the physical return route beneath the raised platforms. Give that one
   // surface its own matte enamel, distinct from the lighter upper decks.
-  const newCampaignRoom=game.chamberEdition==='foundation'&&index>=30;
+  const newCampaignRoom=game.chamberEdition==='foundation'&&(index>=30||index===17||index===19);
   if(newCampaignRoom){
    this.m.service=new THREE.MeshStandardMaterial({
     name:'Foundation service floor',

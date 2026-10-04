@@ -1,9 +1,10 @@
 {
   "mode": "complete",
-  "sourceCommit": "2e3f693a8e0ddbc0e143adfe3086bcb7d93ebc05",
-  "candidateRun": 37142694358,
+  "sourceCommit": "44ab09e41f0021393a333e2b7a37696faff7b06f",
+  "candidateRun": 37198674150,
   "baseCommit": "a74726ff1bfb22f21662d076fc47951b2bf368cd",
   "baseRun": 36509639087,
-  "previousSourceCommit": "b1bf88fb90b85e3b0786c651fcd2ba2edcf92696",
-  "previewPath": "tower-singularity"
+  "previousSourceCommit": "2e3f693a8e0ddbc0e143adfe3086bcb7d93ebc05",
+  "previewPath": "tower-singularity",
+  "sourceBranch": "upgrade/creative-campaign-20261004"
 }

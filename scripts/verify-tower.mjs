@@ -7,9 +7,16 @@ import fs from 'node:fs';
 import path from 'node:path';
 import {pathToFileURL} from 'node:url';
 import {TOWER_STAGES} from '../src/game/LabTowerLayout.js';
+import {towerCourse} from '../src/game/LabTowerCourses.js';
 import {KEYSTONE_SPECS} from '../src/game/LabTowerKeystones.js';
 
 export const TOWER_CAPTURE = Object.freeze({level: 41, stages: 18, decks: 6, branchesPerDeck: 3, keystones: 6, width: 854, height: 480, visualHz: 60, physicsHz: 120, stride: 5, fps: 12});
+export const TOWER_COURSE_TYPES=Object.freeze(Object.fromEntries(TOWER_STAGES.map(stage=>[stage.id,towerCourse(stage).topology])));
+const COURSE_SHORT=Object.freeze({'enclosed-annex':'annex','forked-island':'island',
+ 'raised-causeway':'terrace','broken-skybridge':'skybridge','accumulator-maze':'maze',
+ 'momentum-shaft':'shaft'});
+export const TOWER_COURSE_EXPECTED=Object.freeze(Object.fromEntries(
+ Object.keys(COURSE_SHORT).map(type=>[COURSE_SHORT[type],TOWER_STAGES.filter(stage=>TOWER_COURSE_TYPES[stage.id]===type).map(stage=>stage.id)])));
 
 export function validateTowerEvidence(evidence) {
   const {route, observed} = evidence;
@@ -23,6 +30,13 @@ export function validateTowerEvidence(evidence) {
   assert.equal(observed.last.completedStages, TOWER_CAPTURE.stages);
   assert.equal(observed.stageEvents.length, TOWER_CAPTURE.stages);
   assert.equal(observed.keystoneEvents.length, TOWER_CAPTURE.keystones);
+  for (const [topology, expected] of Object.entries(TOWER_COURSE_EXPECTED))
+    assert.deepEqual(new Set(observed.courseVisits?.[topology]),new Set(expected),
+      `The route must physically traverse every ${topology} space`);
+  const fling = route.flings?.find(event => event.stageId === 'exchange');
+  assert.ok(route.flings?.length === 1 && fling?.speed > 11.5
+    && fling.landing?.[1] > 2 && fling.landing?.[1] < 2.1,
+    'The Exchange crossing must retain fall momentum and land on its raised shelf');
   assert.equal(observed.resetCalls, 0);
   assert.equal(observed.respawnCalls, 0);
   assert.equal(observed.cargoResetCalls, 0);
@@ -123,7 +137,8 @@ export async function runTowerVerification({out = process.env.OUT_DIR || 'qa/tow
       }
     });
     await page.exposeFunction('__NESI_TOWER_SAVE_STILL__', (name, data) => {
-      assert.ok(['start', 'middle', 'finish'].includes(name));
+      assert.ok(['start', 'middle', 'finish'].includes(name) ||
+        /^course-(annex|island|terrace|skybridge|maze|shaft)$/.test(name));
       assert.match(data, /^data:image\/jpeg;base64,/);
       fs.writeFileSync(path.join(out, `tower-${name}.jpg`), Buffer.from(data.slice(data.indexOf(',') + 1), 'base64'));
     });
@@ -139,7 +154,7 @@ export async function runTowerVerification({out = process.env.OUT_DIR || 'qa/tow
       return response.json();
     });
     assert.equal(info.levels, 41);
-    assert.equal(info.version, 'v43-tower-rebuild');
+    assert.equal(info.version, 'v44-tower-variety');
     assert.equal(info.features.defaultEdition, 'foundation');
     if (process.env.BUILD_COMMIT) assert.equal(info.commit, process.env.BUILD_COMMIT);
     assert.equal(await page.$eval('#level-select', element => Number(element.value)), 40);
@@ -219,8 +234,11 @@ export async function runTowerVerification({out = process.env.OUT_DIR || 'qa/tow
       const originals = {visual: game.updateVisuals, physics: game.updatePlaying, reset: game.resetRun, respawn: game.respawn, cargoReset: game.physics.resetCargo, flush: window.__NESI_TOWER_FLUSH_FRAMES__};
       const bodyId = game.physics.cargoBody.id, initialTeleports = game.teleportCount;
       const observed = {first: null, last: null, frames: 0, physicsSteps: 0, physicsSeconds: 0, simulatedSeconds: 0, distanceMeters: 0,
-        activeSeconds: 0, movingSeconds: 0, maxIdleSeconds: 0, maxStationarySeconds: 0, resetCalls: 0, respawnCalls: 0, cargoResetCalls: 0, teleports: 0, stageEvents: [], keystoneEvents: [], telemetry: []};
+        activeSeconds: 0, movingSeconds: 0, maxIdleSeconds: 0, maxStationarySeconds: 0, resetCalls: 0, respawnCalls: 0, cargoResetCalls: 0, teleports: 0, stageEvents: [], keystoneEvents: [], telemetry: [],
+        courseVisits: Object.fromEntries(Object.values(settings.courseTypes).map(type=>[type,[]]))};
       let previousVisualPosition = game.playerPosition.clone(), previousYaw = game.yaw, previousPitch = game.pitch;
+      const courseSeen = Object.fromEntries(Object.values(settings.courseTypes).map(type=>[type,new Set()]));
+      const courseStillSaved = new Set();
       let previousStage = 0, previousKeystone = 0, idleSeconds = 0, stationarySeconds = 0, batch = [], encodedFrames = 0;
       let middleSaved = false, maxQueuedFrames = 0, lastCapture = null;
       const composed = document.createElement('canvas');
@@ -263,6 +281,27 @@ export async function runTowerVerification({out = process.env.OUT_DIR || 'qa/tow
         // Measure every physical segment. Combining two physics steps into a
         // visual-frame chord undercounts stairs, landings and direction changes.
         observed.distanceMeters += before.distanceTo(game.playerPosition);
+        // Observe real positions in the alternative spaces, independently of
+        // the route's waypoint list or the static course descriptors.
+        const p = game.playerPosition, deck = Math.min(5, Math.max(0, Math.floor((p.y + .15) / 8)));
+        for (const stage of level.towerStages.slice(deck * 3, deck * 3 + 3)) {
+          const [dx, dz] = stage.direction;
+          const sx = p.x - stage.entry[0], sz = p.z - stage.entry[2];
+          const s = 2 + sx * dx + sz * dz, n = -sx * dz + sz * dx;
+          const topology = settings.courseTypes[stage.id];
+          if (topology !== 'shaft' && (s < 30 || s > 36.5)) continue;
+          const entered = topology === 'annex' ? Math.abs(n) > 7
+            : topology === 'island' ? Math.abs(n) > 2.8
+            : topology === 'terrace' ? p.y - stage.baseY > .85
+            : topology === 'skybridge' ? n > 19 && p.y - stage.baseY > .95
+            : topology === 'maze' ? Math.abs(n) > 11
+            : topology === 'shaft' ? s > 22.2 && s < 30.9 && n > 3.35 && n < 5.65
+              && game.playerGrounded && Math.abs(p.y - stage.baseY - 2.05) < .16 : false;
+          if (entered && !courseSeen[topology].has(stage.id)) {
+            courseSeen[topology].add(stage.id);
+            observed.courseVisits[topology].push(stage.id);
+          }
+        }
         if (level.completedStages !== previousStage) {
           check(level.completedStages === previousStage + 1, 'Stage chronology skipped or moved backwards');
           const event = level.getTowerMetrics().stageEvents.at(-1);
@@ -319,6 +358,12 @@ export async function runTowerVerification({out = process.env.OUT_DIR || 'qa/tow
       };
       window.__NESI_TOWER_FLUSH_FRAMES__ = async () => {
         if (batch.length) { const pending = batch; batch = []; await window.__NESI_TOWER_WRITE_BATCH__(pending); }
+        for (const [topology, seen] of Object.entries(courseSeen)) {
+          if (seen.size && !courseStillSaved.has(topology)) {
+            await still(`course-${topology}`);
+            courseStillSaved.add(topology);
+          }
+        }
         if (!middleSaved && level.completedStages >= settings.stages / 2) { await still('middle'); middleSaved = true; }
         await window.__NESI_TOWER_PROGRESS__({completedStages: level.completedStages, simulatedSeconds: observed.simulatedSeconds, distanceMeters: observed.distanceMeters, encodedFrames});
       };
@@ -352,7 +397,7 @@ export async function runTowerVerification({out = process.env.OUT_DIR || 'qa/tow
         if (originals.flush) window.__NESI_TOWER_FLUSH_FRAMES__ = originals.flush;
         else delete window.__NESI_TOWER_FLUSH_FRAMES__;
       }
-    }, {record, settings: TOWER_CAPTURE});
+    }, {record, settings: {...TOWER_CAPTURE,courseTypes:Object.fromEntries(Object.entries(TOWER_COURSE_TYPES).map(([id,type])=>[id,COURSE_SHORT[type]]))}});
     const evidence = {...result, sourceCommit: info.commit, version: info.version, title, url: url.href, errors, graphicsPreset, graphicsBenchmark,
       method: 'Ordinary scripted input through production physics, 60 Hz visual and 120 Hz physics simulation. Not a human playtest or a hardware FPS benchmark.'};
     fs.writeFileSync(path.join(out, 'tower-evidence.json'), JSON.stringify(evidence, null, 2) + '\n');

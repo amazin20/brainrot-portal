@@ -45,6 +45,28 @@ function fixture(t) {
   return { game, scope, doc, canvas, joystick, joystickKnob, jumpButton, shots, celebrations, cancellations, look };
 }
 
+test('a mobile Pause tap finishes before replacing its touch target with the menu', t => {
+  const f = fixture(t);
+  f.doc.createElement = () => Object.assign(new Target(), {
+    children: [], attributes: new Map(),
+    setAttribute(name, value) { this.attributes.set(name, value); },
+    appendChild(child) { this.children.push(child); },
+  });
+  f.doc.body = { appendChild() {} };
+  f.game.createOverlay();
+  const [blue, , , pause] = f.game.mobileActionButtons;
+  blue.button.emit('pointerdown', { pointerType: 'touch' });
+  assert.deepEqual(f.shots, [0], 'Portal shots must retain immediate touch response');
+  pause.button.emit('pointerdown', { pointerType: 'touch' });
+  assert.equal(f.game.state, 'playing', 'Changing the screen before touchend lets Chromium click a different menu control');
+  pause.button.emit('pointerup', { pointerType: 'touch' });
+  assert.equal(f.game.state, 'playing');
+  pause.button.emit('click', { pointerType: 'touch', isTrusted: true });
+  assert.equal(f.game.state, 'paused');
+  pause.button.emit('click', { pointerType: 'touch', isTrusted: true });
+  assert.equal(f.game.state, 'paused', 'A completed tap must never resume or open another menu');
+});
+
 test('first look finger survives a second finger, its movement, and its release', t => {
   const f = fixture(t); f.look('pointerdown', 1);
   f.look('pointermove', 1, 120); assert.equal(f.game.yaw, -.1);
@@ -195,7 +217,7 @@ test('mobile portal, interaction and pause buttons keep exactly one handler afte
     { button: buttons[0], action: () => f.game.firePortal(0) },
     { button: buttons[1], action: () => f.game.firePortal(1) },
     { button: buttons[2], action: () => f.game.interact() },
-    { button: buttons[3], action: () => f.game.togglePause(true) },
+    { button: buttons[3], action: () => f.game.togglePause(true), activation: 'click' },
   ];
   f.game.setupControls();
   for (const button of buttons.slice(0, 3)) button.emit('pointerdown');
@@ -204,7 +226,8 @@ test('mobile portal, interaction and pause buttons keep exactly one handler afte
   f.game.setupControls();
   for (const button of buttons.slice(0, 3)) button.emit('pointerdown');
   assert.deepEqual(f.shots, [0, 1, 0, 1]); assert.equal(interactions, 2);
-  buttons[3].emit('pointerdown'); assert.equal(f.game.state, 'paused');
+  buttons[3].emit('pointerdown'); assert.equal(f.game.state, 'playing');
+  buttons[3].emit('click'); assert.equal(f.game.state, 'paused');
   for (const button of buttons) button.emit('pointerdown');
   assert.deepEqual(f.shots, [0, 1, 0, 1]); assert.equal(interactions, 2);
   f.game.togglePause(false); f.game.disposeControls();

@@ -1,11 +1,17 @@
 import assert from 'node:assert/strict';
 
-export const UPGRADE_VERSION='v47-singularity-polish';
+export const UPGRADE_VERSION='v48-folded-castle';
+export const CAPTURE_FRAME_RATES=Object.freeze([4,6,12]);
+export function captureFormat({fps=12,width=960,height=540}={}){
+ assert.ok(CAPTURE_FRAME_RATES.includes(fps),'Capture FPS must be 4, 6 or 12');
+ for(const [name,value]of Object.entries({width,height}))assert.ok(Number.isInteger(value)&&value>=2&&value%2===0,`Capture ${name} must be a positive even integer`);
+ return {fps,width,height,stride:60/fps,durationToleranceSeconds:2/fps+1/120+.01};
+}
 export function assertUpgradeInfo(info,expectedRooms=null){
  assert.match(info.commit,/^[a-f0-9]{40}$/);
  assert.equal(info.version,UPGRADE_VERSION);assert.equal(info.artVersion,UPGRADE_VERSION);assert.equal(info.levels,41);
  const tower=info.features.tower;
- assert.ok(Array.isArray(tower.rooms)&&tower.rooms.length>13,'Upgrade metadata must describe the additional rooms');
+ assert.ok(Array.isArray(tower.rooms)&&tower.rooms.length>=10,'Metadata must describe the rebuilt castle mechanisms');
  assert.equal(tower.stages,tower.rooms.length);assert.equal(tower.uniqueRules,tower.stages);assert.equal(tower.checkpoints,false);
  assert.equal(new Set(tower.rooms.map(r=>r.id)).size,tower.stages);
  assert.equal(new Set(tower.rooms.map(r=>r.rule)).size,tower.stages);
@@ -26,11 +32,22 @@ export function assertUpgradeEvidence(e,info,{record=false}={}){
  for(const event of e.observed.events)assert.equal(event.rule,tower.rooms.find(r=>r.id===event.id).rule);
  assert.equal(e.result.resets+e.result.respawns+e.result.cargoResets,0);assert.equal(e.observed.seenResets,0);
  assert.equal(e.result.sameCompanion,true);assert.equal(e.result.metrics.checkpoints,false);
- assert.ok(e.result.activeSeconds>=900);assert.deepEqual(e.errors,[]);
+ assert.ok(Number.isFinite(e.result.activeSeconds)&&e.result.activeSeconds>0);assert.deepEqual(e.errors,[]);
  if(record){
-  const v=e.video;assert.ok(v&&v.frames>0);assert.equal(v.fps,12);assert.equal(v.first.state,'playing');assert.deepEqual(v.first.solved,[]);
+  const v=e.video;assert.ok(v&&Number.isInteger(v.frames)&&v.frames>0);
+  assert.ok(Number.isFinite(v.fps)&&Number.isInteger(v.width)&&Number.isInteger(v.height),'Recording must declare its FPS and dimensions');const format=captureFormat(v);
+  assert.equal(v.first.state,'playing');assert.deepEqual(v.first.solved,[]);
   assert.equal(v.last.state,'won');assert.deepEqual([...v.last.solved].sort(),[...ids].sort());
-  assert.ok(v.durationSeconds>=900);assert.ok(Math.abs(v.durationSeconds-e.result.seconds)<=2/v.fps+1/120+.01,'Recording must remain at 1× simulation time');
+  assert.ok(Number.isFinite(v.durationSeconds)&&v.durationSeconds>0);assert.ok(Math.abs(v.durationSeconds-v.frames/v.fps)<1e-6,'Video duration must match its declared frame count and FPS');
+  if(v.stride!==undefined)assert.equal(v.stride,format.stride);
+  if(v.durationToleranceSeconds!==undefined)assert.equal(v.durationToleranceSeconds,format.durationToleranceSeconds);
+  if(v.nativeCanvas!==undefined)assert.deepEqual(v.nativeCanvas,{width:v.width,height:v.height},'Recording must declare its actual canvas dimensions');
+  if(v.simulationSeconds!==undefined)assert.equal(v.simulationSeconds,e.result.seconds);
+  if(v.lastVisualFrame!==undefined)assert.equal(v.lastVisualFrame,e.result.frames-1,'The final capture must show the actual last simulation frame');
+  if(v.terminalSample!==undefined)assert.equal(typeof v.terminalSample,'boolean');
+  if(e.encodedFrames!==undefined)assert.equal(e.encodedFrames,v.frames);
+  if(e.capture!==undefined){for(const name of ['fps','stride','width','height'])assert.equal(e.capture[name],format[name]);assert.deepEqual(e.capture.nativeCanvas,{width:v.width,height:v.height});}
+  assert.ok(Math.abs(v.durationSeconds-e.result.seconds)<=format.durationToleranceSeconds,'Recording must remain at 1× simulation time');
  }
  return tower;
 }

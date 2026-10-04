@@ -1,6 +1,8 @@
 const KEY='brainrot-portal.preferences.v24';
 const LEGACY_KEY='nesi.preferences.v8';
 const CAMPAIGN_REVISION='folded-junction-v28';
+export const CREATIVE_CAMPAIGN_REVISION='creative-campaign-v48';
+export const CREATIVE_REPLACED_INDICES=Object.freeze([13,15,17,19,30,31,32,33,34,35,36,38,39,40]);
 export const DEFAULT_PREFERENCES=Object.freeze({quality:'balanced',volume:.65,muted:false,tutorial:true,completed:[],hints:{},resumeLevel:null});
 export function sanitizePreferences(value={}) {
   const safe=value&&typeof value==='object'?value:{};
@@ -12,24 +14,26 @@ export function sanitizePreferences(value={}) {
     hints:Object.fromEntries(Object.entries(safe.hints&&typeof safe.hints==='object'?safe.hints:{}).filter(([k,v])=>/^\d{1,2}$/.test(k)&&Number.isInteger(v)&&v>=0&&v<=3))};
 }
 export class LabPreferences {
-  constructor(storage){
-    this.storage=storage;this.readFailed=false;let saved={};
+  constructor(storage,{campaignRevision=CAMPAIGN_REVISION,replacedIndices=[]}={}){
+    this.storage=storage;this.campaignRevision=campaignRevision;this.readFailed=false;let saved={};
     try{
       saved=JSON.parse(storage?.getItem(KEY)||storage?.getItem(LEGACY_KEY)||'{}');
       if(!saved||typeof saved!=='object'||Array.isArray(saved))throw new TypeError('Invalid preferences record');
     }catch{this.readFailed=true;saved={};}
     this.value=sanitizePreferences(saved);
-    if(saved.campaignRevision!==CAMPAIGN_REVISION){
+    if(saved.campaignRevision!==campaignRevision){
       // Rooms 1–11 and personal settings survive each chamber replacement.
       // The new chamber must not inherit old completion or spoiler hints.
-      this.value.completed=this.value.completed.filter(index=>index<11);
-      this.value.hints=Object.fromEntries(Object.entries(this.value.hints).filter(([index])=>Number(index)<11));
+      const replaced=new Set(replacedIndices);
+      const keep=index=>saved.campaignRevision===CAMPAIGN_REVISION?!replaced.has(index):index<11;
+      this.value.completed=this.value.completed.filter(keep);
+      this.value.hints=Object.fromEntries(Object.entries(this.value.hints).filter(([index])=>keep(Number(index))));
       this.save();
     }
   }
   // A failed read must not be turned into an empty progress write. Session
   // changes remain usable; a new successful load is required before persistence.
-  save(changes={}){this.value=sanitizePreferences({...this.value,...changes});try{if(!this.readFailed)this.storage?.setItem(KEY,JSON.stringify({...this.value,campaignRevision:CAMPAIGN_REVISION}));}catch{/* Storage may be disabled; session settings still work. */}return this.value;}
+  save(changes={}){this.value=sanitizePreferences({...this.value,...changes});try{if(!this.readFailed)this.storage?.setItem(KEY,JSON.stringify({...this.value,campaignRevision:this.campaignRevision}));}catch{/* Storage may be disabled; session settings still work. */}return this.value;}
   complete(index){this.save({completed:[...this.value.completed,index]});}
   unlockHint(index){this.save({hints:{...this.value.hints,[index]:Math.min(3,(this.value.hints[index]||0)+1)}});}
 }
@@ -38,7 +42,11 @@ export const QUALITY_PRESETS=Object.freeze({low:{pixelRatio:1,portalResolution:6
   high:{pixelRatio:1.75,portalResolution:1280,shadowSize:2048,shadows:true}});
 export function applyLabQuality(game,key,dpr=globalThis.devicePixelRatio||1){
   const profile=QUALITY_PRESETS[key]||QUALITY_PRESETS.balanced;game.quality={...profile};
-  if(game.renderer){game.renderer.setPixelRatio(Math.min(dpr,profile.pixelRatio));game.renderer.setSize(innerWidth,innerHeight);game.renderer.shadowMap.enabled=profile.shadows;}
+  if(game.renderer){
+    const width=game.container?.clientWidth||globalThis.innerWidth||1,height=game.container?.clientHeight||globalThis.innerHeight||1;
+    game.renderer.setPixelRatio(Math.min(dpr,profile.pixelRatio));game.renderer.setSize(width,height);game.renderer.shadowMap.enabled=profile.shadows;
+    if(game.camera){game.camera.aspect=width/height;game.camera.updateProjectionMatrix();}
+  }
   if(game.keyLight){game.keyLight.castShadow=profile.shadows;
     const shadow=game.keyLight.shadow;
     // onReady reapplies the saved preset. Do not discard the shadow target

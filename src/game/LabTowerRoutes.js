@@ -1,3 +1,5 @@
+import {towerCourse} from './LabTowerCourses.js';
+
 /**
  * Authored input routes for the eighteen Tower machines. Coordinates are local
  * to the wing: s runs away from the shared hub, n runs toward its left wall.
@@ -20,26 +22,6 @@ export const TOWER_ROUTE_REACTORS=Object.freeze({
  'crown-drive':-3.0,'last-aperture':0,
 });
 
-// Solid transverse baffles leave a >=4m side channel. Their locations start
-// after the beam/turbine receiving field so they cannot merely intercept an
-// optical source. A two-baffle room has a change of side between physical
-// openings; there is no invisible gate or teleport in these passages.
-const DIVERTS=Object.freeze({
- prism:[[26.2,4.4]],freight:[[26.2,-4.4]],
- exchange:[[24.4,4.4],[26.8,-4.4]],
- turbine:[[26.2,4.4]],'double-prism':[[24.4,-4.4],[26.8,4.4]],
- battery:[[26.2,-4.4]],windway:[[26.2,4.4]],vault:[[26.2,-4.4]],
- press:[[26.2,4.4]],refraction:[[24.4,-4.4],[26.8,4.4]],
- storm:[[26.2,4.4]],relay:[[24.4,4.4],[26.8,-4.4]],
- confluence:[[26.2,4.4]],'crown-drive':[[24.4,-4.4],[26.8,4.4]],
- 'last-aperture':[[24.4,4.4],[26.8,-4.4]],
-});
-export const TOWER_ROUTE_OBSTACLES=Object.freeze(Object.fromEntries(
- Object.entries(DIVERTS).map(([id,diverts])=>[id,Object.freeze(diverts.map(([s,gap])=>Object.freeze({
-  s,n:gap>0?-1.8:1.8,along:.55,across:8,height:7.4,
- })))]),
-));
-
 function point(stage,s,n=0,y=stage.baseY){
  const [dx,dz]=stage.direction;
  return Object.freeze([
@@ -51,39 +33,46 @@ function point(stage,s,n=0,y=stage.baseY){
 
 function author(stage){
  const actions=[];
- const diverts=DIVERTS[stage.id]??[];
- const reactorN=stage.reactorN??TOWER_ROUTE_REACTORS[stage.id]??0;
+ const course=towerCourse(stage);
  const add=(kind,s,n=0,details={})=>{
   actions.push(Object.freeze({kind,target:point(stage,s,n),...details}));
  };
  const route={
   walk:(s,n=0,details={})=>add('walk',s,n,details),
+  high:(s,n,height)=>add('walk',s,n,{target:point(stage,s,n,stage.baseY+height)}),
+  fling:(s,n=0)=>add('fling',s,n,{direction:Object.freeze([...stage.direction]),wingIndex:stage.index}),
+  elevated:(s,n,y,details={})=>add('walk',s,n,{target:point(stage,s,n,stage.baseY+y),...details}),
   drop:()=>add('drop',0),
   pickup:()=>add('pickup',0),
   use:()=>add('use',0),
   pause:(seconds=.45)=>add('wait',0,0,{seconds}),
+  until:(field,value=true,seconds=4)=>add('until',0,0,{field,value,seconds}),
   jump:(s,n=0)=>add('jump',s,n),
   // A waist-height aperture admits the player's capsule. The projector and
   // receivers remain above it, within their actual optical acceptance cones.
-  shot:(slot,panel)=>add('shoot',0,0,{slot,aim:point(stage,panel==='input'?8:panel==='A'?14:20,panel==='input'?6.04:-6.04,stage.baseY+2.0)}),
+  shot:(slot,panel)=>add('shoot',0,0,{slot,aim:stage.id==='exchange'
+   ?point(stage,panel==='input'?18:24,panel==='input'?0:-6.04,stage.baseY+(panel==='input'?.025:4.5))
+   :point(stage,panel==='input'?8:panel==='A'?14:20,panel==='input'?6.04:-6.04,stage.baseY+2.0)}),
   // The outlet is on the negative-n wall. `enter` approaches from its
   // positive-n (room) side and advances toward the wall through the aperture.
   enter:()=>add('enter',14,-6.04,{normal:Object.freeze([-stage.direction[1],0,stage.direction[0]]),seconds:4}),
   out:()=>{
-   for(const [s,gap]of diverts){add('walk',s-1.2,gap);add('walk',s+.85,gap);}
-   add('walk',30,reactorN);add('walk',38,reactorN);
-  },
-  socket:(s,n=0)=>{
-   for(const [at,gap]of diverts){add('walk',at-1.2,gap);add('walk',at+.85,gap);}
-   add('walk',29,0);add('walk',s,n);
+   for(const {s,n,y,kind}of course.waypoints)add(kind,s,n,{target:point(stage,s,n,stage.baseY+y)});
   },
   home:()=>{
-   // The late confluence gallery has a live feed beacon beside its return
-   // aisle. Keep the physical companion outside that pedestal on the way in.
-   if(stage.id==='confluence')add('walk',33,4.4);
-   for(const [s,gap]of [...diverts].reverse()){
-    add('walk',s+.85,gap);add('walk',s-1.2,gap);
+   if(stage.id==='windway'){
+    // After the flight lands, the return shutter opens along the right wall.
+    // This path cannot serve as an outward shortcut before airLanding.
+    for(const {s,n,y,kind}of course.returnWaypoints)add(kind,s,n,{target:point(stage,s,n,stage.baseY+y)});
+    add('walk',23,4.75);add('walk',19.35,4.75);add('walk',17.4,4.75);
+    add('walk',13.1,4.75);add('walk',4,0);return;
    }
+   if(stage.id==='refraction'){
+    for(const {s,n,y,kind}of course.returnWaypoints)add(kind,s,n,{target:point(stage,s,n,stage.baseY+y)});
+    // The ray window retracts only after the second receiver is powered.
+    add('walk',21.0,1.4);add('walk',15.5,1.4);add('walk',4,0);return;
+   }
+   for(const {s,n,y,kind}of course.returnWaypoints)add(kind,s,n,{target:point(stage,s,n,stage.baseY+y)});
    add('walk',4,0);
   },
  };
@@ -105,17 +94,37 @@ export function towerRoute(stage){
    r.pause(.8);r.walk(4.2);r.pickup();r.out();r.home();break;
 
   case 'freight':
-   // The counterweight has to rest in its catch tray while the hoist is armed.
+   // The lower tray powers the warehouse. Send the same rigid companion up
+   // the open freight shaft; the player takes one stair, recovers it on the
+   // receiving deck, then leaves by the other. Either stair also accepts a
+   // manually carried load as a physical alternate solution.
    r.walk(.4);r.walk(4.3);r.pause(.3);r.drop();r.pause(.8);r.walk(5,-2);r.use();
-   r.walk(5.1);r.pickup();r.walk(19,-2.4);r.walk(24.7,-4.4);
+   r.walk(5.1);r.pickup();r.walk(12,0);r.walk(15.5,0);
+   r.walk(15.5,5.0);r.walk(16.0,8.0);r.walk(16.0,12.9);
+   r.drop();r.until('freightArmed',true,2.5);
+   r.walk(16.0,6.85);r.walk(13.0,6.85);
+   for(const [n,y]of [[11,1],[15,2],[19,3],[23,4]])r.elevated(13.0,n,y);
+   r.elevated(17.0,23.7,4);r.elevated(21.55,23.7,4);
+   r.elevated(21.55,17.7,4);r.until('freightDelivered',true,2.5);
+   r.elevated(21.55,16.0,4);r.pickup();
+   r.elevated(21.55,23.7,4);r.elevated(25.5,23.7,4);
+   for(const [n,y]of [[19,3],[15,2],[11,1],[7.5,.25]])r.elevated(25.5,n,y);
+   r.walk(25.5,6.8);r.walk(25.5,4.7);r.walk(27.0,0);
    r.out();r.home();break;
 
   case 'exchange':
-   // Light must enter the first portal before the player follows it back.
-   r.walk(4.2);r.drop();r.walk(10,1.3);r.shot(0,'input');
-   r.walk(11,-.6);r.shot(1,'A');r.pause(.55);
-   r.walk(14,-4.5);r.enter();r.walk(8,2.7);
-   r.walk(4.2);r.pickup();r.out();r.home();break;
+   // Climb with the original companion, aim at both real faces, then turn
+   // gravity into horizontal speed. Ordinary running through the exit lands
+   // beneath the receiving shelf.
+   r.walk(4.2);r.pause(.5);r.drop();r.walk(11,0);r.shot(0,'input');r.shot(1,'A');
+   r.walk(4.2);r.pickup();
+   r.walk(4,4.7);r.high(14.4,4.7,4);
+   r.high(14.4,-4.7,4);r.high(2.5,-4.7,5);
+   r.high(3,0,5);r.high(8,0,5);
+   r.high(14.2,0,5);r.fling(18);
+   r.high(27.2,4.7,2.05);r.high(30,4.7,2.05);
+   r.high(31.3,3.45,1.845);r.walk(34.5,3.45);
+   r.walk(38,stage.reactorN);r.home();break;
 
   case 'turbine':
    // Spin up the vent with a portal pair before loading its catch tray.
@@ -137,16 +146,43 @@ export function towerRoute(stage){
    r.walk(26,2.8);r.out();r.home();break;
 
   case 'battery':
-   // Cargo powers the source, whose beam then passes through the portal pair.
-   r.walk(.4);r.walk(4.3);r.pause(.3);r.drop();r.pause(.8);r.walk(11,1);
-   r.shot(0,'input');r.walk(12,-1);r.shot(1,'A');r.pause(.6);
-   r.walk(5.1);r.pickup();r.out();r.home();break;
+   // The original companion charges the upper source. Its real portal beam
+   // raises a missing bridge, letting the same body reach the output socket.
+   // That socket powers a second receiver only after the outlet is retargeted;
+   // the player then retrieves the body and crosses the bridge again.
+   r.walk(18.5,0);r.walk(20.45,4.9);r.walk(20.45,6.3);
+   for(const [n,y]of [[7.2,.3],[8.7,.6],[10.2,.9],[11.7,1.2],[13.2,1.2],[14.35,1.2]])
+    r.high(20.45,n,y);
+   r.drop();r.pause(.8);
+   r.high(20.45,13.2,1.2);
+   for(const [n,y]of [[11.7,1.2],[10.2,.9],[8.7,.6],[7.2,.3],[6.3,0]])r.high(20.45,n,y);
+   r.walk(20.45,4.9);r.walk(11,1);r.shot(0,'input');r.walk(12,-1);r.shot(1,'A');
+   r.walk(20.45,4.9);r.walk(20.45,6.3);
+   for(const [n,y]of [[7.2,.3],[8.7,.6],[10.2,.9],[11.7,1.2],[13.2,1.2]])r.high(20.45,n,y);
+   r.high(20.45,14.35,1.2);r.pickup();
+   for(const s of [22.35,25.5,28.8,29.85])r.high(s,15.15,1.2);
+   r.drop();r.pause(.8);
+   for(const s of [28.8,25.5,22.35,20.45])r.high(s,15.15,1.2);
+   r.high(20.45,13.2,1.2);
+   for(const [n,y]of [[11.7,1.2],[10.2,.9],[8.7,.6],[7.2,.3],[6.3,0]])r.high(20.45,n,y);
+   r.walk(20.45,4.9);r.walk(16,1.1);r.shot(1,'B');
+   r.walk(20.45,4.9);r.walk(20.45,6.3);
+   for(const [n,y]of [[7.2,.3],[8.7,.6],[10.2,.9],[11.7,1.2],[13.2,1.2]])r.high(20.45,n,y);
+   for(const s of [22.35,25.5,28.8,29.85])r.high(s,15.15,1.2);
+   r.pickup();
+   for(const s of [28.8,25.5,22.35,20.45])r.high(s,15.15,1.2);
+   r.high(20.45,13.2,1.2);
+   for(const [n,y]of [[11.7,1.2],[10.2,.9],[8.7,.6],[7.2,.3],[6.3,0]])r.high(20.45,n,y);
+   r.walk(20.45,4.9);r.walk(26,0);r.out();r.home();break;
 
   case 'windway':
    // The open air channel must be stable before the outlet is traversed.
-   r.walk(4.2);r.drop();r.walk(11,1);r.shot(0,'input');
+   // After the crossing, its angled duct carries the original companion and
+   // player over the solid spillway; landing beyond it powers the wing gate.
+   r.walk(4.2,0,{sprint:false});r.pause(.5);r.drop();r.walk(11,1);r.shot(0,'input');
    r.shot(1,'A');r.pause(.8);r.walk(14,-4.5);r.enter();
-   r.walk(4.2);r.pickup();r.walk(24,3.7);r.out();r.home();break;
+   r.walk(4.2);r.pickup();r.walk(11.8,0,{sprint:false});r.jump(12.0,0);
+   r.walk(23,0);r.walk(24,3.7);r.out();r.home();break;
 
   case 'vault':
    // Source charge opens a run-up; the kinetic trigger needs forward motion.
@@ -155,10 +191,28 @@ export function towerRoute(stage){
    r.walk(12,0);r.walk(16,0);r.walk(23,0);r.out();r.home();break;
 
   case 'magnet':
-   // Hoist the companion into the induction coil, then focus its beam.
+   // Charge the hoist, carry its original load around two solid machine banks,
+   // and place it on the raised outer dock while A still illuminates the coil.
+   // Returning alone to redirect B opens a second, raised passage back to it.
    r.walk(.4);r.walk(4.3);r.pause(.3);r.drop();r.pause(2.0);r.walk(10,1.2);
    r.shot(0,'input');r.walk(12,-.8);r.shot(1,'A');
-   r.pause(.9);r.walk(5.1);r.pickup();r.out();r.home();break;
+   r.pause(.9);r.walk(5.1);r.pickup();
+   r.walk(17.75,4.8);r.walk(17.75,8.0);r.walk(18.35,12.25);
+   r.walk(20.65,12.25);r.walk(21.65,8.1);r.walk(23.15,8.1);
+   r.high(23.85,8.1,.30);r.high(24.65,8.1,.60);
+   r.high(25.45,8.1,.90);r.high(26.30,8.1,1.20);
+   r.drop();r.until('cargoDock',true,4.5);
+   r.high(25.45,8.1,.90);r.high(24.65,8.1,.60);
+   r.high(23.85,8.1,.30);r.walk(21.65,8.1);
+   r.walk(20.65,12.25);r.walk(18.35,12.25);r.walk(17.75,8.0);
+   r.walk(17.75,4.8);r.walk(19.25,0);r.shot(1,'B');r.pause(.8);
+   r.walk(26.9,2.2);r.high(26.9,3.35,.30);r.high(26.9,4.15,.60);
+   r.high(26.9,4.95,.90);r.high(26.9,5.75,1.20);
+   r.high(26.9,6.9,1.20);r.high(27.1,8.1,1.20);r.pickup();
+   r.high(26.9,6.9,1.20);r.high(26.9,5.75,1.20);
+   r.high(26.9,4.95,.90);r.high(26.9,4.15,.60);
+   r.high(26.9,3.35,.30);r.walk(26.9,2.2);
+   r.out();r.home();break;
 
   case 'press':
    // The weighted press must be loaded before the floor's acceleration run.
@@ -167,11 +221,17 @@ export function towerRoute(stage){
    r.walk(24.7,4.4);r.out();r.home();break;
 
   case 'refraction':
-   // Rotate the prism, fill its first receiver, then redirect to the second.
+   // The first reflected ray crosses a sealed optical pane. Carry the same
+   // companion through the bent side gallery into the second chamber, leave
+   // it there for the retargeted shot, then retrieve it before the reactor.
    r.walk(4.2);r.drop();r.walk(5,-2);r.use();
    r.walk(10,1);r.shot(0,'input');r.walk(12,-1);r.shot(1,'A');
-   r.pause(.65);r.walk(17,.5);r.shot(1,'B');
-   r.pause(.65);r.walk(4.2);r.pickup();r.out();r.home();break;
+   r.pause(.65);r.walk(4.2);r.pickup();
+   r.walk(14.1,4.9);r.walk(14.1,8.0);r.walk(16.0,7.6);
+   r.walk(18.8,7.6);r.walk(19.4,10.5);r.walk(22.6,10.5);
+   r.walk(22.8,8.0);r.walk(22.8,4.4);r.walk(22.0,1.8);
+   r.drop();r.walk(20.0,-2.5);r.shot(1,'B');r.pause(.65);
+   r.pickup();r.out();r.home();break;
 
   case 'storm':
    // The vent wakes at outlet A; the same inlet later feeds receiver B.
@@ -188,9 +248,13 @@ export function towerRoute(stage){
    r.walk(5,-2);r.use();r.walk(5.1);r.pickup();r.out();r.home();break;
 
   case 'balance':
-   // Set the tray before gravity carries its weight into the upper contact.
+   // The released companion reaches the upper coil. The player escorts it
+   // from the safe inner aisle while its original rigid body flies through
+   // the side aperture to the elevated exterior catch, then back for pickup.
    r.walk(.4);r.walk(4.3);r.pause(.3);r.drop();r.pause(2.0);
-   r.walk(5.1);r.pickup();r.walk(18,-2.8);
+   r.walk(7.2,-3.5,{sprint:false});r.walk(9.3,-3.5,{sprint:false});
+   r.walk(11.0,-3.5,{sprint:false});r.until('bridgeCatch',true,4);
+   r.until('bridgeReturned',true,4);r.walk(10,-2.1);r.pickup();r.walk(18,-2.8);
    r.walk(25,2.8);r.out();r.home();break;
 
   case 'confluence':
@@ -221,9 +285,28 @@ export function towerRoute(stage){
  return Object.freeze(actions);
 }
 
-/** The three powered wings feed one central, physical keystone per deck. These
- * inputs are used before the stair route; completion belongs to the live
- * keystone mechanisms. Positions are in the shared hub's world coordinates.
+/** The upper warehouse is also reachable while carrying the original body.
+ * This second ordinary-input solution uses the first stair for both actors
+ * and the second stair for the return, bypassing the magnetic transfer rail. */
+export function towerFreightCarryRoute(stage){
+ if(stage?.id!=='freight')throw new Error('The carry route belongs to the freight wing');
+ const {actions,route:r}=author(stage);
+ r.walk(.4);r.walk(4.3);r.pause(.3);r.drop();r.pause(.8);r.walk(5,-2);r.use();
+ r.walk(5.1);r.pickup();r.walk(12,0);r.walk(13,5.0);r.walk(13,6.85);
+ for(const [n,y]of [[11,1],[15,2],[19,3],[23,4]])r.elevated(13,n,y);
+ r.elevated(17,23.7,4);r.elevated(21.55,23.7,4);
+ r.elevated(21.6,13.3,4);r.elevated(22.9,13.3,4);r.elevated(22.9,14.7,4);
+ r.drop();r.until('freightDelivered',true,2.5);r.pickup();
+ r.elevated(21.55,23.7,4);r.elevated(25.5,23.7,4);
+ for(const [n,y]of [[19,3],[15,2],[11,1],[7.5,.25]])r.elevated(25.5,n,y);
+ r.walk(25.5,6.8);r.walk(25.5,4.7);r.walk(27,0);r.out();r.home();
+ return Object.freeze(actions);
+}
+
+/** The three solved wings feed one central, physical keystone per deck. The
+ * wing's live signals are captured at its reactor, so the central route never
+ * sends the player through a cleared corridor a second time. Positions are
+ * in the shared hub's world coordinates.
  */
 export function towerDeckRoute(deck,spec={}){
  if(!Number.isInteger(deck)||deck<0||deck>5)throw new RangeError(`Invalid Tower deck ${deck}`);
@@ -238,40 +321,7 @@ export function towerDeckRoute(deck,spec={}){
   shot:(slot,panel)=>add('shoot',0,0,{slot,aim:position(panel==='input'?-6:6,panel==='B'?3:-3,2.0)}),
   enter:(panel='A')=>add('enter',6,panel==='B'?3:-3,{normal:Object.freeze([-1,0,0]),seconds:4}),
  };
- const modes=spec.feedModes??[],stages=spec.stages??[];
- if(modes.length&&!stages.length)throw new Error(`Deck ${deck+1} socket route needs its three stage descriptors`);
- for(const feed of modes){
-  const wing=stages.find(s=>s.branch===feed.branch);
-  if(!wing)throw new Error(`Missing branch ${feed.branch} on deck ${deck+1}`);
-  // Branch mouths share the central hub, not a diagonal tunnel between
-  // outer wings. Return to its clear centre before choosing another mouth.
-  r.walk(0,0);
-  const {actions:wingActions,route:w}=author(wing);
-  // A socket is live only with its actual source powered. The solution visits
-  // different branches, in the keystone's authored order, to reconfigure that
-  // source. Its center is then touched by the grounded player, never assigned.
-  switch(feed.mode){
-   case 'beamA':case 'beamB':case 'airA':
-    w.walk(4.2);w.drop();w.walk(11,0);
-    w.shot(0,'input');w.shot(1,feed.mode==='beamB'?'B':'A');
-    w.pause(feed.mode==='airA'?.8:.55);
-    if(wing.id==='confluence')w.walk(16,-1.5);
-    w.socket(feed.s,feed.n??0);w.home();w.pickup();break;
-   case 'cargo':case 'gravityCargo':
-    w.walk(.4);w.walk(4.3);w.pause(.3);w.drop();
-    w.pause(feed.mode==='gravityCargo'?2.0:.8);
-    w.socket(feed.s,feed.n??0);w.home();w.pickup();break;
-   case 'transit':
-    w.walk(4.2);w.drop();w.walk(11,0);
-    w.shot(0,'input');w.shot(1,'A');w.walk(14,-4.5);w.enter();
-    w.pickup();w.socket(feed.s,feed.n??0);w.home();break;
-   case 'kinetic':
-    w.walk(18,0);w.socket(feed.s+1.2,feed.n??0);w.home();break;
-   default:throw new Error(`Unknown Tower socket mode ${feed.mode}`);
-  }
-  actions.push(...wingActions);
- }
- // All six hub mechanisms are different after their branch socket prerequisites.
+ // All six hub mechanisms are different after the three branch reactors.
  switch(deck){
   case 0: // Spectrum: fill the lower receiver, then retarget the outlet.
    r.walk(0,0);r.drop();r.walk(0,-1.2);

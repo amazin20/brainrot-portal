@@ -372,7 +372,10 @@ export class LabPlayerAnimator {
   }
 
   update(input = {}) {
-    const dt = clamp(Number.isFinite(input.dt ?? 1 / 60) ? (input.dt ?? 1 / 60) : 0, 0, 0.05);
+    // Match the game's bounded render delta. At 15 FPS, a 50 ms cap discarded
+    // a quarter of every gait/gesture/landing update despite advancing elapsed.
+    // The 240 Hz pose substeps below keep the full 100 ms interval stable.
+    const dt = clamp(Number.isFinite(input.dt ?? 1 / 60) ? (input.dt ?? 1 / 60) : 0, 0, 0.1);
     const iterations = Math.max(1, Math.ceil(dt * 240 - 1e-9));
     const step = dt / iterations;
     const startTime = Number.isFinite(input.elapsed) ? input.elapsed - dt : this.elapsed;
