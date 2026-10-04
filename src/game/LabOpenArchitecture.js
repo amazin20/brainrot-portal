@@ -4,6 +4,7 @@ import {mergeGeometries} from 'three/addons/utils/BufferGeometryUtils.js';
 import {Workshop} from './LabWorkshopKit.js';
 import {SolidAssembly,placeSolidModel} from './LabSolidModels.js';
 import {cargoLoadsPlate} from './LabPlateContact.js';
+import {manufacturedMaterials,finishManufacturedChamber} from './LabManufacturedFinish.js';
 
 const V=(...v)=>new THREE.Vector3(...v),Q=()=>new THREE.Quaternion(),UP=V(0,1,0),Z=V(0,0,1);
 export const OPEN_METRICS=Object.freeze({walkway:8,landing:12,headroom:7,carriage:12,portalWidth:7.6,portalHeight:5.8});
@@ -19,18 +20,6 @@ export const OPEN_PALETTES=Object.freeze({
  launch:{paint:0xb47f55,accent:0x85d7dc,secondary:0x507fa1,floor:0xb6b1a6,sky:0x30404c},
 });
 
-function reflectionTexture(){
- const width=256,height=128,data=new Uint8Array(width*height*4);
- for(let y=0;y<height;y++)for(let x=0;x<width;x++){
-  const v=y/height,u=x/width,sky=Math.max(0,Math.sin((v-.5)*Math.PI));
-  const window=Math.exp(-(((u-.30)/.075)**2)-(((v-.72)/.19)**4));
-  const other=Math.exp(-(((u-.78)/.12)**4)-(((v-.61)/.16)**4));
-  const i=(y*width+x)*4,t=.13+.34*sky+.30*window+.15*other;
-  data[i]=Math.min(255,255*t*1.07);data[i+1]=Math.min(255,255*t*1.02);data[i+2]=Math.min(255,255*t*.94);data[i+3]=255;
- }
- const t=new THREE.DataTexture(data,width,height);t.mapping=THREE.EquirectangularReflectionMapping;
- t.colorSpace=THREE.LinearSRGBColorSpace;t.magFilter=t.minFilter=THREE.LinearFilter;t.needsUpdate=true;return t;
-}
 
 /** Authored construction kit for the spatial reboot. Walkable extents and
  * physical volumes are explicit. All world coordinates remain unscaled. */
@@ -38,13 +27,9 @@ export class OpenChamber extends Workshop{
  constructor(game,spec,index,theme='orbital'){
   super(game,spec,index);this.theme=theme;this.colors=OPEN_PALETTES[theme];this.routes=[];this.decks=[];this.artBins=new Map();this.envelopes=[];
   const w=this.world,p=this.colors;w.root.name='Open chamber / '+spec.title;w.root.userData.keepMaterial=true;
-  this.env=reflectionTexture();
-  const material=(name,color,roughness,metalness=0)=>new THREE.MeshStandardMaterial({name,color,roughness,metalness,envMap:this.env,envMapIntensity:.52});
-  this.m={shell:material('Powder-coated structural shell',p.paint,.59,.11),secondary:material('Secondary enamel',p.secondary,.54,.10),
-   floor:material('Honed mineral walking deck',p.floor,.80,.04),dark:material('Recessed graphite frame',0x263946,.56,.25),
-   metal:material('Brushed bearing alloy',0xabb5b2,.39,.75),ceramic:material('Portal porcelain',0xf8f4dd,.48,.03),
-   rubber:material('Rubber isolation gasket',0x172a32,.88),light:new THREE.MeshBasicMaterial({name:'Inset light source',color:p.accent}),
-   white:new THREE.MeshBasicMaterial({name:'Warm service light',color:0xffefc7})};
+  // LabGame owns one filtered reflection environment across room changes.
+  this.env=null;
+  this.m=manufacturedMaterials(p);
   Object.assign(w.materials,{wall:this.m.shell,floor:this.m.floor,ceramic:this.m.ceramic,trim:this.m.dark,accent:this.m.light,lamp:this.m.white});
   // The reboot does not run the old many-layer tile art passes.
   w.surface=options=>this.surface(options);
@@ -62,7 +47,7 @@ export class OpenChamber extends Workshop{
  restoreLight(){
   for(const {n,intensity,color,ground}of this.oldLighting.hemis){n.intensity=intensity;n.color.copy(color);n.groundColor.copy(ground);}
   const k=this.game.keyLight,o=this.oldLighting.key;if(k&&o){k.intensity=o.intensity;k.color.copy(o.color);k.position.copy(o.position);k.target.position.copy(o.target);Object.assign(k.shadow.camera,o.camera);k.shadow.camera.updateProjectionMatrix();}
-  this.env.dispose();this.ownedTextures?.forEach(t=>t.dispose());
+  this.ownedTextures?.forEach(t=>t.dispose());
  }
  geometry(geometry,mat,p=[0,0,0],q=Q(),{parent=this.world.root,solid=false,batch=true,name='manufactured component'}={}){
   const mesh=new THREE.Mesh(geometry,typeof mat==='string'?this.m[mat]:mat);mesh.position.fromArray(p);mesh.quaternion.copy(q);mesh.name=name;
@@ -210,6 +195,7 @@ export class OpenChamber extends Workshop{
   this.routes.push({name:'recovery promenade',width:10,headroom:20});
  }
  finishOpen(spawn,cargo,goal,extra={}){
+  finishManufacturedChamber(this);
   // Pads can sit on a multi-layer deck: register its OWN skin, chassis and
   // closed hull, never nearby pillars or other platforms. The common portal
   // solver still requires the actor to fit the aperture and its throat depth.

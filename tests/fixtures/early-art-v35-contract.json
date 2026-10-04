@@ -280,7 +280,7 @@
     {
       "level": 19,
       "id": "glass-air-inertia",
-      "contract": "e8b5de113374b567fe784f01c19592d696562e667ab0354736ed30a37485bd37",
+      "contract": "da186990d964d3b8da5839ee2cb9b336233b4645f90608e2ccb01f2d13319542",
       "workload": {
         "nodes": 508,
         "meshes": 354,

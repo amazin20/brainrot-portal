@@ -12,17 +12,17 @@ const UP=V(0,1,0);
 
 function noiseTexture(size=48,{bands=false}={}){
   const data=new Uint8Array(size*size*4);
-  let seed=0x9e3779b9;
-  const rand=()=>{seed=(seed*1664525+1013904223)>>>0;return seed/0xffffffff;};
   for(let y=0;y<size;y++)for(let x=0;x<size;x++){
     const i=(y*size+x)*4;
-    const grain=bands?Math.sin((x+y*.16)*1.85)*18:0;
-    const scratch=(x%17===0||y%23===0)?-16:0;
-    const value=THREE.MathUtils.clamp(Math.round(154+(rand()-.5)*44+grain+scratch),38,230);
+    // A quiet material response, rather than high-frequency scratches painted
+    // into both normals and roughness. No line comb survives into portal views.
+    const distance=Math.min(x,y,size-1-x,size-1-y)/size;
+    const value=Math.round((bands?224:239)+Math.min(1,distance*8)*(bands?5:3));
     data[i]=data[i+1]=data[i+2]=value;data[i+3]=255;
   }
   const t=new THREE.DataTexture(data,size,size,THREE.RGBAFormat);
-  t.wrapS=t.wrapT=THREE.RepeatWrapping;t.repeat.set(5,5);t.needsUpdate=true;
+  t.wrapS=t.wrapT=THREE.RepeatWrapping;t.repeat.set(1,1);
+  t.generateMipmaps=true;t.minFilter=THREE.LinearMipmapLinearFilter;t.magFilter=THREE.LinearFilter;t.anisotropy=4;t.needsUpdate=true;
   t.colorSpace=THREE.NoColorSpace;
   return t;
 }
@@ -31,12 +31,12 @@ function materials(level){
   const w=level.world;
   if(w.root.userData.browserArtMaterials)return w.root.userData.browserArtMaterials;
   const ceramicNoise=noiseTexture(48),metalNoise=noiseTexture(48,{bands:true});
-  const ceramic=new THREE.MeshPhysicalMaterial({color:0xf2f0e8,roughness:.42,metalness:.025,clearcoat:.24,clearcoatRoughness:.58,roughnessMap:ceramicNoise,bumpMap:ceramicNoise,bumpScale:.0015});
-  const graphite=new THREE.MeshStandardMaterial({color:0x252d35,roughness:.57,metalness:.48,roughnessMap:metalNoise,bumpMap:metalNoise,bumpScale:.003});
-  const steel=new THREE.MeshStandardMaterial({color:0x66747c,roughness:.34,metalness:.78,roughnessMap:metalNoise,bumpMap:metalNoise,bumpScale:.002});
-  const blackSteel=new THREE.MeshStandardMaterial({color:0x151b20,roughness:.42,metalness:.76,roughnessMap:metalNoise});
+  const ceramic=new THREE.MeshPhysicalMaterial({color:0xf2f0e8,roughness:.63,metalness:.025,clearcoat:.12,clearcoatRoughness:.65});
+  const graphite=new THREE.MeshStandardMaterial({color:0x34434c,roughness:.68,metalness:.24});
+  const steel=new THREE.MeshStandardMaterial({color:0xa4b0b3,roughness:.48,metalness:.66});
+  const blackSteel=new THREE.MeshStandardMaterial({color:0x26313a,roughness:.68,metalness:.28});
   const rubber=new THREE.MeshStandardMaterial({color:0x171a1c,roughness:.9,metalness:.02});
-  const brass=new THREE.MeshStandardMaterial({color:0xb48750,roughness:.31,metalness:.76,roughnessMap:metalNoise});
+  const brass=new THREE.MeshStandardMaterial({color:0xb89b66,roughness:.47,metalness:.66});
   const hazard=new THREE.MeshStandardMaterial({color:0xd2a344,roughness:.62,metalness:.18});
   const lamp=new THREE.MeshBasicMaterial({color:getChapterVisualProfile(level)?.edge??level.spec?.accent??0xa8e5df,toneMapped:true});
   const glass=new THREE.MeshPhysicalMaterial({color:0x8db9c5,roughness:.12,metalness:.05,transmission:.28,transparent:true,opacity:.32,depthWrite:false,clearcoat:.9,clearcoatRoughness:.08});
@@ -164,10 +164,10 @@ function enhanceWorldMaterials(level,m){
     else if(node.material===previousCeramic)node.material=m.ceramic;
   });
   if(previousCeramic!==m.ceramic)previousCeramic.dispose();
-  Object.assign(w.materials.ceramic,{color:new THREE.Color(0xf1efe8),roughness:.43,metalness:.025,roughnessMap:m.textures[0],bumpMap:m.textures[0],bumpScale:.0015});
-  Object.assign(w.materials.wall,{roughness:.66,metalness:.24,roughnessMap:m.textures[1],bumpMap:m.textures[1],bumpScale:.003});
-  Object.assign(w.materials.floor,{roughness:.58,metalness:.20,roughnessMap:m.textures[1],bumpMap:m.textures[1],bumpScale:.002});
-  Object.assign(w.materials.trim,{roughness:.38,metalness:.68,roughnessMap:m.textures[1],bumpMap:m.textures[1],bumpScale:.002});
+  Object.assign(w.materials.ceramic,{color:new THREE.Color(0xf1efe8),roughness:.63,metalness:.025,roughnessMap:null,bumpMap:null,bumpScale:0});
+  Object.assign(w.materials.wall,{roughness:.74,metalness:.08,roughnessMap:null,bumpMap:null,bumpScale:0});
+  Object.assign(w.materials.floor,{roughness:.88,metalness:.025,roughnessMap:null,bumpMap:null,bumpScale:0});
+  Object.assign(w.materials.trim,{roughness:.66,metalness:.24,roughnessMap:null,bumpMap:null,bumpScale:0});
   for(const mat of [w.materials.ceramic,w.materials.wall,w.materials.floor,w.materials.trim])mat.needsUpdate=true;
   for(const s of w.surfaces){
     if(keepsAuthoredMaterial(s.group)&&!s.portal)continue;
@@ -181,74 +181,34 @@ function enhanceWorldMaterials(level,m){
 }
 
 function addDeckEngineering(level,root,m){
-  const early=level.index<11;
-  const batched=early||level.index>=21;
-  const details=batched?new THREE.Group():root;
-  if(batched){details.name='Attached under-deck engineering';details.userData.visualOnly=true;root.add(details);}
+  const details=new THREE.Group();details.name='Attached under-deck engineering';details.userData.visualOnly=true;root.add(details);
   const ground=level.index<11?Math.min(...level.world.floors.map(f=>f.y))+.5:1.5;
   const portalDecks=level.index>=21?level.world.surfaces.filter(s=>s.portal&&s.floor).map(s=>s.floor):[];
-  // New shafts and cargo wells need the underside of their full aperture
-  // open too. A diagonal brace beneath the panel would obscure its view even
-  // though it never enters collision. Keep such decks free of cross-bracing.
+  // Cargo wells keep the full lower aperture open. Visual reinforcement must
+  // never turn a clear portal throat into an apparently crossed-off opening.
   const overlapsAperture=f=>portalDecks.some(p=>Math.abs(p.y-f.y)<.35&&p.minX<f.maxX&&p.maxX>f.minX&&p.minZ<f.maxZ&&p.maxZ>f.minZ);
   const floors=level.world.surfaces.filter(s=>s.floor&&!s.collider.kinematic&&s.floor.y>ground&&!/stair/i.test(s.name)&&!overlapsAperture(s.floor));
   let braces=0,lamps=0;
   for(const s of floors){
     const f=s.floor,w=f.maxX-f.minX,d=f.maxZ-f.minZ;if(w<2||d<2)continue;
-    const y=f.y-.42,longX=w>=d,span=longX?w:d,count=Math.max(1,Math.min(5,Math.ceil(span/6)));
-    if(batched){
-      // The old wire-diameter X braces traversed a broad dark underside and
-      // looked like stray geometry. These opaque, shallow longitudinal load
-      // rails and regularly spaced crossmembers end inside the actual slab.
-      // A portal-bearing deck is filtered above, so its aperture stays open.
-      const midX=(f.minX+f.maxX)/2,midZ=(f.minZ+f.maxZ)/2;
-      const edge=.26,crossSpan=(longX?d:w)-edge*2;
-      for(const side of [-1,1]){
-        const p=longX?[midX,y,midZ+side*(d/2-edge)]:[midX+side*(w/2-edge),y,midZ];
-        box(details,p,longX?[w-edge*2,.29,.22]:[.22,.29,d-edge*2],m.steel);
-        braces++;
-      }
-      for(let i=0;i<count;i++){
-        const offset=(i+.5)*span/count-span/2;
-        const p=longX?[midX+offset,y-.07,midZ]:[midX,y-.07,midZ+offset];
-        box(details,p,longX?[.28,.22,crossSpan]:[crossSpan,.22,.28],m.blackSteel);
-        braces++;
-      }
-      if(w>4.5){
-        // A single inset strip belongs to the leading rail. It is under the
-        // load frame, not an extra light or a nearly coplanar floor skin.
-        const p=longX?[midX,y-.158,f.minZ+edge]:[f.minX+edge,y-.158,midZ];
-        box(details,p,longX?[Math.min(w-1,5.2),.018,.075]:[.075,.018,Math.min(d-1,5.2)],m.lamp);
-        lamps++;
-      }
-      continue;
+    // The upper rail faces meet the recessed deck backing. The former thin
+    // crossing rods floated 16 cm underneath it and looked like stray wires.
+    const y=f.y-.26,longX=w>=d,span=longX?w:d,count=Math.max(1,Math.min(5,Math.ceil(span/6)));
+    const midX=(f.minX+f.maxX)/2,midZ=(f.minZ+f.maxZ)/2,edge=.26,crossSpan=(longX?d:w)-edge*2;
+    for(const side of [-1,1]){
+      const p=longX?[midX,y,midZ+side*(d/2-edge)]:[midX+side*(w/2-edge),y,midZ];
+      box(details,p,longX?[w-edge*2,.29,.22]:[.22,.29,d-edge*2],m.steel);braces++;
     }
-    const strut=(a,b,material)=>{
-      beam(details,a,b,.035,material,6);
-      if(early)for(const p of [a,b]){
-        // End hangers meet the actual recessed deck backing. They explain
-        // how the diagonals carry the slab instead of floating beneath it.
-        beam(details,p,[p[0],f.y-.11,p[2]],.04,m.blackSteel,6);
-        box(details,[p[0],f.y-.14,p[2]],[.18,.055,.18],m.steel);
-      }
-    };
     for(let i=0;i<count;i++){
-      const u=-span/2+span*(i+.5)/count;
-      if(longX){
-        const cx=(f.minX+f.maxX)/2+u;
-        strut([cx-w/count*.42,y-.15,f.minZ+.18],[cx+w/count*.42,y+.15,f.maxZ-.18],m.blackSteel);
-        strut([cx-w/count*.42,y+.15,f.maxZ-.18],[cx+w/count*.42,y-.15,f.minZ+.18],m.steel);
-      }else{
-        const cz=(f.minZ+f.maxZ)/2+u;
-        strut([f.minX+.18,y-.15,cz-d/count*.42],[f.maxX-.18,y+.15,cz+d/count*.42],m.blackSteel);
-        strut([f.maxX-.18,y-.15,cz-d/count*.42],[f.minX+.18,y+.15,cz+d/count*.42],m.steel);
-      }
-      braces+=2;
+      const offset=(i+.5)*span/count-span/2,p=longX?[midX+offset,y-.07,midZ]:[midX,y-.07,midZ+offset];
+      box(details,p,longX?[.28,.22,crossSpan]:[crossSpan,.22,.28],m.blackSteel);braces++;
     }
-    if(w>4.5){box(details,[(f.minX+f.maxX)/2,f.y-.31,f.minZ+.035],[Math.min(w-1,5.2),.028,.03],m.lamp);lamps++;}
+    if(w>4.5){
+      const p=longX?[midX,y-.158,f.minZ+edge]:[f.minX+edge,y-.158,midZ];
+      box(details,p,longX?[Math.min(w-1,5.2),.018,.075]:[.075,.018,Math.min(d-1,5.2)],m.lamp);lamps++;
+    }
   }
-  if(batched)batchStaticDetails(details);
-  return{braces,lamps};
+  batchStaticDetails(details);return{braces,lamps};
 }
 
 function addPortalFrames(level,root,m){

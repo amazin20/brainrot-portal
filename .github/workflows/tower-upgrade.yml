@@ -125,6 +125,7 @@ jobs:
       - name: Probe ordinary physics with fast, failed-order and cargo-only portal attacks
         run: |
           node scripts/qa-adversarial-core.mjs
+          node scripts/check-room2-jump-regression.mjs
           OUT=qa/adversarial-early.json node scripts/qa-adversarial-early.mjs
           node --input-type=module <<'JS'
           import fs from 'node:fs';import assert from 'node:assert/strict';
@@ -155,6 +156,7 @@ jobs:
           name: creative-adversarial-and-yandex
           path: |
             qa/adversarial-core.json
+            qa/room2-jump-regression.json
             qa/adversarial-early.json
             qa/adversarial-late.json
             qa/sealed-partitions-adversarial.json

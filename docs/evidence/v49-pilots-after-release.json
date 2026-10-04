@@ -1,0 +1,335 @@
+{
+  "runtime": "Chromium software WebGL; hardware performance not tested",
+  "rows": [
+    {
+      "level": 1,
+      "errors": [],
+      "views": [
+        {
+          "kind": "start",
+          "capture": {
+            "ok": true,
+            "method": "actual WebGL2 pixel-pack buffer",
+            "includesHTML": false,
+            "file": "1-start.jpg",
+            "pixels": {
+              "width": 960,
+              "height": 540,
+              "colors": 1124,
+              "maxChannelStd": 54.95398575228545
+            },
+            "renderer": {
+              "width": 960,
+              "height": 540,
+              "calls": 74,
+              "triangles": 206502
+            },
+            "frame": {
+              "levelIndex": 0,
+              "state": "playing",
+              "elapsed": 250.0000000000001,
+              "player": [
+                0,
+                0,
+                12
+              ],
+              "cargo": [
+                -4.00000004187978,
+                0.38933222152660285,
+                9.000000108297208
+              ],
+              "camera": [
+                1.0363717020071526,
+                1.7045275915195568,
+                16.79633644714937
+              ],
+              "cargoUUID": "5b7f7685-c42f-4e8d-afb7-f7b9f08605ca",
+              "cargoBodyId": 77
+            },
+            "issues": []
+          }
+        },
+        {
+          "kind": "overview",
+          "capture": {
+            "ok": true,
+            "method": "actual WebGL2 pixel-pack buffer",
+            "includesHTML": false,
+            "file": "1-overview.jpg",
+            "pixels": {
+              "width": 960,
+              "height": 540,
+              "colors": 1296,
+              "maxChannelStd": 56.45995965283332
+            },
+            "renderer": {
+              "width": 960,
+              "height": 540,
+              "calls": 81,
+              "triangles": 207106
+            },
+            "frame": {
+              "levelIndex": 0,
+              "state": "playing",
+              "elapsed": 250.0000000000001,
+              "player": [
+                0,
+                0,
+                12
+              ],
+              "cargo": [
+                -4.00000004187978,
+                0.38933222152660285,
+                9.000000108297208
+              ],
+              "camera": [
+                15,
+                10,
+                14
+              ],
+              "cargoUUID": "5b7f7685-c42f-4e8d-afb7-f7b9f08605ca",
+              "cargoBodyId": 77
+            },
+            "issues": []
+          }
+        }
+      ],
+      "metrics": {
+        "calls": 81,
+        "triangles": 207106,
+        "textures": 27,
+        "geometries": 151,
+        "colliders": 77,
+        "panels": 3,
+        "lighting": {
+          "probe": "broad neutral radiance",
+          "probePixels": 8192,
+          "downloadBytes": 0,
+          "extraShadowLights": 0,
+          "contactDraws": 2,
+          "profile": "laboratory-enamel-and-nickel"
+        }
+      }
+    },
+    {
+      "level": 20,
+      "errors": [],
+      "views": [
+        {
+          "kind": "start",
+          "capture": {
+            "ok": true,
+            "method": "actual WebGL2 pixel-pack buffer",
+            "includesHTML": false,
+            "file": "20-start.jpg",
+            "pixels": {
+              "width": 960,
+              "height": 540,
+              "colors": 928,
+              "maxChannelStd": 42.049916794057424
+            },
+            "renderer": {
+              "width": 960,
+              "height": 540,
+              "calls": 60,
+              "triangles": 208442
+            },
+            "frame": {
+              "levelIndex": 19,
+              "state": "playing",
+              "elapsed": 250.0000000000001,
+              "player": [
+                3,
+                0,
+                23
+              ],
+              "cargo": [
+                -3.00000004187978,
+                0.38933222152660285,
+                23.000000108297204
+              ],
+              "camera": [
+                4.254510894127102,
+                1.9014812193421022,
+                28.795416551985944
+              ],
+              "cargoUUID": "914c451e-16c8-49f9-b341-e59691454ca1",
+              "cargoBodyId": 144
+            },
+            "issues": []
+          }
+        },
+        {
+          "kind": "overview",
+          "capture": {
+            "ok": true,
+            "method": "actual WebGL2 pixel-pack buffer",
+            "includesHTML": false,
+            "file": "20-overview.jpg",
+            "pixels": {
+              "width": 960,
+              "height": 540,
+              "colors": 1077,
+              "maxChannelStd": 61.453734520491075
+            },
+            "renderer": {
+              "width": 960,
+              "height": 540,
+              "calls": 57,
+              "triangles": 183138
+            },
+            "frame": {
+              "levelIndex": 19,
+              "state": "playing",
+              "elapsed": 250.0000000000001,
+              "player": [
+                3,
+                0,
+                23
+              ],
+              "cargo": [
+                -3.00000004187978,
+                0.38933222152660285,
+                23.000000108297204
+              ],
+              "camera": [
+                -20,
+                10,
+                24
+              ],
+              "cargoUUID": "914c451e-16c8-49f9-b341-e59691454ca1",
+              "cargoBodyId": 144
+            },
+            "issues": []
+          }
+        }
+      ],
+      "metrics": {
+        "calls": 57,
+        "triangles": 183138,
+        "textures": 28,
+        "geometries": 142,
+        "colliders": 143,
+        "panels": 2,
+        "lighting": {
+          "probe": "broad neutral radiance",
+          "probePixels": 8192,
+          "downloadBytes": 0,
+          "extraShadowLights": 0,
+          "contactDraws": 2,
+          "profile": "laboratory-enamel-and-nickel"
+        }
+      }
+    },
+    {
+      "level": 41,
+      "errors": [],
+      "views": [
+        {
+          "kind": "start",
+          "capture": {
+            "ok": true,
+            "method": "actual WebGL2 pixel-pack buffer",
+            "includesHTML": false,
+            "file": "41-start.jpg",
+            "pixels": {
+              "width": 960,
+              "height": 540,
+              "colors": 1123,
+              "maxChannelStd": 60.69684068734676
+            },
+            "renderer": {
+              "width": 960,
+              "height": 540,
+              "calls": 318,
+              "triangles": 222642
+            },
+            "frame": {
+              "levelIndex": 40,
+              "state": "playing",
+              "elapsed": 250.0000000000001,
+              "player": [
+                0,
+                0,
+                54
+              ],
+              "cargo": [
+                1.99999986969319,
+                0.38991075418435306,
+                53.99999888625953
+              ],
+              "camera": [
+                1.3892489738943727,
+                2.092153855287108,
+                60.4036996150839
+              ],
+              "cargoUUID": "f1bb0df6-ca82-45c8-8e11-5fc91b3f7da6",
+              "cargoBodyId": 1558
+            },
+            "issues": []
+          }
+        },
+        {
+          "kind": "overview",
+          "capture": {
+            "ok": true,
+            "method": "actual WebGL2 pixel-pack buffer",
+            "includesHTML": false,
+            "file": "41-overview.jpg",
+            "pixels": {
+              "width": 960,
+              "height": 540,
+              "colors": 1395,
+              "maxChannelStd": 46.11867974606651
+            },
+            "renderer": {
+              "width": 960,
+              "height": 540,
+              "calls": 304,
+              "triangles": 193024
+            },
+            "frame": {
+              "levelIndex": 40,
+              "state": "playing",
+              "elapsed": 250.0000000000001,
+              "player": [
+                0,
+                0,
+                54
+              ],
+              "cargo": [
+                1.99999986969319,
+                0.38991075418435306,
+                53.99999888625953
+              ],
+              "camera": [
+                23,
+                31,
+                33
+              ],
+              "cargoUUID": "f1bb0df6-ca82-45c8-8e11-5fc91b3f7da6",
+              "cargoBodyId": 1558
+            },
+            "issues": []
+          }
+        }
+      ],
+      "metrics": {
+        "calls": 304,
+        "triangles": 193024,
+        "textures": 53,
+        "geometries": 177,
+        "colliders": 1558,
+        "panels": 14,
+        "lighting": {
+          "probe": "broad neutral radiance",
+          "probePixels": 8192,
+          "downloadBytes": 0,
+          "extraShadowLights": 0,
+          "contactDraws": 2,
+          "profile": "castle-mineral-and-gold"
+        }
+      }
+    }
+  ]
+}

@@ -335,7 +335,7 @@ test('hand-to-body handoff reverses continuously and catch/drop aliases recover 
   assert.equal(animator.state, 'idle');
 });
 
-test('render-driven motion stays equivalent at 30, 60 and 144 Hz through expressions and movement', () => {
+test('render-driven motion stays equivalent at 15–144 Hz through expressions and movement', () => {
   const sequence = [
     { input: {}, event: 'curious' },
     { input: { speed: 4 } },
@@ -353,13 +353,18 @@ test('render-driven motion stays equivalent at 30, 60 and 144 Hz through express
     const { animator } = makeAnimator();
     return sequence.map(({ input, event }) => {
       if (event) animator.trigger(event);
-      for (let frame = 0; frame < fps / 2; frame += 1) animator.update({ ...input, dt: 1 / fps });
+      // End each segment at exactly the same elapsed time, including a partial
+      // final frame at 15 Hz. Rounding frame counts would skew cue durations.
+      for (let elapsed = 0; elapsed < .5 - 1e-10;) {
+        const dt = Math.min(1 / fps, .5 - elapsed);
+        animator.update({ ...input, dt }); elapsed += dt;
+      }
       return { position: animator.bones.Body.position.clone(), state: animator.state,
         rotations: Object.fromEntries(LAB_PLAYER_JOINTS.map(({ name }) => [name, animator.bones[name].quaternion.clone()])) };
     });
   };
   const reference = simulate(60);
-  for (const fps of [30, 144]) {
+  for (const fps of [15, 20, 30, 120, 144]) {
     const sampled = simulate(fps);
     for (let index = 0; index < reference.length; index += 1) {
       assert.equal(sampled[index].state, reference[index].state, `${fps} Hz changed the state sequence`);
@@ -370,4 +375,56 @@ test('render-driven motion stays equivalent at 30, 60 and 144 Hz through express
       }
     }
   }
+});
+
+test('80–100 ms frames consume the complete gesture and gait interval without changing the player root', () => {
+  for (const dt of [.08, .1]) {
+    const a = makeAnimator(), b = makeAnimator();
+    for (const { animator } of [a, b]) {
+      advance(animator, 90, { speed: 3 });
+      animator.triggerInteraction('pickup'); animator.trigger('curious');
+      animator.triggerLanding(6);
+    }
+    const before = [a.root.position.toArray(), a.root.quaternion.toArray(), a.root.scale.toArray()];
+    const startTime = a.animator.elapsed;
+    const input = { speed: 3, carrying: true, turnRate: .4 };
+    a.animator.update({ dt, ...input });
+    for (let elapsed = 0; elapsed < dt - 1e-10;) {
+      const step = Math.min(1 / 1000, dt - elapsed);
+      b.animator.update({ dt: step, ...input }); elapsed += step;
+    }
+    assert.ok(Math.abs(a.animator.elapsed - startTime - dt) < 1e-12);
+    assert.ok(Math.abs(a.animator.diagnostics.interaction.elapsed - dt) < 1e-12);
+    assert.ok(Math.abs(a.animator.diagnostics.expression.elapsed - dt) < 1e-12);
+    assert.ok(Math.abs(a.animator.gait - b.animator.gait) < .002, 'long frame lost cadence time');
+    for (const { name } of LAB_PLAYER_JOINTS) {
+      assert.ok(a.animator.bones[name].quaternion.angleTo(b.animator.bones[name].quaternion) < .01,
+        `${name} changed its pose on the ${dt * 1000} ms frame`);
+    }
+    assert.deepEqual([a.root.position.toArray(), a.root.quaternion.toArray(), a.root.scale.toArray()], before);
+    assertFinitePose(a.animator);
+  }
+});
+
+test('zero-time pause freezes gesture clocks and resumes with only the next allowed frame', () => {
+  const { animator } = makeAnimator();
+  advance(animator, 90, { speed: 3 });
+  animator.triggerInteraction('pickup'); animator.trigger('curious');
+  animator.triggerLanding(6);
+  const input = { speed: 3, carrying: true, turnRate: .4 };
+  animator.update({ dt: .08, ...input });
+  const paused = {
+    elapsed: animator.elapsed, gait: animator.gait, landing: animator.landing,
+    landVelocity: animator.landVelocity, gesture: animator.diagnostics.interaction.elapsed,
+    expression: animator.diagnostics.expression.elapsed, handoff: animator.holsterProgress,
+  };
+  for (let frame = 0; frame < 1440; frame++) animator.update({ dt: 0, ...input });
+  assert.deepEqual({
+    elapsed: animator.elapsed, gait: animator.gait, landing: animator.landing,
+    landVelocity: animator.landVelocity, gesture: animator.diagnostics.interaction.elapsed,
+    expression: animator.diagnostics.expression.elapsed, handoff: animator.holsterProgress,
+  }, paused);
+  animator.update({ dt: 1 / 15, ...input });
+  assert.ok(Math.abs(animator.elapsed - paused.elapsed - 1 / 15) < 1e-12);
+  assert.ok(Math.abs(animator.diagnostics.interaction.elapsed - paused.gesture - 1 / 15) < 1e-12);
 });

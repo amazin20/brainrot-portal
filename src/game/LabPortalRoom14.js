@@ -51,7 +51,11 @@ export function buildRoom14(game,index=13){
  // launch into the high receiver when paired after reaching its northern view.
  k.panel('island-floor',[0,7.425,0],[0,1,0],5.6,5.6);
  k.panel('entry-dispatch',[-13,.025,12],[0,1,0],3.7,3.7);
- k.panel('island-receiver',[2.93,9.5,0],[-1,0,0],4.5,4.2);
+ const islandReceiver=k.panel('island-receiver',[2.93,9.5,0],[-1,0,0],4.5,4.2);
+ // This authored address receives the independently sent companion. Its
+ // visibly small freight aperture preserves the first projected crossing;
+ // a human cannot replace that bridge by entering the receiver directly.
+ islandReceiver.mesh.userData.portalSize={width:.8,height:.8};
  // The free cargo must support either the island tray or receiving tray.
  // A 6.3 m moving span physically drops when both are empty, closing the
  // repeated jump/release/pickup bypass of the formerly static folded stair.

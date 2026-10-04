@@ -1,0 +1,1262 @@
+{
+  "scope": "Actual mobile DOM in production Vite page; tutorial presentation stress fixture only; no gameplay passage claim",
+  "runtime": "Chromium software WebGL, touch/coarse emulation; no hardware performance claim",
+  "longLesson": {
+    "key": "E · ЛКМ · ПКМ",
+    "text": "Для открытия нужны: ГРУЗОВОЙ ПЕРЕПЛЁТ + ЗАТВОРОВЫЙ ДВОР + РАСКОЛОТЫЙ ФОНАРЬ + КОЛОДЕЦ ПРОТИВОВЕСА + ПЕРЕКРЁСТНЫЙ АРХИВ + МАХОВОЙ ХОР + ПОДВЕШЕННЫЙ ГРУЗ + ПЕРЕЕЗЖАЮЩАЯ ДВЕРЬ + РАЗОМКНУТАЯ СКРЕПА + БАЛКОН ПАДЕНИЯ. Их состояния видны на табличке над входом."
+  },
+  "rows": [
+    {
+      "width": 360,
+      "height": 800,
+      "kind": "current",
+      "mobileMedia": true,
+      "state": "playing",
+      "lessonCharacters": 77,
+      "tutorial": {
+        "left": 14,
+        "right": 346,
+        "top": 90,
+        "bottom": 164.171875,
+        "width": 332,
+        "height": 74.171875,
+        "visible": true
+      },
+      "controls": [
+        {
+          "name": "Меню игры",
+          "left": 243.03125,
+          "right": 344,
+          "top": 45,
+          "bottom": 78,
+          "width": 100.96875,
+          "height": 33,
+          "visible": true
+        },
+        {
+          "name": "joystick",
+          "left": 17,
+          "right": 121,
+          "top": 674,
+          "bottom": 778,
+          "width": 104,
+          "height": 104,
+          "visible": true
+        },
+        {
+          "name": "sprint-button",
+          "left": 196,
+          "right": 258,
+          "top": 716,
+          "bottom": 778,
+          "width": 62,
+          "height": 62,
+          "visible": true
+        },
+        {
+          "name": "jump-button",
+          "left": 267,
+          "right": 343,
+          "top": 702,
+          "bottom": 778,
+          "width": 76,
+          "height": 76,
+          "visible": true
+        },
+        {
+          "name": "lab-reticle",
+          "left": 170,
+          "right": 190,
+          "top": 390,
+          "bottom": 410,
+          "width": 20,
+          "height": 20,
+          "visible": true
+        },
+        {
+          "name": "Голубой портал",
+          "left": 232,
+          "right": 284,
+          "top": 578,
+          "bottom": 630,
+          "width": 52,
+          "height": 52,
+          "visible": true
+        },
+        {
+          "name": "Оранжевый портал",
+          "left": 291,
+          "right": 343,
+          "top": 578,
+          "bottom": 630,
+          "width": 52,
+          "height": 52,
+          "visible": true
+        },
+        {
+          "name": "Взять или поставить друга, использовать механизм",
+          "left": 232,
+          "right": 284,
+          "top": 637,
+          "bottom": 689,
+          "width": 52,
+          "height": 52,
+          "visible": true
+        },
+        {
+          "name": "Приостановить игру",
+          "left": 291,
+          "right": 343,
+          "top": 637,
+          "bottom": 689,
+          "width": 52,
+          "height": 52,
+          "visible": true
+        },
+        {
+          "name": "Частота кадров",
+          "left": 294.875,
+          "right": 346,
+          "top": 16,
+          "bottom": 41.1875,
+          "width": 51.125,
+          "height": 25.1875,
+          "visible": true
+        }
+      ],
+      "intersections": [],
+      "clippedText": [],
+      "outsideViewport": false,
+      "towerClockVisible": false,
+      "pass": true,
+      "screenshot": "/workspace/scratch/5c7196ff0296/mobile-tutorial-qa/360x800-current.png"
+    },
+    {
+      "width": 360,
+      "height": 800,
+      "kind": "long-crown",
+      "mobileMedia": true,
+      "state": "playing",
+      "lessonCharacters": 254,
+      "tutorial": {
+        "left": 14,
+        "right": 346,
+        "top": 90,
+        "bottom": 251.125,
+        "width": 332,
+        "height": 161.125,
+        "visible": true
+      },
+      "controls": [
+        {
+          "name": "Меню игры",
+          "left": 243.03125,
+          "right": 344,
+          "top": 45,
+          "bottom": 78,
+          "width": 100.96875,
+          "height": 33,
+          "visible": true
+        },
+        {
+          "name": "joystick",
+          "left": 17,
+          "right": 121,
+          "top": 674,
+          "bottom": 778,
+          "width": 104,
+          "height": 104,
+          "visible": true
+        },
+        {
+          "name": "sprint-button",
+          "left": 196,
+          "right": 258,
+          "top": 716,
+          "bottom": 778,
+          "width": 62,
+          "height": 62,
+          "visible": true
+        },
+        {
+          "name": "jump-button",
+          "left": 267,
+          "right": 343,
+          "top": 702,
+          "bottom": 778,
+          "width": 76,
+          "height": 76,
+          "visible": true
+        },
+        {
+          "name": "lab-reticle",
+          "left": 170,
+          "right": 190,
+          "top": 390,
+          "bottom": 410,
+          "width": 20,
+          "height": 20,
+          "visible": true
+        },
+        {
+          "name": "Голубой портал",
+          "left": 232,
+          "right": 284,
+          "top": 578,
+          "bottom": 630,
+          "width": 52,
+          "height": 52,
+          "visible": true
+        },
+        {
+          "name": "Оранжевый портал",
+          "left": 291,
+          "right": 343,
+          "top": 578,
+          "bottom": 630,
+          "width": 52,
+          "height": 52,
+          "visible": true
+        },
+        {
+          "name": "Взять или поставить друга, использовать механизм",
+          "left": 232,
+          "right": 284,
+          "top": 637,
+          "bottom": 689,
+          "width": 52,
+          "height": 52,
+          "visible": true
+        },
+        {
+          "name": "Приостановить игру",
+          "left": 291,
+          "right": 343,
+          "top": 637,
+          "bottom": 689,
+          "width": 52,
+          "height": 52,
+          "visible": true
+        },
+        {
+          "name": "Частота кадров",
+          "left": 294.875,
+          "right": 346,
+          "top": 16,
+          "bottom": 41.1875,
+          "width": 51.125,
+          "height": 25.1875,
+          "visible": true
+        }
+      ],
+      "intersections": [],
+      "clippedText": [],
+      "outsideViewport": false,
+      "towerClockVisible": false,
+      "pass": true,
+      "screenshot": "/workspace/scratch/5c7196ff0296/mobile-tutorial-qa/360x800-long-crown.png"
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "kind": "current",
+      "mobileMedia": true,
+      "state": "playing",
+      "lessonCharacters": 77,
+      "tutorial": {
+        "left": 14,
+        "right": 376,
+        "top": 90,
+        "bottom": 164.171875,
+        "width": 362,
+        "height": 74.171875,
+        "visible": true
+      },
+      "controls": [
+        {
+          "name": "Меню игры",
+          "left": 273.03125,
+          "right": 374,
+          "top": 45,
+          "bottom": 78,
+          "width": 100.96875,
+          "height": 33,
+          "visible": true
+        },
+        {
+          "name": "joystick",
+          "left": 17,
+          "right": 121,
+          "top": 718,
+          "bottom": 822,
+          "width": 104,
+          "height": 104,
+          "visible": true
+        },
+        {
+          "name": "sprint-button",
+          "left": 226,
+          "right": 288,
+          "top": 760,
+          "bottom": 822,
+          "width": 62,
+          "height": 62,
+          "visible": true
+        },
+        {
+          "name": "jump-button",
+          "left": 297,
+          "right": 373,
+          "top": 746,
+          "bottom": 822,
+          "width": 76,
+          "height": 76,
+          "visible": true
+        },
+        {
+          "name": "lab-reticle",
+          "left": 185,
+          "right": 205,
+          "top": 412,
+          "bottom": 432,
+          "width": 20,
+          "height": 20,
+          "visible": true
+        },
+        {
+          "name": "Голубой портал",
+          "left": 262,
+          "right": 314,
+          "top": 622,
+          "bottom": 674,
+          "width": 52,
+          "height": 52,
+          "visible": true
+        },
+        {
+          "name": "Оранжевый портал",
+          "left": 321,
+          "right": 373,
+          "top": 622,
+          "bottom": 674,
+          "width": 52,
+          "height": 52,
+          "visible": true
+        },
+        {
+          "name": "Взять или поставить друга, использовать механизм",
+          "left": 262,
+          "right": 314,
+          "top": 681,
+          "bottom": 733,
+          "width": 52,
+          "height": 52,
+          "visible": true
+        },
+        {
+          "name": "Приостановить игру",
+          "left": 321,
+          "right": 373,
+          "top": 681,
+          "bottom": 733,
+          "width": 52,
+          "height": 52,
+          "visible": true
+        },
+        {
+          "name": "Частота кадров",
+          "left": 324.875,
+          "right": 376,
+          "top": 16,
+          "bottom": 41.1875,
+          "width": 51.125,
+          "height": 25.1875,
+          "visible": true
+        }
+      ],
+      "intersections": [],
+      "clippedText": [],
+      "outsideViewport": false,
+      "towerClockVisible": false,
+      "pass": true,
+      "screenshot": "/workspace/scratch/5c7196ff0296/mobile-tutorial-qa/390x844-current.png"
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "kind": "long-crown",
+      "mobileMedia": true,
+      "state": "playing",
+      "lessonCharacters": 254,
+      "tutorial": {
+        "left": 14,
+        "right": 376,
+        "top": 90,
+        "bottom": 233.734375,
+        "width": 362,
+        "height": 143.734375,
+        "visible": true
+      },
+      "controls": [
+        {
+          "name": "Меню игры",
+          "left": 273.03125,
+          "right": 374,
+          "top": 45,
+          "bottom": 78,
+          "width": 100.96875,
+          "height": 33,
+          "visible": true
+        },
+        {
+          "name": "joystick",
+          "left": 17,
+          "right": 121,
+          "top": 718,
+          "bottom": 822,
+          "width": 104,
+          "height": 104,
+          "visible": true
+        },
+        {
+          "name": "sprint-button",
+          "left": 226,
+          "right": 288,
+          "top": 760,
+          "bottom": 822,
+          "width": 62,
+          "height": 62,
+          "visible": true
+        },
+        {
+          "name": "jump-button",
+          "left": 297,
+          "right": 373,
+          "top": 746,
+          "bottom": 822,
+          "width": 76,
+          "height": 76,
+          "visible": true
+        },
+        {
+          "name": "lab-reticle",
+          "left": 185,
+          "right": 205,
+          "top": 412,
+          "bottom": 432,
+          "width": 20,
+          "height": 20,
+          "visible": true
+        },
+        {
+          "name": "Голубой портал",
+          "left": 262,
+          "right": 314,
+          "top": 622,
+          "bottom": 674,
+          "width": 52,
+          "height": 52,
+          "visible": true
+        },
+        {
+          "name": "Оранжевый портал",
+          "left": 321,
+          "right": 373,
+          "top": 622,
+          "bottom": 674,
+          "width": 52,
+          "height": 52,
+          "visible": true
+        },
+        {
+          "name": "Взять или поставить друга, использовать механизм",
+          "left": 262,
+          "right": 314,
+          "top": 681,
+          "bottom": 733,
+          "width": 52,
+          "height": 52,
+          "visible": true
+        },
+        {
+          "name": "Приостановить игру",
+          "left": 321,
+          "right": 373,
+          "top": 681,
+          "bottom": 733,
+          "width": 52,
+          "height": 52,
+          "visible": true
+        },
+        {
+          "name": "Частота кадров",
+          "left": 324.875,
+          "right": 376,
+          "top": 16,
+          "bottom": 41.1875,
+          "width": 51.125,
+          "height": 25.1875,
+          "visible": true
+        }
+      ],
+      "intersections": [],
+      "clippedText": [],
+      "outsideViewport": false,
+      "towerClockVisible": false,
+      "pass": true,
+      "screenshot": "/workspace/scratch/5c7196ff0296/mobile-tutorial-qa/390x844-long-crown.png"
+    },
+    {
+      "width": 412,
+      "height": 915,
+      "kind": "current",
+      "mobileMedia": true,
+      "state": "playing",
+      "lessonCharacters": 77,
+      "tutorial": {
+        "left": 14,
+        "right": 398,
+        "top": 90,
+        "bottom": 146.78125,
+        "width": 384,
+        "height": 56.78125,
+        "visible": true
+      },
+      "controls": [
+        {
+          "name": "Меню игры",
+          "left": 295.03125,
+          "right": 396,
+          "top": 45,
+          "bottom": 78,
+          "width": 100.96875,
+          "height": 33,
+          "visible": true
+        },
+        {
+          "name": "joystick",
+          "left": 17,
+          "right": 121,
+          "top": 789,
+          "bottom": 893,
+          "width": 104,
+          "height": 104,
+          "visible": true
+        },
+        {
+          "name": "sprint-button",
+          "left": 248,
+          "right": 310,
+          "top": 831,
+          "bottom": 893,
+          "width": 62,
+          "height": 62,
+          "visible": true
+        },
+        {
+          "name": "jump-button",
+          "left": 319,
+          "right": 395,
+          "top": 817,
+          "bottom": 893,
+          "width": 76,
+          "height": 76,
+          "visible": true
+        },
+        {
+          "name": "lab-reticle",
+          "left": 196,
+          "right": 216,
+          "top": 447.5,
+          "bottom": 467.5,
+          "width": 20,
+          "height": 20,
+          "visible": true
+        },
+        {
+          "name": "Голубой портал",
+          "left": 284,
+          "right": 336,
+          "top": 693,
+          "bottom": 745,
+          "width": 52,
+          "height": 52,
+          "visible": true
+        },
+        {
+          "name": "Оранжевый портал",
+          "left": 343,
+          "right": 395,
+          "top": 693,
+          "bottom": 745,
+          "width": 52,
+          "height": 52,
+          "visible": true
+        },
+        {
+          "name": "Взять или поставить друга, использовать механизм",
+          "left": 284,
+          "right": 336,
+          "top": 752,
+          "bottom": 804,
+          "width": 52,
+          "height": 52,
+          "visible": true
+        },
+        {
+          "name": "Приостановить игру",
+          "left": 343,
+          "right": 395,
+          "top": 752,
+          "bottom": 804,
+          "width": 52,
+          "height": 52,
+          "visible": true
+        },
+        {
+          "name": "Частота кадров",
+          "left": 346.875,
+          "right": 398,
+          "top": 16,
+          "bottom": 41.1875,
+          "width": 51.125,
+          "height": 25.1875,
+          "visible": true
+        }
+      ],
+      "intersections": [],
+      "clippedText": [],
+      "outsideViewport": false,
+      "towerClockVisible": false,
+      "pass": true,
+      "screenshot": "/workspace/scratch/5c7196ff0296/mobile-tutorial-qa/412x915-current.png"
+    },
+    {
+      "width": 412,
+      "height": 915,
+      "kind": "long-crown",
+      "mobileMedia": true,
+      "state": "playing",
+      "lessonCharacters": 254,
+      "tutorial": {
+        "left": 14,
+        "right": 398,
+        "top": 90,
+        "bottom": 233.734375,
+        "width": 384,
+        "height": 143.734375,
+        "visible": true
+      },
+      "controls": [
+        {
+          "name": "Меню игры",
+          "left": 295.03125,
+          "right": 396,
+          "top": 45,
+          "bottom": 78,
+          "width": 100.96875,
+          "height": 33,
+          "visible": true
+        },
+        {
+          "name": "joystick",
+          "left": 17,
+          "right": 121,
+          "top": 789,
+          "bottom": 893,
+          "width": 104,
+          "height": 104,
+          "visible": true
+        },
+        {
+          "name": "sprint-button",
+          "left": 248,
+          "right": 310,
+          "top": 831,
+          "bottom": 893,
+          "width": 62,
+          "height": 62,
+          "visible": true
+        },
+        {
+          "name": "jump-button",
+          "left": 319,
+          "right": 395,
+          "top": 817,
+          "bottom": 893,
+          "width": 76,
+          "height": 76,
+          "visible": true
+        },
+        {
+          "name": "lab-reticle",
+          "left": 196,
+          "right": 216,
+          "top": 447.5,
+          "bottom": 467.5,
+          "width": 20,
+          "height": 20,
+          "visible": true
+        },
+        {
+          "name": "Голубой портал",
+          "left": 284,
+          "right": 336,
+          "top": 693,
+          "bottom": 745,
+          "width": 52,
+          "height": 52,
+          "visible": true
+        },
+        {
+          "name": "Оранжевый портал",
+          "left": 343,
+          "right": 395,
+          "top": 693,
+          "bottom": 745,
+          "width": 52,
+          "height": 52,
+          "visible": true
+        },
+        {
+          "name": "Взять или поставить друга, использовать механизм",
+          "left": 284,
+          "right": 336,
+          "top": 752,
+          "bottom": 804,
+          "width": 52,
+          "height": 52,
+          "visible": true
+        },
+        {
+          "name": "Приостановить игру",
+          "left": 343,
+          "right": 395,
+          "top": 752,
+          "bottom": 804,
+          "width": 52,
+          "height": 52,
+          "visible": true
+        },
+        {
+          "name": "Частота кадров",
+          "left": 346.875,
+          "right": 398,
+          "top": 16,
+          "bottom": 41.1875,
+          "width": 51.125,
+          "height": 25.1875,
+          "visible": true
+        }
+      ],
+      "intersections": [],
+      "clippedText": [],
+      "outsideViewport": false,
+      "towerClockVisible": false,
+      "pass": true,
+      "screenshot": "/workspace/scratch/5c7196ff0296/mobile-tutorial-qa/412x915-long-crown.png"
+    },
+    {
+      "width": 800,
+      "height": 360,
+      "kind": "current",
+      "mobileMedia": true,
+      "state": "playing",
+      "lessonCharacters": 77,
+      "tutorial": {
+        "left": 14,
+        "right": 454,
+        "top": 14,
+        "bottom": 70.78125,
+        "width": 440,
+        "height": 56.78125,
+        "visible": true
+      },
+      "controls": [
+        {
+          "name": "Меню игры",
+          "left": 683.03125,
+          "right": 784,
+          "top": 45,
+          "bottom": 78,
+          "width": 100.96875,
+          "height": 33,
+          "visible": true
+        },
+        {
+          "name": "joystick",
+          "left": 22,
+          "right": 134,
+          "top": 226,
+          "bottom": 338,
+          "width": 112,
+          "height": 112,
+          "visible": true
+        },
+        {
+          "name": "sprint-button",
+          "left": 631,
+          "right": 693,
+          "top": 276,
+          "bottom": 338,
+          "width": 62,
+          "height": 62,
+          "visible": true
+        },
+        {
+          "name": "jump-button",
+          "left": 702,
+          "right": 778,
+          "top": 262,
+          "bottom": 338,
+          "width": 76,
+          "height": 76,
+          "visible": true
+        },
+        {
+          "name": "lab-reticle",
+          "left": 390,
+          "right": 410,
+          "top": 170,
+          "bottom": 190,
+          "width": 20,
+          "height": 20,
+          "visible": true
+        },
+        {
+          "name": "Голубой портал",
+          "left": 667,
+          "right": 719,
+          "top": 138,
+          "bottom": 190,
+          "width": 52,
+          "height": 52,
+          "visible": true
+        },
+        {
+          "name": "Оранжевый портал",
+          "left": 726,
+          "right": 778,
+          "top": 138,
+          "bottom": 190,
+          "width": 52,
+          "height": 52,
+          "visible": true
+        },
+        {
+          "name": "Взять или поставить друга, использовать механизм",
+          "left": 667,
+          "right": 719,
+          "top": 197,
+          "bottom": 249,
+          "width": 52,
+          "height": 52,
+          "visible": true
+        },
+        {
+          "name": "Приостановить игру",
+          "left": 726,
+          "right": 778,
+          "top": 197,
+          "bottom": 249,
+          "width": 52,
+          "height": 52,
+          "visible": true
+        },
+        {
+          "name": "Частота кадров",
+          "left": 734.875,
+          "right": 786,
+          "top": 16,
+          "bottom": 41.1875,
+          "width": 51.125,
+          "height": 25.1875,
+          "visible": true
+        }
+      ],
+      "intersections": [],
+      "clippedText": [],
+      "outsideViewport": false,
+      "towerClockVisible": false,
+      "pass": true,
+      "screenshot": "/workspace/scratch/5c7196ff0296/mobile-tutorial-qa/800x360-current.png"
+    },
+    {
+      "width": 800,
+      "height": 360,
+      "kind": "long-crown",
+      "mobileMedia": true,
+      "state": "playing",
+      "lessonCharacters": 254,
+      "tutorial": {
+        "left": 14,
+        "right": 454,
+        "top": 14,
+        "bottom": 140.34375,
+        "width": 440,
+        "height": 126.34375,
+        "visible": true
+      },
+      "controls": [
+        {
+          "name": "Меню игры",
+          "left": 683.03125,
+          "right": 784,
+          "top": 45,
+          "bottom": 78,
+          "width": 100.96875,
+          "height": 33,
+          "visible": true
+        },
+        {
+          "name": "joystick",
+          "left": 22,
+          "right": 134,
+          "top": 226,
+          "bottom": 338,
+          "width": 112,
+          "height": 112,
+          "visible": true
+        },
+        {
+          "name": "sprint-button",
+          "left": 631,
+          "right": 693,
+          "top": 276,
+          "bottom": 338,
+          "width": 62,
+          "height": 62,
+          "visible": true
+        },
+        {
+          "name": "jump-button",
+          "left": 702,
+          "right": 778,
+          "top": 262,
+          "bottom": 338,
+          "width": 76,
+          "height": 76,
+          "visible": true
+        },
+        {
+          "name": "lab-reticle",
+          "left": 390,
+          "right": 410,
+          "top": 170,
+          "bottom": 190,
+          "width": 20,
+          "height": 20,
+          "visible": true
+        },
+        {
+          "name": "Голубой портал",
+          "left": 667,
+          "right": 719,
+          "top": 138,
+          "bottom": 190,
+          "width": 52,
+          "height": 52,
+          "visible": true
+        },
+        {
+          "name": "Оранжевый портал",
+          "left": 726,
+          "right": 778,
+          "top": 138,
+          "bottom": 190,
+          "width": 52,
+          "height": 52,
+          "visible": true
+        },
+        {
+          "name": "Взять или поставить друга, использовать механизм",
+          "left": 667,
+          "right": 719,
+          "top": 197,
+          "bottom": 249,
+          "width": 52,
+          "height": 52,
+          "visible": true
+        },
+        {
+          "name": "Приостановить игру",
+          "left": 726,
+          "right": 778,
+          "top": 197,
+          "bottom": 249,
+          "width": 52,
+          "height": 52,
+          "visible": true
+        },
+        {
+          "name": "Частота кадров",
+          "left": 734.875,
+          "right": 786,
+          "top": 16,
+          "bottom": 41.1875,
+          "width": 51.125,
+          "height": 25.1875,
+          "visible": true
+        }
+      ],
+      "intersections": [],
+      "clippedText": [],
+      "outsideViewport": false,
+      "towerClockVisible": false,
+      "pass": true,
+      "screenshot": "/workspace/scratch/5c7196ff0296/mobile-tutorial-qa/800x360-long-crown.png"
+    },
+    {
+      "width": 568,
+      "height": 320,
+      "kind": "current",
+      "mobileMedia": true,
+      "state": "playing",
+      "lessonCharacters": 77,
+      "tutorial": {
+        "left": 14,
+        "right": 416,
+        "top": 14,
+        "bottom": 61.875,
+        "width": 402,
+        "height": 47.875,
+        "visible": true
+      },
+      "controls": [
+        {
+          "name": "Меню игры",
+          "left": 451.03125,
+          "right": 552,
+          "top": 45,
+          "bottom": 78,
+          "width": 100.96875,
+          "height": 33,
+          "visible": true
+        },
+        {
+          "name": "joystick",
+          "left": 22,
+          "right": 134,
+          "top": 186,
+          "bottom": 298,
+          "width": 112,
+          "height": 112,
+          "visible": true
+        },
+        {
+          "name": "sprint-button",
+          "left": 399,
+          "right": 461,
+          "top": 236,
+          "bottom": 298,
+          "width": 62,
+          "height": 62,
+          "visible": true
+        },
+        {
+          "name": "jump-button",
+          "left": 470,
+          "right": 546,
+          "top": 222,
+          "bottom": 298,
+          "width": 76,
+          "height": 76,
+          "visible": true
+        },
+        {
+          "name": "lab-reticle",
+          "left": 274,
+          "right": 294,
+          "top": 150,
+          "bottom": 170,
+          "width": 20,
+          "height": 20,
+          "visible": true
+        },
+        {
+          "name": "Голубой портал",
+          "left": 435,
+          "right": 487,
+          "top": 98,
+          "bottom": 150,
+          "width": 52,
+          "height": 52,
+          "visible": true
+        },
+        {
+          "name": "Оранжевый портал",
+          "left": 494,
+          "right": 546,
+          "top": 98,
+          "bottom": 150,
+          "width": 52,
+          "height": 52,
+          "visible": true
+        },
+        {
+          "name": "Взять или поставить друга, использовать механизм",
+          "left": 435,
+          "right": 487,
+          "top": 157,
+          "bottom": 209,
+          "width": 52,
+          "height": 52,
+          "visible": true
+        },
+        {
+          "name": "Приостановить игру",
+          "left": 494,
+          "right": 546,
+          "top": 157,
+          "bottom": 209,
+          "width": 52,
+          "height": 52,
+          "visible": true
+        },
+        {
+          "name": "Частота кадров",
+          "left": 502.875,
+          "right": 554,
+          "top": 16,
+          "bottom": 41.1875,
+          "width": 51.125,
+          "height": 25.1875,
+          "visible": true
+        }
+      ],
+      "intersections": [],
+      "clippedText": [],
+      "outsideViewport": false,
+      "towerClockVisible": false,
+      "pass": true,
+      "screenshot": "/workspace/scratch/5c7196ff0296/mobile-tutorial-qa/568x320-current.png"
+    },
+    {
+      "width": 568,
+      "height": 320,
+      "kind": "long-crown",
+      "mobileMedia": true,
+      "state": "playing",
+      "lessonCharacters": 254,
+      "tutorial": {
+        "left": 14,
+        "right": 416,
+        "top": 14,
+        "bottom": 125.625,
+        "width": 402,
+        "height": 111.625,
+        "visible": true
+      },
+      "controls": [
+        {
+          "name": "Меню игры",
+          "left": 451.03125,
+          "right": 552,
+          "top": 45,
+          "bottom": 78,
+          "width": 100.96875,
+          "height": 33,
+          "visible": true
+        },
+        {
+          "name": "joystick",
+          "left": 22,
+          "right": 134,
+          "top": 186,
+          "bottom": 298,
+          "width": 112,
+          "height": 112,
+          "visible": true
+        },
+        {
+          "name": "sprint-button",
+          "left": 399,
+          "right": 461,
+          "top": 236,
+          "bottom": 298,
+          "width": 62,
+          "height": 62,
+          "visible": true
+        },
+        {
+          "name": "jump-button",
+          "left": 470,
+          "right": 546,
+          "top": 222,
+          "bottom": 298,
+          "width": 76,
+          "height": 76,
+          "visible": true
+        },
+        {
+          "name": "lab-reticle",
+          "left": 274,
+          "right": 294,
+          "top": 150,
+          "bottom": 170,
+          "width": 20,
+          "height": 20,
+          "visible": true
+        },
+        {
+          "name": "Голубой портал",
+          "left": 435,
+          "right": 487,
+          "top": 98,
+          "bottom": 150,
+          "width": 52,
+          "height": 52,
+          "visible": true
+        },
+        {
+          "name": "Оранжевый портал",
+          "left": 494,
+          "right": 546,
+          "top": 98,
+          "bottom": 150,
+          "width": 52,
+          "height": 52,
+          "visible": true
+        },
+        {
+          "name": "Взять или поставить друга, использовать механизм",
+          "left": 435,
+          "right": 487,
+          "top": 157,
+          "bottom": 209,
+          "width": 52,
+          "height": 52,
+          "visible": true
+        },
+        {
+          "name": "Приостановить игру",
+          "left": 494,
+          "right": 546,
+          "top": 157,
+          "bottom": 209,
+          "width": 52,
+          "height": 52,
+          "visible": true
+        },
+        {
+          "name": "Частота кадров",
+          "left": 502.875,
+          "right": 554,
+          "top": 16,
+          "bottom": 41.1875,
+          "width": 51.125,
+          "height": 25.1875,
+          "visible": true
+        }
+      ],
+      "intersections": [],
+      "clippedText": [],
+      "outsideViewport": false,
+      "towerClockVisible": false,
+      "pass": true,
+      "screenshot": "/workspace/scratch/5c7196ff0296/mobile-tutorial-qa/568x320-long-crown.png"
+    }
+  ],
+  "errors": [],
+  "pass": true
+}

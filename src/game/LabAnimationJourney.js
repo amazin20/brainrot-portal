@@ -9,7 +9,7 @@ const assert = (value, message) => { if (!value) throw Error(message); };
 export async function runAnimationJourney(game, { fps = 60, carrying = false,
   onMilestone = () => {}, onFrame = () => {} } = {}) {
   assert(game.levelIndex === 8, 'Animation inspection belongs to room 9');
-  assert([30, 60, 120, 144].includes(fps), 'Unsupported animation sample rate');
+  assert([15, 20, 30, 60, 120, 144].includes(fps), 'Unsupported animation sample rate');
   let motion;
   const route = await runV8Journey(game, { onMilestone, scenario: d => {
     const { walk, pickup, wait, stop, worldMove, frame, mark } = d;

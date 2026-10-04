@@ -26,6 +26,7 @@ import { LabTutorial } from './LabTutorial.js';
 import { buildLabCampaignLevel, CAMPAIGN, campaignSpec } from './LabCampaignLevels.js';
 import { FOUNDATION_INDICES } from './LabFoundationEdition.js';
 import { disposeLabLevel } from './LabLevelLifecycle.js';
+import { dressLabLighting } from './LabSceneLighting.js';
 
 const UP = new THREE.Vector3(0, 1, 0);
 const PLAYER_HEIGHT = 2.4;
@@ -291,6 +292,7 @@ export class LabGame {
     this.portalActors.register(this.cargo.group, { radius: .75, centerOffset: [0, 0, 0] });
     this.portalShots = new LabPortalShots(this);
     this.createOverlay(); this.resetRun(false);
+    dressLabLighting(this);
     this.levelRoots = this.scene.children.filter(root => !previousRoots.has(root));
   }
 
@@ -367,6 +369,7 @@ export class LabGame {
   }
 
   disposeControls() {
+    this.artRadiance?.dispose(); this.artRadiance = null;
     this.viewportObserver?.disconnect();
     if (this.viewportResize) removeEventListener('resize', this.viewportResize);
     this.resetInput();
@@ -1386,6 +1389,8 @@ export class LabGame {
   }
 
   updateVisuals(dt, alpha = 1, cameraDt = dt) {
+    dt = Number.isFinite(dt) ? THREE.MathUtils.clamp(dt, 0, .1) : 0;
+    cameraDt = Number.isFinite(cameraDt) ? THREE.MathUtils.clamp(cameraDt, 0, .1) : 0;
     this.audio?.flight?.(this.playerVelocity.length(),this.playerGrounded||this.state!=='playing'||this.externalBlocked);
     const active = this.state === 'playing' || this.state === 'won' || this.state === 'ready';
     const visualDt = active ? dt : 0;
@@ -1464,6 +1469,7 @@ export class LabGame {
     // The light and shadow frustum stay fixed across the complete level.
     this.portals.update(this.visualTime); this.portalShots?.render(blend);
     this.velocityCompanion?.renderUpdate(this.visualTime);
+    this.labLighting?.update();
     const nearbyAction = this.velocityCompanion?.prompt || this.firstLevel?.nearbyInteraction?.();
     this.prompt.textContent = (typeof nearbyAction === 'string' ? nearbyAction : nearbyAction?.label) || (this.nearbyTerminal() ? 'E — включить мост' : this.heldCube ? 'E — отпустить брейнрота' : this.playerPosition.distanceTo(this.cargo.position) < 2.25 ? 'E — взять брейнрота' : '');
     if (this.velocityCompanion?.connected && !nearbyAction) this.prompt.textContent = '';

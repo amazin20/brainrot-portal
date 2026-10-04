@@ -10,7 +10,7 @@ test('ordinary player and held-friend jump routes preserve physics across render
   await game.selectLevel(8, false);
   for (const carrying of [false, true]) {
     let reference;
-    for (const fps of [30, 60, 120, 144]) {
+    for (const fps of [15, 20, 30, 60, 120, 144]) {
       const { route, motion } = await runAnimationJourney(game, { carrying, fps });
       assert.ok(route.pass && route.resets === 0 && route.respawns === 0);
       assert.equal(motion.physicsSteps, 384);

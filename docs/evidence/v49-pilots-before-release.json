@@ -1,0 +1,314 @@
+{
+  "runtime": "Chromium software WebGL; hardware performance not tested",
+  "rows": [
+    {
+      "level": 1,
+      "errors": [],
+      "views": [
+        {
+          "kind": "start",
+          "capture": {
+            "ok": true,
+            "method": "actual WebGL2 pixel-pack buffer",
+            "includesHTML": false,
+            "file": "1-start.jpg",
+            "pixels": {
+              "width": 960,
+              "height": 540,
+              "colors": 1091,
+              "maxChannelStd": 53.02307485324975
+            },
+            "renderer": {
+              "width": 960,
+              "height": 540,
+              "calls": 71,
+              "triangles": 206438
+            },
+            "frame": {
+              "levelIndex": 0,
+              "state": "playing",
+              "elapsed": 250.0000000000001,
+              "player": [
+                0,
+                0,
+                12
+              ],
+              "cargo": [
+                -4.00000004187978,
+                0.38933222152660285,
+                9.000000108297208
+              ],
+              "camera": [
+                1.0363717020071526,
+                1.7045275915195568,
+                16.79633644714937
+              ],
+              "cargoUUID": "fe5c37f5-83f1-4906-aa15-5f8d6346ad46",
+              "cargoBodyId": 77
+            },
+            "issues": []
+          }
+        },
+        {
+          "kind": "overview",
+          "capture": {
+            "ok": true,
+            "method": "actual WebGL2 pixel-pack buffer",
+            "includesHTML": false,
+            "file": "1-overview.jpg",
+            "pixels": {
+              "width": 960,
+              "height": 540,
+              "colors": 1232,
+              "maxChannelStd": 55.11820779419752
+            },
+            "renderer": {
+              "width": 960,
+              "height": 540,
+              "calls": 78,
+              "triangles": 207042
+            },
+            "frame": {
+              "levelIndex": 0,
+              "state": "playing",
+              "elapsed": 250.0000000000001,
+              "player": [
+                0,
+                0,
+                12
+              ],
+              "cargo": [
+                -4.00000004187978,
+                0.38933222152660285,
+                9.000000108297208
+              ],
+              "camera": [
+                15,
+                10,
+                14
+              ],
+              "cargoUUID": "fe5c37f5-83f1-4906-aa15-5f8d6346ad46",
+              "cargoBodyId": 77
+            },
+            "issues": []
+          }
+        }
+      ],
+      "metrics": {
+        "calls": 78,
+        "triangles": 207042,
+        "textures": 26,
+        "geometries": 150,
+        "colliders": 77,
+        "panels": 3,
+        "lighting": null
+      }
+    },
+    {
+      "level": 20,
+      "errors": [],
+      "views": [
+        {
+          "kind": "start",
+          "capture": {
+            "ok": true,
+            "method": "actual WebGL2 pixel-pack buffer",
+            "includesHTML": false,
+            "file": "20-start.jpg",
+            "pixels": {
+              "width": 960,
+              "height": 540,
+              "colors": 777,
+              "maxChannelStd": 47.26189113752643
+            },
+            "renderer": {
+              "width": 960,
+              "height": 540,
+              "calls": 57,
+              "triangles": 206602
+            },
+            "frame": {
+              "levelIndex": 19,
+              "state": "playing",
+              "elapsed": 250.0000000000001,
+              "player": [
+                3,
+                0,
+                23
+              ],
+              "cargo": [
+                -3.00000004187978,
+                0.38933222152660285,
+                23.000000108297204
+              ],
+              "camera": [
+                4.254510894127102,
+                1.9014812193421022,
+                28.795416551985944
+              ],
+              "cargoUUID": "581c0e85-6ad7-4d5b-ad15-c10147b633ee",
+              "cargoBodyId": 144
+            },
+            "issues": []
+          }
+        },
+        {
+          "kind": "overview",
+          "capture": {
+            "ok": true,
+            "method": "actual WebGL2 pixel-pack buffer",
+            "includesHTML": false,
+            "file": "20-overview.jpg",
+            "pixels": {
+              "width": 960,
+              "height": 540,
+              "colors": 930,
+              "maxChannelStd": 61.672948599410695
+            },
+            "renderer": {
+              "width": 960,
+              "height": 540,
+              "calls": 56,
+              "triangles": 181302
+            },
+            "frame": {
+              "levelIndex": 19,
+              "state": "playing",
+              "elapsed": 250.0000000000001,
+              "player": [
+                3,
+                0,
+                23
+              ],
+              "cargo": [
+                -3.00000004187978,
+                0.38933222152660285,
+                23.000000108297204
+              ],
+              "camera": [
+                -20,
+                10,
+                24
+              ],
+              "cargoUUID": "581c0e85-6ad7-4d5b-ad15-c10147b633ee",
+              "cargoBodyId": 144
+            },
+            "issues": []
+          }
+        }
+      ],
+      "metrics": {
+        "calls": 56,
+        "triangles": 181302,
+        "textures": 27,
+        "geometries": 141,
+        "colliders": 143,
+        "panels": 2,
+        "lighting": null
+      }
+    },
+    {
+      "level": 41,
+      "errors": [],
+      "views": [
+        {
+          "kind": "start",
+          "capture": {
+            "ok": true,
+            "method": "actual WebGL2 pixel-pack buffer",
+            "includesHTML": false,
+            "file": "41-start.jpg",
+            "pixels": {
+              "width": 960,
+              "height": 540,
+              "colors": 1157,
+              "maxChannelStd": 66.68065960862798
+            },
+            "renderer": {
+              "width": 960,
+              "height": 540,
+              "calls": 314,
+              "triangles": 222142
+            },
+            "frame": {
+              "levelIndex": 40,
+              "state": "playing",
+              "elapsed": 250.0000000000001,
+              "player": [
+                0,
+                0,
+                54
+              ],
+              "cargo": [
+                1.99999986969319,
+                0.38991075418435306,
+                53.99999888625953
+              ],
+              "camera": [
+                1.3892489738943727,
+                2.092153855287108,
+                60.4036996150839
+              ],
+              "cargoUUID": "44fdaa25-c065-4290-bed2-acc932b44759",
+              "cargoBodyId": 1558
+            },
+            "issues": []
+          }
+        },
+        {
+          "kind": "overview",
+          "capture": {
+            "ok": true,
+            "method": "actual WebGL2 pixel-pack buffer",
+            "includesHTML": false,
+            "file": "41-overview.jpg",
+            "pixels": {
+              "width": 960,
+              "height": 540,
+              "colors": 1474,
+              "maxChannelStd": 52.89048703234087
+            },
+            "renderer": {
+              "width": 960,
+              "height": 540,
+              "calls": 303,
+              "triangles": 192556
+            },
+            "frame": {
+              "levelIndex": 40,
+              "state": "playing",
+              "elapsed": 250.0000000000001,
+              "player": [
+                0,
+                0,
+                54
+              ],
+              "cargo": [
+                1.99999986969319,
+                0.38991075418435306,
+                53.99999888625953
+              ],
+              "camera": [
+                23,
+                31,
+                33
+              ],
+              "cargoUUID": "44fdaa25-c065-4290-bed2-acc932b44759",
+              "cargoBodyId": 1558
+            },
+            "issues": []
+          }
+        }
+      ],
+      "metrics": {
+        "calls": 303,
+        "triangles": 192556,
+        "textures": 49,
+        "geometries": 153,
+        "colliders": 1558,
+        "panels": 14,
+        "lighting": null
+      }
+    }
+  ]
+}

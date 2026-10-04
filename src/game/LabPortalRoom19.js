@@ -2,12 +2,26 @@ import {Workshop,V,glass} from './LabWorkshopKit.js';
 import {opticalLift} from './LabRoom13Mechanics.js';
 import {cargoLoadsPlate} from './LabPlateContact.js';
 import {createRoom19Drive,createRoom19Optics} from './LabRoom19Mechanics.js';
-export const ROOM19_SPEC={id:'glass-air-inertia',title:'Свет проходит, воздух — нет',concept:'Свет пересекает герметичную камеру, воздух обходит её, а инерция освобождает порталы для живого груза',description:'Одна камера, два пути передачи. Сохрани то, что продолжает двигаться после разрыва связи.',hints:['Стекло пропускает луч. Поток воздуха упирается в него.','Поднятая кабина — ещё не постоянная опора. Обойди верхний машинный зал и посмотри на обратные стороны оборудования.','Маховик хранит движение. Его можно раскрутить, освободить порталы для друга и подключить тележку муфтой.'],accent:0xd0bb84,assets:[1,2,11,19,22,23,24,31,35]};
+export const ROOM19_SPEC={id:'glass-air-inertia',title:'Свет проходит, воздух — нет',concept:'Свет пересекает герметичную камеру, воздух обходит её, а инерция освобождает порталы для живого груза',description:'Одна камера, два пути передачи. Сохрани то, что продолжает двигаться после разрыва связи.',hints:['Стекло пропускает луч. Поток воздуха упирается в него. Через прозрачную крышу можно установить проход на белом полу камеры.','Поднятая кабина — ещё не постоянная опора. Обойди верхний машинный зал и посмотри на обратные стороны оборудования.','Маховик хранит движение. Его можно раскрутить, освободить порталы для друга и подключить тележку муфтой.'],accent:0xd0bb84,assets:[1,2,11,19,22,23,24,31,35]};
 export function buildRoom19(game,index=18){
  const k=new Workshop(game,ROOM19_SPEC,index),w=k.world;k.shell({minX:-20,maxX:20,minZ:-18,maxZ:18},20);
  const deck=(name,x0,x1,z0,z1,y)=>{const f=w.floor(x0,x1,z0,z1,y,{name});w.box([(x0+x1)/2,y-.28,(z0+z1)/2],[x1-x0,.32,z1-z0],w.materials.trim);return f;};
  // Every pane is a normal solid collider with optical transmission only.
  const panes=[glass(w,[-4,3.0,0],[.22,6.0,8]),glass(w,[4,3.0,0],[.22,6.0,8]),glass(w,[0,3.0,-4],[8,6.0,.22]),glass(w,[0,3.0,4],[8,6.0,.22])];
+ // A complete framed inspection pane closes the previously walkable top.
+ // This roof glazing passes light and portal charges, so the existing upper
+ // sightline still reaches the white floor. It remains in physical and hand/
+ // camera blockers; the side panes keep their original charge-blocking rule.
+ const inspectionRoof=glass(w,[0,6.11,0],[8.22,.22,8.22]);
+ inspectionRoof.name='Solid charge-transmitting inspection roof';
+ inspectionRoof.material.name='Charge-transmitting inspection glazing';
+ inspectionRoof.material.opacity=.14;inspectionRoof.material.roughness=.16;
+ inspectionRoof.userData.portalChargeTransparent=true;
+ const roofAimIndex=game.aimBlockers.indexOf(inspectionRoof);
+ if(roofAimIndex!==-1)game.aimBlockers.splice(roofAimIndex,1);
+ panes.push(inspectionRoof);
+ for(const x of [-4,4])w.box([x,6.11,0],[.16,.24,8.22],w.materials.trim);
+ for(const z of [-4,4])w.box([0,6.11,z],[8.22,.24,.16],w.materials.trim);
  for(const x of [-4,4])for(const z of [-4,4])w.box([x,3.0,z],[.16,6.0,.16],w.materials.trim);
  const cargoFloor=k.panel('sealed-cradle',[0,.025,0],[0,1,0],5.6,5.6);cargoFloor.collider.kinematic=false;
  k.panel('service-intake',[-10,2.3,9],[-1,0,0],5.6,4.6);
@@ -35,7 +49,7 @@ export function buildRoom19(game,index=18){
  w.box([16,14,9],[8,12,.3],w.materials.wall);
  // This normal gearbox changes force transmission, never a completion flag.
  const drive=createRoom19Drive(k,fan,ferry);
- const level=k.finish([-15,0,15],[0,.55,0],[16,8,13],{workshop:k,portalPuzzle:true,cargoOnAnyPad:()=>cargoLoadsPlate(game.cargo,game.heldCube,cargoFloor.getFrame())||ferry.loaded(),playerAcceleration:(p,v)=>fan.acceleration(p.clone().add(V(0,1.2,0)),v)});
+ const level=k.finish([-15,0,15],[0,.55,0],[16,8,13],{workshop:k,portalPuzzle:true,inspectionRoof,cargoOnAnyPad:()=>cargoLoadsPlate(game.cargo,game.heldCube,cargoFloor.getFrame())||ferry.loaded(),playerAcceleration:(p,v)=>fan.acceleration(p.clone().add(V(0,1.2,0)),v)});
  level.mechanismArt={projectors:[{position:light.origin.toArray(),direction:[1,0,0],radius:.38}],turbines:[fan],liftSurfaces:['glass-observer']};
  level.puzzleGeometry={footprint:1440,orders:['air-first','cargo-first'],glass:panes,portalRoles:{'service-intake':'shared optical and pneumatic source','optical-window':'light crosses the sealed cargo chamber','sealed-cradle':'independent retrieval through the only opening below the cargo','open-air-duct':'air route around impermeable glass','ferry-receiver':'moving cargo receiver after releasing the drive source'},deductions:['glass separates optical transmission from air transmission','the powered lift can be left on a permanent ledge','the upper outlet is reached from its reverse side','flywheel angular momentum persists without the portal feed','the same pair must retrieve the original cargo','a clutch applies actual traveller-dependent drive load','the moving receiver belongs to the ferry, not to the dock','cargo-first is possible by returning around the bulkhead to restore the original intake']};
  return level;

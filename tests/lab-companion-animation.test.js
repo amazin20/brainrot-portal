@@ -142,7 +142,7 @@ test('air motion follows velocity, then landing compresses and springs back with
   assert.equal(animator.state, 'landing');
 });
 
-test('same timed changes and cue triggers produce equivalent poses at 30, 60 and 144 Hz', () => {
+test('same timed changes and cue triggers produce equivalent poses at 15–144 Hz', () => {
   function run(hz) {
     const { animator, visual } = makeAnimator();
     const samples = [];
@@ -158,7 +158,7 @@ test('same timed changes and cue triggers produce equivalent poses at 30, 60 and
     return samples;
   }
   const reference = run(60);
-  for (const hz of [30, 144]) {
+  for (const hz of [15, 20, 30, 120, 144]) {
     for (const [i, sample] of run(hz).entries()) {
       const expected = reference[i];
       assert.ok(sample.position.distanceTo(expected.position) < 1e-10, `${hz} Hz position differed at sample ${i}`);

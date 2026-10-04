@@ -24,7 +24,9 @@ function addArchitecturalCladding(level,root){
   const w=level.world,g=level.game,profile=getChapterVisualProfile(level),materials=architecturalMaterials(profile?.edge??level.spec?.accent);
   if(profile){materials.frame.color.setHex(profile.trim);materials.recess.color.setHex(profile.trim);materials.coat.roughness=.62;materials.coat.metalness=.035;}
   const batch=new ArchitecturalBatch(root,materials);
-  const singleSkin=level.index>=23;
+  // All factory cassettes now use the same folded single surface. The two
+  // former skins were only millimetres apart across metre-sized fields.
+  const singleSkin=true;
   if(singleSkin){
     batch.geometry.dispose();
     batch.geometry=architecturalCassetteGeometry({corner:.006,inset:.004});
@@ -152,7 +154,7 @@ function finishMaterials(level){
     mat.bumpMap=null;mat.bumpScale=0;mat.roughnessMap=null;mat.needsUpdate=true;
   };
   finish(w.materials.wall,palette?.wall??0x65767c,.74,.08);
-  finish(w.materials.floor,palette?.low??0x7b898d,.72,.10);
+  finish(w.materials.floor,palette?.low??0x7b898d,.88,.025);
   finish(w.materials.trim,palette?.trim??0x4b6068,.66,.12);
   if(m){
     finish(m.graphite,palette?.wall??0x77868c,.66,.12);finish(m.steel,palette?.low??0x89979b,.48,.38);finish(m.blackSteel,palette?.trim??0x42555f,.62,.22);

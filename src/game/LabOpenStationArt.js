@@ -10,10 +10,11 @@ const V=(...v)=>new THREE.Vector3(...v),Q=()=>new THREE.Quaternion();
 export function applyDeckFinish(k){
  const n=256,data=new Uint8Array(n*n*4);
  for(let y=0;y<n;y++)for(let x=0;x<n;x++){
-  const edge=Math.min(x,y,n-1-x,n-1-y),joint=edge<1?0.53:edge<2?.78:1;
-  const grain=.006*Math.sin(x*2.1+y*3.7)+.004*Math.cos(x*.73-y*1.2);
-  const stamp=x>19&&x<63&&y>19&&y<23||x>19&&x<23&&y>19&&y<43;
-  const t=Math.max(0,Math.min(1,(stamp?.75:.90+grain)*joint)),i=4*(y*n+x);
+  // A broad, quiet mineral panel joint survives minification. The former
+  // one-pixel grid and sinusoidal grain changed into a striped moiré at speed.
+  const edge=Math.min(x,y,n-1-x,n-1-y),joint=edge<2?.70:edge<4?.86:1;
+  const stamp=x>23&&x<54&&y>23&&y<28||x>23&&x<28&&y>23&&y<46;
+  const t=(stamp?.78:.96)*joint,i=4*(y*n+x);
   data[i]=Math.round(255*t);data[i+1]=Math.round(255*t);data[i+2]=Math.round(255*t);data[i+3]=255;
  }
  const map=new THREE.DataTexture(data,n,n);map.colorSpace=THREE.SRGBColorSpace;map.wrapS=map.wrapT=THREE.RepeatWrapping;

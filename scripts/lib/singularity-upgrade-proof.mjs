@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 
-export const UPGRADE_VERSION='v48-folded-castle';
+export const UPGRADE_VERSION='v49-manufactured-light';
 export const CAPTURE_FRAME_RATES=Object.freeze([4,6,12]);
 export function captureFormat({fps=12,width=960,height=540}={}){
  assert.ok(CAPTURE_FRAME_RATES.includes(fps),'Capture FPS must be 4, 6 or 12');

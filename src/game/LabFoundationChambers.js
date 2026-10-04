@@ -154,8 +154,10 @@ export function buildFoundation2(g,index=1){
  const k=new ResearchChamber(g,FOUNDATION_SPECS[1],index,'current',{minX:-27,maxX:24,minZ:-20,maxZ:20},-3,17);
  k.deck('Projector observation deck',-22,-10,2,18,3);
  k.deck('Service-side bridge approach',-14,-6,-12,-4,3);
- k.deck('Service-side link',-10,-2,-4,4,3);
- k.deck('Receiving laboratory deck',4,22,2,14,3);
+ // Both dry gaps exceed a full unladen sprint jump, including the late
+ // coyote launch. Only the live projected span reaches the receiving deck.
+ k.deck('Service-side link',-14,-6,-4,4,3);
+ k.deck('Receiving laboratory deck',4,22,5,17,3);
  // This permanent island supports both travellers while they repurpose the
  // same projected bridge. The direct projected crossing stays a valid route.
  k.deck('Solid bridge-switching island',4,12,-13,-5,3);

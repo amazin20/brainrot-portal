@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import {architecturalCassetteGeometry} from './LabArchitecturalModels.js';
+import {architecturalCassetteGeometry,clipArchitecturalRect} from './LabArchitecturalModels.js';
 import {V} from './LabSingularityKit.js';
 import {applyCastleMaterials} from './LabCastleMaterials.js';
 import {buildCastleMechanismDetails} from './LabCastleMechanismDetails.js';
@@ -7,25 +7,58 @@ import {buildCastleMechanismDetails} from './LabCastleMechanismDetails.js';
 /** Art belongs to the already physical castle envelope. Large fittings occupy
  * real solids; only recessed seams and small fasteners are visual-only. */
 export function buildSingularityArt({game,k,rooms,machines,edges,solved}){
- const m=k.m,geo=k.geo(architecturalCassetteGeometry({corner:.028,inset:.018}));geo.userData.architecturalBatch=true;
- const coat=k.mat(0xe0dccc,.73,.05);coat.vertexColors=true;
- const dusk=k.mat(0x35424e,.8,.13),alloy=k.mat(0xa6a8a3,.57,.37),maroon=k.mat(0x674353,.79,.1);
- // Warm mineral walls and satin faces contrast with cool shaded steel. Large
- // quiet faces retain the hierarchy; signal colour is reserved for controls.
- m.wall.color.setHex(0x78838b);m.floor.color.setHex(0xc9c8b8);m.floor.roughness=.87;m.dark.color.setHex(0x27313d);
- m.steel.color.setHex(0x53616b);m.steel.roughness=.65;m.copper.color.setHex(0xb58b61);m.copper.roughness=.57;
+ const m=k.m,geo=k.geo(architecturalCassetteGeometry({corner:.065,inset:.024}));geo.userData.architecturalBatch=true;
+ const coat=k.mat(0xeee8d9,.73,.05);coat.vertexColors=true;
+ const dusk=k.mat(0x354f63,.78,.13),alloy=k.mat(0xb9c3c5,.53,.35),maroon=k.mat(0x9a6277,.75,.1);
+ // Matte mineral shells, cedar structure and satin machinery have distinct
+ // values even in low quality. Saturated state lamps retain their meaning.
+ m.wall.color.setHex(0xbdc7cc);m.floor.color.setHex(0xe5e0d3);m.floor.roughness=.79;m.dark.color.setHex(0x253f54);
+ m.steel.color.setHex(0x748b98);m.steel.roughness=.61;m.copper.color.setHex(0xd4aa69);m.copper.roughness=.53;
+ m.ivory.color.setHex(0xe7e9df);m.ivory.roughness=.70;m.ivory.metalness=.08;
+ const finishes=applyCastleMaterials({game,k,rooms});
  const accents={freight:m.copper,sluice:m.mint,optics:m.cyan,hoist:m.copper,archive:maroon,flywheel:m.copper,magnet:m.violet,migrant:m.mint,pendulum:m.rose,inertia:m.cyan,crown:m.copper};
  const inset=(p,size,material=coat)=>k.mesh(geo,material,p,size);
+ // Side-wall relief is clipped around actual ceramic addresses. All shapes
+ // are a shallow skin on the existing wall; nothing enters collision or aim
+ // registries, and no added floor can create a route around a puzzle.
+ const portalFrames=k.panels.map(mesh=>{
+  const f=mesh.userData.portalFrame?.();
+  if(f)return{...f};
+  const q=mesh.quaternion;
+  return{center:mesh.userData.center,normal:mesh.userData.normal,right:V(1,0,0).applyQuaternion(q),up:V(0,1,0).applyQuaternion(q),halfWidth:mesh.userData.portalBounds?.halfWidth??mesh.scale.x/2,halfHeight:mesh.userData.portalBounds?.halfHeight??mesh.scale.y/2};
+ }).filter(f=>f.center&&f.normal);
+ function wallFace(r,side,offset,height,span,centreY,material){
+  const [x,y,z]=r.def.at,frame={center:V(x+side*(r.def.w/2-.19),y,z),right:V(0,0,side),up:V(0,1,0),normal:V(-side,0,0)};
+  const x0=offset*side-span/2,x1=offset*side+span/2;
+  const pieces=clipArchitecturalRect({x0,x1,y0:centreY-height/2,y1:centreY+height/2},frame,portalFrames);
+  for(const p of pieces){
+   const mesh=inset(frame.center.clone().addScaledVector(frame.right,(p.x0+p.x1)/2).addScaledVector(frame.up,(p.y0+p.y1)/2).toArray(),[p.x1-p.x0,p.y1-p.y0,.10],material);
+   mesh.quaternion.setFromRotationMatrix(new THREE.Matrix4().makeBasis(frame.right,frame.up,frame.normal));
+   mesh.name='Castle attached wall relief / '+r.def.id;
+  }
+ }
+ const profiles={
+  freight:[[-.31,4.8,4.4,3.65],[0,4.8,4.4,3.65],[.31,4.8,4.4,3.65]],
+  sluice:[[-.28,9,2.5,4.4],[.28,9,2.5,4.4]],
+  optics:[[-.27,12,1.55,3.1],[.27,12,1.55,4.6]],
+  hoist:[[-.33,5.8,4.6,3.65],[.33,5.8,4.6,3.65]],
+  archive:[[-.32,4.7,4.8,3.5],[-.10,3.1,4.0,3.1],[.12,3.1,4.0,3.1],[.34,4.7,4.8,3.5]],
+  flywheel:[[-.25,10,3.4,3.65],[.25,10,3.4,3.65]],
+  magnet:[[-.30,6.2,3.7,3.85],[0,3.5,4.5,3.45],[.30,6.2,3.7,3.85]],
+  migrant:[[-.28,11,1.6,3.2],[.28,11,1.6,3.2],[-.28,11,1.1,5],[.28,11,1.1,5]],
+  pendulum:[[-.30,5.2,4.8,3.5],[.30,5.2,4.8,3.5]],
+  inertia:[[-.30,8.8,1.3,2.8],[.30,8.8,1.3,4.5]],
+  crown:[[-.28,7.2,4.6,3.7],[.28,7.2,4.6,3.7]],
+ };
  for(const r of rooms.values()){
-  const{def,b}=r,[x,y,z]=def.at,accent=accents[def.id];
+  const{def,b}=r,[x,y,z]=def.at,accent=finishes.wingAccents.get(def.id)??accents[def.id],face=finishes.wingFaces.get(def.id)??coat;
   // Broad relief faces have a real bevel and a dark recess behind them. They
   // sit above walking height and do not cover a portal or alter its material.
   for(const side of [-1,1]){
-   for(const t of [-.31,.31]){
-    inset([x+side*(def.w/2-.19),y+4.4,z+t*def.d],[.10,3.45,Math.min(8,def.d*.22)]);
-    k.decor([x+side*(def.w/2-.10),y+1.1,z+t*def.d],[.09,.20,Math.min(8,def.d*.22)],accent);
+   for(const [offset,span,height,centreY]of profiles[def.id]??profiles.freight){
+    wallFace(r,side,offset*def.d,height,span,centreY,face);
    }
-   inset([x+side*(def.w/2-.2),y+def.h-1.3,z],[.12,1.6,def.d-2.2],dusk);
+   wallFace(r,side,0,1.6,def.d-2.2,def.h-1.3,dusk);
   }
   // Lintel shoes and seam keep the entrance visibly attached to both piers.
   const isX=def.entry==='e'||def.entry==='w';
@@ -40,7 +73,8 @@ export function buildSingularityArt({game,k,rooms,machines,edges,solved}){
   }
   // Each wing uses a different large structural silhouette rather than a new
   // collection of tiny unrelated props. All lie in existing shell envelopes.
-  if(def.id==='archive')for(let i=0;i<4;i++)inset([x-def.w/2+.15,y+3,z+(i-1.5)*5],[.12,4.8,3.8],maroon);
+  // The archive's tall leaf pattern is already carried by its wall relief;
+  // avoid a second layer of coplanar panels over the same large face.
   if(def.id==='hoist')for(const dx of [-4,4])for(const dy of [4,10,16,22])inset([x+dx,y+dy,z],[.66,.65,.70],alloy);
   if(def.id==='sluice')for(const dx of [-14,0,14])k.decor([x+dx,y+11,z-10],[1.6,.3,1.6],dusk);
   if(def.id==='inertia')for(const dy of [2,6,10])inset([x-def.w/2+.15,y+dy,z],[.11,.45,def.d*.72],accent);
@@ -71,7 +105,6 @@ export function buildSingularityArt({game,k,rooms,machines,edges,solved}){
   k.decor([5,y-.35,-8],[11,.06,.06],m.lamp);
  }
  const mechanisms=buildCastleMechanismDetails({game,k,rooms,machines});
- applyCastleMaterials({game,k,rooms});
  const lamps=new Map();for(const r of rooms.values()){const lamp=k.box([r.door[0],r.door[1]+4.6,r.door[2]],[.4,.10,.12],m.idle,{solid:false,dynamic:true});lamps.set(r.def.id,lamp);}
- return{update(){mechanisms.update();for(const[id,mesh]of lamps)mesh.material=solved.has(id)?m.live:m.idle;},dispose(){mechanisms.dispose();},profile:'folded-castle-five-storeys',geometrySource:'authored-bevelled-cassettes-and-physical-ribs'};
+ return{update(){mechanisms.update();for(const[id,mesh]of lamps)mesh.material=solved.has(id)?m.live:m.idle;},dispose(){mechanisms.dispose();},profile:'folded-castle-five-storeys',geometrySource:'authored-bevelled-cassettes-and-physical-ribs',artDirection:'eleven-wing-mineral-cedar-and-satin',finishes};
 }
