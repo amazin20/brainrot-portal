@@ -1,0 +1,74 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import path from 'node:path';
+import {spawn} from 'node:child_process';
+import puppeteer from 'puppeteer-core';
+const out=path.resolve(process.env.OUT_DIR||'qa/campaign-menu');fs.mkdirSync(out,{recursive:true});
+const port=process.env.PORT||'4192',server=spawn(process.execPath,['node_modules/vite/bin/vite.js',...(process.env.PRODUCTION==='1'?['preview']:[]),'--host','127.0.0.1','--port',port],{stdio:'ignore'});
+let browser;const report={pass:false,checks:[],errors:[],viewports:[]};
+try{
+ for(let n=0;n<200;n++){try{if((await fetch(`http://127.0.0.1:${port}`)).ok)break;}catch{}await new Promise(r=>setTimeout(r,50));}
+ browser=await puppeteer.launch({executablePath:process.env.CHROME_PATH,headless:true,protocolTimeout:180000,args:['--no-sandbox','--disable-dev-shm-usage','--use-angle=swiftshader','--enable-unsafe-swiftshader']});
+ const page=await browser.newPage();await page.evaluateOnNewDocument(()=>localStorage.setItem('brainrot-foundation-v1:brainrot-portal.preferences.v24',JSON.stringify({quality:'low',muted:true})));page.setDefaultTimeout(180000);page.on('pageerror',e=>report.errors.push(e.message));
+ if(process.env.TRACE_FOCUS==='1')await page.evaluateOnNewDocument(()=>{window.__qaFocus=[];const native=HTMLElement.prototype.focus;HTMLElement.prototype.focus=function(...args){const before=document.activeElement?.id,visibility=getComputedStyle(this).visibility;const result=native.apply(this,args);window.__qaFocus.push({target:this.id,before,after:document.activeElement?.id,visibility,inert:this.closest('[inert]')?.id,stack:new Error().stack?.slice(0,250)});return result;};document.addEventListener('focusout',event=>window.__qaFocus.push({out:event.target?.id,related:event.relatedTarget?.id}));});
+ await page.setViewport({width:1440,height:900,deviceScaleFactor:1});
+ await page.goto(`http://127.0.0.1:${port}/?edition=foundation&level=1&debug=1`,{waitUntil:'domcontentloaded'});
+ await page.waitForFunction(()=>window.__NESI_DEMO_GAME__?.state==='ready');
+ await page.evaluate(()=>window.__NESI_DEMO_GAME__.renderer.setAnimationLoop(null));
+ console.log('Menu ready');
+ await page.waitForFunction(()=>getComputedStyle(document.querySelector('#start-screen')).opacity==='1');
+ assert.equal(await page.$eval('#level-select',e=>e.hidden),true);
+ assert.equal(await page.$eval('.sector-nodes',e=>e.children.length),10);
+ await page.click('.room-node[data-level="4"]');
+ assert.equal(await page.$eval('#level-select',e=>e.value),'3');
+ assert.match(await page.$eval('#play-button',e=>e.textContent),/4/);
+ assert.equal(await page.$eval('.room-node[data-level="4"]',e=>e.getAttribute('aria-pressed')),'true');
+ await page.focus('.room-node[data-level="5"]');await page.keyboard.press('Enter');
+ assert.equal(await page.evaluate(()=>document.activeElement?.dataset.level),'5','Keyboard selection must retain the selected room focus');
+ await page.focus('.sector-tabs [data-sector="0"]');await page.keyboard.press('End');
+ assert.equal(await page.evaluate(()=>document.activeElement?.dataset.sector),'5','End should select and focus the final sector');
+ await page.keyboard.press('Home');assert.equal(await page.evaluate(()=>document.activeElement?.dataset.sector),'0');
+ report.checks.push('Enter retains room focus; Home/End select and focus sector tabs');
+ report.checks.push('Sector room nodes update selected title, native value and explicit Play action');
+ await page.click('.sector-tabs [data-sector="4"]');await page.click('.room-node[data-level="41"]');
+ assert.equal(await page.$eval('#tower-start-note',e=>e.hidden),false);
+ if(await page.$('.sector-tabs [data-sector="5"]')){await page.click('.sector-tabs [data-sector="5"]');await page.click('.room-node[data-level="51"]');assert.equal(await page.$eval('#level-select',e=>e.value),'50');report.checks.push('New chapter exposes room 51 and direct selection');}
+ for(const [width,height]of (process.env.MENU_FOCUS_ONLY==='1'?[]:[[1440,900],[1024,768],[360,800],[390,844],[412,915],[844,390]])){
+   const mobile=width<500||height<500;
+   await page.setViewport({width,height,deviceScaleFactor:1,isMobile:mobile,hasTouch:mobile});
+   await page.waitForFunction(()=>window.__NESI_DEMO_GAME__?.state==='ready'&&getComputedStyle(document.querySelector('#start-screen')).opacity==='1');
+   await page.evaluate(()=>window.__NESI_DEMO_GAME__.renderer.setAnimationLoop(null));
+   console.log('Viewport ready',width,height);
+   await page.evaluate(async()=>{document.querySelector('#start-screen').scrollTo(0,0);await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));});
+   await new Promise(r=>setTimeout(r,350));
+   await page.screenshot({path:path.join(out,`menu-${width}x${height}.png`)});
+   const data=await page.evaluate(()=>{const m=document.querySelector('#start-screen'),b=document.querySelector('#play-button');return{scrollWidth:m.scrollWidth,width:m.clientWidth,height:m.clientHeight,scrollHeight:m.scrollHeight,play:b.getBoundingClientRect().toJSON()};});
+   assert.ok(data.scrollWidth<=data.width+2,'Menu has horizontal overflow');
+   await page.$eval('.sector-nodes .room-node:last-child',e=>e.scrollIntoView({block:'center'}));
+   await page.evaluate(()=>new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r))));
+   assert.ok(await page.$eval('.sector-nodes .room-node:last-child',e=>{const r=e.getBoundingClientRect();return e.contains(document.elementFromPoint(r.x+r.width/2,r.y+r.height/2));}),'Last room node not reachable');
+   await page.$eval('#play-button',e=>e.scrollIntoView({block:'center'}));
+   await page.evaluate(()=>new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r))));
+   const reach=await page.$eval('#play-button',e=>{const r=e.getBoundingClientRect(),hit=document.elementFromPoint(r.x+r.width/2,r.y+r.height/2);return{pass:e.contains(hit),rect:r.toJSON(),hit:hit?.id||hit?.className,inert:e.closest('[inert]')?.id};});
+   report.viewports.push({width,height,...data,reach,pass:reach.pass});
+   assert.ok(reach.pass,`Play not reachable: ${JSON.stringify(reach)}`);
+ }
+ await page.setViewport({width:1024,height:768});
+ await page.waitForFunction(()=>window.__NESI_DEMO_GAME__?.state==='ready'&&getComputedStyle(document.querySelector('#start-screen')).opacity==='1');
+ await page.evaluate(()=>window.__NESI_DEMO_GAME__.renderer.setAnimationLoop(null));
+ await page.select('#level-select','0');
+ await page.$eval('#play-button',e=>e.scrollIntoView({block:'center'}));await page.click('#play-button');
+ await page.waitForFunction(()=>window.__NESI_DEMO_GAME__?.state==='playing');
+ await page.evaluate(()=>window.__NESI_DEMO_GAME__.renderer.setAnimationLoop(null));
+ assert.equal(await page.$eval('#tower-run-clock',e=>e.hidden),true);
+ await page.evaluate(()=>window.__NESI_DEMO_GAME__.togglePause(true));
+ await page.waitForFunction(()=>getComputedStyle(document.querySelector('#pause-screen')).opacity==='1');
+ await page.click('#level-menu-button');await page.waitForFunction(()=>window.__NESI_DEMO_GAME__?.state==='ready');
+ await new Promise(resolve=>setTimeout(resolve,300));
+ report.focusReturn=await page.evaluate(()=>({active:document.activeElement?.outerHTML?.slice(0,220),trace:window.__qaFocus,state:window.__NESI_DEMO_GAME__?.state,focused:document.hasFocus(),hidden:document.hidden,menuInert:document.querySelector('#start-screen').inert,menuVisible:getComputedStyle(document.querySelector('#start-screen')).visibility,button:document.querySelector('#play-button').getBoundingClientRect().toJSON()}));
+ console.log('Focus return',JSON.stringify(report.focusReturn));
+ await page.waitForFunction(()=>document.activeElement?.id==='play-button',{timeout:5000});
+ report.checks.push('Play, pause and return to selected campaign map retain input/state handoff');
+ assert.deepEqual(report.errors,[]);report.pass=true;
+}catch(error){report.errors.push(error.stack);process.exitCode=1;}finally{await browser?.close();server.kill();fs.writeFileSync(path.join(out,'report.json'),JSON.stringify(report,null,2));}
+console.log(JSON.stringify(report,null,2));

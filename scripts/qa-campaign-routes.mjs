@@ -1,4 +1,4 @@
-/** Route evidence for the forty ordinary campaign rooms and the archives. Run with Node after `npm ci`.
+/** Route evidence for the fifty ordinary campaign rooms and the archives. Run with Node after `npm ci`.
  * The driver moves, interacts and fires through production game controls;
  * headless simulation cannot substitute for a browser playtest. */
 import assert from 'node:assert/strict';
@@ -107,6 +107,11 @@ Object.assign(foundationAlternates,{
  39:[{name:'receiver-first',options:{route:'receiver-first'},source:'src/game/LabPostJourneyB.js'},
   {name:'cooling-recovery',kind:'recovery',exercisesRecovery:true,options:{recover:true},source:'tests/lab-post-b.test.js'}],
  40:[{name:'trim-then-balance',options:{route:'trim-then-balance'},source:'src/game/LabCreativeFinalJourney.js'}],
+ 42:[{name:'observe-open-branches',options:{route:'observe-open-branches'},source:'tests/lab-expansion-a.test.js'}],
+ 43:[{name:'inspect-empty-field',options:{route:'inspect-empty-field'},source:'tests/lab-expansion-a.test.js'}],
+ 44:[{name:'observe-unladen-overspeed',options:{route:'observe-unladen-overspeed'},source:'tests/lab-expansion-a.test.js'}],
+ 45:[{name:'observe-unbalanced-thrust',options:{route:'observe-unbalanced-thrust'},source:'tests/lab-expansion-a.test.js'}],
+ 46:[{name:'light-before-damp',options:{route:'light-before-damp'},source:'tests/lab-expansion-a.test.js'}],
 });
 const openAlternates={
  24:[{name:'ride-first',options:{route:'ride-first'},source:'src/game/LabOpenJourney.js'},
@@ -131,7 +136,7 @@ function parseArgs(argv){
     if(match){assert.ok(Number(match[1])<=Number(match[2]),`Descending level range: ${token}`);return Array.from({length:Number(match[2])-Number(match[1])+1},(_,i)=>Number(match[1])+i);}
     return [Number(token)];
    }));
-   assert.ok([...opts.levels].every(n=>Number.isInteger(n)&&n>=1&&n<=40),'--levels must be a comma-separated set of 1–40 or ranges');
+   assert.ok([...opts.levels].every(n=>Number.isInteger(n)&&n>=1&&n<=51&&n!==41),'--levels must select ordinary rooms 1–40 or 42–51; the castle has its own continuous route');
   }else if(arg.startsWith('--json='))opts.json=arg.slice('--json='.length);
   else throw new Error(`Unknown argument ${arg}`);
  }
@@ -146,7 +151,7 @@ async function main(){
  const opts=parseArgs(process.argv.slice(2));
  const selected=opts.edition==='all'?editions:[opts.edition];
  // The rebuilt Tower has a dedicated complete active-run verifier and recording.
- const indices={foundation:FOUNDATION_INDICES.filter(index=>index<40),classic:CAMPAIGN.map((_,i)=>i),open:OPEN_ROOM_INDICES};
+ const indices={foundation:FOUNDATION_INDICES.filter(index=>index!==40),classic:CAMPAIGN.map((_,i)=>i),open:OPEN_ROOM_INDICES};
  assert.ok(selected.some(edition=>indices[edition].some(index=>!opts.levels||opts.levels.has(index+1))),
   'No selectable levels match the requested edition and --levels');
  const game=await createHeadlessGame();
@@ -208,7 +213,7 @@ async function main(){
  const output={generatedAt:new Date().toISOString(),...git(),edition:opts.edition,canonicalOnly:opts.canonicalOnly,kind:opts.kind,summary,rows,gaps,limitations:[
   'Headless physics and scripted production inputs cannot verify visibility, usability, aesthetics, performance or human discoverability.',
   'One successful path and one scripted alternative do not prove every possible route avoids softlocks or shortcuts.',
-  'This ordinary-room matrix covers foundation 1–40; the rebuilt final Tower 41 is verified separately. Classic 1–33 and open review 24, 28, 30–33 require an explicit edition.',
+  'This ordinary-room matrix covers foundation 1–40 and 42–51; the rebuilt final Tower 41 is verified separately. Classic 1–33 and open review 24, 28, 30–33 require an explicit edition.',
  ]};
  save(output);
  console.log(`Routes: ${summary.pass}/${summary.total} passed, ${summary.fail} failed; distinct-solution evidence gaps: ${gaps.length}.`);

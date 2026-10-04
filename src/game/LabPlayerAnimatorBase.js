@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { LabFootContact } from './LabFootContact.js';
+import { poseSubsteps, visualSeconds } from './LabVisualTime.js';
 
 // Landmarks measured on model-01-player.glb. Source coordinates: -Z up,
 // +Y forward. The rear equipment is a backpack attached to the torso.
@@ -349,7 +350,9 @@ export class LabPlayerAnimator {
   triggerHit() { this.triggerLanding(2); }
 
   trigger(kind) {
-    if (kind === 'jump' || kind === 'anticipate_jump') { this.anticipationAge = 0; return true; }
+    if (kind === 'jump' || kind === 'anticipate_jump') {
+      this.interruptInteraction(); this.anticipationAge = 0; return true;
+    }
     if (kind === 'catch' || kind === 'drop') return this.triggerInteraction(kind === 'catch' ? 'pickup' : 'place');
     if (kind === 'success') kind = 'celebrate';
     if (kind !== 'celebrate' && kind !== 'curious') return false;
@@ -361,24 +364,34 @@ export class LabPlayerAnimator {
   triggerJump() { return this.trigger('jump'); }
   triggerInteraction(kind = 'pickup') {
     if (kind !== 'pickup' && kind !== 'place') return false;
+    // Holding/repeating E must not keep replaying preparation after contact.
+    if (this.interaction?.kind === kind) return true;
     this.interaction = { kind, elapsed: 0, duration: kind === 'pickup' ? 0.68 : 0.62 };
     return true;
   }
 
+  interruptInteraction() {
+    // Keep the current reach blend: it settles from the visible pose without a
+    // wrist snap. Input/physical transfer is never delayed by this gesture.
+    this.interaction = null;
+  }
+
   triggerShot(strength = 1) {
     if (!this.weaponRequested || this.carryBlend > 0.5) return false;
+    this.interruptInteraction();
     this.recoil = Math.max(this.recoil, clamp(Number.isFinite(strength) ? strength : 1, 0, 1));
     return true;
   }
 
   update(input = {}) {
-    // Match the game's bounded render delta. At 15 FPS, a 50 ms cap discarded
-    // a quarter of every gait/gesture/landing update despite advancing elapsed.
-    // The 240 Hz pose substeps below keep the full 100 ms interval stable.
-    const dt = clamp(Number.isFinite(input.dt ?? 1 / 60) ? (input.dt ?? 1 / 60) : 0, 0, 0.1);
-    const iterations = Math.max(1, Math.ceil(dt * 240 - 1e-9));
-    const step = dt / iterations;
+    // LabGame bounds permitted time once. Consume all of it through stable pose
+    // substeps, rather than truncating independent gesture/landing clocks.
+    const dt = visualSeconds(input.dt, 1 / 60);
+    if (dt === 0) return;
+    const { count: iterations, seconds: step } = poseSubsteps(dt);
     const startTime = Number.isFinite(input.elapsed) ? input.elapsed - dt : this.elapsed;
+    this.carrySurfaceContact=input.carrySurfaceContact??null;
+    this.presentationDelta=dt;
     // Keep the FK blend independent of the previous frame's IK overlay. Blending
     // the already corrected pose again would accumulate twist on pickup/drop.
     for (const { name } of LAB_PLAYER_JOINTS) this.bones[name].quaternion.copy(this.basePose[name]);
@@ -426,10 +439,11 @@ export class LabPlayerAnimator {
   stepPose({ dt = 1 / 60, speed = 0, velocity = ORIGIN, grounded = true, turnRate = 0,
     carrying = false, phase = false, elapsed, weapon = true, aiming = false, aimPitch = 0,
     moveForward = 1, moveRight = 0, shooting = false } = {}) {
-    dt = clamp(Number.isFinite(dt) ? dt : 0, 0, 0.05);
+    dt = visualSeconds(dt);
     speed = clamp(Number.isFinite(speed) ? speed : 0, 0, 12);
     this.elapsed = Number.isFinite(elapsed) ? elapsed : this.elapsed + dt;
     const vy = Number.isFinite(velocity?.y) ? velocity.y : 0;
+    if (!grounded || phase) this.interruptInteraction();
     if (grounded && !this.previousGrounded) {
       this.triggerLanding(this.lastVerticalSpeed);
       this.landingAge = 0;

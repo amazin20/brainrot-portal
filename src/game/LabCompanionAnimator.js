@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { visualSeconds } from './LabVisualTime.js';
 
 const TAU = Math.PI * 2;
 const clamp = THREE.MathUtils.clamp;
@@ -110,7 +111,8 @@ export class LabCompanionAnimator {
     carrying = false, impact = 0, curious = false, celebrating = false } = {}) {
     // All dynamics below have closed forms, including the gait's damped speed
     // integral. Long frames therefore settle safely without losing elapsed time.
-    dt = clamp(finite(dt), 0, 60);
+    dt = visualSeconds(dt);
+    if (dt === 0) return;
     speed = clamp(finite(speed), 0, 12);
     const vy = clamp(finite(velocity?.y), -30, 30);
     const angularSpeed = Math.hypot(finite(angularVelocity?.x), finite(angularVelocity?.y), finite(angularVelocity?.z));

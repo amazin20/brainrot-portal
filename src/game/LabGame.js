@@ -1,4 +1,5 @@
 import { LabEpicDirector } from './LabEpicDirector.js';
+import {permittedVisualSeconds} from './LabVisualTime.js';
 import { LabVelocityCompanion } from './LabVelocityCompanion.js';
 import { LabPortalShots } from './LabPortalShots.js';
 import { updateKineticVelocity, limitKineticSpeed, sweepKineticBody } from './LabKineticMovement.js';
@@ -21,6 +22,7 @@ import { ALL_LAB_ASSETS } from './labAssets.js';
 import { LabCompanionAnimator } from './LabCompanionAnimator.js';
 import { LabCompanionBehavior } from './LabCompanionBehavior.js';
 import { LabCompanionRig } from './LabCompanionRig.js';
+import { LabCarrySurfaceContact } from './LabCarrySurfaceContact.js';
 import { LabPerformance } from './LabPerformance.js';
 import { LabTutorial } from './LabTutorial.js';
 import { buildLabCampaignLevel, CAMPAIGN, campaignSpec } from './LabCampaignLevels.js';
@@ -278,6 +280,8 @@ export class LabGame {
     this.cubes = [this.cargo];
     this.companionAnimator = new LabCompanionAnimator({ visual });
     this.companionRig = new LabCompanionRig(brainrot);
+    this.carrySurfaceContact = new LabCarrySurfaceContact({ playerRig: this.animator.rig,
+      companionRig: this.companionRig, visual });
     this.physics = new LabPhysics({ fixedStep: FIXED_STEP });
     // All level builders have finished registering their solids. Camera and
     // portal rays hit these frequently in rooms with thousands of envelopes.
@@ -837,7 +841,14 @@ export class LabGame {
       if (clearance > 0) teleport.position.addScaledVector(exit.normal, clearance);
       if (this.heldCube || this.velocityCompanion?.connected) {
         const exitShift = teleport.position.clone().sub(transformPortalPoint(center, entry, exit));
-        const cargoPosition = transformPortalPoint(this.cargo.position, entry, exit).add(exitShift);
+        const cargoPosition = transformPortalPoint(this.cargo.position, entry, exit);
+        const cargoTransitStart = cargoPosition.clone();
+        const transportedCargoQ = this.cargo.quaternion.clone().premultiply(teleport.rotation);
+        const localExitNormal = exit.normal.clone().applyQuaternion(transportedCargoQ.invert());
+        const cargoExtent = CUBE_RADIUS * (Math.abs(localExitNormal.x) + Math.abs(localExitNormal.y) + Math.abs(localExitNormal.z));
+        cargoTransitStart.addScaledVector(exit.normal,
+          -cargoTransitStart.clone().sub(exit.position).dot(exit.normal) - cargoExtent);
+        cargoPosition.add(exitShift);
         const cargoClearance = CUBE_RADIUS * Math.sqrt(3) + .06 - cargoPosition.clone().sub(exit.position).dot(exit.normal);
         if (cargoClearance > 0) {
           cargoPosition.addScaledVector(exit.normal, cargoClearance);
@@ -845,8 +856,15 @@ export class LabGame {
         }
         this.physics.teleportCargo({ position: cargoPosition, rotation: teleport.rotation });
         const ignoredBacking = new Set();
-        for (const collider of this.colliders) if (collider.enabled && this.portalOpensCollider(collider, cargoPosition, CUBE_RADIUS, 0, this.physics.cargoBody.quaternion)) ignoredBacking.add(collider.mesh.uuid);
-        this.physics.resolveCargoTransit(cargoPosition, { ignoreIds: ignoredBacking });
+        const ownerExitCrossing = transformPortalPoint(teleport.crossingPoint, entry, exit);
+        for (const collider of this.colliders) if (collider.enabled
+          && (this.portalOpensCollider(collider, cargoPosition, CUBE_RADIUS, 0, this.physics.cargoBody.quaternion)
+            || this.portalOpensCollider(collider, cargoTransitStart, CUBE_RADIUS, 0, this.physics.cargoBody.quaternion)
+            // A carried box uses the owner's open throat before transport as
+            // well. Preserve that exact backing while sweeping its emergence;
+            // a residual fling can already put the owner far from the exit.
+            || this.portalOpensCollider(collider, ownerExitCrossing, PLAYER_RADIUS, PLAYER_HEIGHT))) ignoredBacking.add(collider.mesh.uuid);
+        this.physics.resolveCargoTransit(cargoTransitStart, { ignoreIds: ignoredBacking });
         this.cargo.position.copy(this.physics.cargoBody.position);
         this.companionBehavior?.reanchor(this.cargo.position); this.cargoPortalCooldown = .07;
         this.companionAnimator.trigger('portal');
@@ -857,8 +875,12 @@ export class LabGame {
       {
         // Resume the residual movement in the destination world. This catches
         // thin obstacles immediately outside the exit at full fling speed.
+        // Clearance is physical travel too. Starting this sweep after the
+        // clearance offset lets a nearby separate wall eject the capsule to
+        // its far face before its first destination contact.
         const exitStart = transformPortalPoint(teleport.crossingPoint, entry, exit)
-          .add(teleport.position.clone().sub(teleport.unadjustedPosition)).addScaledVector(UP, -CENTER_HEIGHT);
+          .addScaledVector(exit.normal, -capsuleExtent)
+          .addScaledVector(UP, -CENTER_HEIGHT);
         if (this.kineticMode) this.groundedByCollider = sweepKineticBody(this, this.playerPosition, exitStart,
           this.playerVelocity, PLAYER_RADIUS, PLAYER_HEIGHT, { portalLimit: false });
         else this.resolveBody(this.playerPosition, exitStart, this.playerVelocity, PLAYER_RADIUS, PLAYER_HEIGHT, true);
@@ -1239,8 +1261,10 @@ export class LabGame {
         const clear = extent + .07 - travel.position.clone().sub(exit.position).dot(exit.normal);
         if (clear > 0) travel.position.addScaledVector(exit.normal, clear);
         this.physics.teleportCargo({ position: travel.position, rotation: travel.rotation });
-        const exitStart = transformPortalPoint(travel.crossingPoint, entry, exit)
-          .add(travel.position.clone().sub(travel.unadjustedPosition));
+        // Sweep from the real exit plane through the complete clearance move.
+        // An already shifted start can choose the far face of a thin obstacle
+        // that overlaps the newly transported original rigid body.
+        const exitStart = transformPortalPoint(travel.crossingPoint, entry, exit);
         const ignoreIds = new Set();
         for (const collider of this.colliders) if (collider.enabled && this.portalOpensCollider(collider, travel.position, CUBE_RADIUS, 0, this.physics.cargoBody.quaternion)) ignoreIds.add(collider.mesh.uuid);
         this.physics.resolveCargoTransit(exitStart, { ignoreIds });
@@ -1389,11 +1413,12 @@ export class LabGame {
   }
 
   updateVisuals(dt, alpha = 1, cameraDt = dt) {
-    dt = Number.isFinite(dt) ? THREE.MathUtils.clamp(dt, 0, .1) : 0;
-    cameraDt = Number.isFinite(cameraDt) ? THREE.MathUtils.clamp(cameraDt, 0, .1) : 0;
+    const active = (this.state === 'playing' || this.state === 'won' || this.state === 'ready')
+      && !this.externalBlocked && globalThis.document?.hidden !== true;
+    dt = permittedVisualSeconds(dt, active);
+    cameraDt = permittedVisualSeconds(cameraDt, active);
     this.audio?.flight?.(this.playerVelocity.length(),this.playerGrounded||this.state!=='playing'||this.externalBlocked);
-    const active = this.state === 'playing' || this.state === 'won' || this.state === 'ready';
-    const visualDt = active ? dt : 0;
+    const visualDt = dt;
     this.visualTime += visualDt;
     const blend = THREE.MathUtils.clamp(alpha, 0, 1);
     this.playerGroup.position.lerpVectors(this.previousPlayerPosition, this.playerPosition, blend);
@@ -1421,8 +1446,9 @@ export class LabGame {
     gripVisual.updateWorldMatrix(true, true);
     gripVisual.localToWorld(this.carryGripTargets.left.set(-.20, -.015, -.20));
     gripVisual.localToWorld(this.carryGripTargets.right.set(.20, -.015, -.20));
-    this.animator.update({ dt: visualDt, ...(this.motion ?? {}), epic: this.kineticMode, sliding: Boolean(this.kinetic?.sliding), velocity: this.playerVelocity, grounded: this.playerGrounded,
+    this.animator.update({ ...(this.motion ?? {}), dt: visualDt, epic: this.kineticMode, sliding: Boolean(this.kinetic?.sliding), velocity: this.playerVelocity, grounded: this.playerGrounded,
       carrying: Boolean(this.heldCube), carryGripTargets: this.heldCube ? this.carryGripTargets : null,
+      carrySurfaceContact: this.carrySurfaceContact,
       lookTarget: this.playerPosition.distanceTo(this.cargo.position) < 3.2 ? this.cargo.group.position : null,
       sampleGround: (x, z, maxY) => this.sampleFootSupport(x, z, maxY),
       windStrength:this.windStrength||0,shooting: this.shotPoseTime>0&&!this.heldCube, phase: this.portalCooldown > .2, elapsed: this.visualTime, weapon: true, aiming: this.isAiming() || (this.shotPoseTime>0&&!this.heldCube), aimPitch: this.shotPoseTime>0&&this.shotAimPoint ? Math.atan2(this.shotAimPoint.y-this.playerPosition.y-1.4, Math.hypot(this.shotAimPoint.x-this.playerPosition.x,this.shotAimPoint.z-this.playerPosition.z)) : this.pitch });

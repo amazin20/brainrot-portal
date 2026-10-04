@@ -75,7 +75,7 @@ export default defineConfig(({mode})=>({
     target: 'es2022',
     sourcemap: false,
     copyPublicDir: false,
-    // Repeated SDK builds must not carry an obsolete hashed bundle into the ZIP.
-    ...(mode==='yandex'?{emptyOutDir:true}:{}),
+    // Every candidate contains only this build's hashed bundles and assets.
+    emptyOutDir: true,
   },
 }));
