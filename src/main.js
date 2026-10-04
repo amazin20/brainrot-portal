@@ -53,7 +53,14 @@ function reconcileFocus(){
 }
 function diagnostics(){const d=game.diagnostics();Object.assign(document.documentElement.dataset,{gameReady:String(d.modelsLoaded>0&&!d.missingModels.length),modelsLoaded:String(d.modelsLoaded),levelIndex:String(game.levelIndex)});
   if(debug)window.__NESI_DEMO_DIAGNOSTICS__={...d,settings:preferences.value,adBusy:platform?.busy};return d;}
-function failure(error){console.error(error);clearInput();game.renderer?.setAnimationLoop(null);game.state='error';setState('error');hideScreens();$('#error-detail').textContent=error?.message||String(error);screen('error-screen',true);}
+function failure(error){
+ console.error(error);clearInput();game.renderer?.setAnimationLoop(null);game.state='error';
+ // Locked mouse events still target the canvas even when a recovery button
+ // covers it. Mark the terminal state first so unlocking cannot open Pause.
+ document.exitPointerLock?.();
+ setState('error');hideScreens();$('#error-detail').textContent=error?.message||String(error);screen('error-screen',true);
+ focusScreenControl('error-screen','#reload-button');
+}
 function choices(){for(const selector of ['#level-select','#settings-level-select']){const e=$(selector),old=e.value;e.replaceChildren();availableRooms.forEach(i=>{const l=campaignSpec(game,i),option=document.createElement('option');option.value=i;option.textContent=`${String(i+1).padStart(2,'0')} · ${l.title}${preferences.value.completed.includes(i)?' ✓':''}`;e.append(option);});e.value=old||String(game.levelIndex);}campaignMenu?.sync();}
 function pauseInfo(){ $('#settings-level-select').value=String(game.levelIndex);$('#pause-course').textContent=`${game.levelIndex+1} · ${campaignSpec(game,game.levelIndex).title}`;$('#hint-detail').hidden=true;}
 function showVictory(){

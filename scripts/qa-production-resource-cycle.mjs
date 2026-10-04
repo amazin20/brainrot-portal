@@ -215,7 +215,13 @@ try{
   phase('context-recovery-room-selection');await pauseWithKeyboard();await visibleControl('#settings-level-select');
   await page.select('#settings-level-select','11');await waitPlayingUI();await page.waitForFunction(()=>window.__NESI_DEMO_GAME__.levelIndex===11);
   await page.evaluate(()=>window.__NESI_DEMO_GAME__.renderer.setAnimationLoop(null));
-  report.controls.context={};phase('native-context-loss');
+  report.controls.context={};phase('context-recovery-pointer-lock');
+  // Exercise recovery while the normal desktop cursor is actually captured.
+  // A geometric button hit-test alone cannot detect locked canvas dispatch.
+  if(!await page.evaluate(()=>document.pointerLockElement===window.__NESI_DEMO_GAME__.renderer.domElement))await page.click('canvas');
+  await page.waitForFunction(()=>document.pointerLockElement===window.__NESI_DEMO_GAME__.renderer.domElement,{timeout:20000});
+  report.controls.context.pointerLockBeforeLoss=await page.evaluate(()=>document.pointerLockElement===window.__NESI_DEMO_GAME__.renderer.domElement);
+  assert.equal(report.controls.context.pointerLockBeforeLoss,true);save();phase('native-context-loss');
   report.controls.context.supported=await page.evaluate(()=>{
     const g=window.__NESI_DEMO_GAME__,canvas=g.renderer.domElement,gl=g.renderer.getContext(),extension=gl.getExtension('WEBGL_lose_context');
     window.__RESOURCE_CONTEXT_EVENTS__=[];canvas.addEventListener('webglcontextlost',event=>window.__RESOURCE_CONTEXT_EVENTS__.push({type:event.type,prevented:event.defaultPrevented}));
@@ -224,19 +230,27 @@ try{
   });
   if(report.controls.context.supported){
     await page.waitForFunction(()=>document.documentElement.dataset.runtimeState==='error');
+    await page.waitForFunction(()=>document.pointerLockElement===null&&document.activeElement?.id==='reload-button',{timeout:20000});
     report.controls.context.loss=await page.evaluate(()=>({events:window.__RESOURCE_CONTEXT_EVENTS__,state:window.__NESI_DEMO_GAME__.state,error:document.querySelector('#error-detail').textContent,
-      retryAccessible:!document.querySelector('#error-screen').inert,contextLost:window.__NESI_DEMO_GAME__.renderer.getContext().isContextLost()}));
+      retryAccessible:!document.querySelector('#error-screen').inert,contextLost:window.__NESI_DEMO_GAME__.renderer.getContext().isContextLost(),
+      pointerLockReleased:document.pointerLockElement===null,retryFocused:document.activeElement?.id==='reload-button'}));
     assert.equal(report.controls.context.loss.contextLost,true);assert.equal(report.controls.context.loss.retryAccessible,true);assert.match(report.controls.context.loss.error,/3D/);
+    assert.equal(report.controls.context.loss.pointerLockReleased,true);assert.equal(report.controls.context.loss.retryFocused,true);
     phase('native-context-restore');await page.evaluate(()=>window.__RESOURCE_CONTEXT_EXTENSION__.restoreContext());
     await page.waitForFunction(()=>window.__RESOURCE_CONTEXT_EVENTS__.some(event=>event.type==='webglcontextrestored'),{timeout:30000});
     report.controls.context.nativeRestored=await page.evaluate(()=>({events:window.__RESOURCE_CONTEXT_EVENTS__,contextLost:window.__NESI_DEMO_GAME__.renderer.getContext().isContextLost(),applicationState:window.__NESI_DEMO_GAME__.state}));
     assert.equal(report.controls.context.nativeRestored.contextLost,false);
     report.controls.context.inPlaceApplicationRecovery=report.controls.context.nativeRestored.applicationState!=='error';
-    phase('ordinary-context-recovery-reload');await waitScreen('error-screen');await clickControl('#reload-button');
+    phase('ordinary-context-recovery-reload');await waitScreen('error-screen');
+    const [navigation]=await Promise.all([page.waitForNavigation({waitUntil:'domcontentloaded'}),clickControl('#reload-button')]);
+    assert.ok([200,304].includes(navigation?.status()),'Visible Reload did not load or revalidate the ordinary production entry');
     await page.waitForFunction(()=>document.documentElement.dataset.runtimeState==='ready'&&window.__NESI_DEMO_GAME__?.levelIndex===11);
     report.controls.context.reload=await page.evaluate(()=>({selectedLevel:document.querySelector('#level-select').value,state:window.__NESI_DEMO_GAME__.state,
-      contextLost:window.__NESI_DEMO_GAME__.renderer.getContext().isContextLost(),errorScreenInert:document.querySelector('#error-screen').inert}));
+      contextLost:window.__NESI_DEMO_GAME__.renderer.getContext().isContextLost(),errorScreenInert:document.querySelector('#error-screen').inert,
+      navigationType:performance.getEntriesByType('navigation')[0]?.type}));
+    report.controls.context.reload.navigation={url:navigation.url(),status:navigation.status()};
     assert.equal(report.controls.context.reload.selectedLevel,'11');assert.equal(report.controls.context.reload.contextLost,false);assert.equal(report.controls.context.reload.errorScreenInert,true);
+    assert.equal(report.controls.context.reload.navigationType,'reload');
     await waitScreen('start-screen');await clickControl('#play-button');await waitPlayingUI();
     await page.evaluate(()=>{const g=window.__NESI_DEMO_GAME__;g.renderer.setAnimationLoop(null);g.render();});
     report.controls.context.final=await page.evaluate(()=>({level:window.__NESI_DEMO_GAME__.levelIndex+1,state:window.__NESI_DEMO_GAME__.state,calls:window.__NESI_DEMO_GAME__.renderer.info.render.calls,contextLost:window.__NESI_DEMO_GAME__.renderer.getContext().isContextLost()}));
