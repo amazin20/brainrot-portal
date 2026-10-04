@@ -1,10 +1,10 @@
 {
   "mode": "complete",
   "sourceCommit": "44ab09e41f0021393a333e2b7a37696faff7b06f",
+  "sourceBranch": "upgrade/creative-campaign-20261004",
   "candidateRun": 37198674150,
   "baseCommit": "a74726ff1bfb22f21662d076fc47951b2bf368cd",
   "baseRun": 36509639087,
   "previousSourceCommit": "2e3f693a8e0ddbc0e143adfe3086bcb7d93ebc05",
-  "previewPath": "tower-singularity",
-  "sourceBranch": "upgrade/creative-campaign-20261004"
+  "previewPath": "tower-singularity"
 }

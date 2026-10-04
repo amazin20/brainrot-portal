@@ -4,7 +4,7 @@ import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
 import puppeteer from 'puppeteer-core';
 import {assertUpgradeInfo,assertUpgradeEvidence,upgradePreviewPath} from './lib/singularity-upgrade-proof.mjs';
-import {verifySingularityUI,waitForStartMenu,playFromStartMenu} from './lib/singularity-ui-check.mjs';
+import {verifySingularityUI,waitForStartMenu,playFromStartMenu,activate} from './lib/singularity-ui-check.mjs';
 
 const config=JSON.parse(fs.readFileSync(process.env.RELEASE_CONFIG||'tools/singularity-upgrade-release.json','utf8'));
 const root=new URL(process.env.PAGE_URL||'https://amazin20.github.io/brainrot-portal/');
@@ -62,7 +62,10 @@ try{
  await waitForStartMenu(page);assert.equal(await page.$eval('#level-select',e=>Number(e.value)),0);
  assert.equal(await page.evaluate(()=>typeof window.__NESI_DEMO_GAME__),'undefined');await playFromStartMenu(page);
  assert.equal(await page.evaluate(()=>document.documentElement.dataset.levelIndex),'0');proof.rootPlayLevel1=true;
- await page.keyboard.press('Escape');await page.waitForFunction(()=>document.documentElement.dataset.runtimeState==='paused');await page.click('#level-menu-button');await waitForStartMenu(page);
+ await page.keyboard.press('Escape');await page.waitForFunction(()=>document.documentElement.dataset.runtimeState==='paused');
+ await page.evaluate(()=>{document.querySelector('#level-menu-button').addEventListener('click',event=>{const screen=event.currentTarget.closest('.screen');window.__PUBLIC_MENU_CLICK__={trusted:event.isTrusted,runtime:document.documentElement.dataset.runtimeState,focused:document.hasFocus(),hidden:document.hidden,pointerLocked:!!document.pointerLockElement,externalPause:document.body.dataset.externalPause??null,screenOpacity:getComputedStyle(screen).opacity};},{capture:true,once:true});});
+ await activate(page,'#level-menu-button');await waitForStartMenu(page);
+ proof.rootReturnFromPause=await page.evaluate(()=>window.__PUBLIC_MENU_CLICK__);assert.equal(proof.rootReturnFromPause?.trusted,true);assert.equal(proof.rootReturnFromPause.runtime,'paused');assert.equal(proof.rootReturnFromPause.pointerLocked,false);assert.notEqual(proof.rootReturnFromPause.externalPause,'true');assert.equal(proof.rootReturnFromPause.screenOpacity,'1');
  await page.select('#level-select','40');await playFromStartMenu(page);
  assert.equal(await page.evaluate(()=>document.documentElement.dataset.levelIndex),'40');assert.match(await page.$eval('#chamber',e=>e.textContent),/СКЛАДЧАТЫЙ ЗАМОК/i);assert.equal(new URL(page.url()).pathname,root.pathname);
  await page.screenshot({path:path.join(out,'primary-game-dropdown-41.png')});proof.rootDropdownLevel41=true;

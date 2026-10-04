@@ -1,0 +1,4432 @@
+{
+  "edition": "foundation",
+  "scope": "New finite input-only speedrun attack patterns; outcomes distinguish blocked physical attempts from setup failures. No absence-of-all-exploits claim.",
+  "source": {
+    "commit": "acfeeb49b45883eee325fb2236f2422a73633f4d",
+    "started": "2026-10-04T10:16:49.000Z",
+    "gameSourcesSha256": "8b40275f81c581d54d26bd8a0cf7f5228e22239227b5c1b0c7992c3e99c4e438",
+    "harnessSha256": "ce1b0cd644b43fb7201a7474609bbc09061891df0593c59cc60cb0d254ce299b",
+    "foldHarnessSha256": "87ba3e0d4286a83750079740ffc598c5544ab54f675fa07f90353a7e7ffde9b4",
+    "finishedGameSourcesSha256": "8b40275f81c581d54d26bd8a0cf7f5228e22239227b5c1b0c7992c3e99c4e438",
+    "unchangedDuringRun": true,
+    "finishedHarnessSha256": "ce1b0cd644b43fb7201a7474609bbc09061891df0593c59cc60cb0d254ce299b",
+    "finishedFoldHarnessSha256": "87ba3e0d4286a83750079740ffc598c5544ab54f675fa07f90353a7e7ffde9b4",
+    "harnessUnchangedDuringRun": true,
+    "finished": "2026-10-04T10:19:24.408Z"
+  },
+  "rooms": [
+    {
+      "number": 1,
+      "title": "По ту сторону",
+      "attacks": [
+        {
+          "name": "clockwise-perimeter-corner-hop-carry",
+          "completed": false,
+          "outcome": "blocked-within-finite-attempt",
+          "frames": 2271,
+          "frameCountSource": "journey-driver-frames",
+          "teleports": 0,
+          "player": [
+            7.034545090288845,
+            0.19187500000000018,
+            -10.86386207919428
+          ],
+          "cargo": [
+            6.858226693195606,
+            1.2518762061880742,
+            -11.561921578384657
+          ],
+          "error": null,
+          "evidence": {
+            "shots": [],
+            "maxY": 1.5275000000000023,
+            "maxSpeed": 12.700137591294748,
+            "teleportPeak": 0,
+            "milestones": [
+              "Outer wall and every exterior corner attacked with the original carried cargo"
+            ],
+            "physicsSteps": 4542,
+            "simulationSeconds": 37.849999999998495,
+            "scenarioStarted": true,
+            "respawnEvents": [
+              {
+                "physicsStep": 0,
+                "simulationSeconds": 0,
+                "scenarioStarted": false,
+                "player": [
+                  0,
+                  0,
+                  12
+                ],
+                "cargo": [
+                  -4,
+                  0.6,
+                  9
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "counterclockwise-perimeter-corner-hop-carry",
+          "completed": false,
+          "outcome": "blocked-within-finite-attempt",
+          "frames": 2297,
+          "frameCountSource": "journey-driver-frames",
+          "teleports": 0,
+          "player": [
+            6.942152162959591,
+            0.11062500000000017,
+            -10.932382590440318
+          ],
+          "cargo": [
+            7.411106571381344,
+            1.1706294230080025,
+            -11.478693988395912
+          ],
+          "error": null,
+          "evidence": {
+            "shots": [],
+            "maxY": 1.5275000000000023,
+            "maxSpeed": 13.074184303846883,
+            "teleportPeak": 0,
+            "milestones": [
+              "Outer wall and every exterior corner attacked with the original carried cargo"
+            ],
+            "physicsSteps": 4594,
+            "simulationSeconds": 38.283333333331804,
+            "scenarioStarted": true,
+            "respawnEvents": [
+              {
+                "physicsStep": 0,
+                "simulationSeconds": 0,
+                "scenarioStarted": false,
+                "player": [
+                  0,
+                  0,
+                  12
+                ],
+                "cargo": [
+                  -4,
+                  0.6,
+                  9
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "cargo-wedge-airborne-pickup-buffers",
+          "completed": false,
+          "outcome": "blocked-within-finite-attempt",
+          "frames": 979,
+          "frameCountSource": "journey-driver-frames",
+          "teleports": 0,
+          "player": [
+            7.058792559547956,
+            0,
+            -10.969144400284396
+          ],
+          "cargo": [
+            6.417996607234845,
+            1.0430723554807253,
+            -11.29750825550493
+          ],
+          "error": null,
+          "evidence": {
+            "shots": [],
+            "maxY": 1.5275000000000023,
+            "maxSpeed": 10.902422146990789,
+            "teleportPeak": 0,
+            "milestones": [
+              "Cargo wedging, repeated buffered jumps and airborne pickup/release attempted"
+            ],
+            "physicsSteps": 1958,
+            "simulationSeconds": 16.316666666666382,
+            "scenarioStarted": true,
+            "respawnEvents": [
+              {
+                "physicsStep": 0,
+                "simulationSeconds": 0,
+                "scenarioStarted": false,
+                "player": [
+                  0,
+                  0,
+                  12
+                ],
+                "cargo": [
+                  -4,
+                  0.6,
+                  9
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "highest-ceramic-edge-exit-clear-in-flight",
+          "completed": true,
+          "outcome": "completed-with-required-introductory-pair",
+          "frames": 487,
+          "frameCountSource": "journey-driver-frames",
+          "teleports": 1,
+          "player": [
+            8.904232655322172,
+            4,
+            -12.127297707175435
+          ],
+          "cargo": [
+            9.051972200650631,
+            5.076656512029147,
+            -12.832020758241676
+          ],
+          "error": null,
+          "evidence": {
+            "shots": [
+              {
+                "panel": "upper-view",
+                "offset": [
+                  0,
+                  0.88
+                ],
+                "accepted": true,
+                "position": [
+                  0.006082698861109324,
+                  6.77,
+                  -16.25
+                ]
+              }
+            ],
+            "maxY": 5.763906935862965,
+            "maxSpeed": 11.730357735796984,
+            "teleportPeak": 1,
+            "milestones": [
+              "Highest accepted edge exit followed by immediate portal clearing and jumping sprint"
+            ],
+            "physicsSteps": 973,
+            "simulationSeconds": 8.108333333333514,
+            "scenarioStarted": true,
+            "respawnEvents": [
+              {
+                "physicsStep": 0,
+                "simulationSeconds": 0,
+                "scenarioStarted": false,
+                "player": [
+                  0,
+                  0,
+                  12
+                ],
+                "cargo": [
+                  -4,
+                  0.6,
+                  9
+                ]
+              }
+            ],
+            "pairTraversal": true,
+            "clearedAfterTraversal": true
+          },
+          "causalReview": "Introductory room requires paired travel to the gallery; upper aperture use still performed that physical transfer with the original companion."
+        },
+        {
+          "name": "under-gallery-console-midjump",
+          "completed": false,
+          "outcome": "blocked-within-finite-attempt",
+          "frames": 748,
+          "frameCountSource": "journey-driver-frames",
+          "teleports": 0,
+          "player": [
+            7.13918909432386,
+            0,
+            -11.07414378743392
+          ],
+          "cargo": [
+            6.501811107911552,
+            1.07095894472617,
+            -10.73926982144741
+          ],
+          "error": null,
+          "evidence": {
+            "shots": [],
+            "maxY": 1.5275000000000023,
+            "maxSpeed": 10.907603325333849,
+            "teleportPeak": 0,
+            "milestones": [],
+            "physicsSteps": 1496,
+            "simulationSeconds": 12.4666666666666,
+            "scenarioStarted": true,
+            "respawnEvents": [
+              {
+                "physicsStep": 0,
+                "simulationSeconds": 0,
+                "scenarioStarted": false,
+                "player": [
+                  0,
+                  0,
+                  12
+                ],
+                "cargo": [
+                  -4,
+                  0.6,
+                  9
+                ]
+              }
+            ],
+            "hoistHeight": 0
+          }
+        }
+      ],
+      "suspectedShortcuts": []
+    },
+    {
+      "number": 2,
+      "title": "Свет под ногами",
+      "attacks": [
+        {
+          "name": "clockwise-perimeter-corner-hop-carry",
+          "completed": false,
+          "outcome": "blocked-within-finite-attempt",
+          "frames": 2118,
+          "frameCountSource": "journey-driver-frames",
+          "teleports": 0,
+          "player": [
+            16.058015087031773,
+            -1.5334374999999971,
+            8.092729196162344
+          ],
+          "cargo": [
+            15.665975397187601,
+            -0.4734338811969768,
+            7.488730194761323
+          ],
+          "error": null,
+          "evidence": {
+            "shots": [],
+            "maxY": 4.5275000000000025,
+            "maxSpeed": 13.974999999999973,
+            "teleportPeak": 0,
+            "milestones": [
+              "Outer wall and every exterior corner attacked with the original carried cargo"
+            ],
+            "physicsSteps": 4236,
+            "simulationSeconds": 35.29999999999864,
+            "scenarioStarted": true,
+            "respawnEvents": [
+              {
+                "physicsStep": 0,
+                "simulationSeconds": 0,
+                "scenarioStarted": false,
+                "player": [
+                  -16,
+                  3,
+                  15
+                ],
+                "cargo": [
+                  -19,
+                  3.6,
+                  13
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "counterclockwise-perimeter-corner-hop-carry",
+          "completed": false,
+          "outcome": "blocked-within-finite-attempt",
+          "frames": 2420,
+          "frameCountSource": "journey-driver-frames",
+          "teleports": 0,
+          "player": [
+            15.943322839553707,
+            -1.4765624999999978,
+            7.966817070649726
+          ],
+          "cargo": [
+            16.654294213721254,
+            -0.4165637064268701,
+            7.853108392590867
+          ],
+          "error": null,
+          "evidence": {
+            "shots": [],
+            "maxY": 4.5275000000000025,
+            "maxSpeed": 19.384254131658857,
+            "teleportPeak": 0,
+            "milestones": [
+              "Outer wall and every exterior corner attacked with the original carried cargo"
+            ],
+            "physicsSteps": 4840,
+            "simulationSeconds": 40.33333333333169,
+            "scenarioStarted": true,
+            "respawnEvents": [
+              {
+                "physicsStep": 0,
+                "simulationSeconds": 0,
+                "scenarioStarted": false,
+                "player": [
+                  -16,
+                  3,
+                  15
+                ],
+                "cargo": [
+                  -19,
+                  3.6,
+                  13
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "cargo-wedge-airborne-pickup-buffers",
+          "completed": false,
+          "outcome": "blocked-within-finite-attempt",
+          "frames": 1052,
+          "frameCountSource": "journey-driver-frames",
+          "teleports": 0,
+          "player": [
+            16.08810067320341,
+            -2.936354166666667,
+            7.966004525163868
+          ],
+          "cargo": [
+            15.418599800280317,
+            -1.876370564091635,
+            8.231124779238248
+          ],
+          "error": null,
+          "evidence": {
+            "shots": [],
+            "maxY": 4.5275000000000025,
+            "maxSpeed": 19.69652138731461,
+            "teleportPeak": 0,
+            "milestones": [
+              "Cargo wedging, repeated buffered jumps and airborne pickup/release attempted"
+            ],
+            "physicsSteps": 2104,
+            "simulationSeconds": 17.53333333333298,
+            "scenarioStarted": true,
+            "respawnEvents": [
+              {
+                "physicsStep": 0,
+                "simulationSeconds": 0,
+                "scenarioStarted": false,
+                "player": [
+                  -16,
+                  3,
+                  15
+                ],
+                "cargo": [
+                  -19,
+                  3.6,
+                  13
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "highest-ceramic-edge-exit-clear-in-flight",
+          "completed": false,
+          "outcome": "blocked-within-finite-attempt",
+          "frames": 1069,
+          "frameCountSource": "journey-driver-frames",
+          "teleports": 0,
+          "player": [
+            15.985309060855263,
+            -2.424479166666662,
+            7.999022814807857
+          ],
+          "cargo": [
+            16.698673372358083,
+            -1.3644642889938925,
+            8.097014138589856
+          ],
+          "error": null,
+          "evidence": {
+            "shots": [
+              {
+                "panel": "island-turn",
+                "offset": [
+                  0,
+                  0.88
+                ],
+                "accepted": true,
+                "position": [
+                  8.184664989342892,
+                  3.8299999999999996,
+                  -14.3
+                ]
+              }
+            ],
+            "maxY": 4.5275000000000025,
+            "maxSpeed": 17.517052342227704,
+            "teleportPeak": 0,
+            "milestones": [
+              "Highest accepted edge exit followed by immediate portal clearing and jumping sprint"
+            ],
+            "physicsSteps": 2138,
+            "simulationSeconds": 17.816666666666297,
+            "scenarioStarted": true,
+            "respawnEvents": [
+              {
+                "physicsStep": 0,
+                "simulationSeconds": 0,
+                "scenarioStarted": false,
+                "player": [
+                  -16,
+                  3,
+                  15
+                ],
+                "cargo": [
+                  -19,
+                  3.6,
+                  13
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "permanent-service-island-jump-with-no-projection",
+          "completed": false,
+          "outcome": "blocked-within-finite-attempt",
+          "frames": 1999,
+          "frameCountSource": "journey-driver-frames",
+          "teleports": 0,
+          "player": [
+            15.951470047084257,
+            -3,
+            7.8516748916224115
+          ],
+          "cargo": [
+            16.600696898379102,
+            -1.92300250934643,
+            8.163062193887013
+          ],
+          "error": null,
+          "evidence": {
+            "shots": [],
+            "maxY": 4.727500000000002,
+            "maxSpeed": 17.23461940433308,
+            "teleportPeak": 0,
+            "milestones": [],
+            "physicsSteps": 3998,
+            "simulationSeconds": 33.31666666666542,
+            "scenarioStarted": true,
+            "respawnEvents": [
+              {
+                "physicsStep": 0,
+                "simulationSeconds": 0,
+                "scenarioStarted": false,
+                "player": [
+                  -16,
+                  3,
+                  15
+                ],
+                "cargo": [
+                  -19,
+                  3.6,
+                  13
+                ]
+              }
+            ],
+            "lightSegments": 1
+          }
+        }
+      ],
+      "suspectedShortcuts": []
+    },
+    {
+      "number": 3,
+      "title": "Адрес в движении",
+      "attacks": [
+        {
+          "name": "clockwise-perimeter-corner-hop-carry",
+          "completed": false,
+          "outcome": "blocked-within-finite-attempt",
+          "frames": 2478,
+          "frameCountSource": "journey-driver-frames",
+          "teleports": 0,
+          "player": [
+            -19.998742822970303,
+            -3,
+            20.330100001490116
+          ],
+          "cargo": [
+            -19.348743949835576,
+            -1.9396764946337282,
+            20.020420362132313
+          ],
+          "error": null,
+          "evidence": {
+            "shots": [],
+            "maxY": 1.5275000000000023,
+            "maxSpeed": 12.189731655545097,
+            "teleportPeak": 0,
+            "milestones": [
+              "Outer wall and every exterior corner attacked with the original carried cargo"
+            ],
+            "physicsSteps": 4956,
+            "simulationSeconds": 41.2999999999983,
+            "scenarioStarted": true,
+            "respawnEvents": [
+              {
+                "physicsStep": 0,
+                "simulationSeconds": 0,
+                "scenarioStarted": false,
+                "player": [
+                  -16,
+                  0,
+                  16
+                ],
+                "cargo": [
+                  -19,
+                  0.6,
+                  13
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "counterclockwise-perimeter-corner-hop-carry",
+          "completed": false,
+          "outcome": "blocked-within-finite-attempt",
+          "frames": 2314,
+          "frameCountSource": "journey-driver-frames",
+          "teleports": 0,
+          "player": [
+            15.835822413011567,
+            -1.4860416666666645,
+            -16.97113806676716
+          ],
+          "cargo": [
+            16.542850715919606,
+            -0.4260436772985189,
+            -17.107592608639003
+          ],
+          "error": null,
+          "evidence": {
+            "shots": [],
+            "maxY": 1.5275000000000023,
+            "maxSpeed": 16.953679016201747,
+            "teleportPeak": 0,
+            "milestones": [
+              "Outer wall and every exterior corner attacked with the original carried cargo"
+            ],
+            "physicsSteps": 4628,
+            "simulationSeconds": 38.56666666666512,
+            "scenarioStarted": true,
+            "respawnEvents": [
+              {
+                "physicsStep": 0,
+                "simulationSeconds": 0,
+                "scenarioStarted": false,
+                "player": [
+                  -16,
+                  0,
+                  16
+                ],
+                "cargo": [
+                  -19,
+                  0.6,
+                  13
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "cargo-wedge-airborne-pickup-buffers",
+          "completed": false,
+          "outcome": "blocked-within-finite-attempt",
+          "frames": 1372,
+          "frameCountSource": "journey-driver-frames",
+          "teleports": 0,
+          "player": [
+            16.042021028045806,
+            -1.4724999999999977,
+            -17.01816733291128
+          ],
+          "cargo": [
+            15.385890273622667,
+            -0.4125004022218879,
+            -16.721514521308574
+          ],
+          "error": null,
+          "evidence": {
+            "shots": [],
+            "maxY": 1.5275000000000023,
+            "maxSpeed": 17.20678080461441,
+            "teleportPeak": 0,
+            "milestones": [
+              "Cargo wedging, repeated buffered jumps and airborne pickup/release attempted"
+            ],
+            "physicsSteps": 2744,
+            "simulationSeconds": 22.86666666666601,
+            "scenarioStarted": true,
+            "respawnEvents": [
+              {
+                "physicsStep": 0,
+                "simulationSeconds": 0,
+                "scenarioStarted": false,
+                "player": [
+                  -16,
+                  0,
+                  16
+                ],
+                "cargo": [
+                  -19,
+                  0.6,
+                  13
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "highest-ceramic-edge-exit-clear-in-flight",
+          "completed": false,
+          "outcome": "blocked-within-finite-attempt",
+          "frames": 702,
+          "frameCountSource": "journey-driver-frames",
+          "teleports": 1,
+          "player": [
+            15.859648219387184,
+            -1.947812499999999,
+            -17.025292504386208
+          ],
+          "cargo": [
+            16.568671873270304,
+            -0.8878233568866565,
+            -17.150629920081887
+          ],
+          "error": null,
+          "evidence": {
+            "shots": [
+              {
+                "panel": "travelling-address",
+                "offset": [
+                  0,
+                  0.88
+                ],
+                "accepted": true,
+                "position": [
+                  -15.98979235351431,
+                  9.419999999999998,
+                  -4
+                ]
+              }
+            ],
+            "maxY": 7.697622621238701,
+            "maxSpeed": 22.66992759151706,
+            "teleportPeak": 1,
+            "milestones": [
+              "Highest accepted edge exit followed by immediate portal clearing and jumping sprint"
+            ],
+            "physicsSteps": 1404,
+            "simulationSeconds": 11.699999999999976,
+            "scenarioStarted": true,
+            "respawnEvents": [
+              {
+                "physicsStep": 0,
+                "simulationSeconds": 0,
+                "scenarioStarted": false,
+                "player": [
+                  -16,
+                  0,
+                  16
+                ],
+                "cargo": [
+                  -19,
+                  0.6,
+                  13
+                ]
+              }
+            ],
+            "pairTraversal": true,
+            "clearedAfterTraversal": true
+          }
+        },
+        {
+          "name": "empty-car-upper-frame-jump-without-dispatch",
+          "completed": false,
+          "outcome": "blocked-within-finite-attempt",
+          "frames": 1182,
+          "frameCountSource": "journey-driver-frames",
+          "teleports": 1,
+          "player": [
+            15.971058816650489,
+            -1.595729166666665,
+            -17.117439182670815
+          ],
+          "cargo": [
+            16.690366099770063,
+            -0.5357347962209389,
+            -17.086171704293744
+          ],
+          "error": null,
+          "evidence": {
+            "shots": [],
+            "maxY": 8.479397637140227,
+            "maxSpeed": 18.633565153440713,
+            "teleportPeak": 1,
+            "milestones": [],
+            "physicsSteps": 2364,
+            "simulationSeconds": 19.699999999999523,
+            "scenarioStarted": true,
+            "respawnEvents": [
+              {
+                "physicsStep": 0,
+                "simulationSeconds": 0,
+                "scenarioStarted": false,
+                "player": [
+                  -16,
+                  0,
+                  16
+                ],
+                "cargo": [
+                  -19,
+                  0.6,
+                  13
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "suspectedShortcuts": []
+    },
+    {
+      "number": 4,
+      "title": "Цена высоты",
+      "attacks": [
+        {
+          "name": "clockwise-perimeter-corner-hop-carry",
+          "completed": false,
+          "outcome": "blocked-within-finite-attempt",
+          "frames": 2257,
+          "frameCountSource": "journey-driver-frames",
+          "teleports": 0,
+          "player": [
+            15.85737379865902,
+            -3.936354166666667,
+            -17.08017578635931
+          ],
+          "cargo": [
+            15.137411642095852,
+            -2.8763681654721736,
+            -17.067289281643976
+          ],
+          "error": null,
+          "evidence": {
+            "shots": [],
+            "maxY": 1.5275000000000023,
+            "maxSpeed": 18.24536000901316,
+            "teleportPeak": 0,
+            "milestones": [
+              "Outer wall and every exterior corner attacked with the original carried cargo"
+            ],
+            "physicsSteps": 4514,
+            "simulationSeconds": 37.616666666665175,
+            "scenarioStarted": true,
+            "respawnEvents": [
+              {
+                "physicsStep": 0,
+                "simulationSeconds": 0,
+                "scenarioStarted": false,
+                "player": [
+                  -22,
+                  0,
+                  19
+                ],
+                "cargo": [
+                  -24,
+                  0.6,
+                  17
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "counterclockwise-perimeter-corner-hop-carry",
+          "completed": false,
+          "outcome": "blocked-within-finite-attempt",
+          "frames": 2470,
+          "frameCountSource": "journey-driver-frames",
+          "teleports": 0,
+          "player": [
+            6.357827370946134,
+            -4,
+            -11.76982441010556
+          ],
+          "cargo": [
+            6.655608894702944,
+            -2.929288399754329,
+            -12.42535445820297
+          ],
+          "error": null,
+          "evidence": {
+            "shots": [],
+            "maxY": 1.5275000000000023,
+            "maxSpeed": 13.314905355785426,
+            "teleportPeak": 0,
+            "milestones": [
+              "Outer wall and every exterior corner attacked with the original carried cargo"
+            ],
+            "physicsSteps": 4940,
+            "simulationSeconds": 41.16666666666497,
+            "scenarioStarted": true,
+            "respawnEvents": [
+              {
+                "physicsStep": 0,
+                "simulationSeconds": 0,
+                "scenarioStarted": false,
+                "player": [
+                  -22,
+                  0,
+                  19
+                ],
+                "cargo": [
+                  -24,
+                  0.6,
+                  17
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "cargo-wedge-airborne-pickup-buffers",
+          "completed": false,
+          "outcome": "blocked-within-finite-attempt",
+          "frames": 1292,
+          "frameCountSource": "journey-driver-frames",
+          "teleports": 0,
+          "player": [
+            15.92942821724816,
+            -3.022291666666666,
+            -17.027882668675755
+          ],
+          "cargo": [
+            16.593592147655496,
+            -1.9623033277583055,
+            -16.749860270004223
+          ],
+          "error": null,
+          "evidence": {
+            "shots": [],
+            "maxY": 1.5275000000000023,
+            "maxSpeed": 18.07362372517316,
+            "teleportPeak": 0,
+            "milestones": [
+              "Cargo wedging, repeated buffered jumps and airborne pickup/release attempted"
+            ],
+            "physicsSteps": 2584,
+            "simulationSeconds": 21.533333333332752,
+            "scenarioStarted": true,
+            "respawnEvents": [
+              {
+                "physicsStep": 0,
+                "simulationSeconds": 0,
+                "scenarioStarted": false,
+                "player": [
+                  -22,
+                  0,
+                  19
+                ],
+                "cargo": [
+                  -24,
+                  0.6,
+                  17
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "highest-ceramic-edge-exit-clear-in-flight",
+          "completed": false,
+          "outcome": "blocked-within-finite-attempt",
+          "frames": 374,
+          "frameCountSource": "journey-driver-frames",
+          "teleports": 0,
+          "player": [
+            -22,
+            0,
+            19
+          ],
+          "cargo": [
+            -23.58778439202818,
+            0.3899981575394087,
+            16.112586176552156
+          ],
+          "error": null,
+          "evidence": {
+            "shots": [
+              {
+                "panel": "inclined-exit",
+                "offset": [
+                  0,
+                  0.88
+                ],
+                "accepted": false,
+                "error": "Rejected shot {\"valid\":false,\"index\":1,\"position\":[-9.361377114984517,10.39267836562653,-13.347425126587268],\"sequence\":1,\"surface\":\"inclined-exit / portal support\",\"reason\":\"back-face\"}"
+              },
+              {
+                "panel": "inclined-exit",
+                "offset": [
+                  0.88,
+                  0.88
+                ],
+                "accepted": false,
+                "error": "Rejected shot {\"valid\":false,\"index\":1,\"position\":[-6.299645169738138,8.909813906660021,-14.743397082725924],\"sequence\":2,\"surface\":\"inclined-exit / portal support\",\"reason\":\"back-face\"}"
+              },
+              {
+                "panel": "inclined-exit",
+                "offset": [
+                  -0.88,
+                  0.88
+                ],
+                "accepted": false,
+                "error": "Rejected shot {\"valid\":false,\"index\":1,\"position\":[-12.944469750695378,11.520835917541682,-10.378461139187904],\"sequence\":3,\"surface\":\"inclined-exit / segmented frame\",\"reason\":\"surface\"}"
+              },
+              {
+                "panel": "fall-entry",
+                "offset": [
+                  0,
+                  0.88
+                ],
+                "accepted": false,
+                "error": "Rejected shot {\"valid\":false,\"index\":1,\"position\":[-20.15134801688111,1.1920928910669204e-8,11.443533024611096],\"sequence\":4,\"surface\":\"Folded floor casing / collision\",\"reason\":\"surface\"}"
+              },
+              {
+                "panel": "fall-entry",
+                "offset": [
+                  0.88,
+                  0.88
+                ],
+                "accepted": false,
+                "error": "Rejected shot {\"valid\":false,\"index\":1,\"position\":[-19.04919128098442,1.1920928910669204e-8,11.641897194080641],\"sequence\":5,\"surface\":\"Folded floor casing / collision\",\"reason\":\"surface\"}"
+              },
+              {
+                "panel": "fall-entry",
+                "offset": [
+                  -0.88,
+                  0.88
+                ],
+                "accepted": false,
+                "error": "Rejected shot {\"valid\":false,\"index\":1,\"position\":[-21.27878618776179,1.1920928910669204e-8,11.460413446203866],\"sequence\":6,\"surface\":\"Folded floor casing / collision\",\"reason\":\"surface\"}"
+              }
+            ],
+            "maxY": 0,
+            "maxSpeed": 0,
+            "teleportPeak": 0,
+            "milestones": [],
+            "physicsSteps": 748,
+            "simulationSeconds": 6.233333333333433,
+            "scenarioStarted": true,
+            "respawnEvents": [
+              {
+                "physicsStep": 0,
+                "simulationSeconds": 0,
+                "scenarioStarted": false,
+                "player": [
+                  -22,
+                  0,
+                  19
+                ],
+                "cargo": [
+                  -24,
+                  0.6,
+                  17
+                ]
+              }
+            ],
+            "noAcceptedPair": true
+          }
+        },
+        {
+          "name": "lower-floor-jump-fling-high-outlet--1",
+          "completed": false,
+          "outcome": "blocked-within-finite-attempt",
+          "frames": 2991,
+          "frameCountSource": "journey-driver-frames",
+          "teleports": 1,
+          "player": [
+            15.58693942731282,
+            -2.510416666666664,
+            -16.945191728097694
+          ],
+          "cargo": [
+            15.02763705200389,
+            -1.4504138520686256,
+            -17.398624584039137
+          ],
+          "error": null,
+          "evidence": {
+            "shots": [],
+            "maxY": 14.433363454870555,
+            "maxSpeed": 25.427877397369198,
+            "teleportPeak": 1,
+            "milestones": [],
+            "physicsSteps": 5982,
+            "simulationSeconds": 49.84999999999781,
+            "scenarioStarted": true,
+            "respawnEvents": [
+              {
+                "physicsStep": 0,
+                "simulationSeconds": 0,
+                "scenarioStarted": false,
+                "player": [
+                  -22,
+                  0,
+                  19
+                ],
+                "cargo": [
+                  -24,
+                  0.6,
+                  17
+                ]
+              }
+            ],
+            "afterLowFling": [
+              -17.13549228727644,
+              -4.100312486886972,
+              -5.9720262006020475
+            ]
+          }
+        },
+        {
+          "name": "lower-floor-jump-fling-high-outlet-0",
+          "completed": false,
+          "outcome": "blocked-within-finite-attempt",
+          "frames": 2829,
+          "frameCountSource": "journey-driver-frames",
+          "teleports": 1,
+          "player": [
+            15.865509635525417,
+            -2.6349999999999967,
+            -16.898961097127778
+          ],
+          "cargo": [
+            15.599206041323551,
+            -1.57499396858203,
+            -17.56800044065183
+          ],
+          "error": null,
+          "evidence": {
+            "shots": [],
+            "maxY": 14.433363454870555,
+            "maxSpeed": 25.425489079308544,
+            "teleportPeak": 1,
+            "milestones": [],
+            "physicsSteps": 5658,
+            "simulationSeconds": 47.149999999997966,
+            "scenarioStarted": true,
+            "respawnEvents": [
+              {
+                "physicsStep": 0,
+                "simulationSeconds": 0,
+                "scenarioStarted": false,
+                "player": [
+                  -22,
+                  0,
+                  19
+                ],
+                "cargo": [
+                  -24,
+                  0.6,
+                  17
+                ]
+              }
+            ],
+            "afterLowFling": [
+              -16.99863848830151,
+              -4.193750000000001,
+              -5.85723993602225
+            ]
+          }
+        },
+        {
+          "name": "lower-floor-jump-fling-high-outlet-1",
+          "completed": false,
+          "outcome": "blocked-within-finite-attempt",
+          "frames": 2833,
+          "frameCountSource": "journey-driver-frames",
+          "teleports": 1,
+          "player": [
+            15.971301844677082,
+            -2.546979166666665,
+            -16.84758461351305
+          ],
+          "cargo": [
+            16.688640978895847,
+            -1.4869835899134656,
+            -16.784913392818424
+          ],
+          "error": null,
+          "evidence": {
+            "shots": [],
+            "maxY": 14.433363454870555,
+            "maxSpeed": 25.427877397369198,
+            "teleportPeak": 1,
+            "milestones": [],
+            "physicsSteps": 5666,
+            "simulationSeconds": 47.21666666666463,
+            "scenarioStarted": true,
+            "respawnEvents": [
+              {
+                "physicsStep": 0,
+                "simulationSeconds": 0,
+                "scenarioStarted": false,
+                "player": [
+                  -22,
+                  0,
+                  19
+                ],
+                "cargo": [
+                  -24,
+                  0.6,
+                  17
+                ]
+              }
+            ],
+            "afterLowFling": [
+              -17.13549228727644,
+              -4.100312486886972,
+              -5.972026200602046
+            ]
+          }
+        }
+      ],
+      "suspectedShortcuts": []
+    },
+    {
+      "number": 5,
+      "title": "Одной парой",
+      "attacks": [
+        {
+          "name": "clockwise-perimeter-corner-hop-carry",
+          "completed": false,
+          "outcome": "blocked-within-finite-attempt",
+          "frames": 2284,
+          "frameCountSource": "journey-driver-frames",
+          "teleports": 0,
+          "player": [
+            18.014597413547275,
+            0.6743750000000044,
+            -16.943948628508796
+          ],
+          "cargo": [
+            17.829099813251894,
+            1.734389073467792,
+            -17.639666815102814
+          ],
+          "error": null,
+          "evidence": {
+            "shots": [],
+            "maxY": 1.5275000000000023,
+            "maxSpeed": 13.165882050589785,
+            "teleportPeak": 0,
+            "milestones": [
+              "Outer wall and every exterior corner attacked with the original carried cargo"
+            ],
+            "physicsSteps": 4568,
+            "simulationSeconds": 38.06666666666515,
+            "scenarioStarted": true,
+            "respawnEvents": [
+              {
+                "physicsStep": 0,
+                "simulationSeconds": 0,
+                "scenarioStarted": false,
+                "player": [
+                  2,
+                  0,
+                  18
+                ],
+                "cargo": [
+                  -1,
+                  0.6,
+                  15
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "counterclockwise-perimeter-corner-hop-carry",
+          "completed": false,
+          "outcome": "blocked-within-finite-attempt",
+          "frames": 2478,
+          "frameCountSource": "journey-driver-frames",
+          "teleports": 0,
+          "player": [
+            15.855467241808876,
+            1.3650000000000033,
+            -14.468796683606978
+          ],
+          "cargo": [
+            16.320716482916364,
+            2.4250060314179698,
+            -15.018301004712809
+          ],
+          "error": null,
+          "evidence": {
+            "shots": [],
+            "maxY": 1.5275000000000023,
+            "maxSpeed": 13.210843715792707,
+            "teleportPeak": 0,
+            "milestones": [
+              "Outer wall and every exterior corner attacked with the original carried cargo"
+            ],
+            "physicsSteps": 4956,
+            "simulationSeconds": 41.2999999999983,
+            "scenarioStarted": true,
+            "respawnEvents": [
+              {
+                "physicsStep": 0,
+                "simulationSeconds": 0,
+                "scenarioStarted": false,
+                "player": [
+                  2,
+                  0,
+                  18
+                ],
+                "cargo": [
+                  -1,
+                  0.6,
+                  15
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "cargo-wedge-airborne-pickup-buffers",
+          "completed": false,
+          "outcome": "blocked-within-finite-attempt",
+          "frames": 1050,
+          "frameCountSource": "journey-driver-frames",
+          "teleports": 0,
+          "player": [
+            18.06314784391873,
+            1.0873958333333371,
+            -16.93058890050696
+          ],
+          "cargo": [
+            17.617966453814624,
+            2.147405885776214,
+            -17.496472400578345
+          ],
+          "error": null,
+          "evidence": {
+            "shots": [],
+            "maxY": 1.5275000000000023,
+            "maxSpeed": 12.681126379465404,
+            "teleportPeak": 0,
+            "milestones": [
+              "Cargo wedging, repeated buffered jumps and airborne pickup/release attempted"
+            ],
+            "physicsSteps": 2100,
+            "simulationSeconds": 17.49999999999965,
+            "scenarioStarted": true,
+            "respawnEvents": [
+              {
+                "physicsStep": 0,
+                "simulationSeconds": 0,
+                "scenarioStarted": false,
+                "player": [
+                  2,
+                  0,
+                  18
+                ],
+                "cargo": [
+                  -1,
+                  0.6,
+                  15
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "highest-ceramic-edge-exit-clear-in-flight",
+          "completed": false,
+          "outcome": "blocked-within-finite-attempt",
+          "frames": 770,
+          "frameCountSource": "journey-driver-frames",
+          "teleports": 0,
+          "player": [
+            2,
+            0,
+            18
+          ],
+          "cargo": [
+            -2.197533470935606,
+            0.3899981579318873,
+            14.458185432189431
+          ],
+          "error": null,
+          "evidence": {
+            "shots": [
+              {
+                "panel": "air-source",
+                "offset": [
+                  0,
+                  0.88
+                ],
+                "accepted": true,
+                "position": [
+                  21.5537773333085,
+                  3.5699999999999994,
+                  15
+                ]
+              },
+              {
+                "panel": "light-source",
+                "accepted": false,
+                "error": "Rejected shot {\"valid\":false,\"index\":0,\"position\":[-12.76000000268221,6.732172748578273,11.114838089748298],\"sequence\":1,\"surface\":\"light-source / portal support\",\"reason\":\"back-face\"}"
+              },
+              {
+                "panel": "air-source",
+                "offset": [
+                  0.88,
+                  0.88
+                ],
+                "accepted": true,
+                "position": [
+                  21.9,
+                  3.5699999999999994,
+                  15
+                ]
+              },
+              {
+                "panel": "light-source",
+                "accepted": false,
+                "error": "Rejected shot {\"valid\":false,\"index\":0,\"position\":[-12.76000000268221,6.7360846741297875,11.11666100239554],\"sequence\":2,\"surface\":\"light-source / portal support\",\"reason\":\"back-face\"}"
+              },
+              {
+                "panel": "air-source",
+                "offset": [
+                  -0.88,
+                  0.88
+                ],
+                "accepted": false,
+                "error": "Rejected shot {\"valid\":false,\"index\":1,\"position\":[16.910447845395332,5.472800068734351,15.130000013113023],\"sequence\":3,\"surface\":\"air-source / segmented frame\",\"reason\":\"surface\"}"
+              },
+              {
+                "panel": "air-receiver",
+                "offset": [
+                  0,
+                  0.88
+                ],
+                "accepted": false,
+                "error": "Rejected shot {\"valid\":false,\"index\":1,\"position\":[-12.621762330091393,4.6,-14.753396704763508],\"sequence\":4,\"surface\":\"Folded dark casing / collision\",\"reason\":\"surface\"}"
+              },
+              {
+                "panel": "air-receiver",
+                "offset": [
+                  0.88,
+                  0.88
+                ],
+                "accepted": false,
+                "error": "Rejected shot {\"valid\":false,\"index\":1,\"position\":[-12.099999998509883,4.977716067089362,-19.876013960772926],\"sequence\":5,\"surface\":\"Folded shell casing / collision\",\"reason\":\"surface\"}"
+              },
+              {
+                "panel": "air-receiver",
+                "offset": [
+                  -0.88,
+                  0.88
+                ],
+                "accepted": false,
+                "error": "Rejected shot {\"valid\":false,\"index\":1,\"position\":[-12.93758184592203,4.0594708087660845,-10.370000004768372],\"sequence\":6,\"surface\":\"Load-bearing telescopic column / physical envelope\",\"reason\":\"surface\"}"
+              },
+              {
+                "panel": "light-source",
+                "offset": [
+                  0,
+                  0.88
+                ],
+                "accepted": false,
+                "error": "Rejected shot {\"valid\":false,\"index\":1,\"position\":[-12.76000000268221,8.71670186017158,11.140526433305656],\"sequence\":7,\"surface\":\"light-source / portal support\",\"reason\":\"back-face\"}"
+              },
+              {
+                "panel": "light-source",
+                "offset": [
+                  0.88,
+                  0.88
+                ],
+                "accepted": false,
+                "error": "Rejected shot {\"valid\":false,\"index\":1,\"position\":[-12.76000000268221,8.767260449160975,14.559279474345416],\"sequence\":8,\"surface\":\"light-source / portal support\",\"reason\":\"back-face\"}"
+              },
+              {
+                "panel": "light-source",
+                "offset": [
+                  -0.88,
+                  0.88
+                ],
+                "accepted": false,
+                "error": "Rejected shot {\"valid\":false,\"index\":1,\"position\":[-12.76000000268221,8.770010785134156,7.564746759365029],\"sequence\":9,\"surface\":\"light-source / portal support\",\"reason\":\"back-face\"}"
+              }
+            ],
+            "maxY": 0,
+            "maxSpeed": 0,
+            "teleportPeak": 0,
+            "milestones": [],
+            "physicsSteps": 1540,
+            "simulationSeconds": 12.833333333333245,
+            "scenarioStarted": true,
+            "respawnEvents": [
+              {
+                "physicsStep": 0,
+                "simulationSeconds": 0,
+                "scenarioStarted": false,
+                "player": [
+                  2,
+                  0,
+                  18
+                ],
+                "cargo": [
+                  -1,
+                  0.6,
+                  15
+                ]
+              }
+            ],
+            "noAcceptedPair": true
+          }
+        },
+        {
+          "name": "jump-through-lowest-light-source-without-motor",
+          "completed": false,
+          "outcome": "blocked-within-finite-attempt",
+          "frames": 2032,
+          "frameCountSource": "journey-driver-frames",
+          "teleports": 0,
+          "player": [
+            17.97126566294213,
+            1.1848958333333344,
+            -16.93258784084288
+          ],
+          "cargo": [
+            18.499460720813488,
+            2.244886584856641,
+            -17.421912373896028
+          ],
+          "error": null,
+          "evidence": {
+            "shots": [],
+            "maxY": 1.5275000000000023,
+            "maxSpeed": 14.09883443945476,
+            "teleportPeak": 0,
+            "milestones": [],
+            "physicsSteps": 4064,
+            "simulationSeconds": 33.86666666666539,
+            "scenarioStarted": true,
+            "respawnEvents": [
+              {
+                "physicsStep": 0,
+                "simulationSeconds": 0,
+                "scenarioStarted": false,
+                "player": [
+                  2,
+                  0,
+                  18
+                ],
+                "cargo": [
+                  -1,
+                  0.6,
+                  15
+                ]
+              }
+            ],
+            "motorHeight": 0
+          }
+        }
+      ],
+      "suspectedShortcuts": []
+    },
+    {
+      "number": 6,
+      "title": "Перекрёстный свет",
+      "attacks": [
+        {
+          "name": "clockwise-perimeter-corner-hop-carry",
+          "completed": false,
+          "outcome": "blocked-within-finite-attempt",
+          "frames": 2486,
+          "frameCountSource": "journey-driver-frames",
+          "teleports": 0,
+          "player": [
+            -0.5592576463897561,
+            1.2164583339293795,
+            -12.314900002384185
+          ],
+          "cargo": [
+            0.05228927475271404,
+            2.2764599422199447,
+            -12.361335135820989
+          ],
+          "error": null,
+          "evidence": {
+            "shots": [],
+            "maxY": 1.5275000000000023,
+            "maxSpeed": 11.05888658315316,
+            "teleportPeak": 0,
+            "milestones": [
+              "Outer wall and every exterior corner attacked with the original carried cargo"
+            ],
+            "physicsSteps": 4972,
+            "simulationSeconds": 41.433333333331625,
+            "scenarioStarted": true,
+            "respawnEvents": [
+              {
+                "physicsStep": 0,
+                "simulationSeconds": 0,
+                "scenarioStarted": false,
+                "player": [
+                  8,
+                  0,
+                  5
+                ],
+                "cargo": [
+                  8,
+                  0.55,
+                  7
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "counterclockwise-perimeter-corner-hop-carry",
+          "completed": false,
+          "outcome": "blocked-within-finite-attempt",
+          "frames": 2486,
+          "frameCountSource": "journey-driver-frames",
+          "teleports": 0,
+          "player": [
+            0.07651133658864177,
+            1.2164583339293795,
+            -12.314900002384185
+          ],
+          "cargo": [
+            0.7965112894500707,
+            2.2764599422199447,
+            -12.3149537897475
+          ],
+          "error": null,
+          "evidence": {
+            "shots": [],
+            "maxY": 1.5275000000000023,
+            "maxSpeed": 11.027512163134729,
+            "teleportPeak": 0,
+            "milestones": [
+              "Outer wall and every exterior corner attacked with the original carried cargo"
+            ],
+            "physicsSteps": 4972,
+            "simulationSeconds": 41.433333333331625,
+            "scenarioStarted": true,
+            "respawnEvents": [
+              {
+                "physicsStep": 0,
+                "simulationSeconds": 0,
+                "scenarioStarted": false,
+                "player": [
+                  8,
+                  0,
+                  5
+                ],
+                "cargo": [
+                  8,
+                  0.55,
+                  7
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "cargo-wedge-airborne-pickup-buffers",
+          "completed": false,
+          "outcome": "blocked-within-finite-attempt",
+          "frames": 1492,
+          "frameCountSource": "journey-driver-frames",
+          "teleports": 0,
+          "player": [
+            -0.5149193287672307,
+            1.1555208339293797,
+            -12.314900002384185
+          ],
+          "cargo": [
+            -1.2349193800364058,
+            2.2155248548348907,
+            -12.314930197781543
+          ],
+          "error": null,
+          "evidence": {
+            "shots": [],
+            "maxY": 3.0275000000000025,
+            "maxSpeed": 11.153128793146909,
+            "teleportPeak": 0,
+            "milestones": [
+              "Cargo wedging, repeated buffered jumps and airborne pickup/release attempted"
+            ],
+            "physicsSteps": 2984,
+            "simulationSeconds": 24.866666666665896,
+            "scenarioStarted": true,
+            "respawnEvents": [
+              {
+                "physicsStep": 0,
+                "simulationSeconds": 0,
+                "scenarioStarted": false,
+                "player": [
+                  8,
+                  0,
+                  5
+                ],
+                "cargo": [
+                  8,
+                  0.55,
+                  7
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "highest-ceramic-edge-exit-clear-in-flight",
+          "completed": false,
+          "outcome": "blocked-within-finite-attempt",
+          "frames": 1284,
+          "frameCountSource": "journey-driver-frames",
+          "teleports": 1,
+          "player": [
+            0.10034035293674166,
+            0.11958333392937971,
+            -12.314900002384185
+          ],
+          "cargo": [
+            0.5285466072763607,
+            1.1795994179096225,
+            -12.352481834529891
+          ],
+          "error": null,
+          "evidence": {
+            "shots": [
+              {
+                "panel": "light-outlet",
+                "offset": [
+                  0,
+                  0.88
+                ],
+                "accepted": false,
+                "error": "Rejected shot {\"valid\":false,\"index\":1,\"position\":[0.16551242293894014,3.76457101906294,-2.799999998509884],\"sequence\":1,\"surface\":\"light-outlet / collision\",\"reason\":\"back-face\"}"
+              },
+              {
+                "panel": "light-outlet",
+                "offset": [
+                  0.88,
+                  0.88
+                ],
+                "accepted": false,
+                "error": "Rejected shot {\"valid\":false,\"index\":1,\"position\":[-1.5094585355937413,3.8080106717644,-2.799999998509884],\"sequence\":2,\"surface\":\"light-outlet / collision\",\"reason\":\"back-face\"}"
+              },
+              {
+                "panel": "light-outlet",
+                "offset": [
+                  -0.88,
+                  0.88
+                ],
+                "accepted": false,
+                "error": "Rejected shot {\"valid\":false,\"index\":1,\"position\":[1.9684522790136478,3.79003615504919,-2.799999998509884],\"sequence\":3,\"surface\":\"light-outlet / collision\",\"reason\":\"back-face\"}"
+              },
+              {
+                "panel": "cab-inner",
+                "offset": [
+                  0,
+                  0.88
+                ],
+                "accepted": false,
+                "error": "Rejected shot {\"valid\":false,\"index\":1,\"position\":[-4.9325315779324015,3.221187016408919,-2],\"sequence\":4,\"surface\":\"\",\"reason\":\"surface\"}"
+              },
+              {
+                "panel": "cab-inner",
+                "offset": [
+                  0.88,
+                  0.88
+                ],
+                "accepted": false,
+                "error": "Rejected shot {\"valid\":false,\"index\":1,\"position\":[-4.875,3.1900375359582758,-3.3680760050286924],\"sequence\":5,\"surface\":\"\",\"reason\":\"surface\"}"
+              },
+              {
+                "panel": "cab-inner",
+                "offset": [
+                  -0.88,
+                  0.88
+                ],
+                "accepted": false,
+                "error": "Rejected shot {\"valid\":false,\"index\":1,\"position\":[-7.730381111284079,3.572958790108725,-1.875],\"sequence\":6,\"surface\":\"\",\"reason\":\"surface\"}"
+              },
+              {
+                "panel": "optical-side-wall",
+                "offset": [
+                  0,
+                  0.88
+                ],
+                "accepted": true,
+                "position": [
+                  11.759999999999998,
+                  2.8419999999999996,
+                  -4.638178346806708
+                ]
+              }
+            ],
+            "maxY": 1.5275000000000023,
+            "maxSpeed": 10.245782146097602,
+            "teleportPeak": 1,
+            "milestones": [
+              "Highest accepted edge exit followed by immediate portal clearing and jumping sprint"
+            ],
+            "physicsSteps": 2568,
+            "simulationSeconds": 21.399999999999427,
+            "scenarioStarted": true,
+            "respawnEvents": [
+              {
+                "physicsStep": 0,
+                "simulationSeconds": 0,
+                "scenarioStarted": false,
+                "player": [
+                  8,
+                  0,
+                  5
+                ],
+                "cargo": [
+                  8,
+                  0.55,
+                  7
+                ]
+              }
+            ],
+            "pairTraversal": true,
+            "clearedAfterTraversal": true
+          }
+        },
+        {
+          "name": "outer-servo-through-wall-midjump-without-pilot",
+          "completed": false,
+          "outcome": "blocked-within-finite-attempt",
+          "frames": 1883,
+          "frameCountSource": "journey-driver-frames",
+          "teleports": 0,
+          "player": [
+            0.0011725841394715445,
+            0.30468750000000006,
+            -12.314900002384185
+          ],
+          "cargo": [
+            -0.7187958468599693,
+            1.3646702094734857,
+            -12.308158202956808
+          ],
+          "error": null,
+          "evidence": {
+            "shots": [],
+            "maxY": 3.0275000000000025,
+            "maxSpeed": 10.928625204902247,
+            "teleportPeak": 0,
+            "milestones": [],
+            "physicsSteps": 3766,
+            "simulationSeconds": 31.383333333332192,
+            "scenarioStarted": true,
+            "respawnEvents": [
+              {
+                "physicsStep": 0,
+                "simulationSeconds": 0,
+                "scenarioStarted": false,
+                "player": [
+                  8,
+                  0,
+                  5
+                ],
+                "cargo": [
+                  8,
+                  0.55,
+                  7
+                ]
+              }
+            ],
+            "mirrorTarget": 0,
+            "pilotLit": false
+          }
+        }
+      ],
+      "suspectedShortcuts": []
+    },
+    {
+      "number": 7,
+      "title": "Инерционный балансир",
+      "attacks": [
+        {
+          "name": "clockwise-perimeter-corner-hop-carry",
+          "completed": false,
+          "outcome": "blocked-within-finite-attempt",
+          "frames": 2297,
+          "frameCountSource": "journey-driver-frames",
+          "teleports": 0,
+          "player": [
+            -9.850099997317791,
+            1.0156250000000038,
+            6.227478030852816
+          ],
+          "cargo": [
+            -9.939486540798594,
+            2.075635856647863,
+            6.160513459201407
+          ],
+          "error": null,
+          "evidence": {
+            "shots": [],
+            "maxY": 1.8025000014901187,
+            "maxSpeed": 10.874483430129443,
+            "teleportPeak": 0,
+            "milestones": [
+              "Outer wall and every exterior corner attacked with the original carried cargo"
+            ],
+            "physicsSteps": 4594,
+            "simulationSeconds": 38.283333333331804,
+            "scenarioStarted": true,
+            "respawnEvents": [
+              {
+                "physicsStep": 0,
+                "simulationSeconds": 0,
+                "scenarioStarted": false,
+                "player": [
+                  8,
+                  0,
+                  12.5
+                ],
+                "cargo": [
+                  6,
+                  0.55,
+                  11.5
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "counterclockwise-perimeter-corner-hop-carry",
+          "completed": false,
+          "outcome": "blocked-within-finite-attempt",
+          "frames": 1758,
+          "frameCountSource": "journey-driver-frames",
+          "teleports": 0,
+          "player": [
+            -0.12115524585595319,
+            1.5275000000000023,
+            11.025065844732522
+          ],
+          "cargo": [
+            0.5709722823024487,
+            2.5874995977781117,
+            10.826458853422459
+          ],
+          "error": null,
+          "evidence": {
+            "shots": [],
+            "maxY": 1.8025000014901187,
+            "maxSpeed": 11.088460924138712,
+            "teleportPeak": 0,
+            "milestones": [
+              "Outer wall and every exterior corner attacked with the original carried cargo"
+            ],
+            "physicsSteps": 3516,
+            "simulationSeconds": 29.299999999998978,
+            "scenarioStarted": true,
+            "respawnEvents": [
+              {
+                "physicsStep": 0,
+                "simulationSeconds": 0,
+                "scenarioStarted": false,
+                "player": [
+                  8,
+                  0,
+                  12.5
+                ],
+                "cargo": [
+                  6,
+                  0.55,
+                  11.5
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "cargo-wedge-airborne-pickup-buffers",
+          "completed": false,
+          "outcome": "blocked-within-finite-attempt",
+          "frames": 1010,
+          "frameCountSource": "journey-driver-frames",
+          "teleports": 0,
+          "player": [
+            -0.1691394243339758,
+            1.4218750000000016,
+            11.007073708497641
+          ],
+          "cargo": [
+            0.5500866890090637,
+            2.4818697725482184,
+            10.97383892958824
+          ],
+          "error": null,
+          "evidence": {
+            "shots": [],
+            "maxY": 1.8025000014901187,
+            "maxSpeed": 9.89941333560489,
+            "teleportPeak": 0,
+            "milestones": [
+              "Cargo wedging, repeated buffered jumps and airborne pickup/release attempted"
+            ],
+            "physicsSteps": 2020,
+            "simulationSeconds": 16.83333333333302,
+            "scenarioStarted": true,
+            "respawnEvents": [
+              {
+                "physicsStep": 0,
+                "simulationSeconds": 0,
+                "scenarioStarted": false,
+                "player": [
+                  8,
+                  0,
+                  12.5
+                ],
+                "cargo": [
+                  6,
+                  0.55,
+                  11.5
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "highest-ceramic-edge-exit-clear-in-flight",
+          "completed": false,
+          "outcome": "blocked-within-finite-attempt",
+          "frames": 453,
+          "frameCountSource": "journey-driver-frames",
+          "teleports": 0,
+          "player": [
+            8,
+            0,
+            12.5
+          ],
+          "cargo": [
+            4.72746726293503,
+            0.3899981462518263,
+            11.773202548294082
+          ],
+          "error": null,
+          "evidence": {
+            "shots": [
+              {
+                "panel": "lever-receiver",
+                "offset": [
+                  0,
+                  0.88
+                ],
+                "accepted": false,
+                "error": "Rejected shot {\"valid\":false,\"index\":1,\"position\":[0.4048869608804708,7.9999999985098835,8.85773389618622],\"sequence\":1,\"surface\":\"floor / collision\",\"reason\":\"surface\"}"
+              },
+              {
+                "panel": "lever-receiver",
+                "offset": [
+                  0.88,
+                  0.88
+                ],
+                "accepted": false,
+                "error": "Rejected shot {\"valid\":false,\"index\":1,\"position\":[2.8991450882535967,7.9999999985098835,8.99675342373872],\"sequence\":2,\"surface\":\"floor / collision\",\"reason\":\"surface\"}"
+              },
+              {
+                "panel": "lever-receiver",
+                "offset": [
+                  -0.88,
+                  0.88
+                ],
+                "accepted": false,
+                "error": "Rejected shot {\"valid\":false,\"index\":1,\"position\":[-2.0524929072917546,7.9999999985098835,8.916892021897116],\"sequence\":3,\"surface\":\"floor / collision\",\"reason\":\"surface\"}"
+              },
+              {
+                "panel": "lever-load",
+                "offset": [
+                  0,
+                  0.88
+                ],
+                "accepted": false,
+                "error": "Rejected shot {\"valid\":false,\"index\":1,\"position\":[3.2099999994039536,2.0976960472417305,4.69917013153114],\"sequence\":4,\"surface\":\"\",\"reason\":\"surface\"}"
+              },
+              {
+                "panel": "lever-load",
+                "offset": [
+                  0.88,
+                  0.88
+                ],
+                "accepted": false,
+                "error": "Rejected shot {\"valid\":false,\"index\":1,\"position\":[1.7999999523162842,2.437169096477378,1.0441812731949858],\"sequence\":5,\"surface\":\"\",\"reason\":\"surface\"}"
+              },
+              {
+                "panel": "lever-load",
+                "offset": [
+                  -0.88,
+                  0.88
+                ],
+                "accepted": false,
+                "error": "Rejected shot {\"valid\":false,\"index\":1,\"position\":[0.014321868739427035,2.3015731407462066,2.3749896704833278],\"sequence\":6,\"surface\":\"\",\"reason\":\"surface\"}"
+              },
+              {
+                "panel": "balance-launch",
+                "offset": [
+                  0,
+                  0.88
+                ],
+                "accepted": false,
+                "error": "Rejected shot {\"valid\":false,\"index\":1,\"position\":[7.289948757192781,1.272460643742569,9.16666667163372],\"sequence\":7,\"surface\":\"floor / collision\",\"reason\":\"surface\"}"
+              },
+              {
+                "panel": "balance-launch",
+                "offset": [
+                  0.88,
+                  0.88
+                ],
+                "accepted": false,
+                "error": "Rejected shot {\"valid\":false,\"index\":1,\"position\":[7.565915432887955,1.2675458670008484,9.16666667163372],\"sequence\":8,\"surface\":\"floor / collision\",\"reason\":\"surface\"}"
+              },
+              {
+                "panel": "balance-launch",
+                "offset": [
+                  -0.88,
+                  0.88
+                ],
+                "accepted": false,
+                "error": "Rejected shot {\"valid\":false,\"index\":1,\"position\":[6.998404238281961,1.2693215643343927,9.16666667163372],\"sequence\":9,\"surface\":\"floor / collision\",\"reason\":\"surface\"}"
+              }
+            ],
+            "maxY": 0,
+            "maxSpeed": 0,
+            "teleportPeak": 0,
+            "milestones": [],
+            "physicsSteps": 906,
+            "simulationSeconds": 7.550000000000165,
+            "scenarioStarted": true,
+            "respawnEvents": [
+              {
+                "physicsStep": 0,
+                "simulationSeconds": 0,
+                "scenarioStarted": false,
+                "player": [
+                  8,
+                  0,
+                  12.5
+                ],
+                "cargo": [
+                  6,
+                  0.55,
+                  11.5
+                ]
+              }
+            ],
+            "noAcceptedPair": true
+          }
+        },
+        {
+          "name": "receiver-floor-lower-side-shot-before-rocker-load",
+          "completed": false,
+          "outcome": "blocked-within-finite-attempt",
+          "frames": 1475,
+          "frameCountSource": "journey-driver-frames",
+          "teleports": 0,
+          "player": [
+            0.13880602502135586,
+            1.438125000000003,
+            10.998652633434665
+          ],
+          "cargo": [
+            -0.5811014966600139,
+            2.4981294230080056,
+            11.009299601792168
+          ],
+          "error": null,
+          "evidence": {
+            "shots": [],
+            "maxY": 1.5275000000000023,
+            "maxSpeed": 8.725085074721783,
+            "teleportPeak": 0,
+            "milestones": [],
+            "physicsSteps": 2950,
+            "simulationSeconds": 24.58333333333258,
+            "scenarioStarted": true,
+            "respawnEvents": [
+              {
+                "physicsStep": 0,
+                "simulationSeconds": 0,
+                "scenarioStarted": false,
+                "player": [
+                  8,
+                  0,
+                  12.5
+                ],
+                "cargo": [
+                  6,
+                  0.55,
+                  11.5
+                ]
+              }
+            ],
+            "receiverAccepted": false,
+            "rejected": "Rejected shot {\"valid\":false,\"index\":1,\"position\":[-9.450000005960465,3.272416889209474,-5.550817072897175],\"sequence\":1,\"surface\":\"\",\"reason\":\"surface\"}"
+          }
+        }
+      ],
+      "suspectedShortcuts": []
+    },
+    {
+      "number": 8,
+      "title": "Ветер за углом",
+      "attacks": [
+        {
+          "name": "clockwise-perimeter-corner-hop-carry",
+          "completed": false,
+          "outcome": "blocked-within-finite-attempt",
+          "frames": 2326,
+          "frameCountSource": "journey-driver-frames",
+          "teleports": 0,
+          "player": [
+            -0.14434988299627097,
+            1.2431250000000011,
+            -8.995076324566385
+          ],
+          "cargo": [
+            0.5705784683230009,
+            2.30311655572829,
+            -8.909678200037979
+          ],
+          "error": null,
+          "evidence": {
+            "shots": [],
+            "maxY": 1.5525000014901187,
+            "maxSpeed": 10.892405723616283,
+            "teleportPeak": 0,
+            "milestones": [
+              "Outer wall and every exterior corner attacked with the original carried cargo"
+            ],
+            "physicsSteps": 4652,
+            "simulationSeconds": 38.76666666666511,
+            "scenarioStarted": true,
+            "respawnEvents": [
+              {
+                "physicsStep": 0,
+                "simulationSeconds": 0,
+                "scenarioStarted": false,
+                "player": [
+                  1,
+                  0,
+                  5.8
+                ],
+                "cargo": [
+                  2.2,
+                  0.55,
+                  4.5
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "counterclockwise-perimeter-corner-hop-carry",
+          "completed": false,
+          "outcome": "blocked-within-finite-attempt",
+          "frames": 1998,
+          "frameCountSource": "journey-driver-frames",
+          "teleports": 0,
+          "player": [
+            -0.09439682964637602,
+            1.0156250000000038,
+            -8.867896730625889
+          ],
+          "cargo": [
+            0.31485271323772995,
+            2.075635856647863,
+            -9.460372183907728
+          ],
+          "error": null,
+          "evidence": {
+            "shots": [],
+            "maxY": 3.0139583333333357,
+            "maxSpeed": 11.00717270546749,
+            "teleportPeak": 0,
+            "milestones": [
+              "Outer wall and every exterior corner attacked with the original carried cargo"
+            ],
+            "physicsSteps": 3996,
+            "simulationSeconds": 33.299999999998754,
+            "scenarioStarted": true,
+            "respawnEvents": [
+              {
+                "physicsStep": 0,
+                "simulationSeconds": 0,
+                "scenarioStarted": false,
+                "player": [
+                  1,
+                  0,
+                  5.8
+                ],
+                "cargo": [
+                  2.2,
+                  0.55,
+                  4.5
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "cargo-wedge-airborne-pickup-buffers",
+          "completed": false,
+          "outcome": "blocked-within-finite-attempt",
+          "frames": 1033,
+          "frameCountSource": "journey-driver-frames",
+          "teleports": 0,
+          "player": [
+            0.15527703819273012,
+            0,
+            -9.020981569924814
+          ],
+          "cargo": [
+            -0.5580235147508552,
+            1.0562966898392816,
+            -8.92305439524171
+          ],
+          "error": null,
+          "evidence": {
+            "shots": [],
+            "maxY": 1.5525000014901187,
+            "maxSpeed": 10.46650526264482,
+            "teleportPeak": 0,
+            "milestones": [
+              "Cargo wedging, repeated buffered jumps and airborne pickup/release attempted"
+            ],
+            "physicsSteps": 2066,
+            "simulationSeconds": 17.21666666666633,
+            "scenarioStarted": true,
+            "respawnEvents": [
+              {
+                "physicsStep": 0,
+                "simulationSeconds": 0,
+                "scenarioStarted": false,
+                "player": [
+                  1,
+                  0,
+                  5.8
+                ],
+                "cargo": [
+                  2.2,
+                  0.55,
+                  4.5
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "highest-ceramic-edge-exit-clear-in-flight",
+          "completed": false,
+          "outcome": "blocked-within-finite-attempt",
+          "frames": 579,
+          "frameCountSource": "journey-driver-frames",
+          "teleports": 1,
+          "player": [
+            -0.1046325818185721,
+            1.453020833333335,
+            -8.975582273991781
+          ],
+          "cargo": [
+            0.3342215264715782,
+            2.513016410086534,
+            -9.54639168211886
+          ],
+          "error": null,
+          "evidence": {
+            "shots": [
+              {
+                "panel": "pneumatic-low-wall",
+                "offset": [
+                  0,
+                  0.88
+                ],
+                "accepted": false,
+                "error": "Rejected shot {\"valid\":false,\"index\":1,\"position\":[-3.049999999254942,2.718249239319964,0.6208949732628003],\"sequence\":1,\"surface\":\"\",\"reason\":\"surface\"}"
+              },
+              {
+                "panel": "pneumatic-low-wall",
+                "offset": [
+                  0.88,
+                  0.88
+                ],
+                "accepted": false,
+                "error": "Rejected shot {\"valid\":false,\"index\":1,\"position\":[-3.049999999254942,2.7171205921505455,-1.7990262223274411],\"sequence\":2,\"surface\":\"\",\"reason\":\"surface\"}"
+              },
+              {
+                "panel": "pneumatic-low-wall",
+                "offset": [
+                  -0.88,
+                  0.88
+                ],
+                "accepted": true,
+                "position": [
+                  -9.760000000000002,
+                  2.8419999999999996,
+                  -1.0679999999999996
+                ]
+              }
+            ],
+            "maxY": 2.666511021190862,
+            "maxSpeed": 13.372670852842248,
+            "teleportPeak": 1,
+            "milestones": [
+              "Highest accepted edge exit followed by immediate portal clearing and jumping sprint"
+            ],
+            "physicsSteps": 1158,
+            "simulationSeconds": 9.650000000000093,
+            "scenarioStarted": true,
+            "respawnEvents": [
+              {
+                "physicsStep": 0,
+                "simulationSeconds": 0,
+                "scenarioStarted": false,
+                "player": [
+                  1,
+                  0,
+                  5.8
+                ],
+                "cargo": [
+                  2.2,
+                  0.55,
+                  4.5
+                ]
+              }
+            ],
+            "pairTraversal": true,
+            "clearedAfterTraversal": true
+          }
+        },
+        {
+          "name": "jump-through-pair-with-fan-off",
+          "completed": false,
+          "outcome": "blocked-within-finite-attempt",
+          "frames": 1348,
+          "frameCountSource": "journey-driver-frames",
+          "teleports": 0,
+          "player": [
+            0.005942684718399392,
+            1.5261458333333358,
+            -9.143596410085443
+          ],
+          "cargo": [
+            -0.5584201192577373,
+            2.5861462353164275,
+            -8.696504454993171
+          ],
+          "error": null,
+          "evidence": {
+            "shots": [],
+            "maxY": 1.5275000000000023,
+            "maxSpeed": 10.86352390366115,
+            "teleportPeak": 0,
+            "milestones": [],
+            "physicsSteps": 2696,
+            "simulationSeconds": 22.466666666666033,
+            "scenarioStarted": true,
+            "respawnEvents": [
+              {
+                "physicsStep": 0,
+                "simulationSeconds": 0,
+                "scenarioStarted": false,
+                "player": [
+                  1,
+                  0,
+                  5.8
+                ],
+                "cargo": [
+                  2.2,
+                  0.55,
+                  4.5
+                ]
+              }
+            ],
+            "fanEnabled": false
+          }
+        }
+      ],
+      "suspectedShortcuts": []
+    },
+    {
+      "number": 9,
+      "title": "Пружинная почта",
+      "attacks": [
+        {
+          "name": "clockwise-perimeter-corner-hop-carry",
+          "completed": false,
+          "outcome": "blocked-within-finite-attempt",
+          "frames": 2482,
+          "frameCountSource": "journey-driver-frames",
+          "teleports": 0,
+          "player": [
+            0.0019118112980933948,
+            1.2164583339293795,
+            -11.314900002384185
+          ],
+          "cargo": [
+            0.7219117243932426,
+            2.2764599422199447,
+            -11.314751459888425
+          ],
+          "error": null,
+          "evidence": {
+            "shots": [],
+            "maxY": 1.5275000000000023,
+            "maxSpeed": 11.059495900377225,
+            "teleportPeak": 0,
+            "milestones": [
+              "Outer wall and every exterior corner attacked with the original carried cargo"
+            ],
+            "physicsSteps": 4964,
+            "simulationSeconds": 41.36666666666496,
+            "scenarioStarted": true,
+            "respawnEvents": [
+              {
+                "physicsStep": 0,
+                "simulationSeconds": 0,
+                "scenarioStarted": false,
+                "player": [
+                  3,
+                  0,
+                  10
+                ],
+                "cargo": [
+                  0,
+                  0.55,
+                  9
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "counterclockwise-perimeter-corner-hop-carry",
+          "completed": false,
+          "outcome": "blocked-within-finite-attempt",
+          "frames": 2482,
+          "frameCountSource": "journey-driver-frames",
+          "teleports": 0,
+          "player": [
+            0.18353822217004084,
+            0,
+            -11.314900002384185
+          ],
+          "cargo": [
+            0.903537860941698,
+            1.060768681044198,
+            -11.314323115363884
+          ],
+          "error": null,
+          "evidence": {
+            "shots": [],
+            "maxY": 1.9774999940395375,
+            "maxSpeed": 11.058924830475474,
+            "teleportPeak": 0,
+            "milestones": [
+              "Outer wall and every exterior corner attacked with the original carried cargo"
+            ],
+            "physicsSteps": 4964,
+            "simulationSeconds": 41.36666666666496,
+            "scenarioStarted": true,
+            "respawnEvents": [
+              {
+                "physicsStep": 0,
+                "simulationSeconds": 0,
+                "scenarioStarted": false,
+                "player": [
+                  3,
+                  0,
+                  10
+                ],
+                "cargo": [
+                  0,
+                  0.55,
+                  9
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "cargo-wedge-airborne-pickup-buffers",
+          "completed": false,
+          "outcome": "blocked-within-finite-attempt",
+          "frames": 1479,
+          "frameCountSource": "journey-driver-frames",
+          "teleports": 0,
+          "player": [
+            0.0839547533312787,
+            0.2800000014901163,
+            -2.39990000089407
+          ],
+          "cargo": [
+            0.09112994950492688,
+            1.3399463241975946,
+            -2.589097357970203
+          ],
+          "error": null,
+          "evidence": {
+            "shots": [],
+            "maxY": 1.8075000014901186,
+            "maxSpeed": 9.927080853751317,
+            "teleportPeak": 0,
+            "milestones": [
+              "Cargo wedging, repeated buffered jumps and airborne pickup/release attempted"
+            ],
+            "physicsSteps": 2958,
+            "simulationSeconds": 24.649999999999242,
+            "scenarioStarted": true,
+            "respawnEvents": [
+              {
+                "physicsStep": 0,
+                "simulationSeconds": 0,
+                "scenarioStarted": false,
+                "player": [
+                  3,
+                  0,
+                  10
+                ],
+                "cargo": [
+                  0,
+                  0.55,
+                  9
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "highest-ceramic-edge-exit-clear-in-flight",
+          "completed": false,
+          "outcome": "blocked-within-finite-attempt",
+          "frames": 1017,
+          "frameCountSource": "journey-driver-frames",
+          "teleports": 1,
+          "player": [
+            0.07216652258896819,
+            1.2259375005960462,
+            -11.314900002384185
+          ],
+          "cargo": [
+            0.27389657405876183,
+            2.285938304681228,
+            -10.623737927768895
+          ],
+          "error": null,
+          "evidence": {
+            "shots": [
+              {
+                "panel": "drop-ceiling",
+                "offset": [
+                  0,
+                  0.88
+                ],
+                "accepted": true,
+                "position": [
+                  -0.023214114704078886,
+                  10.599999999999996,
+                  -3.9368710358717696
+                ]
+              }
+            ],
+            "maxY": 8.174999999999997,
+            "maxSpeed": 14.857057032210603,
+            "teleportPeak": 1,
+            "milestones": [
+              "Highest accepted edge exit followed by immediate portal clearing and jumping sprint"
+            ],
+            "physicsSteps": 2034,
+            "simulationSeconds": 16.94999999999968,
+            "scenarioStarted": true,
+            "respawnEvents": [
+              {
+                "physicsStep": 0,
+                "simulationSeconds": 0,
+                "scenarioStarted": false,
+                "player": [
+                  3,
+                  0,
+                  10
+                ],
+                "cargo": [
+                  0,
+                  0.55,
+                  9
+                ]
+              }
+            ],
+            "pairTraversal": true,
+            "clearedAfterTraversal": true
+          }
+        },
+        {
+          "name": "stomp-spring-and-touch-service-before-cargo-impact",
+          "completed": false,
+          "outcome": "blocked-within-finite-attempt",
+          "frames": 1427,
+          "frameCountSource": "journey-driver-frames",
+          "teleports": 0,
+          "player": [
+            -0.0002776094821204615,
+            1.2956250014901172,
+            -2.4010666675605083
+          ],
+          "cargo": [
+            -0.0010551040110290185,
+            2.3556137425009687,
+            -2.5926429451477864
+          ],
+          "error": null,
+          "evidence": {
+            "shots": [],
+            "maxY": 1.8075000014901186,
+            "maxSpeed": 9.91474868381709,
+            "teleportPeak": 0,
+            "milestones": [],
+            "physicsSteps": 2854,
+            "simulationSeconds": 23.783333333332624,
+            "scenarioStarted": true,
+            "respawnEvents": [
+              {
+                "physicsStep": 0,
+                "simulationSeconds": 0,
+                "scenarioStarted": false,
+                "player": [
+                  3,
+                  0,
+                  10
+                ],
+                "cargo": [
+                  0,
+                  0.55,
+                  9
+                ]
+              }
+            ],
+            "springLatched": false
+          }
+        }
+      ],
+      "suspectedShortcuts": []
+    },
+    {
+      "number": 10,
+      "title": "Телескопический док",
+      "attacks": [
+        {
+          "name": "clockwise-perimeter-corner-hop-carry",
+          "completed": false,
+          "outcome": "blocked-within-finite-attempt",
+          "frames": 2493,
+          "frameCountSource": "journey-driver-frames",
+          "teleports": 0,
+          "player": [
+            0.7468535474324668,
+            0,
+            3.4901000007450578
+          ],
+          "cargo": [
+            0.026854347572129934,
+            1.0601611544376757,
+            3.490156905868157
+          ],
+          "error": null,
+          "evidence": {
+            "shots": [],
+            "maxY": 3.3475000000000024,
+            "maxSpeed": 13.55497677311518,
+            "teleportPeak": 0,
+            "milestones": [
+              "Outer wall and every exterior corner attacked with the original carried cargo"
+            ],
+            "physicsSteps": 4986,
+            "simulationSeconds": 41.549999999998285,
+            "scenarioStarted": true,
+            "respawnEvents": [
+              {
+                "physicsStep": 0,
+                "simulationSeconds": 0,
+                "scenarioStarted": false,
+                "player": [
+                  -6.8,
+                  0,
+                  11
+                ],
+                "cargo": [
+                  -5.5,
+                  0.55,
+                  9.5
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "counterclockwise-perimeter-corner-hop-carry",
+          "completed": false,
+          "outcome": "blocked-within-finite-attempt",
+          "frames": 2493,
+          "frameCountSource": "journey-driver-frames",
+          "teleports": 0,
+          "player": [
+            0.03703507090374327,
+            0,
+            -11.314900002384185
+          ],
+          "cargo": [
+            0.7570350235304154,
+            1.0599478407960272,
+            -11.315015079604157
+          ],
+          "error": null,
+          "evidence": {
+            "shots": [],
+            "maxY": 1.5525000014901187,
+            "maxSpeed": 11.058749748757846,
+            "teleportPeak": 0,
+            "milestones": [
+              "Outer wall and every exterior corner attacked with the original carried cargo"
+            ],
+            "physicsSteps": 4986,
+            "simulationSeconds": 41.549999999998285,
+            "scenarioStarted": true,
+            "respawnEvents": [
+              {
+                "physicsStep": 0,
+                "simulationSeconds": 0,
+                "scenarioStarted": false,
+                "player": [
+                  -6.8,
+                  0,
+                  11
+                ],
+                "cargo": [
+                  -5.5,
+                  0.55,
+                  9.5
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "cargo-wedge-airborne-pickup-buffers",
+          "completed": false,
+          "outcome": "blocked-within-finite-attempt",
+          "frames": 1618,
+          "frameCountSource": "journey-driver-frames",
+          "teleports": 0,
+          "player": [
+            0.23726221570781808,
+            0.4170833333333334,
+            3.4901000007450578
+          ],
+          "cargo": [
+            -0.10299999970197526,
+            1.4770668470118014,
+            3.490466710226419
+          ],
+          "error": null,
+          "evidence": {
+            "shots": [],
+            "maxY": 1.5525000014901187,
+            "maxSpeed": 8.79299593442504,
+            "teleportPeak": 0,
+            "milestones": [
+              "Cargo wedging, repeated buffered jumps and airborne pickup/release attempted"
+            ],
+            "physicsSteps": 3236,
+            "simulationSeconds": 26.966666666665777,
+            "scenarioStarted": true,
+            "respawnEvents": [
+              {
+                "physicsStep": 0,
+                "simulationSeconds": 0,
+                "scenarioStarted": false,
+                "player": [
+                  -6.8,
+                  0,
+                  11
+                ],
+                "cargo": [
+                  -5.5,
+                  0.55,
+                  9.5
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "highest-ceramic-edge-exit-clear-in-flight",
+          "completed": false,
+          "outcome": "blocked-within-finite-attempt",
+          "frames": 1299,
+          "frameCountSource": "journey-driver-frames",
+          "teleports": 0,
+          "player": [
+            0.06029767351505755,
+            0,
+            3.4901000007450578
+          ],
+          "cargo": [
+            -0.10299999970197526,
+            1.060116572382602,
+            3.490012191358467
+          ],
+          "error": null,
+          "evidence": {
+            "shots": [
+              {
+                "panel": "dock-feed-ceiling",
+                "offset": [
+                  0,
+                  0.88
+                ],
+                "accepted": true,
+                "position": [
+                  2.6438307958032787,
+                  5.9,
+                  1.9822067348398105
+                ]
+              }
+            ],
+            "maxY": 1.5525000014901187,
+            "maxSpeed": 9.802693315096976,
+            "teleportPeak": 0,
+            "milestones": [
+              "Highest accepted edge exit followed by immediate portal clearing and jumping sprint"
+            ],
+            "physicsSteps": 2598,
+            "simulationSeconds": 21.649999999999412,
+            "scenarioStarted": true,
+            "respawnEvents": [
+              {
+                "physicsStep": 0,
+                "simulationSeconds": 0,
+                "scenarioStarted": false,
+                "player": [
+                  -6.8,
+                  0,
+                  11
+                ],
+                "cargo": [
+                  -5.5,
+                  0.55,
+                  9.5
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "empty-dock-fast-reverse-before-cargo-latch",
+          "completed": false,
+          "outcome": "blocked-within-finite-attempt",
+          "frames": 2788,
+          "frameCountSource": "journey-driver-frames",
+          "teleports": 0,
+          "player": [
+            0.04352107341409232,
+            0.06364583333333865,
+            3.4901000007450578
+          ],
+          "cargo": [
+            -0.10299999970197384,
+            1.1236643299285278,
+            3.4900676587113524
+          ],
+          "error": null,
+          "evidence": {
+            "shots": [],
+            "maxY": 1.8200000014901163,
+            "maxSpeed": 8.73260194368448,
+            "teleportPeak": 0,
+            "milestones": [],
+            "physicsSteps": 5576,
+            "simulationSeconds": 46.46666666666467,
+            "scenarioStarted": true,
+            "respawnEvents": [
+              {
+                "physicsStep": 0,
+                "simulationSeconds": 0,
+                "scenarioStarted": false,
+                "player": [
+                  -6.8,
+                  0,
+                  11
+                ],
+                "cargo": [
+                  -5.5,
+                  0.55,
+                  9.5
+                ]
+              }
+            ],
+            "freightProgress": 0,
+            "receiverEngaged": false
+          }
+        }
+      ],
+      "suspectedShortcuts": []
+    },
+    {
+      "number": 11,
+      "title": "Запас ветра",
+      "attacks": [
+        {
+          "name": "clockwise-perimeter-corner-hop-carry",
+          "completed": false,
+          "outcome": "blocked-within-finite-attempt",
+          "frames": 2030,
+          "frameCountSource": "journey-driver-frames",
+          "teleports": 0,
+          "player": [
+            -0.10551928999974639,
+            0,
+            -11.314900002384185
+          ],
+          "cargo": [
+            0.6144792696924106,
+            1.062823435338666,
+            -11.316001941776745
+          ],
+          "error": null,
+          "evidence": {
+            "shots": [],
+            "maxY": 1.5275000000000023,
+            "maxSpeed": 11.079527110962234,
+            "teleportPeak": 0,
+            "milestones": [
+              "Outer wall and every exterior corner attacked with the original carried cargo"
+            ],
+            "physicsSteps": 4060,
+            "simulationSeconds": 33.83333333333206,
+            "scenarioStarted": true,
+            "respawnEvents": [
+              {
+                "physicsStep": 0,
+                "simulationSeconds": 0,
+                "scenarioStarted": false,
+                "player": [
+                  -1,
+                  0,
+                  8
+                ],
+                "cargo": [
+                  1.5,
+                  0.55,
+                  7.5
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "counterclockwise-perimeter-corner-hop-carry",
+          "completed": false,
+          "outcome": "blocked-within-finite-attempt",
+          "frames": 1984,
+          "frameCountSource": "journey-driver-frames",
+          "teleports": 0,
+          "player": [
+            -0.8533471664622999,
+            0,
+            -8.395760861829467
+          ],
+          "cargo": [
+            -0.7578507352515974,
+            1.0444555236891055,
+            -9.10941544029406
+          ],
+          "error": null,
+          "evidence": {
+            "shots": [],
+            "maxY": 1.5275000000000023,
+            "maxSpeed": 11.0750122434042,
+            "teleportPeak": 0,
+            "milestones": [
+              "Outer wall and every exterior corner attacked with the original carried cargo"
+            ],
+            "physicsSteps": 3968,
+            "simulationSeconds": 33.066666666665434,
+            "scenarioStarted": true,
+            "respawnEvents": [
+              {
+                "physicsStep": 0,
+                "simulationSeconds": 0,
+                "scenarioStarted": false,
+                "player": [
+                  -1,
+                  0,
+                  8
+                ],
+                "cargo": [
+                  1.5,
+                  0.55,
+                  7.5
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "cargo-wedge-airborne-pickup-buffers",
+          "completed": false,
+          "outcome": "blocked-within-finite-attempt",
+          "frames": 1431,
+          "frameCountSource": "journey-driver-frames",
+          "teleports": 0,
+          "player": [
+            0.07790852024847159,
+            1.0878125005960462,
+            -11.314900002384185
+          ],
+          "cargo": [
+            0.7979087285330149,
+            2.147818129911522,
+            -11.31489059801411
+          ],
+          "error": null,
+          "evidence": {
+            "shots": [],
+            "maxY": 1.5275000000000023,
+            "maxSpeed": 10.583060772006565,
+            "teleportPeak": 0,
+            "milestones": [
+              "Cargo wedging, repeated buffered jumps and airborne pickup/release attempted"
+            ],
+            "physicsSteps": 2862,
+            "simulationSeconds": 23.849999999999287,
+            "scenarioStarted": true,
+            "respawnEvents": [
+              {
+                "physicsStep": 0,
+                "simulationSeconds": 0,
+                "scenarioStarted": false,
+                "player": [
+                  -1,
+                  0,
+                  8
+                ],
+                "cargo": [
+                  1.5,
+                  0.55,
+                  7.5
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "highest-ceramic-edge-exit-clear-in-flight",
+          "completed": false,
+          "outcome": "blocked-within-finite-attempt",
+          "frames": 1058,
+          "frameCountSource": "journey-driver-frames",
+          "teleports": 1,
+          "player": [
+            0.10340021221459732,
+            0.11958333392937971,
+            -11.314900002384185
+          ],
+          "cargo": [
+            0.8226395806411823,
+            1.1795994179096225,
+            -11.347982979977912
+          ],
+          "error": null,
+          "evidence": {
+            "shots": [
+              {
+                "panel": "wind-outlet",
+                "offset": [
+                  0,
+                  0.88
+                ],
+                "accepted": true,
+                "position": [
+                  13.975,
+                  2.6419999999999995,
+                  -4.861122228286021
+                ]
+              }
+            ],
+            "maxY": 1.8554879761706184,
+            "maxSpeed": 11.343576277681885,
+            "teleportPeak": 1,
+            "milestones": [
+              "Highest accepted edge exit followed by immediate portal clearing and jumping sprint"
+            ],
+            "physicsSteps": 2116,
+            "simulationSeconds": 17.633333333332974,
+            "scenarioStarted": true,
+            "respawnEvents": [
+              {
+                "physicsStep": 0,
+                "simulationSeconds": 0,
+                "scenarioStarted": false,
+                "player": [
+                  -1,
+                  0,
+                  8
+                ],
+                "cargo": [
+                  1.5,
+                  0.55,
+                  7.5
+                ]
+              }
+            ],
+            "pairTraversal": true,
+            "clearedAfterTraversal": true
+          }
+        },
+        {
+          "name": "closed-ratchet-west-wall-pinch",
+          "completed": false,
+          "outcome": "blocked-within-finite-attempt",
+          "frames": 1198,
+          "frameCountSource": "journey-driver-frames",
+          "teleports": 0,
+          "player": [
+            -0.6097680723908175,
+            1.0878125005960462,
+            -11.314900002384185
+          ],
+          "cargo": [
+            -0.07933427718826339,
+            2.147818129911522,
+            -10.828033288275227
+          ],
+          "error": null,
+          "evidence": {
+            "shots": [],
+            "maxY": 1.5275000000000023,
+            "maxSpeed": 10.804958666717203,
+            "teleportPeak": 0,
+            "milestones": [],
+            "physicsSteps": 2396,
+            "simulationSeconds": 19.966666666666175,
+            "scenarioStarted": true,
+            "respawnEvents": [
+              {
+                "physicsStep": 0,
+                "simulationSeconds": 0,
+                "scenarioStarted": false,
+                "player": [
+                  -1,
+                  0,
+                  8
+                ],
+                "cargo": [
+                  1.5,
+                  0.55,
+                  7.5
+                ]
+              }
+            ],
+            "ratchetEngaged": false
+          }
+        },
+        {
+          "name": "closed-ratchet-east-wall-pinch",
+          "completed": false,
+          "outcome": "blocked-within-finite-attempt",
+          "frames": 1103,
+          "frameCountSource": "journey-driver-frames",
+          "teleports": 0,
+          "player": [
+            0.6048564759435007,
+            1.1848958333333344,
+            -11.314900002384185
+          ],
+          "cargo": [
+            1.0704486213707338,
+            2.244886584856641,
+            -11.348276541186232
+          ],
+          "error": null,
+          "evidence": {
+            "shots": [],
+            "maxY": 1.5275000000000023,
+            "maxSpeed": 11.423948673928484,
+            "teleportPeak": 0,
+            "milestones": [],
+            "physicsSteps": 2206,
+            "simulationSeconds": 18.38333333333293,
+            "scenarioStarted": true,
+            "respawnEvents": [
+              {
+                "physicsStep": 0,
+                "simulationSeconds": 0,
+                "scenarioStarted": false,
+                "player": [
+                  -1,
+                  0,
+                  8
+                ],
+                "cargo": [
+                  1.5,
+                  0.55,
+                  7.5
+                ]
+              }
+            ],
+            "ratchetEngaged": false
+          }
+        }
+      ],
+      "suspectedShortcuts": []
+    },
+    {
+      "number": 12,
+      "title": "Узел падений",
+      "attacks": [
+        {
+          "name": "clockwise-perimeter-corner-hop-carry",
+          "completed": false,
+          "outcome": "blocked-within-finite-attempt",
+          "frames": 2031,
+          "frameCountSource": "journey-driver-frames",
+          "teleports": 0,
+          "player": [
+            10.03130420485526,
+            0.24645833333333336,
+            4.08973530560699
+          ],
+          "cargo": [
+            9.801873572187993,
+            1.3064406407043283,
+            3.4071784251138606
+          ],
+          "error": null,
+          "evidence": {
+            "shots": [],
+            "maxY": 1.5525000014901187,
+            "maxSpeed": 11.08713373251224,
+            "teleportPeak": 0,
+            "milestones": [
+              "Outer wall and every exterior corner attacked with the original carried cargo"
+            ],
+            "physicsSteps": 4062,
+            "simulationSeconds": 33.84999999999872,
+            "scenarioStarted": true,
+            "respawnEvents": [
+              {
+                "physicsStep": 0,
+                "simulationSeconds": 0,
+                "scenarioStarted": false,
+                "player": [
+                  10,
+                  0,
+                  11
+                ],
+                "cargo": [
+                  12,
+                  0.55,
+                  11
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "counterclockwise-perimeter-corner-hop-carry",
+          "completed": false,
+          "outcome": "blocked-within-finite-attempt",
+          "frames": 2263,
+          "frameCountSource": "journey-driver-frames",
+          "teleports": 0,
+          "player": [
+            9.878567955385344,
+            0.186875,
+            4.05433456210352
+          ],
+          "cargo": [
+            10.534706308371744,
+            1.246856905268301,
+            3.757751815476219
+          ],
+          "error": null,
+          "evidence": {
+            "shots": [],
+            "maxY": 1.5525000014901187,
+            "maxSpeed": 11.084848827248717,
+            "teleportPeak": 0,
+            "milestones": [
+              "Outer wall and every exterior corner attacked with the original carried cargo"
+            ],
+            "physicsSteps": 4526,
+            "simulationSeconds": 37.71666666666517,
+            "scenarioStarted": true,
+            "respawnEvents": [
+              {
+                "physicsStep": 0,
+                "simulationSeconds": 0,
+                "scenarioStarted": false,
+                "player": [
+                  10,
+                  0,
+                  11
+                ],
+                "cargo": [
+                  12,
+                  0.55,
+                  11
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "cargo-wedge-airborne-pickup-buffers",
+          "completed": false,
+          "outcome": "blocked-within-finite-attempt",
+          "frames": 1030,
+          "frameCountSource": "journey-driver-frames",
+          "teleports": 0,
+          "player": [
+            9.865484186288137,
+            1.404270833333335,
+            3.9035187486235436
+          ],
+          "cargo": [
+            10.448074822194174,
+            2.464265203779061,
+            4.326570988535008
+          ],
+          "error": null,
+          "evidence": {
+            "shots": [],
+            "maxY": 1.5525000014901187,
+            "maxSpeed": 10.061864836975873,
+            "teleportPeak": 0,
+            "milestones": [
+              "Cargo wedging, repeated buffered jumps and airborne pickup/release attempted"
+            ],
+            "physicsSteps": 2060,
+            "simulationSeconds": 17.166666666666334,
+            "scenarioStarted": true,
+            "respawnEvents": [
+              {
+                "physicsStep": 0,
+                "simulationSeconds": 0,
+                "scenarioStarted": false,
+                "player": [
+                  10,
+                  0,
+                  11
+                ],
+                "cargo": [
+                  12,
+                  0.55,
+                  11
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "highest-ceramic-edge-exit-clear-in-flight",
+          "completed": false,
+          "outcome": "blocked-within-finite-attempt",
+          "frames": 655,
+          "frameCountSource": "journey-driver-frames",
+          "teleports": 2,
+          "player": [
+            9.850427670711026,
+            1.2431250000000011,
+            3.9236776040102774
+          ],
+          "cargo": [
+            10.530661902457389,
+            2.30311655572829,
+            4.159907186653964
+          ],
+          "error": null,
+          "evidence": {
+            "shots": [
+              {
+                "panel": "return",
+                "offset": [
+                  0,
+                  0.88
+                ],
+                "accepted": true,
+                "position": [
+                  3.993810074364407,
+                  0.025000000000000203,
+                  1.6584302402391953
+                ]
+              }
+            ],
+            "maxY": 2.694687499999999,
+            "maxSpeed": 10.60073374496758,
+            "teleportPeak": 2,
+            "milestones": [
+              "Highest accepted edge exit followed by immediate portal clearing and jumping sprint"
+            ],
+            "physicsSteps": 1310,
+            "simulationSeconds": 10.916666666666687,
+            "scenarioStarted": true,
+            "respawnEvents": [
+              {
+                "physicsStep": 0,
+                "simulationSeconds": 0,
+                "scenarioStarted": false,
+                "player": [
+                  10,
+                  0,
+                  11
+                ],
+                "cargo": [
+                  12,
+                  0.55,
+                  11
+                ]
+              }
+            ],
+            "pairTraversal": true,
+            "clearedAfterTraversal": true
+          }
+        },
+        {
+          "name": "cargo-drop-after-access-then-jump-into-final-without-climb",
+          "completed": false,
+          "outcome": "blocked-within-finite-attempt",
+          "frames": 2892,
+          "frameCountSource": "journey-driver-frames",
+          "teleports": 1,
+          "player": [
+            10.013543303060674,
+            1.4665625000000018,
+            3.9003775927087476
+          ],
+          "cargo": [
+            10.62970142800449,
+            2.526558478855692,
+            4.272838080374546
+          ],
+          "error": null,
+          "evidence": {
+            "shots": [],
+            "maxY": 8.527500000000002,
+            "maxSpeed": 19.777139007046017,
+            "teleportPeak": 1,
+            "milestones": [
+              "folded underpass"
+            ],
+            "physicsSteps": 5784,
+            "simulationSeconds": 48.19999999999791,
+            "scenarioStarted": true,
+            "respawnEvents": [
+              {
+                "physicsStep": 0,
+                "simulationSeconds": 0,
+                "scenarioStarted": false,
+                "player": [
+                  10,
+                  0,
+                  11
+                ],
+                "cargo": [
+                  12,
+                  0.55,
+                  11
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "suspectedShortcuts": []
+    },
+    {
+      "number": 13,
+      "title": "Оптический парадокс",
+      "attacks": [
+        {
+          "name": "clockwise-perimeter-corner-hop-carry",
+          "completed": false,
+          "outcome": "reset-aborted-physical-attempt",
+          "frames": 1815,
+          "frameCountSource": "counted-production-physics-steps-divided-by-two",
+          "teleports": 0,
+          "player": [
+            10,
+            0,
+            16
+          ],
+          "cargo": [
+            12,
+            0.5486458333333334,
+            16
+          ],
+          "error": "Level 13: unexpected reset at 10,0,16",
+          "evidence": {
+            "shots": [],
+            "maxY": 1.5275000000000023,
+            "maxSpeed": 20.033400112918,
+            "teleportPeak": 0,
+            "milestones": [],
+            "physicsSteps": 3630,
+            "simulationSeconds": 30.249999999998924,
+            "scenarioStarted": true,
+            "respawnEvents": [
+              {
+                "physicsStep": 0,
+                "simulationSeconds": 0,
+                "scenarioStarted": false,
+                "player": [
+                  10,
+                  0,
+                  16
+                ],
+                "cargo": [
+                  12,
+                  0.55,
+                  16
+                ]
+              },
+              {
+                "physicsStep": 3630,
+                "simulationSeconds": 30.249999999998924,
+                "scenarioStarted": true,
+                "player": [
+                  16.740882288181048,
+                  -12.157812500596037,
+                  0.79376392301159
+                ],
+                "cargo": [
+                  16.94860238564921,
+                  -10.939328356826474,
+                  1.4236749792907477
+                ]
+              },
+              {
+                "physicsStep": 3630,
+                "simulationSeconds": 30.249999999998924,
+                "scenarioStarted": true,
+                "player": [
+                  16.740882288181048,
+                  -12.157812500596037,
+                  0.79376392301159
+                ],
+                "cargo": [
+                  12,
+                  0.55,
+                  16
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "counterclockwise-perimeter-corner-hop-carry",
+          "completed": false,
+          "outcome": "blocked-within-finite-attempt",
+          "frames": 2153,
+          "frameCountSource": "journey-driver-frames",
+          "teleports": 0,
+          "player": [
+            9.30739565496353,
+            -2.6566666666666654,
+            6.1201
+          ],
+          "cargo": [
+            8.608962313074429,
+            -1.5966735025284124,
+            6.010884053569238
+          ],
+          "error": null,
+          "evidence": {
+            "shots": [],
+            "maxY": 1.5275000000000023,
+            "maxSpeed": 15.021848642227454,
+            "teleportPeak": 0,
+            "milestones": [
+              "Outer wall and every exterior corner attacked with the original carried cargo"
+            ],
+            "physicsSteps": 4306,
+            "simulationSeconds": 35.88333333333194,
+            "scenarioStarted": true,
+            "respawnEvents": [
+              {
+                "physicsStep": 0,
+                "simulationSeconds": 0,
+                "scenarioStarted": false,
+                "player": [
+                  10,
+                  0,
+                  16
+                ],
+                "cargo": [
+                  12,
+                  0.55,
+                  16
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "cargo-wedge-airborne-pickup-buffers",
+          "completed": false,
+          "outcome": "blocked-within-finite-attempt",
+          "frames": 1510,
+          "frameCountSource": "journey-driver-frames",
+          "teleports": 0,
+          "player": [
+            9.202753775225816,
+            -3.5829166666666663,
+            6.1201
+          ],
+          "cargo": [
+            8.482780784393551,
+            -2.522933152988198,
+            6.113852795040456
+          ],
+          "error": null,
+          "evidence": {
+            "shots": [],
+            "maxY": 1.5275000000000023,
+            "maxSpeed": 16.307974990093392,
+            "teleportPeak": 0,
+            "milestones": [
+              "Cargo wedging, repeated buffered jumps and airborne pickup/release attempted"
+            ],
+            "physicsSteps": 3020,
+            "simulationSeconds": 25.16666666666588,
+            "scenarioStarted": true,
+            "respawnEvents": [
+              {
+                "physicsStep": 0,
+                "simulationSeconds": 0,
+                "scenarioStarted": false,
+                "player": [
+                  10,
+                  0,
+                  16
+                ],
+                "cargo": [
+                  12,
+                  0.55,
+                  16
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "highest-ceramic-edge-exit-clear-in-flight",
+          "completed": false,
+          "outcome": "blocked-within-finite-attempt",
+          "frames": 512,
+          "frameCountSource": "journey-driver-frames",
+          "teleports": 0,
+          "player": [
+            10,
+            0,
+            16
+          ],
+          "cargo": [
+            12.134853551450753,
+            0.38999814625182283,
+            15.172133475219592
+          ],
+          "error": null,
+          "evidence": {
+            "shots": [
+              {
+                "panel": "receiving-return",
+                "offset": [
+                  0,
+                  0.88
+                ],
+                "accepted": false,
+                "error": "Rejected shot {\"valid\":false,\"index\":1,\"position\":[9.54170441948786,9.604297302763063,8.224999994039536],\"sequence\":1,\"surface\":\"\",\"reason\":\"surface\"}"
+              },
+              {
+                "panel": "receiving-return",
+                "offset": [
+                  0.88,
+                  0.88
+                ],
+                "accepted": false,
+                "error": "Rejected shot {\"valid\":false,\"index\":1,\"position\":[10.199904502816262,9.567287002511366,8.224999994039536],\"sequence\":2,\"surface\":\"\",\"reason\":\"surface\"}"
+              },
+              {
+                "panel": "receiving-return",
+                "offset": [
+                  -0.88,
+                  0.88
+                ],
+                "accepted": false,
+                "error": "Rejected shot {\"valid\":false,\"index\":1,\"position\":[8.786710770623614,9.552106998437836,8.224999994039536],\"sequence\":3,\"surface\":\"\",\"reason\":\"surface\"}"
+              },
+              {
+                "panel": "light-intake",
+                "offset": [
+                  0,
+                  0.88
+                ],
+                "accepted": false,
+                "error": "Rejected shot {\"valid\":false,\"index\":1,\"position\":[15.780454122819227,6.95038749046358,-1],\"sequence\":4,\"surface\":\"\",\"reason\":\"surface\"}"
+              },
+              {
+                "panel": "light-intake",
+                "offset": [
+                  0.88,
+                  0.88
+                ],
+                "accepted": false,
+                "error": "Rejected shot {\"valid\":false,\"index\":1,\"position\":[16.333867267141965,7.377002133354127,-1],\"sequence\":5,\"surface\":\"\",\"reason\":\"surface\"}"
+              },
+              {
+                "panel": "light-intake",
+                "offset": [
+                  -0.88,
+                  0.88
+                ],
+                "accepted": false,
+                "error": "Rejected shot {\"valid\":false,\"index\":1,\"position\":[15.285434595256016,6.503543627472197,-1],\"sequence\":6,\"surface\":\"\",\"reason\":\"surface\"}"
+              },
+              {
+                "panel": "mirror-cradle",
+                "offset": [
+                  0,
+                  0.88
+                ],
+                "accepted": false,
+                "error": "Rejected shot {\"valid\":false,\"index\":1,\"position\":[-1.0974951061703129,4.25189662915219,5.5],\"sequence\":7,\"surface\":\"\",\"reason\":\"surface\"}"
+              },
+              {
+                "panel": "mirror-cradle",
+                "offset": [
+                  0.88,
+                  0.88
+                ],
+                "accepted": false,
+                "error": "Rejected shot {\"valid\":false,\"index\":1,\"position\":[0.3218701627273628,4.192972437704679,5.5],\"sequence\":8,\"surface\":\"\",\"reason\":\"surface\"}"
+              },
+              {
+                "panel": "mirror-cradle",
+                "offset": [
+                  -0.88,
+                  0.88
+                ],
+                "accepted": false,
+                "error": "Rejected shot {\"valid\":false,\"index\":1,\"position\":[-2.266102277148283,4.176592351067578,5.5],\"sequence\":9,\"surface\":\"\",\"reason\":\"surface\"}"
+              }
+            ],
+            "maxY": 0,
+            "maxSpeed": 0,
+            "teleportPeak": 0,
+            "milestones": [],
+            "physicsSteps": 1024,
+            "simulationSeconds": 8.53333333333349,
+            "scenarioStarted": true,
+            "respawnEvents": [
+              {
+                "physicsStep": 0,
+                "simulationSeconds": 0,
+                "scenarioStarted": false,
+                "player": [
+                  10,
+                  0,
+                  16
+                ],
+                "cargo": [
+                  12,
+                  0.55,
+                  16
+                ]
+              }
+            ],
+            "noAcceptedPair": true
+          }
+        },
+        {
+          "name": "upper-access-aperture-jump-to-north-gallery-without-optics",
+          "completed": false,
+          "outcome": "blocked-within-finite-attempt",
+          "frames": 4950,
+          "frameCountSource": "journey-driver-frames",
+          "teleports": 1,
+          "player": [
+            8.876594830159716,
+            -3.022291666666663,
+            -6.1201
+          ],
+          "cargo": [
+            9.59659428375021,
+            -1.9622804079163125,
+            -6.119611671925525
+          ],
+          "error": null,
+          "evidence": {
+            "shots": [],
+            "maxY": 7.542965822843219,
+            "maxSpeed": 17.85198024341242,
+            "teleportPeak": 1,
+            "milestones": [],
+            "physicsSteps": 9900,
+            "simulationSeconds": 82.50000000001172,
+            "scenarioStarted": true,
+            "respawnEvents": [
+              {
+                "physicsStep": 0,
+                "simulationSeconds": 0,
+                "scenarioStarted": false,
+                "player": [
+                  10,
+                  0,
+                  16
+                ],
+                "cargo": [
+                  12,
+                  0.55,
+                  16
+                ]
+              }
+            ],
+            "opticalReceivers": [
+              false,
+              false
+            ]
+          }
+        }
+      ],
+      "suspectedShortcuts": []
+    },
+    {
+      "number": 14,
+      "title": "Световая вязь",
+      "attacks": [
+        {
+          "name": "clockwise-perimeter-corner-hop-carry",
+          "completed": false,
+          "outcome": "reset-aborted-physical-attempt",
+          "frames": 1561,
+          "frameCountSource": "counted-production-physics-steps-divided-by-two",
+          "teleports": 0,
+          "player": [
+            -14.999564306279499,
+            0.025000001490116525,
+            12.002262410123448
+          ],
+          "cargo": [
+            -13,
+            0.5459379019831273,
+            12
+          ],
+          "error": "Level 14: unexpected reset at -14.999564306279499,0.025000001490116525,12.002262410123448",
+          "evidence": {
+            "shots": [],
+            "maxY": 1.5275000000000023,
+            "maxSpeed": 20.76600118737455,
+            "teleportPeak": 0,
+            "milestones": [],
+            "physicsSteps": 3122,
+            "simulationSeconds": 26.01666666666583,
+            "scenarioStarted": true,
+            "respawnEvents": [
+              {
+                "physicsStep": 0,
+                "simulationSeconds": 0,
+                "scenarioStarted": false,
+                "player": [
+                  -15,
+                  0,
+                  12
+                ],
+                "cargo": [
+                  -13,
+                  0.55,
+                  12
+                ]
+              },
+              {
+                "physicsStep": 3121,
+                "simulationSeconds": 26.008333333332498,
+                "scenarioStarted": true,
+                "player": [
+                  13.779912407960664,
+                  -12.06874999999999,
+                  -13.492232692821526
+                ],
+                "cargo": [
+                  13.910578823218872,
+                  -10.847556718692111,
+                  -12.85207151677082
+                ]
+              },
+              {
+                "physicsStep": 3121,
+                "simulationSeconds": 26.008333333332498,
+                "scenarioStarted": true,
+                "player": [
+                  13.779912407960664,
+                  -12.06874999999999,
+                  -13.492232692821526
+                ],
+                "cargo": [
+                  -13,
+                  0.55,
+                  12
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "counterclockwise-perimeter-corner-hop-carry",
+          "completed": false,
+          "outcome": "blocked-within-finite-attempt",
+          "frames": 2218,
+          "frameCountSource": "journey-driver-frames",
+          "teleports": 0,
+          "player": [
+            1.3615574666537495,
+            1.0156250000000038,
+            -14.164463634703697
+          ],
+          "cargo": [
+            1.9026450983064638,
+            2.075635856647863,
+            -14.639463747812833
+          ],
+          "error": null,
+          "evidence": {
+            "shots": [],
+            "maxY": 1.5275000000000023,
+            "maxSpeed": 11.082934577714267,
+            "teleportPeak": 0,
+            "milestones": [
+              "Outer wall and every exterior corner attacked with the original carried cargo"
+            ],
+            "physicsSteps": 4436,
+            "simulationSeconds": 36.96666666666521,
+            "scenarioStarted": true,
+            "respawnEvents": [
+              {
+                "physicsStep": 0,
+                "simulationSeconds": 0,
+                "scenarioStarted": false,
+                "player": [
+                  -15,
+                  0,
+                  12
+                ],
+                "cargo": [
+                  -13,
+                  0.55,
+                  12
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "cargo-wedge-airborne-pickup-buffers",
+          "completed": false,
+          "outcome": "blocked-within-finite-attempt",
+          "frames": 1592,
+          "frameCountSource": "journey-driver-frames",
+          "teleports": 0,
+          "player": [
+            3.6345390261902946,
+            0.4170833333333334,
+            -1.8798999970197678
+          ],
+          "cargo": [
+            2.9145393332041376,
+            1.4770668470118014,
+            -1.879780946152165
+          ],
+          "error": null,
+          "evidence": {
+            "shots": [],
+            "maxY": 1.5275000000000023,
+            "maxSpeed": 10.429992611244774,
+            "teleportPeak": 0,
+            "milestones": [
+              "Cargo wedging, repeated buffered jumps and airborne pickup/release attempted"
+            ],
+            "physicsSteps": 3184,
+            "simulationSeconds": 26.533333333332468,
+            "scenarioStarted": true,
+            "respawnEvents": [
+              {
+                "physicsStep": 0,
+                "simulationSeconds": 0,
+                "scenarioStarted": false,
+                "player": [
+                  -15,
+                  0,
+                  12
+                ],
+                "cargo": [
+                  -13,
+                  0.55,
+                  12
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "highest-ceramic-edge-exit-clear-in-flight",
+          "completed": false,
+          "outcome": "blocked-within-finite-attempt",
+          "frames": 1908,
+          "frameCountSource": "journey-driver-frames",
+          "teleports": 1,
+          "player": [
+            3.5463994629313826,
+            -3,
+            -25.497532726075907
+          ],
+          "cargo": [
+            3.4862143317251215,
+            -1.9289491521793867,
+            -26.215089635267784
+          ],
+          "error": null,
+          "evidence": {
+            "shots": [
+              {
+                "panel": "light-source",
+                "offset": [
+                  0,
+                  0.88
+                ],
+                "accepted": false,
+                "error": "Rejected shot {\"valid\":false,\"index\":1,\"position\":[-10.243130099330273,7.576095543451338,-8.625000002980233],\"sequence\":1,\"surface\":\"\",\"reason\":\"surface\"}"
+              },
+              {
+                "panel": "light-source",
+                "offset": [
+                  0.88,
+                  0.88
+                ],
+                "accepted": false,
+                "error": "Rejected shot {\"valid\":false,\"index\":1,\"position\":[-7.92508128173375,7.650398592773568,-8.625000002980233],\"sequence\":2,\"surface\":\"\",\"reason\":\"surface\"}"
+              },
+              {
+                "panel": "light-source",
+                "offset": [
+                  -0.88,
+                  0.88
+                ],
+                "accepted": false,
+                "error": "Rejected shot {\"valid\":false,\"index\":1,\"position\":[-13.299933812699422,5.449999997019768,-0.6548784091881068],\"sequence\":3,\"surface\":\"\",\"reason\":\"surface\"}"
+              },
+              {
+                "panel": "weave-north",
+                "offset": [
+                  0,
+                  0.88
+                ],
+                "accepted": false,
+                "error": "Rejected shot {\"valid\":false,\"index\":1,\"position\":[2.669883929725647,15.960665632548517,-2.3999999940395353],\"sequence\":4,\"surface\":\"\",\"reason\":\"surface\"}"
+              },
+              {
+                "panel": "weave-north",
+                "offset": [
+                  0.88,
+                  0.88
+                ],
+                "accepted": false,
+                "error": "Rejected shot {\"valid\":false,\"index\":1,\"position\":[0.14075657483261983,15.96272303214516,-2.3999999940395353],\"sequence\":5,\"surface\":\"\",\"reason\":\"surface\"}"
+              },
+              {
+                "panel": "weave-north",
+                "offset": [
+                  -0.88,
+                  0.88
+                ],
+                "accepted": false,
+                "error": "Rejected shot {\"valid\":false,\"index\":1,\"position\":[4.970585804161328,16.00767612583805,-2.3999999940395353],\"sequence\":6,\"surface\":\"\",\"reason\":\"surface\"}"
+              },
+              {
+                "panel": "island-receiver",
+                "offset": [
+                  0,
+                  0.88
+                ],
+                "accepted": true,
+                "position": [
+                  2.93,
+                  9.842,
+                  -0.00377961644714847
+                ]
+              }
+            ],
+            "maxY": 9.795017244111813,
+            "maxSpeed": 18.31115930116394,
+            "teleportPeak": 1,
+            "milestones": [
+              "Highest accepted edge exit followed by immediate portal clearing and jumping sprint"
+            ],
+            "physicsSteps": 3816,
+            "simulationSeconds": 31.799999999998835,
+            "scenarioStarted": true,
+            "respawnEvents": [
+              {
+                "physicsStep": 0,
+                "simulationSeconds": 0,
+                "scenarioStarted": false,
+                "player": [
+                  -15,
+                  0,
+                  12
+                ],
+                "cargo": [
+                  -13,
+                  0.55,
+                  12
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "carried-friend-fold-with-airborne-release-repickup",
+          "completed": false,
+          "outcome": "blocked-within-finite-attempt",
+          "frames": 2648,
+          "frameCountSource": "journey-driver-frames",
+          "teleports": 1,
+          "player": [
+            3.0051626519392562,
+            0,
+            -7.028242628970677
+          ],
+          "cargo": [
+            2.8757136398153467,
+            1.0599934108013582,
+            -6.31997506454139
+          ],
+          "error": null,
+          "evidence": {
+            "shots": [],
+            "maxY": 8.96583512913839,
+            "maxSpeed": 16.677978432946293,
+            "teleportPeak": 1,
+            "milestones": [
+              "light landing reached",
+              "first woven crossing",
+              "stable island reached"
+            ],
+            "physicsSteps": 5296,
+            "simulationSeconds": 44.13333333333147,
+            "scenarioStarted": true,
+            "respawnEvents": [
+              {
+                "physicsStep": 0,
+                "simulationSeconds": 0,
+                "scenarioStarted": false,
+                "player": [
+                  -15,
+                  0,
+                  12
+                ],
+                "cargo": [
+                  -13,
+                  0.55,
+                  12
+                ]
+              }
+            ],
+            "reachedStableIsland": true,
+            "cargoTransportsBefore": 1,
+            "northFoldReached": false,
+            "cargoAtFold": [
+              -1.6118793826083047,
+              0.3899981462518245,
+              -2.4733597889176666
+            ],
+            "heldAtFold": false,
+            "cargoTransportsAfterFold": 1,
+            "spanOffset": -7.2,
+            "cargoAtReceiver": [
+              2.8757136398153467,
+              1.0599934108013582,
+              -6.31997506454139
+            ],
+            "playerAtReceiver": [
+              3.0051626519392562,
+              0,
+              -7.028242628970677
+            ],
+            "heldAtReceiver": true
+          }
+        },
+        {
+          "name": "precharged-stair-cargo-pickup-and-E-jump-rush",
+          "completed": false,
+          "outcome": "blocked-within-finite-attempt",
+          "frames": 2323,
+          "frameCountSource": "journey-driver-frames",
+          "teleports": 1,
+          "player": [
+            -1.4333180891150077,
+            0.30468750000000006,
+            -13.442413892137411
+          ],
+          "cargo": [
+            -1.6119770004579623,
+            0.3899981462518245,
+            -2.4733584109506124
+          ],
+          "error": null,
+          "evidence": {
+            "shots": [],
+            "maxY": 8.965835129138418,
+            "maxSpeed": 16.677978432946293,
+            "teleportPeak": 1,
+            "milestones": [
+              "light landing reached",
+              "first woven crossing",
+              "stable island reached"
+            ],
+            "physicsSteps": 4646,
+            "simulationSeconds": 38.71666666666511,
+            "scenarioStarted": true,
+            "respawnEvents": [
+              {
+                "physicsStep": 0,
+                "simulationSeconds": 0,
+                "scenarioStarted": false,
+                "player": [
+                  -15,
+                  0,
+                  12
+                ],
+                "cargo": [
+                  -13,
+                  0.55,
+                  12
+                ]
+              }
+            ],
+            "reachedStableIsland": true,
+            "cargoTransportsBefore": 1,
+            "prechargedOffset": -6.510764150036152e-14,
+            "northFoldReached": false,
+            "cargoAtFold": [
+              -1.6119770004579623,
+              0.3899981462518245,
+              -2.4733584109506124
+            ],
+            "heldAtFold": false,
+            "cargoTransportsAfterFold": 1,
+            "spanOffset": -7.2
+          }
+        },
+        {
+          "name": "free-cargo-push-up-fold-with-bunnyhop",
+          "completed": false,
+          "outcome": "blocked-within-finite-attempt",
+          "frames": 1382,
+          "frameCountSource": "journey-driver-frames",
+          "teleports": 1,
+          "player": [
+            -1.4964363739102535,
+            13.24312500149012,
+            -12.5360538210527
+          ],
+          "cargo": [
+            -0.8067831386766766,
+            7.828333275456779,
+            0.006783921063228263
+          ],
+          "error": null,
+          "evidence": {
+            "shots": [],
+            "maxY": 13.24312500149012,
+            "maxSpeed": 9.92337617823542,
+            "teleportPeak": 1,
+            "milestones": [
+              "light landing reached",
+              "first woven crossing",
+              "stable island reached"
+            ],
+            "physicsSteps": 2764,
+            "simulationSeconds": 23.033333333332667,
+            "scenarioStarted": true,
+            "respawnEvents": [
+              {
+                "physicsStep": 0,
+                "simulationSeconds": 0,
+                "scenarioStarted": false,
+                "player": [
+                  -15,
+                  0,
+                  12
+                ],
+                "cargo": [
+                  -13,
+                  0.55,
+                  12
+                ]
+              }
+            ],
+            "reachedStableIsland": true,
+            "cargoTransportsBefore": 1,
+            "northFoldReached": true,
+            "cargoAtFold": [
+              -0.8067831386766766,
+              7.828333275456779,
+              0.006783921063228263
+            ],
+            "heldAtFold": false,
+            "cargoTransportsAfterFold": 1,
+            "spanOffset": 0
+          }
+        }
+      ],
+      "suspectedShortcuts": []
+    }
+  ],
+  "counts": {
+    "roomsAttempted": 14,
+    "attacks": 75,
+    "completedWithRequiredMechanic": 1,
+    "suspectedShortcuts": 0,
+    "incompleteApproaches": 2,
+    "blockedSpeculativeShots": 0,
+    "resetAbortedPhysicalAttempts": 2,
+    "setupOrDriverErrors": 0
+  }
+}

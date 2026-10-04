@@ -6,10 +6,12 @@ export async function waitForStartMenu(page){
  await page.waitForFunction(()=>document.documentElement.dataset.runtimeState==='ready');
  await page.waitForFunction(()=>{const b=document.querySelector('#play-button'),m=document.querySelector('#start-screen');return b&&!b.disabled&&m&&!m.inert&&getComputedStyle(m).opacity==='1';});
 }
-async function activate(page,selector,touch=false){
+export async function activate(page,selector,touch=false){
  await page.$eval(selector,e=>e.scrollIntoView({block:'center'}));
  await page.bringToFront();
- await page.waitForFunction(selector=>{const e=document.querySelector(selector),r=e?.getBoundingClientRect();return !!r&&r.width>0&&r.height>0&&e.contains(document.elementFromPoint(r.x+r.width/2,r.y+r.height/2));},{},selector);
+ // Runtime state changes before pointer-lock release and the screen fade finish.
+ // Wait for a real, active hit target before issuing the single native click.
+ await page.waitForFunction(selector=>{const e=document.querySelector(selector),r=e?.getBoundingClientRect(),screen=e?.closest('.screen');return !document.hidden&&document.hasFocus()&&!document.pointerLockElement&&document.body.dataset.externalPause!=='true'&&!!r&&r.width>0&&r.height>0&&!e.disabled&&!e.closest('[inert]')&&(!screen||getComputedStyle(screen).opacity==='1')&&e.contains(document.elementFromPoint(r.x+r.width/2,r.y+r.height/2));},{},selector);
  if(touch)await page.tap(selector);else await page.click(selector);
 }
 export async function playFromStartMenu(page,touch=false,quality='low'){
