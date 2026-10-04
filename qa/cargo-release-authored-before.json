@@ -1,0 +1,2218 @@
+{
+  "scope": "Authored foundation room 1. Original cargo and rigid body, actual move/camera/E/fire/clear input only. No actor positions, velocities, portal planes, mechanism states or success flags assigned.",
+  "beforeHash": "a7309347802543e5d871f7427a53d602eae40f878b7b53edcf3eaa44fbbe2b8a",
+  "started": "2026-10-04T10:33:52.690Z",
+  "cases": [
+    {
+      "sourceName": "near-right",
+      "triggerDistance": 0.73,
+      "events": [
+        {
+          "at": "partial-held",
+          "player": [
+            15.685673037132648,
+            0,
+            6.232821999661154
+          ],
+          "cargo": [
+            16.404574402696966,
+            1.0738908204457063,
+            6.191855142085083
+          ],
+          "body": [
+            16.404574402696966,
+            1.0738908204457063,
+            6.191855142085083
+          ],
+          "playerDistance": 0.7143269628673501,
+          "cargoDistance": -0.004574402696967197,
+          "playerTeleports": 0,
+          "cargoTransports": 0,
+          "held": true,
+          "grounded": false,
+          "bodyId": 115,
+          "uuid": "86f957ff-d963-46f9-8ae8-e403b1f0aea2",
+          "fit": true
+        },
+        {
+          "at": "after-release-before-clear",
+          "player": [
+            15.685673037132648,
+            0,
+            6.232821999661154
+          ],
+          "cargo": [
+            16.404574402696966,
+            1.0738908204457063,
+            6.191855142085083
+          ],
+          "body": [
+            16.404574402696966,
+            1.0738908204457063,
+            6.191855142085083
+          ],
+          "playerDistance": 0.7143269628673501,
+          "cargoDistance": -0.004574402696967197,
+          "playerTeleports": 0,
+          "cargoTransports": 0,
+          "held": false,
+          "grounded": false,
+          "bodyId": 115,
+          "uuid": "86f957ff-d963-46f9-8ae8-e403b1f0aea2",
+          "fit": true
+        },
+        {
+          "at": "after-clear-before-physics",
+          "player": [
+            15.685673037132648,
+            0,
+            6.232821999661154
+          ],
+          "cargo": [
+            16.404574402696966,
+            1.0738908204457063,
+            6.191855142085083
+          ],
+          "body": [
+            16.404574402696966,
+            1.0738908204457063,
+            6.191855142085083
+          ],
+          "playerDistance": 0.7143269628673501,
+          "cargoDistance": -0.004574402696967197,
+          "playerTeleports": 0,
+          "cargoTransports": 0,
+          "held": false,
+          "grounded": false,
+          "bodyId": 115,
+          "uuid": "86f957ff-d963-46f9-8ae8-e403b1f0aea2",
+          "fit": true
+        },
+        {
+          "at": "free-frame-1",
+          "player": [
+            15.748075070430717,
+            0,
+            6.232032329860346
+          ],
+          "cargo": [
+            16.217581225397858,
+            1.0727579034486185,
+            6.184218781493768
+          ],
+          "body": [
+            16.217581225397858,
+            1.0727579034486185,
+            6.184218781493768
+          ],
+          "playerDistance": 0.6519249295692813,
+          "cargoDistance": 0.18241877460214082,
+          "playerTeleports": 0,
+          "cargoTransports": 0,
+          "held": false,
+          "grounded": false,
+          "bodyId": 115,
+          "uuid": "86f957ff-d963-46f9-8ae8-e403b1f0aea2",
+          "fit": true
+        },
+        {
+          "at": "free-frame-2",
+          "player": [
+            15.7966738228285,
+            0,
+            6.231417334401109
+          ],
+          "cargo": [
+            16.030699049125804,
+            1.0684844322017353,
+            6.176649894727372
+          ],
+          "body": [
+            16.030699049125804,
+            1.0684844322017353,
+            6.176649894727372
+          ],
+          "playerDistance": 0.603326177171498,
+          "cargoDistance": 0.36930095087419446,
+          "playerTeleports": 0,
+          "cargoTransports": 0,
+          "held": false,
+          "grounded": false,
+          "bodyId": 115,
+          "uuid": "86f957ff-d963-46f9-8ae8-e403b1f0aea2",
+          "fit": true
+        },
+        {
+          "at": "free-frame-6",
+          "player": [
+            15.904834109616607,
+            0,
+            6.230048614383359
+          ],
+          "cargo": [
+            15.284279037068233,
+            1.004040639933587,
+            6.146568075378875
+          ],
+          "body": [
+            15.284279037068233,
+            1.004040639933587,
+            6.146568075378875
+          ],
+          "playerDistance": 0.495165890383392,
+          "cargoDistance": 1.115720962931766,
+          "playerTeleports": 0,
+          "cargoTransports": 0,
+          "held": false,
+          "grounded": false,
+          "bodyId": 115,
+          "uuid": "86f957ff-d963-46f9-8ae8-e403b1f0aea2",
+          "fit": true
+        },
+        {
+          "at": "free-frame-30",
+          "player": [
+            15.967624847698591,
+            0,
+            6.229254025697491
+          ],
+          "cargo": [
+            12.47598177579697,
+            0.7045704269745299,
+            5.55064330049967
+          ],
+          "body": [
+            12.47598177579697,
+            0.7045704269745299,
+            5.55064330049967
+          ],
+          "playerDistance": 0.43237515230140744,
+          "cargoDistance": 3.924018224203028,
+          "playerTeleports": 0,
+          "cargoTransports": 0,
+          "held": false,
+          "grounded": false,
+          "bodyId": 115,
+          "uuid": "86f957ff-d963-46f9-8ae8-e403b1f0aea2",
+          "fit": false
+        },
+        {
+          "at": "free-frame-60",
+          "player": [
+            15.967780790838157,
+            0,
+            6.2292520523068635
+          ],
+          "cargo": [
+            11.25480623019448,
+            0.6349674323523631,
+            5.513439080300351
+          ],
+          "body": [
+            11.25480623019448,
+            0.6349674323523631,
+            5.513439080300351
+          ],
+          "playerDistance": 0.43221920916184153,
+          "cargoDistance": 5.145193769805518,
+          "playerTeleports": 0,
+          "cargoTransports": 0,
+          "held": false,
+          "grounded": true,
+          "bodyId": 115,
+          "uuid": "86f957ff-d963-46f9-8ae8-e403b1f0aea2",
+          "fit": false
+        },
+        {
+          "at": "free-frame-180",
+          "player": [
+            15.967780877135604,
+            0,
+            6.22925205121481
+          ],
+          "cargo": [
+            10.900799853026706,
+            0.51355057367304,
+            5.88086853492507
+          ],
+          "body": [
+            10.900799853026706,
+            0.51355057367304,
+            5.88086853492507
+          ],
+          "playerDistance": 0.4322191228643941,
+          "cargoDistance": 5.499200146973292,
+          "playerTeleports": 0,
+          "cargoTransports": 0,
+          "held": false,
+          "grounded": true,
+          "bodyId": 115,
+          "uuid": "86f957ff-d963-46f9-8ae8-e403b1f0aea2",
+          "fit": false
+        }
+      ],
+      "error": null,
+      "source": {
+        "position": [
+          16.4,
+          2.3850419689941904,
+          6.2509127577143175
+        ],
+        "normal": [
+          -1,
+          0,
+          2.220446049250313e-16
+        ],
+        "width": 2.8,
+        "height": 2.1,
+        "backing": []
+      },
+      "releaseAccepted": true,
+      "clearAccepted": true,
+      "minimumFreeDistance": 0.18241877460214082,
+      "maximumFreeDistance": 5.499200146973292,
+      "sameOriginalBody": true,
+      "outcome": "same-front-side-after-clear",
+      "journey": {
+        "frames": 643,
+        "resets": 0,
+        "respawns": 0
+      }
+    },
+    {
+      "sourceName": "near-right",
+      "triggerDistance": 0.68,
+      "events": [
+        {
+          "at": "partial-held",
+          "player": [
+            15.76139308993501,
+            0,
+            6.2319874687735135
+          ],
+          "cargo": [
+            16.480476313852613,
+            1.0674919771335827,
+            6.19404369977556
+          ],
+          "body": [
+            16.480476313852613,
+            1.0674919771335827,
+            6.19404369977556
+          ],
+          "playerDistance": 0.638606910064988,
+          "cargoDistance": -0.08047631385261413,
+          "playerTeleports": 0,
+          "cargoTransports": 0,
+          "held": true,
+          "grounded": false,
+          "bodyId": 194,
+          "uuid": "b7349835-8087-4ac5-a0ae-baa0d9653288",
+          "fit": true
+        },
+        {
+          "at": "after-release-before-clear",
+          "player": [
+            15.76139308993501,
+            0,
+            6.2319874687735135
+          ],
+          "cargo": [
+            16.480476313852613,
+            1.0674919771335827,
+            6.19404369977556
+          ],
+          "body": [
+            16.480476313852613,
+            1.0674919771335827,
+            6.19404369977556
+          ],
+          "playerDistance": 0.638606910064988,
+          "cargoDistance": -0.08047631385261413,
+          "playerTeleports": 0,
+          "cargoTransports": 0,
+          "held": false,
+          "grounded": false,
+          "bodyId": 194,
+          "uuid": "b7349835-8087-4ac5-a0ae-baa0d9653288",
+          "fit": true
+        },
+        {
+          "at": "after-clear-before-physics",
+          "player": [
+            15.76139308993501,
+            0,
+            6.2319874687735135
+          ],
+          "cargo": [
+            16.480476313852613,
+            1.0674919771335827,
+            6.19404369977556
+          ],
+          "body": [
+            16.480476313852613,
+            1.0674919771335827,
+            6.19404369977556
+          ],
+          "playerDistance": 0.638606910064988,
+          "cargoDistance": -0.08047631385261413,
+          "playerTeleports": 0,
+          "cargoTransports": 0,
+          "held": false,
+          "grounded": false,
+          "bodyId": 194,
+          "uuid": "b7349835-8087-4ac5-a0ae-baa0d9653288",
+          "fit": true
+        },
+        {
+          "at": "free-frame-1",
+          "player": [
+            15.824445302091124,
+            0,
+            6.231324574915135
+          ],
+          "cargo": [
+            16.25780854782048,
+            1.0662407998782482,
+            6.187443461943506
+          ],
+          "body": [
+            16.25780854782048,
+            1.0662407998782482,
+            6.187443461943506
+          ],
+          "playerDistance": 0.5755546979088741,
+          "cargoDistance": 0.1421914521795173,
+          "playerTeleports": 0,
+          "cargoTransports": 0,
+          "held": false,
+          "grounded": false,
+          "bodyId": 194,
+          "uuid": "b7349835-8087-4ac5-a0ae-baa0d9653288",
+          "fit": true
+        },
+        {
+          "at": "free-frame-2",
+          "player": [
+            15.87355041429269,
+            0,
+            6.230808312659137
+          ],
+          "cargo": [
+            16.035272959609372,
+            1.0618725705551908,
+            6.18086701672216
+          ],
+          "body": [
+            16.035272959609372,
+            1.0618725705551908,
+            6.18086701672216
+          ],
+          "playerDistance": 0.5264495857073079,
+          "cargoDistance": 0.3647270403906262,
+          "playerTeleports": 0,
+          "cargoTransports": 0,
+          "held": false,
+          "grounded": false,
+          "bodyId": 194,
+          "uuid": "b7349835-8087-4ac5-a0ae-baa0d9653288",
+          "fit": true
+        },
+        {
+          "at": "free-frame-6",
+          "player": [
+            15.969900002682209,
+            0,
+            6.22965933103077
+          ],
+          "cargo": [
+            15.146450816432028,
+            0.9970405532534391,
+            6.154711467831369
+          ],
+          "body": [
+            15.146450816432028,
+            0.9970405532534391,
+            6.154711467831369
+          ],
+          "playerDistance": 0.4300999973177895,
+          "cargoDistance": 1.253549183567971,
+          "playerTeleports": 0,
+          "cargoTransports": 0,
+          "held": false,
+          "grounded": false,
+          "bodyId": 194,
+          "uuid": "b7349835-8087-4ac5-a0ae-baa0d9653288",
+          "fit": true
+        },
+        {
+          "at": "free-frame-30",
+          "player": [
+            15.969900002682209,
+            0,
+            6.228992307979796
+          ],
+          "cargo": [
+            11.63201739605737,
+            0.7844232705345232,
+            5.749013683703724
+          ],
+          "body": [
+            11.63201739605737,
+            0.7844232705345232,
+            5.749013683703724
+          ],
+          "playerDistance": 0.4300999973177895,
+          "cargoDistance": 4.767982603942629,
+          "playerTeleports": 0,
+          "cargoTransports": 0,
+          "held": false,
+          "grounded": false,
+          "bodyId": 194,
+          "uuid": "b7349835-8087-4ac5-a0ae-baa0d9653288",
+          "fit": false
+        },
+        {
+          "at": "free-frame-60",
+          "player": [
+            15.969900002682209,
+            0,
+            6.2289906514031745
+          ],
+          "cargo": [
+            9.523373302381414,
+            0.5618959770065602,
+            5.152766114703564
+          ],
+          "body": [
+            9.523373302381414,
+            0.5618959770065602,
+            5.152766114703564
+          ],
+          "playerDistance": 0.4300999973177895,
+          "cargoDistance": 6.876626697618585,
+          "playerTeleports": 0,
+          "cargoTransports": 0,
+          "held": false,
+          "grounded": false,
+          "bodyId": 194,
+          "uuid": "b7349835-8087-4ac5-a0ae-baa0d9653288",
+          "fit": false
+        },
+        {
+          "at": "free-frame-180",
+          "player": [
+            15.969900002682209,
+            0,
+            6.228990650486442
+          ],
+          "cargo": [
+            9.172884470169219,
+            0.49404881389167066,
+            5.0757313468548615
+          ],
+          "body": [
+            9.172884470169219,
+            0.49404881389167066,
+            5.0757313468548615
+          ],
+          "playerDistance": 0.4300999973177895,
+          "cargoDistance": 7.22711552983078,
+          "playerTeleports": 0,
+          "cargoTransports": 0,
+          "held": false,
+          "grounded": true,
+          "bodyId": 194,
+          "uuid": "b7349835-8087-4ac5-a0ae-baa0d9653288",
+          "fit": false
+        }
+      ],
+      "error": null,
+      "source": {
+        "position": [
+          16.4,
+          2.385041968994191,
+          6.25091275771432
+        ],
+        "normal": [
+          -1,
+          0,
+          2.220446049250313e-16
+        ],
+        "width": 2.8,
+        "height": 2.1,
+        "backing": []
+      },
+      "releaseAccepted": true,
+      "clearAccepted": true,
+      "minimumFreeDistance": 0.1421914521795173,
+      "maximumFreeDistance": 7.4874987355871205,
+      "sameOriginalBody": true,
+      "outcome": "same-front-side-after-clear",
+      "journey": {
+        "frames": 644,
+        "resets": 0,
+        "respawns": 0
+      }
+    },
+    {
+      "sourceName": "near-right",
+      "triggerDistance": 0.6,
+      "events": [
+        {
+          "at": "partial-held",
+          "player": [
+            15.837800258211432,
+            0,
+            6.2312869159608235
+          ],
+          "cargo": [
+            16.557052855012802,
+            1.0592588365273208,
+            6.196598690455605
+          ],
+          "body": [
+            16.557052855012802,
+            1.0592588365273208,
+            6.196598690455605
+          ],
+          "playerDistance": 0.5621997417885662,
+          "cargoDistance": -0.15705285501280386,
+          "playerTeleports": 0,
+          "cargoTransports": 0,
+          "held": true,
+          "grounded": false,
+          "bodyId": 273,
+          "uuid": "0b860137-9cee-485f-b0bf-dc90fb414032",
+          "fit": true
+        },
+        {
+          "at": "after-release-before-clear",
+          "player": [
+            15.837800258211432,
+            0,
+            6.2312869159608235
+          ],
+          "cargo": [
+            16.557052855012802,
+            1.0592588365273208,
+            6.196598690455605
+          ],
+          "body": [
+            16.557052855012802,
+            1.0592588365273208,
+            6.196598690455605
+          ],
+          "playerDistance": 0.5621997417885662,
+          "cargoDistance": -0.15705285501280386,
+          "playerTeleports": 0,
+          "cargoTransports": 0,
+          "held": false,
+          "grounded": false,
+          "bodyId": 273,
+          "uuid": "0b860137-9cee-485f-b0bf-dc90fb414032",
+          "fit": true
+        },
+        {
+          "at": "after-clear-before-physics",
+          "player": [
+            15.837800258211432,
+            0,
+            6.2312869159608235
+          ],
+          "cargo": [
+            16.557052855012802,
+            1.0592588365273208,
+            6.196598690455605
+          ],
+          "body": [
+            16.557052855012802,
+            1.0592588365273208,
+            6.196598690455605
+          ],
+          "playerDistance": 0.5621997417885662,
+          "cargoDistance": -0.15705285501280386,
+          "playerTeleports": 0,
+          "cargoTransports": 0,
+          "held": false,
+          "grounded": false,
+          "bodyId": 273,
+          "uuid": "0b860137-9cee-485f-b0bf-dc90fb414032",
+          "fit": true
+        },
+        {
+          "at": "free-frame-1",
+          "player": [
+            15.90139826757469,
+            0,
+            6.230730445057383
+          ],
+          "cargo": [
+            16.778342415914633,
+            1.0581380531494486,
+            6.202462296909746
+          ],
+          "body": [
+            16.778342415914633,
+            1.0581380531494486,
+            6.202462296909746
+          ],
+          "playerDistance": 0.4986017324253087,
+          "cargoDistance": -0.37834241591463424,
+          "playerTeleports": 0,
+          "cargoTransports": 0,
+          "held": false,
+          "grounded": false,
+          "bodyId": 273,
+          "uuid": "0b860137-9cee-485f-b0bf-dc90fb414032",
+          "fit": true
+        },
+        {
+          "at": "free-frame-2",
+          "player": [
+            15.950928447068579,
+            0,
+            6.230297065082028
+          ],
+          "cargo": [
+            16.999500617111835,
+            1.053877904738323,
+            6.208262976354776
+          ],
+          "body": [
+            16.999500617111835,
+            1.053877904738323,
+            6.208262976354776
+          ],
+          "playerDistance": 0.44907155293141976,
+          "cargoDistance": -0.5995006171118362,
+          "playerTeleports": 0,
+          "cargoTransports": 0,
+          "held": false,
+          "grounded": false,
+          "bodyId": 273,
+          "uuid": "0b860137-9cee-485f-b0bf-dc90fb414032",
+          "fit": true
+        },
+        {
+          "at": "free-frame-6",
+          "player": [
+            15.969900002682209,
+            0,
+            6.2293325443873595
+          ],
+          "cargo": [
+            17.01449999731779,
+            1.051211091955856,
+            6.21081405679762
+          ],
+          "body": [
+            17.01449999731779,
+            1.051211091955856,
+            6.21081405679762
+          ],
+          "playerDistance": 0.4300999973177895,
+          "cargoDistance": -0.6144999973177931,
+          "playerTeleports": 0,
+          "cargoTransports": 0,
+          "held": false,
+          "grounded": false,
+          "bodyId": 273,
+          "uuid": "0b860137-9cee-485f-b0bf-dc90fb414032",
+          "fit": true
+        },
+        {
+          "at": "free-frame-30",
+          "player": [
+            15.969900002682209,
+            0,
+            6.228772607204202
+          ],
+          "cargo": [
+            17.01449999731779,
+            1.051066351744746,
+            6.210963244011083
+          ],
+          "body": [
+            17.01449999731779,
+            1.051066351744746,
+            6.210963244011083
+          ],
+          "playerDistance": 0.4300999973177895,
+          "cargoDistance": -0.6144999973177931,
+          "playerTeleports": 0,
+          "cargoTransports": 0,
+          "held": false,
+          "grounded": false,
+          "bodyId": 273,
+          "uuid": "0b860137-9cee-485f-b0bf-dc90fb414032",
+          "fit": true
+        },
+        {
+          "at": "free-frame-60",
+          "player": [
+            15.969900002682209,
+            0,
+            6.228771216579327
+          ],
+          "cargo": [
+            17.01449999731779,
+            1.0506366455217275,
+            6.2112881474626995
+          ],
+          "body": [
+            17.01449999731779,
+            1.0506366455217275,
+            6.2112881474626995
+          ],
+          "playerDistance": 0.4300999973177895,
+          "cargoDistance": -0.6144999973177931,
+          "playerTeleports": 0,
+          "cargoTransports": 0,
+          "held": false,
+          "grounded": false,
+          "bodyId": 273,
+          "uuid": "0b860137-9cee-485f-b0bf-dc90fb414032",
+          "fit": true
+        },
+        {
+          "at": "free-frame-180",
+          "player": [
+            15.969900002682209,
+            0,
+            6.228771215809769
+          ],
+          "cargo": [
+            17.01449999731779,
+            1.0493718709366928,
+            6.211934332726978
+          ],
+          "body": [
+            17.01449999731779,
+            1.0493718709366928,
+            6.211934332726978
+          ],
+          "playerDistance": 0.4300999973177895,
+          "cargoDistance": -0.6144999973177931,
+          "playerTeleports": 0,
+          "cargoTransports": 0,
+          "held": false,
+          "grounded": false,
+          "bodyId": 273,
+          "uuid": "0b860137-9cee-485f-b0bf-dc90fb414032",
+          "fit": true
+        }
+      ],
+      "error": null,
+      "source": {
+        "position": [
+          16.4,
+          2.3850419689941904,
+          6.250912757714311
+        ],
+        "normal": [
+          -1,
+          0,
+          2.220446049250313e-16
+        ],
+        "width": 2.8,
+        "height": 2.1,
+        "backing": []
+      },
+      "releaseAccepted": true,
+      "clearAccepted": true,
+      "minimumFreeDistance": -0.6217640954473183,
+      "maximumFreeDistance": -0.37834241591463424,
+      "sameOriginalBody": true,
+      "outcome": "original-cargo-behind-source-without-transit",
+      "journey": {
+        "frames": 645,
+        "resets": 0,
+        "respawns": 0
+      }
+    },
+    {
+      "sourceName": "near-right",
+      "triggerDistance": 0.5,
+      "events": [
+        {
+          "at": "partial-held",
+          "player": [
+            15.914784230396632,
+            0,
+            6.230698831983803
+          ],
+          "cargo": [
+            16.63419221642013,
+            1.0512071585881506,
+            6.199565404887244
+          ],
+          "body": [
+            16.63419221642013,
+            1.0512071585881506,
+            6.199565404887244
+          ],
+          "playerDistance": 0.4852157696033661,
+          "cargoDistance": -0.23419221642013,
+          "playerTeleports": 0,
+          "cargoTransports": 0,
+          "held": true,
+          "grounded": false,
+          "bodyId": 352,
+          "uuid": "03bdea2f-5543-4101-a4cf-71dcb7dfed06",
+          "fit": true
+        },
+        {
+          "at": "after-release-before-clear",
+          "player": [
+            15.914784230396632,
+            0,
+            6.230698831983803
+          ],
+          "cargo": [
+            16.63419221642013,
+            1.0512071585881506,
+            6.199565404887244
+          ],
+          "body": [
+            16.63419221642013,
+            1.0512071585881506,
+            6.199565404887244
+          ],
+          "playerDistance": 0.4852157696033661,
+          "cargoDistance": -0.23419221642013,
+          "playerTeleports": 0,
+          "cargoTransports": 0,
+          "held": false,
+          "grounded": false,
+          "bodyId": 352,
+          "uuid": "03bdea2f-5543-4101-a4cf-71dcb7dfed06",
+          "fit": true
+        },
+        {
+          "at": "after-clear-before-physics",
+          "player": [
+            15.914784230396632,
+            0,
+            6.230698831983803
+          ],
+          "cargo": [
+            16.63419221642013,
+            1.0512071585881506,
+            6.199565404887244
+          ],
+          "body": [
+            16.63419221642013,
+            1.0512071585881506,
+            6.199565404887244
+          ],
+          "playerDistance": 0.4852157696033661,
+          "cargoDistance": -0.23419221642013,
+          "playerTeleports": 0,
+          "cargoTransports": 0,
+          "held": false,
+          "grounded": false,
+          "bodyId": 352,
+          "uuid": "03bdea2f-5543-4101-a4cf-71dcb7dfed06",
+          "fit": true
+        },
+        {
+          "at": "free-frame-1",
+          "player": [
+            15.969900002682209,
+            0,
+            6.2302316985770565
+          ],
+          "cargo": [
+            16.819165446065245,
+            1.0500953556479906,
+            6.204671601373468
+          ],
+          "body": [
+            16.819165446065245,
+            1.0500953556479906,
+            6.204671601373468
+          ],
+          "playerDistance": 0.4300999973177895,
+          "cargoDistance": -0.4191654460652465,
+          "playerTeleports": 0,
+          "cargoTransports": 0,
+          "held": false,
+          "grounded": false,
+          "bodyId": 352,
+          "uuid": "03bdea2f-5543-4101-a4cf-71dcb7dfed06",
+          "fit": true
+        },
+        {
+          "at": "free-frame-2",
+          "player": [
+            15.969900002682209,
+            0,
+            6.229867894714083
+          ],
+          "cargo": [
+            17.00402887374451,
+            1.0458170287459043,
+            6.209726585057447
+          ],
+          "body": [
+            17.00402887374451,
+            1.0458170287459043,
+            6.209726585057447
+          ],
+          "playerDistance": 0.4300999973177895,
+          "cargoDistance": -0.604028873744511,
+          "playerTeleports": 0,
+          "cargoTransports": 0,
+          "held": false,
+          "grounded": false,
+          "bodyId": 352,
+          "uuid": "03bdea2f-5543-4101-a4cf-71dcb7dfed06",
+          "fit": true
+        },
+        {
+          "at": "free-frame-6",
+          "player": [
+            15.969900002682209,
+            0,
+            6.229058221045266
+          ],
+          "cargo": [
+            17.01449999731779,
+            1.0431518156696078,
+            6.211889613710439
+          ],
+          "body": [
+            17.01449999731779,
+            1.0431518156696078,
+            6.211889613710439
+          ],
+          "playerDistance": 0.4300999973177895,
+          "cargoDistance": -0.6144999973177931,
+          "playerTeleports": 0,
+          "cargoTransports": 0,
+          "held": false,
+          "grounded": false,
+          "bodyId": 352,
+          "uuid": "03bdea2f-5543-4101-a4cf-71dcb7dfed06",
+          "fit": true
+        },
+        {
+          "at": "free-frame-30",
+          "player": [
+            15.969900002682209,
+            0,
+            6.2285881778456735
+          ],
+          "cargo": [
+            17.01449999731779,
+            1.0430190193649758,
+            6.212021556585489
+          ],
+          "body": [
+            17.01449999731779,
+            1.0430190193649758,
+            6.212021556585489
+          ],
+          "playerDistance": 0.4300999973177895,
+          "cargoDistance": -0.6144999973177931,
+          "playerTeleports": 0,
+          "cargoTransports": 0,
+          "held": false,
+          "grounded": false,
+          "bodyId": 352,
+          "uuid": "03bdea2f-5543-4101-a4cf-71dcb7dfed06",
+          "fit": true
+        },
+        {
+          "at": "free-frame-60",
+          "player": [
+            15.969900002682209,
+            0,
+            6.228587010475863
+          ],
+          "cargo": [
+            17.01449999731779,
+            1.0426053723406836,
+            6.212319086178054
+          ],
+          "body": [
+            17.01449999731779,
+            1.0426053723406836,
+            6.212319086178054
+          ],
+          "playerDistance": 0.4300999973177895,
+          "cargoDistance": -0.6144999973177931,
+          "playerTeleports": 0,
+          "cargoTransports": 0,
+          "held": false,
+          "grounded": false,
+          "bodyId": 352,
+          "uuid": "03bdea2f-5543-4101-a4cf-71dcb7dfed06",
+          "fit": true
+        },
+        {
+          "at": "free-frame-180",
+          "player": [
+            15.969900002682209,
+            0,
+            6.228587009829857
+          ],
+          "cargo": [
+            17.014810215353872,
+            1.041107065064765,
+            6.2133205476119215
+          ],
+          "body": [
+            17.014810215353872,
+            1.041107065064765,
+            6.2133205476119215
+          ],
+          "playerDistance": 0.4300999973177895,
+          "cargoDistance": -0.6148102153538737,
+          "playerTeleports": 0,
+          "cargoTransports": 0,
+          "held": false,
+          "grounded": false,
+          "bodyId": 352,
+          "uuid": "03bdea2f-5543-4101-a4cf-71dcb7dfed06",
+          "fit": true
+        }
+      ],
+      "error": null,
+      "source": {
+        "position": [
+          16.4,
+          2.38504196899419,
+          6.250912757714315
+        ],
+        "normal": [
+          -1,
+          0,
+          2.220446049250313e-16
+        ],
+        "width": 2.8,
+        "height": 2.1,
+        "backing": []
+      },
+      "releaseAccepted": true,
+      "clearAccepted": true,
+      "minimumFreeDistance": -0.6217647662227961,
+      "maximumFreeDistance": -0.4191654460652465,
+      "sameOriginalBody": true,
+      "outcome": "original-cargo-behind-source-without-transit",
+      "journey": {
+        "frames": 646,
+        "resets": 0,
+        "respawns": 0
+      }
+    },
+    {
+      "sourceName": "near-left",
+      "triggerDistance": 0.73,
+      "events": [
+        {
+          "at": "partial-held",
+          "player": [
+            -15.686995637481667,
+            0,
+            6.145366657443736
+          ],
+          "cargo": [
+            -16.40618042997958,
+            1.075839406118185,
+            6.109935561647328
+          ],
+          "body": [
+            -16.40618042997958,
+            1.075839406118185,
+            6.109935561647328
+          ],
+          "playerDistance": 0.7130043625183315,
+          "cargoDistance": -0.006180429979583138,
+          "playerTeleports": 0,
+          "cargoTransports": 0,
+          "held": true,
+          "grounded": false,
+          "bodyId": 431,
+          "uuid": "277db06a-61f4-4965-860f-4becc2a6c5e8",
+          "fit": true
+        },
+        {
+          "at": "after-release-before-clear",
+          "player": [
+            -15.686995637481667,
+            0,
+            6.145366657443736
+          ],
+          "cargo": [
+            -16.40618042997958,
+            1.075839406118185,
+            6.109935561647328
+          ],
+          "body": [
+            -16.40618042997958,
+            1.075839406118185,
+            6.109935561647328
+          ],
+          "playerDistance": 0.7130043625183315,
+          "cargoDistance": -0.006180429979583138,
+          "playerTeleports": 0,
+          "cargoTransports": 0,
+          "held": false,
+          "grounded": false,
+          "bodyId": 431,
+          "uuid": "277db06a-61f4-4965-860f-4becc2a6c5e8",
+          "fit": true
+        },
+        {
+          "at": "after-clear-before-physics",
+          "player": [
+            -15.686995637481667,
+            0,
+            6.145366657443736
+          ],
+          "cargo": [
+            -16.40618042997958,
+            1.075839406118185,
+            6.109935561647328
+          ],
+          "body": [
+            -16.40618042997958,
+            1.075839406118185,
+            6.109935561647328
+          ],
+          "playerDistance": 0.7130043625183315,
+          "cargoDistance": -0.006180429979583138,
+          "playerTeleports": 0,
+          "cargoTransports": 0,
+          "held": false,
+          "grounded": false,
+          "bodyId": 431,
+          "uuid": "277db06a-61f4-4965-860f-4becc2a6c5e8",
+          "fit": true
+        },
+        {
+          "at": "free-frame-1",
+          "player": [
+            -15.749216962175133,
+            0,
+            6.144203514483762
+          ],
+          "cargo": [
+            -16.218219325175813,
+            1.0745854416412817,
+            6.0990707653368945
+          ],
+          "body": [
+            -16.218219325175813,
+            1.0745854416412817,
+            6.0990707653368945
+          ],
+          "playerDistance": 0.6507830378248656,
+          "cargoDistance": 0.18178067482418567,
+          "playerTeleports": 0,
+          "cargoTransports": 0,
+          "held": false,
+          "grounded": false,
+          "bodyId": 431,
+          "uuid": "277db06a-61f4-4965-860f-4becc2a6c5e8",
+          "fit": true
+        },
+        {
+          "at": "free-frame-2",
+          "player": [
+            -15.797674978570145,
+            0,
+            6.143297657835711
+          ],
+          "cargo": [
+            -16.030369795970582,
+            1.0702111033235775,
+            6.088412081652361
+          ],
+          "body": [
+            -16.030369795970582,
+            1.0702111033235775,
+            6.088412081652361
+          ],
+          "playerDistance": 0.6023250214298539,
+          "cargoDistance": 0.3696302040294164,
+          "playerTeleports": 0,
+          "cargoTransports": 0,
+          "held": false,
+          "grounded": false,
+          "bodyId": 431,
+          "uuid": "277db06a-61f4-4965-860f-4becc2a6c5e8",
+          "fit": true
+        },
+        {
+          "at": "free-frame-6",
+          "player": [
+            -15.90552204648595,
+            0,
+            6.141281603718926
+          ],
+          "cargo": [
+            -15.280086111076754,
+            1.005444757347163,
+            6.046170581530751
+          ],
+          "body": [
+            -15.280086111076754,
+            1.005444757347163,
+            6.046170581530751
+          ],
+          "playerDistance": 0.494477953514048,
+          "cargoDistance": 1.1199138889232447,
+          "playerTeleports": 0,
+          "cargoTransports": 0,
+          "held": false,
+          "grounded": false,
+          "bodyId": 431,
+          "uuid": "277db06a-61f4-4965-860f-4becc2a6c5e8",
+          "fit": true
+        },
+        {
+          "at": "free-frame-30",
+          "player": [
+            -15.968130950322147,
+            0,
+            6.140111215494511
+          ],
+          "cargo": [
+            -12.480052719768079,
+            0.6338363792357734,
+            5.339838811923391
+          ],
+          "body": [
+            -12.480052719768079,
+            0.6338363792357734,
+            5.339838811923391
+          ],
+          "playerDistance": 0.4318690496778519,
+          "cargoDistance": 3.91994728023192,
+          "playerTeleports": 0,
+          "cargoTransports": 0,
+          "held": false,
+          "grounded": false,
+          "bodyId": 431,
+          "uuid": "277db06a-61f4-4965-860f-4becc2a6c5e8",
+          "fit": false
+        },
+        {
+          "at": "free-frame-60",
+          "player": [
+            -15.968286441869578,
+            0,
+            6.140108308791708
+          ],
+          "cargo": [
+            -10.996955616128231,
+            0.5536746372370379,
+            4.800501416563978
+          ],
+          "body": [
+            -10.996955616128231,
+            0.5536746372370379,
+            4.800501416563978
+          ],
+          "playerDistance": 0.43171355813042034,
+          "cargoDistance": 5.403044383871768,
+          "playerTeleports": 0,
+          "cargoTransports": 0,
+          "held": false,
+          "grounded": true,
+          "bodyId": 431,
+          "uuid": "277db06a-61f4-4965-860f-4becc2a6c5e8",
+          "fit": false
+        },
+        {
+          "at": "free-frame-180",
+          "player": [
+            -15.968286527917106,
+            0,
+            6.140108307183167
+          ],
+          "cargo": [
+            -10.833479302038231,
+            0.5437315195105695,
+            4.473281095025624
+          ],
+          "body": [
+            -10.833479302038231,
+            0.5437315195105695,
+            4.473281095025624
+          ],
+          "playerDistance": 0.4317134720828921,
+          "cargoDistance": 5.566520697961767,
+          "playerTeleports": 0,
+          "cargoTransports": 0,
+          "held": false,
+          "grounded": true,
+          "bodyId": 431,
+          "uuid": "277db06a-61f4-4965-860f-4becc2a6c5e8",
+          "fit": false
+        }
+      ],
+      "error": null,
+      "source": {
+        "position": [
+          -16.4,
+          2.425848689960307,
+          6.173176419951385
+        ],
+        "normal": [
+          1,
+          0,
+          2.220446049250313e-16
+        ],
+        "width": 2.8,
+        "height": 2.1,
+        "backing": []
+      },
+      "releaseAccepted": true,
+      "clearAccepted": true,
+      "minimumFreeDistance": 0.18178067482418567,
+      "maximumFreeDistance": 5.566520697961767,
+      "sameOriginalBody": true,
+      "outcome": "same-front-side-after-clear",
+      "journey": {
+        "frames": 577,
+        "resets": 0,
+        "respawns": 0
+      }
+    },
+    {
+      "sourceName": "near-left",
+      "triggerDistance": 0.68,
+      "events": [
+        {
+          "at": "partial-held",
+          "player": [
+            -15.762524715636083,
+            0,
+            6.14413743641255
+          ],
+          "cargo": [
+            -16.482058291930123,
+            1.0709408171138919,
+            6.116166978720163
+          ],
+          "body": [
+            -16.482058291930123,
+            1.0709408171138919,
+            6.116166978720163
+          ],
+          "playerDistance": 0.6374752843639158,
+          "cargoDistance": -0.0820582919301245,
+          "playerTeleports": 0,
+          "cargoTransports": 0,
+          "held": true,
+          "grounded": false,
+          "bodyId": 510,
+          "uuid": "87d79939-2476-4269-8fd9-9df8181cbe9d",
+          "fit": true
+        },
+        {
+          "at": "after-release-before-clear",
+          "player": [
+            -15.762524715636083,
+            0,
+            6.14413743641255
+          ],
+          "cargo": [
+            -16.482058291930123,
+            1.0709408171138919,
+            6.116166978720163
+          ],
+          "body": [
+            -16.482058291930123,
+            1.0709408171138919,
+            6.116166978720163
+          ],
+          "playerDistance": 0.6374752843639158,
+          "cargoDistance": -0.0820582919301245,
+          "playerTeleports": 0,
+          "cargoTransports": 0,
+          "held": false,
+          "grounded": false,
+          "bodyId": 510,
+          "uuid": "87d79939-2476-4269-8fd9-9df8181cbe9d",
+          "fit": true
+        },
+        {
+          "at": "after-clear-before-physics",
+          "player": [
+            -15.762524715636083,
+            0,
+            6.14413743641255
+          ],
+          "cargo": [
+            -16.482058291930123,
+            1.0709408171138919,
+            6.116166978720163
+          ],
+          "body": [
+            -16.482058291930123,
+            1.0709408171138919,
+            6.116166978720163
+          ],
+          "playerDistance": 0.6374752843639158,
+          "cargoDistance": -0.0820582919301245,
+          "playerTeleports": 0,
+          "cargoTransports": 0,
+          "held": false,
+          "grounded": false,
+          "bodyId": 510,
+          "uuid": "87d79939-2476-4269-8fd9-9df8181cbe9d",
+          "fit": true
+        },
+        {
+          "at": "free-frame-1",
+          "player": [
+            -15.82542523068535,
+            0,
+            6.143161027888643
+          ],
+          "cargo": [
+            -16.25849008981855,
+            1.0696022693310636,
+            6.106679854367173
+          ],
+          "body": [
+            -16.25849008981855,
+            1.0696022693310636,
+            6.106679854367173
+          ],
+          "playerDistance": 0.5745747693146495,
+          "cargoDistance": 0.14150991018144762,
+          "playerTeleports": 0,
+          "cargoTransports": 0,
+          "held": false,
+          "grounded": false,
+          "bodyId": 510,
+          "uuid": "87d79939-2476-4269-8fd9-9df8181cbe9d",
+          "fit": true
+        },
+        {
+          "at": "free-frame-2",
+          "player": [
+            -15.874412201061315,
+            0,
+            6.142400600165626
+          ],
+          "cargo": [
+            -16.035054600035895,
+            1.0651398680696376,
+            6.097345032034365
+          ],
+          "body": [
+            -16.035054600035895,
+            1.0651398680696376,
+            6.097345032034365
+          ],
+          "playerDistance": 0.5255877989386839,
+          "cargoDistance": 0.36494539996410325,
+          "playerTeleports": 0,
+          "cargoTransports": 0,
+          "held": false,
+          "grounded": false,
+          "bodyId": 510,
+          "uuid": "87d79939-2476-4269-8fd9-9df8181cbe9d",
+          "fit": true
+        },
+        {
+          "at": "free-frame-6",
+          "player": [
+            -15.969900002682209,
+            0,
+            6.14070820938304
+          ],
+          "cargo": [
+            -15.142638189308364,
+            0.9999799093610399,
+            6.060227285962485
+          ],
+          "body": [
+            -15.142638189308364,
+            0.9999799093610399,
+            6.060227285962485
+          ],
+          "playerDistance": 0.4300999973177895,
+          "cargoDistance": 1.2573618106916342,
+          "playerTeleports": 0,
+          "cargoTransports": 0,
+          "held": false,
+          "grounded": false,
+          "bodyId": 510,
+          "uuid": "87d79939-2476-4269-8fd9-9df8181cbe9d",
+          "fit": true
+        },
+        {
+          "at": "free-frame-30",
+          "player": [
+            -15.969900002682209,
+            0,
+            6.13972571877103
+          ],
+          "cargo": [
+            -11.703645035402333,
+            0.7892754998173784,
+            5.283208262353208
+          ],
+          "body": [
+            -11.703645035402333,
+            0.7892754998173784,
+            5.283208262353208
+          ],
+          "playerDistance": 0.4300999973177895,
+          "cargoDistance": 4.696354964597665,
+          "playerTeleports": 0,
+          "cargoTransports": 0,
+          "held": false,
+          "grounded": false,
+          "bodyId": 510,
+          "uuid": "87d79939-2476-4269-8fd9-9df8181cbe9d",
+          "fit": false
+        },
+        {
+          "at": "free-frame-60",
+          "player": [
+            -15.969900002682209,
+            0,
+            6.13972327871896
+          ],
+          "cargo": [
+            -9.962032980011042,
+            0.652561609375218,
+            3.589982210013078
+          ],
+          "body": [
+            -9.962032980011042,
+            0.652561609375218,
+            3.589982210013078
+          ],
+          "playerDistance": 0.4300999973177895,
+          "cargoDistance": 6.437967019988956,
+          "playerTeleports": 0,
+          "cargoTransports": 0,
+          "held": false,
+          "grounded": false,
+          "bodyId": 510,
+          "uuid": "87d79939-2476-4269-8fd9-9df8181cbe9d",
+          "fit": false
+        },
+        {
+          "at": "free-frame-180",
+          "player": [
+            -15.969900002682209,
+            0,
+            6.139723277368662
+          ],
+          "cargo": [
+            -9.03022332109177,
+            0.4675284635869498,
+            2.5282976905490746
+          ],
+          "body": [
+            -9.03022332109177,
+            0.4675284635869498,
+            2.5282976905490746
+          ],
+          "playerDistance": 0.4300999973177895,
+          "cargoDistance": 7.369776678908228,
+          "playerTeleports": 0,
+          "cargoTransports": 0,
+          "held": false,
+          "grounded": true,
+          "bodyId": 510,
+          "uuid": "87d79939-2476-4269-8fd9-9df8181cbe9d",
+          "fit": false
+        }
+      ],
+      "error": null,
+      "source": {
+        "position": [
+          -16.4,
+          2.425848689960307,
+          6.173176419951383
+        ],
+        "normal": [
+          1,
+          0,
+          2.220446049250313e-16
+        ],
+        "width": 2.8,
+        "height": 2.1,
+        "backing": []
+      },
+      "releaseAccepted": true,
+      "clearAccepted": true,
+      "minimumFreeDistance": 0.14150991018144762,
+      "maximumFreeDistance": 7.369776678908228,
+      "sameOriginalBody": true,
+      "outcome": "same-front-side-after-clear",
+      "journey": {
+        "frames": 578,
+        "resets": 0,
+        "respawns": 0
+      }
+    },
+    {
+      "sourceName": "near-left",
+      "triggerDistance": 0.6,
+      "events": [
+        {
+          "at": "partial-held",
+          "player": [
+            -15.838771568903494,
+            0,
+            6.143105558187852
+          ],
+          "cargo": [
+            -16.55852443726379,
+            1.0633635345057815,
+            6.121150037524713
+          ],
+          "body": [
+            -16.55852443726379,
+            1.0633635345057815,
+            6.121150037524713
+          ],
+          "playerDistance": 0.5612284310965041,
+          "cargoDistance": -0.15852443726379306,
+          "playerTeleports": 0,
+          "cargoTransports": 0,
+          "held": true,
+          "grounded": false,
+          "bodyId": 589,
+          "uuid": "66cddee3-dec3-4fac-9d4a-53410060d9ed",
+          "fit": true
+        },
+        {
+          "at": "after-release-before-clear",
+          "player": [
+            -15.838771568903494,
+            0,
+            6.143105558187852
+          ],
+          "cargo": [
+            -16.55852443726379,
+            1.0633635345057815,
+            6.121150037524713
+          ],
+          "body": [
+            -16.55852443726379,
+            1.0633635345057815,
+            6.121150037524713
+          ],
+          "playerDistance": 0.5612284310965041,
+          "cargoDistance": -0.15852443726379306,
+          "playerTeleports": 0,
+          "cargoTransports": 0,
+          "held": false,
+          "grounded": false,
+          "bodyId": 589,
+          "uuid": "66cddee3-dec3-4fac-9d4a-53410060d9ed",
+          "fit": true
+        },
+        {
+          "at": "after-clear-before-physics",
+          "player": [
+            -15.838771568903494,
+            0,
+            6.143105558187852
+          ],
+          "cargo": [
+            -16.55852443726379,
+            1.0633635345057815,
+            6.121150037524713
+          ],
+          "body": [
+            -16.55852443726379,
+            1.0633635345057815,
+            6.121150037524713
+          ],
+          "playerDistance": 0.5612284310965041,
+          "cargoDistance": -0.15852443726379306,
+          "playerTeleports": 0,
+          "cargoTransports": 0,
+          "held": false,
+          "grounded": false,
+          "bodyId": 589,
+          "uuid": "66cddee3-dec3-4fac-9d4a-53410060d9ed",
+          "fit": true
+        },
+        {
+          "at": "free-frame-1",
+          "player": [
+            -15.902242235065378,
+            0,
+            6.142285905197318
+          ],
+          "cargo": [
+            -16.77923163708416,
+            1.0623286962969862,
+            6.129962642128172
+          ],
+          "body": [
+            -16.77923163708416,
+            1.0623286962969862,
+            6.129962642128172
+          ],
+          "playerDistance": 0.49775776493462054,
+          "cargoDistance": -0.3792316370841604,
+          "playerTeleports": 0,
+          "cargoTransports": 0,
+          "held": false,
+          "grounded": false,
+          "bodyId": 589,
+          "uuid": "66cddee3-dec3-4fac-9d4a-53410060d9ed",
+          "fit": true
+        },
+        {
+          "at": "free-frame-2",
+          "player": [
+            -15.951673239574317,
+            0,
+            6.141647558806444
+          ],
+          "cargo": [
+            -16.999807822895285,
+            1.058081007305564,
+            6.138527106049431
+          ],
+          "body": [
+            -16.999807822895285,
+            1.058081007305564,
+            6.138527106049431
+          ],
+          "playerDistance": 0.4483267604256813,
+          "cargoDistance": -0.5998078228952863,
+          "playerTeleports": 0,
+          "cargoTransports": 0,
+          "held": false,
+          "grounded": false,
+          "bodyId": 589,
+          "uuid": "66cddee3-dec3-4fac-9d4a-53410060d9ed",
+          "fit": true
+        },
+        {
+          "at": "free-frame-6",
+          "player": [
+            -15.969900002682209,
+            0,
+            6.140226869482117
+          ],
+          "cargo": [
+            -17.02549997615814,
+            1.053465028274159,
+            6.143215161051773
+          ],
+          "body": [
+            -17.02549997615814,
+            1.053465028274159,
+            6.143215161051773
+          ],
+          "playerDistance": 0.4300999973177895,
+          "cargoDistance": -0.6254999761581423,
+          "playerTeleports": 0,
+          "cargoTransports": 0,
+          "held": false,
+          "grounded": false,
+          "bodyId": 589,
+          "uuid": "66cddee3-dec3-4fac-9d4a-53410060d9ed",
+          "fit": true
+        },
+        {
+          "at": "free-frame-30",
+          "player": [
+            -15.969900002682209,
+            0,
+            6.139402110840024
+          ],
+          "cargo": [
+            -17.02549997615814,
+            1.0533530806580045,
+            6.143285357295927
+          ],
+          "body": [
+            -17.02549997615814,
+            1.0533530806580045,
+            6.143285357295927
+          ],
+          "playerDistance": 0.4300999973177895,
+          "cargoDistance": -0.6254999761581423,
+          "playerTeleports": 0,
+          "cargoTransports": 0,
+          "held": false,
+          "grounded": false,
+          "bodyId": 589,
+          "uuid": "66cddee3-dec3-4fac-9d4a-53410060d9ed",
+          "fit": true
+        },
+        {
+          "at": "free-frame-60",
+          "player": [
+            -15.969900002682209,
+            0,
+            6.1394000625211795
+          ],
+          "cargo": [
+            -17.02549997615814,
+            1.0533272091696644,
+            6.1432852694510975
+          ],
+          "body": [
+            -17.02549997615814,
+            1.0533272091696644,
+            6.1432852694510975
+          ],
+          "playerDistance": 0.4300999973177895,
+          "cargoDistance": -0.6254999761581423,
+          "playerTeleports": 0,
+          "cargoTransports": 0,
+          "held": false,
+          "grounded": false,
+          "bodyId": 589,
+          "uuid": "66cddee3-dec3-4fac-9d4a-53410060d9ed",
+          "fit": true
+        },
+        {
+          "at": "free-frame-180",
+          "player": [
+            -15.969900002682209,
+            0,
+            6.1394000613876605
+          ],
+          "cargo": [
+            -17.02549997615814,
+            1.0532237236077369,
+            6.143284917722973
+          ],
+          "body": [
+            -17.02549997615814,
+            1.0532237236077369,
+            6.143284917722973
+          ],
+          "playerDistance": 0.4300999973177895,
+          "cargoDistance": -0.6254999761581423,
+          "playerTeleports": 0,
+          "cargoTransports": 0,
+          "held": false,
+          "grounded": false,
+          "bodyId": 589,
+          "uuid": "66cddee3-dec3-4fac-9d4a-53410060d9ed",
+          "fit": true
+        }
+      ],
+      "error": null,
+      "source": {
+        "position": [
+          -16.4,
+          2.4258486899603082,
+          6.173176419951388
+        ],
+        "normal": [
+          1,
+          0,
+          2.220446049250313e-16
+        ],
+        "width": 2.8,
+        "height": 2.1,
+        "backing": []
+      },
+      "releaseAccepted": true,
+      "clearAccepted": true,
+      "minimumFreeDistance": -0.6254999761581423,
+      "maximumFreeDistance": -0.3792316370841604,
+      "sameOriginalBody": true,
+      "outcome": "original-cargo-behind-source-without-transit",
+      "journey": {
+        "frames": 579,
+        "resets": 0,
+        "respawns": 0
+      }
+    },
+    {
+      "sourceName": "near-left",
+      "triggerDistance": 0.5,
+      "events": [
+        {
+          "at": "partial-held",
+          "player": [
+            -15.915620963528845,
+            0,
+            6.142239340767537
+          ],
+          "cargo": [
+            -16.63549808046651,
+            1.054962741343289,
+            6.1248830718504665
+          ],
+          "body": [
+            -16.63549808046651,
+            1.054962741343289,
+            6.1248830718504665
+          ],
+          "playerDistance": 0.48437903647115377,
+          "cargoDistance": -0.23549808046650966,
+          "playerTeleports": 0,
+          "cargoTransports": 0,
+          "held": true,
+          "grounded": false,
+          "bodyId": 668,
+          "uuid": "bb953ed8-74e4-4751-bc43-f857cddd41e1",
+          "fit": true
+        },
+        {
+          "at": "after-release-before-clear",
+          "player": [
+            -15.915620963528845,
+            0,
+            6.142239340767537
+          ],
+          "cargo": [
+            -16.63549808046651,
+            1.054962741343289,
+            6.1248830718504665
+          ],
+          "body": [
+            -16.63549808046651,
+            1.054962741343289,
+            6.1248830718504665
+          ],
+          "playerDistance": 0.48437903647115377,
+          "cargoDistance": -0.23549808046650966,
+          "playerTeleports": 0,
+          "cargoTransports": 0,
+          "held": false,
+          "grounded": false,
+          "bodyId": 668,
+          "uuid": "bb953ed8-74e4-4751-bc43-f857cddd41e1",
+          "fit": true
+        },
+        {
+          "at": "after-clear-before-physics",
+          "player": [
+            -15.915620963528845,
+            0,
+            6.142239340767537
+          ],
+          "cargo": [
+            -16.63549808046651,
+            1.054962741343289,
+            6.1248830718504665
+          ],
+          "body": [
+            -16.63549808046651,
+            1.054962741343289,
+            6.1248830718504665
+          ],
+          "playerDistance": 0.48437903647115377,
+          "cargoDistance": -0.23549808046650966,
+          "playerTeleports": 0,
+          "cargoTransports": 0,
+          "held": false,
+          "grounded": false,
+          "bodyId": 668,
+          "uuid": "bb953ed8-74e4-4751-bc43-f857cddd41e1",
+          "fit": true
+        },
+        {
+          "at": "free-frame-1",
+          "player": [
+            -15.969900002682209,
+            0,
+            6.141551277310039
+          ],
+          "cargo": [
+            -16.819940385962756,
+            1.0538731074489978,
+            6.132471730480857
+          ],
+          "body": [
+            -16.819940385962756,
+            1.0538731074489978,
+            6.132471730480857
+          ],
+          "playerDistance": 0.4300999973177895,
+          "cargoDistance": -0.4199403859627573,
+          "playerTeleports": 0,
+          "cargoTransports": 0,
+          "held": false,
+          "grounded": false,
+          "bodyId": 668,
+          "uuid": "bb953ed8-74e4-4751-bc43-f857cddd41e1",
+          "fit": true
+        },
+        {
+          "at": "free-frame-2",
+          "player": [
+            -15.969900002682209,
+            0,
+            6.141015412950536
+          ],
+          "cargo": [
+            -17.004273204655053,
+            1.0495918522057486,
+            6.139897082063488
+          ],
+          "body": [
+            -17.004273204655053,
+            1.0495918522057486,
+            6.139897082063488
+          ],
+          "playerDistance": 0.4300999973177895,
+          "cargoDistance": -0.6042732046550547,
+          "playerTeleports": 0,
+          "cargoTransports": 0,
+          "held": false,
+          "grounded": false,
+          "bodyId": 668,
+          "uuid": "bb953ed8-74e4-4751-bc43-f857cddd41e1",
+          "fit": true
+        },
+        {
+          "at": "free-frame-6",
+          "player": [
+            -15.969900002682209,
+            0,
+            6.139822805322897
+          ],
+          "cargo": [
+            -17.02549997615814,
+            1.0490083125986438,
+            6.1403938270643765
+          ],
+          "body": [
+            -17.02549997615814,
+            1.0490083125986438,
+            6.1403938270643765
+          ],
+          "playerDistance": 0.4300999973177895,
+          "cargoDistance": -0.6254999761581423,
+          "playerTeleports": 0,
+          "cargoTransports": 0,
+          "held": false,
+          "grounded": false,
+          "bodyId": 668,
+          "uuid": "bb953ed8-74e4-4751-bc43-f857cddd41e1",
+          "fit": true
+        },
+        {
+          "at": "free-frame-30",
+          "player": [
+            -15.969900002682209,
+            0,
+            6.1391304558903546
+          ],
+          "cargo": [
+            -17.02549997615814,
+            1.048889079899064,
+            6.140428139668983
+          ],
+          "body": [
+            -17.02549997615814,
+            1.048889079899064,
+            6.140428139668983
+          ],
+          "playerDistance": 0.4300999973177895,
+          "cargoDistance": -0.6254999761581423,
+          "playerTeleports": 0,
+          "cargoTransports": 0,
+          "held": false,
+          "grounded": false,
+          "bodyId": 668,
+          "uuid": "bb953ed8-74e4-4751-bc43-f857cddd41e1",
+          "fit": true
+        },
+        {
+          "at": "free-frame-60",
+          "player": [
+            -15.969900002682209,
+            0,
+            6.13912873641472
+          ],
+          "cargo": [
+            -17.02549997615814,
+            1.0488632083644591,
+            6.140428051858873
+          ],
+          "body": [
+            -17.02549997615814,
+            1.0488632083644591,
+            6.140428051858873
+          ],
+          "playerDistance": 0.4300999973177895,
+          "cargoDistance": -0.6254999761581423,
+          "playerTeleports": 0,
+          "cargoTransports": 0,
+          "held": false,
+          "grounded": false,
+          "bodyId": 668,
+          "uuid": "bb953ed8-74e4-4751-bc43-f857cddd41e1",
+          "fit": true
+        },
+        {
+          "at": "free-frame-180",
+          "player": [
+            -15.969900002682209,
+            0,
+            6.139128735463181
+          ],
+          "cargo": [
+            -17.02549997615814,
+            1.0487597227073124,
+            6.140427700330371
+          ],
+          "body": [
+            -17.02549997615814,
+            1.0487597227073124,
+            6.140427700330371
+          ],
+          "playerDistance": 0.4300999973177895,
+          "cargoDistance": -0.6254999761581423,
+          "playerTeleports": 0,
+          "cargoTransports": 0,
+          "held": false,
+          "grounded": false,
+          "bodyId": 668,
+          "uuid": "bb953ed8-74e4-4751-bc43-f857cddd41e1",
+          "fit": true
+        }
+      ],
+      "error": null,
+      "source": {
+        "position": [
+          -16.4,
+          2.4258486899603082,
+          6.17317641995138
+        ],
+        "normal": [
+          1,
+          0,
+          2.220446049250313e-16
+        ],
+        "width": 2.8,
+        "height": 2.1,
+        "backing": []
+      },
+      "releaseAccepted": true,
+      "clearAccepted": true,
+      "minimumFreeDistance": -0.6254999761581423,
+      "maximumFreeDistance": -0.4199403859627573,
+      "sameOriginalBody": true,
+      "outcome": "original-cargo-behind-source-without-transit",
+      "journey": {
+        "frames": 580,
+        "resets": 0,
+        "respawns": 0
+      }
+    }
+  ],
+  "finished": "2026-10-04T10:34:01.351Z",
+  "afterHash": "a7309347802543e5d871f7427a53d602eae40f878b7b53edcf3eaa44fbbe2b8a",
+  "sourceUnchanged": true
+}

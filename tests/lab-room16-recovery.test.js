@@ -22,7 +22,13 @@ test('removing support before boarding the lift can be recovered through the rea
   aim(1,p['first-address'].getFrame().center);wait(.3);walk(0,0);aim(0,p.arrival.getFrame().center);
   until(()=>game.playerGrounded&&game.playerPosition.y<2.3,6,'The observer drops into the real counterweight well');
   walk(1.55,1.55);aim(1,p.counterweight.getFrame().center);wait(.3);
-  if(game.cargo.position.y>1)pickup();
+  // Opening the basin plate can leave its original load at the opposite
+  // rim. Walk around the live aperture before approaching the actual body;
+  // crossing its centre first would send the observer home without cargo.
+  const rimX=Math.sign(game.cargo.position.x||-1)*2.45;
+  walk(1.55,2.45);walk(rimX,2.45);walk(rimX,game.cargo.position.z);
+  assert.ok(level.pads[0].loaded(),'The original friend must still load the physical basin before retrieval');
+  pickup();
   const before=game.teleportCount;
   for(let frame=0;frame<360&&game.teleportCount===before;frame++){
    const toward=game.portals.portals[1].position.clone().sub(game.playerPosition);toward.y=0;toward.normalize().multiplyScalar(.7);

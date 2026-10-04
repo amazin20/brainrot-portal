@@ -528,9 +528,10 @@ export class LabGame {
     }
   }
 
-  recoverCargoFromClosingPortals(previousPortals, previousSurfaceIds) {
+  recoverCargoFromClosingPortals(previousPortals, previousSurfaceIds, { beforeRelease = false } = {}) {
     const body = this.physics?.cargoBody;
     if (!body || !previousPortals.every(Boolean)) return;
+    if (beforeRelease && !this.heldCube) return;
     const carried = Boolean(this.heldCube || this.velocityCompanion?.connected);
     for (const [index, portal] of previousPortals.entries()) {
       const center = new THREE.Vector3().copy(body.position), quaternion = new THREE.Quaternion().copy(body.quaternion);
@@ -539,9 +540,15 @@ export class LabGame {
       const extent = CUBE_RADIUS * (Math.abs(localNormal.x) + Math.abs(localNormal.y) + Math.abs(localNormal.z));
       // A grip can straddle the plane before its owner's centre crosses. It
       // still belongs on the owner's original side when that aperture closes.
-      const ownerStillInFront = carried && this.playerPosition.clone().addScaledVector(UP, CENTER_HEIGHT)
-        .sub(portal.position).dot(portal.normal) > 0;
-      if (distance >= extent + .025 || distance < -extent || (distance <= 0 && !ownerStillInFront)
+      const ownerCenter = this.playerPosition.clone().addScaledVector(UP, CENTER_HEIGHT);
+      const ownerStillInFront = carried && ownerCenter.clone().sub(portal.position).dot(portal.normal) > 0;
+      const ownsFrontSide = ownerStillInFront && pointInsidePortal(portal, ownerCenter, PLAYER_RADIUS)
+        && previousPortals.every(p => uprightCapsuleFitsPortal(p, PLAYER_HEIGHT, PLAYER_RADIUS));
+      // A grip may put the box's centre behind an open plane before its owner
+      // crosses. Start a release on the owner's side so the first free-body
+      // step has a continuous crossing path instead of an already-behind box.
+      if (beforeRelease && !ownsFrontSide) continue;
+      if (distance >= extent + .025 || (distance < -extent && !ownsFrontSide) || (distance <= 0 && !ownerStillInFront)
         || !orientedBoxFitsPortal(portal, center, quaternion, CUBE_RADIUS)) continue;
       const closesUnderCargo = this.colliders.some(c => {
         if (c.enabled === false || !c.box) return false;
@@ -549,6 +556,7 @@ export class LabGame {
           || c.portalOwner?.userData.portalColliderId === previousSurfaceIds[index]
           || portalBacksCollider(portal, c.box);
         if (!owned) return false;
+        if (beforeRelease) return this.portalOpensCollider(c, ownerCenter, PLAYER_RADIUS, PLAYER_HEIGHT);
         const stillOpen = carried
           ? this.portalOpensCollider(c, this.playerPosition.clone().addScaledVector(UP, CENTER_HEIGHT), PLAYER_RADIUS, PLAYER_HEIGHT)
           : this.portalOpensCollider(c, center, CUBE_RADIUS, 0, quaternion);
@@ -561,7 +569,9 @@ export class LabGame {
         if (this.physics.carryTarget) this.physics.carryTarget.position[key] += correction[key];
       }
       const inward = body.velocity.dot(portal.normal);
-      if (inward < 0) for (const key of ['x', 'y', 'z']) body.velocity[key] -= portal.normal[key] * inward;
+      // A still-open release retains earned momentum; a restored solid stops
+      // only its inward normal component as an ordinary contact would.
+      if (inward < 0 && !beforeRelease) for (const key of ['x', 'y', 'z']) body.velocity[key] -= portal.normal[key] * inward;
       body.previousPosition.copy(body.position); body.interpolatedPosition.copy(body.position);
       body.aabbNeedsUpdate = true; body.wakeUp(); this.physics.world.broadphase.dirty = true;
       this.cargo.position.copy(body.position);
@@ -1107,6 +1117,7 @@ export class LabGame {
   toggleCube() {
     if (this.externalBlocked || this.state !== 'playing') return false;
     if (this.heldCube) {
+      this.recoverCargoFromClosingPortals(this.portals.portals, this.portalSurfaceIds, { beforeRelease: true });
       this.physics.release(); this.heldCube = null;
       this.animator.triggerInteraction('place'); this.companionAnimator.trigger('release');
       return true;

@@ -187,15 +187,25 @@
     {
       "level": 14,
       "id": "light-weave",
-      "contract": "85ecd27422e0288b4dbe650bb939dc51ce117b82fd9e1eb727c4b26f058bad58",
+      "contract": "6df82b170862362798d6d302e61b792f4422aa85b4d2e15f456c2525d520b51c",
       "workload": {
-        "nodes": 721,
-        "meshes": 551,
-        "visibleMeshes": 298,
-        "triangles": 1454618,
+        "nodes": 783,
+        "meshes": 605,
+        "visibleMeshes": 322,
+        "triangles": 1454774,
         "lights": 3,
-        "materials": 68,
-        "geometries": 430
+        "materials": 76,
+        "geometries": 479
+      },
+      "physicalAudit": {
+        "revision": "counterweighted-folded-stair-2026-10-04",
+        "reason": "Made fourteen folded stair treads move with cargo on the island or receiver tray, closing the jump/release/pickup bypass while preserving independent cargo delivery. The collision and interaction digest still guards every authored object.",
+        "excludedRuntimeMaterials": 6,
+        "allowedOrders": [
+          "cargo-first",
+          "remote-companion"
+        ],
+        "absentPanels": []
       }
     },
     {
@@ -215,19 +225,19 @@
     {
       "level": 16,
       "id": "vanishing-support",
-      "contract": "26f49671cad112a91b32f0f3cf6480a8086fc55c30a1cfc4a23e45a28ab2d04e",
+      "contract": "8247ede2c7b952af3cb1196df3c5963b06c541675731ddde195bff739c55ffa5",
       "workload": {
-        "nodes": 831,
-        "meshes": 646,
-        "visibleMeshes": 339,
-        "triangles": 1310674,
+        "nodes": 801,
+        "meshes": 622,
+        "visibleMeshes": 327,
+        "triangles": 1198638,
         "lights": 3,
         "materials": 71,
-        "geometries": 509
+        "geometries": 492
       },
       "physicalAudit": {
-        "revision": "support-extinguishing-gravity-delivery-2026-10-04",
-        "reason": "Removed the staged cargo-injection deck, posts and two portal panels after an ordinary-input route bypassed extinguishing projected support. The collision and interaction digest still guards every remaining authored object.",
+        "revision": "support-extinguishing-retaining-dock-2026-10-04",
+        "reason": "Removed the staged cargo-injection deck, posts and two portal panels, then replaced the lower service stairs with a retaining dock, closing portal-delivery and ground carry/throw bypasses of extinguishing projected support. The collision and interaction digest still guards every remaining authored object.",
         "excludedRuntimeMaterials": 6,
         "allowedOrders": [
           "cargo-first",

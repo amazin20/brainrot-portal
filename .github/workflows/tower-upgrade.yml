@@ -198,7 +198,7 @@ jobs:
           mkdir -p qa/novel-speedrun
           test "$(git rev-parse HEAD)" = "$BUILD_COMMIT"
           git rev-parse HEAD > qa/novel-speedrun/source-commit.txt
-          git ls-files -z src/game scripts/lib 'scripts/qa-speedrun-*.mjs' | xargs -0 sha256sum > qa/novel-speedrun/source-sha256.txt
+          git ls-files -z src/game scripts/lib 'scripts/qa-speedrun-*.mjs' scripts/qa-authored-cargo-release.mjs | xargs -0 sha256sum > qa/novel-speedrun/source-sha256.txt
       - name: Run every assigned novel attack through production inputs or explicit core fixtures
         env:
           ROOMS: ${{ matrix.rooms }}
@@ -220,9 +220,15 @@ jobs:
           const expectedRooms=process.env.EXPECTED_ROOMS?.split(',').filter(Boolean).map(Number);
           const sameSet=(actual,expected)=>assert.deepEqual([...actual].sort(),[...expected].sort());
           if(group==='core'){
-            assert.equal(q.pass,true);assert.equal(q.results.length,8);assert.ok(q.results.every(r=>r.pass));
+            assert.equal(q.pass,true);assert.equal(q.results.length,9);assert.ok(q.results.every(r=>r.pass));
             assert.equal(q.authoredLevelAttempt?.pass,true);assert.equal(q.authoredLevelAttempt.level,31);
             assert.equal(q.authoredLevelAttempt.resets,0);assert.equal(q.authoredLevelAttempt.respawns,0);
+            const release=q.authoredReleaseAttempts;assert.equal(release.pass,true);assert.equal(release.sourceUnchanged,true);assert.equal(release.harnessUnchanged,true);
+            assert.equal(release.summary.cases,96);assert.equal(release.summary.clips,0);assert.equal(release.summary.errors,0);
+            assert.equal(release.physicsHz,120);assert.equal(release.cases.length,96);
+            const expectedRelease=new Set(['near-right','near-left'].flatMap(side=>[1,.8,.6,.5,.4,.3,.2,.1].flatMap(depth=>['release-clear','release-1tick-clear','release-2ticks-clear','release-5ticks-clear','release-no-clear','clear-release'].map(sequence=>`room1-${side}-front-${depth}-${sequence}`))));
+            sameSet(release.cases.map(r=>r.id),expectedRelease);
+            for(const row of release.cases){assert.equal(row.pass,true);assert.equal(row.setupReached,true);assert.ok(!row.error&&!row.clipDetected);assert.equal(row.sameOriginalBody,true);assert.equal(row.journey.resets,0);assert.equal(row.journey.respawns,0);}
           }else if(group==='early'){
             assert.equal(q.source.unchangedDuringRun,true);assert.equal(q.source.harnessUnchangedDuringRun,true);
             assert.equal(q.counts.suspectedShortcuts,0);assert.equal(q.counts.setupOrDriverErrors,0);

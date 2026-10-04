@@ -5,6 +5,8 @@ import * as THREE from 'three';
 import {playerFixture,wall} from './lib/adversarial-core-cases.mjs';
 import {LabPhysics} from '../src/game/LabPhysics.js';
 import {orientedBoxFitsPortal} from '../src/game/LabPortals.js';
+import {runReleaseAttempt} from './lib/cargo-release-portal-cases.mjs';
+import {runAuthoredReleaseCases} from './qa-authored-cargo-release.mjs';
 
 const H=1/120,V=(...p)=>new THREE.Vector3(...p);
 function fixture(kind='floor',{thickness=.2,gravity=0}={}){
@@ -144,6 +146,23 @@ export const newCoreCases=[
    return {gravity:-19.5,backingThickness:.02,before:before.toArray(),corrected:corrected.toArray(),after:g.cargo.position.toArray(),bodyId:id};
   }finally{dispose(g);}
  }},
+ {id:'held-cargo-release-and-deep-clear-preserve-original-side',run(){
+  const attempts=[];
+  for(const depth of [.7,.4,.3,.2,.1]){
+   for(const clearDelayTicks of [0,1,5,30,null])attempts.push(runReleaseAttempt({depth,clearDelayTicks}));
+   attempts.push(runReleaseAttempt({depth,clearFirst:true}));
+   attempts.push(runReleaseAttempt({depth,directClear:true}));
+  }
+  for(const r of attempts){
+   assert.ok(r.before.cargo[2]<.02,'Ordinary pickup and movement must actually put the held centre behind the old aperture');
+   assert.ok(r.afterRelease.cargo[2]>.41,'Release or direct clear returns the entire owned box to its source front side');
+   assert.ok(r.minimumZ>.37,'A released or still-carried original body cannot escape behind its restored wall');
+   assert.equal(r.after.playerTeleports,0);assert.equal(r.after.cargoTransports,0);assert.equal(r.sameBody,true);
+   if(!r.clearFirst&&!r.directClear)assert.deepEqual(r.afterRelease.velocity,r.before.velocity,'A still-open aperture must retain earned release momentum');
+   if(r.depth<=.3)assert.ok(r.before.cargo[2]<-.39,'Deep cases must start with the full original grip behind the old source plane');
+  }
+  return {scope:'Initial front-side fixture poses/planes only; every throat depth is reached by actual pickup and movement, then production E, wait and/or clear. No actor state writes after fixture setup.',gravity:-19.5,sourceWallThickness:.02,attempts};
+ }},
 ];
 export async function runNewCoreCases(){
  const results=[];for(const c of newCoreCases){try{results.push({id:c.id,pass:true,evidence:await c.run()});}catch(error){results.push({id:c.id,pass:false,error:String(error)});}}
@@ -190,7 +209,7 @@ export async function runRoom31HeldCargoAttempt(){
 }
 if(process.argv[1]&&import.meta.url===pathToFileURL(process.argv[1]).href){
  const report=await runNewCoreCases();
- if(process.argv.includes('--room31')){report.authoredLevelAttempt=await runRoom31HeldCargoAttempt();report.pass&&=report.authoredLevelAttempt.pass;}
+ if(process.argv.includes('--room31')){report.authoredLevelAttempt=await runRoom31HeldCargoAttempt();report.pass&&=report.authoredLevelAttempt.pass;report.authoredReleaseAttempts=await runAuthoredReleaseCases();report.pass&&=report.authoredReleaseAttempts.pass;}
  fs.mkdirSync('qa',{recursive:true});fs.writeFileSync(process.env.OUT||'qa/speedrun-core-new.json',JSON.stringify(report,null,2)+'\n');
  for(const row of report.results)console.log(row.pass?'PASS':'FAIL',row.id,row.error||'');if(!report.pass)process.exitCode=1;
  if(report.authoredLevelAttempt)console.log(report.authoredLevelAttempt.pass?'PASS':'FAIL','room31-held-box-cargo-only-intake',report.authoredLevelAttempt.error||'');

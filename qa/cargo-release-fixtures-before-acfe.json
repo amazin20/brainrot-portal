@@ -1,0 +1,6718 @@
+{
+  "root": "/tmp/cargo-release-before-acfeeb49",
+  "scope": "Explicit isolated front-side initial geometry; ordinary controller approach, E, wait and clear only after initial setup. No authored-level wins claimed.",
+  "started": "2026-10-04T10:46:20.956Z",
+  "sourceBefore": {
+    "files": [
+      {
+        "file": "AudioController.js",
+        "sha256": "172b04695f57f77593c459d0418fd88a45b00fe8c9015a2f68a4313869c06264"
+      },
+      {
+        "file": "FullBodyPlayerAnimator.js",
+        "sha256": "f843e3a01ab2abf31aaaad564861019f6880720a08d5ac50477c9e5140053f5a"
+      },
+      {
+        "file": "Game.js",
+        "sha256": "2071169efd1e9687643519782d94e9467e72afecc4f53dfdbb0bf6391ced8bef"
+      },
+      {
+        "file": "InputController.js",
+        "sha256": "9c426261cc522c6a632672875f0b14e68422f3dd4f46dd18e2ba888c4a00c530"
+      },
+      {
+        "file": "LabAdvancedArchitecture.js",
+        "sha256": "fea6d282f0eb301c5e5e6183972f1cee255149cf784242500dd2978359ab8e43"
+      },
+      {
+        "file": "LabAdvancedMechanismArt.js",
+        "sha256": "7000e572acf264951fbdea10adb95148209c7b3d6a96abb131eb35050fb197cf"
+      },
+      {
+        "file": "LabAirForces.js",
+        "sha256": "e2dae42390053ca8d7fbacc3137796930e3ec91dccfe449905b06a3cd72131c8"
+      },
+      {
+        "file": "LabAirflowVisual.js",
+        "sha256": "166644fb5ca94dad5f7c1d947b89f21f9fe9d27b8d9226c306aa95a6ef304d83"
+      },
+      {
+        "file": "LabAnimationJourney.js",
+        "sha256": "b6c143676b60abdb5530e08d66af37aee45e8a9e83f2fc524bcba0748a468f02"
+      },
+      {
+        "file": "LabArchitecturalGate.js",
+        "sha256": "cac5f3659952d7335bf9f49e0511c87d8e3afc6a171700af5af69f9e43732dee"
+      },
+      {
+        "file": "LabArchitecturalModels.js",
+        "sha256": "00a9a8ec4ab38650d85971bf758a56745920a0fd29b6a89ecbd474d67f9803d6"
+      },
+      {
+        "file": "LabArticulatedProps.js",
+        "sha256": "7c5f23ff1ac8b95e0a0e082d1b5107e5550798eb9372a523be251fb6d4d2b150"
+      },
+      {
+        "file": "LabAssetLoader.js",
+        "sha256": "dd1613b56bcfff32225109615deb2625be7668b890a8745ae40aee003a9978bb"
+      },
+      {
+        "file": "LabBalanceChamber.js",
+        "sha256": "d02c43391679899cc04c39fbdbbc606d177bca5d36b72c7cd4f94ab41337cd7e"
+      },
+      {
+        "file": "LabBalanceJourney.js",
+        "sha256": "b0d03dcbbd864c474d7294e31ea58ec33ab416197a39eeb402d6af6f14df1b05"
+      },
+      {
+        "file": "LabBalanceModel.js",
+        "sha256": "bb720ebd6e584cedfe3b90c2e82e4a9a8363d120b974dd4c734c3c6d1cb0eab6"
+      },
+      {
+        "file": "LabBalanceRig.js",
+        "sha256": "8e0856eba608f7afc2dbcd94662338f4a8ddf68227f6bde85fea0d711666daef"
+      },
+      {
+        "file": "LabBrowser3DArt.js",
+        "sha256": "a1e03c285bcc6350f176e30ec27b79c2690e84f9e4c1aaa419d11a8739c51fc4"
+      },
+      {
+        "file": "LabBrowser3DPremium.js",
+        "sha256": "9ba65e410b142dcb2eec0632017deb2acc6ad030c75f93795bd736abda6bcb25"
+      },
+      {
+        "file": "LabCamera.js",
+        "sha256": "66c4fe03e427b22dfaf3b7a75d59147e7d6d7a1ebc9629d820600154ccbac26a"
+      },
+      {
+        "file": "LabCameraBroadPhase.js",
+        "sha256": "8bad01dbaf217fc5d6948aaefd48ee3005899f7d4ef983f02087894e48ac8bed"
+      },
+      {
+        "file": "LabCampaignLevels.js",
+        "sha256": "557dce72fe8c0fe5ff14728583afbf4ae5b97487db8a9512e2999867ff872716"
+      },
+      {
+        "file": "LabCampaignRoute.js",
+        "sha256": "5466df37c20c697ac97fcb0ba7df3992645f8554d703d02d97678ce9a92a58ae"
+      },
+      {
+        "file": "LabCastleMaterials.js",
+        "sha256": "b45df76efbcb33418949512cd3ee700c06a6074cd6d08a33e614c7a77d7b1850"
+      },
+      {
+        "file": "LabCastleMechanismDetails.js",
+        "sha256": "fbe10f73a32e925454b821c2ac267b5e83b90c5e5140839daee890aca0134a5d"
+      },
+      {
+        "file": "LabChapterArt.js",
+        "sha256": "7f55eb6e5329827db475b5718178cc466fc4215164037b6076cacc91952efa79"
+      },
+      {
+        "file": "LabCompanionAnimator.js",
+        "sha256": "8acf2e20491477a2a4b9f3c67d104673eefa67e3cd7f2403b844df1edec3bace"
+      },
+      {
+        "file": "LabCompanionBehavior.js",
+        "sha256": "8065eaa7416d1aed96adf107c9b5b81585f3eebde9a40466527596c8602add61"
+      },
+      {
+        "file": "LabCompanionRig.js",
+        "sha256": "7a97397cc9ce4e8bc9d42b7b39e416e859db31bfcb9e834670855acd9a221d21"
+      },
+      {
+        "file": "LabControls.js",
+        "sha256": "5d5b60dab09325719ed18153c289afebc3767c7585b07f73dd23eca38544ddae"
+      },
+      {
+        "file": "LabCreativeCounterweightJourney.js",
+        "sha256": "eb3f8a707a561b73a5bbd05dfe3cce5a2e3318a7f22e36b2e09826ae3c3b7bfa"
+      },
+      {
+        "file": "LabCreativeCounterweightRoom.js",
+        "sha256": "9f6fd2e01ce1f0a2ed9e2db50f9b17a31156afc896c1dd2bd3011dc243b4b943"
+      },
+      {
+        "file": "LabCreativeFinalJourney.js",
+        "sha256": "0e990bcef88a99cb4a68b327b644a30b54d8bac59f98e712ff56e175ee1f8438"
+      },
+      {
+        "file": "LabCreativeFinalRooms.js",
+        "sha256": "ace1de489722fdcfcef69ef1f486c96f78748c91f713d924bd76014cf90901fb"
+      },
+      {
+        "file": "LabDeckUV.js",
+        "sha256": "85a55720b954c221ff948a4a8216288b15d4c2b7a63c9a6052f735c986b33e5d"
+      },
+      {
+        "file": "LabEarlyArchitecture.js",
+        "sha256": "22e27c491cfd70017ebf4b7e3693905db3cb2063ef696a9ff37240b1a67c03e2"
+      },
+      {
+        "file": "LabEarlyMechanismArt.js",
+        "sha256": "94044b0717eadf7b4d4557ff041e5e3db8bbb0695e81f4cda4973a0453fbe824"
+      },
+      {
+        "file": "LabEpicDirector.js",
+        "sha256": "3afdc4d26e30b44196785dc1ceedf6d904501f5fcc69cf0f2d4d00ffea95f410"
+      },
+      {
+        "file": "LabEvidence.js",
+        "sha256": "d6c1fed0e8a5a44c58293862983d316b757fac11bcf7d00ffd4e84fb6b24fb66"
+      },
+      {
+        "file": "LabExplorationSurfaces.js",
+        "sha256": "534262d66da213b8f02e0bbb76f4db5cdd604df36e53b4fd93f37be84faa2c20"
+      },
+      {
+        "file": "LabExtendedCampaign.js",
+        "sha256": "b693ea6e3a251090166456fb6fd429b1cda03d6157c4314b2f4f30e4b79b1cf8"
+      },
+      {
+        "file": "LabExtendedJourney.js",
+        "sha256": "c6170b9689d3d7f67abb0f7b52a4c728024ced7cd89eef26cea3845843c1ad94"
+      },
+      {
+        "file": "LabFirstLevel.js",
+        "sha256": "37f74b2bf6e80e780f6daf6e5522323eae019cf17136d4a12cf2666d2fe631df"
+      },
+      {
+        "file": "LabFootContact.js",
+        "sha256": "889a6cd5058df0e71b4a5ab6ea2885d7a1fac9805a11f1636dcfd7ed6c720269"
+      },
+      {
+        "file": "LabFoundationChambers.js",
+        "sha256": "661e6f34a65805e27671838322ad136edd3edfaba3f772acdf7702e34f49382b"
+      },
+      {
+        "file": "LabFoundationEdition.js",
+        "sha256": "59c904c14eb9b45b90053d70406d019ba3ae637a8224d9eac81e7d44a34a955a"
+      },
+      {
+        "file": "LabFoundationJourney.js",
+        "sha256": "7cdc740db21dccad699dfa635b4a51affb652e5b6501374d59c776288c16ce8b"
+      },
+      {
+        "file": "LabGame.js",
+        "sha256": "e68764384a42d26e2e0bcd3213ffe7b8fbc4ca0755abe29d8dcaf4360eac4776"
+      },
+      {
+        "file": "LabHeldDevice.js",
+        "sha256": "b95c564c184b622ce0612aea2465413216d9070aca7823547d0fcfc16736935b"
+      },
+      {
+        "file": "LabHumanLab.js",
+        "sha256": "cb8a770c948c404961636958d54c369353a81ae9ee09a634612ae0fa2f0f9cba"
+      },
+      {
+        "file": "LabIntroductoryAlternates.js",
+        "sha256": "1127019eb208260e8e7b28a43624b288bb593700b3bcbd3046f95c40a104845a"
+      },
+      {
+        "file": "LabIntroductoryCampaign.js",
+        "sha256": "0df4b52e4070cb66fb4a518eff40547a76d9e0f581a34608101e9d0f28dc34b5"
+      },
+      {
+        "file": "LabKineticMovement.js",
+        "sha256": "5a5d4bfeb54d5952357faa6a838a3daf8f048dabe54798a639ac5ea4e8534916"
+      },
+      {
+        "file": "LabLateCampaignAim.js",
+        "sha256": "e4f38df8ba5a7fbdc92b3bd4f958154eb285c89dc0da808a53bdf97a885754a3"
+      },
+      {
+        "file": "LabLateCampaignMechanisms.js",
+        "sha256": "ec686927c0445c748d8e9c3bdba738dc73192d91c7096bb2ea82bff1bdae6efb"
+      },
+      {
+        "file": "LabLateCampaignRoomsA.js",
+        "sha256": "e4b1c125113efc3df1cc345936d3efda3dd6869275bfc6270d5fc02de6d1c6f1"
+      },
+      {
+        "file": "LabLateCampaignSpringJourney.js",
+        "sha256": "ea257a225bbda9e781debc60df2ab88acd730290d354d8ea5fe191bfaffda2a1"
+      },
+      {
+        "file": "LabLateCampaignSpringRoom.js",
+        "sha256": "4f06a88b2d58312ac5a28a5292c14739c40857556476a325cd85516a3a84749c"
+      },
+      {
+        "file": "LabLateCampaignThermalJourney.js",
+        "sha256": "efad4e5592fab93f9793509bcc58b0d451c5f52467850856cfc20da75f281aff"
+      },
+      {
+        "file": "LabLateCampaignThermalRoom.js",
+        "sha256": "0ea5c0cfd350d46d334c28f88fc69ab1e6af9c89f62ce2e0dc73828cbb5e0225"
+      },
+      {
+        "file": "LabLevel.js",
+        "sha256": "49d2dea02b4be306934b0893fbdf72e6f5ee1761dc8073ef5d06a9cf45ac7af4"
+      },
+      {
+        "file": "LabLevelLifecycle.js",
+        "sha256": "02d8ae70774f4610f3f1535b474c90e36f16def59ca29095bfda81f08112f85e"
+      },
+      {
+        "file": "LabLightBridge.js",
+        "sha256": "3e5c251e22c5454670a084a0d021a05bf8df7f3e71b4ead40b640d12bf00928e"
+      },
+      {
+        "file": "LabLocalization.js",
+        "sha256": "e9bb56041a12e3521af8bb3cf2e7c7fdab3f546c4f78b601d0aee06ed17b3f41"
+      },
+      {
+        "file": "LabMachinedModels.js",
+        "sha256": "736059de26fb90060f5c957a3ce6b595afba91ec607fafcfc9df5946561f0506"
+      },
+      {
+        "file": "LabMechanismReflections.js",
+        "sha256": "d533dd9983995123e65d1de4165c1fe1a20bb8519fc7c2d33e4b49d6d63e6341"
+      },
+      {
+        "file": "LabMechanisms.js",
+        "sha256": "95906b5a3d55421d09ffec354f794cd02954ddd2860333f80fec3759967fd202"
+      },
+      {
+        "file": "LabOpenArchitecture.js",
+        "sha256": "fb9fd1579acabd5e34d6bd31e5a0f66da7ac71491dcadac392de28d7bb398e14"
+      },
+      {
+        "file": "LabOpenChambers.js",
+        "sha256": "95cb928a83caa3b3d54164d6dda0d150408eda0de44d9fdf12a3a149d81a9ed9"
+      },
+      {
+        "file": "LabOpenEdition.js",
+        "sha256": "d1c07f29446794e90e2c4d964c2da77b265363d245bdfad3a73ce527b76c6831"
+      },
+      {
+        "file": "LabOpenHydraulics.js",
+        "sha256": "eaab133103c962615dfef69d239fa48366d1b74ee41d2ab7f1af4a04f1372a76"
+      },
+      {
+        "file": "LabOpenJourney.js",
+        "sha256": "57cbc1c7d4653abd110a1117a157bca790cde3870d0b9d0cde1c230af7d37ed6"
+      },
+      {
+        "file": "LabOpenLaunch.js",
+        "sha256": "dbc0ed8726f9a2a3a9366126af7278f8f2bc51853a41409f81eb2043c9890e7b"
+      },
+      {
+        "file": "LabOpenStationArt.js",
+        "sha256": "d721775d500d955685ba846682d7abddf90da2bb8ae2b5e5d70a45a8f7e435de"
+      },
+      {
+        "file": "LabPageLifecycle.js",
+        "sha256": "1e5ba728b6141786f7254de16d23f442ad0dd270bdddd19d010347832250cb41"
+      },
+      {
+        "file": "LabPerformance.js",
+        "sha256": "424b1d41734d3a4a771cb2c0ac588d37c3b5649c391226a1a838820fa6f0c455"
+      },
+      {
+        "file": "LabPhysics.js",
+        "sha256": "ef9f066fa8dd2069f71342cf61dbd57eb6e5ede548f5cd40e7947fb91af6eb2f"
+      },
+      {
+        "file": "LabPlateContact.js",
+        "sha256": "6f5c29c328ff663733819f8e0ab287d604d302315b00ecc1d3bd3d0ac5334ed3"
+      },
+      {
+        "file": "LabPlatform.js",
+        "sha256": "53a668bd3c234b88962e362afd949b374e55ef1d799d6403094da73ea7561e64"
+      },
+      {
+        "file": "LabPlayerAnimator.js",
+        "sha256": "a6dec4b18eb48db66dff353e28fa63760127d6bdd90d70a2b67adce3e5432c93"
+      },
+      {
+        "file": "LabPlayerAnimatorBase.js",
+        "sha256": "9b3f8f24be54111eddb515ee18da99a2651ae3ea2aaf603fbb8a165fc1f93e5e"
+      },
+      {
+        "file": "LabPocketCassette.js",
+        "sha256": "feef5b0578b5a5979b0eb81524d5a0d670493541cab907465d19f07b9c13f4e7"
+      },
+      {
+        "file": "LabPocketLoadLink.js",
+        "sha256": "df31b046f9718db15d2262a7bdd2e26d40221fcd37e53e804e95b0e0c1f1ef21"
+      },
+      {
+        "file": "LabPocketReceiver.js",
+        "sha256": "6d6309998c664026f089dbad15890e1ae6ad40e587fbb53d0b18e9cfab9ba9bc"
+      },
+      {
+        "file": "LabPocketSuspension.js",
+        "sha256": "7465801905d33ab2b92e7f348ffa22e2e2ee16e3dd8ded386da1de5b5a338282"
+      },
+      {
+        "file": "LabPortalActors.js",
+        "sha256": "d53b6c1af955a8ea8a64be2ac96d6ebb442791bc0714218ebd2e6e31e3023f5e"
+      },
+      {
+        "file": "LabPortalEdgeJourney.js",
+        "sha256": "2b6985bac6602d50f71b9faa5983a5e6ac0157b9febe46dcf54912ba267dcab7"
+      },
+      {
+        "file": "LabPortalFloorJourney.js",
+        "sha256": "33db5a2b9f895823562e626251fdb04306f00c89921d44b2f6bbe0967fa58213"
+      },
+      {
+        "file": "LabPortalRoom12.js",
+        "sha256": "4b805bbf9a42e64830027edf3a36a12b3c0e0524ea558aa8344411c58b11252d"
+      },
+      {
+        "file": "LabPortalRoom13.js",
+        "sha256": "897c872039738aecafea87fd065d1120aa011e3d87b5eca29fc847a9898cb060"
+      },
+      {
+        "file": "LabPortalRoom14.js",
+        "sha256": "07164996427cb2d29c9684443b4d0660e06eb7d401d202491c4804563ee40294"
+      },
+      {
+        "file": "LabPortalRoom15.js",
+        "sha256": "a7e623faa05e4bd035c4fdc84e5409e4eb9408c872741f902b2e5eecc18f6c6a"
+      },
+      {
+        "file": "LabPortalRoom16.js",
+        "sha256": "f7637012a6feb9ecf1166affe7e39049c02d6d1b0ea198d0aea8dbe2ebc2c950"
+      },
+      {
+        "file": "LabPortalRoom17.js",
+        "sha256": "4ecbb2e1f467e0b117576d116d2fc936c1f9b85db39c3b22a91fd33b918cf61b"
+      },
+      {
+        "file": "LabPortalRoom18.js",
+        "sha256": "40a91673f2839bd23497858f402677052a58e8ed8c048e0ee482c9d2fd110a01"
+      },
+      {
+        "file": "LabPortalRoom19.js",
+        "sha256": "cea8360a9f2b776c1bdba1d3661e7507c336a6f4e6aa1b537443f335ff3261fe"
+      },
+      {
+        "file": "LabPortalRoom20.js",
+        "sha256": "14f98921687e680bea3d1f6adae4246f86db44fb1e30acfadee62da87eee78c8"
+      },
+      {
+        "file": "LabPortalRoom21.js",
+        "sha256": "145fc8960e03abb179af1d9cf213def5d64acbc4b077124fd788a89d14887e04"
+      },
+      {
+        "file": "LabPortalRoom22.js",
+        "sha256": "9f5bb4de8773b9ead7fc222837d51ed55c310fb1218fbd118f906fb2f30b2df7"
+      },
+      {
+        "file": "LabPortalRoom23.js",
+        "sha256": "66faaf7cd3afc91a71b1d9cefee78d3bc4a687f891a8bc7666c0aaea728135c3"
+      },
+      {
+        "file": "LabPortalRoom24.js",
+        "sha256": "d26e8df4bda7c134893b70ec684960e7841be2beae512f5d18c21d8dc6e11eb3"
+      },
+      {
+        "file": "LabPortalRoom25.js",
+        "sha256": "7f45d3a68236cc7ad1223ece790502716703168a077f4f764f43fe83a5575435"
+      },
+      {
+        "file": "LabPortalRoom26.js",
+        "sha256": "3bb1f91d6fc7e4156ff599c6b2f89b6e3c35d6055e492fbf68991f34efde5214"
+      },
+      {
+        "file": "LabPortalRoom27.js",
+        "sha256": "e654f253b71d731b16e80f61b6ff3aada6326285eca727a04e26ae572ee21f10"
+      },
+      {
+        "file": "LabPortalRoom28.js",
+        "sha256": "f53f82fdd89e4c672cdb16632d4471da0ce3d6b3112550fc883a6286730e854d"
+      },
+      {
+        "file": "LabPortalRoom29.js",
+        "sha256": "f6e8ef78e5966a80a33b776cab046c18dfc75618194b290b869bb28365ac0e75"
+      },
+      {
+        "file": "LabPortalRoom30.js",
+        "sha256": "9005a0c61d5e350db172ee146792e631aef8bbcad0fe6faf0a895981a0c13a5b"
+      },
+      {
+        "file": "LabPortalShotVisuals.js",
+        "sha256": "8650fa951ce51910c7feea09fdf5572b619d21484e4f1a32429c43c80026d74f"
+      },
+      {
+        "file": "LabPortalShots.js",
+        "sha256": "d0426f64f0f811983ec484adc3e6883bf5cb436a2f84cb0791b56ac14fc79449"
+      },
+      {
+        "file": "LabPortalWarmup.js",
+        "sha256": "239a25f24f0508cfbc9863c5afad29b02aff6bcdc8cedc0b9f02974a53943284"
+      },
+      {
+        "file": "LabPortals.js",
+        "sha256": "ddc8a55c0d4983dee747c88510b81d52296a0a72988edc3172c6a212285b1d13"
+      },
+      {
+        "file": "LabPostCampaignA.js",
+        "sha256": "31e3cd8c71fa82b73ef0804547cb4b663aac81d1fdf07cf85bd8966d749dad8d"
+      },
+      {
+        "file": "LabPostCampaignB.js",
+        "sha256": "92d07a8f812f0298eb2eb96f06e2899ca42a18e82415aca4b2775b25e1f15480"
+      },
+      {
+        "file": "LabPostJourneyA.js",
+        "sha256": "60895807df6f9ede0137f3aef6a630fe1e733da92524da1b7e6320d8987fedac"
+      },
+      {
+        "file": "LabPostJourneyB.js",
+        "sha256": "f03359fc67b2e370c50e2c367a72717c1a4f9fc9907c2ba8b6cba7663de633d2"
+      },
+      {
+        "file": "LabPreferences.js",
+        "sha256": "03a473c6e049c4628a9c8c75552bfdd1e2d77057297fd81ca17487e9453d5c89"
+      },
+      {
+        "file": "LabPuzzleMechanics.js",
+        "sha256": "22283d794473914f5aa6651542fe464da1f96a1d3027fd76cde5bf7affeb7308"
+      },
+      {
+        "file": "LabRampContact.js",
+        "sha256": "8ee1c3042469023d5d5753adb5414521d9ffcdd7bb83c990391fdc3335523af6"
+      },
+      {
+        "file": "LabRampExplorationJourney.js",
+        "sha256": "a07d65c63345742d44634b768d88b3993e964cce253478256ac65688617a5e81"
+      },
+      {
+        "file": "LabRecoveryJourney.js",
+        "sha256": "2b3b3862f4219d49c34a19427990faf14472f7d7ac3b6a73d741dbd488c0ca6a"
+      },
+      {
+        "file": "LabResearchArt.js",
+        "sha256": "9feeca535f2e7969c7f9a263420e705b4c7b20fefaaf1504106e35fb135a0981"
+      },
+      {
+        "file": "LabResearchChambers.js",
+        "sha256": "47bbd59b2b0628e9ad115fe1eabefcc3aa15a9f99a219d1e18d868b5143f3735"
+      },
+      {
+        "file": "LabResearchJourney.js",
+        "sha256": "6c5a12195d2a163023ba80027460cf90d365a10c2080da0400106c7fc3737c46"
+      },
+      {
+        "file": "LabResume.js",
+        "sha256": "04f40ed00a6342f9d8801150998e8361f0dec3939ad0b3906ad1bc57236083e6"
+      },
+      {
+        "file": "LabRoom12Architecture.js",
+        "sha256": "99d8977a5c309a2844304c528747f41b17664d8756e085aa5c54b35f8b4bbc79"
+      },
+      {
+        "file": "LabRoom12Journey.js",
+        "sha256": "956179a4e2be38461f2efc00db7f79cea83db8d11eefd718e1a8e566039775c0"
+      },
+      {
+        "file": "LabRoom13Journey.js",
+        "sha256": "c00e136fa44e424c2d8551567ee3f29df6066cee79adca7d128b444d912806bc"
+      },
+      {
+        "file": "LabRoom13Mechanics.js",
+        "sha256": "15feab0f428a696aa92b32288354b6acfc326d83a502e6f5942c6ce15689a2f1"
+      },
+      {
+        "file": "LabRoom14CounterweightStair.js",
+        "sha256": "e829c00e8a9d0d14d1da906e0378405b82062986482e07d4d68454ef4a6e0225"
+      },
+      {
+        "file": "LabRoom14Journey.js",
+        "sha256": "22b682c8efdc34a8157a3ee7012fca3222d34ae1e6fd1e66d127d1b26cd4e950"
+      },
+      {
+        "file": "LabRoom15Journey.js",
+        "sha256": "2d6afc50373b198a48851f8d73318d1d79fc06335c058f643e52b9b3bfdb12dd"
+      },
+      {
+        "file": "LabRoom16Journey.js",
+        "sha256": "e7fd06b19ad5ccf3a99e50730d044aebf9abd35d5f616c295d209adc86b1b409"
+      },
+      {
+        "file": "LabRoom17Journey.js",
+        "sha256": "0a3a74dd082aa303b1778422d93de3827e59a79c47174b0ca32eb3d70fa4f31f"
+      },
+      {
+        "file": "LabRoom18Journey.js",
+        "sha256": "9ab87ec333e7eb408a572100240823340a487739d1dea3ba5297d22b34a33f15"
+      },
+      {
+        "file": "LabRoom19Journey.js",
+        "sha256": "89faad9e485e7b18345b7e74c154fd59f6d9eee9f9ea5ba7c423cc7df19c7624"
+      },
+      {
+        "file": "LabRoom19Mechanics.js",
+        "sha256": "18b2450fd6ac530d68a6490f0e900a63d15ce582857c86a03115276cfcdda625"
+      },
+      {
+        "file": "LabRoom20Journey.js",
+        "sha256": "c68204d17120bb94232492b6bd17a2bb7fd6bef4dc1d745c1f06b51a9c9fbdb1"
+      },
+      {
+        "file": "LabRoom20Optics.js",
+        "sha256": "dad517525f642c22debf096cda23f6c8fbfe14fb577a6b9daa91468c23e1c59f"
+      },
+      {
+        "file": "LabRoom21Journey.js",
+        "sha256": "196f379a8262d0730aa1df389036311465cf630abacb21e4bfd5b3ee38a8adce"
+      },
+      {
+        "file": "LabRoom21Retrieval.js",
+        "sha256": "1f55bb0b24dc26fa84d8333c18a0f08811d50997c70366ae813bb4d51976201b"
+      },
+      {
+        "file": "LabRoom21ServiceCar.js",
+        "sha256": "2359082c870fc5fb12624808fbb5484ac5fb93c4245fff9c3d861ff4c35a7fe8"
+      },
+      {
+        "file": "LabRoom22Journey.js",
+        "sha256": "7d9eeee688e415eafcb366a9dbb9d743507bd20d0d93e4289a4bebef057fa513"
+      },
+      {
+        "file": "LabRoom22Mechanics.js",
+        "sha256": "3bef6ecc9333765811859a7562b76de64d15f728ae0adc33f6ac6f92a1b78a35"
+      },
+      {
+        "file": "LabRoom23Journey.js",
+        "sha256": "c2f982cce757fc486b900f9c34d69a24e7883d2e317dc0ad67f213e30011eb4a"
+      },
+      {
+        "file": "LabRoom23Mechanics.js",
+        "sha256": "32be98fab764ccb21821100a0e41a8b2cf660bc89e7e9470f8a5b9f6728d7831"
+      },
+      {
+        "file": "LabRoom24Garden.js",
+        "sha256": "4907fe1d2a3a4eb8582d8ac343ad9280a78fa722f58425e3bbf1a31238c873ac"
+      },
+      {
+        "file": "LabRoom24Journey.js",
+        "sha256": "a4fdbb81bbb8539d787c26b8e581f2ea00fdcdf2e77ed99dccba28247d5928d2"
+      },
+      {
+        "file": "LabRoom25Journey.js",
+        "sha256": "0dc985e924be5ab73ae3ba30f63ae49477531e748f7965640a62c186668f93b2"
+      },
+      {
+        "file": "LabRoom25Optics.js",
+        "sha256": "3c1f49a2cd8366781b6b1315f6c1a7dcbb9f34402ee436cab42aae455068262d"
+      },
+      {
+        "file": "LabRoom26Journey.js",
+        "sha256": "2896708dade1cf9505899511543ba098ef187211f4bf72674603cb1a9b25b57f"
+      },
+      {
+        "file": "LabRoom27Art.js",
+        "sha256": "1b8e390ad799eaa28693c734e153a6220d220acb32db33e142eeb2d319e3aa64"
+      },
+      {
+        "file": "LabRoom27Conveyors.js",
+        "sha256": "1b13158fcff13aec414a681ae1d95b91a50cf834f675a2c743f409dbdb8a83e7"
+      },
+      {
+        "file": "LabRoom27Journey.js",
+        "sha256": "97986067f89bcc79516849d7399385bc694859ab3ed4699f3404662cb3227e51"
+      },
+      {
+        "file": "LabRoom28Art.js",
+        "sha256": "5ac4fa45efbefe2798369cd0786011c25e8754d2cf01688ba483b03e1440b313"
+      },
+      {
+        "file": "LabRoom28Journey.js",
+        "sha256": "3981079558b27948817a078b32996e9adc8161ac701902224c4f8957dea1e494"
+      },
+      {
+        "file": "LabRoom28Tides.js",
+        "sha256": "7867db0ecdf11fd6c6ee0b093891c975a0425d43d9abdb1bf6e811b8ecbb749c"
+      },
+      {
+        "file": "LabRoom29Gravity.js",
+        "sha256": "f4d9e2a81f82b9a8d06fe450190716fda9bd58d639696a39b4652e537bf1d2c9"
+      },
+      {
+        "file": "LabRoom29Journey.js",
+        "sha256": "ce6624475b38f9b7e418a10ce4dbaba32690cbc254fb24297383d234ca4bb52d"
+      },
+      {
+        "file": "LabRoom30Art.js",
+        "sha256": "d281ceadf1ce0e85d6c1c6c047a301b14c820a672ad319cc7857495bddc8860d"
+      },
+      {
+        "file": "LabRoom30Journey.js",
+        "sha256": "935779bdb17c579a7709ca8e3b38f43c24b09e750a97eb5b2d6a0ca85cd5de7c"
+      },
+      {
+        "file": "LabSingularityArt.js",
+        "sha256": "6694522185174b3645a581dd8818489111169fa62c696745302b0ea42b38e9e1"
+      },
+      {
+        "file": "LabSingularityExpansion.js",
+        "sha256": "fb99cee018bccc50d79e5e2a220848d506ebd3ef5b6d6930e6b444338f65d3bb"
+      },
+      {
+        "file": "LabSingularityJourney.js",
+        "sha256": "2f78fa9a9497b27091642cb8f0f1bf9c0288a36794c474a04e6d0b3ba29b054a"
+      },
+      {
+        "file": "LabSingularityKit.js",
+        "sha256": "8f6f794d9c8e97aaba874a5571a9648bf5047ee2c88a6962c79d65a630e5767b"
+      },
+      {
+        "file": "LabSingularityLayout.js",
+        "sha256": "74b14445d54f7e18141366fef2feb80e586df18b57a72092f803b6e039ee7de9"
+      },
+      {
+        "file": "LabSingularityLevel.js",
+        "sha256": "783bc2e3c3c08f65591cd798a414e9bc748fcfd0c455f1fde367a20f35046d9d"
+      },
+      {
+        "file": "LabSolidModels.js",
+        "sha256": "705ed2579b8276371046cef18761242234564c2bd3e9019be3d711b8635bbe4d"
+      },
+      {
+        "file": "LabStaticAwareSAP.js",
+        "sha256": "8e8988e33618baf328852c7a95df37a0768348363ed8deb536405a639eb0505f"
+      },
+      {
+        "file": "LabStaticSurfaceBatches.js",
+        "sha256": "487d5c9eb66818b1abd9a68b4d470b7f0db81154ad8037fafb1d2e2cefb2ac77"
+      },
+      {
+        "file": "LabSweep.js",
+        "sha256": "03b1b45700d5335530fda30559ffd1f81cf1518696b82ab4ddafe193ae3e4f4a"
+      },
+      {
+        "file": "LabTileWorld.js",
+        "sha256": "421b548c877acf84e193810a0c0f38ff4d9ad51e7c6b7f17c6f049d358726a94"
+      },
+      {
+        "file": "LabTileWorldBase.js",
+        "sha256": "8ca9ac06091c64b15d145029cd8a4b8b0d250508a6845eab28c2547f06849b0e"
+      },
+      {
+        "file": "LabTowerArt.js",
+        "sha256": "6891c5815a79dbed4a285cf9cb4050549ee6302ea8c329dcd56bebefcdb0a1d7"
+      },
+      {
+        "file": "LabTowerAscents.js",
+        "sha256": "70170dc4d9b982425acf1a7ae54715abfa514f95aa56605ae3179efafe40ed02"
+      },
+      {
+        "file": "LabTowerCourses.js",
+        "sha256": "3d69bc4bf0741774e3685d59485c432f5987cdd2671b5b26914abd26912e300c"
+      },
+      {
+        "file": "LabTowerCrown.js",
+        "sha256": "0f0e8d35aa5da85ef20891b8d5bbbc42f2461a100fb607d0afdeaa63fce307d6"
+      },
+      {
+        "file": "LabTowerFreight.js",
+        "sha256": "011b78c092a39e22f3f4202e5a3cd3bdc99b362c2de67131e2cbd061d30e61bc"
+      },
+      {
+        "file": "LabTowerInterlock.js",
+        "sha256": "55bad836256492c295e1ec0a8c33a2e95d9e1efe4d2b5c5e8ec1d4ee4a66df44"
+      },
+      {
+        "file": "LabTowerJourney.js",
+        "sha256": "0b31a7c6e36945919b9fe5ad11f1ebfa53a73ef8a58f37ada00f949044d802d1"
+      },
+      {
+        "file": "LabTowerKeystones.js",
+        "sha256": "5ad30a0be6da2313a9a0c51070b5fc8861866903a8ad917f51ae10c0e82b81a6"
+      },
+      {
+        "file": "LabTowerLayout.js",
+        "sha256": "eae631f63fc7156a7dc73331eb537d1a45a99fce4ba7d4cf459f3f76efc83254"
+      },
+      {
+        "file": "LabTowerLevel.js",
+        "sha256": "2bab6f9c1722b313da5347897a31097dd5adad59da1d51593bb616638e0e810c"
+      },
+      {
+        "file": "LabTowerMechanisms.js",
+        "sha256": "73827b3167450a07161c6fd408020c523e0b0b60e6d80689fb0623493bd29ce2"
+      },
+      {
+        "file": "LabTowerRoutes.js",
+        "sha256": "d5b172bfab574628f2e05c72a6142a3b9d9ddfc49545195e728209d530e01fd4"
+      },
+      {
+        "file": "LabTransferFunnel.js",
+        "sha256": "d309e74b8b015218c00a1c988764f035f993e62de963eb7c2ebc31c8d72f519b"
+      },
+      {
+        "file": "LabTutorial.js",
+        "sha256": "370fd820e2ddca855f95e312257fb057918d2cf21e1ae98a10c9fcbe42eb0c6c"
+      },
+      {
+        "file": "LabV8Journey.js",
+        "sha256": "2e7cecdf49dcd658ac625f3da3f24eca2adb3f18d96bf2d3c7c290d96fc745a1"
+      },
+      {
+        "file": "LabVelocityArena.js",
+        "sha256": "82ebbea32ecd9814677a57ca2aaaf6f3cfb78af9a638092916232761918e418d"
+      },
+      {
+        "file": "LabVelocityAssist.js",
+        "sha256": "006b97f84520dee8e60d8fde149c6660ed8e9bcaf6975e2ed220d552b8dafb39"
+      },
+      {
+        "file": "LabVelocityChapters.js",
+        "sha256": "8843b3948421402b4baa96c7dc72e6067d819b4e13077723108aaeeaa4724d98"
+      },
+      {
+        "file": "LabVelocityCompanion.js",
+        "sha256": "6f7adb7a3a0d32b483d9fd340fe30c758483531d5747029b93ce2adbd16354d4"
+      },
+      {
+        "file": "LabVelocityEvidence.js",
+        "sha256": "34e2f17f4e39f9feba06b2625f8f49bf725b1b557540bef605822d4328267c86"
+      },
+      {
+        "file": "LabVelocityHoldButton.js",
+        "sha256": "89ffba930ec6c3c8e8008f7af1ed35b4ef978a401a4a1555362ae61f364ad431"
+      },
+      {
+        "file": "LabVelocityScenery.js",
+        "sha256": "a7740a0a31f36c3b90ac2d211c203eefcd45ea950208b99e132b9d7c3416bc6d"
+      },
+      {
+        "file": "LabWindRoom.js",
+        "sha256": "851ab44cf4b0feb2d33becc768141064744b77156b04344157e94ab40797e33c"
+      },
+      {
+        "file": "LabWorkshopCampaign.js",
+        "sha256": "a830ab8cf52fd1ebd6258383802e46eaf3ab92adb98e20045bc2567559dbf214"
+      },
+      {
+        "file": "LabWorkshopJourney.js",
+        "sha256": "5751c6fa8678ddd94226aba57ed847a17ee2d8343437119fc9c59616d75b5ee2"
+      },
+      {
+        "file": "LabWorkshopKit.js",
+        "sha256": "a363de65b244dc395cccb06ac9be74fad4dd4fe6f9d93e1180450589595f6f33"
+      },
+      {
+        "file": "LabWorkshopModels.js",
+        "sha256": "3f3fbce26cc81cad77abb3a02d7e22fe512808f54be717d88fdb9bf7d0d4c864"
+      },
+      {
+        "file": "LabWorkshopRooms.js",
+        "sha256": "158c4ed3e85b9adc17898d14e89e81827cee9c2518f0cf1a85d0b0b91437c3ae"
+      },
+      {
+        "file": "PlayerAppearanceBaseline.js",
+        "sha256": "77bf3893786cc3cf6ce04d5c1f71d4587f67b7a120029d41e111274007468f28"
+      },
+      {
+        "file": "PlayerRig.js",
+        "sha256": "04db9d1a9fc5ed1bd4feb576ca01b4d2d8d09cba2a4781b2e5457e0f2e3f70fb"
+      },
+      {
+        "file": "RiftGame.js",
+        "sha256": "fbc9e50ecf4ac6a67deb312ed289153f80bbeacad69988e13fd3899d679f4f2d"
+      },
+      {
+        "file": "labAssets.js",
+        "sha256": "394c87741c5772eb7e433b27979f8d0e4c8626d28400131fb1ce6a9bb6c377d3"
+      },
+      {
+        "file": "riftMath.js",
+        "sha256": "eebb0facfa8a46b64b305990829dd76e944ccb9b751e8a30edb74c5d5cd745b2"
+      },
+      {
+        "file": "rules.js",
+        "sha256": "8cef72265b97f454952283e30496d9ef859794b514b836e2515951f3e6db0f0b"
+      }
+    ],
+    "aggregate": "e8799535bb12af1646dd7f6104ba388b6248be7bb6f515aa2f25205ce90b89c8"
+  },
+  "harnessSha256": "b00d93a98cefbaf73ed681754c39eec817dd8e81b3dc29207861cc2c1069829a",
+  "selfSha256": "04dd08f505c25e18ee8538f8d3e91a8dd1ca85ddf91a6c0af2706d76da9bfd1a",
+  "attempts": [
+    {
+      "depth": 0.7,
+      "clearDelayTicks": 0,
+      "clearFirst": false,
+      "directClear": false,
+      "initial": {
+        "player": [
+          0,
+          3.8,
+          1.3
+        ],
+        "cargo": [
+          0,
+          4.86,
+          0.45
+        ],
+        "velocity": [
+          0,
+          0,
+          0
+        ],
+        "quaternion": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "bodyId": 3,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "ticks": 139,
+      "before": {
+        "player": [
+          0,
+          3.8,
+          0.69438636113685
+        ],
+        "cargo": [
+          2.1094174002410973e-7,
+          4.859999403257111,
+          -0.02561364097471113
+        ],
+        "velocity": [
+          -0.000016249129189447734,
+          0.0000457671522127295,
+          0.0008533364061110302
+        ],
+        "quaternion": [
+          2.9510062480979737e-308,
+          1,
+          -1.2849636386815875e-307,
+          6.123233995736766e-17
+        ],
+        "bodyId": 3,
+        "held": true,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "afterRelease": {
+        "player": [
+          0,
+          3.8,
+          0.69438636113685
+        ],
+        "cargo": [
+          2.1094174002410973e-7,
+          4.859999403257111,
+          -0.02561364097471113
+        ],
+        "velocity": [
+          -0.000016249129189447734,
+          0.0000457671522127295,
+          0.0008533364061110302
+        ],
+        "quaternion": [
+          2.9510062480979737e-308,
+          1,
+          -1.2849636386815875e-307,
+          6.123233995736766e-17
+        ],
+        "bodyId": 3,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "afterClear": {
+        "player": [
+          0,
+          3.8,
+          0.69438636113685
+        ],
+        "cargo": [
+          2.1094174002410973e-7,
+          4.859999403257111,
+          -0.02561364097471113
+        ],
+        "velocity": [
+          -0.000016249129189447734,
+          0.0000457671522127295,
+          0.0008533364061110302
+        ],
+        "quaternion": [
+          2.9510062480979737e-308,
+          1,
+          -1.2849636386815875e-307,
+          6.123233995736766e-17
+        ],
+        "bodyId": 3,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "minimumZ": -5.243653845755912,
+      "after": {
+        "player": [
+          0,
+          3.8,
+          0.6944397665893909
+        ],
+        "cargo": [
+          -0.0034972516857499987,
+          4.205387977033416,
+          -5.243653845755912
+        ],
+        "velocity": [
+          0.008954261115698975,
+          0.640158353958434,
+          -0.33740199182801317
+        ],
+        "quaternion": [
+          0.0003283203091449126,
+          -0.7308763451869692,
+          -0.682509823162048,
+          0.00003923293306616144
+        ],
+        "bodyId": 3,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "sameBody": true
+    },
+    {
+      "depth": 0.7,
+      "clearDelayTicks": 1,
+      "clearFirst": false,
+      "directClear": false,
+      "initial": {
+        "player": [
+          0,
+          3.8,
+          1.3
+        ],
+        "cargo": [
+          0,
+          4.86,
+          0.45
+        ],
+        "velocity": [
+          0,
+          0,
+          0
+        ],
+        "quaternion": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "bodyId": 8,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "ticks": 139,
+      "before": {
+        "player": [
+          0,
+          3.8,
+          0.69438636113685
+        ],
+        "cargo": [
+          2.1094174002410973e-7,
+          4.859999403257111,
+          -0.02561364097471113
+        ],
+        "velocity": [
+          -0.000016249129189447734,
+          0.0000457671522127295,
+          0.0008533364061110302
+        ],
+        "quaternion": [
+          2.9510062480979737e-308,
+          1,
+          -1.2849636386815875e-307,
+          6.123233995736766e-17
+        ],
+        "bodyId": 8,
+        "held": true,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "afterRelease": {
+        "player": [
+          0,
+          3.8,
+          0.69438636113685
+        ],
+        "cargo": [
+          2.1094174002410973e-7,
+          4.859999403257111,
+          -0.02561364097471113
+        ],
+        "velocity": [
+          -0.000016249129189447734,
+          0.0000457671522127295,
+          0.0008533364061110302
+        ],
+        "quaternion": [
+          2.9510062480979737e-308,
+          1,
+          -1.2849636386815875e-307,
+          6.123233995736766e-17
+        ],
+        "bodyId": 8,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "afterClear": {
+        "player": [
+          0,
+          3.8,
+          0.6943926364448622
+        ],
+        "cargo": [
+          7.557252627061378e-8,
+          4.858645617870164,
+          -0.02560653194892792
+        ],
+        "velocity": [
+          -0.000016244305650419514,
+          -0.16245424643372425,
+          0.0008530830939851257
+        ],
+        "quaternion": [
+          -2.0236788629877595e-305,
+          1,
+          8.811752794437567e-305,
+          6.123233995736766e-17
+        ],
+        "bodyId": 8,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "minimumZ": -5.257910499986898,
+      "after": {
+        "player": [
+          0,
+          3.8,
+          0.6944397665913106
+        ],
+        "cargo": [
+          -0.1543954758698978,
+          4.2973136802668845,
+          -5.257910499986898
+        ],
+        "velocity": [
+          0.07477373732297486,
+          -1.6656388586036006,
+          -2.2567835685024638
+        ],
+        "quaternion": [
+          0.024902595982714288,
+          -0.6681115792291386,
+          -0.7309539352030225,
+          0.13679591742622843
+        ],
+        "bodyId": 8,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "sameBody": true
+    },
+    {
+      "depth": 0.7,
+      "clearDelayTicks": 5,
+      "clearFirst": false,
+      "directClear": false,
+      "initial": {
+        "player": [
+          0,
+          3.8,
+          1.3
+        ],
+        "cargo": [
+          0,
+          4.86,
+          0.45
+        ],
+        "velocity": [
+          0,
+          0,
+          0
+        ],
+        "quaternion": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "bodyId": 13,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "ticks": 139,
+      "before": {
+        "player": [
+          0,
+          3.8,
+          0.69438636113685
+        ],
+        "cargo": [
+          2.1094174002410973e-7,
+          4.859999403257111,
+          -0.02561364097471113
+        ],
+        "velocity": [
+          -0.000016249129189447734,
+          0.0000457671522127295,
+          0.0008533364061110302
+        ],
+        "quaternion": [
+          2.9510062480979737e-308,
+          1,
+          -1.2849636386815875e-307,
+          6.123233995736766e-17
+        ],
+        "bodyId": 13,
+        "held": true,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "afterRelease": {
+        "player": [
+          0,
+          3.8,
+          0.69438636113685
+        ],
+        "cargo": [
+          2.1094174002410973e-7,
+          4.859999403257111,
+          -0.02561364097471113
+        ],
+        "velocity": [
+          -0.000016249129189447734,
+          0.0000457671522127295,
+          0.0008533364061110302
+        ],
+        "quaternion": [
+          2.9510062480979737e-308,
+          1,
+          -1.2849636386815875e-307,
+          6.123233995736766e-17
+        ],
+        "bodyId": 13,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "afterClear": {
+        "player": [
+          0,
+          3.8,
+          0.6944111807181658
+        ],
+        "cargo": [
+          -4.655026057484133e-7,
+          4.839696846397051,
+          -0.02557811694260912
+        ],
+        "velocity": [
+          -0.000016225025808687962,
+          -0.8119720641571343,
+          0.0008520705972130354
+        ],
+        "quaternion": [
+          -1.0100816595999352e-304,
+          1,
+          4.3982224894364074e-304,
+          6.123233995736766e-17
+        ],
+        "bodyId": 13,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "minimumZ": -5.178075844387993,
+      "after": {
+        "player": [
+          0,
+          3.8,
+          0.6944397665969834
+        ],
+        "cargo": [
+          -0.002640948859983667,
+          4.224071842371955,
+          -5.178075844387993
+        ],
+        "velocity": [
+          -0.000013794136071261867,
+          0.10315020720279097,
+          -0.06014634922750162
+        ],
+        "quaternion": [
+          0.0006030387226957526,
+          -0.7404381813758687,
+          -0.6721238691781015,
+          -0.0006636159680279306
+        ],
+        "bodyId": 13,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "sameBody": true
+    },
+    {
+      "depth": 0.7,
+      "clearDelayTicks": 30,
+      "clearFirst": false,
+      "directClear": false,
+      "initial": {
+        "player": [
+          0,
+          3.8,
+          1.3
+        ],
+        "cargo": [
+          0,
+          4.86,
+          0.45
+        ],
+        "velocity": [
+          0,
+          0,
+          0
+        ],
+        "quaternion": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "bodyId": 18,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "ticks": 139,
+      "before": {
+        "player": [
+          0,
+          3.8,
+          0.69438636113685
+        ],
+        "cargo": [
+          2.1094174002410973e-7,
+          4.859999403257111,
+          -0.02561364097471113
+        ],
+        "velocity": [
+          -0.000016249129189447734,
+          0.0000457671522127295,
+          0.0008533364061110302
+        ],
+        "quaternion": [
+          2.9510062480979737e-308,
+          1,
+          -1.2849636386815875e-307,
+          6.123233995736766e-17
+        ],
+        "bodyId": 18,
+        "held": true,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "afterRelease": {
+        "player": [
+          0,
+          3.8,
+          0.69438636113685
+        ],
+        "cargo": [
+          2.1094174002410973e-7,
+          4.859999403257111,
+          -0.02561364097471113
+        ],
+        "velocity": [
+          -0.000016249129189447734,
+          0.0000457671522127295,
+          0.0008533364061110302
+        ],
+        "quaternion": [
+          2.9510062480979737e-308,
+          1,
+          -1.2849636386815875e-307,
+          6.123233995736766e-17
+        ],
+        "bodyId": 18,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "afterClear": {
+        "player": [
+          0,
+          3.8,
+          0.6944385106294839
+        ],
+        "cargo": [
+          -0.000003832702867536865,
+          4.232126458052922,
+          -0.025401285646817807
+        ],
+        "velocity": [
+          -0.000016105044156817386,
+          -4.854029139878777,
+          0.000845769661919039
+        ],
+        "quaternion": [
+          -5.953315822740332e-304,
+          1,
+          2.592266406328462e-303,
+          6.123233995736766e-17
+        ],
+        "bodyId": 18,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "minimumZ": -2.999581313231282,
+      "after": {
+        "player": [
+          0,
+          3.8,
+          0.6944397666053437
+        ],
+        "cargo": [
+          -0.005328528354306771,
+          4.189415828353452,
+          -2.931836458123342
+        ],
+        "velocity": [
+          -0.00013584513640700437,
+          0.03953303675416908,
+          -0.014716481843734145
+        ],
+        "quaternion": [
+          -0.0013057593475354382,
+          -0.7075870189066615,
+          -0.7066238016072531,
+          0.001307160825384757
+        ],
+        "bodyId": 18,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "sameBody": true
+    },
+    {
+      "depth": 0.7,
+      "clearDelayTicks": null,
+      "clearFirst": false,
+      "directClear": false,
+      "initial": {
+        "player": [
+          0,
+          3.8,
+          1.3
+        ],
+        "cargo": [
+          0,
+          4.86,
+          0.45
+        ],
+        "velocity": [
+          0,
+          0,
+          0
+        ],
+        "quaternion": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "bodyId": 23,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "ticks": 139,
+      "before": {
+        "player": [
+          0,
+          3.8,
+          0.69438636113685
+        ],
+        "cargo": [
+          2.1094174002410973e-7,
+          4.859999403257111,
+          -0.02561364097471113
+        ],
+        "velocity": [
+          -0.000016249129189447734,
+          0.0000457671522127295,
+          0.0008533364061110302
+        ],
+        "quaternion": [
+          2.9510062480979737e-308,
+          1,
+          -1.2849636386815875e-307,
+          6.123233995736766e-17
+        ],
+        "bodyId": 23,
+        "held": true,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "afterRelease": {
+        "player": [
+          0,
+          3.8,
+          0.69438636113685
+        ],
+        "cargo": [
+          2.1094174002410973e-7,
+          4.859999403257111,
+          -0.02561364097471113
+        ],
+        "velocity": [
+          -0.000016249129189447734,
+          0.0000457671522127295,
+          0.0008533364061110302
+        ],
+        "quaternion": [
+          2.9510062480979737e-308,
+          1,
+          -1.2849636386815875e-307,
+          6.123233995736766e-17
+        ],
+        "bodyId": 23,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "afterClear": {
+        "player": [
+          0,
+          3.8,
+          0.69438636113685
+        ],
+        "cargo": [
+          2.1094174002410973e-7,
+          4.859999403257111,
+          -0.02561364097471113
+        ],
+        "velocity": [
+          -0.000016249129189447734,
+          0.0000457671522127295,
+          0.0008533364061110302
+        ],
+        "quaternion": [
+          2.9510062480979737e-308,
+          1,
+          -1.2849636386815875e-307,
+          6.123233995736766e-17
+        ],
+        "bodyId": 23,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "minimumZ": -0.02560653194892792,
+      "after": {
+        "player": [
+          0,
+          3.8,
+          0.6944397665893909
+        ],
+        "cargo": [
+          -0.000004587929928975003,
+          4.1899981478116795,
+          -0.02538594532466183
+        ],
+        "velocity": [
+          -6.970755856185096e-7,
+          5.481748388547203e-11,
+          0.0000011116924828058626
+        ],
+        "quaternion": [
+          4.081706763593149e-8,
+          0.9999999999999991,
+          -5.343224718005799e-9,
+          -1.6066720249781457e-9
+        ],
+        "bodyId": 23,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "sameBody": true
+    },
+    {
+      "depth": 0.7,
+      "clearDelayTicks": 0,
+      "clearFirst": true,
+      "directClear": false,
+      "initial": {
+        "player": [
+          0,
+          3.8,
+          1.3
+        ],
+        "cargo": [
+          0,
+          4.86,
+          0.45
+        ],
+        "velocity": [
+          0,
+          0,
+          0
+        ],
+        "quaternion": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "bodyId": 28,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "ticks": 139,
+      "before": {
+        "player": [
+          0,
+          3.8,
+          0.69438636113685
+        ],
+        "cargo": [
+          2.1094174002410973e-7,
+          4.859999403257111,
+          -0.02561364097471113
+        ],
+        "velocity": [
+          -0.000016249129189447734,
+          0.0000457671522127295,
+          0.0008533364061110302
+        ],
+        "quaternion": [
+          2.9510062480979737e-308,
+          1,
+          -1.2849636386815875e-307,
+          6.123233995736766e-17
+        ],
+        "bodyId": 28,
+        "held": true,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "afterRelease": {
+        "player": [
+          0,
+          3.8,
+          0.69438636113685
+        ],
+        "cargo": [
+          2.1094174002410973e-7,
+          4.859999403257111,
+          0.4350000000000001
+        ],
+        "velocity": [
+          -0.000016249129189447734,
+          0.0000457671522127295,
+          0.0008533364061110302
+        ],
+        "quaternion": [
+          2.9510062480979737e-308,
+          1,
+          -1.2849636386815875e-307,
+          6.123233995736766e-17
+        ],
+        "bodyId": 28,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "afterClear": {
+        "player": [
+          0,
+          3.8,
+          0.69438636113685
+        ],
+        "cargo": [
+          2.1094174002410973e-7,
+          4.859999403257111,
+          0.4350000000000001
+        ],
+        "velocity": [
+          -0.000016249129189447734,
+          0.0000457671522127295,
+          0.0008533364061110302
+        ],
+        "quaternion": [
+          2.9510062480979737e-308,
+          1,
+          -1.2849636386815875e-307,
+          6.123233995736766e-17
+        ],
+        "bodyId": 28,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "minimumZ": 0.4350071090257833,
+      "after": {
+        "player": [
+          0,
+          3.8,
+          0.6944397665893909
+        ],
+        "cargo": [
+          -0.0000045879299289874565,
+          4.18999814781168,
+          0.4352276956500495
+        ],
+        "velocity": [
+          -6.97075590776604e-7,
+          5.480135789603935e-11,
+          0.0000011116924798659442
+        ],
+        "quaternion": [
+          4.081706762052901e-8,
+          0.9999999999999991,
+          -5.343224715579205e-9,
+          -1.606672024957838e-9
+        ],
+        "bodyId": 28,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "sameBody": true
+    },
+    {
+      "depth": 0.7,
+      "clearDelayTicks": 0,
+      "clearFirst": false,
+      "directClear": true,
+      "initial": {
+        "player": [
+          0,
+          3.8,
+          1.3
+        ],
+        "cargo": [
+          0,
+          4.86,
+          0.45
+        ],
+        "velocity": [
+          0,
+          0,
+          0
+        ],
+        "quaternion": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "bodyId": 33,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "ticks": 139,
+      "before": {
+        "player": [
+          0,
+          3.8,
+          0.69438636113685
+        ],
+        "cargo": [
+          2.1094174002410973e-7,
+          4.859999403257111,
+          -0.02561364097471113
+        ],
+        "velocity": [
+          -0.000016249129189447734,
+          0.0000457671522127295,
+          0.0008533364061110302
+        ],
+        "quaternion": [
+          2.9510062480979737e-308,
+          1,
+          -1.2849636386815875e-307,
+          6.123233995736766e-17
+        ],
+        "bodyId": 33,
+        "held": true,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "afterRelease": {
+        "player": [
+          0,
+          3.8,
+          0.69438636113685
+        ],
+        "cargo": [
+          2.1094174002410973e-7,
+          4.859999403257111,
+          0.4350000000000001
+        ],
+        "velocity": [
+          -0.000016249129189447734,
+          0.0000457671522127295,
+          0.0008533364061110302
+        ],
+        "quaternion": [
+          2.9510062480979737e-308,
+          1,
+          -1.2849636386815875e-307,
+          6.123233995736766e-17
+        ],
+        "bodyId": 33,
+        "held": true,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "afterClear": {
+        "player": [
+          0,
+          3.8,
+          0.69438636113685
+        ],
+        "cargo": [
+          2.1094174002410973e-7,
+          4.859999403257111,
+          0.4350000000000001
+        ],
+        "velocity": [
+          -0.000016249129189447734,
+          0.0000457671522127295,
+          0.0008533364061110302
+        ],
+        "quaternion": [
+          2.9510062480979737e-308,
+          1,
+          -1.2849636386815875e-307,
+          6.123233995736766e-17
+        ],
+        "bodyId": 33,
+        "held": true,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "minimumZ": 0.42699999977648273,
+      "after": {
+        "player": [
+          0,
+          3.8,
+          0.6944397665893909
+        ],
+        "cargo": [
+          -2.2699291216906923e-13,
+          4.859999999999369,
+          0.42699999977648273
+        ],
+        "velocity": [
+          7.485846633704904e-12,
+          2.0244456636404642e-11,
+          0
+        ],
+        "quaternion": [
+          0,
+          1,
+          0,
+          6.123233995736766e-17
+        ],
+        "bodyId": 33,
+        "held": true,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "sameBody": true
+    },
+    {
+      "depth": 0.4,
+      "clearDelayTicks": 0,
+      "clearFirst": false,
+      "directClear": false,
+      "initial": {
+        "player": [
+          0,
+          3.8,
+          1.3
+        ],
+        "cargo": [
+          0,
+          4.86,
+          0.45
+        ],
+        "velocity": [
+          0,
+          0,
+          0
+        ],
+        "quaternion": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "bodyId": 38,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "ticks": 152,
+      "before": {
+        "player": [
+          0,
+          3.8,
+          0.39512630543523886
+        ],
+        "cargo": [
+          -0.000004745645268576225,
+          4.8599989253124845,
+          -0.32487369721541404
+        ],
+        "velocity": [
+          0.00007691822293662455,
+          -0.00002833468565799637,
+          0.0010711972933203566
+        ],
+        "quaternion": [
+          0,
+          1,
+          0,
+          6.123233995736766e-17
+        ],
+        "bodyId": 38,
+        "held": true,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "afterRelease": {
+        "player": [
+          0,
+          3.8,
+          0.39512630543523886
+        ],
+        "cargo": [
+          -0.000004745645268576225,
+          4.8599989253124845,
+          -0.32487369721541404
+        ],
+        "velocity": [
+          0.00007691822293662455,
+          -0.00002833468565799637,
+          0.0010711972933203566
+        ],
+        "quaternion": [
+          0,
+          1,
+          0,
+          6.123233995736766e-17
+        ],
+        "bodyId": 38,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "afterClear": {
+        "player": [
+          0,
+          3.8,
+          0.47500000000000003
+        ],
+        "cargo": [
+          -0.000004745645268576225,
+          4.8599989253124845,
+          -0.32487369721541404
+        ],
+        "velocity": [
+          0.00007691822293662455,
+          -0.00002833468565799637,
+          0.0010711972933203566
+        ],
+        "quaternion": [
+          0,
+          1,
+          0,
+          6.123233995736766e-17
+        ],
+        "bodyId": 38,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "minimumZ": -0.9626836037896517,
+      "after": {
+        "player": [
+          0,
+          3.8,
+          0.475067040121342
+        ],
+        "cargo": [
+          -0.0003542570163636513,
+          4.18999814764142,
+          -0.8573743605511518
+        ],
+        "velocity": [
+          -6.973738845908826e-7,
+          6.173251410057645e-9,
+          0.0000011121745870345127
+        ],
+        "quaternion": [
+          4.081806483023767e-8,
+          0.9999999840495355,
+          -5.359527914982702e-9,
+          0.00017860830740306377
+        ],
+        "bodyId": 38,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "sameBody": true
+    },
+    {
+      "depth": 0.4,
+      "clearDelayTicks": 1,
+      "clearFirst": false,
+      "directClear": false,
+      "initial": {
+        "player": [
+          0,
+          3.8,
+          1.3
+        ],
+        "cargo": [
+          0,
+          4.86,
+          0.45
+        ],
+        "velocity": [
+          0,
+          0,
+          0
+        ],
+        "quaternion": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "bodyId": 43,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "ticks": 152,
+      "before": {
+        "player": [
+          0,
+          3.8,
+          0.39512630543523886
+        ],
+        "cargo": [
+          -0.000004745645268576225,
+          4.8599989253124845,
+          -0.32487369721541404
+        ],
+        "velocity": [
+          0.00007691822293662455,
+          -0.00002833468565799637,
+          0.0010711972933203566
+        ],
+        "quaternion": [
+          0,
+          1,
+          0,
+          6.123233995736766e-17
+        ],
+        "bodyId": 43,
+        "held": true,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "afterRelease": {
+        "player": [
+          0,
+          3.8,
+          0.39512630543523886
+        ],
+        "cargo": [
+          -0.000004745645268576225,
+          4.8599989253124845,
+          -0.32487369721541404
+        ],
+        "velocity": [
+          0.00007691822293662455,
+          -0.00002833468565799637,
+          0.0010711972933203566
+        ],
+        "quaternion": [
+          0,
+          1,
+          0,
+          6.123233995736766e-17
+        ],
+        "bodyId": 43,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "afterClear": {
+        "player": [
+          0,
+          3.8,
+          0.47500000000000003
+        ],
+        "cargo": [
+          -0.000004104850353301084,
+          4.85864452259353,
+          -0.32486477322116913
+        ],
+        "velocity": [
+          0.00007689538983301694,
+          -0.16252832627453268,
+          0.0010708793093908173
+        ],
+        "quaternion": [
+          0,
+          1,
+          0,
+          6.123233995736766e-17
+        ],
+        "bodyId": 43,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "minimumZ": -0.9627415969147416,
+      "after": {
+        "player": [
+          0,
+          3.8,
+          0.4750591626994332
+        ],
+        "cargo": [
+          -0.00038682721975487203,
+          4.189998147481324,
+          -0.8556116124739847
+        ],
+        "velocity": [
+          -6.973624720492228e-7,
+          1.1921232334621834e-8,
+          0.0000011132681346622942
+        ],
+        "quaternion": [
+          4.081802226296822e-8,
+          0.9999999852487587,
+          -5.393557564604222e-9,
+          0.00017176286252543413
+        ],
+        "bodyId": 43,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "sameBody": true
+    },
+    {
+      "depth": 0.4,
+      "clearDelayTicks": 5,
+      "clearFirst": false,
+      "directClear": false,
+      "initial": {
+        "player": [
+          0,
+          3.8,
+          1.3
+        ],
+        "cargo": [
+          0,
+          4.86,
+          0.45
+        ],
+        "velocity": [
+          0,
+          0,
+          0
+        ],
+        "quaternion": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "bodyId": 48,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "ticks": 152,
+      "before": {
+        "player": [
+          0,
+          3.8,
+          0.39512630543523886
+        ],
+        "cargo": [
+          -0.000004745645268576225,
+          4.8599989253124845,
+          -0.32487369721541404
+        ],
+        "velocity": [
+          0.00007691822293662455,
+          -0.00002833468565799637,
+          0.0010711972933203566
+        ],
+        "quaternion": [
+          0,
+          1,
+          0,
+          6.123233995736766e-17
+        ],
+        "bodyId": 48,
+        "held": true,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "afterRelease": {
+        "player": [
+          0,
+          3.8,
+          0.39512630543523886
+        ],
+        "cargo": [
+          -0.000004745645268576225,
+          4.8599989253124845,
+          -0.32487369721541404
+        ],
+        "velocity": [
+          0.00007691822293662455,
+          -0.00002833468565799637,
+          0.0010711972933203566
+        ],
+        "quaternion": [
+          0,
+          1,
+          0,
+          6.123233995736766e-17
+        ],
+        "bodyId": 48,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "afterClear": {
+        "player": [
+          0,
+          3.8,
+          0.47500000000000003
+        ],
+        "cargo": [
+          -0.0000015435723214216668,
+          4.83969328362439,
+          -0.32482910372712154
+        ],
+        "velocity": [
+          0.00007680412517832679,
+          -0.8120460560749724,
+          0.001069608317324861
+        ],
+        "quaternion": [
+          0,
+          1,
+          0,
+          6.123233995736766e-17
+        ],
+        "bodyId": 48,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "minimumZ": -0.9431230219002951,
+      "after": {
+        "player": [
+          0,
+          3.8,
+          0.47503588399111757
+        ],
+        "cargo": [
+          -0.00005809110090075642,
+          4.18999814699889,
+          -0.8343977733359885
+        ],
+        "velocity": [
+          -6.971424724661696e-7,
+          2.9239057341978736e-8,
+          0.000001113550064508961
+        ],
+        "quaternion": [
+          4.081727035817529e-8,
+          0.9999999991807601,
+          -5.401403085415887e-9,
+          0.00004047811893341073
+        ],
+        "bodyId": 48,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "sameBody": true
+    },
+    {
+      "depth": 0.4,
+      "clearDelayTicks": 30,
+      "clearFirst": false,
+      "directClear": false,
+      "initial": {
+        "player": [
+          0,
+          3.8,
+          1.3
+        ],
+        "cargo": [
+          0,
+          4.86,
+          0.45
+        ],
+        "velocity": [
+          0,
+          0,
+          0
+        ],
+        "quaternion": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "bodyId": 53,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "ticks": 152,
+      "before": {
+        "player": [
+          0,
+          3.8,
+          0.39512630543523886
+        ],
+        "cargo": [
+          -0.000004745645268576225,
+          4.8599989253124845,
+          -0.32487369721541404
+        ],
+        "velocity": [
+          0.00007691822293662455,
+          -0.00002833468565799637,
+          0.0010711972933203566
+        ],
+        "quaternion": [
+          0,
+          1,
+          0,
+          6.123233995736766e-17
+        ],
+        "bodyId": 53,
+        "held": true,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "afterRelease": {
+        "player": [
+          0,
+          3.8,
+          0.39512630543523886
+        ],
+        "cargo": [
+          -0.000004745645268576225,
+          4.8599989253124845,
+          -0.32487369721541404
+        ],
+        "velocity": [
+          0.00007691822293662455,
+          -0.00002833468565799637,
+          0.0010711972933203566
+        ],
+        "quaternion": [
+          0,
+          1,
+          0,
+          6.123233995736766e-17
+        ],
+        "bodyId": 53,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "afterClear": {
+        "player": [
+          0,
+          3.8,
+          0.47500000000000003
+        ],
+        "cargo": [
+          0.000014395685554421916,
+          4.232107539643356,
+          -0.3246071265513331
+        ],
+        "velocity": [
+          0.00007623617009967075,
+          -4.854102584637391,
+          0.001061698722956239
+        ],
+        "quaternion": [
+          0,
+          1,
+          0,
+          6.123233995736766e-17
+        ],
+        "bodyId": 53,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "minimumZ": -0.4246915701588946,
+      "after": {
+        "player": [
+          0,
+          3.8,
+          0.4750015766325359
+        ],
+        "cargo": [
+          0.0013299574423401455,
+          4.189998147704134,
+          -0.4101786721206112
+        ],
+        "velocity": [
+          -6.971666269036909e-7,
+          3.9136305585163456e-9,
+          0.0000011116389986088923
+        ],
+        "quaternion": [
+          4.08240296159465e-8,
+          0.999999996053808,
+          -5.340928860618016e-9,
+          -0.00008883908129177791
+        ],
+        "bodyId": 53,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "sameBody": true
+    },
+    {
+      "depth": 0.4,
+      "clearDelayTicks": null,
+      "clearFirst": false,
+      "directClear": false,
+      "initial": {
+        "player": [
+          0,
+          3.8,
+          1.3
+        ],
+        "cargo": [
+          0,
+          4.86,
+          0.45
+        ],
+        "velocity": [
+          0,
+          0,
+          0
+        ],
+        "quaternion": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "bodyId": 58,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "ticks": 152,
+      "before": {
+        "player": [
+          0,
+          3.8,
+          0.39512630543523886
+        ],
+        "cargo": [
+          -0.000004745645268576225,
+          4.8599989253124845,
+          -0.32487369721541404
+        ],
+        "velocity": [
+          0.00007691822293662455,
+          -0.00002833468565799637,
+          0.0010711972933203566
+        ],
+        "quaternion": [
+          0,
+          1,
+          0,
+          6.123233995736766e-17
+        ],
+        "bodyId": 58,
+        "held": true,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "afterRelease": {
+        "player": [
+          0,
+          3.8,
+          0.39512630543523886
+        ],
+        "cargo": [
+          -0.000004745645268576225,
+          4.8599989253124845,
+          -0.32487369721541404
+        ],
+        "velocity": [
+          0.00007691822293662455,
+          -0.00002833468565799637,
+          0.0010711972933203566
+        ],
+        "quaternion": [
+          0,
+          1,
+          0,
+          6.123233995736766e-17
+        ],
+        "bodyId": 58,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "afterClear": {
+        "player": [
+          0,
+          3.8,
+          0.39512630543523886
+        ],
+        "cargo": [
+          -0.000004745645268576225,
+          4.8599989253124845,
+          -0.32487369721541404
+        ],
+        "velocity": [
+          0.00007691822293662455,
+          -0.00002833468565799637,
+          0.0010711972933203566
+        ],
+        "quaternion": [
+          0,
+          1,
+          0,
+          6.123233995736766e-17
+        ],
+        "bodyId": 58,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "minimumZ": -0.32486477322116913,
+      "after": {
+        "player": [
+          0,
+          3.8,
+          0.3951933455565808
+        ],
+        "cargo": [
+          0.000015227037836449843,
+          4.1899981478116795,
+          -0.324588076783964
+        ],
+        "velocity": [
+          -6.970755902579473e-7,
+          5.484770970731745e-11,
+          0.0000011116924830189437
+        ],
+        "quaternion": [
+          4.081706760000086e-8,
+          0.9999999999999991,
+          -5.343224750255077e-9,
+          -1.62763771940197e-9
+        ],
+        "bodyId": 58,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "sameBody": true
+    },
+    {
+      "depth": 0.4,
+      "clearDelayTicks": 0,
+      "clearFirst": true,
+      "directClear": false,
+      "initial": {
+        "player": [
+          0,
+          3.8,
+          1.3
+        ],
+        "cargo": [
+          0,
+          4.86,
+          0.45
+        ],
+        "velocity": [
+          0,
+          0,
+          0
+        ],
+        "quaternion": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "bodyId": 63,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "ticks": 152,
+      "before": {
+        "player": [
+          0,
+          3.8,
+          0.39512630543523886
+        ],
+        "cargo": [
+          -0.000004745645268576225,
+          4.8599989253124845,
+          -0.32487369721541404
+        ],
+        "velocity": [
+          0.00007691822293662455,
+          -0.00002833468565799637,
+          0.0010711972933203566
+        ],
+        "quaternion": [
+          0,
+          1,
+          0,
+          6.123233995736766e-17
+        ],
+        "bodyId": 63,
+        "held": true,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "afterRelease": {
+        "player": [
+          0,
+          3.8,
+          0.47500000000000003
+        ],
+        "cargo": [
+          -0.000004745645268576225,
+          4.8599989253124845,
+          0.43500000000000016
+        ],
+        "velocity": [
+          0.00007691822293662455,
+          -0.00002833468565799637,
+          0.0010711972933203566
+        ],
+        "quaternion": [
+          0,
+          1,
+          0,
+          6.123233995736766e-17
+        ],
+        "bodyId": 63,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "afterClear": {
+        "player": [
+          0,
+          3.8,
+          0.47500000000000003
+        ],
+        "cargo": [
+          -0.000004745645268576225,
+          4.8599989253124845,
+          0.43500000000000016
+        ],
+        "velocity": [
+          0.00007691822293662455,
+          -0.00002833468565799637,
+          0.0010711972933203566
+        ],
+        "quaternion": [
+          0,
+          1,
+          0,
+          6.123233995736766e-17
+        ],
+        "bodyId": 63,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "minimumZ": 0.43500892399424507,
+      "after": {
+        "player": [
+          0,
+          3.8,
+          0.475067040121342
+        ],
+        "cargo": [
+          0.000015227037836417991,
+          4.1899981478116795,
+          0.4352856204314501
+        ],
+        "velocity": [
+          -6.97075595740549e-7,
+          5.4831361673279844e-11,
+          0.0000011116924794936688
+        ],
+        "quaternion": [
+          4.081706755949762e-8,
+          0.9999999999999991,
+          -5.343224713908961e-9,
+          -1.627637719370313e-9
+        ],
+        "bodyId": 63,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "sameBody": true
+    },
+    {
+      "depth": 0.4,
+      "clearDelayTicks": 0,
+      "clearFirst": false,
+      "directClear": true,
+      "initial": {
+        "player": [
+          0,
+          3.8,
+          1.3
+        ],
+        "cargo": [
+          0,
+          4.86,
+          0.45
+        ],
+        "velocity": [
+          0,
+          0,
+          0
+        ],
+        "quaternion": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "bodyId": 68,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "ticks": 152,
+      "before": {
+        "player": [
+          0,
+          3.8,
+          0.39512630543523886
+        ],
+        "cargo": [
+          -0.000004745645268576225,
+          4.8599989253124845,
+          -0.32487369721541404
+        ],
+        "velocity": [
+          0.00007691822293662455,
+          -0.00002833468565799637,
+          0.0010711972933203566
+        ],
+        "quaternion": [
+          0,
+          1,
+          0,
+          6.123233995736766e-17
+        ],
+        "bodyId": 68,
+        "held": true,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "afterRelease": {
+        "player": [
+          0,
+          3.8,
+          0.47500000000000003
+        ],
+        "cargo": [
+          -0.000004745645268576225,
+          4.8599989253124845,
+          0.43500000000000016
+        ],
+        "velocity": [
+          0.00007691822293662455,
+          -0.00002833468565799637,
+          0.0010711972933203566
+        ],
+        "quaternion": [
+          0,
+          1,
+          0,
+          6.123233995736766e-17
+        ],
+        "bodyId": 68,
+        "held": true,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "afterClear": {
+        "player": [
+          0,
+          3.8,
+          0.47500000000000003
+        ],
+        "cargo": [
+          -0.000004745645268576225,
+          4.8599989253124845,
+          0.43500000000000016
+        ],
+        "velocity": [
+          0.00007691822293662455,
+          -0.00002833468565799637,
+          0.0010711972933203566
+        ],
+        "quaternion": [
+          0,
+          1,
+          0,
+          6.123233995736766e-17
+        ],
+        "bodyId": 68,
+        "held": true,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "minimumZ": 0.42699999977648273,
+      "after": {
+        "player": [
+          0,
+          3.8,
+          0.6201591624735057
+        ],
+        "cargo": [
+          1.4537173839175697e-12,
+          4.860000000000252,
+          0.42699999977648273
+        ],
+        "velocity": [
+          -2.2860871156402113e-11,
+          -1.7900361657452527e-11,
+          0
+        ],
+        "quaternion": [
+          0,
+          1,
+          0,
+          6.123233995736766e-17
+        ],
+        "bodyId": 68,
+        "held": true,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "sameBody": true
+    },
+    {
+      "depth": 0.3,
+      "clearDelayTicks": 0,
+      "clearFirst": false,
+      "directClear": false,
+      "initial": {
+        "player": [
+          0,
+          3.8,
+          1.3
+        ],
+        "cargo": [
+          0,
+          4.86,
+          0.45
+        ],
+        "velocity": [
+          0,
+          0,
+          0
+        ],
+        "quaternion": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "bodyId": 73,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "ticks": 156,
+      "before": {
+        "player": [
+          0,
+          3.8,
+          0.29512521403892605
+        ],
+        "cargo": [
+          -0.000003971090248216571,
+          4.859993346826001,
+          -0.42487478870267803
+        ],
+        "velocity": [
+          0.00007319374311143632,
+          0.00009089023108646311,
+          0.0011079530116712354
+        ],
+        "quaternion": [
+          0,
+          1,
+          0,
+          6.123233995736766e-17
+        ],
+        "bodyId": 73,
+        "held": true,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "afterRelease": {
+        "player": [
+          0,
+          3.8,
+          0.29512521403892605
+        ],
+        "cargo": [
+          -0.000003971090248216571,
+          4.859993346826001,
+          -0.42487478870267803
+        ],
+        "velocity": [
+          0.00007319374311143632,
+          0.00009089023108646311,
+          0.0011079530116712354
+        ],
+        "quaternion": [
+          0,
+          1,
+          0,
+          6.123233995736766e-17
+        ],
+        "bodyId": 73,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "afterClear": {
+        "player": [
+          0,
+          3.8,
+          0.47500000000000003
+        ],
+        "cargo": [
+          -0.000003971090248216571,
+          4.859993346826001,
+          -0.42487478870267803
+        ],
+        "velocity": [
+          0.00007319374311143632,
+          0.00009089023108646311,
+          0.0011079530116712354
+        ],
+        "quaternion": [
+          0,
+          1,
+          0,
+          6.123233995736766e-17
+        ],
+        "bodyId": 73,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "minimumZ": -0.4248655585017044,
+      "after": {
+        "player": [
+          0,
+          3.8,
+          0.4750693404518541
+        ],
+        "cargo": [
+          0.00001501134256163194,
+          4.18999814781168,
+          -0.42457939565628455
+        ],
+        "velocity": [
+          -6.970755907413046e-7,
+          5.484490639418027e-11,
+          0.0000011116924732690962
+        ],
+        "quaternion": [
+          4.081706770676233e-8,
+          0.9999999999999991,
+          -5.343224826684141e-9,
+          -1.6295426030525807e-9
+        ],
+        "bodyId": 73,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "sameBody": true
+    },
+    {
+      "depth": 0.3,
+      "clearDelayTicks": 1,
+      "clearFirst": false,
+      "directClear": false,
+      "initial": {
+        "player": [
+          0,
+          3.8,
+          1.3
+        ],
+        "cargo": [
+          0,
+          4.86,
+          0.45
+        ],
+        "velocity": [
+          0,
+          0,
+          0
+        ],
+        "quaternion": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "bodyId": 78,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "ticks": 156,
+      "before": {
+        "player": [
+          0,
+          3.8,
+          0.29512521403892605
+        ],
+        "cargo": [
+          -0.000003971090248216571,
+          4.859993346826001,
+          -0.42487478870267803
+        ],
+        "velocity": [
+          0.00007319374311143632,
+          0.00009089023108646311,
+          0.0011079530116712354
+        ],
+        "quaternion": [
+          0,
+          1,
+          0,
+          6.123233995736766e-17
+        ],
+        "bodyId": 78,
+        "held": true,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "afterRelease": {
+        "player": [
+          0,
+          3.8,
+          0.29512521403892605
+        ],
+        "cargo": [
+          -0.000003971090248216571,
+          4.859993346826001,
+          -0.42487478870267803
+        ],
+        "velocity": [
+          0.00007319374311143632,
+          0.00009089023108646311,
+          0.0011079530116712354
+        ],
+        "quaternion": [
+          0,
+          1,
+          0,
+          6.123233995736766e-17
+        ],
+        "bodyId": 78,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "afterClear": {
+        "player": [
+          0,
+          3.8,
+          0.47500000000000003
+        ],
+        "cargo": [
+          -0.0000033613234514146285,
+          4.858639937353088,
+          -0.4248655585017044
+        ],
+        "velocity": [
+          0.00007317201561623314,
+          -0.1624091367495949,
+          0.0011076241168405697
+        ],
+        "quaternion": [
+          0,
+          1,
+          0,
+          6.123233995736766e-17
+        ],
+        "bodyId": 78,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "minimumZ": -0.42485633104070736,
+      "after": {
+        "player": [
+          0,
+          3.8,
+          0.47506119273398506
+        ],
+        "cargo": [
+          0.000015005533598373362,
+          4.189998147812032,
+          -0.4245793863921806
+        ],
+        "velocity": [
+          -6.970755910294055e-7,
+          4.2203990302525085e-11,
+          0.000001111692473124785
+        ],
+        "quaternion": [
+          4.081706770108307e-8,
+          0.9999999999999993,
+          -5.343224883007843e-9,
+          -1.6472426412054455e-9
+        ],
+        "bodyId": 78,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "sameBody": true
+    },
+    {
+      "depth": 0.3,
+      "clearDelayTicks": 5,
+      "clearFirst": false,
+      "directClear": false,
+      "initial": {
+        "player": [
+          0,
+          3.8,
+          1.3
+        ],
+        "cargo": [
+          0,
+          4.86,
+          0.45
+        ],
+        "velocity": [
+          0,
+          0,
+          0
+        ],
+        "quaternion": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "bodyId": 83,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "ticks": 156,
+      "before": {
+        "player": [
+          0,
+          3.8,
+          0.29512521403892605
+        ],
+        "cargo": [
+          -0.000003971090248216571,
+          4.859993346826001,
+          -0.42487478870267803
+        ],
+        "velocity": [
+          0.00007319374311143632,
+          0.00009089023108646311,
+          0.0011079530116712354
+        ],
+        "quaternion": [
+          0,
+          1,
+          0,
+          6.123233995736766e-17
+        ],
+        "bodyId": 83,
+        "held": true,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "afterRelease": {
+        "player": [
+          0,
+          3.8,
+          0.29512521403892605
+        ],
+        "cargo": [
+          -0.000003971090248216571,
+          4.859993346826001,
+          -0.42487478870267803
+        ],
+        "velocity": [
+          0.00007319374311143632,
+          0.00009089023108646311,
+          0.0011079530116712354
+        ],
+        "quaternion": [
+          0,
+          1,
+          0,
+          6.123233995736766e-17
+        ],
+        "bodyId": 83,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "afterClear": {
+        "player": [
+          0,
+          3.8,
+          0.47500000000000003
+        ],
+        "cargo": [
+          -9.240658140819307e-7,
+          4.839692668420545,
+          -0.42482866508944384
+        ],
+        "velocity": [
+          0.00007308517011414649,
+          -0.8119270080122322,
+          0.0011063095135494042
+        ],
+        "quaternion": [
+          0,
+          1,
+          0,
+          6.123233995736766e-17
+        ],
+        "bodyId": 83,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "minimumZ": -0.42481944858022225,
+      "after": {
+        "player": [
+          0,
+          3.8,
+          0.4750371152693135
+        ],
+        "cargo": [
+          0.00001498810670859888,
+          4.1899981478126715,
+          -0.4245793585998687
+        ],
+        "velocity": [
+          0,
+          0,
+          0
+        ],
+        "quaternion": [
+          4.081706768435258e-8,
+          0.9999999999999991,
+          -5.343224843475891e-9,
+          -1.700342755704483e-9
+        ],
+        "bodyId": 83,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "sameBody": true
+    },
+    {
+      "depth": 0.3,
+      "clearDelayTicks": 30,
+      "clearFirst": false,
+      "directClear": false,
+      "initial": {
+        "player": [
+          0,
+          3.8,
+          1.3
+        ],
+        "cargo": [
+          0,
+          4.86,
+          0.45
+        ],
+        "velocity": [
+          0,
+          0,
+          0
+        ],
+        "quaternion": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "bodyId": 88,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "ticks": 156,
+      "before": {
+        "player": [
+          0,
+          3.8,
+          0.29512521403892605
+        ],
+        "cargo": [
+          -0.000003971090248216571,
+          4.859993346826001,
+          -0.42487478870267803
+        ],
+        "velocity": [
+          0.00007319374311143632,
+          0.00009089023108646311,
+          0.0011079530116712354
+        ],
+        "quaternion": [
+          0,
+          1,
+          0,
+          6.123233995736766e-17
+        ],
+        "bodyId": 88,
+        "held": true,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "afterRelease": {
+        "player": [
+          0,
+          3.8,
+          0.29512521403892605
+        ],
+        "cargo": [
+          -0.000003971090248216571,
+          4.859993346826001,
+          -0.42487478870267803
+        ],
+        "velocity": [
+          0.00007319374311143632,
+          0.00009089023108646311,
+          0.0011079530116712354
+        ],
+        "quaternion": [
+          0,
+          1,
+          0,
+          6.123233995736766e-17
+        ],
+        "bodyId": 88,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "afterClear": {
+        "player": [
+          0,
+          3.8,
+          0.47500000000000003
+        ],
+        "cargo": [
+          0.00001424339258277519,
+          4.232131630635527,
+          -0.4245990712676794
+        ],
+        "velocity": [
+          0.00007254471615487815,
+          -4.853984416917363,
+          0.0010981285192951627
+        ],
+        "quaternion": [
+          0,
+          1,
+          0,
+          6.123233995736766e-17
+        ],
+        "bodyId": 88,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "minimumZ": -0.4245899229131722,
+      "after": {
+        "player": [
+          0,
+          3.8,
+          0.4750016307311241
+        ],
+        "cargo": [
+          0.00001498810670859888,
+          4.1899981478126715,
+          -0.4245793585998687
+        ],
+        "velocity": [
+          0,
+          0,
+          0
+        ],
+        "quaternion": [
+          4.081706768435258e-8,
+          0.9999999999999991,
+          -5.343224843475891e-9,
+          -1.700342755704483e-9
+        ],
+        "bodyId": 88,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "sameBody": true
+    },
+    {
+      "depth": 0.3,
+      "clearDelayTicks": null,
+      "clearFirst": false,
+      "directClear": false,
+      "initial": {
+        "player": [
+          0,
+          3.8,
+          1.3
+        ],
+        "cargo": [
+          0,
+          4.86,
+          0.45
+        ],
+        "velocity": [
+          0,
+          0,
+          0
+        ],
+        "quaternion": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "bodyId": 93,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "ticks": 156,
+      "before": {
+        "player": [
+          0,
+          3.8,
+          0.29512521403892605
+        ],
+        "cargo": [
+          -0.000003971090248216571,
+          4.859993346826001,
+          -0.42487478870267803
+        ],
+        "velocity": [
+          0.00007319374311143632,
+          0.00009089023108646311,
+          0.0011079530116712354
+        ],
+        "quaternion": [
+          0,
+          1,
+          0,
+          6.123233995736766e-17
+        ],
+        "bodyId": 93,
+        "held": true,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "afterRelease": {
+        "player": [
+          0,
+          3.8,
+          0.29512521403892605
+        ],
+        "cargo": [
+          -0.000003971090248216571,
+          4.859993346826001,
+          -0.42487478870267803
+        ],
+        "velocity": [
+          0.00007319374311143632,
+          0.00009089023108646311,
+          0.0011079530116712354
+        ],
+        "quaternion": [
+          0,
+          1,
+          0,
+          6.123233995736766e-17
+        ],
+        "bodyId": 93,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "afterClear": {
+        "player": [
+          0,
+          3.8,
+          0.29512521403892605
+        ],
+        "cargo": [
+          -0.000003971090248216571,
+          4.859993346826001,
+          -0.42487478870267803
+        ],
+        "velocity": [
+          0.00007319374311143632,
+          0.00009089023108646311,
+          0.0011079530116712354
+        ],
+        "quaternion": [
+          0,
+          1,
+          0,
+          6.123233995736766e-17
+        ],
+        "bodyId": 93,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "minimumZ": -0.4248655585017044,
+      "after": {
+        "player": [
+          0,
+          3.8,
+          0.29519455449078014
+        ],
+        "cargo": [
+          0.00001501134256163194,
+          4.18999814781168,
+          -0.42457939565628455
+        ],
+        "velocity": [
+          -6.970755907413046e-7,
+          5.484490639418027e-11,
+          0.0000011116924732690962
+        ],
+        "quaternion": [
+          4.081706770676233e-8,
+          0.9999999999999991,
+          -5.343224826684141e-9,
+          -1.6295426030525807e-9
+        ],
+        "bodyId": 93,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "sameBody": true
+    },
+    {
+      "depth": 0.3,
+      "clearDelayTicks": 0,
+      "clearFirst": true,
+      "directClear": false,
+      "initial": {
+        "player": [
+          0,
+          3.8,
+          1.3
+        ],
+        "cargo": [
+          0,
+          4.86,
+          0.45
+        ],
+        "velocity": [
+          0,
+          0,
+          0
+        ],
+        "quaternion": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "bodyId": 98,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "ticks": 156,
+      "before": {
+        "player": [
+          0,
+          3.8,
+          0.29512521403892605
+        ],
+        "cargo": [
+          -0.000003971090248216571,
+          4.859993346826001,
+          -0.42487478870267803
+        ],
+        "velocity": [
+          0.00007319374311143632,
+          0.00009089023108646311,
+          0.0011079530116712354
+        ],
+        "quaternion": [
+          0,
+          1,
+          0,
+          6.123233995736766e-17
+        ],
+        "bodyId": 98,
+        "held": true,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "afterRelease": {
+        "player": [
+          0,
+          3.8,
+          0.47500000000000003
+        ],
+        "cargo": [
+          -0.000003971090248216571,
+          4.859993346826001,
+          -0.42487478870267803
+        ],
+        "velocity": [
+          0.00007319374311143632,
+          0.00009089023108646311,
+          0.0011079530116712354
+        ],
+        "quaternion": [
+          0,
+          1,
+          0,
+          6.123233995736766e-17
+        ],
+        "bodyId": 98,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "afterClear": {
+        "player": [
+          0,
+          3.8,
+          0.47500000000000003
+        ],
+        "cargo": [
+          -0.000003971090248216571,
+          4.859993346826001,
+          -0.42487478870267803
+        ],
+        "velocity": [
+          0.00007319374311143632,
+          0.00009089023108646311,
+          0.0011079530116712354
+        ],
+        "quaternion": [
+          0,
+          1,
+          0,
+          6.123233995736766e-17
+        ],
+        "bodyId": 98,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "minimumZ": -0.4248655585017044,
+      "after": {
+        "player": [
+          0,
+          3.8,
+          0.4750693404518541
+        ],
+        "cargo": [
+          0.00001501134256163194,
+          4.18999814781168,
+          -0.42457939565628455
+        ],
+        "velocity": [
+          -6.970755907413046e-7,
+          5.484490639418027e-11,
+          0.0000011116924732690962
+        ],
+        "quaternion": [
+          4.081706770676233e-8,
+          0.9999999999999991,
+          -5.343224826684141e-9,
+          -1.6295426030525807e-9
+        ],
+        "bodyId": 98,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "sameBody": true
+    },
+    {
+      "depth": 0.3,
+      "clearDelayTicks": 0,
+      "clearFirst": false,
+      "directClear": true,
+      "initial": {
+        "player": [
+          0,
+          3.8,
+          1.3
+        ],
+        "cargo": [
+          0,
+          4.86,
+          0.45
+        ],
+        "velocity": [
+          0,
+          0,
+          0
+        ],
+        "quaternion": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "bodyId": 103,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "ticks": 156,
+      "before": {
+        "player": [
+          0,
+          3.8,
+          0.29512521403892605
+        ],
+        "cargo": [
+          -0.000003971090248216571,
+          4.859993346826001,
+          -0.42487478870267803
+        ],
+        "velocity": [
+          0.00007319374311143632,
+          0.00009089023108646311,
+          0.0011079530116712354
+        ],
+        "quaternion": [
+          0,
+          1,
+          0,
+          6.123233995736766e-17
+        ],
+        "bodyId": 103,
+        "held": true,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "afterRelease": {
+        "player": [
+          0,
+          3.8,
+          0.47500000000000003
+        ],
+        "cargo": [
+          -0.000003971090248216571,
+          4.859993346826001,
+          -0.42487478870267803
+        ],
+        "velocity": [
+          0.00007319374311143632,
+          0.00009089023108646311,
+          0.0011079530116712354
+        ],
+        "quaternion": [
+          0,
+          1,
+          0,
+          6.123233995736766e-17
+        ],
+        "bodyId": 103,
+        "held": true,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "afterClear": {
+        "player": [
+          0,
+          3.8,
+          0.47500000000000003
+        ],
+        "cargo": [
+          -0.000003971090248216571,
+          4.859993346826001,
+          -0.42487478870267803
+        ],
+        "velocity": [
+          0.00007319374311143632,
+          0.00009089023108646311,
+          0.0011079530116712354
+        ],
+        "quaternion": [
+          0,
+          1,
+          0,
+          6.123233995736766e-17
+        ],
+        "bodyId": 103,
+        "held": true,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "minimumZ": -0.410148613037485,
+      "after": {
+        "player": [
+          0,
+          3.8,
+          0.6201611925079753
+        ],
+        "cargo": [
+          -6.752938602391235e-7,
+          4.859986842079439,
+          -0.41014861302914957
+        ],
+        "velocity": [
+          0.000018129720203156704,
+          -0.00011603990311100492,
+          -0.46743869436377666
+        ],
+        "quaternion": [
+          6.485317218693719e-9,
+          0.999999999995603,
+          3.851845738079682e-7,
+          -0.0000029403563770022128
+        ],
+        "bodyId": 103,
+        "held": true,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "sameBody": true
+    },
+    {
+      "depth": 0.2,
+      "clearDelayTicks": 0,
+      "clearFirst": false,
+      "directClear": false,
+      "initial": {
+        "player": [
+          0,
+          3.8,
+          1.3
+        ],
+        "cargo": [
+          0,
+          4.86,
+          0.45
+        ],
+        "velocity": [
+          0,
+          0,
+          0
+        ],
+        "quaternion": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "bodyId": 108,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "ticks": 160,
+      "before": {
+        "player": [
+          0,
+          3.8,
+          0.1951069590860195
+        ],
+        "cargo": [
+          -0.000001907958913796759,
+          4.859994995766483,
+          -0.5248930437223275
+        ],
+        "velocity": [
+          0.00004630187510715971,
+          0.00011382855086731698,
+          0.0011349255586872277
+        ],
+        "quaternion": [
+          0,
+          1,
+          0,
+          6.123233995736766e-17
+        ],
+        "bodyId": 108,
+        "held": true,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "afterRelease": {
+        "player": [
+          0,
+          3.8,
+          0.1951069590860195
+        ],
+        "cargo": [
+          -0.000001907958913796759,
+          4.859994995766483,
+          -0.5248930437223275
+        ],
+        "velocity": [
+          0.00004630187510715971,
+          0.00011382855086731698,
+          0.0011349255586872277
+        ],
+        "quaternion": [
+          0,
+          1,
+          0,
+          6.123233995736766e-17
+        ],
+        "bodyId": 108,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "afterClear": {
+        "player": [
+          0,
+          3.8,
+          0.475
+        ],
+        "cargo": [
+          -0.000001907958913796759,
+          4.859994995766483,
+          -0.5248930437223275
+        ],
+        "velocity": [
+          0.00004630187510715971,
+          0.00011382855086731698,
+          0.0011349255586872277
+        ],
+        "quaternion": [
+          0,
+          1,
+          0,
+          6.123233995736766e-17
+        ],
+        "bodyId": 108,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "minimumZ": -0.5248835888168518,
+      "after": {
+        "player": [
+          0,
+          3.8,
+          0.4750710285095406
+        ],
+        "cargo": [
+          0.00000992444654277027,
+          4.1899981478116795,
+          -0.5245904791911995
+        ],
+        "velocity": [
+          -6.970755910656707e-7,
+          5.4820231687457976e-11,
+          0.000001111692473428335
+        ],
+        "quaternion": [
+          4.081706770414711e-8,
+          0.9999999999999991,
+          -5.3432247750196194e-9,
+          -1.6289122882979208e-9
+        ],
+        "bodyId": 108,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "sameBody": true
+    },
+    {
+      "depth": 0.2,
+      "clearDelayTicks": 1,
+      "clearFirst": false,
+      "directClear": false,
+      "initial": {
+        "player": [
+          0,
+          3.8,
+          1.3
+        ],
+        "cargo": [
+          0,
+          4.86,
+          0.45
+        ],
+        "velocity": [
+          0,
+          0,
+          0
+        ],
+        "quaternion": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "bodyId": 113,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "ticks": 160,
+      "before": {
+        "player": [
+          0,
+          3.8,
+          0.1951069590860195
+        ],
+        "cargo": [
+          -0.000001907958913796759,
+          4.859994995766483,
+          -0.5248930437223275
+        ],
+        "velocity": [
+          0.00004630187510715971,
+          0.00011382855086731698,
+          0.0011349255586872277
+        ],
+        "quaternion": [
+          0,
+          1,
+          0,
+          6.123233995736766e-17
+        ],
+        "bodyId": 113,
+        "held": true,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "afterRelease": {
+        "player": [
+          0,
+          3.8,
+          0.1951069590860195
+        ],
+        "cargo": [
+          -0.000001907958913796759,
+          4.859994995766483,
+          -0.5248930437223275
+        ],
+        "velocity": [
+          0.00004630187510715971,
+          0.00011382855086731698,
+          0.0011349255586872277
+        ],
+        "quaternion": [
+          0,
+          1,
+          0,
+          6.123233995736766e-17
+        ],
+        "bodyId": 113,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "afterClear": {
+        "player": [
+          0,
+          3.8,
+          0.475
+        ],
+        "cargo": [
+          -0.00000152222449347846,
+          4.858641777389491,
+          -0.5248835888168518
+        ],
+        "velocity": [
+          0.000046288130438195904,
+          -0.16238620523903313,
+          0.0011345886570808324
+        ],
+        "quaternion": [
+          0,
+          1,
+          0,
+          6.123233995736766e-17
+        ],
+        "bodyId": 113,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "minimumZ": -0.5248741367180562,
+      "after": {
+        "player": [
+          0,
+          3.8,
+          0.4750626824396647
+        ],
+        "cargo": [
+          0.000009918637579511568,
+          4.189998147812031,
+          -0.5245904699270956
+        ],
+        "velocity": [
+          -6.970755910442075e-7,
+          4.2229414409789e-11,
+          0.0000011116924731327671
+        ],
+        "quaternion": [
+          4.0817067698207735e-8,
+          0.9999999999999993,
+          -5.343224831144809e-9,
+          -1.6466123264507748e-9
+        ],
+        "bodyId": 113,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "sameBody": true
+    },
+    {
+      "depth": 0.2,
+      "clearDelayTicks": 5,
+      "clearFirst": false,
+      "directClear": false,
+      "initial": {
+        "player": [
+          0,
+          3.8,
+          1.3
+        ],
+        "cargo": [
+          0,
+          4.86,
+          0.45
+        ],
+        "velocity": [
+          0,
+          0,
+          0
+        ],
+        "quaternion": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "bodyId": 118,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "ticks": 160,
+      "before": {
+        "player": [
+          0,
+          3.8,
+          0.1951069590860195
+        ],
+        "cargo": [
+          -0.000001907958913796759,
+          4.859994995766483,
+          -0.5248930437223275
+        ],
+        "velocity": [
+          0.00004630187510715971,
+          0.00011382855086731698,
+          0.0011349255586872277
+        ],
+        "quaternion": [
+          0,
+          1,
+          0,
+          6.123233995736766e-17
+        ],
+        "bodyId": 118,
+        "held": true,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "afterRelease": {
+        "player": [
+          0,
+          3.8,
+          0.1951069590860195
+        ],
+        "cargo": [
+          -0.000001907958913796759,
+          4.859994995766483,
+          -0.5248930437223275
+        ],
+        "velocity": [
+          0.00004630187510715971,
+          0.00011382855086731698,
+          0.0011349255586872277
+        ],
+        "quaternion": [
+          0,
+          1,
+          0,
+          6.123233995736766e-17
+        ],
+        "bodyId": 118,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "afterClear": {
+        "player": [
+          0,
+          3.8,
+          0.475
+        ],
+        "cargo": [
+          1.956847857842741e-8,
+          4.839695272273537,
+          -0.5248457972534185
+        ],
+        "velocity": [
+          0.00004623319255115393,
+          -0.8119041037183398,
+          0.0011332420504477341
+        ],
+        "quaternion": [
+          0,
+          1,
+          0,
+          6.123233995736766e-17
+        ],
+        "bodyId": 118,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "minimumZ": -0.5248363563730136,
+      "after": {
+        "player": [
+          0,
+          3.8,
+          0.47503801882148217
+        ],
+        "cargo": [
+          0.000009901210689736898,
+          4.189998147812671,
+          -0.5245904421347837
+        ],
+        "velocity": [
+          0,
+          0,
+          0
+        ],
+        "quaternion": [
+          4.081706768138661e-8,
+          0.9999999999999991,
+          -5.343224933431341e-9,
+          -1.699712440952216e-9
+        ],
+        "bodyId": 118,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "sameBody": true
+    },
+    {
+      "depth": 0.2,
+      "clearDelayTicks": 30,
+      "clearFirst": false,
+      "directClear": false,
+      "initial": {
+        "player": [
+          0,
+          3.8,
+          1.3
+        ],
+        "cargo": [
+          0,
+          4.86,
+          0.45
+        ],
+        "velocity": [
+          0,
+          0,
+          0
+        ],
+        "quaternion": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "bodyId": 123,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "ticks": 160,
+      "before": {
+        "player": [
+          0,
+          3.8,
+          0.1951069590860195
+        ],
+        "cargo": [
+          -0.000001907958913796759,
+          4.859994995766483,
+          -0.5248930437223275
+        ],
+        "velocity": [
+          0.00004630187510715971,
+          0.00011382855086731698,
+          0.0011349255586872277
+        ],
+        "quaternion": [
+          0,
+          1,
+          0,
+          6.123233995736766e-17
+        ],
+        "bodyId": 123,
+        "held": true,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "afterRelease": {
+        "player": [
+          0,
+          3.8,
+          0.1951069590860195
+        ],
+        "cargo": [
+          -0.000001907958913796759,
+          4.859994995766483,
+          -0.5248930437223275
+        ],
+        "velocity": [
+          0.00004630187510715971,
+          0.00011382855086731698,
+          0.0011349255586872277
+        ],
+        "quaternion": [
+          0,
+          1,
+          0,
+          6.123233995736766e-17
+        ],
+        "bodyId": 123,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "afterClear": {
+        "player": [
+          0,
+          3.8,
+          0.475
+        ],
+        "cargo": [
+          0.000009614401787145607,
+          4.232138987845788,
+          -0.5246106140879844
+        ],
+        "velocity": [
+          0.000045891304970884726,
+          -4.853961681997316,
+          0.0011248618940901947
+        ],
+        "quaternion": [
+          0,
+          1,
+          0,
+          6.123233995736766e-17
+        ],
+        "bodyId": 123,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "minimumZ": -0.5246012430214855,
+      "after": {
+        "player": [
+          0,
+          3.8,
+          0.47500167043043573
+        ],
+        "cargo": [
+          0.000009901210689736898,
+          4.189998147812671,
+          -0.5245904421347837
+        ],
+        "velocity": [
+          0,
+          0,
+          0
+        ],
+        "quaternion": [
+          4.081706768138661e-8,
+          0.9999999999999991,
+          -5.343224933431341e-9,
+          -1.699712440952216e-9
+        ],
+        "bodyId": 123,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "sameBody": true
+    },
+    {
+      "depth": 0.2,
+      "clearDelayTicks": null,
+      "clearFirst": false,
+      "directClear": false,
+      "initial": {
+        "player": [
+          0,
+          3.8,
+          1.3
+        ],
+        "cargo": [
+          0,
+          4.86,
+          0.45
+        ],
+        "velocity": [
+          0,
+          0,
+          0
+        ],
+        "quaternion": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "bodyId": 128,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "ticks": 160,
+      "before": {
+        "player": [
+          0,
+          3.8,
+          0.1951069590860195
+        ],
+        "cargo": [
+          -0.000001907958913796759,
+          4.859994995766483,
+          -0.5248930437223275
+        ],
+        "velocity": [
+          0.00004630187510715971,
+          0.00011382855086731698,
+          0.0011349255586872277
+        ],
+        "quaternion": [
+          0,
+          1,
+          0,
+          6.123233995736766e-17
+        ],
+        "bodyId": 128,
+        "held": true,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "afterRelease": {
+        "player": [
+          0,
+          3.8,
+          0.1951069590860195
+        ],
+        "cargo": [
+          -0.000001907958913796759,
+          4.859994995766483,
+          -0.5248930437223275
+        ],
+        "velocity": [
+          0.00004630187510715971,
+          0.00011382855086731698,
+          0.0011349255586872277
+        ],
+        "quaternion": [
+          0,
+          1,
+          0,
+          6.123233995736766e-17
+        ],
+        "bodyId": 128,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "afterClear": {
+        "player": [
+          0,
+          3.8,
+          0.1951069590860195
+        ],
+        "cargo": [
+          -0.000001907958913796759,
+          4.859994995766483,
+          -0.5248930437223275
+        ],
+        "velocity": [
+          0.00004630187510715971,
+          0.00011382855086731698,
+          0.0011349255586872277
+        ],
+        "quaternion": [
+          0,
+          1,
+          0,
+          6.123233995736766e-17
+        ],
+        "bodyId": 128,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "minimumZ": -0.5248835888168518,
+      "after": {
+        "player": [
+          0,
+          3.8,
+          0.1951779875955602
+        ],
+        "cargo": [
+          0.00000992444654277027,
+          4.1899981478116795,
+          -0.5245904791911995
+        ],
+        "velocity": [
+          -6.970755910656707e-7,
+          5.4820231687457976e-11,
+          0.000001111692473428335
+        ],
+        "quaternion": [
+          4.081706770414711e-8,
+          0.9999999999999991,
+          -5.3432247750196194e-9,
+          -1.6289122882979208e-9
+        ],
+        "bodyId": 128,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "sameBody": true
+    },
+    {
+      "depth": 0.2,
+      "clearDelayTicks": 0,
+      "clearFirst": true,
+      "directClear": false,
+      "initial": {
+        "player": [
+          0,
+          3.8,
+          1.3
+        ],
+        "cargo": [
+          0,
+          4.86,
+          0.45
+        ],
+        "velocity": [
+          0,
+          0,
+          0
+        ],
+        "quaternion": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "bodyId": 133,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "ticks": 160,
+      "before": {
+        "player": [
+          0,
+          3.8,
+          0.1951069590860195
+        ],
+        "cargo": [
+          -0.000001907958913796759,
+          4.859994995766483,
+          -0.5248930437223275
+        ],
+        "velocity": [
+          0.00004630187510715971,
+          0.00011382855086731698,
+          0.0011349255586872277
+        ],
+        "quaternion": [
+          0,
+          1,
+          0,
+          6.123233995736766e-17
+        ],
+        "bodyId": 133,
+        "held": true,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "afterRelease": {
+        "player": [
+          0,
+          3.8,
+          0.475
+        ],
+        "cargo": [
+          -0.000001907958913796759,
+          4.859994995766483,
+          -0.5248930437223275
+        ],
+        "velocity": [
+          0.00004630187510715971,
+          0.00011382855086731698,
+          0.0011349255586872277
+        ],
+        "quaternion": [
+          0,
+          1,
+          0,
+          6.123233995736766e-17
+        ],
+        "bodyId": 133,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "afterClear": {
+        "player": [
+          0,
+          3.8,
+          0.475
+        ],
+        "cargo": [
+          -0.000001907958913796759,
+          4.859994995766483,
+          -0.5248930437223275
+        ],
+        "velocity": [
+          0.00004630187510715971,
+          0.00011382855086731698,
+          0.0011349255586872277
+        ],
+        "quaternion": [
+          0,
+          1,
+          0,
+          6.123233995736766e-17
+        ],
+        "bodyId": 133,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "minimumZ": -0.5248835888168518,
+      "after": {
+        "player": [
+          0,
+          3.8,
+          0.4750710285095406
+        ],
+        "cargo": [
+          0.00000992444654277027,
+          4.1899981478116795,
+          -0.5245904791911995
+        ],
+        "velocity": [
+          -6.970755910656707e-7,
+          5.4820231687457976e-11,
+          0.000001111692473428335
+        ],
+        "quaternion": [
+          4.081706770414711e-8,
+          0.9999999999999991,
+          -5.3432247750196194e-9,
+          -1.6289122882979208e-9
+        ],
+        "bodyId": 133,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "sameBody": true
+    },
+    {
+      "depth": 0.2,
+      "clearDelayTicks": 0,
+      "clearFirst": false,
+      "directClear": true,
+      "initial": {
+        "player": [
+          0,
+          3.8,
+          1.3
+        ],
+        "cargo": [
+          0,
+          4.86,
+          0.45
+        ],
+        "velocity": [
+          0,
+          0,
+          0
+        ],
+        "quaternion": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "bodyId": 138,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "ticks": 160,
+      "before": {
+        "player": [
+          0,
+          3.8,
+          0.1951069590860195
+        ],
+        "cargo": [
+          -0.000001907958913796759,
+          4.859994995766483,
+          -0.5248930437223275
+        ],
+        "velocity": [
+          0.00004630187510715971,
+          0.00011382855086731698,
+          0.0011349255586872277
+        ],
+        "quaternion": [
+          0,
+          1,
+          0,
+          6.123233995736766e-17
+        ],
+        "bodyId": 138,
+        "held": true,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "afterRelease": {
+        "player": [
+          0,
+          3.8,
+          0.475
+        ],
+        "cargo": [
+          -0.000001907958913796759,
+          4.859994995766483,
+          -0.5248930437223275
+        ],
+        "velocity": [
+          0.00004630187510715971,
+          0.00011382855086731698,
+          0.0011349255586872277
+        ],
+        "quaternion": [
+          0,
+          1,
+          0,
+          6.123233995736766e-17
+        ],
+        "bodyId": 138,
+        "held": true,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "afterClear": {
+        "player": [
+          0,
+          3.8,
+          0.475
+        ],
+        "cargo": [
+          -0.000001907958913796759,
+          4.859994995766483,
+          -0.5248930437223275
+        ],
+        "velocity": [
+          0.00004630187510715971,
+          0.00011382855086731698,
+          0.0011349255586872277
+        ],
+        "quaternion": [
+          0,
+          1,
+          0,
+          6.123233995736766e-17
+        ],
+        "bodyId": 138,
+        "held": true,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "minimumZ": -0.41014861303594846,
+      "after": {
+        "player": [
+          0,
+          3.8,
+          0.6201626822135948
+        ],
+        "cargo": [
+          -6.742724465472191e-7,
+          4.85998684357228,
+          -0.41014861302914796
+        ],
+        "velocity": [
+          0.000018128107733674226,
+          -0.00011604224863330458,
+          -0.4674386943637305
+        ],
+        "quaternion": [
+          6.485329365558089e-9,
+          0.999999999995603,
+          3.851845468137883e-7,
+          -0.000002940356380703892
+        ],
+        "bodyId": 138,
+        "held": true,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "sameBody": true
+    },
+    {
+      "depth": 0.1,
+      "clearDelayTicks": 0,
+      "clearFirst": false,
+      "directClear": false,
+      "initial": {
+        "player": [
+          0,
+          3.8,
+          1.3
+        ],
+        "cargo": [
+          0,
+          4.86,
+          0.45
+        ],
+        "velocity": [
+          0,
+          0,
+          0
+        ],
+        "quaternion": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "bodyId": 143,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "ticks": 164,
+      "before": {
+        "player": [
+          0,
+          3.8,
+          0.09507655158706849
+        ],
+        "cargo": [
+          7.795002103579178e-7,
+          4.86000218296888,
+          -0.6249234512708179
+        ],
+        "velocity": [
+          0.000004853519353720945,
+          0.000012714524917156946,
+          0.0011549457115122032
+        ],
+        "quaternion": [
+          0,
+          1,
+          0,
+          6.123233995736766e-17
+        ],
+        "bodyId": 143,
+        "held": true,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "afterRelease": {
+        "player": [
+          0,
+          3.8,
+          0.09507655158706849
+        ],
+        "cargo": [
+          7.795002103579178e-7,
+          4.86000218296888,
+          -0.6249234512708179
+        ],
+        "velocity": [
+          0.000004853519353720945,
+          0.000012714524917156946,
+          0.0011549457115122032
+        ],
+        "quaternion": [
+          0,
+          1,
+          0,
+          6.123233995736766e-17
+        ],
+        "bodyId": 143,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "afterClear": {
+        "player": [
+          0,
+          3.8,
+          0.475
+        ],
+        "cargo": [
+          7.795002103579178e-7,
+          4.86000218296888,
+          -0.6249234512708179
+        ],
+        "velocity": [
+          0.000004853519353720945,
+          0.000012714524917156946,
+          0.0011549457115122032
+        ],
+        "quaternion": [
+          0,
+          1,
+          0,
+          6.123233995736766e-17
+        ],
+        "bodyId": 143,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "minimumZ": -0.6249138295802601,
+      "after": {
+        "player": [
+          0,
+          3.8,
+          0.4750722814565771
+        ],
+        "cargo": [
+          0.0000015915789040836628,
+          4.18999814781168,
+          -0.6246155637453723
+        ],
+        "velocity": [
+          -6.970755852737903e-7,
+          5.4805188165474306e-11,
+          0.0000011116924826525067
+        ],
+        "quaternion": [
+          4.081706763901224e-8,
+          0.9999999999999991,
+          -5.343224777065842e-9,
+          -1.6266404678135773e-9
+        ],
+        "bodyId": 143,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "sameBody": true
+    },
+    {
+      "depth": 0.1,
+      "clearDelayTicks": 1,
+      "clearFirst": false,
+      "directClear": false,
+      "initial": {
+        "player": [
+          0,
+          3.8,
+          1.3
+        ],
+        "cargo": [
+          0,
+          4.86,
+          0.45
+        ],
+        "velocity": [
+          0,
+          0,
+          0
+        ],
+        "quaternion": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "bodyId": 148,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "ticks": 164,
+      "before": {
+        "player": [
+          0,
+          3.8,
+          0.09507655158706849
+        ],
+        "cargo": [
+          7.795002103579178e-7,
+          4.86000218296888,
+          -0.6249234512708179
+        ],
+        "velocity": [
+          0.000004853519353720945,
+          0.000012714524917156946,
+          0.0011549457115122032
+        ],
+        "quaternion": [
+          0,
+          1,
+          0,
+          6.123233995736766e-17
+        ],
+        "bodyId": 148,
+        "held": true,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "afterRelease": {
+        "player": [
+          0,
+          3.8,
+          0.09507655158706849
+        ],
+        "cargo": [
+          7.795002103579178e-7,
+          4.86000218296888,
+          -0.6249234512708179
+        ],
+        "velocity": [
+          0.000004853519353720945,
+          0.000012714524917156946,
+          0.0011549457115122032
+        ],
+        "quaternion": [
+          0,
+          1,
+          0,
+          6.123233995736766e-17
+        ],
+        "bodyId": 148,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "afterClear": {
+        "player": [
+          0,
+          3.8,
+          0.47500000000000003
+        ],
+        "cargo": [
+          8.19934198616024e-7,
+          4.8586481222251345,
+          -0.6249138295802601
+        ],
+        "velocity": [
+          0.000004852078590972742,
+          -0.16248728924937786,
+          0.0011546028669418879
+        ],
+        "quaternion": [
+          0,
+          1,
+          0,
+          6.123233995736766e-17
+        ],
+        "bodyId": 148,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "minimumZ": -0.6249042107458922,
+      "after": {
+        "player": [
+          0,
+          3.8,
+          0.4750637881615437
+        ],
+        "cargo": [
+          0.0000015857699408277176,
+          4.189998147812032,
+          -0.6246155544812683
+        ],
+        "velocity": [
+          -6.97075590713419e-7,
+          4.2210901440853377e-11,
+          0.0000011116924799374645
+        ],
+        "quaternion": [
+          4.081706763675519e-8,
+          0.9999999999999993,
+          -5.343224760649948e-9,
+          -1.6443405059696002e-9
+        ],
+        "bodyId": 148,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "sameBody": true
+    },
+    {
+      "depth": 0.1,
+      "clearDelayTicks": 5,
+      "clearFirst": false,
+      "directClear": false,
+      "initial": {
+        "player": [
+          0,
+          3.8,
+          1.3
+        ],
+        "cargo": [
+          0,
+          4.86,
+          0.45
+        ],
+        "velocity": [
+          0,
+          0,
+          0
+        ],
+        "quaternion": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "bodyId": 153,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "ticks": 164,
+      "before": {
+        "player": [
+          0,
+          3.8,
+          0.09507655158706849
+        ],
+        "cargo": [
+          7.795002103579178e-7,
+          4.86000218296888,
+          -0.6249234512708179
+        ],
+        "velocity": [
+          0.000004853519353720945,
+          0.000012714524917156946,
+          0.0011549457115122032
+        ],
+        "quaternion": [
+          0,
+          1,
+          0,
+          6.123233995736766e-17
+        ],
+        "bodyId": 153,
+        "held": true,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "afterRelease": {
+        "player": [
+          0,
+          3.8,
+          0.09507655158706849
+        ],
+        "cargo": [
+          7.795002103579178e-7,
+          4.86000218296888,
+          -0.6249234512708179
+        ],
+        "velocity": [
+          0.000004853519353720945,
+          0.000012714524917156946,
+          0.0011549457115122032
+        ],
+        "quaternion": [
+          0,
+          1,
+          0,
+          6.123233995736766e-17
+        ],
+        "bodyId": 153,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "afterClear": {
+        "player": [
+          0,
+          3.8,
+          0.475
+        ],
+        "cargo": [
+          9.815501593517463e-7,
+          4.839698250141985,
+          -0.6248753713714511
+        ],
+        "velocity": [
+          0.000004846319815601471,
+          -0.8120050677553372,
+          0.0011532325060895075
+        ],
+        "quaternion": [
+          0,
+          1,
+          0,
+          6.123233995736766e-17
+        ],
+        "bodyId": 153,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "minimumZ": -0.6248657639533671,
+      "after": {
+        "player": [
+          0,
+          3.8,
+          0.47503868947570305
+        ],
+        "cargo": [
+          0.0000015683430510467188,
+          4.1899981478126715,
+          -0.6246155266889565
+        ],
+        "velocity": [
+          0,
+          0,
+          0
+        ],
+        "quaternion": [
+          4.081706761188425e-8,
+          0.9999999999999991,
+          -5.343224891612219e-9,
+          -1.6974406204619245e-9
+        ],
+        "bodyId": 153,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "sameBody": true
+    },
+    {
+      "depth": 0.1,
+      "clearDelayTicks": 30,
+      "clearFirst": false,
+      "directClear": false,
+      "initial": {
+        "player": [
+          0,
+          3.8,
+          1.3
+        ],
+        "cargo": [
+          0,
+          4.86,
+          0.45
+        ],
+        "velocity": [
+          0,
+          0,
+          0
+        ],
+        "quaternion": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "bodyId": 158,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "ticks": 164,
+      "before": {
+        "player": [
+          0,
+          3.8,
+          0.09507655158706849
+        ],
+        "cargo": [
+          7.795002103579178e-7,
+          4.86000218296888,
+          -0.6249234512708179
+        ],
+        "velocity": [
+          0.000004853519353720945,
+          0.000012714524917156946,
+          0.0011549457115122032
+        ],
+        "quaternion": [
+          0,
+          1,
+          0,
+          6.123233995736766e-17
+        ],
+        "bodyId": 158,
+        "held": true,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "afterRelease": {
+        "player": [
+          0,
+          3.8,
+          0.09507655158706849
+        ],
+        "cargo": [
+          7.795002103579178e-7,
+          4.86000218296888,
+          -0.6249234512708179
+        ],
+        "velocity": [
+          0.000004853519353720945,
+          0.000012714524917156946,
+          0.0011549457115122032
+        ],
+        "quaternion": [
+          0,
+          1,
+          0,
+          6.123233995736766e-17
+        ],
+        "bodyId": 158,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "afterClear": {
+        "player": [
+          0,
+          3.8,
+          0.475
+        ],
+        "cargo": [
+          0.0000019873130804230832,
+          4.232121012519105,
+          -0.6246360395613082
+        ],
+        "velocity": [
+          0.000004810482001608129,
+          -4.854061899420281,
+          0.0011447045232867083
+        ],
+        "quaternion": [
+          0,
+          1,
+          0,
+          6.123233995736766e-17
+        ],
+        "bodyId": 158,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "minimumZ": -0.6246265031886515,
+      "after": {
+        "player": [
+          0,
+          3.8,
+          0.47500169989692603
+        ],
+        "cargo": [
+          0.0000015683430510467188,
+          4.1899981478126715,
+          -0.6246155266889565
+        ],
+        "velocity": [
+          0,
+          0,
+          0
+        ],
+        "quaternion": [
+          4.081706761188425e-8,
+          0.9999999999999991,
+          -5.343224891612219e-9,
+          -1.6974406204619245e-9
+        ],
+        "bodyId": 158,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "sameBody": true
+    },
+    {
+      "depth": 0.1,
+      "clearDelayTicks": null,
+      "clearFirst": false,
+      "directClear": false,
+      "initial": {
+        "player": [
+          0,
+          3.8,
+          1.3
+        ],
+        "cargo": [
+          0,
+          4.86,
+          0.45
+        ],
+        "velocity": [
+          0,
+          0,
+          0
+        ],
+        "quaternion": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "bodyId": 163,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "ticks": 164,
+      "before": {
+        "player": [
+          0,
+          3.8,
+          0.09507655158706849
+        ],
+        "cargo": [
+          7.795002103579178e-7,
+          4.86000218296888,
+          -0.6249234512708179
+        ],
+        "velocity": [
+          0.000004853519353720945,
+          0.000012714524917156946,
+          0.0011549457115122032
+        ],
+        "quaternion": [
+          0,
+          1,
+          0,
+          6.123233995736766e-17
+        ],
+        "bodyId": 163,
+        "held": true,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "afterRelease": {
+        "player": [
+          0,
+          3.8,
+          0.09507655158706849
+        ],
+        "cargo": [
+          7.795002103579178e-7,
+          4.86000218296888,
+          -0.6249234512708179
+        ],
+        "velocity": [
+          0.000004853519353720945,
+          0.000012714524917156946,
+          0.0011549457115122032
+        ],
+        "quaternion": [
+          0,
+          1,
+          0,
+          6.123233995736766e-17
+        ],
+        "bodyId": 163,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "afterClear": {
+        "player": [
+          0,
+          3.8,
+          0.09507655158706849
+        ],
+        "cargo": [
+          7.795002103579178e-7,
+          4.86000218296888,
+          -0.6249234512708179
+        ],
+        "velocity": [
+          0.000004853519353720945,
+          0.000012714524917156946,
+          0.0011549457115122032
+        ],
+        "quaternion": [
+          0,
+          1,
+          0,
+          6.123233995736766e-17
+        ],
+        "bodyId": 163,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "minimumZ": -0.6249138295802601,
+      "after": {
+        "player": [
+          0,
+          3.8,
+          0.09514883304364544
+        ],
+        "cargo": [
+          0.0000015915789040836628,
+          4.18999814781168,
+          -0.6246155637453723
+        ],
+        "velocity": [
+          -6.970755852737903e-7,
+          5.4805188165474306e-11,
+          0.0000011116924826525067
+        ],
+        "quaternion": [
+          4.081706763901224e-8,
+          0.9999999999999991,
+          -5.343224777065842e-9,
+          -1.6266404678135773e-9
+        ],
+        "bodyId": 163,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "sameBody": true
+    },
+    {
+      "depth": 0.1,
+      "clearDelayTicks": 0,
+      "clearFirst": true,
+      "directClear": false,
+      "initial": {
+        "player": [
+          0,
+          3.8,
+          1.3
+        ],
+        "cargo": [
+          0,
+          4.86,
+          0.45
+        ],
+        "velocity": [
+          0,
+          0,
+          0
+        ],
+        "quaternion": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "bodyId": 168,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "ticks": 164,
+      "before": {
+        "player": [
+          0,
+          3.8,
+          0.09507655158706849
+        ],
+        "cargo": [
+          7.795002103579178e-7,
+          4.86000218296888,
+          -0.6249234512708179
+        ],
+        "velocity": [
+          0.000004853519353720945,
+          0.000012714524917156946,
+          0.0011549457115122032
+        ],
+        "quaternion": [
+          0,
+          1,
+          0,
+          6.123233995736766e-17
+        ],
+        "bodyId": 168,
+        "held": true,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "afterRelease": {
+        "player": [
+          0,
+          3.8,
+          0.475
+        ],
+        "cargo": [
+          7.795002103579178e-7,
+          4.86000218296888,
+          -0.6249234512708179
+        ],
+        "velocity": [
+          0.000004853519353720945,
+          0.000012714524917156946,
+          0.0011549457115122032
+        ],
+        "quaternion": [
+          0,
+          1,
+          0,
+          6.123233995736766e-17
+        ],
+        "bodyId": 168,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "afterClear": {
+        "player": [
+          0,
+          3.8,
+          0.475
+        ],
+        "cargo": [
+          7.795002103579178e-7,
+          4.86000218296888,
+          -0.6249234512708179
+        ],
+        "velocity": [
+          0.000004853519353720945,
+          0.000012714524917156946,
+          0.0011549457115122032
+        ],
+        "quaternion": [
+          0,
+          1,
+          0,
+          6.123233995736766e-17
+        ],
+        "bodyId": 168,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "minimumZ": -0.6249138295802601,
+      "after": {
+        "player": [
+          0,
+          3.8,
+          0.4750722814565771
+        ],
+        "cargo": [
+          0.0000015915789040836628,
+          4.18999814781168,
+          -0.6246155637453723
+        ],
+        "velocity": [
+          -6.970755852737903e-7,
+          5.4805188165474306e-11,
+          0.0000011116924826525067
+        ],
+        "quaternion": [
+          4.081706763901224e-8,
+          0.9999999999999991,
+          -5.343224777065842e-9,
+          -1.6266404678135773e-9
+        ],
+        "bodyId": 168,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "sameBody": true
+    },
+    {
+      "depth": 0.1,
+      "clearDelayTicks": 0,
+      "clearFirst": false,
+      "directClear": true,
+      "initial": {
+        "player": [
+          0,
+          3.8,
+          1.3
+        ],
+        "cargo": [
+          0,
+          4.86,
+          0.45
+        ],
+        "velocity": [
+          0,
+          0,
+          0
+        ],
+        "quaternion": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "bodyId": 173,
+        "held": false,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "ticks": 164,
+      "before": {
+        "player": [
+          0,
+          3.8,
+          0.09507655158706849
+        ],
+        "cargo": [
+          7.795002103579178e-7,
+          4.86000218296888,
+          -0.6249234512708179
+        ],
+        "velocity": [
+          0.000004853519353720945,
+          0.000012714524917156946,
+          0.0011549457115122032
+        ],
+        "quaternion": [
+          0,
+          1,
+          0,
+          6.123233995736766e-17
+        ],
+        "bodyId": 173,
+        "held": true,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "afterRelease": {
+        "player": [
+          0,
+          3.8,
+          0.475
+        ],
+        "cargo": [
+          7.795002103579178e-7,
+          4.86000218296888,
+          -0.6249234512708179
+        ],
+        "velocity": [
+          0.000004853519353720945,
+          0.000012714524917156946,
+          0.0011549457115122032
+        ],
+        "quaternion": [
+          0,
+          1,
+          0,
+          6.123233995736766e-17
+        ],
+        "bodyId": 173,
+        "held": true,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "afterClear": {
+        "player": [
+          0,
+          3.8,
+          0.475
+        ],
+        "cargo": [
+          7.795002103579178e-7,
+          4.86000218296888,
+          -0.6249234512708179
+        ],
+        "velocity": [
+          0.000004853519353720945,
+          0.000012714524917156946,
+          0.0011549457115122032
+        ],
+        "quaternion": [
+          0,
+          1,
+          0,
+          6.123233995736766e-17
+        ],
+        "bodyId": 173,
+        "held": true,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "minimumZ": -0.4416445402685647,
+      "after": {
+        "player": [
+          0,
+          3.8,
+          0.6201637879354278
+        ],
+        "cargo": [
+          -8.242391190396365e-7,
+          4.859987813168347,
+          -0.40625329057611614
+        ],
+        "velocity": [
+          -0.0000027725197115543815,
+          -0.00011555033754968977,
+          -0.6112054316842456
+        ],
+        "quaternion": [
+          4.472954094712444e-9,
+          0.9999999999973417,
+          2.9948728403346403e-7,
+          -0.0000022862398406805545
+        ],
+        "bodyId": 173,
+        "held": true,
+        "playerTeleports": 0,
+        "cargoTransports": 0
+      },
+      "sameBody": true
+    }
+  ],
+  "sourceAfter": {
+    "files": [
+      {
+        "file": "AudioController.js",
+        "sha256": "172b04695f57f77593c459d0418fd88a45b00fe8c9015a2f68a4313869c06264"
+      },
+      {
+        "file": "FullBodyPlayerAnimator.js",
+        "sha256": "f843e3a01ab2abf31aaaad564861019f6880720a08d5ac50477c9e5140053f5a"
+      },
+      {
+        "file": "Game.js",
+        "sha256": "2071169efd1e9687643519782d94e9467e72afecc4f53dfdbb0bf6391ced8bef"
+      },
+      {
+        "file": "InputController.js",
+        "sha256": "9c426261cc522c6a632672875f0b14e68422f3dd4f46dd18e2ba888c4a00c530"
+      },
+      {
+        "file": "LabAdvancedArchitecture.js",
+        "sha256": "fea6d282f0eb301c5e5e6183972f1cee255149cf784242500dd2978359ab8e43"
+      },
+      {
+        "file": "LabAdvancedMechanismArt.js",
+        "sha256": "7000e572acf264951fbdea10adb95148209c7b3d6a96abb131eb35050fb197cf"
+      },
+      {
+        "file": "LabAirForces.js",
+        "sha256": "e2dae42390053ca8d7fbacc3137796930e3ec91dccfe449905b06a3cd72131c8"
+      },
+      {
+        "file": "LabAirflowVisual.js",
+        "sha256": "166644fb5ca94dad5f7c1d947b89f21f9fe9d27b8d9226c306aa95a6ef304d83"
+      },
+      {
+        "file": "LabAnimationJourney.js",
+        "sha256": "b6c143676b60abdb5530e08d66af37aee45e8a9e83f2fc524bcba0748a468f02"
+      },
+      {
+        "file": "LabArchitecturalGate.js",
+        "sha256": "cac5f3659952d7335bf9f49e0511c87d8e3afc6a171700af5af69f9e43732dee"
+      },
+      {
+        "file": "LabArchitecturalModels.js",
+        "sha256": "00a9a8ec4ab38650d85971bf758a56745920a0fd29b6a89ecbd474d67f9803d6"
+      },
+      {
+        "file": "LabArticulatedProps.js",
+        "sha256": "7c5f23ff1ac8b95e0a0e082d1b5107e5550798eb9372a523be251fb6d4d2b150"
+      },
+      {
+        "file": "LabAssetLoader.js",
+        "sha256": "dd1613b56bcfff32225109615deb2625be7668b890a8745ae40aee003a9978bb"
+      },
+      {
+        "file": "LabBalanceChamber.js",
+        "sha256": "d02c43391679899cc04c39fbdbbc606d177bca5d36b72c7cd4f94ab41337cd7e"
+      },
+      {
+        "file": "LabBalanceJourney.js",
+        "sha256": "b0d03dcbbd864c474d7294e31ea58ec33ab416197a39eeb402d6af6f14df1b05"
+      },
+      {
+        "file": "LabBalanceModel.js",
+        "sha256": "bb720ebd6e584cedfe3b90c2e82e4a9a8363d120b974dd4c734c3c6d1cb0eab6"
+      },
+      {
+        "file": "LabBalanceRig.js",
+        "sha256": "8e0856eba608f7afc2dbcd94662338f4a8ddf68227f6bde85fea0d711666daef"
+      },
+      {
+        "file": "LabBrowser3DArt.js",
+        "sha256": "a1e03c285bcc6350f176e30ec27b79c2690e84f9e4c1aaa419d11a8739c51fc4"
+      },
+      {
+        "file": "LabBrowser3DPremium.js",
+        "sha256": "9ba65e410b142dcb2eec0632017deb2acc6ad030c75f93795bd736abda6bcb25"
+      },
+      {
+        "file": "LabCamera.js",
+        "sha256": "66c4fe03e427b22dfaf3b7a75d59147e7d6d7a1ebc9629d820600154ccbac26a"
+      },
+      {
+        "file": "LabCameraBroadPhase.js",
+        "sha256": "8bad01dbaf217fc5d6948aaefd48ee3005899f7d4ef983f02087894e48ac8bed"
+      },
+      {
+        "file": "LabCampaignLevels.js",
+        "sha256": "557dce72fe8c0fe5ff14728583afbf4ae5b97487db8a9512e2999867ff872716"
+      },
+      {
+        "file": "LabCampaignRoute.js",
+        "sha256": "5466df37c20c697ac97fcb0ba7df3992645f8554d703d02d97678ce9a92a58ae"
+      },
+      {
+        "file": "LabCastleMaterials.js",
+        "sha256": "b45df76efbcb33418949512cd3ee700c06a6074cd6d08a33e614c7a77d7b1850"
+      },
+      {
+        "file": "LabCastleMechanismDetails.js",
+        "sha256": "fbe10f73a32e925454b821c2ac267b5e83b90c5e5140839daee890aca0134a5d"
+      },
+      {
+        "file": "LabChapterArt.js",
+        "sha256": "7f55eb6e5329827db475b5718178cc466fc4215164037b6076cacc91952efa79"
+      },
+      {
+        "file": "LabCompanionAnimator.js",
+        "sha256": "8acf2e20491477a2a4b9f3c67d104673eefa67e3cd7f2403b844df1edec3bace"
+      },
+      {
+        "file": "LabCompanionBehavior.js",
+        "sha256": "8065eaa7416d1aed96adf107c9b5b81585f3eebde9a40466527596c8602add61"
+      },
+      {
+        "file": "LabCompanionRig.js",
+        "sha256": "7a97397cc9ce4e8bc9d42b7b39e416e859db31bfcb9e834670855acd9a221d21"
+      },
+      {
+        "file": "LabControls.js",
+        "sha256": "5d5b60dab09325719ed18153c289afebc3767c7585b07f73dd23eca38544ddae"
+      },
+      {
+        "file": "LabCreativeCounterweightJourney.js",
+        "sha256": "eb3f8a707a561b73a5bbd05dfe3cce5a2e3318a7f22e36b2e09826ae3c3b7bfa"
+      },
+      {
+        "file": "LabCreativeCounterweightRoom.js",
+        "sha256": "9f6fd2e01ce1f0a2ed9e2db50f9b17a31156afc896c1dd2bd3011dc243b4b943"
+      },
+      {
+        "file": "LabCreativeFinalJourney.js",
+        "sha256": "0e990bcef88a99cb4a68b327b644a30b54d8bac59f98e712ff56e175ee1f8438"
+      },
+      {
+        "file": "LabCreativeFinalRooms.js",
+        "sha256": "ace1de489722fdcfcef69ef1f486c96f78748c91f713d924bd76014cf90901fb"
+      },
+      {
+        "file": "LabDeckUV.js",
+        "sha256": "85a55720b954c221ff948a4a8216288b15d4c2b7a63c9a6052f735c986b33e5d"
+      },
+      {
+        "file": "LabEarlyArchitecture.js",
+        "sha256": "22e27c491cfd70017ebf4b7e3693905db3cb2063ef696a9ff37240b1a67c03e2"
+      },
+      {
+        "file": "LabEarlyMechanismArt.js",
+        "sha256": "94044b0717eadf7b4d4557ff041e5e3db8bbb0695e81f4cda4973a0453fbe824"
+      },
+      {
+        "file": "LabEpicDirector.js",
+        "sha256": "3afdc4d26e30b44196785dc1ceedf6d904501f5fcc69cf0f2d4d00ffea95f410"
+      },
+      {
+        "file": "LabEvidence.js",
+        "sha256": "d6c1fed0e8a5a44c58293862983d316b757fac11bcf7d00ffd4e84fb6b24fb66"
+      },
+      {
+        "file": "LabExplorationSurfaces.js",
+        "sha256": "534262d66da213b8f02e0bbb76f4db5cdd604df36e53b4fd93f37be84faa2c20"
+      },
+      {
+        "file": "LabExtendedCampaign.js",
+        "sha256": "b693ea6e3a251090166456fb6fd429b1cda03d6157c4314b2f4f30e4b79b1cf8"
+      },
+      {
+        "file": "LabExtendedJourney.js",
+        "sha256": "c6170b9689d3d7f67abb0f7b52a4c728024ced7cd89eef26cea3845843c1ad94"
+      },
+      {
+        "file": "LabFirstLevel.js",
+        "sha256": "37f74b2bf6e80e780f6daf6e5522323eae019cf17136d4a12cf2666d2fe631df"
+      },
+      {
+        "file": "LabFootContact.js",
+        "sha256": "889a6cd5058df0e71b4a5ab6ea2885d7a1fac9805a11f1636dcfd7ed6c720269"
+      },
+      {
+        "file": "LabFoundationChambers.js",
+        "sha256": "661e6f34a65805e27671838322ad136edd3edfaba3f772acdf7702e34f49382b"
+      },
+      {
+        "file": "LabFoundationEdition.js",
+        "sha256": "59c904c14eb9b45b90053d70406d019ba3ae637a8224d9eac81e7d44a34a955a"
+      },
+      {
+        "file": "LabFoundationJourney.js",
+        "sha256": "7cdc740db21dccad699dfa635b4a51affb652e5b6501374d59c776288c16ce8b"
+      },
+      {
+        "file": "LabGame.js",
+        "sha256": "e68764384a42d26e2e0bcd3213ffe7b8fbc4ca0755abe29d8dcaf4360eac4776"
+      },
+      {
+        "file": "LabHeldDevice.js",
+        "sha256": "b95c564c184b622ce0612aea2465413216d9070aca7823547d0fcfc16736935b"
+      },
+      {
+        "file": "LabHumanLab.js",
+        "sha256": "cb8a770c948c404961636958d54c369353a81ae9ee09a634612ae0fa2f0f9cba"
+      },
+      {
+        "file": "LabIntroductoryAlternates.js",
+        "sha256": "1127019eb208260e8e7b28a43624b288bb593700b3bcbd3046f95c40a104845a"
+      },
+      {
+        "file": "LabIntroductoryCampaign.js",
+        "sha256": "0df4b52e4070cb66fb4a518eff40547a76d9e0f581a34608101e9d0f28dc34b5"
+      },
+      {
+        "file": "LabKineticMovement.js",
+        "sha256": "5a5d4bfeb54d5952357faa6a838a3daf8f048dabe54798a639ac5ea4e8534916"
+      },
+      {
+        "file": "LabLateCampaignAim.js",
+        "sha256": "e4f38df8ba5a7fbdc92b3bd4f958154eb285c89dc0da808a53bdf97a885754a3"
+      },
+      {
+        "file": "LabLateCampaignMechanisms.js",
+        "sha256": "ec686927c0445c748d8e9c3bdba738dc73192d91c7096bb2ea82bff1bdae6efb"
+      },
+      {
+        "file": "LabLateCampaignRoomsA.js",
+        "sha256": "e4b1c125113efc3df1cc345936d3efda3dd6869275bfc6270d5fc02de6d1c6f1"
+      },
+      {
+        "file": "LabLateCampaignSpringJourney.js",
+        "sha256": "ea257a225bbda9e781debc60df2ab88acd730290d354d8ea5fe191bfaffda2a1"
+      },
+      {
+        "file": "LabLateCampaignSpringRoom.js",
+        "sha256": "4f06a88b2d58312ac5a28a5292c14739c40857556476a325cd85516a3a84749c"
+      },
+      {
+        "file": "LabLateCampaignThermalJourney.js",
+        "sha256": "efad4e5592fab93f9793509bcc58b0d451c5f52467850856cfc20da75f281aff"
+      },
+      {
+        "file": "LabLateCampaignThermalRoom.js",
+        "sha256": "0ea5c0cfd350d46d334c28f88fc69ab1e6af9c89f62ce2e0dc73828cbb5e0225"
+      },
+      {
+        "file": "LabLevel.js",
+        "sha256": "49d2dea02b4be306934b0893fbdf72e6f5ee1761dc8073ef5d06a9cf45ac7af4"
+      },
+      {
+        "file": "LabLevelLifecycle.js",
+        "sha256": "02d8ae70774f4610f3f1535b474c90e36f16def59ca29095bfda81f08112f85e"
+      },
+      {
+        "file": "LabLightBridge.js",
+        "sha256": "3e5c251e22c5454670a084a0d021a05bf8df7f3e71b4ead40b640d12bf00928e"
+      },
+      {
+        "file": "LabLocalization.js",
+        "sha256": "e9bb56041a12e3521af8bb3cf2e7c7fdab3f546c4f78b601d0aee06ed17b3f41"
+      },
+      {
+        "file": "LabMachinedModels.js",
+        "sha256": "736059de26fb90060f5c957a3ce6b595afba91ec607fafcfc9df5946561f0506"
+      },
+      {
+        "file": "LabMechanismReflections.js",
+        "sha256": "d533dd9983995123e65d1de4165c1fe1a20bb8519fc7c2d33e4b49d6d63e6341"
+      },
+      {
+        "file": "LabMechanisms.js",
+        "sha256": "95906b5a3d55421d09ffec354f794cd02954ddd2860333f80fec3759967fd202"
+      },
+      {
+        "file": "LabOpenArchitecture.js",
+        "sha256": "fb9fd1579acabd5e34d6bd31e5a0f66da7ac71491dcadac392de28d7bb398e14"
+      },
+      {
+        "file": "LabOpenChambers.js",
+        "sha256": "95cb928a83caa3b3d54164d6dda0d150408eda0de44d9fdf12a3a149d81a9ed9"
+      },
+      {
+        "file": "LabOpenEdition.js",
+        "sha256": "d1c07f29446794e90e2c4d964c2da77b265363d245bdfad3a73ce527b76c6831"
+      },
+      {
+        "file": "LabOpenHydraulics.js",
+        "sha256": "eaab133103c962615dfef69d239fa48366d1b74ee41d2ab7f1af4a04f1372a76"
+      },
+      {
+        "file": "LabOpenJourney.js",
+        "sha256": "57cbc1c7d4653abd110a1117a157bca790cde3870d0b9d0cde1c230af7d37ed6"
+      },
+      {
+        "file": "LabOpenLaunch.js",
+        "sha256": "dbc0ed8726f9a2a3a9366126af7278f8f2bc51853a41409f81eb2043c9890e7b"
+      },
+      {
+        "file": "LabOpenStationArt.js",
+        "sha256": "d721775d500d955685ba846682d7abddf90da2bb8ae2b5e5d70a45a8f7e435de"
+      },
+      {
+        "file": "LabPageLifecycle.js",
+        "sha256": "1e5ba728b6141786f7254de16d23f442ad0dd270bdddd19d010347832250cb41"
+      },
+      {
+        "file": "LabPerformance.js",
+        "sha256": "424b1d41734d3a4a771cb2c0ac588d37c3b5649c391226a1a838820fa6f0c455"
+      },
+      {
+        "file": "LabPhysics.js",
+        "sha256": "ef9f066fa8dd2069f71342cf61dbd57eb6e5ede548f5cd40e7947fb91af6eb2f"
+      },
+      {
+        "file": "LabPlateContact.js",
+        "sha256": "6f5c29c328ff663733819f8e0ab287d604d302315b00ecc1d3bd3d0ac5334ed3"
+      },
+      {
+        "file": "LabPlatform.js",
+        "sha256": "53a668bd3c234b88962e362afd949b374e55ef1d799d6403094da73ea7561e64"
+      },
+      {
+        "file": "LabPlayerAnimator.js",
+        "sha256": "a6dec4b18eb48db66dff353e28fa63760127d6bdd90d70a2b67adce3e5432c93"
+      },
+      {
+        "file": "LabPlayerAnimatorBase.js",
+        "sha256": "9b3f8f24be54111eddb515ee18da99a2651ae3ea2aaf603fbb8a165fc1f93e5e"
+      },
+      {
+        "file": "LabPocketCassette.js",
+        "sha256": "feef5b0578b5a5979b0eb81524d5a0d670493541cab907465d19f07b9c13f4e7"
+      },
+      {
+        "file": "LabPocketLoadLink.js",
+        "sha256": "df31b046f9718db15d2262a7bdd2e26d40221fcd37e53e804e95b0e0c1f1ef21"
+      },
+      {
+        "file": "LabPocketReceiver.js",
+        "sha256": "6d6309998c664026f089dbad15890e1ae6ad40e587fbb53d0b18e9cfab9ba9bc"
+      },
+      {
+        "file": "LabPocketSuspension.js",
+        "sha256": "7465801905d33ab2b92e7f348ffa22e2e2ee16e3dd8ded386da1de5b5a338282"
+      },
+      {
+        "file": "LabPortalActors.js",
+        "sha256": "d53b6c1af955a8ea8a64be2ac96d6ebb442791bc0714218ebd2e6e31e3023f5e"
+      },
+      {
+        "file": "LabPortalEdgeJourney.js",
+        "sha256": "2b6985bac6602d50f71b9faa5983a5e6ac0157b9febe46dcf54912ba267dcab7"
+      },
+      {
+        "file": "LabPortalFloorJourney.js",
+        "sha256": "33db5a2b9f895823562e626251fdb04306f00c89921d44b2f6bbe0967fa58213"
+      },
+      {
+        "file": "LabPortalRoom12.js",
+        "sha256": "4b805bbf9a42e64830027edf3a36a12b3c0e0524ea558aa8344411c58b11252d"
+      },
+      {
+        "file": "LabPortalRoom13.js",
+        "sha256": "897c872039738aecafea87fd065d1120aa011e3d87b5eca29fc847a9898cb060"
+      },
+      {
+        "file": "LabPortalRoom14.js",
+        "sha256": "07164996427cb2d29c9684443b4d0660e06eb7d401d202491c4804563ee40294"
+      },
+      {
+        "file": "LabPortalRoom15.js",
+        "sha256": "a7e623faa05e4bd035c4fdc84e5409e4eb9408c872741f902b2e5eecc18f6c6a"
+      },
+      {
+        "file": "LabPortalRoom16.js",
+        "sha256": "f7637012a6feb9ecf1166affe7e39049c02d6d1b0ea198d0aea8dbe2ebc2c950"
+      },
+      {
+        "file": "LabPortalRoom17.js",
+        "sha256": "4ecbb2e1f467e0b117576d116d2fc936c1f9b85db39c3b22a91fd33b918cf61b"
+      },
+      {
+        "file": "LabPortalRoom18.js",
+        "sha256": "40a91673f2839bd23497858f402677052a58e8ed8c048e0ee482c9d2fd110a01"
+      },
+      {
+        "file": "LabPortalRoom19.js",
+        "sha256": "cea8360a9f2b776c1bdba1d3661e7507c336a6f4e6aa1b537443f335ff3261fe"
+      },
+      {
+        "file": "LabPortalRoom20.js",
+        "sha256": "14f98921687e680bea3d1f6adae4246f86db44fb1e30acfadee62da87eee78c8"
+      },
+      {
+        "file": "LabPortalRoom21.js",
+        "sha256": "145fc8960e03abb179af1d9cf213def5d64acbc4b077124fd788a89d14887e04"
+      },
+      {
+        "file": "LabPortalRoom22.js",
+        "sha256": "9f5bb4de8773b9ead7fc222837d51ed55c310fb1218fbd118f906fb2f30b2df7"
+      },
+      {
+        "file": "LabPortalRoom23.js",
+        "sha256": "66faaf7cd3afc91a71b1d9cefee78d3bc4a687f891a8bc7666c0aaea728135c3"
+      },
+      {
+        "file": "LabPortalRoom24.js",
+        "sha256": "d26e8df4bda7c134893b70ec684960e7841be2beae512f5d18c21d8dc6e11eb3"
+      },
+      {
+        "file": "LabPortalRoom25.js",
+        "sha256": "7f45d3a68236cc7ad1223ece790502716703168a077f4f764f43fe83a5575435"
+      },
+      {
+        "file": "LabPortalRoom26.js",
+        "sha256": "3bb1f91d6fc7e4156ff599c6b2f89b6e3c35d6055e492fbf68991f34efde5214"
+      },
+      {
+        "file": "LabPortalRoom27.js",
+        "sha256": "e654f253b71d731b16e80f61b6ff3aada6326285eca727a04e26ae572ee21f10"
+      },
+      {
+        "file": "LabPortalRoom28.js",
+        "sha256": "f53f82fdd89e4c672cdb16632d4471da0ce3d6b3112550fc883a6286730e854d"
+      },
+      {
+        "file": "LabPortalRoom29.js",
+        "sha256": "f6e8ef78e5966a80a33b776cab046c18dfc75618194b290b869bb28365ac0e75"
+      },
+      {
+        "file": "LabPortalRoom30.js",
+        "sha256": "9005a0c61d5e350db172ee146792e631aef8bbcad0fe6faf0a895981a0c13a5b"
+      },
+      {
+        "file": "LabPortalShotVisuals.js",
+        "sha256": "8650fa951ce51910c7feea09fdf5572b619d21484e4f1a32429c43c80026d74f"
+      },
+      {
+        "file": "LabPortalShots.js",
+        "sha256": "d0426f64f0f811983ec484adc3e6883bf5cb436a2f84cb0791b56ac14fc79449"
+      },
+      {
+        "file": "LabPortalWarmup.js",
+        "sha256": "239a25f24f0508cfbc9863c5afad29b02aff6bcdc8cedc0b9f02974a53943284"
+      },
+      {
+        "file": "LabPortals.js",
+        "sha256": "ddc8a55c0d4983dee747c88510b81d52296a0a72988edc3172c6a212285b1d13"
+      },
+      {
+        "file": "LabPostCampaignA.js",
+        "sha256": "31e3cd8c71fa82b73ef0804547cb4b663aac81d1fdf07cf85bd8966d749dad8d"
+      },
+      {
+        "file": "LabPostCampaignB.js",
+        "sha256": "92d07a8f812f0298eb2eb96f06e2899ca42a18e82415aca4b2775b25e1f15480"
+      },
+      {
+        "file": "LabPostJourneyA.js",
+        "sha256": "60895807df6f9ede0137f3aef6a630fe1e733da92524da1b7e6320d8987fedac"
+      },
+      {
+        "file": "LabPostJourneyB.js",
+        "sha256": "f03359fc67b2e370c50e2c367a72717c1a4f9fc9907c2ba8b6cba7663de633d2"
+      },
+      {
+        "file": "LabPreferences.js",
+        "sha256": "03a473c6e049c4628a9c8c75552bfdd1e2d77057297fd81ca17487e9453d5c89"
+      },
+      {
+        "file": "LabPuzzleMechanics.js",
+        "sha256": "22283d794473914f5aa6651542fe464da1f96a1d3027fd76cde5bf7affeb7308"
+      },
+      {
+        "file": "LabRampContact.js",
+        "sha256": "8ee1c3042469023d5d5753adb5414521d9ffcdd7bb83c990391fdc3335523af6"
+      },
+      {
+        "file": "LabRampExplorationJourney.js",
+        "sha256": "a07d65c63345742d44634b768d88b3993e964cce253478256ac65688617a5e81"
+      },
+      {
+        "file": "LabRecoveryJourney.js",
+        "sha256": "2b3b3862f4219d49c34a19427990faf14472f7d7ac3b6a73d741dbd488c0ca6a"
+      },
+      {
+        "file": "LabResearchArt.js",
+        "sha256": "9feeca535f2e7969c7f9a263420e705b4c7b20fefaaf1504106e35fb135a0981"
+      },
+      {
+        "file": "LabResearchChambers.js",
+        "sha256": "47bbd59b2b0628e9ad115fe1eabefcc3aa15a9f99a219d1e18d868b5143f3735"
+      },
+      {
+        "file": "LabResearchJourney.js",
+        "sha256": "6c5a12195d2a163023ba80027460cf90d365a10c2080da0400106c7fc3737c46"
+      },
+      {
+        "file": "LabResume.js",
+        "sha256": "04f40ed00a6342f9d8801150998e8361f0dec3939ad0b3906ad1bc57236083e6"
+      },
+      {
+        "file": "LabRoom12Architecture.js",
+        "sha256": "99d8977a5c309a2844304c528747f41b17664d8756e085aa5c54b35f8b4bbc79"
+      },
+      {
+        "file": "LabRoom12Journey.js",
+        "sha256": "956179a4e2be38461f2efc00db7f79cea83db8d11eefd718e1a8e566039775c0"
+      },
+      {
+        "file": "LabRoom13Journey.js",
+        "sha256": "c00e136fa44e424c2d8551567ee3f29df6066cee79adca7d128b444d912806bc"
+      },
+      {
+        "file": "LabRoom13Mechanics.js",
+        "sha256": "15feab0f428a696aa92b32288354b6acfc326d83a502e6f5942c6ce15689a2f1"
+      },
+      {
+        "file": "LabRoom14CounterweightStair.js",
+        "sha256": "e829c00e8a9d0d14d1da906e0378405b82062986482e07d4d68454ef4a6e0225"
+      },
+      {
+        "file": "LabRoom14Journey.js",
+        "sha256": "22b682c8efdc34a8157a3ee7012fca3222d34ae1e6fd1e66d127d1b26cd4e950"
+      },
+      {
+        "file": "LabRoom15Journey.js",
+        "sha256": "2d6afc50373b198a48851f8d73318d1d79fc06335c058f643e52b9b3bfdb12dd"
+      },
+      {
+        "file": "LabRoom16Journey.js",
+        "sha256": "e7fd06b19ad5ccf3a99e50730d044aebf9abd35d5f616c295d209adc86b1b409"
+      },
+      {
+        "file": "LabRoom17Journey.js",
+        "sha256": "0a3a74dd082aa303b1778422d93de3827e59a79c47174b0ca32eb3d70fa4f31f"
+      },
+      {
+        "file": "LabRoom18Journey.js",
+        "sha256": "9ab87ec333e7eb408a572100240823340a487739d1dea3ba5297d22b34a33f15"
+      },
+      {
+        "file": "LabRoom19Journey.js",
+        "sha256": "89faad9e485e7b18345b7e74c154fd59f6d9eee9f9ea5ba7c423cc7df19c7624"
+      },
+      {
+        "file": "LabRoom19Mechanics.js",
+        "sha256": "18b2450fd6ac530d68a6490f0e900a63d15ce582857c86a03115276cfcdda625"
+      },
+      {
+        "file": "LabRoom20Journey.js",
+        "sha256": "c68204d17120bb94232492b6bd17a2bb7fd6bef4dc1d745c1f06b51a9c9fbdb1"
+      },
+      {
+        "file": "LabRoom20Optics.js",
+        "sha256": "dad517525f642c22debf096cda23f6c8fbfe14fb577a6b9daa91468c23e1c59f"
+      },
+      {
+        "file": "LabRoom21Journey.js",
+        "sha256": "196f379a8262d0730aa1df389036311465cf630abacb21e4bfd5b3ee38a8adce"
+      },
+      {
+        "file": "LabRoom21Retrieval.js",
+        "sha256": "1f55bb0b24dc26fa84d8333c18a0f08811d50997c70366ae813bb4d51976201b"
+      },
+      {
+        "file": "LabRoom21ServiceCar.js",
+        "sha256": "2359082c870fc5fb12624808fbb5484ac5fb93c4245fff9c3d861ff4c35a7fe8"
+      },
+      {
+        "file": "LabRoom22Journey.js",
+        "sha256": "7d9eeee688e415eafcb366a9dbb9d743507bd20d0d93e4289a4bebef057fa513"
+      },
+      {
+        "file": "LabRoom22Mechanics.js",
+        "sha256": "3bef6ecc9333765811859a7562b76de64d15f728ae0adc33f6ac6f92a1b78a35"
+      },
+      {
+        "file": "LabRoom23Journey.js",
+        "sha256": "c2f982cce757fc486b900f9c34d69a24e7883d2e317dc0ad67f213e30011eb4a"
+      },
+      {
+        "file": "LabRoom23Mechanics.js",
+        "sha256": "32be98fab764ccb21821100a0e41a8b2cf660bc89e7e9470f8a5b9f6728d7831"
+      },
+      {
+        "file": "LabRoom24Garden.js",
+        "sha256": "4907fe1d2a3a4eb8582d8ac343ad9280a78fa722f58425e3bbf1a31238c873ac"
+      },
+      {
+        "file": "LabRoom24Journey.js",
+        "sha256": "a4fdbb81bbb8539d787c26b8e581f2ea00fdcdf2e77ed99dccba28247d5928d2"
+      },
+      {
+        "file": "LabRoom25Journey.js",
+        "sha256": "0dc985e924be5ab73ae3ba30f63ae49477531e748f7965640a62c186668f93b2"
+      },
+      {
+        "file": "LabRoom25Optics.js",
+        "sha256": "3c1f49a2cd8366781b6b1315f6c1a7dcbb9f34402ee436cab42aae455068262d"
+      },
+      {
+        "file": "LabRoom26Journey.js",
+        "sha256": "2896708dade1cf9505899511543ba098ef187211f4bf72674603cb1a9b25b57f"
+      },
+      {
+        "file": "LabRoom27Art.js",
+        "sha256": "1b8e390ad799eaa28693c734e153a6220d220acb32db33e142eeb2d319e3aa64"
+      },
+      {
+        "file": "LabRoom27Conveyors.js",
+        "sha256": "1b13158fcff13aec414a681ae1d95b91a50cf834f675a2c743f409dbdb8a83e7"
+      },
+      {
+        "file": "LabRoom27Journey.js",
+        "sha256": "97986067f89bcc79516849d7399385bc694859ab3ed4699f3404662cb3227e51"
+      },
+      {
+        "file": "LabRoom28Art.js",
+        "sha256": "5ac4fa45efbefe2798369cd0786011c25e8754d2cf01688ba483b03e1440b313"
+      },
+      {
+        "file": "LabRoom28Journey.js",
+        "sha256": "3981079558b27948817a078b32996e9adc8161ac701902224c4f8957dea1e494"
+      },
+      {
+        "file": "LabRoom28Tides.js",
+        "sha256": "7867db0ecdf11fd6c6ee0b093891c975a0425d43d9abdb1bf6e811b8ecbb749c"
+      },
+      {
+        "file": "LabRoom29Gravity.js",
+        "sha256": "f4d9e2a81f82b9a8d06fe450190716fda9bd58d639696a39b4652e537bf1d2c9"
+      },
+      {
+        "file": "LabRoom29Journey.js",
+        "sha256": "ce6624475b38f9b7e418a10ce4dbaba32690cbc254fb24297383d234ca4bb52d"
+      },
+      {
+        "file": "LabRoom30Art.js",
+        "sha256": "d281ceadf1ce0e85d6c1c6c047a301b14c820a672ad319cc7857495bddc8860d"
+      },
+      {
+        "file": "LabRoom30Journey.js",
+        "sha256": "935779bdb17c579a7709ca8e3b38f43c24b09e750a97eb5b2d6a0ca85cd5de7c"
+      },
+      {
+        "file": "LabSingularityArt.js",
+        "sha256": "6694522185174b3645a581dd8818489111169fa62c696745302b0ea42b38e9e1"
+      },
+      {
+        "file": "LabSingularityExpansion.js",
+        "sha256": "fb99cee018bccc50d79e5e2a220848d506ebd3ef5b6d6930e6b444338f65d3bb"
+      },
+      {
+        "file": "LabSingularityJourney.js",
+        "sha256": "2f78fa9a9497b27091642cb8f0f1bf9c0288a36794c474a04e6d0b3ba29b054a"
+      },
+      {
+        "file": "LabSingularityKit.js",
+        "sha256": "8f6f794d9c8e97aaba874a5571a9648bf5047ee2c88a6962c79d65a630e5767b"
+      },
+      {
+        "file": "LabSingularityLayout.js",
+        "sha256": "74b14445d54f7e18141366fef2feb80e586df18b57a72092f803b6e039ee7de9"
+      },
+      {
+        "file": "LabSingularityLevel.js",
+        "sha256": "783bc2e3c3c08f65591cd798a414e9bc748fcfd0c455f1fde367a20f35046d9d"
+      },
+      {
+        "file": "LabSolidModels.js",
+        "sha256": "705ed2579b8276371046cef18761242234564c2bd3e9019be3d711b8635bbe4d"
+      },
+      {
+        "file": "LabStaticAwareSAP.js",
+        "sha256": "8e8988e33618baf328852c7a95df37a0768348363ed8deb536405a639eb0505f"
+      },
+      {
+        "file": "LabStaticSurfaceBatches.js",
+        "sha256": "487d5c9eb66818b1abd9a68b4d470b7f0db81154ad8037fafb1d2e2cefb2ac77"
+      },
+      {
+        "file": "LabSweep.js",
+        "sha256": "03b1b45700d5335530fda30559ffd1f81cf1518696b82ab4ddafe193ae3e4f4a"
+      },
+      {
+        "file": "LabTileWorld.js",
+        "sha256": "421b548c877acf84e193810a0c0f38ff4d9ad51e7c6b7f17c6f049d358726a94"
+      },
+      {
+        "file": "LabTileWorldBase.js",
+        "sha256": "8ca9ac06091c64b15d145029cd8a4b8b0d250508a6845eab28c2547f06849b0e"
+      },
+      {
+        "file": "LabTowerArt.js",
+        "sha256": "6891c5815a79dbed4a285cf9cb4050549ee6302ea8c329dcd56bebefcdb0a1d7"
+      },
+      {
+        "file": "LabTowerAscents.js",
+        "sha256": "70170dc4d9b982425acf1a7ae54715abfa514f95aa56605ae3179efafe40ed02"
+      },
+      {
+        "file": "LabTowerCourses.js",
+        "sha256": "3d69bc4bf0741774e3685d59485c432f5987cdd2671b5b26914abd26912e300c"
+      },
+      {
+        "file": "LabTowerCrown.js",
+        "sha256": "0f0e8d35aa5da85ef20891b8d5bbbc42f2461a100fb607d0afdeaa63fce307d6"
+      },
+      {
+        "file": "LabTowerFreight.js",
+        "sha256": "011b78c092a39e22f3f4202e5a3cd3bdc99b362c2de67131e2cbd061d30e61bc"
+      },
+      {
+        "file": "LabTowerInterlock.js",
+        "sha256": "55bad836256492c295e1ec0a8c33a2e95d9e1efe4d2b5c5e8ec1d4ee4a66df44"
+      },
+      {
+        "file": "LabTowerJourney.js",
+        "sha256": "0b31a7c6e36945919b9fe5ad11f1ebfa53a73ef8a58f37ada00f949044d802d1"
+      },
+      {
+        "file": "LabTowerKeystones.js",
+        "sha256": "5ad30a0be6da2313a9a0c51070b5fc8861866903a8ad917f51ae10c0e82b81a6"
+      },
+      {
+        "file": "LabTowerLayout.js",
+        "sha256": "eae631f63fc7156a7dc73331eb537d1a45a99fce4ba7d4cf459f3f76efc83254"
+      },
+      {
+        "file": "LabTowerLevel.js",
+        "sha256": "2bab6f9c1722b313da5347897a31097dd5adad59da1d51593bb616638e0e810c"
+      },
+      {
+        "file": "LabTowerMechanisms.js",
+        "sha256": "73827b3167450a07161c6fd408020c523e0b0b60e6d80689fb0623493bd29ce2"
+      },
+      {
+        "file": "LabTowerRoutes.js",
+        "sha256": "d5b172bfab574628f2e05c72a6142a3b9d9ddfc49545195e728209d530e01fd4"
+      },
+      {
+        "file": "LabTransferFunnel.js",
+        "sha256": "d309e74b8b015218c00a1c988764f035f993e62de963eb7c2ebc31c8d72f519b"
+      },
+      {
+        "file": "LabTutorial.js",
+        "sha256": "370fd820e2ddca855f95e312257fb057918d2cf21e1ae98a10c9fcbe42eb0c6c"
+      },
+      {
+        "file": "LabV8Journey.js",
+        "sha256": "2e7cecdf49dcd658ac625f3da3f24eca2adb3f18d96bf2d3c7c290d96fc745a1"
+      },
+      {
+        "file": "LabVelocityArena.js",
+        "sha256": "82ebbea32ecd9814677a57ca2aaaf6f3cfb78af9a638092916232761918e418d"
+      },
+      {
+        "file": "LabVelocityAssist.js",
+        "sha256": "006b97f84520dee8e60d8fde149c6660ed8e9bcaf6975e2ed220d552b8dafb39"
+      },
+      {
+        "file": "LabVelocityChapters.js",
+        "sha256": "8843b3948421402b4baa96c7dc72e6067d819b4e13077723108aaeeaa4724d98"
+      },
+      {
+        "file": "LabVelocityCompanion.js",
+        "sha256": "6f7adb7a3a0d32b483d9fd340fe30c758483531d5747029b93ce2adbd16354d4"
+      },
+      {
+        "file": "LabVelocityEvidence.js",
+        "sha256": "34e2f17f4e39f9feba06b2625f8f49bf725b1b557540bef605822d4328267c86"
+      },
+      {
+        "file": "LabVelocityHoldButton.js",
+        "sha256": "89ffba930ec6c3c8e8008f7af1ed35b4ef978a401a4a1555362ae61f364ad431"
+      },
+      {
+        "file": "LabVelocityScenery.js",
+        "sha256": "a7740a0a31f36c3b90ac2d211c203eefcd45ea950208b99e132b9d7c3416bc6d"
+      },
+      {
+        "file": "LabWindRoom.js",
+        "sha256": "851ab44cf4b0feb2d33becc768141064744b77156b04344157e94ab40797e33c"
+      },
+      {
+        "file": "LabWorkshopCampaign.js",
+        "sha256": "a830ab8cf52fd1ebd6258383802e46eaf3ab92adb98e20045bc2567559dbf214"
+      },
+      {
+        "file": "LabWorkshopJourney.js",
+        "sha256": "5751c6fa8678ddd94226aba57ed847a17ee2d8343437119fc9c59616d75b5ee2"
+      },
+      {
+        "file": "LabWorkshopKit.js",
+        "sha256": "a363de65b244dc395cccb06ac9be74fad4dd4fe6f9d93e1180450589595f6f33"
+      },
+      {
+        "file": "LabWorkshopModels.js",
+        "sha256": "3f3fbce26cc81cad77abb3a02d7e22fe512808f54be717d88fdb9bf7d0d4c864"
+      },
+      {
+        "file": "LabWorkshopRooms.js",
+        "sha256": "158c4ed3e85b9adc17898d14e89e81827cee9c2518f0cf1a85d0b0b91437c3ae"
+      },
+      {
+        "file": "PlayerAppearanceBaseline.js",
+        "sha256": "77bf3893786cc3cf6ce04d5c1f71d4587f67b7a120029d41e111274007468f28"
+      },
+      {
+        "file": "PlayerRig.js",
+        "sha256": "04db9d1a9fc5ed1bd4feb576ca01b4d2d8d09cba2a4781b2e5457e0f2e3f70fb"
+      },
+      {
+        "file": "RiftGame.js",
+        "sha256": "fbc9e50ecf4ac6a67deb312ed289153f80bbeacad69988e13fd3899d679f4f2d"
+      },
+      {
+        "file": "labAssets.js",
+        "sha256": "394c87741c5772eb7e433b27979f8d0e4c8626d28400131fb1ce6a9bb6c377d3"
+      },
+      {
+        "file": "riftMath.js",
+        "sha256": "eebb0facfa8a46b64b305990829dd76e944ccb9b751e8a30edb74c5d5cd745b2"
+      },
+      {
+        "file": "rules.js",
+        "sha256": "8cef72265b97f454952283e30496d9ef859794b514b836e2515951f3e6db0f0b"
+      }
+    ],
+    "aggregate": "e8799535bb12af1646dd7f6104ba388b6248be7bb6f515aa2f25205ce90b89c8"
+  },
+  "unchangedDuringRun": true,
+  "harnessUnchangedDuringRun": true,
+  "finished": "2026-10-04T10:46:21.325Z",
+  "summary": {
+    "attempts": 35,
+    "sameBody": true,
+    "unexpectedTransports": 0,
+    "behindAfterRelease": 31,
+    "behindWholeBodyAfterPhysics": 29,
+    "negativeHeldApproaches": 35
+  }
+}
