@@ -17,7 +17,10 @@ export async function runRoom22(d,{order='weight-first',recovery=false}={}){
   // The returned upper-floor companion can use the final paired aperture as
   // its own freight path. The observer follows after a separate crossing.
   walk(18,3);const sent=game.physics.portalTransports;
-  for(let n=0;n<160&&game.playerPosition.x<20.15;n++){d.worldMove(1,0);d.frame();}d.stop();
+  // Release from the end of the joined shelf while still walking. The cargo
+  // keeps the real hand velocity; a release farther back falls below the
+  // aperture before its whole box reaches the source plane.
+  for(let n=0;n<160&&game.playerPosition.x<20.32;n++){d.worldMove(1,0);d.frame();}d.stop();
   check(game.playerPosition.y>6.9&&game.heldCube,'The freight launch must begin on the permanent east gallery');
   check(game.interact()&&!game.heldCube,'Cannot release the original companion toward the high receiver');
   until(()=>game.physics.portalTransports>sent,5,'Free companion missed the high receiver');

@@ -172,6 +172,7 @@ jobs:
           npm ci
           npm install --no-save --package-lock=false puppeteer-core@24.16.0
           echo "CHROME_PATH=$(command -v google-chrome || command -v chromium)" >> "$GITHUB_ENV"
+          python -m pip install --user --disable-pip-version-check Pillow==11.3.0
           npm run build
       - name: Finish every assigned room with the original companion through production inputs
         env:
@@ -182,6 +183,8 @@ jobs:
           PORT: '4173'
           OUT_DIR: qa/creative-browser
         run: node scripts/qa-creative-browser.mjs
+      - name: Require nonblank renderer images for every completed room
+        run: node --input-type=module -e "import fs from 'node:fs';import assert from 'node:assert/strict';const q=JSON.parse(fs.readFileSync('qa/creative-browser/report.json'));assert.equal(q.pass,true);assert.equal(q.capturePass,true);assert.equal(q.rows.length,10);"
       - name: Check desktop and touch resizing under all graphics profiles
         if: strategy.job-index == 0
         env:

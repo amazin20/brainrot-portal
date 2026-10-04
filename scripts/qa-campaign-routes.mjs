@@ -40,7 +40,7 @@ const classicAlternates={
   {name:'scout-first',kind:'exploration',options:{order:'scout-first'},source:'tests/lab-room14-light-bridge.test.js'}],
  15:[{name:'carry-crossing',options:{order:'carry-crossing'},source:'tests/lab-room15-carry-crossing.test.js'},
   {name:'scout-first',kind:'exploration',options:{order:'scout-first'},source:'tests/lab-room15-journey.test.js'}],
- 16:[{name:'staged-portal',options:{order:'staged-portal'},source:'tests/lab-room16-alternate.test.js'},
+ 16:[{name:'scout-then-gravity-drop',options:{order:'scout-first'},source:'tests/lab-room16-alternate.test.js'},
   {name:'scout-first',kind:'exploration',options:{order:'scout-first',supportPause:20},source:'tests/lab-room16-journey.test.js'}],
  17:[{name:'cargo-first-momentum',options:{route:'cargo-first-momentum'},source:'tests/lab-room17-alternate.test.js'},
   {name:'scout-first',kind:'exploration',exercisesRecovery:true,options:{order:'scout-first',interruptBrake:true},source:'tests/lab-room17.test.js'}],

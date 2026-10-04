@@ -1,6 +1,16 @@
 export async function runRoom14(d,{order='cargo-first'}={}){
  if(!['cargo-first','scout-first','remote-companion'].includes(order))throw new RangeError('Unknown room14 action order');
  const {game,level,walk,wait,aim,until,pickup,enter,mark}=d,p=level.panels;
+ // The compact shoulder view uses a different ordinary release/observation
+ // approach; both still dispatch the same free friend through the narrow fold.
+ const compactScout=order==='scout-first'&&game.camera.aspect<1.7;
+ if(order==='remote-companion'){
+  // Set the original friend down inside the visible dispatch area before
+  // leaving it below for the first light crossing. Use a settled northward
+  // grip rather than releasing it at the distant edge of the floor aperture.
+  walk(game.cargo.position.x-1,game.cargo.position.z);pickup();
+  walk(-12.1,12);walk(-12.1,11.5);wait(.55);game.interact();wait(.8);
+ }
  aim(0,p.access.getFrame().center);aim(1,p['weave-west'].getFrame().center);
  if(order==='cargo-first'){walk(-14,12);pickup();}
  enter(p.access);walk(-16.5,0);mark('light landing reached');
@@ -10,9 +20,9 @@ export async function runRoom14(d,{order='cargo-first'}={}){
   if(game.heldCube||game.cargo.position.y>1)throw Error('The first crossing must leave the original companion at the entry');
   walk(-2.2,-2.2);
   aim(1,p['island-receiver'].getFrame().center);
-  walk(-1.5,-8);
+  walk(-1.5,-8.5);
   const before=game.physics.portalTransports;
-  aim(0,p['entry-dispatch'].getFrame().center);
+  aim(0,game.cargo.position.clone().setY(p['entry-dispatch'].getFrame().center.y));
   until(()=>game.physics.portalTransports>before&&game.cargo.position.y>7.8,6,'Entry floor did not route the original friend to the island');
   mark('companion follows through the remote island address');
   walk(-1.5,0);walk(game.cargo.position.x-1,game.cargo.position.z);pickup();walk(-1.5,0);
@@ -24,10 +34,13 @@ export async function runRoom14(d,{order='cargo-first'}={}){
  }
  // A narrow full-height fold admits the player, while the friend waits on
  // the stable island. The upper receiver must first be used for cargo.
- walk(-.8,0);game.interact();wait(.7);mark('friend waits on the island');
+ walk(-.8,0);
+ if(order==='remote-companion'||compactScout){walk(-.8,-.8);wait(.4);}
+ game.interact();wait(.7);mark('friend waits on the island');
  walk(-1.5,0);walk(-1.5,-12.7);walk(1.5,-12.7);wait(.2);game.input.jumpQueued=true;walk(3,-12.7);wait(.2);game.input.jumpQueued=true;walk(3,-7);mark('folded upper return');
  aim(1,p['weave-north'].getFrame().center);
- wait(.2);game.input.jumpQueued=true;walk(4.7,-12.7);wait(.2);game.input.jumpQueued=true;walk(1.1,-12.7);walk(-1.5,-12.7);walk(order==='remote-companion'?-1.65:-1.5,-8.5);
+ wait(.2);game.input.jumpQueued=true;walk(4.7,-12.7);wait(.2);game.input.jumpQueued=true;walk(1.1,-12.7);walk(-1.5,-12.7);walk(order==='remote-companion'?-1.25:-1.5,-8.5);
+ if(compactScout)walk(-1.05,-8.5);
  const deliveryBefore=game.physics.portalTransports;
  aim(0,game.cargo.position.clone().setY(7.425));
  until(()=>game.physics.portalTransports>deliveryBefore&&game.cargo.position.y>11.8,5,'Friend did not travel independently');

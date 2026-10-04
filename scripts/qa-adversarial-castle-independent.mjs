@@ -245,13 +245,20 @@ if(import.meta.url===new URL(process.argv[1], 'file:').href){
       }
       browser=await puppeteer.launch({executablePath:process.env.CHROME_PATH||'/usr/bin/chromium',headless:true,protocolTimeout:1_800_000,args:['--no-sandbox','--disable-dev-shm-usage','--use-angle=swiftshader','--enable-unsafe-swiftshader']});
       const page=await browser.newPage(),mobile=process.env.MOBILE==='1';
-      if(mobile)await page.emulate({viewport:{width:390,height:844,deviceScaleFactor:1,isMobile:true,hasTouch:true},userAgent:'Mozilla/5.0 (Linux; Android 14; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Mobile Safari/537.36'});
+      if(mobile){
+        const width=Number(process.env.MOBILE_WIDTH||390),height=Number(process.env.MOBILE_HEIGHT||844);
+        if(!Number.isInteger(width)||!Number.isInteger(height)||width<280||height<280)throw Error('Invalid mobile QA viewport');
+        await page.emulate({viewport:{width,height,deviceScaleFactor:1,isMobile:true,hasTouch:true},userAgent:'Mozilla/5.0 (Linux; Android 14; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Mobile Safari/537.36'});
+      }
       else await page.setViewport({width:1100,height:680,deviceScaleFactor:1});
       await page.evaluateOnNewDocument(()=>localStorage.setItem('brainrot-foundation-v1:brainrot-portal.preferences.v24',JSON.stringify({quality:'low',muted:true})));
       report.browserErrors=[];page.on('pageerror',e=>report.browserErrors.push(String(e)));
       await page.goto('http://127.0.0.1:'+port+'/?edition=foundation&level=41&debug=1',{waitUntil:'domcontentloaded'});
       await page.waitForFunction(()=>{const g=window.__NESI_DEMO_GAME__,m=document.querySelector('#start-screen');return g?.state==='ready'&&m&&!m.inert&&getComputedStyle(m).opacity==='1';},{timeout:180000});
-      await page.click('#play-button');await page.waitForFunction(()=>window.__NESI_DEMO_GAME__?.state==='playing');
+      await page.$eval('#play-button',e=>e.scrollIntoView({block:'center',inline:'nearest',behavior:'instant'}));
+      await page.waitForFunction(()=>{const e=document.querySelector('#play-button'),r=e.getBoundingClientRect();return r.x>=0&&r.y>=0&&r.right<=innerWidth&&r.bottom<=innerHeight&&e.contains(document.elementFromPoint(r.x+r.width/2,r.y+r.height/2));},{timeout:20000});
+      if(mobile)await page.tap('#play-button');else await page.click('#play-button');
+      await page.waitForFunction(()=>window.__NESI_DEMO_GAME__?.state==='playing');
       await page.evaluate(()=>window.__NESI_DEMO_GAME__.renderer.setAnimationLoop(null));
       if(process.env.INSPECTION==='1'){
         report.inspection=[];

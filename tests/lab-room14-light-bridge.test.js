@@ -4,7 +4,7 @@ import {createHeadlessGame} from '../scripts/lab-headless.mjs';
 import {runV8Journey} from '../src/game/LabV8Journey.js';
 import {runRoom14} from '../src/game/LabRoom14Journey.js';
 
-for(const [aspect,order] of [[16/9,'cargo-first'],[1.6,'cargo-first'],[16/9,'scout-first'],[1.6,'scout-first']])test(`room14 ${order} works through real portal shots at aspect ${aspect}`,async()=>{
+for(const [aspect,order] of [[16/9,'cargo-first'],[1.6,'cargo-first'],[16/9,'scout-first'],[1.6,'scout-first'],[16/9,'remote-companion'],[1.6,'remote-companion']])test(`room14 ${order} works through real portal shots at aspect ${aspect}`,async()=>{
  const g=await createHeadlessGame();await g.selectLevel(13,false);g.camera.aspect=aspect;g.camera.updateProjectionMatrix();
  try{
   const r=await runV8Journey(g,{scenario:d=>runRoom14(d,{order})});

@@ -41,7 +41,12 @@ export async function runRoom20(d,{order='cargo-first',interruptPower=false,rout
   until(()=>game.playerPosition.y>21.98,12,'Return exchange ascent');walk(-2,-17);walk(-15.2,-18);
  }
  aim(1,p['final-pocket'].getFrame().center.clone().add({x:0,y:0,z:-1}));walk(-15.2,-14.7);
- const finalCradleAim=route==='early-return'?p['mirror-cradle'].getFrame().center.clone().add({x:0,y:0,z:-.6}):game.cargo.position.clone().setY(p['mirror-cradle'].getFrame().center.y);
+ // The free body settles at its actual contact point on the live cradle.
+ // A fixed offset can leave a rotated corner outside the physical aperture.
+ const finalCradleAim=game.cargo.position.clone().setY(p['mirror-cradle'].getFrame().center.y);
+ // The early return viewpoint sees the body's front silhouette above its
+ // contact point. The adjacent visible floor still admits every box corner.
+ if(route==='early-return')finalCradleAim.z-=.5;
  aim(0,finalCradleAim);until(()=>game.cargo.position.y>22.3,6,'Final retrieval of original counterweight');
  until(()=>game.cargo.position.z>-16.9,4,'Final offloader clears the portal');mark('original load rests in the final pocket');aim(1,p['light-output'].getFrame().center);wait(1);walk(-15.2,-17.6);walk(-12,-17.6);pickup();
  walk(-10.2,-18);mark('final field transfer over the shared hub');for(let n=0;n<180;n++){worldMove(1,0);frame();if(game.playerPosition.x>-8.5)break;}stop();
