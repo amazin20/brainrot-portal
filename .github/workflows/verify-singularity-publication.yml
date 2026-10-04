@@ -1,0 +1,70 @@
+name: Verify the existing upgraded public game
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/verify-singularity-publication.yml
+      - scripts/verify-singularity-upgrade.mjs
+      - scripts/lib/singularity-ui-check.mjs
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: singularity-public-verification
+  cancel-in-progress: false
+env:
+  PAGE_URL: https://amazin20.github.io/brainrot-portal/
+  RELEASE_CONFIG: tools/singularity-upgrade-release.json
+jobs:
+  verify:
+    name: Verify exact published bytes, ordinary controls and complete video
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - name: Validate the successful pinned game and continuous recording
+        id: candidate
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs=require('node:fs');const c=JSON.parse(fs.readFileSync(process.env.RELEASE_CONFIG));
+            const {owner,repo}=context.repo;
+            if(c.mode!=='complete'||!Number.isSafeInteger(c.candidateRun)||!/^[a-f0-9]{40}$/.test(c.sourceCommit))throw Error('Expected the pinned complete release');
+            const run=(await github.rest.actions.getWorkflowRun({owner,repo,run_id:c.candidateRun})).data;
+            if(run.conclusion!=='success'||run.head_sha!==c.sourceCommit||run.path!=='.github/workflows/tower-upgrade.yml'||run.head_branch!=='upgrade/tower-41-final')throw Error('Candidate provenance mismatch');
+            const jobs=await github.paginate(github.rest.actions.listJobsForWorkflowRun,{owner,repo,run_id:c.candidateRun,per_page:100});
+            for(const name of ['Source tests for every retained game regression','Preserve the exact approved public campaign package',...['foundation','classic','open'].map(e=>`All retained campaign routes (${e})`)])if(!jobs.some(j=>j.name===name&&j.conclusion==='success'))throw Error('Missing successful verification: '+name);
+            for(const name of ['Inspect the browser rendering and verify the entire production route','Record one continuous upgraded Tower walkthrough from that exact package'])if(!jobs.some(j=>j.conclusion==='success'&&j.steps?.some(s=>s.name===name&&s.conclusion==='success')))throw Error('Missing successful verification: '+name);
+            core.setOutput('run',String(c.candidateRun));
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install the public browser verifier
+        run: |
+          npm ci
+          npm install --no-save --package-lock=false puppeteer-core@24.16.0
+          echo "CHROME_PATH=$(command -v google-chrome || command -v chromium)" >> "$GITHUB_ENV"
+      - uses: actions/download-artifact@v4
+        with:
+          name: singularity-browser
+          run-id: ${{ steps.candidate.outputs.run }}
+          github-token: ${{ github.token }}
+          path: candidate
+      - name: Verify the already published primary game and Tower recording
+        run: |
+          node --check scripts/verify-singularity-upgrade.mjs
+          node --check scripts/lib/singularity-ui-check.mjs
+          node scripts/verify-singularity-upgrade.mjs
+      - name: Preserve public verification evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: singularity-public-proof
+          path: publication-proof/
+          if-no-files-found: error
+          retention-days: 14
