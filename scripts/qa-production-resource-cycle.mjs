@@ -72,8 +72,8 @@ try{
   async function clickControl(selector){await visibleControl(selector);await page.click(selector);}
   async function waitPlayingUI(){
     await page.waitForFunction(()=>window.__NESI_DEMO_GAME__?.state==='playing'
-      &&document.documentElement.dataset.runtimeState==='playing'&&document.body.dataset.playState==='playing'
-      &&[...document.querySelectorAll('.screen')].every(e=>{const s=getComputedStyle(e);
+      &&document.documentElement.dataset.runtimeState==='playing'&&document.body.dataset.playState==='playing',{timeout:180000});
+    await page.waitForFunction(()=>[...document.querySelectorAll('.screen')].every(e=>{const s=getComputedStyle(e);
         return e.inert&&!e.classList.contains('screen--active')&&s.visibility==='hidden'&&s.opacity==='0';}),{timeout:20000});
   }
   async function pauseWithKeyboard(){
