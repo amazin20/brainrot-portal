@@ -347,43 +347,57 @@ export class LabPhysics {
       let first = null;
       for (const [id, item] of this.solids) {
         const solid = item.body;
-        if (ignored.has(id) || !solid.collisionFilterMask || item.kind === 'ramp'
-          || Math.abs(solid.quaternion.w) < .999999) continue;
+        if (ignored.has(id) || !solid.collisionFilterMask || item.kind === 'ramp') continue;
         const center = solid.type === Body.KINEMATIC && item.remaining > 0 ? item.target : solid.position;
+        // Sweep in this solid's own frame. Moving balance decks keep their
+        // real oriented Cannon boxes; skipping those boxes here lets portal
+        // clearance appear beyond a thin tilted obstruction for one tick.
+        // World-only dynamic bodies deliberately retain their contact solver.
+        const inverse = solid.quaternion.conjugate();
+        const localStart = inverse.vmult(start.vsub(center));
+        const localTarget = inverse.vmult(target.vsub(center));
+        const localAxes = axes.map(axis => inverse.vmult(axis));
+        const localExtent = new Vec3(...['x', 'y', 'z'].map(key => half
+          * localAxes.reduce((sum, axis) => sum + Math.abs(axis[key]), 0)));
         const min = {}, max = {};
         for (const key of ['x', 'y', 'z']) {
-          min[key] = center[key] - item.half[key] - extent[key];
-          max[key] = center[key] + item.half[key] + extent[key];
+          min[key] = -item.half[key] - localExtent[key];
+          max[key] = item.half[key] + localExtent[key];
         }
-        const inside = ['x', 'y', 'z'].every(key => start[key] > min[key] + 1e-8 && start[key] < max[key] - 1e-8);
+        const inside = ['x', 'y', 'z'].every(key => localStart[key] > min[key] + 1e-8 && localStart[key] < max[key] - 1e-8);
         let hit;
         if (inside) {
           // Exit clearance itself can initially overlap a nearby wall when the
           // cargo is tilted. Use the nearest face instead of letting the next
           // Cannon step choose an arbitrary side of that thin destination wall.
           const faces = ['x', 'y', 'z'].flatMap(axis => [
-            { axis, sign: -1, face: min[axis], distance: start[axis] - min[axis] },
-            { axis, sign: 1, face: max[axis], distance: max[axis] - start[axis] },
+            { axis, sign: -1, face: min[axis], distance: localStart[axis] - min[axis] },
+            { axis, sign: 1, face: max[axis], distance: max[axis] - localStart[axis] },
           ]).sort((a, b) => a.distance - b.distance);
           hit = { ...faces[0], t: 0, overlap: true };
-        } else hit = sweepBox(start, target, min, max);
-        if (hit && (!first || hit.t < first.t)) first = { ...hit, solid };
+        } else hit = sweepBox(localStart, localTarget, min, max);
+        if (hit && (!first || hit.t < first.t)) first = { ...hit, solid, center, localStart };
       }
       if (!first) { start.copy(target); break; }
       const key = first.axis;
+      const localNormal = new Vec3(); localNormal[key] = first.sign;
+      const normal = first.solid.quaternion.vmult(localNormal);
       if (first.overlap) {
-        const corrected = first.face + first.sign * margin;
-        start[key] = corrected;
+        first.localStart[key] = first.face + first.sign * margin;
+        first.solid.quaternion.vmult(first.localStart, start); start.vadd(first.center, start);
         // Preserve travel tangent to the contact, including a moving wall's
         // endpoint displacement, but never continue towards its opposite face.
-        if ((target[key] - corrected) * first.sign < 0) target[key] = corrected;
+        const inward = target.vsub(start).dot(normal);
+        if (inward < 0) target.vsub(normal.scale(inward), target);
       } else {
         const delta = target.vsub(start);
         delta.scale(first.t, delta); start.vadd(delta, start);
-        start[key] += first.sign * margin;
-        target[key] = start[key];
+        start.vadd(normal.scale(margin), start);
+        const inward = target.vsub(start).dot(normal);
+        if (inward < 0) target.vsub(normal.scale(inward), target);
       }
-      if (body.velocity[key] * first.sign < 0) body.velocity[key] = 0;
+      const inwardVelocity = body.velocity.dot(normal);
+      if (inwardVelocity < 0) body.velocity.vsub(normal.scale(inwardVelocity), body.velocity);
       contacts++;
     }
     body.position.copy(start);

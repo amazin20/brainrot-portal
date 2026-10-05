@@ -1,4 +1,5 @@
 import './styles.css';
+import {createCampaignMenu} from './game/LabCampaignMenu.js';
 import {LabGame} from './game/LabGame.js';
 import {CAMPAIGN,campaignSpec} from './game/LabCampaignLevels.js';
 import {LabPreferences,QUALITY_PRESETS,applyLabQuality,CREATIVE_CAMPAIGN_REVISION,CREATIVE_REPLACED_INDICES} from './game/LabPreferences.js';
@@ -27,9 +28,15 @@ const preferences=new LabPreferences(foundationEdition.enabled?foundationStorage
 const screens=['loading','start-screen','pause-screen','win-screen','error-screen'];
 const hudNodes={level:$('#level-number'),chamber:$('#chamber'),objective:$('#objective'),cargo:$('#cargo-status'),portals:$('#portal-status')};
 function hudText(key,value){const node=hudNodes[key];if(node.textContent!==value)node.textContent=value;}
+let campaignMenu;
 let platform,entering=false,hintBusy=false,pendingInterruption=false,sessionStarted=false;
 function screen(id,visible){const e=$('#'+id);e.classList.toggle('screen--active',visible);e.setAttribute('aria-hidden',String(!visible));e.inert=!visible;}
 function hideScreens(){screens.forEach(id=>screen(id,false));}
+function focusScreenControl(id,selector){
+ const panel=$('#'+id);
+ const attempt=()=>{if(panel.inert)return;if(getComputedStyle(panel).visibility==='visible')$(selector).focus({preventScroll:true});else requestAnimationFrame(attempt);};
+ requestAnimationFrame(attempt);
+}
 function clearInput(){game.resetInput();}
 function syncActivity(){const active=game.state==='playing'&&!holds.size;platform?.gameplay(active);game.audio?.block('menu',game.state!=='playing'&&game.state!=='won');game.audio?.block('external',holds.size>0);}
 function setState(state){document.body.dataset.playState=state;document.documentElement.dataset.runtimeState=state;
@@ -46,8 +53,15 @@ function reconcileFocus(){
 }
 function diagnostics(){const d=game.diagnostics();Object.assign(document.documentElement.dataset,{gameReady:String(d.modelsLoaded>0&&!d.missingModels.length),modelsLoaded:String(d.modelsLoaded),levelIndex:String(game.levelIndex)});
   if(debug)window.__NESI_DEMO_DIAGNOSTICS__={...d,settings:preferences.value,adBusy:platform?.busy};return d;}
-function failure(error){console.error(error);clearInput();game.renderer?.setAnimationLoop(null);game.state='error';setState('error');hideScreens();$('#error-detail').textContent=error?.message||String(error);screen('error-screen',true);}
-function choices(){for(const selector of ['#level-select','#settings-level-select']){const e=$(selector),old=e.value;e.replaceChildren();availableRooms.forEach(i=>{const l=campaignSpec(game,i),option=document.createElement('option');option.value=i;option.textContent=`${String(i+1).padStart(2,'0')} · ${l.title}${preferences.value.completed.includes(i)?' ✓':''}`;e.append(option);});e.value=old||String(game.levelIndex);}}
+function failure(error){
+ console.error(error);clearInput();game.renderer?.setAnimationLoop(null);game.state='error';
+ // Locked mouse events still target the canvas even when a recovery button
+ // covers it. Mark the terminal state first so unlocking cannot open Pause.
+ document.exitPointerLock?.();
+ setState('error');hideScreens();$('#error-detail').textContent=error?.message||String(error);screen('error-screen',true);
+ focusScreenControl('error-screen','#reload-button');
+}
+function choices(){for(const selector of ['#level-select','#settings-level-select']){const e=$(selector),old=e.value;e.replaceChildren();availableRooms.forEach(i=>{const l=campaignSpec(game,i),option=document.createElement('option');option.value=i;option.textContent=`${String(i+1).padStart(2,'0')} · ${l.title}${preferences.value.completed.includes(i)?' ✓':''}`;e.append(option);});e.value=old||String(game.levelIndex);}campaignMenu?.sync();}
 function pauseInfo(){ $('#settings-level-select').value=String(game.levelIndex);$('#pause-course').textContent=`${game.levelIndex+1} · ${campaignSpec(game,game.levelIndex).title}`;$('#hint-detail').hidden=true;}
 function showVictory(){
   preferences.complete(game.levelIndex);
@@ -56,8 +70,9 @@ function showVictory(){
   const last=game.levelIndex===availableRooms.at(-1);
   $('#win-title').innerHTML='Вместе<br />получилось<span>.</span>';
   $('#win-screen .eyebrow').textContent='ДРУГ ТОЖЕ ДОБРАЛСЯ';
-  $('#play-again-button').textContent=last?'К первому испытанию ↻':'Следующий уровень →';
-  $('#win-screen .muted').textContent=last?(foundationEdition.enabled?'Пройдена вся кампания и финальная Башня без чекпоинтов. Друг добрался до вершины.':openEdition.enabled?'Пройдены все испытания этой версии.':'Все доступные испытания завершены. Друг добрался вместе с тобой.'):foundationEdition.enabled&&game.levelIndex===39?'Впереди финальная Башня: один непрерывный заход без чекпоинтов.':'Получилось! Следующее испытание добавит новую идею.';
+  $('#play-again-button').textContent=last?'К первому испытанию':'Следующая комната';
+  const allCompleted=availableRooms.every(index=>preferences.value.completed.includes(index));
+  $('#win-screen .muted').textContent=last?(allCompleted?'Все испытания этой версии пройдены. Друг с тобой.':'Последнее испытание пройдено. Друг с тобой; в лаборатории можно исследовать остальные комнаты.'):foundationEdition.enabled&&game.levelIndex===39?'Впереди финальная Башня: один непрерывный заход без чекпоинтов.':'Получилось! Следующее испытание добавит новую идею.';
   if(game.firstLevel?.tower){$('#win-title').innerHTML='Башня<br />покорена<span>.</span>';$('#win-screen .eyebrow').textContent=`${game.firstLevel.completedStages} / ${game.firstLevel.totalStages} · ОДНИМ ЗАХОДОМ`;}
   diagnostics();
 }
@@ -107,13 +122,13 @@ finally{game.render();clearInput();setState(game.state);diagnostics();}
           onFrame:sample=>window.__NESI_CAPTURE_ANIMATION_FRAME__?.(sample)});}
         finally{game.render();clearInput();setState(game.state);diagnostics();}
       };}
-    $('#play-button').focus({preventScroll:true});if(debug&&query.get('smoke')==='1')enterLevel(game.levelIndex,'initial');},
+    focusScreenControl('start-screen','#play-button');if(debug&&query.get('smoke')==='1')enterLevel(game.levelIndex,'initial');},
   onHud:({chamber,objective,hasCargo,portalsReady})=>{hudText('level',String(game.levelIndex+1));hudText('chamber',chamber);hudText('objective',objective||'');hudText('cargo',game.velocityCompanion?.connected?'Друг закреплён':hasCargo?'Друг на руках':'Друг ждёт');hudText('portals',portalsReady?'Связаны':'Два портала');
-    const clock=$('#tower-run-clock');clock.hidden=!game.firstLevel?.tower;
+    const clock=$('#tower-run-clock');clock.hidden=!debug||query.get('clock')!=='1'||!game.firstLevel?.tower;
     if(!clock.hidden){const seconds=Math.floor(game.elapsed/1000);clock.textContent=`${String(Math.floor(seconds/60)).padStart(2,'0')}:${String(seconds%60).padStart(2,'0')} · Без чекпоинтов`;}
   },
   onToast:message=>{if(/Сначала|не помещается|препятствие|белую|Раздвинь|свободное|лицевую/.test(message))game.tutorial.explain(message);},
-  onPause:paused=>{clearInput();screen('pause-screen',paused);setState(paused?'paused':'playing');if(paused){pauseInfo();$('#resume-button').focus({preventScroll:true});}},
+  onPause:paused=>{clearInput();screen('pause-screen',paused);setState(paused?'paused':'playing');if(paused){pauseInfo();focusScreenControl('pause-screen','#resume-button');}},
   onRestartRequest:()=>restartLevel(),
   onWin:showVictory,
 });
@@ -130,11 +145,13 @@ function updateStartAction(){
  const index=Number($('#level-select').value),saved=preferences.value.resumeLevel===index;
  const tower=foundationEdition.enabled&&index===40;
  $('#tower-start-note').hidden=!tower;
- $('#play-button').textContent=tower?'Начать башню с основания →':`${saved?'Продолжить':'Начать'} · комната ${index+1} →`;
+ $('#play-button').textContent=tower?'Войти в замок':`${saved?'Продолжить':'Начать'} · комната ${index+1}`;
+ campaignMenu?.sync({reveal:true});
 }
+campaignMenu=createCampaignMenu({root:$('#campaign-map'),select:$('#level-select'),availableRooms,spec:index=>campaignSpec(game,index),preferences,onChoose:()=>updateStartAction()});
 $('#level-select').addEventListener('change',updateStartAction);updateStartAction();
-$('#campaign-count').textContent=foundationEdition.enabled?'Кампания · 41 испытание':openEdition.enabled?`${OPEN_ROOM_INDICES.length} лабораторных испытаний · отдельная версия`:`Архив · ${CAMPAIGN.length} испытания`;
-if(foundationEdition.enabled){$('#start-screen .brand').textContent='КАМПАНИЯ · ОТ ОТКРЫТИЯ К ВЕРШИНЕ';$('#start-screen .lead').textContent='Сорок комнат с порталами, светом и движением. Финал — Складчатый замок: пересекающиеся галереи и связанные механизмы. Доберись до вершины вместе с другом.';}
+$('#campaign-count').textContent=foundationEdition.enabled?`Кампания · ${FOUNDATION_INDICES.length} испытание`:openEdition.enabled?`${OPEN_ROOM_INDICES.length} лабораторных испытаний · отдельная версия`:`Архив · ${CAMPAIGN.length} испытания`;
+if(foundationEdition.enabled){$('#start-screen .brand').textContent='ПОРТАЛЫ · ФИЗИКА · ИССЛЕДОВАНИЕ';$('#start-screen .lead').textContent='Соединяй пространства. Сохраняй импульс. Доберись до выхода вместе с другом.';}
 else if(openEdition.enabled){$('#start-screen .brand').textContent='ЛАБОРАТОРНЫЕ ИСПЫТАНИЯ';$('#start-screen .lead').textContent='Камеры 24, 28, 30 и 31–33. Эта подборка и новая первая глава хранят прогресс отдельно от архива.';}
 const editionNav=document.createElement('nav');editionNav.className='edition-navigation';editionNav.setAttribute('aria-label','Версии кампании');
 for(const [id,text,href]of [['tower',`${SINGULARITY_SPEC.name} · ${singularityHallCount} механизмов`,'?edition=foundation&level=41'],['foundation','Кампания · с начала','?edition=foundation&level=1']]){
@@ -173,7 +190,7 @@ $('#hint-unlock').addEventListener('click',async()=>{
   finally{hintBusy=false;$('#hint-unlock').disabled=false;}
 });
 $('#settings-level-select').addEventListener('change',e=>enterLevel(Number(e.target.value)));
-$('#level-menu-button').addEventListener('click',()=>{if(holds.size)return;hideScreens();game.state='ready';setState('ready');screen('start-screen',true);$('#level-select').value=String(game.levelIndex);});
+$('#level-menu-button').addEventListener('click',()=>{if(holds.size)return;hideScreens();game.state='ready';setState('ready');screen('start-screen',true);$('#level-select').value=String(game.levelIndex);updateStartAction();focusScreenControl('start-screen','#play-button');});
 $('#tutorial-toggle').checked=preferences.value.tutorial;$('#tutorial-toggle').addEventListener('change',e=>{game.tutorial.enabled=e.target.checked;preferences.save({tutorial:e.target.checked});});
 $('#quality-select').value=preferences.value.quality;$('#quality-select').addEventListener('change',e=>{preferences.save({quality:e.target.value});applyLabQuality(game,e.target.value);});
 $('#mute-toggle').checked=preferences.value.muted;$('#volume-control').value=preferences.value.volume*100;

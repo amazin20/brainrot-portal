@@ -7,9 +7,9 @@ import {captureBrowserFrame} from './qa-browser-capture.mjs';
 
 const out = path.resolve(process.env.OUT_DIR || 'qa/creative-browser');
 fs.mkdirSync(out, {recursive: true});
-const levels = (process.env.LEVELS || Array.from({length:41}, (_,i)=>i+1).join(','))
+const levels = (process.env.LEVELS || Array.from({length:51}, (_,i)=>i+1).join(','))
   .split(',').map(Number);
-assert.ok(levels.every(n=>Number.isInteger(n)&&n>=1&&n<=41));
+assert.ok(levels.every(n=>Number.isInteger(n)&&n>=1&&n<=51));
 const mode = process.env.CASE || 'overview';
 assert.ok(['overview','route','rush'].includes(mode));
 let server;
@@ -84,7 +84,7 @@ try {
           document.body.dataset.playState='playing';
         },level);
       }
-      if(mode!=='rush')await page.evaluate(mode=>{const g=window.__NESI_DEMO_GAME__;g.renderer.setAnimationLoop(null);if(mode!=='route')g.render();},mode);
+      if(mode!=='rush')await page.evaluate(mode=>{const g=window.__NESI_DEMO_GAME__;g.renderer.setAnimationLoop(null);if(mode!=='route'){g.lastUiUpdate=-Infinity;g.animate(g.lastFrame);}},mode);
       row.start = await page.evaluate(()=>{
         const g=window.__NESI_DEMO_GAME__,d=g.diagnostics();
         return {id:g.firstLevel.id,title:g.firstLevel.title,position:g.playerPosition.toArray(),cargo:g.cargo.position.toArray(),
@@ -120,7 +120,7 @@ try {
             resets:result.resets??result.cargoResets,respawns:result.respawns,
             sameCompanion:g.cargo===cargo&&g.physics.cargoBody.id===bodyId,
             cargoUUID:g.cargo.group.uuid,cargoBodyId:g.physics.cargoBody.id,milestones:result.milestones??result.events};
-        }),180000,'Ordinary production route');
+        }),Number(process.env.ROUTE_TIMEOUT_MS||180000),'Ordinary production route');
         assert.equal(row.route.pass,true);assert.equal(row.route.state,'won');
         assert.equal(row.route.sameCompanion,true);assert.equal(row.route.cargoUUID,row.start.cargoUUID);assert.equal(row.route.cargoBodyId,row.start.cargoBodyId);
         assert.equal(row.route.resets??0,0);assert.equal(row.route.respawns??0,0);

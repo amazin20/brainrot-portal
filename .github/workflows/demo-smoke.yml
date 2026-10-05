@@ -9,6 +9,9 @@ concurrency:
   cancel-in-progress: true
 jobs:
   checks:
+    # The version-pinned legacy profile is superseded for the 51-room release
+    # by expedition-release-review.yml, including all its retained routes.
+    if: github.event_name != 'pull_request' || github.head_ref != 'upgrade/release-expansion-20261004'
     uses: ./.github/workflows/verified-build.yml
     with:
       revision: ${{ github.event.pull_request.head.sha || github.sha }}

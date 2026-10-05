@@ -74,6 +74,7 @@ export class LabPlayerAnimator extends BaseAnimator{
     if(this.bones.Chest){this.bones.Chest.quaternion.identity();this.basePose?.Chest?.identity();this.bones.Chest.position.copy(this.rig.rest.Chest);this.rig.mesh.updateWorldMatrix(true,true);this.rig.skeleton.update();this.snapCarrierToBody();}
   }
   triggerOperate(){this.operateTime=0;}
+  interruptInteraction(){super.interruptInteraction();this.operateTime=2;}
   update(input={}){super.update(input);this.basePose.Chest.copy(this.bones.Chest.quaternion);}
   get diagnostics(){return {...super.diagnostics,boneCount:LAB_PLAYER_JOINTS.length,profile:'grounded-follow-through-v27',chestIndependent:true,windBrace:this.windBrace,landingChest:this.landingChest,groundFollow:{...this.groundFollow},epicMotion:{sprint:this.epicSprint,slide:this.epicSlide,flight:this.epicBrace}};}
   stepGroundedFollowThrough(dt,grounded){
@@ -193,5 +194,6 @@ export class LabPlayerAnimator extends BaseAnimator{
       arm.updateWorldMatrix(true,true);hand.updateWorldMatrix(true,false);
       this.carryReach[`${key}Error`]=hand.getWorldPosition(new THREE.Vector3()).distanceTo(this.gripTargets[key]);this.carryReach[`${key}Clamped`]=solved.clamped;
     }
+    this.carrySurfaceContact?.apply?.(this,blend);
   }
 }

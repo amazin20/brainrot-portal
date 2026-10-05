@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="theme-color" content="#15262b" />
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iOCIgZmlsbD0iIzExMmIzYiIvPjxlbGxpcHNlIGN4PSIxNiIgY3k9IjE2IiByeD0iOCIgcnk9IjExIiBmaWxsPSJub25lIiBzdHJva2U9IiM4MWRjZTMiIHN0cm9rZS13aWR0aD0iMyIvPjxjaXJjbGUgY3g9IjI0IiBjeT0iNyIgcj0iMyIgZmlsbD0iI2ZmYmQ3OCIvPjwvc3ZnPg==" />
     <meta name="description" content="БРЕЙНРОТ ПОРТАЛ — 3D-головоломка от третьего лица. Исследуйте пространство, сохраняйте импульс и меняйте порталы на лету. Доставьте брейнрота к выходу вместе." />
     <title>БРЕЙНРОТ ПОРТАЛ — физическая 3D-головоломка</title>
   </head>
@@ -13,22 +14,29 @@
       <div class="loading-card">
         <span class="brand">БРЕЙНРОТ ПОРТАЛ</span>
         <h1 id="loading-title">Открываем<br /><span>лабораторию.</span></h1>
-        <p class="muted">Готовим комнаты к исследованию.</p>
+        <p class="muted">Каждый портал — новое открытие.</p>
+        <div class="loading-orbit" aria-hidden="true"><span></span><span></span></div>
         <div id="loading-progress" class="progress-track" role="progressbar" aria-label="Загрузка моделей" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div id="loading-bar"></div></div>
         <div class="loading-row"><span id="loading-label">Подготовка сцены</span><strong id="loading-percent">0%</strong></div>
       </div>
     </section>
     <section id="start-screen" class="screen start-screen" aria-labelledby="game-title" aria-hidden="true">
       <div class="hero-panel">
-        <div class="hero-top"><span class="brand">ПОРТАЛЫ · ФИЗИКА · ОДИН ДРУГ</span><span class="hero-index" aria-hidden="true">01 / ∞</span></div>
+        <div class="hero-top"><span class="brand">ПОРТАЛЫ · ФИЗИКА · ОДИН ДРУГ</span><span class="hero-index" aria-hidden="true">01</span></div>
         <h1 id="game-title">БРЕЙНРОТ<br /><span>ПОРТАЛ<span class="title-dot">.</span></span></h1>
-        <div class="hero-meta"><span id="campaign-count">Кампания · 41 испытание</span><span class="hero-signal">НАЙДИ СВОЙ ПУТЬ</span></div>
+        <div class="hero-meta"><span id="campaign-count">Кампания · 51 испытание</span><span class="hero-signal">НАЙДИ СВОЙ ПУТЬ</span></div>
         <p class="lead">Стена может стать выходом. Падение — разгоном. Исследуй комнату, соедини порталы и выведи друга.</p>
         <div class="start-actions">
-          <label class="setting-row" for="level-select">Выбери комнату <select id="level-select"></select></label>
-          <p id="tower-start-note" class="tower-start-note" hidden>Финальная Башня · без чекпоинтов. Исследуй её залы, реши связанные головоломки и доберись до вершины вместе с другом. Падение или перезапуск возвращает к основанию.</p>
+          <select id="level-select" hidden aria-label="Выбранная комната"></select>
+          <div class="selected-room">
+            <span id="selected-room-number" class="eyebrow">КОМНАТА 01</span>
+            <h2 id="selected-room-title"></h2>
+            <p id="selected-room-description"></p>
+            <span id="selected-room-status"></span>
+          </div>
+          <p id="tower-start-note" class="tower-start-note" hidden>Один заход без чекпоинтов. Падение или перезапуск возвращает к основанию.</p>
           <button id="play-button" class="primary-button">Начать испытание <span aria-hidden="true">↗</span></button>
-          <a class="walkthrough-link" href="./walkthroughs.html">Архив прохождений и новый финал <span aria-hidden="true">↗</span></a>
+          <a class="walkthrough-link" href="./walkthroughs.html">Прохождения <span aria-hidden="true">↗</span></a>
         </div>
         <details class="controls-disclosure">
           <summary>Как играть <span aria-hidden="true">↗</span></summary>
@@ -42,7 +50,13 @@
         </details>
         <div class="hero-footer"><span class="desktop-note">ESC — ПАУЗА <i aria-hidden="true"></i> R — ЗАНОВО</span><span>ЭКСПЕРИМЕНТЫ ПРИВЕТСТВУЮТСЯ</span></div>
       </div>
-      <div class="start-caption" aria-hidden="true"><span class="caption-line"></span>КАЖДАЯ ПОВЕРХНОСТЬ — ВОЗМОЖНОСТЬ</div>
+      <section id="campaign-map" class="campaign-map" aria-labelledby="campaign-map-title">
+        <div class="map-header"><div><span class="eyebrow">КАРТА ЛАБОРАТОРИИ</span><h2 id="campaign-map-title">Выбери направление<span>.</span></h2></div><span class="map-key"><i aria-hidden="true"></i> Пройденная комната</span></div>
+        <div class="sector-tabs" role="tablist" aria-label="Секторы лаборатории"></div>
+        <div class="sector-heading"><h3 class="sector-name"></h3><span class="sector-range"></span></div>
+        <div class="sector-nodes" role="group" aria-label="Комнаты выбранного сектора"></div>
+        <p class="map-footer">Исследуй в своём порядке. Друг путешествует вместе с тобой.</p>
+      </section>
     </section>
     <header id="hud" class="hud" aria-hidden="true" inert>
       <div class="objective-card">

@@ -16,6 +16,9 @@ permissions:
   contents: read
 jobs:
   chapter:
+    # The historical stamp/profile covers the five-room foundation revision.
+    # Expedition verifies these rooms plus every retained and new room itself.
+    if: github.event_name != 'pull_request' || github.head_ref != 'upgrade/release-expansion-20261004'
     runs-on: ubuntu-latest
     timeout-minutes: 25
     strategy:

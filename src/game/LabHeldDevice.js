@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { visualSeconds } from './LabVisualTime.js';
 
 /** Landmarks measured on the original, Draco-decoded model-11-portal-gun.glb.
  * Its POSITION bounds are [-.492971,-.184248,-.725427] to
@@ -188,7 +189,7 @@ export class LabHeldDevice {
   }
 
   update({ dt = 1 / 60, carrying = false } = {}) {
-    const step = THREE.MathUtils.clamp(Number.isFinite(dt) ? dt : 0, 0, 0.1);
+    const step = visualSeconds(dt);
     this.carrying = Boolean(carrying);
     this.holsterProgress = THREE.MathUtils.clamp(this.holsterProgress
       + (this.carrying ? 1 : -1) * step / LAB_DEVICE_TRANSITION_SECONDS, 0, 1);

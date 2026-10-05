@@ -91,7 +91,9 @@ export async function runV8Journey(game,{onMilestone=()=>{},scenario=null,journe
       await scenario({game,level,walk,wait,aim,look,until,pickup,enter,mark,frame,worldMove,stop});
       report.pass=true;report.kind='recovery';report.teleports=game.teleportCount;return report;
     }
-    if(level.creativeEarly){
+    if(level.expansionA){const {runExpansionAJourney}=await import('./LabExpansionJourneyA.js');await runExpansionAJourney({game,level,walk,wait,aim,look,until,pickup,enter,mark,frame,worldMove,stop},journeyOptions);}
+    else if(level.expansionB){const {runExpansionBJourney}=await import('./LabExpansionJourneyB.js');await runExpansionBJourney({game,level,walk,wait,aim,look,until,pickup,enter,mark,frame,worldMove,stop},journeyOptions);}
+    else if(level.creativeEarly){
       const n=level.creativeEarly;assert([18,20].includes(n)&&n===index+1,'Unknown creative early room');
       const journey=await import(`./LabCreativeRoom${n}Journey.js`);
       await journey[`runCreative${n}`]({game,level,walk,wait,aim,look,until,pickup,enter,mark,frame,worldMove,stop},journeyOptions);
@@ -191,7 +193,7 @@ export async function runV8Journey(game,{onMilestone=()=>{},scenario=null,journe
     }
     until(()=>game.state==='won',3,'Goal did not complete');
     assert(game.heldCube||index===0||index>=5,'Friend lost from hands');mark('both at exit');
-    report.pass=true;report.teleports=game.teleportCount;return report;
+    report.pass=true;report.teleports=game.teleportCount;if(journeyOptions.alternative)report.alternative=journeyOptions.alternative;return report;
   } finally {
     stop();game.input.getMove=oldMove;game.respawn=respawn;game.physics.resetCargo=resetCargo;
   }

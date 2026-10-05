@@ -12,12 +12,15 @@ const hash=buffer=>crypto.createHash('sha256').update(buffer).digest('hex');
 function sourceInputs(){
   // These are build inputs, not review media. Output file hashes below also
   // cover the exact packaged models, decoder and bundle bytes.
-  const filenames=['index.html','vite.config.js','package.json','package-lock.json',...walk('src'),...walk('public/models/runtime'),...walk('public/draco')].filter(filename=>fs.existsSync(filename)).sort();
+  const filenames=['index.html','vite.config.js','package.json','package-lock.json',...walk('src'),...walk('public/models/runtime'),...walk('public/draco'),...walk('public/art')].filter(filename=>fs.existsSync(filename)).sort();
   return filenames.map(filename=>({filename:filename.split(path.sep).join('/'),sha256:hash(fs.readFileSync(filename))}));
 }
 const inputsBefore=sourceInputs();
-if(args.has('--build'))execFileSync('npm',['run','build:yandex'],{stdio:'inherit'});
 const input=path.resolve(String(args.get('--input')||'dist-yandex'));
+if(args.has('--build')){
+  execFileSync('npm',['run','build:yandex'],{stdio:'inherit'});
+  execFileSync(process.execPath,['scripts/stamp-expedition.mjs',input],{stdio:'inherit'});
+}
 const output=path.resolve(String(args.get('--output')||'artifacts/brainrot-portal-yandex.zip'));
 const reportPath=path.resolve(String(args.get('--report')||'qa/yandex-package.json'));
 const LIMIT=100_000_000; // Conservative decimal bytes for the user's and platform's 100 MB ceiling.
@@ -29,8 +32,14 @@ function walk(directory){
   });
 }
 assert.ok(fs.existsSync(path.join(input,'index.html')),'index.html must be at the archive root');
+const sourceCommit=execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim();
+const buildInfo=JSON.parse(fs.readFileSync(path.join(input,'build-info.json'),'utf8'));
+assert.equal(buildInfo.commit,sourceCommit,'Package must use the stamped current commit');
+assert.equal(buildInfo.levels,51,'Package must contain the full 51-room candidate');
+assert.equal(buildInfo.sourceInputsSha256,hash(JSON.stringify(inputsBefore)),'Package stamp must match the current build inputs');
 assert.ok(!output.startsWith(input+path.sep),'ZIP must be outside the game directory');
 const filenames=walk(input).map(filename=>path.relative(input,filename).split(path.sep).join('/')).sort();
+assert.equal(filenames.filter(filename=>/^assets\/index-[^/]+\.js$/.test(filename)).length,1,'Remove stale main bundles before packaging this candidate');
 assert.deepEqual(filenames.filter(filename=>/(^|\/)index\.html$/.test(filename)),['index.html']);
 assert.ok(filenames.length>5,'Game bundle is missing');
 assert.ok(!filenames.includes('sdk.js'),'The host-supplied /sdk.js must not be packaged');
@@ -45,7 +54,7 @@ const unpackedBytes=files.reduce((sum,file)=>sum+file.bytes,0);
 assert.ok(unpackedBytes<=LIMIT,`Unpacked package exceeds ${LIMIT} bytes: ${unpackedBytes}`);
 const manifest=JSON.parse(fs.readFileSync(path.join(input,'models/runtime/manifest.json')));
 assert.deepEqual(manifest.models.map(model=>model.id).sort((a,b)=>a-b),[...CAMPAIGN_ASSET_IDS].sort((a,b)=>a-b),'Every active asset must be packaged');
-assert.equal(FOUNDATION_INDICES.length,41);
+assert.equal(FOUNDATION_INDICES.length,51);
 const game={chamberEdition:'foundation'};
 for(const index of FOUNDATION_INDICES){
   const spec=campaignSpec(game,index);assert.ok(spec,`Missing level ${index+1}`);
@@ -100,9 +109,8 @@ with zipfile.ZipFile(destination) as archive:
  assert 'index.html' in archive.namelist()
 `,input,output]);
 const archive=fs.readFileSync(output);assert.ok(archive.length<=LIMIT,`ZIP exceeds ${LIMIT} bytes`);
-const sourceCommit=execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim();
 const dirty=execFileSync('git',['status','--porcelain','--untracked-files=no'],{encoding:'utf8'}).trim().length>0;
-const report={pass:true,scope:'Archive structure, files, hashes and 41-level model coverage; not live SDK, hardware FPS or moderation approval',
+const report={pass:true,scope:'Archive structure, files, hashes and 51-level model coverage; not live SDK, hardware FPS or moderation approval',
   sourceCommit,workingTreeModified:dirty,workingTreeStatusScope:'tracked files only; generated untracked QA/artifacts excluded',builtFromCurrentSource:args.has('--build'),sourceInputFiles:inputsBefore.length,sourceInputsSha256:hash(JSON.stringify(inputsBefore)),compressedBytes:archive.length,unpackedBytes,limitBytes:LIMIT,sha256:hash(archive),
   levels:FOUNDATION_INDICES.length,models:manifest.models.length,modelBytes:manifest.totalBytes,
   sdkScript:'/sdk.js supplied by the Yandex upload host, not included',files};
