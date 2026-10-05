@@ -15,11 +15,14 @@ import puppeteer from 'puppeteer-core';
 
 const level=Number(process.env.LEVEL);
 assert.ok(Number.isInteger(level)&&level>=1&&level<=51,'LEVEL must be a campaign room 1–51');
+const alternative=process.env.ALTERNATIVE_ROUTE||null;
+const alternatives=new Map([[48,'staged-cargo'],[49,'unlit-mirror'],[50,'free-cargo-bridge'],[51,'prearmed-relay']]);
+if(alternative)assert.equal(alternative,alternatives.get(level),'The requested alternative must belong to this room');
 const out=path.resolve(process.env.OUT_DIR||'qa/walkthroughs');
 const base=process.env.PAGE_URL||'http://127.0.0.1:4173/';
 const fps=Number(process.env.CAPTURE_FPS||12);assert.ok([4,6,12].includes(fps));
 const size={width:Number(process.env.CAPTURE_WIDTH||854),height:Number(process.env.CAPTURE_HEIGHT||480)},visualHz=60,stride=visualHz/fps;
-const stem=`level-${String(level).padStart(2,'0')}`;
+const stem=`level-${String(level).padStart(2,'0')}${alternative?'-alternate':''}`;
 const frameDir=path.join(out,`${stem}-frames`);
 const movie=path.join(out,`${stem}.mp4`);
 fs.mkdirSync(frameDir,{recursive:true});
@@ -74,7 +77,7 @@ try{
   });
  }
  await page.waitForFunction(()=>window.__NESI_DEMO_GAME__?.state==='playing');
- const capture=await page.evaluate(async({level,stride})=>{
+ const capture=await page.evaluate(async({level,stride,alternative})=>{
   const game=window.__NESI_DEMO_GAME__,original=game.updateVisuals,writeFrames=[],milestones=[];
   game.renderer.setAnimationLoop(null);
   let visualFrame=0,encodedFrame=0,lastCapturedState=null;
@@ -92,17 +95,18 @@ try{
    return result;
   };
   try{
-   const route=await window.__NESI_RUN_LEVEL_ROUTE__();
+   const route=await window.__NESI_RUN_LEVEL_ROUTE__(alternative?{alternative}:{});
    // The route can finish between sampled frames. Capture its normal victory
    // presentation at the very next regular 12 Hz sample without changing play.
    for(let n=0;n<stride&&lastCapturedState!=='won';n++)game.updateVisuals(1/60,1);
    await Promise.all(writeFrames);
    return {route,milestones,frames:encodedFrame,width:game.renderer.domElement.width,height:game.renderer.domElement.height,visualFrames:visualFrame};
   }finally{game.updateVisuals=original;delete window.__NESI_CAPTURE_LEVEL_MARK__;await Promise.allSettled(writeFrames);}
- },{level,stride});
+ },{level,stride,alternative});
  assert.equal(capture.route.pass,true,'The ordinary route must reach the exit');
  assert.equal(capture.route.level,level);
  assert.equal(capture.route.resets,0);assert.equal(capture.route.respawns,0);
+ if(alternative)assert.equal(capture.route.alternative,alternative,'The recording must execute the declared alternative');
  if(level===41){assert.equal(capture.route.cargoResets,0);assert.equal(capture.route.sameCompanion,true);assert.equal(capture.route.metrics.checkpoints,false);assert.equal(capture.route.metrics.completedStages,info.features.tower.stages);}
  assert.deepEqual(errors,[]);
  assert.equal(capture.width,size.width);assert.equal(capture.height,size.height);
@@ -136,7 +140,7 @@ try{
  assert.equal(probe.streams[0].width,size.width);assert.equal(probe.streams[0].height,size.height);
  assert.equal(Number(probe.streams[0].nb_frames),frameCount);
  assert.ok(Math.abs(Number(probe.format.duration)-frameCount/fps)<.1,'MP4 duration must match the sampled route');
- const result={level,title,sourceCommit:info.commit,edition:'foundation',route:capture.route,frameCount,
+ const result={level,title:alternative?`${title} · Альтернативный путь`:title,...(alternative?{alternative}:{}),sourceCommit:info.commit,edition:'foundation',route:capture.route,frameCount,
   fps,width:size.width,height:size.height,durationSeconds:frameCount/fps,firstFrame,lastFrame,
   continuous:true,pixelCheck,milestones:capture.milestones,sha256:bytesHash(movie),bytes:fs.statSync(movie).size,
   video:`${stem}.mp4`,poster:`${stem}.jpg`,finishPoster:`${stem}-finish.jpg`,

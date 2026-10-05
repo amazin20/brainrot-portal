@@ -193,7 +193,7 @@ export async function runV8Journey(game,{onMilestone=()=>{},scenario=null,journe
     }
     until(()=>game.state==='won',3,'Goal did not complete');
     assert(game.heldCube||index===0||index>=5,'Friend lost from hands');mark('both at exit');
-    report.pass=true;report.teleports=game.teleportCount;return report;
+    report.pass=true;report.teleports=game.teleportCount;if(journeyOptions.alternative)report.alternative=journeyOptions.alternative;return report;
   } finally {
     stop();game.input.getMove=oldMove;game.respawn=respawn;game.physics.resetCargo=resetCargo;
   }

@@ -51,4 +51,20 @@ function relay(d,o){const {game:g,level:l}=d;
  // return by the genuine dry floor and service incline, then repurpose it.
  d.walk(19,-4);d.until(()=>g.playerGrounded&&g.playerPosition.y< -3.8,5,'Dry relay service floor missed');d.walk(-28,-16);d.walk(-28,15);d.walk(-21,15);enterJump(d,l.entry);collect(d);d.walk(8,-16.3);d.walk(3,-16.3);d.walk(3,-23);
 }
-export function runExpansionBJourney(d,options={}){installRoom21Aim(d);const f=[fracture,wedge,reflection,topple,relay][d.level.index-46];check(f,'Unknown expansion B room');return f(d,options);}
+export function runExpansionBJourney(d,options={}){
+ installRoom21Aim(d);
+ if(options.alternative==='staged-cargo'){
+  check(d.level.index===47,'Staged cargo alternative requires room 48');
+  return import('./LabExpansionAlternateJourney48.js').then(m=>m.runRoom48StagedCargo(d));
+ }
+ if(options.alternative==='unlit-mirror'){
+  check(d.level.index===48,'Unlit mirror alternative requires room 49');
+  return import('./LabExpansionAlternateJourney49.js').then(m=>m.runRoom49UnlitMirror(d));
+ }
+ if(options.alternative==='free-cargo-bridge'||options.alternative==='prearmed-relay'){
+  check(d.level.index===(options.alternative==='free-cargo-bridge'?49:50),'Expansion alternative selected for the wrong room');
+  return import('./LabExpansionAlternateJourneyB.js').then(m=>m.runExpansionAlternateJourneyB(d,options.alternative));
+ }
+ check(!options.alternative,'Unknown expansion B alternative');
+ const f=[fracture,wedge,reflection,topple,relay][d.level.index-46];check(f,'Unknown expansion B room');return f(d,options);
+}

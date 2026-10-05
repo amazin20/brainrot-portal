@@ -127,6 +127,9 @@ jobs:
       - run: node -e "const r=require('./qa/release-collision-attacks.json');if(!r.sourceStable||r.rows.some(x=>['driver-error','collision-contact-needs-review','completion-needs-causal-review','restart-residual-candidate'].includes(x.outcome)))process.exit(1)"
       - run: node scripts/qa-speedrun-expansion-new.mjs
       - run: node scripts/qa-targeted-release-contacts.mjs
+      - run: node scripts/qa-parented-collision-stability.mjs
+      - run: node scripts/qa-expedition-alternates-47-49.mjs
+      - run: node scripts/qa-expedition-alternates-50-51.mjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -135,6 +138,9 @@ jobs:
             qa/release-collision-attacks.json
             qa/speedrun-expansion-new.json
             qa/targeted-release-contacts.json
+            qa/parented-collision-stability.json
+            qa/expedition-alternates-47-49.json
+            qa/expedition-alternates-50-51.json
           retention-days: 14
   resources:
     name: Repeated production room and WebGL resource recovery
@@ -162,7 +168,7 @@ jobs:
     timeout-minutes: 75
     strategy:
       fail-fast: false
-      matrix: {levels: ['14 42 43 44 45 46','47 48 49 50 51','41']}
+      matrix: {levels: ['14 28 42 43 44 45 46','47 48 49 50 51','41']}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -175,6 +181,12 @@ jobs:
           command -v ffmpeg >/dev/null || (sudo apt-get update -qq && sudo apt-get install -y --no-install-recommends ffmpeg)
           npm run preview -- --host 127.0.0.1 --port 4173 >qa/preview.log 2>&1 &
           for i in $(seq 1 30); do curl -fsS http://127.0.0.1:4173/build-info.json >/dev/null && break; sleep 1; done
+          if [ '${{ matrix.levels }}' = '47 48 49 50 51' ]; then
+            LEVEL=48 ALTERNATIVE_ROUTE=staged-cargo CAPTURE_FPS=4 CAPTURE_WIDTH=640 CAPTURE_HEIGHT=360 BUILD_COMMIT=${{ github.sha }} CHROME_PATH=$(command -v google-chrome) node scripts/record-foundation-walkthrough.mjs
+            LEVEL=49 ALTERNATIVE_ROUTE=unlit-mirror CAPTURE_FPS=4 CAPTURE_WIDTH=640 CAPTURE_HEIGHT=360 BUILD_COMMIT=${{ github.sha }} CHROME_PATH=$(command -v google-chrome) node scripts/record-foundation-walkthrough.mjs
+            LEVEL=50 ALTERNATIVE_ROUTE=free-cargo-bridge CAPTURE_FPS=4 CAPTURE_WIDTH=640 CAPTURE_HEIGHT=360 BUILD_COMMIT=${{ github.sha }} CHROME_PATH=$(command -v google-chrome) node scripts/record-foundation-walkthrough.mjs
+            LEVEL=51 ALTERNATIVE_ROUTE=prearmed-relay CAPTURE_FPS=4 CAPTURE_WIDTH=640 CAPTURE_HEIGHT=360 BUILD_COMMIT=${{ github.sha }} CHROME_PATH=$(command -v google-chrome) node scripts/record-foundation-walkthrough.mjs
+          fi
           for level in ${{ matrix.levels }}; do
             LEVEL=$level CAPTURE_FPS=4 CAPTURE_WIDTH=640 CAPTURE_HEIGHT=360 BUILD_COMMIT=${{ github.sha }} CHROME_PATH=$(command -v google-chrome) node scripts/record-foundation-walkthrough.mjs
           done
