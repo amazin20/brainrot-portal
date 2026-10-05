@@ -125,9 +125,17 @@ jobs:
       - run: npm ci
       - run: ROOMS=$(seq -s, 1 51) node scripts/qa-release-collision-attacks.mjs
       - run: node -e "const r=require('./qa/release-collision-attacks.json');if(!r.sourceStable||r.rows.some(x=>['driver-error','collision-contact-needs-review','completion-needs-causal-review','restart-residual-candidate'].includes(x.outcome)))process.exit(1)"
+      - run: node scripts/qa-speedrun-expansion-new.mjs
+      - run: node scripts/qa-targeted-release-contacts.mjs
       - uses: actions/upload-artifact@v4
         if: always()
-        with: {name: expedition-new-attacks, path: qa/release-collision-attacks.json, retention-days: 14}
+        with:
+          name: expedition-new-attacks
+          path: |
+            qa/release-collision-attacks.json
+            qa/speedrun-expansion-new.json
+            qa/targeted-release-contacts.json
+          retention-days: 14
   resources:
     name: Repeated production room and WebGL resource recovery
     needs: package
@@ -154,7 +162,7 @@ jobs:
     timeout-minutes: 75
     strategy:
       fail-fast: false
-      matrix: {levels: ['42 43 44 45 46','47 48 49 50 51','41']}
+      matrix: {levels: ['14 42 43 44 45 46','47 48 49 50 51','41']}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4

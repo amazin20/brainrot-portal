@@ -209,7 +209,7 @@ async function main(){
  }finally{game.physics.dispose();game.portals.dispose();}
  assert.ok(rows.length,'No route matches the requested edition, levels and kind');
  const summary={pass:rows.filter(r=>r.pass).length,fail:rows.filter(r=>!r.pass).length,total:rows.length};
- const git=()=>{try{return {commit:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),dirty:!!execFileSync('git',['status','--porcelain'],{encoding:'utf8'}).trim()};}catch{return {commit:process.env.GITHUB_SHA??null,dirty:null};}};
+ const git=()=>{try{return {commit:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),dirty:!!execFileSync('git',['status','--porcelain','--untracked-files=all','--','src','public','index.html','vite.config.js','package.json','package-lock.json'],{encoding:'utf8'}).trim(),dirtyScope:'game-build-inputs'};}catch{return {commit:process.env.GITHUB_SHA??null,dirty:null,dirtyScope:'game-build-inputs'};}};
  const output={generatedAt:new Date().toISOString(),...git(),edition:opts.edition,canonicalOnly:opts.canonicalOnly,kind:opts.kind,summary,rows,gaps,limitations:[
   'Headless physics and scripted production inputs cannot verify visibility, usability, aesthetics, performance or human discoverability.',
   'One successful path and one scripted alternative do not prove every possible route avoids softlocks or shortcuts.',

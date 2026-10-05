@@ -45,7 +45,11 @@ the archived ray, 300 production opening rays across all eleven lower entrances
 and the hoist upper entrance, retained art outside the opening/opposite wall with
 unchanged collision registries, and all existing portal-front reveals.
 
-The strict full native continuous castle recording must be rerun on the combined
-release candidate. Source-geometry success does not substitute for that native
-recording. Failed original frames, neighbors, before/after rays and scope are
-retained in the separate evidence archive.
+The strict full native continuous recording was rerun on source
+`3e0205ebe41804f71eab6792e5d220795fc1028e` in successful release CI
+`37237965678` (artifact `11317384892`). All 4,173 actual JPEG frames passed the
+unchanged nonblank gate; minimum luminance range was 218. The route lasted
+1,043.25 seconds and reached victory with the original cargo and no resets or
+respawns. This confirms the combined candidate in native software WebGL; it is
+not a physical-device FPS measurement. Failed original frames, neighbors,
+before/after rays and scope retain their original provenance.
