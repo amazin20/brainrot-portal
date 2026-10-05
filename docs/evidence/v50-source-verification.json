@@ -1,0 +1,40 @@
+{
+  "method": "All tracked local files compared to GitHub recursive tree Git blob SHA; production artifacts compared byte for byte. This checks source and runtime identity, not release acceptance.",
+  "observedDateUTC": "2026-10-05",
+  "observationSnapshot": {
+    "sourceCommit": "1c804ce1c3abe401ec122dded23917e384ada2a8",
+    "tree": "3389619d9c88d1c464e32ca11bb4d38469f439ec",
+    "trackedFiles": 896,
+    "errors": [],
+    "pass": true
+  },
+  "releaseCandidate": {
+    "sourceCommit": "6f1eec54d47fed7916f5346a218525292d15fd62",
+    "tree": "6ee1aaccd4046d955344dcf4961bc8dee9a6cbbf",
+    "trackedFiles": 896,
+    "errors": [],
+    "pass": true
+  },
+  "gameBuildInputs": {
+    "files": 264,
+    "sha256": "6b84fb4e8b879c0ab65891768bd5f6d18e1f09acfe89b5b36748a9afb121e3da",
+    "identical": true
+  },
+  "productionComparison": {
+    "beforeCommit": "1c804ce1c3abe401ec122dded23917e384ada2a8",
+    "afterCommit": "6f1eec54d47fed7916f5346a218525292d15fd62",
+    "files": 63,
+    "changedFiles": [
+      "build-info.json"
+    ],
+    "identicalRuntimeFiles": 62
+  },
+  "supplementalCaptureSource": {
+    "sourceCommit": "6f1eec54d47fed7916f5346a218525292d15fd62",
+    "algorithm": "SHA256(JSON.stringify(sorted Git tracked paths under src public plus index.html package.json package-lock.json vite.config.js, mapped to {path,sha256}))",
+    "files": 332,
+    "sourceGameBuildInputsSHA256": "f4c493a6fd8812c16f005cc587b7b7cb5798722f173d9abea00b5c2f3f95667f",
+    "sourceRecorderSHA256": "d27129ef7cb4e88f2481cf781d48435b941e10c73a649b10da3630316c0343b3",
+    "distinction": "The capture snapshot covers all 332 tracked src/public/build-root files with path keys. The stamped production hash covers 264 actual runtime build inputs with filename keys. Both independently match the frozen source; they use deliberately different scopes."
+  }
+}

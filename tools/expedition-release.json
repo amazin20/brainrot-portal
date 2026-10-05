@@ -1,0 +1,189 @@
+{
+  "sourceCommit": "6f1eec54d47fed7916f5346a218525292d15fd62",
+  "sourceBranch": "upgrade/release-expansion-20261004",
+  "candidateRun": 37290872843,
+  "previousSourceCommit": "14c6683cb4d2991dfd48be28fa38ccaa1fc015b7",
+  "previousPublicationRun": 37220386492,
+  "previewPath": "tower-singularity",
+  "candidateArtifact": {
+    "id": 11335663976,
+    "name": "expedition-production",
+    "digest": "sha256:3199709fd9ea8fefb8f5f504121e0e2f1adf9bb6d5da71bab74a23faa03e3c44"
+  },
+  "previousArtifact": {
+    "id": 11310157791,
+    "name": "github-pages",
+    "digest": "sha256:65a38ef951b6a9770824005c8b78790ada6664beeb3887912f1acc1658d95892"
+  },
+  "recordingArtifacts": [
+    {
+      "id": 11338451446,
+      "name": "expedition-walkthroughs-0",
+      "digest": "sha256:b249a4c51004302a561a69ca9c4b3232223ee90ada81bad67fd285c04393c6fe"
+    },
+    {
+      "id": 11338740862,
+      "name": "expedition-walkthroughs-1",
+      "digest": "sha256:b20336ad42a675d81b43f935c2112ce34b88b05cda3c501566d9b22d9d72e64e"
+    },
+    {
+      "id": 11340130736,
+      "name": "expedition-walkthroughs-2",
+      "digest": "sha256:12e178cc2ca5ecaf2128185dbd65014655ceeaaf9201767cdc7ae5e055c306e0"
+    }
+  ],
+  "acceptedArtifacts": [
+    {
+      "id": 11336856140,
+      "name": "expedition-interface",
+      "digest": "sha256:f43fa5564483ee256f69b2aa338c3e1f4eb50023ab34cbe428c4df808ea80b27"
+    },
+    {
+      "id": 11337255953,
+      "name": "expedition-new-attacks",
+      "digest": "sha256:59ad43bc43e4a76b166e28437e504d28fb480d31ed3d8f6e6735abbe27ffdd14"
+    },
+    {
+      "id": 11335663976,
+      "name": "expedition-production",
+      "digest": "sha256:3199709fd9ea8fefb8f5f504121e0e2f1adf9bb6d5da71bab74a23faa03e3c44"
+    },
+    {
+      "id": 11337861459,
+      "name": "expedition-resources",
+      "digest": "sha256:23cb152e57e5c78f49c5ea75d75ad328d4718dd4cbaa6800b90a58a6d00e40c4"
+    },
+    {
+      "id": 11336683620,
+      "name": "expedition-routes-classic",
+      "digest": "sha256:9ba211df65e81ec708007de8be1245c33c99d84d1892375e3b7b405379e23688"
+    },
+    {
+      "id": 11337436605,
+      "name": "expedition-routes-foundation",
+      "digest": "sha256:bab2921a9ad4bd120b7b165d2d0cb26e04510a1536d58c3bef34d9e76d67d5d7"
+    },
+    {
+      "id": 11336491021,
+      "name": "expedition-routes-open",
+      "digest": "sha256:d60eb995ef620d9bb9490442727ae4b35234cb0b288d2ec4274d6707b8a43c7b"
+    },
+    {
+      "id": 11338451446,
+      "name": "expedition-walkthroughs-0",
+      "digest": "sha256:b249a4c51004302a561a69ca9c4b3232223ee90ada81bad67fd285c04393c6fe"
+    },
+    {
+      "id": 11338740862,
+      "name": "expedition-walkthroughs-1",
+      "digest": "sha256:b20336ad42a675d81b43f935c2112ce34b88b05cda3c501566d9b22d9d72e64e"
+    },
+    {
+      "id": 11340130736,
+      "name": "expedition-walkthroughs-2",
+      "digest": "sha256:12e178cc2ca5ecaf2128185dbd65014655ceeaaf9201767cdc7ae5e055c306e0"
+    },
+    {
+      "id": 11337045303,
+      "name": "expedition-webgl-0",
+      "digest": "sha256:874111fabc4a7f07a38b7aae5f75f88fca1f56434a750e39d9cb608b74cb144a"
+    },
+    {
+      "id": 11336671821,
+      "name": "expedition-webgl-1",
+      "digest": "sha256:9c81792fae478e954cddb836542972759d4585638655de65430883c6a5f53661"
+    },
+    {
+      "id": 11337065844,
+      "name": "expedition-webgl-2",
+      "digest": "sha256:1581495e0a07ef2aa8cc658960e9283c577985a68e8d58d95b5ac4d0516046df"
+    },
+    {
+      "id": 11336367285,
+      "name": "expedition-webgl-3",
+      "digest": "sha256:660789ecbd75c678f94ff5df158ab6dfbc62ec324052746780cbbfdf1ac5ce0c"
+    },
+    {
+      "id": 11335984234,
+      "name": "expedition-webgl-4",
+      "digest": "sha256:c716a7341ca03f5a6748b8672f7de21e821c2fb8f715f9c9e48a953845463524"
+    },
+    {
+      "id": 11336650684,
+      "name": "expedition-webgl-5",
+      "digest": "sha256:418b0b8ba53a48a0de7395a0e20eede905427cb6d94dcfd09c54c3c5b5e15e9c"
+    },
+    {
+      "id": 11336089502,
+      "name": "expedition-webgl-6",
+      "digest": "sha256:5da0295762a604f7baaee6e61aed84ff03396174466eb6e3ef53629e0b69124a"
+    },
+    {
+      "id": 11336401267,
+      "name": "expedition-yandex-upload",
+      "digest": "sha256:e7e6d5469ad1c4f611a06933c3c6dfde8355938ff1a4407c3b4f76256db66017"
+    }
+  ],
+  "recordedLevels": [
+    14,
+    28,
+    41,
+    42,
+    43,
+    44,
+    45,
+    46,
+    47,
+    48,
+    49,
+    50,
+    51
+  ],
+  "recordingGroups": [
+    "14 28 42 43 44 45 46",
+    "47 48 49 50 51",
+    "41"
+  ],
+  "supplementalRecordingLevels": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40
+  ],
+  "sourceRecorderSHA256": "d27129ef7cb4e88f2481cf781d48435b941e10c73a649b10da3630316c0343b3",
+  "sourceGameBuildInputsSHA256": "f4c493a6fd8812c16f005cc587b7b7cb5798722f173d9abea00b5c2f3f95667f"
+}
