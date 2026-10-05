@@ -187,7 +187,7 @@
     {
       "level": 14,
       "id": "light-weave",
-      "contract": "6df82b170862362798d6d302e61b792f4422aa85b4d2e15f456c2525d520b51c",
+      "contract": "86108a1859f9d7e532d20462c91915355fda34565fa266b3c4fb6503311e84e2",
       "workload": {
         "nodes": 783,
         "meshes": 605,
