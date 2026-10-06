@@ -1,0 +1,53 @@
+name: Audit stalled Expedition publication
+on:
+  push:
+    branches: [main]
+    paths: [.github/workflows/expedition-recovery-audit.yml]
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: expedition-recovery-audit
+  cancel-in-progress: false
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Preserve the exact publication sources
+        run: |
+          mkdir -p recovery-audit
+          git archive --format=tar.gz HEAD scripts tests tools .github/workflows package.json package-lock.json README.md > recovery-audit/publication-sources.tar.gz
+          git rev-parse HEAD > recovery-audit/controller-sha.txt
+      - name: Inspect all capture attempts and public build without mutating them
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('node:fs');
+            const { owner, repo } = context.repo;
+            const run_id = 37297389151;
+            const run = (await github.rest.actions.getWorkflowRun({owner, repo, run_id})).data;
+            const jobs = await github.paginate(github.rest.actions.listJobsForWorkflowRun, {owner, repo, run_id, filter:'all', per_page:100});
+            const artifacts = await github.paginate(github.rest.actions.listWorkflowRunArtifacts, {owner, repo, run_id, per_page:100});
+            fs.writeFileSync('recovery-audit/capture-run.json', JSON.stringify({run, jobs, artifacts}, null, 2));
+            const names = Array.from({length:40}, (_,i)=>i+1).filter(n=>![14,28].includes(n));
+            const rows = names.map(level=>({level, jobs:jobs.filter(j=>j.name===`Continuous supplemental walkthrough (${level})`).map(j=>({id:j.id,attempt:j.run_attempt,status:j.status,conclusion:j.conclusion,startedAt:j.started_at,completedAt:j.completed_at,capture:j.steps?.find(s=>s.name===`Capture room ${level} with the unchanged source recorder`)})),artifacts:artifacts.filter(a=>a.name===`expedition-supplemental-walkthrough-${level}`).map(a=>({id:a.id,name:a.name,digest:a.digest,expired:a.expired,workflow_run:a.workflow_run}))}));
+            const response = await fetch('https://amazin20.github.io/brainrot-portal/build-info.json?recovery='+Date.now(),{cache:'no-store'});
+            if (!response.ok) throw Error('Public build HTTP '+response.status);
+            const publicBuild = await response.json();
+            fs.writeFileSync('recovery-audit/summary.json', JSON.stringify({run:{id:run.id,status:run.status,conclusion:run.conclusion,sha:run.head_sha,attempt:run.run_attempt},publicBuild,rows}, null,2));
+            console.log(JSON.stringify({publicSource:publicBuild.commit,publicVersion:publicBuild.version,publicLevels:publicBuild.levels,captures:rows.map(r=>({level:r.level,successful:r.jobs.filter(j=>j.conclusion==='success'&&j.capture?.conclusion==='success').length,artifacts:r.artifacts.length})),nonCaptureJobs:jobs.filter(j=>!j.name.startsWith('Continuous supplemental walkthrough')).map(j=>({id:j.id,name:j.name,attempt:j.run_attempt,status:j.status,conclusion:j.conclusion}))},null,2));
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: expedition-recovery-audit
+          path: recovery-audit
+          retention-days: 14
+          if-no-files-found: error
