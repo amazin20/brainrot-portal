@@ -25,7 +25,7 @@ const availableRooms=foundationEdition.enabled?FOUNDATION_INDICES:openEdition.en
 if(campaignRoute.legacyVelocityLink)history.replaceState(history.state,'',location.pathname+campaignRoute.search+location.hash);
 let storage;try{storage=localStorage;}catch{}
 const preferences=new LabPreferences(foundationEdition.enabled?foundationStorage(storage):openEdition.enabled?openEditionStorage(storage):storage,
-  foundationEdition.enabled?{campaignRevision:CREATIVE_CAMPAIGN_REVISION,replacedIndices:CREATIVE_REPLACED_INDICES,roomRevisions:{50:'echo-horizon-v1'}}:{}),holds=new Set();
+  foundationEdition.enabled?{campaignRevision:CREATIVE_CAMPAIGN_REVISION,replacedIndices:CREATIVE_REPLACED_INDICES,roomRevisions:{32:'siphon-observatory-v1',50:'echo-horizon-v1'}}:{}),holds=new Set();
 const screens=['loading','start-screen','pause-screen','win-screen','error-screen'];
 const hudNodes={level:$('#level-number'),chamber:$('#chamber'),objective:$('#objective'),cargo:$('#cargo-status'),portals:$('#portal-status')};
 function hudText(key,value){const node=hudNodes[key];if(node.textContent!==value)node.textContent=value;}

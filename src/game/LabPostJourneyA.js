@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import {aimLateSurface} from './LabLateCampaignAim.js';
 import {runCreative34} from './LabCreativeCounterweightJourney.js';
-import {runInverseSpring} from './LabLateCampaignSpringJourney.js';
+import {runSiphonObservatory} from './LabSiphonObservatoryJourney.js';
 import {installRoom21Aim} from './LabRoom21Journey.js';
 import {CAMERA_PITCH_MIN,CAMERA_PITCH_MAX} from './LabCamera.js';
 
@@ -88,7 +88,7 @@ export function runPost32(d,{route='freight-before-light',stopBeforeRatchet=fals
  mark('The light circuit is borrowed again after the original cargo returns');
 }
 
-export const runPost33=runInverseSpring;
+export const runPost33=runSiphonObservatory;
 export const runPost34=runCreative34;
 
 export function runPost35(d,{route='latches-before-freight',stopAfter=null}={}){

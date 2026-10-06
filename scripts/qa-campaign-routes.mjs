@@ -96,7 +96,7 @@ Object.assign(foundationAlternates,{
  {name:'erased-rope-recovery',kind:'recovery',exercisesRecovery:true,options:{recovery:true},source:'tests/lab-creative-room20.test.js'}],
  31:[{name:'inspect-rack-first',options:{route:'inspect-rack-first'},source:'src/game/LabPostJourneyA.js'}],
  32:[{name:'inspect-optics-first',options:{route:'inspect-optics-first'},source:'src/game/LabPostJourneyA.js'}],
- 33:[{name:'aim-before-charge',options:{route:'aim-before-charge'},source:'src/game/LabPostJourneyA.js'}],
+ 33:[{name:'miss-lift-and-recirculate',kind:'recovery',exercisesRecovery:true,options:{route:'miss-lift-and-recirculate'},source:'src/game/LabSiphonObservatoryJourney.js'}],
  34:[{name:'inspect-unsealed-first',options:{alternate:true},source:'src/game/LabCreativeCounterweightJourney.js'},
   {name:'early-discharge-recovery',kind:'recovery',exercisesRecovery:true,options:{recover:true},source:'scripts/qa-pressure-room34.mjs'}],
  35:[{name:'scout-before-second-latch',options:{route:'scout-before-second-latch'},source:'src/game/LabPostJourneyA.js'}],
