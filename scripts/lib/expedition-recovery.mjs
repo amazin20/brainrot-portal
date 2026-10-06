@@ -13,6 +13,8 @@ export const RECOVERY_CAPTURE_SHA = 'fd2e7ad64d1dec04fa4a733ff140ed0d065c609c';
 export const RECOVERY_SOURCE = '6f1eec54d47fed7916f5346a218525292d15fd62';
 export const RECOVERY_CANDIDATE_RUN = 37290872843;
 export const RECOVERY_WORKFLOW = '.github/workflows/recover-expedition.yml';
+export const RECOVERY_ESCROW_ID = 11340536396;
+export const RECOVERY_ESCROW_DIGEST = 'sha256:815ab1074847a222d6d3a0d0c8a45fd8c1ea945c809b7a48b77e560e014bfcef';
 const hash = /^[a-f0-9]{40}$/;
 const digest = /^sha256:[a-f0-9]{64}$/;
 const positiveID = value => assert.ok(Number.isSafeInteger(value) && value > 0);
@@ -22,9 +24,23 @@ function assertTarget(config) {
   assert.equal(config.candidateRun, RECOVERY_CANDIDATE_RUN);
 }
 
+export function assertBaseArchiveRecovery(base, config) {
+  assert.equal(base.mode, 'digest-pinned-preserved-inputs');
+  assert.equal(base.artifact.id, RECOVERY_ESCROW_ID);
+  assert.equal(base.artifact.name, 'expedition-publication-inputs');
+  assert.equal(base.artifact.digest, RECOVERY_ESCROW_DIGEST);
+  assert.equal(base.artifact.publicationRun, RECOVERY_CAPTURE_RUN);
+  assert.equal(base.artifact.controllerSHA, RECOVERY_CAPTURE_SHA);
+  assert.deepEqual(base.previousArtifact, config.previousArtifact);
+  assert.match(base.snapshotSHA256, /^[a-f0-9]{64}$/);
+  positiveID(base.validationJobID);
+  return base;
+}
+
 export function resolveSupplementalProof(proof, config, options = {}) {
   if (!options.recover) return assertSupplementalPublicationProof(proof, config, options);
   assertTarget(config);
+  if (proof.baseArchiveRecovery) assertBaseArchiveRecovery(proof.baseArchiveRecovery, config);
   const {publicationRun, controllerSHA} = options;
   positiveID(publicationRun); assert.match(controllerSHA, hash);
   assert.notEqual(publicationRun, RECOVERY_CAPTURE_RUN);
@@ -73,7 +89,7 @@ export function resolveSupplementalProof(proof, config, options = {}) {
   return {
     mode:'recovered-publication-captures', sourceCommit:config.sourceCommit, candidateRun:config.candidateRun,
     publicationRun:RECOVERY_CAPTURE_RUN, controllerSHA:RECOVERY_CAPTURE_SHA, acceptedJobs, artifactManifest,
-    recovery:{publicationRun,controllerSHA,workflow:RECOVERY_WORKFLOW,captureRunStatus:run.status,captureRunConclusion:run.conclusion},
+    recovery:{publicationRun,controllerSHA,workflow:RECOVERY_WORKFLOW,captureRunStatus:run.status,captureRunConclusion:run.conclusion,...(proof.baseArchiveRecovery ? {baseArchiveRecovery:proof.baseArchiveRecovery} : {})},
   };
 }
 
@@ -83,6 +99,7 @@ export function assertRecoveredRecordingOrigin(proof, release, config, {publicat
   assert.equal(proof.publicationRun, RECOVERY_CAPTURE_RUN);
   assert.equal(proof.controllerSHA, RECOVERY_CAPTURE_SHA);
   const recovery = proof.recovery;
+  if (recovery?.baseArchiveRecovery) assertBaseArchiveRecovery(recovery.baseArchiveRecovery, config);
   positiveID(recovery?.publicationRun); assert.match(recovery.controllerSHA, hash);
   assert.notEqual(recovery.publicationRun, RECOVERY_CAPTURE_RUN);
   assert.equal(recovery.workflow, RECOVERY_WORKFLOW);

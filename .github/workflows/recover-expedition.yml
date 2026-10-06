@@ -4,6 +4,9 @@ on:
     branches: [main]
     paths: [.github/workflows/recover-expedition.yml]
   workflow_dispatch:
+defaults:
+  run:
+    shell: bash
 permissions:
   contents: read
   actions: read
@@ -31,8 +34,9 @@ jobs:
       - name: Apply the blob-guarded publication-only recovery migration
         run: |
           mkdir -p publication-proof/recovery
+          git archive --format=tar.gz HEAD scripts tests tools .github/workflows package.json package-lock.json README.md > publication-proof/recovery/controller-sources.tar.gz
           node scripts/apply-expedition-recovery.mjs | tee publication-proof/recovery/publication-migration.jsonl
-          node --test tests/lab-expedition-publication.test.js tests/lab-expedition-recovery.test.js | tee publication-proof/recovery/tests.tap
+          node --test tests/lab-expedition-publication.test.js tests/lab-expedition-recovery.test.js tests/lab-expedition-escrow.test.js | tee publication-proof/recovery/tests.tap
           git diff --exit-code -- src public package.json package-lock.json tools/expedition-release.json
           git diff -- scripts/assemble-expedition.mjs scripts/verify-expedition-public.mjs > publication-proof/recovery/publication-only.patch
       - name: Check frozen candidate, original successful captures and public baseline
@@ -51,12 +55,42 @@ jobs:
             const candidateRun=await getRun(c.candidateRun),candidateJobs=await getJobs(c.candidateRun),candidateArtifacts=await getArtifacts(c.candidateRun);
             h.assertExpeditionJobs(candidateRun,candidateJobs,c);
             const accepted=h.assertExpeditionArtifacts(candidateArtifacts,c);
-            const previousRun=await getRun(c.previousPublicationRun),previousArtifacts=await getArtifacts(c.previousPublicationRun);
+            const previousRun=await getRun(c.previousPublicationRun),currentPreviousArtifacts=await getArtifacts(c.previousPublicationRun);
             if(previousRun.status!=='completed'||previousRun.conclusion!=='success'||previousRun.head_branch!=='main'||previousRun.path!=='.github/workflows/publish-singularity-upgrade.yml')throw Error('Pinned previous publication is not accepted');
-            const base=previousArtifacts.filter(a=>a.id===c.previousArtifact.id);
-            if(base.length!==1||base[0].name!==c.previousArtifact.name||base[0].digest!==c.previousArtifact.digest||base[0].expired)throw Error('Previous Pages archive is unavailable or different');
             const publicationRun=await getRun(r.RECOVERY_CAPTURE_RUN),publicationJobs=await getJobs(r.RECOVERY_CAPTURE_RUN,'all'),publicationArtifacts=await getArtifacts(r.RECOVERY_CAPTURE_RUN),recoveryRun=await getRun(context.runId);
-            const proof={candidateRun,candidateJobs,candidateArtifacts,previousRun,previousArtifacts,publicationRun,publicationJobs,publicationArtifacts,recoveryRun};
+            // Pages artifacts expire quickly. Recover the unchanged inner ZIP
+            // from the digest-pinned input escrow, not a rebuilt old game.
+            const escrow=publicationArtifacts.filter(a=>a.id===r.RECOVERY_ESCROW_ID);
+            if(escrow.length!==1||escrow[0].name!=='expedition-publication-inputs'||escrow[0].digest!==r.RECOVERY_ESCROW_DIGEST||escrow[0].expired||escrow[0].workflow_run.id!==r.RECOVERY_CAPTURE_RUN||escrow[0].workflow_run.head_sha!==r.RECOVERY_CAPTURE_SHA)throw Error('Preserved input escrow is unavailable or different');
+            const validated=publicationJobs.filter(j=>j.name==='Verify all nineteen frozen source gates and exact archives'&&j.status==='completed'&&j.conclusion==='success'&&j.steps?.some(s=>s.name==='Validate all nineteen jobs and download digest-pinned artifacts'&&s.conclusion==='success')).sort((a,b)=>a.id-b.id);
+            if(!validated.length)throw Error('Input escrow has no successful original validation job');
+            const escrowResponse=await fetch(`https://api.github.com/repos/${owner}/${repo}/actions/artifacts/${r.RECOVERY_ESCROW_ID}/zip`,{headers:{Authorization:`Bearer ${process.env.GITHUB_TOKEN}`,Accept:'application/vnd.github+json'}});
+            if(!escrowResponse.ok)throw Error('Input escrow HTTP '+escrowResponse.status);
+            const escrowBytes=Buffer.from(await escrowResponse.arrayBuffer());
+            if('sha256:'+crypto.createHash('sha256').update(escrowBytes).digest('hex')!==r.RECOVERY_ESCROW_DIGEST)throw Error('Input escrow digest mismatch');
+            fs.writeFileSync('preserved-inputs.zip',escrowBytes);
+            require('node:child_process').execFileSync('python3',['-c',`import pathlib,zipfile,shutil
+            root=pathlib.Path('release-input');root.mkdir()
+            with zipfile.ZipFile('preserved-inputs.zip') as z:
+             seen=set()
+             for e in z.infolist():
+              assert not e.is_dir()
+              name=e.filename
+              assert not name.startswith('/') and chr(92) not in name and all(p not in ('','..','.') for p in name.split('/'))
+              assert name not in seen and (e.external_attr>>16)&0o170000 != 0o120000
+              assert name=='github-proof.json' or (name.startswith('archives/') and name.endswith('.zip') and name.count('/')==1)
+              seen.add(name);f=root/name;f.parent.mkdir(parents=True,exist_ok=True)
+              with z.open(e) as src,f.open('wb') as dst:shutil.copyfileobj(src,dst)
+            `]);
+            const snapshotBytes=fs.readFileSync('release-input/github-proof.json'),snapshot=JSON.parse(snapshotBytes);
+            h.assertExpeditionJobs(snapshot.candidateRun,snapshot.candidateJobs,c);h.assertExpeditionArtifacts(snapshot.candidateArtifacts,c);
+            if(snapshot.previousRun.id!==c.previousPublicationRun||snapshot.previousRun.conclusion!=='success')throw Error('Escrow has another previous publication');
+            const previousArtifacts=snapshot.previousArtifacts,base=previousArtifacts.filter(a=>a.id===c.previousArtifact.id);
+            if(base.length!==1||base[0].name!==c.previousArtifact.name||base[0].digest!==c.previousArtifact.digest||base[0].expired)throw Error('Original escrow snapshot does not attest the pinned base');
+            const baseArchiveRecovery=r.assertBaseArchiveRecovery({mode:'digest-pinned-preserved-inputs',artifact:{id:r.RECOVERY_ESCROW_ID,name:'expedition-publication-inputs',digest:r.RECOVERY_ESCROW_DIGEST,publicationRun:r.RECOVERY_CAPTURE_RUN,controllerSHA:r.RECOVERY_CAPTURE_SHA},previousArtifact:c.previousArtifact,snapshotSHA256:crypto.createHash('sha256').update(snapshotBytes).digest('hex'),validationJobID:validated[0].id},c);
+            fs.writeFileSync('publication-proof/recovery/original-escrow-snapshot.json',snapshotBytes);
+            fs.writeFileSync('publication-proof/recovery/current-previous-artifacts.json',JSON.stringify(currentPreviousArtifacts,null,2));
+            const proof={candidateRun,candidateJobs,candidateArtifacts,previousRun,previousArtifacts,publicationRun,publicationJobs,publicationArtifacts,recoveryRun,baseArchiveRecovery};
             const captures=r.resolveSupplementalProof(proof,c,{recover:true,publicationRun:context.runId,controllerSHA:context.sha});
             const response=await fetch('https://amazin20.github.io/brainrot-portal/build-info.json?recovery='+Date.now(),{cache:'no-store'});
             if(!response.ok||(await response.json()).commit!==c.previousSourceCommit)throw Error('Public source changed; refusing to overwrite another publication');
@@ -66,11 +100,16 @@ jobs:
             const inputs=[...accepted,base[0],...captures.artifactManifest];
             if(new Set(inputs.map(a=>a.name)).size!==inputs.length)throw Error('Duplicate archive name');
             for(const artifact of inputs){
-              const response=await fetch(`https://api.github.com/repos/${owner}/${repo}/actions/artifacts/${artifact.id}/zip`,{headers:{Authorization:`Bearer ${process.env.GITHUB_TOKEN}`,Accept:'application/vnd.github+json'}});
-              if(!response.ok)throw Error(`Artifact ${artifact.id}: HTTP ${response.status}`);
-              const bytes=Buffer.from(await response.arrayBuffer());
+              const filename=path.join('release-input/archives',artifact.name+'.zip');
+              let bytes;
+              if(fs.existsSync(filename))bytes=fs.readFileSync(filename);
+              else{
+                const response=await fetch(`https://api.github.com/repos/${owner}/${repo}/actions/artifacts/${artifact.id}/zip`,{headers:{Authorization:`Bearer ${process.env.GITHUB_TOKEN}`,Accept:'application/vnd.github+json'}});
+                if(!response.ok)throw Error(`Artifact ${artifact.id}: HTTP ${response.status}`);
+                bytes=Buffer.from(await response.arrayBuffer());
+              }
               if('sha256:'+crypto.createHash('sha256').update(bytes).digest('hex')!==artifact.digest)throw Error('Artifact digest mismatch: '+artifact.name);
-              fs.writeFileSync(path.join('release-input/archives',artifact.name+'.zip'),bytes);
+              fs.writeFileSync(filename,bytes);
             }
             core.setOutput('candidate',String(c.candidateRun));
             console.log('All nineteen candidate gates and all38 original capture executions accepted; archive hashes match.');
