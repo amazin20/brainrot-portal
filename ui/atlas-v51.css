@@ -1,0 +1,6 @@
+/* Ordered presentation layers. The accepted gameplay stylesheet is unchanged. */
+@import url('./atlas-layout.css');
+@import url('./atlas-map.css');
+@import url('./atlas-panels.css');
+@import url('./atlas-motion.css');
+@import url('./atlas-responsive.css');
