@@ -1,0 +1,28 @@
+.atlas-enabled #pause-screen .modal-card,.atlas-enabled #win-screen .modal-card,.atlas-enabled #error-screen .modal-card{background:linear-gradient(145deg,#0e3046f5,#071a2efa);border:1px solid #66c0df6b;border-radius:23px;box-shadow:0 25px 85px #0006;color:#e8f7ff}
+.atlas-enabled .modal-screen{background:#03101c99;backdrop-filter:blur(9px)}
+.atlas-enabled .modal-card .primary-button{background:linear-gradient(110deg,#72ebff,#2fb9ed);color:#082339;border-radius:12px}
+.atlas-enabled .modal-card .secondary-button{border-color:#79b5cf4d;background:#16384f7a;color:#cde5ef;border-radius:10px}
+.atlas-enabled .modal-card .muted,.atlas-enabled .modal-card .setting-row{color:#abc8d6}
+.atlas-enabled .atlas-loading.screen--active{display:flex;justify-content:flex-start;align-items:center;padding:clamp(28px,7vw,120px);background:linear-gradient(90deg,#041526f2,#061e36b8 40%,#03233524),url('../art/portal-laboratory-menu.webp') center/cover;overflow:hidden}
+.atlas-enabled .atlas-loading .loading-card{position:relative;z-index:1;border:0;background:transparent;box-shadow:none;padding:0;max-width:460px;width:45%;text-align:left;backdrop-filter:none}
+.atlas-enabled .atlas-loading .brand{font-size:12px;letter-spacing:.14em;color:#96e6ff}
+.atlas-enabled .atlas-loading h1{font-size:clamp(36px,5vw,70px);line-height:1.05;letter-spacing:-.055em;color:#fff;margin:25px 0 20px}
+.atlas-enabled .atlas-loading h1 span{color:#65eaff}
+.atlas-enabled .atlas-loading .muted{font-size:14px;color:#a3c7db}
+.atlas-enabled .atlas-loading .loading-orbit{display:none}
+.atlas-enabled .atlas-loading .progress-track{height:6px;background:#33607766;border:0;border-radius:9px;overflow:hidden;margin-top:38px}
+.atlas-enabled .atlas-loading #loading-bar{height:100%;background:linear-gradient(90deg,#249dff,#74f7ff);box-shadow:0 0 18px #41deff;border-radius:9px;transition:width .18s ease-out}
+.atlas-enabled .atlas-loading .loading-row{display:flex;justify-content:space-between;align-items:center;margin-top:14px;gap:20px;color:#c2dce9;font-size:12px}
+.atlas-load-foot{font-size:9px;letter-spacing:.19em;color:#78a7be;margin-top:36px}
+.atlas-load-portal{position:absolute;left:70%;top:47%;width:min(36vw,470px);height:min(48vw,620px);transform:translate(-50%,-50%) rotate(15deg);border:2px solid #86f4ffb3;border-radius:50%;box-shadow:0 0 34px #32d9ff80,inset 0 0 45px #38c6ff60;background:radial-gradient(ellipse,#148eff05,#40cafa33 65%,#70eaff80 99%);animation:atlas-breathe 4s ease-in-out infinite;pointer-events:none}
+.atlas-load-portal::before,.atlas-load-portal::after{content:'';position:absolute;inset:-12px;border:1px solid #8cebff73;border-radius:50%;transform:rotate(-12deg)}
+.atlas-load-portal::after{inset:18px;border:1px dashed #96e3f580;animation:atlas-orbit 16s linear infinite}
+.atlas-load-portal i{position:absolute;inset:8px;border:3px solid transparent;border-left-color:#c3faff;border-top-color:#ffcf805c;border-radius:50%;animation:atlas-orbit 5s linear infinite}
+.atlas-load-portal i:nth-child(2){inset:-23px;border-width:1px;border-left-color:#ffbe77;animation-direction:reverse;animation-duration:8s}
+.atlas-warp{position:fixed;z-index:50;pointer-events:none;inset:0;opacity:0;margin:auto;width:70vw;height:90vh;border:3px solid #aef4ff;border-radius:50%;box-shadow:0 0 30px 30px #29d4ff4d,inset 0 0 50px #ffac604d;transform-origin:center}
+.atlas-hidden .atlas-route-energy,.atlas-hidden .atlas-loading *{animation-play-state:paused!important}
+@keyframes atlas-flow{to{stroke-dashoffset:-830}}
+@keyframes atlas-node-in{from{opacity:0;transform:translateY(9px)}to{opacity:1;transform:translateY(0)}}
+@keyframes atlas-detail-in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes atlas-orbit{to{transform:rotate(360deg)}}
+@keyframes atlas-breathe{50%{filter:brightness(1.2);box-shadow:0 0 60px #32d9ff80,inset 0 0 75px #38c6ff60}}
