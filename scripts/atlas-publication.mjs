@@ -31,7 +31,18 @@ async function transfer(file,directory){
   }catch(error){if(temporary)fs.rmSync(temporary,{force:true});if(attempt===2)throw error;await new Promise(r=>setTimeout(r,500*(attempt+1)));}
  }
 }
-async function bounded(files,fn){let cursor=0,bytes=0,count=0;await Promise.all(Array.from({length:4},async()=>{while(cursor<files.length){const f=files[cursor++];bytes+=await fn(f);count++;if(count%75===0)console.log('verified',count,'/',files.length);}}));return {files:count,bytes};}
+async function bounded(files,fn){
+ let cursor=0,bytes=0,count=0;
+ await Promise.all(Array.from({length:4},async()=>{
+  while(cursor<files.length){
+   const f=files[cursor++];
+   // Do not read the shared total before an await: other streams may finish.
+   const transferred=await fn(f);bytes+=transferred;count++;
+   if(count%75===0)console.log('verified',count,'/',files.length);
+  }
+ }));
+ assert.equal(count,files.length);return {files:count,bytes};
+}
 function inventory(root){return fs.readdirSync(root,{withFileTypes:true}).flatMap(e=>{assert.ok(!e.isSymbolicLink());const p=path.join(root,e.name);return e.isDirectory()?inventory(p):[{path:safe(path.relative(SITE,p).split(path.sep).join('/')),bytes:fs.statSync(p).size,sha256:hash(fs.readFileSync(p))}];}).sort((a,b)=>a.path.localeCompare(b.path));}
 function write(relative,bytes){const p=path.join(SITE,safe(relative));fs.mkdirSync(path.dirname(p),{recursive:true});fs.writeFileSync(p,bytes);}
 function copy(source,relative){const p=path.join(SITE,safe(relative));fs.mkdirSync(path.dirname(p),{recursive:true});fs.copyFileSync(source,p);}
@@ -44,7 +55,9 @@ if(mode==='assemble'){
  const recordings=[...r.newRecordings,...r.alternateRecordings];
  const files=[...r.exactCandidateFiles,...r.exactCandidateFiles.map(f=>({...f,path:r.previewPath+'/'+f.path})),...r.preservedFiles,...r.archivedFiles.map(f=>({...f,path:f.archivedPath})),...r.historicalRuntime.files,r.historicalVideoIndex,...r.generatedPresentationFiles,...recordings.flatMap(v=>[{path:v.src,bytes:v.bytes,sha256:v.sha256},{path:v.poster,sha256:v.posterSHA256},{path:v.finishPoster,sha256:v.finishPosterSHA256},{path:v.evidence,sha256:v.evidenceSHA256}]),...r.supplementalRecordingProof.captureSourceEvidence];
  const unique=new Map();for(const f of files){safe(f.path);assert.match(f.sha256,/^[a-f0-9]{64}$/);const previous=unique.get(f.path);if(previous){assert.equal(previous.sha256,f.sha256);if(previous.bytes!==undefined&&f.bytes!==undefined)assert.equal(previous.bytes,f.bytes);}else unique.set(f.path,f);}
- const preserved=await bounded([...unique.values()],f=>transfer(f,SITE));write('expedition-release.json',releaseBytes);
+ const preserved=await bounded([...unique.values()],f=>transfer(f,SITE));
+ assert.equal(preserved.bytes,inventory(SITE).reduce((total,f)=>total+f.bytes,0),'Preserved size report must match the actual saved files');
+ write('expedition-release.json',releaseBytes);
  // Preserve the exact previous playable runtime and its metadata.
  const archive='publication-history/'+SOURCE;
  for(const f of r.exactCandidateFiles)copy(path.join(SITE,f.path),archive+'/'+f.path);
@@ -72,6 +85,7 @@ if(mode==='assemble'){
  const expected=read(path.join(SITE,'atlas-interface.json'));
  const publicBytes=await buffer('atlas-interface.json');assert.equal(hash(publicBytes),hash(fs.readFileSync(path.join(SITE,'atlas-interface.json'))),'Wrong public interface manifest');
  const result=await bounded(expected.files,f=>transfer(f,null));
+ assert.equal(result.bytes,expected.files.reduce((total,f)=>total+f.bytes,0));
  const info=JSON.parse(await buffer('build-info.json'));assert.equal(info.interfaceCommit,expected.interfaceCommit);assert.equal(info.commit,SOURCE);assert.equal(info.levels,51);
  fs.mkdirSync('atlas-proof',{recursive:true});fs.writeFileSync('atlas-proof/public-bytes.json',JSON.stringify({pass:true,...result,interfaceCommit:info.interfaceCommit,gameplaySourceCommit:SOURCE},null,2));console.log('ATLAS PUBLIC BYTES VERIFIED',result);
 }else throw Error('Unknown operation');
