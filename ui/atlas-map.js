@@ -10,7 +10,15 @@ export function installMap({map,nodes,tabs,select,chapterLabel,count,previewLabe
   const positions = $$('.room-node-number', nodes).map(e => { const p = e.getBoundingClientRect(); return [p.x-r.x+p.width/2,p.y-r.y+p.height/2]; });
   paths.setAttribute('viewBox', `0 0 ${r.width} ${r.height}`);
   const line = positions.map((p,i) => `${i?'L':'M'}${p[0].toFixed(1)},${p[1].toFixed(1)}`).join(' ');
-  paths.innerHTML = positions.length > 1 ? `<path class="atlas-route-track" d="${line}"/><path class="atlas-route-energy" d="${line}"/>` : '<circle class="atlas-castle-orbit" cx="50%" cy="45%" r="110"/>';
+  // Changing coordinates must not replace the animated SVG element. Keeping
+  // its identity preserves a continuous flow during resize and selection.
+  if(positions.length>1){
+   if(!$('.atlas-route-track',paths)||!$('.atlas-route-energy',paths))paths.innerHTML='<path class="atlas-route-track"/><path class="atlas-route-energy"/>';
+   $('.atlas-route-track',paths).setAttribute('d',line);
+   $('.atlas-route-energy',paths).setAttribute('d',line);
+  }else if(!$('.atlas-castle-orbit',paths)){
+   paths.innerHTML='<circle class="atlas-castle-orbit" cx="50%" cy="45%" r="110"/>';
+  }
  }
  function update() {
   frame = 0; if (!start.classList.contains('screen--active')) return;
