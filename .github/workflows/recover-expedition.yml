@@ -1,0 +1,185 @@
+name: Recover exact Expedition demo publication
+on:
+  push:
+    branches: [main]
+    paths: [.github/workflows/recover-expedition.yml]
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: pages
+  cancel-in-progress: false
+env:
+  RELEASE_CONFIG: tools/expedition-release.json
+  EXPEDITION_RECOVER_CAPTURES: '1'
+jobs:
+  assemble:
+    name: Recover completed captures and verify every original release gate
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    outputs:
+      candidate: ${{ steps.inputs.outputs.candidate }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with: {node-version: 22}
+      - name: Apply the blob-guarded publication-only recovery migration
+        run: |
+          mkdir -p publication-proof/recovery
+          node scripts/apply-expedition-recovery.mjs | tee publication-proof/recovery/publication-migration.jsonl
+          node --test tests/lab-expedition-publication.test.js tests/lab-expedition-recovery.test.js | tee publication-proof/recovery/tests.tap
+          git diff --exit-code -- src public package.json package-lock.json tools/expedition-release.json
+          git diff -- scripts/assemble-expedition.mjs scripts/verify-expedition-public.mjs > publication-proof/recovery/publication-only.patch
+      - name: Check frozen candidate, original successful captures and public baseline
+        id: inputs
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs=require('node:fs'),path=require('node:path'),crypto=require('node:crypto');
+            const h=await import(process.env.GITHUB_WORKSPACE+'/scripts/lib/expedition-proof.mjs');
+            const r=await import(process.env.GITHUB_WORKSPACE+'/scripts/lib/expedition-recovery.mjs');
+            const c=h.assertPublishableExpedition(h.assertExpeditionConfig(JSON.parse(fs.readFileSync(process.env.RELEASE_CONFIG)),JSON.parse(fs.readFileSync('tools/singularity-upgrade-release.json'))));
+            const {owner,repo}=context.repo;
+            const getRun=async run_id=>(await github.rest.actions.getWorkflowRun({owner,repo,run_id})).data;
+            const getJobs=async(run_id,filter='latest')=>github.paginate(github.rest.actions.listJobsForWorkflowRun,{owner,repo,run_id,filter,per_page:100});
+            const getArtifacts=async run_id=>github.paginate(github.rest.actions.listWorkflowRunArtifacts,{owner,repo,run_id,per_page:100});
+            const candidateRun=await getRun(c.candidateRun),candidateJobs=await getJobs(c.candidateRun),candidateArtifacts=await getArtifacts(c.candidateRun);
+            h.assertExpeditionJobs(candidateRun,candidateJobs,c);
+            const accepted=h.assertExpeditionArtifacts(candidateArtifacts,c);
+            const previousRun=await getRun(c.previousPublicationRun),previousArtifacts=await getArtifacts(c.previousPublicationRun);
+            if(previousRun.status!=='completed'||previousRun.conclusion!=='success'||previousRun.head_branch!=='main'||previousRun.path!=='.github/workflows/publish-singularity-upgrade.yml')throw Error('Pinned previous publication is not accepted');
+            const base=previousArtifacts.filter(a=>a.id===c.previousArtifact.id);
+            if(base.length!==1||base[0].name!==c.previousArtifact.name||base[0].digest!==c.previousArtifact.digest||base[0].expired)throw Error('Previous Pages archive is unavailable or different');
+            const publicationRun=await getRun(r.RECOVERY_CAPTURE_RUN),publicationJobs=await getJobs(r.RECOVERY_CAPTURE_RUN,'all'),publicationArtifacts=await getArtifacts(r.RECOVERY_CAPTURE_RUN),recoveryRun=await getRun(context.runId);
+            const proof={candidateRun,candidateJobs,candidateArtifacts,previousRun,previousArtifacts,publicationRun,publicationJobs,publicationArtifacts,recoveryRun};
+            const captures=r.resolveSupplementalProof(proof,c,{recover:true,publicationRun:context.runId,controllerSHA:context.sha});
+            const response=await fetch('https://amazin20.github.io/brainrot-portal/build-info.json?recovery='+Date.now(),{cache:'no-store'});
+            if(!response.ok||(await response.json()).commit!==c.previousSourceCommit)throw Error('Public source changed; refusing to overwrite another publication');
+            fs.mkdirSync('release-input/archives',{recursive:true});
+            fs.writeFileSync('release-input/github-proof.json',JSON.stringify(proof,null,2));
+            fs.writeFileSync('publication-proof/recovery/capture-provenance.json',JSON.stringify(captures,null,2));
+            const inputs=[...accepted,base[0],...captures.artifactManifest];
+            if(new Set(inputs.map(a=>a.name)).size!==inputs.length)throw Error('Duplicate archive name');
+            for(const artifact of inputs){
+              const response=await fetch(`https://api.github.com/repos/${owner}/${repo}/actions/artifacts/${artifact.id}/zip`,{headers:{Authorization:`Bearer ${process.env.GITHUB_TOKEN}`,Accept:'application/vnd.github+json'}});
+              if(!response.ok)throw Error(`Artifact ${artifact.id}: HTTP ${response.status}`);
+              const bytes=Buffer.from(await response.arrayBuffer());
+              if('sha256:'+crypto.createHash('sha256').update(bytes).digest('hex')!==artifact.digest)throw Error('Artifact digest mismatch: '+artifact.name);
+              fs.writeFileSync(path.join('release-input/archives',artifact.name+'.zip'),bytes);
+            }
+            core.setOutput('candidate',String(c.candidateRun));
+            console.log('All nineteen candidate gates and all38 original capture executions accepted; archive hashes match.');
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+      - name: Extract exact archives and preserve the previous site
+        run: |
+          python3 - <<'PY'
+          import pathlib,shutil,tarfile,zipfile
+          root=pathlib.Path('release-input')
+          def safe(name):
+              assert not name.startswith('/') and '\\' not in name and all(p not in ('','..','.') for p in name.split('/')),name
+              return name
+          for archive in (root/'archives').glob('*.zip'):
+              target=root/archive.stem;target.mkdir()
+              seen=set()
+              with zipfile.ZipFile(archive) as z:
+                  for entry in z.infolist():
+                      if entry.is_dir():continue
+                      name=safe(entry.filename);assert name not in seen;seen.add(name)
+                      assert (entry.external_attr>>16)&0o170000 != 0o120000
+                      filename=target/name;filename.parent.mkdir(parents=True,exist_ok=True)
+                      with z.open(entry) as source,filename.open('wb') as output:shutil.copyfileobj(source,output)
+          site=pathlib.Path('site');site.mkdir()
+          with tarfile.open(root/'github-pages/artifact.tar') as tar:
+              seen=set()
+              for entry in tar:
+                  name=entry.name
+                  while name.startswith('./'):name=name[2:]
+                  if name in ('','.'):continue
+                  name=safe(name);assert entry.isfile() or entry.isdir()
+                  if entry.isdir():continue
+                  assert name not in seen;seen.add(name)
+                  filename=site/name;filename.parent.mkdir(parents=True,exist_ok=True)
+                  with tar.extractfile(entry) as source,filename.open('wb') as output:shutil.copyfileobj(source,output)
+          PY
+      - name: Validate every game file, recording, source attestation and preserved byte
+        run: |
+          command -v ffmpeg >/dev/null || (sudo apt-get update -qq && sudo apt-get install -y --no-install-recommends ffmpeg)
+          node scripts/assemble-expedition.mjs
+          CANDIDATE_DIR=release-input/expedition-production OUT_DIR=publication-proof/prepublication node scripts/verify-expedition-public.mjs --local-only
+          node -e "const p=require('./publication-proof/expedition-release.json');if(!p.publishable||!p.acceptance.automated||p.newRecordings.length!==51||p.alternateRecordings.length!==4)process.exit(1)"
+      - uses: actions/upload-pages-artifact@v3
+        with: {path: site}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: expedition-recovered-assembly
+          path: publication-proof
+          retention-days: 30
+          if-no-files-found: error
+  deploy:
+    name: Publish demo and verify real desktop, mobile, restart and all videos
+    needs: assemble
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    permissions:
+      contents: read
+      actions: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with: {node-version: 22,cache: npm}
+      - name: Apply the identical publication-only migration
+        run: node scripts/apply-expedition-recovery.mjs
+      - name: Recheck the live baseline immediately before deployment
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const c=JSON.parse(require('node:fs').readFileSync(process.env.RELEASE_CONFIG));
+            const response=await fetch('https://amazin20.github.io/brainrot-portal/build-info.json?recovery='+Date.now(),{cache:'no-store'});
+            if(!response.ok||(await response.json()).commit!==c.previousSourceCommit)throw Error('Public root changed before deployment');
+      - uses: actions/configure-pages@v5
+      - uses: actions/deploy-pages@v4
+        id: deployment
+      - name: Install browser verification dependencies
+        run: |
+          npm ci
+          npm install --no-save --package-lock=false puppeteer-core@24.16.0
+          command -v ffprobe >/dev/null || (sudo apt-get update -qq && sudo apt-get install -y --no-install-recommends ffmpeg)
+          echo "CHROME_PATH=$(command -v google-chrome || command -v chromium)" >> "$GITHUB_ENV"
+      - uses: actions/download-artifact@v4
+        with:
+          name: expedition-production
+          run-id: ${{ needs.assemble.outputs.candidate }}
+          github-token: ${{ github.token }}
+          path: candidate
+      - uses: actions/download-artifact@v4
+        with:
+          name: expedition-recovered-assembly
+          path: publication-input
+      - name: Verify actual public bytes, ordinary Play and the complete 51-room gallery
+        env:
+          PAGE_URL: ${{ steps.deployment.outputs.page_url }}
+          CANDIDATE_DIR: candidate
+          LOCAL_RELEASE: publication-input/expedition-release.json
+        run: node scripts/verify-expedition-public.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: expedition-recovered-public-verification
+          path: publication-proof
+          retention-days: 30
+          if-no-files-found: error
