@@ -1,0 +1,93 @@
+{
+  "pass": true,
+  "verificationRun": "37402198904",
+  "verificationController": "fd51c69dd6b92e5b6743f32ea8ef1df0aac1e9de",
+  "verifiedPublicationRun": "37401009893",
+  "sourceCommit": "6f1eec54d47fed7916f5346a218525292d15fd62",
+  "phase": "complete",
+  "runtimeFiles": 63,
+  "plays": [
+    {
+      "level": 1,
+      "width": 960,
+      "height": 720,
+      "mobile": false,
+      "trustedPlay": true,
+      "pause": true,
+      "restart": true,
+      "reload": true
+    },
+    {
+      "level": 41,
+      "width": 960,
+      "height": 720,
+      "mobile": false,
+      "trustedPlay": true,
+      "pause": true,
+      "restart": true,
+      "reload": true
+    },
+    {
+      "level": 42,
+      "width": 960,
+      "height": 720,
+      "mobile": false,
+      "trustedPlay": true,
+      "pause": true,
+      "restart": true,
+      "reload": true
+    },
+    {
+      "level": 51,
+      "width": 960,
+      "height": 720,
+      "mobile": false,
+      "trustedPlay": true,
+      "pause": true,
+      "restart": true,
+      "reload": true
+    },
+    {
+      "level": 42,
+      "width": 390,
+      "height": 844,
+      "mobile": true,
+      "trustedPlay": true,
+      "pause": true,
+      "restart": true,
+      "reload": true,
+      "touchControls": [
+        {"selector": "#joystick", "visible": true, "hit": true},
+        {"selector": "#sprint-button", "visible": true, "hit": true},
+        {"selector": "#jump-button", "visible": true, "hit": true},
+        {"selector": ".lab-mobile button:nth-child(1)", "visible": true, "hit": true},
+        {"selector": ".lab-mobile button:nth-child(2)", "visible": true, "hit": true},
+        {"selector": ".lab-mobile button:nth-child(3)", "visible": true, "hit": true},
+        {"selector": ".lab-mobile button:nth-child(4)", "visible": true, "hit": true}
+      ]
+    },
+    {
+      "level": 51,
+      "width": 390,
+      "height": 844,
+      "mobile": true,
+      "trustedPlay": true,
+      "pause": true,
+      "restart": true,
+      "reload": true,
+      "touchControls": [
+        {"selector": "#joystick", "visible": true, "hit": true},
+        {"selector": "#sprint-button", "visible": true, "hit": true},
+        {"selector": "#jump-button", "visible": true, "hit": true},
+        {"selector": ".lab-mobile button:nth-child(1)", "visible": true, "hit": true},
+        {"selector": ".lab-mobile button:nth-child(2)", "visible": true, "hit": true},
+        {"selector": ".lab-mobile button:nth-child(3)", "visible": true, "hit": true},
+        {"selector": ".lab-mobile button:nth-child(4)", "visible": true, "hit": true}
+      ]
+    }
+  ],
+  "errors": [],
+  "scope": "read-only exact runtime bytes, fresh desktop/mobile launches, pause, restart and reload; not a full gallery playback audit",
+  "version": "v50-expedition",
+  "levels": 51
+}
