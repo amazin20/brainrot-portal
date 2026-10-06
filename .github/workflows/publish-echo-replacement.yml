@@ -1,34 +1,46 @@
 name: Publish accepted Echo Horizon replacement
 on:
-  workflow_run:
-    workflows: [Verify real room51 replacement]
-    types: [completed]
+  push:
+    branches: [main]
+    paths: [.github/workflows/publish-echo-replacement.yml]
 permissions: {contents: read, actions: read}
 concurrency:
   group: pages
   cancel-in-progress: false
 jobs:
   assemble:
-    if: github.event.workflow_run.id == 37428403829 && github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
+      - uses: actions/checkout@v4
+        with: {ref: '${{ github.sha }}', persist-credentials: false}
       - uses: actions/setup-node@v4
         with: {node-version: 22}
-      - name: Verify every gate and retrieve only the accepted artifacts
+      - name: Verify gameplay gates and the specific missing-encoder failure
         uses: actions/github-script@v7
         env: {GITHUB_TOKEN: '${{ github.token }}'}
         with:
           script: |
             const fs=require('node:fs'),assert=require('node:assert/strict'),crypto=require('node:crypto'),{Readable,Transform}=require('node:stream'),{pipeline}=require('node:stream/promises');const {owner,repo}=context.repo;
-            const run=(await github.rest.actions.getWorkflowRun({owner,repo,run_id:37428403829})).data;assert.equal(run.head_sha,'5116c64082c216821b2bd26134f94cd8f5dfabee');assert.equal(run.path,'.github/workflows/echo-replacement-review.yml');assert.equal(run.conclusion,'success');
-            const jobs=await github.paginate(github.rest.actions.listJobsForWorkflowRun,{owner,repo,run_id:run.id,per_page:100});assert.equal(jobs.length,11);assert.ok(jobs.every(j=>j.status==='completed'&&j.conclusion==='success'));
-            fs.mkdirSync('inputs');fs.mkdirSync('proof');fs.writeFileSync('proof/gates.json',JSON.stringify({run,jobs},null,2));
-            const artifacts=await github.paginate(github.rest.actions.listWorkflowRunArtifacts,{owner,repo,run_id:run.id,per_page:100});
-            const baseline=(await github.rest.actions.getArtifact({owner,repo,artifact_id:11391421988})).data;assert.equal(baseline.workflow_run.id,37417482109);assert.equal(baseline.digest,'sha256:d8fbbd8bb62dac009913e58cf133d965ddca2ae5b6dd1ad9e827cfed0978c166');
-            const picks=[{a:baseline,file:'baseline.zip'},...['echo-production','echo-recording','echo-tests-and-package'].map(name=>{const a=artifacts.filter(a=>a.name===name);assert.equal(a.length,1);return {a:a[0],file:name+'.zip'};})];
-            for(const {a,file} of picks){assert.equal(a.expired,false);assert.match(a.digest,/^sha256:[a-f0-9]{64}$/);const r=await fetch(`https://api.github.com/repos/${owner}/${repo}/actions/artifacts/${a.id}/zip`,{headers:{Authorization:`Bearer ${process.env.GITHUB_TOKEN}`,Accept:'application/vnd.github+json'}});assert.ok(r.ok);const h=crypto.createHash('sha256'),meter=new Transform({transform(b,e,cb){h.update(b);cb(null,b);}});await pipeline(Readable.fromWeb(r.body),meter,fs.createWriteStream('inputs/'+file));assert.equal('sha256:'+h.digest('hex'),a.digest);}
-            fs.writeFileSync('proof/artifact-inputs.json',JSON.stringify(picks.map(({a,file})=>({id:a.id,name:a.name,digest:a.digest,file})),null,2));
+            const run=(await github.rest.actions.getWorkflowRun({owner,repo,run_id:37428403829})).data;
+            assert.equal(run.head_sha,'5116c64082c216821b2bd26134f94cd8f5dfabee');assert.equal(run.path,'.github/workflows/echo-replacement-review.yml');assert.equal(run.status,'completed');assert.equal(run.conclusion,'failure');
+            const jobs=await github.paginate(github.rest.actions.listJobsForWorkflowRun,{owner,repo,run_id:run.id,per_page:100});assert.equal(jobs.length,11);
+            const failed=jobs.filter(j=>j.conclusion!=='success');assert.equal(failed.length,1);assert.equal(failed[0].id,112154196808);assert.equal(failed[0].name,'recording');assert.equal(failed[0].conclusion,'failure');
+            const headers={Authorization:`Bearer ${process.env.GITHUB_TOKEN}`,Accept:'application/vnd.github+json'};
+            const logResponse=await fetch(`https://api.github.com/repos/${owner}/${repo}/actions/jobs/112154196808/logs`,{headers});assert.ok(logResponse.ok);const log=await logResponse.text();
+            assert.ok(log.includes('Error: spawnSync ffmpeg ENOENT'));assert.ok(log.includes('record-foundation-walkthrough.mjs:122:2'));assert.ok(log.includes('BUILD_COMMIT: f7a03ebd2b0c32a03fd953fe547664037b4c3483'));assert.ok(!log.includes('AssertionError'));
+            const recorder=(await github.rest.repos.getContent({owner,repo,path:'scripts/record-foundation-walkthrough.mjs',ref:'f7a03ebd2b0c32a03fd953fe547664037b4c3483'})).data;assert.equal(recorder.sha,'f875e1fa3ca8f35c615ca8a0411c144571035d3e');
+            fs.mkdirSync('inputs');fs.mkdirSync('proof');fs.writeFileSync('proof/gates.json',JSON.stringify({run,jobs,originalFailureRetained:true,recordingFailureVerified:true,logSHA256:crypto.createHash('sha256').update(log).digest('hex'),recorderBlobSHA:recorder.sha,recoveryScope:'Complete encoding of existing checked native frames; no new capture and no invented detailed route trace'},null,2));
+            const pins=[{id:11391421988,run:37417482109,name:'github-pages',file:'baseline.zip',digest:'sha256:d8fbbd8bb62dac009913e58cf133d965ddca2ae5b6dd1ad9e827cfed0978c166'},{id:11396126450,run:37428403829,name:'echo-production',file:'echo-production.zip',digest:'sha256:4a0f50eafb65067537df4b9dc5567d93e45f779d6421e808b940124f35a667ed'},{id:11395514996,run:37428403829,name:'echo-recording',file:'echo-recording.zip',digest:'sha256:c8f44bd6be80ce60fd7400f0751037ec6901d2372daa8329327cc46edb82eb81'}];
+            for(const pin of pins){const a=(await github.rest.actions.getArtifact({owner,repo,artifact_id:pin.id})).data;assert.equal(a.expired,false);assert.equal(a.name,pin.name);assert.equal(a.workflow_run.id,pin.run);assert.equal(a.digest,pin.digest);const r=await fetch(`https://api.github.com/repos/${owner}/${repo}/actions/artifacts/${pin.id}/zip`,{headers});assert.ok(r.ok);const h=crypto.createHash('sha256'),meter=new Transform({transform(b,e,cb){h.update(b);cb(null,b);}});await pipeline(Readable.fromWeb(r.body),meter,fs.createWriteStream('inputs/'+pin.file));assert.equal('sha256:'+h.digest('hex'),pin.digest);}
+            fs.writeFileSync('proof/artifact-inputs.json',JSON.stringify(pins,null,2));
+      - name: Install the missing encoder and recover every original frame
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends ffmpeg
+          ffmpeg -version | head -1
+          python3 scripts/recover-echo-recording.py inputs/echo-recording.zip encoded-echo
+          cp encoded-echo/level-51.json proof/recording-recovery.json
       - name: Keep the existing publication and replace only the themed gameplay
         run: |
           python3 - <<'PY'
@@ -45,7 +57,7 @@ jobs:
                 if e.is_dir():continue
                 n=safe(e.filename);assert n not in seen and (e.external_attr>>16)&0o170000!=0o120000;seen.add(n);p=dst/n;p.parent.mkdir(parents=True,exist_ok=True)
                 with z.open(e) as a,p.open('wb') as b:shutil.copyfileobj(a,b)
-          for name in ['baseline','echo-production','echo-recording','echo-tests-and-package']:unzip('inputs/'+name+'.zip',pathlib.Path(name))
+          for name in ['baseline','echo-production']:unzip('inputs/'+name+'.zip',pathlib.Path(name))
           site=pathlib.Path('site');site.mkdir();seen=set()
           with tarfile.open('baseline/artifact.tar') as t:
             for e in t:
@@ -61,19 +73,21 @@ jobs:
           for f in current:
             if f['path'].startswith(('models/','draco/')):assert oldfiles['chapter-atlas/'+f['path']]['sha256']==f['sha256']
           archived=site/'publication-history/chapter-atlas-39ad0557';assert not archived.exists();shutil.copytree(chapter,archived)
-          # Remove the old active build, including its obsolete relay chunks.
           shutil.rmtree(chapter);shutil.copytree('echo-production',chapter)
-          evidence=json.loads(pathlib.Path('echo-recording/level-51.json').read_text());assert evidence['sourceCommit']==new['commit'] and evidence['title']=='Эхо горизонта';assert evidence['continuous'] and evidence['route']['pass'] and evidence['route']['resets']==0 and evidence['route']['respawns']==0 and evidence['lastFrame']['state']=='won'
-          assert sha(pathlib.Path('echo-recording/level-51.mp4'))==evidence['sha256'];assert evidence['pixelCheck']['allNonblank']
+          evidence=json.loads(pathlib.Path('encoded-echo/level-51.json').read_text());assert evidence['sourceCommit']==new['commit'] and evidence['title']=='Эхо горизонта'
+          assert evidence['continuous'] and evidence['routeSummary']=={'pass':True,'level':51,'resets':0,'respawns':0,'lastState':'won'}
+          assert evidence['fullRouteTelemetryAvailable'] is False and evidence['recovery']['originalRecordingJobConclusion']=='failure'
+          assert sha(pathlib.Path('encoded-echo/level-51.mp4'))==evidence['sha256'];assert evidence['pixelCheck']['allNonblank']
           (chapter/'walkthroughs').mkdir()
-          for name in ['level-51.mp4','level-51.jpg','level-51-finish.jpg','level-51.json']:shutil.copyfile('echo-recording/'+name,chapter/'walkthroughs'/name)
-          (chapter/'walkthroughs.html').write_text('<!doctype html><html lang="ru"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Эхо горизонта — прохождение</title><style>body{background:#102632;color:#eef8fc;font:17px/1.65 system-ui;max-width:1080px;margin:5vh auto;padding:24px}a{color:#70e4ed}video{width:100%;border-radius:14px}</style><h1>51 · Эхо горизонта</h1><p>Новая головоломка вместо удалённой «Адресной эстафеты».</p><video controls preload="metadata" poster="walkthroughs/level-51.jpg" src="walkthroughs/level-51.mp4"></video><p>Непрерывная автоматическая запись настоящей игры, 12 кадров/с. Без телепортации через отладчик, присваивания решённых состояний и сбросов. Частота записи не является измерением FPS устройства.</p><p><a href="./?edition=foundation&amp;level=51">Играть</a> · <a href="walkthroughs/level-51.json">Доказательства записи</a></p><h2>Исторические прохождения</h2><p>Комнаты 1–50 сохранили правила. Ролики в старой галерее сняты до изменения оформления. Старый ролик 51 относится к удалённой задаче, а не к «Эху горизонта».</p><a href="../walkthroughs.html">Архив прежней версии</a></html>',encoding='utf-8')
+          for name in ['level-51.mp4','level-51.jpg','level-51-finish.jpg','level-51.json']:shutil.copyfile('encoded-echo/'+name,chapter/'walkthroughs'/name)
+          (chapter/'walkthroughs.html').write_text('<!doctype html><html lang="ru"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Эхо горизонта — прохождение</title><style>body{background:#102632;color:#eef8fc;font:17px/1.65 system-ui;max-width:1080px;margin:5vh auto;padding:24px}a{color:#70e4ed}video{width:100%;border-radius:14px}</style><h1>51 · Эхо горизонта</h1><p>Новая головоломка вместо удалённой «Адресной эстафеты».</p><video controls preload="metadata" poster="walkthroughs/level-51.jpg" src="walkthroughs/level-51.mp4"></video><p>335 исходных кадров, 12 кадров/с, 27,92 секунды игрового времени. Автоматический маршрут со знанием решения, не человеческий плейтест и не замер аппаратного FPS.</p><p>Видеофайл восстановлен из непрерывно сохранённых кадров после ошибки отсутствующего кодировщика. Кадры не добавлялись, не удалялись и не переставлялись. Полный первоначальный журнал этапов не сохранился; происхождение и границы доказательства указаны в JSON.</p><p><a href="./?edition=foundation&amp;level=51">Играть</a> · <a href="walkthroughs/level-51.json">Данные записи</a></p><h2>Исторические прохождения</h2><p>Комнаты 1–50 сохранили правила. Ролики в старой галерее сняты до изменения оформления. Старый ролик 51 относится к удалённой задаче, а не к «Эху горизонта».</p><a href="../walkthroughs.html">Архив прежней версии</a></html>',encoding='utf-8')
           preserved=[f for f in before if not f['path'].startswith('chapter-atlas/')]
           after={f['path']:f for f in inventory(site)}
           for f in preserved:assert after[f['path']]==f,'Unrelated publication changed'
-          proof={'sourceCommit':new['commit'],'version':new['version'],'reviewRun':37428403829,'replacedRooms':[51],'allDuplicatesRemoved':False,'preservedFiles':preserved,'previousChapterFiles':[f for f in before if f['path'].startswith('chapter-atlas/')],'gameFiles':current,'video':evidence,'siteFiles':inventory(site)}
+          proof={'sourceCommit':new['commit'],'version':new['version'],'reviewRun':37428403829,'reviewRunConclusion':'failure','gameplayAndMenuJobsPassed':10,'recoveredRecording':True,'replacedRooms':[51],'allDuplicatesRemoved':False,'preservedFiles':preserved,'previousChapterFiles':[f for f in before if f['path'].startswith('chapter-atlas/')],'gameFiles':current,'video':evidence}
+          (chapter/'replacement-report.json').write_text(json.dumps({k:v for k,v in proof.items() if k not in ['preservedFiles','previousChapterFiles']},ensure_ascii=False,indent=2))
+          proof['siteFiles']=inventory(site)
           pathlib.Path('proof/manifest.json').write_text(json.dumps(proof,indent=2))
-          (chapter/'replacement-report.json').write_text(json.dumps({k:v for k,v in proof.items() if k not in ['preservedFiles','previousChapterFiles','siteFiles']},ensure_ascii=False,indent=2))
           print('New gameplay',new['commit'],'one replacement; preserved',len(preserved),'unrelated public files')
           PY
       - uses: actions/upload-pages-artifact@v3
@@ -121,7 +135,7 @@ jobs:
           cat > echo-live.mjs <<'JS'
           import fs from 'node:fs';import assert from 'node:assert/strict';import puppeteer from 'puppeteer-core';import {activate,waitForStartMenu} from './scripts/lib/singularity-ui-check.mjs';
           const out='../proof/live';fs.mkdirSync(out,{recursive:true});const result={pass:false,sourceCommit:'f7a03ebd2b0c32a03fd953fe547664037b4c3483',cases:[],errors:[]};const browser=await puppeteer.launch({executablePath:'/usr/bin/google-chrome',headless:true,protocolTimeout:240000,args:['--no-sandbox','--disable-dev-shm-usage','--use-angle=swiftshader','--enable-unsafe-swiftshader']});let page;
-          try{for(const c of [{width:1440,height:900,touch:false},{width:390,height:844,touch:true}]){page=await browser.newPage();page.setDefaultTimeout(90000);await page.setViewport({...c,deviceScaleFactor:1,isMobile:c.touch,hasTouch:c.touch});page.on('pageerror',e=>result.errors.push(String(e)));await page.goto(process.env.PAGE_URL+'?edition=foundation&level=51',{waitUntil:'domcontentloaded'});await waitForStartMenu(page);assert.equal(await page.evaluate(()=>typeof window.__NESI_DEMO_GAME__),'undefined');assert.match(await page.$eval('#level-select option[value="50"]',e=>e.textContent),/Эхо горизонта/);const info=await page.evaluate(async()=>await(await fetch('build-info.json',{cache:'no-store'})).json());assert.equal(info.commit,result.sourceCommit);await page.screenshot({path:out+'/menu-'+c.width+'.png'});await page.$eval('#play-button',e=>e.addEventListener('click',event=>document.documentElement.dataset.echoTrustedPlay=String(event.isTrusted),{once:true,capture:true}));await activate(page,'#play-button',c.touch);await page.waitForFunction(()=>document.documentElement.dataset.runtimeState==='playing');assert.equal(await page.evaluate(()=>document.documentElement.dataset.echoTrustedPlay),'true');await page.screenshot({path:out+'/playing-'+c.width+'.png'});if(c.touch)await activate(page,'.lab-mobile button:nth-child(4)',true);else await page.keyboard.press('Escape');await page.waitForFunction(()=>document.documentElement.dataset.runtimeState==='paused');await activate(page,'#restart-button',c.touch);await page.waitForFunction(()=>document.documentElement.dataset.runtimeState==='playing');if(c.touch)await activate(page,'.lab-mobile button:nth-child(4)',true);else await page.keyboard.press('Escape');await page.waitForFunction(()=>document.documentElement.dataset.runtimeState==='paused');await activate(page,'#level-menu-button',c.touch);await waitForStartMenu(page);await page.reload({waitUntil:'domcontentloaded'});await waitForStartMenu(page);assert.equal(await page.$eval('#level-select',e=>Number(e.value)),50);result.cases.push({...c,nativePlay:true,pauseRestartReturn:true,reload:true});fs.writeFileSync(out+'/report.json',JSON.stringify(result,null,2));await page.close();page=null;}assert.deepEqual(result.errors,[]);result.pass=true;}catch(e){result.error=String(e);await page?.screenshot({path:out+'/failure.png'}).catch(()=>{});throw e;}finally{fs.writeFileSync(out+'/report.json',JSON.stringify(result,null,2));await browser.close();}
+          try{for(const c of [{width:1440,height:900,touch:false},{width:390,height:844,touch:true}]){page=await browser.newPage();page.setDefaultTimeout(90000);await page.setViewport({width:c.width,height:c.height,deviceScaleFactor:1,isMobile:c.touch,hasTouch:c.touch});page.on('pageerror',e=>result.errors.push(String(e)));await page.goto(process.env.PAGE_URL+'?edition=foundation&level=51',{waitUntil:'domcontentloaded'});await waitForStartMenu(page);assert.equal(await page.evaluate(()=>typeof window.__NESI_DEMO_GAME__),'undefined');assert.match(await page.$eval('#level-select option[value="50"]',e=>e.textContent),/Эхо горизонта/);const info=await page.evaluate(async()=>await(await fetch('build-info.json',{cache:'no-store'})).json());assert.equal(info.commit,result.sourceCommit);await page.screenshot({path:out+'/menu-'+c.width+'.png'});await page.$eval('#play-button',e=>e.addEventListener('click',event=>document.documentElement.dataset.echoTrustedPlay=String(event.isTrusted),{once:true,capture:true}));await activate(page,'#play-button',c.touch);await page.waitForFunction(()=>document.documentElement.dataset.runtimeState==='playing');assert.equal(await page.evaluate(()=>document.documentElement.dataset.echoTrustedPlay),'true');await page.screenshot({path:out+'/playing-'+c.width+'.png'});if(c.touch)await activate(page,'.lab-mobile button:nth-child(4)',true);else await page.keyboard.press('Escape');await page.waitForFunction(()=>document.documentElement.dataset.runtimeState==='paused');await activate(page,'#restart-button',c.touch);await page.waitForFunction(()=>document.documentElement.dataset.runtimeState==='playing');if(c.touch)await activate(page,'.lab-mobile button:nth-child(4)',true);else await page.keyboard.press('Escape');await page.waitForFunction(()=>document.documentElement.dataset.runtimeState==='paused');await activate(page,'#level-menu-button',c.touch);await waitForStartMenu(page);await page.reload({waitUntil:'domcontentloaded'});await waitForStartMenu(page);assert.equal(await page.$eval('#level-select',e=>Number(e.value)),50);result.cases.push({...c,nativePlay:true,pauseRestartReturn:true,reload:true});fs.writeFileSync(out+'/report.json',JSON.stringify(result,null,2));await page.close();page=null;}assert.deepEqual(result.errors,[]);result.pass=true;}catch(e){result.error=String(e);await page?.screenshot({path:out+'/failure.png'}).catch(()=>{});throw e;}finally{fs.writeFileSync(out+'/report.json',JSON.stringify(result,null,2));await browser.close();}
           JS
           timeout --signal=TERM --kill-after=10s 600s node echo-live.mjs
       - uses: actions/upload-artifact@v4
