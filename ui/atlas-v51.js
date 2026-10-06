@@ -1,6 +1,10 @@
 import { $, start, cleanup } from './atlas-common.js';
 import { mount } from './atlas-shell.js';
-if(start&&!document.documentElement.dataset.interfaceVersion){
+const query=new URLSearchParams(location.search);
+// This atlas depicts the primary campaign. Archived editions and special
+// modes retain their original controls and independent save namespaces.
+const primaryCampaign=(!query.has('edition')||query.get('edition')==='foundation')&&!query.has('mode');
+if(primaryCampaign&&start&&!document.documentElement.dataset.interfaceVersion){
  document.documentElement.classList.add('atlas-enabled');
  document.documentElement.dataset.interfaceVersion='v51-atlas';
  // Loading labels and the progress value remain exclusively engine-driven.
