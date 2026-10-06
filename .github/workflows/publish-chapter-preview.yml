@@ -68,6 +68,9 @@ jobs:
           site=pathlib.Path('site');site.mkdir();seen=set()
           with tarfile.open('baseline/artifact.tar') as tar:
             for e in tar:
+              # GNU tar emits a real directory entry for the archive root.
+              # Ignore only that directory, never a file/link named dot.
+              if e.isdir() and e.name in ('.','./'):continue
               name=safe(e.name)
               if name is None or e.isdir():continue
               assert e.isfile() and name not in seen;seen.add(name);p=site/name;p.parent.mkdir(parents=True,exist_ok=True)
@@ -102,6 +105,7 @@ jobs:
       - uses: actions/upload-pages-artifact@v3
         with: {path: site}
       - uses: actions/upload-artifact@v4
+        if: always()
         with: {name: chapter-preview-preservation, path: proof, retention-days: 30}
   publish:
     needs: assemble
