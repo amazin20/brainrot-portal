@@ -11,7 +11,7 @@ const types={'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=
 let server;
 if(!process.env.PAGE_URL){server=http.createServer((req,res)=>{try{const pathname=decodeURIComponent(new URL(req.url,'http://localhost').pathname),file=path.resolve(root,'.'+pathname+(pathname.endsWith('/')?'index.html':''));if(!file.startsWith(root+path.sep)){res.writeHead(403).end();return;}const stat=fs.statSync(file);if(!stat.isFile())throw Error();res.writeHead(200,{'Content-Type':types[path.extname(file)]||'application/octet-stream','Content-Length':stat.size});fs.createReadStream(file).pipe(res);}catch{res.writeHead(404).end();}});await new Promise(r=>server.listen(0,'127.0.0.1',r));}
 const base=process.env.PAGE_URL||`http://127.0.0.1:${server.address().port}/`;
-const report={pass:false,url:base,interfaceVersion:'v51-atlas',errors:[],selections:[],layouts:[],launches:[],retainedEditions:[],settings:false,keyboard:false,reducedMotion:false};
+const report={pass:false,url:base,interfaceVersion:'v51-atlas',errors:[],selections:[],layouts:[],launches:[],retainedEditions:[],settings:false,keyboard:false,reducedMotion:false,motionSamples:[]};
 const save=()=>fs.writeFileSync(path.join(out,'report.json'),JSON.stringify(report,null,2));
 const phase=name=>{report.phase=name;save();console.log('ATLAS CHECK:',name);};
 let browser,active;
@@ -20,9 +20,19 @@ async function ready(page){await page.bringToFront();await page.waitForFunction(
 async function click(page,selector,touch=false){await page.$eval(selector,e=>e.scrollIntoView({block:'center',inline:'center',behavior:'instant'}));if(touch)await page.tap(selector);else await page.click(selector);}
 async function selected(page,level){await page.waitForFunction(n=>Number(document.querySelector('#level-select').value)===n-1&&document.querySelector('#selected-room-number').textContent.endsWith(String(n).padStart(2,'0')),{timeout:15000},level);const text=await page.evaluate(()=>({title:document.querySelector('#selected-room-title').textContent,option:document.querySelector('#level-select').selectedOptions[0].textContent}));assert.equal(text.title,text.option.replace(/^\d+\s*·\s*/,'').replace(/\s*✓$/,''));}
 async function newPage(viewport){const page=await browser.newPage();active=page;await page.setViewport({...viewport,deviceScaleFactor:1});page.setDefaultTimeout(90000);page.on('pageerror',e=>{report.errors.push(String(e));save();});return page;}
+async function verifyMotion(page,label){
+ // Test both OS-preference branches explicitly. Software WebGL can render
+ // fewer than five frames/sec; a 200ms wall-clock sleep is not a frame fence.
+ await page.bringToFront();
+ await page.emulateMediaFeatures([{name:'prefers-reduced-motion',value:'no-preference'}]);
+ const snapshot=()=>page.$eval('.atlas-route-energy',e=>({hidden:document.hidden,reduced:matchMedia('(prefers-reduced-motion:reduce)').matches,classes:document.documentElement.className,display:getComputedStyle(e).display,animationName:getComputedStyle(e).animationName,offset:getComputedStyle(e).strokeDashoffset,animations:e.getAnimations().map(a=>({time:a.currentTime,state:a.playState,pending:a.pending})),runtime:document.documentElement.dataset.runtimeState}));
+ const sample={label,beforeReady:await snapshot()};report.motionSamples.push(sample);save();console.log('ATLAS MOTION',JSON.stringify(sample));
+ await page.waitForFunction(()=>{const e=document.querySelector('.atlas-route-energy'),a=e?.getAnimations()[0];return !document.hidden&&!matchMedia('(prefers-reduced-motion:reduce)').matches&&a?.playState==='running'&&!a.pending&&Number.isFinite(a.currentTime);},{timeout:30000});
+ sample.before=await snapshot();save();
+ await page.waitForFunction(before=>{const e=document.querySelector('.atlas-route-energy'),a=e?.getAnimations()[0];return a?.playState==='running'&&Number.isFinite(a.currentTime)&&a.currentTime>before.time+100&&getComputedStyle(e).strokeDashoffset!==before.offset;},{timeout:30000,polling:'raf'},{time:sample.before.animations[0].time,offset:sample.before.offset});
+ sample.after=await snapshot();sample.pass=true;save();
+}
 async function pause(page,touch){
- // Pointer-locked desktop input targets the canvas. Use the game's real
- // Escape shortcut there; coarse pointers have a dedicated native pause key.
  if(touch)await click(page,'.lab-mobile button:nth-child(4)',true);else await page.keyboard.press('Escape');
  await page.waitForFunction(()=>document.documentElement.dataset.runtimeState==='paused'&&getComputedStyle(document.querySelector('#pause-screen')).opacity==='1');
 }
@@ -47,6 +57,7 @@ try{
  phase('initial menu and native settings');
  const page=await newPage({width:1440,height:900});
  await page.goto(base+'?edition=foundation&level=1',{waitUntil:'domcontentloaded'});await ready(page);
+ await verifyMotion(page,'initial rendered menu');
  await click(page,'[aria-label="Открыть настройки"]');await page.waitForFunction(()=>document.querySelector('#atlas-dialog').open);
  await page.select('#quality-select','low');await click(page,'#mute-toggle');
  await page.$eval('#volume-control',e=>{e.value='37';e.dispatchEvent(new Event('input',{bubbles:true}));});
@@ -76,8 +87,7 @@ try{
  }
  await page.setViewport({width:1440,height:900,deviceScaleFactor:1});
  phase('actual animation and reduced motion');
- const animationTime=()=>page.$eval('.atlas-route-energy',e=>e.getAnimations()[0]?.currentTime);
- const t0=await animationTime();await sleep(200);const t1=await animationTime();assert.ok(Number.isFinite(t0)&&t1>t0);report.motion={pathAnimationAdvanced:true,beforeMilliseconds:t0,afterMilliseconds:t1};
+ await verifyMotion(page,'after eleven viewport changes');
  await page.emulateMediaFeatures([{name:'prefers-reduced-motion',value:'reduce'}]);
  await click(page,'.sector-tabs button[data-sector="2"]');await sleep(100);
  assert.equal(await page.$eval('.atlas-route-energy',e=>getComputedStyle(e).display),'none');report.reducedMotion=true;
@@ -102,5 +112,5 @@ try{
   report.retainedEditions.push({edition,...status});save();await legacy.close();
  }
  assert.deepEqual(report.errors,[]);report.pass=true;phase('complete');console.log('ATLAS MENU VERIFIED',JSON.stringify(report));
-}catch(error){report.error=String(error);report.stack=error.stack;save();if(active&&!active.isClosed()){report.state=await active.evaluate(()=>({url:location.href,runtime:document.documentElement.dataset.runtimeState,ui:document.documentElement.dataset.interfaceVersion,detail:document.querySelector('#error-detail')?.textContent,selection:document.querySelector('#level-select')?.value})).catch(()=>null);await active.screenshot({path:path.join(out,'failure.png')}).catch(()=>{});}throw error;
+}catch(error){report.error=String(error);report.stack=error.stack;save();if(active&&!active.isClosed()){report.state=await active.evaluate(()=>({url:location.href,runtime:document.documentElement.dataset.runtimeState,ui:document.documentElement.dataset.interfaceVersion,detail:document.querySelector('#error-detail')?.textContent,selection:document.querySelector('#level-select')?.value,hidden:document.hidden,rootClass:document.documentElement.className})).catch(()=>null);await active.screenshot({path:path.join(out,'failure.png')}).catch(()=>{});}throw error;
 }finally{save();await browser?.close();if(server)await new Promise(r=>server.close(r));}
