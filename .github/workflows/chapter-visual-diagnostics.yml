@@ -1,0 +1,58 @@
+name: Chapter visual and lifecycle diagnostics
+on:
+  push:
+    branches: [upgrade/themed-chapters-20261006]
+    paths: [.github/workflows/chapter-visual-diagnostics.yml]
+permissions:
+  contents: read
+  actions: read
+jobs:
+  visual:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: bf3113a6fac54431854436369cc4a4c8208dcdbf, persist-credentials: false}
+      - uses: actions/setup-node@v4
+        with: {node-version: 22}
+      - run: npm ci && npm install --no-save --package-lock=false puppeteer-core@24.16.0
+      - uses: actions/download-artifact@v4
+        with: {name: chapter-final-production, run-id: 37413444207, github-token: '${{ github.token }}', path: dist}
+      - name: Capture each chapter menu before the longer control review
+        run: |
+          mkdir -p qa/chapter-visual
+          cat > chapter-visual.mjs <<'JS'
+          import fs from 'node:fs';import {spawn} from 'node:child_process';import puppeteer from 'puppeteer-core';
+          const server=spawn(process.execPath,['node_modules/vite/bin/vite.js','preview','--host','127.0.0.1','--port','4199'],{stdio:'ignore'});let browser;const report={pass:false,rooms:[],errors:[]};
+          const save=()=>fs.writeFileSync('qa/chapter-visual/report.json',JSON.stringify(report,null,2));
+          try{for(let i=0;i<200;i++){try{if((await fetch('http://127.0.0.1:4199')).ok)break;}catch{}await new Promise(r=>setTimeout(r,50));}
+          browser=await puppeteer.launch({executablePath:'/usr/bin/google-chrome',headless:true,protocolTimeout:60000,args:['--no-sandbox','--disable-dev-shm-usage','--use-angle=swiftshader','--enable-unsafe-swiftshader']});
+          for(const c of [{level:1,width:1440,height:900},{level:11,width:1440,height:900},{level:21,width:390,height:844},{level:31,width:844,height:390},{level:41,width:360,height:800},{level:51,width:1440,height:900}]){
+            const page=await browser.newPage();page.setDefaultTimeout(60000);await page.setViewport({width:c.width,height:c.height,deviceScaleFactor:1,isMobile:c.width<500||c.height<500,hasTouch:c.width<500||c.height<500});
+            page.on('pageerror',e=>{report.errors.push(String(e));save();});await page.evaluateOnNewDocument(()=>localStorage.setItem('brainrot-foundation-v1:brainrot-portal.preferences.v24',JSON.stringify({quality:'low',muted:true})));
+            report.active={...c,phase:'opening'};save();console.log('OPEN',JSON.stringify(c));await page.goto('http://127.0.0.1:4199/?edition=foundation&level='+c.level,{waitUntil:'domcontentloaded'});await page.waitForFunction(()=>document.documentElement.dataset.runtimeState==='ready');
+            await page.waitForFunction(()=>getComputedStyle(document.querySelector('#start-screen')).opacity==='1');await page.$eval('#start-screen',e=>e.scrollTo(0,0));
+            const state=await page.evaluate(()=>({runtime:document.documentElement.dataset.runtimeState,selected:document.querySelector('#level-select').value,nodes:document.querySelectorAll('.room-node').length,focus:document.hasFocus(),paused:document.body.dataset.externalPause,scroll:document.querySelector('#start-screen').scrollHeight,height:innerHeight}));
+            await page.screenshot({path:`qa/chapter-visual/menu-${c.level}-${c.width}.png`});report.rooms.push({...c,state});save();console.log('CAPTURED',JSON.stringify(c));await page.close();
+          }report.pass=report.errors.length===0;
+          }catch(e){report.error=String(e);save();throw e;}finally{save();if(browser)await Promise.race([browser.close(),new Promise(r=>setTimeout(r,2000))]);server.kill();}
+          JS
+          timeout --signal=TERM --kill-after=10s 480s node chapter-visual.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: {name: chapter-visual-diagnostics, path: qa/chapter-visual, retention-days: 14}
+  resources:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: bf3113a6fac54431854436369cc4a4c8208dcdbf, persist-credentials: false}
+      - uses: actions/setup-node@v4
+        with: {node-version: 22}
+      - run: npm ci && npm install --no-save --package-lock=false puppeteer-core@24.16.0
+      - uses: actions/download-artifact@v4
+        with: {name: chapter-final-production, run-id: 37413444207, github-token: '${{ github.token }}', path: dist}
+      - run: CHROME_PATH=$(command -v google-chrome) node scripts/qa-production-resource-cycle.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: {name: chapter-final-resources, path: qa/production-resource-cycle, retention-days: 14}
