@@ -1,0 +1,46 @@
+name: Independent read-only demo launch verification
+on:
+  push:
+    branches: [main]
+    paths: [.github/workflows/verify-existing-demo.yml]
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: existing-demo-launch-verification
+  cancel-in-progress: false
+defaults:
+  run:
+    shell: bash
+jobs:
+  launch:
+    name: Verify the deployed 51-room game without republishing
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with: {node-version: 22,cache: npm}
+      - run: |
+          npm ci
+          npm install --no-save --package-lock=false puppeteer-core@24.16.0
+          echo "CHROME_PATH=$(command -v google-chrome || command -v chromium)" >> "$GITHUB_ENV"
+      - uses: actions/download-artifact@v4
+        with:
+          name: expedition-recovered-assembly
+          run-id: 37401009893
+          github-token: ${{ github.token }}
+          path: publication-input
+      - name: Bound the browser check and retain intermediate evidence
+        run: timeout --signal=TERM --kill-after=10s 360s node scripts/verify-existing-demo.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: independent-demo-launch-proof
+          path: demo-launch-proof
+          retention-days: 30
+          if-no-files-found: error
