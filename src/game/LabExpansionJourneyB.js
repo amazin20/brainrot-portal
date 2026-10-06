@@ -41,17 +41,8 @@ function topple(d,o){const {game:g,level:l}=d;
  d.walk(0,15.3);d.walk(-8,15.3);d.walk(-8,-1);d.walk(0,-1);d.walk(0,-14);
  if(!g.heldCube)collect(d);d.walk(0,-24);
 }
-function relay(d,o){const {game:g,level:l}=d;
- d.walk(-21,15);d.aim(0,l.entry.getFrame().center);d.walk(-14,24);d.aim(1,l.shuttle.panel.getFrame().center);
- if(o.stopBeforeDelivery){d.walk(-16,20.4);check(g.interact(),'Relay south control missed');d.wait(5);return;}
- collect(d);enterJump(d,l.entry);d.walk(-17.7,-5.5);release(d);check(l.clutch.loaded(),'Cargo not on the real carrier floor');
- enterJump(d,l.shuttle.panel);d.walk(-16,20.4);check(g.interact(),'Relay dispatch missed');d.until(()=>l.shuttle.at(1),8,'Loaded cabin did not travel transversely');d.mark('Original loose cargo and its portal address travel to the east berth');
- enterJump(d,l.entry);d.walk(22.5,-13.3);d.walk(18,-13.3);d.walk(18,-17);d.walk(26,-18.7);check(g.interact(),'East vertical dispatch missed');d.until(()=>l.shuttle.at(2),5,'Loaded cabin did not climb to the final berth');
- // The same entry is now on the moved cabin. Walk off the east dock and
- // return by the genuine dry floor and service incline, then repurpose it.
- d.walk(19,-4);d.until(()=>g.playerGrounded&&g.playerPosition.y< -3.8,5,'Dry relay service floor missed');d.walk(-28,-16);d.walk(-28,15);d.walk(-21,15);enterJump(d,l.entry);collect(d);d.walk(8,-16.3);d.walk(3,-16.3);d.walk(3,-23);
-}
 export function runExpansionBJourney(d,options={}){
+ if(d.level.echoHorizon)return import('./LabEchoHorizonJourney.js').then(m=>m.runEchoHorizon(d,options));
  installRoom21Aim(d);
  if(options.alternative==='staged-cargo'){
   check(d.level.index===47,'Staged cargo alternative requires room 48');
@@ -61,10 +52,10 @@ export function runExpansionBJourney(d,options={}){
   check(d.level.index===48,'Unlit mirror alternative requires room 49');
   return import('./LabExpansionAlternateJourney49.js').then(m=>m.runRoom49UnlitMirror(d));
  }
- if(options.alternative==='free-cargo-bridge'||options.alternative==='prearmed-relay'){
-  check(d.level.index===(options.alternative==='free-cargo-bridge'?49:50),'Expansion alternative selected for the wrong room');
+ if(options.alternative==='free-cargo-bridge'){
+  check(d.level.index===49,'Expansion alternative selected for the wrong room');
   return import('./LabExpansionAlternateJourneyB.js').then(m=>m.runExpansionAlternateJourneyB(d,options.alternative));
  }
  check(!options.alternative,'Unknown expansion B alternative');
- const f=[fracture,wedge,reflection,topple,relay][d.level.index-46];check(f,'Unknown expansion B room');return f(d,options);
+ const f=[fracture,wedge,reflection,topple][d.level.index-46];check(f,'Unknown expansion B room');return f(d,options);
 }

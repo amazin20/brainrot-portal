@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import {ECHO_HORIZON_SPEC,buildEchoHorizon} from './LabEchoHorizon.js';
 import {Body,Box,Vec3,Material,HingeConstraint} from 'cannon-es';
 import {ResearchChamber} from './LabResearchArt.js';
 import {tracePortalRay,rayTouches,beamDrawing} from './LabPuzzleMechanics.js';
@@ -10,7 +11,7 @@ export const EXPANSION_B_SPECS=Object.freeze([
  {id:'expansion-contact-wedge',title:'Клиновый шлюз',concept:'Настоящий привод сжимает направляемую губку. Спутник физически препятствует её закрытию, и незавершённый ход открывает связанный проход.',description:'Ход прессового привода связан с дверью наблюдателя. В закрытом грузовом ложе видны направляющая, прижимная губка и инспекционный кожух. Северный выход ждёт обоих путешественников.',accent:0x8de0c9,assets,hints:['Человеку не пролезть под кожухом пресса. Белый выход в его ложе принимает только спутника.','Весовая кнопка здесь не помогает: открытый ход сохраняет контакт спутника с движущейся губкой.','С дальнего пульта вставь видимый стопор в направляющую и открой инспекционный кожух.']},
  {id:'expansion-gimbal-reflection',title:'Кривая отражения',concept:'Плечо настоящего груза задаёт момент на шарнире зеркала. Луч отражается от его живой нормали, затем удерживается механической струбциной.',description:'Свет, зеркало и плечо груза образуют одну живую систему. Дальняя линза следит за направлением отражения, а выход ждёт обоих путешественников.',accent:0x8edbf0,assets,hints:['Порталы меняют адрес света; зеркало меняет направление отражения.','Далёкое от оси положение спутника поворачивает зеркальную головку сильнее.','Струбцина удерживает реальный угол и работает в любом положении. При неудачной фиксации её можно освободить.']},
  {id:'expansion-toppling-bridge',title:'Падающая архитектура',concept:'Свободный спутник ударяет высокое плечо шарнирной панели. Настоящее вращение превращает вертикальную стену в горизонтальную переправу.',description:'Вертикальная стена стоит на настоящем шарнире, а северный причал отделён глубоким сервисным разрывом. Здесь сама архитектура может стать частью решения. На северный причал должны попасть оба путешественника.',accent:0xeab77d,assets,hints:['Нижний упор защищает основание. Удар выше упора создаёт большой момент на шарнире.','Панель становится полом в результате вращения, а не после включения кнопки.','Нижний пол возвращает спутника к единственному сервисному пандусу. Ошибка не требует перезапуска.']},
- {id:'expansion-address-relay',title:'Адресная эстафета',concept:'Спутник замыкает механическую муфту на грузовой кабине. Два разных причала перемещают один портальный адрес сначала поперёк комнаты, затем вверх.',description:'Один грузовой адрес принадлежит кабине с тремя причалами. Грузовая муфта, пульты разных крыльев и постоянный сервисный пол задают правила пространства. Верхний причал ждёт обоих путешественников.',accent:0xe7a4d1,assets,hints:['Привод работает только при оригинальном грузе на настоящем настиле кабины.','Дальний причал меняет маршрут кабины. Пульт последнего подъёма недоступен из стартового крыла.','Портал остаётся прикреплён к кабине. Сухой сервисный ярус и возвратный пандус позволяют повторить пересадку.']},
+ ECHO_HORIZON_SPEC,
 ]);
 function chamber(g,i,s,theme,bounds,base=0,roof=20){return new ResearchChamber(g,s,i,theme,bounds,base,roof);}
 function finish(k,spawn,cargo,goal,extra,roles,deductions){
@@ -169,31 +170,4 @@ export function buildTopplingBridge(g,index=49,spec=EXPANSION_B_SPECS[3]){
   {'hinge-gravity-well':'original cargo acquires speed from a real fall','hinge-high-impact':'the high impact produces hinge torque while low hands meet a solid guard'},['a rigid wall rotates through physical hinge constraints','gravity makes the fallen wall into the only structural crossing','segmented colliders track the real panel at every angle','the same cargo is recovered from the dry floor']);return disposeBodies(l,[top]);
 }
 
-/** Three real berths require two independent dispatches. The cargo closes a
- * live weight clutch on the carrier; attached portal coordinates follow it. */
-export function buildAddressRelay(g,index=50,spec=EXPANSION_B_SPECS[4]){
- const k=chamber(g,index,spec,'gravity',{minX:-33,maxX:33,minZ:-30,maxZ:29},-4,28);
- k.deck('South portal departure promenade',-30,-12,7,27,0);
- k.deck('East intermediate dispatch gallery',12,30,-26,-14,7);k.deck('East recall side gallery',24,32,-14,-5,7);
- k.deck('North final unloading gallery',-5,11,-27,-17,16);
- k.ramp('Dry relay return incline',-30,-22,-17,7,-4,0);
- k.deck('Lower western return landing',-30,-12,-27,-17,-4);
- const entry=k.panel('relay-ground-entry',[-23,2.9,9],[0,0,1],8,5.8);
- const shuttle=k.carrier('relay-live-address',[[-22,7,-14],[18,7,-14],[3,16,-17]],{width:12,depth:12,portal:true});shuttle.speed=9;
- const s=shuttle.panel;s.group.quaternion.setFromAxisAngle(V(0,1,0),Math.PI/2);s.group.position.x=3;s.group.position.z=6;s.sync(0);const clutch={loaded:()=>{const p=g.cargo?.position,f=shuttle.floor;return p&&!g.heldCube&&Math.abs(p.y-.39-f.y)<.32&&p.x>f.minX+.4&&p.x<f.maxX-.4&&p.z>f.minZ+.4&&p.z<f.maxZ-.4;}};
- const guards=[];for(const [p,size]of [[[6,.5,6],[.25,1.0,12]],[[-6,.5,6],[.25,1.0,12]],[[0,.5,12],[12,1.0,.25]],[[-5.5,.5,0],[1,1.0,.25]],[[3.5,.5,0],[5,1.0,.25]]]){const m=k.block(p,size,'metal',false,shuttle.group);m.updateWorldMatrix(true,false);const c=g.collisionProxy(new THREE.Box3().setFromObject(m),{kinematic:true});guards.push({m,c});}k.ticks.push(dt=>{for(const {m,c}of guards){m.updateWorldMatrix(true,false);const box=new THREE.Box3().setFromObject(m);if(g.physics?.solids?.has(c.mesh.uuid))g.syncCollision(c,box,dt);else syncProxy(c,box);}});
- k.state.relayClutch=clutch;k.ticks.unshift(()=>{shuttle.braked=!clutch.loaded();});
- k.control('relay-south-dispatch',[-16,0,19],()=>{shuttle.target=1;},'E — поперечный ход к восточному причалу. Муфта замкнута только свободным грузом в кабине.');
- k.control('relay-east-elevation',[27,7,-20],()=>{shuttle.target=2;},'E — направить кабину к верхнему разгрузочному причалу.');
- k.control('relay-east-recall',[26,7,-8],()=>{shuttle.target=0;},'E — вернуть нагруженную кабину к западному причалу.');
- k.control('relay-upper-recall',[8,16,-23],()=>{shuttle.target=1;},'E — вернуть кабину к среднему причалу.');
- // A full-height freight wing prevents reaching the upper control by climbing
- // its column or the intermediate dock's decorative frame.
- k.block([12,17,-24],[.6,22,10],'shell');
- k.block([3,23,-28.4],[16,1.0,.6],'secondary');
- k.label('51 / АДРЕСНАЯ ЭСТАФЕТА',[0,25,-28.5],[0,0,1],26,1.15);
- k.display([30.8,12,15],()=>`МУФТА ${clutch.loaded()?'ЗАМКНУТА ГРУЗОМ':'РАЗОМКНУТА'}\nПРИЧАЛ ${shuttle.at(0)?'ЗАПАД':shuttle.at(1)?'ВОСТОК':shuttle.at(2)?'ВЕРХНИЙ':'ДВИЖЕНИЕ'}`,19,2,[-1,0,0]);
- const l=finish(k,[-22,0,22],[-24,.6,20],[3,16,-23],{entry,shuttle,clutch,spawnView:{yaw:.1,pitch:-.07}},
-  {'relay-ground-entry':'the observer reaches an isolated cabin by portal','relay-live-address':'one real portal address migrates between three separate physical berths'},['an empty carrier cannot transmit motor motion','only the eastern berth has the vertical dispatch','the observer and cargo travel independently before the last unloading','a live cargo clutch can be recalled without recreating either traveller']);return l;
-}
-export const EXPANSION_B_BUILDERS=Object.freeze([buildBrittleFuse,buildContactWedge,buildGimbalReflection,buildTopplingBridge,buildAddressRelay]);
+export const EXPANSION_B_BUILDERS=Object.freeze([buildBrittleFuse,buildContactWedge,buildGimbalReflection,buildTopplingBridge,buildEchoHorizon]);

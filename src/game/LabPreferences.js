@@ -14,13 +14,14 @@ export function sanitizePreferences(value={}) {
     hints:Object.fromEntries(Object.entries(safe.hints&&typeof safe.hints==='object'?safe.hints:{}).filter(([k,v])=>/^\d{1,2}$/.test(k)&&Number.isInteger(v)&&v>=0&&v<=3))};
 }
 export class LabPreferences {
-  constructor(storage,{campaignRevision=CAMPAIGN_REVISION,replacedIndices=[]}={}){
+  constructor(storage,{campaignRevision=CAMPAIGN_REVISION,replacedIndices=[],roomRevisions={}}={}){
     this.storage=storage;this.campaignRevision=campaignRevision;this.readFailed=false;let saved={};
     try{
       saved=JSON.parse(storage?.getItem(KEY)||storage?.getItem(LEGACY_KEY)||'{}');
       if(!saved||typeof saved!=='object'||Array.isArray(saved))throw new TypeError('Invalid preferences record');
     }catch{this.readFailed=true;saved={};}
     this.value=sanitizePreferences(saved);
+    this.roomRevisions=Object.fromEntries(Object.entries(saved.roomRevisions||{}).filter(([key,value])=>/^\d{1,2}$/.test(key)&&typeof value==='string'));
     if(saved.campaignRevision!==campaignRevision){
       // Rooms 1–11 and personal settings survive each chamber replacement.
       // The new chamber must not inherit old completion or spoiler hints.
@@ -30,10 +31,17 @@ export class LabPreferences {
       this.value.hints=Object.fromEntries(Object.entries(this.value.hints).filter(([index])=>keep(Number(index))));
       this.save();
     }
+    const changed=Object.keys(roomRevisions).filter(key=>this.roomRevisions[key]!==roomRevisions[key]);
+    if(changed.length){
+      const replaced=new Set(changed.map(Number));
+      this.value.completed=this.value.completed.filter(index=>!replaced.has(index));
+      this.value.hints=Object.fromEntries(Object.entries(this.value.hints).filter(([key])=>!replaced.has(Number(key))));
+      Object.assign(this.roomRevisions,roomRevisions);this.save();
+    }
   }
   // A failed read must not be turned into an empty progress write. Session
   // changes remain usable; a new successful load is required before persistence.
-  save(changes={}){this.value=sanitizePreferences({...this.value,...changes});try{if(!this.readFailed)this.storage?.setItem(KEY,JSON.stringify({...this.value,campaignRevision:this.campaignRevision}));}catch{/* Storage may be disabled; session settings still work. */}return this.value;}
+  save(changes={}){this.value=sanitizePreferences({...this.value,...changes});try{if(!this.readFailed)this.storage?.setItem(KEY,JSON.stringify({...this.value,campaignRevision:this.campaignRevision,roomRevisions:this.roomRevisions}));}catch{/* Storage may be disabled; session settings still work. */}return this.value;}
   complete(index){this.save({completed:[...this.value.completed,index]});}
   unlockHint(index){this.save({hints:{...this.value.hints,[index]:Math.min(3,(this.value.hints[index]||0)+1)}});}
 }

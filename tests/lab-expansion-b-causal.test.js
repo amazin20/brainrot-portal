@@ -46,16 +46,15 @@ test('49: missing reflection and a real wrong-side load keep the receiver door c
 
 test('50: original cargo at hand height and ordinary jump contacts leave the wall upright',()=>record('50 low physical contact',topplingLowManual));
 
-test('51: a real dispatch request leaves an empty carrier in its berth',()=>record('51 empty cabin floor',async()=>{
+test('51: one actual distant membrane impact decays without opening the common latch',()=>record('51 no stored serial solution',async()=>{
  const game=await createHeadlessGame();try{
   game.chamberEdition='foundation';await game.selectLevel(50,false);const cargo=game.cargo,body=game.physics.cargoBody;
-  const journey=await runV8Journey(game,{scenario:d=>{
-   const l=d.level,before=l.shuttle.position.clone();d.walk(-16,20.4);assert.equal(game.interact(),true);assert.equal(l.shuttle.target,1);d.wait(6);
-   assert.equal(l.clutch.loaded(),false);assert.equal(game.heldCube,null);assert.ok(l.shuttle.position.distanceTo(before)<1e-5);
-   assert.ok(l.shuttle.at(0));assert.equal(l.shuttle.at(1),false);assert.equal(game.teleportCount,0);assert.equal(game.physics.portalTransports,0);assert.equal(game.state,'playing');
-   d.mark('Actual empty floor leaves the weight clutch open despite a real control request');
+  const journey=await runV8Journey(game,{scenario:async d=>{
+   const {runEchoHorizon}=await import('../src/game/LabEchoHorizonJourney.js');await runEchoHorizon(d,{stopBeforeCoincidence:true});
+   const l=d.level;assert.equal(l.field.arrivals.length,1);assert.equal(l.field.arrivals[0].receiver,'long');
+   assert.equal(l.coincidence.latched,false);assert.equal(l.coincidence.membranes[0],0);assert.ok(l.door.progress<.01);assert.equal(game.state,'playing');
   }});
   assert.equal(game.cargo,cargo);assert.equal(game.physics.cargoBody,body);assert.equal(journey.resets+journey.respawns,0);
-  return {journey,position:game.firstLevel.shuttle.position.toArray(),target:game.firstLevel.shuttle.target,loaded:game.firstLevel.clutch.loaded()};
+  return {journey,arrivals:game.firstLevel.field.arrivals,latched:game.firstLevel.coincidence.latched};
  }finally{game.firstLevel.dispose?.();game.physics.dispose();game.portals.dispose();}
 }));

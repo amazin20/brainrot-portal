@@ -9,7 +9,7 @@ import {runV8Journey} from '../src/game/LabV8Journey.js';
 // The restart assertions follow a completed route, so they exercise broken,
 // pinned, clamped, fallen and dispatched physical mechanisms, rather than an
 // already pristine fixture. The companion object and rigid body stay original.
-const sourceFiles=['LabExpansionRoomsB.js','LabExpansionJourneyB.js','LabGame.js','LabPhysics.js','LabPortals.js'];
+const sourceFiles=['LabExpansionRoomsB.js','LabExpansionJourneyB.js','LabEchoHorizon.js','LabTravellingPulse.js','LabEchoHorizonJourney.js','LabGame.js','LabPhysics.js','LabPortals.js'];
 const fingerprint=()=>createHash('sha256').update(sourceFiles.map(name=>name+'\n'+fs.readFileSync(new URL('../src/game/'+name,import.meta.url))).join('\n')).digest('hex');
 const proof={scope:'Five complete ordinary-input routes followed by production restart of genuinely changed mechanisms.',sourceFiles,rows:[]};
 const save=()=>{fs.mkdirSync(new URL('../qa/',import.meta.url),{recursive:true});fs.writeFileSync(new URL('../qa/expansion-b-release.json',import.meta.url),JSON.stringify(proof,null,2)+'\n');};
@@ -24,7 +24,7 @@ for(const room of [47,48,49,50,51])test(`${room}: same companion completes the p
   if(room===48){assert.equal(l.press.pinned,true);assert.ok(l.press.gap>.68);assert.ok(l.roof.progress>.95);}
   if(room===49){assert.equal(l.head.clamped,true);assert.equal(l.head.lit,true);}
   if(room===50){assert.ok(l.top.angle< -1.43);assert.ok(l.bumper.progress>.95);}
-  if(room===51){assert.ok(l.shuttle.at(2));assert.ok(g.physics.portalTransports>=1);assert.ok(g.teleportCount>=4);}
+  if(room===51){assert.equal(l.id,'echo-horizon');assert.equal(l.coincidence.latched,true);assert.equal(l.shuttle,undefined);assert.equal(l.field.arrivals.length,2);}
   row.cargoTransports=g.physics.portalTransports;
   g.resetRun(true);
   assert.equal(g.state,'playing');assert.equal(g.heldCube,null);assert.equal(g.cargo,cargo);assert.equal(g.physics.cargoBody,body);
@@ -37,7 +37,7 @@ for(const room of [47,48,49,50,51])test(`${room}: same companion completes the p
   if(room===48){assert.equal(l.press.pinned,false);assert.equal(l.press.running,false);assert.ok(Math.abs(l.press.body.position.x+2.4)<1e-8);assert.equal(l.roof.target,false);}
   if(room===49){assert.equal(l.head.clamped,false);assert.equal(l.head.lit,false);assert.equal(l.head.angle,0);}
   if(room===50){assert.ok(Math.abs(l.top.angle)<1e-8);assert.equal(l.bumper.target,false);assert.ok(Math.abs(l.top.body.position.y-7)<1e-8);}
-  if(room===51){assert.ok(l.shuttle.at(0));assert.equal(l.shuttle.target,0);assert.equal(l.clutch.loaded(),false);}
+  if(room===51){assert.equal(l.coincidence.latched,false);assert.equal(l.field.packets.length,0);assert.equal(l.field.arrivals.length,0);assert.equal(l.charge.value,0);assert.ok(l.door.progress===0);}
   row.pass=true;row.restartCleared=true;row.sameCargo=true;row.sameBody=true;
  }catch(error){row.pass=false;row.error=String(error);throw error;}
  finally{row.sourceAfter=fingerprint();row.sourceStable=row.sourceBefore===row.sourceAfter;row.finished=new Date().toISOString();proof.rows.push(row);save();g.firstLevel?.dispose?.();g.physics?.dispose();g.portals?.dispose();}

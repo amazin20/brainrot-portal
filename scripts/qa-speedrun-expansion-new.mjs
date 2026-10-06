@@ -31,6 +31,7 @@ function state(){
  if(l.press)r.press={running:l.press.running,pinned:l.press.pinned,gap:l.press.gap,loaded:l.press.loaded(),door:l.door.progress,hood:l.roof.progress};
  if(l.head)r.head={angle:l.head.angle,arm:l.head.arm,lit:l.head.lit,clamped:l.head.clamped,door:l.door.progress,rayKinds:l.head.segments.map(s=>s.kind)};
  if(l.top)r.hinge={angle:l.top.angle,guard:l.bumper.progress};
+ if(l.echoHorizon)r.echo={emitted:l.field.emitted,arrivals:l.field.arrivals,membranes:l.coincidence.membranes,latched:l.coincidence.latched};
  if(l.shuttle)r.relay={position:l.shuttle.position.toArray(),target:l.shuttle.target,braked:l.shuttle.braked,loaded:!!l.clutch.loaded(),at:[0,1,2].map(i=>l.shuttle.at(i))};
  return r;
 }
@@ -210,19 +211,28 @@ const attacks={
   }},
  ],
  51:[
-  {name:'empty-dispatch-enter-carrier-held-cargo-and-jump-berth-roof',omitted:'Free original cargo weight clutch',run:async d=>{
-   await beforeDelivery(d);collect(d);const f=d.level.entry.getFrame();d.walk(f.center.x,f.center.z+1.35);
-   pushFrames(d,0,-1,240,{jumpEvery:40});note('Entered cabin while holding cargo; clutch must remain open');
-   force(d,V(26,7,-8),10);supportChain(d,d.level.goal.position);
+  {name:'one-live-membrane-cargo-jump-central-bulkhead',omitted:'Two live pressure arrivals and common latch',run:async d=>{
+   d.walk(-1,14.7);d.aim(0,d.level.intake.getFrame().center);d.aim(1,d.level.short.getFrame().center);
+   // Actually deliver, not just fire near a receiver. Re-aiming uses only
+   // the camera and native charged portal projectile.
+   for(let i=0;i<3&&!d.level.field.arrivals.length;i++){
+    d.aim(1,d.level.short.getFrame().center);d.until(()=>d.level.charge.value>.99,3,'Load must recharge');game.interact();d.wait(3);
+   }
+   if(!d.level.field.arrivals.some(a=>a.receiver==='short'))throw Error('Preparation: near membrane was not reached');
+   note('Actual near hit occurred without a far arrival');collect(d);d.walk(0,8);d.walk(0,-9.5);
+   force(d,d.level.goal.position,10);supportChain(d,d.level.goal.position);
   }},
-  {name:'east-berth-roof-and-cargo-jump-without-vertical-dispatch',omitted:'Eastern control request for final elevation',run:async d=>{
-   await cut(d,'Original loose cargo and its portal address travel to the east berth');enterJump(d,d.level.entry);collect(d);note('Middle berth cargo recovered before vertical dispatch');
-   force(d,V(22.5,7,-13.3),6);force(d,V(18,7,-17),6);supportChain(d,d.level.goal.position);force(d,d.level.goal.position,12,{veer:-.2});
+  {name:'departed-long-packet-pair-erased-wall-top-probe',omitted:'Second staggered pressure packet',run:async d=>{
+   d.walk(-1,14.7);d.aim(0,d.level.intake.getFrame().center);d.aim(1,d.level.long.getFrame().center);
+   d.until(()=>d.level.charge.value>.99,3,'Load must recharge');game.interact();
+   d.until(()=>d.level.field.packets.some(p=>p.portalCrossings>0),3,'Packet did not depart');game.clearPortals();
+   d.until(()=>d.level.field.arrivals.some(a=>a.receiver==='long'),6,'Departed packet was not physically received');
+   note('Real long hit survived erased portals, without a short arrival');collect(d);d.walk(-21,8);d.walk(-21,-9.5);
+   force(d,V(-21,0,-24),12,{veer:-.1});supportChain(d,d.level.goal.position);
   }},
-  {name:'vertical-dispatch-with-cargo-removed-before-clutch-motion',omitted:'Free cargo on cabin floor during upper leg',run:async d=>{
-   await cut(d,'Original loose cargo and its portal address travel to the east berth');enterJump(d,d.level.entry);collect(d);d.walk(22.5,-13.3);d.walk(18,-13.3);d.walk(18,-17);
-   game.interact();d.wait(.65);note('Put carried cargo down on east dispatch gallery');d.walk(26,-18.7);
-   if(!game.interact())throw Error('Preparation: east elevation control missed');d.wait(5);note('Upper dispatch requested with clutch unloaded');collect(d,{required:false});supportChain(d,d.level.goal.position);
+  {name:'unpowered-east-bulkhead-and-signal-aperture-cargo-jump',omitted:'Striker and both transient receiver membranes',run:async d=>{
+   collect(d);d.walk(21,8);d.walk(21,-9.5);note('Loaded player actually reached east structural wall');
+   force(d,V(21,0,-24),12,{veer:.1});force(d,V(15,4.4,-8),7);supportChain(d,d.level.goal.position);
   }},
  ],
 };

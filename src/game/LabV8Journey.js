@@ -91,7 +91,8 @@ export async function runV8Journey(game,{onMilestone=()=>{},scenario=null,journe
       await scenario({game,level,walk,wait,aim,look,until,pickup,enter,mark,frame,worldMove,stop});
       report.pass=true;report.kind='recovery';report.teleports=game.teleportCount;return report;
     }
-    if(level.expansionA){const {runExpansionAJourney}=await import('./LabExpansionJourneyA.js');await runExpansionAJourney({game,level,walk,wait,aim,look,until,pickup,enter,mark,frame,worldMove,stop},journeyOptions);}
+    if(level.echoHorizon){const {runEchoHorizon}=await import('./LabEchoHorizonJourney.js');await runEchoHorizon({game,level,walk,wait,aim,look,until,pickup,enter,mark,frame,worldMove,stop},journeyOptions);}
+    else if(level.expansionA){const {runExpansionAJourney}=await import('./LabExpansionJourneyA.js');await runExpansionAJourney({game,level,walk,wait,aim,look,until,pickup,enter,mark,frame,worldMove,stop},journeyOptions);}
     else if(level.expansionB){const {runExpansionBJourney}=await import('./LabExpansionJourneyB.js');await runExpansionBJourney({game,level,walk,wait,aim,look,until,pickup,enter,mark,frame,worldMove,stop},journeyOptions);}
     else if(level.creativeEarly){
       const n=level.creativeEarly;assert([18,20].includes(n)&&n===index+1,'Unknown creative early room');

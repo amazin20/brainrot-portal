@@ -57,35 +57,15 @@ async function freeCargoBridge(d){
  d.walk(-23,17);d.walk(-23,-17);d.walk(-15,-17);d.walk(-15,-2);d.walk(0,-2);southBridgeApproach(d);
  if(!g.heldCube&&g.state==='playing')collect(d);d.walk(0,-24);
 }
-function prearmedRelay(d){
- const {game:g,level:l}=d;
- d.walk(-21,15);d.aim(0,l.entry.getFrame().center);d.walk(-14,24);d.aim(1,l.shuttle.panel.getFrame().center);
- d.walk(-16,20.4);check(g.interact(),'Empty dispatch control missed');d.wait(1);
- check(l.shuttle.target===1&&l.shuttle.at(0)&&l.shuttle.braked&&!l.clutch.loaded(),'Empty carrier must hold the pending real dispatch');
- d.mark('Armed transverse dispatch before loading; empty clutch keeps carrier at west');
- collect(d);enterJump(d,l.entry);d.walk(-17.7,-5.5);release(d);
- d.until(()=>l.clutch.loaded(),2,'Released original body did not engage clutch');
- d.mark('Late cargo release engages the already armed drive');
- d.until(()=>l.shuttle.at(1),8,'Observer and loaded carrier did not reach east');
- check(g.playerGrounded&&Math.abs(g.playerPosition.y-7)<.2&&g.playerPosition.x>12,'Observer must ride to the east berth');
- check(g.teleportCount===1,'Observer must not return through the address before reaching east');
- d.mark('Rode transverse carrier without returning to south dispatch');
- d.walk(22.5,-13.3);d.walk(18,-13.3);d.walk(18,-17);d.walk(26,-18.7);
- check(g.interact(),'East vertical control missed');d.until(()=>l.shuttle.at(2),5,'Loaded carrier did not reach upper berth');
- d.walk(19,-4);d.until(()=>g.playerGrounded&&g.playerPosition.y< -3.8,5,'Dry floor missed');
- d.walk(-28,-16);d.walk(-28,15);d.walk(-21,15);enterJump(d,l.entry);collect(d);
- d.walk(8,-16.3);d.walk(3,-16.3);d.walk(3,-23);
-}
-
 /** Reusable debug/recording driver: ordinary controls only, from normal Play.
  * It never assigns actor/body transforms, velocities, portal frames or puzzle
  * state. The common runV8Journey checks every frame for identity and resets. */
 export async function runExpansionAlternateJourneyB(d,routeName){
- const expected={'free-cargo-bridge':49,'prearmed-relay':50};
+ const expected={'free-cargo-bridge':49};
  check(Object.hasOwn(expected,routeName),'Unknown expansion B alternative');
  check(d.level.index===expected[routeName],'Alternative selected for the wrong room');
  installRoom21Aim(d);
  const cargo=d.game.cargo,body=d.game.physics.cargoBody;
- await (routeName==='free-cargo-bridge'?freeCargoBridge(d):prearmedRelay(d));
+ await freeCargoBridge(d);
  check(d.game.cargo===cargo&&d.game.physics.cargoBody===body,'Original companion body changed');
 }

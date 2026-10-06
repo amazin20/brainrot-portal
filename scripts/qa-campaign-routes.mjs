@@ -111,6 +111,7 @@ Object.assign(foundationAlternates,{
  43:[{name:'inspect-empty-field',options:{route:'inspect-empty-field'},source:'tests/lab-expansion-a.test.js'}],
  44:[{name:'observe-unladen-overspeed',options:{route:'observe-unladen-overspeed'},source:'tests/lab-expansion-a.test.js'}],
  45:[{name:'observe-unbalanced-thrust',options:{route:'observe-unbalanced-thrust'},source:'tests/lab-expansion-a.test.js'}],
+ 51:[{name:'missed-echo-recovery',kind:'recovery',exercisesRecovery:true,options:{missFirst:true},source:'tests/lab-echo-horizon.test.js'}],
  46:[{name:'light-before-damp',options:{route:'light-before-damp'},source:'tests/lab-expansion-a.test.js'}],
 });
 const openAlternates={

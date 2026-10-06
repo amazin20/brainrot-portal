@@ -16,7 +16,7 @@ import puppeteer from 'puppeteer-core';
 const level=Number(process.env.LEVEL);
 assert.ok(Number.isInteger(level)&&level>=1&&level<=51,'LEVEL must be a campaign room 1–51');
 const alternative=process.env.ALTERNATIVE_ROUTE||null;
-const alternatives=new Map([[48,'staged-cargo'],[49,'unlit-mirror'],[50,'free-cargo-bridge'],[51,'prearmed-relay']]);
+const alternatives=new Map([[48,'staged-cargo'],[49,'unlit-mirror'],[50,'free-cargo-bridge'],[51,'missed-echo-recovery']]);
 if(alternative)assert.equal(alternative,alternatives.get(level),'The requested alternative must belong to this room');
 const out=path.resolve(process.env.OUT_DIR||'qa/walkthroughs');
 const base=process.env.PAGE_URL||'http://127.0.0.1:4173/';
