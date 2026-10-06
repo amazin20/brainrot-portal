@@ -1,4 +1,5 @@
 import './styles.css';
+import './campaign.css';
 import {createCampaignMenu} from './game/LabCampaignMenu.js';
 import {LabGame} from './game/LabGame.js';
 import {CAMPAIGN,campaignSpec} from './game/LabCampaignLevels.js';
@@ -196,10 +197,31 @@ $('#quality-select').value=preferences.value.quality;$('#quality-select').addEve
 $('#mute-toggle').checked=preferences.value.muted;$('#volume-control').value=preferences.value.volume*100;
 $('#mute-toggle').addEventListener('change',e=>{preferences.save({muted:e.target.checked});game.audio.configure(preferences.value);});
 $('#volume-control').addEventListener('input',e=>{preferences.save({volume:Number(e.target.value)/100});game.audio.configure(preferences.value);});
+
+// Settings are a real modal available before Play. The game stays ready;
+// there is no phantom pause or hidden restart, and existing in-game controls
+// remain the single action path for preference changes.
+const menuSettings=$('#menu-settings');
+const settingPairs=[['#menu-quality','#quality-select','value','change'],['#menu-volume','#volume-control','value','input'],['#menu-muted','#mute-toggle','checked','change'],['#menu-tutorial','#tutorial-toggle','checked','change']];
+$('#menu-settings-button').addEventListener('click',()=>{
+ if(game.state!=='ready'||holds.size)return;
+ for(const [menu,existing,property]of settingPairs)$(menu)[property]=$(existing)[property];
+ menuSettings.showModal();$('#menu-quality').focus();
+});
+for(const [menu,existing,property,event]of settingPairs)$(menu).addEventListener(event,()=>{
+ $(existing)[property]=$(menu)[property];$(existing).dispatchEvent(new Event(event,{bubbles:true}));
+});
+const closeMenuSettings=()=>{menuSettings.close();$('#menu-settings-button').focus();};
+$('#menu-settings-close').addEventListener('click',closeMenuSettings);
+$('#menu-settings-done').addEventListener('click',closeMenuSettings);
+menuSettings.addEventListener('cancel',()=>{$('#menu-settings-button').focus();});
+$('.nav-campaign').addEventListener('click',()=>document.querySelector('.sector-tabs [aria-selected="true"]')?.focus());
+
 $('#reload-button').addEventListener('click',()=>location.reload());
 let captured=false;document.addEventListener('pointerlockchange',()=>{const locked=document.pointerLockElement===game.renderer?.domElement;const lost=captured&&!locked;captured=locked;
   if(lost&&!holds.size&&game.state==='playing'){clearInput();game.togglePause(true);}});
 addEventListener('keydown',event=>{
+  if(menuSettings.open){if(event.code==='Escape'){event.preventDefault();closeMenuSettings();}event.stopImmediatePropagation();return;}
   if(holds.size){event.preventDefault();event.stopImmediatePropagation();return;}
   if(game.state==='paused'&&['Escape','KeyR'].includes(event.code)){event.preventDefault();event.stopImmediatePropagation();if(!event.repeat)(event.code==='KeyR'?restartLevel():resume());}
   else if(game.state!=='playing'&&['Escape','KeyR','Space'].includes(event.code))event.stopImmediatePropagation();
