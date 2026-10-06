@@ -4,3 +4,7 @@
 @import url('./atlas-panels.css');
 @import url('./atlas-motion.css');
 @import url('./atlas-responsive.css');
+/* Bridge the two-column tablet layout to the stacked phone layout. */
+@media (min-width:601px) and (max-width:680px) {
+  .atlas-menu.screen--active { grid-template-columns:minmax(300px,1.5fr) minmax(210px,1fr); }
+}
