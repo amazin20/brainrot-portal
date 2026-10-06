@@ -1,0 +1,35 @@
+.atlas-enabled{--atlas-ink:#eaf8ff;--atlas-muted:#9ebbc9;--atlas-cyan:#43dfff;--atlas-amber:#ffb956;--atlas-edge:rgba(140,212,239,.2)}
+.atlas-enabled #start-screen:not(.screen--active){display:none}
+.atlas-menu.screen--active{display:grid;grid-template-columns:minmax(190px,.84fr) minmax(400px,2.1fr) minmax(265px,1fr);grid-template-rows:60px minmax(0,1fr) 34px;gap:24px;padding:18px 30px 16px;align-items:stretch;justify-content:stretch;justify-items:stretch;overflow:auto;color:var(--atlas-ink);background:linear-gradient(90deg,rgba(3,15,29,.94),rgba(4,21,36,.72) 40%,rgba(4,20,34,.52)),url('../art/portal-laboratory-menu.webp') center/cover;isolation:isolate}
+.atlas-menu::before,.atlas-menu::after{display:none!important}
+.atlas-menu *,.atlas-dialog *{box-sizing:border-box}
+.atlas-menu button,.atlas-menu a,.atlas-dialog button{-webkit-tap-highlight-color:transparent}
+.atlas-menu button:focus-visible,.atlas-menu a:focus-visible,.atlas-dialog :focus-visible{outline:3px solid #fff;outline-offset:5px}
+.atlas-menu .atlas-eyebrow,.atlas-dialog .atlas-eyebrow{color:#9bd7e9;font-size:10px;letter-spacing:.18em;font-weight:700;line-height:1.7}
+.atlas-header{grid-column:1/-1;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--atlas-edge);padding-bottom:15px;min-width:0;width:100%}
+.atlas-wordmark{display:flex;gap:11px;align-items:center;font-size:9px;letter-spacing:.17em;line-height:1.6;color:var(--atlas-muted)}
+.atlas-wordmark svg{width:30px;height:36px;color:var(--atlas-cyan)}
+.atlas-wordmark strong{font-size:10px;color:var(--atlas-ink);font-weight:700}
+.atlas-system{font-size:9px;letter-spacing:.18em;color:#a4c1d1;display:flex;align-items:center;gap:10px}
+.atlas-system i,.atlas-detail-heading i,.atlas-menu .map-footer i{display:inline-block;width:5px;height:5px;background:var(--atlas-cyan);border-radius:50%;box-shadow:0 0 12px #43dfff}
+.atlas-header-tools{display:flex;gap:9px}
+.atlas-menu .atlas-icon,.atlas-dialog .atlas-icon{display:grid;place-items:center;width:40px;height:40px;padding:8px;border:1px solid var(--atlas-edge);border-radius:12px;background:rgba(7,26,43,.65);color:var(--atlas-ink);font:500 23px/1 Arial;cursor:pointer;transition:background .18s,border-color .18s,transform .18s}
+.atlas-menu .atlas-icon svg{width:20px;height:20px}
+.atlas-menu .atlas-icon:hover,.atlas-dialog .atlas-icon:hover{background:#123e56;border-color:#56d7f7;transform:translateY(-2px)}
+.atlas-menu .atlas-icon.is-muted{color:#8397a8;background:repeating-linear-gradient(135deg,transparent,transparent 9px,rgba(160,185,198,.1) 10px,transparent 11px)}
+.atlas-nav{display:flex;flex-direction:column;align-self:stretch;padding:32px 0 6px;min-width:0}
+.atlas-nav>.atlas-eyebrow{font-size:8px;letter-spacing:.13em;margin:0 0 15px}
+.atlas-nav #game-title{font-size:clamp(26px,3.05vw,54px);line-height:.98;letter-spacing:-.055em;margin:0 0 22px;font-weight:900;color:#fff;max-width:none}
+.atlas-nav #game-title>span{color:#45e0ff;background:linear-gradient(110deg,#76f5ff,#0bb2ed);background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.atlas-nav #game-title .title-dot{color:var(--atlas-amber);-webkit-text-fill-color:var(--atlas-amber)}
+.atlas-nav .lead{font-size:13px;line-height:1.8;color:#b1cbd8;margin:0;max-width:230px;letter-spacing:0}
+.atlas-links{display:flex;flex-direction:column;gap:8px;margin-top:32px}
+.atlas-menu .atlas-nav-button{min-height:52px;display:flex;align-items:center;gap:13px;padding:12px 14px;border:1px solid transparent;border-radius:13px;background:transparent;text-decoration:none;color:#b6cedc;font-size:13px;font-weight:600;text-align:left;cursor:pointer;transition:background .18s,transform .18s,border-color .18s}
+.atlas-nav-button svg{width:21px;height:21px;flex:none}
+.atlas-nav-button span{flex:1}
+.atlas-nav-button small{display:block;color:#8fb7cc;font-size:10px;font-weight:400;margin-top:4px}
+.atlas-nav-button b{font-size:17px;font-weight:400}
+.atlas-menu .atlas-nav-button.is-active{background:linear-gradient(100deg,rgba(16,138,178,.34),rgba(18,90,124,.16));color:#fff;border-color:rgba(79,224,255,.5);box-shadow:inset 3px 0 #43dfff,0 5px 25px #0013234d}
+.atlas-menu .atlas-nav-button:hover{background:rgba(46,132,173,.23);color:#fff;border-color:rgba(114,205,233,.35);transform:translateX(3px)}
+.atlas-nav-foot{display:flex;align-items:center;gap:14px;margin-top:auto;padding:26px 10px 12px;color:#8dafc0;font-size:11px;line-height:1.6}
+.atlas-nav-foot svg{width:38px;height:52px;color:var(--atlas-cyan);filter:drop-shadow(0 0 9px #1393af)}
