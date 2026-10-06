@@ -41,6 +41,9 @@ function focusScreenControl(id,selector){
 function clearInput(){game.resetInput();}
 function syncActivity(){const active=game.state==='playing'&&!holds.size;platform?.gameplay(active);game.audio?.block('menu',game.state!=='playing'&&game.state!=='won');game.audio?.block('external',holds.size>0);}
 function setState(state){document.body.dataset.playState=state;document.documentElement.dataset.runtimeState=state;
+  // The opaque illustrated atlas needs only CSS animation, not a hidden 3D render loop.
+  // Playing/resume/restart already restore the original loop explicitly.
+  if(state==='ready')game.renderer?.setAnimationLoop(null);
   const mobile=$('#mobile-controls'),active=state==='playing';mobile.classList.toggle('mobile-controls--active',active);mobile.inert=!active;mobile.setAttribute('aria-hidden',String(!active));
   syncActivity();}
 function hold(reason,on,deferPause=false){pendingInterruption ||= deferPause;
@@ -86,7 +89,7 @@ function showHints(){
   $('#ad-status').textContent=yandex?'Подсказка открывается после подтверждённого просмотра. Прочитанные подсказки остаются доступны.':'В демо на GitHub рекламы нет. В сборке для Яндекс Игр здесь добровольный просмотр.';
 }
 const game=new LabGame({debug,container:$('#game'),touch:{joystick:$('#joystick'),joystickKnob:$('#joystick-knob'),jumpButton:$('#jump-button'),sprintButton:$('#sprint-button')},
-  onProgress:p=>{const n=Math.max(0,Math.min(100,p.percent||0));$('#loading-bar').style.width=n+'%';$('#loading-percent').textContent=n+'%';$('#loading-label').textContent=p.label||'Загрузка';$('#loading-progress').setAttribute('aria-valuenow',String(n));},
+  onProgress:p=>{$('#loading').dataset.phase='assets';const n=Math.max(0,Math.min(100,p.percent||0));$('#loading-bar').style.width=n+'%';$('#loading-percent').textContent=n+'%';$('#loading-label').textContent=p.label||'Загрузка';$('#loading-progress').setAttribute('aria-valuenow',String(n));},
   onReady:()=>{hideScreens();setState('ready');screen('start-screen',true);platform?.ready();
     game.renderer.domElement.addEventListener('webglcontextlost',event=>{
       event.preventDefault();failure(new Error('Браузер остановил 3D-графику. Нажми «Повторить загрузку»: прогресс комнат сохранён. Текущая комната начнётся заново.'));
@@ -167,6 +170,9 @@ async function enterLevel(index,reason='next'){
     // All interstitials are tied to an explicit menu transition, never a timer during play.
     if(reason!=='initial')await platform?.interstitial('next');
     hideScreens();screen('loading',true);game.state='loading';setState('loading');
+    // Building a scene has no byte total: show an honest indeterminate phase.
+    $('#loading').dataset.phase='scene';$('#loading-progress').removeAttribute('aria-valuenow');
+    $('#loading-percent').textContent='';$('#loading-label').textContent=`Подготовка комнаты ${index+1}`;
     if(index!==game.levelIndex)await game.selectLevel(index,false);
     game.start();if(holds.size)pendingInterruption=true;sessionStarted=true;preferences.save({resumeLevel:index});game.renderer.setAnimationLoop(game.animate);hideScreens();setState('playing');$('#level-select').value=String(index);$('#settings-level-select').value=String(index);updateStartAction();diagnostics();
   }catch(error){failure(error);}finally{entering=false;}
