@@ -1,0 +1,202 @@
+name: Review authored chapter atlas
+on:
+  push:
+    branches: [upgrade/themed-chapters-20261006]
+    paths: [.github/workflows/chapter-atlas-review.yml]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: chapter-atlas-review
+  cancel-in-progress: false
+jobs:
+  source-input:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    permissions:
+      contents: write
+    outputs:
+      source: ${{ steps.commit.outputs.source }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with: {node-version: 22}
+      - run: npm ci && npm install --no-save --package-lock=false puppeteer-core@24.16.0
+      - name: Retrieve the authored source attachment through its public download interface
+        env:
+          CHROME_PATH: /usr/bin/google-chrome
+        run: |
+          mkdir -p transfer
+          cat > transfer-download.mjs <<'JS'
+          import fs from 'node:fs';import path from 'node:path';import puppeteer from 'puppeteer-core';
+          const dir=path.resolve('transfer'),browser=await puppeteer.launch({executablePath:process.env.CHROME_PATH,headless:true,args:['--no-sandbox','--disable-dev-shm-usage']});
+          try{
+           const page=await browser.newPage(),cdp=await page.createCDPSession();
+           await cdp.send('Browser.setDownloadBehavior',{behavior:'allow',downloadPath:dir});
+           await page.goto('https://firestorage.ai/ja/f/AJvAo1TlIVux',{waitUntil:'networkidle2',timeout:60000});
+           await page.waitForFunction(()=>document.body.innerText.includes('chapter-atlas-source-update.zip'),{timeout:60000});
+           await page.screenshot({path:path.join(dir,'download-page.png')});fs.writeFileSync(path.join(dir,'page.html'),await page.content());
+           console.log(await page.$$eval('a,button',xs=>xs.map(e=>({text:e.innerText,href:e.getAttribute('href'),download:e.getAttribute('download')}))));
+           const buttons=await page.$$('button,a');let clicked=false;
+           for(const b of buttons){const text=await b.evaluate(e=>e.innerText||'');if(/ダウンロード|download/i.test(text)&&!/(すべて|一括|all)/i.test(text)){await b.click();clicked=true;break;}}
+           if(!clicked)throw Error('No ordinary file download control found');
+           let done=false;for(let i=0;i<120;i++){if(fs.readdirSync(dir).some(f=>f.endsWith('.zip'))){done=true;break;}await new Promise(r=>setTimeout(r,500));}
+           if(!done)throw Error('Source attachment download did not finish');
+          }finally{await browser.close();}
+          JS
+          node transfer-download.mjs
+          rm transfer-download.mjs
+      - name: Validate archive and apply only the declared source paths
+        run: |
+          python3 - <<'PY'
+          import pathlib,zipfile,hashlib,json,subprocess,io
+          expected='f61355f9edb907bd7553d026999b0e67727e9ebf2b7c14ff7a8a2ede6bf15a1b'
+          candidates=list(pathlib.Path('transfer').glob('*.zip')); data=None
+          for f in candidates:
+            b=f.read_bytes()
+            if hashlib.sha256(b).hexdigest()==expected:data=b;break
+            try:
+              with zipfile.ZipFile(io.BytesIO(b)) as z:
+                for e in z.infolist():
+                  if pathlib.PurePosixPath(e.filename).name=='chapter-atlas-source-update.zip':
+                    candidate=z.read(e)
+                    if hashlib.sha256(candidate).hexdigest()==expected:data=candidate
+            except zipfile.BadZipFile:pass
+          assert data is not None,'Downloaded bytes differ from the authored change set'
+          with zipfile.ZipFile(io.BytesIO(data)) as z:
+            m=json.loads(z.read('change-manifest.json'));assert m['base']=='492c8416ce8c5adc0f3080e8733e46d437ce7dd5'
+            paths=[e['path'] for e in m['files']]
+            allowed={'index.html','src/game/LabCampaignLevels.js','src/game/LabCampaignMenu.js','src/game/LabSceneLighting.js','src/main.js','src/campaign.css','src/game/LabCampaignThemeFinish.js','src/game/LabCampaignThemes.js','tests/lab-campaign-themes.test.js','scripts/qa-chapter-inventory.mjs','scripts/stamp-chapters.mjs'}
+            assert set(paths)==allowed and len(paths)==len(allowed)
+            assert set(z.namelist())==allowed|{'change-manifest.json'}
+            unchanged=subprocess.check_output(['git','diff','--name-only',m['base'],'HEAD','--',*paths],text=True)
+            assert not unchanged.strip(),'New source edits exist; reconcile instead of overwriting'
+            for row in m['files']:
+              b=z.read(row['path']);assert len(b)==row['bytes'] and hashlib.sha256(b).hexdigest()==row['sha256']
+              p=pathlib.Path(row['path']);p.parent.mkdir(parents=True,exist_ok=True);p.write_bytes(b)
+          pathlib.Path('transfer/accepted-manifest.json').write_text(json.dumps(m,indent=2))
+          PY
+      - name: Commit the actual source before testing or stamping
+        id: commit
+        run: |
+          set -euo pipefail
+          test "${GITHUB_REF}" = refs/heads/upgrade/themed-chapters-20261006
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add index.html src scripts/qa-chapter-inventory.mjs scripts/stamp-chapters.mjs tests/lab-campaign-themes.test.js
+          git commit -m 'Implement five themed decades, an epilogue, accessible chapter atlas and loading presentation'
+          git push origin HEAD:refs/heads/upgrade/themed-chapters-20261006
+          echo "source=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: {name: chapter-source-transfer, path: transfer, retention-days: 7}
+  package:
+    needs: source-input
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: '${{ needs.source-input.outputs.source }}'}
+      - uses: actions/setup-node@v4
+        with: {node-version: 22}
+      - run: npm ci
+      - run: node --test tests/lab-campaign-themes.test.js
+      - run: npm run build && node scripts/stamp-chapters.mjs dist
+      - run: npm run build:yandex && node scripts/stamp-chapters.mjs dist-yandex && node scripts/package-yandex.mjs
+      - uses: actions/upload-artifact@v4
+        with: {name: chapter-production, path: dist, retention-days: 14}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: chapter-yandex
+          path: |
+            artifacts/brainrot-portal-yandex.zip
+            qa/yandex-package.json
+          retention-days: 14
+  source:
+    needs: source-input
+    runs-on: ubuntu-latest
+    timeout-minutes: 80
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: '${{ needs.source-input.outputs.source }}'}
+      - uses: actions/setup-node@v4
+        with: {node-version: 22}
+      - run: npm ci
+      - run: mkdir -p qa && set -o pipefail && npm test | tee qa/tests.tap
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: {name: chapter-source-tests, path: qa, retention-days: 14}
+  routes:
+    needs: source-input
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    strategy:
+      fail-fast: false
+      matrix: {edition: [foundation, classic, open]}
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: '${{ needs.source-input.outputs.source }}'}
+      - uses: actions/setup-node@v4
+        with: {node-version: 22}
+      - run: npm ci
+      - run: mkdir -p qa && node scripts/qa-campaign-routes.mjs --edition=${{ matrix.edition }} --json=qa/routes.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: {name: 'chapter-routes-${{ matrix.edition }}', path: qa, retention-days: 14}
+  attacks:
+    needs: source-input
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: '${{ needs.source-input.outputs.source }}'}
+      - uses: actions/setup-node@v4
+        with: {node-version: 22}
+      - run: npm ci
+      - run: node scripts/qa-chapter-inventory.mjs
+      - run: ROOMS=$(seq -s, 1 51) node scripts/qa-release-collision-attacks.mjs
+      - run: node scripts/qa-speedrun-expansion-new.mjs && node scripts/qa-targeted-release-contacts.mjs && node scripts/qa-parented-collision-stability.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: {name: chapter-attacks-and-inventory, path: qa, retention-days: 14}
+  menu:
+    needs: [source-input, package]
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: '${{ needs.source-input.outputs.source }}'}
+      - uses: actions/setup-node@v4
+        with: {node-version: 22}
+      - run: npm ci && npm install --no-save --package-lock=false puppeteer-core@24.16.0
+      - uses: actions/download-artifact@v4
+        with: {name: chapter-production, path: dist}
+      - run: PRODUCTION=1 CHROME_PATH=$(command -v google-chrome) node scripts/qa-campaign-menu.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: {name: chapter-interface, path: qa/campaign-menu, retention-days: 14}
+  webgl:
+    needs: [source-input, package]
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    strategy:
+      fail-fast: false
+      matrix:
+        levels: ['1,2,3,4,5,6,7,8,9,10','11,12,13,14,15,16,17,18,19,20','21,22,23,24,25,26,27,28,29,30','31,32,33,34,35,36,37,38,39,40','42,43,44,45,46','47,48,49,50,51','41']
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: '${{ needs.source-input.outputs.source }}'}
+      - uses: actions/setup-node@v4
+        with: {node-version: 22}
+      - run: npm ci && npm install --no-save --package-lock=false puppeteer-core@24.16.0
+      - run: python3 -m pip install Pillow
+      - uses: actions/download-artifact@v4
+        with: {name: chapter-production, path: dist}
+      - run: START_SERVER=1 SERVER_MODE=preview ROUTE_TIMEOUT_MS=1200000 CASE=route LEVELS=${{ matrix.levels }} CHROME_PATH=$(command -v google-chrome) node scripts/qa-creative-browser.mjs
+      - run: node -e "const r=require('./qa/creative-browser/report.json');if(!r.pass||!r.capturePass)process.exit(1)"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: {name: 'chapter-webgl-${{ strategy.job-index }}', path: qa/creative-browser, retention-days: 14}
