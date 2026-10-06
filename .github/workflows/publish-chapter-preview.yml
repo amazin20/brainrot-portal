@@ -1,0 +1,151 @@
+name: Publish isolated themed chapter preview
+on:
+  push:
+    branches: [main]
+    paths: [.github/workflows/publish-chapter-preview.yml]
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: pages
+  cancel-in-progress: false
+jobs:
+  assemble:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: '${{ github.sha }}', persist-credentials: false}
+      - uses: actions/setup-node@v4
+        with: {node-version: 22}
+      - name: Require completed exact-source checks and the parallel Atlas publication
+        uses: actions/github-script@v7
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          script: |
+            const fs=require('node:fs'),assert=require('node:assert/strict'),crypto=require('node:crypto'),{Readable,Transform}=require('node:stream'),{pipeline}=require('node:stream/promises');
+            const {owner,repo}=context.repo;fs.mkdirSync('inputs',{recursive:true});fs.mkdirSync('proof',{recursive:true});
+            const read=async id=>({run:(await github.rest.actions.getWorkflowRun({owner,repo,run_id:id})).data,jobs:await github.paginate(github.rest.actions.listJobsForWorkflowRun,{owner,repo,run_id:id,per_page:100})});
+            let current,world,previous;
+            for(let attempt=0;attempt<50;attempt++){
+              [current,world,previous]=await Promise.all([read(37415362734),read(37413444207),read(37414286098)]);
+              const jobs=[...current.jobs,...world.jobs.filter(j=>['source','attacks','routes (classic)','routes (open)','routes (foundation)'].includes(j.name))];
+              if(jobs.some(j=>j.status==='completed'&&['failure','cancelled','timed_out'].includes(j.conclusion)))throw Error('A required current candidate gate failed');
+              if(previous.run.status==='completed'&&previous.run.conclusion!=='success')throw Error('Parallel Atlas publication is not fully accepted');
+              if(current.run.status==='completed'&&current.run.conclusion==='success'&&jobs.every(j=>j.status==='completed'&&j.conclusion==='success')&&previous.run.status==='completed'&&previous.run.conclusion==='success')break;
+              if(attempt===49)throw Error('Required checks have not completed; no publication was changed');
+              await new Promise(r=>setTimeout(r,15000));
+            }
+            assert.equal(current.run.head_sha,'e49176af70ae41fc8255b7a5cd82e85bd29862f1');assert.equal(current.run.path,'.github/workflows/chapter-runtime-review.yml');assert.equal(current.jobs.length,11);
+            assert.equal(world.run.head_sha,'c96fa8eec3155df619f118133fdbf42bcefbe2bc');assert.equal(world.run.path,'.github/workflows/chapter-final-review.yml');assert.equal(world.jobs.filter(j=>['source','attacks','routes (classic)','routes (open)','routes (foundation)'].includes(j.name)).length,5);
+            assert.equal(previous.run.head_sha,'b9be1bab5550ea0994571baa83516adc98b9d011');assert.equal(previous.run.path,'.github/workflows/atlas-menu.yml');
+            fs.writeFileSync('proof/verified-gates.json',JSON.stringify({current,world,previous},null,2));
+            for(const pin of [{run:37414286098,id:11389864269,name:'github-pages',digest:'sha256:c12e4ea3bd261f151da699c59bdedc9d4c1d3c2e96ede04599fc0aca0d5981be',file:'baseline.zip'},{run:37415362734,id:11390514219,name:'atlas-runtime-production',digest:'sha256:897dad5f93a60954adaf13c55800ebd796696ce47bc5174831867b1586c68f91',file:'candidate.zip'}]){
+              const a=(await github.rest.actions.getArtifact({owner,repo,artifact_id:pin.id})).data;assert.equal(a.name,pin.name);assert.equal(a.digest,pin.digest);assert.equal(a.expired,false);assert.equal(a.workflow_run.id,pin.run);
+              const response=await fetch(`https://api.github.com/repos/${owner}/${repo}/actions/artifacts/${pin.id}/zip`,{headers:{Authorization:`Bearer ${process.env.GITHUB_TOKEN}`,Accept:'application/vnd.github+json'}});assert.ok(response.ok);
+              const hash=crypto.createHash('sha256');const tap=new Transform({transform(chunk,encoding,callback){hash.update(chunk);callback(null,chunk);}});
+              await pipeline(Readable.fromWeb(response.body),tap,fs.createWriteStream('inputs/'+pin.file));assert.equal('sha256:'+hash.digest('hex'),pin.digest);
+            }
+      - name: Restore the whole accepted site and add only the isolated preview
+        run: |
+          python3 - <<'PY'
+          import pathlib,zipfile,tarfile,hashlib,json,shutil
+          def safe(name):
+            while name.startswith('./'):name=name[2:]
+            if not name:return None
+            assert not name.startswith('/') and '\\' not in name and all(p not in ('','.','..') for p in name.split('/')),name
+            return name
+          def unzip(archive,target):
+            target.mkdir();seen=set()
+            with zipfile.ZipFile(archive) as z:
+              for e in z.infolist():
+                if e.is_dir():continue
+                name=safe(e.filename);assert name not in seen;seen.add(name);assert (e.external_attr>>16)&0o170000!=0o120000
+                p=target/name;p.parent.mkdir(parents=True,exist_ok=True)
+                with z.open(e) as source,p.open('wb') as output:shutil.copyfileobj(source,output)
+          unzip('inputs/baseline.zip',pathlib.Path('baseline'));unzip('inputs/candidate.zip',pathlib.Path('candidate'))
+          site=pathlib.Path('site');site.mkdir();seen=set()
+          with tarfile.open('baseline/artifact.tar') as tar:
+            for e in tar:
+              name=safe(e.name)
+              if name is None or e.isdir():continue
+              assert e.isfile() and name not in seen;seen.add(name);p=site/name;p.parent.mkdir(parents=True,exist_ok=True)
+              with tar.extractfile(e) as source,p.open('wb') as output:shutil.copyfileobj(source,output)
+          def manifest(root):
+            rows=[]
+            for p in sorted(root.rglob('*')):
+              assert not p.is_symlink()
+              if p.is_file():
+                h=hashlib.sha256()
+                with p.open('rb') as f:
+                  for b in iter(lambda:f.read(1048576),b''):h.update(b)
+                rows.append({'path':str(p.relative_to(root)),'bytes':p.stat().st_size,'sha256':h.hexdigest()})
+            return rows
+          before=manifest(site);assert not (site/'chapter-atlas').exists(),'A preview already exists; reconcile it instead of overwriting'
+          old=json.loads((site/'build-info.json').read_text());new=json.loads(pathlib.Path('candidate/build-info.json').read_text())
+          assert old['commit']=='6f1eec54d47fed7916f5346a218525292d15fd62' and old.get('interfaceVersion')=='v51-atlas'
+          assert new['commit']=='39ad0557e589286db507281a2fcf308daef84f5a' and new['levels']==51 and new['version']=='v51-chapter-atlas'
+          current=manifest(pathlib.Path('candidate'));assert sum(f['bytes'] for f in current)<100*1024*1024
+          oldmap={f['path']:f for f in before}
+          for f in current:
+            if f['path'].startswith(('models/','draco/')):assert oldmap[f['path']]['sha256']==f['sha256'],'Original asset changed'
+          shutil.copytree('candidate',site/'chapter-atlas')
+          (site/'chapter-atlas/walkthroughs.html').write_text('<!doctype html><html lang="ru"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Архив прохождений</title><style>body{background:#102632;color:#eef8fc;font:18px/1.7 system-ui;max-width:760px;margin:12vh auto;padding:24px}a{color:#70e4ed}</style><h1>Прохождения предыдущего оформления</h1><p>Здесь доступны записи v50. Правила головоломок сохранены, но оформление глав и меню в этих видео прежнее. Это не новые записи текущего оформления.</p><a id="gallery" href="../walkthroughs.html">Открыть архив прохождений</a><p><a href="./">Вернуться к главам</a></p><script>const n=Number(new URLSearchParams(location.search).get("level"));if(Number.isInteger(n)&&n>=1&&n<=51)document.querySelector("#gallery").href+="?level="+n;</script></html>',encoding='utf-8')
+          final={f['path']:f for f in manifest(site)}
+          for f in before:assert final[f['path']]==f,'Existing public file changed'
+          proof={'sourceCommit':new['commit'],'candidateRun':37415362734,'baselinePublicationRun':37414286098,'isolatedPath':'chapter-atlas/','mainSiteUnchanged':True,'masterSpecComplete':False,'currentVisualWalkthroughs':False,'exactCandidateFiles':current,'preservedFiles':before}
+          pathlib.Path('proof/preview-manifest.json').write_text(json.dumps(proof,indent=2))
+          (site/'chapter-atlas/preview-status.json').write_text(json.dumps({k:v for k,v in proof.items() if k not in ['exactCandidateFiles','preservedFiles']},indent=2))
+          print('Unchanged public files:',len(before),'New game files:',len(current))
+          PY
+      - uses: actions/upload-pages-artifact@v3
+        with: {path: site}
+      - uses: actions/upload-artifact@v4
+        with: {name: chapter-preview-preservation, path: proof, retention-days: 30}
+  publish:
+    needs: assemble
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    permissions: {contents: read, actions: read, pages: write, id-token: write}
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/download-artifact@v4
+        with: {name: chapter-preview-preservation, path: proof}
+      - uses: actions/setup-node@v4
+        with: {node-version: 22}
+      - name: Refuse to overwrite a later root publication
+        run: |
+          node --input-type=module <<'JS'
+          import fs from 'node:fs';import crypto from 'node:crypto';import assert from 'node:assert/strict';const p=JSON.parse(fs.readFileSync('proof/preview-manifest.json'));
+          for(const path of ['build-info.json','index.html']){const file=p.preservedFiles.find(f=>f.path===path);assert.ok(file);const r=await fetch('https://amazin20.github.io/brainrot-portal/'+path+'?chapter-guard='+Date.now(),{cache:'no-store'});assert.ok(r.ok);assert.equal(crypto.createHash('sha256').update(Buffer.from(await r.arrayBuffer())).digest('hex'),file.sha256,'Public root changed');}
+          JS
+      - uses: actions/configure-pages@v5
+      - uses: actions/deploy-pages@v4
+        id: deployment
+      - uses: actions/checkout@v4
+        with: {ref: 39ad0557e589286db507281a2fcf308daef84f5a, path: game-source, persist-credentials: false}
+      - name: Compare every preview game file and unchanged root on the actual site
+        env:
+          PAGE_URL: ${{ steps.deployment.outputs.page_url }}
+        run: |
+          node --input-type=module <<'JS'
+          import fs from 'node:fs';import crypto from 'node:crypto';import assert from 'node:assert/strict';const p=JSON.parse(fs.readFileSync('proof/preview-manifest.json'));const base=process.env.PAGE_URL;assert.ok(base.endsWith('/'));
+          const files=[...p.exactCandidateFiles.map(f=>({...f,path:'chapter-atlas/'+f.path})),...p.preservedFiles];let index=0,checked=0,bytes=0;
+          await Promise.all(Array.from({length:6},async()=>{while(index<files.length){const f=files[index++],r=await fetch(new URL(f.path,base),{cache:'no-store'});assert.ok(r.ok,'HTTP '+r.status+' '+f.path);const hash=crypto.createHash('sha256');let length=0;for await(const chunk of r.body){hash.update(chunk);length+=chunk.length;}assert.equal(hash.digest('hex'),f.sha256,'Public bytes '+f.path);assert.equal(length,f.bytes);checked++;bytes+=length;}}));
+          fs.writeFileSync('proof/public-bytes.json',JSON.stringify({pass:true,sourceCommit:p.sourceCommit,checked,bytes,mainSiteUnchanged:true,url:new URL('chapter-atlas/',base).href},null,2));
+          JS
+      - name: Install browser dependencies
+        working-directory: game-source
+        run: npm ci && npm install --no-save --package-lock=false puppeteer-core@24.16.0
+      - name: Verify native desktop and mobile input on the real preview
+        working-directory: game-source
+        env:
+          PAGE_URL: ${{ steps.deployment.outputs.page_url }}chapter-atlas/
+          OUT_DIR: ../proof/public-interface
+        run: CHROME_PATH=$(command -v google-chrome) timeout --signal=TERM --kill-after=10s 720s node scripts/qa-atlas-browser.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: {name: chapter-preview-public-proof, path: proof, retention-days: 30}
