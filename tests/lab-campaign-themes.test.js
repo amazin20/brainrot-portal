@@ -49,3 +49,16 @@ test('Castle theme preserves independently colored wing navigation accents',()=>
  const f=fixture(),wing=new THREE.MeshStandardMaterial({name:'castle wing enamel / freight',color:0x446677});f.root.add(new THREE.Mesh(new THREE.BoxGeometry(1,1,1),wing));
  finishCampaignTheme(f.game,f.level,40,[f.root]);assert.equal(f.root.children.at(-1).material,wing);assert.equal(wing.color.getHex(),0x446677);
 });
+
+test('Instanced architectural skin receives the same chapter palette without changing placement or portal instances',()=>{
+ const f=fixture();const geo=new THREE.BoxGeometry(1,1,.08),mat=new THREE.MeshStandardMaterial({color:0xffffff});
+ const skin=new THREE.InstancedMesh(geo,mat,4);skin.name='Architectural coat / cassette';
+ const normal=new THREE.Vector3(0,0,1),directions=[[0,0,1],[1,0,0],[0,1,0],[0,-1,0]];
+ directions.forEach((p,i)=>{skin.setMatrixAt(i,new THREE.Matrix4().compose(new THREE.Vector3(i*3,0,0),new THREE.Quaternion().setFromUnitVectors(normal,new THREE.Vector3(...p)),new THREE.Vector3(2,2,1)));skin.setColorAt(i,new THREE.Color(0x123456));});
+ const before=Array.from(skin.instanceMatrix.array);f.root.add(skin);
+ const portalSkin=skin.clone();portalSkin.name='Portal tiles';portalSkin.instanceColor=skin.instanceColor.clone();f.root.add(portalSkin);const portalColors=Array.from(portalSkin.instanceColor.array);
+ finishCampaignTheme(f.game,f.level,20,[f.root]);const theme=campaignTheme(20),c=new THREE.Color();
+ for(const [i,role]of ['wall','paint','floor','shell'].entries()){skin.getColorAt(i,c);assert.equal(c.getHex(),theme[role]);}
+ assert.deepEqual(Array.from(skin.instanceMatrix.array),before);assert.deepEqual(Array.from(portalSkin.instanceColor.array),portalColors);
+ assert.equal(f.level.campaignTheme.architecturalInstances,4);assert.equal(skin.material,mat);
+});

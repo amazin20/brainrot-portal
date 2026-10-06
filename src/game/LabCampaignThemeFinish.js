@@ -11,6 +11,11 @@ export function finishCampaignTheme(game,level,index,roots){
   for(const m of Array.isArray(o.material)?o.material:[o.material])if(m)sourceMaterials.add(m);
  });
  const kit=level.workshop,world=level.world||kit?.world;
+ let architecturalInstances=0;
+ const artistMaterials=world?.root?.userData?.browserArtMaterials;
+ for(const [key,m]of Object.entries(artistMaterials||{})){
+  if(['graphite','steel','blackSteel'].includes(key))roles.set(m,key==='graphite'?'wall':key==='steel'?'floor':'dark');
+ }
  for(const [key,m] of Object.entries(world?.materials||{})){
   if(['wall','floor','trim'].includes(key))roles.set(m,key==='trim'?'paint':key);
  }
@@ -30,8 +35,22 @@ export function finishCampaignTheme(game,level,index,roots){
   if(/anodised load frame/i.test(name))return 'dark';
   return roles.get(material)||null;
  }
+ // Older rooms render their large panels using instance colours, not the
+ // hidden source tile's material colour. Finish that one existing skin too;
+ // never add geometry or recolour a portal tile. Local +Z is the panel normal.
+ for(const root of roots)root.updateWorldMatrix(true,true);
+ const matrix=new THREE.Matrix4(),worldMatrix=new THREE.Matrix4(),normal=new THREE.Vector3(),color=new THREE.Color();
  for(const root of roots)root.traverse(node=>{
   if(!node.isMesh)return;
+  if(node.isInstancedMesh&&node.name==='Architectural coat / cassette'&&node.instanceColor){
+   for(let i=0;i<node.count;i++){
+    node.getMatrixAt(i,matrix);worldMatrix.multiplyMatrices(node.matrixWorld,matrix);
+    normal.set(0,0,1).transformDirection(worldMatrix);
+    const kind=normal.y>.8?'floor':normal.y<-.8?'shell':Math.abs(normal.x)>.65?'paint':'wall';
+    color.setHex(theme[kind]);node.setColorAt(i,color);architecturalInstances++;
+   }
+   node.instanceColor.needsUpdate=true;node.userData.campaignTheme=theme.id;
+  }
   const original=Array.isArray(node.material)?node.material:[node.material];
   const changed=original.map(material=>{
    const kind=role(material);if(!kind)return material;
@@ -47,7 +66,7 @@ export function finishCampaignTheme(game,level,index,roots){
  });
  // Update material references used by architecture instruments without touching
  // signals. Original room-owned materials still have their normal disposal path.
- for(const registry of [world?.materials,kit?.m])if(registry)for(const key of Object.keys(registry))if(copies.has(registry[key]))registry[key]=copies.get(registry[key]);
+ for(const registry of [world?.materials,kit?.m,artistMaterials])if(registry)for(const key of Object.keys(registry))if(copies.has(registry[key]))registry[key]=copies.get(registry[key]);
  const oldDispose=level.dispose;
  const shared=new Set(Object.values(game.materials||{}));
  level.dispose=function(...args){
@@ -58,7 +77,7 @@ export function finishCampaignTheme(game,level,index,roots){
  };
  if(game.scene.background?.isColor)game.scene.background.setHex(theme.sky);
  if(game.scene.fog?.color)game.scene.fog.color.setHex(theme.sky);
- level.campaignTheme={...theme,changedMaterials:copies.size};
+ level.campaignTheme={...theme,changedMaterials:copies.size,architecturalInstances};
  for(const root of roots)root.userData.campaignTheme=theme.id;
  return level;
 }
