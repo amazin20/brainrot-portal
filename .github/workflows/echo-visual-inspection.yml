@@ -1,0 +1,22 @@
+name: Inspect new Echo Horizon room
+on:
+  push:
+    branches: [upgrade/replace-repeated-puzzles-20261006]
+    paths: [.github/workflows/echo-visual-inspection.yml]
+permissions: {contents: read, actions: read}
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: f7a03ebd2b0c32a03fd953fe547664037b4c3483, persist-credentials: false}
+      - uses: actions/setup-node@v4
+        with: {node-version: 22}
+      - run: npm ci && npm install --no-save --package-lock=false puppeteer-core@24.16.0 && python3 -m pip install Pillow
+      - uses: actions/download-artifact@v4
+        with: {name: echo-production, run-id: 37428403829, github-token: '${{ github.token }}', path: dist}
+      - run: START_SERVER=1 SERVER_MODE=preview CASE=overview LEVELS=51 CHROME_PATH=$(command -v google-chrome) node scripts/qa-creative-browser.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: {name: echo-visual-inspection, path: qa/creative-browser, retention-days: 14}
