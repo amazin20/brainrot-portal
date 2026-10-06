@@ -1,3 +1,4 @@
+import {finishCampaignTheme} from './LabCampaignThemeFinish.js';
 import {EXPANSION_B_BUILDERS,EXPANSION_B_SPECS} from './LabExpansionRoomsB.js';
 import {EXPANSION_A_BUILDERS,EXPANSION_A_SPECS} from './LabExpansionRoomsA.js';
 import {CREATIVE_ROOM20_SPEC,buildCreative20} from './LabCreativeRoom20.js';
@@ -58,7 +59,7 @@ const FOUNDATION_LATE_BUILDERS=[...POST_A_BUILDERS,...POST_B_BUILDERS,buildTower
 
 // Preserve the verified introductory rooms; extend the public registry once.
 export const CAMPAIGN=Object.freeze([...INTRODUCTORY_CAMPAIGN,...EXTENDED_CAMPAIGN.slice(0,3),...WORKSHOP_CAMPAIGN.slice(0,3).map((room,i)=>i===2?{...room,assets:room.assets.filter(id=>id!==39),accent:0x83cfc7,description:'Направь воздух от вентилятора к приводу двери.',hints:['Круглый вентилятор слева создаёт поток. Привод с решёткой дальше по залу принимает воздух передней стороной.','Воздух толкает тебя и друга. Попав в переднюю решётку приёмника, поток сам запускает дверь; кабель показывает связь.','Соедини правую стену напротив вентилятора с другим участком правой стены напротив привода. Включи вентилятор: когда поток попадёт в приёмник, дверь откроется автоматически. Забери друга и пройди в открывшуюся дверь.']}:room),ROOM12_SPEC,ROOM13_ART_SPEC,ROOM14_ART_SPEC,ROOM15_ART_SPEC,...NEW_CAMPAIGN,...RESEARCH_SPECS]);
-export function buildLabCampaignLevel(game,index){
+function buildUnthemedCampaignLevel(game,index){
  const count=game.chamberEdition==='foundation'?30+FOUNDATION_LATE_BUILDERS.length:CAMPAIGN.length;
  if(!Number.isInteger(index)||index<0||index>=count)throw new RangeError('Unknown campaign course');
  if(game.chamberEdition==='foundation'&&FOUNDATION_BUILDERS[index])return FOUNDATION_BUILDERS[index](game,index);
@@ -79,3 +80,9 @@ export function buildLabCampaignLevel(game,index){
 }
 
 export function campaignSpec(game,index){return game.chamberEdition==='foundation'&&(FOUNDATION_CREATIVE_SPECS[index]||FOUNDATION_SPECS[index]||index>=30&&FOUNDATION_LATE_SPECS[index-30])||game.chamberEdition==='open'&&OPEN_SPECS[index]||CAMPAIGN[index];}
+
+export function buildLabCampaignLevel(game,index){
+ const before=new Set(game.scene.children);
+ const level=buildUnthemedCampaignLevel(game,index);
+ return finishCampaignTheme(game,level,index,game.scene.children.filter(root=>!before.has(root)));
+}

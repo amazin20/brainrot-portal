@@ -1,4 +1,5 @@
 import './styles.css';
+import './campaign.css';
 import {createCampaignMenu} from './game/LabCampaignMenu.js';
 import {LabGame} from './game/LabGame.js';
 import {CAMPAIGN,campaignSpec} from './game/LabCampaignLevels.js';
@@ -40,6 +41,9 @@ function focusScreenControl(id,selector){
 function clearInput(){game.resetInput();}
 function syncActivity(){const active=game.state==='playing'&&!holds.size;platform?.gameplay(active);game.audio?.block('menu',game.state!=='playing'&&game.state!=='won');game.audio?.block('external',holds.size>0);}
 function setState(state){document.body.dataset.playState=state;document.documentElement.dataset.runtimeState=state;
+  // The opaque illustrated atlas needs only CSS animation, not a hidden 3D render loop.
+  // Playing/resume/restart already restore the original loop explicitly.
+  if(state==='ready')game.renderer?.setAnimationLoop(null);
   const mobile=$('#mobile-controls'),active=state==='playing';mobile.classList.toggle('mobile-controls--active',active);mobile.inert=!active;mobile.setAttribute('aria-hidden',String(!active));
   syncActivity();}
 function hold(reason,on,deferPause=false){pendingInterruption ||= deferPause;
@@ -85,7 +89,7 @@ function showHints(){
   $('#ad-status').textContent=yandex?'Подсказка открывается после подтверждённого просмотра. Прочитанные подсказки остаются доступны.':'В демо на GitHub рекламы нет. В сборке для Яндекс Игр здесь добровольный просмотр.';
 }
 const game=new LabGame({debug,container:$('#game'),touch:{joystick:$('#joystick'),joystickKnob:$('#joystick-knob'),jumpButton:$('#jump-button'),sprintButton:$('#sprint-button')},
-  onProgress:p=>{const n=Math.max(0,Math.min(100,p.percent||0));$('#loading-bar').style.width=n+'%';$('#loading-percent').textContent=n+'%';$('#loading-label').textContent=p.label||'Загрузка';$('#loading-progress').setAttribute('aria-valuenow',String(n));},
+  onProgress:p=>{$('#loading').dataset.phase='assets';const n=Math.max(0,Math.min(100,p.percent||0));$('#loading-bar').style.width=n+'%';$('#loading-percent').textContent=n+'%';$('#loading-label').textContent=p.label||'Загрузка';$('#loading-progress').setAttribute('aria-valuenow',String(n));},
   onReady:()=>{hideScreens();setState('ready');screen('start-screen',true);platform?.ready();
     game.renderer.domElement.addEventListener('webglcontextlost',event=>{
       event.preventDefault();failure(new Error('Браузер остановил 3D-графику. Нажми «Повторить загрузку»: прогресс комнат сохранён. Текущая комната начнётся заново.'));
@@ -166,6 +170,9 @@ async function enterLevel(index,reason='next'){
     // All interstitials are tied to an explicit menu transition, never a timer during play.
     if(reason!=='initial')await platform?.interstitial('next');
     hideScreens();screen('loading',true);game.state='loading';setState('loading');
+    // Building a scene has no byte total: show an honest indeterminate phase.
+    $('#loading').dataset.phase='scene';$('#loading-progress').removeAttribute('aria-valuenow');
+    $('#loading-percent').textContent='';$('#loading-label').textContent=`Подготовка комнаты ${index+1}`;
     if(index!==game.levelIndex)await game.selectLevel(index,false);
     game.start();if(holds.size)pendingInterruption=true;sessionStarted=true;preferences.save({resumeLevel:index});game.renderer.setAnimationLoop(game.animate);hideScreens();setState('playing');$('#level-select').value=String(index);$('#settings-level-select').value=String(index);updateStartAction();diagnostics();
   }catch(error){failure(error);}finally{entering=false;}
@@ -196,10 +203,31 @@ $('#quality-select').value=preferences.value.quality;$('#quality-select').addEve
 $('#mute-toggle').checked=preferences.value.muted;$('#volume-control').value=preferences.value.volume*100;
 $('#mute-toggle').addEventListener('change',e=>{preferences.save({muted:e.target.checked});game.audio.configure(preferences.value);});
 $('#volume-control').addEventListener('input',e=>{preferences.save({volume:Number(e.target.value)/100});game.audio.configure(preferences.value);});
+
+// Settings are a real modal available before Play. The game stays ready;
+// there is no phantom pause or hidden restart, and existing in-game controls
+// remain the single action path for preference changes.
+const menuSettings=$('#menu-settings');
+const settingPairs=[['#menu-quality','#quality-select','value','change'],['#menu-volume','#volume-control','value','input'],['#menu-muted','#mute-toggle','checked','change'],['#menu-tutorial','#tutorial-toggle','checked','change']];
+$('#menu-settings-button').addEventListener('click',()=>{
+ if(game.state!=='ready'||holds.size)return;
+ for(const [menu,existing,property]of settingPairs)$(menu)[property]=$(existing)[property];
+ menuSettings.showModal();$('#menu-quality').focus();
+});
+for(const [menu,existing,property,event]of settingPairs)$(menu).addEventListener(event,()=>{
+ $(existing)[property]=$(menu)[property];$(existing).dispatchEvent(new Event(event,{bubbles:true}));
+});
+const closeMenuSettings=()=>{menuSettings.close();$('#menu-settings-button').focus();};
+$('#menu-settings-close').addEventListener('click',closeMenuSettings);
+$('#menu-settings-done').addEventListener('click',closeMenuSettings);
+menuSettings.addEventListener('cancel',()=>{$('#menu-settings-button').focus();});
+$('.nav-campaign').addEventListener('click',()=>document.querySelector('.sector-tabs [aria-selected="true"]')?.focus());
+
 $('#reload-button').addEventListener('click',()=>location.reload());
 let captured=false;document.addEventListener('pointerlockchange',()=>{const locked=document.pointerLockElement===game.renderer?.domElement;const lost=captured&&!locked;captured=locked;
   if(lost&&!holds.size&&game.state==='playing'){clearInput();game.togglePause(true);}});
 addEventListener('keydown',event=>{
+  if(menuSettings.open){if(event.code==='Escape'){event.preventDefault();closeMenuSettings();}event.stopImmediatePropagation();return;}
   if(holds.size){event.preventDefault();event.stopImmediatePropagation();return;}
   if(game.state==='paused'&&['Escape','KeyR'].includes(event.code)){event.preventDefault();event.stopImmediatePropagation();if(!event.repeat)(event.code==='KeyR'?restartLevel():resume());}
   else if(game.state!=='playing'&&['Escape','KeyR','Space'].includes(event.code))event.stopImmediatePropagation();
