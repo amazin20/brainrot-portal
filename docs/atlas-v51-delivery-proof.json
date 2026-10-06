@@ -1,0 +1,46 @@
+{
+  "interfaceVersion": "v51-atlas",
+  "interfaceCommit": "b9be1bab5550ea0994571baa83516adc98b9d011",
+  "gameplaySourceCommit": "6f1eec54d47fed7916f5346a218525292d15fd62",
+  "publicationRun": 37414286098,
+  "workflowConclusion": "success",
+  "completedAt": "2026-10-06T05:03:13Z",
+  "preservedBaseline": {"files":600,"bytes":352485335},
+  "immutableRuntimeFilesPerEntrypoint": 61,
+  "menuSourceBytes": 47370,
+  "candidate": {
+    "pass": true,
+    "artifactId": 11390029025,
+    "artifactSHA256": "cfec3070ccd71d4e33703f04f3ced9ff2d0e7eaaddb4c9363e4758be0318083f",
+    "reportSHA256": "d2aa8fec63e29a6558dbf07d8cfb5c9f5afd5fa5c592a7cb4710716d40a25191"
+  },
+  "live": {
+    "pass": true,
+    "artifactId": 11392145056,
+    "artifactSHA256": "3021671ab98b99d27b400a18e4cd15abad1b15f148c41b623c5d7166bbec885d",
+    "reportSHA256": "750c4c70400b765d84a617e524b592eb004bc481c993f8a2234729de528759b7",
+    "publicFileChecks": {"pass":true,"files":739,"bytes":360909690},
+    "selectedLevels": [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51],
+    "viewports": [[1920,1080],[1440,900],[960,540],[844,390],[768,1024],[640,800],[620,800],[600,800],[390,844],[360,640],[320,640]],
+    "horizontalOverflow": false,
+    "desktopLaunches": [1,41,42,51],
+    "touchEmulatedLaunches": [{"level":42,"viewport":[390,844]},{"level":51,"viewport":[844,390]}],
+    "permalinkLaunch": {"path":"tower-singularity/","level":51,"viewport":[960,700]},
+    "allLaunchesTrusted": true,
+    "allLaunchesPauseResumeRestartReturn": true,
+    "settingsPersisted": true,
+    "keyboardNavigation": true,
+    "animationTimeAndStrokeOffsetAdvanced": true,
+    "reducedMotion": true,
+    "pageErrors": [],
+    "screenshots": 13,
+    "desktopScreenshotSHA256": "3ef2a6b80af6cba5cb736993c5130e536309d4a5ca16853ebb6593ff7dd52b77"
+  },
+  "limits": {
+    "humanPlaytest": false,
+    "physicalDeviceBenchmark": false,
+    "liveYandex": false,
+    "allLevelCompletionRetested": false,
+    "yandexPackageUpdated": false
+  }
+}
