@@ -6,6 +6,7 @@ on:
   workflow_dispatch:
 permissions:
   contents: read
+  actions: read
 concurrency:
   group: chapter-atlas-review
   cancel-in-progress: false
@@ -15,47 +16,30 @@ jobs:
     timeout-minutes: 12
     permissions:
       contents: write
+      actions: read
     outputs:
       source: ${{ steps.commit.outputs.source }}
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ github.ref }}
+          ref: ${{ github.sha }}
           fetch-depth: 0
+          persist-credentials: false
       - uses: actions/setup-node@v4
         with: {node-version: 22}
-      - run: npm ci && npm install --no-save --package-lock=false puppeteer-core@24.16.0
-      - name: Retrieve the authored source attachment through its public download interface
-        env:
-          CHROME_PATH: /usr/bin/google-chrome
-        run: |
-          mkdir -p transfer
-          cat > transfer-download.mjs <<'JS'
-          import fs from 'node:fs';import path from 'node:path';import puppeteer from 'puppeteer-core';
-          const dir=path.resolve('transfer'),browser=await puppeteer.launch({executablePath:process.env.CHROME_PATH,headless:true,args:['--no-sandbox','--disable-dev-shm-usage']});
-          try{
-           const page=await browser.newPage(),cdp=await page.createCDPSession();
-           await cdp.send('Browser.setDownloadBehavior',{behavior:'allow',downloadPath:dir});
-           await page.goto('https://firestorage.ai/ja/f/AJvAo1TlIVux',{waitUntil:'networkidle2',timeout:60000});
-           await page.waitForFunction(()=>document.body.innerText.includes('chapter-atlas-source-update.zip'),{timeout:60000});
-           await page.screenshot({path:path.join(dir,'download-page.png')});fs.writeFileSync(path.join(dir,'page.html'),await page.content());
-           console.log(await page.$$eval('a,button',xs=>xs.map(e=>({text:e.innerText,href:e.getAttribute('href'),download:e.getAttribute('download')}))));
-           const buttons=await page.$$('button,a');let clicked=false;
-           for(const b of buttons){const text=await b.evaluate(e=>e.innerText||'');if(/ダウンロード|download/i.test(text)&&!/(すべて|一括|all)/i.test(text)){await b.click();clicked=true;break;}}
-           if(!clicked)throw Error('No ordinary file download control found');
-           let done=false;for(let i=0;i<120;i++){if(fs.readdirSync(dir).some(f=>f.endsWith('.zip'))){done=true;break;}await new Promise(r=>setTimeout(r,500));}
-           if(!done)throw Error('Source attachment download did not finish');
-          }finally{await browser.close();}
-          JS
-          node transfer-download.mjs
-          rm transfer-download.mjs
+      - uses: actions/download-artifact@v4
+        with:
+          name: chapter-source-transfer
+          run-id: 37411790005
+          github-token: ${{ github.token }}
+          path: transfer
       - name: Validate archive and apply only the declared source paths
         run: |
           python3 - <<'PY'
           import pathlib,zipfile,hashlib,json,subprocess,io
           expected='f61355f9edb907bd7553d026999b0e67727e9ebf2b7c14ff7a8a2ede6bf15a1b'
-          candidates=list(pathlib.Path('transfer').glob('*.zip')); data=None
-          for f in candidates:
+          data=None
+          for f in pathlib.Path('transfer').glob('*.zip'):
             b=f.read_bytes()
             if hashlib.sha256(b).hexdigest()==expected:data=b;break
             try:
@@ -65,7 +49,7 @@ jobs:
                     candidate=z.read(e)
                     if hashlib.sha256(candidate).hexdigest()==expected:data=candidate
             except zipfile.BadZipFile:pass
-          assert data is not None,'Downloaded bytes differ from the authored change set'
+          assert data is not None,'Downloaded bytes differ from authored change set'
           with zipfile.ZipFile(io.BytesIO(data)) as z:
             m=json.loads(z.read('change-manifest.json'));assert m['base']=='492c8416ce8c5adc0f3080e8733e46d437ce7dd5'
             paths=[e['path'] for e in m['files']]
@@ -81,15 +65,23 @@ jobs:
           PY
       - name: Commit the actual source before testing or stamping
         id: commit
-        run: |
-          set -euo pipefail
-          test "${GITHUB_REF}" = refs/heads/upgrade/themed-chapters-20261006
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add index.html src scripts/qa-chapter-inventory.mjs scripts/stamp-chapters.mjs tests/lab-campaign-themes.test.js
-          git commit -m 'Implement five themed decades, an epilogue, accessible chapter atlas and loading presentation'
-          git push origin HEAD:refs/heads/upgrade/themed-chapters-20261006
-          echo "source=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs=require('node:fs'),assert=require('node:assert/strict'),crypto=require('node:crypto');
+            const {owner,repo}=context.repo;const ref='heads/upgrade/themed-chapters-20261006';
+            assert.equal(context.ref,'refs/'+ref);
+            const current=(await github.rest.git.getRef({owner,repo,ref})).data;
+            assert.equal(current.object.sha,context.sha,'Branch changed during source installation');
+            const parent=(await github.rest.git.getCommit({owner,repo,commit_sha:context.sha})).data;
+            const manifest=JSON.parse(fs.readFileSync('transfer/accepted-manifest.json'));
+            const tree=[];
+            for(const row of manifest.files){const bytes=fs.readFileSync(row.path);assert.equal(crypto.createHash('sha256').update(bytes).digest('hex'),row.sha256);tree.push({path:row.path,mode:'100644',type:'blob',content:bytes.toString('utf8')});}
+            const result=(await github.rest.git.createTree({owner,repo,base_tree:parent.tree.sha,tree})).data;
+            const commit=(await github.rest.git.createCommit({owner,repo,message:'Implement five themed decades, an epilogue, accessible chapter atlas and loading presentation',tree:result.sha,parents:[context.sha]})).data;
+            await github.rest.git.updateRef({owner,repo,ref,sha:commit.sha,force:false});
+            fs.writeFileSync('transfer/source-commit.json',JSON.stringify({source:commit.sha,tree:result.sha,manifest},null,2));
+            core.setOutput('source',commit.sha);console.log('Exact authored source committed: '+commit.sha);
       - uses: actions/upload-artifact@v4
         if: always()
         with: {name: chapter-source-transfer, path: transfer, retention-days: 7}
