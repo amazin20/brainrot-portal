@@ -93,10 +93,12 @@ try{
  const permalink=await newPage({width:960,height:700});await permalink.goto(base+'tower-singularity/?edition=foundation&level=51',{waitUntil:'domcontentloaded'});await ready(permalink);await selected(permalink,51);await launch(permalink,51);await permalink.close();
  phase('retained edition menus');
  for(const edition of ['classic','open']){
-  const legacy=await newPage({width:960,height:700});await legacy.goto(base+`?edition=${edition}&level=1`,{waitUntil:'domcontentloaded'});await legacy.bringToFront();
+  const expectedRooms=edition==='classic'?Array.from({length:33},(_,i)=>i):[23,27,29,30,31,32];
+  const first=expectedRooms[0];
+  const legacy=await newPage({width:960,height:700});await legacy.goto(base+`?edition=${edition}&level=${first+1}`,{waitUntil:'domcontentloaded'});await legacy.bringToFront();
   await legacy.waitForFunction(()=>document.documentElement.dataset.runtimeState==='ready'&&document.querySelector('#start-screen.screen--active'),{timeout:180000});
-  const status=await legacy.evaluate(()=>({atlasEnabled:document.documentElement.classList.contains('atlas-enabled'),originalHero:!!document.querySelector('#start-screen .hero-panel'),rooms:document.querySelectorAll('#level-select option').length,selected:Number(document.querySelector('#level-select').value)}));
-  assert.equal(status.atlasEnabled,false);assert.equal(status.originalHero,true);assert.ok(status.rooms>0);assert.equal(status.selected,0);if(edition==='classic')assert.equal(status.rooms,33);
+  const status=await legacy.evaluate(()=>({atlasEnabled:document.documentElement.classList.contains('atlas-enabled'),originalHero:!!document.querySelector('#start-screen .hero-panel'),roomIndices:[...document.querySelectorAll('#level-select option')].map(e=>Number(e.value)),selected:Number(document.querySelector('#level-select').value)}));
+  assert.equal(status.atlasEnabled,false);assert.equal(status.originalHero,true);assert.deepEqual(status.roomIndices,expectedRooms);assert.equal(status.selected,first);
   report.retainedEditions.push({edition,...status});save();await legacy.close();
  }
  assert.deepEqual(report.errors,[]);report.pass=true;phase('complete');console.log('ATLAS MENU VERIFIED',JSON.stringify(report));
