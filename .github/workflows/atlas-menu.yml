@@ -1,0 +1,92 @@
+name: Atlas menu - preserve, verify and publish
+on:
+  push:
+    branches: [main, upgrade/menu-atlas-20261006]
+    paths: ['ui/atlas-*', 'scripts/atlas-publication.mjs', 'scripts/check-atlas-menu.mjs', '.github/workflows/atlas-menu.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: pages
+  cancel-in-progress: false
+jobs:
+  candidate:
+    name: Preserve campaign and verify the real menu
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with: {node-version: 22}
+      - name: Syntax-check every presentation module
+        run: |
+          for file in ui/atlas-*.js scripts/atlas-publication.mjs scripts/check-atlas-menu.mjs; do node --check "$file"; done
+      - name: Fetch the exact existing site and preserve all media
+        run: node scripts/atlas-publication.mjs assemble
+      - name: Install the pinned browser verifier
+        run: |
+          npm install --prefix /tmp/atlas-browser --no-audit --no-fund puppeteer-core@24.16.0
+          echo "CHROME_PATH=$(command -v google-chrome || command -v chromium)" >> "$GITHUB_ENV"
+      - name: Verify all51 selections, layouts, settings and ordinary game launches
+        run: node scripts/check-atlas-menu.mjs
+      - uses: actions/upload-pages-artifact@v3
+        with: {path: site}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: atlas-candidate-proof
+          path: atlas-proof
+          retention-days: 30
+  publish:
+    name: Publish and independently verify the live Atlas menu
+    if: github.ref == 'refs/heads/main'
+    needs: candidate
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+      actions: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with: {node-version: 22}
+      - uses: actions/download-artifact@v4
+        with:
+          name: github-pages
+          path: pages-input
+      - name: Restore the exact checked site for public byte comparison
+        run: mkdir site && tar -xf pages-input/artifact.tar -C site
+      - name: Refuse to overwrite a newer publication
+        run: |
+          node --input-type=module -e "const r=await fetch('https://amazin20.github.io/brainrot-portal/build-info.json?atlas='+Date.now(),{cache:'no-store'});if(!r.ok)throw Error('Public site unavailable');const i=await r.json();if(i.commit!=='6f1eec54d47fed7916f5346a218525292d15fd62'||i.interfaceVersion)throw Error('Public baseline changed');"
+      - uses: actions/configure-pages@v5
+      - uses: actions/deploy-pages@v4
+        id: deployment
+      - name: Check every public file against the accepted publication
+        run: node scripts/atlas-publication.mjs verify
+      - name: Install the pinned browser verifier
+        run: |
+          npm install --prefix /tmp/atlas-browser --no-audit --no-fund puppeteer-core@24.16.0
+          echo "CHROME_PATH=$(command -v google-chrome || command -v chromium)" >> "$GITHUB_ENV"
+      - name: Verify real desktop and mobile menus on the published site
+        env:
+          PAGE_URL: ${{ steps.deployment.outputs.page_url }}
+          OUT_DIR: atlas-proof/live-browser
+        run: node scripts/check-atlas-menu.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: atlas-live-proof
+          path: atlas-proof
+          retention-days: 30
