@@ -23,11 +23,11 @@ export function buildSiphonObservatory(g,index=32,spec=SIPHON_OBSERVATORY_SPEC){
  k.ramp('Archive return stair-ramp',-27,-19,-13,5,13.6,top);
  // An actual upper-floor opening receives the cargo; its four surrounds do
  // not leave a solid invisible deck spanning the cistern's interior.
- slab('Archive cistern west apron',-28,-17,-28,-13,13.6);
+ slab('Archive cistern west apron',-28,-17,-28,-9.6,13.6);
  slab('Archive cistern east apron',-15,-10,-28,-13,13.6);
  slab('Archive cistern rear apron',-17,-15,-28,-21,13.6);
  slab('Archive cistern front apron',-17,-15,-19,-13,13.6);
- k.deck('Separated eastern archive',9,28,-29,-14,top);
+ k.deck('Separated eastern archive',9,28,-29,-9.6,top);
  // This lower bulkhead blocks ground-level shots and routes. Its upper edge
  // is structural, not a invisible field tied to an imagined solved flag.
  const bulkhead=k.block([0,5.1,-8],[60,10.2,.8],'shell');bulkhead.name='Sealed partition / siphon lower bulkhead';k.envelopes.at(-1).mesh.name=bulkhead.name+' / collision';
@@ -65,8 +65,11 @@ export function buildSiphonObservatory(g,index=32,spec=SIPHON_OBSERVATORY_SPEC){
  }
  const loading=k.loadPad('siphon-loading',[13,0,21],7).surface;
  const drop=k.panel('siphon-cargo-inlet',[-16,18,-20],[0,-1,0],6,6);drop.mesh.userData.portalSize={width:1.4,height:.65};
- const passage=k.panel('siphon-archive-entry',[-24,16.45,-27.6],[0,0,1],7.6,5.8);
- const arrival=k.panel('siphon-archive-exit',[20,13.05,-27.6],[0,0,1],7.6,5.8);
+ // Passenger apertures face INTO the elevated archive. Their opaque backs
+ // face the southern ground hall: even a top-edge shot from its far end hits
+ // a real back face instead of opening a floor-to-exit hydraulic shortcut.
+ const passage=k.panel('siphon-archive-entry',[-24,16.45,-9.2],[0,0,-1],7.6,5.8);
+ const arrival=k.panel('siphon-archive-exit',[20,13.05,-9.2],[0,0,-1],7.6,5.8);
  k.label('33 / СИФОННАЯ ОБСЕРВАТОРИЯ',[0,20,-28.5],[0,0,1],25,1.25);
  k.label('ГРУЗОВАЯ ШАХТА / ОТКРЫТЫЙ БАК',[-16,20.6,-20],[0,0,1],17,.8);
  k.label('ОБРАТНЫЙ КЛАПАН / ВОДА ДЕРЖИТ ЛИФТ',[-2,4.5,1],[0,0,1],17,.75);
