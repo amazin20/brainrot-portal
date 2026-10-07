@@ -12,9 +12,9 @@ export async function runSiphonObservatory(d,{route='load-then-ride',stopAfter=n
  d.until(()=>l.getDisplacement()>.25,10,'Original body did not submerge in the header');
  d.until(()=>l.circuit.primed,6,'Displaced water failed to flood the crest');d.mark('cargo displacement fills the dry siphon');
  if(stopAfter==='primed')return;
- // Clear the original pair through the game's normal clear-pair action.
- // The freed connection has no authority over a column already full of water.
- g.clearPortals();d.mark('the pair is freed while the column keeps draining');
+ // Keep the original pair until ordinary shots reassign it upstairs. The
+ // flooded column continues to drain independently of the later addresses.
+ d.mark('the column drains before the pair is reassigned');
  if(route==='miss-lift-and-recirculate'){d.wait(4);d.walk(8,11);d.walk(6.8,9);check(g.interact(),'Service pump unavailable');
  d.until(()=>l.lift.position.y<.05,30,'Service pump did not return the hydraulic platform');
  d.walk(3.3,11);d.walk(3.3,9);
