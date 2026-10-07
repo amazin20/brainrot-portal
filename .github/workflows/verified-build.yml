@@ -610,7 +610,7 @@ jobs:
     runs-on: ubuntu-latest
     # Retained 12–16 clips need more than 35 minutes under software WebGL;
     # preserve every route and native capture window instead of truncating them.
-    timeout-minutes: 60
+    timeout-minutes: 120
     steps:
     - uses: actions/checkout@v4
       with:
