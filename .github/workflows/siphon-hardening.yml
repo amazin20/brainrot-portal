@@ -5,7 +5,7 @@ on:
 permissions: {contents: read, actions: read}
 concurrency:
   group: siphon-hardening
-  cancel-in-progress: false
+  cancel-in-progress: true
 jobs:
   regressions:
     runs-on: ubuntu-latest
@@ -46,6 +46,7 @@ jobs:
       - run: npm ci
       - run: node scripts/qa-speedrun-late-new.mjs --levels=33 --out=qa/siphon-hardening-attacks.json
       - run: node scripts/qa-siphon-archive-shot.mjs > qa/siphon-archive-shot.log
+      - run: node scripts/qa-siphon-cargo-aperture.mjs > qa/siphon-cargo-aperture.log
       - run: node -e "const r=require('./qa/siphon-hardening-attacks.json');if(!r.pass)process.exit(1)"
       - uses: actions/upload-artifact@v4
         if: always()
@@ -54,6 +55,7 @@ jobs:
           path: |
             qa/siphon-hardening-attacks.json
             qa/siphon-archive-shot-after.json
+            qa/siphon-cargo-aperture-after.json
           retention-days: 14
   webgl:
     needs: package

@@ -23,10 +23,11 @@ export function buildSiphonObservatory(g,index=32,spec=SIPHON_OBSERVATORY_SPEC){
  k.ramp('Archive return stair-ramp',-27,-19,-13,5,13.6,top);
  // An actual upper-floor opening receives the cargo; its four surrounds do
  // not leave a solid invisible deck spanning the cistern's interior.
- slab('Archive cistern west apron',-28,-17,-28,-9.6,13.6);
+ slab('Archive cistern west apron',-28,-17,-28,-13,13.6);
  slab('Archive cistern east apron',-15,-10,-28,-13,13.6);
  slab('Archive cistern rear apron',-17,-15,-28,-21,13.6);
  slab('Archive cistern front apron',-17,-15,-19,-13,13.6);
+ slab('Archive passenger portal approach',-20.8,-13.2,-13,-9.6,13.6);
  k.deck('Separated eastern archive',9,28,-29,-9.6,top);
  // This lower bulkhead blocks ground-level shots and routes. Its upper edge
  // is structural, not a invisible field tied to an imagined solved flag.
@@ -64,11 +65,18 @@ export function buildSiphonObservatory(g,index=32,spec=SIPHON_OBSERVATORY_SPEC){
   tube.push(k.geometry(new THREE.CylinderGeometry(.065,.065,length,8),tubeMaterial,p.clone().add(V(0,0,.155)).toArray(),q,{batch:false,name:'Siphon inspection channel'}));
  }
  const loading=k.loadPad('siphon-loading',[13,0,21],7).surface;
- const drop=k.panel('siphon-cargo-inlet',[-16,18,-20],[0,-1,0],6,6);drop.mesh.userData.portalSize={width:1.4,height:.65};
+ // The inclined cargo mouth excludes the upright observer by its actual
+ // tangential height. |normal.y| stays below .6 so aiming cannot rotate its
+ // narrow axis as it does on floor apertures. Three high glass catchers guide
+ // the outgoing body into the tank; the basket inspection band stays open.
+ const drop=k.panel('siphon-cargo-inlet',[-16,18.4,-20.9],[0,-.59,Math.sqrt(1-.59**2)],3.2,2.1);drop.mesh.userData.portalSize={width:1.4,height:.9};
+ k.block([-16.92,15.9,-20],[.24,2.2,2.08],glass,true);
+ k.block([-15.08,15.9,-20],[.24,2.2,2.08],glass,true);
+ k.block([-16,15.9,-19.08],[1.6,2.2,.24],glass,true);
  // Passenger apertures face INTO the elevated archive. Their opaque backs
  // face the southern ground hall: even a top-edge shot from its far end hits
  // a real back face instead of opening a floor-to-exit hydraulic shortcut.
- const passage=k.panel('siphon-archive-entry',[-24,16.45,-9.2],[0,0,-1],7.6,5.8);
+ const passage=k.panel('siphon-archive-entry',[-17,16.45,-9.2],[0,0,-1],7.6,5.8);
  const arrival=k.panel('siphon-archive-exit',[20,13.05,-9.2],[0,0,-1],7.6,5.8);
  k.label('33 / СИФОННАЯ ОБСЕРВАТОРИЯ',[0,20,-28.5],[0,0,1],25,1.25);
  k.label('ГРУЗОВАЯ ШАХТА / ОТКРЫТЫЙ БАК',[-16,20.6,-20],[0,0,1],17,.8);
@@ -95,6 +103,6 @@ export function buildSiphonObservatory(g,index=32,spec=SIPHON_OBSERVATORY_SPEC){
  k.resets.push(()=>{circuit.reset();displaced=0;levelHeight=circuit.surface;lift.stations[1].y=0;lift.reset();});
  k.display([-10,17,-28.4],()=>`БАК ${circuit.surface.toFixed(2)} м / КОЛЕНО ${circuit.crest.toFixed(2)} м\n${circuit.primed?'КОЛОННА БЕЗ ВОЗДУХА':'В КОЛЕНЕ ВОЗДУХ'} / ЛИФТ ${circuit.height.toFixed(1)} м`,15,1.7);
  const l=k.finishResearch([9,0,15],[11,.6,18],[20,top,-20],{postCampaign:false,researchChamber:false,openChamber:false,siphonObservatory:true,circuit,lift,basket,bulkhead,tank,loading,drop,passage,arrival,resetControl,getDisplacement:()=>displaced,spawnView:{yaw:.32,pitch:.04}});
- l.puzzleGeometry={noProgressFlags:true,recoveryFloor:0,orders:['load-then-ride','miss-lift-and-recirculate'],portalRoles:{'siphon-loading':'send the original body into the elevated liquid','siphon-cargo-inlet':'small downward aperture, not a passenger shortcut','siphon-archive-entry':'freed pair crosses the upper archive','siphon-archive-exit':'return both travellers after the hydraulic ascent'},deductions:['volume displacement reaches the dry crest','a flooded column drains below its priming height','a check valve holds actual ram volume','the service motor recirculates water rather than resetting actors','reclaim the original cargo and reuse the same portal pair']};
+ l.puzzleGeometry={noProgressFlags:true,recoveryFloor:0,orders:['load-then-ride','miss-lift-and-recirculate'],portalRoles:{'siphon-loading':'send the original body into the elevated liquid','siphon-cargo-inlet':'inclined narrow mouth and physical glass chute admit cargo but exclude the upright observer','siphon-archive-entry':'freed pair crosses the upper archive','siphon-archive-exit':'return both travellers after the hydraulic ascent'},deductions:['volume displacement reaches the dry crest','a flooded column drains below its priming height','a check valve holds actual ram volume','the service motor recirculates water rather than resetting actors','reclaim the original cargo and reuse the same portal pair']};
  l.getContextLesson=()=>['siphon-observatory','ЛКМ / ПКМ · E',spec.description,false];return l;
 }

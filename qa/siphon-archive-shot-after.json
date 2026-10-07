@@ -1,0 +1,222 @@
+{
+  "scope": "Production headless simulation; ordinary input, no actor or mechanism state assignments after the normal Play reset. No browser rendering claim.",
+  "expectBypass": false,
+  "attempts": [
+    {
+      "name": "original-eastern-archive-top-edge-shot",
+      "point": [
+        20,
+        15.55,
+        -27.6
+      ],
+      "impact": {
+        "valid": false,
+        "index": 1,
+        "position": [
+          20.492089375413514,
+          10.690136416127032,
+          -8.960000002682209
+        ],
+        "sequence": 1,
+        "surface": "siphon-archive-exit / portal support",
+        "reason": "back-face"
+      },
+      "player": [
+        20.002090674512683,
+        0,
+        29.001307618320038
+      ],
+      "cargo": [
+        10.999999474617145,
+        0.5699981436402993,
+        18.000000884541052
+      ],
+      "held": false,
+      "state": "playing",
+      "teleports": 0,
+      "primed": false,
+      "height": 0,
+      "delivered": 0,
+      "displacement": 0
+    },
+    {
+      "name": "new-passage-backface-offset-0",
+      "point": [
+        -17,
+        16.45,
+        -9.2
+      ],
+      "impact": {
+        "valid": false,
+        "index": 1,
+        "position": [
+          -16.81336160002487,
+          16.357776096599807,
+          -8.960000002682209
+        ],
+        "sequence": 1,
+        "surface": "siphon-archive-entry / portal support",
+        "reason": "back-face"
+      },
+      "player": [
+        12.99800672484722,
+        0,
+        28.99302353696524
+      ],
+      "cargo": [
+        10.999999474617145,
+        0.5699981436402993,
+        18.000000884541052
+      ],
+      "held": false,
+      "state": "playing",
+      "teleports": 0,
+      "primed": false,
+      "height": 0,
+      "delivered": 0,
+      "displacement": 0
+    },
+    {
+      "name": "new-passage-backface-offset-2.5",
+      "point": [
+        -17,
+        18.95,
+        -9.2
+      ],
+      "impact": {
+        "valid": false,
+        "index": 1,
+        "position": [
+          -16.81309493085046,
+          18.842476880323066,
+          -8.960000002682209
+        ],
+        "sequence": 1,
+        "surface": "siphon-archive-entry / portal support",
+        "reason": "back-face"
+      },
+      "player": [
+        12.99800672484722,
+        0,
+        28.99302353696524
+      ],
+      "cargo": [
+        10.999999474617145,
+        0.5699981436402993,
+        18.000000884541052
+      ],
+      "held": false,
+      "state": "playing",
+      "teleports": 0,
+      "primed": false,
+      "height": 0,
+      "delivered": 0,
+      "displacement": 0
+    },
+    {
+      "name": "new-arrival-backface-offset-0",
+      "point": [
+        20,
+        13.05,
+        -9.2
+      ],
+      "impact": {
+        "valid": false,
+        "index": 1,
+        "position": [
+          20.006067375431765,
+          12.971595501810851,
+          -8.960000002682209
+        ],
+        "sequence": 1,
+        "surface": "siphon-archive-exit / portal support",
+        "reason": "back-face"
+      },
+      "player": [
+        19.995624098277847,
+        0,
+        28.994430670535436
+      ],
+      "cargo": [
+        11.08325562334409,
+        0.5699981433122798,
+        18.285739417162127
+      ],
+      "held": false,
+      "state": "playing",
+      "teleports": 0,
+      "primed": false,
+      "height": 0,
+      "delivered": 0,
+      "displacement": 0
+    },
+    {
+      "name": "new-arrival-backface-offset-2.5",
+      "point": [
+        20,
+        15.55,
+        -9.2
+      ],
+      "impact": {
+        "valid": false,
+        "index": 1,
+        "position": [
+          20.00485847255864,
+          15.45587576342306,
+          -8.960000002682209
+        ],
+        "sequence": 1,
+        "surface": "siphon-archive-exit / portal support",
+        "reason": "back-face"
+      },
+      "player": [
+        19.995624098278483,
+        0,
+        28.994430670536243
+      ],
+      "cargo": [
+        11.08325562334409,
+        0.5699981433122798,
+        18.285739417162127
+      ],
+      "held": false,
+      "state": "playing",
+      "teleports": 0,
+      "primed": false,
+      "height": 0,
+      "delivered": 0,
+      "displacement": 0
+    }
+  ],
+  "route": {
+    "level": 33,
+    "id": "siphon-observatory",
+    "pass": true,
+    "milestones": [],
+    "respawns": 0,
+    "resets": 0,
+    "frames": 687,
+    "kind": "recovery",
+    "teleports": 0
+  },
+  "final": {
+    "player": [
+      20.002090674512683,
+      0,
+      29.001307618320038
+    ],
+    "cargo": [
+      10.999999474617145,
+      0.5699981436402993,
+      18.000000884541052
+    ],
+    "held": false,
+    "state": "playing",
+    "teleports": 0,
+    "primed": false,
+    "height": 0,
+    "delivered": 0,
+    "displacement": 0
+  },
+  "pass": true
+}

@@ -1,0 +1,77 @@
+{
+  "scope": "Production headless simulation; ordinary movement, aiming, projectiles and E only after initial Play reset; no actor/mechanism state writes. No browser rendering claim.",
+  "expectBypass": true,
+  "milestones": [
+    {
+      "name": "attempted held-cargo floor traversal",
+      "player": [
+        -16.31167986370326,
+        15.575,
+        -19.764987222504363
+      ],
+      "cargo": [
+        -16.90831168150771,
+        16.635016888185223,
+        -19.361933513633133
+      ],
+      "held": true,
+      "state": "playing",
+      "teleports": 1,
+      "primed": false,
+      "height": 0,
+      "delivered": 0,
+      "displacement": 0
+    },
+    {
+      "name": "steered ceiling exit to upper apron",
+      "player": [
+        -18.96918303822662,
+        13.6,
+        -19.078551047379587
+      ],
+      "cargo": [
+        -19.689087232255726,
+        14.66000042240294,
+        -19.066805787586357
+      ],
+      "held": true,
+      "state": "playing",
+      "teleports": 1,
+      "primed": false,
+      "height": 0,
+      "delivered": 0,
+      "displacement": 0
+    }
+  ],
+  "route": {
+    "level": 33,
+    "id": "siphon-observatory",
+    "pass": true,
+    "milestones": [],
+    "respawns": 0,
+    "resets": 0,
+    "frames": 2209,
+    "kind": "recovery",
+    "teleports": 2
+  },
+  "final": {
+    "player": [
+      20.002790009179787,
+      10.2,
+      -18.006025569401654
+    ],
+    "cargo": [
+      20.00103760957757,
+      11.262106680179501,
+      -18.726016646232672
+    ],
+    "held": true,
+    "state": "won",
+    "teleports": 2,
+    "primed": false,
+    "height": 0,
+    "delivered": 0,
+    "displacement": 0
+  },
+  "pass": true
+}
