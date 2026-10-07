@@ -1,0 +1,4742 @@
+{
+  "sourceCommit": "083cc6e7ee75ea7c44dc52326c862495c264eb51",
+  "version": "v53-siphon-observatory",
+  "reviewRun": 37614874735,
+  "publicationRun": 37618434320,
+  "reviewConclusion": "success",
+  "publicationConclusion": "success",
+  "regressions": {
+    "tests": 1404,
+    "pass": 1404,
+    "fail": 0,
+    "skipped": 0
+  },
+  "webgl": {
+    "uniqueLevels": 51,
+    "allWon": true,
+    "allOriginalCompanions": true,
+    "resets": 0,
+    "respawns": 0
+  },
+  "publicCheck": {
+    "pass": true,
+    "checked": 880,
+    "bytes": 378428499,
+    "streams": 6
+  },
+  "liveCheck": {
+    "pass": true,
+    "sourceCommit": "083cc6e7ee75ea7c44dc52326c862495c264eb51",
+    "cases": [
+      {
+        "width": 1440,
+        "height": 900,
+        "touch": false,
+        "nativePlay": true,
+        "pauseRestartReturn": true,
+        "reload": true,
+        "debugGlobalsAbsent": true
+      },
+      {
+        "width": 390,
+        "height": 844,
+        "touch": true,
+        "nativePlay": true,
+        "pauseRestartReturn": true,
+        "reload": true,
+        "debugGlobalsAbsent": true
+      }
+    ],
+    "errors": [],
+    "scope": "Ordinary public menu, native Play, pause, restart, return and reload; complete gameplay route is established separately by the exact-source review and native recording."
+  },
+  "preservedFiles": 805,
+  "preservedEchoFiles": 4,
+  "siteFiles": [
+    {
+      "path": "art/portal-laboratory-menu.webp",
+      "bytes": 158200,
+      "sha256": "f6a544096a6418a0f65ba8c609415d0393a1081d18537ecac5eb4c345b13b4be"
+    },
+    {
+      "path": "assets/LabAnimationJourney-CXGD7KhX.js",
+      "bytes": 3040,
+      "sha256": "fb441a1d5ff7d0b400a0fdbe5a0ddc0ba798552bfb5b023195c6e84db1da1e97"
+    },
+    {
+      "path": "assets/LabCreativeRoom18Journey-DSBVAn45.js",
+      "bytes": 3303,
+      "sha256": "cc8986778d9962a999bc378ba7dda46bd843f6863a13ba51698052c740ed28f7"
+    },
+    {
+      "path": "assets/LabCreativeRoom20Journey-Du1Odzxr.js",
+      "bytes": 3418,
+      "sha256": "4a69b4e3235d167112e8a72f89e0b7fa4e63b6593994f075576216a972e29b7d"
+    },
+    {
+      "path": "assets/LabExpansionAlternateJourney48-m50yyTA-.js",
+      "bytes": 2391,
+      "sha256": "26bb20731b33d540fb7be84366b6f06ebe0ac7f42c7a616c4568d2b65e39104d"
+    },
+    {
+      "path": "assets/LabExpansionAlternateJourney49-6AQfrPj7.js",
+      "bytes": 2039,
+      "sha256": "f67ac65ff41ea7f1625fa42c94a46ee7b21a30cc282a0343295d5263dbcbe507"
+    },
+    {
+      "path": "assets/LabExpansionAlternateJourneyB-WXClA_ZM.js",
+      "bytes": 4760,
+      "sha256": "5b3b216acd84569e9fa414e45f03ff2fd63a32e3f7152cb3d720debc3615aad3"
+    },
+    {
+      "path": "assets/LabExpansionJourneyA-cnKd6uRU.js",
+      "bytes": 7482,
+      "sha256": "3265d2d0e414eef84b24ba7b8dca2a1f5a1b71f93a47a1907765760b20ad71ad"
+    },
+    {
+      "path": "assets/LabExpansionJourneyB-DDE2uQDo.js",
+      "bytes": 6715,
+      "sha256": "fff419c32392cbf3301609c690b0a41e84840c4fd5d45184b0409022985bd7b8"
+    },
+    {
+      "path": "assets/LabExtendedJourney-herB11CQ.js",
+      "bytes": 9252,
+      "sha256": "4ade791aa7c0971dd4e8605cd52b8c1a9dd5a4352828ac71d5ae2667e5f7888f"
+    },
+    {
+      "path": "assets/LabFoundationJourney-BOopWWda.js",
+      "bytes": 9043,
+      "sha256": "e9974baddf5901d5f933cf678a20f5db6e6984d59f75b86078f6b638284ec1f7"
+    },
+    {
+      "path": "assets/LabIntroductoryAlternates-DcdsCClA.js",
+      "bytes": 1341,
+      "sha256": "a6451adc49d9c2f86f43455bfa4ced44d7166234f4fde82082990bf21f76cd5c"
+    },
+    {
+      "path": "assets/LabLateCampaignAim-CJH8BNAs.js",
+      "bytes": 753,
+      "sha256": "ddfbed4b193b1c1837962afb3238714acffeadaeb6f4719a2f2a6c0689c69c84"
+    },
+    {
+      "path": "assets/LabOpenJourney-MyF3CUNd.js",
+      "bytes": 6285,
+      "sha256": "3e909baa14aa36b5d4e5975abdc07a26239a9c10c20f1605d56b2ecd8092669a"
+    },
+    {
+      "path": "assets/LabPortalEdgeJourney-CzhvqzO5.js",
+      "bytes": 2293,
+      "sha256": "308898a26a66110878ecf137f449c5cf721ce9bafc163a506079175f3351ce7c"
+    },
+    {
+      "path": "assets/LabPortalFloorJourney-CQnStGPV.js",
+      "bytes": 1516,
+      "sha256": "9e52f256616264b6b05d759c37ec9b503fd5d244942354b49ce301015753be0a"
+    },
+    {
+      "path": "assets/LabPostJourneyA-CWKaGzhi.js",
+      "bytes": 14134,
+      "sha256": "bfa2b73ef6a903d939a31a1a27e13a008f0e85a620e6e7524d2572f4005aaa00"
+    },
+    {
+      "path": "assets/LabPostJourneyB-EuDAUlX_.js",
+      "bytes": 10887,
+      "sha256": "1270e5d2806a66d1ce503e75bc5d746d3146ff9f10166f7242a872e0f062af2b"
+    },
+    {
+      "path": "assets/LabResearchJourney-DTc4jCjh.js",
+      "bytes": 7650,
+      "sha256": "81c98e926f5db6eb1c27cc986998a58b2d58f62f069503d9b64e8e92e657f3f3"
+    },
+    {
+      "path": "assets/LabRoom13Journey-DpkZeNEo.js",
+      "bytes": 6194,
+      "sha256": "275c62befc9b95dc4c596810721ffba02b137b24ad14006e4769f1c7f21bc041"
+    },
+    {
+      "path": "assets/LabRoom14Journey-C0UfonIt.js",
+      "bytes": 3566,
+      "sha256": "78d7d18c3f30e1eeb07f563356dfdf3f6c54f20246c10efd9f6a00f7ecedc5f5"
+    },
+    {
+      "path": "assets/LabRoom15Journey-CVVlNNXC.js",
+      "bytes": 4604,
+      "sha256": "6048be92f5a176df4ac3e86244cd26f4ceb738e1fb8bf697bb019e6607d55846"
+    },
+    {
+      "path": "assets/LabRoom16Journey-DcT0PHn1.js",
+      "bytes": 2534,
+      "sha256": "43814ce0e94d01e0e2b9152c6ea1c722073f13a019b2992525f6b0480fa97e74"
+    },
+    {
+      "path": "assets/LabRoom17Journey-C2EE7523.js",
+      "bytes": 3260,
+      "sha256": "b621bf8abcb99cec72e5a8b0ef53e4ef6a005e414141e9502855a2759ba02708"
+    },
+    {
+      "path": "assets/LabRoom18Journey-Byl3a4wD.js",
+      "bytes": 6065,
+      "sha256": "03ef642f6013a81be4bee3fae22f96f7679e09d774875287b8b38cd1a36c6e2d"
+    },
+    {
+      "path": "assets/LabRoom19Journey-BVk2pOJ3.js",
+      "bytes": 3087,
+      "sha256": "edbd9e87a7c68f527a6a6d6794cfcb3a8de5780d1c656265ccf7910207066ab4"
+    },
+    {
+      "path": "assets/LabRoom20Journey-Dnjdo837.js",
+      "bytes": 5013,
+      "sha256": "84ee4a4debf18d555e80bbf468821d58576e6fcf805b34adcd2670e8502fc0fd"
+    },
+    {
+      "path": "assets/LabRoom21Journey-uEucOe9-.js",
+      "bytes": 5077,
+      "sha256": "df30a1461d19cf6c1fdadb906b090b3c44ebde9b41c09635a0e331c6ed89b014"
+    },
+    {
+      "path": "assets/LabRoom22Journey-BouPMvNe.js",
+      "bytes": 2624,
+      "sha256": "8256cc0ea7a86ecbf71cd36ced2e41796d5824972fcaa454288b41fb781e4b2a"
+    },
+    {
+      "path": "assets/LabRoom23Journey-4gKbaVii.js",
+      "bytes": 2626,
+      "sha256": "eb971e02e3b4c8185a4f35fbec7cd005181e0f521f132969816376bd18dfeba4"
+    },
+    {
+      "path": "assets/LabRoom24Journey-DkZ5zl4F.js",
+      "bytes": 3453,
+      "sha256": "1bf343d90049936d8dad72675a75e25a52d8d1cd1d285d4d12f1a1a25d3f38c1"
+    },
+    {
+      "path": "assets/LabRoom25Journey-Dsc4dFcD.js",
+      "bytes": 3447,
+      "sha256": "6494b0e4ae0b006dc8b303bf0639916cc2ac95d1ff700bde74e9f91629758e0c"
+    },
+    {
+      "path": "assets/LabRoom26Journey-D5Lhf6Yz.js",
+      "bytes": 4194,
+      "sha256": "f568e01fcbf2e28f9bf1d89aa1d8e83df957bb60ea13a63a77cab81b61577e74"
+    },
+    {
+      "path": "assets/LabRoom27Journey-CtMoXjWq.js",
+      "bytes": 3350,
+      "sha256": "ea4e62a0eed62998b64515b56db65142d1a7d3fb8d5c91b6e31653c5ef4422b5"
+    },
+    {
+      "path": "assets/LabRoom28Journey-BKtIeHL7.js",
+      "bytes": 2721,
+      "sha256": "00bcb74736a0de9b300d8ff110461041bb4a4d62091877b3ce680cc4dc7a25fc"
+    },
+    {
+      "path": "assets/LabRoom29Journey-FXLiWbZf.js",
+      "bytes": 2592,
+      "sha256": "625138692ba0641ed1ea63e7bb6ea332c70bf235ee3bc8b3cbd80456012e04ef"
+    },
+    {
+      "path": "assets/LabRoom30Journey-zAsFaYdh.js",
+      "bytes": 3762,
+      "sha256": "1d260d8e49e983b2f7a9c354898fe771c41df56434d67e203bd8fb51bbc8f925"
+    },
+    {
+      "path": "assets/LabSingularityJourney-DOyHtoU-.js",
+      "bytes": 17459,
+      "sha256": "e1947ab5f87caeab829ed60a54db0fd0e9e12ce3fe0fd2904b974fa296dc0f9c"
+    },
+    {
+      "path": "assets/LabTowerJourney-cnAT52-9.js",
+      "bytes": 31405,
+      "sha256": "ae67ba8e9211e0a9a3b2b7e59e8a4652cd8519d062762f1d3bb341a33096efcb"
+    },
+    {
+      "path": "assets/LabV8Journey-CnUX-JBE.js",
+      "bytes": 15059,
+      "sha256": "efd60e329f37b6105eccf5e65f55594d11c4f945c6bd4043cc120022ab1c983f"
+    },
+    {
+      "path": "assets/LabWorkshopJourney-BreR-TJl.js",
+      "bytes": 7249,
+      "sha256": "2016d65014aa5700492ca93d3a26f4cd80392fc60bc29af20635fb8384f07504"
+    },
+    {
+      "path": "assets/index-B6FmTTVO.css",
+      "bytes": 28952,
+      "sha256": "08ea4c995a1e54c5b3f4dabe61976d1e6c5f0f48363192d080c4b8dfad9d12aa"
+    },
+    {
+      "path": "assets/index-BBzE2-3_.js",
+      "bytes": 1679868,
+      "sha256": "e9d4b2f74ea0591fd5321d165b247fe5256d75ecccad6ba2522e877de3a7469d"
+    },
+    {
+      "path": "atlas-interface.json",
+      "bytes": 144320,
+      "sha256": "5e76c7568a028dfff840e515c6c0385faeb93507504ab5f6498b224f9d641093"
+    },
+    {
+      "path": "build-info.json",
+      "bytes": 3430,
+      "sha256": "9c6d7cd90c31036817ffb5dd9a31e2a2909431b744e461c002092619e0bd7e31"
+    },
+    {
+      "path": "chapter-atlas/art/portal-laboratory-menu.webp",
+      "bytes": 158200,
+      "sha256": "f6a544096a6418a0f65ba8c609415d0393a1081d18537ecac5eb4c345b13b4be"
+    },
+    {
+      "path": "chapter-atlas/assets/LabAnimationJourney-CD7Qo-TW.js",
+      "bytes": 3040,
+      "sha256": "ad1048b489f8634368ceec053951d797935adf776033a7a5df60f155762d0a59"
+    },
+    {
+      "path": "chapter-atlas/assets/LabCreativeRoom18Journey-BABazsjW.js",
+      "bytes": 3303,
+      "sha256": "2e68e6ac1bb3ed1aecc8ad5d565d1c0ba1b73e4024b4f9ea9dee7d89999b90e1"
+    },
+    {
+      "path": "chapter-atlas/assets/LabCreativeRoom20Journey-CGCGa-9o.js",
+      "bytes": 3418,
+      "sha256": "94c681036a883bafa7354921d471e88fae4fdf7230e5e0876cc8e85dd34d423e"
+    },
+    {
+      "path": "chapter-atlas/assets/LabEchoHorizonJourney-Bss6H4A1.js",
+      "bytes": 2271,
+      "sha256": "51f50feaf8e639327671ce5a219b512ad3d4e2f1c5f20c2e8f7871dee2c752b0"
+    },
+    {
+      "path": "chapter-atlas/assets/LabExpansionAlternateJourney48-ijGGhrRt.js",
+      "bytes": 2391,
+      "sha256": "b7d800159afbed249248c5b12670f097231266ce28724e169f7740289310a7bb"
+    },
+    {
+      "path": "chapter-atlas/assets/LabExpansionAlternateJourney49-5SnclBxh.js",
+      "bytes": 2039,
+      "sha256": "03a6b746f22ded4f4be71cf66e9ce358911a01bcd9a0fcb136196659f946d562"
+    },
+    {
+      "path": "chapter-atlas/assets/LabExpansionAlternateJourneyB-B0jSt2Kt.js",
+      "bytes": 2970,
+      "sha256": "c2ef28158bd43935208ac178a9f68139f9a1e42a40ec80179da5c58a6c48102b"
+    },
+    {
+      "path": "chapter-atlas/assets/LabExpansionJourneyA-BXpgw7-f.js",
+      "bytes": 7482,
+      "sha256": "4f47ef138465e28de1633c9d71beb29de27b4d64d1f12f46c37f7dfb1977a29d"
+    },
+    {
+      "path": "chapter-atlas/assets/LabExpansionJourneyB-Y6aAcj3P.js",
+      "bytes": 5436,
+      "sha256": "fcf50c712110f991d35181da0703b4e08ff81aa953b9dca77a4a1959bfdb1e33"
+    },
+    {
+      "path": "chapter-atlas/assets/LabExtendedJourney-2vB0yStK.js",
+      "bytes": 9252,
+      "sha256": "7c6eba9c1ca02bcb1932241614e1ae7c382e0b1651adab6de4e708dade8c54cf"
+    },
+    {
+      "path": "chapter-atlas/assets/LabFoundationJourney-DdFYn9ow.js",
+      "bytes": 9043,
+      "sha256": "e71c59726fda14d34d7430356e2fa5492fb4fd2852eac7dc09cc1aff7339e230"
+    },
+    {
+      "path": "chapter-atlas/assets/LabIntroductoryAlternates-DcdsCClA.js",
+      "bytes": 1341,
+      "sha256": "a6451adc49d9c2f86f43455bfa4ced44d7166234f4fde82082990bf21f76cd5c"
+    },
+    {
+      "path": "chapter-atlas/assets/LabLateCampaignAim-ComIlef_.js",
+      "bytes": 753,
+      "sha256": "931112927f95d748f595adb48a0f6b808074357ceffebe511120c9505c213dec"
+    },
+    {
+      "path": "chapter-atlas/assets/LabOpenJourney-CBxiMqot.js",
+      "bytes": 6285,
+      "sha256": "9606e14b1f3cd5c603d2843cdd00350f3996b43f532c81c4cb8f6036fd2ceefb"
+    },
+    {
+      "path": "chapter-atlas/assets/LabPortalEdgeJourney-CZ_KJs-e.js",
+      "bytes": 2293,
+      "sha256": "721ac3004ae3bb3e9ff76e37764e30a8e3c96ff2f65bbbcd43bf8ee65a96e857"
+    },
+    {
+      "path": "chapter-atlas/assets/LabPortalFloorJourney-BW2BRs-P.js",
+      "bytes": 1516,
+      "sha256": "ba3ed082ad242103e117ed1a8e2d6971b6bd3729a3b9865c94d73fc130016870"
+    },
+    {
+      "path": "chapter-atlas/assets/LabPostJourneyA-CAIZZVFR.js",
+      "bytes": 11717,
+      "sha256": "7ea60a9fbb99879ea04227cc5777b0418b9170696c3d927004d2981a9b4728ae"
+    },
+    {
+      "path": "chapter-atlas/assets/LabPostJourneyB-C8DS96XJ.js",
+      "bytes": 10887,
+      "sha256": "3e03f3f7e10f4f9eb6bbe2e677a117c3e10f997c9b90ac0ef063c046962f489e"
+    },
+    {
+      "path": "chapter-atlas/assets/LabResearchJourney-BCZ5Ga-f.js",
+      "bytes": 7650,
+      "sha256": "2875dcee42fd20c1b3067c001926571319755aa8f4237b9d9e1294afefa2d60a"
+    },
+    {
+      "path": "chapter-atlas/assets/LabRoom13Journey-DpkZeNEo.js",
+      "bytes": 6194,
+      "sha256": "275c62befc9b95dc4c596810721ffba02b137b24ad14006e4769f1c7f21bc041"
+    },
+    {
+      "path": "chapter-atlas/assets/LabRoom14Journey-C0UfonIt.js",
+      "bytes": 3566,
+      "sha256": "78d7d18c3f30e1eeb07f563356dfdf3f6c54f20246c10efd9f6a00f7ecedc5f5"
+    },
+    {
+      "path": "chapter-atlas/assets/LabRoom15Journey-DF-cba7z.js",
+      "bytes": 4604,
+      "sha256": "8a52b9045f042378768599de6ceb4073eac52427bdfbadb6921713155eb078c2"
+    },
+    {
+      "path": "chapter-atlas/assets/LabRoom16Journey-DcT0PHn1.js",
+      "bytes": 2534,
+      "sha256": "43814ce0e94d01e0e2b9152c6ea1c722073f13a019b2992525f6b0480fa97e74"
+    },
+    {
+      "path": "chapter-atlas/assets/LabRoom17Journey-C2EE7523.js",
+      "bytes": 3260,
+      "sha256": "b621bf8abcb99cec72e5a8b0ef53e4ef6a005e414141e9502855a2759ba02708"
+    },
+    {
+      "path": "chapter-atlas/assets/LabRoom18Journey-CUrvwhaV.js",
+      "bytes": 6065,
+      "sha256": "0680d71a41f79329e3c693b824a2fe1cb4d798a465d880c8b48c3358ab918c90"
+    },
+    {
+      "path": "chapter-atlas/assets/LabRoom19Journey-BVk2pOJ3.js",
+      "bytes": 3087,
+      "sha256": "edbd9e87a7c68f527a6a6d6794cfcb3a8de5780d1c656265ccf7910207066ab4"
+    },
+    {
+      "path": "chapter-atlas/assets/LabRoom20Journey-Dnjdo837.js",
+      "bytes": 5013,
+      "sha256": "84ee4a4debf18d555e80bbf468821d58576e6fcf805b34adcd2670e8502fc0fd"
+    },
+    {
+      "path": "chapter-atlas/assets/LabRoom21Journey-DDZRYmdk.js",
+      "bytes": 5077,
+      "sha256": "5f2bbe25eedefa17265379847f431fabb57f63c2ca9e0a006bf6125343c0aa31"
+    },
+    {
+      "path": "chapter-atlas/assets/LabRoom22Journey-Dj_UX01J.js",
+      "bytes": 2624,
+      "sha256": "dc1bb92347214146e4c61f5006aed007ca7b643b4598e421ae87c09e1ac67a41"
+    },
+    {
+      "path": "chapter-atlas/assets/LabRoom23Journey-DJn8lr8t.js",
+      "bytes": 2626,
+      "sha256": "7b31e69c8eba6c0caf01d01eac0ab5e57814b9e814e2a06cdd1e88016b17b316"
+    },
+    {
+      "path": "chapter-atlas/assets/LabRoom24Journey-CFckj1sz.js",
+      "bytes": 3453,
+      "sha256": "15ac832eb5f484cc92dc979f643c2846763bae596bbfcbe37836c7838271d129"
+    },
+    {
+      "path": "chapter-atlas/assets/LabRoom25Journey-Dsc4dFcD.js",
+      "bytes": 3447,
+      "sha256": "6494b0e4ae0b006dc8b303bf0639916cc2ac95d1ff700bde74e9f91629758e0c"
+    },
+    {
+      "path": "chapter-atlas/assets/LabRoom26Journey-D5Lhf6Yz.js",
+      "bytes": 4194,
+      "sha256": "f568e01fcbf2e28f9bf1d89aa1d8e83df957bb60ea13a63a77cab81b61577e74"
+    },
+    {
+      "path": "chapter-atlas/assets/LabRoom27Journey-CtMoXjWq.js",
+      "bytes": 3350,
+      "sha256": "ea4e62a0eed62998b64515b56db65142d1a7d3fb8d5c91b6e31653c5ef4422b5"
+    },
+    {
+      "path": "chapter-atlas/assets/LabRoom28Journey-BKtIeHL7.js",
+      "bytes": 2721,
+      "sha256": "00bcb74736a0de9b300d8ff110461041bb4a4d62091877b3ce680cc4dc7a25fc"
+    },
+    {
+      "path": "chapter-atlas/assets/LabRoom29Journey-FXLiWbZf.js",
+      "bytes": 2592,
+      "sha256": "625138692ba0641ed1ea63e7bb6ea332c70bf235ee3bc8b3cbd80456012e04ef"
+    },
+    {
+      "path": "chapter-atlas/assets/LabRoom30Journey-zAsFaYdh.js",
+      "bytes": 3762,
+      "sha256": "1d260d8e49e983b2f7a9c354898fe771c41df56434d67e203bd8fb51bbc8f925"
+    },
+    {
+      "path": "chapter-atlas/assets/LabSingularityJourney-BmJ0xHXK.js",
+      "bytes": 17459,
+      "sha256": "7dc56bd8f5cc17ca3856d08c7ba990cfad49fb93f7d9c2a43ab53cc60769fcc7"
+    },
+    {
+      "path": "chapter-atlas/assets/LabSiphonObservatoryJourney-CxUnWMhI.js",
+      "bytes": 2734,
+      "sha256": "97f5b21dd5f735fb613db1d4e791bb334c2618876c1b5665c1717fd7f0b58913"
+    },
+    {
+      "path": "chapter-atlas/assets/LabTowerJourney-DvC8wGlh.js",
+      "bytes": 31405,
+      "sha256": "9cd1505c190e46abb9398fad7a0541d7ea47f39fa8fc251ca43da9cc41e00260"
+    },
+    {
+      "path": "chapter-atlas/assets/LabV8Journey-ljAmzfZ1.js",
+      "bytes": 15829,
+      "sha256": "588b29b5f798280873c2e43a57c0110e4b571eff4c3fe917d5cf3fa75c7fe2b9"
+    },
+    {
+      "path": "chapter-atlas/assets/LabWorkshopJourney-BsGmoQQr.js",
+      "bytes": 7249,
+      "sha256": "6168d807763ad86a4e9114d45485639f0f9c37fa80d21589ea1910e663d85d3b"
+    },
+    {
+      "path": "chapter-atlas/assets/index-BL3PzAPt.css",
+      "bytes": 47378,
+      "sha256": "245ee1a808345a8000d2cd1bfc208f163a81f76506f7fc1f9dcbb284d7be53bf"
+    },
+    {
+      "path": "chapter-atlas/assets/index-Db5O-lBP.js",
+      "bytes": 1696025,
+      "sha256": "78ffa19c57279ec5e4c6db7f7cd1581e249bf582e94984d574d98986989d3568"
+    },
+    {
+      "path": "chapter-atlas/build-info.json",
+      "bytes": 4787,
+      "sha256": "4d36c823e7dcbbfbea9d29c04b4de5189b0b390d93c6904ed15dd834e20d66d1"
+    },
+    {
+      "path": "chapter-atlas/draco/draco_decoder.js",
+      "bytes": 719410,
+      "sha256": "30e4d486fa020737af10e3c56197693e5b904bdc05b8bfa5d7b06751dec6da04"
+    },
+    {
+      "path": "chapter-atlas/draco/draco_decoder.wasm",
+      "bytes": 285747,
+      "sha256": "c55a594e8ffd18426d36b27fea9618af3df5e173640a3e56d46f09d76f0574f2"
+    },
+    {
+      "path": "chapter-atlas/draco/draco_wasm_wrapper.js",
+      "bytes": 58763,
+      "sha256": "e8049906ef3f8f75d3456c22a3f31bfdfe5b5b5bd09ccdec613b9e9a49d554d8"
+    },
+    {
+      "path": "chapter-atlas/index.html",
+      "bytes": 13557,
+      "sha256": "0811778b1b8e3842c13c2fe6c3c9c80b941bf955c660f67be5a70d5bba6d04b1"
+    },
+    {
+      "path": "chapter-atlas/models/runtime/manifest.json",
+      "bytes": 2421,
+      "sha256": "8806346ed3ac0fb096aa26321d5620c16a6a2a55f2523023fb21f6c4749fe2ed"
+    },
+    {
+      "path": "chapter-atlas/models/runtime/model-01-player.glb",
+      "bytes": 549756,
+      "sha256": "e5b09ff0281377b679d6fdd505fa1ed89550bb662e94e7f593ed67ee50a66a91"
+    },
+    {
+      "path": "chapter-atlas/models/runtime/model-02-cargo.glb",
+      "bytes": 510376,
+      "sha256": "65763c87e7f14cc807cffa8fc2adc364e8421dae819271a0c406a6b0d2c8c697"
+    },
+    {
+      "path": "chapter-atlas/models/runtime/model-11-portal-gun.glb",
+      "bytes": 393116,
+      "sha256": "d8c76c41efbbf0a6d70e30ab5a7b70f49fd806e497f67ea06cb28f9f4edca1d7"
+    },
+    {
+      "path": "chapter-atlas/models/runtime/model-19-lift-platform.glb",
+      "bytes": 404076,
+      "sha256": "afd039e831ff0baa514f076a505ffbb7c57dac2251959b3d858fc92dcf3d04b9"
+    },
+    {
+      "path": "chapter-atlas/models/runtime/model-22-terminal.glb",
+      "bytes": 377108,
+      "sha256": "9e2f4ff758996f67596d3935041f632bafdf7e84efd4869341920b64a5919c26"
+    },
+    {
+      "path": "chapter-atlas/models/runtime/model-23-floor-tile.glb",
+      "bytes": 103600,
+      "sha256": "0950bc6ef31bb28939087bad53695f21cde0b9fe5740394df202a0b242f77b0c"
+    },
+    {
+      "path": "chapter-atlas/models/runtime/model-24-wall-panel.glb",
+      "bytes": 62448,
+      "sha256": "15aaca48f6e436d5e89abf7548c0fe43580bba8faff4619e476d3a6d306b004d"
+    },
+    {
+      "path": "chapter-atlas/models/runtime/model-28-rotating-panel.glb",
+      "bytes": 366120,
+      "sha256": "3159916bad63903e73b8e660ce4aab8a3b1e38f1231152b68f3df63d6987ac4b"
+    },
+    {
+      "path": "chapter-atlas/models/runtime/model-29-pressure-platform.glb",
+      "bytes": 390244,
+      "sha256": "ee65bd9706ad4f4658e54ec5ad8f6f45b24d9027e4e6072f162358a4c1b3291b"
+    },
+    {
+      "path": "chapter-atlas/models/runtime/model-31-wind-generator.glb",
+      "bytes": 25768,
+      "sha256": "024f25db27e96e1efdaa5e200c13a665dee487e798338f86fef985feeae9019e"
+    },
+    {
+      "path": "chapter-atlas/models/runtime/model-32-spring-ram.glb",
+      "bytes": 25400,
+      "sha256": "958d5ed533736d5779da078be20ae2b0e84212bfc3a00b456dc0106bc0a093d7"
+    },
+    {
+      "path": "chapter-atlas/models/runtime/model-35-shutter-fan.glb",
+      "bytes": 27816,
+      "sha256": "8e11d5ab83250348f6e08f034ec87d82727162742d5a7be18f981fc523aa907a"
+    },
+    {
+      "path": "chapter-atlas/models/runtime/model-37-extension-bridge.glb",
+      "bytes": 25764,
+      "sha256": "96173a9ef89375066b08fad8dff1928425863c6b4e6b8c0373c497448f109c55"
+    },
+    {
+      "path": "chapter-atlas/models/runtime/model-39-cable-winch.glb",
+      "bytes": 28608,
+      "sha256": "301f148938ec83e2a8f4b45c7f9bdfd19fb40ca79d8fb9abc7601caf4fe0eafd"
+    },
+    {
+      "path": "chapter-atlas/replacement-report.json",
+      "bytes": 71548,
+      "sha256": "9fafe51ddecab59b7d2c6264c8f703b0539d68eb5262067fe622cb2ba72c8e15"
+    },
+    {
+      "path": "chapter-atlas/walkthroughs.html",
+      "bytes": 2947,
+      "sha256": "a2b186744f8950bd43a4f98abf2ba50468654095e648289e215d22594172bbdf"
+    },
+    {
+      "path": "chapter-atlas/walkthroughs/level-33-finish.jpg",
+      "bytes": 33875,
+      "sha256": "395aba89a4aeffcdd38bba9f2e54663a3ebd9f69641ae521d9a232a72855c63d"
+    },
+    {
+      "path": "chapter-atlas/walkthroughs/level-33.jpg",
+      "bytes": 42336,
+      "sha256": "8f6fd9edc75d7039a30bbbf581ec37ee83d3175dc6856751a01e6a2a424ee1c2"
+    },
+    {
+      "path": "chapter-atlas/walkthroughs/level-33.json",
+      "bytes": 6614,
+      "sha256": "fbaa8ea831e4246335b7e89ee8908b9158dffddf34b2bc91a692ffe3e03f901d"
+    },
+    {
+      "path": "chapter-atlas/walkthroughs/level-33.mp4",
+      "bytes": 2537371,
+      "sha256": "9361f975e90a556bb83e2a5d59def43a361080902ccd5d51758bc3eafa2c6b77"
+    },
+    {
+      "path": "chapter-atlas/walkthroughs/level-51-finish.jpg",
+      "bytes": 27044,
+      "sha256": "c391db80c0983c61c64953b52869382a29034f26f74a5d44b0cb5491f428cd9c"
+    },
+    {
+      "path": "chapter-atlas/walkthroughs/level-51.jpg",
+      "bytes": 41434,
+      "sha256": "2051a9aad5398593471ac7dc3c580c118d97695a66fb6e31056fab58aa2641b9"
+    },
+    {
+      "path": "chapter-atlas/walkthroughs/level-51.json",
+      "bytes": 46032,
+      "sha256": "df866d900982dc5421b9425dc6aff755914ed55ec97d728f33605f8b3c0f9337"
+    },
+    {
+      "path": "chapter-atlas/walkthroughs/level-51.mp4",
+      "bytes": 1549095,
+      "sha256": "e341281b72d534895155f1b80738b1de3885baa318cdf92b4716d631c6732f83"
+    },
+    {
+      "path": "draco/draco_decoder.js",
+      "bytes": 719410,
+      "sha256": "30e4d486fa020737af10e3c56197693e5b904bdc05b8bfa5d7b06751dec6da04"
+    },
+    {
+      "path": "draco/draco_decoder.wasm",
+      "bytes": 285747,
+      "sha256": "c55a594e8ffd18426d36b27fea9618af3df5e173640a3e56d46f09d76f0574f2"
+    },
+    {
+      "path": "draco/draco_wasm_wrapper.js",
+      "bytes": 58763,
+      "sha256": "e8049906ef3f8f75d3456c22a3f31bfdfe5b5b5bd09ccdec613b9e9a49d554d8"
+    },
+    {
+      "path": "expedition-release.json",
+      "bytes": 274774,
+      "sha256": "4b25480f540789f4538538158e2c987d582f1d4c19920e8bfd4dc8ae9e32b0bb"
+    },
+    {
+      "path": "index.html",
+      "bytes": 11118,
+      "sha256": "2a3e6d51a76caa7b35b99166d4d37ca94c8fde89867be130f7ace23dc5e5d8e8"
+    },
+    {
+      "path": "models/runtime/manifest.json",
+      "bytes": 2421,
+      "sha256": "8806346ed3ac0fb096aa26321d5620c16a6a2a55f2523023fb21f6c4749fe2ed"
+    },
+    {
+      "path": "models/runtime/model-01-player.glb",
+      "bytes": 549756,
+      "sha256": "e5b09ff0281377b679d6fdd505fa1ed89550bb662e94e7f593ed67ee50a66a91"
+    },
+    {
+      "path": "models/runtime/model-02-cargo.glb",
+      "bytes": 510376,
+      "sha256": "65763c87e7f14cc807cffa8fc2adc364e8421dae819271a0c406a6b0d2c8c697"
+    },
+    {
+      "path": "models/runtime/model-11-portal-gun.glb",
+      "bytes": 393116,
+      "sha256": "d8c76c41efbbf0a6d70e30ab5a7b70f49fd806e497f67ea06cb28f9f4edca1d7"
+    },
+    {
+      "path": "models/runtime/model-19-lift-platform.glb",
+      "bytes": 404076,
+      "sha256": "afd039e831ff0baa514f076a505ffbb7c57dac2251959b3d858fc92dcf3d04b9"
+    },
+    {
+      "path": "models/runtime/model-22-terminal.glb",
+      "bytes": 377108,
+      "sha256": "9e2f4ff758996f67596d3935041f632bafdf7e84efd4869341920b64a5919c26"
+    },
+    {
+      "path": "models/runtime/model-23-floor-tile.glb",
+      "bytes": 103600,
+      "sha256": "0950bc6ef31bb28939087bad53695f21cde0b9fe5740394df202a0b242f77b0c"
+    },
+    {
+      "path": "models/runtime/model-24-wall-panel.glb",
+      "bytes": 62448,
+      "sha256": "15aaca48f6e436d5e89abf7548c0fe43580bba8faff4619e476d3a6d306b004d"
+    },
+    {
+      "path": "models/runtime/model-28-rotating-panel.glb",
+      "bytes": 366120,
+      "sha256": "3159916bad63903e73b8e660ce4aab8a3b1e38f1231152b68f3df63d6987ac4b"
+    },
+    {
+      "path": "models/runtime/model-29-pressure-platform.glb",
+      "bytes": 390244,
+      "sha256": "ee65bd9706ad4f4658e54ec5ad8f6f45b24d9027e4e6072f162358a4c1b3291b"
+    },
+    {
+      "path": "models/runtime/model-31-wind-generator.glb",
+      "bytes": 25768,
+      "sha256": "024f25db27e96e1efdaa5e200c13a665dee487e798338f86fef985feeae9019e"
+    },
+    {
+      "path": "models/runtime/model-32-spring-ram.glb",
+      "bytes": 25400,
+      "sha256": "958d5ed533736d5779da078be20ae2b0e84212bfc3a00b456dc0106bc0a093d7"
+    },
+    {
+      "path": "models/runtime/model-35-shutter-fan.glb",
+      "bytes": 27816,
+      "sha256": "8e11d5ab83250348f6e08f034ec87d82727162742d5a7be18f981fc523aa907a"
+    },
+    {
+      "path": "models/runtime/model-37-extension-bridge.glb",
+      "bytes": 25764,
+      "sha256": "96173a9ef89375066b08fad8dff1928425863c6b4e6b8c0373c497448f109c55"
+    },
+    {
+      "path": "models/runtime/model-39-cable-winch.glb",
+      "bytes": 28608,
+      "sha256": "301f148938ec83e2a8f4b45c7f9bdfd19fb40ca79d8fb9abc7601caf4fe0eafd"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/assets/LabAnimationJourney-DBKGoZSI.js",
+      "bytes": 3040,
+      "sha256": "22d0da5cb386ed5407064e0c92cbe39e16fd7f54986421236394032e13f79860"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/assets/LabCreativeRoom18Journey-Bgl7-RUf.js",
+      "bytes": 3303,
+      "sha256": "c07b0315f2c78991d067e95e5b9b2f29755494ff8478712d4f4dc0694afa2cdf"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/assets/LabCreativeRoom20Journey-CKN9SvaR.js",
+      "bytes": 3418,
+      "sha256": "7e001aedabf0a8eca7f58ba41bab5bce2ab471eb3643c9ce711e094651713cef"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/assets/LabExtendedJourney-UAUiVa7E.js",
+      "bytes": 9252,
+      "sha256": "8093c21fe94413d424cedd43ccdcf0edc88b44d5198f95e761aeb7664539d679"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/assets/LabFoundationJourney-CUW7l1Ug.js",
+      "bytes": 9043,
+      "sha256": "2f7a2a0d9b1a37e008741c5f315562790df3903bbb86a6912e45ebe376b7dc4b"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/assets/LabIntroductoryAlternates-DcdsCClA.js",
+      "bytes": 1341,
+      "sha256": "a6451adc49d9c2f86f43455bfa4ced44d7166234f4fde82082990bf21f76cd5c"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/assets/LabLateCampaignAim-BU37-7NZ.js",
+      "bytes": 753,
+      "sha256": "fa29d9348fc6f06b457e0eb3402f5dfe3cd7ce4880e1d024cfc2147803b9e2fe"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/assets/LabOpenJourney-Dva7z5Dc.js",
+      "bytes": 6285,
+      "sha256": "5f5343b9b4ab99ca68145fb55bbac986ffc0040a83b158334f81c2a8d12914ac"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/assets/LabPortalEdgeJourney-kYCmQvSl.js",
+      "bytes": 2293,
+      "sha256": "cf15723d3688cced27e3686b5129f68ef15579d810ed2d4d8c0d06a1c09dbe55"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/assets/LabPortalFloorJourney-CDBLyZxc.js",
+      "bytes": 1516,
+      "sha256": "5420c93efe9c6f7d9b2b45bf8f143147c0db448722fdaa1af94fcf9936b4eba9"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/assets/LabPostJourneyA-D_VrvyGQ.js",
+      "bytes": 14134,
+      "sha256": "5ed81b5f6e404630c7a0ec05605709ef41ca6c1686ff815a5c4e9d5e69428856"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/assets/LabPostJourneyB-CImaoub8.js",
+      "bytes": 10887,
+      "sha256": "c132edc8f393faa0e7d5572100d34d0ae677ede706ccef3b9de90ad26e456521"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/assets/LabResearchJourney-B081KaQQ.js",
+      "bytes": 7650,
+      "sha256": "6fdbb22187793266f8e3d5e80ce59f86149a6b9ebc2d3dd218bce7e4b323f7ee"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/assets/LabRoom13Journey-DpkZeNEo.js",
+      "bytes": 6194,
+      "sha256": "275c62befc9b95dc4c596810721ffba02b137b24ad14006e4769f1c7f21bc041"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/assets/LabRoom14Journey-C0UfonIt.js",
+      "bytes": 3566,
+      "sha256": "78d7d18c3f30e1eeb07f563356dfdf3f6c54f20246c10efd9f6a00f7ecedc5f5"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/assets/LabRoom15Journey-CWyVNUXe.js",
+      "bytes": 4604,
+      "sha256": "8765bbd996f52aa20eeea21fda7ca2e9ed6778fc43bd62ccd051ee57da735f4b"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/assets/LabRoom16Journey-DcT0PHn1.js",
+      "bytes": 2534,
+      "sha256": "43814ce0e94d01e0e2b9152c6ea1c722073f13a019b2992525f6b0480fa97e74"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/assets/LabRoom17Journey-C2EE7523.js",
+      "bytes": 3260,
+      "sha256": "b621bf8abcb99cec72e5a8b0ef53e4ef6a005e414141e9502855a2759ba02708"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/assets/LabRoom18Journey-DdtGr0KS.js",
+      "bytes": 6065,
+      "sha256": "5a4c21cea50ca780d2e956f42c6e0488e9c612173d6b833b5b1f07faf91007dc"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/assets/LabRoom19Journey-BVk2pOJ3.js",
+      "bytes": 3087,
+      "sha256": "edbd9e87a7c68f527a6a6d6794cfcb3a8de5780d1c656265ccf7910207066ab4"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/assets/LabRoom20Journey-Dnjdo837.js",
+      "bytes": 5013,
+      "sha256": "84ee4a4debf18d555e80bbf468821d58576e6fcf805b34adcd2670e8502fc0fd"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/assets/LabRoom21Journey-7Wc-ohMh.js",
+      "bytes": 5077,
+      "sha256": "b265e2288ce4c3a4ad06ce255c86fc4dbb19596974c9065d385f89631b321c0b"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/assets/LabRoom22Journey-DY-4_S3x.js",
+      "bytes": 2624,
+      "sha256": "15eed8474138a2cd46f99d6260c94f79ceb590ef4e1278c5f379345c489c80c5"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/assets/LabRoom23Journey-DzJ92gh3.js",
+      "bytes": 2626,
+      "sha256": "93907d707a8c1ca9fec3901b9c47107f6ed346189737609e4476da1eb1d5cd96"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/assets/LabRoom24Journey-B2revVt1.js",
+      "bytes": 3453,
+      "sha256": "4f975b90e0df42432fcc271dc186475ce7c32703ff34179b0bfa88407cb03d13"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/assets/LabRoom25Journey-Dsc4dFcD.js",
+      "bytes": 3447,
+      "sha256": "6494b0e4ae0b006dc8b303bf0639916cc2ac95d1ff700bde74e9f91629758e0c"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/assets/LabRoom26Journey-D5Lhf6Yz.js",
+      "bytes": 4194,
+      "sha256": "f568e01fcbf2e28f9bf1d89aa1d8e83df957bb60ea13a63a77cab81b61577e74"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/assets/LabRoom27Journey-CtMoXjWq.js",
+      "bytes": 3350,
+      "sha256": "ea4e62a0eed62998b64515b56db65142d1a7d3fb8d5c91b6e31653c5ef4422b5"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/assets/LabRoom28Journey-BKtIeHL7.js",
+      "bytes": 2721,
+      "sha256": "00bcb74736a0de9b300d8ff110461041bb4a4d62091877b3ce680cc4dc7a25fc"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/assets/LabRoom29Journey-FXLiWbZf.js",
+      "bytes": 2592,
+      "sha256": "625138692ba0641ed1ea63e7bb6ea332c70bf235ee3bc8b3cbd80456012e04ef"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/assets/LabRoom30Journey-zAsFaYdh.js",
+      "bytes": 3762,
+      "sha256": "1d260d8e49e983b2f7a9c354898fe771c41df56434d67e203bd8fb51bbc8f925"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/assets/LabSingularityJourney-CR4rH8a2.js",
+      "bytes": 17459,
+      "sha256": "3c27985e042b83cc0a132584100159f7e1349eb94760083de7627113d5afee28"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/assets/LabTowerJourney-DKntvW_C.js",
+      "bytes": 31405,
+      "sha256": "dc95a5a9d0785b4b1834f99808121be5cdb94b9702f64da5cfe4fd4a237aadcc"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/assets/LabV8Journey-CBbt3pg6.js",
+      "bytes": 14253,
+      "sha256": "9ef6969a265b6c4c8e9ca6d55d6a8fda4d2d10a0321e80c25cc19318b382db3c"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/assets/LabWorkshopJourney-DUer24jf.js",
+      "bytes": 7249,
+      "sha256": "78327411f09580606b83c536009c81a04abd489179aa94ba2d857b346de406d4"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/assets/index-Ceirmw-4.js",
+      "bytes": 1609274,
+      "sha256": "7000947594d6a83d02f988adf0d5b18c4c189d49e2b717e15a01af4ceb2a499e"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/assets/index-DRc3SoOH.css",
+      "bytes": 18584,
+      "sha256": "a0d4cb7d4107b0a89c9314c3b12e63a2044899bc1419a9437fe52771d3952bf9"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/build-info.json",
+      "bytes": 4472,
+      "sha256": "3cb30e1f00cc0083bcd84a8f46efcdd21d9dab7f852eb5ccf756b8be176afe2a"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/draco/draco_decoder.js",
+      "bytes": 719410,
+      "sha256": "30e4d486fa020737af10e3c56197693e5b904bdc05b8bfa5d7b06751dec6da04"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/draco/draco_decoder.wasm",
+      "bytes": 285747,
+      "sha256": "c55a594e8ffd18426d36b27fea9618af3df5e173640a3e56d46f09d76f0574f2"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/draco/draco_wasm_wrapper.js",
+      "bytes": 58763,
+      "sha256": "e8049906ef3f8f75d3456c22a3f31bfdfe5b5b5bd09ccdec613b9e9a49d554d8"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/index.html",
+      "bytes": 9736,
+      "sha256": "99d8ce9cfa3d2f619ae837d36c82b39ce98c3aa6cdb866a459e41f32a71f91d8"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/models/runtime/manifest.json",
+      "bytes": 2421,
+      "sha256": "8806346ed3ac0fb096aa26321d5620c16a6a2a55f2523023fb21f6c4749fe2ed"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/models/runtime/model-01-player.glb",
+      "bytes": 549756,
+      "sha256": "e5b09ff0281377b679d6fdd505fa1ed89550bb662e94e7f593ed67ee50a66a91"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/models/runtime/model-02-cargo.glb",
+      "bytes": 510376,
+      "sha256": "65763c87e7f14cc807cffa8fc2adc364e8421dae819271a0c406a6b0d2c8c697"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/models/runtime/model-11-portal-gun.glb",
+      "bytes": 393116,
+      "sha256": "d8c76c41efbbf0a6d70e30ab5a7b70f49fd806e497f67ea06cb28f9f4edca1d7"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/models/runtime/model-19-lift-platform.glb",
+      "bytes": 404076,
+      "sha256": "afd039e831ff0baa514f076a505ffbb7c57dac2251959b3d858fc92dcf3d04b9"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/models/runtime/model-22-terminal.glb",
+      "bytes": 377108,
+      "sha256": "9e2f4ff758996f67596d3935041f632bafdf7e84efd4869341920b64a5919c26"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/models/runtime/model-23-floor-tile.glb",
+      "bytes": 103600,
+      "sha256": "0950bc6ef31bb28939087bad53695f21cde0b9fe5740394df202a0b242f77b0c"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/models/runtime/model-24-wall-panel.glb",
+      "bytes": 62448,
+      "sha256": "15aaca48f6e436d5e89abf7548c0fe43580bba8faff4619e476d3a6d306b004d"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/models/runtime/model-28-rotating-panel.glb",
+      "bytes": 366120,
+      "sha256": "3159916bad63903e73b8e660ce4aab8a3b1e38f1231152b68f3df63d6987ac4b"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/models/runtime/model-29-pressure-platform.glb",
+      "bytes": 390244,
+      "sha256": "ee65bd9706ad4f4658e54ec5ad8f6f45b24d9027e4e6072f162358a4c1b3291b"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/models/runtime/model-31-wind-generator.glb",
+      "bytes": 25768,
+      "sha256": "024f25db27e96e1efdaa5e200c13a665dee487e798338f86fef985feeae9019e"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/models/runtime/model-32-spring-ram.glb",
+      "bytes": 25400,
+      "sha256": "958d5ed533736d5779da078be20ae2b0e84212bfc3a00b456dc0106bc0a093d7"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/models/runtime/model-35-shutter-fan.glb",
+      "bytes": 27816,
+      "sha256": "8e11d5ab83250348f6e08f034ec87d82727162742d5a7be18f981fc523aa907a"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/models/runtime/model-37-extension-bridge.glb",
+      "bytes": 25764,
+      "sha256": "96173a9ef89375066b08fad8dff1928425863c6b4e6b8c0373c497448f109c55"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/models/runtime/model-39-cable-winch.glb",
+      "bytes": 28608,
+      "sha256": "301f148938ec83e2a8f4b45c7f9bdfd19fb40ca79d8fb9abc7601caf4fe0eafd"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/tower-singularity/assets/LabAnimationJourney-DBKGoZSI.js",
+      "bytes": 3040,
+      "sha256": "22d0da5cb386ed5407064e0c92cbe39e16fd7f54986421236394032e13f79860"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/tower-singularity/assets/LabCreativeRoom18Journey-Bgl7-RUf.js",
+      "bytes": 3303,
+      "sha256": "c07b0315f2c78991d067e95e5b9b2f29755494ff8478712d4f4dc0694afa2cdf"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/tower-singularity/assets/LabCreativeRoom20Journey-CKN9SvaR.js",
+      "bytes": 3418,
+      "sha256": "7e001aedabf0a8eca7f58ba41bab5bce2ab471eb3643c9ce711e094651713cef"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/tower-singularity/assets/LabExtendedJourney-UAUiVa7E.js",
+      "bytes": 9252,
+      "sha256": "8093c21fe94413d424cedd43ccdcf0edc88b44d5198f95e761aeb7664539d679"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/tower-singularity/assets/LabFoundationJourney-CUW7l1Ug.js",
+      "bytes": 9043,
+      "sha256": "2f7a2a0d9b1a37e008741c5f315562790df3903bbb86a6912e45ebe376b7dc4b"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/tower-singularity/assets/LabIntroductoryAlternates-DcdsCClA.js",
+      "bytes": 1341,
+      "sha256": "a6451adc49d9c2f86f43455bfa4ced44d7166234f4fde82082990bf21f76cd5c"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/tower-singularity/assets/LabLateCampaignAim-BU37-7NZ.js",
+      "bytes": 753,
+      "sha256": "fa29d9348fc6f06b457e0eb3402f5dfe3cd7ce4880e1d024cfc2147803b9e2fe"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/tower-singularity/assets/LabOpenJourney-Dva7z5Dc.js",
+      "bytes": 6285,
+      "sha256": "5f5343b9b4ab99ca68145fb55bbac986ffc0040a83b158334f81c2a8d12914ac"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/tower-singularity/assets/LabPortalEdgeJourney-kYCmQvSl.js",
+      "bytes": 2293,
+      "sha256": "cf15723d3688cced27e3686b5129f68ef15579d810ed2d4d8c0d06a1c09dbe55"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/tower-singularity/assets/LabPortalFloorJourney-CDBLyZxc.js",
+      "bytes": 1516,
+      "sha256": "5420c93efe9c6f7d9b2b45bf8f143147c0db448722fdaa1af94fcf9936b4eba9"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/tower-singularity/assets/LabPostJourneyA-D_VrvyGQ.js",
+      "bytes": 14134,
+      "sha256": "5ed81b5f6e404630c7a0ec05605709ef41ca6c1686ff815a5c4e9d5e69428856"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/tower-singularity/assets/LabPostJourneyB-CImaoub8.js",
+      "bytes": 10887,
+      "sha256": "c132edc8f393faa0e7d5572100d34d0ae677ede706ccef3b9de90ad26e456521"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/tower-singularity/assets/LabResearchJourney-B081KaQQ.js",
+      "bytes": 7650,
+      "sha256": "6fdbb22187793266f8e3d5e80ce59f86149a6b9ebc2d3dd218bce7e4b323f7ee"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/tower-singularity/assets/LabRoom13Journey-DpkZeNEo.js",
+      "bytes": 6194,
+      "sha256": "275c62befc9b95dc4c596810721ffba02b137b24ad14006e4769f1c7f21bc041"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/tower-singularity/assets/LabRoom14Journey-C0UfonIt.js",
+      "bytes": 3566,
+      "sha256": "78d7d18c3f30e1eeb07f563356dfdf3f6c54f20246c10efd9f6a00f7ecedc5f5"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/tower-singularity/assets/LabRoom15Journey-CWyVNUXe.js",
+      "bytes": 4604,
+      "sha256": "8765bbd996f52aa20eeea21fda7ca2e9ed6778fc43bd62ccd051ee57da735f4b"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/tower-singularity/assets/LabRoom16Journey-DcT0PHn1.js",
+      "bytes": 2534,
+      "sha256": "43814ce0e94d01e0e2b9152c6ea1c722073f13a019b2992525f6b0480fa97e74"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/tower-singularity/assets/LabRoom17Journey-C2EE7523.js",
+      "bytes": 3260,
+      "sha256": "b621bf8abcb99cec72e5a8b0ef53e4ef6a005e414141e9502855a2759ba02708"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/tower-singularity/assets/LabRoom18Journey-DdtGr0KS.js",
+      "bytes": 6065,
+      "sha256": "5a4c21cea50ca780d2e956f42c6e0488e9c612173d6b833b5b1f07faf91007dc"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/tower-singularity/assets/LabRoom19Journey-BVk2pOJ3.js",
+      "bytes": 3087,
+      "sha256": "edbd9e87a7c68f527a6a6d6794cfcb3a8de5780d1c656265ccf7910207066ab4"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/tower-singularity/assets/LabRoom20Journey-Dnjdo837.js",
+      "bytes": 5013,
+      "sha256": "84ee4a4debf18d555e80bbf468821d58576e6fcf805b34adcd2670e8502fc0fd"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/tower-singularity/assets/LabRoom21Journey-7Wc-ohMh.js",
+      "bytes": 5077,
+      "sha256": "b265e2288ce4c3a4ad06ce255c86fc4dbb19596974c9065d385f89631b321c0b"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/tower-singularity/assets/LabRoom22Journey-DY-4_S3x.js",
+      "bytes": 2624,
+      "sha256": "15eed8474138a2cd46f99d6260c94f79ceb590ef4e1278c5f379345c489c80c5"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/tower-singularity/assets/LabRoom23Journey-DzJ92gh3.js",
+      "bytes": 2626,
+      "sha256": "93907d707a8c1ca9fec3901b9c47107f6ed346189737609e4476da1eb1d5cd96"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/tower-singularity/assets/LabRoom24Journey-B2revVt1.js",
+      "bytes": 3453,
+      "sha256": "4f975b90e0df42432fcc271dc186475ce7c32703ff34179b0bfa88407cb03d13"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/tower-singularity/assets/LabRoom25Journey-Dsc4dFcD.js",
+      "bytes": 3447,
+      "sha256": "6494b0e4ae0b006dc8b303bf0639916cc2ac95d1ff700bde74e9f91629758e0c"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/tower-singularity/assets/LabRoom26Journey-D5Lhf6Yz.js",
+      "bytes": 4194,
+      "sha256": "f568e01fcbf2e28f9bf1d89aa1d8e83df957bb60ea13a63a77cab81b61577e74"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/tower-singularity/assets/LabRoom27Journey-CtMoXjWq.js",
+      "bytes": 3350,
+      "sha256": "ea4e62a0eed62998b64515b56db65142d1a7d3fb8d5c91b6e31653c5ef4422b5"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/tower-singularity/assets/LabRoom28Journey-BKtIeHL7.js",
+      "bytes": 2721,
+      "sha256": "00bcb74736a0de9b300d8ff110461041bb4a4d62091877b3ce680cc4dc7a25fc"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/tower-singularity/assets/LabRoom29Journey-FXLiWbZf.js",
+      "bytes": 2592,
+      "sha256": "625138692ba0641ed1ea63e7bb6ea332c70bf235ee3bc8b3cbd80456012e04ef"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/tower-singularity/assets/LabRoom30Journey-zAsFaYdh.js",
+      "bytes": 3762,
+      "sha256": "1d260d8e49e983b2f7a9c354898fe771c41df56434d67e203bd8fb51bbc8f925"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/tower-singularity/assets/LabSingularityJourney-CR4rH8a2.js",
+      "bytes": 17459,
+      "sha256": "3c27985e042b83cc0a132584100159f7e1349eb94760083de7627113d5afee28"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/tower-singularity/assets/LabTowerJourney-DKntvW_C.js",
+      "bytes": 31405,
+      "sha256": "dc95a5a9d0785b4b1834f99808121be5cdb94b9702f64da5cfe4fd4a237aadcc"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/tower-singularity/assets/LabV8Journey-CBbt3pg6.js",
+      "bytes": 14253,
+      "sha256": "9ef6969a265b6c4c8e9ca6d55d6a8fda4d2d10a0321e80c25cc19318b382db3c"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/tower-singularity/assets/LabWorkshopJourney-DUer24jf.js",
+      "bytes": 7249,
+      "sha256": "78327411f09580606b83c536009c81a04abd489179aa94ba2d857b346de406d4"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/tower-singularity/assets/index-Ceirmw-4.js",
+      "bytes": 1609274,
+      "sha256": "7000947594d6a83d02f988adf0d5b18c4c189d49e2b717e15a01af4ceb2a499e"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/tower-singularity/assets/index-DRc3SoOH.css",
+      "bytes": 18584,
+      "sha256": "a0d4cb7d4107b0a89c9314c3b12e63a2044899bc1419a9437fe52771d3952bf9"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/tower-singularity/build-info.json",
+      "bytes": 4472,
+      "sha256": "3cb30e1f00cc0083bcd84a8f46efcdd21d9dab7f852eb5ccf756b8be176afe2a"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/tower-singularity/draco/draco_decoder.js",
+      "bytes": 719410,
+      "sha256": "30e4d486fa020737af10e3c56197693e5b904bdc05b8bfa5d7b06751dec6da04"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/tower-singularity/draco/draco_decoder.wasm",
+      "bytes": 285747,
+      "sha256": "c55a594e8ffd18426d36b27fea9618af3df5e173640a3e56d46f09d76f0574f2"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/tower-singularity/draco/draco_wasm_wrapper.js",
+      "bytes": 58763,
+      "sha256": "e8049906ef3f8f75d3456c22a3f31bfdfe5b5b5bd09ccdec613b9e9a49d554d8"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/tower-singularity/index.html",
+      "bytes": 9736,
+      "sha256": "99d8ce9cfa3d2f619ae837d36c82b39ce98c3aa6cdb866a459e41f32a71f91d8"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/tower-singularity/models/runtime/manifest.json",
+      "bytes": 2421,
+      "sha256": "8806346ed3ac0fb096aa26321d5620c16a6a2a55f2523023fb21f6c4749fe2ed"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/tower-singularity/models/runtime/model-01-player.glb",
+      "bytes": 549756,
+      "sha256": "e5b09ff0281377b679d6fdd505fa1ed89550bb662e94e7f593ed67ee50a66a91"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/tower-singularity/models/runtime/model-02-cargo.glb",
+      "bytes": 510376,
+      "sha256": "65763c87e7f14cc807cffa8fc2adc364e8421dae819271a0c406a6b0d2c8c697"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/tower-singularity/models/runtime/model-11-portal-gun.glb",
+      "bytes": 393116,
+      "sha256": "d8c76c41efbbf0a6d70e30ab5a7b70f49fd806e497f67ea06cb28f9f4edca1d7"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/tower-singularity/models/runtime/model-19-lift-platform.glb",
+      "bytes": 404076,
+      "sha256": "afd039e831ff0baa514f076a505ffbb7c57dac2251959b3d858fc92dcf3d04b9"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/tower-singularity/models/runtime/model-22-terminal.glb",
+      "bytes": 377108,
+      "sha256": "9e2f4ff758996f67596d3935041f632bafdf7e84efd4869341920b64a5919c26"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/tower-singularity/models/runtime/model-23-floor-tile.glb",
+      "bytes": 103600,
+      "sha256": "0950bc6ef31bb28939087bad53695f21cde0b9fe5740394df202a0b242f77b0c"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/tower-singularity/models/runtime/model-24-wall-panel.glb",
+      "bytes": 62448,
+      "sha256": "15aaca48f6e436d5e89abf7548c0fe43580bba8faff4619e476d3a6d306b004d"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/tower-singularity/models/runtime/model-28-rotating-panel.glb",
+      "bytes": 366120,
+      "sha256": "3159916bad63903e73b8e660ce4aab8a3b1e38f1231152b68f3df63d6987ac4b"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/tower-singularity/models/runtime/model-29-pressure-platform.glb",
+      "bytes": 390244,
+      "sha256": "ee65bd9706ad4f4658e54ec5ad8f6f45b24d9027e4e6072f162358a4c1b3291b"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/tower-singularity/models/runtime/model-31-wind-generator.glb",
+      "bytes": 25768,
+      "sha256": "024f25db27e96e1efdaa5e200c13a665dee487e798338f86fef985feeae9019e"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/tower-singularity/models/runtime/model-32-spring-ram.glb",
+      "bytes": 25400,
+      "sha256": "958d5ed533736d5779da078be20ae2b0e84212bfc3a00b456dc0106bc0a093d7"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/tower-singularity/models/runtime/model-35-shutter-fan.glb",
+      "bytes": 27816,
+      "sha256": "8e11d5ab83250348f6e08f034ec87d82727162742d5a7be18f981fc523aa907a"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/tower-singularity/models/runtime/model-37-extension-bridge.glb",
+      "bytes": 25764,
+      "sha256": "96173a9ef89375066b08fad8dff1928425863c6b4e6b8c0373c497448f109c55"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/tower-singularity/models/runtime/model-39-cable-winch.glb",
+      "bytes": 28608,
+      "sha256": "301f148938ec83e2a8f4b45c7f9bdfd19fb40ca79d8fb9abc7601caf4fe0eafd"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/tower-singularity/native-evidence.json",
+      "bytes": 659593,
+      "sha256": "34971aeb3fdb0b0d6667e44d26e596058fae2e5d6fc7406ca71f991a04ade5db"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/tower-singularity/preview-release.json",
+      "bytes": 78195,
+      "sha256": "b348d9af1f62eaa2c16c0eb945821e7ebbde95c21772b538d8f4b104624f046c"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/tower-singularity/recording-evidence.json",
+      "bytes": 660987,
+      "sha256": "a821f742e10f18fc5dda0f71150e941ad8abeb32e9e5170462a10418db0e1eae"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/tower-singularity/ui-evidence.json",
+      "bytes": 4040,
+      "sha256": "26e9a545c5736de21725786fb2cdc285b2aabe80239aefa82109282865fca67e"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/tower-singularity/walkthrough.html",
+      "bytes": 5708,
+      "sha256": "97968cd22ec23d543d3bd6c9bc3e949fa38fad7cf06d9822cfda792b41130ac8"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/walkthroughs.html",
+      "bytes": 3709,
+      "sha256": "bea93b91b3589a08aa9f610f814c5dadc48a5f79c541c4df16ae9ab3a85d6ee3"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/walkthroughs.js",
+      "bytes": 7444,
+      "sha256": "87e5c854933a7c86cfd6637918f2ae8f66e7d30ca512e6efade2044320f59233"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/walkthroughs/level-01.jpg",
+      "bytes": 33700,
+      "sha256": "08017b6571692dc58c6f083c956b3c9b843f0893bc700ea77481da523fd68d3c"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/walkthroughs/level-01.mp4",
+      "bytes": 517377,
+      "sha256": "584c1294478f9b58726f7b66476c2166d2ddc5605aae96c2a218a51b4ccebe7a"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/walkthroughs/level-02.jpg",
+      "bytes": 26781,
+      "sha256": "994124ec411c2d11bdd6920611799587273f386d4cd29dadc27af630467caa22"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/walkthroughs/level-02.mp4",
+      "bytes": 524730,
+      "sha256": "0213e35d0b201f70732bc9b3b1e597ceacc17a3f05e27cbcb716fca72deefddf"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/walkthroughs/level-03.jpg",
+      "bytes": 39705,
+      "sha256": "371cee7f8661376353d27844a10734b991ae6a36ce5f1a30ae18da8027d64962"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/walkthroughs/level-03.mp4",
+      "bytes": 1330367,
+      "sha256": "921f4089044517e122e2751634148b48316973604d64487e416cff8080f8d313"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/walkthroughs/level-04.jpg",
+      "bytes": 27432,
+      "sha256": "cb109b19e8e0627d73da0e7a55c001f1a2f854cfd911547a1b5915b1a0b6f386"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/walkthroughs/level-04.mp4",
+      "bytes": 1075016,
+      "sha256": "8507734c3f6f5a9b832b1c4854b656acb21e9ef0606c9c4b3bc0088455cc092e"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/walkthroughs/level-05.jpg",
+      "bytes": 22007,
+      "sha256": "8a574cb46b651acd893b0da43a94c8592720321b2ef8481676276237c4c12bb5"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/walkthroughs/level-05.mp4",
+      "bytes": 2270687,
+      "sha256": "d5a81ea5909a80282dc1451add31b260d28f5db6db2a0b9b77f8d4144bc76d89"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/walkthroughs/level-06.jpg",
+      "bytes": 46853,
+      "sha256": "157c6a5a81dce7370530d538f2a7685843698ccd9e79839d244777013bfe5b3c"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/walkthroughs/level-06.mp4",
+      "bytes": 3960179,
+      "sha256": "c7277833eb9cab6c7a30338384e2c08ab411426ad3d4a3242d0a64be06b6cb86"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/walkthroughs/level-07.jpg",
+      "bytes": 55792,
+      "sha256": "94ee27176ba31ad5ff18677f81c86ba399e1d4bb5b4cc036c1cd0c1e58e6a6e5"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/walkthroughs/level-07.mp4",
+      "bytes": 6031574,
+      "sha256": "d69b817fffeaee27b7ed663ac6b85207999aaf33f7f05eb29ae66cec30392f71"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/walkthroughs/level-08.jpg",
+      "bytes": 55748,
+      "sha256": "30f9da8141a2b18dab641c473352edfa21b0bd19ebb7fd41fd3acece715449d7"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/walkthroughs/level-08.mp4",
+      "bytes": 1893266,
+      "sha256": "92d88ec5497f7b4ef5b4071d4c42e817ba970e5ff272d4b940512254b25a5aa5"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/walkthroughs/level-09.jpg",
+      "bytes": 54767,
+      "sha256": "a45c4980a12af65eddf87ef73533e66a8a0de05f7ca0239674ba80e3b9bcd640"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/walkthroughs/level-09.mp4",
+      "bytes": 3601696,
+      "sha256": "549d7ba2c0502be5e16d34010deb4847d8e69874d9f4fa2d8b42cd2fa99e4ef6"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/walkthroughs/level-10.jpg",
+      "bytes": 54290,
+      "sha256": "716a78dd3db8bbab6ba0e8951a14dae54f71c20ee91997b5d4cfcb5744bfdaa7"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/walkthroughs/level-10.mp4",
+      "bytes": 3189587,
+      "sha256": "eb233f60572433007343f082b929f324ac57fd37aa2921f8537baabef9f7671b"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/walkthroughs/level-11.jpg",
+      "bytes": 57445,
+      "sha256": "fba0aa022a99e40b9cb0e858051edd9637d590bd6686ff34a8b37760202e1c34"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/walkthroughs/level-11.mp4",
+      "bytes": 1451737,
+      "sha256": "1e55f45649f575e380aa81cdee41bb4bbce268b01d3e045453e6fd9ab520b3f4"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/walkthroughs/level-12.jpg",
+      "bytes": 54217,
+      "sha256": "e887467925d809af13870f1aa8177caf8839b7b274663917f5447575d5c5ae3b"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/walkthroughs/level-12.mp4",
+      "bytes": 9952006,
+      "sha256": "5fe518a81454dd61c21e228ae84733c24a87e74ddfe0c80e1485cfc14e01b5cc"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/walkthroughs/level-13.jpg",
+      "bytes": 42238,
+      "sha256": "e0233cb6ede34a70788dee4dcb6b845e916e92020be5a6b24d1b0361bfedf2f9"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/walkthroughs/level-13.mp4",
+      "bytes": 9362943,
+      "sha256": "8194057855b5117fd3c19ee129d60851e7e0319f0ad702030c747e6b706e9ed2"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/walkthroughs/level-14.jpg",
+      "bytes": 51516,
+      "sha256": "6f850881742df778fe2b735af87545f132a3b772454eef074ac973a7561d3c62"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/walkthroughs/level-14.mp4",
+      "bytes": 5573974,
+      "sha256": "6a59e1c08af0d447b2c56da00f61beb73d737b0c5e3571cb1385f94c3afb9678"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/walkthroughs/level-15.jpg",
+      "bytes": 39976,
+      "sha256": "2cfe663d14aad8488a20fe48ce7ad74e8bb7d9d9ae9934cb81ea3eec27726a1a"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/walkthroughs/level-15.mp4",
+      "bytes": 13813188,
+      "sha256": "24b8ee7967ffe0afb515afe27ee693ba3aec10a39ed9a7f72b344fc3a4526392"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/walkthroughs/level-16.jpg",
+      "bytes": 33890,
+      "sha256": "3fd7d4286f3af606f7f28e5ec3548746510f8ce18673272e539e3aa4803a93f9"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/walkthroughs/level-16.mp4",
+      "bytes": 8600838,
+      "sha256": "8344a68e7dbed53795168de6b7facc737fa7d47baf0d66f761dbd2039929b29c"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/walkthroughs/level-17.jpg",
+      "bytes": 34775,
+      "sha256": "1a16bba34e9baa576bd44bba9771dfc789528afc9c306727b2784ec873095763"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/walkthroughs/level-17.mp4",
+      "bytes": 9940440,
+      "sha256": "162823fabf6d6898b50b38d9ff9eef71c2c5e8b7709a6bdaadb66866ea0debe1"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/walkthroughs/level-18.jpg",
+      "bytes": 54142,
+      "sha256": "ebf8becf47dcecef194ac8c27fcbb9a842fd1b44e54d0d001fd0c8d99dff74b8"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/walkthroughs/level-18.mp4",
+      "bytes": 9320711,
+      "sha256": "8ff37a4c64045bb229e34bf854116cdf0c658a477c098f86183945156ba2497c"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/walkthroughs/level-19.jpg",
+      "bytes": 48575,
+      "sha256": "5e1211cf020b245aaefb89a18dae35967cd8db58c1594e8d893030901759feeb"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/walkthroughs/level-19.mp4",
+      "bytes": 5548093,
+      "sha256": "b096e424455ee737b12a88d56a69b72d5da0dc1ff8423fc303d1193932275a14"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/walkthroughs/level-20.jpg",
+      "bytes": 50537,
+      "sha256": "40e7c393e85d92b0d833e8abb56281e575006dedec931496148fdb05e3c0773e"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/walkthroughs/level-20.mp4",
+      "bytes": 11976946,
+      "sha256": "e0b7ee87ca4e51ed6f2bfe79eb8e2a78da13eae636c74c23765aafec7dbc7cdb"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/walkthroughs/level-21.jpg",
+      "bytes": 45848,
+      "sha256": "9dba226906009c854ddbd04411547ebc9b63f7a6a12a0c021097a63ff2505fd0"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/walkthroughs/level-21.mp4",
+      "bytes": 6955873,
+      "sha256": "d376f041ed5cf47f46e8a131d26ecebceceebdd10ec7e673bd9aba0b3727afd6"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/walkthroughs/level-22.jpg",
+      "bytes": 47343,
+      "sha256": "34dc725585a8ea8eb3d35dd3725e15586f33b87005f0a8af267a560444039949"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/walkthroughs/level-22.mp4",
+      "bytes": 4784210,
+      "sha256": "b21bdccd854d7e2d934d604e84924030884cbf6a736cc9d710ec986dd5fb09d6"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/walkthroughs/level-23.jpg",
+      "bytes": 50558,
+      "sha256": "51708cf9f775631f9e728839576de070bf7c17548ee8ef2c00d03c7659a0e981"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/walkthroughs/level-23.mp4",
+      "bytes": 7539139,
+      "sha256": "21d9acca289f8a5f7f1efaeb98f9886e0cc1f06b6f0638f35a027ad9b01c0765"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/walkthroughs/level-24.jpg",
+      "bytes": 44576,
+      "sha256": "f07b22f9b4dfa989740361099783eb8910c4a810bc211636c1b27d58334d2a40"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/walkthroughs/level-24.mp4",
+      "bytes": 5792520,
+      "sha256": "525c6943b5aca58bc2d6449a3796057049edf10b1fe0de3276039ee915111cd2"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/walkthroughs/level-25.jpg",
+      "bytes": 35015,
+      "sha256": "9f20f9d77c40d2087330669f7d27f395083251b06e80df9a1a19c8fc41e0058f"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/walkthroughs/level-25.mp4",
+      "bytes": 8356855,
+      "sha256": "e28a95340dfa91981e2ff186c62435b5cde44a0e0c6a942b79c0dc00bdf3b1fb"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/walkthroughs/level-26.jpg",
+      "bytes": 31256,
+      "sha256": "4d492630a58c5f0e33bc8335d2a5f5cebf0a0bd8bc82d58dd8e2760a15161a93"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/walkthroughs/level-26.mp4",
+      "bytes": 10565728,
+      "sha256": "4e8abc4c1bcb86df7e09493db80504ce07fb3970032ff060f96d11292649970f"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/walkthroughs/level-27.jpg",
+      "bytes": 45034,
+      "sha256": "6c690de24c3fbabf28de87fb19ea25b2a2b4f1d71ed7ee40543809bf2911a145"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/walkthroughs/level-27.mp4",
+      "bytes": 6206433,
+      "sha256": "c8e81626b09f39d883b95be14b6b019517804e6793ff2710365778f15408b4c2"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/walkthroughs/level-28.jpg",
+      "bytes": 45900,
+      "sha256": "6c54440c416b3617c208c4de7d00299e97fbf114977eb3c6abde4115e2b4e4ff"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/walkthroughs/level-28.mp4",
+      "bytes": 4912820,
+      "sha256": "9449a57ddf344c6c88e36915f75c937574e7c4da7f76707ee58a40731458b7b4"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/walkthroughs/level-29.jpg",
+      "bytes": 38335,
+      "sha256": "6b013bbcb4072a833f7ab8ceede55590ed440773ee38f9624f31f040721d5fa5"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/walkthroughs/level-29.mp4",
+      "bytes": 3649667,
+      "sha256": "f248b4cf3d2c4fd539e35a1d61c46afa1bac1743ee7aa5c3888fb210c3d359ad"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/walkthroughs/level-30.jpg",
+      "bytes": 43240,
+      "sha256": "f903a4f26b258c070ee216b9b28c3f3e1c0ceb3a6fb2c5fa02ab3d94a748272b"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/walkthroughs/level-30.mp4",
+      "bytes": 4231834,
+      "sha256": "bfe0a2a2dd44aa2af88686d88d021bbc67439b80a60ca5fb3805bf92d0e5e5a4"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/walkthroughs/level-31.jpg",
+      "bytes": 31385,
+      "sha256": "a5a6ecb3cef16508e1d64903bfe00307b62c0ef242317e2305caa256555a8c7c"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/walkthroughs/level-31.mp4",
+      "bytes": 1835634,
+      "sha256": "0a2465b88a363b95149a39ca9af7d2ebef42d8e054d3d72b6b1365150cb98783"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/walkthroughs/level-32.jpg",
+      "bytes": 23650,
+      "sha256": "3bf8fd392b0529e96d911954cfdfb26b87e591ffb552f0eafa9b68148010a654"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/walkthroughs/level-32.mp4",
+      "bytes": 813114,
+      "sha256": "0fa95cd8110f4b9e0ad4370c890347b8811cf563328b72ab18d4a7bc40abaf8d"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/walkthroughs/level-33.jpg",
+      "bytes": 32178,
+      "sha256": "7dde2131c72b54c22ad46b3fdc48cc39d0a672b52ddf5336ecc032d080a96b03"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/walkthroughs/level-33.mp4",
+      "bytes": 1964870,
+      "sha256": "84ac01e8306fcd30182c96d28e1abf1ad7f30438034e891f5a31abc2511b40c0"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/walkthroughs/level-34.jpg",
+      "bytes": 26083,
+      "sha256": "0bc6af85db2dd668f361e9242824ec211dd5a2a1c9e7c4515a0f93a20667e73d"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/walkthroughs/level-34.mp4",
+      "bytes": 2304304,
+      "sha256": "8c1d3c6594749ae7cd526aa794465df80f4c31ca2b4beb72da7fc55dd0a94a99"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/walkthroughs/level-35.jpg",
+      "bytes": 22266,
+      "sha256": "ff2fe5ff959bdbed40245a727916e6871bd5ffa08122efd04795b0751afc4e17"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/walkthroughs/level-35.mp4",
+      "bytes": 1513793,
+      "sha256": "982e4abb4c2c9d76c1305a5b30be856a274b2e1b56a6d470e5880b45ccbeb480"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/walkthroughs/level-36.jpg",
+      "bytes": 27116,
+      "sha256": "6a2f3b8ada3df87b2ba3043cfc27ecc812e94cb4151db3c7a93900f236fcbeca"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/walkthroughs/level-36.mp4",
+      "bytes": 2633421,
+      "sha256": "ef153a5a710bfafa12224899ef795cefcaf7c0fde8ab3050bbc737e098306699"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/walkthroughs/level-37.jpg",
+      "bytes": 30501,
+      "sha256": "81d41f552c94733b4d9fdec36ae6fc73f1c65d999a1ef27454d0d23c8761dba6"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/walkthroughs/level-37.mp4",
+      "bytes": 1663891,
+      "sha256": "6df9f594ce0843a39a60ff994d2755cab7d4f0b8c672cce90725758770e98457"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/walkthroughs/level-38.jpg",
+      "bytes": 27667,
+      "sha256": "e7105200ce848171b0042c54eaca5213648b4dbb3cba83744f78854f30f898d2"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/walkthroughs/level-38.mp4",
+      "bytes": 1687440,
+      "sha256": "40488d15e3b547c3147100b7cb7a50e4943bfb5e1c63e469fb6a183e12403fc0"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/walkthroughs/level-39.jpg",
+      "bytes": 27462,
+      "sha256": "8f256f20f1f139714c4da7d911f081d040a74c2022d35a6f9948e4ebf8ecbe13"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/walkthroughs/level-39.mp4",
+      "bytes": 1037096,
+      "sha256": "0aeed57ad42b556a133ca872484d9663954f2158b30c980c1963288e36979b48"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/walkthroughs/level-40.jpg",
+      "bytes": 29395,
+      "sha256": "856091bd3055f070426376a3b805cada23ef2801cd6bcde930ede81a90fc1bdd"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/walkthroughs/level-40.mp4",
+      "bytes": 2473050,
+      "sha256": "24d989aa7fd436d0c86c86d3805ac0a41824935be3f6e23f741226306298baa3"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/walkthroughs/level-41.jpg",
+      "bytes": 26422,
+      "sha256": "a4dd53fa0495afa46216a5067430c42c23a51685cda65425ef04b0333c60e55a"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/walkthroughs/level-41.mp4",
+      "bytes": 21133241,
+      "sha256": "91fbcf6f7cae322acfcdd457ee8e16a27184bd77d0bfaf8796b21aafbbeaea04"
+    },
+    {
+      "path": "publication-history/14c6683cb4d2991dfd48be28fa38ccaa1fc015b7/walkthroughs/manifest.json",
+      "bytes": 29794,
+      "sha256": "793fd602faf191cf78fedf46e26f6f9c6f335bad2fe48644f09f1e6efbcb586b"
+    },
+    {
+      "path": "publication-history/6f1eec54d47fed7916f5346a218525292d15fd62/art/portal-laboratory-menu.webp",
+      "bytes": 158200,
+      "sha256": "f6a544096a6418a0f65ba8c609415d0393a1081d18537ecac5eb4c345b13b4be"
+    },
+    {
+      "path": "publication-history/6f1eec54d47fed7916f5346a218525292d15fd62/assets/LabAnimationJourney-CXGD7KhX.js",
+      "bytes": 3040,
+      "sha256": "fb441a1d5ff7d0b400a0fdbe5a0ddc0ba798552bfb5b023195c6e84db1da1e97"
+    },
+    {
+      "path": "publication-history/6f1eec54d47fed7916f5346a218525292d15fd62/assets/LabCreativeRoom18Journey-DSBVAn45.js",
+      "bytes": 3303,
+      "sha256": "cc8986778d9962a999bc378ba7dda46bd843f6863a13ba51698052c740ed28f7"
+    },
+    {
+      "path": "publication-history/6f1eec54d47fed7916f5346a218525292d15fd62/assets/LabCreativeRoom20Journey-Du1Odzxr.js",
+      "bytes": 3418,
+      "sha256": "4a69b4e3235d167112e8a72f89e0b7fa4e63b6593994f075576216a972e29b7d"
+    },
+    {
+      "path": "publication-history/6f1eec54d47fed7916f5346a218525292d15fd62/assets/LabExpansionAlternateJourney48-m50yyTA-.js",
+      "bytes": 2391,
+      "sha256": "26bb20731b33d540fb7be84366b6f06ebe0ac7f42c7a616c4568d2b65e39104d"
+    },
+    {
+      "path": "publication-history/6f1eec54d47fed7916f5346a218525292d15fd62/assets/LabExpansionAlternateJourney49-6AQfrPj7.js",
+      "bytes": 2039,
+      "sha256": "f67ac65ff41ea7f1625fa42c94a46ee7b21a30cc282a0343295d5263dbcbe507"
+    },
+    {
+      "path": "publication-history/6f1eec54d47fed7916f5346a218525292d15fd62/assets/LabExpansionAlternateJourneyB-WXClA_ZM.js",
+      "bytes": 4760,
+      "sha256": "5b3b216acd84569e9fa414e45f03ff2fd63a32e3f7152cb3d720debc3615aad3"
+    },
+    {
+      "path": "publication-history/6f1eec54d47fed7916f5346a218525292d15fd62/assets/LabExpansionJourneyA-cnKd6uRU.js",
+      "bytes": 7482,
+      "sha256": "3265d2d0e414eef84b24ba7b8dca2a1f5a1b71f93a47a1907765760b20ad71ad"
+    },
+    {
+      "path": "publication-history/6f1eec54d47fed7916f5346a218525292d15fd62/assets/LabExpansionJourneyB-DDE2uQDo.js",
+      "bytes": 6715,
+      "sha256": "fff419c32392cbf3301609c690b0a41e84840c4fd5d45184b0409022985bd7b8"
+    },
+    {
+      "path": "publication-history/6f1eec54d47fed7916f5346a218525292d15fd62/assets/LabExtendedJourney-herB11CQ.js",
+      "bytes": 9252,
+      "sha256": "4ade791aa7c0971dd4e8605cd52b8c1a9dd5a4352828ac71d5ae2667e5f7888f"
+    },
+    {
+      "path": "publication-history/6f1eec54d47fed7916f5346a218525292d15fd62/assets/LabFoundationJourney-BOopWWda.js",
+      "bytes": 9043,
+      "sha256": "e9974baddf5901d5f933cf678a20f5db6e6984d59f75b86078f6b638284ec1f7"
+    },
+    {
+      "path": "publication-history/6f1eec54d47fed7916f5346a218525292d15fd62/assets/LabIntroductoryAlternates-DcdsCClA.js",
+      "bytes": 1341,
+      "sha256": "a6451adc49d9c2f86f43455bfa4ced44d7166234f4fde82082990bf21f76cd5c"
+    },
+    {
+      "path": "publication-history/6f1eec54d47fed7916f5346a218525292d15fd62/assets/LabLateCampaignAim-CJH8BNAs.js",
+      "bytes": 753,
+      "sha256": "ddfbed4b193b1c1837962afb3238714acffeadaeb6f4719a2f2a6c0689c69c84"
+    },
+    {
+      "path": "publication-history/6f1eec54d47fed7916f5346a218525292d15fd62/assets/LabOpenJourney-MyF3CUNd.js",
+      "bytes": 6285,
+      "sha256": "3e909baa14aa36b5d4e5975abdc07a26239a9c10c20f1605d56b2ecd8092669a"
+    },
+    {
+      "path": "publication-history/6f1eec54d47fed7916f5346a218525292d15fd62/assets/LabPortalEdgeJourney-CzhvqzO5.js",
+      "bytes": 2293,
+      "sha256": "308898a26a66110878ecf137f449c5cf721ce9bafc163a506079175f3351ce7c"
+    },
+    {
+      "path": "publication-history/6f1eec54d47fed7916f5346a218525292d15fd62/assets/LabPortalFloorJourney-CQnStGPV.js",
+      "bytes": 1516,
+      "sha256": "9e52f256616264b6b05d759c37ec9b503fd5d244942354b49ce301015753be0a"
+    },
+    {
+      "path": "publication-history/6f1eec54d47fed7916f5346a218525292d15fd62/assets/LabPostJourneyA-CWKaGzhi.js",
+      "bytes": 14134,
+      "sha256": "bfa2b73ef6a903d939a31a1a27e13a008f0e85a620e6e7524d2572f4005aaa00"
+    },
+    {
+      "path": "publication-history/6f1eec54d47fed7916f5346a218525292d15fd62/assets/LabPostJourneyB-EuDAUlX_.js",
+      "bytes": 10887,
+      "sha256": "1270e5d2806a66d1ce503e75bc5d746d3146ff9f10166f7242a872e0f062af2b"
+    },
+    {
+      "path": "publication-history/6f1eec54d47fed7916f5346a218525292d15fd62/assets/LabResearchJourney-DTc4jCjh.js",
+      "bytes": 7650,
+      "sha256": "81c98e926f5db6eb1c27cc986998a58b2d58f62f069503d9b64e8e92e657f3f3"
+    },
+    {
+      "path": "publication-history/6f1eec54d47fed7916f5346a218525292d15fd62/assets/LabRoom13Journey-DpkZeNEo.js",
+      "bytes": 6194,
+      "sha256": "275c62befc9b95dc4c596810721ffba02b137b24ad14006e4769f1c7f21bc041"
+    },
+    {
+      "path": "publication-history/6f1eec54d47fed7916f5346a218525292d15fd62/assets/LabRoom14Journey-C0UfonIt.js",
+      "bytes": 3566,
+      "sha256": "78d7d18c3f30e1eeb07f563356dfdf3f6c54f20246c10efd9f6a00f7ecedc5f5"
+    },
+    {
+      "path": "publication-history/6f1eec54d47fed7916f5346a218525292d15fd62/assets/LabRoom15Journey-CVVlNNXC.js",
+      "bytes": 4604,
+      "sha256": "6048be92f5a176df4ac3e86244cd26f4ceb738e1fb8bf697bb019e6607d55846"
+    },
+    {
+      "path": "publication-history/6f1eec54d47fed7916f5346a218525292d15fd62/assets/LabRoom16Journey-DcT0PHn1.js",
+      "bytes": 2534,
+      "sha256": "43814ce0e94d01e0e2b9152c6ea1c722073f13a019b2992525f6b0480fa97e74"
+    },
+    {
+      "path": "publication-history/6f1eec54d47fed7916f5346a218525292d15fd62/assets/LabRoom17Journey-C2EE7523.js",
+      "bytes": 3260,
+      "sha256": "b621bf8abcb99cec72e5a8b0ef53e4ef6a005e414141e9502855a2759ba02708"
+    },
+    {
+      "path": "publication-history/6f1eec54d47fed7916f5346a218525292d15fd62/assets/LabRoom18Journey-Byl3a4wD.js",
+      "bytes": 6065,
+      "sha256": "03ef642f6013a81be4bee3fae22f96f7679e09d774875287b8b38cd1a36c6e2d"
+    },
+    {
+      "path": "publication-history/6f1eec54d47fed7916f5346a218525292d15fd62/assets/LabRoom19Journey-BVk2pOJ3.js",
+      "bytes": 3087,
+      "sha256": "edbd9e87a7c68f527a6a6d6794cfcb3a8de5780d1c656265ccf7910207066ab4"
+    },
+    {
+      "path": "publication-history/6f1eec54d47fed7916f5346a218525292d15fd62/assets/LabRoom20Journey-Dnjdo837.js",
+      "bytes": 5013,
+      "sha256": "84ee4a4debf18d555e80bbf468821d58576e6fcf805b34adcd2670e8502fc0fd"
+    },
+    {
+      "path": "publication-history/6f1eec54d47fed7916f5346a218525292d15fd62/assets/LabRoom21Journey-uEucOe9-.js",
+      "bytes": 5077,
+      "sha256": "df30a1461d19cf6c1fdadb906b090b3c44ebde9b41c09635a0e331c6ed89b014"
+    },
+    {
+      "path": "publication-history/6f1eec54d47fed7916f5346a218525292d15fd62/assets/LabRoom22Journey-BouPMvNe.js",
+      "bytes": 2624,
+      "sha256": "8256cc0ea7a86ecbf71cd36ced2e41796d5824972fcaa454288b41fb781e4b2a"
+    },
+    {
+      "path": "publication-history/6f1eec54d47fed7916f5346a218525292d15fd62/assets/LabRoom23Journey-4gKbaVii.js",
+      "bytes": 2626,
+      "sha256": "eb971e02e3b4c8185a4f35fbec7cd005181e0f521f132969816376bd18dfeba4"
+    },
+    {
+      "path": "publication-history/6f1eec54d47fed7916f5346a218525292d15fd62/assets/LabRoom24Journey-DkZ5zl4F.js",
+      "bytes": 3453,
+      "sha256": "1bf343d90049936d8dad72675a75e25a52d8d1cd1d285d4d12f1a1a25d3f38c1"
+    },
+    {
+      "path": "publication-history/6f1eec54d47fed7916f5346a218525292d15fd62/assets/LabRoom25Journey-Dsc4dFcD.js",
+      "bytes": 3447,
+      "sha256": "6494b0e4ae0b006dc8b303bf0639916cc2ac95d1ff700bde74e9f91629758e0c"
+    },
+    {
+      "path": "publication-history/6f1eec54d47fed7916f5346a218525292d15fd62/assets/LabRoom26Journey-D5Lhf6Yz.js",
+      "bytes": 4194,
+      "sha256": "f568e01fcbf2e28f9bf1d89aa1d8e83df957bb60ea13a63a77cab81b61577e74"
+    },
+    {
+      "path": "publication-history/6f1eec54d47fed7916f5346a218525292d15fd62/assets/LabRoom27Journey-CtMoXjWq.js",
+      "bytes": 3350,
+      "sha256": "ea4e62a0eed62998b64515b56db65142d1a7d3fb8d5c91b6e31653c5ef4422b5"
+    },
+    {
+      "path": "publication-history/6f1eec54d47fed7916f5346a218525292d15fd62/assets/LabRoom28Journey-BKtIeHL7.js",
+      "bytes": 2721,
+      "sha256": "00bcb74736a0de9b300d8ff110461041bb4a4d62091877b3ce680cc4dc7a25fc"
+    },
+    {
+      "path": "publication-history/6f1eec54d47fed7916f5346a218525292d15fd62/assets/LabRoom29Journey-FXLiWbZf.js",
+      "bytes": 2592,
+      "sha256": "625138692ba0641ed1ea63e7bb6ea332c70bf235ee3bc8b3cbd80456012e04ef"
+    },
+    {
+      "path": "publication-history/6f1eec54d47fed7916f5346a218525292d15fd62/assets/LabRoom30Journey-zAsFaYdh.js",
+      "bytes": 3762,
+      "sha256": "1d260d8e49e983b2f7a9c354898fe771c41df56434d67e203bd8fb51bbc8f925"
+    },
+    {
+      "path": "publication-history/6f1eec54d47fed7916f5346a218525292d15fd62/assets/LabSingularityJourney-DOyHtoU-.js",
+      "bytes": 17459,
+      "sha256": "e1947ab5f87caeab829ed60a54db0fd0e9e12ce3fe0fd2904b974fa296dc0f9c"
+    },
+    {
+      "path": "publication-history/6f1eec54d47fed7916f5346a218525292d15fd62/assets/LabTowerJourney-cnAT52-9.js",
+      "bytes": 31405,
+      "sha256": "ae67ba8e9211e0a9a3b2b7e59e8a4652cd8519d062762f1d3bb341a33096efcb"
+    },
+    {
+      "path": "publication-history/6f1eec54d47fed7916f5346a218525292d15fd62/assets/LabV8Journey-CnUX-JBE.js",
+      "bytes": 15059,
+      "sha256": "efd60e329f37b6105eccf5e65f55594d11c4f945c6bd4043cc120022ab1c983f"
+    },
+    {
+      "path": "publication-history/6f1eec54d47fed7916f5346a218525292d15fd62/assets/LabWorkshopJourney-BreR-TJl.js",
+      "bytes": 7249,
+      "sha256": "2016d65014aa5700492ca93d3a26f4cd80392fc60bc29af20635fb8384f07504"
+    },
+    {
+      "path": "publication-history/6f1eec54d47fed7916f5346a218525292d15fd62/assets/index-B6FmTTVO.css",
+      "bytes": 28952,
+      "sha256": "08ea4c995a1e54c5b3f4dabe61976d1e6c5f0f48363192d080c4b8dfad9d12aa"
+    },
+    {
+      "path": "publication-history/6f1eec54d47fed7916f5346a218525292d15fd62/assets/index-BBzE2-3_.js",
+      "bytes": 1679868,
+      "sha256": "e9d4b2f74ea0591fd5321d165b247fe5256d75ecccad6ba2522e877de3a7469d"
+    },
+    {
+      "path": "publication-history/6f1eec54d47fed7916f5346a218525292d15fd62/build-info.json",
+      "bytes": 3214,
+      "sha256": "8996c51ffaccabeed047d51ba393e0258b8e5ce02dffe50c096ce44dabb760c7"
+    },
+    {
+      "path": "publication-history/6f1eec54d47fed7916f5346a218525292d15fd62/draco/draco_decoder.js",
+      "bytes": 719410,
+      "sha256": "30e4d486fa020737af10e3c56197693e5b904bdc05b8bfa5d7b06751dec6da04"
+    },
+    {
+      "path": "publication-history/6f1eec54d47fed7916f5346a218525292d15fd62/draco/draco_decoder.wasm",
+      "bytes": 285747,
+      "sha256": "c55a594e8ffd18426d36b27fea9618af3df5e173640a3e56d46f09d76f0574f2"
+    },
+    {
+      "path": "publication-history/6f1eec54d47fed7916f5346a218525292d15fd62/draco/draco_wasm_wrapper.js",
+      "bytes": 58763,
+      "sha256": "e8049906ef3f8f75d3456c22a3f31bfdfe5b5b5bd09ccdec613b9e9a49d554d8"
+    },
+    {
+      "path": "publication-history/6f1eec54d47fed7916f5346a218525292d15fd62/index.html",
+      "bytes": 11004,
+      "sha256": "290b84b41988fb1f5fa1cf7a6c757e4dd38fa9be4248b7bd45ca4b159d8153fb"
+    },
+    {
+      "path": "publication-history/6f1eec54d47fed7916f5346a218525292d15fd62/models/runtime/manifest.json",
+      "bytes": 2421,
+      "sha256": "8806346ed3ac0fb096aa26321d5620c16a6a2a55f2523023fb21f6c4749fe2ed"
+    },
+    {
+      "path": "publication-history/6f1eec54d47fed7916f5346a218525292d15fd62/models/runtime/model-01-player.glb",
+      "bytes": 549756,
+      "sha256": "e5b09ff0281377b679d6fdd505fa1ed89550bb662e94e7f593ed67ee50a66a91"
+    },
+    {
+      "path": "publication-history/6f1eec54d47fed7916f5346a218525292d15fd62/models/runtime/model-02-cargo.glb",
+      "bytes": 510376,
+      "sha256": "65763c87e7f14cc807cffa8fc2adc364e8421dae819271a0c406a6b0d2c8c697"
+    },
+    {
+      "path": "publication-history/6f1eec54d47fed7916f5346a218525292d15fd62/models/runtime/model-11-portal-gun.glb",
+      "bytes": 393116,
+      "sha256": "d8c76c41efbbf0a6d70e30ab5a7b70f49fd806e497f67ea06cb28f9f4edca1d7"
+    },
+    {
+      "path": "publication-history/6f1eec54d47fed7916f5346a218525292d15fd62/models/runtime/model-19-lift-platform.glb",
+      "bytes": 404076,
+      "sha256": "afd039e831ff0baa514f076a505ffbb7c57dac2251959b3d858fc92dcf3d04b9"
+    },
+    {
+      "path": "publication-history/6f1eec54d47fed7916f5346a218525292d15fd62/models/runtime/model-22-terminal.glb",
+      "bytes": 377108,
+      "sha256": "9e2f4ff758996f67596d3935041f632bafdf7e84efd4869341920b64a5919c26"
+    },
+    {
+      "path": "publication-history/6f1eec54d47fed7916f5346a218525292d15fd62/models/runtime/model-23-floor-tile.glb",
+      "bytes": 103600,
+      "sha256": "0950bc6ef31bb28939087bad53695f21cde0b9fe5740394df202a0b242f77b0c"
+    },
+    {
+      "path": "publication-history/6f1eec54d47fed7916f5346a218525292d15fd62/models/runtime/model-24-wall-panel.glb",
+      "bytes": 62448,
+      "sha256": "15aaca48f6e436d5e89abf7548c0fe43580bba8faff4619e476d3a6d306b004d"
+    },
+    {
+      "path": "publication-history/6f1eec54d47fed7916f5346a218525292d15fd62/models/runtime/model-28-rotating-panel.glb",
+      "bytes": 366120,
+      "sha256": "3159916bad63903e73b8e660ce4aab8a3b1e38f1231152b68f3df63d6987ac4b"
+    },
+    {
+      "path": "publication-history/6f1eec54d47fed7916f5346a218525292d15fd62/models/runtime/model-29-pressure-platform.glb",
+      "bytes": 390244,
+      "sha256": "ee65bd9706ad4f4658e54ec5ad8f6f45b24d9027e4e6072f162358a4c1b3291b"
+    },
+    {
+      "path": "publication-history/6f1eec54d47fed7916f5346a218525292d15fd62/models/runtime/model-31-wind-generator.glb",
+      "bytes": 25768,
+      "sha256": "024f25db27e96e1efdaa5e200c13a665dee487e798338f86fef985feeae9019e"
+    },
+    {
+      "path": "publication-history/6f1eec54d47fed7916f5346a218525292d15fd62/models/runtime/model-32-spring-ram.glb",
+      "bytes": 25400,
+      "sha256": "958d5ed533736d5779da078be20ae2b0e84212bfc3a00b456dc0106bc0a093d7"
+    },
+    {
+      "path": "publication-history/6f1eec54d47fed7916f5346a218525292d15fd62/models/runtime/model-35-shutter-fan.glb",
+      "bytes": 27816,
+      "sha256": "8e11d5ab83250348f6e08f034ec87d82727162742d5a7be18f981fc523aa907a"
+    },
+    {
+      "path": "publication-history/6f1eec54d47fed7916f5346a218525292d15fd62/models/runtime/model-37-extension-bridge.glb",
+      "bytes": 25764,
+      "sha256": "96173a9ef89375066b08fad8dff1928425863c6b4e6b8c0373c497448f109c55"
+    },
+    {
+      "path": "publication-history/6f1eec54d47fed7916f5346a218525292d15fd62/models/runtime/model-39-cable-winch.glb",
+      "bytes": 28608,
+      "sha256": "301f148938ec83e2a8f4b45c7f9bdfd19fb40ca79d8fb9abc7601caf4fe0eafd"
+    },
+    {
+      "path": "publication-history/chapter-atlas-39ad0557/art/portal-laboratory-menu.webp",
+      "bytes": 158200,
+      "sha256": "f6a544096a6418a0f65ba8c609415d0393a1081d18537ecac5eb4c345b13b4be"
+    },
+    {
+      "path": "publication-history/chapter-atlas-39ad0557/assets/LabAnimationJourney-CIer2Bgj.js",
+      "bytes": 3040,
+      "sha256": "849ff9c4be677a8923e521841565066afb4ac00fbca52f6e88ef456306ec8ce2"
+    },
+    {
+      "path": "publication-history/chapter-atlas-39ad0557/assets/LabCreativeRoom18Journey-iUr9UvVP.js",
+      "bytes": 3303,
+      "sha256": "7000d01831e9c5b66c5bd4e4aeba318e200dc33847d2a95f7f77bc345c1137b6"
+    },
+    {
+      "path": "publication-history/chapter-atlas-39ad0557/assets/LabCreativeRoom20Journey-B9lbwd6c.js",
+      "bytes": 3418,
+      "sha256": "79843944e2008f3d2d738faeaab1496fa0725463a4bf15df95cd5751fe74eb81"
+    },
+    {
+      "path": "publication-history/chapter-atlas-39ad0557/assets/LabExpansionAlternateJourney48-YfA5XB5I.js",
+      "bytes": 2391,
+      "sha256": "d674dbbc47c60e809ff7da1165ee3adef5eae099afae5bb67e9a7900bfc7b6ac"
+    },
+    {
+      "path": "publication-history/chapter-atlas-39ad0557/assets/LabExpansionAlternateJourney49-DRz_SiU6.js",
+      "bytes": 2039,
+      "sha256": "c4c22b95205bcc24421157f8759d14af85187ec7df12475d1d65175631ec2e4b"
+    },
+    {
+      "path": "publication-history/chapter-atlas-39ad0557/assets/LabExpansionAlternateJourneyB-CT1n1UTV.js",
+      "bytes": 4760,
+      "sha256": "50e7fa02400bff099dc249f7c4986068e5a9b6bb69f92862f9e8fa734465b0a7"
+    },
+    {
+      "path": "publication-history/chapter-atlas-39ad0557/assets/LabExpansionJourneyA-Cw9KbBZK.js",
+      "bytes": 7482,
+      "sha256": "8daf1ade30122dac6b33f1a9e78c19563850fc8334fb74bb23797734a663acce"
+    },
+    {
+      "path": "publication-history/chapter-atlas-39ad0557/assets/LabExpansionJourneyB-COskSGSx.js",
+      "bytes": 6715,
+      "sha256": "1e62b097fdbc7a0dd7506e1eb1038f8cd948b71ba1589503fb19eedafc2dbd9b"
+    },
+    {
+      "path": "publication-history/chapter-atlas-39ad0557/assets/LabExtendedJourney-Dx8ZVidI.js",
+      "bytes": 9252,
+      "sha256": "7099d5995f625441696f376d178f9b64350d9c013e1538740a6c666f901da194"
+    },
+    {
+      "path": "publication-history/chapter-atlas-39ad0557/assets/LabFoundationJourney-BASIs-Hw.js",
+      "bytes": 9043,
+      "sha256": "1048cbf4418f8f6b026880ae9a86860f2dfb9d2fde59bb4fbb13298684bc9aca"
+    },
+    {
+      "path": "publication-history/chapter-atlas-39ad0557/assets/LabIntroductoryAlternates-DcdsCClA.js",
+      "bytes": 1341,
+      "sha256": "a6451adc49d9c2f86f43455bfa4ced44d7166234f4fde82082990bf21f76cd5c"
+    },
+    {
+      "path": "publication-history/chapter-atlas-39ad0557/assets/LabLateCampaignAim-DrJlqTZS.js",
+      "bytes": 753,
+      "sha256": "fe0e6e2ca5961e3967ba1b831dd47218b0cd489d673f338baab68a720a88ee1e"
+    },
+    {
+      "path": "publication-history/chapter-atlas-39ad0557/assets/LabOpenJourney-Ty_Tal6y.js",
+      "bytes": 6285,
+      "sha256": "d990b69182989ffc359bbddf39fb650ac0e490be65e5717bc428d9fe7d6761f7"
+    },
+    {
+      "path": "publication-history/chapter-atlas-39ad0557/assets/LabPortalEdgeJourney-CeNGyKQ-.js",
+      "bytes": 2293,
+      "sha256": "89ff265f109cadca4bb209dc711d2f0decb567a3bbc5c860d7a6f6a610acf315"
+    },
+    {
+      "path": "publication-history/chapter-atlas-39ad0557/assets/LabPortalFloorJourney-BtdvwbSo.js",
+      "bytes": 1516,
+      "sha256": "7393af76ec0dbf74b1d4e7e8b04b9b03e037e653439be41d78af1564a0b1a5a2"
+    },
+    {
+      "path": "publication-history/chapter-atlas-39ad0557/assets/LabPostJourneyA-2QwskNG5.js",
+      "bytes": 14134,
+      "sha256": "5a5121c1ccbf96eef12702bebcd8d96138f149da8ef398a5212d04bd9661c4e5"
+    },
+    {
+      "path": "publication-history/chapter-atlas-39ad0557/assets/LabPostJourneyB-D0w7cSYE.js",
+      "bytes": 10887,
+      "sha256": "b19b55bccce79eaf6afff59b5cb399864f93907f614e672ee87031a528b9ee8e"
+    },
+    {
+      "path": "publication-history/chapter-atlas-39ad0557/assets/LabResearchJourney-82SFvRYl.js",
+      "bytes": 7650,
+      "sha256": "d1e01dd184f93e365c28549fa3a9196e7ebeacf4e7ffa74f714b8f575cef6203"
+    },
+    {
+      "path": "publication-history/chapter-atlas-39ad0557/assets/LabRoom13Journey-DpkZeNEo.js",
+      "bytes": 6194,
+      "sha256": "275c62befc9b95dc4c596810721ffba02b137b24ad14006e4769f1c7f21bc041"
+    },
+    {
+      "path": "publication-history/chapter-atlas-39ad0557/assets/LabRoom14Journey-C0UfonIt.js",
+      "bytes": 3566,
+      "sha256": "78d7d18c3f30e1eeb07f563356dfdf3f6c54f20246c10efd9f6a00f7ecedc5f5"
+    },
+    {
+      "path": "publication-history/chapter-atlas-39ad0557/assets/LabRoom15Journey-Bm38isLO.js",
+      "bytes": 4604,
+      "sha256": "7854a80ef48eadd5354f0d9bf56743f204ae970eb91cd535726716952fa182c9"
+    },
+    {
+      "path": "publication-history/chapter-atlas-39ad0557/assets/LabRoom16Journey-DcT0PHn1.js",
+      "bytes": 2534,
+      "sha256": "43814ce0e94d01e0e2b9152c6ea1c722073f13a019b2992525f6b0480fa97e74"
+    },
+    {
+      "path": "publication-history/chapter-atlas-39ad0557/assets/LabRoom17Journey-C2EE7523.js",
+      "bytes": 3260,
+      "sha256": "b621bf8abcb99cec72e5a8b0ef53e4ef6a005e414141e9502855a2759ba02708"
+    },
+    {
+      "path": "publication-history/chapter-atlas-39ad0557/assets/LabRoom18Journey-DMs2D8nS.js",
+      "bytes": 6065,
+      "sha256": "e07b088e14915cbbc5e332395efe4ad8c886ac7edcadada9d59f43fc078f42a3"
+    },
+    {
+      "path": "publication-history/chapter-atlas-39ad0557/assets/LabRoom19Journey-BVk2pOJ3.js",
+      "bytes": 3087,
+      "sha256": "edbd9e87a7c68f527a6a6d6794cfcb3a8de5780d1c656265ccf7910207066ab4"
+    },
+    {
+      "path": "publication-history/chapter-atlas-39ad0557/assets/LabRoom20Journey-Dnjdo837.js",
+      "bytes": 5013,
+      "sha256": "84ee4a4debf18d555e80bbf468821d58576e6fcf805b34adcd2670e8502fc0fd"
+    },
+    {
+      "path": "publication-history/chapter-atlas-39ad0557/assets/LabRoom21Journey-I68goeEZ.js",
+      "bytes": 5077,
+      "sha256": "f0542aeb8396e06a5bc4aa81ead85f1b209dc70326aaf45ee6049da05d3928ce"
+    },
+    {
+      "path": "publication-history/chapter-atlas-39ad0557/assets/LabRoom22Journey-CjGV_ebV.js",
+      "bytes": 2624,
+      "sha256": "71fc56cf379c3f995de086a51f95729fd8c8e15088f736b8b140f73814d8338b"
+    },
+    {
+      "path": "publication-history/chapter-atlas-39ad0557/assets/LabRoom23Journey-DarFD7wW.js",
+      "bytes": 2626,
+      "sha256": "b8abe130eaf54af45640a9129335bcb18242756ce8eaf318212e37a05991c9a9"
+    },
+    {
+      "path": "publication-history/chapter-atlas-39ad0557/assets/LabRoom24Journey-0mYuUMJR.js",
+      "bytes": 3453,
+      "sha256": "f8f87b05b8c8adee08417341385f965e122c43df428e5f5559758b99a97d1387"
+    },
+    {
+      "path": "publication-history/chapter-atlas-39ad0557/assets/LabRoom25Journey-Dsc4dFcD.js",
+      "bytes": 3447,
+      "sha256": "6494b0e4ae0b006dc8b303bf0639916cc2ac95d1ff700bde74e9f91629758e0c"
+    },
+    {
+      "path": "publication-history/chapter-atlas-39ad0557/assets/LabRoom26Journey-D5Lhf6Yz.js",
+      "bytes": 4194,
+      "sha256": "f568e01fcbf2e28f9bf1d89aa1d8e83df957bb60ea13a63a77cab81b61577e74"
+    },
+    {
+      "path": "publication-history/chapter-atlas-39ad0557/assets/LabRoom27Journey-CtMoXjWq.js",
+      "bytes": 3350,
+      "sha256": "ea4e62a0eed62998b64515b56db65142d1a7d3fb8d5c91b6e31653c5ef4422b5"
+    },
+    {
+      "path": "publication-history/chapter-atlas-39ad0557/assets/LabRoom28Journey-BKtIeHL7.js",
+      "bytes": 2721,
+      "sha256": "00bcb74736a0de9b300d8ff110461041bb4a4d62091877b3ce680cc4dc7a25fc"
+    },
+    {
+      "path": "publication-history/chapter-atlas-39ad0557/assets/LabRoom29Journey-FXLiWbZf.js",
+      "bytes": 2592,
+      "sha256": "625138692ba0641ed1ea63e7bb6ea332c70bf235ee3bc8b3cbd80456012e04ef"
+    },
+    {
+      "path": "publication-history/chapter-atlas-39ad0557/assets/LabRoom30Journey-zAsFaYdh.js",
+      "bytes": 3762,
+      "sha256": "1d260d8e49e983b2f7a9c354898fe771c41df56434d67e203bd8fb51bbc8f925"
+    },
+    {
+      "path": "publication-history/chapter-atlas-39ad0557/assets/LabSingularityJourney-Kkoq_Y3s.js",
+      "bytes": 17459,
+      "sha256": "dded013d1c833dac39735768764f26679406c8c98ea4ad43baeb9dc6bfbe3446"
+    },
+    {
+      "path": "publication-history/chapter-atlas-39ad0557/assets/LabTowerJourney-LRqCxuA8.js",
+      "bytes": 31405,
+      "sha256": "03f90c5deee5f67b5cf0884277f9e6a34fe2a88d39d22a0d82cd9cdb76f0b0d4"
+    },
+    {
+      "path": "publication-history/chapter-atlas-39ad0557/assets/LabV8Journey-B3evQvUa.js",
+      "bytes": 15059,
+      "sha256": "40358439ec6e67facc89e73aea2c41a96b177639ef098171a1f0097e97b98007"
+    },
+    {
+      "path": "publication-history/chapter-atlas-39ad0557/assets/LabWorkshopJourney-CTRCL9YY.js",
+      "bytes": 7249,
+      "sha256": "516a55ccfccab29513a214af359619c974c32489fd67f5f2b7f3e515bd4584eb"
+    },
+    {
+      "path": "publication-history/chapter-atlas-39ad0557/assets/index-BL3PzAPt.css",
+      "bytes": 47378,
+      "sha256": "245ee1a808345a8000d2cd1bfc208f163a81f76506f7fc1f9dcbb284d7be53bf"
+    },
+    {
+      "path": "publication-history/chapter-atlas-39ad0557/assets/index-DxA4C4XF.js",
+      "bytes": 1686955,
+      "sha256": "fd89740c6934c55ab33397bf752edb7245b43d5219d192a679a3525cbeb1693a"
+    },
+    {
+      "path": "publication-history/chapter-atlas-39ad0557/build-info.json",
+      "bytes": 4243,
+      "sha256": "edbac65ddafe678e6c96c6ebb8481b1a526fc7e2189ec856dcf3e0966e2bdacc"
+    },
+    {
+      "path": "publication-history/chapter-atlas-39ad0557/draco/draco_decoder.js",
+      "bytes": 719410,
+      "sha256": "30e4d486fa020737af10e3c56197693e5b904bdc05b8bfa5d7b06751dec6da04"
+    },
+    {
+      "path": "publication-history/chapter-atlas-39ad0557/draco/draco_decoder.wasm",
+      "bytes": 285747,
+      "sha256": "c55a594e8ffd18426d36b27fea9618af3df5e173640a3e56d46f09d76f0574f2"
+    },
+    {
+      "path": "publication-history/chapter-atlas-39ad0557/draco/draco_wasm_wrapper.js",
+      "bytes": 58763,
+      "sha256": "e8049906ef3f8f75d3456c22a3f31bfdfe5b5b5bd09ccdec613b9e9a49d554d8"
+    },
+    {
+      "path": "publication-history/chapter-atlas-39ad0557/index.html",
+      "bytes": 13557,
+      "sha256": "a044bcbf91cfd2b6f743bbbc3e11dfa605dd3d9b04f874ac533f2ebc692d0b0c"
+    },
+    {
+      "path": "publication-history/chapter-atlas-39ad0557/models/runtime/manifest.json",
+      "bytes": 2421,
+      "sha256": "8806346ed3ac0fb096aa26321d5620c16a6a2a55f2523023fb21f6c4749fe2ed"
+    },
+    {
+      "path": "publication-history/chapter-atlas-39ad0557/models/runtime/model-01-player.glb",
+      "bytes": 549756,
+      "sha256": "e5b09ff0281377b679d6fdd505fa1ed89550bb662e94e7f593ed67ee50a66a91"
+    },
+    {
+      "path": "publication-history/chapter-atlas-39ad0557/models/runtime/model-02-cargo.glb",
+      "bytes": 510376,
+      "sha256": "65763c87e7f14cc807cffa8fc2adc364e8421dae819271a0c406a6b0d2c8c697"
+    },
+    {
+      "path": "publication-history/chapter-atlas-39ad0557/models/runtime/model-11-portal-gun.glb",
+      "bytes": 393116,
+      "sha256": "d8c76c41efbbf0a6d70e30ab5a7b70f49fd806e497f67ea06cb28f9f4edca1d7"
+    },
+    {
+      "path": "publication-history/chapter-atlas-39ad0557/models/runtime/model-19-lift-platform.glb",
+      "bytes": 404076,
+      "sha256": "afd039e831ff0baa514f076a505ffbb7c57dac2251959b3d858fc92dcf3d04b9"
+    },
+    {
+      "path": "publication-history/chapter-atlas-39ad0557/models/runtime/model-22-terminal.glb",
+      "bytes": 377108,
+      "sha256": "9e2f4ff758996f67596d3935041f632bafdf7e84efd4869341920b64a5919c26"
+    },
+    {
+      "path": "publication-history/chapter-atlas-39ad0557/models/runtime/model-23-floor-tile.glb",
+      "bytes": 103600,
+      "sha256": "0950bc6ef31bb28939087bad53695f21cde0b9fe5740394df202a0b242f77b0c"
+    },
+    {
+      "path": "publication-history/chapter-atlas-39ad0557/models/runtime/model-24-wall-panel.glb",
+      "bytes": 62448,
+      "sha256": "15aaca48f6e436d5e89abf7548c0fe43580bba8faff4619e476d3a6d306b004d"
+    },
+    {
+      "path": "publication-history/chapter-atlas-39ad0557/models/runtime/model-28-rotating-panel.glb",
+      "bytes": 366120,
+      "sha256": "3159916bad63903e73b8e660ce4aab8a3b1e38f1231152b68f3df63d6987ac4b"
+    },
+    {
+      "path": "publication-history/chapter-atlas-39ad0557/models/runtime/model-29-pressure-platform.glb",
+      "bytes": 390244,
+      "sha256": "ee65bd9706ad4f4658e54ec5ad8f6f45b24d9027e4e6072f162358a4c1b3291b"
+    },
+    {
+      "path": "publication-history/chapter-atlas-39ad0557/models/runtime/model-31-wind-generator.glb",
+      "bytes": 25768,
+      "sha256": "024f25db27e96e1efdaa5e200c13a665dee487e798338f86fef985feeae9019e"
+    },
+    {
+      "path": "publication-history/chapter-atlas-39ad0557/models/runtime/model-32-spring-ram.glb",
+      "bytes": 25400,
+      "sha256": "958d5ed533736d5779da078be20ae2b0e84212bfc3a00b456dc0106bc0a093d7"
+    },
+    {
+      "path": "publication-history/chapter-atlas-39ad0557/models/runtime/model-35-shutter-fan.glb",
+      "bytes": 27816,
+      "sha256": "8e11d5ab83250348f6e08f034ec87d82727162742d5a7be18f981fc523aa907a"
+    },
+    {
+      "path": "publication-history/chapter-atlas-39ad0557/models/runtime/model-37-extension-bridge.glb",
+      "bytes": 25764,
+      "sha256": "96173a9ef89375066b08fad8dff1928425863c6b4e6b8c0373c497448f109c55"
+    },
+    {
+      "path": "publication-history/chapter-atlas-39ad0557/models/runtime/model-39-cable-winch.glb",
+      "bytes": 28608,
+      "sha256": "301f148938ec83e2a8f4b45c7f9bdfd19fb40ca79d8fb9abc7601caf4fe0eafd"
+    },
+    {
+      "path": "publication-history/chapter-atlas-39ad0557/preview-status.json",
+      "bytes": 270,
+      "sha256": "72dd8694d545a54a736525062938afb92841e3ce6f847023f6020b070110635d"
+    },
+    {
+      "path": "publication-history/chapter-atlas-39ad0557/walkthroughs.html",
+      "bytes": 986,
+      "sha256": "f98342b9a88acbebb388976500d7e3ffbdf253b99448d7391abd9dc8fb660ff3"
+    },
+    {
+      "path": "release-snapshots/v50-expedition/expedition-release.json",
+      "bytes": 274774,
+      "sha256": "4b25480f540789f4538538158e2c987d582f1d4c19920e8bfd4dc8ae9e32b0bb"
+    },
+    {
+      "path": "tower-singularity/art/portal-laboratory-menu.webp",
+      "bytes": 158200,
+      "sha256": "f6a544096a6418a0f65ba8c609415d0393a1081d18537ecac5eb4c345b13b4be"
+    },
+    {
+      "path": "tower-singularity/assets/LabAnimationJourney-CXGD7KhX.js",
+      "bytes": 3040,
+      "sha256": "fb441a1d5ff7d0b400a0fdbe5a0ddc0ba798552bfb5b023195c6e84db1da1e97"
+    },
+    {
+      "path": "tower-singularity/assets/LabCreativeRoom18Journey-DSBVAn45.js",
+      "bytes": 3303,
+      "sha256": "cc8986778d9962a999bc378ba7dda46bd843f6863a13ba51698052c740ed28f7"
+    },
+    {
+      "path": "tower-singularity/assets/LabCreativeRoom20Journey-Du1Odzxr.js",
+      "bytes": 3418,
+      "sha256": "4a69b4e3235d167112e8a72f89e0b7fa4e63b6593994f075576216a972e29b7d"
+    },
+    {
+      "path": "tower-singularity/assets/LabExpansionAlternateJourney48-m50yyTA-.js",
+      "bytes": 2391,
+      "sha256": "26bb20731b33d540fb7be84366b6f06ebe0ac7f42c7a616c4568d2b65e39104d"
+    },
+    {
+      "path": "tower-singularity/assets/LabExpansionAlternateJourney49-6AQfrPj7.js",
+      "bytes": 2039,
+      "sha256": "f67ac65ff41ea7f1625fa42c94a46ee7b21a30cc282a0343295d5263dbcbe507"
+    },
+    {
+      "path": "tower-singularity/assets/LabExpansionAlternateJourneyB-WXClA_ZM.js",
+      "bytes": 4760,
+      "sha256": "5b3b216acd84569e9fa414e45f03ff2fd63a32e3f7152cb3d720debc3615aad3"
+    },
+    {
+      "path": "tower-singularity/assets/LabExpansionJourneyA-cnKd6uRU.js",
+      "bytes": 7482,
+      "sha256": "3265d2d0e414eef84b24ba7b8dca2a1f5a1b71f93a47a1907765760b20ad71ad"
+    },
+    {
+      "path": "tower-singularity/assets/LabExpansionJourneyB-DDE2uQDo.js",
+      "bytes": 6715,
+      "sha256": "fff419c32392cbf3301609c690b0a41e84840c4fd5d45184b0409022985bd7b8"
+    },
+    {
+      "path": "tower-singularity/assets/LabExtendedJourney-herB11CQ.js",
+      "bytes": 9252,
+      "sha256": "4ade791aa7c0971dd4e8605cd52b8c1a9dd5a4352828ac71d5ae2667e5f7888f"
+    },
+    {
+      "path": "tower-singularity/assets/LabFoundationJourney-BOopWWda.js",
+      "bytes": 9043,
+      "sha256": "e9974baddf5901d5f933cf678a20f5db6e6984d59f75b86078f6b638284ec1f7"
+    },
+    {
+      "path": "tower-singularity/assets/LabIntroductoryAlternates-DcdsCClA.js",
+      "bytes": 1341,
+      "sha256": "a6451adc49d9c2f86f43455bfa4ced44d7166234f4fde82082990bf21f76cd5c"
+    },
+    {
+      "path": "tower-singularity/assets/LabLateCampaignAim-CJH8BNAs.js",
+      "bytes": 753,
+      "sha256": "ddfbed4b193b1c1837962afb3238714acffeadaeb6f4719a2f2a6c0689c69c84"
+    },
+    {
+      "path": "tower-singularity/assets/LabOpenJourney-MyF3CUNd.js",
+      "bytes": 6285,
+      "sha256": "3e909baa14aa36b5d4e5975abdc07a26239a9c10c20f1605d56b2ecd8092669a"
+    },
+    {
+      "path": "tower-singularity/assets/LabPortalEdgeJourney-CzhvqzO5.js",
+      "bytes": 2293,
+      "sha256": "308898a26a66110878ecf137f449c5cf721ce9bafc163a506079175f3351ce7c"
+    },
+    {
+      "path": "tower-singularity/assets/LabPortalFloorJourney-CQnStGPV.js",
+      "bytes": 1516,
+      "sha256": "9e52f256616264b6b05d759c37ec9b503fd5d244942354b49ce301015753be0a"
+    },
+    {
+      "path": "tower-singularity/assets/LabPostJourneyA-CWKaGzhi.js",
+      "bytes": 14134,
+      "sha256": "bfa2b73ef6a903d939a31a1a27e13a008f0e85a620e6e7524d2572f4005aaa00"
+    },
+    {
+      "path": "tower-singularity/assets/LabPostJourneyB-EuDAUlX_.js",
+      "bytes": 10887,
+      "sha256": "1270e5d2806a66d1ce503e75bc5d746d3146ff9f10166f7242a872e0f062af2b"
+    },
+    {
+      "path": "tower-singularity/assets/LabResearchJourney-DTc4jCjh.js",
+      "bytes": 7650,
+      "sha256": "81c98e926f5db6eb1c27cc986998a58b2d58f62f069503d9b64e8e92e657f3f3"
+    },
+    {
+      "path": "tower-singularity/assets/LabRoom13Journey-DpkZeNEo.js",
+      "bytes": 6194,
+      "sha256": "275c62befc9b95dc4c596810721ffba02b137b24ad14006e4769f1c7f21bc041"
+    },
+    {
+      "path": "tower-singularity/assets/LabRoom14Journey-C0UfonIt.js",
+      "bytes": 3566,
+      "sha256": "78d7d18c3f30e1eeb07f563356dfdf3f6c54f20246c10efd9f6a00f7ecedc5f5"
+    },
+    {
+      "path": "tower-singularity/assets/LabRoom15Journey-CVVlNNXC.js",
+      "bytes": 4604,
+      "sha256": "6048be92f5a176df4ac3e86244cd26f4ceb738e1fb8bf697bb019e6607d55846"
+    },
+    {
+      "path": "tower-singularity/assets/LabRoom16Journey-DcT0PHn1.js",
+      "bytes": 2534,
+      "sha256": "43814ce0e94d01e0e2b9152c6ea1c722073f13a019b2992525f6b0480fa97e74"
+    },
+    {
+      "path": "tower-singularity/assets/LabRoom17Journey-C2EE7523.js",
+      "bytes": 3260,
+      "sha256": "b621bf8abcb99cec72e5a8b0ef53e4ef6a005e414141e9502855a2759ba02708"
+    },
+    {
+      "path": "tower-singularity/assets/LabRoom18Journey-Byl3a4wD.js",
+      "bytes": 6065,
+      "sha256": "03ef642f6013a81be4bee3fae22f96f7679e09d774875287b8b38cd1a36c6e2d"
+    },
+    {
+      "path": "tower-singularity/assets/LabRoom19Journey-BVk2pOJ3.js",
+      "bytes": 3087,
+      "sha256": "edbd9e87a7c68f527a6a6d6794cfcb3a8de5780d1c656265ccf7910207066ab4"
+    },
+    {
+      "path": "tower-singularity/assets/LabRoom20Journey-Dnjdo837.js",
+      "bytes": 5013,
+      "sha256": "84ee4a4debf18d555e80bbf468821d58576e6fcf805b34adcd2670e8502fc0fd"
+    },
+    {
+      "path": "tower-singularity/assets/LabRoom21Journey-uEucOe9-.js",
+      "bytes": 5077,
+      "sha256": "df30a1461d19cf6c1fdadb906b090b3c44ebde9b41c09635a0e331c6ed89b014"
+    },
+    {
+      "path": "tower-singularity/assets/LabRoom22Journey-BouPMvNe.js",
+      "bytes": 2624,
+      "sha256": "8256cc0ea7a86ecbf71cd36ced2e41796d5824972fcaa454288b41fb781e4b2a"
+    },
+    {
+      "path": "tower-singularity/assets/LabRoom23Journey-4gKbaVii.js",
+      "bytes": 2626,
+      "sha256": "eb971e02e3b4c8185a4f35fbec7cd005181e0f521f132969816376bd18dfeba4"
+    },
+    {
+      "path": "tower-singularity/assets/LabRoom24Journey-DkZ5zl4F.js",
+      "bytes": 3453,
+      "sha256": "1bf343d90049936d8dad72675a75e25a52d8d1cd1d285d4d12f1a1a25d3f38c1"
+    },
+    {
+      "path": "tower-singularity/assets/LabRoom25Journey-Dsc4dFcD.js",
+      "bytes": 3447,
+      "sha256": "6494b0e4ae0b006dc8b303bf0639916cc2ac95d1ff700bde74e9f91629758e0c"
+    },
+    {
+      "path": "tower-singularity/assets/LabRoom26Journey-D5Lhf6Yz.js",
+      "bytes": 4194,
+      "sha256": "f568e01fcbf2e28f9bf1d89aa1d8e83df957bb60ea13a63a77cab81b61577e74"
+    },
+    {
+      "path": "tower-singularity/assets/LabRoom27Journey-CtMoXjWq.js",
+      "bytes": 3350,
+      "sha256": "ea4e62a0eed62998b64515b56db65142d1a7d3fb8d5c91b6e31653c5ef4422b5"
+    },
+    {
+      "path": "tower-singularity/assets/LabRoom28Journey-BKtIeHL7.js",
+      "bytes": 2721,
+      "sha256": "00bcb74736a0de9b300d8ff110461041bb4a4d62091877b3ce680cc4dc7a25fc"
+    },
+    {
+      "path": "tower-singularity/assets/LabRoom29Journey-FXLiWbZf.js",
+      "bytes": 2592,
+      "sha256": "625138692ba0641ed1ea63e7bb6ea332c70bf235ee3bc8b3cbd80456012e04ef"
+    },
+    {
+      "path": "tower-singularity/assets/LabRoom30Journey-zAsFaYdh.js",
+      "bytes": 3762,
+      "sha256": "1d260d8e49e983b2f7a9c354898fe771c41df56434d67e203bd8fb51bbc8f925"
+    },
+    {
+      "path": "tower-singularity/assets/LabSingularityJourney-DOyHtoU-.js",
+      "bytes": 17459,
+      "sha256": "e1947ab5f87caeab829ed60a54db0fd0e9e12ce3fe0fd2904b974fa296dc0f9c"
+    },
+    {
+      "path": "tower-singularity/assets/LabTowerJourney-cnAT52-9.js",
+      "bytes": 31405,
+      "sha256": "ae67ba8e9211e0a9a3b2b7e59e8a4652cd8519d062762f1d3bb341a33096efcb"
+    },
+    {
+      "path": "tower-singularity/assets/LabV8Journey-CnUX-JBE.js",
+      "bytes": 15059,
+      "sha256": "efd60e329f37b6105eccf5e65f55594d11c4f945c6bd4043cc120022ab1c983f"
+    },
+    {
+      "path": "tower-singularity/assets/LabWorkshopJourney-BreR-TJl.js",
+      "bytes": 7249,
+      "sha256": "2016d65014aa5700492ca93d3a26f4cd80392fc60bc29af20635fb8384f07504"
+    },
+    {
+      "path": "tower-singularity/assets/index-B6FmTTVO.css",
+      "bytes": 28952,
+      "sha256": "08ea4c995a1e54c5b3f4dabe61976d1e6c5f0f48363192d080c4b8dfad9d12aa"
+    },
+    {
+      "path": "tower-singularity/assets/index-BBzE2-3_.js",
+      "bytes": 1679868,
+      "sha256": "e9d4b2f74ea0591fd5321d165b247fe5256d75ecccad6ba2522e877de3a7469d"
+    },
+    {
+      "path": "tower-singularity/build-info.json",
+      "bytes": 3430,
+      "sha256": "9c6d7cd90c31036817ffb5dd9a31e2a2909431b744e461c002092619e0bd7e31"
+    },
+    {
+      "path": "tower-singularity/draco/draco_decoder.js",
+      "bytes": 719410,
+      "sha256": "30e4d486fa020737af10e3c56197693e5b904bdc05b8bfa5d7b06751dec6da04"
+    },
+    {
+      "path": "tower-singularity/draco/draco_decoder.wasm",
+      "bytes": 285747,
+      "sha256": "c55a594e8ffd18426d36b27fea9618af3df5e173640a3e56d46f09d76f0574f2"
+    },
+    {
+      "path": "tower-singularity/draco/draco_wasm_wrapper.js",
+      "bytes": 58763,
+      "sha256": "e8049906ef3f8f75d3456c22a3f31bfdfe5b5b5bd09ccdec613b9e9a49d554d8"
+    },
+    {
+      "path": "tower-singularity/index.html",
+      "bytes": 11118,
+      "sha256": "2a3e6d51a76caa7b35b99166d4d37ca94c8fde89867be130f7ace23dc5e5d8e8"
+    },
+    {
+      "path": "tower-singularity/media/tower-poster.jpg",
+      "bytes": 26422,
+      "sha256": "a4dd53fa0495afa46216a5067430c42c23a51685cda65425ef04b0333c60e55a"
+    },
+    {
+      "path": "tower-singularity/media/tower-preview.png",
+      "bytes": 186413,
+      "sha256": "4ed0ea9684e55c2588c4bf638ca2a1e33d3b236793bd9f5994a3d83e9d7d4aeb"
+    },
+    {
+      "path": "tower-singularity/models/runtime/manifest.json",
+      "bytes": 2421,
+      "sha256": "8806346ed3ac0fb096aa26321d5620c16a6a2a55f2523023fb21f6c4749fe2ed"
+    },
+    {
+      "path": "tower-singularity/models/runtime/model-01-player.glb",
+      "bytes": 549756,
+      "sha256": "e5b09ff0281377b679d6fdd505fa1ed89550bb662e94e7f593ed67ee50a66a91"
+    },
+    {
+      "path": "tower-singularity/models/runtime/model-02-cargo.glb",
+      "bytes": 510376,
+      "sha256": "65763c87e7f14cc807cffa8fc2adc364e8421dae819271a0c406a6b0d2c8c697"
+    },
+    {
+      "path": "tower-singularity/models/runtime/model-11-portal-gun.glb",
+      "bytes": 393116,
+      "sha256": "d8c76c41efbbf0a6d70e30ab5a7b70f49fd806e497f67ea06cb28f9f4edca1d7"
+    },
+    {
+      "path": "tower-singularity/models/runtime/model-19-lift-platform.glb",
+      "bytes": 404076,
+      "sha256": "afd039e831ff0baa514f076a505ffbb7c57dac2251959b3d858fc92dcf3d04b9"
+    },
+    {
+      "path": "tower-singularity/models/runtime/model-22-terminal.glb",
+      "bytes": 377108,
+      "sha256": "9e2f4ff758996f67596d3935041f632bafdf7e84efd4869341920b64a5919c26"
+    },
+    {
+      "path": "tower-singularity/models/runtime/model-23-floor-tile.glb",
+      "bytes": 103600,
+      "sha256": "0950bc6ef31bb28939087bad53695f21cde0b9fe5740394df202a0b242f77b0c"
+    },
+    {
+      "path": "tower-singularity/models/runtime/model-24-wall-panel.glb",
+      "bytes": 62448,
+      "sha256": "15aaca48f6e436d5e89abf7548c0fe43580bba8faff4619e476d3a6d306b004d"
+    },
+    {
+      "path": "tower-singularity/models/runtime/model-28-rotating-panel.glb",
+      "bytes": 366120,
+      "sha256": "3159916bad63903e73b8e660ce4aab8a3b1e38f1231152b68f3df63d6987ac4b"
+    },
+    {
+      "path": "tower-singularity/models/runtime/model-29-pressure-platform.glb",
+      "bytes": 390244,
+      "sha256": "ee65bd9706ad4f4658e54ec5ad8f6f45b24d9027e4e6072f162358a4c1b3291b"
+    },
+    {
+      "path": "tower-singularity/models/runtime/model-31-wind-generator.glb",
+      "bytes": 25768,
+      "sha256": "024f25db27e96e1efdaa5e200c13a665dee487e798338f86fef985feeae9019e"
+    },
+    {
+      "path": "tower-singularity/models/runtime/model-32-spring-ram.glb",
+      "bytes": 25400,
+      "sha256": "958d5ed533736d5779da078be20ae2b0e84212bfc3a00b456dc0106bc0a093d7"
+    },
+    {
+      "path": "tower-singularity/models/runtime/model-35-shutter-fan.glb",
+      "bytes": 27816,
+      "sha256": "8e11d5ab83250348f6e08f034ec87d82727162742d5a7be18f981fc523aa907a"
+    },
+    {
+      "path": "tower-singularity/models/runtime/model-37-extension-bridge.glb",
+      "bytes": 25764,
+      "sha256": "96173a9ef89375066b08fad8dff1928425863c6b4e6b8c0373c497448f109c55"
+    },
+    {
+      "path": "tower-singularity/models/runtime/model-39-cable-winch.glb",
+      "bytes": 28608,
+      "sha256": "301f148938ec83e2a8f4b45c7f9bdfd19fb40ca79d8fb9abc7601caf4fe0eafd"
+    },
+    {
+      "path": "tower-singularity/native-evidence.json",
+      "bytes": 18332,
+      "sha256": "0a0368ab1904d7a2f50ef232a66029b6b15f92913db8d5f8fecd42c3e488e329"
+    },
+    {
+      "path": "tower-singularity/preview-release.json",
+      "bytes": 871,
+      "sha256": "9a368815e960859900d731782d2bba967a0dd64bed2fb2ff47d7701dbc01e72b"
+    },
+    {
+      "path": "tower-singularity/recording-evidence.json",
+      "bytes": 92735,
+      "sha256": "57ac04a9292187c3573b516daaf23e462004358bf610f8a7025aed93dedaf962"
+    },
+    {
+      "path": "tower-singularity/ui-evidence.json",
+      "bytes": 7323,
+      "sha256": "3350c305dedf4ffd0f31c8b0a410ea7b724b409d71f1ab33403907efaedaf29e"
+    },
+    {
+      "path": "tower-singularity/ui/atlas-common.js",
+      "bytes": 1982,
+      "sha256": "fe9016caa1f1003b73a663850d79b9b3a152b7e2510cf9692e09afc19209cb67"
+    },
+    {
+      "path": "tower-singularity/ui/atlas-controls.js",
+      "bytes": 2969,
+      "sha256": "e2442eec3036da5d4f45f3681ec873c9dc0b423d87a7e28c810fe2ea66520377"
+    },
+    {
+      "path": "tower-singularity/ui/atlas-layout.css",
+      "bytes": 4566,
+      "sha256": "8f7720fd3bb31fe93dcbef03e7bff888a792ca05f86b3999517c8e74e69da043"
+    },
+    {
+      "path": "tower-singularity/ui/atlas-map.css",
+      "bytes": 7497,
+      "sha256": "677b343ac0157faea4114a5f52bcc0d52e4ebc755034f87e203c8de9e9745d2e"
+    },
+    {
+      "path": "tower-singularity/ui/atlas-map.js",
+      "bytes": 6044,
+      "sha256": "bd43b25588afb3731bec55a2650c3a8ab6be1f80b2a3e978394774c1c8b8ee57"
+    },
+    {
+      "path": "tower-singularity/ui/atlas-motion.css",
+      "bytes": 3876,
+      "sha256": "b9fd2cdd1b5a0903c9109ca614e3027d45881fd6bbe223abaaf414d419dd5172"
+    },
+    {
+      "path": "tower-singularity/ui/atlas-panels.css",
+      "bytes": 4836,
+      "sha256": "596232893882fdd23a59ef7a4373fb6f272b53441b430c654d30504bc8b84fe3"
+    },
+    {
+      "path": "tower-singularity/ui/atlas-responsive.css",
+      "bytes": 8050,
+      "sha256": "636ea8bbf6ea683adc18ab7998fbeb2de8b1d827d28662face074115187baa9f"
+    },
+    {
+      "path": "tower-singularity/ui/atlas-shell.js",
+      "bytes": 5551,
+      "sha256": "0064b5033735d7007f896185d5d4c16e6af4dd6c114e298bed953e2457326fe6"
+    },
+    {
+      "path": "tower-singularity/ui/atlas-v51.css",
+      "bytes": 474,
+      "sha256": "d960ce537a2304ec4c31024086a590bb89d3dd3d79ca205bcb8f3fb8f04e6e9a"
+    },
+    {
+      "path": "tower-singularity/ui/atlas-v51.js",
+      "bytes": 1525,
+      "sha256": "5f4ecdd983e85161f6b1ccbaf3924a256a9809bae72f445632c74e57315fd3ad"
+    },
+    {
+      "path": "tower-singularity/walkthrough.html",
+      "bytes": 2716,
+      "sha256": "51a630c20edd084e8c2094ed0ba36a15452b00ede102e505124a0155374b3506"
+    },
+    {
+      "path": "tower-singularity/walkthroughs.html",
+      "bytes": 248,
+      "sha256": "ddbba6a53cfc7c22ff8df684712be75b753a0804fdedf1ff366b6aa1569d187f"
+    },
+    {
+      "path": "tower-singularity/walkthroughs/level-01.jpg",
+      "bytes": 29130,
+      "sha256": "697b396eb9d6996a2a8a05795fe96b00d8d578c40099c642f683fa31391b2e8c"
+    },
+    {
+      "path": "tower-singularity/walkthroughs/level-02.jpg",
+      "bytes": 23099,
+      "sha256": "807eed59d9edfcfcf77bf1e259f0a5002bf1a231857f7df0eb5121308901d001"
+    },
+    {
+      "path": "tower-singularity/walkthroughs/level-03.jpg",
+      "bytes": 33844,
+      "sha256": "7d7a0d3be4d5e01b66109515f8f2ae6ca71bac60553c9ab92beeb50d38b0c3f5"
+    },
+    {
+      "path": "tower-singularity/walkthroughs/level-04.jpg",
+      "bytes": 24074,
+      "sha256": "263f202f7e120f2b29dfa1ac354bef7ee8600931fbb2ef42212086c50852dfa0"
+    },
+    {
+      "path": "tower-singularity/walkthroughs/level-05.jpg",
+      "bytes": 21553,
+      "sha256": "aab8ac92fde790f140e2df15328c8db855dafb64894ddef1512ccecda23140df"
+    },
+    {
+      "path": "tower-singularity/walkthroughs/level-06.jpg",
+      "bytes": 25583,
+      "sha256": "12d6df481ee0e8610f6d536ad7f160fd0d97a15db2e208da07beabc6e3461190"
+    },
+    {
+      "path": "tower-singularity/walkthroughs/level-07.jpg",
+      "bytes": 31082,
+      "sha256": "2ff7c546610311c570208634941a496dcaa542fe8d23504f4778d8aa323a27a9"
+    },
+    {
+      "path": "tower-singularity/walkthroughs/level-08.jpg",
+      "bytes": 31851,
+      "sha256": "38ba9f3817a55ae1594e039ef84d11f5126d7bfdaefa606658d4b10017fcf3bc"
+    },
+    {
+      "path": "tower-singularity/walkthroughs/level-09.jpg",
+      "bytes": 28551,
+      "sha256": "84783dc9a18ca5935e0ef94d10ef3dc4b8090896325ed095fe3532727ce4c007"
+    },
+    {
+      "path": "tower-singularity/walkthroughs/level-10.jpg",
+      "bytes": 32178,
+      "sha256": "34a2083698e596dda617a7b7b7b8be42edc1c50ee7c3456a2a111747d04ade7b"
+    },
+    {
+      "path": "tower-singularity/walkthroughs/level-11.jpg",
+      "bytes": 32548,
+      "sha256": "6ec4619940ad09f42d161293bffbe91a0ef4470f8c5fb5d1cdb202097b1222ef"
+    },
+    {
+      "path": "tower-singularity/walkthroughs/level-12.jpg",
+      "bytes": 29600,
+      "sha256": "7e5bb4ca7aff1f4438167d123d7c1f23c9501a3103bf68fa4fb988e0f1bcf773"
+    },
+    {
+      "path": "tower-singularity/walkthroughs/level-13.jpg",
+      "bytes": 22767,
+      "sha256": "d8716c2f20422db7ec3955806f7e21abcde7792716a48ef15733b1a56adc7b99"
+    },
+    {
+      "path": "tower-singularity/walkthroughs/level-14.jpg",
+      "bytes": 29937,
+      "sha256": "2a869a477e15936b4a882e1b1d63ed6292acc737de6bb7d24401dbee2116b8cf"
+    },
+    {
+      "path": "tower-singularity/walkthroughs/level-15.jpg",
+      "bytes": 24069,
+      "sha256": "52ed78dcc693afd92ec69c33e0364cdb36ce86030edf539b4af97c5954630fac"
+    },
+    {
+      "path": "tower-singularity/walkthroughs/level-16.jpg",
+      "bytes": 18566,
+      "sha256": "efdaa7a022cb975278c7e1ef9d8bebb54fe0f899c62ad3a2b05d7a7cf684f0b5"
+    },
+    {
+      "path": "tower-singularity/walkthroughs/level-17.jpg",
+      "bytes": 20373,
+      "sha256": "a82a0a4e9c0dfd73691f037528fd84b15652437a6e274f1c7414ff6f4db328ea"
+    },
+    {
+      "path": "tower-singularity/walkthroughs/level-18.jpg",
+      "bytes": 27582,
+      "sha256": "39e698cb12b66632ced674bb7e0925402bfe14fdc3d42723fa17715bb0403ddc"
+    },
+    {
+      "path": "tower-singularity/walkthroughs/level-19.jpg",
+      "bytes": 30099,
+      "sha256": "eeeed00247bfd4b11c5730e05c05db213d0c0f94c53ae38456cd2858ff701f97"
+    },
+    {
+      "path": "tower-singularity/walkthroughs/level-20.jpg",
+      "bytes": 21045,
+      "sha256": "fc4c9e3f99d93493060e1ab3fc2fba2f0d4915a00ca7750d0a9aa5393376788a"
+    },
+    {
+      "path": "tower-singularity/walkthroughs/level-21.jpg",
+      "bytes": 27403,
+      "sha256": "aa964e8b8df0c32ed93fc9b075a5a3ccc190a6067e0f0098d4eb595949e3d170"
+    },
+    {
+      "path": "tower-singularity/walkthroughs/level-22.jpg",
+      "bytes": 28618,
+      "sha256": "5827cac4c5ce1902e8ba9670873a841c4597b442bbf469266add13798a407fe6"
+    },
+    {
+      "path": "tower-singularity/walkthroughs/level-23.jpg",
+      "bytes": 22809,
+      "sha256": "73866216bc252d3efbcfb30c6fb82e20063b61434baf6433f751c5d8bba3ea41"
+    },
+    {
+      "path": "tower-singularity/walkthroughs/level-24.jpg",
+      "bytes": 31433,
+      "sha256": "13fe508d3c7d35aef5095e2e40d83723338af66b34cf4d86380483fc99e1a12c"
+    },
+    {
+      "path": "tower-singularity/walkthroughs/level-25.jpg",
+      "bytes": 27829,
+      "sha256": "c5d297146fb18696aed7332720ec2b6b062a398fde32185c3e4540e47efae1a6"
+    },
+    {
+      "path": "tower-singularity/walkthroughs/level-26.jpg",
+      "bytes": 24099,
+      "sha256": "42d6326ff78b3c7e44e99839ee499197f37a4cab38c14991f8f7026e1a775f49"
+    },
+    {
+      "path": "tower-singularity/walkthroughs/level-27.jpg",
+      "bytes": 33269,
+      "sha256": "c2bc9d99aa14291503680d372915f1920b47e8f623beb23ad6531f20d0917031"
+    },
+    {
+      "path": "tower-singularity/walkthroughs/level-28.jpg",
+      "bytes": 31392,
+      "sha256": "3f4d0162194f1afdce2c924be29bced291d66a77bb45f2adaa2531e1b60a6cb6"
+    },
+    {
+      "path": "tower-singularity/walkthroughs/level-29.jpg",
+      "bytes": 28337,
+      "sha256": "76b45b8ba7d3755b549a54b3515b0a9553607ad680c444be2f61c5437d225e98"
+    },
+    {
+      "path": "tower-singularity/walkthroughs/level-30.jpg",
+      "bytes": 31279,
+      "sha256": "d955f9e9ff3f4f11fd6c62d53ebfb89393fe4adc6e80351e635c69cf3ddd647f"
+    },
+    {
+      "path": "tower-singularity/walkthroughs/level-31.jpg",
+      "bytes": 20482,
+      "sha256": "3638cc55c1bd28adb5c2ead08aa6907aae1a1893c6468982ffb52caa763c2b7b"
+    },
+    {
+      "path": "tower-singularity/walkthroughs/level-32.jpg",
+      "bytes": 23002,
+      "sha256": "eca6e81f2c52b26293d148a4ad969d647ab500e06c5d952340881c228eb5acf8"
+    },
+    {
+      "path": "tower-singularity/walkthroughs/level-33.jpg",
+      "bytes": 25029,
+      "sha256": "0ceddbcc5f279a5dda384016f92084f5c7f4556304408e7709a4f332582ed0c6"
+    },
+    {
+      "path": "tower-singularity/walkthroughs/level-34.jpg",
+      "bytes": 24017,
+      "sha256": "2945b3c4089e1bd27af7a80a89d86ffc2d5189e86f32a98e8488ca6cd616f1c8"
+    },
+    {
+      "path": "tower-singularity/walkthroughs/level-35.jpg",
+      "bytes": 16191,
+      "sha256": "2d7cb268eb294e28abe91d9e799c38149826b6eb25bd774d1f361b3f4d7b7f95"
+    },
+    {
+      "path": "tower-singularity/walkthroughs/level-36.jpg",
+      "bytes": 16975,
+      "sha256": "52de11372507effa66d66f18f370b84bad007cd0c00e1c4d6af379af8751fc4c"
+    },
+    {
+      "path": "tower-singularity/walkthroughs/level-37.jpg",
+      "bytes": 24290,
+      "sha256": "b1104c2461436df025f592fa03da2c6a290b837c16e31380db11fcbcb0c3384e"
+    },
+    {
+      "path": "tower-singularity/walkthroughs/level-38.jpg",
+      "bytes": 25705,
+      "sha256": "4743d1329afdfbbad4de34d4ad45100cca5925f551582134de8f60ff36ae9b54"
+    },
+    {
+      "path": "tower-singularity/walkthroughs/level-39.jpg",
+      "bytes": 21735,
+      "sha256": "bf4b2e283e1bdcd604cdee793c8e3675b9994a305bf4fd8280cf3c46762cfa3b"
+    },
+    {
+      "path": "tower-singularity/walkthroughs/level-40.jpg",
+      "bytes": 28798,
+      "sha256": "de9126af99f193554c97a125055c82d352ed30dc149d6a9d978d52f5ab3d1e1a"
+    },
+    {
+      "path": "tower-singularity/walkthroughs/level-41.jpg",
+      "bytes": 26983,
+      "sha256": "cd8c9973ed753ad2b8ae8e316b40684b81edacc807223a89797152dc3fa889cc"
+    },
+    {
+      "path": "tower-singularity/walkthroughs/level-42.jpg",
+      "bytes": 24693,
+      "sha256": "f0f2dd0b36f0e1ca5b0f1bf16d88b120e84938b256a742c30ab16eb3e68395fe"
+    },
+    {
+      "path": "tower-singularity/walkthroughs/level-43.jpg",
+      "bytes": 25150,
+      "sha256": "95f9ff909102b7e7cc7c93329d3baa74d991f945f56c03f5c4171c904e5a1275"
+    },
+    {
+      "path": "tower-singularity/walkthroughs/level-44.jpg",
+      "bytes": 22773,
+      "sha256": "1dd6ebb3f55338205e95129cb43c351599b31510c62002e97bdc067630ddbd65"
+    },
+    {
+      "path": "tower-singularity/walkthroughs/level-45.jpg",
+      "bytes": 26158,
+      "sha256": "6e63f09ee800116f77568f7a7b14b371e77842698b217620e07cdd7787d0939b"
+    },
+    {
+      "path": "tower-singularity/walkthroughs/level-46.jpg",
+      "bytes": 18776,
+      "sha256": "c6984c79e41136896316de77308ac2fd7c035b4004b25b4e55a4204951cb29fd"
+    },
+    {
+      "path": "tower-singularity/walkthroughs/level-47.jpg",
+      "bytes": 16960,
+      "sha256": "221afee6e4259ebd42b68a5366ef80bca422cd2bf9bf6c19200d63e6f6be5ca0"
+    },
+    {
+      "path": "tower-singularity/walkthroughs/level-48.jpg",
+      "bytes": 22574,
+      "sha256": "625a0bda0b98b4a0b7b0d4fbed48a9ced9b7a94f6c7c6d443dadcb5fd18e7df4"
+    },
+    {
+      "path": "tower-singularity/walkthroughs/level-49.jpg",
+      "bytes": 24739,
+      "sha256": "911da9d2c2ffb01f4ea5bc46f6edcf8f21ee831111ac98f5ae3cdfdbd7f75234"
+    },
+    {
+      "path": "tower-singularity/walkthroughs/level-50.jpg",
+      "bytes": 20657,
+      "sha256": "ba1308180fd231b75bdd3d21f3f7a605ebda85a806aa84c518837e963a1d5a68"
+    },
+    {
+      "path": "tower-singularity/walkthroughs/level-51.jpg",
+      "bytes": 26051,
+      "sha256": "0f41de3aad7a15ab3f39a1311d4a11fe918889b1300b01fb91a04f9797537e2f"
+    },
+    {
+      "path": "ui/atlas-common.js",
+      "bytes": 1982,
+      "sha256": "fe9016caa1f1003b73a663850d79b9b3a152b7e2510cf9692e09afc19209cb67"
+    },
+    {
+      "path": "ui/atlas-controls.js",
+      "bytes": 2969,
+      "sha256": "e2442eec3036da5d4f45f3681ec873c9dc0b423d87a7e28c810fe2ea66520377"
+    },
+    {
+      "path": "ui/atlas-layout.css",
+      "bytes": 4566,
+      "sha256": "8f7720fd3bb31fe93dcbef03e7bff888a792ca05f86b3999517c8e74e69da043"
+    },
+    {
+      "path": "ui/atlas-map.css",
+      "bytes": 7497,
+      "sha256": "677b343ac0157faea4114a5f52bcc0d52e4ebc755034f87e203c8de9e9745d2e"
+    },
+    {
+      "path": "ui/atlas-map.js",
+      "bytes": 6044,
+      "sha256": "bd43b25588afb3731bec55a2650c3a8ab6be1f80b2a3e978394774c1c8b8ee57"
+    },
+    {
+      "path": "ui/atlas-motion.css",
+      "bytes": 3876,
+      "sha256": "b9fd2cdd1b5a0903c9109ca614e3027d45881fd6bbe223abaaf414d419dd5172"
+    },
+    {
+      "path": "ui/atlas-panels.css",
+      "bytes": 4836,
+      "sha256": "596232893882fdd23a59ef7a4373fb6f272b53441b430c654d30504bc8b84fe3"
+    },
+    {
+      "path": "ui/atlas-responsive.css",
+      "bytes": 8050,
+      "sha256": "636ea8bbf6ea683adc18ab7998fbeb2de8b1d827d28662face074115187baa9f"
+    },
+    {
+      "path": "ui/atlas-shell.js",
+      "bytes": 5551,
+      "sha256": "0064b5033735d7007f896185d5d4c16e6af4dd6c114e298bed953e2457326fe6"
+    },
+    {
+      "path": "ui/atlas-v51.css",
+      "bytes": 474,
+      "sha256": "d960ce537a2304ec4c31024086a590bb89d3dd3d79ca205bcb8f3fb8f04e6e9a"
+    },
+    {
+      "path": "ui/atlas-v51.js",
+      "bytes": 1525,
+      "sha256": "5f4ecdd983e85161f6b1ccbaf3924a256a9809bae72f445632c74e57315fd3ad"
+    },
+    {
+      "path": "walkthroughs.css",
+      "bytes": 5949,
+      "sha256": "a71200a92ac67d9fe12b4d2cec2e8c1a6b3d0eefa89f9572975bc210a69f336f"
+    },
+    {
+      "path": "walkthroughs.html",
+      "bytes": 4012,
+      "sha256": "251d9eb8d86fed2c606817a9e4344a2b833fbd0f0d3534e306fd53f4ba30b481"
+    },
+    {
+      "path": "walkthroughs.js",
+      "bytes": 9119,
+      "sha256": "9d5f8b94e54f9a27b2484a3af511e027b7f8cb07cc122adde48abd1a6ccae5fc"
+    },
+    {
+      "path": "walkthroughs/history.html",
+      "bytes": 18652,
+      "sha256": "d3cf8f929ddf2d7e07f412360891298ad9faa79870016a4eb880b376520165aa"
+    },
+    {
+      "path": "walkthroughs/level-01-finish.jpg",
+      "bytes": 22426,
+      "sha256": "9ed8e4836edea9eb3fb95a1d90baa3779cc0087e590e6c43d9b2f1a3c362cde3"
+    },
+    {
+      "path": "walkthroughs/level-01-source-evidence.json",
+      "bytes": 994,
+      "sha256": "1dd836e2b444a80d75ccab4d29d5af94c09f6f997b7ce3bf78b407f0645afe3e"
+    },
+    {
+      "path": "walkthroughs/level-01.jpg",
+      "bytes": 29130,
+      "sha256": "697b396eb9d6996a2a8a05795fe96b00d8d578c40099c642f683fa31391b2e8c"
+    },
+    {
+      "path": "walkthroughs/level-01.json",
+      "bytes": 2504,
+      "sha256": "ae73aa0d48fad030d40d4b05b57ad6290b94bdcc94756e5cb40e3c1cd5c0bc59"
+    },
+    {
+      "path": "walkthroughs/level-01.mp4",
+      "bytes": 268177,
+      "sha256": "057c16c87ea2c18818373deab133d024fe57eb49c157ce7b29aa63b0292c7b86"
+    },
+    {
+      "path": "walkthroughs/level-02-finish.jpg",
+      "bytes": 30207,
+      "sha256": "91721dbe7290544bfd6ccb2a52a52cf2bf5888ba99ea3254950226ddfc64c1c3"
+    },
+    {
+      "path": "walkthroughs/level-02-source-evidence.json",
+      "bytes": 994,
+      "sha256": "42d6475cddb0bdecadc2f3634f5e7ac7b5ce7dbddf708187f261a382e5f2b360"
+    },
+    {
+      "path": "walkthroughs/level-02.jpg",
+      "bytes": 23099,
+      "sha256": "807eed59d9edfcfcf77bf1e259f0a5002bf1a231857f7df0eb5121308901d001"
+    },
+    {
+      "path": "walkthroughs/level-02.json",
+      "bytes": 2470,
+      "sha256": "5672f54e7cd44caa1be4d4168391a8693be96ad3d6f37b15645483ee3b7b56ce"
+    },
+    {
+      "path": "walkthroughs/level-02.mp4",
+      "bytes": 273461,
+      "sha256": "b7fa79051f7675c10281f527da5badca7102c94be635d4899e5cab1e79152148"
+    },
+    {
+      "path": "walkthroughs/level-03-finish.jpg",
+      "bytes": 31368,
+      "sha256": "e280337469d0d9eb043a9a2314077f499215f34239fb6ce368f78c4cb5b7ba00"
+    },
+    {
+      "path": "walkthroughs/level-03-source-evidence.json",
+      "bytes": 994,
+      "sha256": "56517a57c60686d65dd4098909c536100e85356aa1d704f25c2a5e4572e84b9b"
+    },
+    {
+      "path": "walkthroughs/level-03.jpg",
+      "bytes": 33844,
+      "sha256": "7d7a0d3be4d5e01b66109515f8f2ae6ca71bac60553c9ab92beeb50d38b0c3f5"
+    },
+    {
+      "path": "walkthroughs/level-03.json",
+      "bytes": 3227,
+      "sha256": "4bc308bcdbcbd042a0792e8a8ca4348d09b7f391b09580cdafbd73c8dae09863"
+    },
+    {
+      "path": "walkthroughs/level-03.mp4",
+      "bytes": 757187,
+      "sha256": "56faeb497fc13aa3ce58e04eada1fe45f73be7eb16a528f69d66192df041a32e"
+    },
+    {
+      "path": "walkthroughs/level-04-finish.jpg",
+      "bytes": 19099,
+      "sha256": "327682ef4e4dab06e25cda44f2c4f79398d8cc29b489ad8877e58c8e4d23e630"
+    },
+    {
+      "path": "walkthroughs/level-04-source-evidence.json",
+      "bytes": 994,
+      "sha256": "c909d0ab798be03232df120f3f72d586bff73d3636a4663babd06d1f155828a0"
+    },
+    {
+      "path": "walkthroughs/level-04.jpg",
+      "bytes": 24074,
+      "sha256": "263f202f7e120f2b29dfa1ac354bef7ee8600931fbb2ef42212086c50852dfa0"
+    },
+    {
+      "path": "walkthroughs/level-04.json",
+      "bytes": 3230,
+      "sha256": "5828e0c189ecbf767c8380b8ec7d14339e127011f62251ad413bc86761538854"
+    },
+    {
+      "path": "walkthroughs/level-04.mp4",
+      "bytes": 572980,
+      "sha256": "12c1b4ede5f6b37145dc3ecdf0b2947f0629894c4da76bdd844d37c08cf2da99"
+    },
+    {
+      "path": "walkthroughs/level-05-finish.jpg",
+      "bytes": 22740,
+      "sha256": "a11e3a2170d7da4ae584bd61611811b6132023a896577f57370b8f7208df33fa"
+    },
+    {
+      "path": "walkthroughs/level-05-source-evidence.json",
+      "bytes": 994,
+      "sha256": "883aa37b5f11572c2b15ff5c9d2dcdef2e42647287458d00f8ec4ce5677d87e4"
+    },
+    {
+      "path": "walkthroughs/level-05.jpg",
+      "bytes": 21553,
+      "sha256": "aab8ac92fde790f140e2df15328c8db855dafb64894ddef1512ccecda23140df"
+    },
+    {
+      "path": "walkthroughs/level-05.json",
+      "bytes": 3944,
+      "sha256": "4d84448d7915d20f310784c54ff3e9ac7e293fd4eb7a7aaa000210249e3f67b3"
+    },
+    {
+      "path": "walkthroughs/level-05.mp4",
+      "bytes": 1219996,
+      "sha256": "30bd8ae5283e3dcceef6d996afd092cc58af03175040de23efceebf5313a372a"
+    },
+    {
+      "path": "walkthroughs/level-06-finish.jpg",
+      "bytes": 26219,
+      "sha256": "6319c1fca97c3541932996880ea227c3870af0b353353d613c1ae121c5f7423c"
+    },
+    {
+      "path": "walkthroughs/level-06-source-evidence.json",
+      "bytes": 994,
+      "sha256": "d763e33607b7ce0e3e93c539e425a514ece137ba19734029f9a6e9561b92f345"
+    },
+    {
+      "path": "walkthroughs/level-06.jpg",
+      "bytes": 25583,
+      "sha256": "12d6df481ee0e8610f6d536ad7f160fd0d97a15db2e208da07beabc6e3461190"
+    },
+    {
+      "path": "walkthroughs/level-06.json",
+      "bytes": 3212,
+      "sha256": "9928017d90d0dced88824a045a674ad641088710f1866fd2c20035a3d23658fd"
+    },
+    {
+      "path": "walkthroughs/level-06.mp4",
+      "bytes": 1601464,
+      "sha256": "3914539275b938ab98859eaacdc34a5e7b6aeb0b8388b999b877d79ccb7c6c54"
+    },
+    {
+      "path": "walkthroughs/level-07-finish.jpg",
+      "bytes": 43263,
+      "sha256": "3889995b4d91969ca29a6d0d3dd162ab0f75d023c787b19fab9d16d6c7ffe746"
+    },
+    {
+      "path": "walkthroughs/level-07-source-evidence.json",
+      "bytes": 994,
+      "sha256": "62dc5f8e7b8c52a42d2f5bdfe6090e390f84870e5bd49197e775df95a9051117"
+    },
+    {
+      "path": "walkthroughs/level-07.jpg",
+      "bytes": 31082,
+      "sha256": "2ff7c546610311c570208634941a496dcaa542fe8d23504f4778d8aa323a27a9"
+    },
+    {
+      "path": "walkthroughs/level-07.json",
+      "bytes": 4560,
+      "sha256": "f11f613a0fec4b461a723308e86f52c388887ae0ad5b11d74e7c222989270315"
+    },
+    {
+      "path": "walkthroughs/level-07.mp4",
+      "bytes": 2314503,
+      "sha256": "4563c6204177b6067d6ecca473837f4d96e62b76b682c6518bf910ab645fd4d6"
+    },
+    {
+      "path": "walkthroughs/level-08-finish.jpg",
+      "bytes": 21516,
+      "sha256": "55b71e338cca2c78916533bdd15b4557f3d7a61c6c8b5a058d21ec8123cc25f7"
+    },
+    {
+      "path": "walkthroughs/level-08-source-evidence.json",
+      "bytes": 994,
+      "sha256": "7e22015acfd24a3be964161629235c32de142d9fd86647a0627e94f52ec4c416"
+    },
+    {
+      "path": "walkthroughs/level-08.jpg",
+      "bytes": 31851,
+      "sha256": "38ba9f3817a55ae1594e039ef84d11f5126d7bfdaefa606658d4b10017fcf3bc"
+    },
+    {
+      "path": "walkthroughs/level-08.json",
+      "bytes": 2563,
+      "sha256": "9f72a48030fd781acc5ff8a165b07f454f6aa94429d5de04c1aa45cf31dba639"
+    },
+    {
+      "path": "walkthroughs/level-08.mp4",
+      "bytes": 741716,
+      "sha256": "e625f64431b55f32b0d3f885a2505a3597645b6738cfaaa69f00211b309f6232"
+    },
+    {
+      "path": "walkthroughs/level-09-finish.jpg",
+      "bytes": 23003,
+      "sha256": "6071b3e2443ff33ccef650010f9ba0d8fe1309e1aa5bfb4f6876348f2ec624a7"
+    },
+    {
+      "path": "walkthroughs/level-09-source-evidence.json",
+      "bytes": 994,
+      "sha256": "459e4e991dfdf20862ef8844b46cbcfbe185ff082bd118f88b0550b26b7bdc71"
+    },
+    {
+      "path": "walkthroughs/level-09.jpg",
+      "bytes": 28551,
+      "sha256": "84783dc9a18ca5935e0ef94d10ef3dc4b8090896325ed095fe3532727ce4c007"
+    },
+    {
+      "path": "walkthroughs/level-09.json",
+      "bytes": 3761,
+      "sha256": "c38b3e8eda04635b1b8d62530fd958eaa653c83ae26bb5668376506b918f8779"
+    },
+    {
+      "path": "walkthroughs/level-09.mp4",
+      "bytes": 1472615,
+      "sha256": "df5063020db9ea0aa0d8ba58f71ca7ef44dc82aa6225b58685ee320432f88ab8"
+    },
+    {
+      "path": "walkthroughs/level-10-finish.jpg",
+      "bytes": 19478,
+      "sha256": "cbd82832c370084d3606762b219df8e09e2a3245c0f5aa6fc57cb14de8296e4c"
+    },
+    {
+      "path": "walkthroughs/level-10-source-evidence.json",
+      "bytes": 995,
+      "sha256": "8cee55d5160313b5abec3c24181bc73c82dc17375cffce425bb5513a215d37dd"
+    },
+    {
+      "path": "walkthroughs/level-10.jpg",
+      "bytes": 32178,
+      "sha256": "34a2083698e596dda617a7b7b7b8be42edc1c50ee7c3456a2a111747d04ade7b"
+    },
+    {
+      "path": "walkthroughs/level-10.json",
+      "bytes": 3178,
+      "sha256": "c2226d96ade2270bd17cd5d5e860a2f720195c224d4c42fbdf412349a0ad5199"
+    },
+    {
+      "path": "walkthroughs/level-10.mp4",
+      "bytes": 1331857,
+      "sha256": "2c1742390ad18dfda2727baf8e079d96e39445981a41e7bb7d6977eb48b357ce"
+    },
+    {
+      "path": "walkthroughs/level-11-finish.jpg",
+      "bytes": 22475,
+      "sha256": "5c9964523be8235e9b12ac7fb4de104a6cb14a6ef4f59dc53e82a2317e225ce9"
+    },
+    {
+      "path": "walkthroughs/level-11-source-evidence.json",
+      "bytes": 995,
+      "sha256": "9fa3091abd89fb9f9cdeca0bd6c4eef08a3f50b96097bddefd03050e02fe4f3d"
+    },
+    {
+      "path": "walkthroughs/level-11.jpg",
+      "bytes": 32548,
+      "sha256": "6ec4619940ad09f42d161293bffbe91a0ef4470f8c5fb5d1cdb202097b1222ef"
+    },
+    {
+      "path": "walkthroughs/level-11.json",
+      "bytes": 3100,
+      "sha256": "15ae23638bc2823208ef08502e2c611392bbdbfaf07f4b1c250e253441457a65"
+    },
+    {
+      "path": "walkthroughs/level-11.mp4",
+      "bytes": 570274,
+      "sha256": "cfd260d260880899556560c7fd94a09cf07703b9c2685383844d750012c7d571"
+    },
+    {
+      "path": "walkthroughs/level-12-finish.jpg",
+      "bytes": 20541,
+      "sha256": "382c6ab22abec19954f9829fd0cde06a0ce78e484afa2d03be3f87dd6bc1004d"
+    },
+    {
+      "path": "walkthroughs/level-12-source-evidence.json",
+      "bytes": 995,
+      "sha256": "dde25a582dcf43f9e0c66f83af92454119de96f121d09848b9f3d073d006afc4"
+    },
+    {
+      "path": "walkthroughs/level-12.jpg",
+      "bytes": 29600,
+      "sha256": "7e5bb4ca7aff1f4438167d123d7c1f23c9501a3103bf68fa4fb988e0f1bcf773"
+    },
+    {
+      "path": "walkthroughs/level-12.json",
+      "bytes": 6806,
+      "sha256": "6fca397885166b41d2fd697ad4cc3410e68fa5c6bfa7d6dd9bf44e181edfd4e3"
+    },
+    {
+      "path": "walkthroughs/level-12.mp4",
+      "bytes": 3485295,
+      "sha256": "10cd3bb0e71f832b9ac459b6706e31ff33413e72f27f54d64ffca4152944f3d7"
+    },
+    {
+      "path": "walkthroughs/level-13-finish.jpg",
+      "bytes": 22214,
+      "sha256": "2960031ee10c8633f3cc24c80e358943aee528ca4f16cfde77e4307e12226564"
+    },
+    {
+      "path": "walkthroughs/level-13-source-evidence.json",
+      "bytes": 995,
+      "sha256": "328766e13d4ad7141ee5367213e352813578265b11c5d9cecf345d85d0717511"
+    },
+    {
+      "path": "walkthroughs/level-13.jpg",
+      "bytes": 22767,
+      "sha256": "d8716c2f20422db7ec3955806f7e21abcde7792716a48ef15733b1a56adc7b99"
+    },
+    {
+      "path": "walkthroughs/level-13.json",
+      "bytes": 5004,
+      "sha256": "e59df901511299b5dd3c24c49b82411b0e05409365dfb63f5b75aae79950cc8a"
+    },
+    {
+      "path": "walkthroughs/level-13.mp4",
+      "bytes": 3999727,
+      "sha256": "97aabd793eda574ac1ccd7f2215b91e8579bf418031de96ca68846aa9bce31cf"
+    },
+    {
+      "path": "walkthroughs/level-14-finish.jpg",
+      "bytes": 15214,
+      "sha256": "d09a933adb2318440cb155613c15261aaae94feb4544c11aaa4f2b4e5c92bfbd"
+    },
+    {
+      "path": "walkthroughs/level-14.jpg",
+      "bytes": 29937,
+      "sha256": "2a869a477e15936b4a882e1b1d63ed6292acc737de6bb7d24401dbee2116b8cf"
+    },
+    {
+      "path": "walkthroughs/level-14.json",
+      "bytes": 6283,
+      "sha256": "73873e29143f1481c21f27d92a81a673a14a9077f613c060cd6042cb0559de5d"
+    },
+    {
+      "path": "walkthroughs/level-14.mp4",
+      "bytes": 2079114,
+      "sha256": "b4a6d13591052a242671856874a62ea5b65446883ca4509388f560e0aaebcddb"
+    },
+    {
+      "path": "walkthroughs/level-15-finish.jpg",
+      "bytes": 35301,
+      "sha256": "a8dd4fca18f734ae728522e7a2214bd970c5ea8d2cb27d7cae272b3b0496a8ef"
+    },
+    {
+      "path": "walkthroughs/level-15-source-evidence.json",
+      "bytes": 995,
+      "sha256": "7581bfdd7bed523cfc1368cfc57acd6ee9ed7cbbe27f0bd060910b2b84fa471f"
+    },
+    {
+      "path": "walkthroughs/level-15.jpg",
+      "bytes": 24069,
+      "sha256": "52ed78dcc693afd92ec69c33e0364cdb36ce86030edf539b4af97c5954630fac"
+    },
+    {
+      "path": "walkthroughs/level-15.json",
+      "bytes": 7045,
+      "sha256": "1ef86ae61edd8193ace5af98bf082bddf711981fb6a44a667dfcc8b98e092db9"
+    },
+    {
+      "path": "walkthroughs/level-15.mp4",
+      "bytes": 4966212,
+      "sha256": "519ca760c001cd16b392682e3f6de18ca9d4801bf5cddc4f500ad7a4eea5724f"
+    },
+    {
+      "path": "walkthroughs/level-16-finish.jpg",
+      "bytes": 26643,
+      "sha256": "ea75efb319cc9ac44adabd2bd167da61d7eee853cf1019be7935037f33546e8d"
+    },
+    {
+      "path": "walkthroughs/level-16-source-evidence.json",
+      "bytes": 995,
+      "sha256": "072c19a5abe19dddb6badb32d817a027826be1293cab8af5ada2e47ecc2891c0"
+    },
+    {
+      "path": "walkthroughs/level-16.jpg",
+      "bytes": 18566,
+      "sha256": "efdaa7a022cb975278c7e1ef9d8bebb54fe0f899c62ad3a2b05d7a7cf684f0b5"
+    },
+    {
+      "path": "walkthroughs/level-16.json",
+      "bytes": 6431,
+      "sha256": "ecca2b9cf2a1f9ee860b381071d948f8b0c07f3d550fa905089e123540e7c953"
+    },
+    {
+      "path": "walkthroughs/level-16.mp4",
+      "bytes": 3021657,
+      "sha256": "7666203f212b24bdf8d7a6ccb76fa9249d0e09e874f45f58118feea894be587c"
+    },
+    {
+      "path": "walkthroughs/level-17-finish.jpg",
+      "bytes": 17809,
+      "sha256": "c992ec0166f7209052764e007abf4ce12650e2337b801d91d0cb3d18fc158390"
+    },
+    {
+      "path": "walkthroughs/level-17-source-evidence.json",
+      "bytes": 995,
+      "sha256": "8d54c6d434fbc71e3dfccfb4547a02f4204fc5257294aca13838dde6797ffd86"
+    },
+    {
+      "path": "walkthroughs/level-17.jpg",
+      "bytes": 20373,
+      "sha256": "a82a0a4e9c0dfd73691f037528fd84b15652437a6e274f1c7414ff6f4db328ea"
+    },
+    {
+      "path": "walkthroughs/level-17.json",
+      "bytes": 4441,
+      "sha256": "8ced0d832dce45b21865b7c7bb77ce49989115d1f1bd357104296c76da246465"
+    },
+    {
+      "path": "walkthroughs/level-17.mp4",
+      "bytes": 3563578,
+      "sha256": "7ea7c978e69653cfaaec7670c0861dcfab29b9459c17a78cc207f137c53173bd"
+    },
+    {
+      "path": "walkthroughs/level-18-finish.jpg",
+      "bytes": 17611,
+      "sha256": "84c6e533a93cca92db6da3b7966fc4f15e0beb21013474c7be7ade9a3eae0abd"
+    },
+    {
+      "path": "walkthroughs/level-18-source-evidence.json",
+      "bytes": 995,
+      "sha256": "ada0f7f0451f57418ce8927a7718da50602421e31ec312211b3a229bdaa4f45e"
+    },
+    {
+      "path": "walkthroughs/level-18.jpg",
+      "bytes": 27582,
+      "sha256": "39e698cb12b66632ced674bb7e0925402bfe14fdc3d42723fa17715bb0403ddc"
+    },
+    {
+      "path": "walkthroughs/level-18.json",
+      "bytes": 4118,
+      "sha256": "e22380dd14c451576388845da4486dde2a04076193f33648b2efbf6c87a5918e"
+    },
+    {
+      "path": "walkthroughs/level-18.mp4",
+      "bytes": 1327812,
+      "sha256": "e439d9387f64c8911a734b57d9e22814b8da964851815aa2e26d0824e578889a"
+    },
+    {
+      "path": "walkthroughs/level-19-finish.jpg",
+      "bytes": 19616,
+      "sha256": "bd5c3d7c05d3a3e024dbb067ce49a497bbcd0da3d171595ce758d78880455794"
+    },
+    {
+      "path": "walkthroughs/level-19-source-evidence.json",
+      "bytes": 995,
+      "sha256": "365131e972035db543ab97d63bac35c7c16f03ed5bef7661de8be77a2ca04022"
+    },
+    {
+      "path": "walkthroughs/level-19.jpg",
+      "bytes": 30099,
+      "sha256": "eeeed00247bfd4b11c5730e05c05db213d0c0f94c53ae38456cd2858ff701f97"
+    },
+    {
+      "path": "walkthroughs/level-19.json",
+      "bytes": 5076,
+      "sha256": "c6f525a8aa79bc5f95fc68d7d5ad85ffbe675c4b3a095d22c2b64fed88252631"
+    },
+    {
+      "path": "walkthroughs/level-19.mp4",
+      "bytes": 1971867,
+      "sha256": "e523a30190907f391834c0b1ee236c8d658cc709c9499a0ac47519b4595928eb"
+    },
+    {
+      "path": "walkthroughs/level-20-finish.jpg",
+      "bytes": 17509,
+      "sha256": "45e655e9171f61a780ae0f086afd6b44ab4e25d6b7bc20723cb01a63de9685a9"
+    },
+    {
+      "path": "walkthroughs/level-20-source-evidence.json",
+      "bytes": 995,
+      "sha256": "028b7ac115c4606c382702eca1bd6cd0a5c16e2cdc2d15c1285348d0f25fbce7"
+    },
+    {
+      "path": "walkthroughs/level-20.jpg",
+      "bytes": 21045,
+      "sha256": "fc4c9e3f99d93493060e1ab3fc2fba2f0d4915a00ca7750d0a9aa5393376788a"
+    },
+    {
+      "path": "walkthroughs/level-20.json",
+      "bytes": 6090,
+      "sha256": "af3aa2a278adce7e5eb269db4243239c405a4b071235e3ad917c4bd7b4682931"
+    },
+    {
+      "path": "walkthroughs/level-20.mp4",
+      "bytes": 1228371,
+      "sha256": "6f8b54dc597aae8c5a241f636729f07465eae279e01a0cb04b1859a5ebfdee4d"
+    },
+    {
+      "path": "walkthroughs/level-21-finish.jpg",
+      "bytes": 21731,
+      "sha256": "7906f80b74cc30739adcab5ae7805fc9c4a18377f94ae927768c0590d4bab304"
+    },
+    {
+      "path": "walkthroughs/level-21-source-evidence.json",
+      "bytes": 995,
+      "sha256": "ca8c896b25d6b09b726684132ff7a2d5c6e40bc1e472b79f43191ee26c7f0356"
+    },
+    {
+      "path": "walkthroughs/level-21.jpg",
+      "bytes": 27403,
+      "sha256": "aa964e8b8df0c32ed93fc9b075a5a3ccc190a6067e0f0098d4eb595949e3d170"
+    },
+    {
+      "path": "walkthroughs/level-21.json",
+      "bytes": 9880,
+      "sha256": "36ee6a5d5344515ff6e8abec0a2191fa385c3523e85d99712ef31071d7a6e7c0"
+    },
+    {
+      "path": "walkthroughs/level-21.mp4",
+      "bytes": 2804564,
+      "sha256": "80dfd3d29c7edcc988f6228e822dd12841d4813433980c57295a4ad902533bc7"
+    },
+    {
+      "path": "walkthroughs/level-22-finish.jpg",
+      "bytes": 16366,
+      "sha256": "d1b77835cad6e54757f1ca6fea9234077f0720ed831470426c5fdc98c89726be"
+    },
+    {
+      "path": "walkthroughs/level-22-source-evidence.json",
+      "bytes": 995,
+      "sha256": "595210a1fa2bddbcb236608a05ae604ac43c097d4a3e28c2db33fc78af773a3a"
+    },
+    {
+      "path": "walkthroughs/level-22.jpg",
+      "bytes": 28618,
+      "sha256": "5827cac4c5ce1902e8ba9670873a841c4597b442bbf469266add13798a407fe6"
+    },
+    {
+      "path": "walkthroughs/level-22.json",
+      "bytes": 5329,
+      "sha256": "7683ff1cd5167dd30e92699fd6d3c247dbeb5182b9e03d20b4d92b9743bdd1ed"
+    },
+    {
+      "path": "walkthroughs/level-22.mp4",
+      "bytes": 1678254,
+      "sha256": "722fbac538f4f90f86aefbd2a6ff830548f3aba5f21451b43d91a136f6f5f5ea"
+    },
+    {
+      "path": "walkthroughs/level-23-finish.jpg",
+      "bytes": 20799,
+      "sha256": "9e0f07feee97d295ffd708d1b590170d80ebc8800361638f19d77f9d42c5cc28"
+    },
+    {
+      "path": "walkthroughs/level-23-source-evidence.json",
+      "bytes": 995,
+      "sha256": "93a561896d9a6c295e6146f86a0e8661dbf6cf1068cb15217fccd7e507e26479"
+    },
+    {
+      "path": "walkthroughs/level-23.jpg",
+      "bytes": 22809,
+      "sha256": "73866216bc252d3efbcfb30c6fb82e20063b61434baf6433f751c5d8bba3ea41"
+    },
+    {
+      "path": "walkthroughs/level-23.json",
+      "bytes": 5944,
+      "sha256": "afd7918e6fe40db4f14d2f102870d66cf66576e44add803a709505eb9faf138e"
+    },
+    {
+      "path": "walkthroughs/level-23.mp4",
+      "bytes": 2436722,
+      "sha256": "32f9969ad41421b2ac5576ceb703b21ac977c564e45627145f81c3795dac138a"
+    },
+    {
+      "path": "walkthroughs/level-24-finish.jpg",
+      "bytes": 27680,
+      "sha256": "cfc63ac34536eeac31dc283400babb32c64bc4c80ed234d343be23adfc4f853a"
+    },
+    {
+      "path": "walkthroughs/level-24-source-evidence.json",
+      "bytes": 995,
+      "sha256": "490bbe60a013e4dce7f82fbee28d4e5eddfcd56560b70989da4a024f20b997f8"
+    },
+    {
+      "path": "walkthroughs/level-24.jpg",
+      "bytes": 31433,
+      "sha256": "13fe508d3c7d35aef5095e2e40d83723338af66b34cf4d86380483fc99e1a12c"
+    },
+    {
+      "path": "walkthroughs/level-24.json",
+      "bytes": 4567,
+      "sha256": "0cb46e11e9fc47f9f221e30b2889596f7ae7efaa79cbd047ec695a1b9fc17ccd"
+    },
+    {
+      "path": "walkthroughs/level-24.mp4",
+      "bytes": 2816737,
+      "sha256": "4982e6111928aecf3c6edea3bd2b628cca021ef5308adfb0496cdd0db875bd84"
+    },
+    {
+      "path": "walkthroughs/level-25-finish.jpg",
+      "bytes": 18976,
+      "sha256": "87a973797c7c23a1b295607cb81070c8997efdbc9a55deb7db9b708346432c8b"
+    },
+    {
+      "path": "walkthroughs/level-25-source-evidence.json",
+      "bytes": 995,
+      "sha256": "886a1f488a80d95f44091ee28b185d63270bd54e817aac33f46509c20b9289e5"
+    },
+    {
+      "path": "walkthroughs/level-25.jpg",
+      "bytes": 27829,
+      "sha256": "c5d297146fb18696aed7332720ec2b6b062a398fde32185c3e4540e47efae1a6"
+    },
+    {
+      "path": "walkthroughs/level-25.json",
+      "bytes": 4488,
+      "sha256": "c479cc35785b9687607e490ae0c97543d3ecb583c74bc45529be288a021109d7"
+    },
+    {
+      "path": "walkthroughs/level-25.mp4",
+      "bytes": 4134973,
+      "sha256": "7d813e3b13a171498b8006de3a22369ffb05f9f5c939331267b2a9643111509b"
+    },
+    {
+      "path": "walkthroughs/level-26-finish.jpg",
+      "bytes": 23072,
+      "sha256": "c371233c122f7edbaf613985f472145f4e9b5148fe56a15863ead72c023aa186"
+    },
+    {
+      "path": "walkthroughs/level-26-source-evidence.json",
+      "bytes": 995,
+      "sha256": "a6121d044c96b8a2e8ab70e4a50e7706bc63ff191be5dd3927258b27cbe31506"
+    },
+    {
+      "path": "walkthroughs/level-26.jpg",
+      "bytes": 24099,
+      "sha256": "42d6326ff78b3c7e44e99839ee499197f37a4cab38c14991f8f7026e1a775f49"
+    },
+    {
+      "path": "walkthroughs/level-26.json",
+      "bytes": 5175,
+      "sha256": "cb6be85d6cdb9816362ca417198546d4578821bc5196184a276ebddbfd004ba3"
+    },
+    {
+      "path": "walkthroughs/level-26.mp4",
+      "bytes": 4781615,
+      "sha256": "1a557ec12e4aa83a1bcc4f063883cfe31612b13748702c592ddb047fb2160eee"
+    },
+    {
+      "path": "walkthroughs/level-27-finish.jpg",
+      "bytes": 16940,
+      "sha256": "c820d5162bd11c6f7d5610f1768844c023ed2f47f4bcb73583893c8255c78ed1"
+    },
+    {
+      "path": "walkthroughs/level-27-source-evidence.json",
+      "bytes": 995,
+      "sha256": "35f4d572a06a680e8bdcae9508e26e1aa6ce5130106e1f7d7c1032db15f10141"
+    },
+    {
+      "path": "walkthroughs/level-27.jpg",
+      "bytes": 33269,
+      "sha256": "c2bc9d99aa14291503680d372915f1920b47e8f623beb23ad6531f20d0917031"
+    },
+    {
+      "path": "walkthroughs/level-27.json",
+      "bytes": 5851,
+      "sha256": "8d17d292346873518f42fdace29a28cadd7b0cae12c855dba4a463b46c262d6b"
+    },
+    {
+      "path": "walkthroughs/level-27.mp4",
+      "bytes": 3052339,
+      "sha256": "4e2e3a968d4f15d76667633fac2ba100490821382af987df33e4b2ae91c1487d"
+    },
+    {
+      "path": "walkthroughs/level-28-finish.jpg",
+      "bytes": 29694,
+      "sha256": "84f184fd742c9e6925fcd68bdd3c788ff88da2825ea94d391614a7389599d7ed"
+    },
+    {
+      "path": "walkthroughs/level-28.jpg",
+      "bytes": 31392,
+      "sha256": "3f4d0162194f1afdce2c924be29bced291d66a77bb45f2adaa2531e1b60a6cb6"
+    },
+    {
+      "path": "walkthroughs/level-28.json",
+      "bytes": 6112,
+      "sha256": "5d1efcb2fefb161a49b7abe03234071aafbcab17536d9cd4b3bea7de1d62bbfc"
+    },
+    {
+      "path": "walkthroughs/level-28.mp4",
+      "bytes": 2461549,
+      "sha256": "ed5ae1ec6223fb4043111396e3aec99d8a67fc272f41777cb67e83efed00274f"
+    },
+    {
+      "path": "walkthroughs/level-29-finish.jpg",
+      "bytes": 22344,
+      "sha256": "05b95d8c0586b7acd3daccb49ce5ee50ebbcc37c9d9fb0ce149bd6aec25a283a"
+    },
+    {
+      "path": "walkthroughs/level-29-source-evidence.json",
+      "bytes": 995,
+      "sha256": "a1e1712b8b402800066d2f9573992bbf1be189dea7f30d55c2f429acad358d5c"
+    },
+    {
+      "path": "walkthroughs/level-29.jpg",
+      "bytes": 28337,
+      "sha256": "76b45b8ba7d3755b549a54b3515b0a9553607ad680c444be2f61c5437d225e98"
+    },
+    {
+      "path": "walkthroughs/level-29.json",
+      "bytes": 4621,
+      "sha256": "52a7bc165c186766b7a7c47b0a0ce4c35126dd967d88887d7ded52ad9aa70d6f"
+    },
+    {
+      "path": "walkthroughs/level-29.mp4",
+      "bytes": 1834873,
+      "sha256": "62a6da6a43389d333d8d203092bd5da436b12ad3749fa86bf2362aa847d8e0c7"
+    },
+    {
+      "path": "walkthroughs/level-30-finish.jpg",
+      "bytes": 20233,
+      "sha256": "33c0fa30b5bf84c651b23dc4d3dce9ad76170599fbb2c72af259fc90f22f66c7"
+    },
+    {
+      "path": "walkthroughs/level-30-source-evidence.json",
+      "bytes": 995,
+      "sha256": "ca54df2360283dc5c6d0ef0d72d295d4470fbcb62d4920c7d6c94b6af381c85a"
+    },
+    {
+      "path": "walkthroughs/level-30.jpg",
+      "bytes": 31279,
+      "sha256": "d955f9e9ff3f4f11fd6c62d53ebfb89393fe4adc6e80351e635c69cf3ddd647f"
+    },
+    {
+      "path": "walkthroughs/level-30.json",
+      "bytes": 5073,
+      "sha256": "92a35610ceb0dc0d04ec6e174f0093469ad4a0992b146f81af091fba6ad8b60f"
+    },
+    {
+      "path": "walkthroughs/level-30.mp4",
+      "bytes": 1984280,
+      "sha256": "df7619179fc8405f242ff634da0a2fac0911d4555d6d406be6a09f43124ef464"
+    },
+    {
+      "path": "walkthroughs/level-31-finish.jpg",
+      "bytes": 21064,
+      "sha256": "47bc80975f2a0d266a2db2b4ff3706d060581ba0679b10120da681ab7c516d00"
+    },
+    {
+      "path": "walkthroughs/level-31-source-evidence.json",
+      "bytes": 995,
+      "sha256": "910061e716a9c064b164ca72aa783562c5c4ceb32219d8cbc7384e0042887438"
+    },
+    {
+      "path": "walkthroughs/level-31.jpg",
+      "bytes": 20482,
+      "sha256": "3638cc55c1bd28adb5c2ead08aa6907aae1a1893c6468982ffb52caa763c2b7b"
+    },
+    {
+      "path": "walkthroughs/level-31.json",
+      "bytes": 3250,
+      "sha256": "0b0dcc3ce566a429e9d4e7d25489ce6237ad25a3e08086d0f8a1f62fc81aa048"
+    },
+    {
+      "path": "walkthroughs/level-31.mp4",
+      "bytes": 1127052,
+      "sha256": "895caf80f391734addb533c77686b8e1f2c2b97cfc6fe618a9d926ad5d733cba"
+    },
+    {
+      "path": "walkthroughs/level-32-finish.jpg",
+      "bytes": 19527,
+      "sha256": "73cd5a51abd9997773bd81e55a1ae0a65bdf7f8656719458697c6308e91de2a7"
+    },
+    {
+      "path": "walkthroughs/level-32-source-evidence.json",
+      "bytes": 995,
+      "sha256": "e3d2372db90e42200bcd955f89852122ce25c23e02da57b76eab021e550eebb0"
+    },
+    {
+      "path": "walkthroughs/level-32.jpg",
+      "bytes": 23002,
+      "sha256": "eca6e81f2c52b26293d148a4ad969d647ab500e06c5d952340881c228eb5acf8"
+    },
+    {
+      "path": "walkthroughs/level-32.json",
+      "bytes": 4672,
+      "sha256": "ede8d449c73331d8fd76f02ab2459622eb417170921e46667d74d83212e8dc4e"
+    },
+    {
+      "path": "walkthroughs/level-32.mp4",
+      "bytes": 982332,
+      "sha256": "68e75d824ded0df8216b9c93cc8d50a4f65b7edfda31811cd38e6ac3d69525dc"
+    },
+    {
+      "path": "walkthroughs/level-33-finish.jpg",
+      "bytes": 22872,
+      "sha256": "8e022d2ba0be95e72beb6a8e2bd68738b629d8e8a99235b8eaeaa44b0b147d69"
+    },
+    {
+      "path": "walkthroughs/level-33-source-evidence.json",
+      "bytes": 995,
+      "sha256": "193dac1fc19fef3aa4b985b51fb00d91bff4daa9b5bc51412aeb123640ccade7"
+    },
+    {
+      "path": "walkthroughs/level-33.jpg",
+      "bytes": 25029,
+      "sha256": "0ceddbcc5f279a5dda384016f92084f5c7f4556304408e7709a4f332582ed0c6"
+    },
+    {
+      "path": "walkthroughs/level-33.json",
+      "bytes": 4049,
+      "sha256": "4bcc4b39ecbe2bf5fe046c962ba730d9613d9343482cc2db061bc87c7be4be45"
+    },
+    {
+      "path": "walkthroughs/level-33.mp4",
+      "bytes": 900762,
+      "sha256": "c505f50586c163bf28ee8f4b0ea59cd9d33d76afdbeafa2110297cccf8cf9bdb"
+    },
+    {
+      "path": "walkthroughs/level-34-finish.jpg",
+      "bytes": 20035,
+      "sha256": "96353d7a65f4abe2b651f4a56a3b1fb245eebfe4cd15bc77e66f963c8ae39d8d"
+    },
+    {
+      "path": "walkthroughs/level-34-source-evidence.json",
+      "bytes": 995,
+      "sha256": "24218c002191a797d3ed8635774cae9c4dc00b1e817ee0b30fdd75052f6d8064"
+    },
+    {
+      "path": "walkthroughs/level-34.jpg",
+      "bytes": 24017,
+      "sha256": "2945b3c4089e1bd27af7a80a89d86ffc2d5189e86f32a98e8488ca6cd616f1c8"
+    },
+    {
+      "path": "walkthroughs/level-34.json",
+      "bytes": 5669,
+      "sha256": "98df1d5f6128f7b900426c2f70cad858f03b5cc9b01ce946055e194824660c55"
+    },
+    {
+      "path": "walkthroughs/level-34.mp4",
+      "bytes": 697998,
+      "sha256": "a5b25fcf5ae0ad549f8c5ffef0f78b31806ca488804ef797ad7af77066dd84c7"
+    },
+    {
+      "path": "walkthroughs/level-35-finish.jpg",
+      "bytes": 17308,
+      "sha256": "22f5d86012f5ebd3eca0d95ae29dedce852ad8d7803e4638a687a6490d4f3028"
+    },
+    {
+      "path": "walkthroughs/level-35-source-evidence.json",
+      "bytes": 995,
+      "sha256": "e9f21a61200420b2d59fbb1242dc7eeaf7ed99cdb843344ca1eea8869fd8c0f5"
+    },
+    {
+      "path": "walkthroughs/level-35.jpg",
+      "bytes": 16191,
+      "sha256": "2d7cb268eb294e28abe91d9e799c38149826b6eb25bd774d1f361b3f4d7b7f95"
+    },
+    {
+      "path": "walkthroughs/level-35.json",
+      "bytes": 5438,
+      "sha256": "dd6fcec711247d36ae267177e5154c49555a017878d9ec7a2c25b27f8921f55a"
+    },
+    {
+      "path": "walkthroughs/level-35.mp4",
+      "bytes": 1068431,
+      "sha256": "f154a20144ab6b51ec5800797dd78fc067a50a19dcc3d320f078f8153d37c288"
+    },
+    {
+      "path": "walkthroughs/level-36-finish.jpg",
+      "bytes": 13249,
+      "sha256": "8d1f89edcab4a24d9d3382b9ae1c37011638f96abb8d5600b39bd6f572ddaaa4"
+    },
+    {
+      "path": "walkthroughs/level-36-source-evidence.json",
+      "bytes": 995,
+      "sha256": "02ec5f943348207e95a94d7e756a859870940ac7ec87395000ed0f30753ca681"
+    },
+    {
+      "path": "walkthroughs/level-36.jpg",
+      "bytes": 16975,
+      "sha256": "52de11372507effa66d66f18f370b84bad007cd0c00e1c4d6af379af8751fc4c"
+    },
+    {
+      "path": "walkthroughs/level-36.json",
+      "bytes": 5397,
+      "sha256": "46c2de18c6d10d966ea39ff6129be0db23b09c6728b00aa52e2c089b6d6c4fb0"
+    },
+    {
+      "path": "walkthroughs/level-36.mp4",
+      "bytes": 1734709,
+      "sha256": "496241444fec62a4c729b4b1c98b63d34be30b47d0d67fadadd6d832fa5d8173"
+    },
+    {
+      "path": "walkthroughs/level-37-finish.jpg",
+      "bytes": 17523,
+      "sha256": "d44ae9e3e89c95e0a276911d325be1d288f10f40a4547110d373d689dc6c6a46"
+    },
+    {
+      "path": "walkthroughs/level-37-source-evidence.json",
+      "bytes": 995,
+      "sha256": "ecf89747ab2428448bfe0d0467175176033b1b1a7d24cd12a805a880bf08d5a4"
+    },
+    {
+      "path": "walkthroughs/level-37.jpg",
+      "bytes": 24290,
+      "sha256": "b1104c2461436df025f592fa03da2c6a290b837c16e31380db11fcbcb0c3384e"
+    },
+    {
+      "path": "walkthroughs/level-37.json",
+      "bytes": 6847,
+      "sha256": "508f597a19a848cc19dcc173cc6318fb00a3c9e9d68483b791bef733ff2d6ded"
+    },
+    {
+      "path": "walkthroughs/level-37.mp4",
+      "bytes": 1018313,
+      "sha256": "d064385e47d78441d910878380d99400e2834d910738ab80166cc7e2faa0011c"
+    },
+    {
+      "path": "walkthroughs/level-38-finish.jpg",
+      "bytes": 16223,
+      "sha256": "8173018959957401635eadd80c3571ed418c2bc0e559be9c09710b1038470e9f"
+    },
+    {
+      "path": "walkthroughs/level-38-source-evidence.json",
+      "bytes": 995,
+      "sha256": "87bcc1b6eb6684b85090bd7803a42bb3603da8f46d42f0884e8404d81814ed81"
+    },
+    {
+      "path": "walkthroughs/level-38.jpg",
+      "bytes": 25705,
+      "sha256": "4743d1329afdfbbad4de34d4ad45100cca5925f551582134de8f60ff36ae9b54"
+    },
+    {
+      "path": "walkthroughs/level-38.json",
+      "bytes": 5153,
+      "sha256": "8b7a442ed410abeeab7f8e6505f43ccee7b9550040f7cf0556faa951dc07df2a"
+    },
+    {
+      "path": "walkthroughs/level-38.mp4",
+      "bytes": 870311,
+      "sha256": "41afe5d77c29dd33d67b530cf656809e87f2d23a01014f95f38842e1c5091d8a"
+    },
+    {
+      "path": "walkthroughs/level-39-finish.jpg",
+      "bytes": 22262,
+      "sha256": "cbf5085b60315b79c05a86bcfa36dd71c07731b472ba86651b0712ea314075d9"
+    },
+    {
+      "path": "walkthroughs/level-39-source-evidence.json",
+      "bytes": 995,
+      "sha256": "87b6f8960572c894f8856b40bd6a5d804c64ebb8ddec49ad9bef8f912a4fbdc6"
+    },
+    {
+      "path": "walkthroughs/level-39.jpg",
+      "bytes": 21735,
+      "sha256": "bf4b2e283e1bdcd604cdee793c8e3675b9994a305bf4fd8280cf3c46762cfa3b"
+    },
+    {
+      "path": "walkthroughs/level-39.json",
+      "bytes": 3905,
+      "sha256": "85fafa96478549bd07a6ac3961b3c8c071125b7902987c7b4a27117679cafe03"
+    },
+    {
+      "path": "walkthroughs/level-39.mp4",
+      "bytes": 539431,
+      "sha256": "0ffde0169f02e7fb960f28270deb5fec7d4c7a11714ba6e3f19188944598b8f7"
+    },
+    {
+      "path": "walkthroughs/level-40-finish.jpg",
+      "bytes": 23934,
+      "sha256": "46b67f89500f623ffee23e01af50e81719e8bc79a5382c76683afedf5c12dd4d"
+    },
+    {
+      "path": "walkthroughs/level-40-source-evidence.json",
+      "bytes": 995,
+      "sha256": "a7f107885d70410783c01d1c5503d9dbed2e1f9bdb8cdb2b239903d02d2b2101"
+    },
+    {
+      "path": "walkthroughs/level-40.jpg",
+      "bytes": 28798,
+      "sha256": "de9126af99f193554c97a125055c82d352ed30dc149d6a9d978d52f5ab3d1e1a"
+    },
+    {
+      "path": "walkthroughs/level-40.json",
+      "bytes": 5454,
+      "sha256": "65e659f6593d22ab271666754e0156ea5cfe60f2e35538a93e1e4109e0798c47"
+    },
+    {
+      "path": "walkthroughs/level-40.mp4",
+      "bytes": 1335402,
+      "sha256": "67018eedb9b4762edde446650a7e7e538b55177ac4b4ff77e737dc0f210eff30"
+    },
+    {
+      "path": "walkthroughs/level-41-finish.jpg",
+      "bytes": 12649,
+      "sha256": "c441f7d95ab3790f8e7ca23559be894aeaa0eef3d2856fb56613966ffec3cd32"
+    },
+    {
+      "path": "walkthroughs/level-41.jpg",
+      "bytes": 26983,
+      "sha256": "cd8c9973ed753ad2b8ae8e316b40684b81edacc807223a89797152dc3fa889cc"
+    },
+    {
+      "path": "walkthroughs/level-41.json",
+      "bytes": 92735,
+      "sha256": "57ac04a9292187c3573b516daaf23e462004358bf610f8a7025aed93dedaf962"
+    },
+    {
+      "path": "walkthroughs/level-41.mp4",
+      "bytes": 17421728,
+      "sha256": "ecf973e8310413fbf1a73d6f020e09fb839c4230303719be54132b9397342013"
+    },
+    {
+      "path": "walkthroughs/level-42-finish.jpg",
+      "bytes": 19968,
+      "sha256": "041f6db40b2223c6588d9218ea429d952d8a21c5f3c763e7128550142e593e1f"
+    },
+    {
+      "path": "walkthroughs/level-42.jpg",
+      "bytes": 24693,
+      "sha256": "f0f2dd0b36f0e1ca5b0f1bf16d88b120e84938b256a742c30ab16eb3e68395fe"
+    },
+    {
+      "path": "walkthroughs/level-42.json",
+      "bytes": 4046,
+      "sha256": "45cd9679800b09b490e00668396f150bfe8569fb70933fc66a0d4f3853ea9571"
+    },
+    {
+      "path": "walkthroughs/level-42.mp4",
+      "bytes": 1116526,
+      "sha256": "b71b0366c7b48cf042cc6e9c496c252032e7e6ab621fc7f19f3d0b706d44711a"
+    },
+    {
+      "path": "walkthroughs/level-43-finish.jpg",
+      "bytes": 16044,
+      "sha256": "40239b4a5db4e4a12a3222ca0b24e6a302b5fa5e94a853533101aa156222a4e6"
+    },
+    {
+      "path": "walkthroughs/level-43.jpg",
+      "bytes": 25150,
+      "sha256": "95f9ff909102b7e7cc7c93329d3baa74d991f945f56c03f5c4171c904e5a1275"
+    },
+    {
+      "path": "walkthroughs/level-43.json",
+      "bytes": 4020,
+      "sha256": "5987ac57d7c2fec2f580a5d5f955606bf49d6a1e5b48577d582779e9aece2a1d"
+    },
+    {
+      "path": "walkthroughs/level-43.mp4",
+      "bytes": 827446,
+      "sha256": "408e1bdc9537d06a326a7c980fa77e01ead87ddab73ab26bf3534d321e5b73b3"
+    },
+    {
+      "path": "walkthroughs/level-44-finish.jpg",
+      "bytes": 18614,
+      "sha256": "7887056c5cd39a1f1ecf61a6cdc4a19b76a755bff6dd96d83952ed9cf685aee4"
+    },
+    {
+      "path": "walkthroughs/level-44.jpg",
+      "bytes": 22773,
+      "sha256": "1dd6ebb3f55338205e95129cb43c351599b31510c62002e97bdc067630ddbd65"
+    },
+    {
+      "path": "walkthroughs/level-44.json",
+      "bytes": 2616,
+      "sha256": "993eadb6182e8a4238600c33432cdf2b27cc349a28ce5aa1321e0bad158f8a8a"
+    },
+    {
+      "path": "walkthroughs/level-44.mp4",
+      "bytes": 928421,
+      "sha256": "7738526866369f4fa472820761f89aa445814db4993d4fedd8239daf7ea7ee46"
+    },
+    {
+      "path": "walkthroughs/level-45-finish.jpg",
+      "bytes": 23504,
+      "sha256": "aad01ec8d40199ce3d906930e30c51a557ee8a76e8fbed540bfa5c73d8a3a2c2"
+    },
+    {
+      "path": "walkthroughs/level-45.jpg",
+      "bytes": 26158,
+      "sha256": "6e63f09ee800116f77568f7a7b14b371e77842698b217620e07cdd7787d0939b"
+    },
+    {
+      "path": "walkthroughs/level-45.json",
+      "bytes": 3243,
+      "sha256": "dc544287df2e45e1c6f047dc3b5c8cec20282436d6bbe8573977e131981b4455"
+    },
+    {
+      "path": "walkthroughs/level-45.mp4",
+      "bytes": 663609,
+      "sha256": "e08d393c7321db0075b8e94dc6fc64120bb7e9da8be69c321e65b0fe80ec28d8"
+    },
+    {
+      "path": "walkthroughs/level-46-finish.jpg",
+      "bytes": 21545,
+      "sha256": "86311f085f28088368ea01813b2c329fbe5cefad2a073fecefebfe60cdc1bb21"
+    },
+    {
+      "path": "walkthroughs/level-46.jpg",
+      "bytes": 18776,
+      "sha256": "c6984c79e41136896316de77308ac2fd7c035b4004b25b4e55a4204951cb29fd"
+    },
+    {
+      "path": "walkthroughs/level-46.json",
+      "bytes": 2612,
+      "sha256": "a3d57cc8877f7f10b8f20c8861e6045d31d6415f59c7df1bd0bc63869d78a294"
+    },
+    {
+      "path": "walkthroughs/level-46.mp4",
+      "bytes": 899019,
+      "sha256": "274840373582ad05bbbb0ed24cde0fc07aad443e84fa842fecff290683ab2dca"
+    },
+    {
+      "path": "walkthroughs/level-47-finish.jpg",
+      "bytes": 14857,
+      "sha256": "a82a368bbd31098d25ee2cdad83daa2aefcd23fcc0104c7ef467e3bef8a809cb"
+    },
+    {
+      "path": "walkthroughs/level-47.jpg",
+      "bytes": 16960,
+      "sha256": "221afee6e4259ebd42b68a5366ef80bca422cd2bf9bf6c19200d63e6f6be5ca0"
+    },
+    {
+      "path": "walkthroughs/level-47.json",
+      "bytes": 2581,
+      "sha256": "5350aaba3e4d5fc872617276c7e3889bf87d0a9e81186d7425ae1f463f67b172"
+    },
+    {
+      "path": "walkthroughs/level-47.mp4",
+      "bytes": 1071383,
+      "sha256": "97685b2272f981c49a39cda99aa971ca72e74dc7f429bca685d16867b17f1d9c"
+    },
+    {
+      "path": "walkthroughs/level-48-alternate-finish.jpg",
+      "bytes": 23471,
+      "sha256": "f8f21147fa788d79955d35389b9d01f4ef04740d176902c83ef8209c24899cd4"
+    },
+    {
+      "path": "walkthroughs/level-48-alternate.jpg",
+      "bytes": 22591,
+      "sha256": "58924404620595d6abf2c5a5840780033f6cabec3d34be5212935cd110075a3d"
+    },
+    {
+      "path": "walkthroughs/level-48-alternate.json",
+      "bytes": 4870,
+      "sha256": "533141d11b303c4edb427dad090a23ec280bfbf5c52315a3462316675ecdbb38"
+    },
+    {
+      "path": "walkthroughs/level-48-alternate.mp4",
+      "bytes": 869620,
+      "sha256": "64edd25485e64ea54c477bc35bfb9275121c53d15e33a367a4536ee314dec50e"
+    },
+    {
+      "path": "walkthroughs/level-48-finish.jpg",
+      "bytes": 22999,
+      "sha256": "6596a11418a74501dff1fc9d4dbf9bf25548d79c5cb3b0a8cd792182f079bf8c"
+    },
+    {
+      "path": "walkthroughs/level-48.jpg",
+      "bytes": 22574,
+      "sha256": "625a0bda0b98b4a0b7b0d4fbed48a9ced9b7a94f6c7c6d443dadcb5fd18e7df4"
+    },
+    {
+      "path": "walkthroughs/level-48.json",
+      "bytes": 2538,
+      "sha256": "6cb8757d80d9c2b7e32090e411f70fd768bc39aa1065adef4858a8ba71ffc73e"
+    },
+    {
+      "path": "walkthroughs/level-48.mp4",
+      "bytes": 702120,
+      "sha256": "d31fb7d743c264042bb7f1de06696bd980ff50d1b0dc91dd695744dfff162b4f"
+    },
+    {
+      "path": "walkthroughs/level-49-alternate-finish.jpg",
+      "bytes": 23530,
+      "sha256": "198f97820863ec84d3d871bf3a16aa6d66d11bf63c00ffdd4442d4131771d2f8"
+    },
+    {
+      "path": "walkthroughs/level-49-alternate.jpg",
+      "bytes": 24740,
+      "sha256": "85b8e00b570752e7674feb7c945bc2eba3ee88781437d6c0572140fd764745c5"
+    },
+    {
+      "path": "walkthroughs/level-49-alternate.json",
+      "bytes": 4869,
+      "sha256": "ab4143d05bb63ad0defdbf62933645314b688229ed68239eaf5e44ea0ea0b8b1"
+    },
+    {
+      "path": "walkthroughs/level-49-alternate.mp4",
+      "bytes": 935506,
+      "sha256": "1477ab10b6387ac1ab4dfeec6e54cf429ada2ff3a75b32827735588652337b37"
+    },
+    {
+      "path": "walkthroughs/level-49-finish.jpg",
+      "bytes": 23397,
+      "sha256": "b5485a061253883214373f9adc3ffba86da3ccb8cec4701a463f2041b1136317"
+    },
+    {
+      "path": "walkthroughs/level-49.jpg",
+      "bytes": 24739,
+      "sha256": "911da9d2c2ffb01f4ea5bc46f6edcf8f21ee831111ac98f5ae3cdfdbd7f75234"
+    },
+    {
+      "path": "walkthroughs/level-49.json",
+      "bytes": 2580,
+      "sha256": "21a90552e2b6ca3145b76055b359609ccfdc0041ad01e134a187c6519523b813"
+    },
+    {
+      "path": "walkthroughs/level-49.mp4",
+      "bytes": 718229,
+      "sha256": "06ddc691e20f7e21ae953501ebb31e71d03b066d303424ea1ff5d458ad7349ae"
+    },
+    {
+      "path": "walkthroughs/level-50-alternate-finish.jpg",
+      "bytes": 22975,
+      "sha256": "2abaf742d5e344f6d07d4ab5f9cd5e3286a47302d8b6a642e937b00ee838a80a"
+    },
+    {
+      "path": "walkthroughs/level-50-alternate.jpg",
+      "bytes": 20660,
+      "sha256": "3d2266084bd114d77ce967f98919e2a8df101ec8307b643db1aaa55dd8d2a897"
+    },
+    {
+      "path": "walkthroughs/level-50-alternate.json",
+      "bytes": 6025,
+      "sha256": "52f911e70dc0eeff5701e48fc0d9bcf2f547501044df4627c3425a84a891866f"
+    },
+    {
+      "path": "walkthroughs/level-50-alternate.mp4",
+      "bytes": 2833697,
+      "sha256": "da4b9e275d9f957dd2bb01bfc30422c1b1e16326cdabc268b0b59708eab64217"
+    },
+    {
+      "path": "walkthroughs/level-50-finish.jpg",
+      "bytes": 22343,
+      "sha256": "6d38b4b4aea1b80a8a9258c70c56a669d54107bc4a6364d673fedf44fcac3540"
+    },
+    {
+      "path": "walkthroughs/level-50.jpg",
+      "bytes": 20657,
+      "sha256": "ba1308180fd231b75bdd3d21f3f7a605ebda85a806aa84c518837e963a1d5a68"
+    },
+    {
+      "path": "walkthroughs/level-50.json",
+      "bytes": 2569,
+      "sha256": "d782c52500a909b881c3e66695940e50e235023138bc98a9d5857b7043a25626"
+    },
+    {
+      "path": "walkthroughs/level-50.mp4",
+      "bytes": 1975033,
+      "sha256": "49191e8eee883a6e9cd947a611c810cb8fac985f21e4b529d4853ecf6bc33f50"
+    },
+    {
+      "path": "walkthroughs/level-51-alternate-finish.jpg",
+      "bytes": 20662,
+      "sha256": "74027871ea711bed1a8db208b578a9904f4001b67d393a74388b6f6f84cc6ddf"
+    },
+    {
+      "path": "walkthroughs/level-51-alternate.jpg",
+      "bytes": 26057,
+      "sha256": "cfcb65ffc91a776c9a78047f96245fa490be518b4aca1c03a18e68a92f12e0a8"
+    },
+    {
+      "path": "walkthroughs/level-51-alternate.json",
+      "bytes": 5981,
+      "sha256": "054fc674c62150c44be6029f03e94b4b99dd333d5be8db9a30558652d03c3e66"
+    },
+    {
+      "path": "walkthroughs/level-51-alternate.mp4",
+      "bytes": 1247698,
+      "sha256": "8402b69d42602a364d25743776d67d83f2e30cfe31f17457a83557d9414194b7"
+    },
+    {
+      "path": "walkthroughs/level-51-finish.jpg",
+      "bytes": 20690,
+      "sha256": "92b4b17400d69f3ca44b8a61d413c0719efbdf5ccd91f86ad722f782e67e2487"
+    },
+    {
+      "path": "walkthroughs/level-51.jpg",
+      "bytes": 26051,
+      "sha256": "0f41de3aad7a15ab3f39a1311d4a11fe918889b1300b01fb91a04f9797537e2f"
+    },
+    {
+      "path": "walkthroughs/level-51.json",
+      "bytes": 2577,
+      "sha256": "b0f889429ac5f8411166b82a025971b4560e1254d579922845a34bb54f598b84"
+    },
+    {
+      "path": "walkthroughs/level-51.mp4",
+      "bytes": 1362817,
+      "sha256": "7a337222aa272ef97182b940a1e296a2f1580fe49524a14217e84863cb891499"
+    },
+    {
+      "path": "walkthroughs/manifest.json",
+      "bytes": 120400,
+      "sha256": "6ace4cd52bdfdd7b52a8e598522ffa72e11c81c3b92967bb73dbedbd3de0fe2c"
+    }
+  ],
+  "recording33": {
+    "level": 33,
+    "title": "Сифонная обсерватория",
+    "sourceCommit": "083cc6e7ee75ea7c44dc52326c862495c264eb51",
+    "edition": "foundation",
+    "route": {
+      "level": 33,
+      "id": "siphon-observatory",
+      "pass": true,
+      "milestones": [
+        {
+          "name": "dry crest and real hydraulic ram observed",
+          "player": [
+            4.005082951054574,
+            0,
+            18.99593363915634
+          ],
+          "cargo": [
+            10.999999474617145,
+            0.5699981436402993,
+            18.000000884541052
+          ],
+          "teleports": 0
+        },
+        {
+          "name": "passenger boards before completing the cargo connection",
+          "player": [
+            3.298850348358128,
+            0,
+            9.001667049503455
+          ],
+          "cargo": [
+            13.003898306275524,
+            0.5686439769762477,
+            21.404306483068694
+          ],
+          "teleports": 0
+        },
+        {
+          "name": "cargo displacement fills the dry siphon",
+          "player": [
+            3.298850348358646,
+            0.017831794098903047,
+            9.001667049488024
+          ],
+          "cargo": [
+            -16.204656960356825,
+            12.418620717480245,
+            -20.389391883895943
+          ],
+          "teleports": 0
+        },
+        {
+          "name": "the column drains before the pair is reassigned",
+          "player": [
+            3.298850348358646,
+            0.017831794098903047,
+            9.001667049488024
+          ],
+          "cargo": [
+            -16.204656960356825,
+            12.418620717480245,
+            -20.389391883895943
+          ],
+          "teleports": 0
+        },
+        {
+          "name": "finite conserved water lifts the observer",
+          "player": [
+            3.298850348358646,
+            10.175138817049163,
+            9.001667049488024
+          ],
+          "cargo": [
+            -16.17816278757803,
+            12.389998277685534,
+            -20.10892897601817
+          ],
+          "teleports": 0
+        },
+        {
+          "name": "same original companion reclaimed after the water level falls",
+          "player": [
+            -17.799858848843733,
+            13.6,
+            -20.111540348084105
+          ],
+          "cargo": [
+            -15.834611274193085,
+            14.33999814415756,
+            -20.184052735496877
+          ],
+          "teleports": 0
+        },
+        {
+          "name": "same pair now joins the separated upper archive",
+          "player": [
+            20.003090672596517,
+            10.2,
+            -18.006017262728744
+          ],
+          "cargo": [
+            20.013899574337003,
+            11.256226667792433,
+            -18.726027705430518
+          ],
+          "teleports": 1
+        },
+        {
+          "name": "both at exit",
+          "player": [
+            20.003090672596517,
+            10.2,
+            -18.006017262728744
+          ],
+          "cargo": [
+            20.013899574337003,
+            11.256226667792433,
+            -18.726027705430518
+          ],
+          "teleports": 1
+        }
+      ],
+      "respawns": 0,
+      "resets": 0,
+      "frames": 4730,
+      "teleports": 1
+    },
+    "frameCount": 317,
+    "fps": 4,
+    "width": 854,
+    "height": 480,
+    "durationSeconds": 79.25,
+    "firstFrame": {
+      "visualFrame": 0,
+      "level": 33,
+      "state": "playing",
+      "cargoBodyId": 200
+    },
+    "lastFrame": {
+      "visualFrame": 4740,
+      "level": 33,
+      "state": "won",
+      "cargoBodyId": 200
+    },
+    "continuous": true,
+    "pixelCheck": {
+      "frames": 317,
+      "allNonblank": true,
+      "minimumLuminanceRange": 175,
+      "method": "Every actual JPEG decoded by FFmpeg at 160×90; YMAX−YMIN > 12"
+    },
+    "milestones": [
+      {
+        "name": "dry crest and real hydraulic ram observed",
+        "player": [
+          4.005082951054574,
+          0,
+          18.99593363915634
+        ],
+        "cargo": [
+          10.999999474617145,
+          0.5699981436402993,
+          18.000000884541052
+        ],
+        "teleports": 0,
+        "encodedFrame": 15
+      },
+      {
+        "name": "passenger boards before completing the cargo connection",
+        "player": [
+          3.298850348358128,
+          0,
+          9.001667049503455
+        ],
+        "cargo": [
+          13.003898306275524,
+          0.5686439769762477,
+          21.404306483068694
+        ],
+        "teleports": 0,
+        "encodedFrame": 75
+      },
+      {
+        "name": "cargo displacement fills the dry siphon",
+        "player": [
+          3.298850348358646,
+          0.017831794098903047,
+          9.001667049488024
+        ],
+        "cargo": [
+          -16.204656960356825,
+          12.418620717480245,
+          -20.389391883895943
+        ],
+        "teleports": 0,
+        "encodedFrame": 84
+      },
+      {
+        "name": "the column drains before the pair is reassigned",
+        "player": [
+          3.298850348358646,
+          0.017831794098903047,
+          9.001667049488024
+        ],
+        "cargo": [
+          -16.204656960356825,
+          12.418620717480245,
+          -20.389391883895943
+        ],
+        "teleports": 0,
+        "encodedFrame": 84
+      },
+      {
+        "name": "finite conserved water lifts the observer",
+        "player": [
+          3.298850348358646,
+          10.175138817049163,
+          9.001667049488024
+        ],
+        "cargo": [
+          -16.17816278757803,
+          12.389998277685534,
+          -20.10892897601817
+        ],
+        "teleports": 0,
+        "encodedFrame": 139
+      },
+      {
+        "name": "same original companion reclaimed after the water level falls",
+        "player": [
+          -17.799858848843733,
+          13.6,
+          -20.111540348084105
+        ],
+        "cargo": [
+          -15.834611274193085,
+          14.33999814415756,
+          -20.184052735496877
+        ],
+        "teleports": 0,
+        "encodedFrame": 245
+      },
+      {
+        "name": "same pair now joins the separated upper archive",
+        "player": [
+          20.003090672596517,
+          10.2,
+          -18.006017262728744
+        ],
+        "cargo": [
+          20.013899574337003,
+          11.256226667792433,
+          -18.726027705430518
+        ],
+        "teleports": 1,
+        "encodedFrame": 315
+      },
+      {
+        "name": "both at exit",
+        "player": [
+          20.003090672596517,
+          10.2,
+          -18.006017262728744
+        ],
+        "cargo": [
+          20.013899574337003,
+          11.256226667792433,
+          -18.726027705430518
+        ],
+        "teleports": 1,
+        "encodedFrame": 315
+      }
+    ],
+    "sha256": "9361f975e90a556bb83e2a5d59def43a361080902ccd5d51758bc3eafa2c6b77",
+    "bytes": 2537371,
+    "video": "level-33.mp4",
+    "poster": "level-33.jpg",
+    "finishPoster": "level-33-finish.jpg",
+    "method": "Production WebGL, normal third-person camera and ordinary input-only route, continuous 4 fps from 60 Hz visual/120 Hz physics simulation; silent recording, not measured hardware FPS or a human playtest."
+  },
+  "limitations": [
+    "Finite unsuccessful exploit attacks do not prove that every shortcut is absent.",
+    "Automated software WebGL checks and recorded routes do not establish human playtest quality, physical-device performance, or live Yandex acceptance."
+  ]
+}
