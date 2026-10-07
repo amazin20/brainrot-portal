@@ -12,7 +12,7 @@ permissions:
 
 concurrency:
   group: pages
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 env:
   SOURCE_SHA: 578c31ebee7fd2ef01af5de8e673589c67e9daf0
@@ -24,7 +24,7 @@ env:
 
 jobs:
   assemble:
-    if: github.ref == 'refs/heads/main'
+    if: ${{ false }} # paused while restoring the full 30-case pre/post publication guard
     runs-on: ubuntu-latest
     timeout-minutes: 35
     steps:
