@@ -185,7 +185,7 @@ jobs:
           import hashlib,html,json,pathlib,shutil
           sha=lambda path:hashlib.sha256(path.read_bytes()).hexdigest()
           def inventory(root):
-            return [{'path':str(p.relative_to(root)),'bytes':p.stat().st_size,'sha256':sha(p)} for p in sorted(root.rglob('*')) if p.is_file()]
+            return sorted([{'path':str(p.relative_to(root)),'bytes':p.stat().st_size,'sha256':sha(p)} for p in root.rglob('*') if p.is_file()],key=lambda row:row['path'])
           site=pathlib.Path('site');before=inventory(site);baseline=json.loads(pathlib.Path('proof/baseline-manifest.json').read_text())
           assert before==sorted(baseline['siteFiles'],key=lambda row:row['path'])
           rootinfo=json.loads((site/'build-info.json').read_text());assert rootinfo['commit']=='6f1eec54d47fed7916f5346a218525292d15fd62'
