@@ -12,7 +12,7 @@ permissions:
 
 concurrency:
   group: pages
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 env:
   SOURCE_SHA: 578c31ebee7fd2ef01af5de8e673589c67e9daf0
@@ -24,9 +24,9 @@ env:
 
 jobs:
   assemble:
-    if: ${{ false }} # paused while restoring the full 30-case pre/post publication guard
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
-    timeout-minutes: 35
+    timeout-minutes: 90
     steps:
       - uses: actions/checkout@v4
         with:
@@ -37,6 +37,12 @@ jobs:
           node-version: 22
       - name: Validate publication preservation and archive safety
         run: python3 -m unittest discover -s tests -p test_unified_publication.py -v
+      - name: Install the dependencies for native browser verification
+        run: |
+          npm ci
+          npm install --no-save --package-lock=false puppeteer-core@24.16.0
+      - name: Check bounded startup and trusted mouse and touch input helpers
+        run: node --test tests/browser-startup.test.js tests/unified-public-input.test.js
       - name: Require attempt one, all 47 accepted jobs and the seven exact artifact archives
         uses: actions/github-script@v7
         env:
@@ -184,6 +190,49 @@ jobs:
           fi
       - name: Preserve the verified publication and assemble the accepted bytes without rebuilding
         run: python3 scripts/unified-publication.py assemble --inputs inputs --site site --proof proof --publisher "$GITHUB_SHA"
+      - name: Check all 30 ordinary native cases on the assembled publication before upload
+        env:
+          PUBLIC_BASE: http://127.0.0.1:4173/brainrot-portal/
+          OUTPUT_DIR: proof/prepublication-browser
+        run: |
+          mkdir -p preview-root
+          ln -s "$GITHUB_WORKSPACE/site" preview-root/brainrot-portal
+          python3 -m http.server 4173 --bind 127.0.0.1 --directory preview-root >proof/prepublication-server.log 2>&1 &
+          publication_server_pid=$!
+          trap 'kill "$publication_server_pid" 2>/dev/null || true' EXIT
+          python3 - <<'PY'
+          import time, urllib.request
+          for attempt in range(40):
+              try:
+                  with urllib.request.urlopen('http://127.0.0.1:4173/brainrot-portal/build-info.json', timeout=2) as response:
+                      assert response.status == 200
+                  break
+              except Exception:
+                  if attempt == 39:
+                      raise
+                  time.sleep(.25)
+          PY
+          timeout --signal=TERM --kill-after=10s 3600s node scripts/verify-unified-public.mjs
+          node --input-type=module <<'JS'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          const report=JSON.parse(fs.readFileSync(process.env.OUTPUT_DIR+'/report.json','utf8'));
+          const root=new URL(process.env.PUBLIC_BASE),routes=[root.href,new URL('chapter-atlas/',root).href];
+          const levels=[1,17,33,41,51],viewports=[{width:1280,height:800,touch:false},{width:390,height:844,touch:true},{width:736,height:414,touch:true}];
+          assert.equal(report.pass,true);assert.deepEqual(report.errors,[]);
+          assert.equal(report.sourceCommit,process.env.SOURCE_SHA);assert.equal(report.identity.commit,process.env.SOURCE_SHA);
+          assert.equal(report.identity.rootAndChapterIdentical,true);
+          assert.deepEqual(report.matrix,{levels,routes,viewports,expected:30,verified:30,exact:true});
+          assert.equal(report.ordinary.length,30);
+          const expected=routes.flatMap(route=>viewports.flatMap(viewport=>levels.map(level=>[level,route,viewport.width,viewport.height,viewport.touch].join('|')))).sort();
+          const actual=report.ordinary.map(row=>{
+            for(const flag of ['selectedThroughMap','nativeTrustedPlay','pauseRestartResumeReturnPlay','reloadAndReplay'])assert.equal(row[flag],true);
+            assert.equal(row.buildInfoSHA256,report.identity.buildInfoSHA256);
+            const url=new URL(row.url);url.search='';url.hash='';
+            return [row.level,url.href,row.width,row.height,row.touch].join('|');
+          }).sort();
+          assert.deepEqual(actual,expected,'Missing, repeated or unexpected native browser case');
+          JS
       - uses: actions/upload-pages-artifact@v3
         with:
           path: site
@@ -198,7 +247,7 @@ jobs:
   publish:
     needs: assemble
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 75
     permissions:
       contents: read
       actions: read
@@ -216,7 +265,10 @@ jobs:
         with:
           name: unified-publication-proof
           path: proof
-      - name: Require the accepted review to remain on attempt one before deployment
+      - name: Guard every previous public byte immediately before the single deployment
+        run: python3 scripts/unified-publication.py verify --site-url "$PUBLIC_BASE" --manifest docs/accepted-siphon-publication-20261007.json --output proof/predeploy-public-bytes.json
+      - uses: actions/configure-pages@v5
+      - name: Require the current main publisher and unchanged acceptance before deployment
         uses: actions/github-script@v7
         with:
           script: |
@@ -229,6 +281,13 @@ jobs:
             assert.equal(gate.allExpectedJobsPassed, 47);
             assert.equal(gate.runAttempt, 1);
             assert.equal(gate.artifactInputs.length, 7);
+            const browser=JSON.parse(fs.readFileSync('proof/prepublication-browser/report.json','utf8'));
+            assert.equal(browser.pass,true);
+            assert.equal(browser.sourceCommit,process.env.SOURCE_SHA);
+            assert.equal(browser.ordinary.length,30);
+            assert.equal(browser.matrix.expected,30);
+            assert.equal(browser.matrix.verified,30);
+            assert.equal(browser.matrix.exact,true);
             const run = (await github.rest.actions.getWorkflowRun({...context.repo, run_id: Number(process.env.REVIEW_RUN)})).data;
             assert.equal(run.id, pins.runId);
             assert.equal(run.head_sha, process.env.SOURCE_SHA);
@@ -236,9 +295,8 @@ jobs:
             assert.equal(run.run_attempt, Number(process.env.REVIEW_ATTEMPT));
             assert.equal(run.status, 'completed');
             assert.equal(run.conclusion, 'success');
-      - name: Guard every previous public byte immediately before the single deployment
-        run: python3 scripts/unified-publication.py verify --site-url "$PUBLIC_BASE" --manifest docs/accepted-siphon-publication-20261007.json --output proof/predeploy-public-bytes.json
-      - uses: actions/configure-pages@v5
+            const main=(await github.rest.git.getRef({...context.repo,ref:'heads/main'})).data;
+            assert.equal(main.object.sha,context.sha,'Obsolete publisher is no longer the current main head');
       - uses: actions/deploy-pages@v4
         id: deployment
       - name: Verify all current and preserved public bytes after deployment
@@ -257,11 +315,32 @@ jobs:
         run: |
           npm ci
           npm install --no-save --package-lock=false puppeteer-core@24.16.0
-      - name: Check the ordinary published menu, player controls and desktop and touch lifecycle
+      - name: Check all 30 ordinary native cases on the public publication
         env:
           OUTPUT_DIR: proof/unified-public-browser
           ACCEPTED_SOURCE_DIR: accepted-source
-        run: timeout --signal=TERM --kill-after=10s 1200s node scripts/verify-unified-public.mjs
+        run: |
+          timeout --signal=TERM --kill-after=10s 3600s node scripts/verify-unified-public.mjs
+          node --input-type=module <<'JS'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          const report=JSON.parse(fs.readFileSync(process.env.OUTPUT_DIR+'/report.json','utf8'));
+          const root=new URL(process.env.PUBLIC_BASE),routes=[root.href,new URL('chapter-atlas/',root).href];
+          const levels=[1,17,33,41,51],viewports=[{width:1280,height:800,touch:false},{width:390,height:844,touch:true},{width:736,height:414,touch:true}];
+          assert.equal(report.pass,true);assert.deepEqual(report.errors,[]);
+          assert.equal(report.sourceCommit,process.env.SOURCE_SHA);assert.equal(report.identity.commit,process.env.SOURCE_SHA);
+          assert.equal(report.identity.rootAndChapterIdentical,true);
+          assert.deepEqual(report.matrix,{levels,routes,viewports,expected:30,verified:30,exact:true});
+          assert.equal(report.ordinary.length,30);
+          const expected=routes.flatMap(route=>viewports.flatMap(viewport=>levels.map(level=>[level,route,viewport.width,viewport.height,viewport.touch].join('|')))).sort();
+          const actual=report.ordinary.map(row=>{
+            for(const flag of ['selectedThroughMap','nativeTrustedPlay','pauseRestartResumeReturnPlay','reloadAndReplay'])assert.equal(row[flag],true);
+            assert.equal(row.buildInfoSHA256,report.identity.buildInfoSHA256);
+            const url=new URL(row.url);url.search='';url.hash='';
+            return [row.level,url.href,row.width,row.height,row.touch].join('|');
+          }).sort();
+          assert.deepEqual(actual,expected,'Missing, repeated or unexpected native browser case');
+          JS
       - uses: actions/upload-artifact@v4
         if: always()
         with:

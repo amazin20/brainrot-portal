@@ -7,7 +7,9 @@ import fs from 'node:fs';
 import path from 'node:path';
 import {createHash} from 'node:crypto';
 import {pathToFileURL} from 'node:url';
-import {activate,waitForStartMenu} from './lib/singularity-ui-check.mjs';
+import {waitForStartMenu} from './lib/singularity-ui-check.mjs';
+import {nativeActivate,assertMatrix,MATRIX_LEVELS,MATRIX_VIEWPORTS} from './lib/unified-public-input.mjs';
+import {launchBrowserWithStartupRetry} from './lib/browser-startup.mjs';
 
 const DEFAULT_SOURCE='578c31ebee7fd2ef01af5de8e673589c67e9daf0';
 const SETTINGS='brainrot-foundation-v1:brainrot-portal.preferences.v24';
@@ -48,12 +50,7 @@ async function noDebugGlobals(page){
  assert.deepEqual(globals,[],'Ordinary public play exposes QA globals');return true;
 }
 async function trustedActivate(page,selector,touch=false){
- await page.$eval(selector,element=>{
-  delete document.documentElement.dataset.unifiedTrustedClick;
-  element.addEventListener('click',event=>{document.documentElement.dataset.unifiedTrustedClick=String(event.isTrusted);},{capture:true,once:true});
- });
- await activate(page,selector,touch);
- assert.equal(await page.evaluate(()=>document.documentElement.dataset.unifiedTrustedClick),'true','Control requires a native trusted click: '+selector);
+ return nativeActivate(page,selector,touch);
 }
 async function waitPlaying(page,level=17){
  await page.waitForFunction(level=>{
@@ -77,41 +74,49 @@ async function touchBounds(page){
    inViewport:!!rect&&rect.x>=0&&rect.y>=0&&rect.right<=innerWidth+1&&rect.bottom<=innerHeight+1,
    hit:!!rect&&element.contains(document.elementFromPoint(rect.x+rect.width/2,rect.y+rect.height/2))};
  }),selectors);
- for(const item of bounds){assert.ok(item.inViewport&&item.hit,'Touch control clipped/obstructed: '+item.selector);assert.ok(item.width>=40&&item.height>=40,'Touch control too small: '+item.selector);}
+ for(const item of bounds){assert.ok(item.inViewport&&item.hit,'Touch control clipped/obstructed: '+item.selector);assert.ok(item.width>=44&&item.height>=44,'Touch control too small: '+item.selector);}
  return bounds;
 }
-async function ordinaryMenuPlay(browser,{base,identity,viewport,out,report}){
+async function ordinaryMenuPlay(browser,{base,identity,viewport,level,out,report}){
  const context=await browser.createBrowserContext(),page=await context.newPage();
  report.activePage=page;page.setDefaultTimeout(180000);page.setDefaultNavigationTimeout(180000);
  const failures=[],modelResponses=[];
  page.on('pageerror',error=>{const value=String(error);failures.push(value);report.errors.push(value);});
  page.on('error',error=>{const value='Renderer: '+String(error);failures.push(value);report.errors.push(value);});
  page.on('response',response=>{if(/\/models\/runtime\/model-(?:01-player|02-cargo|11-portal-gun)\.glb(?:[?#]|$)/.test(response.url()))modelResponses.push({url:response.url(),status:response.status()});});
- const touch=viewport.touch,stem=(base.pathname.endsWith('/chapter-atlas/')?'chapter':'root')+`-${viewport.width}x${viewport.height}`;
+ const touch=viewport.touch,stem=(base.pathname.endsWith('/chapter-atlas/')?'chapter':'root')+`-${viewport.width}x${viewport.height}-level-${level}`;
+ const inputEvidence=[];
+ const input=async selector=>{const evidence=await trustedActivate(page,selector,touch);inputEvidence.push(evidence);return evidence;};
+ const selectRoom=async room=>{
+  const sector=room===41?4:room>=42?5:Math.floor((room-1)/10);
+  await input(`.sector-tabs [data-sector="${sector}"]`);await input(`.room-node[data-level="${room}"]`);
+  assert.equal(await page.$eval('#level-select',element=>Number(element.value)),room-1);
+  assert.equal(await page.$eval(`.room-node[data-level="${room}"]`,element=>element.getAttribute('aria-pressed')),'true');
+ };
  try{
   await page.setViewport({width:viewport.width,height:viewport.height,deviceScaleFactor:1,isMobile:touch,hasTouch:touch});
   // Mute/low quality are reproducible preferences; room selection and all
   // actions below still come from real mouse/touch input in an ordinary page.
   await page.evaluateOnNewDocument(key=>localStorage.setItem(key,JSON.stringify({quality:'low',muted:true,tutorial:false})),SETTINGS);
-  const url=new URL(base);url.searchParams.set('level','1');url.searchParams.set('verify',identity.value.commit);
+  const url=new URL(base);url.searchParams.set('level',String(level));url.searchParams.set('verify',identity.value.commit);
   await page.goto(url.href,{waitUntil:'domcontentloaded'});await waitForStartMenu(page);await noDebugGlobals(page);
   assert.equal(await page.evaluate(()=>document.body.dataset.chamberEdition),'foundation');
   assert.equal(await page.$$eval('#level-select option',items=>items.length),51);
-  assert.equal(await page.$eval('#level-select',element=>Number(element.value)),0,'Room 17 must be selected through the map');
+  assert.equal(await page.$eval('#level-select',element=>Number(element.value)),level-1,'Explicit room link must select its room');
   const menuInfo=await page.evaluate(()=>({width:innerWidth,height:innerHeight,scrollWidth:document.documentElement.scrollWidth,menuWidth:document.querySelector('#start-screen').clientWidth,menuScrollWidth:document.querySelector('#start-screen').scrollWidth,coarse:matchMedia('(pointer: coarse)').matches}));
   assert.ok(menuInfo.scrollWidth<=menuInfo.width+1&&menuInfo.menuScrollWidth<=menuInfo.menuWidth+2,'Campaign menu overflows horizontally');
   if(touch)assert.equal(menuInfo.coarse,true);
-  await trustedActivate(page,'.sector-tabs [data-sector="1"]',touch);
-  await trustedActivate(page,'.room-node[data-level="17"]',touch);
-  assert.equal(await page.$eval('#level-select',element=>Number(element.value)),16);
-  assert.equal(await page.$eval('.room-node[data-level="17"]',element=>element.getAttribute('aria-pressed')),'true');
+  // An explicit URL retains the intended room across reload. Selecting another
+  // room and returning through native map clicks proves selection still works.
+  await selectRoom(level===1?2:1);await selectRoom(level);
   const title=await page.$eval('#selected-room-title',element=>element.textContent.trim());assert.ok(title.length>1);
-  const playText=await page.$eval('#play-button',element=>element.textContent.trim());assert.match(playText,/17/);
-  await page.screenshot({path:path.join(out,stem+'-menu-17.png')});
+  const playText=await page.$eval('#play-button',element=>element.textContent.trim());
+  if(level===41)assert.match(playText,/замок/i);else assert.match(playText,new RegExp(String(level)));
+  await page.screenshot({path:path.join(out,stem+'-menu.png')});
   const links=await page.$$eval('#start-screen a[href]',elements=>[...new Set(elements.map(element=>element.href))].filter(url=>/^https?:/.test(url)));
   const linkChecks=[];
   for(const href of links){const link=new URL(href);if(link.origin===base.origin&&!link.hash)linkChecks.push(await availableLink(link));}
-  await trustedActivate(page,'#play-button',touch);await waitPlaying(page);await noDebugGlobals(page);
+  await input('#play-button');await waitPlaying(page,level);await noDebugGlobals(page);
   assert.equal(new URL(page.url()).pathname,base.pathname,'Ordinary Play navigated away from its requested game');
   assert.ok((await page.$eval('#chamber',element=>element.textContent)).includes(title),'Selected room and in-game title differ');
   assert.equal(await page.$eval('#tower-run-clock',element=>element.hidden),true);
@@ -120,18 +125,24 @@ async function ordinaryMenuPlay(browser,{base,identity,viewport,out,report}){
   assert.ok(runtime.modelsLoaded>=3,'Original actors did not load');
   for(const id of ['01-player','02-cargo','11-portal-gun'])assert.ok(modelResponses.some(response=>response.status===200&&response.url.includes('model-'+id+'.glb')),'Missing original model response '+id);
   const controls=touch?await touchBounds(page):null;
-  await page.screenshot({path:path.join(out,stem+'-playing-17.png')});
-  await nativePause(page,touch);await trustedActivate(page,'#restart-button',touch);await waitPlaying(page);
+  await page.screenshot({path:path.join(out,stem+'-playing.png')});
+  await nativePause(page,touch);await input('#restart-button');await waitPlaying(page,level);
   await delay(500);assert.equal(await page.evaluate(()=>document.documentElement.dataset.runtimeState),'playing','Restart did not remain playing');
-  await nativePause(page,touch);await trustedActivate(page,'#resume-button',touch);await waitPlaying(page);
-  await nativePause(page,touch);await trustedActivate(page,'#level-menu-button',touch);await waitForStartMenu(page);
-  assert.equal(await page.$eval('#level-select',element=>Number(element.value)),16,'Return to map lost the selected room');
-  assert.equal(await page.$eval('.room-node[data-level="17"]',element=>element.getAttribute('aria-pressed')),'true');
-  await trustedActivate(page,'#play-button',touch);await waitPlaying(page);await noDebugGlobals(page);
+  await nativePause(page,touch);await input('#resume-button');await waitPlaying(page,level);
+  await nativePause(page,touch);await input('#level-menu-button');await waitForStartMenu(page);
+  assert.equal(await page.$eval('#level-select',element=>Number(element.value)),level-1,'Return to map lost the selected room');
+  assert.equal(await page.$eval(`.room-node[data-level="${level}"]`,element=>element.getAttribute('aria-pressed')),'true');
+  await input('#play-button');await waitPlaying(page,level);await noDebugGlobals(page);
+  await page.reload({waitUntil:'domcontentloaded'});await waitForStartMenu(page);await noDebugGlobals(page);
+  assert.equal(await page.$eval('#level-select',element=>Number(element.value)),level-1,'Reload lost explicit target room');
+  assert.equal(await page.$eval(`.room-node[data-level="${level}"]`,element=>element.getAttribute('aria-pressed')),'true');
+  await input('#play-button');await waitPlaying(page,level);await noDebugGlobals(page);
+  if(touch)await touchBounds(page);
+  await page.screenshot({path:path.join(out,stem+'-reloaded-playing.png')});
   const publicInfo=await page.evaluate(async()=>{const response=await fetch('build-info.json',{cache:'no-store'});if(response.status!==200)throw Error('Build metadata unavailable');return response.json();});
   assert.deepEqual(publicInfo,identity.value,'Browser served different build metadata');
   assert.deepEqual(failures,[]);
-  return {url:url.href,...viewport,title,selectedThroughMap:true,nativeTrustedPlay:true,ordinaryQAGlobalsAbsent:true,pauseRestartResumeReturnPlay:true,menu:menuInfo,runtime,originalModelResponses:modelResponses,mobileControls:controls,links:linkChecks,buildInfoSHA256:identity.sha256};
+  return {url:url.href,level,...viewport,title,selectedThroughMap:true,nativeTrustedPlay:true,ordinaryQAGlobalsAbsent:true,pauseRestartResumeReturnPlay:true,reloadAndReplay:true,inputEvidence,menu:menuInfo,runtime,originalModelResponses:modelResponses,mobileControls:controls,links:linkChecks,buildInfoSHA256:identity.sha256};
  }catch(error){await captureFailure(page,report,out);throw error;}
  finally{await context.close();report.activePage=null;}
 }
@@ -213,7 +224,7 @@ async function verifyGallery(browser,{root,out,report}){
     const time=metadata.duration*fraction;await page.$eval(selector,(video,time)=>{video.pause();video.currentTime=time;},time);
     await page.waitForFunction((selector,time)=>{const video=document.querySelector(selector);return !video.error&&!video.seeking&&video.readyState>=2&&Math.abs(video.currentTime-time)<.12;},{timeout:90000},selector,time);
     const frame=await decodedVideoFrame(page,selector);assert.ok(frame.width>0&&frame.height>0&&frame.luminanceRange>12&&frame.quantizedColors>12,'Decoded public video frame is blank: '+record.id);
-    frames.push(frame);await page.$eval(selector,video=>video.scrollIntoView({block:'center'}));
+    frames.push(frame);
     await page.screenshot({path:path.join(out,`gallery-${record.id}-frame-${Math.round(fraction*100)}.png`)});
    }
    result.currentRecordings.push({id:record.id,...metadata,actualPlaybackSeconds:playback.advance,decodedSeekFrames:frames});
@@ -256,12 +267,13 @@ export async function main(){
   assert.equal(rootModels.sha256,chapterModels.sha256,'Root and chapter original model manifests differ');
   for(const id of [1,2,11])assert.ok(rootModels.value.models.find(model=>model.id===id&&/^[a-f0-9]{64}$/.test(model.outputSHA256)),'Missing original model identity '+id);
   report.identity.modelManifestSHA256=rootModels.sha256;
-  const {default:puppeteer}=await import('puppeteer-core');
-  browser=await puppeteer.launch({executablePath:process.env.CHROME_PATH||'/usr/bin/google-chrome',headless:true,protocolTimeout:720000,args:['--no-sandbox','--disable-dev-shm-usage','--use-angle=swiftshader','--enable-unsafe-swiftshader']});
-  for(const base of [root,chapter])for(const viewport of [{width:1280,height:800,touch:false},{width:390,height:844,touch:true},{width:736,height:414,touch:true}]){
-   console.log('Public native controls',base.href,viewport.width+'x'+viewport.height);
-   report.ordinary.push(await ordinaryMenuPlay(browser,{base,identity:rootInfo,viewport,out,report}));
+  const {default:puppeteer,TimeoutError}=await import('puppeteer-core');report.browserStartup=[];
+  browser=await launchBrowserWithStartupRetry({launch:options=>puppeteer.launch(options),TimeoutError,onAttempt:attempt=>report.browserStartup.push(attempt),options:{executablePath:process.env.CHROME_PATH||'/usr/bin/google-chrome',headless:true,protocolTimeout:720000,args:['--no-sandbox','--disable-dev-shm-usage','--use-angle=swiftshader','--enable-unsafe-swiftshader']}});
+  for(const base of [root,chapter])for(const viewport of MATRIX_VIEWPORTS)for(const level of MATRIX_LEVELS){
+   console.log('Public native controls',base.href,viewport.width+'x'+viewport.height,'room',level);
+   report.ordinary.push(await ordinaryMenuPlay(browser,{base,identity:rootInfo,viewport,level,out,report}));
   }
+  report.matrix=assertMatrix(report.ordinary,{root,chapter});
   for(const base of [root,chapter])report.activeOriginalModels.push(await activeOriginalModels(browser,{base,identity:rootInfo,out,report}));
   report.gallery=await verifyGallery(browser,{root,out,report});
   assert.deepEqual(report.errors,[]);report.pass=true;console.log('UNIFIED PUBLIC BROWSER VERIFIED',JSON.stringify({sourceCommit:source,plays:report.ordinary.length,currentVideos:report.gallery.currentRecordings.length,historicalGalleries:report.gallery.historicalGalleries.length}));

@@ -264,6 +264,7 @@ def assemble(args):
             assert sha(site / prefix / row['path']) == row['sha256']
     after = inventory(site)
     lookup = {row['path']: row for row in after}
+    assert {row['path'] for row in before}.issubset(lookup), 'A previous public path was removed'
     replaced = {prefix + row['path'] for prefix in ['', 'chapter-atlas/'] for row in files}
     replaced.update(['walkthroughs.html', 'chapter-atlas/walkthroughs.html'])
     preserved = [row for row in before if row['path'] not in replaced]
