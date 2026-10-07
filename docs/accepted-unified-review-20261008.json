@@ -1,0 +1,306 @@
+{
+  "sourceCommit": "578c31ebee7fd2ef01af5de8e673589c67e9daf0",
+  "runId": 37684821653,
+  "runAttempt": 1,
+  "workflowPath": ".github/workflows/unified-campaign-review.yml",
+  "conclusion": "success",
+  "completedAt": "2026-10-07T22:10:30Z",
+  "jobs": [
+    {
+      "id": 113009813292,
+      "name": "checks / Finite Room 17 and late attacks plus both known Siphon exploits"
+    },
+    {
+      "id": 113009813497,
+      "name": "checks / Canonical, alternate and recovery profiles (classic)"
+    },
+    {
+      "id": 113009813617,
+      "name": "checks / Complete active source regressions (legacy editions retained)"
+    },
+    {
+      "id": 113009813664,
+      "name": "checks / Build browser and platform candidates exactly once"
+    },
+    {
+      "id": 113009813692,
+      "name": "checks / Classic physical routes, bypass and recovery regressions"
+    },
+    {
+      "id": 113009813761,
+      "name": "checks / Canonical, alternate and recovery profiles (foundation)"
+    },
+    {
+      "id": 113009813915,
+      "name": "checks / Canonical, alternate and recovery profiles (open)"
+    },
+    {
+      "id": 113010063165,
+      "name": "checks / Trusted mouse, emergence and real audio"
+    },
+    {
+      "id": 113010063225,
+      "name": "checks / Production resize, quality and touch controls"
+    },
+    {
+      "id": 113010063305,
+      "name": "checks / Research archive WebGL 33"
+    },
+    {
+      "id": 113010063346,
+      "name": "checks / Carry/wind and exact Yandex SDK UI contract"
+    },
+    {
+      "id": 113010063349,
+      "name": "checks / Research archive WebGL 32"
+    },
+    {
+      "id": 113010063361,
+      "name": "checks / Atlas menus, real loading and reduced motion"
+    },
+    {
+      "id": 113010063363,
+      "name": "checks / Continuous ordinary recording (1-motion)"
+    },
+    {
+      "id": 113010063376,
+      "name": "checks / Open archive WebGL 28"
+    },
+    {
+      "id": 113010063379,
+      "name": "checks / Research archive WebGL 31"
+    },
+    {
+      "id": 113010063423,
+      "name": "checks / Resume, native landscape Play and graphics recovery"
+    },
+    {
+      "id": 113010063453,
+      "name": "checks / Current campaign WebGL (1,2,3,4,5,6,7,8,9,10)"
+    },
+    {
+      "id": 113010063476,
+      "name": "checks / Current late UI integration 37,38"
+    },
+    {
+      "id": 113010063488,
+      "name": "checks / Foundation UI integration 1"
+    },
+    {
+      "id": 113010063508,
+      "name": "checks / Current campaign WebGL (11,12,13,14,15,16,17,18,19,20)"
+    },
+    {
+      "id": 113010063514,
+      "name": "checks / Current late UI integration 39,40"
+    },
+    {
+      "id": 113010063520,
+      "name": "checks / Current campaign WebGL (47,48,49,50,51)"
+    },
+    {
+      "id": 113010063525,
+      "name": "checks / Current campaign WebGL (42,43,44,45,46)"
+    },
+    {
+      "id": 113010063527,
+      "name": "checks / Current late UI integration 31,32"
+    },
+    {
+      "id": 113010063528,
+      "name": "checks / Current campaign WebGL (21,22,23,24,25,26,27,28,29,30)"
+    },
+    {
+      "id": 113010063530,
+      "name": "checks / Foundation UI integration 2"
+    },
+    {
+      "id": 113010063532,
+      "name": "checks / Open archive WebGL 24"
+    },
+    {
+      "id": 113010063563,
+      "name": "checks / Continuous ordinary recording (17-lower-branch)"
+    },
+    {
+      "id": 113010063566,
+      "name": "checks / Frozen production resource lifecycle and context restore"
+    },
+    {
+      "id": 113010063579,
+      "name": "checks / Foundation UI integration 3"
+    },
+    {
+      "id": 113010063580,
+      "name": "checks / Current campaign WebGL (31,32,33,34,35,36,37,38,39,40)"
+    },
+    {
+      "id": 113010063584,
+      "name": "checks / Current late UI integration 35,36"
+    },
+    {
+      "id": 113010063585,
+      "name": "checks / Classic archive WebGL 1–5"
+    },
+    {
+      "id": 113010063599,
+      "name": "checks / Current campaign WebGL (41)"
+    },
+    {
+      "id": 113010063606,
+      "name": "checks / Open archive WebGL 30"
+    },
+    {
+      "id": 113010063617,
+      "name": "checks / Classic archive WebGL 6–11"
+    },
+    {
+      "id": 113010063618,
+      "name": "checks / Classic archive WebGL 22–27"
+    },
+    {
+      "id": 113010063622,
+      "name": "checks / Current late UI integration 33,34"
+    },
+    {
+      "id": 113010063629,
+      "name": "checks / Continuous ordinary recording (17-canonical)"
+    },
+    {
+      "id": 113010063641,
+      "name": "checks / Foundation UI integration 5"
+    },
+    {
+      "id": 113010063648,
+      "name": "checks / Foundation UI integration 4"
+    },
+    {
+      "id": 113010063710,
+      "name": "checks / Classic archive WebGL 17–21"
+    },
+    {
+      "id": 113010063728,
+      "name": "checks / Classic archive WebGL 28–33"
+    },
+    {
+      "id": 113010063761,
+      "name": "checks / Classic archive WebGL 12–16"
+    },
+    {
+      "id": 113010063870,
+      "name": "checks / Foundation UI integration 30"
+    },
+    {
+      "id": 113042339934,
+      "name": "checks / Complete exact-package technical CI evidence"
+    }
+  ],
+  "artifacts": [
+    {
+      "id": 11510458358,
+      "name": "campaign-browser",
+      "digest": "sha256:3e8fafd40290b11be9645f1224978a63465af9f7dac7d42d1fa2335aee29316c",
+      "directory": "browser",
+      "sizeBytes": 4311180
+    },
+    {
+      "id": 11514169011,
+      "name": "campaign-current-recording-17-canonical",
+      "digest": "sha256:a10b2a05a25c7059c3040f7963188e584ec1d90175f50b090850ba6f9227f656",
+      "directory": "recording-17",
+      "sizeBytes": 5769365
+    },
+    {
+      "id": 11513925512,
+      "name": "campaign-current-recording-17-lower-branch",
+      "digest": "sha256:fd10056449bd031d612d391a3cf116354550569acc12f9f28bbbd5e3e06426ea",
+      "directory": "recording-17-lower",
+      "sizeBytes": 4832640
+    },
+    {
+      "id": 11511550370,
+      "name": "campaign-current-recording-1-motion",
+      "digest": "sha256:650a42fd3e5e0fd82c120d8dca6026491f2714e1133315518b92b335a780b6ca",
+      "directory": "recording-1",
+      "sizeBytes": 787358
+    },
+    {
+      "id": 11515280480,
+      "name": "campaign-technical-acceptance",
+      "digest": "sha256:6ded7e58aa8a13d1a4fec556dd0c993db3daff68ee20c1cdf03dceda85293720",
+      "directory": "acceptance",
+      "sizeBytes": 902
+    },
+    {
+      "id": 11510104582,
+      "name": "yandex-moderation-archive",
+      "digest": "sha256:c8a32e0340858a1b8fffdb4ad85fd138aba20e3d90c39e745c0a698f445893d5",
+      "directory": "yandex",
+      "sizeBytes": 4207033
+    },
+    {
+      "id": 11511460315,
+      "name": "campaign-finite-attacks",
+      "digest": "sha256:d0e869a3d2f49340abe502b447533942a375b6248fd08ee6e6133e274a2a0ba0",
+      "directory": "attacks",
+      "sizeBytes": 197573
+    }
+  ],
+  "metrics": {
+    "sourceTests": {
+      "passed": 1495,
+      "failed": 0
+    },
+    "currentProductionRooms": 51,
+    "room17FiniteAttacks": {
+      "cases": 51,
+      "unsupportedLandings": 0,
+      "fullBypasses": 0,
+      "setupOrContinuationErrors": 0
+    },
+    "yandexArchive": {
+      "bytes": 4197166,
+      "unpackedBytes": 6315151,
+      "sha256": "2c2d64a4eb2473bbeb0b618d3d746d4dceeaedd5d1c55f51d0327e00ac53f6b1",
+      "files": 23
+    },
+    "sourceInputFiles": 274,
+    "sourceInputsSha256": "6eb283ac0c561da549a7786e361614877d2e8f1b1e0f84092693ba5074da7ffd",
+    "recordings": [
+      {
+        "directory": "recording-17",
+        "level": 17,
+        "fps": 30,
+        "frames": 3251,
+        "durationSeconds": 108.36666666666666,
+        "videoBytes": 5731510,
+        "videoSha256": "589b5ca36776abbc041919c83600d54f598e50c6f3d0ce99b81163030b10f52d"
+      },
+      {
+        "directory": "recording-17-lower",
+        "level": 17,
+        "fps": 12,
+        "frames": 1403,
+        "durationSeconds": 116.91666666666667,
+        "videoBytes": 4774635,
+        "videoSha256": "b8a25ad6e2e10647cc97f8bfc65425940f9a0c6e38e2a2adb2a949124b617cd9"
+      },
+      {
+        "directory": "recording-1",
+        "level": 1,
+        "fps": 30,
+        "frames": 265,
+        "durationSeconds": 8.833333333333334,
+        "videoBytes": 709754,
+        "videoSha256": "df78e771f9f58b76c9db2a71d3d00ae71aa17bc9ef71d7aa056b71a459afa146"
+      }
+    ]
+  },
+  "evidenceScope": "GitHub API run/job/artifact metadata and decoded exact-job logs. The technical acceptance JSON must be downloaded and checked against browser and Yandex package bytes during delivery.",
+  "limitations": [
+    "Automated technical CI acceptance is complete for this exact source and frozen packages; publication remains a separate step.",
+    "Finite exploit attempts do not prove that every shortcut is absent.",
+    "Software WebGL and controlled SDK checks do not establish hardware FPS/VRAM, blind human playtest quality, actual advertising delivery or live Yandex moderation.",
+    "Historical recordings retain their original source identity; they are not recordings of v54."
+  ]
+}
