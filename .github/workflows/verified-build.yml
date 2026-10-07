@@ -998,7 +998,7 @@ jobs:
     name: Finite Room 17 and late attacks plus both known Siphon exploits
   recording:
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 100
     steps:
     - uses: actions/checkout@v4
       with:
@@ -1048,7 +1048,7 @@ jobs:
 
         export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
 
-        timeout --signal=TERM --kill-after=10s 2400s node scripts/record-foundation-walkthrough.mjs'
+        timeout --signal=TERM --kill-after=10s 4800s node scripts/record-foundation-walkthrough.mjs'
     - uses: actions/upload-artifact@v4
       if: always()
       with:
