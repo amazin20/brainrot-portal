@@ -1,0 +1,311 @@
+name: Publish accepted Siphon Observatory and collision hardening
+on:
+  push:
+    branches: [main]
+    paths: [.github/workflows/publish-siphon-hardening.yml]
+permissions: {contents: read, actions: read}
+concurrency:
+  group: pages
+  cancel-in-progress: false
+env:
+  SOURCE_SHA: 083cc6e7ee75ea7c44dc52326c862495c264eb51
+  REVIEW_RUN: '37614874735'
+  REVIEW_HEAD_SHA: 083cc6e7ee75ea7c44dc52326c862495c264eb51
+  REVIEW_WORKFLOW_PATH: .github/workflows/siphon-hardening.yml
+jobs:
+  assemble:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: '${{ github.sha }}', persist-credentials: false}
+      - uses: actions/setup-node@v4
+        with: {node-version: 22}
+      - name: Require the exact successful review and checksum-pinned artifacts
+        uses: actions/github-script@v7
+        env: {GITHUB_TOKEN: '${{ github.token }}'}
+        with:
+          script: |
+            const fs=require('node:fs'),assert=require('node:assert/strict'),crypto=require('node:crypto'),{Readable,Transform}=require('node:stream'),{pipeline}=require('node:stream/promises');
+            const {owner,repo}=context.repo,source=process.env.SOURCE_SHA,runId=Number(process.env.REVIEW_RUN);
+            assert.match(source,/^[a-f0-9]{40}$/);assert.ok(Number.isSafeInteger(runId)&&runId>0);
+            const run=(await github.rest.actions.getWorkflowRun({owner,repo,run_id:runId})).data;
+            assert.equal(run.head_sha,process.env.REVIEW_HEAD_SHA);assert.equal(run.path,process.env.REVIEW_WORKFLOW_PATH);
+            assert.equal(run.status,'completed');assert.equal(run.conclusion,'success');
+            const jobs=await github.paginate(github.rest.actions.listJobsForWorkflowRunAttempt,{owner,repo,run_id:runId,attempt_number:run.run_attempt,per_page:100});
+            const expected=['regressions','package','attacks','recording','menu','webgl (1,2,3,4,5,6,7,8,9,10)','webgl (11,12,13,14,15,16,17,18,19,20)','webgl (21,22,23,24,25,26,27,28,29,30)','webgl (31,32,33,34,35,36,37,38,39,40)','webgl (41)','webgl (42,43,44,45,46)','webgl (47,48,49,50,51)'];
+            assert.equal(jobs.length,12);assert.deepEqual(jobs.map(j=>j.name).sort(),expected.sort());
+            for(const job of jobs){assert.equal(job.status,'completed');assert.equal(job.conclusion,'success');}
+            const headers={Authorization:'Bearer '+process.env.GITHUB_TOKEN,Accept:'application/vnd.github+json'};
+            const logHashes=[];
+            for(const job of jobs){
+              const response=await fetch('https://api.github.com/repos/'+owner+'/'+repo+'/actions/jobs/'+job.id+'/logs',{headers,signal:AbortSignal.timeout(90000)});
+              assert.ok(response.ok,'Job log HTTP '+response.status);const text=await response.text();
+              assert.ok(new RegExp('git log -1 --format=%H\\r?\\n[^\\n]*'+source).test(text),'Job did not check out the accepted source: '+job.name);
+              logHashes.push({id:job.id,name:job.name,sourceCommit:source,sha256:crypto.createHash('sha256').update(text).digest('hex')});
+            }
+            assert.equal((await github.rest.actions.getWorkflowRun({owner,repo,run_id:runId})).data.run_attempt,run.run_attempt,'Review was rerun while being inspected');
+            fs.mkdirSync('inputs');fs.mkdirSync('proof');fs.mkdirSync('publication-scripts');
+            fs.writeFileSync('proof/gates.json',JSON.stringify({run,jobs,jobLogHashes:logHashes,sourceCommit:source,allExpectedJobsPassed:true},null,2));
+            const pins=[
+              {id:11397616062,run:37431971080,head:'7bcea1fd85d2ed608e8dc5611a45b7398250bc6d',name:'echo-publication-proof',file:'baseline-proof.zip',digest:'sha256:729b369227ac62d9157e15aadc5db9d59ffe7721b7fa3e442884db7683018fe9'},
+              {id:Number('11479523526'),run:runId,head:run.head_sha,name:'siphon-hardening-production',file:'production.zip',digest:'sha256:c1dbcedc426faf79e7018226823f4951a33424d6ba24e4a3d4bc6bab2e98832c'},
+              {id:Number('11478923977'),run:runId,head:run.head_sha,name:'siphon-hardening-recording',file:'recording.zip',digest:'sha256:68e9cca2cb1c2ba5cd5cde7ac022f8bc4f93c50853b00ee8e33a2f29dd1b66d4'}
+            ];
+            for(const pin of pins){
+              assert.ok(Number.isSafeInteger(pin.id)&&pin.id>0);assert.match(pin.digest,/^sha256:[a-f0-9]{64}$/);
+              const artifact=(await github.rest.actions.getArtifact({owner,repo,artifact_id:pin.id})).data;
+              assert.equal(artifact.expired,false);assert.equal(artifact.name,pin.name);assert.equal(artifact.workflow_run.id,pin.run);
+              assert.equal(artifact.workflow_run.head_sha,pin.head);assert.equal(artifact.digest,pin.digest);
+              const response=await fetch('https://api.github.com/repos/'+owner+'/'+repo+'/actions/artifacts/'+pin.id+'/zip',{headers,signal:AbortSignal.timeout(180000)});
+              assert.ok(response.ok);const hash=crypto.createHash('sha256'),meter=new Transform({transform(bytes,encoding,done){hash.update(bytes);done(null,bytes);}});
+              await pipeline(Readable.fromWeb(response.body),meter,fs.createWriteStream('inputs/'+pin.file));
+              assert.equal('sha256:'+hash.digest('hex'),pin.digest);
+            }
+            fs.writeFileSync('proof/artifact-inputs.json',JSON.stringify(pins,null,2));
+      - name: Recover the complete current publication from its verified public inventory
+        run: |
+          cat > publication-scripts/public-inventory.py <<'PY'
+          import concurrent.futures,hashlib,json,pathlib,sys,time,urllib.parse,urllib.request
+          def safe(name):
+            assert isinstance(name,str) and name and not name.startswith('/') and '\\' not in name
+            assert all(part not in ('','.','..') for part in name.split('/')),name
+            return name
+          def inventory(rows):
+            seen=set()
+            for row in rows:
+              name=safe(row['path']);assert name not in seen,name;seen.add(name)
+              assert isinstance(row['bytes'],int) and row['bytes']>=0
+              assert len(row['sha256'])==64 and all(c in '0123456789abcdef' for c in row['sha256'])
+            return rows
+          def verify(rows,base,destination=None):
+            rows=inventory(rows)
+            def one(row):
+              name=row['path'];output=destination/name if destination else None
+              for attempt in range(4):
+                temp=None
+                try:
+                  url=base.rstrip('/')+'/'+urllib.parse.quote(name,safe='/')+'?publication-check='+str(time.time_ns())
+                  request=urllib.request.Request(url,headers={'Cache-Control':'no-cache','User-Agent':'brainrot-publication-byte-verification'})
+                  if output:
+                    output.parent.mkdir(parents=True,exist_ok=True);temp=output.with_name(output.name+'.download')
+                  digest=hashlib.sha256();size=0
+                  with urllib.request.urlopen(request,timeout=90) as response:
+                    assert response.status==200,(name,response.status)
+                    stream=temp.open('wb') if temp else None
+                    try:
+                      while True:
+                        data=response.read(1024*1024)
+                        if not data:break
+                        size+=len(data);assert size<=row['bytes'],('Unexpected bytes',name)
+                        digest.update(data)
+                        if stream:stream.write(data)
+                    finally:
+                      if stream:stream.close()
+                  assert size==row['bytes'] and digest.hexdigest()==row['sha256'],('Public bytes changed',name)
+                  if output:temp.replace(output)
+                  return size
+                except Exception as error:
+                  if temp:temp.unlink(missing_ok=True)
+                  if attempt==3:raise RuntimeError('Public file check failed: '+name+': '+str(error)) from error
+                  time.sleep(2**attempt)
+            with concurrent.futures.ThreadPoolExecutor(max_workers=6) as executor:
+              sizes=list(executor.map(one,rows))
+            return {'pass':True,'checked':len(rows),'bytes':sum(sizes),'streams':6}
+          if __name__=='__main__':
+            manifest=pathlib.Path(sys.argv[1]);rows=json.loads(manifest.read_text())['siteFiles']
+            destination=pathlib.Path(sys.argv[4]) if len(sys.argv)>4 else None
+            output=pathlib.Path(sys.argv[3])
+            try:
+              report=verify(rows,sys.argv[2],destination)
+              output.write_text(json.dumps(report,indent=2)+'\n')
+            except Exception as error:
+              output.write_text(json.dumps({'pass':False,'error':str(error),'streams':6},indent=2)+'\n')
+              raise
+          PY
+          python3 - <<'PY'
+          import hashlib,json,pathlib,shutil,zipfile
+          def safe(name):
+            assert name and not name.startswith('/') and '\\' not in name and all(p not in ('','.','..') for p in name.split('/')),name
+            return name
+          for name in ['baseline-proof','production','recording']:
+            root=pathlib.Path(name);root.mkdir();seen=set();total=0
+            with zipfile.ZipFile('inputs/'+name+'.zip') as archive:
+              for entry in archive.infolist():
+                if entry.is_dir():continue
+                path=safe(entry.filename);assert path not in seen;seen.add(path)
+                assert (entry.external_attr>>16)&0o170000 in (0,0o100000),'Non-regular ZIP entry'
+                total+=entry.file_size;assert total<500_000_000,'Oversized archive'
+                target=root/path;target.parent.mkdir(parents=True,exist_ok=True)
+                with archive.open(entry) as source,target.open('wb') as output:shutil.copyfileobj(source,output)
+          baseline=json.loads(pathlib.Path('baseline-proof/manifest.json').read_text())
+          assert baseline['sourceCommit']=='f7a03ebd2b0c32a03fd953fe547664037b4c3483' and baseline['version']=='v52-echo-horizon'
+          assert len(baseline['siteFiles'])==875
+          bypath={row['path']:row for row in baseline['siteFiles']};assert len(bypath)==875
+          assert bypath['build-info.json']['sha256']=='9c6d7cd90c31036817ffb5dd9a31e2a2909431b744e461c002092619e0bd7e31'
+          assert bypath['chapter-atlas/build-info.json']['sha256']=='20b7bb57ed273326d5b1d03e1868ab31d9aa073d42d362aa7b79fddc12a925b6'
+          shutil.copyfile('baseline-proof/manifest.json','proof/baseline-manifest.json')
+          PY
+          python3 publication-scripts/public-inventory.py proof/baseline-manifest.json https://amazin20.github.io/brainrot-portal/ proof/baseline-public-bytes.json site
+      - name: Verify every native room33 frame and its encoded recording
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends ffmpeg
+          python3 - <<'PY'
+          import hashlib,json,math,pathlib,re,subprocess
+          root=pathlib.Path('recording');evidence=json.loads((root/'level-33.json').read_text());source='083cc6e7ee75ea7c44dc52326c862495c264eb51'
+          assert evidence['sourceCommit']==source and evidence['level']==33 and evidence['edition']=='foundation'
+          assert evidence['title']=='Сифонная обсерватория' and evidence['continuous'] is True
+          route=evidence['route'];assert route['pass'] is True and route['level']==33 and route['resets']==0 and route['respawns']==0
+          first,last=evidence['firstFrame'],evidence['lastFrame'];assert first['visualFrame']==0 and first['state']=='playing' and last['state']=='won'
+          assert first['level']==last['level']==33
+          body=first['cargoBodyId'];assert isinstance(body,int) and body>=0 and last['cargoBodyId']==body
+          frames=evidence['frameCount'];fps=evidence['fps'];assert fps in [4,6,12] and isinstance(frames,int) and frames>fps*5
+          assert last['visualFrame']==(frames-1)*(60//fps)
+          assert math.isclose(evidence['durationSeconds'],frames/fps,abs_tol=1e-8)
+          pixels=evidence['pixelCheck'];assert pixels['frames']==frames and pixels['allNonblank'] is True and pixels['minimumLuminanceRange']>12
+          assert isinstance(evidence['milestones'],list) and evidence['milestones']
+          for field,name in [('video','level-33.mp4'),('poster','level-33.jpg'),('finishPoster','level-33-finish.jpg')]:
+            assert evidence[field]==name and (root/name).is_file()
+          movie=root/'level-33.mp4';assert movie.stat().st_size==evidence['bytes'] and hashlib.sha256(movie.read_bytes()).hexdigest()==evidence['sha256']
+          probe=json.loads(subprocess.check_output(['ffprobe','-v','error','-select_streams','v:0','-show_entries','stream=codec_name,width,height,avg_frame_rate,nb_frames,duration','-show_entries','format=duration,size','-of','json',str(movie)]))
+          stream=probe['streams'][0];assert stream['codec_name']=='h264' and stream['width']==evidence['width'] and stream['height']==evidence['height']
+          assert int(stream['nb_frames'])==frames and abs(float(probe['format']['duration'])-frames/fps)<.1
+          numerator,denominator=map(int,stream['avg_frame_rate'].split('/'));assert numerator/denominator==fps
+          pixelLog=pathlib.Path('proof/recording33-encoded-pixels.txt')
+          subprocess.run(['ffmpeg','-hide_banner','-loglevel','error','-i',str(movie),'-vf','scale=160:90,signalstats,metadata=mode=print:file='+str(pixelLog),'-f','null','-'],check=True,timeout=180)
+          text=pixelLog.read_text();minima=[int(value) for value in re.findall(r'lavfi\.signalstats\.YMIN=(\d+)',text)];maxima=[int(value) for value in re.findall(r'lavfi\.signalstats\.YMAX=(\d+)',text)]
+          assert len(minima)==len(maxima)==frames and all(high-low>12 for low,high in zip(minima,maxima)),'An encoded recording frame is blank'
+          pathlib.Path('proof/recording33.json').write_text(json.dumps(evidence,ensure_ascii=False,indent=2)+'\n')
+          pathlib.Path('proof/recording33-ffprobe.json').write_text(json.dumps(probe,indent=2)+'\n')
+          PY
+      - name: Replace only chapter-atlas and preserve the Echo Horizon recording
+        run: |
+          python3 - <<'PY'
+          import hashlib,html,json,pathlib,shutil
+          sha=lambda path:hashlib.sha256(path.read_bytes()).hexdigest()
+          def inventory(root):
+            return [{'path':str(p.relative_to(root)),'bytes':p.stat().st_size,'sha256':sha(p)} for p in sorted(root.rglob('*')) if p.is_file()]
+          site=pathlib.Path('site');before=inventory(site);baseline=json.loads(pathlib.Path('proof/baseline-manifest.json').read_text())
+          assert before==sorted(baseline['siteFiles'],key=lambda row:row['path'])
+          rootinfo=json.loads((site/'build-info.json').read_text());assert rootinfo['commit']=='6f1eec54d47fed7916f5346a218525292d15fd62'
+          chapter=site/'chapter-atlas';old=json.loads((chapter/'build-info.json').read_text());assert old['commit']=='f7a03ebd2b0c32a03fd953fe547664037b4c3483'
+          new=json.loads(pathlib.Path('production/build-info.json').read_text())
+          assert new['commit']=='083cc6e7ee75ea7c44dc52326c862495c264eb51' and new['levels']==51 and new['version']=='v53-siphon-observatory'
+          replaced={row['level']:row for row in new['features']['replacedRooms']}
+          assert replaced[33]['id']=='siphon-observatory' and replaced[51]['id']=='echo-horizon'
+          current=inventory(pathlib.Path('production'));assert sum(row['bytes'] for row in current)<100_000_000
+          assert not any(row['path'].startswith(('chapter-atlas/','publication-history/','walkthroughs/')) for row in current),'Production contains an unrelated publication'
+          oldfiles={row['path']:row for row in before}
+          for row in current:
+            if row['path'].startswith(('models/','draco/')):assert row['sha256']==oldfiles['chapter-atlas/'+row['path']]['sha256']
+          echoNames=['level-51.mp4','level-51.json','level-51.jpg','level-51-finish.jpg'];kept=pathlib.Path('preserved-echo');kept.mkdir()
+          for name in echoNames:shutil.copyfile(chapter/'walkthroughs'/name,kept/name)
+          priorReport=json.loads((chapter/'replacement-report.json').read_text());echo=json.loads((kept/'level-51.json').read_text())
+          assert echo['sourceCommit']==old['commit'] and sha(kept/'level-51.mp4')==echo['sha256']
+          shutil.rmtree(chapter);shutil.copytree('production',chapter);(chapter/'walkthroughs').mkdir()
+          for name in echoNames:shutil.copyfile(kept/name,chapter/'walkthroughs'/name)
+          for name in ['level-33.mp4','level-33.json','level-33.jpg','level-33-finish.jpg']:shutil.copyfile('recording/'+name,chapter/'walkthroughs'/name)
+          evidence=json.loads(pathlib.Path('proof/recording33.json').read_text())
+          gallery='''<!doctype html><html lang="ru"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Брейнрот Портал — новые головоломки</title><style>body{background:#102632;color:#eef8fc;font:17px/1.65 system-ui;max-width:1080px;margin:5vh auto;padding:24px}a{color:#70e4ed}video{width:100%;border-radius:14px}section{margin:48px 0}code{overflow-wrap:anywhere}</style><h1>Новые головоломки</h1><section><h2>33 · Сифонная обсерватория</h2><p>Новая задача с сохранением объёма воды, клапанами и физическим подъёмником заменяет прежнюю пружинную комнату.</p><video controls preload="metadata" poster="walkthroughs/level-33.jpg" src="walkthroughs/level-33.mp4"></video><p>Непрерывное автоматическое прохождение обычными игровыми действиями, без перезапуска и возрождения. Запись из production WebGL: {frames} кадров, {fps} кадров/с, {duration:.2f} секунды игрового времени. Это маршрут со знанием решения, не человеческий плейтест и не измерение аппаратного FPS.</p><p>Исходник: <code>{source}</code>.</p><p><a href="./?edition=foundation&amp;level=33">Играть в 33</a> · <a href="walkthroughs/level-33.json">Данные записи</a></p></section><section><h2>51 · Эхо горизонта</h2><p>Ранее заменённая головоломка и её исходная запись сохранены. Данные и видео относятся к версии <code>f7a03ebd2b0c32a03fd953fe547664037b4c3483</code>.</p><video controls preload="metadata" poster="walkthroughs/level-51.jpg" src="walkthroughs/level-51.mp4"></video><p>Видео восстановлено из непрерывно сохранённых кадров после ошибки отсутствующего кодировщика в прежнем запуске. Кадры не добавлялись, не удалялись и не переставлялись. Полный первоначальный журнал этапов не сохранился; происхождение указано в исходном JSON.</p><p><a href="./?edition=foundation&amp;level=51">Играть в 51</a> · <a href="walkthroughs/level-51.json">Исходные данные записи</a></p></section><h2>Исторические прохождения</h2><p>Старая галерея содержит записи прежних версий. Прежние ролики 33 и 51 относятся к удалённым задачам.</p><a href="../walkthroughs.html">Открыть прежнюю галерею</a></html>'''
+          # Replace literal tokens so CSS braces never enter format interpolation.
+          gallery=gallery.replace('{frames}',str(evidence['frameCount'])).replace('{fps}',str(evidence['fps'])).replace('{duration:.2f}',format(evidence['durationSeconds'],'.2f')).replace('{source}',html.escape(new['commit']))
+          (chapter/'walkthroughs.html').write_text(gallery,encoding='utf-8')
+          preserved=[row for row in before if not row['path'].startswith('chapter-atlas/')]
+          after={row['path']:row for row in inventory(site)}
+          for row in preserved:assert after[row['path']]==row,'Unrelated publication changed'
+          for name in echoNames:
+            path='chapter-atlas/walkthroughs/'+name;assert after[path]==oldfiles[path],'Echo Horizon recording changed'
+          assert {row['path'] for row in before if row['path'].startswith('publication-history/')}=={path for path in after if path.startswith('publication-history/')},'A new archive was created'
+          proof={'sourceCommit':new['commit'],'version':new['version'],'reviewRun':int('37614874735'),'reviewRunConclusion':'success','allExpectedReviewJobsPassed':12,'replacedInThisRelease':[33],'preservedEarlierReplacement':[51],'allDuplicatesRemoved':False,'publicationPath':'chapter-atlas/','newParallelPreview':False,'newArchive':False,'preservedFiles':preserved,'preservedEchoFiles':[oldfiles['chapter-atlas/walkthroughs/'+name] for name in echoNames],'previousChapterFiles':[row for row in before if row['path'].startswith('chapter-atlas/')],'gameFiles':current,'recording33':evidence,'previousEchoEvidence':{'sourceCommit':old['commit'],'reviewRun':priorReport['reviewRun'],'originalReviewRunConclusion':priorReport['reviewRunConclusion'],'video':echo},'limitations':['Finite unsuccessful exploit attacks do not prove that every shortcut is absent.','Automated software WebGL checks and recorded routes do not establish human playtest quality, physical-device performance, or live Yandex acceptance.']}
+          report={key:value for key,value in proof.items() if key not in ['preservedFiles','previousChapterFiles']}
+          (chapter/'replacement-report.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n')
+          proof['siteFiles']=inventory(site)
+          pathlib.Path('proof/manifest.json').write_text(json.dumps(proof,ensure_ascii=False,indent=2)+'\n')
+          pathlib.Path('proof/before-inventory.json').write_text(json.dumps(before,indent=2)+'\n')
+          print('Replaced existing chapter-atlas game; preserved',len(preserved),'other files and all four Echo51 recording files')
+          PY
+      - uses: actions/upload-pages-artifact@v3
+        with: {path: site}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: siphon-publication-proof
+          path: |
+            proof
+            publication-scripts
+          retention-days: 30
+  publish:
+    needs: assemble
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    permissions: {contents: read, actions: read, pages: write, id-token: write}
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/download-artifact@v4
+        with: {name: siphon-publication-proof, path: publication-proof}
+      - uses: actions/setup-node@v4
+        with: {node-version: 22}
+      - name: Guard the previous root and chapter identities before deployment
+        run: |
+          python3 - <<'PY'
+          import hashlib,json,pathlib,urllib.request
+          manifest=json.loads(pathlib.Path('publication-proof/proof/baseline-manifest.json').read_text())
+          files={row['path']:row for row in manifest['siteFiles']}
+          for name,commit in [('build-info.json','6f1eec54d47fed7916f5346a218525292d15fd62'),('chapter-atlas/build-info.json','f7a03ebd2b0c32a03fd953fe547664037b4c3483')]:
+            with urllib.request.urlopen('https://amazin20.github.io/brainrot-portal/'+name+'?siphon-guard=083cc6e7ee75ea7c44dc52326c862495c264eb51',timeout=90) as response:
+              assert response.status==200;data=response.read()
+              assert hashlib.sha256(data).hexdigest()==files[name]['sha256'],'A newer public version exists'
+              assert json.loads(data)['commit']==commit
+          PY
+          python3 publication-proof/publication-scripts/public-inventory.py publication-proof/proof/baseline-manifest.json https://amazin20.github.io/brainrot-portal/ publication-proof/proof/predeploy-public-bytes.json
+      - uses: actions/configure-pages@v5
+      - uses: actions/deploy-pages@v4
+        id: deployment
+      - name: Verify every preserved and current public byte after deployment
+        env: {PAGE_URL: '${{ steps.deployment.outputs.page_url }}'}
+        run: |
+          python3 publication-proof/publication-scripts/public-inventory.py publication-proof/proof/manifest.json "$PAGE_URL" publication-proof/proof/public-bytes.json
+      - uses: actions/checkout@v4
+        with: {ref: 083cc6e7ee75ea7c44dc52326c862495c264eb51, path: game-source, persist-credentials: false}
+      - run: npm ci && npm install --no-save --package-lock=false puppeteer-core@24.16.0
+        working-directory: game-source
+      - name: Launch and restart the ordinary room33 on desktop and touch screens
+        working-directory: game-source
+        env: {PAGE_URL: '${{ steps.deployment.outputs.page_url }}chapter-atlas/'}
+        run: |
+          cat > siphon-live.mjs <<'JS'
+          import fs from 'node:fs';import assert from 'node:assert/strict';import puppeteer from 'puppeteer-core';import {activate,waitForStartMenu} from './scripts/lib/singularity-ui-check.mjs';
+          const out='../publication-proof/proof/live';fs.mkdirSync(out,{recursive:true});
+          const result={pass:false,sourceCommit:'083cc6e7ee75ea7c44dc52326c862495c264eb51',cases:[],errors:[],scope:'Ordinary public menu, native Play, pause, restart, return and reload; complete gameplay route is established separately by the exact-source review and native recording.'};
+          const browser=await puppeteer.launch({executablePath:'/usr/bin/google-chrome',headless:true,protocolTimeout:240000,args:['--no-sandbox','--disable-dev-shm-usage','--use-angle=swiftshader','--enable-unsafe-swiftshader']});let page;
+          async function noDebug(){assert.deepEqual(await page.evaluate(()=>Object.getOwnPropertyNames(window).filter(key=>key.startsWith('__NESI_'))),[]);}
+          async function ordinaryRoom33(){await page.waitForFunction(()=>document.documentElement.dataset.runtimeState==='playing'&&document.documentElement.dataset.levelIndex==='32'&&document.documentElement.dataset.gameReady==='true');await noDebug();}
+          async function pause(touch){if(touch)await activate(page,'.lab-mobile button:nth-child(4)',true);else await page.keyboard.press('Escape');await page.waitForFunction(()=>document.documentElement.dataset.runtimeState==='paused');}
+          try{
+            for(const viewport of [{width:1440,height:900,touch:false},{width:390,height:844,touch:true}]){
+              page=await browser.newPage();page.setDefaultTimeout(180000);await page.setViewport({width:viewport.width,height:viewport.height,deviceScaleFactor:1,isMobile:viewport.touch,hasTouch:viewport.touch});
+              page.on('pageerror',error=>result.errors.push(String(error)));page.on('error',error=>result.errors.push('Renderer: '+String(error)));
+              await page.goto(process.env.PAGE_URL+'?edition=foundation&level=33',{waitUntil:'domcontentloaded'});await waitForStartMenu(page);await noDebug();
+              assert.equal(await page.$eval('#level-select',element=>Number(element.value)),32);assert.match(await page.$eval('#level-select option[value="32"]',element=>element.textContent),/Сифонная обсерватория/);
+              const info=await page.evaluate(async()=>{const response=await fetch('build-info.json',{cache:'no-store'});if(!response.ok)throw Error('Build-info HTTP '+response.status);return response.json();});
+              assert.equal(info.commit,result.sourceCommit);assert.equal(info.features.replacedRooms.find(row=>row.level===33).id,'siphon-observatory');
+              await page.screenshot({path:out+'/menu-'+viewport.width+'.png'});
+              await page.$eval('#play-button',element=>element.addEventListener('click',event=>document.documentElement.dataset.siphonTrustedPlay=String(event.isTrusted),{once:true,capture:true}));
+              await activate(page,'#play-button',viewport.touch);await ordinaryRoom33();
+              assert.equal(await page.evaluate(()=>document.documentElement.dataset.siphonTrustedPlay),'true');await noDebug();await page.screenshot({path:out+'/playing-'+viewport.width+'.png'});
+              await pause(viewport.touch);await activate(page,'#restart-button',viewport.touch);await ordinaryRoom33();
+              await pause(viewport.touch);await activate(page,'#level-menu-button',viewport.touch);await waitForStartMenu(page);
+              await page.reload({waitUntil:'domcontentloaded'});await waitForStartMenu(page);await noDebug();assert.equal(await page.$eval('#level-select',element=>Number(element.value)),32);
+              result.cases.push({...viewport,nativePlay:true,pauseRestartReturn:true,reload:true,debugGlobalsAbsent:true});fs.writeFileSync(out+'/report.json',JSON.stringify(result,null,2));await page.close();page=null;
+            }
+            assert.deepEqual(result.errors,[]);result.pass=true;
+          }catch(error){result.error=String(error);await page?.screenshot({path:out+'/failure.png'}).catch(()=>{});throw error;}
+          finally{fs.writeFileSync(out+'/report.json',JSON.stringify(result,null,2));await browser.close();}
+          JS
+          timeout --signal=TERM --kill-after=10s 900s node siphon-live.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: {name: siphon-live-proof, path: publication-proof, retention-days: 30}
