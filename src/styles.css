@@ -137,7 +137,7 @@ body[data-play-state='playing'] .lab-reticle { opacity: 1; }
 .settings-panel { padding: 15px 16px 6px; border: 1px solid #c6d9d2; border-radius: 11px; background: #eef4ed; }
 .settings-title { color: #60817c; font-size: 10px; }
 .settings-panel .setting-row { min-height: 34px; margin: 12px 0; }
-.text-button { display: flex; align-items: center; justify-content: space-between; gap: 10px; width: 100%; margin-top: 16px; padding: 9px 0; border: 0; border-bottom: 1px solid #bbd1cb; background: none; color: #216a79; text-align: left; font-size: 12px; }
+.text-button { min-height: 44px; display: flex; align-items: center; justify-content: space-between; gap: 10px; width: 100%; margin-top: 16px; padding: 9px 0; border: 0; border-bottom: 1px solid #bbd1cb; background: none; color: #216a79; text-align: left; font-size: 12px; }
 .text-button:hover { color: #f26d4b; border-color: #f26d4b; }
 #hint-detail { margin: 12px 0; padding: 13px 15px; border: 1px solid #a9ceca; border-radius: 8px; background: #edf6f3; font-size: 13px; line-height: 1.5; }
 #hint-detail .muted { margin-top: 8px; font-size: 12px; }
