@@ -161,19 +161,19 @@ export const newCoreCases=[
    if(!r.clearFirst&&!r.directClear)assert.deepEqual(r.afterRelease.velocity,r.before.velocity,'A still-open aperture must retain earned release momentum');
    if(r.depth<=.3)assert.ok(r.before.cargo[2]<-.39,'Deep cases must start with the full original grip behind the old source plane');
   }
-  return {scope:'Initial front-side fixture poses/planes only; every throat depth is reached by actual pickup and movement, then production E, wait and/or clear. No actor state writes after fixture setup.',gravity:-19.5,sourceWallThickness:.02,attempts};
+  return {scope:'Initial front-side fixture poses/planes only; every throat depth is reached by actual pickup and movement, then production E and wait, plus internal pair-closing lifecycle calls without a player binding. No actor state writes after fixture setup.',gravity:-19.5,sourceWallThickness:.02,attempts};
  }},
 ];
 export async function runNewCoreCases(){
  const results=[];for(const c of newCoreCases){try{results.push({id:c.id,pass:true,evidence:await c.run()});}catch(error){results.push({id:c.id,pass:false,error:String(error)});}}
- return {scope:'Explicit isolated production controller/physics fixtures. Initial poses and portal planes are setup; subsequent motion, clear input and successful/rejected replacement use production methods. These are stress regressions, not authored-level walkthroughs or exhaustive exploit proof.',physicsHz:120,pass:results.every(r=>r.pass),results};
+ return {scope:'Explicit isolated production controller/physics fixtures. Initial poses and portal planes are setup; subsequent motion, internal pair closing and successful/rejected replacement use production methods. These are stress regressions, not authored-level walkthroughs or exhaustive exploit proof.',physicsHz:120,pass:results.every(r=>r.pass),results};
 }
 export async function runRoom31HeldCargoAttempt(){
  const {createHeadlessGame}=await import('./lab-headless.mjs');
  const {runV8Journey}=await import('../src/game/LabV8Journey.js');
  const {runPost31}=await import('../src/game/LabPostJourneyA.js');
  const g=await createHeadlessGame();g.chamberEdition='foundation';await g.selectLevel(30,false);
- const record={scope:'Authored room 31, ordinary movement, jump, pickup, aim projectiles, release and clear inputs. No actor/body pose, velocity, mechanism target or portal plane is assigned. Full box fit is checked only as evidence; it does not drive gameplay.',level:31,pass:false};
+ const record={scope:'Authored room 31, ordinary movement, jump, pickup, aim projectiles and release, plus internal pair-closing stress with no player binding. This is not a wholly ordinary-input proof. No actor/body pose, velocity, mechanism target or portal plane is assigned. Full box fit is checked only as evidence; it does not drive gameplay.',level:31,pass:false};
  try{
   const journey=await runV8Journey(g,{scenario:async d=>{
    runPost31(d,{route:'inspect-rack-first',stopBeforeCargoDelivery:true});

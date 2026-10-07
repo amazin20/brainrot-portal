@@ -12,7 +12,17 @@ export async function runRoom28(d,{route='equal-tide-garden',recoverFall=false,i
   check(Math.abs(s.tides.flow)>.006,'The receiving tide stopped before its visible flow check');
   mark('the east gauge and receiving current show the moving tide');
  }
- if(interrupt){wait(.25);game.clearPortals();const stopped=s.tides.levels[1];wait(3);check(Math.abs(s.tides.levels[1]-stopped)<1e-8,'Disconnected collectors created water');mark('a broken connection holds both tides');walk(14,2.5);walk(21,2.5);walk(21,13);walk(-14,13);aim(0,p['coral-low'].getFrame().center);walk(21,13);walk(21,0);walk(14,0);aim(1,p['lagoon-low'].getFrame().center);}
+ if(interrupt){
+  wait(.25);aim(0,p[route==='full-tide-observatory'?'lagoon-low':'lagoon-fall'].getFrame().center);const stopped=[...s.tides.levels];wait(3);
+  check(s.tides.flow===0&&stopped.every((height,i)=>Math.abs(s.tides.levels[i]-height)<1e-8),'Both collectors in the same basin created water');
+  mark('both mouths in one basin hold both tides');
+  // Use the visible exterior western collector, then keep both mouths in A
+  // so the receiving float cannot rise before the observer boards it again.
+  walk(14,2.5);walk(21,2.5);walk(21,13);walk(-14,13);
+  aim(1,p['coral-overflow'].getFrame().center);aim(0,p['coral-low'].getFrame().center);
+  walk(21,13);walk(21,0);walk(18.7,0);game.input.jumpQueued=true;walk(14,0);
+  aim(1,p[route==='full-tide-observatory'?'lagoon-fall':'lagoon-low'].getFrame().center);
+ }
  until(()=>s['lagoon-float'].position.y>(route==='full-tide-observatory'?5.25:2.90),40,'Eastern tide did not reach the chosen landing');wait(3);
  mark(route==='full-tide-observatory'?'a full tide reveals the observatory':'equal tides reveal the middle garden');
  collect();
@@ -22,8 +32,13 @@ export async function runRoom28(d,{route='equal-tide-garden',recoverFall=false,i
  }else{walk(14,6);walk(5,6);}
  if(recoverFall){
   walk(5,11);until(()=>game.playerGrounded&&game.playerPosition.y<.1,5,'Lagoon foundation did not recover a missed step');release();
-  walk(-4,13);aim(0,p['coral-overflow'].getFrame().center);wait(.3);until(()=>Math.abs(s.tides.flow)<.001,40,'Visible overflow did not return the displaced tide');game.clearPortals();
-  walk(-14,13);aim(0,p['coral-low'].getFrame().center);collect();walk(21,13);walk(21,0);walk(14,0);release();aim(1,p['lagoon-low'].getFrame().center);
+  walk(-4,13);aim(0,p['coral-overflow'].getFrame().center);wait(.3);until(()=>Math.abs(s.tides.flow)<.001,40,'Visible overflow did not return the displaced tide');
+  walk(-14,13);const western=p['coral-low'].getFrame();
+  aim(1,western.center.clone().addScaledVector(western.right,1.7));
+  aim(0,western.center.clone().addScaledVector(western.right,-1.7));wait(.1);
+  check(s.tides.connection.every(end=>end.basin===0)&&s.tides.flow===0,'The two reachable western mouths must preserve the drained landing');
+  mark('both western mouths retain the real low-tide service landing');
+  collect();walk(21,13);walk(21,0);walk(14,0);release();aim(1,p['lagoon-low'].getFrame().center);
   wait(.3);until(()=>Math.abs(s.tides.flow)<.001,40,'Reopened tide did not recover the middle garden');collect();walk(14,6);walk(5,6);mark('the overflow recovers a missed garden without a reset');
  }
  walk(-8.1,6);walk(-8.1,0);walk(-13,0);until(()=>game.playerGrounded,3,'Coral middle hatch');

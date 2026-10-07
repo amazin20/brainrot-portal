@@ -79,7 +79,14 @@ export async function runRoom21(d,{order='cargo-first',recovery=false,offset=0,r
  mark('portal installed on the actual lowered moving ceramic');
  room21Fall(d);
  check(game.playerPosition.y>6.9&&game.playerPosition.y<7.2,'First landing is not the service pocket '+game.playerPosition.toArray());
- if(recovery){game.clearPortals();wait(.3);walk(-1.9,-6);aim(1,level.panels['moving-cassette'].getFrame().center);mark('erased pair restored from permanent service pocket, with same cargo and load');}
+ if(recovery){
+  walk(-1.9,-6);
+  aim(1,level.panels['freight-mouth'].getFrame().center);
+  check(game.portals.portals[1].surfaceId===level.panels['freight-mouth'].mesh.uuid,'Recovery shot did not move the cassette exit');
+  wait(.3);check(level.state.cargoSeat.loaded(),'Retargeting the exit disturbed the same receiver load');
+  aim(1,level.panels['moving-cassette'].getFrame().center);
+  mark('retargeted exit restored from permanent service pocket, with same cargo and load');
+ }
  let returnView;
  if(route==='service-car'){
   walk(19.8,-11);check(game.interact(),'Service brake interaction missed');wait(.3);

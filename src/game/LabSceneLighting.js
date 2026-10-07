@@ -40,9 +40,10 @@ export function dressLabLighting(game){
  if(!game.renderer)return;
  installLabRadiance(game);
  const root=new THREE.Group();root.name='Laboratory silhouette and grounded contacts';game.scene.add(root);
- const castle=Boolean(game.firstLevel?.singularity),fill=new THREE.DirectionalLight(0xd4e8f2,castle?.32:.48);
+ const theme=game.firstLevel?.campaignTheme;
+ const castle=Boolean(game.firstLevel?.singularity),fill=new THREE.DirectionalLight(theme?.fill??0xd4e8f2,castle?.32:.48);
  fill.position.set(35,24,-28);fill.target.position.set(0,4,0);root.add(fill,fill.target);
- if(game.keyLight){game.keyLight.intensity=castle?1.85:2.05;game.keyLight.color.setHex(0xffead0);}
+ if(game.keyLight){game.keyLight.intensity=castle?1.85:2.05;game.keyLight.color.setHex(theme?.key??0xffead0);}
  game.renderer.toneMappingExposure=1.02;
  const texture=contactTexture(),geo=new THREE.PlaneGeometry(1,1);
  const create=()=>{const material=new THREE.MeshBasicMaterial({map:texture,transparent:true,opacity:.24,depthWrite:false,toneMapped:false,polygonOffset:true,polygonOffsetFactor:-1,polygonOffsetUnits:-1});

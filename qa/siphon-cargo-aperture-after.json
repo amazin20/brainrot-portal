@@ -1,0 +1,57 @@
+{
+  "scope": "Production headless simulation; ordinary movement, aiming, projectiles and E only after initial Play reset; no actor/mechanism state writes. No browser rendering claim.",
+  "expectBypass": false,
+  "milestones": [
+    {
+      "name": "attempted held-cargo floor traversal",
+      "player": [
+        12.992994169873723,
+        0,
+        10.644210365569634
+      ],
+      "cargo": [
+        12.981748086855873,
+        1.0711158789227793,
+        9.924217541552556
+      ],
+      "held": true,
+      "state": "playing",
+      "teleports": 0,
+      "primed": false,
+      "height": 0,
+      "delivered": 0,
+      "displacement": 0
+    }
+  ],
+  "route": {
+    "level": 33,
+    "id": "siphon-observatory",
+    "pass": true,
+    "milestones": [],
+    "respawns": 0,
+    "resets": 0,
+    "frames": 1318,
+    "kind": "recovery",
+    "teleports": 0
+  },
+  "final": {
+    "player": [
+      12.992994169873723,
+      0,
+      10.644210365569634
+    ],
+    "cargo": [
+      12.981748086855873,
+      1.0711158789227793,
+      9.924217541552556
+    ],
+    "held": true,
+    "state": "playing",
+    "teleports": 0,
+    "primed": false,
+    "height": 0,
+    "delivered": 0,
+    "displacement": 0
+  },
+  "pass": true
+}

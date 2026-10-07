@@ -1,5 +1,9 @@
+import {finishCampaignTheme} from './LabCampaignThemeFinish.js';
+import {EXPANSION_B_BUILDERS,EXPANSION_B_SPECS} from './LabExpansionRoomsB.js';
+import {EXPANSION_A_BUILDERS,EXPANSION_A_SPECS} from './LabExpansionRoomsA.js';
 import {CREATIVE_ROOM20_SPEC,buildCreative20} from './LabCreativeRoom20.js';
 import {CREATIVE_ROOM18_SPEC,buildCreative18} from './LabCreativeRoom18.js';
+import {CREATIVE_ROOM17_SPEC,buildCreative17} from './LabCreativeRoom17.js';
 import {FOUNDATION_BUILDERS,FOUNDATION_SPECS} from './LabFoundationChambers.js';
 import {RESEARCH_BUILDERS,RESEARCH_SPECS} from './LabResearchChambers.js';
 import {POST_A_BUILDERS,POST_A_SPECS} from './LabPostCampaignA.js';
@@ -49,14 +53,14 @@ export const finishBrowserArt=level=>{
 };
 const NEW_CAMPAIGN=[ROOM16_SPEC,ROOM17_SPEC,ROOM18_SPEC,ROOM19_SPEC,ROOM20_SPEC,ROOM21_SPEC,ROOM22_SPEC,ROOM23_SPEC,ROOM24_SPEC,ROOM25_SPEC,ROOM26_SPEC,ROOM27_SPEC,ROOM28_SPEC,ROOM29_SPEC,ROOM30_SPEC];
 const NEW_BUILDERS=[buildRoom16,buildRoom17,buildRoom18,buildRoom19,buildRoom20,buildRoom21,buildRoom22,buildRoom23,buildRoom24,buildRoom25,buildRoom26,buildRoom27,buildRoom28,buildRoom29,buildRoom30];
-export const FOUNDATION_LATE_SPECS=Object.freeze([...POST_A_SPECS,...POST_B_SPECS,TOWER_SPEC]);
-const FOUNDATION_CREATIVE_SPECS={17:CREATIVE_ROOM18_SPEC,19:CREATIVE_ROOM20_SPEC};
-const FOUNDATION_CREATIVE_BUILDERS={17:buildCreative18,19:buildCreative20};
-const FOUNDATION_LATE_BUILDERS=[...POST_A_BUILDERS,...POST_B_BUILDERS,buildTowerLevel];
+export const FOUNDATION_LATE_SPECS=Object.freeze([...POST_A_SPECS,...POST_B_SPECS,TOWER_SPEC,...EXPANSION_A_SPECS,...EXPANSION_B_SPECS]);
+const FOUNDATION_CREATIVE_SPECS={16:CREATIVE_ROOM17_SPEC,17:CREATIVE_ROOM18_SPEC,19:CREATIVE_ROOM20_SPEC};
+const FOUNDATION_CREATIVE_BUILDERS={16:buildCreative17,17:buildCreative18,19:buildCreative20};
+const FOUNDATION_LATE_BUILDERS=[...POST_A_BUILDERS,...POST_B_BUILDERS,buildTowerLevel,...EXPANSION_A_BUILDERS,...EXPANSION_B_BUILDERS];
 
 // Preserve the verified introductory rooms; extend the public registry once.
 export const CAMPAIGN=Object.freeze([...INTRODUCTORY_CAMPAIGN,...EXTENDED_CAMPAIGN.slice(0,3),...WORKSHOP_CAMPAIGN.slice(0,3).map((room,i)=>i===2?{...room,assets:room.assets.filter(id=>id!==39),accent:0x83cfc7,description:'Направь воздух от вентилятора к приводу двери.',hints:['Круглый вентилятор слева создаёт поток. Привод с решёткой дальше по залу принимает воздух передней стороной.','Воздух толкает тебя и друга. Попав в переднюю решётку приёмника, поток сам запускает дверь; кабель показывает связь.','Соедини правую стену напротив вентилятора с другим участком правой стены напротив привода. Включи вентилятор: когда поток попадёт в приёмник, дверь откроется автоматически. Забери друга и пройди в открывшуюся дверь.']}:room),ROOM12_SPEC,ROOM13_ART_SPEC,ROOM14_ART_SPEC,ROOM15_ART_SPEC,...NEW_CAMPAIGN,...RESEARCH_SPECS]);
-export function buildLabCampaignLevel(game,index){
+function buildUnthemedCampaignLevel(game,index){
  const count=game.chamberEdition==='foundation'?30+FOUNDATION_LATE_BUILDERS.length:CAMPAIGN.length;
  if(!Number.isInteger(index)||index<0||index>=count)throw new RangeError('Unknown campaign course');
  if(game.chamberEdition==='foundation'&&FOUNDATION_BUILDERS[index])return FOUNDATION_BUILDERS[index](game,index);
@@ -77,3 +81,9 @@ export function buildLabCampaignLevel(game,index){
 }
 
 export function campaignSpec(game,index){return game.chamberEdition==='foundation'&&(FOUNDATION_CREATIVE_SPECS[index]||FOUNDATION_SPECS[index]||index>=30&&FOUNDATION_LATE_SPECS[index-30])||game.chamberEdition==='open'&&OPEN_SPECS[index]||CAMPAIGN[index];}
+
+export function buildLabCampaignLevel(game,index){
+ const before=new Set(game.scene.children);
+ const level=buildUnthemedCampaignLevel(game,index);
+ return finishCampaignTheme(game,level,index,game.scene.children.filter(root=>!before.has(root)));
+}

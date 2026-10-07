@@ -3,7 +3,7 @@ import {ResearchChamber} from './LabResearchArt.js';
 import {gate,tracePortalRay,rayTouches,beamDrawing} from './LabPuzzleMechanics.js';
 import {cargoOccludes,clipCargoRay,freightHood,lateShutter} from './LabLateCampaignMechanisms.js';
 import {CREATIVE_COUNTERWEIGHT_SPEC,buildCreative34} from './LabCreativeCounterweightRoom.js';
-import {buildInverseSpring} from './LabLateCampaignSpringRoom.js';
+import {buildSiphonObservatory,SIPHON_OBSERVATORY_SPEC} from './LabSiphonObservatory.js';
 import {buildFreightRake} from './LabLateCampaignRoomsA.js';
 
 const V=(...v)=>new THREE.Vector3(...v);
@@ -11,7 +11,7 @@ const assets=[1,2,11,22,23,24];
 export const POST_A_SPECS=Object.freeze([
  {id:'post-freight-rake',title:'Грузовой рейк',concept:'Воздух движет спутника, спутник толкает настоящий ползун, а ползун передвигает поперечный мост.',description:'Одна пара сначала доставляет груз, затем подаёт воздух на его корпус. С наблюдательной галереи верни тот же груз после движения рейки.',accent:0x8de3c3,assets,hints:['Низкий грузовой адрес пропускает друга, но не человека. Направь туда свободного друга через белый пол.','Воздух не толкает рейку сам: её движет контакт свободного спутника. Переставь вход на белую панель перед вентилятором.','Полный ход удерживает храповик и открывает смотровой кожух. Перепрыгни низкий упор, забери друга и поднимись по западному пандусу.']},
  {id:'post-thin-shadow',title:'Тонкая тень',concept:'Маленький непрозрачный спутник перекрывает нижний луч, но пропускает верхний. Грузовой адрес и оптика занимают одну пару.',description:'Сначала доставь друга под низкий кожух. Затем сравни две настоящие тени и найди фиксатор за диафрагмой.',accent:0xffc57c,assets,hints:['Низкий кожух пропускает свободного друга, но не человека. Белый пол отправляет его в грузовой адрес.','Пара нужна уже для света: два луча идут через одно устье на разных высотах. Верхний должен достигнуть прибора, нижний — встретить корпус друга.','За открывшейся диафрагмой есть механический фиксатор. После него можно вернуть друга и пройти вдвоём.']},
- {id:'post-inverse-spring',title:'Обратная пружина',concept:'Сначала собственный вес наблюдателя сжимает настоящее пружинное ложе. Заряд выстреливает спутником вверх, а потолочный портал меняет направление.',description:'Сожми ложе, сохрани заряд механическим зажимом и загрузи друга. После отпускания он попадёт в низкий дальний приёмник.',accent:0x9dc8ed,assets,hints:['Вес человека сжимает видимую пружину сильнее веса друга. Зажим рядом с ложем сохраняет только достигнутое сжатие.','Сначала открой потолочный адрес и низкий грузовой выход. Поставь друга на сжатое ложе и отпусти пружину с наружного пульта.','Дальний приёмник открывает проход своим настоящим весом. По отдельной галерее доберись до фиксатора и забери того же друга.']},
+ SIPHON_OBSERVATORY_SPEC,
  CREATIVE_COUNTERWEIGHT_SPEC,
  {id:'post-air-switch',title:'Возвратная магистраль',concept:'Одна пара сначала питает два настоящих воздушных шлюза, затем освобождает друга из закрытого грузового кожуха.',description:'Друг ждёт в дальнем закрытом отсеке. Зафиксируй оба открытых шлюза, отдай пару грузовому адресу и вернись с тем же другом к входу.',accent:0x9ce7ed,assets,hints:['Соедини вентилятор с первой узкой воздушной решёткой. Пройди на среднюю площадку и зафиксируй открытый первый шлюз.','Перенаправь поток во вторую решётку и зафиксируй второй шлюз. Подготовь грузовой выход на средней площадке: после этого поток прекратится.','Обойди дальний закрытый кожух. Через смотровую решётку открой белый пол под свободным другом; забери его на середине и вернись через оба удержанных шлюза.']},
 ]);
@@ -120,7 +120,7 @@ export function buildPost32(game,index=31){
   {orders:['freight-before-light','inspect-optics-first'],portalRoles:{'shadow-dispatch':'transport the original opaque small rigid body into a low passage','shadow-mouth':'a shared aperture for freight and two light heights','double-ray-intake':'borrow both portals for two geometric parallel rays'},deductions:['the observer cannot enter the cargo-height hood','one small opaque body blocks only the lower ray','moving the portal pair from cargo to light leaves cargo on real support','the differential receiver moves a real door','the door can be mechanically retained before retrieving its own optical obstruction']});
 }
 
-export function buildPost33(game,index=32){return buildInverseSpring(game,index,POST_A_SPECS[2]);}
+export function buildPost33(game,index=32){return buildSiphonObservatory(game,index,POST_A_SPECS[2]);}
 export const buildPost34=buildCreative34;
 
 export function buildPost35(game,index=34){

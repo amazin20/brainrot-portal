@@ -45,3 +45,14 @@ test('both distinct routes remain playable through ordinary input in portrait fr
   assert.equal(game.state,'won');assert.equal(report.level,number);
  }
 });
+
+test('room 2: a reachable shot withdraws the bridge, and the dry service floor recovers the original companion',async()=>{
+ const {game,report,snapshots}=await room(2,{recover:true});
+ try{
+  const fallen=snapshots.find(s=>s.name==='A reachable shot withdraws the light bridge before the service-floor return');
+  assert.ok(fallen,'The recovery must include the actual bridge-loss fall');
+  assert.ok(fallen.player.y< -2.9&&fallen.cargo.y>3,'The original companion must remain on permanent upper footing');
+  assert.equal(fallen.lightDirection,undefined,'The projected support must actually be absent');
+  assert.equal(report.resets+report.respawns,0);assert.equal(game.state,'won');
+ }finally{game.physics.dispose();game.portals.dispose();}
+});

@@ -1,0 +1,74 @@
+{
+  "scope": "Production headless simulation; ordinary input, no actor or mechanism state assignments after the normal Play reset. No browser rendering claim.",
+  "expectBypass": true,
+  "attempts": [
+    {
+      "name": "original-eastern-archive-top-edge-shot",
+      "point": [
+        20,
+        15.55,
+        -27.6
+      ],
+      "impact": {
+        "valid": true,
+        "index": 1,
+        "position": [
+          19.991029615135847,
+          15.547838823536898,
+          -27.60000000268221
+        ],
+        "sequence": 1,
+        "surface": "siphon-archive-exit / portal support",
+        "reason": "placed"
+      },
+      "player": [
+        20.002090674512726,
+        0,
+        29.001307618320062
+      ],
+      "cargo": [
+        10.999999474617145,
+        0.5699981436402993,
+        18.000000884541052
+      ],
+      "held": false,
+      "state": "playing",
+      "teleports": 0,
+      "primed": false,
+      "height": 0,
+      "delivered": 0,
+      "displacement": 0
+    }
+  ],
+  "route": {
+    "level": 33,
+    "id": "siphon-observatory",
+    "pass": true,
+    "milestones": [],
+    "respawns": 0,
+    "resets": 0,
+    "frames": 1784,
+    "kind": "recovery",
+    "teleports": 1
+  },
+  "final": {
+    "player": [
+      20.5411719641243,
+      10.2,
+      -21.99747438021816
+    ],
+    "cargo": [
+      20.364225968900488,
+      11.245068775328987,
+      -21.299487110706917
+    ],
+    "held": true,
+    "state": "won",
+    "teleports": 1,
+    "primed": false,
+    "height": 0,
+    "delivered": 0,
+    "displacement": 0
+  },
+  "pass": true
+}

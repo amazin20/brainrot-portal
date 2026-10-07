@@ -15,8 +15,13 @@ export async function runRoom24(d,{route='carry-through',recovery=false}={}){
  }
  if(game.heldCube){walk(-8,-10);walk(-12,-10);d.look(game.playerPosition.clone().setX(-16));wait(.3);game.interact();wait(.6);walk(-12,-7);walk(-20,-7);walk(-20,-8);}
  if(recovery==='ground-return'){
-  walk(-12,-7);walk(-12,-2);until(()=>game.playerGrounded&&game.playerPosition.y<.2,4,'Garden recovery floor missed');game.clearPortals();walk(-12,8);walk(9,8);walk(8.3,15);check(game.interact(),'Low garden release missed');until(()=>door.angle>-.01,6,'Low release failed to return the unloaded door');mark('fall and erased pair recovered through the low mechanical release');
+  walk(-12,-7);walk(-12,-2);until(()=>game.playerGrounded&&game.playerPosition.y<.2,4,'Garden recovery floor missed');walk(-12,8);walk(9,8);walk(8.3,15);check(game.interact(),'Low garden release missed');until(()=>door.angle>-.01,6,'Low release failed to return the unloaded door');mark('fall and reversed portal path recovered through the low mechanical release');
   walk(0,22);d.aim(1,p['revolving-door'].getFrame().center);walk(18,19);d.aim(0,p['garden-entry'].getFrame().center);enter(p['garden-entry']);walk(2,3.5);d.aim(0,p['balcony-entry'].getFrame().center);walk(3.7,5);check(game.interact(),'Recovery crank missed');until(()=>door.angle<-1.56,6,'Recovery orbit failed');enter(p['balcony-entry']);walk(-8,-8);
- }else if(recovery){game.clearPortals();wait(.2);walk(-7,-8);d.aim(1,p['revolving-door'].getFrame().center);mark('erased pair restored from the permanent garden');}
+ }else if(recovery){
+  walk(-7,-8);const receiving=p['revolving-door'].getFrame();
+  d.aim(1,receiving.center.clone().addScaledVector(receiving.right,1.2));wait(.2);
+  check(game.portals.portals[1].position.distanceTo(receiving.center)>.9,'The normal shot must physically move the doorway aperture');
+  d.aim(1,p['revolving-door'].getFrame().center);mark('moving doorway aperture repositioned and restored from the permanent garden');
+ }
  walk(-20,-8);walk(-20,-18);check(game.playerPosition.y>10.9,'Garden reverse perch missed');d.aim(0,p['pavilion-receiver'].getFrame().center);mark('folded garden stair reveals the yellow pavilion');walk(-20,-7);walk(-7,-8);walk(game.cargo.position.x-.9,game.cargo.position.z);pickup();enter(p['revolving-door']);walk(16,-18);until(()=>game.state==='won',4,'Garden joint arrival missed');mark('original companion joins the final garden');
 }

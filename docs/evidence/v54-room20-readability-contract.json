@@ -1,0 +1,31 @@
+{
+  "before": "e090e57bb2a7887e01f73c510d03b161ea23693fe1074b90aa0e2761f9f5e5f3",
+  "after": "3ed28c7189bc9101393b46481c4ff40bfca57b2d769ac79b4e223ec0c3198277",
+  "differences": [
+    {
+      "path": "/colliders/140/mesh/matrix/12",
+      "before": 8,
+      "after": 0
+    },
+    {
+      "path": "/colliders/140/box/min/0",
+      "before": 1.349999905,
+      "after": -6.650000095
+    },
+    {
+      "path": "/colliders/140/box/max/0",
+      "before": 14.650000095,
+      "after": 6.650000095
+    },
+    {
+      "path": "/camera/146/matrix/12",
+      "before": 8,
+      "after": 0
+    },
+    {
+      "path": "/aim/146/matrix/12",
+      "before": 8,
+      "after": 0
+    }
+  ]
+}

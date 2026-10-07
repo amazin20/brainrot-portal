@@ -11,11 +11,11 @@ const V=(...p)=>new THREE.Vector3(...p),EPS=1e-5;
 const names={
  31:/^(Rack guide lifting inspection roof|Rack inspection (lower leaf|upper leaf|cheek)|Cargo-driven rack contact)$/,
  32:/^(Cargo shadow guide wall|Cargo-shadow inspection cover)$/,
- 33:/^(Weight-compressed spring bed|Spring catcher (inspection main leaf|optical lower cheek|optical upper cheek))$/,
+ 33:/^(Perforated cistern inspection basket)$/,
  34:/^(Pneumatic vent seat|Pressure-driven guided door)$/,
  39:/^(Thermal door leaf|Continuously expanding thermal rod|Thermal expansion pointer|Thermal energy thermometer)$/,
 };
-const counts={31:6,32:3,33:4,34:5,39:5};
+const counts={31:6,32:3,33:1,34:5,39:5};
 const worldBox=mesh=>new THREE.Box3().setFromObject(mesh);
 function sameBox(a,b,label){assert.ok(a.min.distanceTo(b.min)<EPS&&a.max.distanceTo(b.max)<EPS,label);}
 function vertices(mesh){return mesh.geometry.index?.count??mesh.geometry.attributes.position.count;}
@@ -28,7 +28,7 @@ function mechanics(g){
  return JSON.stringify({state:g.state,time:l.workshop.time,player:g.playerPosition.toArray(),playerVelocity:g.playerVelocity.toArray(),cargo:g.cargo.position.toArray(),cargoVelocity:g.cargo.velocity.toArray(),cargoQuaternion:g.cargo.quaternion.toArray(),transports:g.physics.portalTransports,
   bodies:g.physics.world.bodies.map(b=>({id:b.id,type:b.type,p:b.position.toArray(),q:b.quaternion.toArray(),v:b.velocity.toArray(),w:b.angularVelocity.toArray(),f:b.force.toArray(),torque:b.torque.toArray()})),
   solids:[...g.physics.solids].map(([id,p])=>({id,target:p.target.toArray(),remaining:p.remaining})),
-  pressure:s&&[s.mode,s.pressure,s.coverage,s.seatTravel,s.doorTravel],thermal:t&&[t.temperature,t.energy,t.extension,t.powered,t.remote],optics:l.optics&&{...l.optics},rack:l.rack&&[l.rack.stroke,l.rack.latched],spring:l.spring&&[l.spring.compression,l.spring.held]});
+  hydraulic:l.circuit&&[l.circuit.source,l.circuit.tube,l.circuit.ram,l.circuit.returning,l.basket.height,l.basket.target],pressure:s&&[s.mode,s.pressure,s.coverage,s.seatTravel,s.doorTravel],thermal:t&&[t.temperature,t.energy,t.extension,t.powered,t.remote],optics:l.optics&&{...l.optics},rack:l.rack&&[l.rack.stroke,l.rack.latched],spring:l.spring&&[l.spring.compression,l.spring.held]});
 }
 function neutralRenders(g){
  const before=mechanics(g);
@@ -66,7 +66,7 @@ function validate(g,root,parts,{syncPhase=false}={}){
   const box=worldBox(mesh);
   let collider,body;
   if(mesh.name==='Cargo-driven rack contact'){collider=l.rack.collider;body=l.rack.body;}
-  else if(mesh.name==='Weight-compressed spring bed'){collider=g.colliders.find(c=>c.mesh.uuid===l.spring.floor.mesh.userData?.portalColliderId)||g.colliders.find(c=>c.kinematic&&c.box.min.distanceTo(box.min)<EPS&&c.box.max.distanceTo(box.max)<EPS);body=l.spring.body;}
+  else if(mesh.name==='Perforated cistern inspection basket'){collider=g.colliders.find(c=>c.kinematic&&c.box.min.distanceTo(box.min)<EPS&&c.box.max.distanceTo(box.max)<EPS);}
   else if(mesh.name==='Pressure-driven guided door'){collider=l.doorCollider;body=l.pressureState.doorBody;assert.equal(g.physics.solids.has(collider.mesh.uuid),false,'The guided dynamic door must not regain a duplicate Cannon proxy');}
   else collider=g.colliders.find(c=>c.kinematic&&c.box.min.distanceTo(box.min)<EPS&&c.box.max.distanceTo(box.max)<EPS);
   if(collider){

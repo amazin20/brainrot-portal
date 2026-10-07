@@ -7,9 +7,9 @@ import {captureBrowserFrame} from './qa-browser-capture.mjs';
 
 const out = path.resolve(process.env.OUT_DIR || 'qa/creative-browser');
 fs.mkdirSync(out, {recursive: true});
-const levels = (process.env.LEVELS || Array.from({length:41}, (_,i)=>i+1).join(','))
+const levels = (process.env.LEVELS || Array.from({length:51}, (_,i)=>i+1).join(','))
   .split(',').map(Number);
-assert.ok(levels.every(n=>Number.isInteger(n)&&n>=1&&n<=41));
+assert.ok(levels.every(n=>Number.isInteger(n)&&n>=1&&n<=51));
 const mode = process.env.CASE || 'overview';
 assert.ok(['overview','route','rush'].includes(mode));
 let server;
@@ -45,12 +45,20 @@ const report = {mode, rows:[], errors:[], limitations:[
 ]};
 const save = ()=>fs.writeFileSync(path.join(out,'report.json'),JSON.stringify(report,null,2));
 const reuse = process.env.REUSE_PAGE!=='0';
-let sharedPage;
+let sharedPage, activeRouteRow, activeRouteToken;
 try {
   for (const level of levels) {
     if(!browser)browser=await launchBrowser();
     const page = sharedPage || await browser.newPage(), firstVisit=!sharedPage;
     if(reuse)sharedPage=page;
+    if(firstVisit)await page.exposeFunction('__NESI_REPORT_ROUTE_MARK__',({routeToken,mark})=>{
+      // A timed-out evaluate is not cancelled. Bindings can still arrive after
+      // its row has retired, so attribute progress to this exact invocation.
+      if(!activeRouteRow||routeToken!==activeRouteToken)return;
+      (activeRouteRow.routeProgress??=[]).push({...mark,wallSeconds:Number(((performance.now()-activeRouteRow.routeStarted)/1000).toFixed(2))});
+      if(report.active)report.active.latestMilestone=mark;
+      save();console.log(`MILESTONE room ${activeRouteRow.level}: ${mark.name??'unnamed'}`);
+    });
     page.setDefaultTimeout(180000);
     await page.setViewport({width:960,height:540,deviceScaleFactor:1});
     await page.evaluateOnNewDocument(()=>{
@@ -84,7 +92,7 @@ try {
           document.body.dataset.playState='playing';
         },level);
       }
-      if(mode!=='rush')await page.evaluate(mode=>{const g=window.__NESI_DEMO_GAME__;g.renderer.setAnimationLoop(null);if(mode!=='route')g.render();},mode);
+      if(mode!=='rush')await page.evaluate(mode=>{const g=window.__NESI_DEMO_GAME__;g.renderer.setAnimationLoop(null);if(mode!=='route'){g.lastUiUpdate=-Infinity;g.animate(g.lastFrame);}},mode);
       row.start = await page.evaluate(()=>{
         const g=window.__NESI_DEMO_GAME__,d=g.diagnostics();
         return {id:g.firstLevel.id,title:g.firstLevel.title,position:g.playerPosition.toArray(),cargo:g.cargo.position.toArray(),
@@ -109,18 +117,34 @@ try {
         });
         row.captures.overview=await captureBrowserFrame(page,path.join(out,`${level}-overview.jpg`));
       } else if(mode==='route') {
-        report.active.phase='ordinary-route';save();
-        row.route = await bounded(page.evaluate(async()=>{
+        report.active.phase='ordinary-route';activeRouteRow=row;row.routeStarted=performance.now();activeRouteToken=`${level}-${row.routeStarted}`;save();
+        row.route = await bounded(page.evaluate(async routeToken=>{
           const g=window.__NESI_DEMO_GAME__,cargo=g.cargo,bodyId=g.physics.cargoBody.id;
+          const milestoneWrites=[];
           // Readback is deliberately deferred until the canonical route's proof
           // is persisted. Its returned milestones still retain real positions.
-          window.__NESI_CAPTURE_LEVEL_MARK__=()=>{};
-          const result=await window.__NESI_RUN_LEVEL_ROUTE__();
-          return {pass:result.pass,state:g.state,frames:result.frames,teleports:g.teleportCount,
-            resets:result.resets??result.cargoResets,respawns:result.respawns,
-            sameCompanion:g.cargo===cargo&&g.physics.cargoBody.id===bodyId,
-            cargoUUID:g.cargo.group.uuid,cargoBodyId:g.physics.cargoBody.id,milestones:result.milestones??result.events};
-        }),180000,'Ordinary production route');
+          window.__NESI_CAPTURE_LEVEL_MARK__=mark=>{
+            const write=window.__NESI_REPORT_ROUTE_MARK__({routeToken,mark:{...mark,
+              observedState:{state:g.state,player:g.playerPosition.toArray(),cargo:g.cargo.position.toArray(),
+                solvedIds:g.firstLevel.getTowerMetrics?.().solvedIds??[]}}});
+            milestoneWrites.push(write);return write;
+          };
+          try{
+            const result=await window.__NESI_RUN_LEVEL_ROUTE__();
+            // The game hook is synchronous. Drain binding acknowledgements
+            // before the Node runner retires this row or begins the next one.
+            await Promise.all(milestoneWrites);
+            return {pass:result.pass,state:g.state,frames:result.frames,teleports:g.teleportCount,
+              resets:result.resets??result.cargoResets,respawns:result.respawns,
+              sameCompanion:g.cargo===cargo&&g.physics.cargoBody.id===bodyId,
+              cargoUUID:g.cargo.group.uuid,cargoBodyId:g.physics.cargoBody.id,milestones:result.milestones??result.events};
+          }finally{
+            delete window.__NESI_CAPTURE_LEVEL_MARK__;
+            // Keep already emitted failure progress too, without replacing the
+            // route's original exception with a secondary persistence error.
+            await Promise.allSettled(milestoneWrites);
+          }
+        },activeRouteToken),Number(process.env.ROUTE_TIMEOUT_MS||(level===41?1200000:180000)),'Ordinary production route');
         assert.equal(row.route.pass,true);assert.equal(row.route.state,'won');
         assert.equal(row.route.sameCompanion,true);assert.equal(row.route.cargoUUID,row.start.cargoUUID);assert.equal(row.route.cargoBodyId,row.start.cargoBodyId);
         assert.equal(row.route.resets??0,0);assert.equal(row.route.respawns??0,0);
@@ -149,6 +173,7 @@ try {
     } catch(error) {
       row.error=String(error);report.errors.push({level,error:String(error)});
     } finally {
+      activeRouteRow=undefined;activeRouteToken=undefined;delete row.routeStarted;
       row.wallSeconds=Number(((performance.now()-started)/1000).toFixed(2));
       if(!report.rows.includes(row))report.rows.push(row);delete report.active;save();page.off('pageerror',onError);
       const readbackFailed=Object.values(row.captures??{}).some(c=>!c.ok);

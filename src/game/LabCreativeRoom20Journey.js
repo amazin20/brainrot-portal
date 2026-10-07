@@ -27,11 +27,19 @@ export function creative20Feed(d){
  until(()=>d.level.rope.opening>6.95,14,'Actual hanging cable tension did not withdraw the door');
  mark(CREATIVE20_MARKS.hanging);
 }
+function rerouteCableToFloor(d){
+ // Two distinct ordinary shots on the broad loading floor withdraw the far
+ // cable branch. The second aperture must clear the original freight slot.
+ d.walk(-9,22);
+ aimPatch(d,1,d.level.feed.surface,d.level.feed.surface.getFrame().center.clone().add(V(1.8,0,2)));
+ check(!d.level.rope.currentPath(),'Same-floor apertures still formed a far cable branch');
+}
 export function creative20Pin(d){
  d.walk(2,7);d.walk(2,-3);d.walk(7,-3);
  check(d.game.interact(),'Far retaining finger interaction missed');d.wait(.8);
  check(d.level.rope.pinTravel>.95,'Physical retaining finger did not extend');
- d.game.clearPortals();d.wait(2);
+ d.walk(2,-3);d.walk(2,7);rerouteCableToFloor(d);d.wait(2);
+ d.walk(-3,24);d.walk(-3,8);d.walk(2,7);d.walk(2,-3);d.walk(7,-3);
  check(d.level.rope.opening>6.7,'Real tooth slipped past the physical finger');
  d.mark(CREATIVE20_MARKS.finger);
 }
@@ -44,10 +52,10 @@ export async function runCreative20(d,{order='cargo-first',recovery=false,stopAt
  d.mark(CREATIVE20_MARKS.pair);if(stopAt==='pair-prepared')return;
  creative20Feed(d);if(stopAt==='cargo-hanging')return;
  if(recovery){
-  d.game.clearPortals();d.wait(3);
-  check(d.level.rope.opening<.05,'Erased live pair must release the return spring');
+  rerouteCableToFloor(d);d.wait(3);
+  check(d.level.rope.opening<.05,'Rerouting the far aperture must release the return spring');
   check(d.game.cargo.position.z< -8,'Original cargo must remain on far recovery floor');
-  d.mark('erased pair releases real cable tension; same cargo remains in the recovery pocket');
+  d.mark('ordinary floor shot withdraws the far cable branch; same cargo remains in the recovery pocket');
   creative20Floor(d);creative20Inspect(d);creative20Descend(d);
   d.until(()=>d.level.rope.opening>6.95,14,'Restored current cable geometry did not reopen the door');
   d.mark('current apertures restore continuous tension without respawn or a remembered portal step');

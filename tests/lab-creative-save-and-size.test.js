@@ -11,7 +11,7 @@ test('creative replacement migrates only changed foundation completions, retaini
  const storage={getItem:k=>records.get(k),setItem:(k,v)=>records.set(k,v)};
  const options={campaignRevision:CREATIVE_CAMPAIGN_REVISION,replacedIndices:CREATIVE_REPLACED_INDICES};
  const preferences=new LabPreferences(foundationStorage(storage),options);
- assert.deepEqual(CREATIVE_REPLACED_INDICES,[13,15,17,19,30,31,32,33,34,35,36,38,39,40]);
+ assert.deepEqual(CREATIVE_REPLACED_INDICES,[13,15,16,17,19,30,31,32,33,34,35,36,38,39,40]);
  const expected=completed.filter(i=>!CREATIVE_REPLACED_INDICES.includes(i));
  assert.deepEqual(preferences.value.completed,expected);
  assert.deepEqual(Object.keys(preferences.value.hints).map(Number),expected);

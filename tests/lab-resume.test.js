@@ -15,7 +15,7 @@ test('victory persists the next room and final victory keeps the final room',()=
  const s=storage(),p=new LabPreferences(s);p.complete(4);p.save({resumeLevel:nextResumeLevel(4,FOUNDATION_INDICES)});
  assert.equal(new LabPreferences(s).value.resumeLevel,5);
  assert.equal(nextResumeLevel(29,FOUNDATION_INDICES),30);
- assert.equal(nextResumeLevel(40,FOUNDATION_INDICES),40);
+ assert.equal(nextResumeLevel(40,FOUNDATION_INDICES),41);
  assert.equal(nextResumeLevel(39,FOUNDATION_INDICES),40);
  assert.equal(nextResumeLevel(OPEN_ROOM_INDICES[0],OPEN_ROOM_INDICES),OPEN_ROOM_INDICES[1]);
 });
@@ -38,7 +38,7 @@ test('explicit links and retired velocity links override saved resume',()=>{
 });
 test('old saves resume first uncompleted room; scattered completions never skip puzzles',()=>{
  assert.equal(resumeCampaignLevel('',{completed:[0,1,20]},FOUNDATION_INDICES,0),2);
- assert.equal(resumeCampaignLevel('',{completed:[...FOUNDATION_INDICES]},FOUNDATION_INDICES,0),40);
+ assert.equal(resumeCampaignLevel('',{completed:[...FOUNDATION_INDICES]},FOUNDATION_INDICES,0),50);
  assert.equal(resumeCampaignLevel('',{completed:[]},OPEN_ROOM_INDICES,OPEN_ROOM_INDICES[0]),OPEN_ROOM_INDICES[0]);
 });
 test('resume stays isolated across campaign, archive and research',()=>{
@@ -55,4 +55,11 @@ test('invalid resume data is sanitized; blocked storage keeps session progress u
  }
  const p=new LabPreferences({getItem(){throw Error('denied');},setItem(){throw Error('must not write');}});
  p.save({resumeLevel:7});assert.equal(resumeCampaignLevel('',p.value,FOUNDATION_INDICES,0),7);
+});
+
+test('completed castle resumes at new research chapter while explicit castle links retain start',()=>{
+ const p={completed:Array.from({length:41},(_,i)=>i),resumeLevel:40};
+ assert.equal(resumeCampaignLevel('',p,FOUNDATION_INDICES,0),41);
+ assert.equal(resumeCampaignLevel('level=41',p,FOUNDATION_INDICES,40),40);
+ assert.equal(nextResumeLevel(50,FOUNDATION_INDICES),50);
 });

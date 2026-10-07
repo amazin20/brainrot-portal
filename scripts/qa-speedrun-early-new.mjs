@@ -17,7 +17,7 @@ if(!numbers.every(n=>Number.isInteger(n)&&n>=1&&n<=14))throw Error('ROOMS must b
 const g=await createHeadlessGame();g.chamberEdition='foundation';
 function fingerprint(){const files=fs.readdirSync('src/game',{recursive:true}).filter(f=>f.endsWith('.js')).sort(),h=createHash('sha256');for(const file of files){h.update(file);h.update(fs.readFileSync(path.join('src/game',file)));}return h.digest('hex');}
 const digest=file=>createHash('sha256').update(fs.readFileSync(file)).digest('hex');
-const summary={edition:'foundation',scope:'New finite input-only speedrun attack patterns; outcomes distinguish blocked physical attempts from setup failures. No absence-of-all-exploits claim.',source:{commit:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),started:new Date().toISOString(),gameSourcesSha256:fingerprint(),harnessSha256:digest('scripts/qa-speedrun-early-new.mjs'),foldHarnessSha256:digest('scripts/lib/room14-fold-speedrun.mjs')},rooms:[]};
+const summary={edition:'foundation',scope:'Finite controller attacks plus internal pair-closing stress with no player binding; these are not wholly ordinary-input proofs; outcomes distinguish blocked physical attempts from setup failures. No absence-of-all-exploits claim.',source:{commit:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),started:new Date().toISOString(),gameSourcesSha256:fingerprint(),harnessSha256:digest('scripts/qa-speedrun-early-new.mjs'),foldHarnessSha256:digest('scripts/lib/room14-fold-speedrun.mjs')},rooms:[]};
 const V=(x=0,y=0,z=0)=>new THREE.Vector3(x,y,z);
 
 function runTowards(d,target,seconds,{jumpEvery=35,interactEvery=0,tangent=0}={}){

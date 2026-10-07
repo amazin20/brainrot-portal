@@ -5,9 +5,18 @@ import {CAMPAIGN,campaignSpec} from '../src/game/LabCampaignLevels.js';
 import {OPEN_ROOM_INDICES} from '../src/game/LabOpenEdition.js';
 let shared;
 async function scene(room,aspect=16/9){shared??=await createHeadlessGame();shared.chamberEdition='open';shared.camera.aspect=aspect;shared.camera.updateProjectionMatrix();await shared.selectLevel(room-1,false);return shared;}
-for(const [room,options,aspect]of [[24,{route:'portal-first'},16/9],[24,{route:'ride-first',recover:true},16/10],[28,{route:'equal-head'},16/9],[28,{route:'full-east',interrupt:true},16/10],[30,{},16/9],[30,{},16/10]]){
+for(const [room,options,aspect]of [[24,{route:'portal-first'},16/9],[24,{route:'ride-first',recover:true},16/10],[28,{route:'equal-head'},16/9],[28,{route:'equal-head',interrupt:true},16/10],[28,{route:'full-east',interrupt:true},16/10],[30,{},16/9],[30,{},16/10]]){
  test(`rebuilt room ${room}: original companion and ordinary route ${JSON.stringify(options)} / aspect ${aspect}`,async()=>{
-  const g=await scene(room,aspect),report=await runV8Journey(g,{journeyOptions:options});assert.equal(report.pass,true);assert.equal(g.state,'won');assert.equal(report.resets,0);assert.equal(report.respawns,0);assert.notEqual(report.id,CAMPAIGN[room-1].id);
+  const g=await scene(room,aspect),cargo=g.cargo,body=g.physics.cargoBody;let interrupted=false;
+  const report=await runV8Journey(g,{journeyOptions:options,onMilestone(mark){
+   if(mark.name==='both reachable eastern mouths hold the existing water without a reset'){
+    interrupted=true;assert.equal(g.portals.ready,true);assert.equal(g.firstLevel.tides.flow,0);
+    assert.ok(g.portals.portals.every(frame=>g.firstLevel.ports.find(port=>port.panel.mesh.uuid===frame.surfaceId)?.basin===1));
+    assert.match(g.firstLevel.getObjective(),/ОБА ОТВЕРСТИЯ В РЕЗЕРВУАРЕ Б/);
+    assert.ok(Math.abs(g.firstLevel.tides.levels[0]+g.firstLevel.tides.levels[1]-8)<1e-8);
+   }
+  }});assert.equal(report.pass,true);assert.equal(g.state,'won');assert.equal(report.resets,0);assert.equal(report.respawns,0);assert.notEqual(report.id,CAMPAIGN[room-1].id);
+  assert.equal(g.cargo,cargo);assert.equal(g.physics.cargoBody,body);if(options.interrupt)assert.ok(interrupted);
  });
 }
 test('new deck and ramp dimensions are measured in world space, not declared by a display label',async()=>{

@@ -1,0 +1,36 @@
+name: Export exact chapter workbench
+on:
+  push:
+    branches: [upgrade/themed-chapters-20261006]
+    paths: [.github/workflows/chapter-source-workbench.yml]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Prepare exact source and offline test dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm ci
+          npm install --no-save --package-lock=false puppeteer-core@24.16.0
+          mkdir -p /tmp/workbench/source
+          git archive HEAD | tar -x -C /tmp/workbench/source
+          cp -a node_modules /tmp/workbench/source/node_modules
+          git rev-parse HEAD > /tmp/workbench/source/WORKBENCH_SOURCE_SHA
+          curl --fail --silent --show-error 'https://amazin20.github.io/brainrot-portal/build-info.json' > /tmp/workbench/live-build-info.json
+          tar -czf /tmp/chapter-workbench.tar.gz -C /tmp/workbench .
+      - uses: actions/upload-artifact@v4
+        with:
+          name: chapter-source-workbench
+          path: /tmp/chapter-workbench.tar.gz
+          retention-days: 7

@@ -17,12 +17,12 @@ function sourceHash(){const h=crypto.createHash('sha256');function visit(rel){fo
 function save(file,report){if(!file)return;fs.mkdirSync(path.dirname(file),{recursive:true});fs.writeFileSync(file,JSON.stringify(report,null,2)+'\n');}
 function projectionRange(box,portal){const values=[];for(const x of [box.min.x,box.max.x])for(const y of [box.min.y,box.max.y])for(const z of [box.min.z,box.max.z])values.push(new THREE.Vector3(x,y,z).sub(portal.position).dot(portal.normal));return {min:Math.min(...values),max:Math.max(...values)};}
 
-/** Actual authored room, original actors, production inputs only. The distance
+/** Actual authored room, original actors, production controller actions plus internal pair-closing stress. The distance
  * target chooses when to stop ordinary walking; snapshots never move actors. */
 export async function runAuthoredReleaseCases({sides=SIDES,depths=DEPTHS,sequences=SEQUENCES,outputPath=null,onCase=()=>{}}={}){
  assert.ok(sides.length&&depths.length&&sequences.length,'At least one concrete authored case is required');
  assert.ok(sides.every(s=>SIDES.includes(s))&&sequences.every(s=>SEQUENCES.includes(s))&&depths.every(d=>Number.isFinite(d)&&d>0&&d<1.35),'Unsupported authored release case input');
- const report={scope:'Authored foundation room 1, original cargo/body. Actual move, camera, E, projectile fire and clear inputs. No actor position, velocity, portal plane, mechanism state or win flag assignments. Initial normal level selection/Play reset precede each attempt.',physicsHz:120,settleTicks:120,definitions:sides.flatMap(sourceName=>depths.flatMap(triggerDistance=>sequences.map(sequence=>({sourceName,triggerDistance,sequence})))),started:new Date().toISOString(),beforeHash:sourceHash(),beforeHarnessHash:harnessHash(),cases:[]};
+ const report={scope:'Authored foundation room 1, original cargo/body. Actual move, camera, E and projectile fire; pair closing is an internal lifecycle stress API with no player binding. This is not a wholly ordinary-input proof. No actor position, velocity, portal plane, mechanism state or win flag assignments. Initial normal level selection/Play reset precede each attempt.',physicsHz:120,settleTicks:120,definitions:sides.flatMap(sourceName=>depths.flatMap(triggerDistance=>sequences.map(sequence=>({sourceName,triggerDistance,sequence})))),started:new Date().toISOString(),beforeHash:sourceHash(),beforeHarnessHash:harnessHash(),cases:[]};
  const g=await createHeadlessGame();g.chamberEdition='foundation';
  try{
   for(const sourceName of sides)for(const triggerDistance of depths)for(const sequence of sequences){
@@ -76,14 +76,14 @@ export async function runAuthoredReleaseCases({sides=SIDES,depths=DEPTHS,sequenc
      assert.ok(row.setup.fit,'Original held box must actually fit the authored source aperture');
      assert.equal(g.physics.portalTransports,0,'Setup must not transport the original cargo');row.setupReached=true;
      if(sequence==='clear-release'){
-      row.inputs.push({action:'clear-pair'});assert.equal(g.clearPortals(),true);observe('clear-before-release');
+      row.inputs.push({action:'internal-close-pair'});assert.equal(g.clearPortals(),true);observe('clear-before-release');
       row.inputs.push({action:'E-release'});assert.equal(g.interact(),true);assert.ok(!g.heldCube);observe('released-after-clear');
      }else{
       row.inputs.push({action:'E-release'});assert.equal(g.interact(),true);assert.ok(!g.heldCube);observe('released-before-delay');
       const delay=sequence==='release-1tick-clear'?1:sequence==='release-2ticks-clear'?2:sequence==='release-5ticks-clear'?5:0;
       row.delayTicks=delay;
       for(let n=0;n<delay;n++){tick();observe('release-delay-tick-'+(n+1));}
-      if(sequence!=='release-no-clear'){row.inputs.push({action:'clear-pair',afterPhysicsTicks:delay});assert.equal(g.clearPortals(),true);observe('cleared-after-release');}
+      if(sequence!=='release-no-clear'){row.inputs.push({action:'internal-close-pair',afterPhysicsTicks:delay});assert.equal(g.clearPortals(),true);observe('cleared-after-release');}
      }
      let minimumDistance=Infinity,maximumDistance=-Infinity;
      for(let n=0;n<120;n++){tick();const s=snapshot();minimumDistance=Math.min(minimumDistance,s.cargoDistance);maximumDistance=Math.max(maximumDistance,s.cargoDistance);if([0,1,4,29,59,119].includes(n))observe('settle-tick-'+(n+1));}

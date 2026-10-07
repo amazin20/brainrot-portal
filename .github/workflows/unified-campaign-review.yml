@@ -1,0 +1,14 @@
+name: Unified campaign acceptance
+on:
+  push:
+    branches: [upgrade/unified-campaign-20261007]
+permissions: {contents: read, actions: read}
+concurrency:
+  group: unified-campaign-review
+  cancel-in-progress: false
+jobs:
+  checks:
+    uses: ./.github/workflows/verified-build.yml
+    with:
+      revision: ${{ github.sha }}
+      record_puzzle: true

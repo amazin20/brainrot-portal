@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import {aimLateSurface} from './LabLateCampaignAim.js';
 import {runCreative34} from './LabCreativeCounterweightJourney.js';
-import {runInverseSpring} from './LabLateCampaignSpringJourney.js';
+import {runSiphonObservatory} from './LabSiphonObservatoryJourney.js';
 import {installRoom21Aim} from './LabRoom21Journey.js';
 import {CAMERA_PITCH_MIN,CAMERA_PITCH_MAX} from './LabCamera.js';
 
@@ -47,12 +47,28 @@ export function runPost31(d,{route='cargo-then-air',stopBeforeCargoRecovery=fals
  shot(d,1,p['rake-mouth']);const sent=g.physics.portalTransports;walk(0,16);const dispatchAim=g.cargo.position.clone();dispatchAim.y=p['rake-dispatch'].getFrame().center.y;aimLateSurface(d,0,p['rake-dispatch'],dispatchAim);
  until(()=>g.physics.portalTransports>sent,6,'Original cargo missed the isolated rack guide');
  walk(10,19);walk(13,19);walk(13,23);walk(24,23);shot(d,0,p['rake-air-intake']);until(()=>l.rack.latched,16,'Real air-driven cargo contact did not extend the rack');
- check(l.rack.stroke>12.95,'The bridge must come from the full physical rack stroke');check(g.clearPortals(),'Clearing the powered pair after full stroke failed');
+ check(l.rack.stroke>12.95,'The bridge must come from the full physical rack stroke');// An ordinary lower shot on the same broad face stops capturing the fan.
+ const airStop=p['rake-air-intake'].getFrame().center.clone().add(V(0,-.75,0));
+ aimLateSurface(d,0,p['rake-air-intake'],airStop);
+ check(g.portals.portals[0].position.distanceTo(airStop)<.08,'Air cutoff aperture did not move to the lower ceramic');
  mark('Free cargo contact extends the visible rack and transverse bridge');
  if(stopBeforeCargoRecovery)return;
  walk(13,23);walk(13,19);walk(10,19);walk(0,16);walk(-3,8);until(()=>l.inspection.progress>.94,4,'Full rack stroke did not lift its real inspection cover');
- walk(-6.3,8);g.input.jumpQueued=true;for(let i=0;i<100;i++){d.worldMove(-.65,0);d.frame();if(i>20&&g.playerGrounded&&g.playerPosition.x<-7.8)break;}d.stop();until(()=>g.playerGrounded,3,'Observer did not cross the visible lowered inspection stop');collect(d);
- walk(-8.5,8);g.input.jumpQueued=true;for(let i=0;i<100;i++){d.worldMove(.65,0);d.frame();if(i>20&&g.playerGrounded&&g.playerPosition.x>-6.1)break;}d.stop();until(()=>g.playerGrounded,3,'Original pair did not leave the opened inspection guide');
+ if(g.cargo.position.x> -6){
+  // Momentum can carry the original actuator out of the opened guide. Use
+  // the eastern apron or its genuine lower recovery incline to collect it.
+  walk(0,16);
+  if(g.cargo.position.x>12){
+   walk(10,19);walk(13,19);walk(13,23);walk(24,23);
+   if(g.cargo.position.y<-.5){walk(24,-6);walk(g.cargo.position.x-1.25,-6);walk(g.cargo.position.x-1.25,g.cargo.position.z);d.pickup();}
+   else{walk(24,g.cargo.position.z);collect(d);}
+  }else{walk(g.cargo.position.x+1.25,Math.max(g.cargo.position.z,12.5));collect(d);}
+  if(g.playerPosition.y<-.5){walk(g.playerPosition.x,-6);walk(24,-6);walk(24,23);walk(13,23);walk(13,19);walk(10,19);}
+  walk(0,16);
+ }else{
+  walk(-6.3,8);g.input.jumpQueued=true;for(let i=0;i<100;i++){d.worldMove(-.65,0);d.frame();if(i>20&&g.playerGrounded&&g.playerPosition.x<-7.8)break;}d.stop();until(()=>g.playerGrounded,3,'Observer did not cross the visible lowered inspection stop');collect(d);
+  walk(-8.5,8);g.input.jumpQueued=true;for(let i=0;i<100;i++){d.worldMove(.65,0);d.frame();if(i>20&&g.playerGrounded&&g.playerPosition.x>-6.1)break;}d.stop();until(()=>g.playerGrounded,3,'Original pair did not leave the opened inspection guide');
+ }
  walk(-3,8);walk(0,16);walk(-15,16);walk(-28.1,16);walk(-28.1,6);walk(-28.1,-16);walk(-24,-20);
  if(recover){walk(-15,-18);walk(-15,-11);until(()=>g.playerGrounded&&g.playerPosition.y<-3.8,5,'Crossing miss did not reach physical lower recovery floor');walk(24,-6);walk(24,18);walk(24,23);walk(13,23);walk(13,19);walk(10,19);walk(0,16);walk(-15,16);walk(-28.1,16);walk(-28.1,6);walk(-28.1,-16);mark('A real dry return recovers the independent inspection gallery');}
  walk(-14,-20);walk(-12,-20);walk(-2,-20);walk(2,-20);walk(18,-20);
@@ -88,7 +104,7 @@ export function runPost32(d,{route='freight-before-light',stopBeforeRatchet=fals
  mark('The light circuit is borrowed again after the original cargo returns');
 }
 
-export const runPost33=runInverseSpring;
+export const runPost33=runSiphonObservatory;
 export const runPost34=runCreative34;
 
 export function runPost35(d,{route='latches-before-freight',stopAfter=null}={}){
@@ -126,3 +142,4 @@ export const POST_A_ROUTES=Object.freeze([runPost31,runPost32,runPost33,runPost3
 export function runPostA(d,options={}){
  const fn=POST_A_ROUTES[d.level.index-30];check(fn,'Unknown post-campaign room');return fn(d,options);
 }
+

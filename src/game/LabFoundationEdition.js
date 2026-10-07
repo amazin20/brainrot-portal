@@ -1,6 +1,6 @@
-/** One numbered campaign ends with the continuous final castle.
+/** One numbered campaign includes the continuous castle and ten research rooms.
  * Historical editions require an explicit archive query. */
-export const FOUNDATION_INDICES=Object.freeze(Array.from({length:41},(_,index)=>index));
+export const FOUNDATION_INDICES=Object.freeze(Array.from({length:51},(_,index)=>index));
 export function readFoundationEdition(query){
  const p=new URLSearchParams(query),edition=p.get('edition'),level=Number(p.get('level')||1);
  const enabled=edition==='foundation'||(!edition&&p.get('mode')!=='velocity');

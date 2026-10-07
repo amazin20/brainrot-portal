@@ -48,7 +48,7 @@ test('an explicit supporting hull opens only inside its aperture; an unrelated f
  assert.equal(g.portalOpensCollider(support,V(4,0,0),.43),false);
  assert.equal(g.portalOpensCollider(other,V(0,0,0),.43),false);g.portals.dispose();
 });
-test('8,000 rotated aperture/backing predicates preserve the prior eight-corner equations',()=>{
+test('8,000 rotated aperture/backing predicates match exact eight-corner bounds and front-side exclusion',()=>{
  let seed=7531;const rand=()=>((seed=(Math.imul(seed,1664525)+1013904223)>>>0)/2**32),rnd=(a,b)=>a+(b-a)*rand();
  for(let i=0;i<8000;i++){
   const f=makePortalFrame(V(rnd(-20,20),rnd(-20,20),rnd(-20,20)),V(rnd(-1,1),rnd(-1,1),rnd(-1,1)),V(rnd(-1,1),rnd(-1,1),rnd(-1,1)));
@@ -60,7 +60,7 @@ test('8,000 rotated aperture/backing predicates preserve the prior eight-corner 
   let overlaps=true;for(const axis of ['x','y','z']){const c=f.position[axis]+f.normal[axis]*(-.31),e=Math.hypot(f.width*px[axis],f.height*py[axis])+Math.abs(f.normal[axis])*.39;if(c+e<b.min[axis]||c-e>b.max[axis])overlaps=false;}
   const clamp=THREE.MathUtils.clamp;overlaps &&= lb.max.z>=-.7&&lb.min.z<=.08&&(clamp(0,lb.min.x,lb.max.x)/f.width)**2+(clamp(0,lb.min.y,lb.max.y)/f.height)**2<=1;
   assert.equal(portalIntersectsBox(f,b),overlaps);
-  assert.equal(portalBacksCollider(f,b),overlaps&&lb.max.z<=.08&&lb.max.z>=-.7&&lb.min.z<.08);
+  assert.equal(portalBacksCollider(f,b),overlaps&&(lb.min.z+lb.max.z)/2<=1e-6&&lb.max.z<=.08&&lb.max.z>=-.7&&lb.min.z<.08);
  }
 });
 test('an unchanged static collision mask does not wake cargo or dirty broadphase',()=>{

@@ -38,11 +38,12 @@ export const creative20Attacks=[
   installRoom21Aim(d);creative20Inspect(d);creative20Descend(d);collect(d);rush(d,3,0,4);closed(d,'A remote outlet without its source leaves the real spring closed');
   assert.equal(d.game.physics.portalTransports,0);assert.ok(d.game.playerPosition.z>.4);
  }},
- {name:'20 cargo release on an erased source remains on its true manufactured plate',async run(d){
+ // Internal portal-closing lifecycle fixtures: the player has no delete-pair input.
+ {name:'20 internal portal closing preserves cargo on its true manufactured plate',async run(d){
   await pair(d);d.game.clearPortals();collect(d);cargoRelease(d);d.wait(2);rush(d,2,-4,4);
   assert.equal(d.game.physics.portalTransports,0);assert.ok(d.game.cargo.position.z>0);closed(d,'Missing apertures cannot fake the hanging load');
  }},
- {name:'20 erasing a live hanging pair restores the real cutset before a sprinting entry',async run(d){
+ {name:'20 internal portal closing releases the spring before an entry attack',async run(d){
   await hanging(d);d.game.clearPortals();d.wait(3);closed(d,'Uncoupled spring must shut the door');
   d.walk(2,6);rush(d,2,-5,4);assert.ok(d.game.playerPosition.z>.4);assert.equal(d.level.rope.pinTravel,0);assert.ok(d.game.cargo.position.z< -8);
  }},

@@ -1,4 +1,4 @@
-/** Route evidence for the forty ordinary campaign rooms and the archives. Run with Node after `npm ci`.
+/** Route evidence for the fifty ordinary campaign rooms and the archives. Run with Node after `npm ci`.
  * The driver moves, interacts and fires through production game controls;
  * headless simulation cannot substitute for a browser playtest. */
 import assert from 'node:assert/strict';
@@ -55,7 +55,7 @@ const classicAlternates={
   {name:'power-interruption',kind:'recovery',options:{interruptPower:true},source:'tests/lab-room20-journey.test.js'}],
  21:[{name:'service-car',options:{route:'service-car'},source:'tests/lab-room21.test.js'},
   {name:'brake-first',kind:'preparation',options:{order:'brake-first'},source:'tests/lab-room21.test.js'},
-  {name:'erased-pair-recovery',kind:'recovery',options:{recovery:true},source:'tests/lab-room21.test.js'}],
+  {name:'retargeted-exit-recovery',kind:'recovery',options:{recovery:true},source:'tests/lab-room21.test.js'}],
  22:[{name:'send-freight-first',options:{order:'send-freight-first'},source:'tests/lab-room22-send-first.test.js'},
   {name:'portal-first',kind:'preparation',options:{order:'portal-first'},source:'tests/lab-room22-23.test.js'},
   {name:'cargo-recovery',kind:'recovery',options:{recovery:true},source:'tests/lab-room22-23.test.js'}],
@@ -90,13 +90,15 @@ for(let n=6;n<=30;n++)if(classicAlternates[n])foundationAlternates[n]=classicAlt
 // These post-campaign variants follow different physical orders with the same
 // original companion. Add a room only after its route driver has passed.
 Object.assign(foundationAlternates,{
+ 17:[{name:'lower-branch',options:{route:'lower-branch'},source:'tests/lab-creative-room17.test.js'},
+ {name:'lost-support-and-dry-return',kind:'recovery',exercisesRecovery:true,options:{recovery:true},source:'tests/lab-creative-room17.test.js'}],
  18:[{name:'power-before-contact',options:{route:'power-before-contact'},source:'tests/lab-creative-room18.test.js'},
  {name:'reverse-partial-stroke',kind:'recovery',exercisesRecovery:true,options:{route:'reverse-partial-stroke'},source:'tests/lab-creative-room18.test.js'}],
  20:[{name:'scout-first',options:{order:'scout-first'},source:'tests/lab-creative-room20.test.js'},
- {name:'erased-rope-recovery',kind:'recovery',exercisesRecovery:true,options:{recovery:true},source:'tests/lab-creative-room20.test.js'}],
+ {name:'rerouted-cable-recovery',kind:'recovery',exercisesRecovery:true,options:{recovery:true},source:'tests/lab-creative-room20.test.js'}],
  31:[{name:'inspect-rack-first',options:{route:'inspect-rack-first'},source:'src/game/LabPostJourneyA.js'}],
  32:[{name:'inspect-optics-first',options:{route:'inspect-optics-first'},source:'src/game/LabPostJourneyA.js'}],
- 33:[{name:'aim-before-charge',options:{route:'aim-before-charge'},source:'src/game/LabPostJourneyA.js'}],
+ 33:[{name:'miss-lift-and-recirculate',kind:'recovery',exercisesRecovery:true,options:{route:'miss-lift-and-recirculate'},source:'src/game/LabSiphonObservatoryJourney.js'}],
  34:[{name:'inspect-unsealed-first',options:{alternate:true},source:'src/game/LabCreativeCounterweightJourney.js'},
   {name:'early-discharge-recovery',kind:'recovery',exercisesRecovery:true,options:{recover:true},source:'scripts/qa-pressure-room34.mjs'}],
  35:[{name:'scout-before-second-latch',options:{route:'scout-before-second-latch'},source:'src/game/LabPostJourneyA.js'}],
@@ -107,6 +109,12 @@ Object.assign(foundationAlternates,{
  39:[{name:'receiver-first',options:{route:'receiver-first'},source:'src/game/LabPostJourneyB.js'},
   {name:'cooling-recovery',kind:'recovery',exercisesRecovery:true,options:{recover:true},source:'tests/lab-post-b.test.js'}],
  40:[{name:'trim-then-balance',options:{route:'trim-then-balance'},source:'src/game/LabCreativeFinalJourney.js'}],
+ 42:[{name:'observe-open-branches',options:{route:'observe-open-branches'},source:'tests/lab-expansion-a.test.js'}],
+ 43:[{name:'inspect-empty-field',options:{route:'inspect-empty-field'},source:'tests/lab-expansion-a.test.js'}],
+ 44:[{name:'observe-unladen-overspeed',options:{route:'observe-unladen-overspeed'},source:'tests/lab-expansion-a.test.js'}],
+ 45:[{name:'observe-unbalanced-thrust',options:{route:'observe-unbalanced-thrust'},source:'tests/lab-expansion-a.test.js'}],
+ 51:[{name:'missed-echo-recovery',kind:'recovery',exercisesRecovery:true,options:{missFirst:true},source:'tests/lab-echo-horizon.test.js'}],
+ 46:[{name:'light-before-damp',options:{route:'light-before-damp'},source:'tests/lab-expansion-a.test.js'}],
 });
 const openAlternates={
  24:[{name:'ride-first',options:{route:'ride-first'},source:'src/game/LabOpenJourney.js'},
@@ -131,7 +139,7 @@ function parseArgs(argv){
     if(match){assert.ok(Number(match[1])<=Number(match[2]),`Descending level range: ${token}`);return Array.from({length:Number(match[2])-Number(match[1])+1},(_,i)=>Number(match[1])+i);}
     return [Number(token)];
    }));
-   assert.ok([...opts.levels].every(n=>Number.isInteger(n)&&n>=1&&n<=40),'--levels must be a comma-separated set of 1–40 or ranges');
+   assert.ok([...opts.levels].every(n=>Number.isInteger(n)&&n>=1&&n<=51&&n!==41),'--levels must select ordinary rooms 1–40 or 42–51; the castle has its own continuous route');
   }else if(arg.startsWith('--json='))opts.json=arg.slice('--json='.length);
   else throw new Error(`Unknown argument ${arg}`);
  }
@@ -146,7 +154,7 @@ async function main(){
  const opts=parseArgs(process.argv.slice(2));
  const selected=opts.edition==='all'?editions:[opts.edition];
  // The rebuilt Tower has a dedicated complete active-run verifier and recording.
- const indices={foundation:FOUNDATION_INDICES.filter(index=>index<40),classic:CAMPAIGN.map((_,i)=>i),open:OPEN_ROOM_INDICES};
+ const indices={foundation:FOUNDATION_INDICES.filter(index=>index!==40),classic:CAMPAIGN.map((_,i)=>i),open:OPEN_ROOM_INDICES};
  assert.ok(selected.some(edition=>indices[edition].some(index=>!opts.levels||opts.levels.has(index+1))),
   'No selectable levels match the requested edition and --levels');
  const game=await createHeadlessGame();
@@ -204,11 +212,11 @@ async function main(){
  }finally{game.physics.dispose();game.portals.dispose();}
  assert.ok(rows.length,'No route matches the requested edition, levels and kind');
  const summary={pass:rows.filter(r=>r.pass).length,fail:rows.filter(r=>!r.pass).length,total:rows.length};
- const git=()=>{try{return {commit:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),dirty:!!execFileSync('git',['status','--porcelain'],{encoding:'utf8'}).trim()};}catch{return {commit:process.env.GITHUB_SHA??null,dirty:null};}};
+ const git=()=>{try{return {commit:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),dirty:!!execFileSync('git',['status','--porcelain','--untracked-files=all','--','src','public','index.html','vite.config.js','package.json','package-lock.json'],{encoding:'utf8'}).trim(),dirtyScope:'game-build-inputs'};}catch{return {commit:process.env.GITHUB_SHA??null,dirty:null,dirtyScope:'game-build-inputs'};}};
  const output={generatedAt:new Date().toISOString(),...git(),edition:opts.edition,canonicalOnly:opts.canonicalOnly,kind:opts.kind,summary,rows,gaps,limitations:[
   'Headless physics and scripted production inputs cannot verify visibility, usability, aesthetics, performance or human discoverability.',
   'One successful path and one scripted alternative do not prove every possible route avoids softlocks or shortcuts.',
-  'This ordinary-room matrix covers foundation 1–40; the rebuilt final Tower 41 is verified separately. Classic 1–33 and open review 24, 28, 30–33 require an explicit edition.',
+  'This ordinary-room matrix covers foundation 1–40 and 42–51; the rebuilt final Tower 41 is verified separately. Classic 1–33 and open review 24, 28, 30–33 require an explicit edition.',
  ]};
  save(output);
  console.log(`Routes: ${summary.pass}/${summary.total} passed, ${summary.fail} failed; distinct-solution evidence gaps: ${gaps.length}.`);

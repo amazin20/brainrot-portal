@@ -30,7 +30,7 @@ export function runCreative34(d,{route='charge-then-deliver',alternate=false,rec
   until(()=>g.cargo.position.z< -15.5,7,'Early discharge did not send the actual cargo into the receiving plenum');
   check(g.interact()&&s.mode===2,'Actual distributor did not select reverse recovery');
   until(()=>g.cargo.position.x>-14&&g.cargo.position.z>5,15,'Reverse air failed to recover the original companion through the service window');
-  collect(d);check(g.clearPortals(),'Ordinary clear-pair action was unavailable');walk(-9,12);walk(-9,12.5);check(g.interact()&&!g.heldCube,'Recovered companion was not placed outside the sleeve');wait(.5);walk(-9,8.65);
+  collect(d);walk(-9,12);walk(-9,12.5);check(g.interact()&&!g.heldCube,'Recovered companion was not placed outside the sleeve');wait(.5);walk(-9,8.65);
   check(g.interact()&&s.mode===0,'Actual distributor did not return to charging');
   mark('Early pressure discharge is recovered by reversing the actual flow and reusing the original cargo');
   return runCreative34(d,{route:'charge-then-deliver',stopBeforeRetrieval});

@@ -23,7 +23,7 @@ export async function runRoom23(d,{order='receiver-first',recovery=false}={}){
  else {walk(8.4,5.5);walk(6,5.5);walk(6,-8);}
  walk(0,-8);d.look(game.playerPosition.clone().setZ(-20));wait(.4);game.interact();wait(1.5);check(!game.heldCube,'Cargo was not placed in permanent storage');
  mark('original load rests outside either moving car');
- if(recovery){game.clearPortals();wait(.4);mark('portal pair erased while both fixed cargo pocket and braked car remain recoverable');}
+ if(recovery){wait(.4);check(b.braked&&!b.loaded,'The fixed cargo pocket must unload the coupled car while the physical brake holds both heights');mark('fixed cargo pocket and braked car remain recoverable after the real load leaves the transmission');}
  walk(6,-8);walk(6,5.5);walk(8.4,5.5);check(game.interact(),'Return brake release missed');check(!b.braked,'Counterweight brake remained engaged');
  until(()=>game.playerPosition.y>19.9,20,'Empty far carriage failed to return upward');walk(11,8);mark('upper apron joins the returning gallery');walk(19,8);walk(19,-20);walk(4,-20);
  d.aim(1,p['high-return'].getFrame().center);walk(10,-20);walk(10,-17.1);d.aim(0,p['middle-pocket'].getFrame().center);

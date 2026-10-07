@@ -1,0 +1,26 @@
+name: Resolve chapter source attachment
+on:
+  push:
+    branches: [upgrade/themed-chapters-20261006]
+    paths: [.github/workflows/chapter-transfer-inspect.yml]
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Read the source attachment page
+        run: |
+          mkdir inspect
+          curl --fail --silent --show-error --location 'https://firestorage.ai/ja/f/AJvAo1TlIVux' > inspect/share.html
+          python3 - <<'PY'
+          import re,pathlib
+          text=pathlib.Path('inspect/share.html').read_text()
+          print(text[:22000])
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: chapter-transfer-page
+          path: inspect
+          retention-days: 1

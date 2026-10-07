@@ -3,6 +3,7 @@ import path from 'node:path';
 import assert from 'node:assert/strict';
 import {spawnSync} from 'node:child_process';
 import puppeteer from 'puppeteer-core';
+import {FOUNDATION_INDICES} from '../src/game/LabFoundationEdition.js';
 
 const rooms=(process.env.ROOMS||'1,2,3,4,5').split(',').map(Number);
 assert.ok(rooms.every(n=>Number.isInteger(n)&&n>=1&&n<=40));
@@ -28,11 +29,11 @@ try{
   await page.goto(url.href,{waitUntil:'networkidle2'});await page.waitForFunction(()=>window.__NESI_DEMO_GAME__?.state==='ready');
   const info=await page.evaluate(async()=>{const r=await fetch('build-info.json',{cache:'no-store'});return r.json();});
   if(process.env.BUILD_COMMIT)assert.equal(info.commit,process.env.BUILD_COMMIT);
-  assert.equal(info.features.defaultEdition,'foundation');assert.deepEqual(info.features.foundation.rooms,Array.from({length:41},(_,i)=>i+1));
+  assert.equal(info.features.defaultEdition,'foundation');assert.deepEqual(info.features.foundation.rooms,FOUNDATION_INDICES.map(index=>index+1));
   assert.equal(await page.evaluate(()=>window.__NESI_DEMO_GAME__.chamberEdition),'foundation');
-  assert.deepEqual(await page.$$eval('#level-select option',a=>a.map(e=>Number(e.value))),Array.from({length:41},(_,i)=>i));
+  assert.deepEqual(await page.$$eval('#level-select option',a=>a.map(e=>Number(e.value))),FOUNDATION_INDICES);
   assert.equal(await page.$eval('#level-select',e=>Number(e.value)),room-1);
-  assert.match(await page.$eval('#campaign-count',e=>e.textContent),/41 испытание/);
+  assert.match(await page.$eval('#campaign-count',e=>e.textContent),new RegExp(`${FOUNDATION_INDICES.length} испытание`));
   const saved=await page.evaluate(()=>({classic:localStorage.getItem('brainrot-portal.preferences.v24'),legacy:localStorage.getItem('nesi.preferences.v8'),open:localStorage.getItem('brainrot-open-rebuild-v1:brainrot-portal.preferences.v24')}));
   await page.screenshot({path:path.join(out,`${room}-menu.png`)});
   await page.waitForFunction(()=>{

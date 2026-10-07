@@ -1,13 +1,14 @@
-name: Verified campaign build
-on:
+# Current reusable CI: every production browser gate consumes the same frozen game package.
+name: Verified unified campaign build
+'on':
   workflow_call:
     inputs:
       revision:
-        description: Exact PR head or publication commit SHA
+        description: Exact source, interface and build commit SHA
         required: true
         type: string
       record_puzzle:
-        description: Record native movement in rooms12–20; archive33 and default40 ordinary routes always run
+        description: Record the current replacement by both ordinary routes and a 30 fps player-motion pilot
         required: false
         default: true
         type: boolean
@@ -16,456 +17,1156 @@ permissions:
 env:
   BUILD_COMMIT: ${{ inputs.revision }}
 jobs:
-  source:
-    name: Source tests and deployable package
+  regressions:
     runs-on: ubuntu-latest
-    # The retained 15-room suite took 14m37s locally before this expansion.
-    # Keep every test and allow build/install overhead plus the new routes.
     timeout-minutes: 60
     steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ inputs.revision }}
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: npm
-      - run: npm ci
-      - name: Test source and verify the production asset package
-        run: |
-          npm run check
-          node scripts/v8-package-check.mjs
-          node scripts/stamp-build.mjs v44-tower-variety
-      - name: Preserve the exact deployable package
-        uses: actions/upload-artifact@v4
-        with:
-          name: campaign-browser
-          path: dist/
-          if-no-files-found: error
-          retention-days: 14
+    - uses: actions/checkout@v4
+      with:
+        ref: ${{ inputs.revision }}
+        persist-credentials: false
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 22
+        cache: npm
+    - run: npm ci
+    - run: 'mkdir -p qa
 
-      - name: Build the separate Yandex moderation candidate
-        run: |
-          npm run build:yandex
-          node scripts/v8-package-check.mjs dist-yandex
-          node scripts/stamp-build.mjs v44-tower-variety dist-yandex
-      - uses: actions/upload-artifact@v4
-        with:
-          name: yandex-moderation-candidate
-          path: dist-yandex/
-          if-no-files-found: error
-          retention-days: 14
+        set -o pipefail
 
-  physics:
-    name: All thirty-three routes, bypass checks and recovery
+        npm test | tee qa/source-tests.tap'
+    - uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: campaign-source-regressions
+        path: qa/source-tests.tap
+        if-no-files-found: error
+        retention-days: 14
+    name: Complete active source regressions (legacy editions retained)
+  package:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 20
     steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ inputs.revision }}
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: npm
-      - run: npm ci
-      - name: Verify ordinary routes and physical regressions
-        run: |
-          node scripts/v8-journey.mjs
-          node scripts/v10-shortcuts.mjs
-          node scripts/v17-audit.mjs
-          node scripts/video-repro.mjs
-      - name: Preserve physical evidence
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: campaign-physics
-          path: |
-            qa/v8-journeys.json
-            qa/v10-shortcut-audit.json
-            qa/v17-adversarial.json
-            qa/video-after.json
-          retention-days: 14
+    - uses: actions/checkout@v4
+      with:
+        ref: ${{ inputs.revision }}
+        persist-credentials: false
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 22
+        cache: npm
+    - run: npm ci
+    - name: Compile, verify and stamp the browser candidate
+      run: 'npm run build
 
-  route-matrix:
-    name: Puzzle route matrix (${{ matrix.edition }})
+        node scripts/v8-package-check.mjs dist
+
+        node scripts/stamp-build.mjs v54-unified-campaign dist'
+    - name: Compile, verify, stamp and package the Yandex candidate
+      run: 'npm run build:yandex
+
+        node scripts/v8-package-check.mjs dist-yandex
+
+        node scripts/stamp-build.mjs v54-unified-campaign dist-yandex
+
+        node scripts/package-yandex.mjs --input=dist-yandex'
+    - name: Record the platform archive hash without rebuilding or restamping game files
+      run: 'node --input-type=module <<''JS''
+
+        import fs from ''node:fs'';
+
+        import {createReleaseManifest} from ''./scripts/lib/release-manifest.mjs'';
+
+        const manifest=createReleaseManifest({directory:''dist-yandex'',commit:process.env.BUILD_COMMIT,platformArchive:''artifacts/brainrot-portal-yandex.zip''});
+
+        fs.writeFileSync(''artifacts/yandex-release-manifest.json'',JSON.stringify(manifest,null,2)+''\n'');
+
+        JS'
+    - uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: campaign-browser
+        path: dist/
+        if-no-files-found: error
+        retention-days: 14
+    - uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: yandex-moderation-candidate
+        path: dist-yandex/
+        if-no-files-found: error
+        retention-days: 14
+    - uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: yandex-moderation-archive
+        path: 'artifacts/brainrot-portal-yandex.zip
+
+          artifacts/yandex-release-manifest.json
+
+          qa/yandex-package.json'
+        if-no-files-found: error
+        retention-days: 14
+    name: Build browser and platform candidates exactly once
+  physics:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 35
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        ref: ${{ inputs.revision }}
+        persist-credentials: false
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 22
+        cache: npm
+    - run: npm ci
+    - run: 'node scripts/v8-journey.mjs
+
+        node scripts/v10-shortcuts.mjs
+
+        node scripts/v17-audit.mjs
+
+        node scripts/video-repro.mjs'
+    - uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: campaign-physics
+        path: 'qa/v8-journeys.json
+
+          qa/v10-shortcut-audit.json
+
+          qa/v17-adversarial.json
+
+          qa/video-after.json'
+        if-no-files-found: error
+        retention-days: 14
+    name: Classic physical routes, bypass and recovery regressions
+  route-matrix:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        ref: ${{ inputs.revision }}
+        persist-credentials: false
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 22
+        cache: npm
+    - run: npm ci
+    - run: 'mkdir -p qa/route-matrix
+
+        node scripts/qa-campaign-routes.mjs --edition=${{ matrix.edition }} --json=qa/route-matrix/${{ matrix.edition }}.json'
+    - uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: campaign-route-matrix-${{ matrix.edition }}
+        path: qa/route-matrix/${{ matrix.edition }}.json
+        if-no-files-found: error
+        retention-days: 14
+    name: Canonical, alternate and recovery profiles (${{ matrix.edition }})
     strategy:
       fail-fast: false
       matrix:
-        edition: [foundation, classic, open]
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ inputs.revision }}
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: npm
-      - run: npm ci
-      - name: Complete canonical and established alternate routes
-        run: |
-          mkdir -p qa/route-matrix
-          node scripts/qa-campaign-routes.mjs --edition=${{ matrix.edition }} --json=qa/route-matrix/${{ matrix.edition }}.json
-      - uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: campaign-route-matrix-${{ matrix.edition }}
-          path: qa/route-matrix/${{ matrix.edition }}.json
-          retention-days: 14
-
-  browser:
-    name: WebGL rooms ${{ matrix.first }}–${{ matrix.last }}
+        edition:
+        - foundation
+        - classic
+        - open
+  webgl:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 35
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        ref: ${{ inputs.revision }}
+        persist-credentials: false
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 22
+        cache: npm
+    - run: npm ci
+    - name: Install browser harness, without changing source or lockfile
+      run: 'npm install --no-save --package-lock=false puppeteer-core@24.16.0
+
+        python3 -m pip install --user Pillow'
+    - uses: actions/download-artifact@v4
+      with:
+        name: campaign-browser
+        path: dist
+    - name: Verify downloaded accepted-candidate bytes and source identity
+      env:
+        PACKAGE_DIRS: dist
+      run: "node --input-type=module <<'JS'\nimport assert from 'node:assert/strict';\nimport fs from 'node:fs';\nimport {verifyReleasePackage,buildSourceInputs,sha256} from './scripts/lib/release-manifest.mjs';\n\
+        import {RELEASE_VERSION} from './src/game/ReleaseIdentity.js';\nfor (const directory of process.env.PACKAGE_DIRS.split(',')) {\n  const info=JSON.parse(fs.readFileSync(directory+'/build-info.json'));\n\
+        \  assert.equal(info.commit,process.env.BUILD_COMMIT);\n  assert.equal(info.version,RELEASE_VERSION);\n  assert.equal(info.verified,false,'Stamp remains a candidate until independent acceptance');\n\
+        \  assert.equal(info.sourceInputsSha256,sha256(JSON.stringify(buildSourceInputs())));\n  verifyReleasePackage(info,directory);\n}\nJS"
+    - name: Complete the current canonical route with original cargo and actual pixels
+      env:
+        PAGE_URL: http://127.0.0.1:4173/
+        CASE: route
+        LEVELS: ${{ matrix.levels }}
+        OUT_DIR: qa/current-webgl-${{ matrix.group }}
+        CAPTURE: '1'
+      run: 'mkdir -p qa
+
+        node node_modules/vite/bin/vite.js preview --host 127.0.0.1 --port 4173 --strictPort > qa/preview.log 2>&1 &
+
+        preview_pid=$!; trap ''kill "$preview_pid" || true'' EXIT
+
+        for i in $(seq 1 80); do curl --fail --silent http://127.0.0.1:4173/ >/dev/null && break; sleep .25; done
+
+        curl --fail --silent http://127.0.0.1:4173/ >/dev/null
+
+        export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+
+        node scripts/qa-creative-browser.mjs
+
+        node --input-type=module <<''JS''
+
+        import assert from ''node:assert/strict'';import fs from ''node:fs'';
+
+        const r=JSON.parse(fs.readFileSync(process.env.OUT_DIR+''/report.json''));
+
+        assert.equal(r.pass,true);assert.equal(r.capturePass,true);
+
+        assert.deepEqual(r.rows.map(x=>x.level),process.env.LEVELS.split('','').map(Number));
+
+        for(const row of r.rows){assert.equal(row.pass,true);assert.equal(row.route.pass,true);assert.equal(row.route.state,''won'');assert.equal(row.capturePass,true);assert.equal(row.route.sameCompanion,true);assert.equal(row.route.resets??0,0);assert.equal(row.route.respawns??0,0);}
+
+        JS'
+    - uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: campaign-current-webgl-${{ matrix.group }}
+        path: 'qa/current-webgl-${{ matrix.group }}/
+
+          qa/preview.log'
+        if-no-files-found: error
+        retention-days: 14
+    needs: package
+    name: Current campaign WebGL (${{ matrix.levels }})
     strategy:
       fail-fast: false
       matrix:
         include:
-          - {first: 1, last: 5, ui: '1'}
-          - {first: 6, last: 11, ui: '0'}
-          - {first: 12, last: 12, ui: '0'}
-          - {first: 13, last: 13, ui: '0'}
-          - {first: 14, last: 14, ui: '0'}
-          - {first: 15, last: 15, ui: '0'}
-          - {first: 16, last: 16, ui: '0'}
-          - {first: 17, last: 17, ui: '0'}
-          - {first: 18, last: 18, ui: '0'}
-          - {first: 19, last: 19, ui: '0'}
-          - {first: 20, last: 20, ui: '0'}
-          - {first: 21, last: 21, ui: '0'}
-          - {first: 22, last: 22, ui: '0'}
-          - {first: 23, last: 23, ui: '0'}
-          - {first: 24, last: 24, ui: '0'}
-          - {first: 25, last: 25, ui: '0'}
-          - {first: 26, last: 26, ui: '0'}
-          - {first: 27, last: 27, ui: '0'}
-          - {first: 28, last: 28, ui: '0'}
-          - {first: 29, last: 29, ui: '0'}
-          - {first: 30, last: 30, ui: '0'}
-          - {first: 31, last: 33, ui: '0'}
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ inputs.revision }}
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: npm
-      - name: Build the same production revision
-        run: |
-          npm ci
-          npm install --no-save --package-lock=false puppeteer-core@24.16.0
-          npm run build
-          node scripts/stamp-build.mjs v44-tower-variety
-      - name: Verify ordinary routes in actual WebGL
-        env:
-          NESI_FIRST: ${{ matrix.first }}
-          NESI_LAST: ${{ matrix.last }}
-          NESI_UI: ${{ matrix.ui }}
-          NESI_CAPTURE_PUZZLE: ${{ inputs.record_puzzle && matrix.first >= 12 && matrix.first <= 21 && '1' || '0' }}
-          # New room motion review runs separately in campaign-30-review.
-          NESI_CAPTURE_FULL: '0'
-        run: |
-          npm run preview -- --host 127.0.0.1 --port 4173 >campaign-preview.log 2>&1 &
-          for i in {1..30}; do curl -fsS http://127.0.0.1:4173/ >/dev/null && break; sleep 1; done
-          curl -fsS http://127.0.0.1:4173/ >/dev/null
-          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
-          node scripts/v8-browser.mjs
-      - name: Preserve rendered route evidence
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: campaign-webgl-${{ matrix.first }}-${{ matrix.last }}
-          path: |
-            smoke-artifacts/
-            campaign-preview.log
-          retention-days: 14
-
+        - group: 1
+          levels: 1,2,3,4,5,6,7,8,9,10
+        - group: 2
+          levels: 11,12,13,14,15,16,17,18,19,20
+        - group: 3
+          levels: 21,22,23,24,25,26,27,28,29,30
+        - group: 4
+          levels: 31,32,33,34,35,36,37,38,39,40
+        - group: 5
+          levels: 42,43,44,45,46
+        - group: 6
+          levels: 47,48,49,50,51
+        - group: 7
+          levels: '41'
   input:
-    name: Trusted mouse input and portal-edge regression
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ inputs.revision }}
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: npm
-      - name: Build the same production revision
-        run: |
-          npm ci
-          npm install --no-save --package-lock=false puppeteer-core@24.16.0
-          npm run build
-          node scripts/stamp-build.mjs v44-tower-variety
-      - name: Verify actual mouse shots and ordinary floor/wall traversal
-        run: |
-          npm run preview -- --host 127.0.0.1 --port 4173 >input-preview.log 2>&1 &
-          for i in {1..30}; do curl -fsS http://127.0.0.1:4173/ >/dev/null && break; sleep 1; done
-          curl -fsS http://127.0.0.1:4173/ >/dev/null
-          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
-          node scripts/portal-shot-browser.mjs
-          node scripts/portal-edge-browser.mjs
-          node scripts/flight-audio-browser.mjs
-      - name: Preserve input evidence
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: campaign-input
-          path: |
-            portal-shot-evidence/
-            portal-edge-evidence/
-            flight-audio-evidence/
-            input-preview.log
-          retention-days: 14
+    - uses: actions/checkout@v4
+      with:
+        ref: ${{ inputs.revision }}
+        persist-credentials: false
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 22
+        cache: npm
+    - run: npm ci
+    - name: Install browser harness, without changing source or lockfile
+      run: 'npm install --no-save --package-lock=false puppeteer-core@24.16.0
 
+        python3 -m pip install --user Pillow'
+    - uses: actions/download-artifact@v4
+      with:
+        name: campaign-browser
+        path: dist
+    - name: Verify downloaded accepted-candidate bytes and source identity
+      env:
+        PACKAGE_DIRS: dist
+      run: "node --input-type=module <<'JS'\nimport assert from 'node:assert/strict';\nimport fs from 'node:fs';\nimport {verifyReleasePackage,buildSourceInputs,sha256} from './scripts/lib/release-manifest.mjs';\n\
+        import {RELEASE_VERSION} from './src/game/ReleaseIdentity.js';\nfor (const directory of process.env.PACKAGE_DIRS.split(',')) {\n  const info=JSON.parse(fs.readFileSync(directory+'/build-info.json'));\n\
+        \  assert.equal(info.commit,process.env.BUILD_COMMIT);\n  assert.equal(info.version,RELEASE_VERSION);\n  assert.equal(info.verified,false,'Stamp remains a candidate until independent acceptance');\n\
+        \  assert.equal(info.sourceInputsSha256,sha256(JSON.stringify(buildSourceInputs())));\n  verifyReleasePackage(info,directory);\n}\nJS"
+    - name: Preserve shared input and audio regressions
+      env:
+        PAGE_URL: http://127.0.0.1:4173/
+      run: 'mkdir -p qa
+
+        node node_modules/vite/bin/vite.js preview --host 127.0.0.1 --port 4173 --strictPort > qa/preview.log 2>&1 &
+
+        preview_pid=$!; trap ''kill "$preview_pid" || true'' EXIT
+
+        for i in $(seq 1 80); do curl --fail --silent http://127.0.0.1:4173/ >/dev/null && break; sleep .25; done
+
+        curl --fail --silent http://127.0.0.1:4173/ >/dev/null
+
+        export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+
+        node scripts/portal-shot-browser.mjs
+
+        node scripts/portal-edge-browser.mjs
+
+        node scripts/flight-audio-browser.mjs'
+    - uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: campaign-input
+        path: 'portal-shot-evidence/
+
+          portal-edge-evidence/
+
+          flight-audio-evidence/
+
+          qa/preview.log'
+        if-no-files-found: error
+        retention-days: 14
+    needs: package
+    name: Trusted mouse, emergence and real audio
   sdk-regression:
-    name: Carry/wind video regressions and Yandex SDK contract
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ inputs.revision }}
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: npm
-      - name: Build browser and Yandex packages from the same revision
-        run: |
-          npm ci
-          npm install --no-save --package-lock=false puppeteer-core@24.16.0
-          npm run build
-          node scripts/stamp-build.mjs v44-tower-variety
-          npm run build -- --mode yandex --outDir dist-yandex
-          node scripts/stamp-build.mjs v44-tower-variety dist-yandex
-      - name: Verify physical video regressions and advertising contract
-        run: |
-          npm run preview -- --host 127.0.0.1 --port 4173 >sdk-preview.log 2>&1 &
-          python3 -m http.server 4174 --bind 127.0.0.1 --directory dist-yandex >yandex-preview.log 2>&1 &
-          for port in 4173 4174; do
-            for i in {1..30}; do curl -fsS "http://127.0.0.1:$port/" >/dev/null && break; sleep 1; done
-            curl -fsS "http://127.0.0.1:$port/" >/dev/null
-          done
-          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
-          node scripts/video-repair-browser.mjs
-          node scripts/v8-yandex-browser.mjs
-      - name: Preserve rendered regressions and SDK evidence
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: campaign-sdk-regression
-          path: |
-            video-repair-evidence/
-            smoke-artifacts/
-            sdk-preview.log
-            yandex-preview.log
-          retention-days: 14
-      - name: Preserve Yandex draft (contract tested, not live ads)
-        uses: actions/upload-artifact@v4
-        with:
-          name: campaign-yandex-draft
-          path: dist-yandex/
-          if-no-files-found: error
-          retention-days: 14
-
-  open-chambers:
-    name: Rebuilt open chamber ${{ matrix.room }}
     runs-on: ubuntu-latest
     timeout-minutes: 20
-    strategy:
-      fail-fast: false
-      matrix:
-        room: [24, 28, 30]
     steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ inputs.revision }}
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: npm
-      - name: Build the exact candidate, with unchanged original assets
-        run: |
-          npm ci
-          npm install --no-save --package-lock=false puppeteer-core@24.16.0
-          npm run build
-          node scripts/stamp-build.mjs v44-tower-variety
-      - name: Verify the distinct three-room edition through the real HTTP UI
-        env:
-          ROOM: ${{ matrix.room }}
-          RECORD: '0'
-        run: |
-          npm run preview -- --host 127.0.0.1 --port 4173 >open-preview.log 2>&1 &
-          for i in {1..30}; do curl -fsS http://127.0.0.1:4173/ >/dev/null && break; sleep 1; done
-          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
-          node scripts/open-browser-review.mjs
-      - uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: open-chambers-${{ matrix.room }}
-          path: |
-            qa/open-browser/
-            open-preview.log
-          retention-days: 14
+    - uses: actions/checkout@v4
+      with:
+        ref: ${{ inputs.revision }}
+        persist-credentials: false
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 22
+        cache: npm
+    - run: npm ci
+    - name: Install browser harness, without changing source or lockfile
+      run: 'npm install --no-save --package-lock=false puppeteer-core@24.16.0
 
-  research:
-    name: Research room ${{ matrix.room }} with alternative and recovery routes
+        python3 -m pip install --user Pillow'
+    - uses: actions/download-artifact@v4
+      with:
+        name: campaign-browser
+        path: dist
+    - uses: actions/download-artifact@v4
+      with:
+        name: yandex-moderation-candidate
+        path: dist-yandex
+    - name: Verify downloaded accepted-candidate bytes and source identity
+      env:
+        PACKAGE_DIRS: dist,dist-yandex
+      run: "node --input-type=module <<'JS'\nimport assert from 'node:assert/strict';\nimport fs from 'node:fs';\nimport {verifyReleasePackage,buildSourceInputs,sha256} from './scripts/lib/release-manifest.mjs';\n\
+        import {RELEASE_VERSION} from './src/game/ReleaseIdentity.js';\nfor (const directory of process.env.PACKAGE_DIRS.split(',')) {\n  const info=JSON.parse(fs.readFileSync(directory+'/build-info.json'));\n\
+        \  assert.equal(info.commit,process.env.BUILD_COMMIT);\n  assert.equal(info.version,RELEASE_VERSION);\n  assert.equal(info.verified,false,'Stamp remains a candidate until independent acceptance');\n\
+        \  assert.equal(info.sourceInputsSha256,sha256(JSON.stringify(buildSourceInputs())));\n  verifyReleasePackage(info,directory);\n}\nJS"
+    - name: Verify shared carry/wind and nested upload SDK contract
+      env:
+        PAGE_URL: http://127.0.0.1:4173/
+      run: 'mkdir -p qa
+
+        node node_modules/vite/bin/vite.js preview --host 127.0.0.1 --port 4173 --strictPort > qa/preview.log 2>&1 &
+
+        preview_pid=$!; trap ''kill "$preview_pid" || true'' EXIT
+
+        for i in $(seq 1 80); do curl --fail --silent http://127.0.0.1:4173/ >/dev/null && break; sleep .25; done
+
+        curl --fail --silent http://127.0.0.1:4173/ >/dev/null
+
+        export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+
+        node scripts/video-repair-browser.mjs
+
+        node scripts/check-yandex-platform.mjs > qa/yandex-platform.json
+
+        node scripts/v8-yandex-browser.mjs'
+    - uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: campaign-sdk-regression
+        path: 'video-repair-evidence/
+
+          smoke-artifacts/
+
+          qa/yandex-platform.json
+
+          qa/preview.log'
+        if-no-files-found: error
+        retention-days: 14
+    needs: package
+    name: Carry/wind and exact Yandex SDK UI contract
+  atlas:
     runs-on: ubuntu-latest
     timeout-minutes: 20
-    strategy:
-      fail-fast: false
-      matrix:
-        room: [31, 32, 33]
     steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ inputs.revision }}
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: npm
-      - run: |
-          npm ci
-          npm install --no-save --package-lock=false puppeteer-core@24.16.0
-          npm run build
-          node scripts/stamp-build.mjs v44-tower-variety
-      - name: Ordinary solution and alternative exploration in native WebGL
-        env:
-          ROOMS: ${{ matrix.room }}
-          RECORD: ${{ inputs.record_puzzle && '1' || '0' }}
-        run: |
-          npm run preview -- --host 127.0.0.1 --port 4173 >research-preview.log 2>&1 &
-          for i in {1..30}; do curl -fsS http://127.0.0.1:4173/ >/dev/null && break; sleep 1; done
-          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
-          node scripts/research-browser.mjs
-          RECORD=0 ALTERNATE=1 OUT_DIR=qa/research-alternative node scripts/research-browser.mjs
-      - uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: research-chapter-${{ matrix.room }}
-          path: |
-            qa/research-browser/
-            qa/research-alternative/
-            research-preview.log
-          retention-days: 14
+    - uses: actions/checkout@v4
+      with:
+        ref: ${{ inputs.revision }}
+        persist-credentials: false
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 22
+        cache: npm
+    - run: npm ci
+    - name: Install browser harness, without changing source or lockfile
+      run: 'npm install --no-save --package-lock=false puppeteer-core@24.16.0
 
-  foundation:
-    name: Campaign opening room ${{ matrix.room }} and end transition
+        python3 -m pip install --user Pillow'
+    - uses: actions/download-artifact@v4
+      with:
+        name: campaign-browser
+        path: dist
+    - name: Verify downloaded accepted-candidate bytes and source identity
+      env:
+        PACKAGE_DIRS: dist
+      run: "node --input-type=module <<'JS'\nimport assert from 'node:assert/strict';\nimport fs from 'node:fs';\nimport {verifyReleasePackage,buildSourceInputs,sha256} from './scripts/lib/release-manifest.mjs';\n\
+        import {RELEASE_VERSION} from './src/game/ReleaseIdentity.js';\nfor (const directory of process.env.PACKAGE_DIRS.split(',')) {\n  const info=JSON.parse(fs.readFileSync(directory+'/build-info.json'));\n\
+        \  assert.equal(info.commit,process.env.BUILD_COMMIT);\n  assert.equal(info.version,RELEASE_VERSION);\n  assert.equal(info.verified,false,'Stamp remains a candidate until independent acceptance');\n\
+        \  assert.equal(info.sourceInputsSha256,sha256(JSON.stringify(buildSourceInputs())));\n  verifyReleasePackage(info,directory);\n}\nJS"
+    - name: Verify all menu viewport and chapter cases
+      env:
+        PAGE_URL: http://127.0.0.1:4173/
+      run: 'mkdir -p qa
+
+        node node_modules/vite/bin/vite.js preview --host 127.0.0.1 --port 4173 --strictPort > qa/preview.log 2>&1 &
+
+        preview_pid=$!; trap ''kill "$preview_pid" || true'' EXIT
+
+        for i in $(seq 1 80); do curl --fail --silent http://127.0.0.1:4173/ >/dev/null && break; sleep .25; done
+
+        curl --fail --silent http://127.0.0.1:4173/ >/dev/null
+
+        export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+
+        node scripts/qa-atlas-browser.mjs'
+    - uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: campaign-atlas
+        path: 'qa/atlas-browser/
+
+          qa/preview.log'
+        if-no-files-found: error
+        retention-days: 14
+    needs: package
+    name: Atlas menus, real loading and reduced motion
+  release-session:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        ref: ${{ inputs.revision }}
+        persist-credentials: false
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 22
+        cache: npm
+    - run: npm ci
+    - name: Install browser harness, without changing source or lockfile
+      run: 'npm install --no-save --package-lock=false puppeteer-core@24.16.0
+
+        python3 -m pip install --user Pillow'
+    - uses: actions/download-artifact@v4
+      with:
+        name: campaign-browser
+        path: dist
+    - name: Verify downloaded accepted-candidate bytes and source identity
+      env:
+        PACKAGE_DIRS: dist
+      run: "node --input-type=module <<'JS'\nimport assert from 'node:assert/strict';\nimport fs from 'node:fs';\nimport {verifyReleasePackage,buildSourceInputs,sha256} from './scripts/lib/release-manifest.mjs';\n\
+        import {RELEASE_VERSION} from './src/game/ReleaseIdentity.js';\nfor (const directory of process.env.PACKAGE_DIRS.split(',')) {\n  const info=JSON.parse(fs.readFileSync(directory+'/build-info.json'));\n\
+        \  assert.equal(info.commit,process.env.BUILD_COMMIT);\n  assert.equal(info.version,RELEASE_VERSION);\n  assert.equal(info.verified,false,'Stamp remains a candidate until independent acceptance');\n\
+        \  assert.equal(info.sourceInputsSha256,sha256(JSON.stringify(buildSourceInputs())));\n  verifyReleasePackage(info,directory);\n}\nJS"
+    - name: Verify ordinary session lifecycle without layout mutation
+      env:
+        PAGE_URL: http://127.0.0.1:4173/
+      run: 'mkdir -p qa
+
+        node node_modules/vite/bin/vite.js preview --host 127.0.0.1 --port 4173 --strictPort > qa/preview.log 2>&1 &
+
+        preview_pid=$!; trap ''kill "$preview_pid" || true'' EXIT
+
+        for i in $(seq 1 80); do curl --fail --silent http://127.0.0.1:4173/ >/dev/null && break; sleep .25; done
+
+        curl --fail --silent http://127.0.0.1:4173/ >/dev/null
+
+        export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+
+        node scripts/release-session-browser.mjs'
+    - uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: release-session
+        path: 'qa/release-session/
+
+          qa/preview.log'
+        if-no-files-found: error
+        retention-days: 14
+    needs: package
+    name: Resume, native landscape Play and graphics recovery
+  viewport:
     runs-on: ubuntu-latest
     timeout-minutes: 25
-    strategy:
-      fail-fast: false
-      matrix:
-        room: [1, 2, 3, 4, 5, 30]
     steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ inputs.revision }}
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: npm
-      - run: |
-          npm ci
-          npm install --no-save --package-lock=false puppeteer-core@24.16.0
-          npm run build
-          node scripts/stamp-build.mjs v44-tower-variety
-      - name: Default public entry, ordinary and alternative inputs, saved progress and next button
-        env:
-          ROOMS: ${{ matrix.room }}
-          RECORD: ${{ inputs.record_puzzle && matrix.room <= 5 && '1' || '0' }}
-        run: |
-          npm run preview -- --host 127.0.0.1 --port 4173 >foundation-preview.log 2>&1 &
-          for i in {1..30}; do curl -fsS http://127.0.0.1:4173/ >/dev/null && break; sleep 1; done
-          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
-          node scripts/foundation-browser.mjs
-      - uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: foundation-chapter-${{ matrix.room }}
-          path: |
-            qa/foundation-browser/
-            foundation-preview.log
-          retention-days: 14
+    - uses: actions/checkout@v4
+      with:
+        ref: ${{ inputs.revision }}
+        persist-credentials: false
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 22
+        cache: npm
+    - run: npm ci
+    - name: Install browser harness, without changing source or lockfile
+      run: 'npm install --no-save --package-lock=false puppeteer-core@24.16.0
 
-  new-foundation:
-    name: New campaign rooms ${{ matrix.first }}–${{ matrix.last }}
+        python3 -m pip install --user Pillow'
+    - uses: actions/download-artifact@v4
+      with:
+        name: campaign-browser
+        path: dist
+    - name: Verify downloaded accepted-candidate bytes and source identity
+      env:
+        PACKAGE_DIRS: dist
+      run: "node --input-type=module <<'JS'\nimport assert from 'node:assert/strict';\nimport fs from 'node:fs';\nimport {verifyReleasePackage,buildSourceInputs,sha256} from './scripts/lib/release-manifest.mjs';\n\
+        import {RELEASE_VERSION} from './src/game/ReleaseIdentity.js';\nfor (const directory of process.env.PACKAGE_DIRS.split(',')) {\n  const info=JSON.parse(fs.readFileSync(directory+'/build-info.json'));\n\
+        \  assert.equal(info.commit,process.env.BUILD_COMMIT);\n  assert.equal(info.version,RELEASE_VERSION);\n  assert.equal(info.verified,false,'Stamp remains a candidate until independent acceptance');\n\
+        \  assert.equal(info.sourceInputsSha256,sha256(JSON.stringify(buildSourceInputs())));\n  verifyReleasePackage(info,directory);\n}\nJS"
+    - name: Verify 15 native viewport and quality combinations
+      env:
+        PAGE_URL: http://127.0.0.1:4173/
+      run: 'mkdir -p qa
+
+        node node_modules/vite/bin/vite.js preview --host 127.0.0.1 --port 4173 --strictPort > qa/preview.log 2>&1 &
+
+        preview_pid=$!; trap ''kill "$preview_pid" || true'' EXIT
+
+        for i in $(seq 1 80); do curl --fail --silent http://127.0.0.1:4173/ >/dev/null && break; sleep .25; done
+
+        curl --fail --silent http://127.0.0.1:4173/ >/dev/null
+
+        export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+
+        node scripts/qa-viewport-browser.mjs'
+    - uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: campaign-viewport
+        path: 'qa/creative-viewport-browser/
+
+          qa/preview.log'
+        if-no-files-found: error
+        retention-days: 14
+    needs: package
+    name: Production resize, quality and touch controls
+  resource-cycle:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 35
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        ref: ${{ inputs.revision }}
+        persist-credentials: false
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 22
+        cache: npm
+    - run: npm ci
+    - name: Install browser harness, without changing source or lockfile
+      run: 'npm install --no-save --package-lock=false puppeteer-core@24.16.0
+
+        python3 -m pip install --user Pillow'
+    - uses: actions/download-artifact@v4
+      with:
+        name: campaign-browser
+        path: dist
+    - name: Verify downloaded accepted-candidate bytes and source identity
+      env:
+        PACKAGE_DIRS: dist
+      run: "node --input-type=module <<'JS'\nimport assert from 'node:assert/strict';\nimport fs from 'node:fs';\nimport {verifyReleasePackage,buildSourceInputs,sha256} from './scripts/lib/release-manifest.mjs';\n\
+        import {RELEASE_VERSION} from './src/game/ReleaseIdentity.js';\nfor (const directory of process.env.PACKAGE_DIRS.split(',')) {\n  const info=JSON.parse(fs.readFileSync(directory+'/build-info.json'));\n\
+        \  assert.equal(info.commit,process.env.BUILD_COMMIT);\n  assert.equal(info.version,RELEASE_VERSION);\n  assert.equal(info.verified,false,'Stamp remains a candidate until independent acceptance');\n\
+        \  assert.equal(info.sourceInputsSha256,sha256(JSON.stringify(buildSourceInputs())));\n  verifyReleasePackage(info,directory);\n}\nJS"
+    - name: Verify 10 production cycles, activated fracture disposal, pause and context restore
+      env:
+        START_SERVER: '1'
+        BUILD_DIR: dist
+        OUT_DIR: qa/production-resource-cycle
+      run: 'export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+
+        node scripts/qa-production-resource-cycle.mjs'
+    - uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: campaign-resource-cycle
+        path: qa/production-resource-cycle/
+        if-no-files-found: error
+        retention-days: 14
+    needs: package
+    name: Frozen production resource lifecycle and context restore
+  classic-browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        ref: ${{ inputs.revision }}
+        persist-credentials: false
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 22
+        cache: npm
+    - run: npm ci
+    - name: Install browser harness, without changing source or lockfile
+      run: 'npm install --no-save --package-lock=false puppeteer-core@24.16.0
+
+        python3 -m pip install --user Pillow'
+    - uses: actions/download-artifact@v4
+      with:
+        name: campaign-browser
+        path: dist
+    - name: Verify downloaded accepted-candidate bytes and source identity
+      env:
+        PACKAGE_DIRS: dist
+      run: "node --input-type=module <<'JS'\nimport assert from 'node:assert/strict';\nimport fs from 'node:fs';\nimport {verifyReleasePackage,buildSourceInputs,sha256} from './scripts/lib/release-manifest.mjs';\n\
+        import {RELEASE_VERSION} from './src/game/ReleaseIdentity.js';\nfor (const directory of process.env.PACKAGE_DIRS.split(',')) {\n  const info=JSON.parse(fs.readFileSync(directory+'/build-info.json'));\n\
+        \  assert.equal(info.commit,process.env.BUILD_COMMIT);\n  assert.equal(info.version,RELEASE_VERSION);\n  assert.equal(info.verified,false,'Stamp remains a candidate until independent acceptance');\n\
+        \  assert.equal(info.sourceInputsSha256,sha256(JSON.stringify(buildSourceInputs())));\n  verifyReleasePackage(info,directory);\n}\nJS"
+    - name: Verify retained classic routes, cache and archive UI
+      env:
+        PAGE_URL: http://127.0.0.1:4173/
+        NESI_FIRST: ${{ matrix.first }}
+        NESI_LAST: ${{ matrix.last }}
+        NESI_UI: ${{ matrix.ui }}
+        NESI_CAPTURE_PUZZLE: ${{ inputs.record_puzzle && matrix.first >= 12 && matrix.first <= 21 && '1' || '0' }}
+        NESI_CAPTURE_FULL: '0'
+      run: 'mkdir -p qa
+
+        node node_modules/vite/bin/vite.js preview --host 127.0.0.1 --port 4173 --strictPort > qa/preview.log 2>&1 &
+
+        preview_pid=$!; trap ''kill "$preview_pid" || true'' EXIT
+
+        for i in $(seq 1 80); do curl --fail --silent http://127.0.0.1:4173/ >/dev/null && break; sleep .25; done
+
+        curl --fail --silent http://127.0.0.1:4173/ >/dev/null
+
+        export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+
+        node scripts/v8-browser.mjs'
+    - uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: campaign-classic-webgl-${{ matrix.first }}-${{ matrix.last }}
+        path: 'smoke-artifacts/
+
+          qa/preview.log'
+        if-no-files-found: error
+        retention-days: 14
+    needs: package
+    name: Classic archive WebGL ${{ matrix.first }}–${{ matrix.last }}
     strategy:
       fail-fast: false
       matrix:
         include:
-          - {first: 31, last: 32, rooms: '31,32'}
-          - {first: 33, last: 34, rooms: '33,34'}
-          - {first: 35, last: 36, rooms: '35,36'}
-          - {first: 37, last: 38, rooms: '37,38'}
-          - {first: 39, last: 40, rooms: '39,40'}
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ inputs.revision }}
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: npm
-      - name: Build the exact candidate for native review
-        run: |
-          npm ci
-          npm install --no-save --package-lock=false puppeteer-core@24.16.0
-          npm run build
-          node scripts/stamp-build.mjs v44-tower-variety
-      - name: Verify playable routes and subsequent room transitions in WebGL
-        env:
-          ROOMS: ${{ matrix.rooms }}
-          RECORD: '1'
-          POST_ALTERNATES: '{"31":{"route":"empty-upper-first"},"32":{"route":"prepare-return-first"},"33":{"route":"friend-before-passenger"},"34":{"route":"explore-service-first"},"35":{"route":"carry-after-first-latch"},"36":{"route":"prepare-light-first"},"37":{"route":"dispatch-cargo-first"},"38":{"route":"send-freight-early"},"39":{"route":"scout-first"},"40":{"route":"bridge-prepared-first"}}'
-        run: |
-          npm run preview -- --host 127.0.0.1 --port 4173 >foundation-preview.log 2>&1 &
-          for i in {1..30}; do curl -fsS http://127.0.0.1:4173/ >/dev/null && break; sleep 1; done
-          curl -fsS http://127.0.0.1:4173/ >/dev/null
-          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
-          node scripts/foundation-browser.mjs
-      - uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: foundation-chapter-${{ matrix.first }}-${{ matrix.last }}
-          path: |
-            qa/foundation-browser/
-            foundation-preview.log
-          retention-days: 14
-
-  release-session:
-    name: Resume, mobile menu and graphics recovery
+        - first: 1
+          last: 5
+          ui: '1'
+        - first: 6
+          last: 11
+          ui: '0'
+        - first: 12
+          last: 16
+          ui: '0'
+        - first: 17
+          last: 21
+          ui: '0'
+        - first: 22
+          last: 27
+          ui: '0'
+        - first: 28
+          last: 33
+          ui: '0'
+  open-browser:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 25
     steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ inputs.revision }}
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: npm
-      - run: |
-          npm ci
-          npm install --no-save --package-lock=false puppeteer-core@24.16.0
-          npm run build
-      - name: Verify real browser session lifecycle
-        run: |
-          npm run preview -- --host 127.0.0.1 --port 4173 >release-session-preview.log 2>&1 &
-          for i in {1..30}; do curl -fsS http://127.0.0.1:4173/ >/dev/null && break; sleep 1; done
-          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
-          node scripts/release-session-browser.mjs
-      - uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: release-session
-          path: |
-            qa/release-session/
-            release-session-preview.log
-          retention-days: 14
+    - uses: actions/checkout@v4
+      with:
+        ref: ${{ inputs.revision }}
+        persist-credentials: false
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 22
+        cache: npm
+    - run: npm ci
+    - name: Install browser harness, without changing source or lockfile
+      run: 'npm install --no-save --package-lock=false puppeteer-core@24.16.0
+
+        python3 -m pip install --user Pillow'
+    - uses: actions/download-artifact@v4
+      with:
+        name: campaign-browser
+        path: dist
+    - name: Verify downloaded accepted-candidate bytes and source identity
+      env:
+        PACKAGE_DIRS: dist
+      run: "node --input-type=module <<'JS'\nimport assert from 'node:assert/strict';\nimport fs from 'node:fs';\nimport {verifyReleasePackage,buildSourceInputs,sha256} from './scripts/lib/release-manifest.mjs';\n\
+        import {RELEASE_VERSION} from './src/game/ReleaseIdentity.js';\nfor (const directory of process.env.PACKAGE_DIRS.split(',')) {\n  const info=JSON.parse(fs.readFileSync(directory+'/build-info.json'));\n\
+        \  assert.equal(info.commit,process.env.BUILD_COMMIT);\n  assert.equal(info.version,RELEASE_VERSION);\n  assert.equal(info.verified,false,'Stamp remains a candidate until independent acceptance');\n\
+        \  assert.equal(info.sourceInputsSha256,sha256(JSON.stringify(buildSourceInputs())));\n  verifyReleasePackage(info,directory);\n}\nJS"
+    - name: Verify open archive native routes and save isolation
+      env:
+        PAGE_URL: http://127.0.0.1:4173/
+        ROOM: ${{ matrix.room }}
+        RECORD: '0'
+      run: 'mkdir -p qa
+
+        node node_modules/vite/bin/vite.js preview --host 127.0.0.1 --port 4173 --strictPort > qa/preview.log 2>&1 &
+
+        preview_pid=$!; trap ''kill "$preview_pid" || true'' EXIT
+
+        for i in $(seq 1 80); do curl --fail --silent http://127.0.0.1:4173/ >/dev/null && break; sleep .25; done
+
+        curl --fail --silent http://127.0.0.1:4173/ >/dev/null
+
+        export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+
+        node scripts/open-browser-review.mjs'
+    - uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: campaign-open-webgl-${{ matrix.room }}
+        path: 'qa/open-browser/
+
+          qa/preview.log'
+        if-no-files-found: error
+        retention-days: 14
+    needs: package
+    name: Open archive WebGL ${{ matrix.room }}
+    strategy:
+      fail-fast: false
+      matrix:
+        room:
+        - 24
+        - 28
+        - 30
+  research-browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        ref: ${{ inputs.revision }}
+        persist-credentials: false
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 22
+        cache: npm
+    - run: npm ci
+    - name: Install browser harness, without changing source or lockfile
+      run: 'npm install --no-save --package-lock=false puppeteer-core@24.16.0
+
+        python3 -m pip install --user Pillow'
+    - uses: actions/download-artifact@v4
+      with:
+        name: campaign-browser
+        path: dist
+    - name: Verify downloaded accepted-candidate bytes and source identity
+      env:
+        PACKAGE_DIRS: dist
+      run: "node --input-type=module <<'JS'\nimport assert from 'node:assert/strict';\nimport fs from 'node:fs';\nimport {verifyReleasePackage,buildSourceInputs,sha256} from './scripts/lib/release-manifest.mjs';\n\
+        import {RELEASE_VERSION} from './src/game/ReleaseIdentity.js';\nfor (const directory of process.env.PACKAGE_DIRS.split(',')) {\n  const info=JSON.parse(fs.readFileSync(directory+'/build-info.json'));\n\
+        \  assert.equal(info.commit,process.env.BUILD_COMMIT);\n  assert.equal(info.version,RELEASE_VERSION);\n  assert.equal(info.verified,false,'Stamp remains a candidate until independent acceptance');\n\
+        \  assert.equal(info.sourceInputsSha256,sha256(JSON.stringify(buildSourceInputs())));\n  verifyReleasePackage(info,directory);\n}\nJS"
+    - name: Verify open research archive canonical and recovery variants
+      env:
+        PAGE_URL: http://127.0.0.1:4173/
+        ROOMS: ${{ matrix.room }}
+        RECORD: ${{ inputs.record_puzzle && '1' || '0' }}
+      run: 'mkdir -p qa
+
+        node node_modules/vite/bin/vite.js preview --host 127.0.0.1 --port 4173 --strictPort > qa/preview.log 2>&1 &
+
+        preview_pid=$!; trap ''kill "$preview_pid" || true'' EXIT
+
+        for i in $(seq 1 80); do curl --fail --silent http://127.0.0.1:4173/ >/dev/null && break; sleep .25; done
+
+        curl --fail --silent http://127.0.0.1:4173/ >/dev/null
+
+        export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+
+        node scripts/research-browser.mjs
+
+        RECORD=0 ALTERNATE=1 OUT_DIR=qa/research-alternative node scripts/research-browser.mjs'
+    - uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: campaign-research-webgl-${{ matrix.room }}
+        path: 'qa/research-browser/
+
+          qa/research-alternative/
+
+          qa/preview.log'
+        if-no-files-found: error
+        retention-days: 14
+    needs: package
+    name: Research archive WebGL ${{ matrix.room }}
+    strategy:
+      fail-fast: false
+      matrix:
+        room:
+        - 31
+        - 32
+        - 33
+  foundation-integration:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        ref: ${{ inputs.revision }}
+        persist-credentials: false
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 22
+        cache: npm
+    - run: npm ci
+    - name: Install browser harness, without changing source or lockfile
+      run: 'npm install --no-save --package-lock=false puppeteer-core@24.16.0
+
+        python3 -m pip install --user Pillow'
+    - uses: actions/download-artifact@v4
+      with:
+        name: campaign-browser
+        path: dist
+    - name: Verify downloaded accepted-candidate bytes and source identity
+      env:
+        PACKAGE_DIRS: dist
+      run: "node --input-type=module <<'JS'\nimport assert from 'node:assert/strict';\nimport fs from 'node:fs';\nimport {verifyReleasePackage,buildSourceInputs,sha256} from './scripts/lib/release-manifest.mjs';\n\
+        import {RELEASE_VERSION} from './src/game/ReleaseIdentity.js';\nfor (const directory of process.env.PACKAGE_DIRS.split(',')) {\n  const info=JSON.parse(fs.readFileSync(directory+'/build-info.json'));\n\
+        \  assert.equal(info.commit,process.env.BUILD_COMMIT);\n  assert.equal(info.version,RELEASE_VERSION);\n  assert.equal(info.verified,false,'Stamp remains a candidate until independent acceptance');\n\
+        \  assert.equal(info.sourceInputsSha256,sha256(JSON.stringify(buildSourceInputs())));\n  verifyReleasePackage(info,directory);\n}\nJS"
+    - name: Verify alternate inputs, next buttons, shader warmup and separate saves
+      env:
+        PAGE_URL: http://127.0.0.1:4173/
+        ROOMS: ${{ matrix.room }}
+        RECORD: ${{ inputs.record_puzzle && matrix.room <= 5 && '1' || '0' }}
+      run: 'mkdir -p qa
+
+        node node_modules/vite/bin/vite.js preview --host 127.0.0.1 --port 4173 --strictPort > qa/preview.log 2>&1 &
+
+        preview_pid=$!; trap ''kill "$preview_pid" || true'' EXIT
+
+        for i in $(seq 1 80); do curl --fail --silent http://127.0.0.1:4173/ >/dev/null && break; sleep .25; done
+
+        curl --fail --silent http://127.0.0.1:4173/ >/dev/null
+
+        export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+
+        node scripts/foundation-browser.mjs'
+    - uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: campaign-foundation-integration-${{ matrix.room }}
+        path: 'qa/foundation-browser/
+
+          qa/preview.log'
+        if-no-files-found: error
+        retention-days: 14
+    needs: package
+    name: Foundation UI integration ${{ matrix.room }}
+    strategy:
+      fail-fast: false
+      matrix:
+        room:
+        - 1
+        - 2
+        - 3
+        - 4
+        - 5
+        - 30
+  foundation-late-integration:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        ref: ${{ inputs.revision }}
+        persist-credentials: false
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 22
+        cache: npm
+    - run: npm ci
+    - name: Install browser harness, without changing source or lockfile
+      run: 'npm install --no-save --package-lock=false puppeteer-core@24.16.0
+
+        python3 -m pip install --user Pillow'
+    - uses: actions/download-artifact@v4
+      with:
+        name: campaign-browser
+        path: dist
+    - name: Verify downloaded accepted-candidate bytes and source identity
+      env:
+        PACKAGE_DIRS: dist
+      run: "node --input-type=module <<'JS'\nimport assert from 'node:assert/strict';\nimport fs from 'node:fs';\nimport {verifyReleasePackage,buildSourceInputs,sha256} from './scripts/lib/release-manifest.mjs';\n\
+        import {RELEASE_VERSION} from './src/game/ReleaseIdentity.js';\nfor (const directory of process.env.PACKAGE_DIRS.split(',')) {\n  const info=JSON.parse(fs.readFileSync(directory+'/build-info.json'));\n\
+        \  assert.equal(info.commit,process.env.BUILD_COMMIT);\n  assert.equal(info.version,RELEASE_VERSION);\n  assert.equal(info.verified,false,'Stamp remains a candidate until independent acceptance');\n\
+        \  assert.equal(info.sourceInputsSha256,sha256(JSON.stringify(buildSourceInputs())));\n  verifyReleasePackage(info,directory);\n}\nJS"
+    - name: Verify current alternate routes and subsequent room transitions
+      env:
+        PAGE_URL: http://127.0.0.1:4173/
+        ROOMS: ${{ matrix.rooms }}
+        RECORD: '1'
+        POST_ALTERNATES: '{"31":{"route":"inspect-rack-first"},"32":{"route":"inspect-optics-first"},"33":{"route":"miss-lift-and-recirculate"},"34":{"alternate":true},"35":{"route":"scout-before-second-latch"},"36":{"route":"scout-impact-first"},"37":{"route":"prepare-fields-first"},"38":{"route":"send-freight-early"},"39":{"route":"receiver-first"},"40":{"route":"trim-then-balance"}}'
+      run: 'mkdir -p qa
+
+        node node_modules/vite/bin/vite.js preview --host 127.0.0.1 --port 4173 --strictPort > qa/preview.log 2>&1 &
+
+        preview_pid=$!; trap ''kill "$preview_pid" || true'' EXIT
+
+        for i in $(seq 1 80); do curl --fail --silent http://127.0.0.1:4173/ >/dev/null && break; sleep .25; done
+
+        curl --fail --silent http://127.0.0.1:4173/ >/dev/null
+
+        export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+
+        node scripts/foundation-browser.mjs'
+    - uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: campaign-late-integration-${{ matrix.rooms }}
+        path: 'qa/foundation-browser/
+
+          qa/preview.log'
+        if-no-files-found: error
+        retention-days: 14
+    needs: package
+    name: Current late UI integration ${{ matrix.rooms }}
+    strategy:
+      fail-fast: false
+      matrix:
+        rooms:
+        - 31,32
+        - 33,34
+        - 35,36
+        - 37,38
+        - 39,40
+  finite-attacks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        ref: ${{ inputs.revision }}
+        persist-credentials: false
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 22
+        cache: npm
+    - run: npm ci
+    - run: 'mkdir -p qa
+
+        node scripts/qa-room17-unsupported.mjs
+
+        node scripts/qa-speedrun-late-new.mjs --out=qa/current-late-attacks.json
+
+        node scripts/qa-siphon-archive-shot.mjs
+
+        node scripts/qa-siphon-cargo-aperture.mjs
+
+        node scripts/qa-speedrun-expansion-new.mjs'
+    - uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: campaign-finite-attacks
+        path: 'qa/current-room17-unsupported.json
+
+          qa/current-late-attacks.json
+
+          qa/siphon-archive-shot-after.json
+
+          qa/siphon-cargo-aperture-after.json
+
+          qa/speedrun-expansion-new.json'
+        if-no-files-found: error
+        retention-days: 14
+    name: Finite Room 17 and late attacks plus both known Siphon exploits
+  recording:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        ref: ${{ inputs.revision }}
+        persist-credentials: false
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 22
+        cache: npm
+    - run: npm ci
+    - name: Install browser harness, without changing source or lockfile
+      run: 'npm install --no-save --package-lock=false puppeteer-core@24.16.0
+
+        python3 -m pip install --user Pillow'
+    - uses: actions/download-artifact@v4
+      with:
+        name: campaign-browser
+        path: dist
+    - name: Verify downloaded accepted-candidate bytes and source identity
+      env:
+        PACKAGE_DIRS: dist
+      run: "node --input-type=module <<'JS'\nimport assert from 'node:assert/strict';\nimport fs from 'node:fs';\nimport {verifyReleasePackage,buildSourceInputs,sha256} from './scripts/lib/release-manifest.mjs';\n\
+        import {RELEASE_VERSION} from './src/game/ReleaseIdentity.js';\nfor (const directory of process.env.PACKAGE_DIRS.split(',')) {\n  const info=JSON.parse(fs.readFileSync(directory+'/build-info.json'));\n\
+        \  assert.equal(info.commit,process.env.BUILD_COMMIT);\n  assert.equal(info.version,RELEASE_VERSION);\n  assert.equal(info.verified,false,'Stamp remains a candidate until independent acceptance');\n\
+        \  assert.equal(info.sourceInputsSha256,sha256(JSON.stringify(buildSourceInputs())));\n  verifyReleasePackage(info,directory);\n}\nJS"
+    - run: 'sudo apt-get update -qq
+
+        sudo apt-get install -y -qq ffmpeg'
+    - name: Record the current route from the downloaded exact browser package
+      env:
+        PAGE_URL: http://127.0.0.1:4173/
+        LEVEL: ${{ matrix.level }}
+        CAPTURE_FPS: ${{ matrix.fps }}
+        CAPTURE_WIDTH: '854'
+        CAPTURE_HEIGHT: '480'
+        OUT_DIR: qa/current-recording-${{ matrix.key }}
+        ALTERNATIVE_ROUTE: ${{ matrix.alternative }}
+      run: 'mkdir -p qa
+
+        node node_modules/vite/bin/vite.js preview --host 127.0.0.1 --port 4173 --strictPort > qa/preview.log 2>&1 &
+
+        preview_pid=$!; trap ''kill "$preview_pid" || true'' EXIT
+
+        for i in $(seq 1 80); do curl --fail --silent http://127.0.0.1:4173/ >/dev/null && break; sleep .25; done
+
+        curl --fail --silent http://127.0.0.1:4173/ >/dev/null
+
+        export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+
+        timeout --signal=TERM --kill-after=10s 2400s node scripts/record-foundation-walkthrough.mjs'
+    - uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: campaign-current-recording-${{ matrix.key }}
+        path: 'qa/current-recording-${{ matrix.key }}/
+
+          qa/preview.log'
+        if-no-files-found: error
+        retention-days: 14
+    needs: package
+    name: Continuous ordinary recording (${{ matrix.key }})
+    if: ${{ inputs.record_puzzle }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+        - key: 17-canonical
+          level: '17'
+          fps: '30'
+          alternative: ''
+        - key: 17-lower-branch
+          level: '17'
+          fps: '12'
+          alternative: lower-branch
+        - key: 1-motion
+          level: '1'
+          fps: '30'
+          alternative: ''
+  acceptance:
+    name: Complete exact-package technical CI evidence
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    needs:
+    - regressions
+    - package
+    - physics
+    - route-matrix
+    - webgl
+    - input
+    - sdk-regression
+    - atlas
+    - release-session
+    - viewport
+    - resource-cycle
+    - classic-browser
+    - open-browser
+    - research-browser
+    - foundation-integration
+    - foundation-late-integration
+    - finite-attacks
+    - recording
+    if: always()
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        ref: ${{ inputs.revision }}
+        persist-credentials: false
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 22
+        cache: npm
+    - run: npm ci
+    - uses: actions/download-artifact@v4
+      with:
+        name: campaign-browser
+        path: dist
+    - uses: actions/download-artifact@v4
+      with:
+        pattern: campaign-current-webgl-*
+        path: qa/current-webgl
+        merge-multiple: false
+    - uses: actions/download-artifact@v4
+      with:
+        name: yandex-moderation-archive
+        path: qa/accepted-platform
+    - name: Require every gate and exactly 51 distinct winning pixel-backed routes
+      env:
+        NEEDS_JSON: ${{ toJSON(needs) }}
+        RECORD_PUZZLE: ${{ inputs.record_puzzle }}
+      run: 'node --input-type=module <<''JS''
+
+        import fs from ''node:fs'';import path from ''node:path'';import assert from ''node:assert/strict'';
+
+        import {verifyReleasePackage,verifyReleaseMetadata,sha256} from ''./scripts/lib/release-manifest.mjs'';
+
+        import {FOUNDATION_INDICES} from ''./src/game/LabFoundationEdition.js'';
+
+        const needs=JSON.parse(process.env.NEEDS_JSON);
+
+        for(const [name,job] of Object.entries(needs))assert.equal(job.result,name===''recording''&&process.env.RECORD_PUZZLE===''false''?''skipped'':''success'',`Required ${name}: ${job.result}`);
+
+        const infoBytes=fs.readFileSync(''dist/build-info.json''),info=JSON.parse(infoBytes);assert.equal(info.commit,process.env.BUILD_COMMIT);verifyReleasePackage(info,''dist'');verifyReleaseMetadata(info,{directory:''dist'',commit:process.env.BUILD_COMMIT});
+
+        const platformManifestBytes=fs.readFileSync(''qa/accepted-platform/artifacts/yandex-release-manifest.json''),platform=JSON.parse(platformManifestBytes),zip=fs.readFileSync(''qa/accepted-platform/artifacts/brainrot-portal-yandex.zip'');
+
+        assert.equal(platform.commit,info.commit);assert.equal(platform.sourceInputsSha256,info.sourceInputsSha256);assert.deepEqual(platform.rooms,info.rooms);assert.equal(platform.platformArchive.bytes,zip.length);assert.equal(platform.platformArchive.sha256,sha256(zip));
+
+        const findReports=directory=>fs.readdirSync(directory,{withFileTypes:true}).flatMap(entry=>{const file=path.join(directory,entry.name);return entry.isDirectory()?findReports(file):entry.name===''report.json''?[file]:[];});
+
+        const reports=findReports(''qa/current-webgl'').map(file=>JSON.parse(fs.readFileSync(file)));assert.equal(reports.length,7);
+
+        const rows=reports.flatMap(report=>{assert.equal(report.pass,true);assert.equal(report.capturePass,true);return report.rows;});
+
+        assert.deepEqual(rows.map(row=>row.level).sort((a,b)=>a-b),FOUNDATION_INDICES.map(index=>index+1));
+
+        for(const row of rows){assert.equal(row.pass,true);assert.equal(row.route.pass,true);assert.equal(row.route.state,''won'');assert.equal(row.capturePass,true);assert.equal(row.route.sameCompanion,true);}
+
+        const tower=rows.find(row=>row.level===41);assert.equal(tower.route.milestones.length,24);assert.equal(tower.routeProgress.length,24);
+
+        assert.deepEqual(tower.routeProgress.map(({wallSeconds,observedState,...mark})=>mark),tower.route.milestones);
+
+        for(const mark of tower.routeProgress)assert.deepEqual(mark.observedState,{state:mark.state,player:mark.player,cargo:mark.cargo,solvedIds:mark.solved});
+
+        const evidence={buildInfoSha256:sha256(infoBytes),sourceInputsSha256:info.sourceInputsSha256,sourceInputFiles:info.sourceInputFiles,roomDefinitionsSha256:sha256(JSON.stringify(info.rooms)),platformManifestSha256:sha256(platformManifestBytes),platformArchive:platform.platformArchive,pass:true,scope:''Exact-package automated technical acceptance; human/device/live-platform claims remain separate'',commit:info.commit,version:info.version,packageFilesSha256:info.packageFilesSha256,levels:rows.length,checks:needs,recordingRequested:process.env.RECORD_PUZZLE===''true''};
+
+        fs.mkdirSync(''qa/acceptance'',{recursive:true});fs.writeFileSync(''qa/acceptance/technical-ci.json'',JSON.stringify(evidence,null,2)+''\n'');
+
+        JS'
+    - uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: campaign-technical-acceptance
+        path: qa/acceptance/technical-ci.json
+        if-no-files-found: error
+        retention-days: 14

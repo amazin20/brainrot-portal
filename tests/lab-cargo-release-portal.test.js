@@ -17,7 +17,7 @@ for(const depth of [.7,.4,.3,.2,.1])for(const clearDelayTicks of [0,1,5,30,null]
 }
 
 for(const depth of [.7,.4,.3,.2,.1]){
- test(`ordinary clear then release remains a front-side contact at throat ${depth}`,()=>{
+ test(`internal pair closing then ordinary release remains a front-side contact at throat ${depth}`,()=>{
   const r=runReleaseAttempt({depth,clearFirst:true});assert.ok(r.afterClear.cargo[2]>.41);assert.ok(r.minimumZ>.37);
  });
  test(`clear while still holding the original box recovers the complete grip at throat ${depth}`,()=>{
