@@ -2,8 +2,9 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import {spawn} from 'node:child_process';
-import puppeteer from 'puppeteer-core';
+import puppeteer, {TimeoutError} from 'puppeteer-core';
 import {captureBrowserFrame} from './qa-browser-capture.mjs';
+import {launchBrowserWithStartupRetry} from './lib/browser-startup.mjs';
 
 const out = path.resolve(process.env.OUT_DIR || 'qa/creative-browser');
 fs.mkdirSync(out, {recursive: true});
@@ -25,10 +26,19 @@ if(process.env.START_SERVER==='1') {
     await new Promise(resolve=>setTimeout(resolve,50));
   }
 }
-const launchBrowser = ()=>puppeteer.launch({
-  executablePath:process.env.CHROME_PATH || '/usr/bin/chromium', headless:true,
-  protocolTimeout:1800000,
-  args:['--no-sandbox','--disable-dev-shm-usage','--use-angle=swiftshader','--enable-unsafe-swiftshader'],
+const browserStartup = [];
+const launchBrowser = ()=>launchBrowserWithStartupRetry({
+  launch: options => puppeteer.launch(options), TimeoutError,
+  options: {
+    executablePath:process.env.CHROME_PATH || '/usr/bin/chromium', headless:true,
+    protocolTimeout:1800000,
+    args:['--no-sandbox','--disable-dev-shm-usage','--use-angle=swiftshader','--enable-unsafe-swiftshader'],
+  },
+  onAttempt: event => {
+    browserStartup.push(event);
+    fs.writeFileSync(path.join(out,'browser-startup.json'),JSON.stringify({sourceCommit:process.env.BUILD_COMMIT??null,attempts:browserStartup},null,2)+'\n');
+    if(event.retry)console.warn('Browser CDP endpoint startup timed out; waiting for process cleanup before one fresh launch.');
+  },
 });
 let browser=await launchBrowser();
 async function bounded(promise,ms,label){let timer;try{return await Promise.race([promise,new Promise((_,reject)=>{timer=setTimeout(()=>reject(Error(`${label} timed out after ${ms}ms`)),ms);})]);}finally{clearTimeout(timer);}}
