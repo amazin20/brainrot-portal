@@ -29,7 +29,7 @@ export function buildCreative17(g,index=16){
  // Founded mast lies behind the front-facing ceramic and behind both real
  // cable branches. There is no passenger portal on the receiving shore.
  k.block([-8,8.3,-4.85],[1,36.6,1],'shell');
- const mouth=small('support-anchor-delivery',[-19.4,-9.05,-15.65],[1,0,0],3.0,1.8);mouth.mesh.userData.portalSize={width:.8,height:.75};
+ const mouth=small('support-anchor-delivery',[-19.5,-9.05,-15.65],[1,0,0],3.0,1.8);mouth.mesh.userData.portalSize={width:.8,height:.75};
  const anchor=small('support-anchor-cable',[-18,-8.95,-18],[0,0,1],2.8,1.8);
  const retrieval=k.panel('support-anchor-floor',[-18,-9.98,-15.65],[0,1,0],3.2,2.0);
  retrieval.mesh.userData.portalSize={width:.8,height:.8};

@@ -26,3 +26,16 @@ test('31: air alone cannot move the guided mass or its mechanically linked cross
 test('32: two lit height sensors without real cargo opacity keep the differential diaphragm closed',async()=>{const g=await room(32);try{await runV8Journey(g,{scenario:d=>{runPostA(d,{route:'inspect-optics-first',stopBeforeCargoDelivery:true});assert.deepEqual(g.firstLevel.optics.raw,[true,true]);assert.deepEqual(g.firstLevel.optics.shadow,[false,false]);assert.equal(g.firstLevel.optics.valid,false);assert.ok(g.firstLevel.diaphragm.progress<.01);assert.equal(g.physics.portalTransports,0);}});}finally{close(g);}});
 test('33: an unprimed header cannot raise its passenger ram merely with time',async()=>{const g=await room(33);try{await runV8Journey(g,{scenario:d=>{const c=g.firstLevel.circuit;d.wait(30);assert.equal(c.primed,false);assert.equal(c.height,0);assert.equal(c.volume,c.total);assert.equal(g.state,'playing');}});}finally{close(g);}});
 for(const [n,z]of [[32,-8],[33,-8],[35,9]])for(const x of [-22,22])test(`${n}: sprint and jump cannot pass the closed ${x<0?'west':'east'} partition`,async()=>{const g=await room(n);try{await runV8Journey(g,{scenario:d=>{if(n===33){const reachable=x<0?-7:27;d.walk(reachable,26);d.walk(reachable,z+4);}else d.walk(n===32&&x<0?-12:x,z+4);g.input.keys.add('ShiftLeft');for(let i=0;i<150;i++){if(i%45===0)g.input.jumpQueued=true;d.worldMove(0,-1);d.frame();}d.stop();assert.ok(g.playerPosition.z>z+.4);assert.equal(g.state,'playing');assert.equal(g.physics.portalTransports,0);}});}finally{close(g);}});
+
+test('room35 replay: canonical then scout keeps the same original body in one game',async()=>{
+ const g=await room(35),cargo=g.cargo,body=g.physics.cargoBody.id;
+ try{for(const route of ['latches-before-freight','scout-before-second-latch']){
+  const before=g.physics.portalTransports;let scoutSeen=false;
+  const r=await runV8Journey(g,{journeyOptions:{route},onMilestone:m=>{
+   if(m.name.includes('far sight window')){scoutSeen=true;assert.equal(g.physics.portalTransports,before);assert.equal(g.heldCube,null);assert.ok(g.cargo.position.z<-16);}
+  }});
+  assert.equal(r.pass,true);assert.equal(g.state,'won');assert.equal(r.resets+r.respawns,0);
+  assert.equal(g.cargo,cargo);assert.equal(g.physics.cargoBody.id,body);assert.equal(g.physics.portalTransports-before,1);assert.equal(g.teleportCount,0);
+  if(route==='scout-before-second-latch')assert.ok(scoutSeen);
+ }}finally{close(g);}
+});

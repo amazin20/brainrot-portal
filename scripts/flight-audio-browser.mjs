@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import assert from 'node:assert/strict';
+import { playFromReachableMenu } from './lib/release-session-ui.mjs';
 
 /** Isolated production WebAudio check, not a recorded gameplay route.
  * Loads the ordinary room and obtains its production audio constructor. Only
@@ -26,7 +27,7 @@ export async function runFlightAudioBrowser({browser,baseUrl='http://127.0.0.1:4
         const audio=window.__BRAINROT_FLIGHT_AUDIO_PROBE__;audio.unlock();audio.block('menu',false);
       },{once:true});
     });
-    await page.click('#play-button');
+    report.nativePlay = await playFromReachableMenu(page);
     await page.waitForFunction(()=>window.__BRAINROT_FLIGHT_AUDIO_PROBE__?.context?.state==='running');
     const evidence=await page.evaluate(async capture=>{
       const audio=window.__BRAINROT_FLIGHT_AUDIO_PROBE__,context=audio.context;

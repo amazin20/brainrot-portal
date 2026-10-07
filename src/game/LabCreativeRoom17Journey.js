@@ -25,12 +25,37 @@ export function runCreative17(d,{route='upper-branch',alternative=null,swapColou
  }
  d.walk(-10,0);d.walk(-7,0);
  if(route==='lower-branch'){
-  g.input.keys.add('ShiftLeft');let landed=false;for(let f=0;f<360&&!landed;f++){if(g.playerPosition.x>4.5&&g.playerPosition.x<9&&f%3===0)g.input.jumpQueued=true;d.worldMove(1,0);d.frame();landed=g.playerGrounded&&g.playerPosition.x>12.4&&Math.abs(g.playerPosition.y+1.2)<.3;}d.stop();check(landed,'Independent lower permanent landing missed at '+g.playerPosition.toArray()+' angle '+l.beam.angle);d.mark('observer leaves the live ramp onto the permanent lower gallery');d.walk(16,20);d.walk(24,20);d.walk(24,4);d.walk(24,0);
+  // Walk slowly enough to keep ordinary contact with the live descending
+  // floor. Jump after gaining clearance below the permanent upper chassis.
+  let landed=false,jumped=false,takeoff=false;
+  for(let f=0;f<720&&!landed;f++){
+   if(!jumped&&g.coyoteTime>.065&&g.playerPosition.x>6.5
+     &&g.playerPosition.y<.60&&g.playerPosition.y>-1.5){
+    g.input.keys.add('ShiftLeft');g.input.jumpQueued=true;jumped=true;
+   }
+   const lane=Math.max(-.25,Math.min(.25,-g.playerPosition.z*.8-g.playerVelocity.z*.2));
+   const pace=jumped?1:.30;
+   d.worldMove(pace*Math.sqrt(1-lane*lane),pace*lane);d.frame();
+   takeoff ||= !g.playerGrounded&&g.playerVelocity.y>5;
+   landed=g.playerGrounded&&g.playerPosition.x>12.4&&Math.abs(g.playerPosition.y+1.2)<.3;
+  }
+  d.stop();check(takeoff,'Actual ordinary late jump was never taken');
+  check(landed,'Independent lower permanent landing missed at '+g.playerPosition.toArray()+' angle '+l.beam.angle);
+  d.mark('observer leaves the live ramp onto the permanent lower gallery');
+  d.walk(16,20);d.walk(24,20);d.walk(24,4);d.walk(24,0);
  }else{d.walk(11,0);d.until(()=>g.playerGrounded&&g.playerPosition.x>10.1&&Math.abs(g.playerPosition.y-6)<.3,4,'Permanent upper landing missed');d.mark('observer leaves the live bridge onto permanent upper ground');d.walk(23,0);}
  if(stopAfter==='permanent')return;
  // Both colours are re-fired through actual controls. No stage bit preserves
  // the old support; its spring plungers physically return the free endpoint.
  d.walk(20,0);aimLateSurface(d,c1,l.cargoReceiver);d.until(()=>l.beam.angle<-.62,12,'Removing current support failed to return the original endpoint onto its clear floor');d.walk(16,16);d.walk(12.6,-3);d.until(()=>g.cargo.velocity.length()<.1,8,'The same returned endpoint did not settle on its actual support');aimLateSurface(d,c0,l.retrieval,g.cargo.position.clone().setY(l.retrieval.getFrame().center.y));
+ // Opening the real floor can move the rigid body against the aperture rim.
+ // Re-fire through the same controls beneath its current position; no body
+ // pose, aperture size or supporting collider is changed by this recovery.
+ for(let retry=0;retry<2&&g.physics.portalTransports<2;retry++){
+  d.wait(1);
+  if(g.physics.portalTransports<2)
+   aimLateSurface(d,c0,l.retrieval,g.cargo.position.clone().setY(l.retrieval.getFrame().center.y));
+ }
  d.until(()=>g.physics.portalTransports>1&&g.cargo.position.x>20&&g.cargo.position.y>6,8,'Original endpoint was not reclaimed through its actual floor');
  d.until(()=>l.beam.angle<-.62,12,'Borrowing the same pair failed to remove actual architectural support');d.mark('the unsupported floor falls behind the permanent landing');
  d.walk(16,20);d.walk(24,20);d.walk(24,4);d.walk(g.cargo.position.x-1.25,g.cargo.position.z);if(g.state==='playing')d.pickup();d.walk(24,0);d.until(()=>g.state==='won',4,'Both original travellers did not reunite at the receiving gallery');d.mark('same original endpoint and observer leave together');

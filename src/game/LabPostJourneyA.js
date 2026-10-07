@@ -110,6 +110,7 @@ export const runPost34=runCreative34;
 export function runPost35(d,{route='latches-before-freight',stopAfter=null}={}){
  preciseAim(d);check(['latches-before-freight','scout-before-second-latch'].includes(route),'Unknown 35 route');
  const {game:g,level:l,walk,until,mark}=d,p=l.panels;
+ const transportsAtStart=g.physics.portalTransports;
  walk(0,21);
  shot(d,0,p['air-origin']);shot(d,1,p['first-receiver']);
  until(()=>l.powered()[0]&&l.first.progress>.9,5,'Flow did not open first physical sluice');
@@ -123,7 +124,7 @@ export function runPost35(d,{route='latches-before-freight',stopAfter=null}={}){
  const leaveBay=()=>{walk(8,-24.4);walk(8,-12);walk(0,-12);walk(0,-5);};
  if(route==='scout-before-second-latch'){
   visitBay();d.look(p['companion-address'].getFrame().center);
-  check(!g.heldCube&&g.cargo.position.z<-16&&g.physics.portalTransports===0,'The scout must leave the original cargo inside its closed bay');
+  check(!g.heldCube&&g.cargo.position.z<-16&&g.physics.portalTransports===transportsAtStart,'The scout must leave the original cargo inside its closed bay');
   mark('The far sight window is inspected while the second actual airflow remains live');leaveBay();
  }
  use(d,6,-5.1,'Second door latch');check(l.isLatched(),'Second mechanical latch was not engaged');

@@ -4,6 +4,7 @@ import * as THREE from 'three';
 import {createHeadlessGame} from '../scripts/lab-headless.mjs';
 import {runRoom17UnsupportedAttempt} from '../scripts/qa-room17-unsupported.mjs';
 import {runV8Journey} from '../src/game/LabV8Journey.js';
+import {InputController} from '../src/game/InputController.js';
 import {support17Service,support17Departure} from '../src/game/LabCreativeRoom17Journey.js';
 import {installPreciseLateAim,aimLateSurface} from '../src/game/LabLateCampaignAim.js';
 import {uprightCapsuleFitsPortal,orientedBoxFitsPortal} from '../src/game/LabPortals.js';
@@ -44,4 +45,61 @@ test('17 new-room revision invalidates only its actual old completion and hints,
 
 test('17 formerly complete unsupported jump bypass cannot reach permanent receiving ground or joint goal',async()=>{
  await g.selectLevel(16,false);const cargo=g.cargo,body=g.physics.cargoBody;const report=await runV8Journey(g,{scenario:d=>{const row=runRoom17UnsupportedAttempt(d);assert.equal(row.unsupportedLanding,false);assert.equal(row.outcome,'blocked-before-permanent-landing');assert.ok(row.realTakeoffs>0,'Negative probe must actually jump');assert.ok(g.physics.portalTransports>0,'Original cargo really reaches the early receiver');assert.equal(d.level.beam.tension,0);assert.equal(d.level.beam.angle,-.67);assert.equal(g.state,'playing');}});assert.equal(report.resets+report.respawns,0);assert.equal(report.teleports,0);assert.equal(g.cargo,cargo);assert.equal(g.physics.cargoBody,body);
+});
+
+// CPU route regression: production InputController jump consumption and camera
+// aspect, with inert listener targets. The ordinary route driver supplies its
+// movement vector; this is not trusted browser input or WebGL evidence.
+test('17 both support routes keep the original cargo through production jump consumption at both recorded camera aspects',async()=>{
+ const oldWindow=globalThis.window,oldDocument=globalThis.document;
+ const target=()=>({addEventListener(){},removeEventListener(){},style:{},setAttribute(){}});
+ try{
+  for(const aspect of [854/480,16/9])for(const route of ['upper-branch','lower-branch']){
+   const game=await createHeadlessGame();game.chamberEdition='foundation';
+   try{
+    await game.selectLevel(16,false);
+    game.camera.aspect=aspect;game.camera.updateProjectionMatrix();
+    globalThis.window=target();Object.assign(globalThis.document,target(),{hidden:false});
+    const input=game.input=new InputController({joystick:target(),joystickKnob:target(),jumpButton:target(),sprintButton:target(),isActive:()=>game.state==='playing'&&!game.externalBlocked});
+    const cargo=game.cargo,body=game.physics.cargoBody,requests=[];
+    let actualJumpTakeoff=false,deliveryCapsuleBlocked=false,reunionCapsuleBlocked=false;
+    const consumeJump=input.consumeJump;
+    input.consumeJump=function(){
+     const requested=this.jumpQueued,accepted=consumeJump.call(this);
+     if(requested)requests.push({accepted,active:this.isActive(),disposed:this.disposed});
+     return accepted;
+    };
+    const updatePlayer=game.updatePlayer;
+    game.updatePlayer=function(dt){
+     const result=updatePlayer.call(this,dt);
+     if(requests.some(r=>r.accepted)&&!this.playerGrounded&&this.playerVelocity.y>5)actualJumpTakeoff=true;
+     return result;
+    };
+    const report=await runV8Journey(game,{journeyOptions:{route},onMilestone:()=>{
+     if(!game.portals.ready)return;
+     for(const portal of game.portals.portals){
+      if(portal.surfaceId===game.firstLevel.mouth.mesh.uuid){
+       assert.equal(uprightCapsuleFitsPortal(portal,2.4,.43),false,'The actual ready delivery outlet must remain cargo-only');deliveryCapsuleBlocked=true;
+      }
+      if(portal.surfaceId===game.firstLevel.cargoReceiver.mesh.uuid){
+       assert.equal(uprightCapsuleFitsPortal(portal,2.4,.43),false,'The actual ready reunion outlet must remain cargo-only');reunionCapsuleBlocked=true;
+      }
+     }
+    }});
+    assert.equal(report.pass,true);assert.equal(game.state,'won');
+    assert.equal(report.resets,0);assert.equal(report.respawns,0);assert.equal(report.teleports,0);
+    assert.equal(game.physics.portalTransports,2);assert.equal(game.cargo,cargo);assert.equal(game.physics.cargoBody,body);
+    assert.equal(requests.length,route==='lower-branch'?1:0,'The lower route must consume exactly one actual jump request');
+    assert.ok(requests.every(r=>r.accepted&&r.active&&!r.disposed),'Every requested jump must pass the production input lifecycle gate');
+    if(route==='lower-branch')assert.ok(actualJumpTakeoff,'The accepted lower-route jump must actually leave the support');
+    assert.ok(deliveryCapsuleBlocked&&reunionCapsuleBlocked,'Both actual cargo-only pairs must be observed');
+    console.log('ROOM17_PRODUCTION_CONTROLLER',JSON.stringify({route,aspect,frames:report.frames,acceptedJumps:requests.filter(r=>r.accepted).length,actualJumpTakeoff,playerPortals:report.teleports,cargoPortals:game.physics.portalTransports,resets:report.resets,respawns:report.respawns,deliveryCapsuleBlocked,reunionCapsuleBlocked}));
+   }finally{
+    game.input.dispose?.();game.firstLevel.dispose?.();game.physics.dispose();game.portals.dispose();
+   }
+  }
+ }finally{
+  if(oldWindow===undefined)delete globalThis.window;else globalThis.window=oldWindow;
+  if(oldDocument===undefined)delete globalThis.document;else globalThis.document=oldDocument;
+ }
 });

@@ -561,7 +561,9 @@ jobs:
     name: Production resize, quality and touch controls
   resource-cycle:
     runs-on: ubuntu-latest
-    timeout-minutes: 35
+    # The 110 real room starts and context restore completed just before the
+    # previous 35-minute job limit; keep time for browser cleanup and evidence.
+    timeout-minutes: 45
     steps:
     - uses: actions/checkout@v4
       with:
@@ -606,7 +608,9 @@ jobs:
     name: Frozen production resource lifecycle and context restore
   classic-browser:
     runs-on: ubuntu-latest
-    timeout-minutes: 35
+    # Retained 12–16 clips need more than 35 minutes under software WebGL;
+    # preserve every route and native capture window instead of truncating them.
+    timeout-minutes: 60
     steps:
     - uses: actions/checkout@v4
       with:

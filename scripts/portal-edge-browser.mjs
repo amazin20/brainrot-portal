@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import assert from 'node:assert/strict';
+import { playFromReachableMenu } from './lib/release-session-ui.mjs';
 import { createHash } from 'node:crypto';
 
 /** CI WebGL evidence for the user's floor/wall portal video. This harness
@@ -36,8 +37,20 @@ export async function runPortalEdgeBrowser({ browser, baseUrl = 'http://127.0.0.
       await page.goto(url.href, { waitUntil: 'networkidle2' });
       await page.waitForFunction(() => window.__NESI_DEMO_GAME__?.state === 'ready'
         && typeof window.__NESI_RUN_PORTAL_EDGE_ROUTE__ === 'function');
-      await page.click('#play-button');
+      const nativePlay = await playFromReachableMenu(page);
       await page.waitForFunction(() => window.__NESI_DEMO_GAME__?.state === 'playing');
+      const initialized = await page.evaluate(() => {
+        const game = window.__NESI_DEMO_GAME__;
+        return { chamberEdition: game.chamberEdition, levelIndex: game.levelIndex,
+          runtimeState: document.documentElement.dataset.runtimeState,
+          gameReady: document.documentElement.dataset.gameReady,
+          panels: ['work-left', 'loading-floor'].map(id => ({ id, exists: !!game.firstLevel.panels[id] })) };
+      });
+      assert.equal(initialized.levelIndex, 8, 'The retained portal-edge geometry belongs to room 9');
+      assert.equal(initialized.runtimeState, 'playing');
+      assert.equal(initialized.gameReady, 'true');
+      assert.ok(initialized.panels.every(panel => panel.exists), 'The actual room must retain both tested portal surfaces');
+      (report.nativeInitializations ??= []).push({ name: spec.name, nativePlay, initialized });
       const captured = await page.evaluate(async ({ options, capture }) => {
         const game = window.__NESI_DEMO_GAME__, images = [], timeline = [];
         window.__NESI_CAPTURE_PORTAL_EDGE_FRAME__ = sample => {
@@ -54,7 +67,7 @@ export async function runPortalEdgeBrowser({ browser, baseUrl = 'http://127.0.0.
         } finally { delete window.__NESI_CAPTURE_PORTAL_EDGE_FRAME__; }
       }, { options: spec.options, capture });
       const { images, finalImage, ...data } = captured;
-      const item = { name: spec.name, options: spec.options, ...data,
+      const item = { name: spec.name, options: spec.options, nativePlay, initialized, ...data,
         sampledSimulationFps: 15, sampledFrames: captured.timeline.length, frames: [], finalImage: null };
       if (capture) {
         fs.mkdirSync(path.join(out, spec.name), { recursive: true });
