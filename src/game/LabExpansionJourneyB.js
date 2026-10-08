@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import {installRoom21Aim} from './LabRoom21Journey.js';
+import {watchRoom50Travel} from './LabRoom50CameraJourney.js';
 const V=(...p)=>new THREE.Vector3(...p),check=(v,m)=>{if(!v)throw Error(m);};
 function collect(d){for(let n=0;n<12;n++){const p=d.game.cargo.position;d.walk(p.x+1.25,p.z);if(d.game.playerPosition.distanceTo(p)<2.2){d.pickup();return;}}throw Error('Original companion is not reachable');}
 function release(d){d.stop();d.wait(.2);check(d.game.interact()&&!d.game.heldCube,'Cannot release original cargo');d.wait(.65);}
@@ -32,6 +33,7 @@ function topple(d,o){const {game:g,level:l}=d;
  d.walk(-23,15);d.walk(-23,-17);d.walk(-15,-17);d.walk(-15,7);d.aim(0,l.well.surface.getFrame().center);
  d.walk(-15,-17);d.walk(-23,-17);d.walk(-23,11);d.walk(-8,17);d.until(()=>g.playerGrounded&&g.playerPosition.y<.5,5,'Initial south dock landing failed');
  d.walk(8,17);d.walk(8,1);d.walk(0,1);d.aim(1,l.outlet.getFrame().center);
+ return watchRoom50Travel(d,()=>{
  d.walk(8,1);d.walk(8,17);d.walk(-15,17);d.until(()=>g.playerGrounded&&g.playerPosition.y< -3.8,5,'West service landing failed');d.walk(-15,-17);d.walk(-23,-17);d.walk(-23,11);d.walk(-20,17);
  if(o.stopBeforeDelivery)return;
  collect(d);d.walk(-16,14);d.walk(-16,11.0);d.walk(-16,10.50);fallCargo(d,{x:-16,z:10.50});
@@ -40,6 +42,7 @@ function topple(d,o){const {game:g,level:l}=d;
  if(g.cargo.position.y< -2){d.walk(g.cargo.position.x+1.3,g.cargo.position.z);collect(d);}
  d.walk(0,15.3);d.walk(-8,15.3);d.walk(-8,-1);d.walk(0,-1);d.walk(0,-14);
  if(!g.heldCube)collect(d);d.walk(0,-24);
+ });
 }
 export function runExpansionBJourney(d,options={}){
  if(d.level.echoHorizon)return import('./LabEchoHorizonJourney.js').then(m=>m.runEchoHorizon(d,options));
