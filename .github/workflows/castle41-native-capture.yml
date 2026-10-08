@@ -1,0 +1,78 @@
+name: Frozen L castle 41 native archive stills
+'on':
+  push:
+    branches: [research/l-castle41-native]
+    paths:
+      - .github/workflows/castle41-native-capture.yml
+      - docs/castle41-frozen-l-native-capture.md
+      - scripts/fetch-l-castle41-package.py
+      - scripts/lib/castle41-native-plan.mjs
+      - scripts/qa-castle41-native.mjs
+      - scripts/verify-l-castle41-package.mjs
+      - tests/castle41-native-plan.test.js
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: castle41-frozen-l-native-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  archive:
+    if: github.ref == 'refs/heads/research/l-castle41-native'
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
+          ref: 8d2c01eacd86fe9235a35e7ec5f624ba62c3b29e
+          path: frozen-source
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install checker dependencies and run bounded source checks
+        run: |
+          npm ci
+          npm install --no-save --package-lock=false puppeteer-core@24.16.0
+          ln -s "$GITHUB_WORKSPACE/node_modules" frozen-source/node_modules
+          node --check scripts/qa-castle41-native.mjs
+          node --check scripts/verify-l-castle41-package.mjs
+          python3 -m py_compile scripts/fetch-l-castle41-package.py
+          node --test tests/castle41-native-plan.test.js
+      - name: Retrieve the exact original outer ZIP; no rebuild or restamp
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p qa/castle41-native
+          node --input-type=module -e "import fs from 'node:fs'; import {PIN} from './scripts/lib/castle41-native-plan.mjs'; fs.writeFileSync('qa/l-pin.json',JSON.stringify(PIN));"
+          python3 scripts/fetch-l-castle41-package.py --pin qa/l-pin.json --out qa/frozen-l
+          node scripts/verify-l-castle41-package.mjs frozen-source qa/frozen-l/package qa/frozen-l/campaign-browser.zip qa/frozen-l/download-proof.json qa/castle41-native/frozen-package-proof.json
+      - name: Actual current observer, canonical route and ordinary source-off detours
+        env:
+          FROZEN_SOURCE: frozen-source
+          FROZEN_PACKAGE: qa/frozen-l/package
+          FROZEN_ARCHIVE: qa/frozen-l/campaign-browser.zip
+          DOWNLOAD_PROOF: qa/frozen-l/download-proof.json
+          OUT_DIR: qa/castle41-native
+          PAGE_URL: http://127.0.0.1:4173/
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 --directory qa/frozen-l/package >qa/castle41-native/preview.log 2>&1 &
+          for i in {1..30}; do curl -fsS http://127.0.0.1:4173/build-info.json >/dev/null && break; sleep 1; done
+          curl -fsS http://127.0.0.1:4173/build-info.json >/dev/null
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+          node scripts/qa-castle41-native.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: frozen-l-castle41-native
+          path: |
+            qa/castle41-native/
+            qa/frozen-l/download-proof.json
+          if-no-files-found: error
+          retention-days: 14
