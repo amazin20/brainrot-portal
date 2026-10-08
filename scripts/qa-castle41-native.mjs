@@ -23,6 +23,7 @@ const checkerIdentity={commit:git('rev-parse','HEAD'),tree:git('rev-parse','HEAD
  files:Object.fromEntries(checkerFiles.map(f=>[f,hash(fs.readFileSync(path.join(researchRoot,f)))]))};
 const {captureBrowserFrame}=await import(pathToFileURL(path.join(sourceRoot,'scripts/qa-browser-capture.mjs')).href);
 const report={schema:1,status:'running',identity,checkerIdentity,limits:LIMITS,captures:[],observations:[],route:null,errors:[],
+ batchProfile:{calls:0,visualFrames:0,wallMs:0,largestBatch:0,renderPolicy:'No detour batch render; unchanged frozen helper renders the current observer once immediately before each native readback. Wall time includes CDP and simulation; it is not GPU or hardware FPS.'},
  method:'One original attempt. Existing frozen production canonical driver is parked only at awaited between-stage flushes. Observation detours use trusted keyboard and locked mouse input through unchanged controls.',
  limitations:['Software WebGL images are not hardware FPS or a human playtest.','18 finite stills are not a continuous video. Projection/framing metadata does not prove pixel visibility or absence of occlusion.',
   'Canonical production driver temporarily adapts getMove and its own camera intent as in L; only observation views use trusted native mouse. Detour ticks are counted separately and included in independent total counts.',
@@ -65,19 +66,19 @@ async function read(details=false){return page.evaluate(details=>{
   canvas:{width:g.renderer.domElement.width,height:g.renderer.domElement.height},
   water:{volumes:[...water.volumes],flowing:water.flowing,height:water.height},light:{turned:light.turned,beamPowered:light.beamPowered,lit:light.lit},
   memory:l.archiveMemory.diagnostics(),doorGap:Math.max(0,high-low),parts,leaves,solved:l.getTowerMetrics().solvedIds,
-  events:l.getTowerMetrics().events.map(e=>({id:e.id,seconds:e.seconds})),renderDiagnostics:{calls:g.renderer.info.render.calls,triangles:g.renderer.info.render.triangles}};
+  events:l.getTowerMetrics().events.map(e=>({id:e.id,seconds:e.seconds})),renderDiagnostics:{calls:g.renderer.info.render.calls,triangles:g.renderer.info.render.triangles,submissions:q.renderSubmissions}};
 },details);}
 function stableSnapshot(s){const {renderDiagnostics,...rest}=s;return rest;}
-async function step(n=1){bounded();await page.evaluate(n=>{
+async function step(n=1){bounded();const started=performance.now();await page.evaluate(n=>{
  const g=window.__NESI_DEMO_GAME__,q=window.__ARCHIVE_REVIEW__;
  if(!q.detour||g.input.getMove!==q.originalMove)throw Error('Detour must use original production input');
  if(document.pointerLockElement!==g.renderer.domElement)throw Error('Lost native pointer lock');
  for(let i=0;i<n;i++){if(g.state!=='playing'||g.externalBlocked)throw Error('Ordinary attempt inactive');
   for(let s=0;s<2;s++)g.updatePlaying(1/120);g.updateVisuals(1/60,1);}
- // Every physics/visual tick above is retained. This is a still workflow,
- // not a recording: render the current observer after this finite batch.
- g.render();
-},n);}
+ // Every physics/visual/camera tick is retained. The unchanged frozen helper
+ // renders this current observer once immediately before the still readback.
+},n);report.batchProfile.calls++;report.batchProfile.visualFrames+=n;
+ report.batchProfile.wallMs+=performance.now()-started;report.batchProfile.largestBatch=Math.max(report.batchProfile.largestBatch,n);}
 async function keys(next){const wanted=new Set(next);
  for(const key of pressed)if(!wanted.has(key))await page.keyboard.up(key);
  for(const key of wanted)if(!pressed.has(key))await page.keyboard.down(key);
@@ -121,13 +122,15 @@ async function capture(id,phase,target=null){bounded();assert.ok(++captures<=LIM
  const before=await read(true);if(phase!=='victory')assertMemoryPhase(phase,before);
  const file=path.join(out,id+'.jpg'),pixels=await captureBrowserFrame(page,file,{canvasOnly:true});const after=await read(true);
  const unchanged=JSON.stringify(stableSnapshot(before))===JSON.stringify(stableSnapshot(after));
+ const renderSubmissions=after.renderDiagnostics.submissions-before.renderDiagnostics.submissions;
  const projections=await page.evaluate(()=>{
   const g=window.__NESI_DEMO_GAME__,m=g.firstLevel.archiveMemory,points=[...m.assemblies.flatMap(a=>[a.bolt,a.pawl,a.shoe]),m.teeth,...m.sources];
   return points.map(x=>({name:x.name,centreNdc:x.getWorldPosition(g.playerPosition.clone()).project(g.camera).toArray(),visibleFlag:x.visible}));});
- const row={id,phase,target,aimAttempts,before,after,unchanged,projections,capture:pixels,imageSha256:pixels.ok?hash(fs.readFileSync(file)):null,
+ const row={id,phase,target,aimAttempts,before,after,unchanged,renderSubmissions,projections,capture:pixels,imageSha256:pixels.ok?hash(fs.readFileSync(file)):null,
   pixelVisibility:'Requires actual image review; visible flags/projected centres do not establish occlusion or readable gear detail.'};
  report.captures.push(row);fs.writeFileSync(path.join(out,id+'.json'),JSON.stringify(row,null,2)+'\n');save();
  assert.equal(pixels.ok,true,'Native capture failed '+id);assert.equal(unchanged,true,'Readback advanced physical/current observer state '+id);
+ assert.equal(renderSubmissions,1,'Readback must render the current observer exactly once '+id);
  console.log('NATIVE STILL',id,row.imageSha256);
 }
 async function archiveViews(phase){await travel([-10,18,30]);await capture(phase+'-archive-wide',phase,[-20.6,23.9,30]);
@@ -186,7 +189,7 @@ try{
   const leaves=g.colliders.filter(c=>c.kinematic&&Math.abs(c.box.min.x+21.23)<.01&&Math.abs(c.box.max.x+20.77)<.01&&Math.abs(c.box.min.y-18)<.01&&Math.abs(c.box.max.y-22.7)<.01&&Math.abs(c.box.max.z-c.box.min.z-3.2)<.01);
   if(leaves.length!==2)throw Error('Expected original paired archive leaves');
   const q={limits,phase:'zero',detour:true,cargo:g.cargo,body:g.physics.cargoBody,physics:g.physics,player:g.playerPosition,leaves,
-   initialElapsed:g.elapsed,originalMove:g.input.getMove,originalUpdate:g.updatePlaying,originalVisual:g.updateVisuals,originalReset:g.resetRun,originalRespawn:g.respawn,originalCargoReset:g.physics.resetCargo,
+   initialElapsed:g.elapsed,originalMove:g.input.getMove,originalUpdate:g.updatePlaying,originalVisual:g.updateVisuals,originalRender:g.render,renderSubmissions:0,originalReset:g.resetRun,originalRespawn:g.respawn,originalCargoReset:g.physics.resetCargo,
    pending:[],milestones:[],inputEvents:[],counters:{physicsSteps:0,visualFrames:0,detourPhysicsSteps:0,detourVisualFrames:0,routeVisualFrames:0,resets:0,respawns:0,cargoResets:0}};
   window.__ARCHIVE_REVIEW__=q;
   q.assert=()=>{if(g.cargo!==q.cargo||g.physics.cargoBody!==q.body||g.physics!==q.physics||g.playerPosition!==q.player)throw Error('Original actor/physics identity changed');
@@ -194,6 +197,7 @@ try{
    if(q.counters.visualFrames>limits.totalVisualFrames||q.counters.detourVisualFrames>limits.detourVisualFrames)throw Error('Finite native frame limit reached');};
   g.updatePlaying=function(dt,...a){if(dt!==1/120)throw Error('Unexpected physics tick');q.counters.physicsSteps++;if(q.detour)q.counters.detourPhysicsSteps++;const r=q.originalUpdate.call(this,dt,...a);q.assert();return r;};
   g.updateVisuals=function(dt,...a){if(dt!==1/60)throw Error('Unexpected visual tick');q.counters.visualFrames++;if(q.detour)q.counters.detourVisualFrames++;const r=q.originalVisual.call(this,dt,...a);q.assert();return r;};
+  g.render=function(...a){q.renderSubmissions++;return q.originalRender.apply(this,a);};
   for(const [object,key,original,counter]of [[g,'resetRun',q.originalReset,'resets'],[g,'respawn',q.originalRespawn,'respawns'],[g.physics,'resetCargo',q.originalCargoReset,'cargoResets']])
    object[key]=function(...a){q.counters[counter]++;return original.apply(this,a);};
   for(const type of ['keydown','keyup','mousemove'])document.addEventListener(type,event=>{
@@ -228,6 +232,7 @@ try{
  report.final=await read();report.observer=await page.evaluate(()=>{const q=window.__ARCHIVE_REVIEW__;return {milestones:q.milestones,inputEvents:q.inputEvents,initialElapsed:q.initialElapsed,counters:q.counters,pending:q.pending};});
  assert.deepEqual(report.observer.pending,[]);assert.equal(report.observer.counters.routeVisualFrames,report.route.frames);
  assert.equal(report.observer.counters.visualFrames,report.observer.counters.routeVisualFrames+report.observer.counters.detourVisualFrames);
+ assert.equal(report.batchProfile.visualFrames,report.observer.counters.detourVisualFrames,'Missing/extra detour batch ticks');
  assert.ok(Math.abs((report.final.elapsed-report.observer.initialElapsed)/1000-report.observer.counters.physicsSteps/120)<1e-5,'Missing/extra simulation ticks');
  assert.ok(report.observer.inputEvents.some(e=>e.type==='mousemove'&&e.trusted&&e.locked&&(e.movementX||e.movementY)),'No trusted ordinary camera input');
  assert.ok(report.observer.inputEvents.filter(e=>e.type==='keydown').every(e=>e.trusted),'Untrusted observation keys');

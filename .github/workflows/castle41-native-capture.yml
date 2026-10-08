@@ -40,6 +40,8 @@ jobs:
         run: |
           npm ci
           npm install --no-save --package-lock=false puppeteer-core@24.16.0
+          python -m pip install --disable-pip-version-check Pillow==12.3.0
+          python -c "import PIL; from PIL import Image, ImageStat; assert PIL.__version__ == '12.3.0', PIL.__version__; print('Pixel validator Pillow', PIL.__version__)"
           ln -s "$GITHUB_WORKSPACE/node_modules" frozen-source/node_modules
           node --check scripts/qa-castle41-native.mjs
           node --check scripts/verify-l-castle41-package.mjs
