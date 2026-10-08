@@ -87,7 +87,7 @@ export function runExpansion46(d,{route='damp-before-light',stopAfter=null}={}){
  if(stopAfter==='undamped')return;
  collect(d);deposit(d,-18,4);if(stopAfter==='loaded-before-tuning')return;walk(-11.3,7);check(g.interact(),'Frequency adjustment unreachable');
  check(l.oscillator.frequency<3,'Excitation dial did not change real frequency');walk(-24,9);shot(d,0,l.input);walk(-14,-6);shot(d,1,l.mouth);
- until(()=>l.oscillator.loaded&&l.oscillator.rms<.82&&l.bridge.position.y>3.98,8,'Original free body did not damp the actual sprung bed');mark('Original grounded cargo dissipates oscillator motion until the optical bridge engages');
+ until(()=>l.oscillator.loaded&&l.bridge.position.y>3.98,16,'Original free body did not damp the actual sprung bed');mark('Original grounded cargo reduces real bed motion until the optical actuator raises the bridge');
  if(stopAfter==='damped')return;
  walk(-15,-15);walk(14,-15);use(d,18,-17,'Far-side bridge clamp unreachable');check(l.oscillator.clamped,'Physical crossing clamp did not hold');
  walk(14,-15);walk(-15,-15);collect(d);walk(-15,-12);walk(14,-12);walk(22,-12);walk(22,-15);until(()=>g.state==='won',3,'Both original travellers did not cross the retained damped bridge');

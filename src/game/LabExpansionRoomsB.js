@@ -143,16 +143,20 @@ export function buildTopplingBridge(g,index=49,spec=EXPANSION_B_SPECS[3]){
  for(let n=0;n<28;n++)pieceBoxes.push(g.collisionProxy(new THREE.Box3().setFromCenterAndSize(V(0,(n+.5)*.5,-5),V(8,.5,.5)),{kinematic:true}));
  for(const x of [-4.5,4.5])k.geometry(new THREE.CylinderGeometry(.45,.45,.7,16),'metal',[x,0,-5],Q().setFromAxisAngle(V(0,0,1),Math.PI/2),{batch:false,name:'Structural hinge bearing'});
  k.ramp('Bolted structural hinge threshold',-4,4,-5.3,-4.3,.25,0);
- const bumper=lateShutter(k,'Low impact guard and bridge threshold',[0,1.4,-4.2],[9,2.8,.40],[0,-4.5,0]);
+ // Keep the rear edge at z=-4.4 while the broad front apron separates a
+ // jumping player's capsule from cargo resting on top. Its original height
+ // blocks hand-height pushes; pickup remains visible above the lip at apex.
+ const bumper=lateShutter(k,'Low impact guard and bridge threshold',[0,1.4,-4.0],[9,2.8,.80],[0,-4.5,0]);
  const top={owner:null,body:null,anchor:null,constraint:null,angle:0,ensure(){if(!g.physics||this.owner===g.physics)return;this.owner=g.physics;
   this.anchor=new Body({mass:0,position:new Vec3(...hinge.toArray()),collisionFilterMask:0});
   this.body=new Body({mass:30,position:new Vec3(0,7,-5),shape:new Box(new Vec3(4,7,.25)),angularDamping:.18,material:new Material({friction:.72,restitution:.05}),collisionFilterGroup:1,collisionFilterMask:2});
   this.owner.world.addBody(this.anchor);this.owner.world.addBody(this.body);this.constraint=new HingeConstraint(this.anchor,this.body,{pivotA:new Vec3(0,0,0),pivotB:new Vec3(0,-7,0),axisA:new Vec3(1,0,0),axisB:new Vec3(1,0,0),collideConnected:false});this.owner.world.addConstraint(this.constraint);
   pieceBoxes.forEach(c=>this.owner.removeStaticBox(c.mesh.uuid));
  },force(){this.ensure();const b=this.body;
-  // The manufactured over-centre detent resists hand-height nudges. Above
-  // eight degrees gravity carries the entire wall toward its floor stop.
-  if(this.angle>-.14)b.torque.x+=-this.angle*950-b.angularVelocity.x*55;
+  // The manufactured over-centre detent resists hand-height nudges. Its
+  // stiffness must exceed the upright gravity gradient: 30 * 19.5 * 7 =
+  // 4095 Nm/rad. Above eight degrees gravity carries the wall to its stop.
+  if(this.angle>-.14)b.torque.x+=-this.angle*5800-b.angularVelocity.x*55;
   if(this.angle<-Math.PI/2){b.quaternion.setFromAxisAngle(new Vec3(1,0,0),-Math.PI/2);b.position.set(0,0,-12);b.angularVelocity.setZero();}
  },update(dt){this.ensure();const q=Q().set(this.body.quaternion.x,this.body.quaternion.y,this.body.quaternion.z,this.body.quaternion.w);this.angle=new THREE.Euler().setFromQuaternion(q,'XYZ').x;
   wall.position.set(this.body.position.x,this.body.position.y,this.body.position.z);wall.quaternion.copy(q);wall.updateWorldMatrix(true,false);

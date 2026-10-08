@@ -3,6 +3,7 @@ import {ResearchChamber} from './LabResearchArt.js';
 import {tracePortalRay,rayTouches,beamDrawing} from './LabPuzzleMechanics.js';
 import {lateShutter,movingMechanismBlock} from './LabLateCampaignMechanisms.js';
 import {cargoLoadsPlate} from './LabPlateContact.js';
+import {DamperDrive} from './LabDamperDrive.js';
 
 const V=(...p)=>new THREE.Vector3(...p),Q=()=>new THREE.Quaternion();
 const assets=[1,2,11,22,23,24];
@@ -49,10 +50,12 @@ function partition(k,z,{width=7,height=4.8,name='Manufactured actuator door'}={}
  for(const dx of [-width/2+.3,width/2-.3])k.block([dx,0,.44],[.09,height-.45,.06],'metal',false,door.mesh);
  return door;
 }
-function seat(k,name,p,{width=8,depth=8,mat='metal'}={}){
+function seat(k,name,p,{width=8,depth=8,mat='metal',moving=false}={}){
  const [x,y,z]=p;
- const mesh=k.block([x,y-.14,z],[width,.28,depth],mat);mesh.name=name;
- const collider=k.envelopes.at(-1),floor={minX:x-width/2,maxX:x+width/2,minZ:z-depth/2,maxZ:z+depth/2,y,mesh:collider.mesh,enabled:true};k.game.floors.push(floor);
+ const mesh=moving?movingMechanismBlock(k,name,[x,y-.14,z],[width,.28,depth],mat):k.block([x,y-.14,z],[width,.28,depth],mat);mesh.name=name;
+ const collider=moving?k.game.collisionProxy(new THREE.Box3().setFromObject(mesh),{kinematic:true}):k.envelopes.at(-1);
+ if(moving)k.envelopes.push(collider);
+ const floor={minX:x-width/2,maxX:x+width/2,minZ:z-depth/2,maxZ:z+depth/2,y,mesh:collider.mesh,enabled:true};k.game.floors.push(floor);
  for(const xx of [-width/2+.20,width/2-.20])k.block([x+xx,y-.38,z],[.28,.48,depth-.4],'secondary');
  const frame=()=>({center:V(x,y,z),normal:V(0,1,0),right:V(1,0,0),up:V(0,0,1),halfWidth:width/2,halfHeight:depth/2});
  const result={mesh,collider,floor,position:V(...p),loaded:()=>cargoLoadsPlate(k.game.cargo,k.game.heldCube,result.frame()),frame,surface:{width,height:depth,getFrame:frame}};
@@ -268,35 +271,32 @@ export function buildExpansion45(g,index=44){
  {'quay-wind-input':'intercepts quay wind','moving-wind-address':'cargo-height moving outlet follows the trimmed ferry and always points at its sail'},['counterweight-then-wind','observe-unbalanced-thrust']);
 }
 
-/** 46: the original body supplies dry-friction damping on a continuously
- * moving bed. A spring model and its measured velocity drive the crossing. */
+/** 46: cargo loads a friction shoe. Actual bed travel opens a relief valve;
+ * optical supply and vibration bleed continuously move the bridge actuator. */
 export function buildExpansion46(g,index=45){
  const k=new ResearchChamber(g,EXPANSION_A_SPECS[4],index,'gravity',{minX:-31,maxX:31,minZ:-25,maxZ:29},-4,24);
  k.deck('Western tuning gallery',-29,-8,-21,11,4);
  k.deck('Eastern receiver gallery',8,29,-21,11,4);
  k.ramp('Western return and tuning approach',-28,-20,11,27,4,-4);
- const bed=seat(k,'Driven damping bed',[-18,4.16,4],{width:8,depth:8});
+ const bed=seat(k,'Driven damping bed',[-18,4.16,4],{width:8,depth:8,moving:true});
  const input=k.panel('damper-light-input',[-15,7.2,18],[-1,0,0],7,5.4),mouth=k.panel('magnetic-clamp-mouth',[-26,7.2,-15],[1,0,0],8,5.4);
  const target=[15,7.2,-15];k.projector(target,[-1,0,0],{radius:.65});
  const optical=light(k,[-28,7.2,18],[1,0,0],target);
  const bridge=k.carrier('vibration-linked-crossing',[[0,-4,-17],[0,4,-17]],{width:16,depth:12,portal:false});bridge.speed=7;
- const oscillator={x:.48,v:0,frequency:5.2,phase:0,rms:2.4,loaded:false,clamped:false,clampY:-4};
+ const oscillator=new DamperDrive();oscillator.clamped=false;oscillator.clampY=-4;
  const base=bed.position.y,origin=bed.mesh.position.clone();
  const dial=movingMechanismBlock(k,'Excitation frequency dial',[-10,5.2,7],[.12,.9,.9],'metal');
  k.control('damper-frequency',[-10,4,7],()=>{oscillator.frequency=oscillator.frequency>4?.75:5.2;},'E — изменить частоту возбуждения: 5.2 или 0.75 рад/с.');
  k.control('damper-receiver-clamp',[18,4,-17],()=>{if(oscillator.clamped)oscillator.clamped=false;else if(bridge.position.y>3.98) {oscillator.clamped=true;oscillator.clampY=bridge.position.y;}},'E — удержать поднятый мост струбциной или освободить прижим.');
  k.ticks.unshift(dt=>{
-  oscillator.loaded=bed.loaded();oscillator.phase+=oscillator.frequency*dt;
-  const damping=oscillator.loaded?8:1.0,forcing=Math.sin(oscillator.phase)*16;
-  oscillator.v+=dt*(forcing-oscillator.x*26-damping*oscillator.v);oscillator.x=THREE.MathUtils.clamp(oscillator.x+oscillator.v*dt,-.55,.55);
-  oscillator.rms=THREE.MathUtils.damp(oscillator.rms,Math.abs(oscillator.v),2.5,dt);
+  oscillator.step(dt,bed.loaded(),optical.powered);
   const oldY=bed.floor.y,yy=base+oscillator.x*.15,dy=yy-oldY,p=g.playerPosition;
   if(g.playerGrounded&&Math.abs(p.y-oldY)<.18&&p.x>bed.floor.minX&&p.x<bed.floor.maxX&&p.z>bed.floor.minZ&&p.z<bed.floor.maxZ){p.y+=dy;g.previousPlayerPosition.y+=dy;}
   bed.mesh.position.copy(origin);bed.mesh.position.y+=yy-base;bed.floor.y=yy;bed.position.y=yy;
   g.syncCollision(bed.collider,new THREE.Box3().setFromObject(bed.mesh),dt);
   // Cargo contact belongs to the current top, not the original bed's height.
   bed.frame=()=>({center:V(-18,yy,4),normal:V(0,1,0),right:V(1,0,0),up:V(0,0,1),halfWidth:4,halfHeight:4});
-  bridge.stations[1].y=oscillator.clamped?oscillator.clampY:optical.powered&&oscillator.loaded&&oscillator.rms<.55?4:-4;bridge.target=1;
+  bridge.stations[1].y=oscillator.clamped?oscillator.clampY:-4+8*oscillator.stroke;bridge.target=1;
   dial.rotation.x=(oscillator.frequency-.75)*.32;
  });
  // Rebind contact to the live top, preserving body-grounding checks.
@@ -305,8 +305,10 @@ export function buildExpansion46(g,index=45){
   k.geometry(new THREE.CylinderGeometry(.22,.22,2.8,12),'metal',[x,2.55,z],Q(),{name:'Guided damper piston'});
   for(let i=0;i<6;i++)k.geometry(new THREE.TorusGeometry(.34,.075,6,16),'metal',[x,1.2+i*.36,z],Q().setFromAxisAngle(V(1,0,0),Math.PI/2),{name:'Visible suspension coil'});
  }
- k.resets.push(()=>{oscillator.x=.48;oscillator.v=oscillator.phase=0;oscillator.frequency=5.2;oscillator.rms=2.4;oscillator.loaded=oscillator.clamped=false;oscillator.clampY=-4;bed.mesh.position.copy(origin);bed.floor.y=base;bed.position.y=base;bridge.stations[1].y=-4;});
- k.display([0,16,-23.7],()=>`ЧАСТОТА ${oscillator.frequency.toFixed(1)} / КОЛЕБАНИЯ ${oscillator.rms.toFixed(2)} м/с\nПРИЖИМ ${oscillator.clamped?'ЗАЖАТ':'СВОБОДЕН'} / СВЕТ ${optical.powered?'В ПРИЁМНИКЕ':'НЕ ПОДКЛЮЧЁН'}`,26,2);
+ pipe(k,[[-18,3.5,4],[-18,3.5,-7],[-4,3.5,-7],[-4,-2,-17]],.08);
+ k.label('ВИБРАЦИОННЫЙ СБРОС / ПРИВОД МОСТА',[-12,5.3,-7],[0,0,1],13,.5);
+ k.resets.push(()=>{oscillator.reset();oscillator.clamped=false;oscillator.clampY=-4;const yy=base+oscillator.x*.15;bed.mesh.position.copy(origin);bed.mesh.position.y+=yy-base;bed.floor.y=bed.position.y=yy;bed.frame=()=>({center:V(-18,yy,4),normal:V(0,1,0),right:V(1,0,0),up:V(0,0,1),halfWidth:4,halfHeight:4});bridge.stations[1].y=-4;});
+ k.display([0,16,-23.7],()=>`ЧАСТОТА ${oscillator.frequency.toFixed(1)} / ДРОЖАНИЕ ЛОЖА ${oscillator.rmsVelocity.toFixed(3)} м/с\nПРИЖИМ ${oscillator.clamped?'ЗАЖАТ':'СВОБОДЕН'} / СВЕТ ${optical.powered?'В ПРИЁМНИКЕ':'НЕ ПОДКЛЮЧЁН'}`,26,2);
  heading(k,46,[0,21,-23.7]);
  return finish(k,[-24,4,8],[-24,4.6,5],[22,4,-15],{bed,input,mouth,optical,bridge,oscillator,spawnView:{yaw:.4,pitch:-.07}},
  {'damper-light-input':'supplies the live optical clamp','magnetic-clamp-mouth':'powers a bridge that remains unstable without genuine free-body bed friction'},['damp-before-light','light-before-damp']);
