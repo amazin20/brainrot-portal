@@ -8,7 +8,7 @@ name: Verified unified campaign build
         required: true
         type: string
       record_puzzle:
-        description: Record the current changed rooms by ordinary routes and a 30 fps player-motion pilot
+        description: Record changed rooms, the direct physical room 47 alternative and a 30 fps player-motion pilot
         required: false
         default: true
         type: boolean
@@ -1081,6 +1081,10 @@ jobs:
           level: '46'
           fps: '12'
           alternative: ''
+        - key: 47-manual-impact
+          level: '47'
+          fps: '12'
+          alternative: manual-impact
         - key: 50-canonical
           level: '50'
           fps: '12'

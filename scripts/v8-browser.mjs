@@ -6,6 +6,7 @@ import puppeteer from 'puppeteer-core';
 import {CAMPAIGN} from '../src/game/LabCampaignLevels.js';
 import {FOUNDATION_SPECS} from '../src/game/LabFoundationChambers.js';
 import {ALL_LAB_ASSETS} from '../src/game/labAssets.js';
+import {playFromReachableMenu} from './lib/release-session-ui.mjs';
 const root=process.env.PAGE_URL||'http://127.0.0.1:4173/',out=process.env.EVIDENCE_OUT||'smoke-artifacts';
 const first=Number(process.env.NESI_FIRST??1),last=Number(process.env.NESI_LAST??CAMPAIGN.length);
 assert.ok(Number.isInteger(first)&&Number.isInteger(last)&&first>=1&&first<=last&&last<=CAMPAIGN.length,'NESI_FIRST/NESI_LAST must select a valid inclusive course range');
@@ -55,9 +56,9 @@ fs.mkdirSync(out,{recursive:true});
 const browser=await puppeteer.launch({executablePath:process.env.CHROME_PATH||'/usr/bin/google-chrome',headless:true,timeout:60000,protocolTimeout:captureFull?2100000:1500000,
  args:['--no-sandbox','--disable-dev-shm-usage','--use-angle=swiftshader','--enable-unsafe-swiftshader']});
 const page=await browser.newPage();await page.setViewport(captureFull?{width:fullCapture.width,height:fullCapture.height,deviceScaleFactor:1}:{width:1280,height:800});page.setDefaultTimeout(120000);
-const errors=[],requests=[];page.on('pageerror',e=>errors.push(e.message));page.on('request',r=>{if(r.url().includes('.glb'))requests.push(r.url());});
+const errors=[],requests=[];page.on('pageerror',e=>errors.push(e.message));page.on('error',e=>errors.push('Renderer: '+String(e)));page.on('request',r=>{if(r.url().includes('.glb'))requests.push(r.url());});
 const report={renderer:'CI Chromium / SwiftShader; NOT a user-device FPS benchmark',baseUrl:root,range:{first,last},ui:checkUI,
- capturePuzzle,captureEarly,captureFull,puzzleClips:[],fullRoutes:[],renderSamples:[],routes:[],errors};
+ capturePuzzle,captureEarly,captureFull,puzzleClips:[],fullRoutes:[],renderSamples:[],routes:[],menuStarts:[],errors};
 const nativeFrames=new Map(),sha=bytes=>createHash('sha256').update(bytes).digest('hex');
 if(captureFull)await page.exposeFunction('__NESI_WRITE_ROUTE_FRAME__',(level,index,image,state)=>{
  const frames=nativeFrames.get(level);assert.ok(frames,'Unexpected native capture room');
@@ -76,16 +77,31 @@ async function clickMenu(selector){
  },{},selector);
  await page.locator(selector).click();
 }
-const uiState=()=>page.evaluate(()=>({level:window.__NESI_DEMO_GAME__?.levelIndex,state:window.__NESI_DEMO_GAME__?.state,
+const uiState=()=>page.evaluate(()=>{
+ const button=document.querySelector('#play-button'),menu=document.querySelector('#start-screen'),r=button?.getBoundingClientRect();
+ const target=r&&document.elementFromPoint(r.x+r.width/2,r.y+r.height/2),style=menu&&getComputedStyle(menu);
+ return {url:location.href,debugBridge:!!window.__NESI_DEMO_GAME__,level:window.__NESI_DEMO_GAME__?.levelIndex,state:window.__NESI_DEMO_GAME__?.state,
  blocked:window.__NESI_DEMO_GAME__?.externalBlocked,focused:document.hasFocus(),hidden:document.hidden,locked:!!document.pointerLockElement,
- body:document.body.dataset.playState,win:document.querySelector('#win-screen')?.className,pause:document.querySelector('#pause-screen')?.className,
- button:document.querySelector('#play-again-button')?.textContent,error:document.querySelector('#error-detail')?.textContent}));
+ body:document.body.dataset.playState,runtime:document.documentElement.dataset.runtimeState,externalPause:document.body.dataset.externalPause||null,
+ activeElement:document.activeElement?.id||document.activeElement?.tagName||null,
+ win:document.querySelector('#win-screen')?.className,pause:document.querySelector('#pause-screen')?.className,
+ button:document.querySelector('#play-again-button')?.textContent,error:document.querySelector('#error-detail')?.textContent,
+ start:menu&&{className:menu.className,inert:menu.inert,opacity:style.opacity,visibility:style.visibility,scrollTop:menu.scrollTop,scrollHeight:menu.scrollHeight,clientHeight:menu.clientHeight},
+ play:button&&{text:button.textContent,disabled:button.disabled,inert:!!button.closest('[inert]'),
+  bounds:r&&{left:r.left,right:r.right,top:r.top,bottom:r.bottom,width:r.width,height:r.height},
+  viewport:{width:innerWidth,height:innerHeight},hit:button.contains(target),hitTarget:target?.id||target?.tagName||null,hovered:button.matches(':hover')},
+ trustedPlay:document.documentElement.dataset.releaseTrustedPlay||null,playEvent:document.documentElement.dataset.releasePlayEvent||null};
+});
+async function startMenu(stage,touch=false){
+ const proof={stage,before:await uiState()};report.menuStarts.push(proof);
+ Object.assign(proof,await playFromReachableMenu(page,touch));proof.after=await uiState();
+}
 try{
  await page.goto(startUrl(first),{waitUntil:'networkidle2'});await ready();
  assert.equal(await page.$$eval('#level-select option',a=>a.length),CAMPAIGN.length);
  assert.equal(await page.title(),'БРЕЙНРОТ ПОРТАЛ — физическая 3D-головоломка');
  if(first===1)assert.equal(requests.length,CAMPAIGN[0].assets.length);
- await shot('menu');await page.click('#play-button');await page.waitForFunction(()=>window.__NESI_DEMO_GAME__.state==='playing');
+ await shot('menu');await startMenu('initial course');await page.waitForFunction(()=>window.__NESI_DEMO_GAME__.state==='playing');
  if(first===1)await page.waitForFunction(()=>window.__NESI_DEMO_GAME__.performanceMonitor.stats.fps>0);
  await shot(`level-${first}-start`);
  report.initial=await page.evaluate(()=>({models:window.__NESI_DEMO_GAME__.assets.size,fps:document.querySelector('.lab-fps').textContent,
@@ -218,7 +234,7 @@ try{
  console.log('Returning to first course',await uiState());
  // A shard can end before the campaign's last room, so its Next button need
  // not wrap. Open the ordinary first-course menu before the shared UI checks.
- await page.goto(startUrl(1),{waitUntil:'networkidle2'});await ready();await page.click('#play-button');
+ await page.goto(startUrl(1),{waitUntil:'networkidle2'});await ready();await startMenu('return to first course after routes');
  await page.waitForFunction(()=>window.__NESI_DEMO_GAME__.levelIndex===0&&window.__NESI_DEMO_GAME__.state==='playing');
  await page.evaluate(()=>document.exitPointerLock?.());await page.waitForFunction(()=>!document.pointerLockElement);
  if(await page.evaluate(()=>window.__NESI_DEMO_GAME__.state==='playing'))await page.keyboard.press('Escape');
@@ -234,7 +250,7 @@ try{
  report.persistence=true;
  // Ordinary keyboard run, turn, stop/settle and jump. Rendered simulation
  // frames at 30 Hz; this is not a realtime GPU performance measurement.
- await page.setViewport({width:960,height:600});await page.click('#play-button');await page.evaluate(()=>{const g=window.__NESI_DEMO_GAME__;g.renderer.setAnimationLoop(null);g.resetRun(true);});
+ await page.setViewport({width:960,height:600});await startMenu('saved settings keyboard run');await page.evaluate(()=>{const g=window.__NESI_DEMO_GAME__;g.renderer.setAnimationLoop(null);g.resetRun(true);});
  fs.mkdirSync(`${out}/walk-frames`,{recursive:true});
  const walkSamples=[];
  for(let f=0;f<120;f++){
@@ -263,7 +279,7 @@ try{
  assert.ok(walkSamples.slice(80).some(s=>!s.grounded),'The keyboard jump must leave the floor');
  // Narrow-screen controls and settings remain inside viewport.
  await page.setViewport({width:390,height:844,isMobile:true,hasTouch:true,deviceScaleFactor:1});await page.reload({waitUntil:'networkidle2'});await ready();
- await page.click('#play-button');await page.evaluate(()=>document.exitPointerLock?.());await page.waitForFunction(()=>!document.pointerLockElement);if(await page.evaluate(()=>window.__NESI_DEMO_GAME__.state==='playing'))await page.keyboard.press('Escape');await shot('mobile-settings');assert.equal(await page.$eval('#settings-level-select',e=>!!e.getBoundingClientRect().width),true);
+ await startMenu('narrow settings',true);await page.evaluate(()=>document.exitPointerLock?.());await page.waitForFunction(()=>!document.pointerLockElement);if(await page.evaluate(()=>window.__NESI_DEMO_GAME__.state==='playing'))await page.keyboard.press('Escape');await shot('mobile-settings');assert.equal(await page.$eval('#settings-level-select',e=>!!e.getBoundingClientRect().width),true);
  // The public campaign keeps control tutorials, without solution hints or
  // a debug bridge. The debug-only hint flow is verified separately below.
  const publicUrl=new URL(root);publicUrl.search='?edition=foundation&level=1';
@@ -273,7 +289,7 @@ try{
  await page.goto(publicUrl.href,{waitUntil:'networkidle2'});
  await page.waitForFunction(()=>document.body.dataset.playState==='ready');
  assert.equal(await page.evaluate(()=>window.__NESI_DEMO_GAME__),undefined);
- await page.click('#play-button');await page.waitForFunction(()=>document.body.dataset.playState==='playing');
+ await startMenu('public foundation');await page.waitForFunction(()=>document.body.dataset.playState==='playing');
  await page.evaluate(()=>document.exitPointerLock?.());await page.waitForFunction(()=>!document.pointerLockElement);
  if(await page.evaluate(()=>document.body.dataset.playState==='playing'))await page.keyboard.press('Escape');
  await page.waitForFunction(()=>document.body.dataset.playState==='paused');
@@ -284,7 +300,7 @@ try{
  report.publicHints={edition:'foundation',debug:false,level:1,visible:false,controlTutorials:true};
  publicUrl.searchParams.set('debug','1');
  await page.goto(publicUrl.href,{waitUntil:'networkidle2'});await ready();
- await clickMenu('#play-button');await page.waitForFunction(()=>document.body.dataset.playState==='playing');
+ await startMenu('debug foundation hints');await page.waitForFunction(()=>document.body.dataset.playState==='playing');
  await page.evaluate(()=>document.exitPointerLock?.());await page.waitForFunction(()=>!document.pointerLockElement);
  if(await page.evaluate(()=>document.body.dataset.playState==='playing'))await page.keyboard.press('Escape');
  await page.waitForFunction(()=>document.body.dataset.playState==='paused'&&getComputedStyle(document.querySelector('#pause-screen')).opacity==='1');
@@ -304,9 +320,10 @@ try{
  assert.equal(report.routes.length,last-first+1);report.pass=true;
  fs.writeFileSync(`${out}/report.json`,JSON.stringify(report,null,2));console.log(`Campaign WebGL: courses ${first}–${last}, lazy assets${checkUI?', menus, sound and persistence':''} passed.`);
 }catch(error){
- report.failure={error:String(error),state:null};console.error('Browser failure',report.failure);
+ report.failure={error:String(error),state:null};
  // A busy renderer must not turn one timeout into two more long diagnostic waits.
- report.failure.state=await bounded(uiState(),10000).catch(()=>null);
+ try{report.failure.state=await bounded(uiState(),10000);}catch(diagnosticError){report.failure.stateError=String(diagnosticError);}
+ console.error('Browser failure',report.failure);
  await bounded(shot('browser-failure'),10000).catch(()=>{});throw error;
 }finally{
  fs.writeFileSync(`${out}/report.json`,JSON.stringify(report,null,2));

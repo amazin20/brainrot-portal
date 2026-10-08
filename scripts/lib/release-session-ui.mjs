@@ -5,11 +5,12 @@ async function playBounds(page){
  return page.evaluate(()=>{
   const button=document.querySelector('#play-button'),menu=document.querySelector('#start-screen');
   const r=button.getBoundingClientRect(),m=menu.getBoundingClientRect();
+  const target=document.elementFromPoint(r.x+r.width/2,r.y+r.height/2),opacity=getComputedStyle(menu).opacity;
   return {left:r.left,right:r.right,top:r.top,bottom:r.bottom,width:r.width,height:r.height,
    viewportWidth:innerWidth,viewportHeight:innerHeight,scrollTop:menu.scrollTop,scrollHeight:menu.scrollHeight,clientHeight:menu.clientHeight,
-   menu:{left:m.left,right:m.right,top:m.top,bottom:m.bottom},
-   active:!menu.inert&&!button.disabled&&getComputedStyle(menu).opacity==='1',
-   hit:button.contains(document.elementFromPoint(r.x+r.width/2,r.y+r.height/2))};
+   menu:{left:m.left,right:m.right,top:m.top,bottom:m.bottom,opacity,inert:menu.inert},
+   active:!button.closest('[inert]')&&!button.disabled&&opacity==='1',
+   hit:button.contains(target),hitTarget:target?.id||target?.tagName||null,hovered:button.matches(':hover')};
  });
 }
 
@@ -48,11 +49,18 @@ export async function playFromReachableMenu(page,touch=false){
  const proof=await reachStartPlay(page,touch);
  await page.$eval('#play-button',button=>{
   document.documentElement.dataset.releaseTrustedPlay='pending';
-  button.addEventListener('click',event=>{document.documentElement.dataset.releaseTrustedPlay=String(event.isTrusted);},{once:true,capture:true});
+  document.documentElement.dataset.releasePlayEvent='pending';
+  button.addEventListener('click',event=>{
+   document.documentElement.dataset.releaseTrustedPlay=String(event.isTrusted);
+   document.documentElement.dataset.releasePlayEvent=JSON.stringify({trusted:event.isTrusted,time:performance.now(),
+    state:document.documentElement.dataset.runtimeState,externalPause:document.body.dataset.externalPause||null,
+    focused:document.hasFocus(),hidden:document.hidden,locked:!!document.pointerLockElement,
+    target:event.target?.id||event.target?.tagName||null,hovered:button.matches(':hover')});
+  },{once:true,capture:true});
  });
  const {left,right,top,bottom}=proof.reachable,x=(left+right)/2,y=(top+bottom)/2;
  if(touch)await page.touchscreen.tap(x,y);else await page.mouse.click(x,y);
  await page.waitForFunction(()=>document.documentElement.dataset.runtimeState==='playing');
  assert.equal(await page.evaluate(()=>document.documentElement.dataset.releaseTrustedPlay),'true','Play must respond to native trusted input');
- return {...proof,nativePlay:true,trusted:true};
+ return {...proof,nativePlay:true,trusted:true,event:await page.evaluate(()=>JSON.parse(document.documentElement.dataset.releasePlayEvent))};
 }
