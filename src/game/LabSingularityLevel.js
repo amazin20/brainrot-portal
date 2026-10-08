@@ -3,6 +3,7 @@ import {SingularityKit,V,clamp} from './LabSingularityKit.js';
 import {SINGULARITY_ROOMS,SINGULARITY_SPEC,validateSingularityLayout} from './LabSingularityLayout.js';
 import {buildSingularityArt} from './LabSingularityArt.js';
 import {tracePortalRay,rayTouches} from './LabPuzzleMechanics.js';
+import {buildCastleArchiveMemory} from './LabCastleArchiveMemory.js';
 export {SINGULARITY_SPEC as TOWER_SPEC};
 const UP=V(0,1,0),close=(p,q,r=1.25)=>Math.hypot(p.x-q[0],p.z-q[2])<r&&Math.abs(p.y-q[1])<1.5;
 export function pourVolumes(volumes,capacities,from,to){if(from===to||![from,to].every(i=>Number.isInteger(i)&&i>=0&&i<volumes.length))throw new RangeError('Invalid tank');const copy=[...volumes],amount=Math.max(0,Math.min(copy[from],capacities[to]-copy[to]));copy[from]-=amount;copy[to]+=amount;return copy;}
@@ -20,9 +21,9 @@ export function buildTowerLevel(game,index=40){
  const fill=new THREE.HemisphereLight(0xd5e9ed,0x52404e,.85);game.scene.add(fill);
  const sideFill=new THREE.DirectionalLight(0xffd9b4,1.4);sideFill.position.set(-55,98,32);sideFill.target.position.set(0,30,0);game.scene.add(sideFill,sideFill.target);
  const rooms=new Map(),machines=new Map(),events=[],solved=new Set(),gates=[],signs=[],carriedTransits=new Map();
- let time=0,lastTransit=null,won=false,resetting=false,disposed=false;
+ let time=0,lastTransit=null,won=false,resetting=false,disposed=false,archiveMemory=null;
  const glazing=k.mat(0x8eaead,.65,.05);glazing.transparent=true;glazing.opacity=.24;glazing.depthWrite=false;glazing.name='Castle fixed safety glazing';
- const available=id=>SINGULARITY_ROOMS.find(r=>r.id===id).requires.every(dep=>solved.has(dep));
+ const available=id=>id==='archive'?Boolean(archiveMemory?.released()):SINGULARITY_ROOMS.find(r=>r.id===id).requires.every(dep=>solved.has(dep));
  function complete(id,proof){if(resetting||solved.has(id)||!available(id))return;const r=SINGULARITY_ROOMS.find(r=>r.id===id);solved.add(id);events.push({id,rule:r.rule,seconds:time,player:game.playerPosition.toArray(),cargo:game.cargo?.position.toArray(),proof});game.audio?.mechanism?.('switch');game.emitHud?.();}
  const standing=(p,r=1.2)=>game.playerGrounded&&close(game.playerPosition,p,r)&&Math.abs(game.playerPosition.y-p[1])<.3;
  const loaded=(p,r=1.15)=>!game.heldCube&&game.cargoOnPad?.(V(...p),r);
@@ -107,7 +108,7 @@ export function buildTowerLevel(game,index=40){
    if(def.upperDoor)edge([14,y+def.upperDoor,z],[door[0],y+def.upperDoor,z],5,false);
   }else{edge([-6,72,27],door,5,false);}
   if(def.requires.length){const side=def.entry==='e'||def.entry==='w',parts=[-1,1].map(s=>k.box([door[0]+(side?0:s*1.6),y+2.35,door[2]+(side?s*1.6:0)],side?[.46,4.7,3.2]:[3.2,4.7,.46],m.dark,{dynamic:true}));const short={freight:'ГРУЗОВОЙ ШЛЮЗ',sluice:'ЗАТВОРОВЫЙ ДВОР',optics:'РАСКОЛОТЫЙ ФОНАРЬ',hoist:'ПРОТИВОВЕС',archive:'АРХИВ',flywheel:'МАХОВОЙ ХОР',magnet:'МАГНИТНЫЙ ГРУЗ',migrant:'ПОДВИЖНАЯ ДВЕРЬ',pendulum:'ДВА ПРОЛЁТА',inertia:'БАЛКОН ПАДЕНИЯ'};
-   const label=()=>{const entries=def.requires.map(id=>`${solved.has(id)?'✓':'○'} ${short[id]??id}: ${solved.has(id)?'РАБОТАЕТ':'ЖДЁТ'}`);if(entries.length>2)return Array.from({length:Math.ceil(entries.length/2)},(_,i)=>entries.slice(i*2,i*2+2).join('     ')).join('\n');return entries.join('   +   ');};
+   const label=()=>{if(def.id==='archive')return archiveMemory?.label()??'НАПОР: ЗАПОР ЗАКРЫТ   +   ЛУЧ: ЗАПОР ЗАКРЫТ';const entries=def.requires.map(id=>`${solved.has(id)?'✓':'○'} ${short[id]??id}: ${solved.has(id)?'РАБОТАЕТ':'ЖДЁТ'}`);if(entries.length>2)return Array.from({length:Math.ceil(entries.length/2)},(_,i)=>entries.slice(i*2,i*2+2).join('     ')).join('\n');return entries.join('   +   ');};
    const indicator=sign(label(),V(...door).add(V(0,def.id==='crown'?7.4:6.1,0)).addScaledVector(V(...n),.32).toArray(),def.id==='crown'?10:9,n,def.id==='crown'?5:1);
    gates.push({id:def.id,r,parts,side,progress:0,indicator,label});}
   return r;
@@ -177,7 +178,7 @@ export function buildTowerLevel(game,index=40){
  }
 // 3. The live ray is traced through geometry and portals, then reflected.
  {
-  const r=rooms.get('optics'),{P}=r;base(r);let turned=false,angle=0,lit=0;const draw=beam();
+  const r=rooms.get('optics'),{P}=r;base(r);let turned=false,angle=0,lit=0,hit=false;const draw=beam();
   const intake=k.panel('quarry intake',P(-8,-5,2.4),[-1,0,0],5,4.8),outlet=k.panel('quarry output',P(17,5,2.4),[-1,0,0],5,4.8);
   k.box(P(-5,-8,4),[.55,8,16],m.steel);k.box(P(8,1,2.7),[10,5.4,.5],m.wall);
   const mirror=k.box(P(0,5,2.4),[2.8,3.1,.12],m.ivory,{dynamic:true});
@@ -187,9 +188,9 @@ export function buildTowerLevel(game,index=40){
   k.box(P(0,5,.7),[.5,1.4,.5],m.copper);
   const receiver=k.ring(P(0,-12,2.4),1,m.copper,{normal:[0,0,1],dynamic:true});k.box(P(0,-12,1),[.4,2,.4],m.steel);
   localControl(r,'mirror',-17,9,()=>{turned=!turned;},'Развернуть отражатель');
-  register('optics',{state:{get turned(){return turned;},get lit(){return lit;},intake,outlet},update(dt){angle=THREE.MathUtils.damp(angle,turned?1:0,9,dt);const normal=V(1,0,1-2*angle).normalize();mirror.quaternion.setFromUnitVectors(V(0,0,1),normal);
+  register('optics',{state:{get turned(){return turned;},get lit(){return lit;},get beamPowered(){return hit;},intake,outlet},update(dt){angle=THREE.MathUtils.damp(angle,turned?1:0,9,dt);const normal=V(1,0,1-2*angle).normalize();mirror.quaternion.setFromUnitVectors(V(0,0,1),normal);
    const segments=tracePortalRay(game,V(...P(-26,-5,2.4)),V(1,0,0),{length:130,reflectors:[{position:V(...P(0,5,2.4)),normal,radius:1.4}]});draw(segments);
-   const hit=segments.some(s=>s.kind==='portal')&&segments.some(s=>s.kind==='mirror')&&rayTouches(segments,V(...P(0,-12,2.4)),.8);lit=hit?lit+dt:0;receiver.material=hit?m.live:m.copper;if(lit>1)complete('optics',{portalReflection:true,exposure:lit});},reset(){turned=false;angle=lit=0;}});
+   hit=segments.some(s=>s.kind==='portal')&&segments.some(s=>s.kind==='mirror')&&rayTouches(segments,V(...P(0,-12,2.4)),.8);lit=hit?lit+dt:0;receiver.material=hit?m.live:m.copper;if(lit>1)complete('optics',{portalReflection:true,exposure:lit});},reset(){turned=hit=false;angle=lit=0;}});
  }
 
 // 9. Two actual sliding walls permute a bent archive, with reversible controls.
@@ -318,20 +319,21 @@ export function buildTowerLevel(game,index=40){
  const basePortal=k.panel('castle ground return',[2,2.4,49],[-1,0,0]);
  const upperPortal=k.panel('castle upper return',[2,74.4,49],[-1,0,0]);
  function roomAt(p){return SINGULARITY_ROOMS.find(r=>Math.abs(p.x-r.at[0])<r.w/2+.8&&Math.abs(p.z-r.at[2])<r.d/2+.8&&p.y>r.at[1]-6&&p.y<r.at[1]+r.h+1);}
- function update(dt){time+=dt;for(const[id,machine]of machines)if(available(id))machine.update?.(dt);for(const g of gates){g.indicator?.update(g.label());g.progress=THREE.MathUtils.damp(g.progress,available(g.id)?1:0,5,dt);g.parts.forEach((mesh,i)=>{const s=i?1:-1;k.move(mesh,[g.r.door[0]+(g.side?0:s*(1.6+3.5*g.progress)),g.r.door[1]+2.35,g.r.door[2]+(g.side?s*(1.6+3.5*g.progress):0)],dt);});}k.syncDynamic(dt);}
- function reset(){resetting=true;try{time=0;solved.clear();events.length=0;carriedTransits.clear();lastTransit=null;won=false;for(const machine of machines.values())machine.reset?.();k.resetControls();for(const machine of machines.values())machine.update?.(0);gates.forEach(g=>g.progress=0);update(0);}finally{resetting=false;}}
+ archiveMemory=buildCastleArchiveMemory({k,rooms,machines,gate:gates.find(g=>g.id==='archive')});
+ function update(dt){time+=dt;for(const[id,machine]of machines)if(available(id))machine.update?.(dt);archiveMemory.update(dt);for(const g of gates){g.indicator?.update(g.label());g.progress=THREE.MathUtils.damp(g.progress,available(g.id)?1:0,5,dt);g.parts.forEach((mesh,i)=>{const s=i?1:-1;k.move(mesh,[g.r.door[0]+(g.side?0:s*(1.6+3.5*g.progress)),g.r.door[1]+2.35,g.r.door[2]+(g.side?s*(1.6+3.5*g.progress):0)],dt);});}archiveMemory.syncDoorYoke(dt);k.syncDynamic(dt);}
+ function reset(){resetting=true;try{time=0;solved.clear();events.length=0;carriedTransits.clear();lastTransit=null;won=false;for(const machine of machines.values())machine.reset?.();archiveMemory.reset();k.resetControls();for(const machine of machines.values())machine.update?.(0);gates.forEach(g=>g.progress=0);update(0);}finally{resetting=false;}}
  const art=buildSingularityArt({game,k,rooms,machines,edges,solved});k.batch();
- const level={id:SINGULARITY_SPEC.id,index,game,spec:SINGULARITY_SPEC,title:'41 / '+SINGULARITY_SPEC.title,singularity:true,tower:true,towerChallenge:true,contextHandlesCarry:true,momentum:true,viewDistance:245,spawn,cargoSpawn,spawnView:{yaw:0,pitch:-.12},launchPad:null,terminals:k.terminals,pads:[],gates:[],panels:{crownPortal,basePortal,upperPortal},rooms,machines,edges,structure:k.root,
+ const level={id:SINGULARITY_SPEC.id,index,game,spec:SINGULARITY_SPEC,title:'41 / '+SINGULARITY_SPEC.title,singularity:true,tower:true,towerChallenge:true,contextHandlesCarry:true,momentum:true,viewDistance:245,spawn,cargoSpawn,spawnView:{yaw:0,pitch:-.12},launchPad:null,terminals:k.terminals,pads:[],gates:[],panels:{crownPortal,basePortal,upperPortal},rooms,machines,edges,archiveMemory,structure:k.root,
   get completedStages(){return solved.size;},totalStages:SINGULARITY_ROOMS.length,get progress(){return solved.size;},getLaunch:()=>null,reset,update,isWon:()=>won,
   getTowerMetrics:()=>({id:SINGULARITY_SPEC.id,completedStages:solved.size,totalStages:SINGULARITY_ROOMS.length,solvedIds:[...solved],events:events.map(e=>({...e})),checkpoints:false,seconds:time,won,carriedPortalCrossings:Object.fromEntries(carriedTransits)}),
   getObjective(){const r=roomAt(game.playerPosition);return r?`${r.name}${solved.has(r.id)?' · МЕХАНИЗМ РАБОТАЕТ':''}`:'СКЛАДЧАТЫЙ ЗАМОК · НАЙДИ СВЯЗЬ ГАЛЕРЕЙ';},
-  getContextLesson(){const r=roomAt(game.playerPosition);return['folded-castle','E · ЛКМ · ПКМ',r?available(r.id)?r.hint:`Для открытия нужны: ${r.requires.filter(id=>!solved.has(id)).map(id=>SINGULARITY_ROOMS.find(d=>d.id===id).name).join(' + ')}. Их состояния видны на табличке над входом.`:'Пять высот связаны лестницами и галереями. Один друг и одна пара порталов проходят весь путь вместе. Перезапуск сбрасывает замок.',false];},
+  getContextLesson(){const r=roomAt(game.playerPosition);return['folded-castle','E · ЛКМ · ПКМ',r?available(r.id)?r.hint:r.id==='archive'?`${archiveMemory.label()}. Две рейки удерживают общую дверь. Зубья уловителя сохраняют поднятое положение, когда источник отключён.`:`Для открытия нужны: ${r.requires.filter(id=>!solved.has(id)).map(id=>SINGULARITY_ROOMS.find(d=>d.id===id).name).join(' + ')}. Их состояния видны на табличке над входом.`:'Пять высот связаны лестницами и галереями. Один друг и одна пара порталов проходят весь путь вместе. Перезапуск сбрасывает замок.',false];},
   nearbyInteraction(){const t=k.nearest();return t?{kind:t.kind,label:'E',text:t.lesson}:null;},
   interact(){const t=k.nearest();if(!t)return false;const result=t.action();if(result===false)return false;game.audio?.mechanism?.('switch');game.animator?.triggerOperate?.();return true;},
   cargoOnAnyPad(){const p=game.cargo?.position;if(!p)return false;return loaded(machines.get('hoist').state.pad,1.6)||loaded(socket,1.8)||['freight','magnet','migrant'].includes(roomAt(p)?.id);},
   playerAcceleration:()=>V(),applyCargoForces(){if(available('magnet'))machines.get('magnet').force();},
   onTeleport(){const r=roomAt(game.playerPosition);lastTransit={id:r?.id??'atrium',seconds:time};if(game.heldCube&&r)carriedTransits.set(r.id,(carriedTransits.get(r.id)??0)+1);if(r?.id==='inertia')machines.get('inertia').transit();return true;},
-  renderUpdate(){art.update();},diagnostics(){return{...this.getTowerMetrics(),uniqueRules:SINGULARITY_ROOMS.map(r=>r.rule),rooms:SINGULARITY_ROOMS.length,portalSurfaces:k.panels.length,heightBands:[0,18,36,54,72],connectedCastle:true};},
+  renderUpdate(){art.update();},diagnostics(){return{...this.getTowerMetrics(),archivePhysicalMemory:archiveMemory.diagnostics(),uniqueRules:SINGULARITY_ROOMS.map(r=>r.rule),rooms:SINGULARITY_ROOMS.length,portalSurfaces:k.panels.length,heightBands:[0,18,36,54,72],connectedCastle:true};},
   dispose(){if(disposed)return;disposed=true;art.dispose();k.dispose();fill.removeFromParent();sideFill.removeFromParent();sideFill.target.removeFromParent();fill.dispose();sideFill.dispose();game.scene.background=prior.background;game.scene.fog=prior.fog;},
  };return level;
 }

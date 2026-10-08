@@ -561,9 +561,10 @@ jobs:
     name: Production resize, quality and touch controls
   resource-cycle:
     runs-on: ubuntu-latest
-    # The 110 real room starts and context restore completed just before the
-    # previous 35-minute job limit; keep time for browser cleanup and evidence.
-    timeout-minutes: 45
+    # K spent 43m27s on the 90 core starts; the 45m job ended before the tail.
+    # Remaining explicit room/route and UI wait caps total about 95m. Keep
+    # finite headroom for that unchanged scope, setup, cleanup and evidence.
+    timeout-minutes: 180
     steps:
     - uses: actions/checkout@v4
       with:

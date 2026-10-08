@@ -18,7 +18,9 @@ const sequence=[1,12,21,28,30,35,40,41,1],cycles=10,warmFrames=3;
 const expansion=process.env.EXPANSION_CHECK==='0'?[]:[42,43,44,45,46,47,48,49,50,51];
 const memoryKeys=['geometries','textures'];
 const tolerance=.10;
+const startedClock=performance.now();
 const report={pass:false,phase:'initializing',scope:'Compiled ordinary production JavaScript and native WebGL via explicit QA entry; level-start resource lifecycle and activated fracture route 47, not hardware FPS',
+  startedAt:new Date().toISOString(),elapsedMs:0,phaseTimings:[],
   directory:build,url:base,sequence,cycles,warmFrames,expandedStartupLevels:expansion,
   samples:[],expansionSamples:[],plateau:[],controls:{},errors:[],failedRequests:[],consoleErrors:[],
   limitations:[
@@ -28,8 +30,13 @@ const report={pass:false,phase:'initializing',scope:'Compiled ordinary productio
     'The non-Yandex production build exposes its existing opt-in QA harness; the exact Yandex release disables it and needs its separate SDK/UI checks.',
     'Software SwiftShader is reproducible native WebGL evidence, not physical-device certification.',
   ]};
-const save=()=>fs.writeFileSync(path.join(out,'report.json'),JSON.stringify(report,null,2)+'\n');
-const phase=value=>{report.phase=value;save();};
+const save=()=>{report.elapsedMs=Math.round(performance.now()-startedClock);fs.writeFileSync(path.join(out,'report.json'),JSON.stringify(report,null,2)+'\n');};
+const phase=value=>{
+  const elapsedMs=Math.round(performance.now()-startedClock),previous=report.phaseTimings.at(-1);
+  const row={phase:value,at:new Date().toISOString(),elapsedMs,previousPhaseMs:previous?elapsedMs-previous.elapsedMs:null,
+    coreVisits:report.samples.length,expansionVisits:report.expansionSamples.length};
+  report.phase=value;report.phaseTimings.push(row);save();console.log(JSON.stringify({resourcePhase:value,...row}));
+};
 async function bounded(promise,ms,label){let timer;try{return await Promise.race([promise,new Promise((_,reject)=>{timer=setTimeout(()=>reject(Error(`${label} timed out after ${ms} ms`)),ms);})]);}finally{clearTimeout(timer);}}
 function compareCounts(reference,sample,label,{programs=true}={}){
   const keys=[...memoryKeys,...(programs?['programs']:[])],deltas={};
@@ -140,7 +147,7 @@ try{
       assert.equal(sample.physicsBodies,first.physicsBodies);assert.equal(sample.constraints,first.constraints);assert.equal(sample.sceneNodes,first.sceneNodes);}
     save();
   }
-  const returned=await warmRoom(1);report.returnAfterExpansion=returned;
+  phase('return-after-expansion-startup');const returned=await warmRoom(1);report.returnAfterExpansion=returned;
   compareCounts(references.get(1),returned,'room 1 after expansion startup',{programs:false});
   phase('activated-fracture-route');report.controls.fracture={startup:await warmRoom(47)};
   const fracture=await bounded(page.evaluate(async()=>{

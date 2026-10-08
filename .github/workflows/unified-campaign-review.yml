@@ -4,7 +4,9 @@ on:
     branches: [upgrade/unified-campaign-20261007]
 permissions: {contents: read, actions: read}
 concurrency:
-  group: unified-campaign-review
+  # Every exact source gets its complete run; duplicate runs of that same
+  # source can still cancel each other without truncating another revision.
+  group: unified-campaign-review-${{ github.sha }}
   cancel-in-progress: true
 jobs:
   checks:
