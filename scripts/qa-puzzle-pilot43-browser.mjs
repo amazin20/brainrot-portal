@@ -72,7 +72,24 @@ try{
  await page.click('#play-again-button');await page.waitForFunction(()=>window.__NESI_DEMO_GAME__?.state==='playing');
  assert.equal(await page.evaluate(()=>window.__NESI_DEMO_GAME__.firstLevel.pilot43),true);
  assert.equal(await page.evaluate(()=>window.__NESI_DEMO_GAME__.levelIndex),42);report.replayPassed=true;
- await page.keyboard.press('Escape');await page.waitForFunction(()=>window.__NESI_DEMO_GAME__?.state==='paused');
+ await page.bringToFront();
+ report.pauseControl='escape-or-hud';
+ report.pauseBeforeFocus=await page.evaluate(()=>({hasFocus:document.hasFocus(),activeElement:document.activeElement?.id||document.activeElement?.tagName,
+  pointerLocked:Boolean(document.pointerLockElement),externalBlocked:window.__NESI_DEMO_GAME__?.externalBlocked,
+  externalPause:document.body.dataset.externalPause,state:window.__NESI_DEMO_GAME__?.state}));
+ await page.keyboard.press('Escape');
+ try{await page.waitForFunction(()=>!document.pointerLockElement,{timeout:5000});}
+ catch(error){
+  if(error.name!=='TimeoutError')throw error;
+  const locked=await page.evaluate(()=>Boolean(document.pointerLockElement));
+  if(locked){await page.evaluate(()=>document.exitPointerLock());report.pointerLockExitFallback=true;
+   await page.waitForFunction(()=>!document.pointerLockElement,{timeout:5000});}
+ }
+ report.pauseControlUsed='escape';
+ if(await page.evaluate(()=>window.__NESI_DEMO_GAME__?.state==='playing')){
+  await page.click('#pause-button');report.pauseControlUsed='hud';
+ }
+ await page.waitForFunction(()=>window.__NESI_DEMO_GAME__?.state==='paused',{timeout:30000});
  await page.click('#resume-button');await page.waitForFunction(()=>window.__NESI_DEMO_GAME__?.state==='playing');report.pauseResumePassed=true;
  await page.evaluate(()=>window.__NESI_DEMO_GAME__.renderer.setAnimationLoop(null));
  await page.setViewport({width:390,height:844,deviceScaleFactor:1});

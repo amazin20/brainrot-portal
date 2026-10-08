@@ -74,13 +74,29 @@ export function dressPuzzlePilot43(k,refs={}){
  // The first camera sees the button's north cheek before the remote wall art.
  // Treat that cheek as one actual instrument enclosure, inside its original
  // seven-by-twelve-metre box, instead of another featureless grey obstacle.
- const replaceWall=(p,size,material)=>{
+ const replaceWall=(p,size,material,{parkedCover=false}={})=>{
   const old=k.world.root.children.find(o=>o.isMesh&&!o.userData?.collisionProxy&&
    o.position.toArray().every((v,i)=>Math.abs(v-p[i])<.001)&&
    ['width','height','depth'].every((key,i)=>Math.abs((o.geometry.parameters?.[key]??0)-size[i])<.001));
   if(!old)return false;removeBatchedMesh(k,old);
   const axis=size[0]<size[2]?'x':'z',width=axis==='x'?size[2]:size[0],depth=axis==='x'?size[0]:size[2];
-  k.geometry(foldedBulkhead(width,size[1],depth),material,p,axis==='x'?Q().setFromAxisAngle(UP,Math.PI/2):Q(),{name:'Pilot / integral engineered observation casing'});
+  const geometry=foldedBulkhead(width,size[1],depth);
+  if(parkedCover){
+   // This fixed header and the raised door occupy the same physical housing.
+   // The original equal-depth recesses coincided across their entire field.
+   // Bring the stationary cover's field forward, but keep every point inside
+   // its original .7 m envelope. Its field at +/- .31 hides the leaf field at
+   // +/- .23; the outer flange at +/- .34 remains separated from the leaf's
+   // +/- .35 flange by a real centimetre. No render-order/depth-test bypass,
+   // instant leaf hiding, collider write or change to the moving leaf occurs.
+   const positions=geometry.attributes.position;
+   for(let i=0;i<positions.count;i++){
+    const z=positions.getZ(i),a=Math.abs(z);
+    if(a>.229)positions.setZ(i,Math.sign(z)*(.31+Math.max(0,a-.23)*.25));
+   }
+   geometry.computeVertexNormals();geometry.computeBoundingBox();geometry.computeBoundingSphere();
+  }
+  k.geometry(geometry,material,p,axis==='x'?Q().setFromAxisAngle(UP,Math.PI/2):Q(),{name:'Pilot / integral engineered observation casing'});
   return true;
  };
  const UP=V(0,1,0);
@@ -121,7 +137,7 @@ export function dressPuzzlePilot43(k,refs={}){
  replaceWall([-20,23.5,-8],[12,17,.6],coral);
  replaceWall([-20,23.5,-17],[12,17,.6],mint);
  replaceWall([-14,23.5,-12.5],[.6,17,9],mint);
- replaceWall([-26,27.5,-12.5],[.7,9,9],coral);
+ replaceWall([-26,27.5,-12.5],[.7,9,9],coral,{parkedCover:true});
 
  // Give the existing moving shutter a folded front and inset channels inside
  // the exact same .7 m depth. Physics still measures this same leaf object.
