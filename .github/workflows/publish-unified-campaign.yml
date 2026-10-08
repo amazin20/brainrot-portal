@@ -41,8 +41,8 @@ jobs:
         run: |
           npm ci
           npm install --no-save --package-lock=false puppeteer-core@24.16.0
-      - name: Check bounded startup and trusted mouse and touch input helpers
-        run: node --test tests/browser-startup.test.js tests/unified-public-input.test.js
+      - name: Check bounded startup, trusted input and failed-media diagnostics
+        run: node --test tests/browser-startup.test.js tests/unified-public-input.test.js tests/unified-gallery-observability.test.js
       - name: Require attempt one, all 47 accepted jobs and the seven exact artifact archives
         uses: actions/github-script@v7
         env:
@@ -197,11 +197,11 @@ jobs:
         run: |
           mkdir -p preview-root
           ln -s "$GITHUB_WORKSPACE/site" preview-root/brainrot-portal
-          python3 -m http.server 4173 --bind 127.0.0.1 --directory preview-root >proof/prepublication-server.log 2>&1 &
+          node node_modules/vite/bin/vite.js preview --host 127.0.0.1 --port 4173 --strictPort --outDir preview-root --base / >proof/prepublication-server.log 2>&1 &
           publication_server_pid=$!
           trap 'kill "$publication_server_pid" 2>/dev/null || true' EXIT
           python3 - <<'PY'
-          import time, urllib.request
+          import hashlib, json, pathlib, time, urllib.error, urllib.request
           for attempt in range(40):
               try:
                   with urllib.request.urlopen('http://127.0.0.1:4173/brainrot-portal/build-info.json', timeout=2) as response:
@@ -211,6 +211,38 @@ jobs:
                   if attempt == 39:
                       raise
                   time.sleep(.25)
+          base='http://127.0.0.1:4173/brainrot-portal/'
+          checks=[]
+          for relative in ['walkthroughs/v54-level-17.mp4','walkthroughs/v54-level-17-lower.mp4','walkthroughs/v54-level-1.mp4']:
+              data=(pathlib.Path('site')/relative).read_bytes()
+              assert len(data)>128
+              for start in [0,len(data)//2,len(data)-64]:
+                  end=start+63
+                  request=urllib.request.Request(base+relative,headers={'Range':f'bytes={start}-{end}'})
+                  with urllib.request.urlopen(request,timeout=15) as response:
+                      assert response.status==206,(relative,response.status)
+                      assert response.headers['Content-Range']==f'bytes {start}-{end}/{len(data)}'
+                      assert response.headers['Accept-Ranges']=='bytes'
+                      assert response.headers['Content-Type'].split(';')[0]=='video/mp4'
+                      chunk=response.read()
+                      assert chunk==data[start:end+1],('Range bytes changed',relative,start)
+                      checks.append({'path':relative,'status':206,'start':start,'bytes':len(chunk),'sha256':hashlib.sha256(chunk).hexdigest()})
+              request=urllib.request.Request(base+relative,headers={'Range':f'bytes={len(data)}-'})
+              try:
+                  urllib.request.urlopen(request,timeout=15)
+                  raise AssertionError('Unsatisfiable range did not return416')
+              except urllib.error.HTTPError as error:
+                  assert error.code==416
+                  assert error.headers['Content-Range']==f'bytes */{len(data)}'
+          for relative in ['missing-publication-file.mp4','missing-publication-file.html','missing-publication-route']:
+              try:
+                  urllib.request.urlopen(base+relative,timeout=15)
+                  raise AssertionError('A missing publication path was hidden by a fallback')
+              except urllib.error.HTTPError as error:
+                  assert error.code==404
+          proof={'pass':True,'mediaByteRanges':checks,'unsatisfiableRanges':3,'missingPaths':3,'rebuild':False}
+          pathlib.Path('proof/prepublication-http-ranges.json').write_text(json.dumps(proof,indent=2)+'\n')
+          print('PUBLICATION HTTP RANGE VERIFIED',json.dumps(proof))
           PY
           timeout --signal=TERM --kill-after=10s 3600s node scripts/verify-unified-public.mjs
           node --input-type=module <<'JS'

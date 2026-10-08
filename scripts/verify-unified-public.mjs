@@ -42,7 +42,11 @@ async function availableLink(url){
 }
 async function captureFailure(page,report,out){
  if(report.failureState||page.isClosed())return;
- report.failureState=await page.evaluate(()=>({url:location.href,state:document.documentElement.dataset.runtimeState,levelIndex:document.documentElement.dataset.levelIndex,selected:document.querySelector('#level-select')?.value,hidden:document.hidden,focused:document.hasFocus(),externalPause:document.body.dataset.externalPause,error:document.querySelector('#error-detail')?.textContent,media:[...document.querySelectorAll('video')].map(video=>({src:video.currentSrc||video.src,error:video.error?.message,duration:video.duration,readyState:video.readyState}))})).catch(()=>null);
+ report.failureState=await page.evaluate(()=>{
+  const ranges=value=>Array.from({length:value.length},(_,index)=>({start:value.start(index),end:value.end(index)}));
+  return {url:location.href,state:document.documentElement.dataset.runtimeState,levelIndex:document.documentElement.dataset.levelIndex,selected:document.querySelector('#level-select')?.value,hidden:document.hidden,focused:document.hasFocus(),externalPause:document.body.dataset.externalPause,error:document.querySelector('#error-detail')?.textContent,
+   media:[...document.querySelectorAll('video')].map(video=>({recording:video.dataset.recording||null,src:video.currentSrc||video.src,error:video.error?{code:video.error.code,message:video.error.message}:null,duration:video.duration,currentTime:video.currentTime,seeking:video.seeking,paused:video.paused,readyState:video.readyState,networkState:video.networkState,width:video.videoWidth,height:video.videoHeight,seekable:ranges(video.seekable),buffered:ranges(video.buffered)}))};
+ }).catch(()=>null);
  await page.screenshot({path:path.join(out,'failure.png')}).catch(()=>{});
 }
 async function noDebugGlobals(page){
@@ -200,38 +204,54 @@ async function decodedVideoFrame(page,selector){
   return {currentTime:video.currentTime,duration:video.duration,width:video.videoWidth,height:video.videoHeight,readyState:video.readyState,luminanceRange:max-min,quantizedColors:colors.size};
  });
 }
-async function verifyGallery(browser,{root,out,report}){
+async function mediaState(page,selector){
+ return page.$eval(selector,video=>{
+  const ranges=value=>Array.from({length:value.length},(_,index)=>({start:value.start(index),end:value.end(index)}));
+  return {src:video.currentSrc||video.src,currentTime:video.currentTime,seeking:video.seeking,paused:video.paused,duration:video.duration,readyState:video.readyState,networkState:video.networkState,width:video.videoWidth,height:video.videoHeight,error:video.error?{code:video.error.code,message:video.error.message}:null,seekable:ranges(video.seekable),buffered:ranges(video.buffered)};
+ });
+}
+export async function verifyGallery(browser,{root,out,report}){
  const context=await browser.createBrowserContext(),page=await context.newPage();report.activePage=page;
  page.setDefaultTimeout(180000);page.on('pageerror',error=>report.errors.push(String(error)));
  try{
   await page.setViewport({width:1280,height:800,deviceScaleFactor:1});
   const gallery=new URL('walkthroughs.html',root);await page.goto(gallery.href,{waitUntil:'domcontentloaded'});
   await page.waitForSelector('[data-recording="17"]');
-  const result={url:gallery.href,currentRecordings:[],historicalGalleries:[]};
+  const result={url:gallery.href,currentRecordings:[],historicalGalleries:[],progress:{stage:'current-recordings'}};report.gallery=result;
   for(const record of recordings){
+   const recording={id:record.id,completed:false,decodedSeekFrames:[],seekAttempts:[]};result.currentRecordings.push(recording);
+   result.progress={stage:'current-metadata',recording:record.id};console.log('Public gallery metadata',record.id);
    const selector=await videoSelector(page,record.id);await page.waitForSelector(selector);
    const label=await page.$eval(`[data-recording="${record.id}"]`,element=>(element.closest('article,section')||element).textContent.trim());
    assert.doesNotMatch(label,/историческ(?:ая|ое|ий)\s+(?:запись|видео|прохождение)|архивн(?:ая|ое|ый)\s+(?:запись|видео|прохождение)/i,'Current video was labeled historical');
    await page.$eval(selector,video=>{video.preload='auto';video.muted=true;video.load();});
    await page.waitForFunction(selector=>{const video=document.querySelector(selector);return video&&!video.error&&Number.isFinite(video.duration)&&video.duration>0&&video.readyState>=1;},{timeout:120000},selector);
    const metadata=await page.$eval(selector,video=>({src:video.currentSrc,duration:video.duration,width:video.videoWidth,height:video.videoHeight,error:video.error?.message||null}));
+   Object.assign(recording,metadata);
    assert.equal(new URL(metadata.src).pathname,resource(root,record.src).pathname,'Gallery chose the wrong video');
    assert.ok(Math.abs(metadata.duration-record.duration)<.15,'Published media duration differs from accepted capture '+record.id);
+   result.progress={stage:'current-playback',recording:record.id};
    const playback=await page.$eval(selector,async video=>{video.currentTime=0;await video.play();const before=video.currentTime;await new Promise(resolve=>setTimeout(resolve,1200));video.pause();return {advance:video.currentTime-before,paused:video.paused};});
    assert.ok(playback.advance>.1,'Public recording did not actually play: '+record.id);
-   const frames=[];
+   recording.actualPlaybackSeconds=playback.advance;recording.afterPlayback=await mediaState(page,selector);
+   console.log('Public gallery playback',record.id,JSON.stringify({advance:playback.advance,state:recording.afterPlayback}));
    for(const fraction of [.2,.9]){
-    const time=metadata.duration*fraction;await page.$eval(selector,(video,time)=>{video.pause();video.currentTime=time;},time);
+    const time=metadata.duration*fraction,attempt={fraction,requestedTime:time,before:await mediaState(page,selector),completed:false};recording.seekAttempts.push(attempt);
+    result.progress={stage:'current-seek',recording:record.id,fraction,requestedTime:time};
+    await page.$eval(selector,(video,time)=>{video.pause();video.currentTime=time;},time);
+    attempt.afterAssignment=await mediaState(page,selector);console.log('Public gallery seek requested',record.id,JSON.stringify(attempt));
     await page.waitForFunction((selector,time)=>{const video=document.querySelector(selector);return !video.error&&!video.seeking&&video.readyState>=2&&Math.abs(video.currentTime-time)<.12;},{timeout:90000},selector,time);
+    attempt.afterReady=await mediaState(page,selector);
     const frame=await decodedVideoFrame(page,selector);assert.ok(frame.width>0&&frame.height>0&&frame.luminanceRange>12&&frame.quantizedColors>12,'Decoded public video frame is blank: '+record.id);
-    frames.push(frame);
+    recording.decodedSeekFrames.push(frame);attempt.completed=true;console.log('Public gallery seek decoded',record.id,JSON.stringify({fraction,requestedTime:time,frame}));
     await page.screenshot({path:path.join(out,`gallery-${record.id}-frame-${Math.round(fraction*100)}.png`)});
    }
-   result.currentRecordings.push({id:record.id,...metadata,actualPlaybackSeconds:playback.advance,decodedSeekFrames:frames});
+   recording.completed=true;
   }
   const archivePaths=['walkthroughs-v50.html','chapter-atlas/walkthroughs-v53.html'];
   const links=await page.$$eval('a[href]',elements=>elements.map(element=>({href:element.href,text:element.textContent.trim(),sectionHeading:element.closest('section,article,nav')?.querySelector('h1,h2,h3,h4')?.textContent.trim()||''})));
   for(const relative of archivePaths){
+   result.progress={stage:'historical-gallery',relative};console.log('Public historical gallery',relative);
    const expected=resource(root,relative),link=links.find(link=>new URL(link.href).pathname===expected.pathname);
    assert.ok(link,'Missing preserved historical gallery link: '+relative);
    assert.match(link.text+' '+link.sectionHeading,/архив|историческ|предыдущ/i,'Historical gallery is not clearly labeled: '+relative);
@@ -247,7 +267,7 @@ async function verifyGallery(browser,{root,out,report}){
    }catch(error){await captureFailure(archivePage,report,out);throw error;}
    finally{await archivePage.close();report.activePage=page;}
   }
-  await page.screenshot({path:path.join(out,'gallery-current-v54.png')});return result;
+  await page.screenshot({path:path.join(out,'gallery-current-v54.png')});result.progress={stage:'complete'};return result;
  }catch(error){await captureFailure(page,report,out);throw error;}
  finally{await context.close();report.activePage=null;}
 }
@@ -269,13 +289,13 @@ export async function main(){
   report.identity.modelManifestSHA256=rootModels.sha256;
   const {default:puppeteer,TimeoutError}=await import('puppeteer-core');report.browserStartup=[];
   browser=await launchBrowserWithStartupRetry({launch:options=>puppeteer.launch(options),TimeoutError,onAttempt:attempt=>report.browserStartup.push(attempt),options:{executablePath:process.env.CHROME_PATH||'/usr/bin/google-chrome',headless:true,protocolTimeout:720000,args:['--no-sandbox','--disable-dev-shm-usage','--use-angle=swiftshader','--enable-unsafe-swiftshader']}});
+  report.gallery=await verifyGallery(browser,{root,out,report});
   for(const base of [root,chapter])for(const viewport of MATRIX_VIEWPORTS)for(const level of MATRIX_LEVELS){
    console.log('Public native controls',base.href,viewport.width+'x'+viewport.height,'room',level);
    report.ordinary.push(await ordinaryMenuPlay(browser,{base,identity:rootInfo,viewport,level,out,report}));
   }
   report.matrix=assertMatrix(report.ordinary,{root,chapter});
   for(const base of [root,chapter])report.activeOriginalModels.push(await activeOriginalModels(browser,{base,identity:rootInfo,out,report}));
-  report.gallery=await verifyGallery(browser,{root,out,report});
   assert.deepEqual(report.errors,[]);report.pass=true;console.log('UNIFIED PUBLIC BROWSER VERIFIED',JSON.stringify({sourceCommit:source,plays:report.ordinary.length,currentVideos:report.gallery.currentRecordings.length,historicalGalleries:report.gallery.historicalGalleries.length}));
  }catch(error){
   report.error=String(error);report.stack=error.stack;
