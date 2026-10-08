@@ -44,6 +44,10 @@ function topple(d,o){const {game:g,level:l}=d;
 export function runExpansionBJourney(d,options={}){
  if(d.level.echoHorizon)return import('./LabEchoHorizonJourney.js').then(m=>m.runEchoHorizon(d,options));
  installRoom21Aim(d);
+ if(options.alternative==='manual-impact'){
+  check(d.level.index===46,'Manual impact alternative requires room 47');
+  return import('./LabExpansionAlternateJourney47.js').then(m=>m.runRoom47ManualImpact(d));
+ }
  if(options.alternative==='staged-cargo'){
   check(d.level.index===47,'Staged cargo alternative requires room 48');
   return import('./LabExpansionAlternateJourney48.js').then(m=>m.runRoom48StagedCargo(d));

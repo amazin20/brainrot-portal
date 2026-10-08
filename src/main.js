@@ -76,8 +76,8 @@ function showVictory(){
   $('#win-screen .eyebrow').textContent='ДРУГ ТОЖЕ ДОБРАЛСЯ';
   $('#play-again-button').textContent=last?'К первому испытанию':'Следующая комната';
   const allCompleted=availableRooms.every(index=>preferences.value.completed.includes(index));
-  $('#win-screen .muted').textContent=last?(allCompleted?'Все испытания этой версии пройдены. Друг с тобой.':'Последнее испытание пройдено. Друг с тобой; в лаборатории можно исследовать остальные комнаты.'):foundationEdition.enabled&&game.levelIndex===39?'Впереди финальная Башня: один непрерывный заход без чекпоинтов.':'Получилось! Следующее испытание добавит новую идею.';
-  if(game.firstLevel?.tower){$('#win-title').innerHTML='Башня<br />покорена<span>.</span>';$('#win-screen .eyebrow').textContent=`${game.firstLevel.completedStages} / ${game.firstLevel.totalStages} · ОДНИМ ЗАХОДОМ`;}
+  $('#win-screen .muted').textContent=last?(allCompleted?'Все испытания этой версии пройдены. Друг с тобой.':'Последнее испытание пройдено. Друг с тобой; в лаборатории можно исследовать остальные комнаты.'):foundationEdition.enabled&&game.levelIndex===39?'Впереди Складчатый замок: один непрерывный заход без чекпоинтов.':'Получилось! Следующее испытание добавит новую идею.';
+  if(game.firstLevel?.tower){$('#win-title').innerHTML=game.firstLevel.singularity?'Замок<br />пройден<span>.</span>':'Башня<br />покорена<span>.</span>';$('#win-screen .eyebrow').textContent=`${game.firstLevel.completedStages} / ${game.firstLevel.totalStages} · ОДНИМ ЗАХОДОМ`;}
   diagnostics();
 }
 function showHints(){

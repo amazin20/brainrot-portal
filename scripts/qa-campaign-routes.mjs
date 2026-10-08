@@ -115,6 +115,7 @@ Object.assign(foundationAlternates,{
  45:[{name:'observe-unbalanced-thrust',options:{route:'observe-unbalanced-thrust'},source:'tests/lab-expansion-a.test.js'}],
  51:[{name:'missed-echo-recovery',kind:'recovery',exercisesRecovery:true,options:{missFirst:true},source:'tests/lab-echo-horizon.test.js'}],
  46:[{name:'light-before-damp',options:{route:'light-before-damp'},source:'tests/lab-expansion-a.test.js'}],
+ 47:[{name:'manual-impact',options:{alternative:'manual-impact'},source:'tests/lab-room47-manual-impact.test.js'}],
 });
 const openAlternates={
  24:[{name:'ride-first',options:{route:'ride-first'},source:'src/game/LabOpenJourney.js'},
