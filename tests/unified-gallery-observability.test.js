@@ -18,7 +18,7 @@ function fakeVideo(id, seconds, seekState = {}) {
   let time = 0;
   const video = {
     tagName: 'VIDEO', dataset: {recording: id},
-    currentSrc: new URL(`walkthroughs/v54-level-${id}.mp4`, root).href,
+    currentSrc: new URL(`walkthroughs/v54-8f2132c-level-${id}.mp4`, root).href,
     duration: seconds, videoWidth: 854, videoHeight: 480,
     readyState: 1, networkState: 2, paused: true, seeking: false, error: null,
     seekable: ranges([[0, seconds]]), buffered: ranges([[0, 3]]),
@@ -48,6 +48,7 @@ function galleryFixture({seekState, screenshotError = false} = {}) {
     fakeVideo('17', duration, seekState),
     fakeVideo('17-lower', 116.91666666666667),
     fakeVideo('1', 8.833333333333334),
+    fakeVideo('47-manual-impact',94),fakeVideo('46', 90),fakeVideo('50',95),fakeVideo('50-free-cargo-bridge',98),
   ];
   const events = [], waits = [], timers = [];
   const report = {errors: []};
@@ -114,7 +115,7 @@ function galleryFixture({seekState, screenshotError = false} = {}) {
 
 async function reachFirstSeek(t, fixture = galleryFixture()) {
   t.mock.method(console, 'log', () => {});
-  await assert.rejects(verifyGallery(fixture.browser, {root, out, report: fixture.report}), error => error === fixture.failure);
+  await assert.rejects(verifyGallery(fixture.browser, {root, out, report: fixture.report,recordings:fixture.videos.map(video=>({id:video.dataset.recording,src:'walkthroughs/v54-8f2132c-level-'+video.dataset.recording+'.mp4',duration:video.duration}))}), error => error === fixture.failure);
   assert.equal(fixture.waits.length, 2, 'The real gallery function must reach metadata then first seek');
   return fixture;
 }
@@ -126,7 +127,7 @@ test('first seek failure retains incremental playback and before/after media evi
   assert.equal(gallery.currentRecordings.length, 1);
   const recording = gallery.currentRecordings[0];
   assert.equal(recording.id, '17'); assert.equal(recording.completed, false);
-  assert.equal(recording.src, new URL('walkthroughs/v54-level-17.mp4', root).href);
+  assert.equal(recording.src, new URL('walkthroughs/v54-8f2132c-level-17.mp4', root).href);
   assert.equal(recording.duration, duration);
   assert.ok(recording.actualPlaybackSeconds > .1);
   assert.deepEqual(recording.decodedSeekFrames, []);
@@ -157,8 +158,8 @@ test('failure snapshot retains every video, including unvisited media and error 
   const failure = fixture.report.failureState;
   assert.equal(failure.url, new URL('walkthroughs.html', root).href);
   assert.equal(failure.hidden, false); assert.equal(failure.focused, true);
-  assert.equal(failure.media.length, 3);
-  assert.deepEqual(failure.media.map(item => item.recording), ['17', '17-lower', '1']);
+  assert.equal(failure.media.length, 7);
+  assert.deepEqual(failure.media.map(item => item.recording), ['17', '17-lower', '1','47-manual-impact','46','50','50-free-cargo-bridge']);
   for (const item of failure.media) {
     for (const field of ['src', 'duration', 'currentTime', 'seeking', 'paused', 'readyState', 'networkState', 'width', 'height', 'seekable', 'buffered', 'error']) {
       assert.ok(Object.hasOwn(item, field), `Failure media is missing ${field}`);

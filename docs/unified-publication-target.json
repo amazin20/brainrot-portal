@@ -1,0 +1,202 @@
+{
+  "schemaVersion": 1,
+  "sourceCommit": "8d2c01eacd86fe9235a35e7ec5f624ba62c3b29e",
+  "workflowPath": ".github/workflows/unified-campaign-review.yml",
+  "sourceWorkflowSha256": "2b8ac9e5b33666399bec1d39f01333ca45f96079a2dd419ca2e06481097b0fca",
+  "reviewWorkflowSha256": "7b61c353c898da9f6bfddc46fbbbad824066c5601f3a872d9d35403702f8915b",
+  "expectedJobNames": [
+    "checks / Atlas menus, real loading and reduced motion",
+    "checks / Build browser and platform candidates exactly once",
+    "checks / Canonical, alternate and recovery profiles (classic)",
+    "checks / Canonical, alternate and recovery profiles (foundation)",
+    "checks / Canonical, alternate and recovery profiles (open)",
+    "checks / Carry/wind and exact Yandex SDK UI contract",
+    "checks / Classic archive WebGL 12–16",
+    "checks / Classic archive WebGL 17–21",
+    "checks / Classic archive WebGL 1–5",
+    "checks / Classic archive WebGL 22–27",
+    "checks / Classic archive WebGL 28–33",
+    "checks / Classic archive WebGL 6–11",
+    "checks / Classic physical routes, bypass and recovery regressions",
+    "checks / Complete active source regressions (legacy editions retained)",
+    "checks / Complete exact-package technical CI evidence",
+    "checks / Continuous ordinary recording (1-motion)",
+    "checks / Continuous ordinary recording (17-canonical)",
+    "checks / Continuous ordinary recording (17-lower-branch)",
+    "checks / Continuous ordinary recording (46-canonical)",
+    "checks / Continuous ordinary recording (47-manual-impact)",
+    "checks / Continuous ordinary recording (50-canonical)",
+    "checks / Continuous ordinary recording (50-free-cargo-bridge)",
+    "checks / Current campaign WebGL (1,2,3,4,5,6,7,8,9,10)",
+    "checks / Current campaign WebGL (11,12,13,14,15,16,17,18,19,20)",
+    "checks / Current campaign WebGL (21,22,23,24,25,26,27,28,29,30)",
+    "checks / Current campaign WebGL (31,32,33,34,35,36,37,38,39,40)",
+    "checks / Current campaign WebGL (41)",
+    "checks / Current campaign WebGL (42,43,44,45,46)",
+    "checks / Current campaign WebGL (47,48,49,50,51)",
+    "checks / Current late UI integration 31,32",
+    "checks / Current late UI integration 33,34",
+    "checks / Current late UI integration 35,36",
+    "checks / Current late UI integration 37,38",
+    "checks / Current late UI integration 39,40",
+    "checks / Finite Room 17 and late attacks plus both known Siphon exploits",
+    "checks / Foundation UI integration 1",
+    "checks / Foundation UI integration 2",
+    "checks / Foundation UI integration 3",
+    "checks / Foundation UI integration 30",
+    "checks / Foundation UI integration 4",
+    "checks / Foundation UI integration 5",
+    "checks / Frozen production resource lifecycle and context restore",
+    "checks / Open archive WebGL 24",
+    "checks / Open archive WebGL 28",
+    "checks / Open archive WebGL 30",
+    "checks / Production resize, quality and touch controls",
+    "checks / Research archive WebGL 31",
+    "checks / Research archive WebGL 32",
+    "checks / Research archive WebGL 33",
+    "checks / Resume, native landscape Play and graphics recovery",
+    "checks / Trusted mouse, emergence and real audio"
+  ],
+  "expectedJobs": 51,
+  "expectedArtifacts": 11,
+  "baseline": {
+    "sourceCommit": "578c31ebee7fd2ef01af5de8e673589c67e9daf0",
+    "publisherCommit": "3d30f18aaf9450ac5abca8b7fb153589e2feaf81",
+    "publicationRun": 37709529435,
+    "expectedSiteFiles": 977,
+    "proofArtifact": {
+      "id": 11523027575,
+      "name": "unified-publication-proof",
+      "sizeBytes": 24815706,
+      "digest": "sha256:387dc0dc7872951cc00b60e3594a683b210d1aa94f12b87e84c4a2c9ad763c5b"
+    },
+    "manifestSha256": "9db58c67dd2375abc7ac778e87dd5355858635acea0fac865732c2bb002579c1",
+    "receiptSha256": "c3f3ea43fe7386b7bd183a81ef3e1d37b857787ee7d674a8e309e35c910abdc0",
+    "archivePrefixTemplate": "publication-history/578c31e-before-{sourceShort}"
+  },
+  "recordings": [
+    {
+      "id": "17",
+      "directory": "recording-17",
+      "artifactName": "campaign-current-recording-17-canonical",
+      "level": 17,
+      "fps": 30,
+      "alternative": "",
+      "title": "Свободный конец — верхняя ветвь"
+    },
+    {
+      "id": "17-lower",
+      "directory": "recording-17-lower",
+      "artifactName": "campaign-current-recording-17-lower-branch",
+      "level": 17,
+      "fps": 12,
+      "alternative": "lower-branch",
+      "title": "Свободный конец — нижняя ветвь"
+    },
+    {
+      "id": "1",
+      "directory": "recording-1",
+      "artifactName": "campaign-current-recording-1-motion",
+      "level": 1,
+      "fps": 30,
+      "alternative": "",
+      "title": "Движение и первая головоломка"
+    },
+    {
+      "id": "46",
+      "directory": "recording-46",
+      "artifactName": "campaign-current-recording-46-canonical",
+      "level": 46,
+      "fps": 12,
+      "alternative": "",
+      "title": "Резонансный привод — демпфер и настил"
+    },
+    {
+      "id": "47-manual-impact",
+      "directory": "recording-47-manual-impact",
+      "artifactName": "campaign-current-recording-47-manual-impact",
+      "level": 47,
+      "fps": 12,
+      "alternative": "manual-impact",
+      "title": "Хрупкий предохранитель — ручной удар"
+    },
+    {
+      "id": "50",
+      "directory": "recording-50",
+      "artifactName": "campaign-current-recording-50-canonical",
+      "level": 50,
+      "fps": 12,
+      "alternative": "",
+      "title": "Стена становится мостом — сильный удар"
+    },
+    {
+      "id": "50-free-cargo-bridge",
+      "directory": "recording-50-free-cargo-bridge",
+      "artifactName": "campaign-current-recording-50-free-cargo-bridge",
+      "level": 50,
+      "fps": 12,
+      "alternative": "free-cargo-bridge",
+      "title": "Стена становится мостом — свободный груз"
+    }
+  ],
+  "locallyVerifiedTreeTwin": "57459a733ae6d18114f243b52fffd45d1dcde61b",
+  "sourceTree": "1bb0546cb29fe6919209103ece67d20a7ddb2377",
+  "inputArtifactsCore": [
+    {
+      "directory": "browser",
+      "name": "campaign-browser"
+    },
+    {
+      "directory": "acceptance",
+      "name": "campaign-technical-acceptance"
+    },
+    {
+      "directory": "attacks",
+      "name": "campaign-finite-attacks"
+    },
+    {
+      "directory": "yandex",
+      "name": "yandex-moderation-archive"
+    }
+  ],
+  "native": {
+    "levels": [
+      1,
+      17,
+      33,
+      41,
+      46,
+      47,
+      50,
+      51
+    ],
+    "viewports": [
+      {
+        "width": 1280,
+        "height": 800,
+        "touch": false
+      },
+      {
+        "width": 390,
+        "height": 844,
+        "touch": true
+      },
+      {
+        "width": 736,
+        "height": 414,
+        "touch": true
+      }
+    ],
+    "routeKeys": [
+      "root",
+      "chapter"
+    ],
+    "actorIds": [
+      1,
+      2,
+      11
+    ],
+    "actorLevel": 17
+  },
+  "evidenceScope": "Exact published L source/tree and local twin verified. All 51 job names and seven recording descriptors freshly derived from exact L workflow Git blobs and match the target. Fresh CI run37733898439 attempt1 remains pending until every required job/archive is accepted. K is ineligible after resource timeout; I failed classic UI. Live baseline remains accepted F. Native pre/post/deployment acceptance remains pending."
+}

@@ -1,285 +1,349 @@
 name: Publish the accepted unified campaign
-
 'on':
   push:
-    branches: [main]
-    paths: [.github/workflows/publish-unified-campaign.yml]
-  workflow_dispatch:
-
+    branches:
+    - main
+    paths:
+    - .github/workflows/publish-unified-campaign.yml
+  workflow_dispatch: null
 permissions:
   contents: read
   actions: read
-
 concurrency:
   group: pages
   cancel-in-progress: false
-
 env:
-  SOURCE_SHA: 578c31ebee7fd2ef01af5de8e673589c67e9daf0
-  SOURCE_SCRIPT_SHA: 578c31ebee7fd2ef01af5de8e673589c67e9daf0
-  REVIEW_RUN: '37684821653'
+  SOURCE_SHA: 8d2c01eacd86fe9235a35e7ec5f624ba62c3b29e
+  REVIEW_RUN: '37733898439'
   REVIEW_ATTEMPT: '1'
   REVIEW_WORKFLOW_PATH: .github/workflows/unified-campaign-review.yml
   PUBLIC_BASE: https://amazin20.github.io/brainrot-portal/
-
+  ACCEPTED_SOURCE_SHA: 8d2c01eacd86fe9235a35e7ec5f624ba62c3b29e
 jobs:
   assemble:
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
-    timeout-minutes: 90
+    timeout-minutes: 45
     steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ github.sha }}
-          persist-credentials: false
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-      - name: Validate publication preservation and archive safety
-        run: python3 -m unittest discover -s tests -p test_unified_publication.py -v
-      - name: Install the dependencies for native browser verification
-        run: |
-          npm ci
-          npm install --no-save --package-lock=false puppeteer-core@24.16.0
-      - name: Check bounded startup, trusted input and failed-media diagnostics
-        run: node --test tests/browser-startup.test.js tests/unified-public-input.test.js tests/unified-gallery-observability.test.js
-      - name: Require attempt one, all 47 accepted jobs and the seven exact artifact archives
-        uses: actions/github-script@v7
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-        with:
-          script: |
-            const fs = require('node:fs');
-            const assert = require('node:assert/strict');
-            const crypto = require('node:crypto');
-            const {Readable, Transform} = require('node:stream');
-            const {pipeline} = require('node:stream/promises');
-            const {owner, repo} = context.repo;
-            const source = process.env.SOURCE_SHA;
-            const runId = Number(process.env.REVIEW_RUN);
-            const attempt = Number(process.env.REVIEW_ATTEMPT);
-            fs.mkdirSync('proof', {recursive: true});
-            fs.writeFileSync('proof/publication-attempt.json', JSON.stringify({
-              publisherCommit: context.sha, sourceCommit: source, reviewRun: runId,
-              runAttempt: attempt, startedAt: new Date().toISOString()
-            }, null, 2) + '\n');
-            assert.equal(owner + '/' + repo, 'amazin20/brainrot-portal');
-            const pins = JSON.parse(fs.readFileSync('docs/accepted-unified-review-20261008.json', 'utf8'));
-            fs.copyFileSync('docs/accepted-unified-review-20261008.json', 'proof/accepted-review.json');
-            assert.equal(pins.sourceCommit, source);
-            assert.equal(process.env.SOURCE_SCRIPT_SHA, source);
-            assert.equal(pins.runId, runId);
-            assert.equal(pins.runAttempt, attempt);
-            assert.equal(attempt, 1);
-            assert.equal(pins.workflowPath, process.env.REVIEW_WORKFLOW_PATH);
-            assert.equal(pins.conclusion, 'success');
-            assert.match(source, /^[a-f0-9]{40}$/);
-            assert.ok(Number.isSafeInteger(runId) && runId > 0);
-            assert.equal(pins.jobs.length, 47);
-            assert.equal(new Set(pins.jobs.map(job => job.id)).size, 47);
-            assert.equal(new Set(pins.jobs.map(job => job.name)).size, 47);
-            for (const job of pins.jobs) {
-              assert.ok(Number.isSafeInteger(job.id) && job.id > 0);
-              assert.equal(typeof job.name, 'string');
-              assert.ok(job.name.length > 0);
-            }
-            const getRun = async () => {
-              const run = (await github.rest.actions.getWorkflowRun({owner, repo, run_id: runId})).data;
-              assert.equal(run.id, runId);
-              assert.equal(run.head_sha, source);
-              assert.equal(run.path, pins.workflowPath);
-              assert.equal(run.run_attempt, attempt, 'The accepted review attempt was replaced');
-              assert.equal(run.status, 'completed');
-              assert.equal(run.conclusion, 'success');
-              return run;
-            };
-            const run = await getRun();
-            const jobs = await github.paginate(github.rest.actions.listJobsForWorkflowRunAttempt, {
-              owner, repo, run_id: runId, attempt_number: attempt, per_page: 100
-            });
-            const identity = rows => rows.map(({id, name}) => ({id, name})).sort((a, b) => a.id - b.id);
-            assert.equal(jobs.length, 47);
-            assert.deepEqual(identity(jobs), identity(pins.jobs));
-            for (const job of jobs) {
-              assert.equal(job.run_id, runId);
-              assert.equal(job.head_sha, source);
-              assert.equal(job.status, 'completed', job.name);
-              assert.equal(job.conclusion, 'success', job.name);
-            }
-            fs.mkdirSync('inputs/zips', {recursive: true});
-            const headers = {
-              Authorization: 'Bearer ' + process.env.GITHUB_TOKEN,
-              Accept: 'application/vnd.github+json',
-              'X-GitHub-Api-Version': '2022-11-28'
-            };
-            const logHashes = [];
-            let nextJob = 0;
-            await Promise.all(Array.from({length: 4}, async () => {
-              while (nextJob < jobs.length) {
-                const job = jobs[nextJob++];
-                const response = await fetch('https://api.github.com/repos/' + owner + '/' + repo + '/actions/jobs/' + job.id + '/logs', {
-                  headers, signal: AbortSignal.timeout(120000)
-                });
-                assert.ok(response.ok, 'Job log HTTP ' + response.status + ': ' + job.name);
-                const log = await response.text();
-                assert.ok(new RegExp('git log -1 --format=%H\\r?\\n[^\\n]*' + source).test(log),
-                  'Job did not check out the exact accepted source: ' + job.name);
-                logHashes.push({id: job.id, name: job.name, sourceCommit: source,
-                  sha256: crypto.createHash('sha256').update(log).digest('hex')});
-              }
-            }));
-            const expectedDirectories = ['acceptance', 'attacks', 'browser', 'recording-1', 'recording-17', 'recording-17-lower', 'yandex'];
-            assert.equal(pins.artifacts.length, 7);
-            assert.equal(new Set(pins.artifacts.map(artifact => artifact.id)).size, 7);
-            assert.equal(new Set(pins.artifacts.map(artifact => artifact.name)).size, 7);
-            assert.deepEqual(pins.artifacts.map(artifact => artifact.directory).sort(), expectedDirectories);
-            const listed = await github.paginate(github.rest.actions.listWorkflowRunArtifacts, {
-              owner, repo, run_id: runId, per_page: 100
-            });
-            const names = new Set(pins.artifacts.map(artifact => artifact.name));
-            assert.deepEqual(identity(listed.filter(artifact => names.has(artifact.name))), identity(pins.artifacts));
-            const downloaded = [];
-            for (const pin of pins.artifacts) {
-              assert.ok(Number.isSafeInteger(pin.id) && pin.id > 0);
-              assert.ok(Number.isSafeInteger(pin.sizeBytes) && pin.sizeBytes > 0);
-              assert.match(pin.digest, /^sha256:[a-f0-9]{64}$/);
-              assert.match(pin.directory, /^[a-z0-9]+(?:-[a-z0-9]+)*$/);
-              const artifact = (await github.rest.actions.getArtifact({owner, repo, artifact_id: pin.id})).data;
-              assert.equal(artifact.id, pin.id);
-              assert.equal(artifact.expired, false, pin.name);
-              assert.equal(artifact.name, pin.name);
-              assert.equal(artifact.workflow_run.id, runId);
-              assert.equal(artifact.workflow_run.head_sha, source);
-              assert.equal(artifact.digest, pin.digest);
-              assert.equal(artifact.size_in_bytes, pin.sizeBytes);
-              const response = await fetch('https://api.github.com/repos/' + owner + '/' + repo + '/actions/artifacts/' + pin.id + '/zip', {
-                headers, signal: AbortSignal.timeout(180000)
+    - uses: actions/checkout@v4
+      with:
+        ref: ${{ github.sha }}
+        persist-credentials: false
+    - uses: actions/checkout@v4
+      with:
+        ref: ${{ env.ACCEPTED_SOURCE_SHA }}
+        path: accepted-source
+        persist-credentials: false
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 22
+    - name: Validate publication preservation and archive safety
+      run: python3 -m unittest discover -s tests -p test_unified_publication.py -v
+    - name: Install the dependencies for native browser verification
+      run: |
+        npm ci
+        npm install --no-save --package-lock=false puppeteer-core@24.16.0
+    - name: Check bounded startup, trusted input and failed-media diagnostics
+      run: node --test tests/browser-startup.test.js tests/unified-public-input.test.js tests/unified-gallery-observability.test.js
+        tests/unified-native-reports.test.js tests/unified-recording-identities.test.js tests/unified-publication-config.test.js
+    - name: Require every exact target job and current archive, plus the pinned F baseline proof
+      uses: actions/github-script@v7
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+      with:
+        script: |
+          const fs = require('node:fs');
+          const assert = require('node:assert/strict');
+          const crypto = require('node:crypto');
+          const {Readable, Transform} = require('node:stream');
+          const {pipeline} = require('node:stream/promises');
+          const {owner, repo} = context.repo;
+          const source = process.env.SOURCE_SHA;
+          const runId = Number(process.env.REVIEW_RUN);
+          const attempt = Number(process.env.REVIEW_ATTEMPT);
+          fs.mkdirSync('proof', {recursive: true});
+          fs.writeFileSync('proof/publication-attempt.json', JSON.stringify({
+            publisherCommit: context.sha, sourceCommit: source, reviewRun: runId,
+            runAttempt: attempt, startedAt: new Date().toISOString()
+          }, null, 2) + '\n');
+          assert.equal(owner + '/' + repo, 'amazin20/brainrot-portal');
+          const pins = JSON.parse(fs.readFileSync('docs/accepted-unified-review.json', 'utf8'));
+          fs.copyFileSync('docs/accepted-unified-review.json', 'proof/accepted-review.json');
+          assert.equal(pins.sourceCommit, source);
+          assert.equal(process.env.ACCEPTED_SOURCE_SHA, source);
+          assert.equal(pins.runId, runId);
+          assert.equal(pins.runAttempt, attempt);
+          assert.equal(attempt, 1);
+          assert.equal(pins.workflowPath, process.env.REVIEW_WORKFLOW_PATH);
+          assert.equal(pins.conclusion, 'success');
+          assert.match(source, /^[a-f0-9]{40}$/);
+          assert.ok(Number.isSafeInteger(runId) && runId > 0);
+          const target = JSON.parse(fs.readFileSync('docs/unified-publication-target.json','utf8'));
+          assert.equal(target.sourceCommit,source);
+          const {execFileSync}=require('node:child_process');
+          assert.equal(execFileSync('git',['-C','accepted-source','rev-parse','HEAD'],{encoding:'utf8'}).trim(),source);
+          assert.equal(execFileSync('git',['-C','accepted-source','rev-parse','HEAD^{tree}'],{encoding:'utf8'}).trim(),target.sourceTree);
+          assert.equal(pins.jobs.length, target.expectedJobs);
+          assert.deepEqual(pins.jobs.map(job=>job.name).sort(), target.expectedJobNames);
+          assert.equal(crypto.createHash('sha256').update(fs.readFileSync('accepted-source/.github/workflows/verified-build.yml')).digest('hex'),target.sourceWorkflowSha256);
+          assert.equal(crypto.createHash('sha256').update(fs.readFileSync('accepted-source/.github/workflows/unified-campaign-review.yml')).digest('hex'),target.reviewWorkflowSha256);
+          assert.equal(new Set(pins.jobs.map(job => job.id)).size, target.expectedJobs);
+          assert.equal(new Set(pins.jobs.map(job => job.name)).size, target.expectedJobs);
+          for (const job of pins.jobs) {
+            assert.ok(Number.isSafeInteger(job.id) && job.id > 0);
+            assert.equal(typeof job.name, 'string');
+            assert.ok(job.name.length > 0);
+          }
+          const getRun = async () => {
+            const run = (await github.rest.actions.getWorkflowRun({owner, repo, run_id: runId})).data;
+            assert.equal(run.id, runId);
+            assert.equal(run.head_sha, source);
+            assert.equal(run.path, pins.workflowPath);
+            assert.equal(run.run_attempt, attempt, 'The accepted review attempt was replaced');
+            assert.equal(run.status, 'completed');
+            assert.equal(run.conclusion, 'success');
+            return run;
+          };
+          const run = await getRun();
+          const jobs = await github.paginate(github.rest.actions.listJobsForWorkflowRunAttempt, {
+            owner, repo, run_id: runId, attempt_number: attempt, per_page: 100
+          });
+          const identity = rows => rows.map(({id, name}) => ({id, name})).sort((a, b) => a.id - b.id);
+          assert.equal(jobs.length, target.expectedJobs);
+          assert.deepEqual(identity(jobs), identity(pins.jobs));
+          for (const job of jobs) {
+            assert.equal(job.run_id, runId);
+            assert.equal(job.head_sha, source);
+            assert.equal(job.status, 'completed', job.name);
+            assert.equal(job.conclusion, 'success', job.name);
+          }
+          fs.mkdirSync('inputs/zips', {recursive: true});
+          const headers = {
+            Authorization: 'Bearer ' + process.env.GITHUB_TOKEN,
+            Accept: 'application/vnd.github+json',
+            'X-GitHub-Api-Version': '2022-11-28'
+          };
+          const prior = target.baseline, pin = prior.proofArtifact;
+          const previousRun=(await github.rest.actions.getWorkflowRun({owner,repo,run_id:prior.publicationRun})).data;
+          assert.equal(previousRun.head_sha,prior.publisherCommit);assert.equal(previousRun.run_attempt,1);
+          assert.equal(previousRun.status,'completed');assert.equal(previousRun.conclusion,'success');
+          const oldArtifact=(await github.rest.actions.getArtifact({owner,repo,artifact_id:pin.id})).data;
+          assert.equal(oldArtifact.name,pin.name);assert.equal(oldArtifact.size_in_bytes,pin.sizeBytes);
+          assert.equal(oldArtifact.digest,pin.digest);assert.equal(oldArtifact.expired,false);
+          assert.equal(oldArtifact.workflow_run.id,prior.publicationRun);assert.equal(oldArtifact.workflow_run.head_sha,prior.publisherCommit);
+          const oldResponse=await fetch('https://api.github.com/repos/'+owner+'/'+repo+'/actions/artifacts/'+pin.id+'/zip',{headers,signal:AbortSignal.timeout(180000)});
+          assert.ok(oldResponse.ok&&oldResponse.body,'Baseline proof ZIP unavailable');
+          const oldHash=crypto.createHash('sha256');let oldSize=0;
+          const oldMeter=new Transform({transform(bytes,encoding,done){oldSize+=bytes.length;if(oldSize>pin.sizeBytes)return done(new Error('Oversized baseline proof'));oldHash.update(bytes);done(null,bytes);}});
+          await pipeline(Readable.fromWeb(oldResponse.body),oldMeter,fs.createWriteStream('inputs/zips/baseline-publication.zip',{flags:'wx'}));
+          assert.equal(oldSize,pin.sizeBytes);assert.equal('sha256:'+oldHash.digest('hex'),pin.digest);
+          fs.writeFileSync('proof/baseline-artifact.json',JSON.stringify({publicationRun:previousRun.id,publisherCommit:previousRun.head_sha,publicationConclusion:previousRun.conclusion,runAttempt:previousRun.run_attempt,artifact:pin},null,2)+'\n');
+          const logHashes = [];
+          let nextJob = 0;
+          await Promise.all(Array.from({length: 4}, async () => {
+            while (nextJob < jobs.length) {
+              const job = jobs[nextJob++];
+              const response = await fetch('https://api.github.com/repos/' + owner + '/' + repo + '/actions/jobs/' + job.id + '/logs', {
+                headers, signal: AbortSignal.timeout(120000)
               });
-              assert.ok(response.ok, 'Artifact ZIP HTTP ' + response.status + ': ' + pin.name);
-              assert.ok(response.body, 'Artifact ZIP response has no body: ' + pin.name);
-              const hash = crypto.createHash('sha256');
-              let size = 0;
-              const meter = new Transform({transform(bytes, encoding, done) {
-                size += bytes.length;
-                if (size > pin.sizeBytes) return done(new Error('Oversized artifact ZIP: ' + pin.name));
-                hash.update(bytes);
-                done(null, bytes);
-              }});
-              const file = 'inputs/zips/' + pin.directory + '.zip';
-              await pipeline(Readable.fromWeb(response.body), meter, fs.createWriteStream(file, {flags: 'wx'}));
-              const digest = 'sha256:' + hash.digest('hex');
-              assert.equal(size, pin.sizeBytes, pin.name);
-              assert.equal(digest, pin.digest, pin.name);
-              downloaded.push({...pin, archivePath: file, downloadedBytes: size, downloadedDigest: digest});
+              assert.ok(response.ok, 'Job log HTTP ' + response.status + ': ' + job.name);
+              const log = await response.text();
+              assert.ok(new RegExp('git log -1 --format=%H\\r?\\n[^\\n]*' + source).test(log),
+                'Job did not check out the exact accepted source: ' + job.name);
+              logHashes.push({id: job.id, name: job.name, sourceCommit: source,
+                sha256: crypto.createHash('sha256').update(log).digest('hex')});
             }
-            await getRun();
-            fs.writeFileSync('proof/gates.json', JSON.stringify({
-              sourceCommit: source, sourceScriptCommit: source, publisherCommit: context.sha,
-              acceptedRun: run, jobs, jobLogHashes: logHashes.sort((a, b) => a.id - b.id),
-              allExpectedJobsPassed: 47, runAttempt: attempt, artifactInputs: downloaded,
-              checkedAt: new Date().toISOString()
-            }, null, 2) + '\n');
-            fs.writeFileSync('proof/artifact-inputs.json', JSON.stringify(downloaded, null, 2) + '\n');
-      - name: Safely extract only the checksum-pinned archives
-        run: python3 scripts/unified-publication.py unpack --inputs inputs --proof proof
-      - name: Provide the video decoder used to check accepted recordings
-        run: |
-          if ! command -v ffmpeg >/dev/null || ! command -v ffprobe >/dev/null; then
-            sudo apt-get update -qq
-            sudo apt-get install -y --no-install-recommends ffmpeg
-          fi
-      - name: Preserve the verified publication and assemble the accepted bytes without rebuilding
-        run: python3 scripts/unified-publication.py assemble --inputs inputs --site site --proof proof --publisher "$GITHUB_SHA"
-      - name: Check all 30 ordinary native cases on the assembled publication before upload
-        env:
-          PUBLIC_BASE: http://127.0.0.1:4173/brainrot-portal/
-          OUTPUT_DIR: proof/prepublication-browser
-        run: |
-          mkdir -p preview-root
-          ln -s "$GITHUB_WORKSPACE/site" preview-root/brainrot-portal
-          node node_modules/vite/bin/vite.js preview --host 127.0.0.1 --port 4173 --strictPort --outDir preview-root --base / >proof/prepublication-server.log 2>&1 &
-          publication_server_pid=$!
-          trap 'kill "$publication_server_pid" 2>/dev/null || true' EXIT
-          python3 - <<'PY'
-          import hashlib, json, pathlib, time, urllib.error, urllib.request
-          for attempt in range(40):
-              try:
-                  with urllib.request.urlopen('http://127.0.0.1:4173/brainrot-portal/build-info.json', timeout=2) as response:
-                      assert response.status == 200
-                  break
-              except Exception:
-                  if attempt == 39:
-                      raise
-                  time.sleep(.25)
-          base='http://127.0.0.1:4173/brainrot-portal/'
-          checks=[]
-          for relative in ['walkthroughs/v54-level-17.mp4','walkthroughs/v54-level-17-lower.mp4','walkthroughs/v54-level-1.mp4']:
-              data=(pathlib.Path('site')/relative).read_bytes()
-              assert len(data)>128
-              for start in [0,len(data)//2,len(data)-64]:
-                  end=start+63
-                  request=urllib.request.Request(base+relative,headers={'Range':f'bytes={start}-{end}'})
-                  with urllib.request.urlopen(request,timeout=15) as response:
-                      assert response.status==206,(relative,response.status)
-                      assert response.headers['Content-Range']==f'bytes {start}-{end}/{len(data)}'
-                      assert response.headers['Accept-Ranges']=='bytes'
-                      assert response.headers['Content-Type'].split(';')[0]=='video/mp4'
-                      chunk=response.read()
-                      assert chunk==data[start:end+1],('Range bytes changed',relative,start)
-                      checks.append({'path':relative,'status':206,'start':start,'bytes':len(chunk),'sha256':hashlib.sha256(chunk).hexdigest()})
-              request=urllib.request.Request(base+relative,headers={'Range':f'bytes={len(data)}-'})
-              try:
-                  urllib.request.urlopen(request,timeout=15)
-                  raise AssertionError('Unsatisfiable range did not return416')
-              except urllib.error.HTTPError as error:
-                  assert error.code==416
-                  assert error.headers['Content-Range']==f'bytes */{len(data)}'
-          for relative in ['missing-publication-file.mp4','missing-publication-file.html','missing-publication-route']:
-              try:
-                  urllib.request.urlopen(base+relative,timeout=15)
-                  raise AssertionError('A missing publication path was hidden by a fallback')
-              except urllib.error.HTTPError as error:
-                  assert error.code==404
-          proof={'pass':True,'mediaByteRanges':checks,'unsatisfiableRanges':3,'missingPaths':3,'rebuild':False}
-          pathlib.Path('proof/prepublication-http-ranges.json').write_text(json.dumps(proof,indent=2)+'\n')
-          print('PUBLICATION HTTP RANGE VERIFIED',json.dumps(proof))
-          PY
-          timeout --signal=TERM --kill-after=10s 3600s node scripts/verify-unified-public.mjs
-          node --input-type=module <<'JS'
-          import assert from 'node:assert/strict';
-          import fs from 'node:fs';
-          const report=JSON.parse(fs.readFileSync(process.env.OUTPUT_DIR+'/report.json','utf8'));
-          const root=new URL(process.env.PUBLIC_BASE),routes=[root.href,new URL('chapter-atlas/',root).href];
-          const levels=[1,17,33,41,51],viewports=[{width:1280,height:800,touch:false},{width:390,height:844,touch:true},{width:736,height:414,touch:true}];
-          assert.equal(report.pass,true);assert.deepEqual(report.errors,[]);
-          assert.equal(report.sourceCommit,process.env.SOURCE_SHA);assert.equal(report.identity.commit,process.env.SOURCE_SHA);
-          assert.equal(report.identity.rootAndChapterIdentical,true);
-          assert.deepEqual(report.matrix,{levels,routes,viewports,expected:30,verified:30,exact:true});
-          assert.equal(report.ordinary.length,30);
-          const expected=routes.flatMap(route=>viewports.flatMap(viewport=>levels.map(level=>[level,route,viewport.width,viewport.height,viewport.touch].join('|')))).sort();
-          const actual=report.ordinary.map(row=>{
-            for(const flag of ['selectedThroughMap','nativeTrustedPlay','pauseRestartResumeReturnPlay','reloadAndReplay'])assert.equal(row[flag],true);
-            assert.equal(row.buildInfoSHA256,report.identity.buildInfoSHA256);
-            const url=new URL(row.url);url.search='';url.hash='';
-            return [row.level,url.href,row.width,row.height,row.touch].join('|');
-          }).sort();
-          assert.deepEqual(actual,expected,'Missing, repeated or unexpected native browser case');
-          JS
-      - uses: actions/upload-pages-artifact@v3
-        with:
-          path: site
-      - uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: unified-publication-proof
-          path: proof/
-          if-no-files-found: error
-          retention-days: 30
-
-  publish:
+          }));
+          const expectedInputs=[...target.inputArtifactsCore,...target.recordings.map(record=>({directory:record.directory,name:record.artifactName}))];
+          assert.equal(target.expectedJobs,target.expectedJobNames.length);
+          assert.equal(target.expectedArtifacts,expectedInputs.length);
+          const expectedDirectories=expectedInputs.map(artifact=>artifact.directory).sort();
+          assert.equal(pins.artifacts.length,target.expectedArtifacts);
+          assert.equal(new Set(pins.artifacts.map(artifact=>artifact.id)).size,target.expectedArtifacts);
+          assert.equal(new Set(pins.artifacts.map(artifact=>artifact.name)).size,target.expectedArtifacts);
+          assert.deepEqual(pins.artifacts.map(artifact=>artifact.directory).sort(),expectedDirectories);
+          assert.deepEqual(pins.artifacts.map(({directory,name})=>({directory,name})).sort((a,b)=>a.directory.localeCompare(b.directory)),expectedInputs.sort((a,b)=>a.directory.localeCompare(b.directory)));
+          const listed = await github.paginate(github.rest.actions.listWorkflowRunArtifacts, {
+            owner, repo, run_id: runId, per_page: 100
+          });
+          const names = new Set(pins.artifacts.map(artifact => artifact.name));
+          assert.deepEqual(identity(listed.filter(artifact => names.has(artifact.name))), identity(pins.artifacts));
+          const downloaded = [];
+          for (const pin of pins.artifacts) {
+            assert.ok(Number.isSafeInteger(pin.id) && pin.id > 0);
+            assert.ok(Number.isSafeInteger(pin.sizeBytes) && pin.sizeBytes > 0);
+            assert.match(pin.digest, /^sha256:[a-f0-9]{64}$/);
+            assert.match(pin.directory, /^[a-z0-9]+(?:-[a-z0-9]+)*$/);
+            const artifact = (await github.rest.actions.getArtifact({owner, repo, artifact_id: pin.id})).data;
+            assert.equal(artifact.id, pin.id);
+            assert.equal(artifact.expired, false, pin.name);
+            assert.equal(artifact.name, pin.name);
+            assert.equal(artifact.workflow_run.id, runId);
+            assert.equal(artifact.workflow_run.head_sha, source);
+            assert.equal(artifact.digest, pin.digest);
+            assert.equal(artifact.size_in_bytes, pin.sizeBytes);
+            const response = await fetch('https://api.github.com/repos/' + owner + '/' + repo + '/actions/artifacts/' + pin.id + '/zip', {
+              headers, signal: AbortSignal.timeout(180000)
+            });
+            assert.ok(response.ok, 'Artifact ZIP HTTP ' + response.status + ': ' + pin.name);
+            assert.ok(response.body, 'Artifact ZIP response has no body: ' + pin.name);
+            const hash = crypto.createHash('sha256');
+            let size = 0;
+            const meter = new Transform({transform(bytes, encoding, done) {
+              size += bytes.length;
+              if (size > pin.sizeBytes) return done(new Error('Oversized artifact ZIP: ' + pin.name));
+              hash.update(bytes);
+              done(null, bytes);
+            }});
+            const file = 'inputs/zips/' + pin.directory + '.zip';
+            await pipeline(Readable.fromWeb(response.body), meter, fs.createWriteStream(file, {flags: 'wx'}));
+            const digest = 'sha256:' + hash.digest('hex');
+            assert.equal(size, pin.sizeBytes, pin.name);
+            assert.equal(digest, pin.digest, pin.name);
+            downloaded.push({...pin, archivePath: file, downloadedBytes: size, downloadedDigest: digest});
+          }
+          await getRun();
+          fs.writeFileSync('proof/gates.json', JSON.stringify({
+            sourceCommit: source, acceptedSourceCommit: source, nativeVerifierCommit: context.sha, publisherCommit: context.sha,
+            acceptedRun: run, jobs, jobLogHashes: logHashes.sort((a, b) => a.id - b.id),
+            allExpectedJobsPassed: target.expectedJobs, runAttempt: attempt, artifactInputs: downloaded,
+            checkedAt: new Date().toISOString()
+          }, null, 2) + '\n');
+          fs.writeFileSync('proof/artifact-inputs.json', JSON.stringify(downloaded, null, 2) + '\n');
+    - name: Adopt only the checksum-pinned successful 977-file F baseline
+      run: python3 scripts/unified-publication.py adopt-baseline --inputs inputs --proof proof
+    - name: Safely extract only the checksum-pinned archives
+      run: python3 scripts/unified-publication.py unpack --inputs inputs --proof proof
+    - name: Provide the video decoder used to check accepted recordings
+      run: |
+        if ! command -v ffmpeg >/dev/null || ! command -v ffprobe >/dev/null; then
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends ffmpeg
+        fi
+    - name: Preserve the verified publication and assemble the accepted bytes without rebuilding
+      run: python3 scripts/unified-publication.py assemble --inputs inputs --site site --proof proof --publisher "$GITHUB_SHA"
+    - uses: actions/upload-pages-artifact@v3
+      with:
+        path: site
+    - uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: unified-assembly-proof
+        path: proof/
+        if-no-files-found: error
+        retention-days: 30
+    - uses: actions/upload-artifact@v4
+      with:
+        name: unified-publication-candidate
+        path: site/
+        if-no-files-found: error
+        retention-days: 7
+  pre-native:
     needs: assemble
     runs-on: ubuntu-latest
-    timeout-minutes: 75
+    timeout-minutes: 65
+    strategy:
+      fail-fast: false
+      matrix:
+        shard:
+        - root
+        - chapter
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        ref: ${{ github.sha }}
+        persist-credentials: false
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 22
+    - name: Install only native verification dependencies
+      run: |-
+        npm ci
+        npm install --no-save --package-lock=false puppeteer-core@24.16.0
+    - uses: actions/download-artifact@v4
+      with:
+        name: unified-publication-candidate
+        path: site
+    - uses: actions/download-artifact@v4
+      with:
+        name: unified-assembly-proof
+        path: proof
+    - name: Require exact assembled candidate bytes before serving
+      run: python3 scripts/unified-publication.py check-local --site site --manifest proof/manifest.json
+    - name: Verify every target native case and current movie in this public entry, plus historical samples
+      env:
+        PUBLIC_BASE: http://127.0.0.1:4173/brainrot-portal/
+        PUBLIC_ROUTES: ${{ matrix.shard }}
+        OUTPUT_DIR: native/pre-${{ matrix.shard }}
+      run: |
+        mkdir -p preview-root native
+        ln -s "$GITHUB_WORKSPACE/site" preview-root/brainrot-portal
+        node node_modules/vite/bin/vite.js preview --host 127.0.0.1 --port 4173 --strictPort --outDir preview-root --base / >native/pre-${{ matrix.shard }}-server.log 2>&1 &
+        publication_server_pid=$!
+        trap 'kill "$publication_server_pid" 2>/dev/null || true' EXIT
+        python3 - <<'PYWAIT'
+        import time,urllib.request
+        for attempt in range(40):
+            try:
+                with urllib.request.urlopen('http://127.0.0.1:4173/brainrot-portal/build-info.json',timeout=2) as response:
+                    assert response.status==200
+                break
+            except Exception:
+                if attempt==39:raise
+                time.sleep(.25)
+        PYWAIT
+        python3 scripts/verify-unified-http.py --site site --base "$PUBLIC_BASE" --output native/pre-${{ matrix.shard }}-http-ranges.json
+        timeout --signal=TERM --kill-after=10s 3600s node scripts/verify-unified-public.mjs
+        node scripts/verify-unified-native-report.mjs shard "$OUTPUT_DIR/report.json" "${{ matrix.shard }}"
+    - uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: unified-pre-native-${{ matrix.shard }}
+        path: native/
+        if-no-files-found: error
+        retention-days: 30
+  pre-gate:
+    needs:
+    - assemble
+    - pre-native
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        ref: ${{ github.sha }}
+        persist-credentials: false
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 22
+    - uses: actions/download-artifact@v4
+      with:
+        name: unified-assembly-proof
+        path: proof
+    - uses: actions/download-artifact@v4
+      with:
+        pattern: unified-pre-native-*
+        path: proof/prepublication-browser
+        merge-multiple: true
+    - name: Require all independently complete target native shards
+      env:
+        PUBLIC_BASE: http://127.0.0.1:4173/brainrot-portal/
+      run: node scripts/verify-unified-native-report.mjs merge proof/prepublication-browser/report.json proof/prepublication-browser/pre-root/report.json
+        proof/prepublication-browser/pre-chapter/report.json
+    - uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: unified-publication-proof
+        path: proof/
+        if-no-files-found: error
+        retention-days: 30
+  publish:
+    needs:
+    - assemble
+    - pre-native
+    - pre-gate
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
     permissions:
       contents: read
       actions: read
@@ -289,94 +353,135 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ github.sha }}
-          persist-credentials: false
-      - uses: actions/download-artifact@v4
-        with:
-          name: unified-publication-proof
-          path: proof
-      - name: Guard every previous public byte immediately before the single deployment
-        run: python3 scripts/unified-publication.py verify --site-url "$PUBLIC_BASE" --manifest docs/accepted-siphon-publication-20261007.json --output proof/predeploy-public-bytes.json
-      - uses: actions/configure-pages@v5
-      - name: Require the current main publisher and unchanged acceptance before deployment
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const fs = require('node:fs'), assert = require('node:assert/strict');
-            const pins = JSON.parse(fs.readFileSync('docs/accepted-unified-review-20261008.json', 'utf8'));
-            const gate = JSON.parse(fs.readFileSync('proof/gates.json', 'utf8'));
-            assert.equal(gate.publisherCommit, context.sha);
-            assert.equal(gate.sourceCommit, process.env.SOURCE_SHA);
-            assert.equal(gate.sourceScriptCommit, process.env.SOURCE_SCRIPT_SHA);
-            assert.equal(gate.allExpectedJobsPassed, 47);
-            assert.equal(gate.runAttempt, 1);
-            assert.equal(gate.artifactInputs.length, 7);
-            const browser=JSON.parse(fs.readFileSync('proof/prepublication-browser/report.json','utf8'));
-            assert.equal(browser.pass,true);
-            assert.equal(browser.sourceCommit,process.env.SOURCE_SHA);
-            assert.equal(browser.ordinary.length,30);
-            assert.equal(browser.matrix.expected,30);
-            assert.equal(browser.matrix.verified,30);
-            assert.equal(browser.matrix.exact,true);
-            const run = (await github.rest.actions.getWorkflowRun({...context.repo, run_id: Number(process.env.REVIEW_RUN)})).data;
-            assert.equal(run.id, pins.runId);
-            assert.equal(run.head_sha, process.env.SOURCE_SHA);
-            assert.equal(run.path, process.env.REVIEW_WORKFLOW_PATH);
-            assert.equal(run.run_attempt, Number(process.env.REVIEW_ATTEMPT));
-            assert.equal(run.status, 'completed');
-            assert.equal(run.conclusion, 'success');
-            const main=(await github.rest.git.getRef({...context.repo,ref:'heads/main'})).data;
-            assert.equal(main.object.sha,context.sha,'Obsolete publisher is no longer the current main head');
-      - uses: actions/deploy-pages@v4
-        id: deployment
-      - name: Verify all current and preserved public bytes after deployment
-        run: python3 scripts/unified-publication.py verify --site-url "$PUBLIC_BASE" --manifest proof/manifest.json --output proof/public-bytes.json
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ env.SOURCE_SCRIPT_SHA }}
-          path: accepted-source
-          persist-credentials: false
-      - name: Require the native verification source to be the accepted commit
-        run: test "$(git -C accepted-source rev-parse HEAD)" = "$SOURCE_SHA"
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-      - name: Install only the dependencies for ordinary browser verification
-        run: |
-          npm ci
-          npm install --no-save --package-lock=false puppeteer-core@24.16.0
-      - name: Check all 30 ordinary native cases on the public publication
-        env:
-          OUTPUT_DIR: proof/unified-public-browser
-          ACCEPTED_SOURCE_DIR: accepted-source
-        run: |
-          timeout --signal=TERM --kill-after=10s 3600s node scripts/verify-unified-public.mjs
-          node --input-type=module <<'JS'
-          import assert from 'node:assert/strict';
-          import fs from 'node:fs';
-          const report=JSON.parse(fs.readFileSync(process.env.OUTPUT_DIR+'/report.json','utf8'));
-          const root=new URL(process.env.PUBLIC_BASE),routes=[root.href,new URL('chapter-atlas/',root).href];
-          const levels=[1,17,33,41,51],viewports=[{width:1280,height:800,touch:false},{width:390,height:844,touch:true},{width:736,height:414,touch:true}];
-          assert.equal(report.pass,true);assert.deepEqual(report.errors,[]);
-          assert.equal(report.sourceCommit,process.env.SOURCE_SHA);assert.equal(report.identity.commit,process.env.SOURCE_SHA);
-          assert.equal(report.identity.rootAndChapterIdentical,true);
-          assert.deepEqual(report.matrix,{levels,routes,viewports,expected:30,verified:30,exact:true});
-          assert.equal(report.ordinary.length,30);
-          const expected=routes.flatMap(route=>viewports.flatMap(viewport=>levels.map(level=>[level,route,viewport.width,viewport.height,viewport.touch].join('|')))).sort();
-          const actual=report.ordinary.map(row=>{
-            for(const flag of ['selectedThroughMap','nativeTrustedPlay','pauseRestartResumeReturnPlay','reloadAndReplay'])assert.equal(row[flag],true);
-            assert.equal(row.buildInfoSHA256,report.identity.buildInfoSHA256);
-            const url=new URL(row.url);url.search='';url.hash='';
-            return [row.level,url.href,row.width,row.height,row.touch].join('|');
-          }).sort();
-          assert.deepEqual(actual,expected,'Missing, repeated or unexpected native browser case');
-          JS
-      - uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: unified-public-verification
-          path: proof/
-          if-no-files-found: error
-          retention-days: 30
+    - uses: actions/checkout@v4
+      with:
+        ref: ${{ github.sha }}
+        persist-credentials: false
+    - uses: actions/download-artifact@v4
+      with:
+        name: unified-publication-proof
+        path: proof
+    - name: Guard every previous public byte immediately before the single deployment
+      run: python3 scripts/unified-publication.py verify --site-url "$PUBLIC_BASE" --manifest proof/baseline-accepted.json
+        --output proof/predeploy-public-bytes.json
+    - uses: actions/configure-pages@v5
+    - name: Require the current main publisher and unchanged acceptance before deployment
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const fs = require('node:fs'), assert = require('node:assert/strict');
+          const pins = JSON.parse(fs.readFileSync('docs/accepted-unified-review.json', 'utf8'));
+          const gate = JSON.parse(fs.readFileSync('proof/gates.json', 'utf8'));
+          const target = JSON.parse(fs.readFileSync('docs/unified-publication-target.json','utf8'));
+          const nativeCases=target.native.levels.length*target.native.viewports.length*target.native.routeKeys.length;
+          assert.equal(gate.publisherCommit, context.sha);
+          assert.equal(gate.sourceCommit, process.env.SOURCE_SHA);
+          assert.equal(gate.acceptedSourceCommit, process.env.ACCEPTED_SOURCE_SHA);
+          assert.equal(gate.allExpectedJobsPassed, target.expectedJobs);
+          assert.equal(gate.runAttempt, 1);
+          assert.equal(gate.artifactInputs.length, target.expectedArtifacts);
+          const browser=JSON.parse(fs.readFileSync('proof/prepublication-browser/report.json','utf8'));
+          assert.equal(browser.pass,true);
+          assert.equal(browser.sourceCommit,process.env.SOURCE_SHA);
+          assert.equal(browser.ordinary.length,nativeCases);
+          assert.equal(browser.matrix.expected,nativeCases);
+          assert.equal(browser.matrix.verified,nativeCases);
+          assert.equal(browser.matrix.exact,true);
+          const run = (await github.rest.actions.getWorkflowRun({...context.repo, run_id: Number(process.env.REVIEW_RUN)})).data;
+          assert.equal(run.id, pins.runId);
+          assert.equal(run.head_sha, process.env.SOURCE_SHA);
+          assert.equal(run.path, process.env.REVIEW_WORKFLOW_PATH);
+          assert.equal(run.run_attempt, Number(process.env.REVIEW_ATTEMPT));
+          assert.equal(run.status, 'completed');
+          assert.equal(run.conclusion, 'success');
+          const main=(await github.rest.git.getRef({...context.repo,ref:'heads/main'})).data;
+          assert.equal(main.object.sha,context.sha,'Obsolete publisher is no longer the current main head');
+
+          assert.equal(browser.shards.length,target.native.routeKeys.length);assert.deepEqual(browser.shards.map(row=>row.routeKeys[0]).sort(),[...target.native.routeKeys].sort());
+          assert.equal(gate.nativeVerifierCommit,context.sha);assert.equal(browser.verifierCommit,context.sha);
+          assert.equal(browser.publicationReceiptSHA256,JSON.parse(fs.readFileSync('proof/prepublication-browser/pre-root/report.json')).publicationReceiptSHA256);
+    - uses: actions/deploy-pages@v4
+      id: deployment
+    - name: Verify all current and preserved public bytes after deployment
+      run: python3 scripts/unified-publication.py verify --site-url "$PUBLIC_BASE" --manifest proof/manifest.json --output
+        proof/public-bytes.json
+    - uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: unified-deployment-proof
+        path: proof/
+        if-no-files-found: error
+        retention-days: 30
+  post-native:
+    needs: publish
+    runs-on: ubuntu-latest
+    timeout-minutes: 65
+    strategy:
+      fail-fast: false
+      matrix:
+        shard:
+        - root
+        - chapter
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        ref: ${{ github.sha }}
+        persist-credentials: false
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 22
+    - name: Install only native verification dependencies
+      run: |-
+        npm ci
+        npm install --no-save --package-lock=false puppeteer-core@24.16.0
+    - uses: actions/download-artifact@v4
+      with:
+        name: unified-deployment-proof
+        path: proof
+    - name: Verify every public target native case and current movie, plus historical samples
+      env:
+        PUBLIC_ROUTES: ${{ matrix.shard }}
+        OUTPUT_DIR: native/post-${{ matrix.shard }}
+      run: |-
+        timeout --signal=TERM --kill-after=10s 3600s node scripts/verify-unified-public.mjs
+        node scripts/verify-unified-native-report.mjs shard "$OUTPUT_DIR/report.json" "${{ matrix.shard }}"
+    - uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: unified-post-native-${{ matrix.shard }}
+        path: native/
+        if-no-files-found: error
+        retention-days: 30
+  post-gate:
+    needs:
+    - publish
+    - post-native
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        ref: ${{ github.sha }}
+        persist-credentials: false
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 22
+    - uses: actions/download-artifact@v4
+      with:
+        name: unified-deployment-proof
+        path: proof
+    - uses: actions/download-artifact@v4
+      with:
+        pattern: unified-post-native-*
+        path: proof/unified-public-browser
+        merge-multiple: true
+    - name: Require every target public native case after deployment
+      run: node scripts/verify-unified-native-report.mjs merge proof/unified-public-browser/report.json proof/unified-public-browser/post-root/report.json
+        proof/unified-public-browser/post-chapter/report.json
+    - uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: unified-public-verification
+        path: proof/
+        if-no-files-found: error
+        retention-days: 30

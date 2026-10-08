@@ -309,19 +309,19 @@ for (const [name, trust] of [
 const root = new URL('https://example.test/game/');
 const chapter = new URL('chapter-atlas/', root);
 function completeMatrix() {
-  return [root, chapter].flatMap(base => [1, 17, 33, 41, 51].flatMap(level => [
+  return [root, chapter].flatMap(base => [1, 17, 33, 41, 46, 47, 50, 51].flatMap(level => [
     {width: 1280, height: 800, touch: false},
     {width: 390, height: 844, touch: true},
     {width: 736, height: 414, touch: true},
   ].map(viewport => ({
     level, url: new URL('?level=' + level, base).href, ...viewport,
-    pauseRestartResumeReturnPlay: true, reloadAndReplay: true, nativeTrustedPlay: true,
+    selectedThroughMap: true, pauseRestartResumeReturnPlay: true, reloadAndReplay: true, nativeTrustedPlay: true,
   }))));
 }
 
-test('matrix requires all five rooms, both public URLs and all three viewports', () => {
+test('matrix requires all eight rooms, both public URLs and all three viewports', () => {
   const rows = completeMatrix();
-  assert.equal(rows.length, 30);
+  assert.equal(rows.length, 48);
   assert.doesNotThrow(() => assertMatrix(rows, {root, chapter}));
 });
 
@@ -342,3 +342,15 @@ for (const [name, mutate] of [
     assert.throws(() => assertMatrix(rows, {root, chapter}));
   });
 }
+
+for(const shard of ['root','chapter'])test(`exact ${shard} shard accepts 24 cases and rejects foreign cases`,()=>{
+ const rows=completeMatrix().filter(row=>new URL(row.url).pathname.endsWith('/chapter-atlas/')===(shard==='chapter'));
+ const options={root,chapter,routeKeys:[shard]};
+ assert.equal(rows.length,24);assert.equal(assertMatrix(rows,options).verified,24);
+ assert.throws(()=>assertMatrix(rows.slice(1),options));
+ const foreign=completeMatrix().filter(row=>new URL(row.url).pathname.endsWith('/chapter-atlas/')!==(shard==='chapter'));
+ assert.throws(()=>assertMatrix(foreign,options));
+});
+test('matrix rejects unknown, repeated and empty shard selections',()=>{
+ for(const routeKeys of [[],['root','root'],['other'],['root','chapter','root']])assert.throws(()=>assertMatrix(completeMatrix(),{root,chapter,routeKeys}));
+});

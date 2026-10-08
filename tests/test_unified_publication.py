@@ -21,7 +21,8 @@ ROOT = Path(__file__).resolve().parents[1]
 SPEC = importlib.util.spec_from_file_location('unified_publication', ROOT / 'scripts/unified-publication.py')
 publication = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(publication)
-SOURCE = '578c31ebee7fd2ef01af5de8e673589c67e9daf0'
+SOURCE = '8f2132cabdee6225bc9ebe34356a3bb1cf643dfe'
+TARGET = publication.read(ROOT / 'docs/unified-publication-target.json')
 
 
 def put(root, name, value):
@@ -40,7 +41,7 @@ def make_zip(filename, rows):
 
 
 class SyntheticRelease:
-    """Frozen browser/platform packages and 880 independently preserved files."""
+    """Frozen browser/platform packages and 977 independently preserved files."""
     def __init__(self, root):
         self.root = Path(root)
         self.inputs = self.root / 'inputs'
@@ -50,6 +51,8 @@ class SyntheticRelease:
         self.baseline = self.root / 'baseline'
         self.config = self.root / 'config.json'
         self.baseline_config = self.root / 'baseline.json'
+        self.target_config = self.root / 'target.json'
+        publication.write(self.target_config, {**TARGET, 'sourceCommit': SOURCE})
         self.rooms = [{'level': level, 'stableId': f'foundation-{level:03}', 'id': f'room-{level}'} for level in range(1, 52)]
         put(self.browser, 'index.html', b'<html>accepted game</html>')
         put(self.browser, 'assets/game-v54.js', b'/* immutable source and interface */')
@@ -96,6 +99,7 @@ class SyntheticRelease:
         self.recordings = {}
         for folder, level, fps, alternative in [
             ('recording-17', 17, 30, ''), ('recording-17-lower', 17, 12, 'lower-branch'), ('recording-1', 1, 30, ''),
+            ('recording-46', 46, 12, ''), ('recording-47-manual-impact', 47, 12, 'manual-impact'), ('recording-50', 50, 12, ''), ('recording-50-free-cargo-bridge', 50, 12, 'free-cargo-bridge'),
         ]:
             # Actual recording producer stores optional alternative and relative filenames.
             directory = self.inputs / folder
@@ -133,16 +137,26 @@ class SyntheticRelease:
             'chapter-atlas/walkthroughs/level-33.json': b'{"version":"v53"}',
             'chapter-atlas/walkthroughs/level-51.mp4': b'original echo video',
             'publication-history/previous/runtime.js': b'archived accepted runtime',
+            'walkthroughs-v50.html': b'original v50 gallery already preserved',
+            'chapter-atlas/walkthroughs-v53.html': b'original v53 gallery already preserved',
+            'publication-receipt.json': b'previous F receipt',
+            'chapter-atlas/publication-receipt.json': b'previous F chapter receipt',
+            'brainrot-portal-yandex-v54.zip': b'previous F platform archive',
+            'walkthroughs/v54-level-17.mp4': b'previous F canonical video',
+            'walkthroughs/v54-level-17-lower.mp4': b'previous F alternate video',
+            'walkthroughs/v54-level-1.mp4': b'previous F motion video',
         }
-        for index in range(880 - len(self.originals)):
+        for index in range(977 - len(self.originals)):
             self.originals[f'history/preserved-{index:04}.bin'] = f'historical file {index}'.encode()
         for name, value in self.originals.items():
             put(self.baseline, name, value)
-        publication.write(self.baseline_config, {'siteFiles': publication.inventory(self.baseline), 'publicationConclusion': 'success'})
+        publication.write(self.baseline_config, {'siteFiles': publication.inventory(self.baseline), 'publicationConclusion': 'success',
+            'gameCommit': TARGET['baseline']['sourceCommit'], 'interfaceCommit': TARGET['baseline']['sourceCommit'],
+            'publisherCommit': TARGET['baseline']['publisherCommit'], 'publicationRun': TARGET['baseline']['publicationRun']})
         publication.write(self.config, {
-            'sourceCommit': SOURCE, 'runId': 37684821653, 'runAttempt': 1,
-            'jobs': [{'id': index, 'name': f'gate-{index}'} for index in range(47)],
-            'artifacts': [{'id': 1, 'name': 'synthetic-pinned-input', 'digest': 'sha256:' + '3' * 64, 'directory': 'browser'}],
+            'sourceCommit': SOURCE, 'runId': 37725409355, 'runAttempt': 1, 'conclusion': 'success',
+            'jobs': [{'id': index+1, 'name': name} for index,name in enumerate(TARGET['expectedJobNames'])],
+            'artifacts': [{'id': index+1, 'name': f'synthetic-input-{index}', 'digest': 'sha256:' + '3' * 64, 'directory': f'input-{index}'} for index in range(TARGET['expectedArtifacts'])],
         })
 
     def fetch(self, rows, base, destination=None):
@@ -160,7 +174,7 @@ class SyntheticRelease:
         return result
 
     def assemble(self, fetch=None):
-        with mock.patch.object(publication, 'CONFIG', self.config), mock.patch.object(publication, 'BASELINE', self.baseline_config), \
+        with mock.patch.object(publication, 'CONFIG', self.config), mock.patch.object(publication, 'BASELINE', self.baseline_config), mock.patch.object(publication, 'TARGET', self.target_config), \
                 mock.patch.object(publication, 'fetch_inventory', side_effect=fetch or self.fetch), \
                 mock.patch.object(publication, 'verify_recording', side_effect=self.verify_recording), contextlib.redirect_stdout(io.StringIO()):
             publication.assemble(types.SimpleNamespace(inputs=str(self.inputs), site=str(self.site), proof=str(self.proof), publisher='a' * 40))
@@ -238,12 +252,13 @@ class UnifiedPublicationTests(unittest.TestCase):
             release = SyntheticRelease(temporary)
             release.assemble()
             replaced = {'index.html', 'build-info.json', 'walkthroughs.html', 'chapter-atlas/index.html',
-                        'chapter-atlas/build-info.json', 'chapter-atlas/walkthroughs.html'}
+                        'chapter-atlas/build-info.json', 'chapter-atlas/walkthroughs.html',
+                        'publication-receipt.json', 'chapter-atlas/publication-receipt.json'}
             for name, original in release.originals.items():
                 if name not in replaced:
                     self.assertEqual((release.site / name).read_bytes(), original, name)
-            self.assertEqual((release.site / 'walkthroughs-v50.html').read_bytes(), release.originals['walkthroughs.html'])
-            self.assertEqual((release.site / 'chapter-atlas/walkthroughs-v53.html').read_bytes(), release.originals['chapter-atlas/walkthroughs.html'])
+            self.assertEqual((release.site / 'walkthroughs-v54-578c31e.html').read_bytes(), release.originals['walkthroughs.html'])
+            self.assertEqual((release.site / 'chapter-atlas/walkthroughs-v54-578c31e.html').read_bytes(), release.originals['chapter-atlas/walkthroughs.html'])
             self.assertFalse((release.site / 'chapter-atlas/walkthroughs-v50.html').exists())
             for row in publication.inventory(release.browser):
                 if row['path'] != 'walkthroughs.html':
@@ -253,16 +268,92 @@ class UnifiedPublicationTests(unittest.TestCase):
                 gallery = (release.site / prefix / 'walkthroughs.html').read_text()
                 self.assertIn('href="/brainrot-portal/walkthroughs-v50.html"', gallery)
                 self.assertIn('href="/brainrot-portal/chapter-atlas/walkthroughs-v53.html"', gallery)
-                for folder, stem in [('recording-17', 'v54-level-17'), ('recording-17-lower', 'v54-level-17-lower'), ('recording-1', 'v54-level-1')]:
+                for record in TARGET['recordings']:
+                    folder, stem = record['directory'], publication.recording_stem(record, SOURCE)
                     original, evidence, _ = release.recordings[folder]
                     self.assertEqual((release.site / prefix / 'walkthroughs' / (stem + '.json')).read_bytes(), original.read_bytes())
                     self.assertEqual((release.site / prefix / 'walkthroughs' / (stem + '.mp4')).read_bytes(), (original.parent / evidence['video']).read_bytes())
             manifest = publication.read(release.proof / 'manifest.json')
             self.assertEqual(manifest['siteFiles'], publication.inventory(release.site))
-            self.assertEqual(manifest['successfulJobs'], 47)
+            self.assertEqual(manifest['successfulJobs'], TARGET['expectedJobs'])
             self.assertEqual(manifest['publicationPaths'], ['', 'chapter-atlas/'])
-            self.assertEqual((release.site / 'brainrot-portal-yandex-v54.zip').read_bytes(), release.yandex.read_bytes())
+            self.assertEqual((release.site / 'brainrot-portal-yandex-8f2132c.zip').read_bytes(), release.yandex.read_bytes())
             self.assertEqual((release.site / 'publication-receipt.json').read_bytes(), (release.site / 'chapter-atlas/publication-receipt.json').read_bytes())
+            # Every replaced F byte, including receipts and build identities, has
+            # a checksum-identical historical copy; old media stays in place.
+            archived = manifest['archivedReplacements']
+            self.assertEqual({row['originalPath'] for row in archived}, replaced)
+            for row in archived:
+                self.assertEqual((release.site / row['archivePath']).read_bytes(), release.originals[row['originalPath']])
+                self.assertEqual(publication.sha(release.site / row['archivePath']), row['sha256'])
+            self.assertEqual((release.site / 'walkthroughs-v50.html').read_bytes(), release.originals['walkthroughs-v50.html'])
+            self.assertEqual((release.site / 'chapter-atlas/walkthroughs-v53.html').read_bytes(), release.originals['chapter-atlas/walkthroughs-v53.html'])
+            self.assertEqual((release.site / 'brainrot-portal-yandex-v54.zip').read_bytes(), release.originals['brainrot-portal-yandex-v54.zip'])
+
+    def test_assembly_rejects_pending_or_incomplete_review_and_old_baseline(self):
+        for kind in ['pending', 'missing-job', 'foreign-job', 'missing-artifact', 'old-baseline']:
+            with self.subTest(kind=kind), tempfile.TemporaryDirectory() as temporary:
+                release = SyntheticRelease(temporary)
+                config = publication.read(release.config)
+                if kind == 'pending':
+                    config['conclusion'] = 'pending'
+                elif kind == 'missing-job':
+                    config['jobs'].pop()
+                elif kind == 'foreign-job':
+                    config['jobs'][0]['name'] = 'Successful unrelated job'
+                elif kind == 'missing-artifact':
+                    config['artifacts'].pop()
+                else:
+                    baseline = publication.read(release.baseline_config)
+                    baseline['siteFiles'] = baseline['siteFiles'][:880]
+                    publication.write(release.baseline_config, baseline)
+                publication.write(release.config, config)
+                fetch = mock.Mock(side_effect=AssertionError('Incomplete inputs must fail before touching live publication'))
+                with self.assertRaises(AssertionError):
+                    release.assemble(fetch)
+                fetch.assert_not_called()
+                self.assertFalse(release.site.exists())
+
+    def test_baseline_adoption_requires_pinned_successful_F_and_manifest_hash(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            target = copy.deepcopy(TARGET)
+            manifest = {'gameCommit': target['baseline']['sourceCommit'], 'interfaceCommit': target['baseline']['sourceCommit'],
+                        'publisherCommit': target['baseline']['publisherCommit'], 'publicationRun': target['baseline']['publicationRun'],
+                        'reviewConclusion': 'success', 'siteFiles': [{'path': f'history/{index}.bin'} for index in range(977)]}
+            original = root / 'original.json'
+            publication.write(original, manifest)
+            archive = root / 'inputs/zips/baseline-publication.zip'
+            archive.parent.mkdir(parents=True)
+            make_zip(archive, [('manifest.json', original.read_bytes())])
+            pin = {**target['baseline']['proofArtifact'], 'sizeBytes': archive.stat().st_size, 'digest': 'sha256:' + publication.sha(archive)}
+            target['baseline'].update(proofArtifact=pin, manifestSha256=publication.sha(original))
+            target_path, accepted_path = root / 'target.json', root / 'accepted.json'
+            publication.write(target_path, target)
+            gate = {'publicationRun': target['baseline']['publicationRun'], 'publisherCommit': target['baseline']['publisherCommit'],
+                    'publicationConclusion': 'success', 'runAttempt': 1, 'artifact': pin}
+            gate_path = root / 'proof/baseline-artifact.json'
+            publication.write(gate_path, gate)
+            args = types.SimpleNamespace(inputs=str(root / 'inputs'), proof=str(root / 'proof'))
+            with mock.patch.object(publication, 'TARGET', target_path), mock.patch.object(publication, 'BASELINE', accepted_path), contextlib.redirect_stdout(io.StringIO()):
+                publication.adopt_baseline(args)
+                accepted = publication.read(accepted_path)
+                self.assertEqual(accepted['publicationConclusion'], 'success')
+                self.assertEqual(len(accepted['siteFiles']), 977)
+                shutil.rmtree(root / 'inputs/baseline-publication')
+                accepted_path.unlink()
+                gate['publicationConclusion'] = 'failure'
+                publication.write(gate_path, gate)
+                with self.assertRaises(AssertionError):
+                    publication.adopt_baseline(args)
+                self.assertFalse(accepted_path.exists())
+                gate['publicationConclusion'] = 'success'
+                publication.write(gate_path, gate)
+                target['baseline']['manifestSha256'] = '0' * 64
+                publication.write(target_path, target)
+                with self.assertRaises(AssertionError):
+                    publication.adopt_baseline(args)
+                self.assertFalse(accepted_path.exists())
 
     def test_assembly_rejects_tampered_game_or_acceptance_before_live_fetch(self):
         for kind in ['browser', 'technical', 'platform', 'platform-zip']:

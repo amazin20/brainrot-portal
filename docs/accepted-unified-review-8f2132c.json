@@ -1,0 +1,12 @@
+{
+  "sourceCommit": "8f2132cabdee6225bc9ebe34356a3bb1cf643dfe",
+  "runId": 37725409355,
+  "runAttempt": 1,
+  "workflowPath": ".github/workflows/unified-campaign-review.yml",
+  "conclusion": "pending",
+  "completedAt": null,
+  "jobs": [],
+  "artifacts": [],
+  "metrics": {},
+  "evidenceScope": "UNACCEPTED: populate only from completed exact-source CI, API job/artifact metadata and checked logs; local target metrics are not CI acceptance."
+}

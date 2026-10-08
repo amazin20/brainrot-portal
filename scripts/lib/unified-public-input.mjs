@@ -2,13 +2,10 @@
  * actor transforms or game state. Scrolls are wheel events or real finger moves.
  */
 import assert from 'node:assert/strict';
+import {PUBLICATION_TARGET as TARGET} from './unified-publication-config.mjs';
 
-export const MATRIX_LEVELS=Object.freeze([1,17,33,41,51]);
-export const MATRIX_VIEWPORTS=Object.freeze([
- Object.freeze({width:1280,height:800,touch:false}),
- Object.freeze({width:390,height:844,touch:true}),
- Object.freeze({width:736,height:414,touch:true}),
-]);
+export const MATRIX_LEVELS=Object.freeze([...TARGET.native.levels]);
+export const MATRIX_VIEWPORTS=Object.freeze(TARGET.native.viewports.map(viewport=>Object.freeze({...viewport})));
 export const MAX_SCROLL_ATTEMPTS=20;
 export const SWIPE_STEPS=8;
 export const STABLE_MEASUREMENTS=4;
@@ -39,21 +36,31 @@ export function targetReachable(snapshot){
  }
  return true;
 }
-export function assertMatrix(rows,{root,chapter}={}){
- assert.equal(rows.length,30,'Native publication matrix requires exactly 30 full scenarios');
+export function matrixRoutes({root,chapter,routeKeys=[...TARGET.native.routeKeys]}={}){
+ assert.ok(root&&chapter,'Expected public root and chapter routes are required');
+ assert.ok(Array.isArray(routeKeys)&&routeKeys.length>=1&&routeKeys.length<=2);
+ assert.equal(new Set(routeKeys).size,routeKeys.length,'Duplicate native matrix shard');
+ for(const key of routeKeys)assert.ok(TARGET.native.routeKeys.includes(key),'Unknown native matrix shard');
+ const routes={root:String(root),chapter:String(chapter)};
+ const chapterURL=new URL(chapter),rootURL=new URL(root);
+ assert.equal(chapterURL.origin,rootURL.origin);
+ assert.equal(chapterURL.pathname,new URL('chapter-atlas/',rootURL).pathname);
+ return routeKeys.map(key=>routes[key]);
+}
+export function assertMatrix(rows,options={}){
+ const routes=matrixRoutes(options),expectedCount=routes.length*MATRIX_VIEWPORTS.length*MATRIX_LEVELS.length;
+ assert.equal(rows.length,expectedCount,'Native publication matrix requires every scenario in the selected public routes');
  const routeIdentity=value=>{const url=new URL(value);return url.origin+url.pathname;};
- const expectedRoutes=root&&chapter?[routeIdentity(root),routeIdentity(chapter)]:[...new Set(rows.map(row=>routeIdentity(row.url)))];
- assert.equal(expectedRoutes.length,2,'Native matrix requires both public entry points');
- assert.ok(expectedRoutes.some(route=>route.endsWith('/chapter-atlas/')),'Native matrix lacks chapter-atlas');
+ const expectedRoutes=routes.map(routeIdentity);
  const expected=new Set(expectedRoutes.flatMap(route=>MATRIX_VIEWPORTS.flatMap(viewport=>MATRIX_LEVELS.map(level=>JSON.stringify([route,viewport.width,viewport.height,viewport.touch,level])))));
  const found=new Set();
  for(const row of rows){
   const key=JSON.stringify([routeIdentity(row.url),row.width,row.height,row.touch,row.level]);
   assert.ok(expected.has(key),'Unexpected native matrix scenario: '+key);assert.ok(!found.has(key),'Duplicate native matrix scenario: '+key);found.add(key);
-  for(const flag of ['nativeTrustedPlay','pauseRestartResumeReturnPlay','reloadAndReplay'])assert.equal(row[flag],true,'Incomplete native lifecycle: '+flag+' '+key);
+  for(const flag of ['selectedThroughMap','nativeTrustedPlay','pauseRestartResumeReturnPlay','reloadAndReplay'])assert.equal(row[flag],true,'Incomplete native lifecycle: '+flag+' '+key);
  }
  assert.equal(found.size,expected.size,'Native matrix must not accept a subset');
- return {levels:[...MATRIX_LEVELS],routes:root&&chapter?[String(root),String(chapter)]:expectedRoutes,viewports:MATRIX_VIEWPORTS.map(viewport=>({...viewport})),expected:30,verified:found.size,exact:true};
+ return {levels:[...MATRIX_LEVELS],routes,viewports:MATRIX_VIEWPORTS.map(viewport=>({...viewport})),expected:expectedCount,verified:found.size,exact:true};
 }
 
 export async function measureNativeTarget(page,selector){

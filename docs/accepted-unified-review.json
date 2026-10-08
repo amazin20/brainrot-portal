@@ -1,0 +1,756 @@
+{
+  "sourceCommit": "8d2c01eacd86fe9235a35e7ec5f624ba62c3b29e",
+  "runId": 37733898439,
+  "runAttempt": 1,
+  "workflowPath": ".github/workflows/unified-campaign-review.yml",
+  "conclusion": "success",
+  "completedAt": "2026-10-08T07:04:16Z",
+  "jobs": [
+    {
+      "id": 113168995574,
+      "name": "checks / Finite Room 17 and late attacks plus both known Siphon exploits"
+    },
+    {
+      "id": 113168995672,
+      "name": "checks / Complete active source regressions (legacy editions retained)"
+    },
+    {
+      "id": 113168995732,
+      "name": "checks / Classic physical routes, bypass and recovery regressions"
+    },
+    {
+      "id": 113168995749,
+      "name": "checks / Canonical, alternate and recovery profiles (classic)"
+    },
+    {
+      "id": 113168995766,
+      "name": "checks / Canonical, alternate and recovery profiles (foundation)"
+    },
+    {
+      "id": 113168995780,
+      "name": "checks / Build browser and platform candidates exactly once"
+    },
+    {
+      "id": 113168995846,
+      "name": "checks / Canonical, alternate and recovery profiles (open)"
+    },
+    {
+      "id": 113169095032,
+      "name": "checks / Atlas menus, real loading and reduced motion"
+    },
+    {
+      "id": 113169095033,
+      "name": "checks / Production resize, quality and touch controls"
+    },
+    {
+      "id": 113169095035,
+      "name": "checks / Carry/wind and exact Yandex SDK UI contract"
+    },
+    {
+      "id": 113169095041,
+      "name": "checks / Trusted mouse, emergence and real audio"
+    },
+    {
+      "id": 113169095051,
+      "name": "checks / Frozen production resource lifecycle and context restore"
+    },
+    {
+      "id": 113169095083,
+      "name": "checks / Current campaign WebGL (47,48,49,50,51)"
+    },
+    {
+      "id": 113169095095,
+      "name": "checks / Research archive WebGL 31"
+    },
+    {
+      "id": 113169095111,
+      "name": "checks / Current campaign WebGL (21,22,23,24,25,26,27,28,29,30)"
+    },
+    {
+      "id": 113169095112,
+      "name": "checks / Research archive WebGL 32"
+    },
+    {
+      "id": 113169095122,
+      "name": "checks / Current campaign WebGL (11,12,13,14,15,16,17,18,19,20)"
+    },
+    {
+      "id": 113169095136,
+      "name": "checks / Current campaign WebGL (42,43,44,45,46)"
+    },
+    {
+      "id": 113169095138,
+      "name": "checks / Current campaign WebGL (31,32,33,34,35,36,37,38,39,40)"
+    },
+    {
+      "id": 113169095166,
+      "name": "checks / Current campaign WebGL (1,2,3,4,5,6,7,8,9,10)"
+    },
+    {
+      "id": 113169095198,
+      "name": "checks / Resume, native landscape Play and graphics recovery"
+    },
+    {
+      "id": 113169095217,
+      "name": "checks / Open archive WebGL 24"
+    },
+    {
+      "id": 113169095226,
+      "name": "checks / Current campaign WebGL (41)"
+    },
+    {
+      "id": 113169095281,
+      "name": "checks / Research archive WebGL 33"
+    },
+    {
+      "id": 113169095304,
+      "name": "checks / Current late UI integration 33,34"
+    },
+    {
+      "id": 113169095309,
+      "name": "checks / Classic archive WebGL 1–5"
+    },
+    {
+      "id": 113169095317,
+      "name": "checks / Foundation UI integration 1"
+    },
+    {
+      "id": 113169095318,
+      "name": "checks / Open archive WebGL 28"
+    },
+    {
+      "id": 113169095325,
+      "name": "checks / Classic archive WebGL 12–16"
+    },
+    {
+      "id": 113169095340,
+      "name": "checks / Open archive WebGL 30"
+    },
+    {
+      "id": 113169095344,
+      "name": "checks / Classic archive WebGL 6–11"
+    },
+    {
+      "id": 113169095346,
+      "name": "checks / Current late UI integration 35,36"
+    },
+    {
+      "id": 113169095354,
+      "name": "checks / Continuous ordinary recording (46-canonical)"
+    },
+    {
+      "id": 113169095359,
+      "name": "checks / Current late UI integration 37,38"
+    },
+    {
+      "id": 113169095361,
+      "name": "checks / Continuous ordinary recording (47-manual-impact)"
+    },
+    {
+      "id": 113169095365,
+      "name": "checks / Classic archive WebGL 22–27"
+    },
+    {
+      "id": 113169095368,
+      "name": "checks / Current late UI integration 39,40"
+    },
+    {
+      "id": 113169095382,
+      "name": "checks / Foundation UI integration 5"
+    },
+    {
+      "id": 113169095383,
+      "name": "checks / Classic archive WebGL 17–21"
+    },
+    {
+      "id": 113169095388,
+      "name": "checks / Continuous ordinary recording (1-motion)"
+    },
+    {
+      "id": 113169095390,
+      "name": "checks / Current late UI integration 31,32"
+    },
+    {
+      "id": 113169095391,
+      "name": "checks / Foundation UI integration 30"
+    },
+    {
+      "id": 113169095392,
+      "name": "checks / Foundation UI integration 3"
+    },
+    {
+      "id": 113169095426,
+      "name": "checks / Continuous ordinary recording (17-canonical)"
+    },
+    {
+      "id": 113169095434,
+      "name": "checks / Foundation UI integration 2"
+    },
+    {
+      "id": 113169095440,
+      "name": "checks / Continuous ordinary recording (50-canonical)"
+    },
+    {
+      "id": 113169095443,
+      "name": "checks / Foundation UI integration 4"
+    },
+    {
+      "id": 113169095457,
+      "name": "checks / Continuous ordinary recording (17-lower-branch)"
+    },
+    {
+      "id": 113169095559,
+      "name": "checks / Classic archive WebGL 28–33"
+    },
+    {
+      "id": 113169095574,
+      "name": "checks / Continuous ordinary recording (50-free-cargo-bridge)"
+    },
+    {
+      "id": 113191965960,
+      "name": "checks / Complete exact-package technical CI evidence"
+    }
+  ],
+  "artifacts": [
+    {
+      "id": 11533718510,
+      "name": "campaign-technical-acceptance",
+      "directory": "acceptance",
+      "sizeBytes": 904,
+      "digest": "sha256:051472a5be829c31ade56f1e52cc3fa275a6acf24067c455ebfb239b36316ee0"
+    },
+    {
+      "id": 11531435849,
+      "name": "campaign-finite-attacks",
+      "directory": "attacks",
+      "sizeBytes": 196416,
+      "digest": "sha256:d1ad13573d2c9fcfd92a72cb46e801ad105d1efa83a37cd00bb8aa99143602fc"
+    },
+    {
+      "id": 11531051164,
+      "name": "campaign-browser",
+      "directory": "browser",
+      "sizeBytes": 4315287,
+      "digest": "sha256:c67d6ece4c65d0fe0f762626c5107fc32d7238974fe2c03a194bb831f055bf4a"
+    },
+    {
+      "id": 11531069120,
+      "name": "campaign-current-recording-1-motion",
+      "directory": "recording-1",
+      "sizeBytes": 785540,
+      "digest": "sha256:adee43a80b13d0fa2c591ed0e7c582f3e419e8bd130947265861d13b5de59592"
+    },
+    {
+      "id": 11533163452,
+      "name": "campaign-current-recording-17-canonical",
+      "directory": "recording-17",
+      "sizeBytes": 5890640,
+      "digest": "sha256:894b6d3797f822e0ffa92a0701f24401e37d040b3b6c04ce55b934f15b09c4a5"
+    },
+    {
+      "id": 11531777043,
+      "name": "campaign-current-recording-17-lower-branch",
+      "directory": "recording-17-lower",
+      "sizeBytes": 4906390,
+      "digest": "sha256:54118f38f85bbd9ed6cbcbf9f2105b105fc29482d8aeb55ab1e06f152ba27d58"
+    },
+    {
+      "id": 11531251548,
+      "name": "campaign-current-recording-46-canonical",
+      "directory": "recording-46",
+      "sizeBytes": 2088545,
+      "digest": "sha256:6fcd49de8ecfa41cca032752184a59f2d5f1cef306f1145d94fd6ec230d6a479"
+    },
+    {
+      "id": 11531157477,
+      "name": "campaign-current-recording-47-manual-impact",
+      "directory": "recording-47-manual-impact",
+      "sizeBytes": 1334349,
+      "digest": "sha256:b77d8c3e8ffcb4ca7e418f32a5e8229da7c13c1c3e9b45a5591b55a1518eb7e7"
+    },
+    {
+      "id": 11532376221,
+      "name": "campaign-current-recording-50-canonical",
+      "directory": "recording-50",
+      "sizeBytes": 4032746,
+      "digest": "sha256:878c1270887d34194f84a79c7e9579002a8a24e0340ede21a9fdfdb9829434c9"
+    },
+    {
+      "id": 11531682719,
+      "name": "campaign-current-recording-50-free-cargo-bridge",
+      "directory": "recording-50-free-cargo-bridge",
+      "sizeBytes": 5841480,
+      "digest": "sha256:69cfff7669d9586f3d326b4acd922309b751b32ae18abf912a5e5ad696f2febb"
+    },
+    {
+      "id": 11530848450,
+      "name": "yandex-moderation-archive",
+      "directory": "yandex",
+      "sizeBytes": 4209568,
+      "digest": "sha256:296d630429a404d0a0110749c0206c939cba6d3294736c45c52f203fcdd43f91"
+    }
+  ],
+  "metrics": {
+    "acceptedJobs": 51,
+    "currentRecordingInputs": 7,
+    "verifiedArchiveInputs": 11
+  },
+  "provenance": {
+    "sourceTree": "1bb0546cb29fe6919209103ece67d20a7ddb2377",
+    "sourceWorkflowSha256": "2b8ac9e5b33666399bec1d39f01333ca45f96079a2dd419ca2e06481097b0fca",
+    "reviewWorkflowSha256": "7b61c353c898da9f6bfddc46fbbbad824066c5601f3a872d9d35403702f8915b",
+    "jobLogHashes": [
+      {
+        "id": 113168995574,
+        "name": "checks / Finite Room 17 and late attacks plus both known Siphon exploits",
+        "sourceCommit": "8d2c01eacd86fe9235a35e7ec5f624ba62c3b29e",
+        "bytes": 38035,
+        "sha256": "5829b3c66e1f26610f528c3273075a933853088256230a64796c50660e9cafb5"
+      },
+      {
+        "id": 113168995672,
+        "name": "checks / Complete active source regressions (legacy editions retained)",
+        "sourceCommit": "8d2c01eacd86fe9235a35e7ec5f624ba62c3b29e",
+        "bytes": 651637,
+        "sha256": "3a2bd59e58b7b6e70bf1b89bdb44d647fa745baba87c4b1339ac8ea9345fbb16"
+      },
+      {
+        "id": 113168995732,
+        "name": "checks / Classic physical routes, bypass and recovery regressions",
+        "sourceCommit": "8d2c01eacd86fe9235a35e7ec5f624ba62c3b29e",
+        "bytes": 52944,
+        "sha256": "23886af7df4461296bb41bfab4fc2bc9d5ec91e695ac51936ec739167c1e5bac"
+      },
+      {
+        "id": 113168995749,
+        "name": "checks / Canonical, alternate and recovery profiles (classic)",
+        "sourceCommit": "8d2c01eacd86fe9235a35e7ec5f624ba62c3b29e",
+        "bytes": 27005,
+        "sha256": "d05854fb22b57b6c78e0295aa263a7980708438a38ec8384f78c90fefddf1ef4"
+      },
+      {
+        "id": 113168995766,
+        "name": "checks / Canonical, alternate and recovery profiles (foundation)",
+        "sourceCommit": "8d2c01eacd86fe9235a35e7ec5f624ba62c3b29e",
+        "bytes": 29649,
+        "sha256": "68bd5407b87b4c7d865fb87c056c434ef82c0043ed46bc08bd90743f2a3c4961"
+      },
+      {
+        "id": 113168995780,
+        "name": "checks / Build browser and platform candidates exactly once",
+        "sourceCommit": "8d2c01eacd86fe9235a35e7ec5f624ba62c3b29e",
+        "bytes": 38632,
+        "sha256": "24ff35ff914375cbe59cf362a93ed903d55ce0d01da518950fe7c09d9be24cf3"
+      },
+      {
+        "id": 113168995846,
+        "name": "checks / Canonical, alternate and recovery profiles (open)",
+        "sourceCommit": "8d2c01eacd86fe9235a35e7ec5f624ba62c3b29e",
+        "bytes": 20659,
+        "sha256": "ce78cef1a3f421fe7d46e44139cc060d6ea81aaf2659095f44594172cd02f026"
+      },
+      {
+        "id": 113169095032,
+        "name": "checks / Atlas menus, real loading and reduced motion",
+        "sourceCommit": "8d2c01eacd86fe9235a35e7ec5f624ba62c3b29e",
+        "bytes": 28057,
+        "sha256": "da764f3dc191b9a9e94706f3e5d79a77d0b545299bbbbfe1a498da0851bd8cc3"
+      },
+      {
+        "id": 113169095033,
+        "name": "checks / Production resize, quality and touch controls",
+        "sourceCommit": "8d2c01eacd86fe9235a35e7ec5f624ba62c3b29e",
+        "bytes": 26908,
+        "sha256": "9aed4d3de6daa598cf67619ae3cef1f937afaa48c4f864b1559660e64a3b932a"
+      },
+      {
+        "id": 113169095035,
+        "name": "checks / Carry/wind and exact Yandex SDK UI contract",
+        "sourceCommit": "8d2c01eacd86fe9235a35e7ec5f624ba62c3b29e",
+        "bytes": 32505,
+        "sha256": "e01e93e664976c86cd62b2b2b001df76b4c714e2d8a36cd5ae1c10108ffee953"
+      },
+      {
+        "id": 113169095041,
+        "name": "checks / Trusted mouse, emergence and real audio",
+        "sourceCommit": "8d2c01eacd86fe9235a35e7ec5f624ba62c3b29e",
+        "bytes": 26825,
+        "sha256": "3ea1424011e990b032471baf7cae043b3458a178ea563d068635f15b53b90f43"
+      },
+      {
+        "id": 113169095051,
+        "name": "checks / Frozen production resource lifecycle and context restore",
+        "sourceCommit": "8d2c01eacd86fe9235a35e7ec5f624ba62c3b29e",
+        "bytes": 64158,
+        "sha256": "8ded67fb881e1cb37e9a35d8a1b2134f450a1cfb282b43ffcd7fedf3a5b19b10"
+      },
+      {
+        "id": 113169095083,
+        "name": "checks / Current campaign WebGL (47,48,49,50,51)",
+        "sourceCommit": "8d2c01eacd86fe9235a35e7ec5f624ba62c3b29e",
+        "bytes": 29320,
+        "sha256": "bcc7c17c596041f9cf50729679cb841f7aff6b0b4a96f15fa49ff4e39e69d115"
+      },
+      {
+        "id": 113169095095,
+        "name": "checks / Research archive WebGL 31",
+        "sourceCommit": "8d2c01eacd86fe9235a35e7ec5f624ba62c3b29e",
+        "bytes": 26215,
+        "sha256": "a2e0e0ac10b35d7f27cf1194c10b6b5ad064053f5083a979aaeeb356a0ae45d3"
+      },
+      {
+        "id": 113169095111,
+        "name": "checks / Current campaign WebGL (21,22,23,24,25,26,27,28,29,30)",
+        "sourceCommit": "8d2c01eacd86fe9235a35e7ec5f624ba62c3b29e",
+        "bytes": 36123,
+        "sha256": "3e292f587510f68eafc149774b736d2b29801047693e1fc72bdd17b05011877c"
+      },
+      {
+        "id": 113169095112,
+        "name": "checks / Research archive WebGL 32",
+        "sourceCommit": "8d2c01eacd86fe9235a35e7ec5f624ba62c3b29e",
+        "bytes": 26193,
+        "sha256": "9e91671f1bc8e0717a1db6091a4a36348093a9ad633cde13f74bd8e51880840a"
+      },
+      {
+        "id": 113169095122,
+        "name": "checks / Current campaign WebGL (11,12,13,14,15,16,17,18,19,20)",
+        "sourceCommit": "8d2c01eacd86fe9235a35e7ec5f624ba62c3b29e",
+        "bytes": 35548,
+        "sha256": "720c8bbe649d31e2b957efb86cfb553e020881b73dd8199e5a3f5f9b917698ad"
+      },
+      {
+        "id": 113169095136,
+        "name": "checks / Current campaign WebGL (42,43,44,45,46)",
+        "sourceCommit": "8d2c01eacd86fe9235a35e7ec5f624ba62c3b29e",
+        "bytes": 29831,
+        "sha256": "e8dc3ae4ec6e72b1e8eabcb01cb2f23391a3e09ee7f11081920560c2dd75e0e2"
+      },
+      {
+        "id": 113169095138,
+        "name": "checks / Current campaign WebGL (31,32,33,34,35,36,37,38,39,40)",
+        "sourceCommit": "8d2c01eacd86fe9235a35e7ec5f624ba62c3b29e",
+        "bytes": 36127,
+        "sha256": "42fda412f9d130eb8f98c026e879689455e2e49584f4392a1e3a324956485857"
+      },
+      {
+        "id": 113169095166,
+        "name": "checks / Current campaign WebGL (1,2,3,4,5,6,7,8,9,10)",
+        "sourceCommit": "8d2c01eacd86fe9235a35e7ec5f624ba62c3b29e",
+        "bytes": 32512,
+        "sha256": "c8593c8779fdcad71d57261fc14946f4e008088e9602c0f458560e57f5cce70c"
+      },
+      {
+        "id": 113169095198,
+        "name": "checks / Resume, native landscape Play and graphics recovery",
+        "sourceCommit": "8d2c01eacd86fe9235a35e7ec5f624ba62c3b29e",
+        "bytes": 25588,
+        "sha256": "3f5fa6f55d33aa300ef231e55a6feae9e4daf1ac36a64d91d971cc6ef7e93948"
+      },
+      {
+        "id": 113169095217,
+        "name": "checks / Open archive WebGL 24",
+        "sourceCommit": "8d2c01eacd86fe9235a35e7ec5f624ba62c3b29e",
+        "bytes": 25718,
+        "sha256": "52f881acb2d4bf996cdc55a0ce16d4f8aaa12b8c2503d6f9548b9c701c0b73b4"
+      },
+      {
+        "id": 113169095226,
+        "name": "checks / Current campaign WebGL (41)",
+        "sourceCommit": "8d2c01eacd86fe9235a35e7ec5f624ba62c3b29e",
+        "bytes": 28396,
+        "sha256": "170e92e78ac77984e8701ef45c86f17e88f8ef0756817a33aa74f4cfd08b5b20"
+      },
+      {
+        "id": 113169095281,
+        "name": "checks / Research archive WebGL 33",
+        "sourceCommit": "8d2c01eacd86fe9235a35e7ec5f624ba62c3b29e",
+        "bytes": 26156,
+        "sha256": "522d0dbd4a64a9ef33348c2cc179c09be434c9fce01cadc9769e3efd3752d6d2"
+      },
+      {
+        "id": 113169095304,
+        "name": "checks / Current late UI integration 33,34",
+        "sourceCommit": "8d2c01eacd86fe9235a35e7ec5f624ba62c3b29e",
+        "bytes": 27560,
+        "sha256": "dfb25bde75d2c054a657d6a986b0105a73a888c002d653f3ea1f0de68515271d"
+      },
+      {
+        "id": 113169095309,
+        "name": "checks / Classic archive WebGL 1–5",
+        "sourceCommit": "8d2c01eacd86fe9235a35e7ec5f624ba62c3b29e",
+        "bytes": 28779,
+        "sha256": "7d95154b474b43ffc796769cd32d5efa75ff0b3fe2d84a35c5439eeed9ee0954"
+      },
+      {
+        "id": 113169095317,
+        "name": "checks / Foundation UI integration 1",
+        "sourceCommit": "8d2c01eacd86fe9235a35e7ec5f624ba62c3b29e",
+        "bytes": 26444,
+        "sha256": "a29b4767e2da3c82be61820151f10e8d132b29345f1ddbe7408692adea3f3b7a"
+      },
+      {
+        "id": 113169095318,
+        "name": "checks / Open archive WebGL 28",
+        "sourceCommit": "8d2c01eacd86fe9235a35e7ec5f624ba62c3b29e",
+        "bytes": 25841,
+        "sha256": "86863e3c478bc8b98e8db7a6f3912e3f0a1ad01ea3592c0190817085987431d2"
+      },
+      {
+        "id": 113169095325,
+        "name": "checks / Classic archive WebGL 12–16",
+        "sourceCommit": "8d2c01eacd86fe9235a35e7ec5f624ba62c3b29e",
+        "bytes": 29083,
+        "sha256": "f3329edf4e70dced5626fd428db153f1198eebc39a735e5d1fd2f044caec2203"
+      },
+      {
+        "id": 113169095340,
+        "name": "checks / Open archive WebGL 30",
+        "sourceCommit": "8d2c01eacd86fe9235a35e7ec5f624ba62c3b29e",
+        "bytes": 25835,
+        "sha256": "daf2f1acecd97583f3ff058198c9d27c1ab4760aef8bbe5a6a1dd340e50bf6a5"
+      },
+      {
+        "id": 113169095344,
+        "name": "checks / Classic archive WebGL 6–11",
+        "sourceCommit": "8d2c01eacd86fe9235a35e7ec5f624ba62c3b29e",
+        "bytes": 26276,
+        "sha256": "8ddc3407d29040df98154161725386e021ebd37ea2f3cc8f9cdce3a2627cb866"
+      },
+      {
+        "id": 113169095346,
+        "name": "checks / Current late UI integration 35,36",
+        "sourceCommit": "8d2c01eacd86fe9235a35e7ec5f624ba62c3b29e",
+        "bytes": 27540,
+        "sha256": "fb60c273510413273494133fc9c3bf073d7cc6900a7999432433e537dfc84827"
+      },
+      {
+        "id": 113169095354,
+        "name": "checks / Continuous ordinary recording (46-canonical)",
+        "sourceCommit": "8d2c01eacd86fe9235a35e7ec5f624ba62c3b29e",
+        "bytes": 65315,
+        "sha256": "f1acd6c5fdd9daada381b8ce97c07e99fdf03d92870d6ba173ce2e737893d240"
+      },
+      {
+        "id": 113169095359,
+        "name": "checks / Current late UI integration 37,38",
+        "sourceCommit": "8d2c01eacd86fe9235a35e7ec5f624ba62c3b29e",
+        "bytes": 27607,
+        "sha256": "36878623d795c15c25cd5b9ce30fb053502c39c5aa73245aa081b4ba0554fd4e"
+      },
+      {
+        "id": 113169095361,
+        "name": "checks / Continuous ordinary recording (47-manual-impact)",
+        "sourceCommit": "8d2c01eacd86fe9235a35e7ec5f624ba62c3b29e",
+        "bytes": 65390,
+        "sha256": "7e087eb7fb58c20da53f5e0effe6974c61df1138b614e9d896dab5b8b2e7c1b2"
+      },
+      {
+        "id": 113169095365,
+        "name": "checks / Classic archive WebGL 22–27",
+        "sourceCommit": "8d2c01eacd86fe9235a35e7ec5f624ba62c3b29e",
+        "bytes": 26323,
+        "sha256": "5511ffee12277bf3a0dec14f9fef43f6f9be8e4abf8e259193da67396d6ab317"
+      },
+      {
+        "id": 113169095368,
+        "name": "checks / Current late UI integration 39,40",
+        "sourceCommit": "8d2c01eacd86fe9235a35e7ec5f624ba62c3b29e",
+        "bytes": 27643,
+        "sha256": "7416549a84865b24e184151246577c96b70f5d035cd7dc53b612f6df3dba8467"
+      },
+      {
+        "id": 113169095382,
+        "name": "checks / Foundation UI integration 5",
+        "sourceCommit": "8d2c01eacd86fe9235a35e7ec5f624ba62c3b29e",
+        "bytes": 26434,
+        "sha256": "68e1371e36e619ac5743b0768e072750742c8714f76e146198f77c81ddae16a0"
+      },
+      {
+        "id": 113169095383,
+        "name": "checks / Classic archive WebGL 17–21",
+        "sourceCommit": "8d2c01eacd86fe9235a35e7ec5f624ba62c3b29e",
+        "bytes": 28214,
+        "sha256": "2d8304c1f35ba0bdf18e253e34aca5fca67b4a0387517e33417d9501e3e00825"
+      },
+      {
+        "id": 113169095388,
+        "name": "checks / Continuous ordinary recording (1-motion)",
+        "sourceCommit": "8d2c01eacd86fe9235a35e7ec5f624ba62c3b29e",
+        "bytes": 65225,
+        "sha256": "d6c31b3308f72c50f295f05653e535d967204b09f74a680f690ed269526e25dd"
+      },
+      {
+        "id": 113169095390,
+        "name": "checks / Current late UI integration 31,32",
+        "sourceCommit": "8d2c01eacd86fe9235a35e7ec5f624ba62c3b29e",
+        "bytes": 27632,
+        "sha256": "34215593c38af4d759a27396567301564403345bb0932cb23956d1a9b6424bb8"
+      },
+      {
+        "id": 113169095391,
+        "name": "checks / Foundation UI integration 30",
+        "sourceCommit": "8d2c01eacd86fe9235a35e7ec5f624ba62c3b29e",
+        "bytes": 25846,
+        "sha256": "254c5075b607763328f2acb62198d783077fc3c39d3e6d4f93d9caf1ced5a203"
+      },
+      {
+        "id": 113169095392,
+        "name": "checks / Foundation UI integration 3",
+        "sourceCommit": "8d2c01eacd86fe9235a35e7ec5f624ba62c3b29e",
+        "bytes": 26390,
+        "sha256": "191282ffb1e1936525402cb406f5d91cf650fd009dc3ef1432d2f3755c86ea8c"
+      },
+      {
+        "id": 113169095426,
+        "name": "checks / Continuous ordinary recording (17-canonical)",
+        "sourceCommit": "8d2c01eacd86fe9235a35e7ec5f624ba62c3b29e",
+        "bytes": 66113,
+        "sha256": "792970e2ed8288124ffc3c4899692bce6f24b4f2df17ed83d60b52a8071e432c"
+      },
+      {
+        "id": 113169095434,
+        "name": "checks / Foundation UI integration 2",
+        "sourceCommit": "8d2c01eacd86fe9235a35e7ec5f624ba62c3b29e",
+        "bytes": 26250,
+        "sha256": "a331a07b8e7cd2cf93a94f6763006d7bfbca0c5f315eb845e0ece821cf50eca3"
+      },
+      {
+        "id": 113169095440,
+        "name": "checks / Continuous ordinary recording (50-canonical)",
+        "sourceCommit": "8d2c01eacd86fe9235a35e7ec5f624ba62c3b29e",
+        "bytes": 65547,
+        "sha256": "6274de9e3a726aa1f71fbfe4f2657e32ddc4d6f25a773865b08c840735893f93"
+      },
+      {
+        "id": 113169095443,
+        "name": "checks / Foundation UI integration 4",
+        "sourceCommit": "8d2c01eacd86fe9235a35e7ec5f624ba62c3b29e",
+        "bytes": 26146,
+        "sha256": "077dd64a73183cb66cd5169e33e0b99b091bada83fedd8e907b43fe7d8d2d678"
+      },
+      {
+        "id": 113169095457,
+        "name": "checks / Continuous ordinary recording (17-lower-branch)",
+        "sourceCommit": "8d2c01eacd86fe9235a35e7ec5f624ba62c3b29e",
+        "bytes": 64291,
+        "sha256": "21282fb2cd5afedcdaad0652f7d24b659580abaabf342dc8937c13307f247e0c"
+      },
+      {
+        "id": 113169095559,
+        "name": "checks / Classic archive WebGL 28–33",
+        "sourceCommit": "8d2c01eacd86fe9235a35e7ec5f624ba62c3b29e",
+        "bytes": 26322,
+        "sha256": "ab18bf7ab8efda0e11f60688d745172ff1ffd4a276ede03d561d7f26eadcc6a0"
+      },
+      {
+        "id": 113169095574,
+        "name": "checks / Continuous ordinary recording (50-free-cargo-bridge)",
+        "sourceCommit": "8d2c01eacd86fe9235a35e7ec5f624ba62c3b29e",
+        "bytes": 64485,
+        "sha256": "d54e9dfbda374b474bdd4f27b22287afc409a64ddb627dd7a64807c86b8141f3"
+      },
+      {
+        "id": 113191965960,
+        "name": "checks / Complete exact-package technical CI evidence",
+        "sourceCommit": "8d2c01eacd86fe9235a35e7ec5f624ba62c3b29e",
+        "bytes": 35804,
+        "sha256": "29365aa62cb115769e490cf1dc5daba4d03058e0d013036eea1c8743e7664cc8"
+      }
+    ],
+    "artifactMetadataMode": "filtered-run",
+    "artifactMetadataReads": [
+      {
+        "id": 11531051164,
+        "name": "campaign-browser",
+        "directory": "browser",
+        "method": "github_fetch",
+        "requestURL": "https://api.github.com/repos/amazin20/brainrot-portal/actions/runs/37733898439/artifacts?name=campaign-browser&per_page=100&page=1",
+        "originalResponseSha256": "7a018b1def79fa96de79f435b41bd8aa5e87b9a0ac6caddfab140e104f459da7"
+      },
+      {
+        "id": 11533718510,
+        "name": "campaign-technical-acceptance",
+        "directory": "acceptance",
+        "method": "github_fetch",
+        "requestURL": "https://api.github.com/repos/amazin20/brainrot-portal/actions/runs/37733898439/artifacts?name=campaign-technical-acceptance&per_page=100&page=1",
+        "originalResponseSha256": "ceef475a6ad459d73abfead332ecdf1173089588cc6aaa7a9569465b20e25404"
+      },
+      {
+        "id": 11531435849,
+        "name": "campaign-finite-attacks",
+        "directory": "attacks",
+        "method": "github_fetch",
+        "requestURL": "https://api.github.com/repos/amazin20/brainrot-portal/actions/runs/37733898439/artifacts?name=campaign-finite-attacks&per_page=100&page=1",
+        "originalResponseSha256": "f03bcd8d69e1ad22f193f061a35a8894d00e3ddd6d93c9ea39125202ced06326"
+      },
+      {
+        "id": 11530848450,
+        "name": "yandex-moderation-archive",
+        "directory": "yandex",
+        "method": "github_fetch",
+        "requestURL": "https://api.github.com/repos/amazin20/brainrot-portal/actions/runs/37733898439/artifacts?name=yandex-moderation-archive&per_page=100&page=1",
+        "originalResponseSha256": "cc54f7c9eaa54fa4ce5f89234d44c566dc4bd9b3ca9cb0724c9ee79a7f1f06a0"
+      },
+      {
+        "id": 11533163452,
+        "name": "campaign-current-recording-17-canonical",
+        "directory": "recording-17",
+        "method": "github_fetch",
+        "requestURL": "https://api.github.com/repos/amazin20/brainrot-portal/actions/runs/37733898439/artifacts?name=campaign-current-recording-17-canonical&per_page=100&page=1",
+        "originalResponseSha256": "80812028bb13118130833fab8e677d766613143a0101e61973d4ce515f8a4540"
+      },
+      {
+        "id": 11531777043,
+        "name": "campaign-current-recording-17-lower-branch",
+        "directory": "recording-17-lower",
+        "method": "github_fetch",
+        "requestURL": "https://api.github.com/repos/amazin20/brainrot-portal/actions/runs/37733898439/artifacts?name=campaign-current-recording-17-lower-branch&per_page=100&page=1",
+        "originalResponseSha256": "e2bb55d9e79473dbf4e4d2a1842dbd0aadb014bcc6d0a17b9badbb39b8e7cfb0"
+      },
+      {
+        "id": 11531069120,
+        "name": "campaign-current-recording-1-motion",
+        "directory": "recording-1",
+        "method": "github_fetch",
+        "requestURL": "https://api.github.com/repos/amazin20/brainrot-portal/actions/runs/37733898439/artifacts?name=campaign-current-recording-1-motion&per_page=100&page=1",
+        "originalResponseSha256": "1d57f98f0c621dff62fa028623f8094979e7a1a9146262bd4b4119cf86db6e43"
+      },
+      {
+        "id": 11531251548,
+        "name": "campaign-current-recording-46-canonical",
+        "directory": "recording-46",
+        "method": "github_fetch",
+        "requestURL": "https://api.github.com/repos/amazin20/brainrot-portal/actions/runs/37733898439/artifacts?name=campaign-current-recording-46-canonical&per_page=100&page=1",
+        "originalResponseSha256": "3f09d0e512cb7aef125d89ea08b2e1a8eedd607a5e46c139d7461f573a799d75"
+      },
+      {
+        "id": 11531157477,
+        "name": "campaign-current-recording-47-manual-impact",
+        "directory": "recording-47-manual-impact",
+        "method": "github_fetch",
+        "requestURL": "https://api.github.com/repos/amazin20/brainrot-portal/actions/runs/37733898439/artifacts?name=campaign-current-recording-47-manual-impact&per_page=100&page=1",
+        "originalResponseSha256": "1cd2ef48202887be98652ffc80c5c79447c2e7570375c170ab562409d760536c"
+      },
+      {
+        "id": 11532376221,
+        "name": "campaign-current-recording-50-canonical",
+        "directory": "recording-50",
+        "method": "github_fetch",
+        "requestURL": "https://api.github.com/repos/amazin20/brainrot-portal/actions/runs/37733898439/artifacts?name=campaign-current-recording-50-canonical&per_page=100&page=1",
+        "originalResponseSha256": "6ade49f8ae0aff346907072b4d90bb6a7f9964547755fad5db25a1f85a3f864d"
+      },
+      {
+        "id": 11531682719,
+        "name": "campaign-current-recording-50-free-cargo-bridge",
+        "directory": "recording-50-free-cargo-bridge",
+        "method": "github_fetch",
+        "requestURL": "https://api.github.com/repos/amazin20/brainrot-portal/actions/runs/37733898439/artifacts?name=campaign-current-recording-50-free-cargo-bridge&per_page=100&page=1",
+        "originalResponseSha256": "665adef0c3fdb054517b0e61974ef8ae15e300a6a4e4124ab703179813ab5ee1"
+      }
+    ],
+    "targetSha256": "2cb9428e296da2a4673ae1c50c4b357bf5aa03c854793fdd1dd32583653d9481",
+    "publicationWorkflowSha256": "8f5251b135bab86d7cda7035667be475aae60af69667949627bad1ec4f379c1e"
+  },
+  "evidenceScope": "Exact successful attempt-one CI identities, source tree/workflow bytes, checkout logs and downloaded artifact ZIP checksums. Publication package/media/native/preservation gates remain mandatory; this is not human, device or live Yandex acceptance."
+}

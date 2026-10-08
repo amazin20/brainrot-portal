@@ -8,18 +8,32 @@ import path from 'node:path';
 import {createHash} from 'node:crypto';
 import {pathToFileURL} from 'node:url';
 import {waitForStartMenu} from './lib/singularity-ui-check.mjs';
-import {nativeActivate,assertMatrix,MATRIX_LEVELS,MATRIX_VIEWPORTS} from './lib/unified-public-input.mjs';
+import {nativeActivate,assertMatrix,matrixRoutes,MATRIX_LEVELS,MATRIX_VIEWPORTS} from './lib/unified-public-input.mjs';
+import {PUBLICATION_TARGET as TARGET,recordingStem,historicalPrefix} from './lib/unified-publication-config.mjs';
 import {launchBrowserWithStartupRetry} from './lib/browser-startup.mjs';
 
-const DEFAULT_SOURCE='578c31ebee7fd2ef01af5de8e673589c67e9daf0';
+const DEFAULT_SOURCE=TARGET.sourceCommit;
 const SETTINGS='brainrot-foundation-v1:brainrot-portal.preferences.v24';
 const digest=bytes=>createHash('sha256').update(bytes).digest('hex');
 const delay=milliseconds=>new Promise(resolve=>setTimeout(resolve,milliseconds));
-const recordings=[
- {id:'17',src:'walkthroughs/v54-level-17.mp4',duration:108.36666666666666},
- {id:'17-lower',src:'walkthroughs/v54-level-17-lower.mp4',duration:116.91666666666667},
- {id:'1',src:'walkthroughs/v54-level-1.mp4',duration:8.833333333333334},
-];
+export function acceptedRecordings(receipt,source=DEFAULT_SOURCE){
+ assert.equal(receipt.gameCommit,source);assert.equal(receipt.interfaceCommit,source);
+ assert.equal(receipt.reviewConclusion,'success');assert.equal(receipt.successfulJobs,TARGET.expectedJobs);
+ assert.equal(receipt.recordings.length,TARGET.recordings.length);
+ const identities=new Set();
+ return TARGET.recordings.map(target=>{
+  const rows=receipt.recordings.filter(record=>record.id===target.id);assert.equal(rows.length,1);
+  const record=rows[0],data=record.originalEvidence;assert.ok(!identities.has(record.id));identities.add(record.id);
+  assert.equal(data.sourceCommit,source);assert.equal(data.level,target.level);assert.equal(data.fps,target.fps);
+  assert.equal(data.alternative??'',target.alternative);
+  assert.equal(record.publicVideo,'walkthroughs/'+recordingStem(target,source)+'.mp4');
+  assert.equal(record.publicEvidence,'walkthroughs/'+recordingStem(target,source)+'.json');
+  assert.equal(data.continuous,true);assert.equal(data.route.pass,true);assert.equal(data.route.resets,0);assert.equal(data.route.respawns,0);
+  assert.equal(data.firstFrame.cargoBodyId,data.lastFrame.cargoBodyId);assert.equal(data.lastFrame.state,'won');
+  assert.ok(Number.isFinite(data.durationSeconds)&&data.durationSeconds>5);
+  return {id:target.id,src:record.publicVideo,duration:data.durationSeconds};
+ });
+}
 
 function resource(base,relative){
  const url=new URL(relative,base);
@@ -159,15 +173,15 @@ async function activeOriginalModels(browser,{base,identity,out,report}){
  try{
   await page.setViewport({width:960,height:720,deviceScaleFactor:1});
   await page.evaluateOnNewDocument(key=>localStorage.setItem(key,JSON.stringify({quality:'low',muted:true,tutorial:false})),SETTINGS);
-  const url=new URL(base);url.search='?level=17&debug=1';await page.goto(url.href,{waitUntil:'domcontentloaded'});await waitForStartMenu(page);
-  await trustedActivate(page,'#play-button');await waitPlaying(page);
+  const url=new URL(base);url.search='?level='+TARGET.native.actorLevel+'&debug=1';await page.goto(url.href,{waitUntil:'domcontentloaded'});await waitForStartMenu(page);
+  await trustedActivate(page,'#play-button');await waitPlaying(page,TARGET.native.actorLevel);
   await page.waitForFunction(()=>window.__NESI_DEMO_GAME__?.renderFrames>2);
   const before=await page.evaluate(()=>window.__NESI_DEMO_GAME__.renderFrames);await delay(500);
-  const proof=await page.evaluate(()=>{
+  const proof=await page.evaluate(actorIds=>{
    const game=window.__NESI_DEMO_GAME__,equal=(a,b)=>!!a&&!!b&&a.length===b.length&&a.every((value,index)=>value===b[index]);
    const visible=object=>{for(let node=object;node;node=node.parent)if(node.visible===false)return false;return true;};
    const rows=[];
-   for(const id of [1,2,11]){
+   for(const id of actorIds){
     const source=game.assets.get(id),sourceMeshes=[];source?.traverse(node=>{if(node.isMesh)sourceMeshes.push(node);});
     const roots=[];game.scene.traverse(node=>{if(node.userData.assetId===id)roots.push(node);});
     const matches=[];
@@ -180,8 +194,8 @@ async function activeOriginalModels(browser,{base,identity,out,report}){
     rows.push({id,sourceLoaded:!!source,activeRoots:roots.length,visibleOriginalMeshes:matches});
    }
    const d=game.diagnostics();return {state:game.state,level:game.levelIndex+1,renderFrames:d.renderFrames,animationFrames:d.animationFrames,missingModels:d.missingModels,playerAppearance:game.playerVisual.userData.playerAppearanceMode,cargoIdentity:d.cargo.identity,cargoVisible:d.cargo.visible,rows};
-  });
-  assert.equal(proof.state,'playing');assert.equal(proof.level,17);assert.ok(proof.renderFrames>before,'Live public render loop did not advance');
+  },TARGET.native.actorIds);
+  assert.equal(proof.state,'playing');assert.equal(proof.level,TARGET.native.actorLevel);assert.ok(proof.renderFrames>before,'Live public render loop did not advance');
   assert.ok(proof.animationFrames>0);assert.deepEqual(proof.missingModels,[]);assert.equal(proof.cargoVisible,true);
   for(const row of proof.rows){assert.equal(row.sourceLoaded,true);assert.ok(row.activeRoots>0);assert.ok(row.visibleOriginalMeshes.some(mesh=>mesh.vertices>0&&mesh.triangles>0),'Original visible geometry absent for model '+row.id);}
   await page.screenshot({path:path.join(out,(base.pathname.endsWith('/chapter-atlas/')?'chapter':'root')+'-original-models-17.png')});
@@ -210,7 +224,25 @@ async function mediaState(page,selector){
   return {src:video.currentSrc||video.src,currentTime:video.currentTime,seeking:video.seeking,paused:video.paused,duration:video.duration,readyState:video.readyState,networkState:video.networkState,width:video.videoWidth,height:video.videoHeight,error:video.error?{code:video.error.code,message:video.error.message}:null,seekable:ranges(video.seekable),buffered:ranges(video.buffered)};
  });
 }
-export async function verifyGallery(browser,{root,out,report}){
+async function historicalVideo(page,{selector,expectedPath,out,stem}){
+ await page.waitForFunction(selector=>{const video=document.querySelector(selector);return !!video&&(video.currentSrc||video.getAttribute('src'));},{timeout:90000},selector);
+ await page.$eval(selector,video=>{video.preload='auto';video.muted=true;video.load();});
+ await page.waitForFunction(selector=>{const video=document.querySelector(selector);return !!video&&!video.error&&Number.isFinite(video.duration)&&video.duration>0&&video.readyState>=1;},{timeout:120000},selector);
+ const metadata=await page.$eval(selector,video=>({src:video.currentSrc,duration:video.duration,width:video.videoWidth,height:video.videoHeight,error:video.error?.message||null}));
+ assert.equal(new URL(metadata.src).pathname,expectedPath,'Historical gallery selected a different version or a broken relative path');
+ const playback=await page.$eval(selector,async video=>{video.currentTime=0;await video.play();const before=video.currentTime;await new Promise(resolve=>setTimeout(resolve,1200));video.pause();return {advance:video.currentTime-before};});
+ assert.ok(playback.advance>.1,'Historical recording did not actually play');
+ const time=metadata.duration*.2;
+ await page.$eval(selector,(video,time)=>{video.pause();video.currentTime=time;},time);
+ await page.waitForFunction((selector,time)=>{const video=document.querySelector(selector);return !video.error&&!video.seeking&&video.readyState>=2&&Math.abs(video.currentTime-time)<.12;},{timeout:90000},selector,time);
+ const frame=await decodedVideoFrame(page,selector);
+ assert.ok(frame.width>0&&frame.height>0&&frame.luminanceRange>12&&frame.quantizedColors>12,'Historical seek decoded a blank frame');
+ await page.screenshot({path:path.join(out,stem+'-decoded.png')});
+ return {...metadata,actualPlaybackSeconds:playback.advance,requestedSeekSeconds:time,decodedSeekFrame:frame,completed:true};
+}
+
+export async function verifyGallery(browser,{root,out,report,recordings}){
+ assert.ok(Array.isArray(recordings)&&recordings.length===TARGET.recordings.length,'Require every accepted recording in the target');
  const context=await browser.createBrowserContext(),page=await context.newPage();report.activePage=page;
  page.setDefaultTimeout(180000);page.on('pageerror',error=>report.errors.push(String(error)));
  try{
@@ -248,7 +280,7 @@ export async function verifyGallery(browser,{root,out,report}){
    }
    recording.completed=true;
   }
-  const archivePaths=['walkthroughs-v50.html','chapter-atlas/walkthroughs-v53.html'];
+  const archivePaths=['walkthroughs-v54-578c31e.html','chapter-atlas/walkthroughs-v54-578c31e.html','walkthroughs-v50.html','chapter-atlas/walkthroughs-v53.html'];
   const links=await page.$$eval('a[href]',elements=>elements.map(element=>({href:element.href,text:element.textContent.trim(),sectionHeading:element.closest('section,article,nav')?.querySelector('h1,h2,h3,h4')?.textContent.trim()||''})));
   for(const relative of archivePaths){
    result.progress={stage:'historical-gallery',relative};console.log('Public historical gallery',relative);
@@ -260,10 +292,19 @@ export async function verifyGallery(browser,{root,out,report}){
    try{
     await archivePage.goto(expected.href,{waitUntil:'domcontentloaded'});
     await archivePage.waitForFunction(()=>document.querySelector('video')||document.querySelectorAll('.level-card').length>0);
+    await archivePage.waitForFunction(()=>[...document.querySelectorAll('video')].some(video=>video.currentSrc||video.getAttribute('src')));
     const historical=await archivePage.evaluate(()=>({title:document.title,videoCount:document.querySelectorAll('video').length,cards:document.querySelectorAll('.level-card').length,videoSources:[...document.querySelectorAll('video')].map(video=>video.currentSrc||video.src||video.querySelector('source')?.src||'').filter(Boolean)}));
     for(const src of historical.videoSources)assert.equal(new URL(src).origin,root.origin,'Historical media left its preserved public origin');
-    await archivePage.screenshot({path:path.join(out,'historical-'+(relative.includes('v53')?'v53':'v50')+'-gallery.png')});
-    result.historicalGalleries.push({relative,label:link.text,sectionHeading:link.sectionHeading,...availability,...historical});
+    await archivePage.screenshot({path:path.join(out,'historical-'+relative.replaceAll('/','-').replace('.html','')+'-gallery.png')});
+    const samples=[];
+    const prefix=relative.startsWith('chapter-atlas/')?'chapter-atlas/':'';
+    const ids=relative.includes('v54')?(prefix?['17']:['17','17-lower','1']):[relative.includes('v53')?'33':'1'];
+    for(const id of ids){
+     const selector=relative.includes('v54')?`[data-recording="${id}"]`:'video';
+     const oldVideo=relative.includes('v54')?'v54-level-'+id:'level-'+String(Number(id)).padStart(2,'0');
+     samples.push({id,...await historicalVideo(archivePage,{selector,expectedPath:resource(root,prefix+'walkthroughs/'+oldVideo+'.mp4').pathname,out,stem:'historical-'+relative.replaceAll('/','-').replace('.html','')+'-'+id})});
+    }
+    result.historicalGalleries.push({relative,label:link.text,sectionHeading:link.sectionHeading,...availability,...historical,nativeMediaSamples:samples});
    }catch(error){await captureFailure(archivePage,report,out);throw error;}
    finally{await archivePage.close();report.activePage=page;}
   }
@@ -273,10 +314,12 @@ export async function verifyGallery(browser,{root,out,report}){
 }
 
 export async function main(){
- const source=process.env.SOURCE_SHA||DEFAULT_SOURCE;assert.match(source,/^[a-f0-9]{40}$/);
+ const source=process.env.SOURCE_SHA||DEFAULT_SOURCE;assert.match(source,/^[a-f0-9]{40}$/);assert.equal(source,TARGET.sourceCommit);
  const root=new URL(process.env.PUBLIC_BASE||'https://amazin20.github.io/brainrot-portal/');assert.ok(root.pathname.endsWith('/'),'PUBLIC_BASE must end in /');
  const chapter=new URL('chapter-atlas/',root),out=path.resolve(process.env.OUTPUT_DIR||process.env.OUT_DIR||'proof/unified-public-browser');fs.mkdirSync(out,{recursive:true});
- const report={pass:false,sourceCommit:source,root:root.href,chapter:chapter.href,scope:'public native desktop/touch menu controls, matching accepted build identities, active original actor meshes and real media decoding',limitations:['Software WebGL browser checks do not establish physical-device FPS or blind human playtest quality.','The separate publication byte verifier covers the complete accepted file inventory.'],errors:[],ordinary:[],activeOriginalModels:[]};
+ const routeKeys=process.env.PUBLIC_ROUTES?process.env.PUBLIC_ROUTES.split(','):['root','chapter'];
+ const selectedRoutes=matrixRoutes({root,chapter,routeKeys}).map(route=>new URL(route));
+ const report={verifierCommit:process.env.GITHUB_SHA||null,routeKeys,pass:false,sourceCommit:source,root:root.href,chapter:chapter.href,scope:'public native desktop/touch menu controls, matching accepted build identities, active original actor meshes and real media decoding',limitations:['Software WebGL browser checks do not establish physical-device FPS or blind human playtest quality.','The separate publication byte verifier covers the complete accepted file inventory.'],errors:[],ordinary:[],activeOriginalModels:[]};
  let browser;
  try{
   const rootInfo=await jsonResource(resource(root,'build-info.json')),chapterInfo=await jsonResource(resource(chapter,'build-info.json'));
@@ -285,17 +328,24 @@ export async function main(){
   report.identity={commit:source,version:rootInfo.value.version,levels:51,buildInfoSHA256:rootInfo.sha256,buildInfoBytes:rootInfo.bytes,rootAndChapterIdentical:true};
   const rootModels=await jsonResource(resource(root,'models/runtime/manifest.json')),chapterModels=await jsonResource(resource(chapter,'models/runtime/manifest.json'));
   assert.equal(rootModels.sha256,chapterModels.sha256,'Root and chapter original model manifests differ');
-  for(const id of [1,2,11])assert.ok(rootModels.value.models.find(model=>model.id===id&&/^[a-f0-9]{64}$/.test(model.outputSHA256)),'Missing original model identity '+id);
+  for(const id of TARGET.native.actorIds)assert.ok(rootModels.value.models.find(model=>model.id===id&&/^[a-f0-9]{64}$/.test(model.outputSHA256)),'Missing original model identity '+id);
   report.identity.modelManifestSHA256=rootModels.sha256;
+  const receipt=await jsonResource(resource(root,'publication-receipt.json')),chapterReceipt=await jsonResource(resource(chapter,'publication-receipt.json'));
+  assert.equal(receipt.sha256,chapterReceipt.sha256,'Root and chapter publication receipts differ');
+  const recordings=acceptedRecordings(receipt.value,source);report.publicationReceiptSHA256=receipt.sha256;
+  const previousReceipt=await jsonResource(resource(root,historicalPrefix(source)+'/publication-receipt.json'));
+  assert.equal(previousReceipt.sha256,TARGET.baseline.receiptSha256,'Previous F receipt bytes changed');
+  assert.equal(previousReceipt.value.gameCommit,TARGET.baseline.sourceCommit);assert.equal(previousReceipt.value.interfaceCommit,TARGET.baseline.sourceCommit);
+  report.previousPublicationReceiptSHA256=previousReceipt.sha256;
   const {default:puppeteer,TimeoutError}=await import('puppeteer-core');report.browserStartup=[];
   browser=await launchBrowserWithStartupRetry({launch:options=>puppeteer.launch(options),TimeoutError,onAttempt:attempt=>report.browserStartup.push(attempt),options:{executablePath:process.env.CHROME_PATH||'/usr/bin/google-chrome',headless:true,protocolTimeout:720000,args:['--no-sandbox','--disable-dev-shm-usage','--use-angle=swiftshader','--enable-unsafe-swiftshader']}});
-  report.gallery=await verifyGallery(browser,{root,out,report});
-  for(const base of [root,chapter])for(const viewport of MATRIX_VIEWPORTS)for(const level of MATRIX_LEVELS){
+  report.gallery=await verifyGallery(browser,{root,out,report,recordings});
+  for(const base of selectedRoutes)for(const viewport of MATRIX_VIEWPORTS)for(const level of MATRIX_LEVELS){
    console.log('Public native controls',base.href,viewport.width+'x'+viewport.height,'room',level);
    report.ordinary.push(await ordinaryMenuPlay(browser,{base,identity:rootInfo,viewport,level,out,report}));
   }
-  report.matrix=assertMatrix(report.ordinary,{root,chapter});
-  for(const base of [root,chapter])report.activeOriginalModels.push(await activeOriginalModels(browser,{base,identity:rootInfo,out,report}));
+  report.matrix=assertMatrix(report.ordinary,{root,chapter,routeKeys});
+  for(const base of selectedRoutes)report.activeOriginalModels.push(await activeOriginalModels(browser,{base,identity:rootInfo,out,report}));
   assert.deepEqual(report.errors,[]);report.pass=true;console.log('UNIFIED PUBLIC BROWSER VERIFIED',JSON.stringify({sourceCommit:source,plays:report.ordinary.length,currentVideos:report.gallery.currentRecordings.length,historicalGalleries:report.gallery.historicalGalleries.length}));
  }catch(error){
   report.error=String(error);report.stack=error.stack;
