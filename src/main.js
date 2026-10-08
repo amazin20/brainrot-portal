@@ -20,11 +20,13 @@ const debug=!yandex&&(query.get('debug')==='1'||query.get('smoke')==='1');
 // Player-facing puzzles keep control tutorials, without solution-hint buttons.
 $('#hint-button').hidden=!debug;
 const campaignRoute=readCampaignRoute(query,CAMPAIGN.length),openEdition=readOpenEdition(query),foundationEdition=readFoundationEdition(query);
-const availableRooms=foundationEdition.enabled?FOUNDATION_INDICES:openEdition.enabled?OPEN_ROOM_INDICES:CAMPAIGN.map((_,i)=>i);
+const puzzlePilot43=!yandex&&foundationEdition.enabled&&query.get('pilot')==='43';
+const availableRooms=puzzlePilot43?[42]:foundationEdition.enabled?FOUNDATION_INDICES:openEdition.enabled?OPEN_ROOM_INDICES:CAMPAIGN.map((_,i)=>i);
 // Retired speed-mode links return to the campaign without reloading or touching saves.
 if(campaignRoute.legacyVelocityLink)history.replaceState(history.state,'',location.pathname+campaignRoute.search+location.hash);
 let storage;try{storage=localStorage;}catch{}
-const preferences=new LabPreferences(foundationEdition.enabled?foundationStorage(storage):openEdition.enabled?openEditionStorage(storage):storage,
+const pilotStorage=storage&&{getItem:key=>storage.getItem('brainrot-puzzle-pilot43-v1:'+key),setItem:(key,value)=>storage.setItem('brainrot-puzzle-pilot43-v1:'+key,value)};
+const preferences=new LabPreferences(puzzlePilot43?pilotStorage:foundationEdition.enabled?foundationStorage(storage):openEdition.enabled?openEditionStorage(storage):storage,
   foundationEdition.enabled?{campaignRevision:CREATIVE_CAMPAIGN_REVISION,replacedIndices:CREATIVE_REPLACED_INDICES,roomRevisions:{16:'cable-supported-architecture-v1',32:'siphon-observatory-v1',50:'echo-horizon-v1'}}:{}),holds=new Set();
 const screens=['loading','start-screen','pause-screen','win-screen','error-screen'];
 const hudNodes={level:$('#level-number'),chamber:$('#chamber'),objective:$('#objective'),cargo:$('#cargo-status'),portals:$('#portal-status')};
@@ -75,8 +77,10 @@ function showVictory(){
   $('#win-title').innerHTML='Вместе<br />получилось<span>.</span>';
   $('#win-screen .eyebrow').textContent='ДРУГ ТОЖЕ ДОБРАЛСЯ';
   $('#play-again-button').textContent=last?'К первому испытанию':'Следующая комната';
+  if(puzzlePilot43)$('#play-again-button').textContent='Пройти ещё раз';
   const allCompleted=availableRooms.every(index=>preferences.value.completed.includes(index));
   $('#win-screen .muted').textContent=last?(allCompleted?'Все испытания этой версии пройдены. Друг с тобой.':'Последнее испытание пройдено. Друг с тобой; в лаборатории можно исследовать остальные комнаты.'):foundationEdition.enabled&&game.levelIndex===39?'Впереди Складчатый замок: один непрерывный заход без чекпоинтов.':'Получилось! Следующее испытание добавит новую идею.';
+  if(puzzlePilot43)$('#win-screen .muted').textContent='Комната пройдена. Друг с тобой.';
   if(game.firstLevel?.tower){$('#win-title').innerHTML=game.firstLevel.singularity?'Замок<br />пройден<span>.</span>':'Башня<br />покорена<span>.</span>';$('#win-screen .eyebrow').textContent=`${game.firstLevel.completedStages} / ${game.firstLevel.totalStages} · ОДНИМ ЗАХОДОМ`;}
   diagnostics();
 }
@@ -139,10 +143,12 @@ finally{game.render();clearInput();setState(game.state);diagnostics();}
 // Every public entry uses the same campaign; the review edition has isolated saves.
 game.epicMode=false;
 game.chamberEdition=foundationEdition.enabled?'foundation':openEdition.enabled?'open':'classic';
+game.puzzlePilot43=puzzlePilot43;
 document.body.dataset.chamberEdition=game.chamberEdition;
 document.body.dataset.gameMode='campaign';
 game.quality={...QUALITY_PRESETS[preferences.value.quality]};game.tutorial.enabled=preferences.value.tutorial;
 game.levelIndex=foundationEdition.enabled?foundationEdition.levelIndex:openEdition.enabled?openEdition.levelIndex:campaignRoute.levelIndex;
+if(puzzlePilot43)game.levelIndex=42;
 game.levelIndex=resumeCampaignLevel(query,preferences.value,availableRooms,game.levelIndex);
 choices();$('#level-select').value=String(game.levelIndex);
 function updateStartAction(){
@@ -155,9 +161,11 @@ function updateStartAction(){
 campaignMenu=createCampaignMenu({root:$('#campaign-map'),select:$('#level-select'),availableRooms,spec:index=>campaignSpec(game,index),preferences,onChoose:()=>updateStartAction()});
 $('#level-select').addEventListener('change',updateStartAction);updateStartAction();
 $('#campaign-count').textContent=foundationEdition.enabled?`Кампания · ${FOUNDATION_INDICES.length} испытание`:openEdition.enabled?`${OPEN_ROOM_INDICES.length} лабораторных испытаний · отдельная версия`:`Архив · ${CAMPAIGN.length} испытания`;
+if(puzzlePilot43)$('#campaign-count').textContent='Новая версия · комната 43';
 if(foundationEdition.enabled){$('#start-screen .brand').textContent='ПОРТАЛЫ · ФИЗИКА · ИССЛЕДОВАНИЕ';$('#start-screen .lead').textContent='Соединяй пространства. Сохраняй импульс. Доберись до выхода вместе с другом.';}
 else if(openEdition.enabled){$('#start-screen .brand').textContent='ЛАБОРАТОРНЫЕ ИСПЫТАНИЯ';$('#start-screen .lead').textContent='Камеры 24, 28, 30 и 31–33. Эта подборка и новая первая глава хранят прогресс отдельно от архива.';}
 const editionNav=document.createElement('nav');editionNav.className='edition-navigation';editionNav.setAttribute('aria-label','Версии кампании');
+if(puzzlePilot43){const a=document.createElement('a');a.textContent='Прежняя комната 43';a.href='?edition=foundation&level=43';editionNav.append(a);}
 for(const [id,text,href]of [['tower',`${SINGULARITY_SPEC.name} · ${singularityHallCount} механизмов`,'?edition=foundation&level=41'],['foundation','Кампания · с начала','?edition=foundation&level=1']]){
  if(game.chamberEdition===id)continue;const a=document.createElement('a');a.textContent=text;a.href=href;editionNav.append(a);
 }
@@ -186,7 +194,7 @@ async function restartLevel(){
 }
 function resume(){reconcileFocus();if(holds.size)return;game.audio.unlock();game.togglePause(false);game.renderer.setAnimationLoop(game.animate);}
 $('#play-button').addEventListener('click',()=>enterLevel(Number($('#level-select').value),sessionStarted?'next':'initial'));
-$('#play-again-button').addEventListener('click',()=>enterLevel(foundationEdition.enabled?nextFoundationLevel(game.levelIndex):openEdition.enabled?nextOpenRoom(game.levelIndex):nextCampaignLevel(game.levelIndex,CAMPAIGN.length)));
+$('#play-again-button').addEventListener('click',()=>enterLevel(puzzlePilot43?42:foundationEdition.enabled?nextFoundationLevel(game.levelIndex):openEdition.enabled?nextOpenRoom(game.levelIndex):nextCampaignLevel(game.levelIndex,CAMPAIGN.length)));
 $('#resume-button').addEventListener('click',resume);$('#restart-button').addEventListener('click',restartLevel);
 $('#pause-button').addEventListener('click',()=>game.togglePause(true));
 $('#hint-button').addEventListener('click',showHints);
