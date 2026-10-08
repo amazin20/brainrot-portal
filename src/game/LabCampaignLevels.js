@@ -41,6 +41,7 @@ import {upgradeBrowser3DArt} from './LabBrowser3DArt.js';
 import {applyPremiumBrowser3DArt} from './LabBrowser3DPremium.js';
 import {applyMechanismReflections} from './LabMechanismReflections.js';
 import {batchStaticSurfaceFinishes} from './LabStaticSurfaceBatches.js';
+import {ROOM50_FORM_RESEARCH_SPEC,buildRoom50FormResearch} from './LabRoom50FormResearch.js';
 
 const withArtAssets=(spec,...extra)=>({...spec,assets:[...new Set([...spec.assets,...extra])]});
 const ROOM13_ART_SPEC=withArtAssets(ROOM13_SPEC,19,29);
@@ -63,6 +64,7 @@ export const CAMPAIGN=Object.freeze([...INTRODUCTORY_CAMPAIGN,...EXTENDED_CAMPAI
 function buildUnthemedCampaignLevel(game,index){
  const count=game.chamberEdition==='foundation'?30+FOUNDATION_LATE_BUILDERS.length:CAMPAIGN.length;
  if(!Number.isInteger(index)||index<0||index>=count)throw new RangeError('Unknown campaign course');
+ if(game.chamberEdition==='foundation'&&index===49&&game.room50FormResearch===true)return buildRoom50FormResearch(game,index);
  if(game.chamberEdition==='foundation'&&FOUNDATION_BUILDERS[index])return FOUNDATION_BUILDERS[index](game,index);
  if(game.chamberEdition==='foundation'&&FOUNDATION_CREATIVE_BUILDERS[index])return FOUNDATION_CREATIVE_BUILDERS[index](game,index);
  if(game.chamberEdition==='foundation'&&index>=30)return FOUNDATION_LATE_BUILDERS[index-30](game,index);
@@ -80,7 +82,7 @@ function buildUnthemedCampaignLevel(game,index){
  return finishBrowserArt(addExplorationSurfaces(game,level,index));
 }
 
-export function campaignSpec(game,index){return game.chamberEdition==='foundation'&&(FOUNDATION_CREATIVE_SPECS[index]||FOUNDATION_SPECS[index]||index>=30&&FOUNDATION_LATE_SPECS[index-30])||game.chamberEdition==='open'&&OPEN_SPECS[index]||CAMPAIGN[index];}
+export function campaignSpec(game,index){if(game.chamberEdition==='foundation'&&index===49&&game.room50FormResearch===true)return ROOM50_FORM_RESEARCH_SPEC;return game.chamberEdition==='foundation'&&(FOUNDATION_CREATIVE_SPECS[index]||FOUNDATION_SPECS[index]||index>=30&&FOUNDATION_LATE_SPECS[index-30])||game.chamberEdition==='open'&&OPEN_SPECS[index]||CAMPAIGN[index];}
 
 export function buildLabCampaignLevel(game,index){
  const before=new Set(game.scene.children);
