@@ -8,7 +8,7 @@ import path from 'node:path';
 import {createHash} from 'node:crypto';
 import {pathToFileURL} from 'node:url';
 import {waitForStartMenu} from './lib/singularity-ui-check.mjs';
-import {nativeActivate,assertMatrix,matrixRoutes,MATRIX_LEVELS,MATRIX_VIEWPORTS} from './lib/unified-public-input.mjs';
+import {nativeActivate,measureNativeTarget,selectNativeMapRoom,assertMatrix,matrixRoutes,MATRIX_LEVELS,MATRIX_VIEWPORTS} from './lib/unified-public-input.mjs';
 import {PUBLICATION_TARGET as TARGET,recordingStem,historicalPrefix} from './lib/unified-publication-config.mjs';
 import {launchBrowserWithStartupRetry} from './lib/browser-startup.mjs';
 
@@ -104,13 +104,11 @@ async function ordinaryMenuPlay(browser,{base,identity,viewport,level,out,report
  page.on('response',response=>{if(/\/models\/runtime\/model-(?:01-player|02-cargo|11-portal-gun)\.glb(?:[?#]|$)/.test(response.url()))modelResponses.push({url:response.url(),status:response.status()});});
  const touch=viewport.touch,stem=(base.pathname.endsWith('/chapter-atlas/')?'chapter':'root')+`-${viewport.width}x${viewport.height}-level-${level}`;
  const inputEvidence=[];
- const input=async selector=>{const evidence=await trustedActivate(page,selector,touch);inputEvidence.push(evidence);return evidence;};
- const selectRoom=async room=>{
-  const sector=room===41?4:room>=42?5:Math.floor((room-1)/10);
-  await input(`.sector-tabs [data-sector="${sector}"]`);await input(`.room-node[data-level="${room}"]`);
-  assert.equal(await page.$eval('#level-select',element=>Number(element.value)),room-1);
-  assert.equal(await page.$eval(`.room-node[data-level="${room}"]`,element=>element.getAttribute('aria-pressed')),'true');
+ const input=async selector=>{
+  try{const evidence=await trustedActivate(page,selector,touch);inputEvidence.push(evidence);return evidence;}
+  catch(error){report.nativeInputFailure={selector,touch,snapshotAtFailure:await measureNativeTarget(page,selector).catch(diagnosticError=>({error:String(diagnosticError)}))};throw error;}
  };
+ const selectRoom=room=>selectNativeMapRoom(page,room,input);
  try{
   await page.setViewport({width:viewport.width,height:viewport.height,deviceScaleFactor:1,isMobile:touch,hasTouch:touch});
   // Mute/low quality are reproducible preferences; room selection and all

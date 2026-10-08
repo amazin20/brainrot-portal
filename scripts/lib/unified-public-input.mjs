@@ -36,6 +36,29 @@ export function targetReachable(snapshot){
  }
  return true;
 }
+/** Read the public menu's actual accessible chapter ranges. Game and legacy
+ * archive menus need not group room 41 and rooms 42–51 in the same way. */
+export function nativeRoomSector(tabs,room){
+ assert.ok(Number.isInteger(room)&&room>=1&&room<=51,'Unknown native map room');
+ assert.ok(Array.isArray(tabs)&&tabs.length>0&&tabs.length<=6,'Invalid public sector tabs');
+ const ranges=tabs.map(tab=>{
+  const sector=Number(tab.sector),match=String(tab.label??'').match(/(\d+)\s*[–—-]\s*(\d+)\s*$/u);
+  assert.ok(Number.isInteger(sector)&&sector>=0&&sector<=5&&match,'Public sector needs its accessible room range');
+  const first=Number(match[1]),last=Number(match[2]);assert.ok(first>=1&&last<=51&&first<=last,'Invalid public sector room range');
+  return {sector,first,last};
+ });
+ assert.equal(new Set(ranges.map(range=>range.sector)).size,ranges.length,'Duplicate public sector identity');
+ const matches=ranges.filter(range=>room>=range.first&&room<=range.last);
+ assert.equal(matches.length,1,'Native room must belong to one public sector');return matches[0].sector;
+}
+export async function selectNativeMapRoom(page,room,activate){
+ const tabs=await page.$$eval('.sector-tabs [data-sector]',buttons=>buttons.map(button=>({sector:button.dataset.sector,label:button.getAttribute('aria-label')})));
+ const sector=nativeRoomSector(tabs,room);
+ await activate(`.sector-tabs [data-sector="${sector}"]`);await activate(`.room-node[data-level="${room}"]`);
+ assert.equal(await page.$eval('#level-select',element=>Number(element.value)),room-1);
+ assert.equal(await page.$eval(`.room-node[data-level="${room}"]`,element=>element.getAttribute('aria-pressed')),'true');
+ return {room,sector};
+}
 export function matrixRoutes({root,chapter,routeKeys=[...TARGET.native.routeKeys]}={}){
  assert.ok(root&&chapter,'Expected public root and chapter routes are required');
  assert.ok(Array.isArray(routeKeys)&&routeKeys.length>=1&&routeKeys.length<=2);

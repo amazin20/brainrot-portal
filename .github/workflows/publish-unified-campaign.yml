@@ -5,6 +5,16 @@ name: Publish the accepted unified campaign
     - main
     paths:
     - .github/workflows/publish-unified-campaign.yml
+    - scripts/verify-unified-*.mjs
+    - scripts/verify-unified-http.py
+    - scripts/unified-publication.py
+    - scripts/lib/unified-*.mjs
+    - scripts/lib/browser-startup.mjs
+    - scripts/lib/singularity-ui-check.mjs
+    - tests/unified-*.test.js
+    - tests/browser-startup.test.js
+    - tests/test_unified_publication.py
+    - docs/unified-publication-target.json
   workflow_dispatch: null
 permissions:
   contents: read

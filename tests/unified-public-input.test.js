@@ -6,6 +6,8 @@ import {
   targetReachable,
   assertMatrix,
   nativeActivate,
+  nativeRoomSector,
+  selectNativeMapRoom,
 } from '../scripts/lib/unified-public-input.mjs';
 
 const clone = value => structuredClone(value);
@@ -71,6 +73,73 @@ function fakePage({measure, snapshots, wheelEffect, swipeEffect, trust = {truste
 }
 
 const nativeEvents = fixture => fixture.events.filter(event => ['click', 'tap'].includes(event.type));
+// Exact accepted L menu source: LabCampaignThemes.js at 8d2c01e,
+// SHA-256 a062c274ef590ec0c25e09aaa7b23b4961508d2026ab638246f82526f5222a8e.
+// Public labels are emitted by LabCampaignMenu.js from these real ranges.
+const acceptedTabs=[
+ {sector:'0',label:'Лаборатория открытия, комнаты 1–10'},
+ {sector:'1',label:'Медный энергоблок, комнаты 11–20'},
+ {sector:'2',label:'Биосфера, комнаты 21–30'},
+ {sector:'3',label:'Ночная обсерватория, комнаты 31–40'},
+ {sector:'4',label:'Золотой разлом, комнаты 41–50'},
+ {sector:'5',label:'За горизонтом, комнаты 51–51'},
+];
+function nativeMapModel(touch=false){
+ const state={sector:0,selected:1},inputs=[];
+ const page={
+  async $$eval(selector){assert.equal(selector,'.sector-tabs [data-sector]');return clone(acceptedTabs);},
+  async $eval(selector){
+   if(selector==='#level-select')return state.selected-1;
+   const level=Number(selector.match(/data-level="(\d+)"/)?.[1]);assert.equal(level,state.selected);return 'true';
+  },
+ };
+ const activate=async selector=>{
+  const sector=selector.match(/data-sector="(\d+)"/),room=selector.match(/data-level="(\d+)"/);
+  const exists=!!sector||(!!room&&nativeRoomSector(acceptedTabs,Number(room[1]))===state.sector);
+  const fixture=fakePage({measure:()=>snapshot(exists?{}:{rect:null,visible:false,hit:false})});
+  const input=touch?'tap':'click',click=touch?fixture.page.touchscreen.tap:fixture.page.mouse.click;
+  const handle=touch?fixture.page.touchscreen:fixture.page.mouse;
+  handle[input]=async(...args)=>{await click(...args);if(sector)state.sector=Number(sector[1]);else state.selected=Number(room[1]);};
+  inputs.push({selector,fixture});return nativeActivate(fixture.page,selector,touch,fixture.options);
+ };
+ return {page,activate,state,inputs};
+}
+
+test('public sector labels cover all 51 actual L room memberships, including 41–50 and the separate epilogue',()=>{
+ const expected=[...Array(10).fill(0),...Array(10).fill(1),...Array(10).fill(2),...Array(10).fill(3),...Array(10).fill(4),5];
+ expected.forEach((sector,index)=>assert.equal(nativeRoomSector(acceptedTabs,index+1),sector));
+ // Old archive layout is also resolved from its public labels without a
+ // special room>=42 formula leaking into the current menu.
+ const archive=clone(acceptedTabs);archive[4].label='Складчатый замок, комнаты 41–41';archive[5].label='За пределами, комнаты 42–51';
+ assert.equal(nativeRoomSector(archive,46),5);assert.equal(nativeRoomSector(acceptedTabs,46),4);
+});
+for(const room of [42,46,47,50,51])test(`native map selects actual room ${room} through its public sector and genuine stable input`,async()=>{
+ const model=nativeMapModel();const result=await selectNativeMapRoom(model.page,room,model.activate);
+ assert.equal(model.state.selected,room);assert.equal(result.sector,room===51?5:4);
+ assert.equal(model.inputs.length,2);
+ for(const {fixture} of model.inputs){assert.equal(nativeEvents(fixture).length,1);assert.equal(fixture.samples.length,5);for(let i=1;i<4;i++)assert.ok(fixture.samples[i].time-fixture.samples[i-1].time>=100);}
+});
+test('touch map uses the same actual room46 membership and stable trusted tap protocol',async()=>{
+ const model=nativeMapModel(true);await selectNativeMapRoom(model.page,46,model.activate);
+ assert.equal(model.state.selected,46);assert.deepEqual(model.inputs.flatMap(({fixture})=>nativeEvents(fixture).map(event=>event.type)),['tap','tap']);
+});
+test('actual failed PRE sequence selects epilogue then correctly refuses its absent room46 target',async()=>{
+ const model=nativeMapModel();await model.activate('.sector-tabs [data-sector="5"]');
+ await assert.rejects(model.activate('.room-node[data-level="46"]'),/four stable 100 ms geometry measurements/);
+ assert.equal(model.state.sector,5);assert.equal(model.state.selected,1);
+ assert.equal(model.inputs[1].fixture.samples.length,80);assert.deepEqual(nativeEvents(model.inputs[1].fixture),[]);
+});
+test('native map resolver rejects invalid room inputs before any native activation',async()=>{
+ for(const room of [0,52,-1,1.5,NaN,'46']){
+  const model=nativeMapModel();await assert.rejects(selectNativeMapRoom(model.page,room,model.activate));assert.deepEqual(model.inputs,[]);
+ }
+});
+test('native map requires a unique labelled sector rather than guessing missing or overlapping public ranges',()=>{
+ assert.throws(()=>nativeRoomSector(acceptedTabs.slice(0,4),46));
+ const ambiguous=clone(acceptedTabs);ambiguous[5].label='Другой сектор, комнаты 46–51';assert.throws(()=>nativeRoomSector(ambiguous,46));
+ const missing=clone(acceptedTabs);delete missing[4].label;assert.throws(()=>nativeRoomSector(missing,46));
+ const duplicate=clone(acceptedTabs);duplicate[5].sector='4';assert.throws(()=>nativeRoomSector(duplicate,46));
+});
 const scrollIntent = (axis = 'y') => ({id: 'menu', x: 150, y: 400, axis, direction: 1, distance: 200});
 const inaccessible = state => snapshot({
   rect: rectangle(80, 1000, 60, 52),
