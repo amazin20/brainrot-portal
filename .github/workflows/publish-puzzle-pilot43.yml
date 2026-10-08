@@ -19,7 +19,7 @@ env:
   BASELINE_PUBLISHER: 39d5311d2620a632bb65194921de53add238c74d
   BASELINE_SOURCE: 8d2c01eacd86fe9235a35e7ec5f624ba62c3b29e
   PUBLIC_BASE: https://amazin20.github.io/brainrot-portal/
-  BUILD_COMMIT: e2b8bf20e616e60cd1aa054d707e11fcd4574253
+  BUILD_COMMIT: 415b2da2cfe162fa9bf8f55803977ba2b5dd9bb6
   PILOT_PUBLISHER_COMMIT: ${{ github.sha }}
 jobs:
   pilot:
@@ -40,6 +40,24 @@ jobs:
       with:
         node-version: 22
         cache: npm
+    - name: Read the previous native focus diagnostics
+      uses: actions/download-artifact@v4
+      continue-on-error: true
+      with:
+        name: puzzle-pilot43-proof
+        run-id: '37762564176'
+        github-token: ${{ github.token }}
+        path: previous-proof
+    - name: Print only the prior focus and UI failure evidence
+      continue-on-error: true
+      run: |
+        node --input-type=module <<'JS'
+        import fs from 'node:fs';
+        for (const name of fs.readdirSync('previous-proof',{recursive:true}).filter(name=>name.endsWith('report.json'))) {
+          const r=JSON.parse(fs.readFileSync('previous-proof/'+name));
+          console.log('PILOT43_PREVIOUS',JSON.stringify({source:r.sourceCommit,failure:r.failure,replay:r.replayPassed,pause:r.pauseControlUsed,before:r.pauseBeforeFocus,resume:r.resumeBeforeFocus,focus:r.failureFocus}));
+        }
+        JS
     - name: Refuse a stale source, a changed public game or a later Pages deployment
       env:
         GITHUB_TOKEN: ${{ github.token }}
