@@ -8,17 +8,17 @@ import {installRoom21Aim} from '../../src/game/LabRoom21Journey.js';
 export async function runRoom50Research(plan='short'){
  assert.ok(['short','long','long-recovery'].includes(plan));const g=await createHeadlessGame();g.chamberEdition='foundation';g.room50FormResearch=true;await g.selectLevel(49,false);
  const cargo=g.cargo,body=g.physics.cargoBody,l=g.firstLevel,isLong=plan.startsWith('long');
- let minY=Infinity,loadFrames=0;const visual=g.updateVisuals;
- g.updateVisuals=function(...args){const result=visual.apply(this,args);assert.equal(this.cargo,cargo);assert.equal(this.physics.cargoBody,body);minY=Math.min(minY,this.playerPosition.y);if(l.form.loadForce>0)loadFrames++;return result;};
+ let minY=Infinity,loadFrames=0,otherFormFrames=0;const visual=g.updateVisuals;
+ g.updateVisuals=function(...args){const result=visual.apply(this,args);assert.equal(this.cargo,cargo);assert.equal(this.physics.cargoBody,body);minY=Math.min(minY,this.playerPosition.y);if(l.form.loadForce>0)loadFrames++;if(isLong&&Math.abs(l.form.first)<.002&&Math.abs(l.form.second)<.002)otherFormFrames++;return result;};
  try{
   const result=await runV8Journey(g,{onMilestone:m=>console.error(plan,m.name,JSON.stringify({p:m.player,c:m.cargo,angles:[l.form.first,l.form.second],transfers:g.physics.portalTransports})),scenario:async d=>{
    installRoom21Aim(d);
+   if(isLong){d.walk(4.5,-5);assert.equal(g.interact(),true);assert.equal(l.form.selection,'long');d.wait(.2);assert.deepEqual([l.form.first,l.form.second],[Math.PI/12,Math.PI/2]);}
    d.walk(-4,-3);d.aim(1,l.receiver.getFrame().center);
    d.walk(-5,-5);d.aim(0,l.source.getFrame().center);
    d.walk(-1,-7);d.pickup();d.walk(-5,-3.8);for(let n=0;n<300&&g.cargo.position.z> -7.54;n++){d.worldMove(0,-.65);d.frame();}g.interact();d.mark('ordinary release before upright dispatch aperture');for(let n=0;n<12;n++){d.worldMove(0,-.65);d.frame();}d.stop();
    d.until(()=>g.physics.portalTransports>0,8,'Original cargo delivery missed');d.mark('original free cargo through compatible low delivery');
    d.until(()=>l.form.loadForce>0,10,'Original cargo did not settle onto working shelf');
-   if(isLong){d.walk(4.5,-5);assert.equal(g.interact(),true);assert.equal(l.form.selection,'long');}
    d.until(()=>Math.abs(l.form.first-(isLong?-Math.PI/2:0))<.002&&Math.abs(l.form.second)<.002,12,'Selected real form did not assemble');d.mark('chosen floor graph assembled from original cargo weight');d.wait(3);
    d.walk(0,-.6);
    if(isLong){
@@ -44,8 +44,8 @@ export async function runRoom50Research(plan='short'){
    }
    d.until(()=>g.state==='won',3,'Ordinary joint goal missed');
   }});
-  assert.equal(result.resets+result.respawns,0);assert.equal(g.state,'won');assert.ok(l.goal.contains(g.cargo.position)&&l.goal.contains(g.playerPosition));assert.ok(loadFrames>0);
-  return {...result,plan,state:g.state,cargoTransfers:g.physics.portalTransports,playerTransfers:g.teleportCount,cargoIdentityPreserved:true,loadFrames,minPlayerY:minY,finalAngles:[l.form.first,l.form.second],mechanicalScope:l.researchScope};
+  assert.equal(result.resets+result.respawns,0);assert.equal(g.state,'won');assert.ok(l.goal.contains(g.cargo.position)&&l.goal.contains(g.playerPosition));assert.ok(loadFrames>0);assert.equal(otherFormFrames,0);
+  return {...result,plan,state:g.state,cargoTransfers:g.physics.portalTransports,playerTransfers:g.teleportCount,cargoIdentityPreserved:true,loadFrames,otherFormFrames,minPlayerY:minY,finalAngles:[l.form.first,l.form.second],mechanicalScope:l.researchScope};
  }finally{g.updateVisuals=visual;g.firstLevel.dispose?.();g.physics.dispose();g.portals.dispose();}
 }
 if(process.argv[1]===new URL(import.meta.url).pathname){

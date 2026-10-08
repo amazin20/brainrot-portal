@@ -7,7 +7,7 @@ test('50 research: two actual floor/cargo plans jointly win with the original bo
  const short=await runRoom50Research('short'),long=await runRoom50Research('long'),recovery=await runRoom50Research('long-recovery');
  for(const route of [short,long,recovery]){
   assert.equal(route.pass,true);assert.equal(route.state,'won');assert.equal(route.resets+route.respawns,0);
-  assert.equal(route.playerTransfers,0);assert.equal(route.cargoIdentityPreserved,true);assert.equal(route.minPlayerY,4);
+  assert.equal(route.playerTransfers,0);assert.equal(route.cargoIdentityPreserved,true);assert.equal(route.minPlayerY,4);assert.equal(route.otherFormFrames,0);
  }
  assert.equal(short.cargoTransfers,2);assert.equal(long.cargoTransfers,1);assert.equal(recovery.cargoTransfers,2);assert.deepEqual(recovery.finalAngles,[-Math.PI/2,0]);
  assert.deepEqual(short.finalAngles,[0,0]);assert.deepEqual(long.finalAngles,[-Math.PI/2,0]);
