@@ -1,0 +1,685 @@
+{
+  "baseCommit": "8d2c01eacd86fe9235a35e7ec5f624ba62c3b29e",
+  "baseTree": "1bb0546cb29fe6919209103ece67d20a7ddb2377",
+  "baseReportSha256": "421681f3587c942c739dc76c52b66b858664bca4c36a54ec05ad9383049033cf",
+  "scope": "Unchanged L ordinary-input timeline and quantized1e-6 60Hz physical sequence. Raw impact coordinates are compared with a 1e-12 floating-point tolerance; step, colour, surface, sequence and valid status are exact. Not native pixels.",
+  "cases": [
+    {
+      "route": "lower-branch",
+      "swapColours": false,
+      "width": 854,
+      "height": 480,
+      "frames": 7079,
+      "landingFrame": 5346,
+      "actions": [
+        {
+          "frame": 989,
+          "type": "portal-shot",
+          "colour": 1,
+          "accepted": true
+        },
+        {
+          "frame": 2119,
+          "type": "E",
+          "accepted": true,
+          "holding": true
+        },
+        {
+          "frame": 2275,
+          "type": "E",
+          "accepted": true,
+          "holding": false
+        },
+        {
+          "frame": 2457,
+          "type": "portal-shot",
+          "colour": 0,
+          "accepted": true
+        },
+        {
+          "frame": 3727,
+          "type": "portal-shot",
+          "colour": 1,
+          "accepted": true
+        },
+        {
+          "frame": 4824,
+          "type": "portal-shot",
+          "colour": 0,
+          "accepted": true
+        },
+        {
+          "frame": 5947,
+          "type": "portal-shot",
+          "colour": 1,
+          "accepted": true
+        },
+        {
+          "frame": 6400,
+          "type": "portal-shot",
+          "colour": 0,
+          "accepted": true
+        }
+      ],
+      "portalImpacts": [
+        {
+          "frame": 1007,
+          "valid": true,
+          "index": 1,
+          "position": [
+            -19.50000000268221,
+            -9.050185273360762,
+            -15.653316047270215
+          ],
+          "sequence": 1,
+          "surface": "support-anchor-delivery / portal support",
+          "reason": "placed"
+        },
+        {
+          "frame": 2475,
+          "valid": true,
+          "index": 0,
+          "position": [
+            -15.474536394071617,
+            6.179999997317791,
+            13.610245787005677
+          ],
+          "sequence": 1,
+          "surface": "support-freight-floor / portal support",
+          "reason": "placed"
+        },
+        {
+          "frame": 3757,
+          "valid": true,
+          "index": 1,
+          "position": [
+            -17.99687905759213,
+            -8.95199205237973,
+            -18.00000000268221
+          ],
+          "sequence": 2,
+          "surface": "support-anchor-cable / portal support",
+          "reason": "placed"
+        },
+        {
+          "frame": 4851,
+          "valid": true,
+          "index": 0,
+          "position": [
+            -8.000085918822426,
+            13.401814840361242,
+            -4.000000002682209
+          ],
+          "sequence": 2,
+          "surface": "support-lower-branch / portal support",
+          "reason": "placed"
+        },
+        {
+          "frame": 5965,
+          "valid": true,
+          "index": 1,
+          "position": [
+            26.00000000268221,
+            7.099960477671452,
+            -0.002051812570400133
+          ],
+          "sequence": 3,
+          "surface": "support-far-receiver / portal support",
+          "reason": "placed"
+        },
+        {
+          "frame": 6441,
+          "valid": true,
+          "index": 0,
+          "position": [
+            -17.99563560747798,
+            -9.980000002682209,
+            -16.00424913926281
+          ],
+          "sequence": 3,
+          "surface": "support-anchor-floor / portal support",
+          "reason": "placed"
+        }
+      ],
+      "physicalSequenceQuantized1e6Sha256": "844f1cdff3064a068881b54159767a09bb19faef2f7d38eb7ee8ecb6226ce487",
+      "milestones": [
+        {
+          "name": "original free endpoint reaches the real ground anchor",
+          "frame": 2559
+        },
+        {
+          "name": "current lower branch forms a separate descending route",
+          "frame": 4991
+        },
+        {
+          "name": "observer leaves the live ramp onto the permanent lower gallery",
+          "frame": 5346
+        },
+        {
+          "name": "the unsupported floor falls behind the permanent landing",
+          "frame": 6501
+        },
+        {
+          "name": "same free endpoint inspected on the permanent receiving gallery",
+          "frame": 7045
+        },
+        {
+          "name": "same original endpoint and observer leave together",
+          "frame": 7079
+        },
+        {
+          "name": "both at exit",
+          "frame": 7079
+        }
+      ]
+    },
+    {
+      "route": "lower-branch",
+      "swapColours": false,
+      "width": 390,
+      "height": 844,
+      "frames": 7093,
+      "landingFrame": 5376,
+      "actions": [
+        {
+          "frame": 955,
+          "type": "portal-shot",
+          "colour": 1,
+          "accepted": true
+        },
+        {
+          "frame": 2085,
+          "type": "E",
+          "accepted": true,
+          "holding": true
+        },
+        {
+          "frame": 2268,
+          "type": "E",
+          "accepted": true,
+          "holding": false
+        },
+        {
+          "frame": 2434,
+          "type": "portal-shot",
+          "colour": 0,
+          "accepted": true
+        },
+        {
+          "frame": 3745,
+          "type": "portal-shot",
+          "colour": 1,
+          "accepted": true
+        },
+        {
+          "frame": 4848,
+          "type": "portal-shot",
+          "colour": 0,
+          "accepted": true
+        },
+        {
+          "frame": 5959,
+          "type": "portal-shot",
+          "colour": 1,
+          "accepted": true
+        },
+        {
+          "frame": 6423,
+          "type": "portal-shot",
+          "colour": 0,
+          "accepted": true
+        }
+      ],
+      "portalImpacts": [
+        {
+          "frame": 973,
+          "valid": true,
+          "index": 1,
+          "position": [
+            -19.50000000268221,
+            -9.050048038169562,
+            -15.65021822548897
+          ],
+          "sequence": 1,
+          "surface": "support-anchor-delivery / portal support",
+          "reason": "placed"
+        },
+        {
+          "frame": 2452,
+          "valid": true,
+          "index": 0,
+          "position": [
+            -15.47468024355062,
+            6.179999997317791,
+            13.612398289197213
+          ],
+          "sequence": 1,
+          "surface": "support-freight-floor / portal support",
+          "reason": "placed"
+        },
+        {
+          "frame": 3775,
+          "valid": true,
+          "index": 1,
+          "position": [
+            -18.00074903063346,
+            -8.950013424909917,
+            -18.00000000268221
+          ],
+          "sequence": 2,
+          "surface": "support-anchor-cable / portal support",
+          "reason": "placed"
+        },
+        {
+          "frame": 4875,
+          "valid": true,
+          "index": 0,
+          "position": [
+            -7.999367629040254,
+            13.399007915048909,
+            -4.000000002682209
+          ],
+          "sequence": 2,
+          "surface": "support-lower-branch / portal support",
+          "reason": "placed"
+        },
+        {
+          "frame": 5977,
+          "valid": true,
+          "index": 1,
+          "position": [
+            26.00000000268221,
+            7.100290456662203,
+            -0.00028657742196524014
+          ],
+          "sequence": 3,
+          "surface": "support-far-receiver / portal support",
+          "reason": "placed"
+        },
+        {
+          "frame": 6464,
+          "valid": true,
+          "index": 0,
+          "position": [
+            -17.98420176183062,
+            -9.980000002682209,
+            -15.757799379132264
+          ],
+          "sequence": 3,
+          "surface": "support-anchor-floor / portal support",
+          "reason": "placed"
+        }
+      ],
+      "physicalSequenceQuantized1e6Sha256": "ccf71e2291cbc96c3aad240a14eb9c50bf49c8388d7ab1716ed44a6fe3c9e8ac",
+      "milestones": [
+        {
+          "name": "original free endpoint reaches the real ground anchor",
+          "frame": 2536
+        },
+        {
+          "name": "current lower branch forms a separate descending route",
+          "frame": 5015
+        },
+        {
+          "name": "observer leaves the live ramp onto the permanent lower gallery",
+          "frame": 5376
+        },
+        {
+          "name": "the unsupported floor falls behind the permanent landing",
+          "frame": 6524
+        },
+        {
+          "name": "same free endpoint inspected on the permanent receiving gallery",
+          "frame": 7062
+        },
+        {
+          "name": "same original endpoint and observer leave together",
+          "frame": 7093
+        },
+        {
+          "name": "both at exit",
+          "frame": 7093
+        }
+      ]
+    },
+    {
+      "route": "lower-branch",
+      "swapColours": true,
+      "width": 854,
+      "height": 480,
+      "frames": 7079,
+      "landingFrame": 5346,
+      "actions": [
+        {
+          "frame": 989,
+          "type": "portal-shot",
+          "colour": 0,
+          "accepted": true
+        },
+        {
+          "frame": 2119,
+          "type": "E",
+          "accepted": true,
+          "holding": true
+        },
+        {
+          "frame": 2275,
+          "type": "E",
+          "accepted": true,
+          "holding": false
+        },
+        {
+          "frame": 2457,
+          "type": "portal-shot",
+          "colour": 1,
+          "accepted": true
+        },
+        {
+          "frame": 3727,
+          "type": "portal-shot",
+          "colour": 0,
+          "accepted": true
+        },
+        {
+          "frame": 4824,
+          "type": "portal-shot",
+          "colour": 1,
+          "accepted": true
+        },
+        {
+          "frame": 5947,
+          "type": "portal-shot",
+          "colour": 0,
+          "accepted": true
+        },
+        {
+          "frame": 6400,
+          "type": "portal-shot",
+          "colour": 1,
+          "accepted": true
+        }
+      ],
+      "portalImpacts": [
+        {
+          "frame": 1007,
+          "valid": true,
+          "index": 0,
+          "position": [
+            -19.50000000268221,
+            -9.050185273360762,
+            -15.653316047270215
+          ],
+          "sequence": 1,
+          "surface": "support-anchor-delivery / portal support",
+          "reason": "placed"
+        },
+        {
+          "frame": 2475,
+          "valid": true,
+          "index": 1,
+          "position": [
+            -15.474536394071617,
+            6.179999997317791,
+            13.610245787005677
+          ],
+          "sequence": 1,
+          "surface": "support-freight-floor / portal support",
+          "reason": "placed"
+        },
+        {
+          "frame": 3757,
+          "valid": true,
+          "index": 0,
+          "position": [
+            -17.99687905759213,
+            -8.95199205237973,
+            -18.00000000268221
+          ],
+          "sequence": 2,
+          "surface": "support-anchor-cable / portal support",
+          "reason": "placed"
+        },
+        {
+          "frame": 4851,
+          "valid": true,
+          "index": 1,
+          "position": [
+            -8.000085918822426,
+            13.401814840361242,
+            -4.000000002682209
+          ],
+          "sequence": 2,
+          "surface": "support-lower-branch / portal support",
+          "reason": "placed"
+        },
+        {
+          "frame": 5965,
+          "valid": true,
+          "index": 0,
+          "position": [
+            26.00000000268221,
+            7.099960477671452,
+            -0.002051812570400133
+          ],
+          "sequence": 3,
+          "surface": "support-far-receiver / portal support",
+          "reason": "placed"
+        },
+        {
+          "frame": 6441,
+          "valid": true,
+          "index": 1,
+          "position": [
+            -17.99563560747798,
+            -9.980000002682209,
+            -16.00424913926281
+          ],
+          "sequence": 3,
+          "surface": "support-anchor-floor / portal support",
+          "reason": "placed"
+        }
+      ],
+      "physicalSequenceQuantized1e6Sha256": "844f1cdff3064a068881b54159767a09bb19faef2f7d38eb7ee8ecb6226ce487",
+      "milestones": [
+        {
+          "name": "original free endpoint reaches the real ground anchor",
+          "frame": 2559
+        },
+        {
+          "name": "current lower branch forms a separate descending route",
+          "frame": 4991
+        },
+        {
+          "name": "observer leaves the live ramp onto the permanent lower gallery",
+          "frame": 5346
+        },
+        {
+          "name": "the unsupported floor falls behind the permanent landing",
+          "frame": 6501
+        },
+        {
+          "name": "same free endpoint inspected on the permanent receiving gallery",
+          "frame": 7045
+        },
+        {
+          "name": "same original endpoint and observer leave together",
+          "frame": 7079
+        },
+        {
+          "name": "both at exit",
+          "frame": 7079
+        }
+      ]
+    },
+    {
+      "route": "lower-branch",
+      "swapColours": true,
+      "width": 390,
+      "height": 844,
+      "frames": 7093,
+      "landingFrame": 5376,
+      "actions": [
+        {
+          "frame": 955,
+          "type": "portal-shot",
+          "colour": 0,
+          "accepted": true
+        },
+        {
+          "frame": 2085,
+          "type": "E",
+          "accepted": true,
+          "holding": true
+        },
+        {
+          "frame": 2268,
+          "type": "E",
+          "accepted": true,
+          "holding": false
+        },
+        {
+          "frame": 2434,
+          "type": "portal-shot",
+          "colour": 1,
+          "accepted": true
+        },
+        {
+          "frame": 3745,
+          "type": "portal-shot",
+          "colour": 0,
+          "accepted": true
+        },
+        {
+          "frame": 4848,
+          "type": "portal-shot",
+          "colour": 1,
+          "accepted": true
+        },
+        {
+          "frame": 5959,
+          "type": "portal-shot",
+          "colour": 0,
+          "accepted": true
+        },
+        {
+          "frame": 6423,
+          "type": "portal-shot",
+          "colour": 1,
+          "accepted": true
+        }
+      ],
+      "portalImpacts": [
+        {
+          "frame": 973,
+          "valid": true,
+          "index": 0,
+          "position": [
+            -19.50000000268221,
+            -9.050048038169562,
+            -15.65021822548897
+          ],
+          "sequence": 1,
+          "surface": "support-anchor-delivery / portal support",
+          "reason": "placed"
+        },
+        {
+          "frame": 2452,
+          "valid": true,
+          "index": 1,
+          "position": [
+            -15.47468024355062,
+            6.179999997317791,
+            13.612398289197213
+          ],
+          "sequence": 1,
+          "surface": "support-freight-floor / portal support",
+          "reason": "placed"
+        },
+        {
+          "frame": 3775,
+          "valid": true,
+          "index": 0,
+          "position": [
+            -18.00074903063346,
+            -8.950013424909917,
+            -18.00000000268221
+          ],
+          "sequence": 2,
+          "surface": "support-anchor-cable / portal support",
+          "reason": "placed"
+        },
+        {
+          "frame": 4875,
+          "valid": true,
+          "index": 1,
+          "position": [
+            -7.999367629040254,
+            13.399007915048909,
+            -4.000000002682209
+          ],
+          "sequence": 2,
+          "surface": "support-lower-branch / portal support",
+          "reason": "placed"
+        },
+        {
+          "frame": 5977,
+          "valid": true,
+          "index": 0,
+          "position": [
+            26.00000000268221,
+            7.100290456662203,
+            -0.00028657742196524014
+          ],
+          "sequence": 3,
+          "surface": "support-far-receiver / portal support",
+          "reason": "placed"
+        },
+        {
+          "frame": 6464,
+          "valid": true,
+          "index": 1,
+          "position": [
+            -17.98420176183062,
+            -9.980000002682209,
+            -15.757799379132264
+          ],
+          "sequence": 3,
+          "surface": "support-anchor-floor / portal support",
+          "reason": "placed"
+        }
+      ],
+      "physicalSequenceQuantized1e6Sha256": "ccf71e2291cbc96c3aad240a14eb9c50bf49c8388d7ab1716ed44a6fe3c9e8ac",
+      "milestones": [
+        {
+          "name": "original free endpoint reaches the real ground anchor",
+          "frame": 2536
+        },
+        {
+          "name": "current lower branch forms a separate descending route",
+          "frame": 5015
+        },
+        {
+          "name": "observer leaves the live ramp onto the permanent lower gallery",
+          "frame": 5376
+        },
+        {
+          "name": "the unsupported floor falls behind the permanent landing",
+          "frame": 6524
+        },
+        {
+          "name": "same free endpoint inspected on the permanent receiving gallery",
+          "frame": 7062
+        },
+        {
+          "name": "same original endpoint and observer leave together",
+          "frame": 7093
+        },
+        {
+          "name": "both at exit",
+          "frame": 7093
+        }
+      ]
+    }
+  ],
+  "baselineObserverSha256": "16b2281657e1018c9e91f96cb365cddc7a5bb6dc4fcb41533bf209ec9e7a8012"
+}

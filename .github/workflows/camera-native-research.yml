@@ -1,0 +1,129 @@
+name: Targeted lower17 and room50 camera research recordings
+on:
+  push:
+    branches: [research/camera-native-20261008]
+permissions:
+  contents: read
+concurrency:
+  group: camera-native-research-${{ github.ref }}
+  cancel-in-progress: false
+env:
+  BUILD_COMMIT: ${{ github.sha }}
+jobs:
+  package:
+    name: Targeted CPU contracts and one exact research browser build
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Verify both camera fixtures and original-body recording observer
+        run: |
+          mkdir -p qa/camera-native-cpu
+          set -o pipefail
+          node --test tests/lab-camera-room17-lower-restore.test.js tests/lab-room50-camera-journey.test.js tests/lab-creative-room17.test.js tests/camera-research-observer.test.js | tee qa/camera-native-cpu/targeted-tests.log
+          node --test --test-name-pattern '^50:' tests/lab-expansion-b-release.test.js | tee qa/camera-native-cpu/room50-win-restart.log
+      - name: Compare actual ordinary player/cargo/mechanism trajectories to L
+        run: |
+          baseline="$RUNNER_TEMP/camera-l-baseline"
+          git worktree add --detach "$baseline" 8d2c01eacd86fe9235a35e7ec5f624ba62c3b29e
+          ln -s "$GITHUB_WORKSPACE/node_modules" "$baseline/node_modules"
+          set -o pipefail
+          node scripts/compare-camera-research.mjs "$baseline" qa/camera-native-cpu/comparison.json | tee qa/camera-native-cpu/comparison.log
+      - name: Build, verify and stamp exactly this research SHA
+        run: |
+          npm run build
+          node scripts/v8-package-check.mjs dist
+          node scripts/stamp-build.mjs v54-unified-campaign dist
+          PROVENANCE_OUT=qa/camera-native-cpu/build-provenance.json node scripts/verify-camera-research-package.mjs
+      - uses: actions/upload-artifact@v4
+        with:
+          name: camera-native-browser
+          path: dist/
+          if-no-files-found: error
+          retention-days: 14
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: camera-native-targeted-cpu
+          path: qa/camera-native-cpu/
+          if-no-files-found: error
+          retention-days: 14
+  recording:
+    name: Fresh production camera recording (${{ matrix.key }})
+    needs: package
+    runs-on: ubuntu-latest
+    timeout-minutes: 100
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - key: 17-lower-branch
+            level: '17'
+            alternative: lower-branch
+          - key: 50-canonical
+            level: '50'
+            alternative: ''
+    env:
+      PAGE_URL: http://127.0.0.1:4173/
+      LEVEL: ${{ matrix.level }}
+      ALTERNATIVE_ROUTE: ${{ matrix.alternative }}
+      CAPTURE_FPS: '12'
+      CAPTURE_WIDTH: '854'
+      CAPTURE_HEIGHT: '480'
+      CAMERA_RESEARCH_REPORT: '1'
+      OUT_DIR: qa/camera-native-${{ matrix.key }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install pinned browser and image helpers without source edits
+        run: |
+          npm ci
+          npm install --no-save --package-lock=false puppeteer-core@24.16.0
+          python3 -m pip install --user 'Pillow==12.3.0'
+          python3 -c "import PIL; assert PIL.__version__ == '12.3.0'; from PIL import Image; print('Pillow', PIL.__version__)"
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
+          ffmpeg -version | head -1
+          ffprobe -version | head -1
+          chrome_path="$(command -v google-chrome || command -v chromium)"
+          test -x "$chrome_path"
+          "$chrome_path" --version
+      - uses: actions/download-artifact@v4
+        with:
+          name: camera-native-browser
+          path: dist
+      - name: Verify frozen package, record native frames, verify identity report
+        run: |
+          mkdir -p "$OUT_DIR"
+          PACKAGE_DIR=dist PROVENANCE_OUT="$OUT_DIR/package-provenance.json" PAGE_URL= node scripts/verify-camera-research-package.mjs
+          node node_modules/vite/bin/vite.js preview --host 127.0.0.1 --port 4173 --strictPort > "$OUT_DIR/preview.log" 2>&1 &
+          preview_pid=$!; trap 'kill "$preview_pid" || true' EXIT
+          for i in $(seq 1 80); do curl --fail --silent "$PAGE_URL" >/dev/null && break; sleep .25; done
+          curl --fail --silent "$PAGE_URL" >/dev/null
+          PACKAGE_DIR=dist PROVENANCE_OUT="$OUT_DIR/http-provenance.json" node scripts/verify-camera-research-package.mjs
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+          set -o pipefail
+          timeout --signal=TERM --kill-after=10s 4800s node scripts/record-foundation-walkthrough.mjs 2>&1 | tee "$OUT_DIR/capture.log"
+          node scripts/verify-camera-research-recording.mjs | tee "$OUT_DIR/recording-contract.log"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: camera-native-recording-${{ matrix.key }}
+          path: qa/camera-native-${{ matrix.key }}/
+          if-no-files-found: error
+          retention-days: 14

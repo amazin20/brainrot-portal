@@ -12,10 +12,13 @@ import {execFileSync} from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 import puppeteer from 'puppeteer-core';
+import {installCameraResearchObserver} from './lib/camera-research-observer.mjs';
 
 const level=Number(process.env.LEVEL);
 assert.ok(Number.isInteger(level)&&level>=1&&level<=51,'LEVEL must be a campaign room 1–51');
 const alternative=process.env.ALTERNATIVE_ROUTE||null;
+const cameraResearch=process.env.CAMERA_RESEARCH_REPORT==='1';
+if(cameraResearch)assert.ok((level===17&&alternative==='lower-branch')||(level===50&&!alternative),'Camera research is scoped to lower17 and canonical50');
 const alternatives=new Map([[17,'lower-branch'],[47,'manual-impact'],[48,'staged-cargo'],[49,'unlit-mirror'],[50,'free-cargo-bridge'],[51,'missed-echo-recovery']]);
 if(alternative)assert.equal(alternative,alternatives.get(level),'The requested alternative must belong to this room');
 const out=path.resolve(process.env.OUT_DIR||'qa/walkthroughs');
@@ -29,6 +32,7 @@ fs.mkdirSync(frameDir,{recursive:true});
 const bytesHash=file=>createHash('sha256').update(fs.readFileSync(file)).digest('hex');
 let frameCount=0,firstFrame=null,lastFrame=null,cargoBodyId=null;
 const errors=[];
+let researchIdentity=null,researchPage=null;
 const browser=await puppeteer.launch({
  // A single browser call contains the complete route and can exceed 30 min
  // for the longest chambers under software WebGL rendering on CI.
@@ -37,6 +41,7 @@ const browser=await puppeteer.launch({
 });
 try{
  const page=await browser.newPage();
+ researchPage=page;
  page.setDefaultTimeout(180000);
  await page.setViewport({...size,deviceScaleFactor:1});
  page.on('pageerror',error=>errors.push(String(error)));
@@ -77,7 +82,8 @@ try{
   });
  }
  await page.waitForFunction(()=>window.__NESI_DEMO_GAME__?.state==='playing');
- const capture=await page.evaluate(async({level,stride,alternative})=>{
+ if(cameraResearch)await page.evaluate(installCameraResearchObserver,{pauseAnimationLoop:true});
+ const capture=await page.evaluate(async({level,stride,alternative,cameraResearch})=>{
   const game=window.__NESI_DEMO_GAME__,original=game.updateVisuals,writeFrames=[],milestones=[];
   game.renderer.setAnimationLoop(null);
   let visualFrame=0,encodedFrame=0,lastCapturedState=null;
@@ -88,6 +94,7 @@ try{
     if(visualFrame%stride===0){
      this.render();lastCapturedState=this.state;
      const state={visualFrame,level:this.levelIndex+1,state:this.state,cargoBodyId:this.physics.cargoBody.id};
+     if(cameraResearch){state.cargoUUID=this.cargo.group.uuid;state.playerMeshUUID=this.animator.rig.mesh.uuid;}
      writeFrames.push(window.__NESI_WRITE_WALKTHROUGH_FRAME__(encodedFrame++,this.renderer.domElement.toDataURL('image/jpeg',.84),state));
     }
     visualFrame++;
@@ -102,10 +109,12 @@ try{
    await Promise.all(writeFrames);
    return {route,milestones,frames:encodedFrame,width:game.renderer.domElement.width,height:game.renderer.domElement.height,visualFrames:visualFrame};
   }finally{game.updateVisuals=original;delete window.__NESI_CAPTURE_LEVEL_MARK__;await Promise.allSettled(writeFrames);}
- },{level,stride,alternative});
+ },{level,stride,alternative,cameraResearch});
  assert.equal(capture.route.pass,true,'The ordinary route must reach the exit');
  assert.equal(capture.route.level,level);
  assert.equal(capture.route.resets,0);assert.equal(capture.route.respawns,0);
+ if(cameraResearch)researchIdentity=await page.evaluate(route=>{const observer=window.__NESI_CAMERA_RESEARCH_OBSERVER__;try{return observer.finish(route);}finally{observer.dispose();}},capture.route);
+ if(cameraResearch){assert.equal(researchIdentity.observedVisualFrames,capture.visualFrames);assert.ok(capture.visualFrames>=capture.route.frames&&capture.visualFrames<=capture.route.frames+stride);}
  if(alternative)assert.equal(capture.route.alternative,alternative,'The recording must execute the declared alternative');
  if(level===41){assert.equal(capture.route.cargoResets,0);assert.equal(capture.route.sameCompanion,true);assert.equal(capture.route.metrics.checkpoints,false);assert.equal(capture.route.metrics.completedStages,info.features.tower.stages);}
  assert.deepEqual(errors,[]);
@@ -147,8 +156,15 @@ try{
   fps,width:size.width,height:size.height,durationSeconds:frameCount/fps,firstFrame,lastFrame,
   continuous:true,pixelCheck,milestones:capture.milestones,sha256:bytesHash(movie),bytes:fs.statSync(movie).size,
   video:`${stem}.mp4`,poster:`${stem}.jpg`,finishPoster:`${stem}-finish.jpg`,
+  ...(cameraResearch?{cameraResearch:researchIdentity}:{}),
   method:`Production WebGL, normal third-person camera and ordinary input-only route, continuous ${fps} fps from 60 Hz visual/120 Hz physics simulation; silent recording, not measured hardware FPS or a human playtest.`};
  fs.writeFileSync(path.join(out,`${stem}.json`),JSON.stringify(result,null,2));
  fs.rmSync(frameDir,{recursive:true});
  console.log('WALKTHROUGH VERIFIED',JSON.stringify({level,frames:frameCount,durationSeconds:result.durationSeconds,bytes:result.bytes,sha256:result.sha256}));
+}catch(error){
+ if(cameraResearch&&researchPage){
+  const observed=await researchPage.evaluate(()=>{const observer=window.__NESI_CAMERA_RESEARCH_OBSERVER__;if(!observer)return null;try{return observer.snapshot();}finally{observer.dispose();}}).catch(snapshotError=>({snapshotError:String(snapshotError)}));
+  fs.writeFileSync(path.join(out,`${stem}-research-failure.json`),JSON.stringify({sourceCommit:process.env.BUILD_COMMIT||null,level,alternative,error:String(error),observed},null,2)+'\n');
+ }
+ throw error;
 }finally{await browser.close();}
