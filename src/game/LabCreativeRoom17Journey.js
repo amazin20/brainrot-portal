@@ -6,13 +6,24 @@ const V=(...p)=>new THREE.Vector3(...p),check=(v,m)=>{if(!v)throw Error(m);};
 // An extra stationary inspection changed the free body's return phase. The
 // receiver stays in view through landing; the original aim returns during the
 // existing gallery walk before another portal is fired.
-function watchSupportDuringTravel(d,point,travel){
- const g=d.game,visual=g.updateVisuals,view={yaw:g.yaw,pitch:g.pitch};let returning=false;
+function watchSupportDuringTravel(d,point,travel,{lower=false}={}){
+ const g=d.game,visual=g.updateVisuals,view={yaw:g.yaw,pitch:g.pitch};let returning=false,columnCleared=false;
  g.updateVisuals=function(...args){
   if(returning){
-   const turn=Math.atan2(Math.sin(view.yaw-g.yaw),Math.cos(view.yaw-g.yaw));
+   // The lower landing's immediate return arc swept the ordinary camera
+   // through the real support column (z=2.37..3.63). Look along the service
+   // gallery until its existing walk clears the column plus the 6.65 m boom.
+   // This one-way clearance keeps later walks from repeating the detour and
+   // restores the original aim well before either return portal is fired.
+   columnCleared ||= !lower||g.playerPosition.z>=11;
+   const aroundColumn=lower&&!columnCleared;
+   const yaw=aroundColumn?-Math.PI:view.yaw;
+   const turn=Math.atan2(Math.sin(yaw-g.yaw),Math.cos(yaw-g.yaw));
+   // Keep the level service view during the return turn. Raising the lens's
+   // aim before its yaw settles clipped the torso at narrow camera aspects.
+   const pitch=lower&&(aroundColumn||Math.abs(turn)>.08)?-.2:view.pitch;
    g.yaw+=THREE.MathUtils.clamp(turn,-.04,.04);
-   g.pitch+=THREE.MathUtils.clamp(view.pitch-g.pitch,-.025,.025);
+   g.pitch+=THREE.MathUtils.clamp(pitch-g.pitch,-.025,.025);
   }else{
    g.scene.updateMatrixWorld(true);
    const direction=point.clone().sub(g.camera.position);
@@ -74,7 +85,7 @@ export function runCreative17(d,{route='upper-branch',alternative=null,swapColou
   restoreView();
   d.walk(16,20);d.walk(24,20);d.walk(24,4);d.walk(24,0);
  }else{d.walk(11,0);d.until(()=>g.playerGrounded&&g.playerPosition.x>10.1&&Math.abs(g.playerPosition.y-6)<.3,4,'Permanent upper landing missed');d.mark('observer leaves the live bridge onto permanent upper ground');restoreView();d.walk(23,0);}
- });
+ },{lower:route==='lower-branch'});
  if(stopAfter==='permanent')return;
  // Both colours are re-fired through actual controls. No stage bit preserves
  // the old support; its spring plungers physically return the free endpoint.
