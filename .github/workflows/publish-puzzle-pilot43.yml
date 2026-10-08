@@ -1,0 +1,165 @@
+name: Publish the isolated puzzle pilot from its exact accepted source
+'on':
+  push:
+    branches:
+    - main
+    paths:
+    - .github/workflows/publish-puzzle-pilot43.yml
+permissions:
+  contents: read
+  actions: read
+  deployments: read
+  pages: write
+  id-token: write
+concurrency:
+  group: pages
+  cancel-in-progress: false
+env:
+  BASELINE_RUN: '37744513446'
+  BASELINE_PUBLISHER: 39d5311d2620a632bb65194921de53add238c74d
+  BASELINE_SOURCE: 8d2c01eacd86fe9235a35e7ec5f624ba62c3b29e
+  PUBLIC_BASE: https://amazin20.github.io/brainrot-portal/
+  BUILD_COMMIT: 4d9d1b2344919d43c806388e319de0815f13b871
+  PILOT_PUBLISHER_COMMIT: ${{ github.sha }}
+jobs:
+  pilot:
+    name: Verify one room, preserve the whole accepted site and publish its isolated URL
+    if: github.repository == 'amazin20/brainrot-portal' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 65
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}puzzle-pilot/?edition=foundation&level=43&pilot=43
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        ref: ${{ env.BUILD_COMMIT }}
+        fetch-depth: 30
+        persist-credentials: false
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 22
+        cache: npm
+    - name: Refuse a stale source, a changed public game or a later Pages deployment
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+      run: node scripts/publish-puzzle-pilot43.mjs guard prepare
+    - name: Require the exact accepted source as the pilot ancestor
+      run: git merge-base --is-ancestor "$BASELINE_SOURCE" "$BUILD_COMMIT"
+    - name: Test the affected pilot, campaign registry, browser startup and input focus against exact source
+      env:
+        BUILD_COMMIT: ${{ env.BUILD_COMMIT }}
+      run: 'npm ci
+
+        node --test --test-concurrency=2 tests/lab-puzzle-pilot43.test.js tests/browser-startup.test.js tests/input-focus-recovery.test.js
+        tests/lab-v8-campaign.test.js
+
+        npm run build
+
+        node scripts/publish-puzzle-pilot43.mjs stamp dist'
+    - name: Install only the native browser verifier
+      run: "npm install --no-save --package-lock=false puppeteer-core@24.16.0\nif ! command -v ffmpeg >/dev/null\
+        \ || ! command -v ffprobe >/dev/null; then\n  sudo apt-get update -qq\n  sudo apt-get install -y --no-install-recommends\
+        \ ffmpeg\nfi\npython3 -m venv \"$RUNNER_TEMP/pilot43-python\"\n\"$RUNNER_TEMP/pilot43-python/bin/python\"\
+        \ -m pip install --disable-pip-version-check Pillow==11.3.0\necho \"CODEX_PRIMARY_RUNTIME_PYTHON=$RUNNER_TEMP/pilot43-python/bin/python\"\
+        \ >> \"$GITHUB_ENV\"\necho \"CHROME_PATH=$(command -v google-chrome || command -v chromium)\" >> \"$GITHUB_ENV\"\
+        \n"
+    - name: Verify real rendering, input, pilot gameplay and retained opt-in separation
+      env:
+        START_SERVER: '1'
+        BUILD_COMMIT: ${{ env.BUILD_COMMIT }}
+        OUT_DIR: qa/puzzle-pilot43-browser
+      run: timeout --signal=TERM --kill-after=10s 900s node scripts/qa-puzzle-pilot43-browser.mjs
+    - name: Record the complete exact pilot route with no idle padding or camera staging
+      env:
+        PAGE_URL: http://127.0.0.1:4173/?pilot=43
+        LEVEL: '43'
+        CAPTURE_FPS: '4'
+        CAPTURE_WIDTH: '640'
+        CAPTURE_HEIGHT: '360'
+        OUT_DIR: qa/puzzle-pilot43-walkthrough
+        BUILD_COMMIT: ${{ env.BUILD_COMMIT }}
+      run: "mkdir -p qa/puzzle-pilot43-walkthrough\nnode node_modules/vite/bin/vite.js preview --host 127.0.0.1\
+        \ --port 4173 --strictPort >qa/puzzle-pilot43-walkthrough/server.log 2>&1 &\npilot_preview_pid=$!\ntrap\
+        \ 'kill \"$pilot_preview_pid\" 2>/dev/null || true' EXIT\nnode --input-type=module <<'JS'\nimport assert\
+        \ from 'node:assert/strict';\nfor(let attempt=0;attempt<80;attempt++){\n  try {const response=await fetch('http://127.0.0.1:4173/build-info.json');assert.ok(response.ok);break;}\n\
+        \  catch(error){if(attempt===79)throw error;await new Promise(resolve=>setTimeout(resolve,250));}\n}\nJS\n\
+        timeout --signal=TERM --kill-after=10s 1500s node scripts/record-foundation-walkthrough.mjs\n"
+    - name: Attach the exact native screenshots and movie, then stamp the final complete package inventory
+      env:
+        BUILD_COMMIT: ${{ env.BUILD_COMMIT }}
+      run: 'node scripts/publish-puzzle-pilot43.mjs evidence dist
+
+        node scripts/publish-puzzle-pilot43.mjs stamp dist
+
+        '
+    - name: Save the exact tested pilot package
+      uses: actions/upload-artifact@v4
+      with:
+        name: puzzle-pilot43-production
+        path: dist/
+        if-no-files-found: error
+        retention-days: 14
+    - uses: actions/download-artifact@v4
+      with:
+        name: github-pages
+        run-id: ${{ env.BASELINE_RUN }}
+        github-token: ${{ github.token }}
+        path: baseline-pages
+    - name: Restore the accepted archive safely and preserve every old file hash
+      run: "python3 scripts/publish-puzzle-pilot43.py assemble --baseline baseline-pages --candidate dist --site\
+        \ site --proof proof --source \"$BUILD_COMMIT\" --baseline-source \"$BASELINE_SOURCE\" --baseline-publisher\
+        \ \"$BASELINE_PUBLISHER\" --run \"$GITHUB_RUN_ID\" --baseline-run \"$BASELINE_RUN\"\npython3 - <<'PYRECEIPT'\n\
+        import hashlib,json,pathlib,os\npublisher=os.environ['PILOT_PUBLISHER_COMMIT'];source=os.environ['BUILD_COMMIT']\n\
+        status_path=pathlib.Path('site/puzzle-pilot/preview-status.json')\nstatus=json.loads(status_path.read_text());assert\
+        \ status['sourceCommit']==source\nstatus['publisherCommit']=publisher\nstatus_path.write_text(json.dumps(status,ensure_ascii=False,indent=2)+'\\\
+        n',encoding='utf-8')\nfor name in ['manifest.json','baseline-manifest.json']:\n    target=pathlib.Path('proof')/name;receipt=json.loads(target.read_text())\n\
+        \    assert receipt['sourceCommit']==source;receipt['publisherCommit']=publisher\n    for collection in\
+        \ ['pilotFiles','siteFiles']:\n        for row in receipt.get(collection,[]):\n            if row['path']=='puzzle-pilot/preview-status.json':\n\
+        \                row['bytes']=status_path.stat().st_size\n                row['sha256']=hashlib.sha256(status_path.read_bytes()).hexdigest()\n\
+        \    if 'pilotFiles' in receipt:receipt['pilotBytes']=sum(row['bytes'] for row in receipt['pilotFiles'])\n\
+        \    target.write_text(json.dumps(receipt,ensure_ascii=False,indent=2)+'\\n',encoding='utf-8')\nPYRECEIPT"
+    - uses: actions/upload-pages-artifact@v3
+      with:
+        path: site
+    - name: Check every previously published byte immediately before deployment
+      run: python3 scripts/publish-puzzle-pilot43.py verify --base "$PUBLIC_BASE" --manifest proof/baseline-manifest.json
+        --output proof/predeploy-public-bytes.json
+    - uses: actions/configure-pages@v5
+    - name: Recheck current publisher, latest Pages deployment and exact source at the final gate
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+      run: node scripts/publish-puzzle-pilot43.mjs guard deploy
+    - uses: actions/deploy-pages@v4
+      id: deployment
+    - name: Verify the unchanged game, all original recordings and every new pilot file on the actual site
+      run: python3 scripts/publish-puzzle-pilot43.py verify --base "$PUBLIC_BASE" --manifest proof/manifest.json
+        --output proof/public-bytes.json
+    - name: Verify the actual public pilot with the same native browser input
+      env:
+        PAGE_URL: https://amazin20.github.io/brainrot-portal/puzzle-pilot/
+        BUILD_COMMIT: ${{ env.BUILD_COMMIT }}
+        OUT_DIR: qa/puzzle-pilot43-public
+      run: timeout --signal=TERM --kill-after=10s 900s node scripts/qa-puzzle-pilot43-browser.mjs
+    - name: Preserve publication, native rendering and failure evidence
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: puzzle-pilot43-proof
+        path: 'proof/
+
+          qa/puzzle-pilot43-browser/
+
+          qa/puzzle-pilot43-public/
+
+          qa/puzzle-pilot43-walkthrough/*.json
+
+          qa/puzzle-pilot43-walkthrough/*.mp4
+
+          qa/puzzle-pilot43-walkthrough/*.jpg
+
+          qa/puzzle-pilot43-walkthrough/server.log
+
+          '
+        if-no-files-found: error
+        retention-days: 30
