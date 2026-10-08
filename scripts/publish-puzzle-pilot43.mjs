@@ -103,13 +103,19 @@ async function guard(phase){
   githubGet('deployments?environment=github-pages&per_page=100'),
  ]);
  assert.equal(main.object.sha,mainPublisher||BASELINE_PUBLISHER,'Main changed after the accepted controller; reconcile its publication before adding this pilot');
+ const controllerChain=[];
  if(mainPublisher){
-  const controller=await githubGet('commits/'+mainPublisher);
-  assert.equal(controller.sha,mainPublisher);
-  assert.deepEqual(controller.parents.map(row=>row.sha),[BASELINE_PUBLISHER],'The controller must descend directly from the preserved baseline publisher');
-  assert.equal(controller.files.length,1,'The main controller must not change existing game or publication source');
-  assert.equal(controller.files[0].filename,'.github/workflows/publish-puzzle-pilot43.yml');
-  assert.equal(controller.files[0].status,'added','The controller may only add its isolated publication workflow');
+  let revision=mainPublisher;
+  for(let depth=0;revision!==BASELINE_PUBLISHER;depth++){
+   assert.ok(depth<8,'The isolated controller chain must reach the accepted baseline within eight commits');
+   const controller=await githubGet('commits/'+revision);
+   assert.equal(controller.sha,revision);assert.equal(controller.parents.length,1,'Every controller must have exactly one parent');
+   assert.equal(controller.files.length,1,'The main controller must not change existing game or publication source');
+   assert.equal(controller.files[0].filename,'.github/workflows/publish-puzzle-pilot43.yml');
+   const parent=controller.parents[0].sha;
+   assert.equal(controller.files[0].status,parent===BASELINE_PUBLISHER?'added':'modified','Only the isolated publication workflow may be added or updated');
+   controllerChain.push({commit:revision,parent,status:controller.files[0].status});revision=parent;
+  }
  }
  assert.equal(head.object.sha,source,'A newer pilot source exists; this obsolete run must not deploy');
  assert.equal(run.head_sha,BASELINE_PUBLISHER);assert.equal(run.head_branch,'main');assert.equal(run.run_attempt,1);
@@ -142,7 +148,9 @@ async function guard(phase){
  assert.ok(response.ok,'The public baseline metadata is unavailable');
  const metadata=await response.json();
  assert.equal(metadata.commit,BASELINE_SOURCE,'The public game source changed');
- assert.equal(metadata.publisherCommit,BASELINE_PUBLISHER,'The public publisher changed');
+ // The accepted source stamp intentionally retains a null publisherCommit.
+ // Its actual publisher is proven above by the successful run and Pages deployment.
+ assert.equal(metadata.publisherCommit,null,'The accepted source metadata changed');
  if(phase==='deploy'){
   const proof=JSON.parse(fs.readFileSync('proof/manifest.json'));
   assert.equal(proof.sourceCommit,source);assert.equal(proof.baselinePublisherCommit,BASELINE_PUBLISHER);
@@ -152,7 +160,7 @@ async function guard(phase){
   assert.equal(predeploy.pass,true);assert.equal(predeploy.checked,proof.preservedFiles.length);
  }
  write('proof/github-guard-'+phase+'.json',{pass:true,phase,sourceCommit:source,publisherCommit:publisher,baselineRun:BASELINE_RUN,baselinePublisherCommit:BASELINE_PUBLISHER,
-  baselineSourceCommit:BASELINE_SOURCE,artifact,acceptedDeployment:accepted,inspectedDeployments:inspected,checkedAt:new Date().toISOString()});
+  baselineSourceCommit:BASELINE_SOURCE,controllerChain,artifact,acceptedDeployment:accepted,inspectedDeployments:inspected,checkedAt:new Date().toISOString()});
  console.log('Exact baseline and latest Pages deployment checked: '+phase);
 }
 

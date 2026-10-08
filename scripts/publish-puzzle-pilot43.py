@@ -73,7 +73,9 @@ def assemble(args):
     old = json.loads((site / 'build-info.json').read_text())
     new = json.loads((candidate / 'build-info.json').read_text())
     assert old['commit'] == args.baseline_source, 'Baseline source mismatch'
-    assert old['publisherCommit'] == args.baseline_publisher, 'Baseline publisher mismatch'
+    # The accepted source stamp keeps its publisher unset. The publishing run,
+    # Pages deployment and all preserved public bytes establish its provenance.
+    assert old['publisherCommit'] is None, 'Accepted baseline source metadata changed'
     assert new['commit'] == args.source, 'Pilot source mismatch'
     assert new['version'] == 'v54-puzzle-pilot43-v1'
     assert new['features']['puzzlePilot43']['optIn'] is True
