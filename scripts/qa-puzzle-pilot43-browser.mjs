@@ -10,7 +10,10 @@ const base=process.env.PAGE_URL||'http://127.0.0.1:4173/';
 const errors=[],shots=[],report={pass:false,sourceCommit:process.env.BUILD_COMMIT||null,errors,shots,
  limitations:['Scripted production controls and software WebGL; human puzzle discovery and physical-device FPS are not measured.']};
 const save=()=>fs.writeFileSync(path.join(out,'report.json'),JSON.stringify(report,null,2));
-let server,browser;
+let server,browser,page;
+const focusDiagnostics=async()=>page?await page.evaluate(()=>({state:window.__NESI_DEMO_GAME__?.state,hasFocus:document.hasFocus(),hidden:document.hidden,
+ activeElement:document.activeElement?.id||document.activeElement?.tagName,pointerLocked:Boolean(document.pointerLockElement),
+ externalBlocked:window.__NESI_DEMO_GAME__?.externalBlocked,externalPause:document.body.dataset.externalPause})).catch(error=>({unavailable:String(error)})):null;
 try{
  if(process.env.START_SERVER==='1'){
   server=spawn(process.execPath,['node_modules/vite/bin/vite.js','preview','--host','127.0.0.1','--port','4173'],{stdio:'ignore'});
@@ -22,7 +25,7 @@ try{
  }
  browser=await puppeteer.launch({executablePath:process.env.CHROME_PATH||'/usr/bin/google-chrome',headless:true,protocolTimeout:600000,
   args:['--no-sandbox','--disable-dev-shm-usage','--use-angle=swiftshader','--enable-unsafe-swiftshader']});
- const page=await browser.newPage();page.setDefaultTimeout(180000);
+ page=await browser.newPage();page.setDefaultTimeout(180000);
  await page.setViewport({width:960,height:540,deviceScaleFactor:1});
  page.on('pageerror',e=>errors.push(String(e)));
  const originalKey='brainrot-foundation-v1:brainrot-portal.preferences.v24';
@@ -69,9 +72,11 @@ try{
  assert.equal(route.resets,0);assert.equal(route.respawns,0);assert.ok(route.milestones.length>=3);
  assert.equal(await page.evaluate(key=>localStorage.getItem(key),originalKey),originalSave,'Pilot must preserve campaign progress');
  report.originalProgressUnchanged=true;
+ console.log('PILOT43_STAGE',JSON.stringify({stage:'route',pass:true,frames:route.frames,teleports:route.teleports,shots:shots.length}));
  await page.click('#play-again-button');await page.waitForFunction(()=>window.__NESI_DEMO_GAME__?.state==='playing');
  assert.equal(await page.evaluate(()=>window.__NESI_DEMO_GAME__.firstLevel.pilot43),true);
  assert.equal(await page.evaluate(()=>window.__NESI_DEMO_GAME__.levelIndex),42);report.replayPassed=true;
+ console.log('PILOT43_STAGE',JSON.stringify({stage:'replay',pass:true}));
  await page.bringToFront();
  report.pauseControl='escape-or-hud';
  report.pauseBeforeFocus=await page.evaluate(()=>({hasFocus:document.hasFocus(),activeElement:document.activeElement?.id||document.activeElement?.tagName,
@@ -90,7 +95,17 @@ try{
   await page.click('#pause-button');report.pauseControlUsed='hud';
  }
  await page.waitForFunction(()=>window.__NESI_DEMO_GAME__?.state==='paused',{timeout:30000});
- await page.click('#resume-button');await page.waitForFunction(()=>window.__NESI_DEMO_GAME__?.state==='playing');report.pauseResumePassed=true;
+ console.log('PILOT43_STAGE',JSON.stringify({stage:'pause',pass:true,used:report.pauseControlUsed,before:report.pauseBeforeFocus}));
+ await page.waitForFunction(()=>{
+  const screen=document.querySelector('#pause-screen'),button=document.querySelector('#resume-button'),style=getComputedStyle(screen);
+  return !document.pointerLockElement&&!screen.inert&&style.opacity==='1'&&style.visibility==='visible'&&!button.disabled;
+ },{timeout:30000});
+ await page.bringToFront();await page.focus('#resume-button');
+ report.resumeControl='focused-native-enter';report.resumeBeforeFocus=await focusDiagnostics();
+ console.log('PILOT43_STAGE',JSON.stringify({stage:'resume-input',control:report.resumeControl,before:report.resumeBeforeFocus}));
+ await page.keyboard.press('Enter');
+ await page.waitForFunction(()=>window.__NESI_DEMO_GAME__?.state==='playing',{timeout:30000});report.pauseResumePassed=true;
+ console.log('PILOT43_STAGE',JSON.stringify({stage:'resume',pass:true,control:report.resumeControl}));
  await page.evaluate(()=>window.__NESI_DEMO_GAME__.renderer.setAnimationLoop(null));
  await page.setViewport({width:390,height:844,deviceScaleFactor:1});
  await page.evaluate(()=>{const g=window.__NESI_DEMO_GAME__;g.viewportResize();g.render();});
@@ -98,5 +113,8 @@ try{
  const pixelCode=`import json,sys\nfrom PIL import Image,ImageStat\nr=[]\nfor p in sys.argv[1:]:\n im=Image.open(p).convert('RGB');s=im.resize((64,36));v=max(ImageStat.Stat(s).stddev);assert v>2,(p,v);r.append({'file':p.split('/')[-1],'width':im.width,'height':im.height,'std':v})\nprint(json.dumps(r))`;
  report.pixels=JSON.parse(execFileSync(process.env.CODEX_PRIMARY_RUNTIME_PYTHON||'python3',['-c',pixelCode,...shots.map(s=>path.join(out,s.file))],{encoding:'utf8'}));
  assert.deepEqual(errors,[]);report.pass=true;save();console.log(JSON.stringify({pass:true,routeFrames:route.frames,teleports:route.teleports,shots:shots.length}));
-}catch(e){report.failure=String(e?.stack||e);save();throw e;}
+}catch(e){report.failure=String(e?.stack||e);report.failureFocus=await focusDiagnostics();save();
+ console.error('PILOT43_FAILURE',JSON.stringify({sourceCommit:report.sourceCommit,failure:String(e),focus:report.failureFocus,
+  pauseControl:report.pauseControl,pauseControlUsed:report.pauseControlUsed,pauseBeforeFocus:report.pauseBeforeFocus,
+  resumeControl:report.resumeControl,resumeBeforeFocus:report.resumeBeforeFocus}));throw e;}
 finally{await browser?.close();server?.kill();}
