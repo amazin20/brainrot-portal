@@ -85,15 +85,32 @@ async function githubGet(resource){
 async function guard(phase){
  assert.ok(['prepare','deploy'].includes(phase));
  assert.equal(process.env.GITHUB_REPOSITORY,'amazin20/brainrot-portal');
- assert.equal(process.env.GITHUB_REF,'refs/heads/'+BRANCH);
- const source=process.env.GITHUB_SHA;
+ const source=process.env.BUILD_COMMIT||process.env.GITHUB_SHA;
+ const mainPublisher=process.env.PILOT_PUBLISHER_COMMIT||null;
+ const publisher=mainPublisher||source;
  assert.match(source||'',/^[a-f0-9]{40}$/);
+ if(mainPublisher){
+  assert.match(mainPublisher,/^[a-f0-9]{40}$/);
+  assert.equal(mainPublisher,process.env.GITHUB_SHA,'The controller must be this exact main workflow commit');
+  assert.equal(process.env.GITHUB_REF,'refs/heads/main');
+ }else{
+  assert.equal(process.env.GITHUB_REF,'refs/heads/'+BRANCH);
+  assert.equal(source,process.env.GITHUB_SHA);
+ }
  const [main,head,run,artifacts,deployments]=await Promise.all([
   githubGet('git/ref/heads/main'),githubGet('git/ref/heads/'+BRANCH),githubGet('actions/runs/'+BASELINE_RUN),
   githubGet('actions/runs/'+BASELINE_RUN+'/artifacts?name=github-pages&per_page=100'),
   githubGet('deployments?environment=github-pages&per_page=100'),
  ]);
- assert.equal(main.object.sha,BASELINE_PUBLISHER,'Main changed after the accepted baseline; reconcile its publication before adding this pilot');
+ assert.equal(main.object.sha,mainPublisher||BASELINE_PUBLISHER,'Main changed after the accepted controller; reconcile its publication before adding this pilot');
+ if(mainPublisher){
+  const controller=await githubGet('commits/'+mainPublisher);
+  assert.equal(controller.sha,mainPublisher);
+  assert.deepEqual(controller.parents.map(row=>row.sha),[BASELINE_PUBLISHER],'The controller must descend directly from the preserved baseline publisher');
+  assert.equal(controller.files.length,1,'The main controller must not change existing game or publication source');
+  assert.equal(controller.files[0].filename,'.github/workflows/publish-puzzle-pilot43.yml');
+  assert.equal(controller.files[0].status,'added','The controller may only add its isolated publication workflow');
+ }
  assert.equal(head.object.sha,source,'A newer pilot source exists; this obsolete run must not deploy');
  assert.equal(run.head_sha,BASELINE_PUBLISHER);assert.equal(run.head_branch,'main');assert.equal(run.run_attempt,1);
  assert.equal(run.path,'.github/workflows/publish-unified-campaign.yml');assert.equal(run.status,'completed');assert.equal(run.conclusion,'success');
@@ -112,7 +129,7 @@ async function guard(phase){
   // GitHub creates this job's environment deployment before its first step.
   // Identify it through its Actions log URL, never ignore a foreign publisher.
   const ownLog=status?.log_url&&new RegExp('/actions/runs/'+process.env.GITHUB_RUN_ID+'(?:/|$)').test(status.log_url);
-  if(deployment.sha===source&&ownLog)continue;
+  if(deployment.sha===publisher&&ownLog)continue;
   if(!status||['queued','pending','in_progress'].includes(status.state))throw Error('Another Pages deployment is pending: '+deployment.id);
   if(status.state==='failure'||status.state==='error')continue;
   if(status.state==='success'){
@@ -129,11 +146,12 @@ async function guard(phase){
  if(phase==='deploy'){
   const proof=JSON.parse(fs.readFileSync('proof/manifest.json'));
   assert.equal(proof.sourceCommit,source);assert.equal(proof.baselinePublisherCommit,BASELINE_PUBLISHER);
+  assert.equal(proof.publisherCommit,publisher,'The final receipt must distinguish pilot source from its main controller');
   assert.equal(proof.baselineSourceCommit,BASELINE_SOURCE);assert.equal(proof.mainSiteUnchanged,true);
   const predeploy=JSON.parse(fs.readFileSync('proof/predeploy-public-bytes.json'));
   assert.equal(predeploy.pass,true);assert.equal(predeploy.checked,proof.preservedFiles.length);
  }
- write('proof/github-guard-'+phase+'.json',{pass:true,phase,sourceCommit:source,baselineRun:BASELINE_RUN,baselinePublisherCommit:BASELINE_PUBLISHER,
+ write('proof/github-guard-'+phase+'.json',{pass:true,phase,sourceCommit:source,publisherCommit:publisher,baselineRun:BASELINE_RUN,baselinePublisherCommit:BASELINE_PUBLISHER,
   baselineSourceCommit:BASELINE_SOURCE,artifact,acceptedDeployment:accepted,inspectedDeployments:inspected,checkedAt:new Date().toISOString()});
  console.log('Exact baseline and latest Pages deployment checked: '+phase);
 }
