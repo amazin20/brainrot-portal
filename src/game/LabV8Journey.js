@@ -92,7 +92,7 @@ export async function runV8Journey(game,{onMilestone=()=>{},scenario=null,journe
       report.pass=true;report.kind='recovery';report.teleports=game.teleportCount;return report;
     }
     if(level.puzzleProgression){
-      const n=level.puzzleProgression;assert([44,45,46].includes(n)&&n===index+1,'Unknown spatial progression room');
+      const n=level.puzzleProgression;assert([44,45,46,47,48,49].includes(n)&&n===index+1,'Unknown spatial progression room');
       const journey=await import(`./LabPuzzleProgression${n}Journey.js`);
       await journey[`runPuzzleProgression${n}`]({game,level,walk,wait,aim,look,until,pickup,enter,mark,frame,worldMove,stop},journeyOptions);
     }
