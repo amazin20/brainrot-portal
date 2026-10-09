@@ -3,6 +3,7 @@ import './campaign.css';
 import {createCampaignMenu} from './game/LabCampaignMenu.js';
 import {LabGame} from './game/LabGame.js';
 import {CAMPAIGN,campaignSpec} from './game/LabCampaignLevels.js';
+import {PROGRESSION_INDICES,nextProgressionLevel} from './game/LabPuzzleProgression.js';
 import {LabPreferences,QUALITY_PRESETS,applyLabQuality,CREATIVE_CAMPAIGN_REVISION,CREATIVE_REPLACED_INDICES} from './game/LabPreferences.js';
 import {LabPlatform,loadYandexSDK} from './game/LabPlatform.js';
 import {resolvePlatformLanguage} from './game/LabLocalization.js';
@@ -21,12 +22,14 @@ const debug=!yandex&&(query.get('debug')==='1'||query.get('smoke')==='1');
 $('#hint-button').hidden=!debug;
 const campaignRoute=readCampaignRoute(query,CAMPAIGN.length),openEdition=readOpenEdition(query),foundationEdition=readFoundationEdition(query);
 const puzzlePilot43=!yandex&&foundationEdition.enabled&&query.get('pilot')==='43';
-const availableRooms=puzzlePilot43?[42]:foundationEdition.enabled?FOUNDATION_INDICES:openEdition.enabled?OPEN_ROOM_INDICES:CAMPAIGN.map((_,i)=>i);
+const puzzleProgression=!yandex&&foundationEdition.enabled&&query.get('pilot')==='progression';
+const availableRooms=puzzleProgression?PROGRESSION_INDICES:puzzlePilot43?[42]:foundationEdition.enabled?FOUNDATION_INDICES:openEdition.enabled?OPEN_ROOM_INDICES:CAMPAIGN.map((_,i)=>i);
 // Retired speed-mode links return to the campaign without reloading or touching saves.
 if(campaignRoute.legacyVelocityLink)history.replaceState(history.state,'',location.pathname+campaignRoute.search+location.hash);
 let storage;try{storage=localStorage;}catch{}
 const pilotStorage=storage&&{getItem:key=>storage.getItem('brainrot-puzzle-pilot43-v1:'+key),setItem:(key,value)=>storage.setItem('brainrot-puzzle-pilot43-v1:'+key,value)};
-const preferences=new LabPreferences(puzzlePilot43?pilotStorage:foundationEdition.enabled?foundationStorage(storage):openEdition.enabled?openEditionStorage(storage):storage,
+const progressionStorage=storage&&{getItem:key=>storage.getItem('brainrot-puzzle-progression-v1:'+key),setItem:(key,value)=>storage.setItem('brainrot-puzzle-progression-v1:'+key,value)};
+const preferences=new LabPreferences(puzzleProgression?progressionStorage:puzzlePilot43?pilotStorage:foundationEdition.enabled?foundationStorage(storage):openEdition.enabled?openEditionStorage(storage):storage,
   foundationEdition.enabled?{campaignRevision:CREATIVE_CAMPAIGN_REVISION,replacedIndices:CREATIVE_REPLACED_INDICES,roomRevisions:{16:'cable-supported-architecture-v1',32:'siphon-observatory-v1',50:'echo-horizon-v1'}}:{}),holds=new Set();
 const screens=['loading','start-screen','pause-screen','win-screen','error-screen'];
 const hudNodes={level:$('#level-number'),chamber:$('#chamber'),objective:$('#objective'),cargo:$('#cargo-status'),portals:$('#portal-status')};
@@ -144,11 +147,13 @@ finally{game.render();clearInput();setState(game.state);diagnostics();}
 game.epicMode=false;
 game.chamberEdition=foundationEdition.enabled?'foundation':openEdition.enabled?'open':'classic';
 game.puzzlePilot43=puzzlePilot43;
+game.puzzleProgression=puzzleProgression;
 document.body.dataset.chamberEdition=game.chamberEdition;
 document.body.dataset.gameMode='campaign';
 game.quality={...QUALITY_PRESETS[preferences.value.quality]};game.tutorial.enabled=preferences.value.tutorial;
 game.levelIndex=foundationEdition.enabled?foundationEdition.levelIndex:openEdition.enabled?openEdition.levelIndex:campaignRoute.levelIndex;
 if(puzzlePilot43)game.levelIndex=42;
+if(puzzleProgression&&!PROGRESSION_INDICES.includes(game.levelIndex))game.levelIndex=PROGRESSION_INDICES[0];
 game.levelIndex=resumeCampaignLevel(query,preferences.value,availableRooms,game.levelIndex);
 choices();$('#level-select').value=String(game.levelIndex);
 function updateStartAction(){
@@ -162,6 +167,7 @@ campaignMenu=createCampaignMenu({root:$('#campaign-map'),select:$('#level-select
 $('#level-select').addEventListener('change',updateStartAction);updateStartAction();
 $('#campaign-count').textContent=foundationEdition.enabled?`Кампания · ${FOUNDATION_INDICES.length} испытание`:openEdition.enabled?`${OPEN_ROOM_INDICES.length} лабораторных испытаний · отдельная версия`:`Архив · ${CAMPAIGN.length} испытания`;
 if(puzzlePilot43)$('#campaign-count').textContent='Новая версия · комната 43';
+if(puzzleProgression)$('#campaign-count').textContent='Пространственные испытания · 43–46';
 if(foundationEdition.enabled){$('#start-screen .brand').textContent='ПОРТАЛЫ · ФИЗИКА · ИССЛЕДОВАНИЕ';$('#start-screen .lead').textContent='Соединяй пространства. Сохраняй импульс. Доберись до выхода вместе с другом.';}
 else if(openEdition.enabled){$('#start-screen .brand').textContent='ЛАБОРАТОРНЫЕ ИСПЫТАНИЯ';$('#start-screen .lead').textContent='Камеры 24, 28, 30 и 31–33. Эта подборка и новая первая глава хранят прогресс отдельно от архива.';}
 const editionNav=document.createElement('nav');editionNav.className='edition-navigation';editionNav.setAttribute('aria-label','Версии кампании');
@@ -194,7 +200,7 @@ async function restartLevel(){
 }
 function resume(){reconcileFocus();if(holds.size)return;game.audio.unlock();game.togglePause(false);game.renderer.setAnimationLoop(game.animate);}
 $('#play-button').addEventListener('click',()=>enterLevel(Number($('#level-select').value),sessionStarted?'next':'initial'));
-$('#play-again-button').addEventListener('click',()=>enterLevel(puzzlePilot43?42:foundationEdition.enabled?nextFoundationLevel(game.levelIndex):openEdition.enabled?nextOpenRoom(game.levelIndex):nextCampaignLevel(game.levelIndex,CAMPAIGN.length)));
+$('#play-again-button').addEventListener('click',()=>enterLevel(puzzleProgression?nextProgressionLevel(game.levelIndex):puzzlePilot43?42:foundationEdition.enabled?nextFoundationLevel(game.levelIndex):openEdition.enabled?nextOpenRoom(game.levelIndex):nextCampaignLevel(game.levelIndex,CAMPAIGN.length)));
 $('#resume-button').addEventListener('click',resume);$('#restart-button').addEventListener('click',restartLevel);
 $('#pause-button').addEventListener('click',()=>game.togglePause(true));
 $('#hint-button').addEventListener('click',showHints);

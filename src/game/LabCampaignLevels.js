@@ -1,5 +1,6 @@
 import {finishCampaignTheme} from './LabCampaignThemeFinish.js';
 import {PILOT43_SPEC,buildPuzzlePilot43} from './LabPuzzlePilot43.js';
+import {progressionSpec,buildPuzzleProgression} from './LabPuzzleProgression.js';
 import {EXPANSION_B_BUILDERS,EXPANSION_B_SPECS} from './LabExpansionRoomsB.js';
 import {EXPANSION_A_BUILDERS,EXPANSION_A_SPECS} from './LabExpansionRoomsA.js';
 import {CREATIVE_ROOM20_SPEC,buildCreative20} from './LabCreativeRoom20.js';
@@ -64,6 +65,7 @@ export const CAMPAIGN=Object.freeze([...INTRODUCTORY_CAMPAIGN,...EXTENDED_CAMPAI
 function buildUnthemedCampaignLevel(game,index){
  const count=game.chamberEdition==='foundation'?30+FOUNDATION_LATE_BUILDERS.length:CAMPAIGN.length;
  if(!Number.isInteger(index)||index<0||index>=count)throw new RangeError('Unknown campaign course');
+ if(game.chamberEdition==='foundation'&&game.puzzleProgression&&progressionSpec(index))return buildPuzzleProgression(game,index);
  if(game.chamberEdition==='foundation'&&game.puzzlePilot43&&index===42)return buildPuzzlePilot43(game,index);
  if(game.chamberEdition==='foundation'&&FOUNDATION_BUILDERS[index])return FOUNDATION_BUILDERS[index](game,index);
  if(game.chamberEdition==='foundation'&&FOUNDATION_CREATIVE_BUILDERS[index])return FOUNDATION_CREATIVE_BUILDERS[index](game,index);
@@ -82,7 +84,14 @@ function buildUnthemedCampaignLevel(game,index){
  return finishBrowserArt(addExplorationSurfaces(game,level,index));
 }
 
-export function campaignSpec(game,index){return game.chamberEdition==='foundation'&&game.puzzlePilot43&&index===42?PILOT43_SPEC:game.chamberEdition==='foundation'&&(FOUNDATION_CREATIVE_SPECS[index]||FOUNDATION_SPECS[index]||index>=30&&FOUNDATION_LATE_SPECS[index-30])||game.chamberEdition==='open'&&OPEN_SPECS[index]||CAMPAIGN[index];}
+export function campaignSpec(game,index){
+ if(game.chamberEdition==='foundation'){
+  if(game.puzzleProgression&&progressionSpec(index))return progressionSpec(index);
+  if(game.puzzlePilot43&&index===42)return PILOT43_SPEC;
+  return FOUNDATION_CREATIVE_SPECS[index]||FOUNDATION_SPECS[index]||index>=30&&FOUNDATION_LATE_SPECS[index-30]||CAMPAIGN[index];
+ }
+ return game.chamberEdition==='open'&&OPEN_SPECS[index]||CAMPAIGN[index];
+}
 
 export function buildLabCampaignLevel(game,index){
  const before=new Set(game.scene.children);

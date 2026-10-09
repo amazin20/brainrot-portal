@@ -91,7 +91,12 @@ export async function runV8Journey(game,{onMilestone=()=>{},scenario=null,journe
       await scenario({game,level,walk,wait,aim,look,until,pickup,enter,mark,frame,worldMove,stop});
       report.pass=true;report.kind='recovery';report.teleports=game.teleportCount;return report;
     }
-    if(level.pilot43){const {runPuzzlePilot43}=await import('./LabPuzzlePilot43Journey.js');await runPuzzlePilot43({game,level,walk,wait,aim,look,until,pickup,enter,mark,frame,worldMove,stop},journeyOptions);}
+    if(level.puzzleProgression){
+      const n=level.puzzleProgression;assert([44,45,46].includes(n)&&n===index+1,'Unknown spatial progression room');
+      const journey=await import(`./LabPuzzleProgression${n}Journey.js`);
+      await journey[`runPuzzleProgression${n}`]({game,level,walk,wait,aim,look,until,pickup,enter,mark,frame,worldMove,stop},journeyOptions);
+    }
+    else if(level.pilot43){const {runPuzzlePilot43}=await import('./LabPuzzlePilot43Journey.js');await runPuzzlePilot43({game,level,walk,wait,aim,look,until,pickup,enter,mark,frame,worldMove,stop},journeyOptions);}
     else if(level.siphonObservatory){const {runSiphonObservatory}=await import('./LabSiphonObservatoryJourney.js');await runSiphonObservatory({game,level,walk,wait,aim,look,until,pickup,enter,mark,frame,worldMove,stop},journeyOptions);}
     else if(level.echoHorizon){const {runEchoHorizon}=await import('./LabEchoHorizonJourney.js');await runEchoHorizon({game,level,walk,wait,aim,look,until,pickup,enter,mark,frame,worldMove,stop},journeyOptions);}
     else if(level.expansionA){const {runExpansionAJourney}=await import('./LabExpansionJourneyA.js');await runExpansionAJourney({game,level,walk,wait,aim,look,until,pickup,enter,mark,frame,worldMove,stop},journeyOptions);}
