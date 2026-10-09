@@ -1,0 +1,122 @@
+name: Publish accepted isolated puzzle progression next 47–49
+'on':
+  push:
+    branches: [main]
+    paths: [.github/workflows/publish-puzzle-progression-next.yml]
+  workflow_dispatch:
+    inputs:
+      source:
+        description: Exact accepted source commit from upgrade/puzzle-progression-next-20261009
+        required: true
+        type: string
+      review_run:
+        description: Exact successful source review run ID
+        required: true
+        type: string
+      review_attempt:
+        description: Exact current successful review attempt
+        required: true
+        type: string
+permissions: {contents: read, actions: read, deployments: read}
+concurrency:
+  group: pages
+  cancel-in-progress: false
+env:
+  # Exact source and current successful review attempt accepted before publication.
+  BUILD_COMMIT: ${{ inputs.source || 'b4ca1630ec41f4a93877233ac35b7e9c7e04a19f' }}
+  SOURCE_REVIEW_RUN_ID: ${{ inputs.review_run || '37918564404' }}
+  SOURCE_REVIEW_RUN_ATTEMPT: ${{ inputs.review_attempt || '1' }}
+  PROGRESSION_PUBLISHER_COMMIT: ${{ github.sha }}
+  PUBLIC_BASE: https://amazin20.github.io/brainrot-portal/
+jobs:
+  assemble:
+    name: Assemble only the exact reviewed candidate
+    if: github.repository == 'amazin20/brainrot-portal' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: '${{ env.BUILD_COMMIT }}', fetch-depth: 0, persist-credentials: false}
+      - uses: actions/setup-node@v4
+        with: {node-version: 22}
+      - name: Check the exact source review, current publisher and latest public deployment
+        env: {GITHUB_TOKEN: '${{ github.token }}'}
+        run: node scripts/publish-puzzle-progression-next.mjs guard prepare
+      - name: Download both current-attempt artifacts and enforce their GitHub ZIP checksums
+        env: {GITHUB_TOKEN: '${{ github.token }}'}
+        run: node scripts/publish-puzzle-progression-next.mjs download-reviewed review-inputs
+      - name: Restore the retained checksum-pinned accepted archive and preserve every old byte
+        run: |
+          python3 - <<'PY'
+          import json,subprocess
+          proof=json.load(open('proof/downloaded-review-inputs.json'))
+          assert proof['pass'] is True
+          for item in proof['inputs']:
+              destination='dist' if item['kind']=='production' else 'baseline-retained'
+              command=['python3','scripts/publish-puzzle-progression-next.py','prepare-package','--zip',item['filename'],'--output',destination,'--digest',item['artifact']['digest'],'--bytes',str(item['artifact']['size_in_bytes'])]
+              if item['kind']=='baseline':command+=['--max-uncompressed-bytes','600000000']
+              subprocess.run(command,check=True)
+          PY
+          python3 scripts/publish-puzzle-progression-next.py prepare-baseline --zip baseline-retained/baseline.zip --output baseline-pages
+          python3 scripts/publish-puzzle-progression-next.py assemble --baseline baseline-pages --candidate dist --site site --proof proof --source "$BUILD_COMMIT" --publisher "$PROGRESSION_PUBLISHER_COMMIT" --baseline-source 8d2c01eacd86fe9235a35e7ec5f624ba62c3b29e --baseline-publisher edb11aecfeb634b62addba95e2898cfca0799a79 --run "$GITHUB_RUN_ID" --baseline-run 37889948751 --review-run "$SOURCE_REVIEW_RUN_ID" --review-attempt "$SOURCE_REVIEW_RUN_ATTEMPT"
+      - uses: actions/upload-pages-artifact@v3
+        with: {path: site, retention-days: 14}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: puzzle-progression-next-prepared-${{ github.run_id }}-${{ github.run_attempt }}
+          path: proof/
+          if-no-files-found: error
+          retention-days: 30
+  deploy:
+    name: Preserve the whole site, deploy the isolated URL and verify its public journeys
+    needs: assemble
+    runs-on: ubuntu-latest
+    timeout-minutes: 65
+    permissions: {contents: read, actions: read, deployments: read, pages: write, id-token: write}
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}puzzle-progression-next/?edition=foundation&level=47&pilot=progression
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: '${{ env.BUILD_COMMIT }}', fetch-depth: 0, persist-credentials: false}
+      - uses: actions/setup-node@v4
+        with: {node-version: 22, cache: npm}
+      - uses: actions/download-artifact@v4
+        with:
+          name: puzzle-progression-next-prepared-${{ github.run_id }}-${{ github.run_attempt }}
+          path: proof
+      - name: Install the pinned native public verifier
+        run: |
+          npm ci
+          npm install --no-save --package-lock=false puppeteer-core@24.16.0
+          python3 -m venv "$RUNNER_TEMP/progression-python"
+          "$RUNNER_TEMP/progression-python/bin/python" -m pip install --disable-pip-version-check Pillow==11.3.0
+          echo "CODEX_PRIMARY_RUNTIME_PYTHON=$RUNNER_TEMP/progression-python/bin/python" >> "$GITHUB_ENV"
+          echo "CHROME_PATH=$(command -v google-chrome || command -v chromium)" >> "$GITHUB_ENV"
+      - name: Verify all 1378 existing files immediately before deployment
+        run: python3 scripts/publish-puzzle-progression-next.py verify --base "$PUBLIC_BASE" --manifest proof/baseline-manifest.json --output proof/predeploy-public-bytes.json --source "$BUILD_COMMIT" --publisher "$PROGRESSION_PUBLISHER_COMMIT" --review-run "$SOURCE_REVIEW_RUN_ID" --review-attempt "$SOURCE_REVIEW_RUN_ATTEMPT" --run "$GITHUB_RUN_ID" --phase preflight
+      - uses: actions/configure-pages@v5
+      - name: Refuse a newer source, publisher, review attempt or overlapping Pages publication at the final gate
+        env: {GITHUB_TOKEN: '${{ github.token }}'}
+        run: node scripts/publish-puzzle-progression-next.mjs guard deploy
+      - uses: actions/deploy-pages@v4
+        id: deployment
+      - name: Verify every preserved and newly published file on the public site
+        run: python3 scripts/publish-puzzle-progression-next.py verify --base "$PUBLIC_BASE" --manifest proof/manifest.json --output proof/public-bytes.json --source "$BUILD_COMMIT" --publisher "$PROGRESSION_PUBLISHER_COMMIT" --review-run "$SOURCE_REVIEW_RUN_ID" --review-attempt "$SOURCE_REVIEW_RUN_ATTEMPT" --run "$GITHUB_RUN_ID" --phase published
+      - name: Complete all three actual public room journeys with native rendering and controls
+        env: {PAGE_URL: 'https://amazin20.github.io/brainrot-portal/puzzle-progression-next/'}
+        run: |
+          for progression_level in 47 48 49; do
+            LEVEL="$progression_level" OUT_DIR="qa/puzzle-progression-next-public-$progression_level" timeout --signal=TERM --kill-after=10s 900s node scripts/qa-puzzle-progression-next-browser.mjs
+          done
+      - name: Preserve publication and native rendering receipts, including any failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: puzzle-progression-next-publication-proof-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            proof/
+            qa/puzzle-progression-next-public-*/
+          if-no-files-found: error
+          retention-days: 30
