@@ -120,6 +120,10 @@ try{
  await page.waitForFunction(()=>{const e=document.querySelector('#pause-screen');return !e.inert&&getComputedStyle(e).opacity==='1';});
  await page.click('#level-menu-button');await page.waitForFunction(()=>window.__NESI_DEMO_GAME__?.state==='ready');
  await page.waitForFunction(()=>{const e=document.querySelector('#start-screen');return !e.inert&&getComputedStyle(e).opacity==='1';});
+ // Next crosses the chapter boundary in both finale rooms. Explore the actual
+ // destination chapter tab before selecting the replay node in its map.
+ await page.click(`#campaign-sector-${Math.floor((level-1)/10)}`);
+ await page.waitForSelector(`.room-node[data-level="${level}"]`,{visible:true});
  await page.click(`.room-node[data-level="${level}"]`);
  await page.focus('#play-button');await page.keyboard.press('Enter');
  await page.waitForFunction(()=>window.__NESI_DEMO_GAME__?.state==='playing');
