@@ -1,4 +1,4 @@
-"""Append an exact-review opt-in progression without changing accepted Pages bytes."""
+"""Replace only the exact-review finale namespace; preserve all other accepted Pages bytes."""
 import argparse
 import concurrent.futures
 import hashlib
@@ -16,9 +16,10 @@ import urllib.request
 import zipfile
 
 
-BASELINE_RUN = 37923054511
-BASELINE_PUBLISHER = '0a22c3b1a1456cccccca3759c336ed8a22fad857'
-BASELINE_SOURCE = '8d2c01eacd86fe9235a35e7ec5f624ba62c3b29e'
+BASELINE_RUN = 38084083371
+BASELINE_PUBLISHER = '5666f9ef710045d2ada25d1f0bde6d7c71c939ca'
+BASELINE_SOURCE = 'b89fc2cfb2992cb3908d14982e51a75f723b3261'
+CANONICAL_SOURCE = '8d2c01eacd86fe9235a35e7ec5f624ba62c3b29e'
 PRIOR_PILOT_SOURCE = '415b2da2cfe162fa9bf8f55803977ba2b5dd9bb6'
 PRIOR_PILOT_PUBLISHER = '3b80abcfa59c6cc73b28392e6f997d32df35a51c'
 PRIOR_PROGRESSION_SOURCE = '3aa725337737979ebd1fa6a4bb18b49d809e27fd'
@@ -30,10 +31,19 @@ PRIOR_NEXT_REVIEW = {'runId': 37918564404, 'runAttempt': 1}
 PRIOR_NEXT_PUBLISHER = '0a22c3b1a1456cccccca3759c336ed8a22fad857'
 PRIOR_NEXT_PUBLICATION_RUN = 37923054511
 PLAYABLE_LEVELS = [43, 44, 45, 46, 47, 48, 49, 50, 51]
-BASELINE_FILES = 1507
-BASELINE_BYTES = 518160875
-BASELINE_ZIP_BYTES = 484450139
-BASELINE_ZIP_SHA256 = 'f292d80d624421c6a0a7c59fd2125f970a1ba69555ab22d3360c50df353a414c'
+PRIOR_FINALE_SOURCE = BASELINE_SOURCE
+PRIOR_FINALE_REVIEW = {'runId': 38079889392, 'runAttempt': 1}
+PRIOR_FINALE_PUBLISHER = BASELINE_PUBLISHER
+PRIOR_FINALE_PUBLICATION_RUN = BASELINE_RUN
+BASELINE_FILES = 1622
+BASELINE_BYTES = 531306775
+PRESERVED_FILES = 1507
+PRESERVED_BYTES = 518160875
+PRIOR_FINALE_FILES = 115
+PRIOR_FINALE_BYTES = 13145900
+BASELINE_ZIP_BYTES = 495046295
+BASELINE_ZIP_SHA256 = '175b34cd1efc644556347aa4c459e2e4708beb6899793df7fa1ee3c066e7b69c'
+MINIMUM_TESTS = 1676
 LEVELS = [50, 51]
 PREFIX = 'puzzle-progression-finale/'
 VERSION = 'v54-puzzle-progression-finale-v1'
@@ -260,8 +270,15 @@ def extract_baseline(archive_file, site):
             for index in range(1, len(parts)):
                 parent = '/'.join(parts[:index])
                 require(types.get(parent) != 'file', 'TAR directory/file collision: ' + parent)
-        require(PREFIX.rstrip('/') not in types and not any(name.startswith(PREFIX) for name in types),
-                'The isolated progression path already exists in the baseline')
+        require(types.get(PREFIX.rstrip('/')) in (None, 'directory'), 'Accepted finale namespace must be a directory')
+        old = [(entry, name) for entry, name in entries if entry.isfile() and name.startswith(PREFIX)]
+        outside = [(entry, name) for entry, name in entries if entry.isfile() and not name.startswith(PREFIX)]
+        require(len(old) == PRIOR_FINALE_FILES and sum(entry.size for entry, _ in old) == PRIOR_FINALE_BYTES,
+                'Accepted prior finale TAR inventory mismatch')
+        require(len(outside) == PRESERVED_FILES and sum(entry.size for entry, _ in outside) == PRESERVED_BYTES,
+                'Accepted outside TAR inventory mismatch')
+        require(len(old) + len(outside) == BASELINE_FILES and total == BASELINE_BYTES,
+                'Accepted complete TAR inventory mismatch')
         site.mkdir(parents=True)
         for entry, name in entries:
             destination = site / name
@@ -281,11 +298,18 @@ def extract_baseline(archive_file, site):
 
 
 def check_baseline(rows, root=None):
+    checked_rows(rows, 'Accepted baseline files')
     require(len(rows) == BASELINE_FILES, 'Accepted baseline file count mismatch')
     require(sum(row['bytes'] for row in rows) == BASELINE_BYTES, 'Accepted baseline byte count mismatch')
+    outside = [row for row in rows if not row['path'].startswith(PREFIX)]
+    prior = [row for row in rows if row['path'].startswith(PREFIX)]
+    require(len(outside) == PRESERVED_FILES and sum(row['bytes'] for row in outside) == PRESERVED_BYTES,
+            'Accepted outside file inventory mismatch')
+    require(len(prior) == PRIOR_FINALE_FILES and sum(row['bytes'] for row in prior) == PRIOR_FINALE_BYTES,
+            'Accepted prior finale file inventory mismatch')
     if root is not None:
         metadata = read_json(root / 'build-info.json')
-        require(metadata.get('commit') == BASELINE_SOURCE, 'Canonical baseline source mismatch')
+        require(metadata.get('commit') == CANONICAL_SOURCE, 'Canonical baseline source mismatch')
         require(metadata.get('publisherCommit', 'missing') is None, 'Canonical baseline publisher metadata changed')
         pilot = read_json(root / 'puzzle-pilot/build-info.json')
         require(pilot.get('commit') == PRIOR_PILOT_SOURCE, 'Previously published pilot source mismatch')
@@ -298,6 +322,38 @@ def check_baseline(rows, root=None):
         check_prior_progression(prior, prior_status)
         check_prior_next(read_json(root / 'puzzle-progression-next/build-info.json'),
                          read_json(root / 'puzzle-progression-next/preview-status.json'))
+        check_prior_finale(read_json(root / PREFIX / 'build-info.json'),
+                           read_json(root / PREFIX / 'preview-status.json'))
+
+
+def prior_finale_identity():
+    return {'sourceCommit': PRIOR_FINALE_SOURCE, 'sourceReview': PRIOR_FINALE_REVIEW,
+            'publisherCommit': PRIOR_FINALE_PUBLISHER, 'publicationRun': PRIOR_FINALE_PUBLICATION_RUN}
+
+
+def check_prior_finale(metadata, status):
+    require(metadata.get('commit') == PRIOR_FINALE_SOURCE and metadata.get('publisherCommit', 'missing') is None,
+            'Prior finale source metadata changed')
+    check_review(metadata.get('sourceReview'), PRIOR_FINALE_REVIEW, 'Prior finale metadata')
+    require(metadata.get('version') == VERSION, 'Prior finale version changed')
+    scope = metadata.get('features', {}).get('puzzleProgression', {})
+    for key, value in [('optIn', True), ('levels', LEVELS), ('reviewedLevels', LEVELS),
+                       ('playableLevels', PLAYABLE_LEVELS), ('revision', REVISION),
+                       ('query', QUERY), ('storagePrefix', STORAGE_PREFIX)]:
+        require(type(scope.get(key)) is type(value) and scope[key] == value, 'Prior finale scope changed: ' + key)
+    rooms = scope.get('rooms')
+    require(isinstance(rooms, list) and [room.get('level') for room in rooms] == LEVELS,
+            'Prior finale room identity changed')
+    for room in rooms:
+        check_source_record(room.get('currentWalkthrough'), prior_finale_identity(), 'Prior finale walkthrough')
+    for key, value in prior_finale_identity().items():
+        require(status.get(key) == value, 'Prior finale receipt identity changed: ' + key)
+    check_review(status.get('sourceReview'), PRIOR_FINALE_REVIEW, 'Prior finale receipt')
+    for key, value in [('path', PREFIX), ('levels', LEVELS), ('reviewedLevels', LEVELS),
+                       ('playableLevels', PLAYABLE_LEVELS), ('query', QUERY), ('optIn', True), ('mainSiteUnchanged', True)]:
+        require(type(status.get(key)) is type(value) and status[key] == value, 'Prior finale receipt scope changed: ' + key)
+    require(status.get('rooms') == [{key: room[key] for key in ('level', 'id', 'title', 'currentWalkthrough')}
+                                  for room in rooms], 'Prior finale receipt walkthroughs changed')
 
 
 def check_prior_progression(metadata, status):
@@ -489,7 +545,7 @@ def check_candidate(candidate, expected):
     cpu = receipt.get('cpu', {})
     check_source_record(cpu, expected, 'CPU review')
     require(cpu.get('pass') is True, 'CPU review did not pass')
-    integer(cpu.get('testCount'), 'CPU review test count', 1605)
+    integer(cpu.get('testCount'), 'CPU review test count', MINIMUM_TESTS)
     require(cpu.get('passed') == cpu['testCount'] and type(cpu.get('failed')) is int and cpu['failed'] == 0
             and cpu.get('allActiveGameTests') is True, 'CPU review did not run and pass every active test')
     for field in ('cancelled', 'skipped', 'todo'):
@@ -531,6 +587,7 @@ def status_record(expected, rooms):
             'priorPilotSourceCommit': PRIOR_PILOT_SOURCE, 'priorProgressionSourceCommit': PRIOR_PROGRESSION_SOURCE,
             'priorProgressionSourceReview': PRIOR_PROGRESSION_REVIEW,
             'priorNextSourceCommit': PRIOR_NEXT_SOURCE, 'priorNextSourceReview': PRIOR_NEXT_REVIEW,
+            'canonicalSourceCommit': CANONICAL_SOURCE, 'priorFinale': prior_finale_identity(), 'namespaceReplaced': True,
             'path': PREFIX, 'levels': LEVELS,
             'reviewedLevels': LEVELS, 'playableLevels': PLAYABLE_LEVELS, 'optIn': True,
             'query': QUERY, 'mainSiteUnchanged': True,
@@ -557,7 +614,7 @@ def assemble(args):
     archive_dir, candidate, site, proof = map(pathlib.Path, [args.baseline, args.candidate, args.site, args.proof])
     require(not proof.is_symlink() and (not proof.exists() or proof.is_dir()), 'Publication proof must be an ordinary directory')
     require(all(not (proof / name).exists() and not (proof / name).is_symlink()
-                for name in ('manifest.json', 'baseline-manifest.json')), 'Refuse to overwrite an existing publication manifest')
+                for name in ('manifest.json', 'baseline-manifest.json', 'prior-finale-manifest.json', 'prior-finale')), 'Refuse to overwrite an existing publication manifest')
     candidate_path, site_path, proof_path = candidate.resolve(), site.resolve(), proof.resolve()
     require(not (site_path == candidate_path or site_path.is_relative_to(candidate_path)
                  or candidate_path.is_relative_to(site_path)), 'Candidate and site directories must be disjoint')
@@ -573,24 +630,36 @@ def assemble(args):
     extract_baseline(archives[0], site)
     before = inventory(site)
     check_baseline(before, site)
-    require(not (site / PREFIX.rstrip('/')).exists(), 'Refuse to overwrite any baseline progression directory')
+    preserved = [row for row in before if not row['path'].startswith(PREFIX)]
+    prior = [row for row in before if row['path'].startswith(PREFIX)]
+    # Keep the complete old namespace in private proof before replacing precisely this directory.
+    shutil.copytree(site / PREFIX.rstrip('/'), proof / 'prior-finale')
+    require(inventory(proof / 'prior-finale') == [{**row, 'path': row['path'][len(PREFIX):]} for row in prior],
+            'Private prior finale bytes changed during retention')
+    write_json(proof / 'prior-finale-manifest.json', {**prior_finale_identity(), 'path': PREFIX,
+                                                    'files': prior, 'bytes': PRIOR_FINALE_BYTES})
+    shutil.rmtree(site / PREFIX.rstrip('/'))
     shutil.copytree(candidate, site / PREFIX.rstrip('/'))
     status = status_record(expected, rooms)
     write_json(site / PREFIX / 'preview-status.json', status)
     (site / PREFIX / 'walkthroughs.html').write_text(walkthrough_page(rooms), encoding='utf-8')
     after = inventory(site)
     after_map = {row['path']: row for row in after}
-    require(all(after_map.get(row['path']) == row for row in before), 'An existing public file changed')
+    require(all(after_map.get(row['path']) == row for row in preserved), 'An existing outside public file changed')
     added = [row for row in after if row['path'].startswith(PREFIX)]
-    require(len(after) == len(before) + len(added), 'A file outside the progression directory was added')
+    require(len(after) == len(preserved) + len(added), 'A file outside the progression directory was added')
     require(all(after_map[PREFIX + row['path']] == {**row, 'path': PREFIX + row['path']} for row in candidate_rows),
             'A tested candidate file changed during assembly')
-    manifest = {**status, 'phase': 'published', 'preservedFiles': before, 'candidateFiles': candidate_rows,
-                'progressionFiles': added, 'siteFiles': after, 'preservedBytes': BASELINE_BYTES,
+    manifest = {**status, 'phase': 'published', 'baselineFiles': before, 'baselineBytes': BASELINE_BYTES,
+                'baselineFilesSha256': inventory_sha256(before), 'preservedFiles': preserved, 'preservedBytes': PRESERVED_BYTES,
+                'priorFinaleFiles': prior, 'priorFinaleBytes': PRIOR_FINALE_BYTES, 'candidateFiles': candidate_rows,
+                'progressionFiles': added, 'siteFiles': after,
                 'progressionBytes': sum(row['bytes'] for row in added)}
     write_json(proof / 'manifest.json', manifest)
     write_json(proof / 'baseline-manifest.json', {**manifest, 'phase': 'preflight', 'siteFiles': before})
-    print(json.dumps({'mainSiteUnchanged': True, 'preservedFiles': len(before), 'preservedBytes': BASELINE_BYTES,
+    print(json.dumps({'mainSiteUnchanged': True, 'preservedFiles': len(preserved), 'preservedBytes': PRESERVED_BYTES,
+                      'baselineFiles': len(before), 'baselineBytes': BASELINE_BYTES,
+                      'priorFinaleFiles': len(prior), 'priorFinaleBytes': PRIOR_FINALE_BYTES,
                       'progressionFiles': len(added), 'progressionBytes': manifest['progressionBytes'], **expected}))
 
 
@@ -607,6 +676,10 @@ def checked_rows(value, label):
     return {row['path']: row for row in value}
 
 
+def inventory_sha256(rows):
+    return hashlib.sha256(json.dumps(rows, ensure_ascii=False, separators=(',', ':')).encode()).hexdigest()
+
+
 def check_manifest(manifest, args, expected):
     require(isinstance(manifest, dict), 'Manifest must be an object')
     require(manifest.get('phase') == args.phase, 'Proof phase mismatch')
@@ -618,15 +691,25 @@ def check_manifest(manifest, args, expected):
                        ('priorPilotSourceCommit', PRIOR_PILOT_SOURCE), ('priorProgressionSourceCommit', PRIOR_PROGRESSION_SOURCE),
                        ('priorProgressionSourceReview', PRIOR_PROGRESSION_REVIEW),
                        ('priorNextSourceCommit', PRIOR_NEXT_SOURCE), ('priorNextSourceReview', PRIOR_NEXT_REVIEW),
+                       ('canonicalSourceCommit', CANONICAL_SOURCE), ('priorFinale', prior_finale_identity()), ('namespaceReplaced', True),
                        ('path', PREFIX), ('levels', LEVELS),
                        ('reviewedLevels', LEVELS), ('playableLevels', PLAYABLE_LEVELS), ('query', QUERY),
                        ('optIn', True), ('mainSiteUnchanged', True), ('masterSpecComplete', False),
                        ('currentVisualWalkthroughs', True)]:
         require(type(manifest.get(key)) is type(value) and manifest[key] == value,
                 'Manifest identity/scope mismatch: ' + key)
+    baseline = checked_rows(manifest.get('baselineFiles'), 'Accepted baseline files')
+    check_baseline(list(baseline.values()))
+    require(manifest.get('baselineBytes') == BASELINE_BYTES, 'Manifest baseline bytes mismatch')
+    require(manifest.get('baselineFilesSha256') == inventory_sha256(manifest['baselineFiles']), 'Manifest baseline inventory digest mismatch')
     preserved = checked_rows(manifest.get('preservedFiles'), 'Preserved files')
-    check_baseline(list(preserved.values()))
-    require(manifest.get('preservedBytes') == BASELINE_BYTES, 'Manifest baseline bytes mismatch')
+    prior = checked_rows(manifest.get('priorFinaleFiles'), 'Prior finale files')
+    require(preserved == {name: row for name, row in baseline.items() if not name.startswith(PREFIX)},
+            'Preserved outside inventory differs from accepted baseline')
+    require(prior == {name: row for name, row in baseline.items() if name.startswith(PREFIX)},
+            'Prior finale inventory differs from accepted baseline')
+    require(manifest.get('preservedBytes') == PRESERVED_BYTES and manifest.get('priorFinaleBytes') == PRIOR_FINALE_BYTES,
+            'Manifest preserved/prior finale bytes mismatch')
     progression = checked_rows(manifest.get('progressionFiles'), 'Progression files')
     require(progression and all(name.startswith(PREFIX) for name in progression), 'Progression inventory escaped its isolated directory')
     require(not (preserved.keys() & progression.keys()), 'Progression overwrites the accepted baseline')
@@ -642,7 +725,7 @@ def check_manifest(manifest, args, expected):
     for room in rooms:
         check_source_record(room.get('currentWalkthrough'), expected, 'Manifest walkthrough')
     public = checked_rows(manifest.get('siteFiles'), 'Public files')
-    require(public == (preserved if args.phase == 'preflight' else {**preserved, **progression}),
+    require(public == (baseline if args.phase == 'preflight' else {**preserved, **progression}),
             'Public inventory does not match the expected phase')
     return list(public.values())
 
@@ -669,7 +752,7 @@ def get_public_json(base, path):
 
 def check_public_metadata(args, expected, manifest):
     canonical = get_public_json(args.base, 'build-info.json')
-    require(canonical.get('commit') == BASELINE_SOURCE and canonical.get('publisherCommit', 'missing') is None,
+    require(canonical.get('commit') == CANONICAL_SOURCE and canonical.get('publisherCommit', 'missing') is None,
             'Current canonical public metadata changed')
     pilot = get_public_json(args.base, 'puzzle-pilot/build-info.json')
     require(pilot.get('commit') == PRIOR_PILOT_SOURCE, 'Current preserved pilot metadata changed')
@@ -681,6 +764,9 @@ def check_public_metadata(args, expected, manifest):
                             get_public_json(args.base, 'puzzle-progression/preview-status.json'))
     check_prior_next(get_public_json(args.base, 'puzzle-progression-next/build-info.json'),
                      get_public_json(args.base, 'puzzle-progression-next/preview-status.json'))
+    if args.phase == 'preflight':
+        check_prior_finale(get_public_json(args.base, PREFIX + 'build-info.json'),
+                           get_public_json(args.base, PREFIX + 'preview-status.json'))
     if args.phase == 'published':
         current = get_public_json(args.base, PREFIX + 'build-info.json')
         require(current.get('commit') == expected['sourceCommit'] and current.get('publisherCommit', 'missing') is None,
@@ -739,7 +825,8 @@ def verify(args):
             lengths = list(executor.map(one, rows))
         # Bind the final receipt again after all files, including current metadata, were checked.
         check_public_metadata(args, expected, manifest)
-        report.update({'pass': True, 'checked': len(lengths), 'bytes': sum(lengths), 'mainSiteUnchanged': True})
+        report.update({'pass': True, 'checked': len(lengths), 'bytes': sum(lengths), 'mainSiteUnchanged': True,
+                       'baselineFilesSha256': manifest['baselineFilesSha256']})
         print(json.dumps(report))
     except Exception as error:
         report['error'] = str(error)

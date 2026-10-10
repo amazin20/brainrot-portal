@@ -72,7 +72,7 @@ try{
   const cargoObject=g.cargo,bodyObject=g.physics.cargoBody,playerRoot=g.playerGroup,playerVisual=g.playerVisual,animator=g.animator;
   const sourceMeshes=[];playerVisual.traverse(mesh=>{if(mesh.isMesh)sourceMeshes.push({mesh,geometry:mesh.geometry,uuid:mesh.uuid,vertices:mesh.geometry.attributes.position?.count||0,bones:mesh.skeleton?.bones.length||0});});
   const vertices=sourceMeshes.reduce((n,m)=>n+m.vertices,0),bones=Math.max(0,...sourceMeshes.map(m=>m.bones));
-  if(vertices<1000||bones<10)throw Error('Original rigged player geometry is required');
+  if(vertices!==96753||bones!==15)throw Error('Exact original player geometry (96753 vertices, 15 bones) is required');
   const visual=g.updateVisuals,resetRun=g.resetRun,resetCargo=g.physics.resetCargo,respawn=g.respawn;
   let observedFrames=0;const initialization={resetRun:0,resetCargo:0,respawn:0};
   const noteReset=key=>{if(observedFrames!==0)throw Error('In-route '+key+' is not permitted');initialization[key]++;};
@@ -85,8 +85,47 @@ try{
    observedFrames++;
   }return result;};
   const capture=name=>{
-   g.render();writes.push(window.__NESI_SAVE_PILOT_FRAME__(name,g.renderer.domElement.toDataURL('image/jpeg',.9),{
+   g.render();
+   // Independent rendered-model measurement, not the camera helper's authored
+   // capsule envelope. Precise expansion evaluates the live skinned vertices
+   // at milestones only; it does not alter any actor or camera pose.
+   const bounds=g.colliders[0].box.clone().makeEmpty().expandByObject(g.playerVisual,true);
+   const points=[];
+   for(const x of [bounds.min.x,bounds.max.x])for(const y of [bounds.min.y,bounds.max.y])for(const z of [bounds.min.z,bounds.max.z]){
+    const world=g.playerPosition.clone().set(x,y,z),view=world.clone().applyMatrix4(g.camera.matrixWorldInverse),ndc=world.project(g.camera);
+    points.push({ndc:ndc.toArray(),inFront:view.z<-.1});
+   }
+   const bodyProjection={minX:Math.min(...points.map(p=>p.ndc[0])),maxX:Math.max(...points.map(p=>p.ndc[0])),
+    minY:Math.min(...points.map(p=>p.ndc[1])),maxY:Math.max(...points.map(p=>p.ndc[1])),
+    allInFront:points.every(p=>p.inFront),insideLens:points.every(p=>p.inFront&&Math.abs(p.ndc[0])<=1&&Math.abs(p.ndc[1])<=1),
+    source:'eight projected corners of the precise live original-model world bounds; conservative screen envelope'};
+   if(!Object.values(bodyProjection).filter(v=>typeof v==='number').every(Number.isFinite))throw Error('Non-finite model projection');
+   // A projected AABB can include empty corners far outside a diagonal body.
+   // Measure every original live vertex too, so the conservative envelope is
+   // never reported as actual silhouette clipping.
+   const bodyVertexProjection={vertices:0,minX:Infinity,maxX:-Infinity,minY:Infinity,maxY:-Infinity,
+    minDepth:Infinity,behindCount:0,outsideLensCount:0,insideLens:false,
+    source:'every live skinned original-player vertex at this native milestone'};
+   const vertex=g.playerPosition.clone(),viewVertex=g.playerPosition.clone();
+   for(const row of sourceMeshes){
+    row.mesh.skeleton?.update();
+    for(let i=0;i<row.vertices;i++){
+     row.mesh.getVertexPosition(i,vertex).applyMatrix4(row.mesh.matrixWorld);
+     viewVertex.copy(vertex).applyMatrix4(g.camera.matrixWorldInverse);vertex.project(g.camera);
+     if(![vertex.x,vertex.y,vertex.z,viewVertex.z].every(Number.isFinite))throw Error('Non-finite live vertex projection');
+     bodyVertexProjection.vertices++;
+     bodyVertexProjection.minX=Math.min(bodyVertexProjection.minX,vertex.x);bodyVertexProjection.maxX=Math.max(bodyVertexProjection.maxX,vertex.x);
+     bodyVertexProjection.minY=Math.min(bodyVertexProjection.minY,vertex.y);bodyVertexProjection.maxY=Math.max(bodyVertexProjection.maxY,vertex.y);
+     bodyVertexProjection.minDepth=Math.min(bodyVertexProjection.minDepth,-viewVertex.z);
+     if(viewVertex.z>=0)bodyVertexProjection.behindCount++;
+     if(viewVertex.z>=0||Math.abs(vertex.x)>1||Math.abs(vertex.y)>1||vertex.z< -1||vertex.z>1)bodyVertexProjection.outsideLensCount++;
+    }
+   }
+   if(bodyVertexProjection.vertices!==vertices)throw Error('Milestone projection omitted original model vertices');
+   bodyVertexProjection.insideLens=bodyVertexProjection.outsideLensCount===0;
+   writes.push(window.__NESI_SAVE_PILOT_FRAME__(name,g.renderer.domElement.toDataURL('image/jpeg',.9),{
     state:g.state,player:g.playerPosition.toArray(),cargo:g.cargo.position.toArray(),camera:g.camera.position.toArray(),
+    pitch:g.pitch,cameraPitch:g.cameraRig.pitch,cameraObstructed:g.cameraRig.obstructed,bodyProjection,bodyVertexProjection,
     calls:g.renderer.info.render.calls,triangles:g.renderer.info.render.triangles,width:g.renderer.domElement.width,height:g.renderer.domElement.height}));
   };
   capture('start');let index=0;
@@ -96,7 +135,13 @@ try{
    return {...result,state:g.state,sameCompanion:g.cargo.group.uuid===identity&&g.physics.cargoBody.id===body,modelIdentity:{pass:true,observedFrames,playerRootUuid:playerRoot.uuid,playerVertices:vertices,bones,cargoUuid:identity,cargoBodyId:body,initialization,routeResets:0,routeRespawns:0}};
   }finally{g.updateVisuals=visual;g.resetRun=resetRun;g.physics.resetCargo=resetCargo;g.respawn=respawn;delete window.__NESI_CAPTURE_LEVEL_MARK__;await Promise.allSettled(writes);}
  });
- report.route=route;report.modelIdentity=route.modelIdentity;save();assert.equal(route.pass,true);assert.equal(route.state,'won');assert.equal(route.sameCompanion,true);
+ report.route=route;report.modelIdentity=route.modelIdentity;
+ report.cameraMilestoneReview={sampleCount:shots.length,measuredVerticesPerSample:route.modelIdentity.playerVertices,
+  insideLens:shots.filter(s=>s.bodyVertexProjection?.insideLens).length,
+  outsideVertexSamples:shots.filter(s=>s.bodyVertexProjection&&!s.bodyVertexProjection.insideLens).map(s=>({file:s.file,pitch:s.pitch,cameraObstructed:s.cameraObstructed,projection:s.bodyVertexProjection})),
+  conservativeBoundsExceedLens:shots.filter(s=>s.bodyProjection&&!s.bodyProjection.insideLens).map(s=>({file:s.file,projection:s.bodyProjection})),
+  scope:'Every original live model vertex at native route milestones; conservative box corners are separate. Every recorded movie frame and physical-device camera UX remain separate checks.'};
+ save();assert.equal(route.pass,true);assert.equal(route.state,'won');assert.equal(route.sameCompanion,true);
  assert.equal(route.level,level);assert.equal(route.resets,0);assert.equal(route.respawns,0);assert.ok(route.milestones.length>=5);
  assert.equal(route.modelIdentity.observedFrames,route.frames);
  assert.deepEqual(route.modelIdentity.initialization,{resetRun:1,resetCargo:1,respawn:1});

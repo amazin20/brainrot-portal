@@ -8,9 +8,16 @@ export function dressPuzzleProgression51(k,{apparatus:a}){
  // The long rigid linkage is manufactured and above pedestrian headroom.
  // Its geometry follows the very same compound receiver/stopper bodies.
  const linkages=a.heads.map(r=>{const group=new THREE.Group();k.world.root.add(group);group.position.set(r.sign*15,4.4,22);k.block([r.sign*-12.8,3.95,-17],[.14,.14,34],teal,false,group);k.block([r.sign*-6.4,3.95,0],[12.8,.14,.14],teal,false,group);k.block([0,1.975,0],[.14,3.95,.14],teal,false,group);k.geometry(new THREE.TorusGeometry(.8,.10,8,28),'metal',[0,0,-.2],Q(),{parent:group,batch:false,name:'51 / moving real receiver collar'});return group;});
+ // These rings travel with the same receiver bodies as the long linkages.
+ // Their light follows actual spring displacement, not an arrival counter.
+ const receiverTrim=a.heads.map((r,i)=>{
+  const material=new THREE.MeshStandardMaterial({name:'51 / '+r.name+' displacement enamel',color:i?0xe7bd7c:0x9ad7cc,emissive:i?0xcaa25d:0x5eb4a7,emissiveIntensity:.06,roughness:.45,metalness:.2});
+  const mesh=k.geometry(new THREE.TorusGeometry(1.06,.065,8,32),material,[0,0,-.235],Q(),{parent:linkages[i],batch:false,name:'51 / visible real receiver travel rim'});
+  return{receiver:r,material,mesh};
+ });
  const rope=new THREE.Group();k.world.root.add(rope);const strings=[k.block([0,12,-12],[.07,7,.07],'metal',false,rope),k.block([4,17.4,-12],[8,.07,.07],'metal',false,rope),k.block([8,14.2,-12],[.07,6,.07],'metal',false,rope)];
  for(const x of [0,8])k.geometry(new THREE.TorusGeometry(.42,.12,8,24),'metal',[x,17.4,-12],Q(),{name:'51 / manufactured counterweight pulley'});
- k.renders.push(()=>{linkages.forEach((m,i)=>{const b=a.heads[i].body;if(b)m.position.set(b.position.x,b.position.y,b.position.z);});if(!a.gate)return;const top=a.gate.position.y+4,weight=a.weight.position.y+1;strings[0].position.y=(17.4+top)/2;strings[0].scale.y=Math.max(.01,(17.4-top)/7);strings[2].position.y=(17.4+weight)/2;strings[2].scale.y=Math.max(.01,(17.4-weight)/6);});
+ k.renders.push(()=>{linkages.forEach((m,i)=>{const b=a.heads[i].body;if(b)m.position.set(b.position.x,b.position.y,b.position.z);});receiverTrim.forEach(t=>{t.material.emissiveIntensity=.06+.44*THREE.MathUtils.clamp(((t.receiver.body?.position.z??22)-22)/1.7,0,1);});if(!a.gate)return;const top=a.gate.position.y+4,weight=a.weight.position.y+1;strings[0].position.y=(17.4+top)/2;strings[0].scale.y=Math.max(.01,(17.4-top)/7);strings[2].position.y=(17.4+weight)/2;strings[2].scale.y=Math.max(.01,(17.4-weight)/6);});
  k.wire([[8,.3,19],[11,.3,19],[11,.3,24],[5.4,.3,24],[5.4,4.4,24],[5.4,4.4,19]],()=>a.powered());
- let done=false;const dispose=()=>{if(done)return;done=true;pearl.dispose();teal.dispose();};const restore=k.restoreLight.bind(k);k.restoreLight=()=>{dispose();restore();};return {style:'pearl and turquoise folded mechanical echo laboratory',downloadBytes:0,extraShadowLights:0,dispose};
+ let done=false;const dispose=()=>{if(done)return;done=true;pearl.dispose();teal.dispose();receiverTrim.forEach(t=>t.material.dispose());};const restore=k.restoreLight.bind(k);k.restoreLight=()=>{dispose();restore();};return {style:'pearl and turquoise folded mechanical echo laboratory',receiverTrim,downloadBytes:0,extraShadowLights:0,dispose};
 }

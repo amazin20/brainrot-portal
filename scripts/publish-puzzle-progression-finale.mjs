@@ -10,30 +10,31 @@ import {pipeline} from 'node:stream/promises';
 
 export const PINS=Object.freeze({
  repository:'amazin20/brainrot-portal',artifactStem:'puzzle-progression-finale',branch:'upgrade/puzzle-progression-finale-20261010',
- sourceBase:'b4ca1630ec41f4a93877233ac35b7e9c7e04a19f',
+ sourceBase:'b89fc2cfb2992cb3908d14982e51a75f723b3261',minimumTests:1676,
  priorPilotSource:'415b2da2cfe162fa9bf8f55803977ba2b5dd9bb6',priorPilotPublisher:'3b80abcfa59c6cc73b28392e6f997d32df35a51c',
  priorProgressionSource:'3aa725337737979ebd1fa6a4bb18b49d809e27fd',priorProgressionReview:{runId:37886420411,runAttempt:1},
  priorProgressionPublisher:'edb11aecfeb634b62addba95e2898cfca0799a79',priorProgressionPublicationRun:37889948751,
  priorNextSource:'b4ca1630ec41f4a93877233ac35b7e9c7e04a19f',priorNextReview:{runId:37918564404,runAttempt:1},
  priorNextPublisher:'0a22c3b1a1456cccccca3759c336ed8a22fad857',priorNextPublicationRun:37923054511,
- baselineRun:37923054511,baselineAttempt:1,baselinePublisher:'0a22c3b1a1456cccccca3759c336ed8a22fad857',
+ priorFinaleSource:'b89fc2cfb2992cb3908d14982e51a75f723b3261',priorFinaleReview:{runId:38079889392,runAttempt:1},
+ priorFinalePublisher:'5666f9ef710045d2ada25d1f0bde6d7c71c939ca',priorFinalePublicationRun:38084083371,
+ baselineRun:38084083371,baselineAttempt:1,baselinePublisher:'5666f9ef710045d2ada25d1f0bde6d7c71c939ca',
  canonicalSource:'8d2c01eacd86fe9235a35e7ec5f624ba62c3b29e',canonicalPublisher:'39d5311d2620a632bb65194921de53add238c74d',
- baselineFiles:1507,baselineBytes:518160875,
- baselineArtifact:{id:11612697817,name:'github-pages',size_in_bytes:484450139,digest:'sha256:f292d80d624421c6a0a7c59fd2125f970a1ba69555ab22d3360c50df353a414c'},
+ baselineFiles:1622,baselineBytes:531306775,preservedFiles:1507,preservedBytes:518160875,priorFinaleFiles:115,priorFinaleBytes:13145900,
+ baselineArtifact:{id:11680749760,name:'github-pages',size_in_bytes:495046295,digest:'sha256:175b34cd1efc644556347aa4c459e2e4708beb6899793df7fa1ee3c066e7b69c'},
  reviewPath:'.github/workflows/puzzle-progression-finale-review.yml',controllerPath:'.github/workflows/publish-puzzle-progression-finale.yml',
- baselinePath:'.github/workflows/publish-puzzle-progression-next.yml',
+ baselinePath:'.github/workflows/publish-puzzle-progression-finale.yml',
  publicBase:'https://amazin20.github.io/brainrot-portal/',version:'v54-puzzle-progression-finale-v1',levels:[50,51],playableLevels:[43,44,45,46,47,48,49,50,51],namespace:'puzzle-progression-finale/',
  revision:'puzzle-progression-finale-v1',query:'?edition=foundation&level=50&pilot=progression',storagePrefix:'brainrot-puzzle-progression-finale-v1:',
 });
 export const SOURCE_CHANGES=Object.freeze([
- ...['src/main.js','src/game/LabPuzzleProgression.js','src/game/LabV8Journey.js'].map(path=>({path,status:'M'})),
- ...['scripts/qa-puzzle-progression-finale-browser.mjs','.github/workflows/puzzle-progression-finale-review.yml','scripts/publish-puzzle-progression-finale.mjs','scripts/publish-puzzle-progression-finale.py','scripts/test-publish-puzzle-progression-finale.mjs','scripts/test-publish-puzzle-progression-finale.py','docs/puzzle-progression-finale-publication.md'].map(path=>({path,status:'A'})),
- ...[50,51].flatMap(level=>[...['','Art','Journey'].map(suffix=>`src/game/LabPuzzleProgression${level}${suffix}.js`),`tests/lab-puzzle-progression${level}.test.js`,`docs/puzzle-progression${level}.md`].map(path=>({path,status:'A'}))),
+ ...['src/game/LabGame.js','src/game/LabCamera.js','src/game/LabPuzzleProgression50.js','src/game/LabPuzzleProgression50Art.js','src/game/LabPuzzleProgression50Journey.js','src/game/LabPuzzleProgression51Art.js','docs/puzzle-progression50.md','scripts/qa-puzzle-progression-finale-browser.mjs','.github/workflows/puzzle-progression-finale-review.yml','scripts/publish-puzzle-progression-finale.mjs','scripts/publish-puzzle-progression-finale.py','scripts/test-publish-puzzle-progression-finale.mjs','scripts/test-publish-puzzle-progression-finale.py','docs/puzzle-progression-finale-publication.md'].map(path=>({path,status:'M'})),
+ ...['src/game/LabOrientedBoxContact.js','src/game/LabPuzzleProgression50BeamJourney.js','tests/lab-oriented-box-contact.test.js','tests/lab-room50-oriented-contact.test.js','tests/lab-puzzle-progression50-beams.test.js','tests/lab-camera-finale-framing.test.js'].map(path=>({path,status:'A'})),
 ].map(row=>Object.freeze({...row,mode:'100644',type:'blob'})));
 export function checkSourceChanges(changes){
- assert.ok(Array.isArray(changes));assert.equal(changes.length,20,'The finale source must change exactly the twenty reviewed paths');
+ assert.ok(Array.isArray(changes));assert.equal(changes.length,SOURCE_CHANGES.length,'The finale follow-up must change exactly the frozen reviewed paths');
  const sorted=changes.map(row=>({path:row.path,status:row.status,mode:row.mode,type:row.type})).sort((a,b)=>a.path.localeCompare(b.path)),expected=[...SOURCE_CHANGES].sort((a,b)=>a.path.localeCompare(b.path));
- assert.deepEqual(sorted,expected,'Only three modified central files and seventeen added ordinary files are allowed against the accepted source');
+ assert.deepEqual(sorted,expected,'Only the frozen ordinary follow-up paths are allowed against the accepted finale source');
 }
 const sha=value=>createHash('sha256').update(value).digest('hex');
 const write=(filename,value)=>{fs.mkdirSync(path.dirname(filename),{recursive:true});fs.writeFileSync(filename,JSON.stringify(value,null,2)+'\n');};
@@ -89,7 +90,7 @@ function attachRecording(directory,level){
 export function checkCpuLog(log){
  assert.equal(typeof log,'string');const summary={};
  for(const field of ['tests','pass','fail','cancelled','skipped','todo']){const matches=[...log.matchAll(new RegExp('^# '+field+' ([0-9]+)\\s*$','gm'))];assert.equal(matches.length,1,'Exactly one actual TAP total is required: '+field);const value=Number(matches[0][1]);assert.ok(Number.isSafeInteger(value)&&value>=0,'A TAP total must be a safe integer');summary[field]=value;}
- assert.ok(summary.tests>=1605,'Run the complete retained active suite plus finale regressions');assert.equal(summary.pass,summary.tests);for(const field of ['fail','cancelled','skipped','todo'])assert.equal(summary[field],0,'The complete active suite must pass without '+field);
+ assert.ok(summary.tests>=PINS.minimumTests,'Run the complete retained active suite plus follow-up regressions');assert.equal(summary.pass,summary.tests);for(const field of ['fail','cancelled','skipped','todo'])assert.equal(summary[field],0,'The complete active suite must pass without '+field);
  return {testCount:summary.tests,passed:summary.pass,failed:summary.fail,cancelled:summary.cancelled,skipped:summary.skipped,todo:summary.todo,logSha256:sha(log),allActiveGameTests:true};
 }
 function cpuProof(logFile){
@@ -125,7 +126,7 @@ function bindBrowser(directory,level){
  const proof=verifyBasePackage('dist'),filename=path.join(directory,'report.json'),report=read(filename);checkBrowser(report,currentIdentity(),level);report.nativePackage=proof;write(filename,report);
 }
 function copyEvidence(directory){
- exactSource();const identity=currentIdentity(),cpu=read('qa/puzzle-progression-finale-cpu/report.json'),basePackage=verifyBasePackage(directory);checkIdentity(cpu,identity);assert.equal(cpu.pass,true);assert.ok(Number.isSafeInteger(cpu.testCount)&&cpu.testCount>=1605);assert.equal(cpu.passed,cpu.testCount);for(const field of ['failed','cancelled','skipped','todo'])assert.equal(cpu[field],0);assert.equal(cpu.allActiveGameTests,true);assert.match(cpu.logSha256||'',/^[a-f0-9]{64}$/);
+ exactSource();const identity=currentIdentity(),cpu=read('qa/puzzle-progression-finale-cpu/report.json'),basePackage=verifyBasePackage(directory);checkIdentity(cpu,identity);assert.equal(cpu.pass,true);assert.ok(Number.isSafeInteger(cpu.testCount)&&cpu.testCount>=PINS.minimumTests);assert.equal(cpu.passed,cpu.testCount);for(const field of ['failed','cancelled','skipped','todo'])assert.equal(cpu[field],0);assert.equal(cpu.allActiveGameTests,true);assert.match(cpu.logSha256||'',/^[a-f0-9]{64}$/);
  const destination=path.join(directory,'evidence');assert.equal(fs.existsSync(destination),false,'Assemble exact review evidence only once');fs.mkdirSync(destination,{recursive:true});
  const native=[],recordings=[];
  for(const level of PINS.levels){
@@ -194,11 +195,11 @@ export function validateReview(run,jobs,identity){
  for(const job of jobs){assert.equal(job.run_id,run.id);assert.equal(job.run_attempt,run.run_attempt);assert.equal(job.head_sha,identity.sourceCommit);assert.equal(job.status,'completed');assert.equal(job.conclusion,'success');}
 }
 export function checkPublisherHeads(main,head,comparison,identity,publisher){
- assert.equal(main.object.sha,publisher,'A newer publisher exists; this stale controller must not deploy');assert.equal(head.object.sha,identity.sourceCommit,'A newer source exists; this stale candidate must not deploy');assert.ok(['ahead','identical'].includes(comparison.status),'Candidate must descend from the accepted pilot source');
+ assert.equal(main.object.sha,publisher,'A newer publisher exists; this stale controller must not deploy');assert.equal(head.object.sha,identity.sourceCommit,'A newer source exists; this stale candidate must not deploy');assert.ok(['ahead','identical'].includes(comparison.status),'Candidate must descend from the accepted finale source');
 }
 export function checkControllerCommit(commit,revision){
  assert.equal(commit.sha,revision);assert.equal(commit.parents.length,1);assert.equal(commit.files.length,1,'The main controller must only change the new publication workflow');const file=commit.files[0],parent=commit.parents[0].sha;
- assert.equal(file.filename,PINS.controllerPath);assert.equal(file.status,parent===PINS.baselinePublisher?'added':'modified');return {commit:revision,parent,status:file.status};
+ assert.equal(file.filename,PINS.controllerPath);assert.equal(file.status,'modified','Only the existing isolated publication controller may be modified');assert.equal(parent,PINS.baselinePublisher,'The follow-up controller must directly descend from the accepted main publisher');return {commit:revision,parent,status:file.status};
 }
 async function reviewGuard(){
  const identity=currentIdentity(),run=await githubGet('actions/runs/'+identity.sourceReview.runId),jobsResult=await githubGet(`actions/runs/${run.id}/attempts/${identity.sourceReview.runAttempt}/jobs?per_page=100`);validateReview(run,jobsResult.jobs,identity);
@@ -212,13 +213,40 @@ async function reviewGuard(){
  const latest=await githubGet('actions/runs/'+run.id);assert.equal(latest.run_attempt,run.run_attempt,'Review reran during inspection');assert.equal(latest.conclusion,'success');
  write('proof/source-review-gate.json',{pass:true,...identity,run,jobs:jobsResult.jobs,jobLogHashes:logs,artifact});
 }
-export function checkPreservedMetadata(canonical,pilot,pilotStatus,progression,progressionStatus,next,nextStatus){
+export function checkPriorFinaleMetadata(metadata,status){
+ assert.equal(metadata.commit,PINS.priorFinaleSource);assert.equal(metadata.publisherCommit,null);assert.deepEqual(metadata.sourceReview,PINS.priorFinaleReview);assert.equal(metadata.version,PINS.version);
+ const scope=metadata.features?.puzzleProgression;assert.equal(scope?.optIn,true);for(const field of ['levels','reviewedLevels'])assert.deepEqual(scope[field],PINS.levels);assert.deepEqual(scope.playableLevels,PINS.playableLevels);for(const field of ['revision','query','storagePrefix'])assert.equal(scope[field],PINS[field]);
+ assert.ok(Array.isArray(scope.rooms));assert.deepEqual(scope.rooms.map(room=>room.level),PINS.levels);for(const room of scope.rooms)checkIdentity(room.currentWalkthrough,{sourceCommit:PINS.priorFinaleSource,sourceReview:PINS.priorFinaleReview});
+ assert.equal(status.sourceCommit,PINS.priorFinaleSource);assert.deepEqual(status.sourceReview,PINS.priorFinaleReview);assert.equal(status.publisherCommit,PINS.priorFinalePublisher);assert.equal(status.publicationRun,PINS.priorFinalePublicationRun);
+ assert.equal(status.path,PINS.namespace);assert.equal(status.optIn,true);assert.equal(status.mainSiteUnchanged,true);assert.equal(status.query,PINS.query);for(const field of ['levels','reviewedLevels'])assert.deepEqual(status[field],PINS.levels);assert.deepEqual(status.playableLevels,PINS.playableLevels);
+ assert.deepEqual(status.rooms,scope.rooms.map(({level,id,title,currentWalkthrough})=>({level,id,title,currentWalkthrough})));
+}
+export function checkPreservedMetadata(canonical,pilot,pilotStatus,progression,progressionStatus,next,nextStatus,finale,finaleStatus){
  assert.equal(canonical.commit,PINS.canonicalSource);assert.equal(canonical.publisherCommit,null);
  assert.equal(pilot.commit,PINS.priorPilotSource);assert.equal(pilot.publisherCommit,null);assert.equal(pilotStatus.sourceCommit,PINS.priorPilotSource);assert.equal(pilotStatus.publisherCommit,PINS.priorPilotPublisher);
  assert.equal(progression.commit,PINS.priorProgressionSource);assert.equal(progression.publisherCommit,null);assert.deepEqual(progression.sourceReview,PINS.priorProgressionReview);
  assert.equal(progressionStatus.sourceCommit,PINS.priorProgressionSource);assert.equal(progressionStatus.publisherCommit,PINS.priorProgressionPublisher);assert.equal(progressionStatus.publicationRun,PINS.priorProgressionPublicationRun);assert.deepEqual(progressionStatus.sourceReview,PINS.priorProgressionReview);
  assert.equal(next.commit,PINS.priorNextSource);assert.equal(next.publisherCommit,null);assert.deepEqual(next.sourceReview,PINS.priorNextReview);
  assert.equal(nextStatus.sourceCommit,PINS.priorNextSource);assert.equal(nextStatus.publisherCommit,PINS.priorNextPublisher);assert.equal(nextStatus.publicationRun,PINS.priorNextPublicationRun);assert.deepEqual(nextStatus.sourceReview,PINS.priorNextReview);
+ checkPriorFinaleMetadata(finale,finaleStatus);
+}
+const priorFinaleIdentity=()=>({sourceCommit:PINS.priorFinaleSource,sourceReview:PINS.priorFinaleReview,publisherCommit:PINS.priorFinalePublisher,publicationRun:PINS.priorFinalePublicationRun});
+function checkedPublicationRows(rows,count,bytes,label){
+ assert.ok(Array.isArray(rows));assert.equal(rows.length,count,label+' file count');const names=new Set();let total=0;
+ for(const row of rows){assert.deepEqual(Object.keys(row).sort(),['bytes','path','sha256']);assert.equal(typeof row.path,'string');assert.ok(row.path&&!/[\\\x00-\x1f\x7f]/.test(row.path)&&!row.path.startsWith('/')&&!/^[A-Za-z]:/.test(row.path)&&row.path.split('/').every(part=>part&&part!=='.'&&part!=='..'),label+' unsafe path');assert.equal(names.has(row.path),false,label+' duplicate path');names.add(row.path);assert.ok(Number.isSafeInteger(row.bytes)&&row.bytes>=0);total+=row.bytes;assert.match(row.sha256,/^[a-f0-9]{64}$/);}
+ assert.equal(total,bytes,label+' byte count');return new Map(rows.map(row=>[row.path,row]));
+}
+export function checkDeploymentProofs(proof,preflight,prior,identity,publisher){
+ checkIdentity(proof,identity);assert.equal(proof.publicationRun,positive(identity.publicationRun),'Publication proof belongs to another run');assert.equal(proof.publisherCommit,publisher);assert.equal(proof.phase,'published');assert.equal(proof.baselinePublisherCommit,PINS.baselinePublisher);assert.equal(proof.baselinePublicationRun,PINS.baselineRun);assert.equal(proof.baselineSourceCommit,PINS.priorFinaleSource);assert.equal(proof.mainSiteUnchanged,true);assert.deepEqual(proof.priorFinale,priorFinaleIdentity());
+ const baseline=checkedPublicationRows(proof.baselineFiles,PINS.baselineFiles,PINS.baselineBytes,'Full accepted baseline'),outside=checkedPublicationRows(proof.preservedFiles,PINS.preservedFiles,PINS.preservedBytes,'Preserved outside'),replaced=checkedPublicationRows(proof.priorFinaleFiles,PINS.priorFinaleFiles,PINS.priorFinaleBytes,'Prior finale');
+ assert.ok([...outside.keys()].every(name=>!name.startsWith(PINS.namespace)));assert.ok([...replaced.keys()].every(name=>name.startsWith(PINS.namespace)));assert.equal(outside.size+replaced.size,baseline.size);for(const [name,row]of [...outside,...replaced])assert.deepEqual(baseline.get(name),row,'Accepted inventory partition changed');
+ assert.equal(proof.preservedBytes,PINS.preservedBytes);assert.equal(proof.baselineBytes,PINS.baselineBytes);assert.equal(proof.priorFinaleBytes,PINS.priorFinaleBytes);assert.equal(proof.baselineFilesSha256,sha(JSON.stringify(proof.baselineFiles)));
+ const rows=value=>checkedPublicationRows(value,value?.length,value?.reduce((sum,row)=>sum+row.bytes,0),'Current publication');
+ const progression=rows(proof.progressionFiles),candidate=rows(proof.candidateFiles),site=rows(proof.siteFiles);assert.ok(progression.size>0&&candidate.size>0);assert.ok([...progression.keys()].every(name=>name.startsWith(PINS.namespace)),'Current inventory escaped the namespace');
+ for(const [name,row]of candidate)assert.deepEqual(progression.get(PINS.namespace+name),{...row,path:PINS.namespace+name},'Current candidate inventory differs');const generated=[...progression.keys()].filter(name=>!candidate.has(name.slice(PINS.namespace.length))).sort();assert.deepEqual(generated,[PINS.namespace+'preview-status.json',PINS.namespace+'walkthroughs.html']);assert.equal(proof.progressionBytes,proof.progressionFiles.reduce((sum,row)=>sum+row.bytes,0));
+ assert.equal(site.size,outside.size+progression.size,'Current site inventory is stale');for(const [name,row]of [...outside,...progression])assert.deepEqual(site.get(name),row,'Current site inventory changed');
+ checkIdentity(prior,priorFinaleIdentity());assert.equal(prior.publisherCommit,PINS.priorFinalePublisher);assert.equal(prior.publicationRun,PINS.priorFinalePublicationRun);assert.equal(prior.path,PINS.namespace);assert.equal(prior.bytes,PINS.priorFinaleBytes);assert.deepEqual(prior.files,proof.priorFinaleFiles);
+ checkIdentity(preflight,identity);assert.equal(preflight.publisherCommit,publisher);assert.equal(preflight.publicationRun,proof.publicationRun);assert.equal(preflight.phase,'preflight');assert.equal(preflight.pass,true);assert.equal(preflight.mainSiteUnchanged,true);assert.equal(preflight.checked,PINS.baselineFiles);assert.equal(preflight.bytes,PINS.baselineBytes);assert.equal(preflight.baselineFilesSha256,proof.baselineFilesSha256,'Preflight checked a stale inventory');
 }
 export function checkDeploymentRows(rows,publisher,publicationRun){
  const accepted=[];for(const row of rows){const ownLog=row.logUrl&&new RegExp('/actions/runs/'+positive(publicationRun)+'(?:/|$)').test(row.logUrl);if(row.sha===publisher&&ownLog)continue;
@@ -245,11 +273,10 @@ async function guard(phase){
   if(row.state==='success')break;
  }
  const acceptedDeployment=checkDeploymentRows(inspected,publisher,process.env.GITHUB_RUN_ID);
- const metadata=await Promise.all([pages('build-info.json'),pages('puzzle-pilot/build-info.json'),pages('puzzle-pilot/preview-status.json'),pages('puzzle-progression/build-info.json'),pages('puzzle-progression/preview-status.json'),pages('puzzle-progression-next/build-info.json'),pages('puzzle-progression-next/preview-status.json')]);checkPreservedMetadata(...metadata);
+ const metadata=await Promise.all([pages('build-info.json'),pages('puzzle-pilot/build-info.json'),pages('puzzle-pilot/preview-status.json'),pages('puzzle-progression/build-info.json'),pages('puzzle-progression/preview-status.json'),pages('puzzle-progression-next/build-info.json'),pages('puzzle-progression-next/preview-status.json'),pages(PINS.namespace+'build-info.json'),pages(PINS.namespace+'preview-status.json')]);checkPreservedMetadata(...metadata);
  await reviewGuard();
  if(phase==='deploy'){
-  const proof=read('proof/manifest.json');checkIdentity(proof,identity);assert.equal(proof.publisherCommit,publisher);assert.equal(proof.baselinePublisherCommit,PINS.baselinePublisher);assert.equal(proof.baselinePublicationRun,PINS.baselineRun);assert.equal(proof.mainSiteUnchanged,true);assert.equal(proof.preservedFiles.length,PINS.baselineFiles);assert.equal(proof.preservedBytes,PINS.baselineBytes);
-  const preflight=read('proof/predeploy-public-bytes.json');checkIdentity(preflight,identity);assert.equal(preflight.pass,true);assert.equal(preflight.publisherCommit,publisher);assert.equal(preflight.checked,PINS.baselineFiles);assert.equal(preflight.bytes,PINS.baselineBytes);
+  checkDeploymentProofs(read('proof/manifest.json'),read('proof/predeploy-public-bytes.json'),read('proof/prior-finale-manifest.json'),{...identity,publicationRun:positive(process.env.GITHUB_RUN_ID)},publisher);
  }
  write('proof/github-guard-'+phase+'.json',{pass:true,phase,...identity,publisherCommit:publisher,baselineRun:PINS.baselineRun,baselinePublisherCommit:PINS.baselinePublisher,artifact,controllerChain:chain,acceptedDeployment,inspectedDeployments:inspected,checkedAt:new Date().toISOString()});
  console.log('Exact source, review attempt and latest publisher checked: '+phase);

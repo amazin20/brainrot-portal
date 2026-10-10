@@ -5,6 +5,7 @@ import { LabPortalShots } from './LabPortalShots.js';
 import { updateKineticVelocity, limitKineticSpeed, sweepKineticBody } from './LabKineticMovement.js';
 import { sweepBox } from './LabSweep.js';
 import {resolveRampMotion,followRampGround} from './LabRampContact.js';
+import {resolveCapsuleBoxMotion,capsuleBoxGrounded,orientedBoxSupport,constrainBoxToOrientedCollider,boxIntersectsOrientedCollider} from './LabOrientedBoxContact.js';
 import { cargoLoadsPlate } from './LabPlateContact.js';
 import * as THREE from 'three';
 import { InputController } from './InputController.js';
@@ -268,6 +269,7 @@ export class LabGame {
     this.cameraRig = new LabCamera({ camera: this.camera, blockers: this.cameraBlockers,
       isBlocker: (object, hit) => this.isCameraBlocker(object, hit) });
     this.cameraRig.configureEpic?.({ enabled: this.kineticMode, dynamicFov: this.epicOptions?.dynamicFov !== false });
+    this.cameraRig.configureSilhouette?.({ enabled: this.firstLevel?.puzzleProgression === 50 || this.firstLevel?.puzzleProgression === 51 });
     this.camera.far = this.firstLevel.viewDistance ?? (this.kineticMode ? 500 : 130); this.camera.updateProjectionMatrix();
     if (this.kineticMode && !this.epicDirector) this.epicDirector = new LabEpicDirector({ container: this.container, audio: this.audio, options: this.epicOptions });
     this.portals = new LabPortals({ scene: this.scene, renderer: this.renderer, camera: this.camera, maxResolution: this.quality.portalResolution, samples: 2 });
@@ -813,6 +815,7 @@ export class LabGame {
     const rampSupport=followRampGround(this,this.playerPosition,previous,this.playerVelocity,wasGrounded);
     this.constrainPortalThroat(this.playerPosition, previous, this.playerVelocity);
     this.groundedByCollider = sweptGroundContact || rampSupport;
+    this.groundedByOrientedCollider = false;
     if (!this.kineticMode) {
       // Resolve the source segment before transporting. Geometry beyond the
       // entry plane belongs to the abandoned room and cannot stop a fling.
@@ -822,7 +825,7 @@ export class LabGame {
       if (predicted) {
         const sourceEnd = predicted.crossingPoint.clone().addScaledVector(UP, -CENTER_HEIGHT);
         const resolvedEnd = sourceEnd.clone();
-        this.resolveBody(resolvedEnd, previous, this.playerVelocity, PLAYER_RADIUS, PLAYER_HEIGHT, true);
+        this.resolveBody(resolvedEnd, previous, this.playerVelocity, PLAYER_RADIUS, PLAYER_HEIGHT, true,false,{from:0,to:predicted.crossingFraction});
         if (resolvedEnd.distanceToSquared(sourceEnd) > 1e-10) this.playerPosition.copy(resolvedEnd);
       } else this.resolveBody(this.playerPosition, previous, this.playerVelocity, PLAYER_RADIUS, PLAYER_HEIGHT, true);
     }
@@ -882,7 +885,7 @@ export class LabGame {
           .addScaledVector(UP, -CENTER_HEIGHT);
         if (this.kineticMode) this.groundedByCollider = sweepKineticBody(this, this.playerPosition, exitStart,
           this.playerVelocity, PLAYER_RADIUS, PLAYER_HEIGHT, { portalLimit: false });
-        else this.resolveBody(this.playerPosition, exitStart, this.playerVelocity, PLAYER_RADIUS, PLAYER_HEIGHT, true);
+        else this.resolveBody(this.playerPosition, exitStart, this.playerVelocity, PLAYER_RADIUS, PLAYER_HEIGHT, true,false,{from:teleport.crossingFraction,to:1});
         this.playerGrounded = false;
       }
       // A launcher impulse belongs to the traveller frame too. Keeping the old
@@ -916,7 +919,7 @@ export class LabGame {
       this.portalVisualRotation.copy(transportedQ).multiply(upright.invert());
       if(this.audio.travel)this.audio.travel(teleport.velocity.length());else this.audio.tone(620, .12, 'triangle', .035);
     } else if (this.kineticMode) this.resolveBody(this.playerPosition, previous, this.playerVelocity, PLAYER_RADIUS, PLAYER_HEIGHT, true);
-    this.playerGrounded = Boolean(this.groundedByCollider);
+    this.playerGrounded = Boolean(this.groundedByCollider || this.groundedByOrientedCollider);
     if (this.playerGrounded && !wasGrounded && downwardImpact > 1) {
       this.animator.triggerLanding(downwardImpact); this.audio.land?.(downwardImpact); this.lastLanding = downwardImpact;
     }
@@ -1003,9 +1006,11 @@ export class LabGame {
 
   sampleFootSupport(x, z, maxY) {
     let height = this.floorHeight(x, z, maxY), normal = UP.clone();
-    for (const c of this.colliders) if (!c.walkablePlane && c.enabled !== false && c.box.max.y <= maxY
-      && x >= c.box.min.x && x <= c.box.max.x && z >= c.box.min.z && z <= c.box.max.z
-      && (height === null || c.box.max.y > height)) height = c.box.max.y;
+    for (const c of this.colliders) {
+      if(c.walkablePlane||c.enabled===false)continue;
+      if(c.orientedBox){const support=orientedBoxSupport(c.orientedBox,x,z,maxY);if(support&&(height===null||support.height>height)){height=support.height;normal.copy(support.normal);}continue;}
+      if(c.box.max.y<=maxY&&x>=c.box.min.x&&x<=c.box.max.x&&z>=c.box.min.z&&z<=c.box.max.z&&(height===null||c.box.max.y>height)){height=c.box.max.y;normal.copy(UP);}
+    }
     for (const ramp of this.ramps) {
       if (height === null || x < ramp.minX || x > ramp.maxX || z < ramp.minZ || z > ramp.maxZ) continue;
       const surface = sampleRampSurface(ramp, z);
@@ -1038,7 +1043,12 @@ export class LabGame {
     });
   }
 
-  resolveBody(position, previous, velocity, radius, height, allowPortals = false, substep = false) {
+  resolveBody(position, previous, velocity, radius, height, allowPortals = false, substep = false, sweepInterval = null) {
+    const finishOrientedGround=()=>{if(!substep)this.groundedByOrientedCollider=this.colliders.some(c=>c.enabled&&c.orientedBox&&capsuleBoxGrounded(position,velocity,radius,height,c.orientedBox,sweepInterval?.to??1));};
+    if(!substep)for(const collider of this.colliders){
+      if(!collider.enabled||!collider.orientedBox)continue;
+      resolveCapsuleBoxMotion(position,previous,velocity,radius,height,collider.orientedBox,{fromFraction:sweepInterval?.from??0,toFraction:sweepInterval?.to??1});
+    }
     // A fling or a long frame can put both endpoints outside a thin wall.
     // Sample the actual capsule path with its ordinary rounded contacts:
     // sweeping an expanded square here would seal diagonal drum/ring gaps.
@@ -1050,17 +1060,18 @@ export class LabGame {
       const resolved = previous.clone(), before = previous.clone(), advance = new THREE.Vector3(dx / steps, dy / steps, dz / steps);
       for (let step = 0; step < steps; step++) {
         before.copy(resolved); resolved.add(advance);
-        LabGame.prototype.resolveBody.call(this, resolved, before, velocity, radius, height, allowPortals, true);
+        LabGame.prototype.resolveBody.call(this, resolved, before, velocity, radius, height, allowPortals, true,sweepInterval);
         // Once a normal component is arrested, the remaining travel must not
         // keep driving into that face with a now-zero velocity (especially a
         // ceiling, whose upward-contact branch has already consumed it).
         for (const axis of ['x', 'y', 'z']) if (Math.abs(velocity[axis]) < 1e-10
           && Math.abs(resolved[axis] - before[axis] - advance[axis]) > 1e-8) advance[axis] = 0;
       }
-      position.copy(resolved); return;
+      position.copy(resolved);finishOrientedGround();return;
     }
     for (let iteration = 0; iteration < 3; iteration++) for (const collider of this.colliders) {
       if (!collider.enabled || (collider.walkablePlane && !collider.solidUnderside)) continue;
+      if(collider.orientedBox){resolveCapsuleBoxMotion(position,position.clone(),velocity,radius,height,collider.orientedBox,{sweep:false,toFraction:sweepInterval?.to??1});continue;}
       // A walkable moving top is not an empty volume from below. Its floor
       // solver owns feet on the plane; the real deck and beams block a body
       // approaching the underside. Only explicitly authored tops use this.
@@ -1109,6 +1120,7 @@ export class LabGame {
         position[options[0][1]] = options[0][2]; velocity[options[0][1]] = 0;
       }
     }
+    finishOrientedGround();
   }
 
   nearbyTerminal() {
@@ -1185,6 +1197,7 @@ export class LabGame {
       for (let pass = 0; pass < 3; pass++) for (const c of this.colliders) {
         if (c.enabled === false || c.walkablePlane
           || this.portalOpensCollider(c, this.playerPosition.clone().addScaledVector(UP, CENTER_HEIGHT), PLAYER_RADIUS, PLAYER_HEIGHT)) continue;
+        if(c.orientedBox){target.copy(constrainBoxToOrientedCollider(c.orientedBox,this.cargo.position,target,new THREE.Vector3(CUBE_RADIUS+.035,CUBE_RADIUS+.035,CUBE_RADIUS+.035),quaternion));continue;}
         if (c.frontPlane) {
           const f=c.frontPlane();if(target.clone().sub(f.center).dot(f.normal)>CUBE_RADIUS*Math.sqrt(3)+.05)continue;
         }
@@ -1320,7 +1333,7 @@ export class LabGame {
     if (!support || Math.abs(support.height - (position.y - CUBE_RADIUS)) > .22) return false;
     const test = new THREE.Box3(new THREE.Vector3(x - .34, position.y - .24, z - .34),
       new THREE.Vector3(x + .34, position.y + .35, z + .34));
-    return !this.colliders.some(c => c.enabled !== false && c.box.intersectsBox(test));
+    return !this.colliders.some(c => c.enabled !== false && (c.orientedBox?boxIntersectsOrientedCollider(c.orientedBox,test):c.box.intersectsBox(test)));
   }
 
   cargoOnPad(position, radius = .86) {

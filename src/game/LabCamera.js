@@ -31,7 +31,7 @@ function spring(value, velocity, goal, frequency, dt) {
  * This module never changes player meshes, materials, or the renderer.
  */
 export class LabCamera {
-  constructor({ camera, blockers = [], isBlocker = () => true, epic = false, dynamicFov = true }) {
+  constructor({ camera, blockers = [], isBlocker = () => true, epic = false, dynamicFov = true, fullBodyFraming = false }) {
     this.camera = camera;
     this.blockers = blockers;
     this.isBlocker = isBlocker;
@@ -82,11 +82,22 @@ export class LabCamera {
     this.dynamicFov = dynamicFov !== false;
     this.epicFraming = 0;
     this.epicFramingVelocity = 0;
+    // Large vertical mechanisms need more room below an upward centre ray.
+    // Keep this chamber-specific: existing campaign camera contracts retain
+    // their exact lens and FOV unless the chamber explicitly opts in.
+    this.fullBodyFraming = !!fullBodyFraming;
+    this.upwardBackoff = 0;
+    this.upwardBackoffVelocity = 0;
   }
 
   configureEpic({ enabled = this.epicMode, dynamicFov = this.dynamicFov } = {}) {
     this.epicMode = !!enabled;
     this.dynamicFov = dynamicFov !== false;
+    return this;
+  }
+
+  configureSilhouette({ enabled = this.fullBodyFraming } = {}) {
+    this.fullBodyFraming = !!enabled;
     return this;
   }
 
@@ -112,6 +123,7 @@ export class LabCamera {
     this.aimBlend = 0;
     this.aimBlendVelocity = 0;
     this.epicFraming = this.epicFramingVelocity = 0;
+    this.upwardBackoff = this.upwardBackoffVelocity = 0;
     this.camera.fov = this.epicMode ? 68 : 62;
     this.camera.updateProjectionMatrix();
     this.initialized = true;
@@ -223,11 +235,23 @@ export class LabCamera {
     [this.aimBlend, this.aimBlendVelocity] = spring(
       this.aimBlend, this.aimBlendVelocity, aiming ? 1 : 0, 12, step,
     );
-    const fovGoal = epic
+    // At steep upward aim the ground clamps the boom's low end; the old
+    // 62-degree lens then aimed above the feet even in an empty chamber.
+    // Recover composition with a continuous horizontal retreat plus a
+    // bounded wide lens. The unchanged 16 m look point still defines the
+    // screen-centre shot; no player, reticle or weapon ray is substituted.
+    const upwardFraming = this.fullBodyFraming
+      ? THREE.MathUtils.smoothstep(this.pitch, .35, CAMERA_PITCH_MAX) : 0;
+    [this.upwardBackoff, this.upwardBackoffVelocity] = spring(
+      this.upwardBackoff, this.upwardBackoffVelocity, upwardFraming * 13, 20, step,
+    );
+    const fovGoal = (epic
       ? (this.dynamicFov ? (aiming ? 64 + epicSpeed * 6 : 68 + epicSpeed * 14) : 68)
-      : aiming ? 59.5 : 62 + THREE.MathUtils.clamp((speed - 4) * 0.4, 0, 2.2);
+      : aiming ? 59.5 : 62 + THREE.MathUtils.clamp((speed - 4) * 0.4, 0, 2.2))
+      + upwardFraming * 20;
     const oldFov = this.camera.fov;
-    [this.camera.fov, this.fovVelocity] = spring(oldFov, this.fovVelocity, fovGoal, 7, step);
+    [this.camera.fov, this.fovVelocity] = spring(oldFov, this.fovVelocity, fovGoal,
+      this.fullBodyFraming && upwardFraming > 0 ? 12 : 7, step);
     if (Math.abs(oldFov - this.camera.fov) > 0.00001) this.camera.updateProjectionMatrix();
 
     // A wall-to-floor passage initially retains the exact transported view.
@@ -248,7 +272,8 @@ export class LabCamera {
     // orbit into an overhead view; ordinary walking/aiming keeps its shoulder.
     const overhead = THREE.MathUtils.smoothstep(-this.pitch, 1.08, -CAMERA_PITCH_MIN);
     const shoulder = THREE.MathUtils.lerp(1.4, 1.56, this.aimBlend)
-      * THREE.MathUtils.lerp(1, .035, overhead);
+      * THREE.MathUtils.lerp(1, .035, overhead)
+      * (this.fullBodyFraming ? Math.min(1, this.camera.aspect / .9) : 1);
     this.desired.copy(this.focus).addScaledVector(this.forward, -length)
       .addScaledVector(this.right, shoulder);
     // The normal shoulder view leaves the centre ray beside the visible body.
@@ -258,6 +283,13 @@ export class LabCamera {
     // preserves this construction through floor and tilted portal transitions.
     const belowFocus = this.desired.dot(this.viewUp) - this.focus.dot(this.viewUp);
     if (belowFocus < -.65) this.desired.addScaledVector(this.viewUp, -.65 - belowFocus);
+    // Retreat in the transported horizontal plane instead of driving the
+    // lens through the ground. This plane follows the same rigid portal
+    // mapping as forward/up, preserving the live lens at dt=0 on passage.
+    if (this.fullBodyFraming && this.upwardBackoff > .00001) {
+      const horizontal = this.forward.clone().addScaledVector(this.viewUp, -this.forward.dot(this.viewUp)).normalize();
+      this.desired.addScaledVector(horizontal, -this.upwardBackoff);
+    }
     // The rigidly transported view is exact at dt=0. On subsequent frames
     // gravity still defines the physical floor even while the visual horizon
     // is rolling back. An inclined trailing exit lens is the exception: its back-side
@@ -285,7 +317,7 @@ export class LabCamera {
     let escapePosition = null;
     if ((directDistance < (this.avoidanceActive ? 4.1 : 3.1)
       || this.camera.position.distanceTo(this.playerPivot) < 3.1
-      || (this.rampFraming && this.framingPenalty(this.desired) > .005)) && this.blockers.length) {
+      || ((this.rampFraming || this.fullBodyFraming) && this.framingPenalty(this.desired) > .005)) && this.blockers.length) {
       const direct = this.desired.clone().sub(this.playerPivot);
       let best = null, bestScore = Infinity;
       const longitudinal = this.forward.clone().setY(0).normalize();
@@ -346,7 +378,8 @@ export class LabCamera {
       this.distanceVelocity = 0;
     } else {
       [this.distance, this.distanceVelocity] = spring(
-        this.distance, this.distanceVelocity, safeLength, 9, step,
+        this.distance, this.distanceVelocity, safeLength,
+        this.fullBodyFraming && upwardFraming > 0 && !this.obstructed ? 16 : 9, step,
       );
       this.distance = Math.min(this.distance, safeLength);
     }
@@ -416,7 +449,7 @@ export class LabCamera {
     const forward = this.lookPoint.clone().sub(position).normalize();
     const right = new THREE.Vector3().crossVectors(forward, this.viewUp).normalize();
     const up = new THREE.Vector3().crossVectors(right, forward).normalize();
-    if (!this.inclinedFraming && !this.rampFraming) {
+    if (!this.inclinedFraming && !this.rampFraming && !this.fullBodyFraming) {
       const subject = this.playerPivot.clone().sub(position);
       const depth = subject.dot(forward);
       if (depth <= .1) return 100;

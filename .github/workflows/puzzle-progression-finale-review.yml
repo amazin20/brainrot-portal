@@ -202,7 +202,7 @@ jobs:
       - name: Prove safe full-site assembly without publishing
         run: |
           python3 scripts/publish-puzzle-progression-finale.py prepare-baseline --zip baseline-retained/baseline.zip --output baseline-pages
-          python3 scripts/publish-puzzle-progression-finale.py assemble --baseline baseline-pages --candidate dist --site site --proof proof --source "$BUILD_COMMIT" --publisher 0a22c3b1a1456cccccca3759c336ed8a22fad857 --baseline-source 8d2c01eacd86fe9235a35e7ec5f624ba62c3b29e --baseline-publisher 0a22c3b1a1456cccccca3759c336ed8a22fad857 --run "$GITHUB_RUN_ID" --baseline-run 37923054511 --review-run "$SOURCE_REVIEW_RUN_ID" --review-attempt "$SOURCE_REVIEW_RUN_ATTEMPT"
+          python3 scripts/publish-puzzle-progression-finale.py assemble --baseline baseline-pages --candidate dist --site site --proof proof --source "$BUILD_COMMIT" --publisher 5666f9ef710045d2ada25d1f0bde6d7c71c939ca --baseline-source b89fc2cfb2992cb3908d14982e51a75f723b3261 --baseline-publisher 5666f9ef710045d2ada25d1f0bde6d7c71c939ca --run "$GITHUB_RUN_ID" --baseline-run 38084083371 --review-run "$SOURCE_REVIEW_RUN_ID" --review-attempt "$SOURCE_REVIEW_RUN_ATTEMPT"
       - uses: actions/upload-artifact@v4
         with:
           name: puzzle-progression-finale-review-proof-${{ github.run_id }}-${{ github.run_attempt }}

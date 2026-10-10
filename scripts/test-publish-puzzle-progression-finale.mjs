@@ -4,7 +4,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import {createHash} from 'node:crypto';
-import {PINS,checkIdentity,checkRecording,validateReview,checkPublisherHeads,checkControllerCommit,checkBuildInventory,checkBrowser,checkBaselineArtifact,checkPreservedMetadata,checkDeploymentRows,checkMobileTouch,reviewedArtifactName,checkCpuLog,SOURCE_CHANGES,checkSourceChanges} from './publish-puzzle-progression-finale.mjs';
+import {PINS,checkIdentity,checkRecording,validateReview,checkPublisherHeads,checkControllerCommit,checkBuildInventory,checkBrowser,checkBaselineArtifact,checkPreservedMetadata,checkDeploymentRows,checkMobileTouch,reviewedArtifactName,checkCpuLog,SOURCE_CHANGES,checkSourceChanges,checkPriorFinaleMetadata,checkDeploymentProofs} from './publish-puzzle-progression-finale.mjs';
 
 const identity={sourceCommit:'a'.repeat(40),sourceReview:{runId:37770000000,runAttempt:2}};
 const run={id:identity.sourceReview.runId,run_attempt:2,head_sha:identity.sourceCommit,head_branch:PINS.branch,path:PINS.reviewPath,event:'push',status:'completed',conclusion:'success'};
@@ -13,14 +13,17 @@ validateReview(run,jobs,identity);
 let attacks=0;
 const reject=callback=>{assert.throws(callback);attacks++;};
 checkSourceChanges(structuredClone(SOURCE_CHANGES));checkSourceChanges([...structuredClone(SOURCE_CHANGES)].reverse());
-for(const path of ['src/game/Physics.js','public/models/player.glb','package.json','src/game/LabPuzzlePilot43Art.js','docs/puzzle-progression-next-publication.md'])reject(()=>checkSourceChanges(structuredClone(SOURCE_CHANGES).map((row,index)=>index===19?{path,status:'M',mode:'100644',type:'blob'}:row)));
+assert.equal(SOURCE_CHANGES.length,20);assert.equal(SOURCE_CHANGES.filter(row=>row.status==='M').length,14);assert.equal(SOURCE_CHANGES.filter(row=>row.status==='A').length,6);
+for(const path of ['src/game/Physics.js','public/models/player.glb','package.json','src/game/LabPuzzlePilot43Art.js','docs/puzzle-progression-next-publication.md'])reject(()=>checkSourceChanges(structuredClone(SOURCE_CHANGES).map((row,index)=>index===SOURCE_CHANGES.length-1?{path,status:'M',mode:'100644',type:'blob'}:row)));
 reject(()=>checkSourceChanges([...structuredClone(SOURCE_CHANGES),{path:'src/game/Physics.js',status:'M',mode:'100644',type:'blob'}]));
-for(const missing of ['src/game/LabPuzzleProgression50Journey.js','tests/lab-puzzle-progression51.test.js','docs/puzzle-progression50.md'])reject(()=>checkSourceChanges(structuredClone(SOURCE_CHANGES).filter(row=>row.path!==missing)));
-for(const [path,change]of [['src/main.js',{status:'A'}],['src/game/LabPuzzleProgression50.js',{status:'M'}],['src/game/LabPuzzleProgression51Art.js',{status:'D'}],['src/game/LabPuzzleProgression50Journey.js',{status:'R100'}],['scripts/qa-puzzle-progression-finale-browser.mjs',{mode:'120000'}],['scripts/publish-puzzle-progression-finale.mjs',{mode:'100755'}],['docs/puzzle-progression51.md',{type:'tree'}]])reject(()=>checkSourceChanges(structuredClone(SOURCE_CHANGES).map(row=>row.path===path?{...row,...change}:row)));
-reject(()=>checkSourceChanges(structuredClone(SOURCE_CHANGES).map((row,index)=>index===19?structuredClone(SOURCE_CHANGES[18]):row)));
-const cpuLog='# tests 1605\n# pass 1605\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n';
-assert.deepEqual(checkCpuLog(cpuLog),{testCount:1605,passed:1605,failed:0,cancelled:0,skipped:0,todo:0,logSha256:createHash('sha256').update(cpuLog).digest('hex'),allActiveGameTests:true});
-for(const bad of [cpuLog.replaceAll('1605','1604'),cpuLog.replace('# pass 1605','# pass 1604'),cpuLog.replace('# fail 0','# fail 1'),cpuLog.replace('# cancelled 0','# cancelled 1'),cpuLog.replace('# skipped 0','# skipped 1'),cpuLog.replace('# todo 0','# todo 1'),cpuLog.replace('# tests 1605\n',''),cpuLog.replace('# todo 0\n',''),cpuLog+'# tests 1605\n',cpuLog.replace('# tests 1605','# tests 9007199254740992')])reject(()=>checkCpuLog(bad));
+for(const missing of ['src/game/LabOrientedBoxContact.js','tests/lab-camera-finale-framing.test.js','docs/puzzle-progression50.md','src/game/LabPuzzleProgression50Journey.js'])reject(()=>checkSourceChanges(structuredClone(SOURCE_CHANGES).filter(row=>row.path!==missing)));
+for(const [path,change]of [['src/game/LabGame.js',{status:'A'}],['src/game/LabPuzzleProgression50.js',{status:'A'}],['src/game/LabPuzzleProgression50Journey.js',{status:'A'}],['src/game/LabCamera.js',{status:'D'}],['src/game/LabOrientedBoxContact.js',{status:'R100'}],['scripts/qa-puzzle-progression-finale-browser.mjs',{mode:'120000'}],['scripts/publish-puzzle-progression-finale.mjs',{mode:'100755'}],['tests/lab-camera-finale-framing.test.js',{type:'tree'}]])reject(()=>checkSourceChanges(structuredClone(SOURCE_CHANGES).map(row=>row.path===path?{...row,...change}:row)));
+reject(()=>checkSourceChanges(structuredClone(SOURCE_CHANGES).map((row,index)=>index===SOURCE_CHANGES.length-1?structuredClone(SOURCE_CHANGES.at(-2)):row)));
+const minimum=PINS.minimumTests,cpuLog=`# tests ${minimum}\n# pass ${minimum}\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n`;
+assert.equal(minimum,1676);
+assert.deepEqual(checkCpuLog(cpuLog),{testCount:minimum,passed:minimum,failed:0,cancelled:0,skipped:0,todo:0,logSha256:createHash('sha256').update(cpuLog).digest('hex'),allActiveGameTests:true});
+for(const stale of [1630,1665])reject(()=>checkCpuLog(cpuLog.replaceAll(String(minimum),String(stale))));
+for(const bad of [cpuLog.replaceAll(String(minimum),String(minimum-1)),cpuLog.replace(`# pass ${minimum}`,`# pass ${minimum-1}`),cpuLog.replace('# fail 0','# fail 1'),cpuLog.replace('# cancelled 0','# cancelled 1'),cpuLog.replace('# skipped 0','# skipped 1'),cpuLog.replace('# todo 0','# todo 1'),cpuLog.replace(`# tests ${minimum}\n`,''),cpuLog.replace('# todo 0\n',''),cpuLog+`# tests ${minimum}\n`,cpuLog.replace(`# tests ${minimum}`,'# tests 9007199254740992')])reject(()=>checkCpuLog(bad));
 reject(()=>checkIdentity({...identity,sourceCommit:'b'.repeat(40)},identity));
 reject(()=>checkIdentity({...identity,sourceReview:{runId:run.id,runAttempt:1}},identity));
 reject(()=>validateReview({...run,run_attempt:3},jobs,identity));
@@ -37,11 +40,13 @@ checkPublisherHeads(main,head,{status:'ahead'},identity,publisher);
 reject(()=>checkPublisherHeads({object:{sha:'d'.repeat(40)}},head,{status:'ahead'},identity,publisher));
 reject(()=>checkPublisherHeads(main,{object:{sha:'e'.repeat(40)}},{status:'ahead'},identity,publisher));
 reject(()=>checkPublisherHeads(main,head,{status:'diverged'},identity,publisher));
-const controller={sha:publisher,parents:[{sha:PINS.baselinePublisher}],files:[{filename:PINS.controllerPath,status:'added'}]};
+const controller={sha:publisher,parents:[{sha:PINS.baselinePublisher}],files:[{filename:PINS.controllerPath,status:'modified'}]};
 checkControllerCommit(controller,publisher);
+reject(()=>checkControllerCommit({...controller,files:[{filename:PINS.controllerPath,status:'added'}]},publisher));
 reject(()=>checkControllerCommit({...controller,files:[{filename:'src/main.js',status:'modified'}]},publisher));
 reject(()=>checkControllerCommit({...controller,files:[...controller.files,{filename:'index.html',status:'modified'}]},publisher));
 reject(()=>checkControllerCommit({...controller,parents:[...controller.parents,{sha:'f'.repeat(40)}]},publisher));
+reject(()=>checkControllerCommit({...controller,parents:[{sha:'f'.repeat(40)}]},publisher));
 const buildRows=[{path:'assets/game.js',bytes:42,sha256:'a'.repeat(64)},{path:'index.html',bytes:25,sha256:'b'.repeat(64)}];
 const buildInfo={commit:identity.sourceCommit,sourceReview:identity.sourceReview,version:PINS.version,features:{puzzleProgression:{optIn:true,levels:PINS.levels,reviewedLevels:PINS.levels,playableLevels:PINS.playableLevels,revision:PINS.revision,query:PINS.query,storagePrefix:PINS.storagePrefix}},files:buildRows,packageFilesSha256:createHash('sha256').update(JSON.stringify(buildRows)).digest('hex')};
 checkBuildInventory(buildInfo,buildRows,identity);
@@ -97,11 +102,17 @@ reject(()=>checkBaselineArtifact({...baselineArtifact,size_in_bytes:baselineArti
 reject(()=>checkBaselineArtifact({...baselineArtifact,digest:'sha256:'+'0'.repeat(64)}));
 reject(()=>checkBaselineArtifact({...baselineArtifact,workflow_run:{...baselineArtifact.workflow_run,id:PINS.baselineRun-1}}));
 reject(()=>checkBaselineArtifact({...baselineArtifact,workflow_run:{...baselineArtifact.workflow_run,head_sha:identity.sourceCommit}}));
-const preservedMetadata=[{commit:PINS.canonicalSource,publisherCommit:null},{commit:PINS.priorPilotSource,publisherCommit:null},{sourceCommit:PINS.priorPilotSource,publisherCommit:PINS.priorPilotPublisher},{commit:PINS.priorProgressionSource,publisherCommit:null,sourceReview:PINS.priorProgressionReview},{sourceCommit:PINS.priorProgressionSource,publisherCommit:PINS.priorProgressionPublisher,publicationRun:PINS.priorProgressionPublicationRun,sourceReview:PINS.priorProgressionReview},{commit:PINS.priorNextSource,publisherCommit:null,sourceReview:PINS.priorNextReview},{sourceCommit:PINS.priorNextSource,publisherCommit:PINS.priorNextPublisher,publicationRun:PINS.priorNextPublicationRun,sourceReview:PINS.priorNextReview}];
+const oldRooms=PINS.levels.map(level=>({level,id:`old-${level}`,title:`Accepted ${level}`,currentWalkthrough:{sourceCommit:PINS.priorFinaleSource,sourceReview:PINS.priorFinaleReview}}));
+const oldScope={optIn:true,levels:PINS.levels,reviewedLevels:PINS.levels,playableLevels:PINS.playableLevels,revision:PINS.revision,query:PINS.query,storagePrefix:PINS.storagePrefix,rooms:oldRooms};
+const oldFinale={commit:PINS.priorFinaleSource,publisherCommit:null,version:PINS.version,sourceReview:PINS.priorFinaleReview,features:{puzzleProgression:oldScope}};
+const oldFinaleStatus={sourceCommit:PINS.priorFinaleSource,sourceReview:PINS.priorFinaleReview,publisherCommit:PINS.priorFinalePublisher,publicationRun:PINS.priorFinalePublicationRun,path:PINS.namespace,optIn:true,mainSiteUnchanged:true,query:PINS.query,levels:PINS.levels,reviewedLevels:PINS.levels,playableLevels:PINS.playableLevels,rooms:oldRooms};
+const preservedMetadata=[{commit:PINS.canonicalSource,publisherCommit:null},{commit:PINS.priorPilotSource,publisherCommit:null},{sourceCommit:PINS.priorPilotSource,publisherCommit:PINS.priorPilotPublisher},{commit:PINS.priorProgressionSource,publisherCommit:null,sourceReview:PINS.priorProgressionReview},{sourceCommit:PINS.priorProgressionSource,publisherCommit:PINS.priorProgressionPublisher,publicationRun:PINS.priorProgressionPublicationRun,sourceReview:PINS.priorProgressionReview},{commit:PINS.priorNextSource,publisherCommit:null,sourceReview:PINS.priorNextReview},{sourceCommit:PINS.priorNextSource,publisherCommit:PINS.priorNextPublisher,publicationRun:PINS.priorNextPublicationRun,sourceReview:PINS.priorNextReview},oldFinale,oldFinaleStatus];
 checkPreservedMetadata(...preservedMetadata);
-for(const index of [0,1,2,3,4,5,6]){const substituted=structuredClone(preservedMetadata);substituted[index][index===2||index===4||index===6?'sourceCommit':'commit']=identity.sourceCommit;reject(()=>checkPreservedMetadata(...substituted));}
-for(const [index,key,value]of [[4,'publisherCommit',PINS.baselinePublisher],[4,'publicationRun',PINS.baselineRun],[6,'publisherCommit',PINS.priorProgressionPublisher],[6,'publicationRun',PINS.priorProgressionPublicationRun]]){const substituted=structuredClone(preservedMetadata);substituted[index][key]=value;reject(()=>checkPreservedMetadata(...substituted));}
-for(const index of [3,4,5,6]){const substituted=structuredClone(preservedMetadata);substituted[index].sourceReview.runAttempt++;reject(()=>checkPreservedMetadata(...substituted));}
+for(const index of [0,1,2,3,4,5,6,7,8]){const substituted=structuredClone(preservedMetadata);substituted[index][[2,4,6,8].includes(index)?'sourceCommit':'commit']=identity.sourceCommit;reject(()=>checkPreservedMetadata(...substituted));}
+for(const [index,key,value]of [[4,'publisherCommit',PINS.baselinePublisher],[4,'publicationRun',PINS.baselineRun],[6,'publisherCommit',PINS.priorProgressionPublisher],[6,'publicationRun',PINS.priorProgressionPublicationRun],[8,'publisherCommit',publisher],[8,'publicationRun',PINS.baselineRun+1]]){const substituted=structuredClone(preservedMetadata);substituted[index][key]=value;reject(()=>checkPreservedMetadata(...substituted));}
+for(const index of [3,4,5,6,7,8]){const substituted=structuredClone(preservedMetadata);substituted[index].sourceReview.runAttempt++;reject(()=>checkPreservedMetadata(...substituted));}
+for(const change of [row=>row.features.puzzleProgression.storagePrefix='new-save-prefix:',row=>row.features.puzzleProgression.rooms[0].currentWalkthrough.sourceCommit=identity.sourceCommit]){const bad=structuredClone(oldFinale);change(bad);reject(()=>checkPriorFinaleMetadata(bad,oldFinaleStatus));}
+reject(()=>checkPreservedMetadata(...preservedMetadata.slice(0,7)));
 const publicationRun=37890000000,acceptedDeployment={id:4,sha:PINS.baselinePublisher,state:'success',logUrl:`https://github.com/${PINS.repository}/actions/runs/${PINS.baselineRun}`};
 checkDeploymentRows([acceptedDeployment],publisher,publicationRun);
 checkDeploymentRows([{id:5,sha:publisher,state:'pending',logUrl:`https://github.com/${PINS.repository}/actions/runs/${publicationRun}`},acceptedDeployment],publisher,publicationRun);
@@ -110,6 +121,18 @@ reject(()=>checkDeploymentRows([{id:5,sha:publisher,state:'pending',logUrl:`http
 reject(()=>checkDeploymentRows([{...acceptedDeployment,sha:'d'.repeat(40)}],publisher,publicationRun));
 reject(()=>checkDeploymentRows([{...acceptedDeployment,state:null}],publisher,publicationRun));
 reject(()=>checkDeploymentRows([],publisher,publicationRun));
+const inventoryRows=(prefix,count,bytes)=>Array.from({length:count},(_,index)=>({path:prefix+String(index).padStart(4,'0')+'.bin',bytes:index?1:bytes-count+1,sha256:'a'.repeat(64)}));
+const outsideRows=inventoryRows('outside/',PINS.preservedFiles,PINS.preservedBytes),priorRows=inventoryRows(PINS.namespace+'old/',PINS.priorFinaleFiles,PINS.priorFinaleBytes),baselineRows=[...outsideRows,...priorRows];
+const currentRows=[...buildRows.map(row=>({...row,path:PINS.namespace+row.path})),...['preview-status.json','walkthroughs.html'].map(name=>({path:PINS.namespace+name,bytes:1,sha256:'b'.repeat(64)}))];
+const priorIdentity={sourceCommit:PINS.priorFinaleSource,sourceReview:PINS.priorFinaleReview,publisherCommit:PINS.priorFinalePublisher,publicationRun:PINS.priorFinalePublicationRun};
+const deploymentProof={...identity,publisherCommit:publisher,publicationRun,phase:'published',mainSiteUnchanged:true,baselinePublisherCommit:PINS.baselinePublisher,baselinePublicationRun:PINS.baselineRun,baselineSourceCommit:PINS.priorFinaleSource,priorFinale:priorIdentity,baselineFiles:baselineRows,baselineBytes:PINS.baselineBytes,baselineFilesSha256:createHash('sha256').update(JSON.stringify(baselineRows)).digest('hex'),preservedFiles:outsideRows,preservedBytes:PINS.preservedBytes,priorFinaleFiles:priorRows,priorFinaleBytes:PINS.priorFinaleBytes,candidateFiles:buildRows,progressionFiles:currentRows,progressionBytes:currentRows.reduce((sum,row)=>sum+row.bytes,0),siteFiles:[...outsideRows,...currentRows]};
+const preflightProof={...identity,publisherCommit:publisher,publicationRun,phase:'preflight',pass:true,mainSiteUnchanged:true,checked:PINS.baselineFiles,bytes:PINS.baselineBytes,baselineFilesSha256:deploymentProof.baselineFilesSha256};
+const deploymentIdentity={...identity,publicationRun};
+const priorProof={...priorIdentity,path:PINS.namespace,files:priorRows,bytes:PINS.priorFinaleBytes};
+checkDeploymentProofs(deploymentProof,preflightProof,priorProof,deploymentIdentity,publisher);
+for(const mutate of [row=>row.preservedFiles[0].sha256='c'.repeat(64),row=>row.priorFinaleFiles[0].path='outside/escaped',row=>row.progressionFiles[0].path='outside/escaped',row=>row.progressionFiles[0].path=PINS.namespace+'../escaped',row=>row.siteFiles=structuredClone(row.baselineFiles),row=>row.siteFiles.pop(),row=>row.baselineFilesSha256='f'.repeat(64),row=>row.priorFinale.sourceCommit=identity.sourceCommit,row=>row.priorFinale.publicationRun++,row=>row.publicationRun--]){const bad=structuredClone(deploymentProof);mutate(bad);reject(()=>checkDeploymentProofs(bad,preflightProof,priorProof,deploymentIdentity,publisher));}
+for(const change of [{phase:'published'},{checked:PINS.preservedFiles,bytes:PINS.preservedBytes},{baselineFilesSha256:'f'.repeat(64)},{publicationRun:publicationRun-1},{sourceReview:{...identity.sourceReview,runAttempt:1}}])reject(()=>checkDeploymentProofs(deploymentProof,{...preflightProof,...change},priorProof,deploymentIdentity,publisher));
+for(const change of [{sourceCommit:identity.sourceCommit},{publicationRun:PINS.priorFinalePublicationRun-1},{sourceReview:{...PINS.priorFinaleReview,runAttempt:2}},{files:priorRows.slice(1)}])reject(()=>checkDeploymentProofs(deploymentProof,preflightProof,{...priorProof,...change},deploymentIdentity,publisher));
 const directory=fs.mkdtempSync(path.join(os.tmpdir(),'progression-publication-fixtures-'));
 try{
  const movie=path.join(directory,'movie.mp4');fs.writeFileSync(movie,'fixture bytes, never claimed to be a native movie');

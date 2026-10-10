@@ -80,7 +80,7 @@ class PublicationFixtures(unittest.TestCase):
         self.candidate.mkdir()
         self.site, self.proof = self.root / 'site', self.root / 'proof'
         self.baseline = {
-            'build-info.json': json_bytes({'commit': pub.BASELINE_SOURCE, 'publisherCommit': None}),
+            'build-info.json': json_bytes({'commit': pub.CANONICAL_SOURCE, 'publisherCommit': None}),
             'puzzle-pilot/build-info.json': json_bytes({'commit': pub.PRIOR_PILOT_SOURCE,
                                                      'version': 'v54-puzzle-pilot43-v1', 'publisherCommit': None}),
             'puzzle-pilot/evidence/level-43.mp4': b'old pilot movie\x00\x80',
@@ -94,8 +94,36 @@ class PublicationFixtures(unittest.TestCase):
             'index.html': b'accepted game\x00\xff',
             'assets/old.bin': bytes(range(256)),
         }
+        old_rooms = [{'level': level, 'id': 'old-' + str(level), 'title': 'Accepted ' + str(level),
+                      'currentWalkthrough': {'sourceCommit': pub.PRIOR_FINALE_SOURCE,
+                                             'sourceReview': pub.PRIOR_FINALE_REVIEW}}
+                     for level in pub.LEVELS]
+        old_scope = {'optIn': True, 'levels': pub.LEVELS, 'reviewedLevels': pub.LEVELS,
+                     'playableLevels': pub.PLAYABLE_LEVELS, 'revision': pub.REVISION,
+                     'query': pub.QUERY, 'storagePrefix': pub.STORAGE_PREFIX, 'rooms': old_rooms}
+        self.baseline.update({
+            pub.PREFIX + 'build-info.json': json_bytes({'commit': pub.PRIOR_FINALE_SOURCE, 'publisherCommit': None,
+                'sourceReview': pub.PRIOR_FINALE_REVIEW, 'version': pub.VERSION, 'features': {'puzzleProgression': old_scope}}),
+            pub.PREFIX + 'preview-status.json': json_bytes({**pub.prior_finale_identity(), 'path': pub.PREFIX,
+                'levels': pub.LEVELS, 'reviewedLevels': pub.LEVELS, 'playableLevels': pub.PLAYABLE_LEVELS,
+                'query': pub.QUERY, 'optIn': True, 'mainSiteUnchanged': True, 'rooms': old_rooms}),
+            pub.PREFIX + 'evidence/level-50.mp4': b'accepted old finale 50 movie',
+            pub.PREFIX + 'evidence/level-51.mp4': b'accepted old finale 51 movie',
+            pub.PREFIX + 'assets/old-finale.js': b'old finale asset must not leak into the replacement',
+        })
+        self.baseline_public = self.root / 'baseline-public'
+        for name, data in self.baseline.items():
+            filename = self.baseline_public / name
+            filename.parent.mkdir(parents=True, exist_ok=True)
+            filename.write_bytes(data)
+        outside = {name: data for name, data in self.baseline.items() if not name.startswith(pub.PREFIX)}
+        prior = {name: data for name, data in self.baseline.items() if name.startswith(pub.PREFIX)}
         self.baseline_patches = [patch.object(pub, 'BASELINE_FILES', len(self.baseline)),
-                                 patch.object(pub, 'BASELINE_BYTES', sum(map(len, self.baseline.values())))]
+                                 patch.object(pub, 'BASELINE_BYTES', sum(map(len, self.baseline.values()))),
+                                 patch.object(pub, 'PRESERVED_FILES', len(outside)),
+                                 patch.object(pub, 'PRESERVED_BYTES', sum(map(len, outside.values()))),
+                                 patch.object(pub, 'PRIOR_FINALE_FILES', len(prior)),
+                                 patch.object(pub, 'PRIOR_FINALE_BYTES', sum(map(len, prior.values())))]
         for operation in self.baseline_patches:
             operation.start()
             self.addCleanup(operation.stop)
@@ -132,8 +160,8 @@ class PublicationFixtures(unittest.TestCase):
                          'features': {'puzzleProgression': {'optIn': True, 'levels': pub.LEVELS, 'reviewedLevels': pub.LEVELS, 'playableLevels': pub.PLAYABLE_LEVELS, 'revision': pub.REVISION, 'query': pub.QUERY, 'storagePrefix': pub.STORAGE_PREFIX, 'rooms': self.rooms}}}
         self.write_candidate_json('build-info.json', self.metadata)
         self.receipt = {'pass': True, 'sourceCommit': SOURCE, 'sourceReview': REVIEW, 'requiredLevels': pub.LEVELS,
-                        'cpu': {'pass': True, 'testCount': 1605, 'sourceCommit': SOURCE, 'sourceReview': REVIEW,
-                                'passed': 1605, 'failed': 0, 'cancelled': 0, 'skipped': 0, 'todo': 0, 'allActiveGameTests': True, 'logSha256': 'd' * 64},
+                        'cpu': {'pass': True, 'testCount': pub.MINIMUM_TESTS, 'sourceCommit': SOURCE, 'sourceReview': REVIEW,
+                                'passed': pub.MINIMUM_TESTS, 'failed': 0, 'cancelled': 0, 'skipped': 0, 'todo': 0, 'allActiveGameTests': True, 'logSha256': 'd' * 64},
                         'native': [{'pass': True, 'level': level, 'sourceCommit': SOURCE, 'sourceReview': REVIEW,
                                     'report': f'evidence/browser-report-{level}.json'}
                                    for level in pub.LEVELS],
@@ -211,7 +239,10 @@ class PublicationFixtures(unittest.TestCase):
         candidate_before = pub.inventory(self.candidate)
         manifest = self.assemble()
         for name, value in self.baseline.items():
-            self.assertEqual((self.site / name).read_bytes(), value)
+            if name.startswith(pub.PREFIX):
+                self.assertEqual((self.proof / 'prior-finale' / name[len(pub.PREFIX):]).read_bytes(), value)
+            else:
+                self.assertEqual((self.site / name).read_bytes(), value)
         for row in candidate_before:
             self.assertEqual(pub.sha256_file(self.site / pub.PREFIX / row['path']), row['sha256'])
         self.assertEqual(manifest['publisherCommit'], PUBLISHER)
@@ -221,7 +252,11 @@ class PublicationFixtures(unittest.TestCase):
         self.assertEqual(self.base_package['files'], [row for row in candidate_before
                          if not row['path'].startswith('evidence/')
                          and row['path'] not in ('build-info.json', 'release-manifest.json')])
-        self.assertEqual(len(manifest['siteFiles']), len(self.baseline) + len(candidate_before) + 2)
+        self.assertEqual(len(manifest['siteFiles']), pub.PRESERVED_FILES + len(candidate_before) + 2)
+        self.assertEqual(len(manifest['baselineFiles']), len(self.baseline))
+        self.assertEqual(manifest['priorFinale'], pub.prior_finale_identity())
+        self.assertEqual(pub.read_json(self.proof / 'prior-finale-manifest.json')['files'], manifest['priorFinaleFiles'])
+        self.assertFalse((self.site / pub.PREFIX / 'assets/old-finale.js').exists())
         self.assertTrue(all(row['path'].startswith(pub.PREFIX) for row in manifest['progressionFiles']))
         self.assertEqual(pub.read_json(self.site / pub.PREFIX / 'build-info.json')['publisherCommit'], None)
         page = (self.site / pub.PREFIX / 'walkthroughs.html').read_text()
@@ -232,19 +267,21 @@ class PublicationFixtures(unittest.TestCase):
 
     def test_every_public_byte_is_checked_for_both_expected_phases(self):
         manifest = self.assemble()
-        with local_server(self.site) as base, contextlib.redirect_stdout(io.StringIO()):
-            for phase in ('preflight', 'published'):
+        for phase in ('preflight', 'published'):
+            directory = self.baseline_public if phase == 'preflight' else self.site
+            with local_server(directory) as base, contextlib.redirect_stdout(io.StringIO()):
                 args = self.verification_args(base, phase)
                 pub.verify(args)
                 report = pub.read_json(pathlib.Path(args.output))
                 self.assertTrue(report['pass'])
                 self.assertEqual(report['phase'], phase)
-                rows = manifest['preservedFiles'] if phase == 'preflight' else manifest['siteFiles']
+                rows = manifest['baselineFiles'] if phase == 'preflight' else manifest['siteFiles']
                 self.assertEqual(report['checked'], len(rows))
                 self.assertEqual(report['bytes'], sum(row['bytes'] for row in rows))
                 self.assertEqual(report['sourceCommit'], SOURCE)
                 self.assertEqual(report['publisherCommit'], PUBLISHER)
                 self.assertEqual(report['sourceReview'], REVIEW)
+                self.assertEqual(report['baselineFilesSha256'], manifest['baselineFilesSha256'])
 
     def test_unsafe_tar_namespace_is_rejected_before_extraction(self):
         cases = [
@@ -337,15 +374,17 @@ class PublicationFixtures(unittest.TestCase):
                 original = self.baseline[filename]
                 metadata = json.loads(original)
                 metadata[key] = value
-                self.baseline[filename] = json_bytes(metadata)
-                self.write_baseline()
-                with patch.object(pub, 'BASELINE_BYTES', sum(map(len, self.baseline.values()))), self.assertRaises(ValueError):
-                    pub.assemble(self.args)
-                shutil = __import__('shutil')
-                shutil.rmtree(self.site)
-                self.baseline[filename] = original
+                location = self.baseline_public / filename
+                location.write_bytes(json_bytes(metadata))
+                rows = pub.inventory(self.baseline_public)
+                with patch.object(pub, 'BASELINE_BYTES', sum(row['bytes'] for row in rows)), \
+                     patch.object(pub, 'PRESERVED_BYTES', sum(row['bytes'] for row in rows if not row['path'].startswith(pub.PREFIX))), \
+                     self.assertRaises(ValueError):
+                    pub.check_baseline(rows, self.baseline_public)
+                location.write_bytes(original)
 
     def test_every_walkthrough_native_report_and_receipt_is_same_exact_review(self):
+        self.assertEqual(pub.MINIMUM_TESTS, 1676)
         cases = [
             ('evidence/level-50.json', lambda row: row.update(sourceCommit='c' * 40)),
             ('evidence/level-51.json', lambda row: row['sourceReview'].update(runAttempt=1)),
@@ -356,8 +395,10 @@ class PublicationFixtures(unittest.TestCase):
             ('evidence/review-receipt.json', lambda row: row.update(sourceCommit='c' * 40)),
             ('evidence/review-receipt.json', lambda row: row['native'][1]['sourceReview'].update(runAttempt=1)),
             ('evidence/review-receipt.json', lambda row: row['recordings'][1].update(sha256='f' * 64)),
-            ('evidence/review-receipt.json', lambda row: row['cpu'].update(testCount=1604, passed=1604)),
-            ('evidence/review-receipt.json', lambda row: row['cpu'].update(passed=1604)),
+            ('evidence/review-receipt.json', lambda row: row['cpu'].update(testCount=pub.MINIMUM_TESTS - 1, passed=pub.MINIMUM_TESTS - 1)),
+            ('evidence/review-receipt.json', lambda row: row['cpu'].update(testCount=1630, passed=1630)),
+            ('evidence/review-receipt.json', lambda row: row['cpu'].update(testCount=1665, passed=1665)),
+            ('evidence/review-receipt.json', lambda row: row['cpu'].update(passed=pub.MINIMUM_TESTS - 1)),
             ('evidence/review-receipt.json', lambda row: row['cpu'].update(cancelled=1)),
             ('evidence/review-receipt.json', lambda row: row['cpu'].update(skipped=1)),
             ('evidence/review-receipt.json', lambda row: row['cpu'].update(todo=1)),
@@ -543,18 +584,75 @@ class PublicationFixtures(unittest.TestCase):
                 with self.assertRaises(ValueError):
                     pub.check_manifest(manifest, args, EXPECTED)
 
+    def test_prior_finale_source_review_and_publication_are_pinned_in_baseline_and_preflight(self):
+        self.assemble()
+        manifest = pub.read_json(self.proof / 'baseline-manifest.json')
+        cases = [(pub.PREFIX + 'build-info.json', lambda row: row.update(commit='c' * 40)),
+                 (pub.PREFIX + 'build-info.json', lambda row: row['sourceReview'].update(runId=pub.PRIOR_FINALE_REVIEW['runId'] + 1)),
+                 (pub.PREFIX + 'build-info.json', lambda row: row['features']['puzzleProgression'].update(storagePrefix='foreign-save:')),
+                 (pub.PREFIX + 'preview-status.json', lambda row: row.update(publicationRun=pub.PRIOR_FINALE_PUBLICATION_RUN + 1)),
+                 (pub.PREFIX + 'preview-status.json', lambda row: row.update(publisherCommit='c' * 40)),
+                 (pub.PREFIX + 'preview-status.json', lambda row: row['sourceReview'].update(runAttempt=2))]
+        with local_server(self.baseline_public) as base:
+            args = self.verification_args(base, 'preflight')
+            for name, mutate in cases:
+                with self.subTest(name=name, mutate=mutate):
+                    filename = self.baseline_public / name
+                    original = filename.read_bytes()
+                    self.mutate_json(filename, mutate)
+                    rows = pub.inventory(self.baseline_public)
+                    with patch.object(pub, 'BASELINE_BYTES', sum(row['bytes'] for row in rows)), \
+                         patch.object(pub, 'PRIOR_FINALE_BYTES', sum(row['bytes'] for row in rows if row['path'].startswith(pub.PREFIX))), \
+                         self.assertRaisesRegex(ValueError, 'Prior finale'):
+                        pub.check_baseline(rows, self.baseline_public)
+                    with self.assertRaisesRegex(ValueError, 'Prior finale'):
+                        pub.check_public_metadata(args, EXPECTED, manifest)
+                    filename.write_bytes(original)
+
+    def test_preflight_requires_the_complete_old_inventory_and_exact_namespace_partition(self):
+        published = self.assemble()
+        original = pub.read_json(self.proof / 'baseline-manifest.json')
+        cases = [lambda row: row.update(siteFiles=copy.deepcopy(row['preservedFiles'])),
+                 lambda row: row.update(siteFiles=copy.deepcopy(published['siteFiles'])),
+                 lambda row: row['baselineFiles'].pop(),
+                 lambda row: row['preservedFiles'][0].update(sha256='f' * 64),
+                 lambda row: row['priorFinaleFiles'][0].update(path='outside/escaped-old-finale'),
+                 lambda row: row['progressionFiles'][0].update(path='outside/escaped-new-finale'),
+                 lambda row: row['priorFinale'].update(sourceCommit='c' * 40),
+                 lambda row: row['priorFinale'].update(publicationRun=pub.PRIOR_FINALE_PUBLICATION_RUN + 1),
+                 lambda row: row.update(baselineFilesSha256='f' * 64)]
+        args = self.verification_args('http://127.0.0.1', 'preflight')
+        for mutate in cases:
+            with self.subTest(mutate=mutate):
+                bad = copy.deepcopy(original)
+                mutate(bad)
+                with self.assertRaises(ValueError):
+                    pub.check_manifest(bad, args, EXPECTED)
+
+    def test_private_prior_finale_proof_cannot_be_overwritten(self):
+        (self.proof / 'prior-finale').mkdir(parents=True)
+        sentinel = self.proof / 'prior-finale/keep'
+        sentinel.write_bytes(b'earlier private proof')
+        with self.assertRaisesRegex(ValueError, 'overwrite'):
+            pub.assemble(self.args)
+        self.assertEqual(sentinel.read_bytes(), b'earlier private proof')
+        self.assertFalse(self.site.exists())
+
     def test_changed_public_byte_fails_and_writes_failure_report(self):
         self.assemble()
-        changed = self.site / 'assets/old.bin'
-        changed.write_bytes(b'x' * 256)
-        with local_server(self.site) as base, patch.object(pub.time, 'sleep'):
-            args = self.verification_args(base)
-            with self.assertRaisesRegex(ValueError, 'Public hash changed'):
-                pub.verify(args)
-        report = pub.read_json(pathlib.Path(args.output))
-        self.assertFalse(report['pass'])
-        self.assertFalse(report['mainSiteUnchanged'])
-        self.assertIn('assets/old.bin', report['error'])
+        for phase in ('preflight', 'published'):
+            with self.subTest(phase=phase):
+                directory = self.baseline_public if phase == 'preflight' else self.site
+                changed = directory / 'assets/old.bin'
+                changed.write_bytes(b'x' * 256)
+                with local_server(directory) as base, patch.object(pub.time, 'sleep'):
+                    args = self.verification_args(base, phase)
+                    with self.assertRaisesRegex(ValueError, 'Public hash changed'):
+                        pub.verify(args)
+                report = pub.read_json(pathlib.Path(args.output))
+                self.assertFalse(report['pass'])
+                self.assertFalse(report['mainSiteUnchanged'])
+                self.assertIn('assets/old.bin', report['error'])
 
     def test_current_public_metadata_rejects_stale_source_publisher_and_review(self):
         manifest = self.assemble()
