@@ -28,7 +28,7 @@ const availableRooms=puzzleProgression?PROGRESSION_INDICES:puzzlePilot43?[42]:fo
 if(campaignRoute.legacyVelocityLink)history.replaceState(history.state,'',location.pathname+campaignRoute.search+location.hash);
 let storage;try{storage=localStorage;}catch{}
 const pilotStorage=storage&&{getItem:key=>storage.getItem('brainrot-puzzle-pilot43-v1:'+key),setItem:(key,value)=>storage.setItem('brainrot-puzzle-pilot43-v1:'+key,value)};
-const progressionStorage=storage&&{getItem:key=>storage.getItem('brainrot-puzzle-progression-next-v1:'+key),setItem:(key,value)=>storage.setItem('brainrot-puzzle-progression-next-v1:'+key,value)};
+const progressionStorage=storage&&{getItem:key=>storage.getItem('brainrot-puzzle-progression-finale-v1:'+key),setItem:(key,value)=>storage.setItem('brainrot-puzzle-progression-finale-v1:'+key,value)};
 const preferences=new LabPreferences(puzzleProgression?progressionStorage:puzzlePilot43?pilotStorage:foundationEdition.enabled?foundationStorage(storage):openEdition.enabled?openEditionStorage(storage):storage,
   foundationEdition.enabled?{campaignRevision:CREATIVE_CAMPAIGN_REVISION,replacedIndices:CREATIVE_REPLACED_INDICES,roomRevisions:{16:'cable-supported-architecture-v1',32:'siphon-observatory-v1',50:'echo-horizon-v1'}}:{}),holds=new Set();
 const screens=['loading','start-screen','pause-screen','win-screen','error-screen'];
@@ -167,7 +167,7 @@ campaignMenu=createCampaignMenu({root:$('#campaign-map'),select:$('#level-select
 $('#level-select').addEventListener('change',updateStartAction);updateStartAction();
 $('#campaign-count').textContent=foundationEdition.enabled?`Кампания · ${FOUNDATION_INDICES.length} испытание`:openEdition.enabled?`${OPEN_ROOM_INDICES.length} лабораторных испытаний · отдельная версия`:`Архив · ${CAMPAIGN.length} испытания`;
 if(puzzlePilot43)$('#campaign-count').textContent='Новая версия · комната 43';
-if(puzzleProgression)$('#campaign-count').textContent='Пространственные испытания · 43–49';
+if(puzzleProgression)$('#campaign-count').textContent='Пространственные испытания · 43–51';
 if(foundationEdition.enabled){$('#start-screen .brand').textContent='ПОРТАЛЫ · ФИЗИКА · ИССЛЕДОВАНИЕ';$('#start-screen .lead').textContent='Соединяй пространства. Сохраняй импульс. Доберись до выхода вместе с другом.';}
 else if(openEdition.enabled){$('#start-screen .brand').textContent='ЛАБОРАТОРНЫЕ ИСПЫТАНИЯ';$('#start-screen .lead').textContent='Камеры 24, 28, 30 и 31–33. Эта подборка и новая первая глава хранят прогресс отдельно от архива.';}
 const editionNav=document.createElement('nav');editionNav.className='edition-navigation';editionNav.setAttribute('aria-label','Версии кампании');
