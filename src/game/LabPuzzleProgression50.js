@@ -44,13 +44,16 @@ function foldingRotor(k){
   for(const dx of [-1.85,1.85])meshes.push(k.block([dx,dx<0?2:-.1,0],[.3,dx<0?6:2,depth+.3],'secondary',false,group));
   meshes.push(k.block([0,-.1,name==='b'?4.15:1.35],[3.4,2,.3],'secondary',false,group));
   meshes.push(k.block([0,-.73,name==='b'?-4.15:-1.35],[3.4,.6,.3],'metal',false,group));
+  // The first bowl is freight-only. Its real front lintel leaves a low E
+  // inspection opening while the delivery from above stays unobstructed.
+  const freightLintel=name==='a'?k.block([0,1.6,-1.35],[3.4,2.4,.3],'secondary',false,group):null;if(freightLintel)meshes.push(freightLintel);
   meshes.push(k.block([0,-7,0],[2,1.8,2],'metal',false,group));
   for(const x of [-.8,.8])meshes.push(k.block([x,-4,0],[.15,6,.15],'metal',false,group));
   const colliders=meshes.map((m,i)=>proxy(k,m,'50 / genuine '+name+' cup '+i));
   const feed=name==='a'?k.panel('cup-a-freight',[1.5,3.5,0],[-1,0,0],5,2.1,group,true):k.panel('cup-b-freight',[8,10,-1.5],[0,Math.cos(.7),-Math.sin(.7)],3.2,2.1,root,true);feed.mesh.userData.portalSize={width:name==='a'?2:.85,height:.85};
   // The freight aperture stands above the actual cup wall. A delivered cube
   // emerges inward over its rim, then gravity settles it on the real floor.
-  cups.push({name,x,group,meshes,colliders,feed,body:null,hinge:null});
+  cups.push({name,x,group,meshes,colliders,feed,freightLintel,body:null,hinge:null});
  }
  const stopMesh=k.block([0,25.8,8],[.6,1.4,1.6],'metal'),stopCollider=k.envelopes.at(-1);
  const hoodParts=[];const roof=k.geometry(new THREE.BoxGeometry(3.4,.24,3.0),'secondary',[8,12.3,-1.5],Q().setFromAxisAngle(V(1,0,0),-1.05),{parent:root,batch:false,name:'50 / true oblique rebound freight roof'});
@@ -70,6 +73,7 @@ function foldingRotor(k){
    for(const cup of cups){for(const c of cup.colliders)g.physics.removeStaticBox(c.mesh.uuid);
     const b=cup.body=new Body({mass:3,position:new Vec3(cup.x,14,0),angularDamping:.9,allowSleep:false,material,collisionFilterGroup:1,collisionFilterMask:3});
     b.addShape(new Box(new Vec3(1.7,.15,cup.name==='b'?4:1.2)),new Vec3(0,6,0));b.addShape(new Box(new Vec3(1,.9,1)),new Vec3());for(const x of [-.8,.8])b.addShape(new Box(new Vec3(.075,3,.075)),new Vec3(x,3,0));for(const dx of [-1.85,1.85])b.addShape(new Box(new Vec3(.15,dx<0?3:1,cup.name==='b'?4.15:1.35)),new Vec3(dx,dx<0?9:6.9,0));b.addShape(new Box(new Vec3(1.7,1,.15)),new Vec3(0,6.9,cup.name==='b'?4.15:1.35));b.addShape(new Box(new Vec3(1.7,.3,.15)),new Vec3(0,6.27,cup.name==='b'?-4.15:-1.35));
+    if(cup.name==='a')b.addShape(new Box(new Vec3(1.7,1.2,.15)),new Vec3(0,8.6,-1.35));
     this.owner.world.addBody(b);cup.hinge=new HingeConstraint(this.body,b,{pivotA:new Vec3(cup.x,6,0),pivotB:new Vec3(0,8,0),axisA:new Vec3(0,0,1),axisB:new Vec3(0,0,1),maxForce:1e6,collideConnected:false});this.owner.world.addConstraint(cup.hinge);
    }
    this.preStep=()=>{const q=this.body.quaternion,a=Math.atan2(2*(q.w*q.z+q.x*q.y),1-2*(q.y*q.y+q.z*q.z));this.body.torque.z+=-100*a-750*this.body.angularVelocity.z;for(const c of cups)c.body.torque.z+=-700*c.body.angularVelocity.z;};

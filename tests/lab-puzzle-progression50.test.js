@@ -106,6 +106,27 @@ test('50 prepared B freight rejects an ordinary passenger holding the first retr
  });clean(receipt);assert.equal(g.cargo,cargo);assert.equal(g.physics.cargoBody,body);
 });
 
+test('50 the genuine A inspection lintel blocks the confirmed passenger boarding while outside E still retrieves original freight',async()=>{
+ const g=await room(),cargo=g.cargo,body=g.physics.cargoBody,player=g.playerGroup;g.camera.aspect=16/9;g.camera.updateProjectionMatrix();
+ let highest=0,closestZ=Infinity,lintelTop;
+ const receipt=await scenario(g,d=>{
+  runPuzzleProgression50(d,{stopAfter:'gallery-a'});const r=d.level.rotor,c=r.cups[0];
+  assert.equal(r.loaded('a'),true);assert.equal(g.physics.portalTransports,1);lintelTop=new THREE.Box3().setFromObject(c.freightLintel).max.y;
+  // Replay the independently successful old boarding: normal jumps to the
+  // cup centre, steering until near the target and actually grounded.
+  d.walk(-12,-3);d.walk(c.group.position.x-.2,-3);const x=c.group.position.x-.2;let near=false;
+  for(let n=0;n<360;n++){
+   const dx=x-g.playerPosition.x,dz=-.1-g.playerPosition.z,distance=Math.hypot(dx,dz);if(distance<.25)near=true;if(near&&g.playerGrounded&&distance<.2)break;
+   if(!near&&n%60===0)g.input.jumpQueued=true;const pace=Math.min(1,distance*1.5);d.worldMove(dx/(distance||1)*pace,dz/(distance||1)*pace);d.frame();highest=Math.max(highest,g.playerPosition.y);closestZ=Math.min(closestZ,Math.abs(g.playerPosition.z));
+  }
+  d.stop();d.until(()=>g.playerGrounded,3,'Blocked A inspection jumps did not land on the real gallery');
+  assert.ok(highest>7.4,'The adversary must really jump at the former boarding approach');assert.ok(highest<lintelTop-.5,'The front lintel top must remain beyond this actual ordinary jump');assert.ok(closestZ>1.5,'Confirmed old steering must remain outside the freight-only inspection opening');assert.equal(r.loaded('a'),true);
+  const p=g.cargo.position.clone();d.walk(-12,-3);d.walk(p.x,-3);d.walk(p.x,-1.95);d.pickup();
+  d.until(()=>Math.abs(r.angle)<.06&&Math.abs(r.body.angularVelocity.z)<.008&&r.cups.every(c=>Math.abs(c.body.angularVelocity.z)<.015),35,'Actual unloaded A hinge did not freely return after outside inspection');
+  assert.equal(g.heldCube,cargo);assert.ok(g.playerGrounded&&g.playerPosition.y<7,'Outside extraction must leave the passenger on the fixed gallery');assert.ok(c.group.position.y>20,'The empty physical cup must actually return to its upper berth');assert.equal(r.loaded('a'),false);assert.equal(r.loaded('b'),false);assert.equal(g.state,'playing');d.mark('Real freight-only front lintel rejects A boarding while the original live cargo is recovered through E outside');
+ });clean(receipt);assert.equal(g.cargo,cargo);assert.equal(g.physics.cargoBody,body);assert.equal(g.playerGroup,player);console.info('50 A freight inspection',JSON.stringify({highest,closestZ,lintelTop}));
+});
+
 test('50 initial inclined freight fits the original oriented box and its Cannon skin is an actual OBB',async()=>{
  const g=await room();const receipt=await scenario(g,d=>{
   d.wait(.1);const r=d.level.rotor,p=r.cups[1].feed,f=frame(p),skin=g.physics.solids.get(p.mesh.uuid).body;
