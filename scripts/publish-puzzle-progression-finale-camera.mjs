@@ -55,7 +55,7 @@ const currentIdentity=()=>({sourceCommit:sourceIdentity(),sourceReview:reviewIde
 export function checkIdentity(report,identity){assert.equal(report.sourceCommit,identity.sourceCommit,'Proof must describe the exact candidate');assert.deepEqual(report.sourceReview,identity.sourceReview,'Proof must come from the same review attempt');}
 export const CAMERA_TARGET_REGION=Object.freeze({center:[9.926224685,6.28,-10.4976406],halfExtents:[1.15,1.25,1.15],teleports:3});
 const vertexProjectionSource='every live skinned original-player vertex at this actual native visual sample';
-const nativeCameraScope='Every active native visual step inside the fixed physical east-gallery foot region after the third transport; not all portal, route, render, movie frames or physical devices.';
+const nativeCameraScope='Every active native visual step inside the fixed physical east-gallery falling/retraction region after the third transport; not all portal, route, render, movie frames or physical devices.';
 const movieCameraScope='Every actual encoded sample at the declared capture rate uses all original live skinned vertices. Closure is gated only in the fixed east-gallery region; unrecorded render frames, occlusion, devices and full camera acceptance are separate.';
 const cameraVector=value=>assert.ok(Array.isArray(value)&&value.length===3&&value.every(Number.isFinite),'Actual finite camera/player positions are required');
 const inCameraGallery=sample=>sample.teleports===CAMERA_TARGET_REGION.teleports&&CAMERA_TARGET_REGION.center.every((c,i)=>Math.abs(sample.player[i]-c)<=CAMERA_TARGET_REGION.halfExtents[i]);

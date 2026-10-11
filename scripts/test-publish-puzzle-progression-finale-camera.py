@@ -52,7 +52,7 @@ def camera_native_fixture(level=50):
             'measuredVerticesPerSample': 96753, 'sampleCount': 3, 'targetRegionSampleCount': 3,
             'outsideVertexSamples': [], 'targetRegionOutsideSamples': [],
             'samples': [{**camera_sample(), 'routeFrame': frame} for frame in (10, 11, 12)],
-            'pass': True, 'scope': pub.NATIVE_CAMERA_SCOPE}
+            'pass': True, 'scope': 'Every active native visual step inside the fixed physical east-gallery falling/retraction region after the third transport; not all portal, route, render, movie frames or physical devices.'}
 
 
 def camera_movie_fixture(level=50, count=24):

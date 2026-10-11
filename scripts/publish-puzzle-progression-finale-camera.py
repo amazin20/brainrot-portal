@@ -53,7 +53,7 @@ STORAGE_PREFIX = 'brainrot-puzzle-progression-finale-v1:'
 CAMERA_TARGET_REGION = {'center': [9.926224685, 6.28, -10.4976406],
                         'halfExtents': [1.15, 1.25, 1.15], 'teleports': 3}
 VERTEX_PROJECTION_SOURCE = 'every live skinned original-player vertex at this actual native visual sample'
-NATIVE_CAMERA_SCOPE = 'Every active native visual step inside the fixed physical east-gallery foot region after the third transport; not all portal, route, render, movie frames or physical devices.'
+NATIVE_CAMERA_SCOPE = 'Every active native visual step inside the fixed physical east-gallery falling/retraction region after the third transport; not all portal, route, render, movie frames or physical devices.'
 MOVIE_CAMERA_SCOPE = 'Every actual encoded sample at the declared capture rate uses all original live skinned vertices. Closure is gated only in the fixed east-gallery region; unrecorded render frames, occlusion, devices and full camera acceptance are separate.'
 MAX_BASELINE_BYTES = 2 * 1024 ** 3
 MAX_CANDIDATE_BYTES = 100 * 1024 ** 2
