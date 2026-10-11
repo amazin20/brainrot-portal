@@ -30,7 +30,7 @@ export const PINS=Object.freeze({
  revision:'puzzle-progression-finale-v1',query:'?edition=foundation&level=50&pilot=progression',storagePrefix:'brainrot-puzzle-progression-finale-v1:',
 });
 export const SOURCE_CHANGES=Object.freeze([
- ...['src/game/LabCamera.js','tests/lab-camera-finale-framing.test.js'].map(path=>({path,status:'M'})),
+ ...['src/game/LabCamera.js','tests/lab-camera-finale-framing.test.js','src/game/LabPuzzleProgression50BeamJourney.js'].map(path=>({path,status:'M'})),
  ...['scripts/qa-puzzle-progression-finale-camera-browser.mjs','scripts/record-finale-camera-walkthrough.mjs','.github/workflows/puzzle-progression-finale-camera-review.yml','scripts/publish-puzzle-progression-finale-camera.mjs','scripts/publish-puzzle-progression-finale-camera.py','scripts/test-publish-puzzle-progression-finale-camera.mjs','scripts/test-publish-puzzle-progression-finale-camera.py','docs/puzzle-progression-finale-camera-publication.md'].map(path=>({path,status:'A'})),
 ].map(row=>Object.freeze({...row,mode:'100644',type:'blob'})));
 export function checkSourceChanges(changes){

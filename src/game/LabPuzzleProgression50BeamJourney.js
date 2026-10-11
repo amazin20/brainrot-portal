@@ -109,6 +109,49 @@ export function runPuzzleProgression50BeamJourney(d){
   if(g.playerPosition.y>6&&g.playerPosition.z>0){d.walk(17,8);d.walk(17,-7);d.walk(12,-7);}
   check(r.loaded('b')&&!g.heldCube,'The original B contact must remain the cause of the loaded pose');
  };
+ const recoverFreeCargo=()=>{
+  const snapshot=()=>({step:g.physics.world.stepnumber,player:g.playerPosition.toArray(),hand:g.playerPosition.clone().add(V(0,1.1,0)).toArray(),
+   cargo:cargo.position.toArray(),bodyPosition:body.position.toArray(),velocity:body.velocity.toArray(),angularVelocity:body.angularVelocity.toArray(),
+   body:body.id,mass:body.mass,held:g.heldCube===cargo});
+  const recovery=report.freeCargoRecovery={status:'tracking',frameBudget:600,frames:0,standoff:1.35,attemptDistance:2.1,
+   initial:snapshot(),current:null,minHandDistance:Infinity,minHorizontalDistance:Infinity,lineOfSightChecks:0,blockedChecks:0,nativeEAttempts:[],observations:[]};
+  const ray=new THREE.Raycaster(),side=V();d.stop();
+  for(let frame=0;frame<recovery.frameBudget;frame++){
+   check(g.cargo===cargo&&g.physics.cargoBody===body,'Free cargo recovery replaced the original body');
+   const hand=g.playerPosition.clone().add(V(0,1.1,0)),delta=cargo.position.clone().sub(hand),distance=delta.length();
+   const horizontal=Math.hypot(g.playerPosition.x-cargo.position.x,g.playerPosition.z-cargo.position.z);
+   recovery.current=snapshot();recovery.minHandDistance=Math.min(recovery.minHandDistance,distance);recovery.minHorizontalDistance=Math.min(recovery.minHorizontalDistance,horizontal);
+   if(frame%12===0)recovery.observations.push({...recovery.current,frame,handDistance:distance});
+   if(distance<=2.25){
+    // Observe the same hand-to-body blocker rule as native E with a separate
+    // raycaster. Camera framing never substitutes the interaction ray.
+    g.scene.updateMatrixWorld(true);ray.set(hand,delta.clone().normalize());ray.far=Math.max(0,distance-.1);
+    const blockers=ray.intersectObjects(g.cameraBlockers,true).filter(hit=>hit.distance<distance-.1&&g.isActiveBlocker(hit.object));
+    recovery.lineOfSightChecks++;if(blockers.length)recovery.blockedChecks++;
+    recovery.lastLineOfSight={frame,step:g.physics.world.stepnumber,distance,clear:blockers.length===0,
+     blockers:blockers.slice(0,4).map(hit=>({name:hit.object.name,id:hit.object.uuid,distance:hit.distance}))};
+    if(distance<=recovery.attemptDistance&&!blockers.length){
+     const attempt={frame,...recovery.current,handDistance:distance,lineOfSight:recovery.lastLineOfSight};
+     attempt.nativeReturned=g.interact();attempt.originalHeld=g.heldCube===cargo;recovery.nativeEAttempts.push(attempt);
+     if(attempt.originalHeld){
+      d.stop();d.wait(.55);recovery.status='recovered';recovery.current=snapshot();
+      recovery.physicsSteps=recovery.current.step-recovery.initial.step;recovery.seconds=recovery.physicsSteps/120;
+      recovery.settleFrames=Math.ceil(.55*60);return;
+     }
+    }
+   }
+   // Follow the LIVE body from the player's current side. A fixed south-side
+   // target can walk through and push a free companion before the E attempt.
+   side.set(g.playerPosition.x-cargo.position.x,0,g.playerPosition.z-cargo.position.z);
+   if(side.lengthSq()<1e-8)side.set(0,0,1);else side.normalize();
+   const target=cargo.position.clone().addScaledVector(side,recovery.standoff),moveDelta=target.sub(g.playerPosition);moveDelta.y=0;
+   const remaining=moveDelta.length(),pace=Math.min(1,remaining*1.5);
+   if(remaining>.01){moveDelta.multiplyScalar(pace/remaining);d.worldMove(moveDelta.x,moveDelta.z);}else d.stop();
+   d.frame();recovery.frames++;
+  }
+  d.stop();recovery.status='not-recovered';recovery.current=snapshot();recovery.physicsSteps=recovery.current.step-recovery.initial.step;recovery.seconds=recovery.physicsSteps/120;
+  check(false,'Bounded ordinary live-cargo approach did not recover the same original body: '+JSON.stringify(recovery.current));
+ };
  const returnB=()=>{
   check(g.heldCube===cargo,'B beam return must start with genuine outside E extraction');
   begin('B return physical cup clearance to main-beam moving tip, held');
@@ -130,7 +173,7 @@ export function runPuzzleProgression50BeamJourney(d){
   phase.reachedStopArmZ=Math.abs(g.playerPosition.z-8)<.3;phase.finish=g.playerPosition.toArray();
   check(g.playerPosition.y>6,'The stop-arm empty wedge probe must retain its real east-gallery floor');
   begin('B return recover same free original cargo with ordinary E');
-  const p=cargo.position.clone();d.walk(p.x,p.z-1.1);d.pickup();report.heldReleaseAndRegrab=true;d.walk(12,-7);
+  recoverFreeCargo();report.heldReleaseAndRegrab=true;d.walk(12,-7);
  };
  const mark=d.mark,until=d.until;
  const driver={...d,mark(name){

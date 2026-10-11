@@ -1,10 +1,12 @@
 # Изолированный фикс перехода камеры 50–51
 
-Новый pipeline проверяет только последующий фикс камеры от принятого source `65207e98b463c03fa7614e04c2865aa471a37f7e`. Старые finale scripts, fixtures, review workflow и документация сохраняются побайтово. Существующий URL `/puzzle-progression-finale/`, metadata version/revision v1, query и префикс сохранений не меняются. Canonical L8 и все опубликованные адреса вне finale сохраняют каждый прежний байт.
+Новый pipeline проверяет последующий фикс камеры и одну коррекцию ordinary input-only Beam Journey от принятого source `65207e98b463c03fa7614e04c2865aa471a37f7e`. Старые finale scripts, fixtures, review workflow и документация сохраняются побайтово. Существующий URL `/puzzle-progression-finale/`, metadata version/revision v1, query и префикс сохранений не меняются. Canonical L8 и все опубликованные адреса вне finale сохраняют каждый прежний байт.
 
-Корректирующий source scope, floor `1678` и прежние native/movie evidence contracts зафиксированы: `SOURCE_FREEZE_READY=true`. Авторский camera file содержит восемь active top-level tests: шесть принятых и две дополнительные регрессии; root независимо проверил эти восемь тестов и неизменные финальные hashes. Это разрешает новый exact source review; candidate source и publication acceptance требуют будущих фактических Actions и независимой проверки их evidence. Private main controller до принятого нового review содержит `PENDING_EXACT_REVIEW` и нулевые run/attempt. Локальные fixtures не заменяют реальные Actions, downloaded artifacts и независимую проверку.
+Одиннадцатифайловый source scope и evidence contracts зафиксированы: `SOURCE_FREEZE_READY=true`. Существующий causal Beam Journey прошёл локально 1/1 со всеми прежними assertions после finite live-cargo recovery, без skipped/cancelled/todo; source hashes не изменились во время этой проверки. Это разрешает новый exact review и не заменяет полную Actions-приёмку. Floor `1678` и native/movie evidence contracts сохраняются. Авторский camera file содержит восемь active top-level tests: шесть принятых и две дополнительные регрессии; root независимо проверил эти восемь тестов и неизменные финальные hashes. Новый meaningful top-level game test не добавляется; existing causal beam test остаётся обязательным. Candidate source и publication acceptance требуют нового фактического exact review и независимой проверки его evidence. Private pending main controller содержит `PENDING_EXACT_REVIEW` и нулевые run/attempt; отдельный exact-pin draft для неуспешного e49 заблокирован и не установлен на main. Локальные fixtures не заменяют реальные Actions, downloaded artifacts и независимую проверку.
 
-Исторический candidate `b21980e6a662d5743614e18eb32121ad306cc52b` / review `38106397795/1` не принят для публикации. Независимый native51 audit root при том же неподвижном игроке и относительной фазе показал `minY=-1.4084` и `15219` outside vertices вместо принятых `minY=-1.1877` и `7184`; даже успех всех шести jobs не снимает этот quality hold. Следующий source commit root готовит непосредственным ребёнком `b21980e6…` в той же source branch; проверяемый десятифайловый diff по-прежнему считается от принятого `65207e98…`. Опубликованная база остаётся `372e4831…`.
+Исторический candidate `b21980e6a662d5743614e18eb32121ad306cc52b` / review `38106397795/1` завершился `cancelled` и не принят для публикации. Независимый native51 audit root при том же неподвижном игроке и относительной фазе показал `minY=-1.4084` и `15219` outside vertices вместо принятых `minY=-1.1877` и `7184`. Последующие source commits сохраняются отдельно как исторические кандидаты; проверяемый diff каждого нового source по-прежнему считается от принятого `65207e98…`. Опубликованная база остаётся `372e4831…`.
+
+Exact source `e49f7d0014c6ee97e916c3ff4a31646c535a601a` / review `38109876888/1` завершился `failure`: actual active TAP содержит `1678` tests, `1677` pass и `1` fail, без cancelled/skipped/todo. Единственный сбой — test `1054`, causal production beam journey: `Pickup failed` в `returnB` при повторном подборе того же свободного original cargo. `build` и оба native jobs успешны; `package` и `gate` пропущены. Последующие publication fixtures `240/46/164/39` в этом CI не выполнялись из-за ошибки active suite. Успешные bounded native proofs не принимают source и не разрешают publication.
 
 ## Принятая текущая база
 
@@ -30,14 +32,16 @@
 
 ## Точный source scope
 
-Зафиксированный diff от `65207e98…` содержит ровно десять обычных blob paths с mode `100644`:
+Подготовленный diff от `65207e98…` содержит ровно одиннадцать обычных blob paths с mode `100644`:
 
-- M: `src/game/LabCamera.js`, `tests/lab-camera-finale-framing.test.js`.
+- M: `src/game/LabCamera.js`, `tests/lab-camera-finale-framing.test.js`, `src/game/LabPuzzleProgression50BeamJourney.js`.
 - A: `scripts/qa-puzzle-progression-finale-camera-browser.mjs`, `scripts/record-finale-camera-walkthrough.mjs`.
 - A: оба `scripts/publish-puzzle-progression-finale-camera.{mjs,py}` и оба `scripts/test-publish-puzzle-progression-finale-camera.{mjs,py}`.
 - A: новый review workflow и эта документация.
 
-Guard проверяет cardinality, полный список paths, status, mode и type; лишний, отсутствующий, переименованный или executable файл отклоняется. Shared workspace не определяет release scope: root собирает отдельное GitDataTree от точного source base только с этими paths. Kernel, helpers, tests и playable qualification 41-й комнаты остаются отдельным candidate. `LabGame`, oriented beam physics, Journey50/51, art, models, package dependencies, canonical game и прежние release pipelines в этот camera diff не входят.
+JS source guard проверяет cardinality `11 = 3M + 8A`, полный список paths, status, mode и type; лишний, отсутствующий, переименованный или executable файл отклоняется. Fixtures независимо проверяют точный Beam Journey row и отклоняют прежний десятифайловый набор без него, неправильные status/mode/type. Python guard, его fixtures и source review workflow не содержат этого source-diff allowlist и сохраняются побайтово. Shared workspace не определяет release scope: root собирает отдельное GitDataTree от точного source base только с этими paths. Kernel, helpers, tests и playable qualification 41-й комнаты остаются отдельным candidate. `LabGame`, oriented beam physics, ordinary Journey50/51, art, models, package dependencies, canonical game и прежние release pipelines в этот diff не входят; единственное Journey исключение — input-only `LabPuzzleProgression50BeamJourney.js`.
+
+Коррекция `returnB` должна повторно читать живую позицию того же original cargo во время обычной конечной walk recovery вместо наведения на один старый snapshot. Подбор по-прежнему выполняется настоящим E через `LabGame.interact`/`toggleCube`, с прежними native distance `2.25 m` и line-of-sight checks. Driver не ослабляет pickup assertions, не пишет actor poses/velocity, portal state, mechanism contacts или win state и не заменяет original body. Существующая полная causal beam route обязана пройти с прежними real falls/recovery, free freight transfers, true-contact assertions и ordinary joint finish. Новый source commit требует нового полного six-job review; failed e49 не переиспользуется как успешное proof.
 
 ## Шесть jobs и новые доказательства камеры
 
@@ -65,7 +69,7 @@ Frozen JS `reviewGuard` проверяет присутствие marker как 
 
 Новые artifact names начинаются с `puzzle-progression-finale-camera-` и включают точные run/attempt. Pages concurrency остаётся общей `pages`, cancel-in-progress `false`; параллельная публичная публикация физики 41 не запускается.
 
-Полная камера, художественная/пользовательская приёмка, hardware UX, все возможные input paths и master/Tower500 остаются отдельными задачами. Новый bounded camera proof не меняет эти границы.
+Полная камера, художественная/пользовательская приёмка, hardware UX, все возможные input paths и master/Tower500 остаются отдельными задачами. В фактической e49 movie50 known-region кадры `499–500` проходят, но whole-movie содержит `58` outside samples против прежних `57`; moving boundary crops `518` и `537` остаются OPEN. Same-index moving witnesses не доказывают одинаковую оптическую/физическую позу или отсутствие регрессии. Native51 записанные `184` samples и MP4/RGB совпали с принятой базой в root audit. Эти ограниченные результаты не закрывают full native50 camera/no-regression acceptance и требуют нового source-bound evidence после исправления driver.
 
 ## Ограниченный оптический фикс
 
