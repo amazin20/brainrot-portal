@@ -1,4 +1,6 @@
-name: Review isolated finale camera transition 50–51
+# Corrective follow-up: floor 1678 includes the no-player-portal room51 differential.
+# Target halfY 1.25 includes the actual baseline encoded499 crop; it is not an all-window gate.
+name: Review isolated finale camera correction 50–51
 'on':
   push:
     branches: [upgrade/finale-camera-transition-20261011]

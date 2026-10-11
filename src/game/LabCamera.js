@@ -446,9 +446,10 @@ export class LabCamera {
   // A portal's rolling horizon and a newly solid backing can retract the
   // final lens AFTER escape candidates were scored. Fit that actual view,
   // rather than a desired boom or the pitch alone. Keep the same optical axis;
-  // only the optional finale lens widens, with a finite obstruction budget.
+  // only the optional finale lens widens while a transported horizon recovers.
+  // Upright walking/aiming retains its exact previous camera and sweep.
   fitSilhouetteLens(step) {
-    if (!this.fullBodyFraming || step <= 0) return;
+    if (!this.fullBodyFraming || step <= 0 || this.viewUp.dot(UP) >= Math.cos(.01)) return;
     for (let pass = 0; pass < 3; pass++) {
       let tangent = 0;
       for (const x of [-.65, .65]) for (const y of [-1.52, 1.52]) for (const z of [-.65, .65]) {

@@ -1,9 +1,13 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { execFileSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
 import * as THREE from 'three';
 import { LabCamera, CAMERA_PITCH_MIN, CAMERA_PITCH_MAX } from '../src/game/LabCamera.js';
 import { createHeadlessGame } from '../scripts/lab-headless.mjs';
 import { makePortalFrame, transformPortalPoint, portalRotation } from '../src/game/LabPortals.js';
+import { runV8Journey } from '../src/game/LabV8Journey.js';
+import { runPuzzleProgression51 } from '../src/game/LabPuzzleProgression51Journey.js';
 
 const V = (x = 0, y = 0, z = 0) => new THREE.Vector3(x, y, z);
 const aspects = [640 / 360, 390 / 844];
@@ -194,13 +198,21 @@ test('the recorded third-portal retraction fits feet immediately and rechecks th
     [[9.584352,6.382957,-10.490945],[7.228084,8.680123,-9.966731],[-.054463,-.651173,.086556,.752008],88],
     [[9.677160,6.282497,-10.491374],[7.289172,8.564788,-9.992520],[-.049285,-.652892,.082114,.751373],88],
   ];
+  const transportedUps = [
+    [-.227829,.930617,-.286436],[-.216850,.938741,-.267847],
+    [-.206142,.945927,-.250455],[-.157698,.971108,-.179109],
+    [-.111875,.986435,-.120126],[-.105490,.988044,-.112434],
+    [-.065247,.995651,-.066492],[-.157699,.971113,-.179085],
+    [-.149128,.974527,-.167505],
+  ];
   let oldCrops = 0, overBudget = 0;
-  for (const aspect of aspects) for (const [foot, eye, rotation, fov] of samples) {
+  for (const aspect of aspects) for (const [index, [foot, eye, rotation, fov]] of samples.entries()) {
     const { camera, rig, target } = fixture(aspect);
     target.fromArray(foot); rig.playerPivot.copy(target).y += 1.32;
     rig.focus.copy(rig.playerPivot);
     camera.position.fromArray(eye); camera.quaternion.fromArray(rotation).normalize();
     camera.up.copy(V(0, 1, 0).applyQuaternion(camera.quaternion));
+    rig.viewUp.fromArray(transportedUps[index]).normalize();
     camera.fov = fov; camera.updateProjectionMatrix(); camera.updateMatrixWorld(true);
     rig.lookPoint.copy(camera.position).addScaledVector(camera.getWorldDirection(V()), 16);
     if (target.clone().project(camera).y < -1) oldCrops++;
@@ -243,6 +255,7 @@ test('the recorded third-portal retraction fits feet immediately and rechecks th
   t.after(() => { wall.geometry.dispose(); wall.material.dispose(); });
   const { camera, rig } = fixture(3.2, { blockers: [wall] });
   camera.near = .2; camera.fov = 62; camera.position.set(0, 2, 2.5);
+  rig.viewUp.set(0, Math.cos(.1), Math.sin(.1));
   rig.lookPoint.set(0, 4, -10); camera.up.set(0, 1, 0);
   camera.lookAt(rig.lookPoint); camera.updateMatrixWorld(true); camera.updateProjectionMatrix();
   rig.constrain(rig.playerPivot, camera.position);
@@ -256,4 +269,69 @@ test('the recorded third-portal retraction fits feet immediately and rechecks th
   assert.ok(swept.distanceTo(camera.position) < 1e-9);
   assert.equal(rig.distanceVelocity, 0);
   assert.ok(Math.abs(rig.distance - camera.position.distanceTo(rig.focus)) < 1e-9);
+});
+
+test('the ordinary non-transported room51 route retains every accepted camera state', async () => {
+  // Use the actual accepted implementation, not a second copy of this fitting
+  // formula. Both cameras see the same production inputs and physics states.
+  const acceptedSource = execFileSync('git', ['show',
+    '65207e98b463c03fa7614e04c2865aa471a37f7e:src/game/LabCamera.js'],
+  { cwd: new URL('../', import.meta.url), encoding: 'utf8' });
+  assert.equal(createHash('sha256').update(acceptedSource).digest('hex'),
+    '3195d1e91f5a2328dadba39113343c512a634c1067ab5eed7fbe25f29671aedb');
+  const resolvedSource = acceptedSource.replace("from 'three'", `from '${import.meta.resolve('three')}'`)
+    .replace("from './LabCameraBroadPhase.js'", `from '${new URL('../src/game/LabCameraBroadPhase.js', import.meta.url)}'`)
+    .replace("from './LabPortals.js'", `from '${new URL('../src/game/LabPortals.js', import.meta.url)}'`);
+  const { LabCamera: AcceptedCamera } = await import('data:text/javascript;base64,'
+    + Buffer.from(resolvedSource).toString('base64'));
+  const game = await createHeadlessGame();
+  game.chamberEdition = 'foundation'; game.puzzleProgression = true;
+  await game.selectLevel(50, false);
+  const actual = game.cameraRig;
+  Object.setPrototypeOf(actual, AcceptedCamera.prototype);
+  const comparison = new LabCamera({ camera: game.camera.clone(), blockers: actual.blockers,
+    epic: actual.epicMode, dynamicFov: actual.dynamicFov,
+    fullBodyFraming: actual.fullBodyFraming });
+  const comparisonContext = Object.create(game);
+  comparisonContext.cameraRig = comparison; comparisonContext.camera = comparison.camera;
+  comparison.isBlocker = (object, hit) => game.isCameraBlocker.call(comparisonContext, object, hit);
+  const reset = actual.reset, configure = actual.configureSilhouette, update = actual.update;
+  let resetCount = 0, checkedFrames = 0;
+  const snapshot = rig => ({
+    camera: { eye: rig.camera.position.toArray(), rotation: rig.camera.quaternion.toArray(),
+      up: rig.camera.up.toArray(), fov: rig.camera.fov, projection: rig.camera.projectionMatrix.toArray() },
+    vectors: ['focus', 'focusVelocity', 'lastTarget', 'goal', 'playerPivot', 'forward', 'right',
+      'desired', 'boomDirection', 'lookPoint', 'avoidance', 'avoidanceVelocity', 'viewUp',
+      'portalOrientation', 'portalUpOrientation'].map(key => rig[key].toArray()),
+    springs: ['yaw', 'pitch', 'yawVelocity', 'pitchVelocity', 'distance', 'distanceVelocity',
+      'fovVelocity', 'aimBlend', 'aimBlendVelocity', 'epicFraming', 'epicFramingVelocity',
+      'upwardBackoff', 'upwardBackoffVelocity'].map(key => rig[key]),
+    flags: ['fullBodyFraming', 'inclinedFraming', 'obstructed', 'avoidanceActive',
+      'portalFramingActive', 'rampFraming'].map(key => rig[key]),
+    clipping: rig.mainClippingPlanes.map(plane => [...plane.normal, plane.constant]),
+  });
+  actual.reset = function (...args) {
+    const result = reset.apply(this, args); comparison.reset(...args); resetCount++; return result;
+  };
+  actual.configureSilhouette = function (...args) {
+    const result = configure.apply(this, args); comparison.configureSilhouette(...args); return result;
+  };
+  actual.update = function (input) {
+    const beforeReset = resetCount, result = update.call(this, input);
+    if (beforeReset === resetCount) comparison.update(input);
+    assert.deepEqual(snapshot(comparison), snapshot(this),
+      `Non-transported camera changed at production update ${checkedFrames}`);
+    checkedFrames++; return result;
+  };
+  try {
+    const identities = [game.playerGroup, game.cargo.group, game.physics.cargoBody];
+    const result = await runV8Journey(game, { scenario: runPuzzleProgression51 });
+    assert.equal(result.pass, true); assert.equal(result.teleports, 0);
+    assert.equal(result.resets, 0); assert.equal(result.respawns, 0);
+    assert.ok(result.frames > 1500 && checkedFrames >= result.frames - 2,
+      `Incomplete camera observations: ${checkedFrames} updates for ${result.frames} route frames`);
+    assert.deepEqual([game.playerGroup, game.cargo.group, game.physics.cargoBody], identities);
+  } finally {
+    game.physics.dispose(); game.portals.dispose();
+  }
 });

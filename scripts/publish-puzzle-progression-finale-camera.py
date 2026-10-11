@@ -43,7 +43,7 @@ PRIOR_FINALE_FILES = 116
 PRIOR_FINALE_BYTES = 12989987
 BASELINE_ZIP_BYTES = 494852251
 BASELINE_ZIP_SHA256 = '2001c3acd5b0a96a63bce484209ebc68b7639c6eef5d31a27b98767345fe76fc'
-MINIMUM_TESTS = 1677
+MINIMUM_TESTS = 1678
 LEVELS = [50, 51]
 PREFIX = 'puzzle-progression-finale/'
 VERSION = 'v54-puzzle-progression-finale-v1'
@@ -51,7 +51,7 @@ REVISION = 'puzzle-progression-finale-v1'
 QUERY = '?edition=foundation&level=50&pilot=progression'
 STORAGE_PREFIX = 'brainrot-puzzle-progression-finale-v1:'
 CAMERA_TARGET_REGION = {'center': [9.926224685, 6.28, -10.4976406],
-                        'halfExtents': [1.15, .75, 1.15], 'teleports': 3}
+                        'halfExtents': [1.15, 1.25, 1.15], 'teleports': 3}
 VERTEX_PROJECTION_SOURCE = 'every live skinned original-player vertex at this actual native visual sample'
 NATIVE_CAMERA_SCOPE = 'Every active native visual step inside the fixed physical east-gallery foot region after the third transport; not all portal, route, render, movie frames or physical devices.'
 MOVIE_CAMERA_SCOPE = 'Every actual encoded sample at the declared capture rate uses all original live skinned vertices. Closure is gated only in the fixed east-gallery region; unrecorded render frames, occlusion, devices and full camera acceptance are separate.'

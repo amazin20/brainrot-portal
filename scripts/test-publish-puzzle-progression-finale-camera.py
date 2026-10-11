@@ -430,7 +430,7 @@ class PublicationFixtures(unittest.TestCase):
                 location.write_bytes(original)
 
     def test_every_walkthrough_native_report_and_receipt_is_same_exact_review(self):
-        self.assertEqual(pub.MINIMUM_TESTS, 1677)
+        self.assertEqual(pub.MINIMUM_TESTS, 1678)
         cases = [
             ('evidence/level-50.json', lambda row: row.update(sourceCommit='c' * 40)),
             ('evidence/level-51.json', lambda row: row['sourceReview'].update(runAttempt=1)),
@@ -445,6 +445,7 @@ class PublicationFixtures(unittest.TestCase):
             ('evidence/review-receipt.json', lambda row: row['cpu'].update(testCount=1630, passed=1630)),
             ('evidence/review-receipt.json', lambda row: row['cpu'].update(testCount=1665, passed=1665)),
             ('evidence/review-receipt.json', lambda row: row['cpu'].update(testCount=1676, passed=1676)),
+            ('evidence/review-receipt.json', lambda row: row['cpu'].update(testCount=1677, passed=1677)),
             ('evidence/review-receipt.json', lambda row: row['cpu'].update(passed=pub.MINIMUM_TESTS - 1)),
             ('evidence/review-receipt.json', lambda row: row['cpu'].update(cancelled=1)),
             ('evidence/review-receipt.json', lambda row: row['cpu'].update(skipped=1)),
@@ -958,6 +959,44 @@ class CurrentCameraReleasePins(unittest.TestCase):
 
 
 class CameraEvidenceContracts(unittest.TestCase):
+    def test_original_499_pose_and_crop_cannot_escape_to_old_narrow_region(self):
+        # Actual baseline499 foot geometry; synthetic context/projection is a guard fixture, not native proof.
+        original_player = [9.02811878236383, 7.2478185499411625, -10.497957795932146]
+        self.assertEqual(pub.CAMERA_TARGET_REGION['halfExtents'], [1.15, 1.25, 1.15])
+        self.assertGreater(abs(original_player[1] - pub.CAMERA_TARGET_REGION['center'][1]), .75)
+        for axis in range(3):
+            self.assertLessEqual(abs(original_player[axis] - pub.CAMERA_TARGET_REGION['center'][axis]),
+                                 pub.CAMERA_TARGET_REGION['halfExtents'][axis])
+        route = {'frames': 72, 'teleports': 4}
+        native = camera_native_fixture()
+        native['samples'][0]['player'] = list(original_player)
+        pub.check_camera_transition(native, route, 50)
+        narrow = copy.deepcopy(native)
+        narrow['targetRegion']['halfExtents'][1] = .75
+        with self.assertRaises(ValueError):
+            pub.check_camera_transition(narrow, route, 50)
+        cropped = copy.deepcopy(native)
+        cropped['samples'][0]['bodyVertexProjection'].update(outsideLensCount=11834, insideLens=False,
+                                                            minY=-1.3585925604714426)
+        cropped.update(outsideVertexSamples=[10], targetRegionOutsideSamples=[10], **{'pass': False})
+        with self.assertRaises(ValueError):
+            pub.check_camera_transition(cropped, route, 50)
+        recording = {'frameCount': 24, 'fps': 4, 'route': {'teleports': 4}}
+        movie = camera_movie_fixture()
+        movie['samples'][0]['player'] = list(original_player)
+        pub.check_camera_movie(movie, recording, 50)
+        narrow = copy.deepcopy(movie)
+        narrow['targetRegion']['halfExtents'][1] = .75
+        with self.assertRaises(ValueError):
+            pub.check_camera_movie(narrow, recording, 50)
+        masked = copy.deepcopy(movie)
+        masked['samples'][0]['bodyVertexProjection'].update(outsideLensCount=11834, insideLens=False,
+                                                           minY=-1.3585925604714426)
+        masked.update(outsideSamples=[0], allSamplesInside=False, galleryTargetSampleCount=23,
+                      galleryTargetOutsideSamples=[], **{'pass': True})
+        with self.assertRaises(ValueError):
+            pub.check_camera_movie(masked, recording, 50)
+
     def test_native_actual_projection_context_counts_and_scope_are_recomputed(self):
         route = {'frames': 72, 'teleports': 4}
         native = camera_native_fixture()

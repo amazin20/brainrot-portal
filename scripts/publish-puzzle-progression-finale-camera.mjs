@@ -8,11 +8,11 @@ import {pathToFileURL} from 'node:url';
 import {Readable,Transform} from 'node:stream';
 import {pipeline} from 'node:stream/promises';
 
-// Frozen source scope, test floor and native/movie contracts; actual CI must still pass.
+// Frozen corrective source scope, test floor and evidence contracts; actual CI must pass.
 export const SOURCE_FREEZE_READY=true;
 export const PINS=Object.freeze({
  repository:'amazin20/brainrot-portal',artifactStem:'puzzle-progression-finale-camera',branch:'upgrade/finale-camera-transition-20261011',
- sourceBase:'65207e98b463c03fa7614e04c2865aa471a37f7e',minimumTests:1677,
+ sourceBase:'65207e98b463c03fa7614e04c2865aa471a37f7e',minimumTests:1678,
  priorPilotSource:'415b2da2cfe162fa9bf8f55803977ba2b5dd9bb6',priorPilotPublisher:'3b80abcfa59c6cc73b28392e6f997d32df35a51c',
  priorProgressionSource:'3aa725337737979ebd1fa6a4bb18b49d809e27fd',priorProgressionReview:{runId:37886420411,runAttempt:1},
  priorProgressionPublisher:'edb11aecfeb634b62addba95e2898cfca0799a79',priorProgressionPublicationRun:37889948751,
@@ -53,7 +53,7 @@ const sourceIdentity=()=>{const source=process.env.BUILD_COMMIT||process.env.GIT
 const reviewIdentity=()=>({runId:positive(process.env.SOURCE_REVIEW_RUN_ID||process.env.GITHUB_RUN_ID),runAttempt:positive(process.env.SOURCE_REVIEW_RUN_ATTEMPT||process.env.GITHUB_RUN_ATTEMPT)});
 const currentIdentity=()=>({sourceCommit:sourceIdentity(),sourceReview:reviewIdentity()});
 export function checkIdentity(report,identity){assert.equal(report.sourceCommit,identity.sourceCommit,'Proof must describe the exact candidate');assert.deepEqual(report.sourceReview,identity.sourceReview,'Proof must come from the same review attempt');}
-export const CAMERA_TARGET_REGION=Object.freeze({center:[9.926224685,6.28,-10.4976406],halfExtents:[1.15,.75,1.15],teleports:3});
+export const CAMERA_TARGET_REGION=Object.freeze({center:[9.926224685,6.28,-10.4976406],halfExtents:[1.15,1.25,1.15],teleports:3});
 const vertexProjectionSource='every live skinned original-player vertex at this actual native visual sample';
 const nativeCameraScope='Every active native visual step inside the fixed physical east-gallery foot region after the third transport; not all portal, route, render, movie frames or physical devices.';
 const movieCameraScope='Every actual encoded sample at the declared capture rate uses all original live skinned vertices. Closure is gated only in the fixed east-gallery region; unrecorded render frames, occlusion, devices and full camera acceptance are separate.';

@@ -73,7 +73,7 @@ try{
   const sourceMeshes=[];playerVisual.traverse(mesh=>{if(mesh.isMesh)sourceMeshes.push({mesh,geometry:mesh.geometry,uuid:mesh.uuid,vertices:mesh.geometry.attributes.position?.count||0,bones:mesh.skeleton?.bones.length||0});});
   const vertices=sourceMeshes.reduce((n,m)=>n+m.vertices,0),bones=Math.max(0,...sourceMeshes.map(m=>m.bones));
   if(vertices!==96753||bones!==15)throw Error('Exact original player geometry (96753 vertices, 15 bones) is required');
-  const targetRegion={center:[9.926224685,6.28,-10.4976406],halfExtents:[1.15,.75,1.15],teleports:3};
+  const targetRegion={center:[9.926224685,6.28,-10.4976406],halfExtents:[1.15,1.25,1.15],teleports:3};
   const inGallery=()=>g.firstLevel.puzzleProgression===50&&g.teleportCount===targetRegion.teleports&&targetRegion.center.every((c,i)=>Math.abs(g.playerPosition.getComponent(i)-c)<=targetRegion.halfExtents[i]);
   function measureBody(){
    g.render();
@@ -141,7 +141,7 @@ try{
   try{
    const result=await window.__NESI_RUN_LEVEL_ROUTE__();capture('finish');await Promise.all(writes);
    const outside=transitionSamples.filter(s=>!s.bodyVertexProjection.insideLens).map(s=>s.routeFrame);
-   const cameraTransitionReview=g.firstLevel.puzzleProgression===50?{target:'room50-third-portal-east-gallery',targetRegion,measuredVerticesPerSample:vertices,sampleCount:transitionSamples.length,targetRegionSampleCount:transitionSamples.length,outsideVertexSamples:outside,targetRegionOutsideSamples:outside,samples:transitionSamples,pass:transitionSamples.length>=3&&outside.length===0,scope:'Every active native visual step inside the fixed physical east-gallery foot region after the third transport; not all portal, route, render, movie frames or physical devices.'}:{notApplicable:true,level:51};
+   const cameraTransitionReview=g.firstLevel.puzzleProgression===50?{target:'room50-third-portal-east-gallery',targetRegion,measuredVerticesPerSample:vertices,sampleCount:transitionSamples.length,targetRegionSampleCount:transitionSamples.length,outsideVertexSamples:outside,targetRegionOutsideSamples:outside,samples:transitionSamples,pass:transitionSamples.length>=3&&outside.length===0,scope:'Every active native visual step inside the fixed physical east-gallery falling/retraction region after the third transport; not all portal, route, render, movie frames or physical devices.'}:{notApplicable:true,level:51};
    return {...result,cameraTransitionReview,state:g.state,sameCompanion:g.cargo.group.uuid===identity&&g.physics.cargoBody.id===body,modelIdentity:{pass:true,observedFrames,playerRootUuid:playerRoot.uuid,playerVertices:vertices,bones,cargoUuid:identity,cargoBodyId:body,initialization,routeResets:0,routeRespawns:0}};
   }finally{g.updateVisuals=visual;g.resetRun=resetRun;g.physics.resetCargo=resetCargo;g.respawn=respawn;delete window.__NESI_CAPTURE_LEVEL_MARK__;await Promise.allSettled(writes);}
  });

@@ -83,7 +83,7 @@ try{
   originalPlayer.traverse(mesh=>{if(mesh.isMesh)sourceMeshes.push({mesh,geometry:mesh.geometry,vertices:mesh.geometry.attributes.position?.count||0,bones:mesh.skeleton?.bones.length||0});});
   const vertices=sourceMeshes.reduce((n,m)=>n+m.vertices,0),bones=Math.max(0,...sourceMeshes.map(m=>m.bones));
   if(vertices!==96753||bones!==15)throw Error('Exact original skinned player96753/15 required');
-  const targetRegion={center:[9.926224685,6.28,-10.4976406],halfExtents:[1.15,.75,1.15],teleports:3};
+  const targetRegion={center:[9.926224685,6.28,-10.4976406],halfExtents:[1.15,1.25,1.15],teleports:3};
   function measureBody(){
    g.render();
    // Measure the live skinned vertices of the actual rendered actor at each
