@@ -4,6 +4,7 @@ import {SINGULARITY_ROOMS,SINGULARITY_SPEC,validateSingularityLayout} from './La
 import {buildSingularityArt} from './LabSingularityArt.js';
 import {tracePortalRay,rayTouches} from './LabPuzzleMechanics.js';
 import {buildCastleArchiveMemory} from './LabCastleArchiveMemory.js';
+import {buildTower41RatchetCell} from './LabTower41RatchetCell.js';
 export {SINGULARITY_SPEC as TOWER_SPEC};
 const UP=V(0,1,0),close=(p,q,r=1.25)=>Math.hypot(p.x-q[0],p.z-q[2])<r&&Math.abs(p.y-q[1])<1.5;
 export function pourVolumes(volumes,capacities,from,to){if(from===to||![from,to].every(i=>Number.isInteger(i)&&i>=0&&i<volumes.length))throw new RangeError('Invalid tank');const copy=[...volumes],amount=Math.max(0,Math.min(copy[from],capacities[to]-copy[to]));copy[from]-=amount;copy[to]+=amount;return copy;}
@@ -320,10 +321,13 @@ export function buildTowerLevel(game,index=40){
  const upperPortal=k.panel('castle upper return',[2,74.4,49],[-1,0,0]);
  function roomAt(p){return SINGULARITY_ROOMS.find(r=>Math.abs(p.x-r.at[0])<r.w/2+.8&&Math.abs(p.z-r.at[2])<r.d/2+.8&&p.y>r.at[1]-6&&p.y<r.at[1]+r.h+1);}
  archiveMemory=buildCastleArchiveMemory({k,rooms,machines,gate:gates.find(g=>g.id==='archive')});
- function update(dt){time+=dt;for(const[id,machine]of machines)if(available(id))machine.update?.(dt);archiveMemory.update(dt);for(const g of gates){g.indicator?.update(g.label());g.progress=THREE.MathUtils.damp(g.progress,available(g.id)?1:0,5,dt);g.parts.forEach((mesh,i)=>{const s=i?1:-1;k.move(mesh,[g.r.door[0]+(g.side?0:s*(1.6+3.5*g.progress)),g.r.door[1]+2.35,g.r.door[2]+(g.side?s*(1.6+3.5*g.progress):0)],dt);});}archiveMemory.syncDoorYoke(dt);k.syncDynamic(dt);}
- function reset(){resetting=true;try{time=0;solved.clear();events.length=0;carriedTransits.clear();lastTransit=null;won=false;for(const machine of machines.values())machine.reset?.();archiveMemory.reset();k.resetControls();for(const machine of machines.values())machine.update?.(0);gates.forEach(g=>g.progress=0);update(0);}finally{resetting=false;}}
+ // Qualification is separate from the accepted eleven-node route. Its springs
+ // remain physical even when the hoist's gameplay entrance is unavailable.
+ const ratchetCell=game.tower41RatchetQualification?buildTower41RatchetCell(game,k,typeof game.tower41RatchetQualification==='object'?game.tower41RatchetQualification:{}):null;
+ function update(dt){time+=dt;ratchetCell?.syncPose();for(const[id,machine]of machines)if(available(id))machine.update?.(dt);archiveMemory.update(dt);for(const g of gates){g.indicator?.update(g.label());g.progress=THREE.MathUtils.damp(g.progress,available(g.id)?1:0,5,dt);g.parts.forEach((mesh,i)=>{const s=i?1:-1;k.move(mesh,[g.r.door[0]+(g.side?0:s*(1.6+3.5*g.progress)),g.r.door[1]+2.35,g.r.door[2]+(g.side?s*(1.6+3.5*g.progress):0)],dt);});}archiveMemory.syncDoorYoke(dt);k.syncDynamic(dt);}
+ function reset(){resetting=true;try{time=0;solved.clear();events.length=0;carriedTransits.clear();lastTransit=null;won=false;for(const machine of machines.values())machine.reset?.();archiveMemory.reset();ratchetCell?.reset();k.resetControls();for(const machine of machines.values())machine.update?.(0);gates.forEach(g=>g.progress=0);update(0);}finally{resetting=false;}}
  const art=buildSingularityArt({game,k,rooms,machines,edges,solved});k.batch();
- const level={id:SINGULARITY_SPEC.id,index,game,spec:SINGULARITY_SPEC,title:'41 / '+SINGULARITY_SPEC.title,singularity:true,tower:true,towerChallenge:true,contextHandlesCarry:true,momentum:true,viewDistance:245,spawn,cargoSpawn,spawnView:{yaw:0,pitch:-.12},launchPad:null,terminals:k.terminals,pads:[],gates:[],panels:{crownPortal,basePortal,upperPortal},rooms,machines,edges,archiveMemory,structure:k.root,
+ const level={id:SINGULARITY_SPEC.id,index,game,spec:SINGULARITY_SPEC,title:'41 / '+SINGULARITY_SPEC.title,singularity:true,tower:true,towerChallenge:true,contextHandlesCarry:true,momentum:true,viewDistance:245,spawn,cargoSpawn,spawnView:{yaw:0,pitch:-.12},launchPad:null,terminals:k.terminals,pads:[],gates:[],panels:{crownPortal,basePortal,upperPortal},rooms,machines,edges,archiveMemory,ratchetCell,structure:k.root,
   get completedStages(){return solved.size;},totalStages:SINGULARITY_ROOMS.length,get progress(){return solved.size;},getLaunch:()=>null,reset,update,isWon:()=>won,
   getTowerMetrics:()=>({id:SINGULARITY_SPEC.id,completedStages:solved.size,totalStages:SINGULARITY_ROOMS.length,solvedIds:[...solved],events:events.map(e=>({...e})),checkpoints:false,seconds:time,won,carriedPortalCrossings:Object.fromEntries(carriedTransits)}),
   getObjective(){const r=roomAt(game.playerPosition);return r?`${r.name}${solved.has(r.id)?' · МЕХАНИЗМ РАБОТАЕТ':''}`:'СКЛАДЧАТЫЙ ЗАМОК · НАЙДИ СВЯЗЬ ГАЛЕРЕЙ';},
@@ -331,9 +335,9 @@ export function buildTowerLevel(game,index=40){
   nearbyInteraction(){const t=k.nearest();return t?{kind:t.kind,label:'E',text:t.lesson}:null;},
   interact(){const t=k.nearest();if(!t)return false;const result=t.action();if(result===false)return false;game.audio?.mechanism?.('switch');game.animator?.triggerOperate?.();return true;},
   cargoOnAnyPad(){const p=game.cargo?.position;if(!p)return false;return loaded(machines.get('hoist').state.pad,1.6)||loaded(socket,1.8)||['freight','magnet','migrant'].includes(roomAt(p)?.id);},
-  playerAcceleration:()=>V(),applyCargoForces(){if(available('magnet'))machines.get('magnet').force();},
+  playerAcceleration:()=>V(),applyCargoForces(dt){ratchetCell?.updateForces(dt);if(available('magnet'))machines.get('magnet').force();},
   onTeleport(){const r=roomAt(game.playerPosition);lastTransit={id:r?.id??'atrium',seconds:time};if(game.heldCube&&r)carriedTransits.set(r.id,(carriedTransits.get(r.id)??0)+1);if(r?.id==='inertia')machines.get('inertia').transit();return true;},
-  renderUpdate(){art.update();},diagnostics(){return{...this.getTowerMetrics(),archivePhysicalMemory:archiveMemory.diagnostics(),uniqueRules:SINGULARITY_ROOMS.map(r=>r.rule),rooms:SINGULARITY_ROOMS.length,portalSurfaces:k.panels.length,heightBands:[0,18,36,54,72],connectedCastle:true};},
-  dispose(){if(disposed)return;disposed=true;art.dispose();k.dispose();fill.removeFromParent();sideFill.removeFromParent();sideFill.target.removeFromParent();fill.dispose();sideFill.dispose();game.scene.background=prior.background;game.scene.fog=prior.fog;},
+  renderUpdate(){ratchetCell?.syncPose();art.update();},diagnostics(){return{...this.getTowerMetrics(),archivePhysicalMemory:archiveMemory.diagnostics(),...(ratchetCell?{ratchetPhysicalCell:ratchetCell.diagnostics()}:{}),uniqueRules:SINGULARITY_ROOMS.map(r=>r.rule),rooms:SINGULARITY_ROOMS.length,portalSurfaces:k.panels.length,heightBands:[0,18,36,54,72],connectedCastle:true};},
+  dispose(){if(disposed)return;disposed=true;ratchetCell?.dispose();art.dispose();k.dispose();fill.removeFromParent();sideFill.removeFromParent();sideFill.target.removeFromParent();fill.dispose();sideFill.dispose();game.scene.background=prior.background;game.scene.fog=prior.fog;},
  };return level;
 }
