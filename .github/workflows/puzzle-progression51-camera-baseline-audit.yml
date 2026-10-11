@@ -1,0 +1,157 @@
+name: Diagnose exact652 native room51 camera baseline
+'on':
+  push:
+    branches: [audit/puzzle-progression51-camera-baseline-20261011]
+permissions: {contents: read}
+concurrency:
+  group: room51-camera-baseline-audit-${{ github.ref }}
+  cancel-in-progress: true
+env:
+  BUILD_COMMIT: 65207e98b463c03fa7614e04c2865aa471a37f7e
+  VERIFIER_SOURCE_COMMIT: b21980e6a662d5743614e18eb32121ad306cc52b
+  SOURCE_REVIEW_RUN_ID: ${{ github.run_id }}
+  SOURCE_REVIEW_RUN_ATTEMPT: ${{ github.run_attempt }}
+jobs:
+  baseline-native:
+    name: baseline native (51)
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    defaults:
+      run: {working-directory: game}
+    steps:
+      - name: Check out the exact accepted game source
+        uses: actions/checkout@v4
+        with:
+          ref: 65207e98b463c03fa7614e04c2865aa471a37f7e
+          path: game
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Check out separate audit scripts, never included in the game build
+        uses: actions/checkout@v4
+        with:
+          ref: '${{ github.sha }}'
+          path: verifier
+          fetch-depth: 1
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: game/package-lock.json
+      - name: Verify baseline and copied b219 observer bytes
+        run: |
+          node --input-type=module <<'JS'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import {createHash} from 'node:crypto';
+          import {execFileSync} from 'node:child_process';
+          assert.equal(execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),process.env.BUILD_COMMIT);
+          assert.equal(execFileSync('git',['status','--porcelain'],{encoding:'utf8'}).trim(),'');
+          assert.equal(execFileSync('git',['-C','../verifier','rev-parse','HEAD'],{encoding:'utf8'}).trim(),process.env.GITHUB_SHA);
+          for(const [name,expected]of [
+            ['qa-puzzle-progression51-camera-baseline.mjs','ba10e55403829d7363644ec70989ad2174b0ee9148d18695b894d25278de35e9'],
+            ['record-puzzle-progression51-camera-baseline.mjs','4d5bae4f840c38157038280d6ebf1bc3259ee9eb9db44d7ecfd0c7c116e2be94'],
+          ])assert.equal(createHash('sha256').update(fs.readFileSync('../verifier/scripts/'+name)).digest('hex'),expected);
+          JS
+      - name: Build only exact652 production inputs and stamp their identity
+        run: |
+          npm ci
+          npm run build
+          node scripts/publish-puzzle-progression-finale.mjs stamp dist
+      - name: Install the observer runtime outside the baseline checkout
+        run: |
+          npm ci --prefix ../verifier
+          npm install --prefix ../verifier --no-save --package-lock=false puppeteer-core@24.16.0
+          if ! command -v ffmpeg >/dev/null || ! command -v ffprobe >/dev/null; then
+            sudo apt-get update -qq
+            sudo apt-get install -y --no-install-recommends ffmpeg
+          fi
+          python3 -m venv "$RUNNER_TEMP/baseline-camera-python"
+          "$RUNNER_TEMP/baseline-camera-python/bin/python" -m pip install --disable-pip-version-check Pillow==11.3.0
+          echo "CODEX_PRIMARY_RUNTIME_PYTHON=$RUNNER_TEMP/baseline-camera-python/bin/python" >> "$GITHUB_ENV"
+          echo "CHROME_PATH=$(command -v google-chrome || command -v chromium)" >> "$GITHUB_ENV"
+      - name: Audit the original native room51 route and models
+        env:
+          START_SERVER: '1'
+          LEVEL: '51'
+          OUT_DIR: qa/baseline-native51-browser
+        run: timeout --signal=TERM --kill-after=10s 1200s node ../verifier/scripts/qa-puzzle-progression51-camera-baseline.mjs
+      - name: Record the original route with all96753 live vertices at every encoded sample
+        env:
+          PAGE_URL: http://127.0.0.1:4173/?pilot=progression
+          LEVEL: '51'
+          CAPTURE_FPS: '4'
+          CAPTURE_WIDTH: '640'
+          CAPTURE_HEIGHT: '360'
+          OUT_DIR: qa/baseline-native51-walkthrough
+        run: |
+          mkdir -p "$OUT_DIR"
+          node node_modules/vite/bin/vite.js preview --host 127.0.0.1 --port 4173 --strictPort >"$OUT_DIR/server.log" 2>&1 &
+          baseline_preview_pid=$!
+          trap 'kill "$baseline_preview_pid" 2>/dev/null || true' EXIT
+          node --input-type=module <<'JS'
+          import assert from 'node:assert/strict';
+          for(let attempt=0;attempt<80;attempt++){
+            try {const response=await fetch('http://127.0.0.1:4173/build-info.json');assert.ok(response.ok);assert.equal((await response.json()).commit,process.env.BUILD_COMMIT);break;}
+            catch(error){if(attempt===79)throw error;await new Promise(resolve=>setTimeout(resolve,250));}
+          }
+          JS
+          timeout --signal=TERM --kill-after=10s 3000s node ../verifier/scripts/record-puzzle-progression51-camera-baseline.mjs
+      - name: Decode the whole movie and retain explicit diagnostic provenance
+        run: |
+          node --input-type=module <<'JS'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import {createHash} from 'node:crypto';
+          import {execFileSync} from 'node:child_process';
+          const hash=f=>createHash('sha256').update(fs.readFileSync(f)).digest('hex');
+          const read=f=>JSON.parse(fs.readFileSync(f));
+          const browser=read('qa/baseline-native51-browser/report.json');
+          const filename='qa/baseline-native51-walkthrough/level-51.json';
+          const movieFile='qa/baseline-native51-walkthrough/level-51.mp4';
+          const movie=read(filename),info=read('dist/build-info.json');
+          assert.equal(info.commit,process.env.BUILD_COMMIT);assert.equal(browser.sourceCommit,info.commit);assert.equal(movie.sourceCommit,info.commit);
+          assert.equal(browser.pass,true);assert.equal(browser.route.pass,true);assert.equal(movie.route.pass,true);
+          assert.equal(browser.modelIdentity.playerVertices,96753);assert.equal(browser.modelIdentity.bones,15);
+          assert.equal(movie.cameraSampleReview.measuredVerticesPerSample,96753);assert.equal(movie.cameraSampleReview.bones,15);
+          assert.equal(movie.cameraSampleReview.sampleCount,movie.frameCount);assert.equal(movie.cameraSampleReview.samples.length,movie.frameCount);
+          assert.ok(movie.cameraSampleReview.samples.every(s=>s.bodyVertexProjection.vertices===96753));
+          assert.equal(hash(movieFile),movie.sha256);
+          const probe=JSON.parse(execFileSync('ffprobe',['-v','error','-select_streams','v:0','-show_entries','stream=codec_name,width,height,avg_frame_rate,nb_frames','-show_entries','format=duration,size','-of','json',movieFile],{encoding:'utf8',timeout:60000}));
+          assert.equal(probe.streams[0].codec_name,'h264');assert.equal(probe.streams[0].avg_frame_rate,'4/1');assert.equal(Number(probe.streams[0].nb_frames),movie.frameCount);
+          execFileSync('ffmpeg',['-hide_banner','-loglevel','error','-xerror','-i',movieFile,'-f','null','-'],{stdio:'inherit',timeout:300000});
+          movie.sourceReview={runId:Number(process.env.GITHUB_RUN_ID),runAttempt:Number(process.env.GITHUB_RUN_ATTEMPT)};
+          movie.decode={pass:true,method:'The entire final H.264 movie decoded by FFmpeg with -xerror',probe};
+          fs.writeFileSync(filename,JSON.stringify(movie,null,2)+'\n');
+          const walk=d=>fs.readdirSync(d,{withFileTypes:true}).flatMap(e=>e.isDirectory()?walk(path.join(d,e.name)):[path.join(d,e.name)]);
+          const inventory=walk('dist').sort().map(f=>({path:path.relative('dist',f),bytes:fs.statSync(f).size,sha256:hash(f)}));
+          const provenance={kind:'read-only exact652 room51 native camera baseline diagnostic',pass:true,accepted:false,
+            baselineSourceCommit:info.commit,baselineTree:execFileSync('git',['rev-parse','HEAD^{tree}'],{encoding:'utf8'}).trim(),
+            baselineCameraSha256:hash('src/game/LabCamera.js'),verifierSourceCommit:process.env.VERIFIER_SOURCE_COMMIT,
+            auditCommit:process.env.GITHUB_SHA,auditRun:{runId:Number(process.env.GITHUB_RUN_ID),runAttempt:Number(process.env.GITHUB_RUN_ATTEMPT)},
+            verifierScripts:[['qa-puzzle-progression51-camera-baseline.mjs','scripts/qa-puzzle-progression-finale-camera-browser.mjs'],['record-puzzle-progression51-camera-baseline.mjs','scripts/record-finale-camera-walkthrough.mjs']].map(([name,origin])=>({auditPath:'scripts/'+name,originPath:origin,originCommit:process.env.VERIFIER_SOURCE_COMMIT,sha256:hash('../verifier/scripts/'+name)})),
+            models:{playerVertices:96753,bones:15,sameCompanion:browser.route.sameCompanion,routeResets:browser.route.resets,routeRespawns:browser.route.respawns},
+            baselinePackage:{files:inventory,sha256:createHash('sha256').update(JSON.stringify(inventory)).digest('hex')},
+            evidence:{browser:{path:'baseline-native51-browser/report.json',sha256:hash('qa/baseline-native51-browser/report.json')},movie:{path:'baseline-native51-walkthrough/level-51.mp4',sha256:hash(movieFile),frames:movie.frameCount,fps:movie.fps},movieReport:{path:'baseline-native51-walkthrough/level-51.json',sha256:hash(filename)}},
+            cameraObservation:{sampleCount:movie.cameraSampleReview.sampleCount,allSamplesInside:movie.cameraSampleReview.allSamplesInside,outsideSamples:movie.cameraSampleReview.outsideSamples},
+            scope:'Diagnostic only: production exact652 build with b219 observer bytes outside build inputs; one ordinary room51 route and all actual4fps encoded samples. No CPU suite, source changes, publication, all-render-frame, human or physical-device acceptance.'};
+          assert.equal(execFileSync('git',['status','--porcelain','--untracked-files=no'],{encoding:'utf8'}).trim(),'');
+          fs.writeFileSync('qa/baseline-camera51-provenance.json',JSON.stringify(provenance,null,2)+'\n');
+          console.log(JSON.stringify({baseline:provenance.baselineSourceCommit,verifier:provenance.verifierSourceCommit,audit:provenance.auditCommit,frames:movie.frameCount,outsideSamples:provenance.cameraObservation.outsideSamples}));
+          JS
+      - name: Preserve baseline diagnostic evidence, including failures
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: puzzle-progression51-camera-baseline-audit-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            game/qa/baseline-native51-browser/
+            game/qa/baseline-native51-walkthrough/*.json
+            game/qa/baseline-native51-walkthrough/*.mp4
+            game/qa/baseline-native51-walkthrough/*.jpg
+            game/qa/baseline-native51-walkthrough/server.log
+            game/qa/baseline-camera51-provenance.json
+            game/dist/build-info.json
+          if-no-files-found: error
+          retention-days: 14
