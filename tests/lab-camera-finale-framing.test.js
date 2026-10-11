@@ -56,7 +56,8 @@ test('settled high and low aim frames every original player vertex and the origi
   const ids = [player.uuid, companion.uuid, game.physics.cargoBody.id];
   player.position.set(0, 0, 0); player.rotation.set(0, Math.PI, 0);
   // This is an isolated optical fixture, not proof of gameplay reachability.
-  // Use the uploaded meshes and their live production skeletal rest pose.
+  // Use the uploaded source meshes and their rest transforms. The headless
+  // loader omits skin weights/animation; native animated framing is separate.
   companion.position.set(0, 1.1, -.72); companion.quaternion.identity();
   try {
     for (const aspect of aspects) for (const pitch of [CAMERA_PITCH_MIN, -.2, .35, .6, .9062922649045352, CAMERA_PITCH_MAX]) {
@@ -174,4 +175,85 @@ test('a blocked retreat keeps the camera and near-plane sweep on the player side
   assert.equal(rig.obstructed, true);
   // In this deliberately narrow fixture no long upward retreat is possible;
   // collision safety wins. It does not claim the whole silhouette can fit.
+});
+
+test('the recorded third-portal retraction fits feet immediately and rechecks the widened near plane', t => {
+  // Optical replay of final camera states from the unchanged ordinary room50
+  // route at visual steps 7485–7507, plus the falling candidate's limiting
+  // steps 7526–7527. No actor state is injected into a route.
+  // Headless GLB omits native skin weights: these measured lens/foot anchors
+  // do not certify the animated native model or every encoded movie frame.
+  const samples = [
+    [[8.934864,7.382784,-10.488547],[2.609266,9.804020,-8.174467],[-.111562,-.618614,.127054,.767286],62.660755],
+    [[9.027722,7.255838,-10.489971],[6.693060,9.353669,-9.673830],[-.096615,-.635348,.120713,.756589],62.658046],
+    [[9.120569,7.123700,-10.491171],[6.770172,9.190197,-9.718610],[-.086930,-.638553,.114929,.755966],62.655523],
+    [[9.584689,6.384074,-10.494851],[7.162356,8.213757,-9.930454],[-.044726,-.651311,.094762,.751541],62.645397],
+    [[9.926171,6.281085,-10.496599],[7.370214,7.412343,-10.057087],[-.014478,-.659538,.076342,.747644],62.569444],
+    [[9.948261,6.280919,-10.496758],[7.351323,7.351889,-10.072231],[-.011195,-.660551,.073471,.747094],62.544242],
+    [[10.015518,6.280242,-10.497411],[7.047941,7.320947,-10.145495],[.004516,-.666199,.053256,.743856],62.332005],
+    [[9.584352,6.382957,-10.490945],[7.228084,8.680123,-9.966731],[-.054463,-.651173,.086556,.752008],88],
+    [[9.677160,6.282497,-10.491374],[7.289172,8.564788,-9.992520],[-.049285,-.652892,.082114,.751373],88],
+  ];
+  let oldCrops = 0, overBudget = 0;
+  for (const aspect of aspects) for (const [foot, eye, rotation, fov] of samples) {
+    const { camera, rig, target } = fixture(aspect);
+    target.fromArray(foot); rig.playerPivot.copy(target).y += 1.32;
+    rig.focus.copy(rig.playerPivot);
+    camera.position.fromArray(eye); camera.quaternion.fromArray(rotation).normalize();
+    camera.up.copy(V(0, 1, 0).applyQuaternion(camera.quaternion));
+    camera.fov = fov; camera.updateProjectionMatrix(); camera.updateMatrixWorld(true);
+    rig.lookPoint.copy(camera.position).addScaledVector(camera.getWorldDirection(V()), 16);
+    if (target.clone().project(camera).y < -1) oldCrops++;
+    const before = { eye: camera.position.clone(), axis: camera.getWorldDirection(V()), fov };
+    rig.configureSilhouette({ enabled: false }); rig.fitSilhouetteLens(1 / 60);
+    assert.equal(camera.fov, fov, 'Default campaign lens must remain exact');
+    rig.configureSilhouette({ enabled: true }); rig.fovVelocity = -4;
+    rig.fitSilhouetteLens(0);
+    assert.equal(camera.fov, fov); assert.equal(rig.fovVelocity, -4);
+    rig.fitSilhouetteLens(1 / 60);
+    assert.ok(camera.position.distanceTo(before.eye) < 1e-9);
+    assert.ok(camera.getWorldDirection(V()).distanceTo(before.axis) < 1e-6,
+      'Fitting the final lens changed its centre ray');
+    assert.ok(camera.fov >= fov && camera.fov <= 102);
+    for (const x of [-.2, .2]) for (const z of [-.2, .2]) {
+      const feet = target.clone().add(V(x, -.1, z)).project(camera);
+      assert.ok(Math.abs(feet.x) < 1 && Math.abs(feet.y) < 1,
+          JSON.stringify({ aspect, foot, feet: feet.toArray(), fov: camera.fov }));
+      assert.ok(feet.toArray().every(Number.isFinite));
+    }
+    // A narrower aspect with the same landscape eye can demand more than
+    // this finite lens for conservative empty body-envelope corners. This
+    // stress case is not the aspect-aware ordinary portrait trajectory.
+    for (const x of [-.65, .65]) for (const y of [-.2, 2.84]) for (const z of [-.65, .65]) {
+      const corner = target.clone().add(V(x, y, z)).project(camera);
+      if (Math.abs(corner.x) > 1 || Math.abs(corner.y) > 1) {
+        assert.equal(camera.fov, 102); overBudget++;
+      }
+    }
+    const fitted = { fov: camera.fov, velocity: rig.fovVelocity };
+    rig.fitSilhouetteLens(0);
+    assert.deepEqual({ fov: camera.fov, velocity: rig.fovVelocity }, fitted);
+  }
+  assert.ok(oldCrops >= 6, 'Replay must retain the old obstructed foot crop witness');
+  assert.ok(overBudget > 0, 'Retain an explicit finite obstruction-budget limit');
+
+  const wall = new THREE.Mesh(new THREE.BoxGeometry(20, 20, .2),
+    new THREE.MeshBasicMaterial({ side: THREE.DoubleSide }));
+  wall.position.set(0, 2, 3); wall.updateMatrixWorld(true);
+  t.after(() => { wall.geometry.dispose(); wall.material.dispose(); });
+  const { camera, rig } = fixture(3.2, { blockers: [wall] });
+  camera.near = .2; camera.fov = 62; camera.position.set(0, 2, 2.5);
+  rig.lookPoint.set(0, 4, -10); camera.up.set(0, 1, 0);
+  camera.lookAt(rig.lookPoint); camera.updateMatrixWorld(true); camera.updateProjectionMatrix();
+  rig.constrain(rig.playerPivot, camera.position);
+  camera.lookAt(rig.lookPoint); camera.updateMatrixWorld(true);
+  const oldEye = camera.position.clone();
+  rig.fitSilhouetteLens(1 / 60);
+  assert.ok(camera.fov > 70);
+  assert.ok(oldEye.distanceTo(camera.position) > .05,
+    'The larger near-plane radius was not checked after widening');
+  const swept = camera.position.clone(); rig.constrain(rig.playerPivot, swept);
+  assert.ok(swept.distanceTo(camera.position) < 1e-9);
+  assert.equal(rig.distanceVelocity, 0);
+  assert.ok(Math.abs(rig.distance - camera.position.distanceTo(rig.focus)) < 1e-9);
 });

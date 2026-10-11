@@ -51,6 +51,7 @@ export class LabCamera {
     this.castUp = new THREE.Vector3();
     this.castOrigin = new THREE.Vector3();
     this.clipDirection = new THREE.Vector3();
+    this.silhouettePoint = new THREE.Vector3();
     this.avoidance = new THREE.Vector3();
     this.avoidanceVelocity = new THREE.Vector3();
     this.avoidanceActive = false;
@@ -437,8 +438,56 @@ export class LabCamera {
       this.camera.lookAt(this.lookPoint);
       this.camera.updateMatrixWorld();
     }
+    this.fitSilhouetteLens(step);
     return this;
     } finally { this.broadPhase.end(); this.rayHits.length = 0; }
+  }
+
+  // A portal's rolling horizon and a newly solid backing can retract the
+  // final lens AFTER escape candidates were scored. Fit that actual view,
+  // rather than a desired boom or the pitch alone. Keep the same optical axis;
+  // only the optional finale lens widens, with a finite obstruction budget.
+  fitSilhouetteLens(step) {
+    if (!this.fullBodyFraming || step <= 0) return;
+    for (let pass = 0; pass < 3; pass++) {
+      let tangent = 0;
+      for (const x of [-.65, .65]) for (const y of [-1.52, 1.52]) for (const z of [-.65, .65]) {
+        this.silhouettePoint.set(x, y, z).add(this.playerPivot)
+          .applyMatrix4(this.camera.matrixWorldInverse);
+        const depth = -this.silhouettePoint.z;
+        // A near/behind-eye corner cannot fit by changing FOV. Reach the
+        // bounded budget without claiming that collision-limited view fits.
+        tangent = depth <= this.camera.near ? Infinity : Math.max(tangent,
+          Math.abs(this.silhouettePoint.y) / (depth * .96),
+          Math.abs(this.silhouettePoint.x) / (depth * this.camera.aspect * .96));
+      }
+      // The measured falling third-portal view needs 100.1 degrees for a
+      // small feet envelope, including the margin. Leave a finite reserve
+      // for its last collision sweep; tighter views can still exceed it.
+      const needed = Math.min(102, THREE.MathUtils.radToDeg(2 * Math.atan(tangent)));
+      if (needed <= this.camera.fov + .00001) return;
+      this.camera.fov = needed;
+      this.fovVelocity = Math.max(0, this.fovVelocity);
+      this.camera.updateProjectionMatrix();
+      // A wider lens can have a wider near-plane volume. Retain the same
+      // aperture/backing rules and validate any newly solid surface now.
+      const wasClipped = this.isInclinedExitLens();
+      let pulledIn = this.constrain(this.playerPivot, this.camera.position);
+      this.camera.lookAt(this.lookPoint);
+      this.camera.updateMatrixWorld();
+      this.updatePortalClipping();
+      if (wasClipped && !this.mainClippingPlanes.length) {
+        pulledIn = this.constrain(this.playerPivot, this.camera.position) || pulledIn;
+        this.camera.lookAt(this.lookPoint);
+        this.camera.updateMatrixWorld();
+        this.updatePortalClipping();
+      }
+      if (pulledIn) {
+        this.obstructed = true;
+        this.distance = this.camera.position.distanceTo(this.focus);
+        this.distanceVelocity = 0;
+      }
+    }
   }
 
   // An escape must retain the traveller in the lens, not merely leave space
