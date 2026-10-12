@@ -204,8 +204,11 @@ export async function pauseResume(page){
  await page.waitForFunction(()=>{const s=document.querySelector('#pause-screen');return !s.inert&&getComputedStyle(s).opacity==='1';});
  await page.bringToFront();await page.focus('#resume-button');await page.keyboard.press('Enter');
  await page.waitForFunction(()=>window.__NESI_DEMO_GAME__.state==='playing');
- await page.waitForFunction(()=>!document.pointerLockElement);await page.evaluate(()=>window.__NESI_DEMO_GAME__.renderer.setAnimationLoop(null));
- return {pass:true,pauseControlUsed,pointerLockExitFallback,resumeControl:'focused-native-enter'};
+ // Production Resume requests pointer lock again. Observe that legitimate
+ // state instead of waiting for an unlock that no player action requested.
+ const resumeObservation=await page.evaluate(()=>{const g=window.__NESI_DEMO_GAME__;const observed={state:g.state,pointerLocked:Boolean(document.pointerLockElement),pointerLockedToGameplayCanvas:document.pointerLockElement===g.renderer.domElement,hasFocus:document.hasFocus(),externalBlocked:g.externalBlocked};g.renderer.setAnimationLoop(null);return observed;});
+ assert.equal(resumeObservation.state,'playing');
+ return {pass:true,pauseControlUsed,pointerLockExitFallback,resumeControl:'focused-native-enter',resumeObservation};
 }
 async function mobileReview(browser,url,info,out,viewport,errors){
  const page=await browser.newPage();page.setDefaultTimeout(180000);page.on('pageerror',e=>errors.push('mobile: '+String(e)));
@@ -252,7 +255,13 @@ export async function runBrowserQA(){
   await page.exposeFunction('__NESI_WRITE_RATCHET_SHOT__',(name,image,state)=>{assert.match(name,/^step-\d{2,}$/);assert.match(image,/^data:image\/jpeg;base64,/);const file=name+'.jpg',bytes=Buffer.from(image.slice(image.indexOf(',')+1),'base64');fs.writeFileSync(path.join(out,file),bytes);shots.push({file,bytes:bytes.length,sha256:sha256(bytes),...state});});
   report.observed=await page.evaluate(observeTower41Route,{scenario,record:false,stride:15,width:960,height:540});assertObservedRoute(report.observed,scenario);assert.ok(shots.length>=5);
   report.oldSaves=await assertSaves(page,saves);report.pauseResume=await pauseResume(page);
-  await activate(page,'#pause-button');await page.waitForFunction(()=>window.__NESI_DEMO_GAME__.state==='paused');await activate(page,'#restart-button');await page.waitForFunction(()=>window.__NESI_DEMO_GAME__.state==='playing');
+  // The resumed desktop can own pointer lock, so the next ordinary pause is
+  // Escape. A HUD click is not a valid hit target while the canvas owns it.
+  await page.bringToFront();await page.evaluate(()=>window.__NESI_DEMO_GAME__.renderer.setAnimationLoop(window.__NESI_DEMO_GAME__.animate));await page.keyboard.press('Escape');
+  let restartPointerLockExitFallback=false;try{await page.waitForFunction(()=>!document.pointerLockElement,{timeout:5000});}catch(error){if(error.name!=='TimeoutError')throw error;await page.evaluate(()=>document.exitPointerLock());restartPointerLockExitFallback=true;}
+  await page.waitForFunction(()=>window.__NESI_DEMO_GAME__.state==='paused');await page.waitForFunction(()=>!document.pointerLockElement);
+  report.restartPause={control:'native-escape',pointerLockExitFallback:restartPointerLockExitFallback,state:await page.evaluate(()=>window.__NESI_DEMO_GAME__.state)};
+  await activate(page,'#restart-button');await page.waitForFunction(()=>window.__NESI_DEMO_GAME__.state==='playing');
   await page.evaluate(()=>window.__NESI_DEMO_GAME__.renderer.setAnimationLoop(null));
   report.restart=await page.evaluate(()=>{const g=window.__NESI_DEMO_GAME__;return {atSpawn:g.playerPosition.distanceTo(g.firstLevel.spawn)<.5,solved:g.firstLevel.getTowerMetrics().solvedIds,checkpoints:g.firstLevel.getTowerMetrics().checkpoints,cell:Boolean(g.firstLevel.ratchetCell)};});assert.deepEqual(report.restart,{atSpawn:true,solved:[],checkpoints:false,cell:true});
   report.oldSavesAfterRestart=await assertSaves(page,saves);
