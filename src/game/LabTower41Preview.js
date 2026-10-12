@@ -4,8 +4,20 @@ import {LabPreferences,sanitizePreferences} from './LabPreferences.js';
 export const TOWER41_PREVIEW_STORAGE_PREFIX='brainrot-tower41-native-v1:';
 export const TOWER41_PREVIEW_LEVEL_INDEX=40;
 export const TOWER41_PREVIEW_INDICES=Object.freeze([TOWER41_PREVIEW_LEVEL_INDEX]);
+const NATIVE_ENTRY_PATHS=new Set(['/tower41-native','/tower41-native/','/tower41-native/index.html','/brainrot-portal/tower41-native','/brainrot-portal/tower41-native/','/brainrot-portal/tower41-native/index.html']);
 const PREFERENCE_KEY='brainrot-portal.preferences.v24',LEGACY_KEY='nesi.preferences.v8';
 const PREVIEW_REVISION='tower41-native-v1';
+
+export function isTower41NativePreviewPath(pathname){return NATIVE_ENTRY_PATHS.has(pathname);}
+
+/** The standalone native namespace always opens its own ordinary room and saves. */
+export function normalizeTower41PreviewEntry(query,{pathname='',yandex=false}={}){
+ const params=new URLSearchParams(query);
+ if(!yandex&&isTower41NativePreviewPath(pathname)){
+  params.set('edition','foundation');params.set('level','41');params.set('tower41preview','1');
+ }
+ return params;
+}
 
 /** This ordinary tower entry is opt-in and cannot change a Yandex or archive entry. */
 export function readTower41Preview(query,{yandex=false}={}){

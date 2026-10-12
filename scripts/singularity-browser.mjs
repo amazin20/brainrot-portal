@@ -8,7 +8,7 @@ import puppeteer from 'puppeteer-core';
 import {SINGULARITY_ROOMS} from '../src/game/LabSingularityLayout.js';
 import {assertUpgradeInfo,assertUpgradeEvidence,captureFormat} from './lib/singularity-upgrade-proof.mjs';
 import {verifySingularityUI,waitForStartMenu,playFromStartMenu,activate} from './lib/singularity-ui-check.mjs';
-import {TOWER41_PREVIEW_STORAGE_PREFIX} from '../src/game/LabTower41Preview.js';
+import {TOWER41_PREVIEW_STORAGE_PREFIX,isTower41NativePreviewPath} from '../src/game/LabTower41Preview.js';
 import {oldSavePrefixes,qualificationKey} from './qa-tower41-ratchet-browser.mjs';
 const out=path.resolve(process.env.OUT_DIR||'qa/singularity');fs.mkdirSync(out,{recursive:true});
 const record=process.env.RECORD==='1',route=record||process.env.ROUTE==='1';
@@ -22,15 +22,37 @@ const graphicsPreset=process.env.GRAPHICS_PRESET||'low',routeOptions=JSON.parse(
 assert.ok(['low','balanced','high'].includes(graphicsPreset));assert.ok(routeOptions&&typeof routeOptions==='object'&&!Array.isArray(routeOptions));
 const browser=await puppeteer.launch({executablePath:process.env.CHROME_PATH||'/usr/bin/chromium',headless:true,protocolTimeout:18_000_000,args:['--no-sandbox','--disable-dev-shm-usage','--use-angle=swiftshader','--enable-unsafe-swiftshader']});
 const errors=[],movie=path.join(out,'tower-singularity.mp4');let encoder=null,encoderExit=null,count=0,first=null,last=null,page,lastVisualFrame=-1,terminalCaptured=false;
+async function observeBareNativeEntry(base){
+ if(!isTower41NativePreviewPath(base.pathname))return {applicable:false,reason:'The configured browser review base is outside the standalone tower41-native entry namespace.'};
+ const bare=new URL(base);bare.search='';bare.hash='';await page.goto(bare.href,{waitUntil:'domcontentloaded'});await waitForStartMenu(page);
+ preservedSaves=await page.evaluate(()=>window.__TOWER41_PREVIEW_INITIAL_LEGACY_SAVES__);
+ const baselineHash=createHash('sha256').update(JSON.stringify(preservedSaves)).digest('hex');
+ const read=async()=>{
+  const observed=await page.evaluate(({prefixes,key})=>{
+   const legacy=Object.fromEntries(Object.keys(localStorage).filter(key=>prefixes.some(prefix=>key.startsWith(prefix))).sort().map(key=>[key,localStorage.getItem(key)])),raw=localStorage.getItem(key);
+   return {url:location.href,pathname:location.pathname,search:location.search,state:document.documentElement.dataset.runtimeState,level:Number(document.documentElement.dataset.levelIndex)+1,preview:document.body.dataset.tower41Preview,edition:document.body.dataset.chamberEdition,startChoices:[...document.querySelector('#level-select').options].map(option=>Number(option.value)),settingsChoices:[...document.querySelector('#settings-level-select').options].map(option=>Number(option.value)),editionNavigationPresent:Boolean(document.querySelector('.edition-navigation')),editionNavigationAnchors:[...document.querySelectorAll('.edition-navigation a')].map(anchor=>anchor.getAttribute('href')),debugGameHook:typeof window.__NESI_DEMO_GAME__,debugPreferencesHook:typeof window.__NESI_PREFS__,ratchetHook:typeof window.__NESI_RUN_TOWER41_RATCHET_ROUTE__,legacy,ownRaw:raw,ownQuality:raw?JSON.parse(raw).quality:null};
+  },{prefixes:preservedPrefixes,key:previewKey});
+  assert.equal(observed.url,bare.href);assert.equal(observed.search,'');assert.equal(observed.state,'ready');assert.equal(observed.level,41);assert.equal(observed.preview,'true');assert.equal(observed.edition,'foundation');assert.deepEqual(observed.startChoices,[40]);assert.deepEqual(observed.settingsChoices,[40]);assert.equal(observed.editionNavigationPresent,false);assert.deepEqual(observed.editionNavigationAnchors,[]);
+  assert.equal(observed.debugGameHook,'undefined');assert.equal(observed.debugPreferencesHook,'undefined');assert.equal(observed.ratchetHook,'undefined');assert.deepEqual(observed.legacy,preservedSaves);assert.ok(observed.ownRaw);
+  return {...observed,ownPreferencesSha256:createHash('sha256').update(observed.ownRaw).digest('hex')};
+ };
+ const before=await read();const alternate=before.ownQuality==='low'?'balanced':'low';
+ await activate(page,'#menu-settings-button');await page.waitForFunction(()=>document.querySelector('#menu-settings').open);await page.select('#menu-quality',alternate);
+ const changed=await read();assert.equal(changed.ownQuality,alternate);assert.notEqual(changed.ownPreferencesSha256,before.ownPreferencesSha256);
+ await page.select('#menu-quality',before.ownQuality);await activate(page,'#menu-settings-done');await page.waitForFunction(()=>!document.querySelector('#menu-settings').open);
+ const restored=await read();assert.equal(restored.ownQuality,before.ownQuality);assert.equal(restored.ownPreferencesSha256,before.ownPreferencesSha256);
+ return {applicable:true,pass:true,url:bare.href,pathname:restored.pathname,search:restored.search,state:restored.state,level:restored.level,preview:true,edition:restored.edition,startChoices:restored.startChoices,settingsChoices:restored.settingsChoices,editionNavigationPresent:restored.editionNavigationPresent,editionNavigationAnchors:restored.editionNavigationAnchors,debugGameHook:restored.debugGameHook,debugPreferencesHook:restored.debugPreferencesHook,ratchetHook:restored.ratchetHook,oldBytesUnchanged:true,legacySnapshotSha256:baselineHash,ownKey:previewKey,ownPreferencesSha256:restored.ownPreferencesSha256,settings:{control:'native-menu-quality-select',changedTo:alternate,restoredTo:before.ownQuality,ownQualityChanged:changed.ownQuality,ownQualityRestored:restored.ownQuality,beforeSha256:before.ownPreferencesSha256,changedSha256:changed.ownPreferencesSha256,restoredSha256:restored.ownPreferencesSha256},scope:'Actual no-query and no-debug native namespace entry, player-facing DOM and localStorage, with one native menu quality change and restoration before the separate debug whole-castle route.'};
+}
 async function previewCheckpoint(phase){
  const observed=await page.evaluate(({prefixes,key,preferenceKey})=>{
   const g=window.__NESI_DEMO_GAME__,legacy=Object.fromEntries(Object.keys(localStorage).filter(key=>prefixes.some(prefix=>key.startsWith(prefix))).sort().map(key=>[key,localStorage.getItem(key)])),raw=localStorage.getItem(key);
-  return {legacy,ownRaw:raw,own:raw?JSON.parse(raw):null,preferencesReadMatchesOwn:window.__NESI_PREFS__?.storage?.getItem(preferenceKey)===raw,state:g?.state,level:(g?.levelIndex??-1)+1,preview:g?.tower41Preview===true,previewAttribute:document.body.dataset.tower41Preview,ratchetCell:Boolean(g?.firstLevel?.ratchetCell),ratchetHook:typeof window.__NESI_RUN_TOWER41_RATCHET_ROUTE__,startChoices:[...document.querySelector('#level-select').options].map(option=>Number(option.value)),settingsChoices:[...document.querySelector('#settings-level-select').options].map(option=>Number(option.value)),solved:g?.firstLevel?.getTowerMetrics().solvedIds};
+  return {legacy,ownRaw:raw,own:raw?JSON.parse(raw):null,preferencesReadMatchesOwn:window.__NESI_PREFS__?.storage?.getItem(preferenceKey)===raw,state:g?.state,level:(g?.levelIndex??-1)+1,preview:g?.tower41Preview===true,previewAttribute:document.body.dataset.tower41Preview,ratchetCell:Boolean(g?.firstLevel?.ratchetCell),ratchetHook:typeof window.__NESI_RUN_TOWER41_RATCHET_ROUTE__,startChoices:[...document.querySelector('#level-select').options].map(option=>Number(option.value)),settingsChoices:[...document.querySelector('#settings-level-select').options].map(option=>Number(option.value)),editionNavigationPresent:Boolean(document.querySelector('.edition-navigation')),editionNavigationAnchors:[...document.querySelectorAll('.edition-navigation a')].map(anchor=>anchor.getAttribute('href')),solved:g?.firstLevel?.getTowerMetrics().solvedIds};
  },{prefixes:preservedPrefixes,key:previewKey,preferenceKey});
  assert.deepEqual(observed.legacy,preservedSaves,'Every pre-existing namespace byte must survive '+phase);
  assert.equal(observed.preview,true);assert.equal(observed.previewAttribute,'true');assert.equal(observed.level,41);assert.equal(observed.ratchetCell,false);assert.equal(observed.ratchetHook,'undefined');
  assert.deepEqual(observed.startChoices,[40]);assert.deepEqual(observed.settingsChoices,[40]);assert.equal(observed.preferencesReadMatchesOwn,true,'Runtime preferences must use the isolated preview namespace');assert.ok(observed.ownRaw);
- const result={phase,state:observed.state,level:observed.level,preview:true,ratchetCell:false,startChoices:observed.startChoices,settingsChoices:observed.settingsChoices,oldBytesUnchanged:true,legacySnapshotSha256:createHash('sha256').update(JSON.stringify(observed.legacy)).digest('hex'),ownPreferencesSha256:createHash('sha256').update(observed.ownRaw).digest('hex'),namespaceUsed:true,ownCompleted:observed.own.completed,ownResumeLevel:observed.own.resumeLevel,ownQuality:observed.own.quality,solved:observed.solved};
+ assert.equal(observed.editionNavigationPresent,false,'The isolated preview must not expose navigation into an old save namespace');assert.deepEqual(observed.editionNavigationAnchors,[]);
+ const result={phase,state:observed.state,level:observed.level,preview:true,ratchetCell:false,startChoices:observed.startChoices,settingsChoices:observed.settingsChoices,editionNavigationPresent:observed.editionNavigationPresent,editionNavigationAnchors:observed.editionNavigationAnchors,oldBytesUnchanged:true,legacySnapshotSha256:createHash('sha256').update(JSON.stringify(observed.legacy)).digest('hex'),ownPreferencesSha256:createHash('sha256').update(observed.ownRaw).digest('hex'),namespaceUsed:true,ownCompleted:observed.own.completed,ownResumeLevel:observed.own.resumeLevel,ownQuality:observed.own.quality,solved:observed.solved};
  previewSaveIsolation.phases.push(result);fs.writeFileSync(path.join(out,'preview-save-isolation.json'),JSON.stringify(previewSaveIsolation,null,2)+'\n');return result;
 }
 async function previewSettingsAndPause(){
@@ -93,12 +115,14 @@ try{
   }
   if(count%120===0)console.log('CAPTURE',count/fps,'seconds;',last.solved.length,'machines');
  });
- const url=new URL(process.env.PAGE_URL||'http://127.0.0.1:4173/');url.searchParams.set('level','41');url.searchParams.set('edition','foundation');url.searchParams.set('debug','1');
+ const base=new URL(process.env.PAGE_URL||'http://127.0.0.1:4173/');
+ if(preview){previewSaveIsolation.bareEntry=await observeBareNativeEntry(base);fs.writeFileSync(path.join(out,'preview-save-isolation.json'),JSON.stringify(previewSaveIsolation,null,2)+'\n');}
+ const url=new URL(base);url.searchParams.set('level','41');url.searchParams.set('edition','foundation');url.searchParams.set('debug','1');
  if(preview){url.searchParams.set('tower41preview','1');url.searchParams.delete('tower41ratchet');url.searchParams.delete('pilot');assert.equal(route,true,'Preview isolation proof requires the real whole castle route');const playerURL=new URL(url);playerURL.searchParams.delete('debug');playerURL.searchParams.delete('smoke');previewSaveIsolation.playerURL=playerURL.href;previewSaveIsolation.reviewURL=url.href;}
  await page.goto(url.href,{waitUntil:'domcontentloaded'});await waitForStartMenu(page);
  const info=await page.evaluate(async()=>{const r=await fetch('build-info.json');if(!r.ok)throw Error('Missing build identity');return r.json();});
  if(process.env.BUILD_COMMIT)assert.equal(info.commit,process.env.BUILD_COMMIT);const tower=assertUpgradeInfo(info,SINGULARITY_ROOMS);
- if(preview){preservedSaves=await page.evaluate(()=>window.__TOWER41_PREVIEW_INITIAL_LEGACY_SAVES__);assert.equal(Object.keys(preservedSaves).length>=preservedPrefixes.length,true);previewSaveIsolation.legacySnapshot=preservedSaves;await previewCheckpoint('after-load');await previewSettingsAndPause();}
+ if(preview){const currentBaseline=await page.evaluate(()=>window.__TOWER41_PREVIEW_INITIAL_LEGACY_SAVES__);if(preservedSaves)assert.deepEqual(currentBaseline,preservedSaves,'The bare-entry legacy snapshot must survive the separate debug route navigation');else preservedSaves=currentBaseline;assert.equal(Object.keys(preservedSaves).length>=preservedPrefixes.length,true);previewSaveIsolation.legacySnapshot=preservedSaves;await previewCheckpoint('after-load');await previewSettingsAndPause();}
  else await playFromStartMenu(page,false,graphicsPreset);
  await page.evaluate(()=>window.__NESI_DEMO_GAME__.renderer.setAnimationLoop(null));
  const nativeCanvas=await page.evaluate(()=>{const c=window.__NESI_DEMO_GAME__.renderer.domElement;return {width:c.width,height:c.height};});assert.deepEqual(nativeCanvas,{width,height},'Capture dimensions must match the actual production canvas');

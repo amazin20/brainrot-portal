@@ -11,9 +11,9 @@ import {buildSourceInputs,walkFiles} from './lib/release-manifest.mjs';
 import {assertUpgradeEvidence} from './lib/singularity-upgrade-proof.mjs';
 import {checkBuild,sourceIdentity,assertObservedRoute,oldSavePrefixes,qualificationKey} from './qa-tower41-ratchet-browser.mjs';
 import {CAMPAIGN_ASSET_IDS} from '../src/game/labAssets.js';
-import {TOWER41_PREVIEW_STORAGE_PREFIX} from '../src/game/LabTower41Preview.js';
+import {TOWER41_PREVIEW_STORAGE_PREFIX,isTower41NativePreviewPath} from '../src/game/LabTower41Preview.js';
 
-export const PINS=Object.freeze({branch:'upgrade/tower41-collider-registry-20261012',sourceParent:'0fcc097b1e0a657239de7d5b4de2be040cd032f4',main:'569918af19c4dafdc0f9450e668733c474e8ff56',acceptedSource:'0e257837ca157d59d29c2e892e9a81e4f21fc5a1',canonicalSource:'8d2c01eacd86fe9235a35e7ec5f624ba62c3b29e',repository:'amazin20/brainrot-portal',publicBase:'https://amazin20.github.io/brainrot-portal/'});
+export const PINS=Object.freeze({branch:'upgrade/tower41-preview-nav-20261012',sourceParent:'9f00a4ee1c99d94f6e922e763fbd40d2f3dd79b7',main:'569918af19c4dafdc0f9450e668733c474e8ff56',acceptedSource:'0e257837ca157d59d29c2e892e9a81e4f21fc5a1',canonicalSource:'8d2c01eacd86fe9235a35e7ec5f624ba62c3b29e',repository:'amazin20/brainrot-portal',publicBase:'https://amazin20.github.io/brainrot-portal/'});
 const sha256=bytes=>createHash('sha256').update(bytes).digest('hex');
 const read=file=>JSON.parse(fs.readFileSync(file,'utf8'));
 const write=(file,value)=>{fs.mkdirSync(path.dirname(file),{recursive:true});fs.writeFileSync(file,JSON.stringify(value,null,2)+'\n');};
@@ -92,10 +92,24 @@ export function assertPreviewSaveIsolation(isolation){
  assert.equal(isolation?.pass,true,'The current whole-castle proof must include successful preview save isolation');assert.equal(isolation.namespace,TOWER41_PREVIEW_STORAGE_PREFIX);assert.equal(isolation.ownKey,TOWER41_PREVIEW_STORAGE_PREFIX+key);assert.deepEqual(isolation.legacyPrefixes,prefixes);
  const baseline=isolation.legacySnapshot;assert.ok(baseline&&typeof baseline==='object');for(const prefix of prefixes)assert.equal(typeof baseline[prefix+key],'string');
  assert.ok(Object.keys(baseline).every(name=>prefixes.some(prefix=>name.startsWith(prefix))));const baselineHash=sha256(JSON.stringify(baseline));
+ const playerURL=new URL(isolation.playerURL),reviewURL=new URL(isolation.reviewURL);assert.ok(['http:','https:'].includes(playerURL.protocol));assert.equal(reviewURL.origin,playerURL.origin);assert.equal(reviewURL.pathname,playerURL.pathname);
+ for(const [name,value]of [['edition','foundation'],['level','41'],['tower41preview','1']]){assert.equal(playerURL.searchParams.get(name),value);assert.equal(reviewURL.searchParams.get(name),value);}
+ for(const name of ['debug','smoke','tower41ratchet','pilot'])assert.equal(playerURL.searchParams.has(name),false);assert.equal(reviewURL.searchParams.get('debug'),'1');
+ const bare=isolation.bareEntry;
+ if(!isTower41NativePreviewPath(playerURL.pathname))assert.deepEqual(bare,{applicable:false,reason:'The configured browser review base is outside the standalone tower41-native entry namespace.'},'A local-root review cannot invent a public bare-entry observation');
+ else{
+  assert.equal(bare?.applicable,true,'A native namespace review requires its actual bare-entry observation');assert.equal(bare.pass,true);
+  const bareURL=new URL(bare.url);assert.equal(bareURL.origin,playerURL.origin);assert.equal(bareURL.pathname,playerURL.pathname);assert.equal(bareURL.search,'');assert.equal(bareURL.hash,'');assert.equal(bare.pathname,bareURL.pathname);assert.equal(bare.search,'');
+  assert.equal(bare.state,'ready');assert.equal(bare.level,41);assert.equal(bare.preview,true);assert.equal(bare.edition,'foundation');assert.deepEqual(bare.startChoices,[40]);assert.deepEqual(bare.settingsChoices,[40]);assert.equal(bare.editionNavigationPresent,false);assert.deepEqual(bare.editionNavigationAnchors,[]);
+  for(const name of ['debugGameHook','debugPreferencesHook','ratchetHook'])assert.equal(bare[name],'undefined');assert.equal(bare.oldBytesUnchanged,true);assert.equal(bare.legacySnapshotSha256,baselineHash);assert.equal(bare.ownKey,TOWER41_PREVIEW_STORAGE_PREFIX+key);assert.match(bare.ownPreferencesSha256,/^[a-f0-9]{64}$/);
+  const settings=bare.settings;assert.equal(settings.control,'native-menu-quality-select');assert.notEqual(settings.changedTo,settings.restoredTo);assert.equal(settings.ownQualityChanged,settings.changedTo);assert.equal(settings.ownQualityRestored,settings.restoredTo);
+  for(const name of ['beforeSha256','changedSha256','restoredSha256'])assert.match(settings[name],/^[a-f0-9]{64}$/);assert.notEqual(settings.beforeSha256,settings.changedSha256);assert.equal(settings.beforeSha256,settings.restoredSha256);assert.equal(bare.ownPreferencesSha256,settings.restoredSha256);
+ }
  assert.deepEqual(isolation.phases.map(observed=>observed.phase),phases,'Every load/settings/control/completion/replay/reload transition must preserve legacy bytes');
  const states=['ready','ready','playing','paused','playing','won','playing','ready'];
  for(const [i,observed]of isolation.phases.entries()){
   assert.equal(observed.state,states[i]);assert.equal(observed.level,41);assert.equal(observed.preview,true);assert.equal(observed.ratchetCell,false);assert.deepEqual(observed.startChoices,[40]);assert.deepEqual(observed.settingsChoices,[40]);
+  assert.equal(observed.editionNavigationPresent,false,'Every measured preview phase must omit old edition navigation');assert.deepEqual(observed.editionNavigationAnchors,[]);
   assert.equal(observed.oldBytesUnchanged,true);assert.equal(observed.legacySnapshotSha256,baselineHash);assert.equal(observed.namespaceUsed,true);assert.match(observed.ownPreferencesSha256,/^[a-f0-9]{64}$/);assert.equal(observed.ownResumeLevel,40);
   assert.deepEqual(observed.ownCompleted,i<5?[]:[40]);
  }

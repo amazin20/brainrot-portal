@@ -12,11 +12,12 @@ import {readCampaignRoute,nextCampaignLevel} from './game/LabCampaignRoute.js';
 import {FOUNDATION_INDICES,readFoundationEdition,foundationStorage,nextFoundationLevel} from './game/LabFoundationEdition.js';
 import {OPEN_ROOM_INDICES,readOpenEdition,nextOpenRoom,openEditionStorage} from './game/LabOpenEdition.js';
 import {resumeCampaignLevel,nextResumeLevel} from './game/LabResume.js';
-import {readTower41EntryFlags,createTower41PreviewPreferences,TOWER41_PREVIEW_LEVEL_INDEX,TOWER41_PREVIEW_INDICES} from './game/LabTower41Preview.js';
+import {normalizeTower41PreviewEntry,readTower41EntryFlags,createTower41PreviewPreferences,TOWER41_PREVIEW_LEVEL_INDEX,TOWER41_PREVIEW_INDICES} from './game/LabTower41Preview.js';
 import {SINGULARITY_ROOMS,SINGULARITY_SPEC} from './game/LabSingularityLayout.js';
 const singularityHallCount=SINGULARITY_ROOMS.length,singularityOpenHallCount=SINGULARITY_ROOMS.filter(room=>room.requires.length===0).length;
-const $=s=>document.querySelector(s),query=new URLSearchParams(location.search);
+const $=s=>document.querySelector(s);
 const yandex=import.meta.env.MODE==='yandex';
+const query=normalizeTower41PreviewEntry(location.search,{pathname:location.pathname,yandex});
 if(yandex)query.set('edition','foundation');
 const {preview:tower41Preview,debug,tower41Qualification,puzzlePilot43,puzzleProgression}=readTower41EntryFlags(query,{yandex});
 // Player-facing puzzles keep control tutorials, without solution-hint buttons.
@@ -187,12 +188,14 @@ if(puzzleProgression)$('#campaign-count').textContent='Пространстве�
 if(tower41Preview)$('#campaign-count').textContent='Складчатый замок · комната 41';
 if(foundationEdition.enabled){$('#start-screen .brand').textContent='ПОРТАЛЫ · ФИЗИКА · ИССЛЕДОВАНИЕ';$('#start-screen .lead').textContent='Соединяй пространства. Сохраняй импульс. Доберись до выхода вместе с другом.';}
 else if(openEdition.enabled){$('#start-screen .brand').textContent='ЛАБОРАТОРНЫЕ ИСПЫТАНИЯ';$('#start-screen .lead').textContent='Камеры 24, 28, 30 и 31–33. Эта подборка и новая первая глава хранят прогресс отдельно от архива.';}
-const editionNav=document.createElement('nav');editionNav.className='edition-navigation';editionNav.setAttribute('aria-label','Версии кампании');
-if(puzzlePilot43){const a=document.createElement('a');a.textContent='Прежняя комната 43';a.href='?edition=foundation&level=43';editionNav.append(a);}
-for(const [id,text,href]of [['tower',`${SINGULARITY_SPEC.name} · ${singularityHallCount} механизмов`,'?edition=foundation&level=41'],['foundation','Кампания · с начала','?edition=foundation&level=1']]){
- if(game.chamberEdition===id)continue;const a=document.createElement('a');a.textContent=text;a.href=href;editionNav.append(a);
+if(!tower41Preview){
+ const editionNav=document.createElement('nav');editionNav.className='edition-navigation';editionNav.setAttribute('aria-label','Версии кампании');
+ if(puzzlePilot43){const a=document.createElement('a');a.textContent='Прежняя комната 43';a.href='?edition=foundation&level=43';editionNav.append(a);}
+ for(const [id,text,href]of [['tower',`${SINGULARITY_SPEC.name} · ${singularityHallCount} механизмов`,'?edition=foundation&level=41'],['foundation','Кампания · с начала','?edition=foundation&level=1']]){
+  if(game.chamberEdition===id)continue;const a=document.createElement('a');a.textContent=text;a.href=href;editionNav.append(a);
+ }
+ $('#start-screen .hero-footer').before(editionNav);
 }
-$('#start-screen .hero-footer').before(editionNav);
 async function enterLevel(index,reason='next'){
   reconcileFocus();
   if(entering||holds.size||!availableRooms.includes(index))return;entering=true;clearInput();game.audio?.unlock();

@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {LabPreferences,DEFAULT_PREFERENCES} from '../src/game/LabPreferences.js';
 import {readFoundationEdition} from '../src/game/LabFoundationEdition.js';
-import {readTower41Preview,readTower41EntryFlags,createTower41PreviewPreferences,tower41PreviewStorage,TOWER41_PREVIEW_STORAGE_PREFIX,TOWER41_PREVIEW_LEVEL_INDEX,TOWER41_PREVIEW_INDICES} from '../src/game/LabTower41Preview.js';
+import {normalizeTower41PreviewEntry,isTower41NativePreviewPath,readTower41Preview,readTower41EntryFlags,createTower41PreviewPreferences,tower41PreviewStorage,TOWER41_PREVIEW_STORAGE_PREFIX,TOWER41_PREVIEW_LEVEL_INDEX,TOWER41_PREVIEW_INDICES} from '../src/game/LabTower41Preview.js';
 
 const KEY='brainrot-portal.preferences.v24',LEGACY_KEY='nesi.preferences.v8';
 const OLD_PREFIXES=['','brainrot-foundation-v1:','brainrot-open-rebuild-v1:','brainrot-puzzle-pilot43-v1:','brainrot-puzzle-progression-v1:','brainrot-puzzle-progression-next-v1:','brainrot-puzzle-progression-finale-v1:','brainrot-tower41-ratchet-qualification-v1:'];
@@ -18,6 +18,27 @@ function previousRecords(){
  },null,2)]));
 }
 function unchanged(previous,current){for(const [key,value]of previous)assert.equal(current.get(key),value,key);}
+
+test('literal standalone namespace entries force only ordinary room41 and private storage flags',()=>{
+ const paths=['/tower41-native','/tower41-native/','/tower41-native/index.html','/brainrot-portal/tower41-native','/brainrot-portal/tower41-native/','/brainrot-portal/tower41-native/index.html'];
+ const entries=['','edition=classic&level=42','edition=open&level=51&tower41preview=0','edition=foundation&level=1&pilot=progression&tower41ratchet=1&debug=1','mode=velocity&chapter=2&return=21&smoke=1','edition=classic&edition=open&level=42&level=51&tower41preview=0&tower41preview=false'];
+ for(const pathname of paths)for(const entry of entries){
+  const original=new URLSearchParams(entry),before=original.toString(),normalized=normalizeTower41PreviewEntry(original,{pathname});
+  assert.equal(isTower41NativePreviewPath(pathname),true);assert.equal(original.toString(),before,'Caller query must not be mutated');assert.notEqual(normalized,original);
+  assert.deepEqual(readFoundationEdition(normalized),{enabled:true,levelIndex:40});assert.equal(normalized.get('tower41preview'),'1');
+  assert.deepEqual(readTower41EntryFlags(normalized),{preview:true,debug:original.get('debug')==='1'||original.get('smoke')==='1',tower41Qualification:false,puzzlePilot43:false,puzzleProgression:false});
+  for(const name of ['edition','level','tower41preview'])assert.equal(normalized.getAll(name).length,1,'Conflicting native entry parameters must collapse to one effective value');
+  for(const [name,value]of original)if(!['edition','level','tower41preview'].includes(name))assert.equal(normalized.get(name),value,'Unrelated entry parameters retain their behavior');
+ }
+});
+
+test('other paths, local root opt-in and Yandex retain the existing entry boundaries',()=>{
+ const paths=['/','/index.html','/brainrot-portal/','/brainrot-portal/index.html','/tower41-native/walkthroughs.html','/brainrot-portal/tower41-native/assets/index.js','/tower41-native-extra/','/other/tower41-native/','/publication-history/old/tower41-native/','/brainrot-portal/tower41-native/extra','/brainrot-portal/%74ower41-native/'];
+ const queries=['','edition=classic&level=42','mode=velocity&return=11','edition=foundation&level=41&tower41preview=1&debug=1'];
+ for(const pathname of paths)for(const query of queries){const original=new URLSearchParams(query),normalized=normalizeTower41PreviewEntry(original,{pathname});assert.equal(isTower41NativePreviewPath(pathname),false);assert.equal(normalized.toString(),original.toString());assert.deepEqual(readTower41EntryFlags(normalized),readTower41EntryFlags(original));}
+ for(const pathname of ['/tower41-native/','/brainrot-portal/tower41-native/index.html'])for(const query of queries){const original=new URLSearchParams(query),normalized=normalizeTower41PreviewEntry(original,{pathname,yandex:true});assert.equal(normalized.toString(),original.toString());assert.deepEqual(readTower41EntryFlags(normalized,{yandex:true}),readTower41EntryFlags(original,{yandex:true}));}
+ assert.equal(readTower41EntryFlags(normalizeTower41PreviewEntry('?edition=foundation&level=41&tower41preview=1',{pathname:'/'})).preview,true);
+});
 
 test('ordinary tower preview copies only foundation settings and never rewrites any historical edition',()=>{
  const fixture=memoryStorage(previousRecords()),before=new Map(fixture.data);
