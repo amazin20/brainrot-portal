@@ -1,0 +1,1566 @@
+{
+  "observation": {
+    "kind": "actual-complete-native-camera-observer",
+    "runtimeObserved": true,
+    "accepted": false,
+    "fullRoomAccepted": false,
+    "allCameraAccepted": false,
+    "sourceIdentity": {
+      "sourceCommit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "tree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "sourceInputsSha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "packageFilesSha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "journeySha256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "browserSeamSha256": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+      "sourceReview": {
+        "runId": 123,
+        "runAttempt": 1
+      }
+    },
+    "sourcePins": {
+      "sourceCommit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "tree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "sourceInputsSha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "packageFilesSha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "journeySha256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "browserSeamSha256": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+      "sourceReview": {
+        "runId": 123,
+        "runAttempt": 1
+      }
+    },
+    "config": {
+      "maxRecords": 6001,
+      "maxShots": 64,
+      "maxFrames": 90000,
+      "maxPayloadBytes": 24000000,
+      "width": 640,
+      "height": 360,
+      "stride": 15,
+      "expectedInitialWorldStepOffset": 10
+    },
+    "identity": {
+      "cargoBodyId": 99,
+      "cargoShapeId": 100,
+      "vertices": 96753,
+      "bones": 15,
+      "meshes": [
+        {
+          "meshUuid": "synthetic-mesh",
+          "vertices": 96753,
+          "bones": 15,
+          "skinned": true
+        }
+      ],
+      "initialAppearanceSha256": "1111111111111111111111111111111111111111111111111111111111111111",
+      "finalAppearanceSha256": "1111111111111111111111111111111111111111111111111111111111111111"
+    },
+    "route": {
+      "pass": true,
+      "sameCompanion": true,
+      "frames": 31,
+      "physicsSteps": 61,
+      "seconds": 0.5083333333333333,
+      "solvedIds": [
+        "freight",
+        "sluice",
+        "optics",
+        "hoist",
+        "archive",
+        "flywheel",
+        "magnet",
+        "migrant",
+        "pendulum",
+        "inertia",
+        "crown"
+      ]
+    },
+    "resetCounters": {
+      "resetRun": 0,
+      "respawn": 0,
+      "resetCargo": 0,
+      "levelReset": 0,
+      "pendulumReset": 0
+    },
+    "dataIntegrity": {
+      "everyActualNativeCaptureBound": true,
+      "allActualFramesAndWorldStepsObserved": true,
+      "readPurityGuardsPassed": true
+    },
+    "records": [
+      {
+        "visualFrame": 0,
+        "worldStep": 12,
+        "worldStepOffset": 10,
+        "routePhysicsSteps": 2,
+        "routeSeconds": 0.016666666666666666,
+        "windowId": "actual-native-capture",
+        "nativeCanvas": {
+          "width": 640,
+          "height": 360
+        },
+        "sourceCommit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "player": {
+          "current": [
+            0,
+            0,
+            0
+          ],
+          "previous": [
+            0,
+            0,
+            0
+          ],
+          "velocity": [
+            0,
+            0,
+            0
+          ],
+          "grounded": true,
+          "renderedPosition": [
+            0,
+            0,
+            0
+          ],
+          "renderedQuaternion": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "renderedScale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "cargo": {
+          "bodyId": 99,
+          "shapeId": 100,
+          "position": [
+            0,
+            0.39,
+            0
+          ],
+          "quaternion": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "velocity": [
+            0,
+            0,
+            0
+          ],
+          "angularVelocity": [
+            0,
+            0,
+            0
+          ],
+          "masks": [
+            2,
+            1
+          ],
+          "held": false
+        },
+        "controls": {
+          "aimHeld": false,
+          "isAiming": false,
+          "yaw": 0,
+          "pitch": 0,
+          "facing": 0,
+          "shotPoseTime": 0,
+          "shotAimPoint": null
+        },
+        "camera": {
+          "fov": 90,
+          "aspect": 1.7777777777777777,
+          "near": 0.1,
+          "far": 130,
+          "eye": [
+            0,
+            0,
+            0
+          ],
+          "quaternion": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "up": [
+            0,
+            1,
+            0
+          ],
+          "matrixWorldInverse": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            1
+          ],
+          "projection": [
+            0.5625000000000001,
+            0,
+            0,
+            0,
+            0,
+            1.0000000000000002,
+            0,
+            0,
+            0,
+            0,
+            -1.0015396458814472,
+            -1,
+            0,
+            0,
+            -0.20015396458814472,
+            0
+          ],
+          "rig": {
+            "vectors": {
+              "playerPivot": [
+                0,
+                0,
+                0
+              ],
+              "lookPoint": [
+                0,
+                0,
+                -16
+              ],
+              "viewUp": [
+                0,
+                1,
+                0
+              ]
+            },
+            "flags": {
+              "fullBodyFraming": true,
+              "confinedFraming": true,
+              "inclinedFraming": false,
+              "obstructed": true,
+              "avoidanceActive": true,
+              "portalFramingActive": false,
+              "rampFraming": false
+            },
+            "springs": {
+              "yaw": 0,
+              "pitch": 0,
+              "distance": 3
+            },
+            "clipping": []
+          }
+        },
+        "bodyVertexProjection": {
+          "vertices": 96753,
+          "bones": 15,
+          "minX": -0.056250000000000015,
+          "maxX": 0.056250000000000015,
+          "minY": -0.20000000000000007,
+          "maxY": 0.20000000000000007,
+          "minDepth": 2,
+          "maxDepth": 3,
+          "outsideLensCount": 0,
+          "behindCount": 0,
+          "nearCount": 0,
+          "insideLens": true,
+          "renderEligibility": [
+            {
+              "meshUuid": "synthetic-mesh",
+              "vertices": 96753,
+              "objectVisible": true,
+              "materialVisible": true,
+              "layerMatch": true,
+              "renderEligible": true
+            }
+          ],
+          "renderEligibleVertices": 96753,
+          "renderEligibleOutsideLensCount": 0,
+          "renderEligibleInsideLens": true,
+          "extremaWitnesses": {
+            "minX": {
+              "meshUuid": "synthetic-mesh",
+              "vertex": 0,
+              "world": [
+                -0.2,
+                0,
+                -2
+              ],
+              "ndc": [
+                -0.056250000000000015,
+                0,
+                0.9014626635873748
+              ],
+              "depth": 2
+            },
+            "maxX": {
+              "meshUuid": "synthetic-mesh",
+              "vertex": 0,
+              "world": [
+                0.2,
+                0,
+                -2
+              ],
+              "ndc": [
+                0.056250000000000015,
+                0,
+                0.9014626635873748
+              ],
+              "depth": 2
+            },
+            "minY": {
+              "meshUuid": "synthetic-mesh",
+              "vertex": 0,
+              "world": [
+                0,
+                -0.4,
+                -2
+              ],
+              "ndc": [
+                0,
+                -0.20000000000000007,
+                0.9014626635873748
+              ],
+              "depth": 2
+            },
+            "maxY": {
+              "meshUuid": "synthetic-mesh",
+              "vertex": 0,
+              "world": [
+                0,
+                0.4,
+                -2
+              ],
+              "ndc": [
+                0,
+                0.20000000000000007,
+                0.9014626635873748
+              ],
+              "depth": 2
+            },
+            "minDepth": {
+              "meshUuid": "synthetic-mesh",
+              "vertex": 0,
+              "world": [
+                -0.2,
+                0,
+                -2
+              ],
+              "ndc": [
+                -0.056250000000000015,
+                0,
+                0.9014626635873748
+              ],
+              "depth": 2
+            },
+            "maxDepth": {
+              "meshUuid": "synthetic-mesh",
+              "vertex": 0,
+              "world": [
+                0,
+                0,
+                -3
+              ],
+              "ndc": [
+                0,
+                0,
+                0.9348216576853989
+              ],
+              "depth": 3
+            }
+          },
+          "source": "SYNTHETIC VALIDATOR FIXTURE, NOT A RUNTIME CAMERA MEASUREMENT"
+        },
+        "conservativeEnvelope": {
+          "vertices": 8,
+          "bones": 15,
+          "minX": -0.056250000000000015,
+          "maxX": 0.056250000000000015,
+          "minY": -0.20000000000000007,
+          "maxY": 0.20000000000000007,
+          "minDepth": 2,
+          "maxDepth": 3,
+          "outsideLensCount": 0,
+          "behindCount": 0,
+          "nearCount": 0,
+          "insideLens": true,
+          "renderEligibility": [
+            {
+              "meshUuid": "synthetic-mesh",
+              "vertices": 96753,
+              "objectVisible": true,
+              "materialVisible": true,
+              "layerMatch": true,
+              "renderEligible": true
+            }
+          ],
+          "renderEligibleVertices": 96753,
+          "renderEligibleOutsideLensCount": 0,
+          "renderEligibleInsideLens": true,
+          "extremaWitnesses": {
+            "minX": {
+              "meshUuid": "synthetic-mesh",
+              "vertex": 0,
+              "world": [
+                -0.2,
+                0,
+                -2
+              ],
+              "ndc": [
+                -0.056250000000000015,
+                0,
+                0.9014626635873748
+              ],
+              "depth": 2
+            },
+            "maxX": {
+              "meshUuid": "synthetic-mesh",
+              "vertex": 0,
+              "world": [
+                0.2,
+                0,
+                -2
+              ],
+              "ndc": [
+                0.056250000000000015,
+                0,
+                0.9014626635873748
+              ],
+              "depth": 2
+            },
+            "minY": {
+              "meshUuid": "synthetic-mesh",
+              "vertex": 0,
+              "world": [
+                0,
+                -0.4,
+                -2
+              ],
+              "ndc": [
+                0,
+                -0.20000000000000007,
+                0.9014626635873748
+              ],
+              "depth": 2
+            },
+            "maxY": {
+              "meshUuid": "synthetic-mesh",
+              "vertex": 0,
+              "world": [
+                0,
+                0.4,
+                -2
+              ],
+              "ndc": [
+                0,
+                0.20000000000000007,
+                0.9014626635873748
+              ],
+              "depth": 2
+            },
+            "minDepth": {
+              "meshUuid": "synthetic-mesh",
+              "vertex": 0,
+              "world": [
+                -0.2,
+                0,
+                -2
+              ],
+              "ndc": [
+                -0.056250000000000015,
+                0,
+                0.9014626635873748
+              ],
+              "depth": 2
+            },
+            "maxDepth": {
+              "meshUuid": "synthetic-mesh",
+              "vertex": 0,
+              "world": [
+                0,
+                0,
+                -3
+              ],
+              "ndc": [
+                0,
+                0,
+                0.9348216576853989
+              ],
+              "depth": 3
+            }
+          },
+          "source": "SYNTHETIC VALIDATOR FIXTURE, NOT A RUNTIME CAMERA MEASUREMENT",
+          "requiredFovUncapped": 90,
+          "cap": 120,
+          "exceedsCap": false
+        },
+        "readPurity": {
+          "physicalStateUnchanged": true,
+          "lensAndLocalAppearancePoseUnchanged": true,
+          "attributeBytesUnchanged": true,
+          "appearanceSha256": "1111111111111111111111111111111111111111111111111111111111111111",
+          "derivedWorldAndSkeletonMatricesPrepared": true
+        },
+        "encodedBinding": {
+          "encodedFrame": 0,
+          "visualFrame": 0,
+          "terminal": false,
+          "source": "actual encoder/capture event supplied by external harness"
+        },
+        "materialProvenance": {
+          "validatedMeshes": 1,
+          "originalAuthoredMeshes": 1,
+          "ownedClippedMeshes": 0,
+          "originalStylesTexturesAndProgramsPreserved": true,
+          "activeEntryIndex": null,
+          "sourcePlane": null
+        }
+      },
+      {
+        "visualFrame": 15,
+        "worldStep": 42,
+        "worldStepOffset": 10,
+        "routePhysicsSteps": 32,
+        "routeSeconds": 0.26666666666666666,
+        "windowId": "actual-native-capture",
+        "nativeCanvas": {
+          "width": 640,
+          "height": 360
+        },
+        "sourceCommit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "player": {
+          "current": [
+            0,
+            0,
+            0
+          ],
+          "previous": [
+            0,
+            0,
+            0
+          ],
+          "velocity": [
+            0,
+            0,
+            0
+          ],
+          "grounded": true,
+          "renderedPosition": [
+            0,
+            0,
+            0
+          ],
+          "renderedQuaternion": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "renderedScale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "cargo": {
+          "bodyId": 99,
+          "shapeId": 100,
+          "position": [
+            0,
+            0.39,
+            0
+          ],
+          "quaternion": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "velocity": [
+            0,
+            0,
+            0
+          ],
+          "angularVelocity": [
+            0,
+            0,
+            0
+          ],
+          "masks": [
+            2,
+            1
+          ],
+          "held": false
+        },
+        "controls": {
+          "aimHeld": false,
+          "isAiming": false,
+          "yaw": 0,
+          "pitch": 0,
+          "facing": 0,
+          "shotPoseTime": 0,
+          "shotAimPoint": null
+        },
+        "camera": {
+          "fov": 90,
+          "aspect": 1.7777777777777777,
+          "near": 0.1,
+          "far": 130,
+          "eye": [
+            0,
+            0,
+            0
+          ],
+          "quaternion": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "up": [
+            0,
+            1,
+            0
+          ],
+          "matrixWorldInverse": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            1
+          ],
+          "projection": [
+            0.5625000000000001,
+            0,
+            0,
+            0,
+            0,
+            1.0000000000000002,
+            0,
+            0,
+            0,
+            0,
+            -1.0015396458814472,
+            -1,
+            0,
+            0,
+            -0.20015396458814472,
+            0
+          ],
+          "rig": {
+            "vectors": {
+              "playerPivot": [
+                0,
+                0,
+                0
+              ],
+              "lookPoint": [
+                0,
+                0,
+                -16
+              ],
+              "viewUp": [
+                0,
+                1,
+                0
+              ]
+            },
+            "flags": {
+              "fullBodyFraming": true,
+              "confinedFraming": true,
+              "inclinedFraming": false,
+              "obstructed": true,
+              "avoidanceActive": true,
+              "portalFramingActive": false,
+              "rampFraming": false
+            },
+            "springs": {
+              "yaw": 0,
+              "pitch": 0,
+              "distance": 3
+            },
+            "clipping": []
+          }
+        },
+        "bodyVertexProjection": {
+          "vertices": 96753,
+          "bones": 15,
+          "minX": -0.056250000000000015,
+          "maxX": 0.056250000000000015,
+          "minY": -0.20000000000000007,
+          "maxY": 0.20000000000000007,
+          "minDepth": 2,
+          "maxDepth": 3,
+          "outsideLensCount": 0,
+          "behindCount": 0,
+          "nearCount": 0,
+          "insideLens": true,
+          "renderEligibility": [
+            {
+              "meshUuid": "synthetic-mesh",
+              "vertices": 96753,
+              "objectVisible": true,
+              "materialVisible": true,
+              "layerMatch": true,
+              "renderEligible": true
+            }
+          ],
+          "renderEligibleVertices": 96753,
+          "renderEligibleOutsideLensCount": 0,
+          "renderEligibleInsideLens": true,
+          "extremaWitnesses": {
+            "minX": {
+              "meshUuid": "synthetic-mesh",
+              "vertex": 0,
+              "world": [
+                -0.2,
+                0,
+                -2
+              ],
+              "ndc": [
+                -0.056250000000000015,
+                0,
+                0.9014626635873748
+              ],
+              "depth": 2
+            },
+            "maxX": {
+              "meshUuid": "synthetic-mesh",
+              "vertex": 0,
+              "world": [
+                0.2,
+                0,
+                -2
+              ],
+              "ndc": [
+                0.056250000000000015,
+                0,
+                0.9014626635873748
+              ],
+              "depth": 2
+            },
+            "minY": {
+              "meshUuid": "synthetic-mesh",
+              "vertex": 0,
+              "world": [
+                0,
+                -0.4,
+                -2
+              ],
+              "ndc": [
+                0,
+                -0.20000000000000007,
+                0.9014626635873748
+              ],
+              "depth": 2
+            },
+            "maxY": {
+              "meshUuid": "synthetic-mesh",
+              "vertex": 0,
+              "world": [
+                0,
+                0.4,
+                -2
+              ],
+              "ndc": [
+                0,
+                0.20000000000000007,
+                0.9014626635873748
+              ],
+              "depth": 2
+            },
+            "minDepth": {
+              "meshUuid": "synthetic-mesh",
+              "vertex": 0,
+              "world": [
+                -0.2,
+                0,
+                -2
+              ],
+              "ndc": [
+                -0.056250000000000015,
+                0,
+                0.9014626635873748
+              ],
+              "depth": 2
+            },
+            "maxDepth": {
+              "meshUuid": "synthetic-mesh",
+              "vertex": 0,
+              "world": [
+                0,
+                0,
+                -3
+              ],
+              "ndc": [
+                0,
+                0,
+                0.9348216576853989
+              ],
+              "depth": 3
+            }
+          },
+          "source": "SYNTHETIC VALIDATOR FIXTURE, NOT A RUNTIME CAMERA MEASUREMENT"
+        },
+        "conservativeEnvelope": {
+          "vertices": 8,
+          "bones": 15,
+          "minX": -0.056250000000000015,
+          "maxX": 0.056250000000000015,
+          "minY": -0.20000000000000007,
+          "maxY": 0.20000000000000007,
+          "minDepth": 2,
+          "maxDepth": 3,
+          "outsideLensCount": 0,
+          "behindCount": 0,
+          "nearCount": 0,
+          "insideLens": true,
+          "renderEligibility": [
+            {
+              "meshUuid": "synthetic-mesh",
+              "vertices": 96753,
+              "objectVisible": true,
+              "materialVisible": true,
+              "layerMatch": true,
+              "renderEligible": true
+            }
+          ],
+          "renderEligibleVertices": 96753,
+          "renderEligibleOutsideLensCount": 0,
+          "renderEligibleInsideLens": true,
+          "extremaWitnesses": {
+            "minX": {
+              "meshUuid": "synthetic-mesh",
+              "vertex": 0,
+              "world": [
+                -0.2,
+                0,
+                -2
+              ],
+              "ndc": [
+                -0.056250000000000015,
+                0,
+                0.9014626635873748
+              ],
+              "depth": 2
+            },
+            "maxX": {
+              "meshUuid": "synthetic-mesh",
+              "vertex": 0,
+              "world": [
+                0.2,
+                0,
+                -2
+              ],
+              "ndc": [
+                0.056250000000000015,
+                0,
+                0.9014626635873748
+              ],
+              "depth": 2
+            },
+            "minY": {
+              "meshUuid": "synthetic-mesh",
+              "vertex": 0,
+              "world": [
+                0,
+                -0.4,
+                -2
+              ],
+              "ndc": [
+                0,
+                -0.20000000000000007,
+                0.9014626635873748
+              ],
+              "depth": 2
+            },
+            "maxY": {
+              "meshUuid": "synthetic-mesh",
+              "vertex": 0,
+              "world": [
+                0,
+                0.4,
+                -2
+              ],
+              "ndc": [
+                0,
+                0.20000000000000007,
+                0.9014626635873748
+              ],
+              "depth": 2
+            },
+            "minDepth": {
+              "meshUuid": "synthetic-mesh",
+              "vertex": 0,
+              "world": [
+                -0.2,
+                0,
+                -2
+              ],
+              "ndc": [
+                -0.056250000000000015,
+                0,
+                0.9014626635873748
+              ],
+              "depth": 2
+            },
+            "maxDepth": {
+              "meshUuid": "synthetic-mesh",
+              "vertex": 0,
+              "world": [
+                0,
+                0,
+                -3
+              ],
+              "ndc": [
+                0,
+                0,
+                0.9348216576853989
+              ],
+              "depth": 3
+            }
+          },
+          "source": "SYNTHETIC VALIDATOR FIXTURE, NOT A RUNTIME CAMERA MEASUREMENT",
+          "requiredFovUncapped": 90,
+          "cap": 120,
+          "exceedsCap": false
+        },
+        "readPurity": {
+          "physicalStateUnchanged": true,
+          "lensAndLocalAppearancePoseUnchanged": true,
+          "attributeBytesUnchanged": true,
+          "appearanceSha256": "1111111111111111111111111111111111111111111111111111111111111111",
+          "derivedWorldAndSkeletonMatricesPrepared": true
+        },
+        "encodedBinding": {
+          "encodedFrame": 1,
+          "visualFrame": 15,
+          "terminal": false,
+          "source": "actual encoder/capture event supplied by external harness"
+        },
+        "materialProvenance": {
+          "validatedMeshes": 1,
+          "originalAuthoredMeshes": 1,
+          "ownedClippedMeshes": 0,
+          "originalStylesTexturesAndProgramsPreserved": true,
+          "activeEntryIndex": null,
+          "sourcePlane": null
+        }
+      },
+      {
+        "visualFrame": 30,
+        "worldStep": 71,
+        "worldStepOffset": 10,
+        "routePhysicsSteps": 61,
+        "routeSeconds": 0.5083333333333333,
+        "windowId": "actual-native-capture",
+        "nativeCanvas": {
+          "width": 640,
+          "height": 360
+        },
+        "sourceCommit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "player": {
+          "current": [
+            0,
+            0,
+            0
+          ],
+          "previous": [
+            0,
+            0,
+            0
+          ],
+          "velocity": [
+            0,
+            0,
+            0
+          ],
+          "grounded": true,
+          "renderedPosition": [
+            0,
+            0,
+            0
+          ],
+          "renderedQuaternion": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "renderedScale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "cargo": {
+          "bodyId": 99,
+          "shapeId": 100,
+          "position": [
+            0,
+            0.39,
+            0
+          ],
+          "quaternion": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "velocity": [
+            0,
+            0,
+            0
+          ],
+          "angularVelocity": [
+            0,
+            0,
+            0
+          ],
+          "masks": [
+            2,
+            1
+          ],
+          "held": false
+        },
+        "controls": {
+          "aimHeld": false,
+          "isAiming": false,
+          "yaw": 0,
+          "pitch": 0,
+          "facing": 0,
+          "shotPoseTime": 0,
+          "shotAimPoint": null
+        },
+        "camera": {
+          "fov": 90,
+          "aspect": 1.7777777777777777,
+          "near": 0.1,
+          "far": 130,
+          "eye": [
+            0,
+            0,
+            0
+          ],
+          "quaternion": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "up": [
+            0,
+            1,
+            0
+          ],
+          "matrixWorldInverse": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            1
+          ],
+          "projection": [
+            0.5625000000000001,
+            0,
+            0,
+            0,
+            0,
+            1.0000000000000002,
+            0,
+            0,
+            0,
+            0,
+            -1.0015396458814472,
+            -1,
+            0,
+            0,
+            -0.20015396458814472,
+            0
+          ],
+          "rig": {
+            "vectors": {
+              "playerPivot": [
+                0,
+                0,
+                0
+              ],
+              "lookPoint": [
+                0,
+                0,
+                -16
+              ],
+              "viewUp": [
+                0,
+                1,
+                0
+              ]
+            },
+            "flags": {
+              "fullBodyFraming": true,
+              "confinedFraming": true,
+              "inclinedFraming": false,
+              "obstructed": true,
+              "avoidanceActive": true,
+              "portalFramingActive": false,
+              "rampFraming": false
+            },
+            "springs": {
+              "yaw": 0,
+              "pitch": 0,
+              "distance": 3
+            },
+            "clipping": []
+          }
+        },
+        "bodyVertexProjection": {
+          "vertices": 96753,
+          "bones": 15,
+          "minX": -0.056250000000000015,
+          "maxX": 0.056250000000000015,
+          "minY": -0.20000000000000007,
+          "maxY": 0.20000000000000007,
+          "minDepth": 2,
+          "maxDepth": 3,
+          "outsideLensCount": 0,
+          "behindCount": 0,
+          "nearCount": 0,
+          "insideLens": true,
+          "renderEligibility": [
+            {
+              "meshUuid": "synthetic-mesh",
+              "vertices": 96753,
+              "objectVisible": true,
+              "materialVisible": true,
+              "layerMatch": true,
+              "renderEligible": true
+            }
+          ],
+          "renderEligibleVertices": 96753,
+          "renderEligibleOutsideLensCount": 0,
+          "renderEligibleInsideLens": true,
+          "extremaWitnesses": {
+            "minX": {
+              "meshUuid": "synthetic-mesh",
+              "vertex": 0,
+              "world": [
+                -0.2,
+                0,
+                -2
+              ],
+              "ndc": [
+                -0.056250000000000015,
+                0,
+                0.9014626635873748
+              ],
+              "depth": 2
+            },
+            "maxX": {
+              "meshUuid": "synthetic-mesh",
+              "vertex": 0,
+              "world": [
+                0.2,
+                0,
+                -2
+              ],
+              "ndc": [
+                0.056250000000000015,
+                0,
+                0.9014626635873748
+              ],
+              "depth": 2
+            },
+            "minY": {
+              "meshUuid": "synthetic-mesh",
+              "vertex": 0,
+              "world": [
+                0,
+                -0.4,
+                -2
+              ],
+              "ndc": [
+                0,
+                -0.20000000000000007,
+                0.9014626635873748
+              ],
+              "depth": 2
+            },
+            "maxY": {
+              "meshUuid": "synthetic-mesh",
+              "vertex": 0,
+              "world": [
+                0,
+                0.4,
+                -2
+              ],
+              "ndc": [
+                0,
+                0.20000000000000007,
+                0.9014626635873748
+              ],
+              "depth": 2
+            },
+            "minDepth": {
+              "meshUuid": "synthetic-mesh",
+              "vertex": 0,
+              "world": [
+                -0.2,
+                0,
+                -2
+              ],
+              "ndc": [
+                -0.056250000000000015,
+                0,
+                0.9014626635873748
+              ],
+              "depth": 2
+            },
+            "maxDepth": {
+              "meshUuid": "synthetic-mesh",
+              "vertex": 0,
+              "world": [
+                0,
+                0,
+                -3
+              ],
+              "ndc": [
+                0,
+                0,
+                0.9348216576853989
+              ],
+              "depth": 3
+            }
+          },
+          "source": "SYNTHETIC VALIDATOR FIXTURE, NOT A RUNTIME CAMERA MEASUREMENT"
+        },
+        "conservativeEnvelope": {
+          "vertices": 8,
+          "bones": 15,
+          "minX": -0.056250000000000015,
+          "maxX": 0.056250000000000015,
+          "minY": -0.20000000000000007,
+          "maxY": 0.20000000000000007,
+          "minDepth": 2,
+          "maxDepth": 3,
+          "outsideLensCount": 0,
+          "behindCount": 0,
+          "nearCount": 0,
+          "insideLens": true,
+          "renderEligibility": [
+            {
+              "meshUuid": "synthetic-mesh",
+              "vertices": 96753,
+              "objectVisible": true,
+              "materialVisible": true,
+              "layerMatch": true,
+              "renderEligible": true
+            }
+          ],
+          "renderEligibleVertices": 96753,
+          "renderEligibleOutsideLensCount": 0,
+          "renderEligibleInsideLens": true,
+          "extremaWitnesses": {
+            "minX": {
+              "meshUuid": "synthetic-mesh",
+              "vertex": 0,
+              "world": [
+                -0.2,
+                0,
+                -2
+              ],
+              "ndc": [
+                -0.056250000000000015,
+                0,
+                0.9014626635873748
+              ],
+              "depth": 2
+            },
+            "maxX": {
+              "meshUuid": "synthetic-mesh",
+              "vertex": 0,
+              "world": [
+                0.2,
+                0,
+                -2
+              ],
+              "ndc": [
+                0.056250000000000015,
+                0,
+                0.9014626635873748
+              ],
+              "depth": 2
+            },
+            "minY": {
+              "meshUuid": "synthetic-mesh",
+              "vertex": 0,
+              "world": [
+                0,
+                -0.4,
+                -2
+              ],
+              "ndc": [
+                0,
+                -0.20000000000000007,
+                0.9014626635873748
+              ],
+              "depth": 2
+            },
+            "maxY": {
+              "meshUuid": "synthetic-mesh",
+              "vertex": 0,
+              "world": [
+                0,
+                0.4,
+                -2
+              ],
+              "ndc": [
+                0,
+                0.20000000000000007,
+                0.9014626635873748
+              ],
+              "depth": 2
+            },
+            "minDepth": {
+              "meshUuid": "synthetic-mesh",
+              "vertex": 0,
+              "world": [
+                -0.2,
+                0,
+                -2
+              ],
+              "ndc": [
+                -0.056250000000000015,
+                0,
+                0.9014626635873748
+              ],
+              "depth": 2
+            },
+            "maxDepth": {
+              "meshUuid": "synthetic-mesh",
+              "vertex": 0,
+              "world": [
+                0,
+                0,
+                -3
+              ],
+              "ndc": [
+                0,
+                0,
+                0.9348216576853989
+              ],
+              "depth": 3
+            }
+          },
+          "source": "SYNTHETIC VALIDATOR FIXTURE, NOT A RUNTIME CAMERA MEASUREMENT",
+          "requiredFovUncapped": 90,
+          "cap": 120,
+          "exceedsCap": false
+        },
+        "readPurity": {
+          "physicalStateUnchanged": true,
+          "lensAndLocalAppearancePoseUnchanged": true,
+          "attributeBytesUnchanged": true,
+          "appearanceSha256": "1111111111111111111111111111111111111111111111111111111111111111",
+          "derivedWorldAndSkeletonMatricesPrepared": true
+        },
+        "encodedBinding": {
+          "encodedFrame": 2,
+          "visualFrame": 30,
+          "terminal": false,
+          "source": "actual encoder/capture event supplied by external harness"
+        },
+        "materialProvenance": {
+          "validatedMeshes": 1,
+          "originalAuthoredMeshes": 1,
+          "ownedClippedMeshes": 0,
+          "originalStylesTexturesAndProgramsPreserved": true,
+          "activeEntryIndex": null,
+          "sourcePlane": null
+        }
+      }
+    ],
+    "encodedBindings": [
+      {
+        "encodedFrame": 0,
+        "visualFrame": 0,
+        "terminal": false,
+        "source": "actual encoder/capture event supplied by external harness"
+      },
+      {
+        "encodedFrame": 1,
+        "visualFrame": 15,
+        "terminal": false,
+        "source": "actual encoder/capture event supplied by external harness"
+      },
+      {
+        "encodedFrame": 2,
+        "visualFrame": 30,
+        "terminal": false,
+        "source": "actual encoder/capture event supplied by external harness"
+      }
+    ],
+    "shotRequests": [
+      {
+        "requestWorldStep": 42,
+        "afterObservedVisualFrame": 14,
+        "beforeNextVisualFrame": 15,
+        "inputChannel": 0,
+        "returned": true,
+        "portalShotsRequestEmitted": true,
+        "lastRequestObserved": {
+          "accepted": true,
+          "index": 0,
+          "sequence": 1
+        },
+        "capturedTarget": [
+          0,
+          0,
+          -4
+        ],
+        "capturedTargetNdc": [
+          0,
+          0,
+          0.951501154734411
+        ],
+        "actualCaptureRay": {
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "direction": [
+            0,
+            0,
+            -1
+          ]
+        },
+        "lensUnchangedByRequest": true,
+        "lens": {
+          "eye": [
+            0,
+            0,
+            0
+          ],
+          "q": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "fov": 90,
+          "projection": [
+            0.5625000000000001,
+            0,
+            0,
+            0,
+            0,
+            1.0000000000000002,
+            0,
+            0,
+            0,
+            0,
+            -1.0015396458814472,
+            -1,
+            0,
+            0,
+            -0.20015396458814472,
+            0
+          ],
+          "aspect": 1.7777777777777777,
+          "near": 0.1,
+          "far": 130
+        }
+      }
+    ],
+    "allEncodedSamplesInside": true,
+    "encodedSamplesOutside": [],
+    "payloadRecordBytes": 0,
+    "outputJSONBytes": 16472
+  },
+  "args": {
+    "sourceIdentity": {
+      "sourceCommit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "tree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "sourceInputsSha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "packageFilesSha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "journeySha256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "browserSeamSha256": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+      "sourceReview": {
+        "runId": 123,
+        "runAttempt": 1
+      }
+    },
+    "bodyId": 99,
+    "video": {
+      "frames": 3,
+      "stride": 15,
+      "width": 640,
+      "height": 360,
+      "fps": 4,
+      "terminalSample": false,
+      "lastVisualFrame": 30
+    },
+    "result": {
+      "pass": true,
+      "sameCompanion": true,
+      "frames": 31,
+      "physicsSteps": 61,
+      "seconds": 0.5083333333333333,
+      "shots": 1,
+      "resets": 0,
+      "respawns": 0,
+      "cargoResets": 0,
+      "metrics": {
+        "solvedIds": [
+          "freight",
+          "sluice",
+          "optics",
+          "hoist",
+          "archive",
+          "flywheel",
+          "magnet",
+          "migrant",
+          "pendulum",
+          "inertia",
+          "crown"
+        ]
+      }
+    }
+  }
+}

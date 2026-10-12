@@ -362,6 +362,35 @@ export class LabCamera {
           if (score < bestScore) { bestScore = score; best = candidate; }
         }
       }
+      // An upright castle bay can block the rear boom while a high escape
+      // still needs more than the finite lens budget. Search farther sideways
+      // only for that measured failure. Prefer a swept, cap-fitting view over
+      // a shorter endpoint that merely leaves physical space around the body.
+      if (this.fullBodyFraming && this.confinedFraming && this.viewUp.dot(UP) >= Math.cos(.01)
+        && (!best || this.silhouetteFovAt(best) > 120)) {
+        const lateral = this.right.clone().setY(0).normalize();
+        if (lateral.lengthSq() < .01) lateral.set(1, 0, 0);
+        const along = new THREE.Vector3().crossVectors(lateral, UP);
+        let fitted = null, fittedScore = Infinity;
+        // Keep both the shoulder-relative and world-cardinal directions.
+        // Near a corner, rotating the sparse ring with aim can miss the only
+        // clear direction parallel to its wall.
+        for (const basis of [lateral, new THREE.Vector3(1, 0, 0)])
+        for (const radius of [5.6, 7.2, 8]) for (const height of [0, 1.5, 3]) for (let sector = 0; sector < 16; sector++) {
+          const angle = sector * Math.PI / 8;
+          const tangent = new THREE.Vector3().crossVectors(basis, UP);
+          const candidate = this.playerPivot.clone()
+            .addScaledVector(basis, Math.cos(angle) * radius)
+            .addScaledVector(tangent, Math.sin(angle) * radius);
+          candidate.y += height;
+          this.constrain(this.playerPivot, candidate);
+          if (candidate.distanceTo(this.playerPivot) < 2.4 || this.silhouetteFovAt(candidate) > 120) continue;
+          const score = candidate.distanceToSquared(this.desired)
+            + candidate.distanceToSquared(this.camera.position) * .15;
+          if (score < fittedScore) { fittedScore = score; fitted = candidate; }
+        }
+        if (fitted) best = fitted;
+      }
       if (best) { escapePosition = best; avoidGoal.copy(best).sub(this.desired); this.avoidanceActive = true; }
       else this.avoidanceActive = false;
     } else this.avoidanceActive = false;
@@ -399,7 +428,12 @@ export class LabCamera {
     // A fast fall past a balcony can close the available boom in one physics
     // step. In that exceptional case collision safety outranks spring lag:
     // use the already swept escape rather than render from inside the body.
-    if (escapePosition && this.camera.position.distanceTo(this.playerPivot) < 2.2) {
+    // A confined upright view also cannot interpolate through a lens that
+    // exceeds its finite budget when the swept endpoint already fits it.
+    const confinedOverBudget = this.fullBodyFraming && this.confinedFraming
+      && this.viewUp.dot(UP) >= Math.cos(.01) && this.silhouetteFovAt(this.camera.position) > 120
+      && escapePosition && this.silhouetteFovAt(escapePosition) <= 120;
+    if (escapePosition && (this.camera.position.distanceTo(this.playerPivot) < 2.2 || confinedOverBudget)) {
       this.camera.position.copy(escapePosition);
       this.distance = this.camera.position.distanceTo(this.focus);
       this.distanceVelocity = 0;
@@ -454,9 +488,10 @@ export class LabCamera {
   fitSilhouetteLens(step) {
     const upright = this.viewUp.dot(UP) >= Math.cos(.01);
     if (!this.fullBodyFraming || step <= 0 || (upright && !(this.confinedFraming && this.obstructed))) return;
+    const halfWidth = this.confinedFraming && upright ? .85 : .65;
     for (let pass = 0; pass < 3; pass++) {
       let tangent = 0;
-      for (const x of [-.65, .65]) for (const y of [-1.52, 1.52]) for (const z of [-.65, .65]) {
+      for (const x of [-halfWidth, halfWidth]) for (const y of [-1.52, 1.52]) for (const z of [-halfWidth, halfWidth]) {
         this.silhouettePoint.set(x, y, z).add(this.playerPivot)
           .applyMatrix4(this.camera.matrixWorldInverse);
         const depth = -this.silhouettePoint.z;
@@ -494,6 +529,23 @@ export class LabCamera {
         this.distanceVelocity = 0;
       }
     }
+  }
+
+  // Evaluate the same eight-corner margin as the final fit without writing
+  // the live lens. The look point and centre-ray target stay unchanged.
+  silhouetteFovAt(position) {
+    const forward = this.lookPoint.clone().sub(position).normalize();
+    const right = new THREE.Vector3().crossVectors(forward, this.viewUp).normalize();
+    const up = new THREE.Vector3().crossVectors(right, forward).normalize();
+    const point = new THREE.Vector3();let tangent = 0;
+    for (const x of [-.85, .85]) for (const y of [-1.52, 1.52]) for (const z of [-.85, .85]) {
+      point.set(x, y, z).add(this.playerPivot).sub(position);
+      const depth = point.dot(forward);
+      if (depth <= this.camera.near) return 180;
+      tangent = Math.max(tangent, Math.abs(point.dot(up)) / (depth * .96),
+        Math.abs(point.dot(right)) / (depth * this.camera.aspect * .96));
+    }
+    return THREE.MathUtils.radToDeg(2 * Math.atan(tangent));
   }
 
   // An escape must retain the traveller in the lens, not merely leave space
