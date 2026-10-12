@@ -26,7 +26,7 @@ def row(name, value):
 def save_isolation():
     prefixes = ['brainrot-foundation-v1:', 'brainrot-puzzle-pilot43-v1:', 'brainrot-puzzle-progression-v1:',
                 'brainrot-puzzle-progression-next-v1:', 'brainrot-puzzle-progression-finale-v1:',
-                'brainrot-tower41-ratchet-qualification-v1:']
+                'brainrot-tower41-ratchet-qualification-v1:', 'brainrot-tower41-native-v1:']
     key = 'brainrot-portal.preferences.v24'
     snapshot = {prefix + key: '{"completed":[0,42],"value":"старые байты"}' for prefix in prefixes}
     snapshot_hash = hashlib.sha256(json.dumps(snapshot, ensure_ascii=False, separators=(',', ':')).encode()).hexdigest()
@@ -38,8 +38,8 @@ def save_isolation():
                'legacySnapshotSha256': snapshot_hash, 'namespaceUsed': True, 'ownPreferencesSha256': 'c' * 64,
                'ownResumeLevel': 40, 'ownCompleted': [] if i < 5 else [40], 'ownQuality': 'low'}
               for i, name in enumerate(names)]
-    base = 'http://127.0.0.1:4173/brainrot-portal/tower41-native/'
-    bare = {'applicable': True, 'pass': True, 'url': base, 'pathname': '/brainrot-portal/tower41-native/', 'search': '',
+    base = 'http://127.0.0.1:4173/brainrot-portal/tower41-native-v2/'
+    bare = {'applicable': True, 'pass': True, 'url': base, 'pathname': '/brainrot-portal/tower41-native-v2/', 'search': '',
             'state': 'ready', 'level': 41, 'preview': True, 'edition': 'foundation', 'startChoices': [40], 'settingsChoices': [40],
             'editionNavigationPresent': False, 'editionNavigationAnchors': [], 'debugGameHook': 'undefined',
             'debugPreferencesHook': 'undefined', 'ratchetHook': 'undefined', 'oldBytesUnchanged': True,
@@ -56,6 +56,55 @@ def save_isolation():
                          'replay': {'pass': True, 'button': '#play-again-button', 'label': 'Пройти ещё раз', 'level': 41,
                                     'state': 'playing', 'solved': [], 'atSpawn': True},
                          'reload': {'pass': True, 'state': 'ready', 'level': 41, 'completed': [40], 'resumeLevel': 40}}}
+
+
+def pendulum_proof():
+    # Structural validator fixture only. It is never labelled browser or physics acceptance.
+    original = 7
+    bridge = {'id': 10, 'type': 1, 'mass': 15, 'position': [0, 0, 0], 'quaternion': [0, 0, 0, 1],
+              'velocity': [0, 0, 0], 'angularVelocity': [0, 0, 0], 'inertia': [1, 2, 3], 'COMOffset': [1, 0, 0]}
+    pawl = {**copy.deepcopy(bridge), 'id': 11, 'mass': 2}
+    load = {'originalCargoBodyId': original, 'originalCargoShapeId': 70, 'cupBodyId': 10, 'cupShapeId': 102,
+            'normalForce': 2, 'bridgeAngle': -.2, 'freeOriginal': True}
+    cell = {**{flag: True for flag in ('ready', 'latched', 'catchArmed', 'bodiesPresent', 'constraintsPresent',
+                                      'originalCargoPresent', 'originalCargoIdentityValid', 'originalCargoFree',
+                                      'currentCollisionValid', 'unloadedRetained', 'readyForCrossing')},
+            'disposed': False, 'loadContact': False, 'loadNormalForce': 0, 'loadContactCount': 0,
+            'originalCargoRawContact': False, 'originalCargoRawContactCount': 0, 'originalCargoClearedCup': True,
+            'worldStep': 100, 'contactStep': 100, 'loadedStep': 20, 'loadedTicks': 10, 'loadedNormalImpulse': .3,
+            'lastLoadedNormalForce': 2, 'retainedStartStep': 30, 'retainedTicks': 71,
+            'pawlContactCount': 1, 'pawlNormalForce': 3, 'seatContactCount': 1, 'seatNormalForce': 4,
+            'angle': 0, 'pawlAngle': 0, 'bodyIds': [10, 11, 12, 13], 'constraintIds': [201, 202],
+            'constraintEquationCounts': [5, 5], 'constraintMotorEnabled': [False, False],
+            'constraintMotorEquationPresent': [False, False], 'originalCargoBodyId': original,
+            'originalCargoShapeId': 70, 'cupShapeId': 102, 'deckShapeId': 101, 'pawlShapeId': 103,
+            'pawlHeelShapeId': 104, 'seatBodyId': 12, 'seatShapeId': 105, 'bridge': bridge, 'pawl': pawl,
+            'loadedWitness': {'first': {**load, 'worldStep': 10}, 'last': {**load, 'worldStep': 20}},
+            'handCount': 1, 'handAngularImpulse': 1.2,
+            'catchWitness': {**load, 'worldStep': 15, 'handCount': 1, 'angularImpulse': -1.2,
+                             'action': 'close', 'qualifiedLoad': True, 'loadContact': True, 'loadedAtStep': 15,
+                             'loadedStep': 15, 'loadNormalForce': 2, 'pawlBodyId': 11,
+                             'angularMomentumBefore': 0, 'angularMomentumAfter': -1.2}}
+    support = {'grounded': True, 'live': True, 'footprintInside': True, 'foot': [0, 0, 0], 'velocity': [0, 0, 0],
+               'supportNormal': [0, 1, 0], 'supportHeight': 0, 'supportGap': 0, 'bodyId': 99, 'shapeId': 999,
+               'shapeIndex': 0, 'colliderId': 'founded-test-floor', 'bodyPosition': [0, -.2, 0],
+               'bounds': [[-6, -.4, -2], [6, 0, 2]],
+               'bodyQuaternion': [0, 0, 0, 1], 'shapeHalf': [6, .2, 2]}
+    checkpoints = []
+    for name, x, step in [('near', -4, 61), ('mid', 0, 70), ('far', 4, 80)]:
+        checkpoints.append({**copy.deepcopy(support), 'name': name, 'worldStep': step, 'kind': 'owned-oriented-deck',
+                            'capsuleGrounded': True, 'originalCargoBodyId': original, 'bodyId': 10, 'shapeId': 101,
+                            'localFoot': [x, .2, 0], 'shapeOffset': [0, 0, 0], 'foot': [x, .2, 0], 'supportHeight': .2, 'bodyPosition': [0, 0, 0],
+                            'pose': {'center': [0, 0, 0], 'quaternion': [0, 0, 0, 1], 'step': step,
+                                     'bounds': [[-6, -.2, -2], [6, .2, 2]]}})
+    checkpoints.append({**copy.deepcopy(support), 'name': 'island', 'worldStep': 90, 'kind': 'founded-floor',
+                        'bounds': [[-6, -.4, -2], [6, 0, 2]]})
+    crossing = {'complete': True, 'supportedDeckSteps': 29, 'deckBodyId': 10, 'deckShapeIndex': 0,
+                'originalCargoBodyId': original, 'nearLandingStep': 60, 'firstStep': 61, 'midStep': 70,
+                'farStep': 80, 'islandStep': 90, 'nearLanding': {**copy.deepcopy(support), 'worldStep': 60, 'kind': 'founded-floor'},
+                'checkpoints': checkpoints}
+    return {'physicalLowerCatch': True, 'upperCatchKinematic': True, 'originalCargo': True,
+            'lowerAngle': 0, 'upperHeight': 6, 'lowerPhysicalCell': cell, 'lowerCrossing': crossing}
 
 
 class TemporaryTest(unittest.TestCase):
@@ -148,7 +197,7 @@ class BareEntryTests(unittest.TestCase):
                     P.assert_preview_save_isolation(rejected)
 
     def test_exact_explicit_local_root_nonapplicable_object_is_only_allowed_outside_native_paths(self):
-        for pathname in ('/', '/local-review/', '/tower41-native/nested/', '/other/tower41-native/'):
+        for pathname in ('/', '/local-review/', '/tower41-native-v2/nested/', '/other/tower41-native-v2/'):
             isolated = save_isolation()
             base = 'http://127.0.0.1:4173' + pathname
             isolated['playerURL'] = base + P.QUERY
@@ -165,7 +214,7 @@ class BareEntryTests(unittest.TestCase):
 
     def test_default_http_port_origin_comparison_matches_browser_urls(self):
         isolated = save_isolation()
-        pathname = '/tower41-native/'
+        pathname = '/tower41-native-v2/'
         isolated['playerURL'] = 'http://example.test:80' + pathname + P.QUERY
         isolated['reviewURL'] = 'http://example.test' + pathname + P.QUERY + '&debug=1'
         isolated['bareEntry']['url'] = 'http://example.test' + pathname
@@ -197,7 +246,7 @@ class BareEntryTests(unittest.TestCase):
             elif case == 'review-origin':
                 isolated['reviewURL'] = isolated['reviewURL'].replace('127.0.0.1', 'example.test')
             elif case == 'review-path':
-                isolated['reviewURL'] = isolated['reviewURL'].replace('/tower41-native/', '/other/')
+                isolated['reviewURL'] = isolated['reviewURL'].replace('/tower41-native-v2/', '/other/')
             elif case.startswith('player-'):
                 name = {'player-debug': 'debug', 'player-smoke': 'smoke', 'player-ratchet': 'tower41ratchet', 'player-pilot': 'pilot'}[case]
                 isolated['playerURL'] += '&' + name + '=1'
@@ -331,7 +380,7 @@ class TarTests(TemporaryTest):
                     [('hard', tarfile.LNKTYPE, b'')], [('fifo', tarfile.FIFOTYPE, b'')],
                     [('a', tarfile.REGTYPE, b'x'), ('a/b', tarfile.REGTYPE, b'y')],
                     [('a', tarfile.REGTYPE, b'x'), ('./a', tarfile.REGTYPE, b'y')],
-                    [('tower41-native', tarfile.DIRTYPE, b'')], [('./', tarfile.DIRTYPE, b''), ('.', tarfile.DIRTYPE, b'')]]
+                    [('tower41-native-v2', tarfile.DIRTYPE, b'')], [('./', tarfile.DIRTYPE, b''), ('.', tarfile.DIRTYPE, b'')]]
         for members in examples:
             with self.subTest(members=members):
                 filename = self.tar(members)
@@ -349,7 +398,10 @@ class PipelineFixture(TemporaryTest):
         self.source_identity = {key: self.expected[key] for key in ('sourceCommit', 'sourceReview')}
         for name, content in [('index.html', b'OLD MAIN'), ('history/retained.bin', b'\x00\xffOLD HISTORY'),
                               ('puzzle-progression-finale/build-info.json', b'OLD FINALE BUILD'),
-                              ('puzzle-progression-finale/preview-status.json', b'OLD FINALE STATUS'), ('build-info.json', b'OLD BUILD')]:
+                              ('puzzle-progression-finale/preview-status.json', b'OLD FINALE STATUS'), ('build-info.json', b'OLD BUILD'),
+                              ('tower41-native/index.html', b'OLD V1 PREVIEW'),
+                              ('tower41-native/evidence/tower41-native.mp4', b'OLD V1 MOVIE'),
+                              ('tower41-native/build-info.json', b'OLD V1 BUILD')]:
             self.write('baseline/' + name, content)
         self.before = P.inventory(self.root / 'baseline')
         for key, value in [('BASELINE_COUNT', len(self.before)), ('BASELINE_BYTES', sum(row['bytes'] for row in self.before)),
@@ -375,13 +427,14 @@ class PipelineFixture(TemporaryTest):
         evidence = {'sourceCommit': self.expected['sourceCommit'], 'previewSaveIsolation': self.isolation, 'video': video,
                     'result': {'pass': True, 'sameCompanion': True, 'resets': 0, 'respawns': 0, 'cargoResets': 0,
                                'metrics': {'won': True, 'completedStages': 11}},
-                    'observed': {'seenResets': 0}, 'errors': []}
+                    'observed': {'seenResets': 0, 'bodyId': 7, 'events': [{'id': 'pendulum', 'proof': pendulum_proof()}]}, 'errors': []}
         evidence_hash = hashlib.sha256(P.json_bytes(evidence)).hexdigest()
         receipts = {'source': {'source.json': self.source_identity, 'package.json': {**self.source_identity, 'pass': True, 'buildInfoSha256': info_hash}},
                     'cpu': {'report.json': {**self.source_identity, 'pass': True}},
                     'nativeContact': {'tower41-next-cell-contact/binding.json': {**self.source_identity, 'pass': True}},
                     'nativeCastle': {'binding.json': {**self.source_identity, 'pass': True, 'mechanisms': 11, 'sameCargo': True, 'resets': 0,
                                                        'buildInfoSha256': info_hash, 'evidenceSha256': evidence_hash,
+                                                       'pendulum': P.assert_pendulum_physical_proof(pendulum_proof(), 7),
                                                        'video': {'file': video['filename'], 'bytes': len(self.movie),
                                                                  'sha256': movie_hash, 'fullMP4Decode': True},
                                                        'previewSaveIsolation': {'pass': True, 'namespace': P.STORAGE_PREFIX,
@@ -409,7 +462,8 @@ class PipelineFixture(TemporaryTest):
             self.write('proof/' + relative, content)
             jobs.append({'name': name, 'id': 200 + i, 'conclusion': 'success', 'rawLog': row(relative, content)})
         self.binding = {'schemaVersion': 1, 'kind': 'tower41-native-exact-review', **self.expected,
-                        'preview': P.preview_scope(), 'previewSaveIsolation': self.isolation, 'artifacts': artifacts, 'jobs': jobs}
+                        'preview': P.preview_scope(), 'previewSaveIsolation': self.isolation, 'artifacts': artifacts, 'jobs': jobs,
+                        'pendulum': P.assert_pendulum_physical_proof(pendulum_proof(), 7)}
         copied_movie = {**self.source_identity, 'sourceArtifact': 'nativeCastle', 'sourcePath': video['filename'],
                         'path': P.SUPPLEMENTAL_VIDEO, 'bytes': len(self.movie), 'sha256': movie_hash}
         copied_report = {**self.source_identity, 'sourceArtifact': 'nativeCastle', 'sourcePath': 'evidence.json',
@@ -528,7 +582,7 @@ class PipelineTests(PipelineFixture):
                 P.check_manifest(changed, 'published', self.expected)
 
     def test_existing_native_namespace_rejected_even_when_empty(self):
-        (self.root / 'baseline/tower41-native').mkdir()
+        (self.root / 'baseline/tower41-native-v2').mkdir()
         with self.assertRaisesRegex(ValueError, 'already exists'):
             P.assemble(self.args)
         self.assertFalse((self.root / 'site').exists())
@@ -639,6 +693,95 @@ class PipelineTests(PipelineFixture):
         self.assertEqual((self.root / 'site/existing').read_bytes(), b'keep')
 
 
+class PendulumProofTests(TemporaryTest):
+    def test_complete_retained_original_cargo_and_supported_crossing_witness_passes(self):
+        proof = pendulum_proof()
+        summary = P.assert_pendulum_physical_proof(proof, 7)
+        self.assertEqual(summary, {'pass': True, 'originalCargoBodyId': 7, 'loadedStep': 20, 'retainedStartStep': 30,
+                                  'currentStep': 100, 'supportedDeckSteps': 29, 'islandStep': 90,
+                                  'physicalLowerCatch': True, 'upperCatchKinematic': True})
+        self.assertEqual(P.pendulum_event({'observed': {'bodyId': 7, 'events': [{'id': 'pendulum', 'proof': proof}]}}), summary)
+
+    def test_stale_contacts_held_foreign_motored_cells_and_false_catch_momentum_are_rejected(self):
+        for path, value in [('originalCargo', False), ('twoPhysicalCatches', True),
+                            ('lowerPhysicalCell.contactStep', 99), ('lowerPhysicalCell.originalCargoFree', False),
+                            ('lowerPhysicalCell.currentCollisionValid', False), ('lowerPhysicalCell.originalCargoBodyId', 8),
+                            ('lowerPhysicalCell.loadContact', True), ('lowerPhysicalCell.retainedTicks', 23),
+                            ('lowerPhysicalCell.bridge.type', 4), ('lowerPhysicalCell.constraintMotorEnabled', [True, False]),
+                            ('lowerPhysicalCell.constraintMotorEquationPresent', [True, False]),
+                            ('lowerPhysicalCell.catchWitness.action', 'release'), ('lowerPhysicalCell.catchWitness.qualifiedLoad', False),
+                            ('lowerPhysicalCell.catchWitness.angularImpulse', 1.2), ('lowerPhysicalCell.catchWitness.angularMomentumAfter', -.9),
+                            ('lowerPhysicalCell.loadedWitness.first.freeOriginal', False), ('lowerPhysicalCell.pawlNormalForce', 0)]:
+            with self.subTest(path=path):
+                proof = pendulum_proof()
+                target = proof
+                keys = path.split('.')
+                for key in keys[:-1]:
+                    target = target[key]
+                target[keys[-1]] = value
+                with self.assertRaises(ValueError):
+                    P.assert_pendulum_physical_proof(proof, 7)
+        for value in [True, float('nan'), float('inf')]:
+            proof = pendulum_proof(); proof['lowerPhysicalCell']['bridge']['inertia'][0] = value
+            with self.assertRaises(ValueError):
+                P.assert_pendulum_physical_proof(proof, 7)
+
+    def test_support_pose_world_foot_normal_and_founded_floor_certificates_cannot_be_relabelled(self):
+        for mutate in [lambda p: p['lowerCrossing']['checkpoints'][0]['pose'].update(center=[.01, 0, 0]),
+                       lambda p: p['lowerCrossing']['checkpoints'][0].update(foot=[-3, .2, 0]),
+                       lambda p: p['lowerCrossing']['checkpoints'][0].update(shapeOffset=[1, 0, 0]),
+                       lambda p: p['lowerCrossing']['checkpoints'][0].update(supportNormal=[.1, 1, 0]),
+                       lambda p: p['lowerCrossing']['nearLanding'].update(bodyPosition=[0, 0, 0]),
+                       lambda p: p['lowerCrossing']['nearLanding'].update(shapeHalf=[5, .2, 2]),
+                       lambda p: p['lowerCrossing']['nearLanding'].update(foot=[5.9, 0, 0]),
+                       lambda p: p['lowerCrossing']['checkpoints'][3].update(bodyQuaternion=[0, 0, 1, 0])]:
+            proof = pendulum_proof(); mutate(proof)
+            with self.assertRaises(ValueError):
+                P.assert_pendulum_physical_proof(proof, 7)
+
+    def test_six_causal_count_angle_current_load_normal_and_current_bounds_forgeries_are_rejected(self):
+        mutations = [lambda p: p['lowerPhysicalCell']['catchWitness'].update(bridgeAngle=.42),
+                     lambda p: p['lowerPhysicalCell']['catchWitness'].update(loadedStep=10, loadedAtStep=10),
+                     lambda p: p['lowerPhysicalCell'].update(loadedTicks=10000),
+                     lambda p: p['lowerCrossing'].update(supportedDeckSteps=10000),
+                     lambda p: p['lowerCrossing']['nearLanding'].update(supportNormal=[0, 100, 0]),
+                     lambda p: p['lowerCrossing']['checkpoints'][0]['pose'].update(bounds=[[-50, -50, -50], [50, 50, 50]])]
+        for mutate in mutations:
+            proof = pendulum_proof(); mutate(proof)
+            with self.assertRaises(ValueError):
+                P.assert_pendulum_physical_proof(proof, 7)
+
+    def test_airborne_out_of_order_wrong_deck_and_stale_pose_crossings_are_rejected(self):
+        for mutate in [lambda p: p['lowerCrossing'].update(originalCargoBodyId=8),
+                       lambda p: p['lowerCrossing'].update(midStep=60),
+                       lambda p: p['lowerCrossing'].update(supportedDeckSteps=23),
+                       lambda p: p['lowerCrossing']['nearLanding'].update(bodyId=10),
+                       lambda p: p['lowerCrossing']['checkpoints'][0].update(grounded=False),
+                       lambda p: p['lowerCrossing']['checkpoints'][0].update(live=False),
+                       lambda p: p['lowerCrossing']['checkpoints'][0].update(bodyId=99),
+                       lambda p: p['lowerCrossing']['checkpoints'][0].update(shapeIndex=1),
+                       lambda p: p['lowerCrossing']['checkpoints'][0].update(supportGap=.02),
+                       lambda p: p['lowerCrossing']['checkpoints'][0]['pose'].update(step=60),
+                       lambda p: p['lowerCrossing']['checkpoints'][0].update(localFoot=[-5.9, .2, 0]),
+                       lambda p: p['lowerCrossing']['checkpoints'][3].update(bodyId=12)]:
+            proof = pendulum_proof(); mutate(proof)
+            with self.assertRaises(ValueError):
+                P.assert_pendulum_physical_proof(proof, 7)
+        proof = pendulum_proof()
+        for events in [[], [{'id': 'pendulum', 'proof': proof}] * 2, [{'id': 'pendulum', 'proof': None}]]:
+            with self.assertRaises(ValueError):
+                P.pendulum_event({'observed': {'bodyId': 7, 'events': events}})
+
+
+class PendulumBindingTests(PipelineFixture):
+    def test_relabelled_pendulum_binding_cannot_assemble(self):
+        self.binding['pendulum']['supportedDeckSteps'] = 0
+        self.write_binding()
+        with self.assertRaisesRegex(ValueError, 'Pendulum binding differs'):
+            self.assembled()
+        self.assertFalse((self.root / 'site').exists())
+
+
 class BaselineTests(PipelineFixture):
     def make_accepted_zip(self, modified=False):
         filename = self.root / 'accepted.tar'
@@ -656,8 +799,13 @@ class BaselineTests(PipelineFixture):
         patcher.start()
         self.addCleanup(patcher.stop)
         accepted = {'schemaVersion': 1, 'sourceCommit': P.BASELINE_SOURCE, 'publisherCommit': P.BASELINE_PUBLISHER,
-                    'publicationRun': P.BASELINE_RUN, 'sourceReview': P.BASELINE_REVIEW, 'phase': 'published', 'siteFiles': self.before}
+                    'publicationRun': P.BASELINE_RUN, 'sourceReview': P.BASELINE_REVIEW, 'phase': 'published', 'siteFiles': self.before,
+                    'siteBytes': P.BASELINE_BYTES, 'siteFilesSha256': P.BASELINE_INVENTORY_SHA256}
         self.write('accepted-publication/proof/manifest.json', P.json_bytes(accepted))
+        self.write('accepted-publication/proof/public-bytes.json', P.json_bytes({
+            **{key: accepted[key] for key in ('sourceCommit', 'publisherCommit', 'publicationRun', 'sourceReview')},
+            'pass': True, 'phase': 'published', 'checked': P.BASELINE_COUNT, 'bytes': P.BASELINE_BYTES,
+            'siteFilesSha256': P.BASELINE_INVENTORY_SHA256}))
         return argparse.Namespace(zip=str(pages_zip), accepted_proof=str(self.root / 'accepted-publication'),
                                   output=str(self.root / 'restored-baseline'))
 
@@ -683,6 +831,156 @@ class BaselineTests(PipelineFixture):
         with self.assertRaisesRegex(ValueError, 'safe integer'):
             P.baseline(args)
         self.assertFalse((self.root / 'restored-baseline').exists())
+
+
+class PrivateAcceptedProofTests(PipelineFixture):
+    make_accepted_zip = BaselineTests.make_accepted_zip
+    def make_private_proof(self, extra=()):
+        self.make_accepted_zip()
+        members = [(name, (self.root / 'accepted-publication/proof' / name).read_bytes())
+                   for name in ('manifest.json', 'public-bytes.json')]
+        members.extend([('downloads/previous-baseline.zip', b'PRIVATE ARCHIVE MUST NOT BE EXPANDED'),
+                        ('public-native/old.mp4', b'PRIVATE MOVIE MUST NOT BE EXPANDED')])
+        members.extend(extra)
+        filename = self.zip(members, 'private-proof.zip')
+        patcher = mock.patch.object(P, 'ACCEPTED_PROOF_ARTIFACT',
+                                    {'id': 11752231330, 'bytes': filename.stat().st_size,
+                                     'sha256': P.sha256_file(filename)})
+        patcher.start()
+        self.addCleanup(patcher.stop)
+        return filename
+
+    def test_selects_only_pinned_current_manifest_and_public_byte_receipt(self):
+        filename = self.make_private_proof()
+        rows = P.extract_accepted_proof(filename, self.root / 'selected')
+        self.assertEqual([item['path'] for item in rows], ['manifest.json', 'public-bytes.json'])
+        self.assertFalse((self.root / 'selected/downloads').exists())
+        self.assertFalse((self.root / 'selected/public-native').exists())
+        self.assertEqual(P.accepted_manifest(self.root / 'selected')[0], self.before)
+        self.assertEqual(P.MAX_BYTES, 600_000_000)
+        self.assertEqual(P.MAX_CANDIDATE_BYTES, 100_000_000)
+
+    def test_unsafe_nonselected_member_and_duplicate_manifest_reject_before_output(self):
+        for extra in [[('../ignored.txt', b'unsafe')], [('downloads', b'collision')],
+                      [('proof/manifest.json', b'{}')]]:
+            with self.subTest(extra=extra):
+                filename = self.make_private_proof(extra)
+                with self.assertRaises(ValueError):
+                    P.extract_accepted_proof(filename, self.root / 'selected')
+                self.assertFalse((self.root / 'selected').exists())
+                self.assertEqual(list(self.root.glob('.selected-staging-*')), [])
+
+    def test_private_pin_digest_size_and_current_public_byte_receipt_are_mandatory(self):
+        filename = self.make_private_proof()
+        for pin in [{**P.ACCEPTED_PROOF_ARTIFACT, 'bytes': filename.stat().st_size + 1},
+                    {**P.ACCEPTED_PROOF_ARTIFACT, 'sha256': '0' * 64}]:
+            with mock.patch.object(P, 'ACCEPTED_PROOF_ARTIFACT', pin), self.assertRaises(ValueError):
+                P.extract_accepted_proof(filename, self.root / 'selected')
+            self.assertFalse((self.root / 'selected').exists())
+        self.make_accepted_zip()
+        receipt = P.read_json(self.root / 'accepted-publication/proof/public-bytes.json')
+        receipt['pass'] = False
+        filename = self.zip([('manifest.json', (self.root / 'accepted-publication/proof/manifest.json').read_bytes()),
+                             ('public-bytes.json', P.json_bytes(receipt))], 'failed-private.zip')
+        with mock.patch.object(P, 'ACCEPTED_PROOF_ARTIFACT',
+                               {'id': 11752231330, 'bytes': filename.stat().st_size, 'sha256': P.sha256_file(filename)}), self.assertRaises(ValueError):
+            P.extract_accepted_proof(filename, self.root / 'selected')
+        self.assertFalse((self.root / 'selected').exists())
+        self.assertEqual(list(self.root.glob('.selected-staging-*')), [])
+
+    def test_large_private_namespace_cap_is_separate_from_public_extractor(self):
+        entries = []
+        for name in ('retained/one.zip', 'retained/two.zip'):
+            entry = zipfile.ZipInfo(name)
+            entry.file_size = 400_000_000
+            entry.compress_size = 400_000_000
+            entries.append(entry)
+        archive = mock.Mock(infolist=lambda: entries)
+        self.assertEqual(len(P.zip_entries(archive, P.MAX_PRIVATE_PROOF_BYTES)), 2)
+        with self.assertRaises(ValueError):
+            P.zip_entries(archive, P.MAX_BYTES)
+        filename = self.zip([('small', b'ordinary')])
+        with self.assertRaises(ValueError):
+            self.extract(filename, maximum=P.MAX_PRIVATE_PROOF_BYTES)
+        self.assertFalse((self.root / 'out').exists())
+
+    def test_old_preview_save_snapshot_is_required_and_never_the_active_v2_key(self):
+        isolation = save_isolation()
+        P.assert_preview_save_isolation(isolation)
+        key = 'brainrot-tower41-native-v1:brainrot-portal.preferences.v24'
+        self.assertIn(key, isolation['legacySnapshot'])
+        self.assertNotEqual(key, isolation['ownKey'])
+        for mutate in [lambda value: value['legacyPrefixes'].pop(),
+                       lambda value: value['legacySnapshot'].pop(key),
+                       lambda value: value.update(ownKey=key)]:
+            changed = copy.deepcopy(isolation)
+            mutate(changed)
+            with self.assertRaises(ValueError):
+                P.assert_preview_save_isolation(changed)
+
+
+class VerificationPacketTests(PipelineFixture):
+    def make_packet_input(self):
+        manifest = self.assembled()
+        evidence = P.read_json(self.root / 'proof/review-artifacts/native-castle/evidence.json')
+        self.write('proof/public-native/evidence.json', P.json_bytes(evidence))
+        self.write('proof/public-native/' + evidence['video']['filename'], self.movie)
+        self.write('proof/public-bytes.json', P.json_bytes({**self.expected, 'pass': True, 'phase': 'published',
+                   'checked': len(manifest['siteFiles']), 'bytes': manifest['siteBytes'], 'siteFilesSha256': manifest['siteFilesSha256']}))
+        self.write('proof/public-native/screenshot.png', b'PRIVATE IMAGE')
+        self.write('proof/downloads/old.zip', b'PRIVATE NESTED ARCHIVE')
+        self.write('proof/review-artifacts/build/source-code.js', b'PRODUCTION CODE')
+        return argparse.Namespace(**vars(self.args), output=str(self.root / 'verification-bundle'))
+
+    def test_bounded_packet_keeps_current_metadata_logs_and_whole_unchanged_public_movie(self):
+        args = self.make_packet_input()
+        with mock.patch('builtins.print'):
+            P.verification_bundle(args)
+        output = self.root / 'verification-bundle'
+        packet = P.read_json(output / 'verification-packet.json')
+        self.assertTrue(packet['pass'])
+        self.assertLessEqual(sum(row['bytes'] for row in P.inventory(output)), 100_000_000)
+        self.assertEqual(packet['filesSha256'], P.inventory_sha256(packet['files']))
+        self.assertTrue((output / 'package-binding.json').is_file())
+        self.assertTrue((output / 'manifest.json').is_file())
+        self.assertTrue((output / 'job-logs/200.log').is_file())
+        self.assertEqual((output / packet['completePublicMovie']['path']).read_bytes(), self.movie)
+        self.assertFalse((output / 'public-native/screenshot.png').exists())
+        self.assertFalse((output / 'downloads').exists())
+        self.assertFalse((output / 'review-artifacts/build').exists())
+        for row in packet['files']:
+            self.assertEqual((output / row['path']).read_bytes(), (self.root / 'proof' / row['path']).read_bytes())
+
+    def test_packet_rejects_failed_public_bytes_stale_runtime_and_changed_movie(self):
+        args = self.make_packet_input()
+        for path, field, changed in [('public-bytes.json', 'pass', False),
+                                     ('public-native/evidence.json', 'sourceCommit', 'f' * 40)]:
+            filename = self.root / 'proof' / path
+            original = filename.read_bytes()
+            value = P.read_json(filename)
+            value[field] = changed
+            filename.write_bytes(P.json_bytes(value))
+            with self.assertRaises(ValueError):
+                P.verification_bundle(args)
+            self.assertFalse(pathlib.Path(args.output).exists())
+            filename.write_bytes(original)
+        movie = self.root / 'proof/public-native/ordinary-castle.mp4'
+        movie.write_bytes(self.movie + b'MUTATED')
+        with self.assertRaises(ValueError):
+            P.verification_bundle(args)
+        self.assertFalse(pathlib.Path(args.output).exists())
+
+    def test_packet_caps_and_unselected_symlink_are_enforced_before_copy(self):
+        args = self.make_packet_input()
+        for limit, value in [('MAX_VERIFICATION_BYTES', len(self.movie) - 1), ('MAX_VERIFICATION_METADATA_BYTES', 1)]:
+            with mock.patch.object(P, limit, value), self.assertRaises(ValueError):
+                P.verification_bundle(args)
+            self.assertFalse(pathlib.Path(args.output).exists())
+        (self.root / 'proof/ignored-image.png').symlink_to(self.root / 'proof/manifest.json')
+        with self.assertRaises(ValueError):
+            P.verification_bundle(args)
+        self.assertFalse(pathlib.Path(args.output).exists())
+        self.assertEqual(list(self.root.glob('.verification-bundle-staging-*')), [])
 
 
 class FullVerificationTests(PipelineFixture):
@@ -729,7 +1027,7 @@ class HTTPTests(unittest.TestCase):
 
     def test_streamed_hash_size_encoding_status_and_content_length(self):
         value = b'\x00binary bytes\xff'
-        expected = row('tower41-native/assets/spaces file.js', value)
+        expected = row('tower41-native-v2/assets/spaces file.js', value)
         requests = []
         def opener(request, timeout):
             requests.append(request)

@@ -10,23 +10,24 @@ import {pathToFileURL} from 'node:url';
 
 export const PINS = Object.freeze({
   repository:'amazin20/brainrot-portal', publicBase:'https://amazin20.github.io/brainrot-portal/',
-  branch:'upgrade/tower41-preview-nav-20261012', reviewPath:'.github/workflows/tower41-next-cell-review.yml',
+  branch:'upgrade/tower41-pendulum-20261012', reviewPath:'.github/workflows/tower41-next-cell-review.yml',
   // Fill only after independent exact-attempt source, logs, package and movie acceptance.
-  sourceCommit:'58a71ddfc9bf704bef4c97fe13d16401c5a5f9f2', sourceTree:'ce2f93de147e96b991e62a0ba3e81a8b63efaec7', sourceParent:'9f00a4ee1c99d94f6e922e763fbd40d2f3dd79b7', reviewRun:38243168335, reviewAttempt:1,
+  sourceCommit:'5e552e9c3ac248b535d619741f15e99e29979cbf', sourceTree:'8d573c22140eeb9625fff94ca14efd3f97978c17', sourceParent:'58a71ddfc9bf704bef4c97fe13d16401c5a5f9f2', reviewRun:38291320140, reviewAttempt:1,
   controllerPath:'.github/workflows/publish-puzzle-progression-finale.yml',
-  baselinePublisher:'569918af19c4dafdc0f9450e668733c474e8ff56', baselineRun:38116282717,
+  baselinePublisher:'300e898c169a281bd3e0054e2c4b39bb055649e0', baselineRun:38251739817,
   canonicalSource:'8d2c01eacd86fe9235a35e7ec5f624ba62c3b29e', finaleSource:'0e257837ca157d59d29c2e892e9a81e4f21fc5a1',
-  baselineFiles:1623, baselineBytes:531927136,
-  baselineInventorySha256:'896e685b9e70a572f8c6d486f6a73f8704e6c24fe15495ca814eb008d40bfe26',
-  baselineArtifact:{id:11693810063,name:'github-pages',size_in_bytes:494948351,digest:'sha256:509e9d069bcf57de4b0a3cc9a57e533872524bc07783d3a7e46130ddda928264'},
-  baselineProof:{id:11692978754,name:'puzzle-progression-finale-camera-publication-proof-38116282717-1',size_in_bytes:12625985,digest:'sha256:828314f3a440f5e06a9bb37c93c0cf2738ce0cf0c17fcafa5c44b9bb484df050'},
-  namespace:'tower41-native/', query:'?edition=foundation&level=41&tower41preview=1',
-  storagePrefix:'brainrot-tower41-native-v1:', artifactStem:'tower41-next-cell',
+  baselineFiles:1706, baselineBytes:561674513,
+  baselineInventorySha256:'70ae091efbbad883c3d4eb5c1655b3a9bd55b403da19cfcad409f5c2faff2c70',
+  baselineArtifact:{id:11748151358,name:'github-pages',size_in_bytes:521571734,digest:'sha256:ed5032d4ce2565c36a5cf1d6a4fbbb5ce0d155571f30c483dce6bb01878afc6d'},
+  baselineProof:{id:11752231330,name:'tower41-native-publication-proof-38251739817-1',size_in_bytes:631746277,digest:'sha256:46009cc59b9612e84db53b81999d9878280f7dd3b82afb66a1cc560f08f1f599'},
+  namespace:'tower41-native-v2/', query:'?edition=foundation&level=41&tower41preview=1',
+  storagePrefix:'brainrot-tower41-native-v2:', artifactStem:'tower41-next-cell',
 });
+export const MAX_PRIVATE_PROOF_BYTES=2_000_000_000;
 export const JOB_NAMES=Object.freeze(['build','cpu','native-contact','native-castle','review-summary']);
 export const CONTROLLER_CHANGES=Object.freeze([
   {filename:PINS.controllerPath,status:'modified'},
-  ...['publish-tower41-native.mjs','publish-tower41-native.py','test-publish-tower41-native.mjs','test-publish-tower41-native.py'].map(file=>({filename:'scripts/'+file,status:'added'})),
+  ...['publish-tower41-native.mjs','publish-tower41-native.py','test-publish-tower41-native.mjs','test-publish-tower41-native.py'].map(file=>({filename:'scripts/'+file,status:'modified'})),
 ]);
 const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
 const read=file=>JSON.parse(fs.readFileSync(file,'utf8'));
@@ -53,7 +54,8 @@ export function checkController(commit,publisher){
 }
 export function checkArtifact(artifact,{name,runId,sourceCommit,pinned}={}){
   positive(artifact.id);assert.equal(artifact.name,name);assert.equal(artifact.expired,false);assert.equal(artifact.workflow_run.id,runId);assert.equal(artifact.workflow_run.head_sha,sourceCommit);
-  positive(artifact.size_in_bytes);assert.ok(artifact.size_in_bytes<=600_000_000);assert.match(artifact.digest||'',/^sha256:[a-f0-9]{64}$/);
+  const privateProof=Object.entries(PINS.baselineProof).every(([key,value])=>pinned?.[key]===value);
+  positive(artifact.size_in_bytes);assert.ok(artifact.size_in_bytes<=(privateProof?MAX_PRIVATE_PROOF_BYTES:600_000_000),'Only the exact accepted private proof may exceed the public archive budget');assert.match(artifact.digest||'',/^sha256:[a-f0-9]{64}$/);
   if(pinned)for(const [key,value]of Object.entries(pinned))assert.equal(artifact[key],value,'Pinned accepted artifact '+key);
 }
 export function checkJobLog(bytes,job,expected){
@@ -114,7 +116,7 @@ async function guard(phase){
   const publisherPaths=fs.readdirSync('.github/workflows').filter(file=>/actions\/deploy-pages|pages:\s*write/.test(fs.readFileSync('.github/workflows/'+file,'utf8'))).map(file=>'.github/workflows/'+file);
   for(const state of ['queued','in_progress'])for(const other of await all('actions/runs?status='+state,'workflow_runs'))if(other.id!==expected.publicationRun&&publisherPaths.includes(other.path))throw Error('Other active Pages workflow '+other.id);
   const logs=[];for(const job of jobs){const response=await request('actions/jobs/'+job.id+'/logs',{binary:true});const bytes=Buffer.from(await response.arrayBuffer());assert.ok(bytes.length>0&&bytes.length<20_000_000);const receipt=checkJobLog(bytes,job,expected),filename='proof/job-logs/'+job.id+'.log';fs.mkdirSync(path.dirname(filename),{recursive:true});if(fs.existsSync(filename))assert.equal(sha(fs.readFileSync(filename)),receipt.sha256,'Accepted provider log changed');else fs.writeFileSync(filename,bytes,{flag:'wx'});logs.push({name:job.name,id:job.id,conclusion:job.conclusion,rawLog:{path:'job-logs/'+job.id+'.log',...receipt}});}
-  const metadata=[];for(const [name,commit]of [['build-info.json',PINS.canonicalSource],['puzzle-progression-finale/build-info.json',PINS.finaleSource]]){const response=await fetch(PINS.publicBase+name+'?tower41publisher='+Date.now(),{cache:'no-store',signal:AbortSignal.timeout(60000)});assert.ok(response.ok);const bytes=Buffer.from(await response.arrayBuffer()),value=JSON.parse(bytes);assert.equal(value.commit,commit);metadata.push({path:name,bytes:bytes.length,sha256:sha(bytes)});}
+  const metadata=[];for(const [name,commit]of [['build-info.json',PINS.canonicalSource],['puzzle-progression-finale/build-info.json',PINS.finaleSource],['tower41-native/build-info.json',PINS.sourceParent]]){const response=await fetch(PINS.publicBase+name+'?tower41publisher='+Date.now(),{cache:'no-store',signal:AbortSignal.timeout(60000)});assert.ok(response.ok);const bytes=Buffer.from(await response.arrayBuffer()),value=JSON.parse(bytes);assert.equal(value.commit,commit);metadata.push({path:name,bytes:bytes.length,sha256:sha(bytes)});}
   if(phase==='deploy'){
     const binding=read('proof/package-binding.json'),manifest=read('proof/manifest.json'),pre=read('proof/predeploy-public-bytes.json');for(const proof of [binding,manifest,pre])for(const [key,value]of Object.entries(expected))assert.deepEqual(proof[key],value);
     const downloaded=read('proof/downloaded-inputs.json');for(const [key,value]of Object.entries(expected))assert.deepEqual(downloaded[key],value);assert.equal(downloaded.pass,true);assert.equal(downloaded.inputs.length,checkedArtifacts.length);
@@ -151,7 +153,10 @@ async function restore(reuse=false){
   const expected=identity(),receipt=read('proof/downloaded-inputs.json');for(const [key,value]of Object.entries(expected))assert.deepEqual(receipt[key],value);assert.equal(receipt.pass,true);
   const artifactRecords={};for(const item of receipt.inputs){
     if(item.kind==='baseline')continue;const output='proof/review-artifacts/'+item.kind;
-    if(!reuse)execFileSync('python3',['scripts/publish-tower41-native.py','extract','--zip',item.filename,'--output',output,'--digest',item.artifact.digest,'--bytes',String(item.artifact.size_in_bytes),'--max-bytes','600000000'],{stdio:'inherit'});
+    if(!reuse){
+      if(item.kind==='accepted-publication')execFileSync('python3',['scripts/publish-tower41-native.py','extract-accepted','--zip',item.filename,'--output',output],{stdio:'inherit'});
+      else execFileSync('python3',['scripts/publish-tower41-native.py','extract','--zip',item.filename,'--output',output,'--digest',item.artifact.digest,'--bytes',String(item.artifact.size_in_bytes),'--max-bytes','600000000'],{stdio:'inherit'});
+    }
     else {const archiveBytes=fs.readFileSync(item.filename);assert.equal(archiveBytes.length,item.artifact.size_in_bytes);assert.equal('sha256:'+sha(archiveBytes),item.artifact.digest);}
     artifactRecords[item.kind]={...item.artifact,files:inventory(output)};
   }
@@ -166,8 +171,8 @@ async function restore(reuse=false){
   assert.equal(source.tree,git('source','rev-parse','HEAD^{tree}'));assert.equal(pkg.tree,source.tree);assert.equal(pkg.sourceInputsSha256,source.sourceInputsSha256);assert.equal(pkg.buildInfoSha256,sha(fs.readFileSync('source/dist/build-info.json')));
   assert.equal(summary.allRequiredJobsPassed,true);assert.deepEqual(summary.jobs,{'build':'success','cpu':'success','native-contact':'success','native-castle':'success'});
   assert.equal(pkg.fullTowerAccepted,false);assert.equal(pkg.publicationAccepted,false);assert.equal(pkg.runtimeModels.canonicalRecords.length,14);assert.ok(pkg.totalBytes>0&&pkg.totalBytes<=100_000_000);
-  assert.equal(source.baseline.main,PINS.baselinePublisher);assert.equal(source.baseline.acceptedSource,PINS.finaleSource);assert.equal(source.baseline.canonicalSource,PINS.canonicalSource);
-  for(const [field,filename]of [['canonicalMetadata','build-info.json'],['acceptedMetadata','puzzle-progression-finale/build-info.json']]){const row=read('proof/github-guard-prepare.json').metadata.find(row=>row.path===filename);assert.deepEqual(source.baseline[field],{bytes:row.bytes,sha256:row.sha256},'Reviewed baseline metadata changed before assembly');}
+  assert.equal(source.baseline.main,PINS.baselinePublisher);assert.equal(source.baseline.acceptedSource,PINS.finaleSource);assert.equal(source.baseline.canonicalSource,PINS.canonicalSource);assert.equal(source.baseline.previousPreviewSource,PINS.sourceParent);
+  for(const [field,filename]of [['canonicalMetadata','build-info.json'],['acceptedMetadata','puzzle-progression-finale/build-info.json'],['previousPreviewMetadata','tower41-native/build-info.json']]){const row=read('proof/github-guard-prepare.json').metadata.find(row=>row.path===filename);assert.deepEqual(source.baseline[field],{bytes:row.bytes,sha256:row.sha256},'Reviewed baseline metadata changed before assembly');}
   const frozenCore=await import(pathToFileURL(path.resolve('source/scripts/lib/release-manifest.mjs')).href);assert.equal(source.sourceInputsSha256,sha(JSON.stringify(frozenCore.buildSourceInputs(path.resolve('source')))));
   for(const verifier of source.verifiers)assert.equal(sha(fs.readFileSync(path.join('source',verifier.file))),verifier.sha256);
   const cpu=read('source/qa/tower41-next-cell-cpu/report.json'),cpuBytes=fs.readFileSync('source/qa/tower41-next-cell-cpu/active-tests.log');assert.equal(cpu.log.bytes,cpuBytes.length);assert.equal(cpu.log.sha256,sha(cpuBytes));assert.equal(cpu.packageFilesSha256,pkg.nativePackage.packageFilesSha256);
@@ -175,10 +180,14 @@ async function restore(reuse=false){
   const castle=read('source/qa/tower41-next-cell-castle/evidence.json');assert.equal(castle.previewSaveIsolation?.pass,true,'Exact native preview save/replay proof is mandatory');
   module.assertPreviewSaveIsolation(castle.previewSaveIsolation);assert.equal(castle.previewSaveIsolation.namespace,PINS.storagePrefix);
   assert.equal(castle.previewSaveIsolation.bareEntry.applicable,true,'The exact source review must already exercise the bare standalone namespace');assert.equal(castle.previewSaveIsolation.bareEntry.pass,true);
-  assert.equal(castle.previewSaveIsolation.bareEntry.url,'http://127.0.0.1:4173/brainrot-portal/tower41-native/');
+  assert.equal(castle.previewSaveIsolation.bareEntry.url,'http://127.0.0.1:4173/brainrot-portal/tower41-native-v2/');
+  const physical=await import(pathToFileURL(path.resolve('source/scripts/lib/tower41-pendulum-proof.mjs')).href);
+  const pendulumEvents=castle.observed.events.filter(event=>event.id==='pendulum');assert.equal(pendulumEvents.length,1);
+  const pendulum=physical.assertPendulumPhysicalProof(pendulumEvents[0].proof,castle.observed.bodyId);
+  assert.deepEqual(read('source/qa/tower41-next-cell-castle/binding.json').pendulum,pendulum,'Retained native pendulum binding differs');
   const served=read('source/qa/tower41-next-cell-castle/served-package.json');assert.equal(served.pass,true);assert.equal(served.sourceCommit,expected.sourceCommit);assert.deepEqual(served.sourceReview,expected.sourceReview);assert.deepEqual(served.files,artifactRecords.build.files,'The recorded namespace must serve the entire exact reviewed build');
   const guard=read('proof/github-guard-prepare.json');
-  const binding={schemaVersion:1,kind:'tower41-native-exact-review',...expected,artifacts:{build:artifactRecords.build,source:artifactRecords.source,cpu:artifactRecords.cpu,nativeContact:artifactRecords['native-contact'],nativeCastle:artifactRecords['native-castle'],summary:artifactRecords.summary},jobs:guard.jobs,coreSource:{tree:source.tree,sourceInputsSha256:source.sourceInputsSha256,sourceInputFiles:source.sourceInputFiles,verifiers:source.verifiers},packageFilesSha256:pkg.nativePackage.packageFilesSha256,buildInfoSha256:pkg.buildInfoSha256,preview:{path:PINS.namespace,query:PINS.query,storagePrefix:PINS.storagePrefix,levels:[41],ordinaryCastle:true,ratchetCell:false,saveIsolationAccepted:true},previewSaveIsolation:castle.previewSaveIsolation,supplemental:supplementalRecording(castle,artifactRecords['native-castle'].files,expected),fullTowerAccepted:false,fullCameraAccepted:false,humanPlaytestAccepted:false,physicalDeviceAccepted:false};
+  const binding={schemaVersion:1,kind:'tower41-native-exact-review',...expected,artifacts:{build:artifactRecords.build,source:artifactRecords.source,cpu:artifactRecords.cpu,nativeContact:artifactRecords['native-contact'],nativeCastle:artifactRecords['native-castle'],summary:artifactRecords.summary},jobs:guard.jobs,coreSource:{tree:source.tree,sourceInputsSha256:source.sourceInputsSha256,sourceInputFiles:source.sourceInputFiles,verifiers:source.verifiers},packageFilesSha256:pkg.nativePackage.packageFilesSha256,buildInfoSha256:pkg.buildInfoSha256,preview:{path:PINS.namespace,query:PINS.query,storagePrefix:PINS.storagePrefix,levels:[41],ordinaryCastle:true,ratchetCell:false,saveIsolationAccepted:true},previewSaveIsolation:castle.previewSaveIsolation,pendulum,supplemental:supplementalRecording(castle,artifactRecords['native-castle'].files,expected),fullTowerAccepted:false,fullCameraAccepted:false,humanPlaytestAccepted:false,physicalDeviceAccepted:false};
   const productionBytes=artifactRecords.build.files.reduce((sum,row)=>sum+row.bytes,0),supplementalCopiedBytes=binding.supplemental.reviewedFiles.reduce((sum,row)=>sum+row.bytes,0);
   console.log('TOWER41_NATIVE_MEASURED_BUDGET '+JSON.stringify({baselineBytes:PINS.baselineBytes,productionBytes,supplementalCopiedBytes,subtotalBytes:PINS.baselineBytes+productionBytes+supplementalCopiedBytes,maximumSiteBytes:600000000,generatedBytes:'Measured and enforced separately by the Python assembly manifest.'}));
   assert.deepEqual(inventory('source/dist'),artifactRecords.build.files,'Reviewed production bytes must remain unchanged');

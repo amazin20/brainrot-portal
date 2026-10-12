@@ -45,6 +45,14 @@ test('artifact checksum, exact source, run and expiry are mandatory',()=>{
   for(const mutate of [v=>v.id=8,v=>v.name='build-42-1',v=>v.expired=true,v=>v.workflow_run.id=43,v=>v.workflow_run.head_sha='f'.repeat(40),v=>v.size_in_bytes=600_000_001,v=>v.digest='sha256:bad']){const changed=clone(value);mutate(changed);assert.throws(()=>checkArtifact(changed,options));}
 });
 const marker=(job,status='success',identity=expected)=>'TOWER41_NEXT_JOB '+JSON.stringify({job,status,...identity});
+test('only the fully pinned accepted private proof can exceed 600MB without relaxing source and Pages budgets',()=>{
+  const value={...PINS.baselineProof,expired:false,workflow_run:{id:PINS.baselineRun,head_sha:PINS.baselinePublisher}};
+  const options={name:PINS.baselineProof.name,runId:PINS.baselineRun,sourceCommit:PINS.baselinePublisher,pinned:PINS.baselineProof};
+  checkArtifact(value,options);
+  assert.throws(()=>checkArtifact(value,{...options,pinned:undefined}));
+  assert.throws(()=>checkArtifact(value,{...options,pinned:{...PINS.baselineProof,id:PINS.baselineProof.id+1}}));
+  assert.throws(()=>checkArtifact({...value,size_in_bytes:2_000_000_001},options));
+});
 test('provider markers must be complete standalone exact-attempt source receipts',()=>{
   const job={name:'cpu'};checkJobLog(Buffer.from('2026-10-12T01:02:03.123Z '+marker('cpu')+'\n'),job,expected);
   for(const invalid of [marker('build'),marker('cpu','failure'),marker('cpu','success',{...expected,sourceReview:{runId:42,runAttempt:1}}),marker('cpu')+'\n'+marker('cpu'),'shell echo '+marker('cpu'),marker('cpu')+' trailing',Buffer.from([0xff,0xfe])])assert.throws(()=>checkJobLog(Buffer.isBuffer(invalid)?invalid:Buffer.from(invalid),job,expected));
@@ -66,7 +74,7 @@ test('an inventory cannot silently follow a link or include a special file',()=>
 });
 test('player publication URL is ordinary preview with isolated saves and no debug or ratchet flags',()=>{
   const url=new URL(PINS.publicBase+PINS.namespace+PINS.query);
-  assert.equal(url.pathname,'/brainrot-portal/tower41-native/');assert.equal(url.searchParams.get('edition'),'foundation');assert.equal(url.searchParams.get('level'),'41');assert.equal(url.searchParams.get('tower41preview'),'1');assert.equal(url.searchParams.has('debug'),false);assert.equal(url.searchParams.has('tower41ratchet'),false);assert.equal(url.searchParams.has('pilot'),false);
+  assert.equal(url.pathname,'/brainrot-portal/tower41-native-v2/');assert.equal(url.searchParams.get('edition'),'foundation');assert.equal(url.searchParams.get('level'),'41');assert.equal(url.searchParams.get('tower41preview'),'1');assert.equal(url.searchParams.has('debug'),false);assert.equal(url.searchParams.has('tower41ratchet'),false);assert.equal(url.searchParams.has('pilot'),false);
 });
 test('walkthrough supplements bind only the actual reviewed ordinary movie and unaltered report',()=>{
   const evidence={sourceCommit:expected.sourceCommit,video:{filename:'tower-singularity.mp4',sha256:'c'.repeat(64),frames:100,fps:4,width:640,height:360,durationSeconds:25,simulationSeconds:24.95},result:{pass:true,metrics:{won:true,completedStages:11},sameCompanion:true,resets:0,respawns:0,cargoResets:0,seconds:24.95},observed:{seenResets:0}};

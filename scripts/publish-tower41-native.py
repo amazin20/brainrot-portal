@@ -19,23 +19,26 @@ import zipfile
 
 
 MAX_BYTES = 600_000_000
+MAX_PRIVATE_PROOF_BYTES = 2_000_000_000
+MAX_VERIFICATION_BYTES = 100_000_000
+MAX_VERIFICATION_METADATA_BYTES = 25_000_000
 MAX_CANDIDATE_BYTES = 100_000_000
 MAX_ENTRIES = 20_000
 MAX_SAFE_INTEGER = 2 ** 53 - 1
-BASELINE_RUN = 38116282717
-BASELINE_PUBLISHER = '569918af19c4dafdc0f9450e668733c474e8ff56'
-BASELINE_SOURCE = '0e257837ca157d59d29c2e892e9a81e4f21fc5a1'
-BASELINE_REVIEW = {'runId': 38113879739, 'runAttempt': 1}
-BASELINE_ARTIFACT = {'id': 11693810063, 'bytes': 494948351,
-                     'sha256': '509e9d069bcf57de4b0a3cc9a57e533872524bc07783d3a7e46130ddda928264'}
-ACCEPTED_PROOF_ARTIFACT = {'id': 11692978754, 'bytes': 12625985,
-                         'sha256': '828314f3a440f5e06a9bb37c93c0cf2738ce0cf0c17fcafa5c44b9bb484df050'}
-BASELINE_COUNT = 1623
-BASELINE_BYTES = 531927136
-BASELINE_INVENTORY_SHA256 = '896e685b9e70a572f8c6d486f6a73f8704e6c24fe15495ca814eb008d40bfe26'
-PREFIX = 'tower41-native/'
+BASELINE_RUN = 38251739817
+BASELINE_PUBLISHER = '300e898c169a281bd3e0054e2c4b39bb055649e0'
+BASELINE_SOURCE = '58a71ddfc9bf704bef4c97fe13d16401c5a5f9f2'
+BASELINE_REVIEW = {'runId': 38243168335, 'runAttempt': 1}
+BASELINE_ARTIFACT = {'id': 11748151358, 'bytes': 521571734,
+                     'sha256': 'ed5032d4ce2565c36a5cf1d6a4fbbb5ce0d155571f30c483dce6bb01878afc6d'}
+ACCEPTED_PROOF_ARTIFACT = {'id': 11752231330, 'bytes': 631746277,
+                         'sha256': '46009cc59b9612e84db53b81999d9878280f7dd3b82afb66a1cc560f08f1f599'}
+BASELINE_COUNT = 1706
+BASELINE_BYTES = 561674513
+BASELINE_INVENTORY_SHA256 = '70ae091efbbad883c3d4eb5c1655b3a9bd55b403da19cfcad409f5c2faff2c70'
+PREFIX = 'tower41-native-v2/'
 QUERY = '?edition=foundation&level=41&tower41preview=1'
-STORAGE_PREFIX = 'brainrot-tower41-native-v1:'
+STORAGE_PREFIX = 'brainrot-tower41-native-v2:'
 JOB_NAMES = ('build', 'cpu', 'native-contact', 'native-castle', 'review-summary')
 ARTIFACT_NAMES = {'build': 'build', 'source': 'source', 'cpu': 'cpu',
                   'nativeContact': 'native-contact', 'nativeCastle': 'native-castle', 'summary': 'summary'}
@@ -44,9 +47,9 @@ SUPPLEMENTAL_REPORT = 'evidence/tower41-native-report.json'
 SUPPLEMENTAL_IDENTITY = 'evidence/tower41-native-identity.json'
 SUPPLEMENTAL_TARGETS = {'preview-status.json', 'walkthroughs.html', SUPPLEMENTAL_IDENTITY,
                         SUPPLEMENTAL_VIDEO, SUPPLEMENTAL_REPORT}
-NATIVE_ENTRY_PATHS = frozenset(('/tower41-native', '/tower41-native/', '/tower41-native/index.html',
-                               '/brainrot-portal/tower41-native', '/brainrot-portal/tower41-native/',
-                               '/brainrot-portal/tower41-native/index.html'))
+NATIVE_ENTRY_PATHS = frozenset(('/tower41-native-v2', '/tower41-native-v2/', '/tower41-native-v2/index.html',
+                               '/brainrot-portal/tower41-native-v2', '/brainrot-portal/tower41-native-v2/',
+                               '/brainrot-portal/tower41-native-v2/index.html'))
 BARE_ENTRY_NOT_APPLICABLE = {'applicable': False,
                              'reason': 'The configured browser review base is outside the standalone tower41-native entry namespace.'}
 
@@ -244,7 +247,7 @@ def zip_entries(archive, maximum):
         require(kind in (0, stat.S_IFDIR if entry.is_dir() else stat.S_IFREG), 'Non-regular ZIP entry: ' + name)
         require(not entry.flag_bits & 1, 'Encrypted ZIP is unsupported')
         require(entry.compress_type in (zipfile.ZIP_STORED, zipfile.ZIP_DEFLATED), 'Unsupported ZIP compression')
-        integer(entry.compress_size, 'ZIP compressed size', maximum=MAX_BYTES)
+        integer(entry.compress_size, 'ZIP compressed size', maximum=maximum)
         total += integer(entry.file_size, 'ZIP file size', maximum=maximum)
         require(total <= maximum, 'ZIP exceeds uncompressed byte limit')
         require(not entry.is_dir() or entry.file_size == 0, 'ZIP directory has file bytes')
@@ -301,6 +304,48 @@ def extract_zip(archive_file, output, expected_digest, expected_bytes, maximum):
             shutil.rmtree(temporary)
 
 
+def extract_accepted_proof(archive_file, output):
+    """Inspect every private archive member, then restore only the accepted manifest and byte receipt."""
+    archive_file = ordinary_file(archive_file)
+    output = no_symlinks(output)
+    require(archive_file.stat().st_size == ACCEPTED_PROOF_ARTIFACT['bytes'] and
+            archive_file.stat().st_size <= MAX_PRIVATE_PROOF_BYTES, 'Accepted private proof ZIP size mismatch')
+    require(sha256_file(archive_file) == ACCEPTED_PROOF_ARTIFACT['sha256'], 'Accepted private proof ZIP hash mismatch')
+    require(not output.exists(), 'Refuse to overwrite an accepted proof directory')
+    temporary = None
+    try:
+        with zipfile.ZipFile(archive_file) as archive:
+            # Namespace, types, collisions and the full private byte cap are checked before selecting anything.
+            entries = zip_entries(archive, MAX_PRIVATE_PROOF_BYTES)
+            selected = []
+            for suffix in ('manifest.json', 'public-bytes.json'):
+                matching = [(entry, name) for entry, name, directory in entries
+                            if not directory and name in (suffix, 'proof/' + suffix)]
+                require(len(matching) == 1, 'Accepted private proof needs exactly one ' + suffix)
+                selected.extend(matching)
+            require(all(entry.file_size <= 50_000_000 for entry, _ in selected), 'Accepted private proof JSON exceeds limit')
+            temporary = staging_directory(output)
+            for entry, name in selected:
+                with archive.open(entry) as source:
+                    stream_to_file(source, temporary / name, entry.file_size)
+        rows = inventory(temporary)
+        accepted_manifest(temporary)
+        temporary.rename(output)
+        temporary = None
+        return rows
+    finally:
+        if temporary is not None:
+            shutil.rmtree(temporary)
+
+
+def extract_accepted(args):
+    rows = extract_accepted_proof(args.zip, args.output)
+    print(json.dumps({'pass': True, 'zipSha256': ACCEPTED_PROOF_ARTIFACT['sha256'],
+                      'zipBytes': ACCEPTED_PROOF_ARTIFACT['bytes'], 'allMembersInspected': True,
+                      'privateMaximumBytes': MAX_PRIVATE_PROOF_BYTES, 'files': len(rows),
+                      'bytes': sum(row['bytes'] for row in rows), 'filesSha256': inventory_sha256(rows)}))
+
+
 def extract(args):
     require(isinstance(args.digest, str) and re.fullmatch(r'sha256:[0-9a-f]{64}', args.digest), 'An exact provider digest is required')
     maximum = argument_integer(args.max_bytes, 'ZIP byte limit')
@@ -329,6 +374,15 @@ def accepted_manifest(root):
     require(type(manifest.get('schemaVersion')) is int and manifest['schemaVersion'] == 1 and manifest.get('phase') == 'published',
             'Accepted proof schema/phase mismatch')
     check_baseline(manifest.get('siteFiles'))
+    require(manifest.get('siteBytes') == BASELINE_BYTES and
+            manifest.get('siteFilesSha256') == BASELINE_INVENTORY_SHA256, 'Accepted manifest site totals/hash mismatch')
+    receipt = read_json(filename.with_name('public-bytes.json'))
+    exact_identity(receipt, {'sourceCommit': BASELINE_SOURCE, 'publisherCommit': BASELINE_PUBLISHER,
+                            'publicationRun': BASELINE_RUN, 'sourceReview': BASELINE_REVIEW}, 'Accepted public byte receipt')
+    require(receipt.get('pass') is True and receipt.get('phase') == 'published' and
+            type(receipt.get('checked')) is int and receipt['checked'] == BASELINE_COUNT and
+            type(receipt.get('bytes')) is int and receipt['bytes'] == BASELINE_BYTES and
+            receipt.get('siteFilesSha256') == BASELINE_INVENTORY_SHA256, 'Accepted public byte receipt incomplete')
     return manifest['siteFiles'], sha256_file(filename)
 
 
@@ -481,7 +535,7 @@ def assert_preview_save_isolation(isolation):
     key = 'brainrot-portal.preferences.v24'
     prefixes = ['brainrot-foundation-v1:', 'brainrot-puzzle-pilot43-v1:', 'brainrot-puzzle-progression-v1:',
                 'brainrot-puzzle-progression-next-v1:', 'brainrot-puzzle-progression-finale-v1:',
-                'brainrot-tower41-ratchet-qualification-v1:']
+                'brainrot-tower41-ratchet-qualification-v1:', 'brainrot-tower41-native-v1:']
     require(isolation.get('namespace') == STORAGE_PREFIX and isolation.get('ownKey') == STORAGE_PREFIX + key and
             isolation.get('legacyPrefixes') == prefixes, 'Preview save namespaces changed')
     snapshot = isolation.get('legacySnapshot')
@@ -530,6 +584,234 @@ def assert_preview_save_isolation(isolation):
             type(reload.get('level')) is int and type(reload.get('resumeLevel')) is int and
             all(type(value) is int for value in reload['completed']), 'Native reload did not retain own completion')
     return isolation
+
+
+def assert_pendulum_physical_proof(proof, original_cargo_body_id):
+    """Independently reject incomplete, stale or synthetic lower-catch witness schemas."""
+    integer(original_cargo_body_id, 'Original cargo body ID')
+    require(isinstance(proof, dict) and proof.get('physicalLowerCatch') is True and
+            proof.get('upperCatchKinematic') is True and proof.get('originalCargo') is True and
+            'twoPhysicalCatches' not in proof, 'Pendulum must declare only the lower catch physical')
+    cell, crossing = proof.get('lowerPhysicalCell'), proof.get('lowerCrossing')
+    require(isinstance(cell, dict) and isinstance(crossing, dict), 'Pendulum physical cell/crossing witnesses missing')
+    def measured(value, label, positive=False):
+        require(type(value) in (int, float) and math.isfinite(value) and (not positive or value > 0),
+                'Pendulum needs a finite ' + ('positive ' if positive else '') + label)
+        return value
+    def vector(value, count, label):
+        require(isinstance(value, list) and len(value) == count, 'Pendulum needs exact ' + label)
+        for component in value:
+            measured(component, label)
+        return value
+    def unique_ids(value, count, label):
+        require(isinstance(value, list) and len(value) == count, 'Pendulum needs exact ' + label)
+        for item in value:
+            integer(item, label)
+        require(len(set(value)) == count, 'Pendulum repeated ' + label)
+        return value
+    def quaternion(value, label):
+        vector(value, 4, label)
+        require(abs(sum(component * component for component in value) - 1) < 1e-5,
+                'Pendulum non-normalized ' + label)
+    def close_vector(actual, expected, label):
+        require(len(actual) == len(expected) and all(abs(a - b) < 1e-5 for a, b in zip(actual, expected)),
+                'Pendulum recorded support pose differs: ' + label)
+    def rotate(value, orientation):
+        x, y, z = value
+        qx, qy, qz, qw = orientation
+        tx, ty, tz = 2 * (qy * z - qz * y), 2 * (qz * x - qx * z), 2 * (qx * y - qy * x)
+        return [x + qw * tx + qy * tz - qz * ty,
+                y + qw * ty + qz * tx - qx * tz,
+                z + qw * tz + qx * ty - qy * tx]
+    for flag in ('ready', 'latched', 'catchArmed', 'bodiesPresent', 'constraintsPresent', 'originalCargoPresent',
+                 'originalCargoIdentityValid', 'originalCargoFree', 'currentCollisionValid', 'unloadedRetained', 'readyForCrossing'):
+        require(cell.get(flag) is True, 'Pendulum flag missing: ' + flag)
+    for flag in ('disposed', 'loadContact', 'originalCargoRawContact'):
+        require(cell.get(flag) is False, 'Pendulum invalid retained flag: ' + flag)
+    require(cell.get('originalCargoClearedCup') is True, 'Pendulum original cargo has not cleared the cup')
+    for key in ('loadNormalForce', 'loadContactCount', 'originalCargoRawContactCount'):
+        require(type(cell.get(key)) in (int, float) and cell[key] == 0, 'Pendulum retains cargo contact: ' + key)
+    integer(cell.get('worldStep'), 'Pendulum current step', 1)
+    require(type(cell.get('contactStep')) is int and cell['contactStep'] == cell['worldStep'], 'Pendulum retention contacts are stale')
+    integer(cell.get('loadedStep'), 'Pendulum loaded step', 1)
+    integer(cell.get('loadedTicks'), 'Pendulum loaded ticks', 2)
+    measured(cell.get('loadedNormalImpulse'), 'loaded normal impulse', True)
+    measured(cell.get('lastLoadedNormalForce'), 'last loaded normal force', True)
+    integer(cell.get('retainedStartStep'), 'Pendulum retained start step', 1)
+    integer(cell.get('retainedTicks'), 'Pendulum retained ticks', 24)
+    require(cell['loadedStep'] < cell['retainedStartStep'] and
+            cell['retainedStartStep'] + cell['retainedTicks'] - 1 == cell['worldStep'], 'Pendulum unload retention interval is inconsistent')
+    for key in ('pawlContactCount', 'seatContactCount'):
+        integer(cell.get(key), 'Pendulum ' + key, 1)
+    for key in ('pawlNormalForce', 'seatNormalForce'):
+        measured(cell.get(key), key, True)
+    measured(cell.get('angle'), 'bridge angle'); measured(cell.get('pawlAngle'), 'pawl angle')
+    require(abs(cell['angle']) < .055 and abs(cell['pawlAngle']) < .07 and
+            type(proof.get('lowerAngle')) in (int, float) and proof['lowerAngle'] == cell['angle'], 'Pendulum retained angles differ')
+    upper = measured(proof.get('upperHeight'), 'upper height')
+    require(5.78 < upper <= 6.01, 'Pendulum upper authored lift has not reached its catch')
+    body_ids = unique_ids(cell.get('bodyIds'), 4, 'body IDs')
+    unique_ids(cell.get('constraintIds'), 2, 'constraint IDs')
+    require(cell.get('constraintEquationCounts') == [5, 5] and
+            all(type(value) is int for value in cell['constraintEquationCounts']), 'Pendulum hinge equations differ')
+    require(cell.get('constraintMotorEnabled') == [False, False] and
+            all(type(value) is bool for value in cell['constraintMotorEnabled']) and
+            cell.get('constraintMotorEquationPresent') == [False, False] and
+            all(type(value) is bool for value in cell['constraintMotorEquationPresent']), 'Pendulum hinge motor or motor equation present')
+    require(type(cell.get('originalCargoBodyId')) is int and cell['originalCargoBodyId'] == original_cargo_body_id and
+            original_cargo_body_id not in body_ids, 'Pendulum original cargo identity differs from the full route')
+    integer(cell.get('originalCargoShapeId'), 'Original cargo shape ID')
+    for key in ('cupShapeId', 'deckShapeId', 'pawlShapeId', 'pawlHeelShapeId', 'seatBodyId', 'seatShapeId'):
+        integer(cell.get(key), 'Pendulum ' + key)
+    require(len({cell[key] for key in ('cupShapeId', 'deckShapeId', 'pawlShapeId', 'pawlHeelShapeId', 'seatShapeId')}) == 5 and
+            cell['seatBodyId'] in body_ids, 'Pendulum support shape/body identities are ambiguous')
+    for name in ('bridge', 'pawl'):
+        body = cell.get(name); require(isinstance(body, dict), 'Pendulum missing ' + name + ' body')
+        integer(body.get('id'), 'Pendulum ' + name + ' body ID')
+        require(body['id'] in body_ids and type(body.get('type')) is int and body['type'] == 1,
+                'Pendulum unowned or nondynamic ' + name + ' body')
+        measured(body.get('mass'), name + ' mass', True)
+        for field in ('position', 'velocity', 'angularVelocity', 'inertia'):
+            vector(body.get(field), 3, name + ' ' + field)
+        require(all(value > 0 for value in body['inertia']), 'Pendulum body inertia must be positive')
+        body_orientation = vector(body.get('quaternion'), 4, name + ' quaternion')
+        require(abs(sum(value * value for value in body_orientation) - 1) < 1e-5, 'Pendulum body quaternion is not normalized')
+    require(cell['bridge']['id'] != cell['pawl']['id'] and abs(cell['bridge']['angularVelocity'][2]) < .10,
+            'Pendulum retained bridge motion/identity is invalid')
+    eccentric = vector(cell['bridge'].get('COMOffset'), 3, 'bridge eccentric centre of mass')
+    require(math.hypot(*eccentric) > .1, 'Pendulum gravity requires a real eccentric centre of mass')
+    loaded = cell.get('loadedWitness'); require(isinstance(loaded, dict), 'Pendulum loaded witnesses missing')
+    for name in ('first', 'last'):
+        witness = loaded.get(name); require(isinstance(witness, dict), 'Pendulum missing loaded ' + name)
+        integer(witness.get('worldStep'), 'Pendulum loaded witness step', 1)
+        for field, expected in (('originalCargoBodyId', original_cargo_body_id), ('originalCargoShapeId', cell['originalCargoShapeId']),
+                                ('cupBodyId', cell['bridge']['id']), ('cupShapeId', cell['cupShapeId'])):
+            require(type(witness.get(field)) is int and witness[field] == expected, 'Pendulum loaded witness identity differs: ' + field)
+        measured(witness.get('normalForce'), 'loaded witness normal force', True)
+        measured(witness.get('bridgeAngle'), 'loaded witness bridge angle')
+        require(witness.get('freeOriginal') is True, 'Pendulum loaded witness used held or substituted cargo')
+    require(loaded['first']['worldStep'] <= loaded['last']['worldStep'] and loaded['last']['worldStep'] == cell['loadedStep'] and
+            type(loaded['last'].get('normalForce')) in (int, float) and loaded['last']['normalForce'] == cell['lastLoadedNormalForce'],
+            'Pendulum last actual load witness differs')
+    require(cell['loadedTicks'] <= loaded['last']['worldStep'] - loaded['first']['worldStep'] + 1,
+            'Pendulum load ticks exceed distinct completed load steps')
+    hand = cell.get('catchWitness'); require(isinstance(hand, dict), 'Pendulum native hand catch witness missing')
+    integer(hand.get('worldStep'), 'Pendulum catch step', 1); integer(hand.get('handCount'), 'Pendulum catch hand count', 1)
+    integer(cell.get('handCount'), 'Pendulum current hand count', 1)
+    require(hand['handCount'] == cell['handCount'], 'Pendulum hand count differs')
+    impulse = measured(hand.get('angularImpulse'), 'bounded native hand angular impulse')
+    measured(cell.get('handAngularImpulse'), 'cell native hand angular impulse', True)
+    require(impulse < 0 and abs(impulse) <= 1.2 and abs(impulse) == cell['handAngularImpulse'] and
+            hand.get('action') == 'close' and hand.get('qualifiedLoad') is True and hand.get('loadContact') is True,
+            'Pendulum catch was not closed under actual load with a bounded native impulse')
+    integer(hand.get('loadedStep'), 'Pendulum catch loaded step', 1)
+    require(type(hand.get('loadedAtStep')) is int and hand['loadedAtStep'] == hand['loadedStep'], 'Pendulum catch qualification step differs')
+    measured(hand.get('loadNormalForce'), 'catch loaded normal force', True)
+    for key, expected in (('originalCargoBodyId', original_cargo_body_id), ('originalCargoShapeId', cell['originalCargoShapeId']),
+                          ('cupBodyId', cell['bridge']['id']), ('cupShapeId', cell['cupShapeId']), ('pawlBodyId', cell['pawl']['id'])):
+        require(type(hand.get(key)) is int and hand[key] == expected, 'Pendulum catch exact identity differs: ' + key)
+    before = measured(hand.get('angularMomentumBefore'), 'catch angular momentum before')
+    after = measured(hand.get('angularMomentumAfter'), 'catch angular momentum after')
+    require(abs(after - before - impulse) < 1e-7, 'Pendulum catch angular impulse did not produce the measured momentum change')
+    require(loaded['first']['worldStep'] <= hand['loadedStep'] <= hand['worldStep'] <= cell['loadedStep'], 'Pendulum catch/load causal order differs')
+    measured(hand.get('bridgeAngle'), 'native catch bridge angle')
+    require(hand['loadedStep'] == hand['worldStep'] and hand['bridgeAngle'] < -.08,
+            'Pendulum native catch needs current loaded contact and the qualified lowered angle')
+    require(crossing.get('complete') is True, 'Pendulum actual supported crossing incomplete')
+    integer(crossing.get('supportedDeckSteps'), 'Pendulum supported deck steps', 24)
+    require(type(crossing.get('deckBodyId')) is int and crossing['deckBodyId'] == cell['bridge']['id'] and
+            type(crossing.get('deckShapeIndex')) is int and crossing['deckShapeIndex'] == 0, 'Pendulum crossing support differs from actual deck')
+    require(type(crossing.get('originalCargoBodyId')) is int and crossing['originalCargoBodyId'] == original_cargo_body_id,
+            'Pendulum crossing substituted the original cargo')
+    steps = [integer(crossing.get(key), 'Pendulum crossing ' + key, 1)
+             for key in ('nearLandingStep', 'firstStep', 'midStep', 'farStep', 'islandStep')]
+    require(steps[0] >= cell['retainedStartStep'] + 23 and all(step <= cell['worldStep'] for step in steps) and
+            all(steps[index] > steps[index - 1] for index in range(1, len(steps))), 'Pendulum unloaded supported crossing order differs')
+    require(crossing['supportedDeckSteps'] <= crossing['islandStep'] - crossing['firstStep'],
+            'Pendulum support ticks exceed distinct completed traversal steps')
+    witnesses = crossing.get('checkpoints')
+    require(isinstance(witnesses, list) and [w.get('name') for w in witnesses] == ['near', 'mid', 'far', 'island'],
+            'Pendulum exact near/mid/far/island support witnesses missing')
+    def support_witness(witness):
+        require(isinstance(witness, dict) and all(witness.get(flag) is True for flag in ('grounded', 'live', 'footprintInside')),
+                'Pendulum crossing support is stale or airborne')
+        for key in ('foot', 'velocity', 'supportNormal', 'bodyPosition', 'shapeHalf'):
+            vector(witness.get(key), 3, 'support ' + key)
+        vector(witness.get('bodyQuaternion'), 4, 'support body quaternion')
+        require(all(value > 0 for value in witness['shapeHalf']), 'Pendulum support half extents must be positive')
+        height = measured(witness.get('supportHeight'), 'current support height')
+        gap = measured(witness.get('supportGap'), 'current support gap')
+        require(abs(gap) < .003 and abs(witness['foot'][1] - height - gap) < 1e-7 and witness['supportNormal'][1] > .65,
+                'Pendulum current support gap/normal differs')
+        for key in ('bodyId', 'shapeId', 'shapeIndex'):
+            integer(witness.get(key), 'Pendulum support ' + key)
+        require(isinstance(witness.get('colliderId'), str) and witness['colliderId'], 'Pendulum current support collider ID missing')
+    def founded_witness(witness):
+        require(witness.get('kind') == 'founded-floor' and witness['bodyId'] not in body_ids and witness['shapeIndex'] == 0,
+                'Pendulum landing must be a separately founded floor')
+        quaternion(witness['bodyQuaternion'], 'founded floor quaternion')
+        close_vector(witness['bodyQuaternion'], [0, 0, 0, 1], 'founded floor identity orientation')
+        bounds = witness.get('bounds')
+        require(isinstance(bounds, list) and len(bounds) == 2, 'Pendulum founded floor bounds missing')
+        for bound in bounds:
+            vector(bound, 3, 'founded floor bound')
+        close_vector([(lower + upper) / 2 for lower, upper in zip(*bounds)], witness['bodyPosition'], 'founded floor centre')
+        close_vector([(upper - lower) / 2 for lower, upper in zip(*bounds)], witness['shapeHalf'], 'founded floor half extents')
+        close_vector(witness['supportNormal'], [0, 1, 0], 'founded floor current support normal')
+        require(bounds[0][0] + .43 <= witness['foot'][0] <= bounds[1][0] - .43 and
+                bounds[0][2] + .43 <= witness['foot'][2] <= bounds[1][2] - .43 and
+                abs(witness['supportHeight'] - bounds[1][1]) < .003, 'Pendulum capsule is outside its founded supporting floor')
+    landing = crossing.get('nearLanding'); support_witness(landing)
+    require(type(landing.get('worldStep')) is int and landing['worldStep'] == steps[0] and landing.get('kind') == 'founded-floor' and
+            landing['bodyId'] not in body_ids, 'Pendulum initial landing must be a separately founded floor')
+    founded_witness(landing)
+    for index, witness in enumerate(witnesses):
+        support_witness(witness)
+        require(type(witness.get('worldStep')) is int and witness['worldStep'] == steps[index + 1], 'Pendulum crossing support witness step differs')
+        if index < 3:
+            require(witness.get('kind') == 'owned-oriented-deck' and witness.get('capsuleGrounded') is True and
+                    type(witness.get('originalCargoBodyId')) is int and witness['originalCargoBodyId'] == original_cargo_body_id and
+                    witness['bodyId'] == cell['bridge']['id'] and witness['shapeId'] == cell['deckShapeId'] and
+                    witness['shapeIndex'] == 0, 'Pendulum crossing witness used another supporting object')
+            local = vector(witness.get('localFoot'), 3, 'crossing local foot')
+            vector(witness.get('shapeOffset'), 3, 'crossing shape offset')
+            require(witness['shapeHalf'] == [6, .2, 2] and abs(local[2]) < 2 - .43 and abs(local[0]) < 6 - .43 and
+                    abs(local[1] - .2) < .003, 'Pendulum capsule was outside the actual deck face')
+            pose = witness.get('pose'); require(isinstance(pose, dict), 'Pendulum current collision pose missing')
+            vector(pose.get('center'), 3, 'current deck collision centre'); vector(pose.get('quaternion'), 4, 'current deck collision quaternion')
+            require(type(pose.get('step')) is int and pose['step'] == witness['worldStep'], 'Pendulum deck collision pose is stale')
+            quaternion(witness['bodyQuaternion'], 'deck body quaternion'); quaternion(pose['quaternion'], 'deck collision quaternion')
+            close_vector(pose['quaternion'], witness['bodyQuaternion'], 'deck body/collision orientation')
+            close_vector([value + origin for value, origin in zip(rotate(witness['shapeOffset'], witness['bodyQuaternion']), witness['bodyPosition'])],
+                         pose['center'], 'actual deck shape centre')
+            close_vector([value + origin for value, origin in zip(rotate(local, pose['quaternion']), pose['center'])], witness['foot'], 'actual deck foot')
+            close_vector(rotate([0, 1, 0], pose['quaternion']), witness['supportNormal'], 'actual deck support normal')
+            axes = [rotate(axis, pose['quaternion']) for axis in ([1, 0, 0], [0, 1, 0], [0, 0, 1])]
+            extents = [sum(abs(axis[index]) * witness['shapeHalf'][axis_index] for axis_index, axis in enumerate(axes))
+                       for index in range(3)]
+            bounds = pose.get('bounds')
+            require(isinstance(bounds, list) and len(bounds) == 2, 'Pendulum current rotated deck bounds missing')
+            for bound in bounds:
+                vector(bound, 3, 'rotated current deck bound')
+            close_vector(bounds[0], [centre - extent for centre, extent in zip(pose['center'], extents)], 'current deck minimum bound')
+            close_vector(bounds[1], [centre + extent for centre, extent in zip(pose['center'], extents)], 'current deck maximum bound')
+        else:
+            founded_witness(witness)
+    require(witnesses[0]['localFoot'][0] <= -3 and witnesses[1]['localFoot'][0] >= -.9 and witnesses[2]['localFoot'][0] >= 3,
+            'Pendulum near/middle/far crossing geometry differs')
+    return {'pass': True, 'originalCargoBodyId': original_cargo_body_id, 'loadedStep': cell['loadedStep'],
+            'retainedStartStep': cell['retainedStartStep'], 'currentStep': cell['worldStep'],
+            'supportedDeckSteps': crossing['supportedDeckSteps'], 'islandStep': crossing['islandStep'],
+            'physicalLowerCatch': True, 'upperCatchKinematic': True}
+
+
+def pendulum_event(evidence):
+    require(isinstance(evidence, dict) and isinstance(evidence.get('observed'), dict), 'Pendulum route observations missing')
+    observed = evidence['observed']; events = observed.get('events')
+    require(isinstance(events, list), 'Pendulum route event list missing')
+    matching = [event for event in events if isinstance(event, dict) and event.get('id') == 'pendulum']
+    require(len(matching) == 1, 'Pendulum requires exactly one completed full-route event')
+    return assert_pendulum_physical_proof(matching[0].get('proof'), observed.get('bodyId'))
 
 
 def binding_structure(binding, expected):
@@ -748,6 +1030,8 @@ def check_binding(binding, proof, candidate, expected):
             castle.get('sameCargo') is True and type(castle.get('resets')) is int and castle['resets'] == 0,
             'Ordinary eleven-mechanism castle proof missing')
     castle_evidence = receipts['nativeCastle/evidence.json']
+    pendulum = pendulum_event(castle_evidence)
+    require(castle.get('pendulum') == pendulum and binding.get('pendulum') == pendulum, 'Pendulum binding differs from the exact physical witness')
     served = receipts['nativeCastle/served-package.json']
     require(served.get('pass') is True and served.get('files') == artifacts['build']['files'],
             'Native castle served package differs from the complete exact reviewed build')
@@ -790,7 +1074,7 @@ def status_record(expected, binding):
             'humanPlaytestAccepted': False, 'physicalDeviceAccepted': False, 'fullCameraAccepted': False,
             'nativeEscapeAccepted': False, 'firstVisitSettingsMigrationAccepted': False,
             'classicSaveIsolationObserved': False,
-            'saveIsolationScope': 'Six snapshotted existing save namespaces remained byte-identical through eight observed load, settings, play, pause, resume, win, replay and reload phases. The preview preference key was seeded before loading.',
+            'saveIsolationScope': 'Seven snapshotted existing save namespaces remained byte-identical through eight observed load, settings, play, pause, resume, win, replay and reload phases. The preview preference key was seeded before loading.',
             'pauseScope': 'Observed native pause/resume controls; pointer-lock exit fallback may initiate auto-pause.',
             'sourcePackageFilesSha256': inventory_sha256(binding['artifacts']['build']['files']),
             'walkthroughs': 'walkthroughs.html',
@@ -950,7 +1234,8 @@ def check_manifest(manifest, phase, expected):
                    {'sourceCommit': BASELINE_SOURCE, 'sourceReview': BASELINE_REVIEW}, 'Manifest baseline review')
     for key in ('baselinePagesArtifact', 'acceptedProofArtifact'):
         integer(manifest[key].get('id'), key + ' ID', 1)
-        integer(manifest[key].get('bytes'), key + ' bytes', 1, MAX_BYTES)
+        integer(manifest[key].get('bytes'), key + ' bytes', 1,
+                MAX_PRIVATE_PROOF_BYTES if key == 'acceptedProofArtifact' else MAX_BYTES)
     baseline_rows = manifest.get('baselineFiles')
     check_baseline(baseline_rows)
     require(type(manifest.get('baselineBytes')) is int and manifest['baselineBytes'] == BASELINE_BYTES and
@@ -1065,6 +1350,80 @@ def verify(args):
         write_new_json(output, report)
 
 
+def verification_bundle(args):
+    """Retain current acceptance metadata and one complete public movie without archives or production copies."""
+    expected = identity(args)
+    proof, output = disjoint_roots(args.proof, args.output)
+    proof = ordinary_directory(proof)
+    require(not output.exists(), 'Refuse to overwrite verification packet')
+    manifest = read_json(proof / 'manifest.json')
+    site_rows = check_manifest(manifest, 'published', expected)
+    byte_receipt = read_json(proof / 'public-bytes.json')
+    exact_identity(byte_receipt, expected, 'Verification public byte receipt')
+    require(byte_receipt.get('pass') is True and byte_receipt.get('phase') == 'published' and
+            type(byte_receipt.get('checked')) is int and byte_receipt['checked'] == len(site_rows) and
+            type(byte_receipt.get('bytes')) is int and byte_receipt['bytes'] == manifest['siteBytes'] and
+            byte_receipt.get('siteFilesSha256') == manifest['siteFilesSha256'], 'Verification requires successful complete public bytes')
+    public = read_json(proof / 'public-native/evidence.json')
+    require(public.get('sourceCommit') == expected['sourceCommit'] and public.get('result', {}).get('pass') is True,
+            'Verification requires current successful actual public evidence')
+    pendulum_event(public)
+    video = public.get('video')
+    require(isinstance(video, dict) and isinstance(video.get('filename'), str) and
+            re.fullmatch(r'[A-Za-z0-9_-]+\.mp4', video['filename']), 'Verification needs an ordinary public MP4 basename')
+    video_name = 'public-native/' + video['filename']
+    movie = ordinary_file(proof / video_name)
+    require(movie.stat().st_size > 0 and movie.stat().st_size <= MAX_VERIFICATION_BYTES and
+            sha256_file(movie) == digest(video.get('sha256'), 'Verification public movie hash'), 'Verification public movie bytes changed')
+    selected, total = [], movie.stat().st_size
+    # Every retained path is checked even when its payload is not selected for transport.
+    for filename in sorted(proof.rglob('*')):
+        mode = filename.lstat().st_mode
+        require(stat.S_ISREG(mode) or stat.S_ISDIR(mode), 'Non-regular retained proof path: ' + str(filename))
+        if stat.S_ISDIR(mode):
+            continue
+        name = safe_name(filename.relative_to(proof).as_posix())
+        if name.startswith('downloads/') or name.startswith('review-artifacts/build/'):
+            continue
+        if filename.suffix not in ('.json', '.log', '.txt', '.csv'):
+            continue
+        size = integer(filename.stat().st_size, 'Verification metadata file size', maximum=MAX_VERIFICATION_METADATA_BYTES)
+        total += size
+        require(total <= MAX_VERIFICATION_BYTES and len(selected) < MAX_ENTRIES, 'Verification packet exceeds bounded transport budget')
+        selected.append((filename, name))
+    require(any(name == 'manifest.json' for _, name in selected) and any(name == 'package-binding.json' for _, name in selected),
+            'Verification packet lacks identity/packet metadata')
+    selected.append((movie, video_name))
+    selected.sort(key=lambda pair: pair[1])
+    rows = [{'path': name, 'bytes': filename.stat().st_size, 'sha256': sha256_file(filename)} for filename, name in selected]
+    checked_rows(rows, 'Verification packet', MAX_VERIFICATION_BYTES)
+    record = {'schemaVersion': 1, 'kind': 'tower41-native-public-verification-packet', **expected,
+              'pass': True, 'files': rows, 'bytes': total, 'filesSha256': inventory_sha256(rows),
+              'maximumBytes': MAX_VERIFICATION_BYTES, 'fullPrivateProofRequiredForFinalAcceptance': True,
+              'completePublicMovie': {'path': video_name, 'bytes': movie.stat().st_size, 'sha256': video['sha256']},
+              'imagesIncluded': False, 'productionIncluded': False, 'sourceCodeIncluded': False,
+              'nestedArchivesIncluded': False}
+    record_bytes = json_bytes(record)
+    require(total + len(record_bytes) <= MAX_VERIFICATION_BYTES, 'Verification packet receipt exceeds bounded transport budget')
+    temporary = None
+    try:
+        temporary = staging_directory(output)
+        for filename, name in selected:
+            target = temporary / name
+            target.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copyfile(filename, target)
+        require(inventory(temporary, MAX_VERIFICATION_BYTES) == rows, 'Verification packet copy bytes differ')
+        write_new_json(temporary / 'verification-packet.json', record)
+        inventory(temporary, MAX_VERIFICATION_BYTES)
+        temporary.rename(output)
+        temporary = None
+        print(json.dumps({'pass': True, 'files': len(rows) + 1, 'bytes': total + len(record_bytes),
+                          'filesSha256': record['filesSha256'], 'completePublicMovie': record['completePublicMovie']}))
+    finally:
+        if temporary is not None:
+            shutil.rmtree(temporary)
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     sub = parser.add_subparsers(dest='command', required=True)
@@ -1072,6 +1431,9 @@ def main():
     for flag in ('zip', 'output', 'digest', 'bytes'):
         extraction.add_argument('--' + flag, required=True)
     extraction.add_argument('--max-bytes', default=str(MAX_CANDIDATE_BYTES))
+    private_extraction = sub.add_parser('extract-accepted')
+    for flag in ('zip', 'output'):
+        private_extraction.add_argument('--' + flag, required=True)
     baseline_parser = sub.add_parser('baseline')
     for flag in ('zip', 'accepted-proof', 'output'):
         baseline_parser.add_argument('--' + flag, required=True)
@@ -1082,8 +1444,11 @@ def main():
     for flag in ('base', 'manifest', 'output', 'source', 'publisher', 'run', 'review-run', 'review-attempt'):
         verification.add_argument('--' + flag, required=True)
     verification.add_argument('--phase', required=True, choices=('preflight', 'published'))
+    bundle = sub.add_parser('verification-bundle')
+    for flag in ('proof', 'output', 'source', 'publisher', 'run', 'review-run', 'review-attempt'):
+        bundle.add_argument('--' + flag, required=True)
     args = parser.parse_args()
-    {'extract': extract, 'baseline': baseline, 'assemble': assemble, 'verify': verify}[args.command](args)
+    {'extract': extract, 'extract-accepted': extract_accepted, 'baseline': baseline, 'assemble': assemble, 'verify': verify, 'verification-bundle': verification_bundle}[args.command](args)
 
 
 if __name__ == '__main__':
