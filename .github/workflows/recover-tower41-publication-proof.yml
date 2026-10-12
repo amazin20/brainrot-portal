@@ -1,0 +1,62 @@
+name: Recover exact immutable Tower41 proof in small parts
+'on':
+  push:
+    branches: [ops/recover-tower41-proof-20261012]
+    paths: [.github/workflows/recover-tower41-publication-proof.yml, scripts/recover-tower41-publication-proof.py]
+permissions: {contents: read, actions: read}
+concurrency:
+  group: tower41-proof-recovery-38251739817
+  cancel-in-progress: false
+jobs:
+  recover:
+    name: Recover immutable original proof bytes through small parts
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: '${{ github.sha }}', fetch-depth: 2, persist-credentials: false}
+      - name: Validate actual publication, stream original SHA-pinned ZIP and partition exact bytes
+        env: {GITHUB_TOKEN: '${{ github.token }}'}
+        run: python3 scripts/recover-tower41-publication-proof.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: tower41-proof-recovery-manifest-${{ github.run_id }}-${{ github.run_attempt }}
+          path: recovery/manifest/recovery-manifest.json
+          compression-level: 0
+          if-no-files-found: error
+          retention-days: 30
+      - uses: actions/upload-artifact@v4
+        with:
+          name: tower41-proof-recovery-part-001-${{ github.run_id }}-${{ github.run_attempt }}
+          path: recovery/parts/part-001.bin
+          compression-level: 0
+          if-no-files-found: error
+          retention-days: 30
+      - uses: actions/upload-artifact@v4
+        with:
+          name: tower41-proof-recovery-part-002-${{ github.run_id }}-${{ github.run_attempt }}
+          path: recovery/parts/part-002.bin
+          compression-level: 0
+          if-no-files-found: error
+          retention-days: 30
+      - uses: actions/upload-artifact@v4
+        with:
+          name: tower41-proof-recovery-part-003-${{ github.run_id }}-${{ github.run_attempt }}
+          path: recovery/parts/part-003.bin
+          compression-level: 0
+          if-no-files-found: error
+          retention-days: 30
+      - uses: actions/upload-artifact@v4
+        with:
+          name: tower41-proof-recovery-part-004-${{ github.run_id }}-${{ github.run_attempt }}
+          path: recovery/parts/part-004.bin
+          compression-level: 0
+          if-no-files-found: error
+          retention-days: 30
+      - uses: actions/upload-artifact@v4
+        with:
+          name: tower41-proof-recovery-part-005-${{ github.run_id }}-${{ github.run_attempt }}
+          path: recovery/parts/part-005.bin
+          compression-level: 0
+          if-no-files-found: error
+          retention-days: 30
