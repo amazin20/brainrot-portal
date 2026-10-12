@@ -1,0 +1,148 @@
+name: Review isolated room41 ratchet contacts and native evidence
+'on':
+  push:
+    branches: [upgrade/tower41-contact-native-20261012]
+  workflow_dispatch:
+permissions: {contents: read}
+concurrency:
+  group: tower41-ratchet-contact-review-${{ github.ref }}
+  cancel-in-progress: true
+env:
+  BUILD_COMMIT: ${{ github.sha }}
+  SOURCE_REVIEW_RUN_ID: ${{ github.run_id }}
+  SOURCE_REVIEW_RUN_ATTEMPT: ${{ github.run_attempt }}
+  # Exact final Node registrations: 1705; full CPU must actually pass all1705.
+  EXPECTED_ACTIVE_TESTS: '1705'
+jobs:
+  build:
+    name: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: '${{ github.sha }}', fetch-depth: 0, persist-credentials: false}
+      - uses: actions/setup-node@v4
+        with: {node-version: 22, cache: npm}
+      - name: Bind the actual checked-out source and attempt
+        run: |
+          test "$(git rev-parse HEAD)" = "$BUILD_COMMIT"
+          test -z "$(git status --porcelain --untracked-files=no)"
+          printf 'TOWER41_SOURCE %s REVIEW %s/%s\n' "$BUILD_COMMIT" "$SOURCE_REVIEW_RUN_ID" "$SOURCE_REVIEW_RUN_ATTEMPT"
+      - run: npm ci
+      - name: Build and stamp one production package without declaring acceptance
+        run: |
+          npm run build
+          node scripts/stamp-build.mjs v54-unified-campaign dist
+          node --input-type=module <<'JS'
+          import {checkBuild} from './scripts/qa-tower41-ratchet-browser.mjs';
+          const {nativePackage}=checkBuild();
+          console.log('TOWER41_PACKAGE',JSON.stringify(nativePackage));
+          JS
+      - uses: actions/upload-artifact@v4
+        with:
+          name: tower41-ratchet-build-${{ github.run_id }}-${{ github.run_attempt }}
+          path: dist/
+          if-no-files-found: error
+          retention-days: 14
+  cpu:
+    name: cpu
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: '${{ github.sha }}', fetch-depth: 0, persist-credentials: false}
+      - uses: actions/setup-node@v4
+        with: {node-version: 22, cache: npm}
+      - name: Bind the actual checked-out source and attempt
+        run: |
+          test "$(git rev-parse HEAD)" = "$BUILD_COMMIT"
+          test -z "$(git status --porcelain --untracked-files=no)"
+          printf 'TOWER41_SOURCE %s REVIEW %s/%s\n' "$BUILD_COMMIT" "$SOURCE_REVIEW_RUN_ID" "$SOURCE_REVIEW_RUN_ATTEMPT"
+      - run: npm ci
+      - name: Complete every active regression and require the frozen exact TAP count
+        run: |
+          mkdir -p qa/tower41-ratchet-cpu
+          node --input-type=module <<'JS'
+          import assert from 'node:assert/strict';
+          assert.match(process.env.EXPECTED_ACTIVE_TESTS,/^[1-9]\d*$/,'Freeze the exact active test count before pushing this review');
+          JS
+          set -o pipefail
+          npm test 2>&1 | tee qa/tower41-ratchet-cpu/active-tests.log
+          node --input-type=module <<'JS'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import {createHash} from 'node:crypto';
+          const file='qa/tower41-ratchet-cpu/active-tests.log',bytes=fs.readFileSync(file),log=bytes.toString('utf8'),expected=Number(process.env.EXPECTED_ACTIVE_TESTS);
+          const field=name=>{const matches=[...log.matchAll(new RegExp('^# '+name+' (\\d+)\\r?$','gm'))];assert.equal(matches.length,1,'One actual final TAP '+name+' footer is required');return Number(matches[0][1]);};
+          const actual=Object.fromEntries(['tests','pass','fail','cancelled','skipped','todo'].map(name=>[name,field(name)]));
+          assert.deepEqual(actual,{tests:expected,pass:expected,fail:0,cancelled:0,skipped:0,todo:0});
+          const receipt={pass:true,sourceCommit:process.env.BUILD_COMMIT,sourceReview:{runId:Number(process.env.SOURCE_REVIEW_RUN_ID),runAttempt:Number(process.env.SOURCE_REVIEW_RUN_ATTEMPT)},expected,actual,log:{file:'active-tests.log',bytes:bytes.length,sha256:createHash('sha256').update(bytes).digest('hex')},scope:'All actual active regressions at the frozen source; separate native and contact evidence remain required.',fullTowerAccepted:false,publicationAccepted:false};
+          fs.writeFileSync('qa/tower41-ratchet-cpu/report.json',JSON.stringify(receipt,null,2)+'\n');console.log('TOWER41_CPU',JSON.stringify(receipt));
+          JS
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: tower41-ratchet-cpu-${{ github.run_id }}-${{ github.run_attempt }}
+          path: qa/tower41-ratchet-cpu/
+          if-no-files-found: error
+          retention-days: 14
+  native:
+    name: native (41)
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 80
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: '${{ github.sha }}', fetch-depth: 0, persist-credentials: false}
+      - uses: actions/setup-node@v4
+        with: {node-version: 22, cache: npm}
+      - name: Bind the actual checked-out source and attempt
+        run: |
+          test "$(git rev-parse HEAD)" = "$BUILD_COMMIT"
+          test -z "$(git status --porcelain --untracked-files=no)"
+          printf 'TOWER41_SOURCE %s REVIEW %s/%s\n' "$BUILD_COMMIT" "$SOURCE_REVIEW_RUN_ID" "$SOURCE_REVIEW_RUN_ATTEMPT"
+      - uses: actions/download-artifact@v4
+        with:
+          name: tower41-ratchet-build-${{ github.run_id }}-${{ github.run_attempt }}
+          path: dist
+      - name: Verify the one package and install the pinned browser verifier
+        run: |
+          npm ci
+          node --input-type=module <<'JS'
+          import {checkBuild} from './scripts/qa-tower41-ratchet-browser.mjs';
+          console.log('TOWER41_PACKAGE',JSON.stringify(checkBuild().nativePackage));
+          JS
+          npm install --no-save --package-lock=false puppeteer-core@24.16.0
+          if ! command -v ffmpeg >/dev/null || ! command -v ffprobe >/dev/null; then
+            sudo apt-get update -qq
+            sudo apt-get install -y --no-install-recommends ffmpeg
+          fi
+          python3 -m venv "$RUNNER_TEMP/tower41-python"
+          "$RUNNER_TEMP/tower41-python/bin/python" -m pip install --disable-pip-version-check Pillow==11.3.0
+          echo "CODEX_PRIMARY_RUNTIME_PYTHON=$RUNNER_TEMP/tower41-python/bin/python" >> "$GITHUB_ENV"
+          echo "CHROME_PATH=$(command -v google-chrome || command -v chromium)" >> "$GITHUB_ENV"
+      - name: Review real contacts, original models and native controls
+        env:
+          START_SERVER: '1'
+          OUT_DIR: qa/tower41-ratchet-browser
+        run: timeout --signal=TERM --kill-after=10s 1200s node scripts/qa-tower41-ratchet-browser.mjs
+      - name: Record the complete bounded approach and mechanism route without padding
+        env:
+          START_SERVER: '1'
+          CAPTURE_FPS: '4'
+          CAPTURE_WIDTH: '640'
+          CAPTURE_HEIGHT: '360'
+          OUT_DIR: qa/tower41-ratchet-walkthrough
+        run: timeout --signal=TERM --kill-after=10s 3000s node scripts/record-tower41-ratchet-walkthrough.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: tower41-ratchet-native-41-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            qa/tower41-ratchet-browser/
+            qa/tower41-ratchet-walkthrough/*.json
+            qa/tower41-ratchet-walkthrough/*.mp4
+            qa/tower41-ratchet-walkthrough/*.jpg
+          if-no-files-found: error
+          retention-days: 14

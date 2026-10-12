@@ -6,6 +6,7 @@ import { updateKineticVelocity, limitKineticSpeed, sweepKineticBody } from './La
 import { sweepBox } from './LabSweep.js';
 import {resolveRampMotion,followRampGround} from './LabRampContact.js';
 import {resolveCapsuleBoxMotion,capsuleBoxGrounded,orientedBoxSupport,constrainBoxToOrientedCollider,boxIntersectsOrientedCollider} from './LabOrientedBoxContact.js';
+import {constrainTower41HeldLoadTarget} from './LabTower41CarryContact.js';
 import { cargoLoadsPlate } from './LabPlateContact.js';
 import * as THREE from 'three';
 import { InputController } from './InputController.js';
@@ -1197,7 +1198,7 @@ export class LabGame {
       for (let pass = 0; pass < 3; pass++) for (const c of this.colliders) {
         if (c.enabled === false || c.walkablePlane
           || this.portalOpensCollider(c, this.playerPosition.clone().addScaledVector(UP, CENTER_HEIGHT), PLAYER_RADIUS, PLAYER_HEIGHT)) continue;
-        if(c.orientedBox){target.copy(constrainBoxToOrientedCollider(c.orientedBox,this.cargo.position,target,new THREE.Vector3(CUBE_RADIUS+.035,CUBE_RADIUS+.035,CUBE_RADIUS+.035),quaternion));continue;}
+        if(c.orientedBox){target.copy(constrainTower41HeldLoadTarget(this,c,this.cargo.position,target,quaternion)??constrainBoxToOrientedCollider(c.orientedBox,this.cargo.position,target,new THREE.Vector3(CUBE_RADIUS+.035,CUBE_RADIUS+.035,CUBE_RADIUS+.035),quaternion));continue;}
         if (c.frontPlane) {
           const f=c.frontPlane();if(target.clone().sub(f.center).dot(f.normal)>CUBE_RADIUS*Math.sqrt(3)+.05)continue;
         }

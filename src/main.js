@@ -21,6 +21,9 @@ const debug=!yandex&&(query.get('debug')==='1'||query.get('smoke')==='1');
 // Player-facing puzzles keep control tutorials, without solution-hint buttons.
 $('#hint-button').hidden=!debug;
 const campaignRoute=readCampaignRoute(query,CAMPAIGN.length),openEdition=readOpenEdition(query),foundationEdition=readFoundationEdition(query);
+// This bounded physical-cell review has its own saves and is never enabled by
+// an ordinary game link or the Yandex build.
+const tower41Qualification=debug&&foundationEdition.enabled&&foundationEdition.levelIndex===40&&query.get('tower41ratchet')==='1';
 const puzzlePilot43=!yandex&&foundationEdition.enabled&&query.get('pilot')==='43';
 const puzzleProgression=!yandex&&foundationEdition.enabled&&query.get('pilot')==='progression';
 const availableRooms=puzzleProgression?PROGRESSION_INDICES:puzzlePilot43?[42]:foundationEdition.enabled?FOUNDATION_INDICES:openEdition.enabled?OPEN_ROOM_INDICES:CAMPAIGN.map((_,i)=>i);
@@ -29,7 +32,8 @@ if(campaignRoute.legacyVelocityLink)history.replaceState(history.state,'',locati
 let storage;try{storage=localStorage;}catch{}
 const pilotStorage=storage&&{getItem:key=>storage.getItem('brainrot-puzzle-pilot43-v1:'+key),setItem:(key,value)=>storage.setItem('brainrot-puzzle-pilot43-v1:'+key,value)};
 const progressionStorage=storage&&{getItem:key=>storage.getItem('brainrot-puzzle-progression-finale-v1:'+key),setItem:(key,value)=>storage.setItem('brainrot-puzzle-progression-finale-v1:'+key,value)};
-const preferences=new LabPreferences(puzzleProgression?progressionStorage:puzzlePilot43?pilotStorage:foundationEdition.enabled?foundationStorage(storage):openEdition.enabled?openEditionStorage(storage):storage,
+const ratchetStorage=storage&&{getItem:key=>storage.getItem('brainrot-tower41-ratchet-qualification-v1:'+key),setItem:(key,value)=>storage.setItem('brainrot-tower41-ratchet-qualification-v1:'+key,value)};
+const preferences=new LabPreferences(tower41Qualification?ratchetStorage:puzzleProgression?progressionStorage:puzzlePilot43?pilotStorage:foundationEdition.enabled?foundationStorage(storage):openEdition.enabled?openEditionStorage(storage):storage,
   foundationEdition.enabled?{campaignRevision:CREATIVE_CAMPAIGN_REVISION,replacedIndices:CREATIVE_REPLACED_INDICES,roomRevisions:{16:'cable-supported-architecture-v1',32:'siphon-observatory-v1',50:'echo-horizon-v1'}}:{}),holds=new Set();
 const screens=['loading','start-screen','pause-screen','win-screen','error-screen'];
 const hudNodes={level:$('#level-number'),chamber:$('#chamber'),objective:$('#objective'),cargo:$('#cargo-status'),portals:$('#portal-status')};
@@ -105,6 +109,17 @@ const game=new LabGame({debug,container:$('#game'),touch:{joystick:$('#joystick'
     if(debug){window.__NESI_DEMO_GAME__=game;window.__NESI_PLATFORM__=platform;window.__NESI_PREFS__=preferences;
       window.__NESI_RUN_LEVEL_ROUTE__=async(options={})=>{const {runV8Journey}=await import('./game/LabV8Journey.js');game.renderer.setAnimationLoop(null);hideScreens();setState('playing');
         try{return await runV8Journey(game,{journeyOptions:options,onMilestone:mark=>{game.render();window.__NESI_CAPTURE_LEVEL_MARK__?.(mark);}});}finally{game.render();clearInput();setState(game.state);diagnostics();}};
+      if(tower41Qualification)window.__NESI_RUN_TOWER41_RATCHET_ROUTE__=async({scenario='qualification'}={})=>{
+        if(game.state!=='playing'||game.levelIndex!==40||!game.firstLevel?.ratchetCell)throw Error('Start the opted-in room41 review through Play');
+        const journey=await import('./game/LabTower41RatchetCellJourney.js');
+        const scenarios={qualification:journey.runTower41RatchetQualification,held:journey.runTower41RatchetHeldContact,'fast-release':journey.runTower41RatchetFastRelease,boarding:journey.runTower41RatchetBoarding};
+        if(!Object.hasOwn(scenarios,scenario)||typeof scenarios[scenario]!=='function')throw Error('Unknown room41 ratchet scenario');
+        game.renderer.setAnimationLoop(null);hideScreens();
+        try{return await journey.runTower41RatchetCellJourney(game,{scenario:scenarios[scenario],
+          onMilestone:mark=>{game.render();window.__NESI_CAPTURE_RATCHET_MARK__?.(mark);},
+          onFrame:sample=>window.__NESI_CAPTURE_RATCHET_FRAME__?.(sample)});}
+        finally{game.render();clearInput();setState(game.state);diagnostics();}
+      };
       window.__NESI_RUN_FLOOR_PORTAL_ROUTE__=async(options={})=>{
 const {runPortalFloorJourney}=await import('./game/LabPortalFloorJourney.js');
 game.renderer.setAnimationLoop(null);hideScreens();setState('playing');
@@ -155,6 +170,7 @@ game.levelIndex=foundationEdition.enabled?foundationEdition.levelIndex:openEditi
 if(puzzlePilot43)game.levelIndex=42;
 if(puzzleProgression&&!PROGRESSION_INDICES.includes(game.levelIndex))game.levelIndex=PROGRESSION_INDICES[0];
 game.levelIndex=resumeCampaignLevel(query,preferences.value,availableRooms,game.levelIndex);
+game.tower41RatchetQualification=tower41Qualification&&game.levelIndex===40;
 choices();$('#level-select').value=String(game.levelIndex);
 function updateStartAction(){
  const index=Number($('#level-select').value),saved=preferences.value.resumeLevel===index;

@@ -1,5 +1,6 @@
 import {LabStaticAwareSAP} from './LabStaticAwareSAP.js';
 import { sweepBox } from './LabSweep.js';
+import {resolveCompoundCargoSweep} from './LabCompoundCargoSweep.js';
 import { Body, Box, ConvexPolyhedron, Material, Quaternion, Sphere, Vec3, World } from 'cannon-es';
 
 const SOLID = 1, CARGO = 2, PLAYER = 4;
@@ -97,6 +98,9 @@ export class LabPhysics {
     });
     this.cargoMaterial = new Material({ friction: 1, restitution: 1 });
     this.solids = new Map();
+    this.cargoSweepBoxes = new Map();
+    this.compoundCargoSweepCorrections = 0;
+    this.lastCompoundCargoSweep = null;
     this.cargoBody = null;
     this.playerProxy = null;
     this.carryTarget = null;
@@ -124,6 +128,43 @@ export class LabPhysics {
     this.solids.set(id, { body, half, target: center.clone(), remaining: 0, inWorld: true });
     this.world.addBody(body);
     return body;
+  }
+
+  /** Opt-in CCD ownership for an existing fixed compound Box shape. It adds
+   * no physical body/contact/proxy and leaves every legacy collider unchanged. */
+  registerCargoSweepBox(id, {body,shapeIndex} = {}) {
+    if (typeof id !== 'string' || !id || this.cargoSweepBoxes.has(id)) throw new Error('A unique compound cargo sweep id is required');
+    if (!(body instanceof Body) || body.type !== Body.STATIC || body.mass !== 0 || !this.world.bodies.includes(body)) throw new TypeError('Register an existing owned static Cannon body');
+    if (!Number.isInteger(shapeIndex) || shapeIndex < 0 || !(body.shapes[shapeIndex] instanceof Box)) throw new TypeError('Register an actual Cannon Box shape index');
+    if ([...this.cargoSweepBoxes.values()].some(entry => entry.body === body && entry.shapeIndex === shapeIndex)) throw new Error('This compound cargo Box is already registered');
+    this.cargoSweepBoxes.set(id, {id,body,shapeIndex,shape:body.shapes[shapeIndex]});
+    return true;
+  }
+
+  removeCargoSweepBox(id) {
+    const removed=this.cargoSweepBoxes.delete(id);
+    if(!this.cargoSweepBoxes.size)this.lastCompoundCargoSweep=null;
+    return removed;
+  }
+
+  _guardRegisteredCompoundCargo(previous) {
+    const cargo=this.cargoBody;if (!cargo || !previous || !this.cargoSweepBoxes.size) return;
+    const cargoShape=cargo.shapes[0];
+    const entries=[...this.cargoSweepBoxes.values()].filter(entry =>
+      entry.body.type === Body.STATIC && entry.body.mass === 0 && this.world.bodies.includes(entry.body)
+      && entry.body.shapes[entry.shapeIndex] === entry.shape && entry.body.collisionResponse !== false
+      && entry.shape.collisionResponse !== false && cargo.collisionResponse !== false
+      && cargoShape?.collisionResponse !== false
+      && (cargo.collisionFilterGroup & entry.body.collisionFilterMask) !== 0
+      && (entry.body.collisionFilterGroup & cargo.collisionFilterMask) !== 0
+      && (cargoShape.collisionFilterGroup & entry.shape.collisionFilterMask) !== 0
+      && (entry.shape.collisionFilterGroup & cargoShape.collisionFilterMask) !== 0);
+    if (!entries.length) {this.lastCompoundCargoSweep=null;return;}
+    const result=resolveCompoundCargoSweep(cargo,previous,entries,{maxLinearSpeed:this.maxLinearSpeed,maxAngularSpeed:18});
+    this.compoundCargoSweepCorrections+=result.corrections.length;
+    this.lastCompoundCargoSweep={worldStep:this.world.stepnumber,...result,corrections:result.corrections.map(c=>({step:this.world.stepnumber,...c}))};
+    if (result.supported) this.sweepSupported=true;
+    if (result.corrections.length) this.world.broadphase.dirty=true;
   }
 
   /** One static body/id, with closed convex wedges matching the actual deck
@@ -600,9 +641,12 @@ export class LabPhysics {
         limit(this.cargoBody.angularVelocity, 18);
       }
       const previousCargo = this.cargoBody?.position.clone();
+      const previousCompoundCargo = this.cargoBody && this.cargoSweepBoxes.size
+        ? {position:this.cargoBody.position.clone(),quaternion:this.cargoBody.quaternion.clone()} : null;
       this.sweepSupported = false;
       this.world.step(this.fixedStep);
       this._guardSweptCargo(previousCargo);
+      this._guardRegisteredCompoundCargo(previousCompoundCargo);
       const supported = this.world.contacts.some(contact =>
         (contact.bi === this.cargoBody && contact.ni.y < -.45) ||
         (contact.bj === this.cargoBody && contact.ni.y > .45));
@@ -640,6 +684,8 @@ export class LabPhysics {
       solver: 'cannon-es', fixedHz: 1 / this.fixedStep, steps: this.steps,
       cargoCount: this.cargoBody ? 1 : 0, cargoSize: this.cargoSize ?? null,
       staticColliders: this.solids.size, carrying: Boolean(this.carryTarget),
+      compoundCargoSweepBoxes:this.cargoSweepBoxes.size,
+      compoundCargoSweepCorrections:this.compoundCargoSweepCorrections,
       grounded: this.grounded, sleeping: state?.sleeping ?? false,
       releasePlayerGrace: this.releasePlayerGrace,
       speed: state?.velocity.length() ?? 0, angularSpeed: state?.angularVelocity.length() ?? 0,
@@ -651,5 +697,6 @@ export class LabPhysics {
   dispose() {
     for (const body of [...this.world.bodies]) this.world.removeBody(body);
     this.solids.clear(); this.cargoBody = null; this.playerProxy = null; this.carryTarget = null;
+    this.cargoSweepBoxes.clear();this.lastCompoundCargoSweep=null;
   }
 }
