@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import {SINGULARITY_ROOMS} from '../../src/game/LabSingularityLayout.js';
 
 export const UPGRADE_VERSION='v49-manufactured-light';
 export const CAPTURE_FRAME_RATES=Object.freeze([4,6,12]);
@@ -9,6 +10,21 @@ export function captureFormat({fps=12,width=960,height=540}={}){
 }
 export function assertUpgradeInfo(info,expectedRooms=null){
  assert.match(info.commit,/^[a-f0-9]{40}$/);
+ if(info.version==='v54-unified-campaign'){
+  assert.equal(info.artVersion,info.version);assert.equal(info.levels,51);assert.equal(info.edition,'foundation');
+  if(process.env.BUILD_COMMIT)assert.equal(info.commit,process.env.BUILD_COMMIT,'Current native proof must use the exact reviewed source');
+  assert.equal(info.features.tower.level,41);assert.equal(info.features.tower.stages,11);assert.equal(info.features.tower.checkpoints,false);
+  assert.deepEqual(info.features.foundation.rooms,Array.from({length:51},(_,i)=>i+1));
+  const rooms=SINGULARITY_ROOMS.map(({id,name,rule,requires})=>({id,name,rule,requires:[...requires]}));
+  assert.equal(rooms.length,11);assert.equal(new Set(rooms.map(r=>r.id)).size,11);assert.equal(new Set(rooms.map(r=>r.rule)).size,11);
+  for(const room of rooms)assert.ok(room.requires.every(id=>rooms.some(r=>r.id===id)),'Unknown frozen-source dependency');
+  if(expectedRooms)assert.deepEqual(rooms,expectedRooms.map(({id,name,rule,requires})=>({id,name,rule,requires:[...requires]})));
+  if(info.features.tower.rooms!==undefined)assert.deepEqual(info.features.tower.rooms,rooms);
+  // The unified stamp does not embed historical castle room arrays. Native
+  // event identities are checked against this exact checkout's definitions;
+  // no fields are added to or re-labelled in the production metadata.
+  return {...info.features.tower,rooms,uniqueRules:rooms.length,independentHalls:rooms.filter(r=>r.requires.length===0).length,definitionOrigin:'frozen-source'};
+ }
  assert.equal(info.version,UPGRADE_VERSION);assert.equal(info.artVersion,UPGRADE_VERSION);assert.equal(info.levels,41);
  const tower=info.features.tower;
  assert.ok(Array.isArray(tower.rooms)&&tower.rooms.length>=10,'Metadata must describe the rebuilt castle mechanisms');

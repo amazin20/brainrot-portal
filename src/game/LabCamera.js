@@ -87,6 +87,7 @@ export class LabCamera {
     // Keep this chamber-specific: existing campaign camera contracts retain
     // their exact lens and FOV unless the chamber explicitly opts in.
     this.fullBodyFraming = !!fullBodyFraming;
+    this.confinedFraming = false;
     this.upwardBackoff = 0;
     this.upwardBackoffVelocity = 0;
   }
@@ -97,8 +98,9 @@ export class LabCamera {
     return this;
   }
 
-  configureSilhouette({ enabled = this.fullBodyFraming } = {}) {
+  configureSilhouette({ enabled = this.fullBodyFraming, confined = false } = {}) {
     this.fullBodyFraming = !!enabled;
+    this.confinedFraming = !!confined;
     return this;
   }
 
@@ -446,10 +448,12 @@ export class LabCamera {
   // A portal's rolling horizon and a newly solid backing can retract the
   // final lens AFTER escape candidates were scored. Fit that actual view,
   // rather than a desired boom or the pitch alone. Keep the same optical axis;
-  // only the optional finale lens widens while a transported horizon recovers.
-  // Upright walking/aiming retains its exact previous camera and sweep.
+  // The optional castle lens also fits upright collision-limited views. Its
+  // narrower loading bays can leave a safe swept eye beside the character.
+  // Other upright rooms retain their exact previous camera and sweep.
   fitSilhouetteLens(step) {
-    if (!this.fullBodyFraming || step <= 0 || this.viewUp.dot(UP) >= Math.cos(.01)) return;
+    const upright = this.viewUp.dot(UP) >= Math.cos(.01);
+    if (!this.fullBodyFraming || step <= 0 || (upright && !(this.confinedFraming && this.obstructed))) return;
     for (let pass = 0; pass < 3; pass++) {
       let tangent = 0;
       for (const x of [-.65, .65]) for (const y of [-1.52, 1.52]) for (const z of [-.65, .65]) {
@@ -465,7 +469,8 @@ export class LabCamera {
       // The measured falling third-portal view needs 100.1 degrees for a
       // small feet envelope, including the margin. Leave a finite reserve
       // for its last collision sweep; tighter views can still exceed it.
-      const needed = Math.min(102, THREE.MathUtils.radToDeg(2 * Math.atan(tangent)));
+      const needed = Math.min(this.confinedFraming && upright ? 120 : 102,
+        THREE.MathUtils.radToDeg(2 * Math.atan(tangent)));
       if (needed <= this.camera.fov + .00001) return;
       this.camera.fov = needed;
       this.fovVelocity = Math.max(0, this.fovVelocity);

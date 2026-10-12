@@ -270,7 +270,7 @@ export class LabGame {
     this.cameraRig = new LabCamera({ camera: this.camera, blockers: this.cameraBlockers,
       isBlocker: (object, hit) => this.isCameraBlocker(object, hit) });
     this.cameraRig.configureEpic?.({ enabled: this.kineticMode, dynamicFov: this.epicOptions?.dynamicFov !== false });
-    this.cameraRig.configureSilhouette?.({ enabled: this.firstLevel?.puzzleProgression === 50 || this.firstLevel?.puzzleProgression === 51 });
+    this.cameraRig.configureSilhouette?.({ enabled: (this.firstLevel?.singularity && this.levelIndex === 40) || this.firstLevel?.puzzleProgression === 50 || this.firstLevel?.puzzleProgression === 51, confined: Boolean(this.firstLevel?.singularity && this.levelIndex === 40) });
     this.camera.far = this.firstLevel.viewDistance ?? (this.kineticMode ? 500 : 130); this.camera.updateProjectionMatrix();
     if (this.kineticMode && !this.epicDirector) this.epicDirector = new LabEpicDirector({ container: this.container, audio: this.audio, options: this.epicOptions });
     this.portals = new LabPortals({ scene: this.scene, renderer: this.renderer, camera: this.camera, maxResolution: this.quality.portalResolution, samples: 2 });

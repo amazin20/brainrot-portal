@@ -1,0 +1,282 @@
+name: Review next room41 physical cell and the whole current castle
+'on':
+  push:
+    branches: [upgrade/tower41-next-cell-20261012]
+  workflow_dispatch:
+# Deliberately read-only: no publisher, deployment environment or Pages writes.
+permissions: {contents: read}
+concurrency:
+  group: tower41-next-cell-review-${{ github.ref }}
+  cancel-in-progress: true
+env:
+  BUILD_COMMIT: ${{ github.sha }}
+  SOURCE_REVIEW_RUN_ID: ${{ github.run_id }}
+  SOURCE_REVIEW_RUN_ATTEMPT: ${{ github.run_attempt }}
+jobs:
+  build:
+    name: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: '${{ github.sha }}', fetch-depth: 0, persist-credentials: false}
+      - uses: actions/setup-node@v4
+        with: {node-version: 22, cache: npm}
+      - name: Install checkout dependencies before loading the source verifier
+        run: |
+          mkdir -p qa/tower41-next-cell-build
+          set -o pipefail
+          npm ci 2>&1 | tee qa/tower41-next-cell-build/install.log
+      - name: Freeze exact source and read-only accepted baseline
+        env: {GITHUB_TOKEN: '${{ github.token }}'}
+        run: |
+          mkdir -p qa/tower41-next-cell-build
+          set -o pipefail
+          node scripts/qa-tower41-next-cell-source.mjs freeze 2>&1 | tee qa/tower41-next-cell-build/source.log
+      - name: Build one current production package and retain its complete inventory
+        run: |
+          set -o pipefail
+          {
+            npm run build
+            node scripts/stamp-build.mjs v54-unified-campaign dist
+            node scripts/qa-tower41-next-cell-source.mjs package
+          } 2>&1 | tee qa/tower41-next-cell-build/build.log
+      - name: Retain the one frozen production package
+        uses: actions/upload-artifact@v4
+        with:
+          name: tower41-next-cell-build-${{ github.run_id }}-${{ github.run_attempt }}
+          path: dist/
+          if-no-files-found: error
+          retention-days: 14
+      - name: Emit compact actual build status
+        if: always()
+        env: {REVIEW_JOB_STATUS: '${{ job.status }}'}
+        run: node scripts/qa-tower41-next-cell-source.mjs status build qa/tower41-next-cell-build
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: tower41-next-cell-source-${{ github.run_id }}-${{ github.run_attempt }}
+          path: qa/tower41-next-cell-build/
+          if-no-files-found: error
+          retention-days: 14
+  cpu:
+    name: cpu
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: '${{ github.sha }}', fetch-depth: 0, persist-credentials: false}
+      - uses: actions/setup-node@v4
+        with: {node-version: 22, cache: npm}
+      - uses: actions/download-artifact@v4
+        with:
+          name: tower41-next-cell-build-${{ github.run_id }}-${{ github.run_attempt }}
+          path: dist
+      - uses: actions/download-artifact@v4
+        with:
+          name: tower41-next-cell-source-${{ github.run_id }}-${{ github.run_attempt }}
+          path: qa/tower41-next-cell-build
+      - name: Bind the exact checkout and shared package
+        run: |
+          mkdir -p qa/tower41-next-cell-cpu
+          set -o pipefail
+          {
+            npm ci
+            node scripts/qa-tower41-next-cell-source.mjs verify-package
+          } 2>&1 | tee qa/tower41-next-cell-cpu/install.log
+      - name: Complete every actual regression and bind its final TAP totals and log digest
+        run: |
+          set -o pipefail
+          npm test 2>&1 | tee qa/tower41-next-cell-cpu/active-tests.log
+          node scripts/qa-tower41-next-cell-source.mjs cpu qa/tower41-next-cell-cpu/active-tests.log
+      - name: Emit compact actual CPU status
+        if: always()
+        env: {REVIEW_JOB_STATUS: '${{ job.status }}'}
+        run: node scripts/qa-tower41-next-cell-source.mjs status cpu qa/tower41-next-cell-cpu
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: tower41-next-cell-cpu-${{ github.run_id }}-${{ github.run_attempt }}
+          path: qa/tower41-next-cell-cpu/
+          if-no-files-found: error
+          retention-days: 14
+  native-contact:
+    name: native-contact
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 80
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: '${{ github.sha }}', fetch-depth: 0, persist-credentials: false}
+      - uses: actions/setup-node@v4
+        with: {node-version: 22, cache: npm}
+      - uses: actions/download-artifact@v4
+        with:
+          name: tower41-next-cell-build-${{ github.run_id }}-${{ github.run_attempt }}
+          path: dist
+      - uses: actions/download-artifact@v4
+        with:
+          name: tower41-next-cell-source-${{ github.run_id }}-${{ github.run_attempt }}
+          path: qa/tower41-next-cell-build
+      - name: Verify the frozen package and install the pinned native verifier
+        run: |
+          mkdir -p qa/tower41-next-cell-contact qa/tower41-next-cell-contact-movie
+          set -o pipefail
+          {
+            npm ci
+            node scripts/qa-tower41-next-cell-source.mjs verify-package
+            npm install --no-save --package-lock=false puppeteer-core@24.16.0
+            if ! command -v ffmpeg >/dev/null || ! command -v ffprobe >/dev/null; then
+              sudo apt-get update -qq
+              sudo apt-get install -y --no-install-recommends ffmpeg
+            fi
+            python3 -m venv "$RUNNER_TEMP/tower41-next-cell-python"
+            "$RUNNER_TEMP/tower41-next-cell-python/bin/python" -m pip install --disable-pip-version-check Pillow==11.3.0
+            echo "CODEX_PRIMARY_RUNTIME_PYTHON=$RUNNER_TEMP/tower41-next-cell-python/bin/python" >> "$GITHUB_ENV"
+            echo "CHROME_PATH=$(command -v google-chrome || command -v chromium)" >> "$GITHUB_ENV"
+          } 2>&1 | tee qa/tower41-next-cell-contact/install.log
+      - name: Execute full existing native ratchet contacts, original actors and ordinary controls
+        env:
+          START_SERVER: '1'
+          SCENARIO: qualification
+          OUT_DIR: qa/tower41-next-cell-contact
+        run: |
+          set -o pipefail
+          timeout --signal=TERM --kill-after=10s 1200s node scripts/qa-tower41-ratchet-browser.mjs 2>&1 | tee "$OUT_DIR/native.log"
+      - name: Record every bounded route frame at declared 1x time and verify the new camera samples
+        env:
+          START_SERVER: '1'
+          SCENARIO: qualification
+          CAPTURE_FPS: '4'
+          CAPTURE_WIDTH: '640'
+          CAPTURE_HEIGHT: '360'
+          OUT_DIR: qa/tower41-next-cell-contact-movie
+        run: |
+          set -o pipefail
+          timeout --signal=TERM --kill-after=10s 3000s node scripts/record-tower41-ratchet-walkthrough.mjs 2>&1 | tee "$OUT_DIR/recording.log"
+          node scripts/qa-tower41-next-cell-source.mjs contact
+      - name: Emit compact actual native contact status
+        if: always()
+        env: {REVIEW_JOB_STATUS: '${{ job.status }}'}
+        run: node scripts/qa-tower41-next-cell-source.mjs status native-contact qa/tower41-next-cell-contact qa/tower41-next-cell-contact-movie
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: tower41-next-cell-native-contact-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            qa/tower41-next-cell-contact/
+            qa/tower41-next-cell-contact-movie/*.log
+            qa/tower41-next-cell-contact-movie/*.json
+            qa/tower41-next-cell-contact-movie/*.mp4
+            qa/tower41-next-cell-contact-movie/*.jpg
+          compression-level: 0
+          if-no-files-found: error
+          retention-days: 14
+  native-castle:
+    name: native-castle
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 80
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: '${{ github.sha }}', fetch-depth: 0, persist-credentials: false}
+      - uses: actions/setup-node@v4
+        with: {node-version: 22, cache: npm}
+      - uses: actions/download-artifact@v4
+        with:
+          name: tower41-next-cell-build-${{ github.run_id }}-${{ github.run_attempt }}
+          path: dist
+      - uses: actions/download-artifact@v4
+        with:
+          name: tower41-next-cell-source-${{ github.run_id }}-${{ github.run_attempt }}
+          path: qa/tower41-next-cell-build
+      - name: Verify the shared package and install the pinned native recording runtime
+        run: |
+          mkdir -p qa/tower41-next-cell-castle
+          set -o pipefail
+          {
+            npm ci
+            node scripts/qa-tower41-next-cell-source.mjs verify-package
+            npm install --no-save --package-lock=false puppeteer-core@24.16.0
+            if ! command -v ffmpeg >/dev/null || ! command -v ffprobe >/dev/null; then
+              sudo apt-get update -qq
+              sudo apt-get install -y --no-install-recommends ffmpeg
+            fi
+            echo "CHROME_PATH=$(command -v google-chrome || command -v chromium)" >> "$GITHUB_ENV"
+          } 2>&1 | tee qa/tower41-next-cell-castle/install.log
+      - name: Record the whole ordinary eleven-mechanism castle with the same original cargo and no resets
+        env:
+          PAGE_URL: http://127.0.0.1:4173/
+          ROUTE: '1'
+          RECORD: '1'
+          CAPTURE_FPS: '4'
+          CAPTURE_WIDTH: '640'
+          CAPTURE_HEIGHT: '360'
+          OUT_DIR: qa/tower41-next-cell-castle
+        run: |
+          set -o pipefail
+          node node_modules/vite/bin/vite.js preview --host 127.0.0.1 --port 4173 --strictPort >"$OUT_DIR/server.log" 2>&1 &
+          tower41_preview_pid=$!
+          trap 'kill "$tower41_preview_pid" 2>/dev/null || true' EXIT
+          node --input-type=module <<'JS'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          const expected=JSON.parse(fs.readFileSync('dist/build-info.json','utf8'));
+          for(let attempt=0;attempt<80;attempt++){
+            try{const response=await fetch('http://127.0.0.1:4173/build-info.json',{cache:'no-store'});assert.ok(response.ok);assert.deepEqual(await response.json(),expected);break;}
+            catch(error){if(attempt===79)throw error;await new Promise(resolve=>setTimeout(resolve,250));}
+          }
+          JS
+          timeout --signal=TERM --kill-after=10s 4200s node scripts/singularity-browser.mjs 2>&1 | tee "$OUT_DIR/recording.log"
+          node scripts/qa-tower41-next-cell-source.mjs castle
+      - name: Emit compact actual native castle status
+        if: always()
+        env: {REVIEW_JOB_STATUS: '${{ job.status }}'}
+        run: node scripts/qa-tower41-next-cell-source.mjs status native-castle qa/tower41-next-cell-castle
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: tower41-next-cell-native-castle-${{ github.run_id }}-${{ github.run_attempt }}
+          path: qa/tower41-next-cell-castle/
+          compression-level: 0
+          if-no-files-found: error
+          retention-days: 14
+  summary:
+    name: review-summary
+    needs: [build, cpu, native-contact, native-castle]
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: '${{ github.sha }}', fetch-depth: 0, persist-credentials: false}
+      - uses: actions/setup-node@v4
+        with: {node-version: 22, cache: npm}
+      - name: Install checkout dependencies before loading the summary verifier
+        run: |
+          mkdir -p qa/tower41-next-cell-summary
+          set -o pipefail
+          npm ci 2>&1 | tee qa/tower41-next-cell-summary/install.log
+      - uses: actions/download-artifact@v4
+        if: needs.build.result == 'success'
+        with:
+          name: tower41-next-cell-source-${{ github.run_id }}-${{ github.run_attempt }}
+          path: qa/tower41-next-cell-build
+      - name: Emit every actual required job result without claiming publication acceptance
+        env:
+          REVIEW_JOB_RESULTS: '{"build":"${{ needs.build.result }}","cpu":"${{ needs.cpu.result }}","native-contact":"${{ needs.native-contact.result }}","native-castle":"${{ needs.native-castle.result }}"}'
+        run: node scripts/qa-tower41-next-cell-source.mjs summary
+      - name: Recheck that accepted main and both pinned public metadata files remain unchanged
+        if: always() && needs.build.result == 'success'
+        env: {GITHUB_TOKEN: '${{ github.token }}'}
+        run: |
+          set -o pipefail
+          node scripts/qa-tower41-next-cell-source.mjs guard 2>&1 | tee qa/tower41-next-cell-summary/baseline.log
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: tower41-next-cell-summary-${{ github.run_id }}-${{ github.run_attempt }}
+          path: qa/tower41-next-cell-summary/
+          if-no-files-found: error
+          retention-days: 14
