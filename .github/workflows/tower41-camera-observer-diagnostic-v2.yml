@@ -1,0 +1,83 @@
+name: Tower41 frozen camera observer diagnostic v2
+on:
+  push:
+    branches: [research/tower41-camera-observer-20261013-v2]
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: tower41-camera-observer-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  native-camera-baseline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 100
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: '${{ github.sha }}', fetch-depth: 0, persist-credentials: false}
+      - uses: actions/setup-node@v4
+        with: {node-version: 22, cache: npm}
+      - uses: actions/download-artifact@v4
+        with:
+          name: tower41-next-cell-build-38291320140-1
+          run-id: 38291320140
+          github-token: '${{ github.token }}'
+          path: dist
+      - uses: actions/download-artifact@v4
+        with:
+          name: tower41-next-cell-source-38291320140-1
+          run-id: 38291320140
+          github-token: '${{ github.token }}'
+          path: qa/tower41-frozen-build
+      - name: Install the locked native recording runtime
+        run: |
+          mkdir -p qa/tower41-camera-observer-diagnostic
+          set -o pipefail
+          {
+            npm ci
+            node --test --test-reporter=tap tests/tower41-portal-material-provenance.test.js
+            npm install --no-save --package-lock=false puppeteer-core@24.16.0
+            if ! command -v ffmpeg >/dev/null || ! command -v ffprobe >/dev/null; then
+              sudo apt-get update -qq
+              sudo apt-get install -y --no-install-recommends ffmpeg
+            fi
+            echo "CHROME_PATH=$(command -v google-chrome || command -v chromium)" >> "$GITHUB_ENV"
+          } 2>&1 | tee qa/tower41-camera-observer-diagnostic/install.log
+      - name: Observe the unchanged ordinary nine-machine prefix and encode every real capture
+        env:
+          PAGE_URL: http://127.0.0.1:4173/brainrot-portal/tower41-native-v2/
+          OUT_DIR: qa/tower41-camera-observer-diagnostic
+        run: |
+          set -o pipefail
+          mkdir -p qa/camera-baseline-site/brainrot-portal
+          cp -a dist qa/camera-baseline-site/brainrot-portal/tower41-native-v2
+          python3 -m http.server 4173 --bind 127.0.0.1 --directory qa/camera-baseline-site >"$OUT_DIR/server.log" 2>&1 &
+          camera_baseline_server_pid=$!
+          trap 'kill "$camera_baseline_server_pid" 2>/dev/null || true' EXIT
+          node --input-type=module <<'JS'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          const expected=JSON.parse(fs.readFileSync('dist/build-info.json','utf8'));
+          for(let attempt=0;attempt<80;attempt++){
+            try{const response=await fetch('http://127.0.0.1:4173/brainrot-portal/tower41-native-v2/build-info.json',{cache:'no-store'});assert.ok(response.ok);assert.deepEqual(await response.json(),expected);break;}
+            catch(error){if(attempt===79)throw error;await new Promise(resolve=>setTimeout(resolve,250));}
+          }
+          JS
+          timeout --signal=TERM --kill-after=10s 4800s node scripts/qa-tower41-camera-observer-baseline-v2.mjs 2>&1 | tee "$OUT_DIR/observation.log"
+      - name: Preserve the actual diagnostic provider identity
+        if: always()
+        env: {DIAGNOSTIC_JOB_STATUS: '${{ job.status }}'}
+        run: |
+          node --input-type=module <<'JS'
+          import fs from 'node:fs';
+          const report={diagnosticCommit:process.env.GITHUB_SHA,diagnosticRun:{runId:Number(process.env.GITHUB_RUN_ID),runAttempt:Number(process.env.GITHUB_RUN_ATTEMPT)},job:'native-camera-baseline',status:process.env.DIAGNOSTIC_JOB_STATUS,frozenGameSource:'5e552e9c3ac248b535d619741f15e99e29979cbf',frozenGameSourceReview:{runId:38291320140,runAttempt:1},accepted:false,knownSourceCropClosed:false};
+          fs.mkdirSync('qa/tower41-camera-observer-diagnostic',{recursive:true});fs.writeFileSync('qa/tower41-camera-observer-diagnostic/job-status.json',JSON.stringify(report,null,2)+'\n');console.log('TOWER41_CAMERA_DIAGNOSTIC_JOB',JSON.stringify(report));
+          JS
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: tower41-camera-observer-diagnostic-${{ github.run_id }}-${{ github.run_attempt }}
+          path: qa/tower41-camera-observer-diagnostic/
+          compression-level: 0
+          if-no-files-found: error
+          retention-days: 14
