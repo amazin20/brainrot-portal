@@ -1,0 +1,148 @@
+{
+  "kind": "independent-read-only-C08-production-budget-candidate-review",
+  "newRuntimeExecuted": false,
+  "ordinaryAccepted": false,
+  "sourceAccepted": false,
+  "fullRoomAccepted": false,
+  "prototypeAccepted": false,
+  "sourceInputs": [
+    {
+      "path": "src/game/LabRoom20ProductionBudgetPrototype.js",
+      "sha256": "5ef65507a8deb1e3823f6728cf0c3e9ebc40314c8bdfe69e800023f1bd0612d4"
+    },
+    {
+      "path": "src/game/LabRoom20ProductionBudgetSlipPrototype.js",
+      "sha256": "10b3f92429a50a3ce53509d517bc5e24cda449f296fb77d7609292a35f577187"
+    },
+    {
+      "path": "tests/helpers/room20-production-budget-fixture.js",
+      "sha256": "9ff10a791038a3829ee79e27961ecad9c460822ffdc114772ad1f565126a075e"
+    },
+    {
+      "path": "scripts/qa-room20-production-budget-c08.mjs",
+      "sha256": "82c657477476a7ec0fda06160bfe0394c038ff57a9b7f155cfe076c0e1a93be2"
+    }
+  ],
+  "sourceInputsMatchOwnerActualRunBeforeAfter": true,
+  "artifactInputs": [
+    {
+      "path": "/workspace/scratch/1949b02c22bb/room20-production-budget-prototype/diagnostic/room20-production-budget/c08-actual-result.json",
+      "sha256": "cd61de80375d95acb1e7f3ba3d9360339b133a4a6ffb5098a5561899d40eb1cb"
+    },
+    {
+      "path": "/workspace/scratch/1949b02c22bb/room20-production-budget-prototype/diagnostic/room20-production-budget/c08-causal-actual-trace.json",
+      "sha256": "2cef3a5c92f0a606cf1be0d3b007413dc1a9d599793fe82042201cc5346521a6"
+    },
+    {
+      "path": "/workspace/scratch/1949b02c22bb/room20-production-budget-prototype/diagnostic/room20-production-budget/c08-final-manifest.json",
+      "sha256": "014b8a61448e0fee9f021a447b40ed8a1e7bc3915144d1152130b03c8dee2694"
+    }
+  ],
+  "traceRows": 3583,
+  "checks": {
+    "actualGeometryMirrored": true,
+    "nearEye": "[3-q,3,1.36]",
+    "nearFairlead": [
+      -9,
+      0.98,
+      18
+    ],
+    "farFairlead": [
+      -16,
+      7.2,
+      -20.68
+    ],
+    "authoredUnitCargoInitialization": [
+      -16,
+      6.55,
+      -20.68
+    ],
+    "authoredUnitTrayInitialization": [
+      -16,
+      6.06,
+      -20.68
+    ],
+    "actorPoseWritesDuringMeasuredRunFound": false,
+    "oneOriginalBodyShapeAcrossCausalStages": true,
+    "traceContiguousCompletedSteps": true,
+    "currentContactSteps": true,
+    "actualSolverSlipClock": true,
+    "traceOriginalFreeBodiesAndRegistries": true,
+    "torqueCeiling": 4,
+    "maxTotalCouplingPower": 1.3367291635020895e-31,
+    "maxNetCouplingTorqueError": 4.440892098500626e-16,
+    "maxCableEndpointPowerIdentityError": 1.1368683772161603e-13,
+    "hiddenReadyOrProgressGateInForcesFound": false
+  },
+  "observedNarrowResults": {
+    "sameSignedE": -0.7,
+    "loadedReturnObserved": true,
+    "gravityCapturedOpening": 0.6202728680130295,
+    "gravityCapturedStretch": 0.5632556416775643,
+    "observedTransientFullOpening": 7.221390920268709,
+    "cutReturnOpening": -0.05000000000000185,
+    "rateCases": [
+      {
+        "rate": 30,
+        "actualInputs": 900,
+        "actualIntervals": 3600,
+        "maxOpening": 0.0002587401403621821,
+        "maxHookAngle": 0.0026943875840780645,
+        "passed": true
+      },
+      {
+        "rate": 120,
+        "actualInputs": 3600,
+        "actualIntervals": 3600,
+        "maxOpening": 0.0002587401403621821,
+        "maxHookAngle": 0.0026943875840780645,
+        "passed": true
+      }
+    ]
+  },
+  "concreteOpenDefect": {
+    "kind": "geometrically-slack-cable-transmits-damping-force",
+    "code": "stretch=max(0,L\u221224.8); tension=min(180,max(0,110*stretch+8*rate))",
+    "postTrayReleaseSlackIntervalsWithTensionAbove1N": 64,
+    "maximumSlackTension": 43.51820900463786,
+    "firstMeaningfulBearingReliefWhileSlack": {
+      "worldStep": 936,
+      "contactStep": 936,
+      "opening": 0.00574398549486597,
+      "bearingForce": 0,
+      "captureForce": 0,
+      "tension": 28.24580196106602,
+      "stretch": 0,
+      "forceStep": 935,
+      "pathLength": 23.479099915837992,
+      "pathRate": 3.5307252451332527,
+      "openingPull": 16.43754491668571,
+      "cableWork": 0.08444305972743685,
+      "cargoY": 6.002248176927979
+    },
+    "lastSlackInterval": {
+      "worldStep": 969,
+      "contactStep": 969,
+      "opening": 0.08911828203961397,
+      "bearingForce": 0,
+      "captureForce": 0,
+      "tension": 43.51820900463786,
+      "stretch": 0,
+      "forceStep": 968,
+      "pathLength": 24.754746109457646,
+      "pathRate": 5.439776125579733,
+      "openingPull": 25.213756036449485,
+      "cableWork": 1.9716868226329953,
+      "cargoY": 4.662665955359049
+    },
+    "implication": "Actual original gravity starts unloading the near bearing through a geometrically slack rope. Endpoint passivity is consistent, but it does not establish the unilateral massless cable requirement. This law is inherited from current production and must remain OPEN; protected source was not changed."
+  },
+  "scopeLimits": [
+    "Fixed nominal fairleads stand in for actual portals; no live pair/obstruction/offset/native route acceptance.",
+    "Recovery floor is topY\u22126.0 and productionfloor0/lowguardbar are absent. The fullstroke actualcargoCOM\u2248.936 is not productionbar-clearance evidence.",
+    "The three-shape toy train is not the full production pair of leaves/tie/fartooth.",
+    "Opening7.22139 is a transient threshold crossing; no settled7.2stop or moving-trainCCD proof.",
+    "cutCable() is an explicit unit cable loss, not an ordinary portal reroute.",
+    "Old v2/protected source/main/publisher/Library and uniontool were not changed; no newlongmatrix/native run."
+  ]
+}

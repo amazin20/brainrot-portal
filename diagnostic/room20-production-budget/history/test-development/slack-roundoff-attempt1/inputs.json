@@ -1,0 +1,25 @@
+{
+  "cause": "Assertion uses strict T===0, actual T7.54e\u221214N with zero stretch; no E yet and no behavior conclusion. Only witness tolerance will change; physical candidate remains identical.",
+  "files": [
+    {
+      "original": "diagnostic/room20-production-budget/c08-actual-result.json",
+      "saved": "/workspace/scratch/1949b02c22bb/room20-production-budget-prototype/diagnostic/room20-production-budget/history/test-development/slack-roundoff-attempt1/c08-actual-result.json",
+      "sha256": "1e4d691a71ffe376d82132204817de438891b59d0cf5821eeb634756f41bb92d"
+    },
+    {
+      "original": "diagnostic/room20-production-budget/c08-failed-actual-trace.json",
+      "saved": "/workspace/scratch/1949b02c22bb/room20-production-budget-prototype/diagnostic/room20-production-budget/history/test-development/slack-roundoff-attempt1/c08-failed-actual-trace.json",
+      "sha256": "d653d8fbfb6aa3d58d769029da4aa18ec9e58d95b57d34a10ecba804b8845755"
+    },
+    {
+      "original": "diagnostic/room20-production-budget/c08-actual-run.log",
+      "saved": "/workspace/scratch/1949b02c22bb/room20-production-budget-prototype/diagnostic/room20-production-budget/history/test-development/slack-roundoff-attempt1/c08-actual-run.log",
+      "sha256": "ede3d29e5ac4d417c4544660ec541b4dddc3c8403e5e78826af84d283e1b7f47"
+    },
+    {
+      "original": "scripts/qa-room20-production-budget-c08.mjs",
+      "saved": "/workspace/scratch/1949b02c22bb/room20-production-budget-prototype/diagnostic/room20-production-budget/history/test-development/slack-roundoff-attempt1/qa-room20-production-budget-c08.mjs",
+      "sha256": "e92adf2cd17a15c1a963e551c361481b7f97ce12976c5c6fb15e461c941dc7ec"
+    }
+  ]
+}

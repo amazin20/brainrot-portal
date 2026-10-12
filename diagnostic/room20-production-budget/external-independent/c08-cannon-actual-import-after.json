@@ -1,0 +1,12 @@
+{
+  "kind": "actual-c08-cannon-import-resolution-after-observation",
+  "prototypeInputsChanged": false,
+  "resolvedBareImportFromBudgetWorktree": "/workspace/scratch/1949b02c22bb/dependency-runtime/node_modules/cannon-es/dist/cannon-es.cjs.js",
+  "sha256": "58255a3214dfcddd41e4d5dbc47e3fb39e5679da67c1f47ca5ce0c788c9eef3f",
+  "captureScope": "AFTER-only observation; no CJS before-run capture is claimed.",
+  "clarification": "The c08 manifest before/after Cannon witness binds dist/cannon-es.js (ESM file). Bare cannon-es in these Node fixtures resolves dist/cannon-es.cjs.js (actual executed package entry). Keep those evidence scopes separate.",
+  "sourceAccepted": false,
+  "ordinaryAccepted": false,
+  "prototypeAccepted": false,
+  "fullRoomAccepted": false
+}

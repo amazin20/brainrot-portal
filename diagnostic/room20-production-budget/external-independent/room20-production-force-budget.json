@@ -1,0 +1,380 @@
+{
+  "kind": "read-only-production-room20-analytical-force-and-proxy-review",
+  "runtimeObserved": false,
+  "sourceAccepted": false,
+  "ordinaryAccepted": false,
+  "fullRoomAccepted": false,
+  "productionDesignAccepted": false,
+  "sourceInputs": [
+    {
+      "path": "src/game/LabCreativeRoom20.js",
+      "sha256": "c6de12068b4d41b3614dee456c48f9f7d4919117562450a86eb7064f210fa052"
+    },
+    {
+      "path": "src/game/LabOpenArchitecture.js",
+      "sha256": "bb19e19927649b48ac016e54ab5b5f276fa7c8700aead009b20429978602b2ef"
+    },
+    {
+      "path": "src/game/LabPhysics.js",
+      "sha256": "6540644f258ce46e5f03fccadad030e7486eca5e9561f1271d558ad9452685ef"
+    },
+    {
+      "path": "src/game/LabPortals.js",
+      "sha256": "cb06641335ac74ada4562b4dbbb030d09b7786c592b623dde141551c67487651"
+    }
+  ],
+  "canonicalAssumptions": [
+    "The source aperture is centred on its actual loadPad plane at(-9,.18,18); +.8normal gives(-9,.98,18).",
+    "Portal frame.position is the physical plane; the+.036visual offset is not a cable endpoint offset.",
+    "The far original body is free, clear of supports, quasistatic and vertically below the far fairlead; then tension is62.4N.",
+    "Actual ordinary source shots use current freight contact X/Z offsets, so this canonical calculation is not an actual route witness."
+  ],
+  "mass": 3.2,
+  "gravity": 19.5,
+  "weight": 62.400000000000006,
+  "stroke": {
+    "axis": "-X",
+    "openingRange": [
+      0,
+      7.2
+    ],
+    "anchorFormula": "[3-q,3,1.36]",
+    "nearVectorFormula": "[q-12,-2.02,16.64]",
+    "openingForceFormula": "T*(12-q)/sqrt((12-q)^2+2.02^2+16.64^2)",
+    "rows": [
+      {
+        "opening": 0,
+        "anchor": [
+          3,
+          3,
+          1.36
+        ],
+        "nearEndpoint": [
+          -9,
+          0.98,
+          18
+        ],
+        "nearVector": [
+          -12,
+          -2.02,
+          16.64
+        ],
+        "nearLength": 20.61480050837262,
+        "openingProjection": 0.5821060453690176,
+        "nominalVerticalGravityPull": 36.323417231026696,
+        "currentScalarClosingTerm": 4.0,
+        "nominalStaticMargin": 32.323417231026696
+      },
+      {
+        "opening": 0.62,
+        "anchor": [
+          2.38,
+          3,
+          1.36
+        ],
+        "nearEndpoint": [
+          -9,
+          0.98,
+          18
+        ],
+        "nearVector": [
+          -11.38,
+          -2.02,
+          16.64
+        ],
+        "nearLength": 20.26016781766627,
+        "openingProjection": 0.5616932743309745,
+        "nominalVerticalGravityPull": 35.04966031825281,
+        "currentScalarClosingTerm": 4.744,
+        "nominalStaticMargin": 30.305660318252812
+      },
+      {
+        "opening": 3.6,
+        "anchor": [
+          -0.6000000000000001,
+          3,
+          1.36
+        ],
+        "nearEndpoint": [
+          -9,
+          0.98,
+          18
+        ],
+        "nearVector": [
+          -8.4,
+          -2.02,
+          16.64
+        ],
+        "nearLength": 18.749133313302778,
+        "openingProjection": 0.44802070899139,
+        "nominalVerticalGravityPull": 27.95649224106274,
+        "currentScalarClosingTerm": 8.32,
+        "nominalStaticMargin": 19.63649224106274
+      },
+      {
+        "opening": 6.825,
+        "anchor": [
+          -3.825,
+          3,
+          1.36
+        ],
+        "nearEndpoint": [
+          -9,
+          0.98,
+          18
+        ],
+        "nearVector": [
+          -5.175,
+          -2.02,
+          16.64
+        ],
+        "nearLength": 17.542822606410862,
+        "openingProjection": 0.29499243742616676,
+        "nominalVerticalGravityPull": 18.40752809539281,
+        "currentScalarClosingTerm": 12.19,
+        "nominalStaticMargin": 6.21752809539281
+      },
+      {
+        "opening": 6.95,
+        "anchor": [
+          -3.95,
+          3,
+          1.36
+        ],
+        "nearEndpoint": [
+          -9,
+          0.98,
+          18
+        ],
+        "nearVector": [
+          -5.05,
+          -2.02,
+          16.64
+        ],
+        "nearLength": 17.50635598861168,
+        "openingProjection": 0.288466657669086,
+        "nominalVerticalGravityPull": 18.00031943855097,
+        "currentScalarClosingTerm": 12.34,
+        "nominalStaticMargin": 5.660319438550971
+      },
+      {
+        "opening": 7.2,
+        "anchor": [
+          -4.2,
+          3,
+          1.36
+        ],
+        "nearEndpoint": [
+          -9,
+          0.98,
+          18
+        ],
+        "nearVector": [
+          -4.8,
+          -2.02,
+          16.64
+        ],
+        "nearLength": 17.43588254147177,
+        "openingProjection": 0.27529435281426423,
+        "nominalVerticalGravityPull": 17.17836761561009,
+        "currentScalarClosingTerm": 12.64,
+        "nominalStaticMargin": 4.538367615610088
+      }
+    ]
+  },
+  "currentScalarReturn": {
+    "formula": "4+1.2q",
+    "endpoint": 12.64,
+    "workAcrossStroke": 59.903999999999996,
+    "virtualMass": 1.2,
+    "virtualDamping": 1.1,
+    "isActualCannonSpring": false
+  },
+  "nominalCableWorkAcrossStroke": 198.36448113461313,
+  "dynamicLimit": {
+    "currentTensionCap": 180,
+    "endpointForceAtCap": 49.552983506567564,
+    "tensionNeededForConstant20NAtEndpoint": 72.64951058946572,
+    "prototype20Plus5qAt72": 56,
+    "tensionNeededFor56NAtEndpoint": 203.41862965050402,
+    "note": "62.4N is a quasistatic value, not an absolute dynamic ceiling. Fall/stretch/deceleration can transiently exceed weight; inertia can coast through negative-force intervals. This does not establish a stable full opening or a viable ordinary finger-insertion window."
+  },
+  "privateHookGeometry": {
+    "releaseAngleMagnitude": "alpha>=0; productionX reflection requires reversal of the old+Z hand sign",
+    "bearingFaceYRelativeToPivot": [
+      -0.6,
+      -0.2
+    ],
+    "bearingCentreLever": 0.4,
+    "bearingCornerMaximumLever": 0.6,
+    "capturePostCentre": [
+      0.8,
+      0
+    ],
+    "capturePostHalfX": 0.08,
+    "capturePostHalfY": 0.04,
+    "captureLugHalfY": 0.04,
+    "intrinsicSpringTorqueFormula": "14*(1-.1/L)*(.25*sin(alpha)-.025*cos(alpha)); L^2=.185625+.175*cos(alpha)+.0175*sin(alpha)",
+    "gravityTorqueFormula": "-.585975*sin(alpha)",
+    "initialIntrinsicResistance": 0.29171723740294614,
+    "springOvercentreAngle": 0.09966865249116204,
+    "postCompleteVerticalClearanceAngle": 0.11099701049143366,
+    "handDrivenBearingSeparationPath": "q(alpha)=.1*(1-cos(alpha))+.6*sin(alpha)",
+    "pathOpeningAtPostClearance": 0.06707692307692306,
+    "bearingCompleteVerticalClearanceAngle": 1.4335867631837802,
+    "candidateMaximumQuasistaticResistance": 2.691717237402946,
+    "candidateMaximumResistanceAtAngle": 0.0,
+    "note": "The AABB separating path is conservative once its extremal corner leaves the lug height. This is an analytical candidate for the analysed bearing/capture pair; clearance/contact forces of the complete connected chassis remain open. It is not an actual ordinary runtime replay. No private prototype geometry/force code was changed."
+  },
+  "rootIntrinsic32Hypothesis": {
+    "accepted": false,
+    "reason": "The measured~3.2Nm description is not intrinsic empty-hook resistance. Actual empty spring gives.291717Nm atzero and changes sign near.099669rad; gravity giveszero initially. At4N currentface evenmaximum.6m lever plus intrinsic gives2.691717Nm<4Nm. This does not exclude E-created pretravel before cargo; passive coupling alone does not prove causal necessity. Complete production empty-first unhooking is still an unexecuted runtime target."
+  },
+  "forceLeverBounds": {
+    "cap": 4,
+    "requiredLeverForC0Equals4WithCurrentIntrinsic": 0.9270706906492635,
+    "requiredC0ForPointLever04": 9.270706906492634,
+    "requiredC0ForCornerLever06": 6.18047127099509,
+    "maximumC0WithK12AndNominalEndPullBeforeLosses": 8.538367615610088,
+    "minimumPointLeverWithK12BeforeLosses": 0.434308163988801,
+    "general": "Loaded: C0*ell_loaded+R_intrinsic(0)>4, with a strict physical margin. Fullstroke: C0+k*7.2+losses<F_near,min. Unloaded: the COMPLETE capture/contact/spring/gravity barrier must remain<4.",
+    "centre04WithK12HasStaticFeasibleWindow": false,
+    "corner06WithK12IdealC0Interval": [
+      6.18047127099509,
+      8.538367615610088
+    ],
+    "nearCargoCaptureNormalAtQ062Nominal": 30.305660318252812,
+    "initialCaptureResistanceBound": 1.2122264127301126,
+    "ifIntrinsicWereRedesignedTo32InitialUnloadedTotal": 4.412226412730113,
+    "note": "An intentionally stronger intrinsic3.2Nm is a different mechanism; with the existing.08m capture face and nominal30.306N capture load it also gives an initial unload barrier about4.412Nm, above cap4. Geometry and current contacts must be recalibrated, not inferred from addition of scalar constants."
+  },
+  "unloadCriteria": [
+    "Actual free ORIGINAL current body/shape/carry/masks/world supplies positive cable work BEFORE hand, at distinct completed steps.",
+    "The exact near bearing original gate/hook contact has zero current positive reaction and an actual transformed face gap.",
+    "The captive post still bounds ordinary forward travel until the actual hook has been extracted; a one-sided pawl is insufficient.",
+    "The positive hand sweep must be clear of every hook/lug/seat/frame shape with collisions live, not only an AABB descriptor or absence of one contact.",
+    "If using the current.62m pretravel layout, .62<.78cargo width and.86capsule width blocks the simple doorway gap; full-room bypasses remain untested."
+  ],
+  "farStaticGeometry": {
+    "equilibria": [
+      {
+        "opening": 0,
+        "farLengthForVerticalWeight": 3.052472218900106,
+        "cargoCentreYForCentredOutlet": 4.147527781099894
+      },
+      {
+        "opening": 7.2,
+        "farLengthForVerticalWeight": 6.231390185800957,
+        "cargoCentreYForCentredOutlet": 0.9686098141990431
+      }
+    ],
+    "farLeadIfOutletCentred": [
+      -16,
+      7.2,
+      -20.68
+    ],
+    "bottomGuardBar": {
+      "centre": [
+        -16,
+        1,
+        -21.1
+      ],
+      "size": [
+        3.7,
+        0.25,
+        0.45
+      ],
+      "frontZ": -20.875,
+      "topY": 1.125
+    },
+    "note": "At nominal fullstroke the centred vertical hanging body COM would be~.969m. A standard.78m cube atz=-20.68 overlaps the bottom guard bar. Actual dynamic/offset/oriented cargo clearance and support reactions must be measured; centred verticalmg is an ideal budget, not proof that a free fullstroke equilibrium exists."
+  },
+  "portalFitEnvelope": {
+    "entryCentreOffsetRange": [
+      -2.1,
+      2.1
+    ],
+    "derivedFrom": "panel halfextent3 minus(.8*1.10+.02)",
+    "endpointLowProjectionCorner": {
+      "opening": 7.2,
+      "anchor": [
+        -4.2,
+        3,
+        1.36
+      ],
+      "nearEndpoint": [
+        -6.9,
+        0.98,
+        20.1
+      ],
+      "nearVector": [
+        -2.6999999999999997,
+        -2.02,
+        18.740000000000002
+      ],
+      "nearLength": 19.040955858359634,
+      "openingProjection": 0.14179960397390484,
+      "nominalVerticalGravityPull": 8.848295287971663,
+      "currentScalarClosingTerm": 12.64,
+      "nominalStaticMargin": -3.791704712028338
+    },
+    "endpointHighProjectionCorner": {
+      "opening": 7.2,
+      "anchor": [
+        -4.2,
+        3,
+        1.36
+      ],
+      "nearEndpoint": [
+        -11.1,
+        0.98,
+        15.9
+      ],
+      "nearVector": [
+        -6.9,
+        -2.02,
+        14.540000000000001
+      ],
+      "nearLength": 16.220419230093903,
+      "openingProjection": 0.42538974499489896,
+      "nominalVerticalGravityPull": 26.544320087681697,
+      "currentScalarClosingTerm": 12.64,
+      "nominalStaticMargin": 13.904320087681697
+    },
+    "actualClearSpanRouteVerified": false,
+    "note": "Finite panelfit alone spans about8.848..26.544N nominal endpull. These corners have not been validated as clear ordinary freight routes. Bind forcebudget to current actual accepted shots; do not claim alloffsets from a centred calculation."
+  },
+  "kinematicProxies": [
+    "leaf, returnLeaf, overheadtie, fartooth, farfinger: movingPart\u2192collisionProxy({kinematic:true})\u2192mass0KINEMATIC Cannon owners; five prescribed movers, not one solved rigidtrain.",
+    "Gate q/v scalarODE withclamp0..7.2 writes every leaf/tie/tooth pose; no solvedgate mass receives cable/contact reactions.",
+    "spring.rotation.z=-.75q is visual; return load4+1.2q is scalar.",
+    "Finger pinTravel is prescribedZmotion at2.2/s; farretention is overlapsYZ+calculatedface scalarclamp atq6.825, not measuredCannon normal contact."
+  ],
+  "farRetainedScalarOpening": 6.825,
+  "open": [
+    "Physical mass-positive train, nearhook and farfinger integration, permanentfoundation/contact ownership and moving cargo collision coverage.",
+    "Loaded empty E and sustainedE must fail physically under the actual production return budget; currentprototype geometry transplanted to4N fails the analytical barrier.",
+    "Complete angular/translation clearance, true unloaded currentcontacts, actualfree original trajectory and farfinger ordinary reach/timing.",
+    "Actual portal offsets, guardbar contact, dynamic stretch/forcecap/fallwork and cargo recovery under the proposed spring.",
+    "Source/native/fullroom/public acceptance; this calculation changes none of them."
+  ],
+  "sourceInputsAfter": [
+    {
+      "path": "src/game/LabCreativeRoom20.js",
+      "sha256": "c6de12068b4d41b3614dee456c48f9f7d4919117562450a86eb7064f210fa052"
+    },
+    {
+      "path": "src/game/LabOpenArchitecture.js",
+      "sha256": "bb19e19927649b48ac016e54ab5b5f276fa7c8700aead009b20429978602b2ef"
+    },
+    {
+      "path": "src/game/LabPhysics.js",
+      "sha256": "6540644f258ce46e5f03fccadad030e7486eca5e9561f1271d558ad9452685ef"
+    },
+    {
+      "path": "src/game/LabPortals.js",
+      "sha256": "cb06641335ac74ada4562b4dbbb030d09b7786c592b623dde141551c67487651"
+    }
+  ],
+  "sourceUnchanged": true
+}

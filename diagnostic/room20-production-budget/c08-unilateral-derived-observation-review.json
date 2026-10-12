@@ -1,0 +1,208 @@
+{
+  "revision": "PRIVATE-BUDGET-C08-MIRROR-ATTEMPT3-UNILATERAL-ROPE",
+  "scope": "Isolated actual solver budget experiment with corrected unilateral rope; fixed nominal portal fairlead points only. Production ledge, actual portals, player, far catch, broad aperture offsets and full room omitted.",
+  "boundedUnitAssertionsPassed": true,
+  "sourceAccepted": false,
+  "ordinaryRoom20Accepted": false,
+  "fullRoomAccepted": false,
+  "prototypeAccepted": false,
+  "causalTraceIntervals": 3583,
+  "sameOriginalBodyAndShapeAcrossStages": true,
+  "allObservedOwnershipLive": true,
+  "allObservedSlipLastForcesForActualInterval": true,
+  "slackIntervalsInCompleteCausalTrace": 958,
+  "slackForceViolationIntervals": 0,
+  "maxTension_N": 165.59430117964428,
+  "maxUnclampedTension_N": 165.59430117964428,
+  "actualCableCapHits": 0,
+  "maxCouplingTorqueMagnitude_Nm": 4,
+  "maxCouplingTorqueSumError_Nm": 4.440892098500626e-16,
+  "maxCouplingPower_W": 2.3780184755647773e-31,
+  "maxCableEndpointMagnitudeError_N": 5.684341886080802e-14,
+  "maxCablePowerIdentityError_W": 2.2737367544323206e-13,
+  "gravityBeforeSecondEWitness": {
+    "actualIntervals": 600,
+    "inputCountAtStart": 1,
+    "inputCountAtEnd": 1,
+    "minOpening": -0.00046677852039766305,
+    "maxOpening": 0.6579765062793642,
+    "minHookAngle": -0.0035408658866357247,
+    "maxHookAngle": 3.815584986115903e-06,
+    "maxAbsHookAngle": 0.0035408658866357247,
+    "maxTension": 165.59430117964428,
+    "maxUnclampedTension": 165.59430117964428,
+    "actualCapHits": 0,
+    "slackIntervals": 78,
+    "slackForceIntervals": 0,
+    "firstBearingUnloaded": {
+      "worldStep": 959,
+      "contactStep": 959,
+      "opening": -0.00016279667500167792,
+      "hookAngle": -0.0004844917156136307,
+      "bearingForce": 0,
+      "bearingContacts": 0,
+      "bearingGeometryCurrent": true,
+      "captureForce": 0,
+      "captureContacts": 0,
+      "tension": 73.89704110815475,
+      "stretch": 0.059270059621944426,
+      "originalFree": true,
+      "cargoPosition": [
+        -16.005974337394235,
+        4.585894609401612,
+        -20.68
+      ],
+      "gatePosition": [
+        0.00016279667500167792,
+        0,
+        0
+      ],
+      "hookPosition": [
+        3.0000304347465336,
+        1.908528889649088,
+        0.287480736923053
+      ],
+      "hookQuaternion": [
+        -1.4783542684616165e-05,
+        -6.838998607236262e-06,
+        0.00024224575434239086,
+        0.9999999705258344
+      ],
+      "cablePath": {
+        "worldStep": 958,
+        "eye": [
+          3.0004667785203973,
+          3,
+          1.36
+        ],
+        "nearFairlead": [
+          -9,
+          0.98,
+          18
+        ],
+        "farFairlead": [
+          -16,
+          7.2,
+          -20.68
+        ],
+        "cargo": [
+          -16.005865166172125,
+          4.655808927366918,
+          -20.68
+        ],
+        "near": [
+          -0.5821210154730635,
+          -0.0979865594361963,
+          0.8071764104051022
+        ],
+        "far": [
+          -0.0023053105759654694,
+          -0.9999973427680438,
+          0
+        ],
+        "nearLength": 20.615072226465077,
+        "farLength": 2.5441978331568675,
+        "length": 24.859270059621945,
+        "rate": 8.422166818717608,
+        "reachable": true
+      },
+      "lastCableForce": {
+        "worldStep": 958,
+        "unilateral": true,
+        "slack": false,
+        "extension": 0.059270059621944426,
+        "unclampedTension": 73.89704110815475,
+        "capApplied": false,
+        "nearForce": [
+          -43.01702061033376,
+          -7.240916810703247,
+          59.647948381238635
+        ],
+        "farForce": [
+          0.1703556303991842,
+          73.89684474657565,
+          0
+        ],
+        "gatePower": -4.328112860120799e-15,
+        "cargoPower": -622.3732076225122,
+        "totalEndpointPower": -622.3732076225122,
+        "negativeTensionPathRate": -622.373207622512,
+        "openingPull": 43.01702061033376,
+        "endpointMagnitudeError": 0
+      },
+      "cableWork": 0.013076393308561151,
+      "handCount": 1,
+      "lastHand": {
+        "worldStep": 640,
+        "angularImpulse": -0.7,
+        "angularImpulseMagnitude": 0.7,
+        "driverAngularMomentumBefore": -4.699939292060502e-17,
+        "driverAngularMomentumAfter": -0.7,
+        "actualDriverWork": 3.0000000000000018,
+        "bearingForce": 7.998264501300075,
+        "hookAngle": -0.0006312115555529037
+      },
+      "slip": {
+        "lastForce": {
+          "worldStep": 958,
+          "forceClock": "actual-world-subsystem",
+          "liveOwnership": true,
+          "ownershipErrors": [],
+          "tau": 4.802540154822051e-14,
+          "actualHookTorque": 4.796163466380676e-14,
+          "actualDriverTorque": -4.802540154822051e-14,
+          "totalTorque": -6.376688441374502e-17,
+          "omegaDrive": 1.4196622229883174e-15,
+          "omegaHook": -2.2593038551121936e-14,
+          "totalCouplingPower": -1.1517789092560656e-27,
+          "torqueCeiling": 4,
+          "slipGain": 2
+        },
+        "maxAbsTorque": 4,
+        "maxTotalCouplingPower": 2.3780184755647773e-31,
+        "registryValid": true
+      },
+      "ownedPartsValid": true,
+      "bodiesPresent": true,
+      "constraintEquationCounts": [
+        5,
+        5
+      ],
+      "motorEquationPresent": [
+        false,
+        false
+      ],
+      "motorEnabled": [
+        false,
+        false
+      ]
+    }
+  },
+  "loadedBeforeGravityTension_N": 0,
+  "rateCases": [
+    {
+      "rate": 30,
+      "passed": true,
+      "requests": 900,
+      "actualInputs": 900,
+      "actualIntervals": 3600,
+      "maxOpening_m": 0.0002587401403621821,
+      "maxHookAngle_rad": 0.0026943875840780645,
+      "actualZeroTension": true
+    },
+    {
+      "rate": 120,
+      "passed": true,
+      "requests": 3600,
+      "actualInputs": 3600,
+      "actualIntervals": 3600,
+      "maxOpening_m": 0.0002587401403621821,
+      "maxHookAngle_rad": 0.0026943875840780645,
+      "actualZeroTension": true
+    }
+  ],
+  "movingOpenCrossing_m": 7.2235356361871705,
+  "openStopClaim": "Moving threshold crossing only. Settled full-stroke end-stop retention/penetration/CCD remains OPEN.",
+  "oldVersionDisposition": "Old C08 bilateral/slack damper result is REJECTED; exact old4/source/result/trace/manifest and independent material review are archived under history/unilateral-rope-attempt2-rejected. No old passing assertions transfer.",
+  "unmeasured": "Actual portals/source placement, production ledge/recoveryfloor0, room collisions/player/far catch/offsets/moving compound CCD/long-frame rates/500/human/public/source acceptance remain OPEN."
+}

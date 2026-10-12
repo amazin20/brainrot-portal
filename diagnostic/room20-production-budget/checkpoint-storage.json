@@ -1,0 +1,447 @@
+{
+  "kind": "unintegrated-room20-unilateral-research-checkpoint",
+  "parentCommit": "659ece280f5401dc12c950283013f35063f433ad",
+  "baseSourceCommit": "5e552e9c3ac248b535d619741f15e99e29979cbf",
+  "sourceAccepted": false,
+  "ordinaryAccepted": false,
+  "fullRoomAccepted": false,
+  "productionForceBudgetAccepted": false,
+  "files": [
+    {
+      "originalPath": "diagnostic/room20-production-budget/README.txt",
+      "storedPath": "diagnostic/room20-production-budget/README.txt",
+      "originalBytes": 1971,
+      "originalSha256": "b2d3bfe998e08f0ff208cfce6b328ca08a4eabd74382451a3a986ec8735e8f28",
+      "storedBytes": 1971,
+      "storedSha256": "b2d3bfe998e08f0ff208cfce6b328ca08a4eabd74382451a3a986ec8735e8f28",
+      "gzipBase64": false
+    },
+    {
+      "originalPath": "diagnostic/room20-production-budget/c08-actual-result.json",
+      "storedPath": "diagnostic/room20-production-budget/c08-actual-result.json",
+      "originalBytes": 38886,
+      "originalSha256": "cd61de80375d95acb1e7f3ba3d9360339b133a4a6ffb5098a5561899d40eb1cb",
+      "storedBytes": 38886,
+      "storedSha256": "cd61de80375d95acb1e7f3ba3d9360339b133a4a6ffb5098a5561899d40eb1cb",
+      "gzipBase64": false
+    },
+    {
+      "originalPath": "diagnostic/room20-production-budget/c08-actual-run.log",
+      "storedPath": "diagnostic/room20-production-budget/c08-actual-run.log",
+      "originalBytes": 403,
+      "originalSha256": "c5da2d8e56d86586c540a64ee464c3b06fb519e6733c6fa1853c53a6d7a8b790",
+      "storedBytes": 403,
+      "storedSha256": "c5da2d8e56d86586c540a64ee464c3b06fb519e6733c6fa1853c53a6d7a8b790",
+      "gzipBase64": false
+    },
+    {
+      "originalPath": "diagnostic/room20-production-budget/c08-causal-actual-trace.json",
+      "storedPath": "diagnostic/room20-production-budget/c08-causal-actual-trace.json.gz.b64.txt",
+      "originalBytes": 9526056,
+      "originalSha256": "2cef3a5c92f0a606cf1be0d3b007413dc1a9d599793fe82042201cc5346521a6",
+      "storedBytes": 1285405,
+      "storedSha256": "a50993c982ff30c02a515654b2aafa4a5898d4da783af2619586773e760887b2",
+      "gzipBase64": true
+    },
+    {
+      "originalPath": "diagnostic/room20-production-budget/c08-derived-observation-review.json",
+      "storedPath": "diagnostic/room20-production-budget/c08-derived-observation-review.json",
+      "originalBytes": 2477,
+      "originalSha256": "7bfdb9532cd19a727b697438810644ec2264374baca9bb37f8d5e90025c338ff",
+      "storedBytes": 2477,
+      "storedSha256": "7bfdb9532cd19a727b697438810644ec2264374baca9bb37f8d5e90025c338ff",
+      "gzipBase64": false
+    },
+    {
+      "originalPath": "diagnostic/room20-production-budget/c08-failed-actual-trace.json",
+      "storedPath": "diagnostic/room20-production-budget/c08-failed-actual-trace.json.gz.b64.txt",
+      "originalBytes": 1911471,
+      "originalSha256": "d653d8fbfb6aa3d58d769029da4aa18ec9e58d95b57d34a10ecba804b8845755",
+      "storedBytes": 224545,
+      "storedSha256": "6fa0d23caa81468eb1c4781b23987af4d07d2420c9388bb88670aa813430e0f9",
+      "gzipBase64": true
+    },
+    {
+      "originalPath": "diagnostic/room20-production-budget/c08-final-manifest.json",
+      "storedPath": "diagnostic/room20-production-budget/c08-final-manifest.json",
+      "originalBytes": 8863,
+      "originalSha256": "014b8a61448e0fee9f021a447b40ed8a1e7bc3915144d1152130b03c8dee2694",
+      "storedBytes": 8863,
+      "storedSha256": "014b8a61448e0fee9f021a447b40ed8a1e7bc3915144d1152130b03c8dee2694",
+      "gzipBase64": false
+    },
+    {
+      "originalPath": "diagnostic/room20-production-budget/c08-unilateral-actual-result.json",
+      "storedPath": "diagnostic/room20-production-budget/c08-unilateral-actual-result.json",
+      "originalBytes": 43347,
+      "originalSha256": "de3689a5e83a19c3e4cbf279623cd69c264265e478a83fd710315030594199cc",
+      "storedBytes": 43347,
+      "storedSha256": "de3689a5e83a19c3e4cbf279623cd69c264265e478a83fd710315030594199cc",
+      "gzipBase64": false
+    },
+    {
+      "originalPath": "diagnostic/room20-production-budget/c08-unilateral-actual-run.log",
+      "storedPath": "diagnostic/room20-production-budget/c08-unilateral-actual-run.log",
+      "originalBytes": 401,
+      "originalSha256": "575447ed6ed0a11c2a2702c8aecd38fb92bdd6da1d588dd3e41fd144649d92d9",
+      "storedBytes": 401,
+      "storedSha256": "575447ed6ed0a11c2a2702c8aecd38fb92bdd6da1d588dd3e41fd144649d92d9",
+      "gzipBase64": false
+    },
+    {
+      "originalPath": "diagnostic/room20-production-budget/c08-unilateral-causal-actual-trace.json",
+      "storedPath": "diagnostic/room20-production-budget/c08-unilateral-causal-actual-trace.json.gz.b64.txt",
+      "originalBytes": 9605987,
+      "originalSha256": "1e0effaba428992399cb484c35eda4309076f0fda89308ed9dbd56ad91cf72f1",
+      "storedBytes": 1192737,
+      "storedSha256": "0e633a151085003633b53651b80d5ef8295f050efecbdc9b4eb699912d1380d2",
+      "gzipBase64": true
+    },
+    {
+      "originalPath": "diagnostic/room20-production-budget/c08-unilateral-derived-observation-review.json",
+      "storedPath": "diagnostic/room20-production-budget/c08-unilateral-derived-observation-review.json",
+      "originalBytes": 6640,
+      "originalSha256": "1239245306f14c5674615baf5058da2e4a8cc6ee442721ea3eec79096ae6e0dc",
+      "storedBytes": 6640,
+      "storedSha256": "1239245306f14c5674615baf5058da2e4a8cc6ee442721ea3eec79096ae6e0dc",
+      "gzipBase64": false
+    },
+    {
+      "originalPath": "diagnostic/room20-production-budget/c08-unilateral-final-manifest.json",
+      "storedPath": "diagnostic/room20-production-budget/c08-unilateral-final-manifest.json",
+      "originalBytes": 16463,
+      "originalSha256": "e27fbfabce1672bf2066a9918cc6e45e2633fc127b151741615412acd8b0ef97",
+      "storedBytes": 16463,
+      "storedSha256": "e27fbfabce1672bf2066a9918cc6e45e2633fc127b151741615412acd8b0ef97",
+      "gzipBase64": false
+    },
+    {
+      "originalPath": "diagnostic/room20-production-budget/copied-frozen-v2-inputs.json",
+      "storedPath": "diagnostic/room20-production-budget/copied-frozen-v2-inputs.json",
+      "originalBytes": 1494,
+      "originalSha256": "2e36b71aa49fd3ef56d5cbe089bef3431114a42c0627705b701668e8952f726f",
+      "storedBytes": 1494,
+      "storedSha256": "2e36b71aa49fd3ef56d5cbe089bef3431114a42c0627705b701668e8952f726f",
+      "gzipBase64": false
+    },
+    {
+      "originalPath": "diagnostic/room20-production-budget/history/test-development/slack-roundoff-attempt1/c08-actual-result.json",
+      "storedPath": "diagnostic/room20-production-budget/history/test-development/slack-roundoff-attempt1/c08-actual-result.json",
+      "originalBytes": 12507,
+      "originalSha256": "1e4d691a71ffe376d82132204817de438891b59d0cf5821eeb634756f41bb92d",
+      "storedBytes": 12507,
+      "storedSha256": "1e4d691a71ffe376d82132204817de438891b59d0cf5821eeb634756f41bb92d",
+      "gzipBase64": false
+    },
+    {
+      "originalPath": "diagnostic/room20-production-budget/history/test-development/slack-roundoff-attempt1/c08-actual-run.log",
+      "storedPath": "diagnostic/room20-production-budget/history/test-development/slack-roundoff-attempt1/c08-actual-run.log",
+      "originalBytes": 441,
+      "originalSha256": "ede3d29e5ac4d417c4544660ec541b4dddc3c8403e5e78826af84d283e1b7f47",
+      "storedBytes": 441,
+      "storedSha256": "ede3d29e5ac4d417c4544660ec541b4dddc3c8403e5e78826af84d283e1b7f47",
+      "gzipBase64": false
+    },
+    {
+      "originalPath": "diagnostic/room20-production-budget/history/test-development/slack-roundoff-attempt1/c08-failed-actual-trace.json",
+      "storedPath": "diagnostic/room20-production-budget/history/test-development/slack-roundoff-attempt1/c08-failed-actual-trace.json.gz.b64.txt",
+      "originalBytes": 1911471,
+      "originalSha256": "d653d8fbfb6aa3d58d769029da4aa18ec9e58d95b57d34a10ecba804b8845755",
+      "storedBytes": 224545,
+      "storedSha256": "6fa0d23caa81468eb1c4781b23987af4d07d2420c9388bb88670aa813430e0f9",
+      "gzipBase64": true
+    },
+    {
+      "originalPath": "diagnostic/room20-production-budget/history/test-development/slack-roundoff-attempt1/inputs.json",
+      "storedPath": "diagnostic/room20-production-budget/history/test-development/slack-roundoff-attempt1/inputs.json",
+      "originalBytes": 1694,
+      "originalSha256": "f198919048912d564facf3ebea079f53c97f925278d9b4f63a79b62a3d71c650",
+      "storedBytes": 1694,
+      "storedSha256": "f198919048912d564facf3ebea079f53c97f925278d9b4f63a79b62a3d71c650",
+      "gzipBase64": false
+    },
+    {
+      "originalPath": "diagnostic/room20-production-budget/history/test-development/slack-roundoff-attempt1/qa-room20-production-budget-c08.mjs",
+      "storedPath": "diagnostic/room20-production-budget/history/test-development/slack-roundoff-attempt1/qa-room20-production-budget-c08.mjs",
+      "originalBytes": 8338,
+      "originalSha256": "e92adf2cd17a15c1a963e551c361481b7f97ce12976c5c6fb15e461c941dc7ec",
+      "storedBytes": 8338,
+      "storedSha256": "e92adf2cd17a15c1a963e551c361481b7f97ce12976c5c6fb15e461c941dc7ec",
+      "gzipBase64": false
+    },
+    {
+      "originalPath": "diagnostic/room20-production-budget/history/unilateral-rope-attempt2-rejected/diagnostic/room20-production-budget/README.txt",
+      "storedPath": "diagnostic/room20-production-budget/history/unilateral-rope-attempt2-rejected/diagnostic/room20-production-budget/README.txt",
+      "originalBytes": 1383,
+      "originalSha256": "0453bdf3a877a073da5cb3e30ef29c6b20324dbfaebf0bb0c6ca49f4a0c1d351",
+      "storedBytes": 1383,
+      "storedSha256": "0453bdf3a877a073da5cb3e30ef29c6b20324dbfaebf0bb0c6ca49f4a0c1d351",
+      "gzipBase64": false
+    },
+    {
+      "originalPath": "diagnostic/room20-production-budget/history/unilateral-rope-attempt2-rejected/diagnostic/room20-production-budget/c08-actual-result.json",
+      "storedPath": "diagnostic/room20-production-budget/history/unilateral-rope-attempt2-rejected/diagnostic/room20-production-budget/c08-actual-result.json",
+      "originalBytes": 38886,
+      "originalSha256": "cd61de80375d95acb1e7f3ba3d9360339b133a4a6ffb5098a5561899d40eb1cb",
+      "storedBytes": 38886,
+      "storedSha256": "cd61de80375d95acb1e7f3ba3d9360339b133a4a6ffb5098a5561899d40eb1cb",
+      "gzipBase64": false
+    },
+    {
+      "originalPath": "diagnostic/room20-production-budget/history/unilateral-rope-attempt2-rejected/diagnostic/room20-production-budget/c08-actual-run.log",
+      "storedPath": "diagnostic/room20-production-budget/history/unilateral-rope-attempt2-rejected/diagnostic/room20-production-budget/c08-actual-run.log",
+      "originalBytes": 403,
+      "originalSha256": "c5da2d8e56d86586c540a64ee464c3b06fb519e6733c6fa1853c53a6d7a8b790",
+      "storedBytes": 403,
+      "storedSha256": "c5da2d8e56d86586c540a64ee464c3b06fb519e6733c6fa1853c53a6d7a8b790",
+      "gzipBase64": false
+    },
+    {
+      "originalPath": "diagnostic/room20-production-budget/history/unilateral-rope-attempt2-rejected/diagnostic/room20-production-budget/c08-causal-actual-trace.json",
+      "storedPath": "diagnostic/room20-production-budget/history/unilateral-rope-attempt2-rejected/diagnostic/room20-production-budget/c08-causal-actual-trace.json.gz.b64.txt",
+      "originalBytes": 9526056,
+      "originalSha256": "2cef3a5c92f0a606cf1be0d3b007413dc1a9d599793fe82042201cc5346521a6",
+      "storedBytes": 1285405,
+      "storedSha256": "a50993c982ff30c02a515654b2aafa4a5898d4da783af2619586773e760887b2",
+      "gzipBase64": true
+    },
+    {
+      "originalPath": "diagnostic/room20-production-budget/history/unilateral-rope-attempt2-rejected/diagnostic/room20-production-budget/c08-derived-observation-review.json",
+      "storedPath": "diagnostic/room20-production-budget/history/unilateral-rope-attempt2-rejected/diagnostic/room20-production-budget/c08-derived-observation-review.json",
+      "originalBytes": 2477,
+      "originalSha256": "7bfdb9532cd19a727b697438810644ec2264374baca9bb37f8d5e90025c338ff",
+      "storedBytes": 2477,
+      "storedSha256": "7bfdb9532cd19a727b697438810644ec2264374baca9bb37f8d5e90025c338ff",
+      "gzipBase64": false
+    },
+    {
+      "originalPath": "diagnostic/room20-production-budget/history/unilateral-rope-attempt2-rejected/diagnostic/room20-production-budget/c08-failed-actual-trace.json",
+      "storedPath": "diagnostic/room20-production-budget/history/unilateral-rope-attempt2-rejected/diagnostic/room20-production-budget/c08-failed-actual-trace.json.gz.b64.txt",
+      "originalBytes": 1911471,
+      "originalSha256": "d653d8fbfb6aa3d58d769029da4aa18ec9e58d95b57d34a10ecba804b8845755",
+      "storedBytes": 224545,
+      "storedSha256": "6fa0d23caa81468eb1c4781b23987af4d07d2420c9388bb88670aa813430e0f9",
+      "gzipBase64": true
+    },
+    {
+      "originalPath": "diagnostic/room20-production-budget/history/unilateral-rope-attempt2-rejected/diagnostic/room20-production-budget/c08-final-manifest.json",
+      "storedPath": "diagnostic/room20-production-budget/history/unilateral-rope-attempt2-rejected/diagnostic/room20-production-budget/c08-final-manifest.json",
+      "originalBytes": 8863,
+      "originalSha256": "014b8a61448e0fee9f021a447b40ed8a1e7bc3915144d1152130b03c8dee2694",
+      "storedBytes": 8863,
+      "storedSha256": "014b8a61448e0fee9f021a447b40ed8a1e7bc3915144d1152130b03c8dee2694",
+      "gzipBase64": false
+    },
+    {
+      "originalPath": "diagnostic/room20-production-budget/history/unilateral-rope-attempt2-rejected/diagnostic/room20-production-budget/copied-frozen-v2-inputs.json",
+      "storedPath": "diagnostic/room20-production-budget/history/unilateral-rope-attempt2-rejected/diagnostic/room20-production-budget/copied-frozen-v2-inputs.json",
+      "originalBytes": 1494,
+      "originalSha256": "2e36b71aa49fd3ef56d5cbe089bef3431114a42c0627705b701668e8952f726f",
+      "storedBytes": 1494,
+      "storedSha256": "2e36b71aa49fd3ef56d5cbe089bef3431114a42c0627705b701668e8952f726f",
+      "gzipBase64": false
+    },
+    {
+      "originalPath": "diagnostic/room20-production-budget/history/unilateral-rope-attempt2-rejected/rejection.json",
+      "storedPath": "diagnostic/room20-production-budget/history/unilateral-rope-attempt2-rejected/rejection.json",
+      "originalBytes": 9397,
+      "originalSha256": "f124bf2460f89566f6658720e390cfe1ec86b94deff902748dccf6a6ba8aedaa",
+      "storedBytes": 9397,
+      "storedSha256": "f124bf2460f89566f6658720e390cfe1ec86b94deff902748dccf6a6ba8aedaa",
+      "gzipBase64": false
+    },
+    {
+      "originalPath": "diagnostic/room20-production-budget/history/unilateral-rope-attempt2-rejected/room20-C08-independent-review.json",
+      "storedPath": "diagnostic/room20-production-budget/history/unilateral-rope-attempt2-rejected/room20-C08-independent-review.json",
+      "originalBytes": 5563,
+      "originalSha256": "4fcb58586b095528c12e10d3361982b3ac88ee1e1eec89a9d13c47424b9660a7",
+      "storedBytes": 5563,
+      "storedSha256": "4fcb58586b095528c12e10d3361982b3ac88ee1e1eec89a9d13c47424b9660a7",
+      "gzipBase64": false
+    },
+    {
+      "originalPath": "diagnostic/room20-production-budget/history/unilateral-rope-attempt2-rejected/room20-C08-independent-review.md",
+      "storedPath": "diagnostic/room20-production-budget/history/unilateral-rope-attempt2-rejected/room20-C08-independent-review.md",
+      "originalBytes": 4248,
+      "originalSha256": "a793d622a187a072f1a46ecd327f3aa23b9132ea699d6c41862bc7f40b2bec62",
+      "storedBytes": 4248,
+      "storedSha256": "a793d622a187a072f1a46ecd327f3aa23b9132ea699d6c41862bc7f40b2bec62",
+      "gzipBase64": false
+    },
+    {
+      "originalPath": "diagnostic/room20-production-budget/history/unilateral-rope-attempt2-rejected/scripts/qa-room20-production-budget-c08.mjs",
+      "storedPath": "diagnostic/room20-production-budget/history/unilateral-rope-attempt2-rejected/scripts/qa-room20-production-budget-c08.mjs",
+      "originalBytes": 8451,
+      "originalSha256": "82c657477476a7ec0fda06160bfe0394c038ff57a9b7f155cfe076c0e1a93be2",
+      "storedBytes": 8451,
+      "storedSha256": "82c657477476a7ec0fda06160bfe0394c038ff57a9b7f155cfe076c0e1a93be2",
+      "gzipBase64": false
+    },
+    {
+      "originalPath": "diagnostic/room20-production-budget/history/unilateral-rope-attempt2-rejected/src/game/LabRoom20NearHookPrototype.js",
+      "storedPath": "diagnostic/room20-production-budget/history/unilateral-rope-attempt2-rejected/src/game/LabRoom20NearHookPrototype.js",
+      "originalBytes": 18628,
+      "originalSha256": "0d137cfaafb07cd023e2a754c9d0dd0a8a44e0c4cd13baffd60ebef1f2d69a00",
+      "storedBytes": 18628,
+      "storedSha256": "0d137cfaafb07cd023e2a754c9d0dd0a8a44e0c4cd13baffd60ebef1f2d69a00",
+      "gzipBase64": false
+    },
+    {
+      "originalPath": "diagnostic/room20-production-budget/history/unilateral-rope-attempt2-rejected/src/game/LabRoom20NearHookSlipPrototype.js",
+      "storedPath": "diagnostic/room20-production-budget/history/unilateral-rope-attempt2-rejected/src/game/LabRoom20NearHookSlipPrototype.js",
+      "originalBytes": 10259,
+      "originalSha256": "aedff41a027f730cc303a61da82853df2027f5b64ffbf8ad70c74f303c6ad98e",
+      "storedBytes": 10259,
+      "storedSha256": "aedff41a027f730cc303a61da82853df2027f5b64ffbf8ad70c74f303c6ad98e",
+      "gzipBase64": false
+    },
+    {
+      "originalPath": "diagnostic/room20-production-budget/history/unilateral-rope-attempt2-rejected/src/game/LabRoom20NearHookStrokePrototype.js",
+      "storedPath": "diagnostic/room20-production-budget/history/unilateral-rope-attempt2-rejected/src/game/LabRoom20NearHookStrokePrototype.js",
+      "originalBytes": 7353,
+      "originalSha256": "7c25737876006d690988fc2e1c611552f51d6a23d37492733f420c6c6a444b0b",
+      "storedBytes": 7353,
+      "storedSha256": "7c25737876006d690988fc2e1c611552f51d6a23d37492733f420c6c6a444b0b",
+      "gzipBase64": false
+    },
+    {
+      "originalPath": "diagnostic/room20-production-budget/history/unilateral-rope-attempt2-rejected/src/game/LabRoom20ProductionBudgetPrototype.js",
+      "storedPath": "diagnostic/room20-production-budget/history/unilateral-rope-attempt2-rejected/src/game/LabRoom20ProductionBudgetPrototype.js",
+      "originalBytes": 20370,
+      "originalSha256": "5ef65507a8deb1e3823f6728cf0c3e9ebc40314c8bdfe69e800023f1bd0612d4",
+      "storedBytes": 20370,
+      "storedSha256": "5ef65507a8deb1e3823f6728cf0c3e9ebc40314c8bdfe69e800023f1bd0612d4",
+      "gzipBase64": false
+    },
+    {
+      "originalPath": "diagnostic/room20-production-budget/history/unilateral-rope-attempt2-rejected/src/game/LabRoom20ProductionBudgetSlipPrototype.js",
+      "storedPath": "diagnostic/room20-production-budget/history/unilateral-rope-attempt2-rejected/src/game/LabRoom20ProductionBudgetSlipPrototype.js",
+      "originalBytes": 10336,
+      "originalSha256": "10b3f92429a50a3ce53509d517bc5e24cda449f296fb77d7609292a35f577187",
+      "storedBytes": 10336,
+      "storedSha256": "10b3f92429a50a3ce53509d517bc5e24cda449f296fb77d7609292a35f577187",
+      "gzipBase64": false
+    },
+    {
+      "originalPath": "diagnostic/room20-production-budget/history/unilateral-rope-attempt2-rejected/tests/helpers/room20-hook-prototype-fixture.js",
+      "storedPath": "diagnostic/room20-production-budget/history/unilateral-rope-attempt2-rejected/tests/helpers/room20-hook-prototype-fixture.js",
+      "originalBytes": 4839,
+      "originalSha256": "2282970bb2f57c4adc881b017b0cb283d989abd3ee31c7d82654d9915d56eccb",
+      "storedBytes": 4839,
+      "storedSha256": "2282970bb2f57c4adc881b017b0cb283d989abd3ee31c7d82654d9915d56eccb",
+      "gzipBase64": false
+    },
+    {
+      "originalPath": "diagnostic/room20-production-budget/history/unilateral-rope-attempt2-rejected/tests/helpers/room20-production-budget-fixture.js",
+      "storedPath": "diagnostic/room20-production-budget/history/unilateral-rope-attempt2-rejected/tests/helpers/room20-production-budget-fixture.js",
+      "originalBytes": 4591,
+      "originalSha256": "9ff10a791038a3829ee79e27961ecad9c460822ffdc114772ad1f565126a075e",
+      "storedBytes": 4591,
+      "storedSha256": "9ff10a791038a3829ee79e27961ecad9c460822ffdc114772ad1f565126a075e",
+      "gzipBase64": false
+    },
+    {
+      "originalPath": "scripts/qa-room20-production-budget-c08.mjs",
+      "storedPath": "scripts/qa-room20-production-budget-c08.mjs",
+      "originalBytes": 10591,
+      "originalSha256": "537ab44f5393cab493db0740b9569fe9284c543be191bc815d10f402cc9eb453",
+      "storedBytes": 10591,
+      "storedSha256": "537ab44f5393cab493db0740b9569fe9284c543be191bc815d10f402cc9eb453",
+      "gzipBase64": false
+    },
+    {
+      "originalPath": "src/game/LabRoom20ProductionBudgetPrototype.js",
+      "storedPath": "src/game/LabRoom20ProductionBudgetPrototype.js",
+      "originalBytes": 20627,
+      "originalSha256": "21d0a406798ebf5286bedf3243df12bc8dcc4ab0207f6aaf93aa8f35ccbea5f8",
+      "storedBytes": 20627,
+      "storedSha256": "21d0a406798ebf5286bedf3243df12bc8dcc4ab0207f6aaf93aa8f35ccbea5f8",
+      "gzipBase64": false
+    },
+    {
+      "originalPath": "src/game/LabRoom20ProductionBudgetSlipPrototype.js",
+      "storedPath": "src/game/LabRoom20ProductionBudgetSlipPrototype.js",
+      "originalBytes": 10336,
+      "originalSha256": "10b3f92429a50a3ce53509d517bc5e24cda449f296fb77d7609292a35f577187",
+      "storedBytes": 10336,
+      "storedSha256": "10b3f92429a50a3ce53509d517bc5e24cda449f296fb77d7609292a35f577187",
+      "gzipBase64": false
+    },
+    {
+      "originalPath": "tests/helpers/room20-production-budget-fixture.js",
+      "storedPath": "tests/helpers/room20-production-budget-fixture.js",
+      "originalBytes": 4591,
+      "originalSha256": "9ff10a791038a3829ee79e27961ecad9c460822ffdc114772ad1f565126a075e",
+      "storedBytes": 4591,
+      "storedSha256": "9ff10a791038a3829ee79e27961ecad9c460822ffdc114772ad1f565126a075e",
+      "gzipBase64": false
+    },
+    {
+      "originalPath": "room20-preparation/room20-C08-unilateral-independent-review.json",
+      "storedPath": "diagnostic/room20-production-budget/external-independent/room20-C08-unilateral-independent-review.json",
+      "originalBytes": 9222,
+      "originalSha256": "875a86be417709f26bcea0a88f171186a2522407eea43c5f73475fb1a87567cf",
+      "storedBytes": 9222,
+      "storedSha256": "875a86be417709f26bcea0a88f171186a2522407eea43c5f73475fb1a87567cf",
+      "gzipBase64": false
+    },
+    {
+      "originalPath": "room20-preparation/room20-C08-unilateral-independent-review.md",
+      "storedPath": "diagnostic/room20-production-budget/external-independent/room20-C08-unilateral-independent-review.md",
+      "originalBytes": 3635,
+      "originalSha256": "4c338d2e3692934631839ef779ce1a0a45bae8809e529d36cc5d694770b45a9b",
+      "storedBytes": 3635,
+      "storedSha256": "4c338d2e3692934631839ef779ce1a0a45bae8809e529d36cc5d694770b45a9b",
+      "gzipBase64": false
+    },
+    {
+      "originalPath": "room20-preparation/room20-C08-independent-review.json",
+      "storedPath": "diagnostic/room20-production-budget/external-independent/room20-C08-independent-review.json",
+      "originalBytes": 5563,
+      "originalSha256": "4fcb58586b095528c12e10d3361982b3ac88ee1e1eec89a9d13c47424b9660a7",
+      "storedBytes": 5563,
+      "storedSha256": "4fcb58586b095528c12e10d3361982b3ac88ee1e1eec89a9d13c47424b9660a7",
+      "gzipBase64": false
+    },
+    {
+      "originalPath": "room20-preparation/room20-C08-independent-review.md",
+      "storedPath": "diagnostic/room20-production-budget/external-independent/room20-C08-independent-review.md",
+      "originalBytes": 4248,
+      "originalSha256": "a793d622a187a072f1a46ecd327f3aa23b9132ea699d6c41862bc7f40b2bec62",
+      "storedBytes": 4248,
+      "storedSha256": "a793d622a187a072f1a46ecd327f3aa23b9132ea699d6c41862bc7f40b2bec62",
+      "gzipBase64": false
+    },
+    {
+      "originalPath": "room20-preparation/c08-cannon-actual-import-after.json",
+      "storedPath": "diagnostic/room20-production-budget/external-independent/c08-cannon-actual-import-after.json",
+      "originalBytes": 765,
+      "originalSha256": "600beb1f8de4f4e96c9af7d4d241cf9634f8908c53f503869a358beaf95f9d5a",
+      "storedBytes": 765,
+      "storedSha256": "600beb1f8de4f4e96c9af7d4d241cf9634f8908c53f503869a358beaf95f9d5a",
+      "gzipBase64": false
+    },
+    {
+      "originalPath": "room20-preparation/room20-production-budget-conservative-summary.json",
+      "storedPath": "diagnostic/room20-production-budget/external-independent/room20-production-budget-conservative-summary.json",
+      "originalBytes": 5511,
+      "originalSha256": "5eeca49d4428286dd570a04e0a5dcea2185258adf18e40e090a4b2e15ea5cf7f",
+      "storedBytes": 5511,
+      "storedSha256": "5eeca49d4428286dd570a04e0a5dcea2185258adf18e40e090a4b2e15ea5cf7f",
+      "gzipBase64": false
+    },
+    {
+      "originalPath": "room20-preparation/room20-production-force-budget.json",
+      "storedPath": "diagnostic/room20-production-budget/external-independent/room20-production-force-budget.json",
+      "originalBytes": 13903,
+      "originalSha256": "2ddf4fc3bf35a8ea29fe9417a49bc9d2936d92bc7474f03c96316880cfeba4e5",
+      "storedBytes": 13903,
+      "storedSha256": "2ddf4fc3bf35a8ea29fe9417a49bc9d2936d92bc7474f03c96316880cfeba4e5",
+      "gzipBase64": false
+    }
+  ],
+  "actualRunnerExit": 0,
+  "actualIndependentReview": "read exact full trace, no second runtime",
+  "originalCJSHashBeforeRunCaptured": false,
+  "CJSHashAfterOnlyClarified": true
+}

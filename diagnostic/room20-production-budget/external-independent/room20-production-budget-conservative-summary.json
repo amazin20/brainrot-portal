@@ -1,0 +1,139 @@
+{
+  "kind": "room20-current-geometry-conservative-read-only-budget",
+  "sourceAccepted": false,
+  "ordinaryAccepted": false,
+  "fullRoomAccepted": false,
+  "prototypeAccepted": false,
+  "runtimeSolverProof": false,
+  "actualPurePlacementApiEvaluated": true,
+  "actualOrdinaryChargeReachabilityEvaluated": false,
+  "staticReview": {
+    "path": "/workspace/scratch/1949b02c22bb/room20-preparation/room20-force-budget-static-review.json",
+    "sha256": "a83c0e91e4265c666dda612e48d2cb57a6c82445fd8fa54f17c38fc98f204e6f"
+  },
+  "actualPlacementReceipt": {
+    "path": "/workspace/scratch/1949b02c22bb/room20-preparation/room20-portal-placement-geometry.json",
+    "sha256": "fca6c468052add6575f168eb9bff87f4a260d4db32ad35488385e1ce5ff7f6cf",
+    "sourceUnchanged": true,
+    "sourceSamples": 1849,
+    "sourcePlacementAndNearSpanValid": 1849,
+    "sampledWorstSource": {
+      "offset": [
+        2.1,
+        0,
+        2.1
+      ],
+      "hitPoint": [
+        -6.9,
+        0.18,
+        20.1
+      ],
+      "placementOk": true,
+      "reason": null,
+      "actualCentre": [
+        -6.9,
+        0.17999999999999955,
+        20.1
+      ],
+      "actualNormal": [
+        0,
+        1,
+        2.220446049250313e-16
+      ],
+      "bounds": {
+        "minX": -3,
+        "maxX": 3,
+        "minY": -3,
+        "maxY": 3
+      },
+      "nearSpanAtQ7_2": {
+        "clear": true,
+        "hit": null
+      },
+      "gatePullAtQ7_2WithVerticalMg": 8.848295287971665
+    },
+    "targetSamples": 625,
+    "targetPlacementValid": 391,
+    "validTargetSampleOffsetBounds": {
+      "x": [
+        -0.8,
+        0.8
+      ],
+      "y": [
+        -1.2,
+        1
+      ],
+      "z": [
+        0,
+        0
+      ]
+    }
+  },
+  "productionNominalFormula": {
+    "eye": "A=(3\u2212q,3,1.36)",
+    "nearFairlead": "a=(\u22129,.98,18)",
+    "farFairlead": "b=(\u221216,7.2,\u221220.68)",
+    "nearLength": "sqrt((12\u2212q)^2+2.02^2+16.64^2)",
+    "openingPull": "Q=T*(12\u2212q)/nearLength; actualbodyFx=\u2212Q",
+    "forceRatioAt7_2": 0.27529435300572586,
+    "freeVerticalTensionOnly": "62.4N only with current same original3.2kg, g19.5, taut geometry, no supports and negligible vertical acceleration",
+    "productionReturn": "4+1.2qN; R(7.2)=12.64N",
+    "nominalPull7_2": 17.178367627557293,
+    "nominalMargin7_2": 4.538367627557293
+  },
+  "nearHookClosedBound": {
+    "actualIntrinsicSpringResistanceNm": 0.29171714508464164,
+    "currentBearingLugWorldYRelativePivot": [
+      -0.5,
+      -0.3
+    ],
+    "currentArmCompleteFaceWorldYRelativePivot": [
+      -0.6,
+      -0.2
+    ],
+    "C0_4_centroidArm_4ResistanceNm": 1.8917171450846417,
+    "C0_4_minLugArm_3ResistanceNm": 1.4917171450846416,
+    "couplingCapNm": 4,
+    "centroidArmMinimumIgnoringOtherContacts_m": 0.9270707137288396,
+    "candidatePreloadWindowFromMaxFaceCornerOnly_N": [
+      6.180471424858931,
+      8.538367627557294
+    ],
+    "note": "Bounds are hypotheses. Actual solved contact lever and rotation/capture window differ from simple centroid. No scalar3.2Nm intrinsic claim is valid."
+  },
+  "lowerBarOpen": {
+    "bodyAuthoredCenter": [
+      -16,
+      1,
+      -21.1
+    ],
+    "size": [
+      3.7,
+      0.25,
+      0.45
+    ],
+    "topY": 1.125,
+    "axisAlignedCubeHalf": 0.39,
+    "supportedAxisAlignedCOMY": 1.515,
+    "nominalVerticalEquilibriumCOMAt7_2": "about.969m, below supportedCOM1.515; support can invalidate T=mg",
+    "fullOrientationBoundingHalfY": 0.6754998149518622,
+    "supportBoundAllOrientationCOMY": 1.8004998149518623,
+    "note": "Nominalvertical branch can intersectbar; actual+Z portal flight and offsets may avoidit. No ordinarysoftlockclaim."
+  },
+  "clockVerified": {
+    "normalBrowser": "LabGame.animate715\u2013717 runsupdatePlaying(FIXED_STEP1/120) perfixedinterval; updateCubes1259 appliescableforce beforeeachphysicsstep.",
+    "acceptedJourney": "LabV8Journey32\u201333 executesupdatePlaying1/120 twice pervisual1/60frame.",
+    "correctedEarlierInference": "No lost-half-tension defect isclaimed fornormalbrowser/acceptedjourney. Multi-step directupdateCubes caller remainsanarchitecturehazard; newprototypeforcesuse actualsubsystemclock."
+  },
+  "physicalAdaptationCandidatesOnly": [
+    "Keepproductionreturn4+1.2q andredesign realloadedbearinglever withaminimum solvedlever comfortablyabove.927m; mirrorallhook/COM/spring/stopgeometry to\u2212X. Provefiniteinput stillcrossesunloadedcapturewindow withactualgravityandinertia.",
+    "AlternativeC0preloadaround8N lies onlyinside nominalcorner/endforcewindow, leaveslittleendmargin anddoesnotcoveractualallowedsourceoffsets. TheisolatedC08revisionis notfullroomproof.",
+    "Manufacturefiniteportal-addresssurfaces withactualfootprint/blockerclearance, orfounded nearredirect geometry, toboundgate-forceprojection; changingTnumerically isnotaphysicaltransmission.",
+    "IfshorteningrestLength tokeephangingoriginalabovebar, recalcforactualfarportalY, allcurrentcargoorientationhalfs, everyvalidsourcecentre andinitialdeliveryflight.23.8isonlynominalaxisalignedcandidate, notaconservativeall-placementnumber."
+  ],
+  "requiredNextRuntimeProof": [
+    "Currentactualunilateraltaut/slackropeforce beforephysicalnearhookunload; noqueuedslackdampingforce.",
+    "Sustainedbearingresistance andsamefiniteE afterphysicalcargo-onlyclearance, atactualoriginalbody/shape/step/masks.",
+    "Reachedfarcatchqrequirement, actualstopretention/penetration/CCD, realfarbar/recoveryfloor/roomshapes, ordinarycharge/playerroute andvalidplacementextremes."
+  ]
+}

@@ -1,0 +1,495 @@
+{
+  "revision": "PRIVATE-BUDGET-C08-MIRROR-ATTEMPT1",
+  "scope": "Isolated actual solver budget experiment; fixed nominal portal fairlead points only. Production ledge, actual portals, player, far catch, broad aperture offsets and full room omitted.",
+  "sourceAccepted": false,
+  "ordinaryRoom20Accepted": false,
+  "prototypeAccepted": false,
+  "caseAccepted": false,
+  "closingBase": 8,
+  "closingSlope": 1.2,
+  "trainMass": 8,
+  "gateDamping": 1.1,
+  "handMagnitude": 0.7,
+  "handWorldAngularImpulse": -0.7,
+  "torqueCeiling": 4,
+  "inputsBefore": [
+    {
+      "path": "src/game/LabRoom20ProductionBudgetPrototype.js",
+      "sha256": "5ef65507a8deb1e3823f6728cf0c3e9ebc40314c8bdfe69e800023f1bd0612d4"
+    },
+    {
+      "path": "src/game/LabRoom20ProductionBudgetSlipPrototype.js",
+      "sha256": "10b3f92429a50a3ce53509d517bc5e24cda449f296fb77d7609292a35f577187"
+    },
+    {
+      "path": "tests/helpers/room20-production-budget-fixture.js",
+      "sha256": "9ff10a791038a3829ee79e27961ecad9c460822ffdc114772ad1f565126a075e"
+    },
+    {
+      "path": "scripts/qa-room20-production-budget-c08.mjs",
+      "sha256": "e92adf2cd17a15c1a963e551c361481b7f97ce12976c5c6fb15e461c941dc7ec"
+    }
+  ],
+  "stages": [
+    {
+      "name": "initial640-real-loaded-tray",
+      "diagnostics": {
+        "worldStep": 640,
+        "contactStep": 640,
+        "opening": -0.0004667785203988198,
+        "hookAngle": -0.0006312115555530675,
+        "bearingForce": 7.998264501306721,
+        "bearingContacts": 3,
+        "bearingGeometryCurrent": true,
+        "captureForce": 0,
+        "captureContacts": 0,
+        "tension": 7.54324037863189e-14,
+        "stretch": 0,
+        "originalFree": true,
+        "cargoPosition": [
+          -16,
+          6.535031892668475,
+          -20.68
+        ],
+        "gatePosition": [
+          0.0004667785203988198,
+          0,
+          0
+        ],
+        "hookPosition": [
+          3.0000377337531003,
+          1.90856017136039,
+          0.2874910133363568
+        ],
+        "hookQuaternion": [
+          -0.000019323793204183272,
+          -0.000009806619932675023,
+          0.00031560558304945827,
+          0.9999999499617673
+        ],
+        "cablePath": {
+          "worldStep": 639,
+          "eye": [
+            3.0004667785203987,
+            3,
+            1.36
+          ],
+          "nearFairlead": [
+            -9,
+            0.98,
+            18
+          ],
+          "farFairlead": [
+            -16,
+            7.2,
+            -20.68
+          ],
+          "cargo": [
+            -16,
+            6.535031892668475,
+            -20.68
+          ],
+          "near": [
+            -0.5821210154730635,
+            -0.0979865594361963,
+            0.8071764104051022
+          ],
+          "far": [
+            0,
+            -1,
+            0
+          ],
+          "nearLength": 20.615072226465077,
+          "farLength": 0.664968107331525,
+          "length": 22.9800403337966,
+          "rate": 9.429050473289862e-15,
+          "reachable": true
+        },
+        "lastCableForce": {
+          "worldStep": 639,
+          "nearForce": [
+            -4.391078749166611e-14,
+            -7.391361717023295e-15,
+            6.088725691646912e-14
+          ],
+          "farForce": [
+            0,
+            7.54324037863189e-14,
+            0
+          ],
+          "gatePower": -2.5274225923478e-28,
+          "cargoPower": -4.585136833880021e-28,
+          "totalEndpointPower": -7.112559426227821e-28,
+          "negativeTensionPathRate": -7.112559426227822e-28,
+          "openingPull": 4.391078749166611e-14,
+          "endpointMagnitudeError": 1.262177448353619e-29
+        },
+        "cableWork": -0.0003838258157857149,
+        "handCount": 0,
+        "lastHand": null,
+        "slip": {
+          "lastForce": {
+            "worldStep": 639,
+            "forceClock": "actual-world-subsystem",
+            "liveOwnership": true,
+            "ownershipErrors": [],
+            "tau": -7.965076393839513e-15,
+            "actualHookTorque": -7.993605777301127e-15,
+            "actualDriverTorque": 7.965076393839513e-15,
+            "totalTorque": -2.8529383461613757e-17,
+            "omegaDrive": 1.2528699419332293e-16,
+            "omegaHook": 4.107825191113079e-15,
+            "totalCouplingPower": -3.183841469992027e-29,
+            "torqueCeiling": 4,
+            "slipGain": 2
+          },
+          "maxAbsTorque": 0.014921104578530242,
+          "maxTotalCouplingPower": 1.3367291635020895e-31,
+          "registryValid": true
+        },
+        "ownedPartsValid": true,
+        "bodiesPresent": true,
+        "constraintEquationCounts": [
+          5,
+          5
+        ],
+        "motorEquationPresent": [
+          false,
+          false
+        ],
+        "motorEnabled": [
+          false,
+          false
+        ]
+      },
+      "tray": {
+        "worldStep": 640,
+        "originalCargoBodyId": 0,
+        "originalCargoShapeId": 0,
+        "trayBodyId": 6,
+        "trayShapeId": 38,
+        "normalForce": 62.41852888278355,
+        "contacts": 4,
+        "rows": [
+          {
+            "bi": 0,
+            "bj": 6,
+            "si": 0,
+            "sj": 38,
+            "normal": [
+              0,
+              -1,
+              0
+            ],
+            "normalForce": 22.844579632730248
+          },
+          {
+            "bi": 0,
+            "bj": 6,
+            "si": 0,
+            "sj": 38,
+            "normal": [
+              0,
+              -1,
+              0
+            ],
+            "normalForce": 8.364684808648823
+          },
+          {
+            "bi": 0,
+            "bj": 6,
+            "si": 0,
+            "sj": 38,
+            "normal": [
+              0,
+              -1,
+              0
+            ],
+            "normalForce": 22.844582736519733
+          },
+          {
+            "bi": 0,
+            "bj": 6,
+            "si": 0,
+            "sj": 38,
+            "normal": [
+              0,
+              -1,
+              0
+            ],
+            "normalForce": 8.364681704884742
+          }
+        ],
+        "trayPosition": [
+          -16,
+          6.06,
+          -20.68
+        ],
+        "cargoPosition": [
+          -16,
+          6.535031892668475,
+          -20.68
+        ],
+        "bodiesPresent": true,
+        "cargoMasks": [
+          2,
+          5
+        ],
+        "trayMasks": [
+          1,
+          2
+        ]
+      },
+      "bodyIds": [
+        3,
+        4,
+        5,
+        0,
+        6
+      ],
+      "shapeIds": [
+        0,
+        38
+      ],
+      "maxBearingDepth": 0.0002980174441150382,
+      "maxHingeDrift": 0.0001329542258199695
+    }
+  ],
+  "rateCases": [],
+  "unrun": [
+    "Any later causal stages or rate cases after the first failure",
+    "No C0 retuning or second candidate",
+    "No ordinary/full-room/source acceptance"
+  ],
+  "failure": {
+    "stage": "initial640-real-loaded-tray",
+    "name": "AssertionError",
+    "message": "Initial original gravity is supported; current near/far spans are genuinely slack\n+ actual - expected\n\n+ 7.54324037863189e-14\n- 0\n",
+    "actualFinal": {
+      "worldStep": 640,
+      "contactStep": 640,
+      "opening": -0.0004667785203988198,
+      "hookAngle": -0.0006312115555530675,
+      "bearingForce": 7.998264501306721,
+      "bearingContacts": 3,
+      "bearingGeometryCurrent": true,
+      "captureForce": 0,
+      "captureContacts": 0,
+      "tension": 7.54324037863189e-14,
+      "stretch": 0,
+      "originalFree": true,
+      "cargoPosition": [
+        -16,
+        6.535031892668475,
+        -20.68
+      ],
+      "gatePosition": [
+        0.0004667785203988198,
+        0,
+        0
+      ],
+      "hookPosition": [
+        3.0000377337531003,
+        1.90856017136039,
+        0.2874910133363568
+      ],
+      "hookQuaternion": [
+        -0.000019323793204183272,
+        -0.000009806619932675023,
+        0.00031560558304945827,
+        0.9999999499617673
+      ],
+      "cablePath": {
+        "worldStep": 639,
+        "eye": [
+          3.0004667785203987,
+          3,
+          1.36
+        ],
+        "nearFairlead": [
+          -9,
+          0.98,
+          18
+        ],
+        "farFairlead": [
+          -16,
+          7.2,
+          -20.68
+        ],
+        "cargo": [
+          -16,
+          6.535031892668475,
+          -20.68
+        ],
+        "near": [
+          -0.5821210154730635,
+          -0.0979865594361963,
+          0.8071764104051022
+        ],
+        "far": [
+          0,
+          -1,
+          0
+        ],
+        "nearLength": 20.615072226465077,
+        "farLength": 0.664968107331525,
+        "length": 22.9800403337966,
+        "rate": 9.429050473289862e-15,
+        "reachable": true
+      },
+      "lastCableForce": {
+        "worldStep": 639,
+        "nearForce": [
+          -4.391078749166611e-14,
+          -7.391361717023295e-15,
+          6.088725691646912e-14
+        ],
+        "farForce": [
+          0,
+          7.54324037863189e-14,
+          0
+        ],
+        "gatePower": -2.5274225923478e-28,
+        "cargoPower": -4.585136833880021e-28,
+        "totalEndpointPower": -7.112559426227821e-28,
+        "negativeTensionPathRate": -7.112559426227822e-28,
+        "openingPull": 4.391078749166611e-14,
+        "endpointMagnitudeError": 1.262177448353619e-29
+      },
+      "cableWork": -0.0003838258157857149,
+      "handCount": 0,
+      "lastHand": null,
+      "slip": {
+        "lastForce": {
+          "worldStep": 639,
+          "forceClock": "actual-world-subsystem",
+          "liveOwnership": true,
+          "ownershipErrors": [],
+          "tau": -7.965076393839513e-15,
+          "actualHookTorque": -7.993605777301127e-15,
+          "actualDriverTorque": 7.965076393839513e-15,
+          "totalTorque": -2.8529383461613757e-17,
+          "omegaDrive": 1.2528699419332293e-16,
+          "omegaHook": 4.107825191113079e-15,
+          "totalCouplingPower": -3.183841469992027e-29,
+          "torqueCeiling": 4,
+          "slipGain": 2
+        },
+        "maxAbsTorque": 0.014921104578530242,
+        "maxTotalCouplingPower": 1.3367291635020895e-31,
+        "registryValid": true
+      },
+      "ownedPartsValid": true,
+      "bodiesPresent": true,
+      "constraintEquationCounts": [
+        5,
+        5
+      ],
+      "motorEquationPresent": [
+        false,
+        false
+      ],
+      "motorEnabled": [
+        false,
+        false
+      ]
+    },
+    "actualTray": {
+      "worldStep": 640,
+      "originalCargoBodyId": 0,
+      "originalCargoShapeId": 0,
+      "trayBodyId": 6,
+      "trayShapeId": 38,
+      "normalForce": 62.41852888278355,
+      "contacts": 4,
+      "rows": [
+        {
+          "bi": 0,
+          "bj": 6,
+          "si": 0,
+          "sj": 38,
+          "normal": [
+            0,
+            -1,
+            0
+          ],
+          "normalForce": 22.844579632730248
+        },
+        {
+          "bi": 0,
+          "bj": 6,
+          "si": 0,
+          "sj": 38,
+          "normal": [
+            0,
+            -1,
+            0
+          ],
+          "normalForce": 8.364684808648823
+        },
+        {
+          "bi": 0,
+          "bj": 6,
+          "si": 0,
+          "sj": 38,
+          "normal": [
+            0,
+            -1,
+            0
+          ],
+          "normalForce": 22.844582736519733
+        },
+        {
+          "bi": 0,
+          "bj": 6,
+          "si": 0,
+          "sj": 38,
+          "normal": [
+            0,
+            -1,
+            0
+          ],
+          "normalForce": 8.364681704884742
+        }
+      ],
+      "trayPosition": [
+        -16,
+        6.06,
+        -20.68
+      ],
+      "cargoPosition": [
+        -16,
+        6.535031892668475,
+        -20.68
+      ],
+      "bodiesPresent": true,
+      "cargoMasks": [
+        2,
+        5
+      ],
+      "trayMasks": [
+        1,
+        2
+      ]
+    }
+  },
+  "inputsAfter": [
+    {
+      "path": "src/game/LabRoom20ProductionBudgetPrototype.js",
+      "sha256": "5ef65507a8deb1e3823f6728cf0c3e9ebc40314c8bdfe69e800023f1bd0612d4"
+    },
+    {
+      "path": "src/game/LabRoom20ProductionBudgetSlipPrototype.js",
+      "sha256": "10b3f92429a50a3ce53509d517bc5e24cda449f296fb77d7609292a35f577187"
+    },
+    {
+      "path": "tests/helpers/room20-production-budget-fixture.js",
+      "sha256": "9ff10a791038a3829ee79e27961ecad9c460822ffdc114772ad1f565126a075e"
+    },
+    {
+      "path": "scripts/qa-room20-production-budget-c08.mjs",
+      "sha256": "e92adf2cd17a15c1a963e551c361481b7f97ce12976c5c6fb15e461c941dc7ec"
+    }
+  ],
+  "inputsUnchanged": true
+}

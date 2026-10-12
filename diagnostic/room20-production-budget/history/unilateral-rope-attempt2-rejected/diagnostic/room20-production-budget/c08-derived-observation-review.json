@@ -1,0 +1,29 @@
+{
+  "revision": "PRIVATE-BUDGET-C08-MIRROR-ATTEMPT2-WITNESS-TOLERANCE",
+  "scope": "Isolated actual solver budget experiment; fixed nominal portal fairlead points only. Production ledge, actual portals, player, far catch, broad aperture offsets and full room omitted.",
+  "boundedUnitChecksPassed": true,
+  "sourceAccepted": false,
+  "ordinaryRoom20Accepted": false,
+  "prototypeAccepted": false,
+  "causalTraceIntervals": 3583,
+  "actualWorldStepRange": [
+    1,
+    3583
+  ],
+  "sameOriginalBodyAndShapeAcrossStages": true,
+  "allObservedOwnershipLive": true,
+  "allObservedSlipLastForcesForActualInterval": true,
+  "maxObservedCouplingTorqueMagnitude_Nm": 4,
+  "maxObservedCouplingTorqueSumError_Nm": 4.440892098500626e-16,
+  "maxObservedCouplingPower_W": 1.3367291635020895e-31,
+  "maxObservedCableEndpointMagnitudeError_N": 4.263256414560601e-14,
+  "maxObservedCablePowerIdentityError_W": 1.1368683772161603e-13,
+  "maxObservedOpening_m": 7.221390920268709,
+  "maxObservedHookAngle_rad": 2.8363321253693727,
+  "loadedConnectedTinyDampingTraction_N": 0.06191096949021663,
+  "trueZeroTractionOnlyRateCases": "Both reached rate probes physically cut cable before loaded640 initial steps and assert T===0 at every measured interval. The connected single E phase has up to .06191N transient damping pull despite zero extension; it is not a strict zero-traction claim.",
+  "openStopLimitation": "The opened snapshot q7.22139 is the first moving crossing of the nominal q7.19 threshold with gate velocity; it is not a settled7.2m stop-retention/penetration/CCD proof. Cable is cut after that reached opening and actual founded closed return is measured.",
+  "timing": "Only the owned actual world.subsystems update applies cable/passive/slip forces. Fixture calls updateForces twice before each step, without queued forces. Existing v2 ownership/lifecycle guards are copied unchanged in policy; no replay of old60s acceptance into this revision.",
+  "unmeasured": "Production ledge/near room collisions/freight portal placement/portal clearing/persistent player/cargo journey/far catch/all offsets/long-frame rate bursts/moving compound CCD/500/human/public/source acceptance remain OPEN.",
+  "setupAssertionHistory": "Initial attempt stopped before any E because strict T===0 saw7.543e−14N. Raw run/trace/runner preserved under history/test-development/slack-roundoff-attempt1. Only the numerical-zero witness changed to≤1e−10N; all physical inputs remained identical."
+}

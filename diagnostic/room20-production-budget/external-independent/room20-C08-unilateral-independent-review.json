@@ -1,0 +1,292 @@
+{
+  "kind": "independent-read-only-C08-unilateral-final-review",
+  "newRuntimeExecuted": false,
+  "ordinaryAccepted": false,
+  "sourceAccepted": false,
+  "fullRoomAccepted": false,
+  "prototypeAccepted": false,
+  "boundedRecordedPrimitiveChecksPassed": true,
+  "sourceInputs": [
+    {
+      "path": "src/game/LabRoom20ProductionBudgetPrototype.js",
+      "sha256": "21d0a406798ebf5286bedf3243df12bc8dcc4ab0207f6aaf93aa8f35ccbea5f8"
+    },
+    {
+      "path": "src/game/LabRoom20ProductionBudgetSlipPrototype.js",
+      "sha256": "10b3f92429a50a3ce53509d517bc5e24cda449f296fb77d7609292a35f577187"
+    },
+    {
+      "path": "tests/helpers/room20-production-budget-fixture.js",
+      "sha256": "9ff10a791038a3829ee79e27961ecad9c460822ffdc114772ad1f565126a075e"
+    },
+    {
+      "path": "scripts/qa-room20-production-budget-c08.mjs",
+      "sha256": "537ab44f5393cab493db0740b9569fe9284c543be191bc815d10f402cc9eb453"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "/workspace/scratch/1949b02c22bb/room20-production-budget-prototype/diagnostic/room20-production-budget/c08-unilateral-final-manifest.json",
+      "sha256": "e27fbfabce1672bf2066a9918cc6e45e2633fc127b151741615412acd8b0ef97"
+    },
+    {
+      "path": "/workspace/scratch/1949b02c22bb/room20-production-budget-prototype/diagnostic/room20-production-budget/c08-unilateral-actual-result.json",
+      "sha256": "de3689a5e83a19c3e4cbf279623cd69c264265e478a83fd710315030594199cc"
+    },
+    {
+      "path": "/workspace/scratch/1949b02c22bb/room20-production-budget-prototype/diagnostic/room20-production-budget/c08-unilateral-causal-actual-trace.json",
+      "sha256": "1e0effaba428992399cb484c35eda4309076f0fda89308ed9dbd56ad91cf72f1"
+    }
+  ],
+  "checks": {
+    "manifestListedWholeFilesVerified": 44,
+    "traceRows": 3583,
+    "slackIntervals": 958,
+    "allSlackTensionAndEndpointForcesExactlyZero": true,
+    "maxPathPosePreviousStepError": 0,
+    "maxPathLengthRecomputationError": 7.105427357601002e-15,
+    "maxDirectionAndEndpointForceRecomputationError": 7.815970093361102e-13,
+    "maxUnilateralTensionRecomputationError": 7.815970093361102e-13,
+    "contiguousCompletedSteps": true,
+    "currentContactStep": true,
+    "actualForceClock": true,
+    "currentIdentityOwnershipAllRows": true,
+    "sameOriginalBodyShapeAllCausalStages": true,
+    "gravityIntervalsBeforeSecondE": 600,
+    "gravityInputCounts": [
+      1
+    ],
+    "gravityMaximumOpening": 0.6579765062793642,
+    "gravityMaximumAbsoluteHookAngle": 0.0035408658866357247,
+    "maximumTension": 165.59430117964428,
+    "maximumUnclampedTension": 165.59430117964428,
+    "capHits": 0,
+    "torqueCeiling": 4,
+    "maximumCouplingPower": 2.3780184755647773e-31,
+    "netTorqueError": 4.440892098500626e-16,
+    "cablePowerIdentityError": 2.2737367544323206e-13,
+    "firstNearBearingUnloadingCoincidesFirstTautForce": true,
+    "cableWorkActualDisplacementRecomputationMaxError": 0
+  },
+  "firstTautMeaningfulNearBearingUnloading": {
+    "worldStep": 964,
+    "forceStep": 963,
+    "pathLength": 25.200013156201713,
+    "stretch": 0.4000131562017124,
+    "tension": 107.58070450039827,
+    "opening": 0.007139214768002212,
+    "hookAngle": -0.00011027314433086888,
+    "bearingForce": 0,
+    "captureForce": 0,
+    "cableWork": 0.4315330315440684,
+    "originalFree": true
+  },
+  "stageSummaries": [
+    {
+      "name": "initial640-real-loaded-tray",
+      "worldStep": 640,
+      "opening": -0.00046677852039876813,
+      "hookAngle": -0.0006312115555529037,
+      "bearingForce": 7.998264501300075,
+      "captureForce": 0,
+      "tension": 0,
+      "stretch": 0,
+      "handCount": 0,
+      "originalFree": true,
+      "cargo": [
+        -16,
+        6.535031892661697,
+        -20.68
+      ],
+      "bodyIds": [
+        3,
+        4,
+        5,
+        0,
+        6
+      ],
+      "shapeIds": [
+        0,
+        38
+      ],
+      "trayForce": 62.43120196710866
+    },
+    {
+      "name": "same-finite-E-under-loaded-bearing",
+      "worldStep": 880,
+      "opening": -0.0004667785203975857,
+      "hookAngle": -0.0006312115555525711,
+      "bearingForce": 7.998264501304772,
+      "captureForce": 0,
+      "tension": 0,
+      "stretch": 0,
+      "handCount": 1,
+      "originalFree": true,
+      "cargo": [
+        -16,
+        6.535031892661697,
+        -20.68
+      ],
+      "bodyIds": [
+        3,
+        4,
+        5,
+        0,
+        6
+      ],
+      "shapeIds": [
+        0,
+        38
+      ],
+      "trayForce": 62.43120196710866
+    },
+    {
+      "name": "real-tray-withdrawal-and-original-gravity-relief",
+      "worldStep": 1480,
+      "opening": 0.6202782943949253,
+      "hookAngle": -3.255869320685794e-05,
+      "bearingForce": 0,
+      "captureForce": 26.217240201964703,
+      "tension": 62.244611459594104,
+      "stretch": 0.5642965679666005,
+      "handCount": 1,
+      "originalFree": true,
+      "cargo": [
+        -15.9961710484043,
+        3.7955346111251616,
+        -20.68
+      ],
+      "bodyIds": [
+        3,
+        4,
+        5,
+        0,
+        6
+      ],
+      "shapeIds": [
+        0,
+        38
+      ],
+      "trayForce": 0
+    },
+    {
+      "name": "identical-E-after-real-relief",
+      "worldStep": 1783,
+      "opening": 7.2235356361871705,
+      "hookAngle": 2.819157821595396,
+      "bearingForce": 0,
+      "captureForce": 0,
+      "tension": 65.49572659943321,
+      "stretch": 0.5941358505341441,
+      "handCount": 2,
+      "originalFree": true,
+      "cargo": [
+        -15.988732412455342,
+        0.9351778879832635,
+        -20.68
+      ],
+      "bodyIds": [
+        3,
+        4,
+        5,
+        0,
+        6
+      ],
+      "shapeIds": [
+        0,
+        38
+      ],
+      "trayForce": 0
+    },
+    {
+      "name": "actual-cable-cut-and-return",
+      "worldStep": 3583,
+      "opening": -0.05000000000000185,
+      "hookAngle": 2.8191705218045926,
+      "bearingForce": 0,
+      "captureForce": 0,
+      "tension": 0,
+      "stretch": 0,
+      "handCount": 2,
+      "originalFree": true,
+      "cargo": [
+        -16.02038741772182,
+        -5.609958019250583,
+        -20.68
+      ],
+      "bodyIds": [
+        3,
+        4,
+        5,
+        0,
+        6
+      ],
+      "shapeIds": [
+        0,
+        38
+      ],
+      "trayForce": 0
+    }
+  ],
+  "rateCases": [
+    {
+      "rate": 30,
+      "inputs": 900,
+      "intervals": 3600,
+      "maxOpening": 0.0002587401403621821,
+      "maxHookAngle": 0.0026943875840780645,
+      "passed": true
+    },
+    {
+      "rate": 120,
+      "inputs": 3600,
+      "intervals": 3600,
+      "maxOpening": 0.0002587401403621821,
+      "maxHookAngle": 0.0026943875840780645,
+      "passed": true
+    }
+  ],
+  "oldInvalidVersion": {
+    "archive": "/workspace/scratch/1949b02c22bb/room20-production-budget-prototype/diagnostic/room20-production-budget/history/unilateral-rope-attempt2-rejected",
+    "oldManifestSHA": "014b8a61448e0fee9f021a447b40ed8a1e7bc3915144d1152130b03c8dee2694",
+    "relabelledAsCurrent": false
+  },
+  "scopeLimits": [
+    "Existing full trace and source were independently inspected; no new runtime, long matrix or native/ordinary route was executed.",
+    "Fixed nominal fairleads are not actual current portal pair/obstruction/offset evidence.",
+    "Unit recoveryfloor top\u22126 and absenceofproductionbar remain unchanged.",
+    "Three-shape toytrain omits fullproductionleaves/tie/tooth/farfinger.",
+    "Opening7.223535 remains a transient thresholdcrossing, not a settledstop or moving-trainCCDproof.",
+    "Shared original-shape-deletion CCD defect remains outside this candidate.",
+    "Previous frozenv2/source/main/publisher/plan and uniontool unchanged."
+  ],
+  "firstTautForceAndFirstBearingZero": {
+    "worldStep": 959,
+    "forceStep": 958,
+    "pathLength": 24.859270059621945,
+    "stretch": 0.059270059621944426,
+    "tension": 73.89704110815475,
+    "opening": -0.00016279667500167792,
+    "bearingForce": 0,
+    "bearingGeometryCurrent": true,
+    "originalFree": true,
+    "handCount": 1
+  },
+  "executedCannonAfterOnlyProvenance": {
+    "file": "/workspace/scratch/1949b02c22bb/room20-preparation/c08-cannon-actual-import-after.json",
+    "sha256": "600beb1f8de4f4e96c9af7d4d241cf9634f8908c53f503869a358beaf95f9d5a",
+    "payload": {
+      "kind": "actual-c08-cannon-import-resolution-after-observation",
+      "prototypeInputsChanged": false,
+      "resolvedBareImportFromBudgetWorktree": "/workspace/scratch/1949b02c22bb/dependency-runtime/node_modules/cannon-es/dist/cannon-es.cjs.js",
+      "sha256": "58255a3214dfcddd41e4d5dbc47e3fb39e5679da67c1f47ca5ce0c788c9eef3f",
+      "captureScope": "AFTER-only observation; no CJS before-run capture is claimed.",
+      "clarification": "The c08 manifest before/after Cannon witness binds dist/cannon-es.js (ESM file). Bare cannon-es in these Node fixtures resolves dist/cannon-es.cjs.js (actual executed package entry). Keep those evidence scopes separate.",
+      "sourceAccepted": false,
+      "ordinaryAccepted": false,
+      "prototypeAccepted": false,
+      "fullRoomAccepted": false
+    },
+    "scope": "Manifest pre/post witness f070... is the ESM file, not the actual Node CJS entry; actual CJS hash is after-only and does not invent a before-run executed-entry witness."
+  }
+}

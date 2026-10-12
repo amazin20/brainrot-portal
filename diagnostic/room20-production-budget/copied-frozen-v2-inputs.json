@@ -1,0 +1,27 @@
+{
+  "sourceFrozenV2": "/workspace/scratch/1949b02c22bb/room20-preparation/room20-hook-v2-checkpoint-staging",
+  "baseHEAD": "5e552e9c3ac248b535d619741f15e99e29979cbf",
+  "files": [
+    {
+      "path": "src/game/LabRoom20NearHookPrototype.js",
+      "source": "/workspace/scratch/1949b02c22bb/room20-preparation/room20-hook-v2-checkpoint-staging/src/game/LabRoom20NearHookPrototype.js",
+      "sha256": "0d137cfaafb07cd023e2a754c9d0dd0a8a44e0c4cd13baffd60ebef1f2d69a00"
+    },
+    {
+      "path": "src/game/LabRoom20NearHookSlipPrototype.js",
+      "source": "/workspace/scratch/1949b02c22bb/room20-preparation/room20-hook-v2-checkpoint-staging/src/game/LabRoom20NearHookSlipPrototype.js",
+      "sha256": "aedff41a027f730cc303a61da82853df2027f5b64ffbf8ad70c74f303c6ad98e"
+    },
+    {
+      "path": "src/game/LabRoom20NearHookStrokePrototype.js",
+      "source": "/workspace/scratch/1949b02c22bb/room20-preparation/room20-hook-v2-checkpoint-staging/src/game/LabRoom20NearHookStrokePrototype.js",
+      "sha256": "7c25737876006d690988fc2e1c611552f51d6a23d37492733f420c6c6a444b0b"
+    },
+    {
+      "path": "tests/helpers/room20-hook-prototype-fixture.js",
+      "source": "/workspace/scratch/1949b02c22bb/room20-preparation/room20-hook-v2-checkpoint-staging/tests/helpers/room20-hook-prototype-fixture.js",
+      "sha256": "2282970bb2f57c4adc881b017b0cb283d989abd3ee31c7d82654d9915d56eccb"
+    }
+  ],
+  "scope": "Private isolated different-revision experiment; no ordinary/source acceptance"
+}

@@ -1,0 +1,196 @@
+{
+  "revision": "PRIVATE-BUDGET-C08-MIRROR-ATTEMPT2-WITNESS-TOLERANCE",
+  "finalizedUTC": "2026-10-12T20:51:11.456083+00:00",
+  "scope": "Isolated actual solver budget experiment; fixed nominal portal fairlead points only. Production ledge, actual portals, player, far catch, broad aperture offsets and full room omitted.",
+  "HEAD": "5e552e9c3ac248b535d619741f15e99e29979cbf",
+  "trackedDiff": "",
+  "boundedUnitChecksPassed": true,
+  "sourceAccepted": false,
+  "ordinaryRoom20Accepted": false,
+  "prototypeAccepted": false,
+  "resultInputHashesBeforeAfterEqual": true,
+  "copiedFrozenV2BytesUnchanged": true,
+  "copiedFrozenV2Inputs": [
+    {
+      "path": "src/game/LabRoom20NearHookPrototype.js",
+      "source": "/workspace/scratch/1949b02c22bb/room20-preparation/room20-hook-v2-checkpoint-staging/src/game/LabRoom20NearHookPrototype.js",
+      "sha256": "0d137cfaafb07cd023e2a754c9d0dd0a8a44e0c4cd13baffd60ebef1f2d69a00"
+    },
+    {
+      "path": "src/game/LabRoom20NearHookSlipPrototype.js",
+      "source": "/workspace/scratch/1949b02c22bb/room20-preparation/room20-hook-v2-checkpoint-staging/src/game/LabRoom20NearHookSlipPrototype.js",
+      "sha256": "aedff41a027f730cc303a61da82853df2027f5b64ffbf8ad70c74f303c6ad98e"
+    },
+    {
+      "path": "src/game/LabRoom20NearHookStrokePrototype.js",
+      "source": "/workspace/scratch/1949b02c22bb/room20-preparation/room20-hook-v2-checkpoint-staging/src/game/LabRoom20NearHookStrokePrototype.js",
+      "sha256": "7c25737876006d690988fc2e1c611552f51d6a23d37492733f420c6c6a444b0b"
+    },
+    {
+      "path": "tests/helpers/room20-hook-prototype-fixture.js",
+      "source": "/workspace/scratch/1949b02c22bb/room20-preparation/room20-hook-v2-checkpoint-staging/tests/helpers/room20-hook-prototype-fixture.js",
+      "sha256": "2282970bb2f57c4adc881b017b0cb283d989abd3ee31c7d82654d9915d56eccb"
+    }
+  ],
+  "files": [
+    {
+      "path": "src/game/LabRoom20NearHookPrototype.js",
+      "sha256": "0d137cfaafb07cd023e2a754c9d0dd0a8a44e0c4cd13baffd60ebef1f2d69a00",
+      "bytes": 18628
+    },
+    {
+      "path": "src/game/LabRoom20NearHookSlipPrototype.js",
+      "sha256": "aedff41a027f730cc303a61da82853df2027f5b64ffbf8ad70c74f303c6ad98e",
+      "bytes": 10259
+    },
+    {
+      "path": "src/game/LabRoom20NearHookStrokePrototype.js",
+      "sha256": "7c25737876006d690988fc2e1c611552f51d6a23d37492733f420c6c6a444b0b",
+      "bytes": 7353
+    },
+    {
+      "path": "tests/helpers/room20-hook-prototype-fixture.js",
+      "sha256": "2282970bb2f57c4adc881b017b0cb283d989abd3ee31c7d82654d9915d56eccb",
+      "bytes": 4839
+    },
+    {
+      "path": "src/game/LabRoom20ProductionBudgetPrototype.js",
+      "sha256": "5ef65507a8deb1e3823f6728cf0c3e9ebc40314c8bdfe69e800023f1bd0612d4",
+      "bytes": 20370
+    },
+    {
+      "path": "src/game/LabRoom20ProductionBudgetSlipPrototype.js",
+      "sha256": "10b3f92429a50a3ce53509d517bc5e24cda449f296fb77d7609292a35f577187",
+      "bytes": 10336
+    },
+    {
+      "path": "tests/helpers/room20-production-budget-fixture.js",
+      "sha256": "9ff10a791038a3829ee79e27961ecad9c460822ffdc114772ad1f565126a075e",
+      "bytes": 4591
+    },
+    {
+      "path": "scripts/qa-room20-production-budget-c08.mjs",
+      "sha256": "82c657477476a7ec0fda06160bfe0394c038ff57a9b7f155cfe076c0e1a93be2",
+      "bytes": 8451
+    },
+    {
+      "path": "diagnostic/room20-production-budget/README.txt",
+      "sha256": "0453bdf3a877a073da5cb3e30ef29c6b20324dbfaebf0bb0c6ca49f4a0c1d351",
+      "bytes": 1383
+    },
+    {
+      "path": "diagnostic/room20-production-budget/c08-actual-result.json",
+      "sha256": "cd61de80375d95acb1e7f3ba3d9360339b133a4a6ffb5098a5561899d40eb1cb",
+      "bytes": 38886
+    },
+    {
+      "path": "diagnostic/room20-production-budget/c08-actual-run.log",
+      "sha256": "c5da2d8e56d86586c540a64ee464c3b06fb519e6733c6fa1853c53a6d7a8b790",
+      "bytes": 403
+    },
+    {
+      "path": "diagnostic/room20-production-budget/c08-causal-actual-trace.json",
+      "sha256": "2cef3a5c92f0a606cf1be0d3b007413dc1a9d599793fe82042201cc5346521a6",
+      "bytes": 9526056
+    },
+    {
+      "path": "diagnostic/room20-production-budget/c08-derived-observation-review.json",
+      "sha256": "7bfdb9532cd19a727b697438810644ec2264374baca9bb37f8d5e90025c338ff",
+      "bytes": 2477
+    },
+    {
+      "path": "diagnostic/room20-production-budget/c08-failed-actual-trace.json",
+      "sha256": "d653d8fbfb6aa3d58d769029da4aa18ec9e58d95b57d34a10ecba804b8845755",
+      "bytes": 1911471
+    },
+    {
+      "path": "diagnostic/room20-production-budget/copied-frozen-v2-inputs.json",
+      "sha256": "2e36b71aa49fd3ef56d5cbe089bef3431114a42c0627705b701668e8952f726f",
+      "bytes": 1494
+    },
+    {
+      "path": "diagnostic/room20-production-budget/history/test-development/slack-roundoff-attempt1/c08-actual-result.json",
+      "sha256": "1e4d691a71ffe376d82132204817de438891b59d0cf5821eeb634756f41bb92d",
+      "bytes": 12507
+    },
+    {
+      "path": "diagnostic/room20-production-budget/history/test-development/slack-roundoff-attempt1/c08-actual-run.log",
+      "sha256": "ede3d29e5ac4d417c4544660ec541b4dddc3c8403e5e78826af84d283e1b7f47",
+      "bytes": 441
+    },
+    {
+      "path": "diagnostic/room20-production-budget/history/test-development/slack-roundoff-attempt1/c08-failed-actual-trace.json",
+      "sha256": "d653d8fbfb6aa3d58d769029da4aa18ec9e58d95b57d34a10ecba804b8845755",
+      "bytes": 1911471
+    },
+    {
+      "path": "diagnostic/room20-production-budget/history/test-development/slack-roundoff-attempt1/inputs.json",
+      "sha256": "f198919048912d564facf3ebea079f53c97f925278d9b4f63a79b62a3d71c650",
+      "bytes": 1694
+    },
+    {
+      "path": "diagnostic/room20-production-budget/history/test-development/slack-roundoff-attempt1/qa-room20-production-budget-c08.mjs",
+      "sha256": "e92adf2cd17a15c1a963e551c361481b7f97ce12976c5c6fb15e461c941dc7ec",
+      "bytes": 8338
+    }
+  ],
+  "frozenAfterFinalManifest": true,
+  "receiptRevision": 2,
+  "runnerExecution": {
+    "command": "node scripts/qa-room20-production-budget-c08.mjs > diagnostic/room20-production-budget/c08-actual-run.log 2>&1",
+    "actualExitCode": 0,
+    "executionCompleted": true,
+    "TAP": false,
+    "note": "Actual runner with assertion failure → exit1. Current attempt returned exit0; initial numerical-zero witness failure exit1 remains in history."
+  },
+  "dependencies": {
+    "canonicalRuntime": "/workspace/scratch/1949b02c22bb/dependency-runtime/node_modules",
+    "CannonVersion": "0.20.0",
+    "ThreeVersion": "0.180.0",
+    "CannonBeforeWitness": {
+      "source": "/workspace/scratch/1949b02c22bb/room20-preparation/room20-force-budget-static-review.json",
+      "sourceSHA256": "a83c0e91e4265c666dda612e48d2cb57a6c82445fd8fa54f17c38fc98f204e6f",
+      "captureTime": "2026-10-12T20:39:12.508909+00:00",
+      "file": {
+        "path": "/workspace/scratch/1949b02c22bb/dependency-runtime/node_modules/cannon-es/dist/cannon-es.js",
+        "sha256": "f0700cbd3a482954949b9d58c1b0f76dcc74767750297647a39d8c40dd63d37c",
+        "version": "0.20.0"
+      }
+    },
+    "CannonAfterSHA256": "f0700cbd3a482954949b9d58c1b0f76dcc74767750297647a39d8c40dd63d37c",
+    "CannonBeforeAfterUnchanged": true,
+    "runtimeFilesObservedAfter": [
+      {
+        "path": "/workspace/scratch/1949b02c22bb/dependency-runtime/node_modules/cannon-es/package.json",
+        "sha256": "82a4915fedad350872f2b5cf8a84ea326c73f4eeea841d941fe267f41ac7e453",
+        "bytes": 2031
+      },
+      {
+        "path": "/workspace/scratch/1949b02c22bb/dependency-runtime/node_modules/cannon-es/dist/cannon-es.js",
+        "sha256": "f0700cbd3a482954949b9d58c1b0f76dcc74767750297647a39d8c40dd63d37c",
+        "bytes": 346256
+      },
+      {
+        "path": "/workspace/scratch/1949b02c22bb/dependency-runtime/node_modules/three/package.json",
+        "sha256": "aa42494664dba4cf76d89c6975ee38321a402f09a048672e190bad6f13beec93",
+        "bytes": 4635
+      },
+      {
+        "path": "/workspace/scratch/1949b02c22bb/dependency-runtime/node_modules/three/build/three.module.js",
+        "sha256": "c8211c69345d2e9949dc7a8ac969380497aa0600a5a8ac6a459c8cd02dd9cb8a",
+        "bytes": 603113
+      },
+      {
+        "path": "/workspace/scratch/1949b02c22bb/dependency-runtime/node_modules/three/build/three.core.js",
+        "sha256": "eb077d2417f61d3e6d9264c317cabc4ea35769ed6b0ab533067292a550784c20",
+        "bytes": 1403455
+      }
+    ],
+    "scope": "Cannon primary implementation baseline predates this experiment; all four new experiment inputs were directly hashed before/after by the actual runner. Other dependency hashes are after-run observations, not invented before-run captures."
+  },
+  "protectedReviewedSourceAfter": {
+    "sourceHEAD": "5e552e9c3ac248b535d619741f15e99e29979cbf",
+    "sourcePathsMatchEarlierStaticReview": true,
+    "protectedSourceFileCount": 10
+  }
+}
