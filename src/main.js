@@ -12,28 +12,26 @@ import {readCampaignRoute,nextCampaignLevel} from './game/LabCampaignRoute.js';
 import {FOUNDATION_INDICES,readFoundationEdition,foundationStorage,nextFoundationLevel} from './game/LabFoundationEdition.js';
 import {OPEN_ROOM_INDICES,readOpenEdition,nextOpenRoom,openEditionStorage} from './game/LabOpenEdition.js';
 import {resumeCampaignLevel,nextResumeLevel} from './game/LabResume.js';
+import {readTower41EntryFlags,createTower41PreviewPreferences,TOWER41_PREVIEW_LEVEL_INDEX,TOWER41_PREVIEW_INDICES} from './game/LabTower41Preview.js';
 import {SINGULARITY_ROOMS,SINGULARITY_SPEC} from './game/LabSingularityLayout.js';
 const singularityHallCount=SINGULARITY_ROOMS.length,singularityOpenHallCount=SINGULARITY_ROOMS.filter(room=>room.requires.length===0).length;
 const $=s=>document.querySelector(s),query=new URLSearchParams(location.search);
 const yandex=import.meta.env.MODE==='yandex';
 if(yandex)query.set('edition','foundation');
-const debug=!yandex&&(query.get('debug')==='1'||query.get('smoke')==='1');
+const {preview:tower41Preview,debug,tower41Qualification,puzzlePilot43,puzzleProgression}=readTower41EntryFlags(query,{yandex});
 // Player-facing puzzles keep control tutorials, without solution-hint buttons.
-$('#hint-button').hidden=!debug;
+$('#hint-button').hidden=!debug||tower41Preview;
 const campaignRoute=readCampaignRoute(query,CAMPAIGN.length),openEdition=readOpenEdition(query),foundationEdition=readFoundationEdition(query);
 // This bounded physical-cell review has its own saves and is never enabled by
 // an ordinary game link or the Yandex build.
-const tower41Qualification=debug&&foundationEdition.enabled&&foundationEdition.levelIndex===40&&query.get('tower41ratchet')==='1';
-const puzzlePilot43=!yandex&&foundationEdition.enabled&&query.get('pilot')==='43';
-const puzzleProgression=!yandex&&foundationEdition.enabled&&query.get('pilot')==='progression';
-const availableRooms=puzzleProgression?PROGRESSION_INDICES:puzzlePilot43?[42]:foundationEdition.enabled?FOUNDATION_INDICES:openEdition.enabled?OPEN_ROOM_INDICES:CAMPAIGN.map((_,i)=>i);
+const availableRooms=tower41Preview?TOWER41_PREVIEW_INDICES:puzzleProgression?PROGRESSION_INDICES:puzzlePilot43?[42]:foundationEdition.enabled?FOUNDATION_INDICES:openEdition.enabled?OPEN_ROOM_INDICES:CAMPAIGN.map((_,i)=>i);
 // Retired speed-mode links return to the campaign without reloading or touching saves.
 if(campaignRoute.legacyVelocityLink)history.replaceState(history.state,'',location.pathname+campaignRoute.search+location.hash);
 let storage;try{storage=localStorage;}catch{}
 const pilotStorage=storage&&{getItem:key=>storage.getItem('brainrot-puzzle-pilot43-v1:'+key),setItem:(key,value)=>storage.setItem('brainrot-puzzle-pilot43-v1:'+key,value)};
 const progressionStorage=storage&&{getItem:key=>storage.getItem('brainrot-puzzle-progression-finale-v1:'+key),setItem:(key,value)=>storage.setItem('brainrot-puzzle-progression-finale-v1:'+key,value)};
 const ratchetStorage=storage&&{getItem:key=>storage.getItem('brainrot-tower41-ratchet-qualification-v1:'+key),setItem:(key,value)=>storage.setItem('brainrot-tower41-ratchet-qualification-v1:'+key,value)};
-const preferences=new LabPreferences(tower41Qualification?ratchetStorage:puzzleProgression?progressionStorage:puzzlePilot43?pilotStorage:foundationEdition.enabled?foundationStorage(storage):openEdition.enabled?openEditionStorage(storage):storage,
+const preferences=tower41Preview?createTower41PreviewPreferences(storage):new LabPreferences(tower41Qualification?ratchetStorage:puzzleProgression?progressionStorage:puzzlePilot43?pilotStorage:foundationEdition.enabled?foundationStorage(storage):openEdition.enabled?openEditionStorage(storage):storage,
   foundationEdition.enabled?{campaignRevision:CREATIVE_CAMPAIGN_REVISION,replacedIndices:CREATIVE_REPLACED_INDICES,roomRevisions:{16:'cable-supported-architecture-v1',32:'siphon-observatory-v1',50:'echo-horizon-v1'}}:{}),holds=new Set();
 const screens=['loading','start-screen','pause-screen','win-screen','error-screen'];
 const hudNodes={level:$('#level-number'),chamber:$('#chamber'),objective:$('#objective'),cargo:$('#cargo-status'),portals:$('#portal-status')};
@@ -84,7 +82,7 @@ function showVictory(){
   $('#win-title').innerHTML='Вместе<br />получилось<span>.</span>';
   $('#win-screen .eyebrow').textContent='ДРУГ ТОЖЕ ДОБРАЛСЯ';
   $('#play-again-button').textContent=last?'К первому испытанию':'Следующая комната';
-  if(puzzlePilot43)$('#play-again-button').textContent='Пройти ещё раз';
+  if(puzzlePilot43||tower41Preview)$('#play-again-button').textContent='Пройти ещё раз';
   const allCompleted=availableRooms.every(index=>preferences.value.completed.includes(index));
   $('#win-screen .muted').textContent=last?(allCompleted?'Все испытания этой версии пройдены. Друг с тобой.':'Последнее испытание пройдено. Друг с тобой; в лаборатории можно исследовать остальные комнаты.'):foundationEdition.enabled&&game.levelIndex===39?'Впереди Складчатый замок: один непрерывный заход без чекпоинтов.':'Получилось! Следующее испытание добавит новую идею.';
   if(puzzlePilot43)$('#win-screen .muted').textContent='Комната пройдена. Друг с тобой.';
@@ -150,7 +148,7 @@ finally{game.render();clearInput();setState(game.state);diagnostics();}
       };}
     focusScreenControl('start-screen','#play-button');if(debug&&query.get('smoke')==='1')enterLevel(game.levelIndex,'initial');},
   onHud:({chamber,objective,hasCargo,portalsReady})=>{hudText('level',String(game.levelIndex+1));hudText('chamber',chamber);hudText('objective',objective||'');hudText('cargo',game.velocityCompanion?.connected?'Друг закреплён':hasCargo?'Друг на руках':'Друг ждёт');hudText('portals',portalsReady?'Связаны':'Два портала');
-    const clock=$('#tower-run-clock');clock.hidden=!debug||query.get('clock')!=='1'||!game.firstLevel?.tower;
+    const clock=$('#tower-run-clock');clock.hidden=tower41Preview||!debug||query.get('clock')!=='1'||!game.firstLevel?.tower;
     if(!clock.hidden){const seconds=Math.floor(game.elapsed/1000);clock.textContent=`${String(Math.floor(seconds/60)).padStart(2,'0')}:${String(seconds%60).padStart(2,'0')} · Без чекпоинтов`;}
   },
   onToast:message=>{if(/Сначала|не помещается|препятствие|белую|Раздвинь|свободное|лицевую/.test(message))game.tutorial.explain(message);},
@@ -163,13 +161,15 @@ game.epicMode=false;
 game.chamberEdition=foundationEdition.enabled?'foundation':openEdition.enabled?'open':'classic';
 game.puzzlePilot43=puzzlePilot43;
 game.puzzleProgression=puzzleProgression;
+game.tower41Preview=tower41Preview;
 document.body.dataset.chamberEdition=game.chamberEdition;
+document.body.dataset.tower41Preview=String(tower41Preview);
 document.body.dataset.gameMode='campaign';
 game.quality={...QUALITY_PRESETS[preferences.value.quality]};game.tutorial.enabled=preferences.value.tutorial;
 game.levelIndex=foundationEdition.enabled?foundationEdition.levelIndex:openEdition.enabled?openEdition.levelIndex:campaignRoute.levelIndex;
 if(puzzlePilot43)game.levelIndex=42;
 if(puzzleProgression&&!PROGRESSION_INDICES.includes(game.levelIndex))game.levelIndex=PROGRESSION_INDICES[0];
-game.levelIndex=resumeCampaignLevel(query,preferences.value,availableRooms,game.levelIndex);
+game.levelIndex=tower41Preview?TOWER41_PREVIEW_LEVEL_INDEX:resumeCampaignLevel(query,preferences.value,availableRooms,game.levelIndex);
 game.tower41RatchetQualification=tower41Qualification&&game.levelIndex===40;
 choices();$('#level-select').value=String(game.levelIndex);
 function updateStartAction(){
@@ -184,6 +184,7 @@ $('#level-select').addEventListener('change',updateStartAction);updateStartActio
 $('#campaign-count').textContent=foundationEdition.enabled?`Кампания · ${FOUNDATION_INDICES.length} испытание`:openEdition.enabled?`${OPEN_ROOM_INDICES.length} лабораторных испытаний · отдельная версия`:`Архив · ${CAMPAIGN.length} испытания`;
 if(puzzlePilot43)$('#campaign-count').textContent='Новая версия · комната 43';
 if(puzzleProgression)$('#campaign-count').textContent='Пространственные испытания · 43–51';
+if(tower41Preview)$('#campaign-count').textContent='Складчатый замок · комната 41';
 if(foundationEdition.enabled){$('#start-screen .brand').textContent='ПОРТАЛЫ · ФИЗИКА · ИССЛЕДОВАНИЕ';$('#start-screen .lead').textContent='Соединяй пространства. Сохраняй импульс. Доберись до выхода вместе с другом.';}
 else if(openEdition.enabled){$('#start-screen .brand').textContent='ЛАБОРАТОРНЫЕ ИСПЫТАНИЯ';$('#start-screen .lead').textContent='Камеры 24, 28, 30 и 31–33. Эта подборка и новая первая глава хранят прогресс отдельно от архива.';}
 const editionNav=document.createElement('nav');editionNav.className='edition-navigation';editionNav.setAttribute('aria-label','Версии кампании');
@@ -216,7 +217,7 @@ async function restartLevel(){
 }
 function resume(){reconcileFocus();if(holds.size)return;game.audio.unlock();game.togglePause(false);game.renderer.setAnimationLoop(game.animate);}
 $('#play-button').addEventListener('click',()=>enterLevel(Number($('#level-select').value),sessionStarted?'next':'initial'));
-$('#play-again-button').addEventListener('click',()=>enterLevel(puzzleProgression?nextProgressionLevel(game.levelIndex):puzzlePilot43?42:foundationEdition.enabled?nextFoundationLevel(game.levelIndex):openEdition.enabled?nextOpenRoom(game.levelIndex):nextCampaignLevel(game.levelIndex,CAMPAIGN.length)));
+$('#play-again-button').addEventListener('click',()=>enterLevel(tower41Preview?TOWER41_PREVIEW_LEVEL_INDEX:puzzleProgression?nextProgressionLevel(game.levelIndex):puzzlePilot43?42:foundationEdition.enabled?nextFoundationLevel(game.levelIndex):openEdition.enabled?nextOpenRoom(game.levelIndex):nextCampaignLevel(game.levelIndex,CAMPAIGN.length)));
 $('#resume-button').addEventListener('click',resume);$('#restart-button').addEventListener('click',restartLevel);
 $('#pause-button').addEventListener('click',()=>game.togglePause(true));
 $('#hint-button').addEventListener('click',showHints);

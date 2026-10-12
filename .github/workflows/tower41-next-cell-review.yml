@@ -1,7 +1,7 @@
 name: Review next room41 physical cell and the whole current castle
 'on':
   push:
-    branches: [upgrade/tower41-next-cell-20261012]
+    branches: [upgrade/tower41-preview-storage-20261012]
   workflow_dispatch:
 # Deliberately read-only: no publisher, deployment environment or Pages writes.
 permissions: {contents: read}
@@ -208,6 +208,7 @@ jobs:
       - name: Record the whole ordinary eleven-mechanism castle with the same original cargo and no resets
         env:
           PAGE_URL: http://127.0.0.1:4173/
+          TOWER41_PREVIEW: '1'
           ROUTE: '1'
           RECORD: '1'
           CAPTURE_FPS: '4'

@@ -7,14 +7,59 @@ import {createHash} from 'node:crypto';
 import puppeteer from 'puppeteer-core';
 import {SINGULARITY_ROOMS} from '../src/game/LabSingularityLayout.js';
 import {assertUpgradeInfo,assertUpgradeEvidence,captureFormat} from './lib/singularity-upgrade-proof.mjs';
-import {verifySingularityUI,waitForStartMenu,playFromStartMenu} from './lib/singularity-ui-check.mjs';
+import {verifySingularityUI,waitForStartMenu,playFromStartMenu,activate} from './lib/singularity-ui-check.mjs';
+import {TOWER41_PREVIEW_STORAGE_PREFIX} from '../src/game/LabTower41Preview.js';
+import {oldSavePrefixes,qualificationKey} from './qa-tower41-ratchet-browser.mjs';
 const out=path.resolve(process.env.OUT_DIR||'qa/singularity');fs.mkdirSync(out,{recursive:true});
 const record=process.env.RECORD==='1',route=record||process.env.ROUTE==='1';
+const preview=process.env.TOWER41_PREVIEW==='1',preferenceKey='brainrot-portal.preferences.v24';
+const previewKey=TOWER41_PREVIEW_STORAGE_PREFIX+preferenceKey;
+const preservedPrefixes=[...oldSavePrefixes,qualificationKey.slice(0,-preferenceKey.length)];
+const previewSaveIsolation=preview?{pass:false,namespace:TOWER41_PREVIEW_STORAGE_PREFIX,ownKey:previewKey,legacyPrefixes:preservedPrefixes,legacySnapshot:null,phases:[],controls:{}}:null;
+let preservedSaves=null;
 const {fps,stride,width,height,durationToleranceSeconds}=captureFormat({fps:Number(process.env.CAPTURE_FPS||12),width:Number(process.env.CAPTURE_WIDTH||960),height:Number(process.env.CAPTURE_HEIGHT||540)});
 const graphicsPreset=process.env.GRAPHICS_PRESET||'low',routeOptions=JSON.parse(process.env.ROUTE_OPTIONS||'{}');
 assert.ok(['low','balanced','high'].includes(graphicsPreset));assert.ok(routeOptions&&typeof routeOptions==='object'&&!Array.isArray(routeOptions));
 const browser=await puppeteer.launch({executablePath:process.env.CHROME_PATH||'/usr/bin/chromium',headless:true,protocolTimeout:18_000_000,args:['--no-sandbox','--disable-dev-shm-usage','--use-angle=swiftshader','--enable-unsafe-swiftshader']});
 const errors=[],movie=path.join(out,'tower-singularity.mp4');let encoder=null,encoderExit=null,count=0,first=null,last=null,page,lastVisualFrame=-1,terminalCaptured=false;
+async function previewCheckpoint(phase){
+ const observed=await page.evaluate(({prefixes,key,preferenceKey})=>{
+  const g=window.__NESI_DEMO_GAME__,legacy=Object.fromEntries(Object.keys(localStorage).filter(key=>prefixes.some(prefix=>key.startsWith(prefix))).sort().map(key=>[key,localStorage.getItem(key)])),raw=localStorage.getItem(key);
+  return {legacy,ownRaw:raw,own:raw?JSON.parse(raw):null,preferencesReadMatchesOwn:window.__NESI_PREFS__?.storage?.getItem(preferenceKey)===raw,state:g?.state,level:(g?.levelIndex??-1)+1,preview:g?.tower41Preview===true,previewAttribute:document.body.dataset.tower41Preview,ratchetCell:Boolean(g?.firstLevel?.ratchetCell),ratchetHook:typeof window.__NESI_RUN_TOWER41_RATCHET_ROUTE__,startChoices:[...document.querySelector('#level-select').options].map(option=>Number(option.value)),settingsChoices:[...document.querySelector('#settings-level-select').options].map(option=>Number(option.value)),solved:g?.firstLevel?.getTowerMetrics().solvedIds};
+ },{prefixes:preservedPrefixes,key:previewKey,preferenceKey});
+ assert.deepEqual(observed.legacy,preservedSaves,'Every pre-existing namespace byte must survive '+phase);
+ assert.equal(observed.preview,true);assert.equal(observed.previewAttribute,'true');assert.equal(observed.level,41);assert.equal(observed.ratchetCell,false);assert.equal(observed.ratchetHook,'undefined');
+ assert.deepEqual(observed.startChoices,[40]);assert.deepEqual(observed.settingsChoices,[40]);assert.equal(observed.preferencesReadMatchesOwn,true,'Runtime preferences must use the isolated preview namespace');assert.ok(observed.ownRaw);
+ const result={phase,state:observed.state,level:observed.level,preview:true,ratchetCell:false,startChoices:observed.startChoices,settingsChoices:observed.settingsChoices,oldBytesUnchanged:true,legacySnapshotSha256:createHash('sha256').update(JSON.stringify(observed.legacy)).digest('hex'),ownPreferencesSha256:createHash('sha256').update(observed.ownRaw).digest('hex'),namespaceUsed:true,ownCompleted:observed.own.completed,ownResumeLevel:observed.own.resumeLevel,ownQuality:observed.own.quality,solved:observed.solved};
+ previewSaveIsolation.phases.push(result);fs.writeFileSync(path.join(out,'preview-save-isolation.json'),JSON.stringify(previewSaveIsolation,null,2)+'\n');return result;
+}
+async function previewSettingsAndPause(){
+ await activate(page,'#menu-settings-button');await page.waitForFunction(()=>document.querySelector('#menu-settings').open);
+ const alternate=graphicsPreset==='low'?'balanced':'low';await page.select('#menu-quality',alternate);
+ assert.equal(await page.evaluate(key=>JSON.parse(localStorage.getItem(key)).quality,previewKey),alternate);
+ await page.select('#menu-quality',graphicsPreset);await activate(page,'#menu-settings-done');await page.waitForFunction(()=>!document.querySelector('#menu-settings').open);
+ previewSaveIsolation.controls.settings={control:'native-menu-quality-select',changedTo:alternate,restoredTo:graphicsPreset};await previewCheckpoint('after-settings');
+ await playFromStartMenu(page,false,graphicsPreset);await page.evaluate(()=>window.__NESI_DEMO_GAME__.renderer.setAnimationLoop(null));await previewCheckpoint('after-play');
+ await page.bringToFront();await page.evaluate(()=>window.__NESI_DEMO_GAME__.renderer.setAnimationLoop(window.__NESI_DEMO_GAME__.animate));await page.keyboard.press('Escape');
+ let pointerLockExitFallback=false;
+ try{await page.waitForFunction(()=>!document.pointerLockElement,{timeout:5000});}catch(error){if(error.name!=='TimeoutError')throw error;await page.evaluate(()=>document.exitPointerLock());pointerLockExitFallback=true;}
+ if(await page.evaluate(()=>window.__NESI_DEMO_GAME__.state==='playing'))await activate(page,'#pause-button');
+ await page.waitForFunction(()=>document.documentElement.dataset.runtimeState==='paused');await page.waitForFunction(()=>{const screen=document.querySelector('#pause-screen');return !screen.inert&&getComputedStyle(screen).opacity==='1';});
+ const paused=await previewCheckpoint('after-pause');assert.equal(paused.state,'paused');
+ await page.focus('#resume-button');await page.keyboard.press('Enter');await page.waitForFunction(()=>document.documentElement.dataset.runtimeState==='playing');await page.evaluate(()=>window.__NESI_DEMO_GAME__.renderer.setAnimationLoop(null));
+ const resumed=await previewCheckpoint('after-resume');assert.equal(resumed.state,'playing');previewSaveIsolation.controls.pauseResume={pass:true,pauseControl:'native-escape-or-hud',pointerLockExitFallback,resumeControl:'focused-native-enter',pausedState:paused.state,resumedState:resumed.state};
+}
+async function previewVictoryReplayReload(){
+ const won=await previewCheckpoint('after-win');assert.equal(won.state,'won');assert.deepEqual(won.ownCompleted,[40]);assert.equal(won.ownResumeLevel,40);
+ const label=await page.$eval('#play-again-button',button=>button.textContent);assert.match(label,/Пройти ещё раз/);
+ await activate(page,'#play-again-button');await page.waitForFunction(()=>document.documentElement.dataset.runtimeState==='playing');await page.evaluate(()=>window.__NESI_DEMO_GAME__.renderer.setAnimationLoop(null));
+ const replay=await previewCheckpoint('after-replay');assert.equal(replay.state,'playing');assert.deepEqual(replay.solved,[]);
+ const replayAtSpawn=await page.evaluate(()=>{const g=window.__NESI_DEMO_GAME__;return g.playerPosition.distanceTo(g.firstLevel.spawn)<.5;});assert.equal(replayAtSpawn,true);
+ previewSaveIsolation.controls.replay={pass:true,button:'#play-again-button',label,level:replay.level,state:replay.state,solved:replay.solved,atSpawn:replayAtSpawn};
+ await page.reload({waitUntil:'domcontentloaded'});await waitForStartMenu(page);const reload=await previewCheckpoint('after-reload');assert.equal(reload.state,'ready');assert.deepEqual(reload.solved,[]);assert.deepEqual(reload.ownCompleted,[40]);assert.equal(reload.ownResumeLevel,40);
+ previewSaveIsolation.controls.reload={pass:true,state:reload.state,level:reload.level,completed:reload.ownCompleted,resumeLevel:reload.ownResumeLevel};previewSaveIsolation.pass=true;
+ fs.writeFileSync(path.join(out,'preview-save-isolation.json'),JSON.stringify(previewSaveIsolation,null,2)+'\n');
+}
 // Capture only the actual production canvas. CDP's compositor screenshot can
 // stall software WebGL even when synchronous canvas readback remains healthy.
 async function saveCanvasPng(filename){
@@ -31,7 +76,12 @@ async function saveCanvasPng(filename){
 if(record){encoder=spawn('ffmpeg',['-y','-hide_banner','-loglevel','error','-f','image2pipe','-vcodec','mjpeg','-framerate',String(fps),'-i','pipe:0','-an','-c:v','libx264','-preset','veryfast','-crf','25','-pix_fmt','yuv420p','-movflags','+faststart',movie],{stdio:['pipe','ignore','pipe']});encoder.stderr.on('data',b=>process.stderr.write(b));encoderExit=once(encoder,'exit');}
 try{
  page=await browser.newPage();page.setDefaultTimeout(180000);await page.setViewport({width,height,deviceScaleFactor:1});page.on('pageerror',e=>errors.push(String(e)));
- await page.evaluateOnNewDocument(graphicsPreset=>localStorage.setItem('brainrot-foundation-v1:brainrot-portal.preferences.v24',JSON.stringify({quality:graphicsPreset,muted:true,tutorial:true})),graphicsPreset);
+ if(preview)await page.evaluateOnNewDocument(({graphicsPreset,prefixes,key,preferenceKey})=>{
+  for(const prefix of prefixes)if(localStorage.getItem(prefix+preferenceKey)===null)localStorage.setItem(prefix+preferenceKey,JSON.stringify({quality:'balanced',volume:.65,muted:true,tutorial:true,completed:[0,1,42],hints:{42:2},resumeLevel:42,campaignRevision:'creative-campaign-v48',roomRevisions:{16:'cable-supported-architecture-v1',32:'siphon-observatory-v1',50:'echo-horizon-v1'}}));
+  window.__TOWER41_PREVIEW_INITIAL_LEGACY_SAVES__=Object.fromEntries(Object.keys(localStorage).filter(key=>prefixes.some(prefix=>key.startsWith(prefix))).sort().map(key=>[key,localStorage.getItem(key)]));
+  if(localStorage.getItem(key)===null)localStorage.setItem(key,JSON.stringify({quality:graphicsPreset,muted:true,tutorial:true,completed:[],hints:{},resumeLevel:40}));
+ },{graphicsPreset,prefixes:preservedPrefixes,key:previewKey,preferenceKey});
+ else await page.evaluateOnNewDocument(graphicsPreset=>localStorage.setItem('brainrot-foundation-v1:brainrot-portal.preferences.v24',JSON.stringify({quality:graphicsPreset,muted:true,tutorial:true})),graphicsPreset);
  await page.exposeFunction('__SINGULARITY_WRITE__',async batch=>{
   for(const f of batch){assert.equal(f.index,count);assert.equal(terminalCaptured,false,'No frame may follow the final won sample');
    if(f.terminal){assert.equal(f.state.state,'won');assert.ok(f.visualFrame>lastVisualFrame&&f.visualFrame<count*stride&&count*stride-f.visualFrame<stride,'Final won sample must lie within the next capture interval');terminalCaptured=true;}
@@ -44,10 +94,12 @@ try{
   if(count%120===0)console.log('CAPTURE',count/fps,'seconds;',last.solved.length,'machines');
  });
  const url=new URL(process.env.PAGE_URL||'http://127.0.0.1:4173/');url.searchParams.set('level','41');url.searchParams.set('edition','foundation');url.searchParams.set('debug','1');
+ if(preview){url.searchParams.set('tower41preview','1');url.searchParams.delete('tower41ratchet');url.searchParams.delete('pilot');assert.equal(route,true,'Preview isolation proof requires the real whole castle route');const playerURL=new URL(url);playerURL.searchParams.delete('debug');playerURL.searchParams.delete('smoke');previewSaveIsolation.playerURL=playerURL.href;previewSaveIsolation.reviewURL=url.href;}
  await page.goto(url.href,{waitUntil:'domcontentloaded'});await waitForStartMenu(page);
  const info=await page.evaluate(async()=>{const r=await fetch('build-info.json');if(!r.ok)throw Error('Missing build identity');return r.json();});
  if(process.env.BUILD_COMMIT)assert.equal(info.commit,process.env.BUILD_COMMIT);const tower=assertUpgradeInfo(info,SINGULARITY_ROOMS);
- await playFromStartMenu(page,false,graphicsPreset);
+ if(preview){preservedSaves=await page.evaluate(()=>window.__TOWER41_PREVIEW_INITIAL_LEGACY_SAVES__);assert.equal(Object.keys(preservedSaves).length>=preservedPrefixes.length,true);previewSaveIsolation.legacySnapshot=preservedSaves;await previewCheckpoint('after-load');await previewSettingsAndPause();}
+ else await playFromStartMenu(page,false,graphicsPreset);
  await page.evaluate(()=>window.__NESI_DEMO_GAME__.renderer.setAnimationLoop(null));
  const nativeCanvas=await page.evaluate(()=>{const c=window.__NESI_DEMO_GAME__.renderer.domElement;return {width:c.width,height:c.height};});assert.deepEqual(nativeCanvas,{width,height},'Capture dimensions must match the actual production canvas');
  const renderBenchmark=await page.evaluate(({width,height})=>{const g=window.__NESI_DEMO_GAME__,snapshot=()=>[g.elapsed,...g.playerPosition.toArray(),...g.cargo.position.toArray(),g.firstLevel.completedStages],before=snapshot();const c=document.createElement('canvas');c.width=width;c.height=height;const ctx=c.getContext('2d',{alpha:false});const render=()=>{g.render();ctx.drawImage(g.renderer.domElement,0,0);c.toDataURL('image/jpeg',.83);};const warmupMs=[],times=[];for(let i=0;i<5;i++){const t=performance.now();render();(i<2?warmupMs:times).push(performance.now()-t);}if(JSON.stringify(before)!==JSON.stringify(snapshot()))throw Error('Render inspection advanced gameplay');return {warmupMs,timesMs:times,meanMs:times.reduce((s,x)=>s+x,0)/times.length,width,height,drawCalls:g.renderer.info.render.calls,triangles:g.renderer.info.render.triangles,method:'Software-renderer/readback cost at frozen ordinary start after two warmup frames; not hardware FPS.'};},{width,height});
@@ -86,9 +138,10 @@ try{
    const metadata=JSON.parse(execFileSync('ffprobe',['-v','quiet','-show_streams','-show_format','-of','json',movie],{encoding:'utf8'}));const video=metadata.streams.find(s=>s.codec_type==='video');assert.equal(video.codec_name,'h264');assert.equal(video.width,width);assert.equal(video.height,height);assert.equal(Number(video.nb_frames),count);assert.equal(video.avg_frame_rate,`${fps}/1`);assert.ok(Math.abs(Number(metadata.format.duration)-count/fps)<.12);
    proof.video={filename:path.basename(movie),sha256:createHash('sha256').update(fs.readFileSync(movie)).digest('hex'),frames:count,fps,stride,durationSeconds:count/fps,durationToleranceSeconds,simulationSeconds:report.result.seconds,terminalSample:terminalCaptured,lastVisualFrame,width,height,nativeCanvas,first,last};
   }
+  if(preview){await previewVictoryReplayReload();proof.previewSaveIsolation=previewSaveIsolation;}
   assertUpgradeEvidence(proof,info,{record});
   fs.writeFileSync(path.join(out,'evidence.json'),JSON.stringify(proof,null,2));console.log('VERIFIED',info.commit,report.result.seconds,report.result.activeSeconds,count);
  }
  assert.deepEqual(errors,[]);
-}catch(error){console.error(error);const detail=page?await page.evaluate(()=>window.__SINGULARITY_FAILURE__||null).catch(()=>null):null;fs.writeFileSync(path.join(out,'failure.json'),JSON.stringify({error:String(error),detail,capture:{width,height,fps,stride},errors},null,2));if(page)await saveCanvasPng('failure.png').catch(()=>{});throw error;}
+}catch(error){console.error(error);const detail=page?await page.evaluate(()=>window.__SINGULARITY_FAILURE__||null).catch(()=>null):null;fs.writeFileSync(path.join(out,'failure.json'),JSON.stringify({error:String(error),detail,capture:{width,height,fps,stride},errors,...(preview?{previewSaveIsolation}:{})},null,2));if(page)await saveCanvasPng('failure.png').catch(()=>{});throw error;}
 finally{if(encoder){encoder.stdin.end();await encoderExit.catch(()=>{});}await browser.close();}

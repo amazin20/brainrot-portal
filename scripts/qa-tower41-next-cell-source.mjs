@@ -9,10 +9,11 @@ import {execFileSync} from 'node:child_process';
 import {fileURLToPath} from 'node:url';
 import {buildSourceInputs,walkFiles} from './lib/release-manifest.mjs';
 import {assertUpgradeEvidence} from './lib/singularity-upgrade-proof.mjs';
-import {checkBuild,sourceIdentity,assertObservedRoute} from './qa-tower41-ratchet-browser.mjs';
+import {checkBuild,sourceIdentity,assertObservedRoute,oldSavePrefixes,qualificationKey} from './qa-tower41-ratchet-browser.mjs';
 import {CAMPAIGN_ASSET_IDS} from '../src/game/labAssets.js';
+import {TOWER41_PREVIEW_STORAGE_PREFIX} from '../src/game/LabTower41Preview.js';
 
-export const PINS=Object.freeze({branch:'upgrade/tower41-next-cell-20261012',main:'569918af19c4dafdc0f9450e668733c474e8ff56',acceptedSource:'0e257837ca157d59d29c2e892e9a81e4f21fc5a1',canonicalSource:'8d2c01eacd86fe9235a35e7ec5f624ba62c3b29e',repository:'amazin20/brainrot-portal',publicBase:'https://amazin20.github.io/brainrot-portal/'});
+export const PINS=Object.freeze({branch:'upgrade/tower41-preview-storage-20261012',sourceParent:'57cf8a1363ac9ee01d1552498469723f6619b3c6',main:'569918af19c4dafdc0f9450e668733c474e8ff56',acceptedSource:'0e257837ca157d59d29c2e892e9a81e4f21fc5a1',canonicalSource:'8d2c01eacd86fe9235a35e7ec5f624ba62c3b29e',repository:'amazin20/brainrot-portal',publicBase:'https://amazin20.github.io/brainrot-portal/'});
 const sha256=bytes=>createHash('sha256').update(bytes).digest('hex');
 const read=file=>JSON.parse(fs.readFileSync(file,'utf8'));
 const write=(file,value)=>{fs.mkdirSync(path.dirname(file),{recursive:true});fs.writeFileSync(file,JSON.stringify(value,null,2)+'\n');};
@@ -20,6 +21,7 @@ const git=(...args)=>execFileSync('git',args,{encoding:'utf8'}).trim();
 const sourceFile='qa/tower41-next-cell-build/source.json',packageFile='qa/tower41-next-cell-build/package.json';
 function snapshot(){
  const identity=sourceIdentity();assert.equal(git('rev-parse','HEAD'),identity.sourceCommit,'Exact current checkout required');
+ assert.equal(git('rev-parse','HEAD^'),PINS.sourceParent,'The preview source must directly descend from the frozen physical-cell source');
  assert.equal(git('status','--porcelain','--untracked-files=no'),'','Committed source must remain unchanged');
  if(process.env.GITHUB_REF)assert.equal(process.env.GITHUB_REF,'refs/heads/'+PINS.branch,'Only the isolated review branch is permitted');
  const inputs=buildSourceInputs(),verifiers=['.github/workflows/tower41-next-cell-review.yml','scripts/qa-tower41-next-cell-source.mjs','scripts/qa-tower41-ratchet-browser.mjs','scripts/record-tower41-ratchet-walkthrough.mjs','scripts/singularity-browser.mjs','scripts/lib/singularity-upgrade-proof.mjs','scripts/test-active-game.mjs'].map(file=>({file,sha256:sha256(fs.readFileSync(file))}));
@@ -85,8 +87,26 @@ function contact(){
  write('qa/tower41-next-cell-contact/binding.json',{pass:true,...sourceIdentity(),packageFilesSha256:frozen.nativePackage.packageFilesSha256,nativeReportSha256:sha256(fs.readFileSync('qa/tower41-next-cell-contact/report.json')),recordingReportSha256:sha256(fs.readFileSync('qa/tower41-next-cell-contact-movie/tower41-ratchet-qualification.json')),videoSha256:movie.video.sha256,allBoundedNativeSamplesInLens:true,fullCameraAccepted:false,fullTowerAccepted:false,publicationAccepted:false});
  console.log('TOWER41_NEXT_CONTACT PASS',frozen.sourceCommit);
 }
+export function assertPreviewSaveIsolation(isolation){
+ const key='brainrot-portal.preferences.v24',prefixes=[...oldSavePrefixes,qualificationKey.slice(0,-key.length)],phases=['after-load','after-settings','after-play','after-pause','after-resume','after-win','after-replay','after-reload'];
+ assert.equal(isolation?.pass,true,'The current whole-castle proof must include successful preview save isolation');assert.equal(isolation.namespace,TOWER41_PREVIEW_STORAGE_PREFIX);assert.equal(isolation.ownKey,TOWER41_PREVIEW_STORAGE_PREFIX+key);assert.deepEqual(isolation.legacyPrefixes,prefixes);
+ const baseline=isolation.legacySnapshot;assert.ok(baseline&&typeof baseline==='object');for(const prefix of prefixes)assert.equal(typeof baseline[prefix+key],'string');
+ assert.ok(Object.keys(baseline).every(name=>prefixes.some(prefix=>name.startsWith(prefix))));const baselineHash=sha256(JSON.stringify(baseline));
+ assert.deepEqual(isolation.phases.map(observed=>observed.phase),phases,'Every load/settings/control/completion/replay/reload transition must preserve legacy bytes');
+ const states=['ready','ready','playing','paused','playing','won','playing','ready'];
+ for(const [i,observed]of isolation.phases.entries()){
+  assert.equal(observed.state,states[i]);assert.equal(observed.level,41);assert.equal(observed.preview,true);assert.equal(observed.ratchetCell,false);assert.deepEqual(observed.startChoices,[40]);assert.deepEqual(observed.settingsChoices,[40]);
+  assert.equal(observed.oldBytesUnchanged,true);assert.equal(observed.legacySnapshotSha256,baselineHash);assert.equal(observed.namespaceUsed,true);assert.match(observed.ownPreferencesSha256,/^[a-f0-9]{64}$/);assert.equal(observed.ownResumeLevel,40);
+  assert.deepEqual(observed.ownCompleted,i<5?[]:[40]);
+ }
+ const controls=isolation.controls;assert.equal(controls.settings.control,'native-menu-quality-select');assert.notEqual(controls.settings.changedTo,controls.settings.restoredTo);assert.equal(isolation.phases[1].ownQuality,controls.settings.restoredTo);
+ assert.equal(controls.pauseResume.pass,true);assert.equal(controls.pauseResume.pauseControl,'native-escape-or-hud');assert.equal(controls.pauseResume.resumeControl,'focused-native-enter');assert.equal(typeof controls.pauseResume.pointerLockExitFallback,'boolean');assert.equal(controls.pauseResume.pausedState,'paused');assert.equal(controls.pauseResume.resumedState,'playing');
+ assert.equal(controls.replay.pass,true);assert.equal(controls.replay.button,'#play-again-button');assert.match(controls.replay.label,/Пройти ещё раз/);assert.equal(controls.replay.level,41);assert.equal(controls.replay.state,'playing');assert.deepEqual(controls.replay.solved,[]);assert.equal(controls.replay.atSpawn,true);
+ assert.deepEqual(controls.reload,{pass:true,state:'ready',level:41,completed:[40],resumeLevel:40});return isolation;
+}
 function castle(){
  const frozen=verifyPackage(),info=read('dist/build-info.json'),proof=read('qa/tower41-next-cell-castle/evidence.json');assertUpgradeEvidence(proof,info,{record:true});
+ const isolation=assertPreviewSaveIsolation(proof.previewSaveIsolation);
  const flywheel=proof.observed.events.find(event=>event.id==='flywheel')?.proof;
  assert.ok(flywheel,'The completed ordinary route must include the real flywheel proof');
  assert.equal(flywheel.originalCargo,true);assert.equal(flywheel.physicalAngularMomentum,true);
@@ -100,7 +120,7 @@ function castle(){
  assert.equal(proof.sourceCommit,frozen.sourceCommit);assert.equal(proof.video.fps,4);assert.equal(proof.video.width,640);assert.equal(proof.video.height,360);assert.deepEqual(proof.capture.nativeCanvas,{width:640,height:360});
  const movie=path.join('qa/tower41-next-cell-castle',proof.video.filename),bytes=fs.readFileSync(movie);assert.equal(sha256(bytes),proof.video.sha256);
  execFileSync('ffmpeg',['-hide_banner','-loglevel','error','-xerror','-i',movie,'-f','null','-'],{timeout:300000,stdio:'inherit'});
- write('qa/tower41-next-cell-castle/binding.json',{pass:true,...sourceIdentity(),packageFilesSha256:frozen.nativePackage.packageFilesSha256,buildInfoSha256:frozen.buildInfoSha256,evidenceSha256:sha256(fs.readFileSync('qa/tower41-next-cell-castle/evidence.json')),mechanisms:11,sameCargo:true,resets:0,video:{file:proof.video.filename,bytes:bytes.length,sha256:proof.video.sha256,fullMP4Decode:true},scope:'Complete current ordinary eleven-mechanism castle; not the requested replacement 500-stage tower.',fullTowerAccepted:false,publicationAccepted:false});console.log('TOWER41_NEXT_CASTLE PASS',frozen.sourceCommit,proof.result.seconds);
+ write('qa/tower41-next-cell-castle/binding.json',{pass:true,...sourceIdentity(),packageFilesSha256:frozen.nativePackage.packageFilesSha256,buildInfoSha256:frozen.buildInfoSha256,evidenceSha256:sha256(fs.readFileSync('qa/tower41-next-cell-castle/evidence.json')),mechanisms:11,sameCargo:true,resets:0,previewSaveIsolation:{pass:true,namespace:isolation.namespace,oldBytesUnchanged:true,phases:isolation.phases.length,replayLevel:41},video:{file:proof.video.filename,bytes:bytes.length,sha256:proof.video.sha256,fullMP4Decode:true},scope:'Complete current ordinary eleven-mechanism castle with separate preview saves; not the requested replacement 500-stage tower.',fullTowerAccepted:false,publicationAccepted:false});console.log('TOWER41_NEXT_CASTLE PASS',frozen.sourceCommit,proof.result.seconds);
 }
 function status(name,directory,...extraDirectories){
  const state=process.env.REVIEW_JOB_STATUS||'unknown',logs=[directory,...extraDirectories].flatMap(folder=>walkFiles(folder)).filter(file=>file.endsWith('.log')).map(file=>({file:path.relative(directory,file),bytes:fs.statSync(file).size,sha256:sha256(fs.readFileSync(file))}));

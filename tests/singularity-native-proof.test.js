@@ -1,9 +1,11 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
+import {createHash} from 'node:crypto';
 import {SINGULARITY_ROOMS} from '../src/game/LabSingularityLayout.js';
 import {assertUpgradeInfo,assertUpgradeEvidence} from '../scripts/lib/singularity-upgrade-proof.mjs';
-import {parseTap,verifyRuntimeModels} from '../scripts/qa-tower41-next-cell-source.mjs';
+import {parseTap,verifyRuntimeModels,assertPreviewSaveIsolation} from '../scripts/qa-tower41-next-cell-source.mjs';
+import {oldSavePrefixes,qualificationKey} from '../scripts/qa-tower41-ratchet-browser.mjs';
 
 const rooms=SINGULARITY_ROOMS.map(({id,name,rule,requires})=>({id,name,rule,requires:[...requires]}));
 function current(){return {commit:process.env.BUILD_COMMIT||'a'.repeat(40),version:'v54-unified-campaign',artVersion:'v54-unified-campaign',levels:51,edition:'foundation',features:{tower:{level:41,stages:11,checkpoints:false},foundation:{rooms:Array.from({length:51},(_,i)=>i+1)}}};}
@@ -36,4 +38,11 @@ test('captured compact production manifest retains the fourteen original runtime
  assert.throws(()=>verifyRuntimeModels({...input,readProduction:filename=>{const bytes=readOriginal(filename);if(filename==='model-02-cargo.glb')bytes[bytes.length-1]^=1;return bytes;}}),/Original runtime model bytes/);
  const replaced=JSON.parse(productionBytes);replaced.models.find(m=>m.id===2).outputSHA256='f'.repeat(64);
  assert.throws(()=>verifyRuntimeModels({...input,productionBytes:Buffer.from(JSON.stringify(replaced))}),/replaced an original model record/);
+});
+test('preview acceptance rejects old namespace writes, room42 replay, missing transitions and qualification mechanics',()=>{
+ const key='brainrot-portal.preferences.v24',prefixes=[...oldSavePrefixes,qualificationKey.slice(0,-key.length)],baseline=Object.fromEntries(prefixes.map(prefix=>[prefix+key,'{"completed":[0,42],"resumeLevel":42}'])),baselineHash=createHash('sha256').update(JSON.stringify(baseline)).digest('hex');
+ const phases=['after-load','after-settings','after-play','after-pause','after-resume','after-win','after-replay','after-reload'],states=['ready','ready','playing','paused','playing','won','playing','ready'];
+ const proof={pass:true,namespace:'brainrot-tower41-native-v1:',ownKey:'brainrot-tower41-native-v1:'+key,legacyPrefixes:prefixes,legacySnapshot:baseline,phases:phases.map((phase,i)=>({phase,state:states[i],level:41,preview:true,ratchetCell:false,startChoices:[40],settingsChoices:[40],oldBytesUnchanged:true,legacySnapshotSha256:baselineHash,ownPreferencesSha256:'a'.repeat(64),namespaceUsed:true,ownResumeLevel:40,ownCompleted:i<5?[]:[40],ownQuality:'low'})),controls:{settings:{control:'native-menu-quality-select',changedTo:'balanced',restoredTo:'low'},pauseResume:{pass:true,pauseControl:'native-escape-or-hud',resumeControl:'focused-native-enter',pointerLockExitFallback:false,pausedState:'paused',resumedState:'playing'},replay:{pass:true,button:'#play-again-button',label:'Пройти ещё раз',level:41,state:'playing',solved:[],atSpawn:true},reload:{pass:true,state:'ready',level:41,completed:[40],resumeLevel:40}}};
+ assert.equal(assertPreviewSaveIsolation(proof).pass,true);
+ for(const mutate of [p=>p.namespace='brainrot-foundation-v1:',p=>p.phases[1].oldBytesUnchanged=false,p=>p.phases[3].legacySnapshotSha256='f'.repeat(64),p=>p.controls.replay.level=42,p=>p.controls.replay.label='Следующая комната',p=>p.phases.pop(),p=>p.phases[0].ratchetCell=true,p=>p.phases[5].ownCompleted=[42],p=>p.phases[2].namespaceUsed=false,p=>p.controls.reload.resumeLevel=41,p=>p.controls.pauseResume.resumedState='paused']){const bad=structuredClone(proof);mutate(bad);assert.throws(()=>assertPreviewSaveIsolation(bad));}
 });
