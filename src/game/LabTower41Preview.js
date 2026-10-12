@@ -1,12 +1,13 @@
 import {readFoundationEdition} from './LabFoundationEdition.js';
 import {LabPreferences,sanitizePreferences} from './LabPreferences.js';
 
-export const TOWER41_PREVIEW_STORAGE_PREFIX='brainrot-tower41-native-v1:';
+export const TOWER41_PREVIEW_STORAGE_PREFIX='brainrot-tower41-native-v2:';
+export const TOWER41_PREVIEW_LEGACY_STORAGE_PREFIXES=Object.freeze(['brainrot-tower41-native-v1:']);
 export const TOWER41_PREVIEW_LEVEL_INDEX=40;
 export const TOWER41_PREVIEW_INDICES=Object.freeze([TOWER41_PREVIEW_LEVEL_INDEX]);
-const NATIVE_ENTRY_PATHS=new Set(['/tower41-native','/tower41-native/','/tower41-native/index.html','/brainrot-portal/tower41-native','/brainrot-portal/tower41-native/','/brainrot-portal/tower41-native/index.html']);
+const NATIVE_ENTRY_PATHS=new Set(['/tower41-native-v2','/tower41-native-v2/','/tower41-native-v2/index.html','/brainrot-portal/tower41-native-v2','/brainrot-portal/tower41-native-v2/','/brainrot-portal/tower41-native-v2/index.html']);
 const PREFERENCE_KEY='brainrot-portal.preferences.v24',LEGACY_KEY='nesi.preferences.v8';
-const PREVIEW_REVISION='tower41-native-v1';
+const PREVIEW_REVISION='tower41-native-v2';
 
 export function isTower41NativePreviewPath(pathname){return NATIVE_ENTRY_PATHS.has(pathname);}
 

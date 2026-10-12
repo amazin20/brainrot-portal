@@ -1,7 +1,7 @@
 name: Review next room41 physical cell and the whole current castle
 'on':
   push:
-    branches: [upgrade/tower41-preview-nav-20261012]
+    branches: [upgrade/tower41-pendulum-20261012]
   workflow_dispatch:
 # Deliberately read-only: no publisher, deployment environment or Pages writes.
 permissions: {contents: read}
@@ -105,7 +105,7 @@ jobs:
     name: native-contact
     needs: build
     runs-on: ubuntu-latest
-    timeout-minutes: 80
+    timeout-minutes: 100
     steps:
       - uses: actions/checkout@v4
         with: {ref: '${{ github.sha }}', fetch-depth: 0, persist-credentials: false}
@@ -177,7 +177,7 @@ jobs:
     name: native-castle
     needs: build
     runs-on: ubuntu-latest
-    timeout-minutes: 80
+    timeout-minutes: 100
     steps:
       - uses: actions/checkout@v4
         with: {ref: '${{ github.sha }}', fetch-depth: 0, persist-credentials: false}
@@ -207,7 +207,7 @@ jobs:
           } 2>&1 | tee qa/tower41-next-cell-castle/install.log
       - name: Record the whole ordinary eleven-mechanism castle with the same original cargo and no resets
         env:
-          PAGE_URL: http://127.0.0.1:4173/brainrot-portal/tower41-native/
+          PAGE_URL: http://127.0.0.1:4173/brainrot-portal/tower41-native-v2/
           TOWER41_PREVIEW: '1'
           ROUTE: '1'
           RECORD: '1'
@@ -218,7 +218,7 @@ jobs:
         run: |
           set -o pipefail
           mkdir -p qa/native-preview-site/brainrot-portal
-          cp -a dist qa/native-preview-site/brainrot-portal/tower41-native
+          cp -a dist qa/native-preview-site/brainrot-portal/tower41-native-v2
           node --input-type=module <<'JS'
           import assert from 'node:assert/strict';
           import fs from 'node:fs';
@@ -226,7 +226,7 @@ jobs:
           import {createHash} from 'node:crypto';
           import {walkFiles} from './scripts/lib/release-manifest.mjs';
           const inventory=root=>walkFiles(root).map(file=>({path:path.relative(root,file),bytes:fs.statSync(file).size,sha256:createHash('sha256').update(fs.readFileSync(file)).digest('hex')}));
-          const source=inventory('dist'),served=inventory('qa/native-preview-site/brainrot-portal/tower41-native');
+          const source=inventory('dist'),served=inventory('qa/native-preview-site/brainrot-portal/tower41-native-v2');
           assert.deepEqual(served,source,'The namespace server must serve every exact reviewed production byte');
           fs.writeFileSync(process.env.OUT_DIR+'/served-package.json',JSON.stringify({pass:true,sourceCommit:process.env.BUILD_COMMIT,sourceReview:{runId:Number(process.env.SOURCE_REVIEW_RUN_ID),runAttempt:Number(process.env.SOURCE_REVIEW_RUN_ATTEMPT)},files:served,scope:'An exact copy of the one reviewed production package served under the standalone native namespace.'},null,2)+'\n');
           JS
@@ -238,11 +238,11 @@ jobs:
           import fs from 'node:fs';
           const expected=JSON.parse(fs.readFileSync('dist/build-info.json','utf8'));
           for(let attempt=0;attempt<80;attempt++){
-            try{const response=await fetch('http://127.0.0.1:4173/brainrot-portal/tower41-native/build-info.json',{cache:'no-store'});assert.ok(response.ok);assert.deepEqual(await response.json(),expected);break;}
+            try{const response=await fetch('http://127.0.0.1:4173/brainrot-portal/tower41-native-v2/build-info.json',{cache:'no-store'});assert.ok(response.ok);assert.deepEqual(await response.json(),expected);break;}
             catch(error){if(attempt===79)throw error;await new Promise(resolve=>setTimeout(resolve,250));}
           }
           JS
-          timeout --signal=TERM --kill-after=10s 4200s node scripts/singularity-browser.mjs 2>&1 | tee "$OUT_DIR/recording.log"
+          timeout --signal=TERM --kill-after=10s 4800s node scripts/singularity-browser.mjs 2>&1 | tee "$OUT_DIR/recording.log"
           node scripts/qa-tower41-next-cell-source.mjs castle
       - name: Emit compact actual native castle status
         if: always()

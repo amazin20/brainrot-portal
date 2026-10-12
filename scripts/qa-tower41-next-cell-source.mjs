@@ -8,12 +8,13 @@ import {createHash} from 'node:crypto';
 import {execFileSync} from 'node:child_process';
 import {fileURLToPath} from 'node:url';
 import {buildSourceInputs,walkFiles} from './lib/release-manifest.mjs';
+import {assertPendulumPhysicalProof} from './lib/tower41-pendulum-proof.mjs';
 import {assertUpgradeEvidence} from './lib/singularity-upgrade-proof.mjs';
 import {checkBuild,sourceIdentity,assertObservedRoute,oldSavePrefixes,qualificationKey} from './qa-tower41-ratchet-browser.mjs';
 import {CAMPAIGN_ASSET_IDS} from '../src/game/labAssets.js';
-import {TOWER41_PREVIEW_STORAGE_PREFIX,isTower41NativePreviewPath} from '../src/game/LabTower41Preview.js';
+import {TOWER41_PREVIEW_STORAGE_PREFIX,TOWER41_PREVIEW_LEGACY_STORAGE_PREFIXES,isTower41NativePreviewPath} from '../src/game/LabTower41Preview.js';
 
-export const PINS=Object.freeze({branch:'upgrade/tower41-preview-nav-20261012',sourceParent:'9f00a4ee1c99d94f6e922e763fbd40d2f3dd79b7',main:'569918af19c4dafdc0f9450e668733c474e8ff56',acceptedSource:'0e257837ca157d59d29c2e892e9a81e4f21fc5a1',canonicalSource:'8d2c01eacd86fe9235a35e7ec5f624ba62c3b29e',repository:'amazin20/brainrot-portal',publicBase:'https://amazin20.github.io/brainrot-portal/'});
+export const PINS=Object.freeze({branch:'upgrade/tower41-pendulum-20261012',sourceParent:'58a71ddfc9bf704bef4c97fe13d16401c5a5f9f2',main:'300e898c169a281bd3e0054e2c4b39bb055649e0',previousPreviewSource:'58a71ddfc9bf704bef4c97fe13d16401c5a5f9f2',acceptedSource:'0e257837ca157d59d29c2e892e9a81e4f21fc5a1',canonicalSource:'8d2c01eacd86fe9235a35e7ec5f624ba62c3b29e',repository:'amazin20/brainrot-portal',publicBase:'https://amazin20.github.io/brainrot-portal/'});
 const sha256=bytes=>createHash('sha256').update(bytes).digest('hex');
 const read=file=>JSON.parse(fs.readFileSync(file,'utf8'));
 const write=(file,value)=>{fs.mkdirSync(path.dirname(file),{recursive:true});fs.writeFileSync(file,JSON.stringify(value,null,2)+'\n');};
@@ -24,7 +25,7 @@ function snapshot(){
  assert.equal(git('rev-parse','HEAD^'),PINS.sourceParent,'The preview source must directly descend from the frozen physical-cell source');
  assert.equal(git('status','--porcelain','--untracked-files=no'),'','Committed source must remain unchanged');
  if(process.env.GITHUB_REF)assert.equal(process.env.GITHUB_REF,'refs/heads/'+PINS.branch,'Only the isolated review branch is permitted');
- const inputs=buildSourceInputs(),verifiers=['.github/workflows/tower41-next-cell-review.yml','scripts/qa-tower41-next-cell-source.mjs','scripts/qa-tower41-ratchet-browser.mjs','scripts/record-tower41-ratchet-walkthrough.mjs','scripts/singularity-browser.mjs','scripts/singularity-adversarial-audit.mjs','scripts/lib/singularity-upgrade-proof.mjs','scripts/test-active-game.mjs'].map(file=>({file,sha256:sha256(fs.readFileSync(file))}));
+ const inputs=buildSourceInputs(),verifiers=['.github/workflows/tower41-next-cell-review.yml','scripts/qa-tower41-next-cell-source.mjs','scripts/qa-tower41-ratchet-browser.mjs','scripts/record-tower41-ratchet-walkthrough.mjs','scripts/singularity-browser.mjs','scripts/singularity-adversarial-audit.mjs','scripts/lib/singularity-upgrade-proof.mjs','scripts/lib/tower41-pendulum-proof.mjs','scripts/test-active-game.mjs'].map(file=>({file,sha256:sha256(fs.readFileSync(file))}));
  return {...identity,tree:git('rev-parse','HEAD^{tree}'),sourceInputsSha256:sha256(JSON.stringify(inputs)),sourceInputFiles:inputs.length,verifiers};
 }
 function verifySource(){const actual=snapshot(),frozen=read(sourceFile);for(const key of ['sourceCommit','sourceReview','tree','sourceInputsSha256','sourceInputFiles','verifiers'])assert.deepEqual(actual[key],frozen[key],'Frozen source mismatch: '+key);return frozen;}
@@ -36,13 +37,13 @@ async function get(url,{github=false}={}){
 }
 async function guard(){
  const identity=sourceIdentity(),query='?tower41review='+identity.sourceReview.runId+'-'+identity.sourceReview.runAttempt+'-'+Date.now();
- const [main,head,accepted,canonical]=await Promise.all([
+ const [main,head,accepted,canonical,previousPreview]=await Promise.all([
   get('https://api.github.com/repos/'+PINS.repository+'/git/ref/heads/main',{github:true}),
   get('https://api.github.com/repos/'+PINS.repository+'/git/ref/heads/'+PINS.branch,{github:true}),
-  get(PINS.publicBase+'puzzle-progression-finale/build-info.json'+query),get(PINS.publicBase+'build-info.json'+query)]);
+  get(PINS.publicBase+'puzzle-progression-finale/build-info.json'+query),get(PINS.publicBase+'build-info.json'+query),get(PINS.publicBase+'tower41-native/build-info.json'+query)]);
  assert.equal(main.data.object.sha,PINS.main,'Main changed during this isolated review');assert.equal(head.data.object.sha,identity.sourceCommit,'The isolated review branch advanced');
- assert.equal(accepted.data.commit,PINS.acceptedSource,'Accepted isolated namespace changed');assert.equal(canonical.data.commit,PINS.canonicalSource,'Accepted canonical campaign changed');
- return {pass:true,...identity,main:PINS.main,acceptedSource:PINS.acceptedSource,canonicalSource:PINS.canonicalSource,acceptedMetadata:{bytes:accepted.bytes,sha256:accepted.sha256},canonicalMetadata:{bytes:canonical.bytes,sha256:canonical.sha256},checkedAt:new Date().toISOString(),scope:'Read-only main ref and the two explicitly pinned public metadata files; no whole-site byte claim.',publicationAccepted:false};
+ assert.equal(accepted.data.commit,PINS.acceptedSource,'Accepted isolated namespace changed');assert.equal(canonical.data.commit,PINS.canonicalSource,'Accepted canonical campaign changed');assert.equal(previousPreview.data.commit,PINS.previousPreviewSource,'The accepted previous native preview changed');
+ return {pass:true,...identity,main:PINS.main,acceptedSource:PINS.acceptedSource,canonicalSource:PINS.canonicalSource,acceptedMetadata:{bytes:accepted.bytes,sha256:accepted.sha256},canonicalMetadata:{bytes:canonical.bytes,sha256:canonical.sha256},previousPreviewSource:PINS.previousPreviewSource,previousPreviewMetadata:{bytes:previousPreview.bytes,sha256:previousPreview.sha256},checkedAt:new Date().toISOString(),scope:'Read-only main ref and the three explicitly pinned public metadata files; no whole-site byte claim.',publicationAccepted:false};
 }
 export function verifyRuntimeModels({sourceBytes,productionBytes,readOriginal,readProduction}){
  const source=JSON.parse(sourceBytes),production=JSON.parse(productionBytes);
@@ -88,7 +89,7 @@ function contact(){
  console.log('TOWER41_NEXT_CONTACT PASS',frozen.sourceCommit);
 }
 export function assertPreviewSaveIsolation(isolation){
- const key='brainrot-portal.preferences.v24',prefixes=[...oldSavePrefixes,qualificationKey.slice(0,-key.length)],phases=['after-load','after-settings','after-play','after-pause','after-resume','after-win','after-replay','after-reload'];
+ const key='brainrot-portal.preferences.v24',prefixes=[...oldSavePrefixes,qualificationKey.slice(0,-key.length),...TOWER41_PREVIEW_LEGACY_STORAGE_PREFIXES],phases=['after-load','after-settings','after-play','after-pause','after-resume','after-win','after-replay','after-reload'];
  assert.equal(isolation?.pass,true,'The current whole-castle proof must include successful preview save isolation');assert.equal(isolation.namespace,TOWER41_PREVIEW_STORAGE_PREFIX);assert.equal(isolation.ownKey,TOWER41_PREVIEW_STORAGE_PREFIX+key);assert.deepEqual(isolation.legacyPrefixes,prefixes);
  const baseline=isolation.legacySnapshot;assert.ok(baseline&&typeof baseline==='object');for(const prefix of prefixes)assert.equal(typeof baseline[prefix+key],'string');
  assert.ok(Object.keys(baseline).every(name=>prefixes.some(prefix=>name.startsWith(prefix))));const baselineHash=sha256(JSON.stringify(baseline));
@@ -121,6 +122,7 @@ export function assertPreviewSaveIsolation(isolation){
 function castle(){
  const frozen=verifyPackage(),info=read('dist/build-info.json'),proof=read('qa/tower41-next-cell-castle/evidence.json');assertUpgradeEvidence(proof,info,{record:true});
  const isolation=assertPreviewSaveIsolation(proof.previewSaveIsolation);
+ const pendulum=assertPendulumPhysicalProof(proof.observed.events.find(event=>event.id==='pendulum')?.proof,proof.observed.bodyId);
  const flywheel=proof.observed.events.find(event=>event.id==='flywheel')?.proof;
  assert.ok(flywheel,'The completed ordinary route must include the real flywheel proof');
  assert.equal(flywheel.originalCargo,true);assert.equal(flywheel.physicalAngularMomentum,true);
@@ -134,7 +136,7 @@ function castle(){
  assert.equal(proof.sourceCommit,frozen.sourceCommit);assert.equal(proof.video.fps,4);assert.equal(proof.video.width,640);assert.equal(proof.video.height,360);assert.deepEqual(proof.capture.nativeCanvas,{width:640,height:360});
  const movie=path.join('qa/tower41-next-cell-castle',proof.video.filename),bytes=fs.readFileSync(movie);assert.equal(sha256(bytes),proof.video.sha256);
  execFileSync('ffmpeg',['-hide_banner','-loglevel','error','-xerror','-i',movie,'-f','null','-'],{timeout:300000,stdio:'inherit'});
- write('qa/tower41-next-cell-castle/binding.json',{pass:true,...sourceIdentity(),packageFilesSha256:frozen.nativePackage.packageFilesSha256,buildInfoSha256:frozen.buildInfoSha256,evidenceSha256:sha256(fs.readFileSync('qa/tower41-next-cell-castle/evidence.json')),mechanisms:11,sameCargo:true,resets:0,previewSaveIsolation:{pass:true,namespace:isolation.namespace,oldBytesUnchanged:true,phases:isolation.phases.length,replayLevel:41},video:{file:proof.video.filename,bytes:bytes.length,sha256:proof.video.sha256,fullMP4Decode:true},scope:'Complete current ordinary eleven-mechanism castle with separate preview saves; not the requested replacement 500-stage tower.',fullTowerAccepted:false,publicationAccepted:false});console.log('TOWER41_NEXT_CASTLE PASS',frozen.sourceCommit,proof.result.seconds);
+ write('qa/tower41-next-cell-castle/binding.json',{pass:true,...sourceIdentity(),packageFilesSha256:frozen.nativePackage.packageFilesSha256,buildInfoSha256:frozen.buildInfoSha256,evidenceSha256:sha256(fs.readFileSync('qa/tower41-next-cell-castle/evidence.json')),mechanisms:11,sameCargo:true,resets:0,pendulum,previewSaveIsolation:{pass:true,namespace:isolation.namespace,oldBytesUnchanged:true,phases:isolation.phases.length,replayLevel:41},video:{file:proof.video.filename,bytes:bytes.length,sha256:proof.video.sha256,fullMP4Decode:true},scope:'Complete current ordinary eleven-mechanism castle with separate preview saves; not the requested replacement 500-stage tower.',fullTowerAccepted:false,publicationAccepted:false});console.log('TOWER41_NEXT_CASTLE PASS',frozen.sourceCommit,proof.result.seconds);
 }
 function status(name,directory,...extraDirectories){
  const state=process.env.REVIEW_JOB_STATUS||'unknown',logs=[directory,...extraDirectories].flatMap(folder=>walkFiles(folder)).filter(file=>file.endsWith('.log')).map(file=>({file:path.relative(directory,file),bytes:fs.statSync(file).size,sha256:sha256(fs.readFileSync(file))}));

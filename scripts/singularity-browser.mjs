@@ -8,13 +8,13 @@ import puppeteer from 'puppeteer-core';
 import {SINGULARITY_ROOMS} from '../src/game/LabSingularityLayout.js';
 import {assertUpgradeInfo,assertUpgradeEvidence,captureFormat} from './lib/singularity-upgrade-proof.mjs';
 import {verifySingularityUI,waitForStartMenu,playFromStartMenu,activate} from './lib/singularity-ui-check.mjs';
-import {TOWER41_PREVIEW_STORAGE_PREFIX,isTower41NativePreviewPath} from '../src/game/LabTower41Preview.js';
+import {TOWER41_PREVIEW_STORAGE_PREFIX,TOWER41_PREVIEW_LEGACY_STORAGE_PREFIXES,isTower41NativePreviewPath} from '../src/game/LabTower41Preview.js';
 import {oldSavePrefixes,qualificationKey} from './qa-tower41-ratchet-browser.mjs';
 const out=path.resolve(process.env.OUT_DIR||'qa/singularity');fs.mkdirSync(out,{recursive:true});
 const record=process.env.RECORD==='1',route=record||process.env.ROUTE==='1';
 const preview=process.env.TOWER41_PREVIEW==='1',preferenceKey='brainrot-portal.preferences.v24';
 const previewKey=TOWER41_PREVIEW_STORAGE_PREFIX+preferenceKey;
-const preservedPrefixes=[...oldSavePrefixes,qualificationKey.slice(0,-preferenceKey.length)];
+const preservedPrefixes=[...oldSavePrefixes,qualificationKey.slice(0,-preferenceKey.length),...TOWER41_PREVIEW_LEGACY_STORAGE_PREFIXES];
 const previewSaveIsolation=preview?{pass:false,namespace:TOWER41_PREVIEW_STORAGE_PREFIX,ownKey:previewKey,legacyPrefixes:preservedPrefixes,legacySnapshot:null,phases:[],controls:{}}:null;
 let preservedSaves=null;
 const {fps,stride,width,height,durationToleranceSeconds}=captureFormat({fps:Number(process.env.CAPTURE_FPS||12),width:Number(process.env.CAPTURE_WIDTH||960),height:Number(process.env.CAPTURE_HEIGHT||540)});
@@ -99,7 +99,7 @@ if(record){encoder=spawn('ffmpeg',['-y','-hide_banner','-loglevel','error','-f',
 try{
  page=await browser.newPage();page.setDefaultTimeout(180000);await page.setViewport({width,height,deviceScaleFactor:1});page.on('pageerror',e=>errors.push(String(e)));
  if(preview)await page.evaluateOnNewDocument(({graphicsPreset,prefixes,key,preferenceKey})=>{
-  for(const prefix of prefixes)if(localStorage.getItem(prefix+preferenceKey)===null)localStorage.setItem(prefix+preferenceKey,JSON.stringify({quality:'balanced',volume:.65,muted:true,tutorial:true,completed:[0,1,42],hints:{42:2},resumeLevel:42,campaignRevision:'creative-campaign-v48',roomRevisions:{16:'cable-supported-architecture-v1',32:'siphon-observatory-v1',50:'echo-horizon-v1'}}));
+  for(const prefix of prefixes)if(localStorage.getItem(prefix+preferenceKey)===null)localStorage.setItem(prefix+preferenceKey,JSON.stringify({quality:'balanced',volume:.65,muted:true,tutorial:true,completed:prefix==='brainrot-tower41-native-v1:'?[40]:[0,1,42],hints:prefix==='brainrot-tower41-native-v1:'?{40:2}:{42:2},resumeLevel:prefix==='brainrot-tower41-native-v1:'?40:42,campaignRevision:'creative-campaign-v48',roomRevisions:{16:'cable-supported-architecture-v1',32:'siphon-observatory-v1',50:'echo-horizon-v1'}}));
   window.__TOWER41_PREVIEW_INITIAL_LEGACY_SAVES__=Object.fromEntries(Object.keys(localStorage).filter(key=>prefixes.some(prefix=>key.startsWith(prefix))).sort().map(key=>[key,localStorage.getItem(key)]));
   if(localStorage.getItem(key)===null)localStorage.setItem(key,JSON.stringify({quality:graphicsPreset,muted:true,tutorial:true,completed:[],hints:{},resumeLevel:40}));
  },{graphicsPreset,prefixes:preservedPrefixes,key:previewKey,preferenceKey});

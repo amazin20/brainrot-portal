@@ -6,12 +6,61 @@ import {tracePortalRay,rayTouches} from './LabPuzzleMechanics.js';
 import {buildCastleArchiveMemory} from './LabCastleArchiveMemory.js';
 import {buildTower41RatchetCell} from './LabTower41RatchetCell.js';
 import {buildTower41FlywheelCell} from './LabTower41FlywheelCell.js';
+import {buildTower41PendulumCell} from './LabTower41PendulumCell.js';
+import {capsuleBoxGrounded,orientedBoxSupport} from './LabOrientedBoxContact.js';
 export {SINGULARITY_SPEC as TOWER_SPEC};
 const UP=V(0,1,0),close=(p,q,r=1.25)=>Math.hypot(p.x-q[0],p.z-q[2])<r&&Math.abs(p.y-q[1])<1.5;
 export function pourVolumes(volumes,capacities,from,to){if(from===to||![from,to].every(i=>Number.isInteger(i)&&i>=0&&i<volumes.length))throw new RangeError('Invalid tank');const copy=[...volumes],amount=Math.max(0,Math.min(copy[from],capacities[to]-copy[to]));copy[from]-=amount;copy[to]+=amount;return copy;}
 // The catcher first leaves the side-wall rebate, then rolls into its left
 // cassette. Its upper edge stays below the roof throughout both strokes.
 export function hoistCatcherOffset(progress){const p=clamp(progress,0,1);return{x:-7*clamp((p-.2)/.8,0,1),z:-.75*clamp(p/.2,0,1)};}
+
+/** Observe the controller's actual finite support, once per completed Cannon
+ * step. A jump across the room, a stale body pose, or merely standing near the
+ * middle island cannot substitute for a supported traversal of this deck. */
+export function observeTower41PendulumCrossing(game,cell,record,islandFloor,origin){
+ const world=game.physics?.world,step=world?.stepnumber??-1;
+ const clear=()=>{record.phase=0;record.complete=false;record.deckSteps=0;record.firstStep=record.midStep=record.farStep=record.islandStep=null;record.previousFoot=null;record.checkpoints=[];record.departureStep=null;};
+ const foot=game.playerPosition,finite=v=>v&&['x','y','z'].every(key=>Number.isFinite(v[key]));
+ if(!cell.readyForCrossing||cell.originalCargo!==game.cargo||cell.originalCargoBody!==game.physics.cargoBody||!finite(foot)||!finite(game.playerVelocity)){clear();record.nearLandingStep=null;return false;}
+ if(step<=0||step===record.lastStep)return Boolean(record.complete);
+ const previousStep=record.lastStep;record.lastStep=step;
+ if(record.complete)return true;
+ const x=foot.x-origin[0],z=foot.z-origin[2],floorY=origin[1];
+ const sample=game.sampleFootSupport?.(foot.x,foot.z,foot.y+.03);
+ const founded=f=>{
+  const collider=f?.mesh?.userData.collider,solid=collider&&game.physics.solids.get(f.mesh.uuid),b=solid?.body,shape=b?.shapes[0];
+  if(!f||f.enabled===false||collider?.enabled===false||b?.world!==world||!world.bodies.includes(b)||!shape?.halfExtents||b.collisionResponse===false||shape.collisionResponse===false||!(b.collisionFilterMask&game.physics.cargoBody.collisionFilterGroup)||!game.playerGrounded||!sample||Math.abs(sample.height-f.y)>.003||Math.abs(foot.y-f.y)>.003||foot.x<f.minX+.43||foot.x>f.maxX-.43||foot.z<f.minZ+.43||foot.z>f.maxZ-.43)return null;
+  const center=collider.box.getCenter(V()),half=collider.box.getSize(V()).multiplyScalar(.5);
+  if(center.distanceTo(V().copy(b.position))>1e-5||half.distanceTo(V().copy(shape.halfExtents))>1e-5)return null;
+  return{kind:'founded-floor',worldStep:step,grounded:true,live:true,colliderId:f.mesh.uuid,bodyId:b.id,shapeIndex:0,shapeId:shape.id,foot:foot.toArray(),velocity:game.playerVelocity.toArray(),supportHeight:sample.height,supportNormal:sample.normal.toArray(),supportGap:foot.y-sample.height,bodyPosition:b.position.toArray(),bodyQuaternion:b.quaternion.toArray(),shapeHalf:shape.halfExtents.toArray(),bounds:[collider.box.min.toArray(),collider.box.max.toArray()],footprintInside:true};
+ };
+ const near=game.playerGrounded&&x>=-21.5&&x<=-14.9&&Math.abs(z)>=2.7&&Math.abs(z)<=4.4&&Math.abs(foot.y-floorY)<.003?game.floors.map(founded).find(Boolean):null;
+ if(!record.phase&&near){record.nearLandingStep=step;record.nearLanding=near;}
+ if(record.phase&&(step!==previousStep+1||record.previousFoot&&foot.distanceTo(record.previousFoot)>.22)){clear();record.nearLandingStep=null;}
+ const part=cell.deckPart,box=part?.collider.orientedBox,entry=part&&game.physics.bodyBoxes.get(part.mesh.uuid);
+ const owned=Boolean(box&&entry&&entry.body===cell.bridgeBody&&entry.shapeIndex===cell.deckShapeIndex&&entry.shape===cell.bridgeBody?.shapes[cell.deckShapeIndex]&&game.physics.inspectBodyBox(part.mesh.uuid,{orientedBox:box,bounds:part.collider.box,enabled:part.collider.enabled}).valid);
+ const support=owned?orientedBoxSupport(box,foot.x,foot.z,foot.y+.02):null;
+ const local=owned?foot.clone().sub(box.current.center).applyQuaternion(box.current.quaternion.clone().invert()):null;
+ const deck=Boolean(game.playerGrounded&&support&&sample&&Math.abs(foot.y-support.height)<.003&&Math.abs(sample.height-support.height)<.003&&capsuleBoxGrounded(foot,game.playerVelocity,.43,2.4,box)&&Math.abs(local.z)<box.half.z-.43&&Math.abs(local.x)<box.half.x-.43);
+ const checkpoint=name=>({name,kind:'owned-oriented-deck',worldStep:step,grounded:true,live:true,colliderId:part.mesh.uuid,bodyId:entry.body.id,shapeIndex:entry.shapeIndex,shapeId:entry.shape.id,originalCargoBodyId:cell.originalCargoBody.id,foot:foot.toArray(),velocity:game.playerVelocity.toArray(),localFoot:local.toArray(),supportHeight:support.height,supportNormal:support.normal.toArray(),supportGap:foot.y-support.height,capsuleGrounded:true,footprintInside:true,bodyPosition:entry.body.position.toArray(),bodyQuaternion:entry.body.quaternion.toArray(),shapeOffset:entry.body.shapeOffsets[entry.shapeIndex].toArray(),shapeHalf:entry.shape.halfExtents.toArray(),pose:{step:box.step,center:box.current.center.toArray(),quaternion:box.current.quaternion.toArray(),bounds:[box.current.bounds.min.toArray(),box.current.bounds.max.toArray()]} });
+ if(deck){
+  if(!record.phase&&record.nearLandingStep!==null&&step-record.nearLandingStep<180&&local.x<=-3){record.phase=1;record.firstStep=step;record.checkpoints=[checkpoint('near')];}
+  if(record.phase){record.deckSteps++;record.previousFoot=foot.clone();}
+  if(record.phase===1&&local.x>=-.9&&step>record.firstStep){record.phase=2;record.midStep=step;record.checkpoints.push(checkpoint('mid'));}
+  if(record.phase===2&&local.x>=3&&step>record.midStep){record.phase=3;record.farStep=step;record.checkpoints.push(checkpoint('far'));}
+ }else if(record.phase>0&&record.phase<3){clear();record.nearLandingStep=null;}
+ if(record.phase===3){
+  // The landing is the actual founded floor beyond the bridge's finite end.
+  const island=x>=-.7&&x<=2.3&&Math.abs(z)<3.4?founded(islandFloor):null;
+  if(!deck&&record.departureStep==null)record.departureStep=step;
+  if(deck)record.departureStep=null;
+  if(island&&step>record.farStep&&record.deckSteps>=24){record.complete=true;record.islandStep=step;record.checkpoints.push({...island,name:'island'});}
+  else if(record.departureStep!==null&&step-record.departureStep>90){clear();record.nearLandingStep=null;}
+  else record.previousFoot=foot.clone();
+ }
+ return Boolean(record.complete);
+}
 
 /** The folded castle is a complete replacement of the old sixteen halls.
  * Solids, real supported decks and ordinary portals own every transition. */
@@ -23,7 +72,7 @@ export function buildTowerLevel(game,index=40){
  const fill=new THREE.HemisphereLight(0xd5e9ed,0x52404e,.85);game.scene.add(fill);
  const sideFill=new THREE.DirectionalLight(0xffd9b4,1.4);sideFill.position.set(-55,98,32);sideFill.target.position.set(0,30,0);game.scene.add(sideFill,sideFill.target);
  const rooms=new Map(),machines=new Map(),events=[],solved=new Set(),gates=[],signs=[],carriedTransits=new Map();
- let time=0,lastTransit=null,won=false,resetting=false,disposed=false,archiveMemory=null,flywheelCell=null;
+ let time=0,lastTransit=null,won=false,resetting=false,disposed=false,archiveMemory=null,flywheelCell=null,pendulumCell=null;
  const glazing=k.mat(0x8eaead,.65,.05);glazing.transparent=true;glazing.opacity=.24;glazing.depthWrite=false;glazing.name='Castle fixed safety glazing';
  const available=id=>id==='archive'?Boolean(archiveMemory?.released()):SINGULARITY_ROOMS.find(r=>r.id===id).requires.every(dep=>solved.has(dep));
  function complete(id,proof){if(resetting||solved.has(id)||!available(id))return;const r=SINGULARITY_ROOMS.find(r=>r.id===id);solved.add(id);events.push({id,rule:r.rule,seconds:time,player:game.playerPosition.toArray(),cargo:game.cargo?.position.toArray(),proof});game.audio?.mechanism?.('switch');game.emitHud?.();}
@@ -284,15 +333,32 @@ export function buildTowerLevel(game,index=40){
   const finish=goal('inertia',P(21,0,-3.5),()=>true,()=>({maxSpeed,portalEntries:entryCount,landed:true}));
   register('inertia',{state:{intake,outlet,returnDoor,get returnProgress(){return returnProgress;},get flew(){return flew;},get maxSpeed(){return maxSpeed;}},transit(){entryCount++;maxSpeed=Math.max(maxSpeed,game.playerVelocity.length());},update(dt){if(!game.playerGrounded&&lastTransit?.id==='inertia'){maxSpeed=Math.max(maxSpeed,game.playerVelocity.length());if(game.playerPosition.x>r.def.at[0]+2)flew=true;}finish(dt);returnProgress=THREE.MathUtils.damp(returnProgress,solved.has('inertia')?1:0,4,dt);k.move(returnDoor,P(22,6,6.4+21.6*returnProgress),dt);},reset(){flew=false;entryCount=maxSpeed=returnProgress=0;}});
  }
-  // Two supported moving spans expose different catch positions. The first
- // bridges the lower void; the second becomes a diagonal-height return link.
+ // Original free cargo tips the genuinely hinged lower bridge. Its gravity
+ // catch retains the unloaded deck; the existing upper lift remains kinematic.
  {
-  const r=rooms.get('pendulum'),{P}=r;k.floor(r.def.at[0]+19,r.b.x1,r.def.at[2]-3,r.def.at[2]+3,36);k.floor(r.def.at[0]+23.1,r.b.x1,r.b.z0,r.def.at[2]+3,36);let phase=0,A=false,B=false,ya=0,yb=6;const latchA=P(-17,-10),latchB=P(15,11,6);
+  const r=rooms.get('pendulum'),{P}=r;k.floor(r.def.at[0]+19,r.b.x1,r.def.at[2]-3,r.def.at[2]+3,36);k.floor(r.def.at[0]+23.1,r.b.x1,r.b.z0,r.def.at[2]+3,36);let phase=0,B=false,yb=6;
   k.floor(r.b.x0,r.b.x1,r.b.z0,r.def.at[2]-5,36);k.floor(r.b.x0,r.b.x1,r.def.at[2]+5,r.b.z1,36);
-  k.floor(r.def.at[0]-22,r.def.at[0]-15,r.def.at[2]-5,r.def.at[2]+5,36);k.floor(r.def.at[0]+12,r.def.at[0]+22,r.def.at[2]+5,r.b.z1,42);
-  const a=k.floor(r.def.at[0]-14,r.def.at[0]-2,r.def.at[2]-2,r.def.at[2]+2,36,m.rose,{dynamic:true});
+  // A real opening clears the counterweight's entire gravity sweep. Founded
+  // strips either side join the west approach without supporting that weight.
+  k.floor(r.def.at[0]-22,r.def.at[0]-18.7,r.def.at[2]-5,r.def.at[2]+5,36);
+  for(const[a,b]of [[-5,-2.6],[2.6,5]])k.floor(r.def.at[0]-18.7,r.def.at[0]-15,r.def.at[2]+a,r.def.at[2]+b,36);
+  k.floor(r.def.at[0]+12,r.def.at[0]+22,r.def.at[2]+5,r.b.z1,42);
+  pendulumCell=buildTower41PendulumCell(game,k,{centre:r.def.at});
   const b=k.floor(r.def.at[0]+1,r.def.at[0]+13,r.def.at[2]-2,r.def.at[2]+2,42,m.ivory,{dynamic:true});
-  k.corridor(P(-19,-10),P(-19,0),5,{rails:false});k.floor(r.def.at[0]-4,r.def.at[0]+3,r.def.at[2]-4,r.def.at[2]+4,36,m.copper);
+  k.corridor(P(-20.5,-10),P(-20.5,0),2.5,{rails:false});const islandMesh=k.floor(r.def.at[0]-1.5,r.def.at[0]+3,r.def.at[2]-4,r.def.at[2]+4,36,m.copper),islandFloor=islandMesh.userData.floor;
+  const intake=k.panel('gravity bridge load intake',P(-17,-14,.025),[0,1,0]);
+  const initialCup=pendulumCell.initialCupPosition;
+  const outlet=k.panel('gravity bridge raised cup outlet',[initialCup.x,r.def.at[1]+6.2,initialCup.z],[0,-1,0]);
+  // A framed overhead ceramic plate provides the receiving portal's real
+  // backing. Neither its support nor the room floor enters the bridge sweep.
+  for(const z of [-3,3])k.box(P(0,z,3.3),[.24,6.6,.24],m.steel);
+  k.box(P(0,0,6.48),[.24,.25,6.24],m.steel);
+  const ceramicEdge=initialCup.x-r.def.at[0]+2.4;
+  k.box(P(ceramicEdge/2,1,6.48),[-ceramicEdge+.24,.25,.30],m.steel);
+  sign('ГРУЗ ОПУСКАЕТ ПРОЛЁТ · УЛОВИТЕЛЬ ДЕРЖИТ БЕЗ ГРУЗА',P(-17,-18,3),10);
+  plate(P(-10,-10),3.3,m.copper);
+  const crossing={phase:0,complete:false,lastStep:-1,nearLandingStep:null,nearLanding:null,firstStep:null,midStep:null,farStep:null,islandStep:null,deckSteps:0,previousFoot:null,checkpoints:[],departureStep:null};
+  const crossingProof=()=>structuredClone({complete:crossing.complete,nearLandingStep:crossing.nearLandingStep,firstStep:crossing.firstStep,midStep:crossing.midStep,farStep:crossing.farStep,islandStep:crossing.islandStep,supportedDeckSteps:crossing.deckSteps,deckBodyId:pendulumCell.bridgeBody?.id,deckShapeIndex:pendulumCell.deckShapeIndex,originalCargoBodyId:pendulumCell.originalCargoBody?.id,nearLanding:crossing.nearLanding,checkpoints:crossing.checkpoints});
   k.stairs(P(19,-13),P(19,11,6),4);
   // The return stair is an enclosed service shaft. Its upper side door is six
   // metres above the gallery; the lower door opens from the upper catch.
@@ -304,10 +370,10 @@ export function buildTowerLevel(game,index=40){
   // The low atrium guards make the two supported spans the actual approach to
   // the middle island, while the raised span clears the south guard.
   k.box(P(0,-4.6,2.4),[28,4.8,.4],m.steel);k.box(P(-1.75,4.6,2.4),[24.5,4.8,.4],m.steel);
-  localControl(r,'catch-a',-17,-10,()=>{if(ya<.22){A=true;return true;}return false;},'Поймать нижний пролёт');
-  localControl(r,'catch-b',15,11,()=>{if(A&&yb>5.78){B=true;return true;}return false;},'Поймать верхний пролёт',6);
-  const finish=goal('pendulum',P(15,9.5,6),()=>A&&B,()=>({twoPhysicalCatches:true,phase,heights:[ya,yb]}));
-  register('pendulum',{state:{stairDoor,get stairProgress(){return stairProgress;},get A(){return A;},get B(){return B;},get ya(){return ya;},get yb(){return yb;}},update(dt){stairProgress=THREE.MathUtils.damp(stairProgress,B?1:0,4,dt);k.move(stairDoor,P(19.5,-15,7.5+stairProgress*17),dt);phase+=dt*.65;ya=A?0:3*(1-Math.cos(phase));yb=B?6:3*(1+Math.cos(phase));k.move(a,P(-8,0,ya-.2),dt);k.move(b,P(7,0,yb-.2),dt);finish(dt);},reset(){phase=0;A=B=false;ya=0;yb=6;stairProgress=0;}});
+  localControl(r,'catch-a',-17,-10,()=>pendulumCell.armCatch(),'Закинуть уловитель под нагруженный пролёт');
+  localControl(r,'catch-b',15,11,()=>{if(pendulumCell.readyForCrossing&&crossing.complete&&yb>5.78){B=true;return true;}return false;},'Поймать верхний пролёт',6);
+  const finish=goal('pendulum',P(15,9.5,6),()=>pendulumCell.readyForCrossing&&crossing.complete&&B,()=>({physicalLowerCatch:true,upperCatchKinematic:true,phase,lowerAngle:pendulumCell.angle,upperHeight:yb,originalCargo:true,lowerPhysicalCell:pendulumCell.diagnostics(),lowerCrossing:crossingProof()}));
+  register('pendulum',{state:{cell:pendulumCell,intake,outlet,stairDoor,get stairProgress(){return stairProgress;},get A(){return pendulumCell.latched&&pendulumCell.unloadedRetained;},get B(){return B;},get ya(){return pendulumCell.angle;},get yb(){return yb;},get loadContact(){return pendulumCell.loadContact;},get loadNormalForce(){return pendulumCell.loadNormalForce;},get loadedStep(){return pendulumCell.loadedStep;},get readyForCrossing(){return pendulumCell.readyForCrossing;},get lowerCrossing(){return crossingProof();}},update(dt){pendulumCell.syncPose();if(dt>0)observeTower41PendulumCrossing(game,pendulumCell,crossing,islandFloor,r.def.at);stairProgress=THREE.MathUtils.damp(stairProgress,B?1:0,4,dt);k.move(stairDoor,P(19.5,-15,7.5+stairProgress*17),dt);phase+=dt*.65;yb=B?6:3*(1+Math.cos(phase));k.move(b,P(7,0,yb-.2),dt);finish(dt);},reset(){phase=0;B=false;yb=6;stairProgress=0;Object.assign(crossing,{phase:0,complete:false,lastStep:-1,nearLandingStep:null,nearLanding:null,firstStep:null,midStep:null,farStep:null,islandStep:null,deckSteps:0,previousFoot:null,checkpoints:[],departureStep:null});pendulumCell.reset();}});
  }
  // Crown has a second physically sealed receiver, reached with the one pair
  // of portals. A held companion does not satisfy its independent load socket.
@@ -336,10 +402,10 @@ export function buildTowerLevel(game,index=40){
   getContextLesson(){const r=roomAt(game.playerPosition);return['folded-castle','E · ЛКМ · ПКМ',r?available(r.id)?r.hint:r.id==='archive'?`${archiveMemory.label()}. Две рейки удерживают общую дверь. Зубья уловителя сохраняют поднятое положение, когда источник отключён.`:`Для открытия нужны: ${r.requires.filter(id=>!solved.has(id)).map(id=>SINGULARITY_ROOMS.find(d=>d.id===id).name).join(' + ')}. Их состояния видны на табличке над входом.`:'Пять высот связаны лестницами и галереями. Один друг и одна пара порталов проходят весь путь вместе. Перезапуск сбрасывает замок.',false];},
   nearbyInteraction(){const t=k.nearest();return t?{kind:t.kind,label:'E',text:t.lesson}:null;},
   interact(){const t=k.nearest();if(!t)return false;const result=t.action();if(result===false)return false;game.audio?.mechanism?.('switch');game.animator?.triggerOperate?.();return true;},
-  cargoOnAnyPad(){const p=game.cargo?.position;if(!p)return false;return Boolean(flywheelCell?.loadContact)||loaded(machines.get('hoist').state.pad,1.6)||loaded(socket,1.8)||['freight','magnet','migrant'].includes(roomAt(p)?.id);},
-  playerAcceleration:()=>V(),applyCargoForces(dt){ratchetCell?.updateForces(dt);flywheelCell?.updateForces(dt);if(available('magnet'))machines.get('magnet').force();},
+  cargoOnAnyPad(){const p=game.cargo?.position;if(!p)return false;return Boolean(flywheelCell?.loadContact)||Boolean(pendulumCell?.loadContact)||loaded(machines.get('pendulum').state.intake.center.toArray(),.85)||loaded(rooms.get('pendulum').P(-10,-10),1.5)||loaded(machines.get('hoist').state.pad,1.6)||loaded(socket,1.8)||['freight','magnet','migrant'].includes(roomAt(p)?.id);},
+  playerAcceleration:()=>V(),applyCargoForces(dt){ratchetCell?.updateForces(dt);flywheelCell?.updateForces(dt);pendulumCell?.updateForces(dt);if(available('magnet'))machines.get('magnet').force();},
   onTeleport(){const r=roomAt(game.playerPosition);lastTransit={id:r?.id??'atrium',seconds:time};if(game.heldCube&&r)carriedTransits.set(r.id,(carriedTransits.get(r.id)??0)+1);if(r?.id==='inertia')machines.get('inertia').transit();return true;},
-  renderUpdate(){ratchetCell?.syncPose();flywheelCell?.syncPose();art.update();},diagnostics(){return{...this.getTowerMetrics(),archivePhysicalMemory:archiveMemory.diagnostics(),flywheelPhysicalCell:flywheelCell.diagnostics(),...(ratchetCell?{ratchetPhysicalCell:ratchetCell.diagnostics()}:{}),uniqueRules:SINGULARITY_ROOMS.map(r=>r.rule),rooms:SINGULARITY_ROOMS.length,portalSurfaces:k.panels.length,heightBands:[0,18,36,54,72],connectedCastle:true};},
-  dispose(){if(disposed)return;disposed=true;ratchetCell?.dispose();flywheelCell?.dispose();art.dispose();k.dispose();fill.removeFromParent();sideFill.removeFromParent();sideFill.target.removeFromParent();fill.dispose();sideFill.dispose();game.scene.background=prior.background;game.scene.fog=prior.fog;},
+  renderUpdate(){ratchetCell?.syncPose();flywheelCell?.syncPose();pendulumCell?.syncPose();art.update();},diagnostics(){return{...this.getTowerMetrics(),archivePhysicalMemory:archiveMemory.diagnostics(),flywheelPhysicalCell:flywheelCell.diagnostics(),pendulumPhysicalCell:pendulumCell.diagnostics(),...(ratchetCell?{ratchetPhysicalCell:ratchetCell.diagnostics()}:{}),uniqueRules:SINGULARITY_ROOMS.map(r=>r.rule),rooms:SINGULARITY_ROOMS.length,portalSurfaces:k.panels.length,heightBands:[0,18,36,54,72],connectedCastle:true};},
+  dispose(){if(disposed)return;disposed=true;ratchetCell?.dispose();flywheelCell?.dispose();pendulumCell?.dispose();art.dispose();k.dispose();fill.removeFromParent();sideFill.removeFromParent();sideFill.target.removeFromParent();fill.dispose();sideFill.dispose();game.scene.background=prior.background;game.scene.fog=prior.fog;},
  };return level;
 }

@@ -2,10 +2,10 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {LabPreferences,DEFAULT_PREFERENCES} from '../src/game/LabPreferences.js';
 import {readFoundationEdition} from '../src/game/LabFoundationEdition.js';
-import {normalizeTower41PreviewEntry,isTower41NativePreviewPath,readTower41Preview,readTower41EntryFlags,createTower41PreviewPreferences,tower41PreviewStorage,TOWER41_PREVIEW_STORAGE_PREFIX,TOWER41_PREVIEW_LEVEL_INDEX,TOWER41_PREVIEW_INDICES} from '../src/game/LabTower41Preview.js';
+import {normalizeTower41PreviewEntry,isTower41NativePreviewPath,readTower41Preview,readTower41EntryFlags,createTower41PreviewPreferences,tower41PreviewStorage,TOWER41_PREVIEW_STORAGE_PREFIX,TOWER41_PREVIEW_LEGACY_STORAGE_PREFIXES,TOWER41_PREVIEW_LEVEL_INDEX,TOWER41_PREVIEW_INDICES} from '../src/game/LabTower41Preview.js';
 
 const KEY='brainrot-portal.preferences.v24',LEGACY_KEY='nesi.preferences.v8';
-const OLD_PREFIXES=['','brainrot-foundation-v1:','brainrot-open-rebuild-v1:','brainrot-puzzle-pilot43-v1:','brainrot-puzzle-progression-v1:','brainrot-puzzle-progression-next-v1:','brainrot-puzzle-progression-finale-v1:','brainrot-tower41-ratchet-qualification-v1:'];
+const OLD_PREFIXES=['','brainrot-foundation-v1:','brainrot-open-rebuild-v1:','brainrot-puzzle-pilot43-v1:','brainrot-puzzle-progression-v1:','brainrot-puzzle-progression-next-v1:','brainrot-puzzle-progression-finale-v1:','brainrot-tower41-ratchet-qualification-v1:',...TOWER41_PREVIEW_LEGACY_STORAGE_PREFIXES];
 function memoryStorage(initial=[]){
  const data=new Map(initial),reads=[],writes=[];
  const storage={getItem(key){reads.push(key);return data.get(key)??null;},setItem(key,value){writes.push({key,value});data.set(key,value);}};
@@ -20,7 +20,7 @@ function previousRecords(){
 function unchanged(previous,current){for(const [key,value]of previous)assert.equal(current.get(key),value,key);}
 
 test('literal standalone namespace entries force only ordinary room41 and private storage flags',()=>{
- const paths=['/tower41-native','/tower41-native/','/tower41-native/index.html','/brainrot-portal/tower41-native','/brainrot-portal/tower41-native/','/brainrot-portal/tower41-native/index.html'];
+ const paths=['/tower41-native-v2','/tower41-native-v2/','/tower41-native-v2/index.html','/brainrot-portal/tower41-native-v2','/brainrot-portal/tower41-native-v2/','/brainrot-portal/tower41-native-v2/index.html'];
  const entries=['','edition=classic&level=42','edition=open&level=51&tower41preview=0','edition=foundation&level=1&pilot=progression&tower41ratchet=1&debug=1','mode=velocity&chapter=2&return=21&smoke=1','edition=classic&edition=open&level=42&level=51&tower41preview=0&tower41preview=false'];
  for(const pathname of paths)for(const entry of entries){
   const original=new URLSearchParams(entry),before=original.toString(),normalized=normalizeTower41PreviewEntry(original,{pathname});
@@ -33,10 +33,10 @@ test('literal standalone namespace entries force only ordinary room41 and privat
 });
 
 test('other paths, local root opt-in and Yandex retain the existing entry boundaries',()=>{
- const paths=['/','/index.html','/brainrot-portal/','/brainrot-portal/index.html','/tower41-native/walkthroughs.html','/brainrot-portal/tower41-native/assets/index.js','/tower41-native-extra/','/other/tower41-native/','/publication-history/old/tower41-native/','/brainrot-portal/tower41-native/extra','/brainrot-portal/%74ower41-native/'];
+ const paths=['/tower41-native','/tower41-native/','/tower41-native/index.html','/brainrot-portal/tower41-native/','/','/index.html','/brainrot-portal/','/brainrot-portal/index.html','/tower41-native-v2/walkthroughs.html','/brainrot-portal/tower41-native-v2/assets/index.js','/tower41-native-v2-extra/','/other/tower41-native-v2/','/publication-history/old/tower41-native-v2/','/brainrot-portal/tower41-native-v2/extra','/brainrot-portal/%74ower41-native/'];
  const queries=['','edition=classic&level=42','mode=velocity&return=11','edition=foundation&level=41&tower41preview=1&debug=1'];
  for(const pathname of paths)for(const query of queries){const original=new URLSearchParams(query),normalized=normalizeTower41PreviewEntry(original,{pathname});assert.equal(isTower41NativePreviewPath(pathname),false);assert.equal(normalized.toString(),original.toString());assert.deepEqual(readTower41EntryFlags(normalized),readTower41EntryFlags(original));}
- for(const pathname of ['/tower41-native/','/brainrot-portal/tower41-native/index.html'])for(const query of queries){const original=new URLSearchParams(query),normalized=normalizeTower41PreviewEntry(original,{pathname,yandex:true});assert.equal(normalized.toString(),original.toString());assert.deepEqual(readTower41EntryFlags(normalized,{yandex:true}),readTower41EntryFlags(original,{yandex:true}));}
+ for(const pathname of ['/tower41-native-v2/','/brainrot-portal/tower41-native-v2/index.html'])for(const query of queries){const original=new URLSearchParams(query),normalized=normalizeTower41PreviewEntry(original,{pathname,yandex:true});assert.equal(normalized.toString(),original.toString());assert.deepEqual(readTower41EntryFlags(normalized,{yandex:true}),readTower41EntryFlags(original,{yandex:true}));}
  assert.equal(readTower41EntryFlags(normalizeTower41PreviewEntry('?edition=foundation&level=41&tower41preview=1',{pathname:'/'})).preview,true);
 });
 
