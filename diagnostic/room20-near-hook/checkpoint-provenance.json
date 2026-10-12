@@ -1,0 +1,454 @@
+{
+  "kind": "local-only-private-room20-hook-v2-staging",
+  "baseCommit": "5e552e9c3ac248b535d619741f15e99e29979cbf",
+  "baseTree": "8d573c22140eeb9625fff94ca14efd3f97978c17",
+  "sourceAccepted": false,
+  "ordinaryAccepted": false,
+  "fullRoomAccepted": false,
+  "privatePrototypeAccepted": false,
+  "productionForceBudgetAccepted": false,
+  "localFinalSlipTAP": {
+    "tests": 8,
+    "pass": 8,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0
+  },
+  "independentFinalOwnership": {
+    "cases": 8,
+    "pass": 8,
+    "sourceBeforeAfterUnchanged": true
+  },
+  "livePaths": [
+    "src/game/LabRoom20NearHookPrototype.js",
+    "src/game/LabRoom20NearHookSlipPrototype.js",
+    "src/game/LabRoom20NearHookStrokePrototype.js",
+    "tests/helpers/room20-hook-prototype-fixture.js",
+    "tests/lab-room20-near-hook-slip-prototype.test.js",
+    "scripts/qa-room20-hook-slip-spam.mjs"
+  ],
+  "frozenInputPaths": [
+    "src/game/LabRoom20NearHookPrototype.js",
+    "src/game/LabRoom20NearHookSlipPrototype.js",
+    "tests/helpers/room20-hook-prototype-fixture.js",
+    "tests/lab-room20-near-hook-slip-prototype.test.js"
+  ],
+  "oldAlternativeTestsActive": false,
+  "remotePush": false,
+  "binaryFiles": false,
+  "files": [
+    {
+      "checkpointPath": "src/game/LabRoom20NearHookPrototype.js",
+      "sourcePath": "/workspace/scratch/1949b02c22bb/room20-hook-prototype/src/game/LabRoom20NearHookPrototype.js",
+      "role": "frozen-runnable-final-v2",
+      "bytes": 18628,
+      "sha256": "0d137cfaafb07cd023e2a754c9d0dd0a8a44e0c4cd13baffd60ebef1f2d69a00"
+    },
+    {
+      "checkpointPath": "src/game/LabRoom20NearHookSlipPrototype.js",
+      "sourcePath": "/workspace/scratch/1949b02c22bb/room20-hook-prototype/src/game/LabRoom20NearHookSlipPrototype.js",
+      "role": "frozen-runnable-final-v2",
+      "bytes": 10259,
+      "sha256": "aedff41a027f730cc303a61da82853df2027f5b64ffbf8ad70c74f303c6ad98e"
+    },
+    {
+      "checkpointPath": "src/game/LabRoom20NearHookStrokePrototype.js",
+      "sourcePath": "/workspace/scratch/1949b02c22bb/room20-hook-prototype/src/game/LabRoom20NearHookStrokePrototype.js",
+      "role": "required-import-dependency-rejected-stroke-alternative",
+      "bytes": 7353,
+      "sha256": "7c25737876006d690988fc2e1c611552f51d6a23d37492733f420c6c6a444b0b"
+    },
+    {
+      "checkpointPath": "tests/helpers/room20-hook-prototype-fixture.js",
+      "sourcePath": "/workspace/scratch/1949b02c22bb/room20-hook-prototype/tests/helpers/room20-hook-prototype-fixture.js",
+      "role": "frozen-runnable-final-v2",
+      "bytes": 4839,
+      "sha256": "2282970bb2f57c4adc881b017b0cb283d989abd3ee31c7d82654d9915d56eccb"
+    },
+    {
+      "checkpointPath": "tests/lab-room20-near-hook-slip-prototype.test.js",
+      "sourcePath": "/workspace/scratch/1949b02c22bb/room20-hook-prototype/tests/lab-room20-near-hook-slip-prototype.test.js",
+      "role": "frozen-runnable-final-v2",
+      "bytes": 16210,
+      "sha256": "43fc5c116a40757b733a3ddeeb73f5701feb584d5d47c4629a4ad0e41752e9bd"
+    },
+    {
+      "checkpointPath": "scripts/qa-room20-hook-slip-spam.mjs",
+      "sourcePath": "/workspace/scratch/1949b02c22bb/room20-hook-prototype/scripts/qa-room20-hook-slip-spam.mjs",
+      "role": "frozen-runnable-final-v2",
+      "bytes": 3221,
+      "sha256": "9b9a4f56de2f09dec151e128bcca7f0d2c79ad80da2cf291cecfee853f7d4dfe"
+    },
+    {
+      "checkpointPath": "diagnostic/room20-near-hook/receipts/hook-slip-final-v2-tests.tap",
+      "sourcePath": "/workspace/scratch/1949b02c22bb/room20-preparation/hook-slip-final-v2-tests.tap",
+      "role": "revision-scoped-original-diagnostic-receipt",
+      "bytes": 51415,
+      "sha256": "b65b7091b81b051db3b4298087ac1e684e3e6b7f0aa8cd0955fffac73d99fab1"
+    },
+    {
+      "checkpointPath": "diagnostic/room20-near-hook/receipts/hook-slip-final-v2-test-inputs-before.json",
+      "sourcePath": "/workspace/scratch/1949b02c22bb/room20-preparation/hook-slip-final-v2-test-inputs-before.json",
+      "role": "revision-scoped-original-diagnostic-receipt",
+      "bytes": 907,
+      "sha256": "475aa7a8debb540483e427a91bfa9f2e68f75a037d90c313d27fa732f9da92ce"
+    },
+    {
+      "checkpointPath": "diagnostic/room20-near-hook/receipts/hook-slip-final-v2-test-inputs-after.json",
+      "sourcePath": "/workspace/scratch/1949b02c22bb/room20-preparation/hook-slip-final-v2-test-inputs-after.json",
+      "role": "revision-scoped-original-diagnostic-receipt",
+      "bytes": 759,
+      "sha256": "84bc4e48f1f3b19e552bfb3d61da29bb42e3efde1b2372b67550da132d4dccc3"
+    },
+    {
+      "checkpointPath": "diagnostic/room20-near-hook/receipts/hook-slip-final-v2-manifest.json",
+      "sourcePath": "/workspace/scratch/1949b02c22bb/room20-preparation/hook-slip-final-v2-manifest.json",
+      "role": "revision-scoped-original-diagnostic-receipt",
+      "bytes": 19433,
+      "sha256": "ba2c85255d3e7c44e81ea2413687a7752ddaa1b157275514658a2a820297af90"
+    },
+    {
+      "checkpointPath": "diagnostic/room20-near-hook/receipts/hook-slip-independent-final-ownership-review.json",
+      "sourcePath": "/workspace/scratch/1949b02c22bb/room20-preparation/hook-slip-independent-final-ownership-review.json",
+      "role": "revision-scoped-original-diagnostic-receipt",
+      "bytes": 8353,
+      "sha256": "f74f27da9e365250c45f0a02ed2a1f9d48cdfea455948a92ed120d9ba699120f"
+    },
+    {
+      "checkpointPath": "diagnostic/room20-near-hook/receipts/hook-slip-independent-final-ownership-review.log",
+      "sourcePath": "/workspace/scratch/1949b02c22bb/room20-preparation/hook-slip-independent-final-ownership-review.log",
+      "role": "revision-scoped-original-diagnostic-receipt",
+      "bytes": 485,
+      "sha256": "484d4cd6bfba551ba33478c99c3b5834a4f256f16ad13173436927f0f2e1f186"
+    },
+    {
+      "checkpointPath": "diagnostic/room20-near-hook/receipts/hook-slip-independent-frozen-review.json",
+      "sourcePath": "/workspace/scratch/1949b02c22bb/room20-preparation/hook-slip-independent-frozen-review.json",
+      "role": "revision-scoped-original-diagnostic-receipt",
+      "bytes": 443160,
+      "sha256": "b82cbbe4eba43ae336dcb0fbd6a3b6470241ea775dc4cb4d100bc0c026af5e06"
+    },
+    {
+      "checkpointPath": "diagnostic/room20-near-hook/receipts/hook-slip-independent-frozen-review.log",
+      "sourcePath": "/workspace/scratch/1949b02c22bb/room20-preparation/hook-slip-independent-frozen-review.log",
+      "role": "revision-scoped-original-diagnostic-receipt",
+      "bytes": 2663,
+      "sha256": "60b1ab540ff6d5bccf7c48032077f32443fbe68d4349bee58a46831ce30ab7e5"
+    },
+    {
+      "checkpointPath": "diagnostic/room20-near-hook/receipts/hook-slip-independent-correction-review.json",
+      "sourcePath": "/workspace/scratch/1949b02c22bb/room20-preparation/hook-slip-independent-correction-review.json",
+      "role": "revision-scoped-original-diagnostic-receipt",
+      "bytes": 16909,
+      "sha256": "bb778cdbc91ff1cefbc8a6643a8ed5b4be504b58003989d25e600bc6e9043925"
+    },
+    {
+      "checkpointPath": "diagnostic/room20-near-hook/receipts/hook-slip-independent-correction-followup.json",
+      "sourcePath": "/workspace/scratch/1949b02c22bb/room20-preparation/hook-slip-independent-correction-followup.json",
+      "role": "revision-scoped-original-diagnostic-receipt",
+      "bytes": 3292,
+      "sha256": "f6cf40ba5e7b1048bab34dded043aaa9a8b6476f7607536d040be7fa84f0d0e0"
+    },
+    {
+      "checkpointPath": "diagnostic/room20-near-hook/receipts/hook-slip-independent-correction-followup.log",
+      "sourcePath": "/workspace/scratch/1949b02c22bb/room20-preparation/hook-slip-independent-correction-followup.log",
+      "role": "revision-scoped-original-diagnostic-receipt",
+      "bytes": 297,
+      "sha256": "9064a8c0d71196e7277a212450dc5fcfbe8488495b69b9a9a3f2377571f599e1"
+    },
+    {
+      "checkpointPath": "diagnostic/room20-near-hook/receipts/hook-slip-inherited-type-gap.json",
+      "sourcePath": "/workspace/scratch/1949b02c22bb/room20-preparation/hook-slip-inherited-type-gap.json",
+      "role": "revision-scoped-original-diagnostic-receipt",
+      "bytes": 4545,
+      "sha256": "af6f99ce9208c3f02f0d2d78e0a6e612dd49822cc30b3c586de9ab98cd5b7b05"
+    },
+    {
+      "checkpointPath": "diagnostic/room20-near-hook/receipts/hook-slip-physics-owner-diagnostic-gap.json",
+      "sourcePath": "/workspace/scratch/1949b02c22bb/room20-preparation/hook-slip-physics-owner-diagnostic-gap.json",
+      "role": "revision-scoped-original-diagnostic-receipt",
+      "bytes": 1151,
+      "sha256": "682405a7af5526b0301beb373fa11210d913c0dc0bb06d05adba28a6bf3a7cb7"
+    },
+    {
+      "checkpointPath": "diagnostic/room20-near-hook/reproducers/review-slip-independent.mjs",
+      "sourcePath": "/workspace/scratch/1949b02c22bb/room20-preparation/review-slip-independent.mjs",
+      "role": "unaltered-historical-workspace-path-reproducer",
+      "bytes": 10530,
+      "sha256": "744c85402b814be9868951c287bbecd04b793ae352ef50a1c39ed7582ca03739"
+    },
+    {
+      "checkpointPath": "diagnostic/room20-near-hook/reproducers/review-slip-corrections.mjs",
+      "sourcePath": "/workspace/scratch/1949b02c22bb/room20-preparation/review-slip-corrections.mjs",
+      "role": "unaltered-historical-workspace-path-reproducer",
+      "bytes": 11030,
+      "sha256": "46ebe1f04e4efcd13c7096f212440316899d2b5fbe515cd56a50b92418ce8a85"
+    },
+    {
+      "checkpointPath": "diagnostic/room20-near-hook/reproducers/review-slip-ownership-final.mjs",
+      "sourcePath": "/workspace/scratch/1949b02c22bb/room20-preparation/review-slip-ownership-final.mjs",
+      "role": "unaltered-historical-workspace-path-reproducer",
+      "bytes": 4233,
+      "sha256": "1b6d0e6bd0796721ca497a5fd2d9d202e962bc9adfade28177cdf8cb937150b4"
+    },
+    {
+      "checkpointPath": "diagnostic/room20-near-hook/reproducers/review-near-hook-spam.mjs",
+      "sourcePath": "/workspace/scratch/1949b02c22bb/room20-preparation/review-near-hook-spam.mjs",
+      "role": "unaltered-historical-workspace-path-reproducer",
+      "bytes": 3417,
+      "sha256": "ed546244151a01fe47133bed3e981a07f7355d8ccd5dca0d6aef5665fad7f4d9"
+    },
+    {
+      "checkpointPath": "diagnostic/room20-near-hook/history/failed-stroke-checkpoint/actual-nine-case-failing.tap",
+      "sourcePath": "/workspace/scratch/1949b02c22bb/room20-preparation/failed-stroke-checkpoint/actual-nine-case-failing.tap",
+      "role": "immutable-rejected-revision-bytes-renamed-test-as-data",
+      "bytes": 19202,
+      "sha256": "1f631490a28ace4b3d47c4d6e5b29e40ec420b1ccb1f8fe4a3ae2590f8362c62"
+    },
+    {
+      "checkpointPath": "diagnostic/room20-near-hook/history/failed-stroke-checkpoint/inputs.json",
+      "sourcePath": "/workspace/scratch/1949b02c22bb/room20-preparation/failed-stroke-checkpoint/inputs.json",
+      "role": "immutable-rejected-revision-bytes-renamed-test-as-data",
+      "bytes": 1563,
+      "sha256": "ac3f4afa0e196d6d106d15bb3068b48989dc4bac8ae006c25dc8d2b52fc7120d"
+    },
+    {
+      "checkpointPath": "diagnostic/room20-near-hook/history/failed-stroke-checkpoint/scripts/qa-room20-hook-stroke-spam.mjs",
+      "sourcePath": "/workspace/scratch/1949b02c22bb/room20-preparation/failed-stroke-checkpoint/scripts/qa-room20-hook-stroke-spam.mjs",
+      "role": "immutable-rejected-revision-bytes-renamed-test-as-data",
+      "bytes": 3086,
+      "sha256": "a0b1896718e8452d6f66e6ae9fe7ea380cda81ac152497a4a412b9edc07ba401"
+    },
+    {
+      "checkpointPath": "diagnostic/room20-near-hook/history/failed-stroke-checkpoint/scripts/qa-room20-near-hook-prototype.mjs",
+      "sourcePath": "/workspace/scratch/1949b02c22bb/room20-preparation/failed-stroke-checkpoint/scripts/qa-room20-near-hook-prototype.mjs",
+      "role": "immutable-rejected-revision-bytes-renamed-test-as-data",
+      "bytes": 1167,
+      "sha256": "dae263eab225daa86b21128005bddab76c127ff72b807a93980ad33675a37e42"
+    },
+    {
+      "checkpointPath": "diagnostic/room20-near-hook/history/failed-stroke-checkpoint/src/game/LabRoom20NearHookPrototype.js",
+      "sourcePath": "/workspace/scratch/1949b02c22bb/room20-preparation/failed-stroke-checkpoint/src/game/LabRoom20NearHookPrototype.js",
+      "role": "immutable-rejected-revision-bytes-renamed-test-as-data",
+      "bytes": 15491,
+      "sha256": "6c172bdbbc52bd082c2d5049c961ae4442c3e877bff6cde7e8e6a1501155120f"
+    },
+    {
+      "checkpointPath": "diagnostic/room20-near-hook/history/failed-stroke-checkpoint/src/game/LabRoom20NearHookStrokePrototype.js",
+      "sourcePath": "/workspace/scratch/1949b02c22bb/room20-preparation/failed-stroke-checkpoint/src/game/LabRoom20NearHookStrokePrototype.js",
+      "role": "immutable-rejected-revision-bytes-renamed-test-as-data",
+      "bytes": 7353,
+      "sha256": "7c25737876006d690988fc2e1c611552f51d6a23d37492733f420c6c6a444b0b"
+    },
+    {
+      "checkpointPath": "diagnostic/room20-near-hook/history/failed-stroke-checkpoint/tests/helpers/room20-hook-prototype-fixture.js",
+      "sourcePath": "/workspace/scratch/1949b02c22bb/room20-preparation/failed-stroke-checkpoint/tests/helpers/room20-hook-prototype-fixture.js",
+      "role": "immutable-rejected-revision-bytes-renamed-test-as-data",
+      "bytes": 3659,
+      "sha256": "96d66b29116a343d330bc1050aba361f8fcc26d699e909d381eb17c8a8948432"
+    },
+    {
+      "checkpointPath": "diagnostic/room20-near-hook/history/failed-stroke-checkpoint/tests/lab-room20-near-hook-prototype.test.js.txt",
+      "sourcePath": "/workspace/scratch/1949b02c22bb/room20-preparation/failed-stroke-checkpoint/tests/lab-room20-near-hook-prototype.test.js",
+      "role": "immutable-rejected-revision-bytes-renamed-test-as-data",
+      "bytes": 9120,
+      "sha256": "c166c13d6791bf3ca299a4e9d96ae5e83b5f181dfe8a9c13c4bd7881a8e36161"
+    },
+    {
+      "checkpointPath": "diagnostic/room20-near-hook/history/failed-stroke-checkpoint/tests/lab-room20-near-hook-stroke-prototype.test.js.txt",
+      "sourcePath": "/workspace/scratch/1949b02c22bb/room20-preparation/failed-stroke-checkpoint/tests/lab-room20-near-hook-stroke-prototype.test.js",
+      "role": "immutable-rejected-revision-bytes-renamed-test-as-data",
+      "bytes": 4125,
+      "sha256": "4ed93c30f70d613109330ba3b9be939c83ff86eb2fedceae6268da4958ae5f9f"
+    },
+    {
+      "checkpointPath": "diagnostic/room20-near-hook/history/failed-slip-ownership-checkpoint/hook-slip-final-tests-attempt1.tap",
+      "sourcePath": "/workspace/scratch/1949b02c22bb/room20-preparation/failed-slip-ownership-checkpoint/hook-slip-final-tests-attempt1.tap",
+      "role": "immutable-rejected-revision-bytes-renamed-test-as-data",
+      "bytes": 40656,
+      "sha256": "b9285b563f846bf8907e94d0ac98f178fe9ccdca2d615306f04f9f5ccb730180"
+    },
+    {
+      "checkpointPath": "diagnostic/room20-near-hook/history/failed-slip-ownership-checkpoint/hook-slip-independent-frozen-review.json",
+      "sourcePath": "/workspace/scratch/1949b02c22bb/room20-preparation/failed-slip-ownership-checkpoint/hook-slip-independent-frozen-review.json",
+      "role": "immutable-rejected-revision-bytes-renamed-test-as-data",
+      "bytes": 443160,
+      "sha256": "b82cbbe4eba43ae336dcb0fbd6a3b6470241ea775dc4cb4d100bc0c026af5e06"
+    },
+    {
+      "checkpointPath": "diagnostic/room20-near-hook/history/failed-slip-ownership-checkpoint/hook-slip-spam-attempt1.json",
+      "sourcePath": "/workspace/scratch/1949b02c22bb/room20-preparation/failed-slip-ownership-checkpoint/hook-slip-spam-attempt1.json",
+      "role": "immutable-rejected-revision-bytes-renamed-test-as-data",
+      "bytes": 335795,
+      "sha256": "e25e373cf5a15404e2b3606c58c94445c6d1a1a3f41c10ea5d5d1a8ef2e0328e"
+    },
+    {
+      "checkpointPath": "diagnostic/room20-near-hook/history/failed-slip-ownership-checkpoint/inputs.json",
+      "sourcePath": "/workspace/scratch/1949b02c22bb/room20-preparation/failed-slip-ownership-checkpoint/inputs.json",
+      "role": "immutable-rejected-revision-bytes-renamed-test-as-data",
+      "bytes": 1217,
+      "sha256": "9fbc0bd4bfdad4f0b7b8432b74688d05e283535c96db6e879431041c23700285"
+    },
+    {
+      "checkpointPath": "diagnostic/room20-near-hook/history/failed-slip-ownership-checkpoint/old-hook-slip-prototype-result.json",
+      "sourcePath": "/workspace/scratch/1949b02c22bb/room20-preparation/failed-slip-ownership-checkpoint/old-hook-slip-prototype-result.json",
+      "role": "immutable-rejected-revision-bytes-renamed-test-as-data",
+      "bytes": 10736,
+      "sha256": "014b7f321d14caa78cb3d7f39324e451e361b962a13b726003e73f39c14151f1"
+    },
+    {
+      "checkpointPath": "diagnostic/room20-near-hook/history/failed-slip-ownership-checkpoint/scripts/qa-room20-hook-slip-spam.mjs",
+      "sourcePath": "/workspace/scratch/1949b02c22bb/room20-preparation/failed-slip-ownership-checkpoint/scripts/qa-room20-hook-slip-spam.mjs",
+      "role": "immutable-rejected-revision-bytes-renamed-test-as-data",
+      "bytes": 3221,
+      "sha256": "9b9a4f56de2f09dec151e128bcca7f0d2c79ad80da2cf291cecfee853f7d4dfe"
+    },
+    {
+      "checkpointPath": "diagnostic/room20-near-hook/history/failed-slip-ownership-checkpoint/src/game/LabRoom20NearHookPrototype.js",
+      "sourcePath": "/workspace/scratch/1949b02c22bb/room20-preparation/failed-slip-ownership-checkpoint/src/game/LabRoom20NearHookPrototype.js",
+      "role": "immutable-rejected-revision-bytes-renamed-test-as-data",
+      "bytes": 15645,
+      "sha256": "d55d5725f92207afae5b3d0ae3b2890d89058e9067e8c09aa85f2223ff295d04"
+    },
+    {
+      "checkpointPath": "diagnostic/room20-near-hook/history/failed-slip-ownership-checkpoint/src/game/LabRoom20NearHookSlipPrototype.js",
+      "sourcePath": "/workspace/scratch/1949b02c22bb/room20-preparation/failed-slip-ownership-checkpoint/src/game/LabRoom20NearHookSlipPrototype.js",
+      "role": "immutable-rejected-revision-bytes-renamed-test-as-data",
+      "bytes": 7670,
+      "sha256": "2a82c01a6fb1775a0cf5f9dbb83e03009c18aa22e0525fad994876f1acdf2f72"
+    },
+    {
+      "checkpointPath": "diagnostic/room20-near-hook/history/failed-slip-ownership-checkpoint/tests/helpers/room20-hook-prototype-fixture.js",
+      "sourcePath": "/workspace/scratch/1949b02c22bb/room20-preparation/failed-slip-ownership-checkpoint/tests/helpers/room20-hook-prototype-fixture.js",
+      "role": "immutable-rejected-revision-bytes-renamed-test-as-data",
+      "bytes": 4839,
+      "sha256": "2282970bb2f57c4adc881b017b0cb283d989abd3ee31c7d82654d9915d56eccb"
+    },
+    {
+      "checkpointPath": "diagnostic/room20-near-hook/history/failed-slip-ownership-checkpoint/tests/lab-room20-near-hook-slip-prototype.test.js.txt",
+      "sourcePath": "/workspace/scratch/1949b02c22bb/room20-preparation/failed-slip-ownership-checkpoint/tests/lab-room20-near-hook-slip-prototype.test.js",
+      "role": "immutable-rejected-revision-bytes-renamed-test-as-data",
+      "bytes": 8066,
+      "sha256": "38e10f20b22fea8bb00760e482d552eaf60e48095203d3943a27a1f7fc4dc563"
+    },
+    {
+      "checkpointPath": "diagnostic/room20-near-hook/history/failed-slip-inherited-type-checkpoint/hook-slip-corrected-final-tests.tap",
+      "sourcePath": "/workspace/scratch/1949b02c22bb/room20-preparation/failed-slip-inherited-type-checkpoint/hook-slip-corrected-final-tests.tap",
+      "role": "immutable-rejected-revision-bytes-renamed-test-as-data",
+      "bytes": 50531,
+      "sha256": "266a15542c402eb8168f0148344e07896d59306f8a3a6c97f69c95359f45afcd"
+    },
+    {
+      "checkpointPath": "diagnostic/room20-near-hook/history/failed-slip-inherited-type-checkpoint/hook-slip-corrected-test-inputs-after.json",
+      "sourcePath": "/workspace/scratch/1949b02c22bb/room20-preparation/failed-slip-inherited-type-checkpoint/hook-slip-corrected-test-inputs-after.json",
+      "role": "immutable-rejected-revision-bytes-renamed-test-as-data",
+      "bytes": 759,
+      "sha256": "925fdeb15d2c413bd2d9e36d0988ac65207076bfc235444de59687c8f8678c11"
+    },
+    {
+      "checkpointPath": "diagnostic/room20-near-hook/history/failed-slip-inherited-type-checkpoint/hook-slip-corrected-test-inputs-before.json",
+      "sourcePath": "/workspace/scratch/1949b02c22bb/room20-preparation/failed-slip-inherited-type-checkpoint/hook-slip-corrected-test-inputs-before.json",
+      "role": "immutable-rejected-revision-bytes-renamed-test-as-data",
+      "bytes": 907,
+      "sha256": "2d71ca3b925f2e2ff56342b30917f14f691c61468d7e8a29210b6bfba6cb46c1"
+    },
+    {
+      "checkpointPath": "diagnostic/room20-near-hook/history/failed-slip-inherited-type-checkpoint/hook-slip-independent-correction-review.json",
+      "sourcePath": "/workspace/scratch/1949b02c22bb/room20-preparation/failed-slip-inherited-type-checkpoint/hook-slip-independent-correction-review.json",
+      "role": "immutable-rejected-revision-bytes-renamed-test-as-data",
+      "bytes": 16909,
+      "sha256": "bb778cdbc91ff1cefbc8a6643a8ed5b4be504b58003989d25e600bc6e9043925"
+    },
+    {
+      "checkpointPath": "diagnostic/room20-near-hook/history/failed-slip-inherited-type-checkpoint/hook-slip-inherited-type-gap.json",
+      "sourcePath": "/workspace/scratch/1949b02c22bb/room20-preparation/failed-slip-inherited-type-checkpoint/hook-slip-inherited-type-gap.json",
+      "role": "immutable-rejected-revision-bytes-renamed-test-as-data",
+      "bytes": 4545,
+      "sha256": "af6f99ce9208c3f02f0d2d78e0a6e612dd49822cc30b3c586de9ab98cd5b7b05"
+    },
+    {
+      "checkpointPath": "diagnostic/room20-near-hook/history/failed-slip-inherited-type-checkpoint/hook-slip-physics-owner-diagnostic-gap.json",
+      "sourcePath": "/workspace/scratch/1949b02c22bb/room20-preparation/failed-slip-inherited-type-checkpoint/hook-slip-physics-owner-diagnostic-gap.json",
+      "role": "immutable-rejected-revision-bytes-renamed-test-as-data",
+      "bytes": 1151,
+      "sha256": "682405a7af5526b0301beb373fa11210d913c0dc0bb06d05adba28a6bf3a7cb7"
+    },
+    {
+      "checkpointPath": "diagnostic/room20-near-hook/history/failed-slip-inherited-type-checkpoint/hook-slip-prototype-final-corrected-result.json",
+      "sourcePath": "/workspace/scratch/1949b02c22bb/room20-preparation/failed-slip-inherited-type-checkpoint/hook-slip-prototype-final-corrected-result.json",
+      "role": "immutable-rejected-revision-bytes-renamed-test-as-data",
+      "bytes": 14972,
+      "sha256": "551690535dfe660e74f820a21616cbffe01536f849c27059176969f1f69f8fdb"
+    },
+    {
+      "checkpointPath": "diagnostic/room20-near-hook/history/failed-slip-inherited-type-checkpoint/inputs.json",
+      "sourcePath": "/workspace/scratch/1949b02c22bb/room20-preparation/failed-slip-inherited-type-checkpoint/inputs.json",
+      "role": "immutable-rejected-revision-bytes-renamed-test-as-data",
+      "bytes": 827,
+      "sha256": "1bc34231d7a63ded1de8a2295e03e84f9167143fb7a060ffec88b7a2c377f201"
+    },
+    {
+      "checkpointPath": "diagnostic/room20-near-hook/history/failed-slip-inherited-type-checkpoint/src/game/LabRoom20NearHookPrototype.js",
+      "sourcePath": "/workspace/scratch/1949b02c22bb/room20-preparation/failed-slip-inherited-type-checkpoint/src/game/LabRoom20NearHookPrototype.js",
+      "role": "immutable-rejected-revision-bytes-renamed-test-as-data",
+      "bytes": 18305,
+      "sha256": "62fdf16143ddf6044c7944644a614164ca7c9c0c49dad1c6482951167493bb96"
+    },
+    {
+      "checkpointPath": "diagnostic/room20-near-hook/history/failed-slip-inherited-type-checkpoint/src/game/LabRoom20NearHookSlipPrototype.js",
+      "sourcePath": "/workspace/scratch/1949b02c22bb/room20-preparation/failed-slip-inherited-type-checkpoint/src/game/LabRoom20NearHookSlipPrototype.js",
+      "role": "immutable-rejected-revision-bytes-renamed-test-as-data",
+      "bytes": 10259,
+      "sha256": "aedff41a027f730cc303a61da82853df2027f5b64ffbf8ad70c74f303c6ad98e"
+    },
+    {
+      "checkpointPath": "diagnostic/room20-near-hook/history/failed-slip-inherited-type-checkpoint/tests/helpers/room20-hook-prototype-fixture.js",
+      "sourcePath": "/workspace/scratch/1949b02c22bb/room20-preparation/failed-slip-inherited-type-checkpoint/tests/helpers/room20-hook-prototype-fixture.js",
+      "role": "immutable-rejected-revision-bytes-renamed-test-as-data",
+      "bytes": 4839,
+      "sha256": "2282970bb2f57c4adc881b017b0cb283d989abd3ee31c7d82654d9915d56eccb"
+    },
+    {
+      "checkpointPath": "diagnostic/room20-near-hook/history/failed-slip-inherited-type-checkpoint/tests/lab-room20-near-hook-slip-prototype.test.js.txt",
+      "sourcePath": "/workspace/scratch/1949b02c22bb/room20-preparation/failed-slip-inherited-type-checkpoint/tests/lab-room20-near-hook-slip-prototype.test.js",
+      "role": "immutable-rejected-revision-bytes-renamed-test-as-data",
+      "bytes": 15049,
+      "sha256": "a177f63a1ffe54dcec1b526206fe1cc97a448751504adb5960d42b22f50ac3cc"
+    },
+    {
+      "checkpointPath": "diagnostic/room20-near-hook/history/test-development/hook-slip-corrections-targeted-attempt1.tap",
+      "sourcePath": "/workspace/scratch/1949b02c22bb/room20-preparation/hook-slip-corrections-targeted-attempt1.tap",
+      "role": "honest-raw-failed-test-development-receipt",
+      "bytes": 3876,
+      "sha256": "cfc4b4a6a6600c401a515de5aec1b497845d37b3c5ed4d3d92205b8f3ecf3bfb"
+    },
+    {
+      "checkpointPath": "diagnostic/room20-near-hook/history/test-development/hook-slip-corrections-targeted-attempt2.tap",
+      "sourcePath": "/workspace/scratch/1949b02c22bb/room20-preparation/hook-slip-corrections-targeted-attempt2.tap",
+      "role": "honest-raw-failed-test-development-receipt",
+      "bytes": 3637,
+      "sha256": "e967949632047c7c65554d3edb89d32b72d2bbc1d96a5335825665b4538e3e18"
+    },
+    {
+      "checkpointPath": "diagnostic/room20-near-hook/history/test-development/hook-slip-corrections-targeted-attempt3.tap",
+      "sourcePath": "/workspace/scratch/1949b02c22bb/room20-preparation/hook-slip-corrections-targeted-attempt3.tap",
+      "role": "honest-raw-failed-test-development-receipt",
+      "bytes": 3661,
+      "sha256": "655266437b3c89b61b2ec69ba75a094a9915d79dc53eafd317fa3d24ad5db77a"
+    },
+    {
+      "checkpointPath": "diagnostic/room20-near-hook/README.md",
+      "role": "honest-research-scope-readme",
+      "bytes": 4825,
+      "sha256": "b61759445fd130c2ac714a51eb73ac1310ce2718c70dd33146a62219388e5402"
+    }
+  ],
+  "limits": [
+    "Old60s matrix belongs to d55d5725/2a82c01a revision; do not relabel as current v2 matrix.",
+    "Final-v2 same geometry/dynamics local test includes six30s reached-state input cases, cargo-only30s, actual ownership/clock/mutant lifecycle checks.",
+    "Historical independent reproducers retain original workspace-specific paths and their script SHA; current portable direct commands are in README.",
+    "Rejected Stroke remains only because helper imports it; no failed alternative tests are in active tests glob.",
+    "Base production source/module dependencies remain supplied by existing repository and node_modules; no package or lock copied/edited."
+  ]
+}

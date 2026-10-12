@@ -1,0 +1,54 @@
+TAP version 13
+# ROOM20_HOOK_SLIP_LIVE_OWNERSHIP {"ordinaryAccepted":false,"prototypeAccepted":false,"receipts":[{"name":"detached-driver","actualIntervals":20,"phantomHookTorque":0,"phantomDriverTorque":0,"ownershipErrors":["driver-not-in-world","driver-live-contact"]},{"name":"detached-driver-hinge","actualIntervals":20,"phantomHookTorque":0,"phantomDriverTorque":0,"ownershipErrors":["driver-hinge-ownership"]},{"name":"detached-hook-hinge","actualIntervals":20,"phantomHookTorque":0,"phantomDriverTorque":0,"ownershipErrors":["hinge-ownership"]},{"name":"detached-foundation","actualIntervals":20,"phantomHookTorque":0,"phantomDriverTorque":0,"ownershipErrors":["body-not-in-world:22","driver-foundation"]},{"name":"removed-driver-shape","actualIntervals":20,"phantomHookTorque":0,"phantomDriverTorque":0,"ownershipErrors":["driver-shape-registration"]},{"name":"driver-body-mask","actualIntervals":20,"phantomHookTorque":0,"phantomDriverTorque":0,"ownershipErrors":["driver-live-contact"]},{"name":"driver-shape-mask","actualIntervals":20,"phantomHookTorque":0,"phantomDriverTorque":0,"ownershipErrors":["driver-live-contact"]},{"name":"driver-contact-response","actualIntervals":20,"phantomHookTorque":0,"phantomDriverTorque":0,"ownershipErrors":["driver-live-contact"]},{"name":"foreign-driver-registration","actualIntervals":20,"phantomHookTorque":0,"phantomDriverTorque":0,"ownershipErrors":["driver-shape-registration"]},{"name":"disabled-driver-joint-equation","actualIntervals":20,"phantomHookTorque":0,"phantomDriverTorque":0,"ownershipErrors":["driver-hinge-ownership"]}]}
+# Subtest: DIAGNOSTIC real detached or invalid driver cannot supply phantom coupling torque
+ok 1 - DIAGNOSTIC real detached or invalid driver cannot supply phantom coupling torque
+  ---
+  duration_ms: 1978.812083
+  type: 'test'
+  ...
+# Subtest: DIAGNOSTIC actual solver clock reads E and current original identity after public frame preparation
+not ok 2 - DIAGNOSTIC actual solver clock reads E and current original identity after public frame preparation
+  ---
+  duration_ms: 1131.842313
+  type: 'test'
+  location: '/workspace/scratch/1949b02c22bb/room20-hook-prototype/tests/lab-room20-near-hook-slip-prototype.test.js:59:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    held-original
+    + actual - expected
+    
+    + 62.400000000000006
+    - 0
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 0
+  actual: 62.400000000000006
+  operator: 'strictEqual'
+  stack: |-
+    Object.update (file:///workspace/scratch/1949b02c22bb/room20-hook-prototype/tests/lab-room20-near-hook-slip-prototype.test.js:69:423)
+    World.internalStep (/workspace/scratch/1949b02c22bb/dependency-runtime/node_modules/cannon-es/dist/cannon-es.cjs.js:12598:26)
+    World.step (/workspace/scratch/1949b02c22bb/dependency-runtime/node_modules/cannon-es/dist/cannon-es.cjs.js:12519:12)
+    LabPhysics.step (file:///workspace/scratch/1949b02c22bb/room20-hook-prototype/src/game/LabPhysics.js:728:18)
+    Object.step (file:///workspace/scratch/1949b02c22bb/room20-hook-prototype/tests/helpers/room20-hook-prototype-fixture.js:20:169)
+    TestContext.<anonymous> (file:///workspace/scratch/1949b02c22bb/room20-hook-prototype/tests/lab-room20-near-hook-slip-prototype.test.js:69:489)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1382:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+    Test.postRun (node:internal/test_runner/test:1522:19)
+  ...
+# Subtest: DIAGNOSTIC disposal preserves valid foreign bodyBox and static sweep replacements under owned UUIDs
+ok 3 - DIAGNOSTIC disposal preserves valid foreign bodyBox and static sweep replacements under owned UUIDs
+  ---
+  duration_ms: 142.83177
+  type: 'test'
+  ...
+1..3
+# tests 3
+# suites 0
+# pass 2
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 3435.333017

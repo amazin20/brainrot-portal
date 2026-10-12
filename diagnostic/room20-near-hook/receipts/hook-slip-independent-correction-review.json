@@ -1,0 +1,535 @@
+{
+  "kind": "independent-targeted-room20-slip-corrections",
+  "ordinaryAccepted": false,
+  "sourceAccepted": false,
+  "fullRoomAccepted": false,
+  "privatePrototypeAccepted": false,
+  "productionForceBudgetAccepted": false,
+  "sourceBefore": [
+    {
+      "path": "src/game/LabRoom20NearHookPrototype.js",
+      "bytes": 18305,
+      "sha256": "62fdf16143ddf6044c7944644a614164ca7c9c0c49dad1c6482951167493bb96"
+    },
+    {
+      "path": "src/game/LabRoom20NearHookSlipPrototype.js",
+      "bytes": 10259,
+      "sha256": "aedff41a027f730cc303a61da82853df2027f5b64ffbf8ad70c74f303c6ad98e"
+    },
+    {
+      "path": "tests/helpers/room20-hook-prototype-fixture.js",
+      "bytes": 4839,
+      "sha256": "2282970bb2f57c4adc881b017b0cb283d989abd3ee31c7d82654d9915d56eccb"
+    },
+    {
+      "path": "tests/lab-room20-near-hook-slip-prototype.test.js",
+      "bytes": 15049,
+      "sha256": "a177f63a1ffe54dcec1b526206fe1cc97a448751504adb5960d42b22f50ac3cc"
+    }
+  ],
+  "sourceAfter": [
+    {
+      "path": "src/game/LabRoom20NearHookPrototype.js",
+      "bytes": 18305,
+      "sha256": "62fdf16143ddf6044c7944644a614164ca7c9c0c49dad1c6482951167493bb96"
+    },
+    {
+      "path": "src/game/LabRoom20NearHookSlipPrototype.js",
+      "bytes": 10259,
+      "sha256": "aedff41a027f730cc303a61da82853df2027f5b64ffbf8ad70c74f303c6ad98e"
+    },
+    {
+      "path": "tests/helpers/room20-hook-prototype-fixture.js",
+      "bytes": 4839,
+      "sha256": "2282970bb2f57c4adc881b017b0cb283d989abd3ee31c7d82654d9915d56eccb"
+    },
+    {
+      "path": "tests/lab-room20-near-hook-slip-prototype.test.js",
+      "bytes": 15049,
+      "sha256": "a177f63a1ffe54dcec1b526206fe1cc97a448751504adb5960d42b22f50ac3cc"
+    }
+  ],
+  "sourceUnchanged": true,
+  "passed": false,
+  "cases": [
+    {
+      "kind": "live-ownership-driver-body",
+      "ensure": false,
+      "hand": false,
+      "driverPresent": false,
+      "startDriverTorque": 0,
+      "endDriverTorque": 0,
+      "force": {
+        "worldStep": 242,
+        "forceClock": "actual-world-subsystem",
+        "liveOwnership": false,
+        "ownershipErrors": [
+          "driver-not-in-world",
+          "driver-live-contact"
+        ],
+        "tau": 0,
+        "actualHookTorque": 0,
+        "actualDriverTorque": 0,
+        "totalTorque": 0,
+        "omegaDrive": 8.571428571428566,
+        "omegaHook": -7.716050021144838e-15,
+        "totalCouplingPower": 0,
+        "torqueCeiling": 4,
+        "slipGain": 2
+      },
+      "registryValid": false,
+      "handCount": 1,
+      "passed": true
+    },
+    {
+      "kind": "live-ownership-driver-hinge",
+      "ensure": false,
+      "hand": false,
+      "driverPresent": true,
+      "startDriverTorque": 0,
+      "endDriverTorque": 0,
+      "force": {
+        "worldStep": 242,
+        "forceClock": "actual-world-subsystem",
+        "liveOwnership": false,
+        "ownershipErrors": [
+          "driver-hinge-ownership"
+        ],
+        "tau": 0,
+        "actualHookTorque": 0,
+        "actualDriverTorque": 0,
+        "totalTorque": 0,
+        "omegaDrive": 8.571428571428566,
+        "omegaHook": -7.716050021144838e-15,
+        "totalCouplingPower": 0,
+        "torqueCeiling": 4,
+        "slipGain": 2
+      },
+      "registryValid": true,
+      "handCount": 1,
+      "passed": true
+    },
+    {
+      "kind": "live-ownership-driver-shape",
+      "ensure": false,
+      "hand": false,
+      "driverPresent": true,
+      "startDriverTorque": 0,
+      "endDriverTorque": 0,
+      "force": {
+        "worldStep": 242,
+        "forceClock": "actual-world-subsystem",
+        "liveOwnership": false,
+        "ownershipErrors": [
+          "driver-shape-registration"
+        ],
+        "tau": 0,
+        "actualHookTorque": 0,
+        "actualDriverTorque": 0,
+        "totalTorque": 0,
+        "omegaDrive": 8.571428571428566,
+        "omegaHook": -7.716050021144838e-15,
+        "totalCouplingPower": 0,
+        "torqueCeiling": 4,
+        "slipGain": 2
+      },
+      "registryValid": false,
+      "handCount": 1,
+      "passed": true
+    },
+    {
+      "kind": "live-ownership-driver-registry",
+      "ensure": false,
+      "hand": false,
+      "driverPresent": true,
+      "startDriverTorque": 0,
+      "endDriverTorque": 0,
+      "force": {
+        "worldStep": 242,
+        "forceClock": "actual-world-subsystem",
+        "liveOwnership": false,
+        "ownershipErrors": [
+          "driver-shape-registration"
+        ],
+        "tau": 0,
+        "actualHookTorque": 0,
+        "actualDriverTorque": 0,
+        "totalTorque": 0,
+        "omegaDrive": 8.571428571428566,
+        "omegaHook": -7.716050021144838e-15,
+        "totalCouplingPower": 0,
+        "torqueCeiling": 4,
+        "slipGain": 2
+      },
+      "registryValid": false,
+      "handCount": 1,
+      "passed": true
+    },
+    {
+      "kind": "live-ownership-driver-disabled-collider",
+      "ensure": false,
+      "hand": false,
+      "driverPresent": true,
+      "startDriverTorque": 0,
+      "endDriverTorque": 0,
+      "force": {
+        "worldStep": 242,
+        "forceClock": "actual-world-subsystem",
+        "liveOwnership": false,
+        "ownershipErrors": [
+          "driver-live-contact"
+        ],
+        "tau": 0,
+        "actualHookTorque": 0,
+        "actualDriverTorque": 0,
+        "totalTorque": 0,
+        "omegaDrive": 8.571428571428566,
+        "omegaHook": -7.716050021144838e-15,
+        "totalCouplingPower": 0,
+        "torqueCeiling": 4,
+        "slipGain": 2
+      },
+      "registryValid": true,
+      "handCount": 1,
+      "passed": true
+    },
+    {
+      "kind": "live-ownership-driver-mask",
+      "ensure": false,
+      "hand": false,
+      "driverPresent": true,
+      "startDriverTorque": 0,
+      "endDriverTorque": 0,
+      "force": {
+        "worldStep": 242,
+        "forceClock": "actual-world-subsystem",
+        "liveOwnership": false,
+        "ownershipErrors": [
+          "driver-live-contact"
+        ],
+        "tau": 0,
+        "actualHookTorque": 0,
+        "actualDriverTorque": 0,
+        "totalTorque": 0,
+        "omegaDrive": 8.571428571428566,
+        "omegaHook": -7.716050021144838e-15,
+        "totalCouplingPower": 0,
+        "torqueCeiling": 4,
+        "slipGain": 2
+      },
+      "registryValid": false,
+      "handCount": 1,
+      "passed": true
+    },
+    {
+      "kind": "live-ownership-hook-body",
+      "ensure": false,
+      "hand": false,
+      "driverPresent": true,
+      "startDriverTorque": 0,
+      "endDriverTorque": 0,
+      "force": {
+        "worldStep": 242,
+        "forceClock": "actual-world-subsystem",
+        "liveOwnership": false,
+        "ownershipErrors": [
+          "body-not-in-world:46",
+          "live-contact:1d29a3dc-f03c-4bbc-8ff1-2b88e18d90c5",
+          "live-contact:7cf2fa73-28a5-4222-bfab-ce51cfc7c39b",
+          "live-contact:a02ea29a-af82-4956-b072-77b4a83f9e36",
+          "live-contact:d905396e-854f-4f9b-9761-543ea304ebf7",
+          "live-contact:4f7cd1e1-f06d-46ee-8c36-1a29831c5e86",
+          "live-contact:75e94614-206e-4c82-8bc3-2553e7ba8da5",
+          "live-contact:e4421784-9447-4aeb-b966-ae330d24afdf",
+          "mechanism-contact-masks"
+        ],
+        "tau": 0,
+        "actualHookTorque": 0,
+        "actualDriverTorque": 0,
+        "totalTorque": 0,
+        "omegaDrive": 8.571428571428566,
+        "omegaHook": 8.770761894538737e-15,
+        "totalCouplingPower": 0,
+        "torqueCeiling": 4,
+        "slipGain": 2
+      },
+      "registryValid": true,
+      "handCount": 1,
+      "passed": true
+    },
+    {
+      "kind": "live-ownership-hook-hinge",
+      "ensure": false,
+      "hand": false,
+      "driverPresent": true,
+      "startDriverTorque": 0,
+      "endDriverTorque": 0,
+      "force": {
+        "worldStep": 242,
+        "forceClock": "actual-world-subsystem",
+        "liveOwnership": false,
+        "ownershipErrors": [
+          "hinge-ownership"
+        ],
+        "tau": 0,
+        "actualHookTorque": 0,
+        "actualDriverTorque": 0,
+        "totalTorque": 0,
+        "omegaDrive": 8.571428571428566,
+        "omegaHook": 0.22220950652979737,
+        "totalCouplingPower": 0,
+        "torqueCeiling": 4,
+        "slipGain": 2
+      },
+      "registryValid": true,
+      "handCount": 1,
+      "passed": true
+    },
+    {
+      "kind": "live-ownership-hook-shape",
+      "ensure": false,
+      "hand": false,
+      "driverPresent": true,
+      "startDriverTorque": 0,
+      "endDriverTorque": 0,
+      "force": {
+        "worldStep": 242,
+        "forceClock": "actual-world-subsystem",
+        "liveOwnership": false,
+        "ownershipErrors": [
+          "compound-shape-count",
+          "shape-registration:ec8e3e10-8809-416b-9d79-989467eb364b",
+          "shape-registration:1e9b9150-4720-4d38-959e-73021b7f78b4",
+          "shape-registration:3bc0e0ab-f2fe-4d66-a59c-ecbea043a808",
+          "shape-registration:869c8cf5-1f45-4b72-bb4d-841a6f0d34d0",
+          "shape-registration:3b8b0057-c6fa-48e4-8bea-19b6b09f5a8a",
+          "shape-registration:38f26a20-37ff-4c31-abb8-0404cdc66153",
+          "shape-registration:4e9bfef0-54d6-4d89-93b3-10d340546c7a"
+        ],
+        "tau": 0,
+        "actualHookTorque": 0,
+        "actualDriverTorque": 0,
+        "totalTorque": 0,
+        "omegaDrive": 8.571428571428566,
+        "omegaHook": 0.016704751237251368,
+        "totalCouplingPower": 0,
+        "torqueCeiling": 4,
+        "slipGain": 2
+      },
+      "registryValid": true,
+      "handCount": 1,
+      "passed": true
+    },
+    {
+      "kind": "live-ownership-anchor-body",
+      "ensure": false,
+      "hand": false,
+      "driverPresent": true,
+      "startDriverTorque": 0,
+      "endDriverTorque": 0,
+      "force": {
+        "worldStep": 242,
+        "forceClock": "actual-world-subsystem",
+        "liveOwnership": false,
+        "ownershipErrors": [
+          "body-not-in-world:64",
+          "driver-foundation"
+        ],
+        "tau": 0,
+        "actualHookTorque": 0,
+        "actualDriverTorque": 0,
+        "totalTorque": 0,
+        "omegaDrive": 8.571428571428566,
+        "omegaHook": 0.01637336827177167,
+        "totalCouplingPower": 0,
+        "torqueCeiling": 4,
+        "slipGain": 2
+      },
+      "registryValid": true,
+      "handCount": 1,
+      "passed": true
+    },
+    {
+      "kind": "prepared-force-then-real-E-is-resampled-at-solver",
+      "step": 1103,
+      "beforeForce": {
+        "worldStep": 1102,
+        "forceClock": "actual-world-subsystem",
+        "liveOwnership": true,
+        "ownershipErrors": [],
+        "tau": -0.09871360565870058,
+        "actualHookTorque": -0.09871360565870058,
+        "actualDriverTorque": 0.09871360565870058,
+        "totalTorque": 0,
+        "omegaDrive": 1.3364670886557204,
+        "omegaHook": 1.3858238914850707,
+        "totalCouplingPower": -0.004872187971070724,
+        "torqueCeiling": 4,
+        "slipGain": 2
+      },
+      "torquesBefore": [
+        0,
+        0
+      ],
+      "torquesPrepared": [
+        0,
+        0
+      ],
+      "torquesAfterInput": [
+        0,
+        0
+      ],
+      "inputOmega": 9.89069363844424,
+      "actualBeforeSolver": {
+        "worldStep": 1103,
+        "forceClock": "actual-world-subsystem",
+        "liveOwnership": true,
+        "ownershipErrors": [],
+        "tau": 4,
+        "actualHookTorque": 4,
+        "actualDriverTorque": -4,
+        "totalTorque": 0,
+        "omegaDrive": 9.89069363844424,
+        "omegaHook": 1.3817951487232785,
+        "totalCouplingPower": -34.03559395888385,
+        "torqueCeiling": 4,
+        "slipGain": 2,
+        "actualPower": -34.03559395888385,
+        "omegaDriveCurrent": 9.89069363844424,
+        "omegaHookCurrent": 1.3817951487232785
+      },
+      "passed": true
+    },
+    {
+      "kind": "current-original-cable-clock-original-held",
+      "initialTension": 62.37744956459453,
+      "beforeGateForce": 0,
+      "gateForcePrepared": 0,
+      "freeImmediately": false,
+      "solver": {
+        "worldStep": 840,
+        "originalFree": false,
+        "tension": 0,
+        "cargoForce": [
+          0,
+          -62.400000000000006,
+          0
+        ],
+        "gateForce": [
+          -23.11349306162557,
+          -156,
+          0
+        ]
+      },
+      "passed": true
+    },
+    {
+      "kind": "current-original-cable-clock-original-shape",
+      "passed": false,
+      "error": {
+        "name": "TypeError",
+        "message": "Cannot read properties of undefined (reading 'collisionFilterGroup')",
+        "stack": "TypeError: Cannot read properties of undefined (reading 'collisionFilterGroup')\n    at file:///workspace/scratch/1949b02c22bb/room20-hook-prototype/src/game/LabPhysics.js:241:22\n    at Array.filter (<anonymous>)\n    at LabPhysics._guardRegisteredCompoundCargo (file:///workspace/scratch/1949b02c22bb/room20-hook-prototype/src/game/LabPhysics.js:234:54)\n    at LabPhysics.step (file:///workspace/scratch/1949b02c22bb/room20-hook-prototype/src/game/LabPhysics.js:730:12)\n    at Object.step (file:///workspace/scratch/1949b02c22bb/room20-hook-prototype/tests/helpers/room20-hook-prototype-fixture.js:20:169)\n    at file:///workspace/scratch/1949b02c22bb/room20-preparation/review-slip-corrections.mjs:40:300\n    at attempt (file:///workspace/scratch/1949b02c22bb/room20-preparation/review-slip-corrections.mjs:12:123)\n    at file:///workspace/scratch/1949b02c22bb/room20-preparation/review-slip-corrections.mjs:33:108\n    at ModuleJob.run (node:internal/modules/esm/module_job:439:25)\n    at async node:internal/modules/esm/loader:643:26"
+      }
+    },
+    {
+      "kind": "current-original-cable-clock-original-mask",
+      "initialTension": 62.37744956459453,
+      "beforeGateForce": 0,
+      "gateForcePrepared": 0,
+      "freeImmediately": false,
+      "solver": {
+        "worldStep": 840,
+        "originalFree": false,
+        "tension": 0,
+        "cargoForce": [
+          0,
+          -62.400000000000006,
+          0
+        ],
+        "gateForce": [
+          -23.11349306162557,
+          -156,
+          0
+        ]
+      },
+      "passed": true
+    },
+    {
+      "kind": "current-original-cable-clock-original-body",
+      "initialTension": 62.37744956459453,
+      "beforeGateForce": 0,
+      "gateForcePrepared": 0,
+      "freeImmediately": false,
+      "solver": {
+        "worldStep": 840,
+        "originalFree": false,
+        "tension": 0,
+        "cargoForce": [
+          0,
+          0,
+          0
+        ],
+        "gateForce": [
+          -23.11349306162557,
+          -156,
+          0
+        ]
+      },
+      "passed": true
+    },
+    {
+      "kind": "current-original-cable-clock-original-identity",
+      "initialTension": 62.37744956459453,
+      "beforeGateForce": 0,
+      "gateForcePrepared": 0,
+      "freeImmediately": false,
+      "solver": {
+        "worldStep": 840,
+        "originalFree": false,
+        "tension": 0,
+        "cargoForce": [
+          0,
+          -62.400000000000006,
+          0
+        ],
+        "gateForce": [
+          -23.11349306162557,
+          -156,
+          0
+        ]
+      },
+      "passed": true
+    },
+    {
+      "kind": "exact-owned-dispose-preserves-valid-foreign-registries",
+      "passed": false,
+      "error": {
+        "name": "TypeError",
+        "message": "Invalid owned body Box: body-not-in-world, shape-identity",
+        "stack": "TypeError: Invalid owned body Box: body-not-in-world, shape-identity\n    at LabPhysics.registerBodyBox (file:///workspace/scratch/1949b02c22bb/room20-hook-prototype/src/game/LabPhysics.js:207:34)\n    at file:///workspace/scratch/1949b02c22bb/room20-preparation/review-slip-corrections.mjs:44:207\n    at Array.map (<anonymous>)\n    at file:///workspace/scratch/1949b02c22bb/room20-preparation/review-slip-corrections.mjs:44:20\n    at attempt (file:///workspace/scratch/1949b02c22bb/room20-preparation/review-slip-corrections.mjs:12:123)\n    at file:///workspace/scratch/1949b02c22bb/room20-preparation/review-slip-corrections.mjs:42:1\n    at ModuleJob.run (node:internal/modules/esm/module_job:439:25)\n    at async node:internal/modules/esm/loader:643:26\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)"
+      }
+    },
+    {
+      "kind": "normal-same-E-cascade-and-actual-fixed-clock",
+      "loadedBearing": 14.044673066380845,
+      "loadedClosedOpening": -0.0007854977820348529,
+      "relievedBearing": 0,
+      "relievedCapture": 39.31252531328274,
+      "relievedOpening": 0.6207590351673348,
+      "opened": 2.400000000000008,
+      "returned": -0.05000000000000455,
+      "inputMomenta": [
+        0.6999999999999998,
+        0.7
+      ],
+      "maxPower": 3.771237288381814e-32,
+      "oncePerActualStep": true,
+      "passed": true
+    }
+  ],
+  "limits": [
+    "Targeted regression for three concrete isolated defects, not a repeat of every source test or exhaustive ordinary controls.",
+    "Source/full-room acceptance and production endstroke force budget remain open."
+  ]
+}

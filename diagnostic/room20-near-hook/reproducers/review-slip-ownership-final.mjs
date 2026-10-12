@@ -1,0 +1,21 @@
+import fs from 'node:fs';
+import {createHash} from 'node:crypto';
+import {createHookFixture} from '../room20-hook-prototype/tests/helpers/room20-hook-prototype-fixture.js';
+import {LabPhysics} from '../room20-hook-prototype/src/game/LabPhysics.js';
+const root='/workspace/scratch/1949b02c22bb/room20-hook-prototype',paths=['src/game/LabRoom20NearHookPrototype.js','src/game/LabRoom20NearHookSlipPrototype.js','tests/helpers/room20-hook-prototype-fixture.js','tests/lab-room20-near-hook-slip-prototype.test.js'];
+const inputs=()=>paths.map(path=>({path,sha256:createHash('sha256').update(fs.readFileSync(root+'/'+path)).digest('hex')}));const before=inputs();
+if(process.env.EXPECTED_BASE&&before[0].sha256!==process.env.EXPECTED_BASE)throw Error('Unexpected frozen base SHA');
+const cases=[];
+for(const mutation of ['hook-static','gate-static','fixed-dynamic','hook-mass','gate-mass','fixed-mass']){
+ const f=createHookFixture({slipDrive:true});try{f.step(240,{record:false});const body=mutation.startsWith('hook')?f.cell.hookBody:mutation.startsWith('gate')?f.cell.gateBody:f.cell.fixedBody,initial={id:body.id,type:body.type,mass:body.mass};
+ if(mutation.endsWith('static'))body.type=2;else if(mutation.endsWith('dynamic'))body.type=1;else body.mass+=1;
+ const ensure=f.cell.ensure(),hand=f.cell.hand();f.step(1,{record:false});const force=f.cell.diagnostics().slip.lastForce;cases.push({kind:mutation,initial,current:{type:body.type,mass:body.mass},ensure,hand,force,passed:!ensure&&!hand&&!force.liveOwnership&&force.actualHookTorque===0&&force.actualDriverTorque===0});
+ }finally{f.dispose();}
+}
+{
+ const f=createHookFixture({slipDrive:true}),old=f.game.physics,replacement=new LabPhysics();try{f.step(240,{record:false});f.releaseTray();f.step(600,{record:false});const initial=f.cell.diagnostics();replacement.createCargo({position:[10,5.35,0]});f.game.physics=replacement;const ensure=f.cell.ensure(),hand=f.cell.hand(),immediate=f.cell.diagnostics();old.world.step(1/120);const afterOldSolver=f.cell.diagnostics();cases.push({kind:'current-physics-owner',initial:{worldStep:initial.worldStep,tension:initial.tension,originalFree:initial.originalFree},ensure,hand,immediate:{originalFree:immediate.originalFree,tension:immediate.tension,liveOwnership:immediate.slip.liveOwnership},afterOldSolver:{worldStep:afterOldSolver.worldStep,originalFree:afterOldSolver.originalFree,tension:afterOldSolver.tension,lastForce:afterOldSolver.slip.lastForce},passed:!ensure&&!hand&&!immediate.originalFree&&!afterOldSolver.originalFree&&afterOldSolver.tension===0&&afterOldSolver.slip.lastForce.actualHookTorque===0&&afterOldSolver.slip.lastForce.actualDriverTorque===0});}finally{f.game.physics=old;replacement.dispose();f.dispose();}
+}
+{
+ const f=createHookFixture({slipDrive:true});try{f.step(240,{record:false});const d=f.cell.diagnostics(),hand=f.cell.hand();f.step(1,{record:false});const next=f.cell.diagnostics();cases.push({kind:'unchanged-default-physical-input',bearingForce:d.bearingForce,originalFree:d.originalFree,hand,lastHand:next.lastHand,force:next.slip.lastForce,passed:d.bearingForce>10&&d.originalFree&&hand&&next.slip.lastForce.liveOwnership&&Math.abs(next.lastHand.driverAngularMomentumAfter-next.lastHand.driverAngularMomentumBefore-.7)<1e-8&&Math.abs(next.slip.lastForce.actualHookTorque)<=4&&next.slip.lastForce.totalCouplingPower<=1e-10});}finally{f.dispose();}
+}
+const after=inputs(),output='/workspace/scratch/1949b02c22bb/room20-preparation/hook-slip-independent-final-ownership-review.json';const report={kind:'independent-targeted-final-room20-slip-ownership-review',ordinaryAccepted:false,sourceAccepted:false,fullRoomAccepted:false,privatePrototypeAccepted:false,productionForceBudgetAccepted:false,sourceBefore:before,sourceAfter:after,sourceUnchanged:JSON.stringify(before)===JSON.stringify(after),passed:cases.every(c=>c.passed),cases,scope:'Targeted confirmation of six authored-type/mass mutants and current-owner diagnostic correction; no repeated long rate matrix or ordinary-route claim.'};fs.writeFileSync(output,JSON.stringify(report,null,2));console.log(JSON.stringify({output,sourceUnchanged:report.sourceUnchanged,passed:report.passed,cases:cases.map(c=>({kind:c.kind,passed:c.passed}))}));

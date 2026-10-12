@@ -1,0 +1,269 @@
+{
+  "scope": "Private uncommitted real-solver diagnostic near-hook primitive. No ordinary player/portal route, full room, public package, source CI or release acceptance.",
+  "createdAt": "2026-10-12T19:55:44.297649+00:00",
+  "baseCommit": "5e552e9c3ac248b535d619741f15e99e29979cbf",
+  "baseTree": "8d573c22140eeb9625fff94ca14efd3f97978c17",
+  "sourceAccepted": false,
+  "ordinaryAccepted": false,
+  "room20Accepted": false,
+  "prototypeAccepted": false,
+  "fullCampaignUniquenessAccepted": false,
+  "boundedSlipUnitMechanismObserved": true,
+  "trackedBaseUnchanged": true,
+  "changedFiles": [
+    {
+      "path": "scripts/qa-room20-hook-slip-spam.mjs",
+      "absolutePath": "/workspace/scratch/1949b02c22bb/room20-hook-prototype/scripts/qa-room20-hook-slip-spam.mjs",
+      "bytes": 3221,
+      "sha256": "9b9a4f56de2f09dec151e128bcca7f0d2c79ad80da2cf291cecfee853f7d4dfe"
+    },
+    {
+      "path": "scripts/qa-room20-hook-stroke-spam.mjs",
+      "absolutePath": "/workspace/scratch/1949b02c22bb/room20-hook-prototype/scripts/qa-room20-hook-stroke-spam.mjs",
+      "bytes": 3086,
+      "sha256": "a0b1896718e8452d6f66e6ae9fe7ea380cda81ac152497a4a412b9edc07ba401"
+    },
+    {
+      "path": "scripts/qa-room20-near-hook-prototype.mjs",
+      "absolutePath": "/workspace/scratch/1949b02c22bb/room20-hook-prototype/scripts/qa-room20-near-hook-prototype.mjs",
+      "bytes": 1206,
+      "sha256": "c9d8df50dd1abe877195ecd7fb1da6235fb386151ab5a2099ecd038c103f885d"
+    },
+    {
+      "path": "src/game/LabRoom20NearHookPrototype.js",
+      "absolutePath": "/workspace/scratch/1949b02c22bb/room20-hook-prototype/src/game/LabRoom20NearHookPrototype.js",
+      "bytes": 15645,
+      "sha256": "d55d5725f92207afae5b3d0ae3b2890d89058e9067e8c09aa85f2223ff295d04"
+    },
+    {
+      "path": "src/game/LabRoom20NearHookSlipPrototype.js",
+      "absolutePath": "/workspace/scratch/1949b02c22bb/room20-hook-prototype/src/game/LabRoom20NearHookSlipPrototype.js",
+      "bytes": 7670,
+      "sha256": "2a82c01a6fb1775a0cf5f9dbb83e03009c18aa22e0525fad994876f1acdf2f72"
+    },
+    {
+      "path": "src/game/LabRoom20NearHookStrokePrototype.js",
+      "absolutePath": "/workspace/scratch/1949b02c22bb/room20-hook-prototype/src/game/LabRoom20NearHookStrokePrototype.js",
+      "bytes": 7353,
+      "sha256": "7c25737876006d690988fc2e1c611552f51d6a23d37492733f420c6c6a444b0b"
+    },
+    {
+      "path": "tests/helpers/room20-hook-prototype-fixture.js",
+      "absolutePath": "/workspace/scratch/1949b02c22bb/room20-hook-prototype/tests/helpers/room20-hook-prototype-fixture.js",
+      "bytes": 4839,
+      "sha256": "2282970bb2f57c4adc881b017b0cb283d989abd3ee31c7d82654d9915d56eccb"
+    },
+    {
+      "path": "tests/lab-room20-near-hook-prototype.test.js",
+      "absolutePath": "/workspace/scratch/1949b02c22bb/room20-hook-prototype/tests/lab-room20-near-hook-prototype.test.js",
+      "bytes": 9120,
+      "sha256": "c166c13d6791bf3ca299a4e9d96ae5e83b5f181dfe8a9c13c4bd7881a8e36161"
+    },
+    {
+      "path": "tests/lab-room20-near-hook-slip-prototype.test.js",
+      "absolutePath": "/workspace/scratch/1949b02c22bb/room20-hook-prototype/tests/lab-room20-near-hook-slip-prototype.test.js",
+      "bytes": 8066,
+      "sha256": "38e10f20b22fea8bb00760e482d552eaf60e48095203d3943a27a1f7fc4dc563"
+    },
+    {
+      "path": "tests/lab-room20-near-hook-stroke-prototype.test.js",
+      "absolutePath": "/workspace/scratch/1949b02c22bb/room20-hook-prototype/tests/lab-room20-near-hook-stroke-prototype.test.js",
+      "bytes": 4125,
+      "sha256": "4ed93c30f70d613109330ba3b9be939c83ff86eb2fedceae6268da4958ae5f9f"
+    }
+  ],
+  "currentNarrowTests": {
+    "path": "/workspace/scratch/1949b02c22bb/room20-preparation/hook-slip-final-tests-attempt1.tap",
+    "bytes": 40656,
+    "sha256": "b9285b563f846bf8907e94d0ac98f178fe9ccdca2d615306f04f9f5ccb730180",
+    "counts": {
+      "tests": 5,
+      "suites": 0,
+      "pass": 5,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "terminalFooterCount": 1
+  },
+  "preservedEarlierFailingTests": {
+    "path": "/workspace/scratch/1949b02c22bb/room20-preparation/hook-prototype-final-tests.tap",
+    "bytes": 19202,
+    "sha256": "1f631490a28ace4b3d47c4d6e5b29e40ec420b1ccb1f8fe4a3ae2590f8362c62",
+    "counts": {
+      "tests": 9,
+      "suites": 0,
+      "pass": 8,
+      "fail": 1,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "terminalFooterCount": 1
+  },
+  "earlierFailingSourceCheckpoint": "/workspace/scratch/1949b02c22bb/room20-preparation/failed-stroke-checkpoint",
+  "singleCausalSequence": {
+    "actualPhysicsSteps": 2520,
+    "originalBodyId": 0,
+    "originalShapeId": 0,
+    "loadedBearingN": 14.044673066380845,
+    "loadedContacts": 2,
+    "sameInputAngularImpulseNms": 0.7,
+    "heldOpening": -0.0007854977820348529,
+    "relievedOpening": 0.6207590351673348,
+    "relievedBearingN": 0,
+    "relievedCaptureN": 39.31252531328274,
+    "originalGravityCableN": 62.37744956459453,
+    "openedOpening": 2.400000000000008,
+    "openedHookAngleRad": 2.8192804754772585,
+    "cutReturnOpening": -0.05000000000000455,
+    "maxBearingPenetrationM": 0.0005449145515375412,
+    "maxPivotDriftM": 0.0005932003801079051,
+    "motorEquationPresent": [
+      false,
+      false
+    ],
+    "constraintEquationCounts": [
+      5,
+      5
+    ]
+  },
+  "reachedStateSpamArtifact": {
+    "path": "/workspace/scratch/1949b02c22bb/room20-preparation/hook-slip-spam-attempt1.json",
+    "bytes": 335795,
+    "sha256": "e25e373cf5a15404e2b3606c58c94445c6d1a1a3f41c10ea5d5d1a8ef2e0328e"
+  },
+  "reachedStateSpamResults": [
+    {
+      "rateHz": 15,
+      "frameBatchSteps": 1,
+      "actualE": 450,
+      "physicsSteps": 3840,
+      "initialTrayN": 62.431201967108684,
+      "initialTrayBody": 6,
+      "initialTrayShape": 38,
+      "initialBearingN": 19.99179974591774,
+      "maxOpening": -0.0008477115807691135,
+      "maxHookAngle": -0.0007299500234458909,
+      "maxOriginalTraction": 0,
+      "maxCouplingTorque": 4,
+      "maxNetCouplingTorqueError": 4.440892098500626e-16,
+      "maxInstantaneousTotalCouplingPower": 9.70761493908841e-30,
+      "allEActuallyApplied": true,
+      "observedOverride": false
+    },
+    {
+      "rateHz": 30,
+      "frameBatchSteps": 1,
+      "actualE": 900,
+      "physicsSteps": 3840,
+      "initialTrayN": 62.431201967108684,
+      "initialTrayBody": 13,
+      "initialTrayShape": 78,
+      "initialBearingN": 19.99179974591774,
+      "maxOpening": -0.0008477115807691135,
+      "maxHookAngle": -0.0007299500234458909,
+      "maxOriginalTraction": 0,
+      "maxCouplingTorque": 4,
+      "maxNetCouplingTorqueError": 4.440892098500626e-16,
+      "maxInstantaneousTotalCouplingPower": 9.70761493908841e-30,
+      "allEActuallyApplied": true,
+      "observedOverride": false
+    },
+    {
+      "rateHz": 60,
+      "frameBatchSteps": 1,
+      "actualE": 1800,
+      "physicsSteps": 3840,
+      "initialTrayN": 62.431201967108684,
+      "initialTrayBody": 20,
+      "initialTrayShape": 118,
+      "initialBearingN": 19.99179974591774,
+      "maxOpening": -0.0008477115807691135,
+      "maxHookAngle": -0.0007299500234458909,
+      "maxOriginalTraction": 0,
+      "maxCouplingTorque": 4,
+      "maxNetCouplingTorqueError": 4.440892098500626e-16,
+      "maxInstantaneousTotalCouplingPower": 9.70761493908841e-30,
+      "allEActuallyApplied": true,
+      "observedOverride": false
+    },
+    {
+      "rateHz": 120,
+      "frameBatchSteps": 1,
+      "actualE": 3600,
+      "physicsSteps": 3840,
+      "initialTrayN": 62.431201967108684,
+      "initialTrayBody": 27,
+      "initialTrayShape": 158,
+      "initialBearingN": 19.99179974591774,
+      "maxOpening": -0.0008477115807691135,
+      "maxHookAngle": -0.0007299500234458909,
+      "maxOriginalTraction": 0,
+      "maxCouplingTorque": 4,
+      "maxNetCouplingTorqueError": 4.440892098500626e-16,
+      "maxInstantaneousTotalCouplingPower": 9.70761493908841e-30,
+      "allEActuallyApplied": true,
+      "observedOverride": false
+    },
+    {
+      "rateHz": 60,
+      "frameBatchSteps": 8,
+      "actualE": 1800,
+      "physicsSteps": 3840,
+      "initialTrayN": 62.431201967108684,
+      "initialTrayBody": 34,
+      "initialTrayShape": 198,
+      "initialBearingN": 19.99179974591774,
+      "maxOpening": -0.0008483816801515435,
+      "maxHookAngle": -0.0007308458815896519,
+      "maxOriginalTraction": 0,
+      "maxCouplingTorque": 4,
+      "maxNetCouplingTorqueError": 4.440892098500626e-16,
+      "maxInstantaneousTotalCouplingPower": 9.70761493908841e-30,
+      "allEActuallyApplied": true,
+      "observedOverride": false
+    },
+    {
+      "rateHz": 120,
+      "frameBatchSteps": 8,
+      "actualE": 3600,
+      "physicsSteps": 3840,
+      "initialTrayN": 62.431201967108684,
+      "initialTrayBody": 41,
+      "initialTrayShape": 238,
+      "initialBearingN": 19.99179974591774,
+      "maxOpening": -0.0008483816801515435,
+      "maxHookAngle": -0.0007308458815896519,
+      "maxOriginalTraction": 0,
+      "maxCouplingTorque": 4,
+      "maxNetCouplingTorqueError": 4.440892098500626e-16,
+      "maxInstantaneousTotalCouplingPower": 9.70761493908841e-30,
+      "allEActuallyApplied": true,
+      "observedOverride": false
+    }
+  ],
+  "preservedFailures": [
+    "hook-probe-attempt1.json",
+    "hook-probe-attempt2.json",
+    "hook-probe-attempt3.json",
+    "hook-probe-attempt4.json",
+    "hook-probe-attempt5.json",
+    "hook-stroke-attempt1.json",
+    "hook-stroke-attempt2.json",
+    "hook-stroke-attempt3.json",
+    "hook-stroke-spam-attempt1.json",
+    "hook-stroke-spam-final.json",
+    "hook-independent-loaded-spam.json"
+  ],
+  "remainingOpen": [
+    "Independent review of new slip iteration is pending.",
+    "Physical portal cable/player reachability, ordinary full room20, finite real far finger/tooth and joint return route are not implemented.",
+    "Full current room20 cable projection supplies roughly17-18N at end stroke; prototype20N spring cannot be transplanted without geometry/force-budget redesign.",
+    "Torque-limited viscous coupling is a passive force model, not a meshed slip-clutch art/thermal/manufacturing model. New hand rotor reaches high angular speeds under artificial120Hz input stress; no real-device/human claim.",
+    "Only enumerated rates, initial fixtures and frame batches were tested, not all possible inputs, cargo drops/orientations or manipulation attacks.",
+    "Older direct/stroke variants have known actual failing negative tests. Overall prototype release remains rejected even though the new bounded slip primitive passes its separate five-case diagnostic TAP.",
+    "The default ordinary room20 implementation remains unchanged. No CI, publisher, plans, Library, commits or remote refs were changed."
+  ]
+}

@@ -1,0 +1,45 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {Body,Box,Vec3} from 'cannon-es';
+import {createHookFixture,DT} from './helpers/room20-hook-prototype-fixture.js';
+
+function within(a,b,t=1e-6){assert.ok(Math.abs(a-b)<=t,`${a} != ${b} within ${t}`);}
+function snapshot(f){const d=f.cell.diagnostics();return{worldStep:d.worldStep,contactStep:d.contactStep,opening:d.opening,hookAngle:d.hookAngle,tension:d.tension,bearingForce:d.bearingForce,captureForce:d.captureForce,cableWork:d.cableWork,poses:[f.cell.gateBody,f.cell.hookBody,f.cargo,f.tray].map(b=>({p:b.position.toArray(),q:b.quaternion.toArray(),v:b.velocity.toArray(),w:b.angularVelocity.toArray()}))};}
+
+test('DIAGNOSTIC same finite hand impulse is blocked under real bearing load, succeeds after original gravity pretravel, and cut returns the unretained gate',()=>{
+ const f=createHookFixture();try{
+  f.step(240);const loaded=f.cell.diagnostics();assert.ok(loaded.bearingForce>10&&loaded.bearingContacts>0&&loaded.bearingGeometryCurrent);assert.equal(loaded.originalFree,true);assert.ok(f.raw.bearingSteps>100);const body=f.cargo,shape=body.shapes[0],vel=f.cell.hookBody.velocity.clone();
+  assert.equal(f.cell.hand(),true);within(f.cell.diagnostics().lastHand.angularMomentumAfter-f.cell.diagnostics().lastHand.angularMomentumBefore,.7,1e-6);assert.ok(f.cell.hookBody.velocity.distanceTo(vel)<1e-12,'Equal/opposite hand impulses add no linear momentum');const start=f.trace.length;f.step(240);const held=f.cell.diagnostics(),blocked=f.trace.slice(start);assert.ok(held.bearingForce>10);assert.ok(blocked.every(r=>r.opening<.4&&r.hookAngle<.12),'One impulse cannot reach full stroke or remove the loaded hook');assert.ok(Math.abs(held.opening)<.004);
+  f.releaseTray();f.step(600);const relieved=f.cell.diagnostics();assert.equal(f.cargo,body);assert.equal(body.shapes[0],shape);assert.equal(f.cell.originalCargoBody,body);assert.ok(relieved.originalFree);assert.ok(relieved.opening>.59&&relieved.opening<.66);assert.equal(relieved.bearingForce,0);assert.equal(relieved.bearingContacts,0);assert.ok(relieved.captureForce>20&&relieved.captureContacts>0&&relieved.captureGeometryCurrent);assert.ok(relieved.tension>50&&body.position.y<4.7);assert.equal(relieved.handCount,1,'Original gravity pretravel must not manufacture another hand action');
+  assert.equal(f.cell.hand(),true);within(f.cell.diagnostics().lastHand.angularMomentumAfter-f.cell.diagnostics().lastHand.angularMomentumBefore,.7,1e-6);f.step(480);const opened=f.cell.diagnostics();assert.ok(opened.opening>2.39&&opened.opening<2.43);assert.ok(opened.hookAngle>2.7);assert.equal(opened.bearingContacts+opened.captureContacts,0);assert.ok(opened.cableWork>100);
+  f.cell.cutCable();f.step(960);const returned=f.cell.diagnostics();within(returned.opening,-.05,1e-6);assert.equal(returned.tension,0);assert.ok(returned.hookAngle>2.7);assert.equal(f.cargo,body);assert.equal(f.cell.originalCargoShape,shape);assert.equal(returned.ownedPartsValid,true);assert.ok(f.raw.maxBearingDepth<.005);assert.ok(f.raw.maxHingeDrift<.005);
+  console.info('ROOM20_HOOK_DIAGNOSTIC',JSON.stringify({scope:f.cell.scope,ordinaryAccepted:false,loaded,held,relieved,opened,returned,maxBearingDepth:f.raw.maxBearingDepth,maxHingeDrift:f.raw.maxHingeDrift}));
+ }finally{f.dispose();}
+});
+
+test('DIAGNOSTIC original gravity without hook withdrawal remains captive for 30 actual seconds',()=>{
+ const f=createHookFixture();try{f.step(240);f.releaseTray();f.step(4200);const d=f.cell.diagnostics();assert.equal(d.handCount,0);assert.ok(d.tension>50&&d.originalFree);assert.ok(f.raw.maxOpening<.66&&f.raw.maxHookAngle<.04);assert.ok(d.captureForce>20&&d.captureContacts>0);assert.equal(d.bearingForce,0);assert.ok(f.raw.captureSteps>3000);console.info('ROOM20_HOOK_OMIT_HAND',JSON.stringify({ordinaryAccepted:false,physicsSteps:f.world.stepnumber,opening:d.opening,hookAngle:d.hookAngle,tension:d.tension,captureForce:d.captureForce,captureSteps:f.raw.captureSteps}));}finally{f.dispose();}
+});
+
+test('DIAGNOSTIC cutting current traction before hook withdrawal restores the actual loaded closed face',()=>{
+ const f=createHookFixture();try{f.step(240);f.releaseTray();f.step(600);assert.ok(f.cell.opening>.59);f.cell.cutCable();f.step(960);const d=f.cell.diagnostics();assert.ok(Math.abs(d.opening)<.004);assert.ok(Math.abs(d.hookAngle)<.01);assert.equal(d.tension,0);assert.ok(d.bearingForce>15&&d.bearingContacts>0);assert.equal(d.handCount,0);}finally{f.dispose();}
+});
+
+test('DIAGNOSTIC same-step pose and mask mutations cannot reinterpret old solved bearing contacts as live current load',()=>{
+ const f=createHookFixture();try{f.step(240);const d=f.cell.diagnostics(),saved=f.cell.gateBody.position.clone(),step=f.world.stepnumber;assert.ok(d.bearingForce>10);f.cell.gateBody.position.x+=1;f.cell.syncPose();assert.equal(f.world.stepnumber,step);assert.ok(f.cell.diagnostics().rawBearingForce>10,'Keep the real old contact memory for this race');assert.equal(f.cell.diagnostics().bearingForce,0);assert.equal(f.cell.diagnostics().bearingGeometryCurrent,false);f.cell.gateBody.position.copy(saved);f.cell.syncPose();within(f.cell.diagnostics().bearingForce,d.bearingForce);
+  const mask=f.cargo.collisionFilterMask;f.cargo.collisionFilterMask=0;assert.equal(f.cell.originalFree,false);assert.equal(f.cell.diagnostics().ownedPartsValid,false);assert.equal(f.cell.diagnostics().bearingForce,0);f.cargo.collisionFilterMask=mask;assert.equal(f.cell.originalFree,true);assert.ok(f.cell.diagnostics().bearingForce>10);
+  f.game.heldCube=f.game.cargo;assert.equal(f.cell.originalFree,false);f.game.heldCube=null;f.game.physics.setCarryTarget([10,5.35,0]);assert.equal(f.cell.originalFree,false);f.game.physics.release();assert.equal(f.cell.originalFree,true);
+  const foreign=new Body({mass:3.2,position:f.cargo.position.clone(),shape:new Box(new Vec3(.39,.39,.39)),collisionFilterGroup:2,collisionFilterMask:5});f.world.addBody(foreign);f.game.physics.cargoBody=foreign;assert.equal(f.cell.originalFree,false);f.game.physics.cargoBody=f.cargo;f.world.removeBody(foreign);assert.equal(f.cell.originalFree,true);
+ }finally{f.dispose();}
+});
+
+test('DIAGNOSTIC frame batching keeps one passive force application for each real 120 Hz step',()=>{
+ let reference=null;
+ for(const frameSteps of [1,2,4,8]){const f=createHookFixture();try{f.step(240,{frameSteps,record:false});f.releaseTray();f.step(880,{frameSteps,record:false});assert.equal(f.world.stepnumber,1120);assert.equal(f.cell.forceApplications.size,1120);for(let n=0;n<1120;n++)assert.equal(f.cell.forceApplications.get(n),1);const observed=snapshot(f),workBefore=observed.cableWork;f.cell.updateForces(DT*frameSteps);const prepared=JSON.stringify(snapshot(f));f.cell.updateForces(DT*frameSteps);f.cell.syncPose();assert.equal(JSON.stringify(snapshot(f)),prepared,'Repeated force hook without a completed world interval changes no contact evidence');assert.equal(f.cell.diagnostics().cableWork,workBefore,'Force preparation cannot add work before the real solver interval completes');if(reference)assert.deepEqual(observed,reference);else reference=observed;}finally{f.dispose();}}
+});
+
+test('DIAGNOSTIC reset preserves actual body/hinge/shape ownership and disposal removes owned resources before bodies',()=>{
+ const f=createHookFixture();try{f.step(240);const {cell,world,game}=f,ids=cell.bodies.map(b=>b.id),shapeIds=cell.bodies.map(b=>b.shapes.map(s=>s.id)),jointIds=cell.constraints.map(c=>c.id),owned=[...cell.bodies],unowned=world.bodies.filter(b=>!owned.includes(b)),foreign={update(){}};world.subsystems.push(foreign);const subsystems=[...world.subsystems],listeners=world._listeners.postStep.length;const cp=f.cargo.position.clone(),cq=f.cargo.quaternion.clone();cell.reset();cell.reset();assert.deepEqual(cell.bodies.map(b=>b.id),ids);assert.deepEqual(cell.bodies.map(b=>b.shapes.map(s=>s.id)),shapeIds);assert.deepEqual(cell.constraints.map(c=>c.id),jointIds);assert.deepEqual(world.subsystems,subsystems);assert.equal(f.cargo.position.distanceTo(cp),0);assert.deepEqual(f.cargo.quaternion.toArray(),cq.toArray());assert.equal(cell.diagnostics().ownedPartsValid,true);assert.deepEqual(cell.diagnostics().constraintEquationCounts,[5]);assert.deepEqual(cell.diagnostics().motorEquationPresent,[false]);assert.deepEqual(cell.diagnostics().motorEnabled,[false]);
+  const remove=world.removeBody.bind(world);world.removeBody=b=>{if(owned.includes(b)){assert.ok([...game.physics.bodyBoxes.values()].every(e=>e.body!==b));assert.ok([...game.physics.cargoSweepBoxes.values()].every(e=>e.body!==b));assert.ok(world.constraints.every(c=>c.bodyA!==b&&c.bodyB!==b));assert.equal(world.subsystems.length,1);assert.equal(world.subsystems[0],foreign);}return remove(b);};cell.dispose();cell.dispose();assert.deepEqual(world.bodies,unowned);assert.equal(world._listeners.postStep.length,listeners-1);assert.equal(game.physics.bodyBoxes.size,0);assert.equal(game.physics.cargoSweepBoxes.size,0);assert.equal(game.physics.cargoBody,f.cargo);assert.equal(cell.hand(),false);assert.equal(cell.diagnostics().disposed,true);
+ }finally{f.dispose();}
+});

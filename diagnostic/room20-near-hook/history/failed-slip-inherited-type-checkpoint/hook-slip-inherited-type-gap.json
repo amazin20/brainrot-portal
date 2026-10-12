@@ -1,0 +1,184 @@
+{
+  "kind": "isolated-inherited-type-mass-ownership-mutants",
+  "ordinaryAccepted": false,
+  "sourceAccepted": false,
+  "sourceBefore": "62fdf16143ddf6044c7944644a614164ca7c9c0c49dad1c6482951167493bb96",
+  "sourceAfter": "62fdf16143ddf6044c7944644a614164ca7c9c0c49dad1c6482951167493bb96",
+  "sourceUnchanged": true,
+  "cases": [
+    {
+      "mutation": "hook-static",
+      "initial": {
+        "id": 4,
+        "type": 1,
+        "mass": 0.32815384615384613
+      },
+      "current": {
+        "type": 2,
+        "mass": 0.32815384615384613
+      },
+      "ensure": true,
+      "hand": true,
+      "force": {
+        "worldStep": 240,
+        "forceClock": "actual-world-subsystem",
+        "liveOwnership": true,
+        "ownershipErrors": [],
+        "tau": 4,
+        "actualHookTorque": 4,
+        "actualDriverTorque": -4,
+        "totalTorque": 0,
+        "omegaDrive": 8.571428571428566,
+        "omegaHook": 8.770761894538737e-15,
+        "totalCouplingPower": -34.28571428571423,
+        "torqueCeiling": 4,
+        "slipGain": 2
+      }
+    },
+    {
+      "mutation": "gate-static",
+      "initial": {
+        "id": 10,
+        "type": 1,
+        "mass": 8
+      },
+      "current": {
+        "type": 2,
+        "mass": 8
+      },
+      "ensure": true,
+      "hand": true,
+      "force": {
+        "worldStep": 240,
+        "forceClock": "actual-world-subsystem",
+        "liveOwnership": true,
+        "ownershipErrors": [],
+        "tau": 4,
+        "actualHookTorque": 4,
+        "actualDriverTorque": -4,
+        "totalTorque": 0,
+        "omegaDrive": 8.571428571428566,
+        "omegaHook": 8.770761894538737e-15,
+        "totalCouplingPower": -34.28571428571423,
+        "torqueCeiling": 4,
+        "slipGain": 2
+      }
+    },
+    {
+      "mutation": "fixed-dynamic",
+      "initial": {
+        "id": 16,
+        "type": 2,
+        "mass": 0
+      },
+      "current": {
+        "type": 1,
+        "mass": 0
+      },
+      "ensure": true,
+      "hand": true,
+      "force": {
+        "worldStep": 240,
+        "forceClock": "actual-world-subsystem",
+        "liveOwnership": true,
+        "ownershipErrors": [],
+        "tau": 4,
+        "actualHookTorque": 4,
+        "actualDriverTorque": -4,
+        "totalTorque": 0,
+        "omegaDrive": 8.571428571428566,
+        "omegaHook": 8.770761894538737e-15,
+        "totalCouplingPower": -34.28571428571423,
+        "torqueCeiling": 4,
+        "slipGain": 2
+      }
+    },
+    {
+      "mutation": "hook-mass",
+      "initial": {
+        "id": 25,
+        "type": 1,
+        "mass": 0.32815384615384613
+      },
+      "current": {
+        "type": 1,
+        "mass": 1.328153846153846
+      },
+      "ensure": true,
+      "hand": true,
+      "force": {
+        "worldStep": 240,
+        "forceClock": "actual-world-subsystem",
+        "liveOwnership": true,
+        "ownershipErrors": [],
+        "tau": 4,
+        "actualHookTorque": 4,
+        "actualDriverTorque": -4,
+        "totalTorque": 0,
+        "omegaDrive": 8.571428571428566,
+        "omegaHook": 8.770761894538737e-15,
+        "totalCouplingPower": -34.28571428571423,
+        "torqueCeiling": 4,
+        "slipGain": 2
+      }
+    },
+    {
+      "mutation": "gate-mass",
+      "initial": {
+        "id": 31,
+        "type": 1,
+        "mass": 8
+      },
+      "current": {
+        "type": 1,
+        "mass": 9
+      },
+      "ensure": true,
+      "hand": true,
+      "force": {
+        "worldStep": 240,
+        "forceClock": "actual-world-subsystem",
+        "liveOwnership": true,
+        "ownershipErrors": [],
+        "tau": 4,
+        "actualHookTorque": 4,
+        "actualDriverTorque": -4,
+        "totalTorque": 0,
+        "omegaDrive": 8.571428571428566,
+        "omegaHook": 8.770761894538737e-15,
+        "totalCouplingPower": -34.28571428571423,
+        "torqueCeiling": 4,
+        "slipGain": 2
+      }
+    },
+    {
+      "mutation": "fixed-mass",
+      "initial": {
+        "id": 37,
+        "type": 2,
+        "mass": 0
+      },
+      "current": {
+        "type": 2,
+        "mass": 1
+      },
+      "ensure": true,
+      "hand": true,
+      "force": {
+        "worldStep": 240,
+        "forceClock": "actual-world-subsystem",
+        "liveOwnership": true,
+        "ownershipErrors": [],
+        "tau": 4,
+        "actualHookTorque": 4,
+        "actualDriverTorque": -4,
+        "totalTorque": 0,
+        "omegaDrive": 8.571428571428566,
+        "omegaHook": 8.770761894538737e-15,
+        "totalCouplingPower": -34.28571428571423,
+        "torqueCeiling": 4,
+        "slipGain": 2
+      }
+    }
+  ]
+}

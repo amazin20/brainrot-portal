@@ -1,0 +1,515 @@
+{
+  "kind": "final-v2-private-room20-near-hook-passive-slip-diagnostic",
+  "writtenAt": "2026-10-12T20:27:50.101825+00:00",
+  "baseCommit": "5e552e9c3ac248b535d619741f15e99e29979cbf",
+  "baseTree": "8d573c22140eeb9625fff94ca14efd3f97978c17",
+  "prototypeRoot": "/workspace/scratch/1949b02c22bb/room20-hook-prototype",
+  "sourceAccepted": false,
+  "ordinaryAccepted": false,
+  "fullRoomAccepted": false,
+  "prototypeAccepted": false,
+  "productionForceBudgetAccepted": false,
+  "boundedUnitAssertionsPassed": true,
+  "trackedSourceChanged": false,
+  "remotePush": false,
+  "sourceInputsBefore": [
+    {
+      "path": "src/game/LabRoom20NearHookPrototype.js",
+      "bytes": 18628,
+      "sha256": "0d137cfaafb07cd023e2a754c9d0dd0a8a44e0c4cd13baffd60ebef1f2d69a00"
+    },
+    {
+      "path": "src/game/LabRoom20NearHookSlipPrototype.js",
+      "bytes": 10259,
+      "sha256": "aedff41a027f730cc303a61da82853df2027f5b64ffbf8ad70c74f303c6ad98e"
+    },
+    {
+      "path": "tests/helpers/room20-hook-prototype-fixture.js",
+      "bytes": 4839,
+      "sha256": "2282970bb2f57c4adc881b017b0cb283d989abd3ee31c7d82654d9915d56eccb"
+    },
+    {
+      "path": "tests/lab-room20-near-hook-slip-prototype.test.js",
+      "bytes": 16210,
+      "sha256": "43fc5c116a40757b733a3ddeeb73f5701feb584d5d47c4629a4ad0e41752e9bd"
+    }
+  ],
+  "sourceInputsAfter": [
+    {
+      "path": "src/game/LabRoom20NearHookPrototype.js",
+      "bytes": 18628,
+      "sha256": "0d137cfaafb07cd023e2a754c9d0dd0a8a44e0c4cd13baffd60ebef1f2d69a00"
+    },
+    {
+      "path": "src/game/LabRoom20NearHookSlipPrototype.js",
+      "bytes": 10259,
+      "sha256": "aedff41a027f730cc303a61da82853df2027f5b64ffbf8ad70c74f303c6ad98e"
+    },
+    {
+      "path": "tests/helpers/room20-hook-prototype-fixture.js",
+      "bytes": 4839,
+      "sha256": "2282970bb2f57c4adc881b017b0cb283d989abd3ee31c7d82654d9915d56eccb"
+    },
+    {
+      "path": "tests/lab-room20-near-hook-slip-prototype.test.js",
+      "bytes": 16210,
+      "sha256": "43fc5c116a40757b733a3ddeeb73f5701feb584d5d47c4629a4ad0e41752e9bd"
+    }
+  ],
+  "sourceUnchangedDuringFinalTests": true,
+  "newLocalFiles": [
+    {
+      "relativePath": "scripts/qa-room20-hook-slip-spam.mjs",
+      "path": "/workspace/scratch/1949b02c22bb/room20-hook-prototype/scripts/qa-room20-hook-slip-spam.mjs",
+      "bytes": 3221,
+      "sha256": "9b9a4f56de2f09dec151e128bcca7f0d2c79ad80da2cf291cecfee853f7d4dfe"
+    },
+    {
+      "relativePath": "scripts/qa-room20-hook-stroke-spam.mjs",
+      "path": "/workspace/scratch/1949b02c22bb/room20-hook-prototype/scripts/qa-room20-hook-stroke-spam.mjs",
+      "bytes": 3086,
+      "sha256": "a0b1896718e8452d6f66e6ae9fe7ea380cda81ac152497a4a412b9edc07ba401"
+    },
+    {
+      "relativePath": "scripts/qa-room20-near-hook-prototype.mjs",
+      "path": "/workspace/scratch/1949b02c22bb/room20-hook-prototype/scripts/qa-room20-near-hook-prototype.mjs",
+      "bytes": 1206,
+      "sha256": "c9d8df50dd1abe877195ecd7fb1da6235fb386151ab5a2099ecd038c103f885d"
+    },
+    {
+      "relativePath": "src/game/LabRoom20NearHookPrototype.js",
+      "path": "/workspace/scratch/1949b02c22bb/room20-hook-prototype/src/game/LabRoom20NearHookPrototype.js",
+      "bytes": 18628,
+      "sha256": "0d137cfaafb07cd023e2a754c9d0dd0a8a44e0c4cd13baffd60ebef1f2d69a00"
+    },
+    {
+      "relativePath": "src/game/LabRoom20NearHookSlipPrototype.js",
+      "path": "/workspace/scratch/1949b02c22bb/room20-hook-prototype/src/game/LabRoom20NearHookSlipPrototype.js",
+      "bytes": 10259,
+      "sha256": "aedff41a027f730cc303a61da82853df2027f5b64ffbf8ad70c74f303c6ad98e"
+    },
+    {
+      "relativePath": "src/game/LabRoom20NearHookStrokePrototype.js",
+      "path": "/workspace/scratch/1949b02c22bb/room20-hook-prototype/src/game/LabRoom20NearHookStrokePrototype.js",
+      "bytes": 7353,
+      "sha256": "7c25737876006d690988fc2e1c611552f51d6a23d37492733f420c6c6a444b0b"
+    },
+    {
+      "relativePath": "tests/helpers/room20-hook-prototype-fixture.js",
+      "path": "/workspace/scratch/1949b02c22bb/room20-hook-prototype/tests/helpers/room20-hook-prototype-fixture.js",
+      "bytes": 4839,
+      "sha256": "2282970bb2f57c4adc881b017b0cb283d989abd3ee31c7d82654d9915d56eccb"
+    },
+    {
+      "relativePath": "tests/lab-room20-near-hook-prototype.test.js",
+      "path": "/workspace/scratch/1949b02c22bb/room20-hook-prototype/tests/lab-room20-near-hook-prototype.test.js",
+      "bytes": 9120,
+      "sha256": "c166c13d6791bf3ca299a4e9d96ae5e83b5f181dfe8a9c13c4bd7881a8e36161"
+    },
+    {
+      "relativePath": "tests/lab-room20-near-hook-slip-prototype.test.js",
+      "path": "/workspace/scratch/1949b02c22bb/room20-hook-prototype/tests/lab-room20-near-hook-slip-prototype.test.js",
+      "bytes": 16210,
+      "sha256": "43fc5c116a40757b733a3ddeeb73f5701feb584d5d47c4629a4ad0e41752e9bd"
+    },
+    {
+      "relativePath": "tests/lab-room20-near-hook-stroke-prototype.test.js",
+      "path": "/workspace/scratch/1949b02c22bb/room20-hook-prototype/tests/lab-room20-near-hook-stroke-prototype.test.js",
+      "bytes": 4125,
+      "sha256": "4ed93c30f70d613109330ba3b9be939c83ff86eb2fedceae6268da4958ae5f9f"
+    }
+  ],
+  "finalTest": {
+    "command": "node --test --test-reporter=tap tests/lab-room20-near-hook-slip-prototype.test.js",
+    "exitCode": 0,
+    "footer": {
+      "tests": 8,
+      "suites": 0,
+      "pass": 8,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "artifact": {
+      "path": "/workspace/scratch/1949b02c22bb/room20-preparation/hook-slip-final-v2-tests.tap",
+      "bytes": 51415,
+      "sha256": "b65b7091b81b051db3b4298087ac1e684e3e6b7f0aa8cd0955fffac73d99fab1"
+    }
+  },
+  "physicalChanges": [
+    "Base and rotor passive forces apply exclusively in actual world.subsystems, once per 120 Hz solver interval. Public updateForces prepares ownership and adds no forces.",
+    "Live original identity/free state/body/shape/masks are read at actual cable force interval.",
+    "Before hand impulse and torque coupling, actual world membership, same owner, captured registration/body/shape identity, current OBB, collision masks/response, motor-free hinge equations and same founded anchor are checked.",
+    "Ownership-invalid torque interval records exactly zero coupling; no drag or opposite torque accumulates on detached rotor. Valid loaded E remains applied identically to actual rotor.",
+    "Owned registry cleanup compares exact descriptor and immutable body/shapeIndex/shape tuple; UUID replacement alone does not grant cleanup ownership.",
+    "All base-owned authored body types/masses are captured at creation and required live (gate8kg DYNAMIC, authored hookMass DYNAMIC, founded stops0kg STATIC, anchor0kg STATIC).",
+    "New physics-owner mismatch rejects input/torque, reports originalFree=false and clears stale cable tension/stretch/interval in old actual subsystem."
+  ],
+  "sameInputCausal": {
+    "handAngularImpulseNms": 0.7,
+    "torqueCeilingNm": 4,
+    "loadedBearingN": 14.044673066380845,
+    "loadedClosedOpeningM": -0.0007854977820348529,
+    "originalGravityRelievedBearingN": 0,
+    "originalGravityRelievedCaptureN": 39.31252531328274,
+    "capturePretravelM": 0.6207590351673348,
+    "originalTensionN": 62.37744956459453,
+    "releasedOpeningM": 2.400000000000008,
+    "cutReturnedOpeningM": -0.05000000000000455,
+    "maximumBearingPenetrationM": 0.0005449145515375412,
+    "maximumHingePivotDriftM": 0.0005932003801079051,
+    "maxInstantaneousTotalCouplingPowerW": 3.771237288381814e-32
+  },
+  "rateReceipts": [
+    {
+      "rate": 15,
+      "batch": 1,
+      "requests": 450,
+      "initialBearing": 19.99179974591774,
+      "initialTrayForce": 62.431201967108684,
+      "maxAngle": -0.0007299500234458909,
+      "maxOpening": -0.0008477115807691135,
+      "maxTorque": 4,
+      "maxPower": 9.70761493908841e-30,
+      "finalBearing": 19.994317426816234,
+      "manualWork": 9977.323843700231,
+      "driverOmega": 27.794501533471955
+    },
+    {
+      "rate": 30,
+      "batch": 1,
+      "requests": 900,
+      "initialBearing": 19.99179974591774,
+      "initialTrayForce": 62.431201967108684,
+      "maxAngle": -0.0007299500234458909,
+      "maxOpening": -0.0008477115807691135,
+      "maxTorque": 4,
+      "maxPower": 9.70761493908841e-30,
+      "finalBearing": 19.994317426816234,
+      "manualWork": 52205.09963556935,
+      "driverOmega": 79.69808072445085
+    },
+    {
+      "rate": 60,
+      "batch": 1,
+      "requests": 1800,
+      "initialBearing": 19.99179974591774,
+      "initialTrayForce": 62.431201967108684,
+      "maxAngle": -0.0007299500234458909,
+      "maxOpening": -0.0008477115807691135,
+      "maxTorque": 4,
+      "maxPower": 9.70761493908841e-30,
+      "finalBearing": 19.994317426816234,
+      "manualWork": 233546.74609415862,
+      "driverOmega": 183.59351988217907
+    },
+    {
+      "rate": 120,
+      "batch": 1,
+      "requests": 3600,
+      "initialBearing": 19.99179974591774,
+      "initialTrayForce": 62.431201967108684,
+      "maxAngle": -0.0007299500234458909,
+      "maxOpening": -0.0008477115807691135,
+      "maxTorque": 4,
+      "maxPower": 9.70761493908841e-30,
+      "finalBearing": 19.994317426816234,
+      "manualWork": 983773.9999999994,
+      "driverOmega": 391.4285714285694
+    },
+    {
+      "rate": 60,
+      "batch": 8,
+      "requests": 1800,
+      "initialBearing": 19.99179974591774,
+      "initialTrayForce": 62.431201967108684,
+      "maxAngle": -0.0007308458815896519,
+      "maxOpening": -0.0008483816801515435,
+      "maxTorque": 4,
+      "maxPower": 9.70761493908841e-30,
+      "finalBearing": 19.994317426816234,
+      "manualWork": 234132.40926913827,
+      "driverOmega": 171.17800613388744
+    },
+    {
+      "rate": 120,
+      "batch": 8,
+      "requests": 3600,
+      "initialBearing": 19.99179974591774,
+      "initialTrayForce": 62.431201967108684,
+      "maxAngle": -0.0007308458815896519,
+      "maxOpening": -0.0008483816801515435,
+      "maxTorque": 4,
+      "maxPower": 9.70761493908841e-30,
+      "finalBearing": 19.994317426816234,
+      "manualWork": 986193.1222565996,
+      "driverOmega": 362.3560122677749
+    }
+  ],
+  "ownershipReceipts": [
+    {
+      "name": "detached-driver",
+      "actualIntervals": 20,
+      "phantomHookTorque": 0,
+      "phantomDriverTorque": 0,
+      "ownershipErrors": [
+        "driver-not-in-world",
+        "driver-live-contact"
+      ]
+    },
+    {
+      "name": "detached-driver-hinge",
+      "actualIntervals": 20,
+      "phantomHookTorque": 0,
+      "phantomDriverTorque": 0,
+      "ownershipErrors": [
+        "driver-hinge-ownership"
+      ]
+    },
+    {
+      "name": "detached-hook-hinge",
+      "actualIntervals": 20,
+      "phantomHookTorque": 0,
+      "phantomDriverTorque": 0,
+      "ownershipErrors": [
+        "hinge-ownership"
+      ]
+    },
+    {
+      "name": "detached-foundation",
+      "actualIntervals": 20,
+      "phantomHookTorque": 0,
+      "phantomDriverTorque": 0,
+      "ownershipErrors": [
+        "body-not-in-world:113",
+        "driver-foundation"
+      ]
+    },
+    {
+      "name": "removed-driver-shape",
+      "actualIntervals": 20,
+      "phantomHookTorque": 0,
+      "phantomDriverTorque": 0,
+      "ownershipErrors": [
+        "driver-shape-registration"
+      ]
+    },
+    {
+      "name": "driver-body-mask",
+      "actualIntervals": 20,
+      "phantomHookTorque": 0,
+      "phantomDriverTorque": 0,
+      "ownershipErrors": [
+        "driver-live-contact"
+      ]
+    },
+    {
+      "name": "driver-shape-mask",
+      "actualIntervals": 20,
+      "phantomHookTorque": 0,
+      "phantomDriverTorque": 0,
+      "ownershipErrors": [
+        "driver-live-contact"
+      ]
+    },
+    {
+      "name": "driver-contact-response",
+      "actualIntervals": 20,
+      "phantomHookTorque": 0,
+      "phantomDriverTorque": 0,
+      "ownershipErrors": [
+        "driver-live-contact"
+      ]
+    },
+    {
+      "name": "foreign-driver-registration",
+      "actualIntervals": 20,
+      "phantomHookTorque": 0,
+      "phantomDriverTorque": 0,
+      "ownershipErrors": [
+        "driver-shape-registration"
+      ]
+    },
+    {
+      "name": "disabled-driver-joint-equation",
+      "actualIntervals": 20,
+      "phantomHookTorque": 0,
+      "phantomDriverTorque": 0,
+      "ownershipErrors": [
+        "driver-hinge-ownership"
+      ]
+    },
+    {
+      "name": "hook-authored-type",
+      "actualIntervals": 20,
+      "phantomHookTorque": 0,
+      "phantomDriverTorque": 0,
+      "ownershipErrors": [
+        "authored-body-type-mass:165"
+      ]
+    },
+    {
+      "name": "gate-authored-type",
+      "actualIntervals": 20,
+      "phantomHookTorque": 0,
+      "phantomDriverTorque": 0,
+      "ownershipErrors": [
+        "authored-body-type-mass:171"
+      ]
+    },
+    {
+      "name": "fixed-authored-type",
+      "actualIntervals": 20,
+      "phantomHookTorque": 0,
+      "phantomDriverTorque": 0,
+      "ownershipErrors": [
+        "authored-body-type-mass:177"
+      ]
+    },
+    {
+      "name": "hook-authored-mass",
+      "actualIntervals": 20,
+      "phantomHookTorque": 0,
+      "phantomDriverTorque": 0,
+      "ownershipErrors": [
+        "authored-body-type-mass:186"
+      ]
+    },
+    {
+      "name": "gate-authored-mass",
+      "actualIntervals": 20,
+      "phantomHookTorque": 0,
+      "phantomDriverTorque": 0,
+      "ownershipErrors": [
+        "authored-body-type-mass:192"
+      ]
+    },
+    {
+      "name": "fixed-authored-mass",
+      "actualIntervals": 20,
+      "phantomHookTorque": 0,
+      "phantomDriverTorque": 0,
+      "ownershipErrors": [
+        "authored-body-type-mass:198"
+      ]
+    }
+  ],
+  "priorFailuresRetained": [
+    "/workspace/scratch/1949b02c22bb/room20-preparation/failed-stroke-checkpoint",
+    "/workspace/scratch/1949b02c22bb/room20-preparation/failed-slip-ownership-checkpoint",
+    "/workspace/scratch/1949b02c22bb/room20-preparation/hook-prototype-final-tests.tap",
+    "/workspace/scratch/1949b02c22bb/room20-preparation/hook-slip-independent-frozen-review.json",
+    "/workspace/scratch/1949b02c22bb/room20-preparation/failed-slip-inherited-type-checkpoint"
+  ],
+  "additionalActualSharedPhysicsEdge": {
+    "scope": "Isolated invalid-ownership mutation, no ordinary exploit claim; no shared source edit authorized",
+    "edge": "Removing the only original cargo Box entirely makes existing LabPhysics._guardRegisteredCompoundCargo read cargoShape.collisionFilterGroup after world solver and throw.",
+    "artifact": {
+      "path": "/workspace/scratch/1949b02c22bb/room20-preparation/hook-slip-corrections-targeted-attempt3.tap",
+      "bytes": 3661,
+      "sha256": "655266437b3c89b61b2ec69ba75a094a9915d79dc53eafd317fa3d24ad5db77a"
+    },
+    "status": "OPEN outside prototype; current-original regression uses a real replacement Box to keep shared CCD caller valid."
+  },
+  "limits": [
+    "Isolated Cannon solver primitive with two fixed cable fairleads; no actual portal traversal, player/capsule, E hit test, far retaining finger or ordinary route.",
+    "Actual passive opening stop is not a far retaining catch; cut before any retaining catch physically returns the train.",
+    "Production gate motion must mirror prototype +X hook/chirality to real room -X.",
+    "Production near/far cable equilibrium at opening6.825..7.2 supplies approximately17..18N gate pull from3.2kg original gravity; private20N closing preload cannot be transplanted. Full room force budget remains OPEN.",
+    "Moving compound player/cargo contact and CCD, real access restrictions, bypass attacks and ordinary repeated-E route still require integration/runtime proof.",
+    "Old direct-hook and stroke-drive alternatives remain rejected for mechanical E pumping; their actual9-case TAP retains8PASS/1FAIL. Final8PASS refers solely to corrected slip test file.",
+    "No authoritative source, CI, publisher, work plan, Library, package/lock or remote ref was changed."
+  ],
+  "targetedRegressions": [
+    {
+      "artifact": {
+        "path": "/workspace/scratch/1949b02c22bb/room20-preparation/hook-slip-corrections-targeted-attempt4.tap",
+        "bytes": 2471,
+        "sha256": "5b6a5fb4dcee5e0517637e68ae800f08d6f12e0b0d9bbf72ed0f3d48a616524a"
+      },
+      "tests": 3,
+      "pass": 3,
+      "fail": 0,
+      "scope": "Corrected-v1 ghost torque, input-order, current-original and foreign descriptor regressions."
+    },
+    {
+      "artifact": {
+        "path": "/workspace/scratch/1949b02c22bb/room20-preparation/hook-slip-authored-properties-targeted.tap",
+        "bytes": 3080,
+        "sha256": "a9e3d248a27c4f8260c24ed693a04165e09e1f6d00c820f961fb0d5f2591c7dc"
+      },
+      "tests": 2,
+      "pass": 2,
+      "fail": 0,
+      "scope": "Final-v2 16 ownership mutants including six authored type/mass cases, seven original mutations and actual new physics-owner mismatch."
+    }
+  ],
+  "independentFinalOwnership": {
+    "artifact": {
+      "path": "/workspace/scratch/1949b02c22bb/room20-preparation/hook-slip-independent-final-ownership-review.json",
+      "bytes": 8353,
+      "sha256": "f74f27da9e365250c45f0a02ed2a1f9d48cdfea455948a92ed120d9ba699120f"
+    },
+    "passed": true,
+    "sourceUnchanged": true,
+    "cases": [
+      {
+        "kind": "hook-static",
+        "passed": true
+      },
+      {
+        "kind": "gate-static",
+        "passed": true
+      },
+      {
+        "kind": "fixed-dynamic",
+        "passed": true
+      },
+      {
+        "kind": "hook-mass",
+        "passed": true
+      },
+      {
+        "kind": "gate-mass",
+        "passed": true
+      },
+      {
+        "kind": "fixed-mass",
+        "passed": true
+      },
+      {
+        "kind": "current-physics-owner",
+        "passed": true
+      },
+      {
+        "kind": "unchanged-default-physical-input",
+        "passed": true
+      }
+    ]
+  },
+  "independentEarlierCorrectionFollowup": {
+    "artifact": {
+      "path": "/workspace/scratch/1949b02c22bb/room20-preparation/hook-slip-independent-correction-followup.json",
+      "bytes": 3292,
+      "sha256": "f6cf40ba5e7b1048bab34dded043aaa9a8b6476f7607536d040be7fa84f0d0e0"
+    },
+    "passed": true,
+    "scope": "Prior-v1 valid same-class foreign registration and missing-original-shape direct-world isolated solver probe; shared CCD crash retained."
+  },
+  "independentEarlierRateReview": {
+    "artifact": {
+      "path": "/workspace/scratch/1949b02c22bb/room20-preparation/hook-slip-independent-frozen-review.json",
+      "bytes": 443160,
+      "sha256": "b82cbbe4eba43ae336dcb0fbd6a3b6470241ea775dc4cb4d100bc0c026af5e06"
+    },
+    "normalBoundedPrimitivePassed": true,
+    "scope": "Prior frozen dynamics five60s input attacks including14N partial traction and cargo-only60s. Final-v2 local TAP repeats six30s cases; not final-v2 full60s matrix."
+  },
+  "implementationQueueAfterSourceAcceptance": [
+    "Resolve actual full-room portal cable equilibrium:17..18N gate pull versus20N preload at6.825..7.2m.",
+    "Integrate minimal owned dynamic train and mirrored(-X) captive near hook/finite rotor drive; retain actual fixed-step forces and postStep contacts.",
+    "Replace far analytical latch with real load-bearing finger/tooth; prove original extraction after retention and cut-before-retention return. Keep rigid return leaf in same real gate train with actual recovered-original contact.",
+    "Run actual ordinary portal/player route and loaded/cargo-only/E-spam/long-frame/cut/wrong-original/access-bypass negatives before source or ordinary acceptance."
+  ]
+}

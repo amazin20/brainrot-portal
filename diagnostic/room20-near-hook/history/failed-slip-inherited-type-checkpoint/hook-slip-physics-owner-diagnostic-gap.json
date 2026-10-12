@@ -1,0 +1,43 @@
+{
+  "kind": "isolated-current-physics-owner-diagnostic-mutant",
+  "ordinaryAccepted": false,
+  "sourceAccepted": false,
+  "initial": {
+    "worldStep": 840,
+    "tension": 62.37744956459453,
+    "originalFree": true
+  },
+  "ensure": false,
+  "hand": false,
+  "actualCurrentWorldIsOld": false,
+  "immediate": {
+    "originalFree": true,
+    "tension": 62.37744956459453,
+    "liveOwnership": false
+  },
+  "afterOldSolver": {
+    "worldStep": 841,
+    "originalFree": true,
+    "tension": 62.37744956459453,
+    "lastForce": {
+      "worldStep": 840,
+      "forceClock": "actual-world-subsystem",
+      "liveOwnership": false,
+      "ownershipErrors": [
+        "physics-owner",
+        "physics-owner"
+      ],
+      "tau": 0,
+      "actualHookTorque": 0,
+      "actualDriverTorque": 0,
+      "totalTorque": 0,
+      "omegaDrive": 0.007846601652400358,
+      "omegaHook": 0.00572338641491045,
+      "totalCouplingPower": 0,
+      "torqueCeiling": 4,
+      "slipGain": 2
+    }
+  },
+  "sourceBefore": "62fdf16143ddf6044c7944644a614164ca7c9c0c49dad1c6482951167493bb96",
+  "sourceAfter": "62fdf16143ddf6044c7944644a614164ca7c9c0c49dad1c6482951167493bb96"
+}

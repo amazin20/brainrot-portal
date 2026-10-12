@@ -1,0 +1,43 @@
+{
+  "baseSource": "5e552e9c3ac248b535d619741f15e99e29979cbf",
+  "ordinaryAccepted": false,
+  "prototypeAccepted": false,
+  "files": [
+    {
+      "path": "src/game/LabRoom20NearHookPrototype.js",
+      "bytes": 15491,
+      "sha256": "6c172bdbbc52bd082c2d5049c961ae4442c3e877bff6cde7e8e6a1501155120f"
+    },
+    {
+      "path": "src/game/LabRoom20NearHookStrokePrototype.js",
+      "bytes": 7353,
+      "sha256": "7c25737876006d690988fc2e1c611552f51d6a23d37492733f420c6c6a444b0b"
+    },
+    {
+      "path": "tests/helpers/room20-hook-prototype-fixture.js",
+      "bytes": 3659,
+      "sha256": "96d66b29116a343d330bc1050aba361f8fcc26d699e909d381eb17c8a8948432"
+    },
+    {
+      "path": "tests/lab-room20-near-hook-prototype.test.js",
+      "bytes": 9120,
+      "sha256": "c166c13d6791bf3ca299a4e9d96ae5e83b5f181dfe8a9c13c4bd7881a8e36161"
+    },
+    {
+      "path": "tests/lab-room20-near-hook-stroke-prototype.test.js",
+      "bytes": 4125,
+      "sha256": "4ed93c30f70d613109330ba3b9be939c83ff86eb2fedceae6268da4958ae5f9f"
+    },
+    {
+      "path": "scripts/qa-room20-near-hook-prototype.mjs",
+      "bytes": 1167,
+      "sha256": "dae263eab225daa86b21128005bddab76c127ff72b807a93980ad33675a37e42"
+    },
+    {
+      "path": "scripts/qa-room20-hook-stroke-spam.mjs",
+      "bytes": 3086,
+      "sha256": "a0b1896718e8452d6f66e6ae9fe7ea380cda81ac152497a4a412b9edc07ba401"
+    }
+  ],
+  "note": "Original helper bytes used by the nine-case final TAP restored and hash-verified; later tray-support recorder addition is retained separately in current worktree."
+}

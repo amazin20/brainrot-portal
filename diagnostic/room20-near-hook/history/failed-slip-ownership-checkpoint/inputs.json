@@ -1,0 +1,33 @@
+{
+  "baseSource": "5e552e9c3ac248b535d619741f15e99e29979cbf",
+  "prototypeAccepted": false,
+  "ordinaryAccepted": false,
+  "reason": "Three independently reproduced ownership/API-order/foreign-cleanup defects on this frozen slip revision. Bounded ordinary-free solver matrix passed but does not waive defects.",
+  "files": [
+    {
+      "path": "src/game/LabRoom20NearHookPrototype.js",
+      "bytes": 15645,
+      "sha256": "d55d5725f92207afae5b3d0ae3b2890d89058e9067e8c09aa85f2223ff295d04"
+    },
+    {
+      "path": "src/game/LabRoom20NearHookSlipPrototype.js",
+      "bytes": 7670,
+      "sha256": "2a82c01a6fb1775a0cf5f9dbb83e03009c18aa22e0525fad994876f1acdf2f72"
+    },
+    {
+      "path": "tests/helpers/room20-hook-prototype-fixture.js",
+      "bytes": 4839,
+      "sha256": "2282970bb2f57c4adc881b017b0cb283d989abd3ee31c7d82654d9915d56eccb"
+    },
+    {
+      "path": "tests/lab-room20-near-hook-slip-prototype.test.js",
+      "bytes": 8066,
+      "sha256": "38e10f20b22fea8bb00760e482d552eaf60e48095203d3943a27a1f7fc4dc563"
+    },
+    {
+      "path": "scripts/qa-room20-hook-slip-spam.mjs",
+      "bytes": 3221,
+      "sha256": "9b9a4f56de2f09dec151e128bcca7f0d2c79ad80da2cf291cecfee853f7d4dfe"
+    }
+  ]
+}

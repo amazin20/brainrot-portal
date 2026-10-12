@@ -1,0 +1,103 @@
+{
+  "kind": "independent-targeted-room20-slip-corrections",
+  "ordinaryAccepted": false,
+  "sourceAccepted": false,
+  "fullRoomAccepted": false,
+  "privatePrototypeAccepted": false,
+  "productionForceBudgetAccepted": false,
+  "sourceBefore": [
+    {
+      "path": "src/game/LabRoom20NearHookPrototype.js",
+      "bytes": 18305,
+      "sha256": "62fdf16143ddf6044c7944644a614164ca7c9c0c49dad1c6482951167493bb96"
+    },
+    {
+      "path": "src/game/LabRoom20NearHookSlipPrototype.js",
+      "bytes": 10259,
+      "sha256": "aedff41a027f730cc303a61da82853df2027f5b64ffbf8ad70c74f303c6ad98e"
+    },
+    {
+      "path": "tests/helpers/room20-hook-prototype-fixture.js",
+      "bytes": 4839,
+      "sha256": "2282970bb2f57c4adc881b017b0cb283d989abd3ee31c7d82654d9915d56eccb"
+    },
+    {
+      "path": "tests/lab-room20-near-hook-slip-prototype.test.js",
+      "bytes": 15049,
+      "sha256": "a177f63a1ffe54dcec1b526206fe1cc97a448751504adb5960d42b22f50ac3cc"
+    }
+  ],
+  "sourceAfter": [
+    {
+      "path": "src/game/LabRoom20NearHookPrototype.js",
+      "bytes": 18305,
+      "sha256": "62fdf16143ddf6044c7944644a614164ca7c9c0c49dad1c6482951167493bb96"
+    },
+    {
+      "path": "src/game/LabRoom20NearHookSlipPrototype.js",
+      "bytes": 10259,
+      "sha256": "aedff41a027f730cc303a61da82853df2027f5b64ffbf8ad70c74f303c6ad98e"
+    },
+    {
+      "path": "tests/helpers/room20-hook-prototype-fixture.js",
+      "bytes": 4839,
+      "sha256": "2282970bb2f57c4adc881b017b0cb283d989abd3ee31c7d82654d9915d56eccb"
+    },
+    {
+      "path": "tests/lab-room20-near-hook-slip-prototype.test.js",
+      "bytes": 15049,
+      "sha256": "a177f63a1ffe54dcec1b526206fe1cc97a448751504adb5960d42b22f50ac3cc"
+    }
+  ],
+  "sourceUnchanged": true,
+  "selection": "current-original-cable-clock-original-shape,exact-owned-dispose-preserves-valid-foreign-registries",
+  "passed": true,
+  "cases": [
+    {
+      "kind": "current-original-cable-clock-original-shape",
+      "initialTension": 62.37744956459453,
+      "beforeGateForce": 0,
+      "gateForcePrepared": 0,
+      "freeImmediately": false,
+      "stepMode": "actual-world-only-isolated-missing-shape",
+      "solver": {
+        "worldStep": 840,
+        "originalFree": false,
+        "tension": 0,
+        "cargoForce": [
+          0,
+          -62.400000000000006,
+          0
+        ],
+        "gateForce": [
+          -23.11349306162557,
+          -156,
+          0
+        ]
+      },
+      "passed": true
+    },
+    {
+      "kind": "exact-owned-dispose-preserves-valid-foreign-registries",
+      "validBefore": [
+        true,
+        true,
+        true
+      ],
+      "preserved": [
+        true,
+        true,
+        true
+      ],
+      "sweepPreserved": true,
+      "foreignBodyPresent": true,
+      "foreignSubsystemPresent": true,
+      "passed": true
+    }
+  ],
+  "limits": [
+    "Targeted regression for three concrete isolated defects, not a repeat of every source test or exhaustive ordinary controls.",
+    "Source/full-room acceptance and production endstroke force budget remain open.",
+    "Removing the original cargo shape entirely crashes the existing shared LabPhysics compound CCD after solver; actual failure retained in attempt1. The selected missing-shape followup explicitly uses world.step for that isolated case."
+  ]
+}

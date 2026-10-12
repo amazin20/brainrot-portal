@@ -1,0 +1,23 @@
+{
+  "scope": "Corrected-v1 immutable bytes; inherited types/masses still invalid and owner-mismatch diagnostic stale",
+  "ordinaryAccepted": false,
+  "prototypeAccepted": false,
+  "inputs": [
+    {
+      "path": "src/game/LabRoom20NearHookPrototype.js",
+      "sha256": "62fdf16143ddf6044c7944644a614164ca7c9c0c49dad1c6482951167493bb96"
+    },
+    {
+      "path": "src/game/LabRoom20NearHookSlipPrototype.js",
+      "sha256": "aedff41a027f730cc303a61da82853df2027f5b64ffbf8ad70c74f303c6ad98e"
+    },
+    {
+      "path": "tests/helpers/room20-hook-prototype-fixture.js",
+      "sha256": "2282970bb2f57c4adc881b017b0cb283d989abd3ee31c7d82654d9915d56eccb"
+    },
+    {
+      "path": "tests/lab-room20-near-hook-slip-prototype.test.js",
+      "sha256": "a177f63a1ffe54dcec1b526206fe1cc97a448751504adb5960d42b22f50ac3cc"
+    }
+  ]
+}
