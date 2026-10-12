@@ -21,15 +21,34 @@ export function auditSingularityContacts(game) {
   return p;
  }
  try {
+  const ownedShapes=new Set();
+  for(const [id,entry]of game.physics.bodyBoxes??[]){
+   const collider=colliders.find(c=>c.mesh.uuid===id),shapeKey=`${entry.body?.id}:${entry.shapeIndex}`;
+   if(entry.id!==id||!collider||ownedShapes.has(shapeKey)||game.physics.solids.has(id))fail('owned-body-registry',{id,entryId:entry.id,colliderPresent:!!collider,duplicateShape:ownedShapes.has(shapeKey),duplicateStatic:game.physics.solids.has(id)});
+   ownedShapes.add(shapeKey);
+  }
   for(const c of colliders){
-   const item=game.physics.solids.get(c.mesh.uuid),size=c.box.getSize(vector()),centre=c.box.getCenter(vector());
+   const item=game.physics.solids.get(c.mesh.uuid),owned=game.physics.bodyBoxes?.get(c.mesh.uuid),size=c.box.getSize(vector()),centre=c.box.getCenter(vector());
    const finite=[...c.box.min.toArray(),...c.box.max.toArray()].every(Number.isFinite);
-   if(!item||!finite||Math.min(size.x,size.y,size.z)<=0){fail('registry',{name:c.mesh.name,id:c.mesh.uuid,registered:!!item,finite,size:size.toArray()});continue;}
+   if((!item&&!owned)||!finite||Math.min(size.x,size.y,size.z)<=0){fail('registry',{name:c.mesh.name,id:c.mesh.uuid,registered:!!item||!!owned,finite,size:size.toArray()});continue;}
+   if(owned){
+    // A body-backed collider is accepted only through ownership of the actual
+    // live Box shape. An oriented-contact tag by itself grants no exemption.
+    const inspection=game.physics.inspectBodyBox(c.mesh.uuid,{orientedBox:c.orientedBox,bounds:c.box,enabled:c.enabled});
+    c.mesh.updateWorldMatrix(true,false);
+    const meshBounds=new c.box.constructor().setFromObject(c.mesh),meshCentre=c.mesh.getWorldPosition(vector()),meshQuaternion=c.mesh.getWorldQuaternion(c.mesh.quaternion.clone());
+    const boundError=Math.max(...['min','max'].flatMap(side=>['x','y','z'].map(axis=>Math.abs(c.box[side][axis]-meshBounds[side][axis]))));
+    const contact=c.orientedBox?.current,centreError=contact?meshCentre.distanceTo(contact.center):Infinity;
+    const rotationError=contact?.quaternion?Math.min(...[1,-1].map(sign=>Math.max(...['x','y','z','w'].map(axis=>Math.abs(meshQuaternion[axis]-sign*contact.quaternion[axis]))))):Infinity;
+    const rayRegistered=game.cameraBlockers.includes(c.mesh)&&game.aimBlockers.includes(c.mesh);
+    if(!inspection.valid||![boundError,centreError,rotationError].every(Number.isFinite)||boundError>1e-5||centreError>1e-5||rotationError>1e-5||!rayRegistered)fail('owned-body-box',{name:c.mesh.name,id:c.mesh.uuid,errors:inspection.errors,boundError,centreError,rotationError,rayRegistered});
+    continue;
+   }
    const error=Math.max(Math.abs(item.target.x-centre.x),Math.abs(item.target.y-centre.y),Math.abs(item.target.z-centre.z),Math.abs(item.half.x-size.x/2),Math.abs(item.half.y-size.y/2),Math.abs(item.half.z-size.z/2));
    const maskMatches=(item.body.collisionFilterMask!==0)===(c.enabled!==false);
    if(error>1e-5||!maskMatches)fail('physics-registry',{name:c.mesh.name,id:c.mesh.uuid,error,maskMatches});
   }
-  report.registry={checked:colliders.length,cargoBodies:game.physics.cargoBody?1:0};
+  report.registry={checked:colliders.length,cargoBodies:game.physics.cargoBody?1:0,ownedBodyBoxes:game.physics.bodyBoxes?.size??0};
   for(const room of level.rooms.values()){
    const d=room.def,axis=d.entry==='e'||d.entry==='w'?'x':'z',other=axis==='x'?'z':'x';
    const face=d.at[axis==='x'?0:2]+(d.entry==='e'||d.entry==='s'?-1:1)*(axis==='x'?d.w:d.d)/2;

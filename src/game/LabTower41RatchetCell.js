@@ -20,7 +20,7 @@ export function buildTower41RatchetCell(game,k,options={}){
  const material=new Material({friction:.12,restitution:0});
  let owner=null,disposed=false,lastForceStep=-1,onPostStep=null;
  let anchor=null,rack=null,pawl=null,stops=null,guide=null,hinge=null,rackSpring=null,pawlSpring=null;
- const bodies=[],constraints=[],springs=[],cargoSweepIds=[];
+ const bodies=[],constraints=[],springs=[],cargoSweepIds=[],bodyBoxIds=[];
 
  function boxPart(list,name,offset,size,mat=m.steel,base=V(centre[0],upperY,centre[2])){
   const mesh=k.box(base.clone().add(V(...offset)).toArray(),size,mat,{dynamic:true});mesh.name=name;
@@ -74,7 +74,10 @@ export function buildTower41RatchetCell(game,k,options={}){
 
  function addBody(body,name){body.labTower41Cell=name;owner.world.addBody(body);bodies.push(body);return body;}
  function addConstraint(constraint){constraint.collideConnected=false;for(const e of constraint.equations)e.setSpookParams(1e8,4,DT);owner.world.addConstraint(constraint);constraints.push(constraint);return constraint;}
- function descriptor(part,body){part.collider.orientedBox=createOrientedBoxContact(body,V(part.half.x,part.half.y,part.half.z),V(part.offset.x,part.offset.y,part.offset.z),owner.world.stepnumber);}
+ function descriptor(part,body){
+  part.collider.orientedBox=createOrientedBoxContact(body,V(part.half.x,part.half.y,part.half.z),V(part.offset.x,part.offset.y,part.offset.z),owner.world.stepnumber);
+  owner.registerBodyBox(part.mesh.uuid,{body,shapeIndex:body.shapes.length-1,orientedBox:part.collider.orientedBox});bodyBoxIds.push(part.mesh.uuid);
+ }
  function place(body,p){body.position.copy(p);body.quaternion.set(0,0,0,1);body.velocity.setZero();body.angularVelocity.setZero();body.force.setZero();body.torque.setZero();body.previousPosition.copy(body.position);body.interpolatedPosition.copy(body.position);body.previousQuaternion.copy(body.quaternion);body.interpolatedQuaternion.copy(body.quaternion);body.aabbNeedsUpdate=true;body.wakeUp();}
  function syncPart(part,body,reset){const q=body.quaternion,p=body.quaternion.vmult(part.offset);part.mesh.position.set(body.position.x+p.x,body.position.y+p.y,body.position.z+p.z);part.mesh.quaternion.set(q.x,q.y,q.z,q.w);part.mesh.updateWorldMatrix(true,false);part.collider.box.setFromObject(part.mesh);syncOrientedBoxContact(part.collider.orientedBox,body,owner.world.stepnumber,reset);}
  const cell={
@@ -110,7 +113,7 @@ export function buildTower41RatchetCell(game,k,options={}){
   syncPose(reset=false){if(!cell.ensure())return;for(const p of rackParts)syncPart(p,rack,reset);for(const p of stopParts)syncPart(p,stops,reset);if(pawlPart)syncPart(pawlPart,pawl,reset);for(const t of teeth){const p=rack.quaternion.vmult(t.offset);t.mesh.position.set(rack.position.x+p.x,rack.position.y+p.y,rack.position.z+p.z);t.mesh.quaternion.copy(rack.quaternion);t.mesh.updateWorldMatrix(true,false);}springs.forEach((s,i)=>{const a=C(),b=C();s.getWorldAnchorA(a);s.getWorldAnchorB(b);const delta=V(b.x-a.x,b.y-a.y,b.z-a.z),mesh=springMeshes[i];mesh.position.set(a.x,a.y,a.z);mesh.scale.set(1,delta.length(),1);mesh.quaternion.setFromUnitVectors(UP,delta.normalize());});},
   reset(){if(!cell.ensure())return;place(rack,rackOrigin);if(pawl)place(pawl,C(pivot.x-.14,pivot.y,pivot.z));lastForceStep=-1;owner.world.broadphase.dirty=true;cell.syncPose(true);},
   diagnostics(){if(!cell.ensure())return{ready:false,disposed,config};const a=C(),b=C();return{ready:true,disposed,config,worldStep:owner.world.stepnumber,rack:{id:rack.id,y:rack.position.y,travel:upperY-rack.position.y,velocity:rack.velocity.toArray(),angularVelocity:rack.angularVelocity.toArray()},pawl:pawl?{id:pawl.id,angle:2*Math.atan2(pawl.quaternion.z,pawl.quaternion.w),omega:pawl.angularVelocity.z}:null,springs:springs.map(s=>{s.getWorldAnchorA(a);s.getWorldAnchorB(b);return{length:a.distanceTo(b),restLength:s.restLength,stiffness:s.stiffness,damping:s.damping};}),bodyIds:bodies.map(b=>b.id),constraintEquationCounts:constraints.map(c=>c.equations.length),originalCargoBodyId:cell.originalCargoBody.id};},
-  dispose(){if(disposed)return;disposed=true;if(owner){if(onPostStep)owner.world.removeEventListener('postStep',onPostStep);for(const id of cargoSweepIds)owner.removeCargoSweepBox(id);cargoSweepIds.length=0;for(const c of constraints)owner.world.removeConstraint(c);for(const b of bodies)owner.world.removeBody(b);for(const p of [...rackParts,...stopParts,...(pawlPart?[pawlPart]:[])]){p.collider.enabled=false;delete p.collider.orientedBox;delete p.collider.tower41LoadFace;}}},
+  dispose(){if(disposed)return;disposed=true;if(owner){if(onPostStep)owner.world.removeEventListener('postStep',onPostStep);for(const id of bodyBoxIds)owner.removeBodyBox(id);bodyBoxIds.length=0;for(const id of cargoSweepIds)owner.removeCargoSweepBox(id);cargoSweepIds.length=0;for(const c of constraints)owner.world.removeConstraint(c);for(const b of bodies)owner.world.removeBody(b);for(const p of [...rackParts,...stopParts,...(pawlPart?[pawlPart]:[])]){p.collider.enabled=false;delete p.collider.orientedBox;delete p.collider.tower41LoadFace;}}},
  };
  return cell;
 }

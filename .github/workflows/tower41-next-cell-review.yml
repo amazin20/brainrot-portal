@@ -1,7 +1,7 @@
 name: Review next room41 physical cell and the whole current castle
 'on':
   push:
-    branches: [upgrade/tower41-preview-storage-20261012]
+    branches: [upgrade/tower41-collider-registry-20261012]
   workflow_dispatch:
 # Deliberately read-only: no publisher, deployment environment or Pages writes.
 permissions: {contents: read}

@@ -86,15 +86,21 @@ test('Tower41 repeated passive selector cycles cannot increase stored kinetic en
 test('Tower41 lazy ownership, real shape descriptors, idempotent force updates and reset/disposal preserve cargo identity',()=>{
  const f=fixture({centre:[-48,18,-37]});try{
   const{cell,world,cargo,game,step}=f,owned=[...cell.bodies],joints=[...cell.constraints];
-  const counts=[world.bodies.length,world.constraints.length,world._listeners.postStep.length,game.physics.cargoSweepBoxes.size];
-  cell.ensure();cell.ensure();assert.deepEqual([world.bodies.length,world.constraints.length,world._listeners.postStep.length,game.physics.cargoSweepBoxes.size],counts);
+  const counts=[world.bodies.length,world.constraints.length,world._listeners.postStep.length,game.physics.cargoSweepBoxes.size,game.physics.bodyBoxes.size];
+  cell.ensure();cell.ensure();assert.deepEqual([world.bodies.length,world.constraints.length,world._listeners.postStep.length,game.physics.cargoSweepBoxes.size,game.physics.bodyBoxes.size],counts);
   assert.equal(owned.length,5);assert.deepEqual(joints.map(c=>c.equations.length),[5,5,5,1,1]);
-  for(const p of [...cell.rotorParts.flat(),...cell.fixedParts]){assert.equal(game.physics.solids.has(p.mesh.uuid),false);assert.ok(p.collider.orientedBox);assert.equal(p.collider.orientedBox.body===cell.fixedBody||cell.rotors.includes(p.collider.orientedBox.body),true);}
+  const parts=[...cell.rotorParts.flat(),...cell.fixedParts];assert.equal(game.physics.bodyBoxes.size,parts.length);
+  for(const p of parts){
+   assert.equal(game.physics.solids.has(p.mesh.uuid),false);assert.ok(p.collider.orientedBox);assert.equal(p.collider.orientedBox.body===cell.fixedBody||cell.rotors.includes(p.collider.orientedBox.body),true);
+   const entry=game.physics.bodyBoxes.get(p.mesh.uuid);assert.ok(entry,'Every visible physical Box owns an explicit registry entry');assert.equal(entry.orientedBox,p.collider.orientedBox);assert.equal(entry.body,p.collider.orientedBox.body);assert.equal(entry.shape,entry.body.shapes[entry.shapeIndex]);assert.ok(game.cameraBlockers.includes(p.mesh)&&game.aimBlockers.includes(p.mesh)&&game.colliders.includes(p.collider));
+  }
   assert.equal(game.physics.cargoSweepBoxes.size,cell.fixedParts.length-1,'Real guards are swept; the load face keeps its ordinary positive contact equation');
   cell.crank();cell.updateForces(DT);const torque=cell.rotor.torque.clone();cell.updateForces(DT);assert.equal(cell.rotor.torque.distanceTo(torque),0);game.physics.step(DT);step(1);
+  for(const p of parts){const entry=game.physics.bodyBoxes.get(p.mesh.uuid),offset=entry.body.quaternion.vmult(entry.body.shapeOffsets[entry.shapeIndex]),center=entry.body.position.vadd(offset);assert.ok(p.mesh.position.distanceTo(new THREE.Vector3(center.x,center.y,center.z))<1e-10);assert.ok(entry.orientedBox.current.center.distanceTo(p.mesh.position)<1e-10);assert.equal(entry.orientedBox.step,world.stepnumber);}
   const cargoPose=cargo.position.clone();cell.reset();cell.reset();assert.equal(cargo.position.distanceTo(cargoPose),0);assert.equal(game.physics.cargoBody,cargo);assert.equal(cell.originalCargo,game.cargo);assert.equal(cell.omega,0);assert.equal(cell.output,0);assert.equal(cell.clutch,false);assert.equal(cell.brake,false);assert.equal(cell.ratio,0);assert.equal(cell.loadContact,false);
   const p=cell.rotorParts[0][0],previous=p.collider.orientedBox.previous.center.clone();cell.syncPose();cell.syncPose();assert.equal(p.collider.orientedBox.previous.center.distanceTo(previous),0);
-  cell.dispose();cell.dispose();assert.equal(cell.ensure(),false);for(const b of owned)assert.equal(world.bodies.includes(b),false);for(const c of joints)assert.equal(world.constraints.includes(c),false);assert.equal(game.physics.cargoSweepBoxes.size,0);assert.equal(game.physics.cargoBody,cargo);assert.ok(world.bodies.includes(cargo));cell.updateForces(DT);
+  const removeBody=world.removeBody.bind(world);world.removeBody=body=>{if(owned.includes(body))assert.ok([...game.physics.bodyBoxes.values()].every(entry=>entry.body!==body),'Registry ownership is removed before its actual Cannon body');return removeBody(body);};
+  cell.dispose();cell.dispose();assert.equal(cell.ensure(),false);for(const b of owned)assert.equal(world.bodies.includes(b),false);for(const c of joints)assert.equal(world.constraints.includes(c),false);assert.equal(game.physics.cargoSweepBoxes.size,0);assert.equal(game.physics.bodyBoxes.size,0);assert.equal(game.physics.cargoBody,cargo);assert.ok(world.bodies.includes(cargo));cell.updateForces(DT);
   assert.deepEqual([world.bodies.length,world.constraints.length,world._listeners.postStep.length],[counts[0]-5,counts[1]-5,counts[2]-1]);
  }finally{f.dispose();}
 });

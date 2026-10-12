@@ -90,17 +90,19 @@ test('41 lazy ownership, before-step forces, double reset and disposal retain th
   const {cell,game,body,step}=f,world=game.physics.world,owned=[...cell.bodies],joints=[...cell.constraints];
   assert.equal(owned.length,4);assert.deepEqual(joints.map(c=>c.equations.length),[5,5]);
   assert.equal(cell.guide.equations.includes(cell.guide.equationY),false);assert.equal(cell.hinge.equations.includes(cell.hinge.motorEquation),false);
-  for(const part of [...cell.rackParts,...cell.stopParts,cell.pawlPart])assert.equal(game.physics.solids.has(part.mesh.uuid),false);
-  const counts=[world.bodies.length,world.constraints.length,world._listeners.postStep.length];
-  cell.ensure();cell.ensure();assert.deepEqual([world.bodies.length,world.constraints.length,world._listeners.postStep.length],counts);
+  const parts=[...cell.rackParts,...cell.stopParts,cell.pawlPart];assert.equal(game.physics.bodyBoxes.size,parts.length);
+  for(const part of parts){assert.equal(game.physics.solids.has(part.mesh.uuid),false);const entry=game.physics.bodyBoxes.get(part.mesh.uuid);assert.ok(entry);assert.equal(entry.orientedBox,part.collider.orientedBox);assert.equal(entry.body,part.collider.orientedBox.body);assert.equal(entry.shape,entry.body.shapes[entry.shapeIndex]);assert.ok(game.cameraBlockers.includes(part.mesh)&&game.aimBlockers.includes(part.mesh)&&game.colliders.includes(part.collider));}
+  const counts=[world.bodies.length,world.constraints.length,world._listeners.postStep.length,game.physics.bodyBoxes.size];
+  cell.ensure();cell.ensure();assert.deepEqual([world.bodies.length,world.constraints.length,world._listeners.postStep.length,game.physics.bodyBoxes.size],counts);
   cell.updateForces(0);assert.equal(cell.rack.force.length(),0);cell.updateForces(DT);assert.ok(cell.rack.force.y>27.9&&cell.rack.force.y<28.1);
   const force=cell.rack.force.clone();cell.updateForces(DT);assert.equal(cell.rack.force.distanceTo(force),0);
   game.physics.step(DT);step(3);assert.ok(Math.abs(cell.rack.position.y-1.5)<.003,'The empty spring rack meets its actual upper stop');assert.equal(f.measure.cargoRack,0);
   const cargoPose=body.position.clone();cell.reset();cell.reset();assert.equal(body.position.distanceTo(cargoPose),0);assert.equal(game.physics.cargoBody,body);
-  assert.deepEqual([world.bodies.length,world.constraints.length,world._listeners.postStep.length],counts);
+  assert.deepEqual([world.bodies.length,world.constraints.length,world._listeners.postStep.length,game.physics.bodyBoxes.size],counts);
   assert.ok(Math.abs(cell.rack.position.y-1.5)<1e-12);assert.equal(cell.rack.velocity.length(),0);assert.equal(cell.rack.force.length(),0);
   const before=cell.rackParts[0].collider.orientedBox.current.center.clone();cell.syncPose();cell.syncPose();assert.equal(cell.rackParts[0].collider.orientedBox.previous.center.distanceTo(before),0);
-  cell.dispose();cell.dispose();assert.equal(cell.ensure(),false);assert.equal(game.physics.cargoBody,body);
+  const removeBody=world.removeBody.bind(world);world.removeBody=body=>{if(owned.includes(body))assert.ok([...game.physics.bodyBoxes.values()].every(entry=>entry.body!==body),'Registry ownership is removed before its actual Cannon body');return removeBody(body);};
+  cell.dispose();cell.dispose();assert.equal(cell.ensure(),false);assert.equal(game.physics.cargoBody,body);assert.equal(game.physics.bodyBoxes.size,0);
   for(const b of owned)assert.equal(world.bodies.includes(b),false);for(const c of joints)assert.equal(world.constraints.includes(c),false);
   assert.deepEqual([world.bodies.length,world.constraints.length,world._listeners.postStep.length],[counts[0]-4,counts[1]-2,counts[2]-1]);
   cell.updateForces(DT);game.physics.step(DT);assert.equal(world.bodies.includes(body),true);

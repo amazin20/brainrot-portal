@@ -13,7 +13,7 @@ import {checkBuild,sourceIdentity,assertObservedRoute,oldSavePrefixes,qualificat
 import {CAMPAIGN_ASSET_IDS} from '../src/game/labAssets.js';
 import {TOWER41_PREVIEW_STORAGE_PREFIX} from '../src/game/LabTower41Preview.js';
 
-export const PINS=Object.freeze({branch:'upgrade/tower41-preview-storage-20261012',sourceParent:'57cf8a1363ac9ee01d1552498469723f6619b3c6',main:'569918af19c4dafdc0f9450e668733c474e8ff56',acceptedSource:'0e257837ca157d59d29c2e892e9a81e4f21fc5a1',canonicalSource:'8d2c01eacd86fe9235a35e7ec5f624ba62c3b29e',repository:'amazin20/brainrot-portal',publicBase:'https://amazin20.github.io/brainrot-portal/'});
+export const PINS=Object.freeze({branch:'upgrade/tower41-collider-registry-20261012',sourceParent:'0fcc097b1e0a657239de7d5b4de2be040cd032f4',main:'569918af19c4dafdc0f9450e668733c474e8ff56',acceptedSource:'0e257837ca157d59d29c2e892e9a81e4f21fc5a1',canonicalSource:'8d2c01eacd86fe9235a35e7ec5f624ba62c3b29e',repository:'amazin20/brainrot-portal',publicBase:'https://amazin20.github.io/brainrot-portal/'});
 const sha256=bytes=>createHash('sha256').update(bytes).digest('hex');
 const read=file=>JSON.parse(fs.readFileSync(file,'utf8'));
 const write=(file,value)=>{fs.mkdirSync(path.dirname(file),{recursive:true});fs.writeFileSync(file,JSON.stringify(value,null,2)+'\n');};
@@ -24,7 +24,7 @@ function snapshot(){
  assert.equal(git('rev-parse','HEAD^'),PINS.sourceParent,'The preview source must directly descend from the frozen physical-cell source');
  assert.equal(git('status','--porcelain','--untracked-files=no'),'','Committed source must remain unchanged');
  if(process.env.GITHUB_REF)assert.equal(process.env.GITHUB_REF,'refs/heads/'+PINS.branch,'Only the isolated review branch is permitted');
- const inputs=buildSourceInputs(),verifiers=['.github/workflows/tower41-next-cell-review.yml','scripts/qa-tower41-next-cell-source.mjs','scripts/qa-tower41-ratchet-browser.mjs','scripts/record-tower41-ratchet-walkthrough.mjs','scripts/singularity-browser.mjs','scripts/lib/singularity-upgrade-proof.mjs','scripts/test-active-game.mjs'].map(file=>({file,sha256:sha256(fs.readFileSync(file))}));
+ const inputs=buildSourceInputs(),verifiers=['.github/workflows/tower41-next-cell-review.yml','scripts/qa-tower41-next-cell-source.mjs','scripts/qa-tower41-ratchet-browser.mjs','scripts/record-tower41-ratchet-walkthrough.mjs','scripts/singularity-browser.mjs','scripts/singularity-adversarial-audit.mjs','scripts/lib/singularity-upgrade-proof.mjs','scripts/test-active-game.mjs'].map(file=>({file,sha256:sha256(fs.readFileSync(file))}));
  return {...identity,tree:git('rev-parse','HEAD^{tree}'),sourceInputsSha256:sha256(JSON.stringify(inputs)),sourceInputFiles:inputs.length,verifiers};
 }
 function verifySource(){const actual=snapshot(),frozen=read(sourceFile);for(const key of ['sourceCommit','sourceReview','tree','sourceInputsSha256','sourceInputFiles','verifiers'])assert.deepEqual(actual[key],frozen[key],'Frozen source mismatch: '+key);return frozen;}

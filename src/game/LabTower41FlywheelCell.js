@@ -25,7 +25,7 @@ class GearConstraint extends Constraint{
 export function buildTower41FlywheelCell(game,k,options={}){
  const centre=options.centre??[-48,18,-37],origin=V(...centre),m=k.m;
  const rotorDefs=[{x:-8,r:3.9,mass:4.5,material:m.copper},{x:0,r:2.6,mass:1,material:m.ivory},{x:7,r:3.2,mass:1,material:m.cyan}];
- const rotorParts=rotorDefs.map(()=>[]),fixedParts=[],bodies=[],constraints=[],hinges=[],cargoSweepIds=[];
+ const rotorParts=rotorDefs.map(()=>[]),fixedParts=[],bodies=[],constraints=[],hinges=[],cargoSweepIds=[],bodyBoxIds=[];
  const rotorOrigins=rotorDefs.map(d=>C(centre[0]+d.x,centre[1]+4,centre[2]-11));
  const loadPosition=V(centre[0]+11,centre[1]+.28,centre[2]+5),loadCargoPosition=loadPosition.clone().add(V(0,.39,0));
  let owner=null,anchor=null,fixedBody=null,rotors=[],gear=null,idlerGear=null,disposed=false,onPostStep=null,lastForceStep=-1;
@@ -73,7 +73,13 @@ export function buildTower41FlywheelCell(game,k,options={}){
 
  function addBody(b,name){b.labTower41Cell=name;owner.world.addBody(b);bodies.push(b);return b;}
  function addConstraint(c){c.collideConnected=false;for(const e of c.equations){e.setSpookParams(c instanceof GearConstraint?1e10:1e8,4,DT);if(c instanceof GearConstraint)e.b=1;}owner.world.addConstraint(c);constraints.push(c);return c;}
- function descriptor(p,b){p.collider.orientedBox=createOrientedBoxContact(b,V(p.half.x,p.half.y,p.half.z),V(p.offset.x,p.offset.y,p.offset.z),owner.world.stepnumber);}
+ function descriptor(p,b){
+  p.collider.orientedBox=createOrientedBoxContact(b,V(p.half.x,p.half.y,p.half.z),V(p.offset.x,p.offset.y,p.offset.z),owner.world.stepnumber);
+  // Player capsules, cameras and aimed shots keep this visible box. Its
+  // contact registry binds that same geometry to the existing compound
+  // Cannon shape instead of introducing a second static collision body.
+  owner.registerBodyBox(p.mesh.uuid,{body:b,shapeIndex:b.shapes.length-1,orientedBox:p.collider.orientedBox});bodyBoxIds.push(p.mesh.uuid);
+ }
  function syncPart(p,b,reset){const q=b.quaternion,offset=q.vmult(p.offset);p.mesh.position.set(b.position.x+offset.x,b.position.y+offset.y,b.position.z+offset.z);p.mesh.quaternion.set(q.x,q.y,q.z,q.w);p.mesh.updateWorldMatrix(true,false);p.collider.box.setFromObject(p.mesh);syncOrientedBoxContact(p.collider.orientedBox,b,owner.world.stepnumber,reset);}
  function place(b,p){b.position.copy(p);b.quaternion.set(0,0,0,1);b.velocity.setZero();b.angularVelocity.setZero();b.force.setZero();b.torque.setZero();b.previousPosition.copy(b.position);b.interpolatedPosition.copy(b.position);b.previousQuaternion.copy(b.quaternion);b.interpolatedQuaternion.copy(b.quaternion);b.aabbNeedsUpdate=true;b.wakeUp();}
  function originalFreeCargo(){return!disposed&&owner&&game.cargo===cell.originalCargo&&owner.cargoBody===cell.originalCargoBody&&owner.world.bodies.includes(cell.originalCargoBody)&&cell.originalCargoBody.collisionResponse!==false&&cell.originalCargoBody.shapes[0]?.collisionResponse!==false&&fixedBody.collisionResponse!==false&&fixedBody.shapes[trayShapeIndex].collisionResponse!==false&&!game.heldCube&&!owner.carryTarget;}
@@ -140,7 +146,7 @@ export function buildTower41FlywheelCell(game,k,options={}){
   syncPose(reset=false){if(!cell.ensure())return;for(const [i,list]of rotorParts.entries())for(const p of list)syncPart(p,rotors[i],reset);for(const p of fixedParts)syncPart(p,fixedBody,reset);trayPart.mesh.material=cell.loadContact?m.live:m.copper;},
   reset(){if(!cell.ensure())return;ratio=0;clutch=brake=false;normalLoad=contactCount=crankCount=brakeWork=loadWork=0;contactStep=lastForceStep=-1;gear.gearEquation.ratio=RATIOS[0];for(const [i,b]of rotors.entries())place(b,rotorOrigins[i]);owner.world.broadphase.dirty=true;cell.syncPose(true);},
   diagnostics(){if(!cell.ensure())return{ready:false,disposed};return{ready:true,disposed,worldStep:owner.world.stepnumber,omega:cell.omega,output:cell.output,ratio,ratioValue:RATIOS[ratio],clutch,brake,loadContact:cell.loadContact,loadNormalForce:cell.loadNormalForce,loadContactCount:contactCount,contactStep,readyForProof:cell.readyForProof,energy:cell.energy,crankCount,brakeWork,loadWork,handAngularImpulse,bodyIds:bodies.map(b=>b.id),constraintEquationCounts:constraints.map(c=>c.equations.length),originalCargoBodyId:cell.originalCargoBody.id,trayBodyId:fixedBody.id,trayShapeId:fixedBody.shapes[trayShapeIndex].id,rotors:rotors.map(b=>({id:b.id,position:b.position.toArray(),angularVelocity:b.angularVelocity.toArray(),inertia:b.inertia.toArray(),torque:b.torque.toArray()}))};},
-  dispose(){if(disposed)return;disposed=true;if(owner){if(onPostStep)owner.world.removeEventListener('postStep',onPostStep);for(const id of cargoSweepIds)owner.removeCargoSweepBox(id);cargoSweepIds.length=0;for(const c of constraints)owner.world.removeConstraint(c);for(const b of bodies)owner.world.removeBody(b);for(const p of [...rotorParts.flat(),...fixedParts]){p.collider.enabled=false;delete p.collider.orientedBox;}}},
+  dispose(){if(disposed)return;disposed=true;if(owner){if(onPostStep)owner.world.removeEventListener('postStep',onPostStep);for(const id of bodyBoxIds)owner.removeBodyBox(id);bodyBoxIds.length=0;for(const id of cargoSweepIds)owner.removeCargoSweepBox(id);cargoSweepIds.length=0;for(const c of constraints)owner.world.removeConstraint(c);for(const b of bodies)owner.world.removeBody(b);for(const p of [...rotorParts.flat(),...fixedParts]){p.collider.enabled=false;delete p.collider.orientedBox;}}},
  };
  return cell;
 }
