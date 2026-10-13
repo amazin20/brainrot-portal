@@ -1,0 +1,190 @@
+{
+  "kind": "room23-physical-prototype-failure-history",
+  "baseCommit": "f4ede3632d82494c768f7cc4f03d596c698d3b3d",
+  "historicalRecordsImmutable": true,
+  "fullHistoricalToolOutputClaimed": false,
+  "initialDevelopmentFailuresReportedFromActualToolOutput": [
+    {
+      "failure": "Finite supply cut/release midstroke initially failed; first five-test run passed 4/5.",
+      "cause": "Sleeping original remained an immovable Cannon support when the actual pan began unpowered motion.",
+      "fix": "Wake the same original when its actual support is moving, without pose, velocity or mass writes."
+    },
+    {
+      "failure": "Declared handoff initially required simultaneous foot contacts on both cabins and passed 9/10.",
+      "cause": "The actual 0.20 m gap did not produce simultaneous contact. Each real cabin separately received held traveller load.",
+      "fix": "Require positive real held-foot load on each car and actual original pan transfer; no simultaneity claim."
+    }
+  ],
+  "savedFailedActualSceneRuns": [
+    {
+      "receipt": {
+        "path": "/workspace/scratch/1949b02c22bb/room23-physical-review/blocked-scene-return-final/blocked-scene-return.json",
+        "bytes": 6007,
+        "sha256": "c288fdaaa8e4b3d9357541c6d4298ce59a9e0a0dee039bbe47b8be24c8074ed9",
+        "allBytesReadForHash": true
+      },
+      "snapshot": {
+        "path": "/workspace/scratch/1949b02c22bb/room23-physical-review/blocked-scene-return-final/terminal-physical-snapshot.json",
+        "bytes": 201871,
+        "sha256": "a94c5d3fee0a489df1cfa8f314fd486de088ad26b289c2a18ff7086d2852efc8",
+        "allBytesReadForHash": true
+      },
+      "journal": {
+        "path": "/workspace/scratch/1949b02c22bb/room23-physical-review/blocked-scene-return-final/actual-scene-return-journal.jsonl",
+        "bytes": 16428572,
+        "sha256": "39fa9ae554ee41574b1106a7cb84af8fd950762f5916ca25bc2d37c75f8d8b5a",
+        "allBytesReadForHash": true
+      },
+      "actualFailure": {
+        "name": "Error",
+        "message": "Same original on opposite cabin did not enable the actual scene return: 5.64972339986634,9.999990149427648,5.623605967516251 / friend -1.1382307452946494,10.654936386596253,2.348559445329299",
+        "stack": "Error: Same original on opposite cabin did not enable the actual scene return: 5.64972339986634,9.999990149427648,5.623605967516251 / friend -1.1382307452946494,10.654936386596253,2.348559445329299\n    at assert (file:///workspace/scratch/1949b02c22bb/game-room23-physical-prototype/src/game/LabV8Journey.js:3:56)\n    at Object.until (file:///workspace/scratch/1949b02c22bb/game-room23-physical-prototype/src/game/LabV8Journey.js:40:111)\n    at scenario (file:///workspace/scratch/1949b02c22bb/game-room23-physical-prototype/research/room23-scene-return-probe.mjs:33:5)\n    at async runV8Journey (file:///workspace/scratch/1949b02c22bb/game-room23-physical-prototype/src/game/LabV8Journey.js:91:7)\n    at async file:///workspace/scratch/1949b02c22bb/game-room23-physical-prototype/research/room23-scene-return-probe.mjs:29:9"
+      },
+      "cause": "Reset enabled both normally disabled HingeConstraint zero-speed motor rows. Root independently identified the unintended braking torque.",
+      "acceptedAsPositive": false
+    },
+    {
+      "receipt": {
+        "path": "/workspace/scratch/1949b02c22bb/room23-physical-review/scene-return-reset-fix/blocked-scene-return.json",
+        "bytes": 5209,
+        "sha256": "59acf57fed442642063f0bd130444aeb1c25a94bb145e36e5bdcd0b81268b68c",
+        "allBytesReadForHash": true
+      },
+      "snapshot": {
+        "path": "/workspace/scratch/1949b02c22bb/room23-physical-review/scene-return-reset-fix/terminal-physical-snapshot.json",
+        "bytes": 199207,
+        "sha256": "dfad54c17e51632997751cf8749fe59e90548204563bf0d8a0bfa08c0da3fa6c",
+        "allBytesReadForHash": true
+      },
+      "journal": {
+        "path": "/workspace/scratch/1949b02c22bb/room23-physical-review/scene-return-reset-fix/actual-scene-return-journal.jsonl",
+        "bytes": 15834978,
+        "sha256": "b541ed373e2d412dec44fa35d772711a0dad1e763b109e1c8c607d17f900b135",
+        "allBytesReadForHash": true
+      },
+      "actualFailure": {
+        "name": "Error",
+        "message": "Same original on opposite cabin did not enable the actual scene return: 5.637449273905128,9.999990249904712,5.638272491333764 / friend -4.026621992090294,0.3899981462298793,-1.16922382373284",
+        "stack": "Error: Same original on opposite cabin did not enable the actual scene return: 5.637449273905128,9.999990249904712,5.638272491333764 / friend -4.026621992090294,0.3899981462298793,-1.16922382373284\n    at assert (file:///workspace/scratch/1949b02c22bb/game-room23-physical-prototype/src/game/LabV8Journey.js:3:56)\n    at Object.until (file:///workspace/scratch/1949b02c22bb/game-room23-physical-prototype/src/game/LabV8Journey.js:40:111)\n    at scenario (file:///workspace/scratch/1949b02c22bb/game-room23-physical-prototype/research/room23-scene-return-probe.mjs:33:5)\n    at async runV8Journey (file:///workspace/scratch/1949b02c22bb/game-room23-physical-prototype/src/game/LabV8Journey.js:91:7)\n    at async file:///workspace/scratch/1949b02c22bb/game-room23-physical-prototype/research/room23-scene-return-probe.mjs:29:9"
+      },
+      "cause": "With hidden motors disabled, the original landed outside the west pan. A 1.14 m mouth did not admit real held transfer at 1.06 m centre height.",
+      "acceptedAsPositive": false
+    },
+    {
+      "receipt": {
+        "path": "/workspace/scratch/1949b02c22bb/room23-physical-review/scene-return-reset-and-facing-fix/blocked-scene-return.json",
+        "bytes": 5205,
+        "sha256": "42cc30c78879bf531fef64219ef125cad6402a3bf092e1a6a58acd3ff1072d3f",
+        "allBytesReadForHash": true
+      },
+      "snapshot": {
+        "path": "/workspace/scratch/1949b02c22bb/room23-physical-review/scene-return-reset-and-facing-fix/terminal-physical-snapshot.json",
+        "bytes": 198320,
+        "sha256": "5ed94d780490ba7a0e3a016c56c49a611aaced3e251fc8762e2d7be6339eece2",
+        "allBytesReadForHash": true
+      },
+      "journal": {
+        "path": "/workspace/scratch/1949b02c22bb/room23-physical-review/scene-return-reset-and-facing-fix/actual-scene-return-journal.jsonl",
+        "bytes": 15653363,
+        "sha256": "ff2aec1d746ec78176a9ae7c62bede2f0d7dd0ba2ad8a4130205fcd5d8197363",
+        "allBytesReadForHash": true
+      },
+      "actualFailure": {
+        "name": "Error",
+        "message": "Same original on opposite cabin did not enable the actual scene return: 5.644085964997527,9.999990249904712,5.629358057067116 / friend -3.858271329562848,0.38999814622996176,-2.606436303572556",
+        "stack": "Error: Same original on opposite cabin did not enable the actual scene return: 5.644085964997527,9.999990249904712,5.629358057067116 / friend -3.858271329562848,0.38999814622996176,-2.606436303572556\n    at assert (file:///workspace/scratch/1949b02c22bb/game-room23-physical-prototype/src/game/LabV8Journey.js:3:56)\n    at Object.until (file:///workspace/scratch/1949b02c22bb/game-room23-physical-prototype/src/game/LabV8Journey.js:40:111)\n    at scenario (file:///workspace/scratch/1949b02c22bb/game-room23-physical-prototype/research/room23-scene-return-probe.mjs:33:5)\n    at async runV8Journey (file:///workspace/scratch/1949b02c22bb/game-room23-physical-prototype/src/game/LabV8Journey.js:91:7)\n    at async file:///workspace/scratch/1949b02c22bb/game-room23-physical-prototype/research/room23-scene-return-probe.mjs:29:9"
+      },
+      "cause": "Velocity-driven facing also turned the powered hand away during inertial settling; no actual west-pan load was acquired.",
+      "acceptedAsPositive": false
+    },
+    {
+      "receipt": {
+        "path": "/workspace/scratch/1949b02c22bb/room23-physical-review/scene-return-clear-mouth/blocked-scene-return.json",
+        "bytes": 5247,
+        "sha256": "0e07082b100f868f6d6dd17ddf52fab1b928b01e020b1e6807ee9340914ae0f1",
+        "allBytesReadForHash": true
+      },
+      "snapshot": {
+        "path": "/workspace/scratch/1949b02c22bb/room23-physical-review/scene-return-clear-mouth/terminal-physical-snapshot.json",
+        "bytes": 196558,
+        "sha256": "f03b605915b72d2e17d393e2d05f019908e71671e2a5dd1bd4da523827149ce8",
+        "allBytesReadForHash": true
+      },
+      "journal": {
+        "path": "/workspace/scratch/1949b02c22bb/room23-physical-review/scene-return-clear-mouth/actual-scene-return-journal.jsonl",
+        "bytes": 15181732,
+        "sha256": "875ce644c75e2cc0bf96a00bc816fcf5103157570254cad857200d827cb68205",
+        "allBytesReadForHash": true
+      },
+      "actualFailure": {
+        "name": "Error",
+        "message": "Same original on opposite cabin did not enable the actual scene return: 5.644559716282868,9.999990249908839,5.626965315525781 / friend -5.223693392949554,10.389997338442399,1.6851792621686197",
+        "stack": "Error: Same original on opposite cabin did not enable the actual scene return: 5.644559716282868,9.999990249908839,5.626965315525781 / friend -5.223693392949554,10.389997338442399,1.6851792621686197\n    at assert (file:///workspace/scratch/1949b02c22bb/game-room23-physical-prototype/src/game/LabV8Journey.js:3:56)\n    at Object.until (file:///workspace/scratch/1949b02c22bb/game-room23-physical-prototype/src/game/LabV8Journey.js:40:111)\n    at scenario (file:///workspace/scratch/1949b02c22bb/game-room23-physical-prototype/research/room23-scene-return-probe.mjs:33:5)\n    at async runV8Journey (file:///workspace/scratch/1949b02c22bb/game-room23-physical-prototype/src/game/LabV8Journey.js:91:7)\n    at async file:///workspace/scratch/1949b02c22bb/game-room23-physical-prototype/research/room23-scene-return-probe.mjs:29:9"
+      },
+      "cause": "The longer approach still ended pointing away during real settling; original remained off the pan.",
+      "acceptedAsPositive": false
+    },
+    {
+      "receipt": {
+        "path": "/workspace/scratch/1949b02c22bb/room23-physical-review/scene-return-finite-approach/blocked-scene-return.json",
+        "bytes": 7124,
+        "sha256": "00d177c54844d0a3696144906a5907501bfc99745958b589d84383e6b58a9fb9",
+        "allBytesReadForHash": true
+      },
+      "snapshot": {
+        "path": "/workspace/scratch/1949b02c22bb/room23-physical-review/scene-return-finite-approach/terminal-physical-snapshot.json",
+        "bytes": 200104,
+        "sha256": "f5337bca71dfdf6fdfa734a92fac7c579ce7571997e15910648460455404f9ec",
+        "allBytesReadForHash": true
+      },
+      "journal": {
+        "path": "/workspace/scratch/1949b02c22bb/room23-physical-review/scene-return-finite-approach/actual-scene-return-journal.jsonl",
+        "bytes": 17058908,
+        "sha256": "0ff1f724f9ddd7594ded6fecaa641f49863ea53edd786cf525da723f38dad150",
+        "allBytesReadForHash": true
+      },
+      "actualFailure": {
+        "name": "Error",
+        "message": "Same original on opposite cabin did not enable the actual scene return: 5.64499669001103,19.83142784862398,5.632029734438854 / friend -1.899230152858814,0.7369459475117944,2.974737260238356",
+        "stack": "Error: Same original on opposite cabin did not enable the actual scene return: 5.64499669001103,19.83142784862398,5.632029734438854 / friend -1.899230152858814,0.7369459475117944,2.974737260238356\n    at assert (file:///workspace/scratch/1949b02c22bb/game-room23-physical-prototype/src/game/LabV8Journey.js:3:56)\n    at Object.until (file:///workspace/scratch/1949b02c22bb/game-room23-physical-prototype/src/game/LabV8Journey.js:40:111)\n    at scenario (file:///workspace/scratch/1949b02c22bb/game-room23-physical-prototype/research/room23-scene-return-probe.mjs:33:5)\n    at async runV8Journey (file:///workspace/scratch/1949b02c22bb/game-room23-physical-prototype/src/game/LabV8Journey.js:91:7)\n    at async file:///workspace/scratch/1949b02c22bb/game-room23-physical-prototype/research/room23-scene-return-probe.mjs:29:9"
+      },
+      "cause": "Real handoff and ascent occurred, but the raised hood physically hit two brake shoes at 19.83144 m. Eight real normals totalled 486.91845 N; root and local solver readout independently matched the force balance.",
+      "acceptedAsPositive": false
+    },
+    {
+      "receipt": {
+        "path": "/workspace/scratch/1949b02c22bb/room23-physical-review/scene-return-founded-drive-bay/blocked-scene-return.json",
+        "bytes": 6785,
+        "sha256": "db07294a986f8aa09b54464efb64bf2eb071c66519cacd65236ce5742b15a2d8",
+        "allBytesReadForHash": true
+      },
+      "snapshot": {
+        "path": "/workspace/scratch/1949b02c22bb/room23-physical-review/scene-return-founded-drive-bay/terminal-physical-snapshot.json",
+        "bytes": 202414,
+        "sha256": "a37d146c0b67446ff00e1dd3546dc82b65b3aec6190c6f012849103165292f54",
+        "allBytesReadForHash": true
+      },
+      "journal": {
+        "path": "/workspace/scratch/1949b02c22bb/room23-physical-review/scene-return-founded-drive-bay/actual-scene-return-journal.jsonl",
+        "bytes": 16943009,
+        "sha256": "0a1b704c1bc65583e6c7e8f7c1796c2d7820ad75dabb0e79efe57f5756c56713",
+        "allBytesReadForHash": true
+      },
+      "actualFailure": {
+        "name": "Error",
+        "message": "Same original on opposite cabin did not enable the actual scene return: 5.654232609627803,10.005299202115319,5.619231945093962 / friend -1.9128776012525,10.563071438822128,2.806766811819504",
+        "stack": "Error: Same original on opposite cabin did not enable the actual scene return: 5.654232609627803,10.005299202115319,5.619231945093962 / friend -1.9128776012525,10.563071438822128,2.806766811819504\n    at assert (file:///workspace/scratch/1949b02c22bb/game-room23-physical-prototype/src/game/LabV8Journey.js:3:56)\n    at Object.until (file:///workspace/scratch/1949b02c22bb/game-room23-physical-prototype/src/game/LabV8Journey.js:40:111)\n    at scenario (file:///workspace/scratch/1949b02c22bb/game-room23-physical-prototype/research/room23-scene-return-probe.mjs:33:5)\n    at async runV8Journey (file:///workspace/scratch/1949b02c22bb/game-room23-physical-prototype/src/game/LabV8Journey.js:91:7)\n    at async file:///workspace/scratch/1949b02c22bb/game-room23-physical-prototype/research/room23-scene-return-probe.mjs:29:9"
+      },
+      "cause": "After moving the drive to z=8, one brake actuator still targeted old z=3 and kept real contact. Corrected every command anchor to DRIVE_Z.",
+      "acceptedAsPositive": false
+    }
+  ],
+  "latestActualSceneReturn": {
+    "path": "/workspace/scratch/1949b02c22bb/room23-physical-review/scene-return-clear-static-stroke/blocked-scene-return.json",
+    "bytes": 7363,
+    "sha256": "77cec822264fe58f6112f33dd8b0a0201f67d73ad00a7e644fe076d53381713b",
+    "allBytesReadForHash": true
+  },
+  "latestActualSceneReturnPassed": true,
+  "fullOrdinaryRouteAccepted": false
+}

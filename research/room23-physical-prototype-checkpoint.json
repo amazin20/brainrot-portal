@@ -1,0 +1,626 @@
+{
+  "kind": "unaccepted-opt-in-room23-physical-mechanical-checkpoint",
+  "createdAt": "2026-10-13T05:22:21.258082+00:00",
+  "baseCommit": "f4ede3632d82494c768f7cc4f03d596c698d3b3d",
+  "baseTree": "4de59ef15cb0aaa5fa773c34da418695c333de26",
+  "baseDirectParent": "5e552e9c3ac248b535d619741f15e99e29979cbf",
+  "scope": "Room23-only isolated dynamic mechanical prototype. Default R4 builder is unchanged except a two-line explicit opt-in import/branch. Declared component initial states do not prove a normal authored route.",
+  "optIn": "game.room23PhysicalPrototype === true",
+  "declaredMiddleFixture": "game.room23PhysicalPrototypeInitialState = {displacement:10,spawn:[3.1,10,3],cargoSpawn:[1.1,10.61,3]}",
+  "sources": [
+    {
+      "path": "src/game/LabPortalRoom23.js",
+      "bytes": 5785,
+      "sha256": "86f8d9edca9ddd8667f4ffa8efaff3335ea5da1533a0180028f63172c5b5700c",
+      "allBytesReadForHash": true
+    },
+    {
+      "path": "src/game/LabRoom23PhysicalPrototype.js",
+      "bytes": 5471,
+      "sha256": "f59095a7f31cca22d97c9634b8dfa62481f335eefdcf82215a9e643c58ebd241",
+      "allBytesReadForHash": true
+    },
+    {
+      "path": "src/game/LabRoom23PhysicalMachine.js",
+      "bytes": 27280,
+      "sha256": "933a4c37f13b3032148d9e647eb4502a15c5e83d9af6cc3888db7404d2ee77da",
+      "allBytesReadForHash": true
+    },
+    {
+      "path": "src/game/LabRoom23DynamicTraveller.js",
+      "bytes": 9095,
+      "sha256": "3b30477df14ead81359aa2f49df5b56df98a60b7393e47b3c2db101dccdf47fc",
+      "allBytesReadForHash": true
+    },
+    {
+      "path": "tests/fixtures/room23-physical-fixture.js",
+      "bytes": 3023,
+      "sha256": "5d841b70bbaa4db1b415d9117e44f81d0712d2caec79aab4f3afc81b0d867626",
+      "allBytesReadForHash": true
+    },
+    {
+      "path": "tests/lab-room23-physical-prototype.test.js",
+      "bytes": 14668,
+      "sha256": "d2331a55c0e7b82580629fef30852d04ee5a19c8ff4f1f48c3511267656d6a15",
+      "allBytesReadForHash": true
+    },
+    {
+      "path": "research/room23-physical-prototype-reproduce.mjs",
+      "bytes": 6758,
+      "sha256": "27d2d310f98ff6d8165322c1bdd09c4471b54b2f9d3f1f7f643331930a4e6a97",
+      "allBytesReadForHash": true
+    },
+    {
+      "path": "research/room23-docked-handoff-probe.mjs",
+      "bytes": 1542,
+      "sha256": "b33e5425eb79ce2d81b6ad6bfac511de438c3b7522a14a9bc31056ffbd001939",
+      "allBytesReadForHash": true
+    },
+    {
+      "path": "research/room23-scene-return-probe.mjs",
+      "bytes": 7261,
+      "sha256": "3585dcf9d6a3616d1b1e4589458ab7d361cb56f34d3ce1f135f628c040cbfc43",
+      "allBytesReadForHash": true
+    }
+  ],
+  "allOriginal59GlbsByteExactR4": true,
+  "original59GlbInventory": [
+    {
+      "path": "public/models/art/hard-light-projector.glb",
+      "bytes": 331924,
+      "sha256": "7ed6b08a8f15de454fff1e128384ba5f0ba76b921dad1a10ace3849b52454685",
+      "allBytesReadForHash": true
+    },
+    {
+      "path": "public/models/art/lift-pressure-chassis.glb",
+      "bytes": 160632,
+      "sha256": "48d3bcb3876c1811ba17cf49ec16163d0fd8033ceba2f7ef1953fba3df51b9e6",
+      "allBytesReadForHash": true
+    },
+    {
+      "path": "public/models/art/optical-trunnion-gimbal.glb",
+      "bytes": 178932,
+      "sha256": "e1f5e7be4a1c776ee257279601dd6a4e52dfd10381e30dae2f3c18dd54edf550",
+      "allBytesReadForHash": true
+    },
+    {
+      "path": "public/models/art/transfer-field-turbine.glb",
+      "bytes": 334508,
+      "sha256": "2fab2ff1262e741d2a5910066fdfe812ab6fd3605298b4de61e6c9542392e5a1",
+      "allBytesReadForHash": true
+    },
+    {
+      "path": "public/models/lod/model-23-floor-tile.glb",
+      "bytes": 853444,
+      "sha256": "2aa53385c233f9e7f96134bb2368be4325b718d9b6c0b7a53dd4aadff393f291",
+      "allBytesReadForHash": true
+    },
+    {
+      "path": "public/models/lod/model-24-wall-panel.glb",
+      "bytes": 1479600,
+      "sha256": "9156635cb9a3dde77e40a7b351a199c339bc930c38f87adf1dca781a80f7cd32",
+      "allBytesReadForHash": true
+    },
+    {
+      "path": "public/models/lod/model-25-ramp-lipped.glb",
+      "bytes": 1503176,
+      "sha256": "687db50a7535c6771a075e6565ed6b7a92c9ed0b9d0aea750117f3c309dc41df",
+      "allBytesReadForHash": true
+    },
+    {
+      "path": "public/models/lod/model-26-railing.glb",
+      "bytes": 832372,
+      "sha256": "7160541d7ebf8d1bf494e88e6bdaf1d704a3ac84df1cae36dd8bc2daedb604f7",
+      "allBytesReadForHash": true
+    },
+    {
+      "path": "public/models/lod/model-27-ramp-wide.glb",
+      "bytes": 904992,
+      "sha256": "e7d687b4fee841065b58e4cf9d3db2c0330c0b3917d1d1899f362ab709556ffa",
+      "allBytesReadForHash": true
+    },
+    {
+      "path": "public/models/model-01-player.glb",
+      "bytes": 2682028,
+      "sha256": "58edd10fe36337b3901236ca93ed35cad9a537e64820e80d3c1060eb1babf516",
+      "allBytesReadForHash": true
+    },
+    {
+      "path": "public/models/model-02-cargo.glb",
+      "bytes": 2683500,
+      "sha256": "8266c275bb1a850ae21e08411ae1b131a857dc4cd25ea44273f2bc28e4c43bdc",
+      "allBytesReadForHash": true
+    },
+    {
+      "path": "public/models/model-11-portal-gun.glb",
+      "bytes": 2656704,
+      "sha256": "421350baf3d233dcf707d5efccadc0b9ec9ff0e8389165c0694229e5d4e29b38",
+      "allBytesReadForHash": true
+    },
+    {
+      "path": "public/models/model-12-grand-piano.glb",
+      "bytes": 343828,
+      "sha256": "e27cfec41b7744c9b88f70af0d7e7bfb35fdbaa62d28b0567358856c7e820962",
+      "allBytesReadForHash": true
+    },
+    {
+      "path": "public/models/model-13-office-chair.glb",
+      "bytes": 482616,
+      "sha256": "3631ae9f232eff3967de5f4d883a3a13bd07f0f53b89d3ee5fc3d4601e08cb71",
+      "allBytesReadForHash": true
+    },
+    {
+      "path": "public/models/model-14-round-table.glb",
+      "bytes": 278596,
+      "sha256": "58dc2e9215795945fd951d46e0da81d6fd8eeacb7371df428d6ed3a75097c5b6",
+      "allBytesReadForHash": true
+    },
+    {
+      "path": "public/models/model-15-mug.glb",
+      "bytes": 252496,
+      "sha256": "be6d7ac76d7c7a120e9e303e2a710a324861846fe6f555165cb536d7bc98600f",
+      "allBytesReadForHash": true
+    },
+    {
+      "path": "public/models/model-16-phase-wall.glb",
+      "bytes": 482540,
+      "sha256": "aedc5a0becc3c3dc3fff3441675ab0d47da57c754a0f921cad30ae46a57aa330",
+      "allBytesReadForHash": true
+    },
+    {
+      "path": "public/models/model-17-lab-door.glb",
+      "bytes": 621904,
+      "sha256": "0fd22a882de66937d1160f6d3eb9446542f941028a33b9520bd1fcd99267ecef",
+      "allBytesReadForHash": true
+    },
+    {
+      "path": "public/models/model-18-pressure-pad.glb",
+      "bytes": 589852,
+      "sha256": "b9e51569c3ace74015393947e680f344ff9e8676cacde59bc5d4bd6be58b8dd1",
+      "allBytesReadForHash": true
+    },
+    {
+      "path": "public/models/model-19-lift-platform.glb",
+      "bytes": 505892,
+      "sha256": "c5f0160e8099dbdb90f1e37701edfd2f7014fee8cb431b70ee1d17ec637e99f4",
+      "allBytesReadForHash": true
+    },
+    {
+      "path": "public/models/model-20-energy-barrier.glb",
+      "bytes": 453120,
+      "sha256": "0895ceae40807461bc86269d0363a5c67811f9b55cb0ec76663a178d4691df25",
+      "allBytesReadForHash": true
+    },
+    {
+      "path": "public/models/model-21-launch-pad.glb",
+      "bytes": 960776,
+      "sha256": "93000d90f8acfb9c04386902c583e358e9e30725e19a9cc0dd76754dd69b57c4",
+      "allBytesReadForHash": true
+    },
+    {
+      "path": "public/models/model-22-terminal.glb",
+      "bytes": 492296,
+      "sha256": "1f9228858cc962724de69472d17711cfbf260b0f3932ea10d74f419a50627777",
+      "allBytesReadForHash": true
+    },
+    {
+      "path": "public/models/model-23-floor-tile.glb",
+      "bytes": 1799036,
+      "sha256": "50bd0401d3b78c6f255e0675f03162326307d720b3d0de9f902b323930e86db1",
+      "allBytesReadForHash": true
+    },
+    {
+      "path": "public/models/model-24-wall-panel.glb",
+      "bytes": 1828160,
+      "sha256": "d2749e11a94f444e4334dafc1606b0bf2e1be06d93ccb2a3505a5a562e23b419",
+      "allBytesReadForHash": true
+    },
+    {
+      "path": "public/models/model-25-ramp-lipped.glb",
+      "bytes": 2063240,
+      "sha256": "aee3afcc88b9e3425e04c4cc115cf2133f51afcf186abd0c2e4fe312d8cddcba",
+      "allBytesReadForHash": true
+    },
+    {
+      "path": "public/models/model-26-railing.glb",
+      "bytes": 1736444,
+      "sha256": "343b8eb3caf96cfd126a0dedccea3e91f1dcf65cb75f4f1b82e562e248235bb6",
+      "allBytesReadForHash": true
+    },
+    {
+      "path": "public/models/model-27-ramp-wide.glb",
+      "bytes": 2026904,
+      "sha256": "aa14cb98882852cab7fa39a2787c5b8e32c4ee0a0f2bf8461750fddb0d8e9743",
+      "allBytesReadForHash": true
+    },
+    {
+      "path": "public/models/runtime/model-01-player.glb",
+      "bytes": 549756,
+      "sha256": "e5b09ff0281377b679d6fdd505fa1ed89550bb662e94e7f593ed67ee50a66a91",
+      "allBytesReadForHash": true
+    },
+    {
+      "path": "public/models/runtime/model-02-cargo.glb",
+      "bytes": 510376,
+      "sha256": "65763c87e7f14cc807cffa8fc2adc364e8421dae819271a0c406a6b0d2c8c697",
+      "allBytesReadForHash": true
+    },
+    {
+      "path": "public/models/runtime/model-11-portal-gun.glb",
+      "bytes": 393116,
+      "sha256": "d8c76c41efbbf0a6d70e30ab5a7b70f49fd806e497f67ea06cb28f9f4edca1d7",
+      "allBytesReadForHash": true
+    },
+    {
+      "path": "public/models/runtime/model-12-grand-piano.glb",
+      "bytes": 245952,
+      "sha256": "7c158b751a7d11a55be35f500d41822eedf6fa4332a8c641555c569add498fb0",
+      "allBytesReadForHash": true
+    },
+    {
+      "path": "public/models/runtime/model-13-office-chair.glb",
+      "bytes": 390920,
+      "sha256": "2cfd3130e3d794a4bfb71b46d8d06918c0043d135912218558227533ab052472",
+      "allBytesReadForHash": true
+    },
+    {
+      "path": "public/models/runtime/model-14-round-table.glb",
+      "bytes": 160200,
+      "sha256": "1cc3fea8829a8c6ff30825eb0837c79dc67d51f4ae209521d9741104faebcba1",
+      "allBytesReadForHash": true
+    },
+    {
+      "path": "public/models/runtime/model-15-mug.glb",
+      "bytes": 114244,
+      "sha256": "14547f3e7df323edeff95e77120a3f205dc55c6f97ef0739a92dcb51b59c3838",
+      "allBytesReadForHash": true
+    },
+    {
+      "path": "public/models/runtime/model-16-phase-wall.glb",
+      "bytes": 366396,
+      "sha256": "98f3ec90585531f58cf3d29b2bd501d1b4468fed6405782926eb0d7ab2aab02f",
+      "allBytesReadForHash": true
+    },
+    {
+      "path": "public/models/runtime/model-17-lab-door.glb",
+      "bytes": 475572,
+      "sha256": "3c512bc351f99b09ee3072833a94ec4bd63add8576eed2e89d0c1c0f865fa617",
+      "allBytesReadForHash": true
+    },
+    {
+      "path": "public/models/runtime/model-18-pressure-pad.glb",
+      "bytes": 456532,
+      "sha256": "70d4fff43158c70bca7c24cb93854be78e4594fdee5483d8962c3c5fb64631f7",
+      "allBytesReadForHash": true
+    },
+    {
+      "path": "public/models/runtime/model-19-lift-platform.glb",
+      "bytes": 404076,
+      "sha256": "afd039e831ff0baa514f076a505ffbb7c57dac2251959b3d858fc92dcf3d04b9",
+      "allBytesReadForHash": true
+    },
+    {
+      "path": "public/models/runtime/model-20-energy-barrier.glb",
+      "bytes": 362964,
+      "sha256": "84ccbb53fca9ea828d5d35f4142aa1ae3b56d9fe109f31cc5a92e471fd64e2b9",
+      "allBytesReadForHash": true
+    },
+    {
+      "path": "public/models/runtime/model-21-launch-pad.glb",
+      "bytes": 814148,
+      "sha256": "1c338b6753740b143046304d84f56b574010339ce080343090310e2e46910fa9",
+      "allBytesReadForHash": true
+    },
+    {
+      "path": "public/models/runtime/model-22-terminal.glb",
+      "bytes": 377108,
+      "sha256": "9e2f4ff758996f67596d3935041f632bafdf7e84efd4869341920b64a5919c26",
+      "allBytesReadForHash": true
+    },
+    {
+      "path": "public/models/runtime/model-23-floor-tile.glb",
+      "bytes": 103600,
+      "sha256": "0950bc6ef31bb28939087bad53695f21cde0b9fe5740394df202a0b242f77b0c",
+      "allBytesReadForHash": true
+    },
+    {
+      "path": "public/models/runtime/model-24-wall-panel.glb",
+      "bytes": 62448,
+      "sha256": "15aaca48f6e436d5e89abf7548c0fe43580bba8faff4619e476d3a6d306b004d",
+      "allBytesReadForHash": true
+    },
+    {
+      "path": "public/models/runtime/model-25-ramp-lipped.glb",
+      "bytes": 194596,
+      "sha256": "0125d3c46efb9680d88df0d71e2fac7c0f96d7fa315c5a87d4a9696571ebe638",
+      "allBytesReadForHash": true
+    },
+    {
+      "path": "public/models/runtime/model-26-railing.glb",
+      "bytes": 145220,
+      "sha256": "96110d184f98b6899b016dddd91a44e832e130dc0232bdf29e36b57b00a8fa4d",
+      "allBytesReadForHash": true
+    },
+    {
+      "path": "public/models/runtime/model-27-ramp-wide.glb",
+      "bytes": 131428,
+      "sha256": "1d1be1505b21746cb2b46e27ff3915ad38b4c6b2533c88d0337098018f4f19c5",
+      "allBytesReadForHash": true
+    },
+    {
+      "path": "public/models/runtime/model-28-rotating-panel.glb",
+      "bytes": 366120,
+      "sha256": "3159916bad63903e73b8e660ce4aab8a3b1e38f1231152b68f3df63d6987ac4b",
+      "allBytesReadForHash": true
+    },
+    {
+      "path": "public/models/runtime/model-29-pressure-platform.glb",
+      "bytes": 390244,
+      "sha256": "ee65bd9706ad4f4658e54ec5ad8f6f45b24d9027e4e6072f162358a4c1b3291b",
+      "allBytesReadForHash": true
+    },
+    {
+      "path": "public/models/runtime/model-30-counterweight-bridge.glb",
+      "bytes": 395772,
+      "sha256": "d69aa00cc7abb27fc207119abc778845aa888c47f7b29de2d4a1fc5d7961b592",
+      "allBytesReadForHash": true
+    },
+    {
+      "path": "public/models/runtime/model-31-wind-generator.glb",
+      "bytes": 25768,
+      "sha256": "024f25db27e96e1efdaa5e200c13a665dee487e798338f86fef985feeae9019e",
+      "allBytesReadForHash": true
+    },
+    {
+      "path": "public/models/runtime/model-32-spring-ram.glb",
+      "bytes": 25400,
+      "sha256": "958d5ed533736d5779da078be20ae2b0e84212bfc3a00b456dc0106bc0a093d7",
+      "allBytesReadForHash": true
+    },
+    {
+      "path": "public/models/runtime/model-33-telescopic-lift.glb",
+      "bytes": 25516,
+      "sha256": "3bfdc6c22c1c69095e924c59a3e3deb574ef567a50476df29b3f7f308fb317e9",
+      "allBytesReadForHash": true
+    },
+    {
+      "path": "public/models/runtime/model-34-balance.glb",
+      "bytes": 22476,
+      "sha256": "2189c0ac2f33c120858cf933d745179f034cfde2c88d92ef20613b95a7a3d129",
+      "allBytesReadForHash": true
+    },
+    {
+      "path": "public/models/runtime/model-35-shutter-fan.glb",
+      "bytes": 27816,
+      "sha256": "8e11d5ab83250348f6e08f034ec87d82727162742d5a7be18f981fc523aa907a",
+      "allBytesReadForHash": true
+    },
+    {
+      "path": "public/models/runtime/model-36-gripper.glb",
+      "bytes": 25700,
+      "sha256": "9d7de7d9b096d67a13324dbab5c0fed0a7bb52c0fd4d4dd9de1727d9c1016301",
+      "allBytesReadForHash": true
+    },
+    {
+      "path": "public/models/runtime/model-37-extension-bridge.glb",
+      "bytes": 25764,
+      "sha256": "96173a9ef89375066b08fad8dff1928425863c6b4e6b8c0373c497448f109c55",
+      "allBytesReadForHash": true
+    },
+    {
+      "path": "public/models/runtime/model-38-turntable.glb",
+      "bytes": 26576,
+      "sha256": "6cb15a3242fee284478d39460a5bea71a6eb5f1b4fae0c52f0f10319971219c9",
+      "allBytesReadForHash": true
+    },
+    {
+      "path": "public/models/runtime/model-39-cable-winch.glb",
+      "bytes": 28608,
+      "sha256": "301f148938ec83e2a8f4b45c7f9bdfd19fb40ca79d8fb9abc7601caf4fe0eafd",
+      "allBytesReadForHash": true
+    }
+  ],
+  "defaultBuilderByteExactAfterRemovingTwoOptInLines": true,
+  "allOtherPreviouslyTrackedSourceAndSaveNamespacesUntouched": true,
+  "mechanics": {
+    "carMassKgEach": 20,
+    "panMassKgEach": 2,
+    "passengerMassKg": 50,
+    "sameOriginalMassKg": 3.2,
+    "worldGravityMetersPerSecondSquared": 19.5,
+    "idealConstraint": "Inextensible material cable length equals current unwrapped drum angle through founded fixed idler routing; it does not choose destination height.",
+    "motorMaximumTorqueNm": 448,
+    "motorPreStepPowerLimitW": 1200,
+    "motorMinimumExternalWorkPer10mLegJ": 9126,
+    "actualMotorWorkPositiveDeclaredFirstLegJ": 14480.97321200818,
+    "actualMotorWorkPositiveDeclaredReverseLegJ": 14484.894323262488,
+    "handMaximumVectorForceN": 250,
+    "handReachSpeedMetersPerSecond": 0.5,
+    "handServoPowerBoundW": 125,
+    "jumpImpulseNs": 390,
+    "actuatorMaximumForceN": 3000,
+    "actuatorPreStepPowerLimitWEach": 150,
+    "energyAccountingLimitation": "Actual force/torque times pre-step velocity rectangular quadrature at 120 Hz. All positive supplied work and contact/drag work are exposed; numerical and contact residuals remain reported. This is not an exact continuous-energy-conservation claim.",
+    "declaredComponentEnergyResidualsJ": [
+      {
+        "name": "east-original-west-passenger-positive",
+        "residualJ": 21.027368753565497
+      },
+      {
+        "name": "east-original-west-passenger-no-motor",
+        "residualJ": 142.0950611399861
+      },
+      {
+        "name": "east-original-west-passenger-open-clutch",
+        "residualJ": 125.57518831097332
+      },
+      {
+        "name": "west-original-east-passenger-reverse-positive",
+        "residualJ": -4.907736009246037
+      },
+      {
+        "name": "west-original-east-passenger-reverse-no-motor",
+        "residualJ": 115.69218600056234
+      }
+    ],
+    "geometry": {
+      "carsX": [
+        -3.1,
+        3.1
+      ],
+      "directCabinGapMeters": 0.2,
+      "pressurePanCentersX": [
+        -1.1,
+        1.1
+      ],
+      "panHoodUndersideMetersAboveCar": 1.8,
+      "travellerActualHeightMeters": 2.4,
+      "driveAssemblyY": 24,
+      "driveAssemblyZ": 8,
+      "fixedShaftRoofUndersideY": 22.6,
+      "upperExitGuideSlotX": [
+        6.2,
+        6.6
+      ]
+    },
+    "authoredHingeMotorRowsRemainDisabledOnReset": true,
+    "contactCoulombLimitsUseActualCurrentNormalAndRadius": true,
+    "allRoom23StaticsResidentAndMechanismCollisionMasksEnabled": true
+  },
+  "verification": {
+    "tests": {
+      "pass": 10,
+      "fail": 0,
+      "skipped": 0,
+      "cancelled": 0,
+      "todo": 0,
+      "receipt": {
+        "path": "/workspace/scratch/1949b02c22bb/room23-physical-review/complete-mechanical-tests.tap",
+        "bytes": 2892,
+        "sha256": "ad47372be7290b1bf52270493e1b2fba719fc2c7acad85babfe068105015904e",
+        "allBytesReadForHash": true
+      },
+      "cases": [
+        "Default R4 Room23 regression",
+        "Real 50 kg first ascent plus motor-off and clutch-open controls",
+        "Finite common brake hold, supply cut and same-body recovery",
+        "Declared massive reverse ascent plus matched no motor",
+        "Foreign body-box ownership and failed reset preserve foreign registry",
+        "Disabled real collider/shape stop force supply",
+        "Zero-time no-work; repeated reset retains disabled hinge motors; dispose restores all callbacks, body registries and solver",
+        "Normal-spawn partial courtyard real hand pickup/release and reaction",
+        "Matched finite jump apex reduction with the same real held original",
+        "Declared actual direct handoff plus full reverse end stops and upper apron; matched motor-off and clutch-open after identical handoff; full real car/drive/static clearance"
+      ]
+    },
+    "build": {
+      "pass": true,
+      "receipt": {
+        "path": "/workspace/scratch/1949b02c22bb/room23-physical-review/complete-mechanical-build.log",
+        "bytes": 6165,
+        "sha256": "832ecdaafb8f50ba23528bb582cb8f79d49a568386ab56a7f68ea8ee2be3d1bc",
+        "allBytesReadForHash": true
+      },
+      "runtimeModelsReported": 14,
+      "existingLargeChunkWarningRetained": true
+    },
+    "componentReproduction": {
+      "receipt": {
+        "path": "/workspace/scratch/1949b02c22bb/room23-physical-review/frozen-component-run/component-reproduction.json",
+        "bytes": 22036,
+        "sha256": "3b685cee97b48693181942c5e67a735378e2fccb2e8282c4e72daabab8d12520",
+        "allBytesReadForHash": true
+      },
+      "physicsStepsPerExperiment": 2520,
+      "experimentCount": 5,
+      "journals": [
+        {
+          "path": "/workspace/scratch/1949b02c22bb/room23-physical-review/frozen-component-run/east-original-west-passenger-positive.jsonl",
+          "bytes": 7390552,
+          "sha256": "1b01d5e50f60e33dd5eac605b2595a77eff0c3035ba94ddd60b10df3e59f2fdf",
+          "rows": 2520,
+          "allBytesReadForHash": true
+        },
+        {
+          "path": "/workspace/scratch/1949b02c22bb/room23-physical-review/frozen-component-run/east-original-west-passenger-no-motor.jsonl",
+          "bytes": 7141316,
+          "sha256": "284028f65122e11515271e5b0da45dc9190d7a504b9ba77c2275bd0280dbc0fa",
+          "rows": 2520,
+          "allBytesReadForHash": true
+        },
+        {
+          "path": "/workspace/scratch/1949b02c22bb/room23-physical-review/frozen-component-run/east-original-west-passenger-open-clutch.jsonl",
+          "bytes": 7311140,
+          "sha256": "cf5fb2975f15f9bd19ba55168b94a211484d72fdf321e07b1baee3322239117b",
+          "rows": 2520,
+          "allBytesReadForHash": true
+        },
+        {
+          "path": "/workspace/scratch/1949b02c22bb/room23-physical-review/frozen-component-run/west-original-east-passenger-reverse-positive.jsonl",
+          "bytes": 7424907,
+          "sha256": "8dc4b47cb5a3a9211fdd65bfc36241f34788749b26e3ac99ab18cfe4e9391f46",
+          "rows": 2520,
+          "allBytesReadForHash": true
+        },
+        {
+          "path": "/workspace/scratch/1949b02c22bb/room23-physical-review/frozen-component-run/west-original-east-passenger-reverse-no-motor.jsonl",
+          "bytes": 7104700,
+          "sha256": "f481bfb291fefab69efb4d3506eb388686d00e5590058e15d8b42abfde5607a9",
+          "rows": 2520,
+          "allBytesReadForHash": true
+        }
+      ]
+    },
+    "sameFrozenSceneReturnReproScript": {
+      "path": "research/room23-scene-return-probe.mjs",
+      "bytes": 7261,
+      "sha256": "3585dcf9d6a3616d1b1e4589458ab7d361cb56f34d3ce1f135f628c040cbfc43"
+    },
+    "actualSceneReturnAfterDeclaredRealHandoff": {
+      "receipt": {
+        "path": "/workspace/scratch/1949b02c22bb/room23-physical-review/scene-return-clear-static-stroke/blocked-scene-return.json",
+        "bytes": 7363,
+        "sha256": "77cec822264fe58f6112f33dd8b0a0201f67d73ad00a7e644fe076d53381713b",
+        "allBytesReadForHash": true
+      },
+      "passed": true,
+      "sameOriginal": true,
+      "resets": 0,
+      "respawns": 0,
+      "physicsSteps": 5062,
+      "snapshot": {
+        "path": "/workspace/scratch/1949b02c22bb/room23-physical-review/scene-return-clear-static-stroke/terminal-physical-snapshot.json",
+        "bytes": 175150,
+        "sha256": "053fbd6560b8df8a5af031e8377548e86169d522cd2e2047b624a374c168e299",
+        "allBytesReadForHash": true
+      },
+      "journal": {
+        "path": "/workspace/scratch/1949b02c22bb/room23-physical-review/scene-return-clear-static-stroke/actual-scene-return-journal.jsonl",
+        "bytes": 13427650,
+        "sha256": "101ec613969d567b9574f48f6ab962c482c4b01ce709ffbb6045554091513016",
+        "allBytesReadForHash": true
+      },
+      "normalAuthoredSpawn": false
+    },
+    "failureHistory": {
+      "path": "/workspace/scratch/1949b02c22bb/game-room23-physical-prototype/research/room23-prototype-failure-history.json",
+      "bytes": 14930,
+      "sha256": "c49c1f1fcfe37d4c3a3705592562003c7ef408a3fb53a033b30716c02ba7847f",
+      "allBytesReadForHash": true
+    }
+  },
+  "open": [
+    "Normal authored-spawn original delivery to the initially raised east freight pan has not been driven.",
+    "First actual scene ascent followed by the same-original handoff and complete ordinary exit/retrieval has not been driven.",
+    "The real dynamic passenger has no owned portal transport adapter yet.",
+    "Upper original retrieval and campaign WON remain unproved.",
+    "Native visuals, full CI, 59 rendered GLB acceptance, public/publisher/source and uniqueMaster are unaccepted."
+  ],
+  "fullOrdinaryRouteAccepted": false,
+  "sourceAccepted": false,
+  "publicAccepted": false,
+  "nativeAccepted": false,
+  "publicationAccepted": false,
+  "uniqueMasterAccepted": false,
+  "remoteActionsTaken": false
+}
