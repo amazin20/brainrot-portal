@@ -211,15 +211,38 @@ test('a queued recenter timestamp may precede its lock notification without disc
   assert.equal(f.game.yaw, -.008); assert.ok(Math.abs(f.game.pitch + .1554) < 1e-12);
 });
 
-test('a recenter delayed by initial rendering stays a one-shot exact match and later free movement is unfiltered', t => {
+test('a stationary recenter delayed by rendering still preserves the spawn camera and the following genuine movement', t => {
   const f = fixture(t);
-  f.scope.emit('mousemove', { movementX: 1081, movementY: 568, timeStamp: 8135.5 });
+  f.game.yaw = .25; f.game.pitch = -.14;
+  f.scope.emit('mousemove', { movementX: 1081, movementY: 568, clientX: 1081, clientY: 568, timeStamp: 8135.5 });
   f.doc.pointerLockElement = f.canvas; f.doc.emit('pointerlockchange', { timeStamp: 8161.6 });
-  f.scope.emit('mousemove', { movementX: 0, movementY: 0, timeStamp: 9000 });
-  f.scope.emit('mousemove', { movementX: -1081, movementY: -568, timeStamp: 10855 });
-  assert.equal(f.game.yaw, 0); assert.equal(f.game.pitch, -.15);
-  f.scope.emit('mousemove', { movementX: -1081, movementY: -568, timeStamp: 11000 });
-  assert.equal(f.game.yaw, 2.162); assert.equal(f.game.pitch, .8724);
+  f.scope.emit('mousemove', { movementX: 0, movementY: 0, clientX: 1081, clientY: 568, timeStamp: 8300 });
+  f.scope.emit('mousemove', { movementX: -1081, movementY: -568, clientX: 1081, clientY: 568, timeStamp: 10855 });
+  assert.equal(f.game.yaw, .25); assert.equal(f.game.pitch, -.14);
+  f.scope.emit('mousemove', { movementX: 15, movementY: -8, clientX: 1081, clientY: 568, timeStamp: 10856 });
+  assert.equal(f.game.yaw, .22); assert.ok(Math.abs(f.game.pitch + .1256) < 1e-12);
+  // Exact inverses later in the same lock are ordinary input, never rebounds.
+  f.scope.emit('mousemove', { movementX: -1081, movementY: -568, clientX: 1081, clientY: 568, timeStamp: 10857 });
+  assert.equal(f.game.yaw, 2.382);
+});
+
+test('a late inverse without a matching cursor position remains genuine input', t => {
+  const f = fixture(t);
+  f.scope.emit('mousemove', { movementX: 10, movementY: 20, clientX: 100, clientY: 200, timeStamp: 1000 });
+  f.doc.pointerLockElement = f.canvas; f.doc.emit('pointerlockchange', { timeStamp: 1001 });
+  f.scope.emit('mousemove', { movementX: -10, movementY: -20, clientX: 120, clientY: 210, timeStamp: 4000 });
+  assert.equal(f.game.yaw, .02); assert.ok(Math.abs(f.game.pitch + .114) < 1e-12);
+});
+
+test('ignored movement while blocked consumes the recenter candidate before gameplay resumes', t => {
+  const f = fixture(t);
+  f.scope.emit('mousemove', { movementX: 10, movementY: 20, timeStamp: 1000 });
+  f.doc.pointerLockElement = f.canvas; f.doc.emit('pointerlockchange', { timeStamp: 1001 });
+  f.game.externalBlocked = true;
+  f.scope.emit('mousemove', { movementX: 2, movementY: 3, timeStamp: 1002 });
+  f.game.externalBlocked = false;
+  f.scope.emit('mousemove', { movementX: -10, movementY: -20, timeStamp: 1003 });
+  assert.equal(f.game.yaw, .02); assert.ok(Math.abs(f.game.pitch + .114) < 1e-12);
 });
 
 test('ending an uncaptured gesture outside the canvas still releases it', t => {

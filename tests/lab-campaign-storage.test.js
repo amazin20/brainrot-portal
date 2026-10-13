@@ -78,9 +78,33 @@ test('v56 keeps its exact entry boundary and never reimports over corrupt own pr
  for(const base of ['','/brainrot-portal'])for(const suffix of ['','/','/index.html']){
   const path=base+'/campaign-v56'+suffix;assert.equal(isCampaignV56Path(path),true);assert.equal(isCampaignV55Path(path),false);
   assert.equal(foundationCampaignPrefix(path),CAMPAIGN_V56_STORAGE_PREFIX);
+  assert.equal(foundationCampaignPrefix(path,{fullFoundationCampaign:false}),FOUNDATION_STORAGE_PREFIX);
  }
  for(const path of ['/campaign-v56/assets/a.js','/other/campaign-v56/','/campaign-v56-old/','/campaign-v56//'])assert.equal(foundationCampaignPrefix(path),FOUNDATION_STORAGE_PREFIX);
  const f=fixture([[CAMPAIGN_V55_STORAGE_PREFIX+key,record()],[CAMPAIGN_V56_STORAGE_PREFIX+key,'{broken own record']]);
  const prefs=new LabPreferences(foundationCampaignStorage(f.storage,{pathname:'/campaign-v56/',fullFoundationCampaign:true}));
  assert.equal(prefs.readFailed,true);prefs.save({volume:.4});assert.deepEqual(f.writes,[]);
+});
+
+test('v56 falls back to Foundation for a first visit and imports v55 legacy saves before older primary saves',()=>{
+ for(const previous of [null,legacy]){
+  const historical=record(),latest=JSON.stringify({campaignRevision:CREATIVE_CAMPAIGN_REVISION,completed:[2,6],resumeLevel:6,volume:.81});
+  const entries=[[FOUNDATION_STORAGE_PREFIX+key,historical]];
+  if(previous)entries.push([CAMPAIGN_V55_STORAGE_PREFIX+previous,latest]);
+  const f=fixture(entries),prefs=new LabPreferences(foundationCampaignStorage(f.storage,{pathname:'/campaign-v56/',fullFoundationCampaign:true}),{campaignRevision:CREATIVE_CAMPAIGN_REVISION});
+  assert.equal(prefs.readFailed,false);assert.deepEqual(prefs.value.completed,previous?[2,6]:[0,1,39]);
+  assert.equal(prefs.value.volume,previous ? .81 : .21);
+  prefs.save({volume:.5});assert.deepEqual(f.writes,[CAMPAIGN_V56_STORAGE_PREFIX+key]);
+  for(const[name,bytes]of entries)assert.equal(f.data.get(name),bytes);
+ }
+});
+
+test('v56 own legacy progress wins and an unreadable v55 save never silently downgrades to Foundation',()=>{
+ const historical=record(),own=JSON.stringify({campaignRevision:CREATIVE_CAMPAIGN_REVISION,completed:[8],volume:.73});
+ const f=fixture([[FOUNDATION_STORAGE_PREFIX+key,historical],[CAMPAIGN_V55_STORAGE_PREFIX+key,'{corrupt v55'],[CAMPAIGN_V56_STORAGE_PREFIX+legacy,own]]);
+ const create=()=>new LabPreferences(foundationCampaignStorage(f.storage,{pathname:'/campaign-v56/',fullFoundationCampaign:true}),{campaignRevision:CREATIVE_CAMPAIGN_REVISION});
+ const prefs=create();assert.equal(prefs.readFailed,false);assert.deepEqual(prefs.value.completed,[8]);assert.equal(prefs.value.volume,.73);
+ f.data.delete(CAMPAIGN_V56_STORAGE_PREFIX+legacy);
+ const imported=create();assert.equal(imported.readFailed,true);imported.save({volume:.9});assert.deepEqual(f.writes,[]);
+ assert.equal(f.data.get(FOUNDATION_STORAGE_PREFIX+key),historical);assert.equal(f.data.get(CAMPAIGN_V55_STORAGE_PREFIX+key),'{corrupt v55');
 });

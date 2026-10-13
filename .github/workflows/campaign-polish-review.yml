@@ -6,9 +6,9 @@ on:
 permissions: {contents: read}
 concurrency:
   group: campaign-polish-review-${{ github.ref }}
-  # Replace only this session's initial review after fixing its input observer.
+  # Replace the observed superseded reviews after integrating their changes.
   # Other source reviews keep their normal non-cancelling behavior.
-  cancel-in-progress: ${{ github.event_name == 'push' && (github.event.before == 'a8ca2cbec44294b8fab780881dc71d53ecf16908' || github.event.before == '2bb31bd0f3f3aa0c1be9b8f225d3aaf80596e8b7' || github.event.before == 'f69895b14d597fa65ba1f08ad6e733a4af473d34') }}
+  cancel-in-progress: ${{ github.event_name == 'push' && (github.event.before == 'a8ca2cbec44294b8fab780881dc71d53ecf16908' || github.event.before == '2bb31bd0f3f3aa0c1be9b8f225d3aaf80596e8b7' || github.event.before == 'f69895b14d597fa65ba1f08ad6e733a4af473d34' || github.event.before == '619d30629d1b3d30e34f25a657491ef5b6d338c1') }}
 env:
   BUILD_COMMIT: ${{ github.sha }}
 jobs:
@@ -110,6 +110,10 @@ jobs:
         with: {node-version: 22, cache: npm}
       - run: npm ci
       - run: node scripts/qa-campaign-shortcuts.mjs --levels=${{ matrix.rooms }} --out=qa/shortcuts-${{ matrix.part }}/report.json
+      - if: matrix.part == 'late'
+        run: node scripts/qa-campaign-shortcuts.mjs --levels=38 --cases=freight-dispatch-running-board --out=qa/shortcuts-late/room38-hoist.json
+      - if: matrix.part == 'late'
+        run: node scripts/qa-campaign-shortcuts.mjs --levels=37 --cases=magnetic-last-leg-hand-feed --out=qa/shortcuts-late/room37-sidefeed.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -235,7 +239,7 @@ jobs:
       - run: |
           export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
           node scripts/pointer-lock-start-browser.mjs
-        env: {SITE_DIR: dist, OUT_DIR: qa/presentation/camera-start}
+        env: {SITE_DIR: dist, CAMERA_START_OUT: qa/presentation/camera-start}
       - uses: actions/upload-artifact@v4
         if: always()
         with:

@@ -46,20 +46,26 @@ export class LabControls {
       // Arm the recenter filter at either observation, exactly once per lock.
       if (!this.observePointerLock(event.timeStamp)) {
         if (event.movementX || event.movementY) {
-          this.lastUnlockedMotion = { x: event.movementX, y: event.movementY };
+          this.lastUnlockedMotion = {
+            x: event.movementX, y: event.movementY,
+            clientX: event.clientX, clientY: event.clientY,
+          };
         }
         return;
       }
-      if (!this.active) return;
       // Chromium can report the move to the Play button again in reverse when
-      // pointer lock centers the cursor. Match only the first nonzero inverse;
-      // shader work can delay its delivery for seconds, so event age cannot
-      // distinguish it from real input. A different first movement applies.
+      // pointer lock centers the cursor. Rendering can delay that first event
+      // for seconds, so an unchanged cursor position also confirms the rebound.
+      // Consume the candidate once, including while gameplay is paused.
       const rebound = this.pendingLockRebound;
       if (rebound && (event.movementX || event.movementY)) {
         this.pendingLockRebound = null;
-        if (event.movementX === -rebound.x && event.movementY === -rebound.y) return;
+        const unchangedPosition = Number.isFinite(rebound.clientX) && Number.isFinite(rebound.clientY) &&
+          event.clientX === rebound.clientX && event.clientY === rebound.clientY;
+        if (event.movementX === -rebound.x && event.movementY === -rebound.y &&
+            (unchangedPosition || Math.abs(event.timeStamp - rebound.lockedAt) < 250)) return;
       }
+      if (!this.active) return;
       game.yaw -= event.movementX * .002;
       game.pitch = clampPitch(game.pitch - event.movementY * .0018);
     });

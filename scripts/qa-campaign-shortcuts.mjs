@@ -44,7 +44,7 @@ function validPost35Prerequisites(row){
 }
 function snapshot(g){const l=g.firstLevel;return {player:g.playerPosition.toArray(),cargo:g.cargo.position.toArray(),held:!!g.heldCube,linked:!!g.velocityCompanion?.connected,won:g.state==='won',teleports:g.teleportCount,cargoTransports:g.physics.portalTransports,siphon:l.circuit&&{primed:l.circuit.primed,height:l.circuit.height,returning:l.circuit.returning},rotor:l.puzzleProgression50&&{angle:l.rotor.angle,loadedA:l.rotor.loaded('a'),loadedB:l.rotor.loaded('b')}};}
 export async function runCampaignShortcutCase(g,name){
- const l=g.firstLevel,companion=g.cargo,body=g.physics.cargoBody,mesh=g.cargo.group;
+ const l=g.firstLevel,companion=g.cargo,body=g.physics.cargoBody,mesh=g.cargo.group,shape=body.shapes[0];
  const row={level:g.levelIndex+1,id:l.id,name,outcome:'setup_failure',checkpoints:[],shots:[],milestones:[],attackReached:false};
  const start=performance.now();let d;
  const note=text=>{const point={text,...snapshot(g)};row.checkpoints.push(point);if(typeof process!=='undefined'&&process.env?.PROGRESS==='1')console.log(JSON.stringify({level:row.level,name,text,...point}));};
@@ -137,6 +137,58 @@ export async function runCampaignShortcutCase(g,name){
   }
   drive(goal.x,goal.z,6,{jump:true,skirt:true});
  }
+ function walkaround(goal){
+  // A direct sprint can stop at the middle of a partition without ever
+  // inspecting its ends. Search ordinary floor space around it, then execute
+  // the proposed turns with production movement. This conservative .65 m
+  // grid is a source of attack candidates, never a collision or route proof.
+  const step=.65,start=g.playerPosition.clone(),bounds=l.bounds;
+  if(!bounds)throw Error('Missing physical room bounds for walkaround attack');
+  const solids=g.colliders.filter(c=>c.enabled!==false&&!c.walkablePlane&&c.box);
+  const obstructed=(x,y,z)=>solids.some(c=>{
+   const b=c.box;if(b.max.y<=y+.06||b.min.y>=y+2.4)return false;
+   const dx=Math.max(b.min.x-x,0,x-b.max.x),dz=Math.max(b.min.z-z,0,z-b.max.z);
+   return dx*dx+dz*dz<.46*.46;
+  });
+  const floor=(x,z,previousY)=>{
+   let y=g.floorHeight(x,z,previousY+.37);
+   for(const c of solids){const b=c.box;if(b.max.y<=previousY+.37&&b.max.y>=previousY-.4&&x>=b.min.x&&x<=b.max.x&&z>=b.min.z&&z<=b.max.z)y=Math.max(y??-Infinity,b.max.y);}
+   return y!==null&&Number.isFinite(y)&&y>=previousY-.4?y:null;
+  };
+  const nodes=[{ix:0,iz:0,x:start.x,z:start.z,y:start.y,parent:-1}],seen=new Set(['0,0,'+Math.round(start.y*10)]);
+  const distance=n=>Math.hypot(n.x-goal.x,n.z-goal.z)+Math.abs(n.y-goal.y)*4;
+  let best=0;
+  for(let at=0;at<nodes.length&&nodes.length<25000;at++){
+   const a=nodes[at];if(distance(a)<distance(nodes[best]))best=at;
+   if(Math.hypot(a.x-goal.x,a.z-goal.z)<.7&&Math.abs(a.y-goal.y)<.3){best=at;break;}
+   for(const [dx,dz]of [[1,0],[-1,0],[0,1],[0,-1],[1,1],[1,-1],[-1,1],[-1,-1]]){
+    const ix=a.ix+dx,iz=a.iz+dz,x=start.x+ix*step,z=start.z+iz*step;
+    if(x<bounds.minX+.48||x>bounds.maxX-.48||z<bounds.minZ+.48||z>bounds.maxZ-.48)continue;
+    const y=floor(x,z,a.y);if(y===null)continue;const key=ix+','+iz+','+Math.round(y*10);if(seen.has(key))continue;
+    // Check the midpoint as well, so a diagonal does not plan through a
+    // narrow wall/corner. Native collision remains the final authority.
+    const mx=(a.x+x)/2,mz=(a.z+z)/2,my=floor(mx,mz,a.y);
+    if(my===null||obstructed(x,y,z)||obstructed(mx,my,mz))continue;
+    seen.add(key);nodes.push({ix,iz,x,z,y,parent:at});
+   }
+  }
+  const path=[];for(let i=best;i>=0;i=nodes[i].parent)path.unshift(nodes[i]);
+  const turns=path.filter((n,i)=>i===0||i===path.length-1||n.ix-path[i-1].ix!==path[i+1].ix-n.ix||n.iz-path[i-1].iz!==path[i+1].iz-n.iz||Math.abs(n.y-path[i-1].y)>.1);
+  row.walkaroundPlan={candidateOnly:true,gridStep:step,explored:nodes.length,searchCapped:nodes.length>=25000,closestGoalDistance:distance(nodes[best]),turns:turns.map(n=>[n.x,n.y,n.z]),executed:[]};
+  for(const n of turns.slice(1)){
+   const initial=snapshot(g);let reached=false;
+   // Smooth braking preserves the planned corner approach; sprinting past a
+   // turn can manufacture a failed test that never inspected the opening.
+   for(let tick=0;tick<600&&g.state==='playing';tick++){
+    const dx=n.x-g.playerPosition.x,dz=n.z-g.playerPosition.z,r=Math.hypot(dx,dz);
+    if(r<.18&&g.playerGrounded&&Math.abs(g.playerPosition.y-n.y)<.45){reached=true;break;}
+    const pace=Math.min(1,r*1.6);d.worldMove(dx/Math.max(.001,r)*pace,dz/Math.max(.001,r)*pace);d.frame();
+   }d.stop();row.walkaroundPlan.executed.push({target:[n.x,n.y,n.z],reached,initial,final:snapshot(g)});
+   if(!reached||g.state!=='playing')break;
+  }
+  note('Ordinary floor detour executed as far as production collisions permit');
+  drive(goal.x,goal.z,6,{jump:true,skirt:true});
+ }
  function shoot(slot,panel,point){
   point??=panel.userData?.getFrame?.().center??panel.userData?.center?.clone()??panel.getFrame?.().center;
   if(!point)throw Error('Missing actual portal aiming point');
@@ -192,6 +244,59 @@ export async function runCampaignShortcutCase(g,name){
     for(const [x,z]of [[-13,7],[-23,4],[-23,-14],[-19,-16]])d.walk(x,z);
     for(let n=0;n<6&&!g.heldCube;n++){drive(-16,-20,2,{jump:true,skirt:true});g.interact();d.wait(.5);note('Inspection basket untouched; E at fixed cistern glass');}return;
    }
+   if(name==='freight-dispatch-running-board'){
+    if(row.level!==38)throw Error('Running freight boarding probe belongs to room 38');
+    collect();d.walk(11,2);d.wait(.3);g.interact();d.wait(.9);
+    const terminal=l.terminals.find(t=>t.kind==='lower-dispatch');
+    if(!terminal)throw Error('Actual lower freight dispatch console missing');
+    const x=terminal.position.x-1,z=terminal.position.z;
+    d.walk(x,z);d.walk(x,z+3.6);d.wait(.3);
+    row.freightBoarding={consolePosition:terminal.position.toArray(),consoleActivated:false,jumpQueued:false,boarded:false,maxPlayerHeight:g.playerPosition.y,liftHeightBefore:l.freight.floor.y};
+    begin('Original cargo loaded; sprint toward the live lower console and jump just before the latest reachable dispatch');
+    let activation=-1;g.input.keys.add('ShiftLeft');
+    for(let tick=0;tick<200&&g.state==='playing';tick++){
+     if(activation<0&&g.playerPosition.z<z-1.92){
+      row.freightBoarding.before=snapshot(g);row.freightBoarding.sprintSpeedAtActivation=Math.hypot(g.playerVelocity.x,g.playerVelocity.z);
+      row.freightBoarding.consoleActivated=!!g.interact()&&l.freight.target===1;activation=tick;
+      if(!row.freightBoarding.consoleActivated)throw Error('Native lower freight dispatch rejected');
+     }
+     if(activation<0&&g.playerPosition.z<z-1.41){g.input.jumpQueued=true;row.freightBoarding.jumpQueued=true;}
+     const tx=activation<0?x:l.freight.floor.maxX-.5,tz=3,dx=tx-g.playerPosition.x,dz=tz-g.playerPosition.z,r=Math.hypot(dx,dz);
+     d.worldMove(dx/Math.max(.001,r),dz/Math.max(.001,r));d.frame();
+     row.freightBoarding.maxPlayerHeight=Math.max(row.freightBoarding.maxPlayerHeight,g.playerPosition.y);
+     if(g.playerGrounded&&g.playerPosition.y>1&&g.playerPosition.z<l.freight.floor.maxZ-.1){row.freightBoarding.boarded=true;break;}
+    }d.stop();
+    if(activation<0)throw Error('Running input never reached the actual lower console');
+    row.freightBoarding.afterAttempt=snapshot(g);
+    d.until(()=>l.freight.at(1),12,'Original loaded freight did not finish its normal ascent');
+    if(row.freightBoarding.boarded){d.walk(g.cargo.position.x+1.1,g.cargo.position.z);d.pickup();d.walk(15,-18);d.wait(2);}
+    row.freightBoarding.liftHeightAfter=l.freight.floor.y;row.freightBoarding.after=snapshot(g);
+    note('Real sprint jump at live dispatch completed; only actual boarding can reach the exit without the gravity route');return;
+   }
+   if(name==='magnetic-last-leg-hand-feed'){
+    if(row.level!==37)throw Error('Last magnetic leg hand-feed probe belongs to room 37');
+    const state=()=>({...snapshot(g),magnet:l.getMagnet(),receiverLoaded:l.receiver.loaded(),doorProgress:l.door.progress});
+    const proof=row.magneticHandFeed={initial:state(),released:false,coilActivated:false,selectedCoils:[],receiverEverLoaded:false,maxDoorProgress:l.door.progress};
+    collect();d.walk(16,10);d.walk(16,-3);
+    begin('Carry original cargo against the exposed end of the last magnetic leg, skipping both portals and the first two coils');
+    for(let n=0;n<90;n++){d.worldMove(0,-1);d.frame();}d.stop();d.wait(.4);proof.atRelease=state();
+    proof.released=!!g.interact()&&!g.heldCube;if(!proof.released)throw Error('Original cargo release at the last duct was rejected');
+    d.wait(1);proof.afterRelease=state();d.walk(16,1);d.walk(8,.2);
+    proof.coilActivated=!!g.interact()&&l.getMagnet()===2;
+    if(!proof.coilActivated)throw Error('Actual third magnetic winding switch rejected');
+    proof.selectedCoils.push(l.getMagnet());proof.afterCoil=state();
+    for(let n=0;n<15*60;n++){
+     d.frame();proof.receiverEverLoaded||=l.receiver.loaded();proof.maxDoorProgress=Math.max(proof.maxDoorProgress,l.door.progress);
+     if(l.receiver.loaded()&&l.door.progress>.9)break;
+    }
+    proof.afterPull=state();
+    if(l.receiver.loaded()&&l.door.progress>.9){
+     d.walk(8,2);d.walk(-23,6);d.walk(-23,-10);d.walk(0,-10);d.walk(0,-16);d.walk(4,-15.8);g.interact();d.wait(.25);
+     d.walk(10,-16.8);g.interact();d.wait(.25);d.walk(8,-16.8);d.walk(8,-23);d.walk(20,-23);d.walk(20,-20);
+     d.walk(g.cargo.position.x+1.2,g.cargo.position.z);d.pickup();d.walk(8,-23);d.walk(0,-22);d.wait(3);
+    }
+    proof.after=state();note('Original body pulled by only the third field after an actual manual release at the last leg');return;
+   }
    if(name!=='empty-direct-sprint'){cargoPrerequisites();collect();}
    if(g.kineticMode&&name==='early-release-finish-directed-shots'){row.effectiveName='linked-finish-directed-shots';row.carryMode='hands-free-stabilizer';}
    begin(name.startsWith('empty')?'Untouched spawn attack without cargo':row.prerequisitePrefix?'Original companion retrieved through the authentic causal prefix; remaining mechanisms omitted':g.kineticMode?'Original companion linked through ordinary E; no launch machinery used':'Original companion picked up through normal E; no machinery used');
@@ -206,6 +311,8 @@ export async function runCampaignShortcutCase(g,name){
      shoot(1,target.p,target.point);
      for(const entry of byPlayer){if(g.state!=='playing')break;if(entry.p===target.p)continue;if(name==='early-release-finish-directed-shots'&&g.heldCube){g.interact();d.wait(.65);}shoot(0,entry.p,entry.point);if(name==='early-release-finish-directed-shots')collect({required:false});drive(entry.point.x,entry.point.z,3,{jump:true});drive(goal.x,goal.z,4,{jump:true,skirt:true});}
     }
+   }else if(name==='held-walkaround-detour'){
+    walkaround(goal);
    }else if(name==='held-roof-chain'){
     roofChain(goal);
    }else if(name==='held-corner-jumps'){
@@ -220,7 +327,7 @@ export async function runCampaignShortcutCase(g,name){
   if(g.state==='won'&&introductoryPair)row.classification='The opening-room near-left/upper-view connection carries both original actors, matching its authored causal solution.';
   if(g.state==='won'&&row.outcome==='legitimate_post_prerequisite_solution')row.classification='Runtime snapshots verify both mechanical latches, both open gate positions, original free cargo transport into the middle court, unchanged original actors and zero resets. Only the intended retained-door return remained after this genuine prefix.';
  }catch(error){row.error=String(error);row.outcome=row.attackReached?(String(error).includes('unexpected reset')?'production_death':'attack_error'):'setup_failure';}
- finally{row.final=snapshot(g);row.sameCompanion=g.cargo===companion&&g.cargo.group===mesh&&g.physics.cargoBody===body;row.seconds=Number(((performance.now()-start)/1000).toFixed(2));}
+ finally{row.final=snapshot(g);row.sameCompanion=g.cargo===companion&&g.cargo.group===mesh&&g.physics.cargoBody===body;row.sameCargoShape=g.physics.cargoBody.shapes[0]===shape;row.seconds=Number(((performance.now()-start)/1000).toFixed(2));}
  return row;
 }
 

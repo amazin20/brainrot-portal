@@ -8,6 +8,7 @@ import {captureBrowserFrame} from './qa-browser-capture.mjs';
 import {readStampedCampaignInfo} from './lib/campaign-browser-contract.mjs';
 import {foundationCampaignPrefix,CAMPAIGN_PREFERENCE_KEY} from '../src/game/LabCampaignStorage.js';
 import {SINGULARITY_ROOMS} from '../src/game/LabSingularityLayout.js';
+import {CASTLE_WING_FINISHES} from '../src/game/LabCastleMaterials.js';
 
 // Inspection changes only the camera. All opaque roofs, partitions, doors,
 // actors and machinery retain their actual visibility and production poses.
@@ -93,6 +94,15 @@ try{
  await page.waitForFunction(()=>window.__NESI_DEMO_GAME__?.state==='ready'&&getComputedStyle(document.querySelector('#start-screen')).opacity==='1',{timeout:240000});
  await page.click('#play-button');await page.waitForFunction(()=>window.__NESI_DEMO_GAME__?.state==='playing');
  await page.evaluate(()=>window.__NESI_DEMO_GAME__.renderer.setAnimationLoop(null));
+ report.architecture=await page.evaluate(()=>{
+  const g=window.__NESI_DEMO_GAME__,art=g.firstLevel.castleInteriorArt,finishes={};
+  g.scene.traverse(o=>{for(const m of Array.isArray(o.material)?o.material:[o.material])if(m?.name&&/^Castle (wing wall|cast-in floor) \/ /.test(m.name))finishes[m.name]=m.color.getHex();});
+  return {diagnostics:art?.diagnostics??null,finishes};
+ });
+ for(const [id,finish]of Object.entries(CASTLE_WING_FINISHES))for(const [name,key]of [['wing wall','wall'],['cast-in floor','floor']])
+  assert.equal(report.architecture.finishes[`Castle ${name} / ${id}`],finish[key],`${id} ${key} was flattened to the common castle palette`);
+ assert.equal(report.architecture.diagnostics?.wings,SINGULARITY_ROOMS.length,'Every castle wing must have backed interior architecture');
+ assert.ok(report.architecture.diagnostics.batches<=3&&report.architecture.diagnostics.maxProjection<=.09);
  const wings=process.env.WINGS?SINGULARITY_ROOMS.filter(r=>process.env.WINGS.split(',').includes(r.id)):SINGULARITY_ROOMS;
  for(const wing of wings)for(const view of [0,1]){
   const row=await page.evaluate('('+inspectWing.toString()+')('+JSON.stringify(wing.id)+','+view+')');

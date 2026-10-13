@@ -5,19 +5,20 @@ export const CAMPAIGN_V55_STORAGE_PREFIX='brainrot-campaign-v55:';
 export const CAMPAIGN_V56_STORAGE_PREFIX='brainrot-campaign-v56:';
 export const CAMPAIGN_PREFERENCE_KEY='brainrot-portal.preferences.v24';
 const LEGACY_PREFERENCE_KEY='nesi.preferences.v8';
-const paths=new Set(['','/brainrot-portal'].flatMap(base=>['','/','/index.html'].map(suffix=>`${base}/campaign-v55${suffix}`)));
-const nextPaths=new Set(['','/brainrot-portal'].flatMap(base=>['','/','/index.html'].map(suffix=>`${base}/campaign-v56${suffix}`)));
+const campaignPaths=version=>new Set(['','/brainrot-portal'].flatMap(base=>['','/','/index.html'].map(suffix=>`${base}/campaign-${version}${suffix}`)));
+const v55Paths=campaignPaths('v55'),v56Paths=campaignPaths('v56');
 
-export const isCampaignV55Path=pathname=>paths.has(pathname);
-export const isCampaignV56Path=pathname=>nextPaths.has(pathname);
+export const isCampaignV55Path=pathname=>v55Paths.has(pathname);
+export const isCampaignV56Path=pathname=>v56Paths.has(pathname);
 export function foundationCampaignPrefix(pathname,{fullFoundationCampaign=true}={}){
  if(!fullFoundationCampaign)return FOUNDATION_STORAGE_PREFIX;
  return isCampaignV56Path(pathname)?CAMPAIGN_V56_STORAGE_PREFIX:isCampaignV55Path(pathname)?CAMPAIGN_V55_STORAGE_PREFIX:FOUNDATION_STORAGE_PREFIX;
 }
 
-/** A first visit imports historical Foundation progress/settings by reading.
+/** A first visit reads the newest preceding campaign, then Foundation progress.
  * Every save goes to the new namespace. Once either own preference key exists,
- * neither a corrupt record nor a missing legacy key can re-import old data. */
+ * neither a corrupt record nor a missing legacy key can re-import old data.
+ * Select the namespace as a whole, so a legacy key cannot mix two editions. */
 export function foundationCampaignStorage(storage,{pathname='',fullFoundationCampaign=false}={}){
  if(!storage)return undefined;
  const ownPrefix=foundationCampaignPrefix(pathname,{fullFoundationCampaign});

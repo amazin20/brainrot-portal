@@ -43,7 +43,12 @@ export function buildPost38(g,index=37){
  // high unloading deck at z=-4. Weight sits on its own moving floor.
  const freight=k.carrier('original-cargo-hoist',[[11,0,-6],[11,15,-6]],{width:12,depth:12,portal:false});freight.speed=3;
  k.control('upper-dispatch',[17,15,-19],()=>{freight.target=1;},'E — поднять грузовую платформу со спутником.');
- k.control('lower-dispatch',[18,0,13],()=>{freight.target=1;},'E — отправить груз на верхний причал до своего перелёта.');
+ // Dispatch from the rear of the loading court. At the former z=13 console,
+ // a sprinting observer could press E at maximum hand reach, jump onto the
+ // already rising floor and ride past the entire gravity crossing. The
+ // visible console now leaves enough real travel distance for the hoist to
+ // rise above jump height before anyone can reach its near edge.
+ k.control('lower-dispatch',[18,0,19],()=>{freight.target=1;},'E — отправить груз на верхний причал до своего перелёта.');
  k.control('upper-recall',[4,15,-21],()=>{freight.target=0;},'E — вернуть грузовую платформу на нижний причал.');
  k.block([24,21,-20],[1,11,12],'secondary');
  k.display([0,25,-27.16],()=>`ПЛАТФОРМА ${freight.at(1)?'У ВЕРХНЕГО ДОКА':freight.at(0)?'ВНИЗУ':'В ПУТИ'}\nПЕРЕЛЁТ И ПОДЪЁМНИК — ДВА ОТДЕЛЬНЫХ МАРШРУТА`,25,2);

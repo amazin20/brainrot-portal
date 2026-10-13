@@ -14,9 +14,11 @@ const base=new URL(process.env.PAGE_URL||mounted.url);assert.ok(isCampaignV55Pat
 const ownPrefix=foundationCampaignPrefix(base.pathname);
 const oldPrefixes=['',FOUNDATION_STORAGE_PREFIX,'brainrot-open-rebuild-v1:','brainrot-puzzle-pilot43-v1:','brainrot-puzzle-progression-finale-v1:','brainrot-foundation20-physical-v1:','brainrot-tower41-native-v2:','brainrot-tower41-native-v3:'];
 if(isCampaignV56Path(base.pathname))oldPrefixes.push(CAMPAIGN_V55_STORAGE_PREFIX);
+const importedPrefix=isCampaignV56Path(base.pathname)?CAMPAIGN_V55_STORAGE_PREFIX:FOUNDATION_STORAGE_PREFIX;
+const expectedImport={completed:[0,1,6,9],hints:{1:2},resumeLevel:3,quality:'low',volume:.29,muted:true,tutorial:true};
 const records=oldPrefixes.map((prefix,index)=>[prefix+CAMPAIGN_PREFERENCE_KEY,JSON.stringify({campaignRevision:CREATIVE_CAMPAIGN_REVISION,
- completed:[0,1,6],hints:{1:2},resumeLevel:3,quality:'low',volume:.21,muted:true,tutorial:true,historicalNamespace:index},null,2)]);
-const oldRecord=Object.fromEntries(records),ownKey=foundationCampaignPrefix(base.pathname)+CAMPAIGN_PREFERENCE_KEY;
+ ...(prefix===importedPrefix?expectedImport:{completed:[0],hints:{},resumeLevel:0,quality:'balanced',volume:.21,muted:false,tutorial:false}),historicalNamespace:index},null,2)]);
+const oldRecord=Object.fromEntries(records),ownKey=ownPrefix+CAMPAIGN_PREFERENCE_KEY;
 const report={sourceCommit:process.env.BUILD_COMMIT??null,url:base.href,pass:false,errors:[],checks:[],
  scope:'Frozen production bytes mounted at the candidate subpath; first import, ordinary Play, reload and menu settings. This UI/storage proof does not assert puzzle completion.'};
 const save=()=>fs.writeFileSync(path.join(out,'report.json'),JSON.stringify(report,null,2)+'\n');
@@ -49,10 +51,10 @@ try{
  // A reload must inspect persisted bytes, never seed the historical fixture again.
  await page.removeScriptToEvaluateOnNewDocument(seed.identifier);await ready(page);
  report.imported=await page.evaluate(()=>({...window.__NESI_PREFS__.value}));
- assert.deepEqual(report.imported.completed,[0,1,6]);assert.deepEqual(report.imported.hints,{1:2});assert.equal(report.imported.volume,.21);
+ for(const[key,value]of Object.entries(expectedImport))assert.deepEqual(report.imported[key],value,'Incorrect imported '+key);
  assertCampaignBrowserState(await runtime(page),4);
  const imported=await snapshot(page);assertIsolated(imported);assert.ok(imported.own,'Imported preferences were not saved to the private candidate namespace');
- report.checks.push('Historical settings, untouched progress and resume imported without changing any historical key');save();
+ report.checks.push('Newest historical namespace wins over distinct older saves; settings, progress and resume import without changing any historical key');save();
  await page.click('#menu-settings-button');await page.waitForFunction(()=>document.querySelector('#menu-settings').open);
  await page.$eval('#menu-volume',input=>{input.value='37';input.dispatchEvent(new Event('input',{bubbles:true}));});
  await page.click('#menu-tutorial');await page.click('#menu-settings-done');
@@ -65,7 +67,7 @@ try{
  await page.reload({waitUntil:'domcontentloaded'});await ready(page);
  report.reloaded=await page.evaluate(()=>({...window.__NESI_PREFS__.value}));
  assert.equal(report.reloaded.volume,.37);assert.equal(report.reloaded.tutorial,false);assert.equal(report.reloaded.resumeLevel,3);
- assert.deepEqual(report.reloaded.completed,[0,1,6]);assert.deepEqual(report.reloaded.hints,{1:2});
+ assert.deepEqual(report.reloaded.completed,expectedImport.completed);assert.deepEqual(report.reloaded.hints,expectedImport.hints);
  assertCampaignBrowserState(await runtime(page),4);assertIsolated(await snapshot(page));
  assert.equal(await page.$eval('#level-select',select=>select.value),'3');
  report.checks.push('Reload uses the own save and retains menu settings, progress and selected room');

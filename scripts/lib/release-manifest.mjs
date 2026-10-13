@@ -49,7 +49,7 @@ export function createReleaseManifest({directory,commit,platformArchive,root=pro
  assert.ok(fs.existsSync(path.join(directory,'index.html')),'Stamp an existing production package');
  const inputs=buildSourceInputs(root),files=packageFiles(directory);
  const runtimeConfig={chamberEdition:DEFAULT_EDITION,...ACTIVE_FOUNDATION_RUNTIME_FLAGS};
- const revisions={16:'cable-supported-architecture-v1',19:'portal-tension-physical-v1',22:'counterweight-dynamic-v1',32:'siphon-observatory-v1',40:'lower-pendulum-physical-camera-v3',
+ const revisions={16:'cable-supported-architecture-v1',19:'portal-tension-physical-v1',22:'counterweight-dynamic-v1',32:'siphon-observatory-v1',36:'magnetic-channel-sealed-end-v2',37:'freight-dispatch-setback-v2',40:'lower-pendulum-physical-camera-v3',
   ...Object.fromEntries(PROGRESSION_INDICES.map(index=>[index,`spatial-progression${index+1}-v1`]))};
  const rooms=FOUNDATION_INDICES.map(index=>{
   const spec=campaignSpec(runtimeConfig,index);

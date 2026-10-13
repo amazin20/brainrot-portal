@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import {campaignTheme} from './LabCampaignThemes.js';
 import {installCampaignEnvironment} from './LabCampaignEnvironment.js';
+import {installCastleInteriorArt} from './LabCastleInteriorArt.js';
 
 /** Restyle only authored architecture, not source models, portal porcelain,
  * interaction signals or moving-state materials. No colliders or puzzle state
@@ -92,5 +93,6 @@ export function finishCampaignTheme(game,level,index,roots){
  if(game.scene.fog?.color)game.scene.fog.color.setHex(theme.sky);
  level.campaignTheme={...theme,changedMaterials:copies.size,architecturalInstances};
  for(const root of roots)root.userData.campaignTheme=theme.id;
- return installCampaignEnvironment(game,level,theme);
+ installCampaignEnvironment(game,level,theme);
+ return theme.id==='castle'?installCastleInteriorArt(game,level):level;
 }

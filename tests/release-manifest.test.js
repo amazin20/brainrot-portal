@@ -24,6 +24,8 @@ test('one source binds all 51 current definitions and all current replacements',
   assert.equal(manifest.rooms[16].definitionRevision,'cable-supported-architecture-v1');
   assert.equal(manifest.rooms[19].definitionRevision,'portal-tension-physical-v1');
   assert.equal(manifest.rooms[22].definitionRevision,'counterweight-dynamic-v1');
+  assert.equal(manifest.rooms[36].definitionRevision,'magnetic-channel-sealed-end-v2');
+  assert.equal(manifest.rooms[37].definitionRevision,'freight-dispatch-setback-v2');
   assert.equal(manifest.rooms[50].definitionRevision,'lower-pendulum-physical-camera-v3');
   assert.equal(manifest.rooms[32].id,'siphon-observatory');assert.equal(manifest.rooms[49].id,'puzzle-progression51-mechanical-echo');
   assert.equal(manifest.rooms[50].id,'tower-singularity');assert.equal(manifest.rooms[50].stableLevel,41);

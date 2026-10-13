@@ -19,27 +19,27 @@ export async function runPointerLockStartBrowser({browser,baseUrl='http://127.0.
     for(const [run,level] of levels.entries()){
       const page=await browser.newPage();page.setDefaultTimeout(120000);await page.setViewport({width:1280,height:800});
       page.on('pageerror',error=>report.errors.push(String(error)));
+      const row={run,level};report.rows.push(row);save();
       try{
         await page.evaluateOnNewDocument(()=>{
-          window.__CAMERA_START_PROBE__={events:[],byEvent:new WeakMap()};
+          window.__CAMERA_START_PROBE__={events:[],records:new WeakMap()};
           for(const type of ['mousemove','pointerlockchange'])window.addEventListener(type,event=>{
             const game=window.__NESI_DEMO_GAME__;
             const entry={type,trusted:event.isTrusted,timeStamp:event.timeStamp,now:performance.now(),
-              movementX:event.movementX,movementY:event.movementY,locked:document.pointerLockElement===game?.renderer?.domElement,
+              movementX:event.movementX,movementY:event.movementY,clientX:event.clientX,clientY:event.clientY,locked:document.pointerLockElement===game?.renderer?.domElement,
               yaw:game?.yaw,pitch:game?.pitch,lastUnlockedMotion:game?.controls?.lastUnlockedMotion,pendingLockRebound:game?.controls?.pendingLockRebound};
             window.__CAMERA_START_PROBE__.events.push(entry);
-            window.__CAMERA_START_PROBE__.byEvent.set(event,entry);
+            window.__CAMERA_START_PROBE__.records.set(event,entry);
           },{capture:true});
         });
         const url=new URL(baseUrl);url.search=`?edition=foundation&level=${level}&debug=1`;
         await page.goto(url.href,{waitUntil:'domcontentloaded'});
         await page.waitForFunction(()=>window.__NESI_DEMO_GAME__?.state==='ready');
-        // Register after the production controls, in the same bubble phase.
-        // A microtask from capture can run between native event listeners and
-        // would describe the state before the actual mouse handler executed.
+        // Controls are now registered. Observe the same event after their
+        // bubble listener: a capture-phase microtask can run before controls.
         await page.evaluate(()=>{
           for(const type of ['mousemove','pointerlockchange'])window.addEventListener(type,event=>{
-            const game=window.__NESI_DEMO_GAME__,entry=window.__CAMERA_START_PROBE__.byEvent.get(event);
+            const probe=window.__CAMERA_START_PROBE__,entry=probe.records.get(event),game=window.__NESI_DEMO_GAME__;
             if(entry)entry.after={yaw:game.yaw,pitch:game.pitch};
           });
         });
@@ -51,7 +51,8 @@ export async function runPointerLockStartBrowser({browser,baseUrl='http://127.0.
         const play=await playFromReachableMenu(page);
         await page.waitForFunction(frames=>{const game=window.__NESI_DEMO_GAME__;return game.state==='playing'&&document.pointerLockElement===game.renderer.domElement&&game.renderFrames>=frames+4;},{},expected.frames);
         const before=await page.evaluate(()=>{const game=window.__NESI_DEMO_GAME__;return {yaw:game.yaw,pitch:game.pitch,frames:game.renderFrames,camera:game.camera.position.toArray(),events:window.__CAMERA_START_PROBE__.events.length};});
-        const row={run,level,runtime,trustedPlay:play.trusted,expected,before};report.rows.push(row);save();
+        Object.assign(row,{runtime,trustedPlay:play.trusted,expected,before});
+        row.start=await page.evaluate(()=>{const game=window.__NESI_DEMO_GAME__;return {levelIndex:game.levelIndex,state:game.state,cargoUUID:game.cargo.group.uuid,cargoBodyId:game.physics.cargoBody.id};});save();
         assert.ok(Math.abs(before.yaw-expected.yaw)<1e-10&&Math.abs(before.pitch-expected.pitch)<1e-10,`Room ${level} changed spawn view without genuine camera input`);
         row.screenshot=`room-${level}-run-${run+1}-start.png`;await page.screenshot({path:path.join(out,row.screenshot)});
         // Headless Chromium recentres its native pointer at (0,0) on lock.
@@ -70,6 +71,10 @@ export async function runPointerLockStartBrowser({browser,baseUrl='http://127.0.
         row.nativeLook=movement.map(({movementX,movementY,trusted})=>({movementX,movementY,trusted}));
         save();
         console.log(`NATIVE CAMERA START VERIFIED ${JSON.stringify({level,run,yaw:before.yaw,pitch:before.pitch,look:row.nativeLook})}`);
+      }catch(error){
+        row.error=String(error);
+        try{row.failure=await page.evaluate(()=>{const game=window.__NESI_DEMO_GAME__;return {state:game?.state,externalBlocked:game?.externalBlocked,focused:document.hasFocus(),locked:document.pointerLockElement===game?.renderer?.domElement,yaw:game?.yaw,pitch:game?.pitch,events:window.__CAMERA_START_PROBE__?.events};});}catch{}
+        save();throw error;
       }finally{await page.close();}
     }
     assert.equal(report.errors.length,0,`Page errors: ${report.errors.join('; ')}`);report.pass=true;return report;

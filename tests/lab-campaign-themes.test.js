@@ -53,6 +53,16 @@ test('Castle theme preserves independently colored wing navigation accents',()=>
  finishCampaignTheme(f.game,f.level,40,[f.root]);assert.equal(f.root.children.at(-1).material,wing);assert.equal(wing.color.getHex(),0x446677);
 });
 
+test('Castle theme retains the authored mineral walls and floor inlays of each wing',()=>{
+ const f=fixture();f.level.tower=true;
+ const originals=['Castle wing wall / freight','Castle cast-in floor / freight','Castle wing wall / optics','Castle cast-in floor / optics']
+  .map((name,index)=>new THREE.MeshStandardMaterial({name,color:[0xd5cbb1,0xe4ded0,0xb3cbdd,0xdce4ec][index]}));
+ const meshes=originals.map(material=>new THREE.Mesh(new THREE.BoxGeometry(2,2,.5),material));f.root.add(...meshes);
+ finishCampaignTheme(f.game,f.level,40,[f.root]);
+ meshes.forEach((mesh,index)=>assert.equal(mesh.material,originals[index],'common tint erased a wing finish'));
+ f.level.dispose();
+});
+
 test('Castle common gallery floor and recessed soffit retain separate mineral values without recoloring unclassified machine metal',()=>{
  const f=fixture();f.level.tower=true;
  const floor=new THREE.MeshStandardMaterial({color:0xe5e0d3});floor.map=new THREE.Texture();floor.map.name='Castle floor / quiet mipmapped finish';

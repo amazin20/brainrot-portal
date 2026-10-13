@@ -112,6 +112,10 @@ export function buildCreative37(g,index=36){
    for(const y of [.09,1.92])k.block([p[0],y,p[2]],across?[s[0],.16,.62]:[.62,.16,s[2]],'metal',false);
   }
  }
+ // The final bend has no loading mouth. Close its exposed south end into
+ // both side walls and overlap the roof, so a hand-carried body cannot be
+ // fed straight to the third coil or dropped behind a low freestanding lip.
+ k.block([15.9375,1,-4.1],[4.675,2,.8],'dark');
  // A portal charge can see the floor through this .73 m high inspection
  // slot; the .78 m companion and the human capsule cannot be hand-fed.
  k.block([-16,.15,4.25],[4.55,.3,.55],'dark');

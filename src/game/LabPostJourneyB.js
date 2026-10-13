@@ -37,7 +37,7 @@ function room38(d,{route='carry-freight-then-launch',recover=false}={}){
   'Original loose companion is not on the actual freight floor');
  mark('The original companion waits on its own cargo elevator');
  if(route==='send-freight-early'){
-  walk(17,13);check(g.interact()&&l.freight.target===1,'Lower console did not start loaded freight');
+  walk(17,19);check(g.interact()&&l.freight.target===1,'Lower console did not start loaded freight');
   until(()=>l.freight.at(1),12,'Freight missed upper docking station');
   check(g.cargo.position.y>14,'Original companion failed early freight trip');
   mark('Original companion reaches upper dock before player launches');

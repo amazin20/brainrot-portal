@@ -1,0 +1,141 @@
+[
+  {
+    "releaseZ": -3.8,
+    "milestones": [
+      {
+        "name": "mouth approach",
+        "p": [
+          15.998870733171016,
+          0,
+          -3.8915936535642044
+        ],
+        "cargo": [
+          15.98996432195791,
+          1.0599896393535098,
+          -4.611538548958041
+        ],
+        "held": true,
+        "won": false,
+        "tp": 0,
+        "cargoTp": 0,
+        "field": -1,
+        "receiver": false,
+        "door": 0
+      },
+      {
+        "name": "released near final duct",
+        "p": [
+          15.998865461951455,
+          0,
+          -3.892021196679549
+        ],
+        "cargo": [
+          15.990072499958691,
+          0.38999815823638756,
+          -4.613355701749313
+        ],
+        "held": false,
+        "won": false,
+        "tp": 0,
+        "cargoTp": 0,
+        "field": -1,
+        "receiver": false,
+        "door": 0
+      },
+      {
+        "name": "third winding selected",
+        "p": [
+          7.811244541521638,
+          0,
+          0.17231746500235337
+        ],
+        "cargo": [
+          16.108548117185876,
+          0.7277166367776883,
+          -6.008191778286261
+        ],
+        "held": false,
+        "won": false,
+        "tp": 0,
+        "cargoTp": 0,
+        "field": 2,
+        "receiver": false,
+        "door": 0
+      },
+      {
+        "name": "receiver opens door",
+        "p": [
+          7.80470608210206,
+          0,
+          0.17135828870968178
+        ],
+        "cargo": [
+          16.040722116089526,
+          0.7912645569917492,
+          -19.91100632720923
+        ],
+        "held": false,
+        "won": false,
+        "tp": 0,
+        "cargoTp": 0,
+        "field": 2,
+        "receiver": true,
+        "door": 0.9005804901024502
+      },
+      {
+        "name": "zero-portal joint finish",
+        "p": [
+          2.091556585898005,
+          0,
+          -22.28147659401245
+        ],
+        "cargo": [
+          1.3795616954084444,
+          1.0526886338376182,
+          -22.173851445222116
+        ],
+        "held": true,
+        "won": true,
+        "tp": 0,
+        "cargoTp": 0,
+        "field": -1,
+        "receiver": false,
+        "door": 0.9999999999999987
+      }
+    ],
+    "released": true,
+    "fieldSwitch": true,
+    "pawl": true,
+    "fieldOff": true,
+    "route": {
+      "level": 37,
+      "id": "post-magnetic-u-channel",
+      "pass": true,
+      "milestones": [],
+      "respawns": 0,
+      "resets": 0,
+      "frames": 2399,
+      "kind": "recovery",
+      "teleports": 0
+    },
+    "final": {
+      "p": [
+        2.091556585898005,
+        0,
+        -22.28147659401245
+      ],
+      "cargo": [
+        1.3795616954084444,
+        1.0526886338376182,
+        -22.173851445222116
+      ],
+      "held": true,
+      "won": true,
+      "tp": 0,
+      "cargoTp": 0,
+      "field": -1,
+      "receiver": false,
+      "door": 0.9999999999999987
+    }
+  }
+]
