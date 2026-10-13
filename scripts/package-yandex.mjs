@@ -112,7 +112,10 @@ with zipfile.ZipFile(destination) as archive:
 const archive=fs.readFileSync(output);assert.ok(archive.length<=LIMIT,`ZIP exceeds ${LIMIT} bytes`);
 const dirty=execFileSync('git',['status','--porcelain','--untracked-files=no'],{encoding:'utf8'}).trim().length>0;
 const report={pass:true,scope:'Archive structure, files, hashes and 51-level model coverage; not live SDK, hardware FPS or moderation approval',
-  sourceCommit,workingTreeModified:dirty,workingTreeStatusScope:'tracked files only; generated untracked QA/artifacts excluded',builtFromCurrentSource:args.has('--build'),sourceInputFiles:inputsBefore.length,sourceInputsSha256:hash(JSON.stringify(inputsBefore)),compressedBytes:archive.length,unpackedBytes,limitBytes:LIMIT,sha256:hash(archive),
+  sourceCommit,sourceTree:execFileSync('git',['rev-parse','HEAD^{tree}'],{encoding:'utf8'}).trim(),
+  sourceParent:execFileSync('git',['cat-file','commit','HEAD'],{encoding:'utf8'}).match(/^parent ([a-f0-9]{40})$/m)?.[1]??null,
+  run:process.env.GITHUB_RUN_ID||null,runAttempt:process.env.GITHUB_RUN_ATTEMPT||null,archiveFilename:path.basename(output),
+  workingTreeModified:dirty,workingTreeStatusScope:'tracked files only; generated untracked QA/artifacts excluded',builtFromCurrentSource:args.has('--build'),sourceInputFiles:inputsBefore.length,sourceInputsSha256:hash(JSON.stringify(inputsBefore)),compressedBytes:archive.length,unpackedBytes,limitBytes:LIMIT,sha256:hash(archive),
   levels:FOUNDATION_INDICES.length,models:manifest.models.length,modelBytes:manifest.totalBytes,
   sdkScript:'/sdk.js supplied by the Yandex upload host, not included',files};
 fs.mkdirSync(path.dirname(reportPath),{recursive:true});fs.writeFileSync(reportPath,JSON.stringify(report,null,2)+'\n');

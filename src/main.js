@@ -115,7 +115,9 @@ const game=new LabGame({debug,container:$('#game'),touch:{joystick:$('#joystick'
       event.preventDefault();failure(new Error('Браузер остановил 3D-графику. Нажми «Повторить загрузку»: прогресс комнат сохранён. Текущая комната начнётся заново.'));
     });
     game.audio.configure(preferences.value);applyLabQuality(game,preferences.value.quality);diagnostics();
-    if(debug){window.__NESI_DEMO_GAME__=game;window.__NESI_PLATFORM__=platform;window.__NESI_PREFS__=preferences;
+    // A runtime debug flag cannot prune dynamic imports. Keep this build-time
+    // boundary so the SDK upload contains neither route hooks nor QA chunks.
+    if(import.meta.env.MODE!=='yandex'&&debug){window.__NESI_DEMO_GAME__=game;window.__NESI_PLATFORM__=platform;window.__NESI_PREFS__=preferences;
       window.__NESI_RUN_LEVEL_ROUTE__=async(options={})=>{const {runV8Journey}=await import('./game/LabV8Journey.js');game.renderer.setAnimationLoop(null);hideScreens();setState('playing');
         try{return await runV8Journey(game,{journeyOptions:options,onMilestone:mark=>{game.render();window.__NESI_CAPTURE_LEVEL_MARK__?.(mark);}});}finally{game.render();clearInput();setState(game.state);diagnostics();}};
       window.__NESI_RUN_FOUNDATION20_PHYSICAL_ROUTE__=async(options={})=>{

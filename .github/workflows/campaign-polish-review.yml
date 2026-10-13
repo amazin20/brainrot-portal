@@ -8,7 +8,7 @@ concurrency:
   group: campaign-polish-review-${{ github.ref }}
   # Replace only this session's initial review after fixing its input observer.
   # Other source reviews keep their normal non-cancelling behavior.
-  cancel-in-progress: ${{ github.event_name == 'push' && github.event.before == 'a8ca2cbec44294b8fab780881dc71d53ecf16908' }}
+  cancel-in-progress: ${{ github.event_name == 'push' && (github.event.before == 'a8ca2cbec44294b8fab780881dc71d53ecf16908' || github.event.before == '2bb31bd0f3f3aa0c1be9b8f225d3aaf80596e8b7') }}
 env:
   BUILD_COMMIT: ${{ github.sha }}
 jobs:
@@ -24,6 +24,16 @@ jobs:
       - run: npm run build
       - run: node scripts/stamp-build.mjs
       - run: node scripts/v8-package-check.mjs
+      - run: node scripts/check-yandex-platform.mjs
+      - name: Build and verify the exact production Yandex archive
+        run: node scripts/package-yandex.mjs --build --output=qa/yandex-package/brainrot-portal-v56-yandex.zip --report=qa/yandex-package/report.json
+      - name: Upload exact checked Yandex package
+        uses: actions/upload-artifact@v4
+        with:
+          name: campaign-polish-yandex
+          path: qa/yandex-package
+          retention-days: 10
+          if-no-files-found: error
       - uses: actions/upload-artifact@v4
         with:
           name: campaign-polish-dist
@@ -244,6 +254,14 @@ jobs:
       - run: npm install --no-save --package-lock=false puppeteer-core@24.16.0
       - uses: actions/download-artifact@v4
         with: {name: campaign-polish-dist, path: dist}
+      - uses: actions/download-artifact@v4
+        with: {name: campaign-polish-yandex, path: qa/yandex-package}
+      - name: Open the exact Yandex archive in a nested upload path
+        run: |
+          python3 -m zipfile -e qa/yandex-package/brainrot-portal-v56-yandex.zip dist-yandex
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+          node scripts/check-yandex-browser.mjs
+        env: {YANDEX_DIR: dist-yandex, OUT_DIR: qa/storage-isolation/yandex-browser}
       - run: |
           export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
           node scripts/qa-campaign-save-isolation.mjs
