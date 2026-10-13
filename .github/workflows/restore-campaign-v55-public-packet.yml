@@ -1,0 +1,70 @@
+name: Restore exact campaign v55 PUBLIC verification without deployment
+'on':
+  push:
+    branches: [audit/campaign-v55-public-packet-20261013]
+    paths:
+      - .github/workflows/restore-campaign-v55-public-packet.yml
+      - scripts/restore-campaign-v55-public-packet.mjs
+      - scripts/verify-campaign-v55-readonly-bytes.py
+      - scripts/lib/campaign-v55-canonical-capture.mjs
+      - scripts/lib/campaign-v55-readonly-provider.mjs
+      - scripts/test-campaign-v55-readonly-provider.mjs
+      - scripts/lib/campaign-v55-readonly-get.mjs
+      - scripts/test-campaign-v55-readonly-get.mjs
+      - scripts/test-campaign-v55-readonly-workflow.py
+      - tools/campaign-v55-readonly.json
+permissions:
+  contents: read
+  actions: read
+  deployments: read
+concurrency:
+  group: campaign-v55-readonly-proof
+  cancel-in-progress: false
+env:
+  GITHUB_TOKEN: ${{ github.token }}
+  CODEX_PRIMARY_RUNTIME_PYTHON: /usr/bin/python3
+jobs:
+  restore:
+    if: github.repository == 'amazin20/brainrot-portal'
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
+          ref: ba5c86fd07facd9613f5e6e8efb9709bd2ef9e89
+          path: source
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: source/package-lock.json
+      - name: Install locked immutable Source4 validation dependencies
+        working-directory: source
+        run: npm ci
+      - name: Install original image and movie decoders
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y python3-pil python3-yaml ffmpeg
+          /usr/bin/python3 -c "import PIL; print(PIL.__version__)"
+      - name: Check exact failed-provider and genuine archived-run controls
+        run: |
+          node --check scripts/restore-campaign-v55-public-packet.mjs
+          node --check scripts/lib/campaign-v55-canonical-capture.mjs
+          node --test --test-reporter=tap scripts/test-campaign-v55-readonly-provider.mjs scripts/test-campaign-v55-readonly-get.mjs
+          python3 scripts/test-campaign-v55-readonly-workflow.py
+      - name: Restore unchanged original captures at canonical paths and verify every public byte
+        run: node scripts/restore-campaign-v55-public-packet.mjs restore
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: campaign-v55-readonly-public-verification-${{ github.run_id }}-${{ github.run_attempt }}
+          path: proof/public-verification
+          retention-days: 10
+          if-no-files-found: error
