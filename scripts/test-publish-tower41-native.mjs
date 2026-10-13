@@ -3,12 +3,31 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import {PINS,ENTRIES,JOB_NAMES,CONTROLLER_CHANGES,positive,identity,checkReview,assertVerifierContract,checkController,checkArtifact,checkJobLog,checkDeployments,inventory,supplementalRecording,supplementalFoundation20,assertFoundation20CameraDescriptor,readPublicMetadata} from './publish-tower41-native.mjs';
+import {spawnSync} from 'node:child_process';
+import {PINS,RECOVERY,ENTRIES,JOB_NAMES,CONTROLLER_CHANGES,positive,identity,checkReview,assertVerifierContract,checkController,checkArtifact,checkJobLog,checkDeployments,inventory,supplementalRecording,supplementalFoundation20,assertFoundation20CameraDescriptor,readPublicMetadata} from './publish-tower41-native.mjs';
 const expected={sourceCommit:'a'.repeat(40),sourceReview:{runId:42,runAttempt:2}};
 const clone=value=>structuredClone(value);
 const review=()=>({id:42,run_attempt:2,head_sha:expected.sourceCommit,head_branch:PINS.branch,path:PINS.reviewPath,event:'push',status:'completed',conclusion:'success'});
 const jobs=()=>JOB_NAMES.map((name,index)=>({name,id:index+100,run_id:42,run_attempt:2,head_sha:expected.sourceCommit,status:'completed',conclusion:'success'}));
-const controller=()=>({sha:'b'.repeat(40),parents:[{sha:PINS.baselinePublisher}],files:CONTROLLER_CHANGES.map(row=>({...row}))});
+const controller=()=>({sha:'b'.repeat(40),parents:[{sha:PINS.controllerParent}],files:CONTROLLER_CHANGES.map(row=>({...row}))});
+test('the actual public20 shell launch binds the frozen source stamp and preserves a separate real PUBLIC producer',()=>{
+  const workflow=fs.readFileSync('.github/workflows/publish-puzzle-progression-finale.yml','utf8');
+  const step=workflow.split('      - name: Complete the actual public Foundation20 ordinary hook, cable, far stop and cargo return\n')[1]?.split('\n      - name: ')[0];
+  assert.ok(step);
+  for(const [field,context]of [['PUBLIC_PRODUCER_RUN_ID','github.run_id'],['PUBLIC_PRODUCER_RUN_ATTEMPT','github.run_attempt'],['PUBLIC_PRODUCER_HEAD_SHA','github.sha']])assert.ok(step.includes(field+": '${{ "+context+" }}'"));
+  assert.equal(/^\s+GITHUB_(RUN_ID|RUN_ATTEMPT|SHA|REF):/m.test(step),false,'GitHub reserved YAML env cannot select source metadata');
+  const match=step.match(/        run: \|\n([\s\S]*)$/);assert.ok(match);
+  const body=match[1].split('\n').map(line=>line.replace(/^          /,'')).join('\n');
+  const command='timeout --signal=TERM --kill-after=10s 1800s node scripts/qa-foundation20-native.mjs';
+  assert.equal(body.split(command).length,2,'Exactly one unchanged frozen recorder command must remain');
+  const probe=`node --input-type=module -e 'console.log(JSON.stringify({run:process.env.GITHUB_RUN_ID,attempt:process.env.GITHUB_RUN_ATTEMPT,sha:process.env.GITHUB_SHA,producerRun:process.env.PUBLIC_PRODUCER_RUN_ID,producerAttempt:process.env.PUBLIC_PRODUCER_RUN_ATTEMPT,producerSha:process.env.PUBLIC_PRODUCER_HEAD_SHA,producerUrl:process.env.PUBLIC_PRODUCER_URL}))'`;
+  const env={...process.env,GITHUB_RUN_ID:'99',GITHUB_RUN_ATTEMPT:'2',GITHUB_SHA:'b'.repeat(40),SOURCE_REVIEW_RUN_ID:'42',SOURCE_REVIEW_RUN_ATTEMPT:'1',BUILD_COMMIT:'a'.repeat(40),PUBLIC_PRODUCER_RUN_ID:'99',PUBLIC_PRODUCER_RUN_ATTEMPT:'2',PUBLIC_PRODUCER_HEAD_SHA:'b'.repeat(40),PUBLIC_PRODUCER_URL:'https://github.com/amazin20/brainrot-portal/actions/runs/99'};
+  const original=spawnSync('bash',['-e','-c',probe],{env,encoding:'utf8'});assert.equal(original.status,0);assert.equal(JSON.parse(original.stdout).run,'99','Actual inherited GitHub runner ignores source-only YAML intent');
+  const fixed=spawnSync('bash',['-e','-c',body.replace(command,probe)],{env,encoding:'utf8'});assert.equal(fixed.status,0,fixed.stderr);
+  const actual=JSON.parse(fixed.stdout.trim().split('\n').at(-1));assert.deepEqual(actual,{run:'42',attempt:'1',sha:'a'.repeat(40),producerRun:'99',producerAttempt:'2',producerSha:'b'.repeat(40),producerUrl:env.PUBLIC_PRODUCER_URL});
+  assert.notEqual(actual.run,actual.producerRun);
+  for(const field of ['PUBLIC_PRODUCER_RUN_ID','PUBLIC_PRODUCER_RUN_ATTEMPT','PUBLIC_PRODUCER_HEAD_SHA']){const bad=spawnSync('bash',['-e','-c',body.replace(command,probe)],{env:{...env,[field]:'wrong'},encoding:'utf8'});assert.notEqual(bad.status,0,'Mismatched actual PUBLIC origin must fail before capture');}
+});
 test('numeric pins reject booleans, zero, lossy numbers and decorated strings',()=>{
   assert.equal(positive('42'),42);assert.equal(positive(42),42);
   for(const invalid of [true,false,0,-1,1.5,NaN,Infinity,Number.MAX_SAFE_INTEGER+1,'0','042','42.0','42junk',undefined])assert.throws(()=>positive(invalid));
@@ -36,7 +55,7 @@ test('missing, duplicate, skipped and stale review jobs are rejected',()=>{
 });
 test('main may change only the same controller and its tested helper files in one leased commit',()=>{
   checkController(controller(),'b'.repeat(40));
-  for(const mutate of [v=>v.parents.push({sha:PINS.baselinePublisher}),v=>v.parents[0].sha='d'.repeat(40),v=>v.files.pop(),v=>v.files.push({filename:'src/main.js',status:'modified'}),v=>v.files[0].status='added',v=>v.files[1].previous_filename='old-name.mjs']){const value=controller();mutate(value);assert.throws(()=>checkController(value,'b'.repeat(40)));}
+  for(const mutate of [v=>v.parents.push({sha:PINS.controllerParent}),v=>v.parents[0].sha='d'.repeat(40),v=>v.parents[0].sha=PINS.baselinePublisher,v=>v.files.pop(),v=>v.files.push({filename:'src/main.js',status:'modified'}),v=>v.files[0].status='added',v=>v.files[1].previous_filename='old-name.mjs']){const value=controller();mutate(value);assert.throws(()=>checkController(value,'b'.repeat(40)));}
 });
 test('artifact checksum, exact source, run and expiry are mandatory',()=>{
   const pinned={id:7,name:'build-42-2',size_in_bytes:20,digest:'sha256:'+'e'.repeat(64)};
@@ -62,11 +81,11 @@ test('summary log must independently bind each of the five required job results 
   assert.throws(()=>checkJobLog(Buffer.from(lines.slice(1).join('\n')),{name:'review-summary'},expected));
   assert.throws(()=>checkJobLog(Buffer.from([...lines,lines[0]].join('\n')),{name:'review-summary'},expected));
 });
-test('latest deployment must belong to the accepted current baseline without overlaps',()=>{
-  const accepted={sha:PINS.baselinePublisher,state:'success',logUrl:'https://github.com/amazin20/brainrot-portal/actions/runs/'+PINS.baselineRun+'/job/123'};
+test('latest deployment must belong only to the exact failed-after-deploy recovery lease without overlaps',()=>{
+  const accepted={sha:RECOVERY.publisher,state:'success',logUrl:'https://github.com/amazin20/brainrot-portal/actions/runs/'+RECOVERY.run+'/job/123'};
   checkDeployments([accepted],'b'.repeat(40),99);
   checkDeployments([{sha:'b'.repeat(40),state:'in_progress',logUrl:'https://github.com/amazin20/brainrot-portal/actions/runs/99/job/12'},accepted],'b'.repeat(40),99);
-  for(const row of [{...accepted,state:'pending'},{...accepted,state:'in_progress'},{...accepted,sha:'c'.repeat(40)},{...accepted,logUrl:'https://github.com/amazin20/brainrot-portal/actions/runs/100/job/1'}])assert.throws(()=>checkDeployments([row,accepted],'b'.repeat(40),99));
+  for(const row of [{...accepted,state:'pending'},{...accepted,state:'in_progress'},{...accepted,sha:'c'.repeat(40)},{...accepted,sha:PINS.baselinePublisher},{...accepted,logUrl:'https://github.com/amazin20/brainrot-portal/actions/runs/100/job/1'}])assert.throws(()=>checkDeployments([row,accepted],'b'.repeat(40),99));
 });
 test('an inventory cannot silently follow a link or include a special file',()=>{
   const root=fs.mkdtempSync(path.join(os.tmpdir(),'tower41-publisher-'));

@@ -49,7 +49,7 @@ jobs:
       - name: Validate every baseline archive member and append only immutable reviewed bytes
         run: |
           python3 scripts/publish-tower41-native.py baseline --zip proof/downloads/baseline.zip --accepted-proof proof/review-artifacts/accepted-publication --output baseline-pages
-          python3 scripts/publish-tower41-native.py assemble --baseline baseline-pages --candidate source/dist --site site --proof proof --binding proof/package-binding.json --source "$BUILD_COMMIT" --publisher "$GITHUB_SHA" --run "$GITHUB_RUN_ID" --review-run "$SOURCE_REVIEW_RUN_ID" --review-attempt "$SOURCE_REVIEW_RUN_ATTEMPT"
+          python3 scripts/publish-tower41-native.py assemble-recovery --baseline baseline-pages --candidate source/dist --site site --proof proof --binding proof/package-binding.json --source "$BUILD_COMMIT" --publisher "$GITHUB_SHA" --run "$GITHUB_RUN_ID" --review-run "$SOURCE_REVIEW_RUN_ID" --review-attempt "$SOURCE_REVIEW_RUN_ATTEMPT"
       - uses: actions/upload-pages-artifact@v3
         with: {path: site, retention-days: 14}
       - name: Retain the accepted baseline ZIP, bounded historical transport and current preparation receipts
@@ -92,7 +92,7 @@ jobs:
           echo "CHROME_PATH=$(command -v google-chrome || command -v chromium)" >> "$GITHUB_ENV"
       - name: Rebind every retained source artifact, production file and native proof
         run: node scripts/publish-tower41-native.mjs restore-retained
-      - name: Verify all 1789 existing public files and their 592794475 exact bytes
+      - name: Verify all 1957 current public files and their 633671648 exact bytes before recovery
         run: python3 scripts/publish-tower41-native.py verify --manifest proof/baseline-manifest.json --base "$PUBLIC_BASE" --phase preflight --output proof/predeploy-public-bytes.json --source "$BUILD_COMMIT" --publisher "$GITHUB_SHA" --run "$GITHUB_RUN_ID" --review-run "$SOURCE_REVIEW_RUN_ID" --review-attempt "$SOURCE_REVIEW_RUN_ATTEMPT"
       - uses: actions/configure-pages@v5
       - name: Reject changed review attempt, source, publisher or any overlapping Pages publication at the final gate
@@ -111,11 +111,20 @@ jobs:
           CAPTURE_WIDTH: '640'
           CAPTURE_HEIGHT: '360'
           OUT_DIR: ../proof/public-foundation20
-          GITHUB_RUN_ID: '${{ env.SOURCE_REVIEW_RUN_ID }}'
-          GITHUB_RUN_ATTEMPT: '${{ env.SOURCE_REVIEW_RUN_ATTEMPT }}'
-          GITHUB_SHA: '${{ env.BUILD_COMMIT }}'
-          GITHUB_REF: refs/heads/upgrade/foundation20-physical-20261013-r5
-        run: timeout --signal=TERM --kill-after=10s 1800s node scripts/qa-foundation20-native.mjs
+          PUBLIC_PRODUCER_RUN_ID: '${{ github.run_id }}'
+          PUBLIC_PRODUCER_RUN_ATTEMPT: '${{ github.run_attempt }}'
+          PUBLIC_PRODUCER_HEAD_SHA: '${{ github.sha }}'
+          PUBLIC_PRODUCER_URL: '${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}'
+        run: |
+          test "$PUBLIC_PRODUCER_RUN_ID" = "$GITHUB_RUN_ID"
+          test "$PUBLIC_PRODUCER_RUN_ATTEMPT" = "$GITHUB_RUN_ATTEMPT"
+          test "$PUBLIC_PRODUCER_HEAD_SHA" = "$GITHUB_SHA"
+          printf 'TOWER41_PUBLIC_PRODUCER %s %s %s %s\n' "$PUBLIC_PRODUCER_RUN_ID" "$PUBLIC_PRODUCER_RUN_ATTEMPT" "$PUBLIC_PRODUCER_HEAD_SHA" "$PUBLIC_PRODUCER_URL"
+          export GITHUB_RUN_ID="$SOURCE_REVIEW_RUN_ID"
+          export GITHUB_RUN_ATTEMPT="$SOURCE_REVIEW_RUN_ATTEMPT"
+          export GITHUB_SHA="$BUILD_COMMIT"
+          export GITHUB_REF="refs/heads/upgrade/foundation20-physical-20261013-r5"
+          timeout --signal=TERM --kill-after=10s 1800s node scripts/qa-foundation20-native.mjs
       - name: Independently bind the public20 report and telemetry, then decode the entire actual movie
         run: |
           node --input-type=module <<'JS'

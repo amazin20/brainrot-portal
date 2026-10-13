@@ -1671,5 +1671,51 @@ class DualPublicMoviePacketTests(PipelineFixture):
         self.assertFalse(pathlib.Path(args.output).exists())
 
 
+class ExactRecoveryLeaseTests(unittest.TestCase):
+    """Scoped synthetic lease contracts only; no actual publication acceptance fixture."""
+    def lease(self):
+        value = {'kind': 'exact-failed-after-deploy-R5-recovery-lease', 'pass': True,
+                 'sourceAccepted': True, 'publicationAccepted': False, **copy.deepcopy(P.RECOVERY)}
+        for phase, count, size, digest in [('preflight', P.BASELINE_COUNT, P.BASELINE_BYTES, P.BASELINE_INVENTORY_SHA256),
+                                          ('published', P.RECOVERY['currentFiles'], P.RECOVERY['currentBytes'], P.RECOVERY['currentInventorySha256'])]:
+            value[phase] = {'pass': True, 'mainSiteUnchanged': True, 'phase': phase, 'checked': count, 'bytes': size,
+                'siteFilesSha256': digest, 'sourceCommit': P.RECOVERY['sourceCommit'], 'sourceReview': copy.deepcopy(P.RECOVERY['sourceReview']),
+                'publisherCommit': P.RECOVERY['failedPublisher'], 'publicationRun': P.RECOVERY['failedRun'],
+                'packageBindingSha256': P.RECOVERY['failedBindingSha256']}
+        return value
+
+    def test_recovery_requires_exact_failed_head_run_attempt_source_and_union(self):
+        P.check_recovery_lease(self.lease())
+        for key, original in P.RECOVERY.items():
+            value = self.lease()
+            if isinstance(original, dict):value[key]['runAttempt'] += 1
+            elif isinstance(original, int):value[key] += 1
+            else:value[key] = '0' * len(original)
+            with self.subTest(key=key), self.assertRaises(ValueError):P.check_recovery_lease(value)
+
+    def test_recovery_cannot_accept_the_old_failed_public_run(self):
+        for key, invalid in [('publicationAccepted', True), ('sourceAccepted', False), ('pass', False), ('kind', 'generic-recovery')]:
+            value = self.lease();value[key] = invalid
+            with self.subTest(key=key), self.assertRaises(ValueError):P.check_recovery_lease(value)
+        value = self.lease();value['sourceReview']['runAttempt'] = True
+        with self.assertRaises(ValueError):P.check_recovery_lease(value)
+
+    def test_both_original_preflight_and_current_full_union_are_required(self):
+        for phase in ['preflight', 'published']:
+            for key, invalid in [('checked', 1), ('bytes', 1), ('siteFilesSha256', '0' * 64), ('mainSiteUnchanged', False),
+                                 ('publisherCommit', '0' * 40), ('publicationRun', 1), ('sourceCommit', '0' * 40), ('pass', False)]:
+                value = self.lease();value[phase][key] = invalid
+                with self.subTest(phase=phase, key=key), self.assertRaises(ValueError):P.check_recovery_lease(value)
+        value = self.lease();value['published']['packageBindingSha256'] = '0' * 64
+        with self.assertRaises(ValueError):P.check_recovery_lease(value)
+
+    def test_recovery_cannot_relabel_a_different_source_or_the_same_failed_publisher(self):
+        expected = {'sourceCommit': P.RECOVERY['sourceCommit'], 'publisherCommit': 'b' * 40,
+                    'publicationRun': 99, 'sourceReview': copy.deepcopy(P.RECOVERY['sourceReview'])}
+        for key, invalid in [('sourceCommit', 'a' * 40), ('publisherCommit', P.RECOVERY['failedPublisher'])]:
+            bad = dict(expected);bad[key] = invalid;manifest = {'kind': P.RECOVERY_KIND, 'phase': 'published', **bad}
+            with self.subTest(key=key), self.assertRaises(ValueError):P.check_manifest(manifest, 'published', bad)
+
+
 if __name__ == '__main__':
     unittest.main(verbosity=2)

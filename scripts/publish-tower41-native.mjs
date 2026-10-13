@@ -14,6 +14,7 @@ export const PINS = Object.freeze({
   // Fill only after independent exact-attempt source, logs, package and movie acceptance.
   sourceCommit:'3f2e83127dfd5800068854a98843d73eb9377609', sourceTree:'8a00a9e62642865d83c71039d72bf028dea46256', sourceParent:'5e552e9c3ac248b535d619741f15e99e29979cbf', reviewRun:38348119403, reviewAttempt:1,
   controllerPath:'.github/workflows/publish-puzzle-progression-finale.yml',
+  controllerParent:'387f00791b1b469c83d5a8ab680e12f669ff00d2',
   baselinePublisher:'a74b64fe6d861baa94bbba7c6311794e6d520534', baselineRun:38300647905,
   canonicalSource:'8d2c01eacd86fe9235a35e7ec5f624ba62c3b29e', finaleSource:'0e257837ca157d59d29c2e892e9a81e4f21fc5a1',
   baselineFiles:1789, baselineBytes:592794475,
@@ -24,6 +25,16 @@ export const PINS = Object.freeze({
   legacyPreviewSource:'58a71ddfc9bf704bef4c97fe13d16401c5a5f9f2', previousPreviewSource:'5e552e9c3ac248b535d619741f15e99e29979cbf',
   namespace:'tower41-native-v3/', query:'?edition=foundation&level=41&tower41preview=1',
   storagePrefix:'brainrot-tower41-native-v3:', artifactStem:'tower41-next-cell',
+});
+export const RECOVERY=Object.freeze({
+  publisher:'387f00791b1b469c83d5a8ab680e12f669ff00d2',tree:'181b7044186a93ca840e06e600cd46684ab6d82f',run:38358383551,attempt:1,
+  source:'3f2e83127dfd5800068854a98843d73eb9377609',sourceTree:'8a00a9e62642865d83c71039d72bf028dea46256',reviewRun:38348119403,reviewAttempt:1,
+  files:1957,bytes:633671648,inventorySha256:'d76664e04f5ac2f2b161d9af10da1aa2299df13cfec51a243659d2b732be13c6',bindingSha256:'987db6be44dc54062f6e721cc0bcd67c80e0f466a27f0b62e636ec93f567c2bc',
+  logs:Object.freeze([{id:115166511119,bytes:369831,sha256:'3313af5b6a953505b4ae08d51afcf13b9d73a60c04970589ddc4878e7a385dc3'},{id:115167206215,bytes:270632,sha256:'61ea61f79ac9f409f7b885836ca544c2de297d44400c68d1392c99ca24c4d22b'}]),
+  pages:Object.freeze({id:11793193869,name:'github-pages',size_in_bytes:584433012,digest:'sha256:a75f0531e43459a5e0cb51352a83fb9b2044e585db9b91cc2f611898f2a66c1d'}),
+  artifacts:Object.freeze([{id:11793193869,name:'github-pages',size_in_bytes:584433012,digest:'sha256:a75f0531e43459a5e0cb51352a83fb9b2044e585db9b91cc2f611898f2a66c1d'},
+    {id:11793588970,name:'tower41-native-publication-proof-38358383551-1',size_in_bytes:739530543,digest:'sha256:71d97ead31457db704b7a6cc92c4075d8fa8074ebab1fac603ad5fefccbc4cac'},
+    {id:11793158974,name:'tower41-native-prepared-38358383551-1',size_in_bytes:739485474,digest:'sha256:18ef6d89dd3749b3498303c1f6745effc3d782187656c95b4a14610d12da9543'}]),
 });
 export const MAX_SITE_BYTES=700_000_000;
 export const MAX_SOURCE_ARTIFACT_BYTES=600_000_000;
@@ -63,7 +74,7 @@ export function assertVerifierContract(records,required){
   return records;
 }
 export function checkController(commit,publisher){
-  assert.equal(commit.sha,publisher);assert.deepEqual(commit.parents.map(p=>p.sha),[PINS.baselinePublisher],'Publisher must be one leased direct child of current main');
+  assert.equal(commit.sha,publisher);assert.deepEqual(commit.parents.map(p=>p.sha),[PINS.controllerParent],'Publisher must be one leased direct child of current main');
   assert.deepEqual(commit.files.map(({filename,status})=>({filename,status})).sort((a,b)=>a.filename.localeCompare(b.filename)),[...CONTROLLER_CHANGES].sort((a,b)=>a.filename.localeCompare(b.filename)),'Only the same controller and its tested helpers may change');
   for(const file of commit.files)assert.equal(file.previous_filename,undefined,'Renamed publication paths forbidden');
 }
@@ -86,10 +97,34 @@ export function checkDeployments(rows,publisher,runId){
     const own=row.sha===publisher&&new RegExp('/actions/runs/'+runId+'(?:/|$)').test(row.logUrl||'');if(own)continue;
     assert.ok(row.state&&!['queued','pending','in_progress'].includes(row.state),'Overlapping Pages publication');
     if(['failure','error','inactive'].includes(row.state))continue;
-    assert.equal(row.state,'success');assert.equal(row.sha,PINS.baselinePublisher,'Public site advanced beyond pinned baseline');
-    assert.ok(new RegExp('/actions/runs/'+PINS.baselineRun+'(?:/|$)').test(row.logUrl||''),'Accepted deployment source changed');return row;
+    assert.equal(row.state,'success');assert.equal(row.sha,RECOVERY.publisher,'Public site differs from the exact failed-after-deploy recovery lease');
+    assert.ok(new RegExp('/actions/runs/'+RECOVERY.run+'(?:/|$)').test(row.logUrl||''),'Recovery deployment run changed');return row;
   }
   throw Error('No current accepted Pages deployment');
+}
+export function checkFailedRecovery(run,jobs,commit,artifacts,logs){
+  assert.equal(PINS.sourceCommit,RECOVERY.source);assert.equal(PINS.sourceTree,RECOVERY.sourceTree);assert.equal(PINS.reviewRun,RECOVERY.reviewRun);assert.equal(PINS.reviewAttempt,RECOVERY.reviewAttempt);
+  assert.equal(run.id,RECOVERY.run);assert.equal(run.run_attempt,RECOVERY.attempt);assert.equal(run.head_sha,RECOVERY.publisher);assert.equal(run.head_commit.tree_id,RECOVERY.tree);assert.equal(run.status,'completed');assert.equal(run.conclusion,'failure');assert.equal(run.event,'push');assert.equal(run.path,PINS.controllerPath);assert.equal(run.head_branch,'main');
+  assert.equal(commit.sha,RECOVERY.publisher);assert.equal(commit.tree.sha,RECOVERY.tree);assert.deepEqual(commit.parents.map(p=>p.sha),[PINS.baselinePublisher]);
+  assert.equal(jobs.length,2);assert.deepEqual(jobs.map(j=>j.id).sort(),RECOVERY.logs.map(j=>j.id).sort());
+  for(const job of jobs){assert.equal(job.run_id,RECOVERY.run);assert.equal(job.run_attempt,1);assert.equal(job.head_sha,RECOVERY.publisher);assert.equal(job.status,'completed');}
+  const first=jobs.find(j=>j.id===RECOVERY.logs[0].id),last=jobs.find(j=>j.id===RECOVERY.logs[1].id);assert.equal(first.conclusion,'success');assert.equal(last.conclusion,'failure');
+  assert.equal(first.name,'Assemble the exact reviewed preview without changing the current site');assert.equal(last.name,'Verify every existing byte, append the preview and execute its actual public ordinary journey');
+  assert.deepEqual(last.steps.filter(s=>s.conclusion==='failure').map(s=>s.name),['Complete the actual public Foundation20 ordinary hook, cable, far stop and cargo return']);
+  for(const name of ['Verify all 1789 existing public files and their 592794475 exact bytes','Run actions/deploy-pages@v4','Verify the union of every unchanged old file and every added preview file']){const found=last.steps.filter(s=>s.name===name);assert.equal(found.length,1);assert.equal(found[0].status,'completed');assert.equal(found[0].conclusion,'success');}
+  const pages=artifacts.filter(a=>a.name==='github-pages');assert.equal(pages.length,1);checkArtifact(pages[0],{name:RECOVERY.pages.name,runId:RECOVERY.run,sourceCommit:RECOVERY.publisher,pinned:RECOVERY.pages});
+  assert.equal(artifacts.length,RECOVERY.artifacts.length);for(const pin of RECOVERY.artifacts){const matches=artifacts.filter(a=>a.id===pin.id);assert.equal(matches.length,1);const a=matches[0];for(const key of ['id','name','size_in_bytes','digest'])assert.equal(a[key],pin[key]);assert.equal(a.expired,false);assert.equal(a.workflow_run.id,RECOVERY.run);assert.equal(a.workflow_run.head_sha,RECOVERY.publisher);assert.ok(a.size_in_bytes<=MAX_PRIVATE_PROOF_BYTES);}
+  assert.equal(logs.length,2);for(const pin of RECOVERY.logs){const row=logs.find(r=>r.id===pin.id);assert.ok(row);assert.equal(row.bytes.length,pin.bytes);assert.equal(sha(row.bytes),pin.sha256);}
+  const text=logs.find(r=>r.id===last.id).bytes.toString('utf8');assert.ok(text.includes('Release definitions or configuration differ from the pinned source'));assert.ok(text.includes("+   run: '"+RECOVERY.reviewRun+"'"));assert.ok(text.includes("-   run: '"+RECOVERY.run+"'"));
+  const receipts=text.split(/\r?\n/).map(l=>l.replace(/^(?:\uFEFF)?\d{4}-\d\d-\d\dT\S+ ?/,'')).filter(l=>l.startsWith('{')).flatMap(l=>{try{return [JSON.parse(l)];}catch{return [];}}).filter(r=>['preflight','published'].includes(r.phase));assert.equal(receipts.length,2);
+  for(const [index,phase]of ['preflight','published'].entries()){const r=receipts[index];assert.equal(r.phase,phase);assert.equal(r.pass,true);assert.equal(r.mainSiteUnchanged,true);assert.equal(r.sourceCommit,RECOVERY.source);assert.deepEqual(r.sourceReview,{runId:RECOVERY.reviewRun,runAttempt:RECOVERY.reviewAttempt});assert.equal(r.publisherCommit,RECOVERY.publisher);assert.equal(r.publicationRun,RECOVERY.run);assert.equal(r.checked,index?RECOVERY.files:PINS.baselineFiles);assert.equal(r.bytes,index?RECOVERY.bytes:PINS.baselineBytes);assert.equal(r.siteFilesSha256,index?RECOVERY.inventorySha256:PINS.baselineInventorySha256);}
+  assert.equal(receipts[1].packageBindingSha256,RECOVERY.bindingSha256);
+  return {pass:true,kind:'exact-failed-after-deploy-R5-recovery-lease',publicationAccepted:false,sourceAccepted:true,failedPublisher:RECOVERY.publisher,failedTree:RECOVERY.tree,failedRun:RECOVERY.run,failedAttempt:1,sourceCommit:RECOVERY.source,sourceTree:RECOVERY.sourceTree,sourceReview:{runId:RECOVERY.reviewRun,runAttempt:1},currentFiles:RECOVERY.files,currentBytes:RECOVERY.bytes,currentInventorySha256:RECOVERY.inventorySha256,failedBindingSha256:RECOVERY.bindingSha256,preflight:receipts[0],published:receipts[1]};
+}
+async function recoveryLease(){
+  const [run,jobs,commit,artifacts]=await Promise.all([request('actions/runs/'+RECOVERY.run),all('actions/runs/'+RECOVERY.run+'/attempts/1/jobs','jobs'),request('git/commits/'+RECOVERY.publisher),all('actions/runs/'+RECOVERY.run+'/artifacts','artifacts')]);
+  const logs=[];for(const pin of RECOVERY.logs){const response=await request('actions/jobs/'+pin.id+'/logs',{binary:true}),bytes=Buffer.from(await response.arrayBuffer());logs.push({id:pin.id,bytes});const filename='proof/recovery-job-logs/'+pin.id+'.log';fs.mkdirSync(path.dirname(filename),{recursive:true});if(fs.existsSync(filename))assert.deepEqual(fs.readFileSync(filename),bytes);else fs.writeFileSync(filename,bytes,{flag:'wx'});}
+  const lease=checkFailedRecovery(run,jobs,commit,artifacts,logs);write('proof/recovery-failed-provider.json',{run,jobs,commit,artifacts,lease});return lease;
 }
 export function inventory(root){
   const walk=directory=>fs.readdirSync(directory,{withFileTypes:true}).flatMap(entry=>{const file=path.join(directory,entry.name);assert.equal(entry.isSymbolicLink(),false);if(entry.isDirectory())return walk(file);assert.equal(entry.isFile(),true);return [file];});
@@ -182,7 +217,7 @@ async function guard(phase){
   checkArtifact(baselineProof,{name:PINS.baselineProof.name,runId:PINS.baselineRun,sourceCommit:PINS.baselinePublisher,pinned:PINS.baselineProof});
   for(const [kind,artifact,pinned]of [['baseline',baselineArtifact,PINS.baselineArtifact],['accepted-publication',baselineVerification,PINS.baselineVerification]]){checkArtifact(artifact,{name:pinned.name,runId:PINS.baselineRun,sourceCommit:PINS.baselinePublisher,pinned});checkedArtifacts.push({kind,artifact});}
   const inspected=[];for(const deployment of deployments.sort((a,b)=>b.id-a.id)){const statuses=await all('deployments/'+deployment.id+'/statuses'),latest=statuses.sort((a,b)=>b.id-a.id)[0];inspected.push({id:deployment.id,sha:deployment.sha,state:latest?.state,logUrl:latest?.log_url,statusId:latest?.id});const own=deployment.sha===expected.publisherCommit&&new RegExp('/actions/runs/'+expected.publicationRun+'(?:/|$)').test(latest?.log_url||'');if(!own&&latest?.state==='success')break;}
-  const acceptedDeployment=checkDeployments(inspected,expected.publisherCommit,expected.publicationRun);
+  const recovery=await recoveryLease();const acceptedDeployment=checkDeployments(inspected,expected.publisherCommit,expected.publicationRun);
   const publisherPaths=fs.readdirSync('.github/workflows').filter(file=>/actions\/deploy-pages|pages:\s*write/.test(fs.readFileSync('.github/workflows/'+file,'utf8'))).map(file=>'.github/workflows/'+file);
   for(const state of ['queued','in_progress'])for(const other of await all('actions/runs?status='+state,'workflow_runs'))if(other.id!==expected.publicationRun&&publisherPaths.includes(other.path))throw Error('Other active Pages workflow '+other.id);
   const logs=[];for(const job of jobs){const response=await request('actions/jobs/'+job.id+'/logs',{binary:true});const bytes=Buffer.from(await response.arrayBuffer());assert.ok(bytes.length>0&&bytes.length<20_000_000);const receipt=checkJobLog(bytes,job,expected),filename='proof/job-logs/'+job.id+'.log';fs.mkdirSync(path.dirname(filename),{recursive:true});if(fs.existsSync(filename))assert.equal(sha(fs.readFileSync(filename)),receipt.sha256,'Accepted provider log changed');else fs.writeFileSync(filename,bytes,{flag:'wx'});logs.push({name:job.name,id:job.id,conclusion:job.conclusion,rawLog:{path:'job-logs/'+job.id+'.log',...receipt}});}
@@ -191,8 +226,8 @@ async function guard(phase){
     const binding=read('proof/package-binding.json'),manifest=read('proof/manifest.json'),pre=read('proof/predeploy-public-bytes.json');for(const proof of [binding,manifest,pre])for(const [key,value]of Object.entries(expected))assert.deepEqual(proof[key],value);
     const downloaded=read('proof/downloaded-inputs.json');for(const [key,value]of Object.entries(expected))assert.deepEqual(downloaded[key],value);assert.equal(downloaded.pass,true);assert.equal(downloaded.inputs.length,checkedArtifacts.length);
     for(const {kind,artifact}of checkedArtifacts){const retained=downloaded.inputs.filter(row=>row.kind===kind);assert.equal(retained.length,1);for(const key of ['id','name','size_in_bytes','digest'])assert.equal(retained[0].artifact[key],artifact[key],'Retained source artifact provenance changed');assert.equal(retained[0].artifact.workflow_run.id,artifact.workflow_run.id);assert.equal(retained[0].artifact.workflow_run.head_sha,artifact.workflow_run.head_sha);}
-    assert.deepEqual(binding.jobs,logs,'Review job log provenance changed since assembly');assert.equal(pre.pass,true);assert.equal(pre.phase,'preflight');assert.equal(pre.checked,PINS.baselineFiles);assert.equal(pre.bytes,PINS.baselineBytes);
-    assert.equal(pre.baselineFilesSha256,PINS.baselineInventorySha256);assert.equal(manifest.baselineFilesSha256,PINS.baselineInventorySha256);
+    assert.deepEqual(binding.jobs,logs,'Review job log provenance changed since assembly');assert.equal(pre.pass,true);assert.equal(pre.phase,'preflight');assert.equal(pre.checked,RECOVERY.files);assert.equal(pre.bytes,RECOVERY.bytes);
+    assert.equal(pre.baselineFilesSha256,RECOVERY.inventorySha256);assert.equal(manifest.baselineFilesSha256,RECOVERY.inventorySha256);
   }
   // Check heads and current attempt again after potentially slow provider-log downloads.
   for(const state of ['queued','in_progress'])for(const other of await all('actions/runs?status='+state,'workflow_runs'))if(other.id!==expected.publicationRun&&publisherPaths.includes(other.path))throw Error('Other Pages workflow appeared during guard '+other.id);
@@ -200,7 +235,7 @@ async function guard(phase){
   assert.equal(lastMain.object.sha,expected.publisherCommit);assert.equal(lastHead.object.sha,expected.sourceCommit);assert.equal(lastRun.run_attempt,expected.sourceReview.runAttempt);assert.equal(lastRun.conclusion,'success');
   const finalInspected=[];for(const deployment of lastDeployments.sort((a,b)=>b.id-a.id)){const statuses=await all('deployments/'+deployment.id+'/statuses'),latest=statuses.sort((a,b)=>b.id-a.id)[0];finalInspected.push({id:deployment.id,sha:deployment.sha,state:latest?.state,logUrl:latest?.log_url,statusId:latest?.id});const own=deployment.sha===expected.publisherCommit&&new RegExp('/actions/runs/'+expected.publicationRun+'(?:/|$)').test(latest?.log_url||'');if(!own&&latest?.state==='success')break;}
   const finalAccepted=checkDeployments(finalInspected,expected.publisherCommit,expected.publicationRun);assert.equal(finalAccepted.id,acceptedDeployment.id,'Accepted deployment changed during review guards');
-  write('proof/github-guard-'+phase+'.json',{pass:true,phase,...expected,jobs:logs,artifacts:checkedArtifacts,acceptedDeployment:finalAccepted,inspectedDeployments:finalInspected,baselinePublication:baseline,sourceReviewRun:run,metadata,baselineFullPrivateProof:{artifact:baselineProof,providerRetentionAndDigestBound:true,archiveBytesDownloaded:false,nestedArchiveAudited:false},checkedAt:new Date().toISOString()});
+  write('proof/github-guard-'+phase+'.json',{pass:true,phase,...expected,jobs:logs,artifacts:checkedArtifacts,acceptedDeployment:finalAccepted,inspectedDeployments:finalInspected,recoveryLease:recovery,baselinePublication:baseline,sourceReviewRun:run,metadata,baselineFullPrivateProof:{artifact:baselineProof,providerRetentionAndDigestBound:true,archiveBytesDownloaded:false,nestedArchiveAudited:false},checkedAt:new Date().toISOString()});
 }
 async function downloadOne(artifact,filename){
   assert.equal(fs.existsSync(filename),false);fs.mkdirSync(path.dirname(filename),{recursive:true});const response=await request('actions/artifacts/'+artifact.id+'/zip',{binary:true});let size=0;const hash=createHash('sha256');
@@ -279,6 +314,8 @@ async function restore(reuse=false){
   console.log('TOWER41_NATIVE_MEASURED_BUDGET '+JSON.stringify({baselineBytes:PINS.baselineBytes,productionBytes,productionCopies:ENTRIES.length,supplementalCopiedBytes,subtotalBytes:PINS.baselineBytes+productionBytes*ENTRIES.length+supplementalCopiedBytes,maximumSiteBytes:MAX_SITE_BYTES,generatedBytes:'Measured and enforced separately by the Python assembly manifest.'}));
   assert.deepEqual(inventory('source/dist'),artifactRecords.build.files,'Reviewed production bytes must remain unchanged');
   if(reuse)assert.deepEqual(read('proof/package-binding.json'),binding,'Retained exact package and evidence binding changed');else write('proof/package-binding.json',binding);
+  const deployedBinding={...binding,publisherCommit:RECOVERY.publisher,publicationRun:RECOVERY.run},deployedBytes=Buffer.from(JSON.stringify(deployedBinding,null,2)+'\n');assert.equal(sha(deployedBytes),RECOVERY.bindingSha256,'Reconstructed actual failed-deployment binding differs');
+  if(reuse)assert.deepEqual(fs.readFileSync('proof/failed-deployed-package-binding.json'),deployedBytes);else fs.writeFileSync('proof/failed-deployed-package-binding.json',deployedBytes,{flag:'wx'});
 }
 if(process.argv[1]&&import.meta.url===pathToFileURL(path.resolve(process.argv[1])).href){
   const [command,arg]=process.argv.slice(2);if(command==='guard')await guard(arg);else if(command==='download')await download();else if(command==='restore')await restore();else if(command==='restore-retained')await restore(true);else throw Error('Use guard prepare|deploy, download, restore, restore-retained');

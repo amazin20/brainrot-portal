@@ -38,6 +38,15 @@ BASELINE_FULL_PRIVATE_ARTIFACT = {'id': 11773770811, 'bytes': 1265969704,
 BASELINE_COUNT = 1789
 BASELINE_BYTES = 592794475
 BASELINE_INVENTORY_SHA256 = 'f7728df3a5cfdcaf1d49de047260baa20c72a3b35090213e8ff5cae43763fc72'
+RECOVERY = {'failedPublisher': '387f00791b1b469c83d5a8ab680e12f669ff00d2',
+            'failedTree': '181b7044186a93ca840e06e600cd46684ab6d82f', 'failedRun': 38358383551, 'failedAttempt': 1,
+            'sourceCommit': '3f2e83127dfd5800068854a98843d73eb9377609',
+            'sourceTree': '8a00a9e62642865d83c71039d72bf028dea46256',
+            'sourceReview': {'runId': 38348119403, 'runAttempt': 1},
+            'currentFiles': 1957, 'currentBytes': 633671648,
+            'currentInventorySha256': 'd76664e04f5ac2f2b161d9af10da1aa2299df13cfec51a243659d2b732be13c6',
+            'failedBindingSha256': '987db6be44dc54062f6e721cc0bcd67c80e0f466a27f0b62e636ec93f567c2bc'}
+RECOVERY_KIND = 'exact-failed-after-deploy-R5-byte-identical-recovery'
 PREFIX = 'tower41-native-v3/'
 QUERY = '?edition=foundation&level=41&tower41preview=1'
 STORAGE_PREFIX = 'brainrot-tower41-native-v3:'
@@ -1819,7 +1828,115 @@ def assemble(args):
             shutil.rmtree(temporary)
 
 
+def check_recovery_lease(value):
+    require(isinstance(value, dict) and value.get('pass') is True and value.get('publicationAccepted') is False and
+            value.get('sourceAccepted') is True and value.get('kind') == 'exact-failed-after-deploy-R5-recovery-lease',
+            'Exact failed-after-deploy recovery provenance required; failed PUBLIC is never accepted')
+    for key, expected in RECOVERY.items():
+        require(type(value.get(key)) is type(expected) and value[key] == expected, 'Pinned recovery lease changed: ' + key)
+    exact_identity(value, {'sourceCommit': RECOVERY['sourceCommit'], 'sourceReview': RECOVERY['sourceReview']}, 'Recovery exact source lease')
+    for key, count, size, digest_value in [('preflight', BASELINE_COUNT, BASELINE_BYTES, BASELINE_INVENTORY_SHA256),
+                                         ('published', RECOVERY['currentFiles'], RECOVERY['currentBytes'], RECOVERY['currentInventorySha256'])]:
+        receipt = value.get(key)
+        exact_identity(receipt, {'sourceCommit': RECOVERY['sourceCommit'], 'publisherCommit': RECOVERY['failedPublisher'],
+                       'publicationRun': RECOVERY['failedRun'], 'sourceReview': RECOVERY['sourceReview']}, 'Failed recovery ' + key)
+        require(receipt.get('phase') == key and receipt.get('pass') is True and receipt.get('mainSiteUnchanged') is True and
+                type(receipt.get('checked')) is int and receipt['checked'] == count and receipt.get('bytes') == size and
+                receipt.get('siteFilesSha256') == digest_value, 'Actual failed-run PRE/POST full byte proof differs')
+    require(value['published'].get('packageBindingSha256') == RECOVERY['failedBindingSha256'], 'Failed-run exact binding hash changed')
+    return value
+
+
+def check_recovery_manifest(manifest, phase, expected):
+    exact_identity(manifest, expected, 'Recovery manifest')
+    require(manifest.get('kind') == RECOVERY_KIND and phase in ('preflight', 'published') and manifest.get('phase') == phase,
+            'Exact typed R5 recovery manifest required')
+    require(expected['sourceCommit'] == RECOVERY['sourceCommit'] and expected['sourceReview'] == RECOVERY['sourceReview'] and
+            expected['publisherCommit'] != RECOVERY['failedPublisher'], 'Recovery must retain the exact accepted R5 source in a fresh publisher')
+    check_recovery_lease(manifest.get('recoveryLease'))
+    binding = manifest.get('packageBinding');binding_structure(binding, expected)
+    require(binding['coreSource']['tree'] == RECOVERY['sourceTree'], 'Recovery cannot substitute another source tree')
+    retained = manifest.get('retainedFailedPackageBinding');old = dict(binding)
+    old.update(publisherCommit=RECOVERY['failedPublisher'], publicationRun=RECOVERY['failedRun'])
+    require(retained == old and manifest.get('retainedFailedPackageBindingSha256') == RECOVERY['failedBindingSha256'],
+            'Retained failed publication identities and byte binding must remain unchanged')
+    original = manifest.get('originalBaselineFiles');check_baseline(original)
+    candidate = manifest.get('candidateFiles');checked_rows(candidate, 'Recovery exact source package', MAX_CANDIDATE_BYTES)
+    require(candidate == binding['artifacts']['build']['files'], 'Recovery candidate differs from the exact accepted source package')
+    old_identity = {'sourceCommit': RECOVERY['sourceCommit'], 'publisherCommit': RECOVERY['failedPublisher'],
+                    'publicationRun': RECOVERY['failedRun'], 'sourceReview': RECOVERY['sourceReview']}
+    generated = content_inventory(generated_entry_content(old_identity, retained))
+    copies = supplemental_copied_rows(retained)
+    reconstructed = sorted(original + [{**row, 'path': entry['namespace'] + row['path']} for entry in ENTRIES for row in candidate] + generated + copies,
+                           key=lambda row: row['path'])
+    checked_rows(reconstructed, 'Every retained current R5 public byte', MAX_BYTES)
+    require(len(reconstructed) == RECOVERY['currentFiles'] and sum(row['bytes'] for row in reconstructed) == RECOVERY['currentBytes'] and
+            inventory_sha256(reconstructed) == RECOVERY['currentInventorySha256'], 'Exact old1789 plus real R5 prefixes must reconstruct the current1957 union')
+    require(manifest.get('baselineFiles') == reconstructed == manifest.get('siteFiles') and
+            manifest.get('baselineBytes') == manifest.get('siteBytes') == RECOVERY['currentBytes'] and
+            manifest.get('baselineFilesSha256') == manifest.get('siteFilesSha256') == RECOVERY['currentInventorySha256'],
+            'Recovery PRE and POST must retain every current1957 byte')
+    require(manifest.get('addedFiles') == [] and type(manifest.get('addedBytes')) is int and manifest['addedBytes'] == 0 and
+            type(manifest.get('candidateCopies')) is int and manifest['candidateCopies'] == 0 and
+            manifest.get('retainedCandidateCopies') == 2 and manifest.get('retainedPrefixGeneratedFiles') == generated and
+            manifest.get('retainedSupplementalCopiedFiles') == copies, 'Recovery must reuse exact existing prefixes without overwriting proof identities')
+    require(manifest.get('entries') == list(ENTRIES) and manifest.get('allCurrentPublicBytesUnchanged') is True and
+            manifest.get('failedPublicAcceptanceWaived') is False, 'Recovery cannot waive fresh PUBLIC recording acceptance')
+    for key, value in status_record(expected, binding).items():
+        require(type(manifest.get(key)) is type(value) and manifest[key] == value, 'Recovery scope changed: ' + key)
+    return reconstructed
+
+
+def assemble_recovery(args):
+    baseline_root, candidate, site, proof = disjoint_roots(args.baseline, args.candidate, args.site, args.proof)
+    proof = ordinary_directory(proof);require(not site.exists(), 'Refuse overwrite of recovery site')
+    expected = identity(args);binding_file = ordinary_file(args.binding)
+    require(binding_file == proof / 'package-binding.json', 'Recovery uses the genuine current source binding')
+    binding = read_json(binding_file);artifact_hashes = check_binding(binding, proof, candidate, expected)
+    original = inventory(baseline_root);check_baseline(original)
+    candidate_rows = inventory(candidate, MAX_CANDIDATE_BYTES)
+    failed_file = ordinary_file(proof / 'failed-deployed-package-binding.json')
+    require(sha256_file(failed_file) == RECOVERY['failedBindingSha256'], 'Full reconstructed failed binding bytes differ from actual POST hash')
+    retained = read_json(failed_file);old = dict(binding);old.update(publisherCommit=RECOVERY['failedPublisher'], publicationRun=RECOVERY['failedRun'])
+    require(retained == old, 'Recovery must retain the exact deployed source and historical prefix identities')
+    lease = check_recovery_lease(read_json(proof / 'recovery-failed-provider.json')['lease'])
+    old_identity = {'sourceCommit': RECOVERY['sourceCommit'], 'publisherCommit': RECOVERY['failedPublisher'],
+                    'publicationRun': RECOVERY['failedRun'], 'sourceReview': RECOVERY['sourceReview']}
+    content = generated_entry_content(old_identity, retained);temporary = staging_directory(site)
+    try:
+        shutil.copytree(baseline_root, temporary, dirs_exist_ok=True)
+        for entry in ENTRIES:shutil.copytree(candidate, temporary / entry['namespace'])
+        for entry, supplemental in [(ENTRIES[0], retained['foundation20']['supplemental']), (ENTRIES[1], retained['supplemental'])]:
+            for copied in supplemental['reviewedFiles']:
+                source = ordinary_file(proof / 'review-artifacts' / entry['artifactKind'] / copied['sourcePath'])
+                require(source.stat().st_size == copied['bytes'] and sha256_file(source) == copied['sha256'], 'Retained actual source supplement differs')
+                with source.open('rb') as stream:stream_to_file(stream, temporary / entry['namespace'] / copied['path'], copied['bytes'])
+        for name, data in content.items():
+            destination = temporary / name;destination.parent.mkdir(parents=True, exist_ok=True)
+            with destination.open('xb') as stream:stream.write(data)
+        rows = inventory(temporary)
+        manifest = {**status_record(expected, binding), 'kind': RECOVERY_KIND, 'phase': 'published', 'entries': list(ENTRIES),
+                    'recoveryLease': lease, 'allCurrentPublicBytesUnchanged': True, 'failedPublicAcceptanceWaived': False,
+                    'originalBaselineFiles': original, 'candidateFiles': candidate_rows, 'candidateCopies': 0, 'retainedCandidateCopies': 2,
+                    'retainedPrefixGeneratedFiles': content_inventory(content), 'retainedSupplementalCopiedFiles': supplemental_copied_rows(retained),
+                    'retainedFailedPackageBinding': retained, 'retainedFailedPackageBindingSha256': sha256_file(failed_file),
+                    'baselineFiles': rows, 'baselineBytes': RECOVERY['currentBytes'], 'baselineFilesSha256': RECOVERY['currentInventorySha256'],
+                    'siteFiles': rows, 'siteBytes': RECOVERY['currentBytes'], 'siteFilesSha256': RECOVERY['currentInventorySha256'],
+                    'addedFiles': [], 'addedBytes': 0, 'reviewArtifactFilesSha256': artifact_hashes,
+                    'packageBinding': binding, 'packageBindingSha256': sha256_file(binding_file)}
+        check_recovery_manifest(manifest, 'published', expected)
+        require(inventory(baseline_root) == original and inventory(candidate, MAX_CANDIDATE_BYTES) == candidate_rows, 'Recovery changed an immutable input')
+        temporary.rename(site);temporary = None
+        write_new_json(proof / 'manifest.json', manifest);write_new_json(proof / 'baseline-manifest.json', {**manifest, 'phase': 'preflight'})
+        print(json.dumps({'pass': True, **expected, 'kind': RECOVERY_KIND, 'preservedFiles': len(rows), 'preservedBytes': RECOVERY['currentBytes'],
+                          'addedFiles': 0, 'siteFilesSha256': RECOVERY['currentInventorySha256'], 'freshPublicCapturesStillRequired': True}))
+    finally:
+        if temporary is not None:shutil.rmtree(temporary)
+
+
 def check_manifest(manifest, phase, expected):
+    if isinstance(manifest, dict) and manifest.get('kind') == RECOVERY_KIND:
+        return check_recovery_manifest(manifest, phase, expected)
     exact_identity(manifest, expected, 'Publication manifest')
     require(manifest.get('phase') == phase and phase in ('preflight', 'published'), 'Proof phase mismatch')
     binding = manifest.get('packageBinding')
@@ -1949,7 +2066,7 @@ def verify(args):
             require(path in row_map, 'Missing identifying public file: ' + path)
             one(row_map[path])
         report.update({'pass': True, 'checked': len(lengths), 'bytes': sum(lengths), 'mainSiteUnchanged': True,
-                       'baselineFilesSha256': BASELINE_INVENTORY_SHA256, 'siteFilesSha256': manifest['siteFilesSha256'],
+                       'baselineFilesSha256': manifest['baselineFilesSha256'], 'siteFilesSha256': manifest['siteFilesSha256'],
                        'packageBindingSha256': manifest['packageBindingSha256']})
         print(json.dumps(report))
     except Exception as error:
@@ -2286,6 +2403,9 @@ def main():
     assembly = sub.add_parser('assemble')
     for flag in ('baseline', 'candidate', 'site', 'proof', 'binding', 'source', 'publisher', 'run', 'review-run', 'review-attempt'):
         assembly.add_argument('--' + flag, required=True)
+    recovery_assembly = sub.add_parser('assemble-recovery')
+    for flag in ('baseline', 'candidate', 'site', 'proof', 'binding', 'source', 'publisher', 'run', 'review-run', 'review-attempt'):
+        recovery_assembly.add_argument('--' + flag, required=True)
     verification = sub.add_parser('verify')
     for flag in ('base', 'manifest', 'output', 'source', 'publisher', 'run', 'review-run', 'review-attempt'):
         verification.add_argument('--' + flag, required=True)
@@ -2294,7 +2414,7 @@ def main():
     for flag in ('proof', 'output', 'source', 'publisher', 'run', 'review-run', 'review-attempt'):
         bundle.add_argument('--' + flag, required=True)
     args = parser.parse_args()
-    {'extract': extract, 'extract-accepted': extract_accepted, 'baseline': baseline, 'assemble': assemble, 'verify': verify, 'verification-bundle': verification_bundle}[args.command](args)
+    {'extract': extract, 'extract-accepted': extract_accepted, 'baseline': baseline, 'assemble': assemble, 'assemble-recovery': assemble_recovery, 'verify': verify, 'verification-bundle': verification_bundle}[args.command](args)
 
 
 if __name__ == '__main__':
