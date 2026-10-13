@@ -1472,18 +1472,19 @@ export class LabGame {
       if(this.lastCompanionState==='getting_up'&&companionState!=='getting_up'&&cargo.grounded)this.companionAnimator.trigger('nod');
       this.lastCompanionState=companionState;
     }
-    this.companionAnimator.update({ dt: visualDt, elapsed: this.visualTime, speed: cargo.velocity.length(),
+    const reducedMotion = this.epicDirector?.options?.reducedMotion ?? this.epicOptions?.reducedMotion;
+    this.companionAnimator.update({ dt: visualDt, elapsed: this.visualTime, speed: cargo.velocity.length(), reducedMotion,
       velocity: cargo.velocity, angularVelocity: cargo.angularVelocity, impact: cargo.impact,
       grounded: cargo.grounded, carrying: Boolean(this.heldCube || this.velocityCompanion?.connected), curious: this.playerPosition.distanceTo(this.cargo.position) < 2.5, celebrating:this.state==='won' });
     this.companionRig?.update({ dt: visualDt, elapsed: this.visualTime, speed: Math.hypot(cargo.velocity.x, cargo.velocity.z),
-      velocity: cargo.velocity,
+      velocity: cargo.velocity, angularVelocity: cargo.angularVelocity, reducedMotion,
       grounded: cargo.grounded, carrying: Boolean(this.heldCube || this.velocityCompanion?.connected), recovering: this.companionBehavior?.state === 'getting_up',
       tumbling: !cargo.grounded || cargo.angularVelocity.length() > 3, celebrating:this.state==='won', reaction:this.companionAnimator.reactionClip });
     const gripVisual = this.cargo.visual ?? this.cargo.group;
     gripVisual.updateWorldMatrix(true, true);
     gripVisual.localToWorld(this.carryGripTargets.left.set(-.20, -.015, -.20));
     gripVisual.localToWorld(this.carryGripTargets.right.set(.20, -.015, -.20));
-    this.animator.update({ ...(this.motion ?? {}), dt: visualDt, epic: this.kineticMode, sliding: Boolean(this.kinetic?.sliding), velocity: this.playerVelocity, grounded: this.playerGrounded,
+    this.animator.update({ ...(this.motion ?? {}), dt: visualDt, reducedMotion, epic: this.kineticMode, sliding: Boolean(this.kinetic?.sliding), velocity: this.playerVelocity, grounded: this.playerGrounded,
       carrying: Boolean(this.heldCube), carryGripTargets: this.heldCube ? this.carryGripTargets : null,
       carrySurfaceContact: this.carrySurfaceContact,
       lookTarget: this.playerPosition.distanceTo(this.cargo.position) < 3.2 ? this.cargo.group.position : null,

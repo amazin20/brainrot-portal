@@ -5,6 +5,9 @@ import {spawn} from 'node:child_process';
 import puppeteer, {TimeoutError} from 'puppeteer-core';
 import {captureBrowserFrame} from './qa-browser-capture.mjs';
 import {launchBrowserWithStartupRetry} from './lib/browser-startup.mjs';
+import {readStampedCampaignInfo,assertCampaignBrowserState} from './lib/campaign-browser-contract.mjs';
+import {ACTIVE_FOUNDATION_RUNTIME_FLAGS} from '../src/game/ReleaseIdentity.js';
+import {foundationCampaignPrefix,CAMPAIGN_PREFERENCE_KEY} from '../src/game/LabCampaignStorage.js';
 
 const out = path.resolve(process.env.OUT_DIR || 'qa/creative-browser');
 fs.mkdirSync(out, {recursive: true});
@@ -12,6 +15,7 @@ const levels = (process.env.LEVELS || Array.from({length:51}, (_,i)=>i+1).join('
   .split(',').map(Number);
 assert.ok(levels.every(n=>Number.isInteger(n)&&n>=1&&n<=51));
 const mode = process.env.CASE || 'overview';
+const strictCapture=process.env.STRICT_CAPTURE==='1';
 assert.ok(['overview','route','rush'].includes(mode));
 let server;
 if(process.env.START_SERVER==='1') {
@@ -47,7 +51,7 @@ async function retireBrowser(){
   try{await bounded(old.close(),3000,'Owned browser shutdown');}
   catch{const child=old.process();if(child?.exitCode===null){try{process.kill(-child.pid,'SIGKILL');}catch{child.kill('SIGKILL');}}}
 }
-const report = {mode, rows:[], errors:[], limitations:[
+const report = {mode,strictCapture,sourceCommit:process.env.BUILD_COMMIT??null, rows:[], errors:[], limitations:[
   'Scripted production inputs and software WebGL are reproducible checks, not a human playtest or hardware FPS measurement.',
   'Overview camera placement is inspection only; it never counts as a solved route.',
   'A bounded rush attack cannot prove that every possible shortcut is absent.',
@@ -57,6 +61,7 @@ const save = ()=>fs.writeFileSync(path.join(out,'report.json'),JSON.stringify(re
 const reuse = process.env.REUSE_PAGE!=='0';
 let sharedPage, activeRouteRow, activeRouteToken;
 try {
+  report.package=await readStampedCampaignInfo(process.env.PAGE_URL||'http://127.0.0.1:4173/');save();
   for (const level of levels) {
     if(!browser)browser=await launchBrowser();
     const page = sharedPage || await browser.newPage(), firstVisit=!sharedPage;
@@ -71,9 +76,8 @@ try {
     });
     page.setDefaultTimeout(180000);
     await page.setViewport({width:960,height:540,deviceScaleFactor:1});
-    await page.evaluateOnNewDocument(()=>{
-      localStorage.setItem('brainrot-foundation-v1:brainrot-portal.preferences.v24',JSON.stringify({quality:'low',muted:true}));
-    });
+    const preferenceKey=foundationCampaignPrefix(new URL(process.env.PAGE_URL||'http://127.0.0.1:4173/').pathname)+CAMPAIGN_PREFERENCE_KEY;
+    await page.evaluateOnNewDocument(key=>localStorage.setItem(key,JSON.stringify({quality:'low',muted:true})),preferenceKey);
     const row = {level,pass:false,errors:[]};
     report.active={level,phase:'opening'};save();
     const onError=e=>row.errors.push(String(e));page.on('pageerror',onError);
@@ -103,13 +107,18 @@ try {
         },level);
       }
       if(mode!=='rush')await page.evaluate(mode=>{const g=window.__NESI_DEMO_GAME__;g.renderer.setAnimationLoop(null);if(mode!=='route'){g.lastUiUpdate=-Infinity;g.animate(g.lastFrame);}},mode);
-      row.start = await page.evaluate(()=>{
+      row.start = await page.evaluate(flagNames=>{
         const g=window.__NESI_DEMO_GAME__,d=g.diagnostics();
         return {id:g.firstLevel.id,title:g.firstLevel.title,position:g.playerPosition.toArray(),cargo:g.cargo.position.toArray(),
+          levelIndex:g.levelIndex,edition:g.chamberEdition,flags:Object.fromEntries(flagNames.map(key=>[key,g[key]])),
+          hudNumber:Number(document.querySelector('#level-number').textContent),
+          optionNumber:Number(document.querySelector(`#level-select option[value="${g.levelIndex}"]`).textContent.match(/^\d+/)?.[0]),
+          physicalRoom23:Boolean(g.firstLevel.room23PhysicalPrototype),pilot43:Boolean(g.firstLevel.pilot43),progressionLevel:g.firstLevel.puzzleProgression??null,
           floors:g.floors.length,colliders:g.colliders.length,panels:g.portalPanels.length,
           meshes:d.modelsLoaded,missingModels:d.missingModels,cargoUUID:g.cargo.group.uuid,cargoBodyId:g.physics.cargoBody.id,
           calls:g.renderer.info.render.calls,triangles:g.renderer.info.render.triangles};
-      });
+      },Object.keys(ACTIVE_FOUNDATION_RUNTIME_FLAGS));
+      row.visibleRoom=assertCampaignBrowserState(row.start,level);
       report.active={level,phase:'ready',start:row.start};save();
       console.log(`START WebGL ${mode} room ${level}: ready, cargo ${row.start.cargoUUID}/${row.start.cargoBodyId}`);
       row.captures={};
@@ -178,7 +187,7 @@ try {
         row.captures.rush=await captureBrowserFrame(page,path.join(out,`${level}-rush.jpg`));
       }
       row.capturePass=Object.keys(row.captures).length>0&&Object.values(row.captures).every(c=>c.ok);
-      if(mode!=='route')assert.ok(row.capturePass,'A requested capture did not provide nonblank actual pixels');
+      if(mode!=='route'||strictCapture)assert.ok(row.capturePass,'A requested capture did not provide nonblank actual pixels');
       assert.deepEqual(row.errors,[]);row.pass=true;
     } catch(error) {
       row.error=String(error);report.errors.push({level,error:String(error)});

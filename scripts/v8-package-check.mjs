@@ -8,6 +8,8 @@ import {CAMPAIGN,FOUNDATION_LATE_SPECS,campaignSpec} from '../src/game/LabCampai
 import {FOUNDATION_INDICES} from '../src/game/LabFoundationEdition.js';
 import {OPEN_ROOM_INDICES} from '../src/game/LabOpenEdition.js';
 import {TOWER_SPEC} from '../src/game/LabSingularityLevel.js';
+import {ACTIVE_FOUNDATION_RUNTIME_FLAGS} from '../src/game/ReleaseIdentity.js';
+import {CASTLE_LEVEL_INDEX} from '../src/game/LabCampaignSequence.js';
 
 export function campaignPackageExpectations(){
  // These are preserved archive contracts, not the changing default campaign.
@@ -16,7 +18,8 @@ export function campaignPackageExpectations(){
  assert.equal(CAMPAIGN.length,33,'Retain all thirty-three classic archive rooms');
  assert.deepEqual([...OPEN_ROOM_INDICES],[23,27,29,30,31,32],'Retain the six explicitly numbered open-edition rooms');
  const classic=CAMPAIGN.map((_,index)=>campaignSpec({chamberEdition:'classic'},index));
- const foundation=FOUNDATION_INDICES.map(index=>campaignSpec({chamberEdition:'foundation'},index));
+ const foundation=FOUNDATION_INDICES.map(index=>campaignSpec({chamberEdition:'foundation',...ACTIVE_FOUNDATION_RUNTIME_FLAGS},index));
+ const stableFoundation=new Map(FOUNDATION_INDICES.map((index,position)=>[index,foundation[position]]));
  const open=OPEN_ROOM_INDICES.map(index=>campaignSpec({chamberEdition:'open'},index));
  for(const [edition,rooms] of Object.entries({classic,foundation,open})){
   assert.ok(rooms.length&&rooms.every(Boolean),`Every ${edition} registry entry needs an active definition`);
@@ -30,14 +33,16 @@ export function campaignPackageExpectations(){
  assert.equal(foundation[19].id,'foundation-portal-tension');
  const firstLate=foundation.indexOf(FOUNDATION_LATE_SPECS[0]);
  assert.ok(firstLate>=0,'The late registry must belong to the default campaign');
- assert.deepEqual(foundation.slice(firstLate),FOUNDATION_LATE_SPECS,'Every declared late room must be present, in order');
+ const late=foundation.slice(firstLate);
+ assert.equal(late.length,FOUNDATION_LATE_SPECS.length,'Retain all twenty-one late campaign positions');
  assert.equal(new Set(FOUNDATION_LATE_SPECS.map(room=>room.id)).size,FOUNDATION_LATE_SPECS.length);
  assert.ok(FOUNDATION_LATE_SPECS.every(room=>!classic.some(archive=>archive.id===room.id)),'Do not silently substitute archive puzzles into the late campaign');
  assert.equal(foundation.filter(room=>room===TOWER_SPEC).length,1,'Keep the current Singularity Tower exactly once');
- assert.equal(foundation[40],TOWER_SPEC,'Keep the Tower at stable room 41; later rooms remain after it');
+ assert.equal(stableFoundation.get(CASTLE_LEVEL_INDEX),TOWER_SPEC,'The existing castle gameplay/save identity must remain stable');
+ assert.equal(foundation.at(-1),TOWER_SPEC,'The castle must follow every ordinary campaign room');
  const assetIds=[...new Set([...classic,...foundation,...open].flatMap(room=>room.assets))].sort((a,b)=>a-b);
  assert.deepEqual(assetIds,[...CAMPAIGN_ASSET_IDS],'Declared editions and the active loader must agree on every model');
- return {classic,foundation,open,late:FOUNDATION_LATE_SPECS,assetIds};
+ return {classic,foundation,open,late,assetIds};
 }
 
 export function verifyCampaignPackage(directory='dist'){

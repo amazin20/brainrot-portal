@@ -71,12 +71,13 @@ export class LabPlayerAnimator extends BaseAnimator{
   reset(){
     super.reset();this.flightBrace=0;this.windBrace=0;this.epicBrace=0;this.epicSlide=0;this.epicSprint=0;this.operateTime=2;this.landingChest=0;
     this.groundFollow={forward:0,right:0,forwardVelocity:0,rightVelocity:0};
+    this.turnLook=this.chestTurn=0;
     if(this.bones.Chest){this.bones.Chest.quaternion.identity();this.basePose?.Chest?.identity();this.bones.Chest.position.copy(this.rig.rest.Chest);this.rig.mesh.updateWorldMatrix(true,true);this.rig.skeleton.update();this.snapCarrierToBody();}
   }
   triggerOperate(){this.operateTime=0;}
   interruptInteraction(){super.interruptInteraction();this.operateTime=2;}
   update(input={}){super.update(input);this.basePose.Chest.copy(this.bones.Chest.quaternion);}
-  get diagnostics(){return {...super.diagnostics,boneCount:LAB_PLAYER_JOINTS.length,profile:'grounded-follow-through-v27',chestIndependent:true,windBrace:this.windBrace,landingChest:this.landingChest,groundFollow:{...this.groundFollow},epicMotion:{sprint:this.epicSprint,slide:this.epicSlide,flight:this.epicBrace}};}
+  get diagnostics(){return {...super.diagnostics,boneCount:LAB_PLAYER_JOINTS.length,profile:'responsive-turn-follow-through-v28',chestIndependent:true,windBrace:this.windBrace,landingChest:this.landingChest,groundFollow:{...this.groundFollow},turnAttention:{head:this.turnLook,chest:this.chestTurn},epicMotion:{sprint:this.epicSprint,slide:this.epicSlide,flight:this.epicBrace}};}
   stepGroundedFollowThrough(dt,grounded){
     // The pelvis responds first; the upper pack/ribs lag behind its acceleration
     // and settle once after a stop or reversal. These accelerations already come
@@ -84,7 +85,7 @@ export class LabPlayerAnimator extends BaseAnimator{
     // Solve a damped spring in closed form for each bounded animation substep.
     // No perpetual sway, movement delay, or extra foot trajectory is introduced.
     const support=grounded?(1-this.airBlend)*(1-this.landingSupport):0;
-    const precision=(1-.9*this.aimBlend)*(1-.85*this.shotRaise)*(1-.5*this.carryBlend)*(1-this.interactionBlend);
+    const precision=(1-.9*this.aimBlend)*(1-.85*this.shotRaise)*(1-.5*this.carryBlend)*(1-this.interactionBlend)*this.decorativeBlend;
     const decay=Math.exp(-9*dt),omega=Math.sqrt(196-81),sine=Math.sin(omega*dt),cosine=Math.cos(omega*dt);
     for(const [axis,acceleration,amount] of [['forward',this.inertiaForward,-.18],['right',this.inertiaRight,.15]]){
       const target=acceleration*amount*support*precision,key=`${axis}Velocity`;
@@ -106,6 +107,12 @@ export class LabPlayerAnimator extends BaseAnimator{
     const operate=Math.sin(Math.PI*Math.min(1,this.operateTime/1.1))**2*(1-this.carryBlend)*(1-this.aimBlend);
     const cadence=this.gait*Math.PI*2,body=this.jointTargets.Body,relaxed=(1-.8*this.aimBlend)*(1-.55*this.carryBlend);
     const onGround=input.grounded!==false&&!input.phase;
+    // Eyes/head lead a real change of facing, then the shoulders catch up.
+    // The measured turn is animation input only: no root/camera/capsule turn
+    // is authored here, and precise aiming/attention keep their own bearing.
+    const turnTarget=onGround?this.turn*.06*(1-this.aimBlend)*(1-this.attentionBlend)*this.decorativeBlend:0;
+    this.turnLook=THREE.MathUtils.damp(this.turnLook,turnTarget,15,dt);
+    this.chestTurn=THREE.MathUtils.damp(this.chestTurn,this.turnLook*.45,6,dt);
     this.epicSlide=THREE.MathUtils.damp(this.epicSlide||0,input.epic&&input.sliding&&onGround?1:0,12,dt);
     this.epicSprint=THREE.MathUtils.damp(this.epicSprint||0,input.epic&&onGround?smooth(5.5,12,input.speed||0)*(1-this.epicSlide):0,10,dt);
     if(this.epicSlide>1e-7||this.epicSprint>1e-7){
@@ -137,6 +144,7 @@ export class LabPlayerAnimator extends BaseAnimator{
       -Math.sin(cadence-.22)*.155*moving*relaxed+this.turn*.016);
     this.chestTarget.x+=followForward;
     this.chestTarget.y+=followRight;
+    this.chestTarget.z+=this.chestTurn;
     this.chestTarget.x+=.04*this.epicSprint*(1-.8*this.aimBlend)-.07*this.epicSlide;
     // The pelvis receives impact first; ribs and the rigid backpack follow a
     // beat later, then the head compensates below. The lag is elapsed-time
@@ -153,7 +161,7 @@ export class LabPlayerAnimator extends BaseAnimator{
     // A compact flight silhouette at real launch speed. Only existing joints
     // move; the authored mesh, backpack and held-device aim remain unchanged.
     this.chestTarget.x+=.14*this.epicBrace*(1-.8*this.aimBlend)*(1-.6*this.carryBlend);
-    this.chestTarget.z+=.035*Math.sin(this.elapsed*3.1)*this.windBrace;
+    this.chestTarget.z+=.035*Math.sin(this.elapsed*3.1)*this.windBrace*this.decorativeBlend;
     this.chestTarget.y-=this.turn*.018*this.flightBrace;
     this.chestQuaternion.setFromEuler(this.chestTarget);
     this.bones.Chest.quaternion.slerp(this.chestQuaternion,1-Math.exp(-12*dt));
@@ -162,6 +170,7 @@ export class LabPlayerAnimator extends BaseAnimator{
     const gesture=(cycle>3&&cycle<5.6?Math.sin((cycle-3)/2.6*Math.PI)**2:0)*this.idleBlend*(1-this.aimBlend)*(1-this.carryBlend);
     const head=this.jointTargets.Head;
     this.headTarget.set(head.x-this.chestTarget.x*.65+.075*gesture*Math.sin((cycle-3)*3)+.06*operate*Math.sin(this.operateTime*6),head.y-this.chestTarget.y*.65,head.z-this.chestTarget.z*.65);
+    this.headTarget.z+=this.turnLook;
     this.headQuaternion.setFromEuler(this.headTarget);this.bones.Head.quaternion.copy(this.headBefore).slerp(this.headQuaternion,1-Math.exp(-8*dt));
     // Slightly wider free-arm travel without disturbing the held-device hand.
     const free=(1-this.carryBlend)*(1-this.interactionBlend)*(1-this.aimBlend);

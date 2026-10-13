@@ -241,6 +241,7 @@ export class LabPlayerAnimator {
     this.visual = visual;
     this.carrier = carrier;
     this.onStateChange = onStateChange;
+    this.systemReducedMotion = globalThis.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches ?? false;
     this.rig = createLabPlayerRig(visual);
     this.groundContact = new LabFootContact(this.rig);
     this.bones = this.rig.bones;
@@ -296,6 +297,7 @@ export class LabPlayerAnimator {
       attention: { blend: this.attentionBlend, yaw: this.attentionYaw, pitch: this.attentionPitch },
       expression: this.expression ? { ...this.expression } : null,
       idle: { blend: this.idleBlend, footTap: this.idleFootTap },
+      decorativeMotion: this.decorativeBlend,
       anticipation: this.anticipation,
       handoff: { progress: this.holsterProgress, stowing: this.carryingRequested, blend: this.handoffBlend },
       interaction: this.interaction ? { ...this.interaction, blend: this.interactionBlend } : null,
@@ -329,6 +331,7 @@ export class LabPlayerAnimator {
     this.expression = null;
     this.anticipationAge = 1;
     this.anticipation = this.idleBlend = this.idleFootTap = 0;
+    this.decorativeBlend = this.systemReducedMotion ? 0 : 1;
     this.holsterProgress = this.handoffBlend = 0;
     this.carryingRequested = false;
     this.airAge = 0; this.ascentBlend = 0; this.takeoffLead = 1; this.airbornePhase = 'grounded';
@@ -438,10 +441,11 @@ export class LabPlayerAnimator {
 
   stepPose({ dt = 1 / 60, speed = 0, velocity = ORIGIN, grounded = true, turnRate = 0,
     carrying = false, phase = false, elapsed, weapon = true, aiming = false, aimPitch = 0,
-    moveForward = 1, moveRight = 0, shooting = false } = {}) {
+    moveForward = 1, moveRight = 0, shooting = false, reducedMotion = this.systemReducedMotion } = {}) {
     dt = visualSeconds(dt);
     speed = clamp(Number.isFinite(speed) ? speed : 0, 0, 12);
     this.elapsed = Number.isFinite(elapsed) ? elapsed : this.elapsed + dt;
+    this.decorativeBlend = damp(this.decorativeBlend, reducedMotion ? 0 : 1, 12, dt);
     const vy = Number.isFinite(velocity?.y) ? velocity.y : 0;
     if (!grounded || phase) this.interruptInteraction();
     if (grounded && !this.previousGrounded) {
@@ -554,7 +558,7 @@ export class LabPlayerAnimator {
     const ground = 1 - this.airBlend;
     const moving = this.moveBlend * ground * (1 - .78 * this.landingSupport);
     const turnStep = turning * ground;
-    this.idleBlend = damp(this.idleBlend, ground * (1 - this.moveBlend) * (1 - turning)
+    this.idleBlend = damp(this.idleBlend, ground * (1 - this.moveBlend) * (1 - turning) * this.decorativeBlend
       * (1 - this.aimBlend) * (1 - this.interactionBlend), 5, dt);
     const idleShift = Math.sin(this.elapsed * 1.45) * this.idleBlend;
     // A sparse, smooth self-contained gesture rather than a permanently swaying
@@ -565,7 +569,8 @@ export class LabPlayerAnimator {
     const counterSwing = Math.sin(this.gait * Math.PI * 2 + .25);
 
     this.idleFootTap = 0;
-    const joy = celebrate * ground * (1 - this.aimBlend);
+    const joy = celebrate * ground * (1 - this.aimBlend) * this.decorativeBlend;
+    curious *= this.decorativeBlend;
     const hop = Math.sin(clamp(expressionTime / 0.6, 0, 1) * Math.PI) ** 2 * joy;
     const cadence = this.gait * Math.PI * 2;
     // The pelvis rises over the support foot and settles at double support.
@@ -629,7 +634,7 @@ export class LabPlayerAnimator {
       const swing = clamp(Math.sin(swingPhase) * (0.40 + 0.12 * run)
         + Math.sin(swingPhase * 2 -.22) * (0.025 + run * 0.025), -0.55, 0.55) * moving
         * (this.directionForward + this.directionRight * 0.35);
-      const idle = Math.sin(this.elapsed * 1.7 + offset) * 0.016 + Math.sin(this.elapsed * 0.67 + sign) * 0.006;
+      const idle = (Math.sin(this.elapsed * 1.7 + offset) * 0.016 + Math.sin(this.elapsed * 0.67 + sign) * 0.006) * this.decorativeBlend;
       const arm = this.jointTargets[`Arm${side}`];
       const forearm = this.jointTargets[`Forearm${side}`];
       const hand = this.jointTargets[`Hand${side}`];

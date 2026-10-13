@@ -21,16 +21,19 @@ function packageFixture(){
  return {directory,runtime,manifest,manifestPath,dispose:()=>fs.rmSync(directory,{recursive:true,force:true})};
 }
 
-test('package expectations include the whole explicit foundation registry after the Tower and retain both archive editions',()=>{
+test('package expectations retain both archives and every current ordinary puzzle before the final castle',()=>{
  const expected=campaignPackageExpectations();
  assert.equal(expected.foundation.length,FOUNDATION_INDICES.length);
  assert.equal(expected.classic.length,CAMPAIGN.length);
  assert.equal(expected.classic.length,33,'The preserved classic archive is not truncated');
  assert.equal(expected.open.length,OPEN_ROOM_INDICES.length);
  assert.deepEqual([...OPEN_ROOM_INDICES],[23,27,29,30,31,32]);
- assert.deepEqual(expected.late,FOUNDATION_LATE_SPECS);
- assert.equal(expected.foundation[40].id,'tower-singularity');
- assert.equal(expected.foundation.at(-1).id,'echo-horizon');
+ assert.deepEqual(expected.late,expected.foundation.slice(30));
+ assert.equal(expected.late.length,FOUNDATION_LATE_SPECS.length);
+ assert.equal(expected.foundation[40].id,'expansion-differential-valves');
+ assert.equal(expected.foundation[41].id,'puzzle-pilot43-return-and-release');
+ assert.equal(expected.foundation[49].id,'puzzle-progression51-mechanical-echo');
+ assert.equal(expected.foundation.at(-1).id,'tower-singularity');
  assert.equal(expected.foundation[32].id,'siphon-observatory');
  assert.ok(expected.foundation.length>41&&expected.late.length>11,'The package gate must not truncate the accepted expansion');
 });

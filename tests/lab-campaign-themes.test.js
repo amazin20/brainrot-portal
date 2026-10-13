@@ -2,12 +2,15 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import * as THREE from 'three';
 import {CAMPAIGN_THEMES,campaignTheme} from '../src/game/LabCampaignThemes.js';
+import {FOUNDATION_SEQUENCE} from '../src/game/LabCampaignSequence.js';
 import {finishCampaignTheme} from '../src/game/LabCampaignThemeFinish.js';
 
-test('Five exact ten-room themes and a separate epilogue preserve original numbering',()=>{
+test('Five exact ten-room themes precede the separate castle finale without changing save indices',()=>{
  assert.equal(CAMPAIGN_THEMES.length,6);
  assert.deepEqual(CAMPAIGN_THEMES.map(t=>t.to-t.from+1),[10,10,10,10,10,1]);
- for(let i=0;i<51;i++)assert.equal(campaignTheme(i).id,CAMPAIGN_THEMES[Math.min(5,Math.floor(i/10))].id);
+ FOUNDATION_SEQUENCE.forEach((index,position)=>assert.equal(campaignTheme(index).id,CAMPAIGN_THEMES[Math.min(5,Math.floor(position/10))].id));
+ assert.equal(campaignTheme(40).id,'castle');
+ for(let index=41;index<=50;index++)assert.equal(campaignTheme(index).id,'fracture');
  for(const invalid of [-1,51,1.1,NaN,'1'])assert.throws(()=>campaignTheme(invalid),RangeError);
  assert.equal(new Set(CAMPAIGN_THEMES.map(t=>t.wall)).size,6);
  assert.equal(new Set(CAMPAIGN_THEMES.map(t=>t.floor)).size,6);

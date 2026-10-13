@@ -4,9 +4,11 @@ import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
 import {CAMPAIGN,campaignSpec} from '../../src/game/LabCampaignLevels.js';
 import {FOUNDATION_INDICES} from '../../src/game/LabFoundationEdition.js';
+import {CASTLE_LEVEL_INDEX,FOUNDATION_SEQUENCE_REVISION,foundationDisplayNumber} from '../../src/game/LabCampaignSequence.js';
+import {PROGRESSION_INDICES} from '../../src/game/LabPuzzleProgression.js';
 import {CAMPAIGN_THEMES,campaignTheme} from '../../src/game/LabCampaignThemes.js';
 import {SINGULARITY_ROOMS,SINGULARITY_SPEC} from '../../src/game/LabSingularityLayout.js';
-import {RELEASE_VERSION,DEFAULT_EDITION,EDITION_VERSION,RELEASE_ORIGINS} from '../../src/game/ReleaseIdentity.js';
+import {RELEASE_VERSION,DEFAULT_EDITION,EDITION_VERSION,RELEASE_ORIGINS,ACTIVE_FOUNDATION_RUNTIME_FLAGS} from '../../src/game/ReleaseIdentity.js';
 import {PHYSICAL_REVIEW_ENTRIES} from '../../src/game/LabPhysicalReviewEntry.js';
 
 export const sha256=bytes=>createHash('sha256').update(bytes).digest('hex');
@@ -46,34 +48,41 @@ export function createReleaseManifest({directory,commit,platformArchive,root=pro
  assert.match(commit||'',/^[a-f0-9]{40}$/,'Exact source commit required');
  assert.ok(fs.existsSync(path.join(directory,'index.html')),'Stamp an existing production package');
  const inputs=buildSourceInputs(root),files=packageFiles(directory);
- const revisions={16:'cable-supported-architecture-v1',19:'portal-tension-physical-v1',32:'siphon-observatory-v1',40:'lower-pendulum-physical-camera-v3',50:'echo-horizon-v1'};
+ const runtimeConfig={chamberEdition:DEFAULT_EDITION,...ACTIVE_FOUNDATION_RUNTIME_FLAGS};
+ const revisions={16:'cable-supported-architecture-v1',19:'portal-tension-physical-v1',22:'counterweight-dynamic-v1',32:'siphon-observatory-v1',40:'lower-pendulum-physical-camera-v3',
+  ...Object.fromEntries(PROGRESSION_INDICES.map(index=>[index,`spatial-progression${index+1}-v1`]))};
  const rooms=FOUNDATION_INDICES.map(index=>{
-  const spec=campaignSpec({chamberEdition:DEFAULT_EDITION},index);
+  const spec=campaignSpec(runtimeConfig,index);
   assert.ok(spec?.id&&spec.title,`Missing definition for room ${index+1}`);
-  return {level:index+1,stableId:`foundation-${String(index+1).padStart(3,'0')}`,id:spec.id,title:spec.title,
-   definitionRevision:revisions[index]||'retained-v53',specSha256:sha256(JSON.stringify(spec)),theme:campaignTheme(index).id};
+  return {level:foundationDisplayNumber(index),stableLevel:index+1,stableId:`foundation-${String(index+1).padStart(3,'0')}`,id:spec.id,title:spec.title,
+   definitionRevision:revisions[index]||'retained-v54',specSha256:sha256(JSON.stringify(spec)),theme:campaignTheme(index).id};
  });
  assert.equal(rooms.length,51);assert.equal(new Set(rooms.map(room=>room.stableId)).size,51);assert.equal(new Set(rooms.map(room=>room.id)).size,51);
- return {schemaVersion:1,commit,gameCommit:commit,interfaceCommit:commit,publisherCommit:null,
+ const byStableLevel=new Map(rooms.map(room=>[room.stableLevel,room]));
+ const replaced=[16,19,22,32,40,...PROGRESSION_INDICES].map(index=>{
+  const room=byStableLevel.get(index+1),previousId=index===16?'shifting-berth':index===32?'post-inverse-spring':campaignSpec({chamberEdition:DEFAULT_EDITION},index).id;
+  return {level:room.level,stableLevel:room.stableLevel,stableId:room.stableId,previousId,id:room.id,title:room.title,revision:room.definitionRevision};
+ });
+ return {schemaVersion:2,commit,gameCommit:commit,interfaceCommit:commit,publisherCommit:null,
   origins:RELEASE_ORIGINS,version:RELEASE_VERSION,gameplayVersion:RELEASE_VERSION,artVersion:RELEASE_VERSION,
-  edition:DEFAULT_EDITION,editionVersion:EDITION_VERSION,sourceInputsSha256:sha256(JSON.stringify(inputs)),sourceInputFiles:inputs.length,
+  edition:DEFAULT_EDITION,editionVersion:EDITION_VERSION,runtimeConfig,sequenceRevision:FOUNDATION_SEQUENCE_REVISION,
+  sourceInputsSha256:sha256(JSON.stringify(inputs)),sourceInputFiles:inputs.length,sourceInputs:inputs,
   levels:rooms.length,rooms,files,packageFilesSha256:sha256(JSON.stringify(files)),
   platformArchive:platformArchive?{filename:path.basename(platformArchive),bytes:fs.statSync(platformArchive).size,sha256:sha256(fs.readFileSync(platformArchive))}:null,
   verified:false,status:'technical-candidate',run:process.env.GITHUB_RUN_ID||null,
   verificationScope:'The game and Atlas are built from this single source commit. Exact-package acceptance is recorded separately; this stamp does not assert a completed human, device or live-platform review.',
   acceptance:{humanPlaytest:false,physicalDeviceBenchmark:false,liveYandex:false},
   features:{defaultEdition:DEFAULT_EDITION,archiveRooms:CAMPAIGN.length,
-   foundation:{version:EDITION_VERSION,rooms:rooms.map(room=>room.level),newRooms:rooms.slice(41).map(({level,id,title})=>({level,id,title})),separateSave:true,sectorMap:true,
+   foundation:{version:EDITION_VERSION,rooms:rooms.map(room=>room.level),stableRooms:rooms.map(room=>room.stableLevel),
+    newRooms:rooms.filter(room=>room.stableLevel>=42).map(({level,stableLevel,stableId,id,title})=>({level,stableLevel,stableId,id,title})),separateSave:true,sectorMap:true,castleEndsCampaign:true,
     chapters:CAMPAIGN_THEMES.map(theme=>({id:theme.id,title:theme.name,first:theme.from+1,last:theme.to+1}))},
-   tower:{level:41,title:SINGULARITY_SPEC.name,stages:SINGULARITY_ROOMS.length,checkpoints:false},
+   tower:{level:foundationDisplayNumber(CASTLE_LEVEL_INDEX),stableLevel:CASTLE_LEVEL_INDEX+1,title:SINGULARITY_SPEC.name,stages:SINGULARITY_ROOMS.length,checkpoints:false},
    standaloneEntries:PHYSICAL_REVIEW_ENTRIES.map(entry=>({path:entry.id+'/',level:entry.levelIndex+1,levels:entry.indices.map(i=>i+1),savePrefix:entry.storagePrefix,ordinaryControls:true})),
-   presentation:{unifiedVisualTime:true,modelIdentitiesPreserved:true,menuArtwork:'art/portal-laboratory-menu.webp',chapterArchitectureThemes:true,atlasMenu:true,menuSettings:true},
+   presentation:{unifiedVisualTime:true,modelIdentitiesPreserved:true,menuArtwork:'art/portal-laboratory-menu.webp',chapterArchitectureThemes:true,atlasMenu:true,menuSettings:true,chapterArchitecturalRelief:true,responsiveActorAnimation:true},
    collision:{portalEmergenceSweep:true,carriedCargoEmergenceSweep:true},
-   replacedRooms:[{level:17,previousId:'shifting-berth',id:rooms[16].id,title:rooms[16].title,revision:rooms[16].definitionRevision},
-    {level:33,previousId:'post-inverse-spring',id:rooms[32].id,title:rooms[32].title,revision:rooms[32].definitionRevision},
-    {level:51,previousId:'expansion-address-relay',id:rooms[50].id,title:rooms[50].title,revision:rooms[50].definitionRevision}]},
+   replacedRooms:replaced},
   videoCatalogue:{policy:'Existing recordings retain their original source and version. They are not re-labelled as current visual evidence.',
-   rooms:rooms.map(room=>({level:room.level,definitionRevision:room.definitionRevision,status:[17,20,41].includes(room.level)?'needs-current-recording':'retained-recording-needs-current-visual-review',
-    gameplayCompatibility:[17,20,41].includes(room.level)?null:RELEASE_ORIGINS.game}))},
+   rooms:rooms.map(room=>({level:room.level,stableLevel:room.stableLevel,stableId:room.stableId,definitionRevision:room.definitionRevision,status:'needs-current-recording',
+    gameplayCompatibility:null,visualCompatibility:null}))},
  };
 }

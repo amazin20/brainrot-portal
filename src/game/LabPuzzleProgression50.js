@@ -29,7 +29,10 @@ function foldingRotor(k){
  const g=k.game,root=new THREE.Group();root.name='50 / common physical folding rotor';root.position.set(0,16,0);k.world.root.add(root);
  const beam=k.block([0,0,0],[20,.5,.8],'metal',false,root),stopBeam=k.block([0,0,8],[20,.3,.6],'secondary',false,root),parts=[proxy(k,beam,'50 / common rigid axle beam'),proxy(k,stopBeam,'50 / actual stop contact arm')];
  for(const x of [-8,8])k.block([x,3,0],[.25,6,.25],'metal',false,root);
- const paneA=k.panel('fold-a',[-7,6,-9],[0,1,0],7.7,5.4,root,true),paneB=k.panel('fold-b',[7,6,-12],[0,1,0],7.7,5.4,root,true);
+ // Separate the two complete leaf/frame sweeps along their common axle. The
+ // first frame leaves a real grip corridor at the freight inspection lip;
+ // the opposite frame has its own permanent casing farther north.
+ const paneA=k.panel('fold-a',[-7,6,-6.5],[0,1,0],7.7,5.4,root,true),paneB=k.panel('fold-b',[7,6,-14.5],[0,1,0],7.7,5.4,root,true);
  // Segment the long frame members before rotating. Their broadphase bounds
  // must not fill the visible opening with the diagonal wedge of one beam.
  for(const pane of [paneA,paneB]){
@@ -100,8 +103,21 @@ export function buildPuzzleProgression50(game,index=49){
  const departureEntry=k.panel('departure-passenger',[-34,10.7,14],[0,0,1],7.7,5.4);
  const galleryFeed=k.loadPad('west-gallery-feed',[-12,6.1,-9],7),finalFeed=k.loadPad('east-gallery-feed',[11,6.1,-10],7);
  // The high, upward facing B throat is initially seen from its opaque back.
- // First-cup weight swings its face west; its existing address follows the
- // common frame on return. The lower divider closes the gallery jump gap.
+ // Its first weighted pose faces west. A permanent east-open casing encloses
+ // that actual sweep, so the first gallery cannot address the upper passenger
+ // pane and skip the opposite freight cup. The pane enters/leaves the open
+ // east side without crossing any casing solid. The independent opposite
+ // freight head stays south-west of this casing and remains visible below it.
+ // There is no solved flag, timed curtain or angle-conditioned shot rejection.
+ const upperCasing=[];
+ const casing=(name,p,size)=>{const mesh=k.block(p,size,'shell');mesh.name='50 / upper-pane fixed casing / '+name;upperCasing.push(mesh);return mesh;};
+ casing('opaque west back',[-7,24.15,-14.5],[.4,13.5,7.2]);
+ casing('closed lower face',[-5.25,17.4,-14.5],[3.5,.35,7.2]);
+ casing('north cheek',[-5.25,24.15,-18.1],[3.5,13.5,.4]);
+ casing('south cheek',[-5.25,24.15,-10.9],[3.5,13.5,.4]);
+ casing('roof',[-5.25,30.9,-14.5],[3.5,.35,7.2]);
+ for(const z of [-17.85,-11.15])k.block([-7.24,24.15,z],[.10,13.1,.16],'secondary',false);
+ k.label('ВОСТОЧНЫЙ ПРОЁМ ВЕРХНЕЙ СТВОРКИ',[-7.28,25,-14.5],[-1,0,0],9,.65);
 
  k.label('50 / СКЛАДНОЙ РАЗЛОМ',[-40.6,15,23],[1,0,0],12,1.0);
  k.label('ОБЩИЙ ШАРНИР',[0,29,5.9],[0,0,1],11,.9);k.label('ЗАПАДНАЯ ГАЛЕРЕЯ',[-14,6.135,-16],[0,1,0],7,.7);k.label('ВОСТОЧНАЯ ГАЛЕРЕЯ',[12,6.135,4],[0,1,0],7,.7);
@@ -112,7 +128,7 @@ export function buildPuzzleProgression50(game,index=49){
  k.block([-13.35,7.6,-1],[9.3,3,.4],'shell');
  k.block([-4.85,7.6,-1],[1.1,3,.4],'shell');
  const art=dressPuzzleProgression50(k,{departure,galleryA,galleryB,goalDeck,rotor});
- const level=k.finishResearch([-29,8,28.5],[-30,8.6,27.5],[11,22,-18],{puzzleProgression:50,puzzleProgression50:true,rotor,cargoFeed,galleryFeed,finalFeed,departureEntry,art,spawnView:{yaw:.15,pitch:-.05},cargoOnAnyPad:()=>Math.hypot(game.cargo.position.x+30,game.cargo.position.z-27.5)<1.2&&game.cargo.position.y<9||rotor.loaded('a')||rotor.loaded('b')||cargoFeed.loaded()||galleryFeed.loaded()||finalFeed.loaded()});
+ const level=k.finishResearch([-29,8,28.5],[-30,8.6,27.5],[11,22,-18],{puzzleProgression:50,puzzleProgression50:true,rotor,cargoFeed,galleryFeed,finalFeed,departureEntry,upperCasing,art,spawnView:{yaw:.15,pitch:-.05},cargoOnAnyPad:()=>Math.hypot(game.cargo.position.x+30,game.cargo.position.z-27.5)<1.2&&game.cargo.position.y<9||rotor.loaded('a')||rotor.loaded('b')||cargoFeed.loaded()||galleryFeed.loaded()||finalFeed.loaded()});
  rotor.paneB.mesh.userData.portalBackingIds=goalDeck.record.portalBackingColliders.map(c=>c.mesh.uuid);
  const dispose=level.dispose;level.dispose=()=>{rotor.dispose();dispose();};
  level.getObjective=()=>PROGRESSION50_SPEC.description;

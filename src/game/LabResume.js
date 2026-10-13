@@ -1,7 +1,30 @@
+import {CASTLE_LEVEL_INDEX,FOUNDATION_SEQUENCE_REVISION,isFoundationSequence} from './LabCampaignSequence.js';
 /** Explicit room links win; a normal visit resumes only within its edition. */
 export function resumeCampaignLevel(query, preferences, availableRooms, requestedLevel) {
   const params = new URLSearchParams(query);
   if (params.has('level') || params.get('mode') === 'velocity') return requestedLevel;
+ if(isFoundationSequence(availableRooms)){
+  const completed=preferences.completed??[],firstFortyDone=availableRooms.slice(0,40).every(index=>completed.includes(index));
+  // Translate former automatic finale continuations once. The revision is
+  // saved only on an actual start/win, so merely opening a menu writes nothing.
+  if(preferences.campaignSequenceRevision!==FOUNDATION_SEQUENCE_REVISION){
+   if(preferences.resumeLevel===29&&availableRooms.slice(0,30).every(index=>completed.includes(index))&&!completed.includes(30))return 30;
+   // Old expansion saves can point at their last room after the replacement
+   // revision has cleared those completions. Introduce the new spatial chapter
+   // at its first unplayed room instead of silently skipping to its finale.
+   if(Number.isInteger(preferences.resumeLevel)&&preferences.resumeLevel>=42&&preferences.resumeLevel<=50){
+    return availableRooms.filter(index=>index>=42&&index<=50).find(index=>!completed.includes(index))
+     ??availableRooms.find(index=>!completed.includes(index))??CASTLE_LEVEL_INDEX;
+   }
+   if(firstFortyDone&&(preferences.resumeLevel===39||preferences.resumeLevel===CASTLE_LEVEL_INDEX)){
+    return availableRooms.slice(40).find(index=>!completed.includes(index))??CASTLE_LEVEL_INDEX;
+   }
+   if(preferences.resumeLevel===50&&completed.includes(50)&&availableRooms.slice(0,50).every(index=>completed.includes(index)))return CASTLE_LEVEL_INDEX;
+  }
+  if(availableRooms.includes(preferences.resumeLevel))return preferences.resumeLevel;
+  if(completed.length)return availableRooms.find(index=>!completed.includes(index))??CASTLE_LEVEL_INDEX;
+  return requestedLevel;
+ }
   // The previous campaign stopped at room 30 and saved its own index after
   // victory. Move that exact completed finale into the newly added chapter.
   if (availableRooms.length >= 40 && availableRooms[29] === 29 && availableRooms[30] === 30 &&

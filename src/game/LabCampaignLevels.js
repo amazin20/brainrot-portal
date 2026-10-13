@@ -16,6 +16,7 @@ import {buildVelocityArena} from './LabVelocityArena.js';
 import {ROOM21_SPEC,buildRoom21} from './LabPortalRoom21.js';
 import {ROOM22_SPEC,buildRoom22} from './LabPortalRoom22.js';
 import {ROOM23_SPEC,buildRoom23} from './LabPortalRoom23.js';
+import {ROOM23_SPEC as ROOM23_PHYSICAL_SPEC} from './LabRoom23PhysicalPrototype.js';
 import {ROOM24_SPEC,buildRoom24} from './LabPortalRoom24.js';
 import {ROOM25_SPEC,buildRoom25} from './LabPortalRoom25.js';
 import {ROOM26_SPEC,buildRoom26} from './LabPortalRoom26.js';
@@ -86,6 +87,7 @@ function buildUnthemedCampaignLevel(game,index){
 
 export function campaignSpec(game,index){
  if(game.chamberEdition==='foundation'){
+  if(game.room23PhysicalPrototype===true&&index===22)return ROOM23_PHYSICAL_SPEC;
   if(game.puzzleProgression&&progressionSpec(index))return progressionSpec(index);
   if(game.puzzlePilot43&&index===42)return PILOT43_SPEC;
   return FOUNDATION_CREATIVE_SPECS[index]||FOUNDATION_SPECS[index]||index>=30&&FOUNDATION_LATE_SPECS[index-30]||CAMPAIGN[index];

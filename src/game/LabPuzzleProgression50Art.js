@@ -16,8 +16,8 @@ export function dressPuzzleProgression50(k,{departure,galleryA,galleryB,goalDeck
  const link=(from,to,name)=>{const a=V(...from),b=V(...to),delta=b.clone().sub(a);return k.geometry(new THREE.CylinderGeometry(.13,.13,delta.length(),12),'metal',a.clone().add(b).multiplyScalar(.5).toArray(),Q().setFromUnitVectors(V(0,1,0),delta.normalize()),{parent:rotor.root,batch:false,name});};
  link([0,0,0],[0,0,12],'50 / common counterbalance axle extension');
  link([0,0,12],[0,-10.5,12],'50 / permanent rigid counterweight connection');
- link([0,0,-1],[-7,6,-12.3],'50 / first pane outer bearing link');
- link([0,0,-1],[7,6,-15.3],'50 / second pane outer bearing link');
+ link([0,0,-1],[-7,6,-9.8],'50 / first pane outer bearing link');
+ link([0,0,-1],[7,6,-17.8],'50 / second pane outer bearing link');
  for(const cup of rotor.cups){for(const z of [-1.1,1.1])k.block([0,.25,z],[.17,1.4,.17],'metal',false,cup.group);k.block([0,.9,0],[.25,.2,2.3],'metal',false,cup.group);}
  // Low enamel strips show the contact that actually supplies the load. They
  // sit on the existing floor edges and introduce no collision or aim proxy.

@@ -9,6 +9,7 @@ export function sanitizePreferences(value={}) {
   return {quality:['low','balanced','high'].includes(safe.quality)?safe.quality:'balanced',
     volume:Number.isFinite(safe.volume)?Math.min(1,Math.max(0,safe.volume)):.65,
     muted:safe.muted===true,tutorial:safe.tutorial!==false,
+    ...(typeof safe.campaignSequenceRevision==='string'?{campaignSequenceRevision:safe.campaignSequenceRevision}:{}),
     resumeLevel:Number.isInteger(safe.resumeLevel)&&safe.resumeLevel>=0&&safe.resumeLevel<100?safe.resumeLevel:null,
     completed:Array.isArray(safe.completed)?[...new Set(safe.completed.filter(n=>Number.isInteger(n)&&n>=0&&n<100))]:[],
     hints:Object.fromEntries(Object.entries(safe.hints&&typeof safe.hints==='object'?safe.hints:{}).filter(([k,v])=>/^\d{1,2}$/.test(k)&&Number.isInteger(v)&&v>=0&&v<=3))};

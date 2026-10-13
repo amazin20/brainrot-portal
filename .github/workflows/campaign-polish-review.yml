@@ -1,0 +1,227 @@
+name: Review the unified themed campaign and final castle
+on:
+  push:
+    branches: [upgrade/campaign-polish-20261013]
+  workflow_dispatch:
+permissions: {contents: read}
+concurrency:
+  group: campaign-polish-review-${{ github.ref }}
+  cancel-in-progress: false
+env:
+  BUILD_COMMIT: ${{ github.sha }}
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: '${{ github.sha }}'}
+      - uses: actions/setup-node@v4
+        with: {node-version: 22, cache: npm}
+      - run: npm ci
+      - run: npm run build
+      - run: node scripts/stamp-build.mjs
+      - run: node scripts/v8-package-check.mjs
+      - uses: actions/upload-artifact@v4
+        with:
+          name: campaign-polish-dist
+          path: dist
+          retention-days: 10
+          if-no-files-found: error
+  cpu:
+    runs-on: ubuntu-latest
+    timeout-minutes: 100
+    strategy:
+      fail-fast: false
+      matrix: {part: [0, 1, 2, 3, 4, 5]}
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: '${{ github.sha }}'}
+      - uses: actions/setup-node@v4
+        with: {node-version: 22, cache: npm}
+      - run: npm ci
+      - run: node scripts/qa-campaign-cpu-part.mjs
+        env: {CPU_PART: '${{ matrix.part }}'}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: campaign-polish-cpu-${{ matrix.part }}
+          path: qa/cpu-${{ matrix.part }}
+          retention-days: 10
+          if-no-files-found: error
+  ordinary:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - {part: early, rooms: '1,2,3,4,5,6,7,8,9,10'}
+          - {part: energy, rooms: '11,12,13,14,15,16,17,18,19,20'}
+          - {part: living, rooms: '21,22,23,24,25,26,27,28,29,30'}
+          - {part: optics, rooms: '31,32,33,34,35,36,37,38,39,40'}
+          - {part: fracture, rooms: '42,43,44,45,46,47,48,49,50,51'}
+          - {part: castle, rooms: '41'}
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: '${{ github.sha }}'}
+      - uses: actions/setup-node@v4
+        with: {node-version: 22, cache: npm}
+      - run: npm ci
+      - run: node scripts/qa-campaign-ordinary.mjs
+        env:
+          ROOMS: ${{ matrix.rooms }}
+          OUT: qa/ordinary-${{ matrix.part }}/report.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: campaign-polish-ordinary-${{ matrix.part }}
+          path: qa/ordinary-${{ matrix.part }}
+          retention-days: 10
+          if-no-files-found: error
+  shortcuts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - {part: early, rooms: '1-25'}
+          - {part: late, rooms: '26-40,42-51'}
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: '${{ github.sha }}'}
+      - uses: actions/setup-node@v4
+        with: {node-version: 22, cache: npm}
+      - run: npm ci
+      - run: node scripts/qa-campaign-shortcuts.mjs --levels=${{ matrix.rooms }} --out=qa/shortcuts-${{ matrix.part }}/report.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: campaign-polish-shortcuts-${{ matrix.part }}
+          path: qa/shortcuts-${{ matrix.part }}
+          retention-days: 10
+          if-no-files-found: error
+  castle-shortcuts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: '${{ github.sha }}'}
+      - uses: actions/setup-node@v4
+        with: {node-version: 22, cache: npm}
+      - run: npm ci
+      - run: node scripts/qa-campaign-castle-shortcuts.mjs
+        env: {REPORT: qa/castle-shortcuts/report.json}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: campaign-polish-castle-shortcuts
+          path: qa/castle-shortcuts
+          retention-days: 10
+          if-no-files-found: error
+  native:
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - {part: early, rooms: '1,2,3,4,5,6,7,8,9,10'}
+          - {part: energy, rooms: '11,12,13,14,15,16,17,18,19,20'}
+          - {part: living, rooms: '21,22,23,24,25,26,27,28,29,30'}
+          - {part: optics, rooms: '31,32,33,34,35,36,37,38,39,40'}
+          - {part: fracture, rooms: '42,43,44,45,46,47,48,49,50,51'}
+          - {part: castle, rooms: '41'}
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: '${{ github.sha }}'}
+      - uses: actions/setup-node@v4
+        with: {node-version: 22, cache: npm}
+      - run: npm ci
+      - run: npm install --no-save --package-lock=false puppeteer-core@24.16.0
+      - uses: actions/download-artifact@v4
+        with: {name: campaign-polish-dist, path: dist}
+      - run: |
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+          node scripts/qa-creative-browser.mjs
+        env:
+          CASE: route
+          STRICT_CAPTURE: '1'
+          LEVELS: ${{ matrix.rooms }}
+          START_SERVER: '1'
+          SERVER_MODE: preview
+          OUT_DIR: qa/native-${{ matrix.part }}
+          ROUTE_TIMEOUT_MS: '2400000'
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: campaign-polish-native-${{ matrix.part }}
+          path: qa/native-${{ matrix.part }}
+          retention-days: 10
+          if-no-files-found: error
+  presentation:
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: '${{ github.sha }}'}
+      - uses: actions/setup-node@v4
+        with: {node-version: 22, cache: npm}
+      - run: npm ci
+      - run: npm install --no-save --package-lock=false puppeteer-core@24.16.0
+      - uses: actions/download-artifact@v4
+        with: {name: campaign-polish-dist, path: dist}
+      - run: |
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+          node scripts/qa-campaign-menu.mjs
+        env: {PRODUCTION: '1', OUT_DIR: qa/presentation/menu}
+      - run: |
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+          node scripts/qa-creative-browser.mjs
+        env:
+          CASE: overview
+          LEVELS: '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,42,43,44,45,46,47,48,49,50,51,41'
+          START_SERVER: '1'
+          SERVER_MODE: preview
+          OUT_DIR: qa/presentation/architecture
+      - run: |
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+          node scripts/qa-animation-presentation.mjs
+        env:
+          START_SERVER: '1'
+          EVIDENCE_OUT: qa/presentation/animation
+          SERVER_MODE: preview
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: campaign-polish-presentation
+          path: qa/presentation
+          retention-days: 10
+          if-no-files-found: error
+  storage-isolation:
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: '${{ github.sha }}'}
+      - uses: actions/setup-node@v4
+        with: {node-version: 22, cache: npm}
+      - run: npm ci
+      - run: npm install --no-save --package-lock=false puppeteer-core@24.16.0
+      - uses: actions/download-artifact@v4
+        with: {name: campaign-polish-dist, path: dist}
+      - run: |
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+          node scripts/qa-campaign-save-isolation.mjs
+        env: {SITE_DIR: dist, OUT_DIR: qa/storage-isolation}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: campaign-polish-storage-isolation
+          path: qa/storage-isolation
+          retention-days: 10
+          if-no-files-found: error

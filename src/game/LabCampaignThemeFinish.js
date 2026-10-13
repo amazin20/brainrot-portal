@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import {campaignTheme} from './LabCampaignThemes.js';
+import {installCampaignEnvironment} from './LabCampaignEnvironment.js';
 
 /** Restyle only authored architecture, not source models, portal porcelain,
  * interaction signals or moving-state materials. No colliders or puzzle state
@@ -7,6 +8,7 @@ import {campaignTheme} from './LabCampaignThemes.js';
 export function finishCampaignTheme(game,level,index,roots){
  if(game.chamberEdition!=='foundation')return level;
  const theme=campaignTheme(index),sourceMaterials=new Set(),roles=new Map(),copies=new Map();
+ if(level.campaignTheme?.id===theme.id)return level;
  for(const asset of game.assets?.values?.()||[])asset.traverse(o=>{
   for(const m of Array.isArray(o.material)?o.material:[o.material])if(m)sourceMaterials.add(m);
  });
@@ -79,5 +81,5 @@ export function finishCampaignTheme(game,level,index,roots){
  if(game.scene.fog?.color)game.scene.fog.color.setHex(theme.sky);
  level.campaignTheme={...theme,changedMaterials:copies.size,architecturalInstances};
  for(const root of roots)root.userData.campaignTheme=theme.id;
- return level;
+ return installCampaignEnvironment(game,level,theme);
 }
