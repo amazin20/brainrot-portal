@@ -2,12 +2,12 @@ import test,{after} from 'node:test';
 import assert from 'node:assert/strict';
 import {Body} from 'cannon-es';
 import {createHeadlessGame} from '../scripts/lab-headless.mjs';
-import {runV8Journey} from '../src/game/LabV8Journey.js';
+import {runRoom25NormalPlay} from './helpers/lab-room25-normal-play-driver.js';
 
 const game=await createHeadlessGame();
 after(()=>{game.firstLevel?.dispose?.();game.physics.dispose();game.portals.dispose();});
 
-async function reachFirstGallery(d){
+async function reachMotorCourt(d){
  const {walk,pickup,wait,until,aim,level}=d,p=level.panels;
  walk(-14,9);pickup();walk(-14,8.7);walk(-7,8.7);game.input.jumpQueued=true;walk(-7,10);walk(-7,13.8);walk(-7,12.7);wait(.5);
  assert.ok(game.interact());wait(1.2);assert.equal(game.heldCube,null);
@@ -17,14 +17,15 @@ async function reachFirstGallery(d){
  aim(0,centre);aim(0,centre.clone().add(centre.clone().sub(game.portals.portals[0].position)));
  walk(17,6);walk(-20,6);walk(-20,-10);walk(-14,-10);walk(-15.2,-10.7);
  aim(1,p['lower-relay'].getFrame().center);
- until(()=>game.playerPosition.y>8.97,18,'Actual first optical lift did not reach its landing');
- walk(-14,-13);walk(-6,-13);walk(-7,-13);walk(-14,-13);walk(-14,-10);walk(-7,-10);walk(-7,7.9);
+ assert.equal(level.state.optical.motorLit,true);
+ assert.equal(level.state.optical.receivers[0],false);
+ walk(-14,-10);walk(-7,-10);walk(-7,7.9);
 }
 
 test('25 prototype: real light, moving mirror and original contact feed the bounded drive; interruption returns it',async()=>{
- await game.selectLevel(24,false);const cargo=game.cargo,body=game.physics.cargoBody;
- await runV8Journey(game,{scenario:async d=>{
-  await reachFirstGallery(d);
+ await game.selectLevel(24,true);const cargo=game.cargo,body=game.physics.cargoBody;
+ await runRoom25NormalPlay(game,{scenario:async d=>{
+  await reachMotorCourt(d);
   const o=d.level.state.optical,m=o.machine;
   assert.equal(m.originalCargoBody,body);assert.equal(m.carriageBody.type,Body.DYNAMIC);assert.equal(m.deckBody.type,Body.DYNAMIC);
   assert.equal(Object.hasOwn(m,'target'),false);assert.equal(m.loaded,true);
@@ -32,6 +33,8 @@ test('25 prototype: real light, moving mirror and original contact feed the boun
   const before=m.height;d.wait(2);assert.ok(Math.abs(m.height-before)<.03,'A live ray alone must not arm the actual E switch');
   assert.equal(m.diagnostics().lastForce.motorForce,0);
   assert.equal(game.interact(),true);
+  // Board the waiting passenger car while the actual freight carriage rises.
+  d.walk(-7,-10);d.walk(-14,-10);
   try{d.until(()=>m.height>2,10,'Current light did not raise the original loaded support');}catch(error){error.message+=' '+JSON.stringify({height:m.height,velocity:m.velocity,motorEnabled:m.motorEnabled,lastForce:m.diagnostics().lastForce,loaded:m.loaded,normalLoad:m.normalLoad});throw error;}
   const lit=m.diagnostics().lastForce;
   assert.equal(lit.motorLit,true);assert.ok(lit.motorForce>0&&lit.motorForce<=m.budget.motorForce);
@@ -46,7 +49,8 @@ test('25 prototype: real light, moving mirror and original contact feed the boun
   assert.ok(lit.sourceRackPower<=2*m.budget.pressureDrivePower+1e-8);
   // Reach the existing upper freight firing position by ordinary movement.
   // Reusing this relay cuts the real motor ray without hidden pair clearing.
-  d.walk(-7,-10);d.walk(-14,-10);d.walk(-14,-13);d.walk(-6,-13);d.walk(-3,-14.5);
+  d.until(()=>game.playerPosition.y>8.97,25,'Raised carriage mirror did not illuminate the first passenger receiver');
+  d.walk(-14,-13);d.walk(-6,-13);d.walk(-3,-14.5);
   d.until(()=>m.height>8.95,10,'The current reflected supply did not cover the full physical stroke');
   d.aim(1,d.level.panels['freight-receiver'].getFrame().center);
   const atCut=m.height;

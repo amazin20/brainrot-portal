@@ -3,7 +3,7 @@ import {Workshop} from './LabWorkshopKit.js';
 import {opticalLift} from './LabRoom13Mechanics.js';
 import {buildRoom25Optics} from './LabRoom25Optics.js';
 import {SolidAssembly,placeSolidModel} from './LabSolidModels.js';
-export const ROOM25_SPEC={id:'opposed-shadows',title:'Обратная сторона тени',concept:'Один противовес открывает первый луч и перекрывает второй',description:'Свету мешает сама машина. Друг должен уйти с опоры, прежде чем откроется следующая высота.',accent:0xcab48c,assets:[1,2,11,22,23,24],hints:['Две тёмные заслонки связаны одним противовесом. Груз сдвигает их в противоположные стороны.','Сначала сохрани достигнутую высоту на неподвижной галерее. Снятый с опоры друг меняет настоящий путь света.','Освещённый первый приёмник питает также привод весовой платформы. С верхней галереи можно поднять её вместе с другом и забрать его с бокового балкона или переправить через порталы.']};
+export const ROOM25_SPEC={id:'opposed-shadows',title:'Обратная сторона тени',concept:'Один противовес открывает первый луч и перекрывает второй',description:'Свету мешает сама машина. Друг должен уйти с опоры, прежде чем откроется следующая высота.',accent:0xcab48c,assets:[1,2,11,22,23,24],hints:['Две тёмные заслонки связаны одним противовесом. Груз сдвигает их в противоположные стороны.','Сначала сохрани достигнутую высоту на неподвижной галерее. Снятый с опоры друг меняет настоящий путь света.','Малые белые окна проводят свет. Включи привод внизу: подвижное зеркало поднимет друга и включит первый пассажирский лифт. Забери друга с бокового балкона. Металлическая грузовая платформа не принимает порталы.']};
 
 /** Large structural bays and the real 9m/18m deck edges form an optical
  * instrument, not a sequence of indistinguishable white corridors. Everything
@@ -128,14 +128,26 @@ export function buildRoom25(game,index=24){
  const backedScreen=(position,size,material=baffle)=>{
   const mesh=w.box(position,size,material);mesh.userData.keepMaterial=true;return mesh;
  };
- const pad=k.pad('shadow-counterweight',[-7,0,12],4.8,4.8);
- // Room25 alone replaces the generic kinematic pressure-plate tick. Its
- // guided deck/carriage and bounded drives are owned by the optical machine.
- k.ticks.pop();
- k.panel('light-intake',[9,3,16],[1,0,0],5.6,6);
- k.panel('lower-relay',[-18,3,-6],[1,0,0],5.6,6);
+ // The local freight deck is manufactured metal, not portal ceramic. Keep
+ // its full physical support and spring load path; cargo must ride the real
+ // light-powered carriage to the existing nine-metre retrieval balcony.
+ const surface=w.surface({name:'shadow-counterweight',position:[-7,.18,12],normal:[0,1,0],width:4.8,height:4.8,portal:false,moving:true});
+ const floor={minX:-9.4,maxX:-4.6,minZ:9.6,maxZ:14.4,y:.18,mesh:surface.mesh,enabled:true};
+ game.floors.push(floor);w.floors.push(floor);surface.floor=floor;
+ const pad={surface,position:new THREE.Vector3(-7,0,12),pressed:false,progress:0};
+ k.panels['shadow-counterweight']=surface;k.pads.push(pad);
+ // These three manufactured optical mouths transmit charges and light.
+ // Their real 0.64 m apertures are smaller than the unmodified companion or
+ // player. Full-size high return portals remain ordinary traveller mouths.
+ const opticalPanel=(name,position,normal,width,height)=>{
+  w.surface({name:name+' / metal optical housing',position:position.map((v,i)=>v-normal[i]*.12),normal,width,height,portal:false});
+  const panel=k.panel(name,position,normal,.82,.82);
+  panel.mesh.userData.portalSize={width:.32,height:.32};return panel;
+ };
+ opticalPanel('light-intake',[9,3,16],[1,0,0],5.6,6);
+ opticalPanel('lower-relay',[-18,3,-6],[1,0,0],5.6,6);
  k.panel('freight-receiver',[0,11.3,-15.4],[-1,0,0],3.4,4.6);
- k.panel('upper-relay',[5,11.3,-6],[1,0,0],5.6,4.6);
+ opticalPanel('upper-relay',[5,11.3,-6],[1,0,0],5.6,4.6);
  k.panel('return-entry',[19.9,20.3,-15.4],[-1,0,0],3.4,4.6);
  k.panel('home',[-17,13.6,23],[1,0,0],3.4,4.6);
  const first=opticalLift(k,'shadow-lift',[-14,0,-10],{top:9,width:4,depth:4});
@@ -165,7 +177,7 @@ export function buildRoom25(game,index=24){
  // E selects a bounded motor supply, never a destination height. The actual
  // ray reflected by the live carriage mirror supplies work on every step;
  // interruption removes motor force and gravity returns the same bodies.
- k.control('counterweight-hoist',[-8,9,7],()=>{
+ k.control('counterweight-hoist',[-8,0,7],()=>{
   optical.machine.enableMotor();
  },'E — включить привод: живой луч на зеркале питает грузовую платформу');
  for(const x of [-9.6,-4.4])w.box([x,4.5,12],[.12,9,.15],w.materials.trim,false);
@@ -175,7 +187,7 @@ export function buildRoom25(game,index=24){
  level.shadowHall=shadowHall;
  level.mechanismArt={projectors:[{position:optical.source.toArray(),direction:optical.direction.toArray(),radius:.5}],liftSurfaces:['shadow-lift','relay-lift']};
  level.conceptLesson={position:[-7,0,12],range:4,key:'E',text:'Две заслонки соединены с одной опорой. Нагрузка освобождает один луч и перекрывает другой.'};
- level.puzzleGeometry={footprint:2068,goalHeight:7,orders:['portal-freight-transfer','receiver-powered-plate-hoist'],noProgressFlags:true,sightSlot:{x:-10.8,minY:14.2,maxY:15.55},portalRoles:{'light-intake':'one source for both physical optical circuits','lower-relay':'illuminate the first lift only after its shutter clears','shadow-counterweight':'weight opens the first beam, then leaves through this floor or rises on its receiver-powered hoist','freight-receiver':'retain the same original companion above the first crossing','upper-relay':'the second optical circuit is clear only when the counterweight is unloaded','return-entry':'return from the high reverse overlook','home':'reach the back of the start through its high sight slit'},deductions:['cargo removes a real opaque obstruction','leave a powered car on a permanent ledge','the first live receiver can raise the loaded counterweight itself','retrieval reverses two connected shutters','reuse the source through the upper relay after cargo retrieval','higher observation exposes the back of the starting room']};
+ level.puzzleGeometry={footprint:2068,goalHeight:7,orders:['weight-first-continuous-hoist','light-first-continuous-hoist'],noProgressFlags:true,sightSlot:{x:-10.8,minY:14.2,maxY:15.55},portalRoles:{'light-intake':'one source for both physical optical circuits','lower-relay':'clear the loaded shutter to feed the continuous optical freight column; its raised moving mirror illuminates the first passenger lift','shadow-counterweight':'non-portal metal freight support; current reflected light raises the loaded carriage to the retrieval balcony','freight-receiver':'retain the same original companion above the first crossing','upper-relay':'the second optical circuit is clear only when the counterweight is unloaded','return-entry':'return from the high reverse overlook','home':'reach the back of the start through its high sight slit'},deductions:['cargo removes a real opaque obstruction','leave a powered car on a permanent ledge','current light raises the loaded counterweight; its travelling mirror must illuminate the first passenger receiver','retrieval reverses two connected shutters','reuse the source through the upper relay after cargo retrieval','higher observation exposes the back of the starting room']};
  return level;
 }
 export {runRoom25} from './LabRoom25Journey.js';

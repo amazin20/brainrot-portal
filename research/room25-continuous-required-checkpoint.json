@@ -1,0 +1,513 @@
+{
+  "kind": "isolated-unaccepted-Room25-continuous-optical-hoist-required-prototype-checkpoint",
+  "createdAt": "2026-10-13T02:24:58.138322+00:00",
+  "localBranch": "candidate/room25-continuous-required",
+  "localParentCommit": "00ea3a1b8590b11dfa2c70ad6cf9f935dfe74400",
+  "parentTree": "669b47e269fe50131d61e600c7eb0063082144dd",
+  "upstreamV1RemoteCommit": "86904d81b3e3284fb6c7571d7699be4c72ef618f",
+  "sourceFiles": [
+    {
+      "path": "src/game/LabPortalRoom25.js",
+      "bytes": 14307,
+      "sha256": "a58f0e8cf717b2f5fb363380079acaef10fe302359430fd7597d10ecf38d6237"
+    },
+    {
+      "path": "src/game/LabRoom25Journey.js",
+      "bytes": 5838,
+      "sha256": "ae5ac39b2907099c50dd72be474bf23a06d4f6d2649df47cd85cdb28228a4f9c"
+    },
+    {
+      "path": "src/game/LabRoom25Optics.js",
+      "bytes": 6057,
+      "sha256": "186b5d1bbfa2ce5d68dd645d8f1bf53c8d4d34bb1df50e3817688cde52426cc3"
+    },
+    {
+      "path": "tests/lab-causal-routes-25-29.test.js",
+      "bytes": 3129,
+      "sha256": "cea17e8e99ac7df71251ca774a4c028d4d4257a1dfd162e18e9e092c12f53417"
+    },
+    {
+      "path": "tests/lab-room25-continuous-drive.test.js",
+      "bytes": 5648,
+      "sha256": "6b35d97c843bc67f5bd45f46e927e374c97c20ca18f341c7d3e0cb4b9ea7a580"
+    },
+    {
+      "path": "tests/lab-room25-optics.test.js",
+      "bytes": 4121,
+      "sha256": "243ed247a9924d988c94efafbb6f3bbbb1ce957d059a84cf138746ed55e719af"
+    },
+    {
+      "path": "tests/lab-room25-required-drive.test.js",
+      "bytes": 11900,
+      "sha256": "d6ece5531a94440c425ca6403b976584d7e80e77fb372e676a6cf5f0c443e5ca"
+    },
+    {
+      "path": "tests/helpers/lab-room25-normal-play-driver.js",
+      "bytes": 5908,
+      "sha256": "98d93b85e6a3f53fb62b806b5e886f4ed188fb301892eb710d9bd20b476dcacc"
+    }
+  ],
+  "mechanics": {
+    "existingV1DynamicFreightCarriageAndSpringDeckRetained": true,
+    "movingMirrorActualOpticalRay": true,
+    "firstFixedPassengerReceiver": [
+      -1,
+      12.96,
+      12
+    ],
+    "groundMotorControl": [
+      -8,
+      0,
+      7
+    ],
+    "freightPressureDeckPortalable": false,
+    "opticalPanels": [
+      "light-intake",
+      "lower-relay",
+      "upper-relay"
+    ],
+    "actualCeramicInsetMetres": [
+      0.82,
+      0.82
+    ],
+    "actualOpticalPortalHalfDimensionsMetres": [
+      0.32,
+      0.32
+    ],
+    "surroundingNonportalHousingRetainsOriginalPanelSize": true,
+    "originalCargoCollisionHalfExtentsMetres": [
+      0.39,
+      0.39,
+      0.39
+    ],
+    "originalCargoMassKg": 3.2,
+    "originalPlayerCapsuleHeightMetres": 2.4,
+    "originalPlayerCapsuleRadiusMetres": 0.43,
+    "highReturnPortalsFullSize": true,
+    "runtimeGameOrActorPoseWritesAdded": false,
+    "commonPortalFitCodeModified": false,
+    "heightReadinessOrSolvedGatesAdded": false,
+    "oldTwoPassengerLiftsRemainKinematic": true,
+    "shutterRackActuatorsRemainExplicitFiniteActiveSupplies": true,
+    "passiveShutterTransmissionClaimed": false
+  },
+  "targetedCpuEvidence": {
+    "scope": "Local production simulation only; no SOURCE CI or native/public acceptance. Normal Play route helper starts without a fixture reset and counts every reset/respawn/cargo reset.",
+    "wholeTap": {
+      "path": "/workspace/scratch/1949b02c22bb/room25-required-review/targeted-final-small-optical-mouths.tap",
+      "bytes": 5288,
+      "sha256": "7d0424067ededcfacafb6a5c5410b4f91bcbe12269d6e5ff66db6ee6950eea43"
+    },
+    "tests": 18,
+    "passed": 18,
+    "failed": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0,
+    "testCommand": "node --test --test-reporter=tap tests/lab-room25-required-drive.test.js tests/lab-room25-optics.test.js tests/lab-room25-continuous-drive.test.js tests/lab-causal-routes-25-29.test.js",
+    "normalPlayObservations": {
+      "path": "/workspace/scratch/1949b02c22bb/room25-required-review/final-small-optical-mouths/normal-play-paired-causal-observations.json",
+      "bytes": 525603,
+      "sha256": "c851874268ad1512fc9584d47b52b706ca20935e2ec4f86d1de37b18fab359c6"
+    },
+    "normalPlayCases": [
+      {
+        "label": "weight-first",
+        "normalState": "playing",
+        "normalPlaySpawn": [
+          -17,
+          0,
+          10
+        ],
+        "physicsSteps": 18511,
+        "physicsSeconds": 154.25833333333333,
+        "maxFreightHeight": 9.002284713167864,
+        "positiveMotorForceSteps": 4578,
+        "firstPassengerReceiverSteps": 3521,
+        "secondPassengerReceiverSteps": 2209,
+        "originalLoadedContactSteps": 10036,
+        "invalidOriginalSteps": 0,
+        "resetCounts": {
+          "resets": 0,
+          "respawns": 0,
+          "cargoResets": 0
+        },
+        "declaredComponentMutation": null,
+        "final": {
+          "state": "won",
+          "sameCargo": true,
+          "sameBody": true,
+          "sameShape": true,
+          "motorWork": 2340.0000000000155,
+          "rackWork": 1210.3793254949062,
+          "height": -6.938893903907228e-18,
+          "cargo": [
+            -13.927939434650755,
+            8.046642824602486,
+            22.973676296048406
+          ],
+          "motorEnabled": true,
+          "receivers": [
+            false,
+            false
+          ]
+        }
+      },
+      {
+        "label": "light-first",
+        "normalState": "playing",
+        "normalPlaySpawn": [
+          -17,
+          0,
+          10
+        ],
+        "physicsSteps": 24097,
+        "physicsSeconds": 200.80833333333334,
+        "maxFreightHeight": 9.002284713167796,
+        "positiveMotorForceSteps": 4578,
+        "firstPassengerReceiverSteps": 3521,
+        "secondPassengerReceiverSteps": 3905,
+        "originalLoadedContactSteps": 9142,
+        "invalidOriginalSteps": 0,
+        "resetCounts": {
+          "resets": 0,
+          "respawns": 0,
+          "cargoResets": 0
+        },
+        "declaredComponentMutation": null,
+        "final": {
+          "state": "won",
+          "sameCargo": true,
+          "sameBody": true,
+          "sameShape": true,
+          "motorWork": 2340.0000000000127,
+          "rackWork": 1210.3864134966702,
+          "height": -6.938893903907228e-18,
+          "cargo": [
+            -13.928330680538865,
+            8.043319898601812,
+            22.95497925341475
+          ],
+          "motorEnabled": true,
+          "receivers": [
+            false,
+            false
+          ]
+        }
+      },
+      {
+        "label": "freight-light-cut-and-recovery",
+        "normalState": "playing",
+        "normalPlaySpawn": [
+          -17,
+          0,
+          10
+        ],
+        "physicsSteps": 23089,
+        "physicsSeconds": 192.40833333333333,
+        "maxFreightHeight": 9.002284713167864,
+        "positiveMotorForceSteps": 6995,
+        "firstPassengerReceiverSteps": 4878,
+        "secondPassengerReceiverSteps": 2209,
+        "originalLoadedContactSteps": 14593,
+        "invalidOriginalSteps": 0,
+        "resetCounts": {
+          "resets": 0,
+          "respawns": 0,
+          "cargoResets": 0
+        },
+        "declaredComponentMutation": null,
+        "final": {
+          "state": "won",
+          "sameCargo": true,
+          "sameBody": true,
+          "sameShape": true,
+          "motorWork": 4680.000000000008,
+          "rackWork": 1257.5277553050173,
+          "height": -6.938893903907228e-18,
+          "cargo": [
+            -13.927939434650755,
+            8.046642826357493,
+            22.973660339662896
+          ],
+          "motorEnabled": true,
+          "receivers": [
+            false,
+            false
+          ]
+        }
+      },
+      {
+        "label": "moving-mirror-reflection",
+        "normalState": "playing",
+        "normalPlaySpawn": [
+          -17,
+          0,
+          10
+        ],
+        "physicsSteps": 10878,
+        "physicsSeconds": 90.65,
+        "maxFreightHeight": -6.938893903907228e-18,
+        "positiveMotorForceSteps": 0,
+        "firstPassengerReceiverSteps": 0,
+        "secondPassengerReceiverSteps": 0,
+        "originalLoadedContactSteps": 9813,
+        "invalidOriginalSteps": 0,
+        "resetCounts": {
+          "resets": 0,
+          "respawns": 0,
+          "cargoResets": 0
+        },
+        "declaredComponentMutation": {
+          "property": "movingMirror.radius",
+          "from": 0.45,
+          "to": 0
+        },
+        "final": {
+          "state": "playing",
+          "sameCargo": true,
+          "sameBody": true,
+          "sameShape": true,
+          "motorWork": 0,
+          "rackWork": 1201.7748015682523,
+          "height": -6.938893903907228e-18,
+          "cargo": [
+            -6.989349158642922,
+            0.5675831218782599,
+            12.00533994368854
+          ],
+          "motorEnabled": true,
+          "receivers": [
+            false,
+            false
+          ]
+        }
+      },
+      {
+        "label": "motor-force-supply",
+        "normalState": "playing",
+        "normalPlaySpawn": [
+          -17,
+          0,
+          10
+        ],
+        "physicsSteps": 10878,
+        "physicsSeconds": 90.65,
+        "maxFreightHeight": -6.938893903907228e-18,
+        "positiveMotorForceSteps": 0,
+        "firstPassengerReceiverSteps": 0,
+        "secondPassengerReceiverSteps": 0,
+        "originalLoadedContactSteps": 9813,
+        "invalidOriginalSteps": 0,
+        "resetCounts": {
+          "resets": 0,
+          "respawns": 0,
+          "cargoResets": 0
+        },
+        "declaredComponentMutation": {
+          "property": "budget.motorForce",
+          "from": 260,
+          "to": 0
+        },
+        "final": {
+          "state": "playing",
+          "sameCargo": true,
+          "sameBody": true,
+          "sameShape": true,
+          "motorWork": 0,
+          "rackWork": 1201.7748015682523,
+          "height": -6.938893903907228e-18,
+          "cargo": [
+            -6.989349158642922,
+            0.5675831218782599,
+            12.00533994368854
+          ],
+          "motorEnabled": true,
+          "receivers": [
+            false,
+            false
+          ]
+        }
+      },
+      {
+        "label": "nonportal-deck",
+        "normalState": "playing",
+        "normalPlaySpawn": [
+          -17,
+          0,
+          10
+        ],
+        "physicsSteps": 1106,
+        "physicsSeconds": 9.216666666666667,
+        "maxFreightHeight": -6.938893903907228e-18,
+        "positiveMotorForceSteps": 0,
+        "firstPassengerReceiverSteps": 0,
+        "secondPassengerReceiverSteps": 0,
+        "originalLoadedContactSteps": 0,
+        "invalidOriginalSteps": 0,
+        "resetCounts": {
+          "resets": 0,
+          "respawns": 0,
+          "cargoResets": 0
+        },
+        "declaredComponentMutation": null,
+        "final": {
+          "state": "playing",
+          "sameCargo": true,
+          "sameBody": true,
+          "sameShape": true,
+          "motorWork": 0,
+          "rackWork": 0.0002469566673120794,
+          "height": -6.938893903907228e-18,
+          "cargo": [
+            -10.50843401012635,
+            0.38999814625182744,
+            6.664186440406829
+          ],
+          "motorEnabled": false,
+          "receivers": [
+            false,
+            false
+          ]
+        }
+      },
+      {
+        "label": "small-optical-mouth-held-ferry",
+        "normalState": "playing",
+        "normalPlaySpawn": [
+          -17,
+          0,
+          10
+        ],
+        "physicsSteps": 8192,
+        "physicsSeconds": 68.26666666666667,
+        "maxFreightHeight": -6.938893903907228e-18,
+        "positiveMotorForceSteps": 0,
+        "firstPassengerReceiverSteps": 0,
+        "secondPassengerReceiverSteps": 5476,
+        "originalLoadedContactSteps": 0,
+        "invalidOriginalSteps": 0,
+        "resetCounts": {
+          "resets": 0,
+          "respawns": 0,
+          "cargoResets": 0
+        },
+        "declaredComponentMutation": null,
+        "final": {
+          "state": "playing",
+          "sameCargo": true,
+          "sameBody": true,
+          "sameShape": true,
+          "motorWork": 0,
+          "rackWork": 0.0002469566673120794,
+          "height": -6.938893903907228e-18,
+          "cargo": [
+            9.307002184590177,
+            1.06,
+            16.000004034173678
+          ],
+          "motorEnabled": false,
+          "receivers": [
+            false,
+            true
+          ]
+        }
+      }
+    ],
+    "forceClockContactAndCutChecksIncluded": true,
+    "localWholeBoxOrientationSamples": 3000,
+    "mixedTinyFullMouthEntryAndExitGeometricCrossingChecks": true,
+    "analyticAllOriginalCubeOrientationsCannotFit": {
+      "basis": "Every unchanged 0.78 m cube contains a radius 0.39 m sphere under every rotation. A real 0.32 m half-aperture cannot contain that sphere; the unchanged whole-corner fitting predicate rejects it.",
+      "allOrientationMathematicalBound": true,
+      "allPossibleWorldRoutesAccepted": false
+    }
+  },
+  "independentScopedReview": {
+    "path": "/workspace/scratch/1949b02c22bb/room25-required-independent-review/post-small-mouths-independent-checkpoint.json",
+    "bytes": 15539,
+    "sha256": "76ad9e42316f70ffba9fc34283ed50b14eca379f8bc508290d64a4d51132764e"
+  },
+  "actualBypassAndContactReceipts": [
+    {
+      "path": "/workspace/scratch/1949b02c22bb/room25-required-independent-review/ground-upper-relay-held-ferry-v3.json",
+      "bytes": 83684,
+      "sha256": "c492e0937aa18234e0a156d6bf11436608e1992c2733dd7b82693a3c5348b60e"
+    },
+    {
+      "path": "/workspace/scratch/1949b02c22bb/room25-required-independent-review/post-small-mouths-exact-former-ferry.json",
+      "bytes": 14950,
+      "sha256": "c2c5a538d640f4d6c3ba51c9ee633834c875acea1b725ab2a04f05cf83007a7c"
+    },
+    {
+      "path": "/workspace/scratch/1949b02c22bb/room25-required-independent-review/post-small-mouths-legal-centre-intake-held-jumps.json",
+      "bytes": 65584,
+      "sha256": "5459b5478f30b11361532676293fee0a0c736b2a65ed14f3fdc7bd4ab578554f"
+    },
+    {
+      "path": "/workspace/scratch/1949b02c22bb/room25-required-independent-review/post-small-mouths-legal-centre-lower-held-jumps.json",
+      "bytes": 83797,
+      "sha256": "b3c552430537712d72bdbe131445d5ad37ae69a91abc6b743c181934fd8c1e96"
+    },
+    {
+      "path": "/workspace/scratch/1949b02c22bb/room25-required-independent-review/post-small-mouths-free-original-jump-release.json",
+      "bytes": 147648,
+      "sha256": "3856325a08a0ed4c2db4f3b3bf7e4f78d72c16c4ee3b90541f43d5b8c5d597bf"
+    },
+    {
+      "path": "/workspace/scratch/1949b02c22bb/room25-required-independent-review/small-mouth-shared-fit-component-review-v2.json",
+      "bytes": 4080,
+      "sha256": "0cbc5d7a317e6d2f17c0b266987484ccfa8fa659f79d3dab8df654a18f04d774"
+    }
+  ],
+  "knownGroundFerry": {
+    "previousWideMouthRevisionActuallyWonWithoutMotorOrFirstReceiver": true,
+    "previousWinningReceiptPreserved": true,
+    "exactFormerPlacementRecipeBlockedByManufacturedHousing": true,
+    "legalCentreIntakeAndLowerEntryPairsStillAcceptActualCharges": true,
+    "threeActualHeldJumpsPerEntryRoleProduceZeroTransports": true,
+    "freeOriginalJumpReleaseProducedPositiveActualCannonMetalContacts": true,
+    "demonstratedFerryClosedForListedControls": true,
+    "allBypassesAccepted": false
+  },
+  "parentByteAudit": {
+    "path": "/workspace/scratch/1949b02c22bb/room25-required-review/parent-byte-audit.json",
+    "bytes": 14016,
+    "sha256": "c67985f29818d164eea8609f43fc76a7b67c8e03917795d77b47784c528facca"
+  },
+  "all59GlbBytesUnchanged": true,
+  "all59GlbByteCount": 37163924,
+  "all7CommonInfrastructureFilesUnchanged": true,
+  "historicalWideMouthSourceInventory": {
+    "path": "/workspace/scratch/1949b02c22bb/room25-required-review/pre-small-optical-aperture/source-inventory.json",
+    "bytes": 1790,
+    "sha256": "4949b0de2700f17d46a75fbce6792aae70fad0775ddcb1e1f40c44348d045ce9"
+  },
+  "scratchFailureHistoryPreserved": true,
+  "isolation": {
+    "currentReleaseSourceHead": "8093c0201ec1464a285aa434e177520c96ca16fb",
+    "originalPrototypeHead": "00ea3a1b8590b11dfa2c70ad6cf9f935dfe74400",
+    "sourceBranchOrCurrentReleaseChanged": false,
+    "publisherChangedByThisWork": false,
+    "mainChangedByThisWork": false,
+    "planChangedByThisWork": false
+  },
+  "accepted": false,
+  "productionAccepted": false,
+  "sourceCiAccepted": false,
+  "nativeAccepted": false,
+  "publicAccepted": false,
+  "publicationAccepted": false,
+  "humanAccepted": false,
+  "fullRoomAccepted": false,
+  "allBypassesAccepted": false,
+  "remotePushed": false,
+  "openRequirements": [
+    "Fresh full SOURCE CI and full native/browser journey/video/pixels on this exact future candidate.",
+    "Actual browser inspection of new optical inset visibility, original actor/material/rendering and user affordance.",
+    "Broader held-pressure, jump, intercept, recovery, geometry and alternate-route/bypass coverage beyond the recorded controls.",
+    "Finite real dynamics for the two retained legacy kinematic passenger lifts if full-room mechanical acceptance requires it.",
+    "Physical-contact coverage for every visible reflector and mechanical presentation detail.",
+    "Human play, device layouts, full room acceptance and publication remain open."
+  ]
+}

@@ -5,7 +5,7 @@ import {buildRoom25OpticalMachine} from './LabRoom25OpticalMachine.js';
 /** Both receiver routes and the carriage's moving mirror are actual rays.
  * The owned machine repeats this trace before every real 120Hz world step. */
 export function buildRoom25Optics(k,pad,first,second){
- const w=k.world,g=k.game,source=V(18,3,16),direction=V(-1,0,0),receivers=[V(-7,3,-6),V(18,11.3,-6)];
+ const w=k.world,g=k.game,source=V(18,3,16),direction=V(-1,0,0),receivers=[V(-1,12.96,12),V(18,11.3,-6)];
  // A physical beam becomes readable in the long gallery and through a portal;
  // its endpoints are still the exact same traced light segments.
  const drawing=beamDrawing(w,0xffbe55,.12),lamps=receivers.map(p=>ringDevice(w,p.toArray(),[-1,0,0],0xc2a677,.96));
@@ -35,10 +35,10 @@ export function buildRoom25Optics(k,pad,first,second){
   const rim=new THREE.Mesh(new THREE.TorusGeometry(.45,.035,8,24),w.materials.trim);rim.position.copy(position);rim.quaternion.copy(mesh.quaternion);w.root.add(rim);
   return {position:position.clone(),normal:normal.clone(),radius:.45,mesh,rim};
  };
- // The lower beam first crosses the unchanged first receiver. Two visible
- // folded mirrors then feed an upright optical column through the carriage's
+ // Two visible folded mirrors feed an upright optical column through the carriage's
  // whole nine-metre stroke. Its moving mirror redirects that real column
- // into a receiver mounted on the same physical carriage.
+ // into the travelling motor receiver. Its horizontal export reaches the
+ // fixed passenger-lift receiver only near the upper freight landing.
  // The column is outside the entire deck/carriage footprint: the load can
  // pass through its nine-metre travel without occluding its own supply.
  const folds=[reflector(V(-3.5,3,-6),V(1,0,-1).normalize(),'Room25 lower optical fold'),
@@ -72,6 +72,6 @@ export function buildRoom25Optics(k,pad,first,second){
  k.ticks.unshift(()=>{machine.ensure();machine.syncPose();updateOptics(machine);});
  k.resets.push(()=>{state.travel=0;state.loaded=false;state.receivers=[false,false];});k.state.optical=state;
  k.wire([[-7,.6,12],[-11,.6,12],[-11,.6,-6],[-11,6.3,-6],[11,6.3,-6],[11,11.3,-6]],()=>machine.pressureFraction>.001);
- k.wire([[-7,1,-6],[-7,1,-10],[-14,1,-10]],()=>state.receivers[0]);k.wire([[18,9.5,-6],[18,9.5,-10],[16,9.5,-10]],()=>state.receivers[1]);
+ k.wire([[-1,12.96,12],[-1,9.2,12],[-3.8,9.2,12],[-3.8,9.2,-10],[-14,9.2,-10]],()=>state.receivers[0]);k.wire([[18,9.5,-6],[18,9.5,-10],[16,9.5,-10]],()=>state.receivers[1]);
  return state;
 }
