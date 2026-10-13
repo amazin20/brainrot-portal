@@ -55,10 +55,21 @@ export async function runPointerLockStartBrowser({browser,baseUrl='http://127.0.
         row.start=await page.evaluate(()=>{const game=window.__NESI_DEMO_GAME__;return {levelIndex:game.levelIndex,state:game.state,cargoUUID:game.cargo.group.uuid,cargoBodyId:game.physics.cargoBody.id};});save();
         assert.ok(Math.abs(before.yaw-expected.yaw)<1e-10&&Math.abs(before.pitch-expected.pitch)<1e-10,`Room ${level} changed spawn view without genuine camera input`);
         row.screenshot=`room-${level}-run-${run+1}-start.png`;await page.screenshot({path:path.join(out,row.screenshot)});
-        // Headless Chromium recentres its native pointer at (0,0) on lock.
-        // Move a small distance from that origin, not from the menu button's
-        // former absolute coordinate. The actual trusted deltas are recorded.
-        await page.mouse.move(18,9);
+        // Chromium variants either retain the Play pointer or emit a native
+        // recenter on lock. CDP accepts absolute coordinates, so derive its
+        // origin from the latest trusted mouse event instead of assuming zero.
+        // This is a read-only observation; one native move must still produce
+        // a small delta and retain the game's exact mouse sensitivity below.
+        row.nativePointerOrigin=await page.evaluate(()=>{
+          const events=window.__CAMERA_START_PROBE__.events;
+          const eventIndex=events.findLastIndex(event=>event.type==='mousemove'&&event.trusted&&Number.isFinite(event.clientX)&&Number.isFinite(event.clientY));
+          const event=events[eventIndex];
+          return event?{eventIndex,clientX:event.clientX,clientY:event.clientY,locked:event.locked,timeStamp:event.timeStamp}:null;
+        });
+        assert.ok(row.nativePointerOrigin,'A trusted native pointer position must precede the look');
+        row.requestedNativeLook={x:row.nativePointerOrigin.clientX+18,y:row.nativePointerOrigin.clientY+9,deltaX:18,deltaY:9};
+        save();
+        await page.mouse.move(row.requestedNativeLook.x,row.requestedNativeLook.y);
         await page.waitForFunction(events=>window.__CAMERA_START_PROBE__.events.slice(events).some(event=>event.type==='mousemove'&&event.trusted&&event.locked&&(event.movementX||event.movementY)),{},before.events);
         row.after=await page.evaluate(()=>{const game=window.__NESI_DEMO_GAME__;return {yaw:game.yaw,pitch:game.pitch,events:window.__CAMERA_START_PROBE__.events};});
         const movement=row.after.events.slice(before.events).filter(event=>event.type==='mousemove'&&event.trusted&&event.locked&&(event.movementX||event.movementY));
