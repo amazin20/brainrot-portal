@@ -17,7 +17,8 @@ export class ResearchChamber extends OpenChamber {
   // rooms. A near-black machine frame made it read as an unlit void, hiding
   // the physical return route beneath the raised platforms. Give that one
   // surface its own matte enamel, distinct from the lighter upper decks.
-  const newCampaignRoom=game.chamberEdition==='foundation'&&(index>=30||index===17||index===19);
+  const polishedMotorCourt=game.chamberEdition==='foundation'&&index===4;
+  const newCampaignRoom=game.chamberEdition==='foundation'&&(index>=30||index===17||index===19||polishedMotorCourt);
   if(newCampaignRoom){
    this.m.service=new THREE.MeshStandardMaterial({
     name:'Foundation service floor',
@@ -28,6 +29,9 @@ export class ResearchChamber extends OpenChamber {
    this.restoreLight=()=>{this.m.service.dispose();restore();};
   }
   const service=this.deck('Continuous service and recovery floor',bounds.minX+1,bounds.maxX-1,bounds.minZ+1,bounds.maxZ-1,base,{color:newCampaignRoom?'service':'dark'});
+  // Only the walking finish changes in the motor court. Keep the same
+  // physical proxy identity as the former dark deck.
+  if(polishedMotorCourt)service.collider.mesh.name='Folded dark casing / collision';
   service.record.portalBackingColliders.push(foundation);
   // These are roofed rooms: blue distance haze previously made the far wall
   // look like open sky and flattened the purpose-built mechanical silhouettes.

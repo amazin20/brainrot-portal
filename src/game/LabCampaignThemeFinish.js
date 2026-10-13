@@ -29,6 +29,9 @@ export function finishCampaignTheme(game,level,index,roots){
   const name=material.name||'';
   if(/portal|porcelain|signal|light|diffuser|lens|screen|glass|receiver|emitter|contact on actual/i.test(name))return null;
   if(/castle wing (enamel|structural accent)/i.test(name))return null; // Keep eleven navigational wing identities.
+  // Each wing already has an authored mineral wall and cast-in floor palette.
+  // Applying the common castle tint erased those identities inside the rooms.
+  if(level.tower&&/castle wing wall|castle cast-in floor/i.test(name))return null;
   if(/castle recessed roof soffit/i.test(name))return 'dark';
   if(/structural laboratory wall|wall cassette|castle wing wall|roof soffit/i.test(name))return 'wall';
   if(/walking deck|cast-in floor/i.test(name))return 'floor';

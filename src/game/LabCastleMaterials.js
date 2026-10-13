@@ -23,7 +23,15 @@ function finishTexture(k,game,kind){
   for(let y=0;y<size;y++)for(let x=0;x<size;x++){
     let value=250;
     if(kind==='wood')value=241+3*Math.sin((x+2*Math.sin(y*Math.PI/64))*Math.PI/32)+2*Math.sin(x*Math.PI/64);
-    else if(kind==='floor')value=250+2*Math.cos(x*Math.PI/64)*Math.cos(y*Math.PI/64);
+    else if(kind==='floor'){
+      // Unioned decks already carry continuous world UVs at four metres per
+      // repeat. Broad staggered limestone slabs give that scale a readable
+      // joint, rather than an almost uniform two-value wash on enormous rooms.
+      const row=Math.floor(y/64),sx=(x+row*64)%128,sy=y%64;
+      const edge=Math.min(sx,128-sx,sy,64-sy),t=THREE.MathUtils.clamp(edge/2.2,0,1);
+      const stone=244+4*Math.cos(x*Math.PI/64)*Math.cos(y*Math.PI/64);
+      value=219+(stone-219)*t*t*(3-2*t);
+    }
     else value=251+1.5*Math.cos(x*Math.PI/64)*Math.cos(y*Math.PI/64);
     const i=(y*size+x)*4,v=Math.round(THREE.MathUtils.clamp(value,0,255));
     data[i]=data[i+1]=data[i+2]=v;data[i+3]=255;

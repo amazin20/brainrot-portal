@@ -1,5 +1,6 @@
+import {LabChapterAmbience,chapterAmbienceProfile} from './LabChapterAmbience.js';
 /** Original procedural sound design. No Portal/Valve samples or recordings.
- * One shared noise buffer, bounded voices, quiet room tone and a lift motor. */
+ * One shared noise buffer, bounded voices, chapter room tones and a lift motor. */
 const flightIntensity=speed=>{
   const t=Number.isFinite(speed)?Math.min(1,Math.max(0,(speed-10)/22)):0;
   return t*t*(3-2*t);
@@ -13,21 +14,27 @@ export class AudioController {
   }
   rejectShot(index=0){this.hush(.10,.018,1100);this.tone(index?230:310,.14,'triangle',.016,0,100);}
 
-  constructor(){this.context=null;this.enabled=true;this.volume=.65;this.muted=false;this.blocks=new Set(['menu']);this.voices=0;this.motorOn=false;this.flightAmount=0;this.epicPhase=0;this.epicBpm=0;this.epicActive=false;this.epicVoices=new Set();}
+  constructor(){this.context=null;this.enabled=true;this.volume=.65;this.muted=false;this.blocks=new Set(['menu']);this.voices=0;this.motorOn=false;this.flightAmount=0;this.epicPhase=0;this.epicBpm=0;this.epicActive=false;this.epicVoices=new Set();this.chapterIndex=0;this.ambience=null;}
+  setChapter(index=0){
+    // Validate before retaining a selection. Permanent save/bookmark indices
+    // map through the same campaign order as the chapter menu and materials.
+    chapterAmbienceProfile(index);this.chapterIndex=index;this.ambience?.setChapter(index);
+  }
   unlock(){
     if(!this.context){
       const AC=globalThis.AudioContext||globalThis.webkitAudioContext;if(!AC)return;
       try{
         const c=this.context=new AC();this.master=c.createGain();this.master.gain.value=0;this.master.connect(c.destination);
         this.fx=c.createGain();this.fx.gain.value=.8;this.fx.connect(this.master);
-        this.room=c.createGain();this.room.gain.value=.014;this.room.connect(this.master);
+        this.room=c.createGain();this.room.gain.value=1;this.room.connect(this.master);
         this.motorGain=c.createGain();this.motorGain.gain.value=0;this.motorGain.connect(this.master);
         this.loops=[];
-        for(const [f,output] of [[59,this.room],[89.3,this.room],[112,this.motorGain]]){
+        for(const [f,output] of [[112,this.motorGain]]){
           const o=c.createOscillator();o.type='sine';o.frequency.value=f;o.connect(output);o.start();this.loops.push(o);
         }
         const length=c.sampleRate;this.noise=c.createBuffer(1,length,c.sampleRate);const data=this.noise.getChannelData(0);
         let seed=71473;for(let i=0;i<length;i++){seed=(Math.imul(seed,1664525)+1013904223)>>>0;data[i]=((seed/4294967296)*2-1)*.5;}
+        this.ambience=new LabChapterAmbience(c,this.noise,this.room,this.chapterIndex);
         // One reusable air layer, driven by physical speed. Ordinary jumps stay quiet.
         this.flightGain=c.createGain();this.flightGain.gain.value=0;
         this.flightFilter=c.createBiquadFilter();this.flightFilter.type='lowpass';this.flightFilter.Q.value=.5;this.flightFilter.frequency.value=600;
@@ -155,5 +162,5 @@ export class AudioController {
   land(strength=1){this.hush(.16,.025+Math.min(1,strength/12)*.035,400);this.tone(67,.19,'triangle',.018);}
   hit(){this.hush(.12,.04,750);this.tone(91,.12,'triangle',.023);}
   win(){[392,494,587,784].forEach((f,i)=>this.tone(f,.36,'sine',.032,i*.11));}
-  dispose(){this.resetEpicMotion();this.loops?.forEach(o=>{o.stop();o.disconnect();});this.loops=[];this.context?.close().catch(()=>{});this.context=null;this.flightAmount=0;this.flightGain=null;this.flightFilter=null;this.epicWindGain=null;this.epicPulseGain=null;this.epicFilter=null;this.epicPulse=null;this.epicHatGain=null;this.epicHatFilter=null;this.epicBus=null;}
+  dispose(){this.resetEpicMotion();this.ambience?.dispose();this.ambience=null;this.loops?.forEach(o=>{o.stop();o.disconnect();});this.loops=[];this.context?.close().catch(()=>{});this.context=null;this.flightAmount=0;this.flightGain=null;this.flightFilter=null;this.epicWindGain=null;this.epicPulseGain=null;this.epicFilter=null;this.epicPulse=null;this.epicHatGain=null;this.epicHatFilter=null;this.epicBus=null;}
 }

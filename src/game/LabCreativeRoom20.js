@@ -137,7 +137,9 @@ export function buildCreative20(g,index=19){
  k.display([0,9.8,1.0],()=>`ТРОС ${rope.path?.length.toFixed(2)??'—'} / ${rope.length.toFixed(1)} + ${rope.maxExtension.toFixed(1)} м\nТЯГА ${rope.tension.toFixed(0)} Н / ДВЕРЬ ${rope.opening.toFixed(2)} м`,13,2.2);
  k.label('20 / НАТЯНУТОЕ ПРОСТРАНСТВО',[-26.5,9,18],[1,0,0],15,1.0);
  k.label('ТОЛЬКО ОБЗОР · ВЫСОТА 64 см',[-16,11.3,.5],[0,0,1],7,.7);
- k.label('БЛИЖНИЙ КРЮК · ОСВОБОЖДЕНИЕ',[6,4.8,5.0],[0,0,1],8,.7);
+ // The full eight-metre label stays in the entry court. Its former centre
+ // at x=6 put the right-hand words behind the real court divider at x=7.65.
+ k.label('БЛИЖНИЙ КРЮК · ОСВОБОЖДЕНИЕ',[3.5,4.8,5.0],[0,0,1],8,.7);
  k.label('СТОПОР ЗУБА · СЕРВИСНЫЙ ВХОД',[8,5,-6],[0,0,1],9,.7);
  k.routes.push({name:'continuous ground passage and far service return',width:8,headroom:6.5},{name:'charge-only double sight slit',width:8,headroom:.64,walkable:false});
  const l=k.finishResearch([3,0,23],[-3,0.6,23],[16,0,23],{creativeEarly:20,researchChamber:false,foundationChamber:false,rope,nearHook,leaf,returnLeaf,tie,tooth,stopFinger:stop,feed,recovery,outlet,inspection,pocketSight,spawnView:{yaw:0,pitch:-.1}});

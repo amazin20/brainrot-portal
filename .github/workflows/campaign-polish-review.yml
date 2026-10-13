@@ -210,6 +210,18 @@ jobs:
           START_SERVER: '1'
           EVIDENCE_OUT: qa/presentation/animation
           SERVER_MODE: preview
+      - run: |
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+          node scripts/qa-castle-interiors.mjs
+        env: {SITE_DIR: dist, OUT_DIR: qa/presentation/castle-interiors}
+      - run: |
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+          node scripts/chapter-ambience-browser.mjs
+        env: {CHAPTER_AUDIO_OUT: qa/presentation/chapter-audio}
+      - run: |
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+          node scripts/pointer-lock-start-browser.mjs
+        env: {SITE_DIR: dist, OUT_DIR: qa/presentation/camera-start}
       - uses: actions/upload-artifact@v4
         if: always()
         with:

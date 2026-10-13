@@ -184,6 +184,44 @@ test('pointer-lock cursor recenter does not swing the camera, while the first re
   assert.ok(Math.abs(f.game.pitch + .1392) < 1e-12);
 });
 
+test('a locked recenter preceding pointerlockchange does not turn the camera or rearm on its delayed notification', t => {
+  const f = fixture(t);
+  f.scope.emit('mousemove', { movementX: 1081, movementY: 568, timeStamp: 1000 });
+  // Chromium updates pointerLockElement before dispatching its change event;
+  // its cursor recenter can reach the mouse listener between those steps.
+  f.doc.pointerLockElement = f.canvas;
+  f.scope.emit('mousemove', { movementX: -1081, movementY: -568, timeStamp: 1002 });
+  assert.equal(f.game.yaw, 0); assert.equal(f.game.pitch, -.15);
+  f.doc.emit('pointerlockchange', { timeStamp: 1003 });
+  f.scope.emit('mousemove', { movementX: 18, movementY: -9, timeStamp: 1004 });
+  assert.ok(Math.abs(f.game.yaw + .036) < 1e-12); assert.ok(Math.abs(f.game.pitch + .1338) < 1e-12);
+  assert.equal(f.game.controls.pendingLockRebound, null);
+});
+
+test('a queued recenter timestamp may precede its lock notification without discarding a different first genuine movement', t => {
+  const f = fixture(t);
+  f.scope.emit('mousemove', { movementX: 1081, movementY: 568, timeStamp: 1000 });
+  f.doc.pointerLockElement = f.canvas; f.doc.emit('pointerlockchange', { timeStamp: 1010 });
+  f.scope.emit('mousemove', { movementX: -1081, movementY: -568, timeStamp: 1008 });
+  assert.equal(f.game.yaw, 0); assert.equal(f.game.pitch, -.15);
+  f.doc.pointerLockElement = null; f.doc.emit('pointerlockchange', { timeStamp: 2000 });
+  f.scope.emit('mousemove', { movementX: 50, movementY: 20, timeStamp: 2001 });
+  f.doc.pointerLockElement = f.canvas;
+  f.scope.emit('mousemove', { movementX: 4, movementY: 3, timeStamp: 2002 });
+  assert.equal(f.game.yaw, -.008); assert.ok(Math.abs(f.game.pitch + .1554) < 1e-12);
+});
+
+test('a recenter delayed by initial rendering stays a one-shot exact match and later free movement is unfiltered', t => {
+  const f = fixture(t);
+  f.scope.emit('mousemove', { movementX: 1081, movementY: 568, timeStamp: 8135.5 });
+  f.doc.pointerLockElement = f.canvas; f.doc.emit('pointerlockchange', { timeStamp: 8161.6 });
+  f.scope.emit('mousemove', { movementX: 0, movementY: 0, timeStamp: 9000 });
+  f.scope.emit('mousemove', { movementX: -1081, movementY: -568, timeStamp: 10855 });
+  assert.equal(f.game.yaw, 0); assert.equal(f.game.pitch, -.15);
+  f.scope.emit('mousemove', { movementX: -1081, movementY: -568, timeStamp: 11000 });
+  assert.equal(f.game.yaw, 2.162); assert.equal(f.game.pitch, .8724);
+});
+
 test('ending an uncaptured gesture outside the canvas still releases it', t => {
   const f = fixture(t); f.canvas.setPointerCapture = undefined;
   f.look('pointerdown', 1); f.scope.emit('pointerup', { pointerId: 1 });

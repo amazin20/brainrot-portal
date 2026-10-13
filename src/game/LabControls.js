@@ -15,6 +15,7 @@ export class LabControls {
     this.lookPointer = null;
     this.lastUnlockedMotion = null;
     this.pendingLockRebound = null;
+    this.pointerLocked = doc.pointerLockElement === this.canvas;
     this.disposed = false;
     const canvas = this.canvas;
 
@@ -38,12 +39,12 @@ export class LabControls {
       if (event.button === 0 || event.button === 2) game.firePortal(event.button === 0 ? 0 : 1);
     });
     this.listen(doc, 'pointerlockchange', event => {
-      this.pendingLockRebound = doc.pointerLockElement === canvas && this.lastUnlockedMotion
-        ? { ...this.lastUnlockedMotion, lockedAt: event.timeStamp } : null;
-      this.lastUnlockedMotion = null;
+      this.observePointerLock(event.timeStamp);
     });
     this.listen(scope, 'mousemove', event => {
-      if (doc.pointerLockElement !== canvas) {
+      // The property can change before Chromium dispatches pointerlockchange.
+      // Arm the recenter filter at either observation, exactly once per lock.
+      if (!this.observePointerLock(event.timeStamp)) {
         if (event.movementX || event.movementY) {
           this.lastUnlockedMotion = { x: event.movementX, y: event.movementY };
         }
@@ -51,13 +52,13 @@ export class LabControls {
       }
       if (!this.active) return;
       // Chromium can report the move to the Play button again in reverse when
-      // pointer lock centers the cursor. Match only that immediate rebound;
-      // a different first movement is genuine camera input.
+      // pointer lock centers the cursor. Match only the first nonzero inverse;
+      // shader work can delay its delivery for seconds, so event age cannot
+      // distinguish it from real input. A different first movement applies.
       const rebound = this.pendingLockRebound;
       if (rebound && (event.movementX || event.movementY)) {
         this.pendingLockRebound = null;
-        if (event.movementX === -rebound.x && event.movementY === -rebound.y &&
-            event.timeStamp >= rebound.lockedAt && event.timeStamp - rebound.lockedAt < 250) return;
+        if (event.movementX === -rebound.x && event.movementY === -rebound.y) return;
       }
       game.yaw -= event.movementX * .002;
       game.pitch = clampPitch(game.pitch - event.movementY * .0018);
@@ -92,6 +93,17 @@ export class LabControls {
   }
 
   get active() { return !this.disposed && this.game.state === 'playing' && !this.game.externalBlocked; }
+
+  observePointerLock(timeStamp) {
+    const locked = this.document.pointerLockElement === this.canvas;
+    if (locked !== this.pointerLocked) {
+      this.pointerLocked = locked;
+      this.pendingLockRebound = locked && this.lastUnlockedMotion
+        ? { ...this.lastUnlockedMotion, lockedAt: timeStamp } : null;
+      this.lastUnlockedMotion = null;
+    }
+    return locked;
+  }
 
   listen(target, type, listener, options) {
     target.addEventListener(type, listener, options);

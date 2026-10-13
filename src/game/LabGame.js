@@ -258,6 +258,7 @@ export class LabGame {
     this.scene.fog = new THREE.Fog(0x263844, 64, 120);
     const previousRoots = new Set(this.scene.children);
     this.firstLevel = buildLabCampaignLevel(this, this.levelIndex);
+    this.audio?.setChapter?.(this.chamberEdition === 'foundation' ? this.levelIndex : 0);
     this.mechanisms = this.firstLevel;
     this.launchPad = this.firstLevel.launchPad;
     this.playerGroup = new THREE.Group();
@@ -353,7 +354,7 @@ export class LabGame {
     if (this.debug) {
       this.fpsElement = document.createElement('output'); this.fpsElement.className = 'lab-fps'; this.fpsElement.setAttribute('aria-label', 'Частота кадров'); document.body.appendChild(this.fpsElement);
     }
-    this.tutorialElement = document.createElement('div'); this.tutorialElement.className = 'lab-tutorial'; this.tutorialElement.innerHTML = '<kbd></kbd><span></span>'; document.body.appendChild(this.tutorialElement);
+    this.tutorialElement = document.createElement('div'); this.tutorialElement.className = 'lab-tutorial'; this.tutorialElement.hidden = true; this.tutorialElement.innerHTML = '<kbd></kbd><span></span>'; document.body.appendChild(this.tutorialElement);
   }
 
   setupControls() {

@@ -6,12 +6,14 @@ import {serveFrozenCampaign} from './lib/frozen-campaign-server.mjs';
 import {readStampedCampaignInfo,assertCampaignBrowserState} from './lib/campaign-browser-contract.mjs';
 import {ACTIVE_FOUNDATION_RUNTIME_FLAGS} from '../src/game/ReleaseIdentity.js';
 import {CREATIVE_CAMPAIGN_REVISION} from '../src/game/LabPreferences.js';
-import {isCampaignV55Path,foundationCampaignPrefix,FOUNDATION_STORAGE_PREFIX,CAMPAIGN_V55_STORAGE_PREFIX,CAMPAIGN_PREFERENCE_KEY} from '../src/game/LabCampaignStorage.js';
+import {isCampaignV55Path,isCampaignV56Path,foundationCampaignPrefix,FOUNDATION_STORAGE_PREFIX,CAMPAIGN_V55_STORAGE_PREFIX,CAMPAIGN_PREFERENCE_KEY} from '../src/game/LabCampaignStorage.js';
 
 const out=path.resolve(process.env.OUT_DIR||'qa/campaign-save-isolation');fs.mkdirSync(out,{recursive:true});
 const mounted=process.env.PAGE_URL?null:await serveFrozenCampaign(process.env.SITE_DIR||'dist');
-const base=new URL(process.env.PAGE_URL||mounted.url);assert.ok(isCampaignV55Path(base.pathname),'Save isolation proof requires the actual candidate entry path');
+const base=new URL(process.env.PAGE_URL||mounted.url);assert.ok(isCampaignV55Path(base.pathname)||isCampaignV56Path(base.pathname),'Save isolation proof requires the actual candidate entry path');
+const ownPrefix=foundationCampaignPrefix(base.pathname);
 const oldPrefixes=['',FOUNDATION_STORAGE_PREFIX,'brainrot-open-rebuild-v1:','brainrot-puzzle-pilot43-v1:','brainrot-puzzle-progression-finale-v1:','brainrot-foundation20-physical-v1:','brainrot-tower41-native-v2:','brainrot-tower41-native-v3:'];
+if(isCampaignV56Path(base.pathname))oldPrefixes.push(CAMPAIGN_V55_STORAGE_PREFIX);
 const records=oldPrefixes.map((prefix,index)=>[prefix+CAMPAIGN_PREFERENCE_KEY,JSON.stringify({campaignRevision:CREATIVE_CAMPAIGN_REVISION,
  completed:[0,1,6],hints:{1:2},resumeLevel:3,quality:'low',volume:.21,muted:true,tutorial:true,historicalNamespace:index},null,2)]);
 const oldRecord=Object.fromEntries(records),ownKey=foundationCampaignPrefix(base.pathname)+CAMPAIGN_PREFERENCE_KEY;
@@ -22,7 +24,7 @@ let browser;
 async function snapshot(page){return page.evaluate(({keys,ownKey})=>({historical:Object.fromEntries(keys.map(key=>[key,localStorage.getItem(key)])),own:localStorage.getItem(ownKey),writes:window.__CAMPAIGN_STORAGE_WRITES__??[]}),{keys:Object.keys(oldRecord),ownKey});}
 function assertIsolated(value){
  assert.deepEqual(value.historical,oldRecord,'Candidate changed a historical save byte');
- assert.ok(value.writes.every(write=>write.method!=='clear'&&write.key.startsWith(CAMPAIGN_V55_STORAGE_PREFIX)),'Candidate wrote outside its private save namespace');
+ assert.ok(value.writes.every(write=>write.method!=='clear'&&write.key.startsWith(ownPrefix)),'Candidate wrote outside its private save namespace');
 }
 async function ready(page){await page.bringToFront();await page.waitForFunction(()=>window.__NESI_DEMO_GAME__?.state==='ready'&&getComputedStyle(document.querySelector('#start-screen')).opacity==='1',{timeout:180000});}
 async function runtime(page){return page.evaluate(flagNames=>{const g=window.__NESI_DEMO_GAME__;return{levelIndex:g.levelIndex,edition:g.chamberEdition,id:g.firstLevel.id,

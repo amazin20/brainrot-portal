@@ -5,8 +5,9 @@ const types={'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=
 
 /** Serve the same frozen package at its candidate subpath. There is no source
  * compilation, development-server fallback, redirect or substituted asset. */
-export async function serveFrozenCampaign(directory,{port=0}={}){
- const root=path.resolve(directory),prefixes=['/campaign-v55/','/brainrot-portal/campaign-v55/'];
+export async function serveFrozenCampaign(directory,{port=0,namespace='campaign-v56'}={}){
+ if(!/^campaign-v(?:55|56)$/.test(namespace))throw new Error('Unknown frozen campaign mount');
+ const root=path.resolve(directory),prefixes=[`/${namespace}/`,`/brainrot-portal/${namespace}/`];
  const server=http.createServer((req,res)=>{
   try{
    const pathname=decodeURIComponent(new URL(req.url,'http://localhost').pathname),prefix=prefixes.find(value=>pathname.startsWith(value));
@@ -18,5 +19,5 @@ export async function serveFrozenCampaign(directory,{port=0}={}){
   }catch{res.writeHead(404).end();}
  });
  await new Promise((resolve,reject)=>{server.once('error',reject);server.listen(port,'127.0.0.1',resolve);});
- return {server,url:`http://127.0.0.1:${server.address().port}/campaign-v55/`};
+ return {server,url:`http://127.0.0.1:${server.address().port}/${namespace}/`};
 }
