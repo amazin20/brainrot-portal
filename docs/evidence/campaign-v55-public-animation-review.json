@@ -1,0 +1,209 @@
+{
+  "schemaVersion": 1,
+  "kind": "actual-public-animation-visual-review",
+  "mediaReadinessPass": true,
+  "publicationAccepted": false,
+  "publicURL": "https://amazin20.github.io/brainrot-portal/campaign-v55/",
+  "sourceCommit": "ba5c86fd07facd9613f5e6e8efb9709bd2ef9e89",
+  "sourceTree": "1cd58611f9247c661b460c3a99f890a6e63a8715",
+  "producer": {
+    "kind": "github-actions-public-capture",
+    "repository": "amazin20/brainrot-portal",
+    "ref": "refs/heads/main",
+    "event": "push",
+    "publisherCommit": "ba3218f7855e7cbff8170ec1f692a0fd786794a6",
+    "publicationRun": 38387082981,
+    "publicationRunAttempt": 1,
+    "workflow": ".github/workflows/publish-campaign-v55.yml",
+    "jobKey": "presentation",
+    "jobName": "presentation",
+    "jobId": 115263589990,
+    "runURL": "https://github.com/amazin20/brainrot-portal/actions/runs/38387082981",
+    "jobURL": "https://github.com/amazin20/brainrot-portal/actions/runs/38387082981/job/115263589990"
+  },
+  "outerArtifact": {
+    "id": 11808880945,
+    "bytes": 15027824,
+    "sha256": "42d25bed9017db237bffaf677f92980d0880bcd8537b95f98667ec2eceeb8b33",
+    "members": 229,
+    "expandedBytes": 16322843,
+    "authentication": "Root verified outer digest, CRC and extraction bounds; this review independently checked all105animation-envelope files by byte count and SHA256."
+  },
+  "actualPublicCaptureBinding": {
+    "envelopeFilesValidated": 105,
+    "observerFrameCaptures": 96,
+    "observerAngleCaptures": 6,
+    "all102JpegHashesMatchApprovedPublicObserver": true,
+    "source4MediaSubstituted": false,
+    "reportSha256": "42e4e0b44887933c3da631bc4cff18cd46967ceda495f0941bdcd5100a96096c"
+  },
+  "movies": [
+    {
+      "file": "free-jump.mp4",
+      "bytes": 620900,
+      "sha256": "fdf3a3e41b762167e4624220b7812b72cb5d5602276224cf88cc4323701938ac",
+      "fullyDecoded": true,
+      "frames": 48,
+      "uniqueCapturedJpegs": 48,
+      "jpegMinimumLumaRange": 208,
+      "movieMinimumLumaRange": 179,
+      "width": 960,
+      "height": 540,
+      "fps": 15,
+      "durationSeconds": 3.2,
+      "moviePoseFramesVisuallyReviewed": 48,
+      "jumps": 1,
+      "landings": 1,
+      "finalGrounded": true,
+      "resets": 0,
+      "respawns": 0,
+      "maximumGripErrorMeters": 0,
+      "maximumGroundContactErrorMeters": 0.02602732387725905
+    },
+    {
+      "file": "held-friend-jump.mp4",
+      "bytes": 624678,
+      "sha256": "b3022b1c6c345462e019c8fb4b467a7b699c5f9c46a91aa1ab959fc8af8fded5",
+      "fullyDecoded": true,
+      "frames": 48,
+      "uniqueCapturedJpegs": 48,
+      "jpegMinimumLumaRange": 204,
+      "movieMinimumLumaRange": 174,
+      "width": 960,
+      "height": 540,
+      "fps": 15,
+      "durationSeconds": 3.2,
+      "moviePoseFramesVisuallyReviewed": 48,
+      "jumps": 1,
+      "landings": 1,
+      "finalGrounded": true,
+      "resets": 0,
+      "respawns": 0,
+      "maximumGripErrorMeters": 1.9984014443252818e-15,
+      "maximumGroundContactErrorMeters": 0.024138948048785233
+    }
+  ],
+  "angleOriginals": [
+    {
+      "file": "held-start-front.jpg",
+      "bytes": 123332,
+      "sha256": "6c61883babd0780108dae61be0141d49e75490cd6af8803ebdc8f29c30339d48",
+      "physicalFingerprint": "4640ab2960d075f909885026d463e4ac10c1be55497c327415846efe8695dfcd",
+      "original960x540Viewed": true,
+      "actualDecodeNonblank": true,
+      "heldOriginal": true,
+      "cargoIdentity": "1b729c25-e50e-435c-85c0-bd400f639c77",
+      "cargoBodyId": 49,
+      "shapeIds": [
+        98
+      ],
+      "physicalBeforeAfterIdentical": true,
+      "cameraRestored": true,
+      "minimumActorMeshY": 0.0002927850665272734,
+      "scope": "camera-only inspection, not route/movie"
+    },
+    {
+      "file": "held-start-left.jpg",
+      "bytes": 101618,
+      "sha256": "1c6b6a13645f06598acaa02bd061bf998a6f5942405e4af442f4f4f87cac32a8",
+      "physicalFingerprint": "4640ab2960d075f909885026d463e4ac10c1be55497c327415846efe8695dfcd",
+      "original960x540Viewed": true,
+      "actualDecodeNonblank": true,
+      "heldOriginal": true,
+      "cargoIdentity": "1b729c25-e50e-435c-85c0-bd400f639c77",
+      "cargoBodyId": 49,
+      "shapeIds": [
+        98
+      ],
+      "physicalBeforeAfterIdentical": true,
+      "cameraRestored": true,
+      "minimumActorMeshY": 0.0002927850665272734,
+      "scope": "camera-only inspection, not route/movie"
+    },
+    {
+      "file": "held-start-right.jpg",
+      "bytes": 93356,
+      "sha256": "c3a2c5ba75d94bb610109b6111ee70e8ae91f1e2ab7fb94985ad028b417c885f",
+      "physicalFingerprint": "4640ab2960d075f909885026d463e4ac10c1be55497c327415846efe8695dfcd",
+      "original960x540Viewed": true,
+      "actualDecodeNonblank": true,
+      "heldOriginal": true,
+      "cargoIdentity": "1b729c25-e50e-435c-85c0-bd400f639c77",
+      "cargoBodyId": 49,
+      "shapeIds": [
+        98
+      ],
+      "physicalBeforeAfterIdentical": true,
+      "cameraRestored": true,
+      "minimumActorMeshY": 0.0002927850665272734,
+      "scope": "camera-only inspection, not route/movie"
+    },
+    {
+      "file": "held-grounded-finish-front.jpg",
+      "bytes": 89414,
+      "sha256": "f25689201c7765569f7e10b75653d7e3874279ac6a85eedeb72e6f9cf369ba34",
+      "physicalFingerprint": "3b49e1f5385da20c548e0f01aff4bc881b4f1b11da04601589296553815d9eae",
+      "original960x540Viewed": true,
+      "actualDecodeNonblank": true,
+      "heldOriginal": true,
+      "cargoIdentity": "1b729c25-e50e-435c-85c0-bd400f639c77",
+      "cargoBodyId": 49,
+      "shapeIds": [
+        98
+      ],
+      "physicalBeforeAfterIdentical": true,
+      "cameraRestored": true,
+      "minimumActorMeshY": 0.0002927850665272734,
+      "scope": "camera-only inspection, not route/movie"
+    },
+    {
+      "file": "held-grounded-finish-left.jpg",
+      "bytes": 71377,
+      "sha256": "a6deceedef8dee02b7246972d65e05d6124903570203269438159c444734a681",
+      "physicalFingerprint": "3b49e1f5385da20c548e0f01aff4bc881b4f1b11da04601589296553815d9eae",
+      "original960x540Viewed": true,
+      "actualDecodeNonblank": true,
+      "heldOriginal": true,
+      "cargoIdentity": "1b729c25-e50e-435c-85c0-bd400f639c77",
+      "cargoBodyId": 49,
+      "shapeIds": [
+        98
+      ],
+      "physicalBeforeAfterIdentical": true,
+      "cameraRestored": true,
+      "minimumActorMeshY": 0.0002927850665272734,
+      "scope": "camera-only inspection, not route/movie"
+    },
+    {
+      "file": "held-grounded-finish-right.jpg",
+      "bytes": 103853,
+      "sha256": "ac887fbddce262f023503a0660fc19a330885a1ab98c987766ec3656ce36d550",
+      "physicalFingerprint": "3b49e1f5385da20c548e0f01aff4bc881b4f1b11da04601589296553815d9eae",
+      "original960x540Viewed": true,
+      "actualDecodeNonblank": true,
+      "heldOriginal": true,
+      "cargoIdentity": "1b729c25-e50e-435c-85c0-bd400f639c77",
+      "cargoBodyId": 49,
+      "shapeIds": [
+        98
+      ],
+      "physicalBeforeAfterIdentical": true,
+      "cameraRestored": true,
+      "minimumActorMeshY": 0.0002927850665272734,
+      "scope": "camera-only inspection, not route/movie"
+    }
+  ],
+  "visualFindings": [
+    "Every48-frame movie pose sequence was inspected from freshly decoded actualPUBLIC MP4s. Turn, jump, landing and stop progress continuously at the captured15fps.",
+    "No obvious persistent boot floating, floor penetration, pose pop or cargo/torso/leg clipping was found.",
+    "All6actualPUBLIC front/left/right held start/finish originals were opened at960x540. Hands visibly meet the held friend; side views separate it from torso and legs."
+  ],
+  "blockingFindings": [],
+  "limits": [
+    "Room9 only: one free and one held ordinary-control jump-and-stop sequence.",
+    "Six supplementary camera-only stills inspect two held poses and do not count as route/movie evidence.",
+    "Software WebGL gives no hardware FPS or human playtest acceptance claim.",
+    "This is a media-readiness receipt; aggregate publication/transport acceptance belongs to the root release review."
+  ],
+  "sourceEdits": false
+}

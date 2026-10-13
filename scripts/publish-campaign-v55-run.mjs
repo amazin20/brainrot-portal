@@ -128,7 +128,7 @@ async function aggregate(ctx){
  assertPublicCohort(run,jobs,{now});const images=[],envelopes=[],pins=[];let total=0;
  for(const role of PUBLIC_ROLES){const name='campaign-v55-public-'+role+'-'+now.publicationRun+'-1',matched=artifacts.filter(row=>row.name===name);assert.equal(matched.length,1);const pin=matched[0],info=roleInfo(role),job=jobs.find(job=>job.name===info.name);
   assertProducerArtifact(pin,job,now);
-  total+=pin.size_in_bytes;assert.ok(total<=spec.limits.boundedVerificationBytes);const zip='proof/public-downloads/'+pin.id+'.zip',folder='proof/public-artifacts/'+role;
+  total+=pin.size_in_bytes;assert.ok(total<=spec.limits.boundedVerificationBytes);const zip='proof/public-downloads/'+pin.id+'.zip',folder='proof/public-'+role;
   await ctx.downloadOne(pin,zip,spec.limits.boundedVerificationBytes);execFileSync('python3',['scripts/publish-campaign-v55.py','extract-zip','--zip',zip,'--output',folder,'--expected-bytes',String(pin.size_in_bytes),'--expected-sha256',pin.digest.slice(7)],{stdio:'inherit'});verifiedZip(zip,folder,pin);
   const origin=read(folder+'/origin.json');envelopes.push({role,artifact:pin,jobId:job.id,envelopes:await captureEnvelopes(ctx,role,{folder,run,job,origin,validate:true})});pins.push(pin);
  }
@@ -139,7 +139,7 @@ async function aggregate(ctx){
  const manifest=read('proof/deploy-proof/publication-manifest.json'),post=read('proof/deploy-proof/public-bytes.json');assert.equal(post.pass,true);assert.equal(post.phase,'published');assert.equal(post.publicationRun,now.publicationRun);assert.equal(post.publicationRunAttempt,1);assert.equal(post.publisherCommit,now.publisherCommit);
  assert.equal(post.checked,manifest.siteFiles.length);assert.equal(post.bytes,manifest.siteBytes);assert.equal(post.siteFilesSha256,manifest.siteFilesSha256);
  const output='proof/public-verification';assert.equal(fs.existsSync(output),false);fs.mkdirSync(output,{recursive:true});
- for(const role of PUBLIC_ROLES)fs.cpSync('proof/public-artifacts/'+role,output+'/public-'+role,{recursive:true});
+ for(const role of PUBLIC_ROLES)fs.cpSync('proof/public-'+role,output+'/public-'+role,{recursive:true});
  // Retain only explicit identifying metadata, all actual PUBLIC payloads and
  // complete actual PUBLIC job logs. Never include caches or production copies.
  for(const name of ['source-binding.json','package-binding.json','publication-manifest.json']){const file='proof/deploy-proof/'+name;assert.ok(fs.existsSync(file));fs.copyFileSync(file,output+'/'+name);}
@@ -155,7 +155,7 @@ async function aggregate(ctx){
   scope:'All prior producer jobs are successful; this final verifier job is still in progress and cannot claim its own success. Root final actual11-job/provider/artifact audit is required.',
   limitations:['Finite SOURCE shortcut audit preserves26unproven setup/error probes; no exhaustive bypass guarantee.','Native51routes provide51finishedJPEGs rather than51route movies.','No hardware FPS, physical device benchmark or human playtest is claimed.']});
  const rows=inventory(output,{maximum:spec.limits.boundedVerificationBytes});write(output+'/verification-packet.json',{kind:'campaign-v55-public-verification-packet',schemaVersion:1,pass:true,publicationAccepted:false,...now,sourceCommit:spec.sourceCommit,sourceTree:spec.sourceTree,sourceReview:spec.sourceReview,files:rows,bytes:rows.reduce((n,row)=>n+row.bytes,0),inventorySha256:digestRows(rows),maximumBytes:spec.limits.boundedVerificationBytes});
- inventory(output,{maximum:spec.limits.boundedVerificationBytes});for(const pin of pins)verifiedZip('proof/public-downloads/'+pin.id+'.zip','proof/public-artifacts/'+PUBLIC_ROLES.find(role=>pin.name==='campaign-v55-public-'+role+'-'+now.publicationRun+'-1'),pin);
+ inventory(output,{maximum:spec.limits.boundedVerificationBytes});for(const pin of pins)verifiedZip('proof/public-downloads/'+pin.id+'.zip','proof/public-'+PUBLIC_ROLES.find(role=>pin.name==='campaign-v55-public-'+role+'-'+now.publicationRun+'-1'),pin);
 }
 export async function dispatchPublic(command,arg,ctx){
  if(command==='prepare-public-input')return preparePublicInput();

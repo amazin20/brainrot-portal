@@ -1,0 +1,2515 @@
+{
+  "schemaVersion": 1,
+  "kind": "campaign-v55-actual-public-manual-architecture-review",
+  "reviewer": "/root/public_visual_review",
+  "reviewedAtUTC": "2026-10-13T11:41:25.637923+00:00",
+  "visualScopePass": true,
+  "publicationAccepted": false,
+  "source": {
+    "sourceCommit": "ba5c86fd07facd9613f5e6e8efb9709bd2ef9e89",
+    "sourceTree": "1cd58611f9247c661b460c3a99f890a6e63a8715",
+    "sourceParent": "1160c296e024e34ac19b1d78247d9168eb7a18a7",
+    "sourceReview": {
+      "runId": 38377149910,
+      "runAttempt": 1
+    },
+    "sourceReviewURL": "https://github.com/amazin20/brainrot-portal/actions/runs/38377149910"
+  },
+  "actualPublicProducer": {
+    "kind": "github-actions-public-capture",
+    "repository": "amazin20/brainrot-portal",
+    "ref": "refs/heads/main",
+    "event": "push",
+    "publisherCommit": "ba3218f7855e7cbff8170ec1f692a0fd786794a6",
+    "publicationRun": 38387082981,
+    "publicationRunAttempt": 1,
+    "workflow": ".github/workflows/publish-campaign-v55.yml",
+    "jobKey": "presentation",
+    "jobName": "presentation",
+    "jobId": 115263589990,
+    "runURL": "https://github.com/amazin20/brainrot-portal/actions/runs/38387082981",
+    "jobURL": "https://github.com/amazin20/brainrot-portal/actions/runs/38387082981/job/115263589990"
+  },
+  "requestedBaseURL": "https://amazin20.github.io/brainrot-portal/campaign-v55/",
+  "artifactAuthenticationSuppliedByRoot": {
+    "artifactId": 11808880945,
+    "zipBytes": 15027824,
+    "zipSha256": "42d25bed9017db237bffaf677f92980d0880bcd8537b95f98667ec2eceeb8b33",
+    "zipMembers": 229,
+    "expandedBytes": 16322843,
+    "allMemberCRCAndPathAndTypeCheckedByRoot": true
+  },
+  "independentFileChecks": {
+    "allOriginalImagesDecoded": true,
+    "architectureOriginals": 102,
+    "menuOriginals": 6,
+    "all108OriginalsSHA256AndBytesMatchProducerEnvelopes": true,
+    "matchedArchitectureOriginals": 102,
+    "matchedMenuOriginals": 6
+  },
+  "captureProtocol": {
+    "inspectionQuality": "balanced",
+    "publicStrictCapture": false,
+    "reportPass": true,
+    "capturePass": true,
+    "all51StartupRowsBalanced": true,
+    "all51StartupRowsLiveShadows": true,
+    "all102ArchitectureCapturesIncludeHTML": true,
+    "all51OverviewsInsideRealRoofAndGeometryVisibilityUnchanged": true
+  },
+  "fullResolutionOriginalsReviewed": 108,
+  "architectureOriginalsReviewed": 102,
+  "menuOriginalsReviewed": 6,
+  "contactSheetOnlyReview": false,
+  "substantialObservedVisualBlockers": [],
+  "source4Comparison": {
+    "acceptedReviewFile": "/workspace/scratch/9a3a6b8c1929/campaign-source-audit-4/presentation-visual-review/final-source4-architecture-review.json",
+    "acceptedReviewSha256": "a1ad755f92e43de4b1616787868fae323c7003f26fc93d9d943165c7d9b9b2f4",
+    "all51StableIDsVisibleIDsAndThemesMatch": true,
+    "samePreviouslyAcceptedCosmeticWatchlist": [
+      {
+        "visibleRooms": [
+          5,
+          23
+        ],
+        "observation": "Broad service floor / near-spawn wall remain sparse.",
+        "followup": "Future material/detail variation can be considered after gameplay geometry and portal footprints are rechecked.",
+        "releaseBlocker": false
+      },
+      {
+        "visibleRooms": [
+          20
+        ],
+        "observation": "Secondary hook label is partially masked by the real foreground wall in the initial pose; primary board remains readable.",
+        "followup": "Inspect the normal near-hook interaction view before proposing a label placement change.",
+        "releaseBlocker": false
+      },
+      {
+        "visibleRooms": [
+          10,
+          19,
+          40
+        ],
+        "observation": "Close initial camera poses produce a larger actor near the HUD; actor stays in the observed viewport.",
+        "followup": "Optional future camera/HUD framing preference review; no viewport-cutting failure like old visible47 was found.",
+        "releaseBlocker": false
+      },
+      {
+        "visibleRooms": [
+          51
+        ],
+        "observation": "Retained wing roofs and some wide gallery surfaces remain plain in the central atrium overview.",
+        "followup": "Future finer material variation should preserve collision, opaque visibility and portal readability.",
+        "releaseBlocker": false
+      }
+    ],
+    "noClaimOfPixelIdenticalCaptures": true
+  },
+  "transientCaptureLimitations": [
+    {
+      "visibleRoom": 23,
+      "startupFile": "payload/architecture/23-start.jpg",
+      "clearOverviewFile": "payload/architecture/23-overview.jpg",
+      "observation": "Faint translucent campaign-map labels in startup image; absent in overview from the same real room sequence. Both captures use CDP viewport and include HTML. Consistent with menu fade timing, not a world mesh/body texture issue.",
+      "inference": "menu fade timing",
+      "persistentMenuLayerObservedInOverview": false,
+      "substantialReleaseBlocker": false
+    },
+    {
+      "visibleRoom": 27,
+      "startupFile": "payload/architecture/27-start.jpg",
+      "clearOverviewFile": "payload/architecture/27-overview.jpg",
+      "observation": "Faint translucent campaign-map labels in startup image; absent in overview from the same real room sequence. Both captures use CDP viewport and include HTML. Consistent with menu fade timing, not a world mesh/body texture issue.",
+      "inference": "menu fade timing",
+      "persistentMenuLayerObservedInOverview": false,
+      "substantialReleaseBlocker": false
+    }
+  ],
+  "menuReview": {
+    "reportPass": true,
+    "reportErrors": [],
+    "viewedOriginals": [
+      "payload/menu/menu-1024x768.png",
+      "payload/menu/menu-1440x900.png",
+      "payload/menu/menu-360x800.png",
+      "payload/menu/menu-390x844.png",
+      "payload/menu/menu-412x915.png",
+      "payload/menu/menu-844x390.png"
+    ],
+    "observation": "Desktop and landscape Play controls visible and legible; portrait chapter map has intentional vertical scrolling and no observed horizontal overflow. The 1024×768 viewport is captured after scrolling to Play, so the top of the logo is outside that retained viewport. Automated reach/hit checks retained in producer report.",
+    "manualInteractionTestedByThisReviewer": false
+  },
+  "scope": "All 51 actual-public startup frames and 51 real interior overview frames, plus six actual-public menu viewport originals, opened individually at their original resolution. Review covers visible surfaces, actor silhouette, palette, labels, layout and obvious missing render/clipping.",
+  "limitations": [
+    "Static screenshot review does not prove continuous animation, all gameplay frames, hidden sectors, every mechanism view or every hardware/browser.",
+    "Castle overview shows the central atrium and retained opaque wing roofs, not all eleven hidden wing interiors.",
+    "Public producer run 38387082981 remains failed at late aggregate ffprobe path resolution and consequent packet generation; this visual review does not relabel the run conclusion or accept final publication by itself.",
+    "The PUBLIC architecture report sets strictCapture false; all actual retained images independently decode, match producer envelope hashes and have successful CDP captures."
+  ],
+  "productionChangesDuringReview": false,
+  "rows": [
+    {
+      "visibleRoom": 1,
+      "stableLevelIndex": 0,
+      "stableFileNumber": 1,
+      "id": "foundation-first-connection",
+      "title": "1 / По ту сторону",
+      "theme": "discovery",
+      "reviewedOriginals": [
+        "payload/architecture/1-start.jpg",
+        "payload/architecture/1-overview.jpg"
+      ],
+      "fullResolutionStartViewed": true,
+      "fullResolutionOverviewViewed": true,
+      "visualScopePass": true,
+      "observedFinding": "Pale tiled laboratory, elevated exit platforms and support legs, closed exit frame and original actors render coherently.",
+      "cameraDistance": 4.922069797109185,
+      "cameraObstructed": true,
+      "overviewGeometryVisibilityChanged": false,
+      "overviewVisibleFloorPoints": 36,
+      "overviewRoofClearance": 8.399999985694885,
+      "captureMethod": "CDP viewport",
+      "capturesIncludeHTML": true
+    },
+    {
+      "visibleRoom": 2,
+      "stableLevelIndex": 1,
+      "stableFileNumber": 2,
+      "id": "foundation-solid-light",
+      "title": "2 / Свет под ногами",
+      "theme": "discovery",
+      "reviewedOriginals": [
+        "payload/architecture/2-start.jpg",
+        "payload/architecture/2-overview.jpg"
+      ],
+      "fullResolutionStartViewed": true,
+      "fullResolutionOverviewViewed": true,
+      "visualScopePass": true,
+      "observedFinding": "Split floor platforms, cyan beam and pale receiving wall are visible; overview resolves the height/layout.",
+      "cameraDistance": 4.946665768078233,
+      "cameraObstructed": true,
+      "overviewGeometryVisibilityChanged": false,
+      "overviewVisibleFloorPoints": 39,
+      "overviewRoofClearance": 2.5,
+      "captureMethod": "CDP viewport",
+      "capturesIncludeHTML": true
+    },
+    {
+      "visibleRoom": 3,
+      "stableLevelIndex": 2,
+      "stableFileNumber": 3,
+      "id": "foundation-moving-address",
+      "title": "3 / Адрес в движении",
+      "theme": "discovery",
+      "reviewedOriginals": [
+        "payload/architecture/3-start.jpg",
+        "payload/architecture/3-overview.jpg"
+      ],
+      "fullResolutionStartViewed": true,
+      "fullResolutionOverviewViewed": true,
+      "visualScopePass": true,
+      "observedFinding": "Cabin rail structure, dock labels and supported upper landing render; original actor/companion remain visible.",
+      "cameraDistance": 5.206917647131803,
+      "cameraObstructed": true,
+      "overviewGeometryVisibilityChanged": false,
+      "overviewVisibleFloorPoints": 35,
+      "overviewRoofClearance": 2.5,
+      "captureMethod": "CDP viewport",
+      "capturesIncludeHTML": true
+    },
+    {
+      "visibleRoom": 4,
+      "stableLevelIndex": 3,
+      "stableFileNumber": 4,
+      "id": "foundation-earned-momentum",
+      "title": "4 / Цена высоты",
+      "theme": "discovery",
+      "reviewedOriginals": [
+        "payload/architecture/4-start.jpg",
+        "payload/architecture/4-overview.jpg"
+      ],
+      "fullResolutionStartViewed": true,
+      "fullResolutionOverviewViewed": true,
+      "visualScopePass": true,
+      "observedFinding": "Solid steep ramp, upper galleries and white receiving panels are visible in the real interior overview.",
+      "cameraDistance": 5.4508193568346694,
+      "cameraObstructed": true,
+      "overviewGeometryVisibilityChanged": false,
+      "overviewVisibleFloorPoints": 38,
+      "overviewRoofClearance": 2.5,
+      "captureMethod": "CDP viewport",
+      "capturesIncludeHTML": true
+    },
+    {
+      "visibleRoom": 5,
+      "stableLevelIndex": 4,
+      "stableFileNumber": 5,
+      "id": "foundation-borrowed-power",
+      "title": "5 / Одной парой",
+      "theme": "discovery",
+      "reviewedOriginals": [
+        "payload/architecture/5-start.jpg",
+        "payload/architecture/5-overview.jpg"
+      ],
+      "fullResolutionStartViewed": true,
+      "fullResolutionOverviewViewed": true,
+      "visualScopePass": true,
+      "observedFinding": "Broad blue service floor remains sparse; supported platforms, receiving walls and cyan light are present.",
+      "cameraDistance": 6.5,
+      "cameraObstructed": true,
+      "overviewGeometryVisibilityChanged": false,
+      "overviewVisibleFloorPoints": 38,
+      "overviewRoofClearance": 2.5,
+      "captureMethod": "CDP viewport",
+      "capturesIncludeHTML": true
+    },
+    {
+      "visibleRoom": 6,
+      "stableLevelIndex": 5,
+      "stableFileNumber": 6,
+      "id": "crossed-light",
+      "title": "6 / Перекрёстный свет",
+      "theme": "discovery",
+      "reviewedOriginals": [
+        "payload/architecture/6-start.jpg",
+        "payload/architecture/6-overview.jpg"
+      ],
+      "fullResolutionStartViewed": true,
+      "fullResolutionOverviewViewed": true,
+      "visualScopePass": true,
+      "observedFinding": "Teal ceramic room, open decorative arcs, actual circular mechanisms and receiving panels are distinguishable.",
+      "cameraDistance": 6.499999999999999,
+      "cameraObstructed": false,
+      "overviewGeometryVisibilityChanged": false,
+      "overviewVisibleFloorPoints": 12,
+      "overviewRoofClearance": 6.203999999105927,
+      "captureMethod": "CDP viewport",
+      "capturesIncludeHTML": true
+    },
+    {
+      "visibleRoom": 7,
+      "stableLevelIndex": 6,
+      "stableFileNumber": 7,
+      "id": "moment-arm",
+      "title": "7 / Инерционный балансир",
+      "theme": "discovery",
+      "reviewedOriginals": [
+        "payload/architecture/7-start.jpg",
+        "payload/architecture/7-overview.jpg"
+      ],
+      "fullResolutionStartViewed": true,
+      "fullResolutionOverviewViewed": true,
+      "visualScopePass": true,
+      "observedFinding": "Teal stairwell, lift frame and upper landing machinery are visible; no missing roof-only capture.",
+      "cameraDistance": 6.387140954172118,
+      "cameraObstructed": true,
+      "overviewGeometryVisibilityChanged": false,
+      "overviewVisibleFloorPoints": 39,
+      "overviewRoofClearance": 2.5,
+      "captureMethod": "CDP viewport",
+      "capturesIncludeHTML": true
+    },
+    {
+      "visibleRoom": 8,
+      "stableLevelIndex": 7,
+      "stableFileNumber": 8,
+      "id": "wind-column",
+      "title": "8 / Ветер за углом",
+      "theme": "discovery",
+      "reviewedOriginals": [
+        "payload/architecture/8-start.jpg",
+        "payload/architecture/8-overview.jpg"
+      ],
+      "fullResolutionStartViewed": true,
+      "fullResolutionOverviewViewed": true,
+      "visualScopePass": true,
+      "observedFinding": "Detailed fan blades/housing, tall frame and floor receiving plate render.",
+      "cameraDistance": 6.5,
+      "cameraObstructed": false,
+      "overviewGeometryVisibilityChanged": false,
+      "overviewVisibleFloorPoints": 25,
+      "overviewRoofClearance": 2.5,
+      "captureMethod": "CDP viewport",
+      "capturesIncludeHTML": true
+    },
+    {
+      "visibleRoom": 9,
+      "stableLevelIndex": 8,
+      "stableFileNumber": 9,
+      "id": "spring-mail",
+      "title": "9 / Пружинная почта",
+      "theme": "discovery",
+      "reviewedOriginals": [
+        "payload/architecture/9-start.jpg",
+        "payload/architecture/9-overview.jpg"
+      ],
+      "fullResolutionStartViewed": true,
+      "fullResolutionOverviewViewed": true,
+      "visualScopePass": true,
+      "observedFinding": "Open tiled room and horizontal drive machinery, floor/side receiving panels and companion render.",
+      "cameraDistance": 4.513363200690612,
+      "cameraObstructed": true,
+      "overviewGeometryVisibilityChanged": false,
+      "overviewVisibleFloorPoints": 16,
+      "overviewRoofClearance": 7.199999999999999,
+      "captureMethod": "CDP viewport",
+      "capturesIncludeHTML": true
+    },
+    {
+      "visibleRoom": 10,
+      "stableLevelIndex": 9,
+      "stableFileNumber": 10,
+      "id": "freight-ferry",
+      "title": "10 / Телескопический док",
+      "theme": "discovery",
+      "reviewedOriginals": [
+        "payload/architecture/10-start.jpg",
+        "payload/architecture/10-overview.jpg"
+      ],
+      "fullResolutionStartViewed": true,
+      "fullResolutionOverviewViewed": true,
+      "visualScopePass": true,
+      "observedFinding": "Teal staircase and supported moving platform are visible; startup actor is close but remains in the viewport.",
+      "cameraDistance": 3.542130673790676,
+      "cameraObstructed": true,
+      "overviewGeometryVisibilityChanged": false,
+      "overviewVisibleFloorPoints": 19,
+      "overviewRoofClearance": 4.199999999999999,
+      "captureMethod": "CDP viewport",
+      "capturesIncludeHTML": true
+    },
+    {
+      "visibleRoom": 11,
+      "stableLevelIndex": 10,
+      "stableFileNumber": 11,
+      "id": "stored-wind",
+      "title": "11 / Запас ветра",
+      "theme": "dynamo",
+      "reviewedOriginals": [
+        "payload/architecture/11-start.jpg",
+        "payload/architecture/11-overview.jpg"
+      ],
+      "fullResolutionStartViewed": true,
+      "fullResolutionOverviewViewed": true,
+      "visualScopePass": true,
+      "observedFinding": "Copper chapter begins consistently; two detailed fan/duct mechanisms and contrasting white receiving wall render.",
+      "cameraDistance": 6.499999999999998,
+      "cameraObstructed": false,
+      "overviewGeometryVisibilityChanged": false,
+      "overviewVisibleFloorPoints": 17,
+      "overviewRoofClearance": 2.5,
+      "captureMethod": "CDP viewport",
+      "capturesIncludeHTML": true
+    },
+    {
+      "visibleRoom": 12,
+      "stableLevelIndex": 11,
+      "stableFileNumber": 12,
+      "id": "folded-junction",
+      "title": "12 / Узел падений",
+      "theme": "dynamo",
+      "reviewedOriginals": [
+        "payload/architecture/12-start.jpg",
+        "payload/architecture/12-overview.jpg"
+      ],
+      "fullResolutionStartViewed": true,
+      "fullResolutionOverviewViewed": true,
+      "visualScopePass": true,
+      "observedFinding": "Copper room with large tower/bearing surfaces, upper walkway and floor receiving panels remains geometrically readable.",
+      "cameraDistance": 4.789511269962306,
+      "cameraObstructed": true,
+      "overviewGeometryVisibilityChanged": false,
+      "overviewVisibleFloorPoints": 36,
+      "overviewRoofClearance": 15.6,
+      "captureMethod": "CDP viewport",
+      "capturesIncludeHTML": true
+    },
+    {
+      "visibleRoom": 13,
+      "stableLevelIndex": 12,
+      "stableFileNumber": 13,
+      "id": "optical-paradox",
+      "title": "13 / Оптический парадокс",
+      "theme": "dynamo",
+      "reviewedOriginals": [
+        "payload/architecture/13-start.jpg",
+        "payload/architecture/13-overview.jpg"
+      ],
+      "fullResolutionStartViewed": true,
+      "fullResolutionOverviewViewed": true,
+      "visualScopePass": true,
+      "observedFinding": "Chains, portal-capable plates and large solid supports remain visible in copper palette.",
+      "cameraDistance": 6.5,
+      "cameraObstructed": false,
+      "overviewGeometryVisibilityChanged": false,
+      "overviewVisibleFloorPoints": 64,
+      "overviewRoofClearance": 2.5,
+      "captureMethod": "CDP viewport",
+      "capturesIncludeHTML": true
+    },
+    {
+      "visibleRoom": 14,
+      "stableLevelIndex": 13,
+      "stableFileNumber": 14,
+      "id": "light-weave",
+      "title": "14 / Световая вязь",
+      "theme": "dynamo",
+      "reviewedOriginals": [
+        "payload/architecture/14-start.jpg",
+        "payload/architecture/14-overview.jpg"
+      ],
+      "fullResolutionStartViewed": true,
+      "fullResolutionOverviewViewed": true,
+      "visualScopePass": true,
+      "observedFinding": "Stepped circulation, upper landings and circular duct opening render; original actors are visible.",
+      "cameraDistance": 3.800767972007172,
+      "cameraObstructed": true,
+      "overviewGeometryVisibilityChanged": false,
+      "overviewVisibleFloorPoints": 32,
+      "overviewRoofClearance": 8.75,
+      "captureMethod": "CDP viewport",
+      "capturesIncludeHTML": true
+    },
+    {
+      "visibleRoom": 15,
+      "stableLevelIndex": 14,
+      "stableFileNumber": 15,
+      "id": "countercurrent-weave",
+      "title": "15 / Противотечение",
+      "theme": "dynamo",
+      "reviewedOriginals": [
+        "payload/architecture/15-start.jpg",
+        "payload/architecture/15-overview.jpg"
+      ],
+      "fullResolutionStartViewed": true,
+      "fullResolutionOverviewViewed": true,
+      "visualScopePass": true,
+      "observedFinding": "Large fan with visible airflow particles and multi-level copper galleries render.",
+      "cameraDistance": 6.499999999999999,
+      "cameraObstructed": false,
+      "overviewGeometryVisibilityChanged": false,
+      "overviewVisibleFloorPoints": 28,
+      "overviewRoofClearance": 2.5,
+      "captureMethod": "CDP viewport",
+      "capturesIncludeHTML": true
+    },
+    {
+      "visibleRoom": 16,
+      "stableLevelIndex": 15,
+      "stableFileNumber": 16,
+      "id": "vanishing-support",
+      "title": "16 / Ложный пол",
+      "theme": "dynamo",
+      "reviewedOriginals": [
+        "payload/architecture/16-start.jpg",
+        "payload/architecture/16-overview.jpg"
+      ],
+      "fullResolutionStartViewed": true,
+      "fullResolutionOverviewViewed": true,
+      "visualScopePass": true,
+      "observedFinding": "Connected supported galleries and staircase render in overview; startup faces a valid receiving wall.",
+      "cameraDistance": 6.499999999999999,
+      "cameraObstructed": false,
+      "overviewGeometryVisibilityChanged": false,
+      "overviewVisibleFloorPoints": 46,
+      "overviewRoofClearance": 2.5,
+      "captureMethod": "CDP viewport",
+      "capturesIncludeHTML": true
+    },
+    {
+      "visibleRoom": 17,
+      "stableLevelIndex": 16,
+      "stableFileNumber": 17,
+      "id": "foundation-cable-supported-architecture",
+      "title": "17 / Свободный конец",
+      "theme": "dynamo",
+      "reviewedOriginals": [
+        "payload/architecture/17-start.jpg",
+        "payload/architecture/17-overview.jpg"
+      ],
+      "fullResolutionStartViewed": true,
+      "fullResolutionOverviewViewed": true,
+      "visualScopePass": true,
+      "observedFinding": "Sloped landing structure, white receiving floor and readable support/angle instrument render.",
+      "cameraDistance": 6.499999999999997,
+      "cameraObstructed": false,
+      "overviewGeometryVisibilityChanged": false,
+      "overviewVisibleFloorPoints": 33,
+      "overviewRoofClearance": 12.94999999165535,
+      "captureMethod": "CDP viewport",
+      "capturesIncludeHTML": true
+    },
+    {
+      "visibleRoom": 18,
+      "stableLevelIndex": 17,
+      "stableFileNumber": 18,
+      "id": "conductive-cargo-circuit",
+      "title": "18 / Замкнутая цепь",
+      "theme": "dynamo",
+      "reviewedOriginals": [
+        "payload/architecture/18-start.jpg",
+        "payload/architecture/18-overview.jpg"
+      ],
+      "fullResolutionStartViewed": true,
+      "fullResolutionOverviewViewed": true,
+      "visualScopePass": true,
+      "observedFinding": "Copper closed-loop rails, visible drive mechanisms and floor panels render with readable structure.",
+      "cameraDistance": 3.9846982335972427,
+      "cameraObstructed": true,
+      "overviewGeometryVisibilityChanged": false,
+      "overviewVisibleFloorPoints": 19,
+      "overviewRoofClearance": 2.5,
+      "captureMethod": "CDP viewport",
+      "capturesIncludeHTML": true
+    },
+    {
+      "visibleRoom": 19,
+      "stableLevelIndex": 18,
+      "stableFileNumber": 19,
+      "id": "glass-air-inertia",
+      "title": "19 / Свет проходит, воздух — нет",
+      "theme": "dynamo",
+      "reviewedOriginals": [
+        "payload/architecture/19-start.jpg",
+        "payload/architecture/19-overview.jpg"
+      ],
+      "fullResolutionStartViewed": true,
+      "fullResolutionOverviewViewed": true,
+      "visualScopePass": true,
+      "observedFinding": "Detailed fan and cyan beam lead into portal-capable geometry; close startup actor remains in viewport.",
+      "cameraDistance": 2.766218779141195,
+      "cameraObstructed": true,
+      "overviewGeometryVisibilityChanged": false,
+      "overviewVisibleFloorPoints": 23,
+      "overviewRoofClearance": 2.5,
+      "captureMethod": "CDP viewport",
+      "capturesIncludeHTML": true
+    },
+    {
+      "visibleRoom": 20,
+      "stableLevelIndex": 19,
+      "stableFileNumber": 20,
+      "id": "foundation-portal-tension",
+      "title": "20 / Натянутое пространство",
+      "theme": "dynamo",
+      "reviewedOriginals": [
+        "payload/architecture/20-start.jpg",
+        "payload/architecture/20-overview.jpg"
+      ],
+      "fullResolutionStartViewed": true,
+      "fullResolutionOverviewViewed": true,
+      "visualScopePass": true,
+      "observedFinding": "Primary cable/tension board is legible; near-hook secondary sign is partly occluded by the actual foreground wall.",
+      "cameraDistance": 5.7241039698985885,
+      "cameraObstructed": true,
+      "overviewGeometryVisibilityChanged": false,
+      "overviewVisibleFloorPoints": 14,
+      "overviewRoofClearance": 2.5,
+      "captureMethod": "CDP viewport",
+      "capturesIncludeHTML": true
+    },
+    {
+      "visibleRoom": 21,
+      "stableLevelIndex": 20,
+      "stableFileNumber": 21,
+      "id": "gravity-pocket",
+      "title": "21 / Гравитационный карман",
+      "theme": "biosphere",
+      "reviewedOriginals": [
+        "payload/architecture/21-start.jpg",
+        "payload/architecture/21-overview.jpg"
+      ],
+      "fullResolutionStartViewed": true,
+      "fullResolutionOverviewViewed": true,
+      "visualScopePass": true,
+      "observedFinding": "Jade chapter begins; large mechanical slabs/cables and white receiving panels render in the multi-level layout.",
+      "cameraDistance": 6.23850769065753,
+      "cameraObstructed": true,
+      "overviewGeometryVisibilityChanged": false,
+      "overviewVisibleFloorPoints": 23,
+      "overviewRoofClearance": 2.5,
+      "captureMethod": "CDP viewport",
+      "capturesIncludeHTML": true
+    },
+    {
+      "visibleRoom": 22,
+      "stableLevelIndex": 21,
+      "stableFileNumber": 22,
+      "id": "opposed-freight-lock",
+      "title": "22 / Обратная сторона шлюза",
+      "theme": "biosphere",
+      "reviewedOriginals": [
+        "payload/architecture/22-start.jpg",
+        "payload/architecture/22-overview.jpg"
+      ],
+      "fullResolutionStartViewed": true,
+      "fullResolutionOverviewViewed": true,
+      "visualScopePass": true,
+      "observedFinding": "Jade lower court, visible wheel mechanism and raised circulation render.",
+      "cameraDistance": 5.734334692368893,
+      "cameraObstructed": true,
+      "overviewGeometryVisibilityChanged": false,
+      "overviewVisibleFloorPoints": 24,
+      "overviewRoofClearance": 2.5,
+      "captureMethod": "CDP viewport",
+      "capturesIncludeHTML": true
+    },
+    {
+      "visibleRoom": 23,
+      "stableLevelIndex": 22,
+      "stableFileNumber": 23,
+      "id": "counterweight-reversal",
+      "title": "23 / Вес возвращения",
+      "theme": "biosphere",
+      "reviewedOriginals": [
+        "payload/architecture/23-start.jpg",
+        "payload/architecture/23-overview.jpg"
+      ],
+      "fullResolutionStartViewed": true,
+      "fullResolutionOverviewViewed": true,
+      "visualScopePass": true,
+      "observedFinding": "Vertical jade platforms, botanical reliefs and original terminal group render; faint campaign-map fade residue only in startup image, overview clear.",
+      "cameraDistance": 6.499999999999998,
+      "cameraObstructed": false,
+      "overviewGeometryVisibilityChanged": false,
+      "overviewVisibleFloorPoints": 57,
+      "overviewRoofClearance": 2.5,
+      "captureMethod": "CDP viewport",
+      "capturesIncludeHTML": true
+    },
+    {
+      "visibleRoom": 24,
+      "stableLevelIndex": 23,
+      "stableFileNumber": 24,
+      "id": "garden-of-turning-doors",
+      "title": "24 / Сад поворотных дверей",
+      "theme": "biosphere",
+      "reviewedOriginals": [
+        "payload/architecture/24-start.jpg",
+        "payload/architecture/24-overview.jpg"
+      ],
+      "fullResolutionStartViewed": true,
+      "fullResolutionOverviewViewed": true,
+      "visualScopePass": true,
+      "observedFinding": "Plant pots, colored machine enclosures, arch detail and white receiving surfaces render.",
+      "cameraDistance": 6.435597232486968,
+      "cameraObstructed": true,
+      "overviewGeometryVisibilityChanged": false,
+      "overviewVisibleFloorPoints": 22,
+      "overviewRoofClearance": 8.75,
+      "captureMethod": "CDP viewport",
+      "capturesIncludeHTML": true
+    },
+    {
+      "visibleRoom": 25,
+      "stableLevelIndex": 24,
+      "stableFileNumber": 25,
+      "id": "opposed-shadows",
+      "title": "25 / Обратная сторона тени",
+      "theme": "biosphere",
+      "reviewedOriginals": [
+        "payload/architecture/25-start.jpg",
+        "payload/architecture/25-overview.jpg"
+      ],
+      "fullResolutionStartViewed": true,
+      "fullResolutionOverviewViewed": true,
+      "visualScopePass": true,
+      "observedFinding": "Blue-green machine room with supported walkway and upper receiving panel renders.",
+      "cameraDistance": 4.421497486185161,
+      "cameraObstructed": true,
+      "overviewGeometryVisibilityChanged": false,
+      "overviewVisibleFloorPoints": 47,
+      "overviewRoofClearance": 9.45,
+      "captureMethod": "CDP viewport",
+      "capturesIncludeHTML": true
+    },
+    {
+      "visibleRoom": 26,
+      "stableLevelIndex": 25,
+      "stableFileNumber": 26,
+      "id": "crossflow-foundry",
+      "title": "26 / Перекрёстная тяга",
+      "theme": "biosphere",
+      "reviewedOriginals": [
+        "payload/architecture/26-start.jpg",
+        "payload/architecture/26-overview.jpg"
+      ],
+      "fullResolutionStartViewed": true,
+      "fullResolutionOverviewViewed": true,
+      "visualScopePass": true,
+      "observedFinding": "Jade walkways, stair/frame details, fan and upper airflow are visible.",
+      "cameraDistance": 6.500000000000002,
+      "cameraObstructed": false,
+      "overviewGeometryVisibilityChanged": false,
+      "overviewVisibleFloorPoints": 34,
+      "overviewRoofClearance": 15,
+      "captureMethod": "CDP viewport",
+      "capturesIncludeHTML": true
+    },
+    {
+      "visibleRoom": 27,
+      "stableLevelIndex": 26,
+      "stableFileNumber": 27,
+      "id": "conveyor-city",
+      "title": "27 / Город обратных лент",
+      "theme": "biosphere",
+      "reviewedOriginals": [
+        "payload/architecture/27-start.jpg",
+        "payload/architecture/27-overview.jpg"
+      ],
+      "fullResolutionStartViewed": true,
+      "fullResolutionOverviewViewed": true,
+      "visualScopePass": true,
+      "observedFinding": "Conveyor arches, belt/roller assembly and botanical walls render; faint campaign-map fade residue only in startup image, overview clear.",
+      "cameraDistance": 6.500000000000001,
+      "cameraObstructed": false,
+      "overviewGeometryVisibilityChanged": false,
+      "overviewVisibleFloorPoints": 40,
+      "overviewRoofClearance": 2.5,
+      "captureMethod": "CDP viewport",
+      "capturesIncludeHTML": true
+    },
+    {
+      "visibleRoom": 28,
+      "stableLevelIndex": 27,
+      "stableFileNumber": 28,
+      "id": "tidal-observatory",
+      "title": "28 / Обсерватория приливов",
+      "theme": "biosphere",
+      "reviewedOriginals": [
+        "payload/architecture/28-start.jpg",
+        "payload/architecture/28-overview.jpg"
+      ],
+      "fullResolutionStartViewed": true,
+      "fullResolutionOverviewViewed": true,
+      "visualScopePass": true,
+      "observedFinding": "Distinct paired coral/jade towers, arch, plants and readable circuit instrument render.",
+      "cameraDistance": 5.869866357739128,
+      "cameraObstructed": true,
+      "overviewGeometryVisibilityChanged": false,
+      "overviewVisibleFloorPoints": 35,
+      "overviewRoofClearance": 8.603999999105927,
+      "captureMethod": "CDP viewport",
+      "capturesIncludeHTML": true
+    },
+    {
+      "visibleRoom": 29,
+      "stableLevelIndex": 28,
+      "stableFileNumber": 29,
+      "id": "inverted-orchard",
+      "title": "29 / Небо под ногами",
+      "theme": "biosphere",
+      "reviewedOriginals": [
+        "payload/architecture/29-start.jpg",
+        "payload/architecture/29-overview.jpg"
+      ],
+      "fullResolutionStartViewed": true,
+      "fullResolutionOverviewViewed": true,
+      "visualScopePass": true,
+      "observedFinding": "Gold botanical props, companion, upper walkway and decorative floating motes render.",
+      "cameraDistance": 6.533913799486724,
+      "cameraObstructed": false,
+      "overviewGeometryVisibilityChanged": false,
+      "overviewVisibleFloorPoints": 30,
+      "overviewRoofClearance": 14.399999999999999,
+      "captureMethod": "CDP viewport",
+      "capturesIncludeHTML": true
+    },
+    {
+      "visibleRoom": 30,
+      "stableLevelIndex": 29,
+      "stableFileNumber": 30,
+      "id": "sunward-limit",
+      "title": "30 / Предел",
+      "theme": "biosphere",
+      "reviewedOriginals": [
+        "payload/architecture/30-start.jpg",
+        "payload/architecture/30-overview.jpg"
+      ],
+      "fullResolutionStartViewed": true,
+      "fullResolutionOverviewViewed": true,
+      "visualScopePass": true,
+      "observedFinding": "Blue-green archive enclosures and multi-level ring/tube mechanism render; companion has a visible anchor aura.",
+      "cameraDistance": 6.5460448298752185,
+      "cameraObstructed": false,
+      "overviewGeometryVisibilityChanged": false,
+      "overviewVisibleFloorPoints": 75,
+      "overviewRoofClearance": 29.4,
+      "captureMethod": "CDP viewport",
+      "capturesIncludeHTML": true
+    },
+    {
+      "visibleRoom": 31,
+      "stableLevelIndex": 30,
+      "stableFileNumber": 31,
+      "id": "post-freight-rake",
+      "title": "31 / Грузовой рейк",
+      "theme": "observatory",
+      "reviewedOriginals": [
+        "payload/architecture/31-start.jpg",
+        "payload/architecture/31-overview.jpg"
+      ],
+      "fullResolutionStartViewed": true,
+      "fullResolutionOverviewViewed": true,
+      "visualScopePass": true,
+      "observedFinding": "Indigo chapter begins; large bearing plate, ramps and upper landing structure render.",
+      "cameraDistance": 4.446601946980225,
+      "cameraObstructed": true,
+      "overviewGeometryVisibilityChanged": false,
+      "overviewVisibleFloorPoints": 40,
+      "overviewRoofClearance": 2.5,
+      "captureMethod": "CDP viewport",
+      "capturesIncludeHTML": true
+    },
+    {
+      "visibleRoom": 32,
+      "stableLevelIndex": 31,
+      "stableFileNumber": 32,
+      "id": "post-thin-shadow",
+      "title": "32 / Тонкая тень",
+      "theme": "observatory",
+      "reviewedOriginals": [
+        "payload/architecture/32-start.jpg",
+        "payload/architecture/32-overview.jpg"
+      ],
+      "fullResolutionStartViewed": true,
+      "fullResolutionOverviewViewed": true,
+      "visualScopePass": true,
+      "observedFinding": "Indigo chamber has valid receiving panel and visible contrast between dark non-portal walls and lit floor.",
+      "cameraDistance": 4.1797153027583,
+      "cameraObstructed": true,
+      "overviewGeometryVisibilityChanged": false,
+      "overviewVisibleFloorPoints": 12,
+      "overviewRoofClearance": 2.5,
+      "captureMethod": "CDP viewport",
+      "capturesIncludeHTML": true
+    },
+    {
+      "visibleRoom": 33,
+      "stableLevelIndex": 32,
+      "stableFileNumber": 33,
+      "id": "siphon-observatory",
+      "title": "33 / Сифонная обсерватория",
+      "theme": "observatory",
+      "reviewedOriginals": [
+        "payload/architecture/33-start.jpg",
+        "payload/architecture/33-overview.jpg"
+      ],
+      "fullResolutionStartViewed": true,
+      "fullResolutionOverviewViewed": true,
+      "visualScopePass": true,
+      "observedFinding": "Multi-level indigo observatory and transparent/opaque channel structures render; contextual tutorial remains legible.",
+      "cameraDistance": 6.533913799486722,
+      "cameraObstructed": false,
+      "overviewGeometryVisibilityChanged": false,
+      "overviewVisibleFloorPoints": 34,
+      "overviewRoofClearance": 2.5,
+      "captureMethod": "CDP viewport",
+      "capturesIncludeHTML": true
+    },
+    {
+      "visibleRoom": 34,
+      "stableLevelIndex": 33,
+      "stableFileNumber": 34,
+      "id": "post-pneumatic-reservoir",
+      "title": "34 / Пневмоаккумулятор",
+      "theme": "observatory",
+      "reviewedOriginals": [
+        "payload/architecture/34-start.jpg",
+        "payload/architecture/34-overview.jpg"
+      ],
+      "fullResolutionStartViewed": true,
+      "fullResolutionOverviewViewed": true,
+      "visualScopePass": true,
+      "observedFinding": "Cylinder, support mechanisms, receiving panel and beam are visible.",
+      "cameraDistance": 5.145728407016219,
+      "cameraObstructed": true,
+      "overviewGeometryVisibilityChanged": false,
+      "overviewVisibleFloorPoints": 17,
+      "overviewRoofClearance": 2.5,
+      "captureMethod": "CDP viewport",
+      "capturesIncludeHTML": true
+    },
+    {
+      "visibleRoom": 35,
+      "stableLevelIndex": 34,
+      "stableFileNumber": 35,
+      "id": "post-air-switch",
+      "title": "35 / Возвратная магистраль",
+      "theme": "observatory",
+      "reviewedOriginals": [
+        "payload/architecture/35-start.jpg",
+        "payload/architecture/35-overview.jpg"
+      ],
+      "fullResolutionStartViewed": true,
+      "fullResolutionOverviewViewed": true,
+      "visualScopePass": true,
+      "observedFinding": "Previously sparse dark wall now carries three visible orbital reliefs around the reserved tall opening; inside corridor overview is clear.",
+      "cameraDistance": 5.214540892555082,
+      "cameraObstructed": true,
+      "overviewGeometryVisibilityChanged": false,
+      "overviewVisibleFloorPoints": 5,
+      "overviewRoofClearance": 2.5,
+      "captureMethod": "CDP viewport",
+      "capturesIncludeHTML": true
+    },
+    {
+      "visibleRoom": 36,
+      "stableLevelIndex": 35,
+      "stableFileNumber": 36,
+      "id": "post-angular-cassette",
+      "title": "36 / Удар по касательной",
+      "theme": "observatory",
+      "reviewedOriginals": [
+        "payload/architecture/36-start.jpg",
+        "payload/architecture/36-overview.jpg"
+      ],
+      "fullResolutionStartViewed": true,
+      "fullResolutionOverviewViewed": true,
+      "visualScopePass": true,
+      "observedFinding": "Indigo ramps/galleries and side blade structure are visible in the interior overview.",
+      "cameraDistance": 6.5,
+      "cameraObstructed": false,
+      "overviewGeometryVisibilityChanged": false,
+      "overviewVisibleFloorPoints": 39,
+      "overviewRoofClearance": 10.14999999165535,
+      "captureMethod": "CDP viewport",
+      "capturesIncludeHTML": true
+    },
+    {
+      "visibleRoom": 37,
+      "stableLevelIndex": 36,
+      "stableFileNumber": 37,
+      "id": "post-magnetic-u-channel",
+      "title": "37 / Магнитный обход",
+      "theme": "observatory",
+      "reviewedOriginals": [
+        "payload/architecture/37-start.jpg",
+        "payload/architecture/37-overview.jpg"
+      ],
+      "fullResolutionStartViewed": true,
+      "fullResolutionOverviewViewed": true,
+      "visualScopePass": true,
+      "observedFinding": "Low channel and three original terminals render; clear white receiving surfaces remain distinct.",
+      "cameraDistance": 5.127249736252568,
+      "cameraObstructed": true,
+      "overviewGeometryVisibilityChanged": false,
+      "overviewVisibleFloorPoints": 22,
+      "overviewRoofClearance": 2.5,
+      "captureMethod": "CDP viewport",
+      "capturesIncludeHTML": true
+    },
+    {
+      "visibleRoom": 38,
+      "stableLevelIndex": 37,
+      "stableFileNumber": 38,
+      "id": "post-separated-freight",
+      "title": "38 / Два маршрута",
+      "theme": "observatory",
+      "reviewedOriginals": [
+        "payload/architecture/38-start.jpg",
+        "payload/architecture/38-overview.jpg"
+      ],
+      "fullResolutionStartViewed": true,
+      "fullResolutionOverviewViewed": true,
+      "visualScopePass": true,
+      "observedFinding": "Supported high platforms, return ramp and lower cargo platform render.",
+      "cameraDistance": 6.500000000000001,
+      "cameraObstructed": false,
+      "overviewGeometryVisibilityChanged": false,
+      "overviewVisibleFloorPoints": 57,
+      "overviewRoofClearance": 2.5,
+      "captureMethod": "CDP viewport",
+      "capturesIncludeHTML": true
+    },
+    {
+      "visibleRoom": 39,
+      "stableLevelIndex": 38,
+      "stableFileNumber": 39,
+      "id": "post-thermal-memory",
+      "title": "39 / Тепловая память",
+      "theme": "observatory",
+      "reviewedOriginals": [
+        "payload/architecture/39-start.jpg",
+        "payload/architecture/39-overview.jpg"
+      ],
+      "fullResolutionStartViewed": true,
+      "fullResolutionOverviewViewed": true,
+      "visualScopePass": true,
+      "observedFinding": "Large pale receiving panels contrast with indigo floor/wall and cyan/orange beam.",
+      "cameraDistance": 4.160099111277956,
+      "cameraObstructed": true,
+      "overviewGeometryVisibilityChanged": false,
+      "overviewVisibleFloorPoints": 8,
+      "overviewRoofClearance": 2.5,
+      "captureMethod": "CDP viewport",
+      "capturesIncludeHTML": true
+    },
+    {
+      "visibleRoom": 40,
+      "stableLevelIndex": 39,
+      "stableFileNumber": 40,
+      "id": "post-differential-optical-calibration",
+      "title": "40 / Дифференциальный калибратор",
+      "theme": "observatory",
+      "reviewedOriginals": [
+        "payload/architecture/40-start.jpg",
+        "payload/architecture/40-overview.jpg"
+      ],
+      "fullResolutionStartViewed": true,
+      "fullResolutionOverviewViewed": true,
+      "visualScopePass": true,
+      "observedFinding": "Close startup actor overlaps the lower tutorial overlay slightly; visible gameplay body/world are coherent, overview shows paired mechanism panels.",
+      "cameraDistance": 2.49104106355066,
+      "cameraObstructed": true,
+      "overviewGeometryVisibilityChanged": false,
+      "overviewVisibleFloorPoints": 13,
+      "overviewRoofClearance": 2.5,
+      "captureMethod": "CDP viewport",
+      "capturesIncludeHTML": true
+    },
+    {
+      "visibleRoom": 41,
+      "stableLevelIndex": 41,
+      "stableFileNumber": 42,
+      "id": "expansion-differential-valves",
+      "title": "42 / Разность давлений",
+      "theme": "fracture",
+      "reviewedOriginals": [
+        "payload/architecture/42-start.jpg",
+        "payload/architecture/42-overview.jpg"
+      ],
+      "fullResolutionStartViewed": true,
+      "fullResolutionOverviewViewed": true,
+      "visualScopePass": true,
+      "observedFinding": "First fracture room has mineral reliefs, readable pressure-difference instrument and supported galleries.",
+      "cameraDistance": 6.499999999999999,
+      "cameraObstructed": false,
+      "overviewGeometryVisibilityChanged": false,
+      "overviewVisibleFloorPoints": 36,
+      "overviewRoofClearance": 2.5,
+      "captureMethod": "CDP viewport",
+      "capturesIncludeHTML": true
+    },
+    {
+      "visibleRoom": 42,
+      "stableLevelIndex": 42,
+      "stableFileNumber": 43,
+      "id": "puzzle-pilot43-return-and-release",
+      "title": "43 / Другой ракурс",
+      "theme": "fracture",
+      "reviewedOriginals": [
+        "payload/architecture/43-start.jpg",
+        "payload/architecture/43-overview.jpg"
+      ],
+      "fullResolutionStartViewed": true,
+      "fullResolutionOverviewViewed": true,
+      "visualScopePass": true,
+      "observedFinding": "Teal/copper framed archive enclosure, white receiving panel and return floor render.",
+      "cameraDistance": 4.723584787075589,
+      "cameraObstructed": true,
+      "overviewGeometryVisibilityChanged": false,
+      "overviewVisibleFloorPoints": 37,
+      "overviewRoofClearance": 2.5,
+      "captureMethod": "CDP viewport",
+      "capturesIncludeHTML": true
+    },
+    {
+      "visibleRoom": 43,
+      "stableLevelIndex": 43,
+      "stableFileNumber": 44,
+      "id": "puzzle-progression44-rearrange-the-path",
+      "title": "44 / Перестановка пути",
+      "theme": "fracture",
+      "reviewedOriginals": [
+        "payload/architecture/44-start.jpg",
+        "payload/architecture/44-overview.jpg"
+      ],
+      "fullResolutionStartViewed": true,
+      "fullResolutionOverviewViewed": true,
+      "visualScopePass": true,
+      "observedFinding": "Multi-level separated passage room, opaque central partition and return route render.",
+      "cameraDistance": 6.055456020119164,
+      "cameraObstructed": true,
+      "overviewGeometryVisibilityChanged": false,
+      "overviewVisibleFloorPoints": 34,
+      "overviewRoofClearance": 10.849999991655348,
+      "captureMethod": "CDP viewport",
+      "capturesIncludeHTML": true
+    },
+    {
+      "visibleRoom": 44,
+      "stableLevelIndex": 44,
+      "stableFileNumber": 45,
+      "id": "puzzle-progression45-countercurrent",
+      "title": "45 / Встречное течение",
+      "theme": "fracture",
+      "reviewedOriginals": [
+        "payload/architecture/45-start.jpg",
+        "payload/architecture/45-overview.jpg"
+      ],
+      "fullResolutionStartViewed": true,
+      "fullResolutionOverviewViewed": true,
+      "visualScopePass": true,
+      "observedFinding": "Airflow particles, weight-opened gate and permanent upper gallery render.",
+      "cameraDistance": 3.57817146267382,
+      "cameraObstructed": true,
+      "overviewGeometryVisibilityChanged": false,
+      "overviewVisibleFloorPoints": 38,
+      "overviewRoofClearance": 2.5,
+      "captureMethod": "CDP viewport",
+      "capturesIncludeHTML": true
+    },
+    {
+      "visibleRoom": 45,
+      "stableLevelIndex": 45,
+      "stableFileNumber": 46,
+      "id": "puzzle-progression46-support-and-release",
+      "title": "46 / Опора и освобождение",
+      "theme": "fracture",
+      "reviewedOriginals": [
+        "payload/architecture/46-start.jpg",
+        "payload/architecture/46-overview.jpg"
+      ],
+      "fullResolutionStartViewed": true,
+      "fullResolutionOverviewViewed": true,
+      "visualScopePass": true,
+      "observedFinding": "Beam, suspended drive geometry and solid upper/lower galleries render.",
+      "cameraDistance": 6.500000000000001,
+      "cameraObstructed": false,
+      "overviewGeometryVisibilityChanged": false,
+      "overviewVisibleFloorPoints": 37,
+      "overviewRoofClearance": 2.5,
+      "captureMethod": "CDP viewport",
+      "capturesIncludeHTML": true
+    },
+    {
+      "visibleRoom": 46,
+      "stableLevelIndex": 46,
+      "stableFileNumber": 47,
+      "id": "puzzle-progression47-impact-archive",
+      "title": "47 / Ударный архив",
+      "theme": "fracture",
+      "reviewedOriginals": [
+        "payload/architecture/47-start.jpg",
+        "payload/architecture/47-overview.jpg"
+      ],
+      "fullResolutionStartViewed": true,
+      "fullResolutionOverviewViewed": true,
+      "visualScopePass": true,
+      "observedFinding": "Impact archive startup wall has mineral reliefs; full interior overview exposes supported platforms and receiving panels.",
+      "cameraDistance": 6.533913799486723,
+      "cameraObstructed": false,
+      "overviewGeometryVisibilityChanged": false,
+      "overviewVisibleFloorPoints": 18,
+      "overviewRoofClearance": 2.5,
+      "captureMethod": "CDP viewport",
+      "capturesIncludeHTML": true
+    },
+    {
+      "visibleRoom": 47,
+      "stableLevelIndex": 47,
+      "stableFileNumber": 48,
+      "id": "puzzle-progression48-open-rail",
+      "title": "48 / Разомкнутый рельс",
+      "theme": "fracture",
+      "reviewedOriginals": [
+        "payload/architecture/48-start.jpg",
+        "payload/architecture/48-overview.jpg"
+      ],
+      "fullResolutionStartViewed": true,
+      "fullResolutionOverviewViewed": true,
+      "visualScopePass": true,
+      "observedFinding": "Corrected startup camera keeps the full actor visible with usable distance; rail/cargo mechanism and white panels render.",
+      "cameraDistance": 6.500000000000001,
+      "cameraObstructed": false,
+      "overviewGeometryVisibilityChanged": false,
+      "overviewVisibleFloorPoints": 20,
+      "overviewRoofClearance": 2.5,
+      "captureMethod": "CDP viewport",
+      "capturesIncludeHTML": true
+    },
+    {
+      "visibleRoom": 48,
+      "stableLevelIndex": 48,
+      "stableFileNumber": 49,
+      "id": "puzzle-progression49-optical-transfer",
+      "title": "49 / Оптическая пересадка",
+      "theme": "fracture",
+      "reviewedOriginals": [
+        "payload/architecture/49-start.jpg",
+        "payload/architecture/49-overview.jpg"
+      ],
+      "fullResolutionStartViewed": true,
+      "fullResolutionOverviewViewed": true,
+      "visualScopePass": true,
+      "observedFinding": "Tilted support mechanism, return platform, framed arch and receiving plates render.",
+      "cameraDistance": 5.78489800457895,
+      "cameraObstructed": true,
+      "overviewGeometryVisibilityChanged": false,
+      "overviewVisibleFloorPoints": 23,
+      "overviewRoofClearance": 2.5,
+      "captureMethod": "CDP viewport",
+      "capturesIncludeHTML": true
+    },
+    {
+      "visibleRoom": 49,
+      "stableLevelIndex": 49,
+      "stableFileNumber": 50,
+      "id": "puzzle-progression50-folded-rift",
+      "title": "50 / Складной разлом",
+      "theme": "fracture",
+      "reviewedOriginals": [
+        "payload/architecture/50-start.jpg",
+        "payload/architecture/50-overview.jpg"
+      ],
+      "fullResolutionStartViewed": true,
+      "fullResolutionOverviewViewed": true,
+      "visualScopePass": true,
+      "observedFinding": "Separated cup/hinge assemblies, bearing linkage and supported high galleries render; opaque hood remains visible.",
+      "cameraDistance": 4.8805334998656145,
+      "cameraObstructed": true,
+      "overviewGeometryVisibilityChanged": false,
+      "overviewVisibleFloorPoints": 39,
+      "overviewRoofClearance": 2.5,
+      "captureMethod": "CDP viewport",
+      "capturesIncludeHTML": true
+    },
+    {
+      "visibleRoom": 50,
+      "stableLevelIndex": 50,
+      "stableFileNumber": 51,
+      "id": "puzzle-progression51-mechanical-echo",
+      "title": "51 / Эхо горизонта · обратный двор",
+      "theme": "fracture",
+      "reviewedOriginals": [
+        "payload/architecture/51-start.jpg",
+        "payload/architecture/51-overview.jpg"
+      ],
+      "fullResolutionStartViewed": true,
+      "fullResolutionOverviewViewed": true,
+      "visualScopePass": true,
+      "observedFinding": "Final ordinary room has legible title 50, lit terminals, overhead rails and spring/weight mechanism.",
+      "cameraDistance": 6.5,
+      "cameraObstructed": false,
+      "overviewGeometryVisibilityChanged": false,
+      "overviewVisibleFloorPoints": 19,
+      "overviewRoofClearance": 2.5,
+      "captureMethod": "CDP viewport",
+      "capturesIncludeHTML": true
+    },
+    {
+      "visibleRoom": 51,
+      "stableLevelIndex": 40,
+      "stableFileNumber": 41,
+      "id": "tower-singularity",
+      "title": "41 / СКЛАДЧАТЫЙ ЗАМОК",
+      "theme": "castle",
+      "reviewedOriginals": [
+        "payload/architecture/41-start.jpg",
+        "payload/architecture/41-overview.jpg"
+      ],
+      "fullResolutionStartViewed": true,
+      "fullResolutionOverviewViewed": true,
+      "visualScopePass": true,
+      "observedFinding": "Atrium staircase, multiple levels, gold lancets, slate floor and retained opaque wing roofs render; HUD shows final room 51.",
+      "cameraDistance": 6.533913799486721,
+      "cameraObstructed": false,
+      "overviewGeometryVisibilityChanged": false,
+      "overviewVisibleFloorPoints": 159,
+      "overviewRoofClearance": 19.599999999999994,
+      "captureMethod": "CDP viewport",
+      "capturesIncludeHTML": true
+    }
+  ],
+  "files": [
+    {
+      "file": "payload/architecture/1-overview.jpg",
+      "bytes": 70209,
+      "sha256": "faa0d3709593914c679e4d5ef21e404f7c682c33caf63e0d50a4def770c5b735",
+      "size": [
+        960,
+        540
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "overview"
+    },
+    {
+      "file": "payload/architecture/1-start.jpg",
+      "bytes": 67085,
+      "sha256": "41d805c365a290b6e4d5ebeb10653647a7a3d6af1b7657c3c2791b11629b7745",
+      "size": [
+        960,
+        540
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "start"
+    },
+    {
+      "file": "payload/architecture/10-overview.jpg",
+      "bytes": 74361,
+      "sha256": "c23f0b0ac38c8b34166be92c3122701d841117c1a6ee00edaf64f03a797cdbcc",
+      "size": [
+        960,
+        540
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "overview"
+    },
+    {
+      "file": "payload/architecture/10-start.jpg",
+      "bytes": 70828,
+      "sha256": "312c9a3e208ebfdcb1dcbea6e865c14b06b93440e6a903285573a5347110f2c8",
+      "size": [
+        960,
+        540
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "start"
+    },
+    {
+      "file": "payload/architecture/11-overview.jpg",
+      "bytes": 72499,
+      "sha256": "e554329ac7551cb095a1b6a445f8c5118b37bdce8f522eb06d7524cc4ae14d6c",
+      "size": [
+        960,
+        540
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "overview"
+    },
+    {
+      "file": "payload/architecture/11-start.jpg",
+      "bytes": 72516,
+      "sha256": "9a6d54343970989049901bc885a2f2ad47810693f41256000dd46bad8a90ab0f",
+      "size": [
+        960,
+        540
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "start"
+    },
+    {
+      "file": "payload/architecture/12-overview.jpg",
+      "bytes": 56851,
+      "sha256": "7435078e992e07b50cfd2a7450fde8723eb47117c451b07b67f77578ea89ab88",
+      "size": [
+        960,
+        540
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "overview"
+    },
+    {
+      "file": "payload/architecture/12-start.jpg",
+      "bytes": 60229,
+      "sha256": "2ccfe93e4081678cecc22a80c5db2dba4e51f795bc0805d321ad201c3eff3371",
+      "size": [
+        960,
+        540
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "start"
+    },
+    {
+      "file": "payload/architecture/13-overview.jpg",
+      "bytes": 76820,
+      "sha256": "797383ccfbefc9e74ae1fab4eee939be2557e03eae70f13c38e5ee0f990541a9",
+      "size": [
+        960,
+        540
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "overview"
+    },
+    {
+      "file": "payload/architecture/13-start.jpg",
+      "bytes": 51257,
+      "sha256": "61a4c3e347cfcf7f73172137ed8f9bff9e14ce30f7cccdf2bef95f3f768d74e0",
+      "size": [
+        960,
+        540
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "start"
+    },
+    {
+      "file": "payload/architecture/14-overview.jpg",
+      "bytes": 70166,
+      "sha256": "2b60161379873e50c9dfa45702580ee5fb1b54aefc0f5c781d9b99322bf7c1ca",
+      "size": [
+        960,
+        540
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "overview"
+    },
+    {
+      "file": "payload/architecture/14-start.jpg",
+      "bytes": 64659,
+      "sha256": "878361b33e302ebd06fa6c32a5b56194e0c00b350f98931b72e9664ec443649c",
+      "size": [
+        960,
+        540
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "start"
+    },
+    {
+      "file": "payload/architecture/15-overview.jpg",
+      "bytes": 74315,
+      "sha256": "511245a5dbd9bc0c0ed444c266f2f95c303db5f7177ddb958f435c50f169f28e",
+      "size": [
+        960,
+        540
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "overview"
+    },
+    {
+      "file": "payload/architecture/15-start.jpg",
+      "bytes": 55209,
+      "sha256": "d23c4af30cb904fa3aa30e181ee0d2b660c3a64caa526dd9c5478d12f71532e5",
+      "size": [
+        960,
+        540
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "start"
+    },
+    {
+      "file": "payload/architecture/16-overview.jpg",
+      "bytes": 76164,
+      "sha256": "4ae45f2a4ef3ca78c110fed09ecc5bd674a42be421abd9c33ffe11f8509a1a96",
+      "size": [
+        960,
+        540
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "overview"
+    },
+    {
+      "file": "payload/architecture/16-start.jpg",
+      "bytes": 42808,
+      "sha256": "26a32cea425a448a14c5d0f6d7bc521a2771f5243c483849ed69d866017a7309",
+      "size": [
+        960,
+        540
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "start"
+    },
+    {
+      "file": "payload/architecture/17-overview.jpg",
+      "bytes": 72980,
+      "sha256": "a714f16f1d2f147d3e8fc295b75d10d33053f745b855bcf41c842961642b6eb5",
+      "size": [
+        960,
+        540
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "overview"
+    },
+    {
+      "file": "payload/architecture/17-start.jpg",
+      "bytes": 50004,
+      "sha256": "9086847aa7ca725448738433973b369dda1bbd80c3b1d56ef47e249586c961db",
+      "size": [
+        960,
+        540
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "start"
+    },
+    {
+      "file": "payload/architecture/18-overview.jpg",
+      "bytes": 77959,
+      "sha256": "4c3f89c0d2b70b618032d8f2adcb922d4d189b23ff8d250a848dead97373f931",
+      "size": [
+        960,
+        540
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "overview"
+    },
+    {
+      "file": "payload/architecture/18-start.jpg",
+      "bytes": 58899,
+      "sha256": "ce6681f3d9077762ad5676256f1e06d2f68f55f72564a7d93ac38297b4d7a9f9",
+      "size": [
+        960,
+        540
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "start"
+    },
+    {
+      "file": "payload/architecture/19-overview.jpg",
+      "bytes": 64403,
+      "sha256": "eb6b852f94634e2b5e3477e2125d0a80ce9a80eb2ed735a3295a898b2b2549e5",
+      "size": [
+        960,
+        540
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "overview"
+    },
+    {
+      "file": "payload/architecture/19-start.jpg",
+      "bytes": 65482,
+      "sha256": "1fe770d421a07ab29324670447a40118a5d8f97b05c6493bca8bb682a1c33463",
+      "size": [
+        960,
+        540
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "start"
+    },
+    {
+      "file": "payload/architecture/2-overview.jpg",
+      "bytes": 77507,
+      "sha256": "7e6c7e6d5aaa223cbb23fbb609aafc88d773b455cb5aba968d7d69445d12d1a6",
+      "size": [
+        960,
+        540
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "overview"
+    },
+    {
+      "file": "payload/architecture/2-start.jpg",
+      "bytes": 54678,
+      "sha256": "176161b65b2f75c8d84c3637d3bb2a8f8662c51f57f83746a7bac329f3725a37",
+      "size": [
+        960,
+        540
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "start"
+    },
+    {
+      "file": "payload/architecture/20-overview.jpg",
+      "bytes": 66364,
+      "sha256": "28a61431d654bee53da962f0e93c42e67ace9fec85fc1fe4ffc2518f5f5004fd",
+      "size": [
+        960,
+        540
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "overview"
+    },
+    {
+      "file": "payload/architecture/20-start.jpg",
+      "bytes": 49355,
+      "sha256": "281e7c839e9b305a9f7af1fc29d85ccb57656ffa5e32988530e48a638e6e2326",
+      "size": [
+        960,
+        540
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "start"
+    },
+    {
+      "file": "payload/architecture/21-overview.jpg",
+      "bytes": 84903,
+      "sha256": "ae34a24000eefca390da9e65698d4df516cfc80ad7b25af39c1966ee93c310bb",
+      "size": [
+        960,
+        540
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "overview"
+    },
+    {
+      "file": "payload/architecture/21-start.jpg",
+      "bytes": 61057,
+      "sha256": "9477ade20afe9f60b289d5f1d845abf1cea540fca05f448634fe13564de26abc",
+      "size": [
+        960,
+        540
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "start"
+    },
+    {
+      "file": "payload/architecture/22-overview.jpg",
+      "bytes": 60473,
+      "sha256": "bf101f770d252738a62c4d4e39905cf30145d695b39679c21f6b8bb7f06ba9b3",
+      "size": [
+        960,
+        540
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "overview"
+    },
+    {
+      "file": "payload/architecture/22-start.jpg",
+      "bytes": 62269,
+      "sha256": "e5ac45b61b67518a538218873014b3ac44d9312b84c5ade127d3071aeeb390ca",
+      "size": [
+        960,
+        540
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "start"
+    },
+    {
+      "file": "payload/architecture/23-overview.jpg",
+      "bytes": 72799,
+      "sha256": "9dd6462ef7bd41b8305864a5231497cfc478cfd86147419d51de3ee436f5e06f",
+      "size": [
+        960,
+        540
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "overview"
+    },
+    {
+      "file": "payload/architecture/23-start.jpg",
+      "bytes": 53154,
+      "sha256": "3afca9115802ec92cb6746e7073d831812ca4922be99288deec8e77e1a72e775",
+      "size": [
+        960,
+        540
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "start"
+    },
+    {
+      "file": "payload/architecture/24-overview.jpg",
+      "bytes": 71504,
+      "sha256": "af4b2ae1c7264f0856fbf22f1424bef7e1c773a956477febc1ba0173f59f5459",
+      "size": [
+        960,
+        540
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "overview"
+    },
+    {
+      "file": "payload/architecture/24-start.jpg",
+      "bytes": 65573,
+      "sha256": "3bbd62d587c7a7b5ad88a25efdd7da69c0f09d3b8d7c9c29bf3638de8fdb29f5",
+      "size": [
+        960,
+        540
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "start"
+    },
+    {
+      "file": "payload/architecture/25-overview.jpg",
+      "bytes": 86561,
+      "sha256": "550060a306b2ed2e6e82a74b6c5702265324b9c0cdb387fffe5e703dfd044b3f",
+      "size": [
+        960,
+        540
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "overview"
+    },
+    {
+      "file": "payload/architecture/25-start.jpg",
+      "bytes": 60444,
+      "sha256": "9ad458d4c1156880fb280aab8c0c4f1e3983a0b89718bfdb75b765bcbba3c766",
+      "size": [
+        960,
+        540
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "start"
+    },
+    {
+      "file": "payload/architecture/26-overview.jpg",
+      "bytes": 75062,
+      "sha256": "8db61684344c0d620d62952492e0d8ec12f30fcbef6f7c1003660ede87e18a61",
+      "size": [
+        960,
+        540
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "overview"
+    },
+    {
+      "file": "payload/architecture/26-start.jpg",
+      "bytes": 52400,
+      "sha256": "5a6ed98d1261dad17707781d5ae96d6d526aa1c4b750cbc0b48d944189e443ab",
+      "size": [
+        960,
+        540
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "start"
+    },
+    {
+      "file": "payload/architecture/27-overview.jpg",
+      "bytes": 68311,
+      "sha256": "50d9986aa00fdfe23161efcfeef7ad1346d7a1e2ec76bd405a6920dddf1132a1",
+      "size": [
+        960,
+        540
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "overview"
+    },
+    {
+      "file": "payload/architecture/27-start.jpg",
+      "bytes": 72309,
+      "sha256": "ec9855a7745cac156d47944deb02a1d0286f9d2b47afe14bd89b685e2936eb3e",
+      "size": [
+        960,
+        540
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "start"
+    },
+    {
+      "file": "payload/architecture/28-overview.jpg",
+      "bytes": 70815,
+      "sha256": "5ccc6164447ea3d7baa7da930e2f51ce4e907e44b60fadcf897744ad42feb5a0",
+      "size": [
+        960,
+        540
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "overview"
+    },
+    {
+      "file": "payload/architecture/28-start.jpg",
+      "bytes": 66467,
+      "sha256": "fea3cb2435715cb0a355fbed3fa5654b13c8561583564d58ad497c04fec347fc",
+      "size": [
+        960,
+        540
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "start"
+    },
+    {
+      "file": "payload/architecture/29-overview.jpg",
+      "bytes": 60017,
+      "sha256": "f3dc781df97d1803ec479a7ee496a09b5795a8a58690d46c185a10c403163570",
+      "size": [
+        960,
+        540
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "overview"
+    },
+    {
+      "file": "payload/architecture/29-start.jpg",
+      "bytes": 58772,
+      "sha256": "63c24261ec609b348cfeb9f28f5bf2307e9fced68d4be9a01c1aa75431ed113c",
+      "size": [
+        960,
+        540
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "start"
+    },
+    {
+      "file": "payload/architecture/3-overview.jpg",
+      "bytes": 85424,
+      "sha256": "ee76db638fadb8b086137e294caea9405198b779325c3db2df9d27557f53f4c1",
+      "size": [
+        960,
+        540
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "overview"
+    },
+    {
+      "file": "payload/architecture/3-start.jpg",
+      "bytes": 72531,
+      "sha256": "e789f8b96268c4bdf695536b0fd63936f7574e66bd5845478a6e3224a434c83a",
+      "size": [
+        960,
+        540
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "start"
+    },
+    {
+      "file": "payload/architecture/30-overview.jpg",
+      "bytes": 75483,
+      "sha256": "5336229e32035f9d1778aadf08a67ef2d412839d742b237293202793f2573939",
+      "size": [
+        960,
+        540
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "overview"
+    },
+    {
+      "file": "payload/architecture/30-start.jpg",
+      "bytes": 63042,
+      "sha256": "336cba5e56bfecf06726d089c5dd93484d14f2181c7da65d76e3e88cc5f7371e",
+      "size": [
+        960,
+        540
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "start"
+    },
+    {
+      "file": "payload/architecture/31-overview.jpg",
+      "bytes": 67592,
+      "sha256": "b4e8e85fab5efa01bd58694a19836d0c5bf2605af7e9be1d0fd3ae113f0a128e",
+      "size": [
+        960,
+        540
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "overview"
+    },
+    {
+      "file": "payload/architecture/31-start.jpg",
+      "bytes": 40599,
+      "sha256": "1a6869b1b95368f295d895eb9bafd807db11dfa65bd11192b74e10f56f1062c9",
+      "size": [
+        960,
+        540
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "start"
+    },
+    {
+      "file": "payload/architecture/32-overview.jpg",
+      "bytes": 61940,
+      "sha256": "274a8b3c5d221f5e0f51eb172f58517c8971f2bf801aa196283c9c1e0cd755db",
+      "size": [
+        960,
+        540
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "overview"
+    },
+    {
+      "file": "payload/architecture/32-start.jpg",
+      "bytes": 48078,
+      "sha256": "bde262cf338fa702b67efa1003b130423bb48ddb1e680a57067a935677cbbbf5",
+      "size": [
+        960,
+        540
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "start"
+    },
+    {
+      "file": "payload/architecture/33-overview.jpg",
+      "bytes": 73867,
+      "sha256": "2e78e391cb7571968d7afd942e7a9f574d82d1ff0c8af72b4207cc67fbb6bebb",
+      "size": [
+        960,
+        540
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "overview"
+    },
+    {
+      "file": "payload/architecture/33-start.jpg",
+      "bytes": 65494,
+      "sha256": "9577e557cd4e6da1c7694acae733f52286c04dbc7c35efdd71150dc036ea451e",
+      "size": [
+        960,
+        540
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "start"
+    },
+    {
+      "file": "payload/architecture/34-overview.jpg",
+      "bytes": 58194,
+      "sha256": "109efcc399f89e4f30ffce79d7000b8c6778c9ca856dcf10d82ec4f9242b1f81",
+      "size": [
+        960,
+        540
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "overview"
+    },
+    {
+      "file": "payload/architecture/34-start.jpg",
+      "bytes": 51884,
+      "sha256": "ef86250fdd36762054427a88bf02cc8108430759e5c4a9371eb0d9a3b62dc338",
+      "size": [
+        960,
+        540
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "start"
+    },
+    {
+      "file": "payload/architecture/35-overview.jpg",
+      "bytes": 41997,
+      "sha256": "a88b05f2050265b96fab8ab7cf20233b36b4179592087ffa9d512dac6d986741",
+      "size": [
+        960,
+        540
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "overview"
+    },
+    {
+      "file": "payload/architecture/35-start.jpg",
+      "bytes": 40948,
+      "sha256": "11e6e38bf15443458a3b29db8f66083b3f4c586a59647bbb582fcd80cadcffcb",
+      "size": [
+        960,
+        540
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "start"
+    },
+    {
+      "file": "payload/architecture/36-overview.jpg",
+      "bytes": 79688,
+      "sha256": "45d063465607b0f08462c16eb6f0f1859cfef842a4824547fdfbec369a941d1e",
+      "size": [
+        960,
+        540
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "overview"
+    },
+    {
+      "file": "payload/architecture/36-start.jpg",
+      "bytes": 43579,
+      "sha256": "d5d66be73af87ccd96143db3fc8315808cd27ca0066b0d64464c5761b0acaf7c",
+      "size": [
+        960,
+        540
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "start"
+    },
+    {
+      "file": "payload/architecture/37-overview.jpg",
+      "bytes": 71622,
+      "sha256": "f77253c7302cc2763f6ae57c7ce1498306d9f34ba60ddc5dad077a7173010170",
+      "size": [
+        960,
+        540
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "overview"
+    },
+    {
+      "file": "payload/architecture/37-start.jpg",
+      "bytes": 56854,
+      "sha256": "bcf35509b12393ff00768a3b989615cdeb9e98d4dd90cef22b59a54f4fcea44e",
+      "size": [
+        960,
+        540
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "start"
+    },
+    {
+      "file": "payload/architecture/38-overview.jpg",
+      "bytes": 85806,
+      "sha256": "60f5c779ba21aaeaef7acf4d84d5d6b9ab40d52a9fd42552dc88ee60144416f7",
+      "size": [
+        960,
+        540
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "overview"
+    },
+    {
+      "file": "payload/architecture/38-start.jpg",
+      "bytes": 56934,
+      "sha256": "281883771e536450a787d7e4796b4f0066a834b98bfac3fce43942c9d9f183c1",
+      "size": [
+        960,
+        540
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "start"
+    },
+    {
+      "file": "payload/architecture/39-overview.jpg",
+      "bytes": 51547,
+      "sha256": "f309e4c188bcbe7c1a21a7ba9020be146360897ced73f2e731a78d0530da92fc",
+      "size": [
+        960,
+        540
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "overview"
+    },
+    {
+      "file": "payload/architecture/39-start.jpg",
+      "bytes": 43389,
+      "sha256": "3d497af087092348d45d081924dc5ebfc8263401bbdf898dd657a86de2164f43",
+      "size": [
+        960,
+        540
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "start"
+    },
+    {
+      "file": "payload/architecture/4-overview.jpg",
+      "bytes": 84180,
+      "sha256": "dda9093910a586582c2a12d84ddc4d3811928b98718bcc31028407ca3fa97a58",
+      "size": [
+        960,
+        540
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "overview"
+    },
+    {
+      "file": "payload/architecture/4-start.jpg",
+      "bytes": 54970,
+      "sha256": "0baf85f0f2eba94bed1b0a38352798f76437e098d934af2d0e1522a7a8e96ba0",
+      "size": [
+        960,
+        540
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "start"
+    },
+    {
+      "file": "payload/architecture/40-overview.jpg",
+      "bytes": 73261,
+      "sha256": "92ddc8052b19ac9ac2f703c3172a0d61387c914b70964f5f5387b2c3a9907718",
+      "size": [
+        960,
+        540
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "overview"
+    },
+    {
+      "file": "payload/architecture/40-start.jpg",
+      "bytes": 63037,
+      "sha256": "8cf41713246790eb8f2791b25be70b57e56a127e43dcc6211307fdffd472cd9e",
+      "size": [
+        960,
+        540
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "start"
+    },
+    {
+      "file": "payload/architecture/41-overview.jpg",
+      "bytes": 48326,
+      "sha256": "f539e84839bde6a88d1d3aea1d479f6327344194f6e221bce63cfdbb41720b69",
+      "size": [
+        960,
+        540
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "overview"
+    },
+    {
+      "file": "payload/architecture/41-start.jpg",
+      "bytes": 59115,
+      "sha256": "8a4223029bfd7106efffcf0e997b9a0d221321a487d1548f50921c7e6b84f304",
+      "size": [
+        960,
+        540
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "start"
+    },
+    {
+      "file": "payload/architecture/42-overview.jpg",
+      "bytes": 78890,
+      "sha256": "ee939b267c432e340bfdacb8cce9278bd9544227b3ded64df30647c6076bf23c",
+      "size": [
+        960,
+        540
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "overview"
+    },
+    {
+      "file": "payload/architecture/42-start.jpg",
+      "bytes": 60473,
+      "sha256": "9329a89874f806ba9075e8335f0cf6f8ff30d50606786caec46f85477baf0392",
+      "size": [
+        960,
+        540
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "start"
+    },
+    {
+      "file": "payload/architecture/43-overview.jpg",
+      "bytes": 91947,
+      "sha256": "9302e37450fe4508eca010bd94a15d1df43db7f01156fc76339391bc69ec0ce8",
+      "size": [
+        960,
+        540
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "overview"
+    },
+    {
+      "file": "payload/architecture/43-start.jpg",
+      "bytes": 73021,
+      "sha256": "7b541f4730f99c56a7ab6f72955f1f76c700a0bf78dd2eed0557634df6d39307",
+      "size": [
+        960,
+        540
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "start"
+    },
+    {
+      "file": "payload/architecture/44-overview.jpg",
+      "bytes": 83771,
+      "sha256": "f0294b8a3d7d380923884013fc045903acaf2a7898340b5f50323d10d16955eb",
+      "size": [
+        960,
+        540
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "overview"
+    },
+    {
+      "file": "payload/architecture/44-start.jpg",
+      "bytes": 56642,
+      "sha256": "22883999027b95a3080308bcc4e8a46aba23ab463d762ab4003082d7641ba286",
+      "size": [
+        960,
+        540
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "start"
+    },
+    {
+      "file": "payload/architecture/45-overview.jpg",
+      "bytes": 92615,
+      "sha256": "437659798179b26c0eb1274ee9ee81f99bc131bbdf3f11731f7c5c1dc2b1f087",
+      "size": [
+        960,
+        540
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "overview"
+    },
+    {
+      "file": "payload/architecture/45-start.jpg",
+      "bytes": 83780,
+      "sha256": "f063f936b118695f9c4de20a7ff082959a74fa7c38275b97ae31e47497f77b70",
+      "size": [
+        960,
+        540
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "start"
+    },
+    {
+      "file": "payload/architecture/46-overview.jpg",
+      "bytes": 96733,
+      "sha256": "429e480ae843920568b441c3f2dc4bf7e8530832f8a894cfeecdf54e48661a0b",
+      "size": [
+        960,
+        540
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "overview"
+    },
+    {
+      "file": "payload/architecture/46-start.jpg",
+      "bytes": 62380,
+      "sha256": "ec1effeb9a620383e6d6625cdd8b7a1edabd766699b4c57d2e830f1ae49a390b",
+      "size": [
+        960,
+        540
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "start"
+    },
+    {
+      "file": "payload/architecture/47-overview.jpg",
+      "bytes": 65171,
+      "sha256": "399fbf9153014afa66f223ba6ea0d29b52a4e79c027ea49da9c189182a61d5dd",
+      "size": [
+        960,
+        540
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "overview"
+    },
+    {
+      "file": "payload/architecture/47-start.jpg",
+      "bytes": 45488,
+      "sha256": "fd5db59fcf4dbf1c9dd0441fe6cbcbe654a8e480c7fceca175ff455889e35e18",
+      "size": [
+        960,
+        540
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "start"
+    },
+    {
+      "file": "payload/architecture/48-overview.jpg",
+      "bytes": 66183,
+      "sha256": "f7df653e65dc4284ab03b316944ce0c6d35191de616e7739150d507ca0d3aab2",
+      "size": [
+        960,
+        540
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "overview"
+    },
+    {
+      "file": "payload/architecture/48-start.jpg",
+      "bytes": 57475,
+      "sha256": "5a1608cc2cb399147d6d2bae4ae58780c9a058fb68eb992e037f4325100100fd",
+      "size": [
+        960,
+        540
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "start"
+    },
+    {
+      "file": "payload/architecture/49-overview.jpg",
+      "bytes": 78753,
+      "sha256": "17ee30ad620f66085e6010f5f0b47d7927351e78bcd1b116b2779fb6f0a0b37b",
+      "size": [
+        960,
+        540
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "overview"
+    },
+    {
+      "file": "payload/architecture/49-start.jpg",
+      "bytes": 68495,
+      "sha256": "7c94604f31f2dcf3b421a21d2f30aac09cbe4dd474e6cb01f7b02e144b754074",
+      "size": [
+        960,
+        540
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "start"
+    },
+    {
+      "file": "payload/architecture/5-overview.jpg",
+      "bytes": 75785,
+      "sha256": "dfcc3600bcb78af3fa10001ce36e234321d935141477e3e94c7d529c39929731",
+      "size": [
+        960,
+        540
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "overview"
+    },
+    {
+      "file": "payload/architecture/5-start.jpg",
+      "bytes": 54664,
+      "sha256": "1523f0406a174d431f93a8e8f7fc9418dd5ddbf0a9b627b038866654c79ef05f",
+      "size": [
+        960,
+        540
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "start"
+    },
+    {
+      "file": "payload/architecture/50-overview.jpg",
+      "bytes": 99263,
+      "sha256": "432605173c72b982a0de5734924d21595d56ed3ae0b5363b513715aea72106d5",
+      "size": [
+        960,
+        540
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "overview"
+    },
+    {
+      "file": "payload/architecture/50-start.jpg",
+      "bytes": 68700,
+      "sha256": "bf8cd9835ded681b6d8ff131e1527d8fc65907263af9c78f5b6b6a62410b47ad",
+      "size": [
+        960,
+        540
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "start"
+    },
+    {
+      "file": "payload/architecture/51-overview.jpg",
+      "bytes": 76204,
+      "sha256": "fdcb361022a9bd5adf2150b3cc6d34f96cde9e37ea10915e33f82b513dcb1c0e",
+      "size": [
+        960,
+        540
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "overview"
+    },
+    {
+      "file": "payload/architecture/51-start.jpg",
+      "bytes": 60896,
+      "sha256": "a87c9ffe397b4b8a51eaa3b7106db1bac0c0e7c2c07e6ed7fa625c13dcb88200",
+      "size": [
+        960,
+        540
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "start"
+    },
+    {
+      "file": "payload/architecture/6-overview.jpg",
+      "bytes": 59714,
+      "sha256": "5013ae37d50b35076011a3fbf5e1bf412690b0cd59f0c5c62664301ddaec24f2",
+      "size": [
+        960,
+        540
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "overview"
+    },
+    {
+      "file": "payload/architecture/6-start.jpg",
+      "bytes": 56913,
+      "sha256": "290215402b9baeb8dc4c3fa2b3dcac9a8aae627e23f53bc98170cfdcdc3ea0da",
+      "size": [
+        960,
+        540
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "start"
+    },
+    {
+      "file": "payload/architecture/7-overview.jpg",
+      "bytes": 84509,
+      "sha256": "c6f3dbced82969f4b38380d3028667d75fc5587cbe36fb9eb16d8b2e6311ad2f",
+      "size": [
+        960,
+        540
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "overview"
+    },
+    {
+      "file": "payload/architecture/7-start.jpg",
+      "bytes": 70664,
+      "sha256": "c8a7349b0fb7ab2006611f0cd9dead31a9d6b85b3d8cbd0698d62cd0d9a3fbaf",
+      "size": [
+        960,
+        540
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "start"
+    },
+    {
+      "file": "payload/architecture/8-overview.jpg",
+      "bytes": 78555,
+      "sha256": "7f84831126c6d5b53613d7e03eb714c042f8da2795a4df968710c546556fd03d",
+      "size": [
+        960,
+        540
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "overview"
+    },
+    {
+      "file": "payload/architecture/8-start.jpg",
+      "bytes": 70271,
+      "sha256": "8c10ec6f2917977d85b488e78960bfabf80653664253d7646cd0dde5040be8f3",
+      "size": [
+        960,
+        540
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "start"
+    },
+    {
+      "file": "payload/architecture/9-overview.jpg",
+      "bytes": 77322,
+      "sha256": "f1442677978e4e657d5babe6f01979ceb58005cb041c0fdfd4665068dc7177d7",
+      "size": [
+        960,
+        540
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "overview"
+    },
+    {
+      "file": "payload/architecture/9-start.jpg",
+      "bytes": 63700,
+      "sha256": "f0e929db8f226b2e7e3e610b469bd1a58fb62aafa12ef75908b90ae2a7c2425c",
+      "size": [
+        960,
+        540
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "start"
+    },
+    {
+      "file": "payload/menu/menu-1024x768.png",
+      "bytes": 556796,
+      "sha256": "0b6540c34d69d83f2c827ffc09aaa838da4aa23344f020798d44286f8b0864d7",
+      "size": [
+        1024,
+        768
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "menu"
+    },
+    {
+      "file": "payload/menu/menu-1440x900.png",
+      "bytes": 956668,
+      "sha256": "b7bdb8c5cb9348c2f8cbc43ceeb342616bfbfe7b36c04c32c3b7dc1643aa37eb",
+      "size": [
+        1440,
+        900
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "menu"
+    },
+    {
+      "file": "payload/menu/menu-360x800.png",
+      "bytes": 221214,
+      "sha256": "54b3c156a2c2e5696b58da84c34b94119dc8c779a12194a7e3155a442753d2c7",
+      "size": [
+        360,
+        800
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "menu"
+    },
+    {
+      "file": "payload/menu/menu-390x844.png",
+      "bytes": 241153,
+      "sha256": "a3436847566700c4cf393b317a29e96da8203fb7f3d5d11d1ee27fd69393e146",
+      "size": [
+        390,
+        844
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "menu"
+    },
+    {
+      "file": "payload/menu/menu-412x915.png",
+      "bytes": 265572,
+      "sha256": "0b3c141a21eb56b988d30a29da47322f0ed2c609e9aea2e1b0de42fe3c1a503b",
+      "size": [
+        412,
+        915
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "menu"
+    },
+    {
+      "file": "payload/menu/menu-844x390.png",
+      "bytes": 309117,
+      "sha256": "536e92ee6c9948264dcd745ec38e6f97e2b76aa0dd4b0727c449e6cf83d3ff9f",
+      "size": [
+        844,
+        390
+      ],
+      "manuallyViewedOriginal": true,
+      "kind": "menu"
+    }
+  ]
+}

@@ -1,0 +1,220 @@
+{
+  "schemaVersion": 1,
+  "kind": "campaign-v55-independent-root-public-acceptance",
+  "pass": true,
+  "sourceAccepted": true,
+  "publicationAccepted": true,
+  "acceptedAt": "2026-10-13T12:17:12.947287+00:00",
+  "publicURL": "https://amazin20.github.io/brainrot-portal/campaign-v55/",
+  "source": {
+    "commit": "ba5c86fd07facd9613f5e6e8efb9709bd2ef9e89",
+    "tree": "1cd58611f9247c661b460c3a99f890a6e63a8715",
+    "review": {
+      "runId": 38377149910,
+      "runAttempt": 1
+    },
+    "cpuTests": 2120,
+    "physicalRoutes": 51,
+    "browserRoutes": 51,
+    "sourceInputs": 330,
+    "sourceInputsSha256": "d841a1b2e20b67bc0046a44997538a7567e0aced90485c4e29ee7ec8ac8e19a3"
+  },
+  "publication": {
+    "commit": "ba3218f7855e7cbff8170ec1f692a0fd786794a6",
+    "tree": "54cf0213eec0551c2c88b7a5fee7cd17dbb9e2b3",
+    "runId": 38387082981,
+    "runAttempt": 1,
+    "originalCIConclusion": "failure",
+    "successfulProducerJobs": 10,
+    "failureClassification": {
+      "kind": "exact-original-failed-campaign-v55-provider",
+      "pass": true,
+      "publicationAccepted": false,
+      "originalProviderAccepted": true,
+      "originalCIConclusion": "failure",
+      "publisherCommit": "ba3218f7855e7cbff8170ec1f692a0fd786794a6",
+      "publisherTree": "54cf0213eec0551c2c88b7a5fee7cd17dbb9e2b3",
+      "publisherParent": "bd7481014483ccaaca64923388bdc87e2cafa7ea",
+      "publicationRun": 38387082981,
+      "publicationRunAttempt": 1,
+      "source": {
+        "sourceCommit": "ba5c86fd07facd9613f5e6e8efb9709bd2ef9e89",
+        "sourceTree": "1cd58611f9247c661b460c3a99f890a6e63a8715",
+        "sourceParent": "1160c296e024e34ac19b1d78247d9168eb7a18a7",
+        "sourceReview": {
+          "runId": 38377149910,
+          "runAttempt": 1
+        }
+      },
+      "verifierJobId": 115271204608,
+      "failedSteps": [
+        9,
+        10
+      ],
+      "successfulProducerJobs": 10,
+      "artifacts": [
+        {
+          "artifactId": 11808880945,
+          "artifactName": "campaign-v55-public-presentation-38387082981-1",
+          "jobId": 115263589990,
+          "uploadStep": 18,
+          "descriptorOnly": false
+        },
+        {
+          "artifactId": 11807810979,
+          "artifactName": "campaign-v55-public-native-living-38387082981-1",
+          "jobId": 115263590028,
+          "uploadStep": 14,
+          "descriptorOnly": false
+        },
+        {
+          "artifactId": 11807699055,
+          "artifactName": "campaign-v55-public-native-castle-38387082981-1",
+          "jobId": 115263590102,
+          "uploadStep": 14,
+          "descriptorOnly": false
+        },
+        {
+          "artifactId": 11807693486,
+          "artifactName": "campaign-v55-public-native-early-38387082981-1",
+          "jobId": 115263590156,
+          "uploadStep": 14,
+          "descriptorOnly": false
+        },
+        {
+          "artifactId": 11807604227,
+          "artifactName": "campaign-v55-public-native-fracture-38387082981-1",
+          "jobId": 115263590096,
+          "uploadStep": 14,
+          "descriptorOnly": false
+        },
+        {
+          "artifactId": 11807226966,
+          "artifactName": "github-pages",
+          "jobId": 115261416218,
+          "uploadStep": 14,
+          "descriptorOnly": true
+        },
+        {
+          "artifactId": 11807212363,
+          "artifactName": "campaign-v55-deploy-38387082981-1",
+          "jobId": 115262787304,
+          "uploadStep": 10,
+          "descriptorOnly": false
+        },
+        {
+          "artifactId": 11807211981,
+          "artifactName": "campaign-v55-prepared-38387082981-1",
+          "jobId": 115261416218,
+          "uploadStep": 16,
+          "descriptorOnly": false
+        },
+        {
+          "artifactId": 11807157833,
+          "artifactName": "campaign-v55-public-entry-38387082981-1",
+          "jobId": 115263589982,
+          "uploadStep": 15,
+          "descriptorOnly": false
+        },
+        {
+          "artifactId": 11806963667,
+          "artifactName": "campaign-v55-public-native-optics-38387082981-1",
+          "jobId": 115263590314,
+          "uploadStep": 14,
+          "descriptorOnly": false
+        },
+        {
+          "artifactId": 11806244956,
+          "artifactName": "campaign-v55-public-native-energy-38387082981-1",
+          "jobId": 115263590273,
+          "uploadStep": 14,
+          "descriptorOnly": false
+        }
+      ],
+      "verifierLog": {
+        "bytes": 436092,
+        "sha256": "65bc0e1d0bba4c63c41311acf50234075708f7f4f37aff6a7c457272c20b2298",
+        "differenceLines": [
+          "+             filename: 'proof/public-presentation/payload/animation/free-jump.mp4',",
+          "-             filename: 'proof/public-artifacts/presentation/payload/animation/free-jump.mp4',",
+          "+             filename: 'proof/public-presentation/payload/animation/held-friend-jump.mp4',",
+          "-             filename: 'proof/public-artifacts/presentation/payload/animation/held-friend-jump.mp4',"
+        ]
+      },
+      "scope": "Only the authenticated movie probe filename comparison and consequent missing verification-bundle upload failure are recognized. Original CI remains failure; this gate accepts no capture, site bytes, recovery transport or publication."
+    },
+    "deploymentId": 7036716379,
+    "deploymentState": "success"
+  },
+  "readOnlyVerification": {
+    "commit": "29b45c556d35f0eaa820e0d9d20b83433079a25c",
+    "tree": "01790d1866f1b622fb989fe19911bb25d645571e",
+    "runId": 38394370232,
+    "runAttempt": 1,
+    "jobId": 115285722149,
+    "actualTerminalConclusion": "success",
+    "artifact": {
+      "pass": true,
+      "artifactId": 11811188876,
+      "zipBytes": 19050251,
+      "zipSha256": "ae7cb35212886faac0f8da1f94bf599d91e3b408357097ec37f6e99f725f245e",
+      "expandedFiles": 367,
+      "expandedBytes": 27941761,
+      "payloadFiles": 366,
+      "payloadBytes": 27872892,
+      "inventorySha256": "a79f636cf24ecdabdcd50ebd62b9a8281796e0ab3997473d686cf76628321c62",
+      "packetRecordBytes": 68869,
+      "packetRecordSha256": "1bf9ab12fec1cde72357f9855b30542891f4592859a8d2f31db8713d014a29e8"
+    },
+    "priorPartialRun38393048441Accepted": false
+  },
+  "rootVerification": {
+    "originalImmutableEnvelopes": 11,
+    "originalCaptureRoles": 8,
+    "ordinaryPublicWins": 51,
+    "originalCargoBodyAndShapePreserved": true,
+    "actorPlacementsResetsRespawnsDuringRoutes": 0,
+    "physical20AndAll11CastleMechanismsChecked": true,
+    "decodedImages": 263,
+    "architectureFrames": 102,
+    "menuFrames": 6,
+    "animationJPEGs": 96,
+    "animationMovies": 2,
+    "decodedMovieFrames": 96,
+    "heldAngleStills": 6,
+    "bareEntryHistoricalRecordsPreserved": 16,
+    "manualReviews": [
+      {
+        "path": "docs/evidence/campaign-v55-public-architecture-review.json",
+        "bytes": 82101,
+        "sha256": "419946db542a4be53bb2f1aadbe037c8e3dfeb11d4b7d235b9f3b2ec1898a497"
+      },
+      {
+        "path": "docs/evidence/campaign-v55-public-animation-review.json",
+        "bytes": 7971,
+        "sha256": "9193ae25166c2f7b80289e90e401630515295eacf02f76e79c0aeb67ce9f076f"
+      }
+    ],
+    "originalFailureRemainsFailure": true,
+    "canonicalCallbacksUnmodified": true
+  },
+  "publicBytes": {
+    "checkedFiles": 2038,
+    "checkedBytes": 640738913,
+    "siteInventorySha256": "3cd59f86100c7b9e87ebaf1b3b4b7d81aedaf66d2044895b5b9afa4367264f1e",
+    "baselineFilesPreserved": 1957,
+    "baselineBytesPreserved": 633671648,
+    "baselineInventorySha256": "d76664e04f5ac2f2b161d9af10da1aa2299df13cfec51a243659d2b732be13c6",
+    "freshWholeSiteGETPass": true,
+    "finalExactDeploymentLeasePass": true
+  },
+  "limitations": [
+    "Finite 200 scheduled shortcut probes retain 26 unproven setup/error cases; no universal bypass claim.",
+    "Automated 51 public routes are supported by finished stills, not full route movies.",
+    "Public rooms 23 and 27 start captures contain transient menu-fade residue; same-room overview captures are clear.",
+    "Minor visual watchlist: room 5 plain floor, room 20 secondary hook label partially masked by actual wall, room 40 lower HUD overlap.",
+    "Castle atrium is visually reviewed; all opaque roof-hidden wing interiors are not covered by overview frames.",
+    "Software WebGL checks do not establish hardware-device FPS or human playtest quality.",
+    "A castle with 500 unique stages and a proved 15-minute human speedrun remains a separate future project."
+  ]
+}

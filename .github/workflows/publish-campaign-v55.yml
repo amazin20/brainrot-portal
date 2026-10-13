@@ -6,24 +6,7 @@ name: Publish the independently accepted complete campaign v55
     branches:
     - main
     paths:
-    - .github/workflows/publish-campaign-v55.yml
-    - scripts/publish-campaign-v55.mjs
-    - scripts/publish-campaign-v55-run.mjs
-    - scripts/publish-campaign-v55.py
-    - scripts/lib/campaign-v55-proof.mjs
-    - scripts/lib/campaign-v55-public-proof.mjs
-    - scripts/observe-campaign-v55-browser.mjs
-    - scripts/qa-campaign-v55-public-entry.mjs
-    - scripts/test-campaign-v55-workflow.py
-    - scripts/test-campaign-v55-public-proof.mjs
-    - scripts/test-campaign-v55-public-entry.mjs
-    - scripts/test-campaign-v55-run.mjs
-    - scripts/test-observe-campaign-v55-browser.mjs
-    - scripts/test-publish-campaign-v55.py
     - tools/campaign-v55-release.json
-    - tools/campaign-v55-root-acceptance.json
-    - tools/r5-public-root-acceptance.json
-    - tools/r5-received-packet-acceptance.json
 permissions:
   contents: read
   actions: read
