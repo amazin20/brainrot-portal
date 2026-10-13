@@ -21,19 +21,28 @@ export async function runPointerLockStartBrowser({browser,baseUrl='http://127.0.
       page.on('pageerror',error=>report.errors.push(String(error)));
       try{
         await page.evaluateOnNewDocument(()=>{
-          window.__CAMERA_START_PROBE__={events:[]};
+          window.__CAMERA_START_PROBE__={events:[],byEvent:new WeakMap()};
           for(const type of ['mousemove','pointerlockchange'])window.addEventListener(type,event=>{
             const game=window.__NESI_DEMO_GAME__;
             const entry={type,trusted:event.isTrusted,timeStamp:event.timeStamp,now:performance.now(),
               movementX:event.movementX,movementY:event.movementY,locked:document.pointerLockElement===game?.renderer?.domElement,
               yaw:game?.yaw,pitch:game?.pitch,lastUnlockedMotion:game?.controls?.lastUnlockedMotion,pendingLockRebound:game?.controls?.pendingLockRebound};
             window.__CAMERA_START_PROBE__.events.push(entry);
-            queueMicrotask(()=>{entry.after={yaw:game?.yaw,pitch:game?.pitch};});
+            window.__CAMERA_START_PROBE__.byEvent.set(event,entry);
           },{capture:true});
         });
         const url=new URL(baseUrl);url.search=`?edition=foundation&level=${level}&debug=1`;
         await page.goto(url.href,{waitUntil:'domcontentloaded'});
         await page.waitForFunction(()=>window.__NESI_DEMO_GAME__?.state==='ready');
+        // Register after the production controls, in the same bubble phase.
+        // A microtask from capture can run between native event listeners and
+        // would describe the state before the actual mouse handler executed.
+        await page.evaluate(()=>{
+          for(const type of ['mousemove','pointerlockchange'])window.addEventListener(type,event=>{
+            const game=window.__NESI_DEMO_GAME__,entry=window.__CAMERA_START_PROBE__.byEvent.get(event);
+            if(entry)entry.after={yaw:game.yaw,pitch:game.pitch};
+          });
+        });
         const runtime=await page.evaluate(flagNames=>{const game=window.__NESI_DEMO_GAME__;return {levelIndex:game.levelIndex,edition:game.chamberEdition,id:game.firstLevel.id,
           flags:Object.fromEntries(flagNames.map(key=>[key,game[key]])),physicalRoom23:Boolean(game.firstLevel.room23PhysicalPrototype),
           hudNumber:Number(document.querySelector('#level-number').textContent),optionNumber:Number(document.querySelector(`#level-select option[value="${game.levelIndex}"]`).textContent.match(/^\d+/)?.[0])};},Object.keys(ACTIVE_FOUNDATION_RUNTIME_FLAGS));

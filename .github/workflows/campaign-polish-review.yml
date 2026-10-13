@@ -6,7 +6,9 @@ on:
 permissions: {contents: read}
 concurrency:
   group: campaign-polish-review-${{ github.ref }}
-  cancel-in-progress: false
+  # Replace only this session's initial review after fixing its input observer.
+  # Other source reviews keep their normal non-cancelling behavior.
+  cancel-in-progress: ${{ github.event_name == 'push' && github.event.before == 'a8ca2cbec44294b8fab780881dc71d53ecf16908' }}
 env:
   BUILD_COMMIT: ${{ github.sha }}
 jobs:
