@@ -9,13 +9,18 @@ import {SINGULARITY_ROOMS} from '../src/game/LabSingularityLayout.js';
 import {assertUpgradeInfo,assertUpgradeEvidence,captureFormat} from './lib/singularity-upgrade-proof.mjs';
 import {verifySingularityUI,waitForStartMenu,playFromStartMenu,activate} from './lib/singularity-ui-check.mjs';
 import {TOWER41_PREVIEW_STORAGE_PREFIX,TOWER41_PREVIEW_LEGACY_STORAGE_PREFIXES,isTower41NativePreviewPath} from '../src/game/LabTower41Preview.js';
+import {readPhysicalReviewEntry} from '../src/game/LabPhysicalReviewEntry.js';
 import {oldSavePrefixes,qualificationKey} from './qa-tower41-ratchet-browser.mjs';
+import {packageFiles} from './lib/release-manifest.mjs';
+import {createTower41NativeCameraObserverApi,TOWER41_NATIVE_CAMERA_OBSERVER_BROWSER_FACTORY,assertTower41NativeCameraObservation} from './lib/tower41-native-camera-observer.mjs';
 const out=path.resolve(process.env.OUT_DIR||'qa/singularity');fs.mkdirSync(out,{recursive:true});
 const record=process.env.RECORD==='1',route=record||process.env.ROUTE==='1';
 const preview=process.env.TOWER41_PREVIEW==='1',preferenceKey='brainrot-portal.preferences.v24';
-const previewKey=TOWER41_PREVIEW_STORAGE_PREFIX+preferenceKey;
-const preservedPrefixes=[...oldSavePrefixes,qualificationKey.slice(0,-preferenceKey.length),...TOWER41_PREVIEW_LEGACY_STORAGE_PREFIXES];
-const previewSaveIsolation=preview?{pass:false,namespace:TOWER41_PREVIEW_STORAGE_PREFIX,ownKey:previewKey,legacyPrefixes:preservedPrefixes,legacySnapshot:null,phases:[],controls:{}}:null;
+const base=new URL(process.env.PAGE_URL||'http://127.0.0.1:4173/'),physicalEntry=readPhysicalReviewEntry(base.pathname);
+assert.ok(!physicalEntry||physicalEntry.tower,'The castle recorder cannot qualify a different physical review chamber');
+const previewNamespace=physicalEntry?.storagePrefix||TOWER41_PREVIEW_STORAGE_PREFIX,previewKey=previewNamespace+preferenceKey;
+const preservedPrefixes=[...oldSavePrefixes,qualificationKey.slice(0,-preferenceKey.length),...TOWER41_PREVIEW_LEGACY_STORAGE_PREFIXES,...(physicalEntry?.tower?[TOWER41_PREVIEW_STORAGE_PREFIX,'brainrot-foundation20-physical-v1:']:[])];
+const previewSaveIsolation=preview?{pass:false,namespace:previewNamespace,ownKey:previewKey,legacyPrefixes:preservedPrefixes,legacySnapshot:null,phases:[],controls:{}}:null;
 let preservedSaves=null;
 const {fps,stride,width,height,durationToleranceSeconds}=captureFormat({fps:Number(process.env.CAPTURE_FPS||12),width:Number(process.env.CAPTURE_WIDTH||960),height:Number(process.env.CAPTURE_HEIGHT||540)});
 const graphicsPreset=process.env.GRAPHICS_PRESET||'low',routeOptions=JSON.parse(process.env.ROUTE_OPTIONS||'{}');
@@ -23,7 +28,7 @@ assert.ok(['low','balanced','high'].includes(graphicsPreset));assert.ok(routeOpt
 const browser=await puppeteer.launch({executablePath:process.env.CHROME_PATH||'/usr/bin/chromium',headless:true,protocolTimeout:18_000_000,args:['--no-sandbox','--disable-dev-shm-usage','--use-angle=swiftshader','--enable-unsafe-swiftshader']});
 const errors=[],movie=path.join(out,'tower-singularity.mp4');let encoder=null,encoderExit=null,count=0,first=null,last=null,page,lastVisualFrame=-1,terminalCaptured=false;
 async function observeBareNativeEntry(base){
- if(!isTower41NativePreviewPath(base.pathname))return {applicable:false,reason:'The configured browser review base is outside the standalone tower41-native entry namespace.'};
+ if(!isTower41NativePreviewPath(base.pathname)&&!readPhysicalReviewEntry(base.pathname)?.tower)return {applicable:false,reason:'The configured browser review base is outside the standalone tower41-native entry namespace.'};
  const bare=new URL(base);bare.search='';bare.hash='';await page.goto(bare.href,{waitUntil:'domcontentloaded'});await waitForStartMenu(page);
  preservedSaves=await page.evaluate(()=>window.__TOWER41_PREVIEW_INITIAL_LEGACY_SAVES__);
  const baselineHash=createHash('sha256').update(JSON.stringify(preservedSaves)).digest('hex');
@@ -71,7 +76,7 @@ async function previewSettingsAndPause(){
  await page.focus('#resume-button');await page.keyboard.press('Enter');await page.waitForFunction(()=>document.documentElement.dataset.runtimeState==='playing');await page.evaluate(()=>window.__NESI_DEMO_GAME__.renderer.setAnimationLoop(null));
  const resumed=await previewCheckpoint('after-resume');assert.equal(resumed.state,'playing');previewSaveIsolation.controls.pauseResume={pass:true,pauseControl:'native-escape-or-hud',pointerLockExitFallback,resumeControl:'focused-native-enter',pausedState:paused.state,resumedState:resumed.state};
 }
-async function previewVictoryReplayReload(){
+async function previewVictoryReplayReload(info){
  const won=await previewCheckpoint('after-win');assert.equal(won.state,'won');assert.deepEqual(won.ownCompleted,[40]);assert.equal(won.ownResumeLevel,40);
  const label=await page.$eval('#play-again-button',button=>button.textContent);assert.match(label,/Пройти ещё раз/);
  await activate(page,'#play-again-button');await page.waitForFunction(()=>document.documentElement.dataset.runtimeState==='playing');await page.evaluate(()=>window.__NESI_DEMO_GAME__.renderer.setAnimationLoop(null));
@@ -79,7 +84,22 @@ async function previewVictoryReplayReload(){
  const replayAtSpawn=await page.evaluate(()=>{const g=window.__NESI_DEMO_GAME__;return g.playerPosition.distanceTo(g.firstLevel.spawn)<.5;});assert.equal(replayAtSpawn,true);
  previewSaveIsolation.controls.replay={pass:true,button:'#play-again-button',label,level:replay.level,state:replay.state,solved:replay.solved,atSpawn:replayAtSpawn};
  await page.reload({waitUntil:'domcontentloaded'});await waitForStartMenu(page);const reload=await previewCheckpoint('after-reload');assert.equal(reload.state,'ready');assert.deepEqual(reload.solved,[]);assert.deepEqual(reload.ownCompleted,[40]);assert.equal(reload.ownResumeLevel,40);
- previewSaveIsolation.controls.reload={pass:true,state:reload.state,level:reload.level,completed:reload.ownCompleted,resumeLevel:reload.ownResumeLevel};previewSaveIsolation.pass=true;
+ previewSaveIsolation.controls.reload={pass:true,state:reload.state,level:reload.level,completed:reload.ownCompleted,resumeLevel:reload.ownResumeLevel};
+ if(physicalEntry?.tower){
+  const own41=await page.evaluate(key=>localStorage.getItem(key),previewKey),peerURL=new URL(base);peerURL.pathname=peerURL.pathname.replace('tower41-native-v3','foundation20-physical-v1');peerURL.search='';peerURL.hash='';
+  const readPeer=async()=>{
+   const peer=await page.evaluate(({prefixes,key})=>({url:location.href,pathname:location.pathname,search:location.search,hash:location.hash,state:document.documentElement.dataset.runtimeState,level:Number(document.documentElement.dataset.levelIndex)+1,edition:document.body.dataset.chamberEdition,entry:document.body.dataset.physicalReviewEntry,
+    startChoices:[...document.querySelector('#level-select').options].map(o=>Number(o.value)),settingsChoices:[...document.querySelector('#settings-level-select').options].map(o=>Number(o.value)),editionNavigationPresent:Boolean(document.querySelector('.edition-navigation')),editionNavigationAnchors:[...document.querySelectorAll('.edition-navigation a')].map(a=>a.getAttribute('href')),
+    debugGameHook:typeof window.__NESI_DEMO_GAME__,debugPreferencesHook:typeof window.__NESI_PREFS__,debugRouteHook:typeof window.__NESI_RUN_FOUNDATION20_PHYSICAL_ROUTE__,ownRaw:localStorage.getItem(key),legacy:Object.fromEntries(Object.keys(localStorage).filter(name=>prefixes.some(prefix=>name.startsWith(prefix))).sort().map(name=>[name,localStorage.getItem(name)]))}),{prefixes:preservedPrefixes,key:previewKey});
+   assert.equal(peer.url,peerURL.href);assert.equal(peer.search,'');assert.equal(peer.hash,'');assert.equal(peer.state,'ready');assert.equal(peer.level,20);assert.equal(peer.edition,'foundation');assert.equal(peer.entry,'foundation20-physical-v1');assert.deepEqual(peer.startChoices,[19]);assert.deepEqual(peer.settingsChoices,[19]);assert.equal(peer.editionNavigationPresent,false);assert.deepEqual(peer.editionNavigationAnchors,[]);
+   for(const key of ['debugGameHook','debugPreferencesHook','debugRouteHook'])assert.equal(peer[key],'undefined');assert.equal(peer.ownRaw,own41);assert.deepEqual(peer.legacy,preservedSaves);
+   const peerInfo=await page.evaluate(async()=>{const response=await fetch('build-info.json',{cache:'no-store'});if(!response.ok)throw Error('Missing peer build identity');return response.json();});assert.deepEqual(peerInfo,info);return peer;
+  };
+  await page.goto(peerURL.href,{waitUntil:'domcontentloaded'});await waitForStartMenu(page);const peer=await readPeer();await page.reload({waitUntil:'domcontentloaded'});await waitForStartMenu(page);const peerReload=await readPeer();
+  previewSaveIsolation.crossEntry={pass:true,url:peer.url,pathname:peer.pathname,search:peer.search,hash:peer.hash,entry:peer.entry,level:peer.level,state:peer.state,edition:peer.edition,startChoices:peer.startChoices,settingsChoices:peer.settingsChoices,editionNavigationPresent:peer.editionNavigationPresent,editionNavigationAnchors:peer.editionNavigationAnchors,
+   debugGameHook:peer.debugGameHook,debugPreferencesHook:peer.debugPreferencesHook,debugRouteHook:peer.debugRouteHook,own41BytesUnchanged:true,peerBytesUnchanged:true,reloadVerified:true,sourceCommit:info.commit,legacySnapshotSha256:createHash('sha256').update(JSON.stringify(peerReload.legacy)).digest('hex'),own41Sha256:createHash('sha256').update(own41).digest('hex')};
+ }
+ previewSaveIsolation.pass=true;
  fs.writeFileSync(path.join(out,'preview-save-isolation.json'),JSON.stringify(previewSaveIsolation,null,2)+'\n');
 }
 // Capture only the actual production canvas. CDP's compositor screenshot can
@@ -99,7 +119,10 @@ if(record){encoder=spawn('ffmpeg',['-y','-hide_banner','-loglevel','error','-f',
 try{
  page=await browser.newPage();page.setDefaultTimeout(180000);await page.setViewport({width,height,deviceScaleFactor:1});page.on('pageerror',e=>errors.push(String(e)));
  if(preview)await page.evaluateOnNewDocument(({graphicsPreset,prefixes,key,preferenceKey})=>{
-  for(const prefix of prefixes)if(localStorage.getItem(prefix+preferenceKey)===null)localStorage.setItem(prefix+preferenceKey,JSON.stringify({quality:'balanced',volume:.65,muted:true,tutorial:true,completed:prefix==='brainrot-tower41-native-v1:'?[40]:[0,1,42],hints:prefix==='brainrot-tower41-native-v1:'?{40:2}:{42:2},resumeLevel:prefix==='brainrot-tower41-native-v1:'?40:42,campaignRevision:'creative-campaign-v48',roomRevisions:{16:'cable-supported-architecture-v1',32:'siphon-observatory-v1',50:'echo-horizon-v1'}}));
+  for(const prefix of prefixes)if(localStorage.getItem(prefix+preferenceKey)===null){
+   if(prefix==='brainrot-foundation20-physical-v1:'){localStorage.setItem(prefix+preferenceKey,JSON.stringify({quality:'balanced',volume:.65,muted:true,tutorial:true,resumeLevel:19,completed:[19],hints:{},campaignRevision:'foundation20-physical-v1',roomRevisions:{}}));continue;}
+   localStorage.setItem(prefix+preferenceKey,JSON.stringify({quality:'balanced',volume:.65,muted:true,tutorial:true,completed:['brainrot-tower41-native-v1:','brainrot-tower41-native-v2:'].includes(prefix)?[40]:[0,1,42],hints:['brainrot-tower41-native-v1:','brainrot-tower41-native-v2:'].includes(prefix)?{40:2}:{42:2},resumeLevel:['brainrot-tower41-native-v1:','brainrot-tower41-native-v2:'].includes(prefix)?40:42,campaignRevision:'creative-campaign-v48',roomRevisions:{16:'cable-supported-architecture-v1',32:'siphon-observatory-v1',50:'echo-horizon-v1'}}));
+  }
   window.__TOWER41_PREVIEW_INITIAL_LEGACY_SAVES__=Object.fromEntries(Object.keys(localStorage).filter(key=>prefixes.some(prefix=>key.startsWith(prefix))).sort().map(key=>[key,localStorage.getItem(key)]));
   if(localStorage.getItem(key)===null)localStorage.setItem(key,JSON.stringify({quality:graphicsPreset,muted:true,tutorial:true,completed:[],hints:{},resumeLevel:40}));
  },{graphicsPreset,prefixes:preservedPrefixes,key:previewKey,preferenceKey});
@@ -115,7 +138,6 @@ try{
   }
   if(count%120===0)console.log('CAPTURE',count/fps,'seconds;',last.solved.length,'machines');
  });
- const base=new URL(process.env.PAGE_URL||'http://127.0.0.1:4173/');
  if(preview){previewSaveIsolation.bareEntry=await observeBareNativeEntry(base);fs.writeFileSync(path.join(out,'preview-save-isolation.json'),JSON.stringify(previewSaveIsolation,null,2)+'\n');}
  const url=new URL(base);url.searchParams.set('level','41');url.searchParams.set('edition','foundation');url.searchParams.set('debug','1');
  if(preview){url.searchParams.set('tower41preview','1');url.searchParams.delete('tower41ratchet');url.searchParams.delete('pilot');assert.equal(route,true,'Preview isolation proof requires the real whole castle route');const playerURL=new URL(url);playerURL.searchParams.delete('debug');playerURL.searchParams.delete('smoke');previewSaveIsolation.playerURL=playerURL.href;previewSaveIsolation.reviewURL=url.href;}
@@ -137,32 +159,52 @@ try{
   fs.writeFileSync(path.join(out,'inspection.json'),JSON.stringify({sourceCommit:info.commit,version:info.version,graphicsPreset,width,height,rooms:samples.map(s=>s.id),method:'Camera-only architectural inspections from the actual production canvas; DOM controls are checked separately. These images do not assert a completed playthrough.',errors},null,2));
   await verifySingularityUI(browser,{url,info,out});
  }else{
-  const report=await page.evaluate(async ({record,stride,width,height,routeOptions})=>{
+  let cameraPins=null;
+  if(process.env.CAMERA_OBSERVATION==='1'){
+   assert.equal(record,true,'Current original-skin camera observation requires the complete native recording');
+   assert.deepEqual(routeOptions,{},'Current camera proof requires the unchanged complete eleven-machine route');
+   const frozenSource=JSON.parse(fs.readFileSync(process.env.CAMERA_SOURCE_RECEIPT||'qa/tower41-next-cell-build/source.json','utf8'));
+   const frozenPackage=JSON.parse(fs.readFileSync(process.env.CAMERA_PACKAGE_RECEIPT||'qa/tower41-next-cell-build/package.json','utf8'));
+   cameraPins={sourceCommit:frozenSource.sourceCommit,tree:frozenSource.tree,sourceInputsSha256:frozenSource.sourceInputsSha256,
+    sourceReview:frozenSource.sourceReview,packageFilesSha256:frozenPackage.nativePackage.packageFilesSha256,
+    journeySha256:createHash('sha256').update(fs.readFileSync('src/game/LabSingularityJourney.js')).digest('hex'),
+    browserSeamSha256:createHash('sha256').update(fs.readFileSync('scripts/singularity-browser.mjs')).digest('hex')};
+   createTower41NativeCameraObserverApi(cameraPins).validateIdentity(cameraPins,info);
+   assert.deepEqual(packageFiles('dist'),frozenPackage.nativePackage.files,'Actual current camera route requires the frozen complete native package');
+   assert.equal(createHash('sha256').update(fs.readFileSync('dist/build-info.json')).digest('hex'),frozenPackage.buildInfoSha256);
+   assert.equal(frozenSource.verifiers.find(row=>row.file==='scripts/singularity-browser.mjs')?.sha256,cameraPins.browserSeamSha256,'Exact actual native browser seam must be frozen');
+  }
+  const report=await page.evaluate(async ({record,stride,width,height,routeOptions,cameraFactory,cameraPins,buildInfo})=>{
    const g=window.__NESI_DEMO_GAME__,body=g.physics.cargoBody.id,events=[],telemetry=[];let frames=0,encoded=0,batch=[],lastCaptured=-1,lastSolved=0,seenResets=0;
+   const cameraObserver=cameraPins?await ((0,eval)('('+cameraFactory+')')(cameraPins)).install({game:g,sourceIdentity:cameraPins,buildInfo,options:{width,height,stride}}):null;
    const oldPhysics=g.updatePlaying,oldReset=g.resetRun;
    g.resetRun=function(...a){seenResets++;return oldReset.apply(this,a);};
    g.updatePlaying=function(dt,...args){const result=oldPhysics.call(this,dt,...args);const n=g.firstLevel.completedStages;if(n!==lastSolved){if(n!==lastSolved+1)throw Error('Progress jumped');events.push(g.firstLevel.getTowerMetrics().events.at(-1));lastSolved=n;}return result;};
    const canvas=document.createElement('canvas');canvas.width=width;canvas.height=height;const ctx=canvas.getContext('2d',{alpha:false});
-   const capture=(state,terminal=false)=>{if(g.renderer.domElement.width!==width||g.renderer.domElement.height!==height)throw Error('Production canvas dimensions changed during recording');g.render();ctx.drawImage(g.renderer.domElement,0,0);batch.push({index:encoded++,visualFrame:frames,terminal,jpeg:canvas.toDataURL('image/jpeg',.83),state});lastCaptured=frames;};
-   window.__SINGULARITY_FRAME__=async state=>{if(state.cargoBodyId!==body||seenResets)throw Error('Original attempt changed');frames=state.visualFrame;if(record&&frames%stride===0)capture(state);if(frames%60===0)telemetry.push(state);};
+   const capture=(state,terminal=false)=>{if(g.renderer.domElement.width!==width||g.renderer.domElement.height!==height)throw Error('Production canvas dimensions changed during recording');g.render();ctx.drawImage(g.renderer.domElement,0,0);const index=encoded++,jpeg=canvas.toDataURL('image/jpeg',.83);cameraObserver?.bindEncodedSample({encodedFrame:index,visualFrame:frames,terminal});batch.push({index,visualFrame:frames,terminal,jpeg,state});lastCaptured=frames;};
+   const captureHook=async state=>{if(state.cargoBodyId!==body||seenResets)throw Error('Original attempt changed');frames=state.visualFrame;if(record&&frames%stride===0)capture(state);if(frames%60===0)telemetry.push(state);};
+   cameraObserver?.attachCallObservers();window.__SINGULARITY_FRAME__=cameraObserver?cameraObserver.wrapFrameHook(captureHook):captureHook;
    window.__SINGULARITY_FLUSH__=async()=>{if(batch.length){const pending=batch;batch=[];await window.__SINGULARITY_WRITE__(pending);}};
    try{
     const result=await window.__NESI_RUN_LEVEL_ROUTE__(routeOptions);
     // Include the actual final won state when it falls between regular samples.
     // No extra physics, animation frames or stationary padding are introduced.
-    if(record&&lastCaptured<result.frames-1){frames=result.frames-1;capture({state:g.state,player:g.playerPosition.toArray(),cargo:g.cargo.position.toArray(),solved:g.firstLevel.getTowerMetrics().solvedIds,cargoBodyId:body,visualFrame:frames,seconds:result.seconds},true);}
-    await window.__SINGULARITY_FLUSH__();return {result,observed:{events,telemetry,seenResets,bodyId:body},encodedFrames:encoded};
+    if(record&&lastCaptured<result.frames-1){frames=result.frames-1;const terminalState={state:g.state,player:g.playerPosition.toArray(),cargo:g.cargo.position.toArray(),solved:g.firstLevel.getTowerMetrics().solvedIds,cargoBodyId:body,visualFrame:frames,seconds:result.seconds};capture(terminalState,true);await cameraObserver?.observeTerminalCapture(terminalState);}
+    await window.__SINGULARITY_FLUSH__();const cameraObservation=cameraObserver?await cameraObserver.finish(result):null;return {result,observed:{events,telemetry,seenResets,bodyId:body},encodedFrames:encoded,cameraObservation};
    }catch(error){window.__SINGULARITY_FAILURE__={error:String(error),report:error.singularityReport,events,telemetry};throw error;}
-   finally{g.updatePlaying=oldPhysics;g.resetRun=oldReset;delete window.__SINGULARITY_FRAME__;delete window.__SINGULARITY_FLUSH__;}
-  },{record,stride,width,height,routeOptions});
+   finally{cameraObserver?.dispose();g.updatePlaying=oldPhysics;g.resetRun=oldReset;delete window.__SINGULARITY_FRAME__;delete window.__SINGULARITY_FLUSH__;}
+  },{record,stride,width,height,routeOptions,cameraFactory:TOWER41_NATIVE_CAMERA_OBSERVER_BROWSER_FACTORY,cameraPins,buildInfo:info});
   assert.equal(report.result.pass,true);assert.equal(report.result.metrics.completedStages,tower.stages);assert.equal(report.observed.events.length,tower.stages);assert.equal(new Set(report.observed.events.map(e=>e.id)).size,tower.stages);assert.equal(report.observed.seenResets,0);assert.equal(report.result.sameCompanion,true);
   await saveCanvasPng('ordinary-victory.png');
-  const proof={sourceCommit:info.commit,version:info.version,graphicsPreset,routeOptions,rooms:tower.rooms,capture:{method:'Synchronous actual production-canvas readback; DOM controls are checked separately.',nativeCanvas,width,height,fps,stride},method:'Continuous ordinary scripted input through production physics. No actor placement, no puzzle-state assignment, no resets. Not a human playtest or a minimum-time proof.',...report,errors};
+  const {cameraObservation,...routeReport}=report;
+  if(cameraObservation){const bytes=Buffer.from(JSON.stringify(cameraObservation)+'\n');assert.ok(bytes.length<=25000000,'Compact camera observation must fit the bounded metadata member limit');fs.writeFileSync(path.join(out,'camera-observation.json'),bytes);}
+  const proof={sourceCommit:info.commit,version:info.version,graphicsPreset,routeOptions,rooms:tower.rooms,capture:{method:'Synchronous actual production-canvas readback; DOM controls are checked separately.',nativeCanvas,width,height,fps,stride},method:'Continuous ordinary scripted input through production physics. No actor placement, no puzzle-state assignment, no resets. Not a human playtest or a minimum-time proof.',...routeReport,errors};
   if(record){encoder.stdin.end();const [code]=await encoderExit;encoder=null;assert.equal(code,0);assert.equal(count,report.encodedFrames);assert.equal(last.state,'won');
    const metadata=JSON.parse(execFileSync('ffprobe',['-v','quiet','-show_streams','-show_format','-of','json',movie],{encoding:'utf8'}));const video=metadata.streams.find(s=>s.codec_type==='video');assert.equal(video.codec_name,'h264');assert.equal(video.width,width);assert.equal(video.height,height);assert.equal(Number(video.nb_frames),count);assert.equal(video.avg_frame_rate,`${fps}/1`);assert.ok(Math.abs(Number(metadata.format.duration)-count/fps)<.12);
    proof.video={filename:path.basename(movie),sha256:createHash('sha256').update(fs.readFileSync(movie)).digest('hex'),frames:count,fps,stride,durationSeconds:count/fps,durationToleranceSeconds,simulationSeconds:report.result.seconds,terminalSample:terminalCaptured,lastVisualFrame,width,height,nativeCanvas,first,last};
   }
-  if(preview){await previewVictoryReplayReload();proof.previewSaveIsolation=previewSaveIsolation;}
+  if(cameraObservation){const file='camera-observation.json',bytes=fs.readFileSync(path.join(out,file));const summary=assertTower41NativeCameraObservation(cameraObservation,{sourceIdentity:cameraPins,bodyId:report.observed.bodyId,video:proof.video,result:report.result});proof.cameraObservation={file,bytes:bytes.length,sha256:createHash('sha256').update(bytes).digest('hex'),...summary};}
+  if(preview){await previewVictoryReplayReload(info);proof.previewSaveIsolation=previewSaveIsolation;}
   assertUpgradeEvidence(proof,info,{record});
   fs.writeFileSync(path.join(out,'evidence.json'),JSON.stringify(proof,null,2));console.log('VERIFIED',info.commit,report.result.seconds,report.result.activeSeconds,count);
  }

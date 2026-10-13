@@ -1,0 +1,928 @@
+{
+  "kind": "size-and-codec-only-fixture-not-native-proof",
+  "input": {
+    "file": "/workspace/scratch/1949b02c22bb/camera41-runtime-diagnosis/baseline-v3-native/expanded/observation.json",
+    "bytes": 26344755,
+    "sha256": "61e584f47b68181676b9867a5253d5153eb586bfd09e0029f72dfcc90421ff76"
+  },
+  "limitations": [
+    "Every original floating point number is unchanged; no quantization.",
+    "New eligibility/material fields, repeated rows, clocks and complete capture envelopes are explicit size scaffolding.",
+    "This never creates accepted native data or changes a camera/game."
+  ],
+  "pins": {
+    "sourceCommit": "5e552e9c3ac248b535d619741f15e99e29979cbf",
+    "sourceReview": {
+      "runId": 38291320140,
+      "runAttempt": 1
+    },
+    "tree": "8d573c22140eeb9625fff94ca14efd3f97978c17",
+    "sourceInputsSha256": "35ec4b0d586d0e6f96e2570605295c77e3ee73de5fff22a4a5ee8a726858b69c",
+    "sourceInputFiles": 316,
+    "verifiers": [
+      {
+        "file": ".github/workflows/tower41-next-cell-review.yml",
+        "sha256": "b660eea0945cb983aab15feccec70ad348ab7eda02504a62056d208e20879186"
+      },
+      {
+        "file": "scripts/qa-tower41-next-cell-source.mjs",
+        "sha256": "1dd50eeeae24238fab0c212b2edf0e1c22ec5805556bbfcfd5369961e49d9e5f"
+      },
+      {
+        "file": "scripts/qa-tower41-ratchet-browser.mjs",
+        "sha256": "fd6a45d671aee4984ae27ad5842f9729b5c3f9739076ac3cb6696b3cb0db9031"
+      },
+      {
+        "file": "scripts/record-tower41-ratchet-walkthrough.mjs",
+        "sha256": "ebccedd1137634987c3c5c13f664b50c9e130dddd7a9291e6e652a8602bd3d43"
+      },
+      {
+        "file": "scripts/singularity-browser.mjs",
+        "sha256": "9ac768fcd09f0c01339f367915e0f1b704bbb67dab45bf5ae2ee9763748ce5dd"
+      },
+      {
+        "file": "scripts/singularity-adversarial-audit.mjs",
+        "sha256": "21c722434d4831c29a8f494d79609fe53e9129b73be693d3ccedbb7689392461"
+      },
+      {
+        "file": "scripts/lib/singularity-upgrade-proof.mjs",
+        "sha256": "1078dfacff6505c0f86725a6b2552f12fc2ada4d9bff8ee13a98466c51478fc2"
+      },
+      {
+        "file": "scripts/lib/tower41-pendulum-proof.mjs",
+        "sha256": "01856b443001d458b84386df36c1e221737a06aad73ea075a8e960379acc6240"
+      },
+      {
+        "file": "scripts/test-active-game.mjs",
+        "sha256": "71de2f64648db0d31d452a087db3c92b6e08b7c929e86ff634f5e5a993680437"
+      }
+    ],
+    "baseline": {
+      "pass": true,
+      "sourceCommit": "5e552e9c3ac248b535d619741f15e99e29979cbf",
+      "sourceReview": {
+        "runId": 38291320140,
+        "runAttempt": 1
+      },
+      "main": "300e898c169a281bd3e0054e2c4b39bb055649e0",
+      "acceptedSource": "0e257837ca157d59d29c2e892e9a81e4f21fc5a1",
+      "canonicalSource": "8d2c01eacd86fe9235a35e7ec5f624ba62c3b29e",
+      "acceptedMetadata": {
+        "bytes": 55737,
+        "sha256": "73bf2cb8176603797964b661187b35a475984137d5f7fd8c15801112d46397e8"
+      },
+      "canonicalMetadata": {
+        "bytes": 44728,
+        "sha256": "3136174c7d142880fb6290b243636af35abde5f0cd98ca75323c8e140054d844"
+      },
+      "previousPreviewSource": "58a71ddfc9bf704bef4c97fe13d16401c5a5f9f2",
+      "previousPreviewMetadata": {
+        "bytes": 46740,
+        "sha256": "4d6dd5ea79d9e7e3e4f92ce45358fc857d3fbe23c9821b4d91f5854e051b329e"
+      },
+      "checkedAt": "2026-10-12T18:30:31.196Z",
+      "scope": "Read-only main ref and the three explicitly pinned public metadata files; no whole-site byte claim.",
+      "publicationAccepted": false
+    },
+    "packageFilesSha256": "e6a18309eb5b5008c194774eb998340c2c5a14493730639eeac99ff03c2b313f",
+    "journeySha256": "bdb97352b644a504c8f3154b027171252d10bd75a7354c61aa6c67fd4689388e",
+    "browserSeamSha256": "9ac768fcd09f0c01339f367915e0f1b704bbb67dab45bf5ae2ee9763748ce5dd"
+  },
+  "encoding": {
+    "kind": "tower41-lossless-native-records-v1",
+    "extremaOrder": [
+      "minX",
+      "maxX",
+      "minY",
+      "maxY",
+      "minDepth",
+      "maxDepth"
+    ],
+    "extremaTuple": [
+      "meshIndex",
+      "vertex",
+      "world",
+      "ndc",
+      "depth"
+    ],
+    "eligibilityTuple": [
+      "meshIndex",
+      "objectVisible",
+      "materialVisible",
+      "layerMatch",
+      "renderEligible"
+    ],
+    "meshDictionary": [
+      {
+        "meshUuid": "cefbb5ee-8a39-4ede-88a4-8f48bb0f1513",
+        "vertices": 69777,
+        "bones": 15,
+        "skinned": true
+      },
+      {
+        "meshUuid": "c8b6f5fb-36fe-4ef7-9669-fe97a29b0cb5",
+        "vertices": 26886,
+        "bones": 0,
+        "skinned": false
+      },
+      {
+        "meshUuid": "a81173b0-d2a8-4fef-bf85-054b048f9033",
+        "vertices": 66,
+        "bones": 0,
+        "skinned": false
+      },
+      {
+        "meshUuid": "78cf416a-9c75-4379-9257-e24be4439b5b",
+        "vertices": 24,
+        "bones": 0,
+        "skinned": false
+      }
+    ],
+    "recordConstants": {
+      "sourceCommit": "5e552e9c3ac248b535d619741f15e99e29979cbf",
+      "nativeCanvas": {
+        "width": 640,
+        "height": 360
+      },
+      "appearanceSha256": "b6b44d080c7200f9ed3ec7c865c35664acfcede1ed0ac9cfd067c9b90a46979a",
+      "readPurity": {
+        "physicalStateUnchanged": true,
+        "lensAndLocalAppearancePoseUnchanged": true,
+        "attributeBytesUnchanged": true,
+        "appearanceSha256": "b6b44d080c7200f9ed3ec7c865c35664acfcede1ed0ac9cfd067c9b90a46979a",
+        "derivedWorldAndSkeletonMatricesPrepared": true
+      },
+      "bodySource": "Every current getVertexPosition of all original96753 vertices, including original inactive pulse/dock reserve. Separate object/material/layer eligibility counts do not assert pixel visibility or occlusion.",
+      "envelopeSource": "conservative eight-corner envelope; separate from actual original skin",
+      "callScope": "Compact counts and lens values from every actual observed camera method call at this native sample; detailed call paths are retained separately by the frozen baseline diagnostic.",
+      "rowScope": "actual selected visual-step optical diagnostic; no independent render/pixel or full camera acceptance"
+    }
+  },
+  "rows": [
+    {
+      "visualFrame": 43815,
+      "worldStep": 87632,
+      "worldStepOffset": 0,
+      "routePhysicsSteps": 87632,
+      "routeSeconds": 730.2666666666667,
+      "windowId": "actual-native-capture",
+      "nativeCanvas": {
+        "width": 640,
+        "height": 360
+      },
+      "sourceCommit": "5e552e9c3ac248b535d619741f15e99e29979cbf",
+      "player": {
+        "current": [
+          -64.99999324974516,
+          36.025,
+          19.885731340278387
+        ],
+        "previous": [
+          -64.99999323681664,
+          36.025,
+          19.9027498667631
+        ],
+        "velocity": [
+          -0.0000015514228805667214,
+          0,
+          -2.0422231781654148
+        ],
+        "grounded": true,
+        "renderedPosition": [
+          -64.99999324974516,
+          36.025,
+          19.885731340278387
+        ],
+        "renderedQuaternion": [
+          0,
+          -0.9999999849608711,
+          0,
+          -0.00017343084392369967
+        ],
+        "renderedScale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "cargo": {
+        "bodyId": 1587,
+        "shapeId": 3174,
+        "held": false,
+        "position": [
+          -64.99953819084375,
+          36.41499814632281,
+          19.22961998144121
+        ],
+        "quaternion": [
+          4.081881636499425e-8,
+          0.999999949970115,
+          -5.330705460750307e-9,
+          0.0003163222501279872
+        ],
+        "velocity": [
+          0,
+          0,
+          0
+        ],
+        "angularVelocity": [
+          0,
+          0,
+          0
+        ],
+        "masks": [
+          2,
+          1
+        ]
+      },
+      "controls": {
+        "yaw": 6.283186066853111,
+        "pitch": -0.14,
+        "aimHeld": false,
+        "isAiming": false,
+        "facing": 9.424431099079793,
+        "shotPoseTime": 0,
+        "shotAimPoint": [
+          37,
+          41.02188756254231,
+          -33.03410644660255
+        ]
+      },
+      "camera": {
+        "eye": [
+          -62.85133798704585,
+          38.06991295294863,
+          26.16664463248618
+        ],
+        "quaternion": [
+          -0.05551545976101945,
+          0.0898392971802718,
+          0.005015581307029115,
+          0.9943951821855485
+        ],
+        "up": [
+          0,
+          1,
+          0
+        ],
+        "fov": 62.00000000000002,
+        "aspect": 1.7777777777777777,
+        "near": 0.1,
+        "far": 245,
+        "matrixWorldInverse": [
+          0.9838074892526147,
+          -0.01994987955027859,
+          0.17811464396953902,
+          0,
+          -3.469446951953614e-18,
+          0.9937857553433503,
+          0.11130980404549486,
+          0,
+          -0.17922841317845303,
+          -0.10950741884719882,
+          0.9776938688193548,
+          0,
+          66.52342321688805,
+          -36.22177210862159,
+          -18.62577888700654,
+          0.9999999999999999
+        ],
+        "projection": [
+          0.9361572088221659,
+          0,
+          0,
+          0,
+          0,
+          1.6642794823505171,
+          0,
+          0,
+          0,
+          0,
+          -1.0008166598611679,
+          -1,
+          0,
+          0,
+          -0.2000816659861168,
+          0
+        ],
+        "rig": {
+          "vectors": {
+            "playerPivot": [
+              -64.99999324974516,
+              37.345,
+              19.885731340278387
+            ],
+            "lookPoint": [
+              -66.86666786426792,
+              35.560598885049494,
+              4.125989721941185
+            ],
+            "viewUp": [
+              0,
+              1,
+              0
+            ]
+          },
+          "flags": {
+            "fullBodyFraming": true,
+            "confinedFraming": true,
+            "inclinedFraming": false,
+            "obstructed": false,
+            "avoidanceActive": false,
+            "portalFramingActive": false,
+            "rampFraming": false
+          },
+          "springs": {
+            "yaw": 6.400856220951356,
+            "pitch": -0.11175756183200519,
+            "distance": 6.6490600839517136
+          },
+          "clipping": []
+        }
+      },
+      "bodyVertexProjection": {
+        "vertices": 96753,
+        "minX": -0.2520219327054432,
+        "maxX": -0.03285066101041235,
+        "minY": -0.33164921643576684,
+        "maxY": 0.2609739219455601,
+        "minDepth": 5.927383677148769,
+        "maxDepth": 7.813284737370504,
+        "outsideLensCount": 0,
+        "behindCount": 0,
+        "nearCount": 0,
+        "extremaWitnesses": {
+          "minX": {
+            "meshUuid": "cefbb5ee-8a39-4ede-88a4-8f48bb0f1513",
+            "vertex": 26548,
+            "world": [
+              -65.55020862142854,
+              37.240229374303574,
+              20.51403820336094
+            ],
+            "ndc": [
+              -0.2520219327054432,
+              -0.041387004417127886,
+              0.9680141225526179
+            ],
+            "depth": 6.099578947326277
+          },
+          "maxX": {
+            "meshUuid": "cefbb5ee-8a39-4ede-88a4-8f48bb0f1513",
+            "vertex": 19790,
+            "world": [
+              -64.31436673285748,
+              36.812223316248065,
+              19.49199654717051
+            ],
+            "ndc": [
+              -0.03285066101041235,
+              -0.11768159475800338,
+              0.9719296008094985
+            ],
+            "depth": 6.926342540728607
+          },
+          "minY": {
+            "meshUuid": "cefbb5ee-8a39-4ede-88a4-8f48bb0f1513",
+            "vertex": 29473,
+            "world": [
+              -64.72442583740332,
+              36.03847699016552,
+              20.02247056854157
+            ],
+            "ndc": [
+              -0.1057132892963881,
+              -0.33164921643576684,
+              0.9703482881981949
+            ],
+            "depth": 6.566864425815989
+          },
+          "maxY": {
+            "meshUuid": "cefbb5ee-8a39-4ede-88a4-8f48bb0f1513",
+            "vertex": 7091,
+            "world": [
+              -64.69085649704733,
+              38.375566558787106,
+              19.445535484625154
+            ],
+            "ndc": [
+              -0.08252025943875134,
+              0.2609739219455601,
+              0.9716706730530213
+            ],
+            "depth": 6.864810147042013
+          },
+          "minDepth": {
+            "meshUuid": "cefbb5ee-8a39-4ede-88a4-8f48bb0f1513",
+            "vertex": 1144,
+            "world": [
+              -64.39171058205176,
+              37.134786892418234,
+              20.49111342663524
+            ],
+            "ndc": [
+              -0.07868670547645193,
+              -0.07779573016033627,
+              0.9670611824221973
+            ],
+            "depth": 5.927383677148769
+          },
+          "maxDepth": {
+            "meshUuid": "c8b6f5fb-36fe-4ef7-9669-fe97a29b0cb5",
+            "vertex": 6508,
+            "world": [
+              -65.61257616992027,
+              36.91496162809953,
+              18.80962767118753
+            ],
+            "ndc": [
+              -0.16749574087688074,
+              -0.061141322575883984,
+              0.9752087788339813
+            ],
+            "depth": 7.813284737370504
+          }
+        },
+        "insideLens": true,
+        "bones": 15,
+        "renderEligibility": [
+          {
+            "meshUuid": "cefbb5ee-8a39-4ede-88a4-8f48bb0f1513",
+            "vertices": 69777,
+            "objectVisible": true,
+            "materialVisible": true,
+            "layerMatch": true,
+            "renderEligible": true
+          },
+          {
+            "meshUuid": "c8b6f5fb-36fe-4ef7-9669-fe97a29b0cb5",
+            "vertices": 26886,
+            "objectVisible": true,
+            "materialVisible": true,
+            "layerMatch": true,
+            "renderEligible": true
+          },
+          {
+            "meshUuid": "a81173b0-d2a8-4fef-bf85-054b048f9033",
+            "vertices": 66,
+            "objectVisible": true,
+            "materialVisible": true,
+            "layerMatch": true,
+            "renderEligible": true
+          },
+          {
+            "meshUuid": "78cf416a-9c75-4379-9257-e24be4439b5b",
+            "vertices": 24,
+            "objectVisible": true,
+            "materialVisible": true,
+            "layerMatch": true,
+            "renderEligible": true
+          }
+        ],
+        "renderEligibleVertices": 96753,
+        "renderEligibleOutsideLensCount": 0,
+        "renderEligibleInsideLens": true,
+        "source": "Every current getVertexPosition of all original96753 vertices, including original inactive pulse/dock reserve. Separate object/material/layer eligibility counts do not assert pixel visibility or occlusion."
+      },
+      "conservativeEnvelope": {
+        "vertices": 8,
+        "minX": -0.27602518149977917,
+        "maxX": -0.02980193001646805,
+        "minY": -0.43787670386983624,
+        "maxY": 0.42067751638120876,
+        "minDepth": 5.683740866787333,
+        "maxDepth": 7.524673737711199,
+        "outsideLensCount": 0,
+        "behindCount": 0,
+        "nearCount": 0,
+        "insideLens": true,
+        "requiredFovUncapped": 30.65292049907042,
+        "cap": 120,
+        "exceedsCap": false,
+        "fitEligibleByCurrentGate": false,
+        "source": "conservative eight-corner envelope; separate from actual original skin"
+      },
+      "materialProvenance": {
+        "validatedMeshes": 4,
+        "originalAuthoredMeshes": 4,
+        "ownedClippedMeshes": 0,
+        "originalStylesTexturesAndProgramsPreserved": true,
+        "activeEntryIndex": null,
+        "sourcePlane": null
+      },
+      "actualCameraCalls": {
+        "constrainCalls": 3,
+        "pulledInCalls": 0,
+        "fitCalls": 1,
+        "fit": [
+          {
+            "beforeFov": 62.00000000000002,
+            "afterFov": 62.00000000000002,
+            "requiredFovBefore": 30.65292049907042,
+            "requiredFovAfter": 30.65292049907042
+          }
+        ],
+        "scope": "Compact counts and lens values from every actual observed camera method call at this native sample; detailed call paths are retained separately by the frozen baseline diagnostic."
+      },
+      "readPurity": {
+        "physicalStateUnchanged": true,
+        "lensAndLocalAppearancePoseUnchanged": true,
+        "attributeBytesUnchanged": true,
+        "appearanceSha256": "b6b44d080c7200f9ed3ec7c865c35664acfcede1ed0ac9cfd067c9b90a46979a",
+        "derivedWorldAndSkeletonMatricesPrepared": true
+      },
+      "encodedBinding": {
+        "encodedFrame": 2921,
+        "visualFrame": 43815,
+        "terminal": false,
+        "source": "actual encoder/capture event supplied by external harness"
+      },
+      "scope": "actual selected visual-step optical diagnostic; no independent render/pixel or full camera acceptance"
+    },
+    {
+      "visualFrame": 44640,
+      "worldStep": 89282,
+      "worldStepOffset": 0,
+      "routePhysicsSteps": 89282,
+      "routeSeconds": 744.0166666666667,
+      "windowId": "actual-native-capture",
+      "nativeCanvas": {
+        "width": 640,
+        "height": 360
+      },
+      "sourceCommit": "5e552e9c3ac248b535d619741f15e99e29979cbf",
+      "player": {
+        "current": [
+          -54.47205868967689,
+          35.955415666603386,
+          33.854116217748626
+        ],
+        "previous": [
+          -54.48514162971848,
+          35.97392479031431,
+          33.8547278032008
+        ],
+        "velocity": [
+          1.5699528049899114,
+          -2.2210948453106307,
+          -0.07339025426108578
+        ],
+        "grounded": false,
+        "renderedPosition": [
+          -54.47205862059319,
+          35.955415666603386,
+          33.85411642538117
+        ],
+        "renderedQuaternion": [
+          1.7753853496467593e-16,
+          0.7275955191303473,
+          4.216149643607277e-17,
+          0.6860063852045699
+        ],
+        "renderedScale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "cargo": {
+        "bodyId": 1587,
+        "shapeId": 3174,
+        "held": true,
+        "position": [
+          -53.75332208822049,
+          37.01542116253181,
+          33.8115467933331
+        ],
+        "quaternion": [
+          6.138022517255947e-144,
+          0.7275961545596475,
+          -1.0404987296525749e-144,
+          0.6860057112517456
+        ],
+        "velocity": [
+          1.572342011205418,
+          -2.221046593011572,
+          -0.03312864774822646
+        ],
+        "angularVelocity": [
+          -5.700143635451288e-139,
+          -0.15287816358992348,
+          8.54905321792133e-139
+        ],
+        "masks": [
+          2,
+          1
+        ]
+      },
+      "controls": {
+        "yaw": -1.3665336323807156,
+        "pitch": -0.14,
+        "aimHeld": false,
+        "isAiming": false,
+        "facing": -4.653564582229574,
+        "shotPoseTime": 0,
+        "shotAimPoint": [
+          -64.89930608348483,
+          36.025,
+          19.071822197545686
+        ]
+      },
+      "camera": {
+        "eye": [
+          -60.51931089073208,
+          38.276736539698234,
+          36.531892604292814
+        ],
+        "quaternion": [
+          -0.055492437759757006,
+          -0.6052095557347879,
+          -0.04235128741679034,
+          0.7929995910799201
+        ],
+        "up": [
+          3.1697431400523567e-18,
+          1,
+          7.013173000966546e-18
+        ],
+        "fov": 62.00000000034285,
+        "aspect": 1.7777777777777777,
+        "near": 0.1,
+        "far": 245,
+        "matrixWorldInverse": [
+          0.2638555242028823,
+          0.1343382144128916,
+          -0.9551615080686501,
+          0,
+          -6.938893903907228e-18,
+          0.9902539156112397,
+          0.13927376858765442,
+          0,
+          0.9645622127927376,
+          -0.03674815321840648,
+          0.26128396599756043,
+          0,
+          -19.268928668432,
+          -28.431152485915458,
+          -72.68185938983426,
+          0.9999999999999999
+        ],
+        "projection": [
+          0.9361572088158221,
+          0,
+          0,
+          0,
+          0,
+          1.664279482339239,
+          0,
+          0,
+          0,
+          0,
+          -1.0008166598611679,
+          -1,
+          0,
+          0,
+          -0.2000816659861168,
+          0
+        ],
+        "rig": {
+          "vectors": {
+            "playerPivot": [
+              -54.47205862059319,
+              37.27541566660339,
+              33.85411642538117
+            ],
+            "lookPoint": [
+              -38.98661455849547,
+              35.13701646020293,
+              30.64163399485193
+            ],
+            "viewUp": [
+              3.1697431400523567e-18,
+              1,
+              7.013173000966546e-18
+            ]
+          },
+          "flags": {
+            "fullBodyFraming": true,
+            "confinedFraming": true,
+            "inclinedFraming": false,
+            "obstructed": false,
+            "avoidanceActive": false,
+            "portalFramingActive": false,
+            "rampFraming": false
+          },
+          "springs": {
+            "yaw": -1.3665336323807153,
+            "pitch": -0.14000000000000004,
+            "distance": 6.649060083951594
+          },
+          "clipping": []
+        }
+      },
+      "bodyVertexProjection": {
+        "vertices": 96753,
+        "minX": -0.2505379534898044,
+        "maxX": -0.052842295515857174,
+        "minY": -0.3268963020752661,
+        "maxY": 0.25100779483269253,
+        "minDepth": 5.942941004808817,
+        "maxDepth": 7.380714844149496,
+        "outsideLensCount": 0,
+        "behindCount": 0,
+        "nearCount": 0,
+        "extremaWitnesses": {
+          "minX": {
+            "meshUuid": "cefbb5ee-8a39-4ede-88a4-8f48bb0f1513",
+            "vertex": 26548,
+            "world": [
+              -55.07852359224568,
+              37.253295451002096,
+              33.330006293632835
+            ],
+            "ndc": [
+              -0.2505379534898044,
+              -0.04443601147072835,
+              0.9684198631067742
+            ],
+            "depth": 6.175970652375726
+          },
+          "maxX": {
+            "meshUuid": "cefbb5ee-8a39-4ede-88a4-8f48bb0f1513",
+            "vertex": 28556,
+            "world": [
+              -54.16628311722036,
+              36.06467905880731,
+              34.38810923632022
+            ],
+            "ndc": [
+              -0.052842295515857174,
+              -0.3019012062853128,
+              0.9719714249585687
+            ],
+            "depth": 6.936385391269157
+          },
+          "minY": {
+            "meshUuid": "cefbb5ee-8a39-4ede-88a4-8f48bb0f1513",
+            "vertex": 39205,
+            "world": [
+              -54.2791972146285,
+              35.93264065069974,
+              33.71457571058343
+            ],
+            "ndc": [
+              -0.1427633885795022,
+              -0.3268963020752661,
+              0.972326796533243
+            ],
+            "depth": 7.022907189238866
+          },
+          "maxY": {
+            "meshUuid": "cefbb5ee-8a39-4ede-88a4-8f48bb0f1513",
+            "vertex": 7091,
+            "world": [
+              -54.105300251630034,
+              38.34469016531337,
+              34.134220163879924
+            ],
+            "ndc": [
+              -0.08611771296841626,
+              0.25100779483269253,
+              0.9711460314151577
+            ],
+            "depth": 6.743425281678599
+          },
+          "minDepth": {
+            "meshUuid": "cefbb5ee-8a39-4ede-88a4-8f48bb0f1513",
+            "vertex": 1147,
+            "world": [
+              -55.02308393014789,
+              37.12843031752767,
+              34.49109520840411
+            ],
+            "ndc": [
+              -0.08163948533952727,
+              -0.09066839352657567,
+              0.9671495469242872
+            ],
+            "depth": 5.942941004808817
+          },
+          "maxDepth": {
+            "meshUuid": "cefbb5ee-8a39-4ede-88a4-8f48bb0f1513",
+            "vertex": 69184,
+            "world": [
+              -53.762438869388184,
+              36.970078271814344,
+              33.68124866849796
+            ],
+            "ndc": [
+              -0.12262540326684354,
+              -0.0634668207115709,
+              0.9737079488201612
+            ],
+            "depth": 7.380714844149496
+          }
+        },
+        "insideLens": true,
+        "bones": 15,
+        "renderEligibility": [
+          {
+            "meshUuid": "cefbb5ee-8a39-4ede-88a4-8f48bb0f1513",
+            "vertices": 69777,
+            "objectVisible": true,
+            "materialVisible": true,
+            "layerMatch": true,
+            "renderEligible": true
+          },
+          {
+            "meshUuid": "c8b6f5fb-36fe-4ef7-9669-fe97a29b0cb5",
+            "vertices": 26886,
+            "objectVisible": true,
+            "materialVisible": true,
+            "layerMatch": true,
+            "renderEligible": true
+          },
+          {
+            "meshUuid": "a81173b0-d2a8-4fef-bf85-054b048f9033",
+            "vertices": 66,
+            "objectVisible": true,
+            "materialVisible": true,
+            "layerMatch": true,
+            "renderEligible": true
+          },
+          {
+            "meshUuid": "78cf416a-9c75-4379-9257-e24be4439b5b",
+            "vertices": 24,
+            "objectVisible": true,
+            "materialVisible": true,
+            "layerMatch": true,
+            "renderEligible": true
+          }
+        ],
+        "renderEligibleVertices": 96753,
+        "renderEligibleOutsideLensCount": 0,
+        "renderEligibleInsideLens": true,
+        "source": "Every current getVertexPosition of all original96753 vertices, including original inactive pulse/dock reserve. Separate object/material/layer eligibility counts do not assert pixel visibility or occlusion."
+      },
+      "conservativeEnvelope": {
+        "vertices": 8,
+        "minX": -0.28084735044216746,
+        "maxX": -0.02428643760202527,
+        "minY": -0.4679365544876485,
+        "maxY": 0.3893806127572778,
+        "minDepth": 5.612834623262402,
+        "maxDepth": 7.617605996054936,
+        "outsideLensCount": 0,
+        "behindCount": 0,
+        "nearCount": 0,
+        "insideLens": true,
+        "requiredFovUncapped": 32.64848805115388,
+        "cap": 120,
+        "exceedsCap": false,
+        "fitEligibleByCurrentGate": false,
+        "source": "conservative eight-corner envelope; separate from actual original skin"
+      },
+      "materialProvenance": {
+        "validatedMeshes": 4,
+        "originalAuthoredMeshes": 4,
+        "ownedClippedMeshes": 0,
+        "originalStylesTexturesAndProgramsPreserved": true,
+        "activeEntryIndex": null,
+        "sourcePlane": null
+      },
+      "actualCameraCalls": {
+        "constrainCalls": 3,
+        "pulledInCalls": 0,
+        "fitCalls": 1,
+        "fit": [
+          {
+            "beforeFov": 62.00000000034285,
+            "afterFov": 62.00000000034285,
+            "requiredFovBefore": 32.64848805115388,
+            "requiredFovAfter": 32.64848805115388
+          }
+        ],
+        "scope": "Compact counts and lens values from every actual observed camera method call at this native sample; detailed call paths are retained separately by the frozen baseline diagnostic."
+      },
+      "readPurity": {
+        "physicalStateUnchanged": true,
+        "lensAndLocalAppearancePoseUnchanged": true,
+        "attributeBytesUnchanged": true,
+        "appearanceSha256": "b6b44d080c7200f9ed3ec7c865c35664acfcede1ed0ac9cfd067c9b90a46979a",
+        "derivedWorldAndSkeletonMatricesPrepared": true
+      },
+      "encodedBinding": {
+        "encodedFrame": 2976,
+        "visualFrame": 44640,
+        "terminal": false,
+        "source": "actual encoder/capture event supplied by external harness"
+      },
+      "scope": "actual selected visual-step optical diagnostic; no independent render/pixel or full camera acceptance"
+    }
+  ],
+  "expectedOriginalJSON": [
+    "{\"visualFrame\":43815,\"worldStep\":87632,\"worldStepOffset\":0,\"routePhysicsSteps\":87632,\"routeSeconds\":730.2666666666667,\"windowId\":\"actual-native-capture\",\"nativeCanvas\":{\"width\":640,\"height\":360},\"sourceCommit\":\"5e552e9c3ac248b535d619741f15e99e29979cbf\",\"player\":{\"current\":[-64.99999324974516,36.025,19.885731340278387],\"previous\":[-64.99999323681664,36.025,19.9027498667631],\"velocity\":[-0.0000015514228805667214,0,-2.0422231781654148],\"grounded\":true,\"renderedPosition\":[-64.99999324974516,36.025,19.885731340278387],\"renderedQuaternion\":[0,-0.9999999849608711,0,-0.00017343084392369967],\"renderedScale\":[1,1,1]},\"cargo\":{\"bodyId\":1587,\"shapeId\":3174,\"held\":false,\"position\":[-64.99953819084375,36.41499814632281,19.22961998144121],\"quaternion\":[4.081881636499425e-8,0.999999949970115,-5.330705460750307e-9,0.0003163222501279872],\"velocity\":[0,0,0],\"angularVelocity\":[0,0,0],\"masks\":[2,1]},\"controls\":{\"yaw\":6.283186066853111,\"pitch\":-0.14,\"aimHeld\":false,\"isAiming\":false,\"facing\":9.424431099079793,\"shotPoseTime\":0,\"shotAimPoint\":[37,41.02188756254231,-33.03410644660255]},\"camera\":{\"eye\":[-62.85133798704585,38.06991295294863,26.16664463248618],\"quaternion\":[-0.05551545976101945,0.0898392971802718,0.005015581307029115,0.9943951821855485],\"up\":[0,1,0],\"fov\":62.00000000000002,\"aspect\":1.7777777777777777,\"near\":0.1,\"far\":245,\"matrixWorldInverse\":[0.9838074892526147,-0.01994987955027859,0.17811464396953902,0,-3.469446951953614e-18,0.9937857553433503,0.11130980404549486,0,-0.17922841317845303,-0.10950741884719882,0.9776938688193548,0,66.52342321688805,-36.22177210862159,-18.62577888700654,0.9999999999999999],\"projection\":[0.9361572088221659,0,0,0,0,1.6642794823505171,0,0,0,0,-1.0008166598611679,-1,0,0,-0.2000816659861168,0],\"rig\":{\"vectors\":{\"playerPivot\":[-64.99999324974516,37.345,19.885731340278387],\"lookPoint\":[-66.86666786426792,35.560598885049494,4.125989721941185],\"viewUp\":[0,1,0]},\"flags\":{\"fullBodyFraming\":true,\"confinedFraming\":true,\"inclinedFraming\":false,\"obstructed\":false,\"avoidanceActive\":false,\"portalFramingActive\":false,\"rampFraming\":false},\"springs\":{\"yaw\":6.400856220951356,\"pitch\":-0.11175756183200519,\"distance\":6.6490600839517136},\"clipping\":[]}},\"bodyVertexProjection\":{\"vertices\":96753,\"minX\":-0.2520219327054432,\"maxX\":-0.03285066101041235,\"minY\":-0.33164921643576684,\"maxY\":0.2609739219455601,\"minDepth\":5.927383677148769,\"maxDepth\":7.813284737370504,\"outsideLensCount\":0,\"behindCount\":0,\"nearCount\":0,\"extremaWitnesses\":{\"minX\":{\"meshUuid\":\"cefbb5ee-8a39-4ede-88a4-8f48bb0f1513\",\"vertex\":26548,\"world\":[-65.55020862142854,37.240229374303574,20.51403820336094],\"ndc\":[-0.2520219327054432,-0.041387004417127886,0.9680141225526179],\"depth\":6.099578947326277},\"maxX\":{\"meshUuid\":\"cefbb5ee-8a39-4ede-88a4-8f48bb0f1513\",\"vertex\":19790,\"world\":[-64.31436673285748,36.812223316248065,19.49199654717051],\"ndc\":[-0.03285066101041235,-0.11768159475800338,0.9719296008094985],\"depth\":6.926342540728607},\"minY\":{\"meshUuid\":\"cefbb5ee-8a39-4ede-88a4-8f48bb0f1513\",\"vertex\":29473,\"world\":[-64.72442583740332,36.03847699016552,20.02247056854157],\"ndc\":[-0.1057132892963881,-0.33164921643576684,0.9703482881981949],\"depth\":6.566864425815989},\"maxY\":{\"meshUuid\":\"cefbb5ee-8a39-4ede-88a4-8f48bb0f1513\",\"vertex\":7091,\"world\":[-64.69085649704733,38.375566558787106,19.445535484625154],\"ndc\":[-0.08252025943875134,0.2609739219455601,0.9716706730530213],\"depth\":6.864810147042013},\"minDepth\":{\"meshUuid\":\"cefbb5ee-8a39-4ede-88a4-8f48bb0f1513\",\"vertex\":1144,\"world\":[-64.39171058205176,37.134786892418234,20.49111342663524],\"ndc\":[-0.07868670547645193,-0.07779573016033627,0.9670611824221973],\"depth\":5.927383677148769},\"maxDepth\":{\"meshUuid\":\"c8b6f5fb-36fe-4ef7-9669-fe97a29b0cb5\",\"vertex\":6508,\"world\":[-65.61257616992027,36.91496162809953,18.80962767118753],\"ndc\":[-0.16749574087688074,-0.061141322575883984,0.9752087788339813],\"depth\":7.813284737370504}},\"insideLens\":true,\"bones\":15,\"renderEligibility\":[{\"meshUuid\":\"cefbb5ee-8a39-4ede-88a4-8f48bb0f1513\",\"vertices\":69777,\"objectVisible\":true,\"materialVisible\":true,\"layerMatch\":true,\"renderEligible\":true},{\"meshUuid\":\"c8b6f5fb-36fe-4ef7-9669-fe97a29b0cb5\",\"vertices\":26886,\"objectVisible\":true,\"materialVisible\":true,\"layerMatch\":true,\"renderEligible\":true},{\"meshUuid\":\"a81173b0-d2a8-4fef-bf85-054b048f9033\",\"vertices\":66,\"objectVisible\":true,\"materialVisible\":true,\"layerMatch\":true,\"renderEligible\":true},{\"meshUuid\":\"78cf416a-9c75-4379-9257-e24be4439b5b\",\"vertices\":24,\"objectVisible\":true,\"materialVisible\":true,\"layerMatch\":true,\"renderEligible\":true}],\"renderEligibleVertices\":96753,\"renderEligibleOutsideLensCount\":0,\"renderEligibleInsideLens\":true,\"source\":\"Every current getVertexPosition of all original96753 vertices, including original inactive pulse/dock reserve. Separate object/material/layer eligibility counts do not assert pixel visibility or occlusion.\"},\"conservativeEnvelope\":{\"vertices\":8,\"minX\":-0.27602518149977917,\"maxX\":-0.02980193001646805,\"minY\":-0.43787670386983624,\"maxY\":0.42067751638120876,\"minDepth\":5.683740866787333,\"maxDepth\":7.524673737711199,\"outsideLensCount\":0,\"behindCount\":0,\"nearCount\":0,\"insideLens\":true,\"requiredFovUncapped\":30.65292049907042,\"cap\":120,\"exceedsCap\":false,\"fitEligibleByCurrentGate\":false,\"source\":\"conservative eight-corner envelope; separate from actual original skin\"},\"materialProvenance\":{\"validatedMeshes\":4,\"originalAuthoredMeshes\":4,\"ownedClippedMeshes\":0,\"originalStylesTexturesAndProgramsPreserved\":true,\"activeEntryIndex\":null,\"sourcePlane\":null},\"actualCameraCalls\":{\"constrainCalls\":3,\"pulledInCalls\":0,\"fitCalls\":1,\"fit\":[{\"beforeFov\":62.00000000000002,\"afterFov\":62.00000000000002,\"requiredFovBefore\":30.65292049907042,\"requiredFovAfter\":30.65292049907042}],\"scope\":\"Compact counts and lens values from every actual observed camera method call at this native sample; detailed call paths are retained separately by the frozen baseline diagnostic.\"},\"readPurity\":{\"physicalStateUnchanged\":true,\"lensAndLocalAppearancePoseUnchanged\":true,\"attributeBytesUnchanged\":true,\"appearanceSha256\":\"b6b44d080c7200f9ed3ec7c865c35664acfcede1ed0ac9cfd067c9b90a46979a\",\"derivedWorldAndSkeletonMatricesPrepared\":true},\"encodedBinding\":{\"encodedFrame\":2921,\"visualFrame\":43815,\"terminal\":false,\"source\":\"actual encoder/capture event supplied by external harness\"},\"scope\":\"actual selected visual-step optical diagnostic; no independent render/pixel or full camera acceptance\"}",
+    "{\"visualFrame\":44640,\"worldStep\":89282,\"worldStepOffset\":0,\"routePhysicsSteps\":89282,\"routeSeconds\":744.0166666666667,\"windowId\":\"actual-native-capture\",\"nativeCanvas\":{\"width\":640,\"height\":360},\"sourceCommit\":\"5e552e9c3ac248b535d619741f15e99e29979cbf\",\"player\":{\"current\":[-54.47205868967689,35.955415666603386,33.854116217748626],\"previous\":[-54.48514162971848,35.97392479031431,33.8547278032008],\"velocity\":[1.5699528049899114,-2.2210948453106307,-0.07339025426108578],\"grounded\":false,\"renderedPosition\":[-54.47205862059319,35.955415666603386,33.85411642538117],\"renderedQuaternion\":[1.7753853496467593e-16,0.7275955191303473,4.216149643607277e-17,0.6860063852045699],\"renderedScale\":[1,1,1]},\"cargo\":{\"bodyId\":1587,\"shapeId\":3174,\"held\":true,\"position\":[-53.75332208822049,37.01542116253181,33.8115467933331],\"quaternion\":[6.138022517255947e-144,0.7275961545596475,-1.0404987296525749e-144,0.6860057112517456],\"velocity\":[1.572342011205418,-2.221046593011572,-0.03312864774822646],\"angularVelocity\":[-5.700143635451288e-139,-0.15287816358992348,8.54905321792133e-139],\"masks\":[2,1]},\"controls\":{\"yaw\":-1.3665336323807156,\"pitch\":-0.14,\"aimHeld\":false,\"isAiming\":false,\"facing\":-4.653564582229574,\"shotPoseTime\":0,\"shotAimPoint\":[-64.89930608348483,36.025,19.071822197545686]},\"camera\":{\"eye\":[-60.51931089073208,38.276736539698234,36.531892604292814],\"quaternion\":[-0.055492437759757006,-0.6052095557347879,-0.04235128741679034,0.7929995910799201],\"up\":[3.1697431400523567e-18,1,7.013173000966546e-18],\"fov\":62.00000000034285,\"aspect\":1.7777777777777777,\"near\":0.1,\"far\":245,\"matrixWorldInverse\":[0.2638555242028823,0.1343382144128916,-0.9551615080686501,0,-6.938893903907228e-18,0.9902539156112397,0.13927376858765442,0,0.9645622127927376,-0.03674815321840648,0.26128396599756043,0,-19.268928668432,-28.431152485915458,-72.68185938983426,0.9999999999999999],\"projection\":[0.9361572088158221,0,0,0,0,1.664279482339239,0,0,0,0,-1.0008166598611679,-1,0,0,-0.2000816659861168,0],\"rig\":{\"vectors\":{\"playerPivot\":[-54.47205862059319,37.27541566660339,33.85411642538117],\"lookPoint\":[-38.98661455849547,35.13701646020293,30.64163399485193],\"viewUp\":[3.1697431400523567e-18,1,7.013173000966546e-18]},\"flags\":{\"fullBodyFraming\":true,\"confinedFraming\":true,\"inclinedFraming\":false,\"obstructed\":false,\"avoidanceActive\":false,\"portalFramingActive\":false,\"rampFraming\":false},\"springs\":{\"yaw\":-1.3665336323807153,\"pitch\":-0.14000000000000004,\"distance\":6.649060083951594},\"clipping\":[]}},\"bodyVertexProjection\":{\"vertices\":96753,\"minX\":-0.2505379534898044,\"maxX\":-0.052842295515857174,\"minY\":-0.3268963020752661,\"maxY\":0.25100779483269253,\"minDepth\":5.942941004808817,\"maxDepth\":7.380714844149496,\"outsideLensCount\":0,\"behindCount\":0,\"nearCount\":0,\"extremaWitnesses\":{\"minX\":{\"meshUuid\":\"cefbb5ee-8a39-4ede-88a4-8f48bb0f1513\",\"vertex\":26548,\"world\":[-55.07852359224568,37.253295451002096,33.330006293632835],\"ndc\":[-0.2505379534898044,-0.04443601147072835,0.9684198631067742],\"depth\":6.175970652375726},\"maxX\":{\"meshUuid\":\"cefbb5ee-8a39-4ede-88a4-8f48bb0f1513\",\"vertex\":28556,\"world\":[-54.16628311722036,36.06467905880731,34.38810923632022],\"ndc\":[-0.052842295515857174,-0.3019012062853128,0.9719714249585687],\"depth\":6.936385391269157},\"minY\":{\"meshUuid\":\"cefbb5ee-8a39-4ede-88a4-8f48bb0f1513\",\"vertex\":39205,\"world\":[-54.2791972146285,35.93264065069974,33.71457571058343],\"ndc\":[-0.1427633885795022,-0.3268963020752661,0.972326796533243],\"depth\":7.022907189238866},\"maxY\":{\"meshUuid\":\"cefbb5ee-8a39-4ede-88a4-8f48bb0f1513\",\"vertex\":7091,\"world\":[-54.105300251630034,38.34469016531337,34.134220163879924],\"ndc\":[-0.08611771296841626,0.25100779483269253,0.9711460314151577],\"depth\":6.743425281678599},\"minDepth\":{\"meshUuid\":\"cefbb5ee-8a39-4ede-88a4-8f48bb0f1513\",\"vertex\":1147,\"world\":[-55.02308393014789,37.12843031752767,34.49109520840411],\"ndc\":[-0.08163948533952727,-0.09066839352657567,0.9671495469242872],\"depth\":5.942941004808817},\"maxDepth\":{\"meshUuid\":\"cefbb5ee-8a39-4ede-88a4-8f48bb0f1513\",\"vertex\":69184,\"world\":[-53.762438869388184,36.970078271814344,33.68124866849796],\"ndc\":[-0.12262540326684354,-0.0634668207115709,0.9737079488201612],\"depth\":7.380714844149496}},\"insideLens\":true,\"bones\":15,\"renderEligibility\":[{\"meshUuid\":\"cefbb5ee-8a39-4ede-88a4-8f48bb0f1513\",\"vertices\":69777,\"objectVisible\":true,\"materialVisible\":true,\"layerMatch\":true,\"renderEligible\":true},{\"meshUuid\":\"c8b6f5fb-36fe-4ef7-9669-fe97a29b0cb5\",\"vertices\":26886,\"objectVisible\":true,\"materialVisible\":true,\"layerMatch\":true,\"renderEligible\":true},{\"meshUuid\":\"a81173b0-d2a8-4fef-bf85-054b048f9033\",\"vertices\":66,\"objectVisible\":true,\"materialVisible\":true,\"layerMatch\":true,\"renderEligible\":true},{\"meshUuid\":\"78cf416a-9c75-4379-9257-e24be4439b5b\",\"vertices\":24,\"objectVisible\":true,\"materialVisible\":true,\"layerMatch\":true,\"renderEligible\":true}],\"renderEligibleVertices\":96753,\"renderEligibleOutsideLensCount\":0,\"renderEligibleInsideLens\":true,\"source\":\"Every current getVertexPosition of all original96753 vertices, including original inactive pulse/dock reserve. Separate object/material/layer eligibility counts do not assert pixel visibility or occlusion.\"},\"conservativeEnvelope\":{\"vertices\":8,\"minX\":-0.28084735044216746,\"maxX\":-0.02428643760202527,\"minY\":-0.4679365544876485,\"maxY\":0.3893806127572778,\"minDepth\":5.612834623262402,\"maxDepth\":7.617605996054936,\"outsideLensCount\":0,\"behindCount\":0,\"nearCount\":0,\"insideLens\":true,\"requiredFovUncapped\":32.64848805115388,\"cap\":120,\"exceedsCap\":false,\"fitEligibleByCurrentGate\":false,\"source\":\"conservative eight-corner envelope; separate from actual original skin\"},\"materialProvenance\":{\"validatedMeshes\":4,\"originalAuthoredMeshes\":4,\"ownedClippedMeshes\":0,\"originalStylesTexturesAndProgramsPreserved\":true,\"activeEntryIndex\":null,\"sourcePlane\":null},\"actualCameraCalls\":{\"constrainCalls\":3,\"pulledInCalls\":0,\"fitCalls\":1,\"fit\":[{\"beforeFov\":62.00000000034285,\"afterFov\":62.00000000034285,\"requiredFovBefore\":32.64848805115388,\"requiredFovAfter\":32.64848805115388}],\"scope\":\"Compact counts and lens values from every actual observed camera method call at this native sample; detailed call paths are retained separately by the frozen baseline diagnostic.\"},\"readPurity\":{\"physicalStateUnchanged\":true,\"lensAndLocalAppearancePoseUnchanged\":true,\"attributeBytesUnchanged\":true,\"appearanceSha256\":\"b6b44d080c7200f9ed3ec7c865c35664acfcede1ed0ac9cfd067c9b90a46979a\",\"derivedWorldAndSkeletonMatricesPrepared\":true},\"encodedBinding\":{\"encodedFrame\":2976,\"visualFrame\":44640,\"terminal\":false,\"source\":\"actual encoder/capture event supplied by external harness\"},\"scope\":\"actual selected visual-step optical diagnostic; no independent render/pixel or full camera acceptance\"}"
+  ],
+  "rowCountScaffoldOnly": 4600
+}
