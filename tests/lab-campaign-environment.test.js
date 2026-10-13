@@ -89,3 +89,16 @@ test('a small detail budget covers every wall before repeating one bay',()=>{
  const f=fixture(),sites=campaignOrnamentSites(f.game,f.level,{limit:4});
  assert.equal(sites.length,4);assert.equal(new Set(sites.map(s=>s.normal.toArray().join('/'))).size,4);
 });
+
+test('discovery calibrations use offset open arcs and copper rather than closed porcelain-like portal targets',()=>{
+ const f=fixture();installCampaignEnvironment(f.game,f.level,CAMPAIGN_THEMES[0]);const {root,diagnostics}=f.level.campaignEnvironment;
+ const arcs=root.children.filter(mesh=>mesh.name.startsWith('Chapter ornament / arc /'));
+ assert.equal(arcs.length,2);assert.ok(root.children.every(mesh=>!mesh.name.startsWith('Chapter ornament / ring /')));
+ for(const arc of arcs){assert.equal(arc.geometry.type,'TorusGeometry');assert.ok(arc.geometry.parameters.arc<Math.PI,'calibration became a closed portal-like rim');}
+ const a=new THREE.Matrix4(),b=new THREE.Matrix4();arcs[0].getMatrixAt(0,a);arcs[1].getMatrixAt(0,b);
+ assert.ok(new THREE.Vector3().setFromMatrixPosition(a).distanceTo(new THREE.Vector3().setFromMatrixPosition(b))>.3,'arcs are concentric');
+ const copper=arcs.find(mesh=>mesh.name.endsWith('/ paint')).material;
+ assert.equal(copper.color.getHex(),0x8c6a48);assert.ok(diagnostics.batches<=5,'open arcs added draw submissions');
+ const centerMesh=root.children.find(mesh=>/porcelain|ceramic|centre|center/i.test(mesh.name));assert.equal(centerMesh,undefined);
+ f.level.dispose();
+});

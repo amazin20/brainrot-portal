@@ -36,7 +36,8 @@ jobs:
       matrix: {part: [0, 1, 2, 3, 4, 5]}
     steps:
       - uses: actions/checkout@v4
-        with: {ref: '${{ github.sha }}'}
+        # Camera regression compares the accepted historical implementation.
+        with: {ref: '${{ github.sha }}', fetch-depth: 0}
       - uses: actions/setup-node@v4
         with: {node-version: 22, cache: npm}
       - run: npm ci
@@ -124,6 +125,7 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     timeout-minutes: 55
+    env: {CODEX_PRIMARY_RUNTIME_PYTHON: /usr/bin/python3}
     strategy:
       fail-fast: false
       matrix:
@@ -141,6 +143,11 @@ jobs:
         with: {node-version: 22, cache: npm}
       - run: npm ci
       - run: npm install --no-save --package-lock=false puppeteer-core@24.16.0
+      - name: Install actual image pixel validation dependency
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y python3-pil
+          /usr/bin/python3 -c "import PIL; from PIL import Image, ImageStat; print(PIL.__version__)"
       - uses: actions/download-artifact@v4
         with: {name: campaign-polish-dist, path: dist}
       - run: |
@@ -165,6 +172,7 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     timeout-minutes: 55
+    env: {CODEX_PRIMARY_RUNTIME_PYTHON: /usr/bin/python3}
     steps:
       - uses: actions/checkout@v4
         with: {ref: '${{ github.sha }}'}
@@ -172,6 +180,11 @@ jobs:
         with: {node-version: 22, cache: npm}
       - run: npm ci
       - run: npm install --no-save --package-lock=false puppeteer-core@24.16.0
+      - name: Install actual image pixel validation dependency
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y python3-pil
+          /usr/bin/python3 -c "import PIL; from PIL import Image, ImageStat; print(PIL.__version__)"
       - uses: actions/download-artifact@v4
         with: {name: campaign-polish-dist, path: dist}
       - run: |

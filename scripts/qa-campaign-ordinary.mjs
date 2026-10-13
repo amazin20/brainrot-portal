@@ -17,7 +17,9 @@ const save=()=>fs.writeFileSync(output,JSON.stringify(report,null,2)+'\n');
 const g=await createHeadlessGame();Object.assign(g,report.runtime);
 try{
  for(const stableLevel of selected){
-  await g.selectLevel(stableLevel-1,false);
+  // The continuous castle observes the normal playing spawn; shorter drivers
+  // perform their own normal setup before observation.
+  await g.selectLevel(stableLevel-1,stableLevel===41);
   const body=g.physics.cargoBody,shape=body.shapes[0],cargo=g.cargo;
   const row={stableLevel,number:foundationDisplayNumber(stableLevel-1),id:g.firstLevel.id,pass:false};
   report.active={...row,phase:'ordinary-route'};save();

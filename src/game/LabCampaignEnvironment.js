@@ -3,7 +3,7 @@ import {architecturalRectOverlapsPortal} from './LabArchitecturalModels.js';
 
 const V=(x=0,y=0,z=0)=>new THREE.Vector3(x,y,z),Z=V(0,0,1),UP=V(0,1,0);
 export const CAMPAIGN_ORNAMENTS=Object.freeze({
- discovery:'Glazed research roundels',dynamo:'Copper induction fins',biosphere:'Botanical mineral relief',
+ discovery:'Open research calibration arcs',dynamo:'Copper induction fins',biosphere:'Botanical mineral relief',
  observatory:'Engraved orbital instruments',fracture:'Faceted geological relief',castle:'Gilded castle lancets',
 });
 
@@ -98,7 +98,7 @@ function createBatch(root,materials){
  const groups=new Map(),geometries=new Map(),matrix=new THREE.Matrix4(),p=V(),s=V(),q=new THREE.Quaternion();
  const geometry=kind=>{
   if(geometries.has(kind))return geometries.get(kind);
-  const g=kind==='ring'?new THREE.TorusGeometry(1,.065,6,32):kind==='leaf'?new THREE.SphereGeometry(1,8,6):
+  const g=kind==='arc'?new THREE.TorusGeometry(1,.065,6,24,Math.PI*.90):kind==='ring'?new THREE.TorusGeometry(1,.065,6,32):kind==='leaf'?new THREE.SphereGeometry(1,8,6):
    kind==='facet'?new THREE.OctahedronGeometry(1,0):new THREE.BoxGeometry(1,1,1);
   geometries.set(kind,g);return g;
  };
@@ -150,6 +150,16 @@ function buildMotif(batch,site,id){
   }
   a('box','frame',[0,-unit*.92,.03],[unit*1.65,.12,.055]);
   a('facet','paint',[0,-unit*.93,.073],[unit*.13,unit*.18,.045]);
+ }else if(id==='discovery'){
+  // Offset open calibration arcs have no closed rim or ceramic centre. The
+  // old concentric circles looked like inactive portal targets in room 8.
+  a('arc','frame',[-unit*.06,unit*.06,.048],[unit*.78,unit*.78,.50],-.36);
+  a('arc','paint',[-unit*.16,-unit*.28,.078],[unit*.46,unit*.46,.52],Math.PI*1.17);
+  for(let i=0;i<3;i++){
+   a('box','paint',[unit*.75,unit*(-.18+i*.23),.040],[unit*(.13+i*.04),.055,.05]);
+   a('box','frame',[unit*(-.70+i*.24),unit*.90,.040],[.055,unit*(.12+i*.035),.05],-.18);
+  }
+  rod(-.90,-.44,.43,.08);
  }else {
   const orbital=id==='observatory';
   a('ring','frame',[0,0,.048],[unit*.80,unit*.80,.50]);
@@ -176,11 +186,12 @@ export function installCampaignEnvironment(game,level,theme){
  // Mounts are expressed in world coordinates, so a translated room root
  // must not apply its transform a second time to the finished batches.
  parent.updateWorldMatrix(true,false);root.matrix.copy(parent.matrixWorld).invert();root.matrixAutoUpdate=false;parent.add(root);
+ const ornamentPaint=theme.id==='discovery'?0x8c6a48:theme.paint;
  const materials={
   frame:new THREE.MeshStandardMaterial({name:'Chapter ornament / mineral recess',color:theme.dark,roughness:.82,metalness:.08}),
-  paint:new THREE.MeshStandardMaterial({name:'Chapter ornament / chapter enamel',color:theme.paint,roughness:.64,metalness:theme.id==='dynamo'||theme.id==='castle'?.48:.12}),
-  bead:new THREE.MeshStandardMaterial({name:'Chapter ornament / quiet ambient bead',color:theme.paint,roughness:.48,metalness:.25,
-   emissive:new THREE.Color(theme.paint),emissiveIntensity:.28}),
+  paint:new THREE.MeshStandardMaterial({name:'Chapter ornament / chapter enamel',color:ornamentPaint,roughness:.64,metalness:theme.id==='dynamo'||theme.id==='castle'?.48:.12}),
+  bead:new THREE.MeshStandardMaterial({name:'Chapter ornament / quiet ambient bead',color:ornamentPaint,roughness:.48,metalness:.25,
+   emissive:new THREE.Color(ornamentPaint),emissiveIntensity:.28}),
  };
  const batch=createBatch(root,materials);for(const site of sites)buildMotif(batch,site,theme.id);
  const stats=batch.finish(),beadGeometry=new THREE.SphereGeometry(1,7,5),beads=new THREE.InstancedMesh(beadGeometry,materials.bead,sites.length);
@@ -195,8 +206,9 @@ export function installCampaignEnvironment(game,level,theme){
   const t=reduced()?0:THREE.MathUtils.lerp(previous,time,THREE.MathUtils.clamp(alpha,0,1));
   for(let i=0;i<sites.length;i++){
    const site=sites[i],u=Math.min(site.width,site.height)/2,phase=t*.23+i*1.72;
-   const x=theme.id==='dynamo'?Math.sin(phase)*u*.54:theme.id==='biosphere'?Math.sin(phase)*u*.055:Math.sin(phase)*u*.69;
-   const y=theme.id==='biosphere'?u*.64+Math.cos(phase*.8)*u*.025:theme.id==='castle'?Math.sin(phase*.5)*u*.30:Math.cos(phase)*u*.69;
+   const calibrationAngle=-.36+Math.PI*.90*(.5+.5*Math.sin(phase));
+   const x=theme.id==='discovery'?-u*.06+Math.cos(calibrationAngle)*u*.78:theme.id==='dynamo'?Math.sin(phase)*u*.54:theme.id==='biosphere'?Math.sin(phase)*u*.055:Math.sin(phase)*u*.69;
+   const y=theme.id==='discovery'?u*.06+Math.sin(calibrationAngle)*u*.78:theme.id==='biosphere'?u*.64+Math.cos(phase*.8)*u*.025:theme.id==='castle'?Math.sin(phase*.5)*u*.30:Math.cos(phase)*u*.69;
    position.copy(site.center).addScaledVector(site.right,x).addScaledVector(site.up,y).addScaledVector(site.normal,.14);
    q.setFromUnitVectors(Z,site.normal);matrix.compose(position,q,scale);beads.setMatrixAt(i,matrix);
   }
