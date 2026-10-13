@@ -1,7 +1,7 @@
-# The existing single Pages controller now APPENDS only a separately reviewed
-# Tower41 preview. Every current canonical, finale and historical byte remains.
+# The existing single Pages controller appends two ordinary entries from one
+# separately reviewed package. Every1789 current public file remains byte exact.
 # Exact source/run/attempt pins below MUST be filled after independent acceptance.
-name: Publish accepted isolated Tower41 native preview
+name: Publish accepted Foundation20 and Tower41 ordinary physical entries
 'on':
   push:
     branches: [main]
@@ -12,8 +12,8 @@ concurrency:
   group: pages
   cancel-in-progress: false
 env:
-  BUILD_COMMIT: '5e552e9c3ac248b535d619741f15e99e29979cbf'
-  SOURCE_REVIEW_RUN_ID: '38291320140'
+  BUILD_COMMIT: '3f2e83127dfd5800068854a98843d73eb9377609'
+  SOURCE_REVIEW_RUN_ID: '38348119403'
   SOURCE_REVIEW_RUN_ATTEMPT: '1'
   PUBLIC_BASE: https://amazin20.github.io/brainrot-portal/
 jobs:
@@ -38,13 +38,13 @@ jobs:
             sudo apt-get update -qq
             sudo apt-get install -y --no-install-recommends ffmpeg
           fi
-      - name: Guard all five exact source jobs, current main and latest public deployment
+      - name: Guard all six exact source jobs, current main and latest public deployment
         env: {GITHUB_TOKEN: '${{ github.token }}'}
         run: node scripts/publish-tower41-native.mjs guard prepare
-      - name: Retain checksum-pinned latest Pages archive, acceptance proof and every exact-attempt review artifact
+      - name: Retain pinned Pages and bounded baseline transport plus every exact-attempt source artifact
         env: {GITHUB_TOKEN: '${{ github.token }}'}
         run: node scripts/publish-tower41-native.mjs download
-      - name: Independently bind the frozen source, complete build, CPU log, originals and both native proofs
+      - name: Independently bind the frozen source, complete build, CPU log, originals and all three native proofs
         run: node scripts/publish-tower41-native.mjs restore
       - name: Validate every baseline archive member and append only immutable reviewed bytes
         run: |
@@ -52,7 +52,7 @@ jobs:
           python3 scripts/publish-tower41-native.py assemble --baseline baseline-pages --candidate source/dist --site site --proof proof --binding proof/package-binding.json --source "$BUILD_COMMIT" --publisher "$GITHUB_SHA" --run "$GITHUB_RUN_ID" --review-run "$SOURCE_REVIEW_RUN_ID" --review-attempt "$SOURCE_REVIEW_RUN_ATTEMPT"
       - uses: actions/upload-pages-artifact@v3
         with: {path: site, retention-days: 14}
-      - name: Retain the whole accepted baseline ZIP and every preparation receipt privately
+      - name: Retain the accepted baseline ZIP, bounded historical transport and current preparation receipts
         uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -69,7 +69,7 @@ jobs:
     permissions: {contents: read, actions: read, deployments: read, pages: write, id-token: write}
     environment:
       name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}tower41-native-v2/?edition=foundation&level=41&tower41preview=1
+      url: ${{ steps.deployment.outputs.page_url }}foundation20-physical-v1/
     steps:
       - uses: actions/checkout@v4
         with: {ref: '${{ github.sha }}', fetch-depth: 0, persist-credentials: false}
@@ -92,7 +92,7 @@ jobs:
           echo "CHROME_PATH=$(command -v google-chrome || command -v chromium)" >> "$GITHUB_ENV"
       - name: Rebind every retained source artifact, production file and native proof
         run: node scripts/publish-tower41-native.mjs restore-retained
-      - name: Verify all 1706 existing public files and their 561674513 exact bytes
+      - name: Verify all 1789 existing public files and their 592794475 exact bytes
         run: python3 scripts/publish-tower41-native.py verify --manifest proof/baseline-manifest.json --base "$PUBLIC_BASE" --phase preflight --output proof/predeploy-public-bytes.json --source "$BUILD_COMMIT" --publisher "$GITHUB_SHA" --run "$GITHUB_RUN_ID" --review-run "$SOURCE_REVIEW_RUN_ID" --review-attempt "$SOURCE_REVIEW_RUN_ATTEMPT"
       - uses: actions/configure-pages@v5
       - name: Reject changed review attempt, source, publisher or any overlapping Pages publication at the final gate
@@ -102,11 +102,74 @@ jobs:
         id: deployment
       - name: Verify the union of every unchanged old file and every added preview file
         run: python3 scripts/publish-tower41-native.py verify --manifest proof/manifest.json --base "$PUBLIC_BASE" --phase published --output proof/public-bytes.json --source "$BUILD_COMMIT" --publisher "$GITHUB_SHA" --run "$GITHUB_RUN_ID" --review-run "$SOURCE_REVIEW_RUN_ID" --review-attempt "$SOURCE_REVIEW_RUN_ATTEMPT"
-      - name: Complete the public ordinary eleven-mechanism castle and preserve all old save bytes through replay and reload
+      - name: Complete the actual public Foundation20 ordinary hook, cable, far stop and cargo return
+        working-directory: source
+        env:
+          PAGE_URL: https://amazin20.github.io/brainrot-portal/foundation20-physical-v1/
+          CAMERA_DIAGNOSTIC: '1'
+          CAPTURE_FPS: '4'
+          CAPTURE_WIDTH: '640'
+          CAPTURE_HEIGHT: '360'
+          OUT_DIR: ../proof/public-foundation20
+          GITHUB_RUN_ID: '${{ env.SOURCE_REVIEW_RUN_ID }}'
+          GITHUB_RUN_ATTEMPT: '${{ env.SOURCE_REVIEW_RUN_ATTEMPT }}'
+          GITHUB_SHA: '${{ env.BUILD_COMMIT }}'
+          GITHUB_REF: refs/heads/upgrade/foundation20-physical-20261013-r5
+        run: timeout --signal=TERM --kill-after=10s 1800s node scripts/qa-foundation20-native.mjs
+      - name: Independently bind the public20 report and telemetry, then decode the entire actual movie
+        run: |
+          node --input-type=module <<'JS'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          import {createHash} from 'node:crypto';
+          import {execFileSync} from 'node:child_process';
+          import {assertFoundation20NativeReport} from './source/scripts/lib/foundation20-native-proof.mjs';
+          import {assertFoundation20NativeCameraObservation} from './source/scripts/lib/foundation20-native-camera-proof.mjs';
+          import {assertFoundation20CaptureTelemetry} from './source/scripts/qa-tower41-next-cell-source.mjs';
+          const report=JSON.parse(fs.readFileSync('proof/public-foundation20/foundation20-native-report.json'));
+          const pkg=JSON.parse(fs.readFileSync('proof/package-binding.json'));
+          const sourcePackage=JSON.parse(fs.readFileSync('proof/review-artifacts/source/package.json'));
+          const sourceReceipt=JSON.parse(fs.readFileSync('proof/review-artifacts/source/source.json'));
+          assert.equal(report.video.filename,'foundation20-physical.mp4');assert.equal(report.telemetry.filename,'foundation20-telemetry.jsonl');
+          const filename='proof/public-foundation20/'+report.video.filename;
+          const bytes=fs.readFileSync(filename);
+          assert.equal(bytes.length,report.video.bytes);
+          assert.equal(createHash('sha256').update(bytes).digest('hex'),report.video.sha256);
+          const telemetry=fs.readFileSync('proof/public-foundation20/'+report.telemetry.filename);
+          assert.equal(telemetry.length,report.telemetry.bytes);
+          assert.equal(createHash('sha256').update(telemetry).digest('hex'),report.telemetry.sha256);
+          assertFoundation20CaptureTelemetry(telemetry,report);
+          const pixel=report.video.pixelCheck;assert.equal(pixel.logFilename,'foundation20-native-pixels.log');
+          const pixelBytes=fs.readFileSync('proof/public-foundation20/'+pixel.logFilename);assert.equal(pixelBytes.length,pixel.logBytes);
+          assert.equal(createHash('sha256').update(pixelBytes).digest('hex'),pixel.logSha256);
+          const minima=[...pixelBytes.toString('utf8').matchAll(/lavfi\.signalstats\.YMIN=(\d+)/g)].map(row=>Number(row[1]));
+          const maxima=[...pixelBytes.toString('utf8').matchAll(/lavfi\.signalstats\.YMAX=(\d+)/g)].map(row=>Number(row[1]));
+          assert.equal(minima.length,report.video.frames);assert.equal(maxima.length,report.video.frames);
+          const ranges=maxima.map((value,index)=>value-minima[index]);assert.ok(ranges.every(value=>value>12));assert.equal(Math.min(...ranges),pixel.minimumLuminanceRange);
+          const movieMetadata=JSON.parse(execFileSync('ffprobe',['-v','quiet','-show_streams','-show_format','-of','json',filename],{encoding:'utf8',timeout:300000}));
+          assertFoundation20NativeReport(report,{sourceCommit:pkg.sourceCommit,sourceReview:pkg.sourceReview,nativePackage:sourcePackage.nativePackage,movieMetadata});
+          const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
+          const frozenHash=file=>{const value=hash(fs.readFileSync('source/'+file)),pins=sourceReceipt.verifiers.filter(row=>row.file===file);assert.equal(pins.length,1);assert.equal(value,pins[0].sha256);return value;};
+          const cameraPins={sourceCommit:sourceReceipt.sourceCommit,sourceReview:sourceReceipt.sourceReview,tree:sourceReceipt.tree,sourceInputsSha256:sourceReceipt.sourceInputsSha256,packageFilesSha256:sourcePackage.nativePackage.packageFilesSha256,
+            journeySha256:hash(fs.readFileSync('source/src/game/LabFoundation20PhysicalJourney.js')),browserSeamSha256:frozenHash('scripts/qa-foundation20-native.mjs'),
+            cameraObserverSha256:frozenHash('scripts/lib/foundation20-native-camera-observer.mjs'),cameraProofSha256:frozenHash('scripts/lib/foundation20-native-camera-proof.mjs')};
+          assert.equal(cameraPins.sourceCommit,pkg.sourceCommit);assert.deepEqual(cameraPins.sourceReview,pkg.sourceReview);assert.equal(cameraPins.tree,pkg.coreSource.tree);assert.equal(cameraPins.sourceInputsSha256,pkg.coreSource.sourceInputsSha256);assert.equal(cameraPins.packageFilesSha256,pkg.packageFilesSha256);
+          const camera=report.cameraDiagnostic;assert.equal(camera?.filename,'foundation20-native-camera.json');
+          const cameraBytes=fs.readFileSync('proof/public-foundation20/'+camera.filename);assert.ok(cameraBytes.length>0&&cameraBytes.length<=25000000);assert.equal(cameraBytes.length,camera.bytes);assert.equal(hash(cameraBytes),camera.sha256);
+          const cameraSummary=assertFoundation20NativeCameraObservation(JSON.parse(cameraBytes),{sourceIdentity:cameraPins,nativeReport:report,telemetry:telemetry.toString('utf8').trim().split('\n').map(line=>JSON.parse(line))});
+          assert.equal(cameraSummary.allOriginalSamplesInsideLens,true);assert.equal(cameraSummary.allEligibleSamplesInsideLens,true);assert.equal(cameraSummary.samples,report.video.frames);
+          assert.deepEqual(camera,{filename:'foundation20-native-camera.json',bytes:cameraBytes.length,sha256:hash(cameraBytes),...cameraSummary},'The public20 camera descriptor must equal every actual encoded optical row and terminal');
+          assert.equal(report.saveIsolation.bareEntry.url,'https://amazin20.github.io/brainrot-portal/foundation20-physical-v1/');
+          execFileSync('ffmpeg',['-hide_banner','-loglevel','error','-xerror','-i',filename,'-f','null','-'],{stdio:'inherit',timeout:300000});
+          JS
+      - name: Complete the public ordinary eleven-mechanism castle, camera observations and isolated save replay
         working-directory: source
         env:
           TOWER41_PREVIEW: '1'
-          PAGE_URL: https://amazin20.github.io/brainrot-portal/tower41-native-v2/
+          CAMERA_OBSERVATION: '1'
+          CAMERA_SOURCE_RECEIPT: ../proof/review-artifacts/source/source.json
+          CAMERA_PACKAGE_RECEIPT: ../proof/review-artifacts/source/package.json
+          PAGE_URL: https://amazin20.github.io/brainrot-portal/tower41-native-v3/
           ROUTE: '1'
           RECORD: '1'
           CAPTURE_FPS: '4'
@@ -116,7 +179,7 @@ jobs:
           GITHUB_RUN_ID: '${{ env.SOURCE_REVIEW_RUN_ID }}'
           GITHUB_RUN_ATTEMPT: '${{ env.SOURCE_REVIEW_RUN_ATTEMPT }}'
           GITHUB_SHA: '${{ env.BUILD_COMMIT }}'
-          GITHUB_REF: refs/heads/upgrade/tower41-pendulum-20261012
+          GITHUB_REF: refs/heads/upgrade/foundation20-physical-20261013-r5
         run: timeout --signal=TERM --kill-after=10s 4800s node scripts/singularity-browser.mjs
       - name: Independently check the public save proof and decode the entire actual public movie
         run: |
@@ -128,6 +191,7 @@ jobs:
           import {assertPreviewSaveIsolation} from './source/scripts/qa-tower41-next-cell-source.mjs';
           import {assertUpgradeEvidence} from './source/scripts/lib/singularity-upgrade-proof.mjs';
           import {assertPendulumPhysicalProof} from './source/scripts/lib/tower41-pendulum-proof.mjs';
+          import {assertTower41NativeCameraObservation} from './source/scripts/lib/tower41-native-camera-observer.mjs';
           const info=JSON.parse(fs.readFileSync('source/dist/build-info.json'));
           const evidence=JSON.parse(fs.readFileSync('proof/public-native/evidence.json'));
           assert.equal(evidence.sourceCommit,process.env.BUILD_COMMIT);
@@ -138,10 +202,10 @@ jobs:
           const isolation=evidence.previewSaveIsolation,bare=isolation.bareEntry;
           assert.equal(bare.applicable,true,'Actual public acceptance requires the bare native entry, not a local-root exemption');
           assert.equal(bare.pass,true);
-          assert.equal(bare.url,'https://amazin20.github.io/brainrot-portal/tower41-native-v2/');
-          assert.equal(bare.pathname,'/brainrot-portal/tower41-native-v2/');
+          assert.equal(bare.url,'https://amazin20.github.io/brainrot-portal/tower41-native-v3/');
+          assert.equal(bare.pathname,'/brainrot-portal/tower41-native-v3/');
           assert.equal(bare.search,'');assert.equal(bare.state,'ready');assert.equal(bare.level,41);assert.equal(bare.preview,true);
-          assert.equal(bare.ownKey,'brainrot-tower41-native-v2:brainrot-portal.preferences.v24');
+          assert.equal(bare.ownKey,'brainrot-tower41-native-v3:brainrot-portal.preferences.v24');
           assert.equal(bare.oldBytesUnchanged,true);assert.equal(bare.editionNavigationPresent,false);assert.deepEqual(bare.editionNavigationAnchors,[]);
           assert.equal(bare.settings.control,'native-menu-quality-select');assert.notEqual(bare.settings.beforeSha256,bare.settings.changedSha256);assert.equal(bare.settings.beforeSha256,bare.settings.restoredSha256);
           assert.equal(new URL(isolation.playerURL).origin,'https://amazin20.github.io');
@@ -149,10 +213,22 @@ jobs:
           const filename='proof/public-native/'+evidence.video.filename;
           assert.equal(createHash('sha256').update(fs.readFileSync(filename)).digest('hex'),evidence.video.sha256);
           execFileSync('ffmpeg',['-hide_banner','-loglevel','error','-xerror','-i',filename,'-f','null','-'],{stdio:'inherit',timeout:300000});
+          const sourceReceipt=JSON.parse(fs.readFileSync('proof/review-artifacts/source/source.json'));
+          const packageReceipt=JSON.parse(fs.readFileSync('proof/review-artifacts/source/package.json'));
+          const camera=evidence.cameraObservation;
+          assert.equal(camera.file,'camera-observation.json');
+          const cameraBytes=fs.readFileSync('proof/public-native/'+camera.file);
+          assert.equal(cameraBytes.length,camera.bytes);assert.ok(cameraBytes.length>0&&cameraBytes.length<=25000000);
+          assert.equal(createHash('sha256').update(cameraBytes).digest('hex'),camera.sha256);
+          const journeySha256=createHash('sha256').update(fs.readFileSync('source/src/game/LabSingularityJourney.js')).digest('hex');
+          const browserSeamSha256=createHash('sha256').update(fs.readFileSync('source/scripts/singularity-browser.mjs')).digest('hex');
+          assert.equal(browserSeamSha256,sourceReceipt.verifiers.find(row=>row.file==='scripts/singularity-browser.mjs').sha256);
+          const cameraSummary=assertTower41NativeCameraObservation(JSON.parse(cameraBytes),{sourceIdentity:{sourceCommit:sourceReceipt.sourceCommit,tree:sourceReceipt.tree,sourceInputsSha256:sourceReceipt.sourceInputsSha256,packageFilesSha256:packageReceipt.nativePackage.packageFilesSha256,sourceReview:sourceReceipt.sourceReview,journeySha256,browserSeamSha256},bodyId:evidence.observed.bodyId,video:evidence.video,result:evidence.result});
+          assert.deepEqual(camera,{file:'camera-observation.json',bytes:cameraBytes.length,sha256:createHash('sha256').update(cameraBytes).digest('hex'),...cameraSummary},'The public descriptor must equal the scope and counts derived from every actual optical row');
           JS
       - name: Prepare the bounded independent verification packet after successful public acceptance
         run: python3 scripts/publish-tower41-native.py verification-bundle --proof proof --output verification-bundle --source "$BUILD_COMMIT" --publisher "$GITHUB_SHA" --run "$GITHUB_RUN_ID" --review-run "$SOURCE_REVIEW_RUN_ID" --review-attempt "$SOURCE_REVIEW_RUN_ATTEMPT"
-      - name: Retain the bounded metadata, raw provider receipts and complete actual public movie
+      - name: Retain bounded metadata, raw provider receipts and both complete actual public movies
         uses: actions/upload-artifact@v4
         with:
           name: tower41-native-verification-${{ github.run_id }}-${{ github.run_attempt }}

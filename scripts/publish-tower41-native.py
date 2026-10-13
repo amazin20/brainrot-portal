@@ -18,38 +18,61 @@ import urllib.request
 import zipfile
 
 
-MAX_BYTES = 600_000_000
+MAX_BYTES = 700_000_000
 MAX_PRIVATE_PROOF_BYTES = 2_000_000_000
 MAX_VERIFICATION_BYTES = 100_000_000
 MAX_VERIFICATION_METADATA_BYTES = 25_000_000
 MAX_CANDIDATE_BYTES = 100_000_000
 MAX_ENTRIES = 20_000
 MAX_SAFE_INTEGER = 2 ** 53 - 1
-BASELINE_RUN = 38251739817
-BASELINE_PUBLISHER = '300e898c169a281bd3e0054e2c4b39bb055649e0'
-BASELINE_SOURCE = '58a71ddfc9bf704bef4c97fe13d16401c5a5f9f2'
-BASELINE_REVIEW = {'runId': 38243168335, 'runAttempt': 1}
-BASELINE_ARTIFACT = {'id': 11748151358, 'bytes': 521571734,
-                     'sha256': 'ed5032d4ce2565c36a5cf1d6a4fbbb5ce0d155571f30c483dce6bb01878afc6d'}
-ACCEPTED_PROOF_ARTIFACT = {'id': 11752231330, 'bytes': 631746277,
-                         'sha256': '46009cc59b9612e84db53b81999d9878280f7dd3b82afb66a1cc560f08f1f599'}
-BASELINE_COUNT = 1706
-BASELINE_BYTES = 561674513
-BASELINE_INVENTORY_SHA256 = '70ae091efbbad883c3d4eb5c1655b3a9bd55b403da19cfcad409f5c2faff2c70'
-PREFIX = 'tower41-native-v2/'
+BASELINE_RUN = 38300647905
+BASELINE_PUBLISHER = 'a74b64fe6d861baa94bbba7c6311794e6d520534'
+BASELINE_SOURCE = '5e552e9c3ac248b535d619741f15e99e29979cbf'
+BASELINE_REVIEW = {'runId': 38291320140, 'runAttempt': 1}
+BASELINE_ARTIFACT = {'id': 11770184490, 'bytes': 549474265,
+                     'sha256': '573ab6c76a18ba5d2811fa2d3cd299a58772352b967e03370d16023eb9cf0363'}
+ACCEPTED_PROOF_ARTIFACT = {'id': 11773576422, 'bytes': 38902095,
+                         'sha256': 'd68fa5d19ca851451cdd050ec88e242e3bf75adfcb3f96a0b76b3a3508adf90e'}
+BASELINE_FULL_PRIVATE_ARTIFACT = {'id': 11773770811, 'bytes': 1265969704,
+                                'sha256': 'a1acac27c2786f8b2c087245a55f75fb3bff9a2bc57df4edd9aba9262e5c6838'}
+BASELINE_COUNT = 1789
+BASELINE_BYTES = 592794475
+BASELINE_INVENTORY_SHA256 = 'f7728df3a5cfdcaf1d49de047260baa20c72a3b35090213e8ff5cae43763fc72'
+PREFIX = 'tower41-native-v3/'
 QUERY = '?edition=foundation&level=41&tower41preview=1'
-STORAGE_PREFIX = 'brainrot-tower41-native-v2:'
-JOB_NAMES = ('build', 'cpu', 'native-contact', 'native-castle', 'review-summary')
+STORAGE_PREFIX = 'brainrot-tower41-native-v3:'
+JOB_NAMES = ('build', 'cpu', 'native-contact', 'native-castle', 'native-foundation20', 'review-summary')
 ARTIFACT_NAMES = {'build': 'build', 'source': 'source', 'cpu': 'cpu',
-                  'nativeContact': 'native-contact', 'nativeCastle': 'native-castle', 'summary': 'summary'}
+                  'nativeContact': 'native-contact', 'nativeCastle': 'native-castle', 'nativeFoundation20': 'native-foundation20', 'summary': 'summary'}
 SUPPLEMENTAL_VIDEO = 'evidence/tower41-native.mp4'
 SUPPLEMENTAL_REPORT = 'evidence/tower41-native-report.json'
 SUPPLEMENTAL_IDENTITY = 'evidence/tower41-native-identity.json'
 SUPPLEMENTAL_TARGETS = {'preview-status.json', 'walkthroughs.html', SUPPLEMENTAL_IDENTITY,
                         SUPPLEMENTAL_VIDEO, SUPPLEMENTAL_REPORT}
-NATIVE_ENTRY_PATHS = frozenset(('/tower41-native-v2', '/tower41-native-v2/', '/tower41-native-v2/index.html',
-                               '/brainrot-portal/tower41-native-v2', '/brainrot-portal/tower41-native-v2/',
-                               '/brainrot-portal/tower41-native-v2/index.html'))
+NATIVE_ENTRY_PATHS = frozenset(('/tower41-native-v3', '/tower41-native-v3/', '/tower41-native-v3/index.html',
+                               '/brainrot-portal/tower41-native-v3', '/brainrot-portal/tower41-native-v3/',
+                               '/brainrot-portal/tower41-native-v3/index.html'))
+FOUNDATION20_PREFIX = 'foundation20-physical-v1/'
+FOUNDATION20_STORAGE_PREFIX = 'brainrot-foundation20-physical-v1:'
+FOUNDATION20_VIDEO = 'evidence/foundation20-physical.mp4'
+FOUNDATION20_REPORT = 'evidence/foundation20-native-report.json'
+FOUNDATION20_CAMERA_FILE = 'foundation20-native-camera.json'
+FOUNDATION20_CAMERA_SCOPE = ('Actual Foundation20 encoded native capture and terminal; the frozen producer measures all original current skin vertices. '
+    'Eligibility covers object/material/layer flags only, with unsupported main or player material clipping refused. '
+    'Independent Node checks schema, clocks, finite cache shape/padding, ranges and extrema reprojection; it does not reconstruct all indexed skin vertices. '
+    'NDC bounds do not establish pixel visibility, occlusion, every-render-frame coverage or camera acceptance.')
+FOUNDATION20_CAMERA_FIELDS = {'filename', 'bytes', 'sha256', 'diagnosticVerified', 'samples',
+    'allOriginalSamplesInsideLens', 'allEligibleSamplesInsideLens', 'independentIndexedSkinReconstruction',
+    'meshFlagEligibilityOnly', 'unsupportedClippingRefused', 'cameraAccepted', 'scope'}
+FOUNDATION20_CAMERA_PIN_FIELDS = {'sourceCommit', 'sourceReview', 'tree', 'sourceInputsSha256',
+    'packageFilesSha256', 'journeySha256', 'browserSeamSha256', 'cameraObserverSha256', 'cameraProofSha256'}
+ENTRIES = (
+    {'id': 'foundation20', 'namespace': FOUNDATION20_PREFIX, 'level': 20,
+     'storagePrefix': FOUNDATION20_STORAGE_PREFIX, 'artifact': 'nativeFoundation20',
+     'artifactKind': 'native-foundation20', 'query': ''},
+    {'id': 'tower41', 'namespace': PREFIX, 'level': 41, 'storagePrefix': STORAGE_PREFIX,
+     'artifact': 'nativeCastle', 'artifactKind': 'native-castle', 'query': QUERY},
+)
 BARE_ENTRY_NOT_APPLICABLE = {'applicable': False,
                              'reason': 'The configured browser review base is outside the standalone tower41-native entry namespace.'}
 
@@ -305,18 +328,59 @@ def extract_zip(archive_file, output, expected_digest, expected_bytes, maximum):
 
 
 def extract_accepted_proof(archive_file, output):
-    """Inspect every private archive member, then restore only the accepted manifest and byte receipt."""
+    """Read every pinned bounded packet member; restore the old accepted manifest and byte receipt.
+
+    The separately provider-pinned old full-private archive is not downloaded or
+    described as audited by this transport operation.
+    """
     archive_file = ordinary_file(archive_file)
     output = no_symlinks(output)
     require(archive_file.stat().st_size == ACCEPTED_PROOF_ARTIFACT['bytes'] and
-            archive_file.stat().st_size <= MAX_PRIVATE_PROOF_BYTES, 'Accepted private proof ZIP size mismatch')
-    require(sha256_file(archive_file) == ACCEPTED_PROOF_ARTIFACT['sha256'], 'Accepted private proof ZIP hash mismatch')
+            archive_file.stat().st_size <= MAX_VERIFICATION_BYTES, 'Accepted bounded verification ZIP size mismatch')
+    require(sha256_file(archive_file) == ACCEPTED_PROOF_ARTIFACT['sha256'], 'Accepted bounded verification ZIP hash mismatch')
     require(not output.exists(), 'Refuse to overwrite an accepted proof directory')
     temporary = None
     try:
         with zipfile.ZipFile(archive_file) as archive:
-            # Namespace, types, collisions and the full private byte cap are checked before selecting anything.
-            entries = zip_entries(archive, MAX_PRIVATE_PROOF_BYTES)
+            entries = zip_entries(archive, MAX_VERIFICATION_BYTES)
+            temporary = staging_directory(output)
+            packet_entries = [(entry, name) for entry, name, directory in entries
+                              if not directory and name == 'verification-packet.json']
+            require(len(packet_entries) == 1, 'Accepted bounded archive needs one verification packet')
+            entry, name = packet_entries[0]
+            require(entry.file_size <= MAX_VERIFICATION_METADATA_BYTES, 'Accepted verification packet metadata exceeds limit')
+            packet_file = temporary / name
+            with archive.open(entry) as source:
+                stream_to_file(source, packet_file, entry.file_size)
+            packet = read_json(packet_file)
+            baseline_identity = {'sourceCommit': BASELINE_SOURCE, 'publisherCommit': BASELINE_PUBLISHER,
+                                 'publicationRun': BASELINE_RUN, 'sourceReview': BASELINE_REVIEW}
+            exact_identity(packet, baseline_identity, 'Accepted bounded verification packet')
+            require(packet.get('schemaVersion') == 1 and type(packet['schemaVersion']) is int and
+                    packet.get('kind') == 'tower41-native-public-verification-packet' and packet.get('pass') is True and
+                    packet.get('imagesIncluded') is False and packet.get('nestedArchivesIncluded') is False,
+                    'Accepted verification packet schema/scope mismatch')
+            declared_rows = packet.get('files')
+            checked_rows(declared_rows, 'Accepted bounded packet members', MAX_VERIFICATION_BYTES)
+            actual_rows = []
+            for item, member, directory in entries:
+                if directory or member == 'verification-packet.json':
+                    continue
+                require(not member.startswith('downloads/') and
+                        pathlib.PurePosixPath(member).suffix in ('.json', '.log', '.txt', '.csv', '.mp4'),
+                        'Unexpected bounded verification member: ' + member)
+                count, checksum = 0, hashlib.sha256()
+                with archive.open(item) as source:
+                    for data in iter(lambda: source.read(1024 * 1024), b''):
+                        count += len(data)
+                        require(count <= item.file_size, 'Accepted bounded member exceeded declared bytes')
+                        checksum.update(data)
+                require(count == item.file_size, 'Accepted bounded member byte count mismatch')
+                actual_rows.append({'path': member, 'bytes': count, 'sha256': checksum.hexdigest()})
+            actual_rows.sort(key=lambda row: row['path'])
+            require(actual_rows == declared_rows and packet.get('filesSha256') == inventory_sha256(actual_rows) and
+                    type(packet.get('bytes')) is int and packet['bytes'] == sum(row['bytes'] for row in actual_rows),
+                    'Accepted bounded packet member bytes/hash/inventory mismatch')
             selected = []
             for suffix in ('manifest.json', 'public-bytes.json'):
                 matching = [(entry, name) for entry, name, directory in entries
@@ -324,10 +388,18 @@ def extract_accepted_proof(archive_file, output):
                 require(len(matching) == 1, 'Accepted private proof needs exactly one ' + suffix)
                 selected.extend(matching)
             require(all(entry.file_size <= 50_000_000 for entry, _ in selected), 'Accepted private proof JSON exceeds limit')
-            temporary = staging_directory(output)
             for entry, name in selected:
                 with archive.open(entry) as source:
                     stream_to_file(source, temporary / name, entry.file_size)
+            packet_file.unlink()
+            write_new_json(temporary / 'transport-audit.json', {
+                'schemaVersion': 1, 'kind': 'accepted-baseline-bounded-transport-audit', **baseline_identity,
+                'pass': True, 'artifact': ACCEPTED_PROOF_ARTIFACT,
+                'allMemberNamespaceTypesAndBytesVerified': True, 'memberFiles': len(actual_rows) + 1,
+                'memberFilesSha256': inventory_sha256(actual_rows),
+                'fullPrivateProofProviderPin': BASELINE_FULL_PRIVATE_ARTIFACT,
+                'fullPrivateArchiveBytesDownloaded': False, 'fullPrivateNestedArchiveAudited': False,
+            })
         rows = inventory(temporary)
         accepted_manifest(temporary)
         temporary.rename(output)
@@ -341,8 +413,8 @@ def extract_accepted_proof(archive_file, output):
 def extract_accepted(args):
     rows = extract_accepted_proof(args.zip, args.output)
     print(json.dumps({'pass': True, 'zipSha256': ACCEPTED_PROOF_ARTIFACT['sha256'],
-                      'zipBytes': ACCEPTED_PROOF_ARTIFACT['bytes'], 'allMembersInspected': True,
-                      'privateMaximumBytes': MAX_PRIVATE_PROOF_BYTES, 'files': len(rows),
+                      'zipBytes': ACCEPTED_PROOF_ARTIFACT['bytes'], 'allMemberNamespaceTypesAndBytesVerified': True,
+                      'maximumBytes': MAX_VERIFICATION_BYTES, 'files': len(rows),
                       'bytes': sum(row['bytes'] for row in rows), 'filesSha256': inventory_sha256(rows)}))
 
 
@@ -359,7 +431,8 @@ def check_baseline(rows):
     require(len(rows) == BASELINE_COUNT, 'Accepted baseline file count mismatch')
     require(sum(row['bytes'] for row in rows) == BASELINE_BYTES, 'Accepted baseline byte count mismatch')
     require(inventory_sha256(rows) == BASELINE_INVENTORY_SHA256, 'Accepted baseline inventory hash mismatch')
-    require(not any(row['path'] == PREFIX[:-1] or row['path'].startswith(PREFIX) for row in rows),
+    require(not any(row['path'] == entry['namespace'][:-1] or row['path'].startswith(entry['namespace'])
+                    for entry in ENTRIES for row in rows),
             'Native preview namespace already exists')
 
 
@@ -399,7 +472,8 @@ def tar_entries(archive):
         require(not entry.isdir() or entry.size == 0, 'TAR directory has file bytes')
         total += entry.size
         require(total <= MAX_BYTES, 'TAR exceeds byte limit')
-        require(name != PREFIX[:-1] and not name.startswith(PREFIX), 'Native preview namespace already exists in TAR')
+        require(all(name != entry['namespace'][:-1] and not name.startswith(entry['namespace']) for entry in ENTRIES),
+                'Native preview namespace already exists in TAR')
         entries.append((entry, name, entry.isdir()))
         require(len(entries) <= MAX_ENTRIES * 2, 'TAR has too many entries')
     archive_namespace(entries, 'TAR')
@@ -535,7 +609,8 @@ def assert_preview_save_isolation(isolation):
     key = 'brainrot-portal.preferences.v24'
     prefixes = ['brainrot-foundation-v1:', 'brainrot-puzzle-pilot43-v1:', 'brainrot-puzzle-progression-v1:',
                 'brainrot-puzzle-progression-next-v1:', 'brainrot-puzzle-progression-finale-v1:',
-                'brainrot-tower41-ratchet-qualification-v1:', 'brainrot-tower41-native-v1:']
+                'brainrot-tower41-ratchet-qualification-v1:', 'brainrot-tower41-native-v1:', 'brainrot-tower41-native-v2:',
+                'brainrot-foundation20-physical-v1:']
     require(isolation.get('namespace') == STORAGE_PREFIX and isolation.get('ownKey') == STORAGE_PREFIX + key and
             isolation.get('legacyPrefixes') == prefixes, 'Preview save namespaces changed')
     snapshot = isolation.get('legacySnapshot')
@@ -583,6 +658,95 @@ def assert_preview_save_isolation(isolation):
     require(reload == {'pass': True, 'state': 'ready', 'level': 41, 'completed': [40], 'resumeLevel': 40} and
             type(reload.get('level')) is int and type(reload.get('resumeLevel')) is int and
             all(type(value) is int for value in reload['completed']), 'Native reload did not retain own completion')
+    peer = isolation.get('crossEntry')
+    require(isinstance(peer, dict) and peer.get('pass') is True, 'Castle actual peer entry/reload proof missing')
+    peer_url, peer_origin, _ = preview_url(peer.get('url'), 'Castle peer bare entry')
+    _, own_origin, _ = preview_url(isolation['bareEntry']['url'] if isolation['bareEntry'].get('applicable') else isolation['playerURL'], 'Castle own entry')
+    require(peer_origin == own_origin and peer_url.path == '/brainrot-portal/foundation20-physical-v1/' and
+            peer_url.query == '' and peer_url.fragment == '' and peer.get('pathname') == peer_url.path and
+            peer.get('search') == '' and peer.get('hash') == '' and peer.get('entry') == 'foundation20-physical-v1' and
+            peer.get('edition') == 'foundation' and peer.get('state') == 'ready' and peer.get('level') == 20 and
+            type(peer['level']) is int and peer.get('startChoices') == [19] and peer.get('settingsChoices') == [19] and
+            peer.get('editionNavigationPresent') is False and peer.get('editionNavigationAnchors') == [],
+            'Castle cross-entry visit used a different path/edition/menu')
+    for field in ('debugGameHook', 'debugPreferencesHook', 'debugRouteHook'):
+        require(peer.get(field) == 'undefined', 'Castle peer bare entry exposed a debug hook')
+    require(peer.get('own41BytesUnchanged') is True and peer.get('peerBytesUnchanged') is True and peer.get('reloadVerified') is True and
+            peer.get('legacySnapshotSha256') == snapshot_hash and peer.get('own41Sha256') == observed[-1]['ownPreferencesSha256'],
+            'Castle cross-entry visit/reload changed own41 or preserved saves')
+    return isolation
+
+
+def assert_foundation20_save_isolation(isolation):
+    require(isinstance(isolation, dict) and isolation.get('pass') is True, 'Room20 native save isolation did not pass')
+    key = 'brainrot-portal.preferences.v24'
+    prefixes = ['brainrot-foundation-v1:', 'brainrot-puzzle-pilot43-v1:', 'brainrot-puzzle-progression-v1:',
+                'brainrot-puzzle-progression-next-v1:', 'brainrot-puzzle-progression-finale-v1:',
+                'brainrot-tower41-ratchet-qualification-v1:', 'brainrot-tower41-native-v1:',
+                'brainrot-tower41-native-v2:', 'brainrot-tower41-native-v3:']
+    require(isolation.get('namespace') == FOUNDATION20_STORAGE_PREFIX and
+            isolation.get('ownKey') == FOUNDATION20_STORAGE_PREFIX + key and isolation.get('legacyPrefixes') == prefixes,
+            'Room20 native save namespaces changed')
+    snapshot = isolation.get('legacySnapshot')
+    require(isinstance(snapshot, dict) and all(isinstance(snapshot.get(prefix + key), str) for prefix in prefixes) and
+            all(isinstance(name, str) and any(name.startswith(prefix) for prefix in prefixes) and isinstance(value, str)
+                for name, value in snapshot.items()), 'Room20 actual preserved save snapshot missing')
+    snapshot_hash = hashlib.sha256(json.dumps(snapshot, ensure_ascii=False, separators=(',', ':')).encode()).hexdigest()
+    require(isolation.get('legacySnapshotSha256') == snapshot_hash, 'Room20 preserved snapshot hash mismatch')
+    bare = isolation.get('bareEntry')
+    require(isinstance(bare, dict) and bare.get('pass') is True, 'Room20 actual bare entry missing')
+    url, _, _ = preview_url(bare.get('url'), 'Room20 bare entry')
+    require(url.path in ('/foundation20-physical-v1/', '/brainrot-portal/foundation20-physical-v1/') and
+            url.query == '' and url.fragment == '' and bare.get('search') == '' and bare.get('pathname') == url.path,
+            'Room20 bare entry used a different path/query')
+    require(bare.get('state') == 'ready' and bare.get('level') == 20 and type(bare['level']) is int and
+            bare.get('edition') == 'foundation' and bare.get('entry') == 'foundation20-physical-v1',
+            'Room20 bare entry did not open its actual Foundation room')
+    require(bare.get('legacySnapshotSha256') == snapshot_hash and bare.get('oldBytesUnchanged') is True,
+            'Room20 bare entry changed preserved save bytes')
+    for name in ('debugGameHook', 'debugPreferencesHook', 'debugRouteHook'):
+        require(bare.get(name) == 'undefined', 'Room20 bare entry exposes a debug hook')
+    settings = bare.get('settings')
+    require(isinstance(settings, dict), 'Room20 bare native settings proof missing')
+    for name in ('beforeSha256', 'changedSha256', 'restoredSha256'):
+        digest(settings.get(name), 'Room20 bare settings ' + name)
+    require(settings['beforeSha256'] == settings['restoredSha256'] and settings['beforeSha256'] != settings['changedSha256'],
+            'Room20 native settings did not change/restore actual private bytes')
+    phases = ['after-load', 'after-settings', 'after-play', 'after-pause', 'after-resume', 'after-win', 'after-replay', 'after-reload']
+    states = ['ready', 'ready', 'playing', 'paused', 'playing', 'won', 'playing', 'ready']
+    observed = isolation.get('phases')
+    require(isinstance(observed, list) and len(observed) == len(phases), 'Room20 requires all eight native save phases')
+    for item in [bare] + observed:
+        require(isinstance(item, dict) and item.get('level') == 20 and type(item['level']) is int and
+                item.get('edition') == 'foundation' and item.get('entry') == 'foundation20-physical-v1',
+                'Room20 save proof used another room/edition')
+        require(item.get('startChoices') == [19] and item.get('settingsChoices') == [19] and
+                type(item['startChoices'][0]) is int and type(item['settingsChoices'][0]) is int and
+                item.get('editionNavigationPresent') is False, 'Room20 native menu leaked unrelated rooms')
+        require(item.get('oldBytesUnchanged') is True and item.get('legacySnapshotSha256') == snapshot_hash,
+                'Room20 save transition changed preserved bytes')
+    for i, item in enumerate(observed):
+        require(item.get('phase') == phases[i] and item.get('state') == states[i] and item.get('namespaceUsed') is True and
+                item.get('ownResumeLevel') == 19 and type(item['ownResumeLevel']) is int and
+                item.get('ownCompleted') == ([] if i < 5 else [19]), 'Room20 native save phase state/order/completion mismatch')
+        digest(item.get('ownPreferencesSha256'), 'Room20 own save hash')
+    controls = isolation.get('controls')
+    require(isinstance(controls, dict) and controls.get('pauseResume', {}).get('pass') is True and
+            controls.get('replay', {}).get('pass') is True and controls['replay'].get('atSpawn') is True and
+            controls.get('reload', {}).get('pass') is True, 'Room20 actual pause/replay/reload controls missing')
+    peer = isolation.get('crossEntry')
+    require(isinstance(peer, dict) and peer.get('pass') is True, 'Room20 actual peer entry/reload proof missing')
+    peer_url, peer_origin, _ = preview_url(peer.get('url'), 'Room20 peer bare entry')
+    _, own_origin, _ = preview_url(bare['url'], 'Room20 own bare entry')
+    require(peer_origin == own_origin and peer_url.path == url.path.replace('foundation20-physical-v1', 'tower41-native-v3') and
+            peer_url.query == '' and peer_url.fragment == '' and peer.get('entry') == 'tower41-native-v3' and
+            peer.get('state') == 'ready' and peer.get('level') == 41 and type(peer['level']) is int and
+            peer.get('startChoices') == [40] and peer.get('settingsChoices') == [40], 'Room20 cross-entry visit used another path/menu')
+    for field in ('debugGameHook', 'debugPreferencesHook', 'debugRouteHook'):
+        require(peer.get(field) == 'undefined', 'Peer bare entry exposed a debug hook')
+    require(peer.get('own20BytesUnchanged') is True and peer.get('peerBytesUnchanged') is True and
+            peer.get('reloadVerified') is True and peer.get('legacySnapshotSha256') == snapshot_hash and
+            peer.get('own20Sha256') == observed[-1]['ownPreferencesSha256'], 'Cross-entry visit/reload changed own20 or preserved saves')
     return isolation
 
 
@@ -817,14 +981,45 @@ def pendulum_event(evidence):
 def binding_structure(binding, expected):
     exact_identity(binding, expected, 'Package binding')
     require(type(binding.get('schemaVersion')) is int and binding['schemaVersion'] == 1 and
-            binding.get('kind') == 'tower41-native-exact-review', 'Package binding schema/kind mismatch')
+            binding.get('kind') == 'foundation20-and-tower41-native-exact-review', 'Package binding schema/kind mismatch')
+    require(binding.get('entries') == list(ENTRIES), 'Exactly the two current ordinary entry bindings are required')
+    foundation20 = binding.get('foundation20')
+    require(isinstance(foundation20, dict) and set(foundation20) == {'saveIsolation', 'receipt', 'supplemental'},
+            'Room20 requires actual native save, receipt and full recording binding')
+    assert_foundation20_save_isolation(foundation20['saveIsolation'])
+    foundation20_supplemental_structure(binding, expected)
+    room20_receipt = foundation20['receipt']
+    exact_identity(room20_receipt, {key: expected[key] for key in ('sourceCommit', 'sourceReview')}, 'Room20 binding receipt')
+    require(room20_receipt.get('pass') is True and room20_receipt.get('edition') == 'foundation' and
+            type(room20_receipt.get('level')) is int and room20_receipt['level'] == 20 and
+            room20_receipt.get('roomId') == 'foundation-portal-tension' and room20_receipt.get('sameCargo') is True and
+            type(room20_receipt.get('resets')) is int and room20_receipt['resets'] == 0 and
+            room20_receipt.get('packageFilesSha256') == binding.get('packageFilesSha256') and
+            room20_receipt.get('buildInfoSha256') == binding.get('buildInfoSha256') and
+            room20_receipt.get('video', {}).get('fullMP4Decode') is True, 'Room20 actual source receipt scope/binding changed')
+    digest(room20_receipt.get('reportSha256'), 'Room20 report binding hash')
+    foundation20_camera_descriptor(room20_receipt.get('cameraDiagnostic'))
+    retained = binding.get('baselineFullPrivateProof')
+    require(isinstance(retained, dict) and retained.get('providerRetentionAndDigestBound') is True and
+            retained.get('archiveBytesDownloaded') is False and retained.get('nestedArchiveAudited') is False,
+            'Old full-private proof must remain honestly provider-bound without a byte-audit claim')
+    artifact = retained.get('artifact')
+    require(isinstance(artifact, dict) and artifact.get('id') == BASELINE_FULL_PRIVATE_ARTIFACT['id'] and
+            artifact.get('name') == f'tower41-native-publication-proof-{BASELINE_RUN}-1' and
+            artifact.get('size_in_bytes') == BASELINE_FULL_PRIVATE_ARTIFACT['bytes'] and
+            artifact.get('digest') == 'sha256:' + BASELINE_FULL_PRIVATE_ARTIFACT['sha256'] and
+            artifact.get('expired') is False and artifact.get('workflow_run', {}).get('id') == BASELINE_RUN and
+            artifact.get('workflow_run', {}).get('head_sha') == BASELINE_PUBLISHER,
+            'Old full-private provider artifact pin changed')
     require_preview(binding.get('preview'), 'Package binding')
     assert_preview_save_isolation(binding.get('previewSaveIsolation'))
+    require(binding['previewSaveIsolation']['crossEntry'].get('sourceCommit') == expected['sourceCommit'],
+            'Castle peer entry did not serve the same exact source commit')
     bare = binding['previewSaveIsolation'].get('bareEntry')
     require(isinstance(bare, dict) and bare.get('applicable') is True and bare.get('pass') is True,
             'Publication binding requires an actual native namespace bare-entry observation')
     artifacts = binding.get('artifacts')
-    require(isinstance(artifacts, dict) and set(artifacts) == set(ARTIFACT_NAMES), 'Exactly six exact-review artifacts are required')
+    require(isinstance(artifacts, dict) and set(artifacts) == set(ARTIFACT_NAMES), 'Exactly seven exact-review artifacts are required')
     ids = set()
     review = expected['sourceReview']
     for key, suffix in ARTIFACT_NAMES.items():
@@ -842,7 +1037,7 @@ def binding_structure(binding, expected):
                 workflow.get('head_sha') == expected['sourceCommit'], 'Stale artifact provider workflow identity: ' + key)
         checked_rows(artifact['files'], key + ' artifact inventory', MAX_CANDIDATE_BYTES if key == 'build' else MAX_BYTES)
     jobs = binding.get('jobs')
-    require(isinstance(jobs, list) and len(jobs) == len(JOB_NAMES), 'Exactly five successful review jobs required')
+    require(isinstance(jobs, list) and len(jobs) == len(JOB_NAMES), 'Exactly six successful review jobs required')
     names, job_ids, logs = set(), set(), set()
     for job in jobs:
         require(isinstance(job, dict) and job.get('name') in JOB_NAMES and job['name'] not in names and
@@ -868,23 +1063,23 @@ def positive_number(value, label):
     return value
 
 
-def supplemental_structure(binding, expected):
+def supplemental_structure(binding, expected, *, artifact_key="nativeCastle", video_target=SUPPLEMENTAL_VIDEO, report_target=SUPPLEMENTAL_REPORT):
     supplemental = binding.get('supplemental')
     require(isinstance(supplemental, dict) and set(supplemental) == {'reviewedFiles', 'recording'}, 'Exact supplemental recording binding required')
     files = supplemental.get('reviewedFiles')
     require(isinstance(files, list) and len(files) == 2, 'Exactly two copied native recording files are required')
     source_expected = {key: expected[key] for key in ('sourceCommit', 'sourceReview')}
     destinations, sources = set(), set()
-    artifact_rows = checked_rows(binding.get('artifacts', {}).get('nativeCastle', {}).get('files'), 'Supplemental source artifact')
+    artifact_rows = checked_rows(binding.get('artifacts', {}).get(artifact_key, {}).get('files'), 'Supplemental source artifact')
     for copied in files:
         require(isinstance(copied, dict) and set(copied) == {'sourceArtifact', 'sourcePath', 'path', 'bytes', 'sha256', 'sourceCommit', 'sourceReview'},
                 'Invalid supplemental copied-file binding')
         exact_identity(copied, source_expected, 'Supplemental copied file')
-        require(copied.get('sourceArtifact') == 'nativeCastle', 'Supplemental copy must use the exact reviewed ordinary castle artifact')
+        require(copied.get('sourceArtifact') == artifact_key, 'Supplemental copy must use the exact reviewed ordinary castle artifact')
         source_path = safe_name(copied.get('sourcePath'))
         target_path = safe_name(copied.get('path'))
         require(source_path == copied['sourcePath'] and target_path == copied['path'] and
-                target_path in (SUPPLEMENTAL_VIDEO, SUPPLEMENTAL_REPORT), 'Supplemental copy escaped its assigned evidence path')
+                target_path in (video_target, report_target), 'Supplemental copy escaped its assigned evidence path')
         require(target_path not in destinations and source_path not in sources, 'Duplicate supplemental copied path')
         destinations.add(target_path)
         sources.add(source_path)
@@ -892,14 +1087,14 @@ def supplemental_structure(binding, expected):
         digest(copied.get('sha256'), 'Supplemental copied hash')
         require(artifact_rows.get(source_path) == {key: copied[key] for key in ('bytes', 'sha256')} | {'path': source_path},
                 'Supplemental copy differs from exact reviewed artifact inventory')
-    require(destinations == {SUPPLEMENTAL_VIDEO, SUPPLEMENTAL_REPORT}, 'Supplemental movie/report targets mismatch')
+    require(destinations == {video_target, report_target}, 'Supplemental movie/report targets mismatch')
     recording = supplemental.get('recording')
     require(isinstance(recording, dict) and set(recording) == {'sourceCommit', 'sourceReview', 'filename', 'report', 'bytes', 'sha256',
                                                             'frames', 'fps', 'width', 'height', 'durationSeconds', 'simulationSeconds'},
             'Exact recording identity and measured fields are required')
     exact_identity(recording, source_expected, 'Supplemental recording')
-    require(recording.get('filename') == SUPPLEMENTAL_VIDEO and recording.get('report') == SUPPLEMENTAL_REPORT, 'Supplemental recording target mismatch')
-    movie = next(row for row in files if row['path'] == SUPPLEMENTAL_VIDEO)
+    require(recording.get('filename') == video_target and recording.get('report') == report_target, 'Supplemental recording target mismatch')
+    movie = next(row for row in files if row['path'] == video_target)
     require(type(recording.get('bytes')) is int and recording['bytes'] == movie['bytes'] and recording.get('sha256') == movie['sha256'],
             'Supplemental recording bytes/hash differ from reviewed movie')
     integer(recording.get('frames'), 'Recording frames', 1)
@@ -911,15 +1106,22 @@ def supplemental_structure(binding, expected):
     require(abs(duration - recording['frames'] / recording['fps']) < 1e-6, 'Recording duration differs from actual encoded frames')
     require(abs(duration - simulation) <= 2 / recording['fps'] + 1 / 120 + .01, 'Recording duration differs from actual simulation time')
     candidate = checked_rows(binding.get('artifacts', {}).get('build', {}).get('files'), 'Supplemental candidate inventory')
-    for target in SUPPLEMENTAL_TARGETS:
+    for target in {'preview-status.json', 'walkthroughs.html', SUPPLEMENTAL_IDENTITY, video_target, report_target}:
         require(all(target != name and not target.startswith(name + '/') and not name.startswith(target + '/') for name in candidate),
                 'Candidate collides with supplemental publication path: ' + target)
     return supplemental
 
 
+def foundation20_supplemental_structure(binding, expected):
+    view = dict(binding, supplemental=binding['foundation20']['supplemental'])
+    return supplemental_structure(view, expected, artifact_key='nativeFoundation20',
+                                  video_target=FOUNDATION20_VIDEO, report_target=FOUNDATION20_REPORT)
+
+
 def supplemental_copied_rows(binding):
-    return sorted([{'path': PREFIX + copied['path'], 'bytes': copied['bytes'], 'sha256': copied['sha256']}
-                   for copied in binding['supplemental']['reviewedFiles']], key=lambda row: row['path'])
+    values = [(PREFIX, binding['supplemental']), (FOUNDATION20_PREFIX, binding['foundation20']['supplemental'])]
+    return sorted([{'path': prefix + copied['path'], 'bytes': copied['bytes'], 'sha256': copied['sha256']}
+                   for prefix, supplemental in values for copied in supplemental['reviewedFiles']], key=lambda row: row['path'])
 
 
 def check_supplemental_evidence(binding, proof, castle_evidence, castle_receipt, expected):
@@ -960,10 +1162,342 @@ def check_supplemental_evidence(binding, proof, castle_evidence, castle_receipt,
     return supplemental
 
 
+def foundation20_camera_descriptor(value, samples=None):
+    """Only the bounded original-geometry diagnostic is mandatory; no camera acceptance."""
+    require(isinstance(value, dict) and set(value) == FOUNDATION20_CAMERA_FIELDS,
+            'Room20 needs the exact mandatory camera diagnostic descriptor')
+    require(value['filename'] == FOUNDATION20_CAMERA_FILE, 'Room20 camera raw basename changed')
+    integer(value['bytes'], 'Room20 camera bytes', 1, MAX_VERIFICATION_METADATA_BYTES)
+    digest(value['sha256'], 'Room20 camera hash')
+    integer(value['samples'], 'Room20 camera samples', 1, 6001)
+    if samples is not None:
+        require(type(samples) is int and value['samples'] == samples, 'Room20 camera omits encoded captures')
+    for key in ('diagnosticVerified', 'allOriginalSamplesInsideLens', 'allEligibleSamplesInsideLens',
+                'meshFlagEligibilityOnly', 'unsupportedClippingRefused'):
+        require(value[key] is True, 'Room20 camera diagnostic contradicts ' + key)
+    for key in ('independentIndexedSkinReconstruction', 'cameraAccepted'):
+        require(value[key] is False, 'Room20 camera diagnostic overclaims ' + key)
+    require(value['scope'] == FOUNDATION20_CAMERA_SCOPE, 'Room20 camera diagnostic scope changed')
+    return value
+
+
+def foundation20_camera_pins(value, binding, source, package, expected):
+    require(isinstance(value, dict) and set(value) == FOUNDATION20_CAMERA_PIN_FIELDS,
+            'Room20 camera needs all nine external source identity fields')
+    exact_identity(value, {key: expected[key] for key in ('sourceCommit', 'sourceReview')}, 'Room20 camera source')
+    commit(value['tree'], 'Room20 camera source tree')
+    for key in FOUNDATION20_CAMERA_PIN_FIELDS - {'sourceCommit', 'sourceReview', 'tree'}:
+        digest(value[key], 'Room20 camera ' + key)
+    core = binding.get('coreSource')
+    require(isinstance(core, dict) and source.get('tree') == package.get('tree') == core.get('tree') == value['tree'] and
+            source.get('sourceInputsSha256') == package.get('sourceInputsSha256') == core.get('sourceInputsSha256') == value['sourceInputsSha256'] and
+            source.get('sourceInputFiles') == core.get('sourceInputFiles') and
+            source.get('verifiers') == core.get('verifiers'), 'Room20 camera changed frozen core source pins')
+    integer(core.get('sourceInputFiles'), 'Room20 frozen source input count', 1)
+    require(package.get('nativePackage', {}).get('packageFilesSha256') == binding.get('packageFilesSha256') == value['packageFilesSha256'],
+            'Room20 camera changed frozen package pin')
+    verifiers = core.get('verifiers')
+    require(isinstance(verifiers, list) and verifiers, 'Room20 camera frozen verifier hashes missing')
+    mapped = {}
+    for row in verifiers:
+        require(isinstance(row, dict) and set(row) == {'file', 'sha256'} and row['file'] not in mapped,
+                'Room20 duplicate or malformed frozen verifier')
+        digest(row['sha256'], 'Frozen verifier hash');mapped[row['file']] = row['sha256']
+    for key, filename in [('browserSeamSha256', 'scripts/qa-foundation20-native.mjs'),
+                          ('cameraObserverSha256', 'scripts/lib/foundation20-native-camera-observer.mjs'),
+                          ('cameraProofSha256', 'scripts/lib/foundation20-native-camera-proof.mjs')]:
+        require(value[key] == mapped.get(filename), 'Room20 camera changed frozen helper: ' + filename)
+    # Journey is a frozen source input checked by the SOURCE Node gate, not an invented extra verifier.
+    return value
+
+
+def foundation20_camera_packet_summary(descriptor, observation, report, telemetry_file, source_identity):
+    """Recheck complete capture/summary semantics. Frozen Node owns finite skin/cache/reprojection checks."""
+    video, route = report.get('video', {}), report.get('route', {})
+    foundation20_camera_descriptor(descriptor, video.get('frames'))
+    header_fields = {'kind', 'runtimeObserved', 'accepted', 'cameraAccepted', 'nativeOpticalAccepted',
+        'allRenderFramesObserved', 'pixelOcclusionAccepted', 'sourceIdentity', 'config', 'identity', 'recordEncoding',
+        'records', 'observedFrames', 'driverRouteFrameCount', 'finalLoopFrameIndex', 'finalClock', 'outputJSONBytes',
+        'producerMeasuredOriginalVertices', 'independentIndexedSkinReconstruction', 'meshFlagEligibilityOnly', 'unsupportedClippingRefused', 'scope'}
+    require(isinstance(observation, dict) and set(observation) == header_fields and
+            observation.get('kind') == 'foundation20-native-camera-observation-v1' and
+            observation.get('sourceIdentity') == source_identity, 'Room20 camera raw source identity or room differs')
+    for key in ('runtimeObserved', 'producerMeasuredOriginalVertices', 'meshFlagEligibilityOnly', 'unsupportedClippingRefused'):
+        require(observation.get(key) is True, 'Room20 raw diagnostic contradicts ' + key)
+    for key in ('accepted', 'cameraAccepted', 'nativeOpticalAccepted', 'allRenderFramesObserved',
+                'pixelOcclusionAccepted', 'independentIndexedSkinReconstruction'):
+        require(observation.get(key) is False, 'Room20 raw diagnostic overclaims ' + key)
+    require(observation.get('scope') == FOUNDATION20_CAMERA_SCOPE, 'Room20 raw diagnostic scope changed')
+    require(observation.get('outputJSONBytes') == descriptor['bytes'] and type(observation['outputJSONBytes']) is int,
+            'Room20 whole raw size contradicts descriptor')
+    config = observation.get('config')
+    require(isinstance(config, dict) and set(config) == {'fps', 'width', 'height', 'maxRecords', 'maxFrames', 'maxPayloadBytes', 'stride'},
+            'Room20 capture config missing')
+    for key, value in [('fps', 4), ('stride', 15), ('width', 640), ('height', 360)]:
+        require(type(video.get(key)) is int and type(config.get(key)) is int and video[key] == config[key] == value,
+                'Room20 camera capture format changed: ' + key)
+    integer(config['maxRecords'], 'Room20 camera record budget', 1, 6001)
+    integer(config['maxFrames'], 'Room20 camera frame budget', 1, 90000)
+    integer(config['maxPayloadBytes'], 'Room20 camera byte budget', 1024, MAX_VERIFICATION_METADATA_BYTES)
+    require(descriptor['bytes'] <= config['maxPayloadBytes'], 'Room20 raw exceeds its declared budget')
+    frames = integer(route.get('frames'), 'Room20 camera route frames', 1, config['maxFrames'])
+    steps = integer(route.get('physicsSteps'), 'Room20 camera route steps', 1)
+    require(steps in (frames*2, frames*2-1) and route.get('seconds') == steps/120 and route.get('pass') is True,
+            'Room20 camera route clock differs')
+    terminal = (frames-1) % 15 != 0
+    require(video.get('terminalSample') is terminal and video.get('lastVisualFrame') == frames-1 and
+            descriptor['samples'] == (frames-1)//15+1+int(terminal), 'Room20 camera final encoded sample changed')
+    for key in ('observedFrames', 'driverRouteFrameCount'):
+        require(type(observation.get(key)) is int and observation[key] == frames, 'Room20 observed frame count differs')
+    require(type(observation.get('finalLoopFrameIndex')) is int and observation['finalLoopFrameIndex'] == frames-1,
+            'Room20 final loop index differs')
+    model, encoding = observation.get('identity'), observation.get('recordEncoding')
+    require(isinstance(model, dict) and isinstance(encoding, dict), 'Room20 original geometry identity missing')
+    require(type(model.get('playerVertices')) is int and model['playerVertices'] == 96753 and
+            type(model.get('bones')) is int and model['bones'] == 15 and
+            model.get('sameOriginalActorAndSkinAndLoadedAssets') is True and
+            model.get('packageRuntimeGLBCount') == 14 and type(model['packageRuntimeGLBCount']) is int and
+            model.get('packageModelBytesExternallyPinned') is True and model.get('authoredMaterialIdentity', {}).get('pass') is True,
+            'Room20 original actor or package geometry changed')
+    digest(model.get('initialAppearanceSha256'), 'Room20 original appearance')
+    require(model.get('finalAppearanceSha256') == model['initialAppearanceSha256'], 'Room20 original appearance changed')
+    loaded = model.get('loadedAssetModels');require(isinstance(loaded, list) and loaded and
+            type(model.get('runtimeLoadedModelCount')) is int and model['runtimeLoadedModelCount'] == len(loaded),
+            'Room20 actually loaded model identity changed')
+    meshes, bones = model.get('meshes'), model.get('boneDictionary')
+    require(isinstance(meshes, list) and meshes and isinstance(bones, list) and len(bones) == 15 and
+            len({b.get('uuid') for b in bones}) == 15 and all(isinstance(b.get('uuid'), str) for b in bones),
+            'Room20 original mesh/bone dictionary changed')
+    require(set(encoding) == {'kind', 'extremaOrder', 'extremaTuple', 'eligibilityTuple', 'boneTuple', 'skinMatricesTuple',
+                             'meshDictionary', 'boneDictionary', 'constants'} and
+            encoding.get('kind') == 'foundation20-lossless-native-camera-v1' and encoding.get('meshDictionary') == meshes and
+            encoding.get('boneDictionary') == bones and encoding.get('constants') == {'sourceCommit': source_identity['sourceCommit'],
+                'nativeCanvas': {'width': 640, 'height': 360}, 'appearanceSha256': model['initialAppearanceSha256'], 'scope': FOUNDATION20_CAMERA_SCOPE},
+            'Room20 lossless codec/source/appearance binding changed')
+    extrema = ['minX', 'maxX', 'minY', 'maxY', 'minDepth', 'maxDepth']
+    for key, value in [('extremaOrder', extrema), ('extremaTuple', ['meshIndex', 'vertex', 'world', 'ndc', 'depth']),
+                       ('eligibilityTuple', ['meshIndex', 'objectVisible', 'materialVisible', 'layerMatch', 'renderEligible']),
+                       ('boneTuple', ['boneIndex', 'localPosition', 'localQuaternion', 'localScale', 'matrixWorld']),
+                       ('skinMatricesTuple', ['meshIndex', 'preparedBoneMatrices'])]:
+        require(encoding.get(key) == value, 'Room20 lossless codec tuple changed: ' + key)
+    mesh_ids = set();total = 0;main_index = None
+    for index, mesh in enumerate(meshes):
+        require(isinstance(mesh, dict) and set(mesh) == {'meshUuid', 'vertices', 'bones', 'skinned'} and
+                isinstance(mesh['meshUuid'], str) and mesh['meshUuid'] not in mesh_ids and type(mesh['skinned']) is bool,
+                'Room20 original mesh dictionary malformed')
+        mesh_ids.add(mesh['meshUuid']);total += integer(mesh['vertices'], 'Room20 original mesh vertices', 1, 96753)
+        integer(mesh['bones'], 'Room20 original mesh bones', 0, 15)
+        if mesh['meshUuid'] == model.get('mainBodyMeshUuid'):
+            require(mesh['skinned'] is True and mesh['vertices'] == 69777, 'Room20 original main body changed');main_index = index
+    require(total == 96753 and main_index is not None, 'Room20 original vertex union changed')
+    records = observation.get('records');require(isinstance(records, list) and len(records) == descriptor['samples'] <= config['maxRecords'],
+            'Room20 raw omits or repeats encoded camera samples')
+    telemetry_file = ordinary_file(telemetry_file)
+    integer(telemetry_file.stat().st_size, 'Room20 complete JSONL byte budget', 1, MAX_VERIFICATION_METADATA_BYTES)
+    td = report.get('telemetry', {})
+    require(td.get('filename') == 'foundation20-telemetry.jsonl' and type(td.get('bytes')) is int and
+            td['bytes'] == telemetry_file.stat().st_size and td.get('sha256') == sha256_file(telemetry_file),
+            'Room20 actual complete telemetry bytes changed')
+    def parse_pairs(pairs):
+        result = {}
+        for key, value in pairs:
+            require(key not in result, 'Duplicate Room20 JSONL key');result[key] = value
+        return result
+    text = telemetry_file.read_text(encoding='utf-8');lines = text.splitlines()
+    require(len(lines) == len(records) and all(line.strip() for line in lines), 'Room20 telemetry must retain every encoded row')
+    telemetry = [json.loads(line, object_pairs_hook=parse_pairs, parse_constant=lambda value: (_ for _ in ()).throw(ValueError('Nonfinite Room20 JSONL'))) for line in lines]
+    def finite(value):
+        if isinstance(value, dict):
+            for x in value.values():finite(x)
+        elif isinstance(value, list):
+            for x in value:finite(x)
+        elif type(value) in (int, float):require(math.isfinite(value), 'Room20 nonfinite diagnostic number')
+    finite(observation);finite(telemetry)
+    offset = observation.get('finalClock', {}).get('worldStepOffset');integer(offset, 'Room20 actual world offset', 0)
+    observed = report.get('observed')
+    require(isinstance(observed, dict) and all(type(observed.get(key)) is int and observed[key] == value for key, value in
+        {'samples': frames, 'completedPostSteps': steps, 'forceSamples': steps, 'postStepsStart': offset, 'postStepsFinish': offset+steps}.items()),
+        'Room20 camera world offset or force clock differs from this actual producer report')
+    row_fields = {'encodedBinding', 'worldStep', 'worldStepOffset', 'routePhysicsSteps', 'routeSeconds', 'state', 'player', 'cargo',
+        'controls', 'camera', 'bones', 'skinMatrices', 'projection', 'mainBodyProjection', 'eligibleProjection', 'eligibility',
+        'clipping', 'conservativeEnvelope', 'materialProvenance', 'readPurity'}
+    def projection(p, vertices, allowed, near):
+        require(isinstance(p, dict) and type(p.get('vertices')) is int and p['vertices'] == vertices and p.get('insideLens') is True and
+                all(type(p.get(k)) is int and p[k] == 0 for k in ('outsideLensCount', 'behindCount', 'nearCount')),
+                'Room20 original/eligible vertices are outside the lens')
+        for k in extrema:require(type(p.get(k)) in (int, float) and math.isfinite(p[k]), 'Room20 finite projection extrema missing')
+        require(-1 <= p['minX'] <= p['maxX'] <= 1 and -1 <= p['minY'] <= p['maxY'] <= 1 and
+                near < p['minDepth'] <= p['maxDepth'], 'Room20 zero counts contradict cropped or near/behind extrema')
+        witnesses = p.get('extremaWitnesses');require(isinstance(witnesses, dict) and set(witnesses) == set(extrema), 'Room20 six original extrema required')
+        for key, w in witnesses.items():
+            require(isinstance(w, list) and len(w) == 5 and type(w[0]) is int and w[0] in allowed,
+                    'Room20 extrema belongs to another mesh scope')
+            integer(w[1], 'Room20 original vertex witness', 0, meshes[w[0]]['vertices']-1)
+            require(isinstance(w[2], list) and len(w[2]) == 3 and isinstance(w[3], list) and len(w[3]) == 3 and
+                    all(type(n) in (int, float) and math.isfinite(n) for n in w[2]+w[3]+[w[4]]), 'Room20 finite original witness missing')
+            require(all(-1 <= n <= 1 for n in w[3]) and near < w[4] and
+                    p['minX'] <= w[3][0] <= p['maxX'] and p['minY'] <= w[3][1] <= p['maxY'] and
+                    p['minDepth'] <= w[4] <= p['maxDepth'], 'Room20 outside extrema contradict declared inside lens')
+            require(p[key] == (w[4] if key.endswith('Depth') else w[3][0 if key.endswith('X') else 1]), 'Room20 extrema value contradicts original witness')
+    for index, (row, t) in enumerate(zip(records, telemetry)):
+        require(isinstance(row, dict) and set(row) == row_fields and isinstance(t, dict) and isinstance(t.get('state'), dict), 'Room20 actual capture row malformed')
+        b = row['encodedBinding'];state = t['state'];is_terminal = terminal and index == len(records)-1;vf = frames-1 if is_terminal else index*15
+        n = steps if index == len(records)-1 else 2*(vf+1);status = 'won' if index == len(records)-1 else 'playing'
+        expected_binding = {'encodedFrame': index, 'visualFrame': vf, 'driverFrame': vf, 'worldStep': offset+n,
+            'routeSeconds': n/120, 'state': status, 'terminal': is_terminal, 'source': 'actual post-render encoder capture event'}
+        require(b == expected_binding and all(type(b.get(key)) is int for key in ('encodedFrame', 'visualFrame', 'driverFrame', 'worldStep')) and
+                b.get('terminal') is is_terminal and type(b.get('routeSeconds')) in (int, float) and
+                type(t.get('index')) is int and t['index'] == index and t.get('terminal') is is_terminal and
+                all(state.get(key) == value and type(state.get(key)) is int for key, value in
+                    {'visualFrame': vf, 'frame': vf, 'worldStep': offset+n}.items()) and
+                type(state.get('seconds')) in (int, float) and state['seconds'] == n/120 and state.get('state') == status and
+                all(type(row.get(key)) is int for key in ('worldStep', 'worldStepOffset', 'routePhysicsSteps')) and
+                type(row.get('routeSeconds')) in (int, float) and
+                row['worldStep'] == offset+n and row['worldStepOffset'] == offset and row['routePhysicsSteps'] == n and
+                row['routeSeconds'] == n/120 and row['state'] == status and row['player'] == state.get('player') and row['cargo'] == state.get('cargo'),
+                'Room20 camera/JSONL capture clocks or original actor were spliced')
+        camera = row['camera'];require(isinstance(camera, dict), 'Room20 current lens missing')
+        near = positive_number(camera.get('near'), 'Room20 actual lens near');require(positive_number(camera.get('fov'), 'Room20 actual FOV') <= 120,
+                'Room20 lens exceeds finite FOV')
+        require(camera.get('aspect') == 640/360 and positive_number(camera.get('far'), 'Room20 actual lens far') > near, 'Room20 lens format changed')
+        require(len(row.get('bones', [])) == 15 and len(row.get('skinMatrices', [])) == sum(m['skinned'] for m in meshes), 'Room20 original bones/cache omitted')
+        eligibility = row['eligibility'];require(isinstance(eligibility, list) and len(eligibility) == len(meshes), 'Room20 mesh eligibility omitted')
+        eligible = set()
+        for j, e in enumerate(eligibility):
+            require(isinstance(e, list) and len(e) == 5 and type(e[0]) is int and e[0] == j and all(type(v) is bool for v in e[1:]) and
+                    e[4] == (e[1] and e[2] and e[3]), 'Room20 object/material/layer eligibility contradicts flags')
+            if e[4]:eligible.add(j)
+        projection(row['projection'], 96753, set(range(len(meshes))), near);projection(row['mainBodyProjection'], 69777, {main_index}, near)
+        if eligible:projection(row['eligibleProjection'], sum(meshes[j]['vertices'] for j in eligible), eligible, near)
+        else:require(row['eligibleProjection'] is None, 'Room20 empty eligibility union fabricated')
+        clipping = row['clipping'];require(isinstance(clipping, dict) and clipping.get('mainPlanes') == [] and
+                clipping.get('unsupportedClippingRefused') is True and clipping.get('meshFlagEligibilityOnly') is True and
+                camera.get('rig', {}).get('clipping') == [], 'Room20 unsupported actual clipping was accepted')
+        materials = clipping.get('playerMaterials');require(isinstance(materials, list) and len(materials) == len(meshes), 'Room20 original material clipping omitted')
+        for j, item in enumerate(materials):
+            require(item.get('meshUuid') == meshes[j]['meshUuid'] and isinstance(item.get('materials'), list) and item['materials'] and
+                    all(m.get('planes') == [] for m in item['materials']), 'Room20 unsupported original material clipping')
+        require(row['materialProvenance'].get('pass') is True and isinstance(row['readPurity'], dict) and
+            set(row['readPurity']) == {'physicalStateUnchanged', 'lensAndLocalAppearancePoseUnchanged',
+                                      'preparedMatricesUnchanged', 'noForcedMatrixSkeletonRenderOrPhysicsUpdates'} and
+            all(value is True for value in row['readPurity'].values()),
+            'Room20 geometry read purity changed')
+    last = records[-1];require(observation['finalClock'] == {'visualFrame': frames-1, 'worldStep': last['worldStep'],
+        'worldStepOffset': offset, 'routePhysicsSteps': last['routePhysicsSteps'], 'routeSeconds': last['routeSeconds'], 'state': last['state']},
+        'Room20 final clock is not the exact six-key last encoded capture')
+    require(last['routePhysicsSteps'] == steps and last['state'] == 'won', 'Room20 terminal camera clock differs from victory')
+    return source_identity
+
+
+def check_foundation20_camera(binding, proof, report, receipt, expected):
+    source_root = ordinary_directory(proof / 'review-artifacts/native-foundation20')
+    exact_identity(report, {key: expected[key] for key in ('sourceCommit', 'sourceReview')}, 'Room20 source camera report')
+    require(receipt == binding['foundation20']['receipt'] and receipt.get('reportSha256') == sha256_file(source_root / 'foundation20-native-report.json'),
+            'Room20 source camera receipt/report bytes differ from binding')
+    descriptor = foundation20_camera_descriptor(report.get('cameraDiagnostic'), report.get('video', {}).get('frames'))
+    require(receipt.get('cameraDiagnostic') == descriptor and binding['foundation20']['receipt'].get('cameraDiagnostic') == descriptor,
+            'Room20 camera report/receipt/package descriptor differs')
+    raw = ordinary_file(unique_suffix(source_root, binding['artifacts']['nativeFoundation20']['files'], FOUNDATION20_CAMERA_FILE, 'Room20 camera'))
+    require(raw == source_root / FOUNDATION20_CAMERA_FILE and raw.stat().st_size == descriptor['bytes'] and
+            sha256_file(raw) == descriptor['sha256'], 'Room20 mandatory source camera bytes/hash changed')
+    raw_row = next(row for row in binding['artifacts']['nativeFoundation20']['files'] if row['path'] == FOUNDATION20_CAMERA_FILE)
+    require(raw_row == {'path': FOUNDATION20_CAMERA_FILE, 'bytes': descriptor['bytes'], 'sha256': descriptor['sha256']},
+            'Room20 source raw descriptor differs from artifact inventory')
+    observation = read_json(raw)
+    source = read_json(unique_suffix(proof / 'review-artifacts/source', binding['artifacts']['source']['files'], 'source.json', 'Room20 source'))
+    package = read_json(unique_suffix(proof / 'review-artifacts/source', binding['artifacts']['source']['files'], 'package.json', 'Room20 package'))
+    for suffix in ('source.json', 'package.json'):
+        filename = ordinary_file(unique_suffix(proof / 'review-artifacts/source', binding['artifacts']['source']['files'], suffix, 'Room20 source'))
+        relative = filename.relative_to(proof / 'review-artifacts/source').as_posix()
+        inventory_row = next(row for row in binding['artifacts']['source']['files'] if row['path'] == relative)
+        require(inventory_row == {'path': relative, 'bytes': filename.stat().st_size, 'sha256': sha256_file(filename)},
+                'Room20 external camera source/package inventory bytes changed')
+    for name, value in [('source', source), ('package', package)]:
+        exact_identity(value, {key: expected[key] for key in ('sourceCommit', 'sourceReview')}, 'Room20 camera ' + name)
+    pins = foundation20_camera_pins(observation.get('sourceIdentity'), binding, source, package, expected)
+    foundation20_camera_packet_summary(descriptor, observation, report, source_root / 'foundation20-telemetry.jsonl', pins)
+    return pins
+
+
+def check_foundation20_evidence(binding, proof, report, receipt, expected):
+    source_expected = {key: expected[key] for key in ('sourceCommit', 'sourceReview')}
+    exact_identity(report, source_expected, 'Room20 ordinary native report')
+    require(report.get('pass') is True and report.get('errors') == [], 'Room20 native report did not pass')
+    route = report.get('route')
+    require(isinstance(route, dict) and route.get('kind') == 'ordinary-foundation20-physical-route' and
+            route.get('edition') == 'foundation' and type(route.get('level')) is int and route['level'] == 20 and
+            route.get('id') == 'foundation-portal-tension' and route.get('pass') is True and
+            route.get('sameCompanion') is True and route.get('cargoMass') == 3.2,
+            'Room20 proof is not the actual ordinary Foundation physical room')
+    for key in ('resets', 'respawns', 'cargoResets'):
+        require(type(route.get(key)) is int and route[key] == 0, 'Room20 ordinary route includes resets/respawns')
+    require(receipt.get('pass') is True and receipt.get('edition') == 'foundation' and receipt.get('level') == 20 and
+            type(receipt['level']) is int and receipt.get('roomId') == route['id'] and receipt.get('sameCargo') is True and
+            receipt.get('cargoBodyId') == route.get('cargoBodyId') and receipt.get('resets') == 0,
+            'Room20 bound receipt is not the actual Foundation original cargo route')
+    require(receipt == binding['foundation20']['receipt'] and report.get('saveIsolation') == binding['foundation20']['saveIsolation'],
+            'Room20 native report/receipt differs from package binding')
+    require(receipt.get('previewSaveIsolation') == {'pass': True, 'namespace': FOUNDATION20_STORAGE_PREFIX,
+                                                 'oldBytesUnchanged': True, 'phases': 8, 'replayLevel': 20,
+                                                 'crossEntry': {'pass': True, 'level': 41, 'entry': 'tower41-native-v3',
+                                                                'own20BytesUnchanged': True, 'peerBytesUnchanged': True, 'reloadVerified': True}},
+            'Room20 native save summary changed')
+    assert_foundation20_save_isolation(report['saveIsolation'])
+    supplemental = foundation20_supplemental_structure(binding, expected)
+    source_root = ordinary_directory(proof / 'review-artifacts/native-foundation20')
+    for copied in supplemental['reviewedFiles']:
+        source = ordinary_file(source_root / copied['sourcePath'])
+        require(source.stat().st_size == copied['bytes'] and sha256_file(source) == copied['sha256'],
+                'Room20 source movie/report bytes changed')
+    report_file = ordinary_file(source_root / 'foundation20-native-report.json')
+    require(receipt.get('reportSha256') == sha256_file(report_file), 'Room20 binding changed actual report bytes')
+    require(receipt.get('buildInfoSha256') == binding.get('buildInfoSha256') and
+            receipt.get('packageFilesSha256') == binding.get('packageFilesSha256'), 'Room20 source package/build binding changed')
+    report_video = report.get('video')
+    recording = supplemental['recording']
+    require(isinstance(report_video, dict) and report_video.get('filename') == 'foundation20-physical.mp4' and
+            report_video.get('fullMP4Decode') is True and report_video.get('last', {}).get('state') == 'won',
+            'Room20 complete decoded ordinary movie missing')
+    for name in ('bytes', 'sha256', 'frames', 'fps', 'width', 'height', 'durationSeconds', 'simulationSeconds'):
+        require(report_video.get(name) == recording[name] and type(report_video[name]) is type(recording[name]),
+                'Room20 supplemental movie relabels actual native metadata: ' + name)
+    require(receipt.get('video') == {'file': report_video['filename'], 'bytes': report_video['bytes'],
+                                  'sha256': report_video['sha256'], 'fullMP4Decode': True}, 'Room20 retained movie decode binding changed')
+    telemetry = report.get('telemetry')
+    require(isinstance(telemetry, dict) and telemetry.get('filename') == 'foundation20-telemetry.jsonl',
+            'Room20 complete telemetry descriptor missing')
+    telemetry_file = ordinary_file(source_root / telemetry['filename'])
+    require(type(telemetry.get('bytes')) is int and telemetry['bytes'] == telemetry_file.stat().st_size and
+            telemetry.get('sha256') == sha256_file(telemetry_file) and
+            all(receipt.get('telemetry', {}).get(key) == value for key, value in
+                {'file': telemetry['filename'], 'bytes': telemetry['bytes'], 'sha256': telemetry['sha256']}.items()),
+            'Room20 complete telemetry bytes/hash changed')
+    pixel = report_video.get('pixelCheck')
+    require(isinstance(pixel, dict) and pixel.get('logFilename') == 'foundation20-native-pixels.log',
+            'Room20 actual per-frame decoded pixel log descriptor missing')
+    pixel_file = ordinary_file(source_root / pixel['logFilename'])
+    require(type(pixel.get('logBytes')) is int and pixel['logBytes'] == pixel_file.stat().st_size and
+            pixel.get('logSha256') == sha256_file(pixel_file), 'Room20 actual pixel log bytes/hash changed')
+    minima = [int(value) for value in re.findall(r'lavfi\.signalstats\.YMIN=(\d+)', pixel_file.read_text())]
+    maxima = [int(value) for value in re.findall(r'lavfi\.signalstats\.YMAX=(\d+)', pixel_file.read_text())]
+    require(len(minima) == report_video['frames'] and len(maxima) == report_video['frames'],
+            'Room20 actual pixel log lacks a sample for every encoded frame')
+    ranges = [high - low for low, high in zip(minima, maxima)]
+    require(all(value > 12 for value in ranges) and min(ranges) == pixel.get('minimumLuminanceRange') and
+            receipt.get('pixelLog') == {'file': pixel['logFilename'], 'bytes': pixel['logBytes'], 'sha256': pixel['logSha256'],
+                                        'frames': report_video['frames'], 'allNonblank': True, 'minimumLuminanceRange': min(ranges)},
+            'Room20 complete decoded pixel witness changed')
+    require(receipt.get('servedPackageSha256') == sha256_file(source_root / 'served-package.json') and
+            receipt.get('peerServedPackageSha256') == sha256_file(source_root / 'peer-served-package.json'),
+            'Room20 source/peer served package receipts changed')
+    check_foundation20_camera(binding, proof, report, receipt, expected)
+    return supplemental
+
+
 def check_binding(binding, proof, candidate, expected):
     binding_structure(binding, expected)
     artifacts = binding.get('artifacts')
-    require(isinstance(artifacts, dict) and set(artifacts) == set(ARTIFACT_NAMES), 'Exactly six exact-review artifacts are required')
+    require(isinstance(artifacts, dict) and set(artifacts) == set(ARTIFACT_NAMES), 'Exactly seven exact-review artifacts are required')
     ids, inventory_hashes = set(), {}
     for key, suffix in ARTIFACT_NAMES.items():
         artifact = artifacts[key]
@@ -987,7 +1521,7 @@ def check_binding(binding, proof, candidate, expected):
                 'Persisted artifact bytes differ from binding: ' + key)
         inventory_hashes[key] = inventory_sha256(artifact_rows)
     jobs = binding.get('jobs')
-    require(isinstance(jobs, list) and len(jobs) == len(JOB_NAMES), 'Exactly five successful review jobs required')
+    require(isinstance(jobs, list) and len(jobs) == len(JOB_NAMES), 'Exactly six successful review jobs required')
     names, job_ids, log_paths = set(), set(), set()
     for job in jobs:
         require(isinstance(job, dict) and job.get('name') in JOB_NAMES and job.get('name') not in names and
@@ -1010,7 +1544,8 @@ def check_binding(binding, proof, candidate, expected):
     require(names == set(JOB_NAMES), 'Exact required job set mismatch')
     source_expected = {key: expected[key] for key in ('sourceCommit', 'sourceReview')}
     evidence_paths = {'source': ('source.json', 'package.json'), 'cpu': ('report.json',),
-                      'nativeContact': ('binding.json',), 'nativeCastle': ('binding.json', 'evidence.json', 'served-package.json'),
+                      'nativeContact': ('binding.json',), 'nativeCastle': ('binding.json', 'evidence.json', 'served-package.json', 'peer-served-package.json'),
+                      'nativeFoundation20': ('binding.json', 'foundation20-native-report.json', 'served-package.json', 'peer-served-package.json'),
                       'summary': ('jobs.json',)}
     receipts = {}
     for key, suffixes in evidence_paths.items():
@@ -1030,19 +1565,34 @@ def check_binding(binding, proof, candidate, expected):
             castle.get('sameCargo') is True and type(castle.get('resets')) is int and castle['resets'] == 0,
             'Ordinary eleven-mechanism castle proof missing')
     castle_evidence = receipts['nativeCastle/evidence.json']
+    camera = castle_evidence.get('cameraObservation')
+    require(isinstance(camera, dict) and camera.get('file') == 'camera-observation.json' and
+            binding.get('cameraObservation') == camera and castle.get('cameraObservation') == camera,
+            'Castle live-camera descriptor differs from the frozen native evidence')
+    integer(camera.get('bytes'), 'Castle live-camera bytes', 1, MAX_VERIFICATION_METADATA_BYTES)
+    digest(camera.get('sha256'), 'Castle live-camera hash')
+    camera_file = ordinary_file(proof / 'review-artifacts/native-castle' / camera['file'])
+    require(camera_file.stat().st_size == camera['bytes'] and sha256_file(camera_file) == camera['sha256'],
+            'Castle complete live-camera observation bytes/hash changed')
     pendulum = pendulum_event(castle_evidence)
     require(castle.get('pendulum') == pendulum and binding.get('pendulum') == pendulum, 'Pendulum binding differs from the exact physical witness')
     served = receipts['nativeCastle/served-package.json']
     require(served.get('pass') is True and served.get('files') == artifacts['build']['files'],
             'Native castle served package differs from the complete exact reviewed build')
+    require(receipts['nativeCastle/peer-served-package.json'].get('pass') is True and
+            receipts['nativeCastle/peer-served-package.json'].get('files') == artifacts['build']['files'],
+            'Native castle peer entry differs from the complete exact reviewed build')
     require(castle_evidence.get('previewSaveIsolation') == binding['previewSaveIsolation'], 'Save proof differs from exact reviewed native evidence')
     evidence_path = unique_suffix(proof / 'review-artifacts/native-castle', artifacts['nativeCastle']['files'], 'evidence.json', 'Castle')
     require(castle.get('evidenceSha256') == sha256_file(evidence_path), 'Castle binding differs from native evidence bytes')
     require(castle.get('previewSaveIsolation') == {'pass': True, 'namespace': STORAGE_PREFIX, 'oldBytesUnchanged': True,
-                                                  'phases': 8, 'replayLevel': 41}, 'Castle save summary differs from reviewed proof')
+                                                  'phases': 8, 'replayLevel': 41,
+                                                  'crossEntry': {'pass': True, 'level': 20, 'entry': 'foundation20-physical-v1',
+                                                                 'own41BytesUnchanged': True, 'peerBytesUnchanged': True, 'reloadVerified': True}},
+            'Castle save summary differs from reviewed proof')
     summary = receipts['summary/jobs.json']
     require(summary.get('allRequiredJobsPassed') is True and summary.get('jobs') ==
-            {name: 'success' for name in JOB_NAMES if name != 'review-summary'}, 'Summary did not accept exact four upstream jobs')
+            {name: 'success' for name in JOB_NAMES if name != 'review-summary'}, 'Summary did not accept exact five upstream jobs')
     info = read_json(candidate / 'build-info.json')
     require(info.get('commit') == expected['sourceCommit'] and info.get('publisherCommit', 'missing') is None,
             'Reviewed build source/publisher stamp changed')
@@ -1059,6 +1609,19 @@ def check_binding(binding, proof, candidate, expected):
     require(castle.get('buildInfoSha256') == sha256_file(candidate / 'build-info.json') and
             receipts['source/package.json'].get('buildInfoSha256') == castle['buildInfoSha256'], 'Reviewed build metadata differs between jobs')
     check_supplemental_evidence(binding, proof, castle_evidence, castle, expected)
+    foundation20_receipt = receipts['nativeFoundation20/binding.json']
+    foundation20_report = receipts['nativeFoundation20/foundation20-native-report.json']
+    served20 = receipts['nativeFoundation20/served-package.json']
+    require(served20.get('pass') is True and served20.get('files') == artifacts['build']['files'],
+            'Room20 served package differs from the one entire exact reviewed build')
+    require(receipts['nativeFoundation20/peer-served-package.json'].get('pass') is True and
+            receipts['nativeFoundation20/peer-served-package.json'].get('files') == artifacts['build']['files'],
+            'Room20 cross-entry visit must serve the one entire exact reviewed peer build')
+    check_foundation20_evidence(binding, proof, foundation20_report, foundation20_receipt, expected)
+    declared_entries = [{'path': entry['namespace'], 'level': entry['level'], 'levels': [entry['level']],
+                         'savePrefix': entry['storagePrefix'], 'ordinaryControls': True} for entry in ENTRIES]
+    require(info.get('features', {}).get('standaloneEntries') == declared_entries,
+            'Source build metadata must declare exactly both actual new native entries')
     require((candidate / 'index.html').is_file(), 'Reviewed package has no index.html')
     require(not (candidate / 'preview-status.json').exists(), 'Candidate collides with generated preview status')
     require(set(artifacts['build']['files'][0]) == {'path', 'bytes', 'sha256'}, 'Invalid candidate inventory')
@@ -1074,7 +1637,7 @@ def status_record(expected, binding):
             'humanPlaytestAccepted': False, 'physicalDeviceAccepted': False, 'fullCameraAccepted': False,
             'nativeEscapeAccepted': False, 'firstVisitSettingsMigrationAccepted': False,
             'classicSaveIsolationObserved': False,
-            'saveIsolationScope': 'Seven snapshotted existing save namespaces remained byte-identical through eight observed load, settings, play, pause, resume, win, replay and reload phases. The preview preference key was seeded before loading.',
+            'saveIsolationScope': 'Nine snapshotted save namespaces, including the other new entry, remained byte-identical through eight observed load, settings, play, pause, resume, win, replay and reload phases. The own preference key was seeded before loading.',
             'pauseScope': 'Observed native pause/resume controls; pointer-lock exit fallback may initiate auto-pause.',
             'sourcePackageFilesSha256': inventory_sha256(binding['artifacts']['build']['files']),
             'walkthroughs': 'walkthroughs.html',
@@ -1145,8 +1708,40 @@ def generated_content(expected, binding):
             SUPPLEMENTAL_IDENTITY: json_bytes(walkthrough_identity(expected, binding))}
 
 
+def foundation20_generated_content(expected, binding):
+    recording = binding['foundation20']['supplemental']['recording']
+    report_row = next(row for row in binding['foundation20']['supplemental']['reviewedFiles'] if row['path'] == FOUNDATION20_REPORT)
+    identity_record = {'schemaVersion': 1, **expected, 'level': 20, 'edition': 'foundation',
+                       'recording': recording, 'report': {'filename': FOUNDATION20_REPORT, 'bytes': report_row['bytes'],
+                                                         'sha256': report_row['sha256']},
+                       'copiedFromExactReviewedArtifact': True, 'automaticContinuousRoute': True,
+                       'humanPlaytestAccepted': False, 'physicalDeviceAccepted': False,
+                       'replacement500StageTowerAccepted': False}
+    status = {'schemaVersion': 1, **expected, 'path': FOUNDATION20_PREFIX, 'levels': [20],
+              'storagePrefix': FOUNDATION20_STORAGE_PREFIX, 'ordinaryControls': True,
+              'technicalAcceptance': True, 'saveIsolationAccepted': True, 'appendOnly': True,
+              'masterSpecComplete': False, 'humanPlaytestAccepted': False, 'physicalDeviceAccepted': False,
+              'sourcePackageFilesSha256': inventory_sha256(binding['artifacts']['build']['files']),
+              'currentWalkthrough': {**recording, 'identity': SUPPLEMENTAL_IDENTITY},
+              'scope': 'Ordinary Foundation20 near hook, unilateral cable, physical far contact and cargo return.'}
+    webpage = f'''<!doctype html><html lang="ru"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Комната 20 · Полное прохождение</title><style>body{{font-family:system-ui,sans-serif;background:#101625;color:#eef4ff;max-width:960px;margin:40px auto;padding:0 20px}}a{{color:#92cfff}}video{{width:100%;background:#080c15;border-radius:12px}}p{{line-height:1.6}}code{{overflow-wrap:anywhere}}</style>
+<main><a href="./">← Играть в комнату 20</a><h1>Комната 20 · Трос и два стопора</h1>
+<p>Полное автоматическое прохождение обычным управлением: ближний крюк, подвес друга, дальний стопор и возвращение к выходу.</p>
+<video controls preload="metadata" playsinline src="{FOUNDATION20_VIDEO}"></video><p><a href="{FOUNDATION20_VIDEO}">Скачать полное видео</a></p>
+<p>Видео длится {recording['durationSeconds']:.2f} с. Это техническая проверка прохождения; человеческая проверка исследования и физических устройств остаётся открытой.</p>
+<details><summary>Версия и проверка</summary><p>Исходный код: <code>{html.escape(expected['sourceCommit'])}</code><br>SHA-256 видео: <code>{recording['sha256']}</code></p></details></main></html>'''
+    return {'preview-status.json': json_bytes(status), 'walkthroughs.html': webpage.encode(),
+            SUPPLEMENTAL_IDENTITY: json_bytes(identity_record)}
+
+
+def generated_entry_content(expected, binding):
+    return {**{PREFIX + name: data for name, data in generated_content(expected, binding).items()},
+            **{FOUNDATION20_PREFIX + name: data for name, data in foundation20_generated_content(expected, binding).items()}}
+
+
 def content_inventory(content):
-    return sorted([{'path': PREFIX + name, 'bytes': len(data), 'sha256': hashlib.sha256(data).hexdigest()}
+    return sorted([{'path': name, 'bytes': len(data), 'sha256': hashlib.sha256(data).hexdigest()}
                    for name, data in content.items()], key=lambda row: row['path'])
 
 
@@ -1159,29 +1754,31 @@ def assemble(args):
     expected = identity(args)
     before = inventory(baseline_root)
     check_baseline(before)
-    require(not (baseline_root / PREFIX[:-1]).exists(), 'Native preview namespace already exists')
+    require(all(not (baseline_root / entry['namespace'][:-1]).exists() for entry in ENTRIES), 'Native preview namespace already exists')
     binding = read_json(binding_file)
     artifact_hashes = check_binding(binding, proof, candidate, expected)
     candidate_rows = inventory(candidate, MAX_CANDIDATE_BYTES)
     status = status_record(expected, binding)
-    content = generated_content(expected, binding)
+    content = generated_entry_content(expected, binding)
     generated = content_inventory(content)
     supplemental_copies = supplemental_copied_rows(binding)
-    added = sorted([{**row, 'path': PREFIX + row['path']} for row in candidate_rows] + generated + supplemental_copies,
+    added = sorted([{**row, 'path': entry['namespace'] + row['path']} for entry in ENTRIES for row in candidate_rows] + generated + supplemental_copies,
                    key=lambda row: row['path'])
     after_expected = sorted(before + added, key=lambda row: row['path'])
-    checked_rows(after_expected, 'Append-only union')
+    checked_rows(after_expected, 'Append-only union', MAX_BYTES)
     require(not (proof / 'manifest.json').exists() and not (proof / 'baseline-manifest.json').exists(), 'Publication manifest already exists')
     temporary = staging_directory(site)
     try:
         shutil.copytree(baseline_root, temporary, dirs_exist_ok=True)
-        shutil.copytree(candidate, temporary / PREFIX)
-        for copied in binding['supplemental']['reviewedFiles']:
-            source = ordinary_file(proof / 'review-artifacts/native-castle' / copied['sourcePath'])
-            with source.open('rb') as stream:
-                stream_to_file(stream, temporary / PREFIX / copied['path'], copied['bytes'])
+        for entry in ENTRIES:
+            shutil.copytree(candidate, temporary / entry['namespace'])
+        for entry, supplemental in [(ENTRIES[0], binding['foundation20']['supplemental']), (ENTRIES[1], binding['supplemental'])]:
+            for copied in supplemental['reviewedFiles']:
+                source = ordinary_file(proof / 'review-artifacts' / entry['artifactKind'] / copied['sourcePath'])
+                with source.open('rb') as stream:
+                    stream_to_file(stream, temporary / entry['namespace'] / copied['path'], copied['bytes'])
         for name, data in content.items():
-            destination = temporary / PREFIX / name
+            destination = temporary / name
             destination.parent.mkdir(parents=True, exist_ok=True)
             with destination.open('xb') as stream:
                 stream.write(data)
@@ -1190,9 +1787,12 @@ def assemble(args):
         require(inventory(baseline_root) == before and inventory(candidate, MAX_CANDIDATE_BYTES) == candidate_rows,
                 'An input changed during assembly')
         manifest = {**status, 'phase': 'published', 'preview': preview_scope(),
+                    'entries': list(ENTRIES), 'candidateCopies': len(ENTRIES),
                     'baselinePublisherCommit': BASELINE_PUBLISHER, 'baselineSourceCommit': BASELINE_SOURCE,
                     'baselineSourceReview': BASELINE_REVIEW, 'baselinePagesArtifact': BASELINE_ARTIFACT,
                     'acceptedProofArtifact': ACCEPTED_PROOF_ARTIFACT,
+                    'baselineFullPrivateArtifact': BASELINE_FULL_PRIVATE_ARTIFACT,
+                    'baselineFullPrivateArchiveBytesDownloaded': False, 'baselineFullPrivateNestedArchiveAudited': False,
                     'baselineFiles': before, 'baselineBytes': BASELINE_BYTES, 'baselineFilesSha256': BASELINE_INVENTORY_SHA256,
                     'candidateFiles': candidate_rows, 'candidateBytes': sum(row['bytes'] for row in candidate_rows),
                     'candidateFilesSha256': inventory_sha256(candidate_rows), 'addedFiles': added,
@@ -1200,6 +1800,7 @@ def assemble(args):
                     'supplementalCopiedFiles': supplemental_copies,
                     'supplementalCopiedBytes': sum(row['bytes'] for row in supplemental_copies),
                     'supplementalRecording': binding['supplemental']['recording'],
+                    'foundation20SupplementalRecording': binding['foundation20']['supplemental']['recording'],
                     'siteFiles': after, 'siteBytes': sum(row['bytes'] for row in after), 'siteFilesSha256': inventory_sha256(after),
                     'packageBindingSha256': sha256_file(binding_file), 'reviewArtifactFilesSha256': artifact_hashes,
                     'packageBinding': binding}
@@ -1224,6 +1825,12 @@ def check_manifest(manifest, phase, expected):
     binding = manifest.get('packageBinding')
     binding_structure(binding, expected)
     require_preview(manifest.get('preview'), 'Manifest')
+    require(manifest.get('entries') == list(ENTRIES) and type(manifest.get('candidateCopies')) is int and
+            manifest['candidateCopies'] == len(ENTRIES), 'Manifest current entry/package copies mismatch')
+    require(manifest.get('baselineFullPrivateArtifact') == BASELINE_FULL_PRIVATE_ARTIFACT and
+            manifest.get('baselineFullPrivateArchiveBytesDownloaded') is False and
+            manifest.get('baselineFullPrivateNestedArchiveAudited') is False,
+            'Manifest must preserve honest old full-private provider binding')
     for key, value in status_record(expected, binding).items():
         require(type(manifest.get(key)) is type(value) and manifest.get(key) == value, 'Manifest scope mismatch: ' + key)
     for key, value in {'baselinePublisherCommit': BASELINE_PUBLISHER, 'baselineSourceCommit': BASELINE_SOURCE,
@@ -1249,20 +1856,22 @@ def check_manifest(manifest, phase, expected):
             manifest.get('candidateFilesSha256') == inventory_sha256(candidate_rows), 'Candidate totals/hash mismatch')
     added_rows = manifest.get('addedFiles')
     added = checked_rows(added_rows, 'Manifest appended files')
-    require(all(name.startswith(PREFIX) for name in added), 'Appended file escaped native namespace')
+    require(all(any(name.startswith(entry['namespace']) for entry in ENTRIES) for name in added), 'Appended file escaped native namespace')
     baseline_map = checked_rows(baseline_rows, 'Manifest baseline')
     require(not (set(added) & set(baseline_map)), 'Appended namespace overwrites accepted files')
-    generated = content_inventory(generated_content(expected, binding))
+    generated = content_inventory(generated_entry_content(expected, binding))
     supplemental_copies = supplemental_copied_rows(binding)
-    expected_added = sorted([{**row, 'path': PREFIX + row['path']} for row in candidate_rows] + generated + supplemental_copies,
+    expected_added = sorted([{**row, 'path': entry['namespace'] + row['path']} for entry in ENTRIES for row in candidate_rows] + generated + supplemental_copies,
                            key=lambda row: row['path'])
     require(added_rows == expected_added and manifest.get('generatedFiles') == generated, 'Generated or reviewed appended bytes changed')
     require(manifest.get('supplementalCopiedFiles') == supplemental_copies and type(manifest.get('supplementalCopiedBytes')) is int and
             manifest['supplementalCopiedBytes'] == sum(row['bytes'] for row in supplemental_copies) and
             manifest.get('supplementalRecording') == binding['supplemental']['recording'], 'Supplemental movie/report inventory or identity changed')
+    require(manifest.get('foundation20SupplementalRecording') == binding['foundation20']['supplemental']['recording'],
+            'Room20 supplemental recording identity changed')
     require(type(manifest.get('addedBytes')) is int and manifest['addedBytes'] == sum(row['bytes'] for row in added_rows), 'Appended byte count mismatch')
     union = sorted(baseline_rows + added_rows, key=lambda row: row['path'])
-    checked_rows(union, 'Complete union')
+    checked_rows(union, 'Complete union', MAX_BYTES)
     public_rows = manifest.get('siteFiles')
     checked_rows(public_rows, 'Public phase inventory')
     require(public_rows == (baseline_rows if phase == 'preflight' else union), 'Public phase inventory differs from append-only union')
@@ -1335,7 +1944,7 @@ def verify(args):
         row_map = {row['path']: row for row in rows}
         endpoints = ['build-info.json', 'puzzle-progression-finale/build-info.json', 'puzzle-progression-finale/preview-status.json']
         if args.phase == 'published':
-            endpoints.extend([PREFIX + 'build-info.json', PREFIX + 'preview-status.json'])
+            endpoints.extend([entry['namespace'] + filename for entry in ENTRIES for filename in ('build-info.json', 'preview-status.json')])
         for path in endpoints:
             require(path in row_map, 'Missing identifying public file: ' + path)
             one(row_map[path])
@@ -1350,8 +1959,203 @@ def verify(args):
         write_new_json(output, report)
 
 
+def assert_public_castle_packet_report(public, expected):
+    """Recheck route and save semantics before a packet can declare pass."""
+    require(isinstance(public, dict) and public.get('sourceCommit') == expected['sourceCommit'] and
+            public.get('errors') == [], 'Public castle has stale source or runtime errors')
+    result, observed = public.get('result'), public.get('observed')
+    require(isinstance(result, dict) and isinstance(observed, dict) and result.get('pass') is True and
+            result.get('sameCompanion') is True, 'Public castle lacks the same original completed route')
+    for name in ('resets', 'respawns', 'cargoResets'):
+        require(type(result.get(name)) is int and result[name] == 0, 'Public castle reset counter changed: ' + name)
+    require(type(observed.get('seenResets')) is int and observed['seenResets'] == 0,
+            'Public castle observed a reset')
+    ids = ['freight', 'sluice', 'optics', 'hoist', 'archive', 'flywheel', 'magnet', 'migrant', 'pendulum', 'inertia', 'crown']
+    metrics = result.get('metrics')
+    require(isinstance(metrics, dict) and metrics.get('won') is True and metrics.get('checkpoints') is False and
+            type(metrics.get('completedStages')) is int and metrics['completedStages'] == len(ids) and
+            metrics.get('solvedIds') == ids, 'Public castle omitted or relabelled a completed mechanism')
+    events = observed.get('events')
+    require(isinstance(events, list) and len(events) == len(ids) and
+            all(isinstance(event, dict) for event in events) and [event.get('id') for event in events] == ids,
+            'Public castle requires every actual ordinary mechanism event in order')
+    integer(observed.get('bodyId'), 'Public castle original cargo body', 1)
+    frames = integer(result.get('frames'), 'Public castle visual frames', 1)
+    steps = integer(result.get('physicsSteps'), 'Public castle physics steps', 1)
+    require(steps in (frames * 2, frames * 2 - 1) and
+            positive_number(result.get('seconds'), 'Public castle seconds') == steps / 120,
+            'Public castle actual 120Hz clock changed')
+    isolation = assert_preview_save_isolation(public.get('previewSaveIsolation'))
+    require(isolation['bareEntry'].get('url') == 'https://amazin20.github.io/brainrot-portal/tower41-native-v3/' and
+            isolation['crossEntry'].get('sourceCommit') == expected['sourceCommit'],
+            'Public castle must observe both actual public bare entries from the same source')
+    video = public.get('video')
+    require(isinstance(video, dict), 'Public castle complete movie metadata missing')
+    count = integer(video.get('frames'), 'Public castle encoded frames', 1)
+    for name, value in (('fps', 4), ('stride', 15), ('width', 640), ('height', 360)):
+        require(type(video.get(name)) is int and video[name] == value, 'Public castle capture format changed: ' + name)
+    terminal = (frames - 1) % video['stride'] != 0
+    require(video.get('terminalSample') is terminal and type(video.get('lastVisualFrame')) is int and
+            video['lastVisualFrame'] == frames - 1 and
+            count == (frames - 1) // video['stride'] + 1 + int(terminal),
+            'Public castle movie omitted or padded actual captures')
+    require(video.get('durationSeconds') == count / video['fps'] and
+            video.get('simulationSeconds') == result['seconds'] and
+            abs(video['durationSeconds'] - result['seconds']) <= 2 / video['fps'] + 1 / 120 + .01,
+            'Public castle movie was relabelled or stretched')
+    require(video.get('first', {}).get('state') == 'playing' and video['first'].get('solved') == [] and
+            video.get('last', {}).get('state') == 'won' and video['last'].get('solved') == ids,
+            'Public castle must record the real initial and final states')
+    return result, observed, video
+
+
+def assert_public_foundation20_packet_report(report, expected):
+    """Reject contradictory current20 route, timeline and capture declarations."""
+    exact_identity(report, {key: expected[key] for key in ('sourceCommit', 'sourceReview')}, 'Public room20 native report')
+    require(report.get('pass') is True and report.get('errors') == [], 'Public room20 report has runtime errors')
+    route, observed, video = report.get('route'), report.get('observed'), report.get('video')
+    require(isinstance(route, dict) and route.get('kind') == 'ordinary-foundation20-physical-route' and
+            route.get('edition') == 'foundation' and type(route.get('level')) is int and route['level'] == 20 and
+            route.get('id') == 'foundation-portal-tension' and route.get('pass') is True and
+            route.get('sameCompanion') is True and route.get('cargoMass') == 3.2,
+            'Public room20 is not the same original ordinary physical route')
+    for name in ('resets', 'respawns', 'cargoResets'):
+        require(type(route.get(name)) is int and route[name] == 0, 'Public room20 reset counter changed: ' + name)
+    frames = integer(route.get('frames'), 'Public room20 visual frames', 301)
+    steps = integer(route.get('physicsSteps'), 'Public room20 physics steps', 1)
+    require(steps in (2*frames, 2*frames-1) and positive_number(route.get('seconds'), 'Public room20 seconds') == steps/120,
+            'Public room20 actual route clock changed')
+    require(isinstance(observed, dict) and observed.get('samples') == frames and type(observed['samples']) is int and
+            observed.get('bodyId') == route.get('cargoBodyId') and
+            all(type(observed.get(name)) is int and observed[name] == steps for name in ('completedPostSteps', 'forceSamples')) and
+            type(observed.get('postStepsStart')) is int and type(observed.get('postStepsFinish')) is int and
+            observed['postStepsStart'] >= 0 and observed['postStepsFinish'] - observed['postStepsStart'] == steps,
+            'Public room20 omitted actual world steps or force observations')
+    body_id = integer(route.get('cargoBodyId'), 'Public room20 original cargo body', 0)
+    start, finish, milestones = route.get('start'), route.get('finish'), route.get('milestones')
+    require(isinstance(start, dict) and isinstance(finish, dict) and isinstance(milestones, list),
+            'Public room20 actual route timeline missing')
+    for point in [start] + milestones + [finish]:
+        require(isinstance(point, dict) and point.get('cargoBodyId') == body_id and type(point['cargoBodyId']) is int and
+                point.get('cargoMass') == 3.2 and point.get('cargoDynamic') is True and point.get('edition') == 'foundation' and
+                type(point.get('level')) is int and point['level'] == 20 and point.get('id') == route['id'],
+                'Public room20 timeline replaced the actor or room')
+        frame = integer(point.get('frame'), 'Public room20 timeline frame', 0, frames)
+        seconds = point.get('seconds');require(type(seconds) in (int, float) and math.isfinite(seconds) and seconds >= 0,
+                                             'Public room20 timeline time invalid')
+        count = round(seconds*120)
+        require(abs(count-seconds*120) < 1e-7 and count == (steps if frame == frames else frame*2) and
+                type(point.get('worldStep')) is int and point['worldStep'] == observed['postStepsStart']+count,
+                'Public room20 timeline contradicts its actual world clock')
+    names = ['same finite E slips while the near hook carries the closing spring',
+             'true current cable tension unloads the physically loaded near hook',
+             'same finite E withdraws the now unloaded near hook',
+             'actual cable force advances the same two-leaf gate train',
+             'far solid contact retains the gate train after actual cable force falls to zero',
+             'same original cargo recovered through the grounded side service opening',
+             'both travellers return through the physically retained linked door']
+    selected = []
+    for name in names:
+        matches = [point for point in milestones if point.get('name') == name]
+        require(len(matches) == 1, 'Public room20 requires exactly one causal milestone: ' + name)
+        selected.append(matches[0])
+    require(all(left['frame'] < right['frame'] for left, right in zip(selected, selected[1:])),
+            'Public room20 causal timeline was reordered')
+    require(start.get('state') == 'playing' and start['frame'] == 0 and start['seconds'] == 0 and
+            finish.get('state') == 'won' and finish.get('held') is True and finish['frame'] == frames and
+            finish['seconds'] == route['seconds'] and selected[-1].get('state') == 'won',
+            'Public room20 omitted actual initial or final cargo return')
+    require(isinstance(video, dict) and video.get('filename') == 'foundation20-physical.mp4' and
+            video.get('fullMP4Decode') is True, 'Public room20 lacks the decoded ordinary movie')
+    count = integer(video.get('frames'), 'Public room20 encoded frames', 1)
+    for name, value in (('fps', 4), ('stride', 15), ('width', 640), ('height', 360)):
+        require(type(video.get(name)) is int and video[name] == value, 'Public room20 capture format changed: ' + name)
+    terminal = (frames-1) % video['stride'] != 0
+    require(video.get('terminalSample') is terminal and type(video.get('lastVisualFrame')) is int and
+            video['lastVisualFrame'] == frames-1 and count == (frames-1)//video['stride']+1+int(terminal) and
+            video.get('durationSeconds') == count/video['fps'] and video.get('simulationSeconds') == route['seconds'] and
+            abs(video['durationSeconds']-route['seconds']) <= 2/video['fps']+1/120+.01,
+            'Public room20 movie clocks were relabelled or padded')
+    for point in (video.get('first'), video.get('last')):
+        require(isinstance(point, dict) and type(point.get('cargoBodyId')) is int and point['cargoBodyId'] == body_id and
+                point.get('cargoMass') == 3.2 and point.get('cargoDynamic') is True and point.get('edition') == 'foundation' and
+                type(point.get('level')) is int and point['level'] == 20 and point.get('id') == route['id'],
+                'Public room20 encoded first/last actor was replaced')
+    require(video['first'].get('state') == 'playing' and video['first'].get('visualFrame') == 0 and
+            video['last'].get('state') == 'won' and video['last'].get('visualFrame') == frames-1 and
+            video['last'].get('seconds') == route['seconds'], 'Public room20 encoded endpoints contradict the route')
+    assert_foundation20_save_isolation(report.get('saveIsolation'))
+    require(report['saveIsolation']['bareEntry']['url'] == 'https://amazin20.github.io/brainrot-portal/foundation20-physical-v1/',
+            'Public room20 omitted its actual bare public entry')
+    return video
+
+
+def assert_public_camera_packet_summary(camera, observation, result, observed, video, expected):
+    """Bind the scoped summary to retained optical rows; the Node gate verifies all geometry."""
+    fields = {'file', 'bytes', 'sha256', 'pass', 'sampleRateHz', 'encodedSamples', 'verticesPerSample', 'bones',
+              'measuredVertexSamples', 'maxFov', 'allEncodedOriginalSkinSamplesInside', 'originalCargoBodyId',
+              'geometryBytesUnchanged', 'readOnlyPurity', 'ordinaryAimInputs', 'scope', 'allCameraAccepted'}
+    require(isinstance(camera, dict) and set(camera) == fields and camera.get('pass') is True and
+            camera.get('allCameraAccepted') is False, 'Public camera descriptor makes an unsupported acceptance claim')
+    require(isinstance(observation, dict) and observation.get('kind') == 'actual-complete-native-camera-observer' and
+            observation.get('runtimeObserved') is True and observation.get('accepted') is False and
+            observation.get('allCameraAccepted') is False and observation.get('fullRoomAccepted') is False and
+            observation.get('allEncodedSamplesInside') is True and
+            observation.get('encodedSamplesOutside') == [], 'Public camera raw observation contradicts its declared scope')
+    integrity, resets = observation.get('dataIntegrity'), observation.get('resetCounters')
+    require(isinstance(integrity, dict) and all(integrity.get(key) is True for key in
+                ('everyActualNativeCaptureBound', 'allActualFramesAndWorldStepsObserved', 'readPurityGuardsPassed')),
+            'Public camera capture/world-clock or read-only integrity contradicts its summary')
+    require(isinstance(resets, dict) and len(resets) == 5 and
+            all(type(value) is int and value == 0 for value in resets.values()), 'Public camera observed a reset')
+    identity = observation.get('sourceIdentity')
+    exact_identity(identity, {key: expected[key] for key in ('sourceCommit', 'sourceReview')}, 'Public camera source')
+    model = observation.get('identity')
+    require(isinstance(model, dict) and type(model.get('cargoBodyId')) is int and model['cargoBodyId'] == observed['bodyId'] and
+            type(model.get('vertices')) is int and model['vertices'] == 96753 and
+            type(model.get('bones')) is int and model['bones'] == 15, 'Public camera omitted the original actor')
+    digest(model.get('initialAppearanceSha256'), 'Public camera original appearance hash')
+    require(model.get('finalAppearanceSha256') == model['initialAppearanceSha256'], 'Public camera appearance changed')
+    route = observation.get('route')
+    require(isinstance(route, dict) and route.get('pass') is True and route.get('sameCompanion') is True and
+            all(route.get(key) == result[key] for key in ('frames', 'physicsSteps', 'seconds')) and
+            route.get('solvedIds') == result['metrics']['solvedIds'], 'Public camera observed a different route')
+    rows, bindings = observation.get('records'), observation.get('encodedBindings')
+    require(isinstance(rows, list) and isinstance(bindings, list) and len(rows) == len(bindings) == video['frames'],
+            'Public camera requires one optical row for every encoded frame')
+    max_fov = 0
+    for index, (sample, binding) in enumerate(zip(rows, bindings)):
+        terminal = video['terminalSample'] and index == len(rows) - 1
+        require(isinstance(sample, dict) and isinstance(binding, dict) and type(binding.get('encodedFrame')) is int and
+                binding['encodedFrame'] == index and binding.get('terminal') is terminal and
+                type(binding.get('visualFrame')) is int and
+                binding['visualFrame'] == (result['frames'] - 1 if terminal else index * video['stride']) and
+                sample.get('encodedBinding') == binding and type(sample.get('visualFrame')) is int and sample['visualFrame'] == binding['visualFrame'],
+                'Public camera capture row was omitted or relabelled')
+        projection = sample.get('bodyVertexProjection')
+        require(isinstance(projection, dict) and projection.get('insideLens') is True and
+                type(projection.get('vertices')) is int and projection['vertices'] == 96753 and
+                type(projection.get('bones')) is int and projection['bones'] == 15 and
+                all(type(projection.get(key)) is int and projection[key] == 0 for key in
+                    ('outsideLensCount', 'behindCount', 'nearCount')), 'Public camera skin is outside the lens')
+        lens = sample.get('camera')
+        require(isinstance(lens, dict), 'Public camera actual lens missing')
+        fov = positive_number(lens.get('fov'), 'Public camera FOV')
+        require(fov <= 120, 'Public camera exceeds its finite lens budget')
+        max_fov = max(max_fov, fov)
+    require(camera.get('sampleRateHz') == video['fps'] and type(camera.get('encodedSamples')) is int and
+            camera['encodedSamples'] == len(rows) and type(camera.get('verticesPerSample')) is int and
+            camera['verticesPerSample'] == 96753 and type(camera.get('bones')) is int and camera['bones'] == 15 and
+            type(camera.get('measuredVertexSamples')) is int and camera['measuredVertexSamples'] == len(rows) * 96753 and
+            camera.get('maxFov') == max_fov and type(camera.get('originalCargoBodyId')) is int and camera['originalCargoBodyId'] == observed['bodyId'] and
+            all(camera.get(key) is True for key in ('allEncodedOriginalSkinSamplesInside', 'geometryBytesUnchanged',
+                                                  'readOnlyPurity', 'ordinaryAimInputs')) and
+            isinstance(camera.get('scope'), str) and len(camera['scope']) > 0,
+            'Public camera scoped summary differs from its actual retained samples')
+
+
 def verification_bundle(args):
-    """Retain current acceptance metadata and one complete public movie without archives or production copies."""
+    """Retain current metadata and both complete public movies without images, archives or production copies."""
     expected = identity(args)
     proof, output = disjoint_roots(args.proof, args.output)
     proof = ordinary_directory(proof)
@@ -1365,9 +2169,17 @@ def verification_bundle(args):
             type(byte_receipt.get('bytes')) is int and byte_receipt['bytes'] == manifest['siteBytes'] and
             byte_receipt.get('siteFilesSha256') == manifest['siteFilesSha256'], 'Verification requires successful complete public bytes')
     public = read_json(proof / 'public-native/evidence.json')
-    require(public.get('sourceCommit') == expected['sourceCommit'] and public.get('result', {}).get('pass') is True,
-            'Verification requires current successful actual public evidence')
+    result, observed, video = assert_public_castle_packet_report(public, expected)
     pendulum_event(public)
+    camera = public.get('cameraObservation')
+    require(isinstance(camera, dict) and camera.get('file') == 'camera-observation.json',
+            'Verification requires the actual full public castle live-camera observation')
+    integer(camera.get('bytes'), 'Public camera bytes', 1, MAX_VERIFICATION_METADATA_BYTES)
+    public_camera = ordinary_file(proof / 'public-native' / camera['file'])
+    require(public_camera.stat().st_size == camera['bytes'] and
+            sha256_file(public_camera) == digest(camera.get('sha256'), 'Public camera hash'),
+            'Public camera observation bytes/hash changed')
+    assert_public_camera_packet_summary(camera, read_json(public_camera), result, observed, video, expected)
     video = public.get('video')
     require(isinstance(video, dict) and isinstance(video.get('filename'), str) and
             re.fullmatch(r'[A-Za-z0-9_-]+\.mp4', video['filename']), 'Verification needs an ordinary public MP4 basename')
@@ -1375,7 +2187,30 @@ def verification_bundle(args):
     movie = ordinary_file(proof / video_name)
     require(movie.stat().st_size > 0 and movie.stat().st_size <= MAX_VERIFICATION_BYTES and
             sha256_file(movie) == digest(video.get('sha256'), 'Verification public movie hash'), 'Verification public movie bytes changed')
-    selected, total = [], movie.stat().st_size
+    room20 = read_json(proof / 'public-foundation20/foundation20-native-report.json')
+    video20 = assert_public_foundation20_packet_report(room20, expected)
+    binding = read_json(proof / 'package-binding.json')
+    require(binding == manifest.get('packageBinding') and sha256_file(proof / 'package-binding.json') == manifest.get('packageBindingSha256'),
+            'Verification Room20 binding differs from the accepted package manifest')
+    source20_root = proof / 'review-artifacts/native-foundation20'
+    source20_report = read_json(source20_root / 'foundation20-native-report.json')
+    source20_receipt = read_json(source20_root / 'binding.json')
+    source20_identity = check_foundation20_camera(binding, proof, source20_report, source20_receipt, expected)
+    descriptor20 = foundation20_camera_descriptor(room20.get('cameraDiagnostic'), video20['frames'])
+    public20_camera = ordinary_file(proof / 'public-foundation20' / FOUNDATION20_CAMERA_FILE)
+    require(public20_camera.stat().st_size == descriptor20['bytes'] and sha256_file(public20_camera) == descriptor20['sha256'],
+            'Public room20 mandatory camera bytes/hash changed')
+    foundation20_camera_packet_summary(descriptor20, read_json(public20_camera), room20,
+        proof / 'public-foundation20/foundation20-telemetry.jsonl', source20_identity)
+    video20_name = 'public-foundation20/' + video20['filename']
+    movie20 = ordinary_file(proof / video20_name)
+    require(type(video20.get('bytes')) is int and video20['bytes'] == movie20.stat().st_size and
+            0 < movie20.stat().st_size <= MAX_VERIFICATION_BYTES and
+            sha256_file(movie20) == digest(video20.get('sha256'), 'Verification public20 movie hash'),
+            'Verification public20 movie bytes changed')
+    movies = [(movie20, video20_name), (movie, video_name)]
+    selected, total = [], sum(filename.stat().st_size for filename, _ in movies)
+    require(total <= MAX_VERIFICATION_BYTES, 'Both full public movies exceed the combined bounded packet budget')
     # Every retained path is checked even when its payload is not selected for transport.
     for filename in sorted(proof.rglob('*')):
         mode = filename.lstat().st_mode
@@ -1385,7 +2220,7 @@ def verification_bundle(args):
         name = safe_name(filename.relative_to(proof).as_posix())
         if name.startswith('downloads/') or name.startswith('review-artifacts/build/'):
             continue
-        if filename.suffix not in ('.json', '.log', '.txt', '.csv'):
+        if filename.suffix not in ('.json', '.log', '.txt', '.csv', '.jsonl'):
             continue
         size = integer(filename.stat().st_size, 'Verification metadata file size', maximum=MAX_VERIFICATION_METADATA_BYTES)
         total += size
@@ -1393,14 +2228,25 @@ def verification_bundle(args):
         selected.append((filename, name))
     require(any(name == 'manifest.json' for _, name in selected) and any(name == 'package-binding.json' for _, name in selected),
             'Verification packet lacks identity/packet metadata')
-    selected.append((movie, video_name))
+    require({'review-artifacts/native-foundation20/' + FOUNDATION20_CAMERA_FILE,
+             'public-foundation20/' + FOUNDATION20_CAMERA_FILE,
+             'review-artifacts/native-foundation20/foundation20-telemetry.jsonl',
+             'public-foundation20/foundation20-telemetry.jsonl'} <= {name for _, name in selected},
+            'Verification packet must retain both complete Room20 camera raws and JSONL streams')
+    selected.extend(movies)
     selected.sort(key=lambda pair: pair[1])
     rows = [{'path': name, 'bytes': filename.stat().st_size, 'sha256': sha256_file(filename)} for filename, name in selected]
     checked_rows(rows, 'Verification packet', MAX_VERIFICATION_BYTES)
-    record = {'schemaVersion': 1, 'kind': 'tower41-native-public-verification-packet', **expected,
+    record = {'schemaVersion': 1, 'kind': 'foundation20-and-tower41-native-public-verification-packet', **expected,
               'pass': True, 'files': rows, 'bytes': total, 'filesSha256': inventory_sha256(rows),
               'maximumBytes': MAX_VERIFICATION_BYTES, 'fullPrivateProofRequiredForFinalAcceptance': True,
+              'passScope': 'This bounded packet binds current public verification metadata, the completed public HTTP byte verification receipt and both complete public movies. It does not accept unread private archive payloads.',
+              'fullPrivateProofRequirementScope': 'Provider retention and digest binding of prior and current publication proof artifacts must be checked separately. Archive payload and nested-archive audits are not claimed by this packet.',
+              'fullPrivateArchiveBytesDownloaded': False, 'fullPrivateNestedArchiveAudited': False, 'privateArchiveAccepted': False,
+              'independentPublicUnionReconstructionRequiredForCheckpointAcceptance': True,
               'completePublicMovie': {'path': video_name, 'bytes': movie.stat().st_size, 'sha256': video['sha256']},
+              'completePublicMovies': [{'entry': 'foundation20', 'path': video20_name, 'bytes': movie20.stat().st_size, 'sha256': video20['sha256']},
+                                      {'entry': 'tower41', 'path': video_name, 'bytes': movie.stat().st_size, 'sha256': video['sha256']}],
               'imagesIncluded': False, 'productionIncluded': False, 'sourceCodeIncluded': False,
               'nestedArchivesIncluded': False}
     record_bytes = json_bytes(record)
