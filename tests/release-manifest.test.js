@@ -19,6 +19,8 @@ test('one source binds all 51 current definitions and all current replacements',
   assert.deepEqual(manifest.rooms.map(room=>room.level),Array.from({length:51},(_,i)=>i+1));
   assert.equal(manifest.rooms[16].id,'foundation-cable-supported-architecture');
   assert.equal(manifest.rooms[16].definitionRevision,'cable-supported-architecture-v1');
+  assert.equal(manifest.rooms[19].definitionRevision,'portal-tension-physical-v1');
+  assert.equal(manifest.rooms[40].definitionRevision,'lower-pendulum-physical-camera-v3');
   assert.equal(manifest.rooms[32].id,'siphon-observatory');assert.equal(manifest.rooms[50].id,'echo-horizon');
   assert.equal(manifest.features.tower.stages,11);assert.equal(manifest.verified,false);
   assert.equal(new Set(manifest.rooms.map(room=>room.stableId)).size,51);
@@ -46,7 +48,8 @@ test('writing metadata does not change the game-file digest or falsify acceptanc
   assert.deepEqual(after.acceptance,{humanPlaytest:false,physicalDeviceBenchmark:false,liveYandex:false});
   assert.equal(after.videoCatalogue.rooms[16].status,'needs-current-recording');
   assert.equal(after.videoCatalogue.rooms[16].gameplayCompatibility,null);
-  assert.ok(after.videoCatalogue.rooms.filter(room=>room.level!==17).every(room=>room.status==='retained-recording-needs-current-visual-review'));
+  for(const level of [17,20,41]){assert.equal(after.videoCatalogue.rooms[level-1].status,'needs-current-recording');assert.equal(after.videoCatalogue.rooms[level-1].gameplayCompatibility,null);}
+  assert.ok(after.videoCatalogue.rooms.filter(room=>![17,20,41].includes(room.level)).every(room=>room.status==='retained-recording-needs-current-visual-review'));
   assert.equal(after.features.replacedRooms.length,3);
  }finally{fs.rmSync(setup.directory,{recursive:true});}
 });

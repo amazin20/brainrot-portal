@@ -37,18 +37,18 @@ export function readTower41EntryFlags(query,{yandex=false}={}){
   puzzleProgression:!preview&&!yandex&&foundation.enabled&&params.get('pilot')==='progression'};
 }
 
-export function tower41PreviewStorage(storage){
+export function tower41PreviewStorage(storage,prefix=TOWER41_PREVIEW_STORAGE_PREFIX){
  if(!storage)return undefined;
- return {getItem:key=>storage.getItem(TOWER41_PREVIEW_STORAGE_PREFIX+key),
-  setItem:(key,value)=>storage.setItem(TOWER41_PREVIEW_STORAGE_PREFIX+key,value)};
+ return {getItem:key=>storage.getItem(prefix+key),
+  setItem:(key,value)=>storage.setItem(prefix+key,value)};
 }
 
 /** Only personal settings may seed a first visit; historical progress is never migrated. */
-export function createTower41PreviewPreferences(storage){
- const ownStorage=tower41PreviewStorage(storage);
+export function createTower41PreviewPreferences(storage,{prefix=TOWER41_PREVIEW_STORAGE_PREFIX,revision=PREVIEW_REVISION}={}){
+ const ownStorage=tower41PreviewStorage(storage,prefix);
  let existing=false,readSucceeded=false;
  try{existing=Boolean(ownStorage?.getItem(PREFERENCE_KEY)||ownStorage?.getItem(LEGACY_KEY));readSucceeded=true;}catch{}
- const preferences=new LabPreferences(ownStorage,{campaignRevision:PREVIEW_REVISION});
+ const preferences=new LabPreferences(ownStorage,{campaignRevision:revision});
  if(existing||!readSucceeded||preferences.readFailed)return preferences;
  try{
   const raw=storage?.getItem('brainrot-foundation-v1:'+PREFERENCE_KEY)||storage?.getItem('brainrot-foundation-v1:'+LEGACY_KEY);
