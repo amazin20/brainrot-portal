@@ -29,6 +29,7 @@ export function finishCampaignTheme(game,level,index,roots){
   const name=material.name||'';
   if(/portal|porcelain|signal|light|diffuser|lens|screen|glass|receiver|emitter|contact on actual/i.test(name))return null;
   if(/castle wing (enamel|structural accent)/i.test(name))return null; // Keep eleven navigational wing identities.
+  if(/castle recessed roof soffit/i.test(name))return 'dark';
   if(/structural laboratory wall|wall cassette|castle wing wall|roof soffit/i.test(name))return 'wall';
   if(/walking deck|cast-in floor/i.test(name))return 'floor';
   if(/service floor/i.test(name))return 'service';
@@ -41,6 +42,13 @@ export function finishCampaignTheme(game,level,index,roots){
  // hidden source tile's material colour. Finish that one existing skin too;
  // never add geometry or recolour a portal tile. Local +Z is the panel normal.
  for(const root of roots)root.updateWorldMatrix(true,true);
+ // The castle's original common gallery/stair material has no display name.
+ // Its authored floor finish identifies it without guessing from colour or
+ // recolouring the machine metals that share unnamed materials in this kit.
+ if(level.tower)for(const root of roots)root.traverse(node=>{
+  if(node.isMesh&&node.name==='Unioned floors / no coincident tops'&&node.material?.map?.name==='Castle floor / quiet mipmapped finish')
+   roles.set(node.material,'floor');
+ });
  const matrix=new THREE.Matrix4(),worldMatrix=new THREE.Matrix4(),normal=new THREE.Vector3(),color=new THREE.Color();
  for(const root of roots)root.traverse(node=>{
   if(!node.isMesh)return;

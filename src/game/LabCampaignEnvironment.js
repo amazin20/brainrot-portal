@@ -39,6 +39,34 @@ function protectedFrames(game,level){
  return frames;
 }
 
+function supportedFootprint(rect,boxes){
+ if(!boxes)return true;
+ // The mount is a few centimetres outside the finish. Project its complete
+ // field into the genuine slab; a doorway, glazed band or missing pier can
+ // never be mistaken for a continuous wall by its enclosing bounds.
+ return boxes.some(box=>[-1,1].every(x=>[-1,1].every(y=>box.containsPoint(rect.center.clone()
+  .addScaledVector(rect.right,x*rect.halfWidth).addScaledVector(rect.up,y*rect.halfHeight).addScaledVector(rect.normal,-.10)))));
+}
+
+function observedScreenFrames(level,kit,world){
+ const frames=[],spawn=Array.isArray(level.spawn)?V().fromArray(level.spawn):V().copy(level.spawn||{});
+ // These two fields were inspected from ordinary spawn views. Keep this
+ // selection narrow: an arbitrary machine housing or white portal sheet is
+ // not an architectural canvas, and moving gate leaves stay untouched.
+ if(level.id==='post-air-switch')for(const s of world?.surfaces||[]){
+  if(s.name!=='Sealed partition'||s.portal||s.collider?.kinematic||s.group?.parent!==world.root||s.width<9||s.height<7)continue;
+  const f=s.getFrame();if(f.normal.z<.99)continue;
+  frames.push({...f,span:s.width,height:s.height,fieldY:spawn.y+3.4,fieldX:spawn.dot(f.right),serviceField:true});
+ }
+ if(level.id==='puzzle-progression47-impact-archive')for(const c of kit?.envelopes||[]){
+  const box=c.box,size=box.getSize(V()),center=box.getCenter(V());
+  if(c.enabled===false||c.kinematic||c.mesh.name!=='Folded shell casing / collision'||size.x<9||size.y<7||size.z>.8||Math.abs(center.z+4)>.02)continue;
+  frames.push({center:V(center.x,center.y,box.max.z+.025),normal:Z.clone(),right:V(1,0,0),up:UP.clone(),
+   span:size.x,height:size.y,fieldY:spawn.y+3.4,fieldX:spawn.x,serviceField:true,supports:[box]});
+ }
+ return frames;
+}
+
 /** Ornament mounts come only from genuine fixed wall volumes. The entire
  * relief footprint is tested against portal and instrument apertures, not
  * just its centre. No floor, ramp, collider or portal registry is extended. */
@@ -47,11 +75,16 @@ export function campaignOrnamentSites(game,level,{limit=12}={}){
  if(kit?.roomEnvelope){
   const e=kit.roomEnvelope;frames.push(...wallFrames(e,e.base,e.roof,.77));
  }else if(level.tower&&level.rooms?.values){
-  // Castle ornaments sit below the genuine glazed viewing band. Each wing
-  // keeps its own colour and navigation while sharing the final architecture.
+  // Wing piers face the real atrium, where the player can see their finish.
+  // The earlier north-wall mounts were hidden behind the same wing's front
+  // wall. Reserve the whole low field below glazing and require solid support.
   for(const r of level.rooms.values()){
-   const {b,def}=r,y=def.at[1];
-   frames.push(wallFrames({minX:b.x0,maxX:b.x1,minZ:b.z0,maxZ:b.z1},y,y+6.6,.27)[0]);
+   const {b,def}=r,y=def.at[1],side=def.at[0]<0?1:-1,x=side>0?b.x1:b.x0,normal=V(side,0,0);
+   const supports=(game.colliders||[]).filter(c=>c.enabled!==false&&!c.kinematic&&
+    c.mesh.material?.name==='Castle wing wall / '+def.id&&Math.abs(c.box.getCenter(V()).x-x)<.01&&c.box.getSize(V()).x<.8).map(c=>c.box);
+   if(!supports.length)continue;
+   frames.push({center:V(x+side*.275,y+3.3,(b.z0+b.z1)/2),normal,right:V(0,0,-side),up:UP.clone(),
+    span:b.z1-b.z0,height:6.6,supports});
   }
  }else if(level.flightGeometry&&level.bounds&&kit?.ceiling&&world?.root?.getObjectByName('Solid hangar roof')){
   frames.push(...wallFrames(level.bounds,0,kit.ceiling,0));
@@ -60,15 +93,18 @@ export function campaignOrnamentSites(game,level,{limit=12}={}){
   const f=s.getFrame();if(Math.abs(f.normal.y)>.02)continue;
   frames.push({...f,span:s.width,height:s.height});
  }
+ frames.unshift(...observedScreenFrames(level,kit,world));
  const excluded=protectedFrames(game,level),walls=[];
  for(const wall of frames){
   const bayCount=Math.max(1,Math.ceil(wall.span/10)),bay=wall.span/bayCount;
-  const h=Math.min(3.8,wall.height*.30),w=Math.min(3.8,bay*.58);
+  const h=Math.min(3.8,wall.height*(level.tower?.60:.30)),w=Math.min(3.8,bay*.58);
   if(h<1.8||w<1.8)continue;
   // Bias the artwork to upper wall fields in laboratory rooms. Castle
   // reliefs use the closed 0–6.6 m wall band below fixed glazing instead.
-  const cy=level.tower?0:Math.min(wall.height*.20,wall.height/2-h/2-2);
-  const candidates=[],bays=Array.from({length:bayCount},(_,i)=>i).sort((a,b)=>Math.abs(a-(bayCount-1)/2)-Math.abs(b-(bayCount-1)/2));
+  const cy=Number.isFinite(wall.fieldY)?THREE.MathUtils.clamp(wall.fieldY-wall.center.y,-wall.height/2+h/2+.22,wall.height/2-h/2-.22):
+   level.tower?0:Math.min(wall.height*.20,wall.height/2-h/2-2);
+  const field=Number.isFinite(wall.fieldX)?(wall.fieldX-wall.center.dot(wall.right)+wall.span/2)/bay-.5:(bayCount-1)/2;
+  const candidates=[],bays=Array.from({length:bayCount},(_,i)=>i).sort((a,b)=>Math.abs(a-field)-Math.abs(b-field));
   for(const i of bays){
    const center=wall.center.clone().addScaledVector(wall.right,-wall.span/2+(i+.5)*bay).addScaledVector(wall.up,cy);
    const rect={...wall,center,halfWidth:w/2+.22,halfHeight:h/2+.22};
@@ -79,8 +115,8 @@ export function campaignOrnamentSites(game,level,{limit=12}={}){
     const projected={...p,center:p.center.clone().addScaledVector(wall.normal,-p.center.clone().sub(center).dot(wall.normal))};
     return architecturalRectOverlapsPortal(rect,projected,.45);
    });
-   if(covered)continue;
-   candidates.push({...rect,width:w,height:h,wallDepth:.77});
+   if(covered||!supportedFootprint(rect,wall.supports))continue;
+   candidates.push({...rect,width:w,height:h,wallDepth:.77,serviceField:wall.serviceField===true});
   }
   walls.push(candidates);
  }
@@ -164,11 +200,12 @@ function buildMotif(batch,site,id){
   const orbital=id==='observatory';
   a('ring','frame',[0,0,.048],[unit*.80,unit*.80,.50]);
   a('ring','paint',[0,0,.078],[unit*.52,unit*(orbital?.24:.52),.52],orbital?.42:0);
-  const n=orbital?7:4;
+  const n=orbital?(site.serviceField?5:7):4;
   for(let i=0;i<n;i++){
    const t=i/n*Math.PI*2;
    a('box','paint',[Math.sin(t)*unit*.88,Math.cos(t)*unit*.88,.04],[.07,unit*.17,.05],-t);
   }
+  if(orbital&&site.serviceField)for(const y of [-.96,.96])a('box','paint',[0,y*unit,.04],[unit*1.8,.055,.05]);
   if(!orbital)for(const side of [-1,1])rod(side*.95,0,1.28);
  }
 }
@@ -186,7 +223,7 @@ export function installCampaignEnvironment(game,level,theme){
  // Mounts are expressed in world coordinates, so a translated room root
  // must not apply its transform a second time to the finished batches.
  parent.updateWorldMatrix(true,false);root.matrix.copy(parent.matrixWorld).invert();root.matrixAutoUpdate=false;parent.add(root);
- const ornamentPaint=theme.id==='discovery'?0x8c6a48:theme.paint;
+ const ornamentPaint=theme.id==='discovery'?0x8c6a48:theme.id==='observatory'?0xa6b3cf:theme.paint;
  const materials={
   frame:new THREE.MeshStandardMaterial({name:'Chapter ornament / mineral recess',color:theme.dark,roughness:.82,metalness:.08}),
   paint:new THREE.MeshStandardMaterial({name:'Chapter ornament / chapter enamel',color:ornamentPaint,roughness:.64,metalness:theme.id==='dynamo'||theme.id==='castle'?.48:.12}),

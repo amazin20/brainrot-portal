@@ -53,6 +53,19 @@ test('Castle theme preserves independently colored wing navigation accents',()=>
  finishCampaignTheme(f.game,f.level,40,[f.root]);assert.equal(f.root.children.at(-1).material,wing);assert.equal(wing.color.getHex(),0x446677);
 });
 
+test('Castle common gallery floor and recessed soffit retain separate mineral values without recoloring unclassified machine metal',()=>{
+ const f=fixture();f.level.tower=true;
+ const floor=new THREE.MeshStandardMaterial({color:0xe5e0d3});floor.map=new THREE.Texture();floor.map.name='Castle floor / quiet mipmapped finish';
+ const deck=new THREE.Mesh(new THREE.BoxGeometry(8,.4,8),floor);deck.name='Unioned floors / no coincident tops';f.root.add(deck);
+ const metal=new THREE.MeshStandardMaterial({color:0xe5e0d3}),machine=new THREE.Mesh(new THREE.BoxGeometry(1,4,1),metal);f.root.add(machine);
+ const soffit=new THREE.MeshStandardMaterial({name:'Castle recessed roof soffit',color:0x415363}),roof=new THREE.Mesh(new THREE.BoxGeometry(10,.5,10),soffit);f.root.add(roof);
+ finishCampaignTheme(f.game,f.level,40,[f.root]);const theme=campaignTheme(40);
+ assert.equal(deck.material.color.getHex(),theme.floor);assert.notEqual(deck.material,floor);
+ assert.equal(roof.material.color.getHex(),theme.dark);assert.notEqual(roof.material,soffit);
+ assert.equal(machine.material,metal);assert.equal(metal.color.getHex(),0xe5e0d3);
+ assert.equal(floor.color.getHex(),0xe5e0d3);assert.equal(soffit.color.getHex(),0x415363);f.level.dispose();
+});
+
 test('Instanced architectural skin receives the same chapter palette without changing placement or portal instances',()=>{
  const f=fixture();const geo=new THREE.BoxGeometry(1,1,.08),mat=new THREE.MeshStandardMaterial({color:0xffffff});
  const skin=new THREE.InstancedMesh(geo,mat,4);skin.name='Architectural coat / cassette';

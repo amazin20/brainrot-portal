@@ -102,3 +102,50 @@ test('discovery calibrations use offset open arcs and copper rather than closed 
  const centerMesh=root.children.find(mesh=>/porcelain|ceramic|centre|center/i.test(mesh.name));assert.equal(centerMesh,undefined);
  f.level.dispose();
 });
+
+test('observed return-sluice wall fields receive eye-height relief while moving and portal surfaces remain excluded',()=>{
+ const f=fixture(),frame={center:V(-15.2,8,9.13),normal:V(0,0,1),right:V(1,0,0),up:V(0,1,0)};
+ f.level.id='post-air-switch';f.level.spawn=[-5,0,19];
+ const group=new THREE.Group();f.level.world.root.add(group);
+ const surface={name:'Sealed partition',group,width:25.6,height:16,portal:false,collider:{kinematic:false},getFrame:()=>frame};
+ f.level.world.surfaces=[surface,{...surface,collider:{kinematic:true},getFrame:()=>({...frame,center:V(-15.2,8,3)})},
+  {...surface,portal:true,getFrame:()=>({...frame,center:V(-15.2,8,-3)})}];
+ const sites=campaignOrnamentSites(f.game,f.level,{limit:8}),near=sites.filter(s=>Math.abs(s.center.z-9.13)<.001);
+ assert.ok(near.length>0);assert.ok(Math.abs(near[0].center.y-3.4)<1e-9);assert.ok(Math.abs(near[0].center.x+5)<3);
+ assert.ok(sites.every(s=>Math.abs(s.center.z-3)>.001&&Math.abs(s.center.z+3)>.001));
+ installCampaignEnvironment(f.game,f.level,CAMPAIGN_THEMES[3]);
+ assert.ok(f.level.campaignEnvironment.diagnostics.triangles<=10896);
+ assert.ok(f.level.campaignEnvironment.diagnostics.instances<=144);f.level.dispose();
+});
+
+test('observed archive screen relief needs its full footprint inside the authored fixed shell slab',()=>{
+ const f=fixture(),box=new THREE.Box3(V(-29,0,-4.33),V(-3.3,27,-3.67));
+ const mesh=new THREE.Mesh();mesh.name='Folded shell casing / collision';
+ f.level.id='puzzle-progression47-impact-archive';f.level.spawn=[-23,12,19];
+ f.level.workshop.envelopes=[{mesh,box,kinematic:false,enabled:true}];
+ const sites=campaignOrnamentSites(f.game,f.level,{limit:8}),near=sites.filter(s=>Math.abs(s.center.z+3.645)<.001);
+ assert.ok(near.length>0);assert.equal(near[0].center.y,15.4);
+ for(const site of near)for(const x of [-1,1])for(const y of [-1,1])assert.ok(box.containsPoint(site.center.clone()
+  .addScaledVector(site.right,x*site.halfWidth).addScaledVector(site.up,y*site.halfHeight).addScaledVector(site.normal,-.1)));
+ f.level.workshop.envelopes[0].kinematic=true;
+ assert.ok(campaignOrnamentSites(f.game,f.level,{limit:8}).every(s=>Math.abs(s.center.z+3.645)>.001));
+});
+
+test('castle lancets face the atrium on complete fixed piers and reserve actual portal openings',()=>{
+ const f=fixture();delete f.level.workshop;f.level.tower=true;
+ f.level.rooms=new Map([['wing',{b:{x0:-20,x1:-4,z0:-10,z1:10},def:{id:'wing',at:[-12,0,0]}}]]);
+ const material=new THREE.MeshStandardMaterial({name:'Castle wing wall / wing'});
+ for(const z of [-6,6]){
+  const mesh=new THREE.Mesh(new THREE.BoxGeometry(.5,6.8,8),material);mesh.position.set(-4,3.4,z);f.level.structure.add(mesh);
+  f.game.colliders.push({mesh,box:new THREE.Box3().setFromObject(mesh),kinematic:false,enabled:true});
+ }
+ const frame={center:V(-3.75,3.3,5),normal:V(1,0,0),right:V(0,0,-1),up:V(0,1,0),halfWidth:1.2,halfHeight:2};
+ f.level.panels.atrium={getFrame:()=>frame};
+ const sites=campaignOrnamentSites(f.game,f.level);
+ assert.equal(sites.length,1);assert.ok(sites[0].center.z<0);assert.equal(sites[0].normal.x,1);
+ assert.equal(sites[0].height,3.8);assert.equal(sites[0].center.y,3.3);
+ const projection={...frame,center:frame.center.clone().setX(sites[0].center.x)};
+ assert.equal(architecturalRectOverlapsPortal(sites[0],projection,.45),false);
+ f.game.colliders.filter(c=>c.mesh.material===material).forEach(c=>c.kinematic=true);
+ assert.equal(campaignOrnamentSites(f.game,f.level).length,0,'a moving or missing pier gained a floating ornament');
+});

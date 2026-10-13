@@ -119,7 +119,9 @@ export function buildPuzzleProgression48(g,index=47){
  // A visible descending window allows an observer to target the stop socket.
  const lower=k.loadPad('recovery-return',[-22,0,5],5);
  dressPuzzleProgression48(k,{entry,gallery,goal,arm,machine});
- const level=k.finishResearch([-18,8,20],[-2,4.6,-14.6],[0,8,1],{puzzleProgression:48,puzzleProgression48:true,machine,recover,socket,socketMouth,intake,reunion,goalEntry,lower,spawnView:{yaw:.05,pitch:.05},
+ // The departure porcelain sits at z22. Leave the ordinary rear camera boom
+ // inside the same entry court instead of spawning two metres from its face.
+ const level=k.finishResearch([-18,8,14],[-2,4.6,-14.6],[0,8,1],{puzzleProgression:48,puzzleProgression48:true,machine,recover,socket,socketMouth,intake,reunion,goalEntry,lower,spawnView:{yaw:.05,pitch:.05},
  cargoOnAnyPad:()=>recover.loaded()||socket.loaded()||cargoLoadsPlate(g.cargo,g.heldCube,{center:V(4.45,machine.trapBody.position.y+.2,-12.4),normal:V(0,Math.cos(-.08),Math.sin(-.08)),right:V(1,0,0),up:V(0,-Math.sin(-.08),Math.cos(-.08)),halfWidth:.65,halfHeight:1.5})||cargoLoadsPlate(g.cargo,g.heldCube,{center:V(20,8.7,-21.225),normal:V(0,1,0),right:V(1,0,0),up:V(0,0,-1),halfWidth:2,halfHeight:.78})||cargoLoadsPlate(g.cargo,g.heldCube,{center:V(20,8,-24),normal:V(0,1,0),right:V(1,0,0),up:V(0,0,-1),halfWidth:4,halfHeight:4})||cargoLoadsPlate(g.cargo,g.heldCube,{center:V(10.3,2.88,-14.6),normal:V(0,1,0),right:V(1,0,0),up:V(0,0,-1),halfWidth:1.1,halfHeight:1.5})||cargoLoadsPlate(g.cargo,g.heldCube,{center:V(5,4,-13.7),normal:V(0,1,0),right:V(1,0,0),up:V(0,0,-1),halfWidth:15,halfHeight:1.9}),
  });
  const dispose=level.dispose;level.dispose=()=>{machine.disposeBodies();dispose();};

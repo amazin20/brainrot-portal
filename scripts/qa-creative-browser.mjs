@@ -18,6 +18,99 @@ assert.ok(levels.every(n=>Number.isInteger(n)&&n>=1&&n<=51));
 const mode = process.env.CASE || 'overview';
 const strictCapture=process.env.STRICT_CAPTURE==='1';
 assert.ok(['overview','route','rush'].includes(mode));
+const inspectionQuality=mode==='overview'?(process.env.INSPECTION_QUALITY||'balanced'):'low';
+assert.ok(['low','balanced','high'].includes(inspectionQuality),'Invalid INSPECTION_QUALITY');
+
+// Serialized into the actual frozen runtime by Puppeteer. Only the camera is
+// changed: roofs, walls, actors, mechanisms and their visibility stay intact.
+function frameInteriorOverview(g) {
+  const level=g.firstLevel,kit=level.workshop,world=level.world||kit?.world;
+  const vector=(x=0,y=0,z=0)=>g.playerPosition.clone().set(x,y,z);
+  const floors=g.floors.filter(f=>f.enabled!==false&&Number.isFinite(f.y));
+  const largestFloor=floors.reduce((a,b)=>(b.maxX-b.minX)*(b.maxZ-b.minZ)>(a.maxX-a.minX)*(a.maxZ-a.minZ)?b:a);
+  const bounds=kit?.roomEnvelope||kit?.bounds||level.bounds||largestFloor;
+  const width=bounds.maxX-bounds.minX,depth=bounds.maxZ-bounds.minZ;
+  const roofSurfaces=(world?.surfaces||[]).filter(s=>s.normal.y<-.99&&s.width>=width*.9&&s.height>=depth*.9);
+  const roofSlabs=g.colliders.filter(c=>c.enabled!==false&&c.box.max.x-c.box.min.x>=width*.95&&c.box.max.z-c.box.min.z>=depth*.95&&c.box.max.y-c.box.min.y<3&&c.box.min.y>largestFloor.y+3);
+  const roof=Math.min(kit?.roomEnvelope?.roof??Infinity,kit?.ceiling??Infinity,
+    ...roofSurfaces.map(s=>s.collider.box.min.y),...roofSlabs.map(c=>c.box.min.y));
+  const base=kit?.roomEnvelope?.base??largestFloor.y;
+  if(!Number.isFinite(roof)||roof-base<4)throw Error('No genuine room roof/headroom for interior inspection');
+  const solids=g.colliders.filter(c=>c.enabled!==false&&!c.mesh.material?.transparent);
+  const ray=g.raycaster.ray.clone(),hit=vector();
+  const clear=(eye,point)=>{
+    const delta=point.clone().sub(eye),distance=delta.length();ray.set(eye,delta.normalize());
+    return !solids.some(c=>ray.intersectBox(c.box,hit)&&eye.distanceTo(hit)<distance-.12);
+  };
+  const targets=[],keys=new Set();
+  const add=(point,kind)=>{
+    if(point.x<bounds.minX+1||point.x>bounds.maxX-1||point.z<bounds.minZ+1||point.z>bounds.maxZ-1||point.y<base||point.y>roof-1)return;
+    const key=kind+'/'+point.toArray().map(n=>Math.round(n/2)).join('/');
+    if(!keys.has(key)){keys.add(key);targets.push({point,kind});}
+  };
+  for(const f of floors)if(f.y>=base-.1&&(f.maxX-f.minX)*(f.maxZ-f.minZ)>=12){
+    // Continuous recovery floors also run under closed partitions. A grid
+    // finds their genuinely visible aisles instead of assuming four corners
+    // and a centre are exposed. Raised decks keep five bounded samples each.
+    const samples=f===largestFloor?[.15,.325,.5,.675,.85].flatMap(u=>[.15,.325,.5,.675,.85].map(v=>[u,v])):[[.5,.5],[.2,.2],[.8,.2],[.2,.8],[.8,.8]];
+    for(const [u,v]of samples)add(vector(f.minX+(f.maxX-f.minX)*u,f.y+.16,f.minZ+(f.maxZ-f.minZ)*v),'floor');
+  }
+  for(const panel of g.portalPanels){
+    const f=panel.userData.portalFrame?.()||{center:panel.userData.center,normal:panel.userData.normal};
+    if(f.center&&f.normal)add(f.center.clone().addScaledVector(f.normal,.16),'portal');
+  }
+  if(targets.length<4)throw Error('Insufficient genuine playable inspection targets');
+  const focus=targets.reduce((sum,t)=>sum.add(t.point),vector()).multiplyScalar(1/targets.length);
+  const eyes=[];
+  // The castle has opaque roofs on individual wings too. Inspect its occupied
+  // atrium between storeys rather than photographing those wing roofs from 98m.
+  if(level.tower){
+    const galleries=floors.filter(f=>f.minX>=-10&&f.maxX<=18&&f.y>=0&&f.maxZ-f.minZ>30);
+    const heights=[...new Set(galleries.map(f=>f.y+8))];
+    for(const y of heights)for(const x of [5,9])for(const z of [-45,25])eyes.push(vector(x,y,z));
+  }else for(const y of [roof-2.5,base+(roof-base)*.65,base+(roof-base)*.4]){
+    for(const [u,v]of [[.12,.12],[.88,.12],[.12,.88],[.88,.88],[.5,.12],[.5,.88],[.12,.5],[.88,.5]])eyes.push(vector(bounds.minX+width*u,y,bounds.minZ+depth*v));
+  }
+  g.scene.updateMatrixWorld(true);g.camera.fov=78;g.camera.far=Math.max(500,Math.max(width,depth)*4);g.camera.updateProjectionMatrix();
+  const candidates=[];
+  for(const eye of eyes){
+    if(eye.y>=roof-1||solids.some(c=>c.box.clone().expandByScalar(.3).containsPoint(eye)))continue;
+    const visible=targets.filter(t=>clear(eye,t.point));
+    if(visible.length<4)continue;
+    const localFocus=visible.reduce((sum,t)=>sum.add(t.point),vector()).multiplyScalar(1/visible.length);
+    for(const aim of [focus,localFocus]){
+      g.camera.position.copy(eye);g.camera.lookAt(aim);g.camera.updateMatrixWorld(true);
+      const framed=visible.filter(t=>{const p=t.point.clone().project(g.camera);return Math.abs(p.x)<.9&&Math.abs(p.y)<.82&&p.z>-1&&p.z<1;});
+      const score=framed.reduce((sum,t)=>sum+(t.kind==='portal'?4:1),0);
+      candidates.push({eye:eye.clone(),aim:aim.clone(),framed,score});
+    }
+  }
+  candidates.sort((a,b)=>b.score-a.score);
+  // Collider rays choose candidates cheaply; actual rendered geometry then
+  // checks the finalists, including non-colliding cladding and instanced art.
+  const meshes=[];g.scene.traverseVisible(o=>{if(o.isMesh&&!o.userData.collisionProxy)meshes.push(o);});
+  const cast=g.raycaster.clone?.()||new g.raycaster.constructor();
+  const renderedClear=(eye,t)=>{
+    const delta=t.point.clone().sub(eye);cast.set(eye,delta.clone().normalize());cast.far=delta.length()-.12;
+    return !cast.intersectObjects(meshes,false).some(h=>{
+      const material=Array.isArray(h.object.material)?h.object.material[h.face?.materialIndex??0]:h.object.material;
+      return material?.visible!==false&&!(material?.transparent&&material.opacity<.95);
+    });
+  };
+  let chosen;
+  for(const candidate of candidates.slice(0,8)){
+    const observed=candidate.framed.filter(t=>renderedClear(candidate.eye,t));
+    const floorCount=observed.filter(t=>t.kind==='floor').length,portalCount=observed.filter(t=>t.kind==='portal').length;
+    const score=floorCount+portalCount*4;
+    if(floorCount>=3&&(!chosen||score>chosen.score))chosen={...candidate,observed,floorCount,portalCount,score};
+  }
+  if(!chosen)throw Error('No unobstructed interior overview of at least three genuine playable floor points');
+  g.camera.position.copy(chosen.eye);g.camera.lookAt(chosen.aim);g.camera.updateWorldMatrix(true,false);
+  return {kind:'interior-camera-inspection',bounds:{minX:bounds.minX,maxX:bounds.maxX,minZ:bounds.minZ,maxZ:bounds.maxZ,base,roof},
+    eye:chosen.eye.toArray(),target:chosen.aim.toArray(),roofClearance:roof-chosen.eye.y,fov:g.camera.fov,
+    candidates:candidates.length,visibleFloorPoints:chosen.floorCount,visiblePortalPoints:chosen.portalCount,
+    observedTargets:chosen.observed.map(t=>({kind:t.kind,point:t.point.toArray()})),geometryVisibilityChanged:false};
+}
 let server;
 if(process.env.START_SERVER==='1') {
   const serverRoot=path.resolve(process.env.SERVER_ROOT||'.'),port=String(process.env.PORT||4173);
@@ -52,9 +145,10 @@ async function retireBrowser(){
   try{await bounded(old.close(),3000,'Owned browser shutdown');}
   catch{const child=old.process();if(child?.exitCode===null){try{process.kill(-child.pid,'SIGKILL');}catch{child.kill('SIGKILL');}}}
 }
-const report = {mode,strictCapture,sourceCommit:process.env.BUILD_COMMIT??null, rows:[], errors:[], limitations:[
+const report = {mode,strictCapture,inspectionQuality,sourceCommit:process.env.BUILD_COMMIT??null, rows:[], errors:[], limitations:[
   'Scripted production inputs and software WebGL are reproducible checks, not a human playtest or hardware FPS measurement.',
   'Overview camera placement is inspection only; it never counts as a solved route.',
+  'An interior overview shows an unobstructed view sector, not every surface behind opaque partitions; pixel captures still require visual review.',
   'A bounded rush attack cannot prove that every possible shortcut is absent.',
   'Route pass records gameplay assertions. Capture pass is reported separately; missing or blank readback never counts as visual evidence.',
 ]};
@@ -78,7 +172,7 @@ try {
     page.setDefaultTimeout(180000);
     await page.setViewport({width:960,height:540,deviceScaleFactor:1});
     const preferenceKey=foundationCampaignPrefix(new URL(process.env.PAGE_URL||'http://127.0.0.1:4173/').pathname)+CAMPAIGN_PREFERENCE_KEY;
-    await page.evaluateOnNewDocument(key=>localStorage.setItem(key,JSON.stringify({quality:'low',muted:true})),preferenceKey);
+    await page.evaluateOnNewDocument(({key,quality})=>localStorage.setItem(key,JSON.stringify({quality,muted:true})),{key:preferenceKey,quality:inspectionQuality});
     const row = {level,pass:false,errors:[]};
     report.active={level,phase:'opening'};save();
     const onError=e=>row.errors.push(String(e));page.on('pageerror',onError);
@@ -96,7 +190,7 @@ try {
         if(g?.state!=='ready'||!m||m.inert||getComputedStyle(m).opacity!=='1')return false;
         const r=b.getBoundingClientRect();return b.contains(document.elementFromPoint(r.x+r.width/2,r.y+r.height/2));
       });
-      await page.select('#quality-select','low');
+      await page.select('#quality-select',inspectionQuality);
       await page.bringToFront(); await page.click('#play-button');
       await page.waitForFunction(()=>window.__NESI_DEMO_GAME__?.state==='playing');
       } else {
@@ -117,24 +211,25 @@ try {
           physicalRoom23:Boolean(g.firstLevel.room23PhysicalPrototype),pilot43:Boolean(g.firstLevel.pilot43),progressionLevel:g.firstLevel.puzzleProgression??null,
           floors:g.floors.length,colliders:g.colliders.length,panels:g.portalPanels.length,
           meshes:d.modelsLoaded,missingModels:d.missingModels,cargoUUID:g.cargo.group.uuid,cargoBodyId:g.physics.cargoBody.id,
-          calls:g.renderer.info.render.calls,triangles:g.renderer.info.render.triangles};
+          calls:g.renderer.info.render.calls,triangles:g.renderer.info.render.triangles,
+          cameraPosition:g.camera.position.toArray(),cameraFocus:g.cameraRig.focus.toArray(),
+          cameraPlayerPivot:g.cameraRig.playerPivot.toArray(),
+          cameraDistance:g.camera.position.distanceTo(g.cameraRig.playerPivot),
+          cameraFocusDistance:g.camera.position.distanceTo(g.cameraRig.focus),
+          cameraObstructed:Boolean(g.cameraRig.obstructed),cameraFov:g.camera.fov,
+          quality:document.querySelector('#quality-select').value,shadows:Boolean(g.renderer.shadowMap.enabled)};
       },Object.keys(ACTIVE_FOUNDATION_RUNTIME_FLAGS));
       row.visibleRoom=assertCampaignBrowserState(row.start,level);
       report.active={level,phase:'ready',start:row.start};save();
       console.log(`START WebGL ${mode} room ${level}: ready, cargo ${row.start.cargoUUID}/${row.start.cargoBodyId}`);
       row.captures={};
       assert.deepEqual(row.start.missingModels,[]);
+      assert.equal(row.start.quality,inspectionQuality);
+      assert.equal(row.start.shadows,inspectionQuality!=='low');
       if(mode==='overview') {
         row.captures.start=await captureBrowserFrame(page,path.join(out,`${level}-start.jpg`));
-        await page.evaluate(()=>{
-          const g=window.__NESI_DEMO_GAME__;
-          let minX=Infinity,maxX=-Infinity,minZ=Infinity,maxZ=-Infinity,maxY=0;
-          for(const f of g.floors){minX=Math.min(minX,f.minX);maxX=Math.max(maxX,f.maxX);minZ=Math.min(minZ,f.minZ);maxZ=Math.max(maxZ,f.maxZ);maxY=Math.max(maxY,f.y||0);}
-          const cx=(minX+maxX)/2,cz=(minZ+maxZ)/2,span=Math.max(maxX-minX,maxZ-minZ,20);
-          g.camera.position.set(cx+span*.56,maxY+span*.8,cz+span*.67);
-          g.camera.lookAt(cx,maxY*.35,cz);g.camera.fov=65;g.camera.far=Math.max(500,span*4);
-          g.camera.updateProjectionMatrix();g.camera.updateWorldMatrix(true,false);g.render();
-        });
+        row.framing=await page.evaluate(frameInteriorOverview.toString()+`;frameInteriorOverview(window.__NESI_DEMO_GAME__)`);
+        await page.evaluate(()=>window.__NESI_DEMO_GAME__.render());
         row.captures.overview=await captureBrowserFrame(page,path.join(out,`${level}-overview.jpg`));
       } else if(mode==='route') {
         report.active.phase='ordinary-route';activeRouteRow=row;row.routeStarted=performance.now();activeRouteToken=`${level}-${row.routeStarted}`;save();

@@ -7,17 +7,64 @@ import {runV8Journey} from '../src/game/LabV8Journey.js';
 import {runPuzzleProgression48} from '../src/game/LabPuzzleProgression48Journey.js';
 import {installPreciseLateAim,aimLateSurface} from '../src/game/LabLateCampaignAim.js';
 import {PROGRESSION48_SPEC} from '../src/game/LabPuzzleProgression48.js';
+import {LabCamera} from '../src/game/LabCamera.js';
 let shared;
 async function room(){shared??=await createHeadlessGame();shared.chamberEdition='foundation';shared.puzzleProgression=true;await shared.selectLevel(47,false);return shared;}
 const scenario=(g,route)=>runV8Journey(g,{scenario:route});
 const contact=(g,a,b)=>g.physics.world.contacts.some(c=>(c.bi===a&&c.bj===b)||(c.bi===b&&c.bj===a));
 function dryReturn(d){const g=d.game;d.walk(27.8,-21);d.walk(27.8,-6);d.walk(29,-6);d.until(()=>g.playerPosition.y<3,5,'Leave the gallery');d.walk(28.2,-6);d.until(()=>g.playerGrounded&&g.playerPosition.y<.3,5,'Reach the dry service floor');d.walk(28.2,5.5);d.walk(-16,5.5);d.walk(-16,-7);d.walk(-22,-7);d.walk(-22,14);d.walk(-18,20);}
 for(const aspect of [16/9,16/10])test(`48 ordinary original-cargo contact route wins at aspect ${aspect}`,async()=>{
- const g=await room();g.camera.aspect=aspect;g.camera.updateProjectionMatrix();const cargo=g.cargo,body=g.physics.cargoBody;
+ const g=await room();g.camera.aspect=aspect;g.camera.updateProjectionMatrix();const cargo=g.cargo,body=g.physics.cargoBody,shape=body.shapes[0];
+ assert.deepEqual(g.playerPosition.toArray(),[-18,8,14]);assert.deepEqual(g.firstLevel.spawnView,{yaw:.05,pitch:.05});
  const report=await runV8Journey(g,{scenario:d=>runPuzzleProgression48(d)});
- assert.equal(report.pass,true);assert.equal(g.state,'won');assert.equal(report.resets,0);assert.equal(report.respawns,0);assert.equal(g.cargo,cargo);assert.equal(g.physics.cargoBody,body);assert.equal(g.firstLevel.id,PROGRESSION48_SPEC.id);
+ assert.equal(report.pass,true);assert.equal(g.state,'won');assert.equal(report.resets,0);assert.equal(report.respawns,0);assert.equal(g.cargo,cargo);assert.equal(g.physics.cargoBody,body);assert.equal(body.shapes[0],shape);assert.equal(g.firstLevel.id,PROGRESSION48_SPEC.id);
  const m=g.firstLevel.machine;for(const b of [m.body,m.pinBody,m.roofBody,m.stopBody,m.trapBody])assert.equal(b.type,Body.DYNAMIC);
  assert.ok(m.contacts.cargoCarriage>100);assert.ok(m.contacts.pinCarriage>20);assert.ok(m.contacts.cargoStop>20);assert.ok(g.physics.portalTransports>=3);assert.equal(report.teleports,2);assert.ok(report.milestones.length>=9);
+ console.info('48 route from clear authored spawn',JSON.stringify({aspect,spawn:g.firstLevel.spawn,frames:report.frames,teleports:report.teleports,
+  resets:report.resets,respawns:report.respawns,state:g.state,cargoBodyId:body.id,cargoShapeId:shape.id,
+  sameCargo:g.cargo===cargo,sameBody:g.physics.cargoBody===body,sameShape:body.shapes[0]===shape,contacts:m.contacts}));
+});
+test('48 authored entry spawn clears the real departure-panel camera boom and frames the unchanged player capsule',async()=>{
+ const g=await room(),l=g.firstLevel,original={player:g.playerPosition.clone(),cargo:g.cargo.position.clone(),body:g.physics.cargoBody,shape:g.physics.cargoBody.shapes[0]};
+ g.updateVisuals(0,1);g.scene.updateMatrixWorld(true);
+ const actorBounds=new THREE.Box3().setFromObject(g.playerGroup),actorOffsets=[actorBounds.min.clone().sub(g.playerPosition),actorBounds.max.clone().sub(g.playerPosition)];
+ const sourceGeometry=[];g.playerGroup.traverse(node=>{if(node.isMesh)sourceGeometry.push([node,node.geometry]);});
+ const blockers=g.cameraBlockers.slice(),colliderBoxes=g.colliders.map(c=>[...c.box.min,...c.box.max]),departure=l.panels.departure.getFrame();
+ assert.deepEqual(l.spawn,[-18,8,14]);assert.deepEqual(departure.center.toArray(),[-18,10.85,22]);assert.deepEqual(l.cargoSpawn,[-2,4.6,-14.6]);
+ const sample=(target,aspect)=>{
+  const camera=g.camera.clone();camera.aspect=aspect;camera.updateProjectionMatrix();
+  const rig=new LabCamera({camera,blockers:g.cameraBlockers,isBlocker:(object,hit)=>g.isCameraBlocker(object,hit)});
+  rig.reset(target,l.spawnView.yaw,l.spawnView.pitch);
+  for(let n=0;n<120;n++)rig.update({dt:1/60,target,yaw:l.spawnView.yaw,pitch:l.spawnView.pitch,velocity:new THREE.Vector3()});
+  const points=[],actorPoints=[];
+  // These are the production player's complete 2.4 m/.43 m physical bounds,
+  // not a surrogate actor inserted into physics or a relocated live player.
+  for(const x of [-.43,.43])for(const y of [0,2.4])for(const z of [-.43,.43])points.push(target.clone().add(new THREE.Vector3(x,y,z)).project(camera));
+  // Project the actual imported actor's complete startup mesh envelope too.
+  // Offset arithmetic compares the old authored spawn without assigning any
+  // live player/cargo transform or inserting a substitute render/physics model.
+  for(const x of actorOffsets.map(p=>p.x))for(const y of actorOffsets.map(p=>p.y))for(const z of actorOffsets.map(p=>p.z))actorPoints.push(target.clone().add(new THREE.Vector3(x,y,z)).project(camera));
+  return {blocked:rig.obstructed,boom:camera.position.distanceTo(rig.playerPivot),camera:camera.position.toArray(),
+   ndc:{x:[Math.min(...points.map(p=>p.x)),Math.max(...points.map(p=>p.x))],y:[Math.min(...points.map(p=>p.y)),Math.max(...points.map(p=>p.y))],z:[Math.min(...points.map(p=>p.z)),Math.max(...points.map(p=>p.z))]},
+   actorNdc:{x:[Math.min(...actorPoints.map(p=>p.x)),Math.max(...actorPoints.map(p=>p.x))],y:[Math.min(...actorPoints.map(p=>p.y)),Math.max(...actorPoints.map(p=>p.y))],z:[Math.min(...actorPoints.map(p=>p.z)),Math.max(...actorPoints.map(p=>p.z))]}};
+ };
+ const samples=[];
+ for(const aspect of [16/9,16/10,9/16]){
+  const old=sample(new THREE.Vector3(-18,8,20),aspect),fixed=sample(new THREE.Vector3(...l.spawn),aspect);
+  assert.equal(old.blocked,true);assert.ok(old.boom<3);assert.ok(old.ndc.x[0]<-1||old.ndc.y[0]<-1||old.ndc.y[1]>1,'old departure pose no longer reproduces clipping');
+  assert.equal(fixed.blocked,false);assert.ok(fixed.boom>6.4);assert.ok(fixed.camera[2]<departure.center.z-.3,'new lens crossed the actual porcelain wall');
+  assert.ok(fixed.ndc.x.every(v=>Math.abs(v)<.85)&&fixed.ndc.y.every(v=>Math.abs(v)<.85)&&fixed.ndc.z.every(v=>v>-1&&v<1));
+  assert.ok(old.actorNdc.x.some(v=>Math.abs(v)>1)||old.actorNdc.y.some(v=>Math.abs(v)>1),'actual old actor envelope no longer reproduces crop');
+  assert.ok(fixed.actorNdc.x.every(v=>Math.abs(v)<.99)&&fixed.actorNdc.y.every(v=>Math.abs(v)<.99)&&fixed.actorNdc.z.every(v=>v>-1&&v<1),'original startup actor mesh envelope is cropped');
+  samples.push({aspect,old,fixed});
+ }
+ const support=g.sampleFootSupport(...[l.spawn[0],l.spawn[2],l.spawn[1]+.03]);assert.ok(Math.abs(support.height-8)<1e-6);assert.ok(support.normal.y>.99);
+ assert.ok(l.spawn[0]>-26+.43&&l.spawn[0]<26-.43&&l.spawn[2]>10+.43&&l.spawn[2]<25-.43);
+ assert.deepEqual(g.playerPosition.toArray(),original.player.toArray());assert.deepEqual(g.cargo.position.toArray(),original.cargo.toArray());
+ assert.equal(g.physics.cargoBody,original.body);assert.equal(original.body.shapes[0],original.shape);assert.deepEqual(g.cameraBlockers,blockers);
+ for(const [node,geometry]of sourceGeometry)assert.equal(node.geometry,geometry,'original player geometry was substituted');
+ assert.deepEqual(g.colliders.map(c=>[...c.box.min,...c.box.max]),colliderBoxes,'inspection changed real geometry');
+ console.info('48 startup real-camera measurements',JSON.stringify(samples));
 });
 test('48 pin is real contact support; removing it after cargo extraction loses the first alignment',async()=>{
  const g=await room();await scenario(g,d=>{runPuzzleProgression48(d,{stopAfter:'retrieved'});const m=d.level.machine;assert.ok(m.x>11.4&&m.contacts.pinCarriage>0);d.walk(27.8,-24);d.walk(18,-26);d.walk(18,-24);assert.ok(g.interact());d.until(()=>m.x<.2&&m.pinExtension<.2,20,'The real withdrawn pin must release the empty spring carriage');assert.ok(m.x<.2);assert.ok(m.pinExtension<.2);assert.equal(m.roofOpen,false);assert.notEqual(g.state,'won');});
