@@ -14,7 +14,7 @@ export const PINS = Object.freeze({
   // Fill only after independent exact-attempt source, logs, package and movie acceptance.
   sourceCommit:'3f2e83127dfd5800068854a98843d73eb9377609', sourceTree:'8a00a9e62642865d83c71039d72bf028dea46256', sourceParent:'5e552e9c3ac248b535d619741f15e99e29979cbf', reviewRun:38348119403, reviewAttempt:1,
   controllerPath:'.github/workflows/publish-puzzle-progression-finale.yml',
-  controllerParent:'387f00791b1b469c83d5a8ab680e12f669ff00d2',
+  controllerParent:'4ba2c891597394edae778c17ec2a266d8dba691a',
   baselinePublisher:'a74b64fe6d861baa94bbba7c6311794e6d520534', baselineRun:38300647905,
   canonicalSource:'8d2c01eacd86fe9235a35e7ec5f624ba62c3b29e', finaleSource:'0e257837ca157d59d29c2e892e9a81e4f21fc5a1',
   baselineFiles:1789, baselineBytes:592794475,
@@ -46,7 +46,7 @@ export const ENTRIES=Object.freeze([
 export const JOB_NAMES=Object.freeze(['build','cpu','native-contact','native-castle','native-foundation20','review-summary']);
 export const CONTROLLER_CHANGES=Object.freeze([
   {filename:PINS.controllerPath,status:'modified'},
-  ...['publish-tower41-native.mjs','publish-tower41-native.py','test-publish-tower41-native.mjs','test-publish-tower41-native.py'].map(file=>({filename:'scripts/'+file,status:'modified'})),
+  ...['publish-tower41-native.mjs','test-publish-tower41-native.mjs'].map(file=>({filename:'scripts/'+file,status:'modified'})),
 ]);
 const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
 const read=file=>JSON.parse(fs.readFileSync(file,'utf8'));
@@ -92,13 +92,18 @@ export function checkJobLog(bytes,job,expected){
   for(const marker of markers){assert.equal(marker.sourceCommit,expected.sourceCommit);assert.deepEqual(marker.sourceReview,expected.sourceReview);assert.equal(marker.status,'success');}
   return {bytes:bytes.length,sha256:sha(bytes)};
 }
-export function checkDeployments(rows,publisher,runId){
+export function checkDeployments(rows,publisher,runId,lease){
+  assert.ok(lease&&lease.pass===true&&lease.kind==='exact-failed-after-deploy-R5-recovery-lease'&&lease.publicationAccepted===false&&lease.sourceAccepted===true,'A complete authenticated failed-publication recovery lease is required');
+  for(const [key,value]of Object.entries({failedPublisher:RECOVERY.publisher,failedTree:RECOVERY.tree,failedRun:RECOVERY.run,failedAttempt:1,sourceCommit:RECOVERY.source,sourceTree:RECOVERY.sourceTree,currentFiles:RECOVERY.files,currentBytes:RECOVERY.bytes,currentInventorySha256:RECOVERY.inventorySha256,failedBindingSha256:RECOVERY.bindingSha256}))assert.equal(lease[key],value,'The exact authenticated recovery lease changed: '+key);
+  assert.deepEqual(lease.sourceReview,{runId:RECOVERY.reviewRun,runAttempt:RECOVERY.reviewAttempt});
+  for(const [key,phase,count,bytes,digest]of [['preflight','preflight',PINS.baselineFiles,PINS.baselineBytes,PINS.baselineInventorySha256],['published','published',RECOVERY.files,RECOVERY.bytes,RECOVERY.inventorySha256]]){const row=lease[key];assert.equal(row?.pass,true);assert.equal(row?.phase,phase);assert.equal(row?.mainSiteUnchanged,true);assert.equal(row?.publisherCommit,RECOVERY.publisher);assert.equal(row?.publicationRun,RECOVERY.run);assert.equal(row?.sourceCommit,RECOVERY.source);assert.deepEqual(row?.sourceReview,lease.sourceReview);assert.equal(row?.checked,count);assert.equal(row?.bytes,bytes);assert.equal(row?.siteFilesSha256,digest);assert.equal(row?.packageBindingSha256,RECOVERY.bindingSha256);}
   for(const row of rows){
-    const own=row.sha===publisher&&new RegExp('/actions/runs/'+runId+'(?:/|$)').test(row.logUrl||'');if(own)continue;
+    const runURL=id=>new RegExp('^https://github\\.com/'+PINS.repository+'/actions/runs/'+id+'(?:/|$)');
+    const own=row.sha===publisher&&runURL(runId).test(row.logUrl||'');if(own)continue;
     assert.ok(row.state&&!['queued','pending','in_progress'].includes(row.state),'Overlapping Pages publication');
-    if(['failure','error','inactive'].includes(row.state))continue;
-    assert.equal(row.state,'success');assert.equal(row.sha,RECOVERY.publisher,'Public site differs from the exact failed-after-deploy recovery lease');
-    assert.ok(new RegExp('/actions/runs/'+RECOVERY.run+'(?:/|$)').test(row.logUrl||''),'Recovery deployment run changed');return row;
+    assert.equal(row.sha,RECOVERY.publisher,'A newer unknown deployment cannot replace the exact failed-after-deploy recovery lease');
+    assert.ok(['success','failure','error','inactive'].includes(row.state),'Only the authenticated failed-after-deploy row may retain an unsuccessful environment status');
+    assert.ok(runURL(RECOVERY.run).test(row.logUrl||''),'Recovery deployment run changed');return row;
   }
   throw Error('No current accepted Pages deployment');
 }
@@ -217,7 +222,8 @@ async function guard(phase){
   checkArtifact(baselineProof,{name:PINS.baselineProof.name,runId:PINS.baselineRun,sourceCommit:PINS.baselinePublisher,pinned:PINS.baselineProof});
   for(const [kind,artifact,pinned]of [['baseline',baselineArtifact,PINS.baselineArtifact],['accepted-publication',baselineVerification,PINS.baselineVerification]]){checkArtifact(artifact,{name:pinned.name,runId:PINS.baselineRun,sourceCommit:PINS.baselinePublisher,pinned});checkedArtifacts.push({kind,artifact});}
   const inspected=[];for(const deployment of deployments.sort((a,b)=>b.id-a.id)){const statuses=await all('deployments/'+deployment.id+'/statuses'),latest=statuses.sort((a,b)=>b.id-a.id)[0];inspected.push({id:deployment.id,sha:deployment.sha,state:latest?.state,logUrl:latest?.log_url,statusId:latest?.id});const own=deployment.sha===expected.publisherCommit&&new RegExp('/actions/runs/'+expected.publicationRun+'(?:/|$)').test(latest?.log_url||'');if(!own&&latest?.state==='success')break;}
-  const recovery=await recoveryLease();const acceptedDeployment=checkDeployments(inspected,expected.publisherCommit,expected.publicationRun);
+  write('proof/recovery-inspected-deployments-'+phase+'.json',{kind:'actual-provider-recovery-deployment-diagnostic',publicationAccepted:false,...expected,rows:inspected});console.log('TOWER41_RECOVERY_DEPLOYMENTS '+JSON.stringify({phase,rows:inspected}));
+  const recovery=await recoveryLease();const acceptedDeployment=checkDeployments(inspected,expected.publisherCommit,expected.publicationRun,recovery);
   const publisherPaths=fs.readdirSync('.github/workflows').filter(file=>/actions\/deploy-pages|pages:\s*write/.test(fs.readFileSync('.github/workflows/'+file,'utf8'))).map(file=>'.github/workflows/'+file);
   for(const state of ['queued','in_progress'])for(const other of await all('actions/runs?status='+state,'workflow_runs'))if(other.id!==expected.publicationRun&&publisherPaths.includes(other.path))throw Error('Other active Pages workflow '+other.id);
   const logs=[];for(const job of jobs){const response=await request('actions/jobs/'+job.id+'/logs',{binary:true});const bytes=Buffer.from(await response.arrayBuffer());assert.ok(bytes.length>0&&bytes.length<20_000_000);const receipt=checkJobLog(bytes,job,expected),filename='proof/job-logs/'+job.id+'.log';fs.mkdirSync(path.dirname(filename),{recursive:true});if(fs.existsSync(filename))assert.equal(sha(fs.readFileSync(filename)),receipt.sha256,'Accepted provider log changed');else fs.writeFileSync(filename,bytes,{flag:'wx'});logs.push({name:job.name,id:job.id,conclusion:job.conclusion,rawLog:{path:'job-logs/'+job.id+'.log',...receipt}});}
@@ -234,7 +240,8 @@ async function guard(phase){
   const [lastMain,lastHead,lastRun,lastDeployments]=await Promise.all([request('git/ref/heads/main'),request('git/ref/heads/'+PINS.branch),request('actions/runs/'+expected.sourceReview.runId),all('deployments?environment=github-pages')]);
   assert.equal(lastMain.object.sha,expected.publisherCommit);assert.equal(lastHead.object.sha,expected.sourceCommit);assert.equal(lastRun.run_attempt,expected.sourceReview.runAttempt);assert.equal(lastRun.conclusion,'success');
   const finalInspected=[];for(const deployment of lastDeployments.sort((a,b)=>b.id-a.id)){const statuses=await all('deployments/'+deployment.id+'/statuses'),latest=statuses.sort((a,b)=>b.id-a.id)[0];finalInspected.push({id:deployment.id,sha:deployment.sha,state:latest?.state,logUrl:latest?.log_url,statusId:latest?.id});const own=deployment.sha===expected.publisherCommit&&new RegExp('/actions/runs/'+expected.publicationRun+'(?:/|$)').test(latest?.log_url||'');if(!own&&latest?.state==='success')break;}
-  const finalAccepted=checkDeployments(finalInspected,expected.publisherCommit,expected.publicationRun);assert.equal(finalAccepted.id,acceptedDeployment.id,'Accepted deployment changed during review guards');
+  write('proof/recovery-final-inspected-deployments-'+phase+'.json',{kind:'actual-provider-recovery-final-deployment-diagnostic',publicationAccepted:false,...expected,rows:finalInspected});
+  const finalAccepted=checkDeployments(finalInspected,expected.publisherCommit,expected.publicationRun,recovery);assert.equal(finalAccepted.id,acceptedDeployment.id,'Accepted deployment changed during review guards');
   write('proof/github-guard-'+phase+'.json',{pass:true,phase,...expected,jobs:logs,artifacts:checkedArtifacts,acceptedDeployment:finalAccepted,inspectedDeployments:finalInspected,recoveryLease:recovery,baselinePublication:baseline,sourceReviewRun:run,metadata,baselineFullPrivateProof:{artifact:baselineProof,providerRetentionAndDigestBound:true,archiveBytesDownloaded:false,nestedArchiveAudited:false},checkedAt:new Date().toISOString()});
 }
 async function downloadOne(artifact,filename){
