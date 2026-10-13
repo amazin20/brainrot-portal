@@ -21,6 +21,7 @@ export function animationFrameStatistics(output,{expectedFrames,minimumFrames=45
 export function validateAnimationFrames(folder,expectedFrames){
  const decoded=spawnSync('ffmpeg',['-hide_banner','-loglevel','error','-framerate','15','-i',folder+'/%04d.jpg',
   '-vf','scale=64:36,signalstats,metadata=mode=print:file=-','-f','null','-'],{encoding:'utf8',maxBuffer:4*1024*1024});
+ if(decoded.error)throw new Error('Animation decoder could not start: '+decoded.error.message,{cause:decoded.error});
  assert.equal(decoded.status,0,'Animation pixel validation failed: '+decoded.stderr);
  return animationFrameStatistics(decoded.stdout,{expectedFrames});
 }

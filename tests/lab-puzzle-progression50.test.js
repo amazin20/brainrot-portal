@@ -112,9 +112,9 @@ test('50 the genuine A inspection lintel blocks the confirmed passenger boarding
  const receipt=await scenario(g,d=>{
   runPuzzleProgression50(d,{stopAfter:'gallery-a'});const r=d.level.rotor,c=r.cups[0];
   assert.equal(r.loaded('a'),true);assert.equal(g.physics.portalTransports,1);lintelTop=new THREE.Box3().setFromObject(c.freightLintel).max.y;
-  // Replay the independently successful old boarding: normal jumps to the
-  // cup centre, steering until near the target and actually grounded.
-  d.walk(-12,-3);d.walk(c.group.position.x-.2,-3);const x=c.group.position.x-.2;let near=false;
+  // Approach from the reachable front gallery, clear of the relocated A
+  // frame, then replay the old boarding jumps toward the same cup centre.
+  d.walk(-12,-2.6);d.walk(c.group.position.x-.2,-2.6);const x=c.group.position.x-.2;let near=false;
   for(let n=0;n<360;n++){
    const dx=x-g.playerPosition.x,dz=-.1-g.playerPosition.z,distance=Math.hypot(dx,dz);if(distance<.25)near=true;if(near&&g.playerGrounded&&distance<.2)break;
    if(!near&&n%60===0)g.input.jumpQueued=true;const pace=Math.min(1,distance*1.5);d.worldMove(dx/(distance||1)*pace,dz/(distance||1)*pace);d.frame();highest=Math.max(highest,g.playerPosition.y);closestZ=Math.min(closestZ,Math.abs(g.playerPosition.z));

@@ -3,6 +3,8 @@ import path from 'node:path';
 import assert from 'node:assert/strict';
 import {createHeadlessGame} from './lab-headless.mjs';
 import {runV8Journey} from '../src/game/LabV8Journey.js';
+import {runFoundation20PhysicalJourney} from '../src/game/LabFoundation20PhysicalJourney.js';
+import {assertFoundation20Route} from './lib/foundation20-native-proof.mjs';
 import {ACTIVE_FOUNDATION_RUNTIME_FLAGS} from '../src/game/ReleaseIdentity.js';
 import {FOUNDATION_SEQUENCE,foundationDisplayNumber} from '../src/game/LabCampaignSequence.js';
 
@@ -17,19 +19,22 @@ const save=()=>fs.writeFileSync(output,JSON.stringify(report,null,2)+'\n');
 const g=await createHeadlessGame();Object.assign(g,report.runtime);
 try{
  for(const stableLevel of selected){
-  // The continuous castle observes the normal playing spawn; shorter drivers
-  // perform their own normal setup before observation.
-  await g.selectLevel(stableLevel-1,stableLevel===41);
+  // The physical room20 and continuous castle observe the untouched playing
+  // spawn; shorter legacy drivers perform their own setup before observation.
+  await g.selectLevel(stableLevel-1,stableLevel===20||stableLevel===41);
   const body=g.physics.cargoBody,shape=body.shapes[0],cargo=g.cargo;
   const row={stableLevel,number:foundationDisplayNumber(stableLevel-1),id:g.firstLevel.id,pass:false};
   report.active={...row,phase:'ordinary-route'};save();
   try{
-   const result=await runV8Journey(g);
+   const result=stableLevel===20?await runFoundation20PhysicalJourney(g,{onMilestone:mark=>{report.active.latestMilestone=mark;save();}}):await runV8Journey(g);
+   if(stableLevel===20){assertFoundation20Route(result);row.foundation20Proof=result;}
    assert.equal(result.pass,true);assert.equal(g.state,'won');
    assert.equal(g.physics.cargoBody,body);assert.equal(body.shapes[0],shape);assert.equal(g.cargo,cargo);
    assert.equal(result.resets??result.cargoResets??0,0);assert.equal(result.respawns??0,0);
+   if(stableLevel===20)assert.equal(result.cargoResets,0);
    Object.assign(row,{pass:true,state:g.state,frames:result.frames,steps:result.physicsSteps??null,
     resets:result.resets??result.cargoResets??0,respawns:result.respawns??0,sameOriginal:true,
+    cargoResets:result.cargoResets??null,kind:result.kind??'ordinary-v8-route',
     milestones:result.milestones??result.events??[]});
    console.log('ORDINARY PASS',row.number,'stable',stableLevel,row.id,row.frames);
   }catch(error){row.error=String(error.stack||error);console.error('ORDINARY FAIL',row.number,row.error);}

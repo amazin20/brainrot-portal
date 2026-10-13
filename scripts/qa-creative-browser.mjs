@@ -8,6 +8,7 @@ import {launchBrowserWithStartupRetry} from './lib/browser-startup.mjs';
 import {readStampedCampaignInfo,assertCampaignBrowserState} from './lib/campaign-browser-contract.mjs';
 import {ACTIVE_FOUNDATION_RUNTIME_FLAGS} from '../src/game/ReleaseIdentity.js';
 import {foundationCampaignPrefix,CAMPAIGN_PREFERENCE_KEY} from '../src/game/LabCampaignStorage.js';
+import {assertFoundation20Route} from './lib/foundation20-native-proof.mjs';
 
 const out = path.resolve(process.env.OUT_DIR || 'qa/creative-browser');
 fs.mkdirSync(out, {recursive: true});
@@ -137,36 +138,45 @@ try {
         row.captures.overview=await captureBrowserFrame(page,path.join(out,`${level}-overview.jpg`));
       } else if(mode==='route') {
         report.active.phase='ordinary-route';activeRouteRow=row;row.routeStarted=performance.now();activeRouteToken=`${level}-${row.routeStarted}`;save();
-        row.route = await bounded(page.evaluate(async routeToken=>{
-          const g=window.__NESI_DEMO_GAME__,cargo=g.cargo,bodyId=g.physics.cargoBody.id;
+        row.route = await bounded(page.evaluate(async({routeToken,physical20})=>{
+          const g=window.__NESI_DEMO_GAME__,cargo=g.cargo,body=g.physics.cargoBody,bodyId=body.id,shapes=[...body.shapes];
           const milestoneWrites=[];
           // Readback is deliberately deferred until the canonical route's proof
           // is persisted. Its returned milestones still retain real positions.
-          window.__NESI_CAPTURE_LEVEL_MARK__=mark=>{
+          const recordMark=mark=>{
             const write=window.__NESI_REPORT_ROUTE_MARK__({routeToken,mark:{...mark,
               observedState:{state:g.state,player:g.playerPosition.toArray(),cargo:g.cargo.position.toArray(),
                 solvedIds:g.firstLevel.getTowerMetrics?.().solvedIds??[]}}});
             milestoneWrites.push(write);return write;
           };
+          window.__NESI_CAPTURE_LEVEL_MARK__=recordMark;
+          if(physical20)window.__NESI_CAPTURE_FOUNDATION20_MARK__=recordMark;
           try{
-            const result=await window.__NESI_RUN_LEVEL_ROUTE__();
+            if(physical20&&typeof window.__NESI_RUN_FOUNDATION20_PHYSICAL_ROUTE__!=='function')throw Error('The frozen root package lacks the actual Foundation20 physical route hook');
+            const result=physical20?await window.__NESI_RUN_FOUNDATION20_PHYSICAL_ROUTE__():await window.__NESI_RUN_LEVEL_ROUTE__();
             // The game hook is synchronous. Drain binding acknowledgements
             // before the Node runner retires this row or begins the next one.
             await Promise.all(milestoneWrites);
-            return {pass:result.pass,state:g.state,frames:result.frames,teleports:g.teleportCount,
+            return {pass:result.pass,kind:result.kind??'ordinary-v8-route',state:g.state,frames:result.frames,teleports:g.teleportCount,
               resets:result.resets??result.cargoResets,respawns:result.respawns,
-              sameCompanion:g.cargo===cargo&&g.physics.cargoBody.id===bodyId,
+              cargoResets:result.cargoResets??null,
+              sameCompanion:g.cargo===cargo&&g.physics.cargoBody===body&&g.physics.cargoBody.id===bodyId,
+              sameCargoShape:g.physics.cargoBody.shapes.length===shapes.length&&shapes.every((shape,index)=>g.physics.cargoBody.shapes[index]===shape),
+              foundation20Proof:physical20?result:null,
               cargoUUID:g.cargo.group.uuid,cargoBodyId:g.physics.cargoBody.id,milestones:result.milestones??result.events};
           }finally{
             delete window.__NESI_CAPTURE_LEVEL_MARK__;
+            if(physical20)delete window.__NESI_CAPTURE_FOUNDATION20_MARK__;
             // Keep already emitted failure progress too, without replacing the
             // route's original exception with a secondary persistence error.
             await Promise.allSettled(milestoneWrites);
           }
-        },activeRouteToken),Number(process.env.ROUTE_TIMEOUT_MS||(level===41?1200000:180000)),'Ordinary production route');
+        },{routeToken:activeRouteToken,physical20:level===20}),Number(process.env.ROUTE_TIMEOUT_MS||(level===41?1200000:180000)),'Ordinary production route');
         assert.equal(row.route.pass,true);assert.equal(row.route.state,'won');
         assert.equal(row.route.sameCompanion,true);assert.equal(row.route.cargoUUID,row.start.cargoUUID);assert.equal(row.route.cargoBodyId,row.start.cargoBodyId);
+        assert.equal(row.route.sameCargoShape,true);
         assert.equal(row.route.resets??0,0);assert.equal(row.route.respawns??0,0);
+        if(level===20){assertFoundation20Route(row.route.foundation20Proof);assert.equal(row.route.cargoResets,0);}
         assert.deepEqual(row.errors,[]);
         row.gameplayPassed=true;report.rows.push(row);report.active.phase='route-passed';save();
         console.log(`ROUTE PASS room ${level}: ${row.route.frames} frames, ${row.route.teleports} teleports, original ${row.route.cargoUUID}/${row.route.cargoBodyId}`);

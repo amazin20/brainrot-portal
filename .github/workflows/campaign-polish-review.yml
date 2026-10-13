@@ -180,11 +180,12 @@ jobs:
         with: {node-version: 22, cache: npm}
       - run: npm ci
       - run: npm install --no-save --package-lock=false puppeteer-core@24.16.0
-      - name: Install actual image pixel validation dependency
+      - name: Install actual image and animation validation dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y python3-pil
+          sudo apt-get install -y python3-pil ffmpeg
           /usr/bin/python3 -c "import PIL; from PIL import Image, ImageStat; print(PIL.__version__)"
+          ffmpeg -version
       - uses: actions/download-artifact@v4
         with: {name: campaign-polish-dist, path: dist}
       - run: |
