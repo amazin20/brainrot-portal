@@ -26,7 +26,9 @@ async function prove(number,journeyOptions,milestone){
 test('25: ordinary freight portal and light powered plate hoist each complete both optical lifts',async()=>{
  const canonical=await prove(25,{},'cargo retrieval opens the other beam');
  const alternate=await prove(25,{order:'receiver-hoist'},'first optical receiver raised the loaded counterweight onto a physical balcony');
- assert.equal(canonical.event.hoist,0);
+ // A real founded stop allows solver roundoff; this still rejects any
+ // meaningful unarmed ascent rather than normalising the physical pose.
+ assert.ok(Math.abs(canonical.event.hoist)<.01);
  assert.equal(alternate.event.optical.loaded,true);
  assert.equal(alternate.event.optical[0],true);
  assert.ok(alternate.event.hoist>8.95);

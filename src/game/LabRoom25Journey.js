@@ -8,7 +8,7 @@ function source(d,which){
 function put(d,x,z){d.walk(x,z+1.8);d.walk(x,z+.7);d.wait(.5);d.game.interact();d.wait(1.2);check(!d.game.heldCube,'Release failed');}
 export async function runRoom25(d,{order='weight-first',interruptLight=false}={}){
  const {game,level,walk,aim,wait,until,pickup,enter,mark}=d,p=level.panels,s=level.state;
- async function load(){walk(-14,9);pickup();walk(-7,10);put(d,-7,12);check(s.optical.loaded,'Friend did not load the linked shutters');mark('one weight moves two opposite shadows');}
+ async function load(){walk(-14,9);pickup();walk(-14,8.7);walk(-7,8.7);game.input.jumpQueued=true;walk(-7,10);put(d,-7,12);check(s.optical.loaded,'Friend did not load the linked shutters');until(()=>s.optical.travel>.85,15,'Loaded physical shutters did not clear the first optical route');mark('one weight moves two opposite shadows');}
  if(order!=='light-first')await load();
  walk(-7,6);walk(17,6);walk(17,12);aim(0,p['light-intake'].getFrame().center);aim(0,p['light-intake'].getFrame().center.clone().add(p['light-intake'].getFrame().center.clone().sub(game.portals.portals[0].position)));
  if(order==='light-first')await load();
@@ -24,13 +24,14 @@ export async function runRoom25(d,{order='weight-first',interruptLight=false}={}
   check(game.interact(),'Could not operate the receiver-powered counterweight hoist');
   until(()=>s.counterweightHoist.height>8.95&&game.cargo.position.y>9.1,15,'Loaded plate did not raise its original companion');
   mark('first optical receiver raised the loaded counterweight onto a physical balcony');
-  walk(-9,7.9);walk(-9.7,10.95);walk(-8.3,11.1);pickup();walk(-9.7,11.1);wait(1.2);
+  walk(-9,7.9);walk(-9.7,10.95);game.input.jumpQueued=true;walk(-8.3,11.1);pickup();walk(-9.7,11.1);wait(1.2);
   check(!s.optical.loaded,'Taking the friend off the raised plate must reverse the two shutters');
+  until(()=>s.optical.travel<.1,15,'The unloaded physical shutters did not return');
   mark('balcony retrieval reverses both linked shadows without a cargo portal');
   walk(-9.7,8);walk(-7,7.9);walk(-7,-10);walk(-14,-10);walk(-14,-13);walk(-7,-13);
  }else{
   aim(1,p['freight-receiver'].getFrame().center);walk(-7,-13);walk(-14,-13);walk(-14,-10);walk(-7,-10);walk(-7,7.9);aim(0,p['shadow-counterweight'].getFrame().center);until(()=>game.cargo.position.y>9,8,'Cargo did not leave original counterweight');wait(1.6);
-  check(!s.optical.loaded,'Retrieved friend must release the real shutter load');mark('cargo retrieval opens the other beam');
+  check(!s.optical.loaded,'Retrieved friend must release the real shutter load');until(()=>s.optical.travel<.1,15,'The unloaded physical shutters did not return');mark('cargo retrieval opens the other beam');
   walk(-7,-10);walk(-14,-10);walk(-14,-13);walk(-7,-13);walk(game.cargo.position.x-.9,game.cargo.position.z);pickup();
  }
  walk(-3,-13);walk(10,-13);walk(10,-8.8);walk(12.5,-8.8);walk(16,-10);put(d,16,-10);aim(1,p['upper-relay'].getFrame().center);source(d,1);

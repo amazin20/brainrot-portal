@@ -1,8 +1,9 @@
 import * as THREE from 'three';
 import {V,tracePortalRay,rayTouches,beamDrawing,ringDevice} from './LabPuzzleMechanics.js';
 import {SolidAssembly} from './LabSolidModels.js';
-/** One weight translates two opposed opaque shutters. Receiver illumination
- * is traced through their real kinematic collision boxes at every tick. */
+import {buildRoom25OpticalMachine} from './LabRoom25OpticalMachine.js';
+/** Both receiver routes and the carriage's moving mirror are actual rays.
+ * The owned machine repeats this trace before every real 120Hz world step. */
 export function buildRoom25Optics(k,pad,first,second){
  const w=k.world,g=k.game,source=V(18,3,16),direction=V(-1,0,0),receivers=[V(-7,3,-6),V(18,11.3,-6)];
  // A physical beam becomes readable in the long gallery and through a portal;
@@ -28,15 +29,49 @@ export function buildRoom25Optics(k,pad,first,second){
   for(const z of [-8,3])w.box([base.x,base.y-3.05,z],[.08,.09,1.3],w.materials.trim,false);
   return {mesh,collider,base,sign};
  });
- const state={source,direction,segments:[],receivers:[false,false],loaded:false,travel:0,blades};
- k.ticks.unshift(dt=>{
-  state.loaded=pad.loaded()||pad.player();state.travel=THREE.MathUtils.damp(state.travel,state.loaded?1:0,2.2,dt);
-  for(const b of blades){b.mesh.position.copy(b.base);b.mesh.position.z+=b.sign*8*state.travel;b.mesh.updateWorldMatrix(true,false);b.collider.box.setFromObject(b.mesh);g.physics?.updateStaticBox(b.mesh.uuid,b.collider.box,dt);}
-  state.segments=tracePortalRay(g,source,direction,{length:125,medium:'light'});drawing.update(state.segments);state.receivers=receivers.map(p=>rayTouches(state.segments,p,.7));
+ const mirrorMaterial=new THREE.MeshStandardMaterial({color:0xb5d5da,metalness:.95,roughness:.08,side:THREE.DoubleSide});
+ const reflector=(position,normal,name)=>{
+  const mesh=new THREE.Mesh(new THREE.CircleGeometry(.45,24),mirrorMaterial);mesh.name=name;mesh.position.copy(position);mesh.quaternion.setFromUnitVectors(V(0,0,1),normal);w.root.add(mesh);
+  const rim=new THREE.Mesh(new THREE.TorusGeometry(.45,.035,8,24),w.materials.trim);rim.position.copy(position);rim.quaternion.copy(mesh.quaternion);w.root.add(rim);
+  return {position:position.clone(),normal:normal.clone(),radius:.45,mesh,rim};
+ };
+ // The lower beam first crosses the unchanged first receiver. Two visible
+ // folded mirrors then feed an upright optical column through the carriage's
+ // whole nine-metre stroke. Its moving mirror redirects that real column
+ // into a receiver mounted on the same physical carriage.
+ // The column is outside the entire deck/carriage footprint: the load can
+ // pass through its nine-metre travel without occluding its own supply.
+ const folds=[reflector(V(-3.5,3,-6),V(1,0,-1).normalize(),'Room25 lower optical fold'),
+  reflector(V(-3.5,3,12),V(0,-1,1).normalize(),'Room25 vertical optical fold')];
+ const moving=reflector(V(-3.5,4,12),V(-1,1,0).normalize(),'Room25 carriage mirror');
+ const motorReceiver=V(-2.2,4,12),motorLamp=ringDevice(w,motorReceiver.toArray(),[-1,0,0],0xc2a677,.30);
+ const state={source,direction,segments:[],receivers:[false,false],loaded:false,travel:0,blades,
+  movingMirror:moving,motorReceiver,motorLit:false,motorLamp,folds};
+ function updateOptics(machine){
+  g.portals?.syncMovingSurfaces?.();
+  const body=machine.carriageBody;
+  if(body){
+   const q=new THREE.Quaternion().copy(body.quaternion);
+   moving.position.set(3.5,3.96,0).applyQuaternion(q).add(V().copy(body.position));
+   moving.normal.copy(V(-1,1,0).normalize()).applyQuaternion(q);
+   motorReceiver.set(4.8,3.96,0).applyQuaternion(q).add(V().copy(body.position));
+   moving.mesh.position.copy(moving.position);moving.mesh.quaternion.setFromUnitVectors(V(0,0,1),moving.normal);
+   moving.rim.position.copy(moving.position);moving.rim.quaternion.copy(moving.mesh.quaternion);
+   motorLamp.group.position.copy(motorReceiver);
+  }
+  state.loaded=machine.loaded;state.travel=(blades[0].mesh.position.z-blades[0].base.z)/8;
+  state.segments=tracePortalRay(g,source,direction,{length:150,medium:'light',reflectors:[...folds,moving]});
+  drawing.update(state.segments);state.receivers=receivers.map(p=>rayTouches(state.segments,p,.7));
+  state.motorLit=rayTouches(state.segments,motorReceiver,.25);
   first.powered=state.receivers[0];second.powered=state.receivers[1];lamps.forEach((l,i)=>l.glow.material.color.setHex(state.receivers[i]?0xffe8ab:0x645b4d));
- });
+  motorLamp.glow.material.color.setHex(state.motorLit?0xffe8ab:0x645b4d);
+  return {motor:state.motorLit,mirror:{position:moving.position.toArray(),normal:moving.normal.toArray()},motorReceiver:motorReceiver.toArray(),
+   segments:state.segments.map(s=>({a:s.a.toArray(),b:s.b.toArray(),kind:s.kind}))};
+ }
+ const machine=buildRoom25OpticalMachine(k,pad,blades,{traceCurrentLight:updateOptics});state.machine=machine;
+ k.ticks.unshift(()=>{machine.ensure();machine.syncPose();updateOptics(machine);});
  k.resets.push(()=>{state.travel=0;state.loaded=false;state.receivers=[false,false];});k.state.optical=state;
- k.wire([[-7,.6,12],[-11,.6,12],[-11,.6,-6],[-11,6.3,-6],[11,6.3,-6],[11,11.3,-6]],()=>state.loaded);
+ k.wire([[-7,.6,12],[-11,.6,12],[-11,.6,-6],[-11,6.3,-6],[11,6.3,-6],[11,11.3,-6]],()=>machine.pressureFraction>.001);
  k.wire([[-7,1,-6],[-7,1,-10],[-14,1,-10]],()=>state.receivers[0]);k.wire([[18,9.5,-6],[18,9.5,-10],[16,9.5,-10]],()=>state.receivers[1]);
  return state;
 }

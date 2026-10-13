@@ -26,7 +26,7 @@ test('room25 an unweighted physical shutter blocks the actual source and leaves 
  }});
 });
 test('room25 shutter render and collision positions agree after repeated reset and fixed updates',()=>{
- for(let n=0;n<4;n++){g.resetRun(true);for(let i=0;i<60;i++)g.updatePlaying(1/120);for(const b of g.firstLevel.state.optical.blades)assert.ok(b.collider.box.equals(new THREE.Box3().setFromObject(b.mesh)));assert.equal(g.firstLevel.state.optical.travel,0);}
+ for(let n=0;n<4;n++){g.resetRun(true);for(let i=0;i<60;i++)g.updatePlaying(1/120);for(const b of g.firstLevel.state.optical.blades)assert.ok(b.collider.box.equals(new THREE.Box3().setFromObject(b.mesh)));assert.ok(Math.abs(g.firstLevel.state.optical.travel*8)<.01,'Unloaded physical stop/pressure settling must stay below one centimetre');assert.equal(g.firstLevel.state.optical.loaded,false);}
 });
 test('room25 west hall keeps its enamel finish without rendering the million-triangle source wall through portals',async()=>{
  await g.selectLevel(24,false);const w=g.firstLevel.world;

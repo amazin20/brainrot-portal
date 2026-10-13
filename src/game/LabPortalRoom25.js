@@ -2,7 +2,6 @@ import * as THREE from 'three';
 import {Workshop} from './LabWorkshopKit.js';
 import {opticalLift} from './LabRoom13Mechanics.js';
 import {buildRoom25Optics} from './LabRoom25Optics.js';
-import {cargoLoadsPlate} from './LabPlateContact.js';
 import {SolidAssembly,placeSolidModel} from './LabSolidModels.js';
 export const ROOM25_SPEC={id:'opposed-shadows',title:'Обратная сторона тени',concept:'Один противовес открывает первый луч и перекрывает второй',description:'Свету мешает сама машина. Друг должен уйти с опоры, прежде чем откроется следующая высота.',accent:0xcab48c,assets:[1,2,11,22,23,24],hints:['Две тёмные заслонки связаны одним противовесом. Груз сдвигает их в противоположные стороны.','Сначала сохрани достигнутую высоту на неподвижной галерее. Снятый с опоры друг меняет настоящий путь света.','Освещённый первый приёмник питает также привод весовой платформы. С верхней галереи можно поднять её вместе с другом и забрать его с бокового балкона или переправить через порталы.']};
 
@@ -130,28 +129,9 @@ export function buildRoom25(game,index=24){
   const mesh=w.box(position,size,material);mesh.userData.keepMaterial=true;return mesh;
  };
  const pad=k.pad('shadow-counterweight',[-7,0,12],4.8,4.8);
- const hoist={height:0,target:0,velocity:0};k.state.counterweightHoist=hoist;
- const padFloor=w.floors.find(f=>f.mesh===pad.surface.mesh);
- // Replace this room's plate tick so its real portal face and floor collider
- // move together. The ordinary plate and every other room keep their tick.
+ // Room25 alone replaces the generic kinematic pressure-plate tick. Its
+ // guided deck/carriage and bounded drives are owned by the optical machine.
  k.ticks.pop();
- k.ticks.push(dt=>{
-  const oldFloorY=padFloor.y;
-  const aboard=game.playerGrounded&&Math.abs(game.playerPosition.y-oldFloorY)<.2
-   &&Math.abs(game.playerPosition.x+7)<2.4&&Math.abs(game.playerPosition.z-12)<2.4;
-  pad.pressed=pad.loaded()||pad.player();
-  pad.progress=THREE.MathUtils.damp(pad.progress,pad.pressed?1:0,12,dt);
-  const acceleration=THREE.MathUtils.clamp((hoist.target-hoist.height)*2-hoist.velocity*3,-3,3);
-  hoist.velocity=THREE.MathUtils.clamp(hoist.velocity+acceleration*dt,0,1.4);
-  hoist.height=Math.min(9,hoist.height+hoist.velocity*dt);
-  if(hoist.height===9)hoist.velocity=0;
-  pad.surface.group.position.y=.18-.055*pad.progress+hoist.height;
-  pad.surface.group.updateWorldMatrix(true,true);padFloor.y=pad.surface.group.position.y;
-  if(aboard){game.playerPosition.y+=padFloor.y-oldFloorY;game.previousPlayerPosition.y+=padFloor.y-oldFloorY;}
-  pad.surface.collider.box.setFromObject(pad.surface.mesh);
-  game.physics?.updateStaticBox(pad.surface.mesh.uuid,pad.surface.collider.box,dt);
- });
- k.resets.push(()=>{hoist.height=hoist.target=hoist.velocity=0;});
  k.panel('light-intake',[9,3,16],[1,0,0],5.6,6);
  k.panel('lower-relay',[-18,3,-6],[1,0,0],5.6,6);
  k.panel('freight-receiver',[0,11.3,-15.4],[-1,0,0],3.4,4.6);
@@ -182,16 +162,16 @@ export function buildRoom25(game,index=24){
  w.box([-16.5,13.5,14.8],[11.4,27,.4],w.materials.wall);
  w.box([-16.5,21,20],[11.4,.3,10],w.materials.wall);
  const optical=buildRoom25Optics(k,pad,first,second);
- // The existing plate doubles as a guided freight hoist. Its motor can start
- // only after the *actual* first receiver is lit while the companion loads
- // the plate. The same moving collider supports the original physics body;
- // taking the friend off it then reverses both shutter blades as before.
+ // E selects a bounded motor supply, never a destination height. The actual
+ // ray reflected by the live carriage mirror supplies work on every step;
+ // interruption removes motor force and gravity returns the same bodies.
  k.control('counterweight-hoist',[-8,9,7],()=>{
-  if(optical.receivers[0]&&pad.loaded())hoist.target=9;
- },'E — свет нижнего приёмника поднимает весовую платформу к боковому балкону');
+  optical.machine.enableMotor();
+ },'E — включить привод: живой луч на зеркале питает грузовую платформу');
  for(const x of [-9.6,-4.4])w.box([x,4.5,12],[.12,9,.15],w.materials.trim,false);
  const shadowHall=finishShadowHall(k,optical);
- const level=k.finish([-17,0,10],[-15,.55,9],[-16,7,22],{workshop:k,portalPuzzle:true,cargoOnAnyPad:()=>cargoLoadsPlate(game.cargo,game.heldCube,pad.surface.getFrame())});
+ const level=k.finish([-17,0,10],[-15,.55,9],[-16,7,22],{workshop:k,portalPuzzle:true,cargoOnAnyPad:()=>optical.machine.loaded});
+ level.dispose=()=>optical.machine.dispose();
  level.shadowHall=shadowHall;
  level.mechanismArt={projectors:[{position:optical.source.toArray(),direction:optical.direction.toArray(),radius:.5}],liftSurfaces:['shadow-lift','relay-lift']};
  level.conceptLesson={position:[-7,0,12],range:4,key:'E',text:'Две заслонки соединены с одной опорой. Нагрузка освобождает один луч и перекрывает другой.'};

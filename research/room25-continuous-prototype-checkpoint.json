@@ -1,0 +1,177 @@
+{
+  "schemaVersion": 1,
+  "kind": "isolated-room25-continuous-optical-support-prototype",
+  "createdAt": "2026-10-13T01:16:34.365774+00:00",
+  "baseCommit": "ede45a4deca4bcbeef764fabd0a2e6d19c8af435",
+  "localBranch": "candidate/room25-continuous-optics",
+  "remotePushed": false,
+  "frozenR2SourceOrPublisherModified": false,
+  "planModified": false,
+  "accepted": false,
+  "productionAccepted": false,
+  "nativeAccepted": false,
+  "publicationAccepted": false,
+  "fullRoomAccepted": false,
+  "scope": "Local prototype with five complete ordinary CPU scenarios and a bounded actual-input light-cut/recovery control. Not accepted replacement Room25 or accepted campaign uniqueness.",
+  "files": [
+    {
+      "path": "src/game/LabPortalRoom25.js",
+      "bytes": 13113,
+      "sha256": "9ff6e30cd1749e6af11acf66903077f8821f145589c0956baf5f4d9209340b3d"
+    },
+    {
+      "path": "src/game/LabRoom25Optics.js",
+      "bytes": 5999,
+      "sha256": "a8e5005f23b95f7e633c8271d8dac022f1b07089ef7a2fa2c1da070c5ab13567"
+    },
+    {
+      "path": "src/game/LabRoom25OpticalMachine.js",
+      "bytes": 14807,
+      "sha256": "093421984d72ef08fe10d6dfeea4212ebc230589e92042bd0d9b9c110955f7fd"
+    },
+    {
+      "path": "src/game/LabRoom25Journey.js",
+      "bytes": 4602,
+      "sha256": "2f87cb34ab56c30948f8c2320cc6c85e8ac4dfffc41331de46965cb4022c9844"
+    },
+    {
+      "path": "tests/lab-room25-continuous-drive.test.js",
+      "bytes": 5470,
+      "sha256": "87ac47482b083a5e22da26110cbcc812501cb22997f86d90aa60d99eba71307e"
+    },
+    {
+      "path": "tests/lab-room25-optics.test.js",
+      "bytes": 4055,
+      "sha256": "3f3e68cbb5bc8d7ac6ffd81b45675eeb2067d212a0d742adbc9d52de44bce249"
+    },
+    {
+      "path": "tests/lab-causal-routes-25-29.test.js",
+      "bytes": 3082,
+      "sha256": "e3fc65125099311ec10b0067e400f73a527606c462899cf7a8f1937b93d3e046"
+    }
+  ],
+  "mechanism": {
+    "bodies": 5,
+    "guidedCarriageMass": 6,
+    "springDeckMass": 1,
+    "eachGuidedShutterMass": 4,
+    "strokeMetres": 9,
+    "normalOperationBodyPoseWrites": false,
+    "explicitResetRestoresPoses": true,
+    "physicsForceClock": "owned world subsystem immediately before each actual 120Hz world step",
+    "motorForceCapN": 260,
+    "positiveMotorInputPowerCapW": 400,
+    "eachPressureRackDriveForceCapN": 80,
+    "eachPressureRackPositiveInputPowerCapW": 120,
+    "pressureRackPassiveTransmission": false,
+    "rackDrive": "explicit active external supply, current real spring compression, finite source work and founded equal/opposite reaction",
+    "mirrorColumn": {
+      "fixedFolds": [
+        [
+          -3.5,
+          3,
+          -6
+        ],
+        [
+          -3.5,
+          3,
+          12
+        ]
+      ],
+      "movingMirrorBodyOffset": [
+        3.5,
+        3.96,
+        0
+      ],
+      "movingMirrorLocalNormal": [
+        -0.7071067811865475,
+        0.7071067811865475,
+        0
+      ],
+      "movingReceiverBodyOffset": [
+        4.8,
+        3.96,
+        0
+      ]
+    },
+    "apertureCollision": "existing production portalOpensCollider with local owned-shape mask carving; only the ordinary portal system transports cargo",
+    "sourceModels": {
+      "allTrackedGLBs": 59,
+      "runtimeGLBs": 31,
+      "allBytesMatchBase": true,
+      "packageOrNativeAcceptance": false
+    }
+  },
+  "verification": {
+    "targetedTests": 10,
+    "pass": 10,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0,
+    "completeOrdinaryCPUScenarios": 5,
+    "routes": [
+      "canonical freight transfer",
+      "receiver powered 9m plate hoist",
+      "weight-first landscape 16/9",
+      "weight-first landscape 1.6",
+      "light-first landscape 1.6 with actual second-light interruption"
+    ],
+    "routeIdentity": "same original cargo/body within each scenario; zero reported reset/respawn",
+    "boundedNegativeControls": [
+      "unweighted real shutter blocks first beam",
+      "current reflected ray without E motor selection does not raise support",
+      "actual relay retarget removes light and motor force; gravity returns carriage; ordinary restoration reuses same bodies",
+      "zero-time render/diagnostic preparation does not queue forces or advance clocks",
+      "dispose removes owned bodies, shape registrations and subsystem"
+    ],
+    "forceChecks": [
+      "actual carriage/deck/foundation force balance",
+      "zero founded velocity",
+      "actual positive source power caps",
+      "nonpositive spring/carriage/rack damping powers",
+      "moving mirror position equals actual carriage pose",
+      "latest bounded 2048 force-clock records are single-applied"
+    ],
+    "tap": {
+      "path": "/workspace/scratch/1949b02c22bb/room25-prototype-review/targeted-final.tap",
+      "bytes": 2781,
+      "sha256": "8e0c67b0dc6b322ff2fc3c3d59205e6e8b8d33656d72c6f37572d14480151e5c"
+    },
+    "allModelBytesReceipt": {
+      "path": "/workspace/scratch/1949b02c22bb/room25-prototype-review/runtime-model-byte-audit.json",
+      "sha256": "3f4e9c7f5da35189b080aa854ddefff8c40c9b8aa68198cc38c87ed3303ef6f0"
+    },
+    "priorTargetedFailurePreserved": {
+      "path": "/workspace/scratch/1949b02c22bb/room25-prototype-review/targeted-failed-exact-reset-contract.tap",
+      "pass": 9,
+      "fail": 1,
+      "reason": "old exact-zero kinematic reset assertion; actual unloaded physical settling was about 1.08mm, now bounded below 10mm without changing body poses"
+    }
+  },
+  "preserved": [
+    "second actual optical lift",
+    "9m permanent galleries and 18m high return",
+    "home slit 14.2..15.55m",
+    "original cargo body/shape within ordinary scenarios",
+    "all tracked source GLB bytes",
+    "shared Workshop/opticalLift/LabPhysics/portal controller source bytes"
+  ],
+  "limitations": [
+    "Both existing passenger opticalLift helpers remain target-integrated kinematic supports; this is not a wholly dynamic Room25.",
+    "Canonical freight route still completes without selecting the optional hoist motor, so the new mirror/hoist is not an established mandatory causal step.",
+    "Held-cargo pressure/foreign pressure, repeated-entry, extreme aperture placements, high-speed and all bypass scopes are not accepted.",
+    "Reflector planes derive from actual body poses, but complete visible reflector/finish contact matching and native visual inspection remain open.",
+    "No new native/browser/public package, full CPU suite, device, human, art/animation or whole-camera acceptance.",
+    "Master500, minimum human 15 minutes without checkpoints and campaign causal uniqueness remain open."
+  ],
+  "geometryReview": {
+    "readOnlyReviewer": "room20_native_journey",
+    "corrected": [
+      "vertical column moved outside slab footprint",
+      "moving reflector full swept radius and outgoing ray moved outside upper stop",
+      "shutter travel end stops moved to real overhead lugs above mandatory walking path"
+    ],
+    "withdrawnReviewFinding": "backing/trim stale-solid concern: LabGame.box defaults solid=false; those children are visual only, not registered solids"
+  }
+}
