@@ -1,0 +1,284 @@
+{
+  "kind": "room25-native-diagnostic-preparation-checkpoint",
+  "status": "prepared and CPU-rehearsed; actual native workflow execution pending",
+  "productionAccepted": false,
+  "sourceCiAccepted": false,
+  "nativeAccepted": false,
+  "publicationAccepted": false,
+  "fullRoomAccepted": false,
+  "humanAccepted": false,
+  "allBypassesAccepted": false,
+  "nativeRunAttempted": false,
+  "nativeRecordingCompleted": false,
+  "nativeWorkflowRunId": null,
+  "nativeArtifactId": null,
+  "nativeMP4": null,
+  "remoteWritesPerformed": false,
+  "providerZipDownloaded": false,
+  "providerZipAccepted": false,
+  "source": {
+    "commit": "5ccb9d9c3a9a55aad036e06379cdce76a8b10359",
+    "tree": "642b0e0cc5d4f131047bf7c0a24eafff788b155d",
+    "baseline": "5e552e9c3ac248b535d619741f15e99e29979cbf",
+    "branch": "research/room25-continuous-required-20261013",
+    "sourceInputFiles": 322,
+    "sourceInputsSha256": "207bc372f112e7d3657fe6e8c022c43798e880cf55faa05df8f69d709247f988",
+    "diagnosticProductionBuildInputsByteIdentical": true,
+    "originalModelFiles": 59,
+    "originalModelBytes": 37163924,
+    "allOriginalGlbsByteIdenticalToBaseline": true
+  },
+  "productionPackage": {
+    "commit": "5ccb9d9c3a9a55aad036e06379cdce76a8b10359",
+    "fileCount": 78,
+    "totalBytes": 6885267,
+    "packageFilesSha256": "bfa277529a7a4ed22ad54cb2d0670024dcb11def0c55e0dd18cc4597cacb875b",
+    "buildInfoSha256": "f4d47f3c409d21240d9640f0864444b1d6aca54877014b5e1b012e65840384c6",
+    "originalRuntimeModels": 14,
+    "productionJourney": {
+      "path": "assets/LabRoom25Journey-COqi9k-Z.js",
+      "bytes": 4626,
+      "sha256": "4113270db838996f7bcd1cd8d5edd4ca13461d19057e13a1a5f4e0f5085b9296"
+    }
+  },
+  "localController": {
+    "branch": "candidate/room25-native-readonly",
+    "directParentCommit": "5ccb9d9c3a9a55aad036e06379cdce76a8b10359",
+    "plannedRemoteBranch": "research/room25-required-native-diagnostic-20261013",
+    "files": [
+      {
+        "path": ".github/workflows/room25-required-native-diagnostic.yml",
+        "bytes": 5757,
+        "sha256": "2557c7c916d6d65b930345e6d16d2f7de508ba025e7fd76cc34eed5bcda8b070"
+      },
+      {
+        "path": "scripts/qa-room25-required-native.mjs",
+        "bytes": 20182,
+        "sha256": "68a49b002d10cd78581e722a3adffb4e4a9fa2a5b6242d391f9d6cb989c2ce1d"
+      },
+      {
+        "path": "scripts/freeze-room25-native-diagnostic.mjs",
+        "bytes": 7945,
+        "sha256": "c6dd46e7563367f8dfdcd48ea37123c5aa1f9c40d1dcfb3d7a2a995f9c7b37fe"
+      },
+      {
+        "path": "scripts/lib/room25-native-driver.mjs",
+        "bytes": 14343,
+        "sha256": "0021e112141bf63a13bf6f55b4e1a1d5dfa709f30bec548447bcf2c8b1638d96"
+      },
+      {
+        "path": "scripts/lib/room25-native-proof.mjs",
+        "bytes": 9823,
+        "sha256": "c1c2bcabf76d172aa0fbc3694f4bf4421ba8b15244a57c508401d08b8658594e"
+      },
+      {
+        "path": "tests/room25-native-contract.test.js",
+        "bytes": 7640,
+        "sha256": "5feddff5e32ef219f4caeb555fe0f1b6d9e58528b00fd1a4b3f73e1374ec5073"
+      },
+      {
+        "path": "tests/room25-native-driver.test.js",
+        "bytes": 4850,
+        "sha256": "996fad7f4b3755f64f90aebde05156fcbf38dc683bab0391763c299c49b87c3b"
+      }
+    ],
+    "filesSha256": "6db512a4e4ff33209fdf9095f2f8cfe7cdad7d3e73d3eeddb2cb779a1f961792",
+    "commitBinding": "Post-commit input-freeze/binding receipt records the actual controller commit and tree; this tracked checkpoint avoids a circular self-commit assertion."
+  },
+  "validation": {
+    "targetedTests": 9,
+    "pass": 9,
+    "fail": 0,
+    "tap": {
+      "filename": "native-controller-contracts-v3.tap",
+      "bytes": 2624,
+      "sha256": "606ba50118ecfa5a6f3507811862f75c659d111e004306bb2de90bc49f03abdd"
+    },
+    "preservedEarlierTaps": [
+      "native-controller-contracts-v1.tap",
+      "native-controller-contracts-v2.tap"
+    ],
+    "actualCpuRehearsal": {
+      "filename": "actual-shared-controller-cpu.json",
+      "bytes": 67894,
+      "sha256": "6edc6e685d402a32358f8d53cba5e53f7e3a9b6188557417f2876a81fe800140"
+    },
+    "physicsSteps": 23089,
+    "simulationSeconds": 192.40833333333333,
+    "visualSamples": 11546,
+    "captureCadenceSamples": 771,
+    "sameOriginalCompanion": true,
+    "cargoMass": 3.2,
+    "cargoHalfExtents": [
+      0.39,
+      0.39,
+      0.39
+    ],
+    "resetCounts": {
+      "resets": 0,
+      "respawns": 0,
+      "cargoResets": 0,
+      "levelResets": 0,
+      "machineResets": 0
+    },
+    "actualFullWin": true,
+    "cutGravityReturnAndRelight": true,
+    "observed": {
+      "postSteps": 23089,
+      "forceSamples": 23089,
+      "identityChecks": 34643,
+      "lastWorldStep": 23089,
+      "forceCountStart": 0,
+      "forceCountFinish": 23089,
+      "minHeight": -0.020615911083929656,
+      "maxHeight": 9.002284713167864,
+      "maxCargoY": 19.076999826061673,
+      "loadedContactSteps": 14593,
+      "positiveMotorForceSteps": 6995,
+      "motorOffDescendingSteps": 885,
+      "firstReceiverSteps": 4878,
+      "secondReceiverSteps": 2209,
+      "movingMirrorReflectionSteps": 8014,
+      "maxForceBalanceY": 2.842170943040401e-14,
+      "maxForceBalanceZ": 0,
+      "maxMotorPower": 247.7021644548907,
+      "maxMotorForce": 260,
+      "maxDampingPower": 0,
+      "externalMotorWorkStart": 0,
+      "externalMotorWorkFinish": 4680.000000000008,
+      "activeShutterRackWorkFinish": 1257.5277553050173,
+      "twoLegacyPassengerLiftsKinematic": true,
+      "passiveShutterTransmissionClaimed": false
+    },
+    "routeMilestones": [
+      {
+        "name": "one weight moves two opposite shadows",
+        "physicsSteps": 1778,
+        "seconds": 14.816666666666666,
+        "cargoBodyId": 112
+      },
+      {
+        "name": "ground switch supplies the continuously illuminated moving freight mirror",
+        "physicsSteps": 6944,
+        "seconds": 57.86666666666667,
+        "cargoBodyId": 112
+      },
+      {
+        "name": "permanent gallery keeps height after losing light",
+        "physicsSteps": 9212,
+        "seconds": 76.76666666666667,
+        "cargoBodyId": 112
+      },
+      {
+        "name": "retargeted portal removes current freight mirror supply and gravity returns the original support",
+        "physicsSteps": 9402,
+        "seconds": 78.35,
+        "cargoBodyId": 112
+      },
+      {
+        "name": "ordinary lower-floor portal restores light and raises the same original load",
+        "physicsSteps": 13790,
+        "seconds": 114.91666666666667,
+        "cargoBodyId": 112
+      },
+      {
+        "name": "first optical receiver raised the loaded counterweight onto a physical balcony",
+        "physicsSteps": 15280,
+        "seconds": 127.33333333333333,
+        "cargoBodyId": 112
+      },
+      {
+        "name": "balcony retrieval reverses both linked shadows without a cargo portal",
+        "physicsSteps": 16496,
+        "seconds": 137.46666666666667,
+        "cargoBodyId": 112
+      },
+      {
+        "name": "reverse overlook reveals the starting room",
+        "physicsSteps": 21172,
+        "seconds": 176.43333333333334,
+        "cargoBodyId": 112
+      }
+    ],
+    "scope": "Actual CPU execution of the identical serialized controller and genuine frozen production journey. Capture cadence samples contain no native pixels; no video was fabricated. Frozen source18-test parent evidence is separate and is not rerun by this preparation checkpoint."
+  },
+  "independentReview": {
+    "initialReceipt": {
+      "filename": "prepared-readonly-audit.json",
+      "bytes": 4665,
+      "sha256": "5c4dc418d88584242082eecb2ed1f214859e50672c89404d46a8b80451dd0246"
+    },
+    "resolvedReceipt": {
+      "filename": "prepared-readonly-reaudit.json",
+      "bytes": 4326,
+      "sha256": "0d7470c5c17310fc202f3d21a1db2adc06d03831417adcf58346d2e65bd8ba67"
+    },
+    "initialTargetedTestsPassed": 6,
+    "newFollowupTestsPassed": 3,
+    "remainingConcreteFindings": [],
+    "allThreeFindingsAddressed": true,
+    "nativeRunAttempted": false
+  },
+  "proposedActualNativeMethod": {
+    "ordinaryNativePlayButton": true,
+    "sourceEdition": "foundation",
+    "level": 25,
+    "normalSpawnRequired": true,
+    "worldStepAtPlayRequired": 0,
+    "driver": "shared serialized runRoom25NativeDriver",
+    "journey": "dynamically imported genuine compiled production module",
+    "inputs": "ordinary movement vector, yaw/pitch aiming, jump queue, actual firePortal and E interact APIs",
+    "noFixtureResetOrActorBodyPortalPoseWrites": true,
+    "renderScheduler": "Suppress only the automatic production animate callback before ordinary Play begins; all actual simulated route steps explicitly driven and observed",
+    "capture": {
+      "fps": 4,
+      "stride": 15,
+      "width": 640,
+      "height": 360
+    },
+    "bounds": {
+      "physicsSteps": 36000,
+      "movieBytes": 64000000,
+      "jpegWireBytes": 64000000,
+      "telemetryBytes": 25000000,
+      "metadataBytes": 25000000,
+      "artifactBytes": 150000000
+    },
+    "captureSource": "Actual production WebGL canvas after real render at declared interval plus actual off-stride won terminal; FIFO JPEG pipe into actual ffmpeg H264 MP4",
+    "runtimeRequired": "Observed Chrome/HeadlessChrome product/user agent plus WEBGL_debug_renderer_info unmasked ANGLE SwiftShader",
+    "proof": "All actual120Hz force/identity/clock aggregates, raw per-encoded-frame JSONL, whole MP4 ffprobe and complete decode/nonblank checks, source/controller/full HTTP package guards",
+    "noSeparatePngJpgFiles": true,
+    "noPaddingOrSubstituteFrames": true,
+    "structuredStageFailures": true,
+    "inventoryIncludesOwnBytes": true
+  },
+  "workflow": {
+    "path": ".github/workflows/room25-required-native-diagnostic.yml",
+    "jobs": 1,
+    "permissions": {
+      "contents": "read"
+    },
+    "separateLiteralSourceCheckout": true,
+    "sourceCommit": "5ccb9d9c3a9a55aad036e06379cdce76a8b10359",
+    "timeoutMinutes": 45,
+    "routeTimeoutSeconds": 2100,
+    "publicationJobs": 0,
+    "pagesWrites": false,
+    "remotePushes": false,
+    "actualProviderArtifactVerificationPending": true
+  },
+  "honestMechanicalScope": {
+    "physicalDynamicFreight": "Real dynamic guided carriage/deck driven by current continuous optical receiver and moving mirror; actual original load on physical contact",
+    "legacyPassengerLifts": "Two retained passenger optical lifts remain kinematic opticalLift implementations",
+    "externalSupplies": "Freight motor and active shutter racks perform explicitly accounted external work; passive shutter transmission is not claimed",
+    "minHeightActualCpu": -0.020615911083929656,
+    "minHeightLimitation": "Actual finite contact solver transient penetration is retained; exact zero-penetration or full mechanical acceptance is not claimed"
+  },
+  "remainingOpen": [
+    "Actual browser UI/renderer/canvas route has not run.",
+    "Native MP4, telemetry and whole actual provider artifact bytes await real workflow execution.",
+    "Camera readability, human puzzle discovery, device FPS and all alternate bypasses are unmeasured.",
+    "No current R4, publisher, main, source prototype, plan or public deployment changes.",
+    "Preparation is not release, source CI, whole-room or native acceptance."
+  ]
+}

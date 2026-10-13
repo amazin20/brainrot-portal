@@ -1,0 +1,107 @@
+name: Read-only native diagnostic of the frozen Room25 required hoist
+'on':
+  push:
+    branches: [research/room25-required-native-diagnostic-20261013]
+  workflow_dispatch:
+permissions: {contents: read}
+concurrency:
+  group: room25-required-native-diagnostic-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  room25-native-diagnostic:
+    name: room25-native-diagnostic
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      SOURCE_DIR: ../source
+      BUILD_DIR: ../source/dist
+      OUT_DIR: qa/room25-native-diagnostic
+      PAGE_URL: http://127.0.0.1:4173/brainrot-portal/
+    defaults:
+      run: {working-directory: diagnostic, shell: bash}
+    steps:
+      - name: Checkout the exact read-only diagnostic controller
+        uses: actions/checkout@v4
+        with: {ref: '${{ github.sha }}', path: diagnostic, fetch-depth: 0, persist-credentials: false}
+      - name: Checkout the literal frozen production source separately
+        uses: actions/checkout@v4
+        with: {ref: 5ccb9d9c3a9a55aad036e06379cdce76a8b10359, path: source, fetch-depth: 0, persist-credentials: false}
+      - uses: actions/setup-node@v4
+        with: {node-version: 22, cache: npm, cache-dependency-path: diagnostic/package-lock.json}
+      - name: Install fixed dependencies and recording tools
+        run: |
+          mkdir -p "$OUT_DIR"
+          set -o pipefail
+          {
+            npm ci
+            npm --prefix ../source ci
+            npm install --no-save --package-lock=false puppeteer-core@24.16.0
+            python3 -m venv "$RUNNER_TEMP/room25-native-python"
+            "$RUNNER_TEMP/room25-native-python/bin/python" -m pip install --disable-pip-version-check PyYAML==6.0.2
+            if ! command -v ffmpeg >/dev/null || ! command -v ffprobe >/dev/null; then
+              sudo apt-get update -qq
+              sudo apt-get install -y --no-install-recommends ffmpeg
+            fi
+            node --input-type=module <<'JS'
+          import fs from 'node:fs';
+          import {execFileSync} from 'node:child_process';
+          const chrome=execFileSync('bash',['-c','command -v google-chrome || command -v chromium'],{encoding:'utf8'}).trim();
+          if(!chrome)throw Error('Actual Chrome executable required');
+          fs.appendFileSync(process.env.GITHUB_ENV,'CHROME_PATH='+chrome+'\nROOM25_PYTHON='+process.env.RUNNER_TEMP+'/room25-native-python/bin/python\n');
+          JS
+          } 2>&1 | tee "$OUT_DIR/install.log"
+      - name: Freeze exact source, original GLBs and committed controller bytes
+        run: |
+          set -o pipefail
+          node scripts/freeze-room25-native-diagnostic.mjs freeze 2>&1 | tee "$OUT_DIR/freeze.log"
+      - name: Build and stamp only the clean literal source checkout
+        working-directory: source
+        env: {BUILD_COMMIT: 5ccb9d9c3a9a55aad036e06379cdce76a8b10359}
+        run: |
+          set -o pipefail
+          {
+            npm run build
+            node scripts/stamp-build.mjs v54-unified-campaign dist
+          } 2>&1 | tee ../diagnostic/qa/room25-native-diagnostic/build.log
+      - name: Bind the complete real production package and genuine journey export
+        run: |
+          set -o pipefail
+          node scripts/freeze-room25-native-diagnostic.mjs package 2>&1 | tee "$OUT_DIR/package.log"
+      - name: Test real shared controller and diagnostic contracts without native claims
+        run: |
+          set -o pipefail
+          node --test --test-reporter=tap tests/room25-native-contract.test.js tests/room25-native-driver.test.js 2>&1 | tee "$OUT_DIR/controller-tests.tap"
+          (cd ../source && node --test --test-reporter=tap tests/lab-room25-required-drive.test.js tests/lab-room25-optics.test.js tests/lab-room25-continuous-drive.test.js tests/lab-causal-routes-25-29.test.js) 2>&1 | tee "$OUT_DIR/frozen-room25-tests.tap"
+      - name: Record ordinary UI Play, current optical ascent, cut, gravity return, relight and full original win
+        run: |
+          set -o pipefail
+          mkdir -p qa/native-site/brainrot-portal
+          cp -a ../source/dist/. qa/native-site/brainrot-portal/
+          python3 -m http.server 4173 --bind 127.0.0.1 --directory qa/native-site >"$OUT_DIR/server.log" 2>&1 &
+          room25_native_server_pid=$!
+          trap 'kill "$room25_native_server_pid" 2>/dev/null || true' EXIT
+          node --input-type=module <<'JS'
+          import assert from 'node:assert/strict';
+          for(let attempt=0;attempt<80;attempt++){
+            try{const r=await fetch('http://127.0.0.1:4173/brainrot-portal/build-info.json',{cache:'no-store'});assert.ok(r.ok);assert.equal((await r.json()).commit,'5ccb9d9c3a9a55aad036e06379cdce76a8b10359');break;}
+            catch(error){if(attempt===79)throw error;await new Promise(resolve=>setTimeout(resolve,250));}
+          }
+          JS
+          timeout --signal=TERM --kill-after=10s 2100s node scripts/qa-room25-required-native.mjs 2>&1 | tee "$OUT_DIR/native.log"
+      - name: Recheck unchanged source, controller and complete package
+        if: always()
+        run: |
+          set -o pipefail
+          node scripts/freeze-room25-native-diagnostic.mjs verify 2>&1 | tee "$OUT_DIR/final-input-guard.log"
+      - name: Inventory actual bounded members after log writers exit
+        if: always()
+        run: node scripts/freeze-room25-native-diagnostic.mjs inventory
+      - name: Retain actual diagnostic or actual failure evidence only
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: room25-required-native-diagnostic-${{ github.run_id }}-${{ github.run_attempt }}
+          path: diagnostic/qa/room25-native-diagnostic/
+          compression-level: 0
+          if-no-files-found: error
+          retention-days: 14
