@@ -8,7 +8,7 @@ concurrency:
   group: campaign-polish-review-${{ github.ref }}
   # Replace the observed superseded reviews after integrating their changes.
   # Other source reviews keep their normal non-cancelling behavior.
-  cancel-in-progress: ${{ github.event_name == 'push' && (github.event.before == 'a8ca2cbec44294b8fab780881dc71d53ecf16908' || github.event.before == '2bb31bd0f3f3aa0c1be9b8f225d3aaf80596e8b7' || github.event.before == 'f69895b14d597fa65ba1f08ad6e733a4af473d34' || github.event.before == '619d30629d1b3d30e34f25a657491ef5b6d338c1') }}
+  cancel-in-progress: ${{ github.event_name == 'push' && (github.event.before == 'a8ca2cbec44294b8fab780881dc71d53ecf16908' || github.event.before == '2bb31bd0f3f3aa0c1be9b8f225d3aaf80596e8b7' || github.event.before == 'f69895b14d597fa65ba1f08ad6e733a4af473d34' || github.event.before == '619d30629d1b3d30e34f25a657491ef5b6d338c1' || github.event.before == '9f8f515ff00206c22b0e67c6ff55c1793767290a') }}
 env:
   BUILD_COMMIT: ${{ github.sha }}
 jobs:

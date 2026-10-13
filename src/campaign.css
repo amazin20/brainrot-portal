@@ -3,7 +3,7 @@
 .start-screen {
  --atlas-ink:#edf7ff; --atlas-muted:#abc3d4; --atlas-line:#b4ecff30;
  display:grid; grid-template-columns:minmax(185px,235px) minmax(400px,1fr) minmax(265px,320px);
- gap:clamp(18px,2vw,32px); align-content:center; align-items:center;
+ gap:clamp(18px,2vw,32px); align-content:safe center; align-items:center;
  padding:clamp(24px,3vw,48px); color:var(--atlas-ink); overflow-y:auto;
  background:linear-gradient(90deg,#071724ed 0%,#071724b8 37%,#07172463 75%,#071724c9 100%),url('/art/portal-laboratory-menu.webp') center/cover;
 }
