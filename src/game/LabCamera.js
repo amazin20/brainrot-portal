@@ -31,10 +31,16 @@ function spring(value, velocity, goal, frequency, dt) {
  * This module never changes player meshes, materials, or the renderer.
  */
 export class LabCamera {
-  constructor({ camera, blockers = [], isBlocker = () => true, epic = false, dynamicFov = true, fullBodyFraming = false }) {
+  constructor({ camera, blockers = [], isBlocker = () => true, epic = false, dynamicFov = true, fullBodyFraming = false, currentBlocker = null, currentBlockersValid = null }) {
     this.camera = camera;
     this.blockers = blockers;
     this.isBlocker = isBlocker;
+    this.currentBlocker = currentBlocker;
+    this.currentBlockersValid = currentBlockersValid;
+    this.foundation20EscapeOffset = null;
+    this.currentBlockerMeshes = new WeakMap();
+    this.currentBlockerSources = new WeakMap();
+    this.queryBlockers = blockers;
     this.focus = new THREE.Vector3();
     this.focusVelocity = new THREE.Vector3();
     this.lastTarget = new THREE.Vector3();
@@ -88,6 +94,7 @@ export class LabCamera {
     // their exact lens and FOV unless the chamber explicitly opts in.
     this.fullBodyFraming = !!fullBodyFraming;
     this.confinedFraming = false;
+    this.foundation20Framing = false;
     this.upwardBackoff = 0;
     this.upwardBackoffVelocity = 0;
   }
@@ -98,13 +105,50 @@ export class LabCamera {
     return this;
   }
 
-  configureSilhouette({ enabled = this.fullBodyFraming, confined = false } = {}) {
+  configureSilhouette({ enabled = this.fullBodyFraming, confined = false, foundation20 = false } = {}) {
+    this.foundation20EscapeOffset = null;
     this.fullBodyFraming = !!enabled;
     this.confinedFraming = !!confined;
+    this.foundation20Framing = Boolean(foundation20 && enabled && confined);
     return this;
   }
 
+  updateCurrentBlockers() {
+    if (!this.foundation20Framing || !this.currentBlocker) { this.queryBlockers = this.blockers; return; }
+    // These private query meshes never enter the scene or any aim/physics
+    // collection. Keep every original blocker and map each valid owned proxy
+    // to its exact current physical Box; all original hit policies still run.
+    this.queryBlockers = this.blockers.map(source => {
+      const descriptor = this.currentBlocker(source);
+      if (!descriptor) return source;
+      let mesh = this.currentBlockerMeshes.get(source);
+      if (!mesh) {
+        mesh = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), source.material);
+        this.currentBlockerMeshes.set(source, mesh);this.currentBlockerSources.set(mesh, source);
+      }
+      mesh.material = source.material;mesh.layers.mask = source.layers.mask;
+      mesh.position.copy(descriptor.current.center);mesh.quaternion.copy(descriptor.current.quaternion);
+      mesh.scale.copy(descriptor.half).multiplyScalar(2);mesh.updateMatrixWorld(true);
+      return mesh;
+    });
+  }
+
+  reusableFoundation20Escape() {
+    if (!this.foundation20Framing || !this.foundation20EscapeOffset) return null;
+    // An offset is only a search hint. Rebuild its endpoint around the actual
+    // current actor and reject it unless every owned moving Box is fresh and
+    // the current cap sweep and unchanged look point still admit the full gun.
+    if (this.currentBlockersValid?.() !== true) { this.foundation20EscapeOffset = null; return null; }
+    const candidate = this.playerPivot.clone().add(this.foundation20EscapeOffset);
+    if (this.constrain(this.playerPivot, candidate, 120)
+      || candidate.distanceTo(this.playerPivot) < 2.4 || this.silhouetteFovAt(candidate) > 120) {
+      this.foundation20EscapeOffset = null; return null;
+    }
+    return candidate;
+  }
+
   reset(target, yaw = 0, pitch = -0.2) {
+    this.foundation20EscapeOffset = null;
     this.broadPhase.clear(); this.rayHits.length = 0;
     this.focus.copy(target).y += 1.32;
     this.lastTarget.copy(target);
@@ -140,6 +184,7 @@ export class LabCamera {
    * `target` is the final destination foot position after physical clearance.
    * The returned yaw/pitch replace the game's orbit controls exactly once. */
   applyPortalTransform(entryOrMatrix, exit, { target, yaw = this.yaw, pitch = this.pitch, clipExit = true } = {}) {
+    this.foundation20EscapeOffset = null;
     const matrix = entryOrMatrix?.isMatrix4 ? entryOrMatrix : portalTransformMatrix(entryOrMatrix, exit);
     const rotation = new THREE.Quaternion().setFromRotationMatrix(matrix).normalize();
     const control = rotation.clone().multiply(this.portalOrientation).multiply(
@@ -303,8 +348,9 @@ export class LabCamera {
       this.desired.y = Math.max(this.desired.y, target.y + .67);
     }
     for (const object of this.blockers) object.updateWorldMatrix(true, true);
+    this.updateCurrentBlockers();
 
-    this.broadPhase.begin(this.blockers);
+    this.broadPhase.begin(this.queryBlockers);
     try {
     // Resolve both the smoothed pivot and the actual player. The latter matters
     // when crossing a doorway: a lagging focus must never see through its wall.
@@ -333,7 +379,7 @@ export class LabCamera {
         const candidate = this.playerPivot.clone().addScaledVector(direct, .7)
           .addScaledVector(this.right, side).addScaledVector(longitudinal, ahead);
         candidate.y = Math.max(candidate.y, this.playerPivot.y + height);
-        this.constrain(this.playerPivot, candidate);
+        this.constrain(this.playerPivot, candidate, this.foundation20Framing ? 120 : this.camera.fov);
         const clearance = candidate.distanceTo(this.playerPivot);
         if (clearance < 3.2) continue;
         const score = this.framingPenalty(candidate) * 100
@@ -354,12 +400,50 @@ export class LabCamera {
             .addScaledVector(lateral, Math.cos(angle) * 3.6)
             .addScaledVector(along, Math.sin(angle) * 3.6);
           candidate.y += height;
-          this.constrain(this.playerPivot, candidate);
+          this.constrain(this.playerPivot, candidate, this.foundation20Framing ? 120 : this.camera.fov);
           if (candidate.distanceTo(this.playerPivot) < 2.4) continue;
           const score = this.framingPenalty(candidate) * 100
             + candidate.distanceToSquared(this.desired)
             + candidate.distanceToSquared(this.camera.position) * (this.inclinedFraming ? 3 : .15);
           if (score < bestScore) { bestScore = score; best = candidate; }
+        }
+      }
+      // An upright castle bay can block the rear boom while a high escape
+      // still needs more than the finite lens budget. Search farther sideways
+      // only for that measured failure. Prefer a swept, cap-fitting view over
+      // a shorter endpoint that merely leaves physical space around the body.
+      if (this.fullBodyFraming && this.confinedFraming && this.viewUp.dot(UP) >= Math.cos(.01)
+        && (!best || this.silhouetteFovAt(best) > 120)) {
+        const lateral = this.right.clone().setY(0).normalize();
+        if (lateral.lengthSq() < .01) lateral.set(1, 0, 0);
+        const along = new THREE.Vector3().crossVectors(lateral, UP);
+        let fitted = this.reusableFoundation20Escape(), fittedScore = Infinity;
+        // Keep both the shoulder-relative and world-cardinal directions.
+        // Near a corner, rotating the sparse ring with aim can miss the only
+        // clear direction parallel to its wall.
+        // The actual Foundation20 back corridor has legal cap-fitting views
+        // beyond the castle ring, including a higher eye over its stair rail.
+        // Retain the exact existing search for every other chamber.
+        const radii = this.foundation20Framing ? [5.6, 7.2, 8, 10, 12] : [5.6, 7.2, 8];
+        const searchHeights = this.foundation20Framing ? [0, 1.5, 3, 4.5, 5.5, 8] : [0, 1.5, 3];
+        const sectors = this.foundation20Framing ? 32 : 16;
+        if (!fitted) for (const basis of [lateral, new THREE.Vector3(1, 0, 0)])
+        for (const radius of radii) for (const height of searchHeights) for (let sector = 0; sector < sectors; sector++) {
+          const angle = this.foundation20Framing ? sector * Math.PI / 16 : sector * Math.PI / 8;
+          const tangent = new THREE.Vector3().crossVectors(basis, UP);
+          const candidate = this.playerPivot.clone()
+            .addScaledVector(basis, Math.cos(angle) * radius)
+            .addScaledVector(tangent, Math.sin(angle) * radius);
+          candidate.y += height;
+          this.constrain(this.playerPivot, candidate, this.foundation20Framing ? 120 : this.camera.fov);
+          if (candidate.distanceTo(this.playerPivot) < 2.4 || this.silhouetteFovAt(candidate) > 120) continue;
+          const score = candidate.distanceToSquared(this.desired)
+            + candidate.distanceToSquared(this.camera.position) * .15;
+          if (score < fittedScore) { fittedScore = score; fitted = candidate; }
+        }
+        if (fitted) {
+          best = fitted;
+          if (this.foundation20Framing) this.foundation20EscapeOffset = fitted.clone().sub(this.playerPivot);
         }
       }
       if (best) { escapePosition = best; avoidGoal.copy(best).sub(this.desired); this.avoidanceActive = true; }
@@ -373,7 +457,7 @@ export class LabCamera {
     }
     if (this.avoidance.lengthSq() > .00001) {
       this.desired.add(this.avoidance);
-      this.constrain(this.playerPivot, this.desired);
+      this.constrain(this.playerPivot, this.desired, this.foundation20Framing && escapePosition ? 120 : this.camera.fov);
     }
     const safeLength = this.desired.distanceTo(this.focus);
     if (safeLength < this.distance) {
@@ -390,7 +474,11 @@ export class LabCamera {
     this.camera.position.copy(this.focus).addScaledVector(this.boomDirection, this.distance);
     // The shortened/smoothed position follows a different ray at a corner;
     // validate that final position too, never just the desired endpoint.
-    const pulledIn = this.constrain(this.playerPivot, this.camera.position);
+    // A Foundation20 escape can widen the final lens after this interpolation.
+    // Validate the actual intermediate eye against that same finite cap now,
+    // so a later wider near-plane sweep cannot collapse it into the actor.
+    const pulledIn = this.constrain(this.playerPivot, this.camera.position,
+      this.foundation20Framing && this.obstructed ? 120 : this.camera.fov);
     this.obstructed = this.obstructed || pulledIn;
     if (pulledIn) {
       this.distance = this.camera.position.distanceTo(this.focus);
@@ -399,7 +487,12 @@ export class LabCamera {
     // A fast fall past a balcony can close the available boom in one physics
     // step. In that exceptional case collision safety outranks spring lag:
     // use the already swept escape rather than render from inside the body.
-    if (escapePosition && this.camera.position.distanceTo(this.playerPivot) < 2.2) {
+    // A confined upright view also cannot interpolate through a lens that
+    // exceeds its finite budget when the swept endpoint already fits it.
+    const confinedOverBudget = this.fullBodyFraming && this.confinedFraming
+      && this.viewUp.dot(UP) >= Math.cos(.01) && this.silhouetteFovAt(this.camera.position) > 120
+      && escapePosition && this.silhouetteFovAt(escapePosition) <= 120;
+    if (escapePosition && (this.camera.position.distanceTo(this.playerPivot) < 2.2 || confinedOverBudget)) {
       this.camera.position.copy(escapePosition);
       this.distance = this.camera.position.distanceTo(this.focus);
       this.distanceVelocity = 0;
@@ -454,9 +547,10 @@ export class LabCamera {
   fitSilhouetteLens(step) {
     const upright = this.viewUp.dot(UP) >= Math.cos(.01);
     if (!this.fullBodyFraming || step <= 0 || (upright && !(this.confinedFraming && this.obstructed))) return;
+    const halfWidth = this.foundation20Framing && upright ? 1.35 : this.confinedFraming && upright ? .85 : .65;
     for (let pass = 0; pass < 3; pass++) {
       let tangent = 0;
-      for (const x of [-.65, .65]) for (const y of [-1.52, 1.52]) for (const z of [-.65, .65]) {
+      for (const x of [-halfWidth, halfWidth]) for (const y of [-1.52, 1.52]) for (const z of [-halfWidth, halfWidth]) {
         this.silhouettePoint.set(x, y, z).add(this.playerPivot)
           .applyMatrix4(this.camera.matrixWorldInverse);
         const depth = -this.silhouettePoint.z;
@@ -494,6 +588,26 @@ export class LabCamera {
         this.distanceVelocity = 0;
       }
     }
+  }
+
+  // Evaluate the same eight-corner margin as the final fit without writing
+  // the live lens. The look point and centre-ray target stay unchanged.
+  silhouetteFovAt(position) {
+    const forward = this.lookPoint.clone().sub(position).normalize();
+    const right = new THREE.Vector3().crossVectors(forward, this.viewUp).normalize();
+    const up = new THREE.Vector3().crossVectors(right, forward).normalize();
+    const point = new THREE.Vector3();let tangent = 0;
+    // The measured original Foundation20 gun/pulse extends 1.30m from its
+    // ordinary actor; the castle proxy must keep its existing dimensions.
+    const halfWidth = this.foundation20Framing ? 1.35 : .85;
+    for (const x of [-halfWidth, halfWidth]) for (const y of [-1.52, 1.52]) for (const z of [-halfWidth, halfWidth]) {
+      point.set(x, y, z).add(this.playerPivot).sub(position);
+      const depth = point.dot(forward);
+      if (depth <= this.camera.near) return 180;
+      tangent = Math.max(tangent, Math.abs(point.dot(up)) / (depth * .96),
+        Math.abs(point.dot(right)) / (depth * this.camera.aspect * .96));
+    }
+    return THREE.MathUtils.radToDeg(2 * Math.atan(tangent));
   }
 
   // An escape must retain the traveller in the lens, not merely leave space
@@ -570,7 +684,7 @@ export class LabCamera {
     return !!point && this.isInclinedExitLens() && this.mainClippingPlanes.some(plane => plane.distanceToPoint(point) < 0);
   }
 
-  constrain(origin, position) {
+  constrain(origin, position, sweepFov = this.camera.fov) {
     this.castDirection.copy(position).sub(origin);
     const distance = this.castDirection.length();
     if (distance < 0.0001 || this.blockers.length === 0) return false;
@@ -580,20 +694,24 @@ export class LabCamera {
     this.castUp.crossVectors(this.castDirection, this.castRight).normalize();
     // Cover the near-plane corners as well as the lens centre. At normal
     // display sizes the 24 cm minimum gives walls a comfortable safety margin.
-    const halfNearHeight = this.camera.near * Math.tan(THREE.MathUtils.degToRad(this.camera.fov * 0.5));
+    const halfNearHeight = this.camera.near * Math.tan(THREE.MathUtils.degToRad(sweepFov * 0.5));
     const radius = Math.max(0.24, halfNearHeight * Math.hypot(this.camera.aspect, 1) + 0.08);
     let safeDistance = distance;
     this.raycaster.near = 0;
     this.raycaster.far = distance + radius;
-    const candidates = this.broadPhase.select(this.blockers, origin, this.castDirection, distance, radius);
+    const blockers = this.foundation20Framing ? this.queryBlockers : this.blockers;
+    const candidates = this.broadPhase.select(blockers, origin, this.castDirection, distance, radius);
     for (const [x, y] of SAMPLE_OFFSETS) {
       this.castOrigin.copy(origin).addScaledVector(this.castRight, x * radius)
         .addScaledVector(this.castUp, y * radius);
       this.raycaster.set(this.castOrigin, this.castDirection);
       this.rayHits.length = 0;
       const hits = this.raycaster.intersectObjects(candidates, true, this.rayHits);
-      const hit = hits.find(candidate => !this.clipsPortalHit(candidate.point)
-        && this.isBlocker(candidate.object, candidate));
+      const hit = hits.find(candidate => {
+        if (this.clipsPortalHit(candidate.point)) return false;
+        const source = this.foundation20Framing ? this.currentBlockerSources.get(candidate.object) : null;
+        return source ? this.isBlocker(source, { ...candidate, object: source }) : this.isBlocker(candidate.object, candidate);
+      });
       if (hit) safeDistance = Math.min(safeDistance, Math.max(0, hit.distance - radius - 0.035));
     }
     if (safeDistance >= distance) return false;

@@ -7,6 +7,7 @@ import {FOUNDATION_INDICES} from '../../src/game/LabFoundationEdition.js';
 import {CAMPAIGN_THEMES,campaignTheme} from '../../src/game/LabCampaignThemes.js';
 import {SINGULARITY_ROOMS,SINGULARITY_SPEC} from '../../src/game/LabSingularityLayout.js';
 import {RELEASE_VERSION,DEFAULT_EDITION,EDITION_VERSION,RELEASE_ORIGINS} from '../../src/game/ReleaseIdentity.js';
+import {PHYSICAL_REVIEW_ENTRIES} from '../../src/game/LabPhysicalReviewEntry.js';
 
 export const sha256=bytes=>createHash('sha256').update(bytes).digest('hex');
 export function walkFiles(directory){
@@ -45,7 +46,7 @@ export function createReleaseManifest({directory,commit,platformArchive,root=pro
  assert.match(commit||'',/^[a-f0-9]{40}$/,'Exact source commit required');
  assert.ok(fs.existsSync(path.join(directory,'index.html')),'Stamp an existing production package');
  const inputs=buildSourceInputs(root),files=packageFiles(directory);
- const revisions={16:'cable-supported-architecture-v1',32:'siphon-observatory-v1',50:'echo-horizon-v1'};
+ const revisions={16:'cable-supported-architecture-v1',19:'portal-tension-physical-v1',32:'siphon-observatory-v1',40:'lower-pendulum-physical-camera-v3',50:'echo-horizon-v1'};
  const rooms=FOUNDATION_INDICES.map(index=>{
   const spec=campaignSpec({chamberEdition:DEFAULT_EDITION},index);
   assert.ok(spec?.id&&spec.title,`Missing definition for room ${index+1}`);
@@ -65,13 +66,14 @@ export function createReleaseManifest({directory,commit,platformArchive,root=pro
    foundation:{version:EDITION_VERSION,rooms:rooms.map(room=>room.level),newRooms:rooms.slice(41).map(({level,id,title})=>({level,id,title})),separateSave:true,sectorMap:true,
     chapters:CAMPAIGN_THEMES.map(theme=>({id:theme.id,title:theme.name,first:theme.from+1,last:theme.to+1}))},
    tower:{level:41,title:SINGULARITY_SPEC.name,stages:SINGULARITY_ROOMS.length,checkpoints:false},
+   standaloneEntries:PHYSICAL_REVIEW_ENTRIES.map(entry=>({path:entry.id+'/',level:entry.levelIndex+1,levels:entry.indices.map(i=>i+1),savePrefix:entry.storagePrefix,ordinaryControls:true})),
    presentation:{unifiedVisualTime:true,modelIdentitiesPreserved:true,menuArtwork:'art/portal-laboratory-menu.webp',chapterArchitectureThemes:true,atlasMenu:true,menuSettings:true},
    collision:{portalEmergenceSweep:true,carriedCargoEmergenceSweep:true},
    replacedRooms:[{level:17,previousId:'shifting-berth',id:rooms[16].id,title:rooms[16].title,revision:rooms[16].definitionRevision},
     {level:33,previousId:'post-inverse-spring',id:rooms[32].id,title:rooms[32].title,revision:rooms[32].definitionRevision},
     {level:51,previousId:'expansion-address-relay',id:rooms[50].id,title:rooms[50].title,revision:rooms[50].definitionRevision}]},
   videoCatalogue:{policy:'Existing recordings retain their original source and version. They are not re-labelled as current visual evidence.',
-   rooms:rooms.map(room=>({level:room.level,definitionRevision:room.definitionRevision,status:room.level===17?'needs-current-recording':'retained-recording-needs-current-visual-review',
-    gameplayCompatibility:room.level===17?null:RELEASE_ORIGINS.game}))},
+   rooms:rooms.map(room=>({level:room.level,definitionRevision:room.definitionRevision,status:[17,20,41].includes(room.level)?'needs-current-recording':'retained-recording-needs-current-visual-review',
+    gameplayCompatibility:[17,20,41].includes(room.level)?null:RELEASE_ORIGINS.game}))},
  };
 }

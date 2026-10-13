@@ -10,7 +10,7 @@ const tests=fs.readdirSync(new URL('../tests/',import.meta.url))
 if(!tests.length)throw new Error('No active game regression tests found');
 // Bound each worker's heap so simultaneous mesh/physics fixtures collect
 // unreachable rooms before exhausting the CI container's memory.
-const result=spawnSync(process.execPath,['--max-old-space-size=1024','--test','--test-concurrency=2',...tests],{stdio:'inherit'});
+const result=spawnSync(process.execPath,['--max-old-space-size=1024','--test','--test-reporter=tap','--test-concurrency=2',...tests],{stdio:'inherit'});
 if(result.error)throw result.error;
 if(result.signal)throw new Error(`Active test process ended with ${result.signal}`);
 process.exit(result.status??1);
