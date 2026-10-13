@@ -1,0 +1,55 @@
+name: Restore the exact recorded R5 PUBLIC verification packet without deployment
+on:
+  push:
+    branches: [audit/r5-public-packet-20261013]
+    paths:
+      - .github/workflows/audit-r5-public-packet.yml
+      - scripts/audit-r5-public-packet.py
+      - scripts/test-audit-r5-public-packet.py
+      - tools/r5-public-packet-audit.json
+permissions:
+  contents: read
+  actions: read
+  deployments: read
+concurrency:
+  group: r5-public-proof-transport
+  cancel-in-progress: false
+jobs:
+  packet:
+    name: Independently restore the exact completed PUBLIC proof and retain bounded transport
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: '${{ github.sha }}', fetch-depth: 0, persist-credentials: false}
+      - name: Test the narrow read-only transport guard
+        run: python3 scripts/test-audit-r5-public-packet.py
+      - name: Install the declared movie decoder
+        run: |
+          if ! command -v ffmpeg >/dev/null || ! command -v ffprobe >/dev/null; then
+            sudo apt-get update -qq
+            sudo apt-get install -y --no-install-recommends ffmpeg
+          fi
+      - name: Authenticate the exact completed publication, restore all ZIP bytes and verify every member CRC
+        env: {GITHUB_TOKEN: '${{ github.token }}'}
+        run: python3 scripts/audit-r5-public-packet.py restore
+      - name: Decode both actual PUBLIC movies and run the unchanged frozen semantic packet validator
+        env: {GITHUB_TOKEN: '${{ github.token }}'}
+        run: python3 scripts/audit-r5-public-packet.py packet
+      - name: Retain the bounded original PUBLIC evidence with distinct read-only transport provenance
+        uses: actions/upload-artifact@v4
+        with:
+          name: r5-public-verification-packet-${{ github.run_id }}-${{ github.run_attempt }}
+          path: r5-public-verification-packet/
+          if-no-files-found: error
+          retention-days: 30
+      - name: Retain restore inventory and actual provider receipts including failures
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: r5-public-transport-receipts-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            r5-transport/provider/
+            r5-transport/restore-receipt.json
+          if-no-files-found: error
+          retention-days: 30
