@@ -40,7 +40,16 @@ export function runOpenHydraulics(d,{route='equal-head',interrupt=false}={}){
  const aim=(i,s)=>d.aim(i,wallTarget(s));
  walk(12,11.4);pickup();walk(14,-9);g.interact();wait(1.5);
  aim(0,p['west-low']);aim(1,p[route==='full-east'?'east-high':'east-low']);
- if(interrupt){wait(.5);g.clearPortals();const before=[...l.tides.levels];wait(2);check(before.every((v,i)=>v===l.tides.levels[i]),'Disconnected water moved');aim(0,p['west-low']);aim(1,p[route==='full-east'?'east-high':'east-low']);}
+ if(interrupt){
+  wait(.5);walk(8.3,-3);
+  // This edge of the same floating floor exposes the low connection outside
+  // the glazing that blocks a low shot from the central cargo stance.
+  aim(0,p[route==='full-east'?'east-low':'east-high']);
+  const before=[...l.tides.levels];wait(2);
+  check(before.every((v,i)=>v===l.tides.levels[i])&&l.tides.flow===0,'Both mouths in one reservoir must stop new water transfer');
+  mark('both reachable eastern mouths hold the existing water without a reset');
+  aim(0,p['west-low']);
+ }
  until(()=>b.position.y>(route==='full-east'?7.7:3.98),30,'East hydraulic deck did not rise');wait(.5);mark('visible level gauges follow the real transferred water');
  collect(d);walk(14,-3);walk(5,-3);walk(-5,-3);walk(-14,-3);until(()=>g.playerGrounded,5,'West reservoir landing failed');
  walk(-14,-9);g.interact();wait(1.3);aim(1,p['east-low']);aim(0,p['west-high']);

@@ -16,12 +16,12 @@ export async function runSealedPartitionCases(){
    try{
     const report=await runV8Journey(game,{scenario:d=>{
      installRoom21Aim(d);const level=d.level;
-     const sealed=level.world.surfaces.filter(s=>s.name==='Sealed partition'||s.name==='Spring charge observation slot surround');
+     const sealed=room===33?[{name:level.bulkhead.name,mesh:level.bulkhead,portal:false}]:level.world.surfaces.filter(s=>s.name==='Sealed partition'||s.name==='Spring charge observation slot surround');
      assert.ok(sealed.length>0);assert.ok(sealed.every(s=>!s.portal&&!s.mesh.userData.portalable),'every authored structural partition stays nonportal');
      assert.ok(Object.values(level.panels).every(s=>s.mesh.userData.portalable),'explicit manufactured apertures remain portalable');
      let source,approach,plane;
      if(room===32){d.walk(7,16);source=level.panels['shadow-dispatch'];aimLateSurface(d,0,source);approach=[-8,-4];plane=-7.87;}
-     else if(room===33){d.walk(-3,14);source=level.panels['spring-ceiling'];aimLateSurface(d,0,source);approach=[8,-4];plane=-7.87;}
+     else if(room===33){d.walk(4,19);source=level.loading;aimLateSurface(d,0,source);approach=[8,-4];plane=-7.6;}
      else{d.walk(0,21);source=level.panels['air-origin'];aimLateSurface(d,0,source);approach=[-8,13];plane=9.13;}
      d.walk(approach[0],approach[1]);const target=new THREE.Vector3(approach[0],3,plane),rejected=[];
      d.look(target);

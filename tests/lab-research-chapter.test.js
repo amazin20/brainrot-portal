@@ -11,10 +11,19 @@ async function room(n){shared??=await createHeadlessGame();shared.chamberEdition
 for(const [n,options,aspect] of [[31,{},16/9],[31,{route:'scout-first',recover:true},16/10],[32,{},16/9],[32,{recover:true},16/9],[32,{route:'stored-energy'},16/10],[32,{route:'stored-energy'},16/9],[33,{},16/9],[33,{recover:true},16/10]]){
  test(`research ${n}: ordinary inputs, original companion, options ${JSON.stringify(options)} at ${aspect}`,async()=>{
   const g=await room(n);g.camera.aspect=aspect;g.camera.updateProjectionMatrix();
+  const cargo=g.cargo,body=g.physics.cargoBody;
   const r=await runV8Journey(g,{journeyOptions:options});
   assert.equal(r.pass,true);assert.equal(r.resets,0);assert.equal(r.respawns,0);assert.equal(g.state,'won');
   assert.equal(r.id,RESEARCH_SPECS[n-31].id);assert.equal(r.teleports,n===33?2:n===32&&options.route==='stored-energy'?1:0);
-  if(n===32&&options.route==='stored-energy'){assert.equal(g.portals.ready,false);assert.ok(g.firstLevel.drive.wheel.omega>0);}
+  assert.equal(g.cargo,cargo);assert.equal(g.physics.cargoBody,body);
+  if(n===32&&options.route==='stored-energy'){
+   assert.equal(g.portals.ready,true,'The physical service shortcut remains traversable');
+   assert.equal(g.portals.portals[0].surfaceId,g.firstLevel.panels['service-return'].mesh.uuid);
+   assert.equal(g.portals.portals[1].surfaceId,g.firstLevel.panels['turbine-feed'].mesh.uuid);
+   assert.equal(g.firstLevel.drive.flow,false,'Retargeting the source must stop fresh turbine power');
+   assert.ok(g.firstLevel.drive.wheel.omega>0,'The ordinary ascent must retain real stored motion');
+   assert.ok(r.milestones.some(m=>m.name==='The same portals become a service shortcut while stored motion remains'&&m.teleports===1),'The player must traverse that same shortcut before using the stored drive');
+  }
  });
 }
 test('new chapter keeps old indices, appends distinct real builders, and is available from both editions',async()=>{

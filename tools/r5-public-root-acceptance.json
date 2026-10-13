@@ -1,0 +1,71 @@
+{
+  "kind": "root-independent-R5-public-baseline-acceptance",
+  "schemaVersion": 1,
+  "pass": true,
+  "baselinePublicAccepted": true,
+  "originalCIConclusion": "failure",
+  "failureScope": "packet-transport-budget-only",
+  "acceptedAtUTC": "2026-10-13T10:08:38.475645+00:00",
+  "historicalPublic": {
+    "sourceCommit": "3f2e83127dfd5800068854a98843d73eb9377609",
+    "publisherCommit": "bd7481014483ccaaca64923388bdc87e2cafa7ea",
+    "publicationRun": 38366134401,
+    "sourceReview": {
+      "runId": 38348119403,
+      "runAttempt": 1
+    },
+    "sourceTree": "8a00a9e62642865d83c71039d72bf028dea46256",
+    "publicationRunAttempt": 1
+  },
+  "rescueTransport": {
+    "commit": "ff3487808d8f73e5c85482ec057a59615955740c",
+    "tree": "e6f827f94de6b4a64e4da8c71089b50f018c7eab",
+    "runId": 38378685455,
+    "runAttempt": 1
+  },
+  "packet": {
+    "artifactId": 11803065245,
+    "digest": "sha256:60f5cf0ccb6c63b693c4954de6c6192f3601b48f01e4048656d47803cc428dbd",
+    "inventorySha256": "cf8fcca94649918c10aa003de73fa2aa0a257264d839542623cbb59c7bc2af36",
+    "bytes": 9020,
+    "sha256": "f4911a3739360273cc7a418b4c2fcbd8c71cf168880a972d0e3e1963765499d7"
+  },
+  "independentRootChecks": {
+    "receivedArchiveBytes": 35145323,
+    "receivedArchiveSha256": "60f5cf0ccb6c63b693c4954de6c6192f3601b48f01e4048656d47803cc428dbd",
+    "expandedFiles": 42,
+    "expandedBytes": 68666469,
+    "allDeclaredPayloadsMatched": 41,
+    "crcPathsTypesAnd100MBLimit": true,
+    "byteIdenticalFrozenSemanticValidatorDerivedExactPacket": true,
+    "completeActualMoviesDecoded": [
+      {
+        "entry": "foundation20",
+        "frames": 361,
+        "seconds": 90.25,
+        "bytes": 2612571,
+        "sha256": "79860ab64fdb9f2355f19e5128c45dce0957da6a21e35fc3ce21d7c0feb764c7"
+      },
+      {
+        "entry": "castle",
+        "frames": 4474,
+        "seconds": 1118.5,
+        "bytes": 23421572,
+        "sha256": "632c66d58f02d7041670565dc6d50c84e631648794a6d90b7b403d43bd2ff111"
+      }
+    ],
+    "publicFiles": 1957,
+    "publicBytes": 633671648,
+    "publicInventorySha256": "d76664e04f5ac2f2b161d9af10da1aa2299df13cfec51a243659d2b732be13c6",
+    "completePublicUnionIndependentlyReconstructed": true,
+    "freshTransportHTTPAuditMatchesCompletePublicUnion": true
+  },
+  "scope": "Accepts the exact existing public byte union, completed ordinary public room20/castle, raw save/replay/camera and fully decoded current movies; the original CI failure remains recorded. The rescue produces read-only transport and no new capture or deployment.",
+  "limitations": {
+    "fullPrivateNestedArchivePayloadsIndependentlyDownloadedByRoot": false,
+    "privateNestedArchivesAccepted": false,
+    "humanPlaytest": false,
+    "hardwareFPS": false,
+    "newV55SourceOrPublicationAcceptedByThisReceipt": false
+  }
+}

@@ -1,4 +1,5 @@
 import {mapDeckUV} from './LabDeckUV.js';
+import {campaignSignText} from './LabCampaignSignage.js';
 import {encloseLab} from './LabHumanLab.js';
 import * as THREE from 'three';
 import {RoundedBoxGeometry} from 'three/addons/geometries/RoundedBoxGeometry.js';
@@ -61,6 +62,7 @@ function bearing(k,p,radius=1.6,depth=.7,normal=[0,0,1],parent=k.world.root){
 }
 
 export function sign(k,text,p,normal=[0,0,1],width=5,height=1){
+ text=campaignSignText(text,k);
  if(typeof document==='undefined'||!document.createElement)return;
  const canvas=document.createElement('canvas');if(!canvas.getContext)return;canvas.width=1024;canvas.height=Math.round(1024*height/width);const c=canvas.getContext('2d');if(!c)return;
  c.fillStyle='#172b36';c.fillRect(0,0,canvas.width,canvas.height);c.font=`600 ${Math.round(canvas.height*.54)}px sans-serif`;c.textAlign='center';c.textBaseline='middle';c.fillStyle='#fae8c0';c.fillText(text,canvas.width/2,canvas.height*.52,canvas.width*.92);

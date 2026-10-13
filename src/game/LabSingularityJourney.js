@@ -54,7 +54,7 @@ export async function runSingularityJourney(game,{onMilestone=()=>{},stopAfter=n
   game.yaw-=THREE.MathUtils.clamp(q.x,-1,1)*.21;game.pitch=THREE.MathUtils.clamp(game.pitch+THREE.MathUtils.clamp(q.y,-1,1)*.19,-1.15,1.15);await frame();
  }throw Error('Cannot aim at '+p.toArray());}
  async function shoot(slot,p){check(!game.heldCube,'Set companion down before firing');p=[...(p.toArray?.()??p)];const panel=game.portalPanels.find(a=>(a.userData.portalFrame?.()?.center??a.userData.center).distanceTo(V(...p))<.08);if(panel&&Math.abs((panel.userData.portalFrame?.()?.normal??panel.userData.normal).y)<.1)p[1]-=.4;await look(p);check(game.firePortal(slot),'Portal input rejected');report.shots++;report.actions.push({kind:'shoot',slot,...S()});await until(()=>!game.portalShots.queue.length&&!game.portalShots.active.length,4,'Unresolved shot');check(game.portalShots.lastImpact?.valid,'Invalid portal impact '+JSON.stringify(game.portalShots.lastImpact));}
- async function use(id,{approach=true,side=null}={}){const t=level.terminals.find(t=>t.id===id);check(t,'Unknown console '+id);if(approach)await walk([t.position.x,t.position.y-1,t.position.z+(side??(game.playerPosition.z<t.position.z?-1:1))*1.5]);check(!game.heldCube,'Hands occupied at '+id);check(game.interact(),'Interaction rejected '+id+' at '+game.playerPosition.toArray());report.interactions++;report.actions.push({kind:'use',id,...S()});await wait(.28);}
+ async function use(id,{approach=true,side=null}={}){const t=level.terminals.find(t=>t.id===id);check(t,'Unknown console '+id);if(approach)await walk([t.position.x,t.position.y-1,t.position.z+(side??(game.playerPosition.z<t.position.z?-1:1))*1.5]);check(!game.heldCube,'Hands occupied at '+id);const beforeActuator=t.actuator?.rotation.x;check(game.interact(),'Interaction rejected '+id+' at '+game.playerPosition.toArray());check(!game.heldCube,'E picked up the companion instead of operating '+id);if(t.actuator)check(t.actuator.rotation.x!==beforeActuator,'E operated a different console instead of '+id);report.interactions++;report.actions.push({kind:'use',id,...S()});await wait(.28);}
  async function pickup(){for(let i=0;i<4&&!game.heldCube;i++){
   const p=game.cargo.position;if(game.playerPosition.clone().add(V(0,1.1,0)).distanceTo(p)>1.9)await walk([p.x,game.playerPosition.y,p.z+1.1]);
   if(game.interact()&&game.heldCube){report.interactions++;await wait(.35);return;}await wait(.35);
@@ -91,10 +91,85 @@ export async function runSingularityJourney(game,{onMilestone=()=>{},stopAfter=n
   async optics(){await travel(level.rooms.get('optics').door);await walk(P('optics',20,12));await walk(P('optics',-17,12));await use('optics:mirror');await walk(P('optics',-16,-1));await shoot(0,st('optics').intake.center);await walk(P('optics',-14,12));await walk(P('optics',3,12));await shoot(1,st('optics').outlet.center);await until(()=>level.getTowerMetrics().solvedIds.includes('optics'),3,'No reflected portal beam');await leave('optics',[P('optics',20,12),P('optics',28,0)]);},
   async hoist(){await travel([0,0,54]);await pickup();await travel(level.rooms.get('hoist').door);await walk(P('hoist',-18,-11));await dropAt(st('hoist').pad,[1,0]);await walk(P('hoist',0,-7));await walk(P('hoist',0,0));await use('hoist:lift');await until(()=>game.playerPosition.y>17.7,8,'Counterweight hoist did not rise');await walk(P('hoist',0,10,18));await use('hoist:pawl');await walk(P('hoist',-12,9,18));await shoot(1,st('hoist').outlet.center);await walk(P('hoist',-12,6.45,18));await shoot(0,st('hoist').intake.center);await until(()=>level.getTowerMetrics().solvedIds.includes('hoist'),7,'Original cargo did not reach upper catcher');await pickup();await walk(P('hoist',-18,10,18));await walk(P('hoist',-18,0,18));await walk([level.rooms.get('hoist').door[0],18,level.rooms.get('hoist').door[2]]);await travel([0,18,54]);await dropAt([2,18,54]);},
   async archive(){await travel(level.rooms.get('archive').door);await use('archive:slide-a');await walk(P('archive',12,-7));await walk(P('archive',-5,-7));await walk(P('archive',-5,-13));await walk(P('archive',-7,-13));await use('archive:slide-b');await walk(P('archive',-5,-13));await walk(P('archive',-5,7));await walk(P('archive',-15,7));await until(()=>level.getTowerMetrics().solvedIds.includes('archive'),2,'Rewired archive route');await walk(P('archive',-5,7));await walk(P('archive',-5,-13));await walk(P('archive',-5,-7));await walk(P('archive',12,-7));await leave('archive',[P('archive',14,0)]);},
-  async flywheel(){await arrive('flywheel');await use('flywheel:ratio');await use('flywheel:crank');for(let i=0;i<4;i++)await use('flywheel:crank',{approach:false});await use('flywheel:clutch');if(st('flywheel').output>6){await use('flywheel:brake');await until(()=>st('flywheel').output<5.7,5,'Brake feedback');await use('flywheel:brake',{approach:false});}await until(()=>level.getTowerMetrics().solvedIds.includes('flywheel'),6,'Unstable output shaft');await leave('flywheel',[P('flywheel',13,0)]);},
+  async flywheel(){
+   await travel([0,18,54]);await pickup();await travel(level.rooms.get('flywheel').door);
+   await walk(P('flywheel',13,10));await walk(P('flywheel',11,10));
+   // Keep the capsule outside the tray's finite front edge. The ordinary
+   // carried body reaches the load face without walking through its riser.
+   await walk(P('flywheel',11,6.65),{sprint:false,tolerance:.025});await look(P('flywheel',11,1,1));await wait(.4);
+   check(game.heldCube&&game.interact(),'Original companion clutch release failed');report.interactions++;await wait(1);
+   await until(()=>st('flywheel').loadContact,3,'Original free cargo did not load the actual clutch tray');
+   mark('Original companion loads flywheel clutch');
+   await walk(P('flywheel',11,8.5));await use('flywheel:ratio',{side:1});
+   await use('flywheel:crank');for(let i=0;i<4;i++)await use('flywheel:crank',{approach:false});
+   // The walking route goes around the loaded tray rather than colliding
+   // with the free companion while crossing between the two controls.
+   await walk(P('flywheel',-11,8.5));await walk(P('flywheel',13.7,8.5));
+   await use('flywheel:clutch',{side:1});if(st('flywheel').output>6){await use('flywheel:brake');await until(()=>st('flywheel').output<5.7,8,'Physical brake feedback');await use('flywheel:brake',{approach:false});}
+   await until(()=>level.getTowerMetrics().solvedIds.includes('flywheel'),8,'Unstable physical output shaft');
+   await walk(P('flywheel',11,7.4));await pickup();await walk(P('flywheel',13,10));
+   await leave('flywheel',[P('flywheel',13,0)]);await travel([0,18,54]);await dropAt([2,18,54]);
+  },
   async magnet(){await travel([0,18,54]);await pickup();await travel(level.rooms.get('magnet').door);await walk(P('magnet',-16,0));await dropAt(st('magnet').sender,[1,0]);await walk(P('magnet',-17,-14));await use('magnet:coil-0');await until(()=>game.cargo.position.y>22.2,6,'Magnetic body did not rise');await use('magnet:coil-1');await until(()=>st('magnet').passed&&Math.abs(game.cargo.position.x-P('magnet',0)[0])<.15&&game.cargo.position.z>P('magnet',0,10.9)[2],10,'Cargo did not settle in the physical loading slit');await walk(P('magnet',-19,-9.5));await walk(P('magnet',-19,6.5));await use('magnet:coil-2');await until(()=>Math.hypot(game.cargo.position.x-P('magnet',12)[0],game.cargo.position.z-P('magnet',0,0)[2])<.5,12,'Cargo missed catcher');await use('magnet:coil-2',{approach:false});await until(()=>level.getTowerMetrics().solvedIds.includes('magnet'),6,'Cargo did not settle on real receiver');await until(()=>st('magnet').serviceProgress>.99,3,'Magnetic receiver did not release service door');await walk(P('magnet',-19,6.5));await walk(P('magnet',-19,-14));await walk(P('magnet',20.2,-14));await walk(P('magnet',20.2,18.8));await walk(P('magnet',18,18.8));await walk(P('magnet',18,3,4.2));await walk(P('magnet',13,2,4.2));await pickup();await walk(P('magnet',18,3,4.2));await walk(P('magnet',18,18.8));await walk(P('magnet',20.2,18.8));await walk(P('magnet',20.2,-14));await walk(P('magnet',-17,-14));await leave('magnet',[P('magnet',-17,0)]);await travel([0,36,54]);await dropAt([2,36,54]);},
   async migrant(){await travel(level.rooms.get('migrant').door);await walk(P('migrant',-12,12));await shoot(0,st('migrant').intake.center);await walk(P('migrant',-13,0));await shoot(1,st('migrant').moving.frame().center);await use('migrant:rail');await walk(P('migrant',-12,12));await until(()=>st('migrant').travel>.99,7,'Carriage did not reach opposite bank');await leave('migrant',[P('migrant',-12,0)]);await travel([0,36,54]);await pickup();await travel(level.rooms.get('migrant').door);await enter(st('migrant').intake);await walk(P('migrant',12,10,3));await until(()=>level.getTowerMetrics().solvedIds.includes('migrant'),2,'Joint carriage delivery');await enter(st('migrant').moving);await leave('migrant',[P('migrant',-12,12),P('migrant',-12,0)]);await travel([0,36,54]);await dropAt([2,36,54]);},
-  async pendulum(){await travel(level.rooms.get('pendulum').door);await walk(P('pendulum',24,-19));await walk(P('pendulum',-17,-19));await walk(P('pendulum',-17,-12));await until(()=>st('pendulum').ya<.15,11,'First span catch window');await use('pendulum:catch-a');await walk(P('pendulum',-19,-10));await walk(P('pendulum',-19,0));await jump();worldMove(1,0);for(let i=0;i<50;i++)await frame();stop();await walk(P('pendulum',-8,0));await walk(P('pendulum',0,0));await until(()=>st('pendulum').yb<.2,11,'Second span boarding window');await walk(P('pendulum',7,0),{followFloor:true});await until(()=>st('pendulum').yb>5.9,11,'Second span did not lift');await walk(P('pendulum',12,-1.3,6),{followFloor:true});await until(()=>st('pendulum').yb>5.99,11,'Raised span jump window');await wait(.15);game.input.keys.add('ShiftLeft');worldMove(0,1);for(let i=0;i<32;i++)await frame();await jump();worldMove(0,1);for(let i=0;i<70;i++)await frame();stop();await until(()=>game.playerGrounded&&game.playerPosition.y>41.8,2,'Upper return landing');await walk(P('pendulum',15,9.5,6));await until(()=>st('pendulum').yb>5.78,11,'Second catch window');await use('pendulum:catch-b');await until(()=>level.getTowerMetrics().solvedIds.includes('pendulum'),2,'Two catches not engaged');await walk(P('pendulum',19,11,6));await walk(P('pendulum',19,-13));await until(()=>st('pendulum').stairProgress>.99,3,'Upper catch did not open return stair');await walk(P('pendulum',19,-19));await leave('pendulum',[P('pendulum',24,-19),P('pendulum',24,0)]);},
+  async pendulum(){
+   const machine=st('pendulum'),cell=machine.cell;
+   await travel([0,36,54]);await pickup();await travel(level.rooms.get('pendulum').door);
+   await walk(P('pendulum',24,-19));await walk(P('pendulum',-17,-19));
+   // Put the original body onto the still closed intake before opening it.
+   // Aimed ordinary shots then turn its gravity fall into the raised cup.
+   await dropAt(P('pendulum',-17,-14));await walk(P('pendulum',-17,-22));
+   await shoot(1,machine.outlet.center);await shoot(0,machine.intake.center);
+   await until(()=>machine.loadContact&&cell.angle<-.10,15,'Original cargo did not physically lower the hinged bridge');
+   mark('Original companion tips lower hinged bridge');
+   // Go around the now open floor aperture to reach the catch with empty hands.
+   await walk(P('pendulum',-20,-22));await walk(P('pendulum',-20,-10));await use('pendulum:catch-a');
+   await until(()=>cell.catchArmed,3,'Actual hinged catch did not reach its founded heel seat');
+   // The same floor/ceiling pair now gives a real fall onto the lowered deck.
+   // Its finite west face is exposed beside the cup for the normal pickup ray.
+   await walk(P('pendulum',-17,-11));const beforeRecovery=game.teleportCount,entry=machine.intake.center;
+   for(let i=0;i<8*60&&game.teleportCount===beforeRecovery;i++){
+    const p=game.playerPosition,v=game.playerVelocity,direction=V(4*(entry.x-p.x)-3*v.x,0,4*(entry.z-p.z)-3*v.z).multiplyScalar(1/2.8);
+    if(direction.length()>1)direction.normalize();worldMove(direction.x*.42,direction.z*.42);await frame();
+   }
+   stop();check(game.teleportCount>beforeRecovery,'Actual floor portal recovery entry did not occur');
+   const recoveryTarget=V(...P('pendulum',-8,-.8));
+   for(let i=0;i<8*60&&!game.playerGrounded;i++){
+    const p=game.playerPosition,v=game.playerVelocity,direction=V(4*(recoveryTarget.x-p.x)-3*v.x,0,4*(recoveryTarget.z-p.z)-3*v.z).multiplyScalar(1/2.8);
+    if(direction.length()>1)direction.normalize();worldMove(direction.x,direction.z);await frame();
+   }
+   stop();check(game.playerGrounded&&game.playerPosition.y<36.2&&game.playerPosition.x>P('pendulum',-11)[0]&&game.playerPosition.x<P('pendulum',-2)[0]&&Math.abs(game.playerPosition.z-P('pendulum',0)[2])<2.1,'Portal recovery did not land on the actual lower deck');
+   await pickup();await until(()=>cell.unloadedRetained&&game.playerGrounded&&Math.hypot(game.playerVelocity.x,game.playerVelocity.z)<.12,8,'Actual unloaded cup support before the carried recovery jump');
+   await jump();game.input.keys.add('ShiftLeft');worldMove(-1,0);for(let i=0;i<70;i++)await frame();stop();
+   await walk(P('pendulum',-9,-.8),{followFloor:true,sprint:false});
+   await until(()=>cell.unloadedRetained,8,'Unloaded counterweight did not meet the actual retaining pawl');
+   mark('Original companion recovered; unloaded pawl retains bridge');
+   await walk(P('pendulum',-12.2,-.1),{followFloor:true,sprint:false});
+   game.input.keys.add('ShiftLeft');worldMove(-Math.SQRT1_2,-Math.SQRT1_2);for(let i=0;i<20;i++)await frame();
+   await jump();worldMove(-Math.SQRT1_2,-Math.SQRT1_2);for(let i=0;i<50;i++)await frame();stop();
+   await until(()=>game.playerGrounded&&game.playerPosition.z<P('pendulum',0,-2.6)[2],2,'Original cargo recovery missed the founded north strip');
+   // Keep the recovered original nearby while crossing. Cargo owns the
+   // founded floors' Cannon streaming radius, including the middle island.
+   await walk(P('pendulum',-15.6,-8));await dropAt(P('pendulum',-10,-10));
+   await until(()=>cell.readyForCrossing,3,'Free recovered original cargo and physical unloaded pawl retention are required before crossing');
+   await walk(P('pendulum',-15.6,-8));await walk(P('pendulum',-17,-4.3));
+   game.input.keys.add('ShiftLeft');worldMove(Math.SQRT1_2,Math.SQRT1_2);for(let i=0;i<20;i++)await frame();
+   await jump();worldMove(Math.SQRT1_2,Math.SQRT1_2);for(let i=0;i<35;i++)await frame();stop();
+   await until(()=>game.playerGrounded,2,'Lower hinged deck boarding');
+   await walk(P('pendulum',-11.5,-.8),{followFloor:true,sprint:false});await walk(P('pendulum',-8,-.8),{followFloor:true,sprint:false});
+   await walk(P('pendulum',-4.7,-.8),{followFloor:true,sprint:false});await walk(P('pendulum',0,-.8));
+   await until(()=>machine.lowerCrossing.complete,2,'Actual supported lower deck traversal was not observed');mark('Unloaded lower bridge crossed on actual deck support');
+   await until(()=>machine.yb<.2,11,'Second span boarding window');await walk(P('pendulum',7,0),{followFloor:true});
+   await until(()=>machine.yb>5.9,11,'Second span did not lift');await walk(P('pendulum',12,-1.3,6),{followFloor:true});
+   await until(()=>machine.yb>5.99,11,'Raised span jump window');await wait(.15);game.input.keys.add('ShiftLeft');worldMove(0,1);for(let i=0;i<32;i++)await frame();
+   await jump();worldMove(0,1);for(let i=0;i<70;i++)await frame();stop();await until(()=>game.playerGrounded&&game.playerPosition.y>41.8,2,'Upper return landing');
+   await walk(P('pendulum',15,9.5,6));await until(()=>machine.yb>5.78,11,'Second catch window');await use('pendulum:catch-b');
+   await until(()=>level.getTowerMetrics().solvedIds.includes('pendulum'),2,'Loaded, retained, crossed lower bridge and upper catch did not engage');
+   await walk(P('pendulum',19,11,6));await walk(P('pendulum',19,-13));await until(()=>machine.stairProgress>.99,3,'Upper catch did not open return stair');
+   await walk(P('pendulum',19,-19));await walk(P('pendulum',-10,-19));await walk(P('pendulum',-10,-10));await pickup();
+   await walk(P('pendulum',-10,-19));await leave('pendulum',[P('pendulum',24,-19),P('pendulum',24,0)]);
+   await travel([0,36,54]);await dropAt([2,36,54]);
+  },
   async inertia(){await travel(level.rooms.get('inertia').door);await walk(P('inertia',30,12));await walk(P('inertia',30,16));await walk(P('inertia',-22,16));await walk(P('inertia',-22,12));await walk(P('inertia',-22,-4));await shoot(0,st('inertia').intake.center);await walk(P('inertia',-22,12));await walk(P('inertia',-10,12));await shoot(1,st('inertia').outlet.center);await walk(P('inertia',-27,10));await walk(P('inertia',-27,-14,12));await walk(P('inertia',-1,-14,12));await walk(P('inertia',-1,-11.35,12),{sprint:false,tolerance:.06});const before=game.teleportCount;
    for(let i=0;i<8*60&&game.teleportCount===before;i++){if(game.playerGrounded)worldMove(0,.42);else{const entry=game.portals.portals[0].position,p=game.playerPosition,v=game.playerVelocity,steer=V((4*(entry.x-p.x)-3*v.x)/2.8,0,(4*(entry.z-p.z)-3*v.z)/2.8);if(steer.length()>1)steer.normalize();worldMove(steer.x,steer.z);}await frame();}stop();check(game.teleportCount>before,'Real falling aperture missed');await until(()=>game.playerGrounded,6,'Momentum crossing did not land');await walk(P('inertia',21,0,-3.5));await until(()=>level.getTowerMetrics().solvedIds.includes('inertia'),2,'Receiver balcony not reached');await walk(P('inertia',22,3,-3.5));await until(()=>st('inertia').returnProgress>.99,3,'Receiver did not release the return door');await walk(P('inertia',22,13));await leave('inertia',[P('inertia',30,13),P('inertia',30,0)]);},
   async crown(){await travel([0,36,54]);await pickup();await travel([0,72,54]);await travel(level.rooms.get('crown').door);await walk(P('crown',12,13));await dropAt(P('crown',12,13));await walk(P('crown',13,7));await shoot(0,st('crown').intake.center);await walk(P('crown',12,-10));await shoot(1,st('crown').outlet.center);await walk(P('crown',12,13));await pickup();await enter(st('crown').intake);await dropAt(st('crown').socket);await walk(st('crown').contact);await until(()=>game.state==='won',3,'Independent crown loads not closed');},

@@ -1,9 +1,9 @@
 import assert from 'node:assert/strict';
 import * as THREE from 'three';
 import {installRoom21Aim} from '../../src/game/LabRoom21Journey.js';
-import {runCreative20,creative20Floor,creative20Inspect,creative20Descend} from '../../src/game/LabCreativeRoom20Journey.js';
+import {runCreative20,creative20Floor,creative20Inspect,creative20Descend,creative20Collect} from '../../src/game/LabCreativeRoom20Journey.js';
 const V=(...p)=>new THREE.Vector3(...p);
-function collect(d){const c=d.game.cargo.position;d.walk(c.x+1.2,c.z);d.pickup();}
+function collect(d){creative20Collect(d);}
 function rush(d,x,z,seconds=3,{jump=true}={}){
  const g=d.game;g.input.keys.add('ShiftLeft');
  for(let n=0;n<seconds*60;n++){
@@ -15,10 +15,10 @@ function rush(d,x,z,seconds=3,{jump=true}={}){
 function closed(d,label){assert.ok(d.level.rope.opening<.05,label);assert.equal(d.game.state,'playing');}
 async function pair(d){await runCreative20(d,{stopAt:'pair-prepared'});}
 async function hanging(d){await runCreative20(d,{stopAt:'cargo-hanging'});}
-function cargoRelease(d){d.walk(-9,24);d.look(V(-9,2,10));d.walk(-9,19.25);d.wait(.4);assert.ok(d.game.interact());assert.equal(d.game.heldCube,null);d.wait(.7);}
+function cargoRelease(d){const p=d.level.feed.surface.getFrame().center;d.walk(p.x,p.z+6);d.look(V(p.x,2,p.z-8));d.walk(p.x,p.z+1.25);d.wait(.4);assert.ok(d.game.interact());assert.equal(d.game.heldCube,null);d.wait(.7);}
 export const creative20Attacks=[
  {name:'20 held companion cannot traverse the genuinely small floor-to-weight aperture',async run(d){
-  await pair(d);collect(d);d.walk(-9,22);
+  await pair(d);collect(d);const f=d.level.feed.surface.getFrame().center;d.walk(f.x,f.z+4);
   const point=d.game.portals.portals.find(p=>p.surfaceId===d.level.feed.surface.mesh.uuid).position;
   for(let n=0;n<240;n++){d.worldMove(0,n%120<60?-1:1);if(n%24===0)d.game.input.jumpQueued=true;d.frame();}d.stop();
   assert.equal(d.game.teleportCount,0);assert.ok(d.game.heldCube);assert.ok(d.game.playerPosition.z>0);closed(d,'Held cargo and player must leave the low freight gate closed');
@@ -38,12 +38,17 @@ export const creative20Attacks=[
   installRoom21Aim(d);creative20Inspect(d);creative20Descend(d);collect(d);rush(d,3,0,4);closed(d,'A remote outlet without its source leaves the real spring closed');
   assert.equal(d.game.physics.portalTransports,0);assert.ok(d.game.playerPosition.z>.4);
  }},
- {name:'20 cargo release on an erased source remains on its true manufactured plate',async run(d){
+ // Internal portal-closing lifecycle fixtures: the player has no delete-pair input.
+ {name:'20 internal portal closing preserves cargo on its true manufactured plate',async run(d){
   await pair(d);d.game.clearPortals();collect(d);cargoRelease(d);d.wait(2);rush(d,2,-4,4);
   assert.equal(d.game.physics.portalTransports,0);assert.ok(d.game.cargo.position.z>0);closed(d,'Missing apertures cannot fake the hanging load');
  }},
- {name:'20 erasing a live hanging pair restores the real cutset before a sprinting entry',async run(d){
-  await hanging(d);d.game.clearPortals();d.wait(3);closed(d,'Uncoupled spring must shut the door');
+ {name:'20 internal portal closing releases the spring before an entry attack',async run(d){
+  await hanging(d);const opening=d.level.rope.opening;d.game.clearPortals();d.wait(.5);
+  assert.equal(d.level.rope.currentPath(),null);assert.equal(d.level.nearHook.diagnostics().tension,0);
+  assert.ok(d.level.rope.opening<opening,'The unloaded massive train must start returning under its real spring');
+  d.until(()=>d.level.rope.opening<.05,5,'The unloaded massive train did not finish its finite return stroke');
+  closed(d,'Uncoupled spring must shut the door');
   d.walk(2,6);rush(d,2,-5,4);assert.ok(d.game.playerPosition.z>.4);assert.equal(d.level.rope.pinTravel,0);assert.ok(d.game.cargo.position.z< -8);
  }},
  {name:'20 sprinting recovery without the retaining finger cannot outrun the closing doorway',async run(d){
@@ -72,7 +77,7 @@ export const creative20EarlyAttacks=[
 // Additional production-input aperture-offset probes keep the shared finite
 // seven-case registry stable while covering both diagonal extreme addresses.
 export async function creative20HeldOffset(d,sourceOffset,exitOffset){
- installRoom21Aim(d);d.walk(-9,24);d.aim(0,d.level.feed.surface.getFrame().center.clone().add(V(sourceOffset,0,0)));
+ installRoom21Aim(d);const p=d.level.feed.surface.getFrame().center;d.walk(p.x,p.z+4);d.aim(0,p.clone().add(V(sourceOffset,0,0)));
  creative20Inspect(d);d.aim(1,d.level.outlet.getFrame().center.clone().add(V(exitOffset,0,0)));creative20Descend(d);
  collect(d);d.walk(-15,28.5);d.walk(-21,28.5);d.walk(-21,19);d.walk(-21,8);
  for(const [x,z]of [[-23.5,6],[-13.5,6],[-13.5,15.5],[-23.5,15.5]]){d.walk(x,z);d.look(d.level.outlet.getFrame().center);d.wait(.4);closed(d,'Offset active apertures cannot give a held near endpoint the missing finite cable reach');}

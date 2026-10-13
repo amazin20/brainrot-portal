@@ -22,7 +22,11 @@ test('new20 manufactured apertures reject the full capsule and admit all centred
  }});
 });
 test('new20 visual interpolation cannot change its complete physical and interaction contract',async()=>{
- await room();assert.deepEqual(CREATIVE_ROOM20_SPEC.assets,[1,2,11,22]);assert.deepEqual(g.firstLevel.fixtures,[]);const expected=digest(gameplayContract(g));assert.equal(expected,'e090e57bb2a7887e01f73c510d03b161ea23693fe1074b90aa0e2761f9f5e5f3','Pinned new-room physical, portal, floor and interaction contract changed');
+ await room();assert.deepEqual(CREATIVE_ROOM20_SPEC.assets,[1,2,11,22]);assert.deepEqual(g.firstLevel.fixtures,[]);
+ const train=g.firstLevel.nearHook;assert.equal(train.gateBody.mass,8);assert.equal(train.gateBody.type,1);
+ for(const part of train.gateParts)assert.equal(g.physics.bodyBoxes.get(part.collider.mesh.uuid).body,train.gateBody,'Both leaves, their tie and tooth belong to one massive train');
+ assert.equal(train.diagnostics().handMode,'passive-slip-rotor');
+ const expected=digest(gameplayContract(g));assert.equal(expected,'51a42830b9dd2c9979b023ebceb711ffc1031f5de0b24a06a58aae36e90756e1','Pinned current physical, portal, floor and interaction contract changed');
  for(const alpha of [0,.25,.5,.75,1]){g.firstLevel.renderUpdate(alpha);assert.equal(digest(gameplayContract(g)),expected);}
  for(const p of Object.values(g.firstLevel.panels)){assert.ok(p.getFrame().center.toArray().every(Number.isFinite));assert.equal(p.mesh.userData.portalSize.width,.8);}
  assert.deepEqual(g.firstLevel.puzzleGeometry.orders,['cargo-first','scout-first']);assert.equal(g.firstLevel.goal.position.z,23);
@@ -41,7 +45,7 @@ test('new20 every translated gate, tie, tooth and retaining pin has a real conti
  assert.ok(l.inspection.top-l.inspection.bottom<.78);
 });
 
-for(const offsets of [[-.8,.8],[.8,-.8]])test(`new20 held scaffold corners remain outside the real cable reach with actual portal offsets ${offsets}`,async()=>{
+for(const offsets of [[-.25,.25],[.25,-.25]])test(`new20 held scaffold corners remain outside the real cable reach with actual legal portal offsets ${offsets}`,async()=>{
  await room();const r=await runV8Journey(g,{scenario:d=>creative20HeldOffset(d,...offsets)});assert.equal(r.resets+r.respawns,0);
 });
 

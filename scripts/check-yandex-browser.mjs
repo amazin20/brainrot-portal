@@ -8,7 +8,7 @@ import puppeteer from 'puppeteer-core';
 const directory=path.resolve(process.env.YANDEX_DIR||'dist-yandex'),out=path.resolve(process.env.OUT_DIR||'qa/yandex-browser');
 fs.mkdirSync(out,{recursive:true});
 const prefix='/uploads/yandex-check/game/';
-const types={'.html':'text/html','.js':'application/javascript','.css':'text/css','.json':'application/json','.wasm':'application/wasm','.svg':'image/svg+xml','.png':'image/png'};
+const types={'.html':'text/html','.js':'application/javascript','.css':'text/css','.json':'application/json','.wasm':'application/wasm','.svg':'image/svg+xml','.png':'image/png','.webp':'image/webp'};
 const server=http.createServer((request,response)=>{
   const pathname=new URL(request.url,'http://localhost').pathname;
   if(!pathname.startsWith(prefix)){response.writeHead(404);response.end();return;}
@@ -65,7 +65,7 @@ try{
   assert.equal(await desktop.evaluate(()=>window.__sdkLog.filter(event=>event==='ready').length),1);
   assert.equal(await desktop.evaluate(()=>window.__sdkLocaleReads),1);
   assert.equal(await desktop.$eval('html',node=>node.lang),'ru');
-  assert.equal(await desktop.$eval('#level-select',node=>node.options.length),41);
+  assert.equal(await desktop.$eval('#level-select',node=>node.options.length),51);
   assert.equal(await desktop.$('.walkthrough-link'),null);
   assert.equal(await desktop.evaluate(()=>window.__NESI_DEMO_GAME__),undefined,'Production query must not expose debug harness');
   phase('desktop-start-audio');
@@ -106,7 +106,7 @@ try{
   await desktop.reload({waitUntil:'networkidle2'});await desktop.waitForFunction(()=>document.documentElement.dataset.runtimeState==='ready');
   assert.equal(await desktop.$eval('#level-select',node=>node.value),'1','Selected room survives reload via actual local storage');
   await desktop.screenshot({path:path.join(out,'desktop-menu.png')});
-  report.desktopLog=await desktop.evaluate(()=>window.__sdkLog);report.checks.push('41 rooms, SDK locale, no gallery/debug, start/stop, actual audio pause, interstitial/focus holds and local save reload');await desktop.close();
+  report.desktopLog=await desktop.evaluate(()=>window.__sdkLog);report.checks.push('51 rooms, SDK locale, no gallery/debug, start/stop, actual audio pause, interstitial/focus holds and local save reload');await desktop.close();
   phase('mobile-start');
   const mobile=await pageWithSDK({mobile:true});await mobile.waitForFunction(()=>document.documentElement.dataset.runtimeState==='ready');
   await mobile.tap('#play-button');await mobile.waitForFunction(()=>document.documentElement.dataset.runtimeState==='playing');

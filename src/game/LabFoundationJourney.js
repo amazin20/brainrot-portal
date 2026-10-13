@@ -36,7 +36,7 @@ function second(d,{alternate=false,recover=false}={}){
   collect(d);walk(8,8);walk(16,8);return;
  }
  connect();mark('Light has become a floor across the gap');
- if(recover){walk(-17,8);walk(-2,8);g.clearPortals();until(()=>g.playerGrounded&&g.playerPosition.y< -2.9,5,'Expected real fall after extinguishing bridge');walk(-10,-15);walk(-18,-15);walk(-18,4);walk(-16,15);connect();mark('Bridge loss has a dry recovery, without reset');}
+ if(recover){walk(-17,8);walk(-2,8);d.aim(0,p['service-exit'].getFrame().center);until(()=>g.playerGrounded&&g.playerPosition.y< -2.9,5,'Expected real fall after redirecting the projector aperture');check(g.portals.ready&&!l.light.segments[1],'The normal shot must withdraw the live bridge while keeping both apertures');mark('A reachable shot withdraws the light bridge before the service-floor return');walk(-10,-15);walk(-18,-15);walk(-18,4);walk(-16,15);connect();mark('Bridge loss has a dry recovery, without reset');}
  collect(d);walk(-17,8);walk(16,8);
 }
 function third(d,{alternate=false,recover=false,freight=false,returnCargo=false}={}){
@@ -116,7 +116,7 @@ function fourth(d,{alternate=false,recover=false}={}){
  collect(d);walk(-25,9);walk(-25,-16);walk(-20,-16);release(d);walk(-15,-13.4);d.aim(1,p['inclined-exit'].getFrame().center);
  // Optional exploration is a real fall from the permanent balcony to the
  // service floor away from the aperture, then an ordinary return up the ramp.
- if(recover){g.clearPortals();walk(-11,2);until(()=>g.playerGrounded,6,'Side fall did not reach solid support');walk(12,-6);walk(20,-6);walk(20,19);walk(-23,19);walk(-17,12);d.aim(0,p['fall-entry'].getFrame().center);walk(-25,9);walk(-25,-16);walk(-15,-13.4);d.aim(1,p['inclined-exit'].getFrame().center);mark('A missed drop returns through the service floor and actual incline');}
+ if(recover){walk(-11,2);until(()=>g.playerGrounded,6,'Side fall did not reach solid support');walk(12,-6);walk(20,-6);walk(20,19);walk(-23,19);walk(-17,12);d.aim(0,p['fall-entry'].getFrame().center);walk(-25,9);walk(-25,-16);walk(-15,-13.4);d.aim(1,p['inclined-exit'].getFrame().center);mark('A missed drop returns through the service floor and actual incline');}
  collect(d);mark('high departure prepared before the earned momentum flight');walk(-17,-12.1);wait(.4);const before=g.teleportCount;
  for(let i=0;i<180&&g.playerGrounded;i++){worldMove(0,1);frame();}stop();
  until(()=>g.teleportCount>before,5,'Falling aperture missed');until(()=>g.playerGrounded,6,'Receiving apron missed');

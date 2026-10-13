@@ -77,10 +77,18 @@ test('the new greenhouse is physical while its wall finish leaves all three fixe
  }
 });
 
-test('a fall and erased pair can be recovered from the real lower court while the same companion waits above',async()=>{
+test('a fall and reversed portal path can be recovered from the real lower court while the same companion waits above',async()=>{
  await g.selectLevel(23,false);g.camera.aspect=1.6;g.camera.updateProjectionMatrix();const body=g.physics.cargoBody;
- const report=await runV8Journey(g,{journeyOptions:{route:'carry-through',recovery:'ground-return'}});
- assert.equal(g.state,'won');assert.equal(report.resets+report.respawns,0);assert.equal(g.physics.cargoBody,body);assert.ok(report.milestones.some(m=>m.name==='fall and erased pair recovered through the low mechanical release'));
+ let reversed=false;
+ const report=await runV8Journey(g,{journeyOptions:{route:'carry-through',recovery:'ground-return'},onMilestone(mark){
+  if(mark.name==='fall and reversed portal path recovered through the low mechanical release'){
+   reversed=true;assert.ok(g.playerGrounded&&g.playerPosition.y<.2,'The player must recover from the actual lower floor');
+   assert.ok(g.firstLevel.gardenDoor.angle>-.01,'The real lower release must reverse the door');
+   assert.ok(g.portals.ready,'The pair remains installed while the physical route changes');
+   assert.ok(g.cargo.position.y>6,'The original companion must still wait on the upper garden');
+  }
+ }});
+ assert.equal(g.state,'won');assert.equal(report.resets+report.respawns,0);assert.equal(g.physics.cargoBody,body);assert.ok(reversed);
 });
 for(const aspect of [1.6,16/9])test(`canonical garden route without rehearsal or portal reset at aspect ${aspect}`,async()=>{
  await g.selectLevel(23,false);g.camera.aspect=aspect;g.camera.updateProjectionMatrix();const body=g.physics.cargoBody;

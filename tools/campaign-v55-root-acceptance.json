@@ -1,0 +1,69 @@
+{
+  "kind": "root-independent-campaign-v55-SOURCE-acceptance",
+  "schemaVersion": 1,
+  "pass": true,
+  "sourceAccepted": true,
+  "publicationAccepted": false,
+  "acceptedAtUTC": "2026-10-13T10:26:47.627405+00:00",
+  "sourceCommit": "ba5c86fd07facd9613f5e6e8efb9709bd2ef9e89",
+  "sourceTree": "1cd58611f9247c661b460c3a99f890a6e63a8715",
+  "sourceParent": "1160c296e024e34ac19b1d78247d9168eb7a18a7",
+  "sourceReview": {
+    "runId": 38377149910,
+    "runAttempt": 1
+  },
+  "automatedControl": {
+    "bytes": 282594,
+    "sha256": "38aa86cf918d2b87ff76d2bd5669adb7a69e4769004e5673bc349a01fd0a3fc7",
+    "pass": true,
+    "preFreezeSourceAccepted": false,
+    "allActualJobs": 24,
+    "cpuTests": 2120,
+    "cpuFailSkipCancelTodo": 0,
+    "ordinaryOriginalCompanionWins": 51,
+    "nativeOriginalCompanionWins": 51,
+    "finiteShortcutProbes": 200,
+    "unprovenShortcutProbes": 26,
+    "observedBypassCandidates": 0,
+    "reachedCastleAttackCases": 3,
+    "models": 14,
+    "modelBytes": 3290200,
+    "candidateFiles": 80,
+    "candidateBytes": 7053707,
+    "packageActualSourceInputsMatched": true,
+    "modelAndDracoBytesMatchAcceptedR5": true
+  },
+  "manualVisualReview": {
+    "scopePass": true,
+    "architectureOriginalsAtFull960x540": 102,
+    "quality": "balanced",
+    "substantialObservedBlockers": [],
+    "architectureReceipt": {
+      "bytes": 120735,
+      "sha256": "a1ad755f92e43de4b1616787868fae323c7003f26fc93d9d943165c7d9b9b2f4"
+    },
+    "animationReceipt": {
+      "bytes": 11045,
+      "sha256": "18d71e6c3c8fa1fadff7620bb2c3b2b2c1fc9760717562134ec5544dcc2f1689"
+    },
+    "freshAnimationFrames": 96,
+    "complete48FrameMovies": 2,
+    "originalHeldFrontSideViews": 6,
+    "rootPersonallyOpenedKeyArchitectureViews": 7,
+    "rootPersonallyOpenedHeldViews": 4,
+    "originalCargoShapeAndCameraRestorationSnapshotsMatched": true,
+    "sourceChangedDuringReview": false,
+    "presentationArtifact": {
+      "id": 11802933766,
+      "bytes": 14954028,
+      "digest": "sha256:7e8915831f14ab3fb0aef238f37e82a6040692c62f6285f9cd1d82235860a809"
+    }
+  },
+  "limitations": [
+    "Finite shortcut coverage retains26 unproven setup/error cases; no exhaustive bypass guarantee.",
+    "Visible start and interior sectors were inspected with all opaque geometry retained; hidden sectors are not certified.",
+    "Camera-only held snapshots inspect two real held poses, not puzzle-route or hardware FPS proof.",
+    "No human playtest, real-device performance or500-stage castle acceptance is claimed.",
+    "This receipt accepts the exact source; actual PUBLIC v55 publication still requires fresh verification."
+  ]
+}

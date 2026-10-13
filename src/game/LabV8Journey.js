@@ -91,8 +91,22 @@ export async function runV8Journey(game,{onMilestone=()=>{},scenario=null,journe
       await scenario({game,level,walk,wait,aim,look,until,pickup,enter,mark,frame,worldMove,stop});
       report.pass=true;report.kind='recovery';report.teleports=game.teleportCount;return report;
     }
-    if(level.creativeEarly){
-      const n=level.creativeEarly;assert([18,20].includes(n)&&n===index+1,'Unknown creative early room');
+    if(level.room23PhysicalPrototype){
+      const {runRoom23PhysicalJourney}=await import('./LabRoom23PhysicalJourney.js');
+      await runRoom23PhysicalJourney({game,level,walk,wait,aim,look,until,pickup,enter,mark,frame,worldMove,stop},journeyOptions);
+    }
+    else if(level.puzzleProgression){
+      const n=level.puzzleProgression;assert([44,45,46,47,48,49,50,51].includes(n)&&n===index+1,'Unknown spatial progression room');
+      const journey=await import(`./LabPuzzleProgression${n}Journey.js`);
+      await journey[`runPuzzleProgression${n}`]({game,level,walk,wait,aim,look,until,pickup,enter,mark,frame,worldMove,stop},journeyOptions);
+    }
+    else if(level.pilot43){const {runPuzzlePilot43}=await import('./LabPuzzlePilot43Journey.js');await runPuzzlePilot43({game,level,walk,wait,aim,look,until,pickup,enter,mark,frame,worldMove,stop},journeyOptions);}
+    else if(level.siphonObservatory){const {runSiphonObservatory}=await import('./LabSiphonObservatoryJourney.js');await runSiphonObservatory({game,level,walk,wait,aim,look,until,pickup,enter,mark,frame,worldMove,stop},journeyOptions);}
+    else if(level.echoHorizon){const {runEchoHorizon}=await import('./LabEchoHorizonJourney.js');await runEchoHorizon({game,level,walk,wait,aim,look,until,pickup,enter,mark,frame,worldMove,stop},journeyOptions);}
+    else if(level.expansionA){const {runExpansionAJourney}=await import('./LabExpansionJourneyA.js');await runExpansionAJourney({game,level,walk,wait,aim,look,until,pickup,enter,mark,frame,worldMove,stop},journeyOptions);}
+    else if(level.expansionB){const {runExpansionBJourney}=await import('./LabExpansionJourneyB.js');await runExpansionBJourney({game,level,walk,wait,aim,look,until,pickup,enter,mark,frame,worldMove,stop},journeyOptions);}
+    else if(level.creativeEarly){
+      const n=level.creativeEarly;assert([17,18,20].includes(n)&&n===index+1,'Unknown creative early room');
       const journey=await import(`./LabCreativeRoom${n}Journey.js`);
       await journey[`runCreative${n}`]({game,level,walk,wait,aim,look,until,pickup,enter,mark,frame,worldMove,stop},journeyOptions);
     }else if(level.postCampaign){
@@ -191,7 +205,7 @@ export async function runV8Journey(game,{onMilestone=()=>{},scenario=null,journe
     }
     until(()=>game.state==='won',3,'Goal did not complete');
     assert(game.heldCube||index===0||index>=5,'Friend lost from hands');mark('both at exit');
-    report.pass=true;report.teleports=game.teleportCount;return report;
+    report.pass=true;report.teleports=game.teleportCount;if(journeyOptions.alternative)report.alternative=journeyOptions.alternative;return report;
   } finally {
     stop();game.input.getMove=oldMove;game.respawn=respawn;game.physics.resetCargo=resetCargo;
   }

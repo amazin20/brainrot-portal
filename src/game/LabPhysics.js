@@ -1,9 +1,75 @@
 import {LabStaticAwareSAP} from './LabStaticAwareSAP.js';
 import { sweepBox } from './LabSweep.js';
+import {resolveCompoundCargoSweep} from './LabCompoundCargoSweep.js';
 import { Body, Box, ConvexPolyhedron, Material, Quaternion, Sphere, Vec3, World } from 'cannon-es';
 
 const SOLID = 1, CARGO = 2, PLAYER = 4;
 const EPSILON = 1e-10;
+const BODY_BOX_TOLERANCE = 1e-5;
+
+const finiteXYZ = value => value && ['x', 'y', 'z'].every(key => Number.isFinite(value[key]));
+const finiteQuaternion = value => value && ['x', 'y', 'z', 'w'].every(key => Number.isFinite(value[key]))
+  && Math.abs(value.x ** 2 + value.y ** 2 + value.z ** 2 + value.w ** 2 - 1) <= BODY_BOX_TOLERANCE;
+const vectorError = (a, b) => Math.max(...['x', 'y', 'z'].map(key => Math.abs(a[key] - b[key])));
+const quaternionError = (a, b) => Math.min(...[1, -1].map(sign =>
+  Math.max(...['x', 'y', 'z', 'w'].map(key => Math.abs(a[key] - sign * b[key])))));
+
+/** Inspect a real compound shape without manufacturing a second Cannon body.
+ * Registration owns the shape identity; live inspection also catches a later
+ * removed/replaced shape, stale pose, disabled contact or malformed envelope. */
+function inspectOwnedBodyBox(physics, entry, { orientedBox = entry?.orientedBox, bounds, enabled = true } = {}) {
+  const errors = [], fail = name => errors.push(name);
+  if (!entry) return { valid: false, errors: ['missing-owned-body-box'] };
+  const { body, shape, shapeIndex } = entry;
+  if (!(body instanceof Body) || body.world !== physics.world || !physics.world.bodies.includes(body)) fail('body-not-in-world');
+  if (!(shape instanceof Box) || !Number.isInteger(shapeIndex) || shapeIndex < 0
+    || body?.shapes?.[shapeIndex] !== shape || shape.body !== body) fail('shape-identity');
+  if (!orientedBox || orientedBox !== entry.orientedBox || orientedBox.body !== body) fail('oriented-box-identity');
+  if (physics.solids.has(entry.id)) fail('duplicate-static-id');
+  if (!(body instanceof Body) || !(shape instanceof Box) || !orientedBox) return { valid: false, errors };
+  const half = shape.halfExtents, offset = body.shapeOffsets[shapeIndex], shapeRotation = body.shapeOrientations[shapeIndex];
+  if (!finiteXYZ(half) || Math.min(half.x, half.y, half.z) <= 0 || !finiteXYZ(offset)) fail('finite-local-shape');
+  if (!finiteQuaternion(shapeRotation) || quaternionError(shapeRotation, new Quaternion()) > BODY_BOX_TOLERANCE) fail('local-shape-orientation');
+  if (!finiteXYZ(body.position) || !finiteQuaternion(body.quaternion)
+    || !finiteXYZ(body.velocity) || !finiteXYZ(body.angularVelocity)) fail('finite-body-pose');
+  if (!finiteXYZ(orientedBox.half) || !finiteXYZ(orientedBox.offset)
+    || !finiteXYZ(half) || !finiteXYZ(offset)
+    || vectorError(orientedBox.half, half) > BODY_BOX_TOLERANCE
+    || vectorError(orientedBox.offset, offset) > BODY_BOX_TOLERANCE) fail('local-shape-contact');
+  if (orientedBox.step !== physics.world.stepnumber) fail('stale-contact-step');
+  const cargo = physics.cargoBody, cargoShape = cargo?.shapes[0];
+  const cargoEnabled = Boolean(cargo && cargoShape && body.collisionResponse !== false && shape.collisionResponse !== false
+    && cargo.collisionResponse !== false && cargoShape.collisionResponse !== false
+    && (body.collisionFilterGroup & cargo.collisionFilterMask) !== 0
+    && (cargo.collisionFilterGroup & body.collisionFilterMask) !== 0
+    && (shape.collisionFilterGroup & cargoShape.collisionFilterMask) !== 0
+    && (cargoShape.collisionFilterGroup & shape.collisionFilterMask) !== 0);
+  if (cargoEnabled !== (enabled !== false)) fail('cargo-contact-mask');
+  const frameBounds = frame => {
+    if (!frame || !finiteXYZ(frame.center) || !finiteQuaternion(frame.quaternion)) { fail('finite-contact-pose'); return null; }
+    if (!finiteXYZ(half)) return null;
+    const q = new Quaternion(frame.quaternion.x, frame.quaternion.y, frame.quaternion.z, frame.quaternion.w);
+    const axes = [new Vec3(half.x, 0, 0), new Vec3(0, half.y, 0), new Vec3(0, 0, half.z)].map(axis => q.vmult(axis));
+    const extent = new Vec3(...['x', 'y', 'z'].map(key => axes.reduce((sum, axis) => sum + Math.abs(axis[key]), 0)));
+    const expected = { min: new Vec3(frame.center.x - extent.x, frame.center.y - extent.y, frame.center.z - extent.z),
+      max: new Vec3(frame.center.x + extent.x, frame.center.y + extent.y, frame.center.z + extent.z) };
+    if (!finiteXYZ(frame.bounds?.min) || !finiteXYZ(frame.bounds?.max)
+      || vectorError(frame.bounds.min, expected.min) > BODY_BOX_TOLERANCE
+      || vectorError(frame.bounds.max, expected.max) > BODY_BOX_TOLERANCE) fail('contact-bounds');
+    return expected;
+  };
+  const currentBounds = frameBounds(orientedBox.current);frameBounds(orientedBox.previous);
+  if (finiteXYZ(offset) && finiteXYZ(body.position) && finiteQuaternion(body.quaternion)
+    && finiteXYZ(orientedBox.current?.center) && finiteQuaternion(orientedBox.current?.quaternion)) {
+    const center = body.quaternion.vmult(offset).vadd(body.position);
+    if (vectorError(orientedBox.current.center, center) > BODY_BOX_TOLERANCE
+      || quaternionError(orientedBox.current.quaternion, body.quaternion) > BODY_BOX_TOLERANCE) fail('live-body-contact-pose');
+  }
+  if (bounds && (!currentBounds || !finiteXYZ(bounds.min) || !finiteXYZ(bounds.max)
+    || vectorError(bounds.min, currentBounds.min) > BODY_BOX_TOLERANCE
+    || vectorError(bounds.max, currentBounds.max) > BODY_BOX_TOLERANCE)) fail('visible-collider-bounds');
+  return { valid: errors.length === 0, errors, cargoEnabled };
+}
 
 function vector(value, fallback = new Vec3()) {
   if (!value) return fallback.clone();
@@ -97,6 +163,10 @@ export class LabPhysics {
     });
     this.cargoMaterial = new Material({ friction: 1, restitution: 1 });
     this.solids = new Map();
+    this.bodyBoxes = new Map();
+    this.cargoSweepBoxes = new Map();
+    this.compoundCargoSweepCorrections = 0;
+    this.lastCompoundCargoSweep = null;
     this.cargoBody = null;
     this.playerProxy = null;
     this.carryTarget = null;
@@ -112,7 +182,7 @@ export class LabPhysics {
   }
 
   addStaticBox(id, bounds, { friction = .64, restitution = .08, kinematic = false, enabled = true } = {}) {
-    if (this.solids.has(id)) throw new Error(`Collider already exists: ${id}`);
+    if (this.solids.has(id) || this.bodyBoxes.has(id)) throw new Error(`Collider already exists: ${id}`);
     const { half, center } = dimensions(bounds);
     const body = new Body({
       mass: 0, type: kinematic ? Body.KINEMATIC : Body.STATIC, allowSleep: false,
@@ -126,11 +196,63 @@ export class LabPhysics {
     return body;
   }
 
+  /** Bind an authored collider to its existing static or dynamic compound Box.
+   * Unlike solids, these entries never participate in static streaming, AABB
+   * sweeps or removal of the shared owner body. Cannon remains the sole owner. */
+  registerBodyBox(id, { body, shapeIndex, orientedBox } = {}) {
+    if (typeof id !== 'string' || !id || this.solids.has(id) || this.bodyBoxes.has(id)) throw new Error('A unique owned body Box id is required');
+    if ([...this.bodyBoxes.values()].some(entry => entry.body === body && entry.shapeIndex === shapeIndex)) throw new Error('This owned body Box is already registered');
+    const entry = { id, body, shapeIndex, shape: body?.shapes?.[shapeIndex], orientedBox };
+    const inspection = inspectOwnedBodyBox(this, entry);
+    if (!inspection.valid) throw new TypeError('Invalid owned body Box: ' + inspection.errors.join(', '));
+    this.bodyBoxes.set(id, entry);return true;
+  }
+
+  inspectBodyBox(id, options = {}) { return inspectOwnedBodyBox(this, this.bodyBoxes.get(id), options); }
+  removeBodyBox(id) { return this.bodyBoxes.delete(id); }
+
+  /** Opt-in CCD ownership for an existing fixed compound Box shape. It adds
+   * no physical body/contact/proxy and leaves every legacy collider unchanged. */
+  registerCargoSweepBox(id, {body,shapeIndex} = {}) {
+    if (typeof id !== 'string' || !id || this.cargoSweepBoxes.has(id)) throw new Error('A unique compound cargo sweep id is required');
+    if (!(body instanceof Body) || body.type !== Body.STATIC || body.mass !== 0 || !this.world.bodies.includes(body)) throw new TypeError('Register an existing owned static Cannon body');
+    if (!Number.isInteger(shapeIndex) || shapeIndex < 0 || !(body.shapes[shapeIndex] instanceof Box)) throw new TypeError('Register an actual Cannon Box shape index');
+    if ([...this.cargoSweepBoxes.values()].some(entry => entry.body === body && entry.shapeIndex === shapeIndex)) throw new Error('This compound cargo Box is already registered');
+    this.cargoSweepBoxes.set(id, {id,body,shapeIndex,shape:body.shapes[shapeIndex]});
+    return true;
+  }
+
+  removeCargoSweepBox(id) {
+    const removed=this.cargoSweepBoxes.delete(id);
+    if(!this.cargoSweepBoxes.size)this.lastCompoundCargoSweep=null;
+    return removed;
+  }
+
+  _guardRegisteredCompoundCargo(previous) {
+    const cargo=this.cargoBody;if (!cargo || !previous || !this.cargoSweepBoxes.size) return;
+    const cargoShape=cargo.shapes[0];
+    const entries=[...this.cargoSweepBoxes.values()].filter(entry =>
+      entry.body.type === Body.STATIC && entry.body.mass === 0 && this.world.bodies.includes(entry.body)
+      && entry.body.shapes[entry.shapeIndex] === entry.shape && entry.body.collisionResponse !== false
+      && entry.shape.collisionResponse !== false && cargo.collisionResponse !== false
+      && cargoShape?.collisionResponse !== false
+      && (cargo.collisionFilterGroup & entry.body.collisionFilterMask) !== 0
+      && (entry.body.collisionFilterGroup & cargo.collisionFilterMask) !== 0
+      && (cargoShape.collisionFilterGroup & entry.shape.collisionFilterMask) !== 0
+      && (entry.shape.collisionFilterGroup & cargoShape.collisionFilterMask) !== 0);
+    if (!entries.length) {this.lastCompoundCargoSweep=null;return;}
+    const result=resolveCompoundCargoSweep(cargo,previous,entries,{maxLinearSpeed:this.maxLinearSpeed,maxAngularSpeed:18});
+    this.compoundCargoSweepCorrections+=result.corrections.length;
+    this.lastCompoundCargoSweep={worldStep:this.world.stepnumber,...result,corrections:result.corrections.map(c=>({step:this.world.stepnumber,...c}))};
+    if (result.supported) this.sweepSupported=true;
+    if (result.corrections.length) this.world.broadphase.dirty=true;
+  }
+
   /** One static body/id, with closed convex wedges matching the actual deck
    * profile. Adjacent pieces share their complete end edge without height lips. */
   addStaticRamp(id, { minX, maxX, minZ, maxZ, lowY, highY, highAt = 'maxZ', profile } = {},
     { friction = .64, restitution = .04, enabled = true } = {}) {
-    if (this.solids.has(id)) throw new Error(`Collider already exists: ${id}`);
+    if (this.solids.has(id) || this.bodyBoxes.has(id)) throw new Error(`Collider already exists: ${id}`);
     if (![minX, maxX, minZ, maxZ, lowY, highY].every(Number.isFinite)) throw new TypeError('Ramp bounds must be finite');
     if (!(maxX > minX && maxZ > minZ && highY >= lowY)) throw new RangeError('Ramp needs positive width/length and an ascending height range');
     // Validate the entire profile before creating a body or changing the world.
@@ -347,43 +469,57 @@ export class LabPhysics {
       let first = null;
       for (const [id, item] of this.solids) {
         const solid = item.body;
-        if (ignored.has(id) || !solid.collisionFilterMask || item.kind === 'ramp'
-          || Math.abs(solid.quaternion.w) < .999999) continue;
+        if (ignored.has(id) || !solid.collisionFilterMask || item.kind === 'ramp') continue;
         const center = solid.type === Body.KINEMATIC && item.remaining > 0 ? item.target : solid.position;
+        // Sweep in this solid's own frame. Moving balance decks keep their
+        // real oriented Cannon boxes; skipping those boxes here lets portal
+        // clearance appear beyond a thin tilted obstruction for one tick.
+        // World-only dynamic bodies deliberately retain their contact solver.
+        const inverse = solid.quaternion.conjugate();
+        const localStart = inverse.vmult(start.vsub(center));
+        const localTarget = inverse.vmult(target.vsub(center));
+        const localAxes = axes.map(axis => inverse.vmult(axis));
+        const localExtent = new Vec3(...['x', 'y', 'z'].map(key => half
+          * localAxes.reduce((sum, axis) => sum + Math.abs(axis[key]), 0)));
         const min = {}, max = {};
         for (const key of ['x', 'y', 'z']) {
-          min[key] = center[key] - item.half[key] - extent[key];
-          max[key] = center[key] + item.half[key] + extent[key];
+          min[key] = -item.half[key] - localExtent[key];
+          max[key] = item.half[key] + localExtent[key];
         }
-        const inside = ['x', 'y', 'z'].every(key => start[key] > min[key] + 1e-8 && start[key] < max[key] - 1e-8);
+        const inside = ['x', 'y', 'z'].every(key => localStart[key] > min[key] + 1e-8 && localStart[key] < max[key] - 1e-8);
         let hit;
         if (inside) {
           // Exit clearance itself can initially overlap a nearby wall when the
           // cargo is tilted. Use the nearest face instead of letting the next
           // Cannon step choose an arbitrary side of that thin destination wall.
           const faces = ['x', 'y', 'z'].flatMap(axis => [
-            { axis, sign: -1, face: min[axis], distance: start[axis] - min[axis] },
-            { axis, sign: 1, face: max[axis], distance: max[axis] - start[axis] },
+            { axis, sign: -1, face: min[axis], distance: localStart[axis] - min[axis] },
+            { axis, sign: 1, face: max[axis], distance: max[axis] - localStart[axis] },
           ]).sort((a, b) => a.distance - b.distance);
           hit = { ...faces[0], t: 0, overlap: true };
-        } else hit = sweepBox(start, target, min, max);
-        if (hit && (!first || hit.t < first.t)) first = { ...hit, solid };
+        } else hit = sweepBox(localStart, localTarget, min, max);
+        if (hit && (!first || hit.t < first.t)) first = { ...hit, solid, center, localStart };
       }
       if (!first) { start.copy(target); break; }
       const key = first.axis;
+      const localNormal = new Vec3(); localNormal[key] = first.sign;
+      const normal = first.solid.quaternion.vmult(localNormal);
       if (first.overlap) {
-        const corrected = first.face + first.sign * margin;
-        start[key] = corrected;
+        first.localStart[key] = first.face + first.sign * margin;
+        first.solid.quaternion.vmult(first.localStart, start); start.vadd(first.center, start);
         // Preserve travel tangent to the contact, including a moving wall's
         // endpoint displacement, but never continue towards its opposite face.
-        if ((target[key] - corrected) * first.sign < 0) target[key] = corrected;
+        const inward = target.vsub(start).dot(normal);
+        if (inward < 0) target.vsub(normal.scale(inward), target);
       } else {
         const delta = target.vsub(start);
         delta.scale(first.t, delta); start.vadd(delta, start);
-        start[key] += first.sign * margin;
-        target[key] = start[key];
+        start.vadd(normal.scale(margin), start);
+        const inward = target.vsub(start).dot(normal);
+        if (inward < 0) target.vsub(normal.scale(inward), target);
       }
-      if (body.velocity[key] * first.sign < 0) body.velocity[key] = 0;
+      const inwardVelocity = body.velocity.dot(normal);
+      if (inwardVelocity < 0) body.velocity.vsub(normal.scale(inwardVelocity), body.velocity);
       contacts++;
     }
     body.position.copy(start);
@@ -586,9 +722,12 @@ export class LabPhysics {
         limit(this.cargoBody.angularVelocity, 18);
       }
       const previousCargo = this.cargoBody?.position.clone();
+      const previousCompoundCargo = this.cargoBody && this.cargoSweepBoxes.size
+        ? {position:this.cargoBody.position.clone(),quaternion:this.cargoBody.quaternion.clone()} : null;
       this.sweepSupported = false;
       this.world.step(this.fixedStep);
       this._guardSweptCargo(previousCargo);
+      this._guardRegisteredCompoundCargo(previousCompoundCargo);
       const supported = this.world.contacts.some(contact =>
         (contact.bi === this.cargoBody && contact.ni.y < -.45) ||
         (contact.bj === this.cargoBody && contact.ni.y > .45));
@@ -626,6 +765,9 @@ export class LabPhysics {
       solver: 'cannon-es', fixedHz: 1 / this.fixedStep, steps: this.steps,
       cargoCount: this.cargoBody ? 1 : 0, cargoSize: this.cargoSize ?? null,
       staticColliders: this.solids.size, carrying: Boolean(this.carryTarget),
+      compoundCargoSweepBoxes:this.cargoSweepBoxes.size,
+      ownedBodyBoxes:this.bodyBoxes.size,
+      compoundCargoSweepCorrections:this.compoundCargoSweepCorrections,
       grounded: this.grounded, sleeping: state?.sleeping ?? false,
       releasePlayerGrace: this.releasePlayerGrace,
       speed: state?.velocity.length() ?? 0, angularSpeed: state?.angularVelocity.length() ?? 0,
@@ -635,7 +777,9 @@ export class LabPhysics {
   }
 
   dispose() {
+    this.bodyBoxes.clear();
     for (const body of [...this.world.bodies]) this.world.removeBody(body);
     this.solids.clear(); this.cargoBody = null; this.playerProxy = null; this.carryTarget = null;
+    this.cargoSweepBoxes.clear();this.lastCompoundCargoSweep=null;
   }
 }

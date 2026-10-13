@@ -1,0 +1,10 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import {execFileSync} from 'node:child_process';
+const directory=process.argv[2]||'dist';
+execFileSync(process.execPath,['scripts/stamp-chapters.mjs',directory],{stdio:'inherit'});
+const file=path.join(directory,'build-info.json'),info=JSON.parse(fs.readFileSync(file));
+Object.assign(info,{version:'v52-echo-horizon',gameplayVersion:'v52-echo-horizon'});
+info.features.replacedRooms=[{level:51,previousId:'expansion-address-relay',id:'echo-horizon',title:'Эхо горизонта',revision:'echo-horizon-v1'}];
+info.verificationScope='Candidate with one fully replaced puzzle, room51. Themed architecture and original other rooms are retained. Refer to exact-source checks; retired room51 videos do not show this puzzle.';
+fs.writeFileSync(file,JSON.stringify(info,null,2)+'\n');

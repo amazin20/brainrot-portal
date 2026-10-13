@@ -1,0 +1,4242 @@
+{
+  "created": "2026-10-07T15:50:18.752Z",
+  "kind": "ordinary both-floor body attack after genuine permanent landing",
+  "sourceBefore": {
+    "LabCreativeRoom17.js": "6666940c90a0b976c174d0671e067535e451c4919b55a6a4f790337544f9da93",
+    "LabCreativeRoom17Journey.js": "ae7bd3f349c39063b5495607d3899dfef1df3e5eb494c122a77a9232babd3114"
+  },
+  "prefixCompleted": true,
+  "trace": [
+    {
+      "stage": "enter-feed",
+      "frame": 0,
+      "player": [
+        -11.036665028345016,
+        6.310000013113021,
+        15.993927232043166
+      ],
+      "velocity": [
+        3.0131386925588037,
+        0,
+        -0.992755827439144
+      ],
+      "grounded": true,
+      "playerTeleports": 0,
+      "cargo": [
+        -18.016780277594208,
+        -9.49916616294634,
+        -15.602934459842373
+      ],
+      "cargoTransports": 3,
+      "cargoContacts": [
+        {
+          "otherBody": 348,
+          "normal": [
+            0,
+            0,
+            -1
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        }
+      ],
+      "roofBoundsOverlap": false,
+      "heads": [
+        {
+          "position": [
+            -18,
+            -9.05,
+            -16.221069431940098
+          ],
+          "shapes": 3
+        }
+      ],
+      "beam": {
+        "angle": -0.67,
+        "tension": 0
+      }
+    },
+    {
+      "stage": "enter-feed",
+      "frame": 5,
+      "player": [
+        -11.030346010985198,
+        6.310000013113021,
+        15.81930163971255
+      ],
+      "velocity": [
+        -1.7253469975001134,
+        0,
+        -2.754288456402968
+      ],
+      "grounded": true,
+      "playerTeleports": 0,
+      "cargo": [
+        -18.016852779264436,
+        -9.499153323202398,
+        -15.60290855269276
+      ],
+      "cargoTransports": 3,
+      "cargoContacts": [
+        {
+          "otherBody": 348,
+          "normal": [
+            0,
+            0,
+            -1
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        }
+      ],
+      "roofBoundsOverlap": false,
+      "heads": [
+        {
+          "position": [
+            -18,
+            -9.05,
+            -16.221071690000294
+          ],
+          "shapes": 3
+        }
+      ],
+      "beam": {
+        "angle": -0.67,
+        "tension": 0
+      }
+    },
+    {
+      "stage": "enter-feed",
+      "frame": 10,
+      "player": [
+        -11.27803030902538,
+        6.310000013113021,
+        15.553871560720193
+      ],
+      "velocity": [
+        -3.736954196705541,
+        0,
+        -3.4417003185687607
+      ],
+      "grounded": true,
+      "playerTeleports": 0,
+      "cargo": [
+        -18.016925270261037,
+        -9.499140485003306,
+        -15.60288265274614
+      ],
+      "cargoTransports": 3,
+      "cargoContacts": [
+        {
+          "otherBody": 348,
+          "normal": [
+            0,
+            0,
+            -1
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        }
+      ],
+      "roofBoundsOverlap": false,
+      "heads": [
+        {
+          "position": [
+            -18,
+            -9.05,
+            -16.221073948239415
+          ],
+          "shapes": 3
+        }
+      ],
+      "beam": {
+        "angle": -0.67,
+        "tension": 0
+      }
+    },
+    {
+      "stage": "enter-feed",
+      "frame": 15,
+      "player": [
+        -11.63360309912964,
+        6.310000013113021,
+        15.253213204914829
+      ],
+      "velocity": [
+        -4.5921245101357915,
+        0,
+        -3.706259858883924
+      ],
+      "grounded": true,
+      "playerTeleports": 0,
+      "cargo": [
+        -18.016997750585265,
+        -9.499127648348738,
+        -15.602856760000696
+      ],
+      "cargoTransports": 3,
+      "cargoContacts": [
+        {
+          "otherBody": 348,
+          "normal": [
+            0,
+            0,
+            -1
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        }
+      ],
+      "roofBoundsOverlap": false,
+      "heads": [
+        {
+          "position": [
+            -18,
+            -9.05,
+            -16.221076206657468
+          ],
+          "shapes": 3
+        }
+      ],
+      "beam": {
+        "angle": -0.67,
+        "tension": 0
+      }
+    },
+    {
+      "stage": "enter-feed",
+      "frame": 20,
+      "player": [
+        -12.03509755599014,
+        6.310000013113021,
+        14.939132015055064
+      ],
+      "velocity": [
+        -4.956686856902983,
+        0,
+        -3.8057235924272077
+      ],
+      "grounded": true,
+      "playerTeleports": 0,
+      "cargo": [
+        -18.01707022023835,
+        -9.49911481323838,
+        -15.60283087445461
+      ],
+      "cargoTransports": 3,
+      "cargoContacts": [
+        {
+          "otherBody": 348,
+          "normal": [
+            0,
+            0,
+            -1
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        }
+      ],
+      "roofBoundsOverlap": false,
+      "heads": [
+        {
+          "position": [
+            -18,
+            -9.05,
+            -16.22107846525446
+          ],
+          "shapes": 3
+        }
+      ],
+      "beam": {
+        "angle": -0.67,
+        "tension": 0
+      }
+    },
+    {
+      "stage": "enter-feed",
+      "frame": 25,
+      "player": [
+        -12.45620483964522,
+        6.308645846446355,
+        14.620087032739974
+      ],
+      "velocity": [
+        -5.11274113683065,
+        -0.1625,
+        -3.841683493923318
+      ],
+      "grounded": false,
+      "playerTeleports": 0,
+      "cargo": [
+        -18.01714267922155,
+        -9.499101979671913,
+        -15.602804996106064
+      ],
+      "cargoTransports": 3,
+      "cargoContacts": [
+        {
+          "otherBody": 348,
+          "normal": [
+            0,
+            0,
+            -1
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        }
+      ],
+      "roofBoundsOverlap": false,
+      "heads": [
+        {
+          "position": [
+            -18,
+            -9.05,
+            -16.221080724030404
+          ],
+          "shapes": 3
+        }
+      ],
+      "beam": {
+        "angle": -0.67,
+        "tension": 0
+      }
+    },
+    {
+      "stage": "enter-feed",
+      "frame": 30,
+      "player": [
+        -12.89086754829729,
+        6.220625013113022,
+        14.293591047960016
+      ],
+      "velocity": [
+        -5.3004190981110995,
+        -1.7875000000000003,
+        -3.980324839118601
+      ],
+      "grounded": false,
+      "playerTeleports": 0,
+      "cargo": [
+        -18.017215127536122,
+        -9.499089147649016,
+        -15.602779124953242
+      ],
+      "cargoTransports": 3,
+      "cargoContacts": [
+        {
+          "otherBody": 348,
+          "normal": [
+            0,
+            0,
+            -1
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        }
+      ],
+      "roofBoundsOverlap": false,
+      "heads": [
+        {
+          "position": [
+            -18,
+            -9.05,
+            -16.221082982985312
+          ],
+          "shapes": 3
+        }
+      ],
+      "beam": {
+        "angle": -0.67,
+        "tension": 0
+      }
+    },
+    {
+      "stage": "enter-feed",
+      "frame": 35,
+      "player": [
+        -13.333350978075073,
+        6.18,
+        13.96286083857622
+      ],
+      "velocity": [
+        -5.285195590427488,
+        0,
+        -3.931205732315914
+      ],
+      "grounded": true,
+      "playerTeleports": 0,
+      "cargo": [
+        -18.017287565183306,
+        -9.49907631716937,
+        -15.60275326099433
+      ],
+      "cargoTransports": 3,
+      "cargoContacts": [
+        {
+          "otherBody": 348,
+          "normal": [
+            0,
+            0,
+            -1
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        }
+      ],
+      "roofBoundsOverlap": false,
+      "heads": [
+        {
+          "position": [
+            -18,
+            -9.05,
+            -16.221085242119184
+          ],
+          "shapes": 3
+        }
+      ],
+      "beam": {
+        "angle": -0.67,
+        "tension": 0
+      }
+    },
+    {
+      "stage": "enter-feed",
+      "frame": 40,
+      "player": [
+        -13.77228427233638,
+        6.18,
+        13.637646145972292
+      ],
+      "velocity": [
+        -5.256504901704055,
+        0,
+        -3.8847491532825273
+      ],
+      "grounded": true,
+      "playerTeleports": 0,
+      "cargo": [
+        -18.017359992164355,
+        -9.499063488232654,
+        -15.602727404227505
+      ],
+      "cargoTransports": 3,
+      "cargoContacts": [
+        {
+          "otherBody": 348,
+          "normal": [
+            0,
+            0,
+            -1
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        }
+      ],
+      "roofBoundsOverlap": false,
+      "heads": [
+        {
+          "position": [
+            -18,
+            -9.05,
+            -16.221087501432034
+          ],
+          "shapes": 3
+        }
+      ],
+      "beam": {
+        "angle": -0.67,
+        "tension": 0
+      }
+    },
+    {
+      "stage": "enter-feed",
+      "frame": 45,
+      "player": [
+        -14.209756093814178,
+        6.18,
+        13.314986255608597
+      ],
+      "velocity": [
+        -5.245661082282716,
+        0,
+        -3.8638649646260643
+      ],
+      "grounded": true,
+      "playerTeleports": 0,
+      "cargo": [
+        -18.01743240848052,
+        -9.499050660838552,
+        -15.602701554650954
+      ],
+      "cargoTransports": 3,
+      "cargoContacts": [
+        {
+          "otherBody": 348,
+          "normal": [
+            0,
+            0,
+            -1
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        }
+      ],
+      "roofBoundsOverlap": false,
+      "heads": [
+        {
+          "position": [
+            -18,
+            -9.05,
+            -16.221089760923874
+          ],
+          "shapes": 3
+        }
+      ],
+      "beam": {
+        "angle": -0.67,
+        "tension": 0
+      }
+    },
+    {
+      "stage": "enter-feed",
+      "frame": 50,
+      "player": [
+        -14.646691909253965,
+        6.18,
+        12.993491009313708
+      ],
+      "velocity": [
+        -5.241863903124651,
+        0,
+        -3.8541746488775885
+      ],
+      "grounded": true,
+      "playerTeleports": 0,
+      "cargo": [
+        -18.01750481413305,
+        -9.499037834986748,
+        -15.602675712262863
+      ],
+      "cargoTransports": 3,
+      "cargoContacts": [
+        {
+          "otherBody": 348,
+          "normal": [
+            0,
+            0,
+            -1
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        }
+      ],
+      "roofBoundsOverlap": false,
+      "heads": [
+        {
+          "position": [
+            -18,
+            -9.05,
+            -16.221092020594707
+          ],
+          "shapes": 3
+        }
+      ],
+      "beam": {
+        "angle": -0.67,
+        "tension": 0
+      }
+    },
+    {
+      "stage": "enter-feed",
+      "frame": 55,
+      "player": [
+        -15.083454666701291,
+        6.18,
+        12.672549867446683
+      ],
+      "velocity": [
+        -5.240812421906391,
+        0,
+        -3.849411269747317
+      ],
+      "grounded": true,
+      "playerTeleports": 0,
+      "cargo": [
+        -18.017577209123203,
+        -9.499025010676913,
+        -15.602649877061415
+      ],
+      "cargoTransports": 3,
+      "cargoContacts": [
+        {
+          "otherBody": 348,
+          "normal": [
+            0,
+            0,
+            -1
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        }
+      ],
+      "roofBoundsOverlap": false,
+      "heads": [
+        {
+          "position": [
+            -18,
+            -9.05,
+            -16.221094280444554
+          ],
+          "shapes": 3
+        }
+      ],
+      "beam": {
+        "angle": -0.67,
+        "tension": 0
+      }
+    },
+    {
+      "stage": "enter-feed",
+      "frame": 60,
+      "player": [
+        -15.520186757634496,
+        6.18,
+        12.351896219526065
+      ],
+      "velocity": [
+        -5.240869740536865,
+        0,
+        -3.8467501436148943
+      ],
+      "grounded": true,
+      "playerTeleports": 0,
+      "cargo": [
+        -18.017649593452237,
+        -9.49901218790874,
+        -15.602624049044795
+      ],
+      "cargoTransports": 3,
+      "cargoContacts": [
+        {
+          "otherBody": 348,
+          "normal": [
+            0,
+            0,
+            -1
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        }
+      ],
+      "roofBoundsOverlap": false,
+      "heads": [
+        {
+          "position": [
+            -18,
+            -9.05,
+            -16.221096540473415
+          ],
+          "shapes": 3
+        }
+      ],
+      "beam": {
+        "angle": -0.67,
+        "tension": 0
+      }
+    },
+    {
+      "stage": "enter-feed",
+      "frame": 65,
+      "player": [
+        -15.959298195147605,
+        6.1515625,
+        12.029681114871044
+      ],
+      "velocity": [
+        -5.33528575191425,
+        -0.975,
+        -3.914630919823909
+      ],
+      "grounded": false,
+      "playerTeleports": 0,
+      "cargo": [
+        -18.017721967121393,
+        -9.498999366681906,
+        -15.602598228211189
+      ],
+      "cargoTransports": 3,
+      "cargoContacts": [
+        {
+          "otherBody": 348,
+          "normal": [
+            0,
+            0,
+            -1
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        }
+      ],
+      "roofBoundsOverlap": false,
+      "heads": [
+        {
+          "position": [
+            -18,
+            -9.05,
+            -16.221098800681297
+          ],
+          "shapes": 3
+        }
+      ],
+      "beam": {
+        "angle": -0.67,
+        "tension": 0
+      }
+    },
+    {
+      "stage": "enter-feed",
+      "frame": 70,
+      "player": [
+        -16.317394989547317,
+        5.995833333333334,
+        11.782028099511477
+      ],
+      "velocity": [
+        -0.4602440118572919,
+        -2.6000000000000014,
+        0.5666953755310875
+      ],
+      "grounded": false,
+      "playerTeleports": 0,
+      "cargo": [
+        -18.01779433013193,
+        -9.498986546996093,
+        -15.60257241455878
+      ],
+      "cargoTransports": 3,
+      "cargoContacts": [
+        {
+          "otherBody": 348,
+          "normal": [
+            0,
+            0,
+            -1
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        }
+      ],
+      "roofBoundsOverlap": false,
+      "heads": [
+        {
+          "position": [
+            -18,
+            -9.05,
+            -16.221101061068218
+          ],
+          "shapes": 3
+        }
+      ],
+      "beam": {
+        "angle": -0.67,
+        "tension": 0
+      }
+    },
+    {
+      "stage": "enter-feed",
+      "frame": 75,
+      "player": [
+        -16.3467043834652,
+        5.7046874999999995,
+        11.834945347326368
+      ],
+      "velocity": [
+        -0.26017761547816887,
+        -4.225000000000001,
+        0.6863210473456416
+      ],
+      "grounded": false,
+      "playerTeleports": 0,
+      "cargo": [
+        -18.017866682485106,
+        -9.498973728850984,
+        -15.602546608085753
+      ],
+      "cargoTransports": 3,
+      "cargoContacts": [
+        {
+          "otherBody": 348,
+          "normal": [
+            0,
+            0,
+            -1
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        }
+      ],
+      "roofBoundsOverlap": false,
+      "heads": [
+        {
+          "position": [
+            -18,
+            -9.05,
+            -16.221103321634175
+          ],
+          "shapes": 3
+        }
+      ],
+      "beam": {
+        "angle": -0.67,
+        "tension": 0
+      }
+    },
+    {
+      "stage": "enter-feed",
+      "frame": 80,
+      "player": [
+        -16.358557690089846,
+        5.278124999999999,
+        11.896334441279446
+      ],
+      "velocity": [
+        -0.04371110901844144,
+        -5.849999999999998,
+        0.7727663170808401
+      ],
+      "grounded": false,
+      "playerTeleports": 0,
+      "cargo": [
+        -18.017939024182176,
+        -9.498960912246263,
+        -15.602520808790295
+      ],
+      "cargoTransports": 3,
+      "cargoContacts": [
+        {
+          "otherBody": 348,
+          "normal": [
+            0,
+            0,
+            -1
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        }
+      ],
+      "roofBoundsOverlap": false,
+      "heads": [
+        {
+          "position": [
+            -18,
+            -9.05,
+            -16.22110558237919
+          ],
+          "shapes": 3
+        }
+      ],
+      "beam": {
+        "angle": -0.67,
+        "tension": 0
+      }
+    },
+    {
+      "stage": "destination-resolution",
+      "frame": 0,
+      "player": [
+        -18.818459377947086,
+        -10.404062505960464,
+        -15.500277494709023
+      ],
+      "velocity": [
+        0.0630648560436424,
+        -0.325,
+        -0.8097866297559344
+      ],
+      "grounded": false,
+      "playerTeleports": 1,
+      "cargo": [
+        -18.003940531856337,
+        -9.503169942652422,
+        -15.608607760953737
+      ],
+      "cargoTransports": 3,
+      "cargoContacts": [
+        {
+          "otherBody": 348,
+          "normal": [
+            0,
+            0,
+            -1
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        },
+        {
+          "otherBody": 349,
+          "normal": [
+            0.9698987892443526,
+            0.24295681536858207,
+            -0.016380613184364283
+          ]
+        },
+        {
+          "otherBody": 349,
+          "normal": [
+            0.9985814571417101,
+            -0.00734336268747258,
+            0.0527365952368853
+          ]
+        }
+      ],
+      "roofBoundsOverlap": false,
+      "heads": [
+        {
+          "position": [
+            -18,
+            -9.05,
+            -16.226247461712255
+          ],
+          "shapes": 3
+        }
+      ],
+      "beam": {
+        "angle": -0.67,
+        "tension": 0
+      }
+    },
+    {
+      "stage": "destination-resolution",
+      "frame": 5,
+      "player": [
+        -18.813203973276778,
+        -10.505625005960464,
+        -15.567759713855347
+      ],
+      "velocity": [
+        0.0630648560436424,
+        -1.9500000000000004,
+        -0.8097866297559344
+      ],
+      "grounded": false,
+      "playerTeleports": 1,
+      "cargo": [
+        -17.988667192502017,
+        -9.48282731087331,
+        -15.64812242360096
+      ],
+      "cargoTransports": 3,
+      "cargoContacts": [
+        {
+          "otherBody": 348,
+          "normal": [
+            0,
+            0,
+            -1
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        },
+        {
+          "otherBody": 349,
+          "normal": [
+            0.995822105863429,
+            -0.02906238777596508,
+            0.08656622372776274
+          ]
+        }
+      ],
+      "roofBoundsOverlap": false,
+      "heads": [
+        {
+          "position": [
+            -18,
+            -9.05,
+            -16.285836248890625
+          ],
+          "shapes": 3
+        }
+      ],
+      "beam": {
+        "angle": -0.67,
+        "tension": 0
+      }
+    },
+    {
+      "stage": "destination-resolution",
+      "frame": 10,
+      "player": [
+        -18.80794856860647,
+        -10.74260417262713,
+        -15.635241933001671
+      ],
+      "velocity": [
+        0.0630648560436424,
+        -3.575000000000001,
+        -0.8097866297559344
+      ],
+      "grounded": false,
+      "playerTeleports": 1,
+      "cargo": [
+        -17.973916674989752,
+        -9.455479556505162,
+        -15.699884172980875
+      ],
+      "cargoTransports": 3,
+      "cargoContacts": [
+        {
+          "otherBody": 348,
+          "normal": [
+            0,
+            0,
+            -1
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        },
+        {
+          "otherBody": 349,
+          "normal": [
+            0.9946671922512381,
+            -0.04143517218799221,
+            0.09444735657915378
+          ]
+        }
+      ],
+      "roofBoundsOverlap": false,
+      "heads": [
+        {
+          "position": [
+            -18,
+            -9.05,
+            -16.36236984056122
+          ],
+          "shapes": 3
+        }
+      ],
+      "beam": {
+        "angle": -0.67,
+        "tension": 0
+      }
+    },
+    {
+      "stage": "destination-resolution",
+      "frame": 15,
+      "player": [
+        -18.802693163936162,
+        -11.115000005960463,
+        -15.702724152147995
+      ],
+      "velocity": [
+        0.0630648560436424,
+        -5.199999999999998,
+        -0.8097866297559344
+      ],
+      "grounded": false,
+      "playerTeleports": 1,
+      "cargo": [
+        -17.969825737537253,
+        -9.48466091940504,
+        -15.687048926816328
+      ],
+      "cargoTransports": 3,
+      "cargoContacts": [
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        },
+        {
+          "otherBody": 349,
+          "normal": [
+            0.9952331089618944,
+            0.037638756627018814,
+            0.08996878806349441
+          ]
+        }
+      ],
+      "roofBoundsOverlap": false,
+      "heads": [
+        {
+          "position": [
+            -18,
+            -9.05,
+            -16.334100210751952
+          ],
+          "shapes": 3
+        }
+      ],
+      "beam": {
+        "angle": -0.67,
+        "tension": 0
+      }
+    },
+    {
+      "stage": "destination-resolution",
+      "frame": 20,
+      "player": [
+        -16.324606151559646,
+        6.524583333333334,
+        12.218478276580258
+      ],
+      "velocity": [
+        0.0919786634985427,
+        4.225000000000003,
+        0.8070139325069321
+      ],
+      "grounded": false,
+      "playerTeleports": 2,
+      "cargo": [
+        -17.96371578998289,
+        -9.506272569717984,
+        -15.636181485510386
+      ],
+      "cargoTransports": 3,
+      "cargoContacts": [
+        {
+          "otherBody": 348,
+          "normal": [
+            0,
+            0,
+            -1
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        }
+      ],
+      "roofBoundsOverlap": false,
+      "heads": [
+        {
+          "position": [
+            -18,
+            -9.05,
+            -16.271964585740527
+          ],
+          "shapes": 3
+        }
+      ],
+      "beam": {
+        "angle": -0.67,
+        "tension": 0
+      }
+    },
+    {
+      "stage": "destination-resolution",
+      "frame": 25,
+      "player": [
+        -16.31694126293476,
+        6.802187500000001,
+        12.285729437622502
+      ],
+      "velocity": [
+        0.0919786634985427,
+        2.6000000000000028,
+        0.8070139325069321
+      ],
+      "grounded": false,
+      "playerTeleports": 2,
+      "cargo": [
+        -17.97251558775099,
+        -9.560291497725006,
+        -15.560013220704615
+      ],
+      "cargoTransports": 3,
+      "cargoContacts": [
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        }
+      ],
+      "roofBoundsOverlap": false,
+      "heads": [
+        {
+          "position": [
+            -18,
+            -9.05,
+            -16.220538363592965
+          ],
+          "shapes": 3
+        }
+      ],
+      "beam": {
+        "angle": -0.67,
+        "tension": 0
+      }
+    },
+    {
+      "stage": "destination-resolution",
+      "frame": 30,
+      "player": [
+        -16.30927637430987,
+        6.944375000000002,
+        12.352980598664745
+      ],
+      "velocity": [
+        0.0919786634985427,
+        0.975000000000002,
+        0.8070139325069321
+      ],
+      "grounded": false,
+      "playerTeleports": 2,
+      "cargo": [
+        -17.97686757570975,
+        -9.588197855207868,
+        -15.522091617792038
+      ],
+      "cargoTransports": 3,
+      "cargoContacts": [
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        }
+      ],
+      "roofBoundsOverlap": false,
+      "heads": [
+        {
+          "position": [
+            -18,
+            -9.05,
+            -16.20415939851836
+          ],
+          "shapes": 3
+        }
+      ],
+      "beam": {
+        "angle": -0.67,
+        "tension": 0
+      }
+    },
+    {
+      "stage": "destination-resolution",
+      "frame": 35,
+      "player": [
+        -16.301611485684983,
+        6.951145833333335,
+        12.420231759706988
+      ],
+      "velocity": [
+        0.0919786634985427,
+        -0.6499999999999979,
+        0.8070139325069321
+      ],
+      "grounded": false,
+      "playerTeleports": 2,
+      "cargo": [
+        -17.976267797836748,
+        -9.590334496490074,
+        -15.527361976429487
+      ],
+      "cargoTransports": 3,
+      "cargoContacts": [
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        }
+      ],
+      "roofBoundsOverlap": false,
+      "heads": [
+        {
+          "position": [
+            -18,
+            -9.05,
+            -16.200570703947964
+          ],
+          "shapes": 3
+        }
+      ],
+      "beam": {
+        "angle": -0.67,
+        "tension": 0
+      }
+    },
+    {
+      "stage": "destination-resolution",
+      "frame": 40,
+      "player": [
+        -16.293946597060096,
+        6.8225000000000025,
+        12.487482920749231
+      ],
+      "velocity": [
+        0.0919786634985427,
+        -2.2749999999999986,
+        0.8070139325069321
+      ],
+      "grounded": false,
+      "playerTeleports": 2,
+      "cargo": [
+        -17.976292825859492,
+        -9.590026128094179,
+        -15.527141590266524
+      ],
+      "cargoTransports": 3,
+      "cargoContacts": [
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        }
+      ],
+      "roofBoundsOverlap": false,
+      "heads": [
+        {
+          "position": [
+            -18,
+            -9.05,
+            -16.20001721025947
+          ],
+          "shapes": 3
+        }
+      ],
+      "beam": {
+        "angle": -0.67,
+        "tension": 0
+      }
+    },
+    {
+      "stage": "destination-resolution",
+      "frame": 45,
+      "player": [
+        -16.286281708435208,
+        6.558437500000003,
+        12.554734081791475
+      ],
+      "velocity": [
+        0.0919786634985427,
+        -3.8999999999999995,
+        0.8070139325069321
+      ],
+      "grounded": false,
+      "playerTeleports": 2,
+      "cargo": [
+        -17.976294101889017,
+        -9.590003627867059,
+        -15.527129985080329
+      ],
+      "cargoTransports": 3,
+      "cargoContacts": [
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        }
+      ],
+      "roofBoundsOverlap": false,
+      "heads": [
+        {
+          "position": [
+            -18,
+            -9.05,
+            -16.200006511140923
+          ],
+          "shapes": 3
+        }
+      ],
+      "beam": {
+        "angle": -0.67,
+        "tension": 0
+      }
+    },
+    {
+      "stage": "destination-resolution",
+      "frame": 50,
+      "player": [
+        -16.27861681981032,
+        6.18,
+        12.621985242833718
+      ],
+      "velocity": [
+        0.0919786634985427,
+        0,
+        0.8070139325069321
+      ],
+      "grounded": true,
+      "playerTeleports": 2,
+      "cargo": [
+        -17.976294125991537,
+        -9.590001985763706,
+        -15.527129366924509
+      ],
+      "cargoTransports": 3,
+      "cargoContacts": [
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        }
+      ],
+      "roofBoundsOverlap": false,
+      "heads": [
+        {
+          "position": [
+            -18,
+            -9.05,
+            -16.200002716215337
+          ],
+          "shapes": 3
+        }
+      ],
+      "beam": {
+        "angle": -0.67,
+        "tension": 0
+      }
+    },
+    {
+      "stage": "destination-resolution",
+      "frame": 55,
+      "player": [
+        -16.27450947861297,
+        6.18,
+        12.658022748117496
+      ],
+      "velocity": [
+        0.02635232830112178,
+        0,
+        0.23121336279624186
+      ],
+      "grounded": true,
+      "playerTeleports": 2,
+      "cargo": [
+        -17.976294084207602,
+        -9.590001865919227,
+        -15.527129326937937
+      ],
+      "cargoTransports": 3,
+      "cargoContacts": [
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        }
+      ],
+      "roofBoundsOverlap": false,
+      "heads": [
+        {
+          "position": [
+            -18,
+            -9.05,
+            -16.200000687008593
+          ],
+          "shapes": 3
+        }
+      ],
+      "beam": {
+        "angle": -0.67,
+        "tension": 0
+      }
+    },
+    {
+      "stage": "destination-resolution",
+      "frame": 60,
+      "player": [
+        -16.27333270565759,
+        6.18,
+        12.66834766624817
+      ],
+      "velocity": [
+        0.007550068466705941,
+        0,
+        0.06624373753929874
+      ],
+      "grounded": true,
+      "playerTeleports": 2,
+      "cargo": [
+        -17.976294038956468,
+        -9.590001857172696,
+        -15.527129317376103
+      ],
+      "cargoTransports": 3,
+      "cargoContacts": [
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        }
+      ],
+      "roofBoundsOverlap": false,
+      "heads": [
+        {
+          "position": [
+            -18,
+            -9.05,
+            -16.200000125058004
+          ],
+          "shapes": 3
+        }
+      ],
+      "beam": {
+        "angle": -0.67,
+        "tension": 0
+      }
+    },
+    {
+      "stage": "destination-resolution",
+      "frame": 65,
+      "player": [
+        -16.272995554561053,
+        6.18,
+        12.6713058048198
+      ],
+      "velocity": [
+        0.002163130832334114,
+        0,
+        0.018979148566956545
+      ],
+      "grounded": true,
+      "playerTeleports": 2,
+      "cargo": [
+        -17.97629409213269,
+        -9.590001857836338,
+        -15.527128790849703
+      ],
+      "cargoTransports": 3,
+      "cargoContacts": [
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        }
+      ],
+      "roofBoundsOverlap": false,
+      "heads": [
+        {
+          "position": [
+            -18,
+            -9.05,
+            -16.20000001399373
+          ],
+          "shapes": 3
+        }
+      ],
+      "beam": {
+        "angle": -0.67,
+        "tension": 0
+      }
+    },
+    {
+      "stage": "destination-resolution",
+      "frame": 70,
+      "player": [
+        -16.27289895915463,
+        6.18,
+        12.672153325710347
+      ],
+      "velocity": [
+        0.0006197473596998998,
+        0,
+        0.005437617104755256
+      ],
+      "grounded": true,
+      "playerTeleports": 2,
+      "cargo": [
+        -17.97623876011624,
+        -9.59089900970632,
+        -15.527632851990653
+      ],
+      "cargoTransports": 3,
+      "cargoContacts": [
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        }
+      ],
+      "roofBoundsOverlap": false,
+      "heads": [
+        {
+          "position": [
+            -18,
+            -9.05,
+            -16.200000000127606
+          ],
+          "shapes": 3
+        }
+      ],
+      "beam": {
+        "angle": -0.67,
+        "tension": 0
+      }
+    },
+    {
+      "stage": "destination-resolution",
+      "frame": 75,
+      "player": [
+        -16.27287128410734,
+        6.18,
+        12.67239614451093
+      ],
+      "velocity": [
+        0.00017756059139545905,
+        0,
+        0.0015579033840014004
+      ],
+      "grounded": true,
+      "playerTeleports": 2,
+      "cargo": [
+        -17.976301193778067,
+        -9.59006503989583,
+        -15.527142699573277
+      ],
+      "cargoTransports": 3,
+      "cargoContacts": [
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        }
+      ],
+      "roofBoundsOverlap": false,
+      "heads": [
+        {
+          "position": [
+            -18,
+            -9.05,
+            -16.20000000028126
+          ],
+          "shapes": 3
+        }
+      ],
+      "beam": {
+        "angle": -0.67,
+        "tension": 0
+      }
+    },
+    {
+      "stage": "destination-resolution",
+      "frame": 80,
+      "player": [
+        -16.272863355073532,
+        6.18,
+        12.672465713262064
+      ],
+      "velocity": [
+        5.0871961168131246e-05,
+        0,
+        0.0004463467925611241
+      ],
+      "grounded": true,
+      "playerTeleports": 2,
+      "cargo": [
+        -17.976309418441165,
+        -9.589890449253783,
+        -15.527205478858754
+      ],
+      "cargoTransports": 3,
+      "cargoContacts": [
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        }
+      ],
+      "roofBoundsOverlap": false,
+      "heads": [
+        {
+          "position": [
+            -18,
+            -9.05,
+            -16.200000000096033
+          ],
+          "shapes": 3
+        }
+      ],
+      "beam": {
+        "angle": -0.67,
+        "tension": 0
+      }
+    },
+    {
+      "stage": "destination-resolution",
+      "frame": 85,
+      "player": [
+        -16.27286108336731,
+        6.18,
+        12.672485645042975
+      ],
+      "velocity": [
+        1.4575060900354928e-05,
+        0,
+        0.00012788049713192233
+      ],
+      "grounded": true,
+      "playerTeleports": 2,
+      "cargo": [
+        -17.975882853164872,
+        -9.586163433648315,
+        -15.531033015552364
+      ],
+      "cargoTransports": 3,
+      "cargoContacts": [
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        }
+      ],
+      "roofBoundsOverlap": false,
+      "heads": [
+        {
+          "position": [
+            -18,
+            -9.05,
+            -16.200000000021962
+          ],
+          "shapes": 3
+        }
+      ],
+      "beam": {
+        "angle": -0.67,
+        "tension": 0
+      }
+    },
+    {
+      "stage": "destination-resolution",
+      "frame": 90,
+      "player": [
+        -16.27286043251258,
+        6.18,
+        12.672491355593818
+      ],
+      "velocity": [
+        4.175824862481091e-06,
+        0,
+        3.663837585316155e-05
+      ],
+      "grounded": true,
+      "playerTeleports": 2,
+      "cargo": [
+        -17.974739311265125,
+        -9.576589006536055,
+        -15.541132980417128
+      ],
+      "cargoTransports": 3,
+      "cargoContacts": [
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        }
+      ],
+      "roofBoundsOverlap": false,
+      "heads": [
+        {
+          "position": [
+            -18,
+            -9.05,
+            -16.200000000003573
+          ],
+          "shapes": 3
+        }
+      ],
+      "beam": {
+        "angle": -0.67,
+        "tension": 0
+      }
+    },
+    {
+      "stage": "destination-resolution",
+      "frame": 95,
+      "player": [
+        -16.272860246039585,
+        6.18,
+        12.672492991694028
+      ],
+      "velocity": [
+        1.1963938539488767e-06,
+        0,
+        1.0497070431097354e-05
+      ],
+      "grounded": true,
+      "playerTeleports": 2,
+      "cargo": [
+        -17.972945628952303,
+        -9.562459443362469,
+        -15.556911148867554
+      ],
+      "cargoTransports": 3,
+      "cargoContacts": [
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        }
+      ],
+      "roofBoundsOverlap": false,
+      "heads": [
+        {
+          "position": [
+            -18,
+            -9.05,
+            -16.200000000000294
+          ],
+          "shapes": 3
+        }
+      ],
+      "beam": {
+        "angle": -0.67,
+        "tension": 0
+      }
+    },
+    {
+      "stage": "destination-resolution",
+      "frame": 100,
+      "player": [
+        -16.272860192614175,
+        6.18,
+        12.672493460444588
+      ],
+      "velocity": [
+        3.4277257809040306e-07,
+        0,
+        3.0074610314886573e-06
+      ],
+      "grounded": true,
+      "playerTeleports": 2,
+      "cargo": [
+        -17.970517229260857,
+        -9.544953945845666,
+        -15.578227366515181
+      ],
+      "cargoTransports": 3,
+      "cargoContacts": [
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        }
+      ],
+      "roofBoundsOverlap": false,
+      "heads": [
+        {
+          "position": [
+            -18,
+            -9.05,
+            -16.200000000000017
+          ],
+          "shapes": 3
+        }
+      ],
+      "beam": {
+        "angle": -0.67,
+        "tension": 0
+      }
+    },
+    {
+      "stage": "destination-resolution",
+      "frame": 105,
+      "player": [
+        -16.27286017730754,
+        6.18,
+        12.672493594743875
+      ],
+      "velocity": [
+        9.820598785503466e-08,
+        0,
+        8.616520118915959e-07
+      ],
+      "grounded": true,
+      "playerTeleports": 2,
+      "cargo": [
+        -17.968103100137196,
+        -9.528892568234783,
+        -15.599664048756983
+      ],
+      "cargoTransports": 3,
+      "cargoContacts": [
+        {
+          "otherBody": 348,
+          "normal": [
+            0,
+            0,
+            -1
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        }
+      ],
+      "roofBoundsOverlap": false,
+      "heads": [
+        {
+          "position": [
+            -18,
+            -9.05,
+            -16.211683023734903
+          ],
+          "shapes": 3
+        }
+      ],
+      "beam": {
+        "angle": -0.67,
+        "tension": 0
+      }
+    },
+    {
+      "stage": "destination-resolution",
+      "frame": 110,
+      "player": [
+        -16.272860172922112,
+        6.18,
+        12.672493633221265
+      ],
+      "velocity": [
+        2.8136486600861016e-08,
+        0,
+        2.468674346311759e-07
+      ],
+      "grounded": true,
+      "playerTeleports": 2,
+      "cargo": [
+        -17.96743277704302,
+        -9.523972045568144,
+        -15.60626977497946
+      ],
+      "cargoTransports": 3,
+      "cargoContacts": [
+        {
+          "otherBody": 348,
+          "normal": [
+            0,
+            0,
+            -1
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        }
+      ],
+      "roofBoundsOverlap": false,
+      "heads": [
+        {
+          "position": [
+            -18,
+            -9.05,
+            -16.223785996592405
+          ],
+          "shapes": 3
+        }
+      ],
+      "beam": {
+        "angle": -0.67,
+        "tension": 0
+      }
+    },
+    {
+      "stage": "destination-resolution",
+      "frame": 115,
+      "player": [
+        -16.272860171665666,
+        6.18,
+        12.672493644245218
+      ],
+      "velocity": [
+        8.061238377939151e-09,
+        0,
+        7.072870421040134e-08
+      ],
+      "grounded": true,
+      "playerTeleports": 2,
+      "cargo": [
+        -17.96749487187079,
+        -9.523667414718904,
+        -15.606464298400367
+      ],
+      "cargoTransports": 3,
+      "cargoContacts": [
+        {
+          "otherBody": 348,
+          "normal": [
+            0,
+            0,
+            -1
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        }
+      ],
+      "roofBoundsOverlap": false,
+      "heads": [
+        {
+          "position": [
+            -18,
+            -9.05,
+            -16.224215488084674
+          ],
+          "shapes": 3
+        }
+      ],
+      "beam": {
+        "angle": -0.67,
+        "tension": 0
+      }
+    },
+    {
+      "stage": "destination-resolution",
+      "frame": 120,
+      "player": [
+        -16.272860171305688,
+        6.18,
+        12.672493647403638
+      ],
+      "velocity": [
+        2.309583463913027e-09,
+        0,
+        2.0264113031985517e-08
+      ],
+      "grounded": true,
+      "playerTeleports": 2,
+      "cargo": [
+        -17.967697165492417,
+        -9.524732032719651,
+        -15.60455222078954
+      ],
+      "cargoTransports": 3,
+      "cargoContacts": [
+        {
+          "otherBody": 348,
+          "normal": [
+            0,
+            0,
+            -1
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        }
+      ],
+      "roofBoundsOverlap": false,
+      "heads": [
+        {
+          "position": [
+            -18,
+            -9.05,
+            -16.221275246618834
+          ],
+          "shapes": 3
+        }
+      ],
+      "beam": {
+        "angle": -0.67,
+        "tension": 0
+      }
+    },
+    {
+      "stage": "destination-resolution",
+      "frame": 125,
+      "player": [
+        -16.272860171202552,
+        6.18,
+        12.672493648308539
+      ],
+      "velocity": [
+        6.617067411600564e-10,
+        0,
+        5.805765587780945e-09
+      ],
+      "grounded": true,
+      "playerTeleports": 2,
+      "cargo": [
+        -17.968390258481868,
+        -9.525935480625538,
+        -15.602645923472997
+      ],
+      "cargoTransports": 3,
+      "cargoContacts": [
+        {
+          "otherBody": 348,
+          "normal": [
+            0,
+            0,
+            -1
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        }
+      ],
+      "roofBoundsOverlap": false,
+      "heads": [
+        {
+          "position": [
+            -18,
+            -9.05,
+            -16.218701512132107
+          ],
+          "shapes": 3
+        }
+      ],
+      "beam": {
+        "angle": -0.67,
+        "tension": 0
+      }
+    },
+    {
+      "stage": "destination-resolution",
+      "frame": 130,
+      "player": [
+        -16.272860171173,
+        6.18,
+        12.6724936485678
+      ],
+      "velocity": [
+        1.8958215545708045e-10,
+        0,
+        1.6633796903450625e-09
+      ],
+      "grounded": true,
+      "playerTeleports": 2,
+      "cargo": [
+        -17.969038203805813,
+        -9.525537542797315,
+        -15.60190212717096
+      ],
+      "cargoTransports": 3,
+      "cargoContacts": [
+        {
+          "otherBody": 348,
+          "normal": [
+            0,
+            0,
+            -1
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        }
+      ],
+      "roofBoundsOverlap": false,
+      "heads": [
+        {
+          "position": [
+            -18,
+            -9.05,
+            -16.217499755365118
+          ],
+          "shapes": 3
+        }
+      ],
+      "beam": {
+        "angle": -0.67,
+        "tension": 0
+      }
+    },
+    {
+      "stage": "destination-resolution",
+      "frame": 135,
+      "player": [
+        -16.272860171164538,
+        6.18,
+        12.672493648642078
+      ],
+      "velocity": [
+        5.431619693754785e-11,
+        0,
+        4.765662602836783e-10
+      ],
+      "grounded": true,
+      "playerTeleports": 2,
+      "cargo": [
+        -17.969162439351187,
+        -9.525539336721248,
+        -15.601771701114634
+      ],
+      "cargoTransports": 3,
+      "cargoContacts": [
+        {
+          "otherBody": 348,
+          "normal": [
+            0,
+            0,
+            -1
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        }
+      ],
+      "roofBoundsOverlap": false,
+      "heads": [
+        {
+          "position": [
+            -18,
+            -9.05,
+            -16.2173326426047
+          ],
+          "shapes": 3
+        }
+      ],
+      "beam": {
+        "angle": -0.67,
+        "tension": 0
+      }
+    },
+    {
+      "stage": "destination-resolution",
+      "frame": 140,
+      "player": [
+        -16.272860171162115,
+        6.18,
+        12.67249364866336
+      ],
+      "velocity": [
+        1.556185096981024e-11,
+        0,
+        1.365385195929958e-10
+      ],
+      "grounded": true,
+      "playerTeleports": 2,
+      "cargo": [
+        -17.969251185051142,
+        -9.525523447292462,
+        -15.601741998560644
+      ],
+      "cargoTransports": 3,
+      "cargoContacts": [
+        {
+          "otherBody": 348,
+          "normal": [
+            0,
+            0,
+            -1
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        }
+      ],
+      "roofBoundsOverlap": false,
+      "heads": [
+        {
+          "position": [
+            -18,
+            -9.05,
+            -16.217335716384383
+          ],
+          "shapes": 3
+        }
+      ],
+      "beam": {
+        "angle": -0.67,
+        "tension": 0
+      }
+    },
+    {
+      "stage": "destination-resolution",
+      "frame": 145,
+      "player": [
+        -16.272860171161426,
+        6.18,
+        12.67249364866946
+      ],
+      "velocity": [
+        4.458544950874037e-12,
+        0,
+        3.911894081958238e-11
+      ],
+      "grounded": true,
+      "playerTeleports": 2,
+      "cargo": [
+        -17.969336362485713,
+        -9.525496059271903,
+        -15.601732388608205
+      ],
+      "cargoTransports": 3,
+      "cargoContacts": [
+        {
+          "otherBody": 348,
+          "normal": [
+            0,
+            0,
+            -1
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        }
+      ],
+      "roofBoundsOverlap": false,
+      "heads": [
+        {
+          "position": [
+            -18,
+            -9.05,
+            -16.217372729133256
+          ],
+          "shapes": 3
+        }
+      ],
+      "beam": {
+        "angle": -0.67,
+        "tension": 0
+      }
+    },
+    {
+      "stage": "destination-resolution",
+      "frame": 150,
+      "player": [
+        -16.27286017116123,
+        6.18,
+        12.67249364867121
+      ],
+      "velocity": [
+        1.2773945154421928e-12,
+        0,
+        1.1207764192900258e-11
+      ],
+      "grounded": true,
+      "playerTeleports": 2,
+      "cargo": [
+        -17.969421874252323,
+        -9.52547096440407,
+        -15.601719120042882
+      ],
+      "cargoTransports": 3,
+      "cargoContacts": [
+        {
+          "otherBody": 348,
+          "normal": [
+            0,
+            0,
+            -1
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        }
+      ],
+      "roofBoundsOverlap": false,
+      "heads": [
+        {
+          "position": [
+            -18,
+            -9.05,
+            -16.217403572446937
+          ],
+          "shapes": 3
+        }
+      ],
+      "beam": {
+        "angle": -0.67,
+        "tension": 0
+      }
+    },
+    {
+      "stage": "destination-resolution",
+      "frame": 155,
+      "player": [
+        -16.272860171161174,
+        6.18,
+        12.67249364867171
+      ],
+      "velocity": [
+        3.659796561570867e-13,
+        0,
+        3.211078203343803e-12
+      ],
+      "grounded": true,
+      "playerTeleports": 2,
+      "cargo": [
+        -17.969508300994825,
+        -9.525451454581068,
+        -15.601697657323832
+      ],
+      "cargoTransports": 3,
+      "cargoContacts": [
+        {
+          "otherBody": 348,
+          "normal": [
+            0,
+            0,
+            -1
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        }
+      ],
+      "roofBoundsOverlap": false,
+      "heads": [
+        {
+          "position": [
+            -18,
+            -9.05,
+            -16.217420584218303
+          ],
+          "shapes": 3
+        }
+      ],
+      "beam": {
+        "angle": -0.67,
+        "tension": 0
+      }
+    },
+    {
+      "stage": "destination-resolution",
+      "frame": 160,
+      "player": [
+        -16.27286017116116,
+        6.18,
+        12.672493648671852
+      ],
+      "velocity": [
+        1.048549270422484e-13,
+        0,
+        9.199893083512013e-13
+      ],
+      "grounded": true,
+      "playerTeleports": 2,
+      "cargo": [
+        -17.969595397864936,
+        -9.52543614146743,
+        -15.601670195111552
+      ],
+      "cargoTransports": 3,
+      "cargoContacts": [
+        {
+          "otherBody": 348,
+          "normal": [
+            0,
+            0,
+            -1
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        }
+      ],
+      "roofBoundsOverlap": false,
+      "heads": [
+        {
+          "position": [
+            -18,
+            -9.05,
+            -16.21742746225213
+          ],
+          "shapes": 3
+        }
+      ],
+      "beam": {
+        "angle": -0.67,
+        "tension": 0
+      }
+    },
+    {
+      "stage": "destination-resolution",
+      "frame": 165,
+      "player": [
+        -16.27286017116116,
+        6.18,
+        12.672493648671892
+      ],
+      "velocity": [
+        3.004143957202944e-14,
+        0,
+        2.6358134990270787e-13
+      ],
+      "grounded": true,
+      "playerTeleports": 2,
+      "cargo": [
+        -17.969682813591856,
+        -9.525422906008659,
+        -15.601639829302284
+      ],
+      "cargoTransports": 3,
+      "cargoContacts": [
+        {
+          "otherBody": 348,
+          "normal": [
+            0,
+            0,
+            -1
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        }
+      ],
+      "roofBoundsOverlap": false,
+      "heads": [
+        {
+          "position": [
+            -18,
+            -9.05,
+            -16.21742942730755
+          ],
+          "shapes": 3
+        }
+      ],
+      "beam": {
+        "angle": -0.67,
+        "tension": 0
+      }
+    },
+    {
+      "stage": "destination-resolution",
+      "frame": 170,
+      "player": [
+        -16.27286017116116,
+        6.18,
+        12.672493648671905
+      ],
+      "velocity": [
+        8.607016541971977e-15,
+        0,
+        7.551732111001004e-14
+      ],
+      "grounded": true,
+      "playerTeleports": 2,
+      "cargo": [
+        -17.969770314574326,
+        -9.525410307539119,
+        -15.601608614829864
+      ],
+      "cargoTransports": 3,
+      "cargoContacts": [
+        {
+          "otherBody": 348,
+          "normal": [
+            0,
+            0,
+            -1
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        }
+      ],
+      "roofBoundsOverlap": false,
+      "heads": [
+        {
+          "position": [
+            -18,
+            -9.05,
+            -16.217429945507575
+          ],
+          "shapes": 3
+        }
+      ],
+      "beam": {
+        "angle": -0.67,
+        "tension": 0
+      }
+    },
+    {
+      "stage": "destination-resolution",
+      "frame": 175,
+      "player": [
+        -16.27286017116116,
+        6.18,
+        12.672493648671905
+      ],
+      "velocity": [
+        2.4659515259299785e-15,
+        0,
+        2.163607474404918e-14
+      ],
+      "grounded": true,
+      "playerTeleports": 2,
+      "cargo": [
+        -17.969857796393544,
+        -9.525397688699583,
+        -15.601577468972366
+      ],
+      "cargoTransports": 3,
+      "cargoContacts": [
+        {
+          "otherBody": 348,
+          "normal": [
+            0,
+            0,
+            -1
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        }
+      ],
+      "roofBoundsOverlap": false,
+      "heads": [
+        {
+          "position": [
+            -18,
+            -9.05,
+            -16.21743056441393
+          ],
+          "shapes": 3
+        }
+      ],
+      "beam": {
+        "angle": -0.67,
+        "tension": 0
+      }
+    },
+    {
+      "stage": "ordinary-exit-attempt",
+      "frame": 0,
+      "player": [
+        -16.27286017116116,
+        6.18,
+        12.685727871165817
+      ],
+      "velocity": [
+        8.194601505925939e-16,
+        0,
+        1.043529365000158
+      ],
+      "grounded": true,
+      "playerTeleports": 2,
+      "cargo": [
+        -17.969945233291803,
+        -9.525384878979484,
+        -15.601546617414263
+      ],
+      "cargoTransports": 3,
+      "cargoContacts": [
+        {
+          "otherBody": 348,
+          "normal": [
+            0,
+            0,
+            -1
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        }
+      ],
+      "roofBoundsOverlap": false,
+      "heads": [
+        {
+          "position": [
+            -18,
+            -9.05,
+            -16.217431665032557
+          ],
+          "shapes": 3
+        }
+      ],
+      "beam": {
+        "angle": -0.67,
+        "tension": 0
+      }
+    },
+    {
+      "stage": "ordinary-exit-attempt",
+      "frame": 10,
+      "player": [
+        -16.27286017116116,
+        6.18,
+        13.358211961455114
+      ],
+      "velocity": [
+        4.405217591151035e-16,
+        0,
+        5.551807580434521
+      ],
+      "grounded": true,
+      "playerTeleports": 2,
+      "cargo": [
+        -17.97012000421906,
+        -9.525358861731476,
+        -15.601485515929822
+      ],
+      "cargoTransports": 3,
+      "cargoContacts": [
+        {
+          "otherBody": 348,
+          "normal": [
+            0,
+            0,
+            -1
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        }
+      ],
+      "roofBoundsOverlap": false,
+      "heads": [
+        {
+          "position": [
+            -18,
+            -9.05,
+            -16.217434837715977
+          ],
+          "shapes": 3
+        }
+      ],
+      "beam": {
+        "angle": -0.67,
+        "tension": 0
+      }
+    },
+    {
+      "stage": "ordinary-exit-attempt",
+      "frame": 20,
+      "player": [
+        -16.27286017116116,
+        6.18,
+        14.370150401661055
+      ],
+      "velocity": [
+        3.746721405032915e-16,
+        0,
+        6.335228864102288
+      ],
+      "grounded": true,
+      "playerTeleports": 2,
+      "cargo": [
+        -17.97029470293081,
+        -9.525332707377322,
+        -15.601424646324968
+      ],
+      "cargoTransports": 3,
+      "cargoContacts": [
+        {
+          "otherBody": 348,
+          "normal": [
+            0,
+            0,
+            -1
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        }
+      ],
+      "roofBoundsOverlap": false,
+      "heads": [
+        {
+          "position": [
+            -18,
+            -9.05,
+            -16.21743834409728
+          ],
+          "shapes": 3
+        }
+      ],
+      "beam": {
+        "angle": -0.67,
+        "tension": 0
+      }
+    },
+    {
+      "stage": "ordinary-exit-attempt",
+      "frame": 30,
+      "player": [
+        -16.27286017116116,
+        6.18,
+        15.441077162873416
+      ],
+      "velocity": [
+        3.632291926024091e-16,
+        0,
+        6.471367069948246
+      ],
+      "grounded": true,
+      "playerTeleports": 2,
+      "cargo": [
+        -17.97046935501091,
+        -9.525306575894005,
+        -15.601363784373437
+      ],
+      "cargoTransports": 3,
+      "cargoContacts": [
+        {
+          "otherBody": 348,
+          "normal": [
+            0,
+            0,
+            -1
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        }
+      ],
+      "roofBoundsOverlap": false,
+      "heads": [
+        {
+          "position": [
+            -18,
+            -9.05,
+            -16.217441805994422
+          ],
+          "shapes": 3
+        }
+      ],
+      "beam": {
+        "angle": -0.67,
+        "tension": 0
+      }
+    },
+    {
+      "stage": "ordinary-exit-attempt",
+      "frame": 40,
+      "player": [
+        -16.27286017116116,
+        6.3100000131130205,
+        16.522254557244587
+      ],
+      "velocity": [
+        3.612407064209748e-16,
+        0,
+        6.495024342832366
+      ],
+      "grounded": true,
+      "playerTeleports": 2,
+      "cargo": [
+        -17.970643959684008,
+        -9.525280464022883,
+        -15.60130293695068
+      ],
+      "cargoTransports": 3,
+      "cargoContacts": [
+        {
+          "otherBody": 348,
+          "normal": [
+            0,
+            0,
+            -1
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        }
+      ],
+      "roofBoundsOverlap": false,
+      "heads": [
+        {
+          "position": [
+            -18,
+            -9.05,
+            -16.217445234985163
+          ],
+          "shapes": 3
+        }
+      ],
+      "beam": {
+        "angle": -0.67,
+        "tension": 0
+      }
+    },
+    {
+      "stage": "ordinary-exit-attempt",
+      "frame": 50,
+      "player": [
+        -16.27286017116116,
+        6.220625013113021,
+        17.615845068599356
+      ],
+      "velocity": [
+        3.739494264157567e-16,
+        -1.7875000000000003,
+        6.731259170837206
+      ],
+      "grounded": false,
+      "playerTeleports": 2,
+      "cargo": [
+        -17.970818514893754,
+        -9.525254359214827,
+        -15.601242122070325
+      ],
+      "cargoTransports": 3,
+      "cargoContacts": [
+        {
+          "otherBody": 348,
+          "normal": [
+            0,
+            0,
+            -1
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        }
+      ],
+      "roofBoundsOverlap": false,
+      "heads": [
+        {
+          "position": [
+            -18,
+            -9.05,
+            -16.21744866147184
+          ],
+          "shapes": 3
+        }
+      ],
+      "beam": {
+        "angle": -0.67,
+        "tension": 0
+      }
+    },
+    {
+      "stage": "ordinary-exit-attempt",
+      "frame": 60,
+      "player": [
+        -16.27286017116116,
+        6,
+        18.753834115275303
+      ],
+      "velocity": [
+        3.716940549569695e-16,
+        0,
+        6.693670969616029
+      ],
+      "grounded": true,
+      "playerTeleports": 2,
+      "cargo": [
+        -17.970993020309297,
+        -9.5252282593217,
+        -15.60118134263236
+      ],
+      "cargoTransports": 3,
+      "cargoContacts": [
+        {
+          "otherBody": 348,
+          "normal": [
+            0,
+            0,
+            -1
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        }
+      ],
+      "roofBoundsOverlap": false,
+      "heads": [
+        {
+          "position": [
+            -18,
+            -9.05,
+            -16.21745209037873
+          ],
+          "shapes": 3
+        }
+      ],
+      "beam": {
+        "angle": -0.67,
+        "tension": 0
+      }
+    },
+    {
+      "stage": "ordinary-exit-attempt",
+      "frame": 70,
+      "player": [
+        -16.27286017116116,
+        6,
+        19.851750056413028
+      ],
+      "velocity": [
+        3.6271167893309193e-16,
+        0,
+        6.5336549681220495
+      ],
+      "grounded": true,
+      "playerTeleports": 2,
+      "cargo": [
+        -17.971167476024306,
+        -9.525202164867114,
+        -15.60112059782974
+      ],
+      "cargoTransports": 3,
+      "cargoContacts": [
+        {
+          "otherBody": 348,
+          "normal": [
+            0,
+            0,
+            -1
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        }
+      ],
+      "roofBoundsOverlap": false,
+      "heads": [
+        {
+          "position": [
+            -18,
+            -9.05,
+            -16.21745552037785
+          ],
+          "shapes": 3
+        }
+      ],
+      "beam": {
+        "angle": -0.67,
+        "tension": 0
+      }
+    },
+    {
+      "stage": "ordinary-exit-attempt",
+      "frame": 80,
+      "player": [
+        -16.27286017116116,
+        5.925520845254263,
+        20.94669307624597
+      ],
+      "velocity": [
+        3.732013783029301e-16,
+        -1.6250000000000002,
+        6.722854072487962
+      ],
+      "grounded": false,
+      "playerTeleports": 2,
+      "cargo": [
+        -17.971341882084516,
+        -9.525176076108512,
+        -15.601059887275794
+      ],
+      "cargoTransports": 3,
+      "cargoContacts": [
+        {
+          "otherBody": 348,
+          "normal": [
+            0,
+            0,
+            -1
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        }
+      ],
+      "roofBoundsOverlap": false,
+      "heads": [
+        {
+          "position": [
+            -18,
+            -9.05,
+            -16.217458950849135
+          ],
+          "shapes": 3
+        }
+      ],
+      "beam": {
+        "angle": -0.67,
+        "tension": 0
+      }
+    },
+    {
+      "stage": "ordinary-exit-attempt",
+      "frame": 90,
+      "player": [
+        -16.27286017116116,
+        5.370312511920929,
+        22.108002088327304
+      ],
+      "velocity": [
+        3.9910658221085054e-16,
+        -4.874999999999999,
+        7.189520739154631
+      ],
+      "grounded": false,
+      "playerTeleports": 2,
+      "cargo": [
+        -17.971516238494832,
+        -9.525149993053624,
+        -15.600999210940163
+      ],
+      "cargoTransports": 3,
+      "cargoContacts": [
+        {
+          "otherBody": 348,
+          "normal": [
+            0,
+            0,
+            -1
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        }
+      ],
+      "roofBoundsOverlap": false,
+      "heads": [
+        {
+          "position": [
+            -18,
+            -9.05,
+            -16.217462381773164
+          ],
+          "shapes": 3
+        }
+      ],
+      "beam": {
+        "angle": -0.67,
+        "tension": 0
+      }
+    },
+    {
+      "stage": "ordinary-exit-attempt",
+      "frame": 100,
+      "player": [
+        -16.27286017116116,
+        4.27343751192093,
+        23.347088878186405
+      ],
+      "velocity": [
+        4.2501178611877097e-16,
+        -8.124999999999993,
+        7.656187405821299
+      ],
+      "grounded": false,
+      "playerTeleports": 2,
+      "cargo": [
+        -17.971690545255974,
+        -9.525123915682414,
+        -15.600938568829092
+      ],
+      "cargoTransports": 3,
+      "cargoContacts": [
+        {
+          "otherBody": 348,
+          "normal": [
+            0,
+            0,
+            -1
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        }
+      ],
+      "roofBoundsOverlap": false,
+      "heads": [
+        {
+          "position": [
+            -18,
+            -9.05,
+            -16.21746581319227
+          ],
+          "shapes": 3
+        }
+      ],
+      "beam": {
+        "angle": -0.67,
+        "tension": 0
+      }
+    },
+    {
+      "stage": "ordinary-exit-attempt",
+      "frame": 110,
+      "player": [
+        -16.27286017116116,
+        2.6348958452542655,
+        24.66395344582329
+      ],
+      "velocity": [
+        4.509169900266914e-16,
+        -11.374999999999986,
+        8.122854072487968
+      ],
+      "grounded": false,
+      "playerTeleports": 2,
+      "cargo": [
+        -17.971864802370945,
+        -9.525097843988139,
+        -15.600877960929266
+      ],
+      "cargoTransports": 3,
+      "cargoContacts": [
+        {
+          "otherBody": 348,
+          "normal": [
+            0,
+            0,
+            -1
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        },
+        {
+          "otherBody": 278,
+          "normal": [
+            0,
+            -1,
+            0
+          ]
+        }
+      ],
+      "roofBoundsOverlap": false,
+      "heads": [
+        {
+          "position": [
+            -18,
+            -9.05,
+            -16.21746924511584
+          ],
+          "shapes": 3
+        }
+      ],
+      "beam": {
+        "angle": -0.67,
+        "tension": 0
+      }
+    }
+  ],
+  "floorPairReady": true,
+  "entered": true,
+  "route": {
+    "level": 17,
+    "id": "foundation-cable-supported-architecture",
+    "pass": true,
+    "milestones": [
+      {
+        "name": "original free endpoint reaches the real ground anchor",
+        "player": [
+          -10.404150989398039,
+          6,
+          16.353663607456408
+        ],
+        "cargo": [
+          -17.988244520539133,
+          -9.590006482505695,
+          -15.181081221541664
+        ],
+        "teleports": 0
+      },
+      {
+        "name": "current upper branch supports the free architectural end",
+        "player": [
+          -11.81436314862212,
+          6.310000013113021,
+          11.920650371990224
+        ],
+        "cargo": [
+          -17.764065711289405,
+          -9.546786467985468,
+          -16.143154990542282
+        ],
+        "teleports": 0
+      },
+      {
+        "name": "observer leaves the live bridge onto permanent upper ground",
+        "player": [
+          10.94385184771867,
+          6,
+          0.00014485523731499935
+        ],
+        "cargo": [
+          -18.274920634131654,
+          -9.478826809107566,
+          -16.127054519825087
+        ],
+        "teleports": 0
+      },
+      {
+        "name": "floorpair attack has genuinely reached permanent upper gallery",
+        "player": [
+          22.907729576014688,
+          6,
+          -7.303761788275537e-06
+        ],
+        "cargo": [
+          -18.274941591244886,
+          -9.476704322068596,
+          -16.138728204163108
+        ],
+        "teleports": 0
+      },
+      {
+        "name": "both floor charges shot from genuinely reached far view",
+        "player": [
+          12.563472518598154,
+          -1.2,
+          -3.2043483588623745
+        ],
+        "cargo": [
+          -18.497838542619828,
+          -9.460579914614428,
+          -15.584051768614744
+        ],
+        "teleports": 0
+      },
+      {
+        "name": "observer returned by actual dry floor and recovery incline",
+        "player": [
+          -11.093016149596334,
+          6.310000013113021,
+          16.008096299322812
+        ],
+        "cargo": [
+          -18.016765775979216,
+          -9.499168731080537,
+          -15.602939642136814
+        ],
+        "teleports": 0
+      },
+      {
+        "name": "both-floor body outcome after ordinary destination and exit inputs",
+        "player": [
+          -16.27286017116116,
+          0.6970833452542681,
+          25.91563155669649
+        ],
+        "cargo": [
+          -17.972021591330027,
+          -9.525074384315298,
+          -15.600823443053704
+        ],
+        "teleports": 2
+      }
+    ],
+    "respawns": 0,
+    "resets": 0,
+    "frames": 7667,
+    "kind": "recovery",
+    "teleports": 2
+  },
+  "status": "completed-without-reset",
+  "sourceAfter": {
+    "LabCreativeRoom17.js": "6666940c90a0b976c174d0671e067535e451c4919b55a6a4f790337544f9da93",
+    "LabCreativeRoom17Journey.js": "ae7bd3f349c39063b5495607d3899dfef1df3e5eb494c122a77a9232babd3114"
+  },
+  "sameSource": true,
+  "player": [
+    -16.27286017116116,
+    0.6970833452542681,
+    25.91563155669649
+  ],
+  "cargo": [
+    -17.972021591330027,
+    -9.525074384315298,
+    -15.600823443053704
+  ],
+  "playerTeleports": 2,
+  "cargoTransports": 3,
+  "originalBody": true,
+  "originalCargo": true,
+  "provenance": {
+    "gameCommit": null,
+    "scope": "Independent local working-source verification before exact remote candidate and CI; concrete builder/Journey hashes recorded, not publication proof."
+  }
+}

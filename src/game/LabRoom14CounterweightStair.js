@@ -47,7 +47,15 @@ export function createRoom14CounterweightStair(k,steps){
    g.playerPosition.y+=delta;g.previousPlayerPosition.y+=delta;
   }
   stair.offset=next;setPose(next);
-  for(const p of parts)for(const c of p.colliders)g.syncCollision(c,new THREE.Box3().setFromObject(c.mesh),dt);
+  // These meshes keep their authored local positions under the moving group.
+  // syncCollision assigns a world-space proxy centre to mesh.position; using
+  // it here reapplied the parent's translation (and the floor's rotation)
+  // every tick, so the actual meshes and their solids drifted out of the room.
+  // The parent already owns the pose. Publish its world bounds directly.
+  for(const p of parts)for(const c of p.colliders){
+   c.box.setFromObject(c.mesh);
+   g.physics?.updateStaticBox(c.mesh.uuid,c.box,dt,c.enabled);
+  }
   for(const m of strips)m.material.color.setHex(stair.supported?0x83e0bd:0xbe885a);
  }
  k.ticks.push(step);k.renders.push(alpha=>setPose(THREE.MathUtils.lerp(stair.previousOffset,stair.offset,alpha)));

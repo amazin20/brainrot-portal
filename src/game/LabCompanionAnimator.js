@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { visualSeconds } from './LabVisualTime.js';
 
 const TAU = Math.PI * 2;
 const clamp = THREE.MathUtils.clamp;
@@ -25,6 +26,7 @@ export class LabCompanionAnimator {
   constructor({ visual } = {}) {
     if (!visual?.isObject3D) throw new TypeError('A companion visual child Object3D is required.');
     this.visual = visual;
+    this.systemReducedMotion = globalThis.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches ?? false;
     this.restPosition = visual.position.clone();
     this.restQuaternion = visual.quaternion.clone();
     this.offsetPosition = new THREE.Vector3();
@@ -40,6 +42,8 @@ export class LabCompanionAnimator {
     this.previousGrounded = true;
     this.previousCarrying = false;
     this.carryBlend = this.tumbleBlend = this.lastImpact = 0;
+    this.turnLean = 0;
+    this.decorativeBlend = this.systemReducedMotion ? 0 : 1;
     this.lastVerticalSpeed = 0;
     this.curiousClip = this.celebrateClip = null;
     this.reactionClip = null;
@@ -82,7 +86,7 @@ export class LabCompanionAnimator {
   get diagnostics() {
     return {
       state: this.state,
-      profile: 'responsive-companion-v2',
+      profile: 'responsive-companion-turn-v3',
       rigidVisualOnly: true,
       sourceAttributesPreserved: true,
       elapsed: this.elapsed,
@@ -94,6 +98,8 @@ export class LabCompanionAnimator {
       landingVelocity: this.landVelocity,
       carryBlend: this.carryBlend,
       tumbleBlend: this.tumbleBlend,
+      turnLean: this.turnLean,
+      decorativeMotion: this.decorativeBlend,
       reaction: this.reactionClip ? { ...this.reactionClip } : null,
       clips: {
         curious: this.curiousClip ? { ...this.curiousClip } : null,
@@ -107,15 +113,17 @@ export class LabCompanionAnimator {
   }
 
   update({ dt = 1 / 60, elapsed, speed = 0, grounded = true, velocity, angularVelocity,
-    carrying = false, impact = 0, curious = false, celebrating = false } = {}) {
+    carrying = false, impact = 0, curious = false, celebrating = false, reducedMotion = this.systemReducedMotion } = {}) {
     // All dynamics below have closed forms, including the gait's damped speed
     // integral. Long frames therefore settle safely without losing elapsed time.
-    dt = clamp(finite(dt), 0, 60);
+    dt = visualSeconds(dt);
+    if (dt === 0) return;
     speed = clamp(finite(speed), 0, 12);
     const vy = clamp(finite(velocity?.y), -30, 30);
     const angularSpeed = Math.hypot(finite(angularVelocity?.x), finite(angularVelocity?.y), finite(angularVelocity?.z));
     impact = clamp(finite(impact), 0, 16);
     this.elapsed = Number.isFinite(elapsed) ? elapsed : this.elapsed + dt;
+    this.decorativeBlend = damp(this.decorativeBlend, reducedMotion ? 0 : 1, 12, dt);
     if (!carrying && grounded && !this.previousGrounded) this.triggerLanding(Math.abs(this.lastVerticalSpeed));
     else if (!carrying && grounded && impact > 1.6 && impact > this.lastImpact + .8) this.triggerLanding(impact * .55);
     if (carrying !== this.previousCarrying) this.trigger(carrying ? 'pickup' : 'release');
@@ -135,6 +143,8 @@ export class LabCompanionAnimator {
     this.airPitch = damp(this.airPitch, clamp(vy * 0.012, -0.065, 0.065), 8, dt);
     this.curiousBlend = damp(this.curiousBlend, curious ? 1 : 0, 7, dt);
     this.celebrateBlend = damp(this.celebrateBlend, celebrating ? 1 : 0, 8, dt);
+    this.turnLean = damp(this.turnLean, grounded && !carrying
+      ? clamp(finite(angularVelocity?.y), -2, 2) * .045 : 0, 8, dt);
 
     for (const name of ['curiousClip', 'celebrateClip', 'reactionClip']) {
       const clip = this[name];
@@ -180,8 +190,8 @@ export class LabCompanionAnimator {
       : this.reactionClip?.kind === 'startle' ? -.07 : .075 * Math.sin(reactionPhase);
     // Carried bob/hops would visually leave the actual hand contacts. Carrying
     // uses only a tiny rigid look, while jump/drop/tumble come from physics.
-    const supportMotion = freeSupport + .035 * this.carryBlend;
-    const lookMotion = settled * (1 - .72 * this.carryBlend);
+    const supportMotion = (freeSupport + .035 * this.carryBlend) * this.decorativeBlend;
+    const lookMotion = settled * (1 - .72 * this.carryBlend) * this.decorativeBlend;
     this.offsetPosition.set(
       clamp((0.004 * Math.sin(t * 1.3) + 0.012 * curiousLook + 0.008 * step * Math.sin(this.gait)) * supportMotion, -0.025, 0.025),
       clamp((breathing + 0.014 * step * (1 - Math.cos(this.gait * 2)) + happyHop + this.landing) * supportMotion, -0.04, 0.10),
@@ -190,9 +200,9 @@ export class LabCompanionAnimator {
     this.offsetRotation.set(
       clamp((0.013 * Math.sin(t * 2.25) - 0.04 * step - 0.055 * curiousCue + this.airPitch * this.airBlend
         - this.landing * 1.4 + .06 * autoNod + reaction * reactionNod) * lookMotion, -0.18, 0.18),
-      clamp((0.018 * Math.sin(t * 0.8) + 0.145 * curiousLook + 0.032 * happyWiggle) * lookMotion, -0.20, 0.20),
+      clamp((0.018 * Math.sin(t * 0.8) + 0.145 * curiousLook + 0.032 * happyWiggle + this.turnLean * .35) * lookMotion, -0.20, 0.20),
       clamp((0.015 * Math.sin(t * 1.3) + 0.08 * curiousLook + 0.036 * step * Math.sin(this.gait) + 0.12 * happyWiggle
-        + (this.reactionClip?.kind === 'portal' ? .08 * reaction * Math.sin(reactionPhase) : 0)) * lookMotion, -0.20, 0.20),
+        - this.turnLean + (this.reactionClip?.kind === 'portal' ? .08 * reaction * Math.sin(reactionPhase) : 0)) * lookMotion, -0.20, 0.20),
     );
     this.visual.position.copy(this.restPosition).add(this.offsetPosition);
     this.tempQuaternion.setFromEuler(this.offsetRotation);

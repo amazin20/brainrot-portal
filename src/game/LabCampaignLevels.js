@@ -1,5 +1,11 @@
+import {finishCampaignTheme} from './LabCampaignThemeFinish.js';
+import {PILOT43_SPEC,buildPuzzlePilot43} from './LabPuzzlePilot43.js';
+import {progressionSpec,buildPuzzleProgression} from './LabPuzzleProgression.js';
+import {EXPANSION_B_BUILDERS,EXPANSION_B_SPECS} from './LabExpansionRoomsB.js';
+import {EXPANSION_A_BUILDERS,EXPANSION_A_SPECS} from './LabExpansionRoomsA.js';
 import {CREATIVE_ROOM20_SPEC,buildCreative20} from './LabCreativeRoom20.js';
 import {CREATIVE_ROOM18_SPEC,buildCreative18} from './LabCreativeRoom18.js';
+import {CREATIVE_ROOM17_SPEC,buildCreative17} from './LabCreativeRoom17.js';
 import {FOUNDATION_BUILDERS,FOUNDATION_SPECS} from './LabFoundationChambers.js';
 import {RESEARCH_BUILDERS,RESEARCH_SPECS} from './LabResearchChambers.js';
 import {POST_A_BUILDERS,POST_A_SPECS} from './LabPostCampaignA.js';
@@ -10,6 +16,7 @@ import {buildVelocityArena} from './LabVelocityArena.js';
 import {ROOM21_SPEC,buildRoom21} from './LabPortalRoom21.js';
 import {ROOM22_SPEC,buildRoom22} from './LabPortalRoom22.js';
 import {ROOM23_SPEC,buildRoom23} from './LabPortalRoom23.js';
+import {ROOM23_SPEC as ROOM23_PHYSICAL_SPEC} from './LabRoom23PhysicalPrototype.js';
 import {ROOM24_SPEC,buildRoom24} from './LabPortalRoom24.js';
 import {ROOM25_SPEC,buildRoom25} from './LabPortalRoom25.js';
 import {ROOM26_SPEC,buildRoom26} from './LabPortalRoom26.js';
@@ -49,16 +56,18 @@ export const finishBrowserArt=level=>{
 };
 const NEW_CAMPAIGN=[ROOM16_SPEC,ROOM17_SPEC,ROOM18_SPEC,ROOM19_SPEC,ROOM20_SPEC,ROOM21_SPEC,ROOM22_SPEC,ROOM23_SPEC,ROOM24_SPEC,ROOM25_SPEC,ROOM26_SPEC,ROOM27_SPEC,ROOM28_SPEC,ROOM29_SPEC,ROOM30_SPEC];
 const NEW_BUILDERS=[buildRoom16,buildRoom17,buildRoom18,buildRoom19,buildRoom20,buildRoom21,buildRoom22,buildRoom23,buildRoom24,buildRoom25,buildRoom26,buildRoom27,buildRoom28,buildRoom29,buildRoom30];
-export const FOUNDATION_LATE_SPECS=Object.freeze([...POST_A_SPECS,...POST_B_SPECS,TOWER_SPEC]);
-const FOUNDATION_CREATIVE_SPECS={17:CREATIVE_ROOM18_SPEC,19:CREATIVE_ROOM20_SPEC};
-const FOUNDATION_CREATIVE_BUILDERS={17:buildCreative18,19:buildCreative20};
-const FOUNDATION_LATE_BUILDERS=[...POST_A_BUILDERS,...POST_B_BUILDERS,buildTowerLevel];
+export const FOUNDATION_LATE_SPECS=Object.freeze([...POST_A_SPECS,...POST_B_SPECS,TOWER_SPEC,...EXPANSION_A_SPECS,...EXPANSION_B_SPECS]);
+const FOUNDATION_CREATIVE_SPECS={16:CREATIVE_ROOM17_SPEC,17:CREATIVE_ROOM18_SPEC,19:CREATIVE_ROOM20_SPEC};
+const FOUNDATION_CREATIVE_BUILDERS={16:buildCreative17,17:buildCreative18,19:buildCreative20};
+const FOUNDATION_LATE_BUILDERS=[...POST_A_BUILDERS,...POST_B_BUILDERS,buildTowerLevel,...EXPANSION_A_BUILDERS,...EXPANSION_B_BUILDERS];
 
 // Preserve the verified introductory rooms; extend the public registry once.
 export const CAMPAIGN=Object.freeze([...INTRODUCTORY_CAMPAIGN,...EXTENDED_CAMPAIGN.slice(0,3),...WORKSHOP_CAMPAIGN.slice(0,3).map((room,i)=>i===2?{...room,assets:room.assets.filter(id=>id!==39),accent:0x83cfc7,description:'Направь воздух от вентилятора к приводу двери.',hints:['Круглый вентилятор слева создаёт поток. Привод с решёткой дальше по залу принимает воздух передней стороной.','Воздух толкает тебя и друга. Попав в переднюю решётку приёмника, поток сам запускает дверь; кабель показывает связь.','Соедини правую стену напротив вентилятора с другим участком правой стены напротив привода. Включи вентилятор: когда поток попадёт в приёмник, дверь откроется автоматически. Забери друга и пройди в открывшуюся дверь.']}:room),ROOM12_SPEC,ROOM13_ART_SPEC,ROOM14_ART_SPEC,ROOM15_ART_SPEC,...NEW_CAMPAIGN,...RESEARCH_SPECS]);
-export function buildLabCampaignLevel(game,index){
+function buildUnthemedCampaignLevel(game,index){
  const count=game.chamberEdition==='foundation'?30+FOUNDATION_LATE_BUILDERS.length:CAMPAIGN.length;
  if(!Number.isInteger(index)||index<0||index>=count)throw new RangeError('Unknown campaign course');
+ if(game.chamberEdition==='foundation'&&game.puzzleProgression&&progressionSpec(index))return buildPuzzleProgression(game,index);
+ if(game.chamberEdition==='foundation'&&game.puzzlePilot43&&index===42)return buildPuzzlePilot43(game,index);
  if(game.chamberEdition==='foundation'&&FOUNDATION_BUILDERS[index])return FOUNDATION_BUILDERS[index](game,index);
  if(game.chamberEdition==='foundation'&&FOUNDATION_CREATIVE_BUILDERS[index])return FOUNDATION_CREATIVE_BUILDERS[index](game,index);
  if(game.chamberEdition==='foundation'&&index>=30)return FOUNDATION_LATE_BUILDERS[index-30](game,index);
@@ -76,4 +85,18 @@ export function buildLabCampaignLevel(game,index){
  return finishBrowserArt(addExplorationSurfaces(game,level,index));
 }
 
-export function campaignSpec(game,index){return game.chamberEdition==='foundation'&&(FOUNDATION_CREATIVE_SPECS[index]||FOUNDATION_SPECS[index]||index>=30&&FOUNDATION_LATE_SPECS[index-30])||game.chamberEdition==='open'&&OPEN_SPECS[index]||CAMPAIGN[index];}
+export function campaignSpec(game,index){
+ if(game.chamberEdition==='foundation'){
+  if(game.room23PhysicalPrototype===true&&index===22)return ROOM23_PHYSICAL_SPEC;
+  if(game.puzzleProgression&&progressionSpec(index))return progressionSpec(index);
+  if(game.puzzlePilot43&&index===42)return PILOT43_SPEC;
+  return FOUNDATION_CREATIVE_SPECS[index]||FOUNDATION_SPECS[index]||index>=30&&FOUNDATION_LATE_SPECS[index-30]||CAMPAIGN[index];
+ }
+ return game.chamberEdition==='open'&&OPEN_SPECS[index]||CAMPAIGN[index];
+}
+
+export function buildLabCampaignLevel(game,index){
+ const before=new Set(game.scene.children);
+ const level=buildUnthemedCampaignLevel(game,index);
+ return finishCampaignTheme(game,level,index,game.scene.children.filter(root=>!before.has(root)));
+}

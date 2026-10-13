@@ -5,7 +5,7 @@ import {createHeadlessGame} from '../scripts/lab-headless.mjs';
 import {runV8Journey} from '../src/game/LabV8Journey.js';
 import {runRoom17,room17Depart} from '../src/game/LabRoom17Journey.js';
 import {resolvePortalPlacement} from '../src/game/LabPortals.js';
-const game=await createHeadlessGame();
+const game=await createHeadlessGame();game.chamberEdition='classic';
 after(()=>{game.physics.dispose();game.portals.dispose();});
 for(const [order,aspect,interruptBrake] of [['cargo-first',16/9,false],['scout-first',1.6,true]])test(`moving address ${order} completes with the original cargo and a physically travelling portal`,async()=>{
  await game.selectLevel(16,false);game.camera.aspect=aspect;game.camera.updateProjectionMatrix();

@@ -27,7 +27,7 @@ test('the in-world meter explains actual disconnection, conservation and equilib
 });
 
 const game=await createHeadlessGame();after(()=>{game.physics.dispose();game.portals.dispose();});
-for(const aspect of [1.6,16/9])for(const options of [{},{route:'full-tide-observatory'},{recoverFall:true},{interrupt:true}]){
+for(const aspect of [1.6,16/9])for(const options of [{},{route:'full-tide-observatory'},{recoverFall:true},{interrupt:true},{route:'full-tide-observatory',interrupt:true}]){
  test(`room28 physical water route ${aspect} ${JSON.stringify(options)}`,async()=>{
   await game.selectLevel(27,false);game.camera.aspect=aspect;game.camera.updateProjectionMatrix();const body=game.physics.cargoBody,identity=game.cargo.group.uuid;
   const art=game.firstLevel.tidalPresentation;
@@ -61,9 +61,19 @@ for(const aspect of [1.6,16/9])for(const options of [{},{route:'full-tide-observ
   assert.equal(art.readouts.localReadouts[1].text,'Б / 0.0 м');
   assert.ok(Math.abs(art.readouts.columns[0].scale.y-6)<1e-10);
   assert.ok(art.readouts.columns[1].scale.y<.02);
-  let firstHeights=null,returnObserved=false;
+  let firstHeights=null,returnObserved=false,interruptionObserved=false,landingPreserved=false;
   const report=await runV8Journey(game,{journeyOptions:options,onMilestone(mark){
    const s=game.firstLevel.state;assert.ok(Math.abs(s.tides.levels[0]+s.tides.levels[1]-6)<1e-8);
+   if(mark.name==='both mouths in one basin hold both tides'){
+    interruptionObserved=true;assert.equal(game.portals.ready,true);
+    assert.ok(s.tides.connection.every(end=>end.basin===1));assert.equal(s.tides.flow,0);
+    assert.match(art.readouts.status.text,/ОБА УСТЬЯ: БАССЕЙН Б/);
+   }
+   if(mark.name==='both western mouths retain the real low-tide service landing'){
+    landingPreserved=true;assert.equal(game.portals.ready,true);
+    assert.ok(s.tides.connection.every(end=>end.basin===0));assert.equal(s.tides.flow,0);
+    assert.ok(s['lagoon-float'].position.y<.9,'The receiving float must remain reachable from its real low service steps');
+   }
    if(mark.name==='the east gauge and receiving current show the moving tide'){
     assert.ok(Math.abs(s.tides.flow)>.006);
     assert.ok(art.current.ring.visible,'The current should be visible at the actual receiving portal');
@@ -82,6 +92,7 @@ for(const aspect of [1.6,16/9])for(const options of [{},{route:'full-tide-observ
    }
   }});
   assert.equal(game.state,'won');assert.equal(report.resets+report.respawns,0);assert.equal(game.physics.cargoBody,body);assert.equal(game.cargo.group.uuid,identity);assert.ok(returnObserved);
+  if(options.interrupt)assert.ok(interruptionObserved);if(options.recoverFall)assert.ok(landingPreserved);
   assert.ok(game.firstLevel.goal.contains(game.playerPosition));assert.ok(game.firstLevel.goal.contains(game.cargo.position));
   if(options.route==='full-tide-observatory'){assert.ok(firstHeights[1]>5.25);assert.ok(firstHeights[0]<.75);}else assert.ok(Math.abs(firstHeights[0]-firstHeights[1])<.15);
  });

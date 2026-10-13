@@ -1,0 +1,15 @@
+/** Production-input regression for the formerly horizontal cargo outlet.
+ * EXPECT_BYPASS=1 records the historical full hydraulic-skip completion. */
+import assert from 'node:assert/strict';import fs from 'node:fs';import path from 'node:path';import * as THREE from 'three';
+import {createHeadlessGame} from './lab-headless.mjs';import {runV8Journey} from '../src/game/LabV8Journey.js';import {installPreciseLateAim,aimLateSurface} from '../src/game/LabLateCampaignAim.js';
+const g=await createHeadlessGame();g.chamberEdition='foundation';const expectBypass=process.env.EXPECT_BYPASS==='1',out=process.env.OUT||'qa/siphon-cargo-aperture-after.json';
+const report={scope:'Production headless simulation; ordinary movement, aiming, projectiles and E only after initial Play reset; no actor/mechanism state writes. No browser rendering claim.',expectBypass,milestones:[]};
+const snap=()=>({player:g.playerPosition.toArray(),cargo:g.cargo.position.toArray(),held:!!g.heldCube,state:g.state,teleports:g.teleportCount,primed:g.firstLevel.circuit.primed,height:g.firstLevel.circuit.height,delivered:g.firstLevel.circuit.delivered,displacement:g.firstLevel.getDisplacement()});
+try{await g.selectLevel(32,false);const cargo=g.cargo,body=g.physics.cargoBody;const route=await runV8Journey(g,{scenario:async d=>{
+ installPreciseLateAim(d);d.walk(4,19);aimLateSurface(d,1,d.level.drop);aimLateSurface(d,0,d.level.loading);d.walk(11,16.8);d.pickup();d.walk(20,16.8);d.walk(20,25);d.walk(13,25);
+ const before=g.teleportCount;for(let i=0;i<300&&g.teleportCount===before;i++){d.worldMove(0,-1);d.frame();}d.stop();report.milestones.push({name:'attempted held-cargo floor traversal',...snap()});
+ if(!expectBypass){assert.equal(g.teleportCount,before);assert.ok(g.heldCube);assert.equal(d.level.circuit.height,0);assert.equal(d.level.circuit.primed,false);assert.equal(g.state,'playing');return;}
+ assert.ok(g.teleportCount>before);for(let i=0;i<45;i++){d.worldMove(-1,0);d.frame();}d.stop();d.wait(.7);report.milestones.push({name:'steered ceiling exit to upper apron',...snap()});assert.ok(g.heldCube);assert.equal(g.playerPosition.y,13.6);
+ d.walk(-23,-20);d.look(new THREE.Vector3(-21,14.5,-21));d.wait(.3);assert.ok(g.interact()&&!g.heldCube);d.wait(.8);aimLateSurface(d,0,d.level.passage);aimLateSurface(d,1,d.level.arrival);const p=g.cargo.position.clone();d.walk(p.x-1.2,p.z);d.pickup();d.enter(d.level.passage);d.walk(20,-20);d.until(()=>g.state==='won',4,'Cargo outlet bypass did not complete');assert.equal(d.level.circuit.height,0);assert.equal(d.level.circuit.primed,false);assert.equal(d.level.circuit.delivered,0);assert.equal(d.level.getDisplacement(),0);
+ }});report.route=route;report.final=snap();assert.equal(route.resets+route.respawns,0);assert.equal(g.cargo,cargo);assert.equal(g.physics.cargoBody,body);report.pass=true;
+}finally{fs.mkdirSync(path.dirname(out),{recursive:true});fs.writeFileSync(out,JSON.stringify(report,null,2)+'\n');g.firstLevel.dispose?.();g.physics.dispose();g.portals.dispose();console.log(JSON.stringify(report));}

@@ -5,8 +5,9 @@ import {LabPhysics} from '../../src/game/LabPhysics.js';
 
 const H=1/120,V=(...p)=>new THREE.Vector3(...p);
 /** Explicit isolated geometry: initial actors and planes are fixture setup.
- * Every subsequent approach, pickup, release and clear uses production input,
- * controller and rigid-body simulation. No post-setup actor state writes. */
+ * Approach, pickup and release use the production controller and rigid-body
+ * simulation. Pair closing calls the internal lifecycle API; no player control
+ * exposes it. No post-setup actor state writes. */
 export function releaseFixture(){
  const g=playerFixture();g.physics=new LabPhysics({gravity:-19.5});
  const source=wall(g,0,5,-.01,20,10,.02),destination=wall(g,20.1,5,0,.2,10,10),floor=wall(g,0,3.7,3,40,.2,40);

@@ -45,8 +45,18 @@ export class AudioController {
     this.master.gain.cancelScheduledValues(c.currentTime);this.master.gain.setValueAtTime(active?this.volume:0,c.currentTime);
     if(!active&&this.flightGain){this.flightAmount=0;this.flightGain.gain.cancelScheduledValues(c.currentTime);this.flightGain.gain.setValueAtTime(0,c.currentTime);}
     if(!active)this.resetEpicMotion();
-    if(active&&c.state==='suspended')c.resume().catch(()=>{});
-    else if(!active&&c.state==='running')c.suspend().catch(()=>{});
+    const target=active?'running':'suspended';
+    if((active&&c.state==='suspended')||(!active&&c.state==='running')){
+      if(this.contextTransition?.context===c&&this.contextTransition.target===target)return;
+      const transition={context:c,target};this.contextTransition=transition;
+      const clear=()=>{if(this.contextTransition===transition)this.contextTransition=null;};
+      // Visible AudioContext state changes asynchronously. A pause or mute can
+      // change while this request is pending; reconcile its completion with
+      // the current holds instead of leaving audio in that obsolete state.
+      try{Promise.resolve(active?c.resume():c.suspend()).then(()=>{
+        clear();if(this.context===c&&!this.contextTransition)this.sync();
+      },clear);}catch{clear();}
+    }
   }
   get audible(){return this.enabled&&this.context?.state==='running'&&!this.muted&&!this.blocks.size&&this.volume>0;}
   tone(frequency,duration=.1,type='sine',volume=.045,offset=0,endFrequency=frequency,epic=false){

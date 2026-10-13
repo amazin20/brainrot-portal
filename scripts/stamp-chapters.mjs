@@ -1,0 +1,14 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import {execFileSync} from 'node:child_process';
+import {CAMPAIGN_THEMES} from '../src/game/LabCampaignThemes.js';
+const directory=process.argv[2]||'dist';
+execFileSync(process.execPath,['scripts/stamp-expedition.mjs',directory],{stdio:'inherit'});
+const file=path.join(directory,'build-info.json'),info=JSON.parse(fs.readFileSync(file));
+Object.assign(info,{version:'v51-chapter-atlas',artVersion:'v51-chapter-atlas'});
+info.features.foundation.chapters=CAMPAIGN_THEMES.map(t=>({id:t.id,title:t.name,first:t.from+1,last:t.to+1}));
+info.features.presentation.chapterArchitectureThemes=true;
+info.features.presentation.atlasMenu=true;
+info.features.presentation.menuSettings=true;
+info.verificationScope='Candidate: room themes, accessible chapter atlas and actual loading. Refer to exact-source QA reports; legacy videos are not current visual evidence.';
+fs.writeFileSync(file,JSON.stringify(info,null,2)+'\n');

@@ -1,0 +1,10 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import {execFileSync} from 'node:child_process';
+const directory=process.argv[2]||'dist';
+execFileSync(process.execPath,['scripts/stamp-echo.mjs',directory],{stdio:'inherit'});
+const file=path.join(directory,'build-info.json'),info=JSON.parse(fs.readFileSync(file));
+Object.assign(info,{version:'v53-siphon-observatory',gameplayVersion:'v53-siphon-observatory'});
+info.features.replacedRooms.unshift({level:33,previousId:'post-inverse-spring',id:'siphon-observatory',title:'Сифонная обсерватория',revision:'siphon-observatory-v1'});
+info.verificationScope='One new full replacement in this release (33), preserving the previously replaced Echo Horizon (51). Finite input-only checks are not proof of absence of every shortcut; software WebGL is not hardware FPS.';
+fs.writeFileSync(file,JSON.stringify(info,null,2)+'\n');

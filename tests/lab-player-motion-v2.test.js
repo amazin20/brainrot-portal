@@ -92,7 +92,9 @@ test('backward and strafe gaits change actual leg trajectories in character-loca
     const { animator } = makeAnimator();
     advance(animator, 120, { speed: 2, moveForward, moveRight });
     animator.gait = 0.1;
-    animator.update({ dt: 0, speed: 2, moveForward, moveRight });
+    // Sample an authored target at a chosen gait phase. update(dt:0) is a real
+    // pause and must preserve the rendered pose, not advance/repose the model.
+    animator.stepPose({ dt: 0, speed: 2, moveForward, moveRight });
     return animator;
   };
   const forward = pose(1, 0), backward = pose(-1, 0), right = pose(0, 1), left = pose(0, -1);

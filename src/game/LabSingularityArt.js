@@ -30,7 +30,15 @@ export function buildSingularityArt({game,k,rooms,machines,edges,solved}){
  function wallFace(r,side,offset,height,span,centreY,material){
   const [x,y,z]=r.def.at,frame={center:V(x+side*(r.def.w/2-.19),y,z),right:V(0,0,side),up:V(0,1,0),normal:V(-side,0,0)};
   const x0=offset*side-span/2,x1=offset*side+span/2;
-  const pieces=clipArchitecturalRect({x0,x1,y0:centreY-height/2,y1:centreY+height/2},frame,portalFrames);
+  // Relief must leave the same entrance openings as the physical shell:
+  // 6.8 m wide, from each entry landing to its 5 m lintel. The hoist also
+  // has its authored upper landing; these cuts never change physical solids.
+  const openings=[...portalFrames];
+  const entrySide=r.def.entry==='w'?-1:r.def.entry==='e'?1:0;
+  if(side===entrySide)for(const landing of [0,...(r.def.upperDoor?[r.def.upperDoor]:[])]){
+   openings.push({...frame,center:V(r.door[0],y+landing+2.5,r.door[2]),halfWidth:3.4,halfHeight:2.5});
+  }
+  const pieces=clipArchitecturalRect({x0,x1,y0:centreY-height/2,y1:centreY+height/2},frame,openings);
   for(const p of pieces){
    const mesh=inset(frame.center.clone().addScaledVector(frame.right,(p.x0+p.x1)/2).addScaledVector(frame.up,(p.y0+p.y1)/2).toArray(),[p.x1-p.x0,p.y1-p.y0,.10],material);
    mesh.quaternion.setFromRotationMatrix(new THREE.Matrix4().makeBasis(frame.right,frame.up,frame.normal));
@@ -52,8 +60,8 @@ export function buildSingularityArt({game,k,rooms,machines,edges,solved}){
  };
  for(const r of rooms.values()){
   const{def,b}=r,[x,y,z]=def.at,accent=finishes.wingAccents.get(def.id)??accents[def.id],face=finishes.wingFaces.get(def.id)??coat;
-  // Broad relief faces have a real bevel and a dark recess behind them. They
-  // sit above walking height and do not cover a portal or alter its material.
+  // Broad relief faces have a real bevel and a dark recess behind them. Their
+  // wall skins leave authored entrance and portal openings clear.
   for(const side of [-1,1]){
    for(const [offset,span,height,centreY]of profiles[def.id]??profiles.freight){
     wallFace(r,side,offset*def.d,height,span,centreY,face);

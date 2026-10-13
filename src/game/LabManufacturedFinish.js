@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import {mapDeckUV} from './LabDeckUV.js';
 
 /** The room kit uses a few honest finishes. Reflection comes from LabGame's
  * shared filtered environment; a low-resolution private sky used to turn
@@ -11,7 +12,7 @@ export function manufacturedMaterials(palette){
  const secondary=finish('Satin enamel / machine family',palette.secondary,.66,.10);
  return {
   shell,secondary,
-  floor:finish('Honed mineral walking deck',palette.floor,.88,.025),
+  floor:finish('Honed mineral walking deck',palette.floor,.88,.025,{vertexColors:true}),
   dark:finish('Dark anodised load frame',0x34434c,.68,.24),
   metal:finish('Satin nickel / machined bearing',0xb4bdbb,.48,.70),
   ceramic:finish('Portal porcelain',0xf8f4dd,.63,.025),
@@ -21,6 +22,92 @@ export function manufacturedMaterials(palette){
   shellPanel:finish('Folded enamel / integral flange',palette.paint,.68,.10,{vertexColors:true}),
   secondaryPanel:finish('Folded enamel / machine fascia',palette.secondary,.66,.10,{vertexColors:true}),
  };
+}
+
+/** Local contact depth survives the low preset without another shadow pass.
+ * Only the existing static solids can darken a deck, and the top remains at
+ * its exact standing height. The one closed mesh replaces the source slab;
+ * its vertex colours contain broad contact falloff, not a hovering decal. */
+function mineralDeckGeometry(width,height,depth,mesh,contacts){
+ const bevel=Math.min(.035,height*.12),x0=-width/2,x1=width/2,z0=-depth/2,z1=depth/2;
+ const axes=(lo,hi,key)=>{
+  const count=Math.min(16,Math.max(2,Math.ceil((hi-lo)/2.5)));
+  const values=[lo,lo+bevel,hi-bevel,hi];
+  for(let i=1;i<count;i++)values.push(lo+(hi-lo)*i/count);
+  // Include the actual joint and its broad falloff so a slender mounting
+  // foot is not lost between otherwise metre-scale vertex samples.
+  const offset=mesh.position[key];
+  for(const box of contacts)for(const edge of [box.min[key],box.max[key]])for(const d of [-.65,0,.65]){
+   const value=edge+d-offset;if(value>lo+bevel&&value<hi-bevel)values.push(value);
+  }
+  const sorted=[...new Set(values.map(v=>Math.round(v*1e5)/1e5))].sort((a,b)=>a-b);
+  // Keep a bounded geometry budget even in the largest equipment halls.
+  if(sorted.length<=36)return sorted;
+  const bounded=[sorted[0],sorted[1]];
+  for(let i=1;i<32;i++)bounded.push(sorted[Math.round(1+(sorted.length-4)*i/32)]);
+  bounded.push(sorted.at(-2),sorted.at(-1));return [...new Set(bounded)];
+ };
+ const xs=axes(x0,x1,'x'),zs=axes(z0,z1,'z'),positions=[],colors=[];
+ const point=(x,z)=>[x,height/2-Math.max(0,bevel-Math.min(x-x0,x1-x,z-z0,z1-z)),z];
+ const shade=(x,z)=>{
+  const wx=x+mesh.position.x,wz=z+mesh.position.z;let occlusion=0;
+  for(const box of contacts){
+   const dx=Math.max(box.min.x-wx,0,wx-box.max.x),dz=Math.max(box.min.z-wz,0,wz-box.max.z);
+   const falloff=Math.max(0,1-Math.hypot(dx,dz)/.85);
+   occlusion=Math.max(occlusion,falloff*falloff);
+  }
+  return 1-.24*occlusion;
+ };
+ const tri=(a,b,c,{top=false,value=.79}={})=>{for(const p of [a,b,c]){positions.push(...p);const tone=top?shade(p[0],p[2]):value;colors.push(tone,tone,tone);}};
+ for(let ix=0;ix<xs.length-1;ix++)for(let iz=0;iz<zs.length-1;iz++){
+  const a=point(xs[ix],zs[iz]),b=point(xs[ix],zs[iz+1]),c=point(xs[ix+1],zs[iz+1]),d=point(xs[ix+1],zs[iz]);
+  tri(a,b,c,{top:true});tri(a,c,d,{top:true});
+ }
+ const side=(a,b)=>{const c=[b[0],-height/2,b[2]],d=[a[0],-height/2,a[2]];tri(a,b,c);tri(a,c,d);};
+ for(let ix=0;ix<xs.length-1;ix++){side(point(xs[ix],z0),point(xs[ix+1],z0));side(point(xs[ix+1],z1),point(xs[ix],z1));}
+ for(let iz=0;iz<zs.length-1;iz++){side(point(x1,zs[iz]),point(x1,zs[iz+1]));side(point(x0,zs[iz+1]),point(x0,zs[iz]));}
+ tri([x0,-height/2,z0],[x1,-height/2,z0],[x1,-height/2,z1],{value:.70});
+ tri([x0,-height/2,z0],[x1,-height/2,z1],[x0,-height/2,z1],{value:.70});
+ const geometry=new THREE.BufferGeometry();geometry.name='Mineral deck / integral static contact relief';
+ geometry.setAttribute('position',new THREE.Float32BufferAttribute(positions,3));
+ geometry.setAttribute('color',new THREE.Float32BufferAttribute(colors,3));
+ geometry.computeVertexNormals();geometry.computeBoundingBox();geometry.computeBoundingSphere();
+ geometry.parameters={width,height,depth};return geometry;
+}
+
+function finishMineralDecks(k){
+ const materials=new Set([k.m.floor,k.m.service].filter(Boolean)),up=new THREE.Vector3(0,1,0);
+ for(const material of materials){material.vertexColors=true;material.needsUpdate=true;}
+ let decks=0,contactJoints=0,triangles=0;
+ k.world.root.updateWorldMatrix(true,true);
+ k.world.root.traverse(mesh=>{
+  if(!mesh.isMesh||mesh.isInstancedMesh||!materials.has(mesh.material)||mesh.userData?.collisionProxy)return;
+  const old=mesh.geometry,p=old.parameters;
+  const horizontal=up.clone().applyQuaternion(mesh.quaternion).dot(up)>.9999;
+  if(mesh.parent===k.world.root&&horizontal&&p?.width>=8&&p?.depth>=8&&p?.height>=.15&&p?.height<=.8){
+   const y=mesh.position.y+p.height/2,bounds=new THREE.Box3().setFromObject(mesh);
+   const contacts=k.game.colliders.filter(c=>c.enabled!==false&&!c.kinematic&&c.box.min.y<=y+.06&&c.box.max.y>=y+.18&&
+    c.box.max.x>bounds.min.x&&c.box.min.x<bounds.max.x&&c.box.max.z>bounds.min.z&&c.box.min.z<bounds.max.z).map(c=>c.box);
+   // Coarse box proxies may surround a whole machine. Avoid baking a large
+   // false black pool beneath housings that do not have a local contact.
+   const local=contacts.filter(b=>Math.min(b.max.x-b.min.x,b.max.z-b.min.z)<3.2);
+   if(!local.length){
+    // A clear unsupported landing gains no contact detail from subdivision.
+    // Keep its existing cheap rounded slab and only match the batch contract.
+    if(!old.attributes.color)old.setAttribute('color',new THREE.Float32BufferAttribute(new Float32Array(old.attributes.position.count*3).fill(1),3));
+    return;
+   }
+   mesh.geometry=mineralDeckGeometry(p.width,p.height,p.depth,mesh,local);
+   mapDeckUV(mesh);old.dispose();decks++;contactJoints+=local.length;
+   triangles+=mesh.geometry.attributes.position.count/3;
+   mesh.userData.mineralContactFinish=true;
+  }else if(!old.attributes.color){
+   // Static batching requires the same attributes for ramps, decks and
+   // painted walking slabs sharing this material. Untouched faces stay white.
+   old.setAttribute('color',new THREE.Float32BufferAttribute(new Float32Array(old.attributes.position.count*3).fill(1),3));
+  }
+ });
+ return {decks,contactJoints,triangles};
 }
 
 /** A closed folded bulkhead with its border and recessed field in ONE mesh.
@@ -66,6 +153,7 @@ export function manufacturedBulkheadGeometry(width,height,depth){
  * mechanism state or per-frame callback is introduced. */
 export function finishManufacturedChamber(k){
  if(k.manufacturedFinish)return k.manufacturedFinish;
+ const mineral=finishMineralDecks(k);
  let foldedPanels=0,springWinding=0;const bins=k.artBins;
  k.world.root.traverse(mesh=>{
   if(!mesh.isMesh||mesh.isInstancedMesh||mesh.userData?.collisionProxy)return;
@@ -111,6 +199,6 @@ export function finishManufacturedChamber(k){
    mat.color.setHex(0xb2c0b4);mat.roughness=.88;mat.metalness=.025;mat.envMap=null;mat.envMapIntensity=.45;wallMaterials.add(mat);
   }
  });
- const result=Object.freeze({revision:49,foldedPanels,springWinding,wallFinishes:wallMaterials.size,extraLights:0,perFrameCallbacks:0});
+ const result=Object.freeze({revision:50,foldedPanels,springWinding,wallFinishes:wallMaterials.size,mineralDecks:mineral.decks,staticContactJoints:mineral.contactJoints,mineralTriangles:mineral.triangles,extraLights:0,perFrameCallbacks:0});
  k.manufacturedFinish=result;k.world.root.userData.manufacturedFinish=result;return result;
 }

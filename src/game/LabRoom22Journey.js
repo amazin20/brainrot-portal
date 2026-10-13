@@ -10,7 +10,13 @@ export async function runRoom22(d,{order='weight-first',recovery=false}={}){
  walk(8,3);d.aim(1,p['upper-return'].getFrame().center);walk(3.55,0);d.aim(0,p['freight-weight'].getFrame().center);
  until(()=>game.cargo.position.y>7.3,6,'Original cargo was not recovered through its loaded floor');wait(2);
  check(!level.shutters.loaded,'Removing the physical load must reverse the shutters');mark('permanent gallery retains height while the same cargo reverses both shutters');
- if(recovery){game.clearPortals();wait(.4);d.aim(1,p['upper-return'].getFrame().center);mark('erased portal pair restored on the permanent observation gallery');}
+ if(recovery){
+  walk(15,3);const receiving=p['upper-return'].getFrame();
+  d.aim(1,receiving.center.clone().addScaledVector(receiving.right,1.3));wait(.4);
+  check(game.portals.portals[1].position.distanceTo(receiving.center)>1,'The normal shot must physically move the receiving aperture');
+  check(!level.shutters.loaded,'Moving the receiving aperture must not recreate the removed freight load');
+  d.aim(1,p['upper-return'].getFrame().center);mark('receiving aperture repositioned and restored from the permanent observation gallery');
+ }
  walk(12,-5);walk(12,-18);d.aim(0,p['reverse-receiver'].getFrame().center);mark('reverse high slot reveals the receiving chamber');
  walk(10,-5);walk(15,3);walk(game.cargo.position.x-1,game.cargo.position.z);pickup();
  if(order==='send-freight-first'){

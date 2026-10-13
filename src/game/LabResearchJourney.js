@@ -33,7 +33,14 @@ export function runResearch31(d,{route='carry-first',recover=false}={}){
  if(recover){walk(-14,17);until(()=>g.playerGrounded,5,'Service floor missed');check(g.playerPosition.y<-3.9,'Did not exercise a real fall');walk(-16,-20);walk(-23,-20);walk(-23,5);walk(-21,15);mark('Service ramp returns to the actual start without a reset');}
  d.aim(0,p['light-source'].getFrame().center);d.aim(1,p['west-bridge'].getFrame().center);wait(.4);
  check(l.light.segments.length>1,'No routed light sheet');
- if(recover){walk(-19,8);walk(-9,8);g.clearPortals();until(()=>g.playerGrounded&&g.playerPosition.y<-3.5,5,'Extinguished bridge did not lead to the service floor');walk(-16,-20);walk(-23,-20);walk(-23,5);walk(-21,15);d.aim(0,p['light-source'].getFrame().center);d.aim(1,p['west-bridge'].getFrame().center);mark('Extinguished bridge, real fall and reconstruction without resetting');}
+ if(recover){
+  walk(-19,8);walk(-9,8);
+  // The visible island address accepts an ordinary shot from the crossing.
+  // Moving the source portal there stops intercepting the projector's sheet.
+  d.aim(0,p['island-receiver'].getFrame().center);wait(.1);
+  check(g.portals.portals[0].surfaceId===p['island-receiver'].mesh.uuid&&l.light.segments.length===1,'Retargeted source did not extinguish the bridge');
+  until(()=>g.playerGrounded&&g.playerPosition.y<-3.5,5,'Extinguished bridge did not lead to the service floor');walk(-16,-20);walk(-23,-20);walk(-23,5);walk(-21,15);d.aim(0,p['light-source'].getFrame().center);d.aim(1,p['west-bridge'].getFrame().center);mark('Extinguished bridge, real fall and reconstruction without resetting');
+ }
  mark('Light becomes a walkable crossing, not a progress flag');
  if(route==='scout-first'){walk(-19,8);walk(4,8);walk(4,4);walk(4,8);walk(-21,8);mark('The central island can be explored before transporting the companion');}
  collect(d);walk(-19,8);walk(4,8);walk(4,5);mark('Both travellers stand on independent permanent architecture');
@@ -45,7 +52,13 @@ export function runResearch32(d,{route='powered-ascent',recover=false}={}){
  d.aim(0,p['air-source'].getFrame().center);walk(-26,6);walk(-26,-20);d.aim(1,p['turbine-feed'].getFrame().center);
  until(()=>l.drive.flow,2,'Air did not reach the receiver');mark('A geometric air path spins the receiver');
  // Wait on the ordinary floor, then recall the real cabin with its terminal.
- if(route==='stored-energy'){wait(12);d.aim(0,p['service-return'].getFrame().center);walk(-26,-21.5);walk(-19,-21.5);const before=g.teleportCount;g.input.jumpQueued=true;for(let i=0;i<180&&g.teleportCount===before;i++){d.worldMove(0,-1);d.frame();}d.stop();check(g.teleportCount>before,'Service return jump missed');wait(.7);g.clearPortals();check(l.drive.wheel.omega>15,'Insufficient stored mechanical energy');mark('The same portals become a service shortcut while stored motion remains');}
+ if(route==='stored-energy'){
+  wait(12);d.aim(0,p['service-return'].getFrame().center);walk(-26,-21.5);walk(-19,-21.5);const before=g.teleportCount;g.input.jumpQueued=true;for(let i=0;i<180&&g.teleportCount===before;i++){d.worldMove(0,-1);d.frame();}d.stop();check(g.teleportCount>before,'Service return jump missed');wait(.7);
+  // Retargeting the fan-side portal to this actual shortcut has already cut
+  // the air circuit. The reachable pair remains while the rotor coasts.
+  check(!l.drive.flow&&g.portals.portals[0].surfaceId===p['service-return'].mesh.uuid,'Service shortcut did not disconnect the air circuit');
+  check(l.drive.wheel.omega>15,'Insufficient stored mechanical energy');mark('The same portals become a service shortcut while stored motion remains');
+ }
  walk(-26,9);walk(-18,10);collect(d);walk(-8,9);walk(-8,2);
  until(()=>a.position.y>5.98,25,'First drive did not reach gallery');walk(3,1);mark('Worm drive holds the first landing without an artificial checkpoint');
  walk(3,0);release(d);walk(6.3,2.5);check(g.interact()&&l.drive.gear===1,'Transmission selector missed');

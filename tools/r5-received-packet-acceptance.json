@@ -1,0 +1,85 @@
+{
+  "pass": true,
+  "publicationAccepted": false,
+  "originalCIConclusion": "failure",
+  "originalFailureScope": "packet-transport-budget-only",
+  "historicalPublic": {
+    "sourceCommit": "3f2e83127dfd5800068854a98843d73eb9377609",
+    "publisherCommit": "bd7481014483ccaaca64923388bdc87e2cafa7ea",
+    "publicationRun": 38366134401,
+    "sourceReview": {
+      "runId": 38348119403,
+      "runAttempt": 1
+    },
+    "sourceTree": "8a00a9e62642865d83c71039d72bf028dea46256",
+    "publicationRunAttempt": 1
+  },
+  "rescueTransport": {
+    "repository": "amazin20/brainrot-portal",
+    "branch": "audit/r5-public-packet-20261013",
+    "commit": "ff3487808d8f73e5c85482ec057a59615955740c",
+    "runId": 38378685455,
+    "runAttempt": 1,
+    "runURL": "https://github.com/amazin20/brainrot-portal/actions/runs/38378685455",
+    "scope": "Read-only transport producer; never a new public capture or deployment"
+  },
+  "artifact": {
+    "id": 11803065245,
+    "node_id": "MDg6QXJ0aWZhY3QxMTgwMzA2NTI0NQ==",
+    "name": "r5-public-verification-packet-38378685455-1",
+    "size_in_bytes": 35145323,
+    "url": "https://api.github.com/repos/amazin20/brainrot-portal/actions/artifacts/11803065245",
+    "archive_download_url": "https://api.github.com/repos/amazin20/brainrot-portal/actions/artifacts/11803065245/zip",
+    "expired": false,
+    "digest": "sha256:60f5cf0ccb6c63b693c4954de6c6192f3601b48f01e4048656d47803cc428dbd",
+    "created_at": "2026-10-13T09:48:10Z",
+    "updated_at": "2026-10-13T09:48:10Z",
+    "expires_at": "2026-11-12T09:48:07Z",
+    "workflow_run": {
+      "id": 38378685455,
+      "repository_id": 1354625251,
+      "head_repository_id": 1354625251,
+      "head_branch": "audit/r5-public-packet-20261013",
+      "head_sha": "ff3487808d8f73e5c85482ec057a59615955740c"
+    }
+  },
+  "packetSha256": "f4911a3739360273cc7a418b4c2fcbd8c71cf168880a972d0e3e1963765499d7",
+  "packetBytes": 9020,
+  "packetInventorySha256": "cf8fcca94649918c10aa003de73fa2aa0a257264d839542623cbb59c7bc2af36",
+  "receivedInventorySha256": "d36aa1b3f3a73c3fc5dae3c434884cc79702f6a410b0734d9eaaa112b616b27b",
+  "receivedBytes": 68666469,
+  "movies": [
+    {
+      "entry": "foundation20",
+      "path": "public-foundation20/foundation20-physical.mp4",
+      "bytes": 2612571,
+      "sha256": "79860ab64fdb9f2355f19e5128c45dce0957da6a21e35fc3ce21d7c0feb764c7",
+      "frames": 361,
+      "fullyDecoded": true
+    },
+    {
+      "entry": "tower41",
+      "path": "public-native/tower-singularity.mp4",
+      "bytes": 23421572,
+      "sha256": "632c66d58f02d7041670565dc6d50c84e631648794a6d90b7b403d43bd2ff111",
+      "frames": 4474,
+      "fullyDecoded": true
+    }
+  ],
+  "semantics": {
+    "pass": true,
+    "frozenHelperSha256": "f1f14455349910603180f495e728b2cbe9f1cc2b034ca48a602a88ebd5ad9b0c",
+    "historicalPublic": {
+      "sourceCommit": "3f2e83127dfd5800068854a98843d73eb9377609",
+      "publisherCommit": "bd7481014483ccaaca64923388bdc87e2cafa7ea",
+      "publicationRun": 38366134401,
+      "sourceReview": {
+        "runId": 38348119403,
+        "runAttempt": 1
+      }
+    },
+    "siteFiles": 1957,
+    "siteBytes": 633671648,
+    "siteInventorySha256": "d76664e04f5ac2f2b161d9af10da1aa2299df13cfec51a243659d2b732be13c6"
+  }
+}

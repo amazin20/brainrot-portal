@@ -1,7 +1,9 @@
 import {Workshop} from './LabWorkshopKit.js';
 import {buildRoom23Balance} from './LabRoom23Mechanics.js';
+import {buildRoom23PhysicalPrototype} from './LabRoom23PhysicalPrototype.js';
 export const ROOM23_SPEC={id:'counterweight-reversal',title:'Вес возвращения',concept:'Один груз опускает дальнюю кабину и поднимает ближнюю; постоянный карман освобождает тот же противовес для обратного рейса',description:'Кабины связаны. Чтобы подняться вместе, сначала придётся развести груз, опору и пассажира по разным местам.',accent:0xd9bb87,assets:[1,2,11,22,23,24],hints:['Грузовой приёмник направлен в дальнюю кабину. Ступень высоты сохраняется на неподвижной галерее.','Муфта у западной кабины меняет сторону противовеса: можно подняться вместе с исходным грузом, а не посылать его сразу в дальнюю кабину. Тормоз удерживает обе кабины, пока ты меняешь место друга.','Оставь друга на белом полу постоянного кармана, войди в разгруженную дальнюю кабину и отпусти тормоз. С верхнего обхода можно вернуть друга через пол кармана.']};
 export function buildRoom23(game,index=22){
+ if(game.room23PhysicalPrototype===true)return buildRoom23PhysicalPrototype(game,index);
  const k=new Workshop(game,ROOM23_SPEC,index),w=k.world;w.highFidelity=true;k.bounds={minX:-23,maxX:23,minZ:-23,maxZ:22};k.ceiling=29;w.walls(k.bounds,29,-1);
  const deck=(name,x0,x1,z0,z1,y)=>{w.floor(x0,x1,z0,z1,y,{name});w.box([(x0+x1)/2,y-.28,(z0+z1)/2],[x1-x0,.32,z1-z0],w.materials.trim);};
  const block=(p,s)=>w.box(p,s,w.materials.wall);

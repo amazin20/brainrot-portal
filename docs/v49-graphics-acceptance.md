@@ -14,18 +14,18 @@ overlapping skins and floating wire braces were removed. The castle uses eleven
 mineral palettes and larger wall profiles clipped around real portal footprints.
 
 The original player, companion and gun GLBs are unchanged. A persistent neutral
-radiance probe and one unshadowed fill light improve their volume. Two visual contact marks use floor/ramp support height and fade around open
-floor apertures. They are approximate floor projections: top faces of other
-solids and clipping of the whole footprint at ledges are not supported. Level-owned contacts are released on level changes; the
+radiance probe and one unshadowed fill light improve their volume. Two bounded
+contact marks use actual support height, incline with ramps and disappear over
+open floor apertures. Level-owned contacts are released on level changes; the
 shared probe is released with the game controls. No new shadow-casting lights or
 downloaded textures were introduced. Save revision identifiers remain unchanged.
 
 ## Real-image acceptance
 
 Pilots1,20,41 were captured with identical cameras at960×540, DPR1, low quality.
-The new build was also inspected at balanced and high quality. All six before
-and six after low-quality captures, plus six balanced captures, contain actual
-nonblank WebGL pixels, with no JavaScript errors. Inspection camera positions are not gameplay evidence.
+The new build was also inspected at high quality. All six before and six after
+low-quality captures contain actual nonblank WebGL pixels, with no JavaScript
+errors. Inspection camera positions are not gameplay evidence.
 
 | Pilot | Complete-frame calls before → after | Triangles before → after | Physical colliders |
 | --- | --- | --- | --- |
@@ -36,26 +36,14 @@ nonblank WebGL pixels, with no JavaScript errors. Inspection camera positions ar
 These are renderer counters from software Chromium, including the passes
 accumulated by the game renderer. They are neither GPU timing nor VRAM estimates.
 Real-device FPS, sustained memory pressure and human art acceptance remain to be
-measured. The fourteen shipped models total3,290,200bytes; the exact CI candidate's
-validated Yandex ZIP is3,988,687bytes (5,985,850unpacked), below the100MB limit.
+measured. The fourteen shipped models total3,290,200bytes; the locally validated
+Yandex ZIP is3,988,690bytes, below the100MB limit.
 
 Mobile tutorial presentation was inspected at360×800,390×844,412×915,800×360
 and568×320, each with the current lesson and the real254-character castle
 prerequisite message. All ten scenarios have visible controls, no text clipping
 and no tutorial/control/reticle overlap. The initially observed narrow landscape
 overlap was corrected in CSS.
-
-Ten menu-selection cycles1→20→41 with quality changes retain56 textures,
-178 geometries and identical scene/light/contact counts at each41/low endpoint.
-Program count warms108→115→117 in the first two cycles and then remains117.
-The original overly strict cold-program assertion and its full series are
-retained alongside the explicit plateau assessment. Baseline/final actual
-WebGL captures are byte-identical. These are software renderer allocation
-counts, not RAM/VRAM bytes or evidence against every possible long-term leak.
-A separate forced WebGL loss displays the error card; ordinary wheel scrolling
-and the visible Reload button return the unchanged URL to level1 ready with
-nonblank WebGL and unchanged preferences/classic/open keys. Automatic context
-restoration is not claimed.
 
 ## Physical changes kept separate from art
 
@@ -88,26 +76,10 @@ recorded separately rather than silently counted as successful checks.
 
 The continuous castle recording, three retained campaign route matrices,
 forty production WebGL routes and SDK checks are required by the existing
-publication workflow for the exact candidate commit. Matched six-pose camera-only comparisons of pilots1,20,41 were also captured at
-640×360 balanced, two samples per second. Their three-second videos are visual
-diagnostics rather than gameplay, animation timing or temporal-smoothness proof.
-The independently hashed baseline matches all837 tracked blobs at2cb459c.
-The broad rig, audio, human playtest and hardware tasks in the master spec remain
-separate work.
+publication workflow for the exact candidate commit. The broad rig, audio,
+human playtest and hardware tasks in the master spec remain separate work.
 
 Evidence: [pilots before](evidence/v49-pilots-before-release.json),
 [pilots after](evidence/v49-pilots-after-release.json),
-[balanced pilots](evidence/v49-pilots-balanced.json),
 [mobile presentation](evidence/v49-mobile-tutorial.json),
-[lifecycle summary](evidence/v49-lifecycle-summary.json),
-[lifecycle assessment](evidence/v49-lifecycle-assessment.json),
-[raw lifecycle](evidence/v49-lifecycle-raw.json),
-[native WebGL recovery](evidence/v49-contextloss-native-scroll.json),
-[unscrolled initial guard](evidence/v49-contextloss-unscrolled.json),
-[room1 camera comparison](evidence/v49-level1-camera-pan.json),
-[room20 camera comparison](evidence/v49-level20-camera-pan.json),
-[room41 readable camera comparison](evidence/v49-level41-camera-pan.json),
-[original room41 occluded endpoint](evidence/v49-level41-original-occluded-pan.json),
-[exact CI platform package](evidence/v49-yandex-package.json),
-[hashed baseline source](evidence/v49-baseline-source-verification.json),
 [prior route observations](evidence/v49-prior-route-observations.json).

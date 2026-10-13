@@ -71,7 +71,10 @@ export function portalBacksCollider(frame, box, maxDepth = .7) {
   const extent=(box.max.x-box.min.x)*.5*Math.abs(nx)
     +(box.max.y-box.min.y)*.5*Math.abs(ny)+(box.max.z-box.min.z)*.5*Math.abs(nz);
   const front=centre+extent;
-  return front <= .08 && front >= -maxDepth && centre-extent < .08
+  // Thickness tolerance belongs to the panel mounted behind the aperture.
+  // A separate thin obstacle whose centre is in front of the plane must not
+  // become another backing merely because it lies within that tolerance.
+  return centre <= 1e-6 && front <= .08 && front >= -maxDepth && centre-extent < .08
     && portalIntersectsBox(frame, box, -maxDepth, .08);
 }
 

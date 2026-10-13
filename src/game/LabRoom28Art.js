@@ -135,7 +135,7 @@ export function buildRoom28Art(k,tide){
  for(const name of ['coral-float','lagoon-float']){
   const float=k.state[name],width=float.floor.maxX-float.floor.minX,depth=float.floor.maxZ-float.floor.minZ;
   const binding=placeSolidModel(k,createPontoon(width,depth),[0,0,0],{parent:float.group,kinematic:true});
-  const update=float.update;float.update=function(dt){update.call(this,dt);binding.sync(dt);};
+  const update=float.update;float.update=function(dt){update.call(this,dt);binding.sync(dt,dt===0);};
   // Workshop ticks resolve float.update at call time; reset follows that path.
  }
  for(const z of [-6.25,6.25])structural.arc(5.1,.37,.44,0,[-14,10.6,z],new THREE.Quaternion(),0,Math.PI);

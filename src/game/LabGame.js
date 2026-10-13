@@ -1,9 +1,12 @@
 import { LabEpicDirector } from './LabEpicDirector.js';
+import {permittedVisualSeconds} from './LabVisualTime.js';
 import { LabVelocityCompanion } from './LabVelocityCompanion.js';
 import { LabPortalShots } from './LabPortalShots.js';
 import { updateKineticVelocity, limitKineticSpeed, sweepKineticBody } from './LabKineticMovement.js';
 import { sweepBox } from './LabSweep.js';
 import {resolveRampMotion,followRampGround} from './LabRampContact.js';
+import {resolveCapsuleBoxMotion,capsuleBoxGrounded,orientedBoxSupport,constrainBoxToOrientedCollider,boxIntersectsOrientedCollider} from './LabOrientedBoxContact.js';
+import {constrainTower41HeldLoadTarget} from './LabTower41CarryContact.js';
 import { cargoLoadsPlate } from './LabPlateContact.js';
 import * as THREE from 'three';
 import { InputController } from './InputController.js';
@@ -21,6 +24,7 @@ import { ALL_LAB_ASSETS } from './labAssets.js';
 import { LabCompanionAnimator } from './LabCompanionAnimator.js';
 import { LabCompanionBehavior } from './LabCompanionBehavior.js';
 import { LabCompanionRig } from './LabCompanionRig.js';
+import { LabCarrySurfaceContact } from './LabCarrySurfaceContact.js';
 import { LabPerformance } from './LabPerformance.js';
 import { LabTutorial } from './LabTutorial.js';
 import { buildLabCampaignLevel, CAMPAIGN, campaignSpec } from './LabCampaignLevels.js';
@@ -82,7 +86,6 @@ export class LabGame {
     const compileStart = performance.now();
     this.portals.prepare();
     this.portalActors.prepare();
-    await this.renderer.compileAsync(this.scene, this.camera);
     await warmPortalRendering(this);
     this.render();
     this.loadingProfile.firstFrameMs = performance.now() - compileStart;
@@ -264,9 +267,18 @@ export class LabGame {
     this.animator = new LabPlayerAnimator({ visual: this.playerVisual, carrier: this.carrier });
     this.weapon = this.model(11, .7);
     this.heldDevice = new LabHeldDevice({ model: this.weapon, bones: this.animator.bones, playerRoot: this.playerGroup });
+    const foundation20Silhouette = this.chamberEdition === 'foundation' && this.levelIndex === 19 && this.firstLevel?.id === 'foundation-portal-tension';
     this.cameraRig = new LabCamera({ camera: this.camera, blockers: this.cameraBlockers,
-      isBlocker: (object, hit) => this.isCameraBlocker(object, hit) });
+      isBlocker: (object, hit) => this.isCameraBlocker(object, hit),
+      currentBlocker: foundation20Silhouette ? object => this.foundation20CameraDescriptor(object) : null,
+      currentBlockersValid: foundation20Silhouette ? () => this.colliders.every(collider => {
+        // Ordinary static colliders need no derived query. A registered moving
+        // Box still needs its exact owner even if collider metadata went missing.
+        if (!collider.orientedBox) return !this.physics.bodyBoxes.get(collider.mesh.uuid)?.orientedBox;
+        return this.foundation20CameraDescriptor(collider.mesh) === collider.orientedBox;
+      }) : null });
     this.cameraRig.configureEpic?.({ enabled: this.kineticMode, dynamicFov: this.epicOptions?.dynamicFov !== false });
+    this.cameraRig.configureSilhouette?.({ enabled: foundation20Silhouette || (this.firstLevel?.singularity && this.levelIndex === 40) || this.firstLevel?.puzzleProgression === 50 || this.firstLevel?.puzzleProgression === 51, confined: foundation20Silhouette || Boolean(this.firstLevel?.singularity && this.levelIndex === 40), foundation20: foundation20Silhouette });
     this.camera.far = this.firstLevel.viewDistance ?? (this.kineticMode ? 500 : 130); this.camera.updateProjectionMatrix();
     if (this.kineticMode && !this.epicDirector) this.epicDirector = new LabEpicDirector({ container: this.container, audio: this.audio, options: this.epicOptions });
     this.portals = new LabPortals({ scene: this.scene, renderer: this.renderer, camera: this.camera, maxResolution: this.quality.portalResolution, samples: 2 });
@@ -278,6 +290,8 @@ export class LabGame {
     this.cubes = [this.cargo];
     this.companionAnimator = new LabCompanionAnimator({ visual });
     this.companionRig = new LabCompanionRig(brainrot);
+    this.carrySurfaceContact = new LabCarrySurfaceContact({ playerRig: this.animator.rig,
+      companionRig: this.companionRig, visual });
     this.physics = new LabPhysics({ fixedStep: FIXED_STEP });
     // All level builders have finished registering their solids. Camera and
     // portal rays hit these frequently in rooms with thousands of envelopes.
@@ -308,7 +322,7 @@ export class LabGame {
     disposeLabLevel(this); this.buildLevel();
     this.portals.prepare();
     this.portalActors.prepare();
-    if (this.renderer?.compileAsync) {await this.renderer.compileAsync(this.scene, this.camera);await warmPortalRendering(this);}
+    if (this.renderer?.getContext) await warmPortalRendering(this);
     this.performanceMonitor.reset(); this.accumulator = 0; this.lastFrame = performance.now();
     this.state = playing ? 'playing' : 'ready'; this.emitHud();
     this.renderer?.setAnimationLoop(this.animate);
@@ -417,6 +431,22 @@ export class LabGame {
     const direction = this.cameraRig.raycaster.ray.direction;
     return !this.portals.portals.some(p => p && direction.dot(p.normal) >= -.00001
       && pointInsidePortal(p, hit.point, .04) && (p.backingIds?.has(object.uuid) || portalBacksCollider(p, box)));
+  }
+
+  // Camera queries need the current owned physical shape. Foundation20's
+  // invisible broad-phase proxy can retain its original closed-door pose;
+  // moving it here would also change aim queries that share that source mesh.
+  foundation20CameraDescriptor(object) {
+    if (this.chamberEdition !== 'foundation' || this.levelIndex !== 19 || this.firstLevel?.id !== 'foundation-portal-tension'
+      || !object.userData.collisionProxy) return null;
+    const collider = this.colliderForMesh(object), descriptor = collider?.orientedBox;
+    if (!descriptor || collider.enabled === false) return null;
+    const entry = this.physics.bodyBoxes.get(object.uuid);
+    const inspection = this.physics.inspectBodyBox(object.uuid, { bounds: collider.box, orientedBox: descriptor, enabled: true });
+    if (!inspection.valid || entry?.body !== descriptor.body || entry?.orientedBox !== descriptor
+      || entry.shape !== entry.body.shapes[entry.shapeIndex] || entry.shape.body !== entry.body
+      || descriptor.step !== this.physics.world.stepnumber) return null;
+    return descriptor;
   }
 
   firePortal(index) {
@@ -810,6 +840,7 @@ export class LabGame {
     const rampSupport=followRampGround(this,this.playerPosition,previous,this.playerVelocity,wasGrounded);
     this.constrainPortalThroat(this.playerPosition, previous, this.playerVelocity);
     this.groundedByCollider = sweptGroundContact || rampSupport;
+    this.groundedByOrientedCollider = false;
     if (!this.kineticMode) {
       // Resolve the source segment before transporting. Geometry beyond the
       // entry plane belongs to the abandoned room and cannot stop a fling.
@@ -819,7 +850,7 @@ export class LabGame {
       if (predicted) {
         const sourceEnd = predicted.crossingPoint.clone().addScaledVector(UP, -CENTER_HEIGHT);
         const resolvedEnd = sourceEnd.clone();
-        this.resolveBody(resolvedEnd, previous, this.playerVelocity, PLAYER_RADIUS, PLAYER_HEIGHT, true);
+        this.resolveBody(resolvedEnd, previous, this.playerVelocity, PLAYER_RADIUS, PLAYER_HEIGHT, true,false,{from:0,to:predicted.crossingFraction});
         if (resolvedEnd.distanceToSquared(sourceEnd) > 1e-10) this.playerPosition.copy(resolvedEnd);
       } else this.resolveBody(this.playerPosition, previous, this.playerVelocity, PLAYER_RADIUS, PLAYER_HEIGHT, true);
     }
@@ -837,7 +868,14 @@ export class LabGame {
       if (clearance > 0) teleport.position.addScaledVector(exit.normal, clearance);
       if (this.heldCube || this.velocityCompanion?.connected) {
         const exitShift = teleport.position.clone().sub(transformPortalPoint(center, entry, exit));
-        const cargoPosition = transformPortalPoint(this.cargo.position, entry, exit).add(exitShift);
+        const cargoPosition = transformPortalPoint(this.cargo.position, entry, exit);
+        const cargoTransitStart = cargoPosition.clone();
+        const transportedCargoQ = this.cargo.quaternion.clone().premultiply(teleport.rotation);
+        const localExitNormal = exit.normal.clone().applyQuaternion(transportedCargoQ.invert());
+        const cargoExtent = CUBE_RADIUS * (Math.abs(localExitNormal.x) + Math.abs(localExitNormal.y) + Math.abs(localExitNormal.z));
+        cargoTransitStart.addScaledVector(exit.normal,
+          -cargoTransitStart.clone().sub(exit.position).dot(exit.normal) - cargoExtent);
+        cargoPosition.add(exitShift);
         const cargoClearance = CUBE_RADIUS * Math.sqrt(3) + .06 - cargoPosition.clone().sub(exit.position).dot(exit.normal);
         if (cargoClearance > 0) {
           cargoPosition.addScaledVector(exit.normal, cargoClearance);
@@ -845,8 +883,15 @@ export class LabGame {
         }
         this.physics.teleportCargo({ position: cargoPosition, rotation: teleport.rotation });
         const ignoredBacking = new Set();
-        for (const collider of this.colliders) if (collider.enabled && this.portalOpensCollider(collider, cargoPosition, CUBE_RADIUS, 0, this.physics.cargoBody.quaternion)) ignoredBacking.add(collider.mesh.uuid);
-        this.physics.resolveCargoTransit(cargoPosition, { ignoreIds: ignoredBacking });
+        const ownerExitCrossing = transformPortalPoint(teleport.crossingPoint, entry, exit);
+        for (const collider of this.colliders) if (collider.enabled
+          && (this.portalOpensCollider(collider, cargoPosition, CUBE_RADIUS, 0, this.physics.cargoBody.quaternion)
+            || this.portalOpensCollider(collider, cargoTransitStart, CUBE_RADIUS, 0, this.physics.cargoBody.quaternion)
+            // A carried box uses the owner's open throat before transport as
+            // well. Preserve that exact backing while sweeping its emergence;
+            // a residual fling can already put the owner far from the exit.
+            || this.portalOpensCollider(collider, ownerExitCrossing, PLAYER_RADIUS, PLAYER_HEIGHT))) ignoredBacking.add(collider.mesh.uuid);
+        this.physics.resolveCargoTransit(cargoTransitStart, { ignoreIds: ignoredBacking });
         this.cargo.position.copy(this.physics.cargoBody.position);
         this.companionBehavior?.reanchor(this.cargo.position); this.cargoPortalCooldown = .07;
         this.companionAnimator.trigger('portal');
@@ -857,11 +902,15 @@ export class LabGame {
       {
         // Resume the residual movement in the destination world. This catches
         // thin obstacles immediately outside the exit at full fling speed.
+        // Clearance is physical travel too. Starting this sweep after the
+        // clearance offset lets a nearby separate wall eject the capsule to
+        // its far face before its first destination contact.
         const exitStart = transformPortalPoint(teleport.crossingPoint, entry, exit)
-          .add(teleport.position.clone().sub(teleport.unadjustedPosition)).addScaledVector(UP, -CENTER_HEIGHT);
+          .addScaledVector(exit.normal, -capsuleExtent)
+          .addScaledVector(UP, -CENTER_HEIGHT);
         if (this.kineticMode) this.groundedByCollider = sweepKineticBody(this, this.playerPosition, exitStart,
           this.playerVelocity, PLAYER_RADIUS, PLAYER_HEIGHT, { portalLimit: false });
-        else this.resolveBody(this.playerPosition, exitStart, this.playerVelocity, PLAYER_RADIUS, PLAYER_HEIGHT, true);
+        else this.resolveBody(this.playerPosition, exitStart, this.playerVelocity, PLAYER_RADIUS, PLAYER_HEIGHT, true,false,{from:teleport.crossingFraction,to:1});
         this.playerGrounded = false;
       }
       // A launcher impulse belongs to the traveller frame too. Keeping the old
@@ -895,7 +944,7 @@ export class LabGame {
       this.portalVisualRotation.copy(transportedQ).multiply(upright.invert());
       if(this.audio.travel)this.audio.travel(teleport.velocity.length());else this.audio.tone(620, .12, 'triangle', .035);
     } else if (this.kineticMode) this.resolveBody(this.playerPosition, previous, this.playerVelocity, PLAYER_RADIUS, PLAYER_HEIGHT, true);
-    this.playerGrounded = Boolean(this.groundedByCollider);
+    this.playerGrounded = Boolean(this.groundedByCollider || this.groundedByOrientedCollider);
     if (this.playerGrounded && !wasGrounded && downwardImpact > 1) {
       this.animator.triggerLanding(downwardImpact); this.audio.land?.(downwardImpact); this.lastLanding = downwardImpact;
     }
@@ -982,9 +1031,11 @@ export class LabGame {
 
   sampleFootSupport(x, z, maxY) {
     let height = this.floorHeight(x, z, maxY), normal = UP.clone();
-    for (const c of this.colliders) if (!c.walkablePlane && c.enabled !== false && c.box.max.y <= maxY
-      && x >= c.box.min.x && x <= c.box.max.x && z >= c.box.min.z && z <= c.box.max.z
-      && (height === null || c.box.max.y > height)) height = c.box.max.y;
+    for (const c of this.colliders) {
+      if(c.walkablePlane||c.enabled===false)continue;
+      if(c.orientedBox){const support=orientedBoxSupport(c.orientedBox,x,z,maxY);if(support&&(height===null||support.height>height)){height=support.height;normal.copy(support.normal);}continue;}
+      if(c.box.max.y<=maxY&&x>=c.box.min.x&&x<=c.box.max.x&&z>=c.box.min.z&&z<=c.box.max.z&&(height===null||c.box.max.y>height)){height=c.box.max.y;normal.copy(UP);}
+    }
     for (const ramp of this.ramps) {
       if (height === null || x < ramp.minX || x > ramp.maxX || z < ramp.minZ || z > ramp.maxZ) continue;
       const surface = sampleRampSurface(ramp, z);
@@ -1017,7 +1068,12 @@ export class LabGame {
     });
   }
 
-  resolveBody(position, previous, velocity, radius, height, allowPortals = false, substep = false) {
+  resolveBody(position, previous, velocity, radius, height, allowPortals = false, substep = false, sweepInterval = null) {
+    const finishOrientedGround=()=>{if(!substep)this.groundedByOrientedCollider=this.colliders.some(c=>c.enabled&&c.orientedBox&&capsuleBoxGrounded(position,velocity,radius,height,c.orientedBox,sweepInterval?.to??1));};
+    if(!substep)for(const collider of this.colliders){
+      if(!collider.enabled||!collider.orientedBox)continue;
+      resolveCapsuleBoxMotion(position,previous,velocity,radius,height,collider.orientedBox,{fromFraction:sweepInterval?.from??0,toFraction:sweepInterval?.to??1});
+    }
     // A fling or a long frame can put both endpoints outside a thin wall.
     // Sample the actual capsule path with its ordinary rounded contacts:
     // sweeping an expanded square here would seal diagonal drum/ring gaps.
@@ -1029,17 +1085,18 @@ export class LabGame {
       const resolved = previous.clone(), before = previous.clone(), advance = new THREE.Vector3(dx / steps, dy / steps, dz / steps);
       for (let step = 0; step < steps; step++) {
         before.copy(resolved); resolved.add(advance);
-        LabGame.prototype.resolveBody.call(this, resolved, before, velocity, radius, height, allowPortals, true);
+        LabGame.prototype.resolveBody.call(this, resolved, before, velocity, radius, height, allowPortals, true,sweepInterval);
         // Once a normal component is arrested, the remaining travel must not
         // keep driving into that face with a now-zero velocity (especially a
         // ceiling, whose upward-contact branch has already consumed it).
         for (const axis of ['x', 'y', 'z']) if (Math.abs(velocity[axis]) < 1e-10
           && Math.abs(resolved[axis] - before[axis] - advance[axis]) > 1e-8) advance[axis] = 0;
       }
-      position.copy(resolved); return;
+      position.copy(resolved);finishOrientedGround();return;
     }
     for (let iteration = 0; iteration < 3; iteration++) for (const collider of this.colliders) {
       if (!collider.enabled || (collider.walkablePlane && !collider.solidUnderside)) continue;
+      if(collider.orientedBox){resolveCapsuleBoxMotion(position,position.clone(),velocity,radius,height,collider.orientedBox,{sweep:false,toFraction:sweepInterval?.to??1});continue;}
       // A walkable moving top is not an empty volume from below. Its floor
       // solver owns feet on the plane; the real deck and beams block a body
       // approaching the underside. Only explicitly authored tops use this.
@@ -1088,6 +1145,7 @@ export class LabGame {
         position[options[0][1]] = options[0][2]; velocity[options[0][1]] = 0;
       }
     }
+    finishOrientedGround();
   }
 
   nearbyTerminal() {
@@ -1164,6 +1222,7 @@ export class LabGame {
       for (let pass = 0; pass < 3; pass++) for (const c of this.colliders) {
         if (c.enabled === false || c.walkablePlane
           || this.portalOpensCollider(c, this.playerPosition.clone().addScaledVector(UP, CENTER_HEIGHT), PLAYER_RADIUS, PLAYER_HEIGHT)) continue;
+        if(c.orientedBox){target.copy(constrainTower41HeldLoadTarget(this,c,this.cargo.position,target,quaternion)??constrainBoxToOrientedCollider(c.orientedBox,this.cargo.position,target,new THREE.Vector3(CUBE_RADIUS+.035,CUBE_RADIUS+.035,CUBE_RADIUS+.035),quaternion));continue;}
         if (c.frontPlane) {
           const f=c.frontPlane();if(target.clone().sub(f.center).dot(f.normal)>CUBE_RADIUS*Math.sqrt(3)+.05)continue;
         }
@@ -1239,8 +1298,10 @@ export class LabGame {
         const clear = extent + .07 - travel.position.clone().sub(exit.position).dot(exit.normal);
         if (clear > 0) travel.position.addScaledVector(exit.normal, clear);
         this.physics.teleportCargo({ position: travel.position, rotation: travel.rotation });
-        const exitStart = transformPortalPoint(travel.crossingPoint, entry, exit)
-          .add(travel.position.clone().sub(travel.unadjustedPosition));
+        // Sweep from the real exit plane through the complete clearance move.
+        // An already shifted start can choose the far face of a thin obstacle
+        // that overlaps the newly transported original rigid body.
+        const exitStart = transformPortalPoint(travel.crossingPoint, entry, exit);
         const ignoreIds = new Set();
         for (const collider of this.colliders) if (collider.enabled && this.portalOpensCollider(collider, travel.position, CUBE_RADIUS, 0, this.physics.cargoBody.quaternion)) ignoreIds.add(collider.mesh.uuid);
         this.physics.resolveCargoTransit(exitStart, { ignoreIds });
@@ -1297,7 +1358,7 @@ export class LabGame {
     if (!support || Math.abs(support.height - (position.y - CUBE_RADIUS)) > .22) return false;
     const test = new THREE.Box3(new THREE.Vector3(x - .34, position.y - .24, z - .34),
       new THREE.Vector3(x + .34, position.y + .35, z + .34));
-    return !this.colliders.some(c => c.enabled !== false && c.box.intersectsBox(test));
+    return !this.colliders.some(c => c.enabled !== false && (c.orientedBox?boxIntersectsOrientedCollider(c.orientedBox,test):c.box.intersectsBox(test)));
   }
 
   cargoOnPad(position, radius = .86) {
@@ -1389,11 +1450,12 @@ export class LabGame {
   }
 
   updateVisuals(dt, alpha = 1, cameraDt = dt) {
-    dt = Number.isFinite(dt) ? THREE.MathUtils.clamp(dt, 0, .1) : 0;
-    cameraDt = Number.isFinite(cameraDt) ? THREE.MathUtils.clamp(cameraDt, 0, .1) : 0;
+    const active = (this.state === 'playing' || this.state === 'won' || this.state === 'ready')
+      && !this.externalBlocked && globalThis.document?.hidden !== true;
+    dt = permittedVisualSeconds(dt, active);
+    cameraDt = permittedVisualSeconds(cameraDt, active);
     this.audio?.flight?.(this.playerVelocity.length(),this.playerGrounded||this.state!=='playing'||this.externalBlocked);
-    const active = this.state === 'playing' || this.state === 'won' || this.state === 'ready';
-    const visualDt = active ? dt : 0;
+    const visualDt = dt;
     this.visualTime += visualDt;
     const blend = THREE.MathUtils.clamp(alpha, 0, 1);
     this.playerGroup.position.lerpVectors(this.previousPlayerPosition, this.playerPosition, blend);
@@ -1410,19 +1472,21 @@ export class LabGame {
       if(this.lastCompanionState==='getting_up'&&companionState!=='getting_up'&&cargo.grounded)this.companionAnimator.trigger('nod');
       this.lastCompanionState=companionState;
     }
-    this.companionAnimator.update({ dt: visualDt, elapsed: this.visualTime, speed: cargo.velocity.length(),
+    const reducedMotion = this.epicDirector?.options?.reducedMotion ?? this.epicOptions?.reducedMotion;
+    this.companionAnimator.update({ dt: visualDt, elapsed: this.visualTime, speed: cargo.velocity.length(), reducedMotion,
       velocity: cargo.velocity, angularVelocity: cargo.angularVelocity, impact: cargo.impact,
       grounded: cargo.grounded, carrying: Boolean(this.heldCube || this.velocityCompanion?.connected), curious: this.playerPosition.distanceTo(this.cargo.position) < 2.5, celebrating:this.state==='won' });
     this.companionRig?.update({ dt: visualDt, elapsed: this.visualTime, speed: Math.hypot(cargo.velocity.x, cargo.velocity.z),
-      velocity: cargo.velocity,
+      velocity: cargo.velocity, angularVelocity: cargo.angularVelocity, reducedMotion,
       grounded: cargo.grounded, carrying: Boolean(this.heldCube || this.velocityCompanion?.connected), recovering: this.companionBehavior?.state === 'getting_up',
       tumbling: !cargo.grounded || cargo.angularVelocity.length() > 3, celebrating:this.state==='won', reaction:this.companionAnimator.reactionClip });
     const gripVisual = this.cargo.visual ?? this.cargo.group;
     gripVisual.updateWorldMatrix(true, true);
     gripVisual.localToWorld(this.carryGripTargets.left.set(-.20, -.015, -.20));
     gripVisual.localToWorld(this.carryGripTargets.right.set(.20, -.015, -.20));
-    this.animator.update({ dt: visualDt, ...(this.motion ?? {}), epic: this.kineticMode, sliding: Boolean(this.kinetic?.sliding), velocity: this.playerVelocity, grounded: this.playerGrounded,
+    this.animator.update({ ...(this.motion ?? {}), dt: visualDt, reducedMotion, epic: this.kineticMode, sliding: Boolean(this.kinetic?.sliding), velocity: this.playerVelocity, grounded: this.playerGrounded,
       carrying: Boolean(this.heldCube), carryGripTargets: this.heldCube ? this.carryGripTargets : null,
+      carrySurfaceContact: this.carrySurfaceContact,
       lookTarget: this.playerPosition.distanceTo(this.cargo.position) < 3.2 ? this.cargo.group.position : null,
       sampleGround: (x, z, maxY) => this.sampleFootSupport(x, z, maxY),
       windStrength:this.windStrength||0,shooting: this.shotPoseTime>0&&!this.heldCube, phase: this.portalCooldown > .2, elapsed: this.visualTime, weapon: true, aiming: this.isAiming() || (this.shotPoseTime>0&&!this.heldCube), aimPitch: this.shotPoseTime>0&&this.shotAimPoint ? Math.atan2(this.shotAimPoint.y-this.playerPosition.y-1.4, Math.hypot(this.shotAimPoint.x-this.playerPosition.x,this.shotAimPoint.z-this.playerPosition.z)) : this.pitch });
