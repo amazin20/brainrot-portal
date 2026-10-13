@@ -7,6 +7,7 @@ import {serveFrozenCampaign} from './lib/frozen-campaign-server.mjs';
 import {readStampedCampaignInfo,assertCampaignBrowserState} from './lib/campaign-browser-contract.mjs';
 import {ACTIVE_FOUNDATION_RUNTIME_FLAGS} from '../src/game/ReleaseIdentity.js';
 import {CAMERA_PITCH_MIN,CAMERA_PITCH_MAX} from '../src/game/LabCamera.js';
+import {nativePointerOrigin} from './lib/native-pointer-origin.mjs';
 
 /** Native Play and mouse input on the real game. Reads input/camera state for
  * evidence; never assigns actor positions, camera angles, controls or time. */
@@ -50,25 +51,20 @@ export async function runPointerLockStartBrowser({browser,baseUrl='http://127.0.
         const expected=await page.evaluate(()=>{const game=window.__NESI_DEMO_GAME__;return {yaw:game.firstLevel.spawnView?.yaw??0,pitch:game.firstLevel.spawnView?.pitch??-.15,frames:game.renderFrames};});
         const play=await playFromReachableMenu(page);
         await page.waitForFunction(frames=>{const game=window.__NESI_DEMO_GAME__;return game.state==='playing'&&document.pointerLockElement===game.renderer.domElement&&game.renderFrames>=frames+4;},{},expected.frames);
-        const before=await page.evaluate(()=>{const game=window.__NESI_DEMO_GAME__;return {yaw:game.yaw,pitch:game.pitch,frames:game.renderFrames,camera:game.camera.position.toArray(),events:window.__CAMERA_START_PROBE__.events.length};});
+        let before=await page.evaluate(()=>{const game=window.__NESI_DEMO_GAME__;return {yaw:game.yaw,pitch:game.pitch,frames:game.renderFrames,camera:game.camera.position.toArray(),events:window.__CAMERA_START_PROBE__.events.length};});
         Object.assign(row,{runtime,trustedPlay:play.trusted,expected,before});
         row.start=await page.evaluate(()=>{const game=window.__NESI_DEMO_GAME__;return {levelIndex:game.levelIndex,state:game.state,cargoUUID:game.cargo.group.uuid,cargoBodyId:game.physics.cargoBody.id};});save();
         assert.ok(Math.abs(before.yaw-expected.yaw)<1e-10&&Math.abs(before.pitch-expected.pitch)<1e-10,`Room ${level} changed spawn view without genuine camera input`);
         row.screenshot=`room-${level}-run-${run+1}-start.png`;await page.screenshot({path:path.join(out,row.screenshot)});
-        // Chromium variants either retain the Play pointer or emit a native
-        // recenter on lock. CDP accepts absolute coordinates, so derive its
-        // origin from the latest trusted mouse event instead of assuming zero.
-        // This is a read-only observation; one native move must still produce
-        // a small delta and retain the game's exact mouse sensitivity below.
-        row.nativePointerOrigin=await page.evaluate(()=>{
-          const events=window.__CAMERA_START_PROBE__.events;
-          const eventIndex=events.findLastIndex(event=>event.type==='mousemove'&&event.trusted&&Number.isFinite(event.clientX)&&Number.isFinite(event.clientY));
-          const event=events[eventIndex];
-          return event?{eventIndex,clientX:event.clientX,clientY:event.clientY,locked:event.locked,timeStamp:event.timeStamp}:null;
-        });
-        assert.ok(row.nativePointerOrigin,'A trusted native pointer position must precede the look');
-        row.requestedNativeLook={x:row.nativePointerOrigin.clientX+18,y:row.nativePointerOrigin.clientY+9,deltaX:18,deltaY:9};
-        save();
+        // Capturing the screenshot may deliver a delayed native recenter.
+        // Locked client coordinates remain frozen, so derive the absolute CDP
+        // origin from unlocked coordinates plus every subsequent raw delta.
+        // Recheck the authored camera before issuing the genuine small look.
+        const prelude=await page.evaluate(()=>{const game=window.__NESI_DEMO_GAME__;return {yaw:game.yaw,pitch:game.pitch,frames:game.renderFrames,camera:game.camera.position.toArray(),events:window.__CAMERA_START_PROBE__.events};});
+        assert.ok(Math.abs(prelude.yaw-expected.yaw)<1e-10&&Math.abs(prelude.pitch-expected.pitch)<1e-10,`Room ${level} changed spawn view during the capture prelude`);
+        before={...prelude,events:prelude.events.length};row.before=before;
+        row.nativePointerOrigin=nativePointerOrigin(prelude.events);
+        row.requestedNativeLook={x:row.nativePointerOrigin.x+18,y:row.nativePointerOrigin.y+9,deltaX:18,deltaY:9};save();
         await page.mouse.move(row.requestedNativeLook.x,row.requestedNativeLook.y);
         await page.waitForFunction(events=>window.__CAMERA_START_PROBE__.events.slice(events).some(event=>event.type==='mousemove'&&event.trusted&&event.locked&&(event.movementX||event.movementY)),{},before.events);
         row.after=await page.evaluate(()=>{const game=window.__NESI_DEMO_GAME__;return {yaw:game.yaw,pitch:game.pitch,events:window.__CAMERA_START_PROBE__.events};});
