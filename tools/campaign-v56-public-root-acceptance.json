@@ -1,0 +1,204 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-v56-final-public-acceptance",
+  "generatedAt": "2026-10-15T14:51:08.303854+00:00",
+  "sourceAccepted": true,
+  "publicationAccepted": true,
+  "scope": "Exact technical-candidate publication bytes, preserved baseline, original public captures and a separate completed read-only recovery audit; not completion of the full game specification.",
+  "sourceCommit": "a3c81ee59a9b2cbf1b23254857dd8c2a6f6b3c38",
+  "sourceTree": "78df45b4ccbb543055dafd014a9ea6669938d582",
+  "publisherCommit": "8184c23bfac7d97261e90e4dae4477a651e8bfaf",
+  "sourceReview": {
+    "runId": 38451783602,
+    "runAttempt": 1
+  },
+  "publicationRun": 38745726421,
+  "publicationRunAttempt": 1,
+  "originalCIConclusion": "failure",
+  "originalFailedVerifierJob": 116480339832,
+  "originalFailureClassification": {
+    "originalCIConclusion": "failure",
+    "successfulProducerJobs": 10,
+    "failedVerifierJob": 116480339832,
+    "failedStep": 9,
+    "class": "socket-transport-after-complete-semantic-and-HTTP-checks",
+    "logBytes": 226950,
+    "logSha256": "b4ff9685e72f51547ba238f6e95e5a3ae24f1f5027cf55dc83b72ec11b03dc0f"
+  },
+  "publicURL": "https://amazin20.github.io/brainrot-portal/campaign-v56/",
+  "checks": {
+    "originalCIConclusion": "failure",
+    "successfulProducerJobs": 10,
+    "failedVerifierJob": 116480339832,
+    "captureProducerRoles": 8,
+    "captureEnvelopes": 11,
+    "payloadFiles": 283,
+    "ordinaryPublicWinsWithOriginalCompanion": 51,
+    "decodedNonemptyImages": 263,
+    "partialFiles": 355,
+    "exactSiteFiles": 2119,
+    "preservedPreviousFiles": 2038,
+    "candidateFiles": 80,
+    "candidateBytes": 7062976,
+    "siteBytes": 647805522,
+    "completedSuccessfulRecoveryJobs": 1,
+    "freshRecoveryPublicGETs": 2119,
+    "recoveryPacketFiles": 361
+  },
+  "publicBytes": {
+    "siteInventorySha256": "a5e8625856ced4cfa99fd46c957d7155b52f104f54a8479af15d7b139f0e61ac",
+    "siteBytes": 647805522,
+    "baselineInventorySha256": "3cd59f86100c7b9e87ebaf1b3b4b7d81aedaf66d2044895b5b9afa4367264f1e",
+    "baselineBytes": 640738913
+  },
+  "publicFileCatalog": {
+    "path": "tools/campaign-v56-public-files.json",
+    "bytes": 421206,
+    "sha256": "1111dff70a645853526cccbb5831704e39e96fdc9daf12cbfb3899ff94ee591f"
+  },
+  "originalPartialArtifact": {
+    "id": 11980879139,
+    "node_id": "MDg6QXJ0aWZhY3QxMTk4MDg3OTEzOQ==",
+    "name": "campaign-v56-public-verification-38745726421-1",
+    "size_in_bytes": 18728342,
+    "url": "https://api.github.com/repos/amazin20/brainrot-portal/actions/artifacts/11980879139",
+    "archive_download_url": "https://api.github.com/repos/amazin20/brainrot-portal/actions/artifacts/11980879139/zip",
+    "expired": false,
+    "digest": "sha256:b0f69e4cdd9c8cb1237fa68c48a650bdb73ab6d3cc1273f6ef0f58be6ff2922a",
+    "created_at": "2026-10-15T14:32:36Z",
+    "updated_at": "2026-10-15T14:32:36Z",
+    "expires_at": "2026-10-25T14:32:35Z",
+    "workflow_run": {
+      "id": 38745726421,
+      "repository_id": 1354625251,
+      "head_repository_id": 1354625251,
+      "head_branch": "main",
+      "head_sha": "8184c23bfac7d97261e90e4dae4477a651e8bfaf"
+    }
+  },
+  "verificationArtifact": {
+    "id": 11983131440,
+    "node_id": "MDg6QXJ0aWZhY3QxMTk4MzEzMTQ0MA==",
+    "name": "v56-readonly-final-38754558390-1",
+    "size_in_bytes": 19106535,
+    "url": "https://api.github.com/repos/amazin20/brainrot-portal/actions/artifacts/11983131440",
+    "archive_download_url": "https://api.github.com/repos/amazin20/brainrot-portal/actions/artifacts/11983131440/zip",
+    "expired": false,
+    "digest": "sha256:33e32161bdca6ba9bd80e7e583cf53e9a182ea719671f2f9326a19c26004dccd",
+    "created_at": "2026-10-15T14:50:00Z",
+    "updated_at": "2026-10-15T14:50:00Z",
+    "expires_at": "2026-10-25T14:49:58Z",
+    "workflow_run": {
+      "id": 38754558390,
+      "repository_id": 1354625251,
+      "head_repository_id": 1354625251,
+      "head_branch": "audit/v56-final-20261015",
+      "head_sha": "bd83d300e4e5977a15cf081dea0041fc85064564"
+    }
+  },
+  "readOnlyRecovery": {
+    "run": 38754558390,
+    "runAttempt": 1,
+    "commit": "bd83d300e4e5977a15cf081dea0041fc85064564",
+    "tree": "c1f687b116ef3b41658cce069dae608fc30d02a7",
+    "jobId": 116489421029,
+    "conclusion": "success",
+    "publicationAcceptedByProducer": false,
+    "codeFiles": [
+      {
+        "path": ".github/workflows/audit-v56-final-readonly.yml",
+        "bytes": 1877,
+        "sha256": "d67ea870d19a3433579c81cda7498a024356d3541b2deb288b87eaedb2c6a833",
+        "gitBlob": "a79347f87ad96e22861ae494fea69bf5da65746d"
+      },
+      {
+        "path": "scripts/audit-v56-final.mjs",
+        "bytes": 19437,
+        "sha256": "f03a3b08cf7e9d5015401175df3098c68cfccfe6c8acd9dbbb886e1446908cf0",
+        "gitBlob": "c0e9e42e949168266cb18c7d11c1d5698801ffc8"
+      },
+      {
+        "path": "scripts/test-audit-v56-final.mjs",
+        "bytes": 9209,
+        "sha256": "88cbd628243376697f866fb91c3d528a3a3869946a2d3834b410c05e935f64e2",
+        "gitBlob": "88d61ea9b93445ba46bf723a3a1420b2d4029186"
+      },
+      {
+        "path": "tools/v56-final-audit-pins.json",
+        "bytes": 46744,
+        "sha256": "3457c5186e294e9d36c8c0a473bdc16a7b84b4a6f1dc1a2a648519e95af05e9a",
+        "gitBlob": "8a7139800bd1ab13b1a1ec8e96e76cd1adf541ec"
+      }
+    ]
+  },
+  "latestDeployment": {
+    "id": 7094450003,
+    "sha": "8184c23bfac7d97261e90e4dae4477a651e8bfaf",
+    "state": "success"
+  },
+  "providerJobs": [
+    {
+      "id": 116458731654,
+      "name": "assemble",
+      "conclusion": "success"
+    },
+    {
+      "id": 116460530462,
+      "name": "deploy",
+      "conclusion": "success"
+    },
+    {
+      "id": 116462315222,
+      "name": "entry",
+      "conclusion": "success"
+    },
+    {
+      "id": 116462315368,
+      "name": "native (early, 1,2,3,4,5,6,7,8,9,10)",
+      "conclusion": "success"
+    },
+    {
+      "id": 116462315385,
+      "name": "native (castle, 41)",
+      "conclusion": "success"
+    },
+    {
+      "id": 116462315448,
+      "name": "presentation",
+      "conclusion": "success"
+    },
+    {
+      "id": 116462315512,
+      "name": "native (energy, 11,12,13,14,15,16,17,18,19,20)",
+      "conclusion": "success"
+    },
+    {
+      "id": 116462315544,
+      "name": "native (living, 21,22,23,24,25,26,27,28,29,30)",
+      "conclusion": "success"
+    },
+    {
+      "id": 116462315565,
+      "name": "native (fracture, 42,43,44,45,46,47,48,49,50,51)",
+      "conclusion": "success"
+    },
+    {
+      "id": 116462315694,
+      "name": "native (optics, 31,32,33,34,35,36,37,38,39,40)",
+      "conclusion": "success"
+    },
+    {
+      "id": 116480339832,
+      "name": "verify",
+      "conclusion": "failure"
+    }
+  ],
+  "limitations": [
+    "The original publication workflow remains failure: final transport failed after complete semantic and HTTP checks. This root receipt does not turn that run green.",
+    "Acceptance is for an automated technical candidate, not the complete user specification, a human playtest or physical-device FPS.",
+    "No live Yandex SDK, advertising or moderation acceptance.",
+    "Finite shortcut probes do not establish an exhaustive bypass guarantee.",
+    "The 11-wing castle is not 500 unique stages; all current full-route walkthrough movies remain open.",
+    "Recovery replays original public evidence and refreshes all public byte GETs; it does not claim a new browser capture or deployment."
+  ]
+}
