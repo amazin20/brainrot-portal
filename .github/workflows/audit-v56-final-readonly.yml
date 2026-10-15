@@ -1,0 +1,45 @@
+name: Complete v56 final acceptance with a separate read-only audit
+on:
+  push:
+    branches: [audit/v56-final-20261015]
+permissions:
+  contents: read
+  actions: read
+  deployments: read
+concurrency:
+  group: audit-v56-final-readonly
+  cancel-in-progress: false
+jobs:
+  audit:
+    if: github.repository == 'amazin20/brainrot-portal' && github.ref == 'refs/heads/audit/v56-final-20261015'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: '${{ github.sha }}', fetch-depth: 0, persist-credentials: false}
+      - uses: actions/checkout@v4
+        with: {ref: 8184c23bfac7d97261e90e4dae4477a651e8bfaf, path: publisher, fetch-depth: 0, persist-credentials: false}
+      - uses: actions/checkout@v4
+        with: {ref: a3c81ee59a9b2cbf1b23254857dd8c2a6f6b3c38, path: publisher/source, fetch-depth: 0, persist-credentials: false}
+      - uses: actions/setup-node@v4
+        with: {node-version: 22, cache: npm, cache-dependency-path: publisher/source/package-lock.json}
+      - run: npm ci
+        working-directory: publisher/source
+      - name: Install independent image and movie decoders
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y python3-pil ffmpeg
+      - name: Test read-only transport and provenance boundaries
+        run: node --test scripts/test-audit-v56-final.mjs
+      - name: Revalidate original immutable captures and the current complete public site
+        env:
+          GITHUB_TOKEN: '${{ github.token }}'
+          CODEX_PRIMARY_RUNTIME_PYTHON: /usr/bin/python3
+        run: node scripts/audit-v56-final.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: v56-readonly-final-${{ github.run_id }}-${{ github.run_attempt }}
+          path: audit-output
+          retention-days: 10
+          if-no-files-found: error

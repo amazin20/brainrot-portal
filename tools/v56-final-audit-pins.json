@@ -1,0 +1,1545 @@
+{
+  "schemaVersion": 1,
+  "repository": "amazin20/brainrot-portal",
+  "branch": "audit/v56-final-20261015",
+  "workflow": ".github/workflows/audit-v56-final-readonly.yml",
+  "publisherCommit": "8184c23bfac7d97261e90e4dae4477a651e8bfaf",
+  "sourceCommit": "a3c81ee59a9b2cbf1b23254857dd8c2a6f6b3c38",
+  "publicationRun": 38745726421,
+  "publicationRunAttempt": 1,
+  "verifierJobId": 116480339832,
+  "siteFiles": 2119,
+  "siteBytes": 647805522,
+  "siteInventorySha256": "a5e8625856ced4cfa99fd46c957d7155b52f104f54a8479af15d7b139f0e61ac",
+  "frozenModules": {
+    "run": {
+      "path": "scripts/publish-campaign-v56-run.mjs",
+      "blob": "5897ee72b5cf230ff124e9d6905ab4879fd21b14"
+    },
+    "main": {
+      "path": "scripts/publish-campaign-v56.mjs",
+      "blob": "2e042756ca8a58d1ef8ab7cbca6a1b9107fbb451"
+    }
+  },
+  "artifacts": [
+    {
+      "id": 11981407633,
+      "name": "campaign-v56-public-presentation-38745726421-1",
+      "size_in_bytes": 14954844,
+      "url": "https://api.github.com/repos/amazin20/brainrot-portal/actions/artifacts/11981407633",
+      "archive_download_url": "https://api.github.com/repos/amazin20/brainrot-portal/actions/artifacts/11981407633/zip",
+      "expired": false,
+      "created_at": "2026-10-15T14:30:03Z",
+      "expires_at": "2026-10-25T14:30:01Z",
+      "updated_at": "2026-10-15T14:30:03Z",
+      "digest": "sha256:5718ead7d0f3a0156c9139bcdafe7efa2029e796de46866a731045e3bf4abb08",
+      "workflow_run": {
+        "id": 38745726421,
+        "repository_id": 1354625251,
+        "head_repository_id": 1354625251,
+        "head_branch": "main",
+        "head_sha": "8184c23bfac7d97261e90e4dae4477a651e8bfaf"
+      }
+    },
+    {
+      "id": 11980879139,
+      "name": "campaign-v56-public-verification-38745726421-1",
+      "size_in_bytes": 18728342,
+      "url": "https://api.github.com/repos/amazin20/brainrot-portal/actions/artifacts/11980879139",
+      "archive_download_url": "https://api.github.com/repos/amazin20/brainrot-portal/actions/artifacts/11980879139/zip",
+      "expired": false,
+      "created_at": "2026-10-15T14:32:36Z",
+      "expires_at": "2026-10-25T14:32:35Z",
+      "updated_at": "2026-10-15T14:32:36Z",
+      "digest": "sha256:b0f69e4cdd9c8cb1237fa68c48a650bdb73ab6d3cc1273f6ef0f58be6ff2922a",
+      "workflow_run": {
+        "id": 38745726421,
+        "repository_id": 1354625251,
+        "head_repository_id": 1354625251,
+        "head_branch": "main",
+        "head_sha": "8184c23bfac7d97261e90e4dae4477a651e8bfaf"
+      }
+    },
+    {
+      "id": 11980375759,
+      "name": "campaign-v56-deploy-38745726421-1",
+      "size_in_bytes": 5472994,
+      "url": "https://api.github.com/repos/amazin20/brainrot-portal/actions/artifacts/11980375759",
+      "archive_download_url": "https://api.github.com/repos/amazin20/brainrot-portal/actions/artifacts/11980375759/zip",
+      "expired": false,
+      "created_at": "2026-10-15T13:54:44Z",
+      "expires_at": "2026-10-25T13:54:42Z",
+      "updated_at": "2026-10-15T13:54:44Z",
+      "digest": "sha256:94562868f3db817bfc3884ca64ab9ae2e46e8060b90e3f2f859db06e8ee45824",
+      "workflow_run": {
+        "id": 38745726421,
+        "repository_id": 1354625251,
+        "head_repository_id": 1354625251,
+        "head_branch": "main",
+        "head_sha": "8184c23bfac7d97261e90e4dae4477a651e8bfaf"
+      }
+    },
+    {
+      "id": 11980342735,
+      "name": "campaign-v56-public-native-living-38745726421-1",
+      "size_in_bytes": 394738,
+      "url": "https://api.github.com/repos/amazin20/brainrot-portal/actions/artifacts/11980342735",
+      "archive_download_url": "https://api.github.com/repos/amazin20/brainrot-portal/actions/artifacts/11980342735/zip",
+      "expired": false,
+      "created_at": "2026-10-15T14:08:46Z",
+      "expires_at": "2026-10-25T14:08:45Z",
+      "updated_at": "2026-10-15T14:08:46Z",
+      "digest": "sha256:e5e8a5cd69262ff5964f20e8400a1605edc2a8464341dc924c6550e041426200",
+      "workflow_run": {
+        "id": 38745726421,
+        "repository_id": 1354625251,
+        "head_repository_id": 1354625251,
+        "head_branch": "main",
+        "head_sha": "8184c23bfac7d97261e90e4dae4477a651e8bfaf"
+      }
+    },
+    {
+      "id": 11980246739,
+      "name": "campaign-v56-public-native-castle-38745726421-1",
+      "size_in_bytes": 46680,
+      "url": "https://api.github.com/repos/amazin20/brainrot-portal/actions/artifacts/11980246739",
+      "archive_download_url": "https://api.github.com/repos/amazin20/brainrot-portal/actions/artifacts/11980246739/zip",
+      "expired": false,
+      "created_at": "2026-10-15T13:59:38Z",
+      "expires_at": "2026-10-25T13:59:37Z",
+      "updated_at": "2026-10-15T13:59:38Z",
+      "digest": "sha256:487505937e08708c5ba2c70043168374d35fec619c43873eae9f889431d11910",
+      "workflow_run": {
+        "id": 38745726421,
+        "repository_id": 1354625251,
+        "head_repository_id": 1354625251,
+        "head_branch": "main",
+        "head_sha": "8184c23bfac7d97261e90e4dae4477a651e8bfaf"
+      }
+    },
+    {
+      "id": 11980117302,
+      "name": "campaign-v56-public-native-fracture-38745726421-1",
+      "size_in_bytes": 446301,
+      "url": "https://api.github.com/repos/amazin20/brainrot-portal/actions/artifacts/11980117302",
+      "archive_download_url": "https://api.github.com/repos/amazin20/brainrot-portal/actions/artifacts/11980117302/zip",
+      "expired": false,
+      "created_at": "2026-10-15T14:04:56Z",
+      "expires_at": "2026-10-25T14:04:55Z",
+      "updated_at": "2026-10-15T14:04:56Z",
+      "digest": "sha256:0f4874c46a21b91eda23fea85277d469208890825cb4e5897ee288a0d5f6b10e",
+      "workflow_run": {
+        "id": 38745726421,
+        "repository_id": 1354625251,
+        "head_repository_id": 1354625251,
+        "head_branch": "main",
+        "head_sha": "8184c23bfac7d97261e90e4dae4477a651e8bfaf"
+      }
+    },
+    {
+      "id": 11980061329,
+      "name": "campaign-v56-public-entry-38745726421-1",
+      "size_in_bytes": 771287,
+      "url": "https://api.github.com/repos/amazin20/brainrot-portal/actions/artifacts/11980061329",
+      "archive_download_url": "https://api.github.com/repos/amazin20/brainrot-portal/actions/artifacts/11980061329/zip",
+      "expired": false,
+      "created_at": "2026-10-15T13:56:52Z",
+      "expires_at": "2026-10-25T13:56:51Z",
+      "updated_at": "2026-10-15T13:56:52Z",
+      "digest": "sha256:6763baaf9c64c10ac59aa0ec279c19018c6752f555d45edb97e9aab6ec0b14c0",
+      "workflow_run": {
+        "id": 38745726421,
+        "repository_id": 1354625251,
+        "head_repository_id": 1354625251,
+        "head_branch": "main",
+        "head_sha": "8184c23bfac7d97261e90e4dae4477a651e8bfaf"
+      }
+    },
+    {
+      "id": 11979962148,
+      "name": "campaign-v56-public-native-early-38745726421-1",
+      "size_in_bytes": 531075,
+      "url": "https://api.github.com/repos/amazin20/brainrot-portal/actions/artifacts/11979962148",
+      "archive_download_url": "https://api.github.com/repos/amazin20/brainrot-portal/actions/artifacts/11979962148/zip",
+      "expired": false,
+      "created_at": "2026-10-15T14:00:42Z",
+      "expires_at": "2026-10-25T14:00:42Z",
+      "updated_at": "2026-10-15T14:00:42Z",
+      "digest": "sha256:44a8343bc5016844bf45fd535f78ab403bb02d1a5e3144715584c9011f0204be",
+      "workflow_run": {
+        "id": 38745726421,
+        "repository_id": 1354625251,
+        "head_repository_id": 1354625251,
+        "head_branch": "main",
+        "head_sha": "8184c23bfac7d97261e90e4dae4477a651e8bfaf"
+      }
+    },
+    {
+      "id": 11979950368,
+      "name": "campaign-v56-prepared-38745726421-1",
+      "size_in_bytes": 5437799,
+      "url": "https://api.github.com/repos/amazin20/brainrot-portal/actions/artifacts/11979950368",
+      "archive_download_url": "https://api.github.com/repos/amazin20/brainrot-portal/actions/artifacts/11979950368/zip",
+      "expired": false,
+      "created_at": "2026-10-15T13:51:09Z",
+      "expires_at": "2026-10-25T13:51:08Z",
+      "updated_at": "2026-10-15T13:51:09Z",
+      "digest": "sha256:0c40cd70eda2b2884cb906eaea1f5ef426adb9a4d5491e1424d4687737f77517",
+      "workflow_run": {
+        "id": 38745726421,
+        "repository_id": 1354625251,
+        "head_repository_id": 1354625251,
+        "head_branch": "main",
+        "head_sha": "8184c23bfac7d97261e90e4dae4477a651e8bfaf"
+      }
+    },
+    {
+      "id": 11978639184,
+      "name": "campaign-v56-public-native-energy-38745726421-1",
+      "size_in_bytes": 447936,
+      "url": "https://api.github.com/repos/amazin20/brainrot-portal/actions/artifacts/11978639184",
+      "archive_download_url": "https://api.github.com/repos/amazin20/brainrot-portal/actions/artifacts/11978639184/zip",
+      "expired": false,
+      "created_at": "2026-10-15T14:03:33Z",
+      "expires_at": "2026-10-25T14:03:32Z",
+      "updated_at": "2026-10-15T14:03:33Z",
+      "digest": "sha256:0a532ae5150e5e78a217e31abb60b74cb9da602d6458675d1f4b83338bc5fa82",
+      "workflow_run": {
+        "id": 38745726421,
+        "repository_id": 1354625251,
+        "head_repository_id": 1354625251,
+        "head_branch": "main",
+        "head_sha": "8184c23bfac7d97261e90e4dae4477a651e8bfaf"
+      }
+    },
+    {
+      "id": 11978443930,
+      "name": "campaign-v56-public-native-optics-38745726421-1",
+      "size_in_bytes": 378603,
+      "url": "https://api.github.com/repos/amazin20/brainrot-portal/actions/artifacts/11978443930",
+      "archive_download_url": "https://api.github.com/repos/amazin20/brainrot-portal/actions/artifacts/11978443930/zip",
+      "expired": false,
+      "created_at": "2026-10-15T14:01:27Z",
+      "expires_at": "2026-10-25T14:01:26Z",
+      "updated_at": "2026-10-15T14:01:27Z",
+      "digest": "sha256:4a7b90b91ee58f9d9b1a60ac82251bfc806594c5313a116019352155f1c4cbca",
+      "workflow_run": {
+        "id": 38745726421,
+        "repository_id": 1354625251,
+        "head_repository_id": 1354625251,
+        "head_branch": "main",
+        "head_sha": "8184c23bfac7d97261e90e4dae4477a651e8bfaf"
+      }
+    }
+  ],
+  "originalVerifierLog": {
+    "bytes": 226950,
+    "sha256": "b4ff9685e72f51547ba238f6e95e5a3ae24f1f5027cf55dc83b72ec11b03dc0f"
+  },
+  "originalJobs": [
+    {
+      "id": 116458731654,
+      "name": "assemble",
+      "run_id": 38745726421,
+      "head_sha": "8184c23bfac7d97261e90e4dae4477a651e8bfaf",
+      "run_attempt": 1,
+      "status": "completed",
+      "conclusion": "success",
+      "steps": [
+        {
+          "number": 1,
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 2,
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 3,
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 4,
+          "name": "Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 5,
+          "name": "Install locked SOURCE5 dependencies",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 6,
+          "name": "Install controller test dependencies",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 7,
+          "name": "Install the exact browser observer package before deployment",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 8,
+          "name": "Verify actual SOURCE5 Puppeteer module identity before deployment",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 9,
+          "name": "Install independent image and movie decoders",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 10,
+          "name": "Verify the controller contracts before any deployment",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 11,
+          "name": "Authenticate the full SOURCE5 and accepted existing PUBLIC baseline",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 12,
+          "name": "Extract every pinned accepted baseline byte",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 13,
+          "name": "Append the exact SOURCE5 package while preserving the entire current site",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 14,
+          "name": "Upload the single complete Pages package",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 15,
+          "name": "Prepare the bounded immutable inputs for all PUBLIC consumers",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 16,
+          "name": "Run actions/upload-artifact@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 30,
+          "name": "Post Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 31,
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 32,
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 33,
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ]
+    },
+    {
+      "id": 116460530462,
+      "name": "deploy",
+      "run_id": 38745726421,
+      "head_sha": "8184c23bfac7d97261e90e4dae4477a651e8bfaf",
+      "run_attempt": 1,
+      "status": "completed",
+      "conclusion": "success",
+      "steps": [
+        {
+          "number": 1,
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 2,
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 3,
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 4,
+          "name": "Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 5,
+          "name": "Download this PUBLIC run preparation",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 6,
+          "name": "Verify every existing public byte immediately before deployment",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 7,
+          "name": "Recheck the actual deployment lease",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 8,
+          "name": "Run actions/deploy-pages@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 9,
+          "name": "Fetch and verify every deployed public byte",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 10,
+          "name": "Run actions/upload-artifact@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 18,
+          "name": "Post Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 19,
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 20,
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 21,
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ]
+    },
+    {
+      "id": 116462315222,
+      "name": "entry",
+      "run_id": 38745726421,
+      "head_sha": "8184c23bfac7d97261e90e4dae4477a651e8bfaf",
+      "run_attempt": 1,
+      "status": "completed",
+      "conclusion": "success",
+      "steps": [
+        {
+          "number": 1,
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 2,
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 3,
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 4,
+          "name": "Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 5,
+          "name": "Download this PUBLIC run preparation",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 6,
+          "name": "Install locked SOURCE5 dependencies",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 7,
+          "name": "Install the declared capture driver",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 8,
+          "name": "Verify the actual Puppeteer ESM and CJS module identity before browser launch",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 9,
+          "name": "Locate the actual Chromium binary",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 10,
+          "name": "Install independent image and movie decoders",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 11,
+          "name": "Retain all original SOURCE5 candidate bytes for frozen drivers",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 12,
+          "name": "Authenticate the actual bare-entry producer",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 13,
+          "name": "Verify ordinary bare launch and historical-save preservation",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 14,
+          "name": "Bind the genuine bare-entry checks and frame bytes",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 15,
+          "name": "Run actions/upload-artifact@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 28,
+          "name": "Post Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 29,
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 30,
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 31,
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ]
+    },
+    {
+      "id": 116462315368,
+      "name": "native (early, 1,2,3,4,5,6,7,8,9,10)",
+      "run_id": 38745726421,
+      "head_sha": "8184c23bfac7d97261e90e4dae4477a651e8bfaf",
+      "run_attempt": 1,
+      "status": "completed",
+      "conclusion": "success",
+      "steps": [
+        {
+          "number": 1,
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 2,
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 3,
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 4,
+          "name": "Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 5,
+          "name": "Download this PUBLIC run preparation",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 6,
+          "name": "Install locked SOURCE5 dependencies",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 7,
+          "name": "Install the declared capture driver",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 8,
+          "name": "Verify the actual Puppeteer ESM and CJS module identity before browser launch",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 9,
+          "name": "Locate the actual Chromium binary",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 10,
+          "name": "Install independent image and movie decoders",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 11,
+          "name": "Retain all original SOURCE5 candidate bytes for frozen drivers",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 12,
+          "name": "Capture this complete ordinary route group on actual PUBLIC bytes",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 13,
+          "name": "Bind the raw capture and independent browser observations",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 14,
+          "name": "Run actions/upload-artifact@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 26,
+          "name": "Post Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 27,
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 28,
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 29,
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ]
+    },
+    {
+      "id": 116462315385,
+      "name": "native (castle, 41)",
+      "run_id": 38745726421,
+      "head_sha": "8184c23bfac7d97261e90e4dae4477a651e8bfaf",
+      "run_attempt": 1,
+      "status": "completed",
+      "conclusion": "success",
+      "steps": [
+        {
+          "number": 1,
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 2,
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 3,
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 4,
+          "name": "Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 5,
+          "name": "Download this PUBLIC run preparation",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 6,
+          "name": "Install locked SOURCE5 dependencies",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 7,
+          "name": "Install the declared capture driver",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 8,
+          "name": "Verify the actual Puppeteer ESM and CJS module identity before browser launch",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 9,
+          "name": "Locate the actual Chromium binary",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 10,
+          "name": "Install independent image and movie decoders",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 11,
+          "name": "Retain all original SOURCE5 candidate bytes for frozen drivers",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 12,
+          "name": "Capture this complete ordinary route group on actual PUBLIC bytes",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 13,
+          "name": "Bind the raw capture and independent browser observations",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 14,
+          "name": "Run actions/upload-artifact@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 26,
+          "name": "Post Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 27,
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 28,
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 29,
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ]
+    },
+    {
+      "id": 116462315448,
+      "name": "presentation",
+      "run_id": 38745726421,
+      "head_sha": "8184c23bfac7d97261e90e4dae4477a651e8bfaf",
+      "run_attempt": 1,
+      "status": "completed",
+      "conclusion": "success",
+      "steps": [
+        {
+          "number": 1,
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 2,
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 3,
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 4,
+          "name": "Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 5,
+          "name": "Download this PUBLIC run preparation",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 6,
+          "name": "Install locked SOURCE5 dependencies",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 7,
+          "name": "Install the declared capture driver",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 8,
+          "name": "Verify the actual Puppeteer ESM and CJS module identity before browser launch",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 9,
+          "name": "Locate the actual Chromium binary",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 10,
+          "name": "Install independent image and movie decoders",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 11,
+          "name": "Retain all original SOURCE5 candidate bytes for frozen drivers",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 12,
+          "name": "Authenticate the actual presentation producer",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 13,
+          "name": "Observe the actual PUBLIC menu with the frozen SOURCE5 protocol",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 14,
+          "name": "Observe all51 real room interiors at balanced quality",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 15,
+          "name": "Observe original SOURCE5 movement and animation on PUBLIC bytes",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 16,
+          "name": "Observe the frozen debug-only historical-save isolation protocol",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 17,
+          "name": "Bind complete presentation payload and all4 actual observers",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 18,
+          "name": "Run actions/upload-artifact@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 34,
+          "name": "Post Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 35,
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 36,
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 37,
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ]
+    },
+    {
+      "id": 116462315512,
+      "name": "native (energy, 11,12,13,14,15,16,17,18,19,20)",
+      "run_id": 38745726421,
+      "head_sha": "8184c23bfac7d97261e90e4dae4477a651e8bfaf",
+      "run_attempt": 1,
+      "status": "completed",
+      "conclusion": "success",
+      "steps": [
+        {
+          "number": 1,
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 2,
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 3,
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 4,
+          "name": "Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 5,
+          "name": "Download this PUBLIC run preparation",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 6,
+          "name": "Install locked SOURCE5 dependencies",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 7,
+          "name": "Install the declared capture driver",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 8,
+          "name": "Verify the actual Puppeteer ESM and CJS module identity before browser launch",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 9,
+          "name": "Locate the actual Chromium binary",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 10,
+          "name": "Install independent image and movie decoders",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 11,
+          "name": "Retain all original SOURCE5 candidate bytes for frozen drivers",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 12,
+          "name": "Capture this complete ordinary route group on actual PUBLIC bytes",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 13,
+          "name": "Bind the raw capture and independent browser observations",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 14,
+          "name": "Run actions/upload-artifact@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 26,
+          "name": "Post Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 27,
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 28,
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 29,
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ]
+    },
+    {
+      "id": 116462315544,
+      "name": "native (living, 21,22,23,24,25,26,27,28,29,30)",
+      "run_id": 38745726421,
+      "head_sha": "8184c23bfac7d97261e90e4dae4477a651e8bfaf",
+      "run_attempt": 1,
+      "status": "completed",
+      "conclusion": "success",
+      "steps": [
+        {
+          "number": 1,
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 2,
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 3,
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 4,
+          "name": "Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 5,
+          "name": "Download this PUBLIC run preparation",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 6,
+          "name": "Install locked SOURCE5 dependencies",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 7,
+          "name": "Install the declared capture driver",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 8,
+          "name": "Verify the actual Puppeteer ESM and CJS module identity before browser launch",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 9,
+          "name": "Locate the actual Chromium binary",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 10,
+          "name": "Install independent image and movie decoders",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 11,
+          "name": "Retain all original SOURCE5 candidate bytes for frozen drivers",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 12,
+          "name": "Capture this complete ordinary route group on actual PUBLIC bytes",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 13,
+          "name": "Bind the raw capture and independent browser observations",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 14,
+          "name": "Run actions/upload-artifact@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 26,
+          "name": "Post Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 27,
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 28,
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 29,
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ]
+    },
+    {
+      "id": 116462315565,
+      "name": "native (fracture, 42,43,44,45,46,47,48,49,50,51)",
+      "run_id": 38745726421,
+      "head_sha": "8184c23bfac7d97261e90e4dae4477a651e8bfaf",
+      "run_attempt": 1,
+      "status": "completed",
+      "conclusion": "success",
+      "steps": [
+        {
+          "number": 1,
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 2,
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 3,
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 4,
+          "name": "Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 5,
+          "name": "Download this PUBLIC run preparation",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 6,
+          "name": "Install locked SOURCE5 dependencies",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 7,
+          "name": "Install the declared capture driver",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 8,
+          "name": "Verify the actual Puppeteer ESM and CJS module identity before browser launch",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 9,
+          "name": "Locate the actual Chromium binary",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 10,
+          "name": "Install independent image and movie decoders",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 11,
+          "name": "Retain all original SOURCE5 candidate bytes for frozen drivers",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 12,
+          "name": "Capture this complete ordinary route group on actual PUBLIC bytes",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 13,
+          "name": "Bind the raw capture and independent browser observations",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 14,
+          "name": "Run actions/upload-artifact@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 26,
+          "name": "Post Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 27,
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 28,
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 29,
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ]
+    },
+    {
+      "id": 116462315694,
+      "name": "native (optics, 31,32,33,34,35,36,37,38,39,40)",
+      "run_id": 38745726421,
+      "head_sha": "8184c23bfac7d97261e90e4dae4477a651e8bfaf",
+      "run_attempt": 1,
+      "status": "completed",
+      "conclusion": "success",
+      "steps": [
+        {
+          "number": 1,
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 2,
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 3,
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 4,
+          "name": "Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 5,
+          "name": "Download this PUBLIC run preparation",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 6,
+          "name": "Install locked SOURCE5 dependencies",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 7,
+          "name": "Install the declared capture driver",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 8,
+          "name": "Verify the actual Puppeteer ESM and CJS module identity before browser launch",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 9,
+          "name": "Locate the actual Chromium binary",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 10,
+          "name": "Install independent image and movie decoders",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 11,
+          "name": "Retain all original SOURCE5 candidate bytes for frozen drivers",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 12,
+          "name": "Capture this complete ordinary route group on actual PUBLIC bytes",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 13,
+          "name": "Bind the raw capture and independent browser observations",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 14,
+          "name": "Run actions/upload-artifact@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 26,
+          "name": "Post Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 27,
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 28,
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 29,
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ]
+    },
+    {
+      "id": 116480339832,
+      "name": "verify",
+      "run_id": 38745726421,
+      "head_sha": "8184c23bfac7d97261e90e4dae4477a651e8bfaf",
+      "run_attempt": 1,
+      "status": "completed",
+      "conclusion": "failure",
+      "steps": [
+        {
+          "number": 1,
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 2,
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 3,
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 4,
+          "name": "Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 5,
+          "name": "Install locked SOURCE5 dependencies",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 6,
+          "name": "Install independent image and movie decoders",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 7,
+          "name": "Download this PUBLIC run preparation",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 8,
+          "name": "Recheck the accepted deployment and complete current provider state",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 9,
+          "name": "Verify all11 actual jobs and all8 complete original PUBLIC capture packets",
+          "status": "completed",
+          "conclusion": "failure"
+        },
+        {
+          "number": 10,
+          "name": "Run actions/upload-artifact@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 18,
+          "name": "Post Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 19,
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 20,
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 21,
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ]
+    }
+  ],
+  "publisherTree": "7975af238aace2a3b50baf912b2289a567de11ab"
+}
