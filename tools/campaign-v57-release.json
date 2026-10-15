@@ -1,0 +1,197 @@
+{
+  "schemaVersion": 1,
+  "frozen": true,
+  "repository": "amazin20/brainrot-portal",
+  "namespace": "campaign-v57/",
+  "version": "v57-physical-power",
+  "controllerParent": "75802ea6f3ce5c712111d33e02a75c78a99c0277",
+  "sourceBranch": "upgrade/physical-power-20261015",
+  "sourceWorkflow": ".github/workflows/physical-power-review.yml",
+  "sourceCommit": "ac46f51fdaee4c4d966994988ca24081f9f49493",
+  "sourceTree": "d68f74894432fc3a8aacc71e23a0eee390acc6d5",
+  "sourceRun": 38773003051,
+  "sourceAttempt": 1,
+  "expectedJobs": [
+    "build",
+    "cpu (0)",
+    "cpu (1)",
+    "cpu (2)",
+    "cpu (3)",
+    "cpu (4)",
+    "cpu (5)",
+    "native (castle, 41)",
+    "native (early, 1,2,3,4,5,6,7,8,9,10)",
+    "native (energy, 11,12,13,14,15,16,17,18,19,20)",
+    "native (fracture, 42,43,44,45,46,47,48,49,50,51)",
+    "native (living, 21,22,23,24,25,26,27,28,29,30)",
+    "native (optics, 31,32,33,34,35,36,37,38,39,40)",
+    "ordinary (castle, 41)",
+    "ordinary (early, 1,2,3,4,5,6,7,8,9,10)",
+    "ordinary (energy, 11,12,13,14,15,16,17,18,19,20)",
+    "ordinary (fracture, 42,43,44,45,46,47,48,49,50,51)",
+    "ordinary (living, 21,22,23,24,25,26,27,28,29,30)",
+    "ordinary (optics, 31,32,33,34,35,36,37,38,39,40)",
+    "physics",
+    "presentation",
+    "room25-native"
+  ],
+  "sourceArtifacts": [
+    {
+      "id": 11991563848,
+      "name": "physical-power-build",
+      "size_in_bytes": 5447,
+      "digest": "sha256:c8490a759aebee4f06755ed32be12597a1d304f3d2f8ea0e216e2992093680fc"
+    },
+    {
+      "id": 11993063334,
+      "name": "physical-power-cpu-0",
+      "size_in_bytes": 19112,
+      "digest": "sha256:0e1bda86ed5ce5d4d018c17915b5744758e14fbc00960dc6a3f4313f1c2708c6"
+    },
+    {
+      "id": 11993935299,
+      "name": "physical-power-cpu-1",
+      "size_in_bytes": 19928,
+      "digest": "sha256:7f6161b153d553494bec94f0967823b8284bd096d187df59aad895cf7341b93e"
+    },
+    {
+      "id": 11993135614,
+      "name": "physical-power-cpu-2",
+      "size_in_bytes": 21195,
+      "digest": "sha256:f1034cacf13ed539e7f14435766d52a8d2dd7ef755ec8604662630b725da7679"
+    },
+    {
+      "id": 11992528122,
+      "name": "physical-power-cpu-3",
+      "size_in_bytes": 222315,
+      "digest": "sha256:33b6d136263fb290964fa3609edb71f6fc9a56ed089c436d686969b2dc9c661c"
+    },
+    {
+      "id": 11993231647,
+      "name": "physical-power-cpu-4",
+      "size_in_bytes": 21589,
+      "digest": "sha256:08691885884039c817fa166842d9b8ba34aaecdab13a674085dfdb2a2c7a6b3c"
+    },
+    {
+      "id": 11993248426,
+      "name": "physical-power-cpu-5",
+      "size_in_bytes": 29268,
+      "digest": "sha256:3dc3ba788b4585b1aeebd9e14287dc3fd1caa1cfa12a01da36684917e20a73bb"
+    },
+    {
+      "id": 11992427265,
+      "name": "physical-power-dist",
+      "size_in_bytes": 4486118,
+      "digest": "sha256:13a0c32f58890651e5bd6cdf49418af29b1f8e1f783c6ce1f13b54dd51e0ac02"
+    },
+    {
+      "id": 11991984621,
+      "name": "physical-power-native-castle",
+      "size_in_bytes": 47600,
+      "digest": "sha256:50fe4e5e8fbecfcbafe70960afbc81f6c1f2e247c18832a783b63ef11b5fdd29"
+    },
+    {
+      "id": 11992877722,
+      "name": "physical-power-native-early",
+      "size_in_bytes": 512759,
+      "digest": "sha256:7f6ca55228f0e69c5a27304bec20b6d75b05d22137ba2d6e3e6d5940d050f96a"
+    },
+    {
+      "id": 11992498593,
+      "name": "physical-power-native-energy",
+      "size_in_bytes": 429517,
+      "digest": "sha256:82eb1bf4cca2ee730e23435deaeb019e33905c7d999e2663606c20f19709baa8"
+    },
+    {
+      "id": 11992453951,
+      "name": "physical-power-native-fracture",
+      "size_in_bytes": 425059,
+      "digest": "sha256:9f5cd011fa18dfc6016ee777bd784ae3c49664e6b9bf95138b718a0d09b4bea0"
+    },
+    {
+      "id": 11993641471,
+      "name": "physical-power-native-living",
+      "size_in_bytes": 379365,
+      "digest": "sha256:c54fd74f689ed9c2dbd51a31fdf95e17523494271290c197d68f1c2bf4070936"
+    },
+    {
+      "id": 11992418818,
+      "name": "physical-power-native-optics",
+      "size_in_bytes": 360922,
+      "digest": "sha256:3d35776542b7843410a4005270235add14771d4fd5cf32e90b9241cb7071d04e"
+    },
+    {
+      "id": 11991734642,
+      "name": "physical-power-ordinary-castle",
+      "size_in_bytes": 6714,
+      "digest": "sha256:87406ba82c52b65b225fd25de27b5de249835b2016b6789fff6f3f1e77df3838"
+    },
+    {
+      "id": 11991114863,
+      "name": "physical-power-ordinary-early",
+      "size_in_bytes": 3371,
+      "digest": "sha256:baa770629728e56cbfe6355c41f573c696a6c559bf83db260f5286f13318ba85"
+    },
+    {
+      "id": 11992791565,
+      "name": "physical-power-ordinary-energy",
+      "size_in_bytes": 15319,
+      "digest": "sha256:34713a2b69090db74b0b733349f233f15bd653cd178ef39a7f58cde69fe6016e"
+    },
+    {
+      "id": 11992672119,
+      "name": "physical-power-ordinary-fracture",
+      "size_in_bytes": 7296,
+      "digest": "sha256:f904f1253bde23561e64549e660abf1dd4de0aeb6a4020e3c88c185712943495"
+    },
+    {
+      "id": 11992951061,
+      "name": "physical-power-ordinary-living",
+      "size_in_bytes": 6440,
+      "digest": "sha256:52c0d1a17d01447edf881a63f06e0f1f4202c0fc7a30fe07c5ba751bfc31a91d"
+    },
+    {
+      "id": 11992696487,
+      "name": "physical-power-ordinary-optics",
+      "size_in_bytes": 5504,
+      "digest": "sha256:560d4fd63bab74791fe6e14dd4b90c357b7d6ab1d8ca715ae3eb1fdaf228d134"
+    },
+    {
+      "id": 11992586985,
+      "name": "physical-power-physics",
+      "size_in_bytes": 4630,
+      "digest": "sha256:d448d22e59f9836c10374a5cc09c305a14175514fc5aa81865e1070648ceeffb"
+    },
+    {
+      "id": 11992243109,
+      "name": "physical-power-presentation",
+      "size_in_bytes": 3585831,
+      "digest": "sha256:fad93623ef091a33bb698d1e7bf5db887a242e41cd2cb2226dedb0ce302d90b3"
+    },
+    {
+      "id": 11993841623,
+      "name": "physical-power-room25-native",
+      "size_in_bytes": 8010700,
+      "digest": "sha256:08b3afc237b27a6ee4262bf90081f4f5e187e7a687abd6aca3ff43c31e29b1f9"
+    },
+    {
+      "id": 11991613627,
+      "name": "physical-power-yandex",
+      "size_in_bytes": 4330847,
+      "digest": "sha256:6b36219e43c2c78d65679d90c941f3ba85602bcd02fec8781c288c16f51abdb5"
+    }
+  ],
+  "distArtifact": "physical-power-dist",
+  "sourceAcceptance": {
+    "path": "tools/campaign-v57-root-source-acceptance.json",
+    "sha256": "b626b72f7785cb58f68f04059e709f06cece4be4695dd29cfa0710574e4b7ef8"
+  },
+  "baselineCatalog": "tools/campaign-v56-public-files.json",
+  "baselineCatalogSha256": "1111dff70a645853526cccbb5831704e39e96fdc9daf12cbfb3899ff94ee591f",
+  "baselineInventorySha256": "a5e8625856ced4cfa99fd46c957d7155b52f104f54a8479af15d7b139f0e61ac",
+  "baselineDeployment": {
+    "id": 7094450003,
+    "sha": "8184c23bfac7d97261e90e4dae4477a651e8bfaf"
+  },
+  "publicationAccepted": false
+}

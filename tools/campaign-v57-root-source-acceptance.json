@@ -1,0 +1,892 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-v57-source-acceptance",
+  "generatedAt": "2026-10-15T17:26:24.018224+00:00",
+  "sourceAccepted": true,
+  "publicationAccepted": false,
+  "sourceCommit": "ac46f51fdaee4c4d966994988ca24081f9f49493",
+  "sourceTree": "d68f74894432fc3a8aacc71e23a0eee390acc6d5",
+  "sourceParent": "2783df5074bcdaf06bb39f63f49cabb0616c4c81",
+  "sourceReview": {
+    "runId": 38773003051,
+    "runAttempt": 1
+  },
+  "run": 38773003051,
+  "runAttempt": 1,
+  "version": "v57-physical-power",
+  "edition": "foundation",
+  "sourceInputsSha256": "054547236822636b8d5612763584bdb9dce91e36713d052b5f0dd68fa0c55fef",
+  "sourceInputFiles": 335,
+  "checks": {
+    "provider": {
+      "jobs": 22,
+      "successfulJobs": 22,
+      "artifacts": 24,
+      "attempt": 1
+    },
+    "cpu": {
+      "tests": 2248,
+      "passed": 2248,
+      "failed": 0,
+      "files": 311,
+      "disjointShards": 6
+    },
+    "novelPhysics": {
+      "files": 9,
+      "tests": 36,
+      "passed": 36,
+      "failed": 0
+    },
+    "ordinaryRoutes": {
+      "rooms": 51,
+      "won": 51,
+      "sameOriginalCompanion": 51,
+      "resets": 0,
+      "respawns": 0
+    },
+    "nativeRoutes": {
+      "rooms": 51,
+      "gameplayPassed": 51,
+      "capturesPassed": 51,
+      "won": 51,
+      "sameOriginalCompanion": 51,
+      "resets": 0,
+      "respawns": 0
+    },
+    "decodedImages": 63,
+    "changedRoomInteriorFrames": 4,
+    "responsiveMenuFrames": 6,
+    "saveIsolationV57": true,
+    "mockedYandexSdk": true,
+    "room25ContinuousNative": {
+      "frames": 752,
+      "durationSeconds": 188.0,
+      "simulationSeconds": 187.60833333333332,
+      "fullyDecoded": true,
+      "originalCargoBodyId": 88,
+      "sameOriginalShape": true,
+      "opticalCutGravityReturnAndRelight": true,
+      "twoDynamicPassengerBodies": [
+        89,
+        91
+      ],
+      "movieBytes": 7649353,
+      "movieSha256": "7babaffaff8d1ae9f9bfeea6cc29ac6017da21f059be998f0302301b9b751743",
+      "telemetrySha256": "4f823ba4189a4b2120904edaed05d59ffed90686be5e83901013cf73144f7796"
+    },
+    "currentImmutablePureValidators": {
+      "pass": true,
+      "sourceManifestInputs": 335,
+      "sourceInputsSha256": "054547236822636b8d5612763584bdb9dce91e36713d052b5f0dd68fa0c55fef",
+      "upperPhysicalProofs": [
+        {
+          "kind": "ordinary",
+          "pass": true,
+          "originalCargoBodyId": 1638,
+          "loadedStep": 89162,
+          "retainedStartStep": 89321,
+          "currentStep": 94129,
+          "supportedDeckSteps": 396,
+          "islandStep": 91361,
+          "upperRideLowStep": 91474,
+          "upperRideHighStep": 92185,
+          "upperCatchStep": 93944,
+          "physicalLowerCatch": true,
+          "physicalUpperCatch": true,
+          "twoPhysicalCatches": true
+        },
+        {
+          "kind": "native",
+          "pass": true,
+          "originalCargoBodyId": 1600,
+          "loadedStep": 89162,
+          "retainedStartStep": 89304,
+          "currentStep": 94129,
+          "supportedDeckSteps": 396,
+          "islandStep": 91351,
+          "upperRideLowStep": 91474,
+          "upperRideHighStep": 92185,
+          "upperCatchStep": 93944,
+          "physicalLowerCatch": true,
+          "physicalUpperCatch": true,
+          "twoPhysicalCatches": true
+        }
+      ],
+      "room25NativePureValidator": true
+    }
+  },
+  "packages": {
+    "dist": {
+      "files": 80,
+      "bytes": 7095981,
+      "inventorySha256": "eaa643a49ad2ad925c45d6bcf82b616ea4bb5a4958a040fca5c7af68f892f09d"
+    },
+    "yandex": {
+      "filename": "brainrot-portal-v57-yandex.zip",
+      "bytes": 4328714,
+      "sha256": "7d590a28875550b1287beddf7c7914289204ef192967249c310bbea7b432f811",
+      "unpackedBytes": 6726823
+    }
+  },
+  "sourceLogs": [
+    {
+      "jobId": 116553393682,
+      "bytes": 67061,
+      "sha256": "47a663201ca33c5340b66bfe265ac256b1d7f42b2a2e3fd32f199a254ffabce5"
+    },
+    {
+      "jobId": 116553394077,
+      "bytes": 186765,
+      "sha256": "fe4f390264e9fa12d58704740dba3afba55f6eb681445030f2d1edffa22c82b2"
+    },
+    {
+      "jobId": 116553394078,
+      "bytes": 203779,
+      "sha256": "1d0ff8b4cdbfd171be93bcf2a300cb2edc17f9b1ac11a4d00c241fb2dc90c57f"
+    },
+    {
+      "jobId": 116553394124,
+      "bytes": 188592,
+      "sha256": "80ef5787877bfdd3789b759dc6c8b17a37061bdafa19820fd1e038bba023e4f4"
+    },
+    {
+      "jobId": 116553394155,
+      "bytes": 74236,
+      "sha256": "d167ebd18de7a5cfbd4283837fcce85633d1a1da254ed0cfade241fd372d8814"
+    },
+    {
+      "jobId": 116553394184,
+      "bytes": 47535,
+      "sha256": "1ea10adc54f7b0219cf0d3edab87164a5be557de16e0e341d0c61ec03d7da935"
+    },
+    {
+      "jobId": 116553394188,
+      "bytes": 46582,
+      "sha256": "db08ab7806c5cc3fc7d5445a94b5f2722090695537757e30fc89fa03199e2e32"
+    },
+    {
+      "jobId": 116553394208,
+      "bytes": 257258,
+      "sha256": "296e7acafa34e1be7fd4556812767f36ffe520cebca9c83e9005d42e17103679"
+    },
+    {
+      "jobId": 116553394212,
+      "bytes": 1588344,
+      "sha256": "43ad7a2d7c23f7f2a19e91668da52a5faf6fc39211edf8b66077884429aabb9e"
+    },
+    {
+      "jobId": 116553394276,
+      "bytes": 47348,
+      "sha256": "c45d34e26022b93dbfe1aca9bd42a3564a1aad3217f3a9c08ae5c34dae2835a9"
+    },
+    {
+      "jobId": 116553394289,
+      "bytes": 200427,
+      "sha256": "eff59498f3878bdf3c822620ad4a4dbc709add3a9181890498b0896e8cda334c"
+    },
+    {
+      "jobId": 116553394326,
+      "bytes": 47459,
+      "sha256": "f0d5804527e6af5c4b7dc222fd9d0067f871f7c8f2c02ca4a9006a0f4278f9f6"
+    },
+    {
+      "jobId": 116553394339,
+      "bytes": 47395,
+      "sha256": "4826598c8be536d9d3e8e6cbdb36779218aba893462879d7a4bef91a5819cfc5"
+    },
+    {
+      "jobId": 116553394442,
+      "bytes": 47316,
+      "sha256": "9d5e9074e2b0baa7850332b904a7a3026206520f35d8330431e7f87a7039a694"
+    },
+    {
+      "jobId": 116553699016,
+      "bytes": 78779,
+      "sha256": "0e04cae1af5703ef233392aa685ada20847579ed7223f69b225ae3f0c9a8f002"
+    },
+    {
+      "jobId": 116555209980,
+      "bytes": 113125,
+      "sha256": "84a7feb42c765501e17b76db38ad74f7e8c065db7f656ee127905d99f6a81fa6"
+    },
+    {
+      "jobId": 116555210226,
+      "bytes": 68730,
+      "sha256": "d4e2c1d0345651bcee8685f2a6198de337bad8e3a570459b2faa3f8d09d6fb81"
+    },
+    {
+      "jobId": 116555210230,
+      "bytes": 71831,
+      "sha256": "9c916cc2fa4f7951f93dff1a5f9658f0413a1a1a19404910a0ea8c932e33baa7"
+    },
+    {
+      "jobId": 116555210279,
+      "bytes": 69335,
+      "sha256": "7a9a10f110ff59e4d33dd3924b68b5690b46b67f9c0e22f4ddb44098e9deaeb5"
+    },
+    {
+      "jobId": 116555210552,
+      "bytes": 61423,
+      "sha256": "2dcda75f60c679ccb853bd54a21a61943738d08ee00e4ddb89628ca774736dcc"
+    },
+    {
+      "jobId": 116555210568,
+      "bytes": 65192,
+      "sha256": "248854e7fc8f33abb72f12d228145816d16206efc5aec028170e3e8a28c5d488"
+    },
+    {
+      "jobId": 116555210754,
+      "bytes": 68901,
+      "sha256": "f7c7e15939e6f49d1151df9d1949a87ed0eb7fbe5aab9eb5c79e84256cadbd55"
+    }
+  ],
+  "candidateFiles": [
+    {
+      "path": "art/portal-laboratory-menu.webp",
+      "bytes": 158200,
+      "sha256": "f6a544096a6418a0f65ba8c609415d0393a1081d18537ecac5eb4c345b13b4be"
+    },
+    {
+      "path": "assets/LabAnimationJourney-_cR2hxRh.js",
+      "bytes": 3040,
+      "sha256": "f308a0ecb37f45e080dda3a37ca742f0078caf8432c6e74fb5c604aaa70d13b7"
+    },
+    {
+      "path": "assets/LabCreativeRoom17Journey-D8uhd_nE.js",
+      "bytes": 5480,
+      "sha256": "b4b922b28f228ba5a15889298b5e81199546670e274619c669a3a41f93ee2902"
+    },
+    {
+      "path": "assets/LabCreativeRoom18Journey-C40pMlkA.js",
+      "bytes": 3303,
+      "sha256": "1ba89923299e8b5e5951860777746f04e772a9c2018061c3ede884f5498ebf8b"
+    },
+    {
+      "path": "assets/LabCreativeRoom20Journey-YtI1a2Ko.js",
+      "bytes": 4722,
+      "sha256": "b3bc28fbd718da3ca98c114d9b54d644985055874783de475a4397bf2dbb767c"
+    },
+    {
+      "path": "assets/LabEchoHorizonJourney-DpxxfNe2.js",
+      "bytes": 2271,
+      "sha256": "49ad9f091f9109ae7466a8bf781de6bf54bb796e21f1516e916af46b6d000151"
+    },
+    {
+      "path": "assets/LabExpansionAlternateJourney47-3qgixs4y.js",
+      "bytes": 1864,
+      "sha256": "2054a9f53789e8c5aa399142bef5a6700bd7c6be3353874cd5b89eba9482c851"
+    },
+    {
+      "path": "assets/LabExpansionAlternateJourney48-RfOpJ0Wp.js",
+      "bytes": 2334,
+      "sha256": "d384d006f13ccb22d7d07a9bb1b26ffc428d026d184b13367b2e592db1d42fd7"
+    },
+    {
+      "path": "assets/LabExpansionAlternateJourney49-DNfRfuhQ.js",
+      "bytes": 2039,
+      "sha256": "38c2880ba497f12644cda975ea826e4eec3982ff46e2c0187089a8a125d2c7e7"
+    },
+    {
+      "path": "assets/LabExpansionAlternateJourneyB-pPUzxfPo.js",
+      "bytes": 2970,
+      "sha256": "459f1c92e6dfbfb4964658326a3c2506846a5bae057479e75c9902e2568990d5"
+    },
+    {
+      "path": "assets/LabExpansionJourneyA-BirrnQHD.js",
+      "bytes": 7448,
+      "sha256": "875e55f5a7ea7721a95b4353618c4ab2b197a800a7c6fd3ddeab3242a30d3f66"
+    },
+    {
+      "path": "assets/LabExpansionJourneyB-CWFIFYrC.js",
+      "bytes": 5645,
+      "sha256": "e64b47b4093a15aca7232b66817d9dfd8c94d686ef832126995d1d647ae2f4b0"
+    },
+    {
+      "path": "assets/LabExtendedJourney-Bgjt6ksB.js",
+      "bytes": 9252,
+      "sha256": "3415ecb4dfc4253de0b4a35a15f834531286debde2bca1b71f3054231ac23681"
+    },
+    {
+      "path": "assets/LabFoundation20PhysicalJourney-CDhgusOJ.js",
+      "bytes": 12259,
+      "sha256": "d5e9d99cad973fe055267e939c9d2ed9da47a90a94071a05fc0a2b2d736ca59a"
+    },
+    {
+      "path": "assets/LabFoundationJourney-CZFWCeUs.js",
+      "bytes": 9267,
+      "sha256": "d81849edeb343274bbe04ba68c07658d5414ce1d299c230856b4dfd6bbf4c074"
+    },
+    {
+      "path": "assets/LabIntroductoryAlternates-DcdsCClA.js",
+      "bytes": 1341,
+      "sha256": "a6451adc49d9c2f86f43455bfa4ced44d7166234f4fde82082990bf21f76cd5c"
+    },
+    {
+      "path": "assets/LabLateCampaignAim-B5N5j8AZ.js",
+      "bytes": 753,
+      "sha256": "9f36c9e93a978a2210778b46b50e996b6ff201bb388f572deaa998ef2c459a9e"
+    },
+    {
+      "path": "assets/LabOpenJourney--9CKhEic.js",
+      "bytes": 6404,
+      "sha256": "f7973e742afb8a392675e83b8b463a89b7516a91f216fb6bfdcfe34bfcb0421b"
+    },
+    {
+      "path": "assets/LabPortalEdgeJourney-DZ1oihFT.js",
+      "bytes": 2293,
+      "sha256": "d9c76e0e3267dc851634a24d46e8b86a9f4f6da63db9106e4036ab99de71abbf"
+    },
+    {
+      "path": "assets/LabPortalFloorJourney-DgD9OAw_.js",
+      "bytes": 1516,
+      "sha256": "06299c1e2d78702a65441ff76f195b2c171c4202aae05d7aab49ecbe72594118"
+    },
+    {
+      "path": "assets/LabPostJourneyA-jjBDEexn.js",
+      "bytes": 12240,
+      "sha256": "984c19d9163e4943fed3a5b920864703d967a6ca66e2857a7b2d878c00f18d0f"
+    },
+    {
+      "path": "assets/LabPostJourneyB-B5hIdFQh.js",
+      "bytes": 10887,
+      "sha256": "d4ed701b8851ce0027b80527c07972499d1ff1760022511410e0d76ea1cdcabc"
+    },
+    {
+      "path": "assets/LabPuzzlePilot43Journey-gk1ABVgP.js",
+      "bytes": 3148,
+      "sha256": "5b937e58eb3996f12895f80e4ae58454499f52982a361e381de6bf2ba62014b7"
+    },
+    {
+      "path": "assets/LabPuzzleProgression44Journey-CGFJ-_Hq.js",
+      "bytes": 1956,
+      "sha256": "6ffb9cf76735525fb11db6fe31e94b2c5ef07a4705e040c9f572ae9ec1c9f29d"
+    },
+    {
+      "path": "assets/LabPuzzleProgression45Journey-BZp8Ps9D.js",
+      "bytes": 5497,
+      "sha256": "c0ce133d20a9dc6d07ee35b65e912d890b5833f241d6e6f35d5fd737693d438c"
+    },
+    {
+      "path": "assets/LabPuzzleProgression46Journey-CuZaaUMJ.js",
+      "bytes": 3649,
+      "sha256": "438f24382b5655365d8afc58ee32326f4b79e653b079bef90b27c4baf67b3ada"
+    },
+    {
+      "path": "assets/LabPuzzleProgression47Journey-Cqt9A_Yx.js",
+      "bytes": 4713,
+      "sha256": "45e8ff9ed333f8954d3eeba72ee4165f58784f58810e26587fec3add0a80ba92"
+    },
+    {
+      "path": "assets/LabPuzzleProgression48Journey-D2yYL565.js",
+      "bytes": 5941,
+      "sha256": "ddcd2307bce30df9f74ae60409b6a36b4b9ac4a762d0b693e135947d65ef80a7"
+    },
+    {
+      "path": "assets/LabPuzzleProgression49Journey-u7i7hAWJ.js",
+      "bytes": 4598,
+      "sha256": "90413d7080a0303cd14a54931f17ab49043b06f71935a971cc26decbd40ecd1e"
+    },
+    {
+      "path": "assets/LabPuzzleProgression50BeamJourney-Cta1muS-.js",
+      "bytes": 12675,
+      "sha256": "49cf5b1891911e62d8d05c66b72c1146485ccfb29bddfc0be7281dc98b150379"
+    },
+    {
+      "path": "assets/LabPuzzleProgression50Journey-BcBzPH7h.js",
+      "bytes": 6188,
+      "sha256": "945dcd34e6f204e930705cb49408df693c4df5bbb0562bafbd61ab1127869bbb"
+    },
+    {
+      "path": "assets/LabPuzzleProgression51Journey-CotGBBIA.js",
+      "bytes": 3457,
+      "sha256": "86bfe408527b019dff26e7971342a80da6f5582d6aeff9c3bb44da5858d54430"
+    },
+    {
+      "path": "assets/LabResearchJourney-m9K-Uky-.js",
+      "bytes": 7951,
+      "sha256": "b6348c914482d3b10cd001c53da19fb7b85cc776e2ef0c58749c9dea2efe949d"
+    },
+    {
+      "path": "assets/LabRoom13Journey-DpkZeNEo.js",
+      "bytes": 6194,
+      "sha256": "275c62befc9b95dc4c596810721ffba02b137b24ad14006e4769f1c7f21bc041"
+    },
+    {
+      "path": "assets/LabRoom14Journey-DBKRDFb8.js",
+      "bytes": 4785,
+      "sha256": "ba613d612e4c3ee6fe3459610903106832413c3680e8fab3359697eea9861a24"
+    },
+    {
+      "path": "assets/LabRoom15Journey-Aou9bncD.js",
+      "bytes": 4604,
+      "sha256": "57d3b368de36ac09336e08e626722221921ea07b1332a40b58c1f980b3740e35"
+    },
+    {
+      "path": "assets/LabRoom16Journey-DcT0PHn1.js",
+      "bytes": 2534,
+      "sha256": "43814ce0e94d01e0e2b9152c6ea1c722073f13a019b2992525f6b0480fa97e74"
+    },
+    {
+      "path": "assets/LabRoom17Journey-C2EE7523.js",
+      "bytes": 3260,
+      "sha256": "b621bf8abcb99cec72e5a8b0ef53e4ef6a005e414141e9502855a2759ba02708"
+    },
+    {
+      "path": "assets/LabRoom18Journey-BFg7b5QK.js",
+      "bytes": 6065,
+      "sha256": "bd72dbe4258274194428a6602fa4871d2f1cd4c13b4e9f1897ceda8360a314ea"
+    },
+    {
+      "path": "assets/LabRoom19Journey-BVk2pOJ3.js",
+      "bytes": 3087,
+      "sha256": "edbd9e87a7c68f527a6a6d6794cfcb3a8de5780d1c656265ccf7910207066ab4"
+    },
+    {
+      "path": "assets/LabRoom20Journey-Dnjdo837.js",
+      "bytes": 5013,
+      "sha256": "84ee4a4debf18d555e80bbf468821d58576e6fcf805b34adcd2670e8502fc0fd"
+    },
+    {
+      "path": "assets/LabRoom21Journey-DsqQcV2E.js",
+      "bytes": 5318,
+      "sha256": "0122a0a1cedc309789899b9aaa8876f49fd1c271bdc508c734e144ecd41c5138"
+    },
+    {
+      "path": "assets/LabRoom22Journey-BaxkvcdU.js",
+      "bytes": 2942,
+      "sha256": "fdc997bcd0024ca634634056e23c687d4eacf3716dd6cf3701063983999dab69"
+    },
+    {
+      "path": "assets/LabRoom23Journey-Cf3JMGPg.js",
+      "bytes": 2743,
+      "sha256": "a792100928178d448a37c6473b402626a20eb203ce8cb0b4ece438a12223a4cc"
+    },
+    {
+      "path": "assets/LabRoom23PhysicalJourney-BGgQKytD.js",
+      "bytes": 4194,
+      "sha256": "11f0f773854b7321ea157ede855d03ef265ebce4112996f84c0de8c9c8b7c856"
+    },
+    {
+      "path": "assets/LabRoom24Journey-D77YBvyb.js",
+      "bytes": 3675,
+      "sha256": "cbc1cf00e86cf94fe3d6454e0c4c317f827cb545004c8208aea6710a7496443e"
+    },
+    {
+      "path": "assets/LabRoom25Journey-COqi9k-Z.js",
+      "bytes": 4626,
+      "sha256": "4113270db838996f7bcd1cd8d5edd4ca13461d19057e13a1a5f4e0f5085b9296"
+    },
+    {
+      "path": "assets/LabRoom26Journey-D5Lhf6Yz.js",
+      "bytes": 4194,
+      "sha256": "f568e01fcbf2e28f9bf1d89aa1d8e83df957bb60ea13a63a77cab81b61577e74"
+    },
+    {
+      "path": "assets/LabRoom27Journey-CtMoXjWq.js",
+      "bytes": 3350,
+      "sha256": "ea4e62a0eed62998b64515b56db65142d1a7d3fb8d5c91b6e31653c5ef4422b5"
+    },
+    {
+      "path": "assets/LabRoom28Journey-BK5o10zU.js",
+      "bytes": 3238,
+      "sha256": "abb63b08a5336b66f9274808b2d715e56d00520d744756fd68875b0c7442e686"
+    },
+    {
+      "path": "assets/LabRoom29Journey-FXLiWbZf.js",
+      "bytes": 2592,
+      "sha256": "625138692ba0641ed1ea63e7bb6ea332c70bf235ee3bc8b3cbd80456012e04ef"
+    },
+    {
+      "path": "assets/LabRoom30Journey-zAsFaYdh.js",
+      "bytes": 3762,
+      "sha256": "1d260d8e49e983b2f7a9c354898fe771c41df56434d67e203bd8fb51bbc8f925"
+    },
+    {
+      "path": "assets/LabSingularityJourney-wtOc59cH.js",
+      "bytes": 21471,
+      "sha256": "3c14acb460eb9d534481bf9e2ec7388f75adb508b257b16ce47a64209ec0a8ea"
+    },
+    {
+      "path": "assets/LabSiphonObservatoryJourney-BU9DNWyc.js",
+      "bytes": 2734,
+      "sha256": "eaca61e4d9248793c1335207633b07fd19b1ed1b85b279e7bec1b8f6555e8ead"
+    },
+    {
+      "path": "assets/LabTower41RatchetCellJourney-BXTW0Vs2.js",
+      "bytes": 24187,
+      "sha256": "c830c74314654912915cfab8ed4d120a8a2ab2a0d0f3ffd4211bbeea4b150da8"
+    },
+    {
+      "path": "assets/LabTowerJourney-BcSMZ05s.js",
+      "bytes": 31405,
+      "sha256": "815ca188a9020ac3d9f7018e2e74ec4c91a183b933b0f4a4bc70d900ebf6cbe1"
+    },
+    {
+      "path": "assets/LabV8Journey-DZE-GEAQ.js",
+      "bytes": 18975,
+      "sha256": "88217235622690d4b66874793d6e659933aacf29ef9ad4c35770ee28db3c8388"
+    },
+    {
+      "path": "assets/LabWorkshopJourney-BvUGppl5.js",
+      "bytes": 7249,
+      "sha256": "f995f8e965dcd74e7ad13cf48d2dda285853b35c5304afe5f8d99ead708cd022"
+    },
+    {
+      "path": "assets/index-5hPNGx6l.js",
+      "bytes": 2063351,
+      "sha256": "f60222110f154330705b3ed3c6570643e90826f0224eb90f76920268e38e6e70"
+    },
+    {
+      "path": "assets/index-CRyPkPdN.css",
+      "bytes": 48075,
+      "sha256": "4fb7b3a673420fc8210171716940a809345c8b0e548b74d45c40f163fed40e04"
+    },
+    {
+      "path": "build-info.json",
+      "bytes": 106959,
+      "sha256": "a8b33b77b9669554e993894539b04989fc9af8607fa03d79b0ecdf48d3e8f6ed"
+    },
+    {
+      "path": "draco/draco_decoder.js",
+      "bytes": 719410,
+      "sha256": "30e4d486fa020737af10e3c56197693e5b904bdc05b8bfa5d7b06751dec6da04"
+    },
+    {
+      "path": "draco/draco_decoder.wasm",
+      "bytes": 285747,
+      "sha256": "c55a594e8ffd18426d36b27fea9618af3df5e173640a3e56d46f09d76f0574f2"
+    },
+    {
+      "path": "draco/draco_wasm_wrapper.js",
+      "bytes": 58763,
+      "sha256": "e8049906ef3f8f75d3456c22a3f31bfdfe5b5b5bd09ccdec613b9e9a49d554d8"
+    },
+    {
+      "path": "index.html",
+      "bytes": 13557,
+      "sha256": "a12ccaab27dd1c614b153edaa1b2a5f4e10cad64fd983effb81436e635010481"
+    },
+    {
+      "path": "models/runtime/manifest.json",
+      "bytes": 2421,
+      "sha256": "8806346ed3ac0fb096aa26321d5620c16a6a2a55f2523023fb21f6c4749fe2ed"
+    },
+    {
+      "path": "models/runtime/model-01-player.glb",
+      "bytes": 549756,
+      "sha256": "e5b09ff0281377b679d6fdd505fa1ed89550bb662e94e7f593ed67ee50a66a91"
+    },
+    {
+      "path": "models/runtime/model-02-cargo.glb",
+      "bytes": 510376,
+      "sha256": "65763c87e7f14cc807cffa8fc2adc364e8421dae819271a0c406a6b0d2c8c697"
+    },
+    {
+      "path": "models/runtime/model-11-portal-gun.glb",
+      "bytes": 393116,
+      "sha256": "d8c76c41efbbf0a6d70e30ab5a7b70f49fd806e497f67ea06cb28f9f4edca1d7"
+    },
+    {
+      "path": "models/runtime/model-19-lift-platform.glb",
+      "bytes": 404076,
+      "sha256": "afd039e831ff0baa514f076a505ffbb7c57dac2251959b3d858fc92dcf3d04b9"
+    },
+    {
+      "path": "models/runtime/model-22-terminal.glb",
+      "bytes": 377108,
+      "sha256": "9e2f4ff758996f67596d3935041f632bafdf7e84efd4869341920b64a5919c26"
+    },
+    {
+      "path": "models/runtime/model-23-floor-tile.glb",
+      "bytes": 103600,
+      "sha256": "0950bc6ef31bb28939087bad53695f21cde0b9fe5740394df202a0b242f77b0c"
+    },
+    {
+      "path": "models/runtime/model-24-wall-panel.glb",
+      "bytes": 62448,
+      "sha256": "15aaca48f6e436d5e89abf7548c0fe43580bba8faff4619e476d3a6d306b004d"
+    },
+    {
+      "path": "models/runtime/model-28-rotating-panel.glb",
+      "bytes": 366120,
+      "sha256": "3159916bad63903e73b8e660ce4aab8a3b1e38f1231152b68f3df63d6987ac4b"
+    },
+    {
+      "path": "models/runtime/model-29-pressure-platform.glb",
+      "bytes": 390244,
+      "sha256": "ee65bd9706ad4f4658e54ec5ad8f6f45b24d9027e4e6072f162358a4c1b3291b"
+    },
+    {
+      "path": "models/runtime/model-31-wind-generator.glb",
+      "bytes": 25768,
+      "sha256": "024f25db27e96e1efdaa5e200c13a665dee487e798338f86fef985feeae9019e"
+    },
+    {
+      "path": "models/runtime/model-32-spring-ram.glb",
+      "bytes": 25400,
+      "sha256": "958d5ed533736d5779da078be20ae2b0e84212bfc3a00b456dc0106bc0a093d7"
+    },
+    {
+      "path": "models/runtime/model-35-shutter-fan.glb",
+      "bytes": 27816,
+      "sha256": "8e11d5ab83250348f6e08f034ec87d82727162742d5a7be18f981fc523aa907a"
+    },
+    {
+      "path": "models/runtime/model-37-extension-bridge.glb",
+      "bytes": 25764,
+      "sha256": "96173a9ef89375066b08fad8dff1928425863c6b4e6b8c0373c497448f109c55"
+    },
+    {
+      "path": "models/runtime/model-39-cable-winch.glb",
+      "bytes": 28608,
+      "sha256": "301f148938ec83e2a8f4b45c7f9bdfd19fb40ca79d8fb9abc7601caf4fe0eafd"
+    }
+  ],
+  "candidateBytes": 7095981,
+  "candidateInventorySha256": "eaa643a49ad2ad925c45d6bcf82b616ea4bb5a4958a040fca5c7af68f892f09d",
+  "sourceArtifacts": [
+    {
+      "artifactId": 11993935299,
+      "artifactName": "physical-power-cpu-1",
+      "zipBytes": 19928,
+      "zipSha256": "7f6161b153d553494bec94f0967823b8284bd096d187df59aad895cf7341b93e",
+      "files": 2,
+      "bytes": 97625,
+      "inventorySha256": "40447c353a7064b8cabdedc031ac7b52550a6e7248aac12c34be6d8b15417651"
+    },
+    {
+      "artifactId": 11993841623,
+      "artifactName": "physical-power-room25-native",
+      "zipBytes": 8010700,
+      "zipSha256": "08b3afc237b27a6ee4262bf90081f4f5e187e7a687abd6aca3ff43c31e29b1f9",
+      "files": 10,
+      "bytes": 11478358,
+      "inventorySha256": "386ddd1f97da69e6f9a2723b3297d9ae60cad6bd98185376084fa2670ba96d4a"
+    },
+    {
+      "artifactId": 11993641471,
+      "artifactName": "physical-power-native-living",
+      "zipBytes": 379365,
+      "zipSha256": "c54fd74f689ed9c2dbd51a31fdf95e17523494271290c197d68f1c2bf4070936",
+      "files": 13,
+      "bytes": 512710,
+      "inventorySha256": "a0a2ccfb790ce3211d73e0f69e834191ff55c9b4a64071550a14e11d0e2d5e24"
+    },
+    {
+      "artifactId": 11993248426,
+      "artifactName": "physical-power-cpu-5",
+      "zipBytes": 29268,
+      "zipSha256": "3dc3ba788b4585b1aeebd9e14287dc3fd1caa1cfa12a01da36684917e20a73bb",
+      "files": 2,
+      "bytes": 163066,
+      "inventorySha256": "ead31cdcc4dcb4e282882708adcece3b07c224fc6974050a81d3780e05faef2e"
+    },
+    {
+      "artifactId": 11993231647,
+      "artifactName": "physical-power-cpu-4",
+      "zipBytes": 21589,
+      "zipSha256": "08691885884039c817fa166842d9b8ba34aaecdab13a674085dfdb2a2c7a6b3c",
+      "files": 2,
+      "bytes": 104965,
+      "inventorySha256": "df641d1c6b0e13abc8ecc43132410f689ee8baf4aff7d41da0a79f00bebe6706"
+    },
+    {
+      "artifactId": 11993135614,
+      "artifactName": "physical-power-cpu-2",
+      "zipBytes": 21195,
+      "zipSha256": "f1034cacf13ed539e7f14435766d52a8d2dd7ef755ec8604662630b725da7679",
+      "files": 2,
+      "bytes": 103567,
+      "inventorySha256": "8c09f96f4bd266b25314a5f4f7a638581fbe3736370889b36f5f8dde3e26cafb"
+    },
+    {
+      "artifactId": 11993063334,
+      "artifactName": "physical-power-cpu-0",
+      "zipBytes": 19112,
+      "zipSha256": "0e1bda86ed5ce5d4d018c17915b5744758e14fbc00960dc6a3f4313f1c2708c6",
+      "files": 2,
+      "bytes": 96979,
+      "inventorySha256": "9d404f59660838a1cf7a248c278aa0156e3128e0db526fb7565edd72e8eb52c9"
+    },
+    {
+      "artifactId": 11992951061,
+      "artifactName": "physical-power-ordinary-living",
+      "zipBytes": 6440,
+      "zipSha256": "52c0d1a17d01447edf881a63f06e0f1f4202c0fc7a30fe07c5ba751bfc31a91d",
+      "files": 1,
+      "bytes": 29196,
+      "inventorySha256": "d28da94e5c20df275052437496c11c586928a994dcdf8b7c5a7da41a81af7e17"
+    },
+    {
+      "artifactId": 11992877722,
+      "artifactName": "physical-power-native-early",
+      "zipBytes": 512759,
+      "zipSha256": "7f6ca55228f0e69c5a27304bec20b6d75b05d22137ba2d6e3e6d5940d050f96a",
+      "files": 13,
+      "bytes": 604331,
+      "inventorySha256": "c140b070faf2afaa2bdf4e821fbe7cc49742bf49e5e275f107e8460eb0228761"
+    },
+    {
+      "artifactId": 11992791565,
+      "artifactName": "physical-power-ordinary-energy",
+      "zipBytes": 15319,
+      "zipSha256": "34713a2b69090db74b0b733349f233f15bd653cd178ef39a7f58cde69fe6016e",
+      "files": 1,
+      "bytes": 139946,
+      "inventorySha256": "9e2b913e33a34a5d6c5e55152055c94ec50a9809816173b10c46eff2a45faf0c"
+    },
+    {
+      "artifactId": 11992696487,
+      "artifactName": "physical-power-ordinary-optics",
+      "zipBytes": 5504,
+      "zipSha256": "560d4fd63bab74791fe6e14dd4b90c357b7d6ab1d8ca715ae3eb1fdaf228d134",
+      "files": 1,
+      "bytes": 25303,
+      "inventorySha256": "09bd1c24b1f191aa7742563f39b7356306121f3e6cc688c6bc555807518637e9"
+    },
+    {
+      "artifactId": 11992672119,
+      "artifactName": "physical-power-ordinary-fracture",
+      "zipBytes": 7296,
+      "zipSha256": "f904f1253bde23561e64549e660abf1dd4de0aeb6a4020e3c88c185712943495",
+      "files": 1,
+      "bytes": 34363,
+      "inventorySha256": "b09f152b9830d83763399365af1ceb582fdf3b98d09e784fa8633b339c5322d3"
+    },
+    {
+      "artifactId": 11992586985,
+      "artifactName": "physical-power-physics",
+      "zipBytes": 4630,
+      "zipSha256": "d448d22e59f9836c10374a5cc09c305a14175514fc5aa81865e1070648ceeffb",
+      "files": 2,
+      "bytes": 15333,
+      "inventorySha256": "fd29c0f1c520e20df8ac24cd739022684b74eb1f3648d351499377eba77e9a53"
+    },
+    {
+      "artifactId": 11992528122,
+      "artifactName": "physical-power-cpu-3",
+      "zipBytes": 222315,
+      "zipSha256": "33b6d136263fb290964fa3609edb71f6fc9a56ed089c436d686969b2dc9c661c",
+      "files": 2,
+      "bytes": 1468662,
+      "inventorySha256": "df2592ccf212470bbab339c1971d76e62d0d9900591549a9299d6118d6cdffa8"
+    },
+    {
+      "artifactId": 11992498593,
+      "artifactName": "physical-power-native-energy",
+      "zipBytes": 429517,
+      "zipSha256": "82eb1bf4cca2ee730e23435deaeb019e33905c7d999e2663606c20f19709baa8",
+      "files": 13,
+      "bytes": 699569,
+      "inventorySha256": "a579c8883f67c410c5385010a1fa6d8dd2be4299cd4c15ea041f7c3bac3276e4"
+    },
+    {
+      "artifactId": 11992453951,
+      "artifactName": "physical-power-native-fracture",
+      "zipBytes": 425059,
+      "zipSha256": "9f5cd011fa18dfc6016ee777bd784ae3c49664e6b9bf95138b718a0d09b4bea0",
+      "files": 13,
+      "bytes": 569802,
+      "inventorySha256": "d11e406049f5b90125d10f1598e5e3d0dc3f473c17ced661be54947bae0484ba"
+    },
+    {
+      "artifactId": 11992427265,
+      "artifactName": "physical-power-dist",
+      "zipBytes": 4486118,
+      "zipSha256": "13a0c32f58890651e5bd6cdf49418af29b1f8e1f783c6ce1f13b54dd51e0ac02",
+      "files": 80,
+      "bytes": 7095981,
+      "inventorySha256": "eaa643a49ad2ad925c45d6bcf82b616ea4bb5a4958a040fca5c7af68f892f09d"
+    },
+    {
+      "artifactId": 11992418818,
+      "artifactName": "physical-power-native-optics",
+      "zipBytes": 360922,
+      "zipSha256": "3d35776542b7843410a4005270235add14771d4fd5cf32e90b9241cb7071d04e",
+      "files": 13,
+      "bytes": 482920,
+      "inventorySha256": "ada886cf6e5edc0b811b68cddda0a38665c9630feb6c9ad4576ccb32090f67cb"
+    },
+    {
+      "artifactId": 11992243109,
+      "artifactName": "physical-power-presentation",
+      "zipBytes": 3585831,
+      "zipSha256": "fad93623ef091a33bb698d1e7bf5db887a242e41cd2cb2226dedb0ce302d90b3",
+      "files": 19,
+      "bytes": 3630615,
+      "inventorySha256": "0b682ca16e32720242b1b4ad141ba7aa9905d8b0bf5dfcca1acbc0a250639d89"
+    },
+    {
+      "artifactId": 11991984621,
+      "artifactName": "physical-power-native-castle",
+      "zipBytes": 47600,
+      "zipSha256": "50fe4e5e8fbecfcbafe70960afbc81f6c1f2e247c18832a783b63ef11b5fdd29",
+      "files": 4,
+      "bytes": 140961,
+      "inventorySha256": "a8c12551343f8d6e74274a0a1baba35fb3e702f84981b911022de0582040092c"
+    },
+    {
+      "artifactId": 11991734642,
+      "artifactName": "physical-power-ordinary-castle",
+      "zipBytes": 6714,
+      "zipSha256": "87406ba82c52b65b225fd25de27b5de249835b2016b6789fff6f3f1e77df3838",
+      "files": 1,
+      "bytes": 42332,
+      "inventorySha256": "7dab20d924fe5e348a9994da21fd79c572ebc01b457575764d8387f134225b4d"
+    },
+    {
+      "artifactId": 11991613627,
+      "artifactName": "physical-power-yandex",
+      "zipBytes": 4330847,
+      "zipSha256": "6b36219e43c2c78d65679d90c941f3ba85602bcd02fec8781c288c16f51abdb5",
+      "files": 2,
+      "bytes": 4333720,
+      "inventorySha256": "b25be11bf11e454880ff9e1375725788fe848248241950d822ba31602c9ba406"
+    },
+    {
+      "artifactId": 11991563848,
+      "artifactName": "physical-power-build",
+      "zipBytes": 5447,
+      "zipSha256": "c8490a759aebee4f06755ed32be12597a1d304f3d2f8ea0e216e2992093680fc",
+      "files": 1,
+      "bytes": 15672,
+      "inventorySha256": "7f570b1eb148e8c2983152747530d86707ea41f3255431343360db0660c1da74"
+    },
+    {
+      "artifactId": 11991114863,
+      "artifactName": "physical-power-ordinary-early",
+      "zipBytes": 3371,
+      "zipSha256": "baa770629728e56cbfe6355c41f573c696a6c559bf83db260f5286f13318ba85",
+      "files": 1,
+      "bytes": 14688,
+      "inventorySha256": "918365a53ed8f3aacec5eddd7ba27e1fb9c7f4b28cb20b516c927732a33d690d"
+    }
+  ],
+  "sourceProvider": {
+    "run": {
+      "path": "/workspace/scratch/4668c0c884c8/v57-source-provider/run.json",
+      "sha256": "da686cd13050a36c35c8a488ca02a046a75181b3c002bb5acb534b16cf880251"
+    },
+    "jobs": {
+      "path": "/workspace/scratch/4668c0c884c8/v57-source-provider/jobs.json",
+      "sha256": "f87c4e412d6d8374ddf64490083dff916711edf55f6c1d196409c6102e6bcf02"
+    },
+    "commit": {
+      "path": "/workspace/scratch/4668c0c884c8/v57-source-provider/commit.json",
+      "sha256": "6272afd11707e0c4ee8af8a4953d4634081baf71b2e57755ce580c58ac966aed"
+    },
+    "artifacts": {
+      "path": "/workspace/scratch/4668c0c884c8/v57-source-provider/artifacts.json",
+      "sha256": "4d54b8d10769202d25c2fe6f6cc3c78ad7df20a92e74614fd31eef6dac2443db"
+    }
+  },
+  "scope": "Exact completed SOURCE attempt:22jobs/24archives,51ordinary+51production-native wins, original assets, finite physical regressions, real Room25 MP4 and immutable current upper-contact/ride witnesses. No public acceptance.",
+  "limitations": [
+    "Automated software WebGL and scripted input; human puzzle discovery and physical-device FPS remain unmeasured.",
+    "Only Room25 has a continuous current MP4;51 native wins and the castle upper mechanism are backed by finish frames and physical event witnesses, not full-route movies.",
+    "The retained Room25 movie samples4fps;120Hz force evidence is authenticated aggregate observations, not a retained complete120Hz trace.",
+    "Finite regressions do not prove closure of every bypass.",
+    "No live Yandex SDK, advertising delivery, platform moderation or publication acceptance.",
+    "The castle is not500 unique stages; the historical500-stage and proved15-minute human-speedrun requirements remain open."
+  ]
+}
