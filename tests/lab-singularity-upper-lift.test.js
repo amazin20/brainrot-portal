@@ -31,6 +31,19 @@ test('upper horizontal shelf carries real pressure load, then a tenfold gravity 
  }finally{f.dispose();}
 });
 
+test('upper first retained interval binds actual solver contact force to independently measured changing momentum',()=>{
+ const f=fixture();try{
+  const c=f.cell;f.until(()=>c.height>6.4&&c.diagnostics().direction===1);assert.equal(c.armCatch(),true);
+  let before,step;for(let i=0;i<480&&!c.retained;i++){before=c.liftBody.velocity.y;step=f.game.physics.world.stepnumber;f.step();}
+  assert.equal(c.retained,true);const d=c.diagnostics(),w=d.forceBalance,after=c.liftBody.velocity.y;
+  assert.equal(w.forceStep,step);assert.equal(w.contactStep,step+1);assert.equal(w.contactStep,d.worldStep);assert.equal(w.dt,DT);assert.equal(w.velocityBefore,before);assert.equal(w.velocityAfter,after);assert.equal(w.appliedPressure,d.lastForce);
+  let measuredContact=0;for(const contact of f.game.physics.world.contacts){if(contact.enabled===false||contact.multiplier<=0||![contact.bi,contact.bj].includes(c.liftBody)||![contact.bi,contact.bj].includes(c.pawlBody)||![contact.si,contact.sj].includes(c.liftBody.shapes[0])||![contact.si,contact.sj].includes(c.pawlBody.shapes[0]))continue;const normal=(contact.bi===c.liftBody?-1:1)*contact.ni.y;if(normal>.65)measuredContact+=normal*contact.multiplier;}
+  const inertia=c.liftBody.mass*(after-before)/DT,external=measuredContact+w.appliedPressure+c.liftBody.mass*f.game.physics.world.gravity.y;
+  assert.ok(Math.abs(inertia)>.01,'The first retained interval really is still decelerating');assert.ok(Math.abs(inertia-external)<.002,'Actual solved contact impulses balance independently measured momentum');assert.equal(w.inertialForce,inertia);assert.equal(d.catchForce,measuredContact);
+  c.reset();assert.equal(c.diagnostics().forceBalance,null,'Reset cannot reuse a preceding completed interval');
+ }finally{f.dispose();}
+});
+
 test('upper unlatched power loss falls by gravity while an accepted loaded catch refuses destructive repeated input',()=>{
  const f=fixture();try{f.cell.powered=false;for(let i=0;i<60;i++)f.step();assert.ok(f.cell.height<3.7);assert.equal(f.cell.diagnostics().lastForce,0);assert.ok(f.cell.liftBody.velocity.y<-9);f.cell.reset();f.catchCar();const hand=f.cell.diagnostics().handCount;assert.equal(f.cell.armCatch(),false);assert.equal(f.cell.diagnostics().handCount,hand);for(let i=0;i<240;i++)f.step();assert.equal(f.cell.retained,true);}
  finally{f.dispose();}

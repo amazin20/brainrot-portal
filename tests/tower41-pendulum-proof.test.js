@@ -11,7 +11,7 @@ function receipt(){
  const founded=(name,worldStep)=>({name,kind:'founded-floor',worldStep,grounded:true,live:true,footprintInside:true,foot:[0,0,0],velocity:[0,0,0],supportNormal:[0,1,0],supportHeight:0,supportGap:0,bodyId:9,shapeId:90,shapeIndex:0,colliderId:'founded-island',bodyPosition:[0,-.2,0],bodyQuaternion:[0,0,0,1],shapeHalf:[2,.2,4],bounds:[[-2,-.4,-4],[2,0,4]]});
  const deck=(name,worldStep,x)=>({...founded(name,worldStep),kind:'owned-oriented-deck',foot:[x,.2,0],supportHeight:.2,bodyPosition:[0,0,0],bodyId:3,shapeId:30,shapeIndex:0,colliderId:'owned-deck',originalCargoBodyId:8,capsuleGrounded:true,localFoot:[x,.2,0],shapeHalf:[6,.2,2],shapeOffset:[0,0,0],pose:{step:worldStep,center:[0,0,0],quaternion:[0,0,0,1],bounds:[[-6,-.2,-2],[6,.2,2]]}});
  const ride=(worldStep,height)=>({worldStep,bodyId:14,shapeId:140,colliderId:'upper-owned-deck',foot:[-41,36+height,33],height,supportHeight:36+height,normal:[0,1,0],grounded:true});
- const upper={ready:true,disposed:false,worldStep:300,contactStep:300,height:6,pawlAngle:-.016,latched:true,retained:true,retainedTicks:24,powered:true,direction:-1,lastForce:75.85,pressureWork:32,gravity:[0,-19.5,0],catchForce:8,catchContacts:2,seatForce:0,seatContacts:0,topForce:0,bottomForce:0,handCount:1,handImpulse:1.2,catchWitness:{worldStep:260,action:'close',handCount:1,angularImpulse:-1.2,angularMomentumBefore:.3,angularMomentumAfter:-.9,height:6.49,liftBodyId:14,pawlBodyId:15},rideComplete:true,rideTicks:70,rideLow:ride(220,.2),rideHigh:ride(250,5.8),bodyIds:[12,13,14,15],bodiesPresent:true,constraintIds:[20,21],constraintsPresent:true,currentCollisionValid:true,constraintEquationCounts:[5,5],constraintMotorEquationPresent:[false,false],lift:{...body(14),mass:4.3,position:[-41,41.8,33]},pawl:{...body(15),mass:.28,quaternion:[0,Math.sin(-.016/2),0,Math.cos(-.016/2)]},deckShapeId:140,pawlShapeId:150,pawlHeelShapeId:151,seatBodyId:13,seatShapeId:130};
+ const upper={ready:true,disposed:false,worldStep:300,contactStep:300,height:6,pawlAngle:-.016,latched:true,retained:true,retainedTicks:24,powered:true,direction:-1,lastForce:75.85,pressureWork:32,forceBalance:{forceStep:299,contactStep:300,dt:1/120,liftBodyId:14,velocityBefore:0,velocityAfter:0,appliedPressure:75.85,inertialForce:0},gravity:[0,-19.5,0],catchForce:8,catchContacts:2,seatForce:0,seatContacts:0,topForce:0,bottomForce:0,handCount:1,handImpulse:1.2,catchWitness:{worldStep:260,action:'close',handCount:1,angularImpulse:-1.2,angularMomentumBefore:.3,angularMomentumAfter:-.9,height:6.49,liftBodyId:14,pawlBodyId:15},rideComplete:true,rideTicks:70,rideLow:ride(220,.2),rideHigh:ride(250,5.8),bodyIds:[12,13,14,15],bodiesPresent:true,constraintIds:[20,21],constraintsPresent:true,currentCollisionValid:true,constraintEquationCounts:[5,5],constraintMotorEquationPresent:[false,false],lift:{...body(14),mass:4.3,position:[-41,41.8,33]},pawl:{...body(15),mass:.28,quaternion:[0,Math.sin(-.016/2),0,Math.cos(-.016/2)]},deckShapeId:140,pawlShapeId:150,pawlHeelShapeId:151,seatBodyId:13,seatShapeId:130};
  return{physicalLowerCatch:true,physicalUpperCatch:true,twoPhysicalCatches:true,upperPhysicalCell:upper,originalCargo:true,lowerAngle:.02,upperHeight:6,lowerPhysicalCell:{ready:true,disposed:false,latched:true,catchArmed:true,bodiesPresent:true,constraintsPresent:true,originalCargoPresent:true,originalCargoIdentityValid:true,originalCargoFree:true,currentCollisionValid:true,unloadedRetained:true,readyForCrossing:true,loadContact:false,loadNormalForce:0,loadContactCount:0,originalCargoRawContact:false,originalCargoRawContactCount:0,originalCargoClearedCup:true,worldStep:300,contactStep:300,loadedStep:100,loadedTicks:80,loadedNormalImpulse:40,lastLoadedNormalForce:60,retainedStartStep:120,retainedTicks:181,pawlContactCount:2,pawlNormalForce:15,seatContactCount:4,seatNormalForce:8,angle:.02,pawlAngle:0,bodyIds:[1,2,3,4],constraintIds:[10,11],constraintEquationCounts:[5,5],constraintMotorEnabled:[false,false],constraintMotorEquationPresent:[false,false],originalCargoBodyId:8,originalCargoShapeId:80,cupShapeId:31,deckShapeId:30,pawlShapeId:40,pawlHeelShapeId:41,seatBodyId:2,seatShapeId:20,bridge:{...body(3),COMOffset:[-.5,-.47,0]},pawl:body(4),loadedWitness:{first:load(20),last:load(100)},handCount:1,handAngularImpulse:1.2,catchWitness:{worldStep:70,handCount:1,bridgeAngle:-.12,angularImpulse:-1.2,action:'close',qualifiedLoad:true,loadContact:true,loadedStep:70,loadedAtStep:70,loadNormalForce:60,originalCargoBodyId:8,originalCargoShapeId:80,cupBodyId:3,cupShapeId:31,pawlBodyId:4,angularMomentumBefore:0,angularMomentumAfter:-1.2}},lowerCrossing:{complete:true,supportedDeckSteps:46,deckBodyId:3,deckShapeIndex:0,originalCargoBodyId:8,nearLandingStep:150,firstStep:160,midStep:180,farStep:200,islandStep:210,nearLanding:founded('near-landing',150),checkpoints:[deck('near',160,-4),deck('mid',180,0),deck('far',200,4),founded('island',210)]}};
 }
 
@@ -20,11 +20,30 @@ test('frozen pendulum receipt binds two physical catches, original load, finite 
 });
 
 test('frozen upper catch receipt accepts full gravity retention after pressure is removed without inventing a heel reaction',()=>{
- const proof=receipt(),upper=proof.upperPhysicalCell;upper.powered=false;upper.lastForce=0;upper.catchForce=upper.lift.mass*19.5;
+ const proof=receipt(),upper=proof.upperPhysicalCell;upper.powered=false;upper.lastForce=upper.forceBalance.appliedPressure=0;upper.catchForce=upper.lift.mass*19.5;
  assert.equal(upper.seatForce,0);assert.equal(upper.seatContacts,0);assert.equal(assertPendulumPhysicalProof(proof,8).pass,true);
 });
 
+test('frozen upper receipt accepts measured settling acceleration without pretending that the contact is static',()=>{
+ const proof=receipt(),upper=proof.upperPhysicalCell,velocityBefore=.008144706578635742,velocityAfter=.005722116141124358;
+ upper.lastForce=75.78484234737093;upper.catchForce=6.8150774464477495;upper.lift.velocity[1]=velocityAfter;
+ upper.forceBalance={forceStep:299,contactStep:300,dt:1/120,liftBodyId:upper.lift.id,velocityBefore,velocityAfter,appliedPressure:upper.lastForce,inertialForce:upper.lift.mass*(velocityAfter-velocityBefore)*120};
+ assert.ok(Math.abs(upper.catchForce-(upper.lift.mass*19.5-upper.lastForce))>.75,'This measured transient genuinely fails the invalid static assumption');
+ assert.equal(assertPendulumPhysicalProof(proof,8).pass,true);
+});
+
 const forgeries={
+ 'missing actual force interval':p=>delete p.upperPhysicalCell.forceBalance,
+ 'stale force application step':p=>p.upperPhysicalCell.forceBalance.forceStep--,
+ 'stale force contact step':p=>p.upperPhysicalCell.forceBalance.contactStep--,
+ 'wrong force interval dt':p=>p.upperPhysicalCell.forceBalance.dt=1/60,
+ 'foreign force body':p=>p.upperPhysicalCell.forceBalance.liftBodyId=15,
+ 'force velocity detached from current body':p=>p.upperPhysicalCell.forceBalance.velocityAfter=.001,
+ 'force pressure detached from actual actuator':p=>p.upperPhysicalCell.forceBalance.appliedPressure=0,
+ 'invented inertial force':p=>p.upperPhysicalCell.forceBalance.inertialForce=2,
+ 'invented previous velocity':p=>p.upperPhysicalCell.forceBalance.velocityBefore=.1,
+ 'coherent invented acceleration with unbalanced contact':p=>{const u=p.upperPhysicalCell;u.forceBalance.velocityBefore=.1;u.forceBalance.inertialForce=-u.lift.mass*.1*120;},
+
  'held original':p=>p.lowerPhysicalCell.originalCargoFree=false,
  'raw cup contact after nominal unload':p=>p.lowerPhysicalCell.originalCargoRawContact=true,
  'cargo still within finite cup':p=>p.lowerPhysicalCell.originalCargoClearedCup=false,

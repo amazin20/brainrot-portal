@@ -79,7 +79,12 @@ export function assertPendulumPhysicalProof(proof,originalCargoBodyId){
  for(const key of ['deckShapeId','pawlShapeId','pawlHeelShapeId','seatBodyId','seatShapeId'])integer(upper[key]);assert.ok(upper.bodyIds.includes(upper.seatBodyId));assert.notEqual(upper.seatBodyId,upper.lift.id);assert.notEqual(upper.seatBodyId,upper.pawl.id);assert.equal(new Set([upper.deckShapeId,upper.pawlShapeId,upper.pawlHeelShapeId,upper.seatShapeId]).size,4);
  assert.equal(typeof upper.powered,'boolean');assert.equal(upper.direction,-1);finite(upper.lastForce);assert.ok(Math.abs(upper.lastForce)<=200);if(!upper.powered)assert.equal(upper.lastForce,0);finite(upper.pressureWork);
  vector(upper.gravity,3);assert.deepEqual(upper.gravity,[0,-19.5,0]);integer(upper.catchContacts,1);positive(upper.catchForce);
- const downwardLoad=-upper.gravity[1]*upper.lift.mass-upper.lastForce;positive(downwardLoad);assert.ok(Math.abs(upper.catchForce-downwardLoad)<=Math.max(.75,downwardLoad*.05),'The actual catch reaction must carry the measured net downward load');
+ const balance=upper.forceBalance;integer(balance?.forceStep,0);integer(balance.contactStep,1);assert.equal(balance.forceStep+1,upper.worldStep);assert.equal(balance.contactStep,upper.contactStep);assert.equal(balance.liftBodyId,upper.lift.id);
+ finite(balance.dt);assert.ok(Math.abs(balance.dt-1/120)<1e-12,'Momentum must come from one actual 120 Hz interval');
+ for(const key of ['velocityBefore','velocityAfter','appliedPressure','inertialForce'])finite(balance[key]);
+ assert.equal(balance.velocityAfter,upper.lift.velocity[1]);assert.equal(balance.appliedPressure,upper.lastForce);
+ const measuredInertia=upper.lift.mass*(balance.velocityAfter-balance.velocityBefore)/balance.dt;assert.ok(Math.abs(measuredInertia-balance.inertialForce)<1e-7,'Recorded momentum must match the measured body velocities');
+ const downwardLoad=-upper.gravity[1]*upper.lift.mass-balance.appliedPressure;positive(downwardLoad);assert.ok(Math.abs(upper.catchForce-downwardLoad-measuredInertia)<=Math.max(.75,downwardLoad*.05),'The actual catch reaction must balance the measured downward load and change in momentum');
  for(const key of ['seatForce','topForce','bottomForce']){finite(upper[key]);assert.ok(upper[key]>=0);}integer(upper.seatContacts);assert.ok(upper.topForce<1e-5&&upper.bottomForce<1e-5,'End stops cannot substitute for the upper retaining catch');
  // The vertical catch bearing can carry the shelf's own load, so its heel
  // need not press on the plinth. The car-to-shelf reaction is mandatory.
