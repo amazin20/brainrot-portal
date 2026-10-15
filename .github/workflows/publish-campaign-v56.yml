@@ -1,0 +1,461 @@
+# One append-only deployment; subsequent frozen SOURCE5 drivers observe actual PUBLIC bytes.
+# The inherited GitHub producer identity is preserved. GITHUB_TOKEN supplies only authentication.
+name: Publish the independently accepted complete campaign v56
+'on':
+  push:
+    branches:
+    - main
+    paths:
+    - tools/campaign-v56-release.json
+permissions:
+  contents: read
+  actions: read
+  deployments: read
+concurrency:
+  group: pages
+  cancel-in-progress: false
+defaults:
+  run:
+    shell: bash
+env:
+  BUILD_COMMIT: a3c81ee59a9b2cbf1b23254857dd8c2a6f6b3c38
+  SOURCE_REVIEW_RUN_ID: '38451783602'
+  SOURCE_REVIEW_RUN_ATTEMPT: '1'
+  PUBLIC_CAMPAIGN_URL: https://amazin20.github.io/brainrot-portal/campaign-v56/
+  CODEX_PRIMARY_RUNTIME_PYTHON: /usr/bin/python3
+  GITHUB_TOKEN: ${{ github.token }}
+jobs:
+  assemble:
+    if: github.repository == 'amazin20/brainrot-portal' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        ref: ${{ github.sha }}
+        fetch-depth: 0
+        persist-credentials: false
+    - uses: actions/checkout@v4
+      with:
+        ref: a3c81ee59a9b2cbf1b23254857dd8c2a6f6b3c38
+        path: source
+        fetch-depth: 0
+        persist-credentials: false
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 22
+        cache: npm
+        cache-dependency-path: source/package-lock.json
+    - name: Install locked SOURCE5 dependencies
+      working-directory: source
+      run: npm ci
+    - name: Install controller test dependencies
+      run: npm ci
+    - name: Install the exact browser observer package before deployment
+      working-directory: source
+      run: npm install --no-save --package-lock=false puppeteer-core@24.16.0
+    - name: Verify actual SOURCE5 Puppeteer module identity before deployment
+      run: node scripts/publish-campaign-v56.mjs verify-browser-module
+    - name: Install independent image and movie decoders
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y python3-pil python3-yaml ffmpeg
+        /usr/bin/python3 -c "import PIL, yaml; print(PIL.__version__)"
+        ffmpeg -version
+    - name: Verify the controller contracts before any deployment
+      run: |
+        node --check scripts/publish-campaign-v56-run.mjs
+        node --test scripts/test-campaign-v56-release.mjs
+        python3 -m py_compile scripts/publish-campaign-v56.py scripts/restore-campaign-v56-baseline.py
+        python3 scripts/validate-campaign-v56-workflow.py
+        python3 scripts/test-restore-campaign-v56-baseline.py
+    - name: Authenticate the full SOURCE5 and accepted existing PUBLIC baseline
+      run: |
+        node scripts/publish-campaign-v56.mjs guard preparation
+        node scripts/publish-campaign-v56.mjs download
+        node scripts/publish-campaign-v56.mjs verify-source
+        node scripts/publish-campaign-v56.mjs verify-baseline
+    - name: Extract every pinned accepted baseline byte
+      run: |
+        python3 scripts/restore-campaign-v56-baseline.py --manifest proof/baseline-verification/publication-manifest.json --output baseline --pins tools/campaign-v56-release.json
+    - name: Append the exact SOURCE5 package while preserving the entire current site
+      run: |
+        test ! -e source/dist
+        cp -a proof/review-artifacts/campaign-polish-dist source/dist
+        python3 scripts/publish-campaign-v56.py assemble --baseline baseline --dist source/dist --source-binding proof/source-binding.json --output site --proof proof --pins tools/campaign-v56-release.json --publisher "$GITHUB_SHA" --run "$GITHUB_RUN_ID" --attempt "$GITHUB_RUN_ATTEMPT"
+    - name: Upload the single complete Pages package
+      uses: actions/upload-pages-artifact@v3
+      with:
+        path: site
+    - name: Prepare the bounded immutable inputs for all PUBLIC consumers
+      run: node scripts/publish-campaign-v56.mjs prepare-public-input
+    - uses: actions/upload-artifact@v4
+      with:
+        name: campaign-v56-prepared-${{ github.run_id }}-${{ github.run_attempt }}
+        path: proof/public-input
+        retention-days: 10
+        if-no-files-found: error
+  deploy:
+    needs: assemble
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    permissions:
+      contents: read
+      actions: read
+      deployments: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        ref: ${{ github.sha }}
+        fetch-depth: 0
+        persist-credentials: false
+    - uses: actions/checkout@v4
+      with:
+        ref: a3c81ee59a9b2cbf1b23254857dd8c2a6f6b3c38
+        path: source
+        fetch-depth: 0
+        persist-credentials: false
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 22
+        cache: npm
+        cache-dependency-path: source/package-lock.json
+    - name: Download this PUBLIC run preparation
+      uses: actions/download-artifact@v4
+      with:
+        name: campaign-v56-prepared-${{ github.run_id }}-${{ github.run_attempt }}
+        path: proof
+    - name: Verify every existing public byte immediately before deployment
+      run: |
+        python3 scripts/publish-campaign-v56.py check-public --manifest proof/publication-manifest.json --output proof/public-preflight.json --pins tools/campaign-v56-release.json --publisher "$GITHUB_SHA" --run "$GITHUB_RUN_ID" --attempt "$GITHUB_RUN_ATTEMPT" --phase preflight
+    - name: Recheck the actual deployment lease
+      run: node scripts/publish-campaign-v56.mjs guard deploy
+    - id: deployment
+      uses: actions/deploy-pages@v4
+    - name: Fetch and verify every deployed public byte
+      run: |
+        python3 scripts/publish-campaign-v56.py check-public --manifest proof/publication-manifest.json --output proof/public-bytes.json --pins tools/campaign-v56-release.json --publisher "$GITHUB_SHA" --run "$GITHUB_RUN_ID" --attempt "$GITHUB_RUN_ATTEMPT" --phase published
+        node scripts/publish-campaign-v56.mjs guard published
+    - if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: campaign-v56-deploy-${{ github.run_id }}-${{ github.run_attempt }}
+        path: proof
+        retention-days: 10
+        if-no-files-found: error
+  native:
+    needs: deploy
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+        - part: early
+          rooms: 1,2,3,4,5,6,7,8,9,10
+        - part: energy
+          rooms: 11,12,13,14,15,16,17,18,19,20
+        - part: living
+          rooms: 21,22,23,24,25,26,27,28,29,30
+        - part: optics
+          rooms: 31,32,33,34,35,36,37,38,39,40
+        - part: fracture
+          rooms: 42,43,44,45,46,47,48,49,50,51
+        - part: castle
+          rooms: '41'
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        ref: ${{ github.sha }}
+        fetch-depth: 0
+        persist-credentials: false
+    - uses: actions/checkout@v4
+      with:
+        ref: a3c81ee59a9b2cbf1b23254857dd8c2a6f6b3c38
+        path: source
+        fetch-depth: 0
+        persist-credentials: false
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 22
+        cache: npm
+        cache-dependency-path: source/package-lock.json
+    - name: Download this PUBLIC run preparation
+      uses: actions/download-artifact@v4
+      with:
+        name: campaign-v56-prepared-${{ github.run_id }}-${{ github.run_attempt }}
+        path: proof
+    - name: Install locked SOURCE5 dependencies
+      working-directory: source
+      run: npm ci
+    - name: Install the declared capture driver
+      working-directory: source
+      run: npm install --no-save --package-lock=false puppeteer-core@24.16.0
+    - name: Verify the actual Puppeteer ESM and CJS module identity before browser launch
+      run: node scripts/publish-campaign-v56.mjs verify-browser-module
+    - name: Locate the actual Chromium binary
+      run: |
+        printf 'CHROME_PATH=%s\n' "$(command -v google-chrome || command -v chromium)" >> "$GITHUB_ENV"
+    - name: Install independent image and movie decoders
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y python3-pil python3-yaml ffmpeg
+        /usr/bin/python3 -c "import PIL, yaml; print(PIL.__version__)"
+        ffmpeg -version
+    - name: Retain all original SOURCE5 candidate bytes for frozen drivers
+      run: |
+        python3 - <<'CHECK'
+        import pathlib, shutil
+        src=pathlib.Path("proof/review-artifacts/campaign-polish-dist")
+        dst=pathlib.Path("source/dist")
+        assert src.is_dir() and not dst.exists()
+        assert len([p for p in src.rglob("*") if p.is_file()]) == 80
+        shutil.copytree(src, dst)
+        for p in src.rglob("*"):
+         if p.is_file(): assert p.read_bytes() == (dst/p.relative_to(src)).read_bytes()
+        CHECK
+    - name: Capture this complete ordinary route group on actual PUBLIC bytes
+      run: |
+        role="native-${{ matrix.part }}"
+        node scripts/publish-campaign-v56.mjs capture-origin "$role"
+        source "$GITHUB_WORKSPACE/proof/public-$role/env.sh"
+        export SOURCE_DIR="$GITHUB_WORKSPACE/source"
+        export PUBLIC_BROWSER_OBSERVATIONS="$GITHUB_WORKSPACE/proof/public-$role/browser-native.json"
+        cd "$SOURCE_DIR"
+        CASE=route STRICT_CAPTURE=1 REUSE_PAGE=0 LEVELS="${{ matrix.rooms }}" PAGE_URL="$PUBLIC_CAMPAIGN_URL" START_SERVER=0 ROUTE_TIMEOUT_MS=2700000 OUT_DIR="$GITHUB_WORKSPACE/proof/public-$role/payload" timeout --signal=TERM --kill-after=30s 45m node --import "$GITHUB_WORKSPACE/scripts/observe-campaign-v56-browser.mjs" scripts/qa-creative-browser.mjs
+    - name: Bind the raw capture and independent browser observations
+      if: always()
+      run: node scripts/publish-campaign-v56.mjs wrap-capture "native-${{ matrix.part }}"
+    - if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: campaign-v56-public-native-${{ matrix.part }}-${{ github.run_id }}-${{ github.run_attempt }}
+        path: proof/public-native-${{ matrix.part }}
+        retention-days: 10
+        if-no-files-found: error
+  presentation:
+    needs: deploy
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        ref: ${{ github.sha }}
+        fetch-depth: 0
+        persist-credentials: false
+    - uses: actions/checkout@v4
+      with:
+        ref: a3c81ee59a9b2cbf1b23254857dd8c2a6f6b3c38
+        path: source
+        fetch-depth: 0
+        persist-credentials: false
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 22
+        cache: npm
+        cache-dependency-path: source/package-lock.json
+    - name: Download this PUBLIC run preparation
+      uses: actions/download-artifact@v4
+      with:
+        name: campaign-v56-prepared-${{ github.run_id }}-${{ github.run_attempt }}
+        path: proof
+    - name: Install locked SOURCE5 dependencies
+      working-directory: source
+      run: npm ci
+    - name: Install the declared capture driver
+      working-directory: source
+      run: npm install --no-save --package-lock=false puppeteer-core@24.16.0
+    - name: Verify the actual Puppeteer ESM and CJS module identity before browser launch
+      run: node scripts/publish-campaign-v56.mjs verify-browser-module
+    - name: Locate the actual Chromium binary
+      run: |
+        printf 'CHROME_PATH=%s\n' "$(command -v google-chrome || command -v chromium)" >> "$GITHUB_ENV"
+    - name: Install independent image and movie decoders
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y python3-pil python3-yaml ffmpeg
+        /usr/bin/python3 -c "import PIL, yaml; print(PIL.__version__)"
+        ffmpeg -version
+    - name: Retain all original SOURCE5 candidate bytes for frozen drivers
+      run: |
+        python3 - <<'CHECK'
+        import pathlib, shutil
+        src=pathlib.Path("proof/review-artifacts/campaign-polish-dist")
+        dst=pathlib.Path("source/dist")
+        assert src.is_dir() and not dst.exists()
+        assert len([p for p in src.rglob("*") if p.is_file()]) == 80
+        shutil.copytree(src, dst)
+        for p in src.rglob("*"):
+         if p.is_file(): assert p.read_bytes() == (dst/p.relative_to(src)).read_bytes()
+        CHECK
+    - name: Authenticate the actual presentation producer
+      run: |
+        node scripts/publish-campaign-v56.mjs capture-origin presentation
+    - name: Observe the actual PUBLIC menu with the frozen SOURCE5 protocol
+      run: |
+        source "$GITHUB_WORKSPACE/proof/public-presentation/env.sh"
+        export SOURCE_DIR="$GITHUB_WORKSPACE/source"
+        export PUBLIC_BROWSER_OBSERVATIONS="$GITHUB_WORKSPACE/proof/public-presentation/browser-menu.json"
+        cd "$SOURCE_DIR"
+        PRODUCTION=1 PAGE_URL="$PUBLIC_CAMPAIGN_URL" OUT_DIR="$GITHUB_WORKSPACE/proof/public-presentation/payload/menu" node --import "$GITHUB_WORKSPACE/scripts/observe-campaign-v56-browser.mjs" scripts/qa-campaign-menu.mjs
+    - name: Observe all51 real room interiors at balanced quality
+      run: |
+        source "$GITHUB_WORKSPACE/proof/public-presentation/env.sh"
+        export SOURCE_DIR="$GITHUB_WORKSPACE/source"
+        export PUBLIC_BROWSER_OBSERVATIONS="$GITHUB_WORKSPACE/proof/public-presentation/browser-architecture.json"
+        cd "$SOURCE_DIR"
+        CASE=overview INSPECTION_QUALITY=balanced REUSE_PAGE=0 LEVELS="1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,42,43,44,45,46,47,48,49,50,51,41" PAGE_URL="$PUBLIC_CAMPAIGN_URL" START_SERVER=0 OUT_DIR="$GITHUB_WORKSPACE/proof/public-presentation/payload/architecture" timeout --signal=TERM --kill-after=30s 50m node --import "$GITHUB_WORKSPACE/scripts/observe-campaign-v56-browser.mjs" scripts/qa-creative-browser.mjs
+    - name: Observe original SOURCE5 movement and animation on PUBLIC bytes
+      run: |
+        source "$GITHUB_WORKSPACE/proof/public-presentation/env.sh"
+        export SOURCE_DIR="$GITHUB_WORKSPACE/source"
+        export PUBLIC_BROWSER_OBSERVATIONS="$GITHUB_WORKSPACE/proof/public-presentation/browser-animation.json"
+        cd "$SOURCE_DIR"
+        DEMO_URL="$PUBLIC_CAMPAIGN_URL" START_SERVER=0 EVIDENCE_OUT="$GITHUB_WORKSPACE/proof/public-presentation/payload/animation" node --import "$GITHUB_WORKSPACE/scripts/observe-campaign-v56-browser.mjs" scripts/qa-animation-presentation.mjs
+    - name: Observe the frozen debug-only historical-save isolation protocol
+      run: |
+        source "$GITHUB_WORKSPACE/proof/public-presentation/env.sh"
+        export SOURCE_DIR="$GITHUB_WORKSPACE/source"
+        export PUBLIC_BROWSER_OBSERVATIONS="$GITHUB_WORKSPACE/proof/public-presentation/browser-storage.json"
+        cd "$SOURCE_DIR"
+        PAGE_URL="$PUBLIC_CAMPAIGN_URL" OUT_DIR="$GITHUB_WORKSPACE/proof/public-presentation/payload/storage" node --import "$GITHUB_WORKSPACE/scripts/observe-campaign-v56-browser.mjs" scripts/qa-campaign-save-isolation.mjs
+    - name: Bind complete presentation payload and all4 actual observers
+      if: always()
+      run: node scripts/publish-campaign-v56.mjs wrap-capture presentation
+    - if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: campaign-v56-public-presentation-${{ github.run_id }}-${{ github.run_attempt }}
+        path: proof/public-presentation
+        retention-days: 10
+        if-no-files-found: error
+  entry:
+    needs: deploy
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        ref: ${{ github.sha }}
+        fetch-depth: 0
+        persist-credentials: false
+    - uses: actions/checkout@v4
+      with:
+        ref: a3c81ee59a9b2cbf1b23254857dd8c2a6f6b3c38
+        path: source
+        fetch-depth: 0
+        persist-credentials: false
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 22
+        cache: npm
+        cache-dependency-path: source/package-lock.json
+    - name: Download this PUBLIC run preparation
+      uses: actions/download-artifact@v4
+      with:
+        name: campaign-v56-prepared-${{ github.run_id }}-${{ github.run_attempt }}
+        path: proof
+    - name: Install locked SOURCE5 dependencies
+      working-directory: source
+      run: npm ci
+    - name: Install the declared capture driver
+      working-directory: source
+      run: npm install --no-save --package-lock=false puppeteer-core@24.16.0
+    - name: Verify the actual Puppeteer ESM and CJS module identity before browser launch
+      run: node scripts/publish-campaign-v56.mjs verify-browser-module
+    - name: Locate the actual Chromium binary
+      run: |
+        printf 'CHROME_PATH=%s\n' "$(command -v google-chrome || command -v chromium)" >> "$GITHUB_ENV"
+    - name: Install independent image and movie decoders
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y python3-pil python3-yaml ffmpeg
+        /usr/bin/python3 -c "import PIL, yaml; print(PIL.__version__)"
+        ffmpeg -version
+    - name: Retain all original SOURCE5 candidate bytes for frozen drivers
+      run: |
+        python3 - <<'CHECK'
+        import pathlib, shutil
+        src=pathlib.Path("proof/review-artifacts/campaign-polish-dist")
+        dst=pathlib.Path("source/dist")
+        assert src.is_dir() and not dst.exists()
+        assert len([p for p in src.rglob("*") if p.is_file()]) == 80
+        shutil.copytree(src, dst)
+        for p in src.rglob("*"):
+         if p.is_file(): assert p.read_bytes() == (dst/p.relative_to(src)).read_bytes()
+        CHECK
+    - name: Authenticate the actual bare-entry producer
+      run: node scripts/publish-campaign-v56.mjs capture-origin entry
+    - name: Verify ordinary bare launch and historical-save preservation
+      run: |
+        source "$GITHUB_WORKSPACE/proof/public-entry/env.sh"
+        export SOURCE_DIR="$GITHUB_WORKSPACE/source"
+        export PUBLIC_BROWSER_OBSERVATIONS="$GITHUB_WORKSPACE/proof/public-entry/browser-entry.json"
+        PAGE_URL="$PUBLIC_CAMPAIGN_URL" OUT_DIR="$GITHUB_WORKSPACE/proof/public-entry/payload" node --import "$GITHUB_WORKSPACE/scripts/observe-campaign-v56-browser.mjs" scripts/qa-campaign-v56-public-entry.mjs
+    - name: Bind the genuine bare-entry checks and frame bytes
+      if: always()
+      run: node scripts/publish-campaign-v56.mjs wrap-capture entry
+    - if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: campaign-v56-public-entry-${{ github.run_id }}-${{ github.run_attempt }}
+        path: proof/public-entry
+        retention-days: 10
+        if-no-files-found: error
+  verify:
+    needs:
+    - deploy
+    - native
+    - presentation
+    - entry
+    if: ${{ always() && !cancelled() && needs.deploy.result == 'success' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        ref: ${{ github.sha }}
+        fetch-depth: 0
+        persist-credentials: false
+    - uses: actions/checkout@v4
+      with:
+        ref: a3c81ee59a9b2cbf1b23254857dd8c2a6f6b3c38
+        path: source
+        fetch-depth: 0
+        persist-credentials: false
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 22
+        cache: npm
+        cache-dependency-path: source/package-lock.json
+    - name: Install locked SOURCE5 dependencies
+      working-directory: source
+      run: npm ci
+    - name: Install independent image and movie decoders
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y python3-pil python3-yaml ffmpeg
+        /usr/bin/python3 -c "import PIL, yaml; print(PIL.__version__)"
+        ffmpeg -version
+    - name: Download this PUBLIC run preparation
+      uses: actions/download-artifact@v4
+      with:
+        name: campaign-v56-prepared-${{ github.run_id }}-${{ github.run_attempt }}
+        path: proof
+    - name: Recheck the accepted deployment and complete current provider state
+      run: node scripts/publish-campaign-v56.mjs guard final
+    - name: Verify all11 actual jobs and all8 complete original PUBLIC capture packets
+      run: node scripts/publish-campaign-v56.mjs verify-public-aggregate
+    - if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: campaign-v56-public-verification-${{ github.run_id }}-${{ github.run_attempt }}
+        path: proof/public-verification
+        retention-days: 10
+        if-no-files-found: error
+

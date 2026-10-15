@@ -1,0 +1,347 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-root-source-acceptance",
+  "generatedAt": "2026-10-15T13:33:11.819145+00:00",
+  "decision": "accepted-technical-candidate",
+  "sourceCommit": "a3c81ee59a9b2cbf1b23254857dd8c2a6f6b3c38",
+  "sourceTree": "78df45b4ccbb543055dafd014a9ea6669938d582",
+  "run": "38451783602",
+  "runAttempt": "1",
+  "version": "v56-living-campaign",
+  "edition": "foundation",
+  "editionVersion": "foundation-v5",
+  "sourceInputsSha256": "bb84113e3340a18ae9eba6ae2d6f1ce0f9ee9a55f1413b4507de44fafbb0e56a",
+  "sourceInputFiles": 332,
+  "buildStamp": {
+    "status": "technical-candidate",
+    "verified": false,
+    "acceptance": {
+      "humanPlaytest": false,
+      "physicalDeviceBenchmark": false,
+      "liveYandex": false
+    },
+    "stampUnmodified": true
+  },
+  "checks": {
+    "cpu": {
+      "testFiles": 302,
+      "tests": 2148,
+      "passed": 2148,
+      "failed": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0,
+      "coverage": "Six parts; normalized file-name union equals allFiles, with no duplicate files; TAP summaries match JSON."
+    },
+    "ordinaryRoutes": {
+      "rooms": 51,
+      "won": 51,
+      "sameOriginalCompanion": 51,
+      "resets": 0,
+      "respawns": 0
+    },
+    "nativeRoutes": {
+      "rooms": 51,
+      "gameplayPassed": 51,
+      "capturesPassed": 51,
+      "won": 51,
+      "sameOriginalCompanion": 51,
+      "resets": 0,
+      "respawns": 0,
+      "quality": "low",
+      "renderer": "software WebGL"
+    },
+    "shortcutProbes": {
+      "scenarios": 255,
+      "reachedAttacks": 255,
+      "outcomes": {
+        "finite_attack_observed": 252,
+        "legitimate_post_prerequisite_solution": 1,
+        "legitimate_introductory_solution": 1,
+        "production_death": 1
+      },
+      "bypassCandidates": 0,
+      "setupFailures": 0,
+      "attackErrors": 0,
+      "coverage": "250 common probes across 50 rooms; one room37 sidefeed probe; one room38 hoist probe; three castle probes. Two winning outcomes are classified as authored legitimate solutions, not blocked attacks."
+    },
+    "presentation": {
+      "architectureRooms": 51,
+      "architectureFrames": 102,
+      "castleWings": 11,
+      "castleInteriorFrames": 22,
+      "menuViewports": 6,
+      "cameraStartRuns": 4,
+      "animationClips": 2,
+      "animationFrames": 96,
+      "carryAngleFrames": 6,
+      "chapterAudioStages": 6,
+      "allFinalReportsPassed": true
+    },
+    "storageIsolation": {
+      "passed": true,
+      "scope": "Historical namespace import, trusted Play, candidate-only writes and reload/settings persistence."
+    },
+    "mockedYandexBrowser": {
+      "passed": true,
+      "scope": "Actual production UI/WebGL, SDK initialization failure/retry, locale, lifecycle, audio/ad/focus holds, local reload and mobile fullscreen gesture using a mocked SDK."
+    },
+    "sourceIntegrity": {
+      "shortcutSourceHashesChecked": 289,
+      "beforeAfterSourceDrift": 0,
+      "manifestMismatches": 0,
+      "scope": "Source hashes in all shortcut reports equal frozen build sourceInputs; all dist and Yandex manifest file lengths/hashes checked."
+    }
+  },
+  "packages": {
+    "web": {
+      "directory": "campaign-polish-dist",
+      "buildInfoSha256": "ec5d78f5674d544b97bfe2a803b9874076b8f15065d32c455f6d85399b4eb6de",
+      "packageFilesSha256": "ec7394e0aa1afa0653053fa028d45c7207e8851b9d32951eaa107808d6569eb6",
+      "manifestEntries": 79,
+      "allManifestFilesMatched": true
+    },
+    "yandex": {
+      "filename": "brainrot-portal-v56-yandex.zip",
+      "sha256": "eade7d90b7ac1b5c658671613c1dc2d6ee5121db194a9f43bc65bca249ee90fb",
+      "compressedBytes": 4318170,
+      "unpackedBytes": 6695283,
+      "limitBytes": 100000000,
+      "levels": 51,
+      "models": 14,
+      "manifestEntries": 23,
+      "allManifestFilesMatched": true
+    }
+  },
+  "visualReview": {
+    "reviewed": {
+      "architectureFrames": 102,
+      "castleInteriorFrames": 22,
+      "nativeFinishFrames": 51,
+      "menuViewports": 6,
+      "carryPoseFrames": 6,
+      "jumpSequences": 2
+    },
+    "confirmedBlockingDefects": [],
+    "observations": [
+      {
+        "stableLevel": 13,
+        "file": "campaign-polish-native-energy/13-finish.jpg",
+        "observation": "The finish frame crops the top of the player in a doorway. This frame alone does not establish a gameplay camera defect."
+      },
+      {
+        "stableLevel": 47,
+        "file": "campaign-polish-native-fracture/47-finish.jpg",
+        "observation": "The finish camera points almost entirely at the ceiling and crops the player at the bottom. Post-route aiming versus actual gameplay-camera behavior remains to be diagnosed."
+      },
+      {
+        "stableLevel": 49,
+        "file": "campaign-polish-native-fracture/49-finish.jpg",
+        "observation": "The finish frame crops the player at the right edge. This frame does not demonstrate comfortable post-finish framing."
+      },
+      {
+        "stableLevel": 41,
+        "files": [
+          "campaign-polish-presentation/castle-interiors/archive-0.jpg",
+          "campaign-polish-presentation/castle-interiors/crown-0.jpg",
+          "campaign-polish-presentation/castle-interiors/freight-0.jpg"
+        ],
+        "observation": "Interiors are mostly bright rectangular laboratory volumes with similar paneled walls and dark space above some walls. Rendering is functional; these frames do not establish the requested chaotic, monumental castle art direction."
+      }
+    ]
+  },
+  "nonBlockingReportDetails": [
+    "Castle crown-cargo-slit-running-airdrop has routePrefix.pass=false with partial=true: authentic prerequisite prefix stops after ten of eleven stages, then the actual attack is reached and no bypass is observed.",
+    "Room13 held-corner-jumps ends in a production death; it is not counted as a setup failure or a proven physical-block result.",
+    "Room16 and room48 alternate pickup stance walk timeouts are explicitly recorded as blocked recovery attempts inside completed finite attacks.",
+    "sdk-production-progress.json is an intermediate pass=false document; sdk-production-proof.json is the successful final document with no errors."
+  ],
+  "scope": "Independent local inspection of already-completed run artifacts; no replay of the full suites and no source or GitHub mutation.",
+  "limitations": [
+    "Acceptance is for publication as a technical candidate only, not completion of the full user specification.",
+    "Finite attack probes do not prove that every possible shortcut is absent.",
+    "Scripted routes and software WebGL do not establish human puzzle quality, physical-device FPS or a real mobile-device benchmark.",
+    "Mocked SDK proof does not establish live Yandex advertising, platform behavior or moderation approval.",
+    "Static captures do not establish absence of flicker, animation smoothness or camera comfort under free human control.",
+    "All 51 walkthrough entries remain needs-current-recording. Castle ordinary/native completion is 67095 frames (1118.25 simulated seconds), not a delivered full-length walkthrough movie.",
+    "Chapter-audio report is an isolated OfflineAudioContext check and does not contain its own source/package stamp; its provenance is the run artifact."
+  ],
+  "evidenceDigests": [
+    {
+      "file": "baseline-v55-public/public-entry/payload/report.json",
+      "sha256": "a2c9553cd535bbbf78c93a39852c96250303ef3a4c1f22d640c4baa0a4fed660"
+    },
+    {
+      "file": "baseline-v55-public/public-native-castle/payload/report.json",
+      "sha256": "f97a8719fcad9b0d9ddcede5797ba67e28eefd9c5f5c7df20c25c2127290c29b"
+    },
+    {
+      "file": "baseline-v55-public/public-native-early/payload/report.json",
+      "sha256": "acc85d3a279b4f00a8292b53fd17f41f586dfcc19cc756ebccd22effc719c2f7"
+    },
+    {
+      "file": "baseline-v55-public/public-native-energy/payload/report.json",
+      "sha256": "ef12cd75aff44084738726d92c14d48d2817e598a848cc49450523b1b61ad291"
+    },
+    {
+      "file": "baseline-v55-public/public-native-fracture/payload/report.json",
+      "sha256": "19dd8a7a1f160b4ea5699fc2ad9b019056bea3fd6ae1ae6bb8e5756616d43601"
+    },
+    {
+      "file": "baseline-v55-public/public-native-living/payload/report.json",
+      "sha256": "5ab669aa0ff02f47480ed05b5230122546e3b112d0ab54ec34d34ee524a7c18e"
+    },
+    {
+      "file": "baseline-v55-public/public-native-optics/payload/report.json",
+      "sha256": "2509e47a3c36288bf8b3d9da9962dbbcd6821e66381cfe5f3adda1b4d2b0ef21"
+    },
+    {
+      "file": "baseline-v55-public/public-presentation/payload/animation/report.json",
+      "sha256": "42e4e0b44887933c3da631bc4cff18cd46967ceda495f0941bdcd5100a96096c"
+    },
+    {
+      "file": "baseline-v55-public/public-presentation/payload/architecture/report.json",
+      "sha256": "f848a9e759efa80993733f53f5b7f81f9bfaefb8e116065b3c3b4605f5267a42"
+    },
+    {
+      "file": "baseline-v55-public/public-presentation/payload/menu/report.json",
+      "sha256": "735b0aae6a01d4aab82d0239b08b16a8b9ed383d29581342e20988a32b4a7240"
+    },
+    {
+      "file": "baseline-v55-public/public-presentation/payload/storage/report.json",
+      "sha256": "7ba24c18fc226ad5d1af781288362a29654a748ef130a8575049f571a3cf0227"
+    },
+    {
+      "file": "campaign-polish-castle-shortcuts/report.json",
+      "sha256": "0638902c80bee6bf5cfd1e79c960953a89f48212d4907a600f130649e76ca950"
+    },
+    {
+      "file": "campaign-polish-cpu-0/report.json",
+      "sha256": "dc141f622c8c2e44c5040c1faaef28a32013332521db19c449067371e3ba051f"
+    },
+    {
+      "file": "campaign-polish-cpu-1/report.json",
+      "sha256": "276891c3224799bb4a8bc982f9a8bc83838414cf0a1d53e127f7e4f01f015b67"
+    },
+    {
+      "file": "campaign-polish-cpu-2/report.json",
+      "sha256": "46322770e00f65c56f26968e9b7a65082c3e2fa99f602233db21b5cad7039030"
+    },
+    {
+      "file": "campaign-polish-cpu-3/report.json",
+      "sha256": "d17faab2cd91bbaeae198642c02debef9533e18444b1bd1f43a8d638eb8d600c"
+    },
+    {
+      "file": "campaign-polish-cpu-4/report.json",
+      "sha256": "14227acc94457442b47179761626dffbc7e139ca20553cf5cb72f68a97b68d2f"
+    },
+    {
+      "file": "campaign-polish-cpu-5/report.json",
+      "sha256": "77abb2d26dc112711ec7f8fe39242ba36acbfc90d4afcc9cddaeab796f21a1c6"
+    },
+    {
+      "file": "campaign-polish-native-castle/report.json",
+      "sha256": "fb11a63efe8d06024987274a9b308166a4318a93b36e224078fdb7b8c059eaaa"
+    },
+    {
+      "file": "campaign-polish-native-early/report.json",
+      "sha256": "4767404749cc63e7abcfe9400680950d23d58e4b4977819a2be5ec2ddf4b37f7"
+    },
+    {
+      "file": "campaign-polish-native-energy/report.json",
+      "sha256": "8862f4ff098bc1bf6e6f0fd7cc92d89a9278a4d38613994f3f6cab6515412f94"
+    },
+    {
+      "file": "campaign-polish-native-fracture/report.json",
+      "sha256": "28c59820155ad884968ea93843170b4160e72239fcd8cc0589b14a2609cf7178"
+    },
+    {
+      "file": "campaign-polish-native-living/report.json",
+      "sha256": "b06f0fae7d2f0cdda4e6f00c530ebb273e17239b80ba5343da71c3aff80782e2"
+    },
+    {
+      "file": "campaign-polish-native-optics/report.json",
+      "sha256": "7cbbac59524b7666a0ba2c31768f0986a28c48f82739da4983e08162184da647"
+    },
+    {
+      "file": "campaign-polish-ordinary-castle/report.json",
+      "sha256": "da7f63a14fea7148051ed911c1c99e74cee793c3c1364b01139029bb942d8f8e"
+    },
+    {
+      "file": "campaign-polish-ordinary-early/report.json",
+      "sha256": "7b6667346bc73e5066f740501b742a4f873999bf35c83ca4f90ef25d357dde3b"
+    },
+    {
+      "file": "campaign-polish-ordinary-energy/report.json",
+      "sha256": "a45d5e6b8f82a0bac5014f5e3305307a0302f9bb37fc996cc3973e69ea7c7417"
+    },
+    {
+      "file": "campaign-polish-ordinary-fracture/report.json",
+      "sha256": "83234b00ccfe17863fc63f94aec5596a0b663e6e7703c3544076a25b45cb3e60"
+    },
+    {
+      "file": "campaign-polish-ordinary-living/report.json",
+      "sha256": "cc4c26bac5b7f22ca0d9afed26bf7ec2d485338a5c5fad9afdca5d74231ec16d"
+    },
+    {
+      "file": "campaign-polish-ordinary-optics/report.json",
+      "sha256": "d4ef58f4ead8a8c91ecc39c930827038b1cedac68f4846d04c3a363fc17cc412"
+    },
+    {
+      "file": "campaign-polish-presentation/animation/report.json",
+      "sha256": "c84a18316908bd2f4090896dc0cd4e29bf19ff415bf4f1d2084f4cf85bb4531d"
+    },
+    {
+      "file": "campaign-polish-presentation/architecture/report.json",
+      "sha256": "f999eafbb6bf6839f7a3d41172cb65d0669c6541c4eccfac9a633e39712afc70"
+    },
+    {
+      "file": "campaign-polish-presentation/camera-start/report.json",
+      "sha256": "66d05cbb0d415292357c66aa651574ff2d9ad7ef8ec195fbf008f3d648d58798"
+    },
+    {
+      "file": "campaign-polish-presentation/castle-interiors/report.json",
+      "sha256": "16fecbcd4490ee140f414218b76c5c079dca590d5a624fbf14d235d43a35cde0"
+    },
+    {
+      "file": "campaign-polish-presentation/chapter-audio/report.json",
+      "sha256": "b8afeb6317c1069b288c72b9fd1cb4613bb0308317281106665bc68fd5d24815"
+    },
+    {
+      "file": "campaign-polish-presentation/menu/report.json",
+      "sha256": "113445c621b2e3d88ffd5f8f84e58d1a3e1c3bbb9ce419c07bd77e2bb6bb50e9"
+    },
+    {
+      "file": "campaign-polish-shortcuts-early/report.json",
+      "sha256": "a5e8b4d83dbea65625112ef5cbe48d1eb79cee9e9e5e71061ee45f82361dfa35"
+    },
+    {
+      "file": "campaign-polish-shortcuts-late/report.json",
+      "sha256": "f252b7b9d1c1d2ac7282a2a8c3258151820c74bf14c09a234e873d950dd55c89"
+    },
+    {
+      "file": "campaign-polish-shortcuts-late/room37-sidefeed.json",
+      "sha256": "62703452baff85bca1885dced7232f989a5ddc5e32a4cdd2c42f72b9e4d1b12b"
+    },
+    {
+      "file": "campaign-polish-shortcuts-late/room38-hoist.json",
+      "sha256": "d6e331006dcd4ea1ba9496cb5e264116d57b7917433d9f4d9eba3f5adf13921d"
+    },
+    {
+      "file": "campaign-polish-storage-isolation/report.json",
+      "sha256": "5518320aaa5820e3cfbc0b1c38ce0c84f5abf59a22a24ccbe877675c2434f35e"
+    },
+    {
+      "file": "campaign-polish-storage-isolation/yandex-browser/sdk-production-proof.json",
+      "sha256": "0cbabb6c9b5176f7d1ae0163b775b3d2a9fc67276f48ba29aca953a00ca02b2b"
+    },
+    {
+      "file": "campaign-polish-yandex/report.json",
+      "sha256": "67534ee0855748c4bb248ae1cad5d6f844b3d5e4e638a4d75fe8c5bde15d71fb"
+    }
+  ],
+  "sourceAccepted": true,
+  "publicationAccepted": false,
+  "publicationAcceptanceScope": "Final publication acceptance is not established. Source acceptance permits technical-candidate publication without claiming final user-specification completion.",
+  "sourceParent": "f81eec3359e2560fb8ac1ec14834cf355010dfd2"
+}

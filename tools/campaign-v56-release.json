@@ -1,0 +1,2872 @@
+{
+  "schemaVersion": 1,
+  "frozen": true,
+  "sourceAccepted": true,
+  "publicationAccepted": false,
+  "repository": "amazin20/brainrot-portal",
+  "sourceBranch": "upgrade/campaign-polish-20261013",
+  "sourceWorkflow": ".github/workflows/campaign-polish-review.yml",
+  "sourceCommit": "a3c81ee59a9b2cbf1b23254857dd8c2a6f6b3c38",
+  "sourceTree": "78df45b4ccbb543055dafd014a9ea6669938d582",
+  "sourceParent": "f81eec3359e2560fb8ac1ec14834cf355010dfd2",
+  "sourceReview": {
+    "runId": 38451783602,
+    "runAttempt": 1
+  },
+  "controllerParent": "158f9e6735dd3684aa70a6d6f51a9be165f08943",
+  "modelOriginCommit": "3f2e83127dfd5800068854a98843d73eb9377609",
+  "namespace": "campaign-v56/",
+  "publicURL": "https://amazin20.github.io/brainrot-portal/campaign-v56/",
+  "limits": {
+    "candidateBytes": 100000000,
+    "siteBytes": 700000000,
+    "boundedVerificationBytes": 100000000,
+    "metadataBytes": 25000000,
+    "privateProofBytes": 2000000000
+  },
+  "sourceJobs": [
+    {
+      "id": 115484933345,
+      "name": "ordinary (fracture, 42,43,44,45,46,47,48,49,50,51)",
+      "status": "completed",
+      "conclusion": "success",
+      "run_id": 38451783602,
+      "run_attempt": 1,
+      "started_at": "2026-10-13T19:04:59Z",
+      "completed_at": "2026-10-13T19:10:21Z",
+      "steps": [
+        {
+          "number": 1,
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:00Z",
+          "completed_at": "2026-10-13T19:05:01Z"
+        },
+        {
+          "number": 2,
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:01Z",
+          "completed_at": "2026-10-13T19:05:04Z"
+        },
+        {
+          "number": 3,
+          "name": "Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:04Z",
+          "completed_at": "2026-10-13T19:05:06Z"
+        },
+        {
+          "number": 4,
+          "name": "Run npm ci",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:06Z",
+          "completed_at": "2026-10-13T19:05:07Z"
+        },
+        {
+          "number": 5,
+          "name": "Run node scripts/qa-campaign-ordinary.mjs",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:07Z",
+          "completed_at": "2026-10-13T19:10:18Z"
+        },
+        {
+          "number": 6,
+          "name": "Run actions/upload-artifact@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:10:18Z",
+          "completed_at": "2026-10-13T19:10:18Z"
+        },
+        {
+          "number": 11,
+          "name": "Post Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:10:18Z",
+          "completed_at": "2026-10-13T19:10:19Z"
+        },
+        {
+          "number": 12,
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:10:19Z",
+          "completed_at": "2026-10-13T19:10:19Z"
+        },
+        {
+          "number": 13,
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:10:19Z",
+          "completed_at": "2026-10-13T19:10:19Z"
+        }
+      ]
+    },
+    {
+      "id": 115484933568,
+      "name": "ordinary (castle, 41)",
+      "status": "completed",
+      "conclusion": "success",
+      "run_id": 38451783602,
+      "run_attempt": 1,
+      "started_at": "2026-10-13T19:04:59Z",
+      "completed_at": "2026-10-13T19:13:48Z",
+      "steps": [
+        {
+          "number": 1,
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:00Z",
+          "completed_at": "2026-10-13T19:05:01Z"
+        },
+        {
+          "number": 2,
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:01Z",
+          "completed_at": "2026-10-13T19:05:03Z"
+        },
+        {
+          "number": 3,
+          "name": "Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:03Z",
+          "completed_at": "2026-10-13T19:05:05Z"
+        },
+        {
+          "number": 4,
+          "name": "Run npm ci",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:05Z",
+          "completed_at": "2026-10-13T19:05:07Z"
+        },
+        {
+          "number": 5,
+          "name": "Run node scripts/qa-campaign-ordinary.mjs",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:07Z",
+          "completed_at": "2026-10-13T19:13:45Z"
+        },
+        {
+          "number": 6,
+          "name": "Run actions/upload-artifact@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:13:45Z",
+          "completed_at": "2026-10-13T19:13:46Z"
+        },
+        {
+          "number": 11,
+          "name": "Post Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:13:46Z",
+          "completed_at": "2026-10-13T19:13:46Z"
+        },
+        {
+          "number": 12,
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:13:46Z",
+          "completed_at": "2026-10-13T19:13:46Z"
+        },
+        {
+          "number": 13,
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:13:46Z",
+          "completed_at": "2026-10-13T19:13:46Z"
+        }
+      ]
+    },
+    {
+      "id": 115484933612,
+      "name": "ordinary (early, 1,2,3,4,5,6,7,8,9,10)",
+      "status": "completed",
+      "conclusion": "success",
+      "run_id": 38451783602,
+      "run_attempt": 1,
+      "started_at": "2026-10-13T19:04:59Z",
+      "completed_at": "2026-10-13T19:05:46Z",
+      "steps": [
+        {
+          "number": 1,
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:00Z",
+          "completed_at": "2026-10-13T19:05:01Z"
+        },
+        {
+          "number": 2,
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:01Z",
+          "completed_at": "2026-10-13T19:05:02Z"
+        },
+        {
+          "number": 3,
+          "name": "Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:02Z",
+          "completed_at": "2026-10-13T19:05:04Z"
+        },
+        {
+          "number": 4,
+          "name": "Run npm ci",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:04Z",
+          "completed_at": "2026-10-13T19:05:06Z"
+        },
+        {
+          "number": 5,
+          "name": "Run node scripts/qa-campaign-ordinary.mjs",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:06Z",
+          "completed_at": "2026-10-13T19:05:43Z"
+        },
+        {
+          "number": 6,
+          "name": "Run actions/upload-artifact@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:43Z",
+          "completed_at": "2026-10-13T19:05:44Z"
+        },
+        {
+          "number": 11,
+          "name": "Post Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:44Z",
+          "completed_at": "2026-10-13T19:05:44Z"
+        },
+        {
+          "number": 12,
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:44Z",
+          "completed_at": "2026-10-13T19:05:45Z"
+        },
+        {
+          "number": 13,
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:45Z",
+          "completed_at": "2026-10-13T19:05:45Z"
+        }
+      ]
+    },
+    {
+      "id": 115484933677,
+      "name": "ordinary (optics, 31,32,33,34,35,36,37,38,39,40)",
+      "status": "completed",
+      "conclusion": "success",
+      "run_id": 38451783602,
+      "run_attempt": 1,
+      "started_at": "2026-10-13T19:04:59Z",
+      "completed_at": "2026-10-13T19:06:05Z",
+      "steps": [
+        {
+          "number": 1,
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:00Z",
+          "completed_at": "2026-10-13T19:05:01Z"
+        },
+        {
+          "number": 2,
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:01Z",
+          "completed_at": "2026-10-13T19:05:05Z"
+        },
+        {
+          "number": 3,
+          "name": "Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:05Z",
+          "completed_at": "2026-10-13T19:05:06Z"
+        },
+        {
+          "number": 4,
+          "name": "Run npm ci",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:06Z",
+          "completed_at": "2026-10-13T19:05:08Z"
+        },
+        {
+          "number": 5,
+          "name": "Run node scripts/qa-campaign-ordinary.mjs",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:08Z",
+          "completed_at": "2026-10-13T19:06:01Z"
+        },
+        {
+          "number": 6,
+          "name": "Run actions/upload-artifact@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:06:01Z",
+          "completed_at": "2026-10-13T19:06:02Z"
+        },
+        {
+          "number": 11,
+          "name": "Post Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:06:02Z",
+          "completed_at": "2026-10-13T19:06:02Z"
+        },
+        {
+          "number": 12,
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:06:02Z",
+          "completed_at": "2026-10-13T19:06:02Z"
+        },
+        {
+          "number": 13,
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:06:02Z",
+          "completed_at": "2026-10-13T19:06:02Z"
+        }
+      ]
+    },
+    {
+      "id": 115484933710,
+      "name": "build",
+      "status": "completed",
+      "conclusion": "success",
+      "run_id": 38451783602,
+      "run_attempt": 1,
+      "started_at": "2026-10-13T19:05:00Z",
+      "completed_at": "2026-10-13T19:05:28Z",
+      "steps": [
+        {
+          "number": 1,
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:01Z",
+          "completed_at": "2026-10-13T19:05:02Z"
+        },
+        {
+          "number": 2,
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:02Z",
+          "completed_at": "2026-10-13T19:05:04Z"
+        },
+        {
+          "number": 3,
+          "name": "Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:04Z",
+          "completed_at": "2026-10-13T19:05:07Z"
+        },
+        {
+          "number": 4,
+          "name": "Run npm ci",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:07Z",
+          "completed_at": "2026-10-13T19:05:08Z"
+        },
+        {
+          "number": 5,
+          "name": "Verify current release metadata before producing either package",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:08Z",
+          "completed_at": "2026-10-13T19:05:09Z"
+        },
+        {
+          "number": 6,
+          "name": "Run npm run build",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:09Z",
+          "completed_at": "2026-10-13T19:05:15Z"
+        },
+        {
+          "number": 7,
+          "name": "Run node scripts/stamp-build.mjs",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:15Z",
+          "completed_at": "2026-10-13T19:05:15Z"
+        },
+        {
+          "number": 8,
+          "name": "Run node scripts/v8-package-check.mjs",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:15Z",
+          "completed_at": "2026-10-13T19:05:15Z"
+        },
+        {
+          "number": 9,
+          "name": "Run node scripts/check-yandex-platform.mjs",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:15Z",
+          "completed_at": "2026-10-13T19:05:15Z"
+        },
+        {
+          "number": 10,
+          "name": "Build and verify the exact production Yandex archive",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:15Z",
+          "completed_at": "2026-10-13T19:05:21Z"
+        },
+        {
+          "number": 11,
+          "name": "Upload exact checked Yandex package",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:21Z",
+          "completed_at": "2026-10-13T19:05:23Z"
+        },
+        {
+          "number": 12,
+          "name": "Run actions/upload-artifact@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:23Z",
+          "completed_at": "2026-10-13T19:05:25Z"
+        },
+        {
+          "number": 23,
+          "name": "Post Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:25Z",
+          "completed_at": "2026-10-13T19:05:25Z"
+        },
+        {
+          "number": 24,
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:25Z",
+          "completed_at": "2026-10-13T19:05:25Z"
+        },
+        {
+          "number": 25,
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:25Z",
+          "completed_at": "2026-10-13T19:05:25Z"
+        }
+      ]
+    },
+    {
+      "id": 115484933722,
+      "name": "shortcuts (late, 26-40,42-51)",
+      "status": "completed",
+      "conclusion": "success",
+      "run_id": 38451783602,
+      "run_attempt": 1,
+      "started_at": "2026-10-13T19:04:59Z",
+      "completed_at": "2026-10-13T19:13:59Z",
+      "steps": [
+        {
+          "number": 1,
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:00Z",
+          "completed_at": "2026-10-13T19:05:02Z"
+        },
+        {
+          "number": 2,
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:02Z",
+          "completed_at": "2026-10-13T19:05:05Z"
+        },
+        {
+          "number": 3,
+          "name": "Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:05Z",
+          "completed_at": "2026-10-13T19:05:09Z"
+        },
+        {
+          "number": 4,
+          "name": "Run npm ci",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:09Z",
+          "completed_at": "2026-10-13T19:05:11Z"
+        },
+        {
+          "number": 5,
+          "name": "Run node scripts/qa-campaign-shortcuts.mjs --levels=26-40,42-51 --out=qa/shortcuts-late/report.json",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:11Z",
+          "completed_at": "2026-10-13T19:13:45Z"
+        },
+        {
+          "number": 6,
+          "name": "Run node scripts/qa-campaign-shortcuts.mjs --levels=38 --cases=freight-dispatch-running-board --out=qa/shortcuts-late/room38-hoist.json",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:13:45Z",
+          "completed_at": "2026-10-13T19:13:51Z"
+        },
+        {
+          "number": 7,
+          "name": "Run node scripts/qa-campaign-shortcuts.mjs --levels=37 --cases=magnetic-last-leg-hand-feed --out=qa/shortcuts-late/room37-sidefeed.json",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:13:51Z",
+          "completed_at": "2026-10-13T19:13:56Z"
+        },
+        {
+          "number": 8,
+          "name": "Run actions/upload-artifact@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:13:56Z",
+          "completed_at": "2026-10-13T19:13:57Z"
+        },
+        {
+          "number": 15,
+          "name": "Post Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:13:57Z",
+          "completed_at": "2026-10-13T19:13:57Z"
+        },
+        {
+          "number": 16,
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:13:57Z",
+          "completed_at": "2026-10-13T19:13:57Z"
+        },
+        {
+          "number": 17,
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:13:57Z",
+          "completed_at": "2026-10-13T19:13:57Z"
+        }
+      ]
+    },
+    {
+      "id": 115484933738,
+      "name": "cpu (1)",
+      "status": "completed",
+      "conclusion": "success",
+      "run_id": 38451783602,
+      "run_attempt": 1,
+      "started_at": "2026-10-13T19:04:59Z",
+      "completed_at": "2026-10-13T19:14:33Z",
+      "steps": [
+        {
+          "number": 1,
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:00Z",
+          "completed_at": "2026-10-13T19:05:01Z"
+        },
+        {
+          "number": 2,
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:01Z",
+          "completed_at": "2026-10-13T19:05:09Z"
+        },
+        {
+          "number": 3,
+          "name": "Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:09Z",
+          "completed_at": "2026-10-13T19:05:11Z"
+        },
+        {
+          "number": 4,
+          "name": "Run npm ci",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:11Z",
+          "completed_at": "2026-10-13T19:05:13Z"
+        },
+        {
+          "number": 5,
+          "name": "Run node scripts/qa-campaign-cpu-part.mjs",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:13Z",
+          "completed_at": "2026-10-13T19:14:31Z"
+        },
+        {
+          "number": 6,
+          "name": "Run actions/upload-artifact@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:14:31Z",
+          "completed_at": "2026-10-13T19:14:31Z"
+        },
+        {
+          "number": 11,
+          "name": "Post Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:14:31Z",
+          "completed_at": "2026-10-13T19:14:31Z"
+        },
+        {
+          "number": 12,
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:14:31Z",
+          "completed_at": "2026-10-13T19:14:32Z"
+        },
+        {
+          "number": 13,
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:14:32Z",
+          "completed_at": "2026-10-13T19:14:32Z"
+        }
+      ]
+    },
+    {
+      "id": 115484933753,
+      "name": "cpu (4)",
+      "status": "completed",
+      "conclusion": "success",
+      "run_id": 38451783602,
+      "run_attempt": 1,
+      "started_at": "2026-10-13T19:04:59Z",
+      "completed_at": "2026-10-13T19:20:15Z",
+      "steps": [
+        {
+          "number": 1,
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:00Z",
+          "completed_at": "2026-10-13T19:05:01Z"
+        },
+        {
+          "number": 2,
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:01Z",
+          "completed_at": "2026-10-13T19:05:10Z"
+        },
+        {
+          "number": 3,
+          "name": "Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:10Z",
+          "completed_at": "2026-10-13T19:05:12Z"
+        },
+        {
+          "number": 4,
+          "name": "Run npm ci",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:12Z",
+          "completed_at": "2026-10-13T19:05:13Z"
+        },
+        {
+          "number": 5,
+          "name": "Run node scripts/qa-campaign-cpu-part.mjs",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:13Z",
+          "completed_at": "2026-10-13T19:20:11Z"
+        },
+        {
+          "number": 6,
+          "name": "Run actions/upload-artifact@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:20:11Z",
+          "completed_at": "2026-10-13T19:20:11Z"
+        },
+        {
+          "number": 11,
+          "name": "Post Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:20:11Z",
+          "completed_at": "2026-10-13T19:20:12Z"
+        },
+        {
+          "number": 12,
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:20:12Z",
+          "completed_at": "2026-10-13T19:20:12Z"
+        },
+        {
+          "number": 13,
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:20:12Z",
+          "completed_at": "2026-10-13T19:20:12Z"
+        }
+      ]
+    },
+    {
+      "id": 115484933808,
+      "name": "castle-shortcuts",
+      "status": "completed",
+      "conclusion": "success",
+      "run_id": 38451783602,
+      "run_attempt": 1,
+      "started_at": "2026-10-13T19:04:59Z",
+      "completed_at": "2026-10-13T19:10:29Z",
+      "steps": [
+        {
+          "number": 1,
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:00Z",
+          "completed_at": "2026-10-13T19:05:01Z"
+        },
+        {
+          "number": 2,
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:01Z",
+          "completed_at": "2026-10-13T19:05:04Z"
+        },
+        {
+          "number": 3,
+          "name": "Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:04Z",
+          "completed_at": "2026-10-13T19:05:06Z"
+        },
+        {
+          "number": 4,
+          "name": "Run npm ci",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:06Z",
+          "completed_at": "2026-10-13T19:05:07Z"
+        },
+        {
+          "number": 5,
+          "name": "Run node scripts/qa-campaign-castle-shortcuts.mjs",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:07Z",
+          "completed_at": "2026-10-13T19:10:25Z"
+        },
+        {
+          "number": 6,
+          "name": "Run actions/upload-artifact@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:10:25Z",
+          "completed_at": "2026-10-13T19:10:26Z"
+        },
+        {
+          "number": 11,
+          "name": "Post Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:10:26Z",
+          "completed_at": "2026-10-13T19:10:26Z"
+        },
+        {
+          "number": 12,
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:10:26Z",
+          "completed_at": "2026-10-13T19:10:26Z"
+        },
+        {
+          "number": 13,
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:10:26Z",
+          "completed_at": "2026-10-13T19:10:26Z"
+        }
+      ]
+    },
+    {
+      "id": 115484933842,
+      "name": "ordinary (living, 21,22,23,24,25,26,27,28,29,30)",
+      "status": "completed",
+      "conclusion": "success",
+      "run_id": 38451783602,
+      "run_attempt": 1,
+      "started_at": "2026-10-13T19:04:59Z",
+      "completed_at": "2026-10-13T19:07:15Z",
+      "steps": [
+        {
+          "number": 1,
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:00Z",
+          "completed_at": "2026-10-13T19:05:01Z"
+        },
+        {
+          "number": 2,
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:01Z",
+          "completed_at": "2026-10-13T19:05:03Z"
+        },
+        {
+          "number": 3,
+          "name": "Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:03Z",
+          "completed_at": "2026-10-13T19:05:05Z"
+        },
+        {
+          "number": 4,
+          "name": "Run npm ci",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:05Z",
+          "completed_at": "2026-10-13T19:05:06Z"
+        },
+        {
+          "number": 5,
+          "name": "Run node scripts/qa-campaign-ordinary.mjs",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:06Z",
+          "completed_at": "2026-10-13T19:07:12Z"
+        },
+        {
+          "number": 6,
+          "name": "Run actions/upload-artifact@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:07:12Z",
+          "completed_at": "2026-10-13T19:07:13Z"
+        },
+        {
+          "number": 11,
+          "name": "Post Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:07:13Z",
+          "completed_at": "2026-10-13T19:07:13Z"
+        },
+        {
+          "number": 12,
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:07:13Z",
+          "completed_at": "2026-10-13T19:07:13Z"
+        },
+        {
+          "number": 13,
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:07:13Z",
+          "completed_at": "2026-10-13T19:07:13Z"
+        }
+      ]
+    },
+    {
+      "id": 115484933858,
+      "name": "shortcuts (early, 1-25)",
+      "status": "completed",
+      "conclusion": "success",
+      "run_id": 38451783602,
+      "run_attempt": 1,
+      "started_at": "2026-10-13T19:05:00Z",
+      "completed_at": "2026-10-13T19:12:56Z",
+      "steps": [
+        {
+          "number": 1,
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:01Z",
+          "completed_at": "2026-10-13T19:05:01Z"
+        },
+        {
+          "number": 2,
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:01Z",
+          "completed_at": "2026-10-13T19:05:04Z"
+        },
+        {
+          "number": 3,
+          "name": "Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:04Z",
+          "completed_at": "2026-10-13T19:05:07Z"
+        },
+        {
+          "number": 4,
+          "name": "Run npm ci",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:07Z",
+          "completed_at": "2026-10-13T19:05:09Z"
+        },
+        {
+          "number": 5,
+          "name": "Run node scripts/qa-campaign-shortcuts.mjs --levels=1-25 --out=qa/shortcuts-early/report.json",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:09Z",
+          "completed_at": "2026-10-13T19:12:51Z"
+        },
+        {
+          "number": 6,
+          "name": "Run node scripts/qa-campaign-shortcuts.mjs --levels=38 --cases=freight-dispatch-running-board --out=qa/shortcuts-late/room38-hoist.json",
+          "status": "completed",
+          "conclusion": "skipped",
+          "started_at": "2026-10-13T19:12:51Z",
+          "completed_at": "2026-10-13T19:12:52Z"
+        },
+        {
+          "number": 7,
+          "name": "Run node scripts/qa-campaign-shortcuts.mjs --levels=37 --cases=magnetic-last-leg-hand-feed --out=qa/shortcuts-late/room37-sidefeed.json",
+          "status": "completed",
+          "conclusion": "skipped",
+          "started_at": "2026-10-13T19:12:52Z",
+          "completed_at": "2026-10-13T19:12:52Z"
+        },
+        {
+          "number": 8,
+          "name": "Run actions/upload-artifact@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:12:52Z",
+          "completed_at": "2026-10-13T19:12:53Z"
+        },
+        {
+          "number": 15,
+          "name": "Post Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:12:53Z",
+          "completed_at": "2026-10-13T19:12:53Z"
+        },
+        {
+          "number": 16,
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:12:53Z",
+          "completed_at": "2026-10-13T19:12:53Z"
+        },
+        {
+          "number": 17,
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:12:53Z",
+          "completed_at": "2026-10-13T19:12:53Z"
+        }
+      ]
+    },
+    {
+      "id": 115484933963,
+      "name": "cpu (3)",
+      "status": "completed",
+      "conclusion": "success",
+      "run_id": 38451783602,
+      "run_attempt": 1,
+      "started_at": "2026-10-13T19:04:59Z",
+      "completed_at": "2026-10-13T19:17:26Z",
+      "steps": [
+        {
+          "number": 1,
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:00Z",
+          "completed_at": "2026-10-13T19:05:01Z"
+        },
+        {
+          "number": 2,
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:01Z",
+          "completed_at": "2026-10-13T19:05:13Z"
+        },
+        {
+          "number": 3,
+          "name": "Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:13Z",
+          "completed_at": "2026-10-13T19:05:15Z"
+        },
+        {
+          "number": 4,
+          "name": "Run npm ci",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:15Z",
+          "completed_at": "2026-10-13T19:05:17Z"
+        },
+        {
+          "number": 5,
+          "name": "Run node scripts/qa-campaign-cpu-part.mjs",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:17Z",
+          "completed_at": "2026-10-13T19:17:23Z"
+        },
+        {
+          "number": 6,
+          "name": "Run actions/upload-artifact@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:17:23Z",
+          "completed_at": "2026-10-13T19:17:24Z"
+        },
+        {
+          "number": 11,
+          "name": "Post Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:17:24Z",
+          "completed_at": "2026-10-13T19:17:24Z"
+        },
+        {
+          "number": 12,
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:17:24Z",
+          "completed_at": "2026-10-13T19:17:24Z"
+        },
+        {
+          "number": 13,
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:17:24Z",
+          "completed_at": "2026-10-13T19:17:24Z"
+        }
+      ]
+    },
+    {
+      "id": 115484933984,
+      "name": "cpu (0)",
+      "status": "completed",
+      "conclusion": "success",
+      "run_id": 38451783602,
+      "run_attempt": 1,
+      "started_at": "2026-10-13T19:04:59Z",
+      "completed_at": "2026-10-13T19:16:26Z",
+      "steps": [
+        {
+          "number": 1,
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:00Z",
+          "completed_at": "2026-10-13T19:05:01Z"
+        },
+        {
+          "number": 2,
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:01Z",
+          "completed_at": "2026-10-13T19:05:14Z"
+        },
+        {
+          "number": 3,
+          "name": "Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:14Z",
+          "completed_at": "2026-10-13T19:05:20Z"
+        },
+        {
+          "number": 4,
+          "name": "Run npm ci",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:20Z",
+          "completed_at": "2026-10-13T19:05:22Z"
+        },
+        {
+          "number": 5,
+          "name": "Run node scripts/qa-campaign-cpu-part.mjs",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:22Z",
+          "completed_at": "2026-10-13T19:16:22Z"
+        },
+        {
+          "number": 6,
+          "name": "Run actions/upload-artifact@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:16:22Z",
+          "completed_at": "2026-10-13T19:16:23Z"
+        },
+        {
+          "number": 11,
+          "name": "Post Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:16:23Z",
+          "completed_at": "2026-10-13T19:16:23Z"
+        },
+        {
+          "number": 12,
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:16:23Z",
+          "completed_at": "2026-10-13T19:16:24Z"
+        },
+        {
+          "number": 13,
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:16:24Z",
+          "completed_at": "2026-10-13T19:16:24Z"
+        }
+      ]
+    },
+    {
+      "id": 115484933990,
+      "name": "cpu (2)",
+      "status": "completed",
+      "conclusion": "success",
+      "run_id": 38451783602,
+      "run_attempt": 1,
+      "started_at": "2026-10-13T19:04:59Z",
+      "completed_at": "2026-10-13T19:17:03Z",
+      "steps": [
+        {
+          "number": 1,
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:00Z",
+          "completed_at": "2026-10-13T19:05:01Z"
+        },
+        {
+          "number": 2,
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:01Z",
+          "completed_at": "2026-10-13T19:05:09Z"
+        },
+        {
+          "number": 3,
+          "name": "Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:09Z",
+          "completed_at": "2026-10-13T19:05:10Z"
+        },
+        {
+          "number": 4,
+          "name": "Run npm ci",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:10Z",
+          "completed_at": "2026-10-13T19:05:13Z"
+        },
+        {
+          "number": 5,
+          "name": "Run node scripts/qa-campaign-cpu-part.mjs",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:13Z",
+          "completed_at": "2026-10-13T19:17:00Z"
+        },
+        {
+          "number": 6,
+          "name": "Run actions/upload-artifact@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:17:00Z",
+          "completed_at": "2026-10-13T19:17:01Z"
+        },
+        {
+          "number": 11,
+          "name": "Post Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:17:01Z",
+          "completed_at": "2026-10-13T19:17:01Z"
+        },
+        {
+          "number": 12,
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:17:01Z",
+          "completed_at": "2026-10-13T19:17:02Z"
+        },
+        {
+          "number": 13,
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:17:02Z",
+          "completed_at": "2026-10-13T19:17:02Z"
+        }
+      ]
+    },
+    {
+      "id": 115484934157,
+      "name": "cpu (5)",
+      "status": "completed",
+      "conclusion": "success",
+      "run_id": 38451783602,
+      "run_attempt": 1,
+      "started_at": "2026-10-13T19:04:59Z",
+      "completed_at": "2026-10-13T19:12:37Z",
+      "steps": [
+        {
+          "number": 1,
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:00Z",
+          "completed_at": "2026-10-13T19:05:02Z"
+        },
+        {
+          "number": 2,
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:02Z",
+          "completed_at": "2026-10-13T19:05:12Z"
+        },
+        {
+          "number": 3,
+          "name": "Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:12Z",
+          "completed_at": "2026-10-13T19:05:13Z"
+        },
+        {
+          "number": 4,
+          "name": "Run npm ci",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:13Z",
+          "completed_at": "2026-10-13T19:05:15Z"
+        },
+        {
+          "number": 5,
+          "name": "Run node scripts/qa-campaign-cpu-part.mjs",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:15Z",
+          "completed_at": "2026-10-13T19:12:34Z"
+        },
+        {
+          "number": 6,
+          "name": "Run actions/upload-artifact@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:12:34Z",
+          "completed_at": "2026-10-13T19:12:34Z"
+        },
+        {
+          "number": 11,
+          "name": "Post Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:12:34Z",
+          "completed_at": "2026-10-13T19:12:35Z"
+        },
+        {
+          "number": 12,
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:12:35Z",
+          "completed_at": "2026-10-13T19:12:35Z"
+        },
+        {
+          "number": 13,
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:12:35Z",
+          "completed_at": "2026-10-13T19:12:35Z"
+        }
+      ]
+    },
+    {
+      "id": 115484934895,
+      "name": "ordinary (energy, 11,12,13,14,15,16,17,18,19,20)",
+      "status": "completed",
+      "conclusion": "success",
+      "run_id": 38451783602,
+      "run_attempt": 1,
+      "started_at": "2026-10-13T19:05:00Z",
+      "completed_at": "2026-10-13T19:07:18Z",
+      "steps": [
+        {
+          "number": 1,
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:00Z",
+          "completed_at": "2026-10-13T19:05:01Z"
+        },
+        {
+          "number": 2,
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:01Z",
+          "completed_at": "2026-10-13T19:05:03Z"
+        },
+        {
+          "number": 3,
+          "name": "Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:03Z",
+          "completed_at": "2026-10-13T19:05:04Z"
+        },
+        {
+          "number": 4,
+          "name": "Run npm ci",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:04Z",
+          "completed_at": "2026-10-13T19:05:06Z"
+        },
+        {
+          "number": 5,
+          "name": "Run node scripts/qa-campaign-ordinary.mjs",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:06Z",
+          "completed_at": "2026-10-13T19:07:16Z"
+        },
+        {
+          "number": 6,
+          "name": "Run actions/upload-artifact@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:07:16Z",
+          "completed_at": "2026-10-13T19:07:17Z"
+        },
+        {
+          "number": 11,
+          "name": "Post Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:07:17Z",
+          "completed_at": "2026-10-13T19:07:17Z"
+        },
+        {
+          "number": 12,
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:07:17Z",
+          "completed_at": "2026-10-13T19:07:17Z"
+        },
+        {
+          "number": 13,
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:07:17Z",
+          "completed_at": "2026-10-13T19:07:17Z"
+        }
+      ]
+    },
+    {
+      "id": 115485175033,
+      "name": "storage-isolation",
+      "status": "completed",
+      "conclusion": "success",
+      "run_id": 38451783602,
+      "run_attempt": 1,
+      "started_at": "2026-10-13T19:05:31Z",
+      "completed_at": "2026-10-13T19:07:29Z",
+      "steps": [
+        {
+          "number": 1,
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:32Z",
+          "completed_at": "2026-10-13T19:05:34Z"
+        },
+        {
+          "number": 2,
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:34Z",
+          "completed_at": "2026-10-13T19:05:38Z"
+        },
+        {
+          "number": 3,
+          "name": "Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:38Z",
+          "completed_at": "2026-10-13T19:05:40Z"
+        },
+        {
+          "number": 4,
+          "name": "Run npm ci",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:40Z",
+          "completed_at": "2026-10-13T19:05:42Z"
+        },
+        {
+          "number": 5,
+          "name": "Run npm install --no-save --package-lock=false puppeteer-core@24.16.0",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:42Z",
+          "completed_at": "2026-10-13T19:05:50Z"
+        },
+        {
+          "number": 6,
+          "name": "Run actions/download-artifact@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:50Z",
+          "completed_at": "2026-10-13T19:05:52Z"
+        },
+        {
+          "number": 7,
+          "name": "Run actions/download-artifact@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:52Z",
+          "completed_at": "2026-10-13T19:05:54Z"
+        },
+        {
+          "number": 8,
+          "name": "Open the exact Yandex archive in a nested upload path",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:54Z",
+          "completed_at": "2026-10-13T19:06:58Z"
+        },
+        {
+          "number": 9,
+          "name": "Run export CHROME_PATH=\"$(command -v google-chrome || command -v chromium)\"",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:06:58Z",
+          "completed_at": "2026-10-13T19:07:26Z"
+        },
+        {
+          "number": 10,
+          "name": "Run actions/upload-artifact@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:07:26Z",
+          "completed_at": "2026-10-13T19:07:27Z"
+        },
+        {
+          "number": 19,
+          "name": "Post Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:07:27Z",
+          "completed_at": "2026-10-13T19:07:27Z"
+        },
+        {
+          "number": 20,
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:07:27Z",
+          "completed_at": "2026-10-13T19:07:27Z"
+        },
+        {
+          "number": 21,
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:07:27Z",
+          "completed_at": "2026-10-13T19:07:27Z"
+        }
+      ]
+    },
+    {
+      "id": 115485175093,
+      "name": "presentation",
+      "status": "completed",
+      "conclusion": "success",
+      "run_id": 38451783602,
+      "run_attempt": 1,
+      "started_at": "2026-10-13T19:05:31Z",
+      "completed_at": "2026-10-13T19:39:39Z",
+      "steps": [
+        {
+          "number": 1,
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:31Z",
+          "completed_at": "2026-10-13T19:05:32Z"
+        },
+        {
+          "number": 2,
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:32Z",
+          "completed_at": "2026-10-13T19:05:34Z"
+        },
+        {
+          "number": 3,
+          "name": "Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:34Z",
+          "completed_at": "2026-10-13T19:05:35Z"
+        },
+        {
+          "number": 4,
+          "name": "Run npm ci",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:35Z",
+          "completed_at": "2026-10-13T19:05:37Z"
+        },
+        {
+          "number": 5,
+          "name": "Run npm install --no-save --package-lock=false puppeteer-core@24.16.0",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:37Z",
+          "completed_at": "2026-10-13T19:05:49Z"
+        },
+        {
+          "number": 6,
+          "name": "Install actual image and animation validation dependencies",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:49Z",
+          "completed_at": "2026-10-13T19:09:03Z"
+        },
+        {
+          "number": 7,
+          "name": "Run actions/download-artifact@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:09:03Z",
+          "completed_at": "2026-10-13T19:09:03Z"
+        },
+        {
+          "number": 8,
+          "name": "Run export CHROME_PATH=\"$(command -v google-chrome || command -v chromium)\"",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:09:03Z",
+          "completed_at": "2026-10-13T19:10:01Z"
+        },
+        {
+          "number": 9,
+          "name": "Run export CHROME_PATH=\"$(command -v google-chrome || command -v chromium)\"",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:10:01Z",
+          "completed_at": "2026-10-13T19:31:52Z"
+        },
+        {
+          "number": 10,
+          "name": "Run export CHROME_PATH=\"$(command -v google-chrome || command -v chromium)\"",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:31:52Z",
+          "completed_at": "2026-10-13T19:34:03Z"
+        },
+        {
+          "number": 11,
+          "name": "Run export CHROME_PATH=\"$(command -v google-chrome || command -v chromium)\"",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:34:03Z",
+          "completed_at": "2026-10-13T19:35:39Z"
+        },
+        {
+          "number": 12,
+          "name": "Run export CHROME_PATH=\"$(command -v google-chrome || command -v chromium)\"",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:35:39Z",
+          "completed_at": "2026-10-13T19:35:40Z"
+        },
+        {
+          "number": 13,
+          "name": "Run export CHROME_PATH=\"$(command -v google-chrome || command -v chromium)\"",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:35:40Z",
+          "completed_at": "2026-10-13T19:39:35Z"
+        },
+        {
+          "number": 14,
+          "name": "Run actions/upload-artifact@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:39:35Z",
+          "completed_at": "2026-10-13T19:39:37Z"
+        },
+        {
+          "number": 27,
+          "name": "Post Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:39:37Z",
+          "completed_at": "2026-10-13T19:39:37Z"
+        },
+        {
+          "number": 28,
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:39:37Z",
+          "completed_at": "2026-10-13T19:39:37Z"
+        },
+        {
+          "number": 29,
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:39:37Z",
+          "completed_at": "2026-10-13T19:39:37Z"
+        }
+      ]
+    },
+    {
+      "id": 115485175228,
+      "name": "native (fracture, 42,43,44,45,46,47,48,49,50,51)",
+      "status": "completed",
+      "conclusion": "success",
+      "run_id": 38451783602,
+      "run_attempt": 1,
+      "started_at": "2026-10-13T19:05:31Z",
+      "completed_at": "2026-10-13T19:12:43Z",
+      "steps": [
+        {
+          "number": 1,
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:32Z",
+          "completed_at": "2026-10-13T19:05:34Z"
+        },
+        {
+          "number": 2,
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:34Z",
+          "completed_at": "2026-10-13T19:05:37Z"
+        },
+        {
+          "number": 3,
+          "name": "Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:37Z",
+          "completed_at": "2026-10-13T19:05:40Z"
+        },
+        {
+          "number": 4,
+          "name": "Run npm ci",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:40Z",
+          "completed_at": "2026-10-13T19:05:43Z"
+        },
+        {
+          "number": 5,
+          "name": "Run npm install --no-save --package-lock=false puppeteer-core@24.16.0",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:43Z",
+          "completed_at": "2026-10-13T19:05:51Z"
+        },
+        {
+          "number": 6,
+          "name": "Install actual image pixel validation dependency",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:51Z",
+          "completed_at": "2026-10-13T19:06:11Z"
+        },
+        {
+          "number": 7,
+          "name": "Run actions/download-artifact@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:06:11Z",
+          "completed_at": "2026-10-13T19:06:13Z"
+        },
+        {
+          "number": 8,
+          "name": "Run export CHROME_PATH=\"$(command -v google-chrome || command -v chromium)\"",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:06:13Z",
+          "completed_at": "2026-10-13T19:12:39Z"
+        },
+        {
+          "number": 9,
+          "name": "Run actions/upload-artifact@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:12:39Z",
+          "completed_at": "2026-10-13T19:12:41Z"
+        },
+        {
+          "number": 17,
+          "name": "Post Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:12:41Z",
+          "completed_at": "2026-10-13T19:12:41Z"
+        },
+        {
+          "number": 18,
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:12:41Z",
+          "completed_at": "2026-10-13T19:12:41Z"
+        },
+        {
+          "number": 19,
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:12:41Z",
+          "completed_at": "2026-10-13T19:12:41Z"
+        }
+      ]
+    },
+    {
+      "id": 115485175274,
+      "name": "native (living, 21,22,23,24,25,26,27,28,29,30)",
+      "status": "completed",
+      "conclusion": "success",
+      "run_id": 38451783602,
+      "run_attempt": 1,
+      "started_at": "2026-10-13T19:05:31Z",
+      "completed_at": "2026-10-13T19:17:35Z",
+      "steps": [
+        {
+          "number": 1,
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:32Z",
+          "completed_at": "2026-10-13T19:05:33Z"
+        },
+        {
+          "number": 2,
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:33Z",
+          "completed_at": "2026-10-13T19:05:36Z"
+        },
+        {
+          "number": 3,
+          "name": "Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:36Z",
+          "completed_at": "2026-10-13T19:05:40Z"
+        },
+        {
+          "number": 4,
+          "name": "Run npm ci",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:40Z",
+          "completed_at": "2026-10-13T19:05:43Z"
+        },
+        {
+          "number": 5,
+          "name": "Run npm install --no-save --package-lock=false puppeteer-core@24.16.0",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:43Z",
+          "completed_at": "2026-10-13T19:05:50Z"
+        },
+        {
+          "number": 6,
+          "name": "Install actual image pixel validation dependency",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:50Z",
+          "completed_at": "2026-10-13T19:06:06Z"
+        },
+        {
+          "number": 7,
+          "name": "Run actions/download-artifact@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:06:06Z",
+          "completed_at": "2026-10-13T19:06:07Z"
+        },
+        {
+          "number": 8,
+          "name": "Run export CHROME_PATH=\"$(command -v google-chrome || command -v chromium)\"",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:06:07Z",
+          "completed_at": "2026-10-13T19:17:31Z"
+        },
+        {
+          "number": 9,
+          "name": "Run actions/upload-artifact@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:17:31Z",
+          "completed_at": "2026-10-13T19:17:32Z"
+        },
+        {
+          "number": 17,
+          "name": "Post Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:17:32Z",
+          "completed_at": "2026-10-13T19:17:32Z"
+        },
+        {
+          "number": 18,
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:17:32Z",
+          "completed_at": "2026-10-13T19:17:33Z"
+        },
+        {
+          "number": 19,
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:17:33Z",
+          "completed_at": "2026-10-13T19:17:33Z"
+        }
+      ]
+    },
+    {
+      "id": 115485175433,
+      "name": "native (energy, 11,12,13,14,15,16,17,18,19,20)",
+      "status": "completed",
+      "conclusion": "success",
+      "run_id": 38451783602,
+      "run_attempt": 1,
+      "started_at": "2026-10-13T19:06:08Z",
+      "completed_at": "2026-10-13T19:15:18Z",
+      "steps": [
+        {
+          "number": 1,
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:06:09Z",
+          "completed_at": "2026-10-13T19:06:10Z"
+        },
+        {
+          "number": 2,
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:06:10Z",
+          "completed_at": "2026-10-13T19:06:12Z"
+        },
+        {
+          "number": 3,
+          "name": "Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:06:12Z",
+          "completed_at": "2026-10-13T19:06:15Z"
+        },
+        {
+          "number": 4,
+          "name": "Run npm ci",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:06:15Z",
+          "completed_at": "2026-10-13T19:06:17Z"
+        },
+        {
+          "number": 5,
+          "name": "Run npm install --no-save --package-lock=false puppeteer-core@24.16.0",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:06:17Z",
+          "completed_at": "2026-10-13T19:06:25Z"
+        },
+        {
+          "number": 6,
+          "name": "Install actual image pixel validation dependency",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:06:25Z",
+          "completed_at": "2026-10-13T19:06:35Z"
+        },
+        {
+          "number": 7,
+          "name": "Run actions/download-artifact@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:06:35Z",
+          "completed_at": "2026-10-13T19:06:36Z"
+        },
+        {
+          "number": 8,
+          "name": "Run export CHROME_PATH=\"$(command -v google-chrome || command -v chromium)\"",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:06:36Z",
+          "completed_at": "2026-10-13T19:15:13Z"
+        },
+        {
+          "number": 9,
+          "name": "Run actions/upload-artifact@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:15:13Z",
+          "completed_at": "2026-10-13T19:15:15Z"
+        },
+        {
+          "number": 17,
+          "name": "Post Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:15:15Z",
+          "completed_at": "2026-10-13T19:15:15Z"
+        },
+        {
+          "number": 18,
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:15:15Z",
+          "completed_at": "2026-10-13T19:15:15Z"
+        },
+        {
+          "number": 19,
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:15:15Z",
+          "completed_at": "2026-10-13T19:15:15Z"
+        }
+      ]
+    },
+    {
+      "id": 115485175465,
+      "name": "native (optics, 31,32,33,34,35,36,37,38,39,40)",
+      "status": "completed",
+      "conclusion": "success",
+      "run_id": 38451783602,
+      "run_attempt": 1,
+      "started_at": "2026-10-13T19:05:31Z",
+      "completed_at": "2026-10-13T19:09:58Z",
+      "steps": [
+        {
+          "number": 1,
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:32Z",
+          "completed_at": "2026-10-13T19:05:32Z"
+        },
+        {
+          "number": 2,
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:32Z",
+          "completed_at": "2026-10-13T19:05:34Z"
+        },
+        {
+          "number": 3,
+          "name": "Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:34Z",
+          "completed_at": "2026-10-13T19:05:35Z"
+        },
+        {
+          "number": 4,
+          "name": "Run npm ci",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:35Z",
+          "completed_at": "2026-10-13T19:05:37Z"
+        },
+        {
+          "number": 5,
+          "name": "Run npm install --no-save --package-lock=false puppeteer-core@24.16.0",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:37Z",
+          "completed_at": "2026-10-13T19:05:45Z"
+        },
+        {
+          "number": 6,
+          "name": "Install actual image pixel validation dependency",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:45Z",
+          "completed_at": "2026-10-13T19:05:54Z"
+        },
+        {
+          "number": 7,
+          "name": "Run actions/download-artifact@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:54Z",
+          "completed_at": "2026-10-13T19:05:55Z"
+        },
+        {
+          "number": 8,
+          "name": "Run export CHROME_PATH=\"$(command -v google-chrome || command -v chromium)\"",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:55Z",
+          "completed_at": "2026-10-13T19:09:55Z"
+        },
+        {
+          "number": 9,
+          "name": "Run actions/upload-artifact@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:09:55Z",
+          "completed_at": "2026-10-13T19:09:56Z"
+        },
+        {
+          "number": 17,
+          "name": "Post Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:09:56Z",
+          "completed_at": "2026-10-13T19:09:56Z"
+        },
+        {
+          "number": 18,
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:09:56Z",
+          "completed_at": "2026-10-13T19:09:56Z"
+        },
+        {
+          "number": 19,
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:09:56Z",
+          "completed_at": "2026-10-13T19:09:56Z"
+        }
+      ]
+    },
+    {
+      "id": 115485175483,
+      "name": "native (early, 1,2,3,4,5,6,7,8,9,10)",
+      "status": "completed",
+      "conclusion": "success",
+      "run_id": 38451783602,
+      "run_attempt": 1,
+      "started_at": "2026-10-13T19:05:50Z",
+      "completed_at": "2026-10-13T19:08:27Z",
+      "steps": [
+        {
+          "number": 1,
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:50Z",
+          "completed_at": "2026-10-13T19:05:53Z"
+        },
+        {
+          "number": 2,
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:53Z",
+          "completed_at": "2026-10-13T19:05:55Z"
+        },
+        {
+          "number": 3,
+          "name": "Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:05:55Z",
+          "completed_at": "2026-10-13T19:06:00Z"
+        },
+        {
+          "number": 4,
+          "name": "Run npm ci",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:06:00Z",
+          "completed_at": "2026-10-13T19:06:01Z"
+        },
+        {
+          "number": 5,
+          "name": "Run npm install --no-save --package-lock=false puppeteer-core@24.16.0",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:06:01Z",
+          "completed_at": "2026-10-13T19:06:09Z"
+        },
+        {
+          "number": 6,
+          "name": "Install actual image pixel validation dependency",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:06:09Z",
+          "completed_at": "2026-10-13T19:06:18Z"
+        },
+        {
+          "number": 7,
+          "name": "Run actions/download-artifact@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:06:18Z",
+          "completed_at": "2026-10-13T19:06:20Z"
+        },
+        {
+          "number": 8,
+          "name": "Run export CHROME_PATH=\"$(command -v google-chrome || command -v chromium)\"",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:06:20Z",
+          "completed_at": "2026-10-13T19:08:24Z"
+        },
+        {
+          "number": 9,
+          "name": "Run actions/upload-artifact@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:08:24Z",
+          "completed_at": "2026-10-13T19:08:25Z"
+        },
+        {
+          "number": 17,
+          "name": "Post Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:08:25Z",
+          "completed_at": "2026-10-13T19:08:25Z"
+        },
+        {
+          "number": 18,
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:08:25Z",
+          "completed_at": "2026-10-13T19:08:25Z"
+        },
+        {
+          "number": 19,
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:08:25Z",
+          "completed_at": "2026-10-13T19:08:25Z"
+        }
+      ]
+    },
+    {
+      "id": 115485176610,
+      "name": "native (castle, 41)",
+      "status": "completed",
+      "conclusion": "success",
+      "run_id": 38451783602,
+      "run_attempt": 1,
+      "started_at": "2026-10-13T19:07:18Z",
+      "completed_at": "2026-10-13T19:14:54Z",
+      "steps": [
+        {
+          "number": 1,
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:07:19Z",
+          "completed_at": "2026-10-13T19:07:20Z"
+        },
+        {
+          "number": 2,
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:07:20Z",
+          "completed_at": "2026-10-13T19:07:22Z"
+        },
+        {
+          "number": 3,
+          "name": "Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:07:22Z",
+          "completed_at": "2026-10-13T19:07:24Z"
+        },
+        {
+          "number": 4,
+          "name": "Run npm ci",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:07:24Z",
+          "completed_at": "2026-10-13T19:07:26Z"
+        },
+        {
+          "number": 5,
+          "name": "Run npm install --no-save --package-lock=false puppeteer-core@24.16.0",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:07:26Z",
+          "completed_at": "2026-10-13T19:07:34Z"
+        },
+        {
+          "number": 6,
+          "name": "Install actual image pixel validation dependency",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:07:34Z",
+          "completed_at": "2026-10-13T19:07:43Z"
+        },
+        {
+          "number": 7,
+          "name": "Run actions/download-artifact@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:07:43Z",
+          "completed_at": "2026-10-13T19:07:45Z"
+        },
+        {
+          "number": 8,
+          "name": "Run export CHROME_PATH=\"$(command -v google-chrome || command -v chromium)\"",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:07:45Z",
+          "completed_at": "2026-10-13T19:14:51Z"
+        },
+        {
+          "number": 9,
+          "name": "Run actions/upload-artifact@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:14:51Z",
+          "completed_at": "2026-10-13T19:14:52Z"
+        },
+        {
+          "number": 17,
+          "name": "Post Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:14:52Z",
+          "completed_at": "2026-10-13T19:14:53Z"
+        },
+        {
+          "number": 18,
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:14:53Z",
+          "completed_at": "2026-10-13T19:14:53Z"
+        },
+        {
+          "number": 19,
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-13T19:14:53Z",
+          "completed_at": "2026-10-13T19:14:53Z"
+        }
+      ]
+    }
+  ],
+  "sourceArtifacts": [
+    {
+      "id": 11840363626,
+      "name": "campaign-polish-ordinary-early",
+      "size_in_bytes": 3373,
+      "digest": "sha256:6545ff7849f1e5d2207d21c31df5d7c3b800cfb6593293690f77def36b5334c3",
+      "expired": false,
+      "created_at": "2026-10-13T19:05:44Z",
+      "updated_at": "2026-10-13T19:05:44Z",
+      "expires_at": "2026-10-23T19:05:44Z",
+      "workflow_run": {
+        "id": 38451783602,
+        "repository_id": 1354625251,
+        "head_repository_id": 1354625251,
+        "head_branch": "upgrade/campaign-polish-20261013",
+        "head_sha": "a3c81ee59a9b2cbf1b23254857dd8c2a6f6b3c38"
+      },
+      "jobId": 115484933612
+    },
+    {
+      "id": 11840458845,
+      "name": "campaign-polish-storage-isolation",
+      "size_in_bytes": 759282,
+      "digest": "sha256:f413c18443d04d7f63beb230fe2a60e2bb9a262a776052f8b5ac7d981aa4ff36",
+      "expired": false,
+      "created_at": "2026-10-13T19:07:27Z",
+      "updated_at": "2026-10-13T19:07:27Z",
+      "expires_at": "2026-10-23T19:07:26Z",
+      "workflow_run": {
+        "id": 38451783602,
+        "repository_id": 1354625251,
+        "head_repository_id": 1354625251,
+        "head_branch": "upgrade/campaign-polish-20261013",
+        "head_sha": "a3c81ee59a9b2cbf1b23254857dd8c2a6f6b3c38"
+      },
+      "jobId": 115485175033
+    },
+    {
+      "id": 11840504098,
+      "name": "campaign-polish-castle-shortcuts",
+      "size_in_bytes": 78968,
+      "digest": "sha256:08fba4ec22209bfb4627f2e897040516e56c12d8ed53ee72c8ec9528558bd445",
+      "expired": false,
+      "created_at": "2026-10-13T19:10:26Z",
+      "updated_at": "2026-10-13T19:10:26Z",
+      "expires_at": "2026-10-23T19:10:25Z",
+      "workflow_run": {
+        "id": 38451783602,
+        "repository_id": 1354625251,
+        "head_repository_id": 1354625251,
+        "head_branch": "upgrade/campaign-polish-20261013",
+        "head_sha": "a3c81ee59a9b2cbf1b23254857dd8c2a6f6b3c38"
+      },
+      "jobId": 115484933808
+    },
+    {
+      "id": 11840548557,
+      "name": "campaign-polish-native-living",
+      "size_in_bytes": 371748,
+      "digest": "sha256:0292fca952b545ae3753fc38321735776c75b0542abb527d9b2b921a8ecccce6",
+      "expired": false,
+      "created_at": "2026-10-13T19:17:32Z",
+      "updated_at": "2026-10-13T19:17:32Z",
+      "expires_at": "2026-10-23T19:17:32Z",
+      "workflow_run": {
+        "id": 38451783602,
+        "repository_id": 1354625251,
+        "head_repository_id": 1354625251,
+        "head_branch": "upgrade/campaign-polish-20261013",
+        "head_sha": "a3c81ee59a9b2cbf1b23254857dd8c2a6f6b3c38"
+      },
+      "jobId": 115485175274
+    },
+    {
+      "id": 11840752939,
+      "name": "campaign-polish-native-castle",
+      "size_in_bytes": 36854,
+      "digest": "sha256:972d992d0133b34e889c1002703c29c976a338114786e7988794286ecab55dc1",
+      "expired": false,
+      "created_at": "2026-10-13T19:14:52Z",
+      "updated_at": "2026-10-13T19:14:52Z",
+      "expires_at": "2026-10-23T19:14:52Z",
+      "workflow_run": {
+        "id": 38451783602,
+        "repository_id": 1354625251,
+        "head_repository_id": 1354625251,
+        "head_branch": "upgrade/campaign-polish-20261013",
+        "head_sha": "a3c81ee59a9b2cbf1b23254857dd8c2a6f6b3c38"
+      },
+      "jobId": 115485176610
+    },
+    {
+      "id": 11840756530,
+      "name": "campaign-polish-dist",
+      "size_in_bytes": 4475141,
+      "digest": "sha256:1f7a33cb60ea07d2b949ddd63ac78bba1cf86a72e54e2612c4a4019b9c64ba5f",
+      "expired": false,
+      "created_at": "2026-10-13T19:05:25Z",
+      "updated_at": "2026-10-13T19:05:25Z",
+      "expires_at": "2026-10-23T19:05:23Z",
+      "workflow_run": {
+        "id": 38451783602,
+        "repository_id": 1354625251,
+        "head_repository_id": 1354625251,
+        "head_branch": "upgrade/campaign-polish-20261013",
+        "head_sha": "a3c81ee59a9b2cbf1b23254857dd8c2a6f6b3c38"
+      },
+      "jobId": 115484933710
+    },
+    {
+      "id": 11840976671,
+      "name": "campaign-polish-ordinary-energy",
+      "size_in_bytes": 15322,
+      "digest": "sha256:daa23b352fd485b2f85e1485dc889891167a6e5e161fd59612701afcaf0bf20c",
+      "expired": false,
+      "created_at": "2026-10-13T19:07:17Z",
+      "updated_at": "2026-10-13T19:07:17Z",
+      "expires_at": "2026-10-23T19:07:16Z",
+      "workflow_run": {
+        "id": 38451783602,
+        "repository_id": 1354625251,
+        "head_repository_id": 1354625251,
+        "head_branch": "upgrade/campaign-polish-20261013",
+        "head_sha": "a3c81ee59a9b2cbf1b23254857dd8c2a6f6b3c38"
+      },
+      "jobId": 115484934895
+    },
+    {
+      "id": 11841126188,
+      "name": "campaign-polish-yandex",
+      "size_in_bytes": 4320425,
+      "digest": "sha256:a1390bd3c9a3f4f34bf5920b5c4edb757da76bd1e7fa67b8c420f391f9ab7ef0",
+      "expired": false,
+      "created_at": "2026-10-13T19:05:23Z",
+      "updated_at": "2026-10-13T19:05:23Z",
+      "expires_at": "2026-10-23T19:05:21Z",
+      "workflow_run": {
+        "id": 38451783602,
+        "repository_id": 1354625251,
+        "head_repository_id": 1354625251,
+        "head_branch": "upgrade/campaign-polish-20261013",
+        "head_sha": "a3c81ee59a9b2cbf1b23254857dd8c2a6f6b3c38"
+      },
+      "jobId": 115484933710
+    },
+    {
+      "id": 11841131307,
+      "name": "campaign-polish-ordinary-optics",
+      "size_in_bytes": 5506,
+      "digest": "sha256:476dff589ce5f7f7176e7d4a087df295d25a95ee718938d133b070aadc8df611",
+      "expired": false,
+      "created_at": "2026-10-13T19:06:02Z",
+      "updated_at": "2026-10-13T19:06:02Z",
+      "expires_at": "2026-10-23T19:06:01Z",
+      "workflow_run": {
+        "id": 38451783602,
+        "repository_id": 1354625251,
+        "head_repository_id": 1354625251,
+        "head_branch": "upgrade/campaign-polish-20261013",
+        "head_sha": "a3c81ee59a9b2cbf1b23254857dd8c2a6f6b3c38"
+      },
+      "jobId": 115484933677
+    },
+    {
+      "id": 11841161687,
+      "name": "campaign-polish-native-early",
+      "size_in_bytes": 511040,
+      "digest": "sha256:679581bdb31e512c52e768f80a09bc475b24b3d4ff471b131ac076b79e158699",
+      "expired": false,
+      "created_at": "2026-10-13T19:08:25Z",
+      "updated_at": "2026-10-13T19:08:25Z",
+      "expires_at": "2026-10-23T19:08:24Z",
+      "workflow_run": {
+        "id": 38451783602,
+        "repository_id": 1354625251,
+        "head_repository_id": 1354625251,
+        "head_branch": "upgrade/campaign-polish-20261013",
+        "head_sha": "a3c81ee59a9b2cbf1b23254857dd8c2a6f6b3c38"
+      },
+      "jobId": 115485175483
+    },
+    {
+      "id": 11841191563,
+      "name": "campaign-polish-ordinary-living",
+      "size_in_bytes": 6225,
+      "digest": "sha256:621c218aa99a64e783842afd3c8f383f506d715573f6b4ff87f66e5ce8669ee7",
+      "expired": false,
+      "created_at": "2026-10-13T19:07:13Z",
+      "updated_at": "2026-10-13T19:07:13Z",
+      "expires_at": "2026-10-23T19:07:12Z",
+      "workflow_run": {
+        "id": 38451783602,
+        "repository_id": 1354625251,
+        "head_repository_id": 1354625251,
+        "head_branch": "upgrade/campaign-polish-20261013",
+        "head_sha": "a3c81ee59a9b2cbf1b23254857dd8c2a6f6b3c38"
+      },
+      "jobId": 115484933842
+    },
+    {
+      "id": 11841203513,
+      "name": "campaign-polish-cpu-4",
+      "size_in_bytes": 28080,
+      "digest": "sha256:6e69287e390946e8999220874b63db774afd3dfdfbb7cb1a02b6452765deff3c",
+      "expired": false,
+      "created_at": "2026-10-13T19:20:11Z",
+      "updated_at": "2026-10-13T19:20:11Z",
+      "expires_at": "2026-10-23T19:20:11Z",
+      "workflow_run": {
+        "id": 38451783602,
+        "repository_id": 1354625251,
+        "head_repository_id": 1354625251,
+        "head_branch": "upgrade/campaign-polish-20261013",
+        "head_sha": "a3c81ee59a9b2cbf1b23254857dd8c2a6f6b3c38"
+      },
+      "jobId": 115484933753
+    },
+    {
+      "id": 11841222574,
+      "name": "campaign-polish-cpu-1",
+      "size_in_bytes": 20553,
+      "digest": "sha256:f557d2fee12195446d68b09c002994f667148c89e135554ccd26f72a82600292",
+      "expired": false,
+      "created_at": "2026-10-13T19:14:31Z",
+      "updated_at": "2026-10-13T19:14:31Z",
+      "expires_at": "2026-10-23T19:14:31Z",
+      "workflow_run": {
+        "id": 38451783602,
+        "repository_id": 1354625251,
+        "head_repository_id": 1354625251,
+        "head_branch": "upgrade/campaign-polish-20261013",
+        "head_sha": "a3c81ee59a9b2cbf1b23254857dd8c2a6f6b3c38"
+      },
+      "jobId": 115484933738
+    },
+    {
+      "id": 11841252584,
+      "name": "campaign-polish-ordinary-castle",
+      "size_in_bytes": 2223,
+      "digest": "sha256:a6538559695cf1a9158b38f09eeb9ca2f662f3ffb97b7682b82140f22795de18",
+      "expired": false,
+      "created_at": "2026-10-13T19:13:46Z",
+      "updated_at": "2026-10-13T19:13:46Z",
+      "expires_at": "2026-10-23T19:13:45Z",
+      "workflow_run": {
+        "id": 38451783602,
+        "repository_id": 1354625251,
+        "head_repository_id": 1354625251,
+        "head_branch": "upgrade/campaign-polish-20261013",
+        "head_sha": "a3c81ee59a9b2cbf1b23254857dd8c2a6f6b3c38"
+      },
+      "jobId": 115484933568
+    },
+    {
+      "id": 11841511432,
+      "name": "campaign-polish-native-optics",
+      "size_in_bytes": 359163,
+      "digest": "sha256:0de298a1e8144cab45ba14c6f20711bb176caf5098df20fb3c7d7acf25d119c7",
+      "expired": false,
+      "created_at": "2026-10-13T19:09:56Z",
+      "updated_at": "2026-10-13T19:09:56Z",
+      "expires_at": "2026-10-23T19:09:55Z",
+      "workflow_run": {
+        "id": 38451783602,
+        "repository_id": 1354625251,
+        "head_repository_id": 1354625251,
+        "head_branch": "upgrade/campaign-polish-20261013",
+        "head_sha": "a3c81ee59a9b2cbf1b23254857dd8c2a6f6b3c38"
+      },
+      "jobId": 115485175465
+    },
+    {
+      "id": 11841612538,
+      "name": "campaign-polish-cpu-0",
+      "size_in_bytes": 21378,
+      "digest": "sha256:784694c372c98507d612f28ceacaf726ec0a167a284edc3d77e6e00d0e97131c",
+      "expired": false,
+      "created_at": "2026-10-13T19:16:23Z",
+      "updated_at": "2026-10-13T19:16:23Z",
+      "expires_at": "2026-10-23T19:16:23Z",
+      "workflow_run": {
+        "id": 38451783602,
+        "repository_id": 1354625251,
+        "head_repository_id": 1354625251,
+        "head_branch": "upgrade/campaign-polish-20261013",
+        "head_sha": "a3c81ee59a9b2cbf1b23254857dd8c2a6f6b3c38"
+      },
+      "jobId": 115484933984
+    },
+    {
+      "id": 11841666618,
+      "name": "campaign-polish-cpu-5",
+      "size_in_bytes": 18442,
+      "digest": "sha256:fb7c6612f1df79824141742d77b5cdd8fbe4fe316a3dc3dec80a0e9db5c131c8",
+      "expired": false,
+      "created_at": "2026-10-13T19:12:34Z",
+      "updated_at": "2026-10-13T19:12:34Z",
+      "expires_at": "2026-10-23T19:12:34Z",
+      "workflow_run": {
+        "id": 38451783602,
+        "repository_id": 1354625251,
+        "head_repository_id": 1354625251,
+        "head_branch": "upgrade/campaign-polish-20261013",
+        "head_sha": "a3c81ee59a9b2cbf1b23254857dd8c2a6f6b3c38"
+      },
+      "jobId": 115484934157
+    },
+    {
+      "id": 11841731246,
+      "name": "campaign-polish-ordinary-fracture",
+      "size_in_bytes": 7298,
+      "digest": "sha256:832e2ab25cee79fb547c3660856e4b34a00391053066448ac49fe64f74ffb7a0",
+      "expired": false,
+      "created_at": "2026-10-13T19:10:18Z",
+      "updated_at": "2026-10-13T19:10:18Z",
+      "expires_at": "2026-10-23T19:10:18Z",
+      "workflow_run": {
+        "id": 38451783602,
+        "repository_id": 1354625251,
+        "head_repository_id": 1354625251,
+        "head_branch": "upgrade/campaign-polish-20261013",
+        "head_sha": "a3c81ee59a9b2cbf1b23254857dd8c2a6f6b3c38"
+      },
+      "jobId": 115484933345
+    },
+    {
+      "id": 11841746739,
+      "name": "campaign-polish-shortcuts-early",
+      "size_in_bytes": 141581,
+      "digest": "sha256:34e7d476c78fd194cfcf069c9d85dbd4a43c95d7054dce0b1217526ff6cdd4ee",
+      "expired": false,
+      "created_at": "2026-10-13T19:12:53Z",
+      "updated_at": "2026-10-13T19:12:53Z",
+      "expires_at": "2026-10-23T19:12:52Z",
+      "workflow_run": {
+        "id": 38451783602,
+        "repository_id": 1354625251,
+        "head_repository_id": 1354625251,
+        "head_branch": "upgrade/campaign-polish-20261013",
+        "head_sha": "a3c81ee59a9b2cbf1b23254857dd8c2a6f6b3c38"
+      },
+      "jobId": 115484933858
+    },
+    {
+      "id": 11841766733,
+      "name": "campaign-polish-native-fracture",
+      "size_in_bytes": 423725,
+      "digest": "sha256:8e0593edcf2e5d7e36fb8b7a98e68cf99501b5d1c75bb9582c8e19d8fe8221d9",
+      "expired": false,
+      "created_at": "2026-10-13T19:12:40Z",
+      "updated_at": "2026-10-13T19:12:40Z",
+      "expires_at": "2026-10-23T19:12:39Z",
+      "workflow_run": {
+        "id": 38451783602,
+        "repository_id": 1354625251,
+        "head_repository_id": 1354625251,
+        "head_branch": "upgrade/campaign-polish-20261013",
+        "head_sha": "a3c81ee59a9b2cbf1b23254857dd8c2a6f6b3c38"
+      },
+      "jobId": 115485175228
+    },
+    {
+      "id": 11841980128,
+      "name": "campaign-polish-shortcuts-late",
+      "size_in_bytes": 198913,
+      "digest": "sha256:a3fd93d51f9a1027fd8b5be8152139ef877fd443226acd8cc197c160ce7fb0b6",
+      "expired": false,
+      "created_at": "2026-10-13T19:13:57Z",
+      "updated_at": "2026-10-13T19:13:57Z",
+      "expires_at": "2026-10-23T19:13:56Z",
+      "workflow_run": {
+        "id": 38451783602,
+        "repository_id": 1354625251,
+        "head_repository_id": 1354625251,
+        "head_branch": "upgrade/campaign-polish-20261013",
+        "head_sha": "a3c81ee59a9b2cbf1b23254857dd8c2a6f6b3c38"
+      },
+      "jobId": 115484933722
+    },
+    {
+      "id": 11842070712,
+      "name": "campaign-polish-cpu-3",
+      "size_in_bytes": 22532,
+      "digest": "sha256:97ed818fa688c5b12b2ff5714d6007edb611666683d82beb9444a9ebec23bccc",
+      "expired": false,
+      "created_at": "2026-10-13T19:17:24Z",
+      "updated_at": "2026-10-13T19:17:24Z",
+      "expires_at": "2026-10-23T19:17:23Z",
+      "workflow_run": {
+        "id": 38451783602,
+        "repository_id": 1354625251,
+        "head_repository_id": 1354625251,
+        "head_branch": "upgrade/campaign-polish-20261013",
+        "head_sha": "a3c81ee59a9b2cbf1b23254857dd8c2a6f6b3c38"
+      },
+      "jobId": 115484933963
+    },
+    {
+      "id": 11842115098,
+      "name": "campaign-polish-native-energy",
+      "size_in_bytes": 428134,
+      "digest": "sha256:9f86ca1cceb71da966ca030785efe4e110717c6091b241da5bbb4e737f7d5756",
+      "expired": false,
+      "created_at": "2026-10-13T19:15:14Z",
+      "updated_at": "2026-10-13T19:15:14Z",
+      "expires_at": "2026-10-23T19:15:13Z",
+      "workflow_run": {
+        "id": 38451783602,
+        "repository_id": 1354625251,
+        "head_repository_id": 1354625251,
+        "head_branch": "upgrade/campaign-polish-20261013",
+        "head_sha": "a3c81ee59a9b2cbf1b23254857dd8c2a6f6b3c38"
+      },
+      "jobId": 115485175433
+    },
+    {
+      "id": 11842145354,
+      "name": "campaign-polish-cpu-2",
+      "size_in_bytes": 193083,
+      "digest": "sha256:23f137cd79219e58891602d7ee60ae2319a1ab17addc1e7882a4fdb7977ff227",
+      "expired": false,
+      "created_at": "2026-10-13T19:17:01Z",
+      "updated_at": "2026-10-13T19:17:01Z",
+      "expires_at": "2026-10-23T19:17:01Z",
+      "workflow_run": {
+        "id": 38451783602,
+        "repository_id": 1354625251,
+        "head_repository_id": 1354625251,
+        "head_branch": "upgrade/campaign-polish-20261013",
+        "head_sha": "a3c81ee59a9b2cbf1b23254857dd8c2a6f6b3c38"
+      },
+      "jobId": 115484933990
+    },
+    {
+      "id": 11842921506,
+      "name": "campaign-polish-presentation",
+      "size_in_bytes": 16832470,
+      "digest": "sha256:15fac77bf4907ef749b1e1c754e975a690bd1428656926e9233e698a31b8fb6c",
+      "expired": false,
+      "created_at": "2026-10-13T19:39:37Z",
+      "updated_at": "2026-10-13T19:39:37Z",
+      "expires_at": "2026-10-23T19:39:35Z",
+      "workflow_run": {
+        "id": 38451783602,
+        "repository_id": 1354625251,
+        "head_repository_id": 1354625251,
+        "head_branch": "upgrade/campaign-polish-20261013",
+        "head_sha": "a3c81ee59a9b2cbf1b23254857dd8c2a6f6b3c38"
+      },
+      "jobId": 115485175093
+    }
+  ],
+  "sourceLogs": [],
+  "sourceRootAudit": {
+    "sourceCommit": "a3c81ee59a9b2cbf1b23254857dd8c2a6f6b3c38",
+    "sourceTree": "78df45b4ccbb543055dafd014a9ea6669938d582",
+    "sourceParent": "f81eec3359e2560fb8ac1ec14834cf355010dfd2",
+    "sourceReview": {
+      "runId": 38451783602,
+      "runAttempt": 1
+    },
+    "sourceAccepted": true,
+    "publicationAccepted": false,
+    "path": "tools/campaign-v56-root-acceptance.json",
+    "bytes": 14575,
+    "sha256": "c0c95dca78df8c871b918a951a8376d48c6e0e9ec3ccbdc481b2b13ba2d93a6f"
+  },
+  "baseline": {
+    "publicationAccepted": true,
+    "publisher": "ba3218f7855e7cbff8170ec1f692a0fd786794a6",
+    "tree": "54cf0213eec0551c2c88b7a5fee7cd17dbb9e2b3",
+    "runId": 38387082981,
+    "runAttempt": 1,
+    "files": 2038,
+    "bytes": 640738913,
+    "inventorySha256": "3cd59f86100c7b9e87ebaf1b3b4b7d81aedaf66d2044895b5b9afa4367264f1e",
+    "readonlyRun": 38394370232,
+    "readonlyCommit": "29b45c556d35f0eaa820e0d9d20b83433079a25c",
+    "verificationArtifact": {
+      "id": 11811188876,
+      "name": "campaign-v55-readonly-public-verification-38394370232-1",
+      "size_in_bytes": 19050251,
+      "url": "https://api.github.com/repos/amazin20/brainrot-portal/actions/artifacts/11811188876",
+      "archive_download_url": "https://api.github.com/repos/amazin20/brainrot-portal/actions/artifacts/11811188876/zip",
+      "expired": false,
+      "created_at": "2026-10-13T12:04:33Z",
+      "expires_at": "2026-10-23T12:04:32Z",
+      "updated_at": "2026-10-13T12:04:33Z",
+      "digest": "sha256:ae7cb35212886faac0f8da1f94bf599d91e3b408357097ec37f6e99f725f245e",
+      "workflow_run": {
+        "id": 38394370232,
+        "repository_id": 1354625251,
+        "head_repository_id": 1354625251,
+        "head_branch": "audit/campaign-v55-public-packet-20261013",
+        "head_sha": "29b45c556d35f0eaa820e0d9d20b83433079a25c"
+      }
+    },
+    "rootAudit": {
+      "path": "tools/campaign-v55-public-root-acceptance.json",
+      "bytes": 8431,
+      "sha256": "6df4973220924953bac06e9e21f5b27c8bccdb337e399e44740674447673c494"
+    },
+    "latestOriginalDeployment": {
+      "id": 7036716379,
+      "logUrl": "https://github.com/amazin20/brainrot-portal/actions/runs/38387082981/job/115262787304"
+    }
+  }
+}

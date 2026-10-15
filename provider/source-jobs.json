@@ -1,0 +1,2725 @@
+{
+  "total_count": 24,
+  "jobs": [
+    {
+      "id": 115484933345,
+      "run_id": 38451783602,
+      "workflow_name": "Review the unified themed campaign and final castle",
+      "head_branch": "upgrade/campaign-polish-20261013",
+      "run_url": "https://api.github.com/repos/amazin20/brainrot-portal/actions/runs/38451783602",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOUL3w488AAAAa43A84Q",
+      "head_sha": "a3c81ee59a9b2cbf1b23254857dd8c2a6f6b3c38",
+      "url": "https://api.github.com/repos/amazin20/brainrot-portal/actions/jobs/115484933345",
+      "html_url": "https://github.com/amazin20/brainrot-portal/actions/runs/38451783602/job/115484933345",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-10-13T19:04:56Z",
+      "started_at": "2026-10-13T19:04:59Z",
+      "completed_at": "2026-10-13T19:10:21Z",
+      "name": "ordinary (fracture, 42,43,44,45,46,47,48,49,50,51)",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-13T19:05:00Z",
+          "completed_at": "2026-10-13T19:05:01Z"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-13T19:05:01Z",
+          "completed_at": "2026-10-13T19:05:04Z"
+        },
+        {
+          "name": "Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-13T19:05:04Z",
+          "completed_at": "2026-10-13T19:05:06Z"
+        },
+        {
+          "name": "Run npm ci",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-13T19:05:06Z",
+          "completed_at": "2026-10-13T19:05:07Z"
+        },
+        {
+          "name": "Run node scripts/qa-campaign-ordinary.mjs",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-13T19:05:07Z",
+          "completed_at": "2026-10-13T19:10:18Z"
+        },
+        {
+          "name": "Run actions/upload-artifact@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-13T19:10:18Z",
+          "completed_at": "2026-10-13T19:10:18Z"
+        },
+        {
+          "name": "Post Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-10-13T19:10:18Z",
+          "completed_at": "2026-10-13T19:10:19Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12,
+          "started_at": "2026-10-13T19:10:19Z",
+          "completed_at": "2026-10-13T19:10:19Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13,
+          "started_at": "2026-10-13T19:10:19Z",
+          "completed_at": "2026-10-13T19:10:19Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/amazin20/brainrot-portal/check-runs/115484933345",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "runner_id": 1000009401,
+      "runner_name": "GitHub Actions 1000009401",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 115484933568,
+      "run_id": 38451783602,
+      "workflow_name": "Review the unified themed campaign and final castle",
+      "head_branch": "upgrade/campaign-polish-20261013",
+      "run_url": "https://api.github.com/repos/amazin20/brainrot-portal/actions/runs/38451783602",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOUL3w488AAAAa43A9wA",
+      "head_sha": "a3c81ee59a9b2cbf1b23254857dd8c2a6f6b3c38",
+      "url": "https://api.github.com/repos/amazin20/brainrot-portal/actions/jobs/115484933568",
+      "html_url": "https://github.com/amazin20/brainrot-portal/actions/runs/38451783602/job/115484933568",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-10-13T19:04:56Z",
+      "started_at": "2026-10-13T19:04:59Z",
+      "completed_at": "2026-10-13T19:13:48Z",
+      "name": "ordinary (castle, 41)",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-13T19:05:00Z",
+          "completed_at": "2026-10-13T19:05:01Z"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-13T19:05:01Z",
+          "completed_at": "2026-10-13T19:05:03Z"
+        },
+        {
+          "name": "Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-13T19:05:03Z",
+          "completed_at": "2026-10-13T19:05:05Z"
+        },
+        {
+          "name": "Run npm ci",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-13T19:05:05Z",
+          "completed_at": "2026-10-13T19:05:07Z"
+        },
+        {
+          "name": "Run node scripts/qa-campaign-ordinary.mjs",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-13T19:05:07Z",
+          "completed_at": "2026-10-13T19:13:45Z"
+        },
+        {
+          "name": "Run actions/upload-artifact@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-13T19:13:45Z",
+          "completed_at": "2026-10-13T19:13:46Z"
+        },
+        {
+          "name": "Post Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-10-13T19:13:46Z",
+          "completed_at": "2026-10-13T19:13:46Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12,
+          "started_at": "2026-10-13T19:13:46Z",
+          "completed_at": "2026-10-13T19:13:46Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13,
+          "started_at": "2026-10-13T19:13:46Z",
+          "completed_at": "2026-10-13T19:13:46Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/amazin20/brainrot-portal/check-runs/115484933568",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "runner_id": 1000009403,
+      "runner_name": "GitHub Actions 1000009403",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 115484933612,
+      "run_id": 38451783602,
+      "workflow_name": "Review the unified themed campaign and final castle",
+      "head_branch": "upgrade/campaign-polish-20261013",
+      "run_url": "https://api.github.com/repos/amazin20/brainrot-portal/actions/runs/38451783602",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOUL3w488AAAAa43A97A",
+      "head_sha": "a3c81ee59a9b2cbf1b23254857dd8c2a6f6b3c38",
+      "url": "https://api.github.com/repos/amazin20/brainrot-portal/actions/jobs/115484933612",
+      "html_url": "https://github.com/amazin20/brainrot-portal/actions/runs/38451783602/job/115484933612",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-10-13T19:04:56Z",
+      "started_at": "2026-10-13T19:04:59Z",
+      "completed_at": "2026-10-13T19:05:46Z",
+      "name": "ordinary (early, 1,2,3,4,5,6,7,8,9,10)",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-13T19:05:00Z",
+          "completed_at": "2026-10-13T19:05:01Z"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-13T19:05:01Z",
+          "completed_at": "2026-10-13T19:05:02Z"
+        },
+        {
+          "name": "Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-13T19:05:02Z",
+          "completed_at": "2026-10-13T19:05:04Z"
+        },
+        {
+          "name": "Run npm ci",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-13T19:05:04Z",
+          "completed_at": "2026-10-13T19:05:06Z"
+        },
+        {
+          "name": "Run node scripts/qa-campaign-ordinary.mjs",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-13T19:05:06Z",
+          "completed_at": "2026-10-13T19:05:43Z"
+        },
+        {
+          "name": "Run actions/upload-artifact@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-13T19:05:43Z",
+          "completed_at": "2026-10-13T19:05:44Z"
+        },
+        {
+          "name": "Post Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-10-13T19:05:44Z",
+          "completed_at": "2026-10-13T19:05:44Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12,
+          "started_at": "2026-10-13T19:05:44Z",
+          "completed_at": "2026-10-13T19:05:45Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13,
+          "started_at": "2026-10-13T19:05:45Z",
+          "completed_at": "2026-10-13T19:05:45Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/amazin20/brainrot-portal/check-runs/115484933612",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "runner_id": 1000009402,
+      "runner_name": "GitHub Actions 1000009402",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 115484933677,
+      "run_id": 38451783602,
+      "workflow_name": "Review the unified themed campaign and final castle",
+      "head_branch": "upgrade/campaign-polish-20261013",
+      "run_url": "https://api.github.com/repos/amazin20/brainrot-portal/actions/runs/38451783602",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOUL3w488AAAAa43A-LQ",
+      "head_sha": "a3c81ee59a9b2cbf1b23254857dd8c2a6f6b3c38",
+      "url": "https://api.github.com/repos/amazin20/brainrot-portal/actions/jobs/115484933677",
+      "html_url": "https://github.com/amazin20/brainrot-portal/actions/runs/38451783602/job/115484933677",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-10-13T19:04:56Z",
+      "started_at": "2026-10-13T19:04:59Z",
+      "completed_at": "2026-10-13T19:06:05Z",
+      "name": "ordinary (optics, 31,32,33,34,35,36,37,38,39,40)",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-13T19:05:00Z",
+          "completed_at": "2026-10-13T19:05:01Z"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-13T19:05:01Z",
+          "completed_at": "2026-10-13T19:05:05Z"
+        },
+        {
+          "name": "Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-13T19:05:05Z",
+          "completed_at": "2026-10-13T19:05:06Z"
+        },
+        {
+          "name": "Run npm ci",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-13T19:05:06Z",
+          "completed_at": "2026-10-13T19:05:08Z"
+        },
+        {
+          "name": "Run node scripts/qa-campaign-ordinary.mjs",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-13T19:05:08Z",
+          "completed_at": "2026-10-13T19:06:01Z"
+        },
+        {
+          "name": "Run actions/upload-artifact@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-13T19:06:01Z",
+          "completed_at": "2026-10-13T19:06:02Z"
+        },
+        {
+          "name": "Post Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-10-13T19:06:02Z",
+          "completed_at": "2026-10-13T19:06:02Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12,
+          "started_at": "2026-10-13T19:06:02Z",
+          "completed_at": "2026-10-13T19:06:02Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13,
+          "started_at": "2026-10-13T19:06:02Z",
+          "completed_at": "2026-10-13T19:06:02Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/amazin20/brainrot-portal/check-runs/115484933677",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "runner_id": 1000009408,
+      "runner_name": "GitHub Actions 1000009408",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 115484933710,
+      "run_id": 38451783602,
+      "workflow_name": "Review the unified themed campaign and final castle",
+      "head_branch": "upgrade/campaign-polish-20261013",
+      "run_url": "https://api.github.com/repos/amazin20/brainrot-portal/actions/runs/38451783602",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOUL3w488AAAAa43A-Tg",
+      "head_sha": "a3c81ee59a9b2cbf1b23254857dd8c2a6f6b3c38",
+      "url": "https://api.github.com/repos/amazin20/brainrot-portal/actions/jobs/115484933710",
+      "html_url": "https://github.com/amazin20/brainrot-portal/actions/runs/38451783602/job/115484933710",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-10-13T19:04:56Z",
+      "started_at": "2026-10-13T19:05:00Z",
+      "completed_at": "2026-10-13T19:05:28Z",
+      "name": "build",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-13T19:05:01Z",
+          "completed_at": "2026-10-13T19:05:02Z"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-13T19:05:02Z",
+          "completed_at": "2026-10-13T19:05:04Z"
+        },
+        {
+          "name": "Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-13T19:05:04Z",
+          "completed_at": "2026-10-13T19:05:07Z"
+        },
+        {
+          "name": "Run npm ci",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-13T19:05:07Z",
+          "completed_at": "2026-10-13T19:05:08Z"
+        },
+        {
+          "name": "Verify current release metadata before producing either package",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-13T19:05:08Z",
+          "completed_at": "2026-10-13T19:05:09Z"
+        },
+        {
+          "name": "Run npm run build",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-13T19:05:09Z",
+          "completed_at": "2026-10-13T19:05:15Z"
+        },
+        {
+          "name": "Run node scripts/stamp-build.mjs",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-10-13T19:05:15Z",
+          "completed_at": "2026-10-13T19:05:15Z"
+        },
+        {
+          "name": "Run node scripts/v8-package-check.mjs",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8,
+          "started_at": "2026-10-13T19:05:15Z",
+          "completed_at": "2026-10-13T19:05:15Z"
+        },
+        {
+          "name": "Run node scripts/check-yandex-platform.mjs",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-10-13T19:05:15Z",
+          "completed_at": "2026-10-13T19:05:15Z"
+        },
+        {
+          "name": "Build and verify the exact production Yandex archive",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10,
+          "started_at": "2026-10-13T19:05:15Z",
+          "completed_at": "2026-10-13T19:05:21Z"
+        },
+        {
+          "name": "Upload exact checked Yandex package",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-10-13T19:05:21Z",
+          "completed_at": "2026-10-13T19:05:23Z"
+        },
+        {
+          "name": "Run actions/upload-artifact@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12,
+          "started_at": "2026-10-13T19:05:23Z",
+          "completed_at": "2026-10-13T19:05:25Z"
+        },
+        {
+          "name": "Post Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 23,
+          "started_at": "2026-10-13T19:05:25Z",
+          "completed_at": "2026-10-13T19:05:25Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 24,
+          "started_at": "2026-10-13T19:05:25Z",
+          "completed_at": "2026-10-13T19:05:25Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 25,
+          "started_at": "2026-10-13T19:05:25Z",
+          "completed_at": "2026-10-13T19:05:25Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/amazin20/brainrot-portal/check-runs/115484933710",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "runner_id": 1000009406,
+      "runner_name": "GitHub Actions 1000009406",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 115484933722,
+      "run_id": 38451783602,
+      "workflow_name": "Review the unified themed campaign and final castle",
+      "head_branch": "upgrade/campaign-polish-20261013",
+      "run_url": "https://api.github.com/repos/amazin20/brainrot-portal/actions/runs/38451783602",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOUL3w488AAAAa43A-Wg",
+      "head_sha": "a3c81ee59a9b2cbf1b23254857dd8c2a6f6b3c38",
+      "url": "https://api.github.com/repos/amazin20/brainrot-portal/actions/jobs/115484933722",
+      "html_url": "https://github.com/amazin20/brainrot-portal/actions/runs/38451783602/job/115484933722",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-10-13T19:04:56Z",
+      "started_at": "2026-10-13T19:04:59Z",
+      "completed_at": "2026-10-13T19:13:59Z",
+      "name": "shortcuts (late, 26-40,42-51)",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-13T19:05:00Z",
+          "completed_at": "2026-10-13T19:05:02Z"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-13T19:05:02Z",
+          "completed_at": "2026-10-13T19:05:05Z"
+        },
+        {
+          "name": "Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-13T19:05:05Z",
+          "completed_at": "2026-10-13T19:05:09Z"
+        },
+        {
+          "name": "Run npm ci",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-13T19:05:09Z",
+          "completed_at": "2026-10-13T19:05:11Z"
+        },
+        {
+          "name": "Run node scripts/qa-campaign-shortcuts.mjs --levels=26-40,42-51 --out=qa/shortcuts-late/report.json",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-13T19:05:11Z",
+          "completed_at": "2026-10-13T19:13:45Z"
+        },
+        {
+          "name": "Run node scripts/qa-campaign-shortcuts.mjs --levels=38 --cases=freight-dispatch-running-board --out=qa/shortcuts-late/room38-hoist.json",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-13T19:13:45Z",
+          "completed_at": "2026-10-13T19:13:51Z"
+        },
+        {
+          "name": "Run node scripts/qa-campaign-shortcuts.mjs --levels=37 --cases=magnetic-last-leg-hand-feed --out=qa/shortcuts-late/room37-sidefeed.json",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-10-13T19:13:51Z",
+          "completed_at": "2026-10-13T19:13:56Z"
+        },
+        {
+          "name": "Run actions/upload-artifact@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8,
+          "started_at": "2026-10-13T19:13:56Z",
+          "completed_at": "2026-10-13T19:13:57Z"
+        },
+        {
+          "name": "Post Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 15,
+          "started_at": "2026-10-13T19:13:57Z",
+          "completed_at": "2026-10-13T19:13:57Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 16,
+          "started_at": "2026-10-13T19:13:57Z",
+          "completed_at": "2026-10-13T19:13:57Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 17,
+          "started_at": "2026-10-13T19:13:57Z",
+          "completed_at": "2026-10-13T19:13:57Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/amazin20/brainrot-portal/check-runs/115484933722",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "runner_id": 1000009405,
+      "runner_name": "GitHub Actions 1000009405",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 115484933738,
+      "run_id": 38451783602,
+      "workflow_name": "Review the unified themed campaign and final castle",
+      "head_branch": "upgrade/campaign-polish-20261013",
+      "run_url": "https://api.github.com/repos/amazin20/brainrot-portal/actions/runs/38451783602",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOUL3w488AAAAa43A-ag",
+      "head_sha": "a3c81ee59a9b2cbf1b23254857dd8c2a6f6b3c38",
+      "url": "https://api.github.com/repos/amazin20/brainrot-portal/actions/jobs/115484933738",
+      "html_url": "https://github.com/amazin20/brainrot-portal/actions/runs/38451783602/job/115484933738",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-10-13T19:04:56Z",
+      "started_at": "2026-10-13T19:04:59Z",
+      "completed_at": "2026-10-13T19:14:33Z",
+      "name": "cpu (1)",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-13T19:05:00Z",
+          "completed_at": "2026-10-13T19:05:01Z"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-13T19:05:01Z",
+          "completed_at": "2026-10-13T19:05:09Z"
+        },
+        {
+          "name": "Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-13T19:05:09Z",
+          "completed_at": "2026-10-13T19:05:11Z"
+        },
+        {
+          "name": "Run npm ci",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-13T19:05:11Z",
+          "completed_at": "2026-10-13T19:05:13Z"
+        },
+        {
+          "name": "Run node scripts/qa-campaign-cpu-part.mjs",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-13T19:05:13Z",
+          "completed_at": "2026-10-13T19:14:31Z"
+        },
+        {
+          "name": "Run actions/upload-artifact@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-13T19:14:31Z",
+          "completed_at": "2026-10-13T19:14:31Z"
+        },
+        {
+          "name": "Post Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-10-13T19:14:31Z",
+          "completed_at": "2026-10-13T19:14:31Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12,
+          "started_at": "2026-10-13T19:14:31Z",
+          "completed_at": "2026-10-13T19:14:32Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13,
+          "started_at": "2026-10-13T19:14:32Z",
+          "completed_at": "2026-10-13T19:14:32Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/amazin20/brainrot-portal/check-runs/115484933738",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "runner_id": 1000009404,
+      "runner_name": "GitHub Actions 1000009404",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 115484933753,
+      "run_id": 38451783602,
+      "workflow_name": "Review the unified themed campaign and final castle",
+      "head_branch": "upgrade/campaign-polish-20261013",
+      "run_url": "https://api.github.com/repos/amazin20/brainrot-portal/actions/runs/38451783602",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOUL3w488AAAAa43A-eQ",
+      "head_sha": "a3c81ee59a9b2cbf1b23254857dd8c2a6f6b3c38",
+      "url": "https://api.github.com/repos/amazin20/brainrot-portal/actions/jobs/115484933753",
+      "html_url": "https://github.com/amazin20/brainrot-portal/actions/runs/38451783602/job/115484933753",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-10-13T19:04:56Z",
+      "started_at": "2026-10-13T19:04:59Z",
+      "completed_at": "2026-10-13T19:20:15Z",
+      "name": "cpu (4)",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-13T19:05:00Z",
+          "completed_at": "2026-10-13T19:05:01Z"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-13T19:05:01Z",
+          "completed_at": "2026-10-13T19:05:10Z"
+        },
+        {
+          "name": "Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-13T19:05:10Z",
+          "completed_at": "2026-10-13T19:05:12Z"
+        },
+        {
+          "name": "Run npm ci",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-13T19:05:12Z",
+          "completed_at": "2026-10-13T19:05:13Z"
+        },
+        {
+          "name": "Run node scripts/qa-campaign-cpu-part.mjs",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-13T19:05:13Z",
+          "completed_at": "2026-10-13T19:20:11Z"
+        },
+        {
+          "name": "Run actions/upload-artifact@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-13T19:20:11Z",
+          "completed_at": "2026-10-13T19:20:11Z"
+        },
+        {
+          "name": "Post Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-10-13T19:20:11Z",
+          "completed_at": "2026-10-13T19:20:12Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12,
+          "started_at": "2026-10-13T19:20:12Z",
+          "completed_at": "2026-10-13T19:20:12Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13,
+          "started_at": "2026-10-13T19:20:12Z",
+          "completed_at": "2026-10-13T19:20:12Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/amazin20/brainrot-portal/check-runs/115484933753",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "runner_id": 1000009407,
+      "runner_name": "GitHub Actions 1000009407",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 115484933808,
+      "run_id": 38451783602,
+      "workflow_name": "Review the unified themed campaign and final castle",
+      "head_branch": "upgrade/campaign-polish-20261013",
+      "run_url": "https://api.github.com/repos/amazin20/brainrot-portal/actions/runs/38451783602",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOUL3w488AAAAa43A-sA",
+      "head_sha": "a3c81ee59a9b2cbf1b23254857dd8c2a6f6b3c38",
+      "url": "https://api.github.com/repos/amazin20/brainrot-portal/actions/jobs/115484933808",
+      "html_url": "https://github.com/amazin20/brainrot-portal/actions/runs/38451783602/job/115484933808",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-10-13T19:04:56Z",
+      "started_at": "2026-10-13T19:04:59Z",
+      "completed_at": "2026-10-13T19:10:29Z",
+      "name": "castle-shortcuts",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-13T19:05:00Z",
+          "completed_at": "2026-10-13T19:05:01Z"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-13T19:05:01Z",
+          "completed_at": "2026-10-13T19:05:04Z"
+        },
+        {
+          "name": "Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-13T19:05:04Z",
+          "completed_at": "2026-10-13T19:05:06Z"
+        },
+        {
+          "name": "Run npm ci",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-13T19:05:06Z",
+          "completed_at": "2026-10-13T19:05:07Z"
+        },
+        {
+          "name": "Run node scripts/qa-campaign-castle-shortcuts.mjs",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-13T19:05:07Z",
+          "completed_at": "2026-10-13T19:10:25Z"
+        },
+        {
+          "name": "Run actions/upload-artifact@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-13T19:10:25Z",
+          "completed_at": "2026-10-13T19:10:26Z"
+        },
+        {
+          "name": "Post Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-10-13T19:10:26Z",
+          "completed_at": "2026-10-13T19:10:26Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12,
+          "started_at": "2026-10-13T19:10:26Z",
+          "completed_at": "2026-10-13T19:10:26Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13,
+          "started_at": "2026-10-13T19:10:26Z",
+          "completed_at": "2026-10-13T19:10:26Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/amazin20/brainrot-portal/check-runs/115484933808",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "runner_id": 1000009411,
+      "runner_name": "GitHub Actions 1000009411",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 115484933842,
+      "run_id": 38451783602,
+      "workflow_name": "Review the unified themed campaign and final castle",
+      "head_branch": "upgrade/campaign-polish-20261013",
+      "run_url": "https://api.github.com/repos/amazin20/brainrot-portal/actions/runs/38451783602",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOUL3w488AAAAa43A-0g",
+      "head_sha": "a3c81ee59a9b2cbf1b23254857dd8c2a6f6b3c38",
+      "url": "https://api.github.com/repos/amazin20/brainrot-portal/actions/jobs/115484933842",
+      "html_url": "https://github.com/amazin20/brainrot-portal/actions/runs/38451783602/job/115484933842",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-10-13T19:04:56Z",
+      "started_at": "2026-10-13T19:04:59Z",
+      "completed_at": "2026-10-13T19:07:15Z",
+      "name": "ordinary (living, 21,22,23,24,25,26,27,28,29,30)",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-13T19:05:00Z",
+          "completed_at": "2026-10-13T19:05:01Z"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-13T19:05:01Z",
+          "completed_at": "2026-10-13T19:05:03Z"
+        },
+        {
+          "name": "Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-13T19:05:03Z",
+          "completed_at": "2026-10-13T19:05:05Z"
+        },
+        {
+          "name": "Run npm ci",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-13T19:05:05Z",
+          "completed_at": "2026-10-13T19:05:06Z"
+        },
+        {
+          "name": "Run node scripts/qa-campaign-ordinary.mjs",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-13T19:05:06Z",
+          "completed_at": "2026-10-13T19:07:12Z"
+        },
+        {
+          "name": "Run actions/upload-artifact@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-13T19:07:12Z",
+          "completed_at": "2026-10-13T19:07:13Z"
+        },
+        {
+          "name": "Post Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-10-13T19:07:13Z",
+          "completed_at": "2026-10-13T19:07:13Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12,
+          "started_at": "2026-10-13T19:07:13Z",
+          "completed_at": "2026-10-13T19:07:13Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13,
+          "started_at": "2026-10-13T19:07:13Z",
+          "completed_at": "2026-10-13T19:07:13Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/amazin20/brainrot-portal/check-runs/115484933842",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "runner_id": 1000009409,
+      "runner_name": "GitHub Actions 1000009409",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 115484933858,
+      "run_id": 38451783602,
+      "workflow_name": "Review the unified themed campaign and final castle",
+      "head_branch": "upgrade/campaign-polish-20261013",
+      "run_url": "https://api.github.com/repos/amazin20/brainrot-portal/actions/runs/38451783602",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOUL3w488AAAAa43A-4g",
+      "head_sha": "a3c81ee59a9b2cbf1b23254857dd8c2a6f6b3c38",
+      "url": "https://api.github.com/repos/amazin20/brainrot-portal/actions/jobs/115484933858",
+      "html_url": "https://github.com/amazin20/brainrot-portal/actions/runs/38451783602/job/115484933858",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-10-13T19:04:56Z",
+      "started_at": "2026-10-13T19:05:00Z",
+      "completed_at": "2026-10-13T19:12:56Z",
+      "name": "shortcuts (early, 1-25)",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-13T19:05:01Z",
+          "completed_at": "2026-10-13T19:05:01Z"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-13T19:05:01Z",
+          "completed_at": "2026-10-13T19:05:04Z"
+        },
+        {
+          "name": "Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-13T19:05:04Z",
+          "completed_at": "2026-10-13T19:05:07Z"
+        },
+        {
+          "name": "Run npm ci",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-13T19:05:07Z",
+          "completed_at": "2026-10-13T19:05:09Z"
+        },
+        {
+          "name": "Run node scripts/qa-campaign-shortcuts.mjs --levels=1-25 --out=qa/shortcuts-early/report.json",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-13T19:05:09Z",
+          "completed_at": "2026-10-13T19:12:51Z"
+        },
+        {
+          "name": "Run node scripts/qa-campaign-shortcuts.mjs --levels=38 --cases=freight-dispatch-running-board --out=qa/shortcuts-late/room38-hoist.json",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 6,
+          "started_at": "2026-10-13T19:12:51Z",
+          "completed_at": "2026-10-13T19:12:52Z"
+        },
+        {
+          "name": "Run node scripts/qa-campaign-shortcuts.mjs --levels=37 --cases=magnetic-last-leg-hand-feed --out=qa/shortcuts-late/room37-sidefeed.json",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 7,
+          "started_at": "2026-10-13T19:12:52Z",
+          "completed_at": "2026-10-13T19:12:52Z"
+        },
+        {
+          "name": "Run actions/upload-artifact@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8,
+          "started_at": "2026-10-13T19:12:52Z",
+          "completed_at": "2026-10-13T19:12:53Z"
+        },
+        {
+          "name": "Post Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 15,
+          "started_at": "2026-10-13T19:12:53Z",
+          "completed_at": "2026-10-13T19:12:53Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 16,
+          "started_at": "2026-10-13T19:12:53Z",
+          "completed_at": "2026-10-13T19:12:53Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 17,
+          "started_at": "2026-10-13T19:12:53Z",
+          "completed_at": "2026-10-13T19:12:53Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/amazin20/brainrot-portal/check-runs/115484933858",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "runner_id": 1000009410,
+      "runner_name": "GitHub Actions 1000009410",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 115484933963,
+      "run_id": 38451783602,
+      "workflow_name": "Review the unified themed campaign and final castle",
+      "head_branch": "upgrade/campaign-polish-20261013",
+      "run_url": "https://api.github.com/repos/amazin20/brainrot-portal/actions/runs/38451783602",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOUL3w488AAAAa43A_Sw",
+      "head_sha": "a3c81ee59a9b2cbf1b23254857dd8c2a6f6b3c38",
+      "url": "https://api.github.com/repos/amazin20/brainrot-portal/actions/jobs/115484933963",
+      "html_url": "https://github.com/amazin20/brainrot-portal/actions/runs/38451783602/job/115484933963",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-10-13T19:04:57Z",
+      "started_at": "2026-10-13T19:04:59Z",
+      "completed_at": "2026-10-13T19:17:26Z",
+      "name": "cpu (3)",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-13T19:05:00Z",
+          "completed_at": "2026-10-13T19:05:01Z"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-13T19:05:01Z",
+          "completed_at": "2026-10-13T19:05:13Z"
+        },
+        {
+          "name": "Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-13T19:05:13Z",
+          "completed_at": "2026-10-13T19:05:15Z"
+        },
+        {
+          "name": "Run npm ci",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-13T19:05:15Z",
+          "completed_at": "2026-10-13T19:05:17Z"
+        },
+        {
+          "name": "Run node scripts/qa-campaign-cpu-part.mjs",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-13T19:05:17Z",
+          "completed_at": "2026-10-13T19:17:23Z"
+        },
+        {
+          "name": "Run actions/upload-artifact@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-13T19:17:23Z",
+          "completed_at": "2026-10-13T19:17:24Z"
+        },
+        {
+          "name": "Post Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-10-13T19:17:24Z",
+          "completed_at": "2026-10-13T19:17:24Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12,
+          "started_at": "2026-10-13T19:17:24Z",
+          "completed_at": "2026-10-13T19:17:24Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13,
+          "started_at": "2026-10-13T19:17:24Z",
+          "completed_at": "2026-10-13T19:17:24Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/amazin20/brainrot-portal/check-runs/115484933963",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "runner_id": 1000009413,
+      "runner_name": "GitHub Actions 1000009413",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 115484933984,
+      "run_id": 38451783602,
+      "workflow_name": "Review the unified themed campaign and final castle",
+      "head_branch": "upgrade/campaign-polish-20261013",
+      "run_url": "https://api.github.com/repos/amazin20/brainrot-portal/actions/runs/38451783602",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOUL3w488AAAAa43A_YA",
+      "head_sha": "a3c81ee59a9b2cbf1b23254857dd8c2a6f6b3c38",
+      "url": "https://api.github.com/repos/amazin20/brainrot-portal/actions/jobs/115484933984",
+      "html_url": "https://github.com/amazin20/brainrot-portal/actions/runs/38451783602/job/115484933984",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-10-13T19:04:57Z",
+      "started_at": "2026-10-13T19:04:59Z",
+      "completed_at": "2026-10-13T19:16:26Z",
+      "name": "cpu (0)",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-13T19:05:00Z",
+          "completed_at": "2026-10-13T19:05:01Z"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-13T19:05:01Z",
+          "completed_at": "2026-10-13T19:05:14Z"
+        },
+        {
+          "name": "Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-13T19:05:14Z",
+          "completed_at": "2026-10-13T19:05:20Z"
+        },
+        {
+          "name": "Run npm ci",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-13T19:05:20Z",
+          "completed_at": "2026-10-13T19:05:22Z"
+        },
+        {
+          "name": "Run node scripts/qa-campaign-cpu-part.mjs",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-13T19:05:22Z",
+          "completed_at": "2026-10-13T19:16:22Z"
+        },
+        {
+          "name": "Run actions/upload-artifact@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-13T19:16:22Z",
+          "completed_at": "2026-10-13T19:16:23Z"
+        },
+        {
+          "name": "Post Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-10-13T19:16:23Z",
+          "completed_at": "2026-10-13T19:16:23Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12,
+          "started_at": "2026-10-13T19:16:23Z",
+          "completed_at": "2026-10-13T19:16:24Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13,
+          "started_at": "2026-10-13T19:16:24Z",
+          "completed_at": "2026-10-13T19:16:24Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/amazin20/brainrot-portal/check-runs/115484933984",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "runner_id": 1000009414,
+      "runner_name": "GitHub Actions 1000009414",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 115484933990,
+      "run_id": 38451783602,
+      "workflow_name": "Review the unified themed campaign and final castle",
+      "head_branch": "upgrade/campaign-polish-20261013",
+      "run_url": "https://api.github.com/repos/amazin20/brainrot-portal/actions/runs/38451783602",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOUL3w488AAAAa43A_Zg",
+      "head_sha": "a3c81ee59a9b2cbf1b23254857dd8c2a6f6b3c38",
+      "url": "https://api.github.com/repos/amazin20/brainrot-portal/actions/jobs/115484933990",
+      "html_url": "https://github.com/amazin20/brainrot-portal/actions/runs/38451783602/job/115484933990",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-10-13T19:04:57Z",
+      "started_at": "2026-10-13T19:04:59Z",
+      "completed_at": "2026-10-13T19:17:03Z",
+      "name": "cpu (2)",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-13T19:05:00Z",
+          "completed_at": "2026-10-13T19:05:01Z"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-13T19:05:01Z",
+          "completed_at": "2026-10-13T19:05:09Z"
+        },
+        {
+          "name": "Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-13T19:05:09Z",
+          "completed_at": "2026-10-13T19:05:10Z"
+        },
+        {
+          "name": "Run npm ci",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-13T19:05:10Z",
+          "completed_at": "2026-10-13T19:05:13Z"
+        },
+        {
+          "name": "Run node scripts/qa-campaign-cpu-part.mjs",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-13T19:05:13Z",
+          "completed_at": "2026-10-13T19:17:00Z"
+        },
+        {
+          "name": "Run actions/upload-artifact@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-13T19:17:00Z",
+          "completed_at": "2026-10-13T19:17:01Z"
+        },
+        {
+          "name": "Post Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-10-13T19:17:01Z",
+          "completed_at": "2026-10-13T19:17:01Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12,
+          "started_at": "2026-10-13T19:17:01Z",
+          "completed_at": "2026-10-13T19:17:02Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13,
+          "started_at": "2026-10-13T19:17:02Z",
+          "completed_at": "2026-10-13T19:17:02Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/amazin20/brainrot-portal/check-runs/115484933990",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "runner_id": 1000009412,
+      "runner_name": "GitHub Actions 1000009412",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 115484934157,
+      "run_id": 38451783602,
+      "workflow_name": "Review the unified themed campaign and final castle",
+      "head_branch": "upgrade/campaign-polish-20261013",
+      "run_url": "https://api.github.com/repos/amazin20/brainrot-portal/actions/runs/38451783602",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOUL3w488AAAAa43BADQ",
+      "head_sha": "a3c81ee59a9b2cbf1b23254857dd8c2a6f6b3c38",
+      "url": "https://api.github.com/repos/amazin20/brainrot-portal/actions/jobs/115484934157",
+      "html_url": "https://github.com/amazin20/brainrot-portal/actions/runs/38451783602/job/115484934157",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-10-13T19:04:57Z",
+      "started_at": "2026-10-13T19:04:59Z",
+      "completed_at": "2026-10-13T19:12:37Z",
+      "name": "cpu (5)",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-13T19:05:00Z",
+          "completed_at": "2026-10-13T19:05:02Z"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-13T19:05:02Z",
+          "completed_at": "2026-10-13T19:05:12Z"
+        },
+        {
+          "name": "Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-13T19:05:12Z",
+          "completed_at": "2026-10-13T19:05:13Z"
+        },
+        {
+          "name": "Run npm ci",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-13T19:05:13Z",
+          "completed_at": "2026-10-13T19:05:15Z"
+        },
+        {
+          "name": "Run node scripts/qa-campaign-cpu-part.mjs",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-13T19:05:15Z",
+          "completed_at": "2026-10-13T19:12:34Z"
+        },
+        {
+          "name": "Run actions/upload-artifact@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-13T19:12:34Z",
+          "completed_at": "2026-10-13T19:12:34Z"
+        },
+        {
+          "name": "Post Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-10-13T19:12:34Z",
+          "completed_at": "2026-10-13T19:12:35Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12,
+          "started_at": "2026-10-13T19:12:35Z",
+          "completed_at": "2026-10-13T19:12:35Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13,
+          "started_at": "2026-10-13T19:12:35Z",
+          "completed_at": "2026-10-13T19:12:35Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/amazin20/brainrot-portal/check-runs/115484934157",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "runner_id": 1000009415,
+      "runner_name": "GitHub Actions 1000009415",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 115484934895,
+      "run_id": 38451783602,
+      "workflow_name": "Review the unified themed campaign and final castle",
+      "head_branch": "upgrade/campaign-polish-20261013",
+      "run_url": "https://api.github.com/repos/amazin20/brainrot-portal/actions/runs/38451783602",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOUL3w488AAAAa43BC7w",
+      "head_sha": "a3c81ee59a9b2cbf1b23254857dd8c2a6f6b3c38",
+      "url": "https://api.github.com/repos/amazin20/brainrot-portal/actions/jobs/115484934895",
+      "html_url": "https://github.com/amazin20/brainrot-portal/actions/runs/38451783602/job/115484934895",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-10-13T19:04:57Z",
+      "started_at": "2026-10-13T19:05:00Z",
+      "completed_at": "2026-10-13T19:07:18Z",
+      "name": "ordinary (energy, 11,12,13,14,15,16,17,18,19,20)",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-13T19:05:00Z",
+          "completed_at": "2026-10-13T19:05:01Z"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-13T19:05:01Z",
+          "completed_at": "2026-10-13T19:05:03Z"
+        },
+        {
+          "name": "Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-13T19:05:03Z",
+          "completed_at": "2026-10-13T19:05:04Z"
+        },
+        {
+          "name": "Run npm ci",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-13T19:05:04Z",
+          "completed_at": "2026-10-13T19:05:06Z"
+        },
+        {
+          "name": "Run node scripts/qa-campaign-ordinary.mjs",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-13T19:05:06Z",
+          "completed_at": "2026-10-13T19:07:16Z"
+        },
+        {
+          "name": "Run actions/upload-artifact@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-13T19:07:16Z",
+          "completed_at": "2026-10-13T19:07:17Z"
+        },
+        {
+          "name": "Post Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-10-13T19:07:17Z",
+          "completed_at": "2026-10-13T19:07:17Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12,
+          "started_at": "2026-10-13T19:07:17Z",
+          "completed_at": "2026-10-13T19:07:17Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13,
+          "started_at": "2026-10-13T19:07:17Z",
+          "completed_at": "2026-10-13T19:07:17Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/amazin20/brainrot-portal/check-runs/115484934895",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "runner_id": 1000009416,
+      "runner_name": "GitHub Actions 1000009416",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 115485175033,
+      "run_id": 38451783602,
+      "workflow_name": "Review the unified themed campaign and final castle",
+      "head_branch": "upgrade/campaign-polish-20261013",
+      "run_url": "https://api.github.com/repos/amazin20/brainrot-portal/actions/runs/38451783602",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOUL3w488AAAAa43Ps-Q",
+      "head_sha": "a3c81ee59a9b2cbf1b23254857dd8c2a6f6b3c38",
+      "url": "https://api.github.com/repos/amazin20/brainrot-portal/actions/jobs/115485175033",
+      "html_url": "https://github.com/amazin20/brainrot-portal/actions/runs/38451783602/job/115485175033",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-10-13T19:05:28Z",
+      "started_at": "2026-10-13T19:05:31Z",
+      "completed_at": "2026-10-13T19:07:29Z",
+      "name": "storage-isolation",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-13T19:05:32Z",
+          "completed_at": "2026-10-13T19:05:34Z"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-13T19:05:34Z",
+          "completed_at": "2026-10-13T19:05:38Z"
+        },
+        {
+          "name": "Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-13T19:05:38Z",
+          "completed_at": "2026-10-13T19:05:40Z"
+        },
+        {
+          "name": "Run npm ci",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-13T19:05:40Z",
+          "completed_at": "2026-10-13T19:05:42Z"
+        },
+        {
+          "name": "Run npm install --no-save --package-lock=false puppeteer-core@24.16.0",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-13T19:05:42Z",
+          "completed_at": "2026-10-13T19:05:50Z"
+        },
+        {
+          "name": "Run actions/download-artifact@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-13T19:05:50Z",
+          "completed_at": "2026-10-13T19:05:52Z"
+        },
+        {
+          "name": "Run actions/download-artifact@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-10-13T19:05:52Z",
+          "completed_at": "2026-10-13T19:05:54Z"
+        },
+        {
+          "name": "Open the exact Yandex archive in a nested upload path",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8,
+          "started_at": "2026-10-13T19:05:54Z",
+          "completed_at": "2026-10-13T19:06:58Z"
+        },
+        {
+          "name": "Run export CHROME_PATH=\"$(command -v google-chrome || command -v chromium)\"",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-10-13T19:06:58Z",
+          "completed_at": "2026-10-13T19:07:26Z"
+        },
+        {
+          "name": "Run actions/upload-artifact@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10,
+          "started_at": "2026-10-13T19:07:26Z",
+          "completed_at": "2026-10-13T19:07:27Z"
+        },
+        {
+          "name": "Post Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 19,
+          "started_at": "2026-10-13T19:07:27Z",
+          "completed_at": "2026-10-13T19:07:27Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 20,
+          "started_at": "2026-10-13T19:07:27Z",
+          "completed_at": "2026-10-13T19:07:27Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 21,
+          "started_at": "2026-10-13T19:07:27Z",
+          "completed_at": "2026-10-13T19:07:27Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/amazin20/brainrot-portal/check-runs/115485175033",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "runner_id": 1000009417,
+      "runner_name": "GitHub Actions 1000009417",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 115485175093,
+      "run_id": 38451783602,
+      "workflow_name": "Review the unified themed campaign and final castle",
+      "head_branch": "upgrade/campaign-polish-20261013",
+      "run_url": "https://api.github.com/repos/amazin20/brainrot-portal/actions/runs/38451783602",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOUL3w488AAAAa43PtNQ",
+      "head_sha": "a3c81ee59a9b2cbf1b23254857dd8c2a6f6b3c38",
+      "url": "https://api.github.com/repos/amazin20/brainrot-portal/actions/jobs/115485175093",
+      "html_url": "https://github.com/amazin20/brainrot-portal/actions/runs/38451783602/job/115485175093",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-10-13T19:05:28Z",
+      "started_at": "2026-10-13T19:05:31Z",
+      "completed_at": "2026-10-13T19:39:39Z",
+      "name": "presentation",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-13T19:05:31Z",
+          "completed_at": "2026-10-13T19:05:32Z"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-13T19:05:32Z",
+          "completed_at": "2026-10-13T19:05:34Z"
+        },
+        {
+          "name": "Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-13T19:05:34Z",
+          "completed_at": "2026-10-13T19:05:35Z"
+        },
+        {
+          "name": "Run npm ci",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-13T19:05:35Z",
+          "completed_at": "2026-10-13T19:05:37Z"
+        },
+        {
+          "name": "Run npm install --no-save --package-lock=false puppeteer-core@24.16.0",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-13T19:05:37Z",
+          "completed_at": "2026-10-13T19:05:49Z"
+        },
+        {
+          "name": "Install actual image and animation validation dependencies",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-13T19:05:49Z",
+          "completed_at": "2026-10-13T19:09:03Z"
+        },
+        {
+          "name": "Run actions/download-artifact@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-10-13T19:09:03Z",
+          "completed_at": "2026-10-13T19:09:03Z"
+        },
+        {
+          "name": "Run export CHROME_PATH=\"$(command -v google-chrome || command -v chromium)\"",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8,
+          "started_at": "2026-10-13T19:09:03Z",
+          "completed_at": "2026-10-13T19:10:01Z"
+        },
+        {
+          "name": "Run export CHROME_PATH=\"$(command -v google-chrome || command -v chromium)\"",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-10-13T19:10:01Z",
+          "completed_at": "2026-10-13T19:31:52Z"
+        },
+        {
+          "name": "Run export CHROME_PATH=\"$(command -v google-chrome || command -v chromium)\"",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10,
+          "started_at": "2026-10-13T19:31:52Z",
+          "completed_at": "2026-10-13T19:34:03Z"
+        },
+        {
+          "name": "Run export CHROME_PATH=\"$(command -v google-chrome || command -v chromium)\"",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-10-13T19:34:03Z",
+          "completed_at": "2026-10-13T19:35:39Z"
+        },
+        {
+          "name": "Run export CHROME_PATH=\"$(command -v google-chrome || command -v chromium)\"",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12,
+          "started_at": "2026-10-13T19:35:39Z",
+          "completed_at": "2026-10-13T19:35:40Z"
+        },
+        {
+          "name": "Run export CHROME_PATH=\"$(command -v google-chrome || command -v chromium)\"",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13,
+          "started_at": "2026-10-13T19:35:40Z",
+          "completed_at": "2026-10-13T19:39:35Z"
+        },
+        {
+          "name": "Run actions/upload-artifact@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 14,
+          "started_at": "2026-10-13T19:39:35Z",
+          "completed_at": "2026-10-13T19:39:37Z"
+        },
+        {
+          "name": "Post Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 27,
+          "started_at": "2026-10-13T19:39:37Z",
+          "completed_at": "2026-10-13T19:39:37Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 28,
+          "started_at": "2026-10-13T19:39:37Z",
+          "completed_at": "2026-10-13T19:39:37Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 29,
+          "started_at": "2026-10-13T19:39:37Z",
+          "completed_at": "2026-10-13T19:39:37Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/amazin20/brainrot-portal/check-runs/115485175093",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "runner_id": 1000009418,
+      "runner_name": "GitHub Actions 1000009418",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 115485175228,
+      "run_id": 38451783602,
+      "workflow_name": "Review the unified themed campaign and final castle",
+      "head_branch": "upgrade/campaign-polish-20261013",
+      "run_url": "https://api.github.com/repos/amazin20/brainrot-portal/actions/runs/38451783602",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOUL3w488AAAAa43PtvA",
+      "head_sha": "a3c81ee59a9b2cbf1b23254857dd8c2a6f6b3c38",
+      "url": "https://api.github.com/repos/amazin20/brainrot-portal/actions/jobs/115485175228",
+      "html_url": "https://github.com/amazin20/brainrot-portal/actions/runs/38451783602/job/115485175228",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-10-13T19:05:28Z",
+      "started_at": "2026-10-13T19:05:31Z",
+      "completed_at": "2026-10-13T19:12:43Z",
+      "name": "native (fracture, 42,43,44,45,46,47,48,49,50,51)",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-13T19:05:32Z",
+          "completed_at": "2026-10-13T19:05:34Z"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-13T19:05:34Z",
+          "completed_at": "2026-10-13T19:05:37Z"
+        },
+        {
+          "name": "Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-13T19:05:37Z",
+          "completed_at": "2026-10-13T19:05:40Z"
+        },
+        {
+          "name": "Run npm ci",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-13T19:05:40Z",
+          "completed_at": "2026-10-13T19:05:43Z"
+        },
+        {
+          "name": "Run npm install --no-save --package-lock=false puppeteer-core@24.16.0",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-13T19:05:43Z",
+          "completed_at": "2026-10-13T19:05:51Z"
+        },
+        {
+          "name": "Install actual image pixel validation dependency",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-13T19:05:51Z",
+          "completed_at": "2026-10-13T19:06:11Z"
+        },
+        {
+          "name": "Run actions/download-artifact@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-10-13T19:06:11Z",
+          "completed_at": "2026-10-13T19:06:13Z"
+        },
+        {
+          "name": "Run export CHROME_PATH=\"$(command -v google-chrome || command -v chromium)\"",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8,
+          "started_at": "2026-10-13T19:06:13Z",
+          "completed_at": "2026-10-13T19:12:39Z"
+        },
+        {
+          "name": "Run actions/upload-artifact@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-10-13T19:12:39Z",
+          "completed_at": "2026-10-13T19:12:41Z"
+        },
+        {
+          "name": "Post Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 17,
+          "started_at": "2026-10-13T19:12:41Z",
+          "completed_at": "2026-10-13T19:12:41Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 18,
+          "started_at": "2026-10-13T19:12:41Z",
+          "completed_at": "2026-10-13T19:12:41Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 19,
+          "started_at": "2026-10-13T19:12:41Z",
+          "completed_at": "2026-10-13T19:12:41Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/amazin20/brainrot-portal/check-runs/115485175228",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "runner_id": 1000009419,
+      "runner_name": "GitHub Actions 1000009419",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 115485175274,
+      "run_id": 38451783602,
+      "workflow_name": "Review the unified themed campaign and final castle",
+      "head_branch": "upgrade/campaign-polish-20261013",
+      "run_url": "https://api.github.com/repos/amazin20/brainrot-portal/actions/runs/38451783602",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOUL3w488AAAAa43Pt6g",
+      "head_sha": "a3c81ee59a9b2cbf1b23254857dd8c2a6f6b3c38",
+      "url": "https://api.github.com/repos/amazin20/brainrot-portal/actions/jobs/115485175274",
+      "html_url": "https://github.com/amazin20/brainrot-portal/actions/runs/38451783602/job/115485175274",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-10-13T19:05:28Z",
+      "started_at": "2026-10-13T19:05:31Z",
+      "completed_at": "2026-10-13T19:17:35Z",
+      "name": "native (living, 21,22,23,24,25,26,27,28,29,30)",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-13T19:05:32Z",
+          "completed_at": "2026-10-13T19:05:33Z"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-13T19:05:33Z",
+          "completed_at": "2026-10-13T19:05:36Z"
+        },
+        {
+          "name": "Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-13T19:05:36Z",
+          "completed_at": "2026-10-13T19:05:40Z"
+        },
+        {
+          "name": "Run npm ci",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-13T19:05:40Z",
+          "completed_at": "2026-10-13T19:05:43Z"
+        },
+        {
+          "name": "Run npm install --no-save --package-lock=false puppeteer-core@24.16.0",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-13T19:05:43Z",
+          "completed_at": "2026-10-13T19:05:50Z"
+        },
+        {
+          "name": "Install actual image pixel validation dependency",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-13T19:05:50Z",
+          "completed_at": "2026-10-13T19:06:06Z"
+        },
+        {
+          "name": "Run actions/download-artifact@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-10-13T19:06:06Z",
+          "completed_at": "2026-10-13T19:06:07Z"
+        },
+        {
+          "name": "Run export CHROME_PATH=\"$(command -v google-chrome || command -v chromium)\"",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8,
+          "started_at": "2026-10-13T19:06:07Z",
+          "completed_at": "2026-10-13T19:17:31Z"
+        },
+        {
+          "name": "Run actions/upload-artifact@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-10-13T19:17:31Z",
+          "completed_at": "2026-10-13T19:17:32Z"
+        },
+        {
+          "name": "Post Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 17,
+          "started_at": "2026-10-13T19:17:32Z",
+          "completed_at": "2026-10-13T19:17:32Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 18,
+          "started_at": "2026-10-13T19:17:32Z",
+          "completed_at": "2026-10-13T19:17:33Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 19,
+          "started_at": "2026-10-13T19:17:33Z",
+          "completed_at": "2026-10-13T19:17:33Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/amazin20/brainrot-portal/check-runs/115485175274",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "runner_id": 1000009420,
+      "runner_name": "GitHub Actions 1000009420",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 115485175433,
+      "run_id": 38451783602,
+      "workflow_name": "Review the unified themed campaign and final castle",
+      "head_branch": "upgrade/campaign-polish-20261013",
+      "run_url": "https://api.github.com/repos/amazin20/brainrot-portal/actions/runs/38451783602",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOUL3w488AAAAa43PuiQ",
+      "head_sha": "a3c81ee59a9b2cbf1b23254857dd8c2a6f6b3c38",
+      "url": "https://api.github.com/repos/amazin20/brainrot-portal/actions/jobs/115485175433",
+      "html_url": "https://github.com/amazin20/brainrot-portal/actions/runs/38451783602/job/115485175433",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-10-13T19:05:28Z",
+      "started_at": "2026-10-13T19:06:08Z",
+      "completed_at": "2026-10-13T19:15:18Z",
+      "name": "native (energy, 11,12,13,14,15,16,17,18,19,20)",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-13T19:06:09Z",
+          "completed_at": "2026-10-13T19:06:10Z"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-13T19:06:10Z",
+          "completed_at": "2026-10-13T19:06:12Z"
+        },
+        {
+          "name": "Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-13T19:06:12Z",
+          "completed_at": "2026-10-13T19:06:15Z"
+        },
+        {
+          "name": "Run npm ci",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-13T19:06:15Z",
+          "completed_at": "2026-10-13T19:06:17Z"
+        },
+        {
+          "name": "Run npm install --no-save --package-lock=false puppeteer-core@24.16.0",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-13T19:06:17Z",
+          "completed_at": "2026-10-13T19:06:25Z"
+        },
+        {
+          "name": "Install actual image pixel validation dependency",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-13T19:06:25Z",
+          "completed_at": "2026-10-13T19:06:35Z"
+        },
+        {
+          "name": "Run actions/download-artifact@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-10-13T19:06:35Z",
+          "completed_at": "2026-10-13T19:06:36Z"
+        },
+        {
+          "name": "Run export CHROME_PATH=\"$(command -v google-chrome || command -v chromium)\"",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8,
+          "started_at": "2026-10-13T19:06:36Z",
+          "completed_at": "2026-10-13T19:15:13Z"
+        },
+        {
+          "name": "Run actions/upload-artifact@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-10-13T19:15:13Z",
+          "completed_at": "2026-10-13T19:15:15Z"
+        },
+        {
+          "name": "Post Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 17,
+          "started_at": "2026-10-13T19:15:15Z",
+          "completed_at": "2026-10-13T19:15:15Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 18,
+          "started_at": "2026-10-13T19:15:15Z",
+          "completed_at": "2026-10-13T19:15:15Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 19,
+          "started_at": "2026-10-13T19:15:15Z",
+          "completed_at": "2026-10-13T19:15:15Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/amazin20/brainrot-portal/check-runs/115485175433",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "runner_id": 1000009423,
+      "runner_name": "GitHub Actions 1000009423",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 115485175465,
+      "run_id": 38451783602,
+      "workflow_name": "Review the unified themed campaign and final castle",
+      "head_branch": "upgrade/campaign-polish-20261013",
+      "run_url": "https://api.github.com/repos/amazin20/brainrot-portal/actions/runs/38451783602",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOUL3w488AAAAa43PuqQ",
+      "head_sha": "a3c81ee59a9b2cbf1b23254857dd8c2a6f6b3c38",
+      "url": "https://api.github.com/repos/amazin20/brainrot-portal/actions/jobs/115485175465",
+      "html_url": "https://github.com/amazin20/brainrot-portal/actions/runs/38451783602/job/115485175465",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-10-13T19:05:28Z",
+      "started_at": "2026-10-13T19:05:31Z",
+      "completed_at": "2026-10-13T19:09:58Z",
+      "name": "native (optics, 31,32,33,34,35,36,37,38,39,40)",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-13T19:05:32Z",
+          "completed_at": "2026-10-13T19:05:32Z"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-13T19:05:32Z",
+          "completed_at": "2026-10-13T19:05:34Z"
+        },
+        {
+          "name": "Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-13T19:05:34Z",
+          "completed_at": "2026-10-13T19:05:35Z"
+        },
+        {
+          "name": "Run npm ci",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-13T19:05:35Z",
+          "completed_at": "2026-10-13T19:05:37Z"
+        },
+        {
+          "name": "Run npm install --no-save --package-lock=false puppeteer-core@24.16.0",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-13T19:05:37Z",
+          "completed_at": "2026-10-13T19:05:45Z"
+        },
+        {
+          "name": "Install actual image pixel validation dependency",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-13T19:05:45Z",
+          "completed_at": "2026-10-13T19:05:54Z"
+        },
+        {
+          "name": "Run actions/download-artifact@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-10-13T19:05:54Z",
+          "completed_at": "2026-10-13T19:05:55Z"
+        },
+        {
+          "name": "Run export CHROME_PATH=\"$(command -v google-chrome || command -v chromium)\"",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8,
+          "started_at": "2026-10-13T19:05:55Z",
+          "completed_at": "2026-10-13T19:09:55Z"
+        },
+        {
+          "name": "Run actions/upload-artifact@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-10-13T19:09:55Z",
+          "completed_at": "2026-10-13T19:09:56Z"
+        },
+        {
+          "name": "Post Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 17,
+          "started_at": "2026-10-13T19:09:56Z",
+          "completed_at": "2026-10-13T19:09:56Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 18,
+          "started_at": "2026-10-13T19:09:56Z",
+          "completed_at": "2026-10-13T19:09:56Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 19,
+          "started_at": "2026-10-13T19:09:56Z",
+          "completed_at": "2026-10-13T19:09:56Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/amazin20/brainrot-portal/check-runs/115485175465",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "runner_id": 1000009421,
+      "runner_name": "GitHub Actions 1000009421",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 115485175483,
+      "run_id": 38451783602,
+      "workflow_name": "Review the unified themed campaign and final castle",
+      "head_branch": "upgrade/campaign-polish-20261013",
+      "run_url": "https://api.github.com/repos/amazin20/brainrot-portal/actions/runs/38451783602",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOUL3w488AAAAa43Puuw",
+      "head_sha": "a3c81ee59a9b2cbf1b23254857dd8c2a6f6b3c38",
+      "url": "https://api.github.com/repos/amazin20/brainrot-portal/actions/jobs/115485175483",
+      "html_url": "https://github.com/amazin20/brainrot-portal/actions/runs/38451783602/job/115485175483",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-10-13T19:05:28Z",
+      "started_at": "2026-10-13T19:05:50Z",
+      "completed_at": "2026-10-13T19:08:27Z",
+      "name": "native (early, 1,2,3,4,5,6,7,8,9,10)",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-13T19:05:50Z",
+          "completed_at": "2026-10-13T19:05:53Z"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-13T19:05:53Z",
+          "completed_at": "2026-10-13T19:05:55Z"
+        },
+        {
+          "name": "Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-13T19:05:55Z",
+          "completed_at": "2026-10-13T19:06:00Z"
+        },
+        {
+          "name": "Run npm ci",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-13T19:06:00Z",
+          "completed_at": "2026-10-13T19:06:01Z"
+        },
+        {
+          "name": "Run npm install --no-save --package-lock=false puppeteer-core@24.16.0",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-13T19:06:01Z",
+          "completed_at": "2026-10-13T19:06:09Z"
+        },
+        {
+          "name": "Install actual image pixel validation dependency",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-13T19:06:09Z",
+          "completed_at": "2026-10-13T19:06:18Z"
+        },
+        {
+          "name": "Run actions/download-artifact@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-10-13T19:06:18Z",
+          "completed_at": "2026-10-13T19:06:20Z"
+        },
+        {
+          "name": "Run export CHROME_PATH=\"$(command -v google-chrome || command -v chromium)\"",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8,
+          "started_at": "2026-10-13T19:06:20Z",
+          "completed_at": "2026-10-13T19:08:24Z"
+        },
+        {
+          "name": "Run actions/upload-artifact@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-10-13T19:08:24Z",
+          "completed_at": "2026-10-13T19:08:25Z"
+        },
+        {
+          "name": "Post Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 17,
+          "started_at": "2026-10-13T19:08:25Z",
+          "completed_at": "2026-10-13T19:08:25Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 18,
+          "started_at": "2026-10-13T19:08:25Z",
+          "completed_at": "2026-10-13T19:08:25Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 19,
+          "started_at": "2026-10-13T19:08:25Z",
+          "completed_at": "2026-10-13T19:08:25Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/amazin20/brainrot-portal/check-runs/115485175483",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "runner_id": 1000009422,
+      "runner_name": "GitHub Actions 1000009422",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 115485176610,
+      "run_id": 38451783602,
+      "workflow_name": "Review the unified themed campaign and final castle",
+      "head_branch": "upgrade/campaign-polish-20261013",
+      "run_url": "https://api.github.com/repos/amazin20/brainrot-portal/actions/runs/38451783602",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOUL3w488AAAAa43PzIg",
+      "head_sha": "a3c81ee59a9b2cbf1b23254857dd8c2a6f6b3c38",
+      "url": "https://api.github.com/repos/amazin20/brainrot-portal/actions/jobs/115485176610",
+      "html_url": "https://github.com/amazin20/brainrot-portal/actions/runs/38451783602/job/115485176610",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-10-13T19:05:28Z",
+      "started_at": "2026-10-13T19:07:18Z",
+      "completed_at": "2026-10-13T19:14:54Z",
+      "name": "native (castle, 41)",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-13T19:07:19Z",
+          "completed_at": "2026-10-13T19:07:20Z"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-13T19:07:20Z",
+          "completed_at": "2026-10-13T19:07:22Z"
+        },
+        {
+          "name": "Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-13T19:07:22Z",
+          "completed_at": "2026-10-13T19:07:24Z"
+        },
+        {
+          "name": "Run npm ci",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-13T19:07:24Z",
+          "completed_at": "2026-10-13T19:07:26Z"
+        },
+        {
+          "name": "Run npm install --no-save --package-lock=false puppeteer-core@24.16.0",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-13T19:07:26Z",
+          "completed_at": "2026-10-13T19:07:34Z"
+        },
+        {
+          "name": "Install actual image pixel validation dependency",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-13T19:07:34Z",
+          "completed_at": "2026-10-13T19:07:43Z"
+        },
+        {
+          "name": "Run actions/download-artifact@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-10-13T19:07:43Z",
+          "completed_at": "2026-10-13T19:07:45Z"
+        },
+        {
+          "name": "Run export CHROME_PATH=\"$(command -v google-chrome || command -v chromium)\"",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8,
+          "started_at": "2026-10-13T19:07:45Z",
+          "completed_at": "2026-10-13T19:14:51Z"
+        },
+        {
+          "name": "Run actions/upload-artifact@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-10-13T19:14:51Z",
+          "completed_at": "2026-10-13T19:14:52Z"
+        },
+        {
+          "name": "Post Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 17,
+          "started_at": "2026-10-13T19:14:52Z",
+          "completed_at": "2026-10-13T19:14:53Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 18,
+          "started_at": "2026-10-13T19:14:53Z",
+          "completed_at": "2026-10-13T19:14:53Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 19,
+          "started_at": "2026-10-13T19:14:53Z",
+          "completed_at": "2026-10-13T19:14:53Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/amazin20/brainrot-portal/check-runs/115485176610",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "runner_id": 1000009424,
+      "runner_name": "GitHub Actions 1000009424",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    }
+  ]
+}
