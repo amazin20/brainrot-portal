@@ -8,7 +8,7 @@ defaults:
     shell: bash
 concurrency:
   group: physical-power-review-${{ github.ref }}
-  cancel-in-progress: false
+  cancel-in-progress: true
 env:
   BUILD_COMMIT: ${{ github.sha }}
   CODEX_PRIMARY_RUNTIME_PYTHON: /usr/bin/python3

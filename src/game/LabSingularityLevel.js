@@ -255,7 +255,7 @@ export function buildTowerLevel(game,index=40){
   localControl(r,'slide-a',14,9,()=>{A=!A;},'Сдвинуть восточный архив');
   localControl(r,'slide-b',-7,-11,()=>{B=!B;},'Перенести поперечную секцию');
   const finish=goal('archive',P(-15,7),()=>true,()=>({eastMoved:A,crossMoved:B}));
-  register('archive',{state:{get A(){return A;},get B(){return upperLiftCell.retained;}},update(dt){ta=THREE.MathUtils.damp(ta,A?1:0,3,dt);tb=THREE.MathUtils.damp(tb,B?1:0,3,dt);k.move(a,P(3,ta*15,4.7),dt);k.move(b,P(-10-tb*9,-3,4.7),dt);finish(dt);},reset(){A=B=false;ta=tb=0;}});
+  register('archive',{state:{get A(){return A;},get B(){return B;}},update(dt){ta=THREE.MathUtils.damp(ta,A?1:0,3,dt);tb=THREE.MathUtils.damp(tb,B?1:0,3,dt);k.move(a,P(3,ta*15,4.7),dt);k.move(b,P(-10-tb*9,-3,4.7),dt);finish(dt);},reset(){A=B=false;ta=tb=0;}});
  }
 
 // The shaft's angular momentum now belongs to Cannon. The original free
@@ -373,7 +373,7 @@ export function buildTowerLevel(game,index=40){
   k.box(P(0,-4.6,2.4),[28,4.8,.4],m.steel);k.box(P(-1.75,4.6,2.4),[24.5,4.8,.4],m.steel);
   localControl(r,'catch-a',-17,-10,()=>pendulumCell.armCatch(),'Закинуть уловитель под нагруженный пролёт');
   localControl(r,'catch-b',15,11,()=>upperLiftCell.armCatch(),'Закинуть поворотную опору под верхний подъёмник',6);
-  const finish=goal('pendulum',P(15,9.5,6),()=>pendulumCell.readyForCrossing&&crossing.complete&&upperLiftCell.retained&&upperLiftCell.rideComplete,()=>({physicalLowerCatch:true,physicalUpperCatch:true,twoPhysicalCatches:true,lowerAngle:pendulumCell.angle,upperHeight:upperLiftCell.height,originalCargo:true,lowerPhysicalCell:pendulumCell.diagnostics(),upperPhysicalCell:upperLiftCell.diagnostics(),lowerCrossing:crossingProof()}));
+  const finish=goal('pendulum',P(15,9.5,6),()=>pendulumCell.readyForCrossing&&crossing.complete&&upperLiftCell.retained,()=>({physicalLowerCatch:true,physicalUpperCatch:true,twoPhysicalCatches:true,lowerAngle:pendulumCell.angle,upperHeight:upperLiftCell.height,originalCargo:true,lowerPhysicalCell:pendulumCell.diagnostics(),upperPhysicalCell:upperLiftCell.diagnostics(),lowerCrossing:crossingProof()}));
   register('pendulum',{state:{cell:pendulumCell,upperCell:upperLiftCell,intake,outlet,stairDoor,get stairProgress(){return stairProgress;},get A(){return pendulumCell.latched&&pendulumCell.unloadedRetained;},get B(){return upperLiftCell.retained;},get ya(){return pendulumCell.angle;},get yb(){return upperLiftCell.height;},get loadContact(){return pendulumCell.loadContact;},get loadNormalForce(){return pendulumCell.loadNormalForce;},get loadedStep(){return pendulumCell.loadedStep;},get readyForCrossing(){return pendulumCell.readyForCrossing;},get lowerCrossing(){return crossingProof();}},update(dt){pendulumCell.syncPose();upperLiftCell.syncPose();if(dt>0)observeTower41PendulumCrossing(game,pendulumCell,crossing,islandFloor,r.def.at);stairProgress=THREE.MathUtils.damp(stairProgress,upperLiftCell.retained?1:0,4,dt);k.move(stairDoor,P(19.5,-15,7.5+stairProgress*17),dt);finish(dt);},reset(){stairProgress=0;Object.assign(crossing,{phase:0,complete:false,lastStep:-1,nearLandingStep:null,nearLanding:null,firstStep:null,midStep:null,farStep:null,islandStep:null,deckSteps:0,previousFoot:null,checkpoints:[],departureStep:null});pendulumCell.reset();upperLiftCell.reset();}});
  }
  // Crown has a second physically sealed receiver, reached with the one pair

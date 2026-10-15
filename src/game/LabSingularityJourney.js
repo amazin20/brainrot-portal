@@ -160,8 +160,10 @@ export async function runSingularityJourney(game,{onMilestone=()=>{},stopAfter=n
    await walk(P('pendulum',-4.7,-.8),{followFloor:true,sprint:false});await walk(P('pendulum',0,-.8));
    await until(()=>machine.lowerCrossing.complete,2,'Actual supported lower deck traversal was not observed');mark('Unloaded lower bridge crossed on actual deck support');
    await until(()=>machine.yb<.15,18,'Pressure-driven upper car boarding window');await walk(P('pendulum',7,0),{followFloor:true});
-   await until(()=>machine.yb>5.9,18,'Second span did not lift');await walk(P('pendulum',12,-1.3,6),{followFloor:true});
-   await until(()=>machine.yb>6.25,18,'Raised span jump window');await wait(.15);game.input.keys.add('ShiftLeft');worldMove(0,1);for(let i=0;i<32;i++)await frame();
+   await walk(P('pendulum',12,-1.3,6),{followFloor:true});await walk(P('pendulum',12,.25,6),{followFloor:true,sprint:false});
+   await until(()=>game.playerGrounded&&machine.yb>5.9&&machine.upperCell.liftBody.velocity.y>.5,18,'Grounded rising car departure window');
+   game.input.keys.add('ShiftLeft');worldMove(0,1);
+   for(let i=0;i<18&&game.playerPosition.z<P('pendulum',0,1.1)[2]&&game.playerVelocity.z<4.2;i++)await frame();
    await jump();worldMove(0,1);for(let i=0;i<70;i++)await frame();stop();await until(()=>game.playerGrounded&&game.playerPosition.y>41.8,2,'Upper return landing');
    await walk(P('pendulum',15,9.5,6));await until(()=>machine.yb>6.4,18,'Physical swing-catch clearance window');await use('pendulum:catch-b');
    await until(()=>level.getTowerMetrics().solvedIds.includes('pendulum'),6,'Actual pressure lift ride and upper contact shelf did not retain the car');
