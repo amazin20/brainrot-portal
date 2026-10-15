@@ -226,6 +226,36 @@ class EntryBoundaries(Temporary):
     def test_truthful_four_states_three_images_and_own_namespace(self):
         self.assertEqual(len(self.validate(self.fixture())),3)
 
+    def test_reload_may_read_exact_persisted_preferences_without_writing(self):
+        f=self.fixture();f[0]['checks'][3]['writes']=[]
+        self.assertEqual(len(self.validate(f)),3)
+        for mode in ['history','completed','hints','resume','volume','tutorial']:
+            with self.subTest(mode=mode):
+                f=self.fixture();v=f[0]['checks'][3];v['writes']=[]
+                if mode=='history':v['historicalUnchanged']=False
+                if mode=='completed':v['ownPreferences']['completed']=[0,1]
+                if mode=='hints':v['ownPreferences']['hints']={'1':3}
+                if mode=='resume':v['ownPreferences']['resumeLevel']=0
+                if mode=='volume':v['ownPreferences']['volume']=.29
+                if mode=='tutorial':v['ownPreferences']['tutorial']=True
+                with self.assertRaises(AssertionError):self.validate(f)
+
+    def test_storage_write_lists_early_writes_and_namespace_remain_required(self):
+        for index in range(4):
+            for bad in [None,{},'',0]:
+                with self.subTest(index=index,bad=bad):
+                    f=self.fixture();f[0]['checks'][index]['writes']=bad
+                    with self.assertRaises(AssertionError):self.validate(f)
+            for bad in [{'method':'clear','key':''},{'method':'setItem','key':'brainrot-campaign-v56:old'},
+                        {'method':'removeItem','key':'brainrot-portal.preferences.v24'}]:
+                with self.subTest(index=index,bad=bad):
+                    f=self.fixture();f[0]['checks'][index]['writes']=[bad]
+                    with self.assertRaises(AssertionError):self.validate(f)
+            if index<3:
+                with self.subTest(missingInitialWrites=index):
+                    f=self.fixture();f[0]['checks'][index]['writes']=[]
+                    with self.assertRaises(AssertionError):self.validate(f)
+
     def test_wrong_origin_broader_acceptance_and_failed_report_reject(self):
         for key,value in [('sourceCommit',COMMIT),('publicURL',A.BASE),('buildInfoSha256','0'*64),('publicationAccepted',True),('pass',False),('errors',['error']),('failure','failed')]:
             with self.subTest(key=key):

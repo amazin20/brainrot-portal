@@ -125,7 +125,7 @@ def check_entry(report,root,c,producer,rows,stamp):
     for i,v in enumerate(report['checks']):
         p=v['ownPreferences'];require(v['index']==3 and v['historicalUnchanged'] is True and p['completed']==[0,1,6] and p['hints']=={'1':2} and p['resumeLevel']==3 and p['quality']=='low' and p['muted'] is True,'v56 save import changed')
         require(p['volume']==(.29 if i==0 else .37) and p['tutorial'] is (i==0),'Own save preferences did not persist')
-        require(v['writes'] and all(w['method'] in ('setItem','removeItem') and w['key'].startswith('brainrot-campaign-v57:') for w in v['writes']),'Historical namespace was written')
+        require(isinstance(v['writes'],list) and (v['writes'] or i==3) and all(w['method'] in ('setItem','removeItem') and w['key'].startswith('brainrot-campaign-v57:') for w in v['writes']),'Missing own storage writes or historical namespace was written')
     names=['bare-menu.png','bare-playing.png','mobile-menu.png'];actual=[image(root/n) for n in names];require(report['captures']==actual,'Entry images differ from genuine decoded files')
     require(actual[0]['pixels']=={'width':1024,'height':768} and actual[2]['pixels']=={'width':360,'height':800},'Entry viewport pixels differ')
     require(len(report['network'])>10,'Insufficient entry response observations');check_network(report['network'],report['browserStampReads'],rows,stamp,1,True);return actual

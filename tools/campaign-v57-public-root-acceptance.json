@@ -1,0 +1,162 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-v57-root-public-acceptance",
+  "generatedAt": "2026-10-15T18:25:56.537638+00:00",
+  "sourceAccepted": true,
+  "publicationAccepted": true,
+  "sourceCommit": "ac46f51fdaee4c4d966994988ca24081f9f49493",
+  "sourceTree": "d68f74894432fc3a8aacc71e23a0eee390acc6d5",
+  "sourceReview": {
+    "runId": 38773003051,
+    "runAttempt": 1
+  },
+  "publisherCommit": "88fb7f4376e7505a1af29b6da1c61258fde6aff7",
+  "publicationRun": 38778715528,
+  "publicationRunAttempt": 1,
+  "publicURL": "https://amazin20.github.io/brainrot-portal/campaign-v57/",
+  "sourceAcceptance": {
+    "path": "tools/campaign-v57-root-source-acceptance.json",
+    "sha256": "b626b72f7785cb58f68f04059e709f06cece4be4695dd29cfa0710574e4b7ef8"
+  },
+  "configSha256": "c5a228fd768f237fc2ffd2e4534f744cf30f342066ba71d206343e87cc3c3aff",
+  "finalProof": {
+    "artifactId": 11995312512,
+    "artifactName": "v57-final-public-proof",
+    "zipBytes": 3285841,
+    "zipSha256": "5137e82daf85314f62dc2550722cf247f2595943c332597b11fde6f2bb3076cd",
+    "files": 76,
+    "bytes": 5061722,
+    "inventorySha256": "aadf6eeb30d8a3d59a1667be252537a2c42f56a9739940a2a32e6ae50ea0ac42"
+  },
+  "deployment": {
+    "id": 7099871789,
+    "sha": "88fb7f4376e7505a1af29b6da1c61258fde6aff7",
+    "state": "success"
+  },
+  "checks": {
+    "terminalPublicJobs": 11,
+    "sourceJobs": 22,
+    "sourceArtifacts": 24,
+    "publisherArtifacts": 12,
+    "preservedBaselineFiles": 2119,
+    "preservedBaselineBytes": 647805522,
+    "preservedBaselineInventorySha256": "a5e8625856ced4cfa99fd46c957d7155b52f104f54a8479af15d7b139f0e61ac",
+    "candidateFiles": 80,
+    "candidateBytes": 7095981,
+    "publicFiles": 2200,
+    "publicBytes": 654907147,
+    "publicInventorySha256": "a6e90e3d222eed87c3fa0c616426ec108ab3071ce703904a61686ad27887d5c5",
+    "completeHTTP200ByteClosure": true,
+    "nativeRoutes": {
+      "rooms": 51,
+      "won": 51,
+      "sameOriginalCompanion": 51,
+      "resets": 0,
+      "respawns": 0,
+      "gameplayPassed": 51,
+      "capturesPassed": 51
+    },
+    "decodedImages": 54,
+    "barePlayAndV56SaveImport": true,
+    "ownNamespacePersistence": true,
+    "immutableSourcePureValidators": {
+      "pass": true,
+      "rooms": 51,
+      "upperPhysicalProofs": [
+        {
+          "level": 41,
+          "pass": true,
+          "originalCargoBodyId": 1600,
+          "loadedStep": 89162,
+          "retainedStartStep": 89304,
+          "currentStep": 94129,
+          "supportedDeckSteps": 396,
+          "islandStep": 91351,
+          "upperRideLowStep": 91474,
+          "upperRideHighStep": 92185,
+          "upperCatchStep": 93944,
+          "physicalLowerCatch": true,
+          "physicalUpperCatch": true,
+          "twoPhysicalCatches": true
+        }
+      ]
+    }
+  },
+  "providerFiles": [
+    {
+      "path": "artifacts.json",
+      "bytes": 8400,
+      "sha256": "3a335ec7a6277e6be1a21c0f61f4a0efb5de7c29586ab33faa93b74270569e2f"
+    },
+    {
+      "path": "controller-commit.json",
+      "bytes": 1449,
+      "sha256": "3af84c5fc6e0f4f50545343128afad63db1fc2172d9520fef2030c0c539583c2"
+    },
+    {
+      "path": "controller-tree.json",
+      "bytes": 327195,
+      "sha256": "caf31d99c6a2a7009af3fdf807fc25e7bc4f375bcd314694f6e1de13f83d19e2"
+    },
+    {
+      "path": "deployments.json",
+      "bytes": 381806,
+      "sha256": "b932f37f0d48cacf063c99f921b3103085f297bb0e413d56b32f7027eea2daa9"
+    },
+    {
+      "path": "jobs.json",
+      "bytes": 33824,
+      "sha256": "144f3f05aa509fc5cffc5c9c86eec294646e8c2056e6a548c831136edb36a52e"
+    },
+    {
+      "path": "main.json",
+      "bytes": 346,
+      "sha256": "4c6a3e2026bb6f83cd013a6b89648f496fd46f69c14ed213063f5749b34c5f44"
+    },
+    {
+      "path": "run.json",
+      "bytes": 13117,
+      "sha256": "2584b2ce6164e5ba06c38dff6566a9c8245d5462308e4599b22fb229520388fd"
+    },
+    {
+      "path": "source-artifacts.json",
+      "bytes": 17518,
+      "sha256": "ec14efb8e899beb76f1e6687f80d566a80658862e5209c97a540d3042875db4a"
+    },
+    {
+      "path": "source-commit.json",
+      "bytes": 1223,
+      "sha256": "c58a4ba32366e739ae3ffb9cd1f12b3865288fc9f48cb5ec366bfd7163c9ee31"
+    },
+    {
+      "path": "source-jobs.json",
+      "bytes": 63394,
+      "sha256": "ee0cccfaed8868b59f6427bd3bae403edefca30456cdefff6b687e545afb1a07"
+    },
+    {
+      "path": "source-run.json",
+      "bytes": 12909,
+      "sha256": "5cf700d75a57f5f97634482989847d3ee8fae064d4a11e01f61fb26f721c91a6"
+    },
+    {
+      "path": "source.json",
+      "bytes": 439,
+      "sha256": "52c340d48e09b55b0296f17b7f8162b8627130d13771fc16e227c628521a8d90"
+    },
+    {
+      "path": "statuses.json",
+      "bytes": 6683,
+      "sha256": "af83168f3244de28c13ae2e0d591e40e2ccb9b20ad703e65c1820b28c30226f7"
+    }
+  ],
+  "scope": "Independent terminal review of the exact accepted SOURCE and append-only PUBLIC candidate, actual11/11 successful publisher jobs, current deployment and authenticated complete HTTP byte closure.",
+  "limitations": [
+    "Automated software WebGL and scripted input; human puzzle discovery and physical-device FPS remain unmeasured.",
+    "Only Room25 has a continuous current MP4;51 native wins and the castle upper mechanism are backed by finish frames and physical event witnesses, not full-route movies.",
+    "The retained Room25 movie samples4fps;120Hz force evidence is authenticated aggregate observations, not a retained complete120Hz trace.",
+    "Finite regressions do not prove closure of every bypass.",
+    "The castle is not500 unique stages; the historical500-stage and proved15-minute human-speedrun requirements remain open.",
+    "No live Yandex SDK, advertising delivery or platform moderation acceptance.",
+    "PUBLIC uses51 finish frames and3 entry screenshots; it does not add a continuous full-campaign movie or human/device/live-Yandex acceptance."
+  ]
+}
