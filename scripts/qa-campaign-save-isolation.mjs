@@ -6,15 +6,16 @@ import {serveFrozenCampaign} from './lib/frozen-campaign-server.mjs';
 import {readStampedCampaignInfo,assertCampaignBrowserState} from './lib/campaign-browser-contract.mjs';
 import {ACTIVE_FOUNDATION_RUNTIME_FLAGS} from '../src/game/ReleaseIdentity.js';
 import {CREATIVE_CAMPAIGN_REVISION} from '../src/game/LabPreferences.js';
-import {isCampaignV55Path,isCampaignV56Path,foundationCampaignPrefix,FOUNDATION_STORAGE_PREFIX,CAMPAIGN_V55_STORAGE_PREFIX,CAMPAIGN_PREFERENCE_KEY} from '../src/game/LabCampaignStorage.js';
+import {isCampaignV55Path,isCampaignV56Path,isCampaignV57Path,foundationCampaignPrefix,FOUNDATION_STORAGE_PREFIX,CAMPAIGN_V55_STORAGE_PREFIX,CAMPAIGN_V56_STORAGE_PREFIX,CAMPAIGN_PREFERENCE_KEY} from '../src/game/LabCampaignStorage.js';
 
 const out=path.resolve(process.env.OUT_DIR||'qa/campaign-save-isolation');fs.mkdirSync(out,{recursive:true});
 const mounted=process.env.PAGE_URL?null:await serveFrozenCampaign(process.env.SITE_DIR||'dist');
-const base=new URL(process.env.PAGE_URL||mounted.url);assert.ok(isCampaignV55Path(base.pathname)||isCampaignV56Path(base.pathname),'Save isolation proof requires the actual candidate entry path');
+const base=new URL(process.env.PAGE_URL||mounted.url);assert.ok(isCampaignV55Path(base.pathname)||isCampaignV56Path(base.pathname)||isCampaignV57Path(base.pathname),'Save isolation proof requires the actual candidate entry path');
 const ownPrefix=foundationCampaignPrefix(base.pathname);
 const oldPrefixes=['',FOUNDATION_STORAGE_PREFIX,'brainrot-open-rebuild-v1:','brainrot-puzzle-pilot43-v1:','brainrot-puzzle-progression-finale-v1:','brainrot-foundation20-physical-v1:','brainrot-tower41-native-v2:','brainrot-tower41-native-v3:'];
-if(isCampaignV56Path(base.pathname))oldPrefixes.push(CAMPAIGN_V55_STORAGE_PREFIX);
-const importedPrefix=isCampaignV56Path(base.pathname)?CAMPAIGN_V55_STORAGE_PREFIX:FOUNDATION_STORAGE_PREFIX;
+if(isCampaignV56Path(base.pathname)||isCampaignV57Path(base.pathname))oldPrefixes.push(CAMPAIGN_V55_STORAGE_PREFIX);
+if(isCampaignV57Path(base.pathname))oldPrefixes.push(CAMPAIGN_V56_STORAGE_PREFIX);
+const importedPrefix=isCampaignV57Path(base.pathname)?CAMPAIGN_V56_STORAGE_PREFIX:isCampaignV56Path(base.pathname)?CAMPAIGN_V55_STORAGE_PREFIX:FOUNDATION_STORAGE_PREFIX;
 const expectedImport={completed:[0,1,6,9],hints:{1:2},resumeLevel:3,quality:'low',volume:.29,muted:true,tutorial:true};
 const records=oldPrefixes.map((prefix,index)=>[prefix+CAMPAIGN_PREFERENCE_KEY,JSON.stringify({campaignRevision:CREATIVE_CAMPAIGN_REVISION,
  ...(prefix===importedPrefix?expectedImport:{completed:[0],hints:{},resumeLevel:0,quality:'balanced',volume:.21,muted:false,tutorial:false}),historicalNamespace:index},null,2)]);

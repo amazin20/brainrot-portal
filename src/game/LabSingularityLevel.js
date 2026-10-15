@@ -7,6 +7,7 @@ import {buildCastleArchiveMemory} from './LabCastleArchiveMemory.js';
 import {buildTower41RatchetCell} from './LabTower41RatchetCell.js';
 import {buildTower41FlywheelCell} from './LabTower41FlywheelCell.js';
 import {buildTower41PendulumCell} from './LabTower41PendulumCell.js';
+import {buildTower41UpperLift} from './LabTower41UpperLift.js';
 import {capsuleBoxGrounded,orientedBoxSupport} from './LabOrientedBoxContact.js';
 export {SINGULARITY_SPEC as TOWER_SPEC};
 const UP=V(0,1,0),close=(p,q,r=1.25)=>Math.hypot(p.x-q[0],p.z-q[2])<r&&Math.abs(p.y-q[1])<1.5;
@@ -72,7 +73,7 @@ export function buildTowerLevel(game,index=40){
  const fill=new THREE.HemisphereLight(0xd5e9ed,0x52404e,.85);game.scene.add(fill);
  const sideFill=new THREE.DirectionalLight(0xffd9b4,1.4);sideFill.position.set(-55,98,32);sideFill.target.position.set(0,30,0);game.scene.add(sideFill,sideFill.target);
  const rooms=new Map(),machines=new Map(),events=[],solved=new Set(),gates=[],signs=[],carriedTransits=new Map();
- let time=0,lastTransit=null,won=false,resetting=false,disposed=false,archiveMemory=null,flywheelCell=null,pendulumCell=null;
+ let time=0,lastTransit=null,won=false,resetting=false,disposed=false,archiveMemory=null,flywheelCell=null,pendulumCell=null,upperLiftCell=null;
  const glazing=k.mat(0x8eaead,.65,.05);glazing.transparent=true;glazing.opacity=.24;glazing.depthWrite=false;glazing.name='Castle fixed safety glazing';
  const available=id=>id==='archive'?Boolean(archiveMemory?.released()):SINGULARITY_ROOMS.find(r=>r.id===id).requires.every(dep=>solved.has(dep));
  function complete(id,proof){if(resetting||solved.has(id)||!available(id))return;const r=SINGULARITY_ROOMS.find(r=>r.id===id);solved.add(id);events.push({id,rule:r.rule,seconds:time,player:game.playerPosition.toArray(),cargo:game.cargo?.position.toArray(),proof});game.audio?.mechanism?.('switch');game.emitHud?.();}
@@ -254,7 +255,7 @@ export function buildTowerLevel(game,index=40){
   localControl(r,'slide-a',14,9,()=>{A=!A;},'Сдвинуть восточный архив');
   localControl(r,'slide-b',-7,-11,()=>{B=!B;},'Перенести поперечную секцию');
   const finish=goal('archive',P(-15,7),()=>true,()=>({eastMoved:A,crossMoved:B}));
-  register('archive',{state:{get A(){return A;},get B(){return B;}},update(dt){ta=THREE.MathUtils.damp(ta,A?1:0,3,dt);tb=THREE.MathUtils.damp(tb,B?1:0,3,dt);k.move(a,P(3,ta*15,4.7),dt);k.move(b,P(-10-tb*9,-3,4.7),dt);finish(dt);},reset(){A=B=false;ta=tb=0;}});
+  register('archive',{state:{get A(){return A;},get B(){return upperLiftCell.retained;}},update(dt){ta=THREE.MathUtils.damp(ta,A?1:0,3,dt);tb=THREE.MathUtils.damp(tb,B?1:0,3,dt);k.move(a,P(3,ta*15,4.7),dt);k.move(b,P(-10-tb*9,-3,4.7),dt);finish(dt);},reset(){A=B=false;ta=tb=0;}});
  }
 
 // The shaft's angular momentum now belongs to Cannon. The original free
@@ -334,9 +335,9 @@ export function buildTowerLevel(game,index=40){
   register('inertia',{state:{intake,outlet,returnDoor,get returnProgress(){return returnProgress;},get flew(){return flew;},get maxSpeed(){return maxSpeed;}},transit(){entryCount++;maxSpeed=Math.max(maxSpeed,game.playerVelocity.length());},update(dt){if(!game.playerGrounded&&lastTransit?.id==='inertia'){maxSpeed=Math.max(maxSpeed,game.playerVelocity.length());if(game.playerPosition.x>r.def.at[0]+2)flew=true;}finish(dt);returnProgress=THREE.MathUtils.damp(returnProgress,solved.has('inertia')?1:0,4,dt);k.move(returnDoor,P(22,6,6.4+21.6*returnProgress),dt);},reset(){flew=false;entryCount=maxSpeed=returnProgress=0;}});
  }
  // Original free cargo tips the genuinely hinged lower bridge. Its gravity
- // catch retains the unloaded deck; the existing upper lift remains kinematic.
+ // catch retains the unloaded deck; a pressure-driven dynamic car is separate.
  {
-  const r=rooms.get('pendulum'),{P}=r;k.floor(r.def.at[0]+19,r.b.x1,r.def.at[2]-3,r.def.at[2]+3,36);k.floor(r.def.at[0]+23.1,r.b.x1,r.b.z0,r.def.at[2]+3,36);let phase=0,B=false,yb=6;
+  const r=rooms.get('pendulum'),{P}=r;k.floor(r.def.at[0]+19,r.b.x1,r.def.at[2]-3,r.def.at[2]+3,36);k.floor(r.def.at[0]+23.1,r.b.x1,r.b.z0,r.def.at[2]+3,36);
   k.floor(r.b.x0,r.b.x1,r.b.z0,r.def.at[2]-5,36);k.floor(r.b.x0,r.b.x1,r.def.at[2]+5,r.b.z1,36);
   // A real opening clears the counterweight's entire gravity sweep. Founded
   // strips either side join the west approach without supporting that weight.
@@ -344,7 +345,7 @@ export function buildTowerLevel(game,index=40){
   for(const[a,b]of [[-5,-2.6],[2.6,5]])k.floor(r.def.at[0]-18.7,r.def.at[0]-15,r.def.at[2]+a,r.def.at[2]+b,36);
   k.floor(r.def.at[0]+12,r.def.at[0]+22,r.def.at[2]+5,r.b.z1,42);
   pendulumCell=buildTower41PendulumCell(game,k,{centre:r.def.at});
-  const b=k.floor(r.def.at[0]+1,r.def.at[0]+13,r.def.at[2]-2,r.def.at[2]+2,42,m.ivory,{dynamic:true});
+  upperLiftCell=buildTower41UpperLift(game,k,{centre:r.def.at});
   k.corridor(P(-20.5,-10),P(-20.5,0),2.5,{rails:false});const islandMesh=k.floor(r.def.at[0]-1.5,r.def.at[0]+3,r.def.at[2]-4,r.def.at[2]+4,36,m.copper),islandFloor=islandMesh.userData.floor;
   const intake=k.panel('gravity bridge load intake',P(-17,-14,.025),[0,1,0]);
   const initialCup=pendulumCell.initialCupPosition;
@@ -371,9 +372,9 @@ export function buildTowerLevel(game,index=40){
   // the middle island, while the raised span clears the south guard.
   k.box(P(0,-4.6,2.4),[28,4.8,.4],m.steel);k.box(P(-1.75,4.6,2.4),[24.5,4.8,.4],m.steel);
   localControl(r,'catch-a',-17,-10,()=>pendulumCell.armCatch(),'Закинуть уловитель под нагруженный пролёт');
-  localControl(r,'catch-b',15,11,()=>{if(pendulumCell.readyForCrossing&&crossing.complete&&yb>5.78){B=true;return true;}return false;},'Поймать верхний пролёт',6);
-  const finish=goal('pendulum',P(15,9.5,6),()=>pendulumCell.readyForCrossing&&crossing.complete&&B,()=>({physicalLowerCatch:true,upperCatchKinematic:true,phase,lowerAngle:pendulumCell.angle,upperHeight:yb,originalCargo:true,lowerPhysicalCell:pendulumCell.diagnostics(),lowerCrossing:crossingProof()}));
-  register('pendulum',{state:{cell:pendulumCell,intake,outlet,stairDoor,get stairProgress(){return stairProgress;},get A(){return pendulumCell.latched&&pendulumCell.unloadedRetained;},get B(){return B;},get ya(){return pendulumCell.angle;},get yb(){return yb;},get loadContact(){return pendulumCell.loadContact;},get loadNormalForce(){return pendulumCell.loadNormalForce;},get loadedStep(){return pendulumCell.loadedStep;},get readyForCrossing(){return pendulumCell.readyForCrossing;},get lowerCrossing(){return crossingProof();}},update(dt){pendulumCell.syncPose();if(dt>0)observeTower41PendulumCrossing(game,pendulumCell,crossing,islandFloor,r.def.at);stairProgress=THREE.MathUtils.damp(stairProgress,B?1:0,4,dt);k.move(stairDoor,P(19.5,-15,7.5+stairProgress*17),dt);phase+=dt*.65;yb=B?6:3*(1+Math.cos(phase));k.move(b,P(7,0,yb-.2),dt);finish(dt);},reset(){phase=0;B=false;yb=6;stairProgress=0;Object.assign(crossing,{phase:0,complete:false,lastStep:-1,nearLandingStep:null,nearLanding:null,firstStep:null,midStep:null,farStep:null,islandStep:null,deckSteps:0,previousFoot:null,checkpoints:[],departureStep:null});pendulumCell.reset();}});
+  localControl(r,'catch-b',15,11,()=>upperLiftCell.armCatch(),'Закинуть поворотную опору под верхний подъёмник',6);
+  const finish=goal('pendulum',P(15,9.5,6),()=>pendulumCell.readyForCrossing&&crossing.complete&&upperLiftCell.retained&&upperLiftCell.rideComplete,()=>({physicalLowerCatch:true,physicalUpperCatch:true,twoPhysicalCatches:true,lowerAngle:pendulumCell.angle,upperHeight:upperLiftCell.height,originalCargo:true,lowerPhysicalCell:pendulumCell.diagnostics(),upperPhysicalCell:upperLiftCell.diagnostics(),lowerCrossing:crossingProof()}));
+  register('pendulum',{state:{cell:pendulumCell,upperCell:upperLiftCell,intake,outlet,stairDoor,get stairProgress(){return stairProgress;},get A(){return pendulumCell.latched&&pendulumCell.unloadedRetained;},get B(){return upperLiftCell.retained;},get ya(){return pendulumCell.angle;},get yb(){return upperLiftCell.height;},get loadContact(){return pendulumCell.loadContact;},get loadNormalForce(){return pendulumCell.loadNormalForce;},get loadedStep(){return pendulumCell.loadedStep;},get readyForCrossing(){return pendulumCell.readyForCrossing;},get lowerCrossing(){return crossingProof();}},update(dt){pendulumCell.syncPose();upperLiftCell.syncPose();if(dt>0)observeTower41PendulumCrossing(game,pendulumCell,crossing,islandFloor,r.def.at);stairProgress=THREE.MathUtils.damp(stairProgress,upperLiftCell.retained?1:0,4,dt);k.move(stairDoor,P(19.5,-15,7.5+stairProgress*17),dt);finish(dt);},reset(){stairProgress=0;Object.assign(crossing,{phase:0,complete:false,lastStep:-1,nearLandingStep:null,nearLanding:null,firstStep:null,midStep:null,farStep:null,islandStep:null,deckSteps:0,previousFoot:null,checkpoints:[],departureStep:null});pendulumCell.reset();upperLiftCell.reset();}});
  }
  // Crown has a second physically sealed receiver, reached with the one pair
  // of portals. A held companion does not satisfy its independent load socket.
@@ -403,9 +404,9 @@ export function buildTowerLevel(game,index=40){
   nearbyInteraction(){const t=k.nearest();return t?{kind:t.kind,label:'E',text:t.lesson}:null;},
   interact(){const t=k.nearest();if(!t)return false;const result=t.action();if(result===false)return false;game.audio?.mechanism?.('switch');game.animator?.triggerOperate?.();return true;},
   cargoOnAnyPad(){const p=game.cargo?.position;if(!p)return false;return Boolean(flywheelCell?.loadContact)||Boolean(pendulumCell?.loadContact)||loaded(machines.get('pendulum').state.intake.center.toArray(),.85)||loaded(rooms.get('pendulum').P(-10,-10),1.5)||loaded(machines.get('hoist').state.pad,1.6)||loaded(socket,1.8)||['freight','magnet','migrant'].includes(roomAt(p)?.id);},
-  playerAcceleration:()=>V(),applyCargoForces(dt){ratchetCell?.updateForces(dt);flywheelCell?.updateForces(dt);pendulumCell?.updateForces(dt);if(available('magnet'))machines.get('magnet').force();},
+  playerAcceleration:()=>V(),applyCargoForces(dt){ratchetCell?.updateForces(dt);flywheelCell?.updateForces(dt);pendulumCell?.updateForces(dt);upperLiftCell?.updateForces(dt);if(available('magnet'))machines.get('magnet').force();},
   onTeleport(){const r=roomAt(game.playerPosition);lastTransit={id:r?.id??'atrium',seconds:time};if(game.heldCube&&r)carriedTransits.set(r.id,(carriedTransits.get(r.id)??0)+1);if(r?.id==='inertia')machines.get('inertia').transit();return true;},
-  renderUpdate(){ratchetCell?.syncPose();flywheelCell?.syncPose();pendulumCell?.syncPose();art.update();},diagnostics(){return{...this.getTowerMetrics(),archivePhysicalMemory:archiveMemory.diagnostics(),flywheelPhysicalCell:flywheelCell.diagnostics(),pendulumPhysicalCell:pendulumCell.diagnostics(),...(ratchetCell?{ratchetPhysicalCell:ratchetCell.diagnostics()}:{}),uniqueRules:SINGULARITY_ROOMS.map(r=>r.rule),rooms:SINGULARITY_ROOMS.length,portalSurfaces:k.panels.length,heightBands:[0,18,36,54,72],connectedCastle:true};},
-  dispose(){if(disposed)return;disposed=true;ratchetCell?.dispose();flywheelCell?.dispose();pendulumCell?.dispose();art.dispose();k.dispose();fill.removeFromParent();sideFill.removeFromParent();sideFill.target.removeFromParent();fill.dispose();sideFill.dispose();game.scene.background=prior.background;game.scene.fog=prior.fog;},
+  renderUpdate(){ratchetCell?.syncPose();flywheelCell?.syncPose();pendulumCell?.syncPose();upperLiftCell?.syncPose();art.update();},diagnostics(){return{...this.getTowerMetrics(),archivePhysicalMemory:archiveMemory.diagnostics(),flywheelPhysicalCell:flywheelCell.diagnostics(),pendulumPhysicalCell:pendulumCell.diagnostics(),upperLiftPhysicalCell:upperLiftCell.diagnostics(),...(ratchetCell?{ratchetPhysicalCell:ratchetCell.diagnostics()}:{}),uniqueRules:SINGULARITY_ROOMS.map(r=>r.rule),rooms:SINGULARITY_ROOMS.length,portalSurfaces:k.panels.length,heightBands:[0,18,36,54,72],connectedCastle:true};},
+  dispose(){if(disposed)return;disposed=true;ratchetCell?.dispose();flywheelCell?.dispose();pendulumCell?.dispose();upperLiftCell?.dispose();art.dispose();k.dispose();fill.removeFromParent();sideFill.removeFromParent();sideFill.target.removeFromParent();fill.dispose();sideFill.dispose();game.scene.background=prior.background;game.scene.fog=prior.fog;},
  };return level;
 }

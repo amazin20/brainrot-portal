@@ -1,12 +1,58 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {LabPreferences,CREATIVE_CAMPAIGN_REVISION} from '../src/game/LabPreferences.js';
-import {foundationCampaignStorage,foundationCampaignPrefix,isCampaignV55Path,isCampaignV56Path,CAMPAIGN_V55_STORAGE_PREFIX,CAMPAIGN_V56_STORAGE_PREFIX,FOUNDATION_STORAGE_PREFIX,CAMPAIGN_PREFERENCE_KEY} from '../src/game/LabCampaignStorage.js';
+import {foundationCampaignStorage,foundationCampaignPrefix,isCampaignV55Path,isCampaignV56Path,isCampaignV57Path,CAMPAIGN_V55_STORAGE_PREFIX,CAMPAIGN_V56_STORAGE_PREFIX,CAMPAIGN_V57_STORAGE_PREFIX,FOUNDATION_STORAGE_PREFIX,CAMPAIGN_PREFERENCE_KEY} from '../src/game/LabCampaignStorage.js';
 import {readTower41EntryFlags} from '../src/game/LabTower41Preview.js';
 const key=CAMPAIGN_PREFERENCE_KEY,legacy='nesi.preferences.v8';
 const record=()=>JSON.stringify({campaignRevision:CREATIVE_CAMPAIGN_REVISION,completed:[0,1,39],hints:{1:2},resumeLevel:39,quality:'low',volume:.21,muted:true,tutorial:false});
 function fixture(entries=[]){const data=new Map(entries),writes=[];return{data,writes,storage:{getItem:key=>data.get(key)??null,setItem:(key,value)=>{writes.push(key);data.set(key,value);}}};}
 const candidate=f=>foundationCampaignStorage(f.storage,{pathname:'/campaign-v55/',fullFoundationCampaign:true});
+const current=f=>foundationCampaignStorage(f.storage,{pathname:'/brainrot-portal/campaign-v57/',fullFoundationCampaign:true});
+
+test('v57 imports the newest v56 record once and all later saves leave every predecessor byte intact',()=>{
+ const historical=record(),previous=JSON.stringify({campaignRevision:CREATIVE_CAMPAIGN_REVISION,completed:[0,6,44],resumeLevel:44,volume:.63});
+ const f=fixture([[FOUNDATION_STORAGE_PREFIX+key,historical],[CAMPAIGN_V55_STORAGE_PREFIX+key,historical],[CAMPAIGN_V56_STORAGE_PREFIX+key,previous]]);
+ const prefs=new LabPreferences(current(f),{campaignRevision:CREATIVE_CAMPAIGN_REVISION});
+ assert.deepEqual(prefs.value.completed,[0,6,44]);assert.equal(prefs.value.volume,.63);assert.deepEqual(f.writes,[]);
+ prefs.complete(45);prefs.save({volume:.37});
+ assert.ok(f.writes.length>0&&f.writes.every(name=>name.startsWith(CAMPAIGN_V57_STORAGE_PREFIX)));
+ assert.equal(f.data.get(CAMPAIGN_V56_STORAGE_PREFIX+key),previous);
+ assert.equal(f.data.get(CAMPAIGN_V55_STORAGE_PREFIX+key),historical);assert.equal(f.data.get(FOUNDATION_STORAGE_PREFIX+key),historical);
+ f.data.set(CAMPAIGN_V56_STORAGE_PREFIX+key,'{later damaged predecessor');
+ const again=new LabPreferences(current(f),{campaignRevision:CREATIVE_CAMPAIGN_REVISION});
+ assert.deepEqual(again.value.completed,[0,6,44,45]);assert.equal(again.value.volume,.37);
+});
+
+test('v57 exact entry boundaries isolate saves and preview paths retain their original namespace',()=>{
+ for(const base of ['','/brainrot-portal'])for(const suffix of ['','/','/index.html']){
+  const pathname=base+'/campaign-v57'+suffix;assert.equal(isCampaignV57Path(pathname),true);
+  assert.equal(isCampaignV56Path(pathname),false);assert.equal(foundationCampaignPrefix(pathname),CAMPAIGN_V57_STORAGE_PREFIX);
+  assert.equal(foundationCampaignPrefix(pathname,{fullFoundationCampaign:false}),FOUNDATION_STORAGE_PREFIX);
+ }
+ for(const pathname of ['/campaign-v57/assets/game.js','/other/campaign-v57/','/campaign-v57-old/','/campaign-v57//','/%63ampaign-v57/']){
+  assert.equal(isCampaignV57Path(pathname),false);assert.equal(foundationCampaignPrefix(pathname),FOUNDATION_STORAGE_PREFIX);
+ }
+});
+
+test('v57 selects a predecessor as a whole, including legacy v56 and fallback v55 then Foundation',()=>{
+ const prefixes=[CAMPAIGN_V56_STORAGE_PREFIX,CAMPAIGN_V55_STORAGE_PREFIX,FOUNDATION_STORAGE_PREFIX];
+ for(let start=0;start<prefixes.length;start++)for(const previousKey of [key,legacy]){
+  const entries=prefixes.slice(start).map((prefix,index)=>[prefix+(index===0?previousKey:key),JSON.stringify({campaignRevision:CREATIVE_CAMPAIGN_REVISION,completed:[start+3+index],volume:.32+index*.1})]);
+  const f=fixture(entries),prefs=new LabPreferences(current(f),{campaignRevision:CREATIVE_CAMPAIGN_REVISION});
+  assert.deepEqual(prefs.value.completed,[start+3]);assert.equal(prefs.value.volume,.32);prefs.save({volume:.5});
+  assert.deepEqual(f.writes,[CAMPAIGN_V57_STORAGE_PREFIX+key]);for(const[name,bytes]of entries)assert.equal(f.data.get(name),bytes);
+ }
+});
+
+test('v57 own legacy data takes precedence and corrupt newest records never import older progress',()=>{
+ const own=JSON.stringify({campaignRevision:CREATIVE_CAMPAIGN_REVISION,completed:[19],volume:.72}),f=fixture([[FOUNDATION_STORAGE_PREFIX+key,record()],[CAMPAIGN_V56_STORAGE_PREFIX+key,'{damaged v56'],[CAMPAIGN_V57_STORAGE_PREFIX+legacy,own]]);
+ const prefs=new LabPreferences(current(f),{campaignRevision:CREATIVE_CAMPAIGN_REVISION});assert.deepEqual(prefs.value.completed,[19]);assert.equal(prefs.value.volume,.72);
+ f.data.delete(CAMPAIGN_V57_STORAGE_PREFIX+legacy);
+ const blocked=new LabPreferences(current(f),{campaignRevision:CREATIVE_CAMPAIGN_REVISION});assert.equal(blocked.readFailed,true);blocked.save({volume:.8});assert.deepEqual(f.writes,[]);
+ f.data.set(CAMPAIGN_V57_STORAGE_PREFIX+key,'{damaged own');
+ const corrupt=new LabPreferences(current(f),{campaignRevision:CREATIVE_CAMPAIGN_REVISION});assert.equal(corrupt.readFailed,true);corrupt.save({volume:.9});assert.deepEqual(f.writes,[]);
+ assert.equal(f.data.get(CAMPAIGN_V56_STORAGE_PREFIX+key),'{damaged v56');
+});
 
 test('only the exact candidate entry and its GitHub project prefix use the isolated campaign namespace',()=>{
  for(const base of ['','/brainrot-portal'])for(const suffix of ['','/','/index.html']){

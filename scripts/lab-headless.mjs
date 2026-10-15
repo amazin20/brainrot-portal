@@ -9,7 +9,7 @@ import { ALL_LAB_ASSETS, runtimeAssetPath } from '../src/game/labAssets.js';
 
 const scope = { console, TextDecoder, module: { exports: {} } };
 vm.runInNewContext(fs.readFileSync(new URL('../node_modules/three/examples/jsm/libs/draco/gltf/draco_decoder.js', import.meta.url), 'utf8'), scope);
-const draco = await scope.DracoDecoderModule();
+const draco = await scope.DracoDecoderModule({});
 export async function loadHeadlessGLB(file) {
   const bytes = fs.readFileSync(file), length = bytes.readUInt32LE(12);
   const doc = JSON.parse(bytes.subarray(20, 20 + length)), bin = bytes.subarray(28 + length);

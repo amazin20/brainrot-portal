@@ -17,7 +17,7 @@ const fixture=()=>{
 test('one source binds all 51 current definitions and all current replacements',()=>{
  const setup=fixture();try{
   const manifest=createReleaseManifest(setup);
-  assert.equal(manifest.schemaVersion,2);assert.equal(manifest.version,'v56-living-campaign');assert.equal(manifest.editionVersion,'foundation-v5');
+  assert.equal(manifest.schemaVersion,2);assert.equal(manifest.version,'v57-physical-power');assert.equal(manifest.editionVersion,'foundation-v5');
   assert.equal(manifest.version,RELEASE_VERSION);assert.equal(manifest.gameCommit,setup.commit);assert.equal(manifest.interfaceCommit,setup.commit);
   assert.deepEqual(manifest.rooms.map(room=>room.level),Array.from({length:51},(_,i)=>i+1));
   assert.equal(manifest.rooms[16].id,'foundation-cable-supported-architecture');
@@ -26,7 +26,8 @@ test('one source binds all 51 current definitions and all current replacements',
   assert.equal(manifest.rooms[22].definitionRevision,'counterweight-dynamic-v1');
   assert.equal(manifest.rooms[36].definitionRevision,'magnetic-channel-sealed-end-v2');
   assert.equal(manifest.rooms[37].definitionRevision,'freight-dispatch-setback-v2');
-  assert.equal(manifest.rooms[50].definitionRevision,'lower-pendulum-physical-camera-v3');
+  assert.equal(manifest.rooms[24].definitionRevision,'continuous-optical-power-v1');
+  assert.equal(manifest.rooms[50].definitionRevision,'two-physical-pendulum-spans-v4');
   assert.equal(manifest.rooms[32].id,'siphon-observatory');assert.equal(manifest.rooms[49].id,'puzzle-progression51-mechanical-echo');
   assert.equal(manifest.rooms[50].id,'tower-singularity');assert.equal(manifest.rooms[50].stableLevel,41);
   assert.equal(manifest.rooms[50].stableId,'foundation-041');

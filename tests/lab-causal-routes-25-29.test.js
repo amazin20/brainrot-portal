@@ -2,14 +2,15 @@ import test,{after} from 'node:test';
 import assert from 'node:assert/strict';
 import {createHeadlessGame} from '../scripts/lab-headless.mjs';
 import {runV8Journey} from '../src/game/LabV8Journey.js';
+import {runRoom25NormalPlay} from './helpers/lab-room25-normal-play-driver.js';
 
 const game=await createHeadlessGame();
 after(()=>{game.physics.dispose();game.portals.dispose();});
 
 async function prove(number,journeyOptions,milestone){
- await game.selectLevel(number-1,false);
+ await game.selectLevel(number-1,number===25);
  const cargo=game.cargo,body=game.physics.cargoBody,causes=[];
- const report=await runV8Journey(game,{journeyOptions,onMilestone:(step,g)=>{
+ const report=await (number===25?runRoom25NormalPlay:runV8Journey)(game,{journeyOptions,onMilestone:(step,g)=>{
   if(step.name!==milestone)return;
   causes.push({cargo:g.cargo.position.clone(),portalIds:[...g.portalSurfaceIds],
    hoist:g.firstLevel.state.counterweightHoist?.height,
@@ -23,17 +24,20 @@ async function prove(number,journeyOptions,milestone){
  return {report,event:causes[0]};
 }
 
-test('25: ordinary freight portal and light powered plate hoist each complete both optical lifts',async()=>{
- const canonical=await prove(25,{},'cargo retrieval opens the other beam');
- const alternate=await prove(25,{order:'receiver-hoist'},'first optical receiver raised the loaded counterweight onto a physical balcony');
- assert.equal(canonical.event.hoist,0);
- assert.equal(alternate.event.optical.loaded,true);
- assert.equal(alternate.event.optical[0],true);
- assert.ok(alternate.event.hoist>8.95);
- assert.ok(alternate.event.cargo.y>9.1);
- assert.equal(alternate.event.portalIds.includes(game.firstLevel.panels['shadow-counterweight'].mesh.uuid),false);
- assert.equal(canonical.report.milestones.some(step=>step.name.includes('balcony retrieval')),false);
- assert.ok(alternate.report.milestones.some(step=>step.name.includes('balcony retrieval')));
+test('25: both authored light orders require the continuous loaded plate hoist and complete both passenger lifts',async()=>{
+ const milestone='first optical receiver raised the loaded counterweight onto a physical balcony';
+ const canonical=await prove(25,{},milestone);
+ const alternate=await prove(25,{order:'light-first'},milestone);
+ for(const result of [canonical,alternate]){
+  assert.equal(result.event.optical.loaded,true);
+  assert.equal(result.event.optical[0],true);
+  assert.ok(result.event.hoist>8.95);
+  assert.ok(result.event.cargo.y>9.1);
+  assert.equal(result.event.portalIds.includes(game.firstLevel.panels['shadow-counterweight'].mesh.uuid),false);
+  assert.ok(result.report.milestones.some(step=>step.name.includes('balcony retrieval')));
+ }
+ assert.equal(game.firstLevel.panels['shadow-counterweight'].portal,false);
+ assert.equal(game.firstLevel.panels['shadow-counterweight'].mesh.userData.portalable,undefined);
 });
 
 test('29: ceiling passage or reversed field direct garden catch each reunite the same companion',async()=>{

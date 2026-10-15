@@ -63,7 +63,7 @@ export async function runSingularityJourney(game,{onMilestone=()=>{},stopAfter=n
  async function enter(panel){const f=panel.frame();check(Math.abs(f.normal.y)<.1,'Use falling input for floor portals');await walk(f.center.clone().addScaledVector(f.normal,1.6).setY(f.center.y-2.4).toArray());const old=game.teleportCount;
   for(let i=0;i<240&&game.teleportCount===old;i++){worldMove(-f.normal.x,-f.normal.z);await frame();}stop();check(game.teleportCount>old,'Portal crossing failed');await wait(.2);}
  async function jump(){check(game.playerGrounded,'Jump requires grounded feet');game.input.jumpQueued=true;report.jumps++;await frame();}
- function mark(name){const s={name,...S()};report.milestones.push(s);onMilestone(s,game);}
+ function mark(name,extra={}){const s={name,...S(),...extra};report.milestones.push(s);onMilestone(s,game);}
  const P=(id,x,z=0,y=0)=>level.rooms.get(id).P(x,z,y),st=id=>level.machines.get(id).state;
  const infrastructure=[...level.edges];
  async function travel(to){
@@ -159,12 +159,12 @@ export async function runSingularityJourney(game,{onMilestone=()=>{},stopAfter=n
    await walk(P('pendulum',-11.5,-.8),{followFloor:true,sprint:false});await walk(P('pendulum',-8,-.8),{followFloor:true,sprint:false});
    await walk(P('pendulum',-4.7,-.8),{followFloor:true,sprint:false});await walk(P('pendulum',0,-.8));
    await until(()=>machine.lowerCrossing.complete,2,'Actual supported lower deck traversal was not observed');mark('Unloaded lower bridge crossed on actual deck support');
-   await until(()=>machine.yb<.2,11,'Second span boarding window');await walk(P('pendulum',7,0),{followFloor:true});
-   await until(()=>machine.yb>5.9,11,'Second span did not lift');await walk(P('pendulum',12,-1.3,6),{followFloor:true});
-   await until(()=>machine.yb>5.99,11,'Raised span jump window');await wait(.15);game.input.keys.add('ShiftLeft');worldMove(0,1);for(let i=0;i<32;i++)await frame();
+   await until(()=>machine.yb<.15,18,'Pressure-driven upper car boarding window');await walk(P('pendulum',7,0),{followFloor:true});
+   await until(()=>machine.yb>5.9,18,'Second span did not lift');await walk(P('pendulum',12,-1.3,6),{followFloor:true});
+   await until(()=>machine.yb>6.25,18,'Raised span jump window');await wait(.15);game.input.keys.add('ShiftLeft');worldMove(0,1);for(let i=0;i<32;i++)await frame();
    await jump();worldMove(0,1);for(let i=0;i<70;i++)await frame();stop();await until(()=>game.playerGrounded&&game.playerPosition.y>41.8,2,'Upper return landing');
-   await walk(P('pendulum',15,9.5,6));await until(()=>machine.yb>5.78,11,'Second catch window');await use('pendulum:catch-b');
-   await until(()=>level.getTowerMetrics().solvedIds.includes('pendulum'),2,'Loaded, retained, crossed lower bridge and upper catch did not engage');
+   await walk(P('pendulum',15,9.5,6));await until(()=>machine.yb>6.4,18,'Physical swing-catch clearance window');await use('pendulum:catch-b');
+   await until(()=>level.getTowerMetrics().solvedIds.includes('pendulum'),6,'Actual pressure lift ride and upper contact shelf did not retain the car');
    await walk(P('pendulum',19,11,6));await walk(P('pendulum',19,-13));await until(()=>machine.stairProgress>.99,3,'Upper catch did not open return stair');
    await walk(P('pendulum',19,-19));await walk(P('pendulum',-10,-19));await walk(P('pendulum',-10,-10));await pickup();
    await walk(P('pendulum',-10,-19));await leave('pendulum',[P('pendulum',24,-19),P('pendulum',24,0)]);
@@ -174,7 +174,7 @@ export async function runSingularityJourney(game,{onMilestone=()=>{},stopAfter=n
    for(let i=0;i<8*60&&game.teleportCount===before;i++){if(game.playerGrounded)worldMove(0,.42);else{const entry=game.portals.portals[0].position,p=game.playerPosition,v=game.playerVelocity,steer=V((4*(entry.x-p.x)-3*v.x)/2.8,0,(4*(entry.z-p.z)-3*v.z)/2.8);if(steer.length()>1)steer.normalize();worldMove(steer.x,steer.z);}await frame();}stop();check(game.teleportCount>before,'Real falling aperture missed');await until(()=>game.playerGrounded,6,'Momentum crossing did not land');await walk(P('inertia',21,0,-3.5));await until(()=>level.getTowerMetrics().solvedIds.includes('inertia'),2,'Receiver balcony not reached');await walk(P('inertia',22,3,-3.5));await until(()=>st('inertia').returnProgress>.99,3,'Receiver did not release the return door');await walk(P('inertia',22,13));await leave('inertia',[P('inertia',30,13),P('inertia',30,0)]);},
   async crown(){await travel([0,36,54]);await pickup();await travel([0,72,54]);await travel(level.rooms.get('crown').door);await walk(P('crown',12,13));await dropAt(P('crown',12,13));await walk(P('crown',13,7));await shoot(0,st('crown').intake.center);await walk(P('crown',12,-10));await shoot(1,st('crown').outlet.center);await walk(P('crown',12,13));await pickup();await enter(st('crown').intake);await dropAt(st('crown').socket);await walk(st('crown').contact);await until(()=>game.state==='won',3,'Independent crown loads not closed');},
  };
- try{const sequence=order??['freight','sluice','optics','hoist','archive','flywheel','magnet','migrant','pendulum','inertia','crown'];for(const id of sequence){check(routines[id],'Unknown route '+id);mark('Start '+id);await routines[id]();check(level.getTowerMetrics().solvedIds.includes(id),'Missing solved mechanism '+id);mark('Solved '+id);await globalThis.__SINGULARITY_FLUSH__?.();if(stopAfter===id){report.partial=true;break;}}
+ try{const sequence=order??['freight','sluice','optics','hoist','archive','flywheel','magnet','migrant','pendulum','inertia','crown'];for(const id of sequence){check(routines[id],'Unknown route '+id);mark('Start '+id);await routines[id]();check(level.getTowerMetrics().solvedIds.includes(id),'Missing solved mechanism '+id);mark('Solved '+id,id==='pendulum'?{physicsProof:structuredClone(level.getTowerMetrics().events.find(e=>e.id==='pendulum').proof)}:{});await globalThis.__SINGULARITY_FLUSH__?.();if(stopAfter===id){report.partial=true;break;}}
   report.pass=!report.partial&&game.state==='won';report.seconds=report.physicsSteps/120;report.teleports=game.teleportCount;report.metrics=level.getTowerMetrics();report.sameCompanion=game.cargo===companion&&game.physics.cargoBody.id===body;return report;
  }catch(error){report.seconds=report.physicsSteps/120;report.failure={error:String(error),...S()};report.metrics=level.getTowerMetrics();error.singularityReport=report;throw error;}
  finally{stop();game.input.getMove=original.move;game.resetRun=original.reset;game.respawn=original.respawn;game.physics.resetCargo=original.cargoReset;await globalThis.__SINGULARITY_FLUSH__?.();}

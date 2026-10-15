@@ -17,8 +17,8 @@ const rotate=(v,q)=>{
  * possible route and camera/device condition has been tested. */
 export function assertPendulumPhysicalProof(proof,originalCargoBodyId){
  integer(originalCargoBodyId);
- assert.equal(proof?.physicalLowerCatch,true);assert.equal(proof.upperCatchKinematic,true);assert.equal(proof.originalCargo,true);
- assert.equal(Object.hasOwn(proof,'twoPhysicalCatches'),false,'The unchanged upper authored lift is not a second physical catch');
+ assert.equal(proof?.physicalLowerCatch,true);assert.equal(proof.physicalUpperCatch,true);assert.equal(proof.twoPhysicalCatches,true);assert.equal(proof.originalCargo,true);
+ assert.equal(Object.hasOwn(proof,'upperCatchKinematic'),false,'The upper catch must be proved by its dynamic body, contact and ride witnesses');
  const cell=proof.lowerPhysicalCell,crossing=proof.lowerCrossing;
  for(const flag of ['ready','latched','catchArmed','bodiesPresent','constraintsPresent','originalCargoPresent','originalCargoIdentityValid','originalCargoFree','currentCollisionValid','unloadedRetained','readyForCrossing'])assert.equal(cell?.[flag],true,flag);
  assert.equal(cell.disposed,false);assert.equal(cell.loadContact,false);assert.equal(cell.loadNormalForce,0);assert.equal(cell.loadContactCount,0);
@@ -67,5 +67,29 @@ export function assertPendulumPhysicalProof(proof,originalCargoBodyId){
   }else foundedWitness(witness);
  }
  assert.ok(witnesses[0].localFoot[0]<=-3&&witnesses[1].localFoot[0]>=-.9&&witnesses[2].localFoot[0]>=3);
- return {pass:true,originalCargoBodyId,loadedStep:cell.loadedStep,retainedStartStep:cell.retainedStartStep,currentStep:cell.worldStep,supportedDeckSteps:crossing.supportedDeckSteps,islandStep:crossing.islandStep,physicalLowerCatch:true,upperCatchKinematic:true};
+ const upper=proof.upperPhysicalCell;
+ for(const flag of ['ready','latched','retained','bodiesPresent','constraintsPresent','currentCollisionValid','rideComplete'])assert.equal(upper?.[flag],true,'upper '+flag);
+ assert.equal(upper.disposed,false);integer(upper.worldStep,1);assert.equal(upper.worldStep,cell.worldStep,'Both mechanisms must be witnessed in the same completed world step');assert.equal(upper.contactStep,upper.worldStep);
+ finite(upper.height);assert.equal(upper.height,proof.upperHeight);assert.ok(Math.abs(upper.height-6)<.06);finite(upper.pawlAngle);assert.ok(Math.abs(upper.pawlAngle)<.055);integer(upper.retainedTicks,24);assert.ok(upper.retainedTicks<=upper.worldStep);
+ ids(upper.bodyIds,4);ids(upper.constraintIds,2);assert.deepEqual(upper.constraintEquationCounts,[5,5]);assert.deepEqual(upper.constraintMotorEquationPresent,[false,false]);
+ assert.ok(upper.bodyIds.every(id=>!cell.bodyIds.includes(id)&&id!==originalCargoBodyId),'Upper bodies must be independently owned');assert.ok(upper.constraintIds.every(id=>!cell.constraintIds.includes(id)));
+ for(const body of [upper.lift,upper.pawl]){integer(body?.id);assert.ok(upper.bodyIds.includes(body.id));assert.equal(body.type,1);positive(body.mass);vector(body.position,3);vector(body.velocity,3);vector(body.angularVelocity,3);quaternion(body.quaternion);}
+ assert.notEqual(upper.lift.id,upper.pawl.id);assert.ok(Math.abs(upper.lift.velocity[1])<.10);assert.ok(Math.abs(upper.lift.quaternion[0])+Math.abs(upper.lift.quaternion[1])+Math.abs(upper.lift.quaternion[2])<.003,'The real guide must hold the deck level');
+ const pawlQuaternion=upper.pawl.quaternion;assert.ok(Math.abs(Math.atan2(2*(pawlQuaternion[3]*pawlQuaternion[1]+pawlQuaternion[0]*pawlQuaternion[2]),1-2*(pawlQuaternion[1]**2+pawlQuaternion[0]**2))-upper.pawlAngle)<1e-5);
+ for(const key of ['deckShapeId','pawlShapeId','pawlHeelShapeId','seatBodyId','seatShapeId'])integer(upper[key]);assert.ok(upper.bodyIds.includes(upper.seatBodyId));assert.notEqual(upper.seatBodyId,upper.lift.id);assert.notEqual(upper.seatBodyId,upper.pawl.id);assert.equal(new Set([upper.deckShapeId,upper.pawlShapeId,upper.pawlHeelShapeId,upper.seatShapeId]).size,4);
+ assert.equal(typeof upper.powered,'boolean');assert.equal(upper.direction,-1);finite(upper.lastForce);assert.ok(Math.abs(upper.lastForce)<=200);if(!upper.powered)assert.equal(upper.lastForce,0);finite(upper.pressureWork);
+ vector(upper.gravity,3);assert.deepEqual(upper.gravity,[0,-19.5,0]);integer(upper.catchContacts,1);positive(upper.catchForce);
+ const downwardLoad=-upper.gravity[1]*upper.lift.mass-upper.lastForce;positive(downwardLoad);assert.ok(Math.abs(upper.catchForce-downwardLoad)<=Math.max(.75,downwardLoad*.05),'The actual catch reaction must carry the measured net downward load');
+ for(const key of ['seatForce','topForce','bottomForce']){finite(upper[key]);assert.ok(upper[key]>=0);}integer(upper.seatContacts);assert.ok(upper.topForce<1e-5&&upper.bottomForce<1e-5,'End stops cannot substitute for the upper retaining catch');
+ // The vertical catch bearing can carry the shelf's own load, so its heel
+ // need not press on the plinth. The car-to-shelf reaction is mandatory.
+ integer(upper.handCount,1);positive(upper.handImpulse);assert.ok(upper.handImpulse<=1.2);
+ const upperHand=upper.catchWitness;integer(upperHand?.worldStep,1);assert.equal(upperHand.action,'close');assert.equal(upperHand.handCount,upper.handCount);assert.equal(upperHand.liftBodyId,upper.lift.id);assert.equal(upperHand.pawlBodyId,upper.pawl.id);assert.equal(upperHand.angularImpulse,-upper.handImpulse);finite(upperHand.angularMomentumBefore);finite(upperHand.angularMomentumAfter);assert.ok(Math.abs(upperHand.angularMomentumAfter-upperHand.angularMomentumBefore-upperHand.angularImpulse)<1e-7);finite(upperHand.height);assert.ok(upperHand.height>5.7&&upperHand.height<6.6);
+ integer(upper.rideTicks,24);assert.ok(upper.rideTicks<=upper.worldStep);const ride=[upper.rideLow,upper.rideHigh];
+ for(const witness of ride){integer(witness?.worldStep,1);assert.equal(witness.bodyId,upper.lift.id);assert.equal(witness.shapeId,upper.deckShapeId);assert.equal(typeof witness.colliderId,'string');assert.ok(witness.colliderId.length>0);assert.equal(witness.grounded,true);vector(witness.foot,3);vector(witness.normal,3);assert.ok(witness.normal[1]>.65&&Math.abs(Math.hypot(...witness.normal)-1)<1e-5);finite(witness.height);finite(witness.supportHeight);assert.ok(Math.abs(witness.foot[1]-witness.supportHeight)<.01);}
+ assert.equal(ride[0].colliderId,ride[1].colliderId);assert.ok(ride[0].height>=-.1&&ride[0].height<.45&&ride[1].height>5.7&&ride[1].height<6.6);
+ assert.ok(crossing.islandStep<ride[0].worldStep&&ride[0].worldStep+23<=ride[1].worldStep&&ride[1].worldStep<=upperHand.worldStep&&upperHand.worldStep<=upper.worldStep-upper.retainedTicks+1,'The real lower crossing, low-to-high ride, hand input and retained contact must occur in causal order');
+ const supportOrigin=ride[0].supportHeight-ride[0].height;assert.ok(Math.abs(ride[1].supportHeight-ride[1].height-supportOrigin)<.01);assert.ok(Math.abs(upper.lift.position[1]+.2-upper.height-supportOrigin)<.01,'Recorded lift height must match its actual current deck and ride support');
+ for(const witness of ride)assert.ok(Math.abs(witness.foot[0]-upper.lift.position[0])<5.58&&Math.abs(witness.foot[2]-upper.lift.position[2])<1.58,'The capsule must ride within the finite guided deck');
+ return {pass:true,originalCargoBodyId,loadedStep:cell.loadedStep,retainedStartStep:cell.retainedStartStep,currentStep:cell.worldStep,supportedDeckSteps:crossing.supportedDeckSteps,islandStep:crossing.islandStep,upperRideLowStep:ride[0].worldStep,upperRideHighStep:ride[1].worldStep,upperCatchStep:upperHand.worldStep,physicalLowerCatch:true,physicalUpperCatch:true,twoPhysicalCatches:true};
 }
