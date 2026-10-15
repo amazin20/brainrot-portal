@@ -13,7 +13,7 @@
     "runId": 38451783602,
     "runAttempt": 1
   },
-  "controllerParent": "158f9e6735dd3684aa70a6d6f51a9be165f08943",
+  "controllerParent": "e049996bc7c4221ee084d832ae2666de4c5dfb75",
   "modelOriginCommit": "3f2e83127dfd5800068854a98843d73eb9377609",
   "namespace": "campaign-v56/",
   "publicURL": "https://amazin20.github.io/brainrot-portal/campaign-v56/",
@@ -2842,15 +2842,16 @@
     "readonlyCommit": "29b45c556d35f0eaa820e0d9d20b83433079a25c",
     "verificationArtifact": {
       "id": 11811188876,
+      "node_id": "MDg6QXJ0aWZhY3QxMTgxMTE4ODg3Ng==",
       "name": "campaign-v55-readonly-public-verification-38394370232-1",
       "size_in_bytes": 19050251,
       "url": "https://api.github.com/repos/amazin20/brainrot-portal/actions/artifacts/11811188876",
       "archive_download_url": "https://api.github.com/repos/amazin20/brainrot-portal/actions/artifacts/11811188876/zip",
       "expired": false,
-      "created_at": "2026-10-13T12:04:33Z",
-      "expires_at": "2026-10-23T12:04:32Z",
-      "updated_at": "2026-10-13T12:04:33Z",
       "digest": "sha256:ae7cb35212886faac0f8da1f94bf599d91e3b408357097ec37f6e99f725f245e",
+      "created_at": "2026-10-13T12:04:33Z",
+      "updated_at": "2026-10-13T12:04:33Z",
+      "expires_at": "2026-10-23T12:04:32Z",
       "workflow_run": {
         "id": 38394370232,
         "repository_id": 1354625251,
