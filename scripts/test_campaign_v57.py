@@ -60,6 +60,44 @@ class Boundaries(unittest.TestCase):
             root = pathlib.Path(tmp); (root / 'actual').write_bytes(b'x'); (root / 'link').symlink_to(root / 'actual')
             with self.assertRaises(ValueError): P.inventory(root)
 
+    def test_inventory_orders_full_posix_paths_across_prefix_sibling_files_and_directories(self):
+        names = ['chapter-atlas/walkthroughs/level-33.mp4', 'chapter-atlas/walkthroughs.html',
+                 'chapter-atlas/walkthroughs-v53.html', 'chapter-atlas/walkthroughs/level-33.jpg',
+                 'assets/main.js', 'assets-v2.json']
+        self.assertNotEqual(sorted(names, key=pathlib.PurePosixPath), sorted(names),
+                            'The fixture must expose component ordering versus canonical path ordering')
+        with tempfile.TemporaryDirectory() as tmp:
+            root = pathlib.Path(tmp)
+            for name in reversed(names):
+                target = root / name; target.parent.mkdir(parents=True, exist_ok=True)
+                target.write_bytes(name.encode())
+            expected = [{'path': name, 'bytes': len(name.encode()), 'sha256': P.sha(name.encode())}
+                        for name in sorted(names)]
+            self.assertEqual(P.inventory(root), expected)
+
+    def test_inventory_preserves_real_2119_baseline_and_80_candidate_names_in_a_small_append(self):
+        repository = pathlib.Path(__file__).resolve().parents[1]
+        old = P.load(repository / 'tools/campaign-v56-public-files.json')['siteFiles']
+        candidate = P.load(repository / 'tools/campaign-v57-root-source-acceptance.json')['candidateFiles']
+        self.assertEqual(len(old), 2119); self.assertEqual(len(candidate), 80)
+        new = [{**row, 'path': P.PREFIX + row['path']} for row in candidate]
+        provenance = {'path': P.PREFIX + 'publication-provenance.json', 'bytes': 1, 'sha256': P.sha(b'p')}
+        actual_metadata = sorted(old + new + [provenance], key=lambda row: row['path'])
+        self.assertEqual(len(P.rows_valid(actual_metadata)), 2200)
+        self.assertLess(sum(row['bytes'] for row in actual_metadata), P.MAX_SITE)
+        with tempfile.TemporaryDirectory() as tmp:
+            root = pathlib.Path(tmp)
+            # Exercise every real path without recreating 647 MB of accepted media.
+            for row in reversed(actual_metadata):
+                target = root / row['path']; target.parent.mkdir(parents=True, exist_ok=True)
+                target.write_bytes(b'x')
+            union = P.inventory(root)
+            self.assertEqual([row['path'] for row in union], [row['path'] for row in actual_metadata])
+            self.assertEqual(len(union), len(old) + len(candidate) + 1)
+            self.assertEqual([row['path'] for row in union if not row['path'].startswith(P.PREFIX)],
+                             [row['path'] for row in old])
+            self.assertTrue(all(row['bytes'] == 1 and row['sha256'] == P.sha(b'x') for row in union))
+
     def test_signed_redirect_removes_bearer_and_rejects_plain_http(self):
         request = urllib.request.Request('https://api.github.com/repos/amazin20/brainrot-portal/actions/artifacts/1/zip', headers={'Authorization': 'Bearer private', 'Cookie': 'private=1'})
         result = P.Redirect().redirect_request(request, None, 302, '', {}, 'https://example.blob.core.windows.net/signed')

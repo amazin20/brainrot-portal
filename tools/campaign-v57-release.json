@@ -4,7 +4,7 @@
   "repository": "amazin20/brainrot-portal",
   "namespace": "campaign-v57/",
   "version": "v57-physical-power",
-  "controllerParent": "75802ea6f3ce5c712111d33e02a75c78a99c0277",
+  "controllerParent": "2c425d86967016bd1c13622e4440e669f2e7021a",
   "sourceBranch": "upgrade/physical-power-20261015",
   "sourceWorkflow": ".github/workflows/physical-power-review.yml",
   "sourceCommit": "ac46f51fdaee4c4d966994988ca24081f9f49493",

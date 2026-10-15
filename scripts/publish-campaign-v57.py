@@ -106,6 +106,8 @@ def inventory(root):
         check(not p.is_symlink() and (p.is_file() or p.is_dir()), 'Special inventory member')
         if p.is_file():
             result.append({'path': name(p.relative_to(root).as_posix()), 'bytes': p.stat().st_size, 'sha256': sha(p.read_bytes())})
+    # Path objects compare components; accepted catalogs sort complete POSIX paths.
+    result.sort(key=lambda row: row['path'])
     rows_valid(result)
     return result
 

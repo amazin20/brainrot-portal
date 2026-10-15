@@ -58,6 +58,7 @@ def inventory(root,maximum=LIMIT):
     for p in sorted(root.rglob('*')):
         require(not p.is_symlink() and (p.is_file() or p.is_dir()),'Special proof member')
         if p.is_file():rows.append({'path':safe_name(p.relative_to(root).as_posix()),'bytes':p.stat().st_size,'sha256':file_sha(p)})
+    rows.sort(key=lambda row:row['path'])
     rows_valid(rows,maximum);return rows
 def verified_zip(archive,root,descriptor):
     require(archive.is_file() and not archive.is_symlink() and archive.stat().st_size==descriptor['size_in_bytes'] and 'sha256:'+file_sha(archive)==descriptor['digest'],'Final provider ZIP digest/size mismatch')

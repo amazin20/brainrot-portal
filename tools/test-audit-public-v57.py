@@ -88,6 +88,19 @@ class ZIPBoundaries(Temporary):
         self.assertEqual(result['files'],1);self.assertEqual(result['bytes'],8)
         self.assertEqual(result['zipSha256'],A.file_sha(a))
 
+    def test_prefix_sibling_files_and_directories_have_canonical_full_path_order(self):
+        names=['entry-v2.json','entry.json','entry/report.json',
+               'native-early.report.json','native-early/1-finish.jpg']
+        self.assertNotEqual(sorted(names,key=pathlib.PurePosixPath),names)
+        directory=self.root/'proof';directory.mkdir();archive=self.root/'proof.zip'
+        with zipfile.ZipFile(archive,'w') as z:
+            for name in reversed(names):
+                data=name.encode();target=directory/name;target.parent.mkdir(parents=True,exist_ok=True);target.write_bytes(data);z.writestr(name,data)
+        expected=[{'path':name,'bytes':len(name.encode()),'sha256':A.sha(name.encode())} for name in names]
+        self.assertEqual(A.inventory(directory),expected)
+        result=A.verified_zip(archive,directory,self.pin(archive))
+        self.assertEqual(result['inventorySha256'],A.sha(A.encoded(expected)))
+
     def test_zip_digest_and_extracted_changed_extra_deleted_members_reject(self):
         for mode in ['zip','changed','extra','deleted','extra-directory']:
             with self.subTest(mode=mode):
