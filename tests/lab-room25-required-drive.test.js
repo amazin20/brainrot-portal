@@ -65,7 +65,7 @@ for(const component of ['moving-mirror-reflection','motor-force-supply'])test(`2
 });
 test('25 required drive: manufactured nonportal freight deck retains its original dynamic load support',async()=>{
  await observe('nonportal-deck',async({m})=>runRoom25NormalPlay(game,{scenario:d=>{
-  const deck=d.level.panels['shadow-counterweight'];assert.equal(deck.portal,false);assert.equal(deck.mesh.userData.portalable,undefined);assert.equal(game.portalPanels.includes(deck.mesh),false);
+  const deck=d.level.mechanismSurfaces['shadow-counterweight'];assert.equal(deck.portal,false);assert.equal(deck.mesh.userData.portalable,undefined);assert.equal(game.portalPanels.includes(deck.mesh),false);
   assert.ok(m.parts.some(p=>p.mesh===deck.mesh&&p.body===m.deckBody));assert.ok(game.colliders.includes(deck.collider));assert.ok(game.floors.some(f=>f.mesh===deck.mesh));
   const tiles=[];deck.group.traverse(n=>{if(n.isInstancedMesh)tiles.push(n);});assert.ok(tiles.length>0&&tiles.every(n=>!n.userData.portalTile));
   d.walk(-7,6);d.walk(-7,7.9);d.look(deck.getFrame().center);assert.equal(game.firePortal(0),true);

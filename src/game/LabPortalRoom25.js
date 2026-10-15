@@ -135,7 +135,7 @@ export function buildRoom25(game,index=24){
  const floor={minX:-9.4,maxX:-4.6,minZ:9.6,maxZ:14.4,y:.18,mesh:surface.mesh,enabled:true};
  game.floors.push(floor);w.floors.push(floor);surface.floor=floor;
  const pad={surface,position:new THREE.Vector3(-7,0,12),pressed:false,progress:0};
- k.panels['shadow-counterweight']=surface;k.pads.push(pad);
+ k.pads.push(pad);
  // These three manufactured optical mouths transmit charges and light.
  // Their real 0.64 m apertures are smaller than the unmodified companion or
  // player. Full-size high return portals remain ordinary traveller mouths.
@@ -183,11 +183,12 @@ export function buildRoom25(game,index=24){
  for(const x of [-9.6,-4.4])w.box([x,4.5,12],[.12,9,.15],w.materials.trim,false);
  const shadowHall=finishShadowHall(k,optical);
  const level=k.finish([-17,0,10],[-15,.55,9],[-16,7,22],{workshop:k,portalPuzzle:true,cargoOnAnyPad:()=>optical.machine.loaded});
+ level.mechanismSurfaces={'shadow-counterweight':surface};
  level.dispose=()=>{optical.machine.dispose();first.dispose();second.dispose();};
  level.shadowHall=shadowHall;
  level.mechanismArt={projectors:[{position:optical.source.toArray(),direction:optical.direction.toArray(),radius:.5}],liftSurfaces:['shadow-lift','relay-lift']};
  level.conceptLesson={position:[-7,0,12],range:4,key:'E',text:'Две заслонки соединены с одной опорой. Нагрузка освобождает один луч и перекрывает другой.'};
- level.puzzleGeometry={footprint:2068,goalHeight:7,orders:['weight-first-continuous-hoist','light-first-continuous-hoist'],noProgressFlags:true,sightSlot:{x:-10.8,minY:14.2,maxY:15.55},portalRoles:{'light-intake':'one source for both physical optical circuits','lower-relay':'clear the loaded shutter to feed the continuous optical freight column; its raised moving mirror illuminates the first passenger lift','shadow-counterweight':'non-portal metal freight support; current reflected light raises the loaded carriage to the retrieval balcony','freight-receiver':'retain the same original companion above the first crossing','upper-relay':'the second optical circuit is clear only when the counterweight is unloaded','return-entry':'return from the high reverse overlook','home':'reach the back of the start through its high sight slit'},deductions:['cargo removes a real opaque obstruction','leave a powered car on a permanent ledge','current light raises the loaded counterweight; its travelling mirror must illuminate the first passenger receiver','retrieval reverses two connected shutters','reuse the source through the upper relay after cargo retrieval','higher observation exposes the back of the starting room']};
+ level.puzzleGeometry={footprint:2068,goalHeight:7,orders:['weight-first-continuous-hoist','light-first-continuous-hoist'],noProgressFlags:true,sightSlot:{x:-10.8,minY:14.2,maxY:15.55},mechanismRoles:{'shadow-counterweight':'non-portal metal freight support; current reflected light raises the loaded carriage to the retrieval balcony'},portalRoles:{'light-intake':'one source for both physical optical circuits','lower-relay':'clear the loaded shutter to feed the continuous optical freight column; its raised moving mirror illuminates the first passenger lift','freight-receiver':'retain the same original companion above the first crossing','upper-relay':'the second optical circuit is clear only when the counterweight is unloaded','return-entry':'return from the high reverse overlook','home':'reach the back of the start through its high sight slit'},deductions:['cargo removes a real opaque obstruction','leave a powered car on a permanent ledge','current light raises the loaded counterweight; its travelling mirror must illuminate the first passenger receiver','retrieval reverses two connected shutters','reuse the source through the upper relay after cargo retrieval','higher observation exposes the back of the starting room']};
  return level;
 }
 export {runRoom25} from './LabRoom25Journey.js';

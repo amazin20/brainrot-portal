@@ -33,11 +33,11 @@ test('25: both authored light orders require the continuous loaded plate hoist a
   assert.equal(result.event.optical[0],true);
   assert.ok(result.event.hoist>8.95);
   assert.ok(result.event.cargo.y>9.1);
-  assert.equal(result.event.portalIds.includes(game.firstLevel.panels['shadow-counterweight'].mesh.uuid),false);
+  assert.equal(result.event.portalIds.includes(game.firstLevel.mechanismSurfaces['shadow-counterweight'].mesh.uuid),false);
   assert.ok(result.report.milestones.some(step=>step.name.includes('balcony retrieval')));
  }
- assert.equal(game.firstLevel.panels['shadow-counterweight'].portal,false);
- assert.equal(game.firstLevel.panels['shadow-counterweight'].mesh.userData.portalable,undefined);
+ assert.equal(game.firstLevel.mechanismSurfaces['shadow-counterweight'].portal,false);
+ assert.equal(game.firstLevel.mechanismSurfaces['shadow-counterweight'].mesh.userData.portalable,undefined);
 });
 
 test('29: ceiling passage or reversed field direct garden catch each reunite the same companion',async()=>{
