@@ -1,0 +1,1067 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-v58-source-acceptance",
+  "generatedAt": "2026-10-16T04:41:24.661208+00:00",
+  "sourceAccepted": true,
+  "publicationAccepted": false,
+  "sourceCommit": "f73063b77461be70d7039e2c767fa6df4467ff3b",
+  "sourceTree": "8b22c37e844bca659567eda4a1c27be2c867ca32",
+  "sourceParent": "29bdf8cc9ab9804a9453d1dd6093349629003f95",
+  "sourceReview": {
+    "runId": 38849760441,
+    "runAttempt": 1
+  },
+  "run": 38849760441,
+  "runAttempt": 1,
+  "version": "v58-mechanism-readability",
+  "edition": "foundation",
+  "sourceInputsSha256": "99c67bdee3626a5ef595238fea04e91dd300a52f8cb16767083e5d3d342ec645",
+  "sourceInputFiles": 338,
+  "checks": {
+    "provider": {
+      "jobs": 24,
+      "successfulJobs": 24,
+      "artifacts": 26,
+      "attempt": 1
+    },
+    "cpu": {
+      "tests": 2466,
+      "passed": 2466,
+      "failed": 0,
+      "files": 324,
+      "disjointShards": 6
+    },
+    "novelPhysics": {
+      "files": 9,
+      "tests": 36,
+      "passed": 36,
+      "failed": 0
+    },
+    "ordinaryRoutes": {
+      "rooms": 51,
+      "won": 51,
+      "sameOriginalCompanion": 51,
+      "resets": 0,
+      "respawns": 0
+    },
+    "nativeRoutes": {
+      "rooms": 51,
+      "gameplayPassed": 51,
+      "capturesPassed": 51,
+      "won": 51,
+      "sameOriginalCompanion": 51,
+      "resets": 0,
+      "respawns": 0
+    },
+    "decodedImages": 87,
+    "changedRoomInteriorFrames": 4,
+    "responsiveMenuFrames": 6,
+    "saveIsolationV58": true,
+    "mockedYandexSdk": true,
+    "room25ContinuousNative": {
+      "frames": 770,
+      "durationSeconds": 192.5,
+      "simulationSeconds": 192.06666666666666,
+      "fullyDecoded": true,
+      "originalCargoBodyId": 88,
+      "sameOriginalShape": true,
+      "opticalCutGravityReturnAndRelight": true,
+      "twoDynamicPassengerBodies": [
+        89,
+        91
+      ],
+      "movieBytes": 8200296,
+      "movieSha256": "6e9154e8432a51d9dd17d629ba343ea29cbb044f48852b5afe5bc3ea96dbaf95",
+      "telemetrySha256": "84fdc84717638bffe8e35ac631012b1e0c45736e72e88036b6bddbcb68b28a08"
+    },
+    "mechanismCausal": {
+      "pass": true,
+      "cases": {
+        "room25": {
+          "pass": true,
+          "phases": [
+            "loaded-support",
+            "lit-gallery",
+            "dark-return",
+            "relight-ascent"
+          ],
+          "frames": 96,
+          "keyframes": 12,
+          "reportSha256": "547fd73255d063d33d66a08d741ac278c0b6346ce56a319786ed6fff8108c102",
+          "bindingSha256": "af64870ffb2d3b35282512b4ee00b331e8e10b118a2eb32fa8e425403dcd512f",
+          "telemetrySha256": "508cdd6f7c86dbb8b585d3bfd2964cbf5a83755484a174fad60336fa63631a6c",
+          "clips": [
+            {
+              "path": "clips/loaded-support.mp4",
+              "bytes": 109988,
+              "sha256": "5032b08239844006eb773a71bc627165bcd7e3a071727a221866f538601a14f8",
+              "frames": 24,
+              "fps": 12,
+              "fullyDecoded": true
+            },
+            {
+              "path": "clips/lit-gallery.mp4",
+              "bytes": 194766,
+              "sha256": "d552ad26170e4e935e8519133e9c8b039cd1aa2fa064dacaf295d5bb9e2e0b5a",
+              "frames": 24,
+              "fps": 12,
+              "fullyDecoded": true
+            },
+            {
+              "path": "clips/dark-return.mp4",
+              "bytes": 153157,
+              "sha256": "031314998ae028f81252e4f8ecaaf223ffdc6b101dce3e27be8a09080fd178e5",
+              "frames": 24,
+              "fps": 12,
+              "fullyDecoded": true
+            },
+            {
+              "path": "clips/relight-ascent.mp4",
+              "bytes": 157475,
+              "sha256": "3a1738932d2df1856e1dfd61f30769601b805fe30ae83726985cdef3c10369f0",
+              "frames": 24,
+              "fps": 12,
+              "fullyDecoded": true
+            }
+          ],
+          "fullyDecoded": true,
+          "geometricVisibilityAccepted": true,
+          "humanAccepted": false,
+          "cameraAccepted": false,
+          "hardwareFPSMeasured": false
+        },
+        "castle": {
+          "pass": true,
+          "phases": [
+            "upper-founded-view",
+            "upper-ride",
+            "upper-after-ride",
+            "upper-contact-retained"
+          ],
+          "frames": 96,
+          "keyframes": 12,
+          "reportSha256": "f0677e70b0d8174dc0cbc1891aacd946b5f20f98bfad0c7dd09de7565191fefe",
+          "bindingSha256": "af64870ffb2d3b35282512b4ee00b331e8e10b118a2eb32fa8e425403dcd512f",
+          "telemetrySha256": "c9e16833f62b42c4508b6a69bdaa023ccc642346ed2b233fb7b3d3a8412d2247",
+          "clips": [
+            {
+              "path": "clips/upper-founded-view.mp4",
+              "bytes": 63336,
+              "sha256": "d905b3aa07ea7022ca01757b407517d3575c2f4a2fd686779e18a05b3938c677",
+              "frames": 24,
+              "fps": 12,
+              "fullyDecoded": true
+            },
+            {
+              "path": "clips/upper-ride.mp4",
+              "bytes": 237920,
+              "sha256": "41405a176335a2eb05f48d729ae23592244a14e2834de1a444743b9df877fbe2",
+              "frames": 24,
+              "fps": 12,
+              "fullyDecoded": true
+            },
+            {
+              "path": "clips/upper-after-ride.mp4",
+              "bytes": 171230,
+              "sha256": "e18f0f7d652f7eb0608a883e7f3ab4c1985224dde5a657a1ec9cc5040af024f6",
+              "frames": 24,
+              "fps": 12,
+              "fullyDecoded": true
+            },
+            {
+              "path": "clips/upper-contact-retained.mp4",
+              "bytes": 65946,
+              "sha256": "6538c11b2620f9d099eba198dab2fe74af4edabd4983ceb5aca06abf48ceac31",
+              "frames": 24,
+              "fps": 12,
+              "fullyDecoded": true
+            }
+          ],
+          "fullyDecoded": true,
+          "geometricVisibilityAccepted": true,
+          "humanAccepted": false,
+          "cameraAccepted": false,
+          "hardwareFPSMeasured": false
+        }
+      },
+      "frames": 192,
+      "mediaBytes": 2327835,
+      "metadataBytes": 17025053,
+      "scope": "Eight continuous 2-second clips from actual ordinary scripted Room25/castle routes, selected-keyframe visibility only; no human or physical-device acceptance."
+    },
+    "currentImmutablePureValidators": {
+      "pass": true,
+      "mechanismCausal": {
+        "room25": {
+          "pass": true,
+          "immutablePureValidator": true,
+          "phases": [
+            "loaded-support",
+            "lit-gallery",
+            "dark-return",
+            "relight-ascent"
+          ],
+          "frames": 96,
+          "keyframes": 12,
+          "humanAccepted": false,
+          "cameraAccepted": false,
+          "hardwareFPSMeasured": false
+        },
+        "castle": {
+          "pass": true,
+          "immutablePureValidator": true,
+          "phases": [
+            "upper-founded-view",
+            "upper-ride",
+            "upper-after-ride",
+            "upper-contact-retained"
+          ],
+          "frames": 96,
+          "keyframes": 12,
+          "humanAccepted": false,
+          "cameraAccepted": false,
+          "hardwareFPSMeasured": false
+        }
+      },
+      "sourceManifestInputs": 338,
+      "sourceInputsSha256": "99c67bdee3626a5ef595238fea04e91dd300a52f8cb16767083e5d3d342ec645",
+      "upperPhysicalProofs": [
+        {
+          "kind": "ordinary",
+          "pass": true,
+          "originalCargoBodyId": 1638,
+          "loadedStep": 89162,
+          "retainedStartStep": 89321,
+          "currentStep": 94129,
+          "supportedDeckSteps": 396,
+          "islandStep": 91361,
+          "upperRideLowStep": 91474,
+          "upperRideHighStep": 92185,
+          "upperCatchStep": 93944,
+          "physicalLowerCatch": true,
+          "physicalUpperCatch": true,
+          "twoPhysicalCatches": true
+        },
+        {
+          "kind": "native",
+          "pass": true,
+          "originalCargoBodyId": 1600,
+          "loadedStep": 89162,
+          "retainedStartStep": 89304,
+          "currentStep": 94129,
+          "supportedDeckSteps": 396,
+          "islandStep": 91351,
+          "upperRideLowStep": 91474,
+          "upperRideHighStep": 92185,
+          "upperCatchStep": 93944,
+          "physicalLowerCatch": true,
+          "physicalUpperCatch": true,
+          "twoPhysicalCatches": true
+        }
+      ],
+      "room25NativePureValidator": true
+    }
+  },
+  "packages": {
+    "dist": {
+      "files": 80,
+      "bytes": 7117355,
+      "inventorySha256": "c9f44b283201b0ee2a8d91b879251587bc108c6c6c7be84be81a03f33083d963"
+    },
+    "yandex": {
+      "filename": "brainrot-portal-v58-yandex.zip",
+      "bytes": 4336184,
+      "sha256": "e5516f404383d26e8ed4107dd7332490e9a78e3b092d8869a4d1b23c00653850",
+      "unpackedBytes": 6747515
+    }
+  },
+  "sourceLogs": [
+    {
+      "jobId": 116808368281,
+      "bytes": 74595,
+      "sha256": "0f60f74989969bc9e43c4e666f13756ddec9689936de0476281ab8612337e4d4"
+    },
+    {
+      "jobId": 116808368458,
+      "bytes": 47840,
+      "sha256": "bd09a17303d02513659627ade21542b1cfe257b757fe9f6fbdba0d431e022128"
+    },
+    {
+      "jobId": 116808368549,
+      "bytes": 67385,
+      "sha256": "ae9908c9e6f1f17d1302b4da88a5f0ea56e8ae199bd3c628aad0fc439c36089e"
+    },
+    {
+      "jobId": 116808368563,
+      "bytes": 203579,
+      "sha256": "3254a44e6e81035225722715ab050ba4645ff2d8832a8e460614cedcbd06da24"
+    },
+    {
+      "jobId": 116808368569,
+      "bytes": 46885,
+      "sha256": "8c21089f4f6ff8e3592c91a29c4912b17ceba446e7701cca763755f2ca6ec283"
+    },
+    {
+      "jobId": 116808368599,
+      "bytes": 47698,
+      "sha256": "2cabdd61440f69e42c81a858a5a5e9f6f162b8d40b14180ca580d6cfce19792f"
+    },
+    {
+      "jobId": 116808368601,
+      "bytes": 206879,
+      "sha256": "a49bfd07c4d4d2f2850374047ab8eda263c79ce1d12a83df48018d8a9f218343"
+    },
+    {
+      "jobId": 116808368611,
+      "bytes": 1581796,
+      "sha256": "80eb1706701c5fdf4f61a8d541d0ddeca3fbfb6252c823d0226976ca914f8a80"
+    },
+    {
+      "jobId": 116808368615,
+      "bytes": 47691,
+      "sha256": "c458fcd25d99ecd04f9e53313f8914f87429e5ecc7b02529a8c965c445844c52"
+    },
+    {
+      "jobId": 116808368622,
+      "bytes": 256147,
+      "sha256": "a6f92a9f6d4ba068f9ae8ef2b2e5a50710470057eaa4faa28af65fd14d2f4d7d"
+    },
+    {
+      "jobId": 116808368641,
+      "bytes": 47651,
+      "sha256": "66b82d7687f888c527394ba9cf5a00318dec201992a48ea1214829c872165fdc"
+    },
+    {
+      "jobId": 116808368642,
+      "bytes": 215628,
+      "sha256": "18775e2c36a1e0db120112317824d9b6056a11cf385947f831ff16a2a1f475f5"
+    },
+    {
+      "jobId": 116808368667,
+      "bytes": 47677,
+      "sha256": "a07c1df939f7f98f8fd6ca27a1ebe4f64b85db6d2cdd6ea8c4c42ad134291b60"
+    },
+    {
+      "jobId": 116808368721,
+      "bytes": 243136,
+      "sha256": "b714c8fe88d7e4ad6c204461f9d76e7a3c7b4e3652cbef562aa16a565d2fd418"
+    },
+    {
+      "jobId": 116808514838,
+      "bytes": 79178,
+      "sha256": "4a69f14cfcc1f2c0c5f67a8dfece92acdc6f6e3e2d29747237436e4b7ad318b1"
+    },
+    {
+      "jobId": 116808514914,
+      "bytes": 113024,
+      "sha256": "5a02e2db9bcc589c3ec22c85298ea952a26febea87bc6f104b79d8484dbbc12b"
+    },
+    {
+      "jobId": 116808514971,
+      "bytes": 113023,
+      "sha256": "05be279a81544c1f4cfb6c8b176cc5d73a055856001fa2aead0de5965116f1f4"
+    },
+    {
+      "jobId": 116809738165,
+      "bytes": 113622,
+      "sha256": "e03a150fdd1fe78cd498d5561759e42312419363a4b1b14f880546a3f871bd67"
+    },
+    {
+      "jobId": 116809738280,
+      "bytes": 72285,
+      "sha256": "7b6bb3442eeb3077425bfa0364681fba5b1e3ca05065d3cf1f5f4363bedf3292"
+    },
+    {
+      "jobId": 116809738312,
+      "bytes": 65724,
+      "sha256": "6d9d0bb3c49bd898e8d9d510c518621a80cdfd68839dce0d8bf09ab3dcc37d76"
+    },
+    {
+      "jobId": 116809738341,
+      "bytes": 69184,
+      "sha256": "b49bd03e8a80b5992484ae9622f9d5e53a04bfd87688c455e07966d63175285c"
+    },
+    {
+      "jobId": 116809738364,
+      "bytes": 69792,
+      "sha256": "7b47d34a55d9c388022763b05f3f772eb0ac494a94530d6b910b1ee7393c8d51"
+    },
+    {
+      "jobId": 116809738409,
+      "bytes": 61885,
+      "sha256": "608db98486895d7c0b5e143c9da51afd7862c282774d3de3333555aa70a847b0"
+    },
+    {
+      "jobId": 116809738431,
+      "bytes": 69284,
+      "sha256": "0ef677acea4c7a49e7c1b08d5cb499cf43e1a35b45d85fc397f61983d4f5e8ae"
+    }
+  ],
+  "candidateFiles": [
+    {
+      "path": "art/portal-laboratory-menu.webp",
+      "bytes": 158200,
+      "sha256": "f6a544096a6418a0f65ba8c609415d0393a1081d18537ecac5eb4c345b13b4be"
+    },
+    {
+      "path": "assets/LabAnimationJourney-CUZwGQMX.js",
+      "bytes": 3040,
+      "sha256": "a369e319b6c08c3319f9e91c8e803ecd82849c3c820ab8743aed6e4023c939dd"
+    },
+    {
+      "path": "assets/LabCreativeRoom17Journey-C4mbtLCc.js",
+      "bytes": 5480,
+      "sha256": "a3cb2f5c463e06df2ff4000edc12f2613c25a94a17386ee674d144e5e2fd0677"
+    },
+    {
+      "path": "assets/LabCreativeRoom18Journey-l5Sh0qfo.js",
+      "bytes": 3303,
+      "sha256": "c6e29446916b9ae4ecbfa130ffaaa5beea814efadd50ca1a0b9af69f78cccfef"
+    },
+    {
+      "path": "assets/LabCreativeRoom20Journey-Dg9BG4ng.js",
+      "bytes": 4722,
+      "sha256": "25706b3ce14bb17c4c5412bf44e041b901a09bd1874e01547b19b439b9a217c2"
+    },
+    {
+      "path": "assets/LabEchoHorizonJourney-C9DtWLvX.js",
+      "bytes": 2271,
+      "sha256": "854020b98fd7c86a970ee0de77794d394a075804130c0c92c901a956c92203a1"
+    },
+    {
+      "path": "assets/LabExpansionAlternateJourney47-3qgixs4y.js",
+      "bytes": 1864,
+      "sha256": "2054a9f53789e8c5aa399142bef5a6700bd7c6be3353874cd5b89eba9482c851"
+    },
+    {
+      "path": "assets/LabExpansionAlternateJourney48-CE4dliSj.js",
+      "bytes": 2334,
+      "sha256": "a2e5c912fb23030c4bb825c709db1324283c14619228542ef918034ab3a95ba0"
+    },
+    {
+      "path": "assets/LabExpansionAlternateJourney49-UsjjmISL.js",
+      "bytes": 2039,
+      "sha256": "709eca6b4a7c45d6a7c9c554a228cd2f2ad42f1483e415834b6a6a77b86469fa"
+    },
+    {
+      "path": "assets/LabExpansionAlternateJourneyB-CKP_nQO0.js",
+      "bytes": 2970,
+      "sha256": "66ddf5a2f93026584aa18bf68e57abf47811bf6aec386e0db4c3697b45c657cc"
+    },
+    {
+      "path": "assets/LabExpansionJourneyA-C6eLhvsw.js",
+      "bytes": 7448,
+      "sha256": "5f746e827360dd9c87f3d3fe29180b43fae29964659f418e82f60d2985a5ce35"
+    },
+    {
+      "path": "assets/LabExpansionJourneyB-COX2oiup.js",
+      "bytes": 5645,
+      "sha256": "466d1b6082cb53d8617ddb52fc0751fb75239cb860b83a00e42266a83b03a796"
+    },
+    {
+      "path": "assets/LabExtendedJourney-DXNm-f3S.js",
+      "bytes": 9252,
+      "sha256": "9b2976441d7aa17e0f299970704174cce20229d009546bcbb201494080096845"
+    },
+    {
+      "path": "assets/LabFoundation20PhysicalJourney-BjsxYIej.js",
+      "bytes": 12259,
+      "sha256": "592c40d6bdd2622e724c8af3a7da336b76dd5286b9101a416810c839a6a24198"
+    },
+    {
+      "path": "assets/LabFoundationJourney-BlgcXLHT.js",
+      "bytes": 9267,
+      "sha256": "b58d56b7263b3cf3374de3cbb5719cfa9b105a653ac2a0c80315d633c7b0f283"
+    },
+    {
+      "path": "assets/LabIntroductoryAlternates-DcdsCClA.js",
+      "bytes": 1341,
+      "sha256": "a6451adc49d9c2f86f43455bfa4ced44d7166234f4fde82082990bf21f76cd5c"
+    },
+    {
+      "path": "assets/LabLateCampaignAim-Cq1ACDGQ.js",
+      "bytes": 753,
+      "sha256": "b8e13077c7e9a13b5dee85b33ccc384a32df1cd908c4163fcd9ae6f64e083694"
+    },
+    {
+      "path": "assets/LabOpenJourney-Bcb2L4A3.js",
+      "bytes": 6404,
+      "sha256": "bad87ecd5ed9f5347259b283a01a30300d9b4941856d9beba1c64e45ade76dab"
+    },
+    {
+      "path": "assets/LabPortalEdgeJourney-C91k2Kr5.js",
+      "bytes": 2293,
+      "sha256": "8e48b69be290255c9c8175b9ff4a87b2182d81f30eea8377eaea6c4d84f1d58d"
+    },
+    {
+      "path": "assets/LabPortalFloorJourney-CCtIj6PB.js",
+      "bytes": 1516,
+      "sha256": "79509867175ef81adeddaa3f59344390606a0da3b00ea03a68f137e0c50dcdf4"
+    },
+    {
+      "path": "assets/LabPostJourneyA-DtprvV8n.js",
+      "bytes": 12240,
+      "sha256": "eb6599d0f55bc3fcb5d8fdd3350160c74f5af9acc38367f96662bafa00cfcd52"
+    },
+    {
+      "path": "assets/LabPostJourneyB-5LCDRNIV.js",
+      "bytes": 10887,
+      "sha256": "f318d346eaa59099ab6535b888c1aac04c4a13f3271565a1162dca93afbd4dfa"
+    },
+    {
+      "path": "assets/LabPuzzlePilot43Journey-Co-jNPYB.js",
+      "bytes": 3148,
+      "sha256": "b438b36f7708ad5255f424575382a5e6625a4811d8b8eebd416833535c18bef3"
+    },
+    {
+      "path": "assets/LabPuzzleProgression44Journey-DtLm6wQp.js",
+      "bytes": 1956,
+      "sha256": "d601fc1db217a455a8f367d8720ca7cf9738527308ad65af9a71caa459f1b9f4"
+    },
+    {
+      "path": "assets/LabPuzzleProgression45Journey-BKqUktU7.js",
+      "bytes": 5497,
+      "sha256": "1a72d2d834a0fbb82381884912dd4cced4c4eb7be04bbad19ddadd9038f6b3f3"
+    },
+    {
+      "path": "assets/LabPuzzleProgression46Journey-Cwf2dTTm.js",
+      "bytes": 3649,
+      "sha256": "f9b420decb94d84875588fae3b5a6417bc2f932defc8d2d6da3417f629b09866"
+    },
+    {
+      "path": "assets/LabPuzzleProgression47Journey-BV_4gldt.js",
+      "bytes": 4713,
+      "sha256": "e6e590f9deb8603fcd12c15ac8bde41d70b786d2aa5444d8eb129e27f572f1a5"
+    },
+    {
+      "path": "assets/LabPuzzleProgression48Journey-CYfiSkGw.js",
+      "bytes": 5941,
+      "sha256": "8a4280b41bb7f663882ab11d14e3cf22e4731a8207cf5a1756df565054a218f0"
+    },
+    {
+      "path": "assets/LabPuzzleProgression49Journey-C797lu_P.js",
+      "bytes": 4598,
+      "sha256": "b4c82880ca2e484ea80a489a97731fa311bbd26dd49d6b4900ac00b735c8a581"
+    },
+    {
+      "path": "assets/LabPuzzleProgression50BeamJourney-BXBW9Qh_.js",
+      "bytes": 12675,
+      "sha256": "f58f51793f92593fd0376af1d6930903ab236c128808b6ecd47bc1f1a06d9194"
+    },
+    {
+      "path": "assets/LabPuzzleProgression50Journey-Dpmrow4J.js",
+      "bytes": 6188,
+      "sha256": "7e05136886da91b0df4ab07b51017bb84d37654092de8bf8873c2bb01e4c4db8"
+    },
+    {
+      "path": "assets/LabPuzzleProgression51Journey-Djp3m3Gh.js",
+      "bytes": 3457,
+      "sha256": "56cd98f4e27b451d85b8feb62968447c401060a60605240191aeddd996205257"
+    },
+    {
+      "path": "assets/LabResearchJourney-BWCnyt_g.js",
+      "bytes": 7951,
+      "sha256": "def28ada9c605c786ba766807122c8638cbcb821fd993ca35d1e11a73e4ddfbb"
+    },
+    {
+      "path": "assets/LabRoom13Journey-DpkZeNEo.js",
+      "bytes": 6194,
+      "sha256": "275c62befc9b95dc4c596810721ffba02b137b24ad14006e4769f1c7f21bc041"
+    },
+    {
+      "path": "assets/LabRoom14Journey-CUW8jLoh.js",
+      "bytes": 4785,
+      "sha256": "b0f33c1ff1358758c920c3eed312fc28f3a0de8ce656eb95eadb494a42645a8a"
+    },
+    {
+      "path": "assets/LabRoom15Journey-B5_G8ABP.js",
+      "bytes": 4604,
+      "sha256": "2194e4ef3e7cb4334265d2126d21af5c3243ee9883d47353827c5d9f9e998bd6"
+    },
+    {
+      "path": "assets/LabRoom16Journey-DcT0PHn1.js",
+      "bytes": 2534,
+      "sha256": "43814ce0e94d01e0e2b9152c6ea1c722073f13a019b2992525f6b0480fa97e74"
+    },
+    {
+      "path": "assets/LabRoom17Journey-C2EE7523.js",
+      "bytes": 3260,
+      "sha256": "b621bf8abcb99cec72e5a8b0ef53e4ef6a005e414141e9502855a2759ba02708"
+    },
+    {
+      "path": "assets/LabRoom18Journey-CP1SGimq.js",
+      "bytes": 6065,
+      "sha256": "71cd18c7238a2bbfff880de9b556ba65f1cf66d931dd29c38f185431f4587a72"
+    },
+    {
+      "path": "assets/LabRoom19Journey-BVk2pOJ3.js",
+      "bytes": 3087,
+      "sha256": "edbd9e87a7c68f527a6a6d6794cfcb3a8de5780d1c656265ccf7910207066ab4"
+    },
+    {
+      "path": "assets/LabRoom20Journey-Dnjdo837.js",
+      "bytes": 5013,
+      "sha256": "84ee4a4debf18d555e80bbf468821d58576e6fcf805b34adcd2670e8502fc0fd"
+    },
+    {
+      "path": "assets/LabRoom21Journey-Eq0MMvy7.js",
+      "bytes": 5318,
+      "sha256": "130cb1761954d1df4b9dba5a7da06b41e7c4e2d445037ae2790b871b313bb1f0"
+    },
+    {
+      "path": "assets/LabRoom22Journey-PvRT-GJQ.js",
+      "bytes": 2942,
+      "sha256": "e44d2f7e2880a738460bd3e7c364fa7490255461c57fb71aedcf1de5d81c234e"
+    },
+    {
+      "path": "assets/LabRoom23Journey-D2SrrqPn.js",
+      "bytes": 2743,
+      "sha256": "41e2cf3cfbac43fb8984c312ef2693d89ae42bb2051b7176d007a2e402f7e833"
+    },
+    {
+      "path": "assets/LabRoom23PhysicalJourney-BYFePb-5.js",
+      "bytes": 4194,
+      "sha256": "301cf24fd95099bcdb7268b6371545ee260c89e3b69cf5d752482c9a89000e36"
+    },
+    {
+      "path": "assets/LabRoom24Journey-BJTcXefH.js",
+      "bytes": 3675,
+      "sha256": "6d2eb64bffdc07afc0105c127c35da3f4d023fa76c0104718adcab3a6e483d51"
+    },
+    {
+      "path": "assets/LabRoom25Journey-COqi9k-Z.js",
+      "bytes": 4626,
+      "sha256": "4113270db838996f7bcd1cd8d5edd4ca13461d19057e13a1a5f4e0f5085b9296"
+    },
+    {
+      "path": "assets/LabRoom26Journey-D5Lhf6Yz.js",
+      "bytes": 4194,
+      "sha256": "f568e01fcbf2e28f9bf1d89aa1d8e83df957bb60ea13a63a77cab81b61577e74"
+    },
+    {
+      "path": "assets/LabRoom27Journey-CtMoXjWq.js",
+      "bytes": 3350,
+      "sha256": "ea4e62a0eed62998b64515b56db65142d1a7d3fb8d5c91b6e31653c5ef4422b5"
+    },
+    {
+      "path": "assets/LabRoom28Journey-BK5o10zU.js",
+      "bytes": 3238,
+      "sha256": "abb63b08a5336b66f9274808b2d715e56d00520d744756fd68875b0c7442e686"
+    },
+    {
+      "path": "assets/LabRoom29Journey-FXLiWbZf.js",
+      "bytes": 2592,
+      "sha256": "625138692ba0641ed1ea63e7bb6ea332c70bf235ee3bc8b3cbd80456012e04ef"
+    },
+    {
+      "path": "assets/LabRoom30Journey-zAsFaYdh.js",
+      "bytes": 3762,
+      "sha256": "1d260d8e49e983b2f7a9c354898fe771c41df56434d67e203bd8fb51bbc8f925"
+    },
+    {
+      "path": "assets/LabSingularityJourney-DahiqaXv.js",
+      "bytes": 22117,
+      "sha256": "01f4b3f56fadd39c6ed662b216b9d8463b68c86979096c40ff0e65f0fc3e8d21"
+    },
+    {
+      "path": "assets/LabSiphonObservatoryJourney-sRxJXtHl.js",
+      "bytes": 2734,
+      "sha256": "c8241804a47dd9ff099443d44e995886ff51fc3c589b60ac02dfa6619b8996c6"
+    },
+    {
+      "path": "assets/LabTower41RatchetCellJourney-Dj5gHJTN.js",
+      "bytes": 24187,
+      "sha256": "e15a6cc9ed372463b82ee46b51fa02e8bee683ccabb335e2d1f3286a9d7ed5d6"
+    },
+    {
+      "path": "assets/LabTowerJourney-ewDb9W-T.js",
+      "bytes": 31405,
+      "sha256": "4f29963e4e10895c77e44f3d80ed1cd6edba03991f2576c59a5a64384abab816"
+    },
+    {
+      "path": "assets/LabV8Journey-oVGvsFQp.js",
+      "bytes": 19013,
+      "sha256": "6c1ce56c8f9673351bbcf269a4e943b44c5264a3bf83bf7eb34d8bbd0b7d5112"
+    },
+    {
+      "path": "assets/LabWorkshopJourney-DdEIS9Hu.js",
+      "bytes": 7249,
+      "sha256": "35e8e31fee3c5aa1cf7d218fff4e2ca284420a806b6a77a7ceef823921b2c967"
+    },
+    {
+      "path": "assets/index-CRyPkPdN.css",
+      "bytes": 48075,
+      "sha256": "4fb7b3a673420fc8210171716940a809345c8b0e548b74d45c40f163fed40e04"
+    },
+    {
+      "path": "assets/index-DC_4_ohI.js",
+      "bytes": 2083450,
+      "sha256": "4eefebbe4c2b71b013f4cf248ae6ae1331a06c35f2903f7cfcad80132f7f2fe7"
+    },
+    {
+      "path": "build-info.json",
+      "bytes": 107550,
+      "sha256": "bae8db92f7acf2512000ff5d0cc684bc16c98492015b2aaeb5bfa3cb9d7d3b18"
+    },
+    {
+      "path": "draco/draco_decoder.js",
+      "bytes": 719410,
+      "sha256": "30e4d486fa020737af10e3c56197693e5b904bdc05b8bfa5d7b06751dec6da04"
+    },
+    {
+      "path": "draco/draco_decoder.wasm",
+      "bytes": 285747,
+      "sha256": "c55a594e8ffd18426d36b27fea9618af3df5e173640a3e56d46f09d76f0574f2"
+    },
+    {
+      "path": "draco/draco_wasm_wrapper.js",
+      "bytes": 58763,
+      "sha256": "e8049906ef3f8f75d3456c22a3f31bfdfe5b5b5bd09ccdec613b9e9a49d554d8"
+    },
+    {
+      "path": "index.html",
+      "bytes": 13557,
+      "sha256": "cb787556bb19c3b3b498af9488321fd8553d781feba00feff010ad15f019e395"
+    },
+    {
+      "path": "models/runtime/manifest.json",
+      "bytes": 2421,
+      "sha256": "8806346ed3ac0fb096aa26321d5620c16a6a2a55f2523023fb21f6c4749fe2ed"
+    },
+    {
+      "path": "models/runtime/model-01-player.glb",
+      "bytes": 549756,
+      "sha256": "e5b09ff0281377b679d6fdd505fa1ed89550bb662e94e7f593ed67ee50a66a91"
+    },
+    {
+      "path": "models/runtime/model-02-cargo.glb",
+      "bytes": 510376,
+      "sha256": "65763c87e7f14cc807cffa8fc2adc364e8421dae819271a0c406a6b0d2c8c697"
+    },
+    {
+      "path": "models/runtime/model-11-portal-gun.glb",
+      "bytes": 393116,
+      "sha256": "d8c76c41efbbf0a6d70e30ab5a7b70f49fd806e497f67ea06cb28f9f4edca1d7"
+    },
+    {
+      "path": "models/runtime/model-19-lift-platform.glb",
+      "bytes": 404076,
+      "sha256": "afd039e831ff0baa514f076a505ffbb7c57dac2251959b3d858fc92dcf3d04b9"
+    },
+    {
+      "path": "models/runtime/model-22-terminal.glb",
+      "bytes": 377108,
+      "sha256": "9e2f4ff758996f67596d3935041f632bafdf7e84efd4869341920b64a5919c26"
+    },
+    {
+      "path": "models/runtime/model-23-floor-tile.glb",
+      "bytes": 103600,
+      "sha256": "0950bc6ef31bb28939087bad53695f21cde0b9fe5740394df202a0b242f77b0c"
+    },
+    {
+      "path": "models/runtime/model-24-wall-panel.glb",
+      "bytes": 62448,
+      "sha256": "15aaca48f6e436d5e89abf7548c0fe43580bba8faff4619e476d3a6d306b004d"
+    },
+    {
+      "path": "models/runtime/model-28-rotating-panel.glb",
+      "bytes": 366120,
+      "sha256": "3159916bad63903e73b8e660ce4aab8a3b1e38f1231152b68f3df63d6987ac4b"
+    },
+    {
+      "path": "models/runtime/model-29-pressure-platform.glb",
+      "bytes": 390244,
+      "sha256": "ee65bd9706ad4f4658e54ec5ad8f6f45b24d9027e4e6072f162358a4c1b3291b"
+    },
+    {
+      "path": "models/runtime/model-31-wind-generator.glb",
+      "bytes": 25768,
+      "sha256": "024f25db27e96e1efdaa5e200c13a665dee487e798338f86fef985feeae9019e"
+    },
+    {
+      "path": "models/runtime/model-32-spring-ram.glb",
+      "bytes": 25400,
+      "sha256": "958d5ed533736d5779da078be20ae2b0e84212bfc3a00b456dc0106bc0a093d7"
+    },
+    {
+      "path": "models/runtime/model-35-shutter-fan.glb",
+      "bytes": 27816,
+      "sha256": "8e11d5ab83250348f6e08f034ec87d82727162742d5a7be18f981fc523aa907a"
+    },
+    {
+      "path": "models/runtime/model-37-extension-bridge.glb",
+      "bytes": 25764,
+      "sha256": "96173a9ef89375066b08fad8dff1928425863c6b4e6b8c0373c497448f109c55"
+    },
+    {
+      "path": "models/runtime/model-39-cable-winch.glb",
+      "bytes": 28608,
+      "sha256": "301f148938ec83e2a8f4b45c7f9bdfd19fb40ca79d8fb9abc7601caf4fe0eafd"
+    }
+  ],
+  "candidateBytes": 7117355,
+  "candidateInventorySha256": "c9f44b283201b0ee2a8d91b879251587bc108c6c6c7be84be81a03f33083d963",
+  "sourceArtifacts": [
+    {
+      "artifactId": 12025985930,
+      "artifactName": "camera-readability-cpu-3",
+      "zipBytes": 217927,
+      "zipSha256": "cd22a4fb3350a54188886eae0268b1207aebd7da32231c836df0c30d4db1120e",
+      "files": 2,
+      "bytes": 1458851,
+      "inventorySha256": "6e7f09d004bc5e10639f622bd314eb857d67d7e29c81601da886fbadbedbf808"
+    },
+    {
+      "artifactId": 12025910321,
+      "artifactName": "camera-readability-native-energy",
+      "zipBytes": 429536,
+      "zipSha256": "336dff60ffcaa08a2350bd910a4c34fb9e192343ecf31ad6b722809b92311586",
+      "files": 13,
+      "bytes": 699447,
+      "inventorySha256": "7b16eb4763baa76f5e0fe379b355acd8129bdb685b55a384a11ef7241c0dcc34"
+    },
+    {
+      "artifactId": 12025716060,
+      "artifactName": "camera-readability-cpu-5",
+      "zipBytes": 30427,
+      "zipSha256": "105ebeddec5d4e0739bf537a1e369b02edd4df9f21e3641874e8d11dc64d3e28",
+      "files": 2,
+      "bytes": 161834,
+      "inventorySha256": "cf774a68762b23ad5f6e5218b0f5d8e870d4cabd1f03472dadb2e753c56e29dd"
+    },
+    {
+      "artifactId": 12025570975,
+      "artifactName": "camera-readability-native-castle",
+      "zipBytes": 47617,
+      "zipSha256": "5b52e91552afde857b712b5d40e9fef4cd29d601b00ef0d90afa177dc920c629",
+      "files": 4,
+      "bytes": 140968,
+      "inventorySha256": "91c2d25e34b36ece2f87293bec897b10832a2aba0f13f288defd41911e6677d3"
+    },
+    {
+      "artifactId": 12025510049,
+      "artifactName": "camera-readability-cpu-1",
+      "zipBytes": 29854,
+      "zipSha256": "82e47634632fd6e50591e04df82a563ef918df924473fc279c956e536c416d7c",
+      "files": 2,
+      "bytes": 135403,
+      "inventorySha256": "dd64cd585e5e0edef70e7fac04154078e4b023bb867fadce5b33a1063cbcdbd5"
+    },
+    {
+      "artifactId": 12025505953,
+      "artifactName": "camera-readability-cpu-0",
+      "zipBytes": 21108,
+      "zipSha256": "e7039bcf0ec3141ec074f1775cebfb85186c03e1da32f611fa877aa3939c261d",
+      "files": 2,
+      "bytes": 106167,
+      "inventorySha256": "87b5ec60171726cd42f8683841dcd64746b0e44d16cd8e9ea46d176621ad57eb"
+    },
+    {
+      "artifactId": 12025480445,
+      "artifactName": "camera-readability-cpu-2",
+      "zipBytes": 22180,
+      "zipSha256": "70fbd7be3258671e6c6e78a77edd0ceaab49e79b2fa00352d44cde9f1f467927",
+      "files": 2,
+      "bytes": 111409,
+      "inventorySha256": "ca182b33832595e4925d7f4f27039240ba06d272e94a4ab131b552a1e24fc029"
+    },
+    {
+      "artifactId": 12025415618,
+      "artifactName": "camera-readability-native-early",
+      "zipBytes": 512711,
+      "zipSha256": "044e12f907f456c412553b83f4522a045156ad69932a593060f84b7810395a4b",
+      "files": 13,
+      "bytes": 604244,
+      "inventorySha256": "3fd6bf1ba580813dc3aba12a7558ed2f4459b9fa27f070dc7d9747dba5a0cd04"
+    },
+    {
+      "artifactId": 12025375002,
+      "artifactName": "camera-readability-causal-room25",
+      "zipBytes": 3324011,
+      "zipSha256": "84b6ce1b897de269a2b66a6c1a3780b92f6cd6e3b66840acb551196c9abb3eb0",
+      "files": 30,
+      "bytes": 17182843,
+      "inventorySha256": "b91426945fc8f5c989a3e96d4cc61a96ff9a2dbdf7110a4a448bc8aec8219a24"
+    },
+    {
+      "artifactId": 12025336547,
+      "artifactName": "camera-readability-cpu-4",
+      "zipBytes": 20892,
+      "zipSha256": "96f08291854afdc082e63cb7abbfed8ddee7acf68f1e359a67f8c811c5546b34",
+      "files": 2,
+      "bytes": 106917,
+      "inventorySha256": "9ea179bc219ff336dff3c89904d3fede6f90628acc7f6cd60406e216867939c1"
+    },
+    {
+      "artifactId": 12025202267,
+      "artifactName": "camera-readability-native-fracture",
+      "zipBytes": 425113,
+      "zipSha256": "85195f2cc52a560c05dbcdbaba63d3264bacc3d331afb5aa128b17cd9a8d4fd1",
+      "files": 13,
+      "bytes": 569854,
+      "inventorySha256": "db954362500bcc1fdae359f71626b00d130ba3af5d9fc860acb1d954c519e649"
+    },
+    {
+      "artifactId": 12025175765,
+      "artifactName": "camera-readability-physics",
+      "zipBytes": 4628,
+      "zipSha256": "cf061867604d4d4a6c1b078c12ecfe5fd4f1ef96b7e7e05d4c1f695c52b9d24f",
+      "files": 2,
+      "bytes": 15339,
+      "inventorySha256": "e9bbe2c6ca68cade086e8d26c2594b0d8c65befa965416eb3e21cf6100f626f6"
+    },
+    {
+      "artifactId": 12025170197,
+      "artifactName": "camera-readability-ordinary-living",
+      "zipBytes": 6429,
+      "zipSha256": "e418f51c9290f05e8f9a0fb2441eca083fb6995362096a2d7e5045198548cd15",
+      "files": 1,
+      "bytes": 29193,
+      "inventorySha256": "80ef267e1a9b3ccb8fddcea2380dfed6a2ba65ddeaf0ada74aca5c5c02e37890"
+    },
+    {
+      "artifactId": 12025136445,
+      "artifactName": "camera-readability-native-optics",
+      "zipBytes": 360595,
+      "zipSha256": "359944a68afcc9c4cbd2945a8f6ed779927151f0f76370d5aa7a2bcbafb35f18",
+      "files": 13,
+      "bytes": 482845,
+      "inventorySha256": "b7250f01de8a9d2135e880f0882e894ae1f2e555e95d65fa3f2f3e9bbcd90743"
+    },
+    {
+      "artifactId": 12025106436,
+      "artifactName": "camera-readability-native-living",
+      "zipBytes": 367823,
+      "zipSha256": "ae4fe3ccc30a63761318188f13a8a8555d01d1b290c87a3eb28d30dff11aa660",
+      "files": 13,
+      "bytes": 502453,
+      "inventorySha256": "a27132b5eebdbf243a776bd26266b0dce8f7a485ef4e572388501d53ec176e26"
+    },
+    {
+      "artifactId": 12025096288,
+      "artifactName": "camera-readability-ordinary-castle",
+      "zipBytes": 6714,
+      "zipSha256": "73f28d4562db28b2d87e5fc9471485c4f5aa11784f0c7bf830adf7a97cfb14ae",
+      "files": 1,
+      "bytes": 42332,
+      "inventorySha256": "58a87b0bc1860fac15e24263585d7227bb26ad2a137a50d4433be65d969b0112"
+    },
+    {
+      "artifactId": 12025071632,
+      "artifactName": "camera-readability-causal-castle",
+      "zipBytes": 1191827,
+      "zipSha256": "d8772c71910c8bc92b01b5a02cf2ae318ea3e77c441bbec9ab31157e38269f6c",
+      "files": 30,
+      "bytes": 2170045,
+      "inventorySha256": "3e1ad31d62fed02c8f76dd38d31cc91b611a2af0bdb06406aed21b80a316cb72"
+    },
+    {
+      "artifactId": 12024952348,
+      "artifactName": "camera-readability-room25-native",
+      "zipBytes": 8568941,
+      "zipSha256": "92165cad7d479ba0025abc550863c99f27ab5a33c6b77d01480ae21e84effe59",
+      "files": 10,
+      "bytes": 12090510,
+      "inventorySha256": "256330346b5ba852bb965a4e6ee3576b27929252de3506288dd3d645b8a26f36"
+    },
+    {
+      "artifactId": 12024866885,
+      "artifactName": "camera-readability-build",
+      "zipBytes": 5459,
+      "zipSha256": "f52fa5f8adf2a6d200ed648ec0d97c66d9f5268ae77c1bed222e8c1010d548e3",
+      "files": 1,
+      "bytes": 15683,
+      "inventorySha256": "d02d07eb2bae7264ba20938fcf1db8f8fe50bde43ca11587dfed9046ca0cb68b"
+    },
+    {
+      "artifactId": 12024752635,
+      "artifactName": "camera-readability-ordinary-early",
+      "zipBytes": 3375,
+      "zipSha256": "2ba2c2f9fa7a6c7ac76d6ce73527b51704fc10aa9f574f8bdbcf85cb1eef04f0",
+      "files": 1,
+      "bytes": 14688,
+      "inventorySha256": "97d2aa74e45d9c9f560eacaae356dad339712cd6b84b129d4445b95e286bc78a"
+    },
+    {
+      "artifactId": 12024529173,
+      "artifactName": "camera-readability-presentation",
+      "zipBytes": 3589931,
+      "zipSha256": "a81fa0037cc48861e84690b332356bfe00a5bb532bcba16c732f8ac472f72c07",
+      "files": 19,
+      "bytes": 3634440,
+      "inventorySha256": "383cc42964dbdb69ef4907f9f87c3712fac733923e57622084e3b68246210787"
+    },
+    {
+      "artifactId": 12024473708,
+      "artifactName": "camera-readability-yandex",
+      "zipBytes": 4338389,
+      "zipSha256": "0a00070960e7afabec60fa682805b2fb377882ab74f6f36b2b02c0381108cd8f",
+      "files": 2,
+      "bytes": 4341190,
+      "inventorySha256": "66a822872ce405c617e76bc190b266b1fbed3a306a5f8ba3b71e7268d2784102"
+    },
+    {
+      "artifactId": 12024463761,
+      "artifactName": "camera-readability-dist",
+      "zipBytes": 4494190,
+      "zipSha256": "9945c651e74a8b4b21f5f241bb2aecb3b2b422e0082263007896e269f2511d01",
+      "files": 80,
+      "bytes": 7117355,
+      "inventorySha256": "c9f44b283201b0ee2a8d91b879251587bc108c6c6c7be84be81a03f33083d963"
+    },
+    {
+      "artifactId": 12024064316,
+      "artifactName": "camera-readability-ordinary-energy",
+      "zipBytes": 15321,
+      "zipSha256": "f2977b70352e9437b93c38bc6f1d08c1f782ab0f08bc8b38a65607c286374369",
+      "files": 1,
+      "bytes": 139946,
+      "inventorySha256": "5b669282010c1c0af34e5992521743eb59186e9ea4b623799c4b721fd0987396"
+    },
+    {
+      "artifactId": 12024004622,
+      "artifactName": "camera-readability-ordinary-fracture",
+      "zipBytes": 7297,
+      "zipSha256": "fe207d065837d9e29f14b0b917a5ad9347930b83b4367cd62c8382ea0dcea9bd",
+      "files": 1,
+      "bytes": 34363,
+      "inventorySha256": "da77fc57ba130b27152073890ab02a8224d1e25b176d0f0c9d974dc32c091a72"
+    },
+    {
+      "artifactId": 12023784932,
+      "artifactName": "camera-readability-ordinary-optics",
+      "zipBytes": 5505,
+      "zipSha256": "3ac7178e58de2439ffa7924b39054dee423f9381a1fbef457f7d39f2cabdadc3",
+      "files": 1,
+      "bytes": 25303,
+      "inventorySha256": "4f81943b2316b8eb0b24aa87758f297941d89b63cfd642bbb2f3c71b48458da7"
+    }
+  ],
+  "sourceProvider": {
+    "run": {
+      "path": "/workspace/scratch/4668c0c884c8/v58-source-provider/run.json",
+      "sha256": "86f23ad00e039eebc391ca2c266f49792960283889891574696112dedaa1dc33"
+    },
+    "jobs": {
+      "path": "/workspace/scratch/4668c0c884c8/v58-source-provider/jobs.json",
+      "sha256": "48e249cc9ba7cab6eb37bfbf204305964811eec0c52c2f69e8f7779fb3a9338a"
+    },
+    "commit": {
+      "path": "/workspace/scratch/4668c0c884c8/v58-source-provider/commit.json",
+      "sha256": "e65d2f0d06b1c4910afe220c996d18d9727664d0cf64bde75861d9c0c01aabc6"
+    },
+    "artifacts": {
+      "path": "/workspace/scratch/4668c0c884c8/v58-source-provider/artifacts.json",
+      "sha256": "23649c587465e19a8a37acb71417749fabd4d5aaf772c1fb27948caad8931e93"
+    }
+  },
+  "scope": "Exact completed SOURCE attempt:24jobs/26archives,51ordinary+51production-native wins, original assets, finite physical regressions, real Room25 MP4 and immutable current upper-contact/ride witnesses. No public acceptance.",
+  "limitations": [
+    "Automated software WebGL and scripted input; human puzzle discovery and physical-device FPS remain unmeasured.",
+    "Only Room25 has a continuous full-route current MP4. Eight short12fps clips cover selected mechanism phases;51native wins are not51full-route movies, and intermediate visibility is unmeasured.",
+    "The retained Room25 movie samples4fps;120Hz force evidence is authenticated aggregate observations, not a retained complete120Hz trace.",
+    "Finite regressions do not prove closure of every bypass.",
+    "No live Yandex SDK, advertising delivery, platform moderation or publication acceptance.",
+    "The castle is not500 unique stages; the historical500-stage and proved15-minute human-speedrun requirements remain open."
+  ]
+}

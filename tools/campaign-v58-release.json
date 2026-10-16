@@ -1,0 +1,211 @@
+{
+  "schemaVersion": 1,
+  "frozen": true,
+  "repository": "amazin20/brainrot-portal",
+  "namespace": "campaign-v58/",
+  "version": "v58-mechanism-readability",
+  "controllerParent": "d8409c7f768db1f1634abb5f9f703cc3ce41963c",
+  "sourceBranch": "upgrade/camera-readability-20261016",
+  "sourceWorkflow": ".github/workflows/camera-readability-review.yml",
+  "sourceCommit": "f73063b77461be70d7039e2c767fa6df4467ff3b",
+  "sourceTree": "8b22c37e844bca659567eda4a1c27be2c867ca32",
+  "sourceRun": 38849760441,
+  "sourceAttempt": 1,
+  "expectedJobs": [
+    "build",
+    "cpu (0)",
+    "cpu (1)",
+    "cpu (2)",
+    "cpu (3)",
+    "cpu (4)",
+    "cpu (5)",
+    "native (castle, 41)",
+    "native (early, 1,2,3,4,5,6,7,8,9,10)",
+    "native (energy, 11,12,13,14,15,16,17,18,19,20)",
+    "native (fracture, 42,43,44,45,46,47,48,49,50,51)",
+    "native (living, 21,22,23,24,25,26,27,28,29,30)",
+    "native (optics, 31,32,33,34,35,36,37,38,39,40)",
+    "ordinary (castle, 41)",
+    "ordinary (early, 1,2,3,4,5,6,7,8,9,10)",
+    "ordinary (energy, 11,12,13,14,15,16,17,18,19,20)",
+    "ordinary (fracture, 42,43,44,45,46,47,48,49,50,51)",
+    "ordinary (living, 21,22,23,24,25,26,27,28,29,30)",
+    "ordinary (optics, 31,32,33,34,35,36,37,38,39,40)",
+    "physics",
+    "presentation",
+    "readability (castle)",
+    "readability (room25)",
+    "room25-native"
+  ],
+  "sourceArtifacts": [
+    {
+      "id": 12024866885,
+      "name": "camera-readability-build",
+      "size_in_bytes": 5459,
+      "digest": "sha256:f52fa5f8adf2a6d200ed648ec0d97c66d9f5268ae77c1bed222e8c1010d548e3"
+    },
+    {
+      "id": 12025071632,
+      "name": "camera-readability-causal-castle",
+      "size_in_bytes": 1191827,
+      "digest": "sha256:d8772c71910c8bc92b01b5a02cf2ae318ea3e77c441bbec9ab31157e38269f6c"
+    },
+    {
+      "id": 12025375002,
+      "name": "camera-readability-causal-room25",
+      "size_in_bytes": 3324011,
+      "digest": "sha256:84b6ce1b897de269a2b66a6c1a3780b92f6cd6e3b66840acb551196c9abb3eb0"
+    },
+    {
+      "id": 12025505953,
+      "name": "camera-readability-cpu-0",
+      "size_in_bytes": 21108,
+      "digest": "sha256:e7039bcf0ec3141ec074f1775cebfb85186c03e1da32f611fa877aa3939c261d"
+    },
+    {
+      "id": 12025510049,
+      "name": "camera-readability-cpu-1",
+      "size_in_bytes": 29854,
+      "digest": "sha256:82e47634632fd6e50591e04df82a563ef918df924473fc279c956e536c416d7c"
+    },
+    {
+      "id": 12025480445,
+      "name": "camera-readability-cpu-2",
+      "size_in_bytes": 22180,
+      "digest": "sha256:70fbd7be3258671e6c6e78a77edd0ceaab49e79b2fa00352d44cde9f1f467927"
+    },
+    {
+      "id": 12025985930,
+      "name": "camera-readability-cpu-3",
+      "size_in_bytes": 217927,
+      "digest": "sha256:cd22a4fb3350a54188886eae0268b1207aebd7da32231c836df0c30d4db1120e"
+    },
+    {
+      "id": 12025336547,
+      "name": "camera-readability-cpu-4",
+      "size_in_bytes": 20892,
+      "digest": "sha256:96f08291854afdc082e63cb7abbfed8ddee7acf68f1e359a67f8c811c5546b34"
+    },
+    {
+      "id": 12025716060,
+      "name": "camera-readability-cpu-5",
+      "size_in_bytes": 30427,
+      "digest": "sha256:105ebeddec5d4e0739bf537a1e369b02edd4df9f21e3641874e8d11dc64d3e28"
+    },
+    {
+      "id": 12024463761,
+      "name": "camera-readability-dist",
+      "size_in_bytes": 4494190,
+      "digest": "sha256:9945c651e74a8b4b21f5f241bb2aecb3b2b422e0082263007896e269f2511d01"
+    },
+    {
+      "id": 12025570975,
+      "name": "camera-readability-native-castle",
+      "size_in_bytes": 47617,
+      "digest": "sha256:5b52e91552afde857b712b5d40e9fef4cd29d601b00ef0d90afa177dc920c629"
+    },
+    {
+      "id": 12025415618,
+      "name": "camera-readability-native-early",
+      "size_in_bytes": 512711,
+      "digest": "sha256:044e12f907f456c412553b83f4522a045156ad69932a593060f84b7810395a4b"
+    },
+    {
+      "id": 12025910321,
+      "name": "camera-readability-native-energy",
+      "size_in_bytes": 429536,
+      "digest": "sha256:336dff60ffcaa08a2350bd910a4c34fb9e192343ecf31ad6b722809b92311586"
+    },
+    {
+      "id": 12025202267,
+      "name": "camera-readability-native-fracture",
+      "size_in_bytes": 425113,
+      "digest": "sha256:85195f2cc52a560c05dbcdbaba63d3264bacc3d331afb5aa128b17cd9a8d4fd1"
+    },
+    {
+      "id": 12025106436,
+      "name": "camera-readability-native-living",
+      "size_in_bytes": 367823,
+      "digest": "sha256:ae4fe3ccc30a63761318188f13a8a8555d01d1b290c87a3eb28d30dff11aa660"
+    },
+    {
+      "id": 12025136445,
+      "name": "camera-readability-native-optics",
+      "size_in_bytes": 360595,
+      "digest": "sha256:359944a68afcc9c4cbd2945a8f6ed779927151f0f76370d5aa7a2bcbafb35f18"
+    },
+    {
+      "id": 12025096288,
+      "name": "camera-readability-ordinary-castle",
+      "size_in_bytes": 6714,
+      "digest": "sha256:73f28d4562db28b2d87e5fc9471485c4f5aa11784f0c7bf830adf7a97cfb14ae"
+    },
+    {
+      "id": 12024752635,
+      "name": "camera-readability-ordinary-early",
+      "size_in_bytes": 3375,
+      "digest": "sha256:2ba2c2f9fa7a6c7ac76d6ce73527b51704fc10aa9f574f8bdbcf85cb1eef04f0"
+    },
+    {
+      "id": 12024064316,
+      "name": "camera-readability-ordinary-energy",
+      "size_in_bytes": 15321,
+      "digest": "sha256:f2977b70352e9437b93c38bc6f1d08c1f782ab0f08bc8b38a65607c286374369"
+    },
+    {
+      "id": 12024004622,
+      "name": "camera-readability-ordinary-fracture",
+      "size_in_bytes": 7297,
+      "digest": "sha256:fe207d065837d9e29f14b0b917a5ad9347930b83b4367cd62c8382ea0dcea9bd"
+    },
+    {
+      "id": 12025170197,
+      "name": "camera-readability-ordinary-living",
+      "size_in_bytes": 6429,
+      "digest": "sha256:e418f51c9290f05e8f9a0fb2441eca083fb6995362096a2d7e5045198548cd15"
+    },
+    {
+      "id": 12023784932,
+      "name": "camera-readability-ordinary-optics",
+      "size_in_bytes": 5505,
+      "digest": "sha256:3ac7178e58de2439ffa7924b39054dee423f9381a1fbef457f7d39f2cabdadc3"
+    },
+    {
+      "id": 12025175765,
+      "name": "camera-readability-physics",
+      "size_in_bytes": 4628,
+      "digest": "sha256:cf061867604d4d4a6c1b078c12ecfe5fd4f1ef96b7e7e05d4c1f695c52b9d24f"
+    },
+    {
+      "id": 12024529173,
+      "name": "camera-readability-presentation",
+      "size_in_bytes": 3589931,
+      "digest": "sha256:a81fa0037cc48861e84690b332356bfe00a5bb532bcba16c732f8ac472f72c07"
+    },
+    {
+      "id": 12024952348,
+      "name": "camera-readability-room25-native",
+      "size_in_bytes": 8568941,
+      "digest": "sha256:92165cad7d479ba0025abc550863c99f27ab5a33c6b77d01480ae21e84effe59"
+    },
+    {
+      "id": 12024473708,
+      "name": "camera-readability-yandex",
+      "size_in_bytes": 4338389,
+      "digest": "sha256:0a00070960e7afabec60fa682805b2fb377882ab74f6f36b2b02c0381108cd8f"
+    }
+  ],
+  "distArtifact": "camera-readability-dist",
+  "sourceAcceptance": {
+    "path": "tools/campaign-v58-root-source-acceptance.json",
+    "sha256": "cc01afcf344f90ead76325cc90a8676b727cd068aca16d82be5bf2d95884808e"
+  },
+  "baselineCatalog": "tools/campaign-v57-public-files.json",
+  "baselineCatalogSha256": "42310ad6335cb784a07d27cac43d09ee689a73911c209b145eeb7e4a1b1c0f58",
+  "baselineInventorySha256": "a6e90e3d222eed87c3fa0c616426ec108ab3071ce703904a61686ad27887d5c5",
+  "baselineDeployment": {
+    "id": 7099871789,
+    "sha": "88fb7f4376e7505a1af29b6da1c61258fde6aff7"
+  },
+  "publicationAccepted": false
+}
