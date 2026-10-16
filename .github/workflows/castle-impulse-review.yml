@@ -7,7 +7,7 @@ defaults:
   run:
     shell: bash
 concurrency:
-  group: castle-impulse-review-${{ github.ref }}
+  group: castle-impulse-review-${{ github.sha }}
   cancel-in-progress: true
 env:
   BUILD_COMMIT: ${{ github.sha }}

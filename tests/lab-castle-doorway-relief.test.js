@@ -73,7 +73,7 @@ test('real lower and upper shell openings remain clear of all attached opaque wa
       }
     }
   }
-  assert.equal(openings, 12); assert.equal(upper, 1); assert.equal(samples, 300);
+  assert.equal(openings, 13); assert.equal(upper, 1); assert.equal(samples, 325);
 });
 
 test('magnet wall relief outside the actual entry stays visible and the opposite wall stays finished', () => {
