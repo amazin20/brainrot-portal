@@ -56,7 +56,7 @@ export function createReleaseManifest({directory,commit,platformArchive,root=pro
   assert.ok(spec?.id&&spec.title,`Missing definition for room ${index+1}`);
   return {level:foundationDisplayNumber(index),stableLevel:index+1,stableId:`foundation-${String(index+1).padStart(3,'0')}`,id:spec.id,title:spec.title,
    definitionRevision:revisions[index]||'retained-v54',
-   ...(index===24?{presentationRevision:'mechanism-readability-v1'}:index===40?{presentationRevision:'bistable-impulse-branch-v1'}:{}),
+   ...(index<10?{presentationRevision:'first-chapter-service-frames-v1'}:index===24?{presentationRevision:'mechanism-readability-v1'}:index===40?{presentationRevision:'bistable-impulse-branch-v1'}:{}),
    specSha256:sha256(JSON.stringify(spec)),theme:campaignTheme(index).id};
  });
  assert.equal(rooms.length,51);assert.equal(new Set(rooms.map(room=>room.stableId)).size,51);assert.equal(new Set(rooms.map(room=>room.id)).size,51);

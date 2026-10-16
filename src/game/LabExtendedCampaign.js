@@ -105,6 +105,24 @@ export function buildExtendedCampaign(game,index){
  }else if(index===7){
   bounds={minX:-10,maxX:10,minZ:-13,maxZ:13};spawn=[1,0,5.8];cargoSpawn=[2.2,.55,4.5];world.walls(bounds,15);world.floor(-10,10,-13,13);
   world.floor(-4.2,4.2,-13,-3.1,7);goal=world.goal([0,7,-9],[4.8,4.5]);
+  // The receiving gallery is carried by a founded steel frame. Its front
+  // mouth stays completely open to the real updraft/ballistic landing; the
+  // side and rear guards belong to the same visible solid architecture.
+  // No low cross-members create a ladder from the recovery floor.
+  const galleryStructure=[];
+  const galleryPart=(role,p,size,material=world.materials.trim)=>{
+   const mesh=world.box(p,size,material);mesh.name=`Air receiving gallery / ${role}`;
+   mesh.userData.firstChapterStructuralRole=role;galleryStructure.push(mesh);return mesh;
+  };
+  for(const x of [-3.65,3.65])for(const z of [-5.5,-11.3]){
+   galleryPart('founded column',[x,3.19,z],[.32,6.38,.32]);
+   galleryPart('column footing',[x,.10,z],[.76,.20,.76]);
+  }
+  for(const z of [-5.5,-11.3])galleryPart('underdeck cross-girder',[0,6.59,z],[8.1,.42,.34]);
+  for(const x of [-3.65,3.65])galleryPart('underdeck longitudinal girder',[x,6.59,-8.05],[.34,.42,9.9]);
+  for(const x of [-4.18,4.18])galleryPart('solid side guard',[x,7.58,-8.05],[.14,1.16,9.9]);
+  galleryPart('solid rear guard',[0,7.58,-12.84],[8.4,1.16,.14]);
+  mechanismArt.airGalleryStructure=galleryStructure;
   // Tall column, open only toward the high gallery. It is not an elevator.
   for(const x of [-3.1,3.1]){world.box([x,6,0],[.20,12,.20]);glass(world,[x,5,0],[.10,10,5.2]);}
   patch('air-intake',[9.8,2.1,7],[-1,0,0]);patch('air-up',[0,.025,0],[0,1,0],4,4);

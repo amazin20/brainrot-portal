@@ -14,6 +14,17 @@ const advancedJourneys=[
  * controls. Actor positions, portal positions, mechanism targets and win flags
  * are never assigned by the route. Run only in a debug build or Node test. */
 export async function runV8Journey(game,{onMilestone=()=>{},scenario=null,journeyOptions={}}={}) {
+  // A continuous first-chapter recording starts with the genuine Play button.
+  // Reject a prepared/advanced fixture instead of resetting away its history.
+  if(journeyOptions.nativeStart===true){
+    const spawn=game.firstLevel?.spawn,cargoSpawn=game.firstLevel?.cargoSpawn;
+    const coordinates=value=>value?.toArray?.()??value;
+    const at=(actual,expected)=>Array.isArray(coordinates(expected))&&actual.distanceTo(V(...coordinates(expected)))<1e-8;
+    assert(game.chamberEdition==='foundation'&&Number.isInteger(game.levelIndex)&&game.levelIndex>=0&&game.levelIndex<10,'Native chapter start requires an ordinary first-ten room');
+    assert(game.state==='playing'&&game.physics.world.stepnumber===0&&game.elapsed===0,'Native chapter start requires Play before the first physics step');
+    assert(at(game.playerPosition,spawn)&&at(game.cargo.position,cargoSpawn)&&!game.heldCube,'Native chapter start requires the original normal spawns');
+    assert(game.teleportCount===0&&!game.portals.ready&&game.portals.portals.every(p=>!p)&&game.portalShots.queue.length===0&&game.portalShots.active.length===0,'Native chapter start cannot contain prepared portals or shots');
+  }
   // The tower proof starts at the normal Play spawn and must count every reset.
   // Dispatch before the legacy fixture reset used by the shorter room probes.
   if(game.firstLevel?.singularity){const {runSingularityJourney}=await import('./LabSingularityJourney.js');return runSingularityJourney(game,{onMilestone,...journeyOptions});}
@@ -23,7 +34,8 @@ export async function runV8Journey(game,{onMilestone=()=>{},scenario=null,journe
     return runTowerJourney(game,{onMilestone,...journeyOptions});
   }
   const oldMove=game.input.getMove,move=new THREE.Vector2();game.input.getMove=()=>move.clone();
-  game.resetRun(true);const level=game.firstLevel,index=game.levelIndex;
+  if(journeyOptions.nativeStart!==true)game.resetRun(true);
+  const level=game.firstLevel,index=game.levelIndex;
   const identity=game.cargo.group.uuid,body=game.physics.cargoBody.id,report={level:index+1,id:level.id,pass:false,milestones:[],respawns:0,resets:0,frames:0};
   const respawn=game.respawn,resetCargo=game.physics.resetCargo;
   game.respawn=function(...args){report.respawns++;return respawn.apply(this,args);};

@@ -17,7 +17,7 @@ const fixture=()=>{
 test('one source binds all 51 current definitions and all current replacements',()=>{
  const setup=fixture();try{
   const manifest=createReleaseManifest(setup);
-  assert.equal(manifest.schemaVersion,2);assert.equal(manifest.version,'v59-castle-impulse');assert.equal(manifest.editionVersion,'foundation-v5');
+  assert.equal(manifest.schemaVersion,2);assert.equal(manifest.version,'v60-first-chapter');assert.equal(manifest.editionVersion,'foundation-v5');
   assert.equal(manifest.version,RELEASE_VERSION);assert.equal(manifest.gameCommit,setup.commit);assert.equal(manifest.interfaceCommit,setup.commit);
   assert.deepEqual(manifest.rooms.map(room=>room.level),Array.from({length:51},(_,i)=>i+1));
   assert.equal(manifest.rooms[16].id,'foundation-cable-supported-architecture');
