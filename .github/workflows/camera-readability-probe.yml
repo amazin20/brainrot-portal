@@ -1,0 +1,47 @@
+name: Inspect actual upper mechanism readability before release
+on:
+  push:
+    branches: [diagnostics/readability-upper-v58-20261016]
+permissions: {contents: read}
+defaults:
+  run: {shell: bash}
+env:
+  BUILD_COMMIT: ${{ github.sha }}
+  CODEX_PRIMARY_RUNTIME_PYTHON: /usr/bin/python3
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: '${{ github.sha }}', fetch-depth: 0, persist-credentials: false}
+      - uses: actions/setup-node@v4
+        with: {node-version: 22, cache: npm}
+      - run: npm ci
+      - run: npm run build
+      - run: node scripts/stamp-build.mjs
+      - run: node scripts/v8-package-check.mjs
+      - uses: actions/upload-artifact@v4
+        with: {name: camera-readability-probe-dist, path: dist, retention-days: 14, if-no-files-found: error}
+  castle:
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: '${{ github.sha }}', fetch-depth: 0, persist-credentials: false}
+      - uses: actions/setup-node@v4
+        with: {node-version: 22, cache: npm}
+      - run: npm ci
+      - run: npm install --no-save --package-lock=false puppeteer-core@24.16.0
+      - run: sudo apt-get update && sudo apt-get install -y python3-pil ffmpeg
+      - uses: actions/download-artifact@v4
+        with: {name: camera-readability-probe-dist, path: dist}
+      - name: Retain actual upper lift frames and immutable geometric observations
+        run: |
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+          node scripts/qa-v58-causal-readability.mjs
+        env: {CASE: castle, SOURCE_DIR: '.', BUILD_DIR: dist, PAGE_URL: 'http://127.0.0.1:4173/campaign-v58/', START_SERVER: '1', OUT_DIR: qa/upper-probe}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: {name: camera-readability-probe-castle, path: qa/upper-probe, retention-days: 14, if-no-files-found: error}
