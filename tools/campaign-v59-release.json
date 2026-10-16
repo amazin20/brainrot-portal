@@ -1,0 +1,218 @@
+{
+  "schemaVersion": 1,
+  "frozen": true,
+  "repository": "amazin20/brainrot-portal",
+  "namespace": "campaign-v59/",
+  "version": "v59-castle-impulse",
+  "controllerParent": "b4188c0af2a800c2ea51152eda2fd0b794a8dce9",
+  "sourceBranch": "upgrade/castle-impulse-20261016",
+  "sourceWorkflow": ".github/workflows/castle-impulse-review.yml",
+  "sourceCommit": "c79dbe271588c639d9881f9591efc330f947ea0f",
+  "sourceTree": "b59e227168d3d02a0893f02136acc20bb0c81c9f",
+  "sourceRun": 38964231823,
+  "sourceAttempt": 1,
+  "expectedJobs": [
+    "build",
+    "castle-native",
+    "cpu (0)",
+    "cpu (1)",
+    "cpu (2)",
+    "cpu (3)",
+    "cpu (4)",
+    "cpu (5)",
+    "native (castle, 41)",
+    "native (early, 1,2,3,4,5,6,7,8,9,10)",
+    "native (energy, 11,12,13,14,15,16,17,18,19,20)",
+    "native (fracture, 42,43,44,45,46,47,48,49,50,51)",
+    "native (living, 21,22,23,24,25,26,27,28,29,30)",
+    "native (optics, 31,32,33,34,35,36,37,38,39,40)",
+    "ordinary (castle, 41)",
+    "ordinary (early, 1,2,3,4,5,6,7,8,9,10)",
+    "ordinary (energy, 11,12,13,14,15,16,17,18,19,20)",
+    "ordinary (fracture, 42,43,44,45,46,47,48,49,50,51)",
+    "ordinary (living, 21,22,23,24,25,26,27,28,29,30)",
+    "ordinary (optics, 31,32,33,34,35,36,37,38,39,40)",
+    "physics",
+    "presentation",
+    "readability (castle)",
+    "readability (room25)",
+    "room25-native"
+  ],
+  "sourceArtifacts": [
+    {
+      "id": 12073219225,
+      "name": "castle-impulse-build",
+      "size_in_bytes": 5442,
+      "digest": "sha256:bc2e0dc94dd96354281ed84409bf408270a2691fe2ad1bc12916e22dc54d37ef"
+    },
+    {
+      "id": 12077261822,
+      "name": "castle-impulse-castle-native",
+      "size_in_bytes": 38761689,
+      "digest": "sha256:d3a1b34b2ebadeaadaa0c9d9a7d08bcd8492a98e4795f79924522c1180889536"
+    },
+    {
+      "id": 12074775718,
+      "name": "castle-impulse-causal-castle",
+      "size_in_bytes": 1192048,
+      "digest": "sha256:25270c15d1ce56f92461e8fe37b5d7fe0c73dad71a6953ca1bf81d5aba8c15b0"
+    },
+    {
+      "id": 12074641637,
+      "name": "castle-impulse-causal-room25",
+      "size_in_bytes": 3324287,
+      "digest": "sha256:ad0aa85a713fc4e48d7e888cf8b2f14994622ead0bf7bfc0ded678be27928991"
+    },
+    {
+      "id": 12075405609,
+      "name": "castle-impulse-cpu-0",
+      "size_in_bytes": 20531,
+      "digest": "sha256:f0f488b34b11f996c16f1ec122f72a2441d5300383327e47ae3e865dbb75eb93"
+    },
+    {
+      "id": 12074143897,
+      "name": "castle-impulse-cpu-1",
+      "size_in_bytes": 31236,
+      "digest": "sha256:91b909c78ab507ecba41afbd9d647361818737834504f2b9022172ab9448feac"
+    },
+    {
+      "id": 12073944181,
+      "name": "castle-impulse-cpu-2",
+      "size_in_bytes": 22233,
+      "digest": "sha256:e59cb1cf61fb0f4ed22ce8e9d7121b6992371c66d377034678a6b6a92696329d"
+    },
+    {
+      "id": 12074992258,
+      "name": "castle-impulse-cpu-3",
+      "size_in_bytes": 216459,
+      "digest": "sha256:f413c18a19ff7ac09fceb0f8917e95d0c219f0162adec08dbb0527984cdcb6e4"
+    },
+    {
+      "id": 12074238907,
+      "name": "castle-impulse-cpu-4",
+      "size_in_bytes": 22955,
+      "digest": "sha256:482f6282d79a7ce8b9dfd315e886ec0d8880a7e31bea043b26f44b1baef44a04"
+    },
+    {
+      "id": 12076078823,
+      "name": "castle-impulse-cpu-5",
+      "size_in_bytes": 33342,
+      "digest": "sha256:346f79bfb05a716e253045cf47675bd18d066c0473aa807dba538652a96a6d4e"
+    },
+    {
+      "id": 12073114513,
+      "name": "castle-impulse-dist",
+      "size_in_bytes": 4502297,
+      "digest": "sha256:6b8537d09683b82f5c732cd90d21531ba34704811fe52c2d861cd7a6675c6788"
+    },
+    {
+      "id": 12075151203,
+      "name": "castle-impulse-native-castle",
+      "size_in_bytes": 55524,
+      "digest": "sha256:0838e438a6801a82573d434fda53cc24313549b66f7973be138994096c4b8ec3"
+    },
+    {
+      "id": 12074468301,
+      "name": "castle-impulse-native-early",
+      "size_in_bytes": 512739,
+      "digest": "sha256:30c538e4b6f5c1d123e4338bc828e435901db9a844cdf7624ab9582f225bd72a"
+    },
+    {
+      "id": 12074409413,
+      "name": "castle-impulse-native-energy",
+      "size_in_bytes": 429551,
+      "digest": "sha256:26438f6fd17d41612ff5f49de25524dab12c622455b1bef8061779e048a442a3"
+    },
+    {
+      "id": 12073843992,
+      "name": "castle-impulse-native-fracture",
+      "size_in_bytes": 425040,
+      "digest": "sha256:443a3b876126c0aac769b20b4fae60f5c6ee0ac46f1ec4fcf6b47d97a7cfc57a"
+    },
+    {
+      "id": 12074478861,
+      "name": "castle-impulse-native-living",
+      "size_in_bytes": 367790,
+      "digest": "sha256:b35cb9d9423dfed2c532dd8598ecc1eabf7f7afa588cba3dca60b9c96a9b0c74"
+    },
+    {
+      "id": 12074252872,
+      "name": "castle-impulse-native-optics",
+      "size_in_bytes": 360579,
+      "digest": "sha256:39cfc765aa69ab239f9c88a43eef2e14b3e7e51998d417c8b8fd96ad7f98e3c3"
+    },
+    {
+      "id": 12075045910,
+      "name": "castle-impulse-ordinary-castle",
+      "size_in_bytes": 10743,
+      "digest": "sha256:c5405be63b8db5ce7a4803e2ca6960e32ac1a66f9f6c139b19e923550ce7654b"
+    },
+    {
+      "id": 12073119181,
+      "name": "castle-impulse-ordinary-early",
+      "size_in_bytes": 3371,
+      "digest": "sha256:e2abdf8f467f240ed6a388e3f8f561bcdb38310ab36979b81052ed0a7d612f6d"
+    },
+    {
+      "id": 12074586314,
+      "name": "castle-impulse-ordinary-energy",
+      "size_in_bytes": 15322,
+      "digest": "sha256:2af1c88f26694f00d2e9e4c5ceb757c6779e25c55e0a603869bd2358a65cabbe"
+    },
+    {
+      "id": 12074591496,
+      "name": "castle-impulse-ordinary-fracture",
+      "size_in_bytes": 7296,
+      "digest": "sha256:b4a1ac22e9d968fb26b54b6c9655714d1a856905e1edbb3780afc895b358233d"
+    },
+    {
+      "id": 12074266641,
+      "name": "castle-impulse-ordinary-living",
+      "size_in_bytes": 6429,
+      "digest": "sha256:90023057cabb7a64477e6dd42f6ac0959d706623469a103da1558df16062f188"
+    },
+    {
+      "id": 12073862624,
+      "name": "castle-impulse-ordinary-optics",
+      "size_in_bytes": 5504,
+      "digest": "sha256:c627dcb237857f8b78f8de0f4741223a1b0a17cc976cfa7a2cf82a4b2fe2d48a"
+    },
+    {
+      "id": 12073359629,
+      "name": "castle-impulse-physics",
+      "size_in_bytes": 6180,
+      "digest": "sha256:2130a04518febdca977a630bfe9bffcaa6662401199cb743169956b203e71b83"
+    },
+    {
+      "id": 12074775400,
+      "name": "castle-impulse-presentation",
+      "size_in_bytes": 3592611,
+      "digest": "sha256:5be8367b9e6f1a8d08bdf050c67e0ddf64d80e06a851bf3c82bcef3d6b0dd5f9"
+    },
+    {
+      "id": 12075880311,
+      "name": "castle-impulse-room25-native",
+      "size_in_bytes": 8569224,
+      "digest": "sha256:635a8bedbc4dc8127ffcfc50ab6eff5add94e0538d2170bb2235f87a22855aa5"
+    },
+    {
+      "id": 12073339141,
+      "name": "castle-impulse-yandex",
+      "size_in_bytes": 4345714,
+      "digest": "sha256:0f52d587839908445c89f94466b760a753d0afc793b766f7ae624feda4b5b1a6"
+    }
+  ],
+  "distArtifact": "castle-impulse-dist",
+  "sourceAcceptance": {
+    "path": "tools/campaign-v59-root-source-acceptance.json",
+    "sha256": "ae075c138226ac4fd5172a076b29582c1bb77211d9c903b0a487b5202da4c35e"
+  },
+  "baselineCatalog": "tools/campaign-v58-public-files.json",
+  "baselineCatalogSha256": "e4ecf51453b55c8f09c32486af1227efdedef75a6992a2dc6fab31a9419699bb",
+  "baselineInventorySha256": "64c37e2fd87dcad134368cd321a6733714f981a4684f60d06f866f651c57473e",
+  "baselineDeployment": {
+    "id": 7111131739,
+    "sha": "5ed4b7b5ca735a03c26f7e065297d7da9650e208"
+  },
+  "publicationAccepted": false
+}

@@ -1,0 +1,1113 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-v59-source-acceptance",
+  "generatedAt": "2026-10-16T21:47:31.009033+00:00",
+  "sourceAccepted": true,
+  "publicationAccepted": false,
+  "sourceCommit": "c79dbe271588c639d9881f9591efc330f947ea0f",
+  "sourceTree": "b59e227168d3d02a0893f02136acc20bb0c81c9f",
+  "sourceParent": "5fb9b50a10a66432b97c75cd07f8543797f309d7",
+  "sourceReview": {
+    "runId": 38964231823,
+    "runAttempt": 1
+  },
+  "run": 38964231823,
+  "runAttempt": 1,
+  "version": "v59-castle-impulse",
+  "edition": "foundation",
+  "sourceInputsSha256": "da4759c3199b142966e597a900fc2fed2dc74d857602d6edd58f6ae2a4233ac0",
+  "sourceInputFiles": 340,
+  "checks": {
+    "provider": {
+      "jobs": 25,
+      "successfulJobs": 25,
+      "artifacts": 27,
+      "attempt": 1
+    },
+    "cpu": {
+      "tests": 2508,
+      "passed": 2508,
+      "failed": 0,
+      "files": 330,
+      "disjointShards": 6
+    },
+    "novelPhysics": {
+      "files": 12,
+      "tests": 58,
+      "passed": 58,
+      "failed": 0
+    },
+    "ordinaryRoutes": {
+      "rooms": 51,
+      "won": 51,
+      "sameOriginalCompanion": 51,
+      "resets": 0,
+      "respawns": 0
+    },
+    "nativeRoutes": {
+      "rooms": 51,
+      "gameplayPassed": 51,
+      "capturesPassed": 51,
+      "won": 51,
+      "sameOriginalCompanion": 51,
+      "resets": 0,
+      "respawns": 0
+    },
+    "decodedImages": 87,
+    "changedRoomInteriorFrames": 4,
+    "responsiveMenuFrames": 6,
+    "saveIsolationV59": true,
+    "mockedYandexSdk": true,
+    "room25ContinuousNative": {
+      "frames": 770,
+      "durationSeconds": 192.5,
+      "simulationSeconds": 192.06666666666666,
+      "fullyDecoded": true,
+      "originalCargoBodyId": 88,
+      "sameOriginalShape": true,
+      "opticalCutGravityReturnAndRelight": true,
+      "twoDynamicPassengerBodies": [
+        89,
+        91
+      ],
+      "movieBytes": 8200489,
+      "movieSha256": "75ce6097e0f8a707fcb45c822e1e7ede09a677e6e87033b732ec99b83f314094",
+      "telemetrySha256": "84fdc84717638bffe8e35ac631012b1e0c45736e72e88036b6bddbcb68b28a08"
+    },
+    "castleContinuousNative": {
+      "frames": 5293,
+      "durationSeconds": 1323.25,
+      "simulationSeconds": 1322.9583333333333,
+      "fullyDecoded": true,
+      "originalCargoBodyId": 1760,
+      "sameOriginalShape": true,
+      "completedStages": 12,
+      "continuousFullRoute": true,
+      "humanDurationAccepted": false,
+      "fiveHundredStagesAccepted": false,
+      "movieBytes": 36935812,
+      "movieSha256": "a3770c2743b172478c52fe2e2da906612b398b9f60592c2826600917ce93ec1d",
+      "telemetrySha256": "6c25a31a3a2e5d855fe50b83c7c1aba8c332723cca9db2ec9eb80db957d74b30"
+    },
+    "mechanismCausal": {
+      "pass": true,
+      "cases": {
+        "room25": {
+          "pass": true,
+          "phases": [
+            "loaded-support",
+            "lit-gallery",
+            "dark-return",
+            "relight-ascent"
+          ],
+          "frames": 96,
+          "keyframes": 12,
+          "reportSha256": "1c9b25add4a4f62ebd6e54f807e36da7d8e3eda9bf5be17e53503cb2f12ed147",
+          "bindingSha256": "1a161fc41b02c65f40c68d5f75b6b61a9b808e22bc486d734ae28772ca678643",
+          "telemetrySha256": "b3f558e20d1308034d55c8591b7d5fbe24312368507bc92322910b78d6af53b6",
+          "clips": [
+            {
+              "path": "clips/loaded-support.mp4",
+              "bytes": 109988,
+              "sha256": "5032b08239844006eb773a71bc627165bcd7e3a071727a221866f538601a14f8",
+              "frames": 24,
+              "fps": 12,
+              "fullyDecoded": true
+            },
+            {
+              "path": "clips/lit-gallery.mp4",
+              "bytes": 194766,
+              "sha256": "d552ad26170e4e935e8519133e9c8b039cd1aa2fa064dacaf295d5bb9e2e0b5a",
+              "frames": 24,
+              "fps": 12,
+              "fullyDecoded": true
+            },
+            {
+              "path": "clips/dark-return.mp4",
+              "bytes": 153157,
+              "sha256": "031314998ae028f81252e4f8ecaaf223ffdc6b101dce3e27be8a09080fd178e5",
+              "frames": 24,
+              "fps": 12,
+              "fullyDecoded": true
+            },
+            {
+              "path": "clips/relight-ascent.mp4",
+              "bytes": 157475,
+              "sha256": "3a1738932d2df1856e1dfd61f30769601b805fe30ae83726985cdef3c10369f0",
+              "frames": 24,
+              "fps": 12,
+              "fullyDecoded": true
+            }
+          ],
+          "fullyDecoded": true,
+          "geometricVisibilityAccepted": true,
+          "humanAccepted": false,
+          "cameraAccepted": false,
+          "hardwareFPSMeasured": false
+        },
+        "castle": {
+          "pass": true,
+          "phases": [
+            "upper-founded-view",
+            "upper-ride",
+            "upper-after-ride",
+            "upper-contact-retained"
+          ],
+          "frames": 96,
+          "keyframes": 12,
+          "reportSha256": "e41303a190c05eb39f6356d1821d14d47d639228bb1f00b97ff324fa31bf07f8",
+          "bindingSha256": "1a161fc41b02c65f40c68d5f75b6b61a9b808e22bc486d734ae28772ca678643",
+          "telemetrySha256": "11cfa00d40a4bca1f5db86e67949d386901682c972922669749b40f25aa64962",
+          "clips": [
+            {
+              "path": "clips/upper-founded-view.mp4",
+              "bytes": 63336,
+              "sha256": "d395591bcb99801161a4c89d7af5e95d592e217ad1ff4cc32f3143174a1836e8",
+              "frames": 24,
+              "fps": 12,
+              "fullyDecoded": true
+            },
+            {
+              "path": "clips/upper-ride.mp4",
+              "bytes": 237941,
+              "sha256": "ba78b079e68ec3e47e5aaf9a1aa294cb00f4e3f05fa32ceb6a2549486389fc82",
+              "frames": 24,
+              "fps": 12,
+              "fullyDecoded": true
+            },
+            {
+              "path": "clips/upper-after-ride.mp4",
+              "bytes": 171243,
+              "sha256": "7cd2acd7c7e6596a2ab7731e9a4164b05862317e5d52c4219adaaa970f651522",
+              "frames": 24,
+              "fps": 12,
+              "fullyDecoded": true
+            },
+            {
+              "path": "clips/upper-contact-retained.mp4",
+              "bytes": 65946,
+              "sha256": "6538c11b2620f9d099eba198dab2fe74af4edabd4983ceb5aca06abf48ceac31",
+              "frames": 24,
+              "fps": 12,
+              "fullyDecoded": true
+            }
+          ],
+          "fullyDecoded": true,
+          "geometricVisibilityAccepted": true,
+          "humanAccepted": false,
+          "cameraAccepted": false,
+          "hardwareFPSMeasured": false
+        }
+      },
+      "frames": 192,
+      "mediaBytes": 2327869,
+      "metadataBytes": 17025640,
+      "scope": "Eight continuous 2-second clips from actual ordinary scripted Room25/castle routes, selected-keyframe visibility only; no human or physical-device acceptance."
+    },
+    "currentImmutablePureValidators": {
+      "pass": true,
+      "mechanismCausal": {
+        "room25": {
+          "pass": true,
+          "immutablePureValidator": true,
+          "phases": [
+            "loaded-support",
+            "lit-gallery",
+            "dark-return",
+            "relight-ascent"
+          ],
+          "frames": 96,
+          "keyframes": 12,
+          "humanAccepted": false,
+          "cameraAccepted": false,
+          "hardwareFPSMeasured": false
+        },
+        "castle": {
+          "pass": true,
+          "immutablePureValidator": true,
+          "phases": [
+            "upper-founded-view",
+            "upper-ride",
+            "upper-after-ride",
+            "upper-contact-retained"
+          ],
+          "frames": 96,
+          "keyframes": 12,
+          "humanAccepted": false,
+          "cameraAccepted": false,
+          "hardwareFPSMeasured": false
+        }
+      },
+      "castleImpulseNativePureValidator": true,
+      "impulsePhysicalProofs": [
+        {
+          "kind": "ordinary",
+          "pass": true,
+          "originalCargoBodyId": 1798,
+          "originalCargoShapeId": 3596,
+          "worldStep": 133800
+        },
+        {
+          "kind": "native",
+          "pass": true,
+          "originalCargoBodyId": 1760,
+          "originalCargoShapeId": 3520,
+          "worldStep": 133826
+        }
+      ],
+      "sourceManifestInputs": 340,
+      "sourceInputsSha256": "da4759c3199b142966e597a900fc2fed2dc74d857602d6edd58f6ae2a4233ac0",
+      "upperPhysicalProofs": [
+        {
+          "kind": "ordinary",
+          "pass": true,
+          "originalCargoBodyId": 1798,
+          "loadedStep": 89162,
+          "retainedStartStep": 89321,
+          "currentStep": 94129,
+          "supportedDeckSteps": 396,
+          "islandStep": 91361,
+          "upperRideLowStep": 91474,
+          "upperRideHighStep": 92185,
+          "upperCatchStep": 93944,
+          "physicalLowerCatch": true,
+          "physicalUpperCatch": true,
+          "twoPhysicalCatches": true
+        },
+        {
+          "kind": "native",
+          "pass": true,
+          "originalCargoBodyId": 1760,
+          "loadedStep": 89162,
+          "retainedStartStep": 89304,
+          "currentStep": 94129,
+          "supportedDeckSteps": 396,
+          "islandStep": 91351,
+          "upperRideLowStep": 91474,
+          "upperRideHighStep": 92185,
+          "upperCatchStep": 93944,
+          "physicalLowerCatch": true,
+          "physicalUpperCatch": true,
+          "twoPhysicalCatches": true
+        }
+      ],
+      "room25NativePureValidator": true
+    }
+  },
+  "packages": {
+    "dist": {
+      "files": 80,
+      "bytes": 7147573,
+      "inventorySha256": "cb628e200ed42a6f4c2230758111469032f1be720eb93c67a17b7eebabd1425f"
+    },
+    "yandex": {
+      "filename": "brainrot-portal-v59-yandex.zip",
+      "bytes": 4343475,
+      "sha256": "1a7a641019c21c3ae9bf21502245d7878ba57d10ddf13366ad9353792bd0054f",
+      "unpackedBytes": 6773617
+    }
+  },
+  "sourceLogs": [
+    {
+      "jobId": 117186590370,
+      "bytes": 77788,
+      "sha256": "77ec27c1335414dbd136925c7e76ae6bfa9e4c72a45d74615f9ddae4e0b036ab"
+    },
+    {
+      "jobId": 117186590581,
+      "bytes": 47738,
+      "sha256": "f3cc2f75c5cea10b316a3941bee64ef0b804ba223e63f4698cf6d8cae92a2d87"
+    },
+    {
+      "jobId": 117186590673,
+      "bytes": 47007,
+      "sha256": "165304e77a48e5da60134a2358b1ca33889185dd2523fd7e596e72a91aa65e55"
+    },
+    {
+      "jobId": 117186590685,
+      "bytes": 47963,
+      "sha256": "4c2727c7251fcf4177613e1230a2a34f26df9182fde6698fe7ae610bcc22d93d"
+    },
+    {
+      "jobId": 117186590686,
+      "bytes": 1559051,
+      "sha256": "01af63a35d50cb7b315024438f26df9be6a2277d68b6cd88762cb9ba836f2f1f"
+    },
+    {
+      "jobId": 117186590703,
+      "bytes": 255806,
+      "sha256": "93339eb0551180a60175067342134f6343d4dc72cf4bf316d4fd94f0e2e36dea"
+    },
+    {
+      "jobId": 117186590706,
+      "bytes": 47769,
+      "sha256": "640e36b071ae8c17b717e24e2eb13cd4fe6a51055114a05d34df9ee78d3bf498"
+    },
+    {
+      "jobId": 117186590720,
+      "bytes": 206599,
+      "sha256": "45949c2c7635b5104926e1b9e404faca614b2a22e1b158a285384cb32b1badf0"
+    },
+    {
+      "jobId": 117186590782,
+      "bytes": 47867,
+      "sha256": "e5a1af5f047d4ec9ce85a6a18534f080106f48dcfc00b58f8bcd01d7a17b0569"
+    },
+    {
+      "jobId": 117186590784,
+      "bytes": 229621,
+      "sha256": "5ee2412e19df984b060542090fef6ef7c80a158a9322319a39cf23bc51a780b3"
+    },
+    {
+      "jobId": 117186590810,
+      "bytes": 285074,
+      "sha256": "f1162b6febb241da1fafb32af9ea3717980731b6e9a68ad24f18911d776a08e1"
+    },
+    {
+      "jobId": 117186590827,
+      "bytes": 47813,
+      "sha256": "2edffb3f0939de08006e9b020c074c55146e9bfb3ae5c23eaa4ae8b878c989a7"
+    },
+    {
+      "jobId": 117186590837,
+      "bytes": 74650,
+      "sha256": "b492d1bd30a30391bbee2fe39dc04976c08be84f2d879212c6e44ef9a4feeca4"
+    },
+    {
+      "jobId": 117186590842,
+      "bytes": 201128,
+      "sha256": "f16a7f4ff9062f6535f46b7daaf05862bdd6cfbe1b6e42d2f21e1517a3a99268"
+    },
+    {
+      "jobId": 117187454370,
+      "bytes": 79239,
+      "sha256": "129a7fb62c2456125a9554de86a11b9aa670e761eca4fa8604c07eb9e1aa3dfc"
+    },
+    {
+      "jobId": 117187454404,
+      "bytes": 113120,
+      "sha256": "a93a34dbb5d1aea688318a69593e1c61945be43a6f0c5547867bc6b6a8d20674"
+    },
+    {
+      "jobId": 117187454420,
+      "bytes": 113122,
+      "sha256": "905115ed165c0e00c86282eb97977c3a29359e5bf3272a5846dcf977a61d38a8"
+    },
+    {
+      "jobId": 117187792977,
+      "bytes": 113726,
+      "sha256": "b613ab6c05db962406f2c84b14f8fa0d82cbc67d54aab1ba557faa9823fd3120"
+    },
+    {
+      "jobId": 117187793017,
+      "bytes": 69878,
+      "sha256": "d529cf0a1e8f30e0d812a5c2e63b5faf9732eb8ab4aafd4bbcdb4542475dcfda"
+    },
+    {
+      "jobId": 117187793072,
+      "bytes": 65813,
+      "sha256": "791a248b9a07f227bbf00b83bd6966e9d1a2b6d56cfbdc8ad8d2139268fe0af6"
+    },
+    {
+      "jobId": 117187793092,
+      "bytes": 118443,
+      "sha256": "5b691bfb323eef44e81e03ab8213efebfe0e9c7388aa56e64833e26fb2416345"
+    },
+    {
+      "jobId": 117187793104,
+      "bytes": 69273,
+      "sha256": "8d62805bfa0cf2982bba1b9646e0e3997d1809271be2c27bae8356b61eb644e2"
+    },
+    {
+      "jobId": 117187793132,
+      "bytes": 72380,
+      "sha256": "4721b4718c72be47c29727f1daa12e385afd756c5ea22d9249eb11c491c6780f"
+    },
+    {
+      "jobId": 117187793151,
+      "bytes": 69368,
+      "sha256": "80296b5acd31fa50834bd3793b66fd04bfb842d7d601d2b3c867d109570d560e"
+    },
+    {
+      "jobId": 117187793281,
+      "bytes": 62645,
+      "sha256": "effd7ff12ced9c50c487a9d47f1c2a7a3e0bacdb45e82b54eb947d6fc5dbd300"
+    }
+  ],
+  "candidateFiles": [
+    {
+      "path": "art/portal-laboratory-menu.webp",
+      "bytes": 158200,
+      "sha256": "f6a544096a6418a0f65ba8c609415d0393a1081d18537ecac5eb4c345b13b4be"
+    },
+    {
+      "path": "assets/LabAnimationJourney-DYurwpUb.js",
+      "bytes": 3040,
+      "sha256": "6e60788af0f304a0e4d3a8d9d7ea377fa6e320e502c88b3edeb24e1707da1e00"
+    },
+    {
+      "path": "assets/LabCreativeRoom17Journey-BqkZe29y.js",
+      "bytes": 5480,
+      "sha256": "2c5362ec4d207ba74344719f106ba183bb0c6a4539234e284153cce5258730de"
+    },
+    {
+      "path": "assets/LabCreativeRoom18Journey-CJHXr5sc.js",
+      "bytes": 3303,
+      "sha256": "0af3cdde3d4d6398c7a16548b2567bf280c74c50dfa53f37efdf0e79811db63b"
+    },
+    {
+      "path": "assets/LabCreativeRoom20Journey-kYQ3u38K.js",
+      "bytes": 4722,
+      "sha256": "a50a2b2eeafb006f12497bbf204c9cdc8689f2bc1282623082a955c56e44ddda"
+    },
+    {
+      "path": "assets/LabEchoHorizonJourney-B649xUL4.js",
+      "bytes": 2271,
+      "sha256": "e4f33b3cb99f1d2b5f3bc6632f8ea585cbceb5c022beaaab11198b1af08a588e"
+    },
+    {
+      "path": "assets/LabExpansionAlternateJourney47-3qgixs4y.js",
+      "bytes": 1864,
+      "sha256": "2054a9f53789e8c5aa399142bef5a6700bd7c6be3353874cd5b89eba9482c851"
+    },
+    {
+      "path": "assets/LabExpansionAlternateJourney48-UGhQf4sP.js",
+      "bytes": 2334,
+      "sha256": "7623aa38dcce776953970b38702dcad3e9aae6e73e29103852252f7a359d1f68"
+    },
+    {
+      "path": "assets/LabExpansionAlternateJourney49-DgMLO-9v.js",
+      "bytes": 2039,
+      "sha256": "a995fe9bdd58d9fc7b0195fdf8fc0b8a4fefcc01a4e238482c515927eef4f3ba"
+    },
+    {
+      "path": "assets/LabExpansionAlternateJourneyB-CIUiW21q.js",
+      "bytes": 2970,
+      "sha256": "88ba60cbfd2370d997b8fcf265ef4521cb898495517e84c07518e8229d0fee68"
+    },
+    {
+      "path": "assets/LabExpansionJourneyA-CKyrpRNe.js",
+      "bytes": 7448,
+      "sha256": "11ae1e72f4b6ee7f240b89c820c2b60c828c7144cf4756425bf494770578e98d"
+    },
+    {
+      "path": "assets/LabExpansionJourneyB-Dn__NZKa.js",
+      "bytes": 5645,
+      "sha256": "3f3672ebbe2138cd0520125cd6613ef639977f97bf5f8de17d4191c92a891b64"
+    },
+    {
+      "path": "assets/LabExtendedJourney-BxmPlPnm.js",
+      "bytes": 9252,
+      "sha256": "25dd3d893aa6a97acdd8a43e5525a1fd1e08965ef1085191fa087a9adef09109"
+    },
+    {
+      "path": "assets/LabFoundation20PhysicalJourney-c6AfZRSf.js",
+      "bytes": 12259,
+      "sha256": "82419a23cf158ff5e094089e54e95bc94bd8b9ae2e505698213a12b447316779"
+    },
+    {
+      "path": "assets/LabFoundationJourney-ycf9BGqe.js",
+      "bytes": 9267,
+      "sha256": "648f5967678f296f9ae5e46000a535823e81509f6b0db08c1902ceb657dd3621"
+    },
+    {
+      "path": "assets/LabIntroductoryAlternates-DcdsCClA.js",
+      "bytes": 1341,
+      "sha256": "a6451adc49d9c2f86f43455bfa4ced44d7166234f4fde82082990bf21f76cd5c"
+    },
+    {
+      "path": "assets/LabLateCampaignAim-DtBrKxPE.js",
+      "bytes": 753,
+      "sha256": "bfb0ff300390776aaafc5ade1d56762a01c34fbf8bcb283089bd5d6b77086664"
+    },
+    {
+      "path": "assets/LabOpenJourney-B90RUgts.js",
+      "bytes": 6404,
+      "sha256": "956c68a18a5ad133ce5c843d93ec2ef127e1305769fea0b49f33c466dd5be1d9"
+    },
+    {
+      "path": "assets/LabPortalEdgeJourney-BzA1knAW.js",
+      "bytes": 2293,
+      "sha256": "0e5671ab522963e2dffe75eace424bb8a7a9b980c1d93b1bd6ae1a0fd64b2423"
+    },
+    {
+      "path": "assets/LabPortalFloorJourney-yxKSSWER.js",
+      "bytes": 1516,
+      "sha256": "3b2e29309deebe245752b2958dcbaa6897f2dd383093589cb28433d819c05405"
+    },
+    {
+      "path": "assets/LabPostJourneyA-DajwRLWR.js",
+      "bytes": 12240,
+      "sha256": "8f98176df41a4f8f4c2cb8f98dd2f6a07d9941c09601a05eb44417f953dfc8be"
+    },
+    {
+      "path": "assets/LabPostJourneyB-WL3WRUR4.js",
+      "bytes": 10887,
+      "sha256": "c5062a60cc04998d821751d0ebd440d2300602657c304859be5c77550e49d3c2"
+    },
+    {
+      "path": "assets/LabPuzzlePilot43Journey-Dau91y59.js",
+      "bytes": 3148,
+      "sha256": "c4d0c6e877168c68b73923b7254b3cc7819d34793e1fde1a510c5483787f5832"
+    },
+    {
+      "path": "assets/LabPuzzleProgression44Journey-SplqVeQ-.js",
+      "bytes": 1956,
+      "sha256": "c221b9d167a88e02b9590b0b4eb85f04d6a785befe01071314d260480984db92"
+    },
+    {
+      "path": "assets/LabPuzzleProgression45Journey-CCWi-i-_.js",
+      "bytes": 5497,
+      "sha256": "d7524026a86aec095105b56f5874d827b51b460bcf5986a1e57e415540b2065d"
+    },
+    {
+      "path": "assets/LabPuzzleProgression46Journey-CFBNGwPc.js",
+      "bytes": 3649,
+      "sha256": "637ff937af3ebc8466e9f83b2e8f7b08bf32121f3f486ebcfefb8a1de78c2dcd"
+    },
+    {
+      "path": "assets/LabPuzzleProgression47Journey-DNm3g06B.js",
+      "bytes": 4713,
+      "sha256": "e605363c36734ae167ff9d6dd008f8738d7502c51b8aaef2780036c997623ca2"
+    },
+    {
+      "path": "assets/LabPuzzleProgression48Journey-Byt1Kbdq.js",
+      "bytes": 5941,
+      "sha256": "0d899fc86dd133b9a10ac488c59b3585523631e20cc9ee5a3c89d05d5a43fe2b"
+    },
+    {
+      "path": "assets/LabPuzzleProgression49Journey-B5egXfT5.js",
+      "bytes": 4598,
+      "sha256": "b00e0bc5e54644c9373f26ff1054d487492f11f32e13cad349e9d41135671935"
+    },
+    {
+      "path": "assets/LabPuzzleProgression50BeamJourney-D1yeFbyf.js",
+      "bytes": 12675,
+      "sha256": "58ba923dc7ca5c7eda83f5660e27c98536a9e61c97b1c6b1f761cc9f2c7e2f53"
+    },
+    {
+      "path": "assets/LabPuzzleProgression50Journey-CBeaSHfx.js",
+      "bytes": 6188,
+      "sha256": "3b37afb5f3b126f1b1422c8b48687979bd8fa8705c2e82f7c98a72ec19899a9b"
+    },
+    {
+      "path": "assets/LabPuzzleProgression51Journey-K_rfD_zF.js",
+      "bytes": 3457,
+      "sha256": "68ff953093aa75c50d7ec89fd89095287043d2cf9efbd08a7f0f61bb09fd0b7f"
+    },
+    {
+      "path": "assets/LabResearchJourney-CfGoOR4_.js",
+      "bytes": 7951,
+      "sha256": "8cbdd6fe7d869bbcf0994f2fe150d712b4466432e34a373b15a6eadbcaf839d6"
+    },
+    {
+      "path": "assets/LabRoom13Journey-DpkZeNEo.js",
+      "bytes": 6194,
+      "sha256": "275c62befc9b95dc4c596810721ffba02b137b24ad14006e4769f1c7f21bc041"
+    },
+    {
+      "path": "assets/LabRoom14Journey-rn8KHy_o.js",
+      "bytes": 4785,
+      "sha256": "48b227ae0f02d39d806398ca6ae49217a67137d411cd2ecfee41e1bfac464232"
+    },
+    {
+      "path": "assets/LabRoom15Journey-DkuRhdAp.js",
+      "bytes": 4604,
+      "sha256": "be63a0c9efc97fcefe363e42fda263ba8944e2bef6a90218194f37103316e728"
+    },
+    {
+      "path": "assets/LabRoom16Journey-DcT0PHn1.js",
+      "bytes": 2534,
+      "sha256": "43814ce0e94d01e0e2b9152c6ea1c722073f13a019b2992525f6b0480fa97e74"
+    },
+    {
+      "path": "assets/LabRoom17Journey-C2EE7523.js",
+      "bytes": 3260,
+      "sha256": "b621bf8abcb99cec72e5a8b0ef53e4ef6a005e414141e9502855a2759ba02708"
+    },
+    {
+      "path": "assets/LabRoom18Journey-CMoWqgk7.js",
+      "bytes": 6065,
+      "sha256": "cb2d6c9b83e87597afe4148fe2fdec190af8864e27e488d8d246dcd6fe2ffa54"
+    },
+    {
+      "path": "assets/LabRoom19Journey-BVk2pOJ3.js",
+      "bytes": 3087,
+      "sha256": "edbd9e87a7c68f527a6a6d6794cfcb3a8de5780d1c656265ccf7910207066ab4"
+    },
+    {
+      "path": "assets/LabRoom20Journey-Dnjdo837.js",
+      "bytes": 5013,
+      "sha256": "84ee4a4debf18d555e80bbf468821d58576e6fcf805b34adcd2670e8502fc0fd"
+    },
+    {
+      "path": "assets/LabRoom21Journey-CKO1jCvV.js",
+      "bytes": 5318,
+      "sha256": "50e09d5b6f32c83165b0039f9ec7d8ba2b3eaf992c31aecc4b20ad9488c22f32"
+    },
+    {
+      "path": "assets/LabRoom22Journey-CwuMzMFf.js",
+      "bytes": 2942,
+      "sha256": "aa48c01da207c0db7b5ba4bf933f698cca7c01ca5e2ce19e73f21c661d904f65"
+    },
+    {
+      "path": "assets/LabRoom23Journey-BsnPd4kb.js",
+      "bytes": 2743,
+      "sha256": "50313ccba95f2949e66d30407c4b89f1b83c84a6cf3522ba624015c41fc62813"
+    },
+    {
+      "path": "assets/LabRoom23PhysicalJourney-CAYi4o9F.js",
+      "bytes": 4194,
+      "sha256": "8a68a89ff5678be4e5cc7d3e509abc3777509d5e9b01074e90e72e29cd5e0599"
+    },
+    {
+      "path": "assets/LabRoom24Journey-4IbVbZom.js",
+      "bytes": 3675,
+      "sha256": "028e5dfd86d6c4577b92f0d2357f19ddf3fa2cfdc24a1383062ac5fdea8eb25f"
+    },
+    {
+      "path": "assets/LabRoom25Journey-COqi9k-Z.js",
+      "bytes": 4626,
+      "sha256": "4113270db838996f7bcd1cd8d5edd4ca13461d19057e13a1a5f4e0f5085b9296"
+    },
+    {
+      "path": "assets/LabRoom26Journey-D5Lhf6Yz.js",
+      "bytes": 4194,
+      "sha256": "f568e01fcbf2e28f9bf1d89aa1d8e83df957bb60ea13a63a77cab81b61577e74"
+    },
+    {
+      "path": "assets/LabRoom27Journey-CtMoXjWq.js",
+      "bytes": 3350,
+      "sha256": "ea4e62a0eed62998b64515b56db65142d1a7d3fb8d5c91b6e31653c5ef4422b5"
+    },
+    {
+      "path": "assets/LabRoom28Journey-BK5o10zU.js",
+      "bytes": 3238,
+      "sha256": "abb63b08a5336b66f9274808b2d715e56d00520d744756fd68875b0c7442e686"
+    },
+    {
+      "path": "assets/LabRoom29Journey-FXLiWbZf.js",
+      "bytes": 2592,
+      "sha256": "625138692ba0641ed1ea63e7bb6ea332c70bf235ee3bc8b3cbd80456012e04ef"
+    },
+    {
+      "path": "assets/LabRoom30Journey-zAsFaYdh.js",
+      "bytes": 3762,
+      "sha256": "1d260d8e49e983b2f7a9c354898fe771c41df56434d67e203bd8fb51bbc8f925"
+    },
+    {
+      "path": "assets/LabSingularityJourney-C2SXiJ3k.js",
+      "bytes": 26233,
+      "sha256": "32486232433ca154c5dd9b4eb7a75bf1146dd025d6175513612ad5be89cce374"
+    },
+    {
+      "path": "assets/LabSiphonObservatoryJourney-DyCffoy1.js",
+      "bytes": 2734,
+      "sha256": "1259350c1d1ace06db7abaaa17b90b1387ddf41cda7829f4dbfc56e21247cfa5"
+    },
+    {
+      "path": "assets/LabTower41RatchetCellJourney-CcI5skQu.js",
+      "bytes": 24187,
+      "sha256": "385d033065d73a5b9b3c7fab64e5b44240601b1f535281cd8b1f046ddfa05d87"
+    },
+    {
+      "path": "assets/LabTowerJourney-UnJZQZrD.js",
+      "bytes": 31405,
+      "sha256": "f9faab52181187ac961736e0c2c693d5ea9c9c790f150975248a07f7aa75b6cd"
+    },
+    {
+      "path": "assets/LabV8Journey-DSbK4uEW.js",
+      "bytes": 19013,
+      "sha256": "648c277feb4cb9ed64ce83b7da919800dd0bce4de9bac16c40420ecb97e369a7"
+    },
+    {
+      "path": "assets/LabWorkshopJourney-D7q9lM-B.js",
+      "bytes": 7249,
+      "sha256": "d45ff79a9018f373171a9339e1f5759f3fbfd2255d1880e13af79eb7dadc7485"
+    },
+    {
+      "path": "assets/index-CRyPkPdN.css",
+      "bytes": 48075,
+      "sha256": "4fb7b3a673420fc8210171716940a809345c8b0e548b74d45c40f163fed40e04"
+    },
+    {
+      "path": "assets/index-hpbyt8na.js",
+      "bytes": 2109281,
+      "sha256": "d3db76b0d7b619e99c655b92e472191669694a31020f06b490f005d88393c978"
+    },
+    {
+      "path": "build-info.json",
+      "bytes": 107821,
+      "sha256": "5334c8c57d853e8d36e788c8734bddad89ffcafc9c39e13313538229cd0d96b9"
+    },
+    {
+      "path": "draco/draco_decoder.js",
+      "bytes": 719410,
+      "sha256": "30e4d486fa020737af10e3c56197693e5b904bdc05b8bfa5d7b06751dec6da04"
+    },
+    {
+      "path": "draco/draco_decoder.wasm",
+      "bytes": 285747,
+      "sha256": "c55a594e8ffd18426d36b27fea9618af3df5e173640a3e56d46f09d76f0574f2"
+    },
+    {
+      "path": "draco/draco_wasm_wrapper.js",
+      "bytes": 58763,
+      "sha256": "e8049906ef3f8f75d3456c22a3f31bfdfe5b5b5bd09ccdec613b9e9a49d554d8"
+    },
+    {
+      "path": "index.html",
+      "bytes": 13557,
+      "sha256": "360379ee895afa10af04dd9636a4f8ee45061c68ce4279a64f76e63e95dff466"
+    },
+    {
+      "path": "models/runtime/manifest.json",
+      "bytes": 2421,
+      "sha256": "8806346ed3ac0fb096aa26321d5620c16a6a2a55f2523023fb21f6c4749fe2ed"
+    },
+    {
+      "path": "models/runtime/model-01-player.glb",
+      "bytes": 549756,
+      "sha256": "e5b09ff0281377b679d6fdd505fa1ed89550bb662e94e7f593ed67ee50a66a91"
+    },
+    {
+      "path": "models/runtime/model-02-cargo.glb",
+      "bytes": 510376,
+      "sha256": "65763c87e7f14cc807cffa8fc2adc364e8421dae819271a0c406a6b0d2c8c697"
+    },
+    {
+      "path": "models/runtime/model-11-portal-gun.glb",
+      "bytes": 393116,
+      "sha256": "d8c76c41efbbf0a6d70e30ab5a7b70f49fd806e497f67ea06cb28f9f4edca1d7"
+    },
+    {
+      "path": "models/runtime/model-19-lift-platform.glb",
+      "bytes": 404076,
+      "sha256": "afd039e831ff0baa514f076a505ffbb7c57dac2251959b3d858fc92dcf3d04b9"
+    },
+    {
+      "path": "models/runtime/model-22-terminal.glb",
+      "bytes": 377108,
+      "sha256": "9e2f4ff758996f67596d3935041f632bafdf7e84efd4869341920b64a5919c26"
+    },
+    {
+      "path": "models/runtime/model-23-floor-tile.glb",
+      "bytes": 103600,
+      "sha256": "0950bc6ef31bb28939087bad53695f21cde0b9fe5740394df202a0b242f77b0c"
+    },
+    {
+      "path": "models/runtime/model-24-wall-panel.glb",
+      "bytes": 62448,
+      "sha256": "15aaca48f6e436d5e89abf7548c0fe43580bba8faff4619e476d3a6d306b004d"
+    },
+    {
+      "path": "models/runtime/model-28-rotating-panel.glb",
+      "bytes": 366120,
+      "sha256": "3159916bad63903e73b8e660ce4aab8a3b1e38f1231152b68f3df63d6987ac4b"
+    },
+    {
+      "path": "models/runtime/model-29-pressure-platform.glb",
+      "bytes": 390244,
+      "sha256": "ee65bd9706ad4f4658e54ec5ad8f6f45b24d9027e4e6072f162358a4c1b3291b"
+    },
+    {
+      "path": "models/runtime/model-31-wind-generator.glb",
+      "bytes": 25768,
+      "sha256": "024f25db27e96e1efdaa5e200c13a665dee487e798338f86fef985feeae9019e"
+    },
+    {
+      "path": "models/runtime/model-32-spring-ram.glb",
+      "bytes": 25400,
+      "sha256": "958d5ed533736d5779da078be20ae2b0e84212bfc3a00b456dc0106bc0a093d7"
+    },
+    {
+      "path": "models/runtime/model-35-shutter-fan.glb",
+      "bytes": 27816,
+      "sha256": "8e11d5ab83250348f6e08f034ec87d82727162742d5a7be18f981fc523aa907a"
+    },
+    {
+      "path": "models/runtime/model-37-extension-bridge.glb",
+      "bytes": 25764,
+      "sha256": "96173a9ef89375066b08fad8dff1928425863c6b4e6b8c0373c497448f109c55"
+    },
+    {
+      "path": "models/runtime/model-39-cable-winch.glb",
+      "bytes": 28608,
+      "sha256": "301f148938ec83e2a8f4b45c7f9bdfd19fb40ca79d8fb9abc7601caf4fe0eafd"
+    }
+  ],
+  "candidateBytes": 7147573,
+  "candidateInventorySha256": "cb628e200ed42a6f4c2230758111469032f1be720eb93c67a17b7eebabd1425f",
+  "sourceArtifacts": [
+    {
+      "artifactId": 12077261822,
+      "artifactName": "castle-impulse-castle-native",
+      "zipBytes": 38761689,
+      "zipSha256": "d3a1b34b2ebadeaadaa0c9d9a7d08bcd8492a98e4795f79924522c1180889536",
+      "files": 10,
+      "bytes": 63841416,
+      "inventorySha256": "37921858bb9901f3eaaa2f41764f39c7a8a5f50279fd0229671a9f90deeb5054"
+    },
+    {
+      "artifactId": 12076078823,
+      "artifactName": "castle-impulse-cpu-5",
+      "zipBytes": 33342,
+      "zipSha256": "346f79bfb05a716e253045cf47675bd18d066c0473aa807dba538652a96a6d4e",
+      "files": 2,
+      "bytes": 180975,
+      "inventorySha256": "5587b83dd7247f15c968f51318e078d74c520d5f16d0c36cb77388faa727b8ab"
+    },
+    {
+      "artifactId": 12075880311,
+      "artifactName": "castle-impulse-room25-native",
+      "zipBytes": 8569224,
+      "zipSha256": "635a8bedbc4dc8127ffcfc50ab6eff5add94e0538d2170bb2235f87a22855aa5",
+      "files": 10,
+      "bytes": 12090988,
+      "inventorySha256": "de44318230fb6122bf39b4aa8eea8a7e24e9c1c8dde5a0034302a60be21c01db"
+    },
+    {
+      "artifactId": 12075405609,
+      "artifactName": "castle-impulse-cpu-0",
+      "zipBytes": 20531,
+      "zipSha256": "f0f488b34b11f996c16f1ec122f72a2441d5300383327e47ae3e865dbb75eb93",
+      "files": 2,
+      "bytes": 103035,
+      "inventorySha256": "bc25b02f6f52468317a66e9970dbf6cd8b4f647565b7160c585d5edbcb741154"
+    },
+    {
+      "artifactId": 12075151203,
+      "artifactName": "castle-impulse-native-castle",
+      "zipBytes": 55524,
+      "zipSha256": "0838e438a6801a82573d434fda53cc24313549b66f7973be138994096c4b8ec3",
+      "files": 4,
+      "bytes": 229817,
+      "inventorySha256": "f76a2664d7f33fde4df4deb0b7f0e1c51e7e8e148c3518ff23c886fef93af94b"
+    },
+    {
+      "artifactId": 12075045910,
+      "artifactName": "castle-impulse-ordinary-castle",
+      "zipBytes": 10743,
+      "zipSha256": "c5405be63b8db5ce7a4803e2ca6960e32ac1a66f9f6c139b19e923550ce7654b",
+      "files": 1,
+      "bytes": 82947,
+      "inventorySha256": "eeddaa7ea258fb06bffe8aa35fdbfd5421c84006ca7a679343d863f678457f82"
+    },
+    {
+      "artifactId": 12074992258,
+      "artifactName": "castle-impulse-cpu-3",
+      "zipBytes": 216459,
+      "zipSha256": "f413c18a19ff7ac09fceb0f8917e95d0c219f0162adec08dbb0527984cdcb6e4",
+      "files": 2,
+      "bytes": 1447622,
+      "inventorySha256": "014b148f6f83e79887e923dbcfa2ed9a7ddcb8cef469e6013a5d18261d076f41"
+    },
+    {
+      "artifactId": 12074775718,
+      "artifactName": "castle-impulse-causal-castle",
+      "zipBytes": 1192048,
+      "zipSha256": "25270c15d1ce56f92461e8fe37b5d7fe0c73dad71a6953ca1bf81d5aba8c15b0",
+      "files": 30,
+      "bytes": 2170364,
+      "inventorySha256": "98e13be9cddc9947f6424d360af3954378a0c370b8d7ef64a958c06f455d9dbf"
+    },
+    {
+      "artifactId": 12074775400,
+      "artifactName": "castle-impulse-presentation",
+      "zipBytes": 3592611,
+      "zipSha256": "5be8367b9e6f1a8d08bdf050c67e0ddf64d80e06a851bf3c82bcef3d6b0dd5f9",
+      "files": 19,
+      "bytes": 3636799,
+      "inventorySha256": "66cd864feec42b91149f0d4c0812e04ffee9561382cc16ed9f4caeb293eff2ca"
+    },
+    {
+      "artifactId": 12074641637,
+      "artifactName": "castle-impulse-causal-room25",
+      "zipBytes": 3324287,
+      "zipSha256": "ad0aa85a713fc4e48d7e888cf8b2f14994622ead0bf7bfc0ded678be27928991",
+      "files": 30,
+      "bytes": 17183145,
+      "inventorySha256": "34cd2e452c1504c4be9c9a67aff35261d06da0f3e4b47dcc87e15d8bc177ebd5"
+    },
+    {
+      "artifactId": 12074591496,
+      "artifactName": "castle-impulse-ordinary-fracture",
+      "zipBytes": 7296,
+      "zipSha256": "b4a1ac22e9d968fb26b54b6c9655714d1a856905e1edbb3780afc895b358233d",
+      "files": 1,
+      "bytes": 34363,
+      "inventorySha256": "02206c1a1445e2deac84f66be137db0b4cb9d12208ebb664be9035eced498810"
+    },
+    {
+      "artifactId": 12074586314,
+      "artifactName": "castle-impulse-ordinary-energy",
+      "zipBytes": 15322,
+      "zipSha256": "2af1c88f26694f00d2e9e4c5ceb757c6779e25c55e0a603869bd2358a65cabbe",
+      "files": 1,
+      "bytes": 139946,
+      "inventorySha256": "a578e8ea33109e263c33c35688133c7f35a3fb47af20fcaef5fa25c12f02a3a2"
+    },
+    {
+      "artifactId": 12074478861,
+      "artifactName": "castle-impulse-native-living",
+      "zipBytes": 367790,
+      "zipSha256": "b35cb9d9423dfed2c532dd8598ecc1eabf7f7afa588cba3dca60b9c96a9b0c74",
+      "files": 13,
+      "bytes": 502545,
+      "inventorySha256": "e2af1651fbb82da2b7904281f8a3c25349d0000d4efb43682a7c5bfdd9c86c12"
+    },
+    {
+      "artifactId": 12074468301,
+      "artifactName": "castle-impulse-native-early",
+      "zipBytes": 512739,
+      "zipSha256": "30c538e4b6f5c1d123e4338bc828e435901db9a844cdf7624ab9582f225bd72a",
+      "files": 13,
+      "bytes": 604308,
+      "inventorySha256": "7c5a8f42217ef38233a72f32bc18c8a1c1df09464f2b114c54e0ee6fbb5bd3f4"
+    },
+    {
+      "artifactId": 12074409413,
+      "artifactName": "castle-impulse-native-energy",
+      "zipBytes": 429551,
+      "zipSha256": "26438f6fd17d41612ff5f49de25524dab12c622455b1bef8061779e048a442a3",
+      "files": 13,
+      "bytes": 699491,
+      "inventorySha256": "e7b8dedc27b13c82298c63aa5f15cd601c62ba99625993337712f97d625b7c34"
+    },
+    {
+      "artifactId": 12074266641,
+      "artifactName": "castle-impulse-ordinary-living",
+      "zipBytes": 6429,
+      "zipSha256": "90023057cabb7a64477e6dd42f6ac0959d706623469a103da1558df16062f188",
+      "files": 1,
+      "bytes": 29193,
+      "inventorySha256": "2d10669154f75f8467e514f91f3eb386e9df71d3354eeeaa327d107f1b2a830c"
+    },
+    {
+      "artifactId": 12074252872,
+      "artifactName": "castle-impulse-native-optics",
+      "zipBytes": 360579,
+      "zipSha256": "39cfc765aa69ab239f9c88a43eef2e14b3e7e51998d417c8b8fd96ad7f98e3c3",
+      "files": 13,
+      "bytes": 482891,
+      "inventorySha256": "ada2eb47cf9f5f5036b4957d6957e067048a1c4e1fc4a6c4367a91135fbd4647"
+    },
+    {
+      "artifactId": 12074238907,
+      "artifactName": "castle-impulse-cpu-4",
+      "zipBytes": 22955,
+      "zipSha256": "482f6282d79a7ce8b9dfd315e886ec0d8880a7e31bea043b26f44b1baef44a04",
+      "files": 2,
+      "bytes": 120944,
+      "inventorySha256": "a5932455000f2dd4d8b7bfdb447f8b135227477643561ec8480a8d948e31507e"
+    },
+    {
+      "artifactId": 12074143897,
+      "artifactName": "castle-impulse-cpu-1",
+      "zipBytes": 31236,
+      "zipSha256": "91b909c78ab507ecba41afbd9d647361818737834504f2b9022172ab9448feac",
+      "files": 2,
+      "bytes": 142472,
+      "inventorySha256": "695ae4b6e4d5f53ce7eda62ebe32576efa4887b977db5c38ae38d65be3525346"
+    },
+    {
+      "artifactId": 12073944181,
+      "artifactName": "castle-impulse-cpu-2",
+      "zipBytes": 22233,
+      "zipSha256": "e59cb1cf61fb0f4ed22ce8e9d7121b6992371c66d377034678a6b6a92696329d",
+      "files": 2,
+      "bytes": 108129,
+      "inventorySha256": "3a298dcba12dd58ab425f0a60ff61d1613901aa4fa249b4ad77cdf7869e512e3"
+    },
+    {
+      "artifactId": 12073862624,
+      "artifactName": "castle-impulse-ordinary-optics",
+      "zipBytes": 5504,
+      "zipSha256": "c627dcb237857f8b78f8de0f4741223a1b0a17cc976cfa7a2cf82a4b2fe2d48a",
+      "files": 1,
+      "bytes": 25303,
+      "inventorySha256": "002d659a8b71bb39b8063f7bdb2db0aacf72c46f2d9a004a75605efdbdcd2ccd"
+    },
+    {
+      "artifactId": 12073843992,
+      "artifactName": "castle-impulse-native-fracture",
+      "zipBytes": 425040,
+      "zipSha256": "443a3b876126c0aac769b20b4fae60f5c6ee0ac46f1ec4fcf6b47d97a7cfc57a",
+      "files": 13,
+      "bytes": 569781,
+      "inventorySha256": "0d31bef8726da4f16b6f9bebbe914e22163b7a6a0f0e969393a9a4b051c107da"
+    },
+    {
+      "artifactId": 12073359629,
+      "artifactName": "castle-impulse-physics",
+      "zipBytes": 6180,
+      "zipSha256": "2130a04518febdca977a630bfe9bffcaa6662401199cb743169956b203e71b83",
+      "files": 2,
+      "bytes": 22113,
+      "inventorySha256": "02249e98bc544ca63437bac6ab815bcfb6324e05d7de3ab91e94b2283b977b57"
+    },
+    {
+      "artifactId": 12073339141,
+      "artifactName": "castle-impulse-yandex",
+      "zipBytes": 4345714,
+      "zipSha256": "0f52d587839908445c89f94466b760a753d0afc793b766f7ae624feda4b5b1a6",
+      "files": 2,
+      "bytes": 4348481,
+      "inventorySha256": "7e08a9d87168696ce9239854d4485ade9868854485b566a755619b6dcffe329b"
+    },
+    {
+      "artifactId": 12073219225,
+      "artifactName": "castle-impulse-build",
+      "zipBytes": 5442,
+      "zipSha256": "bc2e0dc94dd96354281ed84409bf408270a2691fe2ad1bc12916e22dc54d37ef",
+      "files": 1,
+      "bytes": 15672,
+      "inventorySha256": "ca74cf1edf38707af0d99a3897ac9e1c3199a5ba5f44cb52fedf849128694acc"
+    },
+    {
+      "artifactId": 12073119181,
+      "artifactName": "castle-impulse-ordinary-early",
+      "zipBytes": 3371,
+      "zipSha256": "e2abdf8f467f240ed6a388e3f8f561bcdb38310ab36979b81052ed0a7d612f6d",
+      "files": 1,
+      "bytes": 14688,
+      "inventorySha256": "f90c0473984388cedf66f3c1cf3195a8452d0d343c87223ce57b28fc0f080798"
+    },
+    {
+      "artifactId": 12073114513,
+      "artifactName": "castle-impulse-dist",
+      "zipBytes": 4502297,
+      "zipSha256": "6b8537d09683b82f5c732cd90d21531ba34704811fe52c2d861cd7a6675c6788",
+      "files": 80,
+      "bytes": 7147573,
+      "inventorySha256": "cb628e200ed42a6f4c2230758111469032f1be720eb93c67a17b7eebabd1425f"
+    }
+  ],
+  "sourceProvider": {
+    "run": {
+      "path": "/workspace/scratch/4668c0c884c8/v59-source-pivot-provider/run.json",
+      "sha256": "845cbdc5eabc901bc87b4b7b33330b4dc40464e354b76b4e13ab3fae9584006d"
+    },
+    "jobs": {
+      "path": "/workspace/scratch/4668c0c884c8/v59-source-pivot-provider/jobs.json",
+      "sha256": "45d3a4e6eac7591365163775c8977a37d16ec0e0d5f3f40a3c42c0e7a8cf92b3"
+    },
+    "commit": {
+      "path": "/workspace/scratch/4668c0c884c8/v59-source-pivot-provider/commit.json",
+      "sha256": "906f7dfa895b3ccd0dea73efb97c2e934ea41e1beabaaab5a0648f007f6c4746"
+    },
+    "artifacts": {
+      "path": "/workspace/scratch/4668c0c884c8/v59-source-pivot-provider/artifacts.json",
+      "sha256": "b951bae05c468a8bbbe39c9b9ead9543d7e06f30b4a66815d594a58d5911b1a7"
+    }
+  },
+  "scope": "Exact completed SOURCE attempt:25jobs/27archives,51ordinary+51production-native wins, original assets, finite physical regressions, real continuous Room25 and full-castle MP4s and immutable current upper-contact/ride/impulse witnesses. No public acceptance.",
+  "limitations": [
+    "Automated software WebGL and scripted input; human puzzle discovery and physical-device FPS remain unmeasured.",
+    "Only Room25 and the final castle have continuous full-route current MP4s. Eight short12fps clips cover selected mechanism phases;51native wins are not51full-route movies, and intermediate visibility is unmeasured.",
+    "The retained Room25 and castle movies sample4fps;120Hz force evidence is authenticated aggregate observations, not a retained complete120Hz trace.",
+    "Finite regressions do not prove closure of every bypass.",
+    "No live Yandex SDK, advertising delivery, platform moderation or publication acceptance.",
+    "The castle is not500 unique stages; the historical500-stage and proved15-minute human-speedrun requirements remain open."
+  ]
+}
