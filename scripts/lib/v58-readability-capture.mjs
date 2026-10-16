@@ -1,4 +1,9 @@
 /** Browser-side observer. Only ordinary route inputs can advance the game. */
+export function readCausalUiPlay(game){
+ const tuple=value=>{const values=value?.toArray?.()??value;if(!Array.isArray(values)||values.length!==3||!values.every(Number.isFinite))throw Error('Causal UI: finite actual position/spawn tuple required');return [...values];};
+ const player=tuple(game.playerPosition),spawn=tuple(game.firstLevel.spawn);
+ return {control:'native #play-button click',normalSpawn:Math.hypot(...player.map((n,i)=>n-spawn[i]))<1e-8,player,spawn,worldStep:game.physics.world.stepnumber,portalsReady:game.portals.ready,level:game.levelIndex+1,state:game.state,edition:game.chamberEdition};
+}
 export async function captureCausalBrowser({caseId,driverSource,guardSource,observerSource,journeyURL,threeURL}){
  const fail=m=>{throw Error('Causal capture: '+m);},check=(v,m)=>{if(!v)fail(m);};
  const g=window.__NESI_DEMO_GAME__,THREE=await import(threeURL),journey=await import(journeyURL);
