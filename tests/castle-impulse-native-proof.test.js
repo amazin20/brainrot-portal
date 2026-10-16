@@ -2,11 +2,12 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import * as THREE from 'three';
+import {Vec3} from 'cannon-es';
 import {LabPhysics} from '../src/game/LabPhysics.js';
 import {SingularityKit} from '../src/game/LabSingularityKit.js';
 import {buildCastleImpulseCell} from '../src/game/LabCastleImpulseCell.js';
 import {buildCastleImpulseBranch} from '../src/game/LabCastleImpulseBranch.js';
-import {CASTLE_NATIVE_CAPTURE,CASTLE_NATIVE_BOUNDS,CASTLE_NATIVE_HARNESS_FILES,CASTLE_NATIVE_OPEN_SCOPES,assertCastleImpulseCellObservation,assertCastleImpulseCellPhysics,assertCastleImpulsePhysicalProof,assertCastleImpulseNativeDiagnostic} from '../scripts/lib/castle-impulse-native-proof.mjs';
+import {CASTLE_NATIVE_CAPTURE,CASTLE_NATIVE_BOUNDS,CASTLE_NATIVE_HARNESS_FILES,CASTLE_NATIVE_OPEN_SCOPES,assertCastleImpulseGuideFrame,assertCastleImpulseCellObservation,assertCastleImpulseCellPhysics,assertCastleImpulsePhysicalProof,assertCastleImpulseNativeDiagnostic} from '../scripts/lib/castle-impulse-native-proof.mjs';
 
 /** Real Cannon mechanics produce the positive packet. These fixture writes
  * prepare only a bounded CPU experiment, never an ordinary route or movie. */
@@ -25,11 +26,44 @@ test('free original shape disabled after an accepted impact cannot pass the inde
 test('impact proof rejects actual recorded external cargo motor force or torque rather than trusting an airborne label',()=>{
  const f=actualImpulse();try{assert.equal(f.diagnostics.firstImpact.cargoForceBefore[0],0);assert.deepEqual(f.diagnostics.firstImpact.cargoTorqueBefore,[0,0,0]);assert.equal(f.diagnostics.firstImpact.cargoActiveDrivePowerBefore,0);assert.ok(f.diagnostics.passiveTray.samples>0);assert.equal(f.diagnostics.passiveTray.scopedSupportSamples,0,'A bare physics experiment cannot impersonate production companion support');for(const mutate of [p=>p.firstImpact.cargoForceBefore[0]=.1,p=>p.firstImpact.cargoTorqueBefore[1]=.1,p=>p.firstImpact.cargoActiveDrivePowerBefore=1,p=>p.firstImpact.cargoMassBefore=4,p=>p.firstImpact.cargoGravityBefore[1]=0,p=>delete p.firstImpact.passiveCompanionSupportBefore,p=>p.passiveTray.unpoweredSamples--,p=>p.loadWitness.worldStep--,p=>p.loadWitness.originalCargoShapeId++]){const d=structuredClone(f.diagnostics);mutate(d);assert.throws(()=>assertCastleImpulseCellPhysics(d,f.body.id,f.shape.id));}}finally{f.dispose();}
 });
+test('guide proof rejects forged pivots and checks radial COM and true pivot residuals separately',()=>{
+ const f=actualImpulse();
+ try{
+  assertCastleImpulseGuideFrame(f.diagnostics);
+  for(const mutate of [p=>delete p.guideFrame,p=>delete p.guideFrame.pivotA,p=>p.guideFrame.pivotA=[3.5,1.5],p=>p.guideFrame.pivotA[0]=3.4,p=>p.guideFrame.pivotB[1]=-1.4,p=>p.guideFrame.pivotA[2]=Infinity,p=>p.guideFrame.pivotB[2]=NaN]){
+   const d=structuredClone(f.diagnostics);mutate(d);assert.throws(()=>assertCastleImpulseGuideFrame(d));
+  }
+  for(const[dy,dz]of [[.020001,0],[-.020001,0],[0,.020001],[0,-.020001],[.019,.019],[-.019,-.019]]){
+   const d=structuredClone(f.diagnostics),a=d.foundedFrame.anchor.position;d.slider.position[1]=a[1]+3+dy;d.slider.position[2]=a[2]+dz;
+   assert.throws(()=>assertCastleImpulseGuideFrame(d),/COM transverse radial envelope/);
+  }
+  for(const[dy,dz]of [[.002001,0],[-.002001,0],[0,.002001],[0,-.002001],[.0015,.0015],[-.0015,-.0015]]){
+   const d=structuredClone(f.diagnostics),a=d.foundedFrame.anchor.position;d.slider.quaternion=[0,0,0,1];d.slider.position[1]=a[1]+3+dy;d.slider.position[2]=a[2]+dz;
+   assert.ok(Math.hypot(dy,dz)<.020);
+   assert.throws(()=>assertCastleImpulseGuideFrame(d),/offset guide-pivot transverse radial residual/);
+  }
+ }finally{f.dispose();}
+});
 test('the real full-shell guide sag leaves the founded receiver frame unchanged and all sampled cell gates valid',()=>{
  const game={scene:new THREE.Scene(),colliders:[],floors:[],cameraBlockers:[],aimBlockers:[],portalPanels:[],cargo:new THREE.Object3D(),heldCube:null,playerPosition:new THREE.Vector3(),playerGrounded:true,markPortalSurface(mesh,center,normal,halfWidth,halfHeight){Object.assign(mesh.userData,{portalable:true,center:center.clone(),normal:normal.clone(),portalUp:Math.abs(normal.y)>.9?new THREE.Vector3(0,0,-1):new THREE.Vector3(0,1,0),portalBounds:{halfWidth,halfHeight}});this.portalPanels.push(mesh);}};
  const k=new SingularityKit(game),room=k.room({id:'impulse',at:[47,54,26],w:46,d:44,h:15,entry:'w'}),branch=buildCastleImpulseBranch({game,k,room,standing:()=>false,plate:()=>null,sign:()=>null,base:r=>k.floor(r.b.x0,r.b.x1,r.b.z0,r.b.z1,r.def.at[1]),register:()=>{},goal:()=>()=>{}});
- game.physics=new LabPhysics();for(const c of game.colliders)game.physics.addStaticBox(c.mesh.uuid,c.box,{kinematic:c.kinematic});game.physics.createCargo({position:room.P(1,0,4.9),velocity:[19,0,0]});branch.cell.ensure();const body=game.physics.cargoBody,shape=body.shapes[0];let maxSag=0;
- try{for(let n=0;n<3600;n++){game.physics.step(1/120);game.cargo.position.copy(body.position);branch.update(1/120);const d=branch.cell.diagnostics();maxSag=Math.max(maxSag,Math.abs(d.slider.position[1]-d.foundedFrame.anchor.position[1]-3));if(n%30===0)assertCastleImpulseCellObservation(d,{bodyId:body.id,shapeId:shape.id,current:true,worldStep:game.physics.world.stepnumber});}const d=branch.cell.diagnostics();assertCastleImpulseCellPhysics(d,body.id,shape.id);assert.ok(maxSag>.004&&maxSag<.02);assert.deepEqual(d.foundedFrame.anchor.position,[47,54,26]);assert.deepEqual(d.foundedFrame.fixed.position,[47,54,26]);assert.deepEqual(branch.targets.receiver,[41,54.16,42]);assert.ok(Math.abs(d.slider.position[1]-3-54)>.004,'Real dynamic guide sag must not be mistaken for a founded receiver offset');for(const mutate of [p=>delete p.foundedFrame,p=>p.foundedFrame.anchor.type=1,p=>p.foundedFrame.anchor.velocity[1]=1,p=>p.foundedFrame.fixed.position[1]+=.004,p=>p.slider.position[1]-=.1,p=>p.slider.quaternion=[0,.2,0,Math.sqrt(.96)]]){const altered=structuredClone(d);mutate(altered);assert.throws(()=>assertCastleImpulseCellObservation(altered,{bodyId:body.id,shapeId:shape.id}));}}finally{branch.cell.dispose();k.dispose();game.physics.dispose();}
+ game.physics=new LabPhysics();for(const c of game.colliders)game.physics.addStaticBox(c.mesh.uuid,c.box,{kinematic:c.kinematic});game.physics.createCargo({position:room.P(1,0,4.9),velocity:[19,0,0]});branch.cell.ensure();const body=game.physics.cargoBody,shape=body.shapes[0];let maxSag=0,maxQuaternionVector=0,nonidentityRoundTrips=0;
+ try{
+  for(let n=0;n<3600;n++){
+   game.physics.step(1/120);game.cargo.position.copy(body.position);branch.update(1/120);const d=branch.cell.diagnostics();
+   maxSag=Math.max(maxSag,Math.abs(d.slider.position[1]-d.foundedFrame.anchor.position[1]-3));maxQuaternionVector=Math.max(maxQuaternionVector,Math.hypot(...d.slider.quaternion.slice(0,3)));
+   if(n%30===0){
+    assertCastleImpulseCellObservation(d,{bodyId:body.id,shapeId:shape.id,current:true,worldStep:game.physics.world.stepnumber});
+    assert.deepEqual(d.guideFrame.pivotA,branch.cell.guide.pivotA.toArray());assert.deepEqual(d.guideFrame.pivotB,branch.cell.guide.pivotB.toArray());
+    const observed=assertCastleImpulseGuideFrame(d),actualA=branch.cell.anchor.pointToWorldFrame(branch.cell.guide.pivotA,new Vec3()).toArray(),actualB=branch.cell.sliderBody.pointToWorldFrame(branch.cell.guide.pivotB,new Vec3()).toArray();
+    if(Math.hypot(...d.slider.quaternion.slice(0,3))>1e-4)nonidentityRoundTrips++;
+    for(let i=0;i<3;i++){assert.ok(Math.abs(observed.worldPivotA[i]-actualA[i])<1e-12);assert.ok(Math.abs(observed.worldPivotB[i]-actualB[i])<1e-12);}
+    assert.ok(Math.abs(observed.pivotTransverseResidual-Math.hypot(actualB[1]-actualA[1],actualB[2]-actualA[2]))<1e-12);
+   }
+  }
+  const d=branch.cell.diagnostics();assertCastleImpulseCellPhysics(d,body.id,shape.id);assert.ok(maxSag>.004&&maxSag<.02);assert.ok(maxQuaternionVector>1e-4&&nonidentityRoundTrips>0,'Actual impact must exercise nonidentity quaternion round trips');assert.deepEqual(d.foundedFrame.anchor.position,[47,54,26]);assert.deepEqual(d.foundedFrame.fixed.position,[47,54,26]);assert.deepEqual(branch.targets.receiver,[41,54.16,42]);assert.ok(Math.abs(d.slider.position[1]-3-54)>.004,'Real dynamic guide sag must not be mistaken for a founded receiver offset');
+  for(const mutate of [p=>delete p.foundedFrame,p=>p.foundedFrame.anchor.type=1,p=>p.foundedFrame.anchor.velocity[1]=1,p=>p.foundedFrame.fixed.position[1]+=.004,p=>p.slider.position[1]-=.1,p=>p.slider.quaternion=[0,.2,0,Math.sqrt(.96)]]){const altered=structuredClone(d);mutate(altered);assert.throws(()=>assertCastleImpulseCellObservation(altered,{bodyId:body.id,shapeId:shape.id}));}
+ }finally{branch.cell.dispose();k.dispose();game.physics.dispose();}
 });
 test('complete movie contract is bounded real-time cadence and cannot silently grant larger acceptance',()=>{
  assert.deepEqual(CASTLE_NATIVE_CAPTURE,{fps:4,stride:15,width:640,height:360});assert.equal(CASTLE_NATIVE_BOUNDS.physicsSteps,24*60*120);assert.equal(CASTLE_NATIVE_BOUNDS.frames,24*60*4+2);assert.equal(new Set(CASTLE_NATIVE_HARNESS_FILES).size,CASTLE_NATIVE_HARNESS_FILES.length);assert.ok(CASTLE_NATIVE_HARNESS_FILES.includes('src/game/LabSingularityJourney.js'));assert.ok(Object.values(CASTLE_NATIVE_OPEN_SCOPES).every(value=>value===false));assert.throws(()=>assertCastleImpulseNativeDiagnostic({kind:'actual-castle-impulse-full-native-browser-diagnostic',pass:true,nativeRecordingCompleted:false}));

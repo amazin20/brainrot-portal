@@ -42,19 +42,63 @@ test('Castle impulse aiming slit passes the real outlet ray while excluding eith
  }finally{f.dispose();}
 });
 
-test('Castle impulse service geometry leaves the entire physical carriage stroke clear',()=>{
+test('Castle impulse service geometry leaves the entire physical carriage stroke and finite guide compliance clear',t=>{
  const f=fixture();try{
   const{branch}=f,owned=new Set([...branch.cell.movingParts,...branch.cell.fixedParts].map(p=>p.mesh)),statics=f.game.colliders.filter(c=>!owned.has(c.mesh)).map(c=>({name:c.mesh.name,box:c.box}));
-  let inspected=0;
-  for(let i=0;i<=83;i++)for(const p of branch.cell.movingParts){
-   const bounds=p.collider.box.clone().translate(V(i/20,0,0));
+  // Sweep actual production boxes, including both simultaneous worst-case
+  // lateral/sag corners and the central axes. A guided Cannon body has finite
+  // solver compliance; 20 mm must fit the architecture on each transverse
+  // axis, rather than being accepted only because an observed route used it.
+  const compliance=.02,offsets=[-compliance,0,compliance];let inspected=0,comparisons=0;
+  assert.equal(branch.cell.movingParts.length,12);
+  for(let i=0;i<=83;i++)for(const dy of offsets)for(const dz of offsets)for(const p of branch.cell.movingParts){
+   const bounds=p.collider.box.clone().translate(V(i/20,dy,dz));
    for(const fixed of statics){
+    comparisons++;
     const overlap=bounds.clone().intersect(fixed.box);if(overlap.isEmpty())continue;
-    const size=overlap.getSize(V());assert.ok(Math.min(size.x,size.y,size.z)<=1e-8,`${p.mesh.name} at stroke ${i/20} overlaps ${fixed.name} by ${size.toArray()}`);
+    const size=overlap.getSize(V());assert.ok(Math.min(size.x,size.y,size.z)<=1e-8,`${p.mesh.name} at stroke ${i/20}, Y/Z compliance ${dy}/${dz} overlaps ${fixed.name} by ${size.toArray()}`);
    }
    inspected++;
   }
-  assert.ok(inspected>800);
+  assert.equal(inspected,84*9*12);
+  assert.equal(comparisons,inspected*statics.length);
+  // Each box retains its identity orientation here. Its union over the full
+  // X stroke and the complete Y/Z square is this exact AABB, so also check
+  // the continuous sweep: no thin obstacle may hide between sampled poses.
+  let sweptComparisons=0;
+  for(const p of branch.cell.movingParts){
+   const swept=p.collider.box.clone().union(p.collider.box.clone().translate(V(4.15,0,0))).expandByVector(V(0,compliance,compliance));
+   for(const fixed of statics){
+    sweptComparisons++;
+    const overlap=swept.clone().intersect(fixed.box);if(overlap.isEmpty())continue;
+    const size=overlap.getSize(V());assert.ok(Math.min(size.x,size.y,size.z)<=1e-8,`${p.mesh.name} continuous translation envelope overlaps ${fixed.name} by ${size.toArray()}`);
+   }
+  }
+  assert.equal(sweptComparisons,12*statics.length);
+  // Independently derive the operating margins from the real manufactured
+  // colliders. The guide shoe is 100 mm inside either lateral rail edge;
+  // applying either signed transverse offset must retain 80 mm of that inset.
+  const shoes=branch.cell.movingParts.filter(p=>p.mesh.name==='Castle impulse captive guide shoe'),rails=branch.cell.fixedParts.filter(p=>p.mesh.name==='Castle impulse founded guide rail');
+  assert.equal(shoes.length,2);assert.equal(rails.length,2);
+  let minimumRailInset=Infinity,minimumRailVerticalGap=Infinity;
+  for(const shoe of shoes){
+   const bounds=shoe.collider.box,centre=bounds.getCenter(V()),rail=rails.find(p=>Math.abs(p.collider.box.getCenter(V()).z-centre.z)<1e-8)?.collider.box;
+   assert.ok(rail);assert.ok(Math.abs(bounds.min.z-rail.min.z-.1)<1e-8);assert.ok(Math.abs(rail.max.z-bounds.max.z-.1)<1e-8);
+   for(const dy of offsets)for(const dz of offsets){
+    minimumRailInset=Math.min(minimumRailInset,bounds.min.z+dz-rail.min.z,rail.max.z-bounds.max.z-dz);
+    minimumRailVerticalGap=Math.min(minimumRailVerticalGap,bounds.min.y+dy-rail.max.y);
+   }
+  }
+  assert.ok(Math.abs(minimumRailInset-.08)<1e-8);assert.ok(Math.abs(minimumRailVerticalGap-.075)<1e-8);
+  const shutter=branch.cell.shutterPart.collider.box,deck=f.game.colliders.find(c=>c.mesh.uuid===branch.panels.intake.mesh.userData.portalBackingIds[0])?.box;
+  assert.ok(deck);assert.ok(Math.abs(shutter.min.y-deck.max.y-.08)<1e-8);
+  const minimumShutterFloorGap=shutter.min.y-compliance-deck.max.y;
+  assert.ok(Math.abs(minimumShutterFloorGap-.06)<1e-8);
+  const pocketFront=branch.parts.find(p=>p.name==='Castle impulse founded shutter pocket front').userData.collider.box,pocketBack=branch.parts.find(p=>p.name==='Castle impulse founded shutter pocket back').userData.collider.box,pocketEnd=branch.parts.find(p=>p.name==='Castle impulse founded shutter pocket end').userData.collider.box;
+  assert.ok(Math.abs(pocketBack.min.z-pocketFront.max.z-.7)<1e-8);assert.ok(Math.abs(shutter.max.z-shutter.min.z-.36)<1e-8);
+  const minimumPocketSideGap=Math.min(...offsets.flatMap(dz=>[shutter.min.z+dz-pocketFront.max.z,pocketBack.min.z-shutter.max.z-dz])),minimumPocketEndGap=pocketEnd.min.x-shutter.max.x-4.15;
+  assert.ok(Math.abs(minimumPocketSideGap-.15)<1e-8);assert.ok(Math.abs(minimumPocketEndGap-.03)<1e-8);
+  t.diagnostic(`${84*9} carriage poses, ${inspected} moving-part boxes, ${comparisons} pose comparisons and ${sweptComparisons} continuous-envelope comparisons against ${statics.length} non-cell static colliders; minimum rail inset ${minimumRailInset} m, rail vertical gap ${minimumRailVerticalGap} m, shutter floor gap ${minimumShutterFloorGap} m, pocket side/end gaps ${minimumPocketSideGap}/${minimumPocketEndGap} m`);
   const apron=branch.floors.find(p=>p.name==='Castle impulse low cargo pickup apron').userData.floor;
   assert.ok(Math.abs(apron.y-56.8)<1e-10);assert.ok(Math.abs(apron.minZ-27.4)<1e-10);
   const receiver=branch.targets.receiverPlatform.userData.collider.box;

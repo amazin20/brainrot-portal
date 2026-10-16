@@ -57,6 +57,23 @@ export function assertCastleImpulseCargoDriveSample(p,{requirePassive=false,requ
  return p;
 }
 
+/** The five-equation guide constrains the offset midpoint pivots in Y/Z.
+ * Its X equation is intentionally absent; the dynamic COM is not that pivot. */
+export function assertCastleImpulseGuideFrame(d){
+ const guide=d?.guideFrame,anchor=d?.foundedFrame?.anchor,slider=d?.slider;
+ vector(guide?.pivotA,3);vector(guide?.pivotB,3);
+ assert.deepEqual(guide.pivotA,[7/2,3/2,0]);assert.deepEqual(guide.pivotB,[-7/2,-3/2,0]);
+ vector(anchor?.position,3);assert.deepEqual(anchor.quaternion,[0,0,0,1]);vector(slider?.position,3);vector(slider.quaternion,4);
+ assert.ok(Math.abs(slider.quaternion.reduce((n,v)=>n+v*v,0)-1)<1e-5);
+ // q*v*conjugate(q), matching actual Cannon Quaternion.vmult exactly.
+ const rotate=(v,q)=>{const[x,y,z]=v,[qx,qy,qz,qw]=q,ix=qw*x+qy*z-qz*y,iy=qw*y+qz*x-qx*z,iz=qw*z+qx*y-qy*x,iw=-qx*x-qy*y-qz*z;return[ix*qw+iw*-qx+iy*-qz-iz*-qy,iy*qw+iw*-qy+iz*-qx-ix*-qz,iz*qw+iw*-qz+ix*-qy-iy*-qx];};
+ const worldPivotA=rotate(guide.pivotA,anchor.quaternion).map((v,i)=>v+anchor.position[i]),worldPivotB=rotate(guide.pivotB,slider.quaternion).map((v,i)=>v+slider.position[i]);
+ const comTransverseRadius=Math.hypot(slider.position[1]-anchor.position[1]-3,slider.position[2]-anchor.position[2]),pivotTransverseResidual=Math.hypot(worldPivotB[1]-worldPivotA[1],worldPivotB[2]-worldPivotA[2]);
+ assert.ok(comTransverseRadius<.020,'Actual COM transverse radial envelope exceeds20mm');
+ assert.ok(pivotTransverseResidual<.002,'Actual offset guide-pivot transverse radial residual exceeds2mm');
+ return {worldPivotA,worldPivotB,comTransverseRadius,pivotTransverseResidual};
+}
+
 export function assertCastleImpulseCellObservation(d,{bodyId,shapeId,current=false,worldStep}={}){
  for(const key of ['ready','currentCollisionValid','originalCargoIdentityValid','bodiesPresent','constraintsPresent','freeXEquationAbsent'])assert.equal(d?.[key],true,key);
  assert.equal(d.disposed,false);integer(d.worldStep);if(current)assert.equal(d.worldStep,worldStep);assert.equal(d.contactStep,d.worldStep);
@@ -64,9 +81,7 @@ export function assertCastleImpulseCellObservation(d,{bodyId,shapeId,current=fal
  const frame=d.foundedFrame;for(const[name,index]of [['anchor',0],['fixed',1]]){const b=frame?.[name];integer(b?.id);assert.equal(b.id,d.bodyIds[index]);assert.equal(b.type,2);assert.equal(b.mass,0);vector(b.position,3);assert.deepEqual(b.quaternion,[0,0,0,1]);assert.deepEqual(b.velocity,[0,0,0]);assert.deepEqual(b.angularVelocity,[0,0,0]);}assert.deepEqual(frame.anchor.position,frame.fixed.position);
  integer(d.slider.id);assert.ok(d.bodyIds.includes(d.slider.id));assert.equal(d.slider.type,1);assert.equal(d.slider.mass,12);vector(d.slider.position,3);vector(d.slider.velocity,3);vector(d.slider.quaternion,4);assert.ok(Math.abs(d.slider.quaternion.reduce((n,v)=>n+v*v,0)-1)<1e-5);
  assert.equal(d.slider.id,d.bodyIds[2]);assert.ok(Math.abs(d.slider.position[0]-frame.anchor.position[0]-d.x)<1e-9);
- // Measured against the actual founded guide, not an inferred receiver pose.
- // The real full-shell impact transient reaches13.34mm vertical solver sag.
- assert.ok(Math.abs(d.slider.position[1]-frame.anchor.position[1]-3)<.02);assert.ok(Math.abs(d.slider.position[2]-frame.anchor.position[2])<.002);assert.ok(d.slider.quaternion.slice(0,3).every(n=>Math.abs(n)<.01));
+ assertCastleImpulseGuideFrame(d);assert.ok(d.slider.quaternion.slice(0,3).every(n=>Math.abs(n)<.01));
  finite(d.x);finite(d.springPotential);finite(d.kineticEnergy);finite(d.barrierEnergy);assert.ok(d.springPotential>=0&&d.kineticEnergy>=0&&d.barrierEnergy>0);finite(d.lastSpringForce);vector(d.springLengths,2);d.springLengths.forEach(n=>assert.ok(n>0));
  assert.deepEqual(d.springGeometry,{near:7,far:11,midpoint:9,bodyY:3,anchorZ:2,restLength:Math.sqrt(8),mass:12,stiffness:16,damping:4});
  const potential=d.springLengths.reduce((n,length)=>n+8*(length-Math.sqrt(8))**2,0);assert.ok(Math.abs(d.springPotential-potential)<1e-7);assert.ok(Math.abs(d.kineticEnergy-6*d.slider.velocity.reduce((n,v)=>n+v*v,0))<1e-7);assert.ok(Math.abs(d.barrierEnergy-16*(2-Math.sqrt(8))**2)<1e-7);
