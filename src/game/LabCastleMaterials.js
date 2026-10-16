@@ -13,6 +13,7 @@ export const CASTLE_WING_FINISHES=Object.freeze({
   migrant:{wall:0xabcfc8,face:0xd9eee8,accent:0x4e9e96,floor:0xd6e6e2},
   pendulum:{wall:0xcbb4c3,face:0xebddea,accent:0xa46893,floor:0xe6dce5},
   inertia:{wall:0xaec9d2,face:0xdceff1,accent:0x548f9f,floor:0xd8e6e9},
+  impulse:{wall:0xb5c0d2,face:0xe2e8f1,accent:0x546e98,floor:0xd9dfeb},
   crown:{wall:0xd8caa8,face:0xf6ecd1,accent:0xc09a52,floor:0xeee7d6},
 });
 

@@ -1,22 +1,43 @@
 import {foundationStorage} from './LabFoundationEdition.js';
+import {CASTLE_LEVEL_INDEX} from './LabCampaignSequence.js';
 
 export const FOUNDATION_STORAGE_PREFIX='brainrot-foundation-v1:';
 export const CAMPAIGN_V55_STORAGE_PREFIX='brainrot-campaign-v55:';
 export const CAMPAIGN_V56_STORAGE_PREFIX='brainrot-campaign-v56:';
 export const CAMPAIGN_V57_STORAGE_PREFIX='brainrot-campaign-v57:';
 export const CAMPAIGN_V58_STORAGE_PREFIX='brainrot-campaign-v58:';
+export const CAMPAIGN_V59_STORAGE_PREFIX='brainrot-campaign-v59:';
 export const CAMPAIGN_PREFERENCE_KEY='brainrot-portal.preferences.v24';
 const LEGACY_PREFERENCE_KEY='nesi.preferences.v8';
 const campaignPaths=version=>new Set(['','/brainrot-portal'].flatMap(base=>['','/','/index.html'].map(suffix=>`${base}/campaign-${version}${suffix}`)));
-const v55Paths=campaignPaths('v55'),v56Paths=campaignPaths('v56'),v57Paths=campaignPaths('v57'),v58Paths=campaignPaths('v58');
+const v55Paths=campaignPaths('v55'),v56Paths=campaignPaths('v56'),v57Paths=campaignPaths('v57'),v58Paths=campaignPaths('v58'),v59Paths=campaignPaths('v59');
 
 export const isCampaignV55Path=pathname=>v55Paths.has(pathname);
 export const isCampaignV56Path=pathname=>v56Paths.has(pathname);
 export const isCampaignV57Path=pathname=>v57Paths.has(pathname);
 export const isCampaignV58Path=pathname=>v58Paths.has(pathname);
+export const isCampaignV59Path=pathname=>v59Paths.has(pathname);
 export function foundationCampaignPrefix(pathname,{fullFoundationCampaign=true}={}){
  if(!fullFoundationCampaign)return FOUNDATION_STORAGE_PREFIX;
- return isCampaignV58Path(pathname)?CAMPAIGN_V58_STORAGE_PREFIX:isCampaignV57Path(pathname)?CAMPAIGN_V57_STORAGE_PREFIX:isCampaignV56Path(pathname)?CAMPAIGN_V56_STORAGE_PREFIX:isCampaignV55Path(pathname)?CAMPAIGN_V55_STORAGE_PREFIX:FOUNDATION_STORAGE_PREFIX;
+ return isCampaignV59Path(pathname)?CAMPAIGN_V59_STORAGE_PREFIX:isCampaignV58Path(pathname)?CAMPAIGN_V58_STORAGE_PREFIX:isCampaignV57Path(pathname)?CAMPAIGN_V57_STORAGE_PREFIX:isCampaignV56Path(pathname)?CAMPAIGN_V56_STORAGE_PREFIX:isCampaignV55Path(pathname)?CAMPAIGN_V55_STORAGE_PREFIX:FOUNDATION_STORAGE_PREFIX;
+}
+
+/** The expanded castle must be played again, while its stable bookmark and all
+ * ordinary-room progress survive. Only imported records are adapted: a later
+ * v59 castle victory belongs to the new mechanism and must remain completed. */
+function importExpandedCastleRecord(value){
+ try{
+  const record=JSON.parse(value);
+  if(!record||typeof record!=='object'||Array.isArray(record))return value;
+  let changed=false;
+  if(Array.isArray(record.completed)&&record.completed.includes(CASTLE_LEVEL_INDEX)){
+   record.completed=record.completed.filter(index=>index!==CASTLE_LEVEL_INDEX);changed=true;
+  }
+  if(record.hints&&typeof record.hints==='object'&&Object.hasOwn(record.hints,CASTLE_LEVEL_INDEX)){
+   record.hints=Object.fromEntries(Object.entries(record.hints).filter(([index])=>Number(index)!==CASTLE_LEVEL_INDEX));changed=true;
+  }
+  return changed?JSON.stringify(record):value;
+ }catch{return value;}
 }
 
 /** A first visit reads the newest preceding campaign, then Foundation progress.
@@ -27,14 +48,15 @@ export function foundationCampaignStorage(storage,{pathname='',fullFoundationCam
  if(!storage)return undefined;
  const ownPrefix=foundationCampaignPrefix(pathname,{fullFoundationCampaign});
  if(ownPrefix===FOUNDATION_STORAGE_PREFIX)return foundationStorage(storage);
- const imports=ownPrefix===CAMPAIGN_V58_STORAGE_PREFIX?[CAMPAIGN_V57_STORAGE_PREFIX,CAMPAIGN_V56_STORAGE_PREFIX,CAMPAIGN_V55_STORAGE_PREFIX,FOUNDATION_STORAGE_PREFIX]:ownPrefix===CAMPAIGN_V57_STORAGE_PREFIX?[CAMPAIGN_V56_STORAGE_PREFIX,CAMPAIGN_V55_STORAGE_PREFIX,FOUNDATION_STORAGE_PREFIX]:ownPrefix===CAMPAIGN_V56_STORAGE_PREFIX?[CAMPAIGN_V55_STORAGE_PREFIX,FOUNDATION_STORAGE_PREFIX]:[FOUNDATION_STORAGE_PREFIX];
+ const imports=ownPrefix===CAMPAIGN_V59_STORAGE_PREFIX?[CAMPAIGN_V58_STORAGE_PREFIX,CAMPAIGN_V57_STORAGE_PREFIX,CAMPAIGN_V56_STORAGE_PREFIX,CAMPAIGN_V55_STORAGE_PREFIX,FOUNDATION_STORAGE_PREFIX]:ownPrefix===CAMPAIGN_V58_STORAGE_PREFIX?[CAMPAIGN_V57_STORAGE_PREFIX,CAMPAIGN_V56_STORAGE_PREFIX,CAMPAIGN_V55_STORAGE_PREFIX,FOUNDATION_STORAGE_PREFIX]:ownPrefix===CAMPAIGN_V57_STORAGE_PREFIX?[CAMPAIGN_V56_STORAGE_PREFIX,CAMPAIGN_V55_STORAGE_PREFIX,FOUNDATION_STORAGE_PREFIX]:ownPrefix===CAMPAIGN_V56_STORAGE_PREFIX?[CAMPAIGN_V55_STORAGE_PREFIX,FOUNDATION_STORAGE_PREFIX]:[FOUNDATION_STORAGE_PREFIX];
  const hasRecord=prefix=>[CAMPAIGN_PREFERENCE_KEY,LEGACY_PREFERENCE_KEY].some(name=>{
   const value=storage.getItem(prefix+name);return value!==null&&value!==undefined;
  });
  return {
   getItem(key){
    const prefix=hasRecord(ownPrefix)?ownPrefix:imports.find(hasRecord)??FOUNDATION_STORAGE_PREFIX;
-   return storage.getItem(prefix+key);
+   const value=storage.getItem(prefix+key);
+   return ownPrefix===CAMPAIGN_V59_STORAGE_PREFIX&&prefix!==ownPrefix&&[CAMPAIGN_PREFERENCE_KEY,LEGACY_PREFERENCE_KEY].includes(key)?importExpandedCastleRecord(value):value;
   },
   setItem:(key,value)=>storage.setItem(ownPrefix+key,value),
  };

@@ -17,7 +17,7 @@ export function buildSingularityArt({game,k,rooms,machines,edges,solved}){
  m.steel.color.setHex(0x748b98);m.steel.roughness=.61;m.copper.color.setHex(0xd4aa69);m.copper.roughness=.53;
  m.ivory.color.setHex(0xe7e9df);m.ivory.roughness=.70;m.ivory.metalness=.08;
  const finishes=applyCastleMaterials({game,k,rooms});
- const accents={freight:m.copper,sluice:m.mint,optics:m.cyan,hoist:m.copper,archive:maroon,flywheel:m.copper,magnet:m.violet,migrant:m.mint,pendulum:m.rose,inertia:m.cyan,crown:m.copper};
+ const accents={freight:m.copper,sluice:m.mint,optics:m.cyan,hoist:m.copper,archive:maroon,flywheel:m.copper,magnet:m.violet,migrant:m.mint,pendulum:m.rose,inertia:m.cyan,impulse:m.violet,crown:m.copper};
  const inset=(p,size,material=coat)=>k.mesh(geo,material,p,size);
  // Side-wall relief is clipped around actual ceramic addresses. All shapes
  // are a shallow skin on the existing wall; nothing enters collision or aim
@@ -57,6 +57,7 @@ export function buildSingularityArt({game,k,rooms,machines,edges,solved}){
   migrant:[[-.28,11,1.6,3.2],[.28,11,1.6,3.2],[-.28,11,1.1,5],[.28,11,1.1,5]],
   pendulum:[[-.30,5.2,4.8,3.5],[.30,5.2,4.8,3.5]],
   inertia:[[-.30,8.8,1.3,2.8],[.30,8.8,1.3,4.5]],
+  impulse:[[-.34,6.1,2.5,4.2],[-.08,3.0,4.1,3.1],[.27,8.2,2.0,5.4]],
   crown:[[-.28,7.2,4.6,3.7],[.28,7.2,4.6,3.7]],
  };
  for(const r of rooms.values()){
@@ -116,5 +117,5 @@ export function buildSingularityArt({game,k,rooms,machines,edges,solved}){
  const mechanisms=buildCastleMechanismDetails({game,k,rooms,machines});
  const upperReadability=buildTower41UpperReadability({k,cell:machines.get('pendulum').state.upperCell});
  const lamps=new Map();for(const r of rooms.values()){const lamp=k.box([r.door[0],r.door[1]+4.6,r.door[2]],[.4,.10,.12],m.idle,{solid:false,dynamic:true});lamps.set(r.def.id,lamp);}
- return{update(){mechanisms.update();upperReadability.update();for(const[id,mesh]of lamps)mesh.material=solved.has(id)?m.live:m.idle;},dispose(){upperReadability.dispose();mechanisms.dispose();},upperReadability,profile:'folded-castle-five-storeys',geometrySource:'authored-bevelled-cassettes-and-physical-ribs',artDirection:'eleven-wing-mineral-cedar-and-satin',finishes};
+ return{update(){mechanisms.update();upperReadability.update();for(const[id,mesh]of lamps)mesh.material=solved.has(id)?m.live:m.idle;},dispose(){upperReadability.dispose();mechanisms.dispose();},upperReadability,profile:'folded-castle-five-storeys',geometrySource:'authored-bevelled-cassettes-and-physical-ribs',artDirection:'twelve-wing-mineral-cedar-and-satin',finishes};
 }

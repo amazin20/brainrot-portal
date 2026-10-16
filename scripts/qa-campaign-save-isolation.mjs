@@ -6,20 +6,22 @@ import {serveFrozenCampaign} from './lib/frozen-campaign-server.mjs';
 import {readStampedCampaignInfo,assertCampaignBrowserState} from './lib/campaign-browser-contract.mjs';
 import {ACTIVE_FOUNDATION_RUNTIME_FLAGS} from '../src/game/ReleaseIdentity.js';
 import {CREATIVE_CAMPAIGN_REVISION} from '../src/game/LabPreferences.js';
-import {isCampaignV55Path,isCampaignV56Path,isCampaignV57Path,isCampaignV58Path,foundationCampaignPrefix,FOUNDATION_STORAGE_PREFIX,CAMPAIGN_V55_STORAGE_PREFIX,CAMPAIGN_V56_STORAGE_PREFIX,CAMPAIGN_V57_STORAGE_PREFIX,CAMPAIGN_PREFERENCE_KEY} from '../src/game/LabCampaignStorage.js';
+import {isCampaignV55Path,isCampaignV56Path,isCampaignV57Path,isCampaignV58Path,isCampaignV59Path,foundationCampaignPrefix,FOUNDATION_STORAGE_PREFIX,CAMPAIGN_V55_STORAGE_PREFIX,CAMPAIGN_V56_STORAGE_PREFIX,CAMPAIGN_V57_STORAGE_PREFIX,CAMPAIGN_V58_STORAGE_PREFIX,CAMPAIGN_PREFERENCE_KEY} from '../src/game/LabCampaignStorage.js';
 
 const out=path.resolve(process.env.OUT_DIR||'qa/campaign-save-isolation');fs.mkdirSync(out,{recursive:true});
 const mounted=process.env.PAGE_URL?null:await serveFrozenCampaign(process.env.SITE_DIR||'dist');
-const base=new URL(process.env.PAGE_URL||mounted.url);assert.ok(isCampaignV55Path(base.pathname)||isCampaignV56Path(base.pathname)||isCampaignV57Path(base.pathname)||isCampaignV58Path(base.pathname),'Save isolation proof requires the actual candidate entry path');
+const base=new URL(process.env.PAGE_URL||mounted.url);assert.ok(isCampaignV55Path(base.pathname)||isCampaignV56Path(base.pathname)||isCampaignV57Path(base.pathname)||isCampaignV58Path(base.pathname)||isCampaignV59Path(base.pathname),'Save isolation proof requires the actual candidate entry path');
 const ownPrefix=foundationCampaignPrefix(base.pathname);
 const oldPrefixes=['',FOUNDATION_STORAGE_PREFIX,'brainrot-open-rebuild-v1:','brainrot-puzzle-pilot43-v1:','brainrot-puzzle-progression-finale-v1:','brainrot-foundation20-physical-v1:','brainrot-tower41-native-v2:','brainrot-tower41-native-v3:'];
-if(isCampaignV56Path(base.pathname)||isCampaignV57Path(base.pathname)||isCampaignV58Path(base.pathname))oldPrefixes.push(CAMPAIGN_V55_STORAGE_PREFIX);
-if(isCampaignV57Path(base.pathname)||isCampaignV58Path(base.pathname))oldPrefixes.push(CAMPAIGN_V56_STORAGE_PREFIX);
-if(isCampaignV58Path(base.pathname))oldPrefixes.push(CAMPAIGN_V57_STORAGE_PREFIX);
-const importedPrefix=isCampaignV58Path(base.pathname)?CAMPAIGN_V57_STORAGE_PREFIX:isCampaignV57Path(base.pathname)?CAMPAIGN_V56_STORAGE_PREFIX:isCampaignV56Path(base.pathname)?CAMPAIGN_V55_STORAGE_PREFIX:FOUNDATION_STORAGE_PREFIX;
-const expectedImport={completed:[0,1,6,9],hints:{1:2},resumeLevel:3,quality:'low',volume:.29,muted:true,tutorial:true};
+if(isCampaignV56Path(base.pathname)||isCampaignV57Path(base.pathname)||isCampaignV58Path(base.pathname)||isCampaignV59Path(base.pathname))oldPrefixes.push(CAMPAIGN_V55_STORAGE_PREFIX);
+if(isCampaignV57Path(base.pathname)||isCampaignV58Path(base.pathname)||isCampaignV59Path(base.pathname))oldPrefixes.push(CAMPAIGN_V56_STORAGE_PREFIX);
+if(isCampaignV58Path(base.pathname)||isCampaignV59Path(base.pathname))oldPrefixes.push(CAMPAIGN_V57_STORAGE_PREFIX);
+if(isCampaignV59Path(base.pathname))oldPrefixes.push(CAMPAIGN_V58_STORAGE_PREFIX);
+const importedPrefix=isCampaignV59Path(base.pathname)?CAMPAIGN_V58_STORAGE_PREFIX:isCampaignV58Path(base.pathname)?CAMPAIGN_V57_STORAGE_PREFIX:isCampaignV57Path(base.pathname)?CAMPAIGN_V56_STORAGE_PREFIX:isCampaignV56Path(base.pathname)?CAMPAIGN_V55_STORAGE_PREFIX:FOUNDATION_STORAGE_PREFIX;
+const expectedImport={completed:isCampaignV59Path(base.pathname)?[0,1,6]:[0,1,6,9],hints:{1:2},resumeLevel:3,quality:'low',volume:.29,muted:true,tutorial:true};
+const historicalImport=isCampaignV59Path(base.pathname)?{...expectedImport,completed:[...expectedImport.completed,40],hints:{...expectedImport.hints,40:3}}:expectedImport;
 const records=oldPrefixes.map((prefix,index)=>[prefix+CAMPAIGN_PREFERENCE_KEY,JSON.stringify({campaignRevision:CREATIVE_CAMPAIGN_REVISION,
- ...(prefix===importedPrefix?expectedImport:{completed:[0],hints:{},resumeLevel:0,quality:'balanced',volume:.21,muted:false,tutorial:false}),historicalNamespace:index},null,2)]);
+ ...(prefix===importedPrefix?historicalImport:{completed:[0],hints:{},resumeLevel:0,quality:'balanced',volume:.21,muted:false,tutorial:false}),historicalNamespace:index},null,2)]);
 const oldRecord=Object.fromEntries(records),ownKey=ownPrefix+CAMPAIGN_PREFERENCE_KEY;
 const report={sourceCommit:process.env.BUILD_COMMIT??null,url:base.href,pass:false,errors:[],checks:[],
  scope:'Frozen production bytes mounted at the candidate subpath; first import, ordinary Play, reload and menu settings. This UI/storage proof does not assert puzzle completion.'};

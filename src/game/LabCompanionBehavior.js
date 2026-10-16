@@ -17,12 +17,19 @@ export class LabCompanionBehavior {
     this.target = null; this.restTime = 0; this.blockedTime = 0;
   }
   random(){this.randomState=(Math.imul(this.randomState,1664525)+1013904223)>>>0;return this.randomState/4294967296;}
-  update(dt, { held = false, onPad = false, canMove = () => true } = {}) {
+  update(dt, { held = false, onPad = false, passiveSupport = false, canMove = () => true } = {}) {
     const body = this.physics.cargoBody;
     if (!body || !(dt > 0)) return;
     body.material.friction = 1;
     this.age += dt;
     if (held) { this.state = 'held'; this.wasHeld = true; this.wasGrounded = false; return; }
+    // The impulse scoop is an energy-transfer surface. Its current positive
+    // physical contact disables both curiosity and the upright recovery motor;
+    // a tilted companion rests naturally until the player retrieves it.
+    if (passiveSupport) {
+      this.state = 'waiting_on_pad'; this.target = null; this.recovery = 0;
+      this.standGoal = null; this.clearanceReady = false; return;
+    }
     this.supportGrace=this.physics.grounded?.12:Math.max(0,this.supportGrace-dt);
     const grounded = this.physics.grounded || (this.recovery>0 && this.supportGrace>0 && Math.abs(body.velocity.y)<1.2);
     if (this.wasHeld) { this.reanchor(body.position); this.wasHeld = false; this.wasGrounded = false; }

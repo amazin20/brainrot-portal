@@ -1294,6 +1294,7 @@ export class LabGame {
     this.portalCargoColliders = nextPortalColliders;
     this.companionBehavior?.update(dt, { held: Boolean(this.heldCube || this.velocityCompanion?.connected),
       onPad: this.firstLevel ? this.firstLevel.cargoOnAnyPad() : this.cargoOnPad(this.mechanisms.chargePad.position) || CHAMBERS.some(c => this.cargoOnPad(c.button)),
+      passiveSupport: this.firstLevel?.passiveCompanionSupport?.() === true,
       canMove: (p, nx, nz) => this.companionCanStep(p, nx, nz) });
     const cargoLaunch = this.firstLevel ? this.firstLevel.getLaunch(this.cargo.position)
       : Math.hypot(this.cargo.position.x, this.cargo.position.z + 31.5) < 1.05

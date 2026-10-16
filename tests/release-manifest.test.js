@@ -17,7 +17,7 @@ const fixture=()=>{
 test('one source binds all 51 current definitions and all current replacements',()=>{
  const setup=fixture();try{
   const manifest=createReleaseManifest(setup);
-  assert.equal(manifest.schemaVersion,2);assert.equal(manifest.version,'v58-mechanism-readability');assert.equal(manifest.editionVersion,'foundation-v5');
+  assert.equal(manifest.schemaVersion,2);assert.equal(manifest.version,'v59-castle-impulse');assert.equal(manifest.editionVersion,'foundation-v5');
   assert.equal(manifest.version,RELEASE_VERSION);assert.equal(manifest.gameCommit,setup.commit);assert.equal(manifest.interfaceCommit,setup.commit);
   assert.deepEqual(manifest.rooms.map(room=>room.level),Array.from({length:51},(_,i)=>i+1));
   assert.equal(manifest.rooms[16].id,'foundation-cable-supported-architecture');
@@ -28,12 +28,12 @@ test('one source binds all 51 current definitions and all current replacements',
   assert.equal(manifest.rooms[37].definitionRevision,'freight-dispatch-setback-v2');
   assert.equal(manifest.rooms[24].definitionRevision,'continuous-optical-power-v1');
   assert.equal(manifest.rooms[24].presentationRevision,'mechanism-readability-v1');
-  assert.equal(manifest.rooms[50].definitionRevision,'two-physical-pendulum-spans-v4');
-  assert.equal(manifest.rooms[50].presentationRevision,'mechanism-readability-v1');
+  assert.equal(manifest.rooms[50].definitionRevision,'bistable-impulse-branch-v1');
+  assert.equal(manifest.rooms[50].presentationRevision,'bistable-impulse-branch-v1');
   assert.equal(manifest.rooms[32].id,'siphon-observatory');assert.equal(manifest.rooms[49].id,'puzzle-progression51-mechanical-echo');
   assert.equal(manifest.rooms[50].id,'tower-singularity');assert.equal(manifest.rooms[50].stableLevel,41);
   assert.equal(manifest.rooms[50].stableId,'foundation-041');
-  assert.equal(manifest.features.tower.stages,11);assert.equal(manifest.verified,false);
+  assert.equal(manifest.features.tower.stages,12);assert.equal(manifest.verified,false);
   assert.equal(new Set(manifest.rooms.map(room=>room.stableId)).size,51);
   assert.equal(manifest.features.foundation.chapters.length,6);
   assert.deepEqual(verifyReleasePackage(manifest,setup.directory),manifest.files);
@@ -89,7 +89,7 @@ test('metadata follows the actual root variants, five chapter boundaries and fin
   assert.deepEqual(manifest.features.foundation.newRooms.map(room=>room.level),Array.from({length:10},(_,index)=>index+41));
   assert.deepEqual(manifest.features.foundation.newRooms.map(room=>room.stableLevel),Array.from({length:10},(_,index)=>index+42));
   assert.ok(!manifest.features.foundation.newRooms.some(room=>room.id==='tower-singularity'));
-  assert.deepEqual(manifest.features.tower,{level:51,stableLevel:41,title:'СКЛАДЧАТЫЙ ЗАМОК',stages:11,checkpoints:false});
+  assert.deepEqual(manifest.features.tower,{level:51,stableLevel:41,title:'СКЛАДЧАТЫЙ ЗАМОК',stages:12,checkpoints:false});
   assert.equal(manifest.features.foundation.castleEndsCampaign,true);
   assert.deepEqual(manifest.features.foundation.chapters.map(chapter=>manifest.rooms.filter(room=>room.theme===chapter.id).length),[10,10,10,10,10,1]);
   for(const stableLevel of [43,44,45,46,47,48,49,50,51])assert.equal(byStable.get(stableLevel).definitionRevision,`spatial-progression${stableLevel}-v1`);

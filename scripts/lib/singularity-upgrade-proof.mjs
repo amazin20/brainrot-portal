@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import {SINGULARITY_ROOMS} from '../../src/game/LabSingularityLayout.js';
+import {HISTORICAL_SINGULARITY_ROOMS as SINGULARITY_ROOMS,HISTORICAL_SINGULARITY_SOURCE} from './singularity-v54-room-snapshot.mjs';
 
 export const UPGRADE_VERSION='v49-manufactured-light';
 export const CAPTURE_FRAME_RATES=Object.freeze([4,6,12]);
@@ -21,9 +21,9 @@ export function assertUpgradeInfo(info,expectedRooms=null){
   if(expectedRooms)assert.deepEqual(rooms,expectedRooms.map(({id,name,rule,requires})=>({id,name,rule,requires:[...requires]})));
   if(info.features.tower.rooms!==undefined)assert.deepEqual(info.features.tower.rooms,rooms);
   // The unified stamp does not embed historical castle room arrays. Native
-  // event identities are checked against this exact checkout's definitions;
+  // event identities use the accepted historical eleven-room definitions;
   // no fields are added to or re-labelled in the production metadata.
-  return {...info.features.tower,rooms,uniqueRules:rooms.length,independentHalls:rooms.filter(r=>r.requires.length===0).length,definitionOrigin:'frozen-source'};
+  return {...info.features.tower,rooms,uniqueRules:rooms.length,independentHalls:rooms.filter(r=>r.requires.length===0).length,definitionOrigin:'frozen-source',definitionCommit:HISTORICAL_SINGULARITY_SOURCE.commit};
  }
  assert.equal(info.version,UPGRADE_VERSION);assert.equal(info.artVersion,UPGRADE_VERSION);assert.equal(info.levels,41);
  const tower=info.features.tower;

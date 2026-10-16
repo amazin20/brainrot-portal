@@ -28,7 +28,7 @@ function fixture(){
 test('castle interior relief is completely supported, clears doors and portal apertures, and adds no physical surface',()=>{
  const f=fixture(),registries=Object.fromEntries(['colliders','floors','cameraBlockers','aimBlockers','portalPanels'].map(k=>[k,[...f.game[k]]]));
  installCastleInteriorArt(f.game,f.level);const art=f.level.castleInteriorArt;
- assert.equal(art.diagnostics.wings,11);assert.equal(art.diagnostics.batches,3);
+ assert.equal(art.diagnostics.wings,12);assert.equal(art.diagnostics.batches,3);
  assert.ok(art.diagnostics.instances<800);assert.ok(art.diagnostics.triangles<10000);assert.equal(art.diagnostics.maxProjection,.089);
  for(const m of art.mounts){
   const center=V(...m.center),normal=V(...m.normal),right=V(...m.right);
@@ -46,7 +46,7 @@ test('moving, disabled and non-wall volumes never receive interior relief',()=>{
  const f=fixture();f.game.colliders[0].kinematic=true;f.game.colliders[1].enabled=false;
  f.game.colliders[2].mesh.material=new THREE.MeshStandardMaterial({name:'Portal address / clean ivory ceramic'});
  const fields=castleInteriorFields(f.game,f.level);
- assert.equal(fields.length,19);assert.equal(fields.filter(s=>s.id==='freight').length,0);
+ assert.equal(fields.length,f.level.rooms.size*2-3);assert.equal(fields.filter(s=>s.id==='freight').length,0);
  assert.equal(fields.filter(s=>s.id==='sluice').length,1);
 });
 

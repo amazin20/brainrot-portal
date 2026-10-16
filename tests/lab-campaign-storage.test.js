@@ -1,13 +1,80 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {LabPreferences,CREATIVE_CAMPAIGN_REVISION} from '../src/game/LabPreferences.js';
-import {foundationCampaignStorage,foundationCampaignPrefix,isCampaignV55Path,isCampaignV56Path,isCampaignV57Path,CAMPAIGN_V55_STORAGE_PREFIX,CAMPAIGN_V56_STORAGE_PREFIX,CAMPAIGN_V57_STORAGE_PREFIX,FOUNDATION_STORAGE_PREFIX,CAMPAIGN_PREFERENCE_KEY} from '../src/game/LabCampaignStorage.js';
+import {foundationCampaignStorage,foundationCampaignPrefix,isCampaignV55Path,isCampaignV56Path,isCampaignV57Path,isCampaignV58Path,isCampaignV59Path,CAMPAIGN_V55_STORAGE_PREFIX,CAMPAIGN_V56_STORAGE_PREFIX,CAMPAIGN_V57_STORAGE_PREFIX,CAMPAIGN_V58_STORAGE_PREFIX,CAMPAIGN_V59_STORAGE_PREFIX,FOUNDATION_STORAGE_PREFIX,CAMPAIGN_PREFERENCE_KEY} from '../src/game/LabCampaignStorage.js';
 import {readTower41EntryFlags} from '../src/game/LabTower41Preview.js';
 const key=CAMPAIGN_PREFERENCE_KEY,legacy='nesi.preferences.v8';
 const record=()=>JSON.stringify({campaignRevision:CREATIVE_CAMPAIGN_REVISION,completed:[0,1,39],hints:{1:2},resumeLevel:39,quality:'low',volume:.21,muted:true,tutorial:false});
 function fixture(entries=[]){const data=new Map(entries),writes=[];return{data,writes,storage:{getItem:key=>data.get(key)??null,setItem:(key,value)=>{writes.push(key);data.set(key,value);}}};}
 const candidate=f=>foundationCampaignStorage(f.storage,{pathname:'/campaign-v55/',fullFoundationCampaign:true});
 const current=f=>foundationCampaignStorage(f.storage,{pathname:'/brainrot-portal/campaign-v57/',fullFoundationCampaign:true});
+const expanded=f=>foundationCampaignStorage(f.storage,{pathname:'/brainrot-portal/campaign-v59/',fullFoundationCampaign:true});
+
+test('v59 imports the whole v58 record, reopens only the expanded castle and preserves every historical byte',()=>{
+ const previous={campaignRevision:CREATIVE_CAMPAIGN_REVISION,campaignSequenceRevision:'fifty-rooms-then-castle-v1',
+  completed:Array.from({length:51},(_,index)=>index),hints:{1:2,40:3,50:1},resumeLevel:40,
+  roomRevisions:{16:'cable-supported-architecture-v1',40:'old-castle',50:'spatial-progression51-v1'},
+  quality:'low',volume:.21,muted:true,tutorial:false,retainedExtension:{source:'v58'}};
+ const historical=record(),bytes=JSON.stringify(previous),entries=[FOUNDATION_STORAGE_PREFIX,CAMPAIGN_V55_STORAGE_PREFIX,CAMPAIGN_V56_STORAGE_PREFIX,CAMPAIGN_V57_STORAGE_PREFIX].map(prefix=>[prefix+key,historical]);
+ entries.push([CAMPAIGN_V58_STORAGE_PREFIX+key,bytes]);
+ const f=fixture(entries),adapter=expanded(f),ordinary=previous.completed.filter(index=>index!==40);
+ assert.deepEqual(JSON.parse(adapter.getItem(key)),{...previous,completed:ordinary,hints:{1:2,50:1}});
+ const prefs=new LabPreferences(adapter,{campaignRevision:CREATIVE_CAMPAIGN_REVISION});
+ assert.deepEqual(prefs.value.completed,ordinary);assert.deepEqual(prefs.value.hints,{1:2,50:1});
+ assert.equal(prefs.value.resumeLevel,40);assert.equal(prefs.value.campaignSequenceRevision,previous.campaignSequenceRevision);
+ for(const setting of ['quality','volume','muted','tutorial'])assert.equal(prefs.value[setting],previous[setting]);
+ assert.deepEqual(prefs.roomRevisions,previous.roomRevisions);assert.deepEqual(f.writes,[]);
+ prefs.complete(40);prefs.save({volume:.37});
+ assert.ok(f.writes.every(name=>name===CAMPAIGN_V59_STORAGE_PREFIX+key));
+ for(const [name,value]of entries)assert.equal(f.data.get(name),value);
+ f.data.set(CAMPAIGN_V58_STORAGE_PREFIX+key,'{damaged after import');
+ const again=new LabPreferences(expanded(f),{campaignRevision:CREATIVE_CAMPAIGN_REVISION});
+ assert.deepEqual(again.value.completed,[...ordinary,40]);assert.equal(again.value.volume,.37);
+ assert.deepEqual(again.value.hints,{1:2,50:1});assert.equal(again.readFailed,false);
+});
+
+test('v59 chooses one newest predecessor including its legacy key, then v57, v56, v55 and Foundation',()=>{
+ const prefixes=[CAMPAIGN_V58_STORAGE_PREFIX,CAMPAIGN_V57_STORAGE_PREFIX,CAMPAIGN_V56_STORAGE_PREFIX,CAMPAIGN_V55_STORAGE_PREFIX,FOUNDATION_STORAGE_PREFIX];
+ for(let start=0;start<prefixes.length;start++)for(const previousKey of [key,legacy]){
+  const entries=prefixes.slice(start).map((prefix,index)=>[prefix+(index===0?previousKey:key),JSON.stringify({campaignRevision:CREATIVE_CAMPAIGN_REVISION,completed:[start+3+index,40],hints:{40:3,[start+3+index]:1},resumeLevel:40,volume:.32+index*.1})]);
+  const f=fixture(entries),prefs=new LabPreferences(expanded(f),{campaignRevision:CREATIVE_CAMPAIGN_REVISION});
+  assert.deepEqual(prefs.value.completed,[start+3]);assert.deepEqual(prefs.value.hints,{[start+3]:1});
+  assert.equal(prefs.value.resumeLevel,40);assert.equal(prefs.value.volume,.32);assert.deepEqual(f.writes,[]);
+  prefs.save({volume:.5});assert.deepEqual(f.writes,[CAMPAIGN_V59_STORAGE_PREFIX+key]);
+  for(const [name,bytes]of entries)assert.equal(f.data.get(name),bytes);
+ }
+});
+
+test('v59 own primary and legacy records retain new castle victories; corrupt newest records block all fallback writes',()=>{
+ const own=JSON.stringify({campaignRevision:CREATIVE_CAMPAIGN_REVISION,completed:[19,40],hints:{40:2},volume:.72});
+ for(const ownKey of [key,legacy]){
+  const f=fixture([[FOUNDATION_STORAGE_PREFIX+key,record()],[CAMPAIGN_V58_STORAGE_PREFIX+key,'{damaged v58'],[CAMPAIGN_V59_STORAGE_PREFIX+ownKey,own]]);
+  const prefs=new LabPreferences(expanded(f),{campaignRevision:CREATIVE_CAMPAIGN_REVISION});
+  assert.deepEqual(prefs.value.completed,[19,40]);assert.deepEqual(prefs.value.hints,{40:2});assert.equal(prefs.value.volume,.72);
+  assert.deepEqual(f.writes,[]);
+ }
+ for(const corruptPrefix of [CAMPAIGN_V59_STORAGE_PREFIX,CAMPAIGN_V58_STORAGE_PREFIX])for(const corruptKey of [key,legacy]){
+  const entries=[[FOUNDATION_STORAGE_PREFIX+key,record()],[CAMPAIGN_V57_STORAGE_PREFIX+key,own],[corruptPrefix+corruptKey,'{damaged newest']];
+  const f=fixture(entries),prefs=new LabPreferences(expanded(f),{campaignRevision:CREATIVE_CAMPAIGN_REVISION});
+  assert.equal(prefs.readFailed,true);prefs.save({volume:.9});assert.deepEqual(f.writes,[]);
+  for(const [name,bytes]of entries)assert.equal(f.data.get(name),bytes);
+ }
+});
+
+test('only exact v59 entries use its namespace and old v58 imports keep the old castle completion',()=>{
+ for(const base of ['','/brainrot-portal'])for(const suffix of ['','/','/index.html']){
+  const pathname=base+'/campaign-v59'+suffix;assert.equal(isCampaignV59Path(pathname),true);
+  assert.equal(isCampaignV58Path(pathname),false);assert.equal(foundationCampaignPrefix(pathname),CAMPAIGN_V59_STORAGE_PREFIX);
+  assert.equal(foundationCampaignPrefix(pathname,{fullFoundationCampaign:false}),FOUNDATION_STORAGE_PREFIX);
+ }
+ for(const pathname of ['/campaign-v59/assets/game.js','/other/campaign-v59/','/campaign-v59-old/','/campaign-v59//','/%63ampaign-v59/']){
+  assert.equal(isCampaignV59Path(pathname),false);assert.equal(foundationCampaignPrefix(pathname),FOUNDATION_STORAGE_PREFIX);
+ }
+ const bytes=JSON.stringify({campaignRevision:CREATIVE_CAMPAIGN_REVISION,completed:[2,40],hints:{40:3},volume:.71}),f=fixture([[CAMPAIGN_V57_STORAGE_PREFIX+key,bytes]]);
+ const prefs=new LabPreferences(foundationCampaignStorage(f.storage,{pathname:'/campaign-v58/',fullFoundationCampaign:true}),{campaignRevision:CREATIVE_CAMPAIGN_REVISION});
+ assert.deepEqual(prefs.value.completed,[2,40]);assert.deepEqual(prefs.value.hints,{40:3});prefs.save();
+ assert.deepEqual(f.writes,[CAMPAIGN_V58_STORAGE_PREFIX+key]);assert.equal(f.data.get(CAMPAIGN_V57_STORAGE_PREFIX+key),bytes);
+});
 
 test('v57 imports the newest v56 record once and all later saves leave every predecessor byte intact',()=>{
  const historical=record(),previous=JSON.stringify({campaignRevision:CREATIVE_CAMPAIGN_REVISION,completed:[0,6,44],resumeLevel:44,volume:.63});

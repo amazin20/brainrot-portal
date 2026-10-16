@@ -2,7 +2,8 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import {createHash} from 'node:crypto';
-import {SINGULARITY_ROOMS} from '../src/game/LabSingularityLayout.js';
+import {SINGULARITY_ROOMS as CURRENT_SINGULARITY_ROOMS} from '../src/game/LabSingularityLayout.js';
+import {HISTORICAL_SINGULARITY_ROOMS as SINGULARITY_ROOMS,HISTORICAL_SINGULARITY_SOURCE} from '../scripts/lib/singularity-v54-room-snapshot.mjs';
 import {assertUpgradeInfo,assertUpgradeEvidence} from '../scripts/lib/singularity-upgrade-proof.mjs';
 import {parseTap,verifyRuntimeModels,assertPreviewSaveIsolation} from '../scripts/qa-tower41-next-cell-source.mjs';
 import {TOWER41_PREVIEW_LEGACY_STORAGE_PREFIXES} from '../src/game/LabTower41Preview.js';
@@ -11,10 +12,19 @@ import {oldSavePrefixes,qualificationKey} from '../scripts/qa-tower41-ratchet-br
 const rooms=SINGULARITY_ROOMS.map(({id,name,rule,requires})=>({id,name,rule,requires:[...requires]}));
 function current(){return {commit:process.env.BUILD_COMMIT||'a'.repeat(40),version:'v54-unified-campaign',artVersion:'v54-unified-campaign',levels:51,edition:'foundation',features:{tower:{level:41,stages:11,checkpoints:false},foundation:{rooms:Array.from({length:51},(_,i)=>i+1)}}};}
 function legacy(){const info=current();info.version=info.artVersion='v49-manufactured-light';info.levels=41;info.features.foundation.rooms=Array.from({length:41},(_,i)=>i+1);Object.assign(info.features.tower,{rooms,uniqueRules:11,independentHalls:rooms.filter(r=>r.requires.length===0).length});return info;}
-test('unified native metadata checks the current frozen definitions without changing stamped metadata',()=>{
+test('historical unified native metadata checks accepted eleven-room definitions without changing its stamp',()=>{
  const info=current(),original=structuredClone(info),verified=assertUpgradeInfo(info,SINGULARITY_ROOMS);
- assert.deepEqual(info,original);assert.deepEqual(verified.rooms,rooms);assert.equal(verified.definitionOrigin,'frozen-source');
+ assert.deepEqual(info,original);assert.deepEqual(verified.rooms,rooms);assert.equal(verified.definitionOrigin,'frozen-source');assert.equal(verified.definitionCommit,HISTORICAL_SINGULARITY_SOURCE.commit);
  for(const mutate of [i=>i.levels=41,i=>i.artVersion='v49-manufactured-light',i=>i.edition='archive',i=>i.features.tower.stages=500,i=>i.features.tower.checkpoints=true,i=>i.features.foundation.rooms.pop(),i=>i.features.tower.rooms=[...rooms].reverse()]){const bad=current();mutate(bad);assert.throws(()=>assertUpgradeInfo(bad));}
+});
+test('historical eleven-room proof cannot accept the expanded live castle or a v59 stamp',()=>{
+ assert.equal(SINGULARITY_ROOMS.length,11);assert.ok(CURRENT_SINGULARITY_ROOMS.length>11);assert.notEqual(SINGULARITY_ROOMS,CURRENT_SINGULARITY_ROOMS);
+ assert.equal(HISTORICAL_SINGULARITY_SOURCE.commit,'f73063b77461be70d7039e2c767fa6df4467ff3b');
+ assert.equal(HISTORICAL_SINGULARITY_SOURCE.blob,'91ac64aa28910d47cbda044cdcb39331d724094f');assert.equal(createHash('sha256').update(JSON.stringify(rooms)).digest('hex'),'93642555205c59ae5dfa41221008c1d70deda137fa980b235be79c2a0b355bf5');
+ assert.ok(Object.isFrozen(SINGULARITY_ROOMS)&&SINGULARITY_ROOMS.every(r=>Object.isFrozen(r)&&Object.isFrozen(r.at)&&Object.isFrozen(r.requires)));
+ assert.throws(()=>assertUpgradeInfo(current(),CURRENT_SINGULARITY_ROOMS));
+ const currentStamp=current();currentStamp.version=currentStamp.artVersion='v59-castle-impulse';currentStamp.features.tower.stages=12;currentStamp.features.tower.level=51;assert.throws(()=>assertUpgradeInfo(currentStamp));
+ const relabelled=current();relabelled.features.tower.stages=12;relabelled.features.tower.rooms=CURRENT_SINGULARITY_ROOMS.map(({id,name,rule,requires})=>({id,name,rule,requires:[...requires]}));assert.throws(()=>assertUpgradeInfo(relabelled));
 });
 test('historical v49 native metadata retains its separate embedded-definition contract',()=>{
  assert.deepEqual(assertUpgradeInfo(legacy(),SINGULARITY_ROOMS).rooms,rooms);const bad=legacy();delete bad.features.tower.rooms;assert.throws(()=>assertUpgradeInfo(bad));

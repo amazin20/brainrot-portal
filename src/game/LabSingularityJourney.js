@@ -61,7 +61,7 @@ export async function runSingularityJourney(game,{onMilestone=()=>{},stopAfter=n
   if(i>20&&Math.abs(q.x)<tolerance&&Math.abs(q.y)<tolerance)return;
   game.yaw-=THREE.MathUtils.clamp(q.x,-1,1)*.21;game.pitch=THREE.MathUtils.clamp(game.pitch+THREE.MathUtils.clamp(q.y,-1,1)*.19,-1.15,1.15);await frame();
  }throw Error('Cannot aim at '+p.toArray());}
- async function shoot(slot,p){check(!game.heldCube,'Set companion down before firing');p=[...(p.toArray?.()??p)];const panel=game.portalPanels.find(a=>(a.userData.portalFrame?.()?.center??a.userData.center).distanceTo(V(...p))<.08);if(panel&&Math.abs((panel.userData.portalFrame?.()?.normal??panel.userData.normal).y)<.1)p[1]-=.4;await look(p);check(game.firePortal(slot),'Portal input rejected');report.shots++;report.actions.push({kind:'shoot',slot,...S()});await until(()=>!game.portalShots.queue.length&&!game.portalShots.active.length,4,'Unresolved shot');check(game.portalShots.lastImpact?.valid,'Invalid portal impact '+JSON.stringify(game.portalShots.lastImpact));}
+ async function shoot(slot,p,{center=false}={}){check(!game.heldCube,'Set companion down before firing');p=[...(p.toArray?.()??p)];const panel=game.portalPanels.find(a=>(a.userData.portalFrame?.()?.center??a.userData.center).distanceTo(V(...p))<.08);if(!center&&panel&&Math.abs((panel.userData.portalFrame?.()?.normal??panel.userData.normal).y)<.1)p[1]-=.4;await look(p);check(game.firePortal(slot),'Portal input rejected');report.shots++;report.actions.push({kind:'shoot',slot,...S()});await until(()=>!game.portalShots.queue.length&&!game.portalShots.active.length,4,'Unresolved shot');check(game.portalShots.lastImpact?.valid,'Invalid portal impact '+JSON.stringify(game.portalShots.lastImpact));}
  async function use(id,{approach=true,side=null}={}){const t=level.terminals.find(t=>t.id===id);check(t,'Unknown console '+id);if(approach)await walk([t.position.x,t.position.y-1,t.position.z+(side??(game.playerPosition.z<t.position.z?-1:1))*1.5]);check(!game.heldCube,'Hands occupied at '+id);const beforeActuator=t.actuator?.rotation.x;check(game.interact(),'Interaction rejected '+id+' at '+game.playerPosition.toArray());check(!game.heldCube,'E picked up the companion instead of operating '+id);if(t.actuator)check(t.actuator.rotation.x!==beforeActuator,'E operated a different console instead of '+id);report.interactions++;report.actions.push({kind:'use',id,...S()});await wait(.28);}
  async function pickup(){for(let i=0;i<4&&!game.heldCube;i++){
   const p=game.cargo.position;if(game.playerPosition.clone().add(V(0,1.1,0)).distanceTo(p)>1.9)await walk([p.x,game.playerPosition.y,p.z+1.1]);
@@ -70,7 +70,7 @@ export async function runSingularityJourney(game,{onMilestone=()=>{},stopAfter=n
  async function dropAt(p,dir=[0,-1]){await walk([p[0]-dir[0]*3,p[1],p[2]-dir[1]*3],{sprint:false});await walk([p[0]-dir[0]*.85,p[1],p[2]-dir[1]*.85],{sprint:false});await look([p[0]+dir[0]*3,p[1]+1,p[2]+dir[1]*3]);await wait(.4);check(game.heldCube&&game.interact(),'Drop failed');report.interactions++;await wait(1);}
  async function enter(panel){const f=panel.frame();check(Math.abs(f.normal.y)<.1,'Use falling input for floor portals');await walk(f.center.clone().addScaledVector(f.normal,1.6).setY(f.center.y-2.4).toArray());const old=game.teleportCount;
   for(let i=0;i<240&&game.teleportCount===old;i++){worldMove(-f.normal.x,-f.normal.z);await frame();}stop();check(game.teleportCount>old,'Portal crossing failed');await wait(.2);}
- async function jump(){check(game.playerGrounded,'Jump requires grounded feet');game.input.jumpQueued=true;report.jumps++;await frame();}
+ async function jump({coyote=false}={}){check(game.playerGrounded||(coyote&&game.coyoteTime>0),'Jump requires grounded feet');game.input.jumpQueued=true;report.jumps++;await frame();}
  function mark(name,extra={}){const s={name,...S(),...extra};report.milestones.push(s);onMilestone(s,game);}
  const P=(id,x,z=0,y=0)=>level.rooms.get(id).P(x,z,y),st=id=>level.machines.get(id).state;
  const infrastructure=[...level.edges];
@@ -185,9 +185,62 @@ export async function runSingularityJourney(game,{onMilestone=()=>{},stopAfter=n
   },
   async inertia(){await travel(level.rooms.get('inertia').door);await walk(P('inertia',30,12));await walk(P('inertia',30,16));await walk(P('inertia',-22,16));await walk(P('inertia',-22,12));await walk(P('inertia',-22,-4));await shoot(0,st('inertia').intake.center);await walk(P('inertia',-22,12));await walk(P('inertia',-10,12));await shoot(1,st('inertia').outlet.center);await walk(P('inertia',-27,10));await walk(P('inertia',-27,-14,12));await walk(P('inertia',-1,-14,12));await walk(P('inertia',-1,-11.35,12),{sprint:false,tolerance:.06});const before=game.teleportCount;
    for(let i=0;i<8*60&&game.teleportCount===before;i++){if(game.playerGrounded)worldMove(0,.42);else{const entry=game.portals.portals[0].position,p=game.playerPosition,v=game.playerVelocity,steer=V((4*(entry.x-p.x)-3*v.x)/2.8,0,(4*(entry.z-p.z)-3*v.z)/2.8);if(steer.length()>1)steer.normalize();worldMove(steer.x,steer.z);}await frame();}stop();check(game.teleportCount>before,'Real falling aperture missed');await until(()=>game.playerGrounded,6,'Momentum crossing did not land');await walk(P('inertia',21,0,-3.5));await until(()=>level.getTowerMetrics().solvedIds.includes('inertia'),2,'Receiver balcony not reached');await walk(P('inertia',22,3,-3.5));await until(()=>st('inertia').returnProgress>.99,3,'Receiver did not release the return door');await walk(P('inertia',22,13));await leave('inertia',[P('inertia',30,13),P('inertia',30,0)]);},
+  async impulse(){
+   const machine=st('impulse'),cell=machine.cell;
+   // An independent wing returns the original to the gallery where this
+   // particular order left it. The same routine therefore works before or
+   // after the magnetic transfer changes the companion's storey.
+   const hubs=infrastructure.filter(([a,b])=>a[0]===0&&b[0]===0&&a[1]===b[1]&&Math.min(a[2],b[2])<=54&&Math.max(a[2],b[2])>=54)
+    .map(([a])=>[0,a[1],54]).sort((a,b)=>V(...a).distanceToSquared(game.cargo.position)-V(...b).distanceToSquared(game.cargo.position));
+   check(hubs.length&&Math.abs(hubs[0][1]-game.cargo.position.y)<1,'Original companion must start on its actual supported gallery');
+   const returnHub=hubs[0];
+   await travel(returnHub);await pickup();await travel(level.rooms.get('impulse').door);
+   await walk(P('impulse',-14,-3));await dropAt(P('impulse',-14,-3));
+   await walk(P('impulse',-14,-8));await shoot(0,machine.intake.center);
+   // The high, narrow founded slit admits the ordinary aimed shot but has
+   // no capsule or cargo sized opening into the sealed impact chamber.
+   await walk(P('impulse',3,-10),{sprint:false,tolerance:.025});await shoot(1,machine.outlet.center,{center:true});
+   await walk(P('impulse',-14,-8));await walk(P('impulse',-14,-3));await pickup();
+   await walk(P('impulse',-19,-2));await walk(P('impulse',-19,-18,4.5));
+   await walk(P('impulse',-8,-18,9));await walk(P('impulse',-8,-12.9,9),{sprint:false,tolerance:.025});
+   await wait(.4);check(game.heldCube&&game.interact(),'Original companion gravity release failed');report.interactions++;
+   mark('Original companion released into impulse fall');
+   await until(()=>cell.impacted&&cell.open,24,'Original free cargo did not drive and settle the spring carriage');
+   mark('Original companion crosses bistable spring barrier',{physicsProof:structuredClone(cell.diagnostics())});
+   // Return down the real stairs. The west service bank reaches the shutter
+   // without passing through either the firing slit or the cargo exit.
+   await walk(P('impulse',-8,-18,9));await walk(P('impulse',-19,-18,4.5));await walk(P('impulse',-19,-2));
+   await walk(P('impulse',-19,7));await walk(P('impulse',7,7));await walk(P('impulse',7,12));
+   await walk(P('impulse',3,12));await walk(P('impulse',3,20));await walk(P('impulse',7,20));
+   await walk(P('impulse',7,13,3.55));await walk(P('impulse',7,10.8,3.55),{sprint:false});
+   await jump();worldMove(0,-1);for(let i=0;i<25;i++)await frame();stop();
+   await until(()=>game.playerGrounded,3,'Actual service bridge gap crossing');await walk(P('impulse',7,5,3.55));
+   const cargoX=game.cargo.position.x-level.rooms.get('impulse').def.at[0],trayX=cell.trayPart.mesh.position.x-level.rooms.get('impulse').def.at[0];
+   const x=cargoX<trayX?Math.min(cargoX+1.1,trayX-.15):Math.max(cargoX-1.1,trayX-.8);
+   await walk(P('impulse',x,4.5,3.55),{sprint:false});
+   worldMove(0,-1);for(let i=0;i<120&&game.playerPosition.z>P('impulse',0,3.55)[2];i++)await frame();
+   mark('Impulse actual scoop boarding departure');await jump();worldMove(0,-.65);let airborne=false;
+   for(let i=0;i<120;i++){await frame();airborne||=!game.playerGrounded;if(airborne&&game.playerGrounded)break;}stop();
+   check(airborne&&game.playerGrounded&&Math.abs(game.playerPosition.y-P('impulse',0,0,2.8)[1])<.12&&game.playerPosition.z<P('impulse',0,.85)[2],'Actual impulse scoop landing '+JSON.stringify(S()));
+   await pickup();mark('Original companion recovered from impulse scoop');
+   await until(()=>game.playerGrounded&&Math.abs(game.playerPosition.y-P('impulse',0,0,2.8)[1])<.12,5,'Actual unloaded scoop support before carrying return');
+   game.input.keys.add('ShiftLeft');worldMove(0,1);
+   for(let i=0;i<90&&game.playerVelocity.z<2.5&&game.playerPosition.z<P('impulse',0,.35)[2];i++)await frame();
+   mark('Impulse actual scoop return departure',{grounded:game.playerGrounded,coyoteTime:game.coyoteTime,velocity:game.playerVelocity.toArray()});
+   await jump({coyote:true});worldMove(0,.75);airborne=false;let upward=false;
+   for(let i=0;i<120;i++){await frame();if(!upward&&game.playerVelocity.y>3){upward=true;mark('Impulse actual scoop return takeoff',{grounded:game.playerGrounded,velocity:game.playerVelocity.toArray()});}airborne||=!game.playerGrounded;if(airborne&&game.playerGrounded)break;}stop();
+   check(upward&&airborne&&game.playerGrounded&&game.playerPosition.z>P('impulse',0,1.8)[2],'Original companion leaves actual scoop for founded apron '+JSON.stringify(S()));
+   await walk(P('impulse',x,3.5,3.55));await walk(P('impulse',7,5,3.55));await walk(P('impulse',7,9.2,3.55),{sprint:false});
+   await jump();game.input.keys.add('ShiftLeft');worldMove(0,1);for(let i=0;i<30;i++)await frame();stop();
+   await until(()=>game.playerGrounded,3,'Original companion service bridge return');await walk(P('impulse',7,13,3.55));
+   await walk(P('impulse',7,20));await walk(P('impulse',-6,20));await dropAt(machine.receiver);
+   await walk(machine.contact);await until(()=>level.getTowerMetrics().solvedIds.includes('impulse'),4,'Original recovered cargo and physical rear contact did not close the impulse receiver');
+   await walk(P('impulse',-6,17.2));await pickup();await walk(P('impulse',3,17));await walk(P('impulse',3,12));await walk(P('impulse',7,12));await walk(P('impulse',7,7));
+   await leave('impulse',[P('impulse',-19,7),P('impulse',-19,0)]);await travel(returnHub);await dropAt([2,returnHub[1],54]);
+  },
   async crown(){await travel([0,36,54]);await pickup();await travel([0,72,54]);await travel(level.rooms.get('crown').door);await walk(P('crown',12,13));await dropAt(P('crown',12,13));await walk(P('crown',13,7));await shoot(0,st('crown').intake.center);await walk(P('crown',12,-10));await shoot(1,st('crown').outlet.center);await walk(P('crown',12,13));await pickup();await enter(st('crown').intake);await dropAt(st('crown').socket);await walk(st('crown').contact);await until(()=>game.state==='won',3,'Independent crown loads not closed');},
  };
- try{const sequence=order??['freight','sluice','optics','hoist','archive','flywheel','magnet','migrant','pendulum','inertia','crown'];for(const id of sequence){check(routines[id],'Unknown route '+id);mark('Start '+id);await routines[id]();check(level.getTowerMetrics().solvedIds.includes(id),'Missing solved mechanism '+id);mark('Solved '+id,id==='pendulum'?{physicsProof:structuredClone(level.getTowerMetrics().events.find(e=>e.id==='pendulum').proof)}:{});await globalThis.__SINGULARITY_FLUSH__?.();if(stopAfter===id){report.partial=true;break;}}
+ try{const sequence=order??['freight','sluice','optics','hoist','archive','flywheel','magnet','migrant','pendulum','inertia','impulse','crown'];for(const id of sequence){check(routines[id],'Unknown route '+id);mark('Start '+id);await routines[id]();check(level.getTowerMetrics().solvedIds.includes(id),'Missing solved mechanism '+id);mark('Solved '+id,['pendulum','impulse'].includes(id)?{physicsProof:structuredClone(level.getTowerMetrics().events.find(e=>e.id===id).proof)}:{});await globalThis.__SINGULARITY_FLUSH__?.();if(stopAfter===id){report.partial=true;break;}}
   report.pass=!report.partial&&game.state==='won';report.seconds=report.physicsSteps/120;report.teleports=game.teleportCount;report.metrics=level.getTowerMetrics();report.sameCompanion=game.cargo===companion&&game.physics.cargoBody.id===body;return report;
  }catch(error){report.seconds=report.physicsSteps/120;report.failure={error:String(error),...S()};report.metrics=level.getTowerMetrics();error.singularityReport=report;throw error;}
  finally{stop();game.input.getMove=original.move;game.resetRun=original.reset;game.respawn=original.respawn;game.physics.resetCargo=original.cargoReset;await globalThis.__SINGULARITY_FLUSH__?.();}

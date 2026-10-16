@@ -1,12 +1,14 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import http from 'node:http';
+import {RELEASE_VERSION} from '../../src/game/ReleaseIdentity.js';
+const activeNamespace='campaign-'+RELEASE_VERSION.split('-')[0];
 const types={'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.json':'application/json','.glb':'model/gltf-binary','.wasm':'application/wasm','.webp':'image/webp','.jpg':'image/jpeg','.png':'image/png','.svg':'image/svg+xml','.ogg':'audio/ogg','.mp3':'audio/mpeg'};
 
 /** Serve the same frozen package at its candidate subpath. There is no source
  * compilation, development-server fallback, redirect or substituted asset. */
-export async function serveFrozenCampaign(directory,{port=0,namespace='campaign-v58'}={}){
- if(!/^campaign-v(?:55|56|57|58)$/.test(namespace))throw new Error('Unknown frozen campaign mount');
+export async function serveFrozenCampaign(directory,{port=0,namespace=activeNamespace}={}){
+ if(!/^campaign-v(?:55|56|57|58|59)$/.test(namespace))throw new Error('Unknown frozen campaign mount');
  const root=path.resolve(directory),prefixes=[`/${namespace}/`,`/brainrot-portal/${namespace}/`];
  const server=http.createServer((req,res)=>{
   try{
