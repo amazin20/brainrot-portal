@@ -3,7 +3,15 @@ import {V} from './LabSingularityKit.js';
 const check=(p,m)=>{if(!p)throw Error(m);},UP=V(0,1,0),angle=x=>Math.atan2(Math.sin(x),Math.cos(x));
 /** Read-only route planning plus ordinary movement, E, jump and aimed shots.
  * The driver never sets an actor position, velocity, portal or puzzle signal. */
-export async function runSingularityJourney(game,{onMilestone=()=>{},stopAfter=null,order=null,onFrame=null,annexVariant='direct'}={}){
+/** Optional observation uses only the same ordinary look/wait inputs as the route.
+ * The default route never calls this helper and retains its original clock. */
+export async function observeSingularityReadability(hook,phase,{look,wait,snapshot}){
+ if(hook==null)return;
+ if(typeof hook!=='function'||typeof look!=='function'||typeof wait!=='function'||typeof snapshot!=='function')throw Error('Ordinary readability callback required');
+ const freeze=value=>{if(value&&typeof value==='object'){Object.values(value).forEach(freeze);Object.freeze(value);}return value;};
+ await hook(Object.freeze({phase,look,wait,snapshot:freeze(structuredClone(snapshot()))}));
+}
+export async function runSingularityJourney(game,{onMilestone=()=>{},stopAfter=null,order=null,onFrame=null,annexVariant='direct',onReadabilityPhase=null}={}){
  const level=game.firstLevel;check(level.singularity&&game.state==='playing','Start the new Tower through Play');
  check(level.completedStages===0,'A route must start with an untouched attempt');
  const original={move:game.input.getMove,reset:game.resetRun,respawn:game.respawn,cargoReset:game.physics.resetCargo};
@@ -159,14 +167,17 @@ export async function runSingularityJourney(game,{onMilestone=()=>{},stopAfter=n
    await walk(P('pendulum',-11.5,-.8),{followFloor:true,sprint:false});await walk(P('pendulum',-8,-.8),{followFloor:true,sprint:false});
    await walk(P('pendulum',-4.7,-.8),{followFloor:true,sprint:false});await walk(P('pendulum',0,-.8));
    await until(()=>machine.lowerCrossing.complete,2,'Actual supported lower deck traversal was not observed');mark('Unloaded lower bridge crossed on actual deck support');
+   if(onReadabilityPhase)await observeSingularityReadability(onReadabilityPhase,'upper-before-boarding',{look,wait,snapshot:S});
    await until(()=>machine.yb<.15,18,'Pressure-driven upper car boarding window');await walk(P('pendulum',7,0),{followFloor:true});
    await walk(P('pendulum',12,-1.3,6),{followFloor:true});await walk(P('pendulum',12,.25,6),{followFloor:true,sprint:false});
    await until(()=>game.playerGrounded&&machine.yb>5.9&&machine.upperCell.liftBody.velocity.y>.5,18,'Grounded rising car departure window');
    game.input.keys.add('ShiftLeft');worldMove(0,1);
    for(let i=0;i<18&&game.playerPosition.z<P('pendulum',0,1.1)[2]&&game.playerVelocity.z<4.2;i++)await frame();
    await jump();worldMove(0,1);for(let i=0;i<70;i++)await frame();stop();await until(()=>game.playerGrounded&&game.playerPosition.y>41.8,2,'Upper return landing');
+   if(onReadabilityPhase)await observeSingularityReadability(onReadabilityPhase,'upper-after-ride',{look,wait,snapshot:S});
    await walk(P('pendulum',15,9.5,6));await until(()=>machine.yb>6.4,18,'Physical swing-catch clearance window');await use('pendulum:catch-b');
    await until(()=>level.getTowerMetrics().solvedIds.includes('pendulum'),6,'Actual pressure lift ride and upper contact shelf did not retain the car');
+   if(onReadabilityPhase)await observeSingularityReadability(onReadabilityPhase,'upper-contact-retained',{look,wait,snapshot:S});
    await walk(P('pendulum',19,11,6));await walk(P('pendulum',19,-13));await until(()=>machine.stairProgress>.99,3,'Upper catch did not open return stair');
    await walk(P('pendulum',19,-19));await walk(P('pendulum',-10,-19));await walk(P('pendulum',-10,-10));await pickup();
    await walk(P('pendulum',-10,-19));await leave('pendulum',[P('pendulum',24,-19),P('pendulum',24,0)]);

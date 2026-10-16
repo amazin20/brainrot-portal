@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { LabCameraBroadPhase } from './LabCameraBroadPhase.js';
 import { portalTransformMatrix, portalBacksCollider } from './LabPortals.js';
+import {MECHANISM_CAMERA_BUDGET, MECHANISM_CAMERA_FOV, MECHANISM_CAMERA_MAX_REAR, MECHANISM_CAMERA_OFFSETS, measureMechanismFrame} from './LabMechanismCamera.js';
 
 const UP = new THREE.Vector3(0, 1, 0);
 const IDENTITY = new THREE.Quaternion();
@@ -97,6 +98,14 @@ export class LabCamera {
     this.foundation20Framing = false;
     this.upwardBackoff = 0;
     this.upwardBackoffVelocity = 0;
+    this.mechanismFramingEnabled = this.mechanismFramingActive = false;
+    this.mechanismCurrentBlocker = this.mechanismCurrentBlockersValid = null;
+    this.mechanismEscape = null;
+    this.mechanismHadObstruction = false;
+    this.mechanismSubjectRotation = null;
+    this.mechanismLensGoal = 0;
+    this.mechanismStats = {candidateBudget: MECHANISM_CAMERA_BUDGET, candidates: 0, cacheHit: false};
+    this.queryStats = {sweeps: 0, rays: 0, candidateMeshes: 0};
   }
 
   configureEpic({ enabled = this.epicMode, dynamicFov = this.dynamicFov } = {}) {
@@ -113,13 +122,24 @@ export class LabCamera {
     return this;
   }
 
+  configureMechanismFraming({enabled = false, currentBlocker = null, currentBlockersValid = null} = {}) {
+    this.mechanismFramingEnabled = !!enabled;
+    this.mechanismFramingActive = false;
+    this.mechanismCurrentBlocker = currentBlocker;
+    this.mechanismCurrentBlockersValid = currentBlockersValid;
+    this.mechanismEscape = null;this.mechanismLensGoal = 0;this.mechanismHadObstruction = false;
+    return this;
+  }
+
   updateCurrentBlockers() {
-    if (!this.foundation20Framing || !this.currentBlocker) { this.queryBlockers = this.blockers; return; }
+    const provider = this.foundation20Framing ? this.currentBlocker
+      : this.mechanismFramingActive ? this.mechanismCurrentBlocker : null;
+    if (!provider) { this.queryBlockers = this.blockers; return; }
     // These private query meshes never enter the scene or any aim/physics
     // collection. Keep every original blocker and map each valid owned proxy
     // to its exact current physical Box; all original hit policies still run.
     this.queryBlockers = this.blockers.map(source => {
-      const descriptor = this.currentBlocker(source);
+      const descriptor = provider(source);
       if (!descriptor) return source;
       let mesh = this.currentBlockerMeshes.get(source);
       if (!mesh) {
@@ -149,6 +169,7 @@ export class LabCamera {
 
   reset(target, yaw = 0, pitch = -0.2) {
     this.foundation20EscapeOffset = null;
+    this.mechanismEscape = null;this.mechanismLensGoal = 0;this.mechanismHadObstruction = false;
     this.broadPhase.clear(); this.rayHits.length = 0;
     this.focus.copy(target).y += 1.32;
     this.lastTarget.copy(target);
@@ -185,6 +206,8 @@ export class LabCamera {
    * The returned yaw/pitch replace the game's orbit controls exactly once. */
   applyPortalTransform(entryOrMatrix, exit, { target, yaw = this.yaw, pitch = this.pitch, clipExit = true } = {}) {
     this.foundation20EscapeOffset = null;
+    this.mechanismEscape = null;
+    this.mechanismHadObstruction = false;
     const matrix = entryOrMatrix?.isMatrix4 ? entryOrMatrix : portalTransformMatrix(entryOrMatrix, exit);
     const rotation = new THREE.Quaternion().setFromRotationMatrix(matrix).normalize();
     const control = rotation.clone().multiply(this.portalOrientation).multiply(
@@ -231,7 +254,13 @@ export class LabCamera {
   }
 
   update({ dt, target, yaw, pitch, velocity, aiming = false, teleported = false,
-    epic = this.epicMode, dynamicFov = this.dynamicFov, rampFraming = false }) {
+    epic = this.epicMode, dynamicFov = this.dynamicFov, rampFraming = false,
+    mechanismFraming = false, subjectRotation = null }) {
+    this.mechanismFramingActive = Boolean(this.mechanismFramingEnabled && mechanismFraming && !this.foundation20Framing);
+    this.mechanismSubjectRotation = subjectRotation;
+    this.mechanismStats = {candidateBudget: MECHANISM_CAMERA_BUDGET, candidates: 0, cacheHit: false};
+    this.queryStats = {sweeps: 0, rays: 0, candidateMeshes: 0};
+    if (!this.mechanismFramingActive) {this.mechanismEscape = null;this.mechanismLensGoal = 0;this.mechanismHadObstruction = false;}
     this.rampFraming = rampFraming;
     this.epicMode = !!epic;
     this.dynamicFov = dynamicFov !== false;
@@ -293,10 +322,11 @@ export class LabCamera {
     [this.upwardBackoff, this.upwardBackoffVelocity] = spring(
       this.upwardBackoff, this.upwardBackoffVelocity, upwardFraming * 13, 20, step,
     );
-    const fovGoal = (epic
+    let fovGoal = (epic
       ? (this.dynamicFov ? (aiming ? 64 + epicSpeed * 6 : 68 + epicSpeed * 14) : 68)
       : aiming ? 59.5 : 62 + THREE.MathUtils.clamp((speed - 4) * 0.4, 0, 2.2))
       + upwardFraming * 20;
+    if (this.mechanismFramingActive) fovGoal = Math.min(MECHANISM_CAMERA_FOV, Math.max(fovGoal, this.mechanismLensGoal));
     const oldFov = this.camera.fov;
     [this.camera.fov, this.fovVelocity] = spring(oldFov, this.fovVelocity, fovGoal,
       this.fullBodyFraming && upwardFraming > 0 ? 12 : 7, step);
@@ -334,7 +364,7 @@ export class LabCamera {
     // Retreat in the transported horizontal plane instead of driving the
     // lens through the ground. This plane follows the same rigid portal
     // mapping as forward/up, preserving the live lens at dt=0 on passage.
-    if (this.fullBodyFraming && this.upwardBackoff > .00001) {
+    if (this.fullBodyFraming && !this.mechanismFramingActive && this.upwardBackoff > .00001) {
       const horizontal = this.forward.clone().addScaledVector(this.viewUp, -this.forward.dot(this.viewUp)).normalize();
       this.desired.addScaledVector(horizontal, -this.upwardBackoff);
     }
@@ -356,6 +386,7 @@ export class LabCamera {
     // when crossing a doorway: a lagging focus must never see through its wall.
     this.obstructed = this.constrain(this.focus, this.desired);
     this.obstructed = this.constrain(this.playerPivot, this.desired) || this.obstructed;
+    if (this.mechanismFramingActive && this.obstructed) this.mechanismHadObstruction = true;
     // A straight retracting boom can end inside the head/backpack at a wall.
     // Start routing it upward before it reaches the body, and sweep every
     // alternative against the same walls and near-plane volume. This is camera
@@ -364,7 +395,11 @@ export class LabCamera {
     this.lookPoint.copy(this.focus).addScaledVector(this.forward, 16);
     const avoidGoal = new THREE.Vector3();
     let escapePosition = null;
-    if ((directDistance < (this.avoidanceActive ? 4.1 : 3.1)
+    if (this.mechanismFramingActive && step > 0) {
+      escapePosition = this.mechanismEscapePosition();
+      if (escapePosition) {avoidGoal.copy(escapePosition).sub(this.desired);this.avoidanceActive = true;}
+      else this.avoidanceActive = false;
+    } else if (!this.mechanismFramingActive && (directDistance < (this.avoidanceActive ? 4.1 : 3.1)
       || this.camera.position.distanceTo(this.playerPivot) < 3.1
       || ((this.rampFraming || this.fullBodyFraming) && this.framingPenalty(this.desired) > .005)) && this.blockers.length) {
       const direct = this.desired.clone().sub(this.playerPivot);
@@ -457,7 +492,8 @@ export class LabCamera {
     }
     if (this.avoidance.lengthSq() > .00001) {
       this.desired.add(this.avoidance);
-      this.constrain(this.playerPivot, this.desired, this.foundation20Framing && escapePosition ? 120 : this.camera.fov);
+      this.constrain(this.playerPivot, this.desired, this.mechanismFramingActive ? Math.max(MECHANISM_CAMERA_FOV, this.camera.fov)
+        : this.foundation20Framing && escapePosition ? 120 : this.camera.fov);
     }
     const safeLength = this.desired.distanceTo(this.focus);
     if (safeLength < this.distance) {
@@ -478,7 +514,7 @@ export class LabCamera {
     // Validate the actual intermediate eye against that same finite cap now,
     // so a later wider near-plane sweep cannot collapse it into the actor.
     const pulledIn = this.constrain(this.playerPivot, this.camera.position,
-      this.foundation20Framing && this.obstructed ? 120 : this.camera.fov);
+      this.mechanismFramingActive ? Math.max(MECHANISM_CAMERA_FOV, this.camera.fov) : this.foundation20Framing && this.obstructed ? 120 : this.camera.fov);
     this.obstructed = this.obstructed || pulledIn;
     if (pulledIn) {
       this.distance = this.camera.position.distanceTo(this.focus);
@@ -506,11 +542,11 @@ export class LabCamera {
     const tilt = this.viewUp.angleTo(UP);
     // Other portal rotations can invert the horizon during an airborne shot;
     // their preserved aim must not receive this quarter-turn correction.
-    if (step > 0 && Math.abs(tilt - Math.PI / 2) < .2
+    if (!this.mechanismFramingActive && step > 0 && Math.abs(tilt - Math.PI / 2) < .2
       && this.framingPenalty(this.camera.position) > .02)
       this.portalFramingActive = true;
     if (tilt < .1) this.portalFramingActive = false;
-    if (step > 0 && this.portalFramingActive) {
+    if (!this.mechanismFramingActive && step > 0 && this.portalFramingActive) {
       const assist = .92 * THREE.MathUtils.smoothstep(tilt, .1, 1.3);
       if (assist > 0) {
         this.portalFramingPoint.copy(this.playerPivot).addScaledVector(this.forward, .8);
@@ -533,9 +569,76 @@ export class LabCamera {
       this.camera.lookAt(this.lookPoint);
       this.camera.updateMatrixWorld();
     }
-    this.fitSilhouetteLens(step);
+    if (!this.mechanismFramingActive) this.fitSilhouetteLens(step);
+    if (this.mechanismFramingActive && step > 0) {
+      const frame = this.measureMechanismFrame(this.camera.position);
+      this.mechanismLensGoal = Math.min(MECHANISM_CAMERA_FOV, Math.max(62, frame.neededFov + 1));
+      this.mechanismStats.final = frame;
+    }
     return this;
     } finally { this.broadPhase.end(); this.rayHits.length = 0; }
+  }
+
+  measureMechanismFrame(eye, fov = this.camera.fov) {
+    return measureMechanismFrame({eye, target: this.lastTarget, rotation: this.mechanismSubjectRotation,
+      lookPoint: this.lookPoint, up: this.viewUp, aspect: this.camera.aspect, near: this.camera.near, fov});
+  }
+
+  mechanismEscapePosition() {
+    const stats = this.mechanismStats;
+    const valid = this.mechanismCurrentBlockersValid?.() !== false;
+    stats.currentBodiesValid = valid;
+    const recipes = this.mechanismEscape && valid
+      ? [this.mechanismEscape, ...MECHANISM_CAMERA_OFFSETS.filter(r => r !== this.mechanismEscape)] : MECHANISM_CAMERA_OFFSETS;
+    const fitted = eye => {
+      const frame = this.measureMechanismFrame(eye);
+      return this.measureMechanismFrame(eye, Math.min(MECHANISM_CAMERA_FOV, Math.max(62, frame.neededFov + 1)));
+    };
+    let best = this.desired.clone(), bestFrame = fitted(best);
+    let bestScore = bestFrame.penalty * 100 + (bestFrame.fits ? 0 : 50), chosen = null;
+    let cached = null;
+    if (bestFrame.fits && !this.mechanismEscape) return null;
+    for (const recipe of recipes) {
+      stats.candidates++;
+      const upward = Math.max(0, this.forward.dot(this.viewUp));
+      const retreat = this.forward.clone().addScaledVector(this.viewUp, -upward).normalize();
+      // The maximum manual upward angle needs a longer horizontal boom to
+      // include the feet under the unchanged high centre ray. Grow the same
+      // twelve shoulder recipes continuously, with an explicit14.5m limit.
+      const rear = recipe.rear + (MECHANISM_CAMERA_MAX_REAR - 8)
+        * THREE.MathUtils.smoothstep(upward, Math.sin(.7), Math.sin(CAMERA_PITCH_MAX));
+      const portrait = THREE.MathUtils.clamp(1 - this.camera.aspect / .9, 0, 1);
+      const side = recipe.side * (1 - portrait * (.4 + .4 * THREE.MathUtils.smoothstep(upward, .1, .5)));
+      const candidate = this.focus.clone().addScaledVector(retreat, -rear)
+        .addScaledVector(this.right, side).addScaledVector(this.viewUp, recipe.rise);
+      const below = candidate.clone().sub(this.focus).dot(this.viewUp);
+      if (below < -.65) candidate.addScaledVector(this.viewUp, -.65 - below);
+      // Entering from another castle wing can retain a wider old lens while
+      // its FOV spring narrows. Sweep that actual volume throughout the blend.
+      this.constrain(this.playerPivot, candidate, Math.max(MECHANISM_CAMERA_FOV, this.camera.fov));
+      const frame = fitted(candidate);
+      const score = frame.penalty * 100 + (frame.fits ? 0 : 50) + candidate.distanceToSquared(this.desired) * .02
+        + candidate.distanceToSquared(this.camera.position) * .06;
+      if (recipe === this.mechanismEscape && valid) cached = {candidate, frame, score, recipe};
+      if (score < bestScore) {best = candidate;bestScore = score;bestFrame = frame;chosen = recipe;}
+      // The conservative box can graze its framing margin while the actual
+      // skin remains clear. Retain that freshly swept shoulder through small
+      // changes instead of chasing a different height on each mouse movement.
+      const b = frame.bounds;
+      const stableFrame = frame.fits || this.mechanismHadObstruction && b
+        && Math.max(-b.minX, b.maxX, -b.minY, b.maxY) <= .95 && frame.height <= .68 && frame.aimGap >= .25;
+      if (recipe === this.mechanismEscape && stableFrame && valid) {
+        best = candidate;chosen = recipe;bestFrame = frame;stats.cacheHit = true;break;
+      }
+    }
+    // A constrained shoulder may have no perfect envelope. Do not oscillate
+    // between nearly equal safe views as a spring or a moving platform settles.
+    if (cached && chosen && cached.frame.fits === bestFrame.fits && cached.score <= bestScore + 3) {
+      best = cached.candidate;bestFrame = cached.frame;chosen = cached.recipe;stats.cacheHit = true;
+    }
+    this.mechanismEscape = chosen;
+    stats.selected = chosen;stats.selectedFrame = bestFrame;
+    return chosen ? best : null;
   }
 
   // A portal's rolling horizon and a newly solid backing can retract the
@@ -685,6 +788,7 @@ export class LabCamera {
   }
 
   constrain(origin, position, sweepFov = this.camera.fov) {
+    if (this.broadPhase.active) this.queryStats.sweeps++;
     this.castDirection.copy(position).sub(origin);
     const distance = this.castDirection.length();
     if (distance < 0.0001 || this.blockers.length === 0) return false;
@@ -699,9 +803,12 @@ export class LabCamera {
     let safeDistance = distance;
     this.raycaster.near = 0;
     this.raycaster.far = distance + radius;
-    const blockers = this.foundation20Framing ? this.queryBlockers : this.blockers;
+    const privateQueries = this.foundation20Framing || this.mechanismFramingActive;
+    const blockers = privateQueries ? this.queryBlockers : this.blockers;
     const candidates = this.broadPhase.select(blockers, origin, this.castDirection, distance, radius);
+    if (this.broadPhase.active) this.queryStats.candidateMeshes += candidates.length;
     for (const [x, y] of SAMPLE_OFFSETS) {
+      if (this.broadPhase.active) this.queryStats.rays++;
       this.castOrigin.copy(origin).addScaledVector(this.castRight, x * radius)
         .addScaledVector(this.castUp, y * radius);
       this.raycaster.set(this.castOrigin, this.castDirection);
@@ -709,7 +816,7 @@ export class LabCamera {
       const hits = this.raycaster.intersectObjects(candidates, true, this.rayHits);
       const hit = hits.find(candidate => {
         if (this.clipsPortalHit(candidate.point)) return false;
-        const source = this.foundation20Framing ? this.currentBlockerSources.get(candidate.object) : null;
+        const source = privateQueries ? this.currentBlockerSources.get(candidate.object) : null;
         return source ? this.isBlocker(source, { ...candidate, object: source }) : this.isBlocker(candidate.object, candidate);
       });
       if (hit) safeDistance = Math.min(safeDistance, Math.max(0, hit.distance - radius - 0.035));

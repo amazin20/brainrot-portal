@@ -55,7 +55,9 @@ export function createReleaseManifest({directory,commit,platformArchive,root=pro
   const spec=campaignSpec(runtimeConfig,index);
   assert.ok(spec?.id&&spec.title,`Missing definition for room ${index+1}`);
   return {level:foundationDisplayNumber(index),stableLevel:index+1,stableId:`foundation-${String(index+1).padStart(3,'0')}`,id:spec.id,title:spec.title,
-   definitionRevision:revisions[index]||'retained-v54',specSha256:sha256(JSON.stringify(spec)),theme:campaignTheme(index).id};
+   definitionRevision:revisions[index]||'retained-v54',
+   ...([24,40].includes(index)?{presentationRevision:'mechanism-readability-v1'}:{}),
+   specSha256:sha256(JSON.stringify(spec)),theme:campaignTheme(index).id};
  });
  assert.equal(rooms.length,51);assert.equal(new Set(rooms.map(room=>room.stableId)).size,51);assert.equal(new Set(rooms.map(room=>room.id)).size,51);
  const byStableLevel=new Map(rooms.map(room=>[room.stableLevel,room]));

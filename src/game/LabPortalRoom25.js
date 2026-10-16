@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import {Workshop} from './LabWorkshopKit.js';
 import {opticalPhysicalLift as opticalLift} from './LabRoom25PhysicalLift.js';
 import {buildRoom25Optics} from './LabRoom25Optics.js';
+import {buildRoom25Readability} from './LabRoom25Readability.js';
 import {SolidAssembly,placeSolidModel} from './LabSolidModels.js';
 export const ROOM25_SPEC={id:'opposed-shadows',title:'Обратная сторона тени',concept:'Один противовес открывает первый луч и перекрывает второй',description:'Свету мешает сама машина. Друг должен уйти с опоры, прежде чем откроется следующая высота.',accent:0xcab48c,assets:[1,2,11,22,23,24],hints:['Две тёмные заслонки связаны одним противовесом. Груз сдвигает их в противоположные стороны.','Сначала сохрани достигнутую высоту на неподвижной галерее. Снятый с опоры друг меняет настоящий путь света.','Малые белые окна проводят свет. Включи привод внизу: подвижное зеркало поднимет друга и включит первый пассажирский лифт. Забери друга с бокового балкона. Металлическая грузовая платформа не принимает порталы.']};
 
@@ -182,9 +183,11 @@ export function buildRoom25(game,index=24){
  },'E — включить привод: живой луч на зеркале питает грузовую платформу');
  for(const x of [-9.6,-4.4])w.box([x,4.5,12],[.12,9,.15],w.materials.trim,false);
  const shadowHall=finishShadowHall(k,optical);
+ const readability=buildRoom25Readability(k,{pad,optical,passengers:[first,second]});
  const level=k.finish([-17,0,10],[-15,.55,9],[-16,7,22],{workshop:k,portalPuzzle:true,cargoOnAnyPad:()=>optical.machine.loaded});
  level.mechanismSurfaces={'shadow-counterweight':surface};
- level.dispose=()=>{optical.machine.dispose();first.dispose();second.dispose();};
+ level.dispose=()=>{readability.dispose();optical.machine.dispose();first.dispose();second.dispose();};
+ level.room25Readability=readability;
  level.shadowHall=shadowHall;
  level.mechanismArt={projectors:[{position:optical.source.toArray(),direction:optical.direction.toArray(),radius:.5}],liftSurfaces:['shadow-lift','relay-lift']};
  level.conceptLesson={position:[-7,0,12],range:4,key:'E',text:'Две заслонки соединены с одной опорой. Нагрузка освобождает один луч и перекрывает другой.'};

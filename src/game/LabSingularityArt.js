@@ -3,6 +3,7 @@ import {architecturalCassetteGeometry,clipArchitecturalRect} from './LabArchitec
 import {V} from './LabSingularityKit.js';
 import {applyCastleMaterials} from './LabCastleMaterials.js';
 import {buildCastleMechanismDetails} from './LabCastleMechanismDetails.js';
+import {buildTower41UpperReadability} from './LabTower41UpperReadability.js';
 
 /** Art belongs to the already physical castle envelope. Large fittings occupy
  * real solids; only recessed seams and small fasteners are visual-only. */
@@ -113,6 +114,7 @@ export function buildSingularityArt({game,k,rooms,machines,edges,solved}){
   k.decor([5,y-.35,-8],[11,.06,.06],m.lamp);
  }
  const mechanisms=buildCastleMechanismDetails({game,k,rooms,machines});
+ const upperReadability=buildTower41UpperReadability({k,cell:machines.get('pendulum').state.upperCell});
  const lamps=new Map();for(const r of rooms.values()){const lamp=k.box([r.door[0],r.door[1]+4.6,r.door[2]],[.4,.10,.12],m.idle,{solid:false,dynamic:true});lamps.set(r.def.id,lamp);}
- return{update(){mechanisms.update();for(const[id,mesh]of lamps)mesh.material=solved.has(id)?m.live:m.idle;},dispose(){mechanisms.dispose();},profile:'folded-castle-five-storeys',geometrySource:'authored-bevelled-cassettes-and-physical-ribs',artDirection:'eleven-wing-mineral-cedar-and-satin',finishes};
+ return{update(){mechanisms.update();upperReadability.update();for(const[id,mesh]of lamps)mesh.material=solved.has(id)?m.live:m.idle;},dispose(){upperReadability.dispose();mechanisms.dispose();},upperReadability,profile:'folded-castle-five-storeys',geometrySource:'authored-bevelled-cassettes-and-physical-ribs',artDirection:'eleven-wing-mineral-cedar-and-satin',finishes};
 }

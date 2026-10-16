@@ -13,6 +13,7 @@ import { InputController } from './InputController.js';
 import { LabControls } from './LabControls.js';
 import { AudioController } from './AudioController.js';
 import { LabCamera } from './LabCamera.js';
+import {mechanismCameraArea} from './LabMechanismCamera.js';
 import { LabPortalActors } from './LabPortalActors.js';
 import { warmPortalRendering } from './LabPortalWarmup.js';
 import { LabPlayerAnimator } from './LabPlayerAnimator.js';
@@ -280,6 +281,14 @@ export class LabGame {
       }) : null });
     this.cameraRig.configureEpic?.({ enabled: this.kineticMode, dynamicFov: this.epicOptions?.dynamicFov !== false });
     this.cameraRig.configureSilhouette?.({ enabled: foundation20Silhouette || (this.firstLevel?.singularity && this.levelIndex === 40) || this.firstLevel?.puzzleProgression === 50 || this.firstLevel?.puzzleProgression === 51, confined: foundation20Silhouette || Boolean(this.firstLevel?.singularity && this.levelIndex === 40), foundation20: foundation20Silhouette });
+    this.cameraRig.configureMechanismFraming?.({enabled: this.firstLevel?.id === 'opposed-shadows'
+      || Boolean(this.firstLevel?.singularity && this.firstLevel.machines?.get('pendulum')?.state.upperCell),
+      currentBlocker: object => this.mechanismCameraDescriptor(object),
+      currentBlockersValid: () => this.colliders.every(collider => {
+        const entry = this.physics.bodyBoxes.get(collider.mesh.uuid);
+        return !collider.orientedBox ? !entry?.orientedBox
+          : this.mechanismCameraDescriptor(collider.mesh) === collider.orientedBox;
+      })});
     this.camera.far = this.firstLevel.viewDistance ?? (this.kineticMode ? 500 : 130); this.camera.updateProjectionMatrix();
     if (this.kineticMode && !this.epicDirector) this.epicDirector = new LabEpicDirector({ container: this.container, audio: this.audio, options: this.epicOptions });
     this.portals = new LabPortals({ scene: this.scene, renderer: this.renderer, camera: this.camera, maxResolution: this.quality.portalResolution, samples: 2 });
@@ -444,6 +453,20 @@ export class LabGame {
     if (!descriptor || collider.enabled === false) return null;
     const entry = this.physics.bodyBoxes.get(object.uuid);
     const inspection = this.physics.inspectBodyBox(object.uuid, { bounds: collider.box, orientedBox: descriptor, enabled: true });
+    if (!inspection.valid || entry?.body !== descriptor.body || entry?.orientedBox !== descriptor
+      || entry.shape !== entry.body.shapes[entry.shapeIndex] || entry.shape.body !== entry.body
+      || descriptor.step !== this.physics.world.stepnumber) return null;
+    return descriptor;
+  }
+
+  // A camera-only current shape for the opted-in vertical mechanisms. Never
+  // move shared render/aim proxies or manufacture a second physical body.
+  mechanismCameraDescriptor(object) {
+    if (!this.cameraRig?.mechanismFramingEnabled) return null;
+    const collider = this.colliderForMesh(object), descriptor = collider?.orientedBox;
+    if (!descriptor || collider.enabled === false) return null;
+    const entry = this.physics.bodyBoxes.get(object.uuid);
+    const inspection = this.physics.inspectBodyBox(object.uuid, {bounds: collider.box, orientedBox: descriptor, enabled: true});
     if (!inspection.valid || entry?.body !== descriptor.body || entry?.orientedBox !== descriptor
       || entry.shape !== entry.body.shapes[entry.shapeIndex] || entry.shape.body !== entry.body
       || descriptor.step !== this.physics.world.stepnumber) return null;
@@ -1522,7 +1545,8 @@ export class LabGame {
     const rampFraming = this.ramps.some(r => subject.x >= r.minX - 1 && subject.x <= r.maxX + 1
       && subject.z >= r.minZ - 1 && subject.z <= r.maxZ + 1
       && Math.abs(subject.y - sampleRampSurface(r, subject.z).height) < 3.5);
-    this.cameraRig.update({ dt: active ? cameraDt : 0, rampFraming, target: this.playerGroup.position, yaw: this.yaw, pitch: this.pitch, velocity: this.playerVelocity, aiming: this.isAiming(), epic: this.kineticMode, dynamicFov: this.epicOptions?.dynamicFov !== false });
+    this.cameraRig.update({ dt: active ? cameraDt : 0, rampFraming, target: this.playerGroup.position, yaw: this.yaw, pitch: this.pitch, velocity: this.playerVelocity, aiming: this.isAiming(), epic: this.kineticMode, dynamicFov: this.epicOptions?.dynamicFov !== false,
+      mechanismFraming: mechanismCameraArea(this.firstLevel, this.levelIndex, this.playerGroup.position), subjectRotation: this.playerGroup.quaternion });
     if (this.epicDirector) {
       if (this.teleportCount > (this.epicLastTeleport || 0)) this.epicDirector.portal(this.lastPortalTravel?.speed || this.playerVelocity.length(), this.teleportCount);
       if (this.playerGrounded && this.epicWasGrounded === false) this.epicDirector.land(this.lastLanding || 0);
