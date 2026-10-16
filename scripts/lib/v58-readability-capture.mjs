@@ -4,7 +4,10 @@ export function readCausalUiPlay(game){
  const player=tuple(game.playerPosition),spawn=tuple(game.firstLevel.spawn);
  return {control:'native #play-button click',normalSpawn:Math.hypot(...player.map((n,i)=>n-spawn[i]))<1e-8,player,spawn,worldStep:game.physics.world.stepnumber,portalsReady:game.portals.ready,level:game.levelIndex+1,state:game.state,edition:game.chamberEdition};
 }
-export async function captureCausalBrowser({caseId,driverSource,guardSource,observerSource,journeyURL,threeURL}){
+export function hasCurrentUpperRide(d,previousRideTicks,worldStep,grounded){
+ return Boolean(d?.ready&&!d.disposed&&d.currentCollisionValid&&d.worldStep===worldStep&&d.contactStep===worldStep&&grounded&&Number.isSafeInteger(previousRideTicks)&&Number.isSafeInteger(d.rideTicks)&&d.rideTicks>previousRideTicks&&d.rideLow&&d.rideLow.worldStep<worldStep&&d.rideLow.bodyId===d.lift?.id&&d.rideLow.shapeId===d.deckShapeId&&d.height>.8&&d.height<3&&d.lift?.velocity?.[1]>0);
+}
+export async function captureCausalBrowser({caseId,driverSource,guardSource,observerSource,ridePredicateSource,journeyURL,threeURL}){
  const fail=m=>{throw Error('Causal capture: '+m);},check=(v,m)=>{if(!v)fail(m);};
  const g=window.__NESI_DEMO_GAME__,THREE=await import(threeURL),journey=await import(journeyURL);
  check(g?.state==='playing'&&g.chamberEdition==='foundation'&&g.levelIndex===(caseId==='room25'?24:40),'ordinary UI Play');
@@ -23,12 +26,12 @@ export async function captureCausalBrowser({caseId,driverSource,guardSource,obse
  // Compare native callbacks against the actual production Material prototype.
  const firstMaterial=Array.isArray(meshes[0].material)?meshes[0].material[0]:meshes[0].material;let prototype=Object.getPrototypeOf(firstMaterial);while(prototype&&!Object.hasOwn(prototype,'onBeforeCompile'))prototype=Object.getPrototypeOf(prototype);check(prototype,'native Material prototype');
  const queryThree={...THREE,Material:{prototype:{onBeforeCompile:prototype.onBeforeCompile}}};
- const createObserver=(0,eval)('('+observerSource+')');
+ const createObserver=(0,eval)('('+observerSource+')'),isCurrentUpperRide=(0,eval)('('+ridePredicateSource+')');
  const targets=caseId==='room25'?level.room25Readability.targets:level.structure.getObjectByName('Upper lift / readable pressure carriage').visualRefs;
  const rail=caseId==='room25'?level.state.optical.machine.parts.find(p=>p.mesh.name==='Room25 founded freight rail').mesh:null;
  const roles=caseId==='room25'?[{role:'moving-mirror',roots:[targets.movingMirror]},{role:'original-cargo',roots:[refs.cargoVisual],bodyId:body.id,shapeId:shape.id},{role:'current-drive',roots:targets.drive},{role:'fixed-reference',roots:[rail]}]:[{role:'upper-deck',roots:[targets.deck]},{role:'upper-shoe',roots:targets.shoes},{role:'contact-shelf',roots:[targets.shelf]},{role:'fixed-reference',roots:targets.guides}];
  const observer=createObserver(queryThree,g,{roles,maxSamplesPerRole:16}),canvas=document.createElement('canvas');canvas.width=960;canvas.height=540;const ctx=canvas.getContext('2d',{alpha:false});check(ctx,'actual readback');
- const phases=[],inputs=[],pending=[];let active=null,encoded=0,wireBytes=0,visual=-1;
+ const phases=[],inputs=[],pending=[];let active=null,encoded=0,wireBytes=0,visual=-1,previousRideTicks=0;
  const pos=root=>new THREE.Vector3().setFromMatrixPosition(root.matrixWorld).toArray();
  // An ordinary look input may precede the next render. Compute its target in
  // private matrices, without preparing or writing the live scene's caches.
@@ -38,7 +41,7 @@ export async function captureCausalBrowser({caseId,driverSource,guardSource,obse
  const capture=()=>{live();const index=active.frames,step=g.physics.world.stepnumber;check(g.renderer.domElement.width===960&&g.renderer.domElement.height===540,'ordinary drawing buffer');g.render();check(g.physics.world.stepnumber===step,'render clock');materialGuard.assertMaterials();ctx.drawImage(g.renderer.domElement,0,0);const jpeg=canvas.toDataURL('image/jpeg',.83);wireBytes+=(jpeg.length-jpeg.indexOf(',')-1)*.75;check(wireBytes<80_000_000,'JPEG wire budget');const keyframe=[0,12,23].includes(index);const row={clipId:active.id,index,encodedFrame:encoded,visualFrame:visual,worldStep:step,physics:state(),camera:{position:g.camera.position.toArray(),quaternion:g.camera.quaternion.toArray(),fov:g.camera.fov,near:g.camera.near,far:g.camera.far,aspect:g.camera.aspect},visibility:null};
   try{if(keyframe)row.visibility=observer.observe({encodedFrame:encoded,visualFrame:visual,worldStep:step});}catch(error){pending.push(window.__V58_CAUSAL_FAILED_FRAME__({row,jpeg,error:String(error)}));throw error;}
   encoded++;pending.push(window.__V58_CAUSAL_WRITE__({row,jpeg,keyframe}));active.frames++;check(encoded<=240,'per-case240 frame budget');if(active.frames===24)active=null;};
- const onFrame=s=>{visual=s.visualFrame;observedFrames++;live();if(caseId==='castle'&&!active&&!phases.some(p=>p.id==='upper-ride')){const u=level.machines.get('pendulum').state.upperCell;if(u?.rideLow&&u.height>.8&&u.height<3)begin('upper-ride',['upper-deck','fixed-reference']);}if(active&&(visual-active.startVisual)%5===0)capture();};
+ const onFrame=s=>{visual=s.visualFrame;observedFrames++;live();if(caseId==='castle'&&phases.length&&!active&&!phases.some(p=>p.id==='upper-ride')){const d=level.machines.get('pendulum').state.upperCell.diagnostics();if(isCurrentUpperRide(d,previousRideTicks,g.physics.world.stepnumber,g.playerGrounded))begin('upper-ride',['upper-deck','fixed-reference']);previousRideTicks=d.rideTicks;}if(active&&(visual-active.startVisual)%5===0)capture();};
  const input=async(api,kind,value)=>{const first=g.physics.world.stepnumber;inputs.push({kind,value,firstWorldStep:first});await api[kind](value);inputs.at(-1).lastWorldStep=g.physics.world.stepnumber;};
  let route;
  try{if(caseId==='room25'){
