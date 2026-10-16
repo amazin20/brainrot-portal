@@ -198,7 +198,7 @@ jobs:
         with: {name: camera-readability-presentation, path: qa/presentation, retention-days: 14, if-no-files-found: error}
 
   readability:
-    needs: [build, physics]
+    needs: [build]
     runs-on: ubuntu-latest
     timeout-minutes: 45
     strategy:

@@ -51,11 +51,15 @@ export async function runV8Journey(game,{onMilestone=()=>{},scenario=null,journe
   }
   function look(point){
     stop();
+    // Room25's 0.82 m optical mouths can present a grazing side face while
+    // their centre is still within the broad campaign probe's .01 NDC margin.
+    // Use the same precise ordinary look convergence as its native driver.
+    const tolerance = level.id === 'opposed-shadows' ? .001 : .01;
     for(let n=0;n<240;n++){
       game.scene.updateMatrixWorld(true);
       if(point.clone().sub(game.camera.position).dot(game.camera.getWorldDirection(V()))<0){game.yaw+=.18;frame();continue;}
       const ndc=point.clone().project(game.camera);
-      if(n>20&&Math.abs(ndc.x)<.01&&Math.abs(ndc.y)<.01)break;
+      if(n>20&&Math.abs(ndc.x)<tolerance&&Math.abs(ndc.y)<tolerance)break;
       game.yaw-=THREE.MathUtils.clamp(ndc.x,-1,1)*.22;
       game.pitch=THREE.MathUtils.clamp(game.pitch+THREE.MathUtils.clamp(ndc.y,-1,1)*.19,-1.15,1.15);frame();
     }
