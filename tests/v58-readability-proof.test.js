@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
 import {
- assertVisibleRole,assertCausalReadability,CAUSAL_CAPTURE,CAUSAL_HARNESS_FILES,
+ assertVisibleRole,assertCausalReadability,assertRoom25MirrorClock,CAUSAL_CAPTURE,CAUSAL_HARNESS_FILES,
 } from '../scripts/lib/v58-readability-proof.mjs';
 import {ROOM25_OPEN_SCOPES} from '../scripts/lib/room25-native-proof.mjs';
 
@@ -57,10 +57,11 @@ function roomFixture(){
    const encodedFrame=rows.length,worldStep=firstWorldStep+index*10,visualFrame=worldStep/2;
    const height=id==='dark-return'?7.5-index*.02:id==='relight-ascent'?5.5+index*.02:6+phaseIndex;
    const currentLight=id!=='dark-return',motorEnabled=true,motorForce=currentLight?100:0,drive=currentLight&&motorEnabled&&motorForce>0;
+   const velocity=id==='dark-return'?-.4:.4,dt=1/120,carriageY=height+.04-velocity*dt,mirror=[-3.5,carriageY+3.96,12];
    const physics={state:'playing',worldStep,bodyId:BODY,shapeId:SHAPE,currentLight,
-    mechanism:{height,velocity:id==='dark-return'?-.4:.4,motorEnabled,lastForce:{motorForce}},
+    mechanism:{worldStep,height,velocity,motorEnabled,lastForce:{worldStep:worldStep-1,dt,carriageY,mirror:{position:[...mirror]},motorForce}},
     instruments:{state:{currentLight,enabled:motorEnabled,drive},driveColor:drive?0xffedbb:0x283e43,currentLightColor:currentLight?0xffd27d:0x283e43},
-    targetWorld:{mirror:[1,height+2,-4],cargo:[0,height,0],reference:[3,0,-4]}};
+    targetWorld:{mirror,cargo:[0,height,0],reference:[3,0,-4]}};
    const row={clipId:id,index,encodedFrame,visualFrame,worldStep,physics,camera:clone(camera),imageSha256:digest('jpeg-'+encodedFrame),visibility:null};
    if(CAUSAL_CAPTURE.visibilityKeyframes.includes(index))row.visibility={clock:{encodedFrame,visualFrame,worldStep,renderFrame:visualFrame+1},
     camera:{...clone(camera),canvas:{width:960,height:540},mainClippingPlanes:[]},roles:roleRequirements.map(visibleRole),
@@ -95,6 +96,35 @@ function roomFixture(){
 const validate=f=>assertCausalReadability(f.report,{rows:f.rows,movieMetadataByClip:f.movieMetadataByClip});
 const keyRows=(f,phase='loaded-support')=>f.rows.filter(r=>r.clipId===phase&&r.visibility);
 function rejectsMutation(name,mutate){test(name,()=>{const f=roomFixture();mutate(f);assert.throws(()=>validate(f));});}
+
+test('mirror binds the actual preStep trace to the following postStep carriage in both travel directions',()=>{
+ const f=roomFixture();for(const row of f.rows)assert.equal(assertRoom25MirrorClock(row),true);
+ for(const id of ['dark-return','relight-ascent']){
+  const row=f.rows.find(r=>r.clipId===id),m=row.physics.mechanism;
+  assert.ok(Math.abs(row.physics.targetWorld.mirror[1]-(m.height+4))>1e-5,'Moving preStep and postStep poses must not be conflated');
+ }
+ const stopped=clone(f.rows[0]);stopped.physics.mechanism.velocity=0;stopped.physics.mechanism.lastForce.carriageY=stopped.physics.mechanism.height+.04;stopped.physics.targetWorld.mirror[1]=stopped.physics.mechanism.lastForce.carriageY+3.96;stopped.physics.mechanism.lastForce.mirror.position=[...stopped.physics.targetWorld.mirror];assert.equal(assertRoom25MirrorClock(stopped),true);
+});
+
+test('mirror clock rejects stale, forged and inconsistent physical trace records',async t=>{
+ const mutations={
+  'stale force clock':r=>{r.physics.mechanism.lastForce.worldStep--;},
+  'future force clock':r=>{r.physics.mechanism.lastForce.worldStep++;},
+  'mechanism clock mismatch':r=>{r.physics.mechanism.worldStep++;},
+  'wrong physics interval':r=>{r.physics.mechanism.lastForce.dt=1/60;},
+  'missing optical trace':r=>{delete r.physics.mechanism.lastForce.mirror;},
+  'rendered mirror substituted':r=>{r.physics.targetWorld.mirror[1]+=.001;},
+  'forged force mirror':r=>{r.physics.mechanism.lastForce.mirror.position[1]+=.001;},
+  'forged preStep carriage':r=>{r.physics.mechanism.lastForce.carriageY+=.001;},
+  'wrong mirror mounting offset':r=>{r.physics.targetWorld.mirror[1]+=.001;r.physics.mechanism.lastForce.mirror.position[1]+=.001;},
+  'wrong postStep height':r=>{r.physics.mechanism.height+=.001;},
+  'wrong postStep velocity':r=>{r.physics.mechanism.velocity+=.01;},
+  'postStep height substituted for preStep carriage':r=>{r.physics.mechanism.lastForce.carriageY=r.physics.mechanism.height+.04;},
+  'nonfinite preStep position':r=>{r.physics.mechanism.lastForce.carriageY=NaN;},
+  'nonfinite postStep velocity':r=>{r.physics.mechanism.velocity=Infinity;},
+ };
+ for(const[name,mutate]of Object.entries(mutations))await t.test(name,()=>{const f=roomFixture(),r=f.rows.find(r=>r.clipId==='dark-return');mutate(r);assert.throws(()=>assertRoom25MirrorClock(r));assert.throws(()=>validate(f));});
+});
 
 test('three separated actual first-hit rays pass, including the correct rendered instance',()=>{
  const role=visibleRole();assert.equal(assertVisibleRole(role),true);
