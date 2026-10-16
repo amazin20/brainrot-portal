@@ -39,7 +39,7 @@ export function createReadabilityObserver(THREE,game,{roles,maxSamplesPerRole=25
   for(const k of ['position','quaternion','scale','up','matrix','matrixWorld','matrixWorldInverse','projectionMatrix','projectionMatrixInverse'])add(refs.camera[k]);
   add(game.playerPosition);add(game.playerVelocity);values.push(game.playerGrounded);
   const planes=game.cameraRig?.mainClippingPlanes??[];values.push(planes,planes.length);for(const p of planes){values.push(p,p.constant);add(p.normal);}
-  let count=0;refs.scene.traverse(n=>{check(++count<=MAX_MESHES*4,'scene node budget');values.push(n,n.parent,n.visible,n.layers.mask,n.children.length,...n.children);add(n.position);add(n.quaternion);add(n.scale);add(n.matrix);add(n.matrixWorld);
+  let count=0;refs.scene.traverse(n=>{check(++count<=MAX_MESHES*4,'scene node budget');values.push(n,n.parent,n.visible,n.layers.mask,n.matrixAutoUpdate,n.matrixWorldAutoUpdate,n.matrixWorldNeedsUpdate,n.children.length,...n.children);add(n.position);add(n.quaternion);add(n.scale);add(n.matrix);add(n.matrixWorld);
    if(n.isMesh){values.push(n.geometry,n.geometry.boundingBox,n.geometry.boundingSphere,n.material);
     for(const m of materialList(n.material))if(m)values.push(m,m.visible,m.side,m.transparent,m.opacity,m.alphaTest,m.depthWrite,m.depthTest,m.colorWrite,m.clippingPlanes,m.onBeforeCompile);
     if(n.skeleton){values.push(n.skeleton,n.skeleton.boneMatrices);if(n.skeleton.boneMatrices)values.push(...n.skeleton.boneMatrices);}
@@ -49,8 +49,13 @@ export function createReadabilityObserver(THREE,game,{roles,maxSamplesPerRole=25
  }
  function same(a,b){check(a.length===b.length&&a.every((v,i)=>Object.is(v,b[i])),'read purity or clock drift');}
  function prepared(mesh){
-  for(let n=mesh;n;n=n.parent){const m=new THREE.Matrix4().compose(n.position,n.quaternion,n.scale);check(m.elements.every((v,i)=>Math.abs(v-n.matrix.elements[i])<1e-7),'stale local matrix');
-   if(n.parent){m.multiplyMatrices(n.parent.matrixWorld,n.matrix);check(m.elements.every((v,i)=>Math.abs(v-n.matrixWorld.elements[i])<1e-6),'stale world matrix');}}
+  const difference=(a,b)=>Math.max(...a.map((v,i)=>Math.abs(v-b[i]))),label=n=>JSON.stringify({name:n.name,type:n.type,uuid:n.uuid,matrixAutoUpdate:n.matrixAutoUpdate});
+  for(let n=mesh;n;n=n.parent){n.matrix.elements.forEach(v=>finite(v,'actual local matrix '+label(n)));n.matrixWorld.elements.forEach(v=>finite(v,'actual world matrix '+label(n)));const m=new THREE.Matrix4();
+   // Three uses an explicitly authored local matrix when auto-update is off.
+   // Production castle/art groups use this for body-relative and inverse-root
+   // transforms; their unused TRS fields are not the rendered transform.
+   if(n.matrixAutoUpdate!==false){m.compose(n.position,n.quaternion,n.scale);const diff=difference(m.elements,n.matrix.elements);check(diff<1e-7,'stale local matrix '+label(n)+' maxAbsDiff='+diff);}
+   if(n.parent){m.multiplyMatrices(n.parent.matrixWorld,n.matrix);const diff=difference(m.elements,n.matrixWorld.elements);check(diff<1e-6,'stale world matrix '+label(n)+' maxAbsDiff='+diff);}}
   if(mesh.skeleton){const s=mesh.skeleton;check(s.boneMatrices?.length>=s.bones.length*16,'missing prepared skin cache');
    for(let i=0;i<s.bones.length;i++){const m=new THREE.Matrix4().multiplyMatrices(s.bones[i].matrixWorld,s.boneInverses[i]);check(m.elements.every((v,j)=>Number.isFinite(v)&&Math.abs(v-s.boneMatrices[i*16+j])<3e-4),'stale prepared skin cache');}}
  }

@@ -4,7 +4,12 @@ export function readCausalUiPlay(game){
  const player=tuple(game.playerPosition),spawn=tuple(game.firstLevel.spawn);
  return {control:'native #play-button click',normalSpawn:Math.hypot(...player.map((n,i)=>n-spawn[i]))<1e-8,player,spawn,worldStep:game.physics.world.stepnumber,portalsReady:game.portals.ready,level:game.levelIndex+1,state:game.state,edition:game.chamberEdition};
 }
-export async function captureCausalBrowser({caseId,driverSource,guardSource,observerSource,journeyURL,threeURL}){
+/** The immutable cell publishes these witnesses through diagnostics(), rather
+ * than public mutable ride fields. A newly counted support step is required. */
+export function hasCurrentUpperRide(d,previousRideTicks,worldStep,grounded){
+ return Boolean(d?.ready&&!d.disposed&&d.currentCollisionValid&&d.worldStep===worldStep&&d.contactStep===worldStep&&grounded&&Number.isSafeInteger(previousRideTicks)&&Number.isSafeInteger(d.rideTicks)&&d.rideTicks>previousRideTicks&&d.rideLow&&d.rideLow.worldStep<worldStep&&d.rideLow.bodyId===d.lift?.id&&d.rideLow.shapeId===d.deckShapeId&&d.height>.8&&d.height<3&&d.lift?.velocity?.[1]>0);
+}
+export async function captureCausalBrowser({caseId,driverSource,guardSource,observerSource,ridePredicateSource,journeyURL,threeURL,nearLoopSource,loadedObservationSource}){
  const fail=m=>{throw Error('Causal capture: '+m);},check=(v,m)=>{if(!v)fail(m);};
  const g=window.__NESI_DEMO_GAME__,THREE=await import(threeURL),journey=await import(journeyURL);
  check(g?.state==='playing'&&g.chamberEdition==='foundation'&&g.levelIndex===(caseId==='room25'?24:40),'ordinary UI Play');
@@ -23,38 +28,38 @@ export async function captureCausalBrowser({caseId,driverSource,guardSource,obse
  // Compare native callbacks against the actual production Material prototype.
  const firstMaterial=Array.isArray(meshes[0].material)?meshes[0].material[0]:meshes[0].material;let prototype=Object.getPrototypeOf(firstMaterial);while(prototype&&!Object.hasOwn(prototype,'onBeforeCompile'))prototype=Object.getPrototypeOf(prototype);check(prototype,'native Material prototype');
  const queryThree={...THREE,Material:{prototype:{onBeforeCompile:prototype.onBeforeCompile}}};
- const createObserver=(0,eval)('('+observerSource+')');
+ const createObserver=(0,eval)('('+observerSource+')'),isCurrentUpperRide=(0,eval)('('+ridePredicateSource+')');
  const targets=caseId==='room25'?level.room25Readability.targets:level.structure.getObjectByName('Upper lift / readable pressure carriage').visualRefs;
  const rail=caseId==='room25'?level.state.optical.machine.parts.find(p=>p.mesh.name==='Room25 founded freight rail').mesh:null;
  const roles=caseId==='room25'?[{role:'moving-mirror',roots:[targets.movingMirror]},{role:'original-cargo',roots:[refs.cargoVisual],bodyId:body.id,shapeId:shape.id},{role:'current-drive',roots:targets.drive},{role:'fixed-reference',roots:[rail]}]:[{role:'upper-deck',roots:[targets.deck]},{role:'upper-shoe',roots:targets.shoes},{role:'contact-shelf',roots:[targets.shelf]},{role:'fixed-reference',roots:targets.guides}];
  const observer=createObserver(queryThree,g,{roles,maxSamplesPerRole:16}),canvas=document.createElement('canvas');canvas.width=960;canvas.height=540;const ctx=canvas.getContext('2d',{alpha:false});check(ctx,'actual readback');
- const phases=[],inputs=[],pending=[];let active=null,encoded=0,wireBytes=0,visual=-1;
- const pos=root=>root.getWorldPosition(new THREE.Vector3()).toArray();
+ const phases=[],inputs=[],pending=[];let active=null,encoded=0,wireBytes=0,visual=-1,previousRideTicks=0;
+ const pos=root=>new THREE.Vector3().setFromMatrixPosition(root.matrixWorld).toArray();
+ // An ordinary look input may precede the next render. Compute its target in
+ // private matrices, without preparing or writing the live scene's caches.
+ const lookPoint=root=>{const chain=[];for(let n=root;n;n=n.parent)chain.unshift(n);const world=new THREE.Matrix4();for(const n of chain)world.multiply(n.matrixAutoUpdate===false?n.matrix:new THREE.Matrix4().compose(n.position,n.quaternion,n.scale));return new THREE.Vector3().setFromMatrixPosition(world);};
  const state=()=>{const s={state:g.state,worldStep:g.physics.world.stepnumber,player:g.playerPosition.toArray(),grounded:Boolean(g.playerGrounded),cargo:g.cargo.position.toArray(),bodyId:body.id,shapeId:shape.id,held:Boolean(g.heldCube)};if(caseId==='room25'){const o=level.state.optical;s.mechanism=structuredClone(o.machine.diagnostics());s.currentLight=Boolean(o.motorLit);s.instruments={state:structuredClone(level.room25Readability.state),driveColor:targets.drive[0].material.color.getHex(),currentLightColor:targets.currentLight[0].material.color.getHex()};s.targetWorld={mirror:pos(targets.movingMirror),cargo:body.position.toArray(),reference:pos(rail)};}else{const u=level.machines.get('pendulum').state.upperCell;s.mechanism=u.diagnostics();s.targetWorld={deck:pos(targets.deck),shelf:pos(targets.shelf),reference:pos(targets.guides[0])};}return s;};
  const begin=(id,requirements)=>{check(!active,'overlapping clips');check(!phases.some(p=>p.id===id),'duplicate phase');active={id,requirements,startVisual:visual+1,frames:0};phases.push(active);};
- const capture=()=>{live();const index=active.frames,step=g.physics.world.stepnumber;check(g.renderer.domElement.width===960&&g.renderer.domElement.height===540,'ordinary drawing buffer');g.render();check(g.physics.world.stepnumber===step,'render clock');materialGuard.assertMaterials();ctx.drawImage(g.renderer.domElement,0,0);const jpeg=canvas.toDataURL('image/jpeg',.83);wireBytes+=(jpeg.length-jpeg.indexOf(',')-1)*.75;check(wireBytes<80_000_000,'JPEG wire budget');const keyframe=[0,12,23].includes(index),visibility=keyframe?observer.observe({encodedFrame:encoded,visualFrame:visual,worldStep:step}):null;const row={clipId:active.id,index,encodedFrame:encoded++,visualFrame:visual,worldStep:step,physics:state(),camera:{position:g.camera.position.toArray(),quaternion:g.camera.quaternion.toArray(),fov:g.camera.fov,near:g.camera.near,far:g.camera.far,aspect:g.camera.aspect},visibility};pending.push(window.__V58_CAUSAL_WRITE__({row,jpeg,keyframe}));active.frames++;check(encoded<=240,'per-case240 frame budget');if(active.frames===24)active=null;};
- const onFrame=s=>{visual=s.visualFrame;observedFrames++;live();if(caseId==='castle'&&!active&&!phases.some(p=>p.id==='upper-ride')){const u=level.machines.get('pendulum').state.upperCell;if(u?.rideLow&&u.height>.8&&u.height<3)begin('upper-ride',['upper-deck','fixed-reference']);}if(active&&(visual-active.startVisual)%5===0)capture();};
+ const capture=()=>{live();const index=active.frames,step=g.physics.world.stepnumber;check(g.renderer.domElement.width===960&&g.renderer.domElement.height===540,'ordinary drawing buffer');g.render();check(g.physics.world.stepnumber===step,'render clock');materialGuard.assertMaterials();ctx.drawImage(g.renderer.domElement,0,0);const jpeg=canvas.toDataURL('image/jpeg',.83);wireBytes+=(jpeg.length-jpeg.indexOf(',')-1)*.75;check(wireBytes<80_000_000,'JPEG wire budget');const keyframe=[0,12,23].includes(index);const row={clipId:active.id,index,encodedFrame:encoded,visualFrame:visual,worldStep:step,physics:state(),camera:{position:g.camera.position.toArray(),quaternion:g.camera.quaternion.toArray(),fov:g.camera.fov,near:g.camera.near,far:g.camera.far,aspect:g.camera.aspect},visibility:null};
+  try{if(keyframe)row.visibility=observer.observe({encodedFrame:encoded,visualFrame:visual,worldStep:step});}catch(error){pending.push(window.__V58_CAUSAL_FAILED_FRAME__({row,jpeg,error:String(error)}));throw error;}
+  encoded++;pending.push(window.__V58_CAUSAL_WRITE__({row,jpeg,keyframe}));active.frames++;check(encoded<=240,'per-case240 frame budget');if(active.frames===24)active=null;};
+ const onFrame=s=>{visual=s.visualFrame;observedFrames++;live();if(caseId==='castle'&&phases.length&&!active&&!phases.some(p=>p.id==='upper-ride')){const d=level.machines.get('pendulum').state.upperCell.diagnostics();if(isCurrentUpperRide(d,previousRideTicks,g.physics.world.stepnumber,g.playerGrounded))begin('upper-ride',['upper-deck','fixed-reference']);previousRideTicks=d.rideTicks;}if(active&&(visual-active.startVisual)%5===0)capture();};
  const input=async(api,kind,value)=>{const first=g.physics.world.stepnumber;inputs.push({kind,value,firstWorldStep:first});await api[kind](value);inputs.at(-1).lastWorldStep=g.physics.world.stepnumber;};
  let route;
- if(caseId==='room25'){
-  const driver=(0,eval)('('+driverSource+')');const production=async(d,options)=>{
-   const mark=d.mark,aim=d.aim;let cut=false,restored=false;
-   const ordinary=(kind,value)=>{const firstWorldStep=g.physics.world.stepnumber;d[kind](value);inputs.push({kind,value:value?.toArray?.()??value,firstWorldStep,lastWorldStep:g.physics.world.stepnumber});};
-   const lookAt=()=>ordinary('look',targets.movingMirror.getWorldPosition(new THREE.Vector3()));
-   d.mark=name=>{mark(name);if(name==='one weight moves two opposite shadows'){lookAt();begin('loaded-support',['original-cargo','moving-mirror']);ordinary('wait',2);}if(name==='permanent gallery keeps height after losing light'){lookAt();begin('lit-gallery',['moving-mirror','current-drive']);ordinary('wait',2);}};
-   d.aim=(slot,p)=>{aim(slot,p);
-    // Production route's cut is the first slot1 retarget after founded gallery.
-    if(slot===1&&phases.some(x=>x.id==='lit-gallery')&&!cut){cut=true;begin('dark-return',['moving-mirror','current-drive']);lookAt();if(active)ordinary('wait',2);}
-    else if(slot===1&&cut&&!restored){restored=true;begin('relight-ascent',['moving-mirror','current-drive']);lookAt();if(active)ordinary('wait',2);}};
-   try{return await journey.runRoom25(d,options);}finally{d.mark=mark;d.aim=aim;}
+ try{if(caseId==='room25'){
+  const driver=(0,eval)('('+driverSource+')'),nearLoop=(0,eval)('('+nearLoopSource+')'),loadedObservation=(0,eval)('('+loadedObservationSource+')');const production=async(d,options)=>{
+   const mark=d.mark;let observedLoaded=false,observedLoop=false;
+   const phase=id=>begin(id,id==='loaded-support'?['original-cargo','moving-mirror']:['moving-mirror','current-drive']),recordInput=record=>inputs.push(record);
+   d.mark=name=>{mark(name);if(name==='one weight moves two opposite shadows'){check(!observedLoaded,'duplicate loaded observation');observedLoaded=true;loadedObservation(d,phase,recordInput);}if(name==='permanent gallery keeps height after losing light'){check(!observedLoop,'duplicate near observation');observedLoop=true;nearLoop(d,phase,recordInput);}};
+   try{const result=await journey.runRoom25(d,options);check(observedLoaded&&observedLoop,'all ordinary observations executed');return result;}finally{d.mark=mark;}
   };
   route=await driver(g,{runProductionJourney:production,onFrame});
  }else{
   route=await journey.runSingularityJourney(g,{stopAfter:'pendulum',onFrame,onReadabilityPhase:async api=>{
-   const point=api.phase==='upper-contact-retained'?pos(targets.shelf):pos(targets.deck);await input(api,'look',point);
+   const point=lookPoint(api.phase==='upper-contact-retained'?targets.shelf:targets.deck).toArray();await input(api,'look',point);
    const id={'upper-before-boarding':'upper-founded-view','upper-after-ride':'upper-after-ride','upper-contact-retained':'upper-contact-retained'}[api.phase];begin(id,api.phase==='upper-contact-retained'?['contact-shelf','upper-deck']:['upper-deck','fixed-reference']);await input(api,'wait',2);
   }});
- }
+ }}catch(error){const drained=await Promise.allSettled(pending);window.__V58_CAUSAL_FAILURE__={error:String(error),diagnosticWriteErrors:drained.filter(r=>r.status==='rejected').map(r=>String(r.reason)),phase:active?.id??null,encodedFrames:encoded,visualFrame:visual,physics:state()};throw error;}
  check(!active,'incomplete final clip');await Promise.all(pending);const finalGeometrySha256=await geometryHash();check(finalGeometrySha256===initialGeometrySha256,'original geometry bytes');
  const gl=g.renderer.getContext(),debug=gl.getExtension('WEBGL_debug_renderer_info');return {route,phases:phases.map(p=>({id:p.id,roleRequirements:p.requirements,frames:p.frames})),inputs,encodedFrames:encoded,modelIdentity:{playerVertices,playerBones:bones.size,sameOriginalActorHandles:true,sameOriginalBuffers:true,sameOriginalCargoShape:true,bodyId:body.id,shapeId:shape.id,cargoMass:body.mass,initialGeometrySha256,finalGeometrySha256,observedFrames,materialIdentity:materialGuard.diagnostics()},renderer:{isWebGLRenderer:g.renderer.isWebGLRenderer===true,contextLost:gl.isContextLost(),version:gl.getParameter(gl.VERSION),unmaskedRenderer:debug?gl.getParameter(debug.UNMASKED_RENDERER_WEBGL):null},scope:'Read-only actual geometry ray samples at retained keyframes only; other frames explicitly unmeasured. Ordinary route look/wait inputs are logged, no lens or actor pose setters.'};
 }

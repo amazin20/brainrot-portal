@@ -71,9 +71,13 @@ function roomFixture(){
    clip:{path:'clips/'+id+'.mp4',frames:24,bytes:10000,sha256:digest('movie-'+id),fullMP4Decode:true,pixelCheck:{frames:24,allNonblank:true,minimumLuminanceRange:32}},
    keyframes:CAUSAL_CAPTURE.visibilityKeyframes.map(index=>({index,path:'stills/'+id+'-'+index+'.jpg',bytes:1000,sha256:local[index].imageSha256,encodedFrame:local[index].encodedFrame}))});
   movieMetadataByClip[id]={streams:[{codec_name:'h264',codec_type:'video',width:960,height:540,r_frame_rate:'12/1',nb_frames:'24',duration:'2.000000'}]};
-  inputs.push({kind:'look',value:[1,6,-4],firstWorldStep:firstWorldStep-1,lastWorldStep:firstWorldStep-1},
-   {kind:'wait',value:2,firstWorldStep:firstWorldStep-1,lastWorldStep:firstWorldStep+239});
+  inputs.push({kind:'look',value:[1,6,-4],firstWorldStep:firstWorldStep-4,lastWorldStep:firstWorldStep-2},
+   {kind:'wait',value:2,firstWorldStep:firstWorldStep-2,lastWorldStep:firstWorldStep+238});
  }
+ for(let i=0;i<10;i++)inputs.push({kind:'walk',value:[-7,6],firstWorldStep:3000+i*2,lastWorldStep:3002+i*2});
+ inputs.push({kind:'aim',value:[1,[-17,13.6,23]],accepted:true,firstWorldStep:8950,lastWorldStep:8994},{kind:'wait',value:1,firstWorldStep:9500,lastWorldStep:9620},{kind:'wait',value:5,firstWorldStep:12000,lastWorldStep:12600});
+ for(const[i,slot]of [0,0,1].entries())inputs.push({kind:'aim',value:[slot,[9,3,16]],accepted:true,firstWorldStep:10000+i*100,lastWorldStep:10010+i*100});
+ inputs.sort((a,b)=>a.firstWorldStep-b.firstWorldStep);
  const files=CAUSAL_HARNESS_FILES.map((path,i)=>({path,bytes:100+i,sha256:digest(path)}));
  const report={kind:'v58-causal-readability',case:'room25',pass:true,geometricVisibilityAccepted:true,humanAccepted:false,cameraAccepted:false,hardwareFPSMeasured:false,publicationAccepted:false,errors:[],
   capture:clone(CAUSAL_CAPTURE),sourceWorkingBytesUnchanged:true,controllerWorkingBytesUnchanged:true,
@@ -85,6 +89,7 @@ function roomFixture(){
   modelIdentity:{playerVertices:96753,playerBones:15,sameOriginalActorHandles:true,sameOriginalBuffers:true,sameOriginalCargoShape:true,cargoMass:3.2,
    initialGeometrySha256:digest('original-geometry'),finalGeometrySha256:digest('original-geometry'),observedFrames:10001,bodyId:BODY,shapeId:SHAPE},
   phases,telemetry:{path:'telemetry.jsonl',sha256:digest(rows.map(r=>JSON.stringify(r)).join('\n')),bytes:Buffer.byteLength(JSON.stringify(rows)),samples:rows.length},inputs,route:roomRoute()};
+ report.route.actions=inputs.filter(i=>i.kind==='aim').map(i=>({kind:'portal-charge',index:i.value[0],point:[...i.value[1]],worldStep:i.lastWorldStep,impact:{valid:true}}));
  return {report,rows,movieMetadataByClip};
 }
 const validate=f=>assertCausalReadability(f.report,{rows:f.rows,movieMetadataByClip:f.movieMetadataByClip});
@@ -184,8 +189,8 @@ const headerMutations={
  'rejects inherited visibility on unmeasured frames':f=>{f.rows[1].visibility=clone(f.rows[0].visibility);},
  'rejects required role deletion from a phase':f=>{f.report.phases[0].roleRequirements.pop();},
  'rejects required role deletion from all keyframes':f=>{for(const row of keyRows(f))row.visibility.roles=row.visibility.roles.filter(r=>r.role!=='original-cargo');},
- 'rejects replacing waits with direct state setters':f=>{f.report.inputs[1].kind='setState';},
- 'rejects an ordinary wait with a false duration':f=>{f.report.inputs[1].value=0;},
+ 'rejects replacing waits with direct state setters':f=>{f.report.inputs.find(i=>i.kind==='wait').kind='setState';},
+ 'rejects an ordinary wait with a false duration':f=>{f.report.inputs.find(i=>i.kind==='wait').value=0;},
  'rejects route reset or respawn':f=>{f.report.route.respawns++;},
  'rejects route cargo identity mismatch':f=>{f.report.route.bodyId++;},
  'rejects missing physical route milestones':f=>{f.report.route.milestones.pop();},
@@ -196,12 +201,32 @@ const headerMutations={
  'rejects a current-light indicator with a false material color':f=>{f.rows[5].physics.instruments.currentLightColor=0xffedbb;},
  'rejects a moving supposed fixed reference':f=>{f.rows[5].physics.targetWorld.reference[1]++;},
  'rejects camera-only apparent mirror motion':f=>{f.rows[5].physics.targetWorld.mirror[1]++;},
+ 'rejects visible stopped dark keys when only unmeasured rows contain the falling event':f=>{for(const r of keyRows(f,'dark-return'))r.physics.mechanism.velocity=0;},
+ 'rejects visible stopped relight keys when only unmeasured rows contain the rising event':f=>{for(const r of keyRows(f,'relight-ascent'))r.physics.mechanism.velocity=0;},
 };
 for(const [name,mutate]of Object.entries(headerMutations))rejectsMutation(name,mutate);
 
 test('clip clocks retain the actual two physics steps per visual frame at every interval',()=>{
  const f=roomFixture();f.rows[5].worldStep++;f.rows[5].physics.worldStep++;
  assert.throws(()=>validate(f));
+});
+
+test('ordinary observation input provenance rejects unmapped controls, clock rewinds and forged charges',async t=>{
+ const mutations={
+  'unavailable clear command':f=>{f.report.inputs.find(i=>i.kind==='aim').kind='clear';},
+  'direct pair deletion alias':f=>{f.report.inputs.find(i=>i.kind==='aim').kind='clearPortals';},
+  'out-of-order clock':f=>{f.report.inputs[2].firstWorldStep=0;},
+  'wait with invented simulation steps':f=>{f.report.inputs.find(i=>i.kind==='wait').lastWorldStep++;},
+  'nonfinite ordinary walking target':f=>{f.report.inputs.find(i=>i.kind==='walk').value[0]=NaN;},
+  'walking pose instead of xz input':f=>{f.report.inputs.find(i=>i.kind==='walk').value=[0,9,0];},
+  'unavailable portal slot':f=>{f.report.inputs.find(i=>i.kind==='aim').value[0]=2;},
+  'rejected real charged shot':f=>{f.report.inputs.find(i=>i.kind==='aim').accepted=false;},
+  'invented charged shot clock':f=>{f.report.inputs.find(i=>i.kind==='aim').lastWorldStep--;},
+  'charged target differs from production action':f=>{f.report.inputs.find(i=>i.kind==='aim').value[1][0]+=.1;},
+  'missing actual portal charge action':f=>{f.report.route.actions=[];},
+  'unlogged cut and restore sequence':f=>{f.report.inputs=f.report.inputs.filter(i=>i.kind!=='aim');},
+ };
+ for(const[name,mutate]of Object.entries(mutations))await t.test(name,()=>{const f=roomFixture();mutate(f);assert.throws(()=>validate(f));});
 });
 
 test('visibility uses the same rendered camera lens as its bound image',async t=>{

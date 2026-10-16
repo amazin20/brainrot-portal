@@ -82,6 +82,57 @@ test('observer does not render, prepare matrices, alter original bounds or edit 
  f.scene.updateMatrixWorld=()=>{throw Error('observer prepared scene');};f.camera.updateMatrixWorld=()=>{throw Error('observer prepared lens');};f.camera.lookAt=()=>{throw Error('observer set lens');};f.camera.updateProjectionMatrix=()=>{throw Error('observer changed projection');};
  f.observe(f.observer());assert.deepEqual(f.camera.position.toArray(),before.camera);assert.deepEqual(f.camera.projectionMatrix.toArray(),before.projection);assert.deepEqual(f.target.matrixWorld.toArray(),before.target);assert.equal(f.target.geometry.boundingSphere,before.sphere);assert.equal(f.target.geometry.boundingBox,before.box);
 });
+function authoredTarget(matrix){
+ const f=fixture(),parent=new THREE.Group(),authored=new THREE.Group();parent.position.set(.2,-.1,0);parent.rotation.z=.08;
+ f.scene.add(parent);parent.add(authored);authored.matrixAutoUpdate=false;authored.matrix.copy(matrix);authored.add(f.target);f.target.position.set(0,0,0);f.prepare();
+ return {...f,parent,authored};
+}
+function transformSnapshot(f){
+ const nodes=[];f.scene.traverse(n=>nodes.push(n));nodes.push(f.camera);
+ return {nodes:nodes.map(n=>({uuid:n.uuid,position:n.position.toArray(),quaternion:n.quaternion.toArray(),scale:n.scale.toArray(),
+  matrix:n.matrix.toArray(),matrixWorld:n.matrixWorld.toArray(),matrixAutoUpdate:n.matrixAutoUpdate,matrixWorldAutoUpdate:n.matrixWorldAutoUpdate,matrixWorldNeedsUpdate:n.matrixWorldNeedsUpdate})),
+  cameraProjection:f.camera.projectionMatrix.toArray(),cameraInverse:f.camera.matrixWorldInverse.toArray(),renderFrame:f.game.renderer.info.render.frame,worldStep:f.game.physics.world.stepnumber};
+}
+function forbidPreparation(f){
+ f.scene.traverse(n=>{n.updateMatrix=()=>{throw Error('observer wrote local matrix');};n.updateMatrixWorld=()=>{throw Error('observer prepared world matrix');};n.updateWorldMatrix=()=>{throw Error('observer prepared world matrix');};});
+ f.camera.updateMatrixWorld=()=>{throw Error('observer prepared camera');};f.camera.updateProjectionMatrix=()=>{throw Error('observer changed lens');};
+}
+function assertHitsActualBox(f,role){
+ const inverse=f.target.matrixWorld.clone().invert();
+ assert.ok(role.projectedSamples>=3);assert.equal(role.visibleFraction,1);
+ for(const sample of role.samples){const local=new THREE.Vector3(...sample.target.worldPoint).applyMatrix4(inverse);
+  assert.equal(sample.firstHit.meshUUID,f.target.uuid);assert.ok(Math.abs(local.x)<=1+1e-6&&Math.abs(local.y)<=1+1e-6&&Math.abs(local.z)<=.05+1e-6,'ray witness must lie on the actual authored transformed box');}
+}
+test('prepared manually authored translation and rotation use actual matrices without rewriting TRS',()=>{
+ const matrix=new THREE.Matrix4().makeTranslation(.4,.2,-6).multiply(new THREE.Matrix4().makeRotationZ(.35)).multiply(new THREE.Matrix4().makeRotationY(.2));
+ const f=authoredTarget(matrix);assert.notDeepEqual(f.authored.matrix.toArray(),new THREE.Matrix4().compose(f.authored.position,f.authored.quaternion,f.authored.scale).toArray());
+ const before=transformSnapshot(f),sphere=f.target.geometry.boundingSphere,box=f.target.geometry.boundingBox;forbidPreparation(f);
+ const r=f.observe(f.observer());assertHitsActualBox(f,r.roles[0]);assert.equal(r.readPurity.unchanged,true);assert.deepEqual(transformSnapshot(f),before);
+ assert.equal(f.target.geometry.boundingSphere,sphere);assert.equal(f.target.geometry.boundingBox,box);
+});
+test('a finite exact authored shear remains valid without a decomposable TRS assumption',()=>{
+ const matrix=new THREE.Matrix4().set(1,.45,0,.2,0,1,.2,.1,0,0,1,-6,0,0,0,1),f=authoredTarget(matrix);
+ const position=new THREE.Vector3(),rotation=new THREE.Quaternion(),scale=new THREE.Vector3();matrix.decompose(position,rotation,scale);
+ assert.ok(new THREE.Matrix4().compose(position,rotation,scale).elements.some((n,i)=>Math.abs(n-matrix.elements[i])>1e-3),'control must contain actual shear');
+ const before=transformSnapshot(f);forbidPreparation(f);const r=f.observe(f.observer());assertHitsActualBox(f,r.roles[0]);assert.deepEqual(transformSnapshot(f),before);
+});
+test('opaque actor and wall meshes under authored manual matrices still block actual target rays',()=>{
+ for(const name of ['original-player','ordinary-wall']){const f=fixture(),group=new THREE.Group();group.matrixAutoUpdate=false;
+  group.matrix.makeTranslation(.1,-.1,-3).multiply(new THREE.Matrix4().makeRotationZ(.3));f.scene.add(group);
+  const occluder=new THREE.Mesh(new THREE.BoxGeometry(6,6,.1),new THREE.MeshBasicMaterial());occluder.name=name;occluder.matrixAutoUpdate=false;occluder.matrix.makeRotationY(.12);group.add(occluder);f.prepare();
+  const before=transformSnapshot(f);forbidPreparation(f);const v=f.observe(f.observer()).roles[0];assert.ok(v.projectedSamples>0);assert.equal(v.visibleFraction,0);assert.equal(v.uncertain.samples,0);
+  assert.ok(v.samples.every(s=>s.firstHit.meshUUID===occluder.uuid&&!s.firstHitIsTarget));assert.deepEqual(transformSnapshot(f),before);}
+});
+test('manual matrix ownership never exempts stale child or ancestor matrixWorld from rejection',()=>{
+ for(const stale of ['child','ancestor']){const f=authoredTarget(new THREE.Matrix4().makeTranslation(.4,.2,-6));
+  if(stale==='child')f.target.matrixWorld.elements[12]+=.25;
+  else{f.authored.matrixWorld.elements[12]+=.25;f.target.matrixWorld.multiplyMatrices(f.authored.matrixWorld,f.target.matrix);}
+  const before=transformSnapshot(f);forbidPreparation(f);assert.throws(()=>f.observe(f.observer()),/stale world matrix/);assert.deepEqual(transformSnapshot(f),before);}
+});
+test('nonfinite authored local or world matrices fail closed and stay untouched',()=>{
+ for(const name of ['matrix','matrixWorld']){const f=authoredTarget(new THREE.Matrix4().makeTranslation(0,0,-6));f.authored[name].elements[12]=NaN;
+  const before=transformSnapshot(f);forbidPreparation(f);assert.throws(()=>f.observe(f.observer()),/nonfinite|matrix/);assert.deepEqual(transformSnapshot(f),before);}
+});
 test('clock drift, repeated renders, stale matrices and nonfinite geometry fail closed',()=>{
  const f=fixture(),o=f.observer();assert.throws(()=>o.observe({encodedFrame:0,visualFrame:0,worldStep:2}),/clock/);f.observe(o);assert.throws(()=>o.observe({encodedFrame:1,visualFrame:1,worldStep:1}),/clock/);
  const stale=fixture();stale.target.position.x=1;assert.throws(()=>stale.observe(stale.observer()),/stale/);
