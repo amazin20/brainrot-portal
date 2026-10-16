@@ -2,7 +2,17 @@
 
 Браузерная 3D-головоломка от третьего лица: одна пара порталов, физика и живой спутник. Основная редакция `foundation` в этом исходнике содержит 51 испытание. Точная опубликованная версия указана в `build-info.json` сайта.
 
-**[Актуальная кампания v57](https://amazin20.github.io/brainrot-portal/campaign-v57/)** · **[Историческая галерея прохождений](https://amazin20.github.io/brainrot-portal/walkthroughs.html)**
+**[Актуальная кампания v58](https://amazin20.github.io/brainrot-portal/campaign-v58/)** · **[Историческая галерея прохождений](https://amazin20.github.io/brainrot-portal/walkthroughs.html)**
+
+## Кампания v58: читаемость вертикальных механизмов
+
+**[Играть в v58](https://amazin20.github.io/brainrot-portal/campaign-v58/)** · [Результаты и границы проверки](docs/campaign-v58-public-acceptance.md) · [Точный штамп сборки](https://amazin20.github.io/brainrot-portal/campaign-v58/build-info.json)
+
+Камера комнаты 25 и верхнего маятникового пролёта замка (стабильный ID 41) подбирает безопасное положение плеча и отступ, сохраняя ручной обзор, центральный луч выстрела и непрозрачные модели. Маркировки существующих механизмов показывают настоящие нагрузку, свет, силу привода, давление и удерживающий контакт. Физика v57 и 59 исходных GLB сохранены; пакет содержит прежние 14 активных моделей.
+
+[Исходник `f73063b`](https://github.com/amazin20/brainrot-portal/tree/f73063b77461be70d7039e2c767fa6df4467ff3b): [SOURCE](https://github.com/amazin20/brainrot-portal/actions/runs/38849760441) — 24 успешных задания, 26 артефактов, 2466 тестов и 36 отдельных проверок механики; обычные прохождения: 51, нативные: 51, все без сбросов. [PUBLIC](https://github.com/amazin20/brainrot-portal/actions/runs/38852007865) — 13 успешных заданий, 14 артефактов; свежие публичные прохождения: 51. Полная HTTP-сверка подтвердила весь каталог: 2 281 файл (662 030 662 байт), включая все прежние 2 200 файлов. [Квитанция PUBLIC](tools/campaign-v58-root-public-acceptance.json) · [Каталог](tools/campaign-v58-public-files.json).
+
+Непрерывное текущее видео комнаты 25: 770 кадров, 192,5 с. Ещё 8 коротких причинных клипов подтверждают выбранные фазы двух механизмов. Человеческая оценка камеры, аппаратный FPS, живая интеграция Яндекс Игр, 500 этапов и доказанный человеческий спидран за 15 минут остаются открытыми.
 
 ## Кампания v57: оптическое питание и физическая опора
 
@@ -125,4 +135,5 @@ npm run check:yandex-browser
 ```
 
 Матрица обычных, альтернативных и восстановительных маршрутов: `node scripts/qa-campaign-routes.mjs --edition=foundation`. Восемь групп дополнительных атак проверяются через `qa-speedrun-core-new.mjs`, `qa-speedrun-early-new.mjs`, `qa-speedrun-middle-new.mjs`, `qa-speedrun-late-new.mjs` и `qa-speedrun-castle-new.mjs`. Конечные быстрые атаки: `qa-adversarial-core.mjs`, `qa-adversarial-early.mjs`, `qa-adversarial-late.mjs` и `qa-adversarial-castle-independent.mjs` в каталоге `scripts`. Исторические материалы и регрессии сохранены в Git; прежние контракты заменённых механизмов обновлены под их новую физическую задачу.
+
 
