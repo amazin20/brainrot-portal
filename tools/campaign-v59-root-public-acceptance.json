@@ -1,0 +1,359 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-v59-root-public-acceptance",
+  "generatedAt": "2026-10-16T22:07:39.874952+00:00",
+  "sourceAccepted": true,
+  "publicationAccepted": true,
+  "sourceCommit": "c79dbe271588c639d9881f9591efc330f947ea0f",
+  "sourceTree": "b59e227168d3d02a0893f02136acc20bb0c81c9f",
+  "sourceReview": {
+    "runId": 38964231823,
+    "runAttempt": 1
+  },
+  "publisherCommit": "29e252b92e848197c1051725e9838a4084f0aaf7",
+  "publicationRun": 38972034471,
+  "publicationRunAttempt": 1,
+  "publicURL": "https://amazin20.github.io/brainrot-portal/campaign-v59/",
+  "sourceAcceptance": {
+    "path": "tools/campaign-v59-root-source-acceptance.json",
+    "sha256": "ae075c138226ac4fd5172a076b29582c1bb77211d9c903b0a487b5202da4c35e"
+  },
+  "configSha256": "998c796274ebe4fa7e7d49d576a1e57594054efeb8b8d489c55e7fba0fb3ded3",
+  "finalProof": {
+    "artifactId": 12077609275,
+    "artifactName": "v59-final-public-proof",
+    "zipBytes": 7818588,
+    "zipSha256": "72c12d43f6827446cdcfbc737cd71e4e1b197c046cb2633bf2a977cbcbbd65e0",
+    "files": 138,
+    "bytes": 24602972,
+    "inventorySha256": "cee8d8c46703905673fd27b87abfea255eca0fc45d1b2f01eab816fe56469e72"
+  },
+  "deployment": {
+    "id": 7130303164,
+    "sha": "29e252b92e848197c1051725e9838a4084f0aaf7",
+    "state": "success"
+  },
+  "checks": {
+    "terminalPublicJobs": 13,
+    "sourceJobs": 25,
+    "sourceArtifacts": 27,
+    "publisherArtifacts": 14,
+    "preservedBaselineFiles": 2281,
+    "preservedBaselineBytes": 662030662,
+    "preservedBaselineInventorySha256": "64c37e2fd87dcad134368cd321a6733714f981a4684f60d06f866f651c57473e",
+    "candidateFiles": 80,
+    "candidateBytes": 7147573,
+    "publicFiles": 2362,
+    "publicBytes": 669184499,
+    "publicInventorySha256": "5a51e244761ba0947a1f4acfd99d98e04a29ea78d5e796cc4bf456e4c09381f8",
+    "completeHTTP200ByteClosure": true,
+    "nativeRoutes": {
+      "rooms": 51,
+      "won": 51,
+      "sameOriginalCompanion": 51,
+      "resets": 0,
+      "respawns": 0,
+      "gameplayPassed": 51,
+      "capturesPassed": 51
+    },
+    "decodedImages": 78,
+    "mechanismCausal": {
+      "pass": true,
+      "cases": {
+        "room25": {
+          "pass": true,
+          "case": "room25",
+          "report": {
+            "path": "report.json",
+            "bytes": 125724,
+            "sha256": "eb76e1471eb6ef5dcb81a01c45d03a09306bd67e028b2e7fc043aa06fab4b583"
+          },
+          "binding": {
+            "path": "public-binding.json",
+            "bytes": 8790,
+            "sha256": "d411db1be94c0f03a33a73bc21e6777c35ba2dc9f63340421b4e0be3cab88587"
+          },
+          "phases": [
+            "loaded-support",
+            "lit-gallery",
+            "dark-return",
+            "relight-ascent"
+          ],
+          "frames": 96,
+          "retainedImages": 12,
+          "fullyDecoded": true,
+          "geometricVisibilityAccepted": true,
+          "humanAccepted": false,
+          "cameraAccepted": false,
+          "hardwareFPSMeasured": false
+        },
+        "castle": {
+          "pass": true,
+          "case": "castle",
+          "report": {
+            "path": "report.json",
+            "bytes": 167561,
+            "sha256": "047a7375d7c704772a021fad1c907b1fdb17918dab510b874e4343db5074ce93"
+          },
+          "binding": {
+            "path": "public-binding.json",
+            "bytes": 7963,
+            "sha256": "0fbdefee773a68e22b1cc11d073d7e911b2fb0976f33086eea2014585ebf84cb"
+          },
+          "phases": [
+            "upper-founded-view",
+            "upper-ride",
+            "upper-after-ride",
+            "upper-contact-retained"
+          ],
+          "frames": 96,
+          "retainedImages": 12,
+          "fullyDecoded": true,
+          "geometricVisibilityAccepted": true,
+          "humanAccepted": false,
+          "cameraAccepted": false,
+          "hardwareFPSMeasured": false
+        }
+      },
+      "frames": 192
+    },
+    "barePlayAndV58SaveImport": true,
+    "expandedCastleCompletionReset": true,
+    "castleFinal": true,
+    "ownNamespacePersistence": true,
+    "immutableSourcePureValidators": {
+      "pass": true,
+      "rooms": 51,
+      "upperPhysicalProofs": [
+        {
+          "level": 41,
+          "pass": true,
+          "originalCargoBodyId": 1760,
+          "loadedStep": 89162,
+          "retainedStartStep": 89304,
+          "currentStep": 94129,
+          "supportedDeckSteps": 396,
+          "islandStep": 91351,
+          "upperRideLowStep": 91474,
+          "upperRideHighStep": 92185,
+          "upperCatchStep": 93944,
+          "physicalLowerCatch": true,
+          "physicalUpperCatch": true,
+          "twoPhysicalCatches": true
+        }
+      ],
+      "impulsePhysicalProofs": [
+        {
+          "level": 41,
+          "pass": true,
+          "originalCargoBodyId": 1760,
+          "originalCargoShapeId": 3520,
+          "worldStep": 133826
+        }
+      ],
+      "castleFinal": true,
+      "causalProofs": [
+        {
+          "case": "room25",
+          "pass": true,
+          "phases": [
+            "loaded-support",
+            "lit-gallery",
+            "dark-return",
+            "relight-ascent"
+          ],
+          "frames": 96,
+          "geometricVisibilityAccepted": true,
+          "humanAccepted": false,
+          "cameraAccepted": false,
+          "hardwareFPSMeasured": false
+        },
+        {
+          "case": "castle",
+          "pass": true,
+          "phases": [
+            "upper-founded-view",
+            "upper-ride",
+            "upper-after-ride",
+            "upper-contact-retained"
+          ],
+          "frames": 96,
+          "geometricVisibilityAccepted": true,
+          "humanAccepted": false,
+          "cameraAccepted": false,
+          "hardwareFPSMeasured": false
+        }
+      ]
+    }
+  },
+  "rawJobLogs": [
+    {
+      "id": 117212459049,
+      "name": "prepare",
+      "bytes": 282328,
+      "sha256": "64cadd698954aecdbb4f3db7e3bc6bf4ee2afb004e621eaf3e372f626b7d907a",
+      "bomRetained": true
+    },
+    {
+      "id": 117213161160,
+      "name": "deploy",
+      "bytes": 19794,
+      "sha256": "23cbd76ca95e446538091c31b2a49b61caf7efffb8ff4fb09fd951bcbe5a5d80",
+      "bomRetained": true
+    },
+    {
+      "id": 117213443932,
+      "name": "public-http",
+      "bytes": 17337,
+      "sha256": "91cdcd9230631d3ded9ee754d4abd04e7de0e4d7c017c72ce2a3e1f0b7aa3757",
+      "bomRetained": true
+    },
+    {
+      "id": 117213444001,
+      "name": "causal (room25)",
+      "bytes": 123943,
+      "sha256": "302b64eedfa534e98a5d4118bc38eb9f5aba1b92587757be247bfec02dac061b",
+      "bomRetained": true
+    },
+    {
+      "id": 117213444025,
+      "name": "native (fracture)",
+      "bytes": 52426,
+      "sha256": "3c3d814847faac43e550da8b51c72af1fd84b6067c4fdbd1e1aa8bea37482e5a",
+      "bomRetained": true
+    },
+    {
+      "id": 117213444027,
+      "name": "entry",
+      "bytes": 39757,
+      "sha256": "bcd59c905e8beb097a3107c496fcb7900cb5b35d40cbac7e9b3ee833c4a3b3f6",
+      "bomRetained": true
+    },
+    {
+      "id": 117213444043,
+      "name": "native (optics)",
+      "bytes": 49501,
+      "sha256": "36f1e59f7383851b10b1b855c1ff9b0cd39fd4f826086d7036cf05dab6c466a8",
+      "bomRetained": true
+    },
+    {
+      "id": 117213444046,
+      "name": "causal (castle)",
+      "bytes": 124021,
+      "sha256": "5cf209189c6c83554183b95e1691960eba0d6908ebd12ff76ee5bc90fdfcd63b",
+      "bomRetained": true
+    },
+    {
+      "id": 117213444081,
+      "name": "native (energy)",
+      "bytes": 49328,
+      "sha256": "2699571a4d3f7fcb34f0e2232769a5373811fe80f1d2327a6fc977c98617d152",
+      "bomRetained": true
+    },
+    {
+      "id": 117213444131,
+      "name": "native (living)",
+      "bytes": 49934,
+      "sha256": "72e115ae6efae328caf5861c14b984c06e5f8bf66c900c0c25c53a481d5b86a1",
+      "bomRetained": true
+    },
+    {
+      "id": 117213444136,
+      "name": "native (castle)",
+      "bytes": 42776,
+      "sha256": "6f01604f9e3ba436ee36219cb9b8a076989ae849d4092cd1ab6e81266d8755b2",
+      "bomRetained": true
+    },
+    {
+      "id": 117213444268,
+      "name": "native (early)",
+      "bytes": 45818,
+      "sha256": "811f5b20b9904b03654490b4a5813e61aa54258cc2984993b2dcd1369d3d5f51",
+      "bomRetained": true
+    },
+    {
+      "id": 117217010650,
+      "name": "verify",
+      "bytes": 48766,
+      "sha256": "9b3e00c46bf8ac950dcef9ddfa02151107e0ff5f2e86544dc8ca46483d42c323",
+      "bomRetained": true
+    }
+  ],
+  "providerFiles": [
+    {
+      "path": "artifacts.json",
+      "bytes": 9805,
+      "sha256": "5e8ee82b44fa0ed4cdc164862b96b8fddc430256a966628aa7bb764296c624bc"
+    },
+    {
+      "path": "controller-commit.json",
+      "bytes": 1223,
+      "sha256": "ddcd01f12158cc3cbec860a90d8d2b5dbbd2fa0ff55f772eb844c44163ebbcc0"
+    },
+    {
+      "path": "controller-tree.json",
+      "bytes": 333976,
+      "sha256": "5a360befc61c55ad6707a00971c2d83bdafdbb88210d2ce89d1b9188b455dfab"
+    },
+    {
+      "path": "deployments.json",
+      "bytes": 381806,
+      "sha256": "985c00ac01f3bfae50e51552a56bd6770cafe3d34ae83b87a306885d59408ff1"
+    },
+    {
+      "path": "jobs.json",
+      "bytes": 41412,
+      "sha256": "ca42c76163c144feec1bc0548ab1787eeaf909cce43ea0a83a70f6d6a1dbfb97"
+    },
+    {
+      "path": "main.json",
+      "bytes": 347,
+      "sha256": "7c15d65dd3046d6f2fae1e362fafe1be9ef5f305b074f0be0161c73d41098369"
+    },
+    {
+      "path": "run.json",
+      "bytes": 12878,
+      "sha256": "502212d3b188fd66803537f14ef971bb571bbdefe583b1b073b311168f6078e6"
+    },
+    {
+      "path": "source-artifacts.json",
+      "bytes": 19720,
+      "sha256": "294990d22ca200db44a2c23a2d182dc02a702f32682b90453522b16d12222237"
+    },
+    {
+      "path": "source-commit.json",
+      "bytes": 1245,
+      "sha256": "29484652f2e85e60b3b400445c8134c1a92d57a57caf3efd92757f7179fdc8f1"
+    },
+    {
+      "path": "source-jobs.json",
+      "bytes": 73341,
+      "sha256": "81e359ed83a144838a6d4a58835fc99bb4a8a4fd09f6a4ed6c5c23a17b812912"
+    },
+    {
+      "path": "source-run.json",
+      "bytes": 12932,
+      "sha256": "da43b42d0111dd9a8cf4264e60f115abaabb2835ea345b85559d52f7f43b60f7"
+    },
+    {
+      "path": "source.json",
+      "bytes": 440,
+      "sha256": "73dea9b23b1996aba0b1af411d290b894b3bc2c4555ad9484671fa03dd86847b"
+    },
+    {
+      "path": "statuses.json",
+      "bytes": 6683,
+      "sha256": "22fb6374f12a0526bf59ca2b023735e836146bce5991de6b06d98fd52708aae4"
+    }
+  ],
+  "scope": "Independent terminal review of the exact accepted SOURCE and append-only PUBLIC candidate, actual13/13 successful publisher jobs, current deployment and authenticated complete HTTP byte closure.",
+  "limitations": [
+    "Automated software WebGL and scripted input; human puzzle discovery and physical-device FPS remain unmeasured.",
+    "Only Room25 and the final castle have continuous full-route current MP4s. Eight short12fps clips cover selected mechanism phases;51native wins are not51full-route movies, and intermediate visibility is unmeasured.",
+    "The retained Room25 and castle movies sample4fps;120Hz force evidence is authenticated aggregate observations, not a retained complete120Hz trace.",
+    "Finite regressions do not prove closure of every bypass.",
+    "The castle is not500 unique stages; the historical500-stage and proved15-minute human-speedrun requirements remain open.",
+    "No live Yandex SDK, advertising delivery or platform moderation acceptance.",
+    "PUBLIC uses51 finish frames,3 entry screenshots and two bounded causal mechanism packets with decoded media; it does not add a continuous full-campaign movie or human/device/live-Yandex acceptance."
+  ]
+}
