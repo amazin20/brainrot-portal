@@ -1,9 +1,32 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
+import vm from 'node:vm';
+import * as THREE from 'three';
 import {parseAst} from 'rollup/parseAst';
 import {createHeadlessGame} from '../scripts/lab-headless.mjs';
-import {createFirstChapterAttackOriginalGuard,firstChapterAttackCatalogue,assertFirstChapterAttacksBrowserDiagnostic} from '../scripts/lib/first-chapter-attack-browser.mjs';
+import {createFirstChapterAttackOriginalGuard,firstChapterAttackCatalogue,readFirstChapterAttackStart,assertFirstChapterAttacksBrowserDiagnostic} from '../scripts/lib/first-chapter-attack-browser.mjs';
+
+test('actual room 1 and 6 array spawns and equivalent Vector3 spawns retain exact numeric distances without moving actors',async()=>{
+ const g=await createHeadlessGame();g.chamberEdition='foundation';
+ for(const index of [0,5]){
+  await g.selectLevel(index,false);g.resetRun(true);const level=g.firstLevel,spawn=level.spawn,cargoSpawn=level.cargoSpawn,player=g.playerPosition.toArray(),cargo=g.cargo.position.toArray(),step=g.physics.world.stepnumber;
+  assert.equal(Array.isArray(spawn),true);assert.equal(Array.isArray(cargoSpawn),true);
+  assert.equal(Number.isNaN(g.playerPosition.distanceTo(spawn)),true,'Regression control: Vector3.distanceTo cannot read an array');
+  assert.equal(Number.isNaN(g.cargo.position.distanceTo(cargoSpawn)),true,'Regression control: cargo array has the same mismatch');
+  const check=()=>{
+   const r=readFirstChapterAttackStart(g),serialized=vm.runInNewContext('('+readFirstChapterAttackStart.toString()+')(game)',{game:g});
+   assert.equal(JSON.stringify(serialized),JSON.stringify(r),'The exact page-transferred function has no Node closure');
+   assert.equal(r.normalSpawn,true);assert.equal(r.normalCargoSpawn,true);assert.equal(r.playerSpawnDistance,0);assert.equal(r.cargoSpawnDistance,0);
+   assert.deepEqual(r.playerPosition,player);assert.deepEqual(r.cargoPosition,cargo);assert.deepEqual(r.expectedPlayerSpawn,spawn);assert.deepEqual(r.expectedCargoSpawn,cargoSpawn);return r;
+  };
+  check();level.spawn=new THREE.Vector3(...spawn);level.cargoSpawn=new THREE.Vector3(...cargoSpawn);check();
+  level.spawn=spawn.slice();level.spawn[0]+=1e-7;assert.equal(readFirstChapterAttackStart(g).normalSpawn,false);assert.equal(readFirstChapterAttackStart(g).normalCargoSpawn,true);
+  level.spawn=spawn;level.cargoSpawn=new THREE.Vector3(...cargoSpawn).add(new THREE.Vector3(0,0,1e-7));assert.equal(readFirstChapterAttackStart(g).normalCargoSpawn,false);assert.equal(readFirstChapterAttackStart(g).normalSpawn,true);
+  level.cargoSpawn=[...cargoSpawn,0];assert.equal(readFirstChapterAttackStart(g).normalCargoSpawn,false);assert.equal(readFirstChapterAttackStart(g).cargoSpawnDistance,null);
+  level.cargoSpawn=cargoSpawn;check();assert.deepEqual(g.playerPosition.toArray(),player);assert.deepEqual(g.cargo.position.toArray(),cargo);assert.equal(g.physics.world.stepnumber,step);
+ }
+});
 
 test('the real original-model guard permits ordinary camera FOV animation and rejects rig/lens/model substitution',async()=>{
  const g=await createHeadlessGame();g.chamberEdition='foundation';await g.selectLevel(0,false);g.resetRun(true);

@@ -22,6 +22,20 @@ export function firstChapterAttackCatalogue(group){
  return group==='early'?earlyChapterAttacks.map(a=>({caseId:a.name,index:a.level-1})):FIRST_CHAPTER_LATE_ATTACKS.map(a=>({caseId:a.id,index:a.index}));
 }
 
+/** Read-only normal-spawn comparison for the actual level definitions, which
+ * use arrays, and for callers holding the equivalent THREE.Vector3 values.
+ * Keep this function closure-free: the UI observer transfers its exact code
+ * into the page before loading the attack harness. */
+export function readFirstChapterAttackStart(g){
+ const coordinates=value=>{const a=value?.toArray?.()??value;return Array.isArray(a)?a.slice():null;};
+ const valid=a=>Array.isArray(a)&&a.length===3&&a.every(Number.isFinite);
+ const playerPosition=coordinates(g.playerPosition),cargoPosition=coordinates(g.cargo.position),expectedPlayerSpawn=coordinates(g.firstLevel.spawn),expectedCargoSpawn=coordinates(g.firstLevel.cargoSpawn);
+ const distance=(actual,expected)=>valid(actual)&&valid(expected)?Math.hypot(...actual.map((n,i)=>n-expected[i])):null;
+ const playerSpawnDistance=distance(playerPosition,expectedPlayerSpawn),cargoSpawnDistance=distance(cargoPosition,expectedCargoSpawn);
+ return{playerPosition,cargoPosition,expectedPlayerSpawn,expectedCargoSpawn,playerSpawnDistance,cargoSpawnDistance,
+  normalSpawn:playerSpawnDistance!==null&&playerSpawnDistance<1e-8,normalCargoSpawn:cargoSpawnDistance!==null&&cargoSpawnDistance<1e-8};
+}
+
 /** Read-only handles and byte identity. This is shared by every browser case;
  * the production driver independently checks the original cargo each frame. */
 export function createFirstChapterAttackOriginalGuard(g){
@@ -53,7 +67,8 @@ export function createFirstChapterAttackOriginalGuard(g){
 export async function observeFirstChapterBrowserAttack({group,caseId,capture={width:640,height:360}}){
  const catalogue=firstChapterAttackCatalogue(group),item=catalogue.find(a=>a.caseId===caseId),g=window.__NESI_DEMO_GAME__;
  need(item&&g&&g.state==='playing'&&g.chamberEdition==='foundation'&&g.levelIndex===item.index,'fresh normal room Play required');
- need(g.physics.world.stepnumber===0&&g.elapsed===0&&g.playerPosition.distanceTo(g.firstLevel.spawn)<1e-8&&g.cargo.position.distanceTo(g.firstLevel.cargoSpawn)<1e-8&&!g.heldCube&&!g.portals.ready&&g.teleportCount===0,'unprepared original spawn at worldStep zero');
+ const start=readFirstChapterAttackStart(g);
+ need(g.physics.world.stepnumber===0&&g.elapsed===0&&start.normalSpawn&&start.normalCargoSpawn&&!g.heldCube&&!g.portals.ready&&g.teleportCount===0,'unprepared original spawn at worldStep zero: '+JSON.stringify(start));
  need(capture.width===640&&capture.height===360,'exact ordinary canvas capture');
  const guard=createFirstChapterAttackOriginalGuard(g),world=guard.world,observed={postSteps:0,visualUpdates:0},resetCounts={resetRun:0,respawn:0,resetCargo:0,levelReset:0},old={visual:g.updateVisuals,reset:g.resetRun,respawn:g.respawn,cargoReset:g.physics.resetCargo,levelReset:g.firstLevel.reset};
  const initialGeometrySha256=await guard.appearanceHash();let previousWorldStep=0,observation=null,error=null,journey=null;
@@ -69,9 +84,9 @@ export async function observeFirstChapterBrowserAttack({group,caseId,capture={wi
  const postStep=()=>{need(world.stepnumber===previousWorldStep+1,'120Hz clock skipped a postStep');previousWorldStep=world.stepnumber;observed.postSteps++;need(observed.postSteps<=40000,'finite native attack physics budget exhausted');guard.live();};
  g.resetRun=rejectReset('resetRun');g.respawn=rejectReset('respawn');g.physics.resetCargo=rejectReset('resetCargo');if(typeof old.levelReset==='function')g.firstLevel.reset=rejectReset('levelReset');
  g.updateVisuals=function(...args){const result=old.visual.apply(this,args);observed.visualUpdates++;need(observed.visualUpdates<=20000,'finite native attack visual budget exhausted');guard.live();return result;};world.addEventListener('postStep',postStep);
- let start=null,end=null,finalGeometrySha256=null;
+ let startCapture=null,end=null,finalGeometrySha256=null;
  try{
-  start=captureCanvas('start');
+  startCapture=captureCanvas('start');
   if(group==='early')observation=await observeEarlyChapterAttack(g,earlyChapterAttacks.find(a=>a.name===caseId),{nativeStart:true});
   else{
    const attack=FIRST_CHAPTER_LATE_ATTACKS.find(a=>a.id===caseId);
@@ -82,7 +97,7 @@ export async function observeFirstChapterBrowserAttack({group,caseId,capture={wi
  try{end=captureCanvas('end');finalGeometrySha256=await guard.appearanceHash();need(finalGeometrySha256===initialGeometrySha256,'authored geometry bytes changed');}catch(err){error??=String(err?.stack??err);}
  finally{world.removeEventListener('postStep',postStep);g.updateVisuals=old.visual;g.resetRun=old.reset;g.respawn=old.respawn;g.physics.resetCargo=old.cargoReset;if(typeof old.levelReset==='function')g.firstLevel.reset=old.levelReset;}
  return{caseId,index:item.index,nativeStart:true,observation,error,clock:{...observed,postStepStart:0,postStepFinish:world.stepnumber},resetCounts,
-  modelIdentity:{...guard.diagnostics(),initialGeometrySha256,finalGeometrySha256},captures:{start,end},final:snapshot()};
+  modelIdentity:{...guard.diagnostics(),initialGeometrySha256,finalGeometrySha256},captures:{start:startCapture,end},final:snapshot()};
 }
 
 /** Pure immutable wrapper gate. Callers must independently bind the expected
@@ -113,6 +128,9 @@ export function assertFirstChapterAttacksBrowserDiagnostic(report,{group,source,
   need(same(r.observation,pureReport.cases[i]),'exact browser observation in pure proof '+expected.caseId);
   need(same(r.errors,[])&&Array.isArray(r.harnessRequests)&&r.harnessRequests.length===1&&r.harnessRequests[0].url===h.url&&r.harnessRequests[0].bytes===h.bytes&&r.harnessRequests[0].sha256===h.sha256,'one exact QA resource and no case browser errors '+expected.caseId);
   need(ui&&ui.control==='native #play-button click'&&ui.state==='playing'&&ui.level===expected.index+1&&ui.edition==='foundation'&&ui.normalSpawn===true&&ui.normalCargoSpawn===true&&ui.worldStep===0&&ui.elapsed===0&&ui.portalsReady===false&&ui.teleports===0,'fresh genuine Play '+expected.caseId);
+  const vector=a=>Array.isArray(a)&&a.length===3&&a.every(Number.isFinite);
+  need([ui.playerPosition,ui.cargoPosition,ui.expectedPlayerSpawn,ui.expectedCargoSpawn].every(vector),'retained actual/expected spawn coordinates '+expected.caseId);
+  for(const[actual,wanted,distance]of [[ui.playerPosition,ui.expectedPlayerSpawn,ui.playerSpawnDistance],[ui.cargoPosition,ui.expectedCargoSpawn,ui.cargoSpawnDistance]])need(typeof distance==='number'&&Number.isFinite(distance)&&distance===Math.hypot(...actual.map((n,i)=>n-wanted[i]))&&distance<1e-8,'exact retained native spawn distance '+expected.caseId);
   need(c&&c.postStepStart===0&&c.postStepFinish===c.postSteps&&integer(c.visualUpdates,100,20000)&&c.postSteps===c.visualUpdates*2,'uninterrupted full native clock '+expected.caseId);
   need(c.visualUpdates===(group==='early'?r.observation.journeyFrames:r.observation.journey.frames),'native clock equals enclosing ordinary journey '+expected.caseId);
   need(Object.keys(r.resetCounts).length===4&&['resetRun','respawn','resetCargo','levelReset'].every(k=>r.resetCounts[k]===0),'zero post-Play resets '+expected.caseId);
