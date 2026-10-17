@@ -1,13 +1,15 @@
 import * as THREE from 'three';
+import {room17RecoveryCameraArea} from './LabRoom17CameraPolicy.js';
 
 export const MECHANISM_CAMERA_BUDGET = 12;
 export const MECHANISM_CAMERA_FOV = 96;
 export const MECHANISM_CAMERA_MAX_REAR = 14.5;
 const UP = new THREE.Vector3(0, 1, 0);
 
-/** Production policy, deliberately confined to the two vertical mechanisms.
- * Other castle wings and the accepted Foundation20 camera keep their policy. */
-export function mechanismCameraArea(level, index, target) {
+/** Production policy for the two vertical mechanisms and room17's measured
+ * rear recovery turn. Other areas retain their existing camera policy. */
+export function mechanismCameraArea(level, index, target, aspect = 16/9) {
+  if (room17RecoveryCameraArea(level,index,target,aspect)) return true;
   if (index === 24 && level?.id === 'opposed-shadows' && level.state?.optical?.machine) return true;
   const room = level?.rooms?.get('pendulum');
   const deck = level?.machines?.get('pendulum')?.state.upperCell?.deckPart;

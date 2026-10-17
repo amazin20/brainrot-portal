@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { LabCameraBroadPhase } from './LabCameraBroadPhase.js';
 import { portalTransformMatrix, portalBacksCollider } from './LabPortals.js';
 import {MECHANISM_CAMERA_BUDGET, MECHANISM_CAMERA_FOV, MECHANISM_CAMERA_MAX_REAR, MECHANISM_CAMERA_OFFSETS, measureMechanismFrame} from './LabMechanismCamera.js';
+import {ROOM17_RECOVERY_CAMERA_OFFSETS,ROOM17_RECOVERY_LENS_RESPONSE} from './LabRoom17CameraPolicy.js';
 
 const UP = new THREE.Vector3(0, 1, 0);
 const IDENTITY = new THREE.Quaternion();
@@ -101,6 +102,7 @@ export class LabCamera {
     this.mechanismFramingEnabled = this.mechanismFramingActive = false;
     this.mechanismCurrentBlocker = this.mechanismCurrentBlockersValid = null;
     this.mechanismEscape = null;
+    this.mechanismOffsets = MECHANISM_CAMERA_OFFSETS;
     this.mechanismHadObstruction = false;
     this.mechanismSubjectRotation = null;
     this.mechanismLensGoal = 0;
@@ -122,11 +124,14 @@ export class LabCamera {
     return this;
   }
 
-  configureMechanismFraming({enabled = false, currentBlocker = null, currentBlockersValid = null} = {}) {
+  configureMechanismFraming({enabled = false, currentBlocker = null, currentBlockersValid = null, offsets = MECHANISM_CAMERA_OFFSETS} = {}) {
+    if (offsets !== MECHANISM_CAMERA_OFFSETS && offsets !== ROOM17_RECOVERY_CAMERA_OFFSETS)
+      throw new TypeError('Mechanism framing requires one of the two frozen twelve-candidate camera policies');
     this.mechanismFramingEnabled = !!enabled;
     this.mechanismFramingActive = false;
     this.mechanismCurrentBlocker = currentBlocker;
     this.mechanismCurrentBlockersValid = currentBlockersValid;
+    this.mechanismOffsets = offsets;
     this.mechanismEscape = null;this.mechanismLensGoal = 0;this.mechanismHadObstruction = false;
     return this;
   }
@@ -329,7 +334,8 @@ export class LabCamera {
     if (this.mechanismFramingActive) fovGoal = Math.min(MECHANISM_CAMERA_FOV, Math.max(fovGoal, this.mechanismLensGoal));
     const oldFov = this.camera.fov;
     [this.camera.fov, this.fovVelocity] = spring(oldFov, this.fovVelocity, fovGoal,
-      this.fullBodyFraming && upwardFraming > 0 ? 12 : 7, step);
+      this.mechanismFramingActive && this.mechanismOffsets === ROOM17_RECOVERY_CAMERA_OFFSETS ? ROOM17_RECOVERY_LENS_RESPONSE
+        : this.fullBodyFraming && upwardFraming > 0 ? 12 : 7, step);
     if (Math.abs(oldFov - this.camera.fov) > 0.00001) this.camera.updateProjectionMatrix();
 
     // A wall-to-floor passage initially retains the exact transported view.
@@ -589,7 +595,7 @@ export class LabCamera {
     const valid = this.mechanismCurrentBlockersValid?.() !== false;
     stats.currentBodiesValid = valid;
     const recipes = this.mechanismEscape && valid
-      ? [this.mechanismEscape, ...MECHANISM_CAMERA_OFFSETS.filter(r => r !== this.mechanismEscape)] : MECHANISM_CAMERA_OFFSETS;
+      ? [this.mechanismEscape, ...this.mechanismOffsets.filter(r => r !== this.mechanismEscape)] : this.mechanismOffsets;
     const fitted = eye => {
       const frame = this.measureMechanismFrame(eye);
       return this.measureMechanismFrame(eye, Math.min(MECHANISM_CAMERA_FOV, Math.max(62, frame.neededFov + 1)));

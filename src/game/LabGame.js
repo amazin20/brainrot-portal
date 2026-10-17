@@ -14,6 +14,7 @@ import { LabControls } from './LabControls.js';
 import { AudioController } from './AudioController.js';
 import { LabCamera } from './LabCamera.js';
 import {mechanismCameraArea} from './LabMechanismCamera.js';
+import {room17RecoveryCameraEnabled,ROOM17_RECOVERY_CAMERA_OFFSETS} from './LabRoom17CameraPolicy.js';
 import { LabPortalActors } from './LabPortalActors.js';
 import { warmPortalRendering } from './LabPortalWarmup.js';
 import { LabPlayerAnimator } from './LabPlayerAnimator.js';
@@ -270,6 +271,7 @@ export class LabGame {
     this.weapon = this.model(11, .7);
     this.heldDevice = new LabHeldDevice({ model: this.weapon, bones: this.animator.bones, playerRoot: this.playerGroup });
     const foundation20Silhouette = this.chamberEdition === 'foundation' && this.levelIndex === 19 && this.firstLevel?.id === 'foundation-portal-tension';
+    const room17RecoveryCamera = room17RecoveryCameraEnabled(this.firstLevel,this.levelIndex);
     this.cameraRig = new LabCamera({ camera: this.camera, blockers: this.cameraBlockers,
       isBlocker: (object, hit) => this.isCameraBlocker(object, hit),
       currentBlocker: foundation20Silhouette ? object => this.foundation20CameraDescriptor(object) : null,
@@ -282,7 +284,8 @@ export class LabGame {
     this.cameraRig.configureEpic?.({ enabled: this.kineticMode, dynamicFov: this.epicOptions?.dynamicFov !== false });
     this.cameraRig.configureSilhouette?.({ enabled: foundation20Silhouette || (this.firstLevel?.singularity && this.levelIndex === 40) || this.firstLevel?.puzzleProgression === 50 || this.firstLevel?.puzzleProgression === 51, confined: foundation20Silhouette || Boolean(this.firstLevel?.singularity && this.levelIndex === 40), foundation20: foundation20Silhouette });
     this.cameraRig.configureMechanismFraming?.({enabled: this.firstLevel?.id === 'opposed-shadows'
-      || Boolean(this.firstLevel?.singularity && this.firstLevel.machines?.get('pendulum')?.state.upperCell),
+      || room17RecoveryCamera || Boolean(this.firstLevel?.singularity && this.firstLevel.machines?.get('pendulum')?.state.upperCell),
+      offsets: room17RecoveryCamera ? ROOM17_RECOVERY_CAMERA_OFFSETS : undefined,
       currentBlocker: object => this.mechanismCameraDescriptor(object),
       currentBlockersValid: () => this.colliders.every(collider => {
         const entry = this.physics.bodyBoxes.get(collider.mesh.uuid);
@@ -1547,7 +1550,7 @@ export class LabGame {
       && subject.z >= r.minZ - 1 && subject.z <= r.maxZ + 1
       && Math.abs(subject.y - sampleRampSurface(r, subject.z).height) < 3.5);
     this.cameraRig.update({ dt: active ? cameraDt : 0, rampFraming, target: this.playerGroup.position, yaw: this.yaw, pitch: this.pitch, velocity: this.playerVelocity, aiming: this.isAiming(), epic: this.kineticMode, dynamicFov: this.epicOptions?.dynamicFov !== false,
-      mechanismFraming: mechanismCameraArea(this.firstLevel, this.levelIndex, this.playerGroup.position), subjectRotation: this.playerGroup.quaternion });
+      mechanismFraming: mechanismCameraArea(this.firstLevel, this.levelIndex, this.playerGroup.position, this.camera.aspect), subjectRotation: this.playerGroup.quaternion });
     if (this.epicDirector) {
       if (this.teleportCount > (this.epicLastTeleport || 0)) this.epicDirector.portal(this.lastPortalTravel?.speed || this.playerVelocity.length(), this.teleportCount);
       if (this.playerGrounded && this.epicWasGrounded === false) this.epicDirector.land(this.lastLanding || 0);
