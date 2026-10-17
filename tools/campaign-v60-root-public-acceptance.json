@@ -1,0 +1,354 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-v60-root-public-acceptance",
+  "generatedAt": "2026-10-17T01:42:00.630164+00:00",
+  "sourceAccepted": true,
+  "publicationAccepted": true,
+  "sourceCommit": "63527aacae5eb311bd64194b029e9bc1e021c474",
+  "sourceTree": "64f6ca1c45eb5f706c5ca99dab7114bf7ba52bd0",
+  "sourceReview": {
+    "runId": 38985364094,
+    "runAttempt": 1
+  },
+  "publisherCommit": "62f2a8c5d83a23f5c1f1581a2619b35dd9d8b156",
+  "publicationRun": 38990468207,
+  "publicationRunAttempt": 1,
+  "publicURL": "https://amazin20.github.io/brainrot-portal/campaign-v60/",
+  "sourceAcceptance": {
+    "path": "tools/campaign-v60-root-source-acceptance.json",
+    "sha256": "b7c87a3ad9e1de61ed425c178effad737e532fb3707e7eee66e2747870990a41"
+  },
+  "configSha256": "ef33222ab6c0e175a4abebcb48cbedb049f8b3dc8352cc094418519be03b6552",
+  "finalProof": {
+    "artifactId": 12085765284,
+    "artifactName": "v60-final-public-proof",
+    "zipBytes": 5446498,
+    "zipSha256": "5ec8fdeccd2cf2e3213e7636d6720263c6d6e3c61ee766cbfa9fd64b14f9c654",
+    "files": 167,
+    "bytes": 13712439,
+    "inventorySha256": "03095c88c043e6f9b817247925bb144e59498560a90638a19749b3084fd4a6f1"
+  },
+  "deployment": {
+    "id": 7132969556,
+    "sha": "62f2a8c5d83a23f5c1f1581a2619b35dd9d8b156",
+    "state": "success"
+  },
+  "checks": {
+    "terminalPublicJobs": 13,
+    "sourceJobs": 32,
+    "sourceArtifacts": 34,
+    "publisherArtifacts": 14,
+    "preservedBaselineFiles": 2362,
+    "preservedBaselineBytes": 669184499,
+    "preservedBaselineInventorySha256": "5a51e244761ba0947a1f4acfd99d98e04a29ea78d5e796cc4bf456e4c09381f8",
+    "candidateFiles": 80,
+    "candidateBytes": 7153533,
+    "publicFiles": 2443,
+    "publicBytes": 676345642,
+    "publicInventorySha256": "ef050541d24ae6a58710ad1f5723b3807f41291026be5d00a61b39a438a8f7eb",
+    "completeHTTP200ByteClosure": true,
+    "deploymentProvider": {
+      "origin": "authenticated-final-ci-api-snapshot",
+      "independentPostCiDeploymentGet": false,
+      "captureStartedAt": "2026-10-17T01:39:03.561189+00:00",
+      "captureCompletedAt": "2026-10-17T01:39:04.957108+00:00",
+      "verifyJobId": 117275377180,
+      "verifyStep": "Validate actual prior producer statuses, all public routes and deployment ownership",
+      "completedAtPrecisionSeconds": 1,
+      "manifest": {
+        "path": "deployment-provider/manifest.json",
+        "bytes": 3004,
+        "sha256": "fd3921c1e5d1f891e2a8c445578f6bf99616da1e493c7a31e987298e3ea1b435"
+      },
+      "rawPages": [
+        {
+          "path": "deployments-page-001.json",
+          "bytes": 381806,
+          "sha256": "7540e33abc0a3d073335df2adce98446d4b441c98095ff03b5bdc7617a9a6534"
+        },
+        {
+          "path": "deployments-page-002.json",
+          "bytes": 75947,
+          "sha256": "356c3b2222da564f0239e6c15aa3a45471ce7052d5d902e10199f08ad1515c72"
+        },
+        {
+          "path": "statuses-page-001.json",
+          "bytes": 6683,
+          "sha256": "0d474f48d06e422b6af7e2f7b7f875c9aca6e363192c6b2907ae390480eaf38e"
+        }
+      ],
+      "deployments": 120,
+      "statuses": 4,
+      "inventorySha256": "0886bcd0aaf7e6e74e5b233a5c5fa893cec6cc29d038017e4c9860faa86e8eed"
+    },
+    "nativeRoutes": {
+      "rooms": 51,
+      "won": 51,
+      "sameOriginalCompanion": 51,
+      "resets": 0,
+      "respawns": 0,
+      "gameplayPassed": 51,
+      "capturesPassed": 51
+    },
+    "decodedImages": 100,
+    "firstChapterAttacks": {
+      "groups": 2,
+      "rooms": 10,
+      "groupResults": [
+        {
+          "group": "early",
+          "report": {
+            "path": "first-chapter-attacks-browser-report.json",
+            "bytes": 1844283,
+            "sha256": "5e83f15920b9af89b62f53ff016aacdfdf98e6d34873d91fad181b42ccde31e7"
+          },
+          "binding": {
+            "path": "public-binding.json",
+            "bytes": 43771,
+            "sha256": "5d5d2f04388529bc2ea7e0bfb3cb2bd842965d68a8125fc34ff9d1cfb52947d0"
+          },
+          "cases": 10,
+          "retainedImages": 20,
+          "pass": true,
+          "immutablePureValidator": true,
+          "originalCargo": true,
+          "closedInventory": true
+        },
+        {
+          "group": "later",
+          "report": {
+            "path": "first-chapter-attacks-browser-report.json",
+            "bytes": 140336,
+            "sha256": "3609ae200b8701e293786adafbe0e0b829a4da022ddebafb6f2682418c89b93d"
+          },
+          "binding": {
+            "path": "public-binding.json",
+            "bytes": 66531,
+            "sha256": "aef4734c6bade3cbc61e2c562bae1f8543b08a0e1b4f9242f8cf0bcf738bd947"
+          },
+          "cases": 13,
+          "retainedImages": 26,
+          "pass": true,
+          "immutablePureValidator": true,
+          "originalCargo": true,
+          "closedInventory": true
+        }
+      ]
+    },
+    "barePlayAndV59SaveImport": true,
+    "previousCastleCompletionPreserved": true,
+    "castleFinal": true,
+    "ownNamespacePersistence": true,
+    "immutableSourcePureValidators": {
+      "pass": true,
+      "rooms": 51,
+      "upperPhysicalProofs": [
+        {
+          "level": 41,
+          "pass": true,
+          "originalCargoBodyId": 1760,
+          "loadedStep": 89162,
+          "retainedStartStep": 89304,
+          "currentStep": 94129,
+          "supportedDeckSteps": 396,
+          "islandStep": 91351,
+          "upperRideLowStep": 91474,
+          "upperRideHighStep": 92185,
+          "upperCatchStep": 93944,
+          "physicalLowerCatch": true,
+          "physicalUpperCatch": true,
+          "twoPhysicalCatches": true
+        }
+      ],
+      "impulsePhysicalProofs": [
+        {
+          "level": 41,
+          "pass": true,
+          "originalCargoBodyId": 1760,
+          "originalCargoShapeId": 3520,
+          "worldStep": 133826
+        }
+      ],
+      "castleFinal": true,
+      "attackProofs": [
+        {
+          "group": "early",
+          "pass": true,
+          "immutablePureValidator": true,
+          "cases": 10,
+          "originalCargo": true,
+          "closedInventory": true
+        },
+        {
+          "group": "later",
+          "pass": true,
+          "immutablePureValidator": true,
+          "cases": 13,
+          "originalCargo": true,
+          "closedInventory": true
+        }
+      ]
+    }
+  },
+  "rawJobLogs": [
+    {
+      "id": 117271516802,
+      "name": "prepare",
+      "bytes": 289763,
+      "sha256": "82b59a154dc5cf3544ed814ef5b1f9e9b6eb18de586609f73dea4de0d911cdbb",
+      "bomRetained": true
+    },
+    {
+      "id": 117271895343,
+      "name": "deploy",
+      "bytes": 19558,
+      "sha256": "c89825cd417a906d5e2f69645aa5cb99ab3ab6a3d09ebd319eb77a0e3a610b68",
+      "bomRetained": true
+    },
+    {
+      "id": 117272033309,
+      "name": "attacks (later)",
+      "bytes": 125604,
+      "sha256": "508918b09e02d6525d12fdfa4b86d9782cfae97db7b5eb925d8e1b6251c47cc4",
+      "bomRetained": true
+    },
+    {
+      "id": 117272033314,
+      "name": "public-http",
+      "bytes": 17347,
+      "sha256": "aecd29b13334d71cc7a545e3b6b68eeaf33546371293f1108df0b302c3411689",
+      "bomRetained": true
+    },
+    {
+      "id": 117272033329,
+      "name": "entry",
+      "bytes": 39781,
+      "sha256": "3f9a7a34812b6d704a1ef3613b265275811ef09c655ed707e6338f78d3e64aec",
+      "bomRetained": true
+    },
+    {
+      "id": 117272033337,
+      "name": "native (optics)",
+      "bytes": 49520,
+      "sha256": "8402beb2ec6aa854cb12773a7ed27f77e3c9283b7eaa26ce3cc48f4a85be6598",
+      "bomRetained": true
+    },
+    {
+      "id": 117272033350,
+      "name": "native (fracture)",
+      "bytes": 52451,
+      "sha256": "07837636919301c32e9d14661b0bc4ac88734f8e7ae518f143201c82fd84d746",
+      "bomRetained": true
+    },
+    {
+      "id": 117272033354,
+      "name": "native (energy)",
+      "bytes": 49348,
+      "sha256": "08b50aace710a6071a71ceec3d890f046654c9ad9e574a3447ae49b5a42dc438",
+      "bomRetained": true
+    },
+    {
+      "id": 117272033397,
+      "name": "attacks (early)",
+      "bytes": 125876,
+      "sha256": "98f30e9729cda46e372ec6922f48b8a39c113f3337ecc3b8ab3a5f3cea5d9e7b",
+      "bomRetained": true
+    },
+    {
+      "id": 117272033399,
+      "name": "native (early)",
+      "bytes": 45836,
+      "sha256": "d5c91a85f758deee0f3283a47f71c7aed03481e66c33dec2ab75e3ac73745c15",
+      "bomRetained": true
+    },
+    {
+      "id": 117272033406,
+      "name": "native (living)",
+      "bytes": 49953,
+      "sha256": "a2fa13951c50b7d904558ea86c3391e862638f8cde76fac1906df51982eefe4e",
+      "bomRetained": true
+    },
+    {
+      "id": 117272033495,
+      "name": "native (castle)",
+      "bytes": 42801,
+      "sha256": "83ea4519881059b68bc173a6cfde1a491c280cdcaf81bf5aa38dc566ad580321",
+      "bomRetained": true
+    },
+    {
+      "id": 117275377180,
+      "name": "verify",
+      "bytes": 48785,
+      "sha256": "c8ecdf42661adbb84a6092817bd00fe6c0988f183788f2b3fd7590600328d44a",
+      "bomRetained": true
+    }
+  ],
+  "providerFiles": [
+    {
+      "path": "artifacts.json",
+      "bytes": 9804,
+      "sha256": "e33da94592ca7ee32209255efec7cf6e2557050a8beab8f5b4b773a337991651"
+    },
+    {
+      "path": "controller-commit.json",
+      "bytes": 1235,
+      "sha256": "3c186726120c00d969f96b6b9ea73b3d4c9f7672156712d8bed701a4f9210507"
+    },
+    {
+      "path": "controller-tree.json",
+      "bytes": 337494,
+      "sha256": "b4a6134d96386470c1f70f44c33e4c948c772654a133c7bf85d0902d0ead4ac3"
+    },
+    {
+      "path": "jobs.json",
+      "bytes": 41373,
+      "sha256": "4df4ca18af2c45d1e6852fbc0ca4c83943d6e33488a2c771d6f69d02a00d0ddd"
+    },
+    {
+      "path": "main.json",
+      "bytes": 347,
+      "sha256": "0556d73d608a4907cbd653b2946afb95bc5702a54ba79a14ef30e4258768a48a"
+    },
+    {
+      "path": "run.json",
+      "bytes": 12892,
+      "sha256": "13defb752830ccf97f089e577b0f028132bd726282edf411f64305c22da746e7"
+    },
+    {
+      "path": "source-artifacts.json",
+      "bytes": 24721,
+      "sha256": "f886bce2748f721b1c60c9a5e78d30e1eacc779eff1767a3158702ccdfa760db"
+    },
+    {
+      "path": "source-commit.json",
+      "bytes": 1251,
+      "sha256": "d5f516ddea1a288251821dc803782bd939e80bab3cf24233231246adbf4e7d74"
+    },
+    {
+      "path": "source-jobs.json",
+      "bytes": 97307,
+      "sha256": "18dd8e1cfd750ed728a7489cc4ee4b4f01fe043fc22ce5f5c3915695f94b5f5d"
+    },
+    {
+      "path": "source-run.json",
+      "bytes": 12942,
+      "sha256": "5191b1ec3a0468e987c99638a62a9c502dd5d489a85149f6c04bb65d9f45a6b9"
+    },
+    {
+      "path": "source.json",
+      "bytes": 436,
+      "sha256": "e11bc03f39307416b9e44e282019ef8bcb057248101b45ac25a47f8ca7598a53"
+    }
+  ],
+  "scope": "Independent terminal review of the exact accepted SOURCE and append-only PUBLIC candidate, actual13/13 successful publisher jobs, fresh independent main/Source refs, final-CI canonical deployment API snapshot and authenticated complete HTTP byte closure.",
+  "limitations": [
+    "Scripted software WebGL input; human discovery, human challenge and physical-device FPS remain unmeasured.",
+    "Only the first10 rooms have fresh complete v60 native movies. Other current native wins retain finish stills; historical v59 full Room25/castle movies remain explicitly historical.",
+    "Movies retain12fps canvas frames;120Hz counters and identity guards do not constitute a full120Hz retained geometry trace.",
+    "The enumerated bounded attacks do not establish closure of every bypass or every successful alternative.",
+    "No live Yandex SDK, ads delivery, moderation or public acceptance is claimed.",
+    "Deployment/status API pages are authenticated observations from the successful final CI job; no independent post-CI deployment GET is claimed. Fresh independent connector main and Source refs remain required.",
+    "No live Yandex SDK, advertising delivery or platform moderation acceptance.",
+    "PUBLIC uses51 finish frames,3 entry screenshots and two current finite first-chapter attack packets with decoded start/end media; current full12fps first10 films are independently bound through the accepted SOURCE package. Human/device/live-Yandex acceptance remains open."
+  ]
+}
