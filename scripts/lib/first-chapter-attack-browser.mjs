@@ -15,6 +15,9 @@ const need=(value,message)=>{if(!value)throw Error('First-chapter browser attack
 const same=(a,b)=>JSON.stringify(a)===JSON.stringify(b);
 const digest=value=>typeof value==='string'&&/^[a-f0-9]{64}$/.test(value);
 const integer=(value,min=0,max=100000000)=>Number.isSafeInteger(value)&&value>=min&&value<=max;
+// Provider identifiers are opaque positive safe integers, not frame/byte
+// counters. GitHub's real run IDs already exceed the simulation's 1e8 cap.
+const runInteger=value=>integer(value,1,Number.MAX_SAFE_INTEGER);
 const SCOPES=Object.freeze({sourceCiAccepted:false,nativeAccepted:false,publicationAccepted:false,fullChapterAccepted:false,humanAccepted:false,allBypassesAccepted:false});
 
 export function firstChapterAttackCatalogue(group){
@@ -110,9 +113,9 @@ export function assertFirstChapterAttacksBrowserDiagnostic(report,{group,source,
  need(same(report.source,source)&&same(report.controller,controller)&&same(report.package,pkg)&&report.captureOrigin===captureOrigin,'exact external identities/origin');
  need(report.completeServedPackageVerified===true&&report.sourceWorkingBytesUnchanged===true&&report.controllerWorkingBytesUnchanged===true&&report.harnessWorkingBytesUnchanged===true,'frozen input and complete HTTP observations');
  need(same(report.errors,[])&&report.humanPlaytest===false&&report.hardwareFPSMeasured===false&&report.allBypassesAccepted===false,'errors or widened scope');
- need(report.sourceReview&&integer(report.sourceReview.runId,1)&&integer(report.sourceReview.runAttempt,1),'explicit source run/attempt');
- need(report.captureRun&&integer(report.captureRun.runId)&&integer(report.captureRun.runAttempt),'separate actual capture run');
- need(report.providerRun&&/^[a-f0-9]{40}$/.test(report.providerRun.commit)&&report.providerRun.runId===report.captureRun.runId&&report.providerRun.runAttempt===report.captureRun.runAttempt,'actual provider run/commit');
+ need(report.sourceReview&&runInteger(report.sourceReview.runId)&&runInteger(report.sourceReview.runAttempt),'explicit source run/attempt');
+ need(report.captureRun&&runInteger(report.captureRun.runId)&&runInteger(report.captureRun.runAttempt),'separate actual capture run');
+ need(report.providerRun&&/^[a-f0-9]{40}$/.test(report.providerRun.commit)&&runInteger(report.providerRun.runId)&&runInteger(report.providerRun.runAttempt)&&report.providerRun.runId===report.captureRun.runId&&report.providerRun.runAttempt===report.captureRun.runAttempt,'actual provider run/commit');
  need(/^\/(?:brainrot-portal\/)?campaign-v60\/$/.test(report.capturePath),'exact isolated production package path');
  const h=report.harness;need(h&&h.sourceHead===source.commit&&h.entry==='scripts/lib/first-chapter-attack-browser.mjs'&&h.onlyInterceptedRequest===h.url,'frozen harness provenance');
  need(digest(h.sha256)&&integer(h.bytes,1)&&h.filename==='attack-harness.js'&&h.url===captureOrigin+'/__v60-attack-harness__/'+h.sha256+'.js','exact narrow harness resource');

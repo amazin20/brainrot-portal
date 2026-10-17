@@ -14,6 +14,7 @@ import {buildWorkshopCampaign} from '../src/game/LabWorkshopCampaign.js';
 import {buildReadableWindRoom} from '../src/game/LabWindRoom.js';
 import {addExplorationSurfaces} from '../src/game/LabExplorationSurfaces.js';
 import {gameplayContract,digest,sceneWorkload} from './helpers/lab-art-contract.js';
+import {originalRoom8Contract} from './helpers/lab-room8-gallery-contract.js';
 
 const baseline=JSON.parse(fs.readFileSync(new URL('./fixtures/early-art-v35-contract.json',import.meta.url)));
 const assets=await createHeadlessGame();
@@ -23,7 +24,10 @@ const registries=['colliders','floors','portalPanels','cameraBlockers','aimBlock
 
 for(const expected of baseline.rooms)test(`room ${expected.level} matches the audited physical and interaction contract`,async()=>{
  if(assets.levelIndex!==expected.level-1)await assets.selectLevel(expected.level-1,false);
- assert.equal(digest(gameplayContract(assets)),expected.contract,
+ const contract=gameplayContract(assets);
+ // Room eight alone gained the independently audited fifteen-part gallery.
+ // Its exact original eighteen-collider contract keeps the existing fixture.
+ assert.equal(digest(expected.level===8?originalRoom8Contract(contract):contract),expected.contract,
   'Authored colliders, portal frames, support geometry, camera blockers or interaction state changed');
  if(expected.physicalAudit){
   assert.deepEqual(assets.firstLevel.puzzleGeometry.orders,expected.physicalAudit.allowedOrders,

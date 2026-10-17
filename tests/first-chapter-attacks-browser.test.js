@@ -71,3 +71,24 @@ test('browser gate refuses empty, wrong-group and declaration-only evidence inst
  assert.equal(firstChapterAttackCatalogue('early').length,10);assert.equal(firstChapterAttackCatalogue('later').length,13);assert.throws(()=>firstChapterAttackCatalogue('all'));
  for(const report of [null,{}, {pass:true,group:'early'}, {schemaVersion:1,kind:'actual-first-chapter-ordinary-attacks-browser-diagnostic',pass:true,group:'later'}])assert.throws(()=>assertFirstChapterAttacksBrowserDiagnostic(report,{group:'early'}));
 });
+
+test('provider run identifiers use positive safe-integer range without borrowing the bounded simulation counter cap',()=>{
+ const source={commit:'e'.repeat(40)},controller={},pkg={},captureOrigin='https://example.invalid',expected={group:'early',source,controller,package:pkg,captureOrigin};
+ // This deliberately incomplete prefix is never accepted as browser proof.
+ // It must advance through real-sized run IDs to the next missing-harness
+ // gate; a generic rejection could hide the former 100,000,000 run-ID bug.
+ const prefix=()=>({schemaVersion:1,kind:'actual-first-chapter-ordinary-attacks-browser-diagnostic',pass:true,group:'early',source,controller,package:pkg,captureOrigin,capturePath:'/campaign-v60/',
+  sourceCiAccepted:false,nativeAccepted:false,publicationAccepted:false,fullChapterAccepted:false,humanAccepted:false,allBypassesAccepted:false,
+  completeServedPackageVerified:true,sourceWorkingBytesUnchanged:true,controllerWorkingBytesUnchanged:true,harnessWorkingBytesUnchanged:true,
+  errors:[],humanPlaytest:false,hardwareFPSMeasured:false,sourceReview:{runId:38984486049,runAttempt:1},captureRun:{runId:38984486049,runAttempt:1},providerRun:{commit:'f'.repeat(40),runId:38984486049,runAttempt:1}});
+ for(const id of [38984486049,Number.MAX_SAFE_INTEGER]){
+  const r=prefix();r.sourceReview.runId=r.captureRun.runId=r.providerRun.runId=id;
+  assert.throws(()=>assertFirstChapterAttacksBrowserDiagnostic(r,expected),/frozen harness provenance/);
+ }
+ const attempts=prefix();attempts.sourceReview.runAttempt=attempts.captureRun.runAttempt=attempts.providerRun.runAttempt=Number.MAX_SAFE_INTEGER;
+ assert.throws(()=>assertFirstChapterAttacksBrowserDiagnostic(attempts,expected),/frozen harness provenance/);
+ const invalid=[0,-1,1.5,Number.MAX_SAFE_INTEGER+1,NaN,Infinity,'38984486049'];
+ for(const value of invalid)for(const [record,label]of [['sourceReview','explicit source run\/attempt'],['captureRun','separate actual capture run'],['providerRun','actual provider run\/commit']])for(const key of ['runId','runAttempt']){
+  const r=prefix();r[record][key]=value;assert.throws(()=>assertFirstChapterAttacksBrowserDiagnostic(r,expected),new RegExp(label),record+'.'+key+'='+String(value));
+ }
+});

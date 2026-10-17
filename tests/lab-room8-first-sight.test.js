@@ -4,8 +4,14 @@ import * as THREE from 'three';
 import { createHeadlessGame } from '../scripts/lab-headless.mjs';
 import { runV8Journey } from '../src/game/LabV8Journey.js';
 import { gameplayContract, digest } from './helpers/lab-art-contract.js';
+import { GALLERY_PREFIX, isGallery, originalRoom8Contract } from './helpers/lab-room8-gallery-contract.js';
 
-test('room eight reveals its real fan and shaft at entry, without changing the puzzle', async () => {
+function assertRoom8MechanicalContract(contract) {
+  assert.equal(digest(originalRoom8Contract(contract)), 'f31a739cd4e1c5cdc16e7b6cb106cdaeb4611678728b9f662f9aa9fc31b16ecc',
+    'The original portal, collision, load and interaction geometry must stay at its audited baseline');
+}
+
+test('room eight reveals its fan, shaft and founded gallery while preserving the original puzzle', async () => {
   const game = await createHeadlessGame();
   try {
     await game.selectLevel(7, false);
@@ -14,8 +20,36 @@ test('room eight reveals its real fan and shaft at entry, without changing the p
     assert.deepEqual(level.spawnView, { yaw: .75, pitch: -.15 });
     const contract = gameplayContract(game);
     delete contract.room.spawnView;
-    assert.equal(digest(contract), 'f31a739cd4e1c5cdc16e7b6cb106cdaeb4611678728b9f662f9aa9fc31b16ecc',
-      'The portal, collision, load and interaction geometry must stay at its audited baseline');
+    assertRoom8MechanicalContract(contract);
+    const gallery = game.colliders.filter(c => c.mesh.name.startsWith(GALLERY_PREFIX));
+    for (const c of gallery) {
+      assert.ok(c.mesh.isMesh && c.mesh.visible && c.mesh.material.visible && c.mesh.material.opacity === 1);
+      for (let p = c.mesh.parent; p; p = p.parent) assert.equal(p.visible, true);
+      assert.ok(new THREE.Box3().setFromObject(c.mesh).equals(c.box),
+        `${c.mesh.name}: its visible solid must match its physical collision bounds`);
+    }
+    // Mutate actual captured contracts, rather than constructing a synthetic
+    // accepted fixture. Every exemption boundary and original registry stays
+    // guarded even when a rogue object uses the gallery's naming prefix.
+    const mutations = [
+      c => c.panels['air-up'].center[1] += .1,
+      c => c.colliders.find(row => !isGallery(row)).box.min[0] += .1,
+      c => c.floors[0].y += .1,
+      c => c.terminals[0].position[0] += .1,
+      c => c.room.cargoSpawn[0] += .1,
+      c => c.colliders.find(isGallery).box.max[1] += .1,
+      c => c.colliders.find(isGallery).mesh.visible = false,
+      c => c.colliders.splice(c.colliders.findIndex(isGallery), 1),
+      c => c.colliders.push(structuredClone(c.colliders.find(isGallery))),
+      c => c.colliders.find(isGallery).mesh.name = GALLERY_PREFIX + 'unapproved barrier',
+      c => c.camera.find(isGallery).matrix[12] += .1,
+      c => c.aim.splice(c.aim.findIndex(isGallery), 1),
+      c => c.portalRegistry.push(structuredClone(c.camera.find(isGallery))),
+    ];
+    for (const mutate of mutations) {
+      const altered = structuredClone(contract); mutate(altered);
+      assert.throws(() => assertRoom8MechanicalContract(altered), assert.AssertionError);
+    }
 
     for (const aspect of [1.6, 16 / 9]) {
       game.camera.aspect = aspect;
