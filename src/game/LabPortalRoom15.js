@@ -27,7 +27,12 @@ export function buildRoom15(game,index=14){
  w.box([-14.5,7.8,-12.5],[9,.3,11],w.materials.wall);
  w.box([-14.5,5.575,-10.5],[9,4.05,5],w.materials.wall);
  // Observation slot permits portal fire and shows the trapped friend.
- w.box([-14.5,1,-6.8],[9,2,.3],w.materials.wall);
+ // Keep the original back face and two-metre top. This grounded deep sill
+ // leaves the charged-shot sight band open, but places a jumping traveller
+ // outside pickup reach of the loose friend behind the inner freight throat.
+ // The actual cargo throat remains 1.55 m tall and the reverse field still
+ // extracts the original body through it; no input or progression latch is used.
+ w.box([-14.5,1,-6.1],[9,2,1.7],w.materials.wall).name='Deep freight observation sill';
  w.box([-14.5,6.6,-6.8],[9,2.4,.3],w.materials.wall);
  // Stacked lift pocket: an open column is shared by player and free friend.
  deck('Upper lift landing',-12,-3,-5,0,12);

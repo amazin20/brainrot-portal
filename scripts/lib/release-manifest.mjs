@@ -49,14 +49,14 @@ export function createReleaseManifest({directory,commit,platformArchive,root=pro
  assert.ok(fs.existsSync(path.join(directory,'index.html')),'Stamp an existing production package');
  const inputs=buildSourceInputs(root),files=packageFiles(directory);
  const runtimeConfig={chamberEdition:DEFAULT_EDITION,...ACTIVE_FOUNDATION_RUNTIME_FLAGS};
- const revisions={16:'cable-supported-architecture-v1',19:'portal-tension-physical-v1',22:'counterweight-dynamic-v1',24:'continuous-optical-power-v1',32:'siphon-observatory-v1',36:'magnetic-channel-sealed-end-v2',37:'freight-dispatch-setback-v2',40:'bistable-impulse-branch-v1',
+ const revisions={14:'freight-observation-deep-sill-v1',16:'cable-supported-architecture-v1',19:'portal-tension-physical-v1',22:'counterweight-dynamic-v1',24:'continuous-optical-power-v1',32:'siphon-observatory-v1',36:'magnetic-channel-sealed-end-v2',37:'freight-dispatch-setback-v2',40:'bistable-impulse-branch-v1',
   ...Object.fromEntries(PROGRESSION_INDICES.map(index=>[index,`spatial-progression${index+1}-v1`]))};
  const rooms=FOUNDATION_INDICES.map(index=>{
   const spec=campaignSpec(runtimeConfig,index);
   assert.ok(spec?.id&&spec.title,`Missing definition for room ${index+1}`);
   return {level:foundationDisplayNumber(index),stableLevel:index+1,stableId:`foundation-${String(index+1).padStart(3,'0')}`,id:spec.id,title:spec.title,
    definitionRevision:revisions[index]||'retained-v54',
-   ...(index<10?{presentationRevision:'first-chapter-service-frames-v1'}:index===24?{presentationRevision:'mechanism-readability-v1'}:index===40?{presentationRevision:'bistable-impulse-branch-v1'}:{}),
+   ...(index<10?{presentationRevision:'first-chapter-service-frames-v1'}:index<20?{presentationRevision:'second-chapter-industrial-energy-v1'}:index===24?{presentationRevision:'mechanism-readability-v1'}:index===40?{presentationRevision:'bistable-impulse-branch-v1'}:{}),
    specSha256:sha256(JSON.stringify(spec)),theme:campaignTheme(index).id};
  });
  assert.equal(rooms.length,51);assert.equal(new Set(rooms.map(room=>room.stableId)).size,51);assert.equal(new Set(rooms.map(room=>room.id)).size,51);

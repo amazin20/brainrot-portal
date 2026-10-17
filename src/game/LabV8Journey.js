@@ -14,13 +14,13 @@ const advancedJourneys=[
  * controls. Actor positions, portal positions, mechanism targets and win flags
  * are never assigned by the route. Run only in a debug build or Node test. */
 export async function runV8Journey(game,{onMilestone=()=>{},scenario=null,journeyOptions={}}={}) {
-  // A continuous first-chapter recording starts with the genuine Play button.
+  // A continuous chapter recording starts with the genuine Play button.
   // Reject a prepared/advanced fixture instead of resetting away its history.
   if(journeyOptions.nativeStart===true){
     const spawn=game.firstLevel?.spawn,cargoSpawn=game.firstLevel?.cargoSpawn;
     const coordinates=value=>value?.toArray?.()??value;
     const at=(actual,expected)=>Array.isArray(coordinates(expected))&&actual.distanceTo(V(...coordinates(expected)))<1e-8;
-    assert(game.chamberEdition==='foundation'&&Number.isInteger(game.levelIndex)&&game.levelIndex>=0&&game.levelIndex<10,'Native chapter start requires an ordinary first-ten room');
+    assert(game.chamberEdition==='foundation'&&Number.isInteger(game.levelIndex)&&game.levelIndex>=0&&game.levelIndex<20,'Native chapter start requires an ordinary first- or second-chapter room');
     assert(game.state==='playing'&&game.physics.world.stepnumber===0&&game.elapsed===0,'Native chapter start requires Play before the first physics step');
     assert(at(game.playerPosition,spawn)&&at(game.cargo.position,cargoSpawn)&&!game.heldCube,'Native chapter start requires the original normal spawns');
     assert(game.teleportCount===0&&!game.portals.ready&&game.portals.portals.every(p=>!p)&&game.portalShots.queue.length===0&&game.portalShots.active.length===0,'Native chapter start cannot contain prepared portals or shots');
