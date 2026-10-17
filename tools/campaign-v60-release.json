@@ -1,0 +1,267 @@
+{
+  "schemaVersion": 1,
+  "frozen": true,
+  "repository": "amazin20/brainrot-portal",
+  "namespace": "campaign-v60/",
+  "version": "v60-first-chapter",
+  "controllerParent": "bdb64160e569641f22e8abf953004ec7e51394c9",
+  "sourceBranch": "upgrade/first-chapter-20261017",
+  "sourceWorkflow": ".github/workflows/first-chapter-review.yml",
+  "sourceCommit": "63527aacae5eb311bd64194b029e9bc1e021c474",
+  "sourceTree": "64f6ca1c45eb5f706c5ca99dab7114bf7ba52bd0",
+  "sourceRun": 38985364094,
+  "sourceAttempt": 1,
+  "expectedJobs": [
+    "attacks (early)",
+    "attacks (later)",
+    "build",
+    "cpu (0)",
+    "cpu (1)",
+    "cpu (2)",
+    "cpu (3)",
+    "cpu (4)",
+    "cpu (5)",
+    "films (1)",
+    "films (10)",
+    "films (2)",
+    "films (3)",
+    "films (4)",
+    "films (5)",
+    "films (6)",
+    "films (7)",
+    "films (8)",
+    "films (9)",
+    "native (castle, 41)",
+    "native (early, 1,2,3,4,5,6,7,8,9,10)",
+    "native (energy, 11,12,13,14,15,16,17,18,19,20)",
+    "native (fracture, 42,43,44,45,46,47,48,49,50,51)",
+    "native (living, 21,22,23,24,25,26,27,28,29,30)",
+    "native (optics, 31,32,33,34,35,36,37,38,39,40)",
+    "ordinary (castle, 41)",
+    "ordinary (early, 1,2,3,4,5,6,7,8,9,10)",
+    "ordinary (energy, 11,12,13,14,15,16,17,18,19,20)",
+    "ordinary (fracture, 42,43,44,45,46,47,48,49,50,51)",
+    "ordinary (living, 21,22,23,24,25,26,27,28,29,30)",
+    "ordinary (optics, 31,32,33,34,35,36,37,38,39,40)",
+    "presentation"
+  ],
+  "sourceArtifacts": [
+    {
+      "id": 12082757466,
+      "name": "first-chapter-attacks-early",
+      "size_in_bytes": 1127479,
+      "digest": "sha256:d9d7bc619c7c168b560ebeedeff95fca2068d428efd16dd460a890b1ec2ea305"
+    },
+    {
+      "id": 12083272425,
+      "name": "first-chapter-attacks-later",
+      "size_in_bytes": 980509,
+      "digest": "sha256:43b22b0687aeec1efb22a2654689edadaa9434b8b6754903c0cb9a9f6c06b27f"
+    },
+    {
+      "id": 12083295560,
+      "name": "first-chapter-build",
+      "size_in_bytes": 5450,
+      "digest": "sha256:56352386557a192c022716cb3d32283b3c7ed216d60a61d1d8f879cfab6c6d95"
+    },
+    {
+      "id": 12083720648,
+      "name": "first-chapter-cpu-0",
+      "size_in_bytes": 30015,
+      "digest": "sha256:0b75da839b8f0388a88e330a9512313ca4f9a29b707e2761f4826485720165dd"
+    },
+    {
+      "id": 12084085816,
+      "name": "first-chapter-cpu-1",
+      "size_in_bytes": 25229,
+      "digest": "sha256:01c9aeee8432a2145520059276a3212de7fb97a96fc2a4064f652eb7c6751b24"
+    },
+    {
+      "id": 12083681186,
+      "name": "first-chapter-cpu-2",
+      "size_in_bytes": 34141,
+      "digest": "sha256:d2318f5ad702ba48440dbd2f9c92cd084f1b03548628a5b544280f5f83e383ba"
+    },
+    {
+      "id": 12084756064,
+      "name": "first-chapter-cpu-3",
+      "size_in_bytes": 22793,
+      "digest": "sha256:5d551a193a1b3bab704a66d515ac95817a2cd3f84b59f2a3fd5cd120f680c53c"
+    },
+    {
+      "id": 12083910036,
+      "name": "first-chapter-cpu-4",
+      "size_in_bytes": 214033,
+      "digest": "sha256:e94d53586f1447bed195f534abd155131048a17ebe495e76b3def132d3ee1f13"
+    },
+    {
+      "id": 12083815392,
+      "name": "first-chapter-cpu-5",
+      "size_in_bytes": 23629,
+      "digest": "sha256:506fdbcd86770dbc216a686da6249d94453ad48671871a9924f1d4d96cbdbbde"
+    },
+    {
+      "id": 12083121417,
+      "name": "first-chapter-dist",
+      "size_in_bytes": 4504355,
+      "digest": "sha256:fde202e5d8653c388c5a2fab2ac1d442a97d5294ae1f9d05633b5c84ec1c90e5"
+    },
+    {
+      "id": 12082649617,
+      "name": "first-chapter-film-1",
+      "size_in_bytes": 1192558,
+      "digest": "sha256:1ebaf59b3806d6e53f2867aadb5d4da11614085019919eb7baf8b9577d3a763c"
+    },
+    {
+      "id": 12083054436,
+      "name": "first-chapter-film-10",
+      "size_in_bytes": 3393103,
+      "digest": "sha256:cbe43cbb51bd9073b71936b5f2790442789deeff1310159ab54f25b2a8f4b46c"
+    },
+    {
+      "id": 12083391733,
+      "name": "first-chapter-film-2",
+      "size_in_bytes": 1202032,
+      "digest": "sha256:0cd7efd273efa927a9f58bbdb3f9b3ba7e68f1432275ec27dc66b0bb6057e337"
+    },
+    {
+      "id": 12083830647,
+      "name": "first-chapter-film-3",
+      "size_in_bytes": 2297887,
+      "digest": "sha256:f45bcc63acc4b2a226d354741125d21f9f79ef6d66098f38cb0742c865fdda8c"
+    },
+    {
+      "id": 12083163866,
+      "name": "first-chapter-film-4",
+      "size_in_bytes": 1635562,
+      "digest": "sha256:d880f18ca0385b9eaec4ac8639379e1c8d94378bef7a26bb344094e8f51861de"
+    },
+    {
+      "id": 12083203667,
+      "name": "first-chapter-film-5",
+      "size_in_bytes": 3611594,
+      "digest": "sha256:d867f58d58ac0b16bce9043a6f42e9bcc99f795a40afa41ce74d0413983e5490"
+    },
+    {
+      "id": 12083946003,
+      "name": "first-chapter-film-6",
+      "size_in_bytes": 3967847,
+      "digest": "sha256:cf7015cc28eb68746cfecb7e23b6988af8bbf0cfafdd7e49548d66777f7911f5"
+    },
+    {
+      "id": 12083846731,
+      "name": "first-chapter-film-7",
+      "size_in_bytes": 5714741,
+      "digest": "sha256:a4a5e0db071295857275b9c55f8d871db2761ab98f081d38b728d1f9370b71d1"
+    },
+    {
+      "id": 12083233162,
+      "name": "first-chapter-film-8",
+      "size_in_bytes": 2238128,
+      "digest": "sha256:877437cd31c193d98a9a252b9e4cfd158de5e4d26aff19ed14071bd2c78ded2c"
+    },
+    {
+      "id": 12083701148,
+      "name": "first-chapter-film-9",
+      "size_in_bytes": 3689883,
+      "digest": "sha256:c1524407760d632720b4fd2003c65f3d8311b970a72e61d439dc50e5504d3f95"
+    },
+    {
+      "id": 12083408058,
+      "name": "first-chapter-native-castle",
+      "size_in_bytes": 55512,
+      "digest": "sha256:46cc325238730e9639ae392f35e82b0733e67be18661378a70e220cfef824753"
+    },
+    {
+      "id": 12082564907,
+      "name": "first-chapter-native-early",
+      "size_in_bytes": 517003,
+      "digest": "sha256:de3f6e5f8d8da68b8a0dd33f483d75ff280fc02d331b755452f6f54e56f24ba0"
+    },
+    {
+      "id": 12083194108,
+      "name": "first-chapter-native-energy",
+      "size_in_bytes": 429549,
+      "digest": "sha256:bfc23ee444d346af37179a699ed7b754300134ae10d4933f1605d2421d8173ef"
+    },
+    {
+      "id": 12083257907,
+      "name": "first-chapter-native-fracture",
+      "size_in_bytes": 425077,
+      "digest": "sha256:3754ed8410e17f16fe389134ff875c5cc51f71a73935ac788b44e1cf04def7f6"
+    },
+    {
+      "id": 12083079933,
+      "name": "first-chapter-native-living",
+      "size_in_bytes": 367818,
+      "digest": "sha256:d84c9e22b42992d23505781ebeae0791b527e96446320fd37c93ad389b43e559"
+    },
+    {
+      "id": 12083297891,
+      "name": "first-chapter-native-optics",
+      "size_in_bytes": 360590,
+      "digest": "sha256:24cd5ff15dbf50da4841f1fdc109df7447dbb7a0592866e9b3858852a9f092a7"
+    },
+    {
+      "id": 12083362271,
+      "name": "first-chapter-ordinary-castle",
+      "size_in_bytes": 10746,
+      "digest": "sha256:3122e376c0a3d980c352dede705018fef938c45dcbea9b8950461c82654ff5e8"
+    },
+    {
+      "id": 12083116725,
+      "name": "first-chapter-ordinary-early",
+      "size_in_bytes": 3370,
+      "digest": "sha256:bb97c7a8eda56c71e7e7860064a1137cd7cf027c244e513200633fa0e229c83d"
+    },
+    {
+      "id": 12082932376,
+      "name": "first-chapter-ordinary-energy",
+      "size_in_bytes": 15322,
+      "digest": "sha256:4ca76873e7e27db44bc1b723a0652f1b30064347a401d10a294b2f8a0ed332b9"
+    },
+    {
+      "id": 12082674276,
+      "name": "first-chapter-ordinary-fracture",
+      "size_in_bytes": 7297,
+      "digest": "sha256:ddc3b178684086e7114b7e540579583bb2287579c7914da51e56b51a13cfc189"
+    },
+    {
+      "id": 12083107051,
+      "name": "first-chapter-ordinary-living",
+      "size_in_bytes": 6428,
+      "digest": "sha256:2d50607320ad4c00a32b8c20d3adfebdba3847ea70dc89949acd62efff613f18"
+    },
+    {
+      "id": 12082554706,
+      "name": "first-chapter-ordinary-optics",
+      "size_in_bytes": 5505,
+      "digest": "sha256:724d1b7ce5704f6fdcffbcb2b20dc5f0857ea4f45597970efcbc362ddac8c738"
+    },
+    {
+      "id": 12083765821,
+      "name": "first-chapter-presentation",
+      "size_in_bytes": 4696556,
+      "digest": "sha256:714d7ef77ec82dc04b25f7a8a4b685210e37a376d96ce53477b4ae6f7bd792f3"
+    },
+    {
+      "id": 12083285535,
+      "name": "first-chapter-yandex",
+      "size_in_bytes": 4347232,
+      "digest": "sha256:447116b106cbe043f1dee71a02fe39dcaeca6ce50e875b15b22e30da96696dfd"
+    }
+  ],
+  "distArtifact": "first-chapter-dist",
+  "sourceAcceptance": {
+    "path": "tools/campaign-v60-root-source-acceptance.json",
+    "sha256": "b7c87a3ad9e1de61ed425c178effad737e532fb3707e7eee66e2747870990a41"
+  },
+  "baselineCatalog": "tools/campaign-v59-public-files.json",
+  "baselineCatalogSha256": "0bb2f2070aaea88e96e4f70da4b8c4634be9b4c8a2d8f425eac6ec04bba8c185",
+  "baselineInventorySha256": "5a51e244761ba0947a1f4acfd99d98e04a29ea78d5e796cc4bf456e4c09381f8",
+  "baselineDeployment": {
+    "id": 7130303164,
+    "sha": "29e252b92e848197c1051725e9838a4084f0aaf7"
+  },
+  "publicationAccepted": false
+}
