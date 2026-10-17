@@ -1,0 +1,267 @@
+{
+  "schemaVersion": 1,
+  "frozen": true,
+  "repository": "amazin20/brainrot-portal",
+  "namespace": "campaign-v61/",
+  "version": "v61-second-chapter",
+  "controllerParent": "38740f73f6452cb8e00a552e91d860a6207ea71b",
+  "sourceBranch": "upgrade/second-chapter-20261017",
+  "sourceWorkflow": ".github/workflows/second-chapter-review.yml",
+  "sourceCommit": "d91c208c72f3eede1fc731dc637f12055c4a4769",
+  "sourceTree": "0c9278dfee84983367cf0111ab1659703d6a30ac",
+  "sourceRun": 39047089739,
+  "sourceAttempt": 1,
+  "expectedJobs": [
+    "attacks (early)",
+    "attacks (later)",
+    "build",
+    "cpu (0)",
+    "cpu (1)",
+    "cpu (2)",
+    "cpu (3)",
+    "cpu (4)",
+    "cpu (5)",
+    "films (11)",
+    "films (12)",
+    "films (13)",
+    "films (14)",
+    "films (15)",
+    "films (16)",
+    "films (17)",
+    "films (18)",
+    "films (19)",
+    "films (20)",
+    "native (castle, 41)",
+    "native (early, 1,2,3,4,5,6,7,8,9,10)",
+    "native (energy, 11,12,13,14,15,16,17,18,19,20)",
+    "native (fracture, 42,43,44,45,46,47,48,49,50,51)",
+    "native (living, 21,22,23,24,25,26,27,28,29,30)",
+    "native (optics, 31,32,33,34,35,36,37,38,39,40)",
+    "ordinary (castle, 41)",
+    "ordinary (early, 1,2,3,4,5,6,7,8,9,10)",
+    "ordinary (energy, 11,12,13,14,15,16,17,18,19,20)",
+    "ordinary (fracture, 42,43,44,45,46,47,48,49,50,51)",
+    "ordinary (living, 21,22,23,24,25,26,27,28,29,30)",
+    "ordinary (optics, 31,32,33,34,35,36,37,38,39,40)",
+    "presentation"
+  ],
+  "sourceArtifacts": [
+    {
+      "id": 12106224095,
+      "name": "second-chapter-attacks-early",
+      "size_in_bytes": 1471939,
+      "digest": "sha256:b6bb401fd54c1358f2e6b642f1c4436a4e8c18af2652dd03345142ed8decf9bd"
+    },
+    {
+      "id": 12105424378,
+      "name": "second-chapter-attacks-later",
+      "size_in_bytes": 1314276,
+      "digest": "sha256:043a8574497841596b0c36e01c733fb8ca5212f7dd2598317a01b57fa7f3004d"
+    },
+    {
+      "id": 12105723090,
+      "name": "second-chapter-build",
+      "size_in_bytes": 5452,
+      "digest": "sha256:6f1879a63c7737561bb99b12db1a9c1c805c66430b5bdcd03daa9b75daa4078a"
+    },
+    {
+      "id": 12107215495,
+      "name": "second-chapter-cpu-0",
+      "size_in_bytes": 21016,
+      "digest": "sha256:ff027fa714160316a2326bfd030d18c0f1f6c3102195c11acaeb115beab4aedf"
+    },
+    {
+      "id": 12105329703,
+      "name": "second-chapter-cpu-1",
+      "size_in_bytes": 23684,
+      "digest": "sha256:3f5c06d8f4662df1d7943a06100bf4c0887c0d9337e60e89e875cf037dde38ab"
+    },
+    {
+      "id": 12106163035,
+      "name": "second-chapter-cpu-2",
+      "size_in_bytes": 34769,
+      "digest": "sha256:c819348ee6ad8e550fddab6a52a1646679840b6f996a85818175f1e31faa0899"
+    },
+    {
+      "id": 12106403137,
+      "name": "second-chapter-cpu-3",
+      "size_in_bytes": 219977,
+      "digest": "sha256:8d4c706fc03f3f534eb23024a100bc432e7ae1235188ca574067259e3f4fe3ea"
+    },
+    {
+      "id": 12107347599,
+      "name": "second-chapter-cpu-4",
+      "size_in_bytes": 25004,
+      "digest": "sha256:e03a1ef87e3cf4edac2ddae234fc71889772b7de66e66d06da4f14dfdccea6e2"
+    },
+    {
+      "id": 12106678601,
+      "name": "second-chapter-cpu-5",
+      "size_in_bytes": 33113,
+      "digest": "sha256:4ef27809089109258e9640a03c7b91caeefd99ad5b6c5d322c2dedc6f78e0b8d"
+    },
+    {
+      "id": 12106057089,
+      "name": "second-chapter-dist",
+      "size_in_bytes": 4508294,
+      "digest": "sha256:51eee2812ce03eb655b5e5c15a9120e1506aaab2597540a728f8d0648fd421d8"
+    },
+    {
+      "id": 12106278009,
+      "name": "second-chapter-film-11",
+      "size_in_bytes": 1804101,
+      "digest": "sha256:bc32a6dd3be7ecbab3dacce8f7bc99cc0db2e82ccfabc4909db2656647d85409"
+    },
+    {
+      "id": 12107461183,
+      "name": "second-chapter-film-12",
+      "size_in_bytes": 7724831,
+      "digest": "sha256:bc933d6318293ee9f06fe9a6e66d1a40b08611a9b6145937b1cf70f75f63c8c6"
+    },
+    {
+      "id": 12107745200,
+      "name": "second-chapter-film-13",
+      "size_in_bytes": 8853357,
+      "digest": "sha256:ae29438be46021fff7364e16edfea4eaf77f835f51bc4c491b81ec65e1cbc806"
+    },
+    {
+      "id": 12106936530,
+      "name": "second-chapter-film-14",
+      "size_in_bytes": 4657419,
+      "digest": "sha256:b60e2e1536b63042bf7589b976b8c1c402d7e5980a81710f6c1a4f0a318413da"
+    },
+    {
+      "id": 12107475199,
+      "name": "second-chapter-film-15",
+      "size_in_bytes": 10375380,
+      "digest": "sha256:2c7c3fb8e732c8a5895eb58df9d333cd5b71d748c0dbdb00fff401e3cf4fcdf6"
+    },
+    {
+      "id": 12106583401,
+      "name": "second-chapter-film-16",
+      "size_in_bytes": 6708433,
+      "digest": "sha256:7750e3881c65359e2f8e9b416568fc29e7bedcda90990a8f8e2d880426fd5521"
+    },
+    {
+      "id": 12106776746,
+      "name": "second-chapter-film-17",
+      "size_in_bytes": 5133305,
+      "digest": "sha256:4cdf29ba234bdfee2a3037cf2f8e986e5f0f869238e6101f550a1a52a2f6c2be"
+    },
+    {
+      "id": 12106835015,
+      "name": "second-chapter-film-18",
+      "size_in_bytes": 2920509,
+      "digest": "sha256:8e295cd7c59c2451995c55ea9ba50be37c6dd520fd1fc3f6e89141e7ab6fdd9e"
+    },
+    {
+      "id": 12106449069,
+      "name": "second-chapter-film-19",
+      "size_in_bytes": 4513522,
+      "digest": "sha256:76235396b6daa68123a3b6071eefa7f0b5bd1006001f21ff77893b4e55b317c9"
+    },
+    {
+      "id": 12105694925,
+      "name": "second-chapter-film-20",
+      "size_in_bytes": 4632861,
+      "digest": "sha256:fd5fadaf2cb5dfac9a362cdd94fbba71dea548672a50a151f4813dbcf4d4e4a6"
+    },
+    {
+      "id": 12106448047,
+      "name": "second-chapter-native-castle",
+      "size_in_bytes": 55517,
+      "digest": "sha256:e94bb1b673e68ff2fb8c590f8c048bdad8c1e0ef7b19d7298e34141068ebfde2"
+    },
+    {
+      "id": 12106620949,
+      "name": "second-chapter-native-early",
+      "size_in_bytes": 517026,
+      "digest": "sha256:29cc0694c5d4828b365c9d7c9f0c12417ccb2547a5dbd77ad579ca6e9362c378"
+    },
+    {
+      "id": 12107005304,
+      "name": "second-chapter-native-energy",
+      "size_in_bytes": 437829,
+      "digest": "sha256:f1db84ee61c4400dc1b71335753e22acf3261f334cd6cd801ea6539f91c562de"
+    },
+    {
+      "id": 12106418348,
+      "name": "second-chapter-native-fracture",
+      "size_in_bytes": 424998,
+      "digest": "sha256:89d2781ac79d4919102863f3b4ce60f74ab818026ff88e3dac37141c71982cf9"
+    },
+    {
+      "id": 12106208231,
+      "name": "second-chapter-native-living",
+      "size_in_bytes": 367891,
+      "digest": "sha256:bd82bc05b7d57b7e294476ca47a7700f3e531e389876d0c21c4fed1d3ef5b2e8"
+    },
+    {
+      "id": 12106138518,
+      "name": "second-chapter-native-optics",
+      "size_in_bytes": 360888,
+      "digest": "sha256:a65cda95788ca6243e35a7ab5ad52ab8b992d709864d6196dd06066e9fdf6cd2"
+    },
+    {
+      "id": 12106084620,
+      "name": "second-chapter-ordinary-castle",
+      "size_in_bytes": 10742,
+      "digest": "sha256:a4b13800065604f2c1de7985bf53bfba1c75cd9729f561cc7316f51cc6b29e81"
+    },
+    {
+      "id": 12106287219,
+      "name": "second-chapter-ordinary-early",
+      "size_in_bytes": 3371,
+      "digest": "sha256:cd0408307b4223718b7faf47ed75193fc378945238904393080a9d96b7a7b1b1"
+    },
+    {
+      "id": 12106561250,
+      "name": "second-chapter-ordinary-energy",
+      "size_in_bytes": 15328,
+      "digest": "sha256:181e211e0592944ed35bac01b2e8815f3f48b60f3d686dfd9caea704fc256318"
+    },
+    {
+      "id": 12106601184,
+      "name": "second-chapter-ordinary-fracture",
+      "size_in_bytes": 7295,
+      "digest": "sha256:5481fb49bc21aac864310366f9cb2c16cab64e78b2face8006eb0f2de3834eea"
+    },
+    {
+      "id": 12106531579,
+      "name": "second-chapter-ordinary-living",
+      "size_in_bytes": 6429,
+      "digest": "sha256:9c34b4abc721cce03b9fd79a64b83c6d309e6b6767525f3627b5d237cfbd1d68"
+    },
+    {
+      "id": 12106481636,
+      "name": "second-chapter-ordinary-optics",
+      "size_in_bytes": 5505,
+      "digest": "sha256:f1e706c6ff8259e9b123e990fb800e59e954d0262b20bd1ff5d8bff3dde94274"
+    },
+    {
+      "id": 12106805676,
+      "name": "second-chapter-presentation",
+      "size_in_bytes": 4589179,
+      "digest": "sha256:d3bbaf7636d0bf0a70c291e4de47440e692bab4096144746bae1bdb985da4f97"
+    },
+    {
+      "id": 12106381193,
+      "name": "second-chapter-yandex",
+      "size_in_bytes": 4350992,
+      "digest": "sha256:89e1e3de7a53137d4bb0fb64fed96b8ff8881bf647b82403e907b943bbde1b7b"
+    }
+  ],
+  "distArtifact": "second-chapter-dist",
+  "sourceAcceptance": {
+    "path": "tools/campaign-v61-root-source-acceptance.json",
+    "sha256": "3cad6fe0dd5615673a5278a0e090ae55975ba83d66b596620b3d019a94ca31aa"
+  },
+  "baselineCatalog": "tools/campaign-v60-public-files.json",
+  "baselineCatalogSha256": "ce3b2061d69b1ea9c9b3062557a35ae1c2cd80322a7114cb45be402e53a5f716",
+  "baselineInventorySha256": "ef050541d24ae6a58710ad1f5723b3807f41291026be5d00a61b39a438a8f7eb",
+  "baselineDeployment": {
+    "id": 7132969556,
+    "sha": "62f2a8c5d83a23f5c1f1581a2619b35dd9d8b156"
+  },
+  "publicationAccepted": false
+}
