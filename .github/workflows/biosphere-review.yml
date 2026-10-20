@@ -1,0 +1,243 @@
+name: Review biosphere ten physical chambers and independent full native movies
+on:
+  push:
+    branches: [upgrade/biosphere-20261020]
+permissions: {contents: read}
+defaults:
+  run:
+    shell: bash
+concurrency:
+  group: biosphere-review-${{ github.sha }}
+  cancel-in-progress: true
+env:
+  BUILD_COMMIT: ${{ github.sha }}
+  CODEX_PRIMARY_RUNTIME_PYTHON: /usr/bin/python3
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: '${{ github.sha }}', fetch-depth: 0, persist-credentials: false}
+      - uses: actions/setup-node@v4
+        with: {node-version: 22, cache: npm}
+      - run: npm ci
+      - run: node --test tests/release-manifest.test.js
+      - run: npm run build
+      - run: node scripts/stamp-build.mjs
+      - run: node scripts/v8-package-check.mjs
+      - run: node scripts/check-yandex-platform.mjs
+      - run: node scripts/package-yandex.mjs --build --output=qa/yandex-package/brainrot-portal-v62-yandex.zip --report=qa/yandex-package/report.json
+      - run: node scripts/qa-biosphere-release.mjs package
+      - uses: actions/upload-artifact@v4
+        with: {name: biosphere-dist, path: dist, retention-days: 14, if-no-files-found: error}
+      - uses: actions/upload-artifact@v4
+        with: {name: biosphere-yandex, path: qa/yandex-package, retention-days: 14, if-no-files-found: error}
+      - uses: actions/upload-artifact@v4
+        with: {name: biosphere-build, path: qa/biosphere-build, retention-days: 14, if-no-files-found: error}
+  cpu:
+    runs-on: ubuntu-latest
+    timeout-minutes: 100
+    strategy:
+      fail-fast: false
+      matrix: {part: [0, 1, 2, 3, 4, 5]}
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: '${{ github.sha }}', fetch-depth: 0, persist-credentials: false}
+      - uses: actions/setup-node@v4
+        with: {node-version: 22, cache: npm}
+      - run: npm ci
+      - run: node scripts/qa-campaign-cpu-part.mjs
+        env: {CPU_PART: '${{ matrix.part }}'}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: {name: 'biosphere-cpu-${{ matrix.part }}', path: 'qa/cpu-${{ matrix.part }}', retention-days: 14, if-no-files-found: error}
+  ordinary:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - {part: early, rooms: '1,2,3,4,5,6,7,8,9,10'}
+          - {part: energy, rooms: '11,12,13,14,15,16,17,18,19,20'}
+          - {part: living, rooms: '21,22,23,24,25,26,27,28,29,30'}
+          - {part: optics, rooms: '31,32,33,34,35,36,37,38,39,40'}
+          - {part: fracture, rooms: '42,43,44,45,46,47,48,49,50,51'}
+          - {part: castle, rooms: '41'}
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: '${{ github.sha }}', fetch-depth: 0, persist-credentials: false}
+      - uses: actions/setup-node@v4
+        with: {node-version: 22, cache: npm}
+      - run: npm ci
+      - run: node scripts/qa-campaign-ordinary.mjs
+        env: {ROOMS: '${{ matrix.rooms }}', OUT: 'qa/ordinary-${{ matrix.part }}/report.json'}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: {name: 'biosphere-ordinary-${{ matrix.part }}', path: 'qa/ordinary-${{ matrix.part }}', retention-days: 14, if-no-files-found: error}
+  native:
+    needs: [build]
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - {part: early, rooms: '1,2,3,4,5,6,7,8,9,10'}
+          - {part: energy, rooms: '11,12,13,14,15,16,17,18,19,20'}
+          - {part: living, rooms: '21,22,23,24,25,26,27,28,29,30'}
+          - {part: optics, rooms: '31,32,33,34,35,36,37,38,39,40'}
+          - {part: fracture, rooms: '42,43,44,45,46,47,48,49,50,51'}
+          - {part: castle, rooms: '41'}
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: '${{ github.sha }}', fetch-depth: 0, persist-credentials: false}
+      - uses: actions/setup-node@v4
+        with: {node-version: 22, cache: npm}
+      - run: npm ci
+      - run: npm install --no-save --package-lock=false puppeteer-core@24.16.0
+      - run: sudo apt-get update && sudo apt-get install -y python3-pil
+      - uses: actions/download-artifact@v4
+        with: {name: biosphere-dist, path: dist}
+      - run: node scripts/qa-biosphere-release.mjs verify-package
+      - name: Complete this ordinary production WebGL group with the same original cargo
+        run: |
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+          node scripts/qa-creative-browser.mjs
+          node scripts/qa-biosphere-release.mjs native "qa/native-${{ matrix.part }}/report.json" "${{ matrix.rooms }}"
+        env:
+          CASE: route
+          STRICT_CAPTURE: '1'
+          REUSE_PAGE: '0'
+          LEVELS: ${{ matrix.rooms }}
+          START_SERVER: '1'
+          SERVER_MODE: preview
+          OUT_DIR: qa/native-${{ matrix.part }}
+          ROUTE_TIMEOUT_MS: '6900000'
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: {name: 'biosphere-native-${{ matrix.part }}', path: 'qa/native-${{ matrix.part }}', retention-days: 14, if-no-files-found: error}
+  presentation:
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: '${{ github.sha }}', fetch-depth: 0, persist-credentials: false}
+      - uses: actions/setup-node@v4
+        with: {node-version: 22, cache: npm}
+      - run: npm ci
+      - run: npm install --no-save --package-lock=false puppeteer-core@24.16.0
+      - run: sudo apt-get update && sudo apt-get install -y python3-pil
+      - uses: actions/download-artifact@v4
+        with: {name: biosphere-dist, path: dist}
+      - uses: actions/download-artifact@v4
+        with: {name: biosphere-yandex, path: qa/yandex-package}
+      - run: node scripts/qa-biosphere-release.mjs verify-package
+      - name: Inspect the ten Biosphere interiors and five updated mechanisms at balanced quality
+        run: |
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+          node scripts/qa-creative-browser.mjs
+          node scripts/qa-biosphere-release.mjs architecture qa/presentation/architecture/report.json 21,22,23,24,25,26,27,28,29,30
+        env: {CASE: overview, INSPECTION_QUALITY: balanced, STRICT_CAPTURE: '1', REUSE_PAGE: '0', LEVELS: '21,22,23,24,25,26,27,28,29,30', START_SERVER: '1', SERVER_MODE: preview, OUT_DIR: qa/presentation/architecture}
+      - name: Check current menu, v61 save import and isolated writes
+        run: |
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+          PRODUCTION=1 OUT_DIR=qa/presentation/menu node scripts/qa-campaign-menu.mjs
+          SITE_DIR=dist OUT_DIR=qa/presentation/storage node scripts/qa-campaign-save-isolation.mjs
+      - name: Open the exact Yandex archive in a nested upload path
+        run: |
+          python3 -m zipfile -e qa/yandex-package/brainrot-portal-v62-yandex.zip dist-yandex
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+          node scripts/check-yandex-browser.mjs
+        env: {YANDEX_DIR: dist-yandex, OUT_DIR: qa/presentation/yandex-browser}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: {name: biosphere-presentation, path: qa/presentation, retention-days: 14, if-no-files-found: error}
+
+
+  attacks:
+    needs: [build]
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix: {group: [early, later]}
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: '${{ github.sha }}', fetch-depth: 0, persist-credentials: false}
+      - uses: actions/setup-node@v4
+        with: {node-version: 22, cache: npm}
+      - run: npm ci
+      - run: npm install --no-save --package-lock=false puppeteer-core@24.16.0
+      - run: sudo apt-get update && sudo apt-get install -y python3-pil
+      - uses: actions/download-artifact@v4
+        with: {name: biosphere-dist, path: dist}
+      - run: node scripts/qa-biosphere-release.mjs verify-package
+      - name: Observe bounded biosphere attacks and any successful alternatives through ordinary inputs
+        run: |
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+          node scripts/qa-biosphere-attacks-browser.mjs
+        env: {GROUP: '${{ matrix.group }}', SOURCE_DIR: '.', BUILD_DIR: dist, PAGE_URL: 'http://127.0.0.1:4173/campaign-v62/', START_SERVER: '1', OUT_DIR: 'qa/biosphere-attacks-${{ matrix.group }}'}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: {name: 'biosphere-attacks-${{ matrix.group }}', path: 'qa/biosphere-attacks-${{ matrix.group }}', retention-days: 14, if-no-files-found: error}
+
+  films:
+    needs: [build]
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      matrix: {room: [21, 22, 23, 24, 25, 26, 27, 28, 29, 30]}
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: '${{ github.sha }}', fetch-depth: 0, persist-credentials: false}
+      - uses: actions/setup-node@v4
+        with: {node-version: 22, cache: npm}
+      - run: npm ci
+      - run: npm install --no-save --package-lock=false puppeteer-core@24.16.0
+      - run: sudo apt-get update && sudo apt-get install -y python3-pil ffmpeg
+      - uses: actions/download-artifact@v4
+        with: {name: biosphere-dist, path: dist}
+      - run: node scripts/qa-biosphere-release.mjs verify-package
+      - name: Retain one independent complete biosphere route at twelve frames per second
+        run: |
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+          node scripts/qa-biosphere-native.mjs
+        env: {ROOM: '${{ matrix.room }}', SOURCE_DIR: '.', BUILD_DIR: dist, PAGE_URL: 'http://127.0.0.1:4173/campaign-v62/', START_SERVER: '1', OUT_DIR: 'qa/biosphere-film-${{ matrix.room }}'}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: {name: 'biosphere-film-${{ matrix.room }}', path: 'qa/biosphere-film-${{ matrix.room }}', retention-days: 14, if-no-files-found: error}
+
+  camera17:
+    needs: [build]
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - {viewport: landscape, width: 640, height: 360}
+          - {viewport: portrait, width: 390, height: 844}
+          - {viewport: classic, width: 800, height: 600}
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: '${{ github.sha }}', fetch-depth: 0, persist-credentials: false}
+      - uses: actions/setup-node@v4
+        with: {node-version: 22, cache: npm}
+      - run: npm ci
+      - run: npm install --no-save --package-lock=false puppeteer-core@24.16.0
+      - run: sudo apt-get update && sudo apt-get install -y python3-pil ffmpeg
+      - uses: actions/download-artifact@v4
+        with: {name: biosphere-dist, path: dist}
+      - run: node scripts/qa-biosphere-release.mjs verify-package
+      - name: Retain one complete room17 route at the exact declared viewport at twelve frames per second
+        run: |
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+          node scripts/qa-biosphere-native.mjs
+        env: {ROOM: '17', CAPTURE_VIEWPORT: '${{ matrix.viewport }}', CAPTURE_WIDTH: '${{ matrix.width }}', CAPTURE_HEIGHT: '${{ matrix.height }}', SOURCE_DIR: '.', BUILD_DIR: dist, PAGE_URL: 'http://127.0.0.1:4173/campaign-v62/', START_SERVER: '1', OUT_DIR: 'qa/biosphere-camera17-${{ matrix.viewport }}'}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: {name: 'biosphere-camera17-${{ matrix.viewport }}', path: 'qa/biosphere-camera17-${{ matrix.viewport }}', retention-days: 14, if-no-files-found: error}

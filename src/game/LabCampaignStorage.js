@@ -9,10 +9,11 @@ export const CAMPAIGN_V58_STORAGE_PREFIX='brainrot-campaign-v58:';
 export const CAMPAIGN_V59_STORAGE_PREFIX='brainrot-campaign-v59:';
 export const CAMPAIGN_V60_STORAGE_PREFIX='brainrot-campaign-v60:';
 export const CAMPAIGN_V61_STORAGE_PREFIX='brainrot-campaign-v61:';
+export const CAMPAIGN_V62_STORAGE_PREFIX='brainrot-campaign-v62:';
 export const CAMPAIGN_PREFERENCE_KEY='brainrot-portal.preferences.v24';
 const LEGACY_PREFERENCE_KEY='nesi.preferences.v8';
 const campaignPaths=version=>new Set(['','/brainrot-portal'].flatMap(base=>['','/','/index.html'].map(suffix=>`${base}/campaign-${version}${suffix}`)));
-const v55Paths=campaignPaths('v55'),v56Paths=campaignPaths('v56'),v57Paths=campaignPaths('v57'),v58Paths=campaignPaths('v58'),v59Paths=campaignPaths('v59'),v60Paths=campaignPaths('v60'),v61Paths=campaignPaths('v61');
+const v55Paths=campaignPaths('v55'),v56Paths=campaignPaths('v56'),v57Paths=campaignPaths('v57'),v58Paths=campaignPaths('v58'),v59Paths=campaignPaths('v59'),v60Paths=campaignPaths('v60'),v61Paths=campaignPaths('v61'),v62Paths=campaignPaths('v62');
 
 export const isCampaignV55Path=pathname=>v55Paths.has(pathname);
 export const isCampaignV56Path=pathname=>v56Paths.has(pathname);
@@ -21,9 +22,10 @@ export const isCampaignV58Path=pathname=>v58Paths.has(pathname);
 export const isCampaignV59Path=pathname=>v59Paths.has(pathname);
 export const isCampaignV60Path=pathname=>v60Paths.has(pathname);
 export const isCampaignV61Path=pathname=>v61Paths.has(pathname);
+export const isCampaignV62Path=pathname=>v62Paths.has(pathname);
 export function foundationCampaignPrefix(pathname,{fullFoundationCampaign=true}={}){
  if(!fullFoundationCampaign)return FOUNDATION_STORAGE_PREFIX;
- return isCampaignV61Path(pathname)?CAMPAIGN_V61_STORAGE_PREFIX:isCampaignV60Path(pathname)?CAMPAIGN_V60_STORAGE_PREFIX:isCampaignV59Path(pathname)?CAMPAIGN_V59_STORAGE_PREFIX:isCampaignV58Path(pathname)?CAMPAIGN_V58_STORAGE_PREFIX:isCampaignV57Path(pathname)?CAMPAIGN_V57_STORAGE_PREFIX:isCampaignV56Path(pathname)?CAMPAIGN_V56_STORAGE_PREFIX:isCampaignV55Path(pathname)?CAMPAIGN_V55_STORAGE_PREFIX:FOUNDATION_STORAGE_PREFIX;
+ return isCampaignV62Path(pathname)?CAMPAIGN_V62_STORAGE_PREFIX:isCampaignV61Path(pathname)?CAMPAIGN_V61_STORAGE_PREFIX:isCampaignV60Path(pathname)?CAMPAIGN_V60_STORAGE_PREFIX:isCampaignV59Path(pathname)?CAMPAIGN_V59_STORAGE_PREFIX:isCampaignV58Path(pathname)?CAMPAIGN_V58_STORAGE_PREFIX:isCampaignV57Path(pathname)?CAMPAIGN_V57_STORAGE_PREFIX:isCampaignV56Path(pathname)?CAMPAIGN_V56_STORAGE_PREFIX:isCampaignV55Path(pathname)?CAMPAIGN_V55_STORAGE_PREFIX:FOUNDATION_STORAGE_PREFIX;
 }
 
 /** The expanded castle must be played again, while its stable bookmark and all
@@ -52,7 +54,7 @@ export function foundationCampaignStorage(storage,{pathname='',fullFoundationCam
  if(!storage)return undefined;
  const ownPrefix=foundationCampaignPrefix(pathname,{fullFoundationCampaign});
  if(ownPrefix===FOUNDATION_STORAGE_PREFIX)return foundationStorage(storage);
- const imports=ownPrefix===CAMPAIGN_V61_STORAGE_PREFIX?[CAMPAIGN_V60_STORAGE_PREFIX,CAMPAIGN_V59_STORAGE_PREFIX,CAMPAIGN_V58_STORAGE_PREFIX,CAMPAIGN_V57_STORAGE_PREFIX,CAMPAIGN_V56_STORAGE_PREFIX,CAMPAIGN_V55_STORAGE_PREFIX,FOUNDATION_STORAGE_PREFIX]:ownPrefix===CAMPAIGN_V60_STORAGE_PREFIX?[CAMPAIGN_V59_STORAGE_PREFIX,CAMPAIGN_V58_STORAGE_PREFIX,CAMPAIGN_V57_STORAGE_PREFIX,CAMPAIGN_V56_STORAGE_PREFIX,CAMPAIGN_V55_STORAGE_PREFIX,FOUNDATION_STORAGE_PREFIX]:ownPrefix===CAMPAIGN_V59_STORAGE_PREFIX?[CAMPAIGN_V58_STORAGE_PREFIX,CAMPAIGN_V57_STORAGE_PREFIX,CAMPAIGN_V56_STORAGE_PREFIX,CAMPAIGN_V55_STORAGE_PREFIX,FOUNDATION_STORAGE_PREFIX]:ownPrefix===CAMPAIGN_V58_STORAGE_PREFIX?[CAMPAIGN_V57_STORAGE_PREFIX,CAMPAIGN_V56_STORAGE_PREFIX,CAMPAIGN_V55_STORAGE_PREFIX,FOUNDATION_STORAGE_PREFIX]:ownPrefix===CAMPAIGN_V57_STORAGE_PREFIX?[CAMPAIGN_V56_STORAGE_PREFIX,CAMPAIGN_V55_STORAGE_PREFIX,FOUNDATION_STORAGE_PREFIX]:ownPrefix===CAMPAIGN_V56_STORAGE_PREFIX?[CAMPAIGN_V55_STORAGE_PREFIX,FOUNDATION_STORAGE_PREFIX]:[FOUNDATION_STORAGE_PREFIX];
+ const imports=ownPrefix===CAMPAIGN_V62_STORAGE_PREFIX?[CAMPAIGN_V61_STORAGE_PREFIX,CAMPAIGN_V60_STORAGE_PREFIX,CAMPAIGN_V59_STORAGE_PREFIX,CAMPAIGN_V58_STORAGE_PREFIX,CAMPAIGN_V57_STORAGE_PREFIX,CAMPAIGN_V56_STORAGE_PREFIX,CAMPAIGN_V55_STORAGE_PREFIX,FOUNDATION_STORAGE_PREFIX]:ownPrefix===CAMPAIGN_V61_STORAGE_PREFIX?[CAMPAIGN_V60_STORAGE_PREFIX,CAMPAIGN_V59_STORAGE_PREFIX,CAMPAIGN_V58_STORAGE_PREFIX,CAMPAIGN_V57_STORAGE_PREFIX,CAMPAIGN_V56_STORAGE_PREFIX,CAMPAIGN_V55_STORAGE_PREFIX,FOUNDATION_STORAGE_PREFIX]:ownPrefix===CAMPAIGN_V60_STORAGE_PREFIX?[CAMPAIGN_V59_STORAGE_PREFIX,CAMPAIGN_V58_STORAGE_PREFIX,CAMPAIGN_V57_STORAGE_PREFIX,CAMPAIGN_V56_STORAGE_PREFIX,CAMPAIGN_V55_STORAGE_PREFIX,FOUNDATION_STORAGE_PREFIX]:ownPrefix===CAMPAIGN_V59_STORAGE_PREFIX?[CAMPAIGN_V58_STORAGE_PREFIX,CAMPAIGN_V57_STORAGE_PREFIX,CAMPAIGN_V56_STORAGE_PREFIX,CAMPAIGN_V55_STORAGE_PREFIX,FOUNDATION_STORAGE_PREFIX]:ownPrefix===CAMPAIGN_V58_STORAGE_PREFIX?[CAMPAIGN_V57_STORAGE_PREFIX,CAMPAIGN_V56_STORAGE_PREFIX,CAMPAIGN_V55_STORAGE_PREFIX,FOUNDATION_STORAGE_PREFIX]:ownPrefix===CAMPAIGN_V57_STORAGE_PREFIX?[CAMPAIGN_V56_STORAGE_PREFIX,CAMPAIGN_V55_STORAGE_PREFIX,FOUNDATION_STORAGE_PREFIX]:ownPrefix===CAMPAIGN_V56_STORAGE_PREFIX?[CAMPAIGN_V55_STORAGE_PREFIX,FOUNDATION_STORAGE_PREFIX]:[FOUNDATION_STORAGE_PREFIX];
  const hasRecord=prefix=>[CAMPAIGN_PREFERENCE_KEY,LEGACY_PREFERENCE_KEY].some(name=>{
   const value=storage.getItem(prefix+name);return value!==null&&value!==undefined;
  });
@@ -62,7 +64,7 @@ export function foundationCampaignStorage(storage,{pathname='',fullFoundationCam
    const value=storage.getItem(prefix+key);
    // v59 already contains the expanded castle. A visual chapter update must
    // preserve its victory; older editions still need the v59 castle migration.
-   const preExpandedCastleImport=[CAMPAIGN_V59_STORAGE_PREFIX,CAMPAIGN_V60_STORAGE_PREFIX,CAMPAIGN_V61_STORAGE_PREFIX].includes(ownPrefix)&&prefix!==ownPrefix&&![CAMPAIGN_V59_STORAGE_PREFIX,CAMPAIGN_V60_STORAGE_PREFIX].includes(prefix);
+   const preExpandedCastleImport=[CAMPAIGN_V59_STORAGE_PREFIX,CAMPAIGN_V60_STORAGE_PREFIX,CAMPAIGN_V61_STORAGE_PREFIX,CAMPAIGN_V62_STORAGE_PREFIX].includes(ownPrefix)&&prefix!==ownPrefix&&![CAMPAIGN_V59_STORAGE_PREFIX,CAMPAIGN_V60_STORAGE_PREFIX,CAMPAIGN_V61_STORAGE_PREFIX].includes(prefix);
    return preExpandedCastleImport&&[CAMPAIGN_PREFERENCE_KEY,LEGACY_PREFERENCE_KEY].includes(key)?importExpandedCastleRecord(value):value;
   },
   setItem:(key,value)=>storage.setItem(ownPrefix+key,value),

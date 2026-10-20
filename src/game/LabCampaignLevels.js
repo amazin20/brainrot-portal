@@ -1,6 +1,7 @@
 import {finishCampaignTheme} from './LabCampaignThemeFinish.js';
 import {installFirstChapterArt} from './LabFirstChapterArt.js';
 import {installSecondChapterArt} from './LabSecondChapterArt.js';
+import {installBiosphereArt} from './LabBiosphereArt.js';
 import {PILOT43_SPEC,buildPuzzlePilot43} from './LabPuzzlePilot43.js';
 import {progressionSpec,buildPuzzleProgression} from './LabPuzzleProgression.js';
 import {EXPANSION_B_BUILDERS,EXPANSION_B_SPECS} from './LabExpansionRoomsB.js';
@@ -100,5 +101,5 @@ export function campaignSpec(game,index){
 export function buildLabCampaignLevel(game,index){
  const before=new Set(game.scene.children);
  const level=buildUnthemedCampaignLevel(game,index);
- return installSecondChapterArt(game,installFirstChapterArt(game,finishCampaignTheme(game,level,index,game.scene.children.filter(root=>!before.has(root))),index));
+ return installBiosphereArt(game,installSecondChapterArt(game,installFirstChapterArt(game,finishCampaignTheme(game,level,index,game.scene.children.filter(root=>!before.has(root))),index)));
 }

@@ -20,7 +20,7 @@ export async function runV8Journey(game,{onMilestone=()=>{},scenario=null,journe
     const spawn=game.firstLevel?.spawn,cargoSpawn=game.firstLevel?.cargoSpawn;
     const coordinates=value=>value?.toArray?.()??value;
     const at=(actual,expected)=>Array.isArray(coordinates(expected))&&actual.distanceTo(V(...coordinates(expected)))<1e-8;
-    assert(game.chamberEdition==='foundation'&&Number.isInteger(game.levelIndex)&&game.levelIndex>=0&&game.levelIndex<20,'Native chapter start requires an ordinary first- or second-chapter room');
+    assert(game.chamberEdition==='foundation'&&Number.isInteger(game.levelIndex)&&game.levelIndex>=0&&game.levelIndex<30,'Native chapter start requires an ordinary room from the first three chapters');
     assert(game.state==='playing'&&game.physics.world.stepnumber===0&&game.elapsed===0,'Native chapter start requires Play before the first physics step');
     assert(at(game.playerPosition,spawn)&&at(game.cargo.position,cargoSpawn)&&!game.heldCube,'Native chapter start requires the original normal spawns');
     assert(game.teleportCount===0&&!game.portals.ready&&game.portals.portals.every(p=>!p)&&game.portalShots.queue.length===0&&game.portalShots.active.length===0,'Native chapter start cannot contain prepared portals or shots');
@@ -41,6 +41,10 @@ export async function runV8Journey(game,{onMilestone=()=>{},scenario=null,journe
   game.respawn=function(...args){report.respawns++;return respawn.apply(this,args);};
   game.physics.resetCargo=function(...args){report.resets++;return resetCargo.apply(this,args);};
   function frame(){
+    // Some ordinary routes still finish a bounded steering loop after the
+    // production goal has already won. A continuous native movie ends at that
+    // real terminal visual update rather than adding frozen post-win frames.
+    if(journeyOptions.nativeStart===true&&game.state==='won')return;
     if(game.state==='playing'){game.updatePlaying(1/120);if(game.state==='playing')game.updatePlaying(1/120);}
     game.updateVisuals(1/60,1);report.frames++;
     assert(report.respawns===0&&report.resets===0,`Level ${index+1}: unexpected reset at ${game.playerPosition.toArray()}`);

@@ -7,13 +7,13 @@ import {runV8Journey} from '../../src/game/LabV8Journey.js';
  * lower recovery turn. No actor, portal, actuator or camera pose is staged.
  * The negative control disables only the newly opted-in local camera policy.
  */
-export async function observeRoom17CameraPrefix({aspect=16/9,disableLocalPolicy=false,aspectChanges=[]}={}){
+export async function observeRoom17CameraPrefix({aspect=16/9,disableLocalPolicy=false,aspectChanges=[],denseVertexRanges=[]}={}){
  const g=await createHeadlessGame();g.chamberEdition='foundation';g.camera.aspect=aspect;g.camera.updateProjectionMatrix();await g.selectLevel(16,true);
  if(disableLocalPolicy)g.cameraRig.configureMechanismFraming({enabled:false});
  const original={player:g.playerGroup,cargo:g.cargo,group:g.cargo.group,body:g.physics.cargoBody,shape:g.physics.cargoBody.shapes[0],world:g.physics.world,camera:g.camera,rig:g.cameraRig},meshes=[];
- g.playerGroup.traverse(mesh=>{if(mesh.isMesh)meshes.push({mesh,geometry:mesh.geometry,position:mesh.geometry.attributes.position.array,index:mesh.geometry.index?.array});});
+ g.playerGroup.traverse(mesh=>{if(mesh.isMesh)meshes.push({mesh,geometry:mesh.geometry,position:mesh.geometry.attributes.position.array,index:mesh.geometry.index?.array,materials:(Array.isArray(mesh.material)?mesh.material:[mesh.material]).map(material=>({material,opacity:material.opacity,transparent:material.transparent,visible:material.visible,depthWrite:material.depthWrite}))});});
  assert.equal(g.physics.world.stepnumber,0);assert.equal(g.elapsed,0);assert.deepEqual(g.playerPosition.toArray(),[-22,6,12]);assert.deepEqual(g.cargo.position.toArray(),[-18,6.57,10]);
- const report={scope:'Bounded native-start CPU route and projection; no WebGL, hardware or exhaustive camera acceptance.',aspect,aspectChanges,disableLocalPolicy,controls:[],complete:false,visualFrames:0,physicsSteps:0,resets:0,respawns:0,samples:[],meshSamples:[],playerVertices:meshes.reduce((n,m)=>n+m.mesh.geometry.attributes.position.count,0),worstReference:0,worstSourceVertex:0,minSourceDepth:Infinity,maxFov:0,maxCandidates:0,maxCenterRayError:0};
+ const report={scope:'Bounded native-start CPU route and projection; no WebGL, hardware or exhaustive camera acceptance.',aspect,aspectChanges,disableLocalPolicy,controls:[],complete:false,visualFrames:0,physicsSteps:0,resets:0,respawns:0,samples:[],meshSamples:[],playerVertices:meshes.reduce((n,m)=>n+m.mesh.geometry.attributes.position.count,0),worstReference:0,worstSourceVertex:0,minSourceDepth:Infinity,maxFov:0,maxCandidates:0,maxCenterRayError:0,maxFinalSweepDisplacement:0,maxEyeStep:0,maxRecoveryFovStep:0,maxRecoveryEyeStep:0,maxRecoveryMotionDisplacement:0,recoveryFrames:[]};
  const end=Symbol('bounded-camera-prefix'),visual=g.updateVisuals,reset=g.resetRun,respawn=g.respawn,cargoReset=g.physics.resetCargo;
  g.resetRun=function(){report.resets++;throw Error('Prefix reset after Play');};g.respawn=function(){report.respawns++;throw Error('Prefix respawned after Play');};g.physics.resetCargo=function(){report.resets++;throw Error('Prefix reset original cargo');};
  const point=new THREE.Vector3(),local=new THREE.Vector3();
@@ -21,25 +21,36 @@ export async function observeRoom17CameraPrefix({aspect=16/9,disableLocalPolicy=
   const nextFrame=report.visualFrames+1;
   const resize=aspectChanges.find(change=>change.frame===nextFrame);if(resize){this.camera.aspect=resize.aspect;this.camera.updateProjectionMatrix();}
   report.controls.push({frame:nextFrame,move:this.input.getMove().toArray(),yaw:this.yaw,pitch:this.pitch,keys:[...this.input.keys].sort()});
-  visual.apply(this,args);report.visualFrames++;
+  const previousEye=this.camera.position.clone(),previousFov=this.camera.fov,previousWeight=this.cameraRig.room17RecoveryWeight??0;visual.apply(this,args);report.visualFrames++;
+  const weight=this.cameraRig.room17RecoveryWeight??0;
+  if(weight>0||previousWeight>0){
+   const swept=this.camera.position.clone();this.cameraRig.constrain(previousEye,swept,Math.max(previousFov,this.camera.fov));
+   const fovStep=Math.abs(this.camera.fov-previousFov),eyeStep=previousEye.distanceTo(this.camera.position),motionDisplacement=swept.distanceTo(this.camera.position);
+   report.maxRecoveryFovStep=Math.max(report.maxRecoveryFovStep,fovStep);report.maxRecoveryEyeStep=Math.max(report.maxRecoveryEyeStep,eyeStep);report.maxRecoveryMotionDisplacement=Math.max(report.maxRecoveryMotionDisplacement,motionDisplacement);
+   report.recoveryFrames.push({frame:report.visualFrames,weight,player:this.playerPosition.toArray(),yaw:this.yaw,pitch:this.pitch,renderYaw:this.cameraRig.yaw,renderPitch:this.cameraRig.pitch,fov:this.camera.fov,fovStep,eyeStep,motionDisplacement});
+  }
   assert.equal(this.playerGroup,original.player);assert.equal(this.cargo,original.cargo);assert.equal(this.cargo.group,original.group);assert.equal(this.physics.cargoBody,original.body);assert.equal(this.physics.cargoBody.shapes[0],original.shape);assert.equal(this.physics.world,original.world);assert.equal(this.camera,original.camera);assert.equal(this.cameraRig,original.rig);
   assert.equal(this.physics.world.stepnumber,report.visualFrames*2,'Ordinary prefix must retain two real physics steps per visual frame');
-  for(const m of meshes){assert.equal(m.mesh.geometry,m.geometry);assert.equal(m.geometry.attributes.position.array,m.position);assert.equal(m.geometry.index?.array,m.index);}
+  for(const m of meshes){assert.equal(m.mesh.geometry,m.geometry);assert.equal(m.geometry.attributes.position.array,m.position);assert.equal(m.geometry.index?.array,m.index);const materials=Array.isArray(m.mesh.material)?m.mesh.material:[m.mesh.material];assert.equal(materials.length,m.materials.length);for(let i=0;i<materials.length;i++){const current=materials[i],saved=m.materials[i];assert.equal(current,saved.material);for(const key of ['opacity','transparent','visible','depthWrite'])assert.equal(current[key],saved[key]);}}
   if(report.visualFrames>=1300){
    this.scene.updateMatrixWorld(true);
    const points=[0,1.32,2.8].map(y=>point.copy(this.playerPosition).add(new THREE.Vector3(0,y,0)).project(this.camera).toArray());
    const edge=Math.max(...points.flatMap(p=>[Math.abs(p[0]),Math.abs(p[1])]));report.worstReference=Math.max(report.worstReference,edge);
-   const rig=this.cameraRig,center=point.copy(rig.lookPoint).project(this.camera),centerError=Math.hypot(center.x,center.y);report.maxCenterRayError=Math.max(report.maxCenterRayError,centerError);
+   const rig=this.cameraRig,swept=this.camera.position.clone();
+   rig.constrain(rig.playerPivot,swept,rig.mechanismFramingActive?96:this.camera.fov);
+   report.maxFinalSweepDisplacement=Math.max(report.maxFinalSweepDisplacement,swept.distanceTo(this.camera.position));
+   report.maxEyeStep=Math.max(report.maxEyeStep,previousEye.distanceTo(this.camera.position));
+   const center=point.copy(rig.lookPoint).project(this.camera),centerError=Math.hypot(center.x,center.y);report.maxCenterRayError=Math.max(report.maxCenterRayError,centerError);
    report.maxFov=Math.max(report.maxFov,this.camera.fov);report.maxCandidates=Math.max(report.maxCandidates,rig.mechanismStats.candidates);
    const sample={frame:report.visualFrames,worldStep:this.physics.world.stepnumber,player:this.playerPosition.toArray(),eye:this.camera.position.toArray(),quaternion:this.camera.quaternion.toArray(),lookPoint:rig.lookPoint.toArray(),points,active:rig.mechanismFramingActive,ramp:rig.rampFraming,fov:this.camera.fov,aspect:this.camera.aspect,near:this.camera.near,centerError,candidates:rig.mechanismStats.candidates};report.samples.push(sample);
    // Check every original animated player/gun vertex at the actual movie's
    // twelve-fps cadence, together with per-visual-frame body references above.
-   if(report.visualFrames%5===0){
-    let extent=0,minDepth=Infinity;
+   if(report.visualFrames%5===0||denseVertexRanges.some(([a,b])=>report.visualFrames>=a&&report.visualFrames<=b)){
+    let extent=0,minDepth=Infinity,minX=Infinity,maxX=-Infinity,minY=Infinity,maxY=-Infinity;
     for(const {mesh}of meshes)for(let index=0;index<mesh.geometry.attributes.position.count;index++){
-     mesh.getVertexPosition(index,point).applyMatrix4(mesh.matrixWorld);local.copy(point).applyMatrix4(this.camera.matrixWorldInverse);minDepth=Math.min(minDepth,-local.z);point.project(this.camera);extent=Math.max(extent,Math.abs(point.x),Math.abs(point.y));
+     mesh.getVertexPosition(index,point).applyMatrix4(mesh.matrixWorld);local.copy(point).applyMatrix4(this.camera.matrixWorldInverse);minDepth=Math.min(minDepth,-local.z);point.project(this.camera);extent=Math.max(extent,Math.abs(point.x),Math.abs(point.y));minX=Math.min(minX,point.x);maxX=Math.max(maxX,point.x);minY=Math.min(minY,point.y);maxY=Math.max(maxY,point.y);
     }
-    report.worstSourceVertex=Math.max(report.worstSourceVertex,extent);report.minSourceDepth=Math.min(report.minSourceDepth,minDepth);report.meshSamples.push({frame:report.visualFrames,extent,minDepth});
+    report.worstSourceVertex=Math.max(report.worstSourceVertex,extent);report.minSourceDepth=Math.min(report.minSourceDepth,minDepth);report.meshSamples.push({frame:report.visualFrames,extent,minDepth,bounds:{minX,maxX,minY,maxY}});
    }
   }
   if(report.visualFrames>=2000)throw end;

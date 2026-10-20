@@ -19,7 +19,7 @@ test('native start rejects a prepared, advanced or wrong-room fixture before cha
   x=>{x.state='ready';},x=>{x.physics.world.stepnumber=1;},x=>{x.elapsed=.01;},
   x=>{x.playerPosition.x+=.01;},x=>{x.cargo.position.z+=.01;},x=>{x.heldCube=x.cargo;},
   x=>{x.teleportCount=1;},x=>{x.portalShots.queue.push({});},x=>{x.portalShots.active.push({});},
-  x=>{x.levelIndex=20;},x=>{x.chamberEdition='open';},
+  x=>{x.levelIndex=30;},x=>{x.chamberEdition='open';},
  ];
  for(const mutate of mutations){
   g.chamberEdition='foundation';await g.selectLevel(0,false);g.resetRun(true);mutate(g);
