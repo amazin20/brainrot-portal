@@ -108,7 +108,11 @@ jobs:
         with: {node-version: 22, cache: npm}
       - run: npm ci
       - run: npm install --no-save --package-lock=false puppeteer-core@24.16.0
-      - run: sudo apt-get update && sudo apt-get install -y python3-pil
+      - name: Install browser evidence tools from the signed Ubuntu repository
+        run: |
+          test -s /etc/apt/sources.list.d/ubuntu.sources
+          sudo apt-get -o Dir::Etc::sourcelist=/etc/apt/sources.list.d/ubuntu.sources -o Dir::Etc::sourceparts=- update
+          sudo apt-get -o Dir::Etc::sourcelist=/etc/apt/sources.list.d/ubuntu.sources -o Dir::Etc::sourceparts=- install -y python3-pil
       - uses: actions/download-artifact@v4
         with: {name: v63-dist, path: dist}
       - run: node scripts/qa-player-access-release.mjs verify-package
@@ -143,7 +147,11 @@ jobs:
         with: {node-version: 22, cache: npm}
       - run: npm ci
       - run: npm install --no-save --package-lock=false puppeteer-core@24.16.0
-      - run: sudo apt-get update && sudo apt-get install -y python3-pil
+      - name: Install browser evidence tools from the signed Ubuntu repository
+        run: |
+          test -s /etc/apt/sources.list.d/ubuntu.sources
+          sudo apt-get -o Dir::Etc::sourcelist=/etc/apt/sources.list.d/ubuntu.sources -o Dir::Etc::sourceparts=- update
+          sudo apt-get -o Dir::Etc::sourcelist=/etc/apt/sources.list.d/ubuntu.sources -o Dir::Etc::sourceparts=- install -y python3-pil
       - uses: actions/download-artifact@v4
         with: {name: v63-dist, path: dist}
       - run: node scripts/qa-player-access-release.mjs verify-package
@@ -169,7 +177,11 @@ jobs:
         with: {node-version: 22, cache: npm}
       - run: npm ci
       - run: npm install --no-save --package-lock=false puppeteer-core@24.16.0
-      - run: sudo apt-get update && sudo apt-get install -y python3-pil
+      - name: Install browser evidence tools from the signed Ubuntu repository
+        run: |
+          test -s /etc/apt/sources.list.d/ubuntu.sources
+          sudo apt-get -o Dir::Etc::sourcelist=/etc/apt/sources.list.d/ubuntu.sources -o Dir::Etc::sourceparts=- update
+          sudo apt-get -o Dir::Etc::sourcelist=/etc/apt/sources.list.d/ubuntu.sources -o Dir::Etc::sourceparts=- install -y python3-pil
       - uses: actions/download-artifact@v4
         with: {name: v63-dist, path: dist}
       - run: node scripts/qa-player-access-release.mjs verify-package
@@ -193,7 +205,11 @@ jobs:
         with: {node-version: 22, cache: npm}
       - run: npm ci
       - run: npm install --no-save --package-lock=false puppeteer-core@24.16.0
-      - run: sudo apt-get update && sudo apt-get install -y python3-pil
+      - name: Install browser evidence tools from the signed Ubuntu repository
+        run: |
+          test -s /etc/apt/sources.list.d/ubuntu.sources
+          sudo apt-get -o Dir::Etc::sourcelist=/etc/apt/sources.list.d/ubuntu.sources -o Dir::Etc::sourceparts=- update
+          sudo apt-get -o Dir::Etc::sourcelist=/etc/apt/sources.list.d/ubuntu.sources -o Dir::Etc::sourceparts=- install -y python3-pil
       - uses: actions/download-artifact@v4
         with: {name: v63-dist, path: dist}
       - run: node scripts/qa-player-access-release.mjs verify-package
@@ -218,7 +234,11 @@ jobs:
         with: {node-version: 22, cache: npm}
       - run: npm ci
       - run: npm install --no-save --package-lock=false puppeteer-core@24.16.0
-      - run: sudo apt-get update && sudo apt-get install -y python3-pil
+      - name: Install browser evidence tools from the signed Ubuntu repository
+        run: |
+          test -s /etc/apt/sources.list.d/ubuntu.sources
+          sudo apt-get -o Dir::Etc::sourcelist=/etc/apt/sources.list.d/ubuntu.sources -o Dir::Etc::sourceparts=- update
+          sudo apt-get -o Dir::Etc::sourcelist=/etc/apt/sources.list.d/ubuntu.sources -o Dir::Etc::sourceparts=- install -y python3-pil
       - uses: actions/download-artifact@v4
         with: {name: v63-yandex, path: qa/yandex-package}
       - name: Open the exact production Yandex archive with no game QA hooks
@@ -245,7 +265,11 @@ jobs:
         with: {node-version: 22, cache: npm}
       - run: npm ci
       - run: npm install --no-save --package-lock=false puppeteer-core@24.16.0
-      - run: sudo apt-get update && sudo apt-get install -y python3-pil ffmpeg
+      - name: Install browser evidence tools from the signed Ubuntu repository
+        run: |
+          test -s /etc/apt/sources.list.d/ubuntu.sources
+          sudo apt-get -o Dir::Etc::sourcelist=/etc/apt/sources.list.d/ubuntu.sources -o Dir::Etc::sourceparts=- update
+          sudo apt-get -o Dir::Etc::sourcelist=/etc/apt/sources.list.d/ubuntu.sources -o Dir::Etc::sourceparts=- install -y python3-pil ffmpeg
       - uses: actions/download-artifact@v4
         with: {name: v63-dist, path: dist}
       - run: node scripts/qa-player-access-release.mjs verify-package

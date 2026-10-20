@@ -34,10 +34,18 @@ function instrumentAudioContexts(){
  window.__LAB_PRODUCTION_AUDIO_CONTEXTS__=[];const NativeAudio=window.AudioContext||window.webkitAudioContext;
  if(NativeAudio){const Wrapped=function(...args){const context=new NativeAudio(...args);window.__LAB_PRODUCTION_AUDIO_CONTEXTS__.push(context);return context;};Wrapped.prototype=NativeAudio.prototype;window.AudioContext=Wrapped;}
 }
+/** A never-held fresh page has no pause attribute until the first real hold
+ * event. Accept only that absence or the explicit released marker at startup;
+ * subsequent SDK pause/resume checks still require exact true/false markers. */
+export function isProductionSDKInitialMenuReady(){
+ const marker=document.body.getAttribute('data-external-pause');
+ return document.documentElement.dataset.runtimeState==='ready'&&(marker===null||marker==='false');
+}
 function readProductionSDKState(){
  const mock=window.__LAB_YANDEX_MOCK__,select=document.querySelector('#level-select');
  return {url:location.href,state:document.documentElement.dataset.runtimeState,levelIndex:Number(document.documentElement.dataset.levelIndex),
-  edition:document.body.dataset.chamberEdition,externalPause:document.body.dataset.externalPause,documentLang:document.documentElement.lang,
+  edition:document.body.dataset.chamberEdition,externalPause:document.body.getAttribute('data-external-pause'),documentLang:document.documentElement.lang,
+  documentHidden:document.hidden,documentHasFocus:document.hasFocus(),visibilityState:document.visibilityState,
   selected:select?Number(select.value):null,options:select?.options.length??0,enabledIndices:select?[...select.options].filter(option=>!option.disabled).map(option=>Number(option.value)):[],
   obsoletePauseSelect:!!document.querySelector('#settings-level-select'),walkthrough:!!document.querySelector('.walkthrough-link'),
   qaHooks:Object.fromEntries(['__NESI_DEMO_GAME__','__NESI_PLATFORM__','__NESI_PREFS__','__NESI_RUN_LEVEL_ROUTE__'].map(key=>[key,typeof window[key]])),
@@ -77,7 +85,7 @@ export async function runProductionYandexSDKBrowserQA({sourceRoot=process.env.SO
      fs.writeFileSync(path.join(out,'sdk-rejected-original-checker.txt'),text);assert.equal(row.checker.timing.gameReady,0);
      row.network=await network.finish();row.pass=true;await page.evaluate(()=>window.YGDebugChecker.close());continue;
     }
-    await page.waitForFunction(()=>document.documentElement.dataset.runtimeState==='ready'&&document.body.dataset.externalPause==='false');
+    await page.waitForFunction(isProductionSDKInitialMenuReady);
     row.menu=await page.evaluate(readProductionSDKState);assertNoProductionHooks(row.menu);assert.equal(row.menu.options,51);assert.equal(row.menu.selected,0);assert.equal(row.menu.levelIndex,0);assert.equal(row.menu.edition,'foundation');assert.deepEqual(row.menu.enabledIndices,[0]);
     assert.equal(row.menu.mock.log.filter(event=>event.event==='ready').length,1);assert.equal(row.menu.mock.log.filter(event=>event.event==='sdk-language-get').length,1);assert.equal(row.menu.documentLang,'ru');
     await activate(page,'#play-button',mobile);await page.waitForFunction(()=>document.documentElement.dataset.runtimeState==='playing');await page.waitForFunction(()=>window.__LAB_PRODUCTION_AUDIO_CONTEXTS__[0]?.state==='running');
@@ -114,6 +122,7 @@ export async function runProductionYandexSDKBrowserQA({sourceRoot=process.env.SO
     await page.screenshot({path:path.join(out,scenario+'-playing.png')});
     if(!mobile){await page.reload({waitUntil:'domcontentloaded'});await page.waitForFunction(()=>document.documentElement.dataset.runtimeState==='ready'&&document.body.dataset.externalPause==='false');row.reloaded=await page.evaluate(readProductionSDKState);assertNoProductionHooks(row.reloaded);assert.equal(row.reloaded.selected,0);assert.deepEqual(row.reloaded.enabledIndices,[0]);}
     row.network=await network.finish();row.pass=true;
+   }catch(error){row.failureObservation=await page.evaluate(readProductionSDKState).catch(()=>null);row.observedErrors=report.errors.filter(value=>value.scenario===scenario);throw error;
    }finally{await page.close();await new Promise(resolve=>mount.server.close(resolve));save();}
   }
   assert.deepEqual(report.errors,[]);assert.equal(report.cases.length,3);assert.ok(report.cases.every(row=>row.pass));report.pass=true;delete report.phase;

@@ -10,6 +10,7 @@ import {createMockYandexSDKSource} from '../scripts/lib/yandex-review-sdk.mjs';
 import {parsePlatformRouteLevels,observePlatformPackageResponses,serveYandexReviewPackage,pauseFrozenRouteThroughNativeInput} from '../scripts/qa-campaign-platform-route.mjs';
 import {LabGame} from '../src/game/LabGame.js';
 import {InputController} from '../src/game/InputController.js';
+import {isProductionSDKInitialMenuReady} from '../scripts/qa-player-production-sdk-browser.mjs';
 
 const root=fileURLToPath(new URL('../',import.meta.url));
 const hash=value=>createHash('sha256').update(value).digest('hex');
@@ -159,6 +160,28 @@ test('fixed-clock pause consumes actual production input queue before any physic
   assert.equal(physics,0);assert.equal(proof.after.worldStep,0);assert.equal(proof.after.elapsed,0);assert.equal(renders,1);
   const alreadyPaused=await pauseFrozenRouteThroughNativeInput(page);assert.equal(alreadyPaused.clockTick,null);assert.equal(keys,1,'Already paused input must not resume the game');
  }finally{if(originalWindow===undefined)delete globalThis.window;else globalThis.window=originalWindow;if(originalDocument===undefined)delete globalThis.document;else globalThis.document=originalDocument;}
+});
+
+test('production startup accepts only genuinely ready never-held or explicitly released pages',()=>{
+ const previous=globalThis.document;
+ const cases=[
+  {name:'fresh ready mobile page was never externally held',state:'ready',marker:null,expected:true},
+  {name:'ready desktop page released its startup SDK hold',state:'ready',marker:'false',expected:true},
+  {name:'an active SDK hold still blocks a ready page',state:'ready',marker:'true',expected:false},
+  {name:'loading assets are not ready even without a hold',state:'loading',marker:null,expected:false},
+  {name:'failed startup cannot become ready through a missing marker',state:'error',marker:null,expected:false},
+  {name:'a playing session is not the initial menu',state:'playing',marker:null,expected:false},
+  {name:'a paused session is not the initial menu',state:'paused',marker:'false',expected:false},
+  {name:'empty pause markers are malformed',state:'ready',marker:'',expected:false},
+  {name:'numeric pause markers are malformed',state:'ready',marker:'0',expected:false},
+  {name:'unknown pause markers are malformed',state:'ready',marker:'unknown',expected:false},
+ ];
+ try{
+  for(const {name,state,marker,expected} of cases){
+   globalThis.document={documentElement:{dataset:{runtimeState:state}},body:{getAttribute(name){assert.equal(name,'data-external-pause');return marker;}}};
+   assert.equal(isProductionSDKInitialMenuReady(),expected,name);
+  }
+ }finally{if(previous===undefined)delete globalThis.document;else globalThis.document=previous;}
 });
 
 test('actual-response observer hashes cache-busted bytes and rejects wrong/empty received bodies',async()=>{
