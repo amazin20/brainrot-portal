@@ -1,0 +1,288 @@
+{
+  "schemaVersion": 1,
+  "frozen": true,
+  "repository": "amazin20/brainrot-portal",
+  "namespace": "campaign-v62/",
+  "version": "v62-biosphere",
+  "controllerParent": "504a28cc5aab7b7a28ea6a83ec3ee385238c64ff",
+  "sourceBranch": "upgrade/biosphere-20261020",
+  "sourceWorkflow": ".github/workflows/biosphere-review.yml",
+  "sourceCommit": "8102e724cafff008faf57316fcd82f03ed6f4072",
+  "sourceTree": "289f9408382fb0ca20647f6cd230ec270f70513e",
+  "sourceRun": 39354459080,
+  "sourceAttempt": 1,
+  "expectedJobs": [
+    "attacks (early)",
+    "attacks (later)",
+    "build",
+    "camera17 (classic, 800, 600)",
+    "camera17 (landscape, 640, 360)",
+    "camera17 (portrait, 390, 844)",
+    "cpu (0)",
+    "cpu (1)",
+    "cpu (2)",
+    "cpu (3)",
+    "cpu (4)",
+    "cpu (5)",
+    "films (21)",
+    "films (22)",
+    "films (23)",
+    "films (24)",
+    "films (25)",
+    "films (26)",
+    "films (27)",
+    "films (28)",
+    "films (29)",
+    "films (30)",
+    "native (castle, 41)",
+    "native (early, 1,2,3,4,5,6,7,8,9,10)",
+    "native (energy, 11,12,13,14,15,16,17,18,19,20)",
+    "native (fracture, 42,43,44,45,46,47,48,49,50,51)",
+    "native (living, 21,22,23,24,25,26,27,28,29,30)",
+    "native (optics, 31,32,33,34,35,36,37,38,39,40)",
+    "ordinary (castle, 41)",
+    "ordinary (early, 1,2,3,4,5,6,7,8,9,10)",
+    "ordinary (energy, 11,12,13,14,15,16,17,18,19,20)",
+    "ordinary (fracture, 42,43,44,45,46,47,48,49,50,51)",
+    "ordinary (living, 21,22,23,24,25,26,27,28,29,30)",
+    "ordinary (optics, 31,32,33,34,35,36,37,38,39,40)",
+    "presentation"
+  ],
+  "sourceArtifacts": [
+    {
+      "id": 12235525835,
+      "name": "biosphere-attacks-early",
+      "size_in_bytes": 1293833,
+      "digest": "sha256:0c9b41296e788996ed941ddbc551230a36da859760b1458e8cb240db245fa486"
+    },
+    {
+      "id": 12235071396,
+      "name": "biosphere-attacks-later",
+      "size_in_bytes": 1483256,
+      "digest": "sha256:e1c905bfde51338f7752f6eb35d2bcde5396b2178dd7791f2a7acc9e79a0befa"
+    },
+    {
+      "id": 12234129180,
+      "name": "biosphere-build",
+      "size_in_bytes": 5433,
+      "digest": "sha256:e554a7d1a6fcf5f0d774b1f90ead24a5040a4db04af0ffd702f697f00acd49b9"
+    },
+    {
+      "id": 12235631836,
+      "name": "biosphere-camera17-classic",
+      "size_in_bytes": 7619627,
+      "digest": "sha256:22c77d0a413cbe01254b14b16936bc6d35bdbdbe016b698408b3518f1cbbcbe2"
+    },
+    {
+      "id": 12234819682,
+      "name": "biosphere-camera17-landscape",
+      "size_in_bytes": 5133767,
+      "digest": "sha256:37c11f85cb395eedd9e7004cedb9594adf7b6ec706b724ea37aeca441a80db12"
+    },
+    {
+      "id": 12235677145,
+      "name": "biosphere-camera17-portrait",
+      "size_in_bytes": 6087637,
+      "digest": "sha256:b434943d71881792fda2ca79180dae349b4bd53c2c01cdd3f109b73f0bcd8e4d"
+    },
+    {
+      "id": 12235811896,
+      "name": "biosphere-cpu-0",
+      "size_in_bytes": 35797,
+      "digest": "sha256:0a07a83a2902579c065a66d0a1a57c64cc0280e58fd12c3d33746ada6bc8140a"
+    },
+    {
+      "id": 12235173099,
+      "name": "biosphere-cpu-1",
+      "size_in_bytes": 27836,
+      "digest": "sha256:7e1aa6bd3b7cf175470a41daa7c448d3ee5c1292d5d6021e03d2553962b6fdc6"
+    },
+    {
+      "id": 12235465297,
+      "name": "biosphere-cpu-2",
+      "size_in_bytes": 25390,
+      "digest": "sha256:6d5c899ef0d913d1a021acf6bc86a050dd58eed37469df5a3f9fe702f81129ee"
+    },
+    {
+      "id": 12234788189,
+      "name": "biosphere-cpu-3",
+      "size_in_bytes": 33536,
+      "digest": "sha256:83464c0ced209c89a4cdab357b0b8e8a0f6c75dc4eecde63285006ea925c1176"
+    },
+    {
+      "id": 12235350497,
+      "name": "biosphere-cpu-4",
+      "size_in_bytes": 221503,
+      "digest": "sha256:3953142e024536754683ea497d4b8bc8247b254e94b3e6dd79598783dfb1aea7"
+    },
+    {
+      "id": 12235767216,
+      "name": "biosphere-cpu-5",
+      "size_in_bytes": 25547,
+      "digest": "sha256:42ca57d1e289a1461d678822183fd0fc7bf144a3d68636e112373deb889022fb"
+    },
+    {
+      "id": 12234419133,
+      "name": "biosphere-dist",
+      "size_in_bytes": 4512152,
+      "digest": "sha256:a77a42576b8364c89a59f1514b73f6833d07271373dd7057cb870a7eca020879"
+    },
+    {
+      "id": 12235708094,
+      "name": "biosphere-film-21",
+      "size_in_bytes": 5906807,
+      "digest": "sha256:5bbdfe52fdc29956b09aba9b70c4d4cded6f1a9693b74e412bf48f73d6d99009"
+    },
+    {
+      "id": 12235617770,
+      "name": "biosphere-film-22",
+      "size_in_bytes": 4088223,
+      "digest": "sha256:7140030713670b7ccdd7e076e753ab017189375d8b6cca1f7c37624794a12ba7"
+    },
+    {
+      "id": 12236205133,
+      "name": "biosphere-film-23",
+      "size_in_bytes": 6391911,
+      "digest": "sha256:650cf82dc9b7925b2e11a67c5556f929906ffe4d4abcc6b1873f56bd4b32ef83"
+    },
+    {
+      "id": 12235398592,
+      "name": "biosphere-film-24",
+      "size_in_bytes": 5965817,
+      "digest": "sha256:863202bf7f9d692a3978726d391306b4d0f54c11b57e68256a111cef03c304a6"
+    },
+    {
+      "id": 12236390712,
+      "name": "biosphere-film-25",
+      "size_in_bytes": 11398362,
+      "digest": "sha256:628315c583891c11952a93cf4629fc08b358907a1652af15dbbe8a8213f38a90"
+    },
+    {
+      "id": 12235587488,
+      "name": "biosphere-film-26",
+      "size_in_bytes": 9822486,
+      "digest": "sha256:829c102e829a09b9c2adbe407f41296e06bfd5ea9ee75c0b0fdff5c0505790f3"
+    },
+    {
+      "id": 12235028562,
+      "name": "biosphere-film-27",
+      "size_in_bytes": 6302186,
+      "digest": "sha256:824155e3bc48a08b46bc15f10c250f0fd242a4d283eede5bfe8cc886de91a1ad"
+    },
+    {
+      "id": 12235428840,
+      "name": "biosphere-film-28",
+      "size_in_bytes": 5023984,
+      "digest": "sha256:50ede946c5aadd6b6a02d072e4262f20d8efbe25a8efed1e627b6b97e2ab136b"
+    },
+    {
+      "id": 12235222817,
+      "name": "biosphere-film-29",
+      "size_in_bytes": 3881822,
+      "digest": "sha256:729bda5a8a6a180d82211ba8a31716b81b98ac9a49e6112e75eb7e16870d5f6a"
+    },
+    {
+      "id": 12235768428,
+      "name": "biosphere-film-30",
+      "size_in_bytes": 4216459,
+      "digest": "sha256:317676b32123b2fc58d1d05315bfb9e6c341819e7d8c2c45ae41015ab5be9b18"
+    },
+    {
+      "id": 12235420611,
+      "name": "biosphere-native-castle",
+      "size_in_bytes": 55520,
+      "digest": "sha256:9f9e305fdffc559fedfcffa3563f6aa4b7c39cd4f6deaf44dbd5d56ba393fa9f"
+    },
+    {
+      "id": 12234694221,
+      "name": "biosphere-native-early",
+      "size_in_bytes": 516999,
+      "digest": "sha256:123786c1100c16b661d3e89bb2f868c024b7f2330d2cf81b099eb72f45fea54b"
+    },
+    {
+      "id": 12233969830,
+      "name": "biosphere-native-energy",
+      "size_in_bytes": 437793,
+      "digest": "sha256:85a2079fc2d72894ac4015c47e4a867d0607998fb2e8e72ab3b2cf9d37166213"
+    },
+    {
+      "id": 12235390801,
+      "name": "biosphere-native-fracture",
+      "size_in_bytes": 425119,
+      "digest": "sha256:0e1dc4fc1f3faae2bd47b9e343744d17dc9cd6aed134f9ecb59bfd06f7c564f5"
+    },
+    {
+      "id": 12235223478,
+      "name": "biosphere-native-living",
+      "size_in_bytes": 367911,
+      "digest": "sha256:10d9ab56015be57c3f04f051e7948df7bd6eabdc5303ece50192a9de0bb29967"
+    },
+    {
+      "id": 12235391858,
+      "name": "biosphere-native-optics",
+      "size_in_bytes": 360629,
+      "digest": "sha256:8cab471219b2a31e677e82c591f473fc314eaacba2e1821d5a7fa600c0a48381"
+    },
+    {
+      "id": 12235395968,
+      "name": "biosphere-ordinary-castle",
+      "size_in_bytes": 10745,
+      "digest": "sha256:38baa22d9d794ab273e3f0a4570683667745d233417b5dbae1651c6e11f0fb2c"
+    },
+    {
+      "id": 12233819370,
+      "name": "biosphere-ordinary-early",
+      "size_in_bytes": 3372,
+      "digest": "sha256:b297217a1043d4c8f503bc682a4385d4ffa78888b47d9137bbc9c5252f300860"
+    },
+    {
+      "id": 12234003174,
+      "name": "biosphere-ordinary-energy",
+      "size_in_bytes": 15329,
+      "digest": "sha256:015963b7e5b99879a910de5b89177d266824cb393514c3b089aff2ce147efdca"
+    },
+    {
+      "id": 12234694057,
+      "name": "biosphere-ordinary-fracture",
+      "size_in_bytes": 7298,
+      "digest": "sha256:117258d5e6314e514ac60ae4956266c41cb6701d55ebe872724658533d7b99d6"
+    },
+    {
+      "id": 12233998096,
+      "name": "biosphere-ordinary-living",
+      "size_in_bytes": 6429,
+      "digest": "sha256:3ce6960dc7ade539d475a515eeb30f2ff6aee31abedec9610561c36cdb349128"
+    },
+    {
+      "id": 12234597182,
+      "name": "biosphere-ordinary-optics",
+      "size_in_bytes": 5506,
+      "digest": "sha256:9b45b4c7dc95d303cc6c577b83188e6670cf299ebc50e7af98f0fd67c11105d5"
+    },
+    {
+      "id": 12235008810,
+      "name": "biosphere-presentation",
+      "size_in_bytes": 4621507,
+      "digest": "sha256:8b82faba04e2ef5ecdf05061b82ab643571d041b7d79e1764944bb8fc327818b"
+    },
+    {
+      "id": 12234284283,
+      "name": "biosphere-yandex",
+      "size_in_bytes": 4354849,
+      "digest": "sha256:6f1560292b01d4bffedad83a78463b7651b71424cc8dd5edc65c101787413b4a"
+    }
+  ],
+  "distArtifact": "biosphere-dist",
+  "sourceAcceptance": {
+    "path": "tools/campaign-v62-root-source-acceptance.json",
+    "sha256": "02dc21c887a0746d407d4136af5b116dd30fcb2a2b1e49af9971d043ee5b58be"
+  },
+  "baselineCatalog": "tools/campaign-v61-public-files.json",
+  "baselineCatalogSha256": "694d6b5ec4ffb680e4c4a5981e0417157622241a84108e74c30a1afa29de1531",
+  "baselineInventorySha256": "7e880fb0bcbc6d7b1625f2fc87ee9e40adc5ac4d6700a884681e49bf1a550a5f",
+  "baselineDeployment": {
+    "id": 7142692882,
+    "sha": "08a11c3d7e91b06588d3877fb8d674e111d01476"
+  },
+  "publicationAccepted": false
+}
