@@ -129,12 +129,32 @@ function readRewardedHintUI({level,key}){
   sdkLog:mock.log.map(row=>({...row}))};
 }
 
+/** The fixed-clock observer disables automatic frames. Escape is queued by
+ * the real InputController and consumed by production animate, before physics.
+ * One zero-delta frame processes that actual queued input without advancing a
+ * room; pointer-lock loss may already have opened the ordinary pause dialog. */
+export async function pauseFrozenRouteThroughNativeInput(page){
+ const read=()=>{const g=window.__NESI_DEMO_GAME__;return{state:g.state,worldStep:g.physics.world.stepnumber,elapsed:g.elapsed,pauseQueued:g.input.pauseQueued,pointerLocked:!!document.pointerLockElement};};
+ const before=await page.evaluate(read);await page.evaluate(()=>document.exitPointerLock?.());
+ await page.waitForFunction(()=>!document.pointerLockElement);
+ const afterPointerLockExit=await page.evaluate(read);let afterKeyboard=null,clockTick=null;
+ if(afterPointerLockExit.state==='playing'){
+  await page.keyboard.press('Escape');afterKeyboard=await page.evaluate(read);
+  clockTick=await page.evaluate(()=>{const g=window.__NESI_DEMO_GAME__,before={state:g.state,worldStep:g.physics.world.stepnumber,elapsed:g.elapsed,pauseQueued:g.input.pauseQueued};
+   const consumed=g.state==='playing'&&g.input.pauseQueued===true;if(consumed)g.animate(g.lastFrame);
+   return{consumed,method:'production animate(lastFrame), zero delta, actual native Escape queue',before,after:{state:g.state,worldStep:g.physics.world.stepnumber,elapsed:g.elapsed,pauseQueued:g.input.pauseQueued}};});
+ }
+ await page.waitForFunction(()=>document.documentElement.dataset.runtimeState==='paused');const after=await page.evaluate(read);
+ assert.equal(after.state,'paused');assert.equal(after.worldStep,before.worldStep,'Pause input advanced physics');assert.equal(after.elapsed,before.elapsed,'Pause input advanced elapsed time');
+ return {control:'native Escape or ordinary pointer-lock-loss pause',before,afterPointerLockExit,afterKeyboard,clockTick,after};
+}
+
 /** Each transaction begins with a real hint-button click. Only explicit local
  * SDK callbacks are controlled; game hint state/storage/lifecycle are observed. */
 export async function observeRewardedHintUI(page,{level,key}){
  const args={level,key},proof={kind:'actual-rewarded-hint-ui-with-explicit-sdk-mock',level,liveAds:false,transactions:[]};
  await page.waitForFunction(()=>window.__NESI_DEMO_GAME__.audio.context?.state==='running');
- await page.keyboard.press('Escape');await page.waitForFunction(()=>document.documentElement.dataset.runtimeState==='paused');
+ proof.pause=await pauseFrozenRouteThroughNativeInput(page);
  await page.waitForFunction(()=>window.__NESI_DEMO_GAME__.audio.context?.state==='suspended');
  await activate(page,'#hint-button');
  const initial=await page.evaluate(readRewardedHintUI,args);assert.equal(initial.runtimeHintCount,0);assert.equal(initial.savedHintCount,0);assert.equal(initial.hintsHidden,false);assert.equal(initial.revealedParagraphs,0);proof.before=initial;
@@ -212,7 +232,10 @@ export async function runCampaignPlatformRoutes({sourceRoot=process.cwd(),direct
    console.log('YANDEX_PLATFORM_ROUTE_COMPLETE',level,binding.source.commit,binding.runId,JSON.stringify(row.checker.summary));await page.close();page=null;
   }
   assert.equal(report.rows.length,levels.length);assert.ok(report.rows.every(row=>row.pass));report.pass=true;
- }catch(error){report.failure=String(error?.stack||error);if(page)await page.screenshot({path:path.join(out,'failure.png')}).catch(()=>{});throw error;
+ }catch(error){report.failure=String(error?.stack||error);if(page){
+  const last=report.rows.at(-1);if(last?.fixture)last.failureObservation=await page.evaluate(readRewardedHintUI,{level:last.level,key:last.fixture.key}).catch(()=>null);
+  await page.screenshot({path:path.join(out,'failure.png')}).catch(()=>{});
+ }throw error;
  }finally{
   if(page)await page.close().catch(()=>{});if(browser&&!givenBrowser)await browser.close().catch(()=>{});await new Promise(resolve=>mount.server.close(resolve));
   const inventory=walkFiles(out).filter(file=>!['platform-route-report.json','artifact-inventory.json'].includes(path.basename(file))).map(file=>{const bytes=fs.readFileSync(file);return{path:path.relative(out,file).split(path.sep).join('/'),bytes:bytes.length,sha256:sha256(bytes)};});

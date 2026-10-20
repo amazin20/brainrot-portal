@@ -5,9 +5,11 @@ import path from 'node:path';
 import vm from 'node:vm';
 import {fileURLToPath} from 'node:url';
 import {createHash} from 'node:crypto';
-import {YANDEX_CHECKER_PIN,loadPinnedYandexChecker,preloadPinnedYandexChecker,assertYandexCheckerDiagnostic} from '../scripts/lib/yandex-debug-checker.mjs';
+import {YANDEX_CHECKER_PIN,loadPinnedYandexChecker,preloadPinnedYandexChecker,assertYandexCheckerDiagnostic,bindOriginalYandexCopiedRows} from '../scripts/lib/yandex-debug-checker.mjs';
 import {createMockYandexSDKSource} from '../scripts/lib/yandex-review-sdk.mjs';
-import {parsePlatformRouteLevels,observePlatformPackageResponses,serveYandexReviewPackage} from '../scripts/qa-campaign-platform-route.mjs';
+import {parsePlatformRouteLevels,observePlatformPackageResponses,serveYandexReviewPackage,pauseFrozenRouteThroughNativeInput} from '../scripts/qa-campaign-platform-route.mjs';
+import {LabGame} from '../src/game/LabGame.js';
+import {InputController} from '../src/game/InputController.js';
 
 const root=fileURLToPath(new URL('../',import.meta.url));
 const hash=value=>createHash('sha256').update(value).digest('hex');
@@ -84,7 +86,7 @@ function syntheticDiagnostic(){
  const rows=['SDK script tag','YaGames.init()','LoadingAPI.ready()','SDK loaded','SDK initialized','environment.i18n.lang','SDK language read before Game Ready'].map(name=>({name,category:'SYNTHETIC VALIDATOR FIXTURE',metadata:'SYNTHETIC',status:'pass'}));
  rows.push({name:'Fixture warning',category:'SYNTHETIC VALIDATOR FIXTURE',metadata:'SYNTHETIC',status:'warn'},
   {name:'Fixture insufficient evidence',category:'SYNTHETIC VALIDATOR FIXTURE',metadata:'SYNTHETIC',status:'not_verified'});
- return {syntheticTestFixture:true,kind:'original-yandex-debug-checker-browser-diagnostic',context:'mock-yandex-platform',checker:{...YANDEX_CHECKER_PIN},publicVersion:'1.1.0',
+ const report={syntheticTestFixture:true,kind:'original-yandex-debug-checker-browser-diagnostic',context:'mock-yandex-platform',checker:{...YANDEX_CHECKER_PIN},publicVersion:'1.1.0',
   sourceAccepted:false,publicationAccepted:false,liveSdkAccepted:false,moderationAccepted:false,
   identity:{sourceCommit:'1'.repeat(40),sourceTree:'2'.repeat(40),runId:1,runAttempt:1,level:1},
   observedPage:{levelIndex:0,runtimeState:'won',url:'http://test.invalid/campaign-v63/'},
@@ -93,6 +95,7 @@ function syntheticDiagnostic(){
   timing:{sdkInit:11,sdkPatched:12,langDetected:13,gameReady:14,gameplayStart:15,_patched:true,log:[{event:'sdkInit'},{event:'gameReady'}]},
   runtime:{_i18nRead:true,_i18nObservation:'early',errors:[],warnings:[]},
   originalReport:'YG DEBUG CHECKER REPORT\n'+rows.map(row=>'  ['+(row.status==='not_verified'?'NOT VERIFIED':row.status.toUpperCase())+'][SYNTHETIC] '+row.name).join('\n')+'\nTOTAL: 7 pass, 0 fail, 1 warn, 1 not verified (88% score; 89% automated coverage)\n'};
+ report.rows=bindOriginalYandexCopiedRows(report.rows,report.originalReport);return report;
 }
 
 test('validator preserves WARN and NOT VERIFIED as distinct insufficient/risk states',()=>{
@@ -113,10 +116,49 @@ test('validator rejects promoted verdicts, inconsistent original text, missing o
  ]){const report=syntheticDiagnostic();mutate(report);assert.throws(()=>assertYandexCheckerDiagnostic(report));}
 });
 
+test('pinned upstream raw audio label preserves original Copy text and actual browser-rendered name',()=>{
+ // Exact discrepancy observed in Source CI39404772400/1 production-sdk.
+ const copiedName='Music via Web Audio, not <audio>/new Audio (п.1.6.1.6/1.6.2.5)',
+  renderedDOMName='Music via Web Audio, not /new Audio (п.1.6.1.6/1.6.2.5)',
+  row={name:renderedDOMName,category:'Quality',metadata:'REQ 1.6.1.6',status:'pass'},
+  copiedLine='  [PASS][REQ 1.6.1.6] '+copiedName,
+  bound=bindOriginalYandexCopiedRows([row],copiedLine+'\n')[0];
+ assert.equal(bound.name,renderedDOMName);assert.equal(bound.renderedDOMName,renderedDOMName);assert.equal(bound.copiedName,copiedName);assert.equal(bound.copiedLine,copiedLine);assert.equal(bound.status,'pass');
+ const report=syntheticDiagnostic();report.rows.push(row);report.counts.PASS=8;report.counts.SCORE=89;report.coveragePercent=90;
+ report.originalReport=report.originalReport.replace('TOTAL: 7 pass, 0 fail, 1 warn, 1 not verified (88% score; 89% automated coverage)',copiedLine+'\nTOTAL: 8 pass, 0 fail, 1 warn, 1 not verified (89% score; 90% automated coverage)');
+ report.rows=bindOriginalYandexCopiedRows(report.rows,report.originalReport);assert.equal(assertYandexCheckerDiagnostic(report).checks,10);
+ assert.throws(()=>bindOriginalYandexCopiedRows([{...row,status:'warn'}],copiedLine+'\n'),/status differs/);
+ assert.throws(()=>bindOriginalYandexCopiedRows([{...row,metadata:'REQ OTHER'}],copiedLine+'\n'),/metadata differs/);
+ assert.throws(()=>bindOriginalYandexCopiedRows([row],copiedLine.replace('<audio>','<video>')+'\n'),/name differs/);
+ const forged=structuredClone(report);forged.rows.at(-1).copiedName=renderedDOMName;assert.throws(()=>assertYandexCheckerDiagnostic(forged),/verbatim original copied label/);
+});
+
 test('platform route level parser accepts only unique permanent room numbers',()=>{
  assert.equal(parsePlatformRouteLevels().length,51);assert.equal(parsePlatformRouteLevels().at(-1),41);
  assert.deepEqual(parsePlatformRouteLevels('1,31,41'),[1,31,41]);
  for(const invalid of ['','0','52','1,1','1,','x']){if(invalid==='')continue;assert.throws(()=>parsePlatformRouteLevels(invalid));}
+});
+
+test('fixed-clock pause consumes actual production input queue before any physics step',async()=>{
+ // Unit scheduler fixture only; actual native browser gestures are exercised
+ // by the browser runner. Production animate/togglePause/consumePause run here.
+ const originalWindow=globalThis.window,originalDocument=globalThis.document,game=Object.create(LabGame.prototype),input=Object.create(InputController.prototype);
+ let keys=0,renders=0,physics=0;
+ Object.assign(input,{pauseQueued:false,disposed:false,isActive:()=>game.state==='playing',keys:new Set()});
+ const document={pointerLockElement:null,documentElement:{dataset:{runtimeState:'playing'}},exitPointerLock(){}};
+ Object.assign(game,{state:'playing',externalBlocked:false,input,lastFrame:100,elapsed:0,accumulator:0,renderFrames:0,
+  physics:{world:{stepnumber:0}},performanceMonitor:{sample(){}},renderer:{info:{render:{}}},audio:{flight(){}},
+  resetInput(){input.pauseQueued=false;},callbacks:{onPause(paused){document.documentElement.dataset.runtimeState=paused?'paused':'playing';}},
+  updatePlaying(){physics++;game.physics.world.stepnumber++;},updateVisuals(){},render(){renders++;}});
+ globalThis.window={__NESI_DEMO_GAME__:game};globalThis.document=document;
+ const page={async evaluate(fn){return fn();},async waitForFunction(fn){assert.ok(fn(),'The unit observer must reach the actual requested state');},keyboard:{async press(code){assert.equal(code,'Escape');keys++;input.pauseQueued=true;}}};
+ try{
+  const proof=await pauseFrozenRouteThroughNativeInput(page);
+  assert.equal(keys,1);assert.equal(proof.afterKeyboard.state,'playing');assert.equal(proof.afterKeyboard.pauseQueued,true);
+  assert.equal(proof.clockTick.consumed,true);assert.equal(proof.after.state,'paused');assert.equal(proof.after.pauseQueued,false);
+  assert.equal(physics,0);assert.equal(proof.after.worldStep,0);assert.equal(proof.after.elapsed,0);assert.equal(renders,1);
+  const alreadyPaused=await pauseFrozenRouteThroughNativeInput(page);assert.equal(alreadyPaused.clockTick,null);assert.equal(keys,1,'Already paused input must not resume the game');
+ }finally{if(originalWindow===undefined)delete globalThis.window;else globalThis.window=originalWindow;if(originalDocument===undefined)delete globalThis.document;else globalThis.document=originalDocument;}
 });
 
 test('actual-response observer hashes cache-busted bytes and rejects wrong/empty received bodies',async()=>{

@@ -20,6 +20,29 @@ const sha=value=>createHash('sha256').update(value).digest('hex');
 const HASH=/^[a-f0-9]{64}$/;
 const GIT=/^[a-f0-9]{40}$/;
 export const YANDEX_CHECKER_SCOPE='Original third-party pre-submit checker on the actual Yandex-compiled game with an explicitly mocked SDK. Not live advertising, platform/device performance or moderation approval. WARN and NOT VERIFIED retain their original meanings.';
+// This exact pinned upstream label is inserted into its UI as raw HTML. The
+// browser consumes the <audio> tag, while the original Copy report retains it.
+// Preserve both names; never normalize arbitrary labels or checker verdicts.
+export const YANDEX_CHECKER_PINNED_LABEL_RENDERINGS=Object.freeze({
+ 'Music via Web Audio, not <audio>/new Audio (п.1.6.1.6/1.6.2.5)':
+  'Music via Web Audio, not /new Audio (п.1.6.1.6/1.6.2.5)',
+});
+
+export function bindOriginalYandexCopiedRows(rows,originalReport){
+ assert.ok(Array.isArray(rows)&&typeof originalReport==='string');
+ const copied=originalReport.split('\n').flatMap(line=>{
+  const match=line.match(/^  \[(PASS|FAIL|WARN|NOT VERIFIED)\]\[([^\]]+)\] (.*)$/);
+  return match?[{line,status:match[1]==='NOT VERIFIED'?'not_verified':match[1].toLowerCase(),metadata:match[2],text:match[3]}]:[];
+ });
+ assert.equal(copied.length,rows.length,'Original copied row count differs from actual DOM');
+ return rows.map((row,index)=>{
+  const actual=copied[index];assert.equal(actual.status,row.status,'Original copied row status differs from actual DOM');
+  assert.equal(actual.metadata,row.metadata,'Original copied metadata differs from actual DOM');
+  const rawName=Object.entries(YANDEX_CHECKER_PINNED_LABEL_RENDERINGS).find(([,rendered])=>rendered===row.name)?.[0]??row.name;
+  assert.ok(actual.text===rawName||actual.text.startsWith(rawName+' — '),'Original copied name differs from actual DOM/pinned label rendering');
+  return {...row,renderedDOMName:row.name,copiedName:actual.text.slice(0,rawName.length),copiedLine:actual.line};
+ });
+}
 
 export function loadPinnedYandexChecker({sourceRoot=process.cwd()}={}){
  const filename=path.join(path.resolve(sourceRoot),YANDEX_CHECKER_PIN.filename);
@@ -170,7 +193,13 @@ export function assertYandexCheckerDiagnostic(report,{requireNoHardFailures=true
  assert.ok(typeof report.originalReport==='string'&&report.originalReport.startsWith('YG DEBUG CHECKER REPORT\n'));
  const result=report.originalReport.match(/TOTAL: (\d+) pass, (\d+) fail, (\d+) warn, (\d+) not verified \((\d+)% score; (\d+)% automated coverage\)/);
  assert.ok(result,'Original copied summary absent');assert.deepEqual(result.slice(1).map(Number),[totals.pass,totals.fail,totals.warn,totals.not_verified,report.counts.SCORE,report.coveragePercent]);
- for(const row of report.rows){const tag=row.status==='not_verified'?'NOT VERIFIED':row.status.toUpperCase();assert.ok(report.originalReport.includes('['+tag+']['+row.metadata+'] '+row.name),'Original copied text disagrees with actual DOM row');}
+ const copiedRows=bindOriginalYandexCopiedRows(report.rows,report.originalReport);
+ for(const [index,row]of report.rows.entries()){
+  assert.equal(row.renderedDOMName,row.name,'Preserve the actual rendered DOM label');
+  assert.equal(row.copiedName,copiedRows[index].copiedName,'Preserve the verbatim original copied label');
+  assert.equal(row.copiedLine,copiedRows[index].copiedLine,'Preserve the verbatim original copied row');
+  assert.equal(YANDEX_CHECKER_PINNED_LABEL_RENDERINGS[row.copiedName]??row.copiedName,row.renderedDOMName,'Unrecognized pinned label rendering');
+ }
  assert.ok(Array.isArray(report.runtime.errors)&&Array.isArray(report.runtime.warnings));
  return {checked:true,checks:all,hardFailures:totals.fail,warnings:totals.warn,notVerified:totals.not_verified,
   originalScorePercent:report.counts.SCORE,originalCoveragePercent:report.coveragePercent,
@@ -187,6 +216,7 @@ export async function captureYandexChecker(page,{outputDirectory,identity,contex
   await page.waitForFunction(()=>window.__LAB_YANDEX_CHECKER_BOOT__?.installed&&window.__dbg?.TIMING?.gameReady>0,{timeout:timeoutMs});
   await page.evaluate(refreshOriginalYandexChecker,timeoutMs);
   const actual=await page.evaluate(readOriginalYandexCheckerPanel),originalReport=await page.evaluate(copyOriginalYandexCheckerReport);
+  actual.rows=bindOriginalYandexCopiedRows(actual.rows,originalReport);
   assert.ok(Buffer.byteLength(actual.scannedSource)<=12_000_000,'Bounded actual checker source scan required');
   const scanned=Buffer.from(actual.scannedSource);delete actual.scannedSource;
   const scored=actual.counts.PASS+actual.counts.FAIL+actual.counts.WARN,total=scored+actual.counts['N/V'];

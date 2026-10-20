@@ -10,6 +10,7 @@ import {buildSourceInputs,verifyReleaseMetadata,verifyReleasePackage,sha256} fro
 import {serveFrozenCampaign} from './lib/frozen-campaign-server.mjs';
 import {assertStampedCampaignInfo,assertCampaignBrowserState} from './lib/campaign-browser-contract.mjs';
 import {waitForStartMenu,activate} from './lib/singularity-ui-check.mjs';
+import {installResponseBodyLifecycle,enableDurableResponseBodies} from './lib/browser-response-lifecycle.mjs';
 import {assertAtlasAccess,assertCompactPause,assertMobileControls,assertMigrationPhase} from './lib/player-access-browser-proof.mjs';
 import {V62_IMPORTED_PREFERENCES,v61HistoricalPreferenceFixture} from './lib/campaign-preferences-fixture.mjs';
 import {FOUNDATION_SEQUENCE,foundationDisplayNumber} from '../src/game/LabCampaignSequence.js';
@@ -19,7 +20,7 @@ import {campaignSpec} from '../src/game/LabCampaignLevels.js';
 
 const git=(root,args)=>execFileSync('git',args,{cwd:root,maxBuffer:32000000,encoding:'utf8'}).trim();
 const openScopes=Object.freeze({sourceAccepted:false,publicationAccepted:false,liveSdkAccepted:false,moderationAccepted:false,physicalPhonePerformanceAccepted:false});
-const controllerPaths=['scripts/qa-player-access-browser.mjs','scripts/lib/player-access-browser-proof.mjs','scripts/lib/campaign-browser-contract.mjs','scripts/lib/campaign-preferences-fixture.mjs','scripts/lib/singularity-ui-check.mjs','scripts/lib/frozen-campaign-server.mjs','scripts/lib/release-manifest.mjs'];
+const controllerPaths=['scripts/qa-player-access-browser.mjs','scripts/lib/player-access-browser-proof.mjs','scripts/lib/campaign-browser-contract.mjs','scripts/lib/campaign-preferences-fixture.mjs','scripts/lib/singularity-ui-check.mjs','scripts/lib/frozen-campaign-server.mjs','scripts/lib/release-manifest.mjs','scripts/lib/browser-response-lifecycle.mjs'];
 const positive=(value,label)=>{const n=Number(value);assert.ok(Number.isSafeInteger(n)&&n>0,label+' must identify the actual CI run/attempt');return n;};
 
 export function bindPlayerAccessPackage({sourceRoot=process.cwd(),directory='dist'}={}){
@@ -52,6 +53,7 @@ export async function runPlayerAccessBrowserQA(){
   scope:'Fresh guest access, one genuine room 1 ordinary-input victory and Next/reload/replay, compact Escape/Atlas return, separately labelled accepted-v62 save migration, and actual full-page mobile screenshots. Phone emulation does not measure hardware FPS.'};
  const write=(name,value)=>fs.writeFileSync(path.join(out,name),JSON.stringify(value,null,2)+'\n');
  const save=()=>write('report.json',report);
+ const liveSessions=new Set();
  let binding,browser,mounted,page,stage='source-package-binding';
  try{
   binding=bindPlayerAccessPackage({sourceRoot:root,directory});write('binding.json',binding);
@@ -77,21 +79,20 @@ export async function runPlayerAccessBrowserQA(){
    const context=await browser.createBrowserContext(),p=await context.newPage();p.setDefaultTimeout(180000);
    await p.setCacheEnabled(false);
    await p.setViewport({...viewport,deviceScaleFactor:1,...(touch?{isMobile:true,hasTouch:true}:{})});
+   const capture=await enableDurableResponseBodies(p);
    p.on('pageerror',error=>report.errors.push(String(error.stack||error)));p.on('error',error=>report.errors.push('Renderer: '+String(error)));
-   const responses=[],pending=new Set(),failures=[];
-   const responseObserver=response=>{
-    const job=(async()=>{
+   const responses=[];
+   const lifecycle=installResponseBodyLifecycle(p,{onFailure:detail=>{(report.networkFailures??=[]).push(detail);},consumeResponse:async(response,{documentGeneration,requestId,requestOrdinal})=>{
      const url=new URL(response.url());if(['data:','blob:'].includes(url.protocol))return;
      if(url.pathname.endsWith('/favicon.ico')&&response.status()===404)return;
      assert.equal(url.origin,base.origin,'Browser received an external response');assert.ok(url.pathname.startsWith(base.pathname),'Browser received a response outside the frozen mount');
      const relative=decodeURIComponent(url.pathname.slice(base.pathname.length))||'index.html',expected=expectedResponses.get(relative);
      assert.ok(expected,'Browser received a file absent from the frozen inventory: '+relative);assert.equal(response.status(),200);
      const bytes=await response.buffer();assert.equal(bytes.length,expected.bytes);assert.equal(sha256(bytes),expected.sha256,'Actual browser response differs: '+relative);
-     responses.push({url:url.href,path:relative,status:response.status(),bytes:bytes.length,sha256:sha256(bytes)});
-    })().catch(error=>failures.push(String(error.stack||error)));
-    pending.add(job);void job.finally(()=>pending.delete(job));
-   };
-   p.on('response',responseObserver);
+     const row={url:url.href,path:relative,status:response.status(),bytes:bytes.length,sha256:sha256(bytes),requestId,requestOrdinal,documentGeneration,fromCache:response.fromCache()};responses.push(row);
+     return{requestId,bytes:row.bytes,sha256:row.sha256};
+   }});
+   const session={context,page:p,url:null,responses,lifecycle,capture};liveSessions.add(session);
    let seed;
    if(historical)seed=await p.evaluateOnNewDocument(({key,raw})=>localStorage.setItem(key,raw),historical);
    await p.evaluateOnNewDocument(()=>{
@@ -100,13 +101,25 @@ export async function runPlayerAccessBrowserQA(){
    });
    const url=new URL(base);if(debug)url.searchParams.set('debug','1');for(const[key,value]of Object.entries(query))url.searchParams.set(key,value);
    await p.goto(url.href,{waitUntil:'domcontentloaded'});if(seed)await p.removeScriptToEvaluateOnNewDocument(seed.identifier);
-   await p.bringToFront();await waitForStartMenu(p);return{context,page:p,url:url.href,responses,pending,failures,responseObserver};
+   await p.bringToFront();await waitForStartMenu(p);session.url=url.href;return session;
   };
   const close=async session=>{
-   await Promise.all([...session.pending]);session.page.off('response',session.responseObserver);
-   assert.deepEqual(session.failures,[],'Browser did not receive the frozen package bytes');
-   assert.ok(session.responses.some(row=>row.path==='index.html')&&session.responses.some(row=>row.path.endsWith('.js')),'Actual HTML and JavaScript response bodies required');
-   report.browserResponses.push({url:session.url,allReceivedBytesMatched:true,responses:session.responses});await session.context.close();
+   try{
+    await session.lifecycle.drain('context.close');
+    assert.ok(session.responses.some(row=>row.path==='index.html')&&session.responses.some(row=>row.path.endsWith('.js')),'Actual HTML and JavaScript response bodies required');
+   }finally{
+    try{await session.context.close();}finally{session.lifecycle.detach();liveSessions.delete(session);}
+   }
+   assert.deepEqual(session.lifecycle.failures,[],'Browser did not receive the frozen package bytes');
+   const lifecycle=session.lifecycle.diagnostics(),requestOutcomeCounts={finishedWithCompleteVerifiedBody:0,abortedWithCompleteVerifiedBody:0};
+   for(const response of session.responses){
+    const request=lifecycle.requests.find(row=>row.requestOrdinal===response.requestOrdinal);
+    assert.ok(request,'No exact request lifecycle for an actual response');assert.equal(request.requestId,response.requestId);assert.equal(request.documentGeneration,response.documentGeneration);assert.equal(request.url,response.url);
+    assert.deepEqual(request.verifiedBody,{requestId:response.requestId,bytes:response.bytes,sha256:response.sha256});
+    assert.ok(Object.hasOwn(requestOutcomeCounts,request.outcome));requestOutcomeCounts[request.outcome]++;
+    response.requestOutcome=request.outcome;response.requestFailureText=request.failureText;
+   }
+   report.browserResponses.push({url:session.url,allReceivedBytesMatched:true,responses:session.responses,capture:session.capture,lifecycle,requestOutcomeCounts});
   };
   const observe=async p=>p.evaluate(({ownKey,flagNames})=>{const g=window.__NESI_DEMO_GAME__;return{
    state:document.documentElement.dataset.runtimeState,index:Number(document.documentElement.dataset.levelIndex),selectedIndex:Number(document.querySelector('#level-select').value),
@@ -119,7 +132,7 @@ export async function runPlayerAccessBrowserQA(){
    for(const sector of tabs){await activate(p,`.sector-tabs button[data-sector="${sector}"]`);rows.push(...await p.$$eval('.room-node',buttons=>buttons.map(button=>({index:Number(button.dataset.roomIndex),number:Number(button.dataset.level),disabled:button.disabled,ariaDisabled:button.getAttribute('aria-disabled'),completed:button.classList.contains('room-node--completed')}))));}
    rows.sort((a,b)=>FOUNDATION_SEQUENCE.indexOf(a.index)-FOUNDATION_SEQUENCE.indexOf(b.index));assertAtlasAccess(rows,completed);return rows;
   };
-  const snap=async(p,name)=>{await p.waitForFunction(()=>[...document.querySelectorAll('.screen.screen--active')].every(screen=>getComputedStyle(screen).opacity==='1'));const file=path.join(out,name);await p.screenshot({path:file,fullPage:false});const bytes=fs.readFileSync(file);assert.equal(bytes.toString('hex',0,8),'89504e470d0a1a0a');const row={path:name,bytes:bytes.length,sha256:sha256(bytes),width:bytes.readUInt32BE(16),height:bytes.readUInt32BE(20),capture:'Puppeteer page.screenshot includes actual HTML UI'};report.screenshots.push(row);return row;};
+  const snap=async(p,name)=>{await p.waitForFunction(()=>[...document.querySelectorAll('.screen')].every(screen=>screen.classList.contains('screen--active')?getComputedStyle(screen).opacity==='1':getComputedStyle(screen).visibility==='hidden'||getComputedStyle(screen).opacity==='0'));const file=path.join(out,name);await p.screenshot({path:file,fullPage:false});const bytes=fs.readFileSync(file);assert.equal(bytes.toString('hex',0,8),'89504e470d0a1a0a');const row={path:name,bytes:bytes.length,sha256:sha256(bytes),width:bytes.readUInt32BE(16),height:bytes.readUInt32BE(20),capture:'Puppeteer page.screenshot includes actual HTML UI'};report.screenshots.push(row);return row;};
   const play=async(p,touch=false)=>{await activate(p,'#play-button',touch);await p.waitForFunction(()=>document.documentElement.dataset.runtimeState==='playing');};
 
   stage='ordinary-fresh-guest';let session=await open({debug:false});page=session.page;
@@ -223,7 +236,17 @@ export async function runPlayerAccessBrowserQA(){
   write('closed-file-inventory.json',{kind:'closed-player-access-artifacts',...openScopes,sourceCommit:binding.source.commit,sourceTree:binding.source.tree,runId:binding.runId,runAttempt:binding.runAttempt,files:inventory,inventoryExcludesItself:true});
   console.log(JSON.stringify({pass:true,out,sourceCommit:binding.source.commit,packageFilesSha256:binding.package.packageFilesSha256,screenshots:report.screenshots.map(row=>row.path)}));return report;
  }catch(error){report.pass=false;report.stage=stage;report.failure=String(error.stack||error);if(page&&!page.isClosed())await page.screenshot({path:path.join(out,'failure.png')}).catch(()=>{});save();throw error;}
- finally{await browser?.close();if(mounted)await new Promise(resolve=>mounted.server.close(resolve));}
+ finally{
+  // A failed open/action may leave a context outside the ordinary close path.
+  // Drain every live document before cleanup; a failed body remains fatal in
+  // the saved report, and cleanup must still close Chrome on that error.
+  const cleanup=await Promise.allSettled([...liveSessions].map(async session=>{
+   try{await session.lifecycle.drain('browser.close');}
+   finally{try{await session.context.close();}finally{session.lifecycle.detach();liveSessions.delete(session);}}
+  }));
+  try{await browser?.close();}finally{if(mounted)await new Promise(resolve=>mounted.server.close(resolve));}
+  const failed=cleanup.find(result=>result.status==='rejected');if(failed&&report.pass)throw failed.reason;
+ }
 }
 
 if(process.argv[1]&&path.resolve(process.argv[1])===fileURLToPath(import.meta.url))await runPlayerAccessBrowserQA();
