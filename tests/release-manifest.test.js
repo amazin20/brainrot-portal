@@ -17,7 +17,7 @@ const fixture=()=>{
 test('one source binds all 51 current definitions and all current replacements',()=>{
  const setup=fixture();try{
   const manifest=createReleaseManifest(setup);
-  assert.equal(manifest.schemaVersion,2);assert.equal(manifest.version,'v62-biosphere');assert.equal(manifest.editionVersion,'foundation-v5');
+  assert.equal(manifest.schemaVersion,2);assert.equal(manifest.version,'v63-player-access-optics');assert.equal(manifest.editionVersion,'foundation-v5');
   assert.equal(manifest.version,RELEASE_VERSION);assert.equal(manifest.gameCommit,setup.commit);assert.equal(manifest.interfaceCommit,setup.commit);
   assert.deepEqual(manifest.rooms.map(room=>room.level),Array.from({length:51},(_,i)=>i+1));
   assert.ok(manifest.rooms.slice(10,20).every(room=>room.presentationRevision==='second-chapter-industrial-energy-v1'));
@@ -30,6 +30,9 @@ test('one source binds all 51 current definitions and all current replacements',
   assert.equal(manifest.rooms[37].definitionRevision,'freight-dispatch-setback-v2');
   assert.equal(manifest.rooms[24].definitionRevision,'continuous-optical-power-v1');
   assert.equal(manifest.rooms[24].presentationRevision,'mechanism-readability-v1');
+  assert.equal(manifest.rooms[34].presentationRevision,'optics-powered-receivers-v1');
+  assert.equal(manifest.rooms[38].presentationRevision,'optics-thermal-shutter-leaves-v1');
+  assert.equal(manifest.rooms[35].queryRevision,'owned-rotor-live-cannon-pose-v1');
   assert.equal(manifest.rooms[50].definitionRevision,'bistable-impulse-branch-v1');
   assert.equal(manifest.rooms[50].presentationRevision,'bistable-impulse-branch-v1');
   assert.equal(manifest.rooms[32].id,'siphon-observatory');assert.equal(manifest.rooms[49].id,'puzzle-progression51-mechanical-echo');

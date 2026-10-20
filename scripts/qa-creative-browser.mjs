@@ -7,7 +7,7 @@ import {captureBrowserFrame} from './qa-browser-capture.mjs';
 import {launchBrowserWithStartupRetry} from './lib/browser-startup.mjs';
 import {readStampedCampaignInfo,assertCampaignBrowserState} from './lib/campaign-browser-contract.mjs';
 import {ACTIVE_FOUNDATION_RUNTIME_FLAGS} from '../src/game/ReleaseIdentity.js';
-import {foundationCampaignPrefix,CAMPAIGN_PREFERENCE_KEY} from '../src/game/LabCampaignStorage.js';
+import {campaignAccessFixture} from './lib/campaign-access-fixture.mjs';
 import {assertFoundation20Route} from './lib/foundation20-native-proof.mjs';
 
 const out = path.resolve(process.env.OUT_DIR || 'qa/creative-browser');
@@ -151,10 +151,13 @@ const report = {mode,strictCapture,inspectionQuality,sourceCommit:process.env.BU
   'An interior overview shows an unobstructed view sector, not every surface behind opaque partitions; pixel captures still require visual review.',
   'A bounded rush attack cannot prove that every possible shortcut is absent.',
   'Route pass records gameplay assertions. Capture pass is reported separately; missing or blank readback never counts as visual evidence.',
+  'Each room uses a declared QA save containing exactly its prior canonical completed prefix before construction; the current target is unfinished. This is not a fresh guest full-campaign playthrough.',
+  'Legacy short route initialization may reset before the driver starts its own counters; zero reported route resets does not prove an uninterrupted normal-Play recording.',
 ]};
 const save = ()=>fs.writeFileSync(path.join(out,'report.json'),JSON.stringify(report,null,2));
 const reuse = process.env.REUSE_PAGE!=='0';
 let sharedPage, activeRouteRow, activeRouteToken;
+const preferencePreloads=new WeakMap();
 try {
   report.package=await readStampedCampaignInfo(process.env.PAGE_URL||'http://127.0.0.1:4173/');save();
   for (const level of levels) {
@@ -171,16 +174,19 @@ try {
     });
     page.setDefaultTimeout(180000);
     await page.setViewport({width:960,height:540,deviceScaleFactor:1});
-    const preferenceKey=foundationCampaignPrefix(new URL(process.env.PAGE_URL||'http://127.0.0.1:4173/').pathname)+CAMPAIGN_PREFERENCE_KEY;
-    await page.evaluateOnNewDocument(({key,quality})=>localStorage.setItem(key,JSON.stringify({quality,muted:true})),{key:preferenceKey,quality:inspectionQuality});
-    const row = {level,pass:false,errors:[]};
+    const fixture=campaignAccessFixture({levelIndex:level-1,pathname:new URL(process.env.PAGE_URL||'http://127.0.0.1:4173/').pathname});
+    const fixtureRaw=JSON.stringify({...fixture.preferences,quality:inspectionQuality});
+    const previousPreload=preferencePreloads.get(page);
+    if(previousPreload)await page.removeScriptToEvaluateOnNewDocument(previousPreload);
+    const preload=await page.evaluateOnNewDocument(({key,raw})=>{if(window!==window.top)return;localStorage.clear();localStorage.setItem(key,raw);},{key:fixture.key,raw:fixtureRaw});
+    preferencePreloads.set(page,preload.identifier);
+    const row = {level,pass:false,errors:[],accessFixture:{...fixture,raw:fixtureRaw,preferences:{...fixture.preferences,quality:inspectionQuality}}};
     report.active={level,phase:'opening'};save();
     const onError=e=>row.errors.push(String(e));page.on('pageerror',onError);
     const started = performance.now();
     try {
       const url = new URL(process.env.PAGE_URL || 'http://127.0.0.1:4173/');
       url.search = `?edition=foundation&level=${level}&debug=1`;
-      if(firstVisit||!reuse) {
       await page.goto(url.href,{waitUntil:'domcontentloaded'});
       report.active.phase='waiting-for-ready';save();
       await page.waitForFunction(()=>window.__NESI_DEMO_GAME__?.state==='ready');
@@ -191,16 +197,11 @@ try {
         const r=b.getBoundingClientRect();return b.contains(document.elementFromPoint(r.x+r.width/2,r.y+r.height/2));
       });
       await page.select('#quality-select',inspectionQuality);
+      const loadedPreferences=await page.evaluate(()=>({completed:window.__NESI_PREFS__.value.completed.slice(),selected:Number(document.querySelector('#level-select').value)}));
+      assert.deepEqual(loadedPreferences.completed,fixture.completed,'The real constructor changed the declared prior-prefix fixture');
+      assert.equal(loadedPreferences.selected,level-1,'The production access gate selected another room');
       await page.bringToFront(); await page.click('#play-button');
       await page.waitForFunction(()=>window.__NESI_DEMO_GAME__?.state==='playing');
-      } else {
-        report.active.phase='changing-level';save();
-        await page.evaluate(async level=>{
-          const g=window.__NESI_DEMO_GAME__;await g.selectLevel(level-1,false);g.start();
-          document.querySelectorAll('.screen').forEach(e=>e.classList.remove('screen--active'));
-          document.body.dataset.playState='playing';
-        },level);
-      }
       if(mode!=='rush')await page.evaluate(mode=>{const g=window.__NESI_DEMO_GAME__;g.renderer.setAnimationLoop(null);if(mode!=='route'){g.lastUiUpdate=-Infinity;g.animate(g.lastFrame);}},mode);
       row.start = await page.evaluate(flagNames=>{
         const g=window.__NESI_DEMO_GAME__,d=g.diagnostics();

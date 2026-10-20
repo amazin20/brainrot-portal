@@ -85,6 +85,15 @@
 .start-screen .room-node[aria-pressed=true] .room-node-state { color:var(--sector-accent); }
 .start-screen .room-node--completed .room-node-number::after { content:'✓'; position:absolute; bottom:9px; right:16px; font-size:10px; color:#a6edc5; }
 .start-screen .room-node--completed::before { background:#a2e6bfaa; }
+.start-screen .room-node--locked { color:#9eafbf; cursor:not-allowed; }
+.start-screen .room-node--locked::before,.start-screen .room-node--locked:hover::before { background:#6a7e925e; }
+.start-screen .room-node--locked .room-node-number { background:#13263b; color:#9eafbf; }
+.start-screen .room-node--locked .room-node-state { color:#a2b2c0; }
+.start-screen .room-node--locked:hover { color:#9eafbf; background:none; }
+.room-node-lock { position:absolute; right:16px; bottom:12px; width:11px; height:9px; border:1.5px solid #b0becc; border-radius:2px; }
+.room-node-lock::before { content:''; position:absolute; width:6px; height:6px; left:1px; top:-7px; border:1.5px solid #b0becc; border-bottom:0; border-radius:5px 5px 0 0; }
+.start-screen .sector-tabs .chapter-tab--locked { color:#96aabd; }
+.start-screen .sector-tabs .chapter-tab--locked .chapter-tab-number { color:#8ba0b4; }
 .start-screen .sector-nodes--castle { grid-template-columns:1fr; min-height:225px; }
 .start-screen .sector-nodes--castle .room-node { max-width:200px; justify-self:center; width:100%; }
 .start-screen .sector-nodes--castle .room-node-title { font-size:16px; }

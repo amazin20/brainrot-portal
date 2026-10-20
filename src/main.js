@@ -7,6 +7,9 @@ import {CAMPAIGN,campaignSpec} from './game/LabCampaignLevels.js';
 import {PROGRESSION_INDICES,nextProgressionLevel} from './game/LabPuzzleProgression.js';
 import {LabPreferences,QUALITY_PRESETS,applyLabQuality,CREATIVE_CAMPAIGN_REVISION,CREATIVE_REPLACED_INDICES} from './game/LabPreferences.js';
 import {LabPlatform,loadYandexSDK} from './game/LabPlatform.js';
+import {createHintProgress} from './game/LabHintProgress.js';
+import {canAccessCampaignLevel,resolveCampaignLevel} from './game/LabCampaignAccess.js';
+import {normalizePlayerCampaignQuery} from './game/LabPlayerEntry.js';
 import {resolvePlatformLanguage} from './game/LabLocalization.js';
 import {holdInterruptedGame,settleInterruptedGame} from './game/LabPageLifecycle.js';
 import {readCampaignRoute,nextCampaignLevel} from './game/LabCampaignRoute.js';
@@ -16,18 +19,19 @@ import {CASTLE_LEVEL_INDEX,FOUNDATION_SEQUENCE_REVISION,foundationDisplayNumber}
 import {campaignTheme,campaignThemeAtPosition} from './game/LabCampaignThemes.js';
 import {OPEN_ROOM_INDICES,readOpenEdition,nextOpenRoom,openEditionStorage} from './game/LabOpenEdition.js';
 import {resumeCampaignLevel,nextResumeLevel} from './game/LabResume.js';
-import {normalizeTower41PreviewEntry,readTower41EntryFlags,createTower41PreviewPreferences,TOWER41_PREVIEW_LEVEL_INDEX,TOWER41_PREVIEW_INDICES} from './game/LabTower41Preview.js';
+import {normalizeTower41PreviewEntry,readTower41EntryFlags,isTower41NativePreviewPath,createTower41PreviewPreferences,TOWER41_PREVIEW_LEVEL_INDEX,TOWER41_PREVIEW_INDICES} from './game/LabTower41Preview.js';
 import {readPhysicalReviewEntry,normalizePhysicalReviewQuery,createPhysicalReviewPreferences} from './game/LabPhysicalReviewEntry.js';
 import {SINGULARITY_ROOMS,SINGULARITY_SPEC} from './game/LabSingularityLayout.js';
 const singularityHallCount=SINGULARITY_ROOMS.length,singularityOpenHallCount=SINGULARITY_ROOMS.filter(room=>room.requires.length===0).length;
 const $=s=>document.querySelector(s);
-const yandex=import.meta.env.MODE==='yandex';
+const qaPlatformReview=import.meta.env.MODE==='yandex-review';
+const yandex=import.meta.env.MODE==='yandex'||qaPlatformReview;
 const physicalReviewEntry=readPhysicalReviewEntry(location.pathname,{yandex});
-const query=normalizePhysicalReviewQuery(normalizeTower41PreviewEntry(location.search,{pathname:location.pathname,yandex}),physicalReviewEntry);
+const playerQuery=normalizePlayerCampaignQuery(location.search,{development:import.meta.env.DEV&&!yandex,reviewEntry:!yandex&&(!!physicalReviewEntry||isTower41NativePreviewPath(location.pathname))});
+const query=normalizePhysicalReviewQuery(normalizeTower41PreviewEntry(playerQuery,{pathname:location.pathname,yandex}),physicalReviewEntry);
 if(yandex)query.set('edition','foundation');
-const {preview:tower41Preview,debug,tower41Qualification,puzzlePilot43,puzzleProgression}=readTower41EntryFlags(query,{yandex});
-// Player-facing puzzles keep control tutorials, without solution-hint buttons.
-$('#hint-button').hidden=!debug||tower41Preview;
+const {preview:tower41Preview,debug,tower41Qualification,puzzlePilot43,puzzleProgression}=readTower41EntryFlags(query,{yandex:yandex&&!qaPlatformReview});
+$('#hint-button').hidden=false;
 const campaignRoute=readCampaignRoute(query,CAMPAIGN.length),openEdition=readOpenEdition(query),foundationEdition=readFoundationEdition(query);
 // This bounded physical-cell review has its own saves and is never enabled by
 // an ordinary game link or the Yandex build.
@@ -44,11 +48,16 @@ const progressionStorage=storage&&{getItem:key=>storage.getItem('brainrot-puzzle
 const ratchetStorage=storage&&{getItem:key=>storage.getItem('brainrot-tower41-ratchet-qualification-v1:'+key),setItem:(key,value)=>storage.setItem('brainrot-tower41-ratchet-qualification-v1:'+key,value)};
 const preferences=physicalReviewEntry?createPhysicalReviewPreferences(storage,physicalReviewEntry):tower41Preview?createTower41PreviewPreferences(storage):new LabPreferences(tower41Qualification?ratchetStorage:puzzleProgression?progressionStorage:puzzlePilot43?pilotStorage:fullFoundationCampaign?foundationCampaignStorage(storage,{pathname:location.pathname,fullFoundationCampaign}):foundationEdition.enabled?foundationStorage(storage):openEdition.enabled?openEditionStorage(storage):storage,
   foundationEdition.enabled?{campaignRevision:CREATIVE_CAMPAIGN_REVISION,replacedIndices:CREATIVE_REPLACED_INDICES,roomRevisions:{16:'cable-supported-architecture-v1',32:'siphon-observatory-v1',50:'echo-horizon-v1',...(fullFoundationCampaign?{22:'counterweight-dynamic-v1',...Object.fromEntries(PROGRESSION_INDICES.map(index=>[index,`spatial-progression${index+1}-v1`]))}:{})}}:{}),holds=new Set();
+// Development is a build-time exception. A public debug/level/pilot query does
+// not open the campaign, nor does inspecting a card modify a saved completion.
+const developmentAccess=import.meta.env.DEV&&!yandex;
+const canPlayLevel=index=>availableRooms.includes(index)&&(developmentAccess||canAccessCampaignLevel(index,preferences.value,availableRooms));
+const accessibleLevel=index=>developmentAccess&&availableRooms.includes(index)?index:resolveCampaignLevel(index,preferences.value,availableRooms);
 const screens=['loading','start-screen','pause-screen','win-screen','error-screen'];
 const hudNodes={level:$('#level-number'),chamber:$('#chamber'),objective:$('#objective'),cargo:$('#cargo-status'),portals:$('#portal-status')};
 function hudText(key,value){const node=hudNodes[key];if(node.textContent!==value)node.textContent=value;}
 let campaignMenu;
-let platform,entering=false,hintBusy=false,pendingInterruption=false,sessionStarted=false;
+let platform,hintProgress,entering=false,hintBusy=false,pendingInterruption=false,sessionStarted=false,returnToSession=false;
 function screen(id,visible){const e=$('#'+id);e.classList.toggle('screen--active',visible);e.setAttribute('aria-hidden',String(!visible));e.inert=!visible;}
 function hideScreens(){screens.forEach(id=>screen(id,false));}
 function focusScreenControl(id,selector){
@@ -83,11 +92,11 @@ function failure(error){
  setState('error');hideScreens();$('#error-detail').textContent=error?.message||String(error);screen('error-screen',true);
  focusScreenControl('error-screen','#reload-button');
 }
-function choices(){for(const selector of ['#level-select','#settings-level-select']){const e=$(selector),old=e.value;e.replaceChildren();availableRooms.forEach(i=>{const l=campaignSpec(game,i),option=document.createElement('option');option.value=i;option.textContent=`${String(roomNumber(i)).padStart(2,'0')} · ${l.title}${preferences.value.completed.includes(i)?' ✓':''}`;e.append(option);});e.value=old||String(game.levelIndex);}campaignMenu?.sync();}
-function pauseInfo(){ $('#settings-level-select').value=String(game.levelIndex);$('#pause-course').textContent=`${roomNumber(game.levelIndex)} · ${campaignSpec(game,game.levelIndex).title}`;$('#hint-detail').hidden=true;}
+function choices(){const e=$('#level-select'),old=e.value;e.replaceChildren();availableRooms.forEach(i=>{const l=campaignSpec(game,i),option=document.createElement('option');option.value=i;option.disabled=!canPlayLevel(i);option.textContent=`${String(roomNumber(i)).padStart(2,'0')} · ${l.title}${preferences.value.completed.includes(i)?' ✓':canPlayLevel(i)?'':' · Закрыто'}`;e.append(option);});e.value=String(accessibleLevel(old===''?game.levelIndex:Number(old)));campaignMenu?.sync();}
+function pauseInfo(){ $('#pause-course').textContent=`${roomNumber(game.levelIndex)} · ${campaignSpec(game,game.levelIndex).title}`;$('#hint-detail').hidden=true;$('#pause-settings').open=false;}
 function showVictory(){
   preferences.complete(game.levelIndex);
-  preferences.save({resumeLevel:nextResumeLevel(game.levelIndex,availableRooms),...sequenceSave()});
+  preferences.save({resumeLevel:accessibleLevel(nextResumeLevel(game.levelIndex,availableRooms)),...sequenceSave()});
   choices();clearInput();setState('won');screen('win-screen',true);
   const last=game.levelIndex===availableRooms.at(-1);
   $('#win-title').innerHTML='Вместе<br />получилось<span>.</span>';
@@ -101,10 +110,10 @@ function showVictory(){
   diagnostics();
 }
 function showHints(){
-  const count=preferences.value.hints[game.levelIndex]||0;$('#hint-detail').hidden=false;$('#hint-text').replaceChildren();
-  campaignSpec(game,game.levelIndex).hints.slice(0,count).forEach((text,i)=>{const p=document.createElement('p');p.textContent=`${i+1}. ${text}`;$('#hint-text').append(p);});
+  const state=hintProgress.read(game.levelIndex),{count,total}=state;$('#hint-detail').hidden=false;$('#hint-text').replaceChildren();
+  state.revealed.forEach((text,i)=>{const p=document.createElement('p');p.textContent=`${i+1}. ${text}`;$('#hint-text').append(p);});
   if(!count)$('#hint-text').textContent='Открой сначала намёк. Следующие подсказки раскрывают решение подробнее.';
-  const button=$('#hint-unlock');button.hidden=count>=3;button.disabled=hintBusy;
+  const button=$('#hint-unlock');button.hidden=count>=total;button.disabled=hintBusy||state.busy;
   button.textContent=yandex?'Посмотреть рекламу · следующий намёк':'Следующий намёк · бесплатно в демо';
   $('#ad-status').textContent=yandex?'Подсказка открывается после подтверждённого просмотра. Прочитанные подсказки остаются доступны.':'В демо на GitHub рекламы нет. В сборке для Яндекс Игр здесь добровольный просмотр.';
 }
@@ -117,7 +126,7 @@ const game=new LabGame({debug,container:$('#game'),touch:{joystick:$('#joystick'
     game.audio.configure(preferences.value);applyLabQuality(game,preferences.value.quality);diagnostics();
     // A runtime debug flag cannot prune dynamic imports. Keep this build-time
     // boundary so the SDK upload contains neither route hooks nor QA chunks.
-    if(import.meta.env.MODE!=='yandex'&&debug){window.__NESI_DEMO_GAME__=game;window.__NESI_PLATFORM__=platform;window.__NESI_PREFS__=preferences;
+    if((!yandex||qaPlatformReview)&&debug){window.__NESI_DEMO_GAME__=game;window.__NESI_PLATFORM__=platform;window.__NESI_PREFS__=preferences;
       window.__NESI_RUN_LEVEL_ROUTE__=async(options={})=>{const {runV8Journey}=await import('./game/LabV8Journey.js');game.renderer.setAnimationLoop(null);hideScreens();setState('playing');
         try{return await runV8Journey(game,{journeyOptions:options,onMilestone:mark=>{game.render();window.__NESI_CAPTURE_LEVEL_MARK__?.(mark);}});}finally{game.render();clearInput();setState(game.state);diagnostics();}};
       window.__NESI_RUN_FOUNDATION20_PHYSICAL_ROUTE__=async(options={})=>{
@@ -195,16 +204,17 @@ game.levelIndex=foundationEdition.enabled?foundationEdition.levelIndex:openEditi
 if(puzzlePilot43)game.levelIndex=42;
 if(puzzleProgression&&!PROGRESSION_INDICES.includes(game.levelIndex))game.levelIndex=PROGRESSION_INDICES[0];
 game.levelIndex=physicalReviewEntry?.levelIndex??(tower41Preview?TOWER41_PREVIEW_LEVEL_INDEX:resumeCampaignLevel(query,preferences.value,availableRooms,game.levelIndex));
+game.levelIndex=accessibleLevel(game.levelIndex);
 game.tower41RatchetQualification=tower41Qualification&&game.levelIndex===40;
 choices();$('#level-select').value=String(game.levelIndex);
 function updateStartAction(){
- const index=Number($('#level-select').value),saved=preferences.value.resumeLevel===index;
+ const index=accessibleLevel(Number($('#level-select').value));$('#level-select').value=String(index);const saved=preferences.value.resumeLevel===index;
  const tower=foundationEdition.enabled&&index===40;
  $('#tower-start-note').hidden=!tower;
  $('#play-button').textContent=tower?'Войти в замок':`${saved?'Продолжить':'Начать'} · комната ${roomNumber(index)}`;
  campaignMenu?.sync({reveal:true});
 }
-campaignMenu=createCampaignMenu({root:$('#campaign-map'),select:$('#level-select'),availableRooms,spec:index=>campaignSpec(game,index),preferences,onChoose:()=>updateStartAction(),number:roomNumber,theme:roomTheme});
+campaignMenu=createCampaignMenu({root:$('#campaign-map'),select:$('#level-select'),availableRooms,spec:index=>campaignSpec(game,index),preferences,isAccessible:canPlayLevel,onChoose:()=>updateStartAction(),number:roomNumber,theme:roomTheme});
 $('#level-select').addEventListener('change',updateStartAction);updateStartAction();
 $('#campaign-count').textContent=foundationEdition.enabled?`Кампания · ${FOUNDATION_INDICES.length} испытание`:openEdition.enabled?`${OPEN_ROOM_INDICES.length} лабораторных испытаний · отдельная версия`:`Архив · ${CAMPAIGN.length} испытания`;
 if(puzzlePilot43)$('#campaign-count').textContent='Новая версия · комната 43';
@@ -223,7 +233,9 @@ if(!tower41Preview&&!physicalReviewEntry){
 }
 async function enterLevel(index,reason='next'){
   reconcileFocus();
-  if(entering||holds.size||!availableRooms.includes(index))return;entering=true;clearInput();game.audio?.unlock();
+  if(entering||holds.size||!availableRooms.includes(index))return;
+  if(!canPlayLevel(index)){$('#level-select').value=String(accessibleLevel(index));updateStartAction();return;}
+  entering=true;returnToSession=false;$('#campaign-back-button').hidden=true;clearInput();game.audio?.unlock();
   if(yandex&&reason==='initial')void platform?.enterFullscreen();
   try{
     // All interstitials are tied to an explicit menu transition, never a timer during play.
@@ -233,7 +245,7 @@ async function enterLevel(index,reason='next'){
     $('#loading').dataset.phase='scene';$('#loading-progress').removeAttribute('aria-valuenow');
     $('#loading-percent').textContent='';$('#loading-label').textContent=`Подготовка комнаты ${roomNumber(index)}`;
     if(index!==game.levelIndex)await game.selectLevel(index,false);
-    game.start();if(holds.size)pendingInterruption=true;sessionStarted=true;preferences.save({resumeLevel:index,...sequenceSave()});game.renderer.setAnimationLoop(game.animate);hideScreens();setState('playing');$('#level-select').value=String(index);$('#settings-level-select').value=String(index);updateStartAction();diagnostics();
+    game.start();if(holds.size)pendingInterruption=true;sessionStarted=true;preferences.save({resumeLevel:index,...sequenceSave()});game.renderer.setAnimationLoop(game.animate);hideScreens();setState('playing');$('#level-select').value=String(index);updateStartAction();diagnostics();
   }catch(error){failure(error);}finally{entering=false;}
 }
 async function restartLevel(){
@@ -247,19 +259,21 @@ function resume(){reconcileFocus();if(holds.size)return;game.audio.unlock();game
 $('#play-button').addEventListener('click',()=>enterLevel(Number($('#level-select').value),sessionStarted?'next':'initial'));
 $('#play-again-button').addEventListener('click',()=>{
  if(fullFoundationCampaign&&game.levelIndex===CASTLE_LEVEL_INDEX){showCampaignMenu();return;}
- enterLevel(physicalReviewEntry?.levelIndex??(tower41Preview?TOWER41_PREVIEW_LEVEL_INDEX:puzzleProgression?nextProgressionLevel(game.levelIndex):puzzlePilot43?42:foundationEdition.enabled?nextFoundationLevel(game.levelIndex):openEdition.enabled?nextOpenRoom(game.levelIndex):nextCampaignLevel(game.levelIndex,CAMPAIGN.length)));
+ enterLevel(accessibleLevel(physicalReviewEntry?.levelIndex??(tower41Preview?TOWER41_PREVIEW_LEVEL_INDEX:puzzleProgression?nextProgressionLevel(game.levelIndex):puzzlePilot43?42:foundationEdition.enabled?nextFoundationLevel(game.levelIndex):openEdition.enabled?nextOpenRoom(game.levelIndex):nextCampaignLevel(game.levelIndex,CAMPAIGN.length))));
 });
 $('#resume-button').addEventListener('click',resume);$('#restart-button').addEventListener('click',restartLevel);
 $('#pause-button').addEventListener('click',()=>game.togglePause(true));
 $('#hint-button').addEventListener('click',showHints);
 $('#hint-unlock').addEventListener('click',async()=>{
-  if(hintBusy||holds.size||(preferences.value.hints[game.levelIndex]||0)>=3)return;
+  if(hintBusy||holds.size||!hintProgress.read(game.levelIndex).canUnlock)return;
   hintBusy=true;const index=game.levelIndex;showHints();
-  try{const result=await platform.hint(()=>preferences.unlockHint(index));showHints();if(!result.rewarded)$('#ad-status').textContent='Просмотр не подтверждён или реклама недоступна. Намёк не списан; игру можно продолжить.';}
-  finally{hintBusy=false;$('#hint-unlock').disabled=false;}
+  try{const result=await hintProgress.request(index);showHints();if(!result.rewarded&&!result.rewardConfirmed)$('#ad-status').textContent='Просмотр не подтверждён или реклама недоступна. Новая подсказка не открыта; игру можно продолжить.';}
+  catch{showHints();$('#ad-status').textContent='Реклама недоступна. Подсказка не открыта; попробуй позже.';}
+  finally{hintBusy=false;$('#hint-unlock').disabled=!hintProgress.read(game.levelIndex).canUnlock;}
 });
-$('#settings-level-select').addEventListener('change',e=>enterLevel(Number(e.target.value)));
-function showCampaignMenu(){if(holds.size)return;hideScreens();game.state='ready';setState('ready');screen('start-screen',true);$('#level-select').value=String(game.levelIndex);updateStartAction();focusScreenControl('start-screen','#play-button');}
+function showCampaignMenu(){if(holds.size)return;returnToSession=game.state==='paused';$('#campaign-back-button').hidden=!returnToSession;hideScreens();game.state='ready';setState('ready');screen('start-screen',true);$('#level-select').value=String(game.levelIndex);updateStartAction();focusScreenControl('start-screen',returnToSession?'#campaign-back-button':'#play-button');}
+function returnFromCampaign(){if(!returnToSession||holds.size)return;returnToSession=false;$('#campaign-back-button').hidden=true;hideScreens();game.state='paused';$('#level-select').value=String(game.levelIndex);updateStartAction();resume();}
+$('#campaign-back-button').addEventListener('click',returnFromCampaign);
 $('#level-menu-button').addEventListener('click',showCampaignMenu);
 $('#tutorial-toggle').checked=preferences.value.tutorial;$('#tutorial-toggle').addEventListener('change',e=>{game.tutorial.enabled=e.target.checked;preferences.save({tutorial:e.target.checked});});
 $('#quality-select').value=preferences.value.quality;$('#quality-select').addEventListener('change',e=>{preferences.save({quality:e.target.value});applyLabQuality(game,e.target.value);});
@@ -292,13 +306,19 @@ let captured=false;document.addEventListener('pointerlockchange',()=>{const lock
 addEventListener('keydown',event=>{
   if(menuSettings.open){if(event.code==='Escape'){event.preventDefault();closeMenuSettings();}event.stopImmediatePropagation();return;}
   if(holds.size){event.preventDefault();event.stopImmediatePropagation();return;}
+  if(game.state==='ready'&&returnToSession&&event.code==='Escape'){event.preventDefault();event.stopImmediatePropagation();if(!event.repeat)returnFromCampaign();return;}
+  if(game.state==='paused'&&event.code==='Tab'){
+    const controls=[...$('#pause-screen').querySelectorAll('button,select,input,summary,a[href],[tabindex="0"]')].filter(node=>!node.disabled&&!node.hidden&&node.getClientRects().length);
+    if(controls.length){const first=controls[0],last=controls.at(-1);if(event.shiftKey&&document.activeElement===first){event.preventDefault();last.focus();}else if(!event.shiftKey&&(document.activeElement===last||!$('#pause-screen').contains(document.activeElement))){event.preventDefault();first.focus();}}
+    event.stopImmediatePropagation();return;
+  }
   if(game.state==='paused'&&['Escape','KeyR'].includes(event.code)){event.preventDefault();event.stopImmediatePropagation();if(!event.repeat)(event.code==='KeyR'?restartLevel():resume());}
   else if(game.state!=='playing'&&['Escape','KeyR','Space'].includes(event.code))event.stopImmediatePropagation();
 },true);
 addEventListener('blur',()=>holdInterruptedGame(game,hold,'focus'));addEventListener('focus',()=>hold('focus',false));
 document.addEventListener('visibilitychange',()=>{if(document.hidden)holdInterruptedGame(game,hold,'hidden');else hold('hidden',false);});
 // A bfcache visit keeps the one live controller; a discarded page detaches it.
-addEventListener('pagehide',event=>{holdInterruptedGame(game,hold,'page');if(!event.persisted){game.renderer?.setAnimationLoop(null);game.disposeControls();game.epicDirector?.dispose();platform?.dispose();game.audio?.dispose();}});
+addEventListener('pagehide',event=>{holdInterruptedGame(game,hold,'page');if(!event.persisted){game.renderer?.setAnimationLoop(null);game.disposeControls();game.epicDirector?.dispose();hintProgress?.dispose();platform?.dispose();game.audio?.dispose();}});
 addEventListener('pageshow',event=>{if(event.persisted)hold('page',false);});
 addEventListener('contextmenu',event=>event.preventDefault());
 addEventListener('error',event=>{if(event.error)failure(event.error);});
@@ -307,7 +327,7 @@ async function boot(){
   const sdk=yandex?await loadYandexSDK():null;
   const locale=resolvePlatformLanguage(sdk);document.documentElement.lang=locale.activeLanguage;
   document.documentElement.dataset.portalLanguage=locale.portalLanguage;
-  platform=new LabPlatform({sdk,demo:!yandex,hold});hideScreens();screen('loading',true);setState('loading');await game.init();
+  platform=new LabPlatform({sdk,demo:!yandex,hold});hintProgress=createHintProgress({platform,preferences,hintsFor:index=>campaignSpec(game,index).hints,isAvailable:()=>!holds.size&&!entering&&game.state==='paused'});hideScreens();screen('loading',true);setState('loading');await game.init();
 }
 boot().catch(failure);
 

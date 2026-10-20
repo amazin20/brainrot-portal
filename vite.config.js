@@ -15,7 +15,11 @@ function levelAssetBundle() {
     configResolved(config) { outDir = path.resolve(config.root, config.build.outDir); mode=config.mode; },
     transformIndexHtml(html) {
       // Walkthrough media is a separate website deliverable, never an SDK game asset.
-      return mode==='yandex'?html.replace(/\s*<a\b[^>]*class="walkthrough-link"[^>]*>[\s\S]*?<\/a>/g,''):html;
+      if(mode!=='yandex'&&mode!=='yandex-review')return html;
+      const game=html.replace(/\s*<a\b[^>]*class="walkthrough-link"[^>]*>[\s\S]*?<\/a>/g,'');
+      // Load the real platform SDK before the deferred game module. The
+      // adapter reuses this YaGames global and still reports loading failures.
+      return game.replace(/<head\b[^>]*>/i,head=>head+'\n    <script src="/sdk.js"></script>');
     },
     async writeBundle() {
       const runtimeDir = path.join(root, 'public/models/runtime');

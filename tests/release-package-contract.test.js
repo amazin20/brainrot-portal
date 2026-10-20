@@ -17,7 +17,7 @@ function packageFixture(){
  for(const model of models)fs.copyFileSync(new URL(model.filename,source),path.join(runtime,model.filename));
  const manifest={models,totalBytes:models.reduce((sum,model)=>sum+model.outputBytes,0)};
  const manifestPath=path.join(runtime,'manifest.json');fs.writeFileSync(manifestPath,JSON.stringify(manifest));
- fs.writeFileSync(path.join(directory,'index.html'),'<select id="settings-level-select"></select>');
+ fs.writeFileSync(path.join(directory,'index.html'),'<button id="level-menu-button"></button><button id="campaign-back-button" hidden></button>');
  return {directory,runtime,manifest,manifestPath,dispose:()=>fs.rmSync(directory,{recursive:true,force:true})};
 }
 

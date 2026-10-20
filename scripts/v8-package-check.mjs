@@ -61,7 +61,9 @@ export function verifyCampaignPackage(directory='dist'){
  assert.equal(actualBytes,manifest.totalBytes,'The model budget must describe actual packaged bytes');
  assert.ok(actualBytes<4_000_000,'Preserve the active model budget');
  for(const retired of ['models/model-01-player.glb','model-screens','concepts'])assert.ok(!fs.existsSync(path.join(root,retired)),`Do not ship source/reference files: ${retired}`);
- assert.ok(fs.readFileSync(path.join(root,'index.html'),'utf8').includes('settings-level-select'));
+ const html=fs.readFileSync(path.join(root,'index.html'),'utf8');
+ assert.ok(html.includes('id="level-menu-button"')&&html.includes('id="campaign-back-button"'),'Ship Atlas entry and return controls');
+ assert.ok(!html.includes('settings-level-select'),'The pause dialog must not restore the retired native room list');
  return {pass:true,models:manifest.models.length,modelBytes:actualBytes,editions:{foundation:expected.foundation.length,classic:expected.classic.length,open:expected.open.length},lateRooms:expected.late.length};
 }
 

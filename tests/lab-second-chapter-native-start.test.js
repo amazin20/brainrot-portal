@@ -24,8 +24,8 @@ for(const index of [10,19])test(`nativeStart completes current room ${index+1} f
  }finally{g.physics.world.removeEventListener('postStep',onStep);g.resetRun=original.resetRun;g.respawn=original.respawn;g.physics.resetCargo=original.resetCargo;if(typeof original.levelReset==='function')level.reset=original.levelReset;}
 });
 
-test('nativeStart rejects room index 30 and prepared second-chapter starts before movement, time or reset changes',async()=>{
- const g=await fresh(19),mutations=[x=>{x.levelIndex=30;},x=>{x.physics.world.stepnumber=1;},x=>{x.elapsed=.01;},x=>{x.playerPosition.x+=.01;},x=>{x.cargo.position.z+=.01;},x=>{x.heldCube=x.cargo;},x=>{x.portalShots.queue.push({});}];
+test('nativeStart rejects unsupported room index 40 and prepared second-chapter starts before movement, time or reset changes',async()=>{
+ const g=await fresh(19),mutations=[x=>{x.levelIndex=40;},x=>{x.physics.world.stepnumber=1;},x=>{x.elapsed=.01;},x=>{x.playerPosition.x+=.01;},x=>{x.cargo.position.z+=.01;},x=>{x.heldCube=x.cargo;},x=>{x.portalShots.queue.push({});}];
  for(const mutate of mutations){
   await g.selectLevel(19,false);g.resetRun(true);mutate(g);const move=g.input.getMove,step=g.physics.world.stepnumber,elapsed=g.elapsed,player=g.playerPosition.toArray(),cargo=g.cargo.position.toArray(),reset=g.resetRun;let resets=0;g.resetRun=function(...args){resets++;return reset.apply(this,args);};
   try{await assert.rejects(runV8Journey(g,{journeyOptions:{nativeStart:true}}),/Native chapter start/);}finally{g.resetRun=reset;}

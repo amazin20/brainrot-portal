@@ -1,0 +1,264 @@
+name: Review gradual access, rewarded hints, compact menu and Optics native movies
+on:
+  push:
+    branches: [upgrade/campaign-access-20261020]
+permissions: {contents: read}
+defaults:
+  run:
+    shell: bash
+concurrency:
+  group: player-access-review-${{ github.sha }}
+  cancel-in-progress: true
+env:
+  BUILD_COMMIT: ${{ github.sha }}
+  CODEX_PRIMARY_RUNTIME_PYTHON: /usr/bin/python3
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: '${{ github.sha }}', fetch-depth: 0, persist-credentials: false}
+      - uses: actions/setup-node@v4
+        with: {node-version: 22, cache: npm}
+      - run: npm ci
+      - run: node --test tests/release-manifest.test.js tests/yandex-debug-checker.test.js
+      - run: npm run build
+      - run: node scripts/stamp-build.mjs
+      - run: node scripts/v8-package-check.mjs
+      - run: node scripts/check-yandex-platform.mjs
+      - name: Build the real production Yandex archive without QA hooks or checker
+        run: node scripts/package-yandex.mjs --build --output=qa/yandex-package/brainrot-portal-v63-yandex.zip --report=qa/yandex-package/report.json
+      - name: Build the separate Yandex REVIEW TEST package from this same source
+        run: |
+          npx vite build --mode yandex-review --outDir dist-yandex-review
+          node scripts/stamp-build.mjs v63-player-access-optics dist-yandex-review
+          node scripts/v8-package-check.mjs dist-yandex-review
+      - run: node scripts/qa-player-access-release.mjs package
+      - uses: actions/upload-artifact@v4
+        with: {name: v63-dist, path: dist, retention-days: 14, if-no-files-found: error}
+      - uses: actions/upload-artifact@v4
+        with: {name: v63-yandex, path: qa/yandex-package, retention-days: 14, if-no-files-found: error}
+      - uses: actions/upload-artifact@v4
+        with: {name: v63-yandex-review-dist, path: dist-yandex-review, retention-days: 14, if-no-files-found: error}
+      - uses: actions/upload-artifact@v4
+        with: {name: v63-build, path: qa/player-access-build, retention-days: 14, if-no-files-found: error}
+
+  cpu:
+    runs-on: ubuntu-latest
+    timeout-minutes: 100
+    strategy:
+      fail-fast: false
+      matrix: {part: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]}
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: '${{ github.sha }}', fetch-depth: 0, persist-credentials: false}
+      - uses: actions/setup-node@v4
+        with: {node-version: 22, cache: npm}
+      - run: npm ci
+      - run: node scripts/qa-campaign-cpu-part.mjs
+        env: {CPU_PART: '${{ matrix.part }}', CPU_PARTS: '12'}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: {name: 'v63-cpu-${{ matrix.part }}', path: 'qa/cpu-${{ matrix.part }}', retention-days: 14, if-no-files-found: error}
+
+  ordinary:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - {part: early, rooms: '1,2,3,4,5,6,7,8,9,10'}
+          - {part: energy, rooms: '11,12,13,14,15,16,17,18,19,20'}
+          - {part: living, rooms: '21,22,23,24,25,26,27,28,29,30'}
+          - {part: optics, rooms: '31,32,33,34,35,36,37,38,39,40'}
+          - {part: fracture, rooms: '42,43,44,45,46,47,48,49,50,51'}
+          - {part: castle, rooms: '41'}
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: '${{ github.sha }}', fetch-depth: 0, persist-credentials: false}
+      - uses: actions/setup-node@v4
+        with: {node-version: 22, cache: npm}
+      - run: npm ci
+      - run: node scripts/qa-campaign-ordinary.mjs
+        env: {ROOMS: '${{ matrix.rooms }}', OUT: 'qa/ordinary-${{ matrix.part }}/report.json'}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: {name: 'v63-ordinary-${{ matrix.part }}', path: 'qa/ordinary-${{ matrix.part }}', retention-days: 14, if-no-files-found: error}
+
+  native:
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - {part: early, rooms: '1,2,3,4,5,6,7,8,9,10'}
+          - {part: energy, rooms: '11,12,13,14,15,16,17,18,19,20'}
+          - {part: living, rooms: '21,22,23,24,25,26,27,28,29,30'}
+          - {part: optics, rooms: '31,32,33,34,35,36,37,38,39,40'}
+          - {part: fracture, rooms: '42,43,44,45,46,47,48,49,50,51'}
+          - {part: castle, rooms: '41'}
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: '${{ github.sha }}', fetch-depth: 0, persist-credentials: false}
+      - uses: actions/setup-node@v4
+        with: {node-version: 22, cache: npm}
+      - run: npm ci
+      - run: npm install --no-save --package-lock=false puppeteer-core@24.16.0
+      - run: sudo apt-get update && sudo apt-get install -y python3-pil
+      - uses: actions/download-artifact@v4
+        with: {name: v63-dist, path: dist}
+      - run: node scripts/qa-player-access-release.mjs verify-package
+      - name: Run every consumer route with the production access gate and original cargo
+        run: |
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+          node scripts/qa-campaign-consumer-browser.mjs
+          node scripts/qa-player-access-release.mjs native "qa/native-${{ matrix.part }}/report.json" "${{ matrix.rooms }}"
+        env: {CASE: route, STRICT_CAPTURE: '1', REUSE_PAGE: '0', LEVELS: '${{ matrix.rooms }}', BUILD_DIR: dist, OUT_DIR: 'qa/native-${{ matrix.part }}', ROUTE_TIMEOUT_MS: '6900000'}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: {name: 'v63-native-${{ matrix.part }}', path: 'qa/native-${{ matrix.part }}', retention-days: 14, if-no-files-found: error}
+
+  checker-platform:
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - {part: early, rooms: '1,2,3,4,5,6,7,8,9,10'}
+          - {part: energy, rooms: '11,12,13,14,15,16,17,18,19,20'}
+          - {part: living, rooms: '21,22,23,24,25,26,27,28,29,30'}
+          - {part: optics, rooms: '31,32,33,34,35,36,37,38,39,40'}
+          - {part: fracture, rooms: '42,43,44,45,46,47,48,49,50,51'}
+          - {part: castle, rooms: '41'}
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: '${{ github.sha }}', fetch-depth: 0, persist-credentials: false}
+      - uses: actions/setup-node@v4
+        with: {node-version: 22, cache: npm}
+      - run: npm ci
+      - run: npm install --no-save --package-lock=false puppeteer-core@24.16.0
+      - run: sudo apt-get update && sudo apt-get install -y python3-pil
+      - uses: actions/download-artifact@v4
+        with: {name: v63-dist, path: dist}
+      - run: node scripts/qa-player-access-release.mjs verify-package
+      - uses: actions/download-artifact@v4
+        with: {name: v63-yandex-review-dist, path: dist-yandex-review}
+      - name: Observe every actual route with the original upstream checker and explicit SDK mock
+        run: |
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+          node scripts/qa-campaign-platform-route.mjs
+        env: {LEVELS: '${{ matrix.rooms }}', YANDEX_REVIEW_DIR: dist-yandex-review, CONSUMER_DIR: dist, OUT_DIR: 'qa/checker-platform-${{ matrix.part }}'}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: {name: 'v63-checker-platform-${{ matrix.part }}', path: 'qa/checker-platform-${{ matrix.part }}', retention-days: 14, if-no-files-found: error}
+
+  player-ui:
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: '${{ github.sha }}', fetch-depth: 0, persist-credentials: false}
+      - uses: actions/setup-node@v4
+        with: {node-version: 22, cache: npm}
+      - run: npm ci
+      - run: npm install --no-save --package-lock=false puppeteer-core@24.16.0
+      - run: sudo apt-get update && sudo apt-get install -y python3-pil
+      - uses: actions/download-artifact@v4
+        with: {name: v63-dist, path: dist}
+      - run: node scripts/qa-player-access-release.mjs verify-package
+      - name: Observe locked bookmarks, gradual access, imported progress, compact Escape menu and phone controls
+        run: |
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+          node scripts/qa-player-access-browser.mjs
+        env: {SOURCE_DIR: '.', SITE_DIR: dist, OUT_DIR: qa/player-access}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: {name: v63-player-ui, path: qa/player-access, retention-days: 14, if-no-files-found: error}
+
+  architecture:
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: '${{ github.sha }}', fetch-depth: 0, persist-credentials: false}
+      - uses: actions/setup-node@v4
+        with: {node-version: 22, cache: npm}
+      - run: npm ci
+      - run: npm install --no-save --package-lock=false puppeteer-core@24.16.0
+      - run: sudo apt-get update && sudo apt-get install -y python3-pil
+      - uses: actions/download-artifact@v4
+        with: {name: v63-dist, path: dist}
+      - run: node scripts/qa-player-access-release.mjs verify-package
+      - name: Inspect all ten updated Optics interiors at balanced quality
+        run: |
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+          node scripts/qa-campaign-consumer-browser.mjs
+          node scripts/qa-player-access-release.mjs architecture qa/architecture/report.json 31,32,33,34,35,36,37,38,39,40
+        env: {CASE: overview, INSPECTION_QUALITY: balanced, STRICT_CAPTURE: '1', REUSE_PAGE: '0', LEVELS: '31,32,33,34,35,36,37,38,39,40', BUILD_DIR: dist, OUT_DIR: qa/architecture}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: {name: v63-architecture, path: qa/architecture, retention-days: 14, if-no-files-found: error}
+
+  production-sdk:
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: '${{ github.sha }}', fetch-depth: 0, persist-credentials: false}
+      - uses: actions/setup-node@v4
+        with: {node-version: 22, cache: npm}
+      - run: npm ci
+      - run: npm install --no-save --package-lock=false puppeteer-core@24.16.0
+      - run: sudo apt-get update && sudo apt-get install -y python3-pil
+      - uses: actions/download-artifact@v4
+        with: {name: v63-yandex, path: qa/yandex-package}
+      - name: Open the exact production Yandex archive with no game QA hooks
+        run: |
+          python3 -m zipfile -e qa/yandex-package/brainrot-portal-v63-yandex.zip dist-yandex
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+          node scripts/qa-player-production-sdk-browser.mjs
+        env: {YANDEX_DIR: dist-yandex, OUT_DIR: qa/production-sdk}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: {name: v63-production-sdk, path: qa/production-sdk, retention-days: 14, if-no-files-found: error}
+
+  films:
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      matrix: {room: [31, 32, 33, 34, 35, 36, 37, 38, 39, 40]}
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: '${{ github.sha }}', fetch-depth: 0, persist-credentials: false}
+      - uses: actions/setup-node@v4
+        with: {node-version: 22, cache: npm}
+      - run: npm ci
+      - run: npm install --no-save --package-lock=false puppeteer-core@24.16.0
+      - run: sudo apt-get update && sudo apt-get install -y python3-pil ffmpeg
+      - uses: actions/download-artifact@v4
+        with: {name: v63-dist, path: dist}
+      - run: node scripts/qa-player-access-release.mjs verify-package
+      - uses: actions/download-artifact@v4
+        with: {name: v63-yandex-review-dist, path: dist-yandex-review}
+      - name: Retain one complete normal-Play Optics movie and its original checker observation
+        run: |
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+          node scripts/qa-optics-native.mjs
+        env: {ROOM: '${{ matrix.room }}', SOURCE_DIR: '.', BUILD_DIR: dist-yandex-review, CONSUMER_DIR: dist, OUT_DIR: 'qa/optics-film-${{ matrix.room }}', CHECKER_OUT_DIR: 'qa/optics-checker-${{ matrix.room }}'}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: {name: 'v63-optics-film-${{ matrix.room }}', path: 'qa/optics-film-${{ matrix.room }}', retention-days: 14, if-no-files-found: error}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: {name: 'v63-optics-checker-${{ matrix.room }}', path: 'qa/optics-checker-${{ matrix.room }}', retention-days: 14, if-no-files-found: error}

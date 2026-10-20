@@ -20,7 +20,7 @@ export async function runV8Journey(game,{onMilestone=()=>{},scenario=null,journe
     const spawn=game.firstLevel?.spawn,cargoSpawn=game.firstLevel?.cargoSpawn;
     const coordinates=value=>value?.toArray?.()??value;
     const at=(actual,expected)=>Array.isArray(coordinates(expected))&&actual.distanceTo(V(...coordinates(expected)))<1e-8;
-    assert(game.chamberEdition==='foundation'&&Number.isInteger(game.levelIndex)&&game.levelIndex>=0&&game.levelIndex<30,'Native chapter start requires an ordinary room from the first three chapters');
+    assert(game.chamberEdition==='foundation'&&Number.isInteger(game.levelIndex)&&game.levelIndex>=0&&game.levelIndex<40&&game.firstLevel?.index===game.levelIndex,'Native chapter start requires an ordinary matching room from the first four chapters');
     assert(game.state==='playing'&&game.physics.world.stepnumber===0&&game.elapsed===0,'Native chapter start requires Play before the first physics step');
     assert(at(game.playerPosition,spawn)&&at(game.cargo.position,cargoSpawn)&&!game.heldCube,'Native chapter start requires the original normal spawns');
     assert(game.teleportCount===0&&!game.portals.ready&&game.portals.portals.every(p=>!p)&&game.portalShots.queue.length===0&&game.portalShots.active.length===0,'Native chapter start cannot contain prepared portals or shots');

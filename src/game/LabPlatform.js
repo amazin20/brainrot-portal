@@ -30,7 +30,7 @@ export class LabPlatform {
     if(this.demo){this.readySent=true;return false;}
     const api=this.sdk?.features?.LoadingAPI;
     if(typeof api?.ready!=='function')throw new Error('SDK Яндекс Игр не готов. Повтори загрузку.');
-    api.ready();this.readySent=true;return true;
+    this.sdk.features.LoadingAPI.ready();this.readySent=true;return true;
   }
   gameplay(active){
     active=Boolean(active)&&!this.disposed;

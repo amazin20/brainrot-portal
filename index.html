@@ -29,7 +29,7 @@
         <p class="lead">Стена может стать выходом. Падение — разгоном. Исследуй комнату, соедини порталы и выведи друга.</p>
         <nav class="campaign-navigation" aria-label="Главное меню">
           <button class="nav-campaign" type="button" aria-current="page">◈ <span>Кампания<small>Карта испытаний</small></span></button>
-          <a class="walkthrough-link" href="./walkthroughs.html">▧ <span>Галерея прохождений</span></a>
+          <a class="walkthrough-link" href="../walkthroughs.html">▧ <span>Галерея прохождений</span></a>
           <button id="menu-settings-button" type="button">⚙ <span>Настройки</span></button>
         </nav>
         <p id="campaign-completed" class="campaign-completed" aria-live="polite"></p>
@@ -51,7 +51,7 @@
         <div class="sector-heading"><h3 class="sector-name"></h3><span class="sector-range"></span></div>
         <p class="sector-subtitle"></p>
         <div class="sector-nodes" role="group" aria-label="Комнаты выбранного сектора"></div>
-        <p class="map-footer">Исследуй в своём порядке. Друг путешествует вместе с тобой.</p>
+        <p class="map-footer">Пройди испытание, чтобы открыть следующее. Пройденные комнаты можно повторять.</p>
       </section>
       <aside class="mission-panel" aria-label="Выбранное испытание">
         <div class="mission-art" aria-hidden="true"><span class="mission-art-orbit"></span><span id="mission-illustration-number">01</span><span class="mission-art-caption">ЛАБОРАТОРИЯ ПЕРЕХОДОВ</span></div>
@@ -66,7 +66,8 @@
           </div>
           <p id="tower-start-note" class="tower-start-note" hidden>Один заход без чекпоинтов. Падение или перезапуск возвращает к основанию.</p>
           <button id="play-button" class="primary-button">Начать испытание <span aria-hidden="true">↗</span></button>
-          <a class="walkthrough-link" href="./walkthroughs.html">Прохождения <span aria-hidden="true">↗</span></a>
+          <button id="campaign-back-button" class="secondary-button" type="button" hidden>Вернуться в игру <span aria-hidden="true">↩</span></button>
+          <a class="walkthrough-link" href="../walkthroughs.html">Прохождения <span aria-hidden="true">↗</span></a>
         </div>
         <p class="mission-footnote">Одна пара порталов. Один друг.<br />Решение предстоит найти тебе.</p>
       </aside>
@@ -94,26 +95,27 @@
     </header>
     <nav class="play-tools" aria-label="Меню игры"><span id="level-number" class="level-number" aria-label="Текущий уровень">1</span></nav>
     <div id="toast" class="toast" role="status" aria-live="polite"></div>
-    <section id="pause-screen" class="screen modal-screen" aria-labelledby="pause-title" aria-hidden="true">
+    <section id="pause-screen" class="screen modal-screen" role="dialog" aria-modal="true" aria-labelledby="pause-title" aria-describedby="pause-course" aria-hidden="true">
       <div class="modal-card pause-card">
         <span class="eyebrow">ИСПЫТАНИЕ ПРИОСТАНОВЛЕНО</span>
         <h2 id="pause-title">Пауза<span>.</span></h2>
         <p class="muted" id="pause-course">Продолжим с того же места.</p>
         <div class="pause-actions">
-          <button id="resume-button" class="primary-button">Вернуться в комнату <span aria-hidden="true">→</span></button>
+          <button id="resume-button" class="primary-button">Продолжить игру <span aria-hidden="true">→</span></button>
           <button id="restart-button" class="secondary-button">Начать заново <span aria-hidden="true">↻</span></button>
-          <button id="hint-button" class="secondary-button">Подсказка <span aria-hidden="true">?</span></button>
+          <button id="hint-button" class="secondary-button" aria-controls="hint-detail">Подсказки <span aria-hidden="true">?</span></button>
+          <button id="level-menu-button" class="secondary-button pause-level-button">Выбрать комнату <span aria-hidden="true">↗</span></button>
           <section id="hint-detail" hidden aria-live="polite"><div id="hint-text"></div><button id="hint-unlock" class="secondary-button">Открыть подсказку</button><p id="ad-status" class="muted"></p></section>
         </div>
-        <div class="settings-panel">
-          <span class="settings-title">ПАРАМЕТРЫ ИГРЫ</span>
-          <label class="setting-row">Комната <select id="settings-level-select" aria-label="Перейти к уровню"></select></label>
-          <label class="setting-row"><span>Подсказки управления</span><input id="tutorial-toggle" type="checkbox" checked></label>
-          <label class="setting-row"><span>Выключить звук</span><input id="mute-toggle" type="checkbox"></label>
-          <label class="setting-row">Громкость <input id="volume-control" type="range" min="0" max="100" value="65" aria-label="Громкость"></label>
-          <label class="setting-row">Графика <select id="quality-select"><option value="low">Лёгкая</option><option value="balanced" selected>Сбалансированная</option><option value="high">Высокая</option></select></label>
-        </div>
-        <button id="level-menu-button" class="text-button">К выбору комнаты <span aria-hidden="true">↗</span></button>
+        <details id="pause-settings" class="pause-settings">
+          <summary>Настройки <span aria-hidden="true">⌄</span></summary>
+          <div class="settings-panel">
+            <label class="setting-row"><span>Обучение управлению</span><input id="tutorial-toggle" type="checkbox" checked></label>
+            <label class="setting-row"><span>Выключить звук</span><input id="mute-toggle" type="checkbox"></label>
+            <label class="setting-row">Громкость <input id="volume-control" type="range" min="0" max="100" value="65" aria-label="Громкость"></label>
+            <label class="setting-row">Графика <select id="quality-select"><option value="low">Лёгкая</option><option value="balanced" selected>Сбалансированная</option><option value="high">Высокая</option></select></label>
+          </div>
+        </details>
       </div>
     </section>
     <section id="win-screen" class="screen modal-screen" aria-labelledby="win-title" aria-hidden="true">

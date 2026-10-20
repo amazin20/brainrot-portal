@@ -17,6 +17,42 @@ function movingBox(k,p,size,mat='shell',name='Moving manufactured part'){
  const collider=k.game.collisionProxy(new THREE.Box3().setFromObject(mesh),{kinematic:true});
  return {mesh,collider,move(next,dt){mesh.position.fromArray(next);mesh.updateWorldMatrix(true,false);k.game.syncCollision(collider,new THREE.Box3().setFromObject(mesh),dt);}};
 }
+
+/** The rotor has replaced this proxy's static physics body with one dynamic
+ * Box. Read that body's current pose at query time, including after a physics
+ * step, rather than raycasting the proxy's original axis-aligned pose. The
+ * custom raycast also keeps camera broad phase from caching its old bounds.
+ * collider.box remains owned by the existing room mechanics. */
+function bindRotorQuery(game,rotor,collider){
+ const mesh=collider.mesh,body=rotor.body,owner=rotor.owner,shape=body.shapes[0];
+ const original=mesh.raycast,auto=mesh.matrixAutoUpdate,local=mesh.matrix.clone();
+ mesh.geometry.computeBoundingBox();
+ const size=mesh.geometry.boundingBox.getSize(V()),center=mesh.geometry.boundingBox.getCenter(V());
+ const world=new THREE.Matrix4(),shapePose=new THREE.Matrix4(),inverse=new THREE.Matrix4();
+ const position=V(),quaternion=Q(),scale=V(),offset=V(),orientation=Q();let disposed=false;
+ function raycast(raycaster,hits){
+  if(disposed||game.physics!==owner||rotor.body!==body||rotor.owner!==owner||body.world!==owner.world||owner.world.getBodyById(body.id)!==body)
+   throw new Error('Angular rotor query owner is no longer active');
+  if(body.shapes.length!==1||body.shapes[0]!==shape||!(shape instanceof Box))throw new Error('Angular rotor query requires its original physical Box');
+  const p=body.position,q=body.quaternion,h=shape.halfExtents,o=body.shapeOffsets[0],r=body.shapeOrientations[0];
+  if(![p.x,p.y,p.z,q.x,q.y,q.z,q.w,h.x,h.y,h.z,o.x,o.y,o.z,r.x,r.y,r.z,r.w].every(Number.isFinite)||Math.min(h.x,h.y,h.z)<=0)
+   throw new Error('Angular rotor query requires a finite physical pose');
+  world.compose(position.set(p.x,p.y,p.z),quaternion.set(q.x,q.y,q.z,q.w),scale.set(1,1,1));
+  shapePose.compose(offset.set(o.x,o.y,o.z),orientation.set(r.x,r.y,r.z,r.w),scale.set(h.x*2/size.x,h.y*2/size.y,h.z*2/size.z));
+  world.multiply(shapePose).multiply(shapePose.makeTranslation(-center.x,-center.y,-center.z));
+  mesh.parent?.updateWorldMatrix(true,false);
+  if(mesh.parent){
+   if(Math.abs(mesh.parent.matrixWorld.determinant())<1e-12)throw new Error('Angular rotor query requires an invertible parent matrix');
+   mesh.matrix.multiplyMatrices(inverse.copy(mesh.parent.matrixWorld).invert(),world);
+  }else mesh.matrix.copy(world);
+  // Retain the exact local matrix: decomposing a rotated, nonuniformly scaled
+  // parent would discard shear and move the world-space physical Box.
+  mesh.matrixWorld.copy(world);mesh.matrixWorldNeedsUpdate=false;
+  original.call(mesh,raycaster,hits);
+ }
+ mesh.matrixAutoUpdate=false;mesh.raycast=raycast;
+ return {dispose(){if(disposed)return;disposed=true;if(mesh.raycast===raycast){mesh.raycast=original;mesh.matrixAutoUpdate=auto;mesh.matrix.copy(local);mesh.updateWorldMatrix(true,false);}}};
+}
 function slidingDoor(k,z,{vent=null}={}){
  const b=k.bounds,roof=k.ceiling;
  const span=(a,c)=>{if(c>a)k.block([(a+c)/2,roof/2,z],[c-a,roof,.65],'shell');};
@@ -58,11 +94,14 @@ export function buildCreative36(g,index=35){
   const t=i*Math.PI/6;k.geometry(new RoundedBoxGeometry(.25,.28,.35,1,.04),'metal',[Math.cos(t)*1.8,2.6,Math.sin(t)*1.8],Q().setFromAxisAngle(V(0,1,0),-t),{parent:rotorArt,batch:false,name:'Visible ratchet tooth'});
  }
  const pawl=k.geometry(new RoundedBoxGeometry(.9,.22,.42,1,.05),'metal',[-6.1,4.6,-5],Q(),{batch:false,name:'One-way rotor pawl'});
+ let rotorQuery=null;
  const rotor={body:null,angle:0,omega:0,owner:null,previousAngle:0,ensure(){
   if(!g.physics||this.owner===g.physics)return;this.owner=g.physics;
+  rotorQuery?.dispose();
   g.physics.removeStaticBox(paddle.collider.mesh.uuid);
   this.body=new Body({mass:14,position:new Vec3(...pivot.toArray()),shape:new Box(new Vec3(4,1.5,.325)),linearFactor:new Vec3(0,0,0),angularFactor:new Vec3(0,1,0),angularDamping:.55,material:new Material({friction:.25,restitution:.22}),collisionFilterGroup:1,collisionFilterMask:2});
   g.physics.world.addBody(this.body);
+  rotorQuery=bindRotorQuery(g,this,paddle.collider);
  },update(dt){this.ensure();if(!this.body)return;
   const b=this.body,e=new THREE.Euler().setFromQuaternion(new THREE.Quaternion(b.quaternion.x,b.quaternion.y,b.quaternion.z,b.quaternion.w),'YXZ');
   let delta=e.y-this.previousAngle;if(delta>Math.PI)delta-=Math.PI*2;if(delta< -Math.PI)delta+=Math.PI*2;
@@ -71,8 +110,8 @@ export function buildCreative36(g,index=35){
   if(this.angle>=Math.PI/2){b.angularVelocity.y=0;b.torque.y=0;}
   this.omega=b.angularVelocity.y;
   paddle.mesh.quaternion.copy(new THREE.Quaternion(b.quaternion.x,b.quaternion.y,b.quaternion.z,b.quaternion.w));paddle.mesh.updateWorldMatrix(true,false);paddle.collider.box.setFromObject(paddle.mesh);
-  // Player/ray collision uses the same rotating volume; no duplicate static
-  // physics body is introduced on top of the dynamic rotor.
+  // Player overlap bounds follow the visual paddle here. Ray queries read the
+  // actual dynamic Box at query time, without adding another physics body.
   rotorArt.rotation.y=this.angle;pawl.rotation.y=Math.sin(this.angle*12)*.1;
   bridge.stations[1].z=10-28*THREE.MathUtils.clamp(this.angle/(Math.PI/2),0,1);bridge.target=1;
  },reset(){this.ensure();this.angle=this.omega=this.previousAngle=0;if(this.body){this.body.quaternion.set(0,0,0,1);this.body.angularVelocity.setZero();this.body.velocity.setZero();this.body.force.setZero();this.body.torque.setZero();this.body.wakeUp();}paddle.mesh.quaternion.identity();paddle.collider.box.setFromObject(paddle.mesh);bridge.stations[1].z=10;bridge.reset();}};
@@ -82,8 +121,9 @@ export function buildCreative36(g,index=35){
  for(const x of [-13.1,-2.9])k.block([x,2,-5],[.35,6,7],'dark');
  k.display([0,18,-25.5],()=>`УГОЛ ${THREE.MathUtils.radToDeg(rotor.angle).toFixed(0)}° / 90°\nМОСТ ${bridge.position.z.toFixed(1)} м / УГЛОВАЯ СКОРОСТЬ ${rotor.omega.toFixed(1)}`,22,2.2);
  k.label('36 / УДАР ПО КАСАТЕЛЬНОЙ',[-29.5,16,12],[1,0,0],17,1.2);
- return finish(k,[-24,10,-13],[-22,10.6,-11],[19,10,-13],{rotor,bridge,fallPad:fall,outlet,spawnView:{yaw:.1,pitch:-.08}},
+ const level=finish(k,[-24,10,-13],[-22,10.6,-11],[19,10,-13],{rotor,bridge,fallPad:fall,outlet,spawnView:{yaw:.1,pitch:-.08}},
   {'gravity-well':'the actual fall supplies kinetic energy','tangential-outlet':'horizontal cargo jet hits a real rotor away from its spindle'},['off-centre-impact','scout-impact-first']);
+ const dispose=level.dispose;level.dispose=function(...args){rotorQuery?.dispose();return dispose?.apply(this,args);};return level;
 }
 
 /** Low guarded U duct: the companion is driven by forces, not teleported

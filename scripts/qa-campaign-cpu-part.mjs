@@ -3,7 +3,8 @@ import path from 'node:path';
 import assert from 'node:assert/strict';
 import {spawn} from 'node:child_process';
 
-const part=Number(process.env.CPU_PART),parts=6;
+const part=Number(process.env.CPU_PART),parts=Number(process.env.CPU_PARTS||6);
+assert.ok(Number.isInteger(parts)&&parts>=1&&parts<=32,'CPU_PARTS must be between 1 and 32');
 assert.ok(Number.isInteger(part)&&part>=0&&part<parts);
 const all=fs.readdirSync('tests').filter(n=>n.endsWith('.test.js')&&!n.startsWith('lab-tower')).sort();
 const files=all.filter((_,i)=>i%parts===part).map(name=>'tests/'+name);

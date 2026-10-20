@@ -56,7 +56,8 @@ export function createReleaseManifest({directory,commit,platformArchive,root=pro
   assert.ok(spec?.id&&spec.title,`Missing definition for room ${index+1}`);
   return {level:foundationDisplayNumber(index),stableLevel:index+1,stableId:`foundation-${String(index+1).padStart(3,'0')}`,id:spec.id,title:spec.title,
    definitionRevision:revisions[index]||'retained-v54',
-   ...(index<10?{presentationRevision:'first-chapter-service-frames-v1'}:index<20?{presentationRevision:'second-chapter-industrial-energy-v1'}:[20,21,22,25,28].includes(index)?{presentationRevision:'biosphere-founded-drive-and-shutters-v1'}:index===24?{presentationRevision:'mechanism-readability-v1'}:index===40?{presentationRevision:'bistable-impulse-branch-v1'}:{}),
+   ...(index<10?{presentationRevision:'first-chapter-service-frames-v1'}:index<20?{presentationRevision:'second-chapter-industrial-energy-v1'}:[20,21,22,25,28].includes(index)?{presentationRevision:'biosphere-founded-drive-and-shutters-v1'}:index===24?{presentationRevision:'mechanism-readability-v1'}:index===34?{presentationRevision:'optics-powered-receivers-v1'}:index===38?{presentationRevision:'optics-thermal-shutter-leaves-v1'}:index===40?{presentationRevision:'bistable-impulse-branch-v1'}:{}),
+   ...(index===35?{queryRevision:'owned-rotor-live-cannon-pose-v1'}:{}),
    specSha256:sha256(JSON.stringify(spec)),theme:campaignTheme(index).id};
  });
  assert.equal(rooms.length,51);assert.equal(new Set(rooms.map(room=>room.stableId)).size,51);assert.equal(new Set(rooms.map(room=>room.id)).size,51);
@@ -80,6 +81,7 @@ export function createReleaseManifest({directory,commit,platformArchive,root=pro
     chapters:CAMPAIGN_THEMES.map(theme=>({id:theme.id,title:theme.name,first:theme.from+1,last:theme.to+1}))},
    tower:{level:foundationDisplayNumber(CASTLE_LEVEL_INDEX),stableLevel:CASTLE_LEVEL_INDEX+1,title:SINGULARITY_SPEC.name,stages:SINGULARITY_ROOMS.length,checkpoints:false},
    standaloneEntries:PHYSICAL_REVIEW_ENTRIES.map(entry=>({path:entry.id+'/',level:entry.levelIndex+1,levels:entry.indices.map(i=>i+1),savePrefix:entry.storagePrefix,ordinaryControls:true})),
+   playerAccess:{completedReplay:true,nextUncompleted:true,productionQueryCannotSelectEdition:true,hintsPerRoom:3,rewardedHints:true,freeDemoHints:true,compactPauseAtlas:true},
    presentation:{unifiedVisualTime:true,modelIdentitiesPreserved:true,menuArtwork:'art/portal-laboratory-menu.webp',chapterArchitectureThemes:true,atlasMenu:true,menuSettings:true,chapterArchitecturalRelief:true,responsiveActorAnimation:true},
    collision:{portalEmergenceSweep:true,carriedCargoEmergenceSweep:true},
    replacedRooms:replaced},

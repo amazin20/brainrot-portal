@@ -1,0 +1,19 @@
+{
+  "repository": "https://github.com/Nioris/yandex-games-debug-checker",
+  "commit": "f86d4ebd1d17f92911ff64b373286fc8d85aec8e",
+  "version": "1.1.0",
+  "license": "MIT",
+  "files": [
+    {
+      "path": "debugcheck.js",
+      "bytes": 99613,
+      "sha256": "adb1ca16e9b3172712d5eda9b64d6fd6792b5e00e85102a0bf0a2390b3239e00"
+    },
+    {
+      "path": "LICENSE",
+      "bytes": 1066,
+      "sha256": "30db7316101f11b4667062331bc37bb9739f0352982ce1e693af2adb72b8fb39"
+    }
+  ],
+  "scope": "Unmodified third-party test-only checker. Not loaded or shipped in release game packages. Original checker computes every verdict; its NOT VERIFIED and WARN states are retained."
+}
