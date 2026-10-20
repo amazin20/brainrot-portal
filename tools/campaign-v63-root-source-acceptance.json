@@ -1,0 +1,2782 @@
+{
+  "schemaVersion": 1,
+  "kind": "root-independent-v63-source-acceptance",
+  "generatedAt": "2026-10-20T11:32:56.770486+00:00",
+  "pass": true,
+  "sourceAccepted": true,
+  "publicationAccepted": false,
+  "sourceCommit": "a60a31dfd4c624d6d60f4c33111d315b3bc44aa6",
+  "sourceTree": "47e3de85ee814f18020514faf2614b9c4da37d12",
+  "run": 39411608067,
+  "runAttempt": 1,
+  "sourceReview": {
+    "runId": 39411608067,
+    "runAttempt": 1
+  },
+  "version": "v63-player-access-optics",
+  "candidateFiles": [
+    {
+      "path": "art/portal-laboratory-menu.webp",
+      "bytes": 158200,
+      "sha256": "f6a544096a6418a0f65ba8c609415d0393a1081d18537ecac5eb4c345b13b4be"
+    },
+    {
+      "path": "assets/LabAnimationJourney-B_qnWyyJ.js",
+      "bytes": 3040,
+      "sha256": "a9ede860fbfc257095868c0ce4d5fccd582c5334be2de925d68f602bf7d9ad58"
+    },
+    {
+      "path": "assets/LabCreativeRoom17Journey-D0XgeCb7.js",
+      "bytes": 5480,
+      "sha256": "e5cde076b8d9e1fb74c523a98044050578c1185666d2a1d164d6f10db7940676"
+    },
+    {
+      "path": "assets/LabCreativeRoom18Journey-nu6wSA3Y.js",
+      "bytes": 3303,
+      "sha256": "d0320fd8cb562665c81930698a12acd4e9f356449e19ac54d97b9783aebca841"
+    },
+    {
+      "path": "assets/LabCreativeRoom20Journey-DZ-ptIvh.js",
+      "bytes": 4722,
+      "sha256": "afaaba6999e8bf9eea33d23dddd87dcb1c811240fce3a95989e6c815a0129fcd"
+    },
+    {
+      "path": "assets/LabEchoHorizonJourney-DOsli6J0.js",
+      "bytes": 2271,
+      "sha256": "776bca47aabd26abf678f3d82c3139e06ddfd41fc75324fbf5a4398d45eee1e2"
+    },
+    {
+      "path": "assets/LabExpansionAlternateJourney47-3qgixs4y.js",
+      "bytes": 1864,
+      "sha256": "2054a9f53789e8c5aa399142bef5a6700bd7c6be3353874cd5b89eba9482c851"
+    },
+    {
+      "path": "assets/LabExpansionAlternateJourney48-BzxtmzNy.js",
+      "bytes": 2334,
+      "sha256": "ab31123d5f7a6ac36085add5a4088d3d5a7c434157a763d0914d2a6421673df9"
+    },
+    {
+      "path": "assets/LabExpansionAlternateJourney49-D6S5nHrL.js",
+      "bytes": 2039,
+      "sha256": "3a735cb199c144ac2d390c5cfb0b4acd4c139523658dfdc2baebe610fbb40593"
+    },
+    {
+      "path": "assets/LabExpansionAlternateJourneyB-Cw2fugQe.js",
+      "bytes": 2970,
+      "sha256": "9002602ead3c2914dc923c68a411bc519a1d22eb7d13dbbe841a1fdc688b935f"
+    },
+    {
+      "path": "assets/LabExpansionJourneyA-CmE48KCi.js",
+      "bytes": 7448,
+      "sha256": "aed8d0ff8294d79bdb2f97ea0c8adc5ba957f6ac00e5e34ef13a07b4c34bd987"
+    },
+    {
+      "path": "assets/LabExpansionJourneyB-Dxb9C5yt.js",
+      "bytes": 5645,
+      "sha256": "25becd906fbe929f74132dd167d40a1688e7b66403ceeae67c7f89ad8dc0f20b"
+    },
+    {
+      "path": "assets/LabExtendedJourney-D8-StgxS.js",
+      "bytes": 9252,
+      "sha256": "18a36aafc323b814c21dfe59bae210ba592c71e7a02d7ecdee254274c0d0a7c2"
+    },
+    {
+      "path": "assets/LabFoundation20PhysicalJourney-PND_5roo.js",
+      "bytes": 12259,
+      "sha256": "48f9bcf5f3a51444dbffb48076f83d9bb4c5c7d25d9dca5f6b8d23a8fc2273e2"
+    },
+    {
+      "path": "assets/LabFoundationJourney-DUmaaJqJ.js",
+      "bytes": 9267,
+      "sha256": "b8e31f0130644fa1a53dc810a5330b0847d0dcd55bb7105296e01d4c1a04a006"
+    },
+    {
+      "path": "assets/LabIntroductoryAlternates-DcdsCClA.js",
+      "bytes": 1341,
+      "sha256": "a6451adc49d9c2f86f43455bfa4ced44d7166234f4fde82082990bf21f76cd5c"
+    },
+    {
+      "path": "assets/LabLateCampaignAim-DhxYf3Jd.js",
+      "bytes": 753,
+      "sha256": "3a7258d70e21db3a5fe0f5399b5cd290961e186317506bc73179ca049e1fe40f"
+    },
+    {
+      "path": "assets/LabOpenJourney-DVN1IDK_.js",
+      "bytes": 6404,
+      "sha256": "139bf0778210830a917bef0ad1eab0f0a071cebbc9edf2cb8ae739bc3488a4cb"
+    },
+    {
+      "path": "assets/LabPortalEdgeJourney-D3DIz8w0.js",
+      "bytes": 2293,
+      "sha256": "04a5841fc0dc496e05246b7561038d77efeb815b3cff86f3e34c77dad715c910"
+    },
+    {
+      "path": "assets/LabPortalFloorJourney-CIL4mQVN.js",
+      "bytes": 1516,
+      "sha256": "3c9f593876f4b4e95bb030ba65b7f4fd4c282fa4aa0d54a02ab63c016b55e529"
+    },
+    {
+      "path": "assets/LabPostJourneyA-BHL8k1cB.js",
+      "bytes": 12240,
+      "sha256": "0258fdb2caebeaa0e8fe136cb35cbeeb3528feb7f00562448794404174a12d10"
+    },
+    {
+      "path": "assets/LabPostJourneyB-Baqm6tig.js",
+      "bytes": 10887,
+      "sha256": "54f268c67c7e13a89e4d910a5e7c82a15469dc588216685ca717f2c6c6dfebf3"
+    },
+    {
+      "path": "assets/LabPuzzlePilot43Journey-B26hDIpV.js",
+      "bytes": 3148,
+      "sha256": "df9c5c4de2faab6085057f96704d676a6d5bdcf3ec0c611731fe2896d6e7b55f"
+    },
+    {
+      "path": "assets/LabPuzzleProgression44Journey-8_znVVbt.js",
+      "bytes": 1956,
+      "sha256": "ec195a71900967e905ae2b9c094e7fbfd772c5f96088b1eaafdc9ff33310dd2c"
+    },
+    {
+      "path": "assets/LabPuzzleProgression45Journey-tJXI0JNz.js",
+      "bytes": 5497,
+      "sha256": "0fa5a29cb42d8925533650c207099d5e60e965cc9b768eedc53c9cb5774ceca5"
+    },
+    {
+      "path": "assets/LabPuzzleProgression46Journey-C7-wqb7m.js",
+      "bytes": 3649,
+      "sha256": "6e7766ad62cc05a6217dd374597553d5ae64fe1ccba28dfc3084acd003a671cf"
+    },
+    {
+      "path": "assets/LabPuzzleProgression47Journey-Cab67tov.js",
+      "bytes": 4713,
+      "sha256": "d35c65cd2b49b1a93f154329e44a71900872e77ddd54e66a57d55d9f680fcfb5"
+    },
+    {
+      "path": "assets/LabPuzzleProgression48Journey-Berg86z6.js",
+      "bytes": 5941,
+      "sha256": "a97aae1b0e77c863b09df773c77e9778cc26f2ac8ae159db4289190c41f730f5"
+    },
+    {
+      "path": "assets/LabPuzzleProgression49Journey-Bg0dd7fc.js",
+      "bytes": 4598,
+      "sha256": "a4b6650230ba767f7ff0a512f4a5641990eca06a817831aecf515bc9b11c3cc6"
+    },
+    {
+      "path": "assets/LabPuzzleProgression50BeamJourney-B8qWL77C.js",
+      "bytes": 12675,
+      "sha256": "9ac8056bb8d7e4e0ea507cab98ec8f767523762229c3e74142949973d740b02e"
+    },
+    {
+      "path": "assets/LabPuzzleProgression50Journey-DXmGTWz0.js",
+      "bytes": 6188,
+      "sha256": "a08c76abfcdd5295a2aab207738d89166a45040bbd51d52a1757b7f118d36533"
+    },
+    {
+      "path": "assets/LabPuzzleProgression51Journey-CHm2T-6i.js",
+      "bytes": 3457,
+      "sha256": "2842b5d0ffd94c7a5a3b12b5f7b37eb9fbbaecb09bd627b5003ef36ed8be2f6d"
+    },
+    {
+      "path": "assets/LabResearchJourney-CZxqOufG.js",
+      "bytes": 7951,
+      "sha256": "39847f73c8e122dda7c8af5bb6169a9881fe67108a4870761653d1d3a2a971d4"
+    },
+    {
+      "path": "assets/LabRoom13Journey-DpkZeNEo.js",
+      "bytes": 6194,
+      "sha256": "275c62befc9b95dc4c596810721ffba02b137b24ad14006e4769f1c7f21bc041"
+    },
+    {
+      "path": "assets/LabRoom14Journey-D-gpC3nG.js",
+      "bytes": 4785,
+      "sha256": "1a770dc0e42131f617f0b0113b045c6b51d1277696ba75c24dee3463d496d0b0"
+    },
+    {
+      "path": "assets/LabRoom15Journey-BQNFqiLy.js",
+      "bytes": 4604,
+      "sha256": "6207bb9d4a27b22fd8a84e2f0e84f108e3844d5a902ac221d2813745b3f88faf"
+    },
+    {
+      "path": "assets/LabRoom16Journey-DcT0PHn1.js",
+      "bytes": 2534,
+      "sha256": "43814ce0e94d01e0e2b9152c6ea1c722073f13a019b2992525f6b0480fa97e74"
+    },
+    {
+      "path": "assets/LabRoom17Journey-C2EE7523.js",
+      "bytes": 3260,
+      "sha256": "b621bf8abcb99cec72e5a8b0ef53e4ef6a005e414141e9502855a2759ba02708"
+    },
+    {
+      "path": "assets/LabRoom18Journey-DhJ3S8XF.js",
+      "bytes": 6065,
+      "sha256": "e73d7500dce7966d6d82047c9958231a79f693746be6d26176ba2804828308fe"
+    },
+    {
+      "path": "assets/LabRoom19Journey-BVk2pOJ3.js",
+      "bytes": 3087,
+      "sha256": "edbd9e87a7c68f527a6a6d6794cfcb3a8de5780d1c656265ccf7910207066ab4"
+    },
+    {
+      "path": "assets/LabRoom20Journey-Dnjdo837.js",
+      "bytes": 5013,
+      "sha256": "84ee4a4debf18d555e80bbf468821d58576e6fcf805b34adcd2670e8502fc0fd"
+    },
+    {
+      "path": "assets/LabRoom21Journey-g85mN3wB.js",
+      "bytes": 5318,
+      "sha256": "29d54c42fcd5bf711ff81258ebb54e81954ace1dab922713595f9230d12b54d2"
+    },
+    {
+      "path": "assets/LabRoom22Journey-f6idjV9w.js",
+      "bytes": 2942,
+      "sha256": "85d463ea1e7347c709730b546915f7df0a8a13c5f838bb089fddeb89cc049933"
+    },
+    {
+      "path": "assets/LabRoom23Journey-Msdv4cwo.js",
+      "bytes": 2743,
+      "sha256": "c77e4b01da1749ae49083a217e6d3c9dcbb80cf8ca0510f3fba94951905e0231"
+    },
+    {
+      "path": "assets/LabRoom23PhysicalJourney-TxUy1wFo.js",
+      "bytes": 4194,
+      "sha256": "f5bafd0d96fa803377ed7ff894308591bb762e169b6fae7452064dee9113f576"
+    },
+    {
+      "path": "assets/LabRoom24Journey-BDFk5X64.js",
+      "bytes": 3675,
+      "sha256": "bccd9f16d6cb79f410848b700cd5b2ce1365ae2aa9da874e3122f12c859b4226"
+    },
+    {
+      "path": "assets/LabRoom25Journey-COqi9k-Z.js",
+      "bytes": 4626,
+      "sha256": "4113270db838996f7bcd1cd8d5edd4ca13461d19057e13a1a5f4e0f5085b9296"
+    },
+    {
+      "path": "assets/LabRoom26Journey-D5Lhf6Yz.js",
+      "bytes": 4194,
+      "sha256": "f568e01fcbf2e28f9bf1d89aa1d8e83df957bb60ea13a63a77cab81b61577e74"
+    },
+    {
+      "path": "assets/LabRoom27Journey-CtMoXjWq.js",
+      "bytes": 3350,
+      "sha256": "ea4e62a0eed62998b64515b56db65142d1a7d3fb8d5c91b6e31653c5ef4422b5"
+    },
+    {
+      "path": "assets/LabRoom28Journey-BK5o10zU.js",
+      "bytes": 3238,
+      "sha256": "abb63b08a5336b66f9274808b2d715e56d00520d744756fd68875b0c7442e686"
+    },
+    {
+      "path": "assets/LabRoom29Journey-FXLiWbZf.js",
+      "bytes": 2592,
+      "sha256": "625138692ba0641ed1ea63e7bb6ea332c70bf235ee3bc8b3cbd80456012e04ef"
+    },
+    {
+      "path": "assets/LabRoom30Journey-zAsFaYdh.js",
+      "bytes": 3762,
+      "sha256": "1d260d8e49e983b2f7a9c354898fe771c41df56434d67e203bd8fb51bbc8f925"
+    },
+    {
+      "path": "assets/LabSingularityJourney-CuH5SyjU.js",
+      "bytes": 26233,
+      "sha256": "cc4d526b49a44e8cc42cfc40d147e52c09ab7027f96f44ea154c3780565476ca"
+    },
+    {
+      "path": "assets/LabSiphonObservatoryJourney-Btph9mcO.js",
+      "bytes": 2734,
+      "sha256": "f532054d6ae7a53f8544d6c4558296b7757b7afea15e4d965cf924e765c6beec"
+    },
+    {
+      "path": "assets/LabTower41RatchetCellJourney-DB5S0pH9.js",
+      "bytes": 24187,
+      "sha256": "78a9e2f129895e398b6fe03c5e915f4d3b528623101ce0a26b83777d90fcc7de"
+    },
+    {
+      "path": "assets/LabTowerJourney-jlz_ZQhv.js",
+      "bytes": 31405,
+      "sha256": "0ee1defb49ca023cad56477a7d0838e9a14e7966f8dac60f33ac9a679f005bfe"
+    },
+    {
+      "path": "assets/LabV8Journey-BXDsLXN9.js",
+      "bytes": 19916,
+      "sha256": "b5f792565e3cc4efc05a7260172baabe962a657ea158d139aaca3738002ac7c0"
+    },
+    {
+      "path": "assets/LabWorkshopJourney-zQGRYAHX.js",
+      "bytes": 7249,
+      "sha256": "5f2cb597424d85e3a90960ddcd6fd45b003626ac06dacb485b3eed849a15618c"
+    },
+    {
+      "path": "assets/index-B8t0AZ6H.js",
+      "bytes": 2149420,
+      "sha256": "fde534561d09584eb61ac0193d43c3bb362f2649326d64f3e122fbaa7e1da030"
+    },
+    {
+      "path": "assets/index-iaXSZqoT.css",
+      "bytes": 51123,
+      "sha256": "3cbd8f9a0859aeb5e94a6ca26d13df37d6500a8773de9934c79f911694efa648"
+    },
+    {
+      "path": "build-info.json",
+      "bytes": 111196,
+      "sha256": "83b45110af24205fc77a5836bbaca773224ee169b7f3690c3ce7842b8a6d7ac7"
+    },
+    {
+      "path": "draco/draco_decoder.js",
+      "bytes": 719410,
+      "sha256": "30e4d486fa020737af10e3c56197693e5b904bdc05b8bfa5d7b06751dec6da04"
+    },
+    {
+      "path": "draco/draco_decoder.wasm",
+      "bytes": 285747,
+      "sha256": "c55a594e8ffd18426d36b27fea9618af3df5e173640a3e56d46f09d76f0574f2"
+    },
+    {
+      "path": "draco/draco_wasm_wrapper.js",
+      "bytes": 58763,
+      "sha256": "e8049906ef3f8f75d3456c22a3f31bfdfe5b5b5bd09ccdec613b9e9a49d554d8"
+    },
+    {
+      "path": "index.html",
+      "bytes": 13823,
+      "sha256": "192b1bcb841a8983cf4651bef19a852973eb48f74abe50fc4ef1ddb01516ce57"
+    },
+    {
+      "path": "models/runtime/manifest.json",
+      "bytes": 2421,
+      "sha256": "8806346ed3ac0fb096aa26321d5620c16a6a2a55f2523023fb21f6c4749fe2ed"
+    },
+    {
+      "path": "models/runtime/model-01-player.glb",
+      "bytes": 549756,
+      "sha256": "e5b09ff0281377b679d6fdd505fa1ed89550bb662e94e7f593ed67ee50a66a91"
+    },
+    {
+      "path": "models/runtime/model-02-cargo.glb",
+      "bytes": 510376,
+      "sha256": "65763c87e7f14cc807cffa8fc2adc364e8421dae819271a0c406a6b0d2c8c697"
+    },
+    {
+      "path": "models/runtime/model-11-portal-gun.glb",
+      "bytes": 393116,
+      "sha256": "d8c76c41efbbf0a6d70e30ab5a7b70f49fd806e497f67ea06cb28f9f4edca1d7"
+    },
+    {
+      "path": "models/runtime/model-19-lift-platform.glb",
+      "bytes": 404076,
+      "sha256": "afd039e831ff0baa514f076a505ffbb7c57dac2251959b3d858fc92dcf3d04b9"
+    },
+    {
+      "path": "models/runtime/model-22-terminal.glb",
+      "bytes": 377108,
+      "sha256": "9e2f4ff758996f67596d3935041f632bafdf7e84efd4869341920b64a5919c26"
+    },
+    {
+      "path": "models/runtime/model-23-floor-tile.glb",
+      "bytes": 103600,
+      "sha256": "0950bc6ef31bb28939087bad53695f21cde0b9fe5740394df202a0b242f77b0c"
+    },
+    {
+      "path": "models/runtime/model-24-wall-panel.glb",
+      "bytes": 62448,
+      "sha256": "15aaca48f6e436d5e89abf7548c0fe43580bba8faff4619e476d3a6d306b004d"
+    },
+    {
+      "path": "models/runtime/model-28-rotating-panel.glb",
+      "bytes": 366120,
+      "sha256": "3159916bad63903e73b8e660ce4aab8a3b1e38f1231152b68f3df63d6987ac4b"
+    },
+    {
+      "path": "models/runtime/model-29-pressure-platform.glb",
+      "bytes": 390244,
+      "sha256": "ee65bd9706ad4f4658e54ec5ad8f6f45b24d9027e4e6072f162358a4c1b3291b"
+    },
+    {
+      "path": "models/runtime/model-31-wind-generator.glb",
+      "bytes": 25768,
+      "sha256": "024f25db27e96e1efdaa5e200c13a665dee487e798338f86fef985feeae9019e"
+    },
+    {
+      "path": "models/runtime/model-32-spring-ram.glb",
+      "bytes": 25400,
+      "sha256": "958d5ed533736d5779da078be20ae2b0e84212bfc3a00b456dc0106bc0a093d7"
+    },
+    {
+      "path": "models/runtime/model-35-shutter-fan.glb",
+      "bytes": 27816,
+      "sha256": "8e11d5ab83250348f6e08f034ec87d82727162742d5a7be18f981fc523aa907a"
+    },
+    {
+      "path": "models/runtime/model-37-extension-bridge.glb",
+      "bytes": 25764,
+      "sha256": "96173a9ef89375066b08fad8dff1928425863c6b4e6b8c0373c497448f109c55"
+    },
+    {
+      "path": "models/runtime/model-39-cable-winch.glb",
+      "bytes": 28608,
+      "sha256": "301f148938ec83e2a8f4b45c7f9bdfd19fb40ca79d8fb9abc7601caf4fe0eafd"
+    }
+  ],
+  "candidateBytes": 7195304,
+  "candidateInventorySha256": "9db5aff37caff72d3f770daf9a3c14983cc9a1b63286a17d50e6c5378d9754ac",
+  "checks": {
+    "pass": true,
+    "sourceInputsSha256": "bcbba45d73f1b858c40040c93bcb2453ed1ab3130eb4630620487f46cc6196ee",
+    "sourceInputFiles": 348,
+    "ordinaryRoutes": {
+      "pass": true,
+      "rooms": 51,
+      "won": 51,
+      "resetCounterScope": "reported journey counters after legacy fixture initialization; the initial fixture reset is outside these counters; specialized drivers retain their own stricter proofs"
+    },
+    "nativeRoutes": {
+      "pass": true,
+      "gameplayPassed": 51,
+      "capturesPassed": 51,
+      "normalUiZeroStepStartProven": false,
+      "resetCounterScope": "reported journey counters after legacy fixture initialization; the initial fixture reset is outside these counters; specialized drivers retain their own stricter proofs"
+    },
+    "playerAccess": {
+      "pass": true,
+      "kind": "offline-current-player-ui-audit",
+      "auditPassed": true,
+      "sourceAccepted": false,
+      "publicationAccepted": false,
+      "liveSdkAccepted": false,
+      "moderationAccepted": false,
+      "physicalPhonePerformanceAccepted": false,
+      "artifact": "v63-player-ui",
+      "sourceCommit": "a60a31dfd4c624d6d60f4c33111d315b3bc44aa6",
+      "sourceTree": "47e3de85ee814f18020514faf2614b9c4da37d12",
+      "runId": 39411608067,
+      "runAttempt": 1,
+      "sourceCheckoutChecked": true,
+      "controllerFiles": 8,
+      "packageFilesSha256": "0f17b54c7ec7b6ee4b8a903cf4cbedc2eb7ca0c55fd8712ca0bee631618170c1",
+      "closedArtifactFiles": 9,
+      "servedHTTPFiles": 80,
+      "actualBrowserContexts": 10,
+      "actualBrowserResponses": 138,
+      "requestOutcomeCounts": {
+        "finishedWithCompleteVerifiedBody": 104,
+        "abortedWithCompleteVerifiedBody": 34
+      },
+      "browserResponseLifecycle": [
+        {
+          "url": "http://127.0.0.1:44019/campaign-v63/",
+          "documentGenerations": 1,
+          "requests": 25,
+          "responses": 11,
+          "requestOutcomeCounts": {
+            "finishedWithCompleteVerifiedBody": 11,
+            "abortedWithCompleteVerifiedBody": 0
+          },
+          "skippedNoncandidateRequests": 14,
+          "fromCacheResponses": 0,
+          "settledDrains": 2
+        },
+        {
+          "url": "http://127.0.0.1:44019/campaign-v63/?debug=1&level=51",
+          "documentGenerations": 1,
+          "requests": 25,
+          "responses": 11,
+          "requestOutcomeCounts": {
+            "finishedWithCompleteVerifiedBody": 7,
+            "abortedWithCompleteVerifiedBody": 4
+          },
+          "skippedNoncandidateRequests": 14,
+          "fromCacheResponses": 0,
+          "settledDrains": 2
+        },
+        {
+          "url": "http://127.0.0.1:44019/campaign-v63/?debug=1&pilot=43",
+          "documentGenerations": 1,
+          "requests": 25,
+          "responses": 11,
+          "requestOutcomeCounts": {
+            "finishedWithCompleteVerifiedBody": 10,
+            "abortedWithCompleteVerifiedBody": 1
+          },
+          "skippedNoncandidateRequests": 14,
+          "fromCacheResponses": 0,
+          "settledDrains": 2
+        },
+        {
+          "url": "http://127.0.0.1:44019/campaign-v63/?debug=1&pilot=progression",
+          "documentGenerations": 1,
+          "requests": 25,
+          "responses": 11,
+          "requestOutcomeCounts": {
+            "finishedWithCompleteVerifiedBody": 8,
+            "abortedWithCompleteVerifiedBody": 3
+          },
+          "skippedNoncandidateRequests": 14,
+          "fromCacheResponses": 0,
+          "settledDrains": 2
+        },
+        {
+          "url": "http://127.0.0.1:44019/campaign-v63/?debug=1&tower41preview=1",
+          "documentGenerations": 1,
+          "requests": 25,
+          "responses": 11,
+          "requestOutcomeCounts": {
+            "finishedWithCompleteVerifiedBody": 7,
+            "abortedWithCompleteVerifiedBody": 4
+          },
+          "skippedNoncandidateRequests": 14,
+          "fromCacheResponses": 0,
+          "settledDrains": 2
+        },
+        {
+          "url": "http://127.0.0.1:44019/campaign-v63/?debug=1",
+          "documentGenerations": 1,
+          "requests": 25,
+          "responses": 11,
+          "requestOutcomeCounts": {
+            "finishedWithCompleteVerifiedBody": 6,
+            "abortedWithCompleteVerifiedBody": 5
+          },
+          "skippedNoncandidateRequests": 14,
+          "fromCacheResponses": 0,
+          "settledDrains": 2
+        },
+        {
+          "url": "http://127.0.0.1:44019/campaign-v63/?debug=1",
+          "documentGenerations": 2,
+          "requests": 57,
+          "responses": 28,
+          "requestOutcomeCounts": {
+            "finishedWithCompleteVerifiedBody": 22,
+            "abortedWithCompleteVerifiedBody": 6
+          },
+          "skippedNoncandidateRequests": 29,
+          "fromCacheResponses": 0,
+          "settledDrains": 3
+        },
+        {
+          "url": "http://127.0.0.1:44019/campaign-v63/?debug=1",
+          "documentGenerations": 2,
+          "requests": 50,
+          "responses": 22,
+          "requestOutcomeCounts": {
+            "finishedWithCompleteVerifiedBody": 15,
+            "abortedWithCompleteVerifiedBody": 7
+          },
+          "skippedNoncandidateRequests": 28,
+          "fromCacheResponses": 0,
+          "settledDrains": 3
+        },
+        {
+          "url": "http://127.0.0.1:44019/campaign-v63/",
+          "documentGenerations": 1,
+          "requests": 25,
+          "responses": 11,
+          "requestOutcomeCounts": {
+            "finishedWithCompleteVerifiedBody": 8,
+            "abortedWithCompleteVerifiedBody": 3
+          },
+          "skippedNoncandidateRequests": 14,
+          "fromCacheResponses": 0,
+          "settledDrains": 2
+        },
+        {
+          "url": "http://127.0.0.1:44019/campaign-v63/",
+          "documentGenerations": 1,
+          "requests": 25,
+          "responses": 11,
+          "requestOutcomeCounts": {
+            "finishedWithCompleteVerifiedBody": 10,
+            "abortedWithCompleteVerifiedBody": 1
+          },
+          "skippedNoncandidateRequests": 14,
+          "fromCacheResponses": 0,
+          "settledDrains": 2
+        }
+      ],
+      "atlasRooms": 51,
+      "actualFirstRoomWin": {
+        "level": 1,
+        "frames": 530,
+        "teleports": 1,
+        "resetCounts": {
+          "reset": 0,
+          "respawn": 0
+        },
+        "sameOriginalCargo": true
+      },
+      "migrationPhases": [
+        "initial",
+        "settings",
+        "playing",
+        "reloaded"
+      ],
+      "hintRooms": 51,
+      "hintTiers": 153,
+      "decodedScreenshots": [
+        {
+          "path": "fresh-guest-atlas.png",
+          "width": 1024,
+          "height": 768,
+          "bitDepth": 8,
+          "colorType": 2,
+          "bytes": 600722,
+          "decodedBytes": 2360064,
+          "pixelBytes": 2359296,
+          "pixelSha256": "c77c4868ebb0b877be93b8a9ec930e410ab1f687cef46aa46c2c8cce98e877b3",
+          "opaquePixels": 786432,
+          "visiblePixels": 786432,
+          "nonUniformPixels": 785857
+        },
+        {
+          "path": "first-room-real-win.png",
+          "width": 1024,
+          "height": 768,
+          "bitDepth": 8,
+          "colorType": 2,
+          "bytes": 102012,
+          "decodedBytes": 2360064,
+          "pixelBytes": 2359296,
+          "pixelSha256": "65983d5e593b57bf56b7351071815902181d37c0fcf7f4f99288bcccf8a8f39e",
+          "opaquePixels": 786432,
+          "visiblePixels": 786432,
+          "nonUniformPixels": 672914
+        },
+        {
+          "path": "compact-escape-pause.png",
+          "width": 1024,
+          "height": 768,
+          "bitDepth": 8,
+          "colorType": 2,
+          "bytes": 92296,
+          "decodedBytes": 2360064,
+          "pixelBytes": 2359296,
+          "pixelSha256": "8db9d260ec03e2dddc4e28c95b388ec78d33df7e09cf120d53e6f9c20adb1248",
+          "opaquePixels": 786432,
+          "visiblePixels": 786432,
+          "nonUniformPixels": 729143
+        },
+        {
+          "path": "mobile-controls-portrait.png",
+          "width": 390,
+          "height": 844,
+          "bitDepth": 8,
+          "colorType": 2,
+          "bytes": 168279,
+          "decodedBytes": 988324,
+          "pixelBytes": 987480,
+          "pixelSha256": "a33b7d791a54d5e3e60d58f77c21d25234ec373d897e941ebd06c86bd69d5201",
+          "opaquePixels": 329160,
+          "visiblePixels": 329160,
+          "nonUniformPixels": 310360
+        },
+        {
+          "path": "mobile-controls-landscape.png",
+          "width": 844,
+          "height": 390,
+          "bitDepth": 8,
+          "colorType": 2,
+          "bytes": 162437,
+          "decodedBytes": 987870,
+          "pixelBytes": 987480,
+          "pixelSha256": "ddf5a600f5836297dcb4e9bb1d984cde40e58a5b71399aa3386217f170a008a3",
+          "opaquePixels": 329160,
+          "visiblePixels": 329160,
+          "nonUniformPixels": 327029
+        }
+      ],
+      "scope": "Offline validation of retained provider observations, pinned Source validators, exact consumer response hashes/actual request identities and decoded full-page PNGs; ERR_ABORTED only with a complete independently verified body for that same CDP request/document. No fresh browser rerun, visual human acceptance, Source acceptance, publication or live-platform acceptance."
+    },
+    "rewardedUI": {
+      "pass": true,
+      "rooms": 51,
+      "transactions": 153,
+      "liveAds": false
+    },
+    "platformChecker": {
+      "pass": true,
+      "rooms": 51,
+      "liveSdkAccepted": false,
+      "moderationAccepted": false,
+      "originalFindings": [
+        {
+          "level": 1,
+          "checked": true,
+          "checks": 82,
+          "hardFailures": 0,
+          "warnings": 12,
+          "notVerified": 2,
+          "originalScorePercent": 85,
+          "originalCoveragePercent": 98,
+          "context": "mock-yandex-platform",
+          "liveSdkAccepted": false,
+          "moderationAccepted": false
+        },
+        {
+          "level": 2,
+          "checked": true,
+          "checks": 82,
+          "hardFailures": 0,
+          "warnings": 12,
+          "notVerified": 2,
+          "originalScorePercent": 85,
+          "originalCoveragePercent": 98,
+          "context": "mock-yandex-platform",
+          "liveSdkAccepted": false,
+          "moderationAccepted": false
+        },
+        {
+          "level": 3,
+          "checked": true,
+          "checks": 82,
+          "hardFailures": 0,
+          "warnings": 12,
+          "notVerified": 2,
+          "originalScorePercent": 85,
+          "originalCoveragePercent": 98,
+          "context": "mock-yandex-platform",
+          "liveSdkAccepted": false,
+          "moderationAccepted": false
+        },
+        {
+          "level": 4,
+          "checked": true,
+          "checks": 82,
+          "hardFailures": 0,
+          "warnings": 12,
+          "notVerified": 2,
+          "originalScorePercent": 85,
+          "originalCoveragePercent": 98,
+          "context": "mock-yandex-platform",
+          "liveSdkAccepted": false,
+          "moderationAccepted": false
+        },
+        {
+          "level": 5,
+          "checked": true,
+          "checks": 82,
+          "hardFailures": 0,
+          "warnings": 12,
+          "notVerified": 2,
+          "originalScorePercent": 85,
+          "originalCoveragePercent": 98,
+          "context": "mock-yandex-platform",
+          "liveSdkAccepted": false,
+          "moderationAccepted": false
+        },
+        {
+          "level": 6,
+          "checked": true,
+          "checks": 82,
+          "hardFailures": 0,
+          "warnings": 12,
+          "notVerified": 2,
+          "originalScorePercent": 85,
+          "originalCoveragePercent": 98,
+          "context": "mock-yandex-platform",
+          "liveSdkAccepted": false,
+          "moderationAccepted": false
+        },
+        {
+          "level": 7,
+          "checked": true,
+          "checks": 82,
+          "hardFailures": 0,
+          "warnings": 12,
+          "notVerified": 2,
+          "originalScorePercent": 85,
+          "originalCoveragePercent": 98,
+          "context": "mock-yandex-platform",
+          "liveSdkAccepted": false,
+          "moderationAccepted": false
+        },
+        {
+          "level": 8,
+          "checked": true,
+          "checks": 82,
+          "hardFailures": 0,
+          "warnings": 12,
+          "notVerified": 2,
+          "originalScorePercent": 85,
+          "originalCoveragePercent": 98,
+          "context": "mock-yandex-platform",
+          "liveSdkAccepted": false,
+          "moderationAccepted": false
+        },
+        {
+          "level": 9,
+          "checked": true,
+          "checks": 82,
+          "hardFailures": 0,
+          "warnings": 12,
+          "notVerified": 2,
+          "originalScorePercent": 85,
+          "originalCoveragePercent": 98,
+          "context": "mock-yandex-platform",
+          "liveSdkAccepted": false,
+          "moderationAccepted": false
+        },
+        {
+          "level": 10,
+          "checked": true,
+          "checks": 82,
+          "hardFailures": 0,
+          "warnings": 12,
+          "notVerified": 2,
+          "originalScorePercent": 85,
+          "originalCoveragePercent": 98,
+          "context": "mock-yandex-platform",
+          "liveSdkAccepted": false,
+          "moderationAccepted": false
+        },
+        {
+          "level": 11,
+          "checked": true,
+          "checks": 82,
+          "hardFailures": 0,
+          "warnings": 12,
+          "notVerified": 2,
+          "originalScorePercent": 85,
+          "originalCoveragePercent": 98,
+          "context": "mock-yandex-platform",
+          "liveSdkAccepted": false,
+          "moderationAccepted": false
+        },
+        {
+          "level": 12,
+          "checked": true,
+          "checks": 82,
+          "hardFailures": 0,
+          "warnings": 12,
+          "notVerified": 2,
+          "originalScorePercent": 85,
+          "originalCoveragePercent": 98,
+          "context": "mock-yandex-platform",
+          "liveSdkAccepted": false,
+          "moderationAccepted": false
+        },
+        {
+          "level": 13,
+          "checked": true,
+          "checks": 82,
+          "hardFailures": 0,
+          "warnings": 12,
+          "notVerified": 2,
+          "originalScorePercent": 85,
+          "originalCoveragePercent": 98,
+          "context": "mock-yandex-platform",
+          "liveSdkAccepted": false,
+          "moderationAccepted": false
+        },
+        {
+          "level": 14,
+          "checked": true,
+          "checks": 82,
+          "hardFailures": 0,
+          "warnings": 12,
+          "notVerified": 2,
+          "originalScorePercent": 85,
+          "originalCoveragePercent": 98,
+          "context": "mock-yandex-platform",
+          "liveSdkAccepted": false,
+          "moderationAccepted": false
+        },
+        {
+          "level": 15,
+          "checked": true,
+          "checks": 82,
+          "hardFailures": 0,
+          "warnings": 12,
+          "notVerified": 2,
+          "originalScorePercent": 85,
+          "originalCoveragePercent": 98,
+          "context": "mock-yandex-platform",
+          "liveSdkAccepted": false,
+          "moderationAccepted": false
+        },
+        {
+          "level": 16,
+          "checked": true,
+          "checks": 82,
+          "hardFailures": 0,
+          "warnings": 12,
+          "notVerified": 2,
+          "originalScorePercent": 85,
+          "originalCoveragePercent": 98,
+          "context": "mock-yandex-platform",
+          "liveSdkAccepted": false,
+          "moderationAccepted": false
+        },
+        {
+          "level": 17,
+          "checked": true,
+          "checks": 82,
+          "hardFailures": 0,
+          "warnings": 12,
+          "notVerified": 2,
+          "originalScorePercent": 85,
+          "originalCoveragePercent": 98,
+          "context": "mock-yandex-platform",
+          "liveSdkAccepted": false,
+          "moderationAccepted": false
+        },
+        {
+          "level": 18,
+          "checked": true,
+          "checks": 82,
+          "hardFailures": 0,
+          "warnings": 12,
+          "notVerified": 2,
+          "originalScorePercent": 85,
+          "originalCoveragePercent": 98,
+          "context": "mock-yandex-platform",
+          "liveSdkAccepted": false,
+          "moderationAccepted": false
+        },
+        {
+          "level": 19,
+          "checked": true,
+          "checks": 82,
+          "hardFailures": 0,
+          "warnings": 12,
+          "notVerified": 2,
+          "originalScorePercent": 85,
+          "originalCoveragePercent": 98,
+          "context": "mock-yandex-platform",
+          "liveSdkAccepted": false,
+          "moderationAccepted": false
+        },
+        {
+          "level": 20,
+          "checked": true,
+          "checks": 82,
+          "hardFailures": 0,
+          "warnings": 12,
+          "notVerified": 2,
+          "originalScorePercent": 85,
+          "originalCoveragePercent": 98,
+          "context": "mock-yandex-platform",
+          "liveSdkAccepted": false,
+          "moderationAccepted": false
+        },
+        {
+          "level": 21,
+          "checked": true,
+          "checks": 82,
+          "hardFailures": 0,
+          "warnings": 12,
+          "notVerified": 2,
+          "originalScorePercent": 85,
+          "originalCoveragePercent": 98,
+          "context": "mock-yandex-platform",
+          "liveSdkAccepted": false,
+          "moderationAccepted": false
+        },
+        {
+          "level": 22,
+          "checked": true,
+          "checks": 82,
+          "hardFailures": 0,
+          "warnings": 12,
+          "notVerified": 2,
+          "originalScorePercent": 85,
+          "originalCoveragePercent": 98,
+          "context": "mock-yandex-platform",
+          "liveSdkAccepted": false,
+          "moderationAccepted": false
+        },
+        {
+          "level": 23,
+          "checked": true,
+          "checks": 82,
+          "hardFailures": 0,
+          "warnings": 12,
+          "notVerified": 2,
+          "originalScorePercent": 85,
+          "originalCoveragePercent": 98,
+          "context": "mock-yandex-platform",
+          "liveSdkAccepted": false,
+          "moderationAccepted": false
+        },
+        {
+          "level": 24,
+          "checked": true,
+          "checks": 82,
+          "hardFailures": 0,
+          "warnings": 12,
+          "notVerified": 2,
+          "originalScorePercent": 85,
+          "originalCoveragePercent": 98,
+          "context": "mock-yandex-platform",
+          "liveSdkAccepted": false,
+          "moderationAccepted": false
+        },
+        {
+          "level": 25,
+          "checked": true,
+          "checks": 82,
+          "hardFailures": 0,
+          "warnings": 12,
+          "notVerified": 2,
+          "originalScorePercent": 85,
+          "originalCoveragePercent": 98,
+          "context": "mock-yandex-platform",
+          "liveSdkAccepted": false,
+          "moderationAccepted": false
+        },
+        {
+          "level": 26,
+          "checked": true,
+          "checks": 82,
+          "hardFailures": 0,
+          "warnings": 12,
+          "notVerified": 2,
+          "originalScorePercent": 85,
+          "originalCoveragePercent": 98,
+          "context": "mock-yandex-platform",
+          "liveSdkAccepted": false,
+          "moderationAccepted": false
+        },
+        {
+          "level": 27,
+          "checked": true,
+          "checks": 82,
+          "hardFailures": 0,
+          "warnings": 12,
+          "notVerified": 2,
+          "originalScorePercent": 85,
+          "originalCoveragePercent": 98,
+          "context": "mock-yandex-platform",
+          "liveSdkAccepted": false,
+          "moderationAccepted": false
+        },
+        {
+          "level": 28,
+          "checked": true,
+          "checks": 82,
+          "hardFailures": 0,
+          "warnings": 12,
+          "notVerified": 2,
+          "originalScorePercent": 85,
+          "originalCoveragePercent": 98,
+          "context": "mock-yandex-platform",
+          "liveSdkAccepted": false,
+          "moderationAccepted": false
+        },
+        {
+          "level": 29,
+          "checked": true,
+          "checks": 82,
+          "hardFailures": 0,
+          "warnings": 12,
+          "notVerified": 2,
+          "originalScorePercent": 85,
+          "originalCoveragePercent": 98,
+          "context": "mock-yandex-platform",
+          "liveSdkAccepted": false,
+          "moderationAccepted": false
+        },
+        {
+          "level": 30,
+          "checked": true,
+          "checks": 82,
+          "hardFailures": 0,
+          "warnings": 12,
+          "notVerified": 2,
+          "originalScorePercent": 85,
+          "originalCoveragePercent": 98,
+          "context": "mock-yandex-platform",
+          "liveSdkAccepted": false,
+          "moderationAccepted": false
+        },
+        {
+          "level": 31,
+          "checked": true,
+          "checks": 82,
+          "hardFailures": 0,
+          "warnings": 12,
+          "notVerified": 2,
+          "originalScorePercent": 85,
+          "originalCoveragePercent": 98,
+          "context": "mock-yandex-platform",
+          "liveSdkAccepted": false,
+          "moderationAccepted": false
+        },
+        {
+          "level": 32,
+          "checked": true,
+          "checks": 82,
+          "hardFailures": 0,
+          "warnings": 12,
+          "notVerified": 2,
+          "originalScorePercent": 85,
+          "originalCoveragePercent": 98,
+          "context": "mock-yandex-platform",
+          "liveSdkAccepted": false,
+          "moderationAccepted": false
+        },
+        {
+          "level": 33,
+          "checked": true,
+          "checks": 82,
+          "hardFailures": 0,
+          "warnings": 12,
+          "notVerified": 2,
+          "originalScorePercent": 85,
+          "originalCoveragePercent": 98,
+          "context": "mock-yandex-platform",
+          "liveSdkAccepted": false,
+          "moderationAccepted": false
+        },
+        {
+          "level": 34,
+          "checked": true,
+          "checks": 82,
+          "hardFailures": 0,
+          "warnings": 12,
+          "notVerified": 2,
+          "originalScorePercent": 85,
+          "originalCoveragePercent": 98,
+          "context": "mock-yandex-platform",
+          "liveSdkAccepted": false,
+          "moderationAccepted": false
+        },
+        {
+          "level": 35,
+          "checked": true,
+          "checks": 82,
+          "hardFailures": 0,
+          "warnings": 12,
+          "notVerified": 2,
+          "originalScorePercent": 85,
+          "originalCoveragePercent": 98,
+          "context": "mock-yandex-platform",
+          "liveSdkAccepted": false,
+          "moderationAccepted": false
+        },
+        {
+          "level": 36,
+          "checked": true,
+          "checks": 82,
+          "hardFailures": 0,
+          "warnings": 12,
+          "notVerified": 2,
+          "originalScorePercent": 85,
+          "originalCoveragePercent": 98,
+          "context": "mock-yandex-platform",
+          "liveSdkAccepted": false,
+          "moderationAccepted": false
+        },
+        {
+          "level": 37,
+          "checked": true,
+          "checks": 82,
+          "hardFailures": 0,
+          "warnings": 12,
+          "notVerified": 2,
+          "originalScorePercent": 85,
+          "originalCoveragePercent": 98,
+          "context": "mock-yandex-platform",
+          "liveSdkAccepted": false,
+          "moderationAccepted": false
+        },
+        {
+          "level": 38,
+          "checked": true,
+          "checks": 82,
+          "hardFailures": 0,
+          "warnings": 12,
+          "notVerified": 2,
+          "originalScorePercent": 85,
+          "originalCoveragePercent": 98,
+          "context": "mock-yandex-platform",
+          "liveSdkAccepted": false,
+          "moderationAccepted": false
+        },
+        {
+          "level": 39,
+          "checked": true,
+          "checks": 82,
+          "hardFailures": 0,
+          "warnings": 12,
+          "notVerified": 2,
+          "originalScorePercent": 85,
+          "originalCoveragePercent": 98,
+          "context": "mock-yandex-platform",
+          "liveSdkAccepted": false,
+          "moderationAccepted": false
+        },
+        {
+          "level": 40,
+          "checked": true,
+          "checks": 82,
+          "hardFailures": 0,
+          "warnings": 12,
+          "notVerified": 2,
+          "originalScorePercent": 85,
+          "originalCoveragePercent": 98,
+          "context": "mock-yandex-platform",
+          "liveSdkAccepted": false,
+          "moderationAccepted": false
+        },
+        {
+          "level": 42,
+          "checked": true,
+          "checks": 82,
+          "hardFailures": 0,
+          "warnings": 12,
+          "notVerified": 2,
+          "originalScorePercent": 85,
+          "originalCoveragePercent": 98,
+          "context": "mock-yandex-platform",
+          "liveSdkAccepted": false,
+          "moderationAccepted": false
+        },
+        {
+          "level": 43,
+          "checked": true,
+          "checks": 82,
+          "hardFailures": 0,
+          "warnings": 12,
+          "notVerified": 2,
+          "originalScorePercent": 85,
+          "originalCoveragePercent": 98,
+          "context": "mock-yandex-platform",
+          "liveSdkAccepted": false,
+          "moderationAccepted": false
+        },
+        {
+          "level": 44,
+          "checked": true,
+          "checks": 82,
+          "hardFailures": 0,
+          "warnings": 12,
+          "notVerified": 2,
+          "originalScorePercent": 85,
+          "originalCoveragePercent": 98,
+          "context": "mock-yandex-platform",
+          "liveSdkAccepted": false,
+          "moderationAccepted": false
+        },
+        {
+          "level": 45,
+          "checked": true,
+          "checks": 82,
+          "hardFailures": 0,
+          "warnings": 12,
+          "notVerified": 2,
+          "originalScorePercent": 85,
+          "originalCoveragePercent": 98,
+          "context": "mock-yandex-platform",
+          "liveSdkAccepted": false,
+          "moderationAccepted": false
+        },
+        {
+          "level": 46,
+          "checked": true,
+          "checks": 82,
+          "hardFailures": 0,
+          "warnings": 12,
+          "notVerified": 2,
+          "originalScorePercent": 85,
+          "originalCoveragePercent": 98,
+          "context": "mock-yandex-platform",
+          "liveSdkAccepted": false,
+          "moderationAccepted": false
+        },
+        {
+          "level": 47,
+          "checked": true,
+          "checks": 82,
+          "hardFailures": 0,
+          "warnings": 12,
+          "notVerified": 2,
+          "originalScorePercent": 85,
+          "originalCoveragePercent": 98,
+          "context": "mock-yandex-platform",
+          "liveSdkAccepted": false,
+          "moderationAccepted": false
+        },
+        {
+          "level": 48,
+          "checked": true,
+          "checks": 82,
+          "hardFailures": 0,
+          "warnings": 12,
+          "notVerified": 2,
+          "originalScorePercent": 85,
+          "originalCoveragePercent": 98,
+          "context": "mock-yandex-platform",
+          "liveSdkAccepted": false,
+          "moderationAccepted": false
+        },
+        {
+          "level": 49,
+          "checked": true,
+          "checks": 82,
+          "hardFailures": 0,
+          "warnings": 12,
+          "notVerified": 2,
+          "originalScorePercent": 85,
+          "originalCoveragePercent": 98,
+          "context": "mock-yandex-platform",
+          "liveSdkAccepted": false,
+          "moderationAccepted": false
+        },
+        {
+          "level": 50,
+          "checked": true,
+          "checks": 82,
+          "hardFailures": 0,
+          "warnings": 12,
+          "notVerified": 2,
+          "originalScorePercent": 85,
+          "originalCoveragePercent": 98,
+          "context": "mock-yandex-platform",
+          "liveSdkAccepted": false,
+          "moderationAccepted": false
+        },
+        {
+          "level": 51,
+          "checked": true,
+          "checks": 82,
+          "hardFailures": 0,
+          "warnings": 12,
+          "notVerified": 2,
+          "originalScorePercent": 85,
+          "originalCoveragePercent": 98,
+          "context": "mock-yandex-platform",
+          "liveSdkAccepted": false,
+          "moderationAccepted": false
+        },
+        {
+          "level": 41,
+          "checked": true,
+          "checks": 82,
+          "hardFailures": 0,
+          "warnings": 12,
+          "notVerified": 2,
+          "originalScorePercent": 85,
+          "originalCoveragePercent": 98,
+          "context": "mock-yandex-platform",
+          "liveSdkAccepted": false,
+          "moderationAccepted": false
+        }
+      ]
+    },
+    "opticsNative": {
+      "pass": true,
+      "rooms": 10,
+      "evidence": {
+        "kind": "offline-optics-source-evidence-audit",
+        "pass": true,
+        "source": {
+          "commit": "a60a31dfd4c624d6d60f4c33111d315b3bc44aa6",
+          "tree": "47e3de85ee814f18020514faf2614b9c4da37d12",
+          "runId": 39411608067,
+          "runAttempt": 1,
+          "sourceInputsSha256": "bcbba45d73f1b858c40040c93bcb2453ed1ab3130eb4630620487f46cc6196ee"
+        },
+        "rooms": [
+          {
+            "room": 31,
+            "id": "post-freight-rake",
+            "mediaArtifact": "v63-optics-film-31",
+            "checkerArtifact": "v63-optics-checker-31",
+            "videoSha256": "34fe2116a0f31b167749427e5bedebb77de3a7118434971b85726affdee11110",
+            "frames": 1062,
+            "physicsSteps": 10607,
+            "simulationSeconds": 88.39166666666667,
+            "closedMembers": 13,
+            "fullDecode": true,
+            "keyframesCompared": 3,
+            "minimumLuminanceRange": 125,
+            "checker": {
+              "checked": true,
+              "checks": 80,
+              "hardFailures": 0,
+              "warnings": 12,
+              "notVerified": 2,
+              "originalScorePercent": 85,
+              "originalCoveragePercent": 98,
+              "context": "mock-yandex-platform",
+              "liveSdkAccepted": false,
+              "moderationAccepted": false
+            },
+            "observedHTTPResponses": 22
+          },
+          {
+            "room": 32,
+            "id": "post-thin-shadow",
+            "mediaArtifact": "v63-optics-film-32",
+            "checkerArtifact": "v63-optics-checker-32",
+            "videoSha256": "fb064ce64730ee09adc7b2364fed177803d0f8795804e59b649b516f5cd8061a",
+            "frames": 505,
+            "physicsSteps": 5040,
+            "simulationSeconds": 42,
+            "closedMembers": 13,
+            "fullDecode": true,
+            "keyframesCompared": 3,
+            "minimumLuminanceRange": 140,
+            "checker": {
+              "checked": true,
+              "checks": 80,
+              "hardFailures": 0,
+              "warnings": 12,
+              "notVerified": 2,
+              "originalScorePercent": 85,
+              "originalCoveragePercent": 98,
+              "context": "mock-yandex-platform",
+              "liveSdkAccepted": false,
+              "moderationAccepted": false
+            },
+            "observedHTTPResponses": 22
+          },
+          {
+            "room": 33,
+            "id": "siphon-observatory",
+            "mediaArtifact": "v63-optics-film-33",
+            "checkerArtifact": "v63-optics-checker-33",
+            "videoSha256": "6158845e9ec64e477ecc7678a0b1b6c2b29c6fd9b14f86e4213cd1676b626042",
+            "frames": 945,
+            "physicsSteps": 9434,
+            "simulationSeconds": 78.61666666666666,
+            "closedMembers": 13,
+            "fullDecode": true,
+            "keyframesCompared": 3,
+            "minimumLuminanceRange": 161,
+            "checker": {
+              "checked": true,
+              "checks": 80,
+              "hardFailures": 0,
+              "warnings": 12,
+              "notVerified": 2,
+              "originalScorePercent": 85,
+              "originalCoveragePercent": 98,
+              "context": "mock-yandex-platform",
+              "liveSdkAccepted": false,
+              "moderationAccepted": false
+            },
+            "observedHTTPResponses": 19
+          },
+          {
+            "room": 34,
+            "id": "post-pneumatic-reservoir",
+            "mediaArtifact": "v63-optics-film-34",
+            "checkerArtifact": "v63-optics-checker-34",
+            "videoSha256": "a9afbd6288f1ffc193e3cb1b652fcabe023b4cc07bdaae955b663eb6a98c184d",
+            "frames": 405,
+            "physicsSteps": 4037,
+            "simulationSeconds": 33.641666666666666,
+            "closedMembers": 13,
+            "fullDecode": true,
+            "keyframesCompared": 3,
+            "minimumLuminanceRange": 170,
+            "checker": {
+              "checked": true,
+              "checks": 80,
+              "hardFailures": 0,
+              "warnings": 12,
+              "notVerified": 2,
+              "originalScorePercent": 85,
+              "originalCoveragePercent": 98,
+              "context": "mock-yandex-platform",
+              "liveSdkAccepted": false,
+              "moderationAccepted": false
+            },
+            "observedHTTPResponses": 22
+          },
+          {
+            "room": 35,
+            "id": "post-air-switch",
+            "mediaArtifact": "v63-optics-film-35",
+            "checkerArtifact": "v63-optics-checker-35",
+            "videoSha256": "202648b8ed5020f211b9933266e869312bd4074fd2d5c4121a66f20b80ceddd7",
+            "frames": 492,
+            "physicsSteps": 4909,
+            "simulationSeconds": 40.90833333333333,
+            "closedMembers": 13,
+            "fullDecode": true,
+            "keyframesCompared": 3,
+            "minimumLuminanceRange": 144,
+            "checker": {
+              "checked": true,
+              "checks": 80,
+              "hardFailures": 0,
+              "warnings": 12,
+              "notVerified": 2,
+              "originalScorePercent": 85,
+              "originalCoveragePercent": 98,
+              "context": "mock-yandex-platform",
+              "liveSdkAccepted": false,
+              "moderationAccepted": false
+            },
+            "observedHTTPResponses": 22
+          },
+          {
+            "room": 36,
+            "id": "post-angular-cassette",
+            "mediaArtifact": "v63-optics-film-36",
+            "checkerArtifact": "v63-optics-checker-36",
+            "videoSha256": "8f7a4d32084c749724f8c92c6cd22eb877c9cb297d4cd52eacef5f3c255c6af5",
+            "frames": 936,
+            "physicsSteps": 9344,
+            "simulationSeconds": 77.86666666666666,
+            "closedMembers": 13,
+            "fullDecode": true,
+            "keyframesCompared": 3,
+            "minimumLuminanceRange": 145,
+            "checker": {
+              "checked": true,
+              "checks": 80,
+              "hardFailures": 0,
+              "warnings": 12,
+              "notVerified": 2,
+              "originalScorePercent": 85,
+              "originalCoveragePercent": 98,
+              "context": "mock-yandex-platform",
+              "liveSdkAccepted": false,
+              "moderationAccepted": false
+            },
+            "observedHTTPResponses": 21
+          },
+          {
+            "room": 37,
+            "id": "post-magnetic-u-channel",
+            "mediaArtifact": "v63-optics-film-37",
+            "checkerArtifact": "v63-optics-checker-37",
+            "videoSha256": "92a5a6108d91744f99b84cb0d40dfd54b8ad194d74de5a127f178812882b8ccb",
+            "frames": 541,
+            "physicsSteps": 5392,
+            "simulationSeconds": 44.93333333333333,
+            "closedMembers": 13,
+            "fullDecode": true,
+            "keyframesCompared": 3,
+            "minimumLuminanceRange": 163,
+            "checker": {
+              "checked": true,
+              "checks": 80,
+              "hardFailures": 0,
+              "warnings": 12,
+              "notVerified": 2,
+              "originalScorePercent": 85,
+              "originalCoveragePercent": 98,
+              "context": "mock-yandex-platform",
+              "liveSdkAccepted": false,
+              "moderationAccepted": false
+            },
+            "observedHTTPResponses": 21
+          },
+          {
+            "room": 38,
+            "id": "post-separated-freight",
+            "mediaArtifact": "v63-optics-film-38",
+            "checkerArtifact": "v63-optics-checker-38",
+            "videoSha256": "c0cfe7c96261922b5c531e6188bac3bdc73212492b7a2aba49f621c8da941afa",
+            "frames": 500,
+            "physicsSteps": 4989,
+            "simulationSeconds": 41.575,
+            "closedMembers": 13,
+            "fullDecode": true,
+            "keyframesCompared": 3,
+            "minimumLuminanceRange": 128,
+            "checker": {
+              "checked": true,
+              "checks": 80,
+              "hardFailures": 0,
+              "warnings": 12,
+              "notVerified": 2,
+              "originalScorePercent": 85,
+              "originalCoveragePercent": 98,
+              "context": "mock-yandex-platform",
+              "liveSdkAccepted": false,
+              "moderationAccepted": false
+            },
+            "observedHTTPResponses": 21
+          },
+          {
+            "room": 39,
+            "id": "post-thermal-memory",
+            "mediaArtifact": "v63-optics-film-39",
+            "checkerArtifact": "v63-optics-checker-39",
+            "videoSha256": "adb4dd3f250f24c43317aa5786af7af133dd5519c27aee3b519bfbff038ccec9",
+            "frames": 380,
+            "physicsSteps": 3788,
+            "simulationSeconds": 31.566666666666666,
+            "closedMembers": 13,
+            "fullDecode": true,
+            "keyframesCompared": 3,
+            "minimumLuminanceRange": 166,
+            "checker": {
+              "checked": true,
+              "checks": 80,
+              "hardFailures": 0,
+              "warnings": 12,
+              "notVerified": 2,
+              "originalScorePercent": 85,
+              "originalCoveragePercent": 98,
+              "context": "mock-yandex-platform",
+              "liveSdkAccepted": false,
+              "moderationAccepted": false
+            },
+            "observedHTTPResponses": 21
+          },
+          {
+            "room": 40,
+            "id": "post-differential-optical-calibration",
+            "mediaArtifact": "v63-optics-film-40",
+            "checkerArtifact": "v63-optics-checker-40",
+            "videoSha256": "b0e4b60fa7e15514ea6e207b11bf550588929b07738f4668ef0ce4899455d62f",
+            "frames": 509,
+            "physicsSteps": 5080,
+            "simulationSeconds": 42.333333333333336,
+            "closedMembers": 13,
+            "fullDecode": true,
+            "keyframesCompared": 3,
+            "minimumLuminanceRange": 177,
+            "checker": {
+              "checked": true,
+              "checks": 80,
+              "hardFailures": 0,
+              "warnings": 12,
+              "notVerified": 2,
+              "originalScorePercent": 85,
+              "originalCoveragePercent": 98,
+              "context": "mock-yandex-platform",
+              "liveSdkAccepted": false,
+              "moderationAccepted": false
+            },
+            "observedHTTPResponses": 21
+          }
+        ],
+        "totals": {
+          "movies": 10,
+          "frames": 6275,
+          "physicsSteps": 62620,
+          "keyframesCompared": 30,
+          "hardFailures": 0,
+          "warnings": 120,
+          "notVerified": 20
+        },
+        "sourceAccepted": false,
+        "sourceCiAccepted": false,
+        "publicationAccepted": false,
+        "nativeAccepted": false,
+        "liveSdkAccepted": false,
+        "moderationAccepted": false,
+        "cameraAccepted": false,
+        "humanAccepted": false,
+        "scope": "Offline byte/identity/cadence/media/checker audit of retained provider artifacts. It preserves original WARN and NOT VERIFIED and issues no acceptance."
+      }
+    },
+    "architecture": {
+      "pass": true,
+      "rooms": 10,
+      "decodedImages": 20
+    },
+    "productionSDK": {
+      "pass": true,
+      "liveSdkAccepted": false,
+      "moderationAccepted": false,
+      "actualArchiveSha256": "2e108db1fcecf217e17f52fc4c4ff29bc2e70e5269a6e19fca7f127ec133e311",
+      "cases": [
+        {
+          "scenario": "sdk-rejected",
+          "expectedNegativeStartup": true,
+          "originalCounts": {
+            "PASS": 57,
+            "FAIL": 0,
+            "WARN": 14,
+            "N/V": 9,
+            "SCORE": 80
+          }
+        },
+        {
+          "scenario": "desktop",
+          "checked": true,
+          "checks": 82,
+          "hardFailures": 0,
+          "warnings": 12,
+          "notVerified": 2,
+          "originalScorePercent": 85,
+          "originalCoveragePercent": 98,
+          "context": "mock-yandex-platform",
+          "liveSdkAccepted": false,
+          "moderationAccepted": false
+        },
+        {
+          "scenario": "mobile",
+          "checked": true,
+          "checks": 80,
+          "hardFailures": 0,
+          "warnings": 12,
+          "notVerified": 2,
+          "originalScorePercent": 85,
+          "originalCoveragePercent": 98,
+          "context": "mock-yandex-platform",
+          "liveSdkAccepted": false,
+          "moderationAccepted": false
+        }
+      ]
+    },
+    "cpu": {
+      "tests": 2900,
+      "passed": 2900,
+      "failed": 0,
+      "skipped": 0,
+      "files": 366,
+      "disjointShards": 12,
+      "shards": [
+        {
+          "part": 0,
+          "files": 31,
+          "tests": 304,
+          "tapSha256": "3000c5377e6dc92d90061138605d1b3200cbfdf38b8fbc839cfac54e8c9c4e31"
+        },
+        {
+          "part": 1,
+          "files": 31,
+          "tests": 238,
+          "tapSha256": "4b2338a9b9be432db197af0d357f707aeeaf1c78d5680e97f092fde2302118a8"
+        },
+        {
+          "part": 2,
+          "files": 31,
+          "tests": 208,
+          "tapSha256": "dd119d23b6ef81e89750ea28c4dc3f4d8f5b78d1527f84fc2acd3af6ffddc461"
+        },
+        {
+          "part": 3,
+          "files": 31,
+          "tests": 292,
+          "tapSha256": "bc505abc83770607a4354cea739a65a50a0ef403c687610d17510bf277463a2c"
+        },
+        {
+          "part": 4,
+          "files": 31,
+          "tests": 211,
+          "tapSha256": "13509a7b649c7cc367ac5d4ccd562ebab9d186eb9a6a33bf60e0231afa046a7a"
+        },
+        {
+          "part": 5,
+          "files": 31,
+          "tests": 216,
+          "tapSha256": "227625f1acaea0af05d7d959c685bb499e3d491a0d7ed2904af808aa13a3c465"
+        },
+        {
+          "part": 6,
+          "files": 30,
+          "tests": 203,
+          "tapSha256": "e15e7cb96b05ed302b41714a5c02194dbbf1d3b1579d75003c0475fb5c6540f5"
+        },
+        {
+          "part": 7,
+          "files": 30,
+          "tests": 272,
+          "tapSha256": "c6200b15236c1af06ac2424dcf520162c84b521a43e85434e0f93c036297590d"
+        },
+        {
+          "part": 8,
+          "files": 30,
+          "tests": 283,
+          "tapSha256": "57b65d24f2efa104a9450266182c4618b29bb2d00db23aad618eed83e0283acd"
+        },
+        {
+          "part": 9,
+          "files": 30,
+          "tests": 252,
+          "tapSha256": "5c9eaff1ee10c42579c9dfcc8076236966de77ef7a991f8531c483c4086c346f"
+        },
+        {
+          "part": 10,
+          "files": 30,
+          "tests": 241,
+          "tapSha256": "6c607e18152b1dcac7141878767662e386f6a8731855f6dd1b580e1e129b5659"
+        },
+        {
+          "part": 11,
+          "files": 30,
+          "tests": 180,
+          "tapSha256": "fd1cadfa8249118c05b6939851ba5c3fd5bdd2eec726311a79f921ff421b8180"
+        }
+      ],
+      "fileSelection": "Actual qa-campaign-cpu-part.mjs policy: every tests/*.test.js except lab-tower*"
+    },
+    "provider": {
+      "jobs": 44,
+      "artifacts": 57,
+      "attempt": 1,
+      "independentWorkflowMetadataGet": false,
+      "workflowDefinitionFromExactSourceTree": true,
+      "workflowId": 390386386,
+      "workflowUrl": "https://api.github.com/repos/amazin20/brainrot-portal/actions/workflows/390386386",
+      "sourceWorkflow": {
+        "path": ".github/workflows/player-access-review.yml",
+        "bytes": 14827,
+        "sha256": "1c9908d16f7be3ceb6938f967f389b11f2233a7e245223b0034ee1fd423b6382",
+        "gitBlob": "2610e26c0eaab1eed9520aab3483c4ba4e9eed4f"
+      },
+      "capabilityRejection": {
+        "path": "provider/workflow-metadata-unavailable.json",
+        "bytes": 1005,
+        "sha256": "0a8d791ba40074a2a2b072341ac1577d905a1e6d8f0b6410edbcdf2677b2faa1",
+        "tool": "mcp__codex_apps__github_fetch",
+        "actualToolResponseSha256": "f81a73d3edf97b2a2e601eaa751d5c8ea9cfc7f9d5d391b3b38fda08f6f7a585"
+      },
+      "limitation": "The provider tool rejected the independent workflow metadata endpoint; workflow state was not independently fetched. Actual run path/ID/URL and exact Git-tree workflow bytes are verified."
+    }
+  },
+  "sourceArtifacts": [
+    {
+      "artifactId": 12259673187,
+      "artifactName": "v63-architecture",
+      "zipBytes": 1029960,
+      "zipSha256": "f81fb910e6dfe85478bc36c13cf742f9bea79ad9efb6b608e8fa0b8efbdc1259",
+      "files": 24,
+      "bytes": 1167451,
+      "inventorySha256": "9db30578f7c8b206c293c1231c9cf8580b4fbaea01545bb0ca00b6edad50442d"
+    },
+    {
+      "artifactId": 12259287726,
+      "artifactName": "v63-build",
+      "zipBytes": 5453,
+      "zipSha256": "45353b1f4fc03919a64221a619bbfbb887dd656496ad240823d455827e8b8aba",
+      "files": 1,
+      "bytes": 15677,
+      "inventorySha256": "5a3ee4a0985854fc5373541bc211f697472bdc7da55b0fc9060ecf92ed511e4c"
+    },
+    {
+      "artifactId": 12259759028,
+      "artifactName": "v63-checker-platform-castle",
+      "zipBytes": 110275,
+      "zipSha256": "b30d910e0f675b90a1cb42e715f1a09cb7691068b994f15009700d7b4d921d7f",
+      "files": 5,
+      "bytes": 729950,
+      "inventorySha256": "cdfa9534e619505b4af09387130b396ddedfb9ec08a66dd7480bc08c8e6e652d"
+    },
+    {
+      "artifactId": 12259363945,
+      "artifactName": "v63-checker-platform-early",
+      "zipBytes": 583489,
+      "zipSha256": "dce5427f585f684f8a01e6371894ba0f260aa4ba779da71569028d7cd7153044",
+      "files": 41,
+      "bytes": 2337599,
+      "inventorySha256": "6afa2787256026a7846e6eb62a5ae1b0b42cfdd350d7a7b2b4048a12e13302e0"
+    },
+    {
+      "artifactId": 12260409630,
+      "artifactName": "v63-checker-platform-energy",
+      "zipBytes": 551102,
+      "zipSha256": "cc394fb6faacbba1aba716f62870788231ffd4adb08c07a17c1422fc9f7f9582",
+      "files": 41,
+      "bytes": 2491072,
+      "inventorySha256": "3ebc08e9b621b72bad132aa25f3d9c9240782f7f603ae5259352adb92621ed9c"
+    },
+    {
+      "artifactId": 12259299949,
+      "artifactName": "v63-checker-platform-fracture",
+      "zipBytes": 551781,
+      "zipSha256": "5ae60599241d6ea32d2479c92586a893291db5e34ea695cabc0466b276ad67e6",
+      "files": 41,
+      "bytes": 2433671,
+      "inventorySha256": "18d70ff25af307e2bf8ccb8d91ae2a943231f6486644914a5f7b70c47344c47c"
+    },
+    {
+      "artifactId": 12260770466,
+      "artifactName": "v63-checker-platform-living",
+      "zipBytes": 511302,
+      "zipSha256": "ae055539411e7e6a3d250d852e2928ddaa9e215e84d024c741c5f24344f40c4f",
+      "files": 41,
+      "bytes": 2335541,
+      "inventorySha256": "3632ace86c82e1a9ef59f786a1e576d6302a1a686986853d53add480d6cc62d5"
+    },
+    {
+      "artifactId": 12260396876,
+      "artifactName": "v63-checker-platform-optics",
+      "zipBytes": 512079,
+      "zipSha256": "6887d0aa124a59fa14dfaa5a5a2db2cf66777565199c826e4bcd41fd7a74aba1",
+      "files": 41,
+      "bytes": 2363290,
+      "inventorySha256": "c6f62df6ba7224b51d2db51f8489d5db2073bad767e8a33f4497e28c615d02bd"
+    },
+    {
+      "artifactId": 12260070806,
+      "artifactName": "v63-cpu-0",
+      "zipBytes": 15286,
+      "zipSha256": "ab7e0ccd1e0ff576c1fb4d182e5dc950986c37d1bc2de9ead75218cd897aec5a",
+      "files": 2,
+      "bytes": 77078,
+      "inventorySha256": "b3f4f988e3304656604d8e7863bb92a948cde82f30c93c89ec846b8f9227c95f"
+    },
+    {
+      "artifactId": 12260640787,
+      "artifactName": "v63-cpu-1",
+      "zipBytes": 20973,
+      "zipSha256": "bdbb2f5d6217c856198cad708c7697ce10baea7ed17d741798dba98bd5136563",
+      "files": 2,
+      "bytes": 91583,
+      "inventorySha256": "7ccaff47d6a0f9c8e927e96d2c9f174e6a39b774ac2fa7b1abd4de1117c821e9"
+    },
+    {
+      "artifactId": 12259934335,
+      "artifactName": "v63-cpu-10",
+      "zipBytes": 16284,
+      "zipSha256": "ab259fe3c4c428b526ccf2d3285c954021ed9f449afe2f6cbd7957dcfded6b83",
+      "files": 2,
+      "bytes": 78078,
+      "inventorySha256": "5029350ef91f8f759ff497e2faf5ab1968cf7a3a661e52b853bf02ade15293dd"
+    },
+    {
+      "artifactId": 12261950186,
+      "artifactName": "v63-cpu-11",
+      "zipBytes": 14170,
+      "zipSha256": "0c8bf63d3cc80a369128200fee10e8b2e4c843db17dd3e14cc0201ed0b90f29c",
+      "files": 2,
+      "bytes": 70077,
+      "inventorySha256": "9d2e01a6628cbf83994e91dd2ad0a089ef6671798450132952d585c544da1ab0"
+    },
+    {
+      "artifactId": 12259791300,
+      "artifactName": "v63-cpu-2",
+      "zipBytes": 203856,
+      "zipSha256": "51478add64b21f8e243f2258d9b25ad14a78d8e7be1a887a4c5e3c6f2bbdd3fa",
+      "files": 2,
+      "bytes": 1377259,
+      "inventorySha256": "b51537ca9cadbc4bef52994df3cc4109cd4689a560d0973684a09a8977302649"
+    },
+    {
+      "artifactId": 12259891956,
+      "artifactName": "v63-cpu-3",
+      "zipBytes": 21142,
+      "zipSha256": "39013a6faf715b3c7c2c3ba06e9779dc65c00edf7a78fa6355c686f2a3b85868",
+      "files": 2,
+      "bytes": 109446,
+      "inventorySha256": "d6421233c79c7f978825b83cf84835af9a5ebba43f34177b4db0ce1642940963"
+    },
+    {
+      "artifactId": 12259303751,
+      "artifactName": "v63-cpu-4",
+      "zipBytes": 21241,
+      "zipSha256": "8ff2be96313308f98bdd0fd08509ffed3d837eccd2683c8a0954544219cf2b13",
+      "files": 2,
+      "bytes": 118698,
+      "inventorySha256": "33d7e0e80da43fdaaa1e3fea179620c68beeee4ebefaff09e8e8ae1ba2f907ff"
+    },
+    {
+      "artifactId": 12260483479,
+      "artifactName": "v63-cpu-5",
+      "zipBytes": 14048,
+      "zipSha256": "72f1aeff0a31bbcd1e041fb7fb9226de9f52613d52d795378ebe8dd1fb5fae32",
+      "files": 2,
+      "bytes": 68761,
+      "inventorySha256": "fd59240e0e91428c38346c4b6befb4a97c88b7a609652f5467c0ca8a6694bc54"
+    },
+    {
+      "artifactId": 12260530745,
+      "artifactName": "v63-cpu-6",
+      "zipBytes": 13296,
+      "zipSha256": "d8a7bbbbb1fed0ad96e065ff17f05031542a63e5bde1979cf6e85fef280c64b6",
+      "files": 2,
+      "bytes": 65092,
+      "inventorySha256": "96e5571d75207b50b76c3c8ae44bfd1a3c1eeda7b5bd57a6b75db79b318d7ecd"
+    },
+    {
+      "artifactId": 12259811970,
+      "artifactName": "v63-cpu-7",
+      "zipBytes": 20110,
+      "zipSha256": "04b1f6ccc93d712557839eb8903af235a08d123726d77f226b5eef226ff4c4af",
+      "files": 2,
+      "bytes": 95279,
+      "inventorySha256": "b06856e7cec3e6549ff060152b97eeefaf12dc1c53a87c54c9636333fd145fb8"
+    },
+    {
+      "artifactId": 12259628394,
+      "artifactName": "v63-cpu-8",
+      "zipBytes": 24652,
+      "zipSha256": "10de1fa53a4bef1c8e43ba5831af60fd2139172fa8832d7b950f4c161d41718e",
+      "files": 2,
+      "bytes": 111659,
+      "inventorySha256": "7caf14eabb4c76baf6b43de291ab78cf5c6b170d474a9cfd3f32f99e5ff43183"
+    },
+    {
+      "artifactId": 12259328744,
+      "artifactName": "v63-cpu-9",
+      "zipBytes": 16792,
+      "zipSha256": "c277579672b338a26f3cb7754dbe35d77db4a054bcd841826e25f06a77388ae6",
+      "files": 2,
+      "bytes": 80817,
+      "inventorySha256": "a0052768a38a16992f5b4f794760badbe33f8d5cdca52184d138602cb31e2e61"
+    },
+    {
+      "artifactId": 12259148155,
+      "artifactName": "v63-dist",
+      "zipBytes": 4517588,
+      "zipSha256": "3339b154deccebcfbc82b417cfce5926cb2e985f04df32a5b4e3598d1f8e08eb",
+      "files": 80,
+      "bytes": 7195304,
+      "inventorySha256": "9db5aff37caff72d3f770daf9a3c14983cc9a1b63286a17d50e6c5378d9754ac"
+    },
+    {
+      "artifactId": 12259929922,
+      "artifactName": "v63-native-castle",
+      "zipBytes": 62225,
+      "zipSha256": "06cb56cd98bd23a245c4584eca631a042fd85b4e29a18b8563d4b0c54cac4871",
+      "files": 5,
+      "bytes": 248606,
+      "inventorySha256": "6366ef919312c364bfbb615088d0e1e9f747f9e7c9f641b3942790d9f4fdfb4f"
+    },
+    {
+      "artifactId": 12260700120,
+      "artifactName": "v63-native-early",
+      "zipBytes": 523773,
+      "zipSha256": "0223a8441a331f924022453829070e0faaccd37ec98aa4be14dc503c8e91de8e",
+      "files": 14,
+      "bytes": 646761,
+      "inventorySha256": "5521fb4bcff240710d50d6bc6d0f6e56e09c269417f8012045c098d4eca9c4ae"
+    },
+    {
+      "artifactId": 12260815794,
+      "artifactName": "v63-native-energy",
+      "zipBytes": 444781,
+      "zipSha256": "2794e4da26a6001e157c427d86b6760870ed8885cd1c20170876af21fa797e34",
+      "files": 14,
+      "bytes": 748505,
+      "inventorySha256": "3667c3af802db30bc89364c886506723baf42c4b18f361b0bfd09a0c884cb0c4"
+    },
+    {
+      "artifactId": 12260498038,
+      "artifactName": "v63-native-fracture",
+      "zipBytes": 432537,
+      "zipSha256": "15a78023b8a94439df8c4205a93eab26c90d855fcaba38f1d2c7d445f68889f3",
+      "files": 14,
+      "bytes": 620234,
+      "inventorySha256": "152f1f70c2822b75eeb3f5621d42c574fef7746f9a4b14d646187980047ed46b"
+    },
+    {
+      "artifactId": 12260936026,
+      "artifactName": "v63-native-living",
+      "zipBytes": 374943,
+      "zipSha256": "5e5be7643c5b92b99196bed3850f89950cbf501c84f24dcd4c1c3e9670de8d0e",
+      "files": 14,
+      "bytes": 546540,
+      "inventorySha256": "fff0e7b22e062781891481b1a4d1d8f0e8f59f3445f84b3104c5de5941964afd"
+    },
+    {
+      "artifactId": 12261080150,
+      "artifactName": "v63-native-optics",
+      "zipBytes": 370084,
+      "zipSha256": "4a0c826b058b5014e08eecfb0f424ff14f51df83ceb672d4d272afbd2ddff2e5",
+      "files": 14,
+      "bytes": 532194,
+      "inventorySha256": "64131c818f117173fbcca8f6797066627ae01b0749b45b63965c18ca867ea6ab"
+    },
+    {
+      "artifactId": 12260961264,
+      "artifactName": "v63-optics-checker-31",
+      "zipBytes": 27442,
+      "zipSha256": "d6dd94bc339f06e04f57840bf75da92b87dbe88b3ba09cde7b47205c3cb44bef",
+      "files": 4,
+      "bytes": 126274,
+      "inventorySha256": "e756d2f19d9cbadfb0b737f3861620cada455b38431f4cb889db02cb79e9d438"
+    },
+    {
+      "artifactId": 12261125113,
+      "artifactName": "v63-optics-checker-32",
+      "zipBytes": 27445,
+      "zipSha256": "1375cf58a80f880cb857447513258863ec6b2f52b934bfb33b9fe2750122551b",
+      "files": 4,
+      "bytes": 126280,
+      "inventorySha256": "568197b9f803890567216fddd8999a6a0ae2609f5559727f5b018d0b880e40ad"
+    },
+    {
+      "artifactId": 12260133289,
+      "artifactName": "v63-optics-checker-33",
+      "zipBytes": 27164,
+      "zipSha256": "d5c83d6dbed4738aaa11605877e022b0f836632508cb38c1fcc93a9bf657e234",
+      "files": 4,
+      "bytes": 124752,
+      "inventorySha256": "ee8268e17565df854a43ec995e11dda603ce5fb0867ff4de911d1eab6c2b3ce7"
+    },
+    {
+      "artifactId": 12260846136,
+      "artifactName": "v63-optics-checker-34",
+      "zipBytes": 27444,
+      "zipSha256": "d9fe50ac11f7411573a04a6cead0425f69200da6f16df4e667d2f7748f8e5537",
+      "files": 4,
+      "bytes": 126336,
+      "inventorySha256": "39194668d0ab7cf8bd2813cba0d5c8bec292dde8ef116b3a52d7ef28a06bd71a"
+    },
+    {
+      "artifactId": 12260204173,
+      "artifactName": "v63-optics-checker-35",
+      "zipBytes": 27409,
+      "zipSha256": "90bfb1a5aba40f3c4591ef681c9a18351a776a4c7e2db4bc8299c5e6ebccfa99",
+      "files": 4,
+      "bytes": 126256,
+      "inventorySha256": "b7939f9aa778ab2b3b300fd11d271b6c88f8b74c447f73e99bd19f50917d3bd2"
+    },
+    {
+      "artifactId": 12260986448,
+      "artifactName": "v63-optics-checker-36",
+      "zipBytes": 27460,
+      "zipSha256": "c584561b9529b244e13154261565e93209039ede9c321373a0d61f22584374ba",
+      "files": 4,
+      "bytes": 125995,
+      "inventorySha256": "9a9751aad35d12a233a6ccb928b5e763ee9ca9cf230e7f175ea870bf6524f75f"
+    },
+    {
+      "artifactId": 12259989066,
+      "artifactName": "v63-optics-checker-37",
+      "zipBytes": 27428,
+      "zipSha256": "612e95097e7277ab595c3069aeb3232548b11a68cbe2914e3cadb190696dc1c6",
+      "files": 4,
+      "bytes": 125941,
+      "inventorySha256": "d147d2e4a5ebe4fe2e302b9b8a06695dada57306711372f4c766f6c33d11cb54"
+    },
+    {
+      "artifactId": 12259863047,
+      "artifactName": "v63-optics-checker-38",
+      "zipBytes": 27454,
+      "zipSha256": "fc2f4124d24fa64ae85d65013e0536bff34d9f2c364d2929ebe6f9b0c8bb69a4",
+      "files": 4,
+      "bytes": 126016,
+      "inventorySha256": "aa83efb4491c5b16b13e9fd24306a8a87c1119c4fd124706e35456943f6ba669"
+    },
+    {
+      "artifactId": 12260426229,
+      "artifactName": "v63-optics-checker-39",
+      "zipBytes": 27276,
+      "zipSha256": "f085760901db900a9c9046a427650067e6991382b216df5df1330790e003ae2d",
+      "files": 4,
+      "bytes": 125603,
+      "inventorySha256": "805236372e6640d2087f3610734346ad4519b8a09df085dbbfa0539bc8a738c7"
+    },
+    {
+      "artifactId": 12260337429,
+      "artifactName": "v63-optics-checker-40",
+      "zipBytes": 27447,
+      "zipSha256": "53187c70016a29630f3051a0ac2d79660a7860bc796be788a2438a8541e0d79f",
+      "files": 4,
+      "bytes": 126000,
+      "inventorySha256": "92dd213bf9fb437facc5c5b0787fc58f1b9a75d0e2af2f8dca8b408de762cd49"
+    },
+    {
+      "artifactId": 12261085993,
+      "artifactName": "v63-optics-film-31",
+      "zipBytes": 4876213,
+      "zipSha256": "9b64523633e90fa1b82165e259bf6239a6aae9f3cba9b7fe98e73dd7bdd0bcfb",
+      "files": 13,
+      "bytes": 6928204,
+      "inventorySha256": "7512cfe542f2f07d7d7c7887118acc1e7a2debbba4667b0c022ee2a8194801b5"
+    },
+    {
+      "artifactId": 12260860577,
+      "artifactName": "v63-optics-film-32",
+      "zipBytes": 2325993,
+      "zipSha256": "3e55222bf46aaf2b94d72c712bbb0151f4904a06b593f0eb1b732d79b5dc163c",
+      "files": 13,
+      "bytes": 3402639,
+      "inventorySha256": "c3fa525d7c6eb6a0fcbba0e187bec9f7478afbbbf5fb83e6480784bd797b55d5"
+    },
+    {
+      "artifactId": 12260203213,
+      "artifactName": "v63-optics-film-33",
+      "zipBytes": 3996864,
+      "zipSha256": "856d49c4ea607ca0274019f580b5dfbd7b5797b0224b41a3645750de4d129344",
+      "files": 13,
+      "bytes": 6097916,
+      "inventorySha256": "95a5cf307a038939e1ad4fe943cfada034593c8b32455e7c2767110671745d34"
+    },
+    {
+      "artifactId": 12260731316,
+      "artifactName": "v63-optics-film-34",
+      "zipBytes": 1909551,
+      "zipSha256": "8066a2e7581ec5e0ca0d514b2c286d30a161d4b336835fda0c06ee4e45cf4a0c",
+      "files": 13,
+      "bytes": 2854916,
+      "inventorySha256": "a8a745bb63177f77f983d0eaf17f3eab959df2dc16a78de5b27275b4f5b3dc67"
+    },
+    {
+      "artifactId": 12259944352,
+      "artifactName": "v63-optics-film-35",
+      "zipBytes": 2646303,
+      "zipSha256": "9aed359586c26624859c08ec7216e9fcf3ed6dedd4d032d957498cd022eee806",
+      "files": 13,
+      "bytes": 3687142,
+      "inventorySha256": "1d8bdd80325f915b325ffc42d54afe4746a07d1771bc5fa014fabb380ec2fca5"
+    },
+    {
+      "artifactId": 12260696973,
+      "artifactName": "v63-optics-film-36",
+      "zipBytes": 3984022,
+      "zipSha256": "86699aa7633f78808efe1bef4be7768ce9d37dcd979637af69848ee64ccd57b0",
+      "files": 13,
+      "bytes": 5925816,
+      "inventorySha256": "13afb6244a43dfb3eec72cae0c1d76df8c29e93874a2d587c9e1ec2831930e91"
+    },
+    {
+      "artifactId": 12260144028,
+      "artifactName": "v63-optics-film-37",
+      "zipBytes": 2384402,
+      "zipSha256": "1b66cbf6af06fa7017ef73c88c6700bad679901982cc648589d7a330a11a3baf",
+      "files": 13,
+      "bytes": 3551139,
+      "inventorySha256": "7ab1320e819e7efbe8085fd9f5617a6013d4e57fb2092c1aebc2a0c589c78f17"
+    },
+    {
+      "artifactId": 12259723430,
+      "artifactName": "v63-optics-film-38",
+      "zipBytes": 2233398,
+      "zipSha256": "450551318dd6bd8ee7b0438e285fd0269f2a09e65f44028de2712ab7eea5fb48",
+      "files": 13,
+      "bytes": 3341062,
+      "inventorySha256": "83cb6b43f2b74ec9be5b3e40be4c97a873b17b1d732864d71efc8ab956869058"
+    },
+    {
+      "artifactId": 12259866660,
+      "artifactName": "v63-optics-film-39",
+      "zipBytes": 1479752,
+      "zipSha256": "971d012c69c439f6279d9f5f259a6eb6e2ede524fe336bbce10034de2256362f",
+      "files": 13,
+      "bytes": 2340544,
+      "inventorySha256": "9bc2be91632b6c796a1873f469e30241eb53a31067841edfe73e51e1b923faaf"
+    },
+    {
+      "artifactId": 12260147772,
+      "artifactName": "v63-optics-film-40",
+      "zipBytes": 3152816,
+      "zipSha256": "c4c9332a7670fdb94d7e8980e864ab6e382de690a6c9263e93342f5d17ccbf16",
+      "files": 13,
+      "bytes": 4288947,
+      "inventorySha256": "9c903eb220e528f7fa66d2057f8b9fc32a6d9b902ca31255d264a6f0f781ed1b"
+    },
+    {
+      "artifactId": 12259534662,
+      "artifactName": "v63-ordinary-castle",
+      "zipBytes": 10747,
+      "zipSha256": "9c6acf3fae4b623d5e296be1d34da37b34ed43b5f6b7b61ab924dfee9867ed30",
+      "files": 1,
+      "bytes": 82947,
+      "inventorySha256": "bde0067498f44742b05cd07a0d1397d58d9ac6c8de51e2fd53f52f6c36226ae4"
+    },
+    {
+      "artifactId": 12259935368,
+      "artifactName": "v63-ordinary-early",
+      "zipBytes": 3372,
+      "zipSha256": "6dc1bd3809b009560ffcf90380276d4058736bc34d394105b963e44f6770eb71",
+      "files": 1,
+      "bytes": 14688,
+      "inventorySha256": "c7daf52cc668cdc836236d3c559ba296d33c4cfa11d8f128a3674465c1a6677c"
+    },
+    {
+      "artifactId": 12259667421,
+      "artifactName": "v63-ordinary-energy",
+      "zipBytes": 15328,
+      "zipSha256": "81a3c88d06ceeab07bc2a71ff1bef6e36c76938d89315cd7ec9637a257b09428",
+      "files": 1,
+      "bytes": 139944,
+      "inventorySha256": "e937e0aa501921d45c959eb4482702f1373be5837d12dc02c34bf95e20786f3f"
+    },
+    {
+      "artifactId": 12260505952,
+      "artifactName": "v63-ordinary-fracture",
+      "zipBytes": 7298,
+      "zipSha256": "d7dd5171227a2ac4fd5261e0a05c334dab6ba69b118456dc62f237d67df4d44c",
+      "files": 1,
+      "bytes": 34363,
+      "inventorySha256": "3866e00deda383909c8c61db684e9655be4109a3cf49c9fd5947af0c864abebb"
+    },
+    {
+      "artifactId": 12260430227,
+      "artifactName": "v63-ordinary-living",
+      "zipBytes": 6429,
+      "zipSha256": "63a1daa0cf7cf578d65431f7b4d0cb03bc8b01b78fd838f363ef8575cc9c6e52",
+      "files": 1,
+      "bytes": 29193,
+      "inventorySha256": "263ec824725559854a4f4fc69280295faae3ce690306f566625cc08579208555"
+    },
+    {
+      "artifactId": 12258909863,
+      "artifactName": "v63-ordinary-optics",
+      "zipBytes": 5505,
+      "zipSha256": "14822b35b0f559bc550cdd581f3642ba95e18d052478c2acc7582331561c59cb",
+      "files": 1,
+      "bytes": 25303,
+      "inventorySha256": "c999ed0b07e6a661f85005fafe8e5de4844692809c2a43e5c85125ca66ec966b"
+    },
+    {
+      "artifactId": 12260895232,
+      "artifactName": "v63-player-ui",
+      "zipBytes": 1159646,
+      "zipSha256": "351907d524cc4b3f88f8f248e8f8bdc80a672383a61625d4527d55708ebde025",
+      "files": 9,
+      "bytes": 1519682,
+      "inventorySha256": "78ba7cd54519c3aef23007ad3ecc681209c5bd914d04082ebf2eaf3f8282ffb6"
+    },
+    {
+      "artifactId": 12260017302,
+      "artifactName": "v63-production-sdk",
+      "zipBytes": 441601,
+      "zipSha256": "e2d0100f3aa151c43f8edf9a32903a55a0c5596682596ea103ae36fd90d0bb01",
+      "files": 8,
+      "bytes": 685213,
+      "inventorySha256": "919d34615be08a03ca6a027f1f040f61c48804e1ca32531e185a044ac705eccc"
+    },
+    {
+      "artifactId": 12259672036,
+      "artifactName": "v63-yandex",
+      "zipBytes": 4360441,
+      "zipSha256": "d593413f7b09edc21cb68a130ae37445f7f24a6d97eb69c87a5d3022ef9ed5cc",
+      "files": 2,
+      "bytes": 4363220,
+      "inventorySha256": "7f886e634d9e424bad2120f690490caa7e46f924e3f9b788b1021147ebb62485"
+    },
+    {
+      "artifactId": 12259402580,
+      "artifactName": "v63-yandex-review-dist",
+      "zipBytes": 4517833,
+      "zipSha256": "9ad5d367d2c07fe94e50a74bbb453caf0682b2549fcefda90ffcd9983ba6428c",
+      "files": 80,
+      "bytes": 7196446,
+      "inventorySha256": "9a5becae161020a22774f3bbe7d74a729d99cda0d89eb45d1b7e9ba2cc053bc1"
+    }
+  ],
+  "sourceLogs": [
+    {
+      "jobId": 118590470796,
+      "jobName": "build",
+      "bytes": 96881,
+      "sha256": "0fe2b6796e1ae526ec5be745b0196335c422823f3e06a1a0812ed8906c2761ab"
+    },
+    {
+      "jobId": 118590471037,
+      "jobName": "cpu (10)",
+      "bytes": 152763,
+      "sha256": "d85e4e891258ec62f35c2a4c3a6609f59efbb2681279d9279db9478e70f5adb9"
+    },
+    {
+      "jobId": 118590471056,
+      "jobName": "ordinary (early, 1,2,3,4,5,6,7,8,9,10)",
+      "bytes": 48555,
+      "sha256": "ad66396e9cfee6b2361a699294c4246999a2b7e42e742da5724f11d540968ac3"
+    },
+    {
+      "jobId": 118590471087,
+      "jobName": "ordinary (living, 21,22,23,24,25,26,27,28,29,30)",
+      "bytes": 48668,
+      "sha256": "ac5f27a2863a988cc0558e6ffbd403f55430bf4d49b70f87059978c000d22b17"
+    },
+    {
+      "jobId": 118590471089,
+      "jobName": "ordinary (optics, 31,32,33,34,35,36,37,38,39,40)",
+      "bytes": 48629,
+      "sha256": "cdd71ce17a95547ade2c5f35b05fbd225417d9f03dd8a41cdd051185c21759c2"
+    },
+    {
+      "jobId": 118590471109,
+      "jobName": "ordinary (energy, 11,12,13,14,15,16,17,18,19,20)",
+      "bytes": 48620,
+      "sha256": "2eda8aaae2c38aafb47760bf039b655992470ee1f0fb2338f310c8017bb04e7e"
+    },
+    {
+      "jobId": 118590471144,
+      "jobName": "ordinary (fracture, 42,43,44,45,46,47,48,49,50,51)",
+      "bytes": 48776,
+      "sha256": "3e577ebe26c4633bcfc8356e07a03c376188e6eccf1d5a0979d9c034f143e4f2"
+    },
+    {
+      "jobId": 118590471219,
+      "jobName": "cpu (0)",
+      "bytes": 162686,
+      "sha256": "bdb04515a1348276f751ee30995d54b1aaefff687508d413b7b5f30438b81881"
+    },
+    {
+      "jobId": 118590471230,
+      "jobName": "cpu (3)",
+      "bytes": 193374,
+      "sha256": "9ab8f601c209d398f7cfe7e0d113b718afbc7fcb8d284836efe0a400434dee8d"
+    },
+    {
+      "jobId": 118590471231,
+      "jobName": "cpu (6)",
+      "bytes": 133118,
+      "sha256": "2edd89c197e5a2718bb502b7616ab1cdefe888b2907d84eff99672b0de65e791"
+    },
+    {
+      "jobId": 118590471253,
+      "jobName": "cpu (2)",
+      "bytes": 1447291,
+      "sha256": "4b7b4083bd4706d4a97162c84f65862ac5d5e0937e3b50e236eecd39888eefa3"
+    },
+    {
+      "jobId": 118590471255,
+      "jobName": "cpu (5)",
+      "bytes": 138831,
+      "sha256": "50163fc365577e9cb9db312143641b6cd0a3c9c2e814c248761c2927760970b1"
+    },
+    {
+      "jobId": 118590471259,
+      "jobName": "cpu (7)",
+      "bytes": 175365,
+      "sha256": "f2a370bc366df26862f08e0feb83ddeb479619538616a73e7702b39e67c5b3b1"
+    },
+    {
+      "jobId": 118590471274,
+      "jobName": "ordinary (castle, 41)",
+      "bytes": 47832,
+      "sha256": "2bf79339c02d8db3029494ed42400d5fdf03e33402d9354c630f1540db21775d"
+    },
+    {
+      "jobId": 118590471279,
+      "jobName": "cpu (4)",
+      "bytes": 188106,
+      "sha256": "6c4f8fb9f8b2949ec70350ce612efb298ba733a256a639011ec7207a749d78f3"
+    },
+    {
+      "jobId": 118590471289,
+      "jobName": "cpu (11)",
+      "bytes": 136336,
+      "sha256": "63b19e3fe0e4dfd396cc3b2d193fb70241c9e8c684a04533e323c722bda9b001"
+    },
+    {
+      "jobId": 118590471292,
+      "jobName": "cpu (9)",
+      "bytes": 157815,
+      "sha256": "10718dc8212473ff5f5ba64ccdbfcd41f85d7da2609ed3e64ffeeb9f4a2f77cc"
+    },
+    {
+      "jobId": 118590471399,
+      "jobName": "cpu (8)",
+      "bytes": 193676,
+      "sha256": "40bd8160562e80ad58050538aa7b9b5bdc88ca573bd13e3807fe1abd93fe5d25"
+    },
+    {
+      "jobId": 118590471479,
+      "jobName": "cpu (1)",
+      "bytes": 166360,
+      "sha256": "98c4e09731c16c9fc09c4f9379ac360b48b5b4f4e2124273e267b4b1d194e12a"
+    },
+    {
+      "jobId": 118590741515,
+      "jobName": "production-sdk",
+      "bytes": 59821,
+      "sha256": "62186e59cdaf2d0be3b12495616003db947a4609aa2b6e84458253aaa03a627b"
+    },
+    {
+      "jobId": 118590741573,
+      "jobName": "architecture",
+      "bytes": 62579,
+      "sha256": "7eae4217e71b3357e66c8494d45e7f3a0f276f368c237a29a70bf1925a9bfc82"
+    },
+    {
+      "jobId": 118590741597,
+      "jobName": "player-ui",
+      "bytes": 59486,
+      "sha256": "8f874530f40a7fbba29300f20a018cd0add0c7676765055a8942a5c6644a203f"
+    },
+    {
+      "jobId": 118590741606,
+      "jobName": "checker-platform (fracture, 42,43,44,45,46,47,48,49,50,51)",
+      "bytes": 69033,
+      "sha256": "c8a35d7ac21ec9eb479ed50728a46510418da4e008610baf08c90154d3c40b99"
+    },
+    {
+      "jobId": 118590741637,
+      "jobName": "checker-platform (early, 1,2,3,4,5,6,7,8,9,10)",
+      "bytes": 68114,
+      "sha256": "537320268ffd1f697dbdbb43cf14372e51a679e0525110a1a89d090a3b7616f1"
+    },
+    {
+      "jobId": 118590741638,
+      "jobName": "checker-platform (optics, 31,32,33,34,35,36,37,38,39,40)",
+      "bytes": 69019,
+      "sha256": "056f03bdc43f18de78115a44c17188e184f39337d234491194ab1d2908cd4b8e"
+    },
+    {
+      "jobId": 118590741683,
+      "jobName": "native (fracture, 42,43,44,45,46,47,48,49,50,51)",
+      "bytes": 73028,
+      "sha256": "7ce4b3042a5e5769d6f65dd4f3bf091377ccac23ffdf1c224d69d958994b54c1"
+    },
+    {
+      "jobId": 118590741700,
+      "jobName": "checker-platform (castle, 41)",
+      "bytes": 62942,
+      "sha256": "943af7141b711c6eabe9d338541e746abfc75c8faf2750d7caf0f7391f76f19c"
+    },
+    {
+      "jobId": 118590741705,
+      "jobName": "films (39)",
+      "bytes": 117944,
+      "sha256": "8b95f5c13d53090c915aa9478098ccd86337c2b54803d57ed1554b34adfd5be9"
+    },
+    {
+      "jobId": 118590741716,
+      "jobName": "checker-platform (living, 21,22,23,24,25,26,27,28,29,30)",
+      "bytes": 69100,
+      "sha256": "2bd0916a20e614f4f1ce4abdc4a44f37a472a17af4b96ba8547ca1394b8b8969"
+    },
+    {
+      "jobId": 118590741718,
+      "jobName": "native (early, 1,2,3,4,5,6,7,8,9,10)",
+      "bytes": 66311,
+      "sha256": "5c2186a4a085ebbf8bb4ee5484b67e7cf839366dc66cfc3290e49263956ee349"
+    },
+    {
+      "jobId": 118590741728,
+      "jobName": "films (33)",
+      "bytes": 118238,
+      "sha256": "7107c9ebe108a6cdc199933b0a037d1f558f3614b23dfe9a2395c9a01db72f8d"
+    },
+    {
+      "jobId": 118590741754,
+      "jobName": "films (40)",
+      "bytes": 118018,
+      "sha256": "acee079101a7d15666642d59081c3ece2bc629852bd8ce5b33b70dc75afb57b2"
+    },
+    {
+      "jobId": 118590741765,
+      "jobName": "native (living, 21,22,23,24,25,26,27,28,29,30)",
+      "bytes": 69673,
+      "sha256": "a1f5f99a909939c363581b5391c798fa5e4651ee7dd6c3b0dc2bccdf9903d2d7"
+    },
+    {
+      "jobId": 118590741784,
+      "jobName": "films (38)",
+      "bytes": 118003,
+      "sha256": "0a1472fb28a1f1793214d8eee0ac0d1c3a70715bf9080938672ae81d2fcfc084"
+    },
+    {
+      "jobId": 118590741792,
+      "jobName": "checker-platform (energy, 11,12,13,14,15,16,17,18,19,20)",
+      "bytes": 69026,
+      "sha256": "af99054fdcd90d72e68106c076cee2361cbeabfd59e8056f92b1e641ea96fab3"
+    },
+    {
+      "jobId": 118590741805,
+      "jobName": "native (optics, 31,32,33,34,35,36,37,38,39,40)",
+      "bytes": 69946,
+      "sha256": "271c475ac4e537e98cc915ba75651813c1fe126115cc80c093315811beae1b9c"
+    },
+    {
+      "jobId": 118590741806,
+      "jobName": "films (37)",
+      "bytes": 118014,
+      "sha256": "49ac29429128cfab37f8490befb8e23b312dfda2c1ca8b06e4628b811af0aac4"
+    },
+    {
+      "jobId": 118590741819,
+      "jobName": "native (castle, 41)",
+      "bytes": 63222,
+      "sha256": "e87e1f0c8739abcf83c014f2215255a565f23734bc1dd5255b3d011b66a83234"
+    },
+    {
+      "jobId": 118590741825,
+      "jobName": "native (energy, 11,12,13,14,15,16,17,18,19,20)",
+      "bytes": 69856,
+      "sha256": "62088eebc3404aecdb7851b98dd0903a72d74c162408ef5fce62d1e32b8b8a4f"
+    },
+    {
+      "jobId": 118590741849,
+      "jobName": "films (34)",
+      "bytes": 118023,
+      "sha256": "19835c2a53cce547abe6a42585251138db881fd794855a4fa4233e5fb19b10d6"
+    },
+    {
+      "jobId": 118590741851,
+      "jobName": "films (32)",
+      "bytes": 118000,
+      "sha256": "fb9631046a59fa11231cc5e51be559805e91eeb659105ba3f5214a208be7e951"
+    },
+    {
+      "jobId": 118590741867,
+      "jobName": "films (31)",
+      "bytes": 119170,
+      "sha256": "a372926d906059be47afecf46573c8dd01fb4e93f6d3a72288a1ef36175394c9"
+    },
+    {
+      "jobId": 118590741915,
+      "jobName": "films (35)",
+      "bytes": 118879,
+      "sha256": "24083bf7e14294091b9c3366e6242b6819e4bcc31470c1b059da9581dabee51a"
+    },
+    {
+      "jobId": 118590742000,
+      "jobName": "films (36)",
+      "bytes": 119096,
+      "sha256": "5f3563c9a82da5f62a64900958467aa6f41fce16f90e53dea6cea69cb957afbc"
+    }
+  ],
+  "sourceProvider": [
+    {
+      "path": "provider/run.json",
+      "bytes": 12929,
+      "sha256": "e21f6d0199143ce57222d532b2c5ad6ed952b5d78220868915dc2a1d6bfbf9c2"
+    },
+    {
+      "path": "provider/commit.json",
+      "bytes": 1229,
+      "sha256": "9721dca6fd304383ffa8eac2e061e0eff38a64c1cbc93416f6adec15c580e02e"
+    },
+    {
+      "path": "provider/workflow-metadata-unavailable.json",
+      "bytes": 1005,
+      "sha256": "0a8d791ba40074a2a2b072341ac1577d905a1e6d8f0b6410edbcdf2677b2faa1"
+    },
+    {
+      "path": "provider/jobs/page-001.json",
+      "bytes": 136641,
+      "sha256": "5c430dad324d90a38ec27ade817d15c99888c0833bf481fda472db83cd90eba9"
+    },
+    {
+      "path": "provider/artifacts/page-001.json",
+      "bytes": 41175,
+      "sha256": "a47a4398704330c3015fd59aa781ff1ffda1ba05fdf9fbad2cfa7c5ab611a199"
+    }
+  ],
+  "baselineSourceC": "8102e724cafff008faf57316fcd82f03ed6f4072",
+  "acceptedAt": "2026-10-20T11:35:02.611477+00:00",
+  "masterTzAccepted": false,
+  "liveSdkAccepted": false,
+  "moderationAccepted": false,
+  "physicalPhonePerformanceAccepted": false,
+  "independentAudit": {
+    "draftFilename": "source-39411608067-draft.json",
+    "draftBytes": 87703,
+    "draftSha256": "4ad072fca870cfb473d4ef84fbb32e5f8390660b59368191e34411e47aa99b7b",
+    "auditorFiles": [
+      {
+        "path": "README.md",
+        "bytes": 12522,
+        "sha256": "da287426c5f35dc295c7acd1561429e06e57e7586b1faabb2136a5ca9d8bb073"
+      },
+      {
+        "path": "audit-common.mjs",
+        "bytes": 10394,
+        "sha256": "def67a5c97b227fb701b2f4a5240dac3e3b17bf6d3841823af908099cc99f633"
+      },
+      {
+        "path": "audit-common.test.mjs",
+        "bytes": 8781,
+        "sha256": "41ddfa8fac9291571956205970f99ba891a0ebdd49e828bfd615085e856f536f"
+      },
+      {
+        "path": "audit-evidence.mjs",
+        "bytes": 23315,
+        "sha256": "1dea3825ca8f680ebd5d9fc001fffa3d91c246e0f81515be2925fa6003685269"
+      },
+      {
+        "path": "audit-optics.mjs",
+        "bytes": 21303,
+        "sha256": "d101a4c1e45a6174b90c1ec45080d1cb7a910abbff59f99af64e7ad0f656c9f6"
+      },
+      {
+        "path": "audit-optics.test.mjs",
+        "bytes": 4003,
+        "sha256": "ce0cc3f875b45e8bcd0c78eee7707ad16624fa41e05173e3e17332a4d2f56b1e"
+      },
+      {
+        "path": "audit-player-ui.mjs",
+        "bytes": 30317,
+        "sha256": "fcc569b34dfb349497726a66c638a06537acafb49f03685cf7382f07ddf3b7a8"
+      },
+      {
+        "path": "audit-player-ui.test.mjs",
+        "bytes": 5350,
+        "sha256": "79672ceb80e71afc815a61271bb1494f04e625a2bd51589d0a7a3e3b9bb9d0f9"
+      },
+      {
+        "path": "audit-png.mjs",
+        "bytes": 7011,
+        "sha256": "9b39fb1e8f106854f9c555ab87bcd428532ff867a121dafd6ce3fc2cc3d6c3cf"
+      },
+      {
+        "path": "audit-png.test.mjs",
+        "bytes": 8145,
+        "sha256": "7e28bcb34918bef73177fa2bc15f6dec582d17ed65aee9481d82248597fbfd6f"
+      },
+      {
+        "path": "audit-source.py",
+        "bytes": 29336,
+        "sha256": "a5492fe337dce8201bc3cc7722c9edc21627626534fdf9e51f625d28e1153cde"
+      },
+      {
+        "path": "test_audit_source.py",
+        "bytes": 11657,
+        "sha256": "2e88b53e1abf35346454a2cdaf7633bb9bf0c84487e63dfd049973f328d93c33"
+      }
+    ],
+    "auditorInventorySha256": "c68c86669dc8c23e10647a7345e7824809a4323ba0cd2bcbc91ecdc61d714be0",
+    "pythonGuardTests": 8,
+    "nodeGuardTests": 18,
+    "completeProviderRawLogsRechecked": 44
+  },
+  "rootReview": {
+    "providerAndImmutableSourceReviewed": true,
+    "all57ProviderArchivesHashedAndCRCRead": true,
+    "all44OriginalLogsRecheckedAgainstProvider": true,
+    "cpuTests": 2900,
+    "ordinaryRooms": 51,
+    "consumerNativeRooms": 51,
+    "reviewSdkCheckerRooms": 51,
+    "rewardedUITransactions": 153,
+    "opticsVideosFullyDecoded": 10,
+    "reviewedCurrentImages": [
+      {
+        "path": "v63-player-ui/mobile-controls-landscape.png",
+        "bytes": 162437,
+        "sha256": "d02a9a8a1575e0a01ac4cb1f7ab77491b510d1a0c8d352ef2f002ca1faa04281"
+      },
+      {
+        "path": "v63-player-ui/compact-escape-pause.png",
+        "bytes": 92296,
+        "sha256": "7649a96afca4e74bf5c4ffcc0844e4c796ffa76913eb43f0c0914ebabe5b1bd6"
+      },
+      {
+        "path": "v63-optics-film-39/room-39-keyframe-01.png",
+        "bytes": 124707,
+        "sha256": "08decd2edcdb418cc9571cea11305b2e48f2aa15fa69a360188c25bffa26cd6b"
+      },
+      {
+        "path": "v63-optics-film-36/room-36-keyframe-03.png",
+        "bytes": 69037,
+        "sha256": "d2063979679d0c365f2107a7ff979bf05d4a2f363a12c6f52efda47f3d5d2a42"
+      }
+    ],
+    "localRoom35Supplement": {
+      "path": "v63-local-art35-review/attempt-02/local-review.json",
+      "sha256": "a175d4d024cf9da45b48f813a3238536c38bfbdd48db3b94bf063194f8d7a154",
+      "localOnly": true,
+      "completedLevel": false,
+      "scope": "Partial receiver casting/power/latch visual inspection with ordinary inputs; not additional CI evidence."
+    },
+    "decision": "Accept this exact technical Source increment after independent provider, byte, gameplay, UI, checker, decoded media and scope review."
+  },
+  "acceptedScope": [
+    "Progressive canonical room access, completed-room replay and final castle number51",
+    "Three authored hints per room, actual paused rewarded UI with close/error/reward/duplicate/reread proof under explicit mock SDK",
+    "Compact Escape pause and Atlas return preserving the current room",
+    "Original pinned checker diagnostics for every review room and ten Optics movies",
+    "Room36 rotor queries use the current owned Cannon body pose",
+    "Room35 receiver and room39 shutter art with original mechanisms preserved",
+    "Ten native Optics movies and all51 compiled consumer route wins",
+    "Mobile browser control presentation and four-phase accepted-v62 save migration"
+  ],
+  "draftAuditLimitations": [
+    "Draft internal audit only; Root must review actual provider bytes before issuing any acceptance.",
+    "Software WebGL scripted routes do not establish human discovery, physical-device performance, live ad delivery or moderation.",
+    "Ordinary/native51 route counters exclude the historical legacy fixture reset. Only specialized native movies retain their stricter complete-start proofs.",
+    "Checker WARN and NOT VERIFIED remain observed statuses; no fake PASS verdicts."
+  ],
+  "limitations": [
+    "Software WebGL scripted routes do not establish human discovery, physical-device performance, live ad delivery or moderation.",
+    "Ordinary/native51 route counters exclude the historical legacy fixture reset. Only specialized native movies retain their stricter complete-start proofs.",
+    "Checker WARN and NOT VERIFIED remain observed statuses; no fake PASS verdicts.",
+    "Acceptance covers this exact technical increment; it does not close the complete Master TZ.",
+    "Original checker WARN and NOT VERIFIED remain observed findings; mock SDK callbacks do not prove live ad fill or moderation."
+  ],
+  "openMasterItems": [
+    "500 meaningful unique castle stages: open; current final castle retains12 tested mechanisms",
+    "15-minute human speedrun acceptance: open",
+    "Physical-phone performance/FPS and comprehensive human puzzle discovery: open",
+    "Room17 portrait/readability and instant-resize acceptance remain separate open work"
+  ]
+}
