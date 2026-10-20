@@ -1,0 +1,430 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-v62-root-public-acceptance",
+  "generatedAt": "2026-10-20T03:15:15.808531+00:00",
+  "sourceAccepted": true,
+  "publicationAccepted": true,
+  "sourceCommit": "8102e724cafff008faf57316fcd82f03ed6f4072",
+  "sourceTree": "289f9408382fb0ca20647f6cd230ec270f70513e",
+  "sourceReview": {
+    "runId": 39354459080,
+    "runAttempt": 1
+  },
+  "publisherCommit": "c5814892d6a40ffc911e0ed62df022f82990cb4a",
+  "publicationRun": 39361361199,
+  "publicationRunAttempt": 1,
+  "publicURL": "https://amazin20.github.io/brainrot-portal/campaign-v62/",
+  "sourceAcceptance": {
+    "path": "tools/campaign-v62-root-source-acceptance.json",
+    "sha256": "02dc21c887a0746d407d4136af5b116dd30fcb2a2b1e49af9971d043ee5b58be"
+  },
+  "configSha256": "950673f15ff0d23341eeeca6acbb75fd2087aa10e2d8914cebf6451c62cfa620",
+  "finalProof": {
+    "artifactId": 12238336549,
+    "artifactName": "v62-final-public-proof",
+    "zipBytes": 6134341,
+    "zipSha256": "d62c9f00944ffe6073ddf0ca9385a6de606410c096f84457cbaf2dd00184b3b6",
+    "files": 158,
+    "bytes": 21626842,
+    "inventorySha256": "f312489b31400d0c8802221b968f7bb68b9b9b209d2927ba58af18ca1c9c3033"
+  },
+  "deployment": {
+    "id": 7190324410,
+    "sha": "c5814892d6a40ffc911e0ed62df022f82990cb4a",
+    "state": "success"
+  },
+  "checks": {
+    "terminalPublicJobs": 13,
+    "sourceJobs": 35,
+    "sourceArtifacts": 37,
+    "publisherArtifacts": 14,
+    "preservedBaselineFiles": 2524,
+    "preservedBaselineBytes": 683517693,
+    "preservedBaselineInventorySha256": "7e880fb0bcbc6d7b1625f2fc87ee9e40adc5ac4d6700a884681e49bf1a550a5f",
+    "candidateFiles": 80,
+    "candidateBytes": 7176838,
+    "publicFiles": 2605,
+    "publicBytes": 690702631,
+    "publicInventorySha256": "2ecbf5a2b61c5b0fd8366f833c6670672f3447a16db3fd36464088291421190e",
+    "completeHTTP200ByteClosure": true,
+    "deploymentProvider": {
+      "origin": "authenticated-final-ci-api-snapshot",
+      "independentPostCiDeploymentGet": false,
+      "captureStartedAt": "2026-10-20T03:13:43.145528+00:00",
+      "captureCompletedAt": "2026-10-20T03:13:44.226193+00:00",
+      "verifyJobId": 118433721267,
+      "verifyStep": "Validate actual prior producer statuses, all public routes and deployment ownership",
+      "completedAtPrecisionSeconds": 1,
+      "manifest": {
+        "path": "deployment-provider/manifest.json",
+        "bytes": 3004,
+        "sha256": "78b2c99e20f66d3dd0d03799ad1111b7c59bb004e3f438893c7bc4615d8623e4"
+      },
+      "rawPages": [
+        {
+          "path": "deployments-page-001.json",
+          "bytes": 381806,
+          "sha256": "981132e354000b3383c3592950ec3b24614def814194ef84eac78e8687522bbf"
+        },
+        {
+          "path": "deployments-page-002.json",
+          "bytes": 83621,
+          "sha256": "e7801905b9b19c553463140058293f1d7c84ab48df92afe85856ba7785cf2326"
+        },
+        {
+          "path": "statuses-page-001.json",
+          "bytes": 6683,
+          "sha256": "d21148551beb7977e3176240895eb0afc780eb08cacfcfb22836ba3419bef4fa"
+        }
+      ],
+      "deployments": 122,
+      "statuses": 4,
+      "inventorySha256": "747fc78412de448f584adc02016e7daaab187e17abd3ada7eae50a8585ddda18"
+    },
+    "nativeRoutes": {
+      "rooms": 51,
+      "won": 51,
+      "sameOriginalCompanion": 51,
+      "resets": 0,
+      "respawns": 0,
+      "gameplayPassed": 51,
+      "capturesPassed": 51,
+      "normalUiZeroStepStartProven": false,
+      "resetCounterScope": "reported journey counters after legacy fixture initialization; the initial fixture reset is outside these counters; specialized drivers retain their own stricter proofs"
+    },
+    "decodedImages": 94,
+    "camera17ContinuousNative": {
+      "room": 17,
+      "viewports": [
+        "landscape",
+        "portrait",
+        "classic"
+      ],
+      "fullyDecoded": true,
+      "fps": 12,
+      "rows": [
+        {
+          "level": 17,
+          "viewport": "landscape",
+          "width": 640,
+          "height": 360,
+          "frames": 1315,
+          "durationSeconds": 109.58333333333333,
+          "simulationSeconds": 109.5,
+          "fullyDecoded": true,
+          "sameOriginalShape": true,
+          "completeRoute": true,
+          "movieBytes": 4493159,
+          "movieSha256": "b2bab69e9f17aac64c838d1f856b77dc44f66eeffa39dc8a77cc9d6b0785db78",
+          "telemetrySha256": "aa07b8fa3f778cd91a54b445d11ef203688969cd1ef9fc46b91ab6a75290a231"
+        },
+        {
+          "level": 17,
+          "viewport": "portrait",
+          "width": 390,
+          "height": 844,
+          "frames": 1322,
+          "durationSeconds": 110.16666666666667,
+          "simulationSeconds": 110.04166666666667,
+          "fullyDecoded": true,
+          "sameOriginalShape": true,
+          "completeRoute": true,
+          "movieBytes": 5411015,
+          "movieSha256": "4f9e4a028a975fa2a796674a9726967bbf4947329c609e7c2f64104e606ce16c",
+          "telemetrySha256": "a196b290cb0019ba15ec9b2f439ebd728ebf203a5bf4b9631a421223d36756a2"
+        },
+        {
+          "level": 17,
+          "viewport": "classic",
+          "width": 800,
+          "height": 600,
+          "frames": 1304,
+          "durationSeconds": 108.66666666666667,
+          "simulationSeconds": 108.54166666666667,
+          "fullyDecoded": true,
+          "sameOriginalShape": true,
+          "completeRoute": true,
+          "movieBytes": 6801720,
+          "movieSha256": "109033d71c296b9a3b1b20dc896ff5437a629bce17b2893da281b831a8402b6e",
+          "telemetrySha256": "1e61bef66d90c39e6c73be05da5750d382877a9bcdeb1d20c3394774de929145"
+        }
+      ]
+    },
+    "biosphereAttacks": {
+      "groups": 2,
+      "rooms": 10,
+      "groupResults": [
+        {
+          "group": "early",
+          "report": {
+            "path": "biosphere-attacks-browser-report.json",
+            "bytes": 1939282,
+            "sha256": "5c271cbce4c51eb893cc02ce59a8e311c875cff4b108a65332f22e0ab1ce30ad"
+          },
+          "binding": {
+            "path": "public-binding.json",
+            "bytes": 51391,
+            "sha256": "a4f09de2206df60deb48b8a94203c8f10f9843530c107e663c7f43b2d929df1a"
+          },
+          "cases": 10,
+          "retainedImages": 20,
+          "pass": true,
+          "immutablePureValidator": true,
+          "originalCargo": true,
+          "closedInventory": true
+        },
+        {
+          "group": "later",
+          "report": {
+            "path": "biosphere-attacks-browser-report.json",
+            "bytes": 2908795,
+            "sha256": "c7fc0514d70f68ab2e67fc9f1e4c4acfe8a601139ffc6705cfeb3ffbd9104730"
+          },
+          "binding": {
+            "path": "public-binding.json",
+            "bytes": 51397,
+            "sha256": "9e21c385e87f44f50a5f0f090a16be956365011bc26429e448e56fd7cefae356"
+          },
+          "cases": 10,
+          "retainedImages": 20,
+          "pass": true,
+          "immutablePureValidator": true,
+          "originalCargo": true,
+          "closedInventory": true
+        }
+      ]
+    },
+    "barePlayAndV61SaveImport": true,
+    "bareEntryPreferenceLifecycle": {
+      "phases": [
+        "historical-read-through",
+        "own-persisted",
+        "own-persisted",
+        "own-persisted"
+      ],
+      "initialPrivateRecord": false,
+      "initialWrites": 0,
+      "hintsObservedAfterPersistence": true,
+      "bareUiOnly": true
+    },
+    "previousCastleCompletionPreserved": true,
+    "castleFinal": true,
+    "ownNamespacePersistence": true,
+    "immutableSourcePureValidators": {
+      "pass": true,
+      "preferenceLifecyclePureValidator": true,
+      "rooms": 51,
+      "upperPhysicalProofs": [
+        {
+          "level": 41,
+          "pass": true,
+          "originalCargoBodyId": 1760,
+          "loadedStep": 89162,
+          "retainedStartStep": 89304,
+          "currentStep": 94129,
+          "supportedDeckSteps": 396,
+          "islandStep": 91351,
+          "upperRideLowStep": 91474,
+          "upperRideHighStep": 92185,
+          "upperCatchStep": 93944,
+          "physicalLowerCatch": true,
+          "physicalUpperCatch": true,
+          "twoPhysicalCatches": true
+        }
+      ],
+      "impulsePhysicalProofs": [
+        {
+          "level": 41,
+          "pass": true,
+          "originalCargoBodyId": 1760,
+          "originalCargoShapeId": 3520,
+          "worldStep": 133826
+        }
+      ],
+      "castleFinal": true,
+      "attackProofs": [
+        {
+          "group": "early",
+          "pass": true,
+          "immutablePureValidator": true,
+          "cases": 10,
+          "originalCargo": true,
+          "closedInventory": true
+        },
+        {
+          "group": "later",
+          "pass": true,
+          "immutablePureValidator": true,
+          "cases": 10,
+          "originalCargo": true,
+          "closedInventory": true
+        }
+      ]
+    }
+  },
+  "rawJobLogs": [
+    {
+      "id": 118428058012,
+      "name": "prepare",
+      "bytes": 304879,
+      "sha256": "4d3bb730d04cf1188a8a725ec39bb141fe7b16d2e54f2077106d9206487929ad",
+      "bomRetained": true
+    },
+    {
+      "id": 118428758581,
+      "name": "deploy",
+      "bytes": 19679,
+      "sha256": "d5e09479bf382bf48450cfc41af4f0beaa2dde5e205913058807fe7ef1b2d58e",
+      "bomRetained": true
+    },
+    {
+      "id": 118428936595,
+      "name": "attacks (early)",
+      "bytes": 125936,
+      "sha256": "4c07b22e7ca5bac8fec6348d40600f2f7dca456437905f017eba68d2b85a6439",
+      "bomRetained": true
+    },
+    {
+      "id": 118428936603,
+      "name": "attacks (later)",
+      "bytes": 125944,
+      "sha256": "a229379a4e9f1f65d2c87a1bc386bf0befe7727dd9039bf9d30eeb82e490ae3a",
+      "bomRetained": true
+    },
+    {
+      "id": 118428936624,
+      "name": "public-http",
+      "bytes": 17338,
+      "sha256": "28761c15d5730af089c5ab6e15cd531188c0338172a335a674384fd8a39f2c2f",
+      "bomRetained": true
+    },
+    {
+      "id": 118428936645,
+      "name": "entry",
+      "bytes": 39734,
+      "sha256": "059ebc172aaa6e9218e15f1efef47d2446588fd55f47226b0f5088f033493cfc",
+      "bomRetained": true
+    },
+    {
+      "id": 118428936650,
+      "name": "native (energy)",
+      "bytes": 49380,
+      "sha256": "346d9043a51380181e9acb03f315fd5b373098afae0bcc2d0eedf4603d2a9cb6",
+      "bomRetained": true
+    },
+    {
+      "id": 118428936664,
+      "name": "native (castle)",
+      "bytes": 42828,
+      "sha256": "f0ce3399128a1defa7bbf348b7e8a78a852e630a985481f6912b718f18d22361",
+      "bomRetained": true
+    },
+    {
+      "id": 118428936706,
+      "name": "native (optics)",
+      "bytes": 49404,
+      "sha256": "4602bbf985f997e1b5d0f814ebf6548a408f364a4b2b2db20400944714a3e131",
+      "bomRetained": true
+    },
+    {
+      "id": 118428936743,
+      "name": "native (living)",
+      "bytes": 49914,
+      "sha256": "619ec4ae086a04c463987d3cf504bc4d425bf2d68cfa762edc33560ccd6d776b",
+      "bomRetained": true
+    },
+    {
+      "id": 118428936749,
+      "name": "native (fracture)",
+      "bytes": 51177,
+      "sha256": "763e8a1c883e7594cf7114c51c43cdadc1c8eacaf14c97b1cea4acb4d396aa20",
+      "bomRetained": true
+    },
+    {
+      "id": 118428936803,
+      "name": "native (early)",
+      "bytes": 45870,
+      "sha256": "50967d62cf3137a964126f34475d131b1be19d16552fab9a10942cb51783ea09",
+      "bomRetained": true
+    },
+    {
+      "id": 118433721267,
+      "name": "verify",
+      "bytes": 48749,
+      "sha256": "d299e1d2b3260061629cf3e7fc07e52bee92f84acc8d5393ae0f1fa325cf57ba",
+      "bomRetained": true
+    }
+  ],
+  "providerFiles": [
+    {
+      "path": "artifacts.json",
+      "bytes": 9804,
+      "sha256": "bc4e4b793876fc4d52124cc7dca60c7369b51652a03f71003f037bd58043d47c"
+    },
+    {
+      "path": "controller-commit.json",
+      "bytes": 1222,
+      "sha256": "57c4abf2a6af1c619268e8632e0d34101b376b45407545b974d3efb5b7be57b1"
+    },
+    {
+      "path": "controller-tree.json",
+      "bytes": 344531,
+      "sha256": "cba819ae641c84f605c19efe226315d8acafd6bbeb97259c77e4a439836a5906"
+    },
+    {
+      "path": "jobs.json",
+      "bytes": 41312,
+      "sha256": "9e66145eb4f2d38928e8bfab00463ce1f95ed353a35bc646dc249ed675b7fbe2"
+    },
+    {
+      "path": "main.json",
+      "bytes": 346,
+      "sha256": "7cf70f52026bd5d25fc86832c6eb8c2a9a20bea72d5910546c6c2a6a26c0cc6f"
+    },
+    {
+      "path": "run.json",
+      "bytes": 12872,
+      "sha256": "f088e66d99ac58a028026f45c3194ceda15aa7ff63aa04d9f5a29625c2052181"
+    },
+    {
+      "path": "source-artifacts.json",
+      "bytes": 26640,
+      "sha256": "e2cd67e3c317e1882339bb1b6c38468626833ff1b5fde2bc55aeed9651438005"
+    },
+    {
+      "path": "source-commit.json",
+      "bytes": 1217,
+      "sha256": "6d28748db381deaa9e31feb66aeb6082699998ee2b488856bb62e84fc5e6e7b0"
+    },
+    {
+      "path": "source-jobs.json",
+      "bytes": 107213,
+      "sha256": "f1a7d4b8ee3934bfe822c1391a54cbc63a6b8ce0b1fcca5f40211aa48599968e"
+    },
+    {
+      "path": "source-run.json",
+      "bytes": 12896,
+      "sha256": "7a6a28980781c5f7d2b696db579c5fa4cb32dbdd9fafd27def9a6128fa76828e"
+    },
+    {
+      "path": "source.json",
+      "bytes": 422,
+      "sha256": "7fc3799b6cf7c8b64978db8954ba1d99248832d52b7bae621289975632e625e2"
+    }
+  ],
+  "scope": "Independent terminal review of the exact accepted SOURCE and append-only PUBLIC candidate, actual13/13 successful publisher jobs, fresh independent main/Source refs, final-CI canonical deployment API snapshot and authenticated complete HTTP byte closure.",
+  "limitations": [
+    "Accepted SOURCE boundary: Scripted software WebGL input; human discovery, human challenge and physical-device FPS remain unmeasured.",
+    "Accepted SOURCE boundary: The51 ordinary/native route cohorts use legacy driver initialization. Their reported reset counters begin after the legacy initial fixture reset; zero counters do not establish whole-cohort zero-step normal UI Play or absence of every reset since Play. Specialized room20/castle drivers retain their own stricter proofs. Zero-step normal-Play starts and continuous no-reset-from-Play observations are established separately for the13 nativeStart movies and20 finite browser attacks.",
+    "Accepted SOURCE boundary: Only rooms21–30 and room17 at landscape640x360, portrait390x844 and classic800x600 have fresh complete v62 movies. Other current native wins retain finish stills. Prior accepted rooms1–20 and v59 Room25/castle movies are referenced solely by immutable prior Root receipt pins without rereading or decoding historical media bytes.",
+    "Accepted SOURCE boundary: The three room17 movies use fixed exact viewports 640x360, 390x844 and 800x600. Those movies do not themselves establish instantaneous orientation-transition recovery, every manual view or subjective framing quality. Bounded CPU resize results are documented separately and are not inferred from the fixed-viewport movies.",
+    "Accepted SOURCE boundary: Valid accepted v61 preferences are read through without startup writes. Private v62 persistence is established after ordinary menu settings and Play actions, then reload; an initial private record is not claimed.",
+    "Accepted SOURCE boundary: Movies retain12fps canvas frames;120Hz counters and identity guards do not constitute a full120Hz retained geometry trace.",
+    "Accepted SOURCE boundary: The enumerated bounded attacks do not establish closure of every bypass or every successful alternative.",
+    "Accepted SOURCE boundary: No live Yandex SDK, ads delivery, moderation or public acceptance is claimed.",
+    "PUBLIC HTTP closure independently reads and hashes all2524 historical baseline files against the accepted catalog. These reads do not create fresh historical recordings or renew their previous full-movie decoding.",
+    "Deployment/status API pages are authenticated observations from the successful final CI job; no independent post-CI deployment GET is claimed. Fresh independent connector main and Source refs remain required.",
+    "No live Yandex SDK, advertising delivery or platform moderation acceptance.",
+    "The51 PUBLIC production WebGL finishes use legacy fixture initialization with the initial fixture reset outside reported journey counters; no normal-UI zero-step start is established for that cohort. PUBLIC uses51 finish frames,3 entry screenshots and two current finite biosphere attack packets with decoded start/end media; current full12fps rooms21–30 films are independently bound through the accepted SOURCE package. Human/device/live-Yandex acceptance remains open."
+  ]
+}
