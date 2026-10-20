@@ -15,6 +15,26 @@ export function biosphereCapture(room,viewport='landscape'){
  assert.ok(room===17||viewport==='landscape','Other chapter rooms retain the original landscape capture');
  return BIOSPHERE_VIEWPORTS[viewport];
 }
+/** Match the intended production input device before navigation. Desktop CSS
+ * deliberately caps a tall fine-pointer game area at2:1; portrait proof uses
+ * the real mobile/coarse-pointer layout instead of resizing the renderer. */
+export function biosphereBrowserProfile(room,viewport='landscape'){
+ const capture=biosphereCapture(room,viewport),touch=viewport==='portrait';
+ return Object.freeze({width:capture.width,height:capture.height,deviceScaleFactor:1,isMobile:touch,hasTouch:touch});
+}
+export function assertBiosphereViewportObservation(value,{room,viewport}={}){
+ const profile=biosphereBrowserProfile(room,viewport);
+ assert.ok(value&&typeof value==='object','Actual browser viewport observation required');
+ for(const key of ['innerWidth','containerWidth','canvasWidth'])assert.equal(value[key],profile.width,'Actual '+key+' differs from exact native viewport');
+ for(const key of ['innerHeight','containerHeight','canvasHeight'])assert.equal(value[key],profile.height,'Actual '+key+' differs from exact native viewport');
+ assert.equal(value.devicePixelRatio,1);assert.equal(value.rendererPixelRatio,1);assert.equal(value.cameraAspect,profile.width/profile.height);
+ for(const key of ['pointerCoarse','pointerFine','pointerNone'])assert.equal(typeof value[key],'boolean');
+ assert.equal(value.pointerCoarse,profile.hasTouch,'Actual pointer mode differs from native browser profile');
+ assert.ok(Number.isSafeInteger(value.maxTouchPoints)&&value.maxTouchPoints>=0);
+ if(profile.hasTouch){assert.equal(value.pointerFine,false);assert.equal(value.pointerNone,false);assert.ok(value.maxTouchPoints>0);}
+ else{assert.ok(value.pointerFine!==value.pointerNone);assert.equal(value.maxTouchPoints,0);}
+ return value;
+}
 export const BIOSPHERE_BOUNDS=Object.freeze({visualFrames:18000,physicsSteps:36000,movieBytes:40000000,jpegWireBytes:120000000,telemetryBytes:12000000,metadataBytes:8000000,artifactBytes:80000000});
 export const BIOSPHERE_OPEN_SCOPES=Object.freeze({sourceCiAccepted:false,nativeAccepted:false,publicationAccepted:false,fullChapterAccepted:false,humanAccepted:false,allBypassesAccepted:false});
 export const BIOSPHERE_HARNESS_FILES=Object.freeze([
@@ -73,7 +93,9 @@ export function assertBiosphereNativeDiagnostic(report,{binding,rows,movieMetada
  assert.match(report.source.commit,/^[a-f0-9]{40}$/);assert.match(report.source.tree,/^[a-f0-9]{40}$/);assert.equal(report.sourceWorkingBytesUnchanged,true);assert.equal(report.controllerWorkingBytesUnchanged,true);assert.equal(report.completeServedPackageVerified,true);
  assert.equal(typeof report.captureViewport,'string');const capture=biosphereCapture(report.route.level,report.captureViewport);assert.equal(report.captureViewport,binding.captureViewport);assert.deepEqual(report.capture,capture);assert.deepEqual(binding.capture,capture);assert.deepEqual(report.captureBounds,BIOSPHERE_BOUNDS);assertBiosphereCaptureRows(rows,report.route);
  const level=report.route.level,tag=String(level).padStart(2,'0'),ui=report.ui;
- assert.equal(ui.control,'native #play-button click');assert.equal(ui.normalSpawn,true);assert.equal(ui.normalCargoSpawn,true);assert.equal(ui.elapsed,0);assert.equal(ui.worldStep,0);assert.equal(ui.portalsReady,false);assert.equal(ui.teleports,0);assert.equal(ui.edition,'foundation');assert.equal(ui.level,level);assert.equal(ui.id,report.route.id);assert.equal(ui.state,'playing');
+ const profile=biosphereBrowserProfile(level,report.captureViewport);assert.deepEqual(binding.browserProfile,profile);assert.deepEqual(report.browserProfile,profile);
+ assertBiosphereViewportObservation(report.viewportObservation.beforePlay,{room:level,viewport:report.captureViewport});assertBiosphereViewportObservation(report.viewportObservation.playing,{room:level,viewport:report.captureViewport});assert.deepEqual(ui.viewport,report.viewportObservation.playing);
+ assert.equal(ui.control,profile.hasTouch?'native #play-button tap':'native #play-button click');assert.equal(ui.normalSpawn,true);assert.equal(ui.normalCargoSpawn,true);assert.equal(ui.elapsed,0);assert.equal(ui.worldStep,0);assert.equal(ui.portalsReady,false);assert.equal(ui.teleports,0);assert.equal(ui.edition,'foundation');assert.equal(ui.level,level);assert.equal(ui.id,report.route.id);assert.equal(ui.state,'playing');
  for(const [actual,expected,distance]of [[ui.playerPosition,ui.expectedPlayerSpawn,ui.playerSpawnDistance],[ui.cargoPosition,ui.expectedCargoSpawn,ui.cargoSpawnDistance]]){finiteVector(actual,3);finiteVector(expected,3);assert.equal(distance,Math.hypot(...actual.map((n,i)=>n-expected[i])));assert.ok(distance<1e-8);}
  assert.match(report.browser.product,/^(?:HeadlessChrome|Chrome)\/\d+(?:\.\d+){3}$/);assert.match(report.browser.userAgent,/\b(?:HeadlessChrome|Chrome)\/\d+/);
  const renderer=report.renderer;assert.equal(renderer.isWebGLRenderer,true);assert.equal(renderer.contextLost,false);assert.match(renderer.version,/WebGL/);assert.equal(renderer.debugRendererInfoAvailable,true);assert.equal(typeof renderer.unmaskedVendor,'string');assert.ok(renderer.unmaskedVendor.length>0);assert.match(renderer.unmaskedRenderer,/ANGLE/i);assert.match(renderer.unmaskedRenderer,/SwiftShader/i);

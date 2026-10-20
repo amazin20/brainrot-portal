@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import vm from 'node:vm';
 import {parseAst} from 'rollup/parseAst';
-import {BIOSPHERE_CAPTURE,BIOSPHERE_VIEWPORTS,biosphereCapture,BIOSPHERE_OPEN_SCOPES,BIOSPHERE_HARNESS_FILES,assertBiosphereCaptureRows,assertBiosphereRunProvenance} from '../scripts/lib/biosphere-native-proof.mjs';
+import {BIOSPHERE_CAPTURE,BIOSPHERE_VIEWPORTS,biosphereCapture,biosphereBrowserProfile,assertBiosphereViewportObservation,BIOSPHERE_OPEN_SCOPES,BIOSPHERE_HARNESS_FILES,assertBiosphereCaptureRows,assertBiosphereRunProvenance} from '../scripts/lib/biosphere-native-proof.mjs';
 
 const source=fs.readFileSync(new URL('../scripts/qa-biosphere-native.mjs',import.meta.url),'utf8'),tree=parseAst(source);
 const observer=tree.body.find(n=>n.type==='ExportNamedDeclaration'&&n.declaration?.id?.name==='observeBiosphereNativeBrowser')?.declaration;
@@ -43,7 +43,7 @@ test('the actual full native observer has no Node closure, including late comple
 
 test('actual page.evaluate transfers every contract and scope as data',()=>{
  const calls=[];function walk(n){if(!n||typeof n!=='object')return;if(Array.isArray(n)){n.forEach(walk);return;}if(n.type==='CallExpression'&&n.callee.type==='MemberExpression'&&n.callee.object.name==='page'&&n.callee.property.name==='evaluate'&&n.arguments[0]?.name==='observeBiosphereNativeBrowser')calls.push(n);for(const v of Object.values(n))if(v&&typeof v==='object')walk(v);}walk(tree);
- assert.equal(calls.length,1);assert.deepEqual(calls[0].arguments[1].properties.map(p=>p.key.name).sort(),['bounds','capture','captureViewport','journeyURL','materialGuardSource','openScopes','room']);
+ assert.equal(calls.length,1);assert.deepEqual(calls[0].arguments[1].properties.map(p=>p.key.name).sort(),['bounds','capture','captureViewport','journeyURL','materialGuardSource','openScopes','room','viewportReaderSource']);
 });
 
 test('native observation never assigns a camera lens, actor pose, mechanism target or win state',()=>{
@@ -140,4 +140,37 @@ test('serialized observer rejects viewport substitution and arbitrary dimensions
  for(const view of Object.keys(BIOSPHERE_VIEWPORTS))await assert.rejects(run({...args,captureViewport:view,capture:BIOSPHERE_VIEWPORTS[view]}),/Fresh normal Foundation room Play/);
  const mutations=[x=>delete x.captureViewport,x=>x.captureViewport='wide',x=>x.captureViewport='__proto__',x=>x.captureViewport='portrait',x=>x.capture.width++,x=>x.capture.height++,x=>x.capture.fps=24,x=>x.capture.stride=10,x=>x.capture.extra=1,x=>x.room=18,x=>{x.room=21;x.captureViewport='portrait';x.capture={...BIOSPHERE_VIEWPORTS.portrait};}];
  for(const mutate of mutations){const x=structuredClone(args);mutate(x);await assert.rejects(run(x),/Exact native capture contract/);}
+});
+
+test('portrait capture chooses real mobile/coarse-pointer layout while both wide profiles retain desktop setup',()=>{
+ for(const view of ['landscape','classic']){
+  const capture=biosphereCapture(17,view),profile=biosphereBrowserProfile(17,view);
+  assert.deepEqual(profile,{width:capture.width,height:capture.height,deviceScaleFactor:1,isMobile:false,hasTouch:false});assert.equal(Object.isFrozen(profile),true);
+ }
+ assert.deepEqual(biosphereBrowserProfile(17,'portrait'),{width:390,height:844,deviceScaleFactor:1,isMobile:true,hasTouch:true});
+ assert.throws(()=>biosphereBrowserProfile(21,'portrait'));
+ const nodes=[];function walk(n){if(!n||typeof n!=='object')return;if(Array.isArray(n)){n.forEach(walk);return;}if(n.type==='CallExpression')nodes.push(n);for(const v of Object.values(n))if(v&&typeof v==='object')walk(v);}walk(tree);
+ const viewport=nodes.find(n=>n.callee.type==='MemberExpression'&&n.callee.object.name==='page'&&n.callee.property.name==='setViewport');assert.equal(viewport.arguments[0].name,'browserProfile');
+ const navigate=nodes.find(n=>n.callee.type==='MemberExpression'&&n.callee.object.name==='page'&&n.callee.property.name==='goto');assert.ok(viewport.start<navigate.start,'Device emulation must precede navigation and production layout');
+ const activate=nodes.find(n=>n.callee.name==='activate');assert.equal(activate.arguments[2].object.name,'browserProfile');assert.equal(activate.arguments[2].property.name,'hasTouch','Portrait must use the genuine native tap path');
+});
+
+function viewportUnit(view='portrait'){
+ const profile=biosphereBrowserProfile(17,view);return {innerWidth:profile.width,innerHeight:profile.height,devicePixelRatio:1,pointerCoarse:profile.hasTouch,pointerFine:!profile.hasTouch,pointerNone:false,maxTouchPoints:profile.hasTouch?1:0,containerWidth:profile.width,containerHeight:profile.height,canvasWidth:profile.width,canvasHeight:profile.height,rendererPixelRatio:1,cameraAspect:profile.width/profile.height};
+}
+test('actual viewport guard rejects desktop-clamped portrait, faked buffer size, pointer, DPR and camera-aspect substitutions',()=>{
+ for(const view of ['portrait','landscape','classic']){const v=viewportUnit(view);assert.equal(assertBiosphereViewportObservation(v,{room:17,viewport:view}),v);}
+ const oldDesktop={...viewportUnit(),pointerCoarse:false,pointerFine:true,maxTouchPoints:0,containerHeight:780,canvasHeight:780,cameraAspect:390/780};
+ assert.throws(()=>assertBiosphereViewportObservation(oldDesktop,{room:17,viewport:'portrait'}),/containerHeight/);
+ const mutations=[v=>v.innerWidth++,v=>v.innerHeight++,v=>v.containerWidth++,v=>v.containerHeight=780,v=>v.canvasWidth++,v=>v.canvasHeight=780,v=>v.devicePixelRatio=2,v=>v.rendererPixelRatio=.5,v=>v.cameraAspect=.5,v=>v.pointerCoarse=false,v=>v.pointerFine=true,v=>v.pointerNone=true,v=>v.maxTouchPoints=0,v=>v.maxTouchPoints=.5,v=>delete v.canvasHeight];
+ for(const mutate of mutations){const v=viewportUnit();mutate(v);assert.throws(()=>assertBiosphereViewportObservation(v,{room:17,viewport:'portrait'}));}
+ const rendererOnlyWorkaround={...oldDesktop,containerHeight:844,canvasHeight:844,cameraAspect:390/844};assert.throws(()=>assertBiosphereViewportObservation(rendererOnlyWorkaround,{room:17,viewport:'portrait'}),/pointer mode/);
+});
+
+test('retained browser viewport reader is closure-free and reads production dimensions without resizing renderer or camera',()=>{
+ const node=tree.body.find(n=>n.type==='ExportNamedDeclaration'&&n.declaration?.id?.name==='readBiosphereNativeViewport')?.declaration;assert.equal(node?.type,'FunctionDeclaration');const text=source.slice(node.start,node.end);assert.deepEqual(nodeOnly(text),[]);
+ const expected=viewportUnit(),game={container:{clientWidth:390,clientHeight:844},renderer:{domElement:{width:390,height:844},getPixelRatio:()=>1},camera:{aspect:390/844}},window={innerWidth:390,innerHeight:844,devicePixelRatio:1,navigator:{maxTouchPoints:1},matchMedia:q=>({matches:q==='(pointer: coarse)'})},before=JSON.stringify(game);
+ const actual=vm.runInNewContext('('+text+')(game)',{game,window});assert.equal(JSON.stringify(actual),JSON.stringify(expected));assert.equal(JSON.stringify(game),before);
+ const failure=tree.body.find(n=>n.type==='ExportNamedDeclaration'&&n.declaration?.id?.name==='runBiosphereNativeQA').declaration;const run=source.slice(failure.start,failure.end);
+ assert.match(run,/viewportObservation:\{beforePlay:viewportBeforePlay,playing:viewportPlaying\}/);assert.match(run,/browserProfile,viewportObservation/);assert.match(observerText,/actual:viewport\(\)/);assert.match(observerText,/viewport:viewport\(\)/);
 });

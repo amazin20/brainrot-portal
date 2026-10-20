@@ -6,6 +6,7 @@ import {serveFrozenCampaign} from './lib/frozen-campaign-server.mjs';
 import {readStampedCampaignInfo,assertCampaignBrowserState} from './lib/campaign-browser-contract.mjs';
 import {ACTIVE_FOUNDATION_RUNTIME_FLAGS} from '../src/game/ReleaseIdentity.js';
 import {CREATIVE_CAMPAIGN_REVISION} from '../src/game/LabPreferences.js';
+import {v61HistoricalPreferenceFixture} from './lib/campaign-preferences-fixture.mjs';
 import {isCampaignV55Path,isCampaignV56Path,isCampaignV57Path,isCampaignV58Path,isCampaignV59Path,isCampaignV60Path,isCampaignV61Path,isCampaignV62Path,foundationCampaignPrefix,FOUNDATION_STORAGE_PREFIX,CAMPAIGN_V55_STORAGE_PREFIX,CAMPAIGN_V56_STORAGE_PREFIX,CAMPAIGN_V57_STORAGE_PREFIX,CAMPAIGN_V58_STORAGE_PREFIX,CAMPAIGN_V59_STORAGE_PREFIX,CAMPAIGN_V60_STORAGE_PREFIX,CAMPAIGN_V61_STORAGE_PREFIX,CAMPAIGN_PREFERENCE_KEY} from '../src/game/LabCampaignStorage.js';
 
 const out=path.resolve(process.env.OUT_DIR||'qa/campaign-save-isolation');fs.mkdirSync(out,{recursive:true});
@@ -23,8 +24,11 @@ if(isCampaignV62Path(base.pathname))oldPrefixes.push(CAMPAIGN_V61_STORAGE_PREFIX
 const importedPrefix=isCampaignV62Path(base.pathname)?CAMPAIGN_V61_STORAGE_PREFIX:(isCampaignV61Path(base.pathname)||isCampaignV62Path(base.pathname))?CAMPAIGN_V60_STORAGE_PREFIX:isCampaignV60Path(base.pathname)?CAMPAIGN_V59_STORAGE_PREFIX:isCampaignV59Path(base.pathname)?CAMPAIGN_V58_STORAGE_PREFIX:isCampaignV58Path(base.pathname)?CAMPAIGN_V57_STORAGE_PREFIX:isCampaignV57Path(base.pathname)?CAMPAIGN_V56_STORAGE_PREFIX:isCampaignV56Path(base.pathname)?CAMPAIGN_V55_STORAGE_PREFIX:FOUNDATION_STORAGE_PREFIX;
 const expectedImport={completed:isCampaignV62Path(base.pathname)?[0,1,6,9,10,14,19,20,22,25,28,29,40]:(isCampaignV61Path(base.pathname)||isCampaignV62Path(base.pathname))?[0,1,6,9,10,14,19,40]:isCampaignV60Path(base.pathname)?[0,1,6,9,40]:isCampaignV59Path(base.pathname)?[0,1,6]:[0,1,6,9],hints:isCampaignV62Path(base.pathname)?{1:2,14:1,22:2,29:1,40:3}:(isCampaignV61Path(base.pathname)||isCampaignV62Path(base.pathname))?{1:2,14:1,40:3}:isCampaignV60Path(base.pathname)?{1:2,40:3}:{1:2},resumeLevel:3,quality:'low',volume:.29,muted:true,tutorial:true};
 const historicalImport=isCampaignV59Path(base.pathname)?{...expectedImport,completed:[...expectedImport.completed,40],hints:{...expectedImport.hints,40:3}}:expectedImport;
-const records=oldPrefixes.map((prefix,index)=>[prefix+CAMPAIGN_PREFERENCE_KEY,JSON.stringify({campaignRevision:CREATIVE_CAMPAIGN_REVISION,
- ...(prefix===importedPrefix?historicalImport:{completed:[0],hints:{},resumeLevel:0,quality:'balanced',volume:.21,muted:false,tutorial:false}),historicalNamespace:index},null,2)]);
+const records=oldPrefixes.map((prefix,index)=>{
+ const value={campaignRevision:CREATIVE_CAMPAIGN_REVISION,
+  ...(prefix===importedPrefix?historicalImport:{completed:[0],hints:{},resumeLevel:0,quality:'balanced',volume:.21,muted:false,tutorial:false}),historicalNamespace:index};
+ return[prefix+CAMPAIGN_PREFERENCE_KEY,JSON.stringify(prefix===CAMPAIGN_V61_STORAGE_PREFIX?v61HistoricalPreferenceFixture(value):value,null,2)];
+});
 const oldRecord=Object.fromEntries(records),ownKey=ownPrefix+CAMPAIGN_PREFERENCE_KEY;
 const report={sourceCommit:process.env.BUILD_COMMIT??null,url:base.href,pass:false,errors:[],checks:[],
  scope:'Frozen production bytes mounted at the candidate subpath; first import, ordinary Play, reload and menu settings. This UI/storage proof does not assert puzzle completion.'};
