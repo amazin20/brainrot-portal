@@ -88,9 +88,11 @@ export function observePlatformPackageResponses(page,{base,binding,sdk}){
    const relative=sdkResponse?'/sdk.js':decodeURIComponent(url.pathname.slice(root.pathname.length))||'index.html',expected=sdkResponse?sdk:files.get(relative);
    // Entry probes deliberately include forged legacy selectors to verify the
    // production gate. They belong only to the main index document; linked
-   // assets and SDK responses may carry only the checker's numeric cachebuster.
+   // Runtime GLBs carry the loader's exact frozen content-hash prefix. Other
+   // linked assets and SDK responses may carry only the numeric cachebuster.
    const entryKeys=new Set(['edition','level','debug','pilot','tower41preview','tower41ratchet']);
-   const query=[...url.searchParams];assert.ok(query.every(([key,value])=>key==='_dc'&&/^\d+$/.test(value)||relative==='index.html'&&entryKeys.has(key)),'Unexpected unverified response query');
+   const versionedModel=/^models\/runtime\/[^/]+\.glb$/.test(relative)&&url.searchParams.getAll('v').length===1;
+   const query=[...url.searchParams];assert.ok(query.every(([key,value])=>key==='_dc'&&/^\d+$/.test(value)||relative==='index.html'&&entryKeys.has(key)||key==='v'&&versionedModel&&value===expected?.sha256?.slice(0,12)),'Unexpected unverified response query: '+url.href);
    if(relative==='favicon.ico'&&response.status()===404)return;
    assert.ok(expected,'Response absent from frozen inventory: '+relative);assert.equal(response.status(),200,'Non-200 actual package response');
    const bytes=await response.buffer();assert.equal(bytes.length,expected.bytes,'Actual response byte length differs: '+relative);assert.equal(sha256(bytes),expected.sha256,'Actual response bytes differ: '+relative);

@@ -191,3 +191,20 @@ test('forged production entry selectors are confined to the main index response'
   invalid.emit(base+'index.html?'+query,index);await assert.rejects(()=>observed.finish(),/verification failed/);
  }
 });
+
+test('runtime GLB version query must equal the actual frozen model hash prefix and still match all received bytes',async()=>{
+ const index=Buffer.from('actual frozen main index'),js=Buffer.from('actual frozen main javascript'),sdk=Buffer.from('explicit mock SDK'),model=Buffer.from('actual frozen runtime GLB bytes');
+ const file=(path,bytes)=>({path,bytes:bytes.length,sha256:hash(bytes)}),modelPath='models/runtime/model-01-player.glb',version=hash(model).slice(0,12),
+  binding={review:{files:[file('index.html',index),file('assets/main.js',js),file(modelPath,model),file('art/other.glb',model)],buildInfoBytes:5,buildInfoSha256:hash('stamp')}},base='http://test.invalid/campaign-v63/';
+ const createPage=()=>{let handler;return{on(name,fn){assert.equal(name,'response');handler=fn;},off(){},emit(relative,bytes){handler({url:()=>new URL(relative,base).href,status:()=>200,buffer:async()=>bytes,fromCache:()=>false});}};};
+ const setup=()=>{const page=createPage(),observer=observePlatformPackageResponses(page,{base,binding,sdk:file('/sdk.js',sdk)});page.emit('',index);page.emit('/sdk.js',sdk);page.emit('index.html?_dc=123',index);page.emit('assets/main.js?_dc=123',js);return{page,observer};};
+ const valid=setup();valid.page.emit(modelPath+'?v='+version,model);valid.page.emit(modelPath+'?v='+version+'&_dc=124',model);
+ const evidence=await valid.observer.finish();assert.equal(evidence.allReceivedBytesMatched,true);
+ assert.deepEqual(evidence.responses.filter(row=>row.path===modelPath).map(row=>[row.bytes,row.sha256]),[[model.length,hash(model)],[model.length,hash(model)]]);
+ for(const relative of [modelPath+'?v=000000000000',modelPath+'?v='+hash(model),modelPath+'?v='+version+'&v='+version,modelPath+'?v='+version+'&edition=foundation',modelPath+'?v='+version+'&_dc=invalid','art/other.glb?v='+version,'assets/main.js?v='+hash(js).slice(0,12),'/sdk.js?v='+hash(sdk).slice(0,12),'models/runtime/unknown.glb?v='+version]){
+  const invalid=setup();invalid.page.emit(relative,model);await assert.rejects(()=>invalid.observer.finish(),/verification failed/);
+ }
+ for(const wrongBytes of [Buffer.alloc(0),Buffer.alloc(model.length,1)]){
+  const invalid=setup();invalid.page.emit(modelPath+'?v='+version,wrongBytes);await assert.rejects(()=>invalid.observer.finish(),/verification failed/);
+ }
+});
