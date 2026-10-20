@@ -97,7 +97,8 @@ class GuardTests(unittest.TestCase):
         c={'sourceCommit':'1'*40,'sourceRun':123,'sourceAttempt':2,'expectedJobs':['build','cpu (0)'],
            'sourceArtifacts':[{'id':456,'name':'v63-dist','size_in_bytes':100,'digest':'sha256:'+'a'*64}]}
         run={'id':123,'status':'completed','conclusion':'success','head_sha':c['sourceCommit'],'head_branch':m.SOURCE_BRANCH,'path':m.SOURCE_WORKFLOW,'run_attempt':2}
-        jobs=[{'name':n,'status':'completed','conclusion':'success'} for n in c['expectedJobs']]
+        jobs=[{'id':1000+i,'name':n,'status':'completed','conclusion':'success','run_id':123,'run_attempt':2,'head_sha':c['sourceCommit']}
+              for i,n in enumerate(c['expectedJobs'])]
         artifacts=[dict(c['sourceArtifacts'][0],expired=False,workflow_run={'head_sha':c['sourceCommit'],'id':123})]
         return c,run,jobs,artifacts
 
@@ -108,7 +109,8 @@ class GuardTests(unittest.TestCase):
 
     def test_source_provider_requires_terminal_exact_job_and_artifact_set(self):
         c,run,jobs,artifacts=self.provider_fixture();self.check_provider(c,run,jobs,artifacts)
-        for variant in ['running','failed','attempt','missingjob','extrajob','jobfailure','artifactdigest','expired','artifactcommit','artifactrun']:
+        for variant in ['running','failed','attempt','missingjob','extrajob','jobfailure','artifactdigest','expired','artifactcommit','artifactrun',
+                        'foreignrun','jobrun','jobattempt','jobsha','duplicatejobid']:
             r,j,a=copy.deepcopy((run,jobs,artifacts))
             if variant=='running':r['status']='in_progress'
             elif variant=='failed':r['conclusion']='failure'
@@ -119,7 +121,12 @@ class GuardTests(unittest.TestCase):
             elif variant=='artifactdigest':a[0]['digest']='sha256:'+'b'*64
             elif variant=='expired':a[0]['expired']=True
             elif variant=='artifactcommit':a[0]['workflow_run']['head_sha']='3'*40
-            else:a[0]['workflow_run']['id']=124
+            elif variant=='artifactrun':a[0]['workflow_run']['id']=124
+            elif variant=='foreignrun':r['id']=124;a[0]['workflow_run']['id']=124
+            elif variant=='jobrun':j[0]['run_id']=124
+            elif variant=='jobattempt':j[0]['run_attempt']=1
+            elif variant=='jobsha':j[0]['head_sha']='3'*40
+            else:j[1]['id']=j[0]['id']
             with self.subTest(variant=variant),self.assertRaises(ValueError):self.check_provider(c,r,j,a)
 
     def test_scope_never_promotes_legacy_initialization_to_strict_native_start(self):
@@ -181,5 +188,87 @@ class GuardTests(unittest.TestCase):
         self.assertEqual(m.BASELINE[:2],(2605,690702631))
         self.assertEqual(m.CATALOG_SHA,'e5d36ae12354ec7fea8c86a187d5a044fdf29ecec669789b8fe85b9f12c17994')
         self.assertEqual(m.BASELINE_DEPLOYMENT,{'id':7190324410,'sha':'c5814892d6a40ffc911e0ed62df022f82990cb4a'})
+
+class RecoveryGuardTests(unittest.TestCase):
+    """Synthetic API mutations; these tests issue no acceptance or requests."""
+    def configuration(self):
+        return m.load(Path(__file__).parent.parent/'tools/campaign-v63-release.json')
+
+    def provider(self,c):
+        r=c['recovery'];origin=r['publisherCommit']
+        run={'id':r['runId'],'run_attempt':r['runAttempt'],'status':'completed','conclusion':'failure',
+             'head_sha':origin,'head_branch':'main','event':'push','path':r['workflow'],'repository':{'full_name':m.REPO}}
+        commit={'sha':origin,'tree':{'sha':r['publisherTree']},'parents':[{'sha':m.ORIGINAL_CONTROLLER_PARENT}]}
+        jobs=[dict(row,status='completed',run_id=r['runId'],run_attempt=r['runAttempt'],head_sha=origin) for row in r['expectedJobs']]
+        artifacts=[dict(row,expired=False,workflow_run={'id':r['runId'],'head_sha':origin}) for row in r['artifacts']]
+        deployment={'id':r['deployment']['id'],'sha':origin,'environment':'github-pages'}
+        statuses=[{'id':77,'state':'success','log_url':'https://github.com/'+m.REPO+'/actions/runs/'+str(r['runId'])}]
+        return {'run':run,'commit':commit,'jobs':jobs,'artifacts':artifacts,'deployment':deployment,'statuses':statuses}
+
+    def test_recovery_requires_explicit_exact_failed_origin_and_unchanged_union(self):
+        c=self.configuration();self.assertEqual(m.recovery_config(c),c['recovery'])
+        mutations=[lambda x:x.update(controllerParent='0'*40),
+            lambda x:x['recovery'].update(publicationAccepted=True),
+            lambda x:x['recovery'].update(kind='accepted-public-baseline'),
+            lambda x:x['recovery'].update(publisherTree='0'*40),
+            lambda x:x['recovery'].update(runId=1),
+            lambda x:x['recovery']['union'].update(bytes=1),
+            lambda x:x['recovery']['provenance'].update(sha256='0'*64),
+            lambda x:x['recovery']['expectedJobs'][0].update(conclusion='failure'),
+            lambda x:x['recovery']['artifacts'].pop()]
+        for mutate in mutations:
+            bad=copy.deepcopy(c);mutate(bad)
+            with self.assertRaises(ValueError):m.recovery_config(bad)
+
+    def test_original_provenance_bytes_and_producer_survive_republish(self):
+        c=self.configuration();root=m.load(Path(__file__).parent.parent/c['sourceAcceptance']['path'])
+        stamp=next(row['sha256'] for row in root['candidateFiles'] if row['path']=='build-info.json')
+        new_producer={'GITHUB_REPOSITORY':m.REPO,'GITHUB_SHA':'0'*40,'GITHUB_RUN_ID':'999','GITHUB_RUN_ATTEMPT':'1'}
+        state={'producer':new_producer,'candidateFiles':root['candidateFiles'],'originalBuildInfoSha256':stamp}
+        provenance=m.publication_provenance(c,state)
+        raw=json.dumps(provenance,ensure_ascii=False,indent=2,allow_nan=False).encode()+b'\n'
+        self.assertEqual({'path':m.PREFIX+'publication-provenance.json','bytes':len(raw),'sha256':m.sha(raw)},c['recovery']['provenance'])
+        self.assertEqual(provenance['producer'],m.original_recovery_producer(c['recovery']))
+        self.assertNotEqual(provenance['producer'],new_producer)
+        self.assertIs(provenance['publicationAccepted'],False)
+        first=copy.deepcopy(c);del first['recovery']
+        self.assertEqual(m.publication_provenance(first,state)['producer'],new_producer)
+
+    def test_retained_failed_provider_is_terminal_exact_and_not_promoted(self):
+        c=self.configuration();provider=self.provider(c)
+        self.assertEqual(m.validate_recovery_provider(c,provider),provider)
+        self.assertEqual(provider['run']['conclusion'],'failure')
+        self.assertEqual(sum(row['conclusion']=='success' for row in provider['jobs']),9)
+        self.assertEqual(sum(row['conclusion']=='failure' for row in provider['jobs']),1)
+        self.assertEqual(sum(row['conclusion']=='skipped' for row in provider['jobs']),1)
+        mutations=[lambda x:x['run'].update(id=1),lambda x:x['run'].update(status='in_progress'),
+            lambda x:x['run'].update(conclusion='success'),lambda x:x['run'].update(run_attempt=2),
+            lambda x:x['run'].update(head_sha='0'*40),lambda x:x['run']['repository'].update(full_name='foreign/repo'),
+            lambda x:x['commit']['tree'].update(sha='0'*40),lambda x:x['commit']['parents'].append({'sha':'0'*40}),
+            lambda x:x['jobs'][0].update(id=1),lambda x:x['jobs'][0].update(conclusion='failure'),
+            lambda x:x['jobs'][0].update(run_id=1),lambda x:x['jobs'][0].update(head_sha='0'*40),
+            lambda x:x['jobs'][0].update(run_attempt=2),lambda x:x['jobs'][0].update(status='in_progress'),
+            lambda x:x['artifacts'][0].update(digest='sha256:'+'0'*64),
+            lambda x:x['artifacts'][0].update(expired=True),lambda x:x['artifacts'][0]['workflow_run'].update(id=1),
+            lambda x:x['artifacts'][0]['workflow_run'].update(head_sha='0'*40),
+            lambda x:x['deployment'].update(id=1),lambda x:x['deployment'].update(sha='0'*40),
+            lambda x:x['statuses'][0].update(state='failure'),lambda x:x['statuses'][0].update(log_url='https://example.com/other')]
+        for mutate in mutations:
+            bad=copy.deepcopy(provider);mutate(bad)
+            with self.assertRaises(ValueError):m.validate_recovery_provider(c,bad)
+
+    def test_recovery_lease_uses_partial_deployment_not_v62_baseline(self):
+        c=self.configuration();self.assertEqual(m.previous_deployment(c),c['recovery']['deployment'])
+        self.assertNotEqual(m.previous_deployment(c),c['baselineDeployment'])
+        first=copy.deepcopy(c);del first['recovery'];self.assertEqual(m.previous_deployment(first),c['baselineDeployment'])
+
+    def test_recovery_cannot_synthesize_missing_original_zip_material(self):
+        c=self.configuration()
+        with WorkingDirectory():
+            Path('proof/recovery').mkdir(parents=True)
+            m.write('proof/recovery/provider.json',self.provider(c))
+            candidate=[{'path':'index.html','bytes':1,'sha256':m.sha(b'x')}]
+            old=[{'path':'old.html','bytes':1,'sha256':m.sha(b'y')}]
+            with self.assertRaises(ValueError):m.validate_recovery_material(c,old,candidate,'0'*64)
 
 if __name__=='__main__':unittest.main()

@@ -106,7 +106,22 @@ function installCandidateResponseBodyObserver(browser,{base,members,sha,prepared
   };
   const goto=page.goto.bind(page),reload=page.reload.bind(page),closePage=page.close.bind(page);
   page.goto=async(...args)=>{assert.ok(String(args[0]).startsWith(base),'Native driver attempted a different public origin');await drain(page);state.started=true;const result=await goto(...args);await stamp();return result;};
-  page.reload=async(...args)=>{assert.equal(state.started,true,'Reload before a candidate navigation');await drain(page);const result=await reload(...args);await stamp();return result;};
+  page.reload=async(...args)=>{
+   if(!state.started){
+    // Puppeteer changes mobile emulation by reloading its fresh blank target.
+    // That target has no candidate document or evidence to stamp.
+    const assertUnusedBlank=()=>{
+     assert.equal(page.url(),'about:blank','Pre-navigation reload requires the exact fresh blank target');
+     assert.equal(state.tasks.size,0);assert.equal(state.inflight.size,0);
+     assert.equal(network.some(row=>row.page===state.number),false,'Blank target already received candidate bytes');
+     assert.equal(stampReads.some(row=>row.page===state.number),false,'Blank target already recorded a candidate stamp');
+    };
+    assert.equal(page.url(),'about:blank','Reload before a candidate navigation');
+    await drain(page);assertUnusedBlank();
+    const result=await reload(...args);await drain(page);assertUnusedBlank();return result;
+   }
+   await drain(page);const result=await reload(...args);await stamp();return result;
+  };
   page.close=async(...args)=>closeAfterDrain([page],()=>closePage(...args));
   return page;
  };

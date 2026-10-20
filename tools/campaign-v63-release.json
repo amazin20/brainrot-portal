@@ -4,7 +4,7 @@
   "repository": "amazin20/brainrot-portal",
   "namespace": "campaign-v63/",
   "version": "v63-player-access-optics",
-  "controllerParent": "d19c595c7f177995ec93837ddbfc9806fa1a40fe",
+  "controllerParent": "7feee7351bc2be2cdee708cae0e7a305bca6567c",
   "sourceBranch": "upgrade/campaign-access-20261020",
   "sourceWorkflow": ".github/workflows/player-access-review.yml",
   "sourceCommit": "a60a31dfd4c624d6d60f4c33111d315b3bc44aa6",
@@ -417,5 +417,166 @@
   "sourceContract": {
     "jobs": 44,
     "artifacts": 57
+  },
+  "recovery": {
+    "kind": "byte-identical-republish-after-public-observer-failure",
+    "publicationAccepted": false,
+    "publisherCommit": "7feee7351bc2be2cdee708cae0e7a305bca6567c",
+    "publisherTree": "8fe1f1318f5deab459fd240a16655bbfc62d738a",
+    "runId": 39416100725,
+    "runAttempt": 1,
+    "workflow": ".github/workflows/publish-campaign-v63.yml",
+    "deployment": {
+      "id": 7198668659,
+      "sha": "7feee7351bc2be2cdee708cae0e7a305bca6567c"
+    },
+    "expectedJobs": [
+      {
+        "id": 118606049399,
+        "name": "deploy",
+        "conclusion": "success"
+      },
+      {
+        "id": 118606295845,
+        "name": "native (castle)",
+        "conclusion": "success"
+      },
+      {
+        "id": 118606295777,
+        "name": "native (early)",
+        "conclusion": "success"
+      },
+      {
+        "id": 118606296308,
+        "name": "native (energy)",
+        "conclusion": "success"
+      },
+      {
+        "id": 118606295969,
+        "name": "native (fracture)",
+        "conclusion": "success"
+      },
+      {
+        "id": 118606295798,
+        "name": "native (living)",
+        "conclusion": "success"
+      },
+      {
+        "id": 118606295992,
+        "name": "native (optics)",
+        "conclusion": "success"
+      },
+      {
+        "id": 118606295677,
+        "name": "player",
+        "conclusion": "failure"
+      },
+      {
+        "id": 118605371190,
+        "name": "prepare",
+        "conclusion": "success"
+      },
+      {
+        "id": 118606295769,
+        "name": "public-http",
+        "conclusion": "success"
+      },
+      {
+        "id": 118610392543,
+        "name": "verify",
+        "conclusion": "skipped"
+      }
+    ],
+    "artifacts": [
+      {
+        "id": 12261647489,
+        "name": "github-pages",
+        "size_in_bytes": 624613815,
+        "digest": "sha256:9e0598d75742836a1a8bfbb389225c09aa0c3286fbe7d08ce634f0a4eb49eb2c"
+      },
+      {
+        "id": 12261532559,
+        "name": "v63-deployment-lease",
+        "size_in_bytes": 2277,
+        "digest": "sha256:4da0eef7dd8f315b8de3258406d9816ae9cd05586ef0a488bed09f699bfb72fd"
+      },
+      {
+        "id": 12261812300,
+        "name": "v63-preparation",
+        "size_in_bytes": 162671,
+        "digest": "sha256:74e0d3ee716c578b700779ee7dc8b7178c81cd130d1116b3b094093ab190974d"
+      },
+      {
+        "id": 12262002314,
+        "name": "v63-public-http",
+        "size_in_bytes": 2053,
+        "digest": "sha256:3e9d92d18c87bfc805e0aa256a069090eb20a8600b0e65f494347bf9a7722319"
+      },
+      {
+        "id": 12261894171,
+        "name": "v63-public-native-castle",
+        "size_in_bytes": 57941,
+        "digest": "sha256:cd6361ccf13e713fff346faf39f93704533678e69bf8dd525b78bae9e9792460"
+      },
+      {
+        "id": 12260914375,
+        "name": "v63-public-native-early",
+        "size_in_bytes": 520783,
+        "digest": "sha256:b0d70405853a23dbc0198399f338d2ea70702b4548385cd0d22c804f37469f5b"
+      },
+      {
+        "id": 12261913972,
+        "name": "v63-public-native-energy",
+        "size_in_bytes": 442330,
+        "digest": "sha256:db09c072702ef9cdd01cf9f75c641d58b3c4fe630d69e714e8d58f45a9f3347e"
+      },
+      {
+        "id": 12261928837,
+        "name": "v63-public-native-fracture",
+        "size_in_bytes": 429881,
+        "digest": "sha256:10cadd5e6df8ec63fb36dedf36486eb5f1aebe1a815d2369d9a56498bc725760"
+      },
+      {
+        "id": 12261913700,
+        "name": "v63-public-native-living",
+        "size_in_bytes": 372186,
+        "digest": "sha256:fc3cb03754dace7246f1040600ef84f64fb2644f8b54e7a2f659e489b45975d2"
+      },
+      {
+        "id": 12261718342,
+        "name": "v63-public-native-optics",
+        "size_in_bytes": 367066,
+        "digest": "sha256:17a9ae29ced2e82bffe0d19c64122b949d1fe4b215d089361b28c8437bfbab3c"
+      },
+      {
+        "id": 12260919224,
+        "name": "v63-public-player",
+        "size_in_bytes": 823681,
+        "digest": "sha256:4976bd6208e0ec23fc95b97234bf438211d36729b23acf05711482d064b2fc57"
+      }
+    ],
+    "originalConfigSha256": "aa27b7e9f5687b73ca26728f2b043d6153d0cffec642a549c4c8afc3c2123030",
+    "preparation": {
+      "artifactId": 12261812300,
+      "path": "preparation.json",
+      "bytes": 960448,
+      "sha256": "9efb0fe5595cca1effd60da9b27a480c87719ea8057d40a543a581d80a855db5"
+    },
+    "http": {
+      "artifactId": 12262002314,
+      "path": "public-http.json",
+      "bytes": 14012,
+      "sha256": "d6a85b7c5e26a4b79fc88b938be89912110d4e06d683d85fc3adaa8bdc874269"
+    },
+    "union": {
+      "files": 2686,
+      "bytes": 697909952,
+      "inventorySha256": "2b94cf95c7e41a9d5d0d35cb305fb2ecb25a70e6884714c1f1460d97b767ffc8"
+    },
+    "provenance": {
+      "path": "campaign-v63/publication-provenance.json",
+      "bytes": 12017,
+      "sha256": "fe44e1a3c3aaeb6e9804d194b7c39a358f34a1c54a0fd47607d732832f0be3b8"
+    }
   }
 }

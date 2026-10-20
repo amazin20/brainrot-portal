@@ -28,6 +28,8 @@ jobs:
         with: {ref: '${{ steps.pins.outputs.source_commit }}', path: source, fetch-depth: 0, persist-credentials: false}
       - name: Test immutable provider, archive and append guards
         run: python3 -m unittest discover -s scripts -p test_campaign_v63.py -v
+      - name: Test initial mobile viewport reload and retained candidate response guards
+        run: node --test tests/public-observer-blank-reload.test.mjs
       - name: Authenticate actual completed Source evidence and restore all accepted public bytes
         run: python3 scripts/publish-campaign-v63.py prepare
       - uses: actions/upload-pages-artifact@v3
