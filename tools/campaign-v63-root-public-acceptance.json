@@ -1,0 +1,866 @@
+{
+  "schemaVersion": 1,
+  "kind": "root-independent-v63-public-acceptance",
+  "acceptedAt": "2026-10-20T12:36:48.151514+00:00",
+  "pass": true,
+  "sourceAccepted": true,
+  "publicationAccepted": true,
+  "masterTzAccepted": false,
+  "liveSdkAccepted": false,
+  "moderationAccepted": false,
+  "physicalPhonePerformanceAccepted": false,
+  "humanPlaytest": false,
+  "hardwareFPSMeasured": false,
+  "sourceCommit": "a60a31dfd4c624d6d60f4c33111d315b3bc44aa6",
+  "sourceTree": "47e3de85ee814f18020514faf2614b9c4da37d12",
+  "sourceReview": {
+    "runId": 39411608067,
+    "runAttempt": 1
+  },
+  "publisherCommit": "21f54a9f6ef63a7e18e4a2002565ec1616879eb9",
+  "publisherTree": "6383f71b4ca942b0e5486f578a492e07df15a0d9",
+  "publicReview": {
+    "runId": 39420466757,
+    "runAttempt": 1
+  },
+  "publicURL": "https://amazin20.github.io/brainrot-portal/campaign-v63/",
+  "sourceAcceptance": {
+    "path": "tools/campaign-v63-root-source-acceptance.json",
+    "bytes": 94376,
+    "sha256": "2ae75756ca6891e8698090e965cf81f9ceeb655d60004cda6f97ea8d415a5ece"
+  },
+  "independentAudit": {
+    "draftPath": "tools/campaign-v63-public-audit/run-39420466757-draft.json",
+    "draftBytes": 24545,
+    "draftSha256": "4cf61a2d5282ff5413379fbfe3aaa2803e48cde26fd5bc09c4379bd478e7b7b0",
+    "auditorInventorySha256": "57f082d2d98f21abd062e730347676104085415ab2f597963574ad712901beb5",
+    "independentlyRepeatedDraftSha256": "3deaff0daeed8a922ff96a6ac8178da110424c6228769a88dc339d8b2c484a48",
+    "rootReranCompleteOfflineAudit": true
+  },
+  "evidenceBindings": {
+    "preparationSha256": "ce6e06a23f2b9974bd64c72146a2f0ff9d880dd27f5429ec0e12df27ef03a364",
+    "finalProofSha256": "181a6a27a72329818a05cad6f9708fa28b5fa71f1333537d63c576a7a282ece2",
+    "sourceAcceptanceSha256": "2ae75756ca6891e8698090e965cf81f9ceeb655d60004cda6f97ea8d415a5ece",
+    "releaseConfigSha256": "79e806f3ddbe2034da8d47e402358985e0de2409739b1bd2bd472e47394f4906"
+  },
+  "recovery": {
+    "kind": "byte-identical-republish-after-public-observer-failure",
+    "originalProducer": {
+      "GITHUB_REPOSITORY": "amazin20/brainrot-portal",
+      "GITHUB_SHA": "7feee7351bc2be2cdee708cae0e7a305bca6567c",
+      "GITHUB_RUN_ID": "39416100725",
+      "GITHUB_RUN_ATTEMPT": "1"
+    },
+    "originalAttemptEligible": false,
+    "originalPublicAcceptance": false,
+    "identicalUnionConfirmed": true,
+    "previousDeployment": {
+      "id": 7198668659,
+      "sha": "7feee7351bc2be2cdee708cae0e7a305bca6567c"
+    },
+    "originalProvenance": {
+      "path": "campaign-v63/publication-provenance.json",
+      "bytes": 12017,
+      "sha256": "fe44e1a3c3aaeb6e9804d194b7c39a358f34a1c54a0fd47607d732832f0be3b8"
+    },
+    "retainedOriginProviderIsParsed": true
+  },
+  "checks": {
+    "kind": "offline-v63-public-terminal-proof-audit",
+    "pass": true,
+    "auditPassed": true,
+    "sourceAccepted": false,
+    "publicationAccepted": false,
+    "liveSdkAccepted": false,
+    "moderationAccepted": false,
+    "physicalPhonePerformanceAccepted": false,
+    "publisher": {
+      "commit": "21f54a9f6ef63a7e18e4a2002565ec1616879eb9",
+      "tree": "6383f71b4ca942b0e5486f578a492e07df15a0d9",
+      "runId": 39420466757,
+      "runAttempt": 1
+    },
+    "source": {
+      "commit": "a60a31dfd4c624d6d60f4c33111d315b3bc44aa6",
+      "tree": "47e3de85ee814f18020514faf2614b9c4da37d12",
+      "runId": 39411608067,
+      "runAttempt": 1
+    },
+    "controllers": [
+      {
+        "path": "scripts/publish-campaign-v63.py",
+        "bytes": 57304,
+        "sha256": "e6f431fb4e568e7a9196112523da2d9bde76d7d445f6e5dfe4fa5692ca6b6e3e"
+      },
+      {
+        "path": "scripts/observe-campaign-v63-public.mjs",
+        "bytes": 18017,
+        "sha256": "9b8dbdb7c3999df5b1cd62c612ee6653f5d8429c6db6c7c96382ab6c343471bb"
+      },
+      {
+        "path": ".github/workflows/publish-campaign-v63.yml",
+        "bytes": 8749,
+        "sha256": "2d1a816a6b196ced020b29495de4b78c446fd5992f4259114e84ee2d63524966"
+      },
+      {
+        "path": "tools/campaign-v63-release.json",
+        "bytes": 18507,
+        "sha256": "79e806f3ddbe2034da8d47e402358985e0de2409739b1bd2bd472e47394f4906"
+      },
+      {
+        "path": "tools/campaign-v63-root-source-acceptance.json",
+        "bytes": 94376,
+        "sha256": "2ae75756ca6891e8698090e965cf81f9ceeb655d60004cda6f97ea8d415a5ece"
+      },
+      {
+        "path": "tools/campaign-v62-public-files.json",
+        "bytes": 994206,
+        "sha256": "e5d36ae12354ec7fea8c86a187d5a044fdf29ecec669789b8fe85b9f12c17994"
+      }
+    ],
+    "providerBinding": {
+      "jobs": 11,
+      "finalProducerJobs": 10,
+      "pagesArtifactId": 12262204463
+    },
+    "baseline": {
+      "files": 2605,
+      "bytes": 690702631,
+      "inventorySha256": "2ecbf5a2b61c5b0fd8366f833c6670672f3447a16db3fd36464088291421190e"
+    },
+    "candidate": {
+      "files": 80,
+      "bytes": 7195304,
+      "inventorySha256": "9db5aff37caff72d3f770daf9a3c14983cc9a1b63286a17d50e6c5378d9754ac"
+    },
+    "union": {
+      "files": 2686,
+      "bytes": 697909952,
+      "inventorySha256": "2b94cf95c7e41a9d5d0d35cb305fb2ecb25a70e6884714c1f1460d97b767ffc8"
+    },
+    "recovery": {
+      "kind": "byte-identical-republish-after-public-observer-failure",
+      "originalProducer": {
+        "GITHUB_REPOSITORY": "amazin20/brainrot-portal",
+        "GITHUB_SHA": "7feee7351bc2be2cdee708cae0e7a305bca6567c",
+        "GITHUB_RUN_ID": "39416100725",
+        "GITHUB_RUN_ATTEMPT": "1"
+      },
+      "originalAttemptEligible": false,
+      "originalPublicAcceptance": false,
+      "identicalUnionConfirmed": true,
+      "previousDeployment": {
+        "id": 7198668659,
+        "sha": "7feee7351bc2be2cdee708cae0e7a305bca6567c"
+      },
+      "originalProvenance": {
+        "path": "campaign-v63/publication-provenance.json",
+        "bytes": 12017,
+        "sha256": "fe44e1a3c3aaeb6e9804d194b7c39a358f34a1c54a0fd47607d732832f0be3b8"
+      },
+      "retainedOriginProviderIsParsed": true
+    },
+    "publicRooms": 51,
+    "playerNetwork": {
+      "pages": 10,
+      "responses": 150,
+      "stampReads": 12
+    },
+    "nativeNetworks": [
+      {
+        "group": "early",
+        "pages": 10,
+        "responses": 155,
+        "stampReads": 10
+      },
+      {
+        "group": "energy",
+        "pages": 10,
+        "responses": 164,
+        "stampReads": 10
+      },
+      {
+        "group": "living",
+        "pages": 10,
+        "responses": 165,
+        "stampReads": 10
+      },
+      {
+        "group": "optics",
+        "pages": 10,
+        "responses": 182,
+        "stampReads": 10
+      },
+      {
+        "group": "fracture",
+        "pages": 10,
+        "responses": 177,
+        "stampReads": 10
+      },
+      {
+        "group": "castle",
+        "pages": 1,
+        "responses": 13,
+        "stampReads": 1
+      }
+    ],
+    "decodedImages": [
+      {
+        "path": "player/fresh-guest-atlas.png",
+        "width": 1024,
+        "height": 768,
+        "format": "PNG"
+      },
+      {
+        "path": "player/first-room-real-win.png",
+        "width": 1024,
+        "height": 768,
+        "format": "PNG"
+      },
+      {
+        "path": "player/compact-escape-pause.png",
+        "width": 1024,
+        "height": 768,
+        "format": "PNG"
+      },
+      {
+        "path": "player/mobile-controls-portrait.png",
+        "width": 390,
+        "height": 844,
+        "format": "PNG"
+      },
+      {
+        "path": "player/mobile-controls-landscape.png",
+        "width": 844,
+        "height": 390,
+        "format": "PNG"
+      },
+      {
+        "path": "native-early/1-finish.jpg",
+        "width": 960,
+        "height": 540,
+        "format": "JPEG"
+      },
+      {
+        "path": "native-early/2-finish.jpg",
+        "width": 960,
+        "height": 540,
+        "format": "JPEG"
+      },
+      {
+        "path": "native-early/3-finish.jpg",
+        "width": 960,
+        "height": 540,
+        "format": "JPEG"
+      },
+      {
+        "path": "native-early/4-finish.jpg",
+        "width": 960,
+        "height": 540,
+        "format": "JPEG"
+      },
+      {
+        "path": "native-early/5-finish.jpg",
+        "width": 960,
+        "height": 540,
+        "format": "JPEG"
+      },
+      {
+        "path": "native-early/6-finish.jpg",
+        "width": 960,
+        "height": 540,
+        "format": "JPEG"
+      },
+      {
+        "path": "native-early/7-finish.jpg",
+        "width": 960,
+        "height": 540,
+        "format": "JPEG"
+      },
+      {
+        "path": "native-early/8-finish.jpg",
+        "width": 960,
+        "height": 540,
+        "format": "JPEG"
+      },
+      {
+        "path": "native-early/9-finish.jpg",
+        "width": 960,
+        "height": 540,
+        "format": "JPEG"
+      },
+      {
+        "path": "native-early/10-finish.jpg",
+        "width": 960,
+        "height": 540,
+        "format": "JPEG"
+      },
+      {
+        "path": "native-energy/11-finish.jpg",
+        "width": 960,
+        "height": 540,
+        "format": "JPEG"
+      },
+      {
+        "path": "native-energy/12-finish.jpg",
+        "width": 960,
+        "height": 540,
+        "format": "JPEG"
+      },
+      {
+        "path": "native-energy/13-finish.jpg",
+        "width": 960,
+        "height": 540,
+        "format": "JPEG"
+      },
+      {
+        "path": "native-energy/14-finish.jpg",
+        "width": 960,
+        "height": 540,
+        "format": "JPEG"
+      },
+      {
+        "path": "native-energy/15-finish.jpg",
+        "width": 960,
+        "height": 540,
+        "format": "JPEG"
+      },
+      {
+        "path": "native-energy/16-finish.jpg",
+        "width": 960,
+        "height": 540,
+        "format": "JPEG"
+      },
+      {
+        "path": "native-energy/17-finish.jpg",
+        "width": 960,
+        "height": 540,
+        "format": "JPEG"
+      },
+      {
+        "path": "native-energy/18-finish.jpg",
+        "width": 960,
+        "height": 540,
+        "format": "JPEG"
+      },
+      {
+        "path": "native-energy/19-finish.jpg",
+        "width": 960,
+        "height": 540,
+        "format": "JPEG"
+      },
+      {
+        "path": "native-energy/20-finish.jpg",
+        "width": 960,
+        "height": 540,
+        "format": "JPEG"
+      },
+      {
+        "path": "native-living/21-finish.jpg",
+        "width": 960,
+        "height": 540,
+        "format": "JPEG"
+      },
+      {
+        "path": "native-living/22-finish.jpg",
+        "width": 960,
+        "height": 540,
+        "format": "JPEG"
+      },
+      {
+        "path": "native-living/23-finish.jpg",
+        "width": 960,
+        "height": 540,
+        "format": "JPEG"
+      },
+      {
+        "path": "native-living/24-finish.jpg",
+        "width": 960,
+        "height": 540,
+        "format": "JPEG"
+      },
+      {
+        "path": "native-living/25-finish.jpg",
+        "width": 960,
+        "height": 540,
+        "format": "JPEG"
+      },
+      {
+        "path": "native-living/26-finish.jpg",
+        "width": 960,
+        "height": 540,
+        "format": "JPEG"
+      },
+      {
+        "path": "native-living/27-finish.jpg",
+        "width": 960,
+        "height": 540,
+        "format": "JPEG"
+      },
+      {
+        "path": "native-living/28-finish.jpg",
+        "width": 960,
+        "height": 540,
+        "format": "JPEG"
+      },
+      {
+        "path": "native-living/29-finish.jpg",
+        "width": 960,
+        "height": 540,
+        "format": "JPEG"
+      },
+      {
+        "path": "native-living/30-finish.jpg",
+        "width": 960,
+        "height": 540,
+        "format": "JPEG"
+      },
+      {
+        "path": "native-optics/31-finish.jpg",
+        "width": 960,
+        "height": 540,
+        "format": "JPEG"
+      },
+      {
+        "path": "native-optics/32-finish.jpg",
+        "width": 960,
+        "height": 540,
+        "format": "JPEG"
+      },
+      {
+        "path": "native-optics/33-finish.jpg",
+        "width": 960,
+        "height": 540,
+        "format": "JPEG"
+      },
+      {
+        "path": "native-optics/34-finish.jpg",
+        "width": 960,
+        "height": 540,
+        "format": "JPEG"
+      },
+      {
+        "path": "native-optics/35-finish.jpg",
+        "width": 960,
+        "height": 540,
+        "format": "JPEG"
+      },
+      {
+        "path": "native-optics/36-finish.jpg",
+        "width": 960,
+        "height": 540,
+        "format": "JPEG"
+      },
+      {
+        "path": "native-optics/37-finish.jpg",
+        "width": 960,
+        "height": 540,
+        "format": "JPEG"
+      },
+      {
+        "path": "native-optics/38-finish.jpg",
+        "width": 960,
+        "height": 540,
+        "format": "JPEG"
+      },
+      {
+        "path": "native-optics/39-finish.jpg",
+        "width": 960,
+        "height": 540,
+        "format": "JPEG"
+      },
+      {
+        "path": "native-optics/40-finish.jpg",
+        "width": 960,
+        "height": 540,
+        "format": "JPEG"
+      },
+      {
+        "path": "native-fracture/42-finish.jpg",
+        "width": 960,
+        "height": 540,
+        "format": "JPEG"
+      },
+      {
+        "path": "native-fracture/43-finish.jpg",
+        "width": 960,
+        "height": 540,
+        "format": "JPEG"
+      },
+      {
+        "path": "native-fracture/44-finish.jpg",
+        "width": 960,
+        "height": 540,
+        "format": "JPEG"
+      },
+      {
+        "path": "native-fracture/45-finish.jpg",
+        "width": 960,
+        "height": 540,
+        "format": "JPEG"
+      },
+      {
+        "path": "native-fracture/46-finish.jpg",
+        "width": 960,
+        "height": 540,
+        "format": "JPEG"
+      },
+      {
+        "path": "native-fracture/47-finish.jpg",
+        "width": 960,
+        "height": 540,
+        "format": "JPEG"
+      },
+      {
+        "path": "native-fracture/48-finish.jpg",
+        "width": 960,
+        "height": 540,
+        "format": "JPEG"
+      },
+      {
+        "path": "native-fracture/49-finish.jpg",
+        "width": 960,
+        "height": 540,
+        "format": "JPEG"
+      },
+      {
+        "path": "native-fracture/50-finish.jpg",
+        "width": 960,
+        "height": 540,
+        "format": "JPEG"
+      },
+      {
+        "path": "native-fracture/51-finish.jpg",
+        "width": 960,
+        "height": 540,
+        "format": "JPEG"
+      },
+      {
+        "path": "native-castle/41-finish.jpg",
+        "width": 960,
+        "height": 540,
+        "format": "JPEG"
+      }
+    ],
+    "deployment": {
+      "deploymentId": 7199379584,
+      "statuses": 4,
+      "rawFiles": [
+        {
+          "path": "deployments-page-001.json",
+          "bytes": 381806,
+          "sha256": "769fd376c585574a148bcba9ac1f3e50cf72b2091027483710d0e600ace45d83"
+        },
+        {
+          "path": "deployments-page-002.json",
+          "bytes": 91295,
+          "sha256": "880e43519019f42f671eab6f9b05cebc7bb9ad31bf5f0f797a9804db696f8f23"
+        },
+        {
+          "path": "manifest.json",
+          "bytes": 3004,
+          "sha256": "70141aa0a3250ab9d47e98516885c285acf791004988061a77d11c9e8a322cf3"
+        },
+        {
+          "path": "statuses-page-001.json",
+          "bytes": 6683,
+          "sha256": "7a9abced1aea03aeb8b73ba9d4676decb8514071de0024ad4ae6134cea7f294b"
+        }
+      ],
+      "independentPostCIDeploymentGet": false,
+      "workflowRetainedOriginalAPIBytes": true
+    },
+    "githubPages": {
+      "provider": {
+        "id": 12262204463,
+        "node_id": "MDg6QXJ0aWZhY3QxMjI2MjIwNDQ2Mw==",
+        "name": "github-pages",
+        "size_in_bytes": 624613849,
+        "url": "https://api.github.com/repos/amazin20/brainrot-portal/actions/artifacts/12262204463",
+        "archive_download_url": "https://api.github.com/repos/amazin20/brainrot-portal/actions/artifacts/12262204463/zip",
+        "expired": false,
+        "digest": "sha256:41fe624cee3f366bb1d48207b4527d6791b8b1217b19b2302e2487c3889ad7b6",
+        "created_at": "2026-10-20T12:14:35Z",
+        "updated_at": "2026-10-20T12:14:35Z",
+        "expires_at": "2026-10-21T12:14:14Z",
+        "workflow_run": {
+          "id": 39420466757,
+          "repository_id": 1354625251,
+          "head_repository_id": 1354625251,
+          "head_branch": "main",
+          "head_sha": "21f54a9f6ef63a7e18e4a2002565ec1616879eb9"
+        }
+      },
+      "metadataOnlyNotDownloaded": true,
+      "bytesNotRead": true,
+      "zipDigestIndependentlyRecomputed": false,
+      "archiveCRCOrInventoryVerified": false
+    },
+    "scope": "Offline validation of retained provider-bound producer artifacts with actual frozen publisher validators and Source pure contracts. No HTTP, build, browser, live mutation, independent post-CI deployment GET, or acceptance receipt.",
+    "provider": {
+      "jobs": 11,
+      "artifacts": 12,
+      "rawJobLogs": 11,
+      "downloadedArchives": 11,
+      "independentWorkflowMetadataGet": false,
+      "workflowDefinitionFromExactGitTree": true,
+      "workflowId": 390469611,
+      "workflowUrl": "https://api.github.com/repos/amazin20/brainrot-portal/actions/workflows/390469611",
+      "publisherWorkflow": {
+        "path": ".github/workflows/publish-campaign-v63.yml",
+        "bytes": 8749,
+        "sha256": "2d1a816a6b196ced020b29495de4b78c446fd5992f4259114e84ee2d63524966",
+        "gitBlob": "f12ad338a942ccaf21508a5ae157166d46723769"
+      },
+      "capabilityRejection": {
+        "path": "provider/workflow-metadata-unavailable.json",
+        "bytes": 1004,
+        "sha256": "6059a7e626ebfdc5fc05a149c844e419406991e3fcd20fc3007a221738a40554",
+        "actualToolResponseSha256": "f81a73d3edf97b2a2e601eaa751d5c8ea9cfc7f9d5d391b3b38fda08f6f7a585"
+      },
+      "limitation": "Provider tool rejected independent workflow metadata; workflow state was not independently fetched."
+    }
+  },
+  "publicArtifacts": [
+    {
+      "artifactId": 12263254510,
+      "artifactName": "v63-deployment-lease",
+      "zipBytes": 2362,
+      "zipSha256": "4ff28b5b934e481519f26f1bd675d83aa55c178d20952d865b748117d0542b3a",
+      "files": 1,
+      "bytes": 14857,
+      "inventorySha256": "d04d5921b220d8dcf5dd40536a13d9b46a5b49383c57bf5f7678a0e8465ef9db"
+    },
+    {
+      "artifactId": 12265205585,
+      "artifactName": "v63-final-public-proof",
+      "zipBytes": 4096613,
+      "zipSha256": "85af34126ef39c6ce328ac8b986da11deec3cc1897ea62c977a4a8e07fdc6faa",
+      "files": 91,
+      "bytes": 9126913,
+      "inventorySha256": "fcade50fff17e62f8c3cd76f72bde769d7c22ac794a54953a403f6482847abd5"
+    },
+    {
+      "artifactId": 12262883565,
+      "artifactName": "v63-preparation",
+      "zipBytes": 602571,
+      "zipSha256": "2be9b88ca84905b2861fdc2c151beadf2ec606dfbb42c90251f30a02f54dedf6",
+      "files": 6,
+      "bytes": 2723814,
+      "inventorySha256": "a5dac91875a499ab70e5761182de4d69bcb1920a5d86fa8b49c4dc42e5449793"
+    },
+    {
+      "artifactId": 12263473858,
+      "artifactName": "v63-public-http",
+      "zipBytes": 2051,
+      "zipSha256": "6ecdaf600a8f13ce82b3db7356006b3371426a6f9e374881eebb9ddff998afff",
+      "files": 1,
+      "bytes": 14012,
+      "inventorySha256": "f777a5094c34332d392712286b053153ae7918fac87e6e0088b22de6b9f7e410"
+    },
+    {
+      "artifactId": 12263726974,
+      "artifactName": "v63-public-native-castle",
+      "zipBytes": 57920,
+      "zipSha256": "abdd3191586bd5954862a4437fb151f914ca8bfcf28ed5d645f66601cbb283ae",
+      "files": 4,
+      "bytes": 238324,
+      "inventorySha256": "9c8b404c0695e2f9c7b6c7708ec2d2ea86f9a8c370119fe11ef2846c147eaf6e"
+    },
+    {
+      "artifactId": 12263801209,
+      "artifactName": "v63-public-native-early",
+      "zipBytes": 520690,
+      "zipSha256": "af29f256e60f9cc0c93f5cd98740cafbf2d5a9126cd3823904cc682bc34e3e55",
+      "files": 13,
+      "bytes": 678407,
+      "inventorySha256": "c402299093f4e82edd13a202ffffff14bcfc5ad617254ec27bdc9898023e1762"
+    },
+    {
+      "artifactId": 12264311180,
+      "artifactName": "v63-public-native-energy",
+      "zipBytes": 442300,
+      "zipSha256": "865d9b962093df7922c69916a40d57a4b0e48280d8d0ee2f14ef08bf4c3e12a1",
+      "files": 13,
+      "bytes": 782923,
+      "inventorySha256": "c44cb4eaba9611ccc74f6f71db08e9b5456282866a8e811e43317f03fc2178b5"
+    },
+    {
+      "artifactId": 12263855648,
+      "artifactName": "v63-public-native-fracture",
+      "zipBytes": 429804,
+      "zipSha256": "9e7d65313e85e8f5c99d6b49250dc6e1b2ecd6901d9fa09e57f5a5454a66e7d3",
+      "files": 13,
+      "bytes": 658383,
+      "inventorySha256": "ee4f5217b95573e1f9badc633e1206895d5398651012f00b957a51324c8c125c"
+    },
+    {
+      "artifactId": 12265041348,
+      "artifactName": "v63-public-native-living",
+      "zipBytes": 372259,
+      "zipSha256": "9711fb71e0868fb6a38831c15864dfca302e66cd83f3e9b5fa1ef419938a06da",
+      "files": 13,
+      "bytes": 581135,
+      "inventorySha256": "4327017f6e005592d2fe9907a5438a4e8633b2d91670041b398a982f7629782c"
+    },
+    {
+      "artifactId": 12264835038,
+      "artifactName": "v63-public-native-optics",
+      "zipBytes": 367023,
+      "zipSha256": "0da903a40c8d06d81b11e71159507469998cc76f46352a9dd40788a69981ffb5",
+      "files": 13,
+      "bytes": 571731,
+      "inventorySha256": "a7e65a0c85cfa60d94be390ef39ad677fdb412710ef7598ba359e0f9c8f57bb0"
+    },
+    {
+      "artifactId": 12263099549,
+      "artifactName": "v63-public-player",
+      "zipBytes": 1162909,
+      "zipSha256": "21b3bfd9f835feec33152971dc19a5fea4cc95eec241927acd076be10334076c",
+      "files": 10,
+      "bytes": 1586214,
+      "inventorySha256": "404485f754edc6e1598ac2fa0f682e3373407ca515803b390005cdcb6fb38a1d"
+    }
+  ],
+  "metadataOnlyArtifacts": [
+    {
+      "artifactId": 12262204463,
+      "artifactName": "github-pages",
+      "providerZipBytes": 624613849,
+      "providerDigest": "sha256:41fe624cee3f366bb1d48207b4527d6791b8b1217b19b2302e2487c3889ad7b6",
+      "metadataOnlyNotDownloaded": true,
+      "bytesNotRead": true,
+      "zipDigestIndependentlyRecomputed": false,
+      "archiveCRCOrInventoryVerified": false,
+      "scope": "Provider metadata and raw successful upload event only; no Pages ZIP payload was downloaded or read."
+    }
+  ],
+  "publicLogs": [
+    {
+      "jobId": 118619837083,
+      "jobName": "prepare",
+      "bytes": 315489,
+      "sha256": "fcb975e8f349054eb4b7f4c782fd83a7170d478df81ff6edcbafe096e488aa76"
+    },
+    {
+      "jobId": 118620888659,
+      "jobName": "deploy",
+      "bytes": 20057,
+      "sha256": "4a7412dda8d3c16420b0e9bb5bad6f47442993e6d3a74ce399d4154f9f4213d5"
+    },
+    {
+      "jobId": 118621590734,
+      "jobName": "player",
+      "bytes": 70385,
+      "sha256": "425831771a7f404cef61a59abd05c34b29c5c8cdbc23b3e7fbccb3372a5b4273"
+    },
+    {
+      "jobId": 118621590804,
+      "jobName": "native (energy)",
+      "bytes": 76965,
+      "sha256": "b17b9eb9f8d538c46b97d0a0eb15b4b8f33984b4763898a74845fd876cfd6405"
+    },
+    {
+      "jobId": 118621590820,
+      "jobName": "public-http",
+      "bytes": 17333,
+      "sha256": "3c746cab80dd2663ec778d6cd6df5c7d6292f8a00940abe4474d8e17bf404fd1"
+    },
+    {
+      "jobId": 118621590841,
+      "jobName": "native (castle)",
+      "bytes": 70415,
+      "sha256": "ff92d990d4f8377bccc7b98c007483e387e9ba21b5c2f754a11c0248037fce3f"
+    },
+    {
+      "jobId": 118621590906,
+      "jobName": "native (optics)",
+      "bytes": 77923,
+      "sha256": "a15bfb14f9c76316a6a0c0ea138a594cabb26905a18e7b1552b74eec284a1e08"
+    },
+    {
+      "jobId": 118621590956,
+      "jobName": "native (early)",
+      "bytes": 73457,
+      "sha256": "7e6ffa9c49711f834d197b7255d3e0fe8182876348da16956debac58b7caca23"
+    },
+    {
+      "jobId": 118621590987,
+      "jobName": "native (fracture)",
+      "bytes": 80147,
+      "sha256": "1e1401794bfb808d99790d102fa751437b54e3a541b0de2891ec23c180b6e007"
+    },
+    {
+      "jobId": 118621590995,
+      "jobName": "native (living)",
+      "bytes": 77571,
+      "sha256": "0176188d04d396fa45713038420bc365848ea513038b0b21a41a26fd08e3987f"
+    },
+    {
+      "jobId": 118628414761,
+      "jobName": "verify",
+      "bytes": 44432,
+      "sha256": "d988d42572d46bf442e16e549b3d237ae098dceffcc230bbbf48e9b1fb02dbf6"
+    }
+  ],
+  "publicProvider": [
+    {
+      "path": "provider/run.json",
+      "bytes": 13049,
+      "sha256": "3be5aa45a1d6fa9f0730984eab67ac11de8fd2029cd5121ebf0b6d52645aa818"
+    },
+    {
+      "path": "provider/commit.json",
+      "bytes": 1399,
+      "sha256": "c0fd2539b8b79c904f28e4e127e8d7d7b5a4f229fd028564b039d641751609d9"
+    },
+    {
+      "path": "provider/workflow-metadata-unavailable.json",
+      "bytes": 1004,
+      "sha256": "6059a7e626ebfdc5fc05a149c844e419406991e3fcd20fc3007a221738a40554"
+    },
+    {
+      "path": "provider/jobs/page-001.json",
+      "bytes": 34411,
+      "sha256": "70c78193eb7d830b8b6fe788a9cbaa729a8b4dd7571addf3fc0ec3c3b044ea43"
+    },
+    {
+      "path": "provider/artifacts/page-001.json",
+      "bytes": 8402,
+      "sha256": "daedaa1d29e16087ae0077dd8e5aec8c78f9e2e0e5729b60a06c256e8088bb8f"
+    }
+  ],
+  "rootManualReview": {
+    "actualTerminalRunJobsArtifactsRequeried": true,
+    "terminalRawBytesEqualCanonicalInputs": true,
+    "actualPublishedScreenshotsViewed": [
+      {
+        "artifact": "v63-public-player",
+        "path": "mobile-controls-landscape.png",
+        "bytes": 162446,
+        "sha256": "dc7e81ae425725bdc97f6d81ba060a4200bb2729bff5a598946e67a2e23e2bec"
+      },
+      {
+        "artifact": "v63-public-player",
+        "path": "compact-escape-pause.png",
+        "bytes": 92296,
+        "sha256": "b6f7e9c19832648a93fb4abeeb0ab1eb4ac1c95bdeeceabbff21854f219afbdb"
+      },
+      {
+        "artifact": "v63-public-player",
+        "path": "fresh-guest-atlas.png",
+        "bytes": 600465,
+        "sha256": "f4880abfd9a2581d34d25520893e52181c6d58d9ee1ab9096f56205531a2e442"
+      }
+    ],
+    "sourceAndPublisherCheckoutsClean": true
+  },
+  "scope": "Root accepts this frozen Source and the complete new successful Public technical cohort after independently requerying terminal provider metadata, rerunning all offline proof validators and reviewing actual published UI images. The first failed Public attempt remains ineligible. All2686 public bytes, including original provenance, are unchanged; new deployment ownership is separately recorded. This is not full Master TZ, live Yandex/moderation, human discovery or physical-device performance acceptance.",
+  "limitations": [
+    "Draft internal audit only. Root must independently review actual provider bytes before any acceptance.",
+    "github-pages ZIP was not downloaded: its metadata and upload log are bound, but archive bytes/CRC/union inventory are not independently recomputed from it.",
+    "Historical2605 and the complete new union are revalidated from frozen baseline/catalog and actual CI HTTP proof, not a new post-CI HTTP GET.",
+    "Deployment API snapshot is the canonical original CI snapshot; no independent post-CI deployment lookup or current-live-state claim.",
+    "Scripted software WebGL routes do not establish human discovery, physical-device performance, live ads or moderation."
+  ]
+}
