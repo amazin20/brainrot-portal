@@ -1,0 +1,144 @@
+{
+  "schemaVersion": 1,
+  "kind": "v62-isolated-lifecycle-probe-inputs",
+  "acceptance": {
+    "diagnosticClassification": "LOCALDIAGNOSTIC",
+    "sourceAccepted": false,
+    "publicationAccepted": false,
+    "humanAccepted": false,
+    "publicAccepted": false
+  },
+  "candidateCommit": "8102e724cafff008faf57316fcd82f03ed6f4072",
+  "candidateTree": "289f9408382fb0ca20647f6cd230ec270f70513e",
+  "futureObserver": {
+    "controllerPath": "scripts/observe-campaign-v62-public.mjs",
+    "bytes": 20347,
+    "sha256": "93072009682cb7890c13ff15a2b31e61ddf9aca81a5cb2ec4477f02173484537",
+    "extractedBytes": 8056,
+    "extractedSha256": "b16f537a49580436d0eb06a316a22a36f470612bb9d6d8110c0b39bed097040f",
+    "extractedStartCharacter": 4921,
+    "extractedEndCharacter": 12977
+  },
+  "candidateBindings": [
+    {
+      "path": "scripts/lib/campaign-preferences-fixture.mjs",
+      "bytes": 5268,
+      "sha256": "f4e87005bb888fbf6e089287457ade5dd2208ed48ceed322efbfe47fe6f1a613"
+    },
+    {
+      "path": "scripts/qa-campaign-menu.mjs",
+      "bytes": 9248,
+      "sha256": "c12ce84eb1ea8b30e4774c31e813a6a6057210c8bb9781b6b445d20ead0541de"
+    },
+    {
+      "path": "scripts/qa-campaign-save-isolation.mjs",
+      "bytes": 11680,
+      "sha256": "53b0a192c73c72bc82e6d7d4d38c581644ba8429ca482747a2745b2febb62e2d"
+    },
+    {
+      "path": "scripts/check-yandex-browser.mjs",
+      "bytes": 10953,
+      "sha256": "c63ce203468dc292243ae5bc266ca9dd2a7c55c478b616cd4c588a66420515af"
+    },
+    {
+      "path": "scripts/package-yandex.mjs",
+      "bytes": 9494,
+      "sha256": "f7c25b0a5fcd4bd9beb6664f98762be4f60d3ab850d1478b433f07545236f7c7"
+    },
+    {
+      "path": "scripts/stamp-build.mjs",
+      "bytes": 1860,
+      "sha256": "68a976f3080abc8c0ef8363593c9a15f29bd984d925d05fb6f53ce513d7116d6"
+    },
+    {
+      "path": "scripts/lib/frozen-campaign-server.mjs",
+      "bytes": 1911,
+      "sha256": "a163d6a440a834828c0e362564fa1cde068401c41c53ba8bd16f2a1ce5c1dafd"
+    },
+    {
+      "path": "scripts/lib/campaign-browser-contract.mjs",
+      "bytes": 2984,
+      "sha256": "2cb53a794a70688d99fe4f15c71574a82f94e02d2aabeb955e971e3a5c2756f3"
+    },
+    {
+      "path": "src/game/LabPreferences.js",
+      "bytes": 5091,
+      "sha256": "3bee1fe537c1994ae0f8171b4290ef802cc05f968d9a21581c5b0dc2e8014f5a"
+    },
+    {
+      "path": "src/game/LabCampaignStorage.js",
+      "bytes": 6224,
+      "sha256": "d8ddeefeb3369b9da66be11e05290099594c94fb1f0cbf1155d7bc4b8fc8a458"
+    },
+    {
+      "path": "src/game/LabCamera.js",
+      "bytes": 52802,
+      "sha256": "359897a527fdad2b2a1fa8fffeee1bdc0142a4f67f0d2ba0e680d86f27e38d08"
+    },
+    {
+      "path": "src/game/LabRoom17CameraPolicy.js",
+      "bytes": 2704,
+      "sha256": "2d7888e2ddf3f7f84a3986734d97bc9eed1ecebf9f74d37a6fd5fe87f7b0daa2"
+    },
+    {
+      "path": "src/game/ReleaseIdentity.js",
+      "bytes": 699,
+      "sha256": "2159ec95f919a87d20a3889efcbb486cedb01942e8a15b203a08d53da0841349"
+    },
+    {
+      "path": "package.json",
+      "bytes": 753,
+      "sha256": "58770bd429afec25c51bc02a6cfabd014f23c65ae52588545f61da1bef0edf48"
+    },
+    {
+      "path": "package-lock.json",
+      "bytes": 35442,
+      "sha256": "488608da8b37edd4222be8a28175bc1dd4286bdc020abf6147d68f3d7d5aa273"
+    },
+    {
+      "path": "tests/lab-campaign-v62-storage.test.js",
+      "bytes": 8345,
+      "sha256": "84c329cfa42e2f2ff212acd47fc5c4ee0f54444f7034bfdf1e2497ad8f220d67"
+    },
+    {
+      "path": "tests/campaign-preference-lifecycle.test.js",
+      "bytes": 7583,
+      "sha256": "237489c9a85c7cb8f7e58939d76cf06b322c1ec53d766c565e7134a17c5e44b6"
+    },
+    {
+      "path": "tests/campaign-browser-contract.test.js",
+      "bytes": 3274,
+      "sha256": "3c65cdab797b9b42304f1d7585b7d0f31fe9bd06377c4dae4d81e6520eb9cc9d"
+    },
+    {
+      "path": "tests/biosphere-native-proof.test.js",
+      "bytes": 19157,
+      "sha256": "00bfbd5275e6414116d1b8a0265c0da20ec0cdcbf02e6c53b1fdb4cb2123102b"
+    },
+    {
+      "path": "tests/release-manifest.test.js",
+      "bytes": 8322,
+      "sha256": "7c9ad51a21385405395d5f9b60e77eb2ac18fed82b58cf945e385814c7905357"
+    }
+  ],
+  "probePaths": [
+    ".github/workflows/biosphere-lifecycle-diagnostic.yml",
+    "diagnostics/biosphere-lifecycle/probe-runner.mjs",
+    "diagnostics/biosphere-lifecycle/public-observer.sha-bound.mjs",
+    "diagnostics/biosphere-lifecycle/manifest.json"
+  ],
+  "unitTests": [
+    "tests/lab-campaign-v62-storage.test.js",
+    "tests/campaign-preference-lifecycle.test.js",
+    "tests/campaign-browser-contract.test.js",
+    "tests/biosphere-native-proof.test.js",
+    "tests/release-manifest.test.js"
+  ],
+  "restrictions": [
+    "Only a diagnostic child P; no official Source branch or main mutation.",
+    "No Source/Public accepted receipt or frozen release config.",
+    "No alternate URL argument is added to the actual Public observer.",
+    "Observer helper and entry function bytes are unmodified; local mount and true P facts belong only to the isolated wrapper.",
+    "Any result remains LOCALDIAGNOSTIC; all acceptance flags remain false."
+  ]
+}
