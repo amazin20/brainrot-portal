@@ -6,7 +6,7 @@ import {serveFrozenCampaign} from './lib/frozen-campaign-server.mjs';
 import {readStampedCampaignInfo,assertCampaignBrowserState} from './lib/campaign-browser-contract.mjs';
 import {ACTIVE_FOUNDATION_RUNTIME_FLAGS} from '../src/game/ReleaseIdentity.js';
 import {CREATIVE_CAMPAIGN_REVISION} from '../src/game/LabPreferences.js';
-import {v61HistoricalPreferenceFixture} from './lib/campaign-preferences-fixture.mjs';
+import {v61HistoricalPreferenceFixture,readCampaignPreferenceLifecycleObservation,assertCampaignPreferenceLifecycleObservation} from './lib/campaign-preferences-fixture.mjs';
 import {isCampaignV55Path,isCampaignV56Path,isCampaignV57Path,isCampaignV58Path,isCampaignV59Path,isCampaignV60Path,isCampaignV61Path,isCampaignV62Path,foundationCampaignPrefix,FOUNDATION_STORAGE_PREFIX,CAMPAIGN_V55_STORAGE_PREFIX,CAMPAIGN_V56_STORAGE_PREFIX,CAMPAIGN_V57_STORAGE_PREFIX,CAMPAIGN_V58_STORAGE_PREFIX,CAMPAIGN_V59_STORAGE_PREFIX,CAMPAIGN_V60_STORAGE_PREFIX,CAMPAIGN_V61_STORAGE_PREFIX,CAMPAIGN_PREFERENCE_KEY} from '../src/game/LabCampaignStorage.js';
 
 const out=path.resolve(process.env.OUT_DIR||'qa/campaign-save-isolation');fs.mkdirSync(out,{recursive:true});
@@ -31,6 +31,7 @@ const records=oldPrefixes.map((prefix,index)=>{
 });
 const oldRecord=Object.fromEntries(records),ownKey=ownPrefix+CAMPAIGN_PREFERENCE_KEY;
 const report={sourceCommit:process.env.BUILD_COMMIT??null,url:base.href,pass:false,errors:[],checks:[],
+ ...(isCampaignV62Path(base.pathname)?{preferenceLifecycle:[]}:{}),
  scope:'Frozen production bytes mounted at the candidate subpath; first import, ordinary Play, reload and menu settings. This UI/storage proof does not assert puzzle completion.'};
 const save=()=>fs.writeFileSync(path.join(out,'report.json'),JSON.stringify(report,null,2)+'\n');
 let browser;
@@ -38,6 +39,13 @@ async function snapshot(page){return page.evaluate(({keys,ownKey})=>({historical
 function assertIsolated(value){
  assert.deepEqual(value.historical,oldRecord,'Candidate changed a historical save byte');
  assert.ok(value.writes.every(write=>write.method!=='clear'&&write.key.startsWith(ownPrefix)),'Candidate wrote outside its private save namespace');
+}
+async function observeLifecycle(page,stage,phase,requireWrites=false){
+ const value=await page.evaluate(readCampaignPreferenceLifecycleObservation,{phase,writeLog:'__CAMPAIGN_STORAGE_WRITES__',includeRuntime:true});
+ const persisted=await snapshot(page);assertIsolated(persisted);
+ assert.equal(value.ownRaw,persisted.own);assert.deepEqual(value.writes,persisted.writes);
+ assertCampaignPreferenceLifecycleObservation(value,{phase,requireWrites,requireRuntime:true});
+ report.preferenceLifecycle.push({...value,stage,historicalUnchanged:true});
 }
 async function ready(page){await page.bringToFront();await page.waitForFunction(()=>window.__NESI_DEMO_GAME__?.state==='ready'&&getComputedStyle(document.querySelector('#start-screen')).opacity==='1',{timeout:180000});}
 async function runtime(page){return page.evaluate(flagNames=>{const g=window.__NESI_DEMO_GAME__;return{levelIndex:g.levelIndex,edition:g.chamberEdition,id:g.firstLevel.id,
@@ -64,23 +72,28 @@ try{
  report.imported=await page.evaluate(()=>({...window.__NESI_PREFS__.value}));
  for(const[key,value]of Object.entries(expectedImport))assert.deepEqual(report.imported[key],value,'Incorrect imported '+key);
  assertCampaignBrowserState(await runtime(page),4);
- const imported=await snapshot(page);assertIsolated(imported);assert.ok(imported.own,'Imported preferences were not saved to the private candidate namespace');
- report.checks.push('Newest historical namespace wins over distinct older saves; settings, progress and resume import without changing any historical key');save();
+ const imported=await snapshot(page);assertIsolated(imported);
+ if(isCampaignV62Path(base.pathname))await observeLifecycle(page,'initial','historical-read-through');
+ else assert.ok(imported.own,'Imported preferences were not saved to the private candidate namespace');
+ report.checks.push('Newest historical namespace supplies settings, progress and resume without changing historical keys; valid v61 startup reads through without a private write');save();
  await page.click('#menu-settings-button');await page.waitForFunction(()=>document.querySelector('#menu-settings').open);
  await page.$eval('#menu-volume',input=>{input.value='37';input.dispatchEvent(new Event('input',{bubbles:true}));});
  await page.click('#menu-tutorial');await page.click('#menu-settings-done');
  const settings=await snapshot(page);assertIsolated(settings);assert.equal(JSON.parse(settings.own).volume,.37);assert.equal(JSON.parse(settings.own).tutorial,false);
+ if(isCampaignV62Path(base.pathname))await observeLifecycle(page,'settings','own-persisted',true);
  const frames=await page.evaluate(()=>window.__NESI_DEMO_GAME__.animationFrames);
  await page.$eval('#play-button',button=>button.scrollIntoView({block:'center'}));await page.click('#play-button');
  await page.waitForFunction(previous=>window.__NESI_DEMO_GAME__?.state==='playing'&&window.__NESI_DEMO_GAME__.animationFrames>previous,{timeout:120000},frames);
  assertCampaignBrowserState(await runtime(page),4);const started=await snapshot(page);assertIsolated(started);
  assert.equal(JSON.parse(started.own).resumeLevel,3);report.checks.push('Trusted Play starts the inherited room and saves only into the candidate namespace');save();
+ if(isCampaignV62Path(base.pathname))await observeLifecycle(page,'playing','own-persisted',true);
  await page.reload({waitUntil:'domcontentloaded'});await ready(page);
  report.reloaded=await page.evaluate(()=>({...window.__NESI_PREFS__.value}));
  assert.equal(report.reloaded.volume,.37);assert.equal(report.reloaded.tutorial,false);assert.equal(report.reloaded.resumeLevel,3);
  assert.deepEqual(report.reloaded.completed,expectedImport.completed);assert.deepEqual(report.reloaded.hints,expectedImport.hints);
  assertCampaignBrowserState(await runtime(page),4);assertIsolated(await snapshot(page));
  assert.equal(await page.$eval('#level-select',select=>select.value),'3');
+ if(isCampaignV62Path(base.pathname))await observeLifecycle(page,'reloaded','own-persisted');
  report.checks.push('Reload uses the own save and retains menu settings, progress and selected room');
  assert.deepEqual(report.errors,[]);report.pass=true;save();console.log(JSON.stringify(report));
 }catch(error){report.failure=String(error.stack||error);save();throw error;}
