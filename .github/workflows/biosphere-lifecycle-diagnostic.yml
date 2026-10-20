@@ -1,0 +1,35 @@
+name: Local diagnostic of candidate preference lifecycle
+on:
+  push:
+    branches: [qa/biosphere-lifecycle-20261020-3]
+permissions: {contents: read}
+defaults:
+  run:
+    shell: bash
+env:
+  BUILD_COMMIT: ${{ github.sha }}
+  CODEX_PRIMARY_RUNTIME_PYTHON: /usr/bin/python3
+jobs:
+  local-lifecycle-diagnostic:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: '${{ github.sha }}', fetch-depth: 0, persist-credentials: false}
+      - uses: actions/setup-node@v4
+        with: {node-version: 22, cache: npm}
+      - run: node diagnostics/biosphere-lifecycle/probe-runner.mjs --initialize
+      - run: npm ci
+      - run: npm install --no-save --package-lock=false puppeteer-core@24.16.0
+      - run: sudo apt-get update && sudo apt-get install -y python3-pil
+      - name: Exercise the actual candidate package and future observer entry locally
+        run: |
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+          node diagnostics/biosphere-lifecycle/probe-runner.mjs --run
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: v62-lifecycle-LOCALDIAGNOSTIC
+          path: qa/lifecycle-probe
+          retention-days: 14
+          if-no-files-found: error
