@@ -130,3 +130,22 @@ test('actual-response observer hashes cache-busted bytes and rejects wrong/empty
  const broken=createPage(),bad=observePlatformPackageResponses(broken,{base:'http://test.invalid/campaign-v63/',binding,sdk:file('/sdk.js',sdk)});
  broken.emit('http://test.invalid/campaign-v63/index.html?_dc=123',Buffer.alloc(0));await assert.rejects(()=>bad.finish(),/verification failed/);
 });
+
+test('forged production entry selectors are confined to the main index response',async()=>{
+ const index=Buffer.from('actual production index'),js=Buffer.from('actual production javascript'),css=Buffer.from('actual production css'),sdk=Buffer.from('explicit mock SDK');
+ const file=(path,bytes)=>({path,bytes:bytes.length,sha256:hash(bytes)}),binding={review:{files:[file('index.html',index),file('assets/main.js',js),file('assets/main.css',css)],buildInfoBytes:5,buildInfoSha256:hash('stamp')}};
+ const base='http://test.invalid/uploads/yandex-check/game/',entry='debug=1&level=51&pilot=progression&tower41preview=1&tower41ratchet=1&edition=classic';
+ const createPage=()=>{let handler;return {on(name,fn){assert.equal(name,'response');handler=fn;},off(){},emit(url,bytes){handler({url:()=>url,status:()=>200,buffer:async()=>bytes,fromCache:()=>false});}};};
+ const page=createPage(),observer=observePlatformPackageResponses(page,{base,binding,sdk:file('/sdk.js',sdk)});
+ page.emit(base+'?'+entry,index);page.emit('http://test.invalid/sdk.js',sdk);
+ page.emit(base+'index.html?'+entry+'&_dc=123',index);page.emit(base+'assets/main.js?_dc=123',js);
+ const evidence=await observer.finish();assert.equal(evidence.allReceivedBytesMatched,true);assert.equal(evidence.responses.length,4);
+ for(const [relative,body] of [['assets/main.js',js],['assets/main.css',css],['/sdk.js',sdk]]){
+  const invalid=createPage(),observed=observePlatformPackageResponses(invalid,{base,binding,sdk:file('/sdk.js',sdk)});
+  invalid.emit(new URL(relative,base).href+'?'+entry,body);await assert.rejects(()=>observed.finish(),/verification failed/);
+ }
+ for(const query of ['unverified=1','_dc=not-a-number']){
+  const invalid=createPage(),observed=observePlatformPackageResponses(invalid,{base,binding,sdk:file('/sdk.js',sdk)});
+  invalid.emit(base+'index.html?'+query,index);await assert.rejects(()=>observed.finish(),/verification failed/);
+ }
+});

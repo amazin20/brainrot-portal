@@ -84,9 +84,13 @@ export function observePlatformPackageResponses(page,{base,binding,sdk}){
   const job=(async()=>{
    const url=new URL(response.url());if(['data:','blob:'].includes(url.protocol))return;
    assert.equal(url.origin,root.origin,'Unexpected external response');
-   const query=[...url.searchParams];assert.ok(query.every(([key,value])=>key==='_dc'&&/^\d+$/.test(value)||['edition','level','debug'].includes(key)),'Unexpected unverified response query');
    const sdkResponse=url.pathname==='/sdk.js';assert.ok(sdkResponse||url.pathname.startsWith(root.pathname),'Response outside frozen package');
    const relative=sdkResponse?'/sdk.js':decodeURIComponent(url.pathname.slice(root.pathname.length))||'index.html',expected=sdkResponse?sdk:files.get(relative);
+   // Entry probes deliberately include forged legacy selectors to verify the
+   // production gate. They belong only to the main index document; linked
+   // assets and SDK responses may carry only the checker's numeric cachebuster.
+   const entryKeys=new Set(['edition','level','debug','pilot','tower41preview','tower41ratchet']);
+   const query=[...url.searchParams];assert.ok(query.every(([key,value])=>key==='_dc'&&/^\d+$/.test(value)||relative==='index.html'&&entryKeys.has(key)),'Unexpected unverified response query');
    if(relative==='favicon.ico'&&response.status()===404)return;
    assert.ok(expected,'Response absent from frozen inventory: '+relative);assert.equal(response.status(),200,'Non-200 actual package response');
    const bytes=await response.buffer();assert.equal(bytes.length,expected.bytes,'Actual response byte length differs: '+relative);assert.equal(sha256(bytes),expected.sha256,'Actual response bytes differ: '+relative);

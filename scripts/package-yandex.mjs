@@ -70,8 +70,8 @@ assert.ok(manifest.totalBytes<4_000_000,'Preserve the active model budget');
 for(const decoder of ['draco_decoder.js','draco_wasm_wrapper.js','draco_decoder.wasm'])assert.ok(filenames.includes(`draco/${decoder}`));
 const index=fs.readFileSync(path.join(input,'index.html'),'utf8');
 assert.ok(!/walkthroughs|https?:\/\/|class="walkthrough-link"/.test(index),'The game entry must not link to absent gallery or external assets');
-// All static URLs stay inside a nested upload directory. /sdk.js is loaded by
-// LabPlatform and supplied by Yandex, so it is deliberately absent from the ZIP.
+// Game assets stay inside the nested upload directory. Only the genuine SDK
+// script tag uses the host-provided absolute /sdk.js, absent from the ZIP.
 function resource(value,owner){
   if(!value||value.startsWith('#')||value.startsWith('data:')||value.startsWith('?'))return;
   assert.ok(!/^(?:https?:)?\/\//i.test(value),`External game resource ${value}`);
@@ -83,7 +83,18 @@ function resource(value,owner){
 for(const file of files){
   if(!/\.(?:html|css|js)$/.test(file.filename))continue;
   const text=fs.readFileSync(path.join(input,file.filename),'utf8');
-  if(file.filename.endsWith('.html'))for(const match of text.matchAll(/\b(?:src|href|poster)=["']([^"']+)["']/g))resource(match[1],file.filename);
+  if(file.filename.endsWith('.html')){
+    let sdkScripts=0;
+    for(const tag of text.matchAll(/<([a-z][\w-]*)\b[^>]*>/gi)){
+      for(const match of tag[0].matchAll(/\b(src|href|poster)\s*=\s*["']([^"']+)["']/gi)){
+        if(tag[1].toLowerCase()==='script'&&match[1].toLowerCase()==='src'&&match[2]==='/sdk.js'){
+          assert.equal(file.filename,'index.html');sdkScripts++;continue;
+        }
+        resource(match[2],file.filename);
+      }
+    }
+    assert.equal(sdkScripts,1,'Load exactly one genuine host SDK script before game startup');
+  }
   if(file.filename.endsWith('.css'))for(const match of text.matchAll(/url\(\s*["']?([^"')]+)["']?\s*\)/g))resource(match[1],file.filename);
   if(file.filename.endsWith('.js')){
     assert.ok(!/__NESI_RUN_|__LAB_EVIDENCE_CAPTURE__/.test(text),`Review entry point shipped in ${file.filename}`);
