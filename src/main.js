@@ -11,7 +11,8 @@ import {LabPlatform,loadYandexSDK} from './game/LabPlatform.js';
 import {createHintProgress} from './game/LabHintProgress.js';
 import {canAccessCampaignLevel,resolveCampaignLevel} from './game/LabCampaignAccess.js';
 import {normalizePlayerCampaignQuery} from './game/LabPlayerEntry.js';
-import {resolvePlatformLanguage} from './game/LabLocalization.js';
+import {resolvePlatformLanguage,resolveGameLanguage} from './game/LabLocalization.js';
+import {waitForMenuPaint,LabStartupError,startupFailureMessage} from './game/LabReadyPresentation.js';
 import {holdInterruptedGame,settleInterruptedGame} from './game/LabPageLifecycle.js';
 import {readCampaignRoute,nextCampaignLevel} from './game/LabCampaignRoute.js';
 import {FOUNDATION_INDICES,readFoundationEdition,foundationStorage,nextFoundationLevel} from './game/LabFoundationEdition.js';
@@ -26,6 +27,8 @@ import {SINGULARITY_ROOMS,SINGULARITY_SPEC} from './game/LabSingularityLayout.js
 const singularityHallCount=SINGULARITY_ROOMS.length,singularityOpenHallCount=SINGULARITY_ROOMS.filter(room=>room.requires.length===0).length;
 const $=s=>document.querySelector(s);
 const qaPlatformReview=import.meta.env.MODE==='yandex-review';
+// The upstream observer can execute this exact runtime resolver in TEST only.
+if(qaPlatformReview)window.YGDebugCheckerConfig=Object.freeze({resolveLanguage:resolveGameLanguage});
 const yandex=import.meta.env.MODE==='yandex'||qaPlatformReview;
 const physicalReviewEntry=readPhysicalReviewEntry(location.pathname,{yandex});
 const playerQuery=normalizePlayerCampaignQuery(location.search,{development:import.meta.env.DEV&&!yandex,reviewEntry:!yandex&&(!!physicalReviewEntry||isTower41NativePreviewPath(location.pathname))});
@@ -67,7 +70,7 @@ function focusScreenControl(id,selector){
  requestAnimationFrame(attempt);
 }
 function clearInput(){game.resetInput();}
-function syncActivity(){const active=game.state==='playing'&&!holds.size;platform?.gameplay(active);game.audio?.block('menu',game.state!=='playing'&&game.state!=='won');game.audio?.block('external',holds.size>0);}
+function syncActivity(){const active=game.state==='playing'&&!holds.size;platform?.gameplay(active);game.audio?.block('menu',game.state!=='playing'&&game.state!=='won');game.audio?.muteForAd(holds.has('ad'));game.audio?.block('external',[...holds].some(reason=>reason!=='ad'));}
 function setState(state){document.body.dataset.playState=state;document.documentElement.dataset.runtimeState=state;
   // The opaque illustrated atlas needs only CSS animation, not a hidden 3D render loop.
   // Playing/resume/restart already restore the original loop explicitly.
@@ -90,7 +93,7 @@ function failure(error){
  // Locked mouse events still target the canvas even when a recovery button
  // covers it. Mark the terminal state first so unlocking cannot open Pause.
  document.exitPointerLock?.();
- setState('error');hideScreens();$('#error-detail').textContent=error?.message||String(error);screen('error-screen',true);
+ setState('error');hideScreens();$('#error-detail').textContent=startupFailureMessage(error);screen('error-screen',true);
  focusScreenControl('error-screen','#reload-button');
 }
 function choices(){const e=$('#level-select'),old=e.value;e.replaceChildren();availableRooms.forEach(i=>{const l=campaignSpec(game,i),option=document.createElement('option');option.value=i;option.disabled=!canPlayLevel(i);option.textContent=`${String(roomNumber(i)).padStart(2,'0')} · ${l.title}${preferences.value.completed.includes(i)?' ✓':canPlayLevel(i)?'':' · Закрыто'}`;e.append(option);});e.value=String(accessibleLevel(old===''?game.levelIndex:Number(old)));campaignMenu?.sync();}
@@ -120,7 +123,7 @@ function showHints(){
 }
 const game=new LabGame({debug,container:$('#game'),touch:{joystick:$('#joystick'),joystickKnob:$('#joystick-knob'),jumpButton:$('#jump-button'),sprintButton:$('#sprint-button')},
   onProgress:p=>{$('#loading').dataset.phase='assets';const n=Math.max(0,Math.min(100,p.percent||0));$('#loading-bar').style.width=n+'%';$('#loading-percent').textContent=n+'%';$('#loading-label').textContent=p.label||'Загрузка';$('#loading-progress').setAttribute('aria-valuenow',String(n));},
-  onReady:()=>{hideScreens();setState('ready');screen('start-screen',true);platform?.ready();
+  onReady:async()=>{hideScreens();setState('ready');screen('start-screen',true);const menu=$('#start-screen');menu.inert=true;
     game.renderer.domElement.addEventListener('webglcontextlost',event=>{
       event.preventDefault();failure(new Error('Браузер остановил 3D-графику. Нажми «Повторить загрузку»: прогресс комнат сохранён. Текущая комната начнётся заново.'));
     });
@@ -178,6 +181,8 @@ finally{game.render();clearInput();setState(game.state);diagnostics();}
           onFrame:sample=>window.__NESI_CAPTURE_ANIMATION_FRAME__?.(sample)});}
         finally{game.render();clearInput();setState(game.state);diagnostics();}
       };}
+    if(!await waitForMenuPaint({panel:menu,isCurrent:()=>game.state==='ready'}))return;
+    menu.inert=false;platform?.ready();
     focusScreenControl('start-screen','#play-button');if(debug&&query.get('smoke')==='1')enterLevel(game.levelIndex,'initial');},
   onHud:({chamber,objective,hasCargo,portalsReady})=>{hudText('level',String(roomNumber(game.levelIndex)));hudText('chamber',chamber);hudText('objective',objective||'');hudText('cargo',game.velocityCompanion?.connected?'Друг закреплён':hasCargo?'Друг на руках':'Друг ждёт');hudText('portals',portalsReady?'Связаны':'Два портала');
     const clock=$('#tower-run-clock');clock.hidden=tower41Preview||!debug||query.get('clock')!=='1'||!game.firstLevel?.tower;
@@ -234,7 +239,7 @@ if(!tower41Preview&&!physicalReviewEntry){
 }
 async function enterLevel(index,reason='next'){
   reconcileFocus();
-  if(entering||holds.size||!availableRooms.includes(index))return;
+  if(!platform?.readySent||entering||holds.size||!availableRooms.includes(index))return;
   if(!canPlayLevel(index)){$('#level-select').value=String(accessibleLevel(index));updateStartAction();return;}
   entering=true;returnToSession=false;$('#campaign-back-button').hidden=true;clearInput();game.audio?.unlock();
   if(yandex&&reason==='initial')void platform?.enterFullscreen();
@@ -268,7 +273,7 @@ $('#hint-button').addEventListener('click',showHints);
 $('#hint-unlock').addEventListener('click',async()=>{
   if(hintBusy||holds.size||!hintProgress.read(game.levelIndex).canUnlock)return;
   hintBusy=true;const index=game.levelIndex;showHints();
-  try{const result=await hintProgress.request(index);showHints();if(!result.rewarded&&!result.rewardConfirmed)$('#ad-status').textContent='Просмотр не подтверждён или реклама недоступна. Новая подсказка не открыта; игру можно продолжить.';}
+  try{const result=await hintProgress.request(index);showHints();if(result.reason==='save-unavailable')$('#ad-status').textContent='Не удалось сохранить прогресс. Реклама не запускалась и подсказка не потрачена; игру можно продолжить.';else if(!result.rewarded&&!result.rewardConfirmed)$('#ad-status').textContent='Просмотр не подтверждён или реклама недоступна. Новая подсказка не открыта; игру можно продолжить.';}
   catch{showHints();$('#ad-status').textContent='Реклама недоступна. Подсказка не открыта; попробуй позже.';}
   finally{hintBusy=false;$('#hint-unlock').disabled=!hintProgress.read(game.levelIndex).canUnlock;}
 });
@@ -325,10 +330,11 @@ addEventListener('contextmenu',event=>event.preventDefault());
 addEventListener('error',event=>{if(event.error)failure(event.error);});
 addEventListener('unhandledrejection',event=>{if(/pointer.?lock|user gesture|document is not focused/i.test(String(event.reason))){event.preventDefault();return;}failure(event.reason);});
 async function boot(){
-  const sdk=yandex?await loadYandexSDK():null;
+  let sdk=null;
+  if(yandex)try{sdk=await loadYandexSDK();}catch(error){throw new LabStartupError('sdk',error);}
   const locale=resolvePlatformLanguage(sdk);document.documentElement.lang=locale.activeLanguage;
   document.documentElement.dataset.portalLanguage=locale.portalLanguage;
-  platform=new LabPlatform({sdk,demo:!yandex,hold});hintProgress=createHintProgress({platform,preferences,hintsFor:index=>campaignSpec(game,index).hints,isAvailable:()=>!holds.size&&!entering&&game.state==='paused'});hideScreens();screen('loading',true);setState('loading');await game.init();
+  platform=new LabPlatform({sdk,demo:!yandex,hold,saveProgress:()=>preferences.saveProgress()});hintProgress=createHintProgress({platform,preferences,hintsFor:index=>campaignSpec(game,index).hints,isAvailable:()=>!holds.size&&!entering&&game.state==='paused'});hideScreens();screen('loading',true);setState('loading');await game.init();
 }
 boot().catch(failure);
 

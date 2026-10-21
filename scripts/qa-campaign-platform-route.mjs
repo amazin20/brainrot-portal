@@ -17,11 +17,12 @@ import {assertFoundation20Route} from './lib/foundation20-native-proof.mjs';
 import {installPinnedYandexChecker,captureYandexChecker,YANDEX_CHECKER_PIN} from './lib/yandex-debug-checker.mjs';
 import {createMockYandexSDKSource,readMockYandexSDKObservation} from './lib/yandex-review-sdk.mjs';
 import {RELEASE_VERSION} from '../src/game/ReleaseIdentity.js';
+import {installCanvasTextObserver,readCanvasTextObservation} from './lib/canvas-text-observer.mjs';
 
 const git=(root,args)=>execFileSync('git',args,{cwd:root,maxBuffer:32000000,encoding:'utf8'}).trim();
 const positive=(value,label)=>{const n=Number(value);assert.ok(Number.isSafeInteger(n)&&n>0,label+' must identify an actual positive CI run/attempt');return n;};
 const openScopes=Object.freeze({sourceAccepted:false,publicationAccepted:false,liveSdkAccepted:false,moderationAccepted:false});
-const controllerPaths=Object.freeze(['scripts/qa-campaign-platform-route.mjs','scripts/lib/yandex-debug-checker.mjs','scripts/lib/yandex-review-sdk.mjs','scripts/lib/campaign-access-fixture.mjs','scripts/qa-browser-capture.mjs','qa/vendor/yandex-games-debug-checker/debugcheck.js','qa/vendor/yandex-games-debug-checker/LICENSE','qa/vendor/yandex-games-debug-checker/upstream.json']);
+const controllerPaths=Object.freeze(['scripts/qa-campaign-platform-route.mjs','scripts/lib/canvas-text-observer.mjs','scripts/lib/yandex-debug-checker.mjs','scripts/lib/yandex-review-sdk.mjs','scripts/lib/campaign-access-fixture.mjs','scripts/qa-browser-capture.mjs','qa/vendor/yandex-games-debug-checker/debugcheck.js','qa/vendor/yandex-games-debug-checker/LICENSE','qa/vendor/yandex-games-debug-checker/upstream.json']);
 
 export function parsePlatformRouteLevels(value){
  const result=value?String(value).split(',').map(text=>Number(text.trim())):FOUNDATION_SEQUENCE.map(index=>index+1);
@@ -98,7 +99,7 @@ export function observePlatformPackageResponses(page,{base,binding,sdk}){
    assert.ok(expected,'Response absent from frozen inventory: '+relative);assert.equal(response.status(),200,'Non-200 actual package response');
    const bytes=await response.buffer();assert.equal(bytes.length,expected.bytes,'Actual response byte length differs: '+relative);assert.equal(sha256(bytes),expected.sha256,'Actual response bytes differ: '+relative);
    rows.push({url:url.href,path:relative,status:response.status(),bytes:bytes.length,sha256:sha256(bytes),fromCache:response.fromCache(),checkerSourceScan:url.searchParams.has('_dc'),mockSdk:sdkResponse});
-  })().catch(error=>failures.push(String(error?.stack||error)));
+  })().catch(error=>failures.push(response.url()+': '+String(error?.stack||error)));
   pending.add(job);void job.finally(()=>pending.delete(job));
  };
  page.on('response',onResponse);
@@ -197,13 +198,16 @@ export async function runCampaignPlatformRoutes({sourceRoot=process.cwd(),direct
   for(const level of levels){
    const roomOut=path.join(out,'room-'+String(level).padStart(2,'0'));fs.mkdirSync(roomOut);const errors=[];
    const row={level,displayNumber:foundationDisplayNumber(level-1),pass:false,...openScopes};report.rows.push(row);
-   page=await browser.newPage();page.setDefaultTimeout(180000);await page.setViewport({width:640,height:360,deviceScaleFactor:1});
+   page=await browser.newPage();page.setDefaultTimeout(180000);await page.setCacheEnabled(false);
+   await page._client().send('Network.enable',{maxTotalBufferSize:134217728,maxResourceBufferSize:67108864,enableDurableMessages:true});
+   await page.setViewport({width:640,height:360,deviceScaleFactor:1});
    page.on('pageerror',error=>errors.push(String(error)));page.on('error',error=>errors.push('Renderer: '+String(error)));
    const fixture=campaignAccessFixture({levelIndex:level-1,pathname:mount.pathname});
    fixture.preferences={...fixture.preferences,muted:false,volume:.29};fixture.raw=JSON.stringify(fixture.preferences);row.fixture=fixture;
    assert.ok(!fixture.completed.includes(level-1));assert.deepEqual(fixture.completed,FOUNDATION_SEQUENCE.slice(0,FOUNDATION_SEQUENCE.indexOf(level-1)));
    await page.evaluateOnNewDocument(({key,raw})=>{if(window!==window.top)return;localStorage.clear();localStorage.setItem(key,raw);},{key:fixture.key,raw:fixture.raw});
    row.checkerInstallation=await installPinnedYandexChecker(page,{sourceRoot});
+   await page.evaluateOnNewDocument(installCanvasTextObserver);
    const network=observePlatformPackageResponses(page,{base:mount.url,binding,sdk:mount.sdk});
    const url=new URL(mount.url);url.searchParams.set('edition','foundation');url.searchParams.set('level',String(level));url.searchParams.set('debug','1');row.url=url.href;
    await page.goto(url.href,{waitUntil:'domcontentloaded'});await waitForStartMenu(page);
@@ -227,6 +231,10 @@ export async function runCampaignPlatformRoutes({sourceRoot=process.cwd(),direct
    row.finished=await page.evaluate(readRouteState);assert.equal(row.route.pass,true);assert.equal(row.finished.state,'won');assert.equal(row.finished.actualProductionWin,true);assert.equal(row.finished.levelIndex,level-1);
    assert.equal(row.finished.cargoUUID,row.normalPlay.cargoUUID);assert.equal(row.finished.cargoBodyId,row.normalPlay.cargoBodyId);assert.equal(row.finished.cargoMass,3.2);
    row.finalFrame=await captureBrowserFrame(page,path.join(roomOut,'finished-canvas.jpg'),{timeoutMs:60000,canvasOnly:true});assert.equal(row.finalFrame.ok,true);
+   row.canvasText=await page.evaluate(readCanvasTextObservation);
+   fs.writeFileSync(path.join(roomOut,'canvas-text.json'),JSON.stringify(row.canvasText,null,2)+'\n');
+   assert.equal(row.canvasText.present,true);assert.equal(row.canvasText.installed,true);assert.equal(row.canvasText.instrumentationIntact,true);
+   assert.equal(row.canvasText.overflow,false);assert.equal(row.canvasText.unrecordedTextCalls,0);assert.equal(row.canvasText.fontUnavailableCalls,0);assert.equal(row.canvasText.observationErrors,0);
    const checker=await captureYandexChecker(page,{outputDirectory:path.join(roomOut,'checker'),identity:{sourceCommit:binding.source.commit,sourceTree:binding.source.tree,sourceInputsSha256:binding.source.sourceInputsSha256,runId:binding.runId,runAttempt:binding.runAttempt,level,displayNumber:row.displayNumber,reviewPackageFilesSha256:binding.review.packageFilesSha256,consumerPackageFilesSha256:binding.consumer.packageFilesSha256,controllerFilesSha256:binding.controller.filesSha256}});
    row.checker={directory:'checker',summary:checker.summary,reportSha256:sha256(fs.readFileSync(path.join(roomOut,'checker/yandex-debug-checker-report.json'))),originalTextSha256:sha256(fs.readFileSync(path.join(roomOut,'checker/yandex-debug-checker-report.txt')))};
    row.sdk=await page.evaluate(readMockYandexSDKObservation);assert.equal(row.sdk.platformDemo,false);assert.ok(row.sdk.log.some(event=>event.event==='init')&&row.sdk.log.some(event=>event.event==='ready')&&row.sdk.log.some(event=>event.event==='start'));

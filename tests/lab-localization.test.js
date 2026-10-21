@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {resolvePlatformLanguage, SUPPORTED_GAME_LANGUAGES} from '../src/game/LabLocalization.js';
+import {resolvePlatformLanguage,resolveGameLanguage, SUPPORTED_GAME_LANGUAGES} from '../src/game/LabLocalization.js';
 
 test('startup reads the SDK language even though the catalogue has only Russian', () => {
   let reads=0;
@@ -31,4 +31,11 @@ test('browser demo and missing SDK locale use actual Russian content', () => {
     assert.equal(locale.fallbackUsed,false);
   }
   assert.equal(resolvePlatformLanguage({environment:{i18n:{lang:' RU-ru '}}}).portalLanguage,'ru');
+});
+
+test('the executable resolver shared with the test observer is the actual runtime mapping',()=>{
+ for(const value of ['be','kk','uk','uz','en-US',' RU-ru ','ru','constructor','toString','__proto__','',null,undefined]){
+  assert.equal(resolveGameLanguage(value),resolvePlatformLanguage({environment:{i18n:{lang:value}}}).activeLanguage);
+  assert.equal(resolveGameLanguage(value),'ru');
+ }
 });

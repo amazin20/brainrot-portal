@@ -46,6 +46,7 @@ export class AudioController {
   }
   configure({volume=this.volume,muted=this.muted}={}){this.volume=Math.min(1,Math.max(0,Number.isFinite(volume)?volume:.65));this.muted=!!muted;this.sync();}
   block(reason,value){value?this.blocks.add(reason):this.blocks.delete(reason);this.sync();}
+  muteForAd(active){this.block('ad',Boolean(active));}
   sync(){
     const c=this.context;if(!c)return;
     const active=this.enabled&&!this.muted&&!this.blocks.size&&this.volume>0;

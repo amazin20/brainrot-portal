@@ -81,7 +81,7 @@ export class LabVelocityCompanion {
     return true;
   }
 
-  get prompt() {
+  get interactionPrompt() {
     return !this.connected && this.canConnect() ? 'E — закрепить брейнрота • руки останутся свободны' : '';
   }
 

@@ -8,7 +8,7 @@ const types={'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=
 /** Serve the same frozen package at its candidate subpath. There is no source
  * compilation, development-server fallback, redirect or substituted asset. */
 export async function serveFrozenCampaign(directory,{port=0,namespace=activeNamespace}={}){
- if(!/^campaign-v(?:55|56|57|58|59|60|61|62|63|64)$/.test(namespace))throw new Error('Unknown frozen campaign mount');
+ if(!/^campaign-v(?:55|56|57|58|59|60|61|62|63|64|65)$/.test(namespace))throw new Error('Unknown frozen campaign mount');
  const root=path.resolve(directory),prefixes=[`/${namespace}/`,`/brainrot-portal/${namespace}/`];
  const server=http.createServer((req,res)=>{
   try{

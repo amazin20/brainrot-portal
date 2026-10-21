@@ -12,6 +12,7 @@ import * as THREE from 'three';
 import { InputController } from './InputController.js';
 import { LabControls } from './LabControls.js';
 import {touchButtonContent,bindTouchFeedback} from './LabTouchPresentation.js';
+import {LabStartupError} from './LabReadyPresentation.js';
 import { AudioController } from './AudioController.js';
 import { LabCamera } from './LabCamera.js';
 import {mechanismCameraArea} from './LabMechanismCamera.js';
@@ -95,7 +96,7 @@ export class LabGame {
     this.callbacks.onProgress({ percent: 100, label: 'Можно отправляться' });
     this.state = 'ready'; this.lastFrame = performance.now();
     this.renderer.setAnimationLoop(this.animate);
-    this.callbacks.onReady(); this.emitHud();
+    await this.callbacks.onReady(); this.emitHud();
   }
 
   createScene() {
@@ -104,7 +105,8 @@ export class LabGame {
     const viewport = () => ({ width: Math.max(1, this.container.clientWidth), height: Math.max(1, this.container.clientHeight) });
     const initialViewport = viewport();
     this.camera = new THREE.PerspectiveCamera(57, initialViewport.width / initialViewport.height, 0.1, 130);
-    this.renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' });
+    try { this.renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' }); }
+    catch(error) { throw new LabStartupError('graphics',error); }
     this.renderer.setPixelRatio(Math.min(devicePixelRatio, this.quality.pixelRatio));
     this.renderer.setSize(initialViewport.width, initialViewport.height);
     this.renderer.outputColorSpace = THREE.SRGBColorSpace;
@@ -1574,7 +1576,7 @@ export class LabGame {
     this.portals.update(this.visualTime); this.portalShots?.render(blend);
     this.velocityCompanion?.renderUpdate(this.visualTime);
     this.labLighting?.update();
-    const nearbyAction = this.velocityCompanion?.prompt || this.firstLevel?.nearbyInteraction?.();
+    const nearbyAction = this.velocityCompanion?.interactionPrompt || this.firstLevel?.nearbyInteraction?.();
     this.prompt.textContent = (typeof nearbyAction === 'string' ? nearbyAction : nearbyAction?.label) || (this.nearbyTerminal() ? 'E — включить мост' : this.heldCube ? 'E — отпустить брейнрота' : this.playerPosition.distanceTo(this.cargo.position) < 2.25 ? 'E — взять брейнрота' : '');
     if (this.velocityCompanion?.connected && !nearbyAction) this.prompt.textContent = '';
     this.onVelocityFrame?.();

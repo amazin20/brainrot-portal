@@ -1,0 +1,152 @@
+name: Review v65 checker readiness and retained campaign
+'on':
+  push:
+    branches: [upgrade/checker-readiness-20261021]
+permissions: {contents: read}
+defaults:
+  run: {shell: bash}
+concurrency:
+  group: checker-readiness-v65-${{ github.sha }}
+  cancel-in-progress: true
+env:
+  BUILD_COMMIT: ${{ github.sha }}
+  CODEX_PRIMARY_RUNTIME_PYTHON: /usr/bin/python3
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: '${{ github.sha }}', fetch-depth: 0, persist-credentials: false}
+      - uses: actions/setup-node@v4
+        with: {node-version: 22, cache: npm}
+      - run: npm ci
+      - name: Targeted actual lifecycle, persistence, localization and original-checker unit tests
+        run: |
+          node --input-type=module <<'JS'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          import {spawnSync} from 'node:child_process';
+          const files=fs.readdirSync('tests').filter(name=>/^(?:yandex-debug-checker|lab-v8-platform|lab-audio-lifecycle|lab-preferences.*|lab-localization|lab-ready-presentation|lab-startup-error|lab-campaign-v6[45]-storage|lab-platform-checkpoint|lab-velocity-(?:companion|lifecycle)|canvas-text-observer|release-manifest|campaign-preference-lifecycle)\.test\.js$/.test(name)).sort();
+          for(const file of ['lab-ready-presentation.test.js','lab-campaign-v65-storage.test.js','lab-platform-checkpoint.test.js','lab-preferences-checkpoint.test.js','lab-localization.test.js','yandex-debug-checker.test.js'])assert.ok(files.includes(file));
+          const result=spawnSync(process.execPath,['--test','--test-reporter=tap','--test-concurrency=2',...files.map(name=>'tests/'+name)],{encoding:'utf8',maxBuffer:64*1024*1024});
+          fs.mkdirSync('qa/v65-unit',{recursive:true});fs.writeFileSync('qa/v65-unit/full.tap',result.stdout+(result.stderr||''));
+          const metric=key=>Number([...result.stdout.matchAll(new RegExp('^# '+key+' (\\d+)$','gm'))].at(-1)?.[1]);
+          const counts=Object.fromEntries(['tests','pass','fail','cancelled','skipped','todo'].map(key=>[key,metric(key)]));
+          const pass=result.status===0&&result.signal===null&&counts.tests>0&&counts.pass===counts.tests&&['fail','cancelled','skipped','todo'].every(key=>counts[key]===0);
+          fs.writeFileSync('qa/v65-unit/report.json',JSON.stringify({kind:'v65-targeted-regression-tests',pass,sourceCommit:process.env.BUILD_COMMIT,runId:process.env.GITHUB_RUN_ID,runAttempt:process.env.GITHUB_RUN_ATTEMPT,files,counts,sourceAccepted:false,publicationAccepted:false,fullCpuSuiteRerun:false},null,2)+'\n');
+          process.stdout.write(result.stdout);process.stderr.write(result.stderr||'');assert.equal(pass,true);
+          JS
+      - name: Build and stamp exact consumer package
+        run: |
+          npm run build
+          node scripts/stamp-build.mjs
+          node scripts/v8-package-check.mjs
+          node scripts/check-yandex-platform.mjs
+      - name: Build exact production Yandex ZIP without QA hooks or checker
+        run: node scripts/package-yandex.mjs --build --output=qa/v65-yandex/brainrot-portal-v65-yandex.zip --report=qa/v65-yandex/report.json
+      - name: Build distinct Yandex REVIEW TEST package
+        run: |
+          npx vite build --mode yandex-review --outDir dist-yandex-review
+          node scripts/stamp-build.mjs v65-checker-readiness dist-yandex-review
+          node scripts/v8-package-check.mjs dist-yandex-review
+      - name: Bind all three exact package inventories
+        run: |
+          node --input-type=module <<'JS'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          import {execFileSync} from 'node:child_process';
+          import {verifyReleaseMetadata,verifyReleasePackage,sha256} from './scripts/lib/release-manifest.mjs';
+          import {RELEASE_VERSION} from './src/game/ReleaseIdentity.js';
+          assert.equal(RELEASE_VERSION,'v65-checker-readiness');assert.equal(execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),process.env.BUILD_COMMIT);assert.equal(execFileSync('git',['status','--porcelain','--untracked-files=no'],{encoding:'utf8'}).trim(),'');
+          const packages=['dist','dist-yandex','dist-yandex-review'].map(directory=>{
+            const stamp=fs.readFileSync(directory+'/build-info.json'),info=JSON.parse(stamp);verifyReleaseMetadata(info,{directory,commit:process.env.BUILD_COMMIT});const files=verifyReleasePackage(info,directory);
+            assert.equal(info.version,RELEASE_VERSION);assert.equal(info.levels,51);assert.equal(info.rooms.at(-1).stableLevel,41);assert.equal(info.verified,false);assert.ok(!files.some(row=>/debugcheck|yandex-games-debug-checker/.test(row.path)));assert.ok(files.reduce((n,row)=>n+row.bytes,0)<100_000_000);
+            return{directory,sourceCommit:info.commit,sourceInputsSha256:info.sourceInputsSha256,packageFilesSha256:info.packageFilesSha256,buildInfoBytes:stamp.length,buildInfoSha256:sha256(stamp),files};
+          });
+          assert.equal(new Set(packages.map(row=>row.sourceInputsSha256)).size,1);assert.equal(new Set(packages.map(row=>row.packageFilesSha256)).size,3);
+          fs.mkdirSync('qa/v65-build',{recursive:true});fs.writeFileSync('qa/v65-build/report.json',JSON.stringify({kind:'v65-exact-source-packages',pass:true,sourceCommit:process.env.BUILD_COMMIT,runId:process.env.GITHUB_RUN_ID,runAttempt:process.env.GITHUB_RUN_ATTEMPT,packages,sourceAccepted:false,publicationAccepted:false,liveSdkAccepted:false,moderationAccepted:false},null,2)+'\n');
+          JS
+      - uses: actions/upload-artifact@v4
+        with: {name: v65-dist, path: dist, retention-days: 14, if-no-files-found: error}
+      - uses: actions/upload-artifact@v4
+        with: {name: v65-yandex, path: qa/v65-yandex, retention-days: 14, if-no-files-found: error}
+      - uses: actions/upload-artifact@v4
+        with: {name: v65-yandex-review-dist, path: dist-yandex-review, retention-days: 14, if-no-files-found: error}
+      - uses: actions/upload-artifact@v4
+        with: {name: v65-build, path: qa/v65-build, retention-days: 14, if-no-files-found: error}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: {name: v65-unit, path: qa/v65-unit, retention-days: 14, if-no-files-found: error}
+
+  production-startup:
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: '${{ github.sha }}', fetch-depth: 0, persist-credentials: false}
+      - uses: actions/setup-node@v4
+        with: {node-version: 22, cache: npm}
+      - run: npm ci
+      - run: npm install --no-save --package-lock=false puppeteer-core@24.16.0
+      - uses: actions/download-artifact@v4
+        with: {name: v65-yandex, path: qa/v65-yandex}
+      - name: Extract original bounded production ZIP and verify CRC
+        run: |
+          python3 - <<'PY'
+          import pathlib,stat,zipfile
+          with zipfile.ZipFile('qa/v65-yandex/brainrot-portal-v65-yandex.zip') as z:
+            assert z.testzip() is None and len(set(z.namelist()))==len(z.namelist())
+            assert sum(i.file_size for i in z.infolist())<100_000_000
+            for item in z.infolist():
+              p=pathlib.PurePosixPath(item.filename)
+              assert not p.is_absolute() and '..' not in p.parts and not stat.S_ISLNK(item.external_attr>>16)
+            z.extractall('dist-yandex')
+          PY
+      - name: Actual ready paint, native Play, failed-checkpoint ad suppression and native error retry
+        run: |
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+          node scripts/qa-checker-readiness.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: {name: v65-production-startup, path: qa/checker-readiness, retention-days: 14, if-no-files-found: error}
+
+  checker-platform:
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - {part: early, rooms: '1,2,3,4,5,6,7,8,9,10'}
+          - {part: energy, rooms: '11,12,13,14,15,16,17,18,19,20'}
+          - {part: living, rooms: '21,22,23,24,25,26,27,28,29,30'}
+          - {part: optics, rooms: '31,32,33,34,35,36,37,38,39,40'}
+          - {part: fracture, rooms: '42,43,44,45,46,47,48,49,50,51'}
+          - {part: castle, rooms: '41'}
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: '${{ github.sha }}', fetch-depth: 0, persist-credentials: false}
+      - uses: actions/setup-node@v4
+        with: {node-version: 22, cache: npm}
+      - run: npm ci
+      - run: npm install --no-save --package-lock=false puppeteer-core@24.16.0
+      - name: Install capture decoder from signed Ubuntu repository
+        run: |
+          test -s /etc/apt/sources.list.d/ubuntu.sources
+          sudo apt-get -o Dir::Etc::sourcelist=/etc/apt/sources.list.d/ubuntu.sources -o Dir::Etc::sourceparts=- update
+          sudo apt-get -o Dir::Etc::sourcelist=/etc/apt/sources.list.d/ubuntu.sources -o Dir::Etc::sourceparts=- install -y python3-pil
+      - uses: actions/download-artifact@v4
+        with: {name: v65-dist, path: dist}
+      - uses: actions/download-artifact@v4
+        with: {name: v65-yandex-review-dist, path: dist-yandex-review}
+      - name: All51 actual TEST routes, original checker verdicts and rewarded lifecycle transactions
+        run: |
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+          node scripts/qa-campaign-platform-route.mjs
+        env: {LEVELS: '${{ matrix.rooms }}', YANDEX_REVIEW_DIR: dist-yandex-review, CONSUMER_DIR: dist, OUT_DIR: 'qa/checker-platform-${{ matrix.part }}'}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: {name: 'v65-checker-platform-${{ matrix.part }}', path: 'qa/checker-platform-${{ matrix.part }}', retention-days: 14, if-no-files-found: error}

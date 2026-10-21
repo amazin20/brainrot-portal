@@ -16,7 +16,7 @@ export function sanitizePreferences(value={}) {
 }
 export class LabPreferences {
   constructor(storage,{campaignRevision=CAMPAIGN_REVISION,replacedIndices=[],roomRevisions={}}={}){
-    this.storage=storage;this.campaignRevision=campaignRevision;this.readFailed=false;let saved={};
+    this.storage=storage;this.campaignRevision=campaignRevision;this.readFailed=false;this.lastSaveSucceeded=false;this.persistenceFailure=null;let saved={};
     try{
       saved=JSON.parse(storage?.getItem(KEY)||storage?.getItem(LEGACY_KEY)||'{}');
       if(!saved||typeof saved!=='object'||Array.isArray(saved))throw new TypeError('Invalid preferences record');
@@ -42,7 +42,26 @@ export class LabPreferences {
   }
   // A failed read must not be turned into an empty progress write. Session
   // changes remain usable; a new successful load is required before persistence.
-  save(changes={}){this.value=sanitizePreferences({...this.value,...changes});try{if(!this.readFailed)this.storage?.setItem(KEY,JSON.stringify({...this.value,campaignRevision:this.campaignRevision,roomRevisions:this.roomRevisions}));}catch{/* Storage may be disabled; session settings still work. */}return this.value;}
+  save(changes={}){
+    this.value=sanitizePreferences({...this.value,...changes});this.lastSaveSucceeded=false;
+    if(this.readFailed)this.persistenceFailure='read-failed';
+    else if(typeof this.storage?.setItem!=='function')this.persistenceFailure='storage-unavailable';
+    else try{
+      this.storage.setItem(KEY,JSON.stringify({...this.value,campaignRevision:this.campaignRevision,roomRevisions:this.roomRevisions}));
+      this.lastSaveSucceeded=true;this.persistenceFailure=null;
+    }catch{this.persistenceFailure='write-failed';}
+    // Storage failures do not discard the current session's progress, but
+    // callers can no longer mistake that in-memory value for a durable write.
+    return this.value;
+  }
+  saveProgress(){
+    this.save();
+    if(this.lastSaveSucceeded)try{
+      const expected=JSON.stringify({...this.value,campaignRevision:this.campaignRevision,roomRevisions:this.roomRevisions});
+      if(this.storage.getItem(KEY)!==expected){this.lastSaveSucceeded=false;this.persistenceFailure='verification-failed';}
+    }catch{this.lastSaveSucceeded=false;this.persistenceFailure='verification-failed';}
+    return this.lastSaveSucceeded;
+  }
   complete(index){this.save({completed:[...this.value.completed,index]});}
   unlockHint(index){this.save({hints:{...this.value.hints,[index]:Math.min(3,(this.value.hints[index]||0)+1)}});}
 }

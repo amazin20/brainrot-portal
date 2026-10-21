@@ -61,3 +61,21 @@ test('a rejected device transition does not spin retries; a later user action ma
   f.audio.configure({volume:.4});assert.equal(f.requests.length,1);
   await f.settle();assert.equal(f.audio.audible,true);assert.equal(f.parameter.value,.4);
 });
+
+test('ad mute zeros output immediately and preserves independent manual/page holds after close',async()=>{
+  const f=fixture();f.audio.muteForAd(true);
+  assert.equal(f.parameter.value,0);assert.equal(f.audio.blocks.has('ad'),true);assert.equal(f.requests.length,1);
+  f.audio.block('manual-pause',true);f.audio.block('hidden',true);
+  f.audio.muteForAd(false);assert.equal(f.audio.blocks.has('ad'),false);await f.settle();
+  assert.equal(f.context.state,'suspended');assert.equal(f.requests.length,0);
+  f.audio.block('hidden',false);assert.equal(f.requests.length,0);
+  f.audio.block('manual-pause',false);await f.settle();assert.equal(f.audio.audible,true);
+});
+
+test('a late resume cannot restore sound beneath a newly opened advert or override the user mute',async()=>{
+  const f=fixture('suspended');f.audio.sync();assert.equal(f.requests.length,1);
+  f.audio.muteForAd(true);assert.equal(f.parameter.value,0);await f.settle();
+  assert.equal(await f.settle(),'suspended');assert.equal(f.audio.audible,false);
+  f.audio.configure({muted:true});f.audio.muteForAd(false);
+  assert.equal(f.requests.length,0);assert.equal(f.audio.muted,true);assert.equal(f.parameter.value,0);
+});

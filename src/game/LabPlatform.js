@@ -19,8 +19,8 @@ export async function loadYandexSDK({document:doc=globalThis.document,scope=glob
   finally{clearTimeout(timer);}
 }
 export class LabPlatform {
-  constructor({sdk=null,demo=true,hold=()=>{},now=()=>Date.now(),timeout=15000}={}){
-    this.sdk=sdk;this.demo=demo;this.hold=hold;this.now=now;this.timeout=timeout;this.busy=false;this.playing=false;this.adLocks=new Set();this.requestSerial=0;
+  constructor({sdk=null,demo=true,hold=()=>{},saveProgress=()=>true,now=()=>Date.now(),timeout=15000}={}){
+    this.sdk=sdk;this.demo=demo;this.hold=hold;this.saveProgress=saveProgress;this.now=now;this.timeout=timeout;this.busy=false;this.playing=false;this.adLocks=new Set();this.requestSerial=0;
     this.lastAdAt=now();this.lastRestartAttempt=now();this.readySent=false;this.disposed=false;this.requests=new Map();this.fullscreenPending=null;
     this.onPause=()=>this.hold('sdk',true);this.onResume=()=>this.hold('sdk',false);
     sdk?.on?.('game_api_pause',this.onPause);sdk?.on?.('game_api_resume',this.onResume);
@@ -58,9 +58,8 @@ export class LabPlatform {
     if(this.demo||!this.sdk?.adv?.showFullscreenAdv)return {shown:false,reason:this.demo?'demo':'unavailable'};
     if(reason==='restart'){
       if(this.now()-Math.max(this.lastAdAt,this.lastRestartAttempt)<300000)return {shown:false,reason:'cooldown'};
-      this.lastRestartAttempt=this.now();
     }
-    return this.request(false);
+    return this.request(false,undefined,{restart:reason==='restart'});
   }
   async hint(reward){
     if(this.disposed)return {rewarded:false,reason:'disposed'};
@@ -69,9 +68,24 @@ export class LabPlatform {
     if(!this.sdk?.adv?.showRewardedVideo)return {rewarded:false,reason:'unavailable'};
     return this.request(true,reward);
   }
-  request(rewarded,onReward=()=>{}){
+  request(rewarded,onReward=()=>{},{restart=false}={}){
     if(this.disposed)return Promise.resolve({rewarded:false,shown:false,reason:'disposed'});
     if(this.busy||this.adLocks.size)return Promise.resolve({rewarded:false,shown:false,reason:'busy'});
+    // Reserve the request before invoking application code: a checkpoint may
+    // trigger listeners, but cannot open a second advert reentrantly.
+    this.busy=true;
+    let saved=false;
+    try{
+      const checkpoint=this.saveProgress();saved=checkpoint===true;
+      // This boundary is synchronous. An accidentally async adapter is not a
+      // confirmed save and its rejection must not escape into the game loop.
+      if(checkpoint&&typeof checkpoint.then==='function')Promise.resolve(checkpoint).catch(()=>{});
+    }catch{}
+    if(!saved||this.disposed){
+      this.busy=false;
+      return Promise.resolve({rewarded:false,shown:false,reason:this.disposed?'disposed':'save-unavailable'});
+    }
+    if(restart)this.lastRestartAttempt=this.now();
     const requestId=++this.requestSerial;
     const lock=active=>{active?this.adLocks.add(requestId):this.adLocks.delete(requestId);this.hold('ad',this.adLocks.size>0);};
     this.busy=true;lock(true);this.gameplay(false);
@@ -90,7 +104,11 @@ export class LabPlatform {
         onClose:wasShown=>{if(settled){lock(false);return;}finish(rewardFailed?'reward-handler-error':'closed',rewarded?opened:!!wasShown);},
         onError:()=>{if(settled){lock(false);return;}finish('error',opened);},
       };
-      try{const result=rewarded?this.sdk.adv.showRewardedVideo({callbacks}):this.sdk.adv.showFullscreenAdv({callbacks});
+      try{const result=rewarded?this.sdk.adv.showRewardedVideo({callbacks:{
+          onOpen:callbacks.onOpen,onRewarded:callbacks.onRewarded,onClose:callbacks.onClose,onError:callbacks.onError,
+        }}):this.sdk.adv.showFullscreenAdv({callbacks:{
+          onOpen:callbacks.onOpen,onClose:callbacks.onClose,onError:callbacks.onError,
+        }});
         result?.catch?.(()=>finish('error',opened));}catch{finish('error',false);}
     });
   }
