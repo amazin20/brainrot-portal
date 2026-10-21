@@ -239,18 +239,24 @@ function hydraulicMachine(a,l){
 
 function pneumaticMachine(a,l){
  for(const x of [-9.5,-14.5])a.casing([x,3,4.5],[1.0,.90,.90],'closed pressure quick coupling',{axis:'x',mat:'metal'});
- // The reservoir gauge is a recessed round pressure instrument, rather than
- // a cubical box perched in front of a tube. Its envelope stays identical.
+ // Mount the instrument above the y=3 manifold, on the actual reservoir.
+ // The former y=3.35 face was obscured by the foreground pressure pipe.
+ // Its complete drawing now fits the tank's existing closed collision box;
+ // the deep bezel enters the turned shell instead of floating over it.
+ const gaugeY=4.2;
  const gauge=new THREE.Shape();gauge.absarc(0,0,.8,0,Math.PI*2,false);
  const aperture=new THREE.Path();aperture.absarc(0,0,.64,0,Math.PI*2,true);gauge.holes.push(aperture);
  const housing=new THREE.ExtrudeGeometry(gauge,{depth:.62,bevelEnabled:false,curveSegments:32});housing.translate(0,0,-.31);
- a.raw(housing,[-7,3.35,3.3],'dark','round recessed reservoir instrument');
- a.visualDisk([-7,3.35,3.055],.8,.16,'metal');
+ a.raw(housing,[-7,gaugeY,3.12],'dark','round recessed reservoir instrument');
+ a.visualDisk([-7,gaugeY,3.05],.8,.16,'metal');
  // Retain the original small closed pressure-case contact envelope.
  const gaugeContact=a.k.game.collisionProxy(new THREE.Box3().setFromCenterAndSize(V(-7,3.35,3.3),V(1.70,1.65,.65)));
  gaugeContact.mesh.name='Observatory / reservoir pressure instrument / physical';gaugeContact.visualAuditObservatory=true;
  a.stats.physicalParts.push({name:'reservoir pressure instrument',min:gaugeContact.box.min.toArray(),max:gaugeContact.box.max.toArray()});
- a.dial([-7,3.35,3.52],.57,()=>l.pressureState?.pressure||0,{max:100});
+ // A shallow instrument face clears even the upper shoulder while keeping
+ // the live scale and needle inside the original tank's front plane.
+ const face=a.dial([-7,gaugeY,3.43],.57,()=>l.pressureState?.pressure||0,{max:100});
+ face.scale.z=.1;
  // The old free torus intersects the replacement vessel's lower flange;
  // remove that duplicate skin and use one closed, founded load cradle.
  for(const m of a.k.world.root.children.filter(o=>o.name==='Reservoir retaining ring'&&Math.abs(o.position.y-.3)<.02))m.visible=false;

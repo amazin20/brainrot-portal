@@ -15,6 +15,7 @@ import {buildRoom16} from '../src/game/LabPortalRoom16.js';
 import {buildCreative17} from '../src/game/LabCreativeRoom17.js';
 import {CAMPAIGN,finishBrowserArt} from '../src/game/LabCampaignLevels.js';
 import {finishVisualAuditEarly,earlyStructuralSection} from '../src/game/LabVisualAuditEarly.js';
+import {finishVisualAudit} from '../src/game/LabVisualAuditFinish.js';
 import {serviceMassGeometry,treadChassisGeometry} from '../src/game/LabEarlyMachineConstruction.js';
 import {gameplayContract} from './helpers/lab-art-contract.js';
 import {originalRoom9Contract,originalRoom11Contract} from './helpers/lab-early-construction-contract.js';
@@ -96,6 +97,15 @@ test('all seventeen real layouts preserve physical owners, portal frames and ray
   game.levelRoots.push(l.visualAuditEarly.root);
   assert.deepEqual(gameplayContract(game),before,`Room ${index+1}: art changed a physical or interaction contract`);
   for(const saved of sourceOwners){assert.equal(saved.mesh.geometry,saved.geometry);assert.deepEqual(saved.mesh.children,saved.children);}
+  const drawingOwners=new Map();
+  l.visualAuditEarly.root.traverse(mesh=>{
+   const id=mesh.userData.physicalSourceId;if(!id)return;
+   assert.equal(drawingOwners.has(id),false,`Room ${index+1}: one physical source acquired overlapping sibling drawings`);
+   drawingOwners.set(id,mesh);
+  });
+  const stairs=[];l.world.root.traverse(mesh=>{if(mesh.userData.earlyAuditStair)stairs.push(mesh);});
+  assert.equal(stairs.length,({6:48,13:20,15:22})[index]??0,`Room ${index+1}: the complete authored stair flight must be checked`);
+  for(const stair of stairs)assert.ok(drawingOwners.has(stair.uuid),`Room ${index+1}: a real stair source lost its tailored drawing`);
   assert.equal(l.visualAuditEarly.stats.extraColliders,0);assert.equal(l.visualAuditEarly.stats.extraLights,0);
   if([5,7,8,9,10,11,12,13,14,15].includes(index))assert.ok(l.visualAuditEarly.stats.floorFieldTiles>0,`Room ${index+1}: the visible finished floor must receive the actual work-bay pigment`);
   const art=l.visualAuditEarly,render=l.renderUpdate;finishVisualAuditEarly(game,l,index);
@@ -116,4 +126,44 @@ test('weighted mirror bearing follows the real full pivot transform and render d
  const counts=new Map([...geometries,...materials].map(r=>[r,0]));
  for(const resource of counts.keys())resource.addEventListener('dispose',()=>counts.set(resource,counts.get(resource)+1));
  disposeLabLevel(game);l.dispose();assert.ok([...counts.values()].every(n=>n===1));assert.equal(art.root.children.length,0);
+});
+
+test('room 5 gives the coincident roof one drawing owner and restores the real court as the cabin rises',async()=>{
+ await game.selectLevel(4,false);const l=game.firstLevel,cabin=l.state['stored-power-cabin'];
+ let court;l.world.root.traverse(m=>{if(m.name==='Manufactured architecture / Foundation service floor')court=m;});
+ const geometry=court.geometry,material=court.material;
+ const compile=()=>{const shader={uniforms:{},vertexShader:THREE.ShaderLib.standard.vertexShader,fragmentShader:THREE.ShaderLib.standard.fragmentShader};material.onBeforeCompile(shader,{});return shader;};
+ const shader=compile(),uniforms=shader.uniforms;
+ assert.match(shader.vertexShader,/vEarlyDockWorld/);assert.match(shader.vertexShader,/instanceMatrix\*earlyDockWorld/);
+ assert.match(shader.fragmentShader,/earlyDockLocal/);assert.match(shader.fragmentShader,/finishCourt/);
+ assert.match(material.customProgramCacheKey(),/coincident-cabin-floor67.*architectural-plinth67/);
+ assert.equal(compile().uniforms.earlyDockInverse,uniforms.earlyDockInverse,'Separate portal/main programs must share the same live world predicate');
+ const isDiscarded=world=>{
+  const p=new THREE.Vector3(...world).applyMatrix4(uniforms.earlyDockInverse.value),b=uniforms.earlyDockBounds.value;
+  return Math.abs(p.y-uniforms.earlyDockTop.value)<.00001&&p.x>=b.x&&p.x<=b.y&&p.z>=b.z&&p.z<=b.w;
+ };
+ assert.ok(isDiscarded([-20,0,-4]));assert.equal(isDiscarded([-13,0,-4]),false);
+ assert.equal(isDiscarded([-25.98,0,-4]),false,'The actual rounded bevel does not cover this court strip');
+ assert.deepEqual(uniforms.earlyDockBounds.value.toArray().map(n=>+n.toFixed(3)),[-5.945,5.945,-5.945,5.945]);
+ cabin.stations[1].y=6;cabin.target=1;cabin.update(.6);assert.equal(cabin.floor.y,6);
+ l.renderUpdate(1);assert.equal(isDiscarded([-20,0,-4]),false,'The court must reappear below the raised cabin');
+ l.renderUpdate(.5);assert.equal(isDiscarded([-20,0,-4]),false,'The predicate follows the interpolated drawing pose');
+ const physical=gameplayContract(game);l.renderUpdate(.75);assert.deepEqual(gameplayContract(game),physical);
+ l.reset();l.renderUpdate(1);assert.ok(isDiscarded([-20,0,-4]));assert.equal(court.geometry,geometry);
+});
+
+test('docked-floor and outer pigment clones preserve previous shaders and restore/dispose in order',()=>{
+ const l=bare(4);let court;l.world.root.traverse(m=>{if(m.name==='Manufactured architecture / Foundation service floor')court=m;});
+ const original=court.material,geometry=court.geometry;let calls=0;
+ original.userData.architecturalRole='service';
+ original.onBeforeCompile=function(shader){calls++;shader.uniforms.previousHook={value:17};};original.customProgramCacheKey=()=> 'previous-court-hook';
+ const physical=gameplayContract(game);finishVisualAuditEarly(game,l,4);const clip=court.material;
+ finishVisualAudit(game,l,4,game.levelRoots);const pigment=court.material;
+ assert.notEqual(clip,original);assert.notEqual(pigment,clip);
+ const shader={uniforms:{},vertexShader:THREE.ShaderLib.standard.vertexShader,fragmentShader:THREE.ShaderLib.standard.fragmentShader};pigment.onBeforeCompile(shader,{});
+ assert.equal(calls,1);assert.equal(shader.uniforms.previousHook.value,17);assert.ok(shader.uniforms.earlyDockInverse);
+ assert.match(pigment.customProgramCacheKey(),/^previous-court-hook\|coincident-cabin-floor67\|architectural-plinth67$/);
+ assert.deepEqual(gameplayContract(game),physical);assert.equal(court.geometry,geometry);
+ const disposed=[0,0,0];[original,clip,pigment].forEach((m,i)=>m.addEventListener('dispose',()=>disposed[i]++));
+ l.dispose();l.dispose();assert.equal(court.material,original);assert.deepEqual(disposed,[1,1,1]);
 });

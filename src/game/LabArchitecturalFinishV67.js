@@ -38,6 +38,11 @@ export function finishArchitecturalMaterials(game,level,roots){
     // Centimetre joints remain geometry. This broad two-tone painted band
     // does not create another grid or shimmer through the portal cameras.
     diffuseColor.rgb*=1.0-finishVertical*finishPlinth*.31;
+    // The lower court is a darker working surface. Raised walking decks keep
+    // their lighter mineral skin, so floor, platform and wall no longer merge
+    // into one pale field even in the first grey laboratory.
+    float finishCourt=1.0-smoothstep(.20,1.40,finishHeight);
+    diffuseColor.rgb*=1.0-(1.0-finishVertical)*finishCourt*.14;
     float finishGrain=sin(vLabFinishWorld.x*.47+sin(vLabFinishWorld.z*.31))*sin(vLabFinishWorld.y*.39+vLabFinishWorld.z*.23);
     diffuseColor.rgb*=1.0+finishGrain*.016;
     diffuseColor.rgb*=mix(.91,1.0,smoothstep(0.0,8.0,finishHeight))*finishVertical+(1.0-finishVertical);`);
@@ -58,8 +63,20 @@ export function finishArchitecturalMaterials(game,level,roots){
   if(mesh.userData.visualAuditEarly||mesh.userData.visualAuditObservatory||mesh.userData.visualAuditMiddleShape||mesh.userData.visualAuditLateShape)return;
   changed.push({mesh,source,replacement:finish(source,role)});mesh.material=changed.at(-1).replacement;
  });
+ // Mechanisms also resolve their walking material through these authored
+ // dictionaries. Keep those references coherent with the finished drawing,
+ // then restore them before the original world releases its resources.
+ const bindings=[];
+ for(const registry of new Set([level.workshop?.m,level.world?.materials,level.workshop?.world?.materials].filter(Boolean))){
+  for(const [key,source]of Object.entries(registry))if(copies.has(source)){
+   const replacement=copies.get(source);bindings.push({registry,key,source,replacement});registry[key]=replacement;
+  }
+ }
+ let disposed=false;
  return {materials:copies.size,meshes:changed.length,dispose(){
+  if(disposed)return;disposed=true;
   for(const {mesh,source,replacement}of changed)if(mesh.material===replacement)mesh.material=source;
+  for(const {registry,key,source,replacement}of bindings)if(registry[key]===replacement)registry[key]=source;
   for(const material of copies.values())material.dispose();
  }};
 }

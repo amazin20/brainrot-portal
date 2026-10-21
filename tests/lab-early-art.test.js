@@ -31,6 +31,16 @@ for(const expected of baseline.rooms)test(`room ${expected.level} matches the au
  // Preserve both original goldens: subtract only room eight's exact gallery,
  // or normalize room fifteen's exact independently audited observation sill.
  const retained=expected.level===8?originalRoom8Contract(contract):expected.level===9?originalRoom9Contract(contract):expected.level===10?originalRoom10Contract(contract):expected.level===11?originalRoom11Contract(contract):expected.level===15?originalRoom15Contract(contract):contract;
+ if(expected.nativeViewAudit){
+  // The v67 room16 entry aim changed deliberately. Keep its full current
+  // contract and independently retain the original collision/interaction
+  // golden by restoring only the explicitly audited camera yaw and pitch.
+  assert.deepEqual(contract.room.spawnView,expected.nativeViewAudit.current);
+  const originalView=structuredClone(contract);
+  originalView.room.spawnView=expected.nativeViewAudit.previous;
+  assert.equal(digest(originalView),expected.nativeViewAudit.previousContract,
+   'Only the audited initial camera view may differ from the original room16 contract');
+ }
  assert.equal(digest(retained),expected.contract,
   'Authored colliders, portal frames, support geometry, camera blockers or interaction state changed');
  if(expected.physicalAudit){

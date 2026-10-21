@@ -315,6 +315,11 @@ export function finishEarlyMachineConstruction(level,index,owner,replace,materia
  // scale, rather than the tiny trim of the previous audit.
  const surfaceGroups=new Set((level.world.surfaces??[]).map(s=>s.group));
  for(const mesh of meshes){
+  // Tailored stairs and dedicated machine/bus housings each own one drawing.
+  // Their protected source boxes remain in this list, even when a sibling
+  // replaces their rendering. A generic partition would draw a second skin
+  // on those same physical planes.
+  if(mesh.userData.earlyAuditStair||mesh.userData.earlyAuditMachineHousing||mesh.userData.earlyAuditBus)continue;
   const p=mesh.geometry?.parameters;
   if(!p||![p.width,p.height,p.depth].every(Number.isFinite)||mesh.userData.visualAuditEarly||mesh.userData.firstChapterStructuralRole||mesh.material?.transparent||Array.isArray(mesh.material))continue;
   if(p.height<.9||Math.min(p.width,p.depth)>.7||Math.max(p.width,p.depth)<2.4)continue;

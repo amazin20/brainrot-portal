@@ -55,6 +55,9 @@ function replace(owner,mesh,geometry,material){
 function profilePosts(root,owner,{onlyFolded=false,closedPiers=false}={}){
  const nodes=[];root.traverse(mesh=>{
   const p=mesh.geometry?.parameters;
+  // These measured owners receive their dedicated closed housings later;
+  // profiling them here would leave a second sibling inside that housing.
+  if(mesh.userData?.earlyAuditStair||mesh.userData?.earlyAuditMachineHousing||mesh.userData?.earlyAuditBus)return;
   if(!mesh.isMesh||mesh.isInstancedMesh||mesh.userData?.collisionProxy||mesh.userData?.portalTile||mesh.userData?.visualAuditEarly||!mesh.visible||
    Array.isArray(mesh.material)||mesh.material?.visible===false||mesh.material?.transparent||!p||![p.width,p.height,p.depth].every(Number.isFinite))return;
   if(onlyFolded&&!/^Folded (dark|shell) casing$/.test(mesh.name))return;
@@ -154,6 +157,57 @@ function finishGlass(level,owner){
   }
   replace(owner,mesh,mesh.geometry,changed.get(source));owner.stats.materialRoles++;
  });
+}
+
+/** The travelling cabin docks flush with the court. At that one pose its
+ * walking roof owns the shared plane; the court is still drawn everywhere
+ * else, and immediately underneath the cabin once it rises. Physical/ray
+ * owners and both geometries remain intact. The predicate uses the live
+ * rendered cabin transform, so portal cameras see the same world surface. */
+function finishDockedCabinFloor(level,owner){
+ const cabin=level.state?.['stored-power-cabin'];if(!cabin?.group)return;
+ const deck=cabin.group.children.find(m=>m.isMesh&&m.name==='Folded floor casing');if(!deck)return;
+ deck.geometry.computeBoundingBox();const top=deck.geometry.boundingBox.max.y,positions=deck.geometry.attributes.position;
+ const flat=new THREE.Box3();
+ // Rounded deck edges slope below the court. Only its genuinely flat roof
+ // overlaps, so retain the court at the bevel instead of opening a rim gap.
+ for(let i=0;i<positions.count;i++)if(Math.abs(positions.getY(i)-top)<1e-6)flat.expandByPoint(V().fromBufferAttribute(positions,i));
+ if(flat.isEmpty())return;
+ const uniforms={earlyDockInverse:{value:new THREE.Matrix4()},earlyDockBounds:{value:new THREE.Vector4(flat.min.x,flat.max.x,flat.min.z,flat.max.z)},earlyDockTop:{value:top}};
+ const originals=new Map();
+ level.world.root.traverse(mesh=>{
+  const source=mesh.material;
+  if(!mesh.isMesh||mesh.name!=='Manufactured architecture / Foundation service floor'||Array.isArray(source)||!source?.isMeshStandardMaterial)return;
+  if(!originals.has(source)){
+   const material=source.clone(),prior=source.onBeforeCompile,priorKey=source.customProgramCacheKey.bind(source);
+   material.onBeforeCompile=function(shader,renderer){
+    prior.call(this,shader,renderer);Object.assign(shader.uniforms,uniforms);
+    shader.vertexShader='varying vec3 vEarlyDockWorld;\n'+shader.vertexShader;
+    shader.vertexShader=shader.vertexShader.replace('#include <project_vertex>',`#include <project_vertex>
+     vec4 earlyDockWorld=vec4(transformed,1.0);
+     #ifdef USE_BATCHING
+      earlyDockWorld=batchingMatrix*earlyDockWorld;
+     #endif
+     #ifdef USE_INSTANCING
+      earlyDockWorld=instanceMatrix*earlyDockWorld;
+     #endif
+     vEarlyDockWorld=(modelMatrix*earlyDockWorld).xyz;`);
+    shader.fragmentShader='varying vec3 vEarlyDockWorld;\nuniform mat4 earlyDockInverse;\nuniform vec4 earlyDockBounds;\nuniform float earlyDockTop;\n'+shader.fragmentShader;
+    shader.fragmentShader=shader.fragmentShader.replace('#include <clipping_planes_fragment>',`#include <clipping_planes_fragment>
+     vec3 earlyDockLocal=(earlyDockInverse*vec4(vEarlyDockWorld,1.0)).xyz;
+     if(abs(earlyDockLocal.y-earlyDockTop)<0.00001
+      &&earlyDockLocal.x>=earlyDockBounds.x&&earlyDockLocal.x<=earlyDockBounds.y
+      &&earlyDockLocal.z>=earlyDockBounds.z&&earlyDockLocal.z<=earlyDockBounds.w)discard;`);
+   };
+   material.customProgramCacheKey=()=>priorKey()+'|coincident-cabin-floor67';material.needsUpdate=true;
+   originals.set(source,material);owner.materials.push(material);
+  }
+  const material=originals.get(source);
+  // Do not mark this court as machinery: the subsequent architectural
+  // pigment pass must clone/wrap this hook and share these live uniforms.
+  owner.replacements.push({mesh,geometry:mesh.geometry,material:source,replacementGeometry:mesh.geometry,replacementMaterial:material});mesh.material=material;
+ });
+ if(originals.size)(owner.renders??=[]).push(()=>{deck.updateWorldMatrix(true,false);uniforms.earlyDockInverse.value.copy(deck.matrixWorld).invert();});
 }
 
 // Broad work bays are pigment in the EXISTING mineral tiles. They organize
@@ -283,6 +337,7 @@ export function finishVisualAuditEarly(game,level,index=level?.index){
  if(index>=5&&index<=15)profilePosts(level.world.root,owner,{closedPiers:index===6});
  if(index===6)restoreBalanceRoles(level,owner);
  if(index===9)finishGlass(level,owner);
+ if(index===4)finishDockedCabinFloor(level,owner);
  paintWorkingBays(level,index,owner);finishEnergyMachineRoles(level,index,owner);finishProjectedLight(level,owner,index);
  if(index===10){
   // Retain the controller's own active colour updates. The stronger integral

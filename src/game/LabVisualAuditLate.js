@@ -126,6 +126,65 @@ function machineBox(k,mesh,kind='drive',axis){
  if(batched){const bin=k.artBins.get(material)||[];bin.push(mesh);k.artBins.set(material,bin);}
  return true;
 }
+
+/** Delegate only drawing. Several late devices measure their real source
+ * mesh on every step; a sibling casting retains its exact triangles, child
+ * list and box, while using the same local pose and existing moving parent. */
+function castMeasuredSource(k,source,kind='drive',axis='z',role=kind){
+ if(!source?.isMesh||source.userData?.visualAuditLateShape||source.userData?.collisionProxy||Array.isArray(source.material))return null;
+ const size=boxSize(source);if(!size)return null;
+ source.geometry.computeBoundingBox();const center=source.geometry.boundingBox.getCenter(V());
+ const geometry=kind==='bulkhead'?lateCassetteBulkheadGeometry(...size,axis):lateMachineHousingGeometry(...size,{kind,axis});geometry.translate(...center.toArray());
+ const original=source.material,hidden=original.clone();hidden.name='Late mechanism / retained measured query owner';hidden.visible=false;hidden.userData={...hidden.userData,keepMaterial:true};source.material=hidden;
+ const material=mechanismMaterial(k,original,kind),visual=k.geometry(geometry,material,source.position.toArray(),source.quaternion,{parent:source.parent,batch:false,name:'Late casting / '+role});
+ visual.scale.copy(source.scale);visual.castShadow=source.castShadow;visual.receiveShadow=source.receiveShadow;
+ visual.userData.visualAuditLateShape=kind;visual.userData.physicalSourceId=source.uuid;source.userData.visualAuditLateShape='measured '+role;
+ const receipt={role,source,visual,size,axis};(k.visualAuditLateTargetBindings??=[]).push(receipt);
+ const restore=k.restoreLight.bind(k);let disposed=false;
+ k.restoreLight=()=>{if(!disposed){disposed=true;if(source.material===hidden)source.material=original;hidden.dispose();}restore();};
+ return receipt;
+}
+
+function dressLowPortalBacks(k){
+ let count=0;
+ for(const name of ['bridge-source','first-bridge','north-bridge','exit-bridge','freight-return']){
+  const panel=k.panels[name],back=panel?.group.children.find(m=>m.isMesh&&m.name==='Folded dark casing'&&at(m,[0,0,-.19]));
+  if(!back)throw new Error('Missing actual low portal back casing: '+name);
+  if(castMeasuredSource(k,back,'bulkhead','z','44 / '+name+' closed rear casing'))count++;
+ }
+ return count;
+}
+
+function dressFreightField(k){
+ // This source is the reversible freight field, independent of the two
+ // optical receiver tubes. Its real backplate is behind the emitted ray.
+ const parent=k.world.root.children.find(n=>n.isGroup&&at(n,[-4.6,9.33,10.5]));
+ const source=parent?.children.find(n=>n.isMesh&&n.geometry?.type==='BoxGeometry'&&at(n,[0,-.27,0]));
+ if(!source)throw new Error('Missing actual 49 freight field backplate');
+ const casing=castMeasuredSource(k,source,'drive','y','49 / reversible freight field enclosure');
+ const rim=parent.children.find(n=>n.isMesh&&n.geometry?.type==='TorusGeometry'&&Math.abs(n.geometry.parameters.radius-2.02)<.001);
+ if(!rim)throw new Error('Missing actual 49 freight field collar');
+ const old=rim.geometry;rim.geometry=coloured(old.clone(),LATE_DEVICE_COLORS.copper);old.dispose();
+ rim.material=mechanismMaterial(k,rim.material,'rail');rim.userData.visualAuditLateShape='freight field collar';
+ // The original light ring still follows field.enabled/reversed. Only the
+ // solid collar gains its cast metal finish; no signal or radius changes.
+ return {casings:casing?1:0,collars:1};
+}
+
+function dressSuspendedCupBodies(k){
+ let cups=0,hoods=0;
+ const rotor=k.state.rotor;if(!rotor)throw new Error('Missing actual 50 folding rotor');
+ for(const cup of rotor.cups)for(const source of cup.meshes){
+  const size=boxSize(source);if(!size||Math.min(...size)<.2||Math.max(...size)<2||source.userData.visualAuditLateShape)continue;
+  const axis=size[0]<size[1]&&size[0]<size[2]?'x':size[1]<size[2]?'y':'z';
+  if(castMeasuredSource(k,source,'rail',axis,'50 / '+cup.name+' suspended load cup casting'))cups++;
+ }
+ for(const source of [...rotor.root.children])if(source.isMesh&&['50 / low freight hood side','50 / true oblique rebound freight roof'].includes(source.name)){
+  const size=boxSize(source),axis=size[0]<size[1]&&size[0]<size[2]?'x':size[1]<size[2]?'y':'z';
+  if(castMeasuredSource(k,source,'rail',axis,'50 / rotating freight hood casting'))hoods++;
+ }
+ return {cups,hoods};
+}
 function at(mesh,p,tolerance=.025){return p.every((v,i)=>Math.abs(mesh.position.getComponent(i)-v)<tolerance);}
 function beforeMeshes(k){const a=[];k.world.root.traverse(m=>{if(m.isMesh&&!m.userData?.collisionProxy)a.push(m);});return a;}
 function select(k,predicate,kind,axis){let n=0;for(const m of beforeMeshes(k))if(predicate(m)&&machineBox(k,m,kind,axis))n++;return n;}
@@ -260,7 +319,7 @@ function finishSightHoops(k){
  * portal planes, target registries and every solver state stay unchanged. */
 export function dressVisualAuditLate(k,stableLevel=k.index+1){
  if(!STABLE_LEVELS.has(stableLevel)||k.visualAuditLate)return k.visualAuditLate??null;
- const stats={stableLevel,revision:LATE_VISUAL_COMPLETION_REVISION,housings:0,barrels:0,windings:0,sightHoops:0,railTrucks:0,extraLights:0,downloadBytes:0};
+ const stats={stableLevel,revision:LATE_VISUAL_COMPLETION_REVISION,housings:0,barrels:0,windings:0,sightHoops:0,railTrucks:0,portalBackCasings:0,freightFieldCasings:0,freightFieldCollars:0,suspendedCupCasings:0,freightHoodCasings:0,extraLights:0,downloadBytes:0};
  const shape=(predicate,kind,axis)=>{stats.housings+=select(k,predicate,kind,axis);};
  const largePanel=m=>{const s=boxSize(m);return s&&Math.max(...s)>5&&Math.min(...s)<1.2&&m.material===k.m.shell;};
  switch(stableLevel){
@@ -297,6 +356,7 @@ export function dressVisualAuditLate(k,stableLevel=k.index+1){
    stats.housings+=dressDeckUnderfaces(k,stableLevel)+dressPilotBacks(k);break;
   case 44:
    shape(m=>largePanel(m)&&m.parent===k.world.root,'bulkhead');
+   stats.portalBackCasings=dressLowPortalBacks(k);stats.housings+=stats.portalBackCasings;
    stats.housings+=dressDeckUnderfaces(k,stableLevel);break;
   case 45:
    shape(m=>m.parent?.name==='Countercurrent / live rising air valve','valve','y');
@@ -315,6 +375,7 @@ export function dressVisualAuditLate(k,stableLevel=k.index+1){
   case 49:
    shape(m=>m.parent?.name==='49 / actual force driven rail carriage'&&/side cheek|enclosed carriage roof|rear portal cheek/.test(m.name),'rail');
    shape(m=>/opaque receiver tube|closed receiver back/.test(m.name),'drive');
+   {const field=dressFreightField(k);stats.freightFieldCasings=field.casings;stats.freightFieldCollars=field.collars;stats.housings+=field.casings;}
    {const parent=k.world.root.getObjectByName('49 / actual force driven rail carriage');
     if(parent){k.visualAuditLateRailTruck=installOpticalRailTruck(k,parent,mechanismMaterial(k,k.m.metal,'rail truck'));stats.railTrucks=k.visualAuditLateRailTruck?1:0;}}
    break;
@@ -322,6 +383,7 @@ export function dressVisualAuditLate(k,stableLevel=k.index+1){
    shape(m=>m.name==='50 / rigid common lower counterweight','weight','z');
    shape(m=>/^50 \/ gravity suspended cup /.test(m.parent?.name)&&at(m,[0,-7,0]),'weight','z');
    shape(m=>/^50 \/ upper-pane fixed casing/.test(m.name),'bulkhead');
+   {const bodies=dressSuspendedCupBodies(k);stats.suspendedCupCasings=bodies.cups;stats.freightHoodCasings=bodies.hoods;stats.housings+=bodies.cups+bodies.hoods;}
    stats.housings+=dressDeckUnderfaces(k,stableLevel)+dressFoldingSpindle(k);break;
   case 51:
    shape(m=>/51 \/ (long|short) spring receiver|51 \/ real spring striker/.test(m.name),'piston');

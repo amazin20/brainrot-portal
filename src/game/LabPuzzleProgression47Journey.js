@@ -78,7 +78,10 @@ export function runPuzzleProgression47(d,{stopAfter=null,noCargo=false,recover=f
  d.walk(20,-12);d.walk(-16,-12);collect(d);d.until(()=>!l.drive.powered&&l.drive.contacts>0,4,'Cargo removal did not leave the dynamic piston resting against its physical pin');check(l.drive.body.type===1,'A pinned piston must remain dynamic');d.mark('Returning the original cargo releases the motor; true pin contact preserves alignment');if(stopAfter==='retrieved')return;
  d.walk(-16,-8);d.look(l.loadSupport.center);d.stop();d.wait(.2);check(g.interact()&&!g.heldCube,'Freeing the hands on permanent mineral floor failed');d.wait(.6);
  d.walk(-20,-8);aimLateSurface(d,0,l.entrance);d.walk(0,-16);d.walk(8.3,-16);d.walk(8.3,-14.8);aimLateSurface(d,1,l.address);
- d.walk(0,-16);d.walk(0,-8);if(!noCargo)collect(d);
+ // Return along the dry motor-side court to the original companion. A real
+ // tilted fragment can occupy (0,-8) long after fracture; that fixed debris
+ // waypoint is unnecessary once both final apertures are prepared.
+ d.walk(0,-16);d.walk(-16,-12);if(!noCargo)collect(d);
  d.walk(-20,-8);enterJump(d,l.entrance);d.walk(8.3,-12);d.until(()=>g.playerGrounded,4,'The aligned high receiving terrace did not catch the original player');check(g.playerPosition.y>7.8,`Upper terrace must require the aligned actual address: ${g.playerPosition.toArray()}`);d.mark('The sole pair carries the travellers through the physically aligned moving address');
  d.walk(10,-10);if(noCargo){d.wait(.8);check(g.state!=='won','The archive goal cannot accept the player alone');return;}d.until(()=>g.state==='won',3,'Original player and original companion did not reach the archive goal');d.mark('Both original travellers reach the high archive exit');
 }

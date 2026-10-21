@@ -225,7 +225,13 @@
     {
       "level": 16,
       "id": "vanishing-support",
-      "contract": "8247ede2c7b952af3cb1196df3c5963b06c541675731ddde195bff739c55ffa5",
+      "contract": "9ef647cd7487ed7589f770b25ae137b930e616480af4df675f35c77e52a42385",
+      "nativeViewAudit": {
+        "revision": "v67-initial-camera-aim-only-2026-10-22",
+        "previous": {"yaw": 1.5, "pitch": 0.1},
+        "current": {"yaw": -0.68, "pitch": -0.1},
+        "previousContract": "8247ede2c7b952af3cb1196df3c5963b06c541675731ddde195bff739c55ffa5"
+      },
       "workload": {
         "nodes": 801,
         "meshes": 622,

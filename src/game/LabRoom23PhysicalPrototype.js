@@ -42,6 +42,10 @@ export function buildRoom23PhysicalPrototype(game,index=22){
  k.control('ground-brake-release',[-7,0,1],()=>balance.requestBrake(false),'E — отвести колодки общего тормоза');
  installVisualAuditMiddleKit(k,23);
  const level=k.finish(spawn,cargoSpawn,[0,20,-20],{workshop:k,spec:ROOM23_SPEC,room23PhysicalPrototype:true,portalPuzzle:true,balance,cargoOnAnyPad:()=>balance.west.loaded()||balance.east.loaded()});
+ // A positive spring-pan contact is a command to stay on this load surface.
+ // The shared passive guard also suppresses the powered upright recovery,
+ // which otherwise runs before the ordinary onPad stay check.
+ level.passiveCompanionSupport=()=>balance.west.loaded()||balance.east.loaded();
  level.dispose=()=>balance.dispose();level.spawnView={yaw:-.80,pitch:-.15};
  level.mechanismArt={liftSurfaces:['west-load-car','east-load-car']};
  level.puzzleGeometry={footprint:46*45,occupiedHeights:[0,10,20],orders:['physical-direct-transfer-prototype'],noProgressFlags:true,

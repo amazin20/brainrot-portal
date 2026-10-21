@@ -4,6 +4,20 @@ import * as THREE from 'three';
 import {finishVisualAudit} from '../src/game/LabVisualAuditFinish.js';
 import {finishBridgeSheetNormals} from '../src/game/LabWorkshopModels.js';
 import {RoundedBoxGeometry} from 'three/addons/geometries/RoundedBoxGeometry.js';
+import {finishArchitecturalMaterials} from '../src/game/LabArchitecturalFinishV67.js';
+
+test('finished floor keeps the mechanism material registry and restores it before world cleanup',()=>{
+ const root=new THREE.Group(),source=new THREE.MeshStandardMaterial(),map=new THREE.Texture();source.map=map;source.userData.architecturalRole='floor';
+ const deck=new THREE.Mesh(new THREE.BoxGeometry(6,.2,6),source);root.add(deck);
+ const world={root,materials:{floor:source}},workshop={world,m:{floor:source}},level={world,workshop};
+ const finish=finishArchitecturalMaterials({assets:new Map()},level,[root]),drawing=deck.material;
+ assert.notEqual(drawing,source);assert.equal(drawing.map,map);
+ assert.equal(workshop.m.floor,drawing);assert.equal(world.materials.floor,drawing);
+ let released=0;drawing.addEventListener('dispose',()=>released++);
+ finish.dispose();finish.dispose();assert.equal(released,1);
+ assert.equal(deck.material,source);assert.equal(workshop.m.floor,source);assert.equal(world.materials.floor,source);
+ deck.geometry.dispose();source.dispose();map.dispose();
+});
 
 test('recessed partitions keep the exact physical and portal contracts while replacing one visible skin',()=>{
  const scene=new THREE.Scene(),root=new THREE.Group();scene.add(root);
