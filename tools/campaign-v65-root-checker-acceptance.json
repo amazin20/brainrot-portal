@@ -1,0 +1,1106 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-root-v65-checker-readiness-verification",
+  "pass": true,
+  "sourceAccepted": true,
+  "sourceAcceptanceScope": "Targeted v65 readiness, persistence, localization, package integrity and original-checker regression; no full CPU rerun.",
+  "publicationAccepted": false,
+  "masterTzAccepted": false,
+  "liveSdkAccepted": false,
+  "liveAdsAccepted": false,
+  "moderationAccepted": false,
+  "hardwareFpsAccepted": false,
+  "physicalPhoneTest": false,
+  "sourceCommit": "8eee93c02d4d6da18107ba9882c5656939257938",
+  "sourceTree": "b89b660a094d050ab4c246df12b153d11a187143",
+  "sourceInputsSha256": "bedb3368831a19ba2655b4351ba0035ae3d6e2eac7de0f2b007d1c11ca5ae26b",
+  "runId": 39560406793,
+  "runAttempt": 1,
+  "providerJobs": [
+    {
+      "id": 119090024816,
+      "name": "build",
+      "conclusion": "success"
+    },
+    {
+      "id": 119090266344,
+      "name": "checker-platform (energy, 11,12,13,14,15,16,17,18,19,20)",
+      "conclusion": "success"
+    },
+    {
+      "id": 119090266412,
+      "name": "checker-platform (castle, 41)",
+      "conclusion": "success"
+    },
+    {
+      "id": 119090266465,
+      "name": "production-startup",
+      "conclusion": "success"
+    },
+    {
+      "id": 119090266472,
+      "name": "checker-platform (optics, 31,32,33,34,35,36,37,38,39,40)",
+      "conclusion": "success"
+    },
+    {
+      "id": 119090266481,
+      "name": "checker-platform (early, 1,2,3,4,5,6,7,8,9,10)",
+      "conclusion": "success"
+    },
+    {
+      "id": 119090266505,
+      "name": "checker-platform (living, 21,22,23,24,25,26,27,28,29,30)",
+      "conclusion": "success"
+    },
+    {
+      "id": 119090266630,
+      "name": "checker-platform (fracture, 42,43,44,45,46,47,48,49,50,51)",
+      "conclusion": "success"
+    }
+  ],
+  "sourceArtifacts": [
+    {
+      "id": 12328455816,
+      "name": "v65-checker-platform-living",
+      "bytes": 521137,
+      "sha256": "88f20f17972d9fc015717cc7c65c172864e12ffa4d51d98bdcb70d523f52c4f9"
+    },
+    {
+      "id": 12328135842,
+      "name": "v65-checker-platform-fracture",
+      "bytes": 576386,
+      "sha256": "2ce2a68ff08950d4dc2aedb4996f0a72422c79fdad51d44fb8adf250465d117c"
+    },
+    {
+      "id": 12327682257,
+      "name": "v65-checker-platform-early",
+      "bytes": 600892,
+      "sha256": "7d8ec4b72d02f22c2dd2336f17103d959c1b9dd93541d441ba32adb6333f8828"
+    },
+    {
+      "id": 12327612027,
+      "name": "v65-yandex",
+      "bytes": 4364554,
+      "sha256": "1a8af2a156e16014d7411c9a5138b08415fea1ab3bf9ddcae4983e72c3d8df8a"
+    },
+    {
+      "id": 12327602022,
+      "name": "v65-build",
+      "bytes": 8132,
+      "sha256": "f76add9b0821ca0c3617d5546335675ba0a8cf5e86a7847599c18b267691cb8f"
+    },
+    {
+      "id": 12327587596,
+      "name": "v65-production-startup",
+      "bytes": 3130161,
+      "sha256": "c4dd2840aa2d6a635c1e290b4070a801d20d90d6d0d764fcc6c72ec2ea18b844"
+    },
+    {
+      "id": 12327573860,
+      "name": "v65-checker-platform-energy",
+      "bytes": 564470,
+      "sha256": "55a7d1145d557ae507bcc025f7e69581e57421b7fb879733eb2575b8f7ed359a"
+    },
+    {
+      "id": 12327459348,
+      "name": "v65-checker-platform-castle",
+      "bytes": 131609,
+      "sha256": "f8acd2f978c8a6adc2a5f8cffeacacd0170ab40381bc48ddda6b59838e34e8f5"
+    },
+    {
+      "id": 12327382975,
+      "name": "v65-dist",
+      "bytes": 4521814,
+      "sha256": "3a42b1d8a5baaeb26791a1ffba493792ce84d8fd5ee4a7da580a79af589acf08"
+    },
+    {
+      "id": 12327348065,
+      "name": "v65-unit",
+      "bytes": 6091,
+      "sha256": "875559be5c0231cda73e3b10d084cb3e28fab9ef6dd1617aead0273d0b79439c"
+    },
+    {
+      "id": 12327348061,
+      "name": "v65-yandex-review-dist",
+      "bytes": 4522117,
+      "sha256": "5d5d26493b81f9534b65fcc132f3be402634c3fb660d2d0a363dddcf7c5cba79"
+    },
+    {
+      "id": 12327118803,
+      "name": "v65-checker-platform-optics",
+      "bytes": 548273,
+      "sha256": "e30120c9fa5b67b96976de239e3d89252031ca1558e3af08da915a09d93a043e"
+    }
+  ],
+  "unit": {
+    "tests": 103,
+    "pass": 103,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0
+  },
+  "productionArchive": {
+    "name": "brainrot-portal-v65-yandex.zip",
+    "bytes": 4362366,
+    "sha256": "2c588aa1171bfe2faa5c55c3a30f49ec76fb647db119fe5f35a0d0e1b78fd4bd"
+  },
+  "productionOriginalChecker": {
+    "PASS": 76,
+    "FAIL": 0,
+    "WARN": 3,
+    "N/V": 1,
+    "SCORE": 96
+  },
+  "reviewOriginalCheckerPerRoom": {
+    "PASS": 78,
+    "FAIL": 0,
+    "WARN": 3,
+    "N/V": 1,
+    "SCORE": 96
+  },
+  "reviewRooms": [
+    {
+      "level": 21,
+      "displayNumber": 21,
+      "pass": true,
+      "checkerCounts": {
+        "PASS": 78,
+        "FAIL": 0,
+        "WARN": 3,
+        "N/V": 1,
+        "SCORE": 96
+      },
+      "checkerReportSha256": "ea2fa8ca13cb59f70da382f8537fd80937a20717ca9d2075cbe6289cbfe1c19a",
+      "originalTextSha256": "7d6110375e0fbe4335c58b36b2241d455778036b8bd6375c2fe92a0430dbdb93",
+      "drawCalls": 0,
+      "hintTransactions": 3,
+      "networkResponses": 19
+    },
+    {
+      "level": 22,
+      "displayNumber": 22,
+      "pass": true,
+      "checkerCounts": {
+        "PASS": 78,
+        "FAIL": 0,
+        "WARN": 3,
+        "N/V": 1,
+        "SCORE": 96
+      },
+      "checkerReportSha256": "09956ec461ccf545fd82eeaba615de1d2bb11857292e219d0207e34ac3bda38b",
+      "originalTextSha256": "b611092a8376b9a638691fa4db967097d1bfa7749a8b93b72464d14086601dfa",
+      "drawCalls": 0,
+      "hintTransactions": 3,
+      "networkResponses": 21
+    },
+    {
+      "level": 23,
+      "displayNumber": 23,
+      "pass": true,
+      "checkerCounts": {
+        "PASS": 78,
+        "FAIL": 0,
+        "WARN": 3,
+        "N/V": 1,
+        "SCORE": 96
+      },
+      "checkerReportSha256": "0960e34e8572ace5f31570efab94fff70d5b0094c1c89237ff7407e272c50f77",
+      "originalTextSha256": "080d99833aa9e3f77b043e17954f9f2b38ffdc02ef7ade2b44ccf739dd857b1b",
+      "drawCalls": 0,
+      "hintTransactions": 3,
+      "networkResponses": 20
+    },
+    {
+      "level": 24,
+      "displayNumber": 24,
+      "pass": true,
+      "checkerCounts": {
+        "PASS": 78,
+        "FAIL": 0,
+        "WARN": 3,
+        "N/V": 1,
+        "SCORE": 96
+      },
+      "checkerReportSha256": "56c993dd866801f04858e3aecc834ce99ad7581c68cacfe19d1bf7959d11feb3",
+      "originalTextSha256": "3b69f68b0410db429a79217ef20fd65c900631e6468e160383433c3a7c4b785e",
+      "drawCalls": 0,
+      "hintTransactions": 3,
+      "networkResponses": 20
+    },
+    {
+      "level": 25,
+      "displayNumber": 25,
+      "pass": true,
+      "checkerCounts": {
+        "PASS": 78,
+        "FAIL": 0,
+        "WARN": 3,
+        "N/V": 1,
+        "SCORE": 96
+      },
+      "checkerReportSha256": "0755008985ab91b7f53506a5cda7c46f2a2b40e4c6760ac3416bac53c7fd9e91",
+      "originalTextSha256": "5487b93f55b67cd6467fc30cf2abc1d4540f540646b474fd211d288fa0f6a2fa",
+      "drawCalls": 0,
+      "hintTransactions": 3,
+      "networkResponses": 19
+    },
+    {
+      "level": 26,
+      "displayNumber": 26,
+      "pass": true,
+      "checkerCounts": {
+        "PASS": 78,
+        "FAIL": 0,
+        "WARN": 3,
+        "N/V": 1,
+        "SCORE": 96
+      },
+      "checkerReportSha256": "d3940e13289ecc17a7847291b6fc020f200169ec2863982c2c4e2d62aba151b2",
+      "originalTextSha256": "4f854581951f13129ad11fd16355354745bb1ba6d31d0a5a006ba089f18bd3bc",
+      "drawCalls": 0,
+      "hintTransactions": 3,
+      "networkResponses": 19
+    },
+    {
+      "level": 27,
+      "displayNumber": 27,
+      "pass": true,
+      "checkerCounts": {
+        "PASS": 78,
+        "FAIL": 0,
+        "WARN": 3,
+        "N/V": 1,
+        "SCORE": 96
+      },
+      "checkerReportSha256": "a7881107d90bb9cd19465b30a0410dff6a0f7e807ac5844e3107c392e2a15f8b",
+      "originalTextSha256": "595d5dcaf9da4825ad9db5b40af3837e7e745aaacf8f3d9e38b9fbce8cb30791",
+      "drawCalls": 0,
+      "hintTransactions": 3,
+      "networkResponses": 19
+    },
+    {
+      "level": 28,
+      "displayNumber": 28,
+      "pass": true,
+      "checkerCounts": {
+        "PASS": 78,
+        "FAIL": 0,
+        "WARN": 3,
+        "N/V": 1,
+        "SCORE": 96
+      },
+      "checkerReportSha256": "88b3a7c2748f303f6eb21b091a3216deba5b9930e3c5344f0187e609bdd4de99",
+      "originalTextSha256": "7c473c9130c280f669589f8fbb60e6ebb764a27d8e0a6f52edb9f2e5fa013cd4",
+      "drawCalls": 600,
+      "hintTransactions": 3,
+      "networkResponses": 20
+    },
+    {
+      "level": 29,
+      "displayNumber": 29,
+      "pass": true,
+      "checkerCounts": {
+        "PASS": 78,
+        "FAIL": 0,
+        "WARN": 3,
+        "N/V": 1,
+        "SCORE": 96
+      },
+      "checkerReportSha256": "57d9d858b34b33e2aa35bcc502a61366549bc10200872103a858deaf67227f1d",
+      "originalTextSha256": "d910de32166da0386dd1d33bdb81d22049bb0164614fd7f4a6043e5920f8c723",
+      "drawCalls": 0,
+      "hintTransactions": 3,
+      "networkResponses": 19
+    },
+    {
+      "level": 30,
+      "displayNumber": 30,
+      "pass": true,
+      "checkerCounts": {
+        "PASS": 78,
+        "FAIL": 0,
+        "WARN": 3,
+        "N/V": 1,
+        "SCORE": 96
+      },
+      "checkerReportSha256": "4df796bdace313ef94449d19dd4e80f7ff6f2a6bd70c97de092fac5c1fd777ad",
+      "originalTextSha256": "2c35a1e7742ca8f5eb130b8098e2fe649a0cece359dac36de2ee059eef5f8775",
+      "drawCalls": 56,
+      "hintTransactions": 3,
+      "networkResponses": 19
+    },
+    {
+      "level": 42,
+      "displayNumber": 41,
+      "pass": true,
+      "checkerCounts": {
+        "PASS": 78,
+        "FAIL": 0,
+        "WARN": 3,
+        "N/V": 1,
+        "SCORE": 96
+      },
+      "checkerReportSha256": "3a3ee5f9d6b5e5aaff0b740a1f92e3feafa211cfb5f4266a5373c809224b9817",
+      "originalTextSha256": "844610d49e2250acca1e8ba46eaa818d729414900bad26316317b91511d1f611",
+      "drawCalls": 461,
+      "hintTransactions": 3,
+      "networkResponses": 21
+    },
+    {
+      "level": 43,
+      "displayNumber": 42,
+      "pass": true,
+      "checkerCounts": {
+        "PASS": 78,
+        "FAIL": 0,
+        "WARN": 3,
+        "N/V": 1,
+        "SCORE": 96
+      },
+      "checkerReportSha256": "0d6e6513efdea41f868b22664a5afa43f5ad1e66b749f7d1bc8303665dd4b565",
+      "originalTextSha256": "632ca203736ab1992a46721c17584077a3841ea4b9b183e4b0644a1f3deff970",
+      "drawCalls": 5,
+      "hintTransactions": 3,
+      "networkResponses": 21
+    },
+    {
+      "level": 44,
+      "displayNumber": 43,
+      "pass": true,
+      "checkerCounts": {
+        "PASS": 78,
+        "FAIL": 0,
+        "WARN": 3,
+        "N/V": 1,
+        "SCORE": 96
+      },
+      "checkerReportSha256": "2d9c43ee3881a21809f4238d0520d57b6b820db6ff89b41fd76c32a767ea0218",
+      "originalTextSha256": "ed2df993c9c6577963c03ad6ee994a273cddad43046d99eaf5919486e410440b",
+      "drawCalls": 5,
+      "hintTransactions": 3,
+      "networkResponses": 21
+    },
+    {
+      "level": 45,
+      "displayNumber": 44,
+      "pass": true,
+      "checkerCounts": {
+        "PASS": 78,
+        "FAIL": 0,
+        "WARN": 3,
+        "N/V": 1,
+        "SCORE": 96
+      },
+      "checkerReportSha256": "6ef3db777fe91338f510108d797def695fabf9560d38aa8941ab6c9de0eaf6c8",
+      "originalTextSha256": "1e47533d9b45332620bdbd79bc28df01124795f5432f141f9540eed25457711e",
+      "drawCalls": 4,
+      "hintTransactions": 3,
+      "networkResponses": 21
+    },
+    {
+      "level": 46,
+      "displayNumber": 45,
+      "pass": true,
+      "checkerCounts": {
+        "PASS": 78,
+        "FAIL": 0,
+        "WARN": 3,
+        "N/V": 1,
+        "SCORE": 96
+      },
+      "checkerReportSha256": "e4e38dc5096eedae1201f96348b6b0e0a522d91b46b557b6dda5b7f080129bed",
+      "originalTextSha256": "37ee87d2da7f025cbe4bb520e6c47adc4633e607902964605ce78eb0ed516edf",
+      "drawCalls": 8,
+      "hintTransactions": 3,
+      "networkResponses": 21
+    },
+    {
+      "level": 47,
+      "displayNumber": 46,
+      "pass": true,
+      "checkerCounts": {
+        "PASS": 78,
+        "FAIL": 0,
+        "WARN": 3,
+        "N/V": 1,
+        "SCORE": 96
+      },
+      "checkerReportSha256": "cf5176b9c546008057df1abcc2b0a802d98ee31508be41f01df08f0fb4fda916",
+      "originalTextSha256": "70a68acfbb78bf064d32a2691bb8aebc16a5cc5caeb3cc5334abccea4713f2cc",
+      "drawCalls": 5,
+      "hintTransactions": 3,
+      "networkResponses": 21
+    },
+    {
+      "level": 48,
+      "displayNumber": 47,
+      "pass": true,
+      "checkerCounts": {
+        "PASS": 78,
+        "FAIL": 0,
+        "WARN": 3,
+        "N/V": 1,
+        "SCORE": 96
+      },
+      "checkerReportSha256": "81bf611820cfa5b11a4e29799e071c89562f2dde013495453688a9506e27f303",
+      "originalTextSha256": "b8f051dfa1ba5b0c402b10666d94a1ce0508911d98fe2c51406591f19b39b784",
+      "drawCalls": 4,
+      "hintTransactions": 3,
+      "networkResponses": 21
+    },
+    {
+      "level": 49,
+      "displayNumber": 48,
+      "pass": true,
+      "checkerCounts": {
+        "PASS": 78,
+        "FAIL": 0,
+        "WARN": 3,
+        "N/V": 1,
+        "SCORE": 96
+      },
+      "checkerReportSha256": "7996c6a9b5b166d42895dd35875fab3e8a02d2c875b56b5da655016ba22ee386",
+      "originalTextSha256": "7e2c055fdf7da0ee718d8c25e29453305e90fa0fd43a68ba68840b870c182610",
+      "drawCalls": 4,
+      "hintTransactions": 3,
+      "networkResponses": 21
+    },
+    {
+      "level": 50,
+      "displayNumber": 49,
+      "pass": true,
+      "checkerCounts": {
+        "PASS": 78,
+        "FAIL": 0,
+        "WARN": 3,
+        "N/V": 1,
+        "SCORE": 96
+      },
+      "checkerReportSha256": "c52a1469f4480287c84a2beef3279874c944a44e1ab770270fc01fc5051179c4",
+      "originalTextSha256": "f4733b13c1a4619a3ef84a6f79992aeaf02e6d3be273a3f3e2b229f0db09e967",
+      "drawCalls": 6,
+      "hintTransactions": 3,
+      "networkResponses": 18
+    },
+    {
+      "level": 51,
+      "displayNumber": 50,
+      "pass": true,
+      "checkerCounts": {
+        "PASS": 78,
+        "FAIL": 0,
+        "WARN": 3,
+        "N/V": 1,
+        "SCORE": 96
+      },
+      "checkerReportSha256": "c05759404b49f270278e2174371a0668ed9977d72cf0ca017e3480386d728cd5",
+      "originalTextSha256": "fe660836e77c5d89161163bceca36085906c75c30cbcfbc7fd26b27c0d18b98b",
+      "drawCalls": 5,
+      "hintTransactions": 3,
+      "networkResponses": 21
+    },
+    {
+      "level": 1,
+      "displayNumber": 1,
+      "pass": true,
+      "checkerCounts": {
+        "PASS": 78,
+        "FAIL": 0,
+        "WARN": 3,
+        "N/V": 1,
+        "SCORE": 96
+      },
+      "checkerReportSha256": "5ce21b157def43eda0a48e65a2bff5fc737ac0d2db6192e04ef79e78428584e6",
+      "originalTextSha256": "2b067d9c2b8fa3c7ccc9704df2f55d9915db4fd8277427d4d7b59ed74d0e4c8f",
+      "drawCalls": 3,
+      "hintTransactions": 3,
+      "networkResponses": 18
+    },
+    {
+      "level": 2,
+      "displayNumber": 2,
+      "pass": true,
+      "checkerCounts": {
+        "PASS": 78,
+        "FAIL": 0,
+        "WARN": 3,
+        "N/V": 1,
+        "SCORE": 96
+      },
+      "checkerReportSha256": "fbbd827733091b4c1d51bfed8e944a12419b144aea224d09c25d96ee0de0c71e",
+      "originalTextSha256": "b21ef9c77ee195c8727016215d139e62c585e8f486409e7746acded2bcd53b8d",
+      "drawCalls": 6,
+      "hintTransactions": 3,
+      "networkResponses": 17
+    },
+    {
+      "level": 3,
+      "displayNumber": 3,
+      "pass": true,
+      "checkerCounts": {
+        "PASS": 78,
+        "FAIL": 0,
+        "WARN": 3,
+        "N/V": 1,
+        "SCORE": 96
+      },
+      "checkerReportSha256": "b8d9c82ed58d0d16e1a379ea092f18ebf6e7a1a71565a696fe10dca3503110a6",
+      "originalTextSha256": "57d0c3d107028c9f5e2125453f2e77a42d6148780ced19ffedbfbcedd4b1c856",
+      "drawCalls": 15,
+      "hintTransactions": 3,
+      "networkResponses": 18
+    },
+    {
+      "level": 4,
+      "displayNumber": 4,
+      "pass": true,
+      "checkerCounts": {
+        "PASS": 78,
+        "FAIL": 0,
+        "WARN": 3,
+        "N/V": 1,
+        "SCORE": 96
+      },
+      "checkerReportSha256": "a1cbd1f30f97ad8d20c05a051498365b31560d02529b004b0d88b021df614e8a",
+      "originalTextSha256": "61a021a97229d92a16ff316aff8a85a682672c8e72f5a9486e324a1b3bb352dd",
+      "drawCalls": 6,
+      "hintTransactions": 3,
+      "networkResponses": 17
+    },
+    {
+      "level": 5,
+      "displayNumber": 5,
+      "pass": true,
+      "checkerCounts": {
+        "PASS": 78,
+        "FAIL": 0,
+        "WARN": 3,
+        "N/V": 1,
+        "SCORE": 96
+      },
+      "checkerReportSha256": "dc30b9d42fd3cbf34a217e375984ba5ab035959ff78e8f1648e4f91bad8b9fd0",
+      "originalTextSha256": "d0b2986fdc5b76d0ca5d12221651d9f1904deb38d938d9eb6f24016ba84573e3",
+      "drawCalls": 473,
+      "hintTransactions": 3,
+      "networkResponses": 18
+    },
+    {
+      "level": 6,
+      "displayNumber": 6,
+      "pass": true,
+      "checkerCounts": {
+        "PASS": 78,
+        "FAIL": 0,
+        "WARN": 3,
+        "N/V": 1,
+        "SCORE": 96
+      },
+      "checkerReportSha256": "bb9b05bba08c09f3ca06ea7c585d6e7beb4672b1c07d63f2753f6283d56470ab",
+      "originalTextSha256": "ea0e2310d66d0af8c004f0262c2f53749155e4c1565a7eaf7adcf8d0296fe5c9",
+      "drawCalls": 0,
+      "hintTransactions": 3,
+      "networkResponses": 18
+    },
+    {
+      "level": 7,
+      "displayNumber": 7,
+      "pass": true,
+      "checkerCounts": {
+        "PASS": 78,
+        "FAIL": 0,
+        "WARN": 3,
+        "N/V": 1,
+        "SCORE": 96
+      },
+      "checkerReportSha256": "15e162f23a02c294eb6de6558b05c951e9d50b766b6c6257830fb59a3fbb73d3",
+      "originalTextSha256": "15709e1d6e1f0cbb331bba5632e928a6fc541757b87a16ca4a4c50b9e659836c",
+      "drawCalls": 0,
+      "hintTransactions": 3,
+      "networkResponses": 19
+    },
+    {
+      "level": 8,
+      "displayNumber": 8,
+      "pass": true,
+      "checkerCounts": {
+        "PASS": 78,
+        "FAIL": 0,
+        "WARN": 3,
+        "N/V": 1,
+        "SCORE": 96
+      },
+      "checkerReportSha256": "ff01ad1b690908746961495d60f310f63229a34134388fbb5f8d07a02b3e5f97",
+      "originalTextSha256": "e75ff6a3f4bfab5b4472ec97c7948eb2ab73ef59fa53d6d9013b99fc7836fde5",
+      "drawCalls": 0,
+      "hintTransactions": 3,
+      "networkResponses": 20
+    },
+    {
+      "level": 9,
+      "displayNumber": 9,
+      "pass": true,
+      "checkerCounts": {
+        "PASS": 78,
+        "FAIL": 0,
+        "WARN": 3,
+        "N/V": 1,
+        "SCORE": 96
+      },
+      "checkerReportSha256": "2bdd0645a72cb79deed7f4217d227f06e7f0f474d8a253900a65bc52e1236b3d",
+      "originalTextSha256": "f9ab595b7353593b02d362547eb14d6d99d8619a025b1b08793021c5f7e0b418",
+      "drawCalls": 0,
+      "hintTransactions": 3,
+      "networkResponses": 20
+    },
+    {
+      "level": 10,
+      "displayNumber": 10,
+      "pass": true,
+      "checkerCounts": {
+        "PASS": 78,
+        "FAIL": 0,
+        "WARN": 3,
+        "N/V": 1,
+        "SCORE": 96
+      },
+      "checkerReportSha256": "4bea82f6429739ad7f703d3eaec18d3e6d5387885e60d4db01f6edf252a6be5b",
+      "originalTextSha256": "44ce80aeb0143505da4e9e3695c6d236b38ce264643520ed9aef17c311a7fc9e",
+      "drawCalls": 0,
+      "hintTransactions": 3,
+      "networkResponses": 20
+    },
+    {
+      "level": 11,
+      "displayNumber": 11,
+      "pass": true,
+      "checkerCounts": {
+        "PASS": 78,
+        "FAIL": 0,
+        "WARN": 3,
+        "N/V": 1,
+        "SCORE": 96
+      },
+      "checkerReportSha256": "719082e0e372e1ad1b4545fff2c376757e7fff04ecc5019b6c712c2a2efb9b00",
+      "originalTextSha256": "7e92a37741d3c018e56f2b046f656fb829b1c352636dffe2f0fa479fdf16b9f9",
+      "drawCalls": 0,
+      "hintTransactions": 3,
+      "networkResponses": 21
+    },
+    {
+      "level": 12,
+      "displayNumber": 12,
+      "pass": true,
+      "checkerCounts": {
+        "PASS": 78,
+        "FAIL": 0,
+        "WARN": 3,
+        "N/V": 1,
+        "SCORE": 96
+      },
+      "checkerReportSha256": "41ce8b042890bcded472e0da4ae8731fd4df993597ec91798de3fc00958a029f",
+      "originalTextSha256": "240c106dbd013cd25cb3156f5cc453c7618e941bd1f4b6e830f0d1428b895638",
+      "drawCalls": 0,
+      "hintTransactions": 3,
+      "networkResponses": 17
+    },
+    {
+      "level": 13,
+      "displayNumber": 13,
+      "pass": true,
+      "checkerCounts": {
+        "PASS": 78,
+        "FAIL": 0,
+        "WARN": 3,
+        "N/V": 1,
+        "SCORE": 96
+      },
+      "checkerReportSha256": "7cf84ba90b6e065484a7ef5bfe1678dc14c5139e45d3d416527467ed75e37e0d",
+      "originalTextSha256": "8f07de0a5eefbe51147a74afa9d684e8d47a0b4b1eda3d4f6cfb8a0b39f7154c",
+      "drawCalls": 0,
+      "hintTransactions": 3,
+      "networkResponses": 20
+    },
+    {
+      "level": 14,
+      "displayNumber": 14,
+      "pass": true,
+      "checkerCounts": {
+        "PASS": 78,
+        "FAIL": 0,
+        "WARN": 3,
+        "N/V": 1,
+        "SCORE": 96
+      },
+      "checkerReportSha256": "93d52384ddfa998f3afbeb7ae1e47e92fb69dae81838a5ddaae51b4c71421bb1",
+      "originalTextSha256": "5e1551873d57cde8f38a71446b99dc3064883a353b62e6f606b3f2f6f266739c",
+      "drawCalls": 0,
+      "hintTransactions": 3,
+      "networkResponses": 19
+    },
+    {
+      "level": 15,
+      "displayNumber": 15,
+      "pass": true,
+      "checkerCounts": {
+        "PASS": 78,
+        "FAIL": 0,
+        "WARN": 3,
+        "N/V": 1,
+        "SCORE": 96
+      },
+      "checkerReportSha256": "484a91acbca1854b1b1e65c6057887ab61ec49bfff218d897df1ec0277f08665",
+      "originalTextSha256": "bd582fcc9e497559ccf4c5ea801f164aeb95f67692cec5ddc9c51bf4a5fba9f4",
+      "drawCalls": 0,
+      "hintTransactions": 3,
+      "networkResponses": 19
+    },
+    {
+      "level": 16,
+      "displayNumber": 16,
+      "pass": true,
+      "checkerCounts": {
+        "PASS": 78,
+        "FAIL": 0,
+        "WARN": 3,
+        "N/V": 1,
+        "SCORE": 96
+      },
+      "checkerReportSha256": "6053fd32b08c27f84e0d45941bc9ea61c28bc00a3b791e359375608538290f2f",
+      "originalTextSha256": "09e118220580a975a82bdd6b0e48a9491554b6c9ca61e4abf69584518fc154b9",
+      "drawCalls": 0,
+      "hintTransactions": 3,
+      "networkResponses": 21
+    },
+    {
+      "level": 17,
+      "displayNumber": 17,
+      "pass": true,
+      "checkerCounts": {
+        "PASS": 78,
+        "FAIL": 0,
+        "WARN": 3,
+        "N/V": 1,
+        "SCORE": 96
+      },
+      "checkerReportSha256": "abf0642ee95e845d5c124a690090b69e7a8296f353d2e7b5548da20efb9afdce",
+      "originalTextSha256": "b6a19871dd1c8ce84c1cca791c786bf0ff70cfb35fc18eccc9c8be2b811b7338",
+      "drawCalls": 35,
+      "hintTransactions": 3,
+      "networkResponses": 18
+    },
+    {
+      "level": 18,
+      "displayNumber": 18,
+      "pass": true,
+      "checkerCounts": {
+        "PASS": 78,
+        "FAIL": 0,
+        "WARN": 3,
+        "N/V": 1,
+        "SCORE": 96
+      },
+      "checkerReportSha256": "3dcfb3623384cb338d3c5109fba2e85d23a45e9c660c417b8bbf7d708fb59091",
+      "originalTextSha256": "c770a261a06edd647cbb5767fc8fcfeaf5683be827c5b41f6baecef39c0f6887",
+      "drawCalls": 120,
+      "hintTransactions": 3,
+      "networkResponses": 21
+    },
+    {
+      "level": 19,
+      "displayNumber": 19,
+      "pass": true,
+      "checkerCounts": {
+        "PASS": 78,
+        "FAIL": 0,
+        "WARN": 3,
+        "N/V": 1,
+        "SCORE": 96
+      },
+      "checkerReportSha256": "3fa9e1c3e3416ddacd58d04c9d63f95d509b198309816dac8154c0c78b4fbcfe",
+      "originalTextSha256": "6f9f540271b3f8cdfa4b6c867c3d69567e0869f40e18127e92eba179a98ad396",
+      "drawCalls": 0,
+      "hintTransactions": 3,
+      "networkResponses": 22
+    },
+    {
+      "level": 20,
+      "displayNumber": 20,
+      "pass": true,
+      "checkerCounts": {
+        "PASS": 78,
+        "FAIL": 0,
+        "WARN": 3,
+        "N/V": 1,
+        "SCORE": 96
+      },
+      "checkerReportSha256": "430f1d841f1bf01b3e159817c2dbae540a228ba317b3d30da69796b732e63224",
+      "originalTextSha256": "280241cfed7447ed6ab4ffe14531c99f035316cbd316f9664c1cd26a78e93156",
+      "drawCalls": 280,
+      "hintTransactions": 3,
+      "networkResponses": 16
+    },
+    {
+      "level": 41,
+      "displayNumber": 51,
+      "pass": true,
+      "checkerCounts": {
+        "PASS": 78,
+        "FAIL": 0,
+        "WARN": 3,
+        "N/V": 1,
+        "SCORE": 96
+      },
+      "checkerReportSha256": "393bb8ab37344040d4f46aceadaf4933b8833f76a336b761521dc4de85d496b5",
+      "originalTextSha256": "dcad7beb8fccf8baea19e0493bf068506451aadb531fc620144ba1c2cc060e51",
+      "drawCalls": 617,
+      "hintTransactions": 3,
+      "networkResponses": 16
+    },
+    {
+      "level": 31,
+      "displayNumber": 31,
+      "pass": true,
+      "checkerCounts": {
+        "PASS": 78,
+        "FAIL": 0,
+        "WARN": 3,
+        "N/V": 1,
+        "SCORE": 96
+      },
+      "checkerReportSha256": "1e5ece38f453a61e021bc2195951855824222b8018a68515942020c5195cce9d",
+      "originalTextSha256": "8cac5c7f2fdd7e0d47ab36a316cde4b17959edd66df8b09272e53e01bd96bb1c",
+      "drawCalls": 27,
+      "hintTransactions": 3,
+      "networkResponses": 22
+    },
+    {
+      "level": 32,
+      "displayNumber": 32,
+      "pass": true,
+      "checkerCounts": {
+        "PASS": 78,
+        "FAIL": 0,
+        "WARN": 3,
+        "N/V": 1,
+        "SCORE": 96
+      },
+      "checkerReportSha256": "d7ea724f1622cb61dadc18089b17b22908adedc6559650443c84e542c5ce166e",
+      "originalTextSha256": "dbab38ce5a1d8c6742d3f89bb2a8aeff5ff23528b6828b8488c733b197e18170",
+      "drawCalls": 9,
+      "hintTransactions": 3,
+      "networkResponses": 22
+    },
+    {
+      "level": 33,
+      "displayNumber": 33,
+      "pass": true,
+      "checkerCounts": {
+        "PASS": 78,
+        "FAIL": 0,
+        "WARN": 3,
+        "N/V": 1,
+        "SCORE": 96
+      },
+      "checkerReportSha256": "4cf3b77fddca2037a90e44ca66523d468279921b7cdd29d01431564a3eee457c",
+      "originalTextSha256": "398aa384b15924b3e545418c3073b1d3e8074e7d72780bc3f8e7df55a56b10ab",
+      "drawCalls": 233,
+      "hintTransactions": 3,
+      "networkResponses": 19
+    },
+    {
+      "level": 34,
+      "displayNumber": 34,
+      "pass": true,
+      "checkerCounts": {
+        "PASS": 78,
+        "FAIL": 0,
+        "WARN": 3,
+        "N/V": 1,
+        "SCORE": 96
+      },
+      "checkerReportSha256": "24a268aaca12df3be813660a07c2a85bcb6c32c5fb0d058bce7a0607e36a2c3a",
+      "originalTextSha256": "331ea711656b2167fd0c7f6560267f08ee0014ba7ddf3a62de237e43d6972b37",
+      "drawCalls": 333,
+      "hintTransactions": 3,
+      "networkResponses": 22
+    },
+    {
+      "level": 35,
+      "displayNumber": 35,
+      "pass": true,
+      "checkerCounts": {
+        "PASS": 78,
+        "FAIL": 0,
+        "WARN": 3,
+        "N/V": 1,
+        "SCORE": 96
+      },
+      "checkerReportSha256": "f0035d63de9c0a3467859cc5f8154caa70f843902891cd5996663a7d3a3427dd",
+      "originalTextSha256": "83fab97ccec9c9bc2cc61694d52de6b5d947de4afe45937642308a0562c19be5",
+      "drawCalls": 16,
+      "hintTransactions": 3,
+      "networkResponses": 22
+    },
+    {
+      "level": 36,
+      "displayNumber": 36,
+      "pass": true,
+      "checkerCounts": {
+        "PASS": 78,
+        "FAIL": 0,
+        "WARN": 3,
+        "N/V": 1,
+        "SCORE": 96
+      },
+      "checkerReportSha256": "eeb6377cf4a847019a8afdf50a3edb4d4f8dc44a8b866df9c7aabfcb8a5138f0",
+      "originalTextSha256": "37a526d850edc644ca3725c78a0714b9cb4e90e33db0712a3afd7770d69db613",
+      "drawCalls": 58,
+      "hintTransactions": 3,
+      "networkResponses": 21
+    },
+    {
+      "level": 37,
+      "displayNumber": 37,
+      "pass": true,
+      "checkerCounts": {
+        "PASS": 78,
+        "FAIL": 0,
+        "WARN": 3,
+        "N/V": 1,
+        "SCORE": 96
+      },
+      "checkerReportSha256": "ce713ca2a87b284b0eeb883450508cc83af82b1af5a828e0772e958c9102485c",
+      "originalTextSha256": "b03489ee0da393301cfc76f14e6667a49b354145b801c03dedcbd730902392d2",
+      "drawCalls": 27,
+      "hintTransactions": 3,
+      "networkResponses": 21
+    },
+    {
+      "level": 38,
+      "displayNumber": 38,
+      "pass": true,
+      "checkerCounts": {
+        "PASS": 78,
+        "FAIL": 0,
+        "WARN": 3,
+        "N/V": 1,
+        "SCORE": 96
+      },
+      "checkerReportSha256": "f73525f51051d4080527c5740efb44017c0acb1ee3ebfc048abcca49a70385a3",
+      "originalTextSha256": "5baf627c09c77a264da38aa33ef95c768f68e441864293c1c8ff039450b8fe87",
+      "drawCalls": 10,
+      "hintTransactions": 3,
+      "networkResponses": 21
+    },
+    {
+      "level": 39,
+      "displayNumber": 39,
+      "pass": true,
+      "checkerCounts": {
+        "PASS": 78,
+        "FAIL": 0,
+        "WARN": 3,
+        "N/V": 1,
+        "SCORE": 96
+      },
+      "checkerReportSha256": "64ca9e51955fbda01d7ac86677b4979a5786120a8cad1e1075b1aa2dc327be19",
+      "originalTextSha256": "49e3e03c70fe5f6df465f2fe0887e50caa1c0d721f0cb3346b964ba5fd24f5bc",
+      "drawCalls": 458,
+      "hintTransactions": 3,
+      "networkResponses": 21
+    },
+    {
+      "level": 40,
+      "displayNumber": 40,
+      "pass": true,
+      "checkerCounts": {
+        "PASS": 78,
+        "FAIL": 0,
+        "WARN": 3,
+        "N/V": 1,
+        "SCORE": 96
+      },
+      "checkerReportSha256": "c3372bc9cfb6903ec969d4a3f808b33507da8463c0d7169f8af86dc48fba11c0",
+      "originalTextSha256": "2c4142efbbfc4fb4e38ef2941f16a687df17aae5226e8cdb61ef006f5c806588",
+      "drawCalls": 41,
+      "hintTransactions": 3,
+      "networkResponses": 21
+    }
+  ],
+  "hintTransactions": 153,
+  "canvas": {
+    "rooms": 51,
+    "successfulDrawCalls": 3930,
+    "distinctExactTextStrings": 1754,
+    "captureComplete": true,
+    "languageReview": "See separate captured-text review; capture completeness does not prove visible pixels/readability."
+  },
+  "remainingOriginalFindings": [
+    {
+      "name": "GameReady timing (п.1.19)",
+      "status": "warn",
+      "detail": "LoadingAPI.ready() may be called too early — ensure it runs AFTER game is playable"
+    },
+    {
+      "name": "No WebGL notice (п.1.6.1.7)",
+      "status": "warn",
+      "detail": "Detected risk — review this item"
+    },
+    {
+      "name": "No profanity in UI text (п.8.2.4)",
+      "status": "warn",
+      "detail": "Possible profanity detected in the source/UI text (п.8.2.4 — no obscene language in any language). Review and replace; if it is a false match (clean homograph), ignore."
+    },
+    {
+      "name": "Canvas text reminder",
+      "status": "not_verified",
+      "detail": "NOT VERIFIED — Canvas text is not visible to DOM scanning; verify rendered text for declared languages"
+    }
+  ],
+  "productionRuntimeWarnings": [
+    "%c[DEBUGCHECK] 1 TIMING ISSUES DETECTED: color:#ff4040;font-weight:bold;font-size:14px",
+    "[DEBUGCHECK] ⚠️ LoadingAPI.ready() NOT CALLED after 8 seconds! (Yandex 1.19.2 — red after 90s = not implemented)",
+    "[DEBUGCHECK] Open panel: Ctrl+Shift+2 (×3) for full report"
+  ],
+  "limits": [
+    "Original WARN and NOT VERIFIED are retained; they have not been promoted to PASS.",
+    "Review routes use completed-prefix fixtures and legacy initialization resets outside route counters; not a continuous new-player campaign.",
+    "Explicit local SDK only; no live SDK/ad, moderation, hardware FPS or physical-phone acceptance.",
+    "Published v64 is unchanged; v65 is a checked source/package candidate."
+  ],
+  "version": "v65-checker-readiness",
+  "sourceBranch": "upgrade/checker-readiness-20261021",
+  "workflow": ".github/workflows/checker-readiness-v65-review.yml",
+  "workflowUrl": "https://github.com/amazin20/brainrot-portal/actions/runs/39560406793",
+  "humanPlaytestAccepted": false,
+  "previousReviewOriginalCheckerPerRoom": {
+    "PASS": 68,
+    "FAIL": 0,
+    "WARN": 12,
+    "N/V": 2
+  },
+  "originalVerdictsAltered": false,
+  "supplementalReviews": {
+    "remainingWarnings": {
+      "bytes": 24757,
+      "sha256": "6da810780469adff1bb1c8de89f7b1a99399b1cc0b99ab0672c8f2c3390d445f"
+    },
+    "canvasLanguage": {
+      "bytes": 2048,
+      "sha256": "b96e671f6a0622b2e48caaab5b9b4724a3556461866683a1039745bc071bbf60"
+    }
+  },
+  "deliverables": [
+    {
+      "name": "Brainrot-Portal-v65-Checker-Evidence.zip",
+      "bytes": 19790744,
+      "sha256": "3c6032bf3e04e5c37599d8a31505af98051d96b51fa65d4dcc2e44f652a66953"
+    },
+    {
+      "name": "Brainrot-Portal-v65-Yandex.zip",
+      "bytes": 4362366,
+      "sha256": "2c588aa1171bfe2faa5c55c3a30f49ec76fb647db119fe5f35a0d0e1b78fd4bd"
+    }
+  ]
+}

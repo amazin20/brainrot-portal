@@ -1,0 +1,100 @@
+{
+  "schemaVersion": 1,
+  "kind": "v65-independent-captured-canvas-text-review",
+  "pass": true,
+  "reviewer": "/root/sdk_review",
+  "rootCrossCheck": true,
+  "sourceCommit": "8eee93c02d4d6da18107ba9882c5656939257938",
+  "sourceTree": "b89b660a094d050ab4c246df12b153d11a187143",
+  "runId": 39560406793,
+  "runAttempt": 1,
+  "rooms": 51,
+  "nonemptyRooms": 31,
+  "successfulFillTextCalls": 3930,
+  "successfulStrokeTextCalls": 0,
+  "distinctMethodTextFontEntries": 1779,
+  "distinctExactTextStrings": 1754,
+  "noEnglishInstructionsFoundInCapturedArguments": true,
+  "allInstrumentationIntact": true,
+  "allCapturesComplete": true,
+  "overflow": false,
+  "skippedCalls": 0,
+  "unrecordedCalls": 0,
+  "observationErrors": 0,
+  "emptyCaptures": [
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    19,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    29
+  ],
+  "allowedLatinNotation": [
+    {
+      "values": [
+        "I",
+        "II",
+        "III"
+      ],
+      "meaning": "Roman numbering",
+      "rooms": [
+        3,
+        35,
+        40
+      ]
+    },
+    {
+      "values": [
+        "A"
+      ],
+      "meaning": "Amperes",
+      "rooms": [
+        18
+      ]
+    },
+    {
+      "values": [
+        "A",
+        "B"
+      ],
+      "meaning": "Circuit identifiers",
+      "rooms": [
+        42
+      ]
+    },
+    {
+      "values": [
+        "°C"
+      ],
+      "meaning": "Temperature",
+      "rooms": [
+        39
+      ]
+    }
+  ],
+  "originalCanvasVerdict": "NOT VERIFIED",
+  "originalCheckerAltered": false,
+  "originalVerdictPromoted": false,
+  "humanPlaytestAccepted": false,
+  "moderationAccepted": false,
+  "limits": [
+    "Only successful native fillText/strokeText argument observations along recorded routes.",
+    "No language conclusion for rooms with no captured text.",
+    "Instrumentation completeness does not prove all possible states, DOM/WebGL text, visible pixels or readability.",
+    "This supplemental review leaves the original Canvas NOT VERIFIED unchanged."
+  ]
+}
