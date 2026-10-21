@@ -4,7 +4,59 @@ import * as THREE from 'three';
 import {SingularityKit} from '../src/game/LabSingularityKit.js';
 import {SINGULARITY_ROOMS} from '../src/game/LabSingularityLayout.js';
 import {castleMachineCasingGeometry,buildCastleAuditConstruction,finishVisualAuditCastle} from '../src/game/LabVisualAuditCastle.js';
+import {castlePerimeterCofferGeometry} from '../src/game/LabCastleMaterials.js';
 const V=(...p)=>new THREE.Vector3(...p);
+
+test('castle coffer frame volumes do not duplicate any exterior coplanar face',()=>{
+ for(const size of [[32,6.8,.5],[.5,15,36],[6.8,8,.5],[32,3,.5],[.5,2.4,9]])for(const monumental of [false,true]){
+  const geometry=castlePerimeterCofferGeometry(size,{monumental}),p=geometry.attributes.position,faces=[];
+  assert.ok(geometry.boundingBox.min.distanceTo(V(-.5,-.5,-.5))<1e-6);assert.ok(geometry.boundingBox.max.distanceTo(V(.5,.5,.5))<1e-6);
+  // Each primitive contributes two adjacent triangles per closed box face.
+  // Coplanar front/side rectangles must only meet along their boundaries.
+  for(let i=0;i<p.count;i+=6)for(let axis=0;axis<3;axis++)for(const side of [-1,1]){
+   if(!Array.from({length:6},(_,j)=>i+j).every(j=>Math.abs(p.getComponent(j,axis)-side*.5)<1e-6))continue;
+   const bounds=[0,1,2].filter(a=>a!==axis).map(a=>[Math.min(...Array.from({length:6},(_,j)=>p.getComponent(i+j,a))),Math.max(...Array.from({length:6},(_,j)=>p.getComponent(i+j,a)))]);
+   faces.push({axis,side,bounds});
+  }
+  for(let i=0;i<faces.length;i++)for(let j=i+1;j<faces.length;j++){
+   const a=faces[i],b=faces[j];if(a.axis!==b.axis||a.side!==b.side)continue;
+   assert.ok(a.bounds.some((r,k)=>Math.min(r[1],b.bounds[k][1])-Math.max(r[0],b.bounds[k][0])<1e-6),'coffer overlaps its own external frame');
+  }
+  geometry.dispose();
+ }
+});
+
+test('migrant suspension follows the actual carriage without enlarging its physical deck and disposes once',()=>{
+ const game={scene:new THREE.Scene(),colliders:[],floors:[],cameraBlockers:[],aimBlockers:[],portalPanels:[]},k=new SingularityKit(game);
+ const def=SINGULARITY_ROOMS.find(r=>r.id==='migrant'),[x,y,z]=def.at,room={def,b:{x0:x-def.w/2,x1:x+def.w/2,z0:z-def.d/2,z1:z+def.d/2}};
+ const platform=k.floor(x-9,x-3,z-4,z+4,y+3,k.m.ivory,{dynamic:true}),rail=k.decor([x,y+10,z],[30,.4,.5],k.m.copper);
+ const before=platform.userData.collider.box.clone(),registries=Object.fromEntries(['colliders','floors','cameraBlockers','aimBlockers','portalPanels'].map(key=>[key,[...game[key]]]));
+ const result=buildCastleAuditConstruction({game,k,rooms:new Map([['migrant',room]]),machines:new Map(),edges:[]});
+ assert.equal(result.carriageChassis,1);assert.equal(result.carriageSuspensions,4);assert.equal(result.perFrameCallbacks,1);
+ k.sync(platform,0,true);assert.ok(platform.userData.collider.box.equals(before));assert.equal(platform.children.length,0);
+ for(const [key,values]of Object.entries(registries))assert.deepEqual(game[key],values);
+ let renders=0;const initial=platform.position.clone(),level={tower:true,singularity:true,structure:k.root,renderUpdate(){renders++;},reset(){k.move(platform,initial.toArray(),0);},dispose(){k.dispose();}};
+ finishVisualAuditCastle(game,level,40,[k.root]);const follower=k.root.userData.castleVisualFollowers[0];
+ const assertAnchors=()=>{
+  follower.mount.updateWorldMatrix(true,true);
+  assert.ok(follower.mount.getWorldScale(V()).distanceTo(V(1,1,1))<1e-9,'metre-authored suspension inherits the deck dimensions as scale');
+  for(const anchorX of [-2.65,2.65]){
+   for(const side of [-1,1]){
+    const lower=V(anchorX,.20,side*3.55).applyMatrix4(follower.mount.matrixWorld);
+    assert.ok(lower.distanceTo(V(platform.position.x+anchorX,platform.userData.floor.y,platform.position.z+side*3.55))<1e-9,'suspension foot misses the actual walking deck');
+   }
+   const upper=V(anchorX,7,0).applyMatrix4(follower.mount.matrixWorld);
+   assert.ok(upper.distanceTo(V(platform.position.x+anchorX,rail.position.y-rail.scale.y/2,rail.position.z))<1e-9,'suspension head misses the underside of the actual rail');
+  }
+ };
+ assertAnchors();
+ k.move(platform,initial.clone().add(V(11,0,0)).toArray(),0);level.renderUpdate();follower.mount.updateWorldMatrix(true,true);platform.updateWorldMatrix(true,false);
+ assert.equal(renders,1);assertAnchors();assert.equal(platform.children.length,0);
+ level.reset();assertAnchors();
+ const geometries=new Set([platform.geometry,...follower.mount.children.map(m=>m.geometry)]);let disposals=0;
+ for(const geometry of geometries)geometry.addEventListener('dispose',()=>disposals++);
+ level.dispose();level.dispose();assert.equal(disposals,geometries.size);assert.equal(k.root.parent,null);assert.equal(game.colliders.length,0);
+});
 
 test('closed castle casings retain exact original bounds and finite normals at every equipment orientation',()=>{
  for(const size of [[.6,9.4,21],[17,9.4,.6],[12,.4,4],[.24,24.4,.24]])for(const axis of ['x','y','z']){

@@ -3,7 +3,7 @@ import {RoundedBoxGeometry} from 'three/addons/geometries/RoundedBoxGeometry.js'
 import {mergeGeometries} from 'three/addons/utils/BufferGeometryUtils.js';
 
 const V=(...a)=>new THREE.Vector3(...a),Q=()=>new THREE.Quaternion();
-export const MIDDLE_AUDIT_REVISION='v66-authored-machine-finishes';
+export const MIDDLE_AUDIT_REVISION='v67-readably-built-middle-machines';
 const COLORS={paint:0x709b94,dark:0x243d48,metal:0x9fafab,copper:0xd0a26d,ivory:0xc9d1c2};
 
 /** Two broad moving arrow arms, one instanced draw, point along actual belt
@@ -154,6 +154,132 @@ function makeWorkshop(k,number){
   }
   stats.cabinets=(stats.cabinets||0)+1;return o;
  }
+ /** The large sight baffles were still plain cream sheets after the first
+  * pass. Their actual CLOSED collision box now supplies the complete outer
+  * silhouette, deep perimeter, coloured structural skirt and wide enamel
+  * bays on BOTH sides. No trim projects into an aperture or walking lane. */
+ function bulkhead(target,name,{paint=COLORS.paint,accent=COLORS.copper,axis,theme='service'}={}){
+  const o=owner(target,name);if(!o)return;
+  const s=o.bounds.getSize(V()),c=o.bounds.getCenter(V());axis??=(s.x<s.z?0:2);
+  const n=axis===0?V(1,0,0):V(0,0,1),right=axis===0?V(0,0,-1):V(1,0,0),up=V(0,1,0);
+  const q=Q().setFromRotationMatrix(new THREE.Matrix4().makeBasis(right,up,n));
+  const w=Math.abs(s.dot(right))*.996,h=s.y*.996,d=Math.abs(s.dot(n))*.996;
+  const rim=Math.min(.28,w*.065,h*.055),skin=d*.075,face=d*.462;
+  const b=(x,y,z,a,b,e,col=paint,metal=false)=>part(o,c.clone().addScaledVector(right,x).addScaledVector(up,y).addScaledVector(n,z).toArray(),[a,b,e],col,{q,metal});
+  // Closed core: dark panel seams are shallow recesses backed by solid metal.
+  b(0,0,0,w,h,d*.78,COLORS.dark);
+  const bays=Math.max(1,Math.min(7,Math.ceil(w/5.7))),rows=Math.max(1,Math.min(3,Math.ceil(h/9))),bw=(w-rim*2)/bays,rh=(h-rim*2)/rows;
+  for(const sign of [-1,1]){
+   for(const x of [-1,1])b(x*(w-rim)/2,0,sign*face,rim,h,skin,COLORS.metal,true);
+   for(const y of [-1,1])b(0,y*(h-rim)/2,sign*face,w-rim*2,rim,skin,COLORS.dark);
+   for(let i=0;i<bays;i++)for(let j=0;j<rows;j++){
+    const x=-w/2+rim+bw*(i+.5),y=-h/2+rim+rh*(j+.5),gap=Math.min(.105,bw*.04,rh*.04);
+    const color=new THREE.Color(paint).multiplyScalar(theme==='garden'&&j===rows-1?.86:j%2===0?1:.93).getHex();
+    b(x,y,sign*d*.422,bw-gap,rh-gap,skin,color);
+    // Broad lower service bands, rather than a repetitive bolt texture.
+    // The bottom row already has the broad continuous skirt below. A
+    // second band there shared the same exterior z-plane over part of its
+    // height; retain only one visible face instead of masking the overlap.
+    if(j>0)b(x,y-rh*.30,sign*face,bw*.83,Math.min(.30,rh*.085),skin,COLORS.dark);
+    if(theme==='garden'){
+     b(x,y+rh*.37,sign*face,bw*.74,Math.min(.21,rh*.06),skin,accent,true);
+     for(const edge of [-1,1])b(x+edge*bw*.31,y+rh*.07,sign*face,Math.min(.12,bw*.05),rh*.44,skin,COLORS.dark);
+    }else{
+     const at=x+(i%2?-.27:.27)*bw;
+     b(at,y+rh*.03,sign*face,Math.min(.16,bw*.055),rh*.42,skin,COLORS.dark);
+     b(x,y+rh*.32,sign*face,bw*.70,Math.min(.12,rh*.045),skin,accent,true);
+    }
+   }
+   // A wide founded skirt helps a 20 m partition read as architecture rather
+   // than an enormous untextured cupboard suspended over the puzzle.
+   b(0,-h/2+rim+Math.min(.68,h*.075),sign*face,w-rim*2,Math.min(1.1,h*.11),skin,COLORS.dark);
+  }
+  const keep=target.userData.keepMaterial;target.userData.keepMaterial=true;
+  cleanup.push(()=>{if(keep===undefined)delete target.userData.keepMaterial;else target.userData.keepMaterial=keep;});
+  stats.largeBulkheads=(stats.largeBulkheads||0)+1;return o;
+ }
+ /** Retain the real readout and its update callback, while making its board
+  * an instrument IN a housing, not a billboard floating over the machine.
+  * Only a render-only Plane is resized. The original measured support box,
+  * all mechanism children, portals and the device's current values stay exact. */
+ function instrumentFascia(target,name,{paint=COLORS.paint}={}){
+  const o=owner(target,name);if(!o)return;
+  const s=o.bounds.getSize(V()),c=o.bounds.getCenter(V()),axis=s.x<s.z?0:2;
+  const n=axis===0?V(1,0,0):V(0,0,1),right=axis===0?V(0,0,-1):V(1,0,0),up=V(0,1,0),q=Q().setFromRotationMatrix(new THREE.Matrix4().makeBasis(right,up,n));
+  const w=Math.abs(s.dot(right))*.995,h=s.y*.995,d=Math.abs(s.dot(n))*.995;
+  const b=(x,y,z,a,b,e,col=paint,metal=false)=>part(o,c.clone().addScaledVector(right,x).addScaledVector(up,y).addScaledVector(n,z).toArray(),[a,b,e],col,{q,metal});
+  b(0,0,0,w,h,d*.81,COLORS.dark);
+  for(const sign of [-1,1]){
+   b(0,0,sign*d*.43,w*.97,h*.88,d*.08,paint);
+   for(const x of [-1,1]){
+    b(x*w*.45,0,sign*d*.475,w*.045,h*.90,d*.04,COLORS.metal,true);
+    for(let i=0;i<4;i++)b(x*w*.35,(i-1.5)*h*.14,sign*d*.475,w*.12,h*.055,d*.04,COLORS.dark);
+   }
+   // End before the side rails. Their outward planes are equal by design,
+   // so the copper must not enter their x-range at either corner.
+   for(const y of [-1,1])b(0,y*h*.43,sign*d*.475,w*.84,h*.045,d*.04,COLORS.copper,true);
+  }
+  stats.instrumentFascias=(stats.instrumentFascias||0)+1;return o;
+ }
+ function compactReadout(mesh,scale){
+  if(mesh?.geometry?.type!=='PlaneGeometry'||!mesh.material?.map||mesh.userData?.middleCompactReadout)return;
+  const original=mesh.scale.clone();mesh.scale.x*=scale;mesh.scale.y*=.83;mesh.userData.middleCompactReadout=true;
+  cleanup.push(()=>{mesh.scale.copy(original);delete mesh.userData.middleCompactReadout;});
+  stats.compactReadouts=(stats.compactReadouts||0)+1;
+ }
+ /** A closed steel caisson with continuous perimeter returns and a few deep
+  * transverse webs. It uses the ACTUAL shallow slab, not a suspended false
+  * floor below it. Large dark members replace the former many copper slats. */
+ function deckCaisson(target,name){
+  const o=owner(target,name);if(!o)return;
+  const s=o.bounds.getSize(V()),c=o.bounds.getCenter(V()),w=s.x*.995,h=s.y*.995,d=s.z*.995;
+  const b=(x,y,z,a,b,e,col=COLORS.dark)=>part(o,c.clone().add(V(x,y,z)).toArray(),[a,b,e],col);
+  const side=Math.min(.34,w*.08),end=Math.min(.32,d*.12);
+  b(0,h*.45,0,w,h*.10,d,0x8a9e97);
+  b(0,-h*.02,0,w-side*2-.05,h*.84,d-end*2-.05,0x46696b);
+  for(const x of [-1,1])b(x*(w-side)/2,-h*.05,0,side,h*.90,d,0x28474c);
+  for(const z of [-1,1])b(0,-h*.05,z*(d-end)/2,w-side*2-.025,h*.90,end,0x46696b);
+  const webs=Math.max(1,Math.min(5,Math.floor(w/5))),spacing=(w-side*2)/(webs+1);
+  for(let i=1;i<=webs;i++)b(-w/2+side+i*spacing,-h*.14,0,Math.min(.24,spacing*.12),h*.72,d-end*2-.025,0x47676b);
+  stats.closedDeckCaissons=(stats.closedDeckCaissons||0)+1;return o;
+ }
+ /** The hook loads the near edge of this REAL moving gate. A broad top
+  * flange, closed bearing-side return and diagonal plate webs explain that
+  * transmission. They follow the original rigid train, not a display clock. */
+ function tractionGate(target,name){
+  const o=owner(target,name);if(!o)return;
+  const s=o.bounds.getSize(V()),c=o.bounds.getCenter(V()),w=s.x*.99,h=s.y*.99,d=s.z*.99;
+  const b=(x,y,z,a,b,e,col=COLORS.dark,angle=0)=>part(o,c.clone().add(V(x,y,z)).toArray(),[a,b,e],col,{q:Q().setFromAxisAngle(V(0,0,1),angle)});
+  const rail=Math.min(.42,w*.08,h*.08),innerW=w-rail*2,innerH=h-rail*2;
+  b(0,0,0,innerW,innerH,d*.52,0x527675);
+  for(const x of [-1,1])b(x*(w-rail)/2,0,0,rail,h,d,0x263f48);
+  for(const y of [-1,1])b(0,y*(h-rail)/2,0,innerW,rail,d,0x4c6b70);
+  // Webs do not overlap one another or the perimeter in their outside plane.
+  // Their raised faces sit in front of a complete closed enamel backing.
+  const dy=innerH*.25,thickness=Math.min(.30,innerH*.09);
+  for(const sign of [-1,1]){
+   for(const [x,run,direction]of [[-.23,.38,-1],[.12,.22,1]]){
+    const dx=innerW*run,length=Math.hypot(dx,dy),angle=direction*Math.atan2(dy,dx);
+    b(x*innerW,0,sign*d*.375,length,thickness,d*.18,0xb89b68,angle);
+   }
+   b(innerW*.33,0,sign*d*.375,Math.min(.30,innerW*.055),innerH*.83,d*.18,0x263f48);
+  }
+  stats.tractionGates=(stats.tractionGates||0)+1;return o;
+ }
+ /** The terminal already owns this full collision envelope. A founded
+  * closed lower casting replaces its visually weightless stalk while the
+  * original GLB display, input point, height and physical bounds stay exact. */
+ function terminalCasting(terminal){
+  const target=terminal?.collider?.mesh;if(!target)return;
+  const o=owner(target,`${number} / ${terminal.kind} founded control casting`,{physicalSurface:true});if(!o)return;
+  const s=o.bounds.getSize(V()),c=o.bounds.getCenter(V()),b=(p,size,color)=>part(o,c.clone().add(V(...p)).toArray(),size,color);
+  b([0,-s.y*.445,0],[s.x*.90,s.y*.10,s.z*.90],0x263f48);
+  b([0,-s.y*.15,0],[s.x*.70,s.y*.50,s.z*.64],0x64867d);
+  b([0,s.y*.11,0],[s.x*.84,s.y*.08,s.z*.78],0x9caea3);
+  for(const side of [-1,1])b([side*s.x*.36,-s.y*.15,0],[s.x*.07,s.y*.43,s.z*.69],0x304d54);
+  b([0,-s.y*.12,s.z*.345],[s.x*.45,s.y*.25,s.z*.04],0x314f55);
+  stats.foundedControls=(stats.foundedControls||0)+1;return o;
+ }
  function stairRiser(target){
   const o=owner(target,number+' / closed structural riser below the finished tread');if(!o)return;
   const size=o.bounds.getSize(V()),center=o.bounds.getCenter(V()),recess=Math.min(.12,size.y*.48);
@@ -217,7 +343,57 @@ function makeWorkshop(k,number){
    for(const fn of cleanup)fn();for(const list of banks.values())list[0].mesh.dispose();for(const g of Object.values(geometry))g.dispose();for(const m of Object.values(materials))m.dispose();for(const m of ownedMaterials)m.dispose();root.clear();};
   return {root,stats,sync};
  }
- return {root,meshes,boxMeshes,named,at,visible,chamber,vessel,cabinet,stairRiser,smoothSurface,coat,nearestBox,handwheel,extras,cleanup,stats,finish};
+ return {root,meshes,boxMeshes,named,at,visible,chamber,vessel,cabinet,bulkhead,instrumentFascia,compactReadout,deckCaisson,tractionGate,terminalCasting,stairRiser,smoothSurface,coat,nearestBox,handwheel,extras,cleanup,stats,finish};
+}
+
+/** Authored large-scale construction for the second and third chapters.
+ * These are original thin CLOSED structural boxes, never the white portal
+ * sheets or imported actors. Keep the garden, workshop and launch identities
+ * separate; one consistent palette per chapter still leaves room-specific
+ * silhouettes, windows and all their original occlusion relationships. */
+function finishMiddleComposition(a,k,number){
+ if(number<18||number>30)return;
+ const palette=number<=20?{paint:0x718b8d,accent:0xd4ad68,theme:'service'}:
+  number===24?{paint:0xaf7565,accent:0xeac57e,theme:'garden'}:
+  number===27?{paint:0x637c9a,accent:0xe5b55e,theme:'service'}:
+  number===28?{paint:0xbf7d69,accent:0x8bcac0,theme:'garden'}:
+  number===29?{paint:0x827e9d,accent:0xe2c974,theme:'garden'}:
+  {paint:0x63877c,accent:0xb5c4a4,theme:'garden'};
+ for(const mesh of a.boxMeshes()){
+  const p=mesh.geometry.parameters;
+  if(mesh.parent!==k.world.root||!a.visible(mesh)||mesh.userData?.keepMaterial||mesh.userData?.portalable||mesh.userData?.portalTile||mesh.userData?.recoveryStairRiser||mesh.userData?.freightStairRiser)continue;
+  if(p.height<4.5||Math.min(p.width,p.depth)>.85||Math.max(p.width,p.depth)<5.0||p.height*Math.max(p.width,p.depth)<38)continue;
+  a.bulkhead(mesh,`${number} / closed architectural service bay`,palette);
+ }
+ if([19,21,22,23,27,29].includes(number))for(const mesh of a.boxMeshes()){
+  const p=mesh.geometry.parameters;
+  if(mesh.parent!==k.world.root||!a.visible(mesh)||mesh.userData?.keepMaterial||mesh.position.y<2||p.height<.20||p.height>.61||p.width<5||p.depth<2)continue;
+  // The source's complete shallow steel box is still the load envelope.
+  // A dark edge, milled perimeter and broad folded underside now separate
+  // it from the light walking mineral, instead of reading as white paper.
+  const made=number===23?a.deckCaisson(mesh,'23 / closed permanent load-bearing caisson'):
+   a.chamber(mesh,`${number} / folded permanent deck underside`,{axis:1,paint:0x5b7b77,style:'rack'});
+  if(made){
+   a.stats.deckFascias=(a.stats.deckFascias||0)+1;
+   const keep=mesh.userData.keepMaterial;mesh.userData.keepMaterial=true;
+   a.cleanup.push(()=>{if(keep===undefined)delete mesh.userData.keepMaterial;else mesh.userData.keepMaterial=keep;});
+  }
+ }
+ if(number===18||number===20){
+  for(const mesh of a.meshes){
+   if(mesh.name==='Process instrument')a.compactReadout(mesh,number===20?.47:.64);
+   if(number===20&&/^Station wayfinding \/ (?:БЛИЖНИЙ КРЮК|ТОЛЬКО ОБЗОР|СТОПОР ЗУБА)/.test(mesh.name))a.compactReadout(mesh,.72);
+   const p=mesh.geometry?.parameters;
+   if(mesh.parent===k.world.root&&a.visible(mesh)&&mesh.name==='Folded dark casing'&&p?.height>1.8&&p.height<2.8&&p.width>9&&p.width<15&&p.depth<.35)
+    a.instrumentFascia(mesh,`${number} / enclosed process instrument`,{paint:0x506b73});
+  }
+ }
+ if(number===28){
+  // The same tide values remain visible at every original observation site.
+  // Reduction is proportional to the real cabinet: no replacement values or
+  // fabricated status animation can drift away from the conserved water.
+  for(const mesh of a.meshes)if(mesh.userData?.tideInstrument)a.compactReadout(mesh,.64);
+ }
 }
 
 /** Pre-flush entry for ResearchChamber and ordinary Workshop builders. */
@@ -229,6 +405,13 @@ export function installVisualAuditMiddleKit(k,number){
    for(const x of [-22,19])a.cabinet(at([x,2.5,14],[4.2,5,4.4]),'18 / closed generator cabinet with cooling cheeks',{paint:0x8c9f92});
    for(const e of k.world.root.children.filter(m=>m.name==='Spring-loaded insulated electrode'))chamber(e,'18 / ribbed ceramic clamping jaw',{axis:0,paint:0xb8c6ba,style:'electrode'});
    chamber(at([10.35,5.1,-6.1],[2,1.4,1.25]),'18 / screw-drive motor casting',{paint:0x506c72});
+   for(const mesh of a.meshes){
+    const p=mesh.geometry?.parameters;
+    if(/^Electrical cell service hatch$/.test(mesh.name))chamber(mesh,'18 / divided insulated service hatch',{paint:0x708e91});
+    else if(mesh.name==='Electrical cell sliding roof')chamber(mesh,'18 / closed sliding conductor cover',{axis:1,paint:0x64878b});
+    else if(mesh.parent===k.world.root&&a.visible(mesh)&&p?.height===1.8&&p.width===.35&&p.depth===6.3)
+     chamber(mesh,'18 / insulated contact-cell enclosure',{axis:0,paint:0x779994});
+   }
    break;
   case 19:
    chamber(nearestBox([-17,.7,9],p=>p.width>1&&p.width<7&&p.height<4&&p.depth>1&&p.depth<7),'19 / fan founded service plinth',{paint:0x6c7f72});
@@ -236,7 +419,10 @@ export function installVisualAuditMiddleKit(k,number){
   case 20:
    a.handwheel(named('Finite motor-free hook hand rotor'),'20 / cast handwheel and passive coupling');
    for(const name of ['Loaded near-hook bearing arm','Near connector neck','Bearing-arm neck connection','Rigid hook back connector','Actual hook closed seat'])coat(named(name),0xcfa467);
-   chamber(named('Tension-driven horizontal bulkhead'),'20 / tension door closed casing',{paint:0x8b9b91});
+   a.tractionGate(named('Tension-driven horizontal bulkhead'),'20 / framed load-bearing traction gate');
+   a.tractionGate(named('Rigidly linked return-court bulkhead'),'20 / linked return traction gate');
+   for(const name of ['Current near cable branch','Current far hanging cable branch','Near fairlead to active aperture','Active aperture to far fairlead','Cargo tether sleeve'])coat(named(name),0xe5c17e);
+   for(const terminal of k.terminals)a.terminalCasting(terminal);
    break;
   case 21:
    for(const mesh of a.meshes.filter(m=>m.userData.recoveryStairRiser))a.stairRiser(mesh);
@@ -249,6 +435,7 @@ export function installVisualAuditMiddleKit(k,number){
    chamber(nearestBox([-12,.45,-5.75],p=>p.width>2&&p.width<5&&p.height<1.5&&p.depth>1&&p.depth<3),'22 / winch founded load pedestal',{paint:0x587b70});
    break;
   case 23:
+   for(const terminal of k.terminals)a.terminalCasting(terminal);
    if(k.state.balance?.parts){
     // The ordinary campaign uses the physical machine, whose car and freight
     // pan are separately owned massive bodies. The thin car backing is an
@@ -269,7 +456,7 @@ export function installVisualAuditMiddleKit(k,number){
    break;
   case 24:{
    const coral=a.boxMeshes().filter(m=>{const p=m.geometry.parameters,c=m.material?.color;return a.visible(m)&&p.height>4&&Math.min(p.width,p.depth)<1&&c&&c.r>c.g*1.14;}).sort((x,y)=>y.geometry.parameters.height*Math.max(y.geometry.parameters.width,y.geometry.parameters.depth)-x.geometry.parameters.height*Math.max(x.geometry.parameters.width,x.geometry.parameters.depth))[0];
-   chamber(coral,'24 / pavilion coral access cassettes',{paint:0xb87b6b});break;
+   a.bulkhead(coral,'24 / pavilion coral access cassettes',{paint:0xb87b6b,accent:0xe6c777,theme:'garden'});break;
   }
   case 25:
    for(const blade of k.state.optical?.blades||[])coat(blade.mesh,0x436d74);
@@ -287,7 +474,15 @@ export function installVisualAuditMiddleKit(k,number){
    break;
   case 28:
    for(const mesh of a.meshes){
-    if(/Basin [AB] (?:gauge|near-mouth readout) backing|Tidal circuit rear-wall backing/.test(mesh.name))chamber(mesh,mesh.name+' / sealed instrument housing',{paint:0x507c78});
+    if(/Basin [AB] (?:gauge|near-mouth readout) backing|Tidal circuit rear-wall backing/.test(mesh.name))a.instrumentFascia(mesh,mesh.name+' / sealed instrument housing',{paint:0x507c78});
+   }
+   // The coral shells are intentional authored colour, so the ordinary
+   // automatic structural pass skips them. Their broad backs were still
+   // featureless in the camera; finish those very same closed tank walls.
+   for(const mesh of a.boxMeshes()){
+    const p=mesh.geometry.parameters,color=mesh.material?.color;
+    if(mesh.parent===k.world.root&&a.visible(mesh)&&mesh.userData?.keepMaterial&&color&&color.r>color.g*1.2&&p.height>5&&Math.min(p.width,p.depth)<.6&&Math.max(p.width,p.depth)>5)
+     a.bulkhead(mesh,'28 / coral basin formed structural wall',{paint:0xbb7c68,accent:0x90c6bb,theme:'garden'});
    }
    break;
   case 29:
@@ -320,6 +515,7 @@ export function installVisualAuditMiddleKit(k,number){
    chamber(named('Pressure-driven guided door'),'34 / pressure actuator door casing',{paint:0x698a9a});
    break;
  }
+ finishMiddleComposition(a,k,number);
  const result=a.finish();k.visualAuditMiddle=result;return result;
 }
 
@@ -327,6 +523,48 @@ export function finishVisualAuditMiddle(game,level,index=level.index){
  if(game.chamberEdition!=='foundation'||index<17||index>33||level.visualAuditMiddle)return level;
  const k=level.workshop;if(!k)return level;
  const art=k.visualAuditMiddle||installVisualAuditMiddleKit(k,index+1);if(!art)return level;
+ if(index===22&&!art.stats.workingFloorFields){
+  // Pigment belongs to the existing recovery floor, never an overlay plane.
+  // The broad west operating court and real south control bay establish
+  // scale around the actual machine without filling the clear floor with
+  // decorative props or implying another route/powered platform.
+  const copies=new Map(),changes=[],roots=[level.world.root,level.premiumBrowser3DArt].filter(Boolean),seen=new Set();
+  for(const root of roots)root.traverse(mesh=>{
+   if(seen.has(mesh)||!mesh.isMesh||!mesh.visible||mesh.userData?.portalTile||mesh.userData?.portalable||mesh.userData?.collisionProxy)return;seen.add(mesh);
+   for(let node=mesh;node;node=node.parent)if(node.visible===false)return;
+   const source=mesh.material;
+   if(!source?.isMeshStandardMaterial||Array.isArray(source)||!source.visible||source.transparent)return;
+   if(mesh.name!=='Architectural coat / cassette'&&source.userData?.architecturalRole!=='floor')return;
+   let material=copies.get(source);
+   if(!material){
+    material=source.clone();const previous=source.onBeforeCompile,key=source.customProgramCacheKey.bind(source);
+    material.onBeforeCompile=(shader,renderer)=>{
+     previous.call(material,shader,renderer);
+     shader.vertexShader='varying vec3 vCounterweightFloor;\nvarying vec3 vCounterweightNormal;\n'+shader.vertexShader;
+     shader.vertexShader=shader.vertexShader.replace('#include <project_vertex>',`#include <project_vertex>
+      vec4 counterweightVertex=vec4(transformed,1.0);
+      #ifdef USE_INSTANCING
+       counterweightVertex=instanceMatrix*counterweightVertex;
+      #endif
+      vCounterweightFloor=(modelMatrix*counterweightVertex).xyz;
+      vCounterweightNormal=inverseTransformDirection(transformedNormal,viewMatrix);`);
+     shader.fragmentShader='varying vec3 vCounterweightFloor;\nvarying vec3 vCounterweightNormal;\n'+shader.fragmentShader;
+     shader.fragmentShader=shader.fragmentShader.replace('#include <color_fragment>',`#include <color_fragment>
+      float counterweightGround=(1.0-smoothstep(.10,.25,abs(vCounterweightFloor.y)))*smoothstep(.85,.98,normalize(vCounterweightNormal).y);
+      vec2 counterweightP=vCounterweightFloor.xz;
+      float westCourt=smoothstep(-22.0,-21.84,counterweightP.x)*(1.0-smoothstep(-6.76,-6.6,counterweightP.x))*smoothstep(-14.0,-13.84,counterweightP.y)*(1.0-smoothstep(17.84,18.0,counterweightP.y));
+      float controlBay=smoothstep(-6.4,-6.24,counterweightP.x)*(1.0-smoothstep(6.24,6.4,counterweightP.x))*smoothstep(6.8,6.96,counterweightP.y)*(1.0-smoothstep(14.64,14.8,counterweightP.y));
+      diffuseColor.rgb*=mix(vec3(1.0),vec3(.52,.71,.73),counterweightGround*westCourt*.78);
+      diffuseColor.rgb*=mix(vec3(1.0),vec3(.80,.86,.66),counterweightGround*controlBay*.55);`);
+    };
+    material.customProgramCacheKey=()=>key()+'|counterweight-working-courts-v1';material.needsUpdate=true;copies.set(source,material);
+   }
+   mesh.material=material;changes.push({mesh,source,material});
+  });
+  const dispose=art.root.dispose;let released=false;
+  art.root.dispose=()=>{if(released)return;released=true;for(const {mesh,source,material}of changes)if(mesh.material===material)mesh.material=source;for(const material of copies.values())material.dispose();dispose();};
+  art.stats.workingFloorFields=2;art.stats.workingFloorMeshes=changes.length;
+ }
  const oldRender=level.renderUpdate,oldReset=level.reset,oldDispose=level.dispose;
  // Pre-flush installations already share the Workshop clock; the fallback
  // is also in k.renders, so this wrapper only owns deterministic cleanup.

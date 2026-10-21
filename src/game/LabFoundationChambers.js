@@ -175,7 +175,7 @@ export function buildFoundation2(g,index=1){
  const light=addLight(k,[-11.98,3.20,-14],[1,0,0]);
  k.display([7,11,-19.25],()=>light.segments.length>1?'ПРОЕКЦИЯ СОЕДИНЕНА':'СВЕТ ОСТАНАВЛИВАЕТСЯ НА КЕРАМИКЕ',20,1.35);
  k.label('СЛУЖЕБНЫЙ ВОЗВРАТ',[-13.2,-.7,-12],[1,0,0],10,.65);title(k,1,[0,14,-19.25],22);
- const l=finish(k,[-16,3,15],[-19,3.6,13],[16,3,8],{light,spawnView:{yaw:.4,pitch:-.07}},
+ const l=finish(k,[-16,3,15],[-19,3.6,13],[16,3,8],{light,spawnView:{yaw:-.10,pitch:-.18}},
   {introduces:['light as support'],routes:['direct-light-crossing','island-switching'],roles:{'light-source':'intercept the projector','light-exit':'direct projection across the main gap','service-exit':'project to the permanent island','island-turn':'turn the same projection from the island toward the exit'}});ownLight(l,light);return l;
 }
 function cabinConsole(k,c,local){

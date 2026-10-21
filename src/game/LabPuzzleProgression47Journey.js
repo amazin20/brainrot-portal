@@ -40,7 +40,28 @@ function approachBrokenArchive(d,p,attempt){
  reachArchiveSide(d,target.z<opening.z?-1:1);
  hopWalk(d,target.x,target.z);
 }
-function collect(d){for(let n=0;n<12;n++){const p=d.game.cargo.position.clone(),amongDebris=d.level.fuse.broken&&Math.abs(p.x)<6&&p.z>-10&&p.z< -1;if(d.level.fuse.broken&&p.x>3&&p.x<17&&p.z< -7&&p.z> -17){const x=p.x>4.8&&p.x<13?p.x+1.25:p.x-1.25;d.walk(d.game.playerPosition.x,-12);d.walk(x,-12);d.walk(x,p.z);}else if(amongDebris)approachBrokenArchive(d,p,n);else d.walk(p.x-1.25,p.z);if(d.game.playerPosition.distanceTo(d.game.cargo.position)<2.2){if(amongDebris){d.game.interact();if(d.game.heldCube){d.wait(.55);return;}}else{d.pickup();return;}}}throw Error('Original companion cannot be collected');}
+function collect(d){
+ for(let n=0;n<12;n++){
+  const p=d.game.cargo.position.clone(),broken=d.level.fuse.broken;
+  // A real rebound may leave cargo beyond either side of the broken sheet,
+  // including outside the old narrow "among debris" band. First cross the
+  // actual opening with ordinary jump/walk input. A direct side approach from
+  // the opposite court can otherwise walk straight through fallen fragments.
+  if(broken){const opening=archiveOpening(d),side=p.z<opening.z?-1:1;if((d.game.playerPosition.z-opening.z)*side<0)reachArchiveSide(d,side);}
+  const amongDebris=broken&&Math.abs(p.x)<6&&p.z>-10&&p.z< -1;
+  if(broken&&p.x>3&&p.x<17&&p.z< -7&&p.z> -17){
+   const x=p.x>4.8&&p.x<13?p.x+1.25:p.x-1.25;
+   d.walk(d.game.playerPosition.x,-12);d.walk(x,-12);d.walk(x,p.z);
+  }else if(amongDebris)approachBrokenArchive(d,p,n);
+  else d.walk(p.x-1.25,p.z);
+  if(d.game.playerPosition.distanceTo(d.game.cargo.position)<2.2){
+   if(amongDebris){d.game.interact();if(d.game.heldCube){d.wait(.55);return;}}
+   else{d.pickup();return;}
+  }
+ }
+ throw Error('Original companion cannot be collected');
+}
+
 function enterJump(d,p){const f=p.getFrame(),before=d.game.teleportCount;d.walk(f.center.x+f.normal.x*1.35,f.center.z+f.normal.z*1.35);for(let n=0;n<240&&d.game.teleportCount===before;n++){if(n%45===0)d.game.input.jumpQueued=true;d.worldMove(-f.normal.x,-f.normal.z);d.frame();}d.stop();check(d.game.teleportCount>before,'The actual standing aperture did not accept a normal jump');}
 export function runPuzzleProgression47(d,{stopAfter=null,noCargo=false,recover=false}={}){
  const {game:g,level:l}=d;installPreciseLateAim(d);check(l.puzzleProgression===47,'Impact archive room required');

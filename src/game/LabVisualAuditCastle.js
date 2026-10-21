@@ -3,6 +3,65 @@ import {CASTLE_WING_FINISHES} from './LabCastleMaterials.js';
 import {mergeGeometries} from 'three/addons/utils/BufferGeometryUtils.js';
 
 const V=(x=0,y=0,z=0)=>new THREE.Vector3(x,y,z);
+function castleFollowerSync(root,followers){
+ const inverse=new THREE.Matrix4(),relative=new THREE.Matrix4(),position=V(),quaternion=new THREE.Quaternion(),sourceScale=V(),unitScale=V(1,1,1);
+ return ()=>{
+  root.updateWorldMatrix(true,false);inverse.copy(root.matrixWorld).invert();
+  for(const {target,mount}of followers){
+   target.updateWorldMatrix(true,false);relative.multiplyMatrices(inverse,target.matrixWorld);
+   // The target's scale stores its physical deck dimensions. The suspension is
+   // already authored in metres and must follow only the target's rigid pose.
+   relative.decompose(position,quaternion,sourceScale);mount.matrix.compose(position,quaternion,unitScale);mount.matrixWorldNeedsUpdate=true;
+  }
+ };
+}
+function vertexTint(geometry,color){
+ const c=new THREE.Color(color),values=new Float32Array(geometry.attributes.position.count*3);
+ for(let i=0;i<values.length;i+=3)values.set([c.r,c.g,c.b],i);
+ geometry.setAttribute('color',new THREE.BufferAttribute(values,3));return geometry;
+}
+
+/** A single closed top, with broad engraved fields instead of a second decal
+ * fighting the plate. The socket and traveller contact stay at their original
+ * coordinates and retain their original tiny, nonblocking vertical envelope. */
+export function castleDockingFaceGeometry({socket=false}={}){
+ const positions=[],colors=[],uv=[],segments=64,radii=[0,.23,.285,.36,.405,.465];
+ const palette=(socket?[0x779e94,0x2a4746,0xc6d4bb,0x314f49,0x99c3ae,0x273b3b]:[0xd8b56d,0x453e30,0xefd6a0,0x514631,0xc69d50,0x293a3b]).map(c=>new THREE.Color(c));
+ function point(radius,angle,outer=false){const r=outer ? .5/Math.max(Math.abs(Math.cos(angle)),Math.abs(Math.sin(angle))) : radius;return [Math.cos(angle)*r,.5,Math.sin(angle)*r];}
+ const triangle=(a,b,c,color)=>{for(const p of [a,b,c]){positions.push(...p);colors.push(color.r,color.g,color.b);uv.push(p[0]+.5,p[2]+.5);}};
+ for(let band=0;band<radii.length;band++)for(let i=0;i<segments;i++){
+  const a=i*Math.PI*2/segments,b=(i+1)*Math.PI*2/segments,outer=band===radii.length-1;
+  const color=socket&&band===2&&Math.floor(i/8)%2?palette[1]:palette[band];
+  const p=point(radii[band],a),q=point(radii[band],b),r=point(outer?0:radii[band+1],b,outer),s=point(outer?0:radii[band+1],a,outer);
+  triangle(p,q,r,color);triangle(p,r,s,color);
+ }
+ const dark=palette.at(-1),corners=[[-.5,-.5,-.5],[.5,-.5,-.5],[.5,-.5,.5],[-.5,-.5,.5]];
+ for(let i=0;i<4;i++){
+  const a=corners[i],b=corners[(i+1)%4],c=[b[0],.5,b[2]],d=[a[0],.5,a[2]];
+  triangle(a,c,b,dark);triangle(a,d,c,dark);
+ }
+ triangle(corners[0],corners[1],corners[2],dark);triangle(corners[0],corners[2],corners[3],dark);
+ const geometry=new THREE.BufferGeometry();geometry.setAttribute('position',new THREE.Float32BufferAttribute(positions,3));
+ geometry.setAttribute('color',new THREE.Float32BufferAttribute(colors,3));geometry.setAttribute('uv',new THREE.Float32BufferAttribute(uv,2));
+ geometry.computeVertexNormals();geometry.computeBoundingBox();geometry.computeBoundingSphere();geometry.name='Castle crown / integral '+(socket?'cargo socket':'traveller contact')+' engraving';return geometry;
+}
+
+/** Closed radial machinery is mounted inside the solid rear wall's recessed
+ * field. There is no door-sized hole, fictitious portal or walk-through prop. */
+function crownReceiverGeometry(radius,depth){
+ const parts=[],add=(g,c)=>{parts.push(vertexTint(g,c));};
+ const disk=new THREE.CylinderGeometry(radius,radius,depth*.55,48);disk.rotateX(Math.PI/2);add(disk,0x263d42);
+ for(const [r,tube,c]of [[radius*.94,radius*.045,0xa77e40],[radius*.77,radius*.025,0xd6b86c],[radius*.32,radius*.032,0xba9551]]){
+  const g=new THREE.TorusGeometry(r,tube,6,48);g.scale(1,1,depth/(tube*2)*.65);g.translate(0,0,-depth*.08);add(g,c);
+ }
+ for(let i=0;i<12;i++){
+  const a=i*Math.PI/6,c=Math.cos(a),s=Math.sin(a),g=new THREE.BoxGeometry(radius*.34,radius*.09,depth*.7);
+  g.rotateZ(a+.30);g.translate(c*radius*.53,s*radius*.53,-depth*.12);add(g,i%3===0?0xc6a464:0x69817d);
+ }
+ const hub=new THREE.CylinderGeometry(radius*.23,radius*.23,depth*.90,12);hub.rotateX(Math.PI/2);hub.rotateZ(Math.PI/12);hub.translate(0,0,-depth*.03);add(hub,0xd1ad68);
+ const geometry=mergeGeometries(parts,false);parts.forEach(g=>g.dispose());geometry.computeBoundingBox();geometry.computeBoundingSphere();
+ geometry.name='Castle crown / closed twelve-sector receiving iris';geometry.userData.architecturalBatch=true;return geometry;
+}
 function mergeParts(parts,groups=false){
  const inputs=parts.map(geometry=>geometry.index?geometry.toNonIndexed():geometry),merged=mergeGeometries(inputs,groups);
  inputs.forEach((geometry,i)=>{if(geometry!==parts[i])geometry.dispose();});return merged;
@@ -37,10 +96,40 @@ function mirrorCassette(width,height,depth){
  geometry.name='Castle optics / closed gimballed mirror cassette';return geometry;
 }
 
+export function castleLoadSectionGeometry(size,{rail=false}={}){
+ const [x,y,z]=size;if(!size.every(n=>Number.isFinite(n)&&n>0))throw new RangeError('Positive structural section required');
+ const parts=[],add=(p,s,tone)=>{const g=vertexTint(new THREE.BoxGeometry(...s),tone);g.translate(...p);parts.push(g);};
+ if(rail){
+  const flange=y*.22;
+  for(const sign of [-1,1])add([0,sign*(y-flange)/2,0],[x,flange,z],0xc3b08c);
+  add([0,0,0],[x,y-2*flange,z*.24],0x3c5157);
+ }else{
+  const flange=z*.23;
+  for(const sign of [-1,1])add([0,0,sign*(z-flange)/2],[x,y,flange],0x9aada8);
+  add([0,0,0],[x*.30,y,z-2*flange],0x344b55);
+ }
+ const geometry=mergeGeometries(parts,false);parts.forEach(g=>g.dispose());geometry.scale(1/x,1/y,1/z);
+ geometry.computeBoundingBox();geometry.computeBoundingSphere();geometry.parameters={width:1,height:1,depth:1};
+ geometry.name='Castle / actual '+(rail?'overhead rail section':'flanged load-bearing section');geometry.userData.architecturalBatch=true;return geometry;
+}
+
+export function castleCarriageDeckGeometry(size){
+ const [x,y,z]=size,parts=[],add=(p,s,color)=>{const g=vertexTint(new THREE.BoxGeometry(...s),color);g.translate(...p);parts.push(g);};
+ const top=Math.min(.09,y*.24),rim=Math.min(.34,x*.12,z*.12),under=y-top;
+ add([0,(y-top)/2,0],[x,top,z],0xd8dfd3);
+ for(const sign of [-1,1]){
+  add([sign*(x-rim)/2,-top/2,0],[rim,under,z],0x3b535d);
+  add([0,-top/2,sign*(z-rim)/2],[x-2*rim,under,rim],0x567b83);
+ }
+ add([0,-y/2+under*.31,0],[x-2*rim,under*.62,z-2*rim],0x263e48);
+ const geometry=mergeGeometries(parts,false);parts.forEach(g=>g.dispose());geometry.scale(1/x,1/y,1/z);
+ geometry.computeBoundingBox();geometry.computeBoundingSphere();geometry.name='Castle carriage / closed walking deck and captive underframe';return geometry;
+}
+
 /** A closed casing with inset fields on both sides. Bounds and mesh identity
  * stay exact: physical cells keep their original contact/ray object and no
  * child can enlarge Box3.setFromObject during the cell's pose sync. */
-export function castleMachineCasingGeometry(size,{axis='z',bays=1}={}){
+export function castleMachineCasingGeometry(size,{axis='z',bays=1,sculpt=false}={}){
  if(!size.every(v=>Number.isFinite(v)&&v>0))throw new RangeError('Positive castle casing dimensions required');
  const [sx,sy,sz]=size,width=axis==='x'?sz:sx,height=axis==='y'?sz:sy,depth=axis==='x'?sx:axis==='y'?sy:sz;
  const rim=Math.min(.22,width*.09,height*.09),recess=Math.min(.10,depth*.18),bevel=Math.min(.045,depth*.07,rim*.2);
@@ -64,7 +153,24 @@ export function castleMachineCasingGeometry(size,{axis='z',bays=1}={}){
   const field=inner.map(p=>[p[0],p[1],r]);
   const face=(a,b,c,d,t)=>sign>0?quad(a,b,c,d,t):quad(d,c,b,a,t);
   for(let j=0;j<4;j++){const n=(j+1)%4;face(outer[j],outer[n],inner[n],inner[j],.70);if(!flatTop)face(inner[j],inner[n],field[n],field[j],.40);}
-  face(...field,1);
+  face(...field,sculpt&&!flatTop ? .86 : 1);
+  const fw=b-a-2*rim,fh=height-2*rim;
+  if(sculpt&&axis!=='y'&&fw>1.8&&fh>3.2){
+   // Broad pressed ribs and a sealed service bay emerge from the closed
+   // recessed field. Their outer faces stay below the original frame plane;
+   // there are no coplanar overlay skins or unrelated walk-through props.
+   const back=r,front=r+sign*recess*.78;
+   const raised=(cx,cy,w,h,tone)=>{
+    const a=cx-w/2,b=cx+w/2,c=cy-h/2,d=cy+h/2;
+    face([a,c,front],[b,c,front],[b,d,front],[a,d,front],tone);
+    face([a,c,back],[a,c,front],[a,d,front],[a,d,back],tone*.52);
+    face([b,c,front],[b,c,back],[b,d,back],[b,d,front],tone*.64);
+    face([a,c,back],[b,c,back],[b,c,front],[a,c,front],tone*.60);
+    face([a,d,front],[b,d,front],[b,d,back],[a,d,back],tone*.90);
+   };
+   for(const side of [-1,1])raised((a+b)/2+side*fw*.28,0,Math.min(.62,fw*.14),fh*.84,1.17);
+   raised((a+b)/2,-fh*.22,fw*.32,Math.min(1.35,fh*.22),.52);
+  }
  }
  const geometry=new THREE.BufferGeometry();geometry.name='Castle / closed folded equipment casing';
  geometry.setAttribute('position',new THREE.Float32BufferAttribute(positions,3));
@@ -78,9 +184,9 @@ export function castleMachineCasingGeometry(size,{axis='z',bays=1}={}){
  * with matching box/cylinder contact. No portal, light or floor is added. */
 export function buildCastleAuditConstruction({game,k,rooms,machines,edges}){
  if(k.root.userData.castleVisualAudit)return k.root.userData.castleVisualAudit;
- const source=[...k.meshes],initialColliders=k.colliders.length,materials=new Map(),counts=new Map([...rooms.keys()].map(id=>[id,0]));
- const counters={casings:0,structuralMembers:0,tankShells:0,bearingBodies:0,coilWindings:0,hydraulicGauges:0,flywheelInspectionWindows:0,opticalMirrorCassettes:0,opticalProjectors:0,instrumentCases:0,inlays:0,finaleMeshes:0};
- let projector=null,windingMaterial=null;
+ const source=[...k.meshes],initialColliders=k.colliders.length,materials=new Map(),counts=new Map([...rooms.keys()].map(id=>[id,0])),followers=[];
+ const counters={casings:0,structuralMembers:0,tankShells:0,bearingBodies:0,coilWindings:0,hydraulicGauges:0,flywheelInspectionWindows:0,opticalMirrorCassettes:0,opticalProjectors:0,instrumentCases:0,inlays:0,finaleMeshes:0,carriageChassis:0,carriageSuspensions:0};
+ let projector=null,windingMaterial=null,tankMaterial=null;
  const roomFor=mesh=>[...rooms.values()].find(r=>mesh.position.y>=r.def.at[1]-.8&&mesh.position.y<=r.def.at[1]+r.def.h&&
   mesh.position.x>r.b.x0-.5&&mesh.position.x<r.b.x1+.5&&mesh.position.z>r.b.z0-.5&&mesh.position.z<r.b.z1+.5);
  const finish=(original,id,role,geometry)=>{
@@ -98,11 +204,38 @@ export function buildCastleAuditConstruction({game,k,rooms,machines,edges}){
  function casing(mesh,room,structural=false){
   if(mesh.userData.castleAuditCasing||!mesh.userData.collider||mesh.userData.floor||mesh.userData.collisionProxy||k.panels.includes(mesh)||
    mesh.geometry.parameters?.width!==1||mesh.geometry.parameters?.height!==1||mesh.geometry.parameters?.depth!==1||mesh.material.transparent)return;
-  const size=mesh.scale.toArray().map(Math.abs),[x,y,z]=size,axis=['x','y','z'][size.indexOf(Math.min(...size))];
+  const size=mesh.scale.toArray().map(Math.abs),[x,y,z]=size,axis=y>2.5?(x<z?'x':'z'):['x','y','z'][size.indexOf(Math.min(...size))];
   if(structural?!(y>5&&Math.max(x,z)<1.4):!(Math.max(x,y,z)>3&&size.filter(v=>v>1.25).length>=2))return;
-  mesh.geometry=k.geo(castleMachineCasingGeometry(size,{axis,bays:structural?1:Math.min(4,Math.max(1,Math.floor((axis==='x'?z:x)/5)))}));
+  mesh.geometry=k.geo(structural?castleLoadSectionGeometry(size):castleMachineCasingGeometry(size,{axis,bays:Math.min(4,Math.max(1,Math.floor((axis==='x'?z:x)/5))),sculpt:true}));
   mesh.material=finish(mesh.material,room.def.id,structural?'structure':'casing',mesh.geometry);mesh.userData.castleAuditCasing=true;
   counts.set(room.def.id,counts.get(room.def.id)+1);counters[structural?'structuralMembers':'casings']++;
+ }
+ const migrant=rooms.get('migrant');
+ if(migrant){
+  const platform=source.find(mesh=>mesh.userData.floor&&mesh.userData.collider?.kinematic&&roomFor(mesh)?.def.id==='migrant'&&
+   Math.abs(mesh.scale.x-6)<.01&&Math.abs(mesh.scale.y-.4)<.01&&Math.abs(mesh.scale.z-8)<.01);
+  const rail=source.find(mesh=>!mesh.userData.collider&&Math.abs(mesh.scale.x-30)<.01&&Math.abs(mesh.scale.y-.4)<.01&&Math.abs(mesh.scale.z-.5)<.01&&
+   Math.abs(mesh.position.x-migrant.def.at[0])<.01&&Math.abs(mesh.position.z-migrant.def.at[2])<.01&&Math.abs(mesh.position.y-migrant.def.at[1]-10)<.01);
+  if(platform&&rail){
+   const alloy=k.mat(0xffffff,.61,.34);alloy.name='Castle machinery / carriage porcelain and captive graphite chassis';alloy.vertexColors=true;
+   platform.geometry=k.geo(castleCarriageDeckGeometry(platform.scale.toArray()));platform.material=alloy;platform.userData.castleCarriageChassis=true;
+   rail.geometry=k.geo(castleLoadSectionGeometry(rail.scale.toArray(),{rail:true}));rail.material=alloy;rail.name='Castle carriage / actual formed overhead running rail';
+   const mount=new THREE.Group();mount.name='Castle carriage / source-pose suspension and captive bogies';mount.userData.visualOnly=true;mount.matrixAutoUpdate=false;k.root.add(mount);
+   const wireParts=[],bogieParts=[],height=rail.position.y-platform.position.y;
+   for(const x of [-2.65,2.65]){
+    for(const side of [-1,1]){
+     const a=V(x,.20,side*3.55),b=V(x,height-.20,0),delta=b.clone().sub(a),g=new THREE.CylinderGeometry(.035,.035,delta.length(),6);
+     g.applyQuaternion(new THREE.Quaternion().setFromUnitVectors(V(0,1,0),delta.normalize()));g.translate(...a.add(b).multiplyScalar(.5).toArray());wireParts.push(vertexTint(g,0x4b6267));counters.carriageSuspensions++;
+    }
+    const wheel=new THREE.CylinderGeometry(.103,.103,.12,16);wheel.rotateX(Math.PI/2);wheel.translate(x,height,.15);bogieParts.push(vertexTint(wheel,0x344b51));
+    const pin=new THREE.CylinderGeometry(.032,.032,.13,12);pin.rotateX(Math.PI/2);pin.translate(x,height,.155);bogieParts.push(vertexTint(pin,0xc9aa6a));
+   }
+   for(const [parts,name]of [[wireParts,'thin suspension legs to the real rail'],[bogieParts,'captive wheels inside the actual rail section']]){
+    const geometry=k.geo(mergeGeometries(parts,false));parts.forEach(g=>g.dispose());const mesh=new THREE.Mesh(geometry,alloy);
+    mesh.name='Castle carriage / '+name;mesh.userData.visualOnly=true;mesh.receiveShadow=true;mount.add(mesh);
+   }
+   followers.push({target:platform,mount});castleFollowerSync(k.root,followers)();counters.carriageChassis++;
+  }
  }
  for(const mesh of source){
   const r=roomFor(mesh);if(!r)continue;
@@ -113,9 +246,16 @@ export function buildCastleAuditConstruction({game,k,rooms,machines,edges}){
   // carrying its palette. The ten large internal panels need both sides too.
   if(!perimeter&&!/Portal address|Castle fixed glazed|castle cast-in floor/i.test(mesh.material?.name??'')){casing(mesh,r);casing(mesh,r,true);}
   if(r.def.id==='sluice'&&mesh.geometry.type==='CylinderGeometry'&&Math.abs(mesh.scale.x-3)<.01&&[3,7,10].includes(mesh.scale.y)){
-   const points=[[0,-.5],[.68,-.5],[.93,-.47],[1,-.45],[1,-.40],[.94,-.37],[.94,.32],
+   const points=[[0,-.5],[.68,-.5],[.93,-.47],[1,-.45],[1,-.40],[.94,-.37],[.94,-.31],[.94,-.27],[.94,.22],[.94,.28],[.94,.32],
     [1,.35],[1,.40],[.94,.43],[.72,.48],[.42,.5],[0,.5]].map(([x,y])=>new THREE.Vector2(x,y));
    mesh.geometry=k.geo(new THREE.LatheGeometry(points,24));mesh.geometry.computeBoundingBox();mesh.geometry.computeBoundingSphere();
+   const p=mesh.geometry.attributes.position,colors=new Float32Array(p.count*3);
+   for(let i=0;i<p.count;i++){
+    const y=p.getY(i),color=new THREE.Color(y<-.36||y>.42?0xa6b6a9:y<-.30||y>.31?0x304a4b:y>.23?0xb59b68:0x789c8e);
+    colors.set([color.r,color.g,color.b],i*3);
+   }
+   mesh.geometry.setAttribute('color',new THREE.BufferAttribute(colors,3));
+   tankMaterial??=k.mat(0xffffff,.62,.27);tankMaterial.vertexColors=true;tankMaterial.name='Castle hydraulics / enamel barrel and dark pressure collars';mesh.material=tankMaterial;
    mesh.geometry.name='Castle tank / rolled barrel, base flange and shouldered head';counters.tankShells++;counts.set('sluice',counts.get('sluice')+1);
   }
   if(r.def.id==='sluice'&&!mesh.userData.collider&&mesh.material===k.m.cyan&&Math.abs(mesh.scale.x-3.8)<.01&&Math.abs(mesh.scale.z-.10)<.01){
@@ -214,35 +354,65 @@ export function buildCastleAuditConstruction({game,k,rooms,machines,edges}){
    k.floorInlays.push({minX:room.def.at[0]+x0,maxX:room.def.at[0]+x1,minZ:room.def.at[2]+z0,maxZ:room.def.at[2]+z1,y:room.def.at[1],material,baseOnly:true});counters.inlays++;
   }
  }
- // A deliberately transparent energy crown marks the real final contact in
- // three dimensions. It cannot be mistaken for an uncollidable solid gate.
+ // The final receiver is backed by a real closed wall. Its radial mechanism
+ // and two engraved docking contacts read as one installation, not a pink
+ // square underneath an unrelated floating doorway.
  const crown=rooms.get('crown'),contact=machines.get('crown')?.state.contact,socket=machines.get('crown')?.state.socket;
  if(crown&&contact&&socket){
-  const energy=k.mat(0xffd18a,1,0,0xffd18a,true);energy.name='Castle finale / amber energy aperture';energy.transparent=true;energy.opacity=.72;
-  energy.depthWrite=false;energy.blending=THREE.AdditiveBlending;energy.side=THREE.DoubleSide;
-  const halo=k.geo(new THREE.TorusGeometry(1,.025,6,64,Math.PI*1.75));
-  for(const [radius,dy,dz,angle]of [[2.4,3.3,1.1,.12],[2.9,3.3,1.16,Math.PI*.82],[3.45,3.3,1.22,Math.PI*1.35]]){
-   const mesh=k.mesh(halo,energy,[contact[0],contact[1]+dy,contact[2]+dz],[radius,radius,radius]);mesh.rotation.z=angle;
-   mesh.name='Castle finale / suspended energy crown';mesh.userData.visualOnly=true;counters.finaleMeshes++;
-  }
-  const beam=k.geo(new THREE.CylinderGeometry(.023,.023,1,8));
-  for(const p of [contact,socket]){
-   const ring=k.mesh(k.geo(new THREE.TorusGeometry(p===contact?1.2:1.5,.045,6,48)),energy,[p[0],p[1]+.085,p[2]]);
-   ring.rotation.x=-Math.PI/2;ring.name='Castle finale / independent docking halo';ring.userData.visualOnly=true;counters.finaleMeshes++;
-   for(const side of [-1,1]){
-    const mesh=k.mesh(beam,energy,[p[0]+side*(p===contact?1.35:1.65),p[1]+1.6,p[2]],[1,3.1,1]);
-    mesh.name='Castle finale / docking energy filament';mesh.userData.visualOnly=true;counters.finaleMeshes++;
-   }
-  }
   const rear=source.find(mesh=>mesh.userData.collider&&!mesh.userData.collider.kinematic&&mesh.material?.name==='Castle wing wall / crown'&&
    mesh.scale.z<.8&&Math.abs(mesh.position.z-crown.b.z1)<.8&&mesh.scale.x>20);
-  if(rear){casing(rear,crown);rear.userData.castleFinaleBackdrop=true;}
+  const energy=k.mat(0xf0c676,1,0,0,true);energy.name='Castle finale / warm docking illumination';energy.transparent=true;energy.opacity=.58;
+  energy.depthWrite=false;energy.side=THREE.DoubleSide;energy.toneMapped=false;
+  const socketEnergy=energy.clone();socketEnergy.color.setHex(0x89c9b4);socketEnergy.name='Castle finale / companion docking illumination';k.materials.add(socketEnergy);
+  const wallZ=rear?rear.position.z-rear.scale.z/2-.025:crown.b.z1-.275,receiverY=contact[1]+3.4;
+  if(rear){
+   const material=k.mat(0xffffff,.56,.49);material.vertexColors=true;material.name='Castle crown / bronze and graphite receiving mechanism';
+   const iris=k.mesh(k.geo(crownReceiverGeometry(2.8,.10)),material,[contact[0],receiverY,rear.position.z-rear.scale.z/2+.077]);
+   iris.name='Castle crown / twelve-sector receiver founded in rear wall';iris.userData.visualOnly=true;
+   iris.userData.wallBacking=rear.uuid;rear.userData.castleFinaleBackdrop=true;
+   // Subsequent wall dressing must leave the actual receiver visible, just
+   // as it already reserves a portal address or an instrument face.
+   k.root.userData.castleReservedFaces??=[];
+   k.root.userData.castleReservedFaces.push({id:'crown-closed-receiver',center:[contact[0],receiverY,rear.position.z-rear.scale.z/2],normal:[0,0,-1],right:[1,0,0],up:[0,1,0],halfWidth:2.8,halfHeight:2.8});
+   iris.updateWorldMatrix(true,false);const bounds=new THREE.Box3().setFromObject(iris);
+   if(!rear.userData.collider.box.clone().expandByScalar(1e-4).containsBox(bounds))throw new Error('Final receiver escaped its closed physical wall');
+  }
+  for(const [radius,phase]of [[2.58,0],[2.06,Math.PI/6],[.78,Math.PI/12]]){
+   const pieces=[];
+   for(let i=0;i<6;i++)pieces.push(new THREE.RingGeometry(radius-.045,radius,16,1,phase+i*Math.PI/3+.065,Math.PI/3-.13));
+   const geometry=k.geo(mergeGeometries(pieces,false));pieces.forEach(g=>g.dispose());
+   const mesh=k.mesh(geometry,energy,[contact[0],receiverY,wallZ]);
+   mesh.name='Castle finale / wall-receiver segmented light scale';mesh.userData.visualOnly=true;counters.finaleMeshes++;
+  }
+  const beam=k.geo(new THREE.CylinderGeometry(.035,.065,.45,8)),plateMaterial=k.mat(0xffffff,.63,.35);plateMaterial.vertexColors=true;plateMaterial.name='Castle crown / integral engraved docking plates';
+  for(const p of [contact,socket]){
+   const isSocket=p===socket,light=isSocket?socketEnergy:energy;
+   const plate=source.find(mesh=>Math.abs(mesh.position.x-p[0])<.01&&Math.abs(mesh.position.y-p[1]-.065)<.01&&Math.abs(mesh.position.z-p[2])<.01&&Math.abs(mesh.scale.y-.035)<.002);
+   if(plate){plate.geometry=k.geo(castleDockingFaceGeometry({socket:isSocket}));plate.material=plateMaterial;plate.name='Castle crown / '+(isSocket?'companion socket':'traveller contact')+' engraved face';}
+   const ring=k.mesh(k.geo(new THREE.TorusGeometry(isSocket?1.41:1.12,.035,6,48)),light,[p[0],p[1]+.092,p[2]]);
+   ring.rotation.x=-Math.PI/2;ring.name='Castle finale / independent docking halo';ring.userData.visualOnly=true;counters.finaleMeshes++;
+   for(const side of [-1,1]){
+    const mesh=k.mesh(beam,light,[p[0]+side*(isSocket?1.55:1.25),p[1]+.30,p[2]]);
+    mesh.name='Castle finale / low docking field marker';mesh.userData.visualOnly=true;counters.finaleMeshes++;
+   }
+  }
  }
- const result=Object.freeze({revision:66,...counters,projector,sharedEquipmentFinishes:materials.size,sections:Object.freeze(Object.fromEntries(counts)),extraColliders:k.colliders.length-initialColliders,extraLights:0,perFrameCallbacks:0});
+ k.root.userData.castleVisualFollowers=followers;
+ const result=Object.freeze({revision:67,...counters,projector,sharedEquipmentFinishes:materials.size,sections:Object.freeze(Object.fromEntries(counts)),extraColliders:k.colliders.length-initialColliders,extraLights:0,perFrameCallbacks:followers.length?1:0});
  k.root.userData.castleVisualAudit=result;return result;
 }
 
 export function finishVisualAuditCastle(game,level,index,roots){
  if(!level?.tower||!level.singularity)return level;
- level.visualAuditCastle=level.structure?.userData.castleVisualAudit??null;return level;
+ level.visualAuditCastle=level.structure?.userData.castleVisualAudit??null;
+ const followers=level.structure?.userData.castleVisualFollowers??[];
+ if(followers.length&&!level.castleFollowerClock){
+  const syncPose=castleFollowerSync(level.structure,followers),oldRender=level.renderUpdate,oldReset=level.reset,oldDispose=level.dispose;let disposed=false;
+  const sync=()=>{if(!disposed)syncPose();};
+  level.renderUpdate=function(...args){const result=oldRender?.apply(this,args);sync();return result;};
+  level.reset=function(...args){const result=oldReset?.apply(this,args);sync();return result;};
+  level.dispose=function(...args){if(disposed)return;disposed=true;return oldDispose?.apply(this,args);};
+  level.castleFollowerClock={sync,followers:followers.length};sync();
+ }
+ return level;
 }

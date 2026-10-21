@@ -5,19 +5,31 @@ const COLORS = {
   high: 0xaaa38d, receiving: 0x91a68f, return: 0x708e89,
   wall: 0x72827d, ceiling: 0x85918a, dark: 0x344e50,
 };
-const GLYPHS = {
-  'У':['10001','10001','10001','01111','00001','00001','11110'],
-  'З':['11110','00001','00001','01110','00001','00001','11110'],
-  'Е':['11111','10000','10000','11110','10000','10000','11111'],
-  'Л':['00111','01001','01001','01001','01001','10001','10001'],
-  'П':['11111','10001','10001','10001','10001','10001','10001'],
-  'Р':['11110','10001','10001','11110','10000','10000','10000'],
-  'И':['10001','10001','10011','10101','11001','10001','10001'],
-  'Ё':['01010','00000','11111','10000','11110','10000','11111'],
-  'М':['10001','11011','10101','10101','10001','10001','10001'],
-  'В':['11110','10001','10001','11110','10001','10001','11110'],
-  'Х':['10001','10001','01010','00100','01010','10001','10001'],
-};
+
+/** Smooth painted type on the same real plaque. The previous 5×7 box font
+ * was literal staircase geometry, so raising its resolution could never make
+ * it look like finished signage. No web font, network or frame clock is used. */
+function antialiasedLocationPlaque(root,text,position,normal,width,height){
+ const canvas=globalThis.document?.createElement?.('canvas'),context=canvas?.getContext?.('2d');
+ // CPU simulation has no pixels to draw; label metadata is still declared by
+ // its caller. There is intentionally no second low-quality rendering path.
+ if(!context)return false;
+ canvas.width=1024;canvas.height=Math.max(256,Math.round(1024*height/width));
+ context.fillStyle='#263f48';context.fillRect(0,0,canvas.width,canvas.height);
+ context.font=`600 ${Math.round(canvas.height*.64)}px sans-serif`;
+ context.textAlign='center';context.textBaseline='middle';context.fillStyle='#f0e8cc';
+ context.fillText(text,canvas.width/2,canvas.height*.52,canvas.width*.92);
+ const texture=new THREE.CanvasTexture(canvas);texture.name='Junction AA location / '+text;
+ texture.colorSpace=THREE.SRGBColorSpace;texture.generateMipmaps=true;
+ texture.minFilter=THREE.LinearMipmapLinearFilter;texture.magFilter=THREE.LinearFilter;texture.anisotropy=8;
+ const material=new THREE.MeshBasicMaterial({map:texture,toneMapped:false});
+ let disposed=false;material.addEventListener('dispose',()=>{if(!disposed){disposed=true;texture.dispose();}});
+ const mesh=new THREE.InstancedMesh(new THREE.PlaneGeometry(width,height),material,1);
+ mesh.name='Antialiased wall location plaque / '+text;mesh.userData={visualOnly:true,labelText:text,keepMaterial:true};
+ const q=new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0,0,1),new THREE.Vector3(...normal));
+ mesh.setMatrixAt(0,new THREE.Matrix4().compose(new THREE.Vector3(...position),q,new THREE.Vector3(1,1,1)));
+ mesh.castShadow=mesh.receiveShadow=false;mesh.instanceMatrix.needsUpdate=true;mesh.computeBoundingSphere();root.add(mesh);return true;
+}
 
 function district(name) {
   if (/Receiving|throat/i.test(name)) return 'receiving';
@@ -36,7 +48,7 @@ export function buildRoom12Architecture(world) {
   root.name = 'Folded junction structural finishes';
   root.userData.visualOnly = true;
   world.root.add(root);
-  const solid = [], inserts = [], lettering = [];
+  const solid = [], inserts = [];
   const add = (list, position, size, color) => list.push({position, size, color});
   const metal = new THREE.MeshStandardMaterial({color:0xffffff, roughness:.84, metalness:.12});
   const matrix = new THREE.Matrix4(), tint = new THREE.Color();
@@ -154,7 +166,7 @@ export function buildRoom12Architecture(world) {
     ['Same-shaft high lip', 'ВЕРХ', COLORS.high],
     ['Receiving dock', 'ПРИЁМ', COLORS.receiving],
   ];
-  const mountedLabels = [];
+  const mountedLabels = [];let antialiasedLabels=0;
   for (const [name, text, paint] of labels) {
     const deck = floors.find(s => s.name === name);
     if (!deck) continue;
@@ -181,14 +193,9 @@ export function buildRoom12Architecture(world) {
     // Both the plaque and paint are on this same actual closed wall face.
     rectangle(solid, 0, 0, width+.24, step*8.3, 0x263f48, .018);
     rectangle(solid, 0, -step * 4.35, width, .045, paint, .029);
-    [...text].forEach((letter,n) => GLYPHS[letter]?.forEach((row,r) => {
-      for (let c = 0; c < row.length;) {
-        if (row[c] !== '1') {c++; continue;}
-        const start = c; while (row[c] === '1') c++;
-        rectangle(lettering, -width / 2 + (n * 6 + (start + c) / 2) * step,
-          (3 - r) * step, (c - start) * step, step * .88, 0xe2e3d2, .029);
-      }
-    }));
+    const position=axis==='x'?[coordinate+side*.029,y,u]:[u,y,coordinate+side*.029];
+    const normal=axis==='x'?[side,0,0]:[0,0,side];
+    if(antialiasedLocationPlaque(root,text,position,normal,width,step*7.7))antialiasedLabels++;
     mountedLabels.push(text);
   }
 
@@ -210,11 +217,11 @@ export function buildRoom12Architecture(world) {
   batch('Junction deck beam finishes', solid, metal);
   const painted = new THREE.MeshBasicMaterial({color:0xffffff, toneMapped:true});
   batch('Mounted deck light inserts', inserts, painted);
-  batch('Existing wall location stencils', lettering, painted);
   root.userData.finishCount = solid.length;
   root.userData.lightInsertCount = inserts.length;
   root.userData.structuralJointCount = structuralJoints;
   root.userData.districts = ['lower return','folded ledge','shared shaft','receiving dock'];
   root.userData.mountedLabels = mountedLabels;
+  root.userData.antialiasedLabels = antialiasedLabels;
   return root;
 }

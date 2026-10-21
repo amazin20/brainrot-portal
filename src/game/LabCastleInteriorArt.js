@@ -28,6 +28,11 @@ export function castleInteriorFields(game,level){
 
 function reservedFaces(game,level){
  const faces=[],seen=new Set(),q=new THREE.Quaternion();
+ for(const face of level.structure?.userData?.castleReservedFaces??[]){
+  if(![face.center,face.normal,face.right,face.up].every(p=>Array.isArray(p)&&p.length===3&&p.every(Number.isFinite))||
+    ![face.halfWidth,face.halfHeight].every(n=>Number.isFinite(n)&&n>0))throw new Error('Invalid closed castle receiver reservation');
+  faces.push({...face,center:V(...face.center),normal:V(...face.normal),right:V(...face.right),up:V(...face.up)});
+ }
  for(const mesh of game.portalPanels||[]){
   const d=mesh.userData,frame=d.portalFrame?.();
   if(frame){faces.push(frame);seen.add(mesh);continue;}

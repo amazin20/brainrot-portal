@@ -4,6 +4,9 @@ import {lateCassetteBulkheadGeometry,latePressureManifoldGeometry,installOptical
 
 const V=(...p)=>new THREE.Vector3(...p),Q=()=>new THREE.Quaternion();
 const STABLE_LEVELS=new Set([35,36,37,38,39,40,42,43,44,45,46,47,48,49,50,51]);
+export const LATE_VISUAL_COMPLETION_REVISION='v67-pressure-painted-machinery';
+const RGB=hex=>new THREE.Color(hex).toArray();
+const LATE_DEVICE_COLORS=Object.freeze({paint:RGB(0x658f88),dark:RGB(0x253e4a),metal:RGB(0xb6c3ba),copper:RGB(0xc99665),ivory:RGB(0xc1cec2)});
 
 function coloured(geometry,tone){
  const g=geometry.index?geometry.toNonIndexed():geometry;
@@ -20,9 +23,11 @@ export function lateMachineHousingGeometry(width,height,depth,{kind='drive',axis
  const w=axis==='x'?depth:width,h=axis==='y'?depth:height,d=axis==='x'?width:axis==='y'?height:depth;
  if(![w,h,d].every(v=>Number.isFinite(v)&&v>0))throw new RangeError('Finite positive machine housing dimensions required');
  const parts=[],rim=Math.min(w*.095,h*.095,.44),fieldW=w-2*rim,fieldH=h-2*rim;
+ const colors=LATE_DEVICE_COLORS;
+ const shade=t=>Array.isArray(t)?t:t<.40?colors.dark:t<.60?colors.metal:t<.76?colors.copper:t<.9?colors.ivory:colors.paint;
  const box=(x,y,z,a,b,c,t=.9,angle=0)=>{
   if(Math.min(a,b,c)<=0)return;
-  const g=coloured(new THREE.BoxGeometry(a,b,c),t);if(angle)g.rotateZ(angle);g.translate(x,y,z);parts.push(g);
+  const g=coloured(new THREE.BoxGeometry(a,b,c),shade(t));if(angle)g.rotateZ(angle);g.translate(x,y,z);parts.push(g);
  };
  // Four non-overlapping folded rails and a genuinely recessed closed field.
  for(const x of [-1,1])box(x*(w-rim)/2,0,0,rim,h,d,.53);
@@ -30,32 +35,42 @@ export function lateMachineHousingGeometry(width,height,depth,{kind='drive',axis
  box(0,0,0,fieldW,fieldH,d*.62,.96);
  for(const sign of [-1,1]){
   const z=sign*d*.395,skin=d*.09;
-  if(kind==='weight'){
+  if(kind==='chassis'){
+   // Full-depth perimeter girders and deep inspection coffers remain wholly
+   // within the existing one-metre load chassis below the walking surface.
+   const bays=Math.max(2,Math.min(5,Math.ceil(fieldW/7)));
+   for(let i=0;i<bays;i++){
+    const x=(i-(bays-1)/2)*fieldW/bays,span=fieldW/bays;
+    box(x,0,z,span*.78,fieldH*.76,skin,colors.dark);
+    box(x,0,sign*d*.437,Math.min(.24,span*.10),fieldH*.89,d*.070,colors.metal);
+    for(const y of [-1,1])box(x,y*fieldH*.37,sign*d*.46,span*.87,Math.min(.23,fieldH*.11),d*.075,colors.copper);
+   }
+  }else if(kind==='weight'){
    // Captive straps and recessed cast-in lifting pads on the actual weight.
    for(const x of [-1,1])box(x*fieldW*.31,0,z,Math.min(.22,fieldW*.09),fieldH*.96,skin,.30);
-   for(const y of [-1,1])box(0,y*fieldH*.34,z,fieldW*.76,Math.min(.2,fieldH*.08),skin,.64);
+   for(const y of [-1,1])box(0,y*fieldH*.34,sign*d*.455,fieldW*.76,Math.min(.2,fieldH*.08),skin*.7,.64);
    box(0,0,z,fieldW*.34,fieldH*.37,skin,.76);
   }else if(kind==='rail'){
    for(const y of [-1,1])box(0,y*fieldH*.30,z,fieldW*.93,Math.min(.16,fieldH*.11),skin,.34);
-   for(const x of [-1,1])box(x*fieldW*.36,0,z,Math.min(.24,fieldW*.1),fieldH*.75,skin,.70);
+   for(const x of [-1,1])box(x*fieldW*.36,0,sign*d*.455,Math.min(.24,fieldW*.1),fieldH*.75,skin*.7,.70);
   }else if(kind==='valve'||kind==='piston'){
    // A cast closed pressure cover, captive fastening pads and radial drive
    // ribs belong to this real leaf/head, rather than an unrelated front decal.
    const r=Math.min(fieldW,fieldH)*.29;
-   const disk=coloured(new THREE.CylinderGeometry(r,r,skin*1.7,24),.55);
+   const disk=coloured(new THREE.CylinderGeometry(r,r,skin*1.7,24),colors.metal);
    disk.rotateX(Math.PI/2);disk.translate(0,0,z);parts.push(disk);
    for(let i=0;i<4;i++){
     const a=i*Math.PI/2,cx=Math.cos(a),cy=Math.sin(a);
-    box(cx*fieldW*.32,cy*fieldH*.32,z,Math.max(.12,fieldW*.07),Math.max(.12,fieldH*.07),skin,.28);
-    const rib=coloured(new THREE.BoxGeometry(Math.min(fieldW,fieldH)*.25,Math.min(.22,r*.22),skin),.35);
+    box(cx*fieldW*.32,cy*fieldH*.32,sign*d*.455,Math.max(.12,fieldW*.07),Math.max(.12,fieldH*.07),skin*.7,.28);
+    const rib=coloured(new THREE.BoxGeometry(Math.min(fieldW,fieldH)*.25,Math.min(.22,r*.22),skin),colors.dark);
     rib.rotateZ(a);rib.translate(cx*r*1.02,cy*r*1.02,z);parts.push(rib);
    }
-   const hub=coloured(new THREE.CylinderGeometry(r*.34,r*.34,skin*2,12),.32);
+   const hub=coloured(new THREE.CylinderGeometry(r*.34,r*.34,skin*2,12),colors.copper);
    hub.rotateX(Math.PI/2);hub.translate(0,0,z);parts.push(hub);
   }else if(kind==='pressure'){
    for(const x of [-1,1])box(x*fieldW*.31,0,z,fieldW*.21,fieldH*.72,skin,.43);
-   box(0,-fieldH*.26,z,fieldW*.83,Math.min(.18,fieldH*.13),skin,.65);
-   box(0,fieldH*.28,z,fieldW*.70,Math.min(.11,fieldH*.09),skin,.28);
+   box(0,-fieldH*.26,sign*d*.455,fieldW*.78,Math.min(.18,fieldH*.13),skin*.7,.65);
+   box(0,fieldH*.28,sign*d*.455,fieldW*.70,Math.min(.11,fieldH*.09),skin*.7,.28);
   }else if(kind==='thermal'){
    const count=Math.min(7,Math.max(3,Math.floor(fieldW/1.1)));
    for(let i=0;i<count;i++)box((i-(count-1)/2)*fieldW/(count+1),0,z,fieldW/(count+1)*.37,fieldH*.66,skin,.38);
@@ -81,8 +96,12 @@ function mechanismMaterial(k,original,kind){
  k.visualAuditLateMaterials??=new Map();
  const variants=k.visualAuditLateMaterials.get(original)??new Map();
  if(!variants.has(kind)){
-  const material=original.clone();material.name=(original.name||'Late mechanism enamel')+' / machined '+kind;
-  material.vertexColors=true;material.needsUpdate=true;variants.set(kind,material);k.visualAuditLateMaterials.set(original,variants);
+  const material=original.clone();material.name='Fabricated device enamel / '+kind;
+  // Preserve the authored device materials through chapter tinting. Internal
+  // partitions and moving machines must not collapse into the beige room skin.
+  material.color.setHex(['bulkhead','drive','sluice','weight','rail','pressure','thermal','piston','valve','chassis','incline web','cast pneumatic manifold','sealed axle cartridge'].includes(kind)?0xffffff:kind==='rail truck'?0xc1d0c9:0xa1bab3);
+  material.vertexColors=true;material.roughness=kind==='rail truck'?.44:.62;material.metalness=kind==='rail truck'?.54:.24;
+  material.userData={...material.userData,keepMaterial:true,lateDeviceFinish:true};material.needsUpdate=true;variants.set(kind,material);k.visualAuditLateMaterials.set(original,variants);
  }
  return variants.get(kind);
 }
@@ -150,9 +169,9 @@ function dressDeckUnderfaces(k,stable){
  let n=0;
  for(const d of k.decks||[]){
   if(targets.size&&!targets.has(d.name)&&!/(receiving|gallery|island)/i.test(d.name))continue;
-  if(!targets.size&&stable!==36&&stable!==40)continue;
+  if(!targets.size&&stable!==36&&stable!==40&&stable<42)continue;
   const x=(d.minX+d.maxX)/2,z=(d.minZ+d.maxZ)/2;
-  for(const m of beforeMeshes(k))if(at(m,[x,d.y-.9,z])&&m.geometry?.parameters?.height===1&&machineBox(k,m,'rail','y'))n++;
+  for(const m of beforeMeshes(k))if(at(m,[x,d.y-.9,z])&&m.geometry?.parameters?.height===1&&machineBox(k,m,'chassis','y'))n++;
  }
  return n;
 }
@@ -191,7 +210,7 @@ function rampWebGeometry(source){
   const v=[[a,bottomA,p],[c,bottomA,p],[c,topA,p],[a,topA,p],[a,bottomC,q],[c,bottomC,q],[c,topC,q],[a,topC,q]];
   const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(v.flat(),3));
   g.setIndex([0,3,2,0,2,1,4,5,6,4,6,7,0,1,5,0,5,4,2,3,7,2,7,6,0,4,7,0,7,3,1,2,6,1,6,5]);
-  const n=g.toNonIndexed();g.dispose();n.computeVertexNormals();n.setAttribute('uv',new THREE.Float32BufferAttribute(new Float32Array(n.attributes.position.count*2),2));parts.push(coloured(n,tone));
+  const n=g.toNonIndexed();g.dispose();n.computeVertexNormals();n.setAttribute('uv',new THREE.Float32BufferAttribute(new Float32Array(n.attributes.position.count*2),2));parts.push(coloured(n,tone===.72?LATE_DEVICE_COLORS.dark:tone===.43?LATE_DEVICE_COLORS.metal:tone===.50?LATE_DEVICE_COLORS.copper:LATE_DEVICE_COLORS.paint));
  };
  const inset=(x1-x0)*.23;
  wedge(x0+inset,x1-inset,z0,z1,base,base,y0,y1,.72);
@@ -223,9 +242,9 @@ function finishSightHoops(k){
   // metal rails. An interrupted translucent cyan arc cannot be mistaken for
   // a gold physical ring inexplicably suspended without legs or a collider.
   const batched=removeBin(k,mesh);
-  projection??=new THREE.MeshBasicMaterial({name:'Echo / projected range calibration arc',color:0x72d2df,transparent:true,opacity:.34,depthWrite:false});
+  projection??=new THREE.MeshBasicMaterial({name:'Echo / projected range calibration arc',color:0x72d2df,transparent:true,opacity:.54,depthWrite:false});
   mesh.material=projection;
-  const old=mesh.geometry;mesh.geometry=new THREE.TorusGeometry(.75,.045,6,28,Math.PI*1.72);mesh.geometry.rotateZ(Math.PI*.64);old.dispose();
+  const old=mesh.geometry;mesh.geometry=new THREE.TorusGeometry(.75,.065,6,36,Math.PI*1.72);mesh.geometry.rotateZ(Math.PI*.64);old.dispose();
   mesh.userData.visualAuditLateShape='projected range arc';
   if(batched){const bin=k.artBins.get(projection)||[];bin.push(mesh);k.artBins.set(projection,bin);}
   n++;
@@ -241,7 +260,7 @@ function finishSightHoops(k){
  * portal planes, target registries and every solver state stay unchanged. */
 export function dressVisualAuditLate(k,stableLevel=k.index+1){
  if(!STABLE_LEVELS.has(stableLevel)||k.visualAuditLate)return k.visualAuditLate??null;
- const stats={stableLevel,housings:0,barrels:0,windings:0,sightHoops:0,railTrucks:0,extraLights:0,downloadBytes:0};
+ const stats={stableLevel,revision:LATE_VISUAL_COMPLETION_REVISION,housings:0,barrels:0,windings:0,sightHoops:0,railTrucks:0,extraLights:0,downloadBytes:0};
  const shape=(predicate,kind,axis)=>{stats.housings+=select(k,predicate,kind,axis);};
  const largePanel=m=>{const s=boxSize(m);return s&&Math.max(...s)>5&&Math.min(...s)<1.2&&m.material===k.m.shell;};
  switch(stableLevel){
@@ -309,6 +328,7 @@ export function dressVisualAuditLate(k,stableLevel=k.index+1){
    shape(m=>/51 \/ actual counterweighted door|51 \/ gravity counterweight/.test(m.name),'weight');
    stats.sightHoops=finishSightHoops(k);stats.barrels=finishProjectorBarrels(k);break;
  }
+ if(stableLevel>=42)stats.housings+=dressDeckUnderfaces(k,stableLevel);
  k.visualAuditLate=stats;k.world.root.userData.visualAuditLate=stats;return stats;
 }
 
@@ -327,6 +347,37 @@ function dialOnMesh(k,host,{read,min=0,max=100,range=2.5,mount}={}){
  }
  const update=()=>{const f=THREE.MathUtils.clamp((read()-min)/(max-min),0,1);pointer.rotation.z=range/2-range*f;pointer.position.x=-Math.sin(pointer.rotation.z)*radius*.31;pointer.position.y=Math.cos(pointer.rotation.z)*radius*.31;};
  k.renders.push(update);update();return {group,faceMesh,pointer};
+}
+
+/** A ground-aligned projected occupancy field marks only the real joint goal.
+ * It is deliberately rectangular and flat, distinct from every portal and
+ * from the castle's finale. The field creates no body, trigger or progress. */
+function finishLateGoalField(level){
+ const position=level.goal?.position,parent=level.world?.root;
+ if(!position||!parent)return null;
+ const root=new THREE.Group();root.name='Late finish / true joint occupancy field';root.userData={visualOnly:true,keepMaterial:true};
+ root.position.copy(position);root.position.y+=.028;parent.add(root);
+ const shape=new THREE.Shape(),w=4.0,h=3.8,c=.42;
+ [[-w/2+c,-h/2],[w/2-c,-h/2],[w/2,-h/2+c],[w/2,h/2-c],[w/2-c,h/2],[-w/2+c,h/2],[-w/2,h/2-c],[-w/2,-h/2+c]].forEach(([x,z],i)=>i?shape.lineTo(x,z):shape.moveTo(x,z));shape.closePath();
+ const baseGeometry=new THREE.ShapeGeometry(shape);baseGeometry.rotateX(-Math.PI/2);
+ const baseMaterial=new THREE.MeshBasicMaterial({name:'Late finish / projected mineral occupancy field',color:0x31575a,transparent:true,opacity:.48,depthWrite:false,toneMapped:false});
+ const base=new THREE.Mesh(baseGeometry,baseMaterial);base.name='Late finish / ground projection on actual finish';root.add(base);
+ const geometry=new THREE.PlaneGeometry(1,1);geometry.rotateX(-Math.PI/2);
+ const material=new THREE.MeshBasicMaterial({name:'Late finish / illuminated inset corner field',color:0xf4cf8a,transparent:true,opacity:.84,depthWrite:false,toneMapped:false});
+ const entries=[];
+ for(const x of [-1,1])for(const z of [-1,1]){
+  entries.push({p:[x*1.28,.006,z*1.65],s:[.84,1,.16]});
+  entries.push({p:[x*1.78,.006,z*1.23],s:[.16,1,.96]});
+ }
+ // The short paired seams describe a shared docking zone without a new label
+ // or a made-up completion indicator. Actual victory still uses goal.contains.
+ for(const x of [-.72,.72])entries.push({p:[x,.006,0],s:[.18,1,.74]});
+ const marks=new THREE.InstancedMesh(geometry,material,entries.length),matrix=new THREE.Matrix4();
+ for(const [i,e]of entries.entries())marks.setMatrixAt(i,matrix.compose(V(...e.p),Q(),V(...e.s)));
+ marks.instanceMatrix.needsUpdate=true;marks.computeBoundingBox();marks.computeBoundingSphere();marks.name='Late finish / broad inset occupancy corners';root.add(marks);
+ const oldDispose=level.dispose;let disposed=false;
+ level.dispose=function(...args){if(!disposed){disposed=true;root.removeFromParent();root.clear();marks.dispose();baseGeometry.dispose();geometry.dispose();baseMaterial.dispose();material.dispose();}return oldDispose?.apply(this,args);};
+ return{root,position:position.toArray(),footprint:[w,h],extraColliders:0,extraLights:0,perFrameCallbacks:0};
 }
 
 /** Post-theme binding uses actual continuous mechanism values. It introduces
@@ -359,5 +410,6 @@ export function finishVisualAuditLate(game,level,index=level.index,roots=[]){
   const host=s.parts?.[2]?.mesh;
   if(host&&dialOnMesh(k,host,{read:()=>s.offset,min:-4,max:4}))instruments++;
  }
- level.visualAuditLateBound={...stats,instruments,perFrameReadings:instruments};return level;
+ const finishField=stable>=42?finishLateGoalField(level):null;
+ level.visualAuditLateGoal=finishField;level.visualAuditLateBound={...stats,instruments,perFrameReadings:instruments,finishField:finishField?{position:finishField.position,footprint:finishField.footprint}:null};return level;
 }

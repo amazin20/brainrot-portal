@@ -134,8 +134,18 @@ function createBatch(root,materials){
  const groups=new Map(),geometries=new Map(),matrix=new THREE.Matrix4(),p=V(),s=V(),q=new THREE.Quaternion();
  const geometry=kind=>{
   if(geometries.has(kind))return geometries.get(kind);
-  const g=kind==='arc'?new THREE.TorusGeometry(1,.065,6,24,Math.PI*.90):kind==='ring'?new THREE.TorusGeometry(1,.065,6,32):kind==='leaf'?new THREE.SphereGeometry(1,8,6):
+  const g=kind==='arc'?new THREE.TorusGeometry(1,.065,6,24,Math.PI*.90):kind==='ring'?new THREE.TorusGeometry(1,.065,6,32):kind==='leaf'?new THREE.SphereGeometry(1,10,8):
    kind==='facet'?new THREE.OctahedronGeometry(1,0):new THREE.BoxGeometry(1,1,1);
+  if(kind==='leaf'){
+   // A curved lance with a raised central fold, rather than five flat round
+   // stickers. Its thickness remains inside the genuine wall relief budget.
+   const p=g.attributes.position;
+   for(let i=0;i<p.count;i++){
+    const x=p.getX(i),y=p.getY(i),z=p.getZ(i);
+    p.setXYZ(i,x*.65*(1-y*.15),y,z*.45+.36*(1-y*y)+.12*y);
+   }
+   p.needsUpdate=true;g.computeVertexNormals();g.computeBoundingBox();g.computeBoundingSphere();
+  }
   geometries.set(kind,g);return g;
  };
  return {
@@ -167,7 +177,7 @@ function buildMotif(batch,site,id){
  if(id==='biosphere'){
   rod(0,-.02,1.72);rod(-.27,-.02,.65,-.62);rod(.27,.30,.65,.62);
   for(const [x,y,r]of [[-.38,-.35,-.65],[.38,-.03,.65],[-.38,.31,-.65],[.32,.60,.58],[0,.74,0]])
-   a('leaf','paint',[x*unit,y*unit,.068],[unit*.21,unit*.26,.042],r);
+   a('leaf','paint',[x*unit,y*unit,.068],[unit*.28,unit*.35,.14],r);
   a('box','frame',[0,-unit*.95,.038],[unit*.82,.085,.05]);
  }else if(id==='dynamo'){
   for(let i=0;i<5;i++)a('box','paint',[(i-2)*unit*.28,0,.040],[unit*.105,unit*(1.38-Math.abs(i-2)*.16),.065]);
@@ -219,7 +229,7 @@ export function installCampaignEnvironment(game,level,theme){
  // One small set of chapter landmarks is enough. Repeating twelve emblems
  // across bare walls made the room kit look stamped and competed with the
  // machines. The castle retains its separate navigational wing identities.
- const sites=campaignOrnamentSites(game,level,{limit:theme.id==='castle'?(game.quality?.shadows===false?8:12):4});
+ const sites=campaignOrnamentSites(game,level,{limit:theme.id==='castle'?(game.quality?.shadows===false?8:12):2});
  if(!sites.length)return level;
  const parent=level.structure||level.world?.root||level.workshop?.world?.root;if(!parent)return level;
  const root=new THREE.Group();root.name='Chapter architectural relief';root.userData.visualOnly=true;root.userData.keepMaterial=true;

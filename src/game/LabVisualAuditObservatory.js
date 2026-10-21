@@ -2,7 +2,78 @@ import * as THREE from 'three';
 import {mergeGeometries} from 'three/addons/utils/BufferGeometryUtils.js';
 
 const V=(...p)=>new THREE.Vector3(...p),Q=()=>new THREE.Quaternion(),Z=V(0,0,1);
-export const OBSERVATORY_ART_REVISION='v66-observatory-physical-machinery-2';
+export const OBSERVATORY_ART_REVISION='v67-observatory-built-in-service-bays';
+
+/** A wall-sized equipment enclosure, drawn inside the existing closed hull.
+ * The old broad white slab made every machine read like a tiny prop in a
+ * warehouse. Recessed ceramic-free service bays now give those structural
+ * partitions a metre-scale hierarchy, with a continuous closed back. */
+function serviceBayGeometry(size,{axis='z',paint=0x527888,accent=0xacae9a,deck=false}={}){
+ const [sx,sy,sz]=size,w=axis==='x'?sz:sx,h=axis==='y'?sz:sy,d=axis==='x'?sx:axis==='y'?sy:sz;
+ const parts=[],colors={frame:0x344b57,recess:0x263d49,paint,accent,metal:0xa8bab9};
+ const add=(x,y,z,a,b,c,tone)=>{
+  if(Math.min(a,b,c)<=0)return;
+  const g=new THREE.BoxGeometry(a,b,c).toNonIndexed(),rgb=new THREE.Color(colors[tone]??tone),values=new Float32Array(g.attributes.position.count*3);
+  for(let i=0;i<values.length;i+=3)values.set([rgb.r,rgb.g,rgb.b],i);
+  g.setAttribute('color',new THREE.BufferAttribute(values,3));g.translate(x,y,z);parts.push(g);
+ };
+ const rim=Math.min(deck ? .23 : .34,w*.055,h*.055),gap=Math.min(.065,rim*.23),core=d*.56;
+ // The core fits BETWEEN the full-depth perimeter. A full-width core
+ // duplicates the rim's outer side/top triangles and produces diagonal
+ // black stipple when its dark material fights the lighter frame.
+ add(0,0,0,w-rim*2,h-rim*2,core,'recess');
+ for(const side of [-1,1]){
+  add(side*(w-rim)/2,0,0,rim,h,d,'frame');
+  add(0,side*(h-rim)/2,0,w-rim*2,rim,d,'frame');
+ }
+ const cols=Math.max(1,Math.min(6,Math.ceil((w-2*rim)/(deck?6:7.5)))),rows=deck?1:Math.max(1,Math.min(4,Math.ceil((h-2*rim)/5.8))),cw=(w-rim*2)/cols,ch=(h-rim*2)/rows;
+ for(const sign of [-1,1]){
+  const face=sign*(d*.5-d*.10),skin=d*.12;
+  for(let x=0;x<cols;x++)for(let y=0;y<rows;y++){
+   const px=-w/2+rim+(x+.5)*cw,py=-h/2+rim+(y+.5)*ch;
+   const tone=(x+y)%3===1?new THREE.Color(paint).multiplyScalar(.87).getHex():paint;
+   add(px,py,face,cw-gap*2,ch-gap*2,skin,tone);
+   // Wide embedded stiffeners and a restrained mineral equipment belt are
+   // readable from the starting gallery without a forest of tiny fasteners.
+   if(!deck&&ch>2.4){
+    add(px,py-ch*.31,sign*d*.478,cw*.80,Math.min(.23,ch*.075),d*.035,'frame');
+    if(y===0)add(px,py+ch*.25,sign*d*.478,cw*.80,Math.min(.32,ch*.095),d*.035,'accent');
+   }
+  }
+  for(let x=1;x<cols;x++)add(-w/2+rim+x*cw,0,sign*d*.46,rim*.44,h-rim*2,d*.08,'metal');
+  if(!deck)for(let y=1;y<rows;y++)add(0,-h/2+rim+y*ch,sign*d*.46,w-rim*2,rim*.44,d*.08,'frame');
+ }
+ const g=mergeGeometries(parts,false);parts.forEach(p=>p.dispose());
+ if(axis==='x')g.rotateY(Math.PI/2);else if(axis==='y')g.rotateX(-Math.PI/2);
+ g.name=deck?'Closed cellular gallery chassis':'Closed observatory service-bay bulkhead';
+ g.parameters={width:sx,height:sy,depth:sz};g.computeBoundingBox();g.computeBoundingSphere();return g;
+}
+
+function refinishPrimaryVolumes(a,stable){
+ const {k}=a,tones={31:[0x526f86,0xb6aa8b],32:[0x294551,0xa7b4ad],33:[0x4a7683,0xa6b9a7],34:[0x567d88,0xb5bea9],35:[0x365b73,0xa2bcc0],36:[0x486d83,0xc1a57e],37:[0x3b6972,0xbba274],38:[0x496778,0xa2b8b3],39:[0x4d687a,0xc4a383],40:[0x607b8b,0xb7b7a0]};
+ const [paint,accent]=tones[stable],mat=new THREE.MeshStandardMaterial({name:'Observatory / recessed structural service bays',color:0xffffff,vertexColors:true,roughness:.72,metalness:.19});
+ mat.userData.keepMaterial=true;
+ const sources=[...k.world.root.children].filter(m=>m.isMesh&&!m.isInstancedMesh&&m.visible&&m.material?.visible!==false&&!m.userData?.collisionProxy&&m.geometry?.parameters);
+ a.stats.closedPartitionBays=0;a.stats.closedGalleryChassis=0;
+ for(const m of sources){
+  const p=m.geometry.parameters,size=[p.width,p.height,p.depth];if(!size.every(n=>Number.isFinite(n)&&n>0))continue;
+  const wall=m.material===k.m.shell&&p.height>=4.5&&Math.min(p.width,p.depth)<1.3&&Math.max(p.width,p.depth)>=5.5;
+  const gallery=m.material===k.m.dark&&p.height>=.65&&p.height<=1.15&&Math.min(p.width,p.depth)>6&&m.position.y>k.base+.5;
+  const magneticHood=stable===37&&m.material===k.m.shell&&Math.abs(p.height-.55)<.001&&Math.abs(m.position.y-1.98)<.001;
+  const deck=gallery||magneticHood;
+  if(!wall&&!deck)continue;
+  // Keep the physical/aim owner's geometry, matrix and children unchanged.
+  // Only its drawing moves to a sibling. Every new vertex remains in its
+  // former full box; there is no new route obstacle or portal-facing skin.
+  for(const bin of k.artBins.values()){const i=bin.indexOf(m);if(i>=0)bin.splice(i,1);}
+  const hidden=m.material.clone();hidden.visible=false;m.material=hidden;
+  const replacement=a.raw(serviceBayGeometry(size,{axis:deck?'y':p.width<p.depth?'x':'z',paint:deck?0x657d88:paint,accent,deck}),m.position.toArray(),mat,deck?'closed framed gallery chassis':'recessed internal structural service bay',{q:m.quaternion.clone()});
+  replacement.scale.copy(m.scale);replacement.userData.keepMaterial=true;
+  replacement.castShadow=m.castShadow;replacement.receiveShadow=m.receiveShadow;
+  replacement.userData.originalClosedVolume={min:size.map(n=>-n/2),max:size.map(n=>n/2),source:m.uuid};
+  if(wall)a.stats.closedPartitionBays++;else a.stats.closedGalleryChassis++;
+ }
+}
 
 /** A second art pass for the ten observatory rooms. Large fittings now have
  * real manufactured depth and their own measured collision. Original portal
@@ -44,7 +115,9 @@ function workshop(k){
    const m=box(pos.toArray(),sizeWorld,material,name+' / formed '+material,{solid:false});parts.push(m);return m;
   };
   const rim=Math.min(.32,w*.12,h*.12);
-  add([0,0,0],[w,h,d*.42],'dark');
+  // Keep the core inside the perimeter rather than placing duplicate dark
+  // and metal triangles on the same exterior side and top planes.
+  add([0,0,0],[w-rim*2,h-rim*2,d*.42],'dark');
   for(const sign of [-1,1])add([0,0,sign*d*.25],[w-2*rim,h-2*rim,d*.10],mat);
   for(const sign of [-1,1]){
    add([sign*(w-rim)/2,0,0],[rim,h,d],'metal');
@@ -136,16 +209,56 @@ function hydraulicMachine(a,l){
   m.geometry=new THREE.BoxGeometry(.24,old.parameters.height,.012);old.dispose();
   m.quaternion.setFromRotationMatrix(new THREE.Matrix4().makeBasis(axis.clone().cross(normal),axis,normal));
  }
+ // Three real telescopic sleeves make the lift support readable as a
+ // hydraulic ram. They extend below its existing floor, never through the
+ // landing; their tight moving contacts follow that same carriage height.
+ if(l.lift){
+  const segments=[.62,.48,.35].map((radius,i)=>{
+   const mesh=a.raw(new THREE.CylinderGeometry(radius,radius,1,24),[-2,0,6],i%2?'metal':'paint','hydraulic telescopic barrel '+i,{batch:false});
+   const c=a.k.game.collisionProxy(new THREE.Box3().setFromCenterAndSize(V(-2,-2,6),V(radius*2,.01,radius*2)),{kinematic:true});
+   c.mesh.name='Observatory / hydraulic telescopic barrel '+i+' / moving physical';c.visualAuditObservatory=true;
+   const collar=a.raw(new THREE.CylinderGeometry(radius*1.10,radius*1.10,.12,24),[-2,0,6],'copper','hydraulic barrel retaining gland '+i,{batch:false});
+   return {radius,mesh,c,collar};
+  });
+  const sync=dt=>{
+   const floor=l.lift.group.position.y,base=-.65,height=Math.max(0,floor-1.45-base),span=height/3;
+   for(let i=0;i<segments.length;i++){
+    const {radius,mesh,c,collar}=segments[i],visible=height>.12;
+    mesh.visible=collar.visible=visible;c.enabled=visible;
+    if(!visible){a.k.game.syncCollision(c,c.box,dt);continue;}
+    const top=base+span*(i+1),bottom=base+span*i-.08;
+    mesh.scale.y=top-bottom;mesh.position.y=(top+bottom)/2;collar.position.y=top-.06;
+    mesh.updateWorldMatrix(true,false);
+    const box=new THREE.Box3().setFromCenterAndSize(V(-2,(top+bottom)/2,6),V(radius*2.2,top-bottom,radius*2.2));
+    a.k.game.syncCollision(c,box,dt);
+   }
+  };
+  a.updates.push(sync);sync(0);a.stats.telescopicBarrels=3;
+ }
 }
 
 function pneumaticMachine(a,l){
  for(const x of [-9.5,-14.5])a.casing([x,3,4.5],[1.0,.90,.90],'closed pressure quick coupling',{axis:'x',mat:'metal'});
- a.casing([-7,3.35,3.30],[1.70,1.65,.65],'reservoir pressure instrument',{mat:'ivory'});
+ // The reservoir gauge is a recessed round pressure instrument, rather than
+ // a cubical box perched in front of a tube. Its envelope stays identical.
+ const gauge=new THREE.Shape();gauge.absarc(0,0,.8,0,Math.PI*2,false);
+ const aperture=new THREE.Path();aperture.absarc(0,0,.64,0,Math.PI*2,true);gauge.holes.push(aperture);
+ const housing=new THREE.ExtrudeGeometry(gauge,{depth:.62,bevelEnabled:false,curveSegments:32});housing.translate(0,0,-.31);
+ a.raw(housing,[-7,3.35,3.3],'dark','round recessed reservoir instrument');
+ a.visualDisk([-7,3.35,3.055],.8,.16,'metal');
+ // Retain the original small closed pressure-case contact envelope.
+ const gaugeContact=a.k.game.collisionProxy(new THREE.Box3().setFromCenterAndSize(V(-7,3.35,3.3),V(1.70,1.65,.65)));
+ gaugeContact.mesh.name='Observatory / reservoir pressure instrument / physical';gaugeContact.visualAuditObservatory=true;
+ a.stats.physicalParts.push({name:'reservoir pressure instrument',min:gaugeContact.box.min.toArray(),max:gaugeContact.box.max.toArray()});
  a.dial([-7,3.35,3.52],.57,()=>l.pressureState?.pressure||0,{max:100});
  // The old free torus intersects the replacement vessel's lower flange;
  // remove that duplicate skin and use one closed, founded load cradle.
  for(const m of a.k.world.root.children.filter(o=>o.name==='Reservoir retaining ring'&&Math.abs(o.position.y-.3)<.02))m.visible=false;
  a.casing([-7,.36,2],[3.4,.72,3.4],'reservoir founded load cradle',{mat:'dark'});
+ const body=a.k.visualAuditMiddle?.root?.mounts?.find(m=>m.name==='34 / flanged pressure vessel');
+ if(body?.parts?.[0]){
+  const p=body.parts[0];p.color=0x4b7c84;p.mesh.setColorAt(p.index,new THREE.Color(p.color));p.mesh.instanceColor.needsUpdate=true;
+ }
 }
 
 function sluiceDrive(a,l){
@@ -156,6 +269,7 @@ function sluiceDrive(a,l){
   for(const x of [-3.6,3.6]){
    a.casing([x,5.9,z+.67],[2.4,2.1,.48],'sluice cable drum casing',{mat:'metal'});
    a.visualDisk([x,5.9,z+.80],.79,.14,'copper');
+   a.raw(new THREE.TorusGeometry(.68,.105,10,40),[x,5.9,z+.82],'metal','closed deep cable drum rim');
    const pieces=[new THREE.TorusGeometry(.63,.055,6,28)];
    for(let i=0;i<4;i++){const g=new THREE.BoxGeometry(1.18,.11,.065);g.rotateZ(i*Math.PI/4);pieces.push(g);}
    const gs=pieces.map(g=>g.index?g.toNonIndexed():g),wheel=mergeGeometries(gs,false);
@@ -227,15 +341,23 @@ function freightHoist(a,l){
 }
 
 function thermalEmitter(a,l){
+ a.mats.paint.color.setHex(0x956d4d);
  a.casing([17.75,1.2,17],[3.4,2.4,3.2],'thermal source founded pedestal',{mat:'dark'});
  a.casing([18.85,3.35,17],[1.9,2.9,3.2],'thermal emitter power and cooling body');
  for(let i=0;i<5;i++)a.box([18.85,2.30+i*.45,18.45],[1.70,.17,.26],'metal','emitter rear cooling fin',{solid:false});
  a.casing([19.2,1.2,17],[1.15,2.35,1.45],'emitter power feed foot',{mat:'metal'});
  // Optical head and its emitting normal remain the original projector.
  if(l.emitter)a.dial([18.85,3.35,18.45],.65,()=>l.thermal?.temperature||20,{min:20,max:470});
+ // The heat source owns the warm machine enamel; the distant structural
+ // bulkhead stays cool and darker. This preserves the real optical barrel.
+ l.emitter?.root.traverse(m=>{
+  if(!m.isMesh||m.material!==a.k.m.shell)return;
+  m.material=m.material.clone();m.material.name='Thermal source / copper enamel barrel';m.material.color.setHex(0xb68156);m.material.userData.keepMaterial=true;
+ });
 }
 
 function differentialSlides(a,l){
+ a.mats.paint.color.setHex(0x9eaea9);
  for(const s of l.shutters||[]){
   for(const x of [-10.4,10.4])a.casing([x,4.5,s.z],[1.0,9,1.8],'calibrator founded linear guide',{mat:'dark'});
   a.casing([0,8.9,s.z],[21.8,1.0,1.8],'calibrator fixed common crosshead');
@@ -252,5 +374,5 @@ function differentialSlides(a,l){
 export function dressVisualAuditObservatory(k,extra={}){
  const stable=k.index+1;if(stable<31||stable>40||k.visualAuditObservatory)return k.visualAuditObservatory??null;
  const a=workshop(k),builders={31:freightRack,32:shadowPartition,33:hydraulicMachine,34:pneumaticMachine,35:sluiceDrive,36:impactRotor,37:magneticChannel,38:freightHoist,39:thermalEmitter,40:differentialSlides};
- builders[stable](a,extra);return a.finish();
+ builders[stable](a,extra);refinishPrimaryVolumes(a,stable);return a.finish();
 }

@@ -79,12 +79,50 @@ test('upright confined fit preserves the optical axis, frozen frames and a finit
   assert.equal(rig.confinedFraming, false);
 });
 
+/** Historical negative control for the recorded v66 camera defect. In
+ * fa37048, applyCastleMaterials left these wing-wall query owners on k.cube;
+ * v67 carves their actual geometry into closed coffers. Reproduce only that
+ * documented historical query surface in the legacy run, using the unchanged
+ * original shared unit cube already present in this very castle. This is not
+ * a current-scene art adjustment, and it never runs on the fixed-camera path.
+ * Collider bounds, poses, physical bodies, rendered batches and new exterior
+ * columns remain actual v67; this comparator is specifically the old flat
+ * wing-wall camera-query scene, not a claim to replay the entire old build. */
+function historicalV66FlatWallQueries(g) {
+  const walls = [...new Set(g.cameraBlockers)].filter(mesh => mesh.userData.castlePerimeterCoffer);
+  assert.equal(walls.length, 109, 'Declare every new coffer wall participating in the historical comparator');
+  const originalUnitCubes = [...new Set(g.cameraBlockers.filter(mesh => !mesh.userData.castlePerimeterCoffer
+    && mesh.geometry?.type === 'BoxGeometry'
+    && ['width', 'height', 'depth'].every(key => mesh.geometry.parameters[key] === 1)).map(mesh => mesh.geometry))];
+  assert.equal(originalUnitCubes.length, 1, 'Use the genuine unchanged shared k.cube, never a synthetic camera blocker');
+  const [originalUnitCube] = originalUnitCubes;
+  assert.equal(originalUnitCube.attributes.position.count, 24);
+  assert.equal(originalUnitCube.index.count, 36);
+  const registries = [g.colliders, g.aimBlockers, g.cameraBlockers, g.portalPanels, g.floors];
+  const before = registries.map(items => [...items]);
+  for (const mesh of walls) {
+    const geometry = mesh.geometry, collider = mesh.userData.collider;
+    assert.equal(geometry.name, 'Castle perimeter / closed load-bearing stone coffers');
+    assert.ok(collider && !collider.kinematic);
+    const box = collider.box.clone(), pose = mesh.matrixWorld.clone();
+    mesh.geometry = originalUnitCube;
+    assert.deepEqual(collider.box, box, 'The historical query comparator must not alter physical wall bounds');
+    assert.deepEqual(mesh.matrixWorld, pose, 'Historical flat queries retain the actual wall pose');
+  }
+  registries.forEach((items, i) => assert.deepEqual(items, before[i]));
+  return {kind: 'historical-v66-flat-wing-wall-camera-query', sourceCommit: 'fa37048d48a279203a6eae7e945f5f5880a2b499', restoredWallQueries: walls.length,
+    physicalBoundsUnchanged: true, exteriorColumnsUnchanged: true};
+}
+
 async function measureRoute(legacy) {
   const g = await createHeadlessGame();
   let originalVisual;
   try {
     g.chamberEdition = 'foundation';g.tower41RatchetQualification = true;
     await g.selectLevel(40, true);
+    const currentCoffers = [...new Set(g.cameraBlockers)].filter(mesh => mesh.userData.castlePerimeterCoffer)
+      .map(mesh => ({mesh, geometry: mesh.geometry}));
+    const comparisonScene = legacy ? historicalV66FlatWallQueries(g) : {kind: 'current-actual-v67-coffer-scene'};
     if (legacy) g.cameraRig.configureSilhouette({enabled: false});
     const cargo = g.cargo, body = g.physics.cargoBody, root = g.playerGroup, visual = g.playerVisual;
     const meshes = [];
@@ -132,17 +170,21 @@ async function measureRoute(legacy) {
     assert.equal(route.heldContact.status, 'CONTACT_OBSERVED');
     assert.equal(route.preparation.sameCompanion, true);
     assert.equal(g.heldCube, cargo);
-    return {frames, samples, maxFov, outside: samples.filter(s => s.outside > 0)};
+    if (!legacy) for (const row of currentCoffers) assert.equal(row.mesh.geometry, row.geometry,
+      'The fixed-camera run must keep every actual new coffer query geometry');
+    return {frames, samples, maxFov, comparisonScene, outside: samples.filter(s => s.outside > 0)};
   } finally {if (originalVisual) g.updateVisuals = originalVisual;dispose(g);}
 }
 
-test('the full ordinary original-actor castle/contact route reproduces and removes the fifteen recorded crop samples',
+test('historical v66 flat-wall queries reproduce fifteen camera crop samples while the actual current castle route fits',
   {timeout: 600000}, async () => {
     // Both runs use the unchanged ordinary freight preparation, then native
     // move/jump/E and the real four-body contact cell. This CPU optical evidence
     // is sampled at 4fps plus the terminal frame; it is not a WebGL, occlusion,
     // every-render-frame, portrait-device or human-usability acceptance.
     const old = await measureRoute(true), fixed = await measureRoute(false);
+    assert.equal(old.comparisonScene.kind, 'historical-v66-flat-wing-wall-camera-query');
+    assert.equal(fixed.comparisonScene.kind, 'current-actual-v67-coffer-scene');
     assert.equal(old.frames, 7248);assert.equal(fixed.frames, old.frames);
     assert.equal(old.samples.length, 485);assert.equal(fixed.samples.length, old.samples.length);
     assert.equal(old.outside.length, 15, 'Retain the accepted recorded-route crop witness');

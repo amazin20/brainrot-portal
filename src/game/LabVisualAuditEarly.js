@@ -1,9 +1,9 @@
 import * as THREE from 'three';
 import {manufacturedBulkheadGeometry} from './LabManufacturedFinish.js';
-import {finishEarlyMachineConstruction} from './LabEarlyMachineConstruction.js';
+import {finishEarlyMachineConstruction,earlyBoxGirderGeometry,earlyFoundedPierGeometry,earlyEmitterBarrelGeometry,projectedWalkwayGeometry} from './LabEarlyMachineConstruction.js';
 
 const V=(...p)=>new THREE.Vector3(...p),Q=()=>new THREE.Quaternion(),UP=V(0,1,0);
-export const EARLY_AUDIT_REVISION='early-fabricated-machines-v66-r2';
+export const EARLY_AUDIT_REVISION='early-integral-structures-v67';
 const METAL=0x9eafb3,DARK=0x294b59,PAINT=0x5b8998,BRASS=0xd1a768;
 
 /** A closed structural I-section, contained in the former rectangular post.
@@ -24,10 +24,12 @@ export function earlyStructuralSection(width,height,depth){
 
 function resources(){return {geometry:[],materials:[],replacements:[],followers:[],instancePaint:[],stats:{structuralSections:0,foldedChassis:0,materialRoles:0,mirrorBearings:0,floorFieldTiles:0,extraColliders:0,extraLights:0}};}
 function ownMaterial(owner,source,color,{vertexColors=false}={}){
+ const key=color+':'+Boolean(vertexColors),sources=owner.materialCache??=new Map(),cache=sources.get(source)??new Map();
+ if(cache.has(key))return cache.get(key);
  const material=source.clone();material.name='Early audit / founded machine metal';
  material.color.setHex(color);material.roughness=.53;material.metalness=.46;
  material.vertexColors=vertexColors;material.envMapIntensity=.65;
- owner.materials.push(material);return material;
+ owner.materials.push(material);cache.set(key,material);sources.set(source,cache);return material;
 }
 function replace(owner,mesh,geometry,material){
  if(geometry!==mesh.geometry&&owner.protected?.has(mesh)){
@@ -35,7 +37,7 @@ function replace(owner,mesh,geometry,material){
   // triangles and its child list intact; only its drawing is delegated to a
   // sibling, just like the existing manufactured second-chapter coat.
   const hidden=mesh.material.clone();hidden.visible=false;owner.materials.push(hidden);
-  owner.replacements.push({mesh,geometry:mesh.geometry,material:mesh.material,replacementGeometry:mesh.geometry,replacementMaterial:hidden});
+  const replacement={mesh,geometry:mesh.geometry,material:mesh.material,replacementGeometry:mesh.geometry,replacementMaterial:hidden};owner.replacements.push(replacement);
   mesh.material=hidden;
   const mount=new THREE.Group();mount.matrixAutoUpdate=false;mount.name='Early audit / measured structural owner';
   mesh.updateWorldMatrix(true,false);owner.renderRoot.updateWorldMatrix(true,false);
@@ -43,13 +45,14 @@ function replace(owner,mesh,geometry,material){
   const visual=new THREE.Mesh(geometry,material);visual.name='Early audit / integral structural profile';visual.castShadow=mesh.castShadow;visual.receiveShadow=mesh.receiveShadow;
   visual.userData.visualOnly=true;visual.userData.physicalSourceId=mesh.uuid;mount.add(visual);owner.geometry.push(geometry);
   if(owner.dynamic?.has(mesh))owner.followers.push({target:mesh,mount});
-  return;
+  return {visual,mount,replacement};
  }
- owner.replacements.push({mesh,geometry:mesh.geometry,material:mesh.material,replacementGeometry:geometry,replacementMaterial:material});
+ const replacement={mesh,geometry:mesh.geometry,material:mesh.material,replacementGeometry:geometry,replacementMaterial:material};owner.replacements.push(replacement);
  if(geometry!==mesh.geometry)owner.geometry.push(geometry);
  mesh.geometry=geometry;mesh.material=material;mesh.userData.visualAuditEarly=true;
+ return {visual:mesh,mount:null,replacement};
 }
-function profilePosts(root,owner,{onlyFolded=false}={}){
+function profilePosts(root,owner,{onlyFolded=false,closedPiers=false}={}){
  const nodes=[];root.traverse(mesh=>{
   const p=mesh.geometry?.parameters;
   if(!mesh.isMesh||mesh.isInstancedMesh||mesh.userData?.collisionProxy||mesh.userData?.portalTile||mesh.userData?.visualAuditEarly||!mesh.visible||
@@ -63,7 +66,8 @@ function profilePosts(root,owner,{onlyFolded=false}={}){
  });
  for(const mesh of nodes.slice(0,44)){
   const p=mesh.geometry.parameters;
-  replace(owner,mesh,earlyStructuralSection(p.width,p.height,p.depth),ownMaterial(owner,mesh.material,DARK));owner.stats.structuralSections++;
+  const g=closedPiers?earlyFoundedPierGeometry(p.width,p.height,p.depth):earlyStructuralSection(p.width,p.height,p.depth);
+  replace(owner,mesh,g,ownMaterial(owner,mesh.material,closedPiers?0xffffff:DARK,{vertexColors:closedPiers}));owner.stats.structuralSections++;
  }
 }
 
@@ -78,9 +82,9 @@ export function prepareVisualAuditEarlyKit(kit){
   for(const mesh of [...meshes]){
    const p=mesh.geometry?.parameters;
    if(!p||mesh.name!=='Folded dark casing'||p.height<.65||p.height>1.12||Math.min(p.width,p.depth)<6)continue;
-   const geometry=manufacturedBulkheadGeometry(p.width,p.depth,p.height);geometry.rotateX(-Math.PI/2);
+   const geometry=earlyBoxGirderGeometry(p.width,p.height,p.depth);
    geometry.parameters={width:p.width,height:p.height,depth:p.depth};geometry.name='Closed underdeck girder / recessed load chassis';
-   const replacement=ownMaterial(owner,material,PAINT,{vertexColors:true});
+   const replacement=ownMaterial(owner,material,0xffffff,{vertexColors:true});
    replace(owner,mesh,geometry,replacement);owner.stats.foldedChassis++;
    const i=meshes.indexOf(mesh);if(i>=0)meshes.splice(i,1);
    kit.artBins.set(replacement,[mesh]);
@@ -91,10 +95,25 @@ export function prepareVisualAuditEarlyKit(kit){
  const carriers=[kit.state?.['travelling-address'],kit.state?.['stored-power-cabin'],kit.state?.['companion-hoist']].filter(Boolean);
  for(const carrier of carriers)carrier.group?.traverse(mesh=>{
   const p=mesh.geometry?.parameters;
-  if(!mesh.isMesh||mesh.userData?.collisionProxy||mesh.userData?.visualAuditEarly||!p||p.height<.55||p.height>.85||p.width<10||p.depth<10)return;
-  const geometry=manufacturedBulkheadGeometry(p.width,p.depth,p.height);geometry.rotateX(-Math.PI/2);geometry.parameters={width:p.width,height:p.height,depth:p.depth};
-  replace(owner,mesh,geometry,ownMaterial(owner,mesh.material,DARK,{vertexColors:true}));owner.stats.foldedChassis++;
+  if(!mesh.isMesh||mesh.userData?.collisionProxy||mesh.userData?.visualAuditEarly||!p)return;
+  if(p.height>=.55&&p.height<=.85&&p.width>=10&&p.depth>=10){
+   const geometry=earlyBoxGirderGeometry(p.width,p.height,p.depth);
+   replace(owner,mesh,geometry,ownMaterial(owner,mesh.material,0xffffff,{vertexColors:true}));owner.stats.foldedChassis++;
+  }else if(p.height<.9&&Math.min(p.width,p.depth)<1&&Math.max(p.width,p.depth)>5&&p.height>.35){
+   // The travelling crosshead has a warm machine livery, distinct from the
+   // cool fixed platforms behind it. Its own physical beam is unchanged.
+   replace(owner,mesh,mesh.geometry,ownMaterial(owner,mesh.material,BRASS));owner.stats.materialRoles++;
+  }
  });
+ // Static batching is keyed by material, rather than each mesh's current
+ // assignment. Rebucket prepared structural profiles so their dark load
+ // paint survives the merge instead of reverting to the source shell paint.
+ for(const r of owner.replacements){
+  if(r.replacementMaterial===r.material)continue;
+  const bin=kit.artBins.get(r.material),at=bin?.indexOf(r.mesh)??-1;if(at<0)continue;
+  bin.splice(at,1);const dest=kit.artBins.get(r.replacementMaterial)||[];
+  if(!dest.includes(r.mesh))dest.push(r.mesh);kit.artBins.set(r.replacementMaterial,dest);
+ }
  return owner;
 }
 
@@ -210,6 +229,48 @@ function finishEnergyMachineRoles(level,index,owner){
  for(const mesh of record.keys())mesh.instanceColor.needsUpdate=true;
 }
 
+function finishProjectedLight(level,owner,index){
+ const materials=new Map(),profiles=new Map();
+ const axes=mesh=>{const s=mesh.scale.toArray(),l=s.indexOf(Math.max(...s)),n=[0,1,2].filter(a=>a!==l).sort((a,b)=>s[a]-s[b])[0];return [l,n];};
+ const profile=(l,n)=>{const key=l+':'+n;if(!profiles.has(key)){const g=projectedWalkwayGeometry(l,n);profiles.set(key,g);}return profiles.get(key);};
+ level.world.root.traverse(mesh=>{
+  const source=mesh.material;
+  if(!mesh.isMesh||Array.isArray(source)||source?.name!=='Projected solid light / luminous cyan volume')return;
+  if(!materials.has(source)){
+   const mat=source.clone();mat.name='Projected solid light / saturated load-bearing field';mat.color.setHex(0x066f8b);
+   mat.emissive.setHex(0x008aac);mat.emissiveIntensity=.82;mat.toneMapped=false;mat.opacity=.95;
+   owner.materials.push(mat);materials.set(source,mat);
+  }
+  if(index===1){
+   const mat=materials.get(source);mat.vertexColors=true;mat.color.setHex(0xffffff);mat.emissive.setHex(0x027790);mat.emissiveIntensity=.48;
+   // Source meshes remain the exact ray/collision boxes and receive no
+   // children. Their sibling drawing follows both visibility and full pose.
+   const [lengthAxis,normalAxis]=axes(mesh),g=profile(lengthAxis,normalAxis),{visual,mount,replacement}=replace(owner,mesh,g,mat);
+   if(mount&&!owner.followers.some(f=>f.target===mesh&&f.mount===mount))owner.followers.push({target:mesh,mount});
+   let key=lengthAxis+':'+normalAxis;
+   (owner.renders??=[]).push(()=>{
+    visual.visible=mesh.visible;
+    if(!mesh.visible)return;
+    const [l,n]=axes(mesh),next=l+':'+n;
+    if(next===key)return;key=next;
+    const geometry=profile(l,n);if(!owner.geometry.includes(geometry))owner.geometry.push(geometry);visual.geometry=geometry;
+    if(!mount)replacement.replacementGeometry=geometry;
+   });
+  }else replace(owner,mesh,mesh.geometry,materials.get(source));
+  owner.stats.materialRoles++;
+ });
+}
+
+function finishFirstLightEmitter(level,owner){
+ const meshes=[];level.world.root.traverse(mesh=>{if(mesh.isMesh&&mesh.geometry?.type==='CylinderGeometry')meshes.push(mesh);});
+ for(const mesh of meshes){
+  const p=mesh.geometry.parameters;
+  if(Math.abs(p.radiusTop-1)>.001||Math.abs(p.height-1.7)>.001||mesh.parent?.getWorldPosition(V()).distanceTo(V(-12,3.2,-14))>.01)continue;
+  const m=new THREE.MeshStandardMaterial({name:'Early audit / cast projector source housing',color:0xffffff,vertexColors:true,roughness:.42,metalness:.55});owner.materials.push(m);
+  replace(owner,mesh,earlyEmitterBarrelGeometry(p.radiusTop,p.height),m);owner.stats.opticalHousings=(owner.stats.opticalHousings??0)+1;
+ }
+}
+
 /** Final visual pass for the first seventeen rooms. All moving attachments
  * are scene siblings, so art cannot enlarge a machine measured by Box3 during
  * its physical update. No collider, portal registry, actor, state or clock is
@@ -219,10 +280,10 @@ export function finishVisualAuditEarly(game,level,index=level?.index){
  const owner=level.workshop?.visualAuditEarlyPrepared??resources();
  const root=new THREE.Group();root.name='Early visual audit / machine construction';root.userData={visualOnly:true,keepMaterial:true,revision:EARLY_AUDIT_REVISION};game.scene.add(root);
  owner.renderRoot=root;owner.protected=new Set([...(game.colliders??[]).map(c=>c.mesh),...(game.aimBlockers??[]),...(game.cameraBlockers??[])]);owner.dynamic=new Set((game.colliders??[]).filter(c=>c.kinematic).map(c=>c.mesh));
- if(index>=5&&index<=15)profilePosts(level.world.root,owner);
+ if(index>=5&&index<=15)profilePosts(level.world.root,owner,{closedPiers:index===6});
  if(index===6)restoreBalanceRoles(level,owner);
  if(index===9)finishGlass(level,owner);
- paintWorkingBays(level,index,owner);finishEnergyMachineRoles(level,index,owner);
+ paintWorkingBays(level,index,owner);finishEnergyMachineRoles(level,index,owner);finishProjectedLight(level,owner,index);
  if(index===10){
   // Retain the controller's own active colour updates. The stronger integral
   // border makes its existing turntable visible against the beige court.
@@ -238,10 +299,12 @@ export function finishVisualAuditEarly(game,level,index=level?.index){
   const m=new THREE.MeshStandardMaterial({name:'Early audit / fabricated structural alloys',color:0xffffff,vertexColors:true,roughness:.49,metalness:.38});
   owner.materials.push(m);return m;
  });
+ if(index===1)finishFirstLightEmitter(level,owner);
  const inverse=new THREE.Matrix4();let disposed=false;
  const sync=()=>{
   if(disposed)return;root.updateWorldMatrix(true,false);inverse.copy(root.matrixWorld).invert();
   for(const {target,mount}of owner.followers){target.updateWorldMatrix(true,false);mount.matrix.multiplyMatrices(inverse,target.matrixWorld);mount.matrixWorldNeedsUpdate=true;}
+  for(const render of owner.renders??[])render();
  };
  const oldRender=level.renderUpdate,oldReset=level.reset,oldDispose=level.dispose;
  const render=function(...args){const r=oldRender?.apply(this,args);sync();return r;};
@@ -271,9 +334,10 @@ export function finishVisualAuditEarly(game,level,index=level?.index){
   }
   for(const {part,matrix}of owner.retiredCoat??[]){part.matrix.copy(matrix);}
   for(const g of new Set(owner.geometry))if(!flushed.has(g))g.dispose();for(const m of new Set(owner.materials))m.dispose();
+  for(const texture of owner.textures??[])texture.dispose();
  };
  level.dispose=function(...args){if(disposed)return;release();return oldDispose?.apply(this,args);};
- if(owner.followers.length){level.renderUpdate=render;level.reset=reset;sync();}
+ if(owner.followers.length||owner.renders?.length){level.renderUpdate=render;level.reset=reset;sync();}
  const stats=Object.freeze({revision:EARLY_AUDIT_REVISION,level:index+1,...owner.stats,followers:owner.followers.length});
  root.userData.stats=stats;level.visualAuditEarly={root,stats,followers:owner.followers};return level;
 }

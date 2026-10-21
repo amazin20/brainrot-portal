@@ -42,7 +42,7 @@ export function buildRoom23PhysicalPrototype(game,index=22){
  k.control('ground-brake-release',[-7,0,1],()=>balance.requestBrake(false),'E — отвести колодки общего тормоза');
  installVisualAuditMiddleKit(k,23);
  const level=k.finish(spawn,cargoSpawn,[0,20,-20],{workshop:k,spec:ROOM23_SPEC,room23PhysicalPrototype:true,portalPuzzle:true,balance,cargoOnAnyPad:()=>balance.west.loaded()||balance.east.loaded()});
- level.dispose=()=>balance.dispose();level.spawnView={yaw:0,pitch:-.15};
+ level.dispose=()=>balance.dispose();level.spawnView={yaw:-.80,pitch:-.15};
  level.mechanismArt={liftSurfaces:['west-load-car','east-load-car']};
  level.puzzleGeometry={footprint:46*45,occupiedHeights:[0,10,20],orders:['physical-direct-transfer-prototype'],noProgressFlags:true,
   portalRoles:{'west-load-car':'original cargo delivery and final retrieval on a real cabin','east-load-car':'the opposite massive carriage','freight-throat':'initial high delivery','high-return':'retrieve the original from the descended cabin'},

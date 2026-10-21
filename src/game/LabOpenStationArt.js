@@ -64,9 +64,13 @@ function bearing(k,p,radius=1.6,depth=.7,normal=[0,0,1],parent=k.world.root){
 export function sign(k,text,p,normal=[0,0,1],width=5,height=1){
  text=campaignSignText(text,k);
  if(typeof document==='undefined'||!document.createElement)return;
- const canvas=document.createElement('canvas');if(!canvas.getContext)return;canvas.width=1024;canvas.height=Math.round(1024*height/width);const c=canvas.getContext('2d');if(!c)return;
+ const canvas=document.createElement('canvas');if(!canvas.getContext)return;
+ // Long wayfinding boards were rasterised to forty pixels in height. A
+ // minimum 128px letter field and mip filtering keep Cyrillic edges legible
+ // both close to the player and at an oblique view through a portal.
+ canvas.width=2048;canvas.height=Math.max(128,Math.round(2048*height/width));const c=canvas.getContext('2d');if(!c)return;
  c.fillStyle='#172b36';c.fillRect(0,0,canvas.width,canvas.height);c.font=`600 ${Math.round(canvas.height*.54)}px sans-serif`;c.textAlign='center';c.textBaseline='middle';c.fillStyle='#fae8c0';c.fillText(text,canvas.width/2,canvas.height*.52,canvas.width*.92);
- const t=new THREE.CanvasTexture(canvas);t.anisotropy=4;k.ownedTextures??=[];k.ownedTextures.push(t);
+ const t=new THREE.CanvasTexture(canvas);t.colorSpace=THREE.SRGBColorSpace;t.generateMipmaps=true;t.minFilter=THREE.LinearMipmapLinearFilter;t.magFilter=THREE.LinearFilter;t.anisotropy=8;k.ownedTextures??=[];k.ownedTextures.push(t);
  const mat=new THREE.MeshStandardMaterial({map:t,roughness:.55});const g=new THREE.PlaneGeometry(width,height);k.geometry(g,mat,p,Q().setFromUnitVectors(V(0,0,1),V(...normal)),{batch:false,name:'Station wayfinding / '+text});
 }
 

@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import {manufacturedBulkheadGeometry} from './LabManufacturedFinish.js';
+import {finishArchitecturalMaterials} from './LabArchitecturalFinishV67.js';
 
 const V=(...p)=>new THREE.Vector3(...p),Q=()=>new THREE.Quaternion();
 
@@ -92,11 +93,13 @@ export function finishVisualAudit(game,level,index,roots=[]){
  // Castle geometry has its own wing-specific commissioned pass.
  const partitions=level.tower?0:finishVisiblePartitions(game,level,unique);
  const instruments=instrumentHousings(game,level,unique);
- const diagnostics=Object.freeze({revision:66,index,partitions,instruments:instruments?.instruments||0,instrumentInstances:instruments?.instances||0,
+ const finish=finishArchitecturalMaterials(game,level,unique);
+ const diagnostics=Object.freeze({revision:67,index,partitions,architecturalMaterials:finish.materials,architecturalMeshes:finish.meshes,instruments:instruments?.instruments||0,instrumentInstances:instruments?.instances||0,
   extraLights:0,extraColliders:0,extraFloors:0,perFrameCallbacks:0});
  let disposed=false;const dispose=level.dispose;
  level.dispose=function(...args){
   if(disposed)return;disposed=true;
+  finish.dispose?.();
   if(instruments){instruments.root.removeFromParent();instruments.root.clear();instruments.batch.dispose();instruments.geometry.dispose();instruments.material.dispose();}
   return dispose?.apply(this,args);
  };

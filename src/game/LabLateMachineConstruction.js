@@ -24,28 +24,34 @@ function builder(){
  * The rear skin, rolled perimeter, deep mullions and stepped removable fields
  * all remain inside the original box; apertures are authored elsewhere. */
 export function lateCassetteBulkheadGeometry(width,height,depth,axis='z'){
- const w=axis==='x'?depth:axis==='y'?width:width,h=axis==='x'?height:axis==='y'?depth:height,d=axis==='x'?width:axis==='y'?height:depth;
+ const w=axis==='x'?depth:width,h=axis==='x'?height:axis==='y'?depth:height,d=axis==='x'?width:axis==='y'?height:depth;
  if(![w,h,d].every(v=>Number.isFinite(v)&&v>0))throw new RangeError('Positive closed cassette dimensions required');
- const b=builder(),rim=Math.min(.38,w*.08,h*.08),iw=w-2*rim,ih=h-2*rim;
- b.box([0,0,0],[w,h,d*.42],.68);
- for(const x of [-1,1])b.box([x*(w-rim)/2,0,0],[rim,h,d],.38);
- for(const y of [-1,1])b.box([0,y*(h-rim)/2,0],[iw,rim,d],.46);
- const nx=Math.max(1,Math.ceil(iw/6.2)),ny=Math.max(1,Math.ceil(ih/6.2)),cw=iw/nx,ch=ih/ny,gap=Math.min(.15,cw*.04,ch*.04);
+ const rgb=hex=>new THREE.Color(hex).toArray(),paint=rgb(0x608b87),dark=rgb(0x263f49),metal=rgb(0xb4c4bc),warm=rgb(0xba8964),field=rgb(0xa1bab0);
+ const b=builder(),rim=Math.min(.42,w*.08,h*.08),iw=w-2*rim,ih=h-2*rim;
+ b.box([0,0,0],[iw,ih,d*.42],dark);
+ for(const x of [-1,1])b.box([x*(w-rim)/2,0,0],[rim,h,d],metal);
+ for(const y of [-1,1])b.box([0,y*(h-rim)/2,0],[iw,rim,d],dark);
+ // Large pressure-painted bays belong to the real partition. They replace
+ // the former office-like grid of identical beige tiles; a continuous dark
+ // service plinth and broad vertical spine make each closed wall legible.
+ const nx=Math.max(1,Math.ceil(iw/10.5)),ny=Math.max(1,Math.ceil(ih/9)),cw=iw/nx,ch=ih/ny,gap=Math.min(.18,cw*.04,ch*.04);
  for(let x=0;x<nx;x++)for(let y=0;y<ny;y++){
   const px=-iw/2+(x+.5)*cw,py=-ih/2+(y+.5)*ch;
   for(const sign of [-1,1]){
-   // A broad recessed shoulder supports the smaller closed inner cassette.
-   // These are volumetric stampings, with no coplanar overlay or open back.
-   b.plate([px,py,sign*d*.275],cw-gap,ch-gap,d*.13,.43);
-   const inset=Math.min(.24,cw*.14,ch*.14);
-   b.plate([px,py,sign*d*.355],cw-gap-inset,ch-gap-inset,d*.13,.88);
-   const pad=Math.min(.24,cw*.09,ch*.09),boltX=cw/2-Math.min(.35,cw*.18),boltY=ch/2-Math.min(.35,ch*.18);
-   for(const sx of [-1,1])for(const sy of [-1,1])b.box([px+sx*boltX,py+sy*boltY,sign*d*.455],[pad,pad,d*.065],.30);
-   // Integral louvered service shoulder, not another painted stripe.
-   if(ch>2.3)for(let j=0;j<3;j++)b.box([px+(j-1)*cw*.16,py-ch*.28,sign*d*.447],[cw*.105,Math.min(.18,ch*.07),d*.075],.42);
+   b.plate([px,py,sign*d*.275],cw-gap,ch-gap,d*.13,dark);
+   const inset=Math.min(.28,cw*.14,ch*.14),fw=cw-gap-inset,fh=ch-gap-inset;
+   b.plate([px,py,sign*d*.355],fw,fh,d*.13,(x+y)%2===0?paint:field);
+   const strip=Math.min(.34,fw*.10),skirt=Math.min(1.15,fh*.21);
+   b.box([px-fw*.37,py,sign*d*.457],[strip,fh*.91,d*.076],metal);
+   b.box([px,py-fh*.34,sign*d*.444],[fw*.87,skirt,d*.072],dark);
+   if(fw>2.2&&fh>2.2){
+    const count=Math.min(7,Math.max(3,Math.floor(fw/.9))),span=fw*.57;
+    for(let j=0;j<count;j++)b.box([px+fw*.08-span/2+(j+.5)*span/count,py-fh*.34,sign*d*.485],[span/count*.45,skirt*.58,d*.022],metal);
+    b.box([px+fw*.31,py+fh*.32,sign*d*.447],[fw*.14,Math.min(.28,fh*.08),d*.075],warm);
+   }
   }
  }
- const g=join(b.parts,'Closed bilateral pressed cassette bulkhead');
+ const g=join(b.parts,'Closed bilateral large-bay pressure-painted bulkhead');
  if(axis==='x')g.rotateY(Math.PI/2);else if(axis==='y')g.rotateX(Math.PI/2);
  g.parameters={width,height,depth};g.computeBoundingBox();g.computeBoundingSphere();return g;
 }
@@ -53,20 +59,21 @@ export function lateCassetteBulkheadGeometry(width,height,depth,axis='z'){
 /** One cast opposed-pressure head, aligned to the original cylinder's Y
  * axis. It has sealed chambers, full flanges and four captive tie rods. */
 export function latePressureManifoldGeometry(radius,height){
- const b=builder(),r=radius,h=height;
- b.cylinder([0,0,0],r*.76,h*.90,.76,Q(),20);
+ const b=builder(),r=radius,h=height,rgb=hex=>new THREE.Color(hex).toArray();
+ const paint=rgb(0x527e7d),metal=rgb(0xb4c5be),dark=rgb(0x28434c),copper=rgb(0xc79560);
+ b.cylinder([0,0,0],r*.76,h*.90,paint,Q(),20);
  for(const sign of [-1,1]){
-  b.cylinder([0,sign*h*.44,0],r,h*.12,.47,Q(),24);
-  b.cylinder([0,sign*h*.34,0],r*.91,h*.10,.70,Q(),24);
+  b.cylinder([0,sign*h*.43,0],r,h*.10,metal,Q(),24);
+  b.cylinder([0,sign*h*.34,0],r*.91,h*.10,dark,Q(),24);
  }
  for(const x of [-1,1])for(const z of [-1,1]){
-  b.cylinder([x*r*.60,0,z*r*.60],r*.075,h*.79,.30,Q(),8);
-  for(const sign of [-1,1])b.cylinder([x*r*.60,sign*h*.47,z*r*.60],r*.12,h*.06,.39,Q(),6);
+  b.cylinder([x*r*.60,0,z*r*.60],r*.075,h*.79,copper,Q(),8);
+  for(const sign of [-1,1])b.cylinder([x*r*.60,sign*h*.47,z*r*.60],r*.12,h*.06,dark,Q(),6);
  }
  // Cast saddle and a connected square side manifold fit behind the end flange.
- b.box([0,0,-r*.72],[r*1.45,h*.56,r*.30],.56);
- b.box([r*.64,-h*.06,0],[r*.36,h*.43,r*.88],.59);
- for(const sign of [-1,1])b.cylinder([r*.83,sign*h*.12,0],r*.135,r*.34,.32,Q().setFromAxisAngle(V(0,0,1),Math.PI/2),10);
+ b.box([0,0,-r*.72],[r*1.45,h*.56,r*.30],dark);
+ b.box([r*.64,-h*.06,0],[r*.36,h*.43,r*.88],paint);
+ for(const sign of [-1,1])b.cylinder([r*.83,sign*h*.12,0],r*.135,r*.34,metal,Q().setFromAxisAngle(V(0,0,1),Math.PI/2),10);
  const g=join(b.parts,'Closed opposed-pressure manifold with captive tie rods');
  g.parameters={radiusTop:r,radiusBottom:r,height:h,width:r*2,depth:r*2};return g;
 }
