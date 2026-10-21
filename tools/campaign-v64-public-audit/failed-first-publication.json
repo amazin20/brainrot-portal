@@ -1,0 +1,47 @@
+{
+  "runId": 39549522977,
+  "runAttempt": 1,
+  "publisherCommit": "b2123a4e3614413b9ca017f3ce5bfa4f31558df7",
+  "conclusion": "failure",
+  "stage": "prepare",
+  "failure": "Fresh output path provider/ conflicted with four tracked historical input files. Corrected publisher isolates downloads under v64-provider/.",
+  "deploymentExecuted": false,
+  "sourceCommit": "307aefaa960cc8f6b0ce9b3d7267e1eeaceccb81",
+  "jobs": [
+    {
+      "id": 119055285069,
+      "name": "prepare",
+      "status": "completed",
+      "conclusion": "failure"
+    },
+    {
+      "id": 119055383371,
+      "name": "deploy",
+      "status": "completed",
+      "conclusion": "skipped"
+    },
+    {
+      "id": 119055383975,
+      "name": "public-http",
+      "status": "completed",
+      "conclusion": "skipped"
+    },
+    {
+      "id": 119055384011,
+      "name": "verify",
+      "status": "completed",
+      "conclusion": "skipped"
+    },
+    {
+      "id": 119055384343,
+      "name": "mobile",
+      "status": "completed",
+      "conclusion": "skipped"
+    }
+  ],
+  "originalProviderSha256": {
+    "provider-artifacts.json": "f7417e1fb877d3f5934f143cc38ad9e2905476e8f5ac6776507d09441efcd6f6",
+    "provider-jobs.json": "2ddf2a1c1be31dd9188e588e76ffc167d04230c3ca5b57a7b579bbbdc07a5b4d",
+    "provider-run.json": "cb5d02808f615c33484b9ae7e8f13193871b1944a2aff7d7203b6575f418cfbb"
+  }
+}
