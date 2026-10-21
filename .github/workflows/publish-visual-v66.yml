@@ -1,0 +1,115 @@
+name: Publish accepted visual campaign v66
+'on':
+  push:
+    branches: [main]
+    paths: [tools/campaign-v66-release.json]
+permissions: {contents: read, actions: read, deployments: read}
+concurrency:
+  group: pages
+  cancel-in-progress: false
+defaults:
+  run: {shell: bash}
+env:
+  GITHUB_TOKEN: ${{ github.token }}
+  CODEX_PRIMARY_RUNTIME_PYTHON: /usr/bin/python3
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    outputs:
+      source_commit: ${{ steps.pins.outputs.source_commit }}
+      source_run: ${{ steps.pins.outputs.source_run }}
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: '${{ github.sha }}', persist-credentials: false}
+      - id: pins
+        run: python3 scripts/publish-visual-v66.py pins
+      - uses: actions/checkout@v4
+        with: {ref: '${{ steps.pins.outputs.source_commit }}', path: source, fetch-depth: 0, persist-credentials: false}
+      - name: Verify exact accepted Source and preserve the accepted historical Pages payload
+        run: python3 scripts/publish-visual-v66.py prepare
+      - uses: actions/upload-pages-artifact@v3
+        with: {path: pages, name: github-pages}
+      - uses: actions/upload-artifact@v4
+        with: {name: v66-preparation, path: proof, retention-days: 14, if-no-files-found: error}
+  deploy:
+    needs: prepare
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions: {contents: read, actions: read, deployments: read, pages: write, id-token: write}
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: '${{ github.sha }}', persist-credentials: false}
+      - uses: actions/download-artifact@v4
+        with: {name: v66-preparation, path: proof}
+      - name: Recheck Main, Source, latest deployment and unused namespace immediately before deploy
+        run: python3 scripts/publish-visual-v66.py before
+      - uses: actions/upload-artifact@v4
+        with: {name: v66-deployment-lease, path: proof/before-deploy.json, retention-days: 14, if-no-files-found: error}
+      - id: deployment
+        uses: actions/deploy-pages@v4
+        with: {artifact_name: github-pages}
+  public-http:
+    needs: deploy
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: '${{ github.sha }}', persist-credentials: false}
+      - uses: actions/download-artifact@v4
+        with: {name: v66-preparation, path: proof}
+      - name: Full GET and SHA-256 of every historical, v66 and redirected-root byte
+        run: python3 scripts/publish-visual-v66.py public
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: {name: v66-public-http, path: proof/public-http.json, retention-days: 14, if-no-files-found: error}
+  native-smoke:
+    needs: [prepare, deploy]
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: '${{ github.sha }}', persist-credentials: false}
+      - uses: actions/checkout@v4
+        with: {ref: '${{ needs.prepare.outputs.source_commit }}', path: source, fetch-depth: 0, persist-credentials: false}
+      - uses: actions/setup-node@v4
+        with: {node-version: 22, cache: npm, cache-dependency-path: source/package-lock.json}
+      - run: npm ci
+        working-directory: source
+      - run: npm install --no-save --package-lock=false puppeteer-core@24.16.0
+        working-directory: source
+      - name: Signed image-decoder dependency for genuine frame checks
+        run: |
+          test -s /etc/apt/sources.list.d/ubuntu.sources
+          sudo apt-get -o Dir::Etc::sourcelist=/etc/apt/sources.list.d/ubuntu.sources -o Dir::Etc::sourceparts=- update
+          sudo apt-get -o Dir::Etc::sourcelist=/etc/apt/sources.list.d/ubuntu.sources -o Dir::Etc::sourceparts=- install -y python3-pil
+      - uses: actions/download-artifact@v4
+        with: {name: v66-preparation, path: proof}
+      - name: Native ordinary desktop/mobile entry, root redirect, progression gate and pause
+        run: |
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+          node scripts/observe-visual-v66-public.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: {name: v66-public-native, path: proof/native, retention-days: 14, if-no-files-found: error}
+  verify:
+    needs: [prepare, deploy, public-http, native-smoke]
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: '${{ github.sha }}', persist-credentials: false}
+      - uses: actions/download-artifact@v4
+        with: {name: v66-preparation, path: proof}
+      - uses: actions/download-artifact@v4
+        with: {name: v66-public-http, path: proof}
+      - uses: actions/download-artifact@v4
+        with: {name: v66-public-native, path: proof/native}
+      - name: Bind actual terminal producers, live union and owned deployment
+        run: python3 scripts/publish-visual-v66.py final
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: {name: v66-final-public-proof, path: proof, retention-days: 14, if-no-files-found: error}

@@ -1,0 +1,969 @@
+{
+  "kind": "root-accepted-final-visual-source",
+  "pass": true,
+  "sourceAccepted": true,
+  "publicationAccepted": false,
+  "sourceCommit": "fa37048d48a279203a6eae7e945f5f5880a2b499",
+  "sourceTree": "ca869b2f1a5f4ebe33238ce3f773ee605f761251",
+  "sourceReview": {
+    "runId": 39668333490,
+    "runAttempt": 1
+  },
+  "candidateFiles": [
+    {
+      "path": "art/portal-laboratory-menu.webp",
+      "bytes": 158200,
+      "sha256": "f6a544096a6418a0f65ba8c609415d0393a1081d18537ecac5eb4c345b13b4be"
+    },
+    {
+      "path": "assets/LabAnimationJourney-DDOaJb6z.js",
+      "bytes": 3040,
+      "sha256": "4f85021306296580d217761f677ef45881ffb5fa1e5a950dbb794d9aeecb7c39"
+    },
+    {
+      "path": "assets/LabCreativeRoom17Journey-Zo6hWVF1.js",
+      "bytes": 5480,
+      "sha256": "6339cb96ec0127d712d7f0dfb97a0ee909d7c3acd0920eddbdfc4a95e1c27b1d"
+    },
+    {
+      "path": "assets/LabCreativeRoom18Journey-CeKbmXry.js",
+      "bytes": 3303,
+      "sha256": "44df304a9ee56106014ada49ebfd5ae0f25f0d2dd41e0c0cd513dfcbf95cbdf9"
+    },
+    {
+      "path": "assets/LabCreativeRoom20Journey-B2bXFu8l.js",
+      "bytes": 4722,
+      "sha256": "8ee4ba4c513c76dd0c22fb51515d7f975c652f0a05d6eae52e2b72befd5c475b"
+    },
+    {
+      "path": "assets/LabEchoHorizonJourney-BLMGQTWI.js",
+      "bytes": 2271,
+      "sha256": "2e10293e42b732c4e7882a7aec77eef84d617b87208e3d554918145dfafc8a90"
+    },
+    {
+      "path": "assets/LabExpansionAlternateJourney47-3qgixs4y.js",
+      "bytes": 1864,
+      "sha256": "2054a9f53789e8c5aa399142bef5a6700bd7c6be3353874cd5b89eba9482c851"
+    },
+    {
+      "path": "assets/LabExpansionAlternateJourney48-DoGfUXpn.js",
+      "bytes": 2334,
+      "sha256": "aa208f41164b14cb21818b726103c24632ca94f8333a4044be6ca817fb71afdd"
+    },
+    {
+      "path": "assets/LabExpansionAlternateJourney49-CMb9Wqlq.js",
+      "bytes": 2039,
+      "sha256": "12245407d4fcc275c0f1398c85bdfe6e35cea8c24e6d129aadb9516dcb846dca"
+    },
+    {
+      "path": "assets/LabExpansionAlternateJourneyB-SnjyOOqw.js",
+      "bytes": 2970,
+      "sha256": "7addf4756daf3dcc83258f8255ea9c605552667227810c1119d950e4959d921f"
+    },
+    {
+      "path": "assets/LabExpansionJourneyA-BpgoGSt6.js",
+      "bytes": 7448,
+      "sha256": "bef22594ddaa62abc752c96d019e3eaef5781161a4e15f1229f1c59745e2dbdd"
+    },
+    {
+      "path": "assets/LabExpansionJourneyB-ClReS6WQ.js",
+      "bytes": 5645,
+      "sha256": "adfcb410bf606ed54da29eda82908b687a27f43c38ff50b7a23fa100f308e6e4"
+    },
+    {
+      "path": "assets/LabExtendedJourney-DH3QP3rA.js",
+      "bytes": 9252,
+      "sha256": "0bc45fc990ca9932658b20b4f9bd442d87c26ac278b97c12e8c72d16e373fac7"
+    },
+    {
+      "path": "assets/LabFoundation20PhysicalJourney-Bp6jXM4m.js",
+      "bytes": 12259,
+      "sha256": "e40f471822132107d6ffe03686f10cbb3e4a768a8233d2be90593c61af25fd71"
+    },
+    {
+      "path": "assets/LabFoundationJourney-DBXDB587.js",
+      "bytes": 9267,
+      "sha256": "006eccb868362a61942b8cfac9d00aad11142d566f5ed67388e3286e96e4e6cb"
+    },
+    {
+      "path": "assets/LabIntroductoryAlternates-DcdsCClA.js",
+      "bytes": 1341,
+      "sha256": "a6451adc49d9c2f86f43455bfa4ced44d7166234f4fde82082990bf21f76cd5c"
+    },
+    {
+      "path": "assets/LabLateCampaignAim-DxRn2edl.js",
+      "bytes": 753,
+      "sha256": "ba4294b8647f3a881a6cd21a0a58d5e0a00263b8e980ce9a955cbc51d520bb88"
+    },
+    {
+      "path": "assets/LabOpenJourney-BImBLjJ9.js",
+      "bytes": 6404,
+      "sha256": "7437d30876c3003925269230cddbb342d06042e0edd33595837db869286530a8"
+    },
+    {
+      "path": "assets/LabPortalEdgeJourney-D4QpjOts.js",
+      "bytes": 2293,
+      "sha256": "8a95b6df90a5f2e564af149d27e1b4823323f6cca14fbe70f386dc615803e05a"
+    },
+    {
+      "path": "assets/LabPortalFloorJourney-D6BCZBd9.js",
+      "bytes": 1516,
+      "sha256": "c5b8fc87377ad9dd5a622780492b42482548557811f6c1c584cc974c5e87cea1"
+    },
+    {
+      "path": "assets/LabPostJourneyA-tyO1kUy5.js",
+      "bytes": 12240,
+      "sha256": "2e877d01200158dfe96df0e7fe5a4cc057b0d822dd9a3a3271d8632735bdb60a"
+    },
+    {
+      "path": "assets/LabPostJourneyB-D_M1pIRD.js",
+      "bytes": 10887,
+      "sha256": "643d8cf6b84f2805dbe8eb182b292c65b828a6dbd898dbda7f71a637be2cec26"
+    },
+    {
+      "path": "assets/LabPuzzlePilot43Journey-BBF9ax0i.js",
+      "bytes": 3148,
+      "sha256": "f951a782d68bdee4b267cbfcf9cb966790a4deb933cc84cb07d8393481ffe601"
+    },
+    {
+      "path": "assets/LabPuzzleProgression44Journey-XzHE5xDb.js",
+      "bytes": 1956,
+      "sha256": "e6f0041eb811941da8d2ccd2d8a50cbabd09760ea8f72feb361703450323918b"
+    },
+    {
+      "path": "assets/LabPuzzleProgression45Journey-CEDVAviT.js",
+      "bytes": 5497,
+      "sha256": "7dbc398ca418916746ecf5cf4c8a8ced7682cf3b2091a1a3dbf734025faab03a"
+    },
+    {
+      "path": "assets/LabPuzzleProgression46Journey-DzAi_CJN.js",
+      "bytes": 3649,
+      "sha256": "e18af3e6992e56f31073ec75ed219c5f36e7c45bbc987174a2a22884f97dc917"
+    },
+    {
+      "path": "assets/LabPuzzleProgression47Journey-BIBskqeH.js",
+      "bytes": 6001,
+      "sha256": "30d0c4039dc8d678bfb10702db1f9de698b19c60375fb110444a43b8b7c49bf3"
+    },
+    {
+      "path": "assets/LabPuzzleProgression48Journey-BeJ1FZqQ.js",
+      "bytes": 5941,
+      "sha256": "d037cfea8e0779f31ac94da273746e7ccdfb3c94a35c2d84dd5d26acd87c07c1"
+    },
+    {
+      "path": "assets/LabPuzzleProgression49Journey-BAiy_3_5.js",
+      "bytes": 4598,
+      "sha256": "5042650b9da7168c6f17ef1b7f1afa5847c4119a8c1c03a57efab7b9a5dd49ec"
+    },
+    {
+      "path": "assets/LabPuzzleProgression50BeamJourney-0tEtcRyg.js",
+      "bytes": 12675,
+      "sha256": "c6563b4a44a1e10fd83f38eec21f8c7491a91b7e142e33b6246bc1db2af9cf1d"
+    },
+    {
+      "path": "assets/LabPuzzleProgression50Journey-g85TL7Qo.js",
+      "bytes": 6188,
+      "sha256": "887b66222b976f491f3026d6757be1d81b77e4cf94150ed4c14f013f12fb6477"
+    },
+    {
+      "path": "assets/LabPuzzleProgression51Journey-D_g5k-Wq.js",
+      "bytes": 3457,
+      "sha256": "46c019dabeea48d2476a1e290641f434e526f76ae6f3abcc2f1cb745bbc64413"
+    },
+    {
+      "path": "assets/LabResearchJourney-C9JIK7JF.js",
+      "bytes": 7951,
+      "sha256": "14ec8a4b6e1b844bcdf494b27e99c39d31810855f8ae6ebb850c43952605bf51"
+    },
+    {
+      "path": "assets/LabRoom13Journey-DpkZeNEo.js",
+      "bytes": 6194,
+      "sha256": "275c62befc9b95dc4c596810721ffba02b137b24ad14006e4769f1c7f21bc041"
+    },
+    {
+      "path": "assets/LabRoom14Journey-CmChy98T.js",
+      "bytes": 4785,
+      "sha256": "9d8bb5f9a3df5c7e69b1118075f854827d5661efef53f82a1b2a8c254a6f0764"
+    },
+    {
+      "path": "assets/LabRoom15Journey-CvyzTlDP.js",
+      "bytes": 4604,
+      "sha256": "d5d9e000f05dfc15c5749ee1533012f4675a7e5b15df0e72ad28d683897bb2b6"
+    },
+    {
+      "path": "assets/LabRoom16Journey-DcT0PHn1.js",
+      "bytes": 2534,
+      "sha256": "43814ce0e94d01e0e2b9152c6ea1c722073f13a019b2992525f6b0480fa97e74"
+    },
+    {
+      "path": "assets/LabRoom17Journey-C2EE7523.js",
+      "bytes": 3260,
+      "sha256": "b621bf8abcb99cec72e5a8b0ef53e4ef6a005e414141e9502855a2759ba02708"
+    },
+    {
+      "path": "assets/LabRoom18Journey-BQxpWZyx.js",
+      "bytes": 6065,
+      "sha256": "4c9de709bd048151e086c2fcc491434b134ef1937bbe6cf4e9cb0668a4bc7331"
+    },
+    {
+      "path": "assets/LabRoom19Journey-BVk2pOJ3.js",
+      "bytes": 3087,
+      "sha256": "edbd9e87a7c68f527a6a6d6794cfcb3a8de5780d1c656265ccf7910207066ab4"
+    },
+    {
+      "path": "assets/LabRoom20Journey-Dnjdo837.js",
+      "bytes": 5013,
+      "sha256": "84ee4a4debf18d555e80bbf468821d58576e6fcf805b34adcd2670e8502fc0fd"
+    },
+    {
+      "path": "assets/LabRoom21Journey-BVAvjjTV.js",
+      "bytes": 5318,
+      "sha256": "9b991348e1c115ea053069e21346f86a7c522c144581cdb98d140d157da1c181"
+    },
+    {
+      "path": "assets/LabRoom22Journey-GvYXNDC8.js",
+      "bytes": 2942,
+      "sha256": "23af56bcd7b4e19b58241058498bd617f8496eda62ac0d9d2ac405e37e1078bf"
+    },
+    {
+      "path": "assets/LabRoom23Journey-_v_g_Pht.js",
+      "bytes": 2743,
+      "sha256": "8a165b344c8c6d8d7f0e030d098f3ea8ce4ecba414e90d01842c497788d2c1e4"
+    },
+    {
+      "path": "assets/LabRoom23PhysicalJourney-CxtkuZCt.js",
+      "bytes": 4194,
+      "sha256": "dc8d48eebc1d629d65b1c2b4ff49b7d7dd3b9c57a168f5b90e3e42799df0b281"
+    },
+    {
+      "path": "assets/LabRoom24Journey-Df1hmSn0.js",
+      "bytes": 3675,
+      "sha256": "44474277fe420cd103d3955604a43e37ea6c9d0032323e055c73c1e384ecea80"
+    },
+    {
+      "path": "assets/LabRoom25Journey-COqi9k-Z.js",
+      "bytes": 4626,
+      "sha256": "4113270db838996f7bcd1cd8d5edd4ca13461d19057e13a1a5f4e0f5085b9296"
+    },
+    {
+      "path": "assets/LabRoom26Journey-D5Lhf6Yz.js",
+      "bytes": 4194,
+      "sha256": "f568e01fcbf2e28f9bf1d89aa1d8e83df957bb60ea13a63a77cab81b61577e74"
+    },
+    {
+      "path": "assets/LabRoom27Journey-CtMoXjWq.js",
+      "bytes": 3350,
+      "sha256": "ea4e62a0eed62998b64515b56db65142d1a7d3fb8d5c91b6e31653c5ef4422b5"
+    },
+    {
+      "path": "assets/LabRoom28Journey-BK5o10zU.js",
+      "bytes": 3238,
+      "sha256": "abb63b08a5336b66f9274808b2d715e56d00520d744756fd68875b0c7442e686"
+    },
+    {
+      "path": "assets/LabRoom29Journey-FXLiWbZf.js",
+      "bytes": 2592,
+      "sha256": "625138692ba0641ed1ea63e7bb6ea332c70bf235ee3bc8b3cbd80456012e04ef"
+    },
+    {
+      "path": "assets/LabRoom30Journey-zAsFaYdh.js",
+      "bytes": 3762,
+      "sha256": "1d260d8e49e983b2f7a9c354898fe771c41df56434d67e203bd8fb51bbc8f925"
+    },
+    {
+      "path": "assets/LabSingularityJourney-JyjYPgRV.js",
+      "bytes": 26233,
+      "sha256": "dcc21ebc03f597275c75ada4af59eaf5bad925178285e8812011b738b9094044"
+    },
+    {
+      "path": "assets/LabSiphonObservatoryJourney-p5eR9m4G.js",
+      "bytes": 2734,
+      "sha256": "bf24d051c12e6b9b79dd216d0ee44a43883325bb132c86e45f3ff250905b3663"
+    },
+    {
+      "path": "assets/LabTower41RatchetCellJourney-4s7J1ikZ.js",
+      "bytes": 24187,
+      "sha256": "4052210fabdfa5a184ccac74d2106c8c61e88c051be67eaf344e22b26938de15"
+    },
+    {
+      "path": "assets/LabTowerJourney-DUgIc-Mw.js",
+      "bytes": 31405,
+      "sha256": "02ab69adfcf2b13c9699cbd59ec71abc1f801c98f993a16ac3fa06c931bc3a2f"
+    },
+    {
+      "path": "assets/LabV8Journey-axL4HDXp.js",
+      "bytes": 19916,
+      "sha256": "aa4ecb5b75b9f3e2c6ebea6dc9a30b644689fadec12342c623d79fe528243551"
+    },
+    {
+      "path": "assets/LabWorkshopJourney-JWlHxwHG.js",
+      "bytes": 7249,
+      "sha256": "9ced2a01548ef9132c62b8e00e12f5acbe12ac3390e48c5ff52d6f8b85a01e62"
+    },
+    {
+      "path": "assets/index-CK9e6SZS.js",
+      "bytes": 2254446,
+      "sha256": "940aa3a65e6fc02fc698b42fc9a4ca425a0917a44aa700297eb7ae9046eb801d"
+    },
+    {
+      "path": "assets/index-npFaCiOw.css",
+      "bytes": 57709,
+      "sha256": "95bdd86175f2327e872226779c11e7ca792e9556cf9788befa214c14dd42099b"
+    },
+    {
+      "path": "build-info.json",
+      "bytes": 112976,
+      "sha256": "65100100a87941f3b63130f927e0ff38a98aa69c0dffdcb84a2262abd820e786"
+    },
+    {
+      "path": "draco/draco_decoder.js",
+      "bytes": 719410,
+      "sha256": "30e4d486fa020737af10e3c56197693e5b904bdc05b8bfa5d7b06751dec6da04"
+    },
+    {
+      "path": "draco/draco_decoder.wasm",
+      "bytes": 285747,
+      "sha256": "c55a594e8ffd18426d36b27fea9618af3df5e173640a3e56d46f09d76f0574f2"
+    },
+    {
+      "path": "draco/draco_wasm_wrapper.js",
+      "bytes": 58763,
+      "sha256": "e8049906ef3f8f75d3456c22a3f31bfdfe5b5b5bd09ccdec613b9e9a49d554d8"
+    },
+    {
+      "path": "index.html",
+      "bytes": 13950,
+      "sha256": "a90084428029622bf0f66dac698de7fbc1f52b27488bb68273e8f0d81d92f04b"
+    },
+    {
+      "path": "models/runtime/manifest.json",
+      "bytes": 2421,
+      "sha256": "8806346ed3ac0fb096aa26321d5620c16a6a2a55f2523023fb21f6c4749fe2ed"
+    },
+    {
+      "path": "models/runtime/model-01-player.glb",
+      "bytes": 549756,
+      "sha256": "e5b09ff0281377b679d6fdd505fa1ed89550bb662e94e7f593ed67ee50a66a91"
+    },
+    {
+      "path": "models/runtime/model-02-cargo.glb",
+      "bytes": 510376,
+      "sha256": "65763c87e7f14cc807cffa8fc2adc364e8421dae819271a0c406a6b0d2c8c697"
+    },
+    {
+      "path": "models/runtime/model-11-portal-gun.glb",
+      "bytes": 393116,
+      "sha256": "d8c76c41efbbf0a6d70e30ab5a7b70f49fd806e497f67ea06cb28f9f4edca1d7"
+    },
+    {
+      "path": "models/runtime/model-19-lift-platform.glb",
+      "bytes": 404076,
+      "sha256": "afd039e831ff0baa514f076a505ffbb7c57dac2251959b3d858fc92dcf3d04b9"
+    },
+    {
+      "path": "models/runtime/model-22-terminal.glb",
+      "bytes": 377108,
+      "sha256": "9e2f4ff758996f67596d3935041f632bafdf7e84efd4869341920b64a5919c26"
+    },
+    {
+      "path": "models/runtime/model-23-floor-tile.glb",
+      "bytes": 103600,
+      "sha256": "0950bc6ef31bb28939087bad53695f21cde0b9fe5740394df202a0b242f77b0c"
+    },
+    {
+      "path": "models/runtime/model-24-wall-panel.glb",
+      "bytes": 62448,
+      "sha256": "15aaca48f6e436d5e89abf7548c0fe43580bba8faff4619e476d3a6d306b004d"
+    },
+    {
+      "path": "models/runtime/model-28-rotating-panel.glb",
+      "bytes": 366120,
+      "sha256": "3159916bad63903e73b8e660ce4aab8a3b1e38f1231152b68f3df63d6987ac4b"
+    },
+    {
+      "path": "models/runtime/model-29-pressure-platform.glb",
+      "bytes": 390244,
+      "sha256": "ee65bd9706ad4f4658e54ec5ad8f6f45b24d9027e4e6072f162358a4c1b3291b"
+    },
+    {
+      "path": "models/runtime/model-31-wind-generator.glb",
+      "bytes": 25768,
+      "sha256": "024f25db27e96e1efdaa5e200c13a665dee487e798338f86fef985feeae9019e"
+    },
+    {
+      "path": "models/runtime/model-32-spring-ram.glb",
+      "bytes": 25400,
+      "sha256": "958d5ed533736d5779da078be20ae2b0e84212bfc3a00b456dc0106bc0a093d7"
+    },
+    {
+      "path": "models/runtime/model-35-shutter-fan.glb",
+      "bytes": 27816,
+      "sha256": "8e11d5ab83250348f6e08f034ec87d82727162742d5a7be18f981fc523aa907a"
+    },
+    {
+      "path": "models/runtime/model-37-extension-bridge.glb",
+      "bytes": 25764,
+      "sha256": "96173a9ef89375066b08fad8dff1928425863c6b4e6b8c0373c497448f109c55"
+    },
+    {
+      "path": "models/runtime/model-39-cable-winch.glb",
+      "bytes": 28608,
+      "sha256": "301f148938ec83e2a8f4b45c7f9bdfd19fb40ca79d8fb9abc7601caf4fe0eafd"
+    }
+  ],
+  "candidateBytes": 7310111,
+  "candidateInventorySha256": "73cf7be4cefd65d21765f3fd7e781708c12204232942efcbbcf79120714ab4e9",
+  "technicalSummarySha256": "29cb69cff47d77d94522cdf9d65a09f26aaa3ef4c4c6cc2cfd7a128efe123f6a",
+  "assistantVisualInspection": {
+    "reviewer": "Codex",
+    "accepted": true,
+    "coverage": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      47,
+      48,
+      49,
+      50,
+      51
+    ],
+    "images": [
+      {
+        "displayNumber": 1,
+        "stableLevel": 1,
+        "artifact": "v66-visual-early",
+        "path": "room-01/oblique.jpg",
+        "bytes": 108240,
+        "sha256": "24ec8b0358ba0242da24a65c95a66574caad22e42cf20eca837621a27156f8b6"
+      },
+      {
+        "displayNumber": 2,
+        "stableLevel": 2,
+        "artifact": "v66-visual-early",
+        "path": "room-02/oblique.jpg",
+        "bytes": 89696,
+        "sha256": "b6eb27aa0c9b343d07453abc6e61a00facdc992a9d19f7f68b08c4ef3844f901"
+      },
+      {
+        "displayNumber": 3,
+        "stableLevel": 3,
+        "artifact": "v66-visual-early",
+        "path": "room-03/oblique.jpg",
+        "bytes": 89792,
+        "sha256": "9fe5d7937ae46b5441c77793896bcbe489191de9789306d6faa0fe0f8a2f9465"
+      },
+      {
+        "displayNumber": 4,
+        "stableLevel": 4,
+        "artifact": "v66-visual-early",
+        "path": "room-04/oblique.jpg",
+        "bytes": 99206,
+        "sha256": "b7dfcc9c981d22ec39e5d83c934f52f038a285be7524131977a6aa4832435c4e"
+      },
+      {
+        "displayNumber": 5,
+        "stableLevel": 5,
+        "artifact": "v66-visual-early",
+        "path": "room-05/oblique.jpg",
+        "bytes": 101909,
+        "sha256": "31e0a3225b9d7404bfd5e4dfc0c7c65bbd361b60dd1e5adaa69e168cfb2da76a"
+      },
+      {
+        "displayNumber": 6,
+        "stableLevel": 6,
+        "artifact": "v66-visual-early",
+        "path": "room-06/oblique.jpg",
+        "bytes": 107200,
+        "sha256": "1cfcb6ebc40a23885b26230fe95c035c81ce55dac433b7b92b03582652ea40d6"
+      },
+      {
+        "displayNumber": 7,
+        "stableLevel": 7,
+        "artifact": "v66-visual-early",
+        "path": "room-07/oblique.jpg",
+        "bytes": 129619,
+        "sha256": "53c6c8cc1e0a71cb92ee7d99ccd698a7c013e3b5c6c655e3ca08036924bb4dcc"
+      },
+      {
+        "displayNumber": 8,
+        "stableLevel": 8,
+        "artifact": "v66-visual-early",
+        "path": "room-08/oblique.jpg",
+        "bytes": 110824,
+        "sha256": "906fd1519af357a69bec2e38aa3f35fd2d05b702d6623cb329fcab654f730150"
+      },
+      {
+        "displayNumber": 9,
+        "stableLevel": 9,
+        "artifact": "v66-visual-early",
+        "path": "room-09/oblique.jpg",
+        "bytes": 109999,
+        "sha256": "276d8152468008fefa382ce6b420637182adfdf0eff1790be1a810d97ce384bc"
+      },
+      {
+        "displayNumber": 10,
+        "stableLevel": 10,
+        "artifact": "v66-visual-early",
+        "path": "room-10/oblique.jpg",
+        "bytes": 123727,
+        "sha256": "ab78b12fed25af712ccd5a2c1aecf9391bbda57a61678470938adcee0586df32"
+      },
+      {
+        "displayNumber": 11,
+        "stableLevel": 11,
+        "artifact": "v66-visual-energy",
+        "path": "room-11/oblique.jpg",
+        "bytes": 106555,
+        "sha256": "3730bc347437a69eeb62cffa868220aeb41ab27052e2969faa77a4cb567ff133"
+      },
+      {
+        "displayNumber": 12,
+        "stableLevel": 12,
+        "artifact": "v66-visual-energy",
+        "path": "room-12/oblique.jpg",
+        "bytes": 63922,
+        "sha256": "1a8f1d4733474909aab98820c5b7cd258cf4b72379097dceb6008dc495cb763b"
+      },
+      {
+        "displayNumber": 13,
+        "stableLevel": 13,
+        "artifact": "v66-visual-energy",
+        "path": "room-13/oblique.jpg",
+        "bytes": 101340,
+        "sha256": "4e093a9a8dc1ff1feb3352e8b3f45db84abfe54d2c8d8612a745f62500a2b4e3"
+      },
+      {
+        "displayNumber": 14,
+        "stableLevel": 14,
+        "artifact": "v66-visual-energy",
+        "path": "room-14/oblique.jpg",
+        "bytes": 73354,
+        "sha256": "648c783e7128701937d54e67628d0e8c3301bd5faec31f8c123a8562b2564f20"
+      },
+      {
+        "displayNumber": 15,
+        "stableLevel": 15,
+        "artifact": "v66-visual-energy",
+        "path": "room-15/oblique.jpg",
+        "bytes": 81437,
+        "sha256": "828123d09054eeb9d68bb75516ca650b6efc465cc6a5f72648c2af1cdfef99e5"
+      },
+      {
+        "displayNumber": 16,
+        "stableLevel": 16,
+        "artifact": "v66-visual-energy",
+        "path": "room-16/oblique.jpg",
+        "bytes": 106871,
+        "sha256": "d486a620d83ce0bde1bbc2e85fdac32f5fdf9d08e4b40337250f6811cd28d34b"
+      },
+      {
+        "displayNumber": 17,
+        "stableLevel": 17,
+        "artifact": "v66-visual-energy",
+        "path": "room-17/oblique.jpg",
+        "bytes": 88413,
+        "sha256": "17572f290d7163f5bb2e3bcf892583e15eddaf528981cb222c4f1b60d7d68a35"
+      },
+      {
+        "displayNumber": 18,
+        "stableLevel": 18,
+        "artifact": "v66-visual-energy",
+        "path": "room-18/oblique.jpg",
+        "bytes": 84434,
+        "sha256": "5b9c47998dca0e50c078e72d0866de6b20cc5f473ea57797407714ae41e1ee5d"
+      },
+      {
+        "displayNumber": 19,
+        "stableLevel": 19,
+        "artifact": "v66-visual-energy",
+        "path": "room-19/oblique.jpg",
+        "bytes": 38336,
+        "sha256": "70e7d143963e8a806eb87d6f01f95f684f694e0f49ea8a3c1113d85f79c922c7"
+      },
+      {
+        "displayNumber": 20,
+        "stableLevel": 20,
+        "artifact": "v66-visual-energy",
+        "path": "room-20/oblique.jpg",
+        "bytes": 54541,
+        "sha256": "e41b596a5b6c195486c2a0cc84927ab63d714ef3cd0bd9bee8dccf7b0cc3b091"
+      },
+      {
+        "displayNumber": 21,
+        "stableLevel": 21,
+        "artifact": "v66-visual-living",
+        "path": "room-21/oblique.jpg",
+        "bytes": 116939,
+        "sha256": "f51e7de4d2b2dd5acc0637987eeb354b27a69ac7eb405c05a3a49b6fec4d92f5"
+      },
+      {
+        "displayNumber": 22,
+        "stableLevel": 22,
+        "artifact": "v66-visual-living",
+        "path": "room-22/oblique.jpg",
+        "bytes": 106153,
+        "sha256": "3902aee5d896eda148adaef47541a01e8f89a1534c23cbc532ac0b8e3325d262"
+      },
+      {
+        "displayNumber": 23,
+        "stableLevel": 23,
+        "artifact": "v66-visual-living",
+        "path": "room-23/oblique.jpg",
+        "bytes": 93931,
+        "sha256": "d137b23cc994afbdc8f110a83e223eff416f5872f5209804fbb5a5012aa41ded"
+      },
+      {
+        "displayNumber": 24,
+        "stableLevel": 24,
+        "artifact": "v66-visual-living",
+        "path": "room-24/oblique.jpg",
+        "bytes": 108590,
+        "sha256": "1e7ef712961fedc9e25f68bce1bc46ce6062e674c9bbe62e4054fa32405f248d"
+      },
+      {
+        "displayNumber": 25,
+        "stableLevel": 25,
+        "artifact": "v66-visual-living",
+        "path": "room-25/oblique.jpg",
+        "bytes": 118916,
+        "sha256": "ae61bea4e8f590e5c3c96c70a4bc2b3812881787e3af9ad5f3e5c18b930d3f51"
+      },
+      {
+        "displayNumber": 26,
+        "stableLevel": 26,
+        "artifact": "v66-visual-living",
+        "path": "room-26/oblique.jpg",
+        "bytes": 74438,
+        "sha256": "f2c26656cff01f70ae531fdec598ca053d8997634876b4a17d7aef4a5bdec08b"
+      },
+      {
+        "displayNumber": 27,
+        "stableLevel": 27,
+        "artifact": "v66-visual-living",
+        "path": "room-27/oblique.jpg",
+        "bytes": 99043,
+        "sha256": "fe6f2c38a0bde5daf74a0908279d98b7ec6e244e7f1af9707c255ea64cc6574b"
+      },
+      {
+        "displayNumber": 28,
+        "stableLevel": 28,
+        "artifact": "v66-visual-living",
+        "path": "room-28/oblique.jpg",
+        "bytes": 96754,
+        "sha256": "d2f7e10313b51c5511b8827653d4c17d55873fdc3f21b10c09ad402f7117f85e"
+      },
+      {
+        "displayNumber": 29,
+        "stableLevel": 29,
+        "artifact": "v66-visual-living",
+        "path": "room-29/oblique.jpg",
+        "bytes": 84714,
+        "sha256": "468b2a4e8dce39297cbbd76337f36a221ba380af0054502cfd869b267834d9dc"
+      },
+      {
+        "displayNumber": 30,
+        "stableLevel": 30,
+        "artifact": "v66-visual-living",
+        "path": "room-30/oblique.jpg",
+        "bytes": 90242,
+        "sha256": "3f7e3d25ad1602496acb34d39f5cd9650ac260eefd27392ce93805aa4697fc16"
+      },
+      {
+        "displayNumber": 31,
+        "stableLevel": 31,
+        "artifact": "v66-visual-optics",
+        "path": "room-31/oblique.jpg",
+        "bytes": 98396,
+        "sha256": "731d879d104436bf4e8246d575d8c76a197fe514b837140a89eb833f234bd5ab"
+      },
+      {
+        "displayNumber": 32,
+        "stableLevel": 32,
+        "artifact": "v66-visual-optics",
+        "path": "room-32/oblique.jpg",
+        "bytes": 88249,
+        "sha256": "0fabce498a72c2e7b39ba3b0ce43c68865e91b9e46d7e3444f427bd357549c14"
+      },
+      {
+        "displayNumber": 33,
+        "stableLevel": 33,
+        "artifact": "v66-visual-optics",
+        "path": "room-33/oblique.jpg",
+        "bytes": 89788,
+        "sha256": "5fbe72415a1cc235fbd3e8dedf09de7ee22ebdef1d3025c18df2f8ffcfef8d61"
+      },
+      {
+        "displayNumber": 34,
+        "stableLevel": 34,
+        "artifact": "v66-visual-optics",
+        "path": "room-34/oblique.jpg",
+        "bytes": 74591,
+        "sha256": "b20da5f8454f456ec1cf9f8dfeded3ed0375c38dd3cc580cc685cc6672817892"
+      },
+      {
+        "displayNumber": 35,
+        "stableLevel": 35,
+        "artifact": "v66-visual-optics",
+        "path": "room-35/oblique.jpg",
+        "bytes": 11347,
+        "sha256": "b83941502f740a29b3556020768b8b2cd9db5a2be0512f6c613c5e50586759e3"
+      },
+      {
+        "displayNumber": 36,
+        "stableLevel": 36,
+        "artifact": "v66-visual-optics",
+        "path": "room-36/oblique.jpg",
+        "bytes": 93046,
+        "sha256": "97a2c395fd99d771eeb1f836955131a7649d58c16e5ebfc0711d17644c2c620d"
+      },
+      {
+        "displayNumber": 37,
+        "stableLevel": 37,
+        "artifact": "v66-visual-optics",
+        "path": "room-37/oblique.jpg",
+        "bytes": 77064,
+        "sha256": "7d0933a4c860a6a18ebcb9cc50ec68dda298487be2bb52c429b5ab911369a714"
+      },
+      {
+        "displayNumber": 38,
+        "stableLevel": 38,
+        "artifact": "v66-visual-optics",
+        "path": "room-38/oblique.jpg",
+        "bytes": 105213,
+        "sha256": "5d4257c8bf1599fd8311c47235e3f60a8129a916603b4b2f4e6369cd86a3b098"
+      },
+      {
+        "displayNumber": 39,
+        "stableLevel": 39,
+        "artifact": "v66-visual-optics",
+        "path": "room-39/oblique.jpg",
+        "bytes": 71540,
+        "sha256": "d2f5efa60f142e22855611ebefb3439b30f0977cb5f43ecdba02901ee6c4a1b1"
+      },
+      {
+        "displayNumber": 40,
+        "stableLevel": 40,
+        "artifact": "v66-visual-optics",
+        "path": "room-40/oblique.jpg",
+        "bytes": 85531,
+        "sha256": "38f83bf7a24d09edcf5fb57b60c6be32882b05e880d3fc1b33a5da8f836902e2"
+      },
+      {
+        "displayNumber": 41,
+        "stableLevel": 42,
+        "artifact": "v66-visual-fracture",
+        "path": "room-42/oblique.jpg",
+        "bytes": 84894,
+        "sha256": "0f67e726f72a2c0b8a22c9c85cc9755b861de86bc1e66ccdc51bd7cbfa01116b"
+      },
+      {
+        "displayNumber": 42,
+        "stableLevel": 43,
+        "artifact": "v66-visual-fracture",
+        "path": "room-43/oblique.jpg",
+        "bytes": 112512,
+        "sha256": "ac7eab9f852c33f6c8f3b0b4bfd365c10896515e5dc7aef682fffe6864860459"
+      },
+      {
+        "displayNumber": 43,
+        "stableLevel": 44,
+        "artifact": "v66-visual-fracture",
+        "path": "room-44/oblique.jpg",
+        "bytes": 107747,
+        "sha256": "88b6dbdc4ca60653a09551c247b506ef043783e1fb639fa46e4f9eb453aee45e"
+      },
+      {
+        "displayNumber": 44,
+        "stableLevel": 45,
+        "artifact": "v66-visual-fracture",
+        "path": "room-45/oblique.jpg",
+        "bytes": 101410,
+        "sha256": "68dd335c630c0872c55a86a1b02801b53249d19c66e072465ea024c3d936bc75"
+      },
+      {
+        "displayNumber": 45,
+        "stableLevel": 46,
+        "artifact": "v66-visual-fracture",
+        "path": "room-46/oblique.jpg",
+        "bytes": 101421,
+        "sha256": "9a1d1282ab74549d5277301af546dbac3b98a3b63480b0652e5fb51873628e17"
+      },
+      {
+        "displayNumber": 46,
+        "stableLevel": 47,
+        "artifact": "v66-visual-fracture",
+        "path": "room-47/oblique.jpg",
+        "bytes": 96783,
+        "sha256": "5b2eef8861047e5c451c378d6b3a52fcd6834a715bccbdc03f66cd8a0f788eca"
+      },
+      {
+        "displayNumber": 47,
+        "stableLevel": 48,
+        "artifact": "v66-visual-fracture",
+        "path": "room-48/oblique.jpg",
+        "bytes": 84773,
+        "sha256": "9002294a6fb85833f9dd17257148170d1f1ec75a5b5cf269f3ef20a63507063e"
+      },
+      {
+        "displayNumber": 48,
+        "stableLevel": 49,
+        "artifact": "v66-visual-fracture",
+        "path": "room-49/oblique.jpg",
+        "bytes": 97518,
+        "sha256": "14beef3f6e2e0e365f380e0bbe298e7d713c1609f48ab59c7d2253edd9476e86"
+      },
+      {
+        "displayNumber": 49,
+        "stableLevel": 50,
+        "artifact": "v66-visual-fracture",
+        "path": "room-50/oblique.jpg",
+        "bytes": 106842,
+        "sha256": "084e58ef91b88fd3813d92d09fc9116d59385519fce4370e38d99d4fe231c1c1"
+      },
+      {
+        "displayNumber": 50,
+        "stableLevel": 51,
+        "artifact": "v66-visual-fracture",
+        "path": "room-51/oblique.jpg",
+        "bytes": 105377,
+        "sha256": "939cd68b2f4d7aea9de9f53b5692ca60d87aa39043d76900b33e577817d83998"
+      },
+      {
+        "displayNumber": 51,
+        "stableLevel": 41,
+        "artifact": "v66-visual-castle",
+        "path": "room-41/oblique.jpg",
+        "bytes": 62941,
+        "sha256": "0103b9cc8415bf40d9ccc5682bb8a8d2f5decb9c0693f4b2f11d73c0d0df4aab"
+      }
+    ],
+    "summaryReceipt": {
+      "path": "tools/campaign-v66-root-visual-summary.json",
+      "sha256": "42f0bcfc5fd2f7ef707b84d7ef073d73f07c6539f998f321f7bb65266d2f0d6e"
+    },
+    "personallyViewedContactSheets": 55,
+    "personallyViewedNativeViews": 323,
+    "humanPlaytest": false,
+    "scope": "Codex personally inspected all 55 derived sheets of actual final fa CI native images (all non-HUD views), plus native close inspection of rooms 10, 22 and 30. No game geometry, lighting or fog hidden to make these images. Acceptance covers this visual correction pass; retained design choices and camera limits are documented per room."
+  },
+  "checkerWarningReviewSha256": "9f81ad06479feefbca9d791dd684b5e0bbc20c6457567cbaae9d3f55aba901d7",
+  "checkerWarningReviewScope": "Exact original-checker predicates reproduced on actual final provider production/review bundles; original WARN/N/V remain unchanged.",
+  "technicalReview": {
+    "status": "completed-success",
+    "sourceProviderPinsVerified": true,
+    "technicalSummaryVerified": true,
+    "runId": 39668333490,
+    "runAttempt": 1,
+    "successfulProviderJobs": 19,
+    "providerArtifacts": 22,
+    "unitFiles": 386,
+    "unitShards": 4,
+    "unitCounts": {
+      "tests": 3023,
+      "pass": 3023,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "routeCount": 51,
+    "hintTransactions": 153,
+    "visualLevels": 51,
+    "visualImageCount": 374,
+    "originalCheckerTotals": {
+      "PASS": 3978,
+      "FAIL": 0,
+      "WARN": 153,
+      "N/V": 51
+    },
+    "evidence": [
+      {
+        "path": "/workspace/scratch/796a39e3632d/visual-fix-v66/ci-fa37048/final-provider-pins.json",
+        "bytes": 11723,
+        "sha256": "9ca45909f88b6ffcb2b29bc0a62e362ad7a2198cfe0ddb2f72471f2b91036e4f"
+      },
+      {
+        "path": "/workspace/scratch/796a39e3632d/visual-fix-v66/ci-fa37048/provider-unit-summary.json",
+        "bytes": 4123,
+        "sha256": "35792708934063992392ae3bcd16d94eba6ea886c9dfd6427d4612bc29a2f85b"
+      },
+      {
+        "path": "/workspace/scratch/796a39e3632d/visual-fix-v66/ci-fa37048/v66-review-summary/report.json",
+        "bytes": 68875,
+        "sha256": "29cb69cff47d77d94522cdf9d65a09f26aaa3ef4c4c6cc2cfd7a128efe123f6a"
+      },
+      {
+        "path": "/workspace/scratch/796a39e3632d/visual-fix-v66/ci-fa37048/review-summary.independent-verified.json",
+        "bytes": 1488,
+        "sha256": "3cf153a2e68ae2442954f324604cded84113b40b0f37dfc0f5c5954ca952d789"
+      },
+      {
+        "path": "/workspace/scratch/796a39e3632d/visual-fix-v66/ci-fa37048/build-packages-validated.json",
+        "bytes": 17125,
+        "sha256": "29a4a96ce8a326141751b228d743fa0f09bd155db6c0446a17b1ff871d536822"
+      },
+      {
+        "path": "/workspace/scratch/796a39e3632d/visual-fix-v66/ci-fa37048/checker-warning-review.json",
+        "bytes": 21716,
+        "sha256": "9f81ad06479feefbca9d791dd684b5e0bbc20c6457567cbaae9d3f55aba901d7"
+      }
+    ],
+    "independentValidator": {
+      "path": "/workspace/scratch/796a39e3632d/visual-fix-v66/validate-fa37048-ci-summary.py",
+      "bytes": 7348,
+      "sha256": "20293fbb3cc5d8af949395aafbc22a5fd2dc54e77816c07a5b23651a59e18f57"
+    }
+  },
+  "masterTzAccepted": false,
+  "humanPlaytest": false,
+  "liveSdkAccepted": false,
+  "moderationAccepted": false,
+  "physicalPhonePerformanceAccepted": false,
+  "liveAdsAccepted": false,
+  "draftCreatedAt": "2026-10-21T21:01:09.609842+00:00",
+  "rootAcceptedAt": "2026-10-21T21:07:18.781231+00:00",
+  "scope": "Root accepts this final source and visual correction pass using the actual complete successful provider CI and personal visual review. Publication, live platform, moderation, physical devices and complete master-TZ acceptance remain separate."
+}

@@ -1,0 +1,1632 @@
+{
+  "kind": "root-personal-native-visual-inspection",
+  "reviewer": "Codex",
+  "sourceCommit": "fa37048d48a279203a6eae7e945f5f5880a2b499",
+  "sourceTree": "ca869b2f1a5f4ebe33238ce3f773ee605f761251",
+  "runId": 39668333490,
+  "runAttempt": 1,
+  "sourceAccepted": false,
+  "publicationAccepted": false,
+  "reviews": [
+    {
+      "displayNumber": 1,
+      "stableLevel": 1,
+      "personallyViewedSheets": [
+        "room-01.jpg"
+      ],
+      "personallyViewedImageNames": [
+        "player-start.jpg",
+        "oblique.jpg",
+        "opposite.jpg",
+        "clear-layout.jpg"
+      ],
+      "imageViews": 4,
+      "observations": [
+        "H-section platform supports, framed fixtures and the receiving dock form a consistent introductory room."
+      ],
+      "visualBlockers": [],
+      "limits": []
+    },
+    {
+      "displayNumber": 2,
+      "stableLevel": 2,
+      "personallyViewedSheets": [
+        "room-02.jpg"
+      ],
+      "personallyViewedImageNames": [
+        "player-start.jpg",
+        "oblique.jpg",
+        "opposite.jpg",
+        "clear-layout.jpg",
+        "route-mid.jpg",
+        "route-far.jpg"
+      ],
+      "imageViews": 6,
+      "observations": [
+        "Cyan bridge and opaque portal surfaces remain distinguishable; platform supports read as rigid frames."
+      ],
+      "visualBlockers": [],
+      "limits": []
+    },
+    {
+      "displayNumber": 3,
+      "stableLevel": 3,
+      "personallyViewedSheets": [
+        "room-03.jpg"
+      ],
+      "personallyViewedImageNames": [
+        "player-start.jpg",
+        "oblique.jpg",
+        "opposite.jpg",
+        "clear-layout.jpg",
+        "route-mid.jpg",
+        "route-far.jpg"
+      ],
+      "imageViews": 6,
+      "observations": [
+        "Cabin, landing and support framework connect visibly; dock labels retain opaque backing."
+      ],
+      "visualBlockers": [],
+      "limits": []
+    },
+    {
+      "displayNumber": 4,
+      "stableLevel": 4,
+      "personallyViewedSheets": [
+        "room-04.jpg"
+      ],
+      "personallyViewedImageNames": [
+        "player-start.jpg",
+        "oblique.jpg",
+        "opposite.jpg",
+        "clear-layout.jpg",
+        "route-mid.jpg",
+        "route-far.jpg"
+      ],
+      "imageViews": 6,
+      "observations": [
+        "Ramps and upper platforms have continuous rigid supports with consistent wall panel framing."
+      ],
+      "visualBlockers": [],
+      "limits": []
+    },
+    {
+      "displayNumber": 5,
+      "stableLevel": 5,
+      "personallyViewedSheets": [
+        "room-05.jpg"
+      ],
+      "personallyViewedImageNames": [
+        "player-start.jpg",
+        "oblique.jpg",
+        "opposite.jpg",
+        "clear-layout.jpg",
+        "route-mid.jpg",
+        "route-far.jpg"
+      ],
+      "imageViews": 6,
+      "observations": [
+        "Rigid support feet and platform edges are consistent across the return route."
+      ],
+      "visualBlockers": [],
+      "limits": []
+    },
+    {
+      "displayNumber": 6,
+      "stableLevel": 6,
+      "personallyViewedSheets": [
+        "room-06.jpg"
+      ],
+      "personallyViewedImageNames": [
+        "player-start.jpg",
+        "oblique.jpg",
+        "opposite.jpg",
+        "clear-layout.jpg",
+        "route-mid.jpg",
+        "route-far.jpg"
+      ],
+      "imageViews": 6,
+      "observations": [
+        "Thicker cyan beam reads clearly across the room; optical shield has a closed housing and emitter frame."
+      ],
+      "visualBlockers": [],
+      "limits": []
+    },
+    {
+      "displayNumber": 7,
+      "stableLevel": 7,
+      "personallyViewedSheets": [
+        "room-07.jpg"
+      ],
+      "personallyViewedImageNames": [
+        "player-start.jpg",
+        "oblique.jpg",
+        "opposite.jpg",
+        "clear-layout.jpg",
+        "route-mid.jpg",
+        "route-far.jpg"
+      ],
+      "imageViews": 6,
+      "observations": [
+        "Stairs have continuous side channels; balance fulcrum and grounded supports read as a real mechanism."
+      ],
+      "visualBlockers": [],
+      "limits": []
+    },
+    {
+      "displayNumber": 8,
+      "stableLevel": 8,
+      "personallyViewedSheets": [
+        "room-08.jpg"
+      ],
+      "personallyViewedImageNames": [
+        "player-start.jpg",
+        "oblique.jpg",
+        "opposite.jpg",
+        "clear-layout.jpg",
+        "route-mid.jpg",
+        "route-far.jpg"
+      ],
+      "imageViews": 6,
+      "observations": [
+        "Upper gallery has visible knee braces and founded fan/motor structure."
+      ],
+      "visualBlockers": [],
+      "limits": []
+    },
+    {
+      "displayNumber": 9,
+      "stableLevel": 9,
+      "personallyViewedSheets": [
+        "room-09.jpg"
+      ],
+      "personallyViewedImageNames": [
+        "player-start.jpg",
+        "oblique.jpg",
+        "opposite.jpg",
+        "clear-layout.jpg",
+        "route-mid.jpg",
+        "route-far.jpg"
+      ],
+      "imageViews": 6,
+      "observations": [
+        "Rear gantry and drive cabinet add physical support to the formerly thin suspended assembly."
+      ],
+      "visualBlockers": [],
+      "limits": []
+    },
+    {
+      "displayNumber": 10,
+      "stableLevel": 10,
+      "personallyViewedSheets": [
+        "room-10.jpg"
+      ],
+      "personallyViewedImageNames": [
+        "player-start.jpg",
+        "oblique.jpg",
+        "opposite.jpg",
+        "clear-layout.jpg",
+        "route-mid.jpg",
+        "route-far.jpg"
+      ],
+      "imageViews": 6,
+      "observations": [
+        "Receiver frame now has substantial posts, tie rails and founded feet. Rigid dock top is planar with straight seams; no warped scanned skin remains."
+      ],
+      "visualBlockers": [],
+      "limits": []
+    },
+    {
+      "displayNumber": 11,
+      "stableLevel": 11,
+      "personallyViewedSheets": [
+        "room-11.jpg"
+      ],
+      "imageViews": 6,
+      "observations": [
+        "Fan and motor skids have real foundations and an overhead service bus; soft air ribbons do not obscure the door."
+      ],
+      "visualBlockers": [],
+      "limits": [
+        "Some fixed diagnostic views are occluded by actual geometry; no objects were hidden to expose the route."
+      ],
+      "personallyViewedImageNames": [
+        "player-start.jpg",
+        "oblique.jpg",
+        "opposite.jpg",
+        "clear-layout.jpg",
+        "route-mid.jpg",
+        "route-far.jpg"
+      ]
+    },
+    {
+      "displayNumber": 12,
+      "stableLevel": 12,
+      "personallyViewedSheets": [
+        "room-12.jpg"
+      ],
+      "imageViews": 6,
+      "observations": [
+        "Closed segmented shaft/cabinet bodies and opaque receiver sign backing replace broad bare blocks."
+      ],
+      "visualBlockers": [],
+      "limits": [
+        "Some fixed diagnostic views are occluded by actual geometry; no objects were hidden to expose the route."
+      ],
+      "personallyViewedImageNames": [
+        "player-start.jpg",
+        "oblique.jpg",
+        "opposite.jpg",
+        "clear-layout.jpg",
+        "route-mid.jpg",
+        "route-far.jpg"
+      ]
+    },
+    {
+      "displayNumber": 13,
+      "stableLevel": 13,
+      "personallyViewedSheets": [
+        "room-13.jpg"
+      ],
+      "imageViews": 6,
+      "observations": [
+        "Mirror supports and service cabinets have closed casings; portal pair remains visually distinct from the light bridge."
+      ],
+      "visualBlockers": [],
+      "limits": [
+        "Some fixed diagnostic views are occluded by actual geometry; no objects were hidden to expose the route."
+      ],
+      "personallyViewedImageNames": [
+        "player-start.jpg",
+        "oblique.jpg",
+        "opposite.jpg",
+        "clear-layout.jpg",
+        "route-mid.jpg",
+        "route-far.jpg"
+      ]
+    },
+    {
+      "displayNumber": 14,
+      "stableLevel": 14,
+      "personallyViewedSheets": [
+        "room-14.jpg"
+      ],
+      "imageViews": 6,
+      "observations": [
+        "Stairs have continuous side supports, segmented machinery casings and a brighter cyan bridge edge."
+      ],
+      "visualBlockers": [],
+      "limits": [
+        "Some fixed diagnostic views are occluded by actual geometry; no objects were hidden to expose the route."
+      ],
+      "personallyViewedImageNames": [
+        "player-start.jpg",
+        "oblique.jpg",
+        "opposite.jpg",
+        "clear-layout.jpg",
+        "route-mid.jpg",
+        "route-far.jpg"
+      ]
+    },
+    {
+      "displayNumber": 15,
+      "stableLevel": 15,
+      "personallyViewedSheets": [
+        "room-15.jpg"
+      ],
+      "imageViews": 6,
+      "observations": [
+        "Airflow remains faint and directional; casing vents and offset side panels give the large mechanism depth."
+      ],
+      "visualBlockers": [],
+      "limits": [
+        "Some fixed diagnostic views are occluded by actual geometry; no objects were hidden to expose the route."
+      ],
+      "personallyViewedImageNames": [
+        "player-start.jpg",
+        "oblique.jpg",
+        "opposite.jpg",
+        "clear-layout.jpg",
+        "route-mid.jpg",
+        "route-far.jpg"
+      ]
+    },
+    {
+      "displayNumber": 16,
+      "stableLevel": 16,
+      "personallyViewedSheets": [
+        "room-16.jpg"
+      ],
+      "imageViews": 6,
+      "observations": [
+        "Stair structure and segmented machine shells read consistently with adjacent rooms; false-floor route remains clear."
+      ],
+      "visualBlockers": [],
+      "limits": [
+        "Some fixed diagnostic views are occluded by actual geometry; no objects were hidden to expose the route."
+      ],
+      "personallyViewedImageNames": [
+        "player-start.jpg",
+        "oblique.jpg",
+        "opposite.jpg",
+        "clear-layout.jpg",
+        "route-mid.jpg",
+        "route-far.jpg"
+      ]
+    },
+    {
+      "displayNumber": 17,
+      "stableLevel": 17,
+      "personallyViewedSheets": [
+        "room-17.jpg"
+      ],
+      "imageViews": 6,
+      "observations": [
+        "Continuous framed partition walls and founded ramp platforms retain the sparse structural balance layout."
+      ],
+      "visualBlockers": [],
+      "limits": [
+        "Some fixed diagnostic views are occluded by actual geometry; no objects were hidden to expose the route."
+      ],
+      "personallyViewedImageNames": [
+        "player-start.jpg",
+        "oblique.jpg",
+        "opposite.jpg",
+        "clear-layout.jpg",
+        "route-mid.jpg",
+        "route-far.jpg"
+      ]
+    },
+    {
+      "displayNumber": 18,
+      "stableLevel": 18,
+      "personallyViewedSheets": [
+        "room-18.jpg"
+      ],
+      "imageViews": 6,
+      "observations": [
+        "Closed generator cabinets and routed copper conductors read as a connected circuit assembly."
+      ],
+      "visualBlockers": [],
+      "limits": [
+        "Some fixed diagnostic views are occluded by actual geometry; no objects were hidden to expose the route."
+      ],
+      "personallyViewedImageNames": [
+        "player-start.jpg",
+        "oblique.jpg",
+        "opposite.jpg",
+        "clear-layout.jpg",
+        "route-mid.jpg",
+        "route-far.jpg"
+      ]
+    },
+    {
+      "displayNumber": 19,
+      "stableLevel": 19,
+      "personallyViewedSheets": [
+        "room-19.jpg"
+      ],
+      "imageViews": 6,
+      "observations": [
+        "Transparent optical barrier remains distinct from opaque portal surfaces; floor and fan surfaces show no obvious depth conflict."
+      ],
+      "visualBlockers": [],
+      "limits": [
+        "Some fixed diagnostic views are occluded by actual geometry; no objects were hidden to expose the route."
+      ],
+      "personallyViewedImageNames": [
+        "player-start.jpg",
+        "oblique.jpg",
+        "opposite.jpg",
+        "clear-layout.jpg",
+        "route-mid.jpg",
+        "route-far.jpg"
+      ]
+    },
+    {
+      "displayNumber": 20,
+      "stableLevel": 20,
+      "personallyViewedSheets": [
+        "room-20.jpg"
+      ],
+      "imageViews": 6,
+      "observations": [
+        "Larger handwheel is visible from the start-facing route; cable indicators retain clear labels."
+      ],
+      "visualBlockers": [],
+      "limits": [
+        "Some fixed diagnostic views are occluded by actual geometry; no objects were hidden to expose the route."
+      ],
+      "personallyViewedImageNames": [
+        "player-start.jpg",
+        "oblique.jpg",
+        "opposite.jpg",
+        "clear-layout.jpg",
+        "route-mid.jpg",
+        "route-far.jpg"
+      ]
+    },
+    {
+      "displayNumber": 21,
+      "stableLevel": 21,
+      "personallyViewedSheets": [
+        "room-21.jpg"
+      ],
+      "observations": [
+        "Receiver cabinets have closed doors and vent bands; stair risers show continuous clean striping without the old surface overlap."
+      ],
+      "visualBlockers": [],
+      "limits": [],
+      "personallyViewedImageNames": [
+        "player-start.jpg",
+        "oblique.jpg",
+        "opposite.jpg",
+        "clear-layout.jpg",
+        "route-mid.jpg",
+        "route-far.jpg"
+      ],
+      "imageViews": 6
+    },
+    {
+      "displayNumber": 22,
+      "stableLevel": 22,
+      "personallyViewedSheets": [
+        "room-22.jpg"
+      ],
+      "observations": [
+        "Both stair flights have clean tread/riser boundaries; the former torn triangular step pattern is absent at native size."
+      ],
+      "visualBlockers": [],
+      "limits": [],
+      "personallyViewedImageNames": [
+        "player-start.jpg",
+        "oblique.jpg",
+        "opposite.jpg",
+        "clear-layout.jpg",
+        "route-mid.jpg",
+        "route-far.jpg"
+      ],
+      "imageViews": 6
+    },
+    {
+      "displayNumber": 23,
+      "stableLevel": 23,
+      "personallyViewedSheets": [
+        "room-23.jpg"
+      ],
+      "observations": [
+        "Actual physical balance cars have manufactured chassis/backing edges and founded clutch/mount detail; the active physical prototype is the one rendered."
+      ],
+      "visualBlockers": [],
+      "limits": [],
+      "personallyViewedImageNames": [
+        "player-start.jpg",
+        "oblique.jpg",
+        "opposite.jpg",
+        "clear-layout.jpg",
+        "route-mid.jpg",
+        "route-far.jpg"
+      ],
+      "imageViews": 6
+    },
+    {
+      "displayNumber": 24,
+      "stableLevel": 24,
+      "personallyViewedSheets": [
+        "room-24.jpg"
+      ],
+      "observations": [
+        "Arched green structural frames and planted garden palette remain distinct; door and floor surfaces have consistent edge finish."
+      ],
+      "visualBlockers": [],
+      "limits": [],
+      "personallyViewedImageNames": [
+        "player-start.jpg",
+        "oblique.jpg",
+        "opposite.jpg",
+        "clear-layout.jpg",
+        "route-mid.jpg",
+        "route-far.jpg"
+      ],
+      "imageViews": 6
+    },
+    {
+      "displayNumber": 25,
+      "stableLevel": 25,
+      "personallyViewedSheets": [
+        "room-25.jpg"
+      ],
+      "observations": [
+        "Opaque optical shield and receiving surfaces remain distinct, with closed framed surrounding partitions."
+      ],
+      "visualBlockers": [],
+      "limits": [],
+      "personallyViewedImageNames": [
+        "player-start.jpg",
+        "oblique.jpg",
+        "opposite.jpg",
+        "clear-layout.jpg",
+        "route-mid.jpg",
+        "route-far.jpg"
+      ],
+      "imageViews": 6
+    },
+    {
+      "displayNumber": 26,
+      "stableLevel": 26,
+      "personallyViewedSheets": [
+        "room-26.jpg"
+      ],
+      "observations": [
+        "Traction gallery has consistent framed plates and grounded posts; airborne/ray paths stay visibly clear."
+      ],
+      "visualBlockers": [],
+      "limits": [],
+      "personallyViewedImageNames": [
+        "player-start.jpg",
+        "oblique.jpg",
+        "opposite.jpg",
+        "clear-layout.jpg",
+        "route-mid.jpg",
+        "route-far.jpg"
+      ],
+      "imageViews": 6
+    },
+    {
+      "displayNumber": 27,
+      "stableLevel": 27,
+      "personallyViewedSheets": [
+        "room-27.jpg"
+      ],
+      "observations": [
+        "Conveyor chevrons read as directional belt traction; canopy supports and foundations are coherent with the saturated accent palette."
+      ],
+      "visualBlockers": [],
+      "limits": [],
+      "personallyViewedImageNames": [
+        "player-start.jpg",
+        "oblique.jpg",
+        "opposite.jpg",
+        "clear-layout.jpg",
+        "route-mid.jpg",
+        "route-far.jpg"
+      ],
+      "imageViews": 6
+    },
+    {
+      "displayNumber": 28,
+      "stableLevel": 28,
+      "personallyViewedSheets": [
+        "room-28.jpg"
+      ],
+      "observations": [
+        "Large level numerals, explicit units, water fill and gauge scales read from the oblique route view."
+      ],
+      "visualBlockers": [],
+      "limits": [],
+      "personallyViewedImageNames": [
+        "player-start.jpg",
+        "oblique.jpg",
+        "opposite.jpg",
+        "clear-layout.jpg",
+        "route-mid.jpg",
+        "route-far.jpg"
+      ],
+      "imageViews": 6
+    },
+    {
+      "displayNumber": 29,
+      "stableLevel": 29,
+      "personallyViewedSheets": [
+        "room-29.jpg"
+      ],
+      "observations": [
+        "Gold gravity arrows make field direction visible; crown/field markers remain visually separate from portal surfaces."
+      ],
+      "visualBlockers": [],
+      "limits": [],
+      "personallyViewedImageNames": [
+        "player-start.jpg",
+        "oblique.jpg",
+        "opposite.jpg",
+        "clear-layout.jpg",
+        "route-mid.jpg",
+        "route-far.jpg"
+      ],
+      "imageViews": 6
+    },
+    {
+      "displayNumber": 30,
+      "stableLevel": 30,
+      "personallyViewedSheets": [
+        "room-30.jpg"
+      ],
+      "observations": [
+        "Clean closed floor and portal display skins eliminate the former black-dot seam artifacts. Founded piers/girders support the four islands, and soft trajectory hints replace the dense repeated guide collars."
+      ],
+      "visualBlockers": [],
+      "limits": [],
+      "personallyViewedImageNames": [
+        "player-start.jpg",
+        "oblique.jpg",
+        "opposite.jpg",
+        "clear-layout.jpg",
+        "route-mid.jpg",
+        "route-far.jpg"
+      ],
+      "imageViews": 6
+    },
+    {
+      "displayNumber": 31,
+      "stableLevel": 31,
+      "personallyViewedSheets": [
+        "room-31.jpg"
+      ],
+      "imageViews": 6,
+      "observations": [
+        "Full-size rack bed, tooth row, end bearings and displacement shoe read as a physical rail drive."
+      ],
+      "visualBlockers": [],
+      "limits": [
+        "Some fixed diagnostic views are occluded by actual geometry; no objects were hidden to expose the route."
+      ],
+      "personallyViewedImageNames": [
+        "player-start.jpg",
+        "oblique.jpg",
+        "opposite.jpg",
+        "clear-layout.jpg",
+        "route-mid.jpg",
+        "route-far.jpg"
+      ]
+    },
+    {
+      "displayNumber": 32,
+      "stableLevel": 32,
+      "personallyViewedSheets": [
+        "room-32.jpg"
+      ],
+      "imageViews": 6,
+      "observations": [
+        "Optical partition has founded structural framing rather than isolated suspended strips."
+      ],
+      "visualBlockers": [],
+      "limits": [
+        "Some fixed diagnostic views are occluded by actual geometry; no objects were hidden to expose the route."
+      ],
+      "personallyViewedImageNames": [
+        "player-start.jpg",
+        "oblique.jpg",
+        "opposite.jpg",
+        "clear-layout.jpg",
+        "route-mid.jpg",
+        "route-far.jpg"
+      ]
+    },
+    {
+      "displayNumber": 33,
+      "stableLevel": 33,
+      "personallyViewedSheets": [
+        "room-33.jpg"
+      ],
+      "imageViews": 6,
+      "observations": [
+        "Hydraulic control bodies and pressure gauge are closed and visible; the long lift support remains continuous."
+      ],
+      "visualBlockers": [],
+      "limits": [
+        "Some fixed diagnostic views are occluded by actual geometry; no objects were hidden to expose the route."
+      ],
+      "personallyViewedImageNames": [
+        "player-start.jpg",
+        "oblique.jpg",
+        "opposite.jpg",
+        "clear-layout.jpg",
+        "route-mid.jpg",
+        "route-far.jpg"
+      ]
+    },
+    {
+      "displayNumber": 34,
+      "stableLevel": 34,
+      "personallyViewedSheets": [
+        "room-34.jpg"
+      ],
+      "imageViews": 6,
+      "observations": [
+        "Pipe couplings connect the accumulator branch, reservoir cradle and pressure instrument."
+      ],
+      "visualBlockers": [],
+      "limits": [
+        "Some fixed diagnostic views are occluded by actual geometry; no objects were hidden to expose the route."
+      ],
+      "personallyViewedImageNames": [
+        "player-start.jpg",
+        "oblique.jpg",
+        "opposite.jpg",
+        "clear-layout.jpg",
+        "route-mid.jpg",
+        "route-far.jpg"
+      ]
+    },
+    {
+      "displayNumber": 35,
+      "stableLevel": 35,
+      "personallyViewedSheets": [
+        "room-35.jpg",
+        "room-35-sections-1.jpg"
+      ],
+      "imageViews": 8,
+      "observations": [
+        "Sluice drive has closed uprights, visible drum spokes and pressure instrument; extra declared drive view shows actual assembly."
+      ],
+      "visualBlockers": [],
+      "limits": [
+        "Some fixed diagnostic views are occluded by actual geometry; no objects were hidden to expose the route."
+      ],
+      "personallyViewedImageNames": [
+        "player-start.jpg",
+        "oblique.jpg",
+        "opposite.jpg",
+        "clear-layout.jpg",
+        "route-mid.jpg",
+        "route-far.jpg",
+        "extra-review-detail.jpg",
+        "extra-observatory-drive.jpg"
+      ]
+    },
+    {
+      "displayNumber": 36,
+      "stableLevel": 36,
+      "personallyViewedSheets": [
+        "room-36.jpg"
+      ],
+      "personallyViewedImageNames": [
+        "player-start.jpg",
+        "oblique.jpg",
+        "opposite.jpg",
+        "clear-layout.jpg",
+        "route-mid.jpg",
+        "route-far.jpg"
+      ],
+      "imageViews": 6,
+      "observations": [
+        "Upper start now faces the open route; thrust gearbox/spindle below the deck has a closed mechanical housing."
+      ],
+      "visualBlockers": [],
+      "limits": [
+        "The device is below the elevated starting deck and is not fully visible in the first player frame; the access route is visible."
+      ]
+    },
+    {
+      "displayNumber": 37,
+      "stableLevel": 37,
+      "personallyViewedSheets": [
+        "room-37.jpg"
+      ],
+      "personallyViewedImageNames": [
+        "player-start.jpg",
+        "oblique.jpg",
+        "opposite.jpg",
+        "clear-layout.jpg",
+        "route-mid.jpg",
+        "route-far.jpg"
+      ],
+      "imageViews": 6,
+      "observations": [
+        "Magnetic yokes have visible copper windings, with founded bases behind the receiver."
+      ],
+      "visualBlockers": [],
+      "limits": []
+    },
+    {
+      "displayNumber": 38,
+      "stableLevel": 38,
+      "personallyViewedSheets": [
+        "room-38.jpg"
+      ],
+      "personallyViewedImageNames": [
+        "player-start.jpg",
+        "oblique.jpg",
+        "opposite.jpg",
+        "clear-layout.jpg",
+        "route-mid.jpg",
+        "route-far.jpg"
+      ],
+      "imageViews": 6,
+      "observations": [
+        "Hoist has continuous guide posts, a crosshead and real moving guide shoes."
+      ],
+      "visualBlockers": [],
+      "limits": []
+    },
+    {
+      "displayNumber": 39,
+      "stableLevel": 39,
+      "personallyViewedSheets": [
+        "room-39.jpg"
+      ],
+      "personallyViewedImageNames": [
+        "player-start.jpg",
+        "oblique.jpg",
+        "opposite.jpg",
+        "clear-layout.jpg",
+        "route-mid.jpg",
+        "route-far.jpg"
+      ],
+      "imageViews": 6,
+      "observations": [
+        "Thermal ray originates at a founded emitter/control body; no stray floating source. Broad plain partition fields remain visually sparse."
+      ],
+      "visualBlockers": [],
+      "limits": []
+    },
+    {
+      "displayNumber": 40,
+      "stableLevel": 40,
+      "personallyViewedSheets": [
+        "room-40.jpg"
+      ],
+      "personallyViewedImageNames": [
+        "player-start.jpg",
+        "oblique.jpg",
+        "opposite.jpg",
+        "clear-layout.jpg",
+        "route-mid.jpg",
+        "route-far.jpg"
+      ],
+      "imageViews": 6,
+      "observations": [
+        "Fixed rails and moving clevis blocks provide a readable connection to the actuator."
+      ],
+      "visualBlockers": [],
+      "limits": []
+    },
+    {
+      "displayNumber": 41,
+      "stableLevel": 42,
+      "personallyViewedSheets": [
+        "room-42.jpg"
+      ],
+      "personallyViewedImageNames": [
+        "player-start.jpg",
+        "oblique.jpg",
+        "opposite.jpg",
+        "clear-layout.jpg",
+        "route-mid.jpg",
+        "route-far.jpg"
+      ],
+      "imageViews": 6,
+      "observations": [
+        "Pneumatic flanges, tierods and an instrument body are visible around the pressure assembly."
+      ],
+      "visualBlockers": [],
+      "limits": []
+    },
+    {
+      "displayNumber": 42,
+      "stableLevel": 43,
+      "personallyViewedSheets": [
+        "room-43.jpg"
+      ],
+      "personallyViewedImageNames": [
+        "player-start.jpg",
+        "oblique.jpg",
+        "opposite.jpg",
+        "clear-layout.jpg",
+        "route-mid.jpg",
+        "route-far.jpg"
+      ],
+      "imageViews": 6,
+      "observations": [
+        "Large shielding surfaces have closed segmented cassettes on both sides and consistent fabricated edges."
+      ],
+      "visualBlockers": [],
+      "limits": []
+    },
+    {
+      "displayNumber": 43,
+      "stableLevel": 44,
+      "personallyViewedSheets": [
+        "room-44.jpg"
+      ],
+      "personallyViewedImageNames": [
+        "player-start.jpg",
+        "oblique.jpg",
+        "opposite.jpg",
+        "clear-layout.jpg",
+        "route-mid.jpg",
+        "route-far.jpg"
+      ],
+      "imageViews": 6,
+      "observations": [
+        "Repositionable path shields use closed cassette panels; portal surfaces remain visually distinct."
+      ],
+      "visualBlockers": [],
+      "limits": []
+    },
+    {
+      "displayNumber": 44,
+      "stableLevel": 45,
+      "personallyViewedSheets": [
+        "room-45.jpg"
+      ],
+      "personallyViewedImageNames": [
+        "player-start.jpg",
+        "oblique.jpg",
+        "opposite.jpg",
+        "clear-layout.jpg",
+        "route-mid.jpg",
+        "route-far.jpg"
+      ],
+      "imageViews": 6,
+      "observations": [
+        "Soft airflow does not dominate the scene; former overlapping floor blotches are absent in the oblique view."
+      ],
+      "visualBlockers": [],
+      "limits": []
+    },
+    {
+      "displayNumber": 45,
+      "stableLevel": 46,
+      "personallyViewedSheets": [
+        "room-46.jpg"
+      ],
+      "personallyViewedImageNames": [
+        "player-start.jpg",
+        "oblique.jpg",
+        "opposite.jpg",
+        "clear-layout.jpg",
+        "route-mid.jpg",
+        "route-far.jpg"
+      ],
+      "imageViews": 6,
+      "observations": [
+        "Closed two-sided shield/body skins preserve the support and release layout."
+      ],
+      "visualBlockers": [],
+      "limits": []
+    },
+    {
+      "displayNumber": 46,
+      "stableLevel": 47,
+      "personallyViewedSheets": [
+        "room-47.jpg"
+      ],
+      "personallyViewedImageNames": [
+        "player-start.jpg",
+        "oblique.jpg",
+        "opposite.jpg",
+        "clear-layout.jpg",
+        "route-mid.jpg",
+        "route-far.jpg"
+      ],
+      "imageViews": 6,
+      "observations": [
+        "Archive wall panels are closed and segmented; piston assembly is housed. The upper start still presents the corner and access ramp before the mechanism below."
+      ],
+      "visualBlockers": [],
+      "limits": [
+        "The device is below the elevated starting deck and is not fully visible in the first player frame; the access route is visible."
+      ]
+    },
+    {
+      "displayNumber": 47,
+      "stableLevel": 48,
+      "personallyViewedSheets": [
+        "room-48.jpg"
+      ],
+      "personallyViewedImageNames": [
+        "player-start.jpg",
+        "oblique.jpg",
+        "opposite.jpg",
+        "clear-layout.jpg",
+        "route-mid.jpg",
+        "route-far.jpg"
+      ],
+      "imageViews": 6,
+      "observations": [
+        "Rail support and closed shield casings form a continuous assembly."
+      ],
+      "visualBlockers": [],
+      "limits": []
+    },
+    {
+      "displayNumber": 48,
+      "stableLevel": 49,
+      "personallyViewedSheets": [
+        "room-49.jpg"
+      ],
+      "personallyViewedImageNames": [
+        "player-start.jpg",
+        "oblique.jpg",
+        "opposite.jpg",
+        "clear-layout.jpg",
+        "route-mid.jpg",
+        "route-far.jpg"
+      ],
+      "imageViews": 6,
+      "observations": [
+        "Carriage sits on a visible rail truck with wheel/axle structure rather than floating above the track."
+      ],
+      "visualBlockers": [],
+      "limits": []
+    },
+    {
+      "displayNumber": 49,
+      "stableLevel": 50,
+      "personallyViewedSheets": [
+        "room-50.jpg"
+      ],
+      "personallyViewedImageNames": [
+        "player-start.jpg",
+        "oblique.jpg",
+        "opposite.jpg",
+        "clear-layout.jpg",
+        "route-mid.jpg",
+        "route-far.jpg"
+      ],
+      "imageViews": 6,
+      "observations": [
+        "Founded H-section posts, bearing cartridge and counterweight straps define the folding mechanism."
+      ],
+      "visualBlockers": [],
+      "limits": []
+    },
+    {
+      "displayNumber": 50,
+      "stableLevel": 51,
+      "personallyViewedSheets": [
+        "room-51.jpg"
+      ],
+      "personallyViewedImageNames": [
+        "player-start.jpg",
+        "oblique.jpg",
+        "opposite.jpg",
+        "clear-layout.jpg",
+        "route-mid.jpg",
+        "route-far.jpg"
+      ],
+      "imageViews": 6,
+      "observations": [
+        "Range rings are faint interrupted cyan arcs, visually separate from the amber pulse and portal framing."
+      ],
+      "visualBlockers": [],
+      "limits": []
+    },
+    {
+      "displayNumber": 51,
+      "stableLevel": 41,
+      "personallyViewedSheets": [
+        "room-41.jpg",
+        "room-41-sections-1.jpg",
+        "room-41-sections-2.jpg",
+        "room-41-sections-3.jpg"
+      ],
+      "imageViews": 23,
+      "observations": [
+        "Internal partitions have manufactured edge/casing detail; full-size supports retain the tall multilevel layout.",
+        "Copper windings are visible around the magnet; flywheel viewing fascia has three open circular windows.",
+        "Additional declared views expose actual pendulum/inertia/impulse mechanisms, final energy crown and the projector behind its unchanged ray origin.",
+        "Several original fixed diagnostic cameras remain behind actual partition walls; the extra views show the otherwise occluded devices without hiding geometry."
+      ],
+      "visualBlockers": [],
+      "limits": [
+        "This is an assistant review of native rendered images, not a human playtest or physical phone performance measurement."
+      ],
+      "personallyViewedImageNames": [
+        "player-start.jpg",
+        "oblique.jpg",
+        "opposite.jpg",
+        "clear-layout.jpg",
+        "route-mid.jpg",
+        "route-far.jpg",
+        "castle-freight.jpg",
+        "castle-sluice.jpg",
+        "castle-optics.jpg",
+        "castle-hoist.jpg",
+        "castle-archive.jpg",
+        "castle-flywheel.jpg",
+        "castle-magnet.jpg",
+        "castle-migrant.jpg",
+        "castle-pendulum.jpg",
+        "castle-inertia.jpg",
+        "castle-impulse.jpg",
+        "castle-crown.jpg",
+        "extra-impulse-alternate.jpg",
+        "extra-inertia-alternate.jpg",
+        "extra-pendulum-alternate.jpg",
+        "extra-finale-contact.jpg",
+        "extra-optics-projector.jpg"
+      ]
+    }
+  ],
+  "assistantVisualAccepted": true,
+  "coverage": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40,
+    41,
+    42,
+    43,
+    44,
+    45,
+    46,
+    47,
+    48,
+    49,
+    50,
+    51
+  ],
+  "nativeSettings": {
+    "width": 1280,
+    "height": 720,
+    "quality": "balanced",
+    "shadows": true,
+    "shadowSize": 1024,
+    "elapsed": 0,
+    "worldStep": 0
+  },
+  "personallyViewedContactSheets": 55,
+  "primaryImages": [
+    {
+      "displayNumber": 1,
+      "stableLevel": 1,
+      "artifact": "v66-visual-early",
+      "path": "room-01/oblique.jpg",
+      "bytes": 108240,
+      "sha256": "24ec8b0358ba0242da24a65c95a66574caad22e42cf20eca837621a27156f8b6"
+    },
+    {
+      "displayNumber": 2,
+      "stableLevel": 2,
+      "artifact": "v66-visual-early",
+      "path": "room-02/oblique.jpg",
+      "bytes": 89696,
+      "sha256": "b6eb27aa0c9b343d07453abc6e61a00facdc992a9d19f7f68b08c4ef3844f901"
+    },
+    {
+      "displayNumber": 3,
+      "stableLevel": 3,
+      "artifact": "v66-visual-early",
+      "path": "room-03/oblique.jpg",
+      "bytes": 89792,
+      "sha256": "9fe5d7937ae46b5441c77793896bcbe489191de9789306d6faa0fe0f8a2f9465"
+    },
+    {
+      "displayNumber": 4,
+      "stableLevel": 4,
+      "artifact": "v66-visual-early",
+      "path": "room-04/oblique.jpg",
+      "bytes": 99206,
+      "sha256": "b7dfcc9c981d22ec39e5d83c934f52f038a285be7524131977a6aa4832435c4e"
+    },
+    {
+      "displayNumber": 5,
+      "stableLevel": 5,
+      "artifact": "v66-visual-early",
+      "path": "room-05/oblique.jpg",
+      "bytes": 101909,
+      "sha256": "31e0a3225b9d7404bfd5e4dfc0c7c65bbd361b60dd1e5adaa69e168cfb2da76a"
+    },
+    {
+      "displayNumber": 6,
+      "stableLevel": 6,
+      "artifact": "v66-visual-early",
+      "path": "room-06/oblique.jpg",
+      "bytes": 107200,
+      "sha256": "1cfcb6ebc40a23885b26230fe95c035c81ce55dac433b7b92b03582652ea40d6"
+    },
+    {
+      "displayNumber": 7,
+      "stableLevel": 7,
+      "artifact": "v66-visual-early",
+      "path": "room-07/oblique.jpg",
+      "bytes": 129619,
+      "sha256": "53c6c8cc1e0a71cb92ee7d99ccd698a7c013e3b5c6c655e3ca08036924bb4dcc"
+    },
+    {
+      "displayNumber": 8,
+      "stableLevel": 8,
+      "artifact": "v66-visual-early",
+      "path": "room-08/oblique.jpg",
+      "bytes": 110824,
+      "sha256": "906fd1519af357a69bec2e38aa3f35fd2d05b702d6623cb329fcab654f730150"
+    },
+    {
+      "displayNumber": 9,
+      "stableLevel": 9,
+      "artifact": "v66-visual-early",
+      "path": "room-09/oblique.jpg",
+      "bytes": 109999,
+      "sha256": "276d8152468008fefa382ce6b420637182adfdf0eff1790be1a810d97ce384bc"
+    },
+    {
+      "displayNumber": 10,
+      "stableLevel": 10,
+      "artifact": "v66-visual-early",
+      "path": "room-10/oblique.jpg",
+      "bytes": 123727,
+      "sha256": "ab78b12fed25af712ccd5a2c1aecf9391bbda57a61678470938adcee0586df32"
+    },
+    {
+      "displayNumber": 11,
+      "stableLevel": 11,
+      "artifact": "v66-visual-energy",
+      "path": "room-11/oblique.jpg",
+      "bytes": 106555,
+      "sha256": "3730bc347437a69eeb62cffa868220aeb41ab27052e2969faa77a4cb567ff133"
+    },
+    {
+      "displayNumber": 12,
+      "stableLevel": 12,
+      "artifact": "v66-visual-energy",
+      "path": "room-12/oblique.jpg",
+      "bytes": 63922,
+      "sha256": "1a8f1d4733474909aab98820c5b7cd258cf4b72379097dceb6008dc495cb763b"
+    },
+    {
+      "displayNumber": 13,
+      "stableLevel": 13,
+      "artifact": "v66-visual-energy",
+      "path": "room-13/oblique.jpg",
+      "bytes": 101340,
+      "sha256": "4e093a9a8dc1ff1feb3352e8b3f45db84abfe54d2c8d8612a745f62500a2b4e3"
+    },
+    {
+      "displayNumber": 14,
+      "stableLevel": 14,
+      "artifact": "v66-visual-energy",
+      "path": "room-14/oblique.jpg",
+      "bytes": 73354,
+      "sha256": "648c783e7128701937d54e67628d0e8c3301bd5faec31f8c123a8562b2564f20"
+    },
+    {
+      "displayNumber": 15,
+      "stableLevel": 15,
+      "artifact": "v66-visual-energy",
+      "path": "room-15/oblique.jpg",
+      "bytes": 81437,
+      "sha256": "828123d09054eeb9d68bb75516ca650b6efc465cc6a5f72648c2af1cdfef99e5"
+    },
+    {
+      "displayNumber": 16,
+      "stableLevel": 16,
+      "artifact": "v66-visual-energy",
+      "path": "room-16/oblique.jpg",
+      "bytes": 106871,
+      "sha256": "d486a620d83ce0bde1bbc2e85fdac32f5fdf9d08e4b40337250f6811cd28d34b"
+    },
+    {
+      "displayNumber": 17,
+      "stableLevel": 17,
+      "artifact": "v66-visual-energy",
+      "path": "room-17/oblique.jpg",
+      "bytes": 88413,
+      "sha256": "17572f290d7163f5bb2e3bcf892583e15eddaf528981cb222c4f1b60d7d68a35"
+    },
+    {
+      "displayNumber": 18,
+      "stableLevel": 18,
+      "artifact": "v66-visual-energy",
+      "path": "room-18/oblique.jpg",
+      "bytes": 84434,
+      "sha256": "5b9c47998dca0e50c078e72d0866de6b20cc5f473ea57797407714ae41e1ee5d"
+    },
+    {
+      "displayNumber": 19,
+      "stableLevel": 19,
+      "artifact": "v66-visual-energy",
+      "path": "room-19/oblique.jpg",
+      "bytes": 38336,
+      "sha256": "70e7d143963e8a806eb87d6f01f95f684f694e0f49ea8a3c1113d85f79c922c7"
+    },
+    {
+      "displayNumber": 20,
+      "stableLevel": 20,
+      "artifact": "v66-visual-energy",
+      "path": "room-20/oblique.jpg",
+      "bytes": 54541,
+      "sha256": "e41b596a5b6c195486c2a0cc84927ab63d714ef3cd0bd9bee8dccf7b0cc3b091"
+    },
+    {
+      "displayNumber": 21,
+      "stableLevel": 21,
+      "artifact": "v66-visual-living",
+      "path": "room-21/oblique.jpg",
+      "bytes": 116939,
+      "sha256": "f51e7de4d2b2dd5acc0637987eeb354b27a69ac7eb405c05a3a49b6fec4d92f5"
+    },
+    {
+      "displayNumber": 22,
+      "stableLevel": 22,
+      "artifact": "v66-visual-living",
+      "path": "room-22/oblique.jpg",
+      "bytes": 106153,
+      "sha256": "3902aee5d896eda148adaef47541a01e8f89a1534c23cbc532ac0b8e3325d262"
+    },
+    {
+      "displayNumber": 23,
+      "stableLevel": 23,
+      "artifact": "v66-visual-living",
+      "path": "room-23/oblique.jpg",
+      "bytes": 93931,
+      "sha256": "d137b23cc994afbdc8f110a83e223eff416f5872f5209804fbb5a5012aa41ded"
+    },
+    {
+      "displayNumber": 24,
+      "stableLevel": 24,
+      "artifact": "v66-visual-living",
+      "path": "room-24/oblique.jpg",
+      "bytes": 108590,
+      "sha256": "1e7ef712961fedc9e25f68bce1bc46ce6062e674c9bbe62e4054fa32405f248d"
+    },
+    {
+      "displayNumber": 25,
+      "stableLevel": 25,
+      "artifact": "v66-visual-living",
+      "path": "room-25/oblique.jpg",
+      "bytes": 118916,
+      "sha256": "ae61bea4e8f590e5c3c96c70a4bc2b3812881787e3af9ad5f3e5c18b930d3f51"
+    },
+    {
+      "displayNumber": 26,
+      "stableLevel": 26,
+      "artifact": "v66-visual-living",
+      "path": "room-26/oblique.jpg",
+      "bytes": 74438,
+      "sha256": "f2c26656cff01f70ae531fdec598ca053d8997634876b4a17d7aef4a5bdec08b"
+    },
+    {
+      "displayNumber": 27,
+      "stableLevel": 27,
+      "artifact": "v66-visual-living",
+      "path": "room-27/oblique.jpg",
+      "bytes": 99043,
+      "sha256": "fe6f2c38a0bde5daf74a0908279d98b7ec6e244e7f1af9707c255ea64cc6574b"
+    },
+    {
+      "displayNumber": 28,
+      "stableLevel": 28,
+      "artifact": "v66-visual-living",
+      "path": "room-28/oblique.jpg",
+      "bytes": 96754,
+      "sha256": "d2f7e10313b51c5511b8827653d4c17d55873fdc3f21b10c09ad402f7117f85e"
+    },
+    {
+      "displayNumber": 29,
+      "stableLevel": 29,
+      "artifact": "v66-visual-living",
+      "path": "room-29/oblique.jpg",
+      "bytes": 84714,
+      "sha256": "468b2a4e8dce39297cbbd76337f36a221ba380af0054502cfd869b267834d9dc"
+    },
+    {
+      "displayNumber": 30,
+      "stableLevel": 30,
+      "artifact": "v66-visual-living",
+      "path": "room-30/oblique.jpg",
+      "bytes": 90242,
+      "sha256": "3f7e3d25ad1602496acb34d39f5cd9650ac260eefd27392ce93805aa4697fc16"
+    },
+    {
+      "displayNumber": 31,
+      "stableLevel": 31,
+      "artifact": "v66-visual-optics",
+      "path": "room-31/oblique.jpg",
+      "bytes": 98396,
+      "sha256": "731d879d104436bf4e8246d575d8c76a197fe514b837140a89eb833f234bd5ab"
+    },
+    {
+      "displayNumber": 32,
+      "stableLevel": 32,
+      "artifact": "v66-visual-optics",
+      "path": "room-32/oblique.jpg",
+      "bytes": 88249,
+      "sha256": "0fabce498a72c2e7b39ba3b0ce43c68865e91b9e46d7e3444f427bd357549c14"
+    },
+    {
+      "displayNumber": 33,
+      "stableLevel": 33,
+      "artifact": "v66-visual-optics",
+      "path": "room-33/oblique.jpg",
+      "bytes": 89788,
+      "sha256": "5fbe72415a1cc235fbd3e8dedf09de7ee22ebdef1d3025c18df2f8ffcfef8d61"
+    },
+    {
+      "displayNumber": 34,
+      "stableLevel": 34,
+      "artifact": "v66-visual-optics",
+      "path": "room-34/oblique.jpg",
+      "bytes": 74591,
+      "sha256": "b20da5f8454f456ec1cf9f8dfeded3ed0375c38dd3cc580cc685cc6672817892"
+    },
+    {
+      "displayNumber": 35,
+      "stableLevel": 35,
+      "artifact": "v66-visual-optics",
+      "path": "room-35/oblique.jpg",
+      "bytes": 11347,
+      "sha256": "b83941502f740a29b3556020768b8b2cd9db5a2be0512f6c613c5e50586759e3"
+    },
+    {
+      "displayNumber": 36,
+      "stableLevel": 36,
+      "artifact": "v66-visual-optics",
+      "path": "room-36/oblique.jpg",
+      "bytes": 93046,
+      "sha256": "97a2c395fd99d771eeb1f836955131a7649d58c16e5ebfc0711d17644c2c620d"
+    },
+    {
+      "displayNumber": 37,
+      "stableLevel": 37,
+      "artifact": "v66-visual-optics",
+      "path": "room-37/oblique.jpg",
+      "bytes": 77064,
+      "sha256": "7d0933a4c860a6a18ebcb9cc50ec68dda298487be2bb52c429b5ab911369a714"
+    },
+    {
+      "displayNumber": 38,
+      "stableLevel": 38,
+      "artifact": "v66-visual-optics",
+      "path": "room-38/oblique.jpg",
+      "bytes": 105213,
+      "sha256": "5d4257c8bf1599fd8311c47235e3f60a8129a916603b4b2f4e6369cd86a3b098"
+    },
+    {
+      "displayNumber": 39,
+      "stableLevel": 39,
+      "artifact": "v66-visual-optics",
+      "path": "room-39/oblique.jpg",
+      "bytes": 71540,
+      "sha256": "d2f5efa60f142e22855611ebefb3439b30f0977cb5f43ecdba02901ee6c4a1b1"
+    },
+    {
+      "displayNumber": 40,
+      "stableLevel": 40,
+      "artifact": "v66-visual-optics",
+      "path": "room-40/oblique.jpg",
+      "bytes": 85531,
+      "sha256": "38f83bf7a24d09edcf5fb57b60c6be32882b05e880d3fc1b33a5da8f836902e2"
+    },
+    {
+      "displayNumber": 41,
+      "stableLevel": 42,
+      "artifact": "v66-visual-fracture",
+      "path": "room-42/oblique.jpg",
+      "bytes": 84894,
+      "sha256": "0f67e726f72a2c0b8a22c9c85cc9755b861de86bc1e66ccdc51bd7cbfa01116b"
+    },
+    {
+      "displayNumber": 42,
+      "stableLevel": 43,
+      "artifact": "v66-visual-fracture",
+      "path": "room-43/oblique.jpg",
+      "bytes": 112512,
+      "sha256": "ac7eab9f852c33f6c8f3b0b4bfd365c10896515e5dc7aef682fffe6864860459"
+    },
+    {
+      "displayNumber": 43,
+      "stableLevel": 44,
+      "artifact": "v66-visual-fracture",
+      "path": "room-44/oblique.jpg",
+      "bytes": 107747,
+      "sha256": "88b6dbdc4ca60653a09551c247b506ef043783e1fb639fa46e4f9eb453aee45e"
+    },
+    {
+      "displayNumber": 44,
+      "stableLevel": 45,
+      "artifact": "v66-visual-fracture",
+      "path": "room-45/oblique.jpg",
+      "bytes": 101410,
+      "sha256": "68dd335c630c0872c55a86a1b02801b53249d19c66e072465ea024c3d936bc75"
+    },
+    {
+      "displayNumber": 45,
+      "stableLevel": 46,
+      "artifact": "v66-visual-fracture",
+      "path": "room-46/oblique.jpg",
+      "bytes": 101421,
+      "sha256": "9a1d1282ab74549d5277301af546dbac3b98a3b63480b0652e5fb51873628e17"
+    },
+    {
+      "displayNumber": 46,
+      "stableLevel": 47,
+      "artifact": "v66-visual-fracture",
+      "path": "room-47/oblique.jpg",
+      "bytes": 96783,
+      "sha256": "5b2eef8861047e5c451c378d6b3a52fcd6834a715bccbdc03f66cd8a0f788eca"
+    },
+    {
+      "displayNumber": 47,
+      "stableLevel": 48,
+      "artifact": "v66-visual-fracture",
+      "path": "room-48/oblique.jpg",
+      "bytes": 84773,
+      "sha256": "9002294a6fb85833f9dd17257148170d1f1ec75a5b5cf269f3ef20a63507063e"
+    },
+    {
+      "displayNumber": 48,
+      "stableLevel": 49,
+      "artifact": "v66-visual-fracture",
+      "path": "room-49/oblique.jpg",
+      "bytes": 97518,
+      "sha256": "14beef3f6e2e0e365f380e0bbe298e7d713c1609f48ab59c7d2253edd9476e86"
+    },
+    {
+      "displayNumber": 49,
+      "stableLevel": 50,
+      "artifact": "v66-visual-fracture",
+      "path": "room-50/oblique.jpg",
+      "bytes": 106842,
+      "sha256": "084e58ef91b88fd3813d92d09fc9116d59385519fce4370e38d99d4fe231c1c1"
+    },
+    {
+      "displayNumber": 50,
+      "stableLevel": 51,
+      "artifact": "v66-visual-fracture",
+      "path": "room-51/oblique.jpg",
+      "bytes": 105377,
+      "sha256": "939cd68b2f4d7aea9de9f53b5692ca60d87aa39043d76900b33e577817d83998"
+    },
+    {
+      "displayNumber": 51,
+      "stableLevel": 41,
+      "artifact": "v66-visual-castle",
+      "path": "room-41/oblique.jpg",
+      "bytes": 62941,
+      "sha256": "0103b9cc8415bf40d9ccc5682bb8a8d2f5decb9c0693f4b2f11d73c0d0df4aab"
+    }
+  ],
+  "scope": "Codex personally inspected all 55 derived sheets of actual final fa CI native images (all non-HUD views), plus native close inspection of rooms 10, 22 and 30. No game geometry, lighting or fog hidden to make these images. Acceptance covers this visual correction pass; retained design choices and camera limits are documented per room.",
+  "humanPlaytest": false,
+  "liveSdkAccepted": false,
+  "moderationAccepted": false,
+  "physicalPhonePerformanceAccepted": false,
+  "masterTzAccepted": false,
+  "reviewedOriginalInventoryEvidence": {
+    "path": "ci-visual-download-completeness.json",
+    "sha256": "c7ef6a9ce5281f283b402ea79efc98a21eabe29001c0c7b455afaf385e5b7688",
+    "allCapturedJpegs": 374,
+    "actualPersonallyViewedNonHudJpegs": 323,
+    "verifiedNativeWidth": 1280,
+    "verifiedNativeHeight": 720
+  },
+  "summaryReceiptRole": "Assistant visual observations only. Overall source and publication acceptance are separate receipts."
+}
