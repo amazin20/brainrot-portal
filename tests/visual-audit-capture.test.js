@@ -2,6 +2,8 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import {validateVisualAuditCameras} from '../scripts/qa-visual-audit-capture.mjs';
+import {campaignAccessFixture} from '../scripts/lib/campaign-access-fixture.mjs';
+import {RELEASE_VERSION} from '../src/game/ReleaseIdentity.js';
 
 const actual=()=>JSON.parse(fs.readFileSync(new URL('../tools/visual-audit-v65-reference-cameras.json',import.meta.url),'utf8'));
 
@@ -17,5 +19,13 @@ test('capture validator rejects missing rooms, duplicate identities and invalid 
  for(const mutate of [value=>value.levels.pop(),value=>value.levels[0].stableLevel=2,value=>value.levels[0].displayNumber=9,
   value=>value.levels[0].views[0].camera[0]=NaN,value=>value.levels[0].views[0].fov=200,value=>value.levels[0].views[0].kind='../outside',value=>value.levels[0].views[0].kind='player-start']){
   const value=actual();mutate(value);assert.throws(()=>validateVisualAuditCameras(value));
+ }
+});
+
+test('the active release mount has its own working campaign save before any browser review starts',()=>{
+ const pathname='/campaign-'+RELEASE_VERSION.split('-')[0]+'/';
+ for(let levelIndex=0;levelIndex<51;levelIndex++){
+  const fixture=campaignAccessFixture({levelIndex,pathname});
+  assert.equal(fixture.targetIndex,levelIndex);assert.equal(fixture.targetCompleted,false);assert.equal(fixture.constructorWrites,0);
  }
 });
