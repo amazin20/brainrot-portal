@@ -1,0 +1,17 @@
+{
+  "sourceCommit": "307aefaa960cc8f6b0ce9b3d7267e1eeaceccb81",
+  "sourceReview": {"runId": 39544785403, "runAttempt": 1},
+  "checkerStatusesChanged": false,
+  "newReleaseBlockerFound": false,
+  "scope": "Independent diagnosis of retained original WARN/N/V. These findings do not rewrite the original checker report or establish live platform approval.",
+  "findings": [
+    {"originalName": "No prompt()", "originalStatus": "WARN", "finding": "Exact compiled match is the LabVelocityCompanion get prompt() property accessor; no window.prompt invocation found.", "source": "src/game/LabVelocityCompanion.js", "compiled": "assets/index-PovWAtJ9.js"},
+    {"originalName": "No profanity in UI text (п.8.2.4)", "originalStatus": "WARN", "finding": "Exact Russian regexp matches are ебу inside требуется/требует and ебан inside Колебания. These are clean authored Russian words; no English profanity or standalone-бля match found in the examined compiled package.", "compiled": "assets/index-PovWAtJ9.js"},
+    {"originalName": "No WebGL notice (п.1.6.1.7)", "originalStatus": "WARN", "finding": "Matched locations are Three.js diagnostic warning/error strings about unsupported attributes, extensions, precision, color space and tone mapping. No authored enable-WebGL notice was found. Actual unsupported-device recovery is not covered by this diagnosis."},
+    {"originalName": "Ad callback and sound-during-ad checks", "originalStatus": "WARN", "finding": "Static rules cannot trace the shared LabPlatform hold callback through main hold()/syncActivity() to AudioController.block(). Actual retained rewarded mock transactions observe paused gameplay and suspended AudioContext during ads; live ad delivery remains unverified.", "sources": ["src/game/LabPlatform.js", "src/main.js", "src/game/AudioController.js"]},
+    {"originalName": "GameReady timing (п.1.19)", "originalStatus": "WARN", "finding": "The boot path awaits game.init(), which loads assets, warms shaders and renders a first frame before onReady invokes platform.ready(). The retained room1 runtime has SDK init257ms, first paint1400ms, fonts1713ms and ready13210ms; original ready-after-fonts/first-paint runtime checks PASS. Exact title-screen paint at the SDK ready event was not independently timed here.", "sources": ["src/main.js", "src/game/LabGame.js"]},
+    {"originalName": "Progress saved before ad (п.4.2)", "originalStatus": "WARN", "finding": "The static rule seeks setData/saveProgress/saveGame names. Normal victory calls preferences.complete/save before a later Next interstitial, and settings persist through the preferences/localStorage abstraction. This does not establish cloud saves or durability when browser storage is unavailable.", "sources": ["src/main.js", "src/game/LabPreferences.js"]},
+    {"originalName": "Yandex lang fallback", "originalStatus": "NOT VERIFIED", "finding": "Actual source resolver supports Russian only and maps unsupported platform languages to ru. Independent direct calls for be/kk/uk/uz/en/en-US/ru/ru-RU all resolved ru. Checker could not infer the minified resolver; original N/V remains unchanged.", "source": "src/game/LabLocalization.js"},
+    {"originalName": "Canvas text reminder", "originalStatus": "NOT VERIFIED", "finding": "DOM scanning cannot verify every rendered text in51WebGL rooms. Current runtime declares Russian only; full rendered-language/human readability review remains open."}
+  ]
+}

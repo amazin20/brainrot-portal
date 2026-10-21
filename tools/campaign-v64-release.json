@@ -1,0 +1,261 @@
+{
+  "schemaVersion": 1,
+  "frozen": true,
+  "repository": "amazin20/brainrot-portal",
+  "namespace": "campaign-v64/",
+  "version": "v64-mobile-controls",
+  "controllerParent": "75c0d0adc6c9dd755ed516b589fa71bad1215ef2",
+  "sourceBranch": "upgrade/mobile-controls-20261021",
+  "sourceWorkflow": ".github/workflows/mobile-controls-v64-review.yml",
+  "sourceCommit": "307aefaa960cc8f6b0ce9b3d7267e1eeaceccb81",
+  "sourceTree": "d58c829d58a1bdbd61587d301c04a8422911f814",
+  "sourceRun": 39544785403,
+  "sourceAttempt": 1,
+  "expectedJobs": [
+    "build",
+    "checker-platform (castle, 41)",
+    "checker-platform (early, 1,2,3,4,5,6,7,8,9,10)",
+    "checker-platform (energy, 11,12,13,14,15,16,17,18,19,20)",
+    "checker-platform (fracture, 42,43,44,45,46,47,48,49,50,51)",
+    "checker-platform (living, 21,22,23,24,25,26,27,28,29,30)",
+    "checker-platform (optics, 31,32,33,34,35,36,37,38,39,40)",
+    "cpu (0)",
+    "cpu (1)",
+    "cpu (10)",
+    "cpu (11)",
+    "cpu (2)",
+    "cpu (3)",
+    "cpu (4)",
+    "cpu (5)",
+    "cpu (6)",
+    "cpu (7)",
+    "cpu (8)",
+    "cpu (9)",
+    "mobile-controls",
+    "native (castle, 41)",
+    "native (early, 1,2,3,4,5,6,7,8,9,10)",
+    "native (energy, 11,12,13,14,15,16,17,18,19,20)",
+    "native (fracture, 42,43,44,45,46,47,48,49,50,51)",
+    "native (living, 21,22,23,24,25,26,27,28,29,30)",
+    "native (optics, 31,32,33,34,35,36,37,38,39,40)"
+  ],
+  "expectedArtifactNames": [
+    "v64-build",
+    "v64-checker-platform-castle",
+    "v64-checker-platform-early",
+    "v64-checker-platform-energy",
+    "v64-checker-platform-fracture",
+    "v64-checker-platform-living",
+    "v64-checker-platform-optics",
+    "v64-cpu-0",
+    "v64-cpu-1",
+    "v64-cpu-10",
+    "v64-cpu-11",
+    "v64-cpu-2",
+    "v64-cpu-3",
+    "v64-cpu-4",
+    "v64-cpu-5",
+    "v64-cpu-6",
+    "v64-cpu-7",
+    "v64-cpu-8",
+    "v64-cpu-9",
+    "v64-dist",
+    "v64-mobile-controls",
+    "v64-native-castle",
+    "v64-native-early",
+    "v64-native-energy",
+    "v64-native-fracture",
+    "v64-native-living",
+    "v64-native-optics",
+    "v64-yandex",
+    "v64-yandex-review-dist"
+  ],
+  "sourceArtifacts": [
+    {
+      "id": 12321505493,
+      "name": "v64-build",
+      "size_in_bytes": 8190,
+      "digest": "sha256:a74469122063ae5782900b9433a24c19f226dd2946bf89bfacc41c3c486aa76e"
+    },
+    {
+      "id": 12321791904,
+      "name": "v64-checker-platform-castle",
+      "size_in_bytes": 110284,
+      "digest": "sha256:8bcba5839ad9482d281d1e8238d8694a933ae6ca375220d08635170b698eca41"
+    },
+    {
+      "id": 12321710935,
+      "name": "v64-checker-platform-early",
+      "size_in_bytes": 584492,
+      "digest": "sha256:f062da227a2d4c9fd7568bfe4afafb7a4f8c79ea66393ebc6bb74ab7a3575c39"
+    },
+    {
+      "id": 12320734084,
+      "name": "v64-checker-platform-energy",
+      "size_in_bytes": 550954,
+      "digest": "sha256:a8b0b915d84bedc70229920c06c76ac16916b1aacdd9d8b8735e2cab19929710"
+    },
+    {
+      "id": 12320833951,
+      "name": "v64-checker-platform-fracture",
+      "size_in_bytes": 551708,
+      "digest": "sha256:7e9a79ba48701195fa1c396a7ef3509ed3aaf877b907db1db60fca98c4e9d77e"
+    },
+    {
+      "id": 12320814186,
+      "name": "v64-checker-platform-living",
+      "size_in_bytes": 511230,
+      "digest": "sha256:8098c68de6306d03652a1c16e56db068ddbfd573ed4871399f6ff062d9f3f9ad"
+    },
+    {
+      "id": 12321726467,
+      "name": "v64-checker-platform-optics",
+      "size_in_bytes": 511232,
+      "digest": "sha256:893efd8ece187cd1295052487cbd6a5c82bf5010c3190e3ef19b31ea7c104335"
+    },
+    {
+      "id": 12323360106,
+      "name": "v64-cpu-0",
+      "size_in_bytes": 15174,
+      "digest": "sha256:362dced42f159c6bb418a11e63bc20ed9d7018f29b26e83ce75b95647f468384"
+    },
+    {
+      "id": 12321296986,
+      "name": "v64-cpu-1",
+      "size_in_bytes": 20119,
+      "digest": "sha256:e435c77a13dc2c8e455dbbc982004051ca5f0b720b28bb8798517366b398663f"
+    },
+    {
+      "id": 12320937603,
+      "name": "v64-cpu-10",
+      "size_in_bytes": 18492,
+      "digest": "sha256:e4100022574318e8511f096e73d1a733ee12bc33018fc6137079b4d68634a878"
+    },
+    {
+      "id": 12321995337,
+      "name": "v64-cpu-11",
+      "size_in_bytes": 16015,
+      "digest": "sha256:aafe3cc90784ffd7a7fd044602e7f98749cc1d3a46195c60c66ab40d6cf34e14"
+    },
+    {
+      "id": 12320783133,
+      "name": "v64-cpu-2",
+      "size_in_bytes": 18752,
+      "digest": "sha256:f1d10856e4465bfc891b5e5e8e207f9ae6ad14f18fee038e963d1e1b6f372a4e"
+    },
+    {
+      "id": 12321411964,
+      "name": "v64-cpu-3",
+      "size_in_bytes": 203094,
+      "digest": "sha256:6b46cf9a2d6e46c5a10ff8b19102ad0d53bf6d158c9b04567426db1018c67b94"
+    },
+    {
+      "id": 12321372798,
+      "name": "v64-cpu-4",
+      "size_in_bytes": 19064,
+      "digest": "sha256:460d4fb83c4e90972977ca6f1db1a1bd62db9951f9f7f930b4c5eafc70e138f1"
+    },
+    {
+      "id": 12321585993,
+      "name": "v64-cpu-5",
+      "size_in_bytes": 23011,
+      "digest": "sha256:b733e0ba9325dbec81013ee4fa2e6f5191c4019e03d11e4e19755904e2481986"
+    },
+    {
+      "id": 12321801988,
+      "name": "v64-cpu-6",
+      "size_in_bytes": 13199,
+      "digest": "sha256:42b543a7ab91bc6d3c2586dcd447504d6475668d02988af542db4d907e78cf9a"
+    },
+    {
+      "id": 12321695544,
+      "name": "v64-cpu-7",
+      "size_in_bytes": 14721,
+      "digest": "sha256:277d787891a446ce717cfacacc625125fcaed6fc80eec95c1b722067aeb35a93"
+    },
+    {
+      "id": 12321740951,
+      "name": "v64-cpu-8",
+      "size_in_bytes": 20580,
+      "digest": "sha256:4a253a9211f57a31141801850ad896e6f99d95b64ccd345c08b17a3d2e24e41c"
+    },
+    {
+      "id": 12321760987,
+      "name": "v64-cpu-9",
+      "size_in_bytes": 21526,
+      "digest": "sha256:89d3b66dd5feca5181db045d6f5249880dafedb61ef7b7bab80f20513759f77b"
+    },
+    {
+      "id": 12321685109,
+      "name": "v64-dist",
+      "size_in_bytes": 4520420,
+      "digest": "sha256:a4c4cede4654b6856ed8dfc6465219aa295c002a9606ca43b0c867376867150a"
+    },
+    {
+      "id": 12321536714,
+      "name": "v64-mobile-controls",
+      "size_in_bytes": 1568365,
+      "digest": "sha256:8a32d2ed292036c622c4c2f30ccc18457083410e3d45f841f08f9f8e367c8c7c"
+    },
+    {
+      "id": 12321825397,
+      "name": "v64-native-castle",
+      "size_in_bytes": 61330,
+      "digest": "sha256:d04c96a5b83fc307ea197e68da36aaa59adae3c05ee3b8c79544def33eefc489"
+    },
+    {
+      "id": 12321506474,
+      "name": "v64-native-early",
+      "size_in_bytes": 522556,
+      "digest": "sha256:62f7dbc259b62f8ecc689c2245143532abe2dcd7dc3f81ef93d351d056822120"
+    },
+    {
+      "id": 12320638740,
+      "name": "v64-native-energy",
+      "size_in_bytes": 443391,
+      "digest": "sha256:3ee23adc6c0cd879cd35387d1ff897880e73e514c924e1aaed32d77b4c1c8b65"
+    },
+    {
+      "id": 12321597134,
+      "name": "v64-native-fracture",
+      "size_in_bytes": 431276,
+      "digest": "sha256:97e2c45a76eb7e1f86b6c32399a0949c14330f6d7451b8cc81b117f5d9c2cf84"
+    },
+    {
+      "id": 12320788463,
+      "name": "v64-native-living",
+      "size_in_bytes": 373570,
+      "digest": "sha256:4c73d26e3d92e37fe14d8a07f3c0e5f63c71eb0f02a1ead83f507758630573b8"
+    },
+    {
+      "id": 12320848096,
+      "name": "v64-native-optics",
+      "size_in_bytes": 368765,
+      "digest": "sha256:8f603889b6790919b56432c522c09e92aa33c914bab50e6898167e97116e1463"
+    },
+    {
+      "id": 12320569735,
+      "name": "v64-yandex",
+      "size_in_bytes": 4363227,
+      "digest": "sha256:dd2b8b125540ddd495dbb1e7869c8ebd07ff3ec3cdf953c0561982e639a00a85"
+    },
+    {
+      "id": 12321695045,
+      "name": "v64-yandex-review-dist",
+      "size_in_bytes": 4520571,
+      "digest": "sha256:be7f28e31a8392e0a11d97b2958ebae6b9a6da0b4270f1f41e4fba45b4ded7e2"
+    }
+  ],
+  "sourceAcceptance": {
+    "path": "tools/campaign-v64-root-source-acceptance.json",
+    "sha256": "20aa9a86c627613c4e486569db7aa827efc4c92bc771190734f89cb462bfdef4"
+  },
+  "baselineCatalog": "tools/campaign-v63-public-files.json",
+  "baselineCatalogSha256": "4dc766e1fdfd6f70e5abed02dee534dbc270f664a1cb4fe3c319167fbb1ecd02",
+  "baselineInventorySha256": "2b94cf95c7e41a9d5d0d35cb305fb2ecb25a70e6884714c1f1460d97b767ffc8",
+  "baselineDeployment": {
+    "id": 7199379584,
+    "sha": "21f54a9f6ef63a7e18e4a2002565ec1616879eb9"
+  },
+  "publicationAccepted": false
+}

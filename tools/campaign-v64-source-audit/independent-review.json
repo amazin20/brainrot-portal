@@ -1,0 +1,1341 @@
+{
+  "kind": "independent-v64-evidence-review",
+  "sourceCommit": "307aefaa960cc8f6b0ce9b3d7267e1eeaceccb81",
+  "sourceTree": "d58c829d58a1bdbd61587d301c04a8422911f814",
+  "sourceReview": {
+    "runId": 39544785403,
+    "runAttempt": 1
+  },
+  "availableEvidencePassed": true,
+  "evidenceComplete": true,
+  "sourceAccepted": false,
+  "publicationAccepted": false,
+  "artifactZips": 29,
+  "cpuShards": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11
+  ],
+  "cpuTests": 2921,
+  "cpuFiles": 368,
+  "nativeRooms": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40,
+    41,
+    42,
+    43,
+    44,
+    45,
+    46,
+    47,
+    48,
+    49,
+    50,
+    51
+  ],
+  "checkerRooms": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40,
+    41,
+    42,
+    43,
+    44,
+    45,
+    46,
+    47,
+    48,
+    49,
+    50,
+    51
+  ],
+  "originalCheckerCounts": [
+    {
+      "level": 1,
+      "PASS": 68,
+      "FAIL": 0,
+      "WARN": 12,
+      "N/V": 2,
+      "SCORE": 85
+    },
+    {
+      "level": 2,
+      "PASS": 68,
+      "FAIL": 0,
+      "WARN": 12,
+      "N/V": 2,
+      "SCORE": 85
+    },
+    {
+      "level": 3,
+      "PASS": 68,
+      "FAIL": 0,
+      "WARN": 12,
+      "N/V": 2,
+      "SCORE": 85
+    },
+    {
+      "level": 4,
+      "PASS": 68,
+      "FAIL": 0,
+      "WARN": 12,
+      "N/V": 2,
+      "SCORE": 85
+    },
+    {
+      "level": 5,
+      "PASS": 68,
+      "FAIL": 0,
+      "WARN": 12,
+      "N/V": 2,
+      "SCORE": 85
+    },
+    {
+      "level": 6,
+      "PASS": 68,
+      "FAIL": 0,
+      "WARN": 12,
+      "N/V": 2,
+      "SCORE": 85
+    },
+    {
+      "level": 7,
+      "PASS": 68,
+      "FAIL": 0,
+      "WARN": 12,
+      "N/V": 2,
+      "SCORE": 85
+    },
+    {
+      "level": 8,
+      "PASS": 68,
+      "FAIL": 0,
+      "WARN": 12,
+      "N/V": 2,
+      "SCORE": 85
+    },
+    {
+      "level": 9,
+      "PASS": 68,
+      "FAIL": 0,
+      "WARN": 12,
+      "N/V": 2,
+      "SCORE": 85
+    },
+    {
+      "level": 10,
+      "PASS": 68,
+      "FAIL": 0,
+      "WARN": 12,
+      "N/V": 2,
+      "SCORE": 85
+    },
+    {
+      "level": 11,
+      "PASS": 68,
+      "FAIL": 0,
+      "WARN": 12,
+      "N/V": 2,
+      "SCORE": 85
+    },
+    {
+      "level": 12,
+      "PASS": 68,
+      "FAIL": 0,
+      "WARN": 12,
+      "N/V": 2,
+      "SCORE": 85
+    },
+    {
+      "level": 13,
+      "PASS": 68,
+      "FAIL": 0,
+      "WARN": 12,
+      "N/V": 2,
+      "SCORE": 85
+    },
+    {
+      "level": 14,
+      "PASS": 68,
+      "FAIL": 0,
+      "WARN": 12,
+      "N/V": 2,
+      "SCORE": 85
+    },
+    {
+      "level": 15,
+      "PASS": 68,
+      "FAIL": 0,
+      "WARN": 12,
+      "N/V": 2,
+      "SCORE": 85
+    },
+    {
+      "level": 16,
+      "PASS": 68,
+      "FAIL": 0,
+      "WARN": 12,
+      "N/V": 2,
+      "SCORE": 85
+    },
+    {
+      "level": 17,
+      "PASS": 68,
+      "FAIL": 0,
+      "WARN": 12,
+      "N/V": 2,
+      "SCORE": 85
+    },
+    {
+      "level": 18,
+      "PASS": 68,
+      "FAIL": 0,
+      "WARN": 12,
+      "N/V": 2,
+      "SCORE": 85
+    },
+    {
+      "level": 19,
+      "PASS": 68,
+      "FAIL": 0,
+      "WARN": 12,
+      "N/V": 2,
+      "SCORE": 85
+    },
+    {
+      "level": 20,
+      "PASS": 68,
+      "FAIL": 0,
+      "WARN": 12,
+      "N/V": 2,
+      "SCORE": 85
+    },
+    {
+      "level": 21,
+      "PASS": 68,
+      "FAIL": 0,
+      "WARN": 12,
+      "N/V": 2,
+      "SCORE": 85
+    },
+    {
+      "level": 22,
+      "PASS": 68,
+      "FAIL": 0,
+      "WARN": 12,
+      "N/V": 2,
+      "SCORE": 85
+    },
+    {
+      "level": 23,
+      "PASS": 68,
+      "FAIL": 0,
+      "WARN": 12,
+      "N/V": 2,
+      "SCORE": 85
+    },
+    {
+      "level": 24,
+      "PASS": 68,
+      "FAIL": 0,
+      "WARN": 12,
+      "N/V": 2,
+      "SCORE": 85
+    },
+    {
+      "level": 25,
+      "PASS": 68,
+      "FAIL": 0,
+      "WARN": 12,
+      "N/V": 2,
+      "SCORE": 85
+    },
+    {
+      "level": 26,
+      "PASS": 68,
+      "FAIL": 0,
+      "WARN": 12,
+      "N/V": 2,
+      "SCORE": 85
+    },
+    {
+      "level": 27,
+      "PASS": 68,
+      "FAIL": 0,
+      "WARN": 12,
+      "N/V": 2,
+      "SCORE": 85
+    },
+    {
+      "level": 28,
+      "PASS": 68,
+      "FAIL": 0,
+      "WARN": 12,
+      "N/V": 2,
+      "SCORE": 85
+    },
+    {
+      "level": 29,
+      "PASS": 68,
+      "FAIL": 0,
+      "WARN": 12,
+      "N/V": 2,
+      "SCORE": 85
+    },
+    {
+      "level": 30,
+      "PASS": 68,
+      "FAIL": 0,
+      "WARN": 12,
+      "N/V": 2,
+      "SCORE": 85
+    },
+    {
+      "level": 31,
+      "PASS": 68,
+      "FAIL": 0,
+      "WARN": 12,
+      "N/V": 2,
+      "SCORE": 85
+    },
+    {
+      "level": 32,
+      "PASS": 68,
+      "FAIL": 0,
+      "WARN": 12,
+      "N/V": 2,
+      "SCORE": 85
+    },
+    {
+      "level": 33,
+      "PASS": 68,
+      "FAIL": 0,
+      "WARN": 12,
+      "N/V": 2,
+      "SCORE": 85
+    },
+    {
+      "level": 34,
+      "PASS": 68,
+      "FAIL": 0,
+      "WARN": 12,
+      "N/V": 2,
+      "SCORE": 85
+    },
+    {
+      "level": 35,
+      "PASS": 68,
+      "FAIL": 0,
+      "WARN": 12,
+      "N/V": 2,
+      "SCORE": 85
+    },
+    {
+      "level": 36,
+      "PASS": 68,
+      "FAIL": 0,
+      "WARN": 12,
+      "N/V": 2,
+      "SCORE": 85
+    },
+    {
+      "level": 37,
+      "PASS": 68,
+      "FAIL": 0,
+      "WARN": 12,
+      "N/V": 2,
+      "SCORE": 85
+    },
+    {
+      "level": 38,
+      "PASS": 68,
+      "FAIL": 0,
+      "WARN": 12,
+      "N/V": 2,
+      "SCORE": 85
+    },
+    {
+      "level": 39,
+      "PASS": 68,
+      "FAIL": 0,
+      "WARN": 12,
+      "N/V": 2,
+      "SCORE": 85
+    },
+    {
+      "level": 40,
+      "PASS": 68,
+      "FAIL": 0,
+      "WARN": 12,
+      "N/V": 2,
+      "SCORE": 85
+    },
+    {
+      "level": 42,
+      "PASS": 68,
+      "FAIL": 0,
+      "WARN": 12,
+      "N/V": 2,
+      "SCORE": 85
+    },
+    {
+      "level": 43,
+      "PASS": 68,
+      "FAIL": 0,
+      "WARN": 12,
+      "N/V": 2,
+      "SCORE": 85
+    },
+    {
+      "level": 44,
+      "PASS": 68,
+      "FAIL": 0,
+      "WARN": 12,
+      "N/V": 2,
+      "SCORE": 85
+    },
+    {
+      "level": 45,
+      "PASS": 68,
+      "FAIL": 0,
+      "WARN": 12,
+      "N/V": 2,
+      "SCORE": 85
+    },
+    {
+      "level": 46,
+      "PASS": 68,
+      "FAIL": 0,
+      "WARN": 12,
+      "N/V": 2,
+      "SCORE": 85
+    },
+    {
+      "level": 47,
+      "PASS": 68,
+      "FAIL": 0,
+      "WARN": 12,
+      "N/V": 2,
+      "SCORE": 85
+    },
+    {
+      "level": 48,
+      "PASS": 68,
+      "FAIL": 0,
+      "WARN": 12,
+      "N/V": 2,
+      "SCORE": 85
+    },
+    {
+      "level": 49,
+      "PASS": 68,
+      "FAIL": 0,
+      "WARN": 12,
+      "N/V": 2,
+      "SCORE": 85
+    },
+    {
+      "level": 50,
+      "PASS": 68,
+      "FAIL": 0,
+      "WARN": 12,
+      "N/V": 2,
+      "SCORE": 85
+    },
+    {
+      "level": 51,
+      "PASS": 68,
+      "FAIL": 0,
+      "WARN": 12,
+      "N/V": 2,
+      "SCORE": 85
+    },
+    {
+      "level": 41,
+      "PASS": 68,
+      "FAIL": 0,
+      "WARN": 12,
+      "N/V": 2,
+      "SCORE": 85
+    }
+  ],
+  "hintTransactions": 153,
+  "mobile": {
+    "layouts": 8,
+    "actualViewportSizes": 7,
+    "simulatedInsetCases": 1,
+    "threeFingerNativeInput": true,
+    "originalCompanionPreserved": true,
+    "screenshots": 9
+  },
+  "decodedImages": [
+    {
+      "file": "v64-native-early/1-finish.jpg",
+      "width": 960,
+      "height": 540,
+      "maxChannelStd": 54.732691230402835,
+      "sha256": "81414a63efc4143f58d8e4fe02762105ecfaf876d12bced70b05a89cb5380467"
+    },
+    {
+      "file": "v64-native-early/2-finish.jpg",
+      "width": 960,
+      "height": 540,
+      "maxChannelStd": 53.669016026474715,
+      "sha256": "e3d46c0c8b7621b5794d9973d651d76a37ba22e727034306e6ed0d28f6132753"
+    },
+    {
+      "file": "v64-native-early/3-finish.jpg",
+      "width": 960,
+      "height": 540,
+      "maxChannelStd": 57.92833074326083,
+      "sha256": "0c7031917a0d61733676b84a849605676937b802933cbd2eec75fadeaf130091"
+    },
+    {
+      "file": "v64-native-early/4-finish.jpg",
+      "width": 960,
+      "height": 540,
+      "maxChannelStd": 39.86766022429687,
+      "sha256": "ef5c19baa9d178c8efdda7382e7680647ab1e2bd5a7d5c2a6359e970c62ca27a"
+    },
+    {
+      "file": "v64-native-early/5-finish.jpg",
+      "width": 960,
+      "height": 540,
+      "maxChannelStd": 46.358004140387635,
+      "sha256": "4d3f2ef8616e3b3cb49f58a3197a8d5c967d5cd37ba429ae2862270692004e28"
+    },
+    {
+      "file": "v64-native-early/6-finish.jpg",
+      "width": 960,
+      "height": 540,
+      "maxChannelStd": 67.68953904571404,
+      "sha256": "7c3945ab18eb48c127ce658bc871b3f2b30f0a964421b4cff73751985365b634"
+    },
+    {
+      "file": "v64-native-early/7-finish.jpg",
+      "width": 960,
+      "height": 540,
+      "maxChannelStd": 76.00451668547336,
+      "sha256": "b0c797e40ab5404126e62dc58ea11321b21046c4d7897f39de788152f71fa00c"
+    },
+    {
+      "file": "v64-native-early/8-finish.jpg",
+      "width": 960,
+      "height": 540,
+      "maxChannelStd": 69.11090461697383,
+      "sha256": "9cd3925982c544f6ae08ecd8e274797cf94d6280350675be1d0fcb531eb9a6bd"
+    },
+    {
+      "file": "v64-native-early/9-finish.jpg",
+      "width": 960,
+      "height": 540,
+      "maxChannelStd": 35.270288804900154,
+      "sha256": "45a70fba27ec173d2e60cf37454b054b1db7fc48627ba0365b65680b56b67751"
+    },
+    {
+      "file": "v64-native-early/10-finish.jpg",
+      "width": 960,
+      "height": 540,
+      "maxChannelStd": 44.43051715072875,
+      "sha256": "c7adb2b2bb930e3f84eaa67f7f385edfb81eb47712d98dbed06cfde7b13e4018"
+    },
+    {
+      "file": "v64-native-energy/11-finish.jpg",
+      "width": 960,
+      "height": 540,
+      "maxChannelStd": 46.17109708902659,
+      "sha256": "06181f4a263b79728ca97a751720a0759a7c9b4e4782fbf7c1bda78b1caa2114"
+    },
+    {
+      "file": "v64-native-energy/12-finish.jpg",
+      "width": 960,
+      "height": 540,
+      "maxChannelStd": 36.81811604948838,
+      "sha256": "2a5b80edb8ef20f17b8909fceaf044a14c2bd77d39e66f33aaf1bac82239f6a7"
+    },
+    {
+      "file": "v64-native-energy/13-finish.jpg",
+      "width": 960,
+      "height": 540,
+      "maxChannelStd": 45.97272351501614,
+      "sha256": "2ecf80abcbb12136ede5eb27e61f85440223b33824fdc09a4a5598242c38c652"
+    },
+    {
+      "file": "v64-native-energy/14-finish.jpg",
+      "width": 960,
+      "height": 540,
+      "maxChannelStd": 24.615165669240913,
+      "sha256": "b5c7d8defeee57de05c517d25850a784cdc54456b5192d3f75f6c9d8b38c7738"
+    },
+    {
+      "file": "v64-native-energy/15-finish.jpg",
+      "width": 960,
+      "height": 540,
+      "maxChannelStd": 50.257534322860785,
+      "sha256": "db7497d634b53336eb66aada128f1a19f539f2005ab9bf6bc7f9607b3038a652"
+    },
+    {
+      "file": "v64-native-energy/16-finish.jpg",
+      "width": 960,
+      "height": 540,
+      "maxChannelStd": 43.69929477366057,
+      "sha256": "0aafcc4e8f6481141bb838857b7e7daea04266f81c1d6872230512298407364f"
+    },
+    {
+      "file": "v64-native-energy/17-finish.jpg",
+      "width": 960,
+      "height": 540,
+      "maxChannelStd": 37.576455585206915,
+      "sha256": "ff86822b549128861e9ada6b2d37fdfdc3f5c71a8afb230aba4ebd0501d6bf5c"
+    },
+    {
+      "file": "v64-native-energy/18-finish.jpg",
+      "width": 960,
+      "height": 540,
+      "maxChannelStd": 43.8800003086068,
+      "sha256": "061cebb2fb026dfe721a1dd8806898ce69606588afe100b91a5e5944ae8090da"
+    },
+    {
+      "file": "v64-native-energy/19-finish.jpg",
+      "width": 960,
+      "height": 540,
+      "maxChannelStd": 56.48851768224287,
+      "sha256": "c58d837ae2eeb93cc06a4cdb05adc548893c44a28a8c67db12ff8cdfc2759725"
+    },
+    {
+      "file": "v64-native-energy/20-finish.jpg",
+      "width": 960,
+      "height": 540,
+      "maxChannelStd": 41.27637300287256,
+      "sha256": "63bc16ee86393a2b25991e2275f91023fe73ebe6693d39d5493b17cbe6710eba"
+    },
+    {
+      "file": "v64-native-living/21-finish.jpg",
+      "width": 960,
+      "height": 540,
+      "maxChannelStd": 40.38559152190326,
+      "sha256": "58af922d0600883f8901bac777309a297e7f277b01ddb3aed18ca74ac07f43f0"
+    },
+    {
+      "file": "v64-native-living/22-finish.jpg",
+      "width": 960,
+      "height": 540,
+      "maxChannelStd": 38.817294430928484,
+      "sha256": "273d652499bdb81f42c5deafeeb54d174a8951e9f6025ef3cbeca37b6d81a1c8"
+    },
+    {
+      "file": "v64-native-living/23-finish.jpg",
+      "width": 960,
+      "height": 540,
+      "maxChannelStd": 21.826040182828738,
+      "sha256": "3076ce0759a4663f65aeeac809126dcacec6c11a9aa7be23613bc92902403ed6"
+    },
+    {
+      "file": "v64-native-living/24-finish.jpg",
+      "width": 960,
+      "height": 540,
+      "maxChannelStd": 61.02341742669818,
+      "sha256": "67bc367b331c614efe13500ae0fb10e0376b32c0b4823ab28835744e6673883f"
+    },
+    {
+      "file": "v64-native-living/25-finish.jpg",
+      "width": 960,
+      "height": 540,
+      "maxChannelStd": 56.20692545854126,
+      "sha256": "2900eb345ba99f2bf06f39bdd02270e16d654f01ddd8a4a30bff4d3da88ad56b"
+    },
+    {
+      "file": "v64-native-living/26-finish.jpg",
+      "width": 960,
+      "height": 540,
+      "maxChannelStd": 50.95369257958816,
+      "sha256": "d5535f747baba125a143083b2bf1b1862d064518c3ef2bea0071c0230e70d09c"
+    },
+    {
+      "file": "v64-native-living/27-finish.jpg",
+      "width": 960,
+      "height": 540,
+      "maxChannelStd": 63.5626017718572,
+      "sha256": "0f674823d5bf622b56e13fc2315f569adcaf16103930283f29156887bffb0cf4"
+    },
+    {
+      "file": "v64-native-living/28-finish.jpg",
+      "width": 960,
+      "height": 540,
+      "maxChannelStd": 66.69960380997296,
+      "sha256": "2a1b0034d82176008d64186212a97eeb85e748178f1a6b7c3d98745de7d83073"
+    },
+    {
+      "file": "v64-native-living/29-finish.jpg",
+      "width": 960,
+      "height": 540,
+      "maxChannelStd": 62.20616006619075,
+      "sha256": "552cf770ef1765f0df34c521282835c5874ba5dfe7a9148a157a3e8fcd234a9e"
+    },
+    {
+      "file": "v64-native-living/30-finish.jpg",
+      "width": 960,
+      "height": 540,
+      "maxChannelStd": 57.43828042705863,
+      "sha256": "1470dedeabe197a167c51cbd0a5978a290a8fa88f2e30fe5f5117f4a363b73b9"
+    },
+    {
+      "file": "v64-native-optics/31-finish.jpg",
+      "width": 960,
+      "height": 540,
+      "maxChannelStd": 35.20091195760796,
+      "sha256": "ab49ad3a1e749c1406318a5738db9ef95688c9caa9196d53237a7a874d9501cb"
+    },
+    {
+      "file": "v64-native-optics/32-finish.jpg",
+      "width": 960,
+      "height": 540,
+      "maxChannelStd": 58.135333505816945,
+      "sha256": "486020e12ffb042cf91bd0a2a98da406c7aa60a7956a2b50bc8a167f95996e21"
+    },
+    {
+      "file": "v64-native-optics/33-finish.jpg",
+      "width": 960,
+      "height": 540,
+      "maxChannelStd": 41.46482095938978,
+      "sha256": "23f175870e655c10894ed4f40add57c1fa121af56f5b93ae0990a69faf906f1e"
+    },
+    {
+      "file": "v64-native-optics/34-finish.jpg",
+      "width": 960,
+      "height": 540,
+      "maxChannelStd": 44.164645388540414,
+      "sha256": "345017573e278686a42bea1ab6ba299830bb85f23594d5b4fab9d756077607ac"
+    },
+    {
+      "file": "v64-native-optics/35-finish.jpg",
+      "width": 960,
+      "height": 540,
+      "maxChannelStd": 21.534569871075096,
+      "sha256": "316a8d1c871d8f6b0df6ec298d5c1320c9a0ac29ffc6fd981f58847649b5355d"
+    },
+    {
+      "file": "v64-native-optics/36-finish.jpg",
+      "width": 960,
+      "height": 540,
+      "maxChannelStd": 18.67264102011003,
+      "sha256": "384fd730e759ecfc5fa89bd738c223e709122d7f7fd6bd58c7cfd53a7e80a64a"
+    },
+    {
+      "file": "v64-native-optics/37-finish.jpg",
+      "width": 960,
+      "height": 540,
+      "maxChannelStd": 39.230084614304445,
+      "sha256": "942a5d9b2895eeb3a391a3e5765b547bd11cc2b364e09b793020f8bd24c3ed70"
+    },
+    {
+      "file": "v64-native-optics/38-finish.jpg",
+      "width": 960,
+      "height": 540,
+      "maxChannelStd": 23.678825295815365,
+      "sha256": "b34cf2134a4226aa8a004cd3f094c2eae00bbcc532df08fbff9fd83994f86a17"
+    },
+    {
+      "file": "v64-native-optics/39-finish.jpg",
+      "width": 960,
+      "height": 540,
+      "maxChannelStd": 46.37681664940981,
+      "sha256": "e2e642f85a5d44a38bb09ea9b64ad0ef283f847a58876397e4e95a6c52ec0449"
+    },
+    {
+      "file": "v64-native-optics/40-finish.jpg",
+      "width": 960,
+      "height": 540,
+      "maxChannelStd": 43.212596439262455,
+      "sha256": "19d429506f28ba0cfe7481775a8a7d21c4a6b3334c4f67d0aadce34bcb78cbfb"
+    },
+    {
+      "file": "v64-native-fracture/42-finish.jpg",
+      "width": 960,
+      "height": 540,
+      "maxChannelStd": 29.34043032594609,
+      "sha256": "26e7ddd15b5cb976b3f79d26911ea4ad47a622902958b9dbb97515a4ab062ea6"
+    },
+    {
+      "file": "v64-native-fracture/43-finish.jpg",
+      "width": 960,
+      "height": 540,
+      "maxChannelStd": 36.56991932666022,
+      "sha256": "312614e5b7fbfe2af31ac0bd25bee1e1e08a63886cd13e5c6c26576739092148"
+    },
+    {
+      "file": "v64-native-fracture/44-finish.jpg",
+      "width": 960,
+      "height": 540,
+      "maxChannelStd": 48.797071444773934,
+      "sha256": "da1fca1e9efab58e4e6bd7bb8aedc22482470fe517353b7257178cdcadd5c003"
+    },
+    {
+      "file": "v64-native-fracture/45-finish.jpg",
+      "width": 960,
+      "height": 540,
+      "maxChannelStd": 53.05127861710417,
+      "sha256": "920d88cd7d3574d8637c1c76d2fa9567cea055e73f515f6ed9d960b5aa586f0b"
+    },
+    {
+      "file": "v64-native-fracture/46-finish.jpg",
+      "width": 960,
+      "height": 540,
+      "maxChannelStd": 19.66546631027645,
+      "sha256": "b4169c2042306390f8bf5b4a592127715fdd7bd7bbfc5345ebf5654d4050b83f"
+    },
+    {
+      "file": "v64-native-fracture/47-finish.jpg",
+      "width": 960,
+      "height": 540,
+      "maxChannelStd": 65.18374081289403,
+      "sha256": "91d4566364c2a97bb18df143c8ca2656935678669a0865534addeddb18e1c39a"
+    },
+    {
+      "file": "v64-native-fracture/48-finish.jpg",
+      "width": 960,
+      "height": 540,
+      "maxChannelStd": 20.418770854815214,
+      "sha256": "d001545646ace2a6d7987d5390c226ecab52f71099158ec38b80b1a40d2c2fad"
+    },
+    {
+      "file": "v64-native-fracture/49-finish.jpg",
+      "width": 960,
+      "height": 540,
+      "maxChannelStd": 61.81984022018526,
+      "sha256": "3c96b26e2ac0f355d1330c144be36d7b04f0263bc18218ef8b9fc6113762dffb"
+    },
+    {
+      "file": "v64-native-fracture/50-finish.jpg",
+      "width": 960,
+      "height": 540,
+      "maxChannelStd": 53.30944338432863,
+      "sha256": "95d16e97abd5fb8ac613040ad6524e95791d7f9f81dd04f9a87e653306cae81a"
+    },
+    {
+      "file": "v64-native-fracture/51-finish.jpg",
+      "width": 960,
+      "height": 540,
+      "maxChannelStd": 45.25867252856332,
+      "sha256": "4628c65448cd8cbc329b6a38f1ba6caf03448c22b51c771ccda17ff4bf82f82a"
+    },
+    {
+      "file": "v64-native-castle/41-finish.jpg",
+      "width": 960,
+      "height": 540,
+      "maxChannelStd": 63.78628204363703,
+      "sha256": "62463e5841674cc3189d9a5cdb1a27761b228b61f372eba700fda12e2246471d"
+    },
+    {
+      "file": "v64-checker-platform-early/room-01/finished-canvas.jpg",
+      "width": 640,
+      "height": 360,
+      "maxChannelStd": 54.898801271487216,
+      "sha256": "75f87d2a60b206980fdc19457119b24247c0cd624a3a08218c9ec84c4af1f159"
+    },
+    {
+      "file": "v64-checker-platform-early/room-02/finished-canvas.jpg",
+      "width": 640,
+      "height": 360,
+      "maxChannelStd": 53.67181597661218,
+      "sha256": "2b98bba82d8aa56eea53098dbc9a6d4bdd07a5c1e493ac4859d484e01100bfb6"
+    },
+    {
+      "file": "v64-checker-platform-early/room-03/finished-canvas.jpg",
+      "width": 640,
+      "height": 360,
+      "maxChannelStd": 57.89136377317213,
+      "sha256": "d9cac63a38f26b053b110bf569b6ac913466e8f41bf3a0c3b58ce74e528c08f5"
+    },
+    {
+      "file": "v64-checker-platform-early/room-04/finished-canvas.jpg",
+      "width": 640,
+      "height": 360,
+      "maxChannelStd": 39.76092103929845,
+      "sha256": "9bc94b1f7b75c954b936fd4c81c9c42622d967f9e659c6e834336690f90906ac"
+    },
+    {
+      "file": "v64-checker-platform-early/room-05/finished-canvas.jpg",
+      "width": 640,
+      "height": 360,
+      "maxChannelStd": 46.3522818667868,
+      "sha256": "e4008c982d7f782ca6399b47800eaf9c49adcfce70da59b3ca7c8b342cb3e351"
+    },
+    {
+      "file": "v64-checker-platform-early/room-06/finished-canvas.jpg",
+      "width": 640,
+      "height": 360,
+      "maxChannelStd": 67.62446523514876,
+      "sha256": "0ea6aa1ef2562cebc68379b8c1419e76551905bfc7111f6d6161abe3fe324871"
+    },
+    {
+      "file": "v64-checker-platform-early/room-07/finished-canvas.jpg",
+      "width": 640,
+      "height": 360,
+      "maxChannelStd": 75.9090007173467,
+      "sha256": "6dbd1d409689021ee16b1c858c4cbe4a64e1c3bad9943785e3b07561d692450d"
+    },
+    {
+      "file": "v64-checker-platform-early/room-08/finished-canvas.jpg",
+      "width": 640,
+      "height": 360,
+      "maxChannelStd": 69.07302031218441,
+      "sha256": "669ed7c3ba9f72224b37c273a1fb4d67c62fdfdcd35ab99bc899c14edb532e19"
+    },
+    {
+      "file": "v64-checker-platform-early/room-09/finished-canvas.jpg",
+      "width": 640,
+      "height": 360,
+      "maxChannelStd": 35.25632716553881,
+      "sha256": "02e581833046c7dc26e60e388a4fd8d6023413895a0a23852a3e30bde3f353e2"
+    },
+    {
+      "file": "v64-checker-platform-early/room-10/finished-canvas.jpg",
+      "width": 640,
+      "height": 360,
+      "maxChannelStd": 44.3841484317233,
+      "sha256": "535f19a295df87ad85300110fc3c0f972af6bf71fd96e0c8f4c049ba35ee519c"
+    },
+    {
+      "file": "v64-checker-platform-energy/room-11/finished-canvas.jpg",
+      "width": 640,
+      "height": 360,
+      "maxChannelStd": 46.18879187693567,
+      "sha256": "5c8e0221aed295b6d5bd919c4b6a5896fc3ab5e5ea785e4fc5cff527c7f06784"
+    },
+    {
+      "file": "v64-checker-platform-energy/room-12/finished-canvas.jpg",
+      "width": 640,
+      "height": 360,
+      "maxChannelStd": 36.7309688732539,
+      "sha256": "ac70dfcf280d97d6a5e7667aefff3bd1ac0c405405f929acf16c9ecf4ae34074"
+    },
+    {
+      "file": "v64-checker-platform-energy/room-13/finished-canvas.jpg",
+      "width": 640,
+      "height": 360,
+      "maxChannelStd": 45.92996933705912,
+      "sha256": "f019cf0646562d1fe7d1d8ca78bac3e77858597ac881c595336034b4dd93ee5e"
+    },
+    {
+      "file": "v64-checker-platform-energy/room-14/finished-canvas.jpg",
+      "width": 640,
+      "height": 360,
+      "maxChannelStd": 24.52884153058889,
+      "sha256": "12701a873f8ea6d4c32c873d479efb6c4dceedd0a8ce30ef03656983561f6ec4"
+    },
+    {
+      "file": "v64-checker-platform-energy/room-15/finished-canvas.jpg",
+      "width": 640,
+      "height": 360,
+      "maxChannelStd": 50.18109130010277,
+      "sha256": "6a023309525d2367cc21069feb5135e08ffecd10e0cd7ec9a2a732052d6a4a1d"
+    },
+    {
+      "file": "v64-checker-platform-energy/room-16/finished-canvas.jpg",
+      "width": 640,
+      "height": 360,
+      "maxChannelStd": 43.62637704012308,
+      "sha256": "1cbd435bbd9d76eb75a14c07123e4ff8746f2494311b214c6563839e4937c6c8"
+    },
+    {
+      "file": "v64-checker-platform-energy/room-17/finished-canvas.jpg",
+      "width": 640,
+      "height": 360,
+      "maxChannelStd": 37.48765674790535,
+      "sha256": "05a3fc140a94e505107caf94ff279a4430c387f83126bea1d282e5ebe340e170"
+    },
+    {
+      "file": "v64-checker-platform-energy/room-18/finished-canvas.jpg",
+      "width": 640,
+      "height": 360,
+      "maxChannelStd": 43.83044679369562,
+      "sha256": "fd7049a24817e5a5b801767f988ab373a11ad64bd5b1fa7087ba8ec157c421d5"
+    },
+    {
+      "file": "v64-checker-platform-energy/room-19/finished-canvas.jpg",
+      "width": 640,
+      "height": 360,
+      "maxChannelStd": 56.41489990847119,
+      "sha256": "a9043593c70473827034cb53ff06533f1aaa7efcd4c846c4144975f483be62bb"
+    },
+    {
+      "file": "v64-checker-platform-energy/room-20/finished-canvas.jpg",
+      "width": 640,
+      "height": 360,
+      "maxChannelStd": 41.22192610971051,
+      "sha256": "6dd98d980c14e645965e41e9eeff390346f4e2e29d40f67f8ab7245a6b983fec"
+    },
+    {
+      "file": "v64-checker-platform-living/room-21/finished-canvas.jpg",
+      "width": 640,
+      "height": 360,
+      "maxChannelStd": 40.34842776118691,
+      "sha256": "893b4ff025a0430f45269d7bb0153464261dd5374d84b2c68a71321f7677dbad"
+    },
+    {
+      "file": "v64-checker-platform-living/room-22/finished-canvas.jpg",
+      "width": 640,
+      "height": 360,
+      "maxChannelStd": 38.771200421977596,
+      "sha256": "a803b2d27f78dfaf5e239230e01f1246fd1cfa3a6ee13e3a2bd3f94c7a28096a"
+    },
+    {
+      "file": "v64-checker-platform-living/room-23/finished-canvas.jpg",
+      "width": 640,
+      "height": 360,
+      "maxChannelStd": 21.779189360320743,
+      "sha256": "9f9df7d08fc8d55a50a640dce6965349f62c69a01f21e100c223b9d106ff4b84"
+    },
+    {
+      "file": "v64-checker-platform-living/room-24/finished-canvas.jpg",
+      "width": 640,
+      "height": 360,
+      "maxChannelStd": 61.01930905382444,
+      "sha256": "cde171728995575d4e24a36238421aea9a5ca38bee2241390ce8fb23c7b9217b"
+    },
+    {
+      "file": "v64-checker-platform-living/room-25/finished-canvas.jpg",
+      "width": 640,
+      "height": 360,
+      "maxChannelStd": 56.21177413417699,
+      "sha256": "fe01f36c5afe7837999b2e2340bc55e749feb6dd10e1ed534f5177756dfc9fdd"
+    },
+    {
+      "file": "v64-checker-platform-living/room-26/finished-canvas.jpg",
+      "width": 640,
+      "height": 360,
+      "maxChannelStd": 50.941414886622866,
+      "sha256": "c5a581bd58c96898db7a33517222a3f287e1caa8f48716c01b4a242b841a33ac"
+    },
+    {
+      "file": "v64-checker-platform-living/room-27/finished-canvas.jpg",
+      "width": 640,
+      "height": 360,
+      "maxChannelStd": 63.51316352632279,
+      "sha256": "c73aa7e9cc30e1fda5bb8c63c335f444f3135b8653b96bd116f33a176ad28364"
+    },
+    {
+      "file": "v64-checker-platform-living/room-28/finished-canvas.jpg",
+      "width": 640,
+      "height": 360,
+      "maxChannelStd": 66.65974511137333,
+      "sha256": "026144adf401ab1f4f1e4576f0aec240e188dbe822c0f7bf4d4b984b70569182"
+    },
+    {
+      "file": "v64-checker-platform-living/room-29/finished-canvas.jpg",
+      "width": 640,
+      "height": 360,
+      "maxChannelStd": 62.163528752574635,
+      "sha256": "d43121492306246084f525cf9354b1f558c0b45bfd31b4fc3321e8625c57c800"
+    },
+    {
+      "file": "v64-checker-platform-living/room-30/finished-canvas.jpg",
+      "width": 640,
+      "height": 360,
+      "maxChannelStd": 57.42838695018882,
+      "sha256": "4c4d5ec90b7fe516e09e99d6a9b84136563b843317a2fcb2d455d249efc7808a"
+    },
+    {
+      "file": "v64-checker-platform-optics/room-31/finished-canvas.jpg",
+      "width": 640,
+      "height": 360,
+      "maxChannelStd": 35.151336845367375,
+      "sha256": "708de6e727dafea1066fb618f20965a66a1c043a15842255be588fc84e1cfea5"
+    },
+    {
+      "file": "v64-checker-platform-optics/room-32/finished-canvas.jpg",
+      "width": 640,
+      "height": 360,
+      "maxChannelStd": 58.16119153506518,
+      "sha256": "63081eb3acfdd1807b8799591d9aeaea9e8e12e54ffc5474999634e1b05aae9e"
+    },
+    {
+      "file": "v64-checker-platform-optics/room-33/finished-canvas.jpg",
+      "width": 640,
+      "height": 360,
+      "maxChannelStd": 41.397355779180536,
+      "sha256": "92b4d648b36d3ef82d09323d456b1e865f5c9cef4ef3aabbbe038cff16a4cfcc"
+    },
+    {
+      "file": "v64-checker-platform-optics/room-34/finished-canvas.jpg",
+      "width": 640,
+      "height": 360,
+      "maxChannelStd": 44.15925198101142,
+      "sha256": "7f532590125bcefb54939ab0272c025122b84d06a98d91d55fd1a832bd1f2b2a"
+    },
+    {
+      "file": "v64-checker-platform-optics/room-35/finished-canvas.jpg",
+      "width": 640,
+      "height": 360,
+      "maxChannelStd": 21.44441968952651,
+      "sha256": "93a7c6793a6df9a46bcbb4c024b0d9eb3adcb3269f38df357e820f1a80a917d5"
+    },
+    {
+      "file": "v64-checker-platform-optics/room-36/finished-canvas.jpg",
+      "width": 640,
+      "height": 360,
+      "maxChannelStd": 18.629867834196475,
+      "sha256": "685393cd5cf9b236040e1e566029474204b56544a359474c1fea5c44e969853e"
+    },
+    {
+      "file": "v64-checker-platform-optics/room-37/finished-canvas.jpg",
+      "width": 640,
+      "height": 360,
+      "maxChannelStd": 39.22916889241314,
+      "sha256": "190239e6c6b8bd0874e9483cbacbeb3ead1b6af20c03014f111a6158e4cb59bd"
+    },
+    {
+      "file": "v64-checker-platform-optics/room-38/finished-canvas.jpg",
+      "width": 640,
+      "height": 360,
+      "maxChannelStd": 23.6442065336134,
+      "sha256": "56e5b3271a50791a52a697d048c29e0cbcf229e56529555ac108dd5ea2414331"
+    },
+    {
+      "file": "v64-checker-platform-optics/room-39/finished-canvas.jpg",
+      "width": 640,
+      "height": 360,
+      "maxChannelStd": 46.319787531314006,
+      "sha256": "e629bf1c63ba6aa83b8f20294702159da598a88efa677738396ad432af6347ac"
+    },
+    {
+      "file": "v64-checker-platform-optics/room-40/finished-canvas.jpg",
+      "width": 640,
+      "height": 360,
+      "maxChannelStd": 43.198367402912424,
+      "sha256": "c74f5f3dfa37e152a10e79b20e311f1f653c89695b8448541a5bfee10c407a29"
+    },
+    {
+      "file": "v64-checker-platform-fracture/room-42/finished-canvas.jpg",
+      "width": 640,
+      "height": 360,
+      "maxChannelStd": 29.284214960085755,
+      "sha256": "9cc7ce35e7995c1fc4aefe592ce0edeb8d523592d02cf9c480f41790a8ec9205"
+    },
+    {
+      "file": "v64-checker-platform-fracture/room-43/finished-canvas.jpg",
+      "width": 640,
+      "height": 360,
+      "maxChannelStd": 36.4724907175566,
+      "sha256": "dcd6492c9c766ba1ebfd33687cc7fd1afede80409ba0a44827b85254c2bb92d9"
+    },
+    {
+      "file": "v64-checker-platform-fracture/room-44/finished-canvas.jpg",
+      "width": 640,
+      "height": 360,
+      "maxChannelStd": 48.77509146949486,
+      "sha256": "cbdec25210c89eeaaabb216c949cf49279e1d3589e20aadad642c7d72c5d5c94"
+    },
+    {
+      "file": "v64-checker-platform-fracture/room-45/finished-canvas.jpg",
+      "width": 640,
+      "height": 360,
+      "maxChannelStd": 52.96610244796518,
+      "sha256": "f95d82cd8f69b399447f627f6d16d4fd8e22c45a456d19711df021f28e960945"
+    },
+    {
+      "file": "v64-checker-platform-fracture/room-46/finished-canvas.jpg",
+      "width": 640,
+      "height": 360,
+      "maxChannelStd": 19.6405456937611,
+      "sha256": "6c0c1ad57658382f4cbf8250bf3b02464491d54e064a37b470351ea0221004e0"
+    },
+    {
+      "file": "v64-checker-platform-fracture/room-47/finished-canvas.jpg",
+      "width": 640,
+      "height": 360,
+      "maxChannelStd": 65.1283453018895,
+      "sha256": "79c7f9363bd76cf8a8e8fa5385822ac657832c7e9b442e5b7b853e4f9430520c"
+    },
+    {
+      "file": "v64-checker-platform-fracture/room-48/finished-canvas.jpg",
+      "width": 640,
+      "height": 360,
+      "maxChannelStd": 20.379507513760572,
+      "sha256": "f0d9db15b7e6b8e06d73600878b29e96b0c3277b58e7a053927025cc5fe97c9b"
+    },
+    {
+      "file": "v64-checker-platform-fracture/room-49/finished-canvas.jpg",
+      "width": 640,
+      "height": 360,
+      "maxChannelStd": 61.74595622519084,
+      "sha256": "8ea38936b8facd64dae4442b3a14f90047315b37a4afb7ab2f8d72d771c21bed"
+    },
+    {
+      "file": "v64-checker-platform-fracture/room-50/finished-canvas.jpg",
+      "width": 640,
+      "height": 360,
+      "maxChannelStd": 53.25033167355072,
+      "sha256": "a6236afabb3c89345b218323761d16e138a9e3ffea04c521fcb80050ab0b8e27"
+    },
+    {
+      "file": "v64-checker-platform-fracture/room-51/finished-canvas.jpg",
+      "width": 640,
+      "height": 360,
+      "maxChannelStd": 45.20717849259099,
+      "sha256": "3bf002c3e0ad2cd236774c2e1d81f695c5e024e74dead7edb1338d7fd5d94643"
+    },
+    {
+      "file": "v64-checker-platform-castle/room-41/finished-canvas.jpg",
+      "width": 640,
+      "height": 360,
+      "maxChannelStd": 63.775365471493444,
+      "sha256": "1bb3d448c24ebda687e54f738d32ec25722344301b5e6ead34625d540ee91307"
+    },
+    {
+      "file": "v64-mobile-controls/controls-844x390.png",
+      "width": 844,
+      "height": 390,
+      "maxChannelStd": 48.58285481899663,
+      "sha256": "87502983d6f128b4f31b938509852396a1c08f19035309cbb6f1c7ce05f412ce"
+    },
+    {
+      "file": "v64-mobile-controls/controls-390x844.png",
+      "width": 390,
+      "height": 844,
+      "maxChannelStd": 54.44972182666418,
+      "sha256": "21239617a0f29b511730b7d823b15a72d8053d2d0a17c4b2b9d2a2e01e629255"
+    },
+    {
+      "file": "v64-mobile-controls/controls-360x800.png",
+      "width": 360,
+      "height": 800,
+      "maxChannelStd": 54.58231176920051,
+      "sha256": "b9f6200c0cf2d505d979fc84aacf913d6efd7bfee17c97a408ae4fc8a78dc87e"
+    },
+    {
+      "file": "v64-mobile-controls/controls-412x915.png",
+      "width": 412,
+      "height": 915,
+      "maxChannelStd": 54.16065645179122,
+      "sha256": "36639feab33820b84be3c9dcb4a1394ca0c84a5f6bc72dea295442b545f92366"
+    },
+    {
+      "file": "v64-mobile-controls/controls-800x360.png",
+      "width": 800,
+      "height": 360,
+      "maxChannelStd": 49.3238330185878,
+      "sha256": "4a9fb40ba211146d84b5feeb237573ac566d45324131c01f8ce563614aa34dc7"
+    },
+    {
+      "file": "v64-mobile-controls/controls-568x320.png",
+      "width": 568,
+      "height": 320,
+      "maxChannelStd": 49.85758507745577,
+      "sha256": "d297420ec5e2592012863f8166cf6d78752c16788e3f1ad959c3ea2be637d10f"
+    },
+    {
+      "file": "v64-mobile-controls/controls-915x412.png",
+      "width": 915,
+      "height": 412,
+      "maxChannelStd": 48.05644846964366,
+      "sha256": "568371019bba34638520bd3636bd1e1c050c43798ab299364902d552c247b895"
+    },
+    {
+      "file": "v64-mobile-controls/controls-simulated-insets.png",
+      "width": 844,
+      "height": 390,
+      "maxChannelStd": 48.28675551613674,
+      "sha256": "ca9e8913fb4440c6214511e776b7b4de3ff6344e5876239f0974514ece2e711b"
+    },
+    {
+      "file": "v64-mobile-controls/controls-three-fingers.png",
+      "width": 844,
+      "height": 390,
+      "maxChannelStd": 48.984533502949965,
+      "sha256": "54a52bb401f83bcf6593d236b320e9b8d54b69bd34891ecad15f18929f1d1288"
+    }
+  ],
+  "limits": [
+    "Root alone accepts Source and publication after live provider verification.",
+    "Legacy route fixture initialization is outside reported reset counters; no zero-step whole-campaign claim.",
+    "7 emulated viewport sizes plus1 simulated-inset geometry case; no physical phone/hardware FPS proof.",
+    "Original checker WARN/N/V are retained; SDK and ads are explicit mocks.",
+    "Room17 instant narrowing body clipping, castle500stages/15minute human speedrun and human puzzle discovery remain open."
+  ]
+}

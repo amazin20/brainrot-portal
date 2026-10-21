@@ -1,0 +1,116 @@
+name: Publish accepted mobile controls v64
+'on':
+  push:
+    branches: [main]
+    paths: [tools/campaign-v64-release.json]
+permissions: {contents: read, actions: read, deployments: read}
+concurrency:
+  group: pages
+  cancel-in-progress: false
+defaults:
+  run: {shell: bash}
+env:
+  GITHUB_TOKEN: ${{ github.token }}
+  CODEX_PRIMARY_RUNTIME_PYTHON: /usr/bin/python3
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    outputs:
+      source_commit: ${{ steps.pins.outputs.source_commit }}
+      source_run: ${{ steps.pins.outputs.source_run }}
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: '${{ github.sha }}', persist-credentials: false}
+      - id: pins
+        run: python3 scripts/publish-mobile-v64.py pins
+      - uses: actions/checkout@v4
+        with: {ref: '${{ steps.pins.outputs.source_commit }}', path: source, fetch-depth: 0, persist-credentials: false}
+      - name: Test frozen archive/provider primitives
+        run: python3 -m unittest discover -s scripts -p test_campaign_v63.py -v
+      - name: Test exact Source provider and append-only v64 guards
+        run: python3 -m unittest discover -s scripts -p test_mobile_v64.py -v
+      - name: Authenticate exact Source evidence and preserve every accepted historical byte
+        run: python3 scripts/publish-mobile-v64.py prepare
+      - uses: actions/upload-pages-artifact@v3
+        with: {path: pages, name: github-pages}
+      - uses: actions/upload-artifact@v4
+        with: {name: v64-preparation, path: proof, retention-days: 14, if-no-files-found: error}
+  deploy:
+    needs: prepare
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions: {contents: read, actions: read, deployments: read, pages: write, id-token: write}
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: '${{ github.sha }}', persist-credentials: false}
+      - uses: actions/download-artifact@v4
+        with: {name: v64-preparation, path: proof}
+      - name: Recheck Source, Main and accepted deployment immediately before publication
+        run: python3 scripts/publish-mobile-v64.py before
+      - uses: actions/upload-artifact@v4
+        with: {name: v64-deployment-lease, path: proof/before-deploy.json, retention-days: 14, if-no-files-found: error}
+      - id: deployment
+        uses: actions/deploy-pages@v4
+        with: {artifact_name: github-pages}
+  public-http:
+    needs: deploy
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: '${{ github.sha }}', persist-credentials: false}
+      - uses: actions/download-artifact@v4
+        with: {name: v64-preparation, path: proof}
+      - name: Fetch and hash every historical and new public file
+        run: python3 scripts/publish-mobile-v64.py public
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: {name: v64-public-http, path: proof/public-http.json, retention-days: 14, if-no-files-found: error}
+  mobile:
+    needs: [prepare, deploy]
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: '${{ github.sha }}', persist-credentials: false}
+      - uses: actions/checkout@v4
+        with: {ref: '${{ needs.prepare.outputs.source_commit }}', path: source, fetch-depth: 0, persist-credentials: false}
+      - uses: actions/setup-node@v4
+        with: {node-version: 22, cache: npm, cache-dependency-path: source/package-lock.json}
+      - run: npm ci
+        working-directory: source
+      - run: npm install --no-save --package-lock=false puppeteer-core@24.16.0
+        working-directory: source
+      - uses: actions/download-artifact@v4
+        with: {name: v64-preparation, path: proof}
+      - uses: actions/download-artifact@v4
+        with: {name: v64-dist, path: source/dist, run-id: '${{ needs.prepare.outputs.source_run }}', github-token: '${{ github.token }}'}
+      - name: Actual public ordinary guest, compact pause and native three-finger mobile input
+        run: |
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+          node scripts/observe-mobile-v64-public.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: {name: v64-public-mobile, path: proof/mobile, retention-days: 14, if-no-files-found: error}
+  verify:
+    needs: [prepare, deploy, public-http, mobile]
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: '${{ github.sha }}', persist-credentials: false}
+      - uses: actions/download-artifact@v4
+        with: {name: v64-preparation, path: proof}
+      - uses: actions/download-artifact@v4
+        with: {name: v64-public-http, path: proof}
+      - uses: actions/download-artifact@v4
+        with: {name: v64-public-mobile, path: proof/mobile}
+      - name: Verify actual terminal producer jobs, public bytes and deployment ownership
+        run: python3 scripts/publish-mobile-v64.py final
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: {name: v64-final-public-proof, path: proof, retention-days: 14, if-no-files-found: error}

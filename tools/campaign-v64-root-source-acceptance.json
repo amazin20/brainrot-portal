@@ -1,0 +1,1316 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-root-v64-source-acceptance",
+  "pass": true,
+  "sourceAccepted": true,
+  "publicationAccepted": false,
+  "masterTzAccepted": false,
+  "humanPlaytestAccepted": false,
+  "liveSdkAccepted": false,
+  "moderationAccepted": false,
+  "physicalPhonePerformanceAccepted": false,
+  "hardwareFpsAccepted": false,
+  "sourceCommit": "307aefaa960cc8f6b0ce9b3d7267e1eeaceccb81",
+  "sourceTree": "d58c829d58a1bdbd61587d301c04a8422911f814",
+  "sourceReview": {
+    "runId": 39544785403,
+    "runAttempt": 1
+  },
+  "sourceBranch": "upgrade/mobile-controls-20261021",
+  "sourceWorkflow": ".github/workflows/mobile-controls-v64-review.yml",
+  "providerJobs": [
+    {
+      "id": 119040374610,
+      "name": "build",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 119040374747,
+      "name": "cpu (0)",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 119040374763,
+      "name": "cpu (9)",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 119040374778,
+      "name": "cpu (11)",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 119040374799,
+      "name": "cpu (7)",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 119040374840,
+      "name": "cpu (4)",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 119040374860,
+      "name": "cpu (2)",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 119040374865,
+      "name": "cpu (6)",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 119040374870,
+      "name": "cpu (1)",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 119040374891,
+      "name": "cpu (8)",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 119040374907,
+      "name": "cpu (5)",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 119040374942,
+      "name": "cpu (10)",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 119040375018,
+      "name": "cpu (3)",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 119040576154,
+      "name": "native (optics, 31,32,33,34,35,36,37,38,39,40)",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 119040576158,
+      "name": "native (fracture, 42,43,44,45,46,47,48,49,50,51)",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 119040576217,
+      "name": "checker-platform (energy, 11,12,13,14,15,16,17,18,19,20)",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 119040576218,
+      "name": "checker-platform (early, 1,2,3,4,5,6,7,8,9,10)",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 119040576220,
+      "name": "native (energy, 11,12,13,14,15,16,17,18,19,20)",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 119040576224,
+      "name": "checker-platform (living, 21,22,23,24,25,26,27,28,29,30)",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 119040576231,
+      "name": "native (living, 21,22,23,24,25,26,27,28,29,30)",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 119040576263,
+      "name": "native (castle, 41)",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 119040576282,
+      "name": "checker-platform (castle, 41)",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 119040576293,
+      "name": "checker-platform (fracture, 42,43,44,45,46,47,48,49,50,51)",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 119040576337,
+      "name": "native (early, 1,2,3,4,5,6,7,8,9,10)",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 119040576350,
+      "name": "checker-platform (optics, 31,32,33,34,35,36,37,38,39,40)",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 119040576368,
+      "name": "mobile-controls",
+      "status": "completed",
+      "conclusion": "success"
+    }
+  ],
+  "sourceArtifacts": [
+    {
+      "id": 12321505493,
+      "name": "v64-build",
+      "size_in_bytes": 8190,
+      "digest": "sha256:a74469122063ae5782900b9433a24c19f226dd2946bf89bfacc41c3c486aa76e"
+    },
+    {
+      "id": 12321791904,
+      "name": "v64-checker-platform-castle",
+      "size_in_bytes": 110284,
+      "digest": "sha256:8bcba5839ad9482d281d1e8238d8694a933ae6ca375220d08635170b698eca41"
+    },
+    {
+      "id": 12321710935,
+      "name": "v64-checker-platform-early",
+      "size_in_bytes": 584492,
+      "digest": "sha256:f062da227a2d4c9fd7568bfe4afafb7a4f8c79ea66393ebc6bb74ab7a3575c39"
+    },
+    {
+      "id": 12320734084,
+      "name": "v64-checker-platform-energy",
+      "size_in_bytes": 550954,
+      "digest": "sha256:a8b0b915d84bedc70229920c06c76ac16916b1aacdd9d8b8735e2cab19929710"
+    },
+    {
+      "id": 12320833951,
+      "name": "v64-checker-platform-fracture",
+      "size_in_bytes": 551708,
+      "digest": "sha256:7e9a79ba48701195fa1c396a7ef3509ed3aaf877b907db1db60fca98c4e9d77e"
+    },
+    {
+      "id": 12320814186,
+      "name": "v64-checker-platform-living",
+      "size_in_bytes": 511230,
+      "digest": "sha256:8098c68de6306d03652a1c16e56db068ddbfd573ed4871399f6ff062d9f3f9ad"
+    },
+    {
+      "id": 12321726467,
+      "name": "v64-checker-platform-optics",
+      "size_in_bytes": 511232,
+      "digest": "sha256:893efd8ece187cd1295052487cbd6a5c82bf5010c3190e3ef19b31ea7c104335"
+    },
+    {
+      "id": 12323360106,
+      "name": "v64-cpu-0",
+      "size_in_bytes": 15174,
+      "digest": "sha256:362dced42f159c6bb418a11e63bc20ed9d7018f29b26e83ce75b95647f468384"
+    },
+    {
+      "id": 12321296986,
+      "name": "v64-cpu-1",
+      "size_in_bytes": 20119,
+      "digest": "sha256:e435c77a13dc2c8e455dbbc982004051ca5f0b720b28bb8798517366b398663f"
+    },
+    {
+      "id": 12320937603,
+      "name": "v64-cpu-10",
+      "size_in_bytes": 18492,
+      "digest": "sha256:e4100022574318e8511f096e73d1a733ee12bc33018fc6137079b4d68634a878"
+    },
+    {
+      "id": 12321995337,
+      "name": "v64-cpu-11",
+      "size_in_bytes": 16015,
+      "digest": "sha256:aafe3cc90784ffd7a7fd044602e7f98749cc1d3a46195c60c66ab40d6cf34e14"
+    },
+    {
+      "id": 12320783133,
+      "name": "v64-cpu-2",
+      "size_in_bytes": 18752,
+      "digest": "sha256:f1d10856e4465bfc891b5e5e8e207f9ae6ad14f18fee038e963d1e1b6f372a4e"
+    },
+    {
+      "id": 12321411964,
+      "name": "v64-cpu-3",
+      "size_in_bytes": 203094,
+      "digest": "sha256:6b46cf9a2d6e46c5a10ff8b19102ad0d53bf6d158c9b04567426db1018c67b94"
+    },
+    {
+      "id": 12321372798,
+      "name": "v64-cpu-4",
+      "size_in_bytes": 19064,
+      "digest": "sha256:460d4fb83c4e90972977ca6f1db1a1bd62db9951f9f7f930b4c5eafc70e138f1"
+    },
+    {
+      "id": 12321585993,
+      "name": "v64-cpu-5",
+      "size_in_bytes": 23011,
+      "digest": "sha256:b733e0ba9325dbec81013ee4fa2e6f5191c4019e03d11e4e19755904e2481986"
+    },
+    {
+      "id": 12321801988,
+      "name": "v64-cpu-6",
+      "size_in_bytes": 13199,
+      "digest": "sha256:42b543a7ab91bc6d3c2586dcd447504d6475668d02988af542db4d907e78cf9a"
+    },
+    {
+      "id": 12321695544,
+      "name": "v64-cpu-7",
+      "size_in_bytes": 14721,
+      "digest": "sha256:277d787891a446ce717cfacacc625125fcaed6fc80eec95c1b722067aeb35a93"
+    },
+    {
+      "id": 12321740951,
+      "name": "v64-cpu-8",
+      "size_in_bytes": 20580,
+      "digest": "sha256:4a253a9211f57a31141801850ad896e6f99d95b64ccd345c08b17a3d2e24e41c"
+    },
+    {
+      "id": 12321760987,
+      "name": "v64-cpu-9",
+      "size_in_bytes": 21526,
+      "digest": "sha256:89d3b66dd5feca5181db045d6f5249880dafedb61ef7b7bab80f20513759f77b"
+    },
+    {
+      "id": 12321685109,
+      "name": "v64-dist",
+      "size_in_bytes": 4520420,
+      "digest": "sha256:a4c4cede4654b6856ed8dfc6465219aa295c002a9606ca43b0c867376867150a"
+    },
+    {
+      "id": 12321536714,
+      "name": "v64-mobile-controls",
+      "size_in_bytes": 1568365,
+      "digest": "sha256:8a32d2ed292036c622c4c2f30ccc18457083410e3d45f841f08f9f8e367c8c7c"
+    },
+    {
+      "id": 12321825397,
+      "name": "v64-native-castle",
+      "size_in_bytes": 61330,
+      "digest": "sha256:d04c96a5b83fc307ea197e68da36aaa59adae3c05ee3b8c79544def33eefc489"
+    },
+    {
+      "id": 12321506474,
+      "name": "v64-native-early",
+      "size_in_bytes": 522556,
+      "digest": "sha256:62f7dbc259b62f8ecc689c2245143532abe2dcd7dc3f81ef93d351d056822120"
+    },
+    {
+      "id": 12320638740,
+      "name": "v64-native-energy",
+      "size_in_bytes": 443391,
+      "digest": "sha256:3ee23adc6c0cd879cd35387d1ff897880e73e514c924e1aaed32d77b4c1c8b65"
+    },
+    {
+      "id": 12321597134,
+      "name": "v64-native-fracture",
+      "size_in_bytes": 431276,
+      "digest": "sha256:97e2c45a76eb7e1f86b6c32399a0949c14330f6d7451b8cc81b117f5d9c2cf84"
+    },
+    {
+      "id": 12320788463,
+      "name": "v64-native-living",
+      "size_in_bytes": 373570,
+      "digest": "sha256:4c73d26e3d92e37fe14d8a07f3c0e5f63c71eb0f02a1ead83f507758630573b8"
+    },
+    {
+      "id": 12320848096,
+      "name": "v64-native-optics",
+      "size_in_bytes": 368765,
+      "digest": "sha256:8f603889b6790919b56432c522c09e92aa33c914bab50e6898167e97116e1463"
+    },
+    {
+      "id": 12320569735,
+      "name": "v64-yandex",
+      "size_in_bytes": 4363227,
+      "digest": "sha256:dd2b8b125540ddd495dbb1e7869c8ebd07ff3ec3cdf953c0561982e639a00a85"
+    },
+    {
+      "id": 12321695045,
+      "name": "v64-yandex-review-dist",
+      "size_in_bytes": 4520571,
+      "digest": "sha256:be7f28e31a8392e0a11d97b2958ebae6b9a6da0b4270f1f41e4fba45b4ded7e2"
+    }
+  ],
+  "candidateFiles": [
+    {
+      "path": "art/portal-laboratory-menu.webp",
+      "bytes": 158200,
+      "sha256": "f6a544096a6418a0f65ba8c609415d0393a1081d18537ecac5eb4c345b13b4be"
+    },
+    {
+      "path": "assets/LabAnimationJourney-BqUwRq-v.js",
+      "bytes": 3040,
+      "sha256": "8d794ae646b8c2723a785eff2d318c6fd6b3e51f3c5be1acb2ce7a8f6a6cc9b9"
+    },
+    {
+      "path": "assets/LabCreativeRoom17Journey-DfOECl9I.js",
+      "bytes": 5480,
+      "sha256": "5280f26edf6d1e5e9d0c89a06ca3c45cf6a24e05f85ec9449f51d75ebd470db2"
+    },
+    {
+      "path": "assets/LabCreativeRoom18Journey-QeXoCFty.js",
+      "bytes": 3303,
+      "sha256": "23df7505b52aefbd44657a944e292122e41f5c016c636ea6c7ef5053f83db4f3"
+    },
+    {
+      "path": "assets/LabCreativeRoom20Journey-CW1lpagp.js",
+      "bytes": 4722,
+      "sha256": "f40307837b7a4991da77ce8359e5167eee1f126503f5ad9c37023f10ee942597"
+    },
+    {
+      "path": "assets/LabEchoHorizonJourney-V-egNIv4.js",
+      "bytes": 2271,
+      "sha256": "6f428b097e2ad6fa985df8c0b1d3142908eb3c2bd8455f8e8a85cd791f2006ab"
+    },
+    {
+      "path": "assets/LabExpansionAlternateJourney47-3qgixs4y.js",
+      "bytes": 1864,
+      "sha256": "2054a9f53789e8c5aa399142bef5a6700bd7c6be3353874cd5b89eba9482c851"
+    },
+    {
+      "path": "assets/LabExpansionAlternateJourney48-BaHuHX4r.js",
+      "bytes": 2334,
+      "sha256": "d31f6bb093e95ce3c1397fb11011696d81d0d7f5e6f1961c54ac6bb92ab94e95"
+    },
+    {
+      "path": "assets/LabExpansionAlternateJourney49-BsVx_CXr.js",
+      "bytes": 2039,
+      "sha256": "cae41cb57b9fbab0d7d2387d93c92d44b0291364758c94e06ff9be3853104a92"
+    },
+    {
+      "path": "assets/LabExpansionAlternateJourneyB-DY8WbZLw.js",
+      "bytes": 2970,
+      "sha256": "b331936d1e105b5014c904ea8cc72e40ea792dd60a8213f647ea2c7ece734858"
+    },
+    {
+      "path": "assets/LabExpansionJourneyA-Ce_TnMrt.js",
+      "bytes": 7448,
+      "sha256": "1b17d436242bb1bc9e1b7e5ae282b78ee1727004547fa6eb2606cffb6bdb17f3"
+    },
+    {
+      "path": "assets/LabExpansionJourneyB-DJMKF-uj.js",
+      "bytes": 5645,
+      "sha256": "211a85401f0bca52f9a49b7da562b1a7ba80bfb2ec9a71bd08e17767cf7badbe"
+    },
+    {
+      "path": "assets/LabExtendedJourney-N6BD0C6S.js",
+      "bytes": 9252,
+      "sha256": "fb1fc1d6d13417a25f0bd7364d6b558732c34c6ea2ad194e4bf50924cddc5062"
+    },
+    {
+      "path": "assets/LabFoundation20PhysicalJourney-BIdyLeec.js",
+      "bytes": 12259,
+      "sha256": "9531c01a8533fc26b936947a1561a5c5af472696a0062c9e6a58ccbc6db83c5f"
+    },
+    {
+      "path": "assets/LabFoundationJourney-Bww3-954.js",
+      "bytes": 9267,
+      "sha256": "77d942415893c6539c7920aaac03e1f6fab8ebbdf8f06d96f793d539f8980978"
+    },
+    {
+      "path": "assets/LabIntroductoryAlternates-DcdsCClA.js",
+      "bytes": 1341,
+      "sha256": "a6451adc49d9c2f86f43455bfa4ced44d7166234f4fde82082990bf21f76cd5c"
+    },
+    {
+      "path": "assets/LabLateCampaignAim-DmDWt3AN.js",
+      "bytes": 753,
+      "sha256": "0f52b17c632803b0087140df6c63827a28f4d8bc9074884b30a2e101f0756af8"
+    },
+    {
+      "path": "assets/LabOpenJourney-CWKATQIo.js",
+      "bytes": 6404,
+      "sha256": "69aa87f53838df2e94ab5fd2c7f4c29ec78cad5984a4441470bc649808dcbd65"
+    },
+    {
+      "path": "assets/LabPortalEdgeJourney-pkz7xBtg.js",
+      "bytes": 2293,
+      "sha256": "489357a2cc4af636b571c2ef03122599fecdc7b1e9c994e8b1a7f9b78a61906b"
+    },
+    {
+      "path": "assets/LabPortalFloorJourney-Bf9FjJsw.js",
+      "bytes": 1516,
+      "sha256": "501d69a18343c1f0276f7b0f74cc8337d7b1b7eac9d8b2c438845a6e9c8e3ed7"
+    },
+    {
+      "path": "assets/LabPostJourneyA-D_1TXkaw.js",
+      "bytes": 12240,
+      "sha256": "bacf4d30d3d2ea130928045fb23951c347670fb7f2444e1215baad2dc242a4fd"
+    },
+    {
+      "path": "assets/LabPostJourneyB-JZy4HwHd.js",
+      "bytes": 10887,
+      "sha256": "0c702e7c8e93c2b83bb8437922141e6759e53f9e6d75936a7e2caf00d536d809"
+    },
+    {
+      "path": "assets/LabPuzzlePilot43Journey-XygUHNOb.js",
+      "bytes": 3148,
+      "sha256": "12a6a0be7ff3ea8b31b2db1e14d7ec84031c5800308a516e541d65e2af6b5a25"
+    },
+    {
+      "path": "assets/LabPuzzleProgression44Journey-BCkYEQ96.js",
+      "bytes": 1956,
+      "sha256": "8bd1e1fd331f89f21be79d331d4796802cb3581123c8b9767bcd693f531bb272"
+    },
+    {
+      "path": "assets/LabPuzzleProgression45Journey-CO6LN2SK.js",
+      "bytes": 5497,
+      "sha256": "457ee1b716968fa311ea8ed6b4643e5e6db2d0b09766c057b40b83728e22eade"
+    },
+    {
+      "path": "assets/LabPuzzleProgression46Journey-DDdap6Cm.js",
+      "bytes": 3649,
+      "sha256": "d245deecf8079082e4d0bd3d28560d854fd8d041f0695d421face5ed8e535e70"
+    },
+    {
+      "path": "assets/LabPuzzleProgression47Journey-IZ-i_5Zo.js",
+      "bytes": 4713,
+      "sha256": "b3dfe0c21307e15c99f7d3bddef69a1e7d2a48f8a1044847c5681007aca836e3"
+    },
+    {
+      "path": "assets/LabPuzzleProgression48Journey-Bcq53EyO.js",
+      "bytes": 5941,
+      "sha256": "36d055c3c382d7ae84bd1742155a9cddced73413d88af90a9f24123a5463d041"
+    },
+    {
+      "path": "assets/LabPuzzleProgression49Journey-CPFiNEi2.js",
+      "bytes": 4598,
+      "sha256": "1f58ae4e254cba5986bbc213c099b8a367a213c5127b0ae7702245374377315f"
+    },
+    {
+      "path": "assets/LabPuzzleProgression50BeamJourney-CZ0Skx1X.js",
+      "bytes": 12675,
+      "sha256": "551e2f9468d6573874d89fb03436a4f33b203abedb877e4c0c8180b32047da6e"
+    },
+    {
+      "path": "assets/LabPuzzleProgression50Journey-Dk_Jdo95.js",
+      "bytes": 6188,
+      "sha256": "a8e6f454123eacda3d332fb8d170e4134d74320cce131da55db7dab9dbe40de6"
+    },
+    {
+      "path": "assets/LabPuzzleProgression51Journey-D1mDOoET.js",
+      "bytes": 3457,
+      "sha256": "bb85de44d2ce22c84a2d994ccf777d0c3cf4d488cc979567aeabcd1a8f61e23c"
+    },
+    {
+      "path": "assets/LabResearchJourney-Tl67uheL.js",
+      "bytes": 7951,
+      "sha256": "5ff1ae0c55fb888324098d1616ca3a0343feab5565f58ab2647e0ba2cac4a869"
+    },
+    {
+      "path": "assets/LabRoom13Journey-DpkZeNEo.js",
+      "bytes": 6194,
+      "sha256": "275c62befc9b95dc4c596810721ffba02b137b24ad14006e4769f1c7f21bc041"
+    },
+    {
+      "path": "assets/LabRoom14Journey-BZpNV7Is.js",
+      "bytes": 4785,
+      "sha256": "6e31f18571523dd81a667142277edb8bea02021d32c35b42a819f4a05f79cfb7"
+    },
+    {
+      "path": "assets/LabRoom15Journey-BYFpV5wr.js",
+      "bytes": 4604,
+      "sha256": "bb9d10b15a29059b20638c6796d6b6302181d714f0903c5352fa6fa38d97ec0f"
+    },
+    {
+      "path": "assets/LabRoom16Journey-DcT0PHn1.js",
+      "bytes": 2534,
+      "sha256": "43814ce0e94d01e0e2b9152c6ea1c722073f13a019b2992525f6b0480fa97e74"
+    },
+    {
+      "path": "assets/LabRoom17Journey-C2EE7523.js",
+      "bytes": 3260,
+      "sha256": "b621bf8abcb99cec72e5a8b0ef53e4ef6a005e414141e9502855a2759ba02708"
+    },
+    {
+      "path": "assets/LabRoom18Journey-DKQWeCVy.js",
+      "bytes": 6065,
+      "sha256": "47d9f673903123d3752d17669cd04bbf749934d3cd4404af458590cbc4a55fc8"
+    },
+    {
+      "path": "assets/LabRoom19Journey-BVk2pOJ3.js",
+      "bytes": 3087,
+      "sha256": "edbd9e87a7c68f527a6a6d6794cfcb3a8de5780d1c656265ccf7910207066ab4"
+    },
+    {
+      "path": "assets/LabRoom20Journey-Dnjdo837.js",
+      "bytes": 5013,
+      "sha256": "84ee4a4debf18d555e80bbf468821d58576e6fcf805b34adcd2670e8502fc0fd"
+    },
+    {
+      "path": "assets/LabRoom21Journey-BPQ5ICF0.js",
+      "bytes": 5318,
+      "sha256": "0a134bb057dd71d532732af7cfa80fc19d86d56f58740ceff489c3c155dc4948"
+    },
+    {
+      "path": "assets/LabRoom22Journey-CflpSjYZ.js",
+      "bytes": 2942,
+      "sha256": "f0b93bfcd2245088b7a86a27aeb2e3d1ca64d2308799fdadc6bb24189cb28813"
+    },
+    {
+      "path": "assets/LabRoom23Journey-JTJULeqd.js",
+      "bytes": 2743,
+      "sha256": "af11aafb281b4abb6b0a2de8ce4a613833f3a9be9c42137ec3e5c324918464d4"
+    },
+    {
+      "path": "assets/LabRoom23PhysicalJourney-CdXoi1Ij.js",
+      "bytes": 4194,
+      "sha256": "2969421bffb5bdf98d2efb7e050b2758217ae15f3c19d5a7cededf64f4ae4f75"
+    },
+    {
+      "path": "assets/LabRoom24Journey-BlFeCaX-.js",
+      "bytes": 3675,
+      "sha256": "98bfc733658ea988c68d455b6a5dc2d039462895e78a729abd924eecd72685c9"
+    },
+    {
+      "path": "assets/LabRoom25Journey-COqi9k-Z.js",
+      "bytes": 4626,
+      "sha256": "4113270db838996f7bcd1cd8d5edd4ca13461d19057e13a1a5f4e0f5085b9296"
+    },
+    {
+      "path": "assets/LabRoom26Journey-D5Lhf6Yz.js",
+      "bytes": 4194,
+      "sha256": "f568e01fcbf2e28f9bf1d89aa1d8e83df957bb60ea13a63a77cab81b61577e74"
+    },
+    {
+      "path": "assets/LabRoom27Journey-CtMoXjWq.js",
+      "bytes": 3350,
+      "sha256": "ea4e62a0eed62998b64515b56db65142d1a7d3fb8d5c91b6e31653c5ef4422b5"
+    },
+    {
+      "path": "assets/LabRoom28Journey-BK5o10zU.js",
+      "bytes": 3238,
+      "sha256": "abb63b08a5336b66f9274808b2d715e56d00520d744756fd68875b0c7442e686"
+    },
+    {
+      "path": "assets/LabRoom29Journey-FXLiWbZf.js",
+      "bytes": 2592,
+      "sha256": "625138692ba0641ed1ea63e7bb6ea332c70bf235ee3bc8b3cbd80456012e04ef"
+    },
+    {
+      "path": "assets/LabRoom30Journey-zAsFaYdh.js",
+      "bytes": 3762,
+      "sha256": "1d260d8e49e983b2f7a9c354898fe771c41df56434d67e203bd8fb51bbc8f925"
+    },
+    {
+      "path": "assets/LabSingularityJourney-GgZS_jcQ.js",
+      "bytes": 26233,
+      "sha256": "156ecd791d85e88520c79c53e254694f1c0e75c742ca98d68d6e03ae55d94ab8"
+    },
+    {
+      "path": "assets/LabSiphonObservatoryJourney-Cj9l6-t1.js",
+      "bytes": 2734,
+      "sha256": "090e5d79b457c303751253cbb2bbd8c4ac75dedacefcc377359a4267106ca33c"
+    },
+    {
+      "path": "assets/LabTower41RatchetCellJourney-CVsttHx4.js",
+      "bytes": 24187,
+      "sha256": "7cfe32472a3a1790c30dfccef841a9f2e2d169176f4585be275102c24686f05b"
+    },
+    {
+      "path": "assets/LabTowerJourney-Cr8QneEZ.js",
+      "bytes": 31405,
+      "sha256": "730051b1da73d84f3cedd2e67bad2f82ef50a63270260689d3e3a0d02c507b2b"
+    },
+    {
+      "path": "assets/LabV8Journey-DzYD3eFW.js",
+      "bytes": 19916,
+      "sha256": "f81f6478970bab0e4d3fce0c82b0a1371168b4a3b6a053c65ffb737a3ef3ea57"
+    },
+    {
+      "path": "assets/LabWorkshopJourney-BF37Slts.js",
+      "bytes": 7249,
+      "sha256": "fd4fab9ce9d97c74e205a91b9a7271e1134f5d6f59d08400e2422c4330faea23"
+    },
+    {
+      "path": "assets/index-DTzN6JLo.js",
+      "bytes": 2152260,
+      "sha256": "f90437622ffb418dd179142cf28652d57a977b6e30309d71b98bd849d33808d9"
+    },
+    {
+      "path": "assets/index-npFaCiOw.css",
+      "bytes": 57709,
+      "sha256": "95bdd86175f2327e872226779c11e7ca792e9556cf9788befa214c14dd42099b"
+    },
+    {
+      "path": "build-info.json",
+      "bytes": 111471,
+      "sha256": "c3a09ec81af1cc712200b8de08ef8f3584f01ab8f88ac3ce2ee791e3f56e3669"
+    },
+    {
+      "path": "draco/draco_decoder.js",
+      "bytes": 719410,
+      "sha256": "30e4d486fa020737af10e3c56197693e5b904bdc05b8bfa5d7b06751dec6da04"
+    },
+    {
+      "path": "draco/draco_decoder.wasm",
+      "bytes": 285747,
+      "sha256": "c55a594e8ffd18426d36b27fea9618af3df5e173640a3e56d46f09d76f0574f2"
+    },
+    {
+      "path": "draco/draco_wasm_wrapper.js",
+      "bytes": 58763,
+      "sha256": "e8049906ef3f8f75d3456c22a3f31bfdfe5b5b5bd09ccdec613b9e9a49d554d8"
+    },
+    {
+      "path": "index.html",
+      "bytes": 13950,
+      "sha256": "a22516179a6288bda86b7bd605423c1ca8c8e8eab0d0eac1743bd54e07faae8f"
+    },
+    {
+      "path": "models/runtime/manifest.json",
+      "bytes": 2421,
+      "sha256": "8806346ed3ac0fb096aa26321d5620c16a6a2a55f2523023fb21f6c4749fe2ed"
+    },
+    {
+      "path": "models/runtime/model-01-player.glb",
+      "bytes": 549756,
+      "sha256": "e5b09ff0281377b679d6fdd505fa1ed89550bb662e94e7f593ed67ee50a66a91"
+    },
+    {
+      "path": "models/runtime/model-02-cargo.glb",
+      "bytes": 510376,
+      "sha256": "65763c87e7f14cc807cffa8fc2adc364e8421dae819271a0c406a6b0d2c8c697"
+    },
+    {
+      "path": "models/runtime/model-11-portal-gun.glb",
+      "bytes": 393116,
+      "sha256": "d8c76c41efbbf0a6d70e30ab5a7b70f49fd806e497f67ea06cb28f9f4edca1d7"
+    },
+    {
+      "path": "models/runtime/model-19-lift-platform.glb",
+      "bytes": 404076,
+      "sha256": "afd039e831ff0baa514f076a505ffbb7c57dac2251959b3d858fc92dcf3d04b9"
+    },
+    {
+      "path": "models/runtime/model-22-terminal.glb",
+      "bytes": 377108,
+      "sha256": "9e2f4ff758996f67596d3935041f632bafdf7e84efd4869341920b64a5919c26"
+    },
+    {
+      "path": "models/runtime/model-23-floor-tile.glb",
+      "bytes": 103600,
+      "sha256": "0950bc6ef31bb28939087bad53695f21cde0b9fe5740394df202a0b242f77b0c"
+    },
+    {
+      "path": "models/runtime/model-24-wall-panel.glb",
+      "bytes": 62448,
+      "sha256": "15aaca48f6e436d5e89abf7548c0fe43580bba8faff4619e476d3a6d306b004d"
+    },
+    {
+      "path": "models/runtime/model-28-rotating-panel.glb",
+      "bytes": 366120,
+      "sha256": "3159916bad63903e73b8e660ce4aab8a3b1e38f1231152b68f3df63d6987ac4b"
+    },
+    {
+      "path": "models/runtime/model-29-pressure-platform.glb",
+      "bytes": 390244,
+      "sha256": "ee65bd9706ad4f4658e54ec5ad8f6f45b24d9027e4e6072f162358a4c1b3291b"
+    },
+    {
+      "path": "models/runtime/model-31-wind-generator.glb",
+      "bytes": 25768,
+      "sha256": "024f25db27e96e1efdaa5e200c13a665dee487e798338f86fef985feeae9019e"
+    },
+    {
+      "path": "models/runtime/model-32-spring-ram.glb",
+      "bytes": 25400,
+      "sha256": "958d5ed533736d5779da078be20ae2b0e84212bfc3a00b456dc0106bc0a093d7"
+    },
+    {
+      "path": "models/runtime/model-35-shutter-fan.glb",
+      "bytes": 27816,
+      "sha256": "8e11d5ab83250348f6e08f034ec87d82727162742d5a7be18f981fc523aa907a"
+    },
+    {
+      "path": "models/runtime/model-37-extension-bridge.glb",
+      "bytes": 25764,
+      "sha256": "96173a9ef89375066b08fad8dff1928425863c6b4e6b8c0373c497448f109c55"
+    },
+    {
+      "path": "models/runtime/model-39-cable-winch.glb",
+      "bytes": 28608,
+      "sha256": "301f148938ec83e2a8f4b45c7f9bdfd19fb40ca79d8fb9abc7601caf4fe0eafd"
+    }
+  ],
+  "candidateBytes": 7205132,
+  "candidateInventorySha256": "bdfb5fe1c0d3f0e84bae78dfdc1d1ddb1bdf37bcac447af7b2e497e1e887ad68",
+  "sourceInputsSha256": "5ee91f1abd8632b62a52455265df9ce87a54fc99a06431f152af508a70ad14e4",
+  "cpuTests": 2921,
+  "cpuFiles": 368,
+  "nativeRooms": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40,
+    41,
+    42,
+    43,
+    44,
+    45,
+    46,
+    47,
+    48,
+    49,
+    50,
+    51
+  ],
+  "originalCheckerRooms": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40,
+    41,
+    42,
+    43,
+    44,
+    45,
+    46,
+    47,
+    48,
+    49,
+    50,
+    51
+  ],
+  "originalCheckerCounts": [
+    {
+      "level": 1,
+      "PASS": 68,
+      "FAIL": 0,
+      "WARN": 12,
+      "N/V": 2,
+      "SCORE": 85
+    },
+    {
+      "level": 2,
+      "PASS": 68,
+      "FAIL": 0,
+      "WARN": 12,
+      "N/V": 2,
+      "SCORE": 85
+    },
+    {
+      "level": 3,
+      "PASS": 68,
+      "FAIL": 0,
+      "WARN": 12,
+      "N/V": 2,
+      "SCORE": 85
+    },
+    {
+      "level": 4,
+      "PASS": 68,
+      "FAIL": 0,
+      "WARN": 12,
+      "N/V": 2,
+      "SCORE": 85
+    },
+    {
+      "level": 5,
+      "PASS": 68,
+      "FAIL": 0,
+      "WARN": 12,
+      "N/V": 2,
+      "SCORE": 85
+    },
+    {
+      "level": 6,
+      "PASS": 68,
+      "FAIL": 0,
+      "WARN": 12,
+      "N/V": 2,
+      "SCORE": 85
+    },
+    {
+      "level": 7,
+      "PASS": 68,
+      "FAIL": 0,
+      "WARN": 12,
+      "N/V": 2,
+      "SCORE": 85
+    },
+    {
+      "level": 8,
+      "PASS": 68,
+      "FAIL": 0,
+      "WARN": 12,
+      "N/V": 2,
+      "SCORE": 85
+    },
+    {
+      "level": 9,
+      "PASS": 68,
+      "FAIL": 0,
+      "WARN": 12,
+      "N/V": 2,
+      "SCORE": 85
+    },
+    {
+      "level": 10,
+      "PASS": 68,
+      "FAIL": 0,
+      "WARN": 12,
+      "N/V": 2,
+      "SCORE": 85
+    },
+    {
+      "level": 11,
+      "PASS": 68,
+      "FAIL": 0,
+      "WARN": 12,
+      "N/V": 2,
+      "SCORE": 85
+    },
+    {
+      "level": 12,
+      "PASS": 68,
+      "FAIL": 0,
+      "WARN": 12,
+      "N/V": 2,
+      "SCORE": 85
+    },
+    {
+      "level": 13,
+      "PASS": 68,
+      "FAIL": 0,
+      "WARN": 12,
+      "N/V": 2,
+      "SCORE": 85
+    },
+    {
+      "level": 14,
+      "PASS": 68,
+      "FAIL": 0,
+      "WARN": 12,
+      "N/V": 2,
+      "SCORE": 85
+    },
+    {
+      "level": 15,
+      "PASS": 68,
+      "FAIL": 0,
+      "WARN": 12,
+      "N/V": 2,
+      "SCORE": 85
+    },
+    {
+      "level": 16,
+      "PASS": 68,
+      "FAIL": 0,
+      "WARN": 12,
+      "N/V": 2,
+      "SCORE": 85
+    },
+    {
+      "level": 17,
+      "PASS": 68,
+      "FAIL": 0,
+      "WARN": 12,
+      "N/V": 2,
+      "SCORE": 85
+    },
+    {
+      "level": 18,
+      "PASS": 68,
+      "FAIL": 0,
+      "WARN": 12,
+      "N/V": 2,
+      "SCORE": 85
+    },
+    {
+      "level": 19,
+      "PASS": 68,
+      "FAIL": 0,
+      "WARN": 12,
+      "N/V": 2,
+      "SCORE": 85
+    },
+    {
+      "level": 20,
+      "PASS": 68,
+      "FAIL": 0,
+      "WARN": 12,
+      "N/V": 2,
+      "SCORE": 85
+    },
+    {
+      "level": 21,
+      "PASS": 68,
+      "FAIL": 0,
+      "WARN": 12,
+      "N/V": 2,
+      "SCORE": 85
+    },
+    {
+      "level": 22,
+      "PASS": 68,
+      "FAIL": 0,
+      "WARN": 12,
+      "N/V": 2,
+      "SCORE": 85
+    },
+    {
+      "level": 23,
+      "PASS": 68,
+      "FAIL": 0,
+      "WARN": 12,
+      "N/V": 2,
+      "SCORE": 85
+    },
+    {
+      "level": 24,
+      "PASS": 68,
+      "FAIL": 0,
+      "WARN": 12,
+      "N/V": 2,
+      "SCORE": 85
+    },
+    {
+      "level": 25,
+      "PASS": 68,
+      "FAIL": 0,
+      "WARN": 12,
+      "N/V": 2,
+      "SCORE": 85
+    },
+    {
+      "level": 26,
+      "PASS": 68,
+      "FAIL": 0,
+      "WARN": 12,
+      "N/V": 2,
+      "SCORE": 85
+    },
+    {
+      "level": 27,
+      "PASS": 68,
+      "FAIL": 0,
+      "WARN": 12,
+      "N/V": 2,
+      "SCORE": 85
+    },
+    {
+      "level": 28,
+      "PASS": 68,
+      "FAIL": 0,
+      "WARN": 12,
+      "N/V": 2,
+      "SCORE": 85
+    },
+    {
+      "level": 29,
+      "PASS": 68,
+      "FAIL": 0,
+      "WARN": 12,
+      "N/V": 2,
+      "SCORE": 85
+    },
+    {
+      "level": 30,
+      "PASS": 68,
+      "FAIL": 0,
+      "WARN": 12,
+      "N/V": 2,
+      "SCORE": 85
+    },
+    {
+      "level": 31,
+      "PASS": 68,
+      "FAIL": 0,
+      "WARN": 12,
+      "N/V": 2,
+      "SCORE": 85
+    },
+    {
+      "level": 32,
+      "PASS": 68,
+      "FAIL": 0,
+      "WARN": 12,
+      "N/V": 2,
+      "SCORE": 85
+    },
+    {
+      "level": 33,
+      "PASS": 68,
+      "FAIL": 0,
+      "WARN": 12,
+      "N/V": 2,
+      "SCORE": 85
+    },
+    {
+      "level": 34,
+      "PASS": 68,
+      "FAIL": 0,
+      "WARN": 12,
+      "N/V": 2,
+      "SCORE": 85
+    },
+    {
+      "level": 35,
+      "PASS": 68,
+      "FAIL": 0,
+      "WARN": 12,
+      "N/V": 2,
+      "SCORE": 85
+    },
+    {
+      "level": 36,
+      "PASS": 68,
+      "FAIL": 0,
+      "WARN": 12,
+      "N/V": 2,
+      "SCORE": 85
+    },
+    {
+      "level": 37,
+      "PASS": 68,
+      "FAIL": 0,
+      "WARN": 12,
+      "N/V": 2,
+      "SCORE": 85
+    },
+    {
+      "level": 38,
+      "PASS": 68,
+      "FAIL": 0,
+      "WARN": 12,
+      "N/V": 2,
+      "SCORE": 85
+    },
+    {
+      "level": 39,
+      "PASS": 68,
+      "FAIL": 0,
+      "WARN": 12,
+      "N/V": 2,
+      "SCORE": 85
+    },
+    {
+      "level": 40,
+      "PASS": 68,
+      "FAIL": 0,
+      "WARN": 12,
+      "N/V": 2,
+      "SCORE": 85
+    },
+    {
+      "level": 42,
+      "PASS": 68,
+      "FAIL": 0,
+      "WARN": 12,
+      "N/V": 2,
+      "SCORE": 85
+    },
+    {
+      "level": 43,
+      "PASS": 68,
+      "FAIL": 0,
+      "WARN": 12,
+      "N/V": 2,
+      "SCORE": 85
+    },
+    {
+      "level": 44,
+      "PASS": 68,
+      "FAIL": 0,
+      "WARN": 12,
+      "N/V": 2,
+      "SCORE": 85
+    },
+    {
+      "level": 45,
+      "PASS": 68,
+      "FAIL": 0,
+      "WARN": 12,
+      "N/V": 2,
+      "SCORE": 85
+    },
+    {
+      "level": 46,
+      "PASS": 68,
+      "FAIL": 0,
+      "WARN": 12,
+      "N/V": 2,
+      "SCORE": 85
+    },
+    {
+      "level": 47,
+      "PASS": 68,
+      "FAIL": 0,
+      "WARN": 12,
+      "N/V": 2,
+      "SCORE": 85
+    },
+    {
+      "level": 48,
+      "PASS": 68,
+      "FAIL": 0,
+      "WARN": 12,
+      "N/V": 2,
+      "SCORE": 85
+    },
+    {
+      "level": 49,
+      "PASS": 68,
+      "FAIL": 0,
+      "WARN": 12,
+      "N/V": 2,
+      "SCORE": 85
+    },
+    {
+      "level": 50,
+      "PASS": 68,
+      "FAIL": 0,
+      "WARN": 12,
+      "N/V": 2,
+      "SCORE": 85
+    },
+    {
+      "level": 51,
+      "PASS": 68,
+      "FAIL": 0,
+      "WARN": 12,
+      "N/V": 2,
+      "SCORE": 85
+    },
+    {
+      "level": 41,
+      "PASS": 68,
+      "FAIL": 0,
+      "WARN": 12,
+      "N/V": 2,
+      "SCORE": 85
+    }
+  ],
+  "hintTransactions": 153,
+  "mobile": {
+    "layouts": 8,
+    "actualViewportSizes": 7,
+    "simulatedInsetCases": 1,
+    "threeFingerNativeInput": true,
+    "originalCompanionPreserved": true,
+    "screenshots": 9
+  },
+  "decodedImages": 111,
+  "supplementalAudits": [
+    {
+      "path": "tools/campaign-v64-source-audit/independent-review.json",
+      "bytes": 34903,
+      "sha256": "257845cfb0d866e6126b8dec343a7613e09cad5681f2abd9c02326b667240d17"
+    },
+    {
+      "path": "tools/campaign-v64-source-audit/checker-warning-review.json",
+      "bytes": 3467,
+      "sha256": "c977301b0174ee59775d18331470c662fd0c0e54b4245a591e6726df402e14ad"
+    },
+    {
+      "path": "tools/campaign-v64-source-audit/compiled-migration-report.json",
+      "bytes": 30955,
+      "sha256": "033db2871071cd3bf2b9989395455971d5c3785f923931d59ba4890f0acd6f76"
+    }
+  ],
+  "normalUiZeroStepStartProven": false,
+  "resetCounterScope": "reported journey counters after legacy fixture initialization; the initial fixture reset is outside these counters; specialized drivers retain their own stricter proofs",
+  "limits": [
+    "Root alone accepts Source and publication after live provider verification.",
+    "Legacy route fixture initialization is outside reported reset counters; no zero-step whole-campaign claim.",
+    "7 emulated viewport sizes plus1 simulated-inset geometry case; no physical phone/hardware FPS proof.",
+    "Original checker WARN/N/V are retained; SDK and ads are explicit mocks.",
+    "Room17 instant narrowing body clipping, castle500stages/15minute human speedrun and human puzzle discovery remain open.",
+    "Original checker WARN and NOT VERIFIED retained; no official certification or real ad delivery claimed.",
+    "Source validates each51 room separately; no new continuous whole-campaign movie or blind human playthrough is claimed."
+  ]
+}
