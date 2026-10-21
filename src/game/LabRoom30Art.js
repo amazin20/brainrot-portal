@@ -1,6 +1,49 @@
 import * as THREE from 'three';
 import {SolidAssembly,createGuideRing,placeSolidModel} from './LabSolidModels.js';
+import {LabAirflowVisual} from './LabAirflowVisual.js';
 const V=(...p)=>new THREE.Vector3(...p),Q=()=>new THREE.Quaternion();
+
+// Projected directional cursors occupy the trajectory itself. They have no
+// physical rim: a player following a guide must never hit an invisible gate.
+function flightCursorGeometry(){
+ const positions=[],uv=[],indices=[];
+ for(const plane of [0,1])for(const sign of [-1,1]){
+  const start=V(sign*1.05,0,-.86),end=V(0,0,.72),side=V(end.z-start.z,0,start.x-end.x).normalize().multiplyScalar(.16),base=positions.length/3;
+  for(const [p,u,v]of [[start.clone().sub(side),0,0],[start.clone().add(side),0,1],[end.clone().sub(side),1,0],[end.clone().add(side),1,1]]){
+   if(plane)p.set(0,p.x,p.z);positions.push(...p.toArray());uv.push(u,v);
+  }
+  indices.push(base,base+1,base+2,base+1,base+3,base+2);
+ }
+ const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(positions,3));g.setAttribute('uv',new THREE.Float32BufferAttribute(uv,2));g.setIndex(indices);g.computeVertexNormals();return g;
+}
+
+function foundIsland(steel,floor,supports){
+ const {minX,maxX,minZ,maxZ,y}=floor,xs=[minX+3,maxX-3],zs=[minZ+3,maxZ-3];
+ for(const x of xs)for(const z of zs){
+  const shaftHeight=y-2.0;
+  // A broad closed pier carries the real deck. Separate flanges and capitals
+  // meet it with positive overlap, without fragile fifty-metre needle posts.
+  steel.box([x,.40,z],[4.4,.80,4.0],1,.13);
+  steel.box([x,.8+shaftHeight/2,z],[2.8,shaftHeight,2.6],0,.14);
+  for(const side of [-1,1])steel.box([x+side*1.32,.8+shaftHeight/2,z],[.22,shaftHeight,2.84],1,.045);
+  steel.box([x,y-1.20,z],[4.6,1.24,4.0],1,.12);
+  steel.box([x,y-1.78,z],[3.8,.28,3.45],2,.05);
+  for(let level=8;level<y-5;level+=9){
+   for(const side of [-1,1])steel.box([x,level,z+side*1.315],[2.34,.22,.07],1,.02,false);
+  }
+  supports.push({x,z,base:0,top:y-.58,shaft:[2.8,2.6],foot:[4.4,4.0],deck:[minX,maxX,minZ,maxZ,y]});
+ }
+ // Deep load girders connect all four capitals. Their tops meet the soffit;
+ // every added solid stays below the already occupied walking deck volume.
+ for(const z of zs){
+  steel.box([(xs[0]+xs[1])/2,y-1.80,z],[xs[1]-xs[0],2.4,1.16],1,.10);
+  steel.box([(xs[0]+xs[1])/2,y-2.91,z],[xs[1]-xs[0],.24,1.8],0,.05);
+ }
+ for(const x of xs){
+  steel.box([x,y-1.80,(zs[0]+zs[1])/2],[1.16,2.4,zs[1]-zs[0]],1,.10);
+  steel.box([x,y-2.91,(zs[0]+zs[1])/2],[1.8,.24,zs[1]-zs[0]],0,.05);
+ }
+}
 
 // The opening hub has three existing physical cores. Dress those exact
 // footprints as launch equipment, so the player sees what the structures do
@@ -100,26 +143,29 @@ export function buildRoom30Art(level){
  steel.materials[1].color.setHex(0x285267);
  steel.materials[2].color.setHex(0xffd37c);
  steel.materials[3].color.setHex(0x4d7988);
+ const supports=[];
  for(const floor of world.floors){if(floor.y<20||!floor.mesh)continue;const {minX,maxX,minZ,maxZ,y}=floor;
   // Real broad soffits replace thin floating edge strips. The walking plane is unchanged.
   steel.box([(minX+maxX)/2,y-.42,(minZ+maxZ)/2],[maxX-minX,.64,maxZ-minZ],1,.08);
-  if(maxX-minX>20&&maxZ-minZ>20)for(const x of [minX+3,maxX-3])for(const z of [minZ+3,maxZ-3]){
-   steel.box([x,y/2-.6,z],[.82,y-1.2,.82],1,.08);
-   steel.box([x,.3,z],[1.7,.6,1.7],1,.08);
-   steel.beam([x,y-12,z],[x+(x<(minX+maxX)/2?5:-5),y-.7,z],.21,1);
-  }
+  if(maxX-minX>20&&maxZ-minZ>20)foundIsland(steel,floor,supports);
  }
  placeSolidModel(k,buildLaunchCore(),[-1,56,7],{parent:root});
  for(const p of [[-21,54,-6],[19,54,8]]){
   const routeConsole=buildRouteConsole('Launch path console');
   routeConsole.position.fromArray(p);root.add(routeConsole);
  }
- const horizontal=Q().setFromAxisAngle(V(1,0,0),-Math.PI/2);
+ const wellFlows=[];
  for(const well of f.wells){const c=well.panel.getFrame().center;
-  for(let y=c.y+4;y<well.top;y+=7)placeSolidModel(k,createGuideRing(5.7,'lagoon',.19,.28),[c.x,y,c.z],{parent:root,quaternion:horizontal});
+  const flow=new LabAirflowVisual(root,{capacity:42,speed:17,radius:.75,opacity:.6});flow.mesh.name='Projected gravity-well descent';
+  flow.wellPath=[{a:V(c.x,well.top-.5,c.z),direction:V(0,-1,0),length:well.top-c.y-1}];flow.setPath(flow.wellPath);wellFlows.push(flow);
   for(const dx of [-6.5,6.5])steel.beam([c.x+dx,c.y-1,c.z+3],[c.x+dx,well.top+1,c.z+3],.22,0);
  }
- const paths=[],clearances=[];
+ const paths=[],clearances=[],cursorGeometry=flightCursorGeometry(),cursorMaterial=new THREE.ShaderMaterial({
+  name:'Feathered trajectory projection',transparent:true,depthWrite:false,side:THREE.DoubleSide,toneMapped:false,
+  uniforms:{tint:{value:new THREE.Color(0xd5eee7)}},
+  vertexShader:'varying vec2 vUv;void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}',
+  fragmentShader:'uniform vec3 tint;varying vec2 vUv;void main(){float edge=max(0.,1.-abs(vUv.y*2.-1.));float a=.42*edge*edge*pow(max(0.,sin(vUv.x*3.14159265)),.5);if(a<.002)discard;gl_FragColor=vec4(tint,a);\n#include <colorspace_fragment>\n}',
+ });
  const posePath=path=>{
   const frame=path.panel.getFrame(),normal=frame.normal,speed=Math.sqrt(39*(path.drop+1.2));
   const vy=normal.y*speed,time=(vy+Math.sqrt(vy*vy+39*(frame.center.y-path.landingY)))/19.5;
@@ -128,13 +174,19 @@ export function buildRoom30Art(level){
    mesh.position.copy(frame.center).addScaledVector(normal,speed*t).add(V(0,-9.75*t*t,0));
    mesh.quaternion.setFromUnitVectors(V(0,0,1),normal.clone().multiplyScalar(speed).add(V(0,-19.5*t,0)).normalize());
   }
+  const segments=[];
+  for(let i=0;i<6;i++){
+   const at=t=>frame.center.clone().addScaledVector(normal,speed*t).add(V(0,-9.75*t*t,0)),a=at(time*i/6),b=at(time*(i+1)/6),direction=b.sub(a),length=direction.length();
+   segments.push({a,direction:direction.normalize(),length});
+  }
+  path.flow.setPath(segments);
  };
  for(const [name,panel,drop,landingY,style] of [['north',f.north,36,40,'launch'],['east',f.east,36,40,'lagoon'],['final',f.final,34,28,'launch'],['east-final',f.eastFinal,34,28,'lagoon']]){
-  const path={name,panel,drop,landingY,rings:[],bindings:[]};
+  const flow=new LabAirflowVisual(root,{capacity:64,speed:18,radius:1.15,opacity:.64});flow.mesh.name=name+' / projected ballistic trace';
+  const path={name,panel,drop,landingY,rings:[],bindings:[],flow};
   const lastArc=name==='final'||name==='east-final';
-  for(let i=0;i<(lastArc?8:6);i++){const model=createGuideRing(lastArc?7:6,style);root.add(model);path.rings.push(model);}
+  for(let i=0;i<(lastArc?8:6);i++){const model=new THREE.Mesh(cursorGeometry,cursorMaterial);model.name=name+' / soft directional cursor';model.userData.projectedFlightGuide=true;model.castShadow=model.receiveShadow=false;root.add(model);path.rings.push(model);}
   posePath(path);
-  for(const model of path.rings){const position=model.position.toArray(),quaternion=model.quaternion.clone();path.bindings.push(placeSolidModel(k,model,position,{parent:root,quaternion,kinematic:lastArc}));}
   // Receiver collars live in the same local frame as their physical panel.
   placeSolidModel(k,createGuideRing(7.5,style,.44,.65),[0,0,-1.3],{parent:panel.group,kinematic:lastArc});
   paths.push(path);clearances.push({name,radius:lastArc?6.6:5.6});
@@ -192,10 +244,12 @@ export function buildRoom30Art(level){
  }
  placeSolidModel(k,steel.finish(),[0,0,0],{parent:root});
  const moving=(k.solidModels??[]).filter(b=>b.colliders[0]?.kinematic);
- const update=()=>{for(const path of paths)if(path.name==='final'||path.name==='east-final')posePath(path);};
+ const flows=[...wellFlows,...paths.map(p=>p.flow)],update=()=>{for(const path of paths)if(path.name==='final'||path.name==='east-final')posePath(path);};
  // The final outlet actuator has already run when this callback executes.
  // Decorative rings no longer move in render-only time with stale colliders.
- k.ticks.push(dt=>{update();for(const binding of moving)binding.sync(dt);});
- k.resets.push(()=>{update();for(const binding of moving)binding.sync(0,true);});
- update();level.launchArt={root,paths,clearances,update,drawCalls:root.children.length};return level.launchArt;
+ k.ticks.push(dt=>{update();for(const binding of moving)binding.sync(dt);for(const flow of flows)flow.step(dt,1);});
+ k.renders.push(alpha=>{for(const flow of flows)flow.render(alpha,level.workshop.game.qualityLevel||'balanced');});
+ k.resets.push(()=>{for(const flow of flows)flow.reset();for(const path of paths)posePath(path);for(const flow of wellFlows)flow.setPath(flow.wellPath);for(const binding of moving)binding.sync(0,true);for(const flow of flows){flow.step(0,1);flow.render(1);}});
+ update();for(const flow of flows){flow.step(0,1);flow.render(1);}
+ level.launchArt={root,paths,clearances,supports,flows,update,drawCalls:root.children.length};return level.launchArt;
 }

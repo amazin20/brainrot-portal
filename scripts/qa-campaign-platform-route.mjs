@@ -246,6 +246,13 @@ export async function runCampaignPlatformRoutes({sourceRoot=process.cwd(),direct
   assert.equal(report.rows.length,levels.length);assert.ok(report.rows.every(row=>row.pass));report.pass=true;
  }catch(error){report.failure=String(error?.stack||error);if(page){
   const last=report.rows.at(-1);if(last?.fixture)last.failureObservation=await page.evaluate(readRewardedHintUI,{level:last.level,key:last.fixture.key}).catch(()=>null);
+  if(last)last.failureGameState=await page.evaluate(()=>{
+   const g=window.__NESI_DEMO_GAME__;if(!g)return null;
+   const near=(g.colliders||[]).filter(c=>c.enabled!==false&&c.box).map(c=>({name:c.mesh?.name||'',kinematic:Boolean(c.kinematic),min:c.box.min.toArray(),max:c.box.max.toArray(),distance:c.box.distanceToPoint(g.playerPosition)})).sort((a,b)=>a.distance-b.distance).slice(0,12);
+   return{levelIndex:g.levelIndex,id:g.firstLevel?.id,state:g.state,worldStep:g.physics.world.stepnumber,elapsed:g.elapsed,
+    player:g.playerPosition.toArray(),playerVelocity:g.playerVelocity.toArray(),grounded:g.grounded,held:Boolean(g.heldCube),cargo:g.cargo.position.toArray(),cargoVelocity:g.cargo.velocity.toArray(),cargoBodyId:g.physics.cargoBody.id,
+    inputView:{yaw:g.cameraRig.yaw,pitch:g.cameraRig.pitch},camera:{position:g.camera.position.toArray(),quaternion:g.camera.quaternion.toArray(),fov:g.camera.fov},nearestEnabledColliders:near};
+  }).catch(()=>null);
   await page.screenshot({path:path.join(out,'failure.png')}).catch(()=>{});
  }throw error;
  }finally{

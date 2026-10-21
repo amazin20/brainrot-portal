@@ -21,7 +21,8 @@ export function buildBalanceChamber(game,spec){
   for(let i=0;i<count;i++){
    const z1=front-i*depth,z0=z1-depth,y=high*(i+1)/count;
    world.floor(x0,x1,z0,z1,y);
-   world.box([(x0+x1)/2,(y-.12)/2,(z0+z1)/2],[x1-x0,Math.max(.025,y-.12),depth-.02],world.materials.trim);
+   const body=world.box([(x0+x1)/2,(y-.12)/2,(z0+z1)/2],[x1-x0,Math.max(.025,y-.12),depth-.02],world.materials.trim);
+   body.userData.earlyAuditStair={foundation:true,rise:-high/count,floorY:y};
   }
  }
  stairs(6.5,9.7,11,5.5,3.3);world.floor(1.8,9.7,3.5,5.5,3.3);

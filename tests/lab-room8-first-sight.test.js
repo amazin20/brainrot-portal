@@ -4,7 +4,7 @@ import * as THREE from 'three';
 import { createHeadlessGame } from '../scripts/lab-headless.mjs';
 import { runV8Journey } from '../src/game/LabV8Journey.js';
 import { gameplayContract, digest } from './helpers/lab-art-contract.js';
-import { GALLERY_PREFIX, isGallery, originalRoom8Contract } from './helpers/lab-room8-gallery-contract.js';
+import { GALLERY_PREFIX, isGallery, isGalleryBrace, originalRoom8Contract } from './helpers/lab-room8-gallery-contract.js';
 
 function assertRoom8MechanicalContract(contract) {
   assert.equal(digest(originalRoom8Contract(contract)), 'f31a739cd4e1c5cdc16e7b6cb106cdaeb4611678728b9f662f9aa9fc31b16ecc',
@@ -21,11 +21,20 @@ test('room eight reveals its fan, shaft and founded gallery while preserving the
     const contract = gameplayContract(game);
     delete contract.room.spawnView;
     assertRoom8MechanicalContract(contract);
+    const alpha=level.state.airflow.opacity;
+    level.state.airflow.opacity=.19;
+    const fadedContract=gameplayContract(game);delete fadedContract.room.spawnView;
+    assert.deepEqual(fadedContract,contract,
+      'Ribbon alpha changes drawing only, and cannot change the mechanical receipt');
+    level.state.airflow.opacity=alpha;
     const gallery = game.colliders.filter(c => c.mesh.name.startsWith(GALLERY_PREFIX));
     for (const c of gallery) {
-      assert.ok(c.mesh.isMesh && c.mesh.visible && c.mesh.material.visible && c.mesh.material.opacity === 1);
+      let drawing=c.mesh;
+      if(!drawing.material.visible)level.visualAuditEarly.root.traverse(n=>{if(n.userData.physicalSourceId===c.mesh.uuid)drawing=n;});
+      assert.ok(drawing.isMesh&&drawing.visible&&drawing.material.visible&&drawing.material.opacity===1);
       for (let p = c.mesh.parent; p; p = p.parent) assert.equal(p.visible, true);
-      assert.ok(new THREE.Box3().setFromObject(c.mesh).equals(c.box),
+      const bounds=new THREE.Box3().setFromObject(drawing);
+      assert.ok(bounds.min.distanceTo(c.box.min)<1e-5&&bounds.max.distanceTo(c.box.max)<1e-5,
         `${c.mesh.name}: its visible solid must match its physical collision bounds`);
     }
     // Mutate actual captured contracts, rather than constructing a synthetic
@@ -45,6 +54,9 @@ test('room eight reveals its fan, shaft and founded gallery while preserving the
       c => c.camera.find(isGallery).matrix[12] += .1,
       c => c.aim.splice(c.aim.findIndex(isGallery), 1),
       c => c.portalRegistry.push(structuredClone(c.camera.find(isGallery))),
+      c => c.colliders.find(isGalleryBrace).box.min[1] -= 1,
+      c => c.colliders.splice(c.colliders.findIndex(isGalleryBrace),1),
+      c => c.aim.find(isGalleryBrace).matrix[13] -= 1,
     ];
     for (const mutate of mutations) {
       const altered = structuredClone(contract); mutate(altered);

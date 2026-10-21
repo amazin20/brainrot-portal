@@ -5,7 +5,7 @@ export const ROOM14_SPEC={id:'light-weave',title:'Световая вязь',con
 export function buildRoom14(game,index=13){
  const k=new Workshop(game,ROOM14_SPEC,index),w=k.world;
  k.bounds={minX:-20,maxX:20,minZ:-28,maxZ:16};k.ceiling=25;w.walls(k.bounds,25,-1);
- const deck=(name,x0,x1,z0,z1,y)=>{const surface=w.floor(x0,x1,z0,z1,y,{name}),casing=w.box([(x0+x1)/2,y-.35,(z0+z1)/2],[x1-x0,.4,z1-z0],w.materials.trim);return {surface,casing,baseY:y};};
+ const deck=(name,x0,x1,z0,z1,y)=>{const surface=w.floor(x0,x1,z0,z1,y,{name}),casing=w.box([(x0+x1)/2,y-.35,(z0+z1)/2],[x1-x0,.4,z1-z0],w.materials.trim);if(name==='Folded stair')casing.userData.earlyAuditStair={rise:-.23};return {surface,casing,baseY:y};};
  // A lower recovery ring serves the two crossings; the deep north is occupied
  // by the exit foundation rather than an empty walkable basement.
  deck('South return court',-20,20,6,16,0);deck('West recovery passage',-20,-12,-28,6,0);deck('Crossing recovery',-12,12,-14,6,0);

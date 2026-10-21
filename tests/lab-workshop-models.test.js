@@ -18,8 +18,8 @@ function areas(root) {
   return result.sort((a, b) => a - b);
 }
 
-test('workshop repairs preserve every supplied triangle, vertex color and material at one uniform scale', () => {
-  for (const [id, build, size] of [[32, buildSpringRamModel, 4.5], [37, buildExtensionBridgeModel, 12]]) {
+test('the accepted spring repair preserves every supplied triangle, vertex color and material at one uniform scale', () => {
+  for (const [id, build, size] of [[32, buildSpringRamModel, 4.5]]) {
     const parent = new THREE.Group(), before = areas(game.model(id, 1));
     const item = build(game, parent, { size });
     const after = [...areas(item.fixed), ...areas(item.moving)].sort((a, b) => a - b);
@@ -32,6 +32,19 @@ test('workshop repairs preserve every supplied triangle, vertex color and materi
     });
     assert.deepEqual(areas(game.model(id, 1)), before, 'Cached source was changed');
   }
+});
+
+test('the deformed37 drawing is replaced completely by one rigid planar deck, while its cached source stays exact',()=>{
+ const source=areas(game.model(37,1)),item=buildExtensionBridgeModel(game,new THREE.Group());
+ assert.equal(item.sourceTriangles,4198);assert.equal(item.replacedSourceTriangles,4198);assert.equal(item.retainedSourceTriangles,0);
+ assert.equal(item.presentationRevision,'rigid-telescopic-deck-v66');assert.equal(item.moving.children.length,1);
+ const mesh=item.deck.mesh,p=mesh.geometry.attributes.position,n=mesh.geometry.attributes.normal;
+ const tops=[];for(let i=0;i<p.count;i++)if(n.getY(i)>.99)tops.push(p.getY(i));
+ assert.ok(tops.length>30);assert.ok(tops.every(y=>Math.abs(y-1.82)<1e-6));
+ assert.ok(Math.abs(item.deck.top-1.82)<1e-12);assert.equal(item.deck.slabs.length,1);
+ assert.ok(item.movingTriangles<item.sourceTriangles);assert.equal(item.movingTriangles,areas(item.moving).length);
+ const names=[];item.art.traverse(m=>{if(m.isMesh)names.push(m.name);});assert.ok(names.every(name=>!/^Supplied .* triangles$/.test(name)),'Old dented drawing remains below the new body');
+ assert.deepEqual(areas(game.model(37,1)),source,'The shared GLB cache was mutated');
 });
 
 test('the bridge moves its entire original span while its broad cassette stays bolted down', () => {
@@ -54,7 +67,7 @@ test('the bridge moves its entire original span while its broad cassette stays b
   assert.throws(() => buildExtensionBridgeModel(game, parent, { stroke: 10 }), RangeError);
 });
 
-test('bridge bounds match source-mesh raycasts across positions, headings and travel without repeated raycasts', () => {
+test('bridge bounds match the one physical plane across positions, headings and travel without repeated mesh raycasts', () => {
   const headings = [0, Math.PI / 2, -.4], positions = [[-2, .4, 3], [2, .8, -3]];
   let sample = null;
   for (const position of positions) for (const yaw of headings) {
@@ -86,7 +99,7 @@ test('bridge bounds match source-mesh raycasts across positions, headings and tr
   assert.equal(rays, 0, 'Repeated bounds queries should not scan source triangles');
 });
 
-test('bridge physics slices track the actual source deck profile through the full travel and yaw', () => {
+test('bridge physical body and heightAt match real rendered ray hits across the whole rigid plane and travel', () => {
   for (const yaw of [0, Math.PI / 2, -.4]) {
     const item = buildExtensionBridgeModel(game, new THREE.Group(), { position: [2, .8, -3], yaw });
     for (const t of [0, .5, 1]) {
@@ -97,11 +110,21 @@ test('bridge physics slices track the actual source deck profile through the ful
           const p = V(x, slab.size.y / 2, 0).applyQuaternion(q).add(slab.center).applyMatrix4(item.moving.matrixWorld);
           const top = item.deck.heightAt(p.x, p.z);
           assert.ok(Number.isFinite(top));
-          assert.ok(Math.abs(top - p.y) < .03, `Collider drifts off original deck by ${top - p.y}`);
+          assert.ok(Math.abs(top - p.y) < 1e-6, `Collider drifts off rigid deck by ${top - p.y}`);
         }
       }
     }
     assert.equal(item.art.children.length, 2, 'A substitute visible slab was added over the source');
+    const ray=new THREE.Raycaster();
+    for(const progress of [0,.25,.5,1]){
+      item.setProgress(progress);
+      for(let x=-1.35;x<=1.35;x+=.45)for(let z=item.deck.start+.04;z<item.deck.end-.04;z+=.37){
+        const point=V(x,item.deck.top,z).applyMatrix4(item.moving.matrixWorld);
+        ray.set(point.clone().add(V(0,2,0)),V(0,-1,0));
+        const hit=ray.intersectObject(item.deck.mesh,false)[0];assert.ok(hit,'The physical plane has no visible top face');
+        assert.ok(Math.abs(hit.point.y-item.deck.heightAt(point.x,point.z))<1e-6,'A floating or buried support plane remains');
+      }
+    }
   }
 });
 

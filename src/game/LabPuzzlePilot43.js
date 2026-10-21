@@ -105,7 +105,6 @@ export function buildPuzzlePilot43(game,index=42){
  k.label('СМОТРОВАЯ ЗАСЛОНКА',[-18,23.4,-5.35],[0,0,1],13,.75);
  k.label('ВЫХОД',[15,27.6,25.9],[0,0,-1],9,.9);
  k.label('СЛУЖЕБНЫЙ ВОЗВРАТ',[-29.0,-.9,-6],[1,0,0],8,.7);
- k.label('ОБЗОР ГАЛЕРЕИ',[-14,0.04,22],[0,1,0],8,.6);
  dressPuzzlePilot43(k,{entryDeck,galleryDeck,viewingDeck,goalDeck,button,shutter,ingress,panels:k.panels});
  const level=k.finishResearch([-14,0,20],[-12,.6,19],[15,22,15],{
   pilot43:true,button,shutter,ingress,fall,launch,entry,gallery,returned,spawnView:{yaw:-.28,pitch:.06},

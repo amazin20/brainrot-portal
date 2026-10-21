@@ -1,4 +1,5 @@
 import {createHash} from 'node:crypto';
+import {LabAirflowVisual} from '../../src/game/LabAirflowVisual.js';
 
 const array=v=>v?.toArray?.()??v;
 const rounded=value=>JSON.parse(JSON.stringify(value,(_key,v)=>typeof v==='number'?Math.round(v*1e9)/1e9:v));
@@ -43,7 +44,14 @@ export function gameplayContract(game){
    if(['number','boolean','string'].includes(typeof v))return [[key,v]];
    // Render-only metadata lives outside the mechanics state; body IDs are
    // engine allocation counters, while shape/position are checked separately.
-   if(v&&!v.isObject3D&&!Array.isArray(v))return [[key,numeric(v)]];
+   if(v&&!v.isObject3D&&!Array.isArray(v)){
+    const fields=numeric(v);
+    // The ribbon shader's alpha is render metadata, not an airflow force.
+    // Preserve the existing mechanical receipt and all other recorded fields;
+    // never remove an arbitrary state object's similarly named property.
+    if(v instanceof LabAirflowVisual)delete fields.opacity;
+    return [[key,fields]];
+   }
    return [];
   })),
   pads:level.pads.map(numeric),lift:numeric(level.lift),receiverPanel:numeric(level.receiverPanel),

@@ -6,7 +6,7 @@ export const ROOM16_SPEC={id:'vanishing-support',title:'Ложный пол',con
 export function buildRoom16(game,index=15){
  const k=new Workshop(game,ROOM16_SPEC,index),w=k.world;
  k.bounds={minX:-22,maxX:22,minZ:-19,maxZ:19};k.ceiling=27;w.walls(k.bounds,27,-1);
- const deck=(name,x0,x1,z0,z1,y)=>{const f=w.floor(x0,x1,z0,z1,y,{name});w.box([(x0+x1)/2,y-.3,(z0+z1)/2],[x1-x0,.35,z1-z0],w.materials.trim);return f;};
+ const deck=(name,x0,x1,z0,z1,y)=>{const f=w.floor(x0,x1,z0,z1,y,{name}),casing=w.box([(x0+x1)/2,y-.3,(z0+z1)/2],[x1-x0,.35,z1-z0],w.materials.trim);if(name==='Descending island return')casing.userData.earlyAuditStair={rise:-5.4/22};return f;};
  deck('Southern return court',-22,22,12,19,0);
  deck('West recovery loop',-22,-13,-19,12,0);
  deck('North recovery loop',-13,22,-19,-14,0);

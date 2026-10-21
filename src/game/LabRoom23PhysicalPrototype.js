@@ -1,4 +1,5 @@
 import {Workshop} from './LabWorkshopKit.js';
+import {installVisualAuditMiddleKit} from './LabVisualAuditMiddle.js';
 import {buildRoom23PhysicalMachine as buildRoom23Balance} from './LabRoom23PhysicalMachine.js';
 export const ROOM23_SPEC={id:'counterweight-reversal',title:'Вес возвращения',concept:'Передача настоящей нагрузки между противоположными кабинами под общим тормозом',description:'Две кабины и один барабан. Передай другу другую опору, сохранив обе высоты общим тормозом.',accent:0xd9bb87,assets:[1,2,11,22,23,24],hints:['Пружинные грузовые поддоны меняют направление питаемого привода. Пассажир и друг действительно нагружают свои кабины.','На средней высоте края кабин сближаются. Общий тормоз держит барабан, пока нагрузка переходит с одного поддона на другой.','Муфта передаёт момент через прижатые диски. Снятый тормоз позволяет восточной кабине отвезти тебя на верхний обратный путь.']};
 
@@ -39,6 +40,7 @@ export function buildRoom23PhysicalPrototype(game,index=22){
  k.control('balance-brake',[7,10,4.5],()=>balance.requestBrake(!balance.brakeRequested),'E — привести в движение колодки общего тормоза');
  k.control('balance-coupling',[-6.5,0,5.6],()=>balance.requestClutch(!balance.clutchRequested),'E — прижать или отвести диски муфты');
  k.control('ground-brake-release',[-7,0,1],()=>balance.requestBrake(false),'E — отвести колодки общего тормоза');
+ installVisualAuditMiddleKit(k,23);
  const level=k.finish(spawn,cargoSpawn,[0,20,-20],{workshop:k,spec:ROOM23_SPEC,room23PhysicalPrototype:true,portalPuzzle:true,balance,cargoOnAnyPad:()=>balance.west.loaded()||balance.east.loaded()});
  level.dispose=()=>balance.dispose();level.spawnView={yaw:0,pitch:-.15};
  level.mechanismArt={liftSurfaces:['west-load-car','east-load-car']};

@@ -1,7 +1,7 @@
 {
   "kind": "declared-v65-visual-reference-cameras",
   "sourceCommit": "8eee93c02d4d6da18107ba9882c5656939257938",
-  "scope": "Previously inspected v65 interior TEST camera positions. Player-start is intentionally absent: the new release must show its actual ordinary initial camera. All future captures preserve their authored fog, even where the earlier inspection used an extra fog-free view. Mechanisms remain in initial state. No camera guarantees a clear view of every mechanism.",
+  "scope": "Previously inspected v65 interior TEST camera positions. Player-start is intentionally absent: the new release must show its actual ordinary initial camera. All future captures preserve their authored fog, even where the earlier inspection used an extra fog-free view. Mechanisms remain in initial state. No camera guarantees a clear view of every mechanism. Supplementary views labelled addedForRelease are new declared cameras based on their stated authored geometry; they are not represented as previously inspected v65 views.",
   "levels": [
     {
       "stableLevel": 1,
@@ -2819,6 +2819,23 @@
             -5.18
           ],
           "fov": 62
+        },
+        {
+          "kind": "extra-observatory-drive",
+          "camera": [
+            -11,
+            7,
+            23
+          ],
+          "target": [
+            0,
+            4,
+            9
+          ],
+          "fov": 62,
+          "referenceFogDisabled": false,
+          "addedForRelease": "v66-visual-audit",
+          "referenceSource": "Supplementary v66 camera in the first observatory courtyard, declared against the new mechanical drive and opening. Not a previously inspected v65 reference camera."
         }
       ]
     },
@@ -3527,6 +3544,40 @@
             33
           ],
           "fov": 70
+        },
+        {
+          "kind": "extra-finale-contact",
+          "camera": [
+            -62,
+            76,
+            35
+          ],
+          "target": [
+            -57,
+            74,
+            39
+          ],
+          "fov": 62,
+          "referenceFogDisabled": false,
+          "addedForRelease": "v66-visual-audit",
+          "referenceSource": "Declared supplementary camera inside actual sealed receiver, supplied by castle author after d060a64 visual review; contact[-57,72,39],socket[-57,72,33]. This is not a prior v65 screenshot camera."
+        },
+        {
+          "kind": "extra-optics-projector",
+          "camera": [
+            -64,
+            5,
+            -39
+          ],
+          "target": [
+            -73,
+            2.2,
+            -46
+          ],
+          "fov": 62,
+          "referenceFogDisabled": false,
+          "addedForRelease": "v66-visual-audit",
+          "referenceSource": "Supplementary v66 camera inside optics hall, declared against the actual projector lens and body. Not a previously inspected v65 reference camera."
         }
       ]
     },

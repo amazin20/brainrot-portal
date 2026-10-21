@@ -35,6 +35,6 @@ export function dressPuzzleProgression50(k,{departure,galleryA,galleryB,goalDeck
  // Mineral gold niche frames sit on the actual rear wall, outside the
  // passenger capsule and cup retrieval throat.
  for(const x of [-24,24]){k.block([x,12,-30.7],[1.0,25,1.2],'secondary');k.block([x,24.5,-30.1],[5,.3,.4],'metal',false);}
- k.label('ОБЩИЙ ВЕРХНИЙ ВЫХОД',[11,26,-21.5],[0,0,1],10,.8);
+ k.label('ВЫХОД',[11,26,-21.5],[0,0,1],7,.8);
  return {spindle,spring,angleScale,pointer,loadTrim,originalActors:true,downloadBytes:0,extraShadowLights:0,theme:'mineral gold / mint porcelain / terracotta casings'};
 }

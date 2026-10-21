@@ -63,7 +63,7 @@ export function manufacturedMaterials(palette){
  * Only the existing static solids can darken a deck, and the top remains at
  * its exact standing height. The one closed mesh replaces the source slab;
  * its vertex colours contain broad contact falloff, not a hovering decal. */
-function mineralDeckGeometry(width,height,depth,mesh,contacts){
+function mineralDeckGeometry(width,height,depth,mesh,contacts,exclusions=[]){
  const bevel=Math.min(.035,height*.12),x0=-width/2,x1=width/2,z0=-depth/2,z1=depth/2;
  const axes=(lo,hi,key)=>{
   const count=Math.min(16,Math.max(2,Math.ceil((hi-lo)/2.5)));
@@ -75,9 +75,21 @@ function mineralDeckGeometry(width,height,depth,mesh,contacts){
   for(const box of contacts)for(const edge of [box.min[key],box.max[key]])for(const d of [-.65,0,.65]){
    const value=edge+d-offset;if(value>lo+bevel&&value<hi-bevel)values.push(value);
   }
+  for(const cut of exclusions)for(const edge of key==='x'?[cut.minX,cut.maxX]:[cut.minZ,cut.maxZ]){
+   const value=edge-offset;if(value>lo+bevel&&value<hi-bevel)values.push(value);
+  }
   const sorted=[...new Set(values.map(v=>Math.round(v*1e5)/1e5))].sort((a,b)=>a-b);
   // Keep a bounded geometry budget even in the largest equipment halls.
   if(sorted.length<=36)return sorted;
+  if(exclusions.length){
+   const required=[lo,lo+bevel,hi-bevel,hi];
+   for(const cut of exclusions)for(const edge of key==='x'?[cut.minX,cut.maxX]:[cut.minZ,cut.maxZ]){
+    const value=Math.round((edge-offset)*1e5)/1e5;if(value>lo+bevel&&value<hi-bevel)required.push(value);
+   }
+   const retained=new Set(required),slots=Math.max(0,36-retained.size);
+   for(let i=0;i<slots;i++)retained.add(sorted[Math.round((i+1)*(sorted.length-1)/(slots+1))]);
+   return [...retained].sort((a,b)=>a-b);
+  }
   const bounded=[sorted[0],sorted[1]];
   for(let i=1;i<32;i++)bounded.push(sorted[Math.round(1+(sorted.length-4)*i/32)]);
   bounded.push(sorted.at(-2),sorted.at(-1));return [...new Set(bounded)];
@@ -95,6 +107,8 @@ function mineralDeckGeometry(width,height,depth,mesh,contacts){
  };
  const tri=(a,b,c,{top=false,value=.79}={})=>{for(const p of [a,b,c]){positions.push(...p);const tone=top?shade(p[0],p[2]):value;colors.push(tone,tone,tone);}};
  for(let ix=0;ix<xs.length-1;ix++)for(let iz=0;iz<zs.length-1;iz++){
+  const wx=mesh.position.x+(xs[ix]+xs[ix+1])/2,wz=mesh.position.z+(zs[iz]+zs[iz+1])/2;
+  if(exclusions.some(c=>wx>c.minX&&wx<c.maxX&&wz>c.minZ&&wz<c.maxZ))continue;
   const a=point(xs[ix],zs[iz]),b=point(xs[ix],zs[iz+1]),c=point(xs[ix+1],zs[iz+1]),d=point(xs[ix+1],zs[iz]);
   tri(a,b,c,{top:true});tri(a,c,d,{top:true});
  }
@@ -113,7 +127,7 @@ function mineralDeckGeometry(width,height,depth,mesh,contacts){
 function finishMineralDecks(k){
  const materials=new Set([k.m.floor,k.m.service].filter(Boolean)),up=new THREE.Vector3(0,1,0);
  for(const material of materials){material.vertexColors=true;material.needsUpdate=true;}
- let decks=0,contactJoints=0,triangles=0;
+ let decks=0,contactJoints=0,triangles=0,coplanarFields=0;
  k.world.root.updateWorldMatrix(true,true);
  k.world.root.traverse(mesh=>{
   if(!mesh.isMesh||mesh.isInstancedMesh||!materials.has(mesh.material)||mesh.userData?.collisionProxy)return;
@@ -121,20 +135,27 @@ function finishMineralDecks(k){
   const horizontal=up.clone().applyQuaternion(mesh.quaternion).dot(up)>.9999;
   if(mesh.parent===k.world.root&&horizontal&&p?.width>=8&&p?.depth>=8&&p?.height>=.15&&p?.height<=.8){
    const y=mesh.position.y+p.height/2,bounds=new THREE.Box3().setFromObject(mesh);
+   // The genuine recovery floor sometimes meets an authored court at the
+   // same height. Both full physical supports remain, but only the court owns
+   // the visible walking skin there. This removes the large stippled patches
+   // caused by two differently painted, coincident triangles (not shadows).
+   const exclusions=mesh.name==='Continuous service and recovery floor'?(k.decks||[])
+    .filter(d=>d.name!==mesh.name&&Math.abs(d.y-y)<.002&&d.maxX>bounds.min.x&&d.minX<bounds.max.x&&d.maxZ>bounds.min.z&&d.minZ<bounds.max.z)
+    .map(d=>({minX:d.minX+.04,maxX:d.maxX-.04,minZ:d.minZ+.04,maxZ:d.maxZ-.04})):[];
    const contacts=k.game.colliders.filter(c=>c.enabled!==false&&!c.kinematic&&c.box.min.y<=y+.06&&c.box.max.y>=y+.18&&
     c.box.max.x>bounds.min.x&&c.box.min.x<bounds.max.x&&c.box.max.z>bounds.min.z&&c.box.min.z<bounds.max.z).map(c=>c.box);
    // Coarse box proxies may surround a whole machine. Avoid baking a large
    // false black pool beneath housings that do not have a local contact.
    const local=contacts.filter(b=>Math.min(b.max.x-b.min.x,b.max.z-b.min.z)<3.2);
-   if(!local.length){
+   if(!local.length&&!exclusions.length){
     // A clear unsupported landing gains no contact detail from subdivision.
     // Keep its existing cheap rounded slab and only match the batch contract.
     if(!old.attributes.color)old.setAttribute('color',new THREE.Float32BufferAttribute(new Float32Array(old.attributes.position.count*3).fill(1),3));
     return;
    }
-   mesh.geometry=mineralDeckGeometry(p.width,p.height,p.depth,mesh,local);
+   mesh.geometry=mineralDeckGeometry(p.width,p.height,p.depth,mesh,local,exclusions);
    mapDeckUV(mesh);old.dispose();decks++;contactJoints+=local.length;
-   triangles+=mesh.geometry.attributes.position.count/3;
+   triangles+=mesh.geometry.attributes.position.count/3;coplanarFields+=exclusions.length;
    mesh.userData.mineralContactFinish=true;
   }else if(!old.attributes.color){
    // Static batching requires the same attributes for ramps, decks and
@@ -142,7 +163,7 @@ function finishMineralDecks(k){
    old.setAttribute('color',new THREE.Float32BufferAttribute(new Float32Array(old.attributes.position.count*3).fill(1),3));
   }
  });
- return {decks,contactJoints,triangles};
+ return {decks,contactJoints,triangles,coplanarFields};
 }
 
 /** A closed folded bulkhead with its border and recessed field in ONE mesh.
@@ -239,6 +260,6 @@ export function finishManufacturedChamber(k){
    mat.color.setHex(0xb2c0b4);mat.roughness=.88;mat.metalness=.025;mat.envMap=null;mat.envMapIntensity=.45;wallMaterials.add(mat);
   }
  });
- const result=Object.freeze({revision:66,foldedPanels,springWinding,wallCassettes,wallFinishes:wallMaterials.size,mineralDecks:mineral.decks,staticContactJoints:mineral.contactJoints,mineralTriangles:mineral.triangles,structuralColumns:structural.columns,structuralColumnTriangles:structural.triangles,extraLights:0,perFrameCallbacks:0});
+ const result=Object.freeze({revision:66,foldedPanels,springWinding,wallCassettes,wallFinishes:wallMaterials.size,mineralDecks:mineral.decks,staticContactJoints:mineral.contactJoints,mineralTriangles:mineral.triangles,coplanarFields:mineral.coplanarFields,structuralColumns:structural.columns,structuralColumnTriangles:structural.triangles,extraLights:0,perFrameCallbacks:0});
  k.manufacturedFinish=result;k.world.root.userData.manufacturedFinish=result;return result;
 }

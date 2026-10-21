@@ -85,7 +85,8 @@ export function buildRoom21(game,index=20) {
       floor(name,x0,x1,Math.min(a,b),Math.max(a,b),lo+(hi-lo)*(i+1)/n);
       // Structural riser all the way down; no floating stack of thin shelves.
       const y=lo+(hi-lo)*(i+1)/n;
-      w.box([(x0+x1)/2,y/2,(a+b)/2],[x1-x0,y,Math.abs(b-a)],w.materials.wall);
+      const riser=w.box([(x0+x1)/2,y/2,(a+b)/2],[x1-x0,y,Math.abs(b-a)],w.materials.wall);
+      riser.name=name+' / original closed riser';riser.userData.recoveryStairRiser=true;
     }
   };
   floor('Connected recovery basin',-20,24,-17,19,0);

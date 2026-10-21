@@ -1,8 +1,9 @@
 import * as THREE from 'three';
 import {manufacturedBulkheadGeometry} from './LabManufacturedFinish.js';
+import {finishEarlyMachineConstruction} from './LabEarlyMachineConstruction.js';
 
 const V=(...p)=>new THREE.Vector3(...p),Q=()=>new THREE.Quaternion(),UP=V(0,1,0);
-export const EARLY_AUDIT_REVISION='early-machine-construction-v66';
+export const EARLY_AUDIT_REVISION='early-fabricated-machines-v66-r2';
 const METAL=0x9eafb3,DARK=0x294b59,PAINT=0x5b8998,BRASS=0xd1a768;
 
 /** A closed structural I-section, contained in the former rectangular post.
@@ -40,7 +41,7 @@ function replace(owner,mesh,geometry,material){
   mesh.updateWorldMatrix(true,false);owner.renderRoot.updateWorldMatrix(true,false);
   mount.matrix.copy(owner.renderRoot.matrixWorld).invert().multiply(mesh.matrixWorld);owner.renderRoot.add(mount);
   const visual=new THREE.Mesh(geometry,material);visual.name='Early audit / integral structural profile';visual.castShadow=mesh.castShadow;visual.receiveShadow=mesh.receiveShadow;
-  visual.userData.visualOnly=true;mount.add(visual);owner.geometry.push(geometry);
+  visual.userData.visualOnly=true;visual.userData.physicalSourceId=mesh.uuid;mount.add(visual);owner.geometry.push(geometry);
   if(owner.dynamic?.has(mesh))owner.followers.push({target:mesh,mount});
   return;
  }
@@ -233,6 +234,10 @@ export function finishVisualAuditEarly(game,level,index=level?.index){
   }
  }
  if(index===12)opticsCradle(level,owner,root);
+ finishEarlyMachineConstruction(level,index,owner,replace,()=>{
+  const m=new THREE.MeshStandardMaterial({name:'Early audit / fabricated structural alloys',color:0xffffff,vertexColors:true,roughness:.49,metalness:.38});
+  owner.materials.push(m);return m;
+ });
  const inverse=new THREE.Matrix4();let disposed=false;
  const sync=()=>{
   if(disposed)return;root.updateWorldMatrix(true,false);inverse.copy(root.matrixWorld).invert();
@@ -264,6 +269,7 @@ export function finishVisualAuditEarly(game,level,index=level?.index){
   for(const {mesh,attribute,values}of owner.instancePaint){
    mesh.instanceColor=attribute;if(attribute&&values){attribute.array.set(values);attribute.needsUpdate=true;}
   }
+  for(const {part,matrix}of owner.retiredCoat??[]){part.matrix.copy(matrix);}
   for(const g of new Set(owner.geometry))if(!flushed.has(g))g.dispose();for(const m of new Set(owner.materials))m.dispose();
  };
  level.dispose=function(...args){if(disposed)return;release();return oldDispose?.apply(this,args);};

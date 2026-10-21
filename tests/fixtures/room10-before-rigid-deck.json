@@ -1,0 +1,625 @@
+{
+  "sourceCommit": "8eee93c02d4d6da18107ba9882c5656939257938",
+  "originalGolden": "6cb58c509dc8b7c3f6d803f02ac3e7439e2d9669d6aadac32548edd9a1cc68f4",
+  "scope": "Only the replaced scanned deck twelve-slab contact profile, exact fixed-cassette float32 envelope and old moving ray owner. Other original room records are retained by the existing whole-room golden.",
+  "fixedProxy": {
+    "mesh": {
+      "name": "",
+      "visible": false,
+      "ancestorsVisible": false,
+      "raycastChildren": [],
+      "matrix": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        -6.759292006,
+        1.21258831,
+        1.5,
+        1
+      ],
+      "frame": null
+    },
+    "box": {
+      "min": [
+        -9.000000119,
+        0,
+        -1.263991117
+      ],
+      "max": [
+        -4.518583894,
+        2.42517662,
+        4.263991117
+      ]
+    },
+    "enabled": true,
+    "kinematic": false,
+    "frontPlane": null
+  },
+  "deckColliders": [
+    {
+      "mesh": {
+        "name": "",
+        "visible": false,
+        "ancestorsVisible": false,
+        "raycastChildren": [],
+        "matrix": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          -8.095110077,
+          1.786073364,
+          1.5,
+          1
+        ],
+        "frame": null
+      },
+      "box": {
+        "min": [
+          -8.403220145,
+          1.74032008,
+          0.06
+        ],
+        "max": [
+          -7.787000009,
+          1.831826648,
+          2.94
+        ]
+      },
+      "enabled": true,
+      "kinematic": true,
+      "frontPlane": null
+    },
+    {
+      "mesh": {
+        "name": "",
+        "visible": false,
+        "ancestorsVisible": false,
+        "raycastChildren": [],
+        "matrix": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          -7.484158566,
+          1.791039063,
+          1.5,
+          1
+        ],
+        "frame": null
+      },
+      "box": {
+        "min": [
+          -7.792999476,
+          1.740286788,
+          0.06
+        ],
+        "max": [
+          -7.175317657,
+          1.841791338,
+          2.94
+        ]
+      },
+      "enabled": true,
+      "kinematic": true,
+      "frontPlane": null
+    },
+    {
+      "mesh": {
+        "name": "",
+        "visible": false,
+        "ancestorsVisible": false,
+        "raycastChildren": [],
+        "matrix": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          -6.874029351,
+          1.803326085,
+          1.5,
+          1
+        ],
+        "frame": null
+      },
+      "box": {
+        "min": [
+          -7.182999302,
+          1.751691472,
+          0.06
+        ],
+        "max": [
+          -6.5650594,
+          1.854960699,
+          2.94
+        ]
+      },
+      "enabled": true,
+      "kinematic": true,
+      "frontPlane": null
+    },
+    {
+      "mesh": {
+        "name": "",
+        "visible": false,
+        "ancestorsVisible": false,
+        "raycastChildren": [],
+        "matrix": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          -6.265161756,
+          1.808799928,
+          1.5,
+          1
+        ],
+        "frame": null
+      },
+      "box": {
+        "min": [
+          -6.573323492,
+          1.762693082,
+          0.06
+        ],
+        "max": [
+          -5.957000019,
+          1.854906773,
+          2.94
+        ]
+      },
+      "enabled": true,
+      "kinematic": true,
+      "frontPlane": null
+    },
+    {
+      "mesh": {
+        "name": "",
+        "visible": false,
+        "ancestorsVisible": false,
+        "raycastChildren": [],
+        "matrix": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          -5.6537488,
+          1.816204314,
+          1.5,
+          1
+        ],
+        "frame": null
+      },
+      "box": {
+        "min": [
+          -5.96299884,
+          1.762654667,
+          0.06
+        ],
+        "max": [
+          -5.344498761,
+          1.869753962,
+          2.94
+        ]
+      },
+      "enabled": true,
+      "kinematic": true,
+      "frontPlane": null
+    },
+    {
+      "mesh": {
+        "name": "",
+        "visible": false,
+        "ancestorsVisible": false,
+        "raycastChildren": [],
+        "matrix": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          -5.046135963,
+          1.816983131,
+          1.5,
+          1
+        ],
+        "frame": null
+      },
+      "box": {
+        "min": [
+          -5.35527097,
+          1.764219983,
+          0.06
+        ],
+        "max": [
+          -4.737000956,
+          1.869746279,
+          2.94
+        ]
+      },
+      "enabled": true,
+      "kinematic": true,
+      "frontPlane": null
+    },
+    {
+      "mesh": {
+        "name": "",
+        "visible": false,
+        "ancestorsVisible": false,
+        "raycastChildren": [],
+        "matrix": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          -4.435116071,
+          1.808480478,
+          1.5,
+          1
+        ],
+        "frame": null
+      },
+      "box": {
+        "min": [
+          -4.743232132,
+          1.762686184,
+          0.06
+        ],
+        "max": [
+          -4.12700001,
+          1.854274771,
+          2.94
+        ]
+      },
+      "enabled": true,
+      "kinematic": true,
+      "frontPlane": null
+    },
+    {
+      "mesh": {
+        "name": "",
+        "visible": false,
+        "ancestorsVisible": false,
+        "raycastChildren": [],
+        "matrix": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          -3.825920187,
+          1.801464905,
+          1.5,
+          1
+        ],
+        "frame": null
+      },
+      "box": {
+        "min": [
+          -4.134839747,
+          1.750174842,
+          0.06
+        ],
+        "max": [
+          -3.517000627,
+          1.852754968,
+          2.94
+        ]
+      },
+      "enabled": true,
+      "kinematic": true,
+      "frontPlane": null
+    },
+    {
+      "mesh": {
+        "name": "",
+        "visible": false,
+        "ancestorsVisible": false,
+        "raycastChildren": [],
+        "matrix": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          -3.217205016,
+          1.780308345,
+          1.5,
+          1
+        ],
+        "frame": null
+      },
+      "box": {
+        "min": [
+          -3.527406427,
+          1.72025232,
+          0.06
+        ],
+        "max": [
+          -2.907003604,
+          1.84036437,
+          2.94
+        ]
+      },
+      "enabled": true,
+      "kinematic": true,
+      "frontPlane": null
+    },
+    {
+      "mesh": {
+        "name": "",
+        "visible": false,
+        "ancestorsVisible": false,
+        "raycastChildren": [],
+        "matrix": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          -2.606857114,
+          1.752731709,
+          1.5,
+          1
+        ],
+        "frame": null
+      },
+      "box": {
+        "min": [
+          -2.916711672,
+          1.695048401,
+          0.06
+        ],
+        "max": [
+          -2.297002556,
+          1.810415018,
+          2.94
+        ]
+      },
+      "enabled": true,
+      "kinematic": true,
+      "frontPlane": null
+    },
+    {
+      "mesh": {
+        "name": "",
+        "visible": false,
+        "ancestorsVisible": false,
+        "raycastChildren": [],
+        "matrix": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          -1.995677081,
+          1.735511006,
+          1.5,
+          1
+        ],
+        "frame": null
+      },
+      "box": {
+        "min": [
+          -2.304353822,
+          1.685881338,
+          0.06
+        ],
+        "max": [
+          -1.68700034,
+          1.785140673,
+          2.94
+        ]
+      },
+      "enabled": true,
+      "kinematic": true,
+      "frontPlane": null
+    },
+    {
+      "mesh": {
+        "name": "",
+        "visible": false,
+        "ancestorsVisible": false,
+        "raycastChildren": [],
+        "matrix": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          -1.385964271,
+          1.724389502,
+          1.5,
+          1
+        ],
+        "frame": null
+      },
+      "box": {
+        "min": [
+          -1.694927854,
+          1.672798432,
+          0.06
+        ],
+        "max": [
+          -1.077000689,
+          1.775980573,
+          2.94
+        ]
+      },
+      "enabled": true,
+      "kinematic": true,
+      "frontPlane": null
+    }
+  ],
+  "movingRayOwner": {
+    "name": "Bridge rigid telescoping span",
+    "visible": true,
+    "ancestorsVisible": true,
+    "raycastChildren": [
+      {
+        "name": "Supplied moving triangles",
+        "visible": true,
+        "matrix": [
+          0,
+          0,
+          -1,
+          0,
+          0,
+          1,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          -6.6,
+          0,
+          1.5,
+          1
+        ]
+      },
+      {
+        "name": "Supplied moving triangles",
+        "visible": true,
+        "matrix": [
+          0,
+          0,
+          -1,
+          0,
+          0,
+          1,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          -6.6,
+          0,
+          1.5,
+          1
+        ]
+      }
+    ],
+    "matrix": [
+      0,
+      0,
+      -1,
+      0,
+      0,
+      1,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      -6.6,
+      0,
+      1.5,
+      1
+    ],
+    "frame": null
+  },
+  "floorMeshName": "Supplied moving triangles",
+  "freightCenterY": 1.854267033
+}

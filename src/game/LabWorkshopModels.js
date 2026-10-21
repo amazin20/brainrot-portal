@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import {RoundedBoxGeometry} from 'three/addons/geometries/RoundedBoxGeometry.js';
 
 const V = (...v) => new THREE.Vector3(...v);
 const clamp = THREE.MathUtils.clamp;
@@ -64,10 +65,39 @@ function assembly(game, parent, id, { position, size, yaw }, moves) {
   return { id, art, fixed, moving, uniformScale: size, sourceTriangles, fixedTriangles, movingTriangles };
 }
 
-/** Uploaded 37 is a telescopic bridge, not a wheeled carriage. Its cassette
- * stays bolted to the near bank while the complete narrow span slides into it.
- * The original deck is the visible surface; no replacement slab is added.
- * `deck.slabs` are collider specifications in `moving` coordinates. */
+/** A rigid closed load plate with pigment IN its single upper face. The
+ * uploaded37 had up to22cm of dents and a scanned vertex-AO pattern across
+ * the walking field. Neither another skin nor different normals can fix that
+ * shape. Every upper vertex here lies on the same physical support plane. */
+export function rigidBridgeDeckGeometry(width,start,end,top,thickness){
+ const positions=[],normals=[],colors=[],uv=[],bottom=top-thickness,half=width/2;
+ const frame=new THREE.Color(0x365564),deck=new THREE.Color(0xb5c6c8),joint=new THREE.Color(0x879fa7);
+ const quad=(a,b,c,d,normal,color)=>{
+  for(const p of [a,b,c,a,c,d]){positions.push(...p);normals.push(...normal);colors.push(color.r,color.g,color.b);uv.push(p[0]/width+.5,(p[2]-start)/(end-start));}
+ };
+ const rim=Math.min(.11,width*.04),seam=.012;
+ const xs=[-half,-half+rim,half-rim,half];
+ const zs=[start,start+rim];
+ for(const t of [1/3,2/3]){const z=start+(end-start)*t;zs.push(z-seam/2,z+seam/2);}
+ zs.push(end-rim,end);
+ for(let x=0;x<xs.length-1;x++)for(let z=0;z<zs.length-1;z++){
+  const color=x===0||x===xs.length-2||z===0||z===zs.length-2?frame:zs[z+1]-zs[z]<seam*1.1?joint:deck;
+  quad([xs[x],top,zs[z]],[xs[x],top,zs[z+1]],[xs[x+1],top,zs[z+1]],[xs[x+1],top,zs[z]],[0,1,0],color);
+ }
+ quad([-half,bottom,start],[half,bottom,start],[half,bottom,end],[-half,bottom,end],[0,-1,0],frame);
+ quad([-half,bottom,start],[-half,bottom,end],[-half,top,end],[-half,top,start],[-1,0,0],frame);
+ quad([half,bottom,end],[half,bottom,start],[half,top,start],[half,top,end],[1,0,0],frame);
+ quad([half,bottom,start],[-half,bottom,start],[-half,top,start],[half,top,start],[0,0,-1],frame);
+ quad([-half,bottom,end],[half,bottom,end],[half,top,end],[-half,top,end],[0,0,1],frame);
+ const geometry=new THREE.BufferGeometry();geometry.name='Rigid telescopic deck / one planar load surface';
+ geometry.setAttribute('position',new THREE.Float32BufferAttribute(positions,3));geometry.setAttribute('normal',new THREE.Float32BufferAttribute(normals,3));
+ geometry.setAttribute('color',new THREE.Float32BufferAttribute(colors,3));geometry.setAttribute('uv',new THREE.Float32BufferAttribute(uv,2));
+ geometry.computeBoundingBox();geometry.computeBoundingSphere();return geometry;
+}
+
+/** The cassette and its span are rebuilt as manufactured parts in the
+ * uploaded model's exact local system. The source GLB cache stays intact,
+ * but none of its deformed triangles remains under the new drawing. */
 export function buildExtensionBridgeModel(game, parent, {
   position = [0, 0, 0], size = 12, yaw = 0, stroke = 3.6,
 } = {}) {
@@ -76,45 +106,59 @@ export function buildExtensionBridgeModel(game, parent, {
   const { art, fixed, moving } = item;
   fixed.name = 'Bridge stationary cassette'; moving.name = 'Bridge rigid telescoping span';
   const width = .24 * size, start = -.15 * size, end = .46 * size, depth = end - start;
-  const sourceMeshes = moving.children.filter(child => child.isMesh);
-  const ray = new THREE.Raycaster(), origin = V(), down = V(0, -1, 0), local = V();
-  const worldHeight = (x, z) => {
-    moving.updateWorldMatrix(true, true);
-    origin.set(x, art.position.y + size * 2, z);
-    ray.set(origin, down);
-    return ray.intersectObjects(sourceMeshes, false)[0]?.point.y ?? -Infinity;
+  const cassette=new THREE.Box3();
+  for(const mesh of fixed.children)cassette.union(mesh.geometry.boundingBox);
+  item.originalPartition={fixedTriangles:item.fixedTriangles,movingTriangles:item.movingTriangles};
+  for(const group of [fixed,moving])for(const mesh of [...group.children]){mesh.removeFromParent();mesh.geometry.dispose();}
+  const top=size*(1.82/12),thickness=size*.02;
+  const materials={
+    enamel:new THREE.MeshStandardMaterial({name:'Bridge rigid baked enamel',color:0x91aeb7,roughness:.53,metalness:.28}),
+    frame:new THREE.MeshStandardMaterial({name:'Bridge machined load frame',color:0x294654,roughness:.46,metalness:.62}),
+    metal:new THREE.MeshStandardMaterial({name:'Bridge satin guide alloy',color:0xadb9b7,roughness:.38,metalness:.68}),
+    signal:new THREE.MeshStandardMaterial({name:'Bridge inset cassette markers',color:0xe1b66b,roughness:.5,metalness:.28}),
+    deck:new THREE.MeshStandardMaterial({name:'Bridge rigid mineral load plate',color:0xffffff,vertexColors:true,roughness:.71,metalness:.17}),
   };
-  const localHeight = (x, z) => {
-    moving.updateWorldMatrix(true, true);
-    local.set(x, 0, z).applyMatrix4(moving.matrixWorld);
-    const y = worldHeight(local.x, local.z);
-    return Number.isFinite(y) ? moving.worldToLocal(V(local.x, y, local.z)).y : -Infinity;
+  const box=(name,p,span,material,bevel=.018)=>{
+    const geometry=bevel?new RoundedBoxGeometry(...span,1,Math.min(bevel*size/12,...span.map(n=>n*.12))):new THREE.BoxGeometry(...span);
+    const mesh=new THREE.Mesh(geometry,materials[material]);mesh.name=name;mesh.position.fromArray(p);mesh.castShadow=mesh.receiveShadow=true;fixed.add(mesh);return mesh;
   };
-  const slabs = [], slices = 12, length = depth / slices, thickness = .09;
-  for (let i = 0; i < slices; i++) {
-    const z0 = start + i * length, z1 = z0 + length;
-    const y0 = localHeight(0, z0), y1 = localHeight(0, z1), rotationX = Math.atan2(y0 - y1, length);
-    const normal = V(0, Math.cos(rotationX), Math.sin(rotationX));
-    slabs.push({ center: V(0, (y0 + y1) / 2, (z0 + z1) / 2).addScaledVector(normal, -thickness / 2),
-      size: V(width, thickness, length / Math.cos(rotationX) + .006), rotationX });
+  const s=cassette.getSize(V()),c=cassette.getCenter(V()),h=cassette.max.y,foot=size*.03,cheek=size*.06;
+  // These extreme planes also preserve the former stationary collision box.
+  box('Cassette / grounded continuous machine bed',[c.x,foot/2,c.z],[s.x,foot,s.z],'frame',0);
+  box('Cassette / folded rear bulkhead',[c.x,h/2,cassette.min.z+size*.018],[s.x,h,size*.036],'frame');
+  for(const sign of [-1,1]){
+    const x=c.x+sign*(s.x-cheek)/2;
+    box('Cassette / structural side cheek',[x,(h+foot)/2,c.z],[cheek,h-foot,s.z-size*.03],'enamel');
+    box('Cassette / front guide shoe',[x,top-size*.018,cassette.max.z-size*.023],[cheek*.87,size*.055,size*.045],'metal');
+    box('Cassette / recessed marker housing',[x,h-size*.029,cassette.max.z-size*.018],[cheek*.73,size*.025,size*.033],'frame');
+    box('Cassette / amber inset marker',[x,h-size*.029,cassette.max.z-size*.0025],[cheek*.48,size*.010,size*.005],'signal',.008);
   }
-  const center = V(0, localHeight(0, (start + end) / 2), (start + end) / 2);
-  // The moving deck translates horizontally; its height range cannot change
-  // with bridge progress. Sample that range once from the source mesh, then
-  // transform only the four rectangle corners for subsequent bounds queries.
-  let verticalBounds = null;
-  const deck = { width, depth, center, mesh: moving.children[0], slabs, start, end,
+  box('Cassette / flat removable top cover',[c.x,h-size*.008,c.z],[s.x,size*.016,s.z-size*.025],'enamel');
+  box('Cassette / transverse motor housing',[c.x,(foot+top-size*.035)/2,c.z],[s.x-cheek*1.5,top-size*.035-foot,s.z-size*.05],'frame');
+  const loadGeometry=rigidBridgeDeckGeometry(width,start,end,top,thickness);
+  const loadMesh=new THREE.Mesh(loadGeometry,materials.deck);loadMesh.name='Rigid single-surface telescoping load deck';loadMesh.castShadow=loadMesh.receiveShadow=true;moving.add(loadMesh);
+  item.retainedSourceTriangles=0;item.replacedSourceTriangles=item.sourceTriangles;
+  const triangles=group=>{let n=0;group.traverse(m=>{if(m.isMesh)n+=(m.geometry.index?.count??m.geometry.attributes.position.count)/3;});return n;};
+  item.fixedTriangles=triangles(fixed);item.movingTriangles=triangles(moving);item.presentationRevision='rigid-telescopic-deck-v66';
+  const ray = new THREE.Ray(),plane=new THREE.Plane(),origin=V(),down=V(0,-1,0),local=V(),hit=V(),normal=V(),planePoint=V();
+  const worldHeight = (x, z) => {
+    moving.updateWorldMatrix(true,false);normal.set(0,1,0).transformDirection(moving.matrixWorld);planePoint.set(0,top,0).applyMatrix4(moving.matrixWorld);
+    plane.setFromNormalAndCoplanarPoint(normal,planePoint);origin.set(x,planePoint.y+size*2,z);ray.set(origin,down);
+    if(!ray.intersectPlane(plane,hit))return -Infinity;
+    local.copy(hit);moving.worldToLocal(local);
+    return Math.abs(local.x)<=width/2+1e-6&&local.z>=start-1e-6&&local.z<=end+1e-6?hit.y:-Infinity;
+  };
+  // One closed exact body replaces twelve approximations to a dented sheet.
+  const center = V(0,top,(start+end)/2),slabs=[{center:V(0,top-thickness/2,(start+end)/2),size:V(width,thickness,depth),rotationX:0}];
+  const deck = { width, depth, center, mesh: loadMesh, slabs, start, end, top, thickness,
     heightAt: worldHeight,
     bounds() {
       moving.updateWorldMatrix(true, true);
       const box = new THREE.Box3();
       for (const x of [-width / 2, width / 2]) for (const z of [start, end]) {
-        const p = V(x, 0, z).applyMatrix4(moving.matrixWorld);
-        if (!verticalBounds) p.y = worldHeight(p.x, p.z);
+        const p = V(x, top, z).applyMatrix4(moving.matrixWorld);
         box.expandByPoint(p);
       }
-      if (!verticalBounds) verticalBounds = [box.min.y, box.max.y];
-      else [box.min.y, box.max.y] = verticalBounds;
       return box;
     },
   };
@@ -126,7 +170,7 @@ export function buildExtensionBridgeModel(game, parent, {
     moving.updateWorldMatrix(true, true);
     return item.progress;
   };
-  item.role = 'Uploaded telescopic bridge: stationary cassette, sliding original deck';
+  item.role = 'Manufactured telescopic bridge: stationary source-sized cassette, rigid planar sliding deck';
   art.userData.gameplayRole = item.role;
   item.setProgress(0);
   return item;

@@ -83,7 +83,7 @@ export function buildExtendedCampaign(game,index){
   world.box([0,4.15,-10.5],[.16,1.45,.15],pilotBeacon,false);
   world.box([9.7,4.15,-8],[.16,1.45,.15],exitBeacon,false);
   mechanismArt.earlyOptics={emitter,mirror,pilot,sensor};
-  const ray=beamDrawing(world),door=gate(world,-13,24,10);
+  const ray=beamDrawing(world,0x28edff,.065),door=gate(world,-13,24,10);
   const reflector={position:V(0,2.1,-8),normal:V(1,0,0),radius:.83};
   state.mirror=0;state.target=0;state.pilotLit=false;state.lit=false;state.door=door;
   console([-8,0,-5.8],()=>{state.target=state.target?0:1;game.audio?.mechanism?.('switch');},'mirror','E — повернуть зеркало. Луч отражается от диска и проходит через порталы.');
@@ -123,6 +123,14 @@ export function buildExtendedCampaign(game,index){
   for(const x of [-4.18,4.18])galleryPart('solid side guard',[x,7.58,-8.05],[.14,1.16,9.9]);
   galleryPart('solid rear guard',[0,7.58,-12.84],[8.4,1.16,.14]);
   mechanismArt.airGalleryStructure=galleryStructure;
+  const galleryBraces=[];
+  for(const x of [-3.65,3.65])for(const [za,zb]of [[-5.5,-7],[-11.3,-9.8]]){
+   const a=V(x,5.15,za),b=V(x,6.38,zb),delta=b.clone().sub(a);
+   const brace=world.box(a.clone().add(b).multiplyScalar(.5).toArray(),[.18,delta.length(),.18],world.materials.trim);
+   brace.name='Receiving gallery knee brace / closed steel section';brace.quaternion.setFromUnitVectors(V(0,1,0),delta.normalize());
+   brace.updateWorldMatrix(true,false);game.colliders.find(c=>c.mesh===brace).box.setFromObject(brace);galleryBraces.push(brace);
+  }
+  mechanismArt.galleryKneeBraces=galleryBraces;
   // Tall column, open only toward the high gallery. It is not an elevator.
   for(const x of [-3.1,3.1]){world.box([x,6,0],[.20,12,.20]);glass(world,[x,5,0],[.10,10,5.2]);}
   patch('air-intake',[9.8,2.1,7],[-1,0,0]);patch('air-up',[0,.025,0],[0,1,0],4,4);

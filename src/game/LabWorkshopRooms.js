@@ -41,11 +41,13 @@ export function buildSpringMailRoom(k,{baseWalls,closedExit}) {
   k.panel('loading-floor',[-7,.025,6],[0,1,0],5,5);
   // A gantry carries the overhead ceramic target; the falling path stays open.
   for(const x of [-3.4,3.4]) {
-    w.box([x,6,-8.2],[.22,12,.24]);
+    w.box([x,6,-8.2],[.45,12,.50]);
     w.box([x,10.8,-5],[.22,.28,6.5]);
   }
   w.box([0,10.8,-8.2],[7,.28,.28]);
   w.box([0,10.8,-1.8],[7,.28,.28]);
+  const driveHousing=w.box([0,9.85,-8.75],[6.4,1.4,.65],w.materials.trim);
+  driveHousing.name='Spring drop gantry / rear drive enclosure';driveHousing.userData.earlyAuditMachineHousing=true;
   // The rear gantry and the horizontal supplied ram are the two visible
   // landmarks of the falling load. Status on the actual rear truss follows
   // the physical latch; a tall indicator above the grounded ram shows its
@@ -157,13 +159,24 @@ export function buildFreightBridgeRoom(k,{baseWalls,closedExit}) {
   // before the real receiving contact can release the hood.
   k.panel('dock-feed-floor',[-2.9,.025,9.5],[0,1,0],4,4);
   k.panel('dock-feed-ceiling',[2.5,5.9,1.5],[0,-1,0],4,4);
-  // Four real hangers tie the overhead ceramic panel to the chamber ceiling.
-  // Its open centre remains clear for the incoming friend and for portal shots.
-  for(const x of [.44,4.56])for(const z of [-.56,3.56])
-    w.box([x,8.98,z],[.16,6.04,.16],w.materials.trim);
-  for(const y of [6.02,11.88]){
-    for(const z of [-.56,3.56])w.box([2.5,y,z],[4.28,.16,.16],w.materials.trim);
-    for(const x of [.44,4.56])w.box([x,y,1.5],[.16,.16,4.28],w.materials.trim);
+  // Closed steel sections, broad end shoes and real junction blocks support
+  // the receiver. Every enlarged section grows OUTWARD from the old aperture
+  // planes; its ceramic face and the full incoming cargo path stay unchanged.
+  const frameParts=[];
+  const capMetal=new THREE.MeshStandardMaterial({name:'Freight receiver machined load shoes and junctions',color:0x95afb4,roughness:.42,metalness:.62});
+  const framePart=(role,p,size,material=w.materials.trim)=>{
+    const mesh=w.box(p,size,material);mesh.name='Freight receiving frame / '+role;
+    mesh.userData.freightFrameRole=role;frameParts.push(mesh);return mesh;
+  };
+  for(const x of [.37,4.63])for(const z of [-.63,3.63])
+    framePart('overhead hanger',[x,8.98,z],[.30,6.04,.30]);
+  for(const y of [6.09,11.81]){
+    for(const z of [-.63,3.63])framePart('overhead cross-head',[2.5,y,z],[4.56,.30,.30]);
+    for(const x of [.37,4.63])framePart('overhead side tie',[x,y,1.5],[.30,.30,4.56]);
+  }
+  for(const x of [.29,4.71])for(const z of [-.71,3.71]){
+    framePart('overhead lower shoe',[x,6.14,z],[.46,.40,.46],capMetal);
+    framePart('overhead upper junction',[x,11.735,z],[.46,.45,.46],capMetal);
   }
 
   const slabBox=new THREE.Box3(),matrix=new THREE.Matrix4(),rotation=new THREE.Matrix4();
@@ -230,15 +243,21 @@ export function buildFreightBridgeRoom(k,{baseWalls,closedExit}) {
     [[3.8,bankY+.65,-.01],[8.8,1.3,.10]],[[3.8,bankY+.65,3.01],[8.8,1.3,.10]],
     [[8.2,bankY+.65,1.5],[.12,1.3,3.0]],
   ])hood.push(glassLift(k,p,size,3.8,()=>lock.engaged));
-  for(const x of [-.6,8.2])for(const z of [-.10,3.10])w.box([x,3.7,z],[.14,7.4,.14]);
-  w.box([3.8,7.32,-.1],[9,.16,.16]);w.box([3.8,7.32,3.1],[9,.16,.16]);
+  for(const x of [-.68,8.28])for(const z of [-.18,3.18])
+    framePart('founded hood upright',[x,3.7,z],[.30,7.4,.30]);
+  for(const z of [-.18,3.18])framePart('hood load girder',[3.8,7.32,z],[9.26,.30,.30]);
+  for(const x of [-.83,8.43])for(const z of [-.33,3.33])
+    framePart('founded hood shoe',[x,x<0?.12:bankY+.12,z],[.60,.24,.60],capMetal);
+  for(const x of [-.76,8.36])for(const z of [-.26,3.26])
+    framePart('hood upper junction',[x,7.255,z],[.46,.45,.46],capMetal);
   const indicator=w.box([2.5,bankY+.025,3.5],[1.3,.04,.12],new THREE.MeshStandardMaterial({color:0xb49462}),false);
   // The same contact colour outlines the supported receiving end of the bay;
   // the incoming edge stays open to the telescopic deck.
   for(const z of [.3,2.7])w.box([2.84,bankY+.008,z],[1.02,.016,.05],indicator.material,false);
   w.box([3.35,bankY+.008,1.5],[.05,.016,2.45],indicator.material,false);
   k.ticks.push(()=>indicator.material.color.setHex(lock.engaged?0x80dabc:0xb49462));
-  k.state.freightHood=hood;k.state.presentation={kind:'telescopic-cargo-transfer',bankY,loadingPoint:[-1.55,bankY,1.5],receiver};
+  k.state.freightHood=hood;k.state.freightReceiverFrame=frameParts;
+  k.state.presentation={kind:'telescopic-cargo-transfer',bankY,loadingPoint:[-1.55,bankY,1.5],receiver};
   closedExit(()=>lock.engaged);
   // The dock contact feeds the indicator, then follows the bank surface,
   // drops down its visible end face and reaches the fixed door-frame lamp.

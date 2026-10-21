@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import {mergeGeometries} from 'three/addons/utils/BufferGeometryUtils.js';
+import {lateCassetteBulkheadGeometry,latePressureManifoldGeometry,installOpticalRailTruck} from './LabLateMachineConstruction.js';
 
 const V=(...p)=>new THREE.Vector3(...p),Q=()=>new THREE.Quaternion();
 const STABLE_LEVELS=new Set([35,36,37,38,39,40,42,43,44,45,46,47,48,49,50,51]);
@@ -37,6 +38,20 @@ export function lateMachineHousingGeometry(width,height,depth,{kind='drive',axis
   }else if(kind==='rail'){
    for(const y of [-1,1])box(0,y*fieldH*.30,z,fieldW*.93,Math.min(.16,fieldH*.11),skin,.34);
    for(const x of [-1,1])box(x*fieldW*.36,0,z,Math.min(.24,fieldW*.1),fieldH*.75,skin,.70);
+  }else if(kind==='valve'||kind==='piston'){
+   // A cast closed pressure cover, captive fastening pads and radial drive
+   // ribs belong to this real leaf/head, rather than an unrelated front decal.
+   const r=Math.min(fieldW,fieldH)*.29;
+   const disk=coloured(new THREE.CylinderGeometry(r,r,skin*1.7,24),.55);
+   disk.rotateX(Math.PI/2);disk.translate(0,0,z);parts.push(disk);
+   for(let i=0;i<4;i++){
+    const a=i*Math.PI/2,cx=Math.cos(a),cy=Math.sin(a);
+    box(cx*fieldW*.32,cy*fieldH*.32,z,Math.max(.12,fieldW*.07),Math.max(.12,fieldH*.07),skin,.28);
+    const rib=coloured(new THREE.BoxGeometry(Math.min(fieldW,fieldH)*.25,Math.min(.22,r*.22),skin),.35);
+    rib.rotateZ(a);rib.translate(cx*r*1.02,cy*r*1.02,z);parts.push(rib);
+   }
+   const hub=coloured(new THREE.CylinderGeometry(r*.34,r*.34,skin*2,12),.32);
+   hub.rotateX(Math.PI/2);hub.translate(0,0,z);parts.push(hub);
   }else if(kind==='pressure'){
    for(const x of [-1,1])box(x*fieldW*.31,0,z,fieldW*.21,fieldH*.72,skin,.43);
    box(0,-fieldH*.26,z,fieldW*.83,Math.min(.18,fieldH*.13),skin,.65);
@@ -73,8 +88,14 @@ function mechanismMaterial(k,original,kind){
 }
 function boxSize(mesh){
  const p=mesh.geometry?.parameters;
- if(![p?.width,p?.height,p?.depth].every(Number.isFinite))return null;
- return [p.width,p.height,p.depth];
+ if([p?.width,p?.height,p?.depth].every(Number.isFinite))return [p.width,p.height,p.depth];
+ // Earlier folded-cassette builders emit BufferGeometry with no parameters.
+ // Exact source-local bounds preserve those already translated hulls too.
+ if(mesh.geometry?.type==='BufferGeometry'){
+  mesh.geometry.computeBoundingBox();const s=mesh.geometry.boundingBox?.getSize(V());
+  if(s&&[s.x,s.y,s.z].every(v=>Number.isFinite(v)&&v>0))return s.toArray();
+ }
+ return null;
 }
 function machineBox(k,mesh,kind='drive',axis){
  if(!mesh?.isMesh||mesh.userData?.collisionProxy||mesh.userData?.visualAuditLateShape||Array.isArray(mesh.material))return false;
@@ -82,7 +103,7 @@ function machineBox(k,mesh,kind='drive',axis){
  if(!axis)axis=s[0]<s[1]&&s[0]<s[2]?'x':s[1]<s[2]?'y':'z';
  const old=mesh.geometry,batched=removeBin(k,mesh),material=mechanismMaterial(k,mesh.material,kind);
  old.computeBoundingBox();const localCenter=old.boundingBox.getCenter(V());
- mesh.geometry=lateMachineHousingGeometry(...s,{kind,axis});mesh.geometry.translate(...localCenter.toArray());mesh.material=material;mesh.userData.visualAuditLateShape=kind;old.dispose();
+ mesh.geometry=kind==='bulkhead'?lateCassetteBulkheadGeometry(...s,axis):lateMachineHousingGeometry(...s,{kind,axis});mesh.geometry.translate(...localCenter.toArray());mesh.material=material;mesh.userData.visualAuditLateShape=kind;old.dispose();
  if(batched){const bin=k.artBins.get(material)||[];bin.push(mesh);k.artBins.set(material,bin);}
  return true;
 }
@@ -102,7 +123,7 @@ export function lateToroidalWindingGeometry(radius=1.35,tube=.18){
  g.name='Continuous toroidal copper winding';g.computeBoundingBox();g.computeBoundingSphere();return g;
 }
 
-function finishProjectorBarrels(k){
+function finishProjectorBarrels(k,{pressure=false}={}){
  let n=0;
  for(const mesh of beforeMeshes(k)){
   const p=mesh.geometry?.parameters;
@@ -111,9 +132,11 @@ function finishProjectorBarrels(k){
    [0,-h/2],[r*.80,-h/2],[r,-h*.38],[r,-h*.26],[r*.83,-h*.20],
    [r*.83,h*.18],[r,h*.24],[r,h*.39],[r*.8,h/2],[0,h/2],
   ];
-  const g=new THREE.LatheGeometry(profile.map(([x,y])=>new THREE.Vector2(x,y)),24);
-  g.parameters={...p};g.name='Stepped sealed emitter barrel';g.computeBoundingBox();g.computeBoundingSphere();
-  const old=mesh.geometry;mesh.geometry=g;old.dispose();mesh.userData.visualAuditLateShape='barrel';n++;
+  const g=pressure?latePressureManifoldGeometry(r,h):new THREE.LatheGeometry(profile.map(([x,y])=>new THREE.Vector2(x,y)),24);
+  if(!pressure)g.parameters={...p};g.name=pressure?'Closed opposed-pressure manifold':'Stepped sealed emitter barrel';g.computeBoundingBox();g.computeBoundingSphere();
+  const old=mesh.geometry;mesh.geometry=g;old.dispose();mesh.userData.visualAuditLateShape=pressure?'pressure manifold':'barrel';
+  if(pressure){mesh.material=mechanismMaterial(k,mesh.material,'cast pneumatic manifold');mesh.userData.pressureManifold=true;}
+  n++;
  }
  return n;
 }
@@ -123,7 +146,7 @@ function dressDeckUnderfaces(k,stable){
  // Two longitudinal ribs then read as a closed load chassis in the same box.
  const targets=new Set(stable===38?['North flight catch','Catch apron','West acceleration balcony']:
   stable===43?['Side observation return','High receiving terrace']:stable===46?['High joint receiving terrace']:
-  stable===44?['Eastern receiving gallery']:[]);
+  stable===44?['Eastern receiving gallery']:stable===50?['Fold departure court','Permanent west cup gallery','Permanent east cup gallery','High returned portal court','Service return head']:[]);
  let n=0;
  for(const d of k.decks||[]){
   if(targets.size&&!targets.has(d.name)&&!/(receiving|gallery|island)/i.test(d.name))continue;
@@ -137,7 +160,7 @@ function dressDeckUnderfaces(k,stable){
 function dressPilotBacks(k){
  let n=0;
  for(const mesh of beforeMeshes(k)){
-  if(mesh.name==='Pilot / integral engineered observation casing'&&machineBox(k,mesh,'sluice'))n++;
+  if(mesh.name==='Pilot / integral engineered observation casing'&&machineBox(k,mesh,'bulkhead'))n++;
   if(mesh.name==='Pilot / tapered closed platform sill'){
    mesh.geometry.computeBoundingBox();const size=mesh.geometry.boundingBox.getSize(V());
    mesh.geometry.parameters={width:size.x,height:size.y,depth:size.z};
@@ -145,6 +168,14 @@ function dressPilotBacks(k){
   }
  }
  return n;
+}
+
+function dressFoldingSpindle(k){
+ const mesh=k.world.root.getObjectByName('50 / actual common bearing spindle'),p=mesh?.geometry?.parameters;
+ if(!mesh||!p||mesh.userData.visualAuditLateShape)return 0;
+ const old=mesh.geometry;mesh.geometry=latePressureManifoldGeometry(p.radiusTop,p.height);
+ mesh.geometry.name='Sealed split bearing cartridge on actual common axle';mesh.material=mechanismMaterial(k,mesh.material,'sealed axle cartridge');
+ mesh.userData.visualAuditLateShape='axle cartridge';old.dispose();return 1;
 }
 
 function rampWebGeometry(source){
@@ -210,7 +241,7 @@ function finishSightHoops(k){
  * portal planes, target registries and every solver state stay unchanged. */
 export function dressVisualAuditLate(k,stableLevel=k.index+1){
  if(!STABLE_LEVELS.has(stableLevel)||k.visualAuditLate)return k.visualAuditLate??null;
- const stats={stableLevel,housings:0,barrels:0,windings:0,sightHoops:0,extraLights:0,downloadBytes:0};
+ const stats={stableLevel,housings:0,barrels:0,windings:0,sightHoops:0,railTrucks:0,extraLights:0,downloadBytes:0};
  const shape=(predicate,kind,axis)=>{stats.housings+=select(k,predicate,kind,axis);};
  const largePanel=m=>{const s=boxSize(m);return s&&Math.max(...s)>5&&Math.min(...s)<1.2&&m.material===k.m.shell;};
  switch(stableLevel){
@@ -241,47 +272,53 @@ export function dressVisualAuditLate(k,stableLevel=k.index+1){
    stats.housings+=dressDeckUnderfaces(k,stableLevel);break;
   case 42:
    shape(m=>m.name==='Differential cylinder crosshead','pressure','z');
-   stats.barrels=finishProjectorBarrels(k);break;
+   stats.barrels=finishProjectorBarrels(k,{pressure:true});break;
   case 43:
-   shape(m=>largePanel(m)&&m.position.y>2,'sluice');
+   shape(m=>largePanel(m)&&m.parent===k.world.root&&m.position.y>2,'bulkhead');
    stats.housings+=dressDeckUnderfaces(k,stableLevel)+dressPilotBacks(k);break;
   case 44:
-   shape(m=>largePanel(m)&&Math.abs(m.position.x+12)<.03,'rail','x');
+   shape(m=>largePanel(m)&&m.parent===k.world.root,'bulkhead');
    stats.housings+=dressDeckUnderfaces(k,stableLevel);break;
   case 45:
-   shape(m=>m.parent?.name==='Countercurrent / live rising air valve','pressure','y');
+   shape(m=>m.parent?.name==='Countercurrent / live rising air valve','valve','y');
    stats.barrels=finishProjectorBarrels(k);break;
   case 46:
-   shape(m=>at(m,[10.65,20,8])||at(m,[-22,20,-19.4]),'sluice');
+   shape(m=>at(m,[10.65,20,8])||at(m,[-22,20,-19.4]),'bulkhead');
    stats.housings+=dressDeckUnderfaces(k,stableLevel);break;
   case 47:
-   shape(m=>m.parent?.name==='47 / actual dynamic piston address'&&boxSize(m),'drive');
-   shape(m=>largePanel(m)&&m.position.z===-17.2,'sluice','z');
+   shape(m=>m.parent?.name==='47 / actual dynamic piston address'&&boxSize(m),'piston');
+   shape(m=>largePanel(m)&&m.parent===k.world.root,'bulkhead');
    stats.housings+=dressImpactRamp(k);break;
   case 48:
    shape(m=>['48 / dynamic spring rail carriage','48 / physical pin-operated freight roof'].includes(m.parent?.name),'rail');
-   shape(m=>m.name==='48 / real movable rear socket back','drive','z');break;
+   shape(m=>m.name==='48 / real movable rear socket back','drive','z');
+   shape(m=>largePanel(m)&&m.parent===k.world.root,'bulkhead');break;
   case 49:
    shape(m=>m.parent?.name==='49 / actual force driven rail carriage'&&/side cheek|enclosed carriage roof|rear portal cheek/.test(m.name),'rail');
-   shape(m=>/opaque receiver tube|closed receiver back/.test(m.name),'drive');break;
+   shape(m=>/opaque receiver tube|closed receiver back/.test(m.name),'drive');
+   {const parent=k.world.root.getObjectByName('49 / actual force driven rail carriage');
+    if(parent){k.visualAuditLateRailTruck=installOpticalRailTruck(k,parent,mechanismMaterial(k,k.m.metal,'rail truck'));stats.railTrucks=k.visualAuditLateRailTruck?1:0;}}
+   break;
   case 50:
    shape(m=>m.name==='50 / rigid common lower counterweight','weight','z');
    shape(m=>/^50 \/ gravity suspended cup /.test(m.parent?.name)&&at(m,[0,-7,0]),'weight','z');
-   shape(m=>/^50 \/ upper-pane fixed casing/.test(m.name),'rail');break;
+   shape(m=>/^50 \/ upper-pane fixed casing/.test(m.name),'bulkhead');
+   stats.housings+=dressDeckUnderfaces(k,stableLevel)+dressFoldingSpindle(k);break;
   case 51:
-   shape(m=>/51 \/ (long|short) spring receiver|51 \/ actual counterweighted door|51 \/ gravity counterweight|51 \/ real spring striker/.test(m.name),'weight');
+   shape(m=>/51 \/ (long|short) spring receiver|51 \/ real spring striker/.test(m.name),'piston');
+   shape(m=>/51 \/ actual counterweighted door|51 \/ gravity counterweight/.test(m.name),'weight');
    stats.sightHoops=finishSightHoops(k);stats.barrels=finishProjectorBarrels(k);break;
  }
  k.visualAuditLate=stats;k.world.root.userData.visualAuditLate=stats;return stats;
 }
 
-function dialOnMesh(k,host,{read,min=0,max=100,range=2.5}={}){
+function dialOnMesh(k,host,{read,min=0,max=100,range=2.5,mount}={}){
  const s=boxSize(host);if(!s||s[0]<.5||s[1]<.5||s[2]<.25)return null;
  const radius=Math.min(.38,s[0]*.19,s[1]*.29),z=s[2]*.47;
  const face=new THREE.MeshStandardMaterial({name:'Late mechanism / recessed ivory instrument face',color:0xe7ead9,roughness:.62,metalness:.06});
  const ink=new THREE.MeshStandardMaterial({name:'Late mechanism / moving physical reading needle',color:0x293f49,roughness:.55,metalness:.25});
  const group=new THREE.Group();group.name='Recessed live machine instrument';host.add(group);
- group.position.set(0,0,z);
+ group.position.fromArray(mount?.position??[0,0,z]);if(mount?.quaternion)group.quaternion.copy(mount.quaternion);
  const faceMesh=k.geometry(new THREE.CylinderGeometry(radius,radius,s[2]*.018,24),face,[0,0,0],Q().setFromAxisAngle(V(1,0,0),Math.PI/2),{parent:group,batch:false,name:'Physical dial face'});
  const pointer=k.geometry(new THREE.BoxGeometry(radius*.10,radius*.78,s[2]*.014),ink,[0,radius*.31,s[2]*.018],Q(),{parent:group,batch:false,name:'Needle reading actual room mechanism'});
  for(let i=0;i<=8;i++){
@@ -304,6 +341,13 @@ export function finishVisualAuditLate(game,level,index=level.index,roots=[]){
  if(stable===42&&level.pressure){
   const host=named('Differential cylinder crosshead');
   if(host&&dialOnMesh(k,host,{read:()=>level.pressure.difference,min:-100,max:100}))instruments++;
+  level.world.root.updateWorldMatrix(true,true);
+  level.world.root.traverse(mesh=>{
+   if(!mesh.userData?.pressureManifold)return;
+   const h=mesh.geometry.parameters.height,world=mesh.parent.getWorldPosition(V()),right=world.z>30,source=world.z>10&&!right;
+   const read=()=>right?level.pressure.right:source?level.pressure.difference:level.pressure.left;
+   if(dialOnMesh(k,mesh,{read,min:source?-100:0,max:100,mount:{position:[0,-h*.44,0],quaternion:Q().setFromAxisAngle(V(1,0,0),Math.PI/2)}}))instruments++;
+  });
  }
  if(stable===35)for(const gate of [level.first,level.second])for(const leaf of gate?.leaves||[])
   if(machineBox(k,leaf,'sluice','z'))stats.housings++;

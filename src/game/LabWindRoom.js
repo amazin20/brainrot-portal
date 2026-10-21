@@ -101,6 +101,18 @@ export function buildReadableWindRoom(game, spec) {
   const turbine = { art: turbineArt, wheel, position: inlet, normal: V(1, 0, 0), power: false, clutch: false, housing };
   k.state.flywheel = turbine;
 
+  // A fixed, enclosed service bus belongs to the blower and exit drive.
+  // It is outside both routed air paths and above every low portal mouth;
+  // all four manufactured bodies are real solids, not floating decals.
+  for(const [p,size]of [
+    [[-11.6,6.55,-3.7],[.42,.42,15.4]],
+    [[-11.6,4.325,4],[.24,4.45,.24]],
+    [[-11.6,4.325,-11.4],[.24,4.45,.24]],
+    [[-11.24,2.1,4],[.72,.24,.24]],
+  ]){
+    const bus=w.box(p,size,w.materials.trim);bus.name='Wind test service bus / closed power casing';bus.userData.earlyAuditBus=true;
+  }
+
   // The original companion can turn the receiving grille toward a second
   // physical air path. Its load rests on the actual floor; the turntable and
   // receiver housing rotate together and keep one synchronized collision box.

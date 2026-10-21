@@ -14,19 +14,26 @@ function finishVisiblePartitions(game,level,roots){
  let panels=0;
  for(const root of roots)root.traverse(mesh=>{
   if(!mesh.isMesh||mesh.isInstancedMesh||!mesh.visible||mesh.userData.collisionProxy||portal.has(mesh)
+   ||mesh.userData.portalable||mesh.userData.portalTile||mesh.userData.visualAuditObservatory
    ||mesh.userData.visualAuditLateShape||mesh.userData.visualAuditEarlyShape||mesh.userData.visualAuditMiddleShape
    ||mesh.userData.manufacturedFinish||assetGeometries.has(mesh.geometry))return;
   const p=mesh.geometry?.parameters,source=mesh.material;
-  if(mesh.geometry?.type!=='BoxGeometry'||!p||!source?.isMeshStandardMaterial||Array.isArray(source))return;
+  if(!['BoxGeometry','RoundedBoxGeometry'].includes(mesh.geometry?.type)||!p||!source?.isMeshStandardMaterial||Array.isArray(source)||source.visible===false)return;
+  // Hidden measured owners survive beside authored sibling replacements.
+  // Never revive them, a hidden ancestor, or cached source-bound geometry.
+  for(let owner=mesh.parent;owner;owner=owner.parent)if(owner.visible===false)return;
+  if(source.userData?.middleAuditOwner||mesh.userData.visualAuditPartition)return;
   const role=source.userData?.architecturalRole;
   if(!['wall','shell','paint'].includes(role)&&!/structural laboratory wall|wall cassette|structural shell|machine family/i.test(source.name))return;
   if(p.height<3.2||Math.max(p.width,p.depth)<5.5||Math.min(p.width,p.depth)<.25||Math.min(p.width,p.depth)>1.8)return;
+  mesh.geometry.computeBoundingBox();const bounds=mesh.geometry.boundingBox,size=bounds.getSize(V()),center=bounds.getCenter(V());
+  if(size.distanceTo(V(p.width,p.height,p.depth))>.0001)return;
   if(!materials.has(source)){
    const material=source.clone();material.vertexColors=true;material.roughness=Math.max(.74,material.roughness);
    material.name=source.name||'Commissioned mineral partition';materials.set(source,material);
   }
   const x=p.width<p.depth,geometry=manufacturedBulkheadGeometry(x?p.depth:p.width,p.height,x?p.width:p.depth);
-  if(x)geometry.rotateY(Math.PI/2);geometry.parameters={...p};
+  if(x)geometry.rotateY(Math.PI/2);geometry.translate(...center.toArray());geometry.parameters={...p};
   const old=mesh.geometry;mesh.geometry=geometry;mesh.material=materials.get(source);
   mesh.userData.visualAuditPartition=true;
   // Primitive boxes created by game.box are normally unique. A shared one is

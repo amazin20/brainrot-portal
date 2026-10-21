@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import * as THREE from 'three';
 import {finishVisualAudit} from '../src/game/LabVisualAuditFinish.js';
 import {finishBridgeSheetNormals} from '../src/game/LabWorkshopModels.js';
+import {RoundedBoxGeometry} from 'three/addons/geometries/RoundedBoxGeometry.js';
 
 test('recessed partitions keep the exact physical and portal contracts while replacing one visible skin',()=>{
  const scene=new THREE.Scene(),root=new THREE.Group();scene.add(root);
@@ -32,6 +33,24 @@ test('static display bodies retain live display meshes and release their owned i
  const bank=level.visualAuditFinish.root.children[0],owned=[bank.geometry,bank.material];let events=0;for(const resource of owned)resource.addEventListener('dispose',()=>events++);
  assert.equal(level.visualAuditFinish.diagnostics.instruments,1);assert.equal(bank.count,6);assert.equal(level.visualAuditFinish.diagnostics.extraColliders,0);
  level.dispose();level.dispose();assert.equal(events,2);assert.equal(previousDisposals,1);assert.equal(level.visualAuditFinish.root.parent,null);
+});
+
+test('visible premium rounded partitions receive relief while hidden measured owners and portal masters are protected',()=>{
+ const scene=new THREE.Scene(),root=new THREE.Group();scene.add(root);
+ const material=new THREE.MeshStandardMaterial({name:'Structural laboratory wall'});material.userData.architecturalRole='wall';
+ const visible=new THREE.Mesh(new RoundedBoxGeometry(18,12,.65,2,.06),material);root.add(visible);
+ const hiddenMaterial=material.clone();hiddenMaterial.visible=false;
+ const hidden=new THREE.Mesh(new RoundedBoxGeometry(18,12,.65,2,.06),hiddenMaterial);hidden.position.x=30;root.add(hidden);
+ const portal=new THREE.Mesh(new RoundedBoxGeometry(18,12,.65,2,.06),material);portal.position.x=-30;root.add(portal);
+ const hiddenParent=new THREE.Group();hiddenParent.visible=false;root.add(hiddenParent);
+ const hiddenChild=new THREE.Mesh(new RoundedBoxGeometry(18,12,.65,2,.06),material);hiddenParent.add(hiddenChild);
+ const originals=[hidden.geometry,portal.geometry,hiddenChild.geometry],bounds=new THREE.Box3().setFromObject(visible);
+ const game={scene,chamberEdition:'foundation',portalPanels:[portal],assets:new Map()},level={world:{root}};
+ finishVisualAudit(game,level,31,[root]);
+ assert.equal(level.visualAuditFinish.diagnostics.partitions,1);assert.ok(visible.geometry.attributes.color);
+ const finished=new THREE.Box3().setFromObject(visible);
+ assert.ok(bounds.min.distanceTo(finished.min)<1e-5&&bounds.max.distanceTo(finished.max)<1e-5);
+ assert.deepEqual([hidden.geometry,portal.geometry,hiddenChild.geometry],originals);
 });
 
 test('bridge hard-sheet shading changes no vertex, colour or triangle used for physical height samples',()=>{

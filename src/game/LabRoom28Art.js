@@ -1,10 +1,56 @@
 import * as THREE from 'three';
 import {SolidAssembly,createGuideRing,createPlanter,createPontoon,placeSolidModel} from './LabSolidModels.js';
-import {labInstrument} from './LabHumanLab.js';
 import {sign} from './LabOpenStationArt.js';
 import {room28FlowStatus} from './LabRoom28Tides.js';
 
 const V=(...p)=>new THREE.Vector3(...p);
+
+/** The full instrument face carries a readable measurement and a six-metre
+ * graduated scale. The shared cabinet shows both conserved columns and the
+ * actual hydraulic connection, rather than an undersized generic heading. */
+function tideInstrument(k,p,{width,height,name,tide,basin=null}){
+ const instrument={text:'',updates:0,basin,worldFace:[width,height]};let elapsed=.2,paintedText='';
+ const summary=basin===null,read=()=>summary?`А ${tide.levels[0].toFixed(1)} + Б ${tide.levels[1].toFixed(1)} = ${tide.total.toFixed(1)} м\n${room28FlowStatus(tide.levels,tide.connection,tide.flow)}`:`${basin?'Б':'А'} / ${tide.levels[basin].toFixed(1)} м`;
+ const canvas=globalThis.document?.createElement?.('canvas'),c=canvas?.getContext?.('2d');
+ if(canvas&&c){
+  canvas.width=1536;canvas.height=Math.round(canvas.width*height/width);
+  const texture=new THREE.CanvasTexture(canvas);texture.anisotropy=4;k.ownedTextures??=[];k.ownedTextures.push(texture);
+  const material=new THREE.MeshBasicMaterial({map:texture,toneMapped:false});
+  instrument.mesh=k.geometry(new THREE.PlaneGeometry(width,height),material,p,new THREE.Quaternion(),{batch:false,name});
+  instrument.mesh.userData.keepMaterial=true;instrument.mesh.userData.tideInstrument=true;
+  instrument.paint=()=>{
+   const W=canvas.width,H=canvas.height,g=W*.045;
+   c.fillStyle='#152c35';c.fillRect(0,0,W,H);c.textBaseline='middle';c.textAlign='left';
+   const scale=(x,y,w,h,level)=>{
+    c.fillStyle='#25444b';c.fillRect(x,y,w,h);c.fillStyle='#66d5c2';c.fillRect(x,y+h*(1-level/6),w,h*level/6);
+    c.strokeStyle='#bddad0';c.lineWidth=Math.max(2,H*.007);c.beginPath();
+    for(let i=0;i<=6;i++){const at=y+h*(1-i/6);c.moveTo(x+w*.66,at);c.lineTo(x+w,at);}c.stroke();
+   };
+   if(!summary){
+    const level=tide.levels[basin];
+    c.fillStyle='#7ac9b8';c.font=`600 ${Math.round(H*.20)}px sans-serif`;c.fillText(basin?'Б':'А',g,H*.24);
+    c.fillStyle='#f8e5b8';c.font=`600 ${Math.round(H*.59)}px sans-serif`;c.fillText(level.toFixed(1),W*.18,H*.51,W*.48);
+    c.fillStyle='#bddad0';c.font=`500 ${Math.round(H*.19)}px sans-serif`;c.fillText('м',W*.66,H*.59);
+    scale(W*.81,H*.18,W*.12,H*.62,level);
+    c.fillStyle='#7caaa6';c.font=`500 ${Math.round(H*.12)}px sans-serif`;c.fillText('УРОВЕНЬ ВОДЫ',W*.18,H*.86);c.fillText('6',W*.95,H*.19);c.fillText('0',W*.95,H*.80);
+   }else{
+    for(const [i,x]of [[0,W*.065],[1,W*.65]]){
+     c.fillStyle='#8ed8ca';c.font=`600 ${Math.round(H*.19)}px sans-serif`;c.fillText(i?'Б':'А',x,H*.25);
+     c.fillStyle='#f8e5b8';c.font=`600 ${Math.round(H*.44)}px sans-serif`;c.fillText(tide.levels[i].toFixed(1),x+W*.052,H*.35,W*.20);
+     scale(x+W*.265,H*.14,W*.034,H*.38,tide.levels[i]);
+    }
+    const connected=tide.connection?.length===2&&tide.connection[0].basin!==tide.connection[1].basin;
+    c.strokeStyle=connected?'#66d5c2':'#547071';c.lineWidth=H*.026;c.beginPath();c.moveTo(W*.39,H*.32);c.lineTo(W*.43,H*.32);c.moveTo(W*.57,H*.32);c.lineTo(W*.61,H*.32);c.stroke();
+    c.fillStyle=connected?'#a6e7d6':'#7c9998';c.textAlign='center';c.font=`600 ${Math.round(H*.21)}px sans-serif`;c.fillText(connected?'↔':'—',W*.50,H*.32);
+    c.fillStyle='#b8d5cb';c.font=`500 ${Math.round(H*.125)}px sans-serif`;c.fillText(`ОБЩИЙ ОБЪЁМ ${tide.total.toFixed(1)} м`,W*.50,H*.62);
+    c.fillStyle='#f8e5b8';c.font=`600 ${Math.round(H*.16)}px sans-serif`;c.fillText(room28FlowStatus(tide.levels,tide.connection,tide.flow),W*.50,H*.84,W*.88);
+   }
+   texture.needsUpdate=true;
+  };
+ }
+ const update=dt=>{instrument.text=read();elapsed+=dt;if(elapsed<.2)return;elapsed=0;if(instrument.text===paintedText)return;paintedText=instrument.text;instrument.updates++;instrument.paint?.();};
+ k.ticks.push(update);update(.2);return instrument;
+}
 
 /** Each aperture has a visible pipe to its own basin. The shallow pipes run
  * behind the ceramics and the coral wall, clear of the shot and walking lanes. */
@@ -53,9 +99,9 @@ function buildTideGauges(k,tide,labels){
   block([(x+meterX)/2,7.13,12.02],[Math.abs(x-meterX)+.42,1.02,.5]);
   const backing=block([meterX,8.38,12.02],[7.4,2.1,.5]);
   backing.name=`Basin ${i?'B':'A'} gauge backing`;
-  const display=labInstrument(labels,[meterX,8.40,12.31],{
+  const display=tideInstrument(labels,[meterX,8.40,12.31],{
    width:7.1,height:1.84,name:`Basin ${i?'B':'A'} live water-level gauge`,
-   read:()=>`${i?'Б':'А'} / ${tide.levels[i].toFixed(1)} м`,
+   tide,basin:i,
   });gauges.push(display);
  }
  // The opening camera faces this real rear wall. Place the shared reading in
@@ -63,9 +109,9 @@ function buildTideGauges(k,tide,labels){
  // spawn where it was outside the third-person camera's vertical field.
  const farBacking=block([0,10.45,-22.22],[20.4,4.35,.43]);
  farBacking.name='Tidal circuit rear-wall backing';
- const status=labInstrument(labels,[0,10.45,-21.96],{
+ const status=tideInstrument(labels,[0,10.45,-21.96],{
   width:19.7,height:4.05,name:'Conserved tidal circuit and live flow status',
-  read:()=>`А ${tide.levels[0].toFixed(1)} + Б ${tide.levels[1].toFixed(1)} = ${tide.total.toFixed(1)} м\n${room28FlowStatus(tide.levels,tide.connection,tide.flow)}`,
+  tide,
  });
  // Close readings sit beside the high mouths seen during both branches. The
  // ruler below each display shows the same real water height as the basin.
@@ -79,9 +125,9 @@ function buildTideGauges(k,tide,labels){
   block([x,7.45,-5.28],[.42,1.45,.44]);
   const backing=block([x,9.6,-5.35],[5.6,2.15,.43]);
   backing.name=`Basin ${i?'B':'A'} near-mouth readout backing`;
-  localReadouts.push(labInstrument(labels,[x,9.6,-5.09],{
+  localReadouts.push(tideInstrument(labels,[x,9.6,-5.09],{
    width:5.35,height:1.93,name:`Basin ${i?'B':'A'} near-mouth live status`,
-   read:()=>`${i?'Б':'А'} / ${tide.levels[i].toFixed(1)} м`,
+   tide,basin:i,
   }));
  }
  const updateColumns=()=>[columns,localColumns].forEach(group=>group.forEach((bar,i)=>{

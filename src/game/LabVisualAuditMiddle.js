@@ -23,10 +23,31 @@ export function conveyorChevronGeometry(width){
  * follows its complete matrix, and adds no contact, ray or portal surface. */
 function makeWorkshop(k,number){
  const root=new THREE.Group();root.name=`Visual audit ${number} / authored machinery`;root.userData={visualOnly:true,keepMaterial:true};k.world.root.add(root);
- const geometry={box:new RoundedBoxGeometry(1,1,1,1,.025),cylinder:new THREE.CylinderGeometry(1,1,1,24),wheel:new THREE.TorusGeometry(.84,.16,8,32),
+ const geometry={box:new RoundedBoxGeometry(1,1,1,1,.025),riser:new THREE.BoxGeometry(1,1,1),plate:new THREE.BoxGeometry(1,1,1),cylinder:new THREE.CylinderGeometry(1,1,1,24),wheel:new THREE.TorusGeometry(.84,.16,8,32),
   turned:new THREE.LatheGeometry([[0,-.5],[.87,-.5],[.94,-.46],[1,-.40],[1,-.31],[.84,-.27],[.84,.27],[1,.31],[1,.40],[.94,.46],[.87,.5],[0,.5]].map(p=>new THREE.Vector2(...p)),32)};
  const materials={paint:new THREE.MeshStandardMaterial({name:'Audit satin machine enamel',color:0xffffff,roughness:.64,metalness:.19}),
-  metal:new THREE.MeshStandardMaterial({name:'Audit brushed machine alloy',color:0xffffff,roughness:.43,metalness:.68})};
+  metal:new THREE.MeshStandardMaterial({name:'Audit brushed machine alloy',color:0xffffff,roughness:.43,metalness:.68}),
+  deck:new THREE.MeshStandardMaterial({name:'Launch closed plate / distance-filtered seams',color:0xffffff,roughness:.80,metalness:.025})};
+ materials.deck.onBeforeCompile=shader=>{
+  shader.vertexShader='varying vec3 vPlateWorld;\n'+shader.vertexShader;
+  shader.vertexShader=shader.vertexShader.replace('#include <project_vertex>',`#include <project_vertex>
+   vec4 platePosition=vec4(transformed,1.0);
+   #ifdef USE_INSTANCING
+    platePosition=instanceMatrix*platePosition;
+   #endif
+   vPlateWorld=(modelMatrix*platePosition).xyz;`);
+  shader.fragmentShader='varying vec3 vPlateWorld;\n'+shader.fragmentShader;
+  shader.fragmentShader=shader.fragmentShader.replace('#include <map_fragment>',`#include <map_fragment>
+   vec3 plateNormal=abs(cross(dFdx(vPlateWorld),dFdy(vPlateWorld)));
+   vec2 plateCoord=plateNormal.y>plateNormal.x&&plateNormal.y>plateNormal.z?vPlateWorld.xz:plateNormal.x>plateNormal.z?vPlateWorld.zy:vPlateWorld.xy;
+   vec2 plateCell=plateCoord/6.5;
+   vec2 plateAA=max(fwidth(plateCell),vec2(.00001));
+   vec2 plateEdge=abs(fract(plateCell+.5)-.5);
+   vec2 plateSeam=1.0-smoothstep(vec2(.002)-plateAA,vec2(.002)+plateAA,plateEdge);
+   float plateFade=1.0-smoothstep(.018,.075,max(plateAA.x,plateAA.y));
+   diffuseColor.rgb*=1.0-.13*max(plateSeam.x,plateSeam.y)*plateFade;`);
+ };
+ materials.deck.customProgramCacheKey=()=> 'launch-closed-aa-plate-v1';
  const mounts=[],banks=new Map(),restores=[],ownedMaterials=[],extras=[],cleanup=[];
  const meshes=[];k.world.root.traverse(m=>{if(m.isMesh&&!m.isInstancedMesh&&!m.userData?.collisionProxy&&!m.userData?.portalable&&!m.userData?.portalTile)meshes.push(m);});
  const boxMeshes=()=>meshes.filter(m=>{const p=m.geometry?.parameters;return p&&[p.width,p.height,p.depth].every(Number.isFinite)&&p.width>0&&p.height>0&&p.depth>0;});
@@ -34,20 +55,22 @@ function makeWorkshop(k,number){
  const named=name=>meshes.find(m=>m.name===name);
  const at=(p,size)=>boxMeshes().find(m=>m.position.distanceTo(V(...p))<.015&&V(m.geometry.parameters.width,m.geometry.parameters.height,m.geometry.parameters.depth).distanceTo(V(...size))<.015);
  const stats={revision:MIDDLE_AUDIT_REVISION,number,mounts:[],parts:0,batches:0,extraColliders:0,extraLights:0,independentClocks:0};
- function owner(target,name){
-  if(!visible(target)||mounts.some(a=>a.target===target))return null;
+ function owner(target,name,{physicalSurface=false}={}){
+  if((!visible(target)&&!(physicalSurface&&target?.userData?.collisionProxy))||mounts.some(a=>a.target===target))return null;
   target.geometry.computeBoundingBox();const bounds=target.geometry.boundingBox.clone();
   const m={target,name,bounds,parts:[],cylindrical:target.geometry.type==='CylinderGeometry'};
   const original=target.material,clones=[];
   const hide=mat=>{const copy=mat.clone();copy.visible=false;copy.userData={...copy.userData,middleAuditOwner:root.uuid};clones.push(copy);ownedMaterials.push(copy);return copy;};
-  target.material=Array.isArray(original)?original.map(hide):hide(original);
+  // A registered hidden surface proxy already has no visible skin. Its
+  // canonical material is part of portal ownership and must stay untouched.
+  if(!physicalSurface)target.material=Array.isArray(original)?original.map(hide):hide(original);
   // ResearchChamber's pending static bins are keyed by the old material.
   // Keep this hidden owner out of that bake; otherwise flush would revive a
   // plain original shell around the recessed replacement and occlude it.
   for(const list of k.artBins?.values?.()||[]){const i=list.indexOf(target);if(i>=0)list.splice(i,1);}
-  restores.push({target,original,replacement:target.material});mounts.push(m);stats.mounts.push(name);return m;
+  if(!physicalSurface)restores.push({target,original,replacement:target.material});mounts.push(m);stats.mounts.push(name);return m;
  }
- function part(o,p,size,color=COLORS.paint,{kind='box',metal=false,q=Q()}={}){
+ function part(o,p,size,color=COLORS.paint,{kind='box',metal=false,material,q=Q()}={}){
   if(!o)return;
   const matrix=new THREE.Matrix4().compose(V(...p),q,V(...size)),g=geometry[kind];g.computeBoundingBox();
   const bounds=g.boundingBox.clone().applyMatrix4(matrix);
@@ -56,7 +79,7 @@ function makeWorkshop(k,number){
    const r=o.target.geometry.parameters.radiusTop,h=o.target.geometry.parameters.height,point=V(),vertices=g.attributes.position;
    for(let n=0;n<vertices.count;n++){point.fromBufferAttribute(vertices,n).applyMatrix4(matrix);if(Math.hypot(point.x,point.z)>r+.0001||Math.abs(point.y)>h/2+.0001)throw new Error(`Audit ${number}: ${o.name} trim escaped its original cylinder`);}
   }
-  const key=kind+':'+(metal?'metal':'paint'),row={owner:o,matrix,bounds,color};
+  const key=kind+':'+(material||(metal?'metal':'paint')),row={owner:o,matrix,bounds,color};
   const list=banks.get(key)||[];list.push(row);banks.set(key,list);o.parts.push(row);stats.parts++;return row;
  }
  function chamber(target,name,{axis,paint=COLORS.paint,style='panel'}={}){
@@ -104,6 +127,61 @@ function makeWorkshop(k,number){
   }
   return o;
  }
+ function cabinet(target,name,{paint=COLORS.paint}={}){
+  const o=owner(target,name);if(!o)return;
+  const s=o.bounds.getSize(V()),c=o.bounds.getCenter(V()),b=(p,size,color=paint,metal=false)=>part(o,c.clone().add(V(...p)).toArray(),size,color,{metal});
+  // Closed source-bound shell with shallow formed doors on all four sides.
+  // Relief is centimetres deep, so the full physical cabinet never appears
+  // to contain a metre-deep cavity that the player cannot enter.
+  b([0,0,0],[s.x-.10,s.y-.10,s.z-.10],COLORS.dark);
+  b([0,s.y/2-.055,0],[s.x-.045,.065,s.z-.045],COLORS.metal,true);
+  b([0,-s.y/2+.13,0],[s.x-.04,.22,s.z-.04],COLORS.dark);
+  for(const sign of [-1,1]){
+   const count=Math.max(2,Math.min(4,Math.ceil(s.x/4))),bay=(s.x-.22)/count;
+   for(let i=0;i<count;i++){
+    const x=(i-(count-1)/2)*bay,z=sign*(s.z/2-.052);
+    b([x,0,z],[bay-.075,s.y-.40,.075],paint);
+    b([x,0,sign*(s.z/2-.009)],[Math.min(.10,bay*.08),Math.min(.68,s.y*.15),.014],COLORS.copper,true);
+    for(const y of [-1,1])b([x,y*(s.y/2-.43),sign*(s.z/2-.008)],[bay-.27,.07,.012],COLORS.metal,true);
+   }
+   const sideCount=Math.max(2,Math.min(3,Math.ceil(s.z/3))),span=(s.z-.24)/sideCount;
+   for(let i=0;i<sideCount;i++){
+    const z=(i-(sideCount-1)/2)*span;
+    b([sign*(s.x/2-.052),0,z],[.075,s.y-.42,span-.075],paint);
+    b([sign*(s.x/2-.009),s.y*.22,z],[.014,Math.min(.48,s.y*.12),span*.72],COLORS.dark);
+    for(let n=0;n<4;n++)b([sign*(s.x/2-.004),s.y*.22,z+(n-1.5)*span*.16],[.006,Math.min(.32,s.y*.08),.035],COLORS.metal,true);
+   }
+  }
+  stats.cabinets=(stats.cabinets||0)+1;return o;
+ }
+ function stairRiser(target){
+  const o=owner(target,number+' / closed structural riser below the finished tread');if(!o)return;
+  const size=o.bounds.getSize(V()),center=o.bounds.getCenter(V()),recess=Math.min(.12,size.y*.48);
+  // The source stays a complete original Box, including all six ray/contact
+  // faces. The render top ends inside the tread backing. Its side walls are
+  // also inset20mm: the full-width backing and lower trim occupy the same
+  // vertical z/x planes as the source box, so merely lowering the top leaves
+  // a second coplanar conflict on their side faces.
+  const keep=target.userData.keepMaterial,shape=target.userData.visualAuditMiddleShape;
+  target.userData.keepMaterial=true;target.userData.visualAuditMiddleShape=true;
+  cleanup.push(()=>{if(keep===undefined)delete target.userData.keepMaterial;else target.userData.keepMaterial=keep;
+   if(shape===undefined)delete target.userData.visualAuditMiddleShape;else target.userData.visualAuditMiddleShape=shape;});
+  part(o,center.add(V(0,-recess/2,0)).toArray(),[size.x-.04,size.y-recess,size.z-.04],COLORS.ivory,{kind:'riser'});
+  o.stairTopRecess=recess;o.stairSideRecess=.02;stats.stairRisers=(stats.stairRisers||0)+1;
+ }
+ function smoothSurface(surface){
+  const o=owner(surface.mesh,number+' / closed '+(surface.portal?'white portal face / ':'walking plate / ')+surface.name,{physicalSurface:true});if(!o)return;
+  const size=o.bounds.getSize(V()),center=o.bounds.getCenter(V());
+  // The original proxy owns exactly the same local box, ray target, portal
+  // frame and moving parent. A closed sibling fills its interior and ends
+  // six millimetres behind the established contact/portal plane.
+  part(o,center.toArray(),[size.x,size.y,size.z-.012],surface.portal?0xf0f0e1:0xafbcae,{kind:'plate',material:'deck'});
+  const keep=surface.group.userData.keepMaterial;surface.group.userData.keepMaterial=true;
+  const sources=surface.group.children.filter(m=>m.isInstancedMesh),visibility=sources.map(m=>m.visible);
+  for(const mesh of sources)mesh.visible=false;
+  cleanup.push(()=>{sources.forEach((m,i)=>m.visible=visibility[i]);if(keep===undefined)delete surface.group.userData.keepMaterial;else surface.group.userData.keepMaterial=keep;});
+  o.surface=surface;o.contactPlaneInset=.006;stats.closedSurfacePlates=(stats.closedSurfacePlates||0)+1;
+ }
  function coat(target,color){if(!target?.material)return;const original=target.material;
   const copy=mat=>{const m=mat.clone();m.color?.setHex(color);m.roughness=.56;m.metalness=.36;ownedMaterials.push(m);return m;};
   target.material=Array.isArray(original)?original.map(copy):copy(original);restores.push({target,original,replacement:target.material});}
@@ -139,7 +217,7 @@ function makeWorkshop(k,number){
    for(const fn of cleanup)fn();for(const list of banks.values())list[0].mesh.dispose();for(const g of Object.values(geometry))g.dispose();for(const m of Object.values(materials))m.dispose();for(const m of ownedMaterials)m.dispose();root.clear();};
   return {root,stats,sync};
  }
- return {root,meshes,boxMeshes,named,at,visible,chamber,vessel,coat,nearestBox,handwheel,extras,cleanup,stats,finish};
+ return {root,meshes,boxMeshes,named,at,visible,chamber,vessel,cabinet,stairRiser,smoothSurface,coat,nearestBox,handwheel,extras,cleanup,stats,finish};
 }
 
 /** Pre-flush entry for ResearchChamber and ordinary Workshop builders. */
@@ -148,6 +226,7 @@ export function installVisualAuditMiddleKit(k,number){
  const a=makeWorkshop(k,number),{named,at,chamber,vessel,coat,nearestBox}=a;
  switch(number){
   case 18:
+   for(const x of [-22,19])a.cabinet(at([x,2.5,14],[4.2,5,4.4]),'18 / closed generator cabinet with cooling cheeks',{paint:0x8c9f92});
    for(const e of k.world.root.children.filter(m=>m.name==='Spring-loaded insulated electrode'))chamber(e,'18 / ribbed ceramic clamping jaw',{axis:0,paint:0xb8c6ba,style:'electrode'});
    chamber(at([10.35,5.1,-6.1],[2,1.4,1.25]),'18 / screw-drive motor casting',{paint:0x506c72});
    break;
@@ -160,20 +239,33 @@ export function installVisualAuditMiddleKit(k,number){
    chamber(named('Tension-driven horizontal bulkhead'),'20 / tension door closed casing',{paint:0x8b9b91});
    break;
   case 21:
+   for(const mesh of a.meshes.filter(m=>m.userData.recoveryStairRiser))a.stairRiser(mesh);
+   a.cabinet(at([13.1,12.25,6],[14.5,7.5,8]),'21 / receiver upper equipment cabinet',{paint:0x819c91});
    chamber(named('Cassette rear header / solid'),'21 / counterweight return upper casing',{axis:0,paint:0x7b9a88});
    chamber(named('Cassette north enclosure / solid'),'21 / counterweight north load frame',{paint:0x5f807b});
    break;
   case 22:
-   // The ordinary shutter cassettes have their own existing follower banks;
-   // staircase geometry and central structural finish belong to the shared pass.
+   for(const mesh of a.meshes.filter(m=>m.userData.freightStairRiser))a.stairRiser(mesh);
    chamber(nearestBox([-12,.45,-5.75],p=>p.width>2&&p.width<5&&p.height<1.5&&p.depth>1&&p.depth<3),'22 / winch founded load pedestal',{paint:0x587b70});
    break;
   case 23:
-   for(const car of [k.state.balance?.west,k.state.balance?.east].filter(Boolean)){
+   if(k.state.balance?.parts){
+    // The ordinary campaign uses the physical machine, whose car and freight
+    // pan are separately owned massive bodies. The thin car backing is an
+    // authored body shape, not the retired half-metre decorative slab.
+    for(const car of k.state.balance.cars){
+     if(chamber(car.surface.backing,`23 / ${car.name} actual load-bearing folded underside`,{axis:2,paint:0x6d9385}))a.stats.physicalCarChassis=(a.stats.physicalCarChassis||0)+1;
+    }
+    for(const part of k.state.balance.parts){
+     if(/founded lower cabin corner foot|travelling guide stop ear|powered clutch thrust fork/.test(part.mesh?.name||''))
+      chamber(part.mesh,'23 / '+part.mesh.name+' formed shoe',{paint:0x719587});
+    }
+    // BiosphereArt owns the original moving hood, backstop and drive discs;
+    // no second model is layered over those already manufactured parts.
+   }else for(const car of [k.state.balance?.west,k.state.balance?.east].filter(Boolean)){
     const source=car.group.children.find(m=>m.geometry?.parameters?.height===.5);
     chamber(source,'23 / suspended car ribbed load chassis',{axis:1,paint:0x6d9385});
    }
-   for(const part of k.state.balance?.parts||[])if(/counterweight|hood/i.test(part.mesh?.name||''))chamber(part.mesh,'23 / actual guided load casing',{axis:1});
    break;
   case 24:{
    const coral=a.boxMeshes().filter(m=>{const p=m.geometry.parameters,c=m.material?.color;return a.visible(m)&&p.height>4&&Math.min(p.width,p.depth)<1&&c&&c.r>c.g*1.14;}).sort((x,y)=>y.geometry.parameters.height*Math.max(y.geometry.parameters.width,y.geometry.parameters.depth)-x.geometry.parameters.height*Math.max(x.geometry.parameters.width,x.geometry.parameters.depth))[0];
@@ -195,12 +287,7 @@ export function installVisualAuditMiddleKit(k,number){
    break;
   case 28:
    for(const mesh of a.meshes){
-    if(/Basin [AB] gauge backing/.test(mesh.name))chamber(mesh,mesh.name+' / sealed instrument housing',{paint:0x507c78});
-    if(/live water-level gauge|near-mouth live status|Conserved tidal circuit and live flow status/.test(mesh.name)&&mesh.geometry.type==='PlaneGeometry'){
-     const scale=mesh.scale.clone();mesh.scale.multiplyScalar(.72);a.stats.reducedReadouts=(a.stats.reducedReadouts||0)+1;
-     // Only a non-interactive label is scaled; its housing and collider remain.
-     a.cleanup.push(()=>mesh.scale.copy(scale));
-    }
+    if(/Basin [AB] (?:gauge|near-mouth readout) backing|Tidal circuit rear-wall backing/.test(mesh.name))chamber(mesh,mesh.name+' / sealed instrument housing',{paint:0x507c78});
    }
    break;
   case 29:
@@ -211,6 +298,7 @@ export function installVisualAuditMiddleKit(k,number){
    }
    break;
   case 30:
+   for(const surface of k.world.surfaces)if(surface.floor||surface.portal)a.smoothSurface(surface);
    chamber(named('Hub-to-outlet sightline screen'),'30 / launch separator structural bays',{axis:0,paint:0x4b809b});
    break;
   case 31:

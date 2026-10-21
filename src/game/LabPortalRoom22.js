@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import {installVisualAuditMiddleKit} from './LabVisualAuditMiddle.js';
 import {Workshop} from './LabWorkshopKit.js';
 import {buildRoom22Shutters} from './LabRoom22Mechanics.js';
 import {architecturalCassetteGeometry} from './LabArchitecturalModels.js';
@@ -141,16 +142,10 @@ export function buildRoom22(game,index=21){
  for(let i=0;i<28;i++){
   const z=22-i*.5;deck('Freight inspection stair',16,21,z-.5,z,(i+1)*.25);
   const riser=block([18.5,(i+1)*.125,z-.25],[5,(i+1)*.25,.5]);
-  // The structural block's +Y face was exactly at the walking height, while
-  // the finished tread ends 3 mm below it. Drawing both produced the observed
-  // serrated/dotted bands over every step. Retain every vertex and the full
-  // collision bounds, but submit only the riser's five exposed faces. The
-  // existing tread is now the sole visible upper skin.
-  const geometry=riser.geometry,indices=geometry.index.array,visible=[];
-  for(const group of geometry.groups)if(group.materialIndex!==2)
-   for(let j=group.start;j<group.start+group.count;j++)visible.push(indices[j]);
-  geometry.setIndex(visible);geometry.clearGroups();geometry.name='Freight stair riser / single tread upper skin';
-  riser.userData.singleTreadSkin=true;
+  // Retain the full original Box for physical contacts and ray ownership.
+  // The pre-finish art pass creates a separate closed riser below the tread
+  // backing; the premium cassette pass must not recreate a second top skin.
+  riser.name='Freight stair original closed riser';riser.userData.freightStairRiser=true;
  }
  // The last stair already meets the observation gallery; no coplanar overlay.
  for(let i=0;i<12;i++){const z=-11-i*.5;deck('Reverse inspection stair',9,15,z-.5,z,7+(i+1)*.25);}
@@ -172,6 +167,7 @@ export function buildRoom22(game,index=21){
  k.panel('lower-return',[-21.65,2.3,18],[1,0,0],5.6,4.6);
  const shutters=buildRoom22Shutters(k,pad);
  const architecture=buildFreightArchitecture(k,shutters);
+ installVisualAuditMiddleKit(k,22);
  const level=k.finish([-17,0,18],[-15,.55,17],[-14,14,-18],{workshop:k,spec:ROOM22_SPEC,portalPuzzle:true,shutters});
  level.freightArchitecture=architecture;
  level.spawnView={yaw:-.25,pitch:-.1};

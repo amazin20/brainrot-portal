@@ -56,3 +56,47 @@ test('integral castle work-bay finish does not bridge an authored floor opening'
  }
  assert.deepEqual(game.floors,floors);assert.deepEqual(game.colliders,colliders);k.dispose();
 });
+
+test('real source projector stays completely behind the original beam plane with physical box and barrel contacts',()=>{
+ const game={scene:new THREE.Scene(),colliders:[],floors:[],cameraBlockers:[],aimBlockers:[],portalPanels:[]},k=new SingularityKit(game);
+ const def=SINGULARITY_ROOMS.find(r=>r.id==='optics'),[x,y,z]=def.at;
+ const room={def,b:{x0:x-def.w/2,x1:x+def.w/2,z0:z-def.d/2,z1:z+def.d/2},P:(a,b,c=0)=>[x+a,y+c,z+b]};
+ const report=buildCastleAuditConstruction({game,k,rooms:new Map([['optics',room]]),machines:new Map([['optics',{state:{intake:{}}}]]),edges:[]});
+ assert.equal(report.opticalProjectors,1);assert.equal(report.extraColliders,17);assert.equal(game.floors.length,0);
+ const ray=new THREE.Ray(V(...report.projector.source),V(1,0,0));
+ for(const collider of game.colliders){assert.ok(collider.box.max.x<report.projector.source[0]-.005,'emitter contact intrudes in front of the ray origin');assert.equal(ray.intersectBox(collider.box,V()),null);}
+ assert.ok(Math.abs(report.projector.bodyBounds[1])<1e-7,'projector must be founded at the real room floor');
+ k.dispose();
+});
+
+test('magnetic copper winding is visible outside its core but remains inside the old physical horseshoe envelope',()=>{
+ const game={scene:new THREE.Scene(),colliders:[],floors:[],cameraBlockers:[],aimBlockers:[],portalPanels:[]},k=new SingularityKit(game);
+ const def=SINGULARITY_ROOMS.find(r=>r.id==='magnet'),[x,y,z]=def.at;
+ const room={def,b:{x0:x-def.w/2,x1:x+def.w/2,z0:z-def.d/2,z1:z+def.d/2}};
+ k.ring([x,y+4.8,z],3,k.m.cyan,{normal:[1,0,0],tube:.24,arc:Math.PI});
+ buildCastleAuditConstruction({game,k,rooms:new Map([['magnet',room]]),machines:new Map(),edges:[]});
+ const winding=k.meshes.find(m=>m.userData.castleCoilEnvelope),p=winding.geometry.attributes.position;
+ let outsideCore=false;
+ for(let i=0;i<p.count;i++){
+  const distance=Math.hypot(Math.hypot(p.getX(i),p.getY(i))-3,p.getZ(i));
+  assert.ok(distance<=.24+1e-4,'winding escapes original torus tube');assert.ok(p.getY(i)>=-1e-5,'winding escapes the original open-end planes');
+  outsideCore||=distance>.16;
+ }
+ assert.equal(outsideCore,true,'winding remains buried in the core');k.dispose();
+});
+
+test('wing-coloured internal walls receive closed casings while the real perimeter survives static batching',()=>{
+ const game={scene:new THREE.Scene(),colliders:[],floors:[],cameraBlockers:[],aimBlockers:[],portalPanels:[]},k=new SingularityKit(game);
+ const def=SINGULARITY_ROOMS.find(r=>r.id==='archive'),[x,y,z]=def.at;
+ const room={def,b:{x0:x-def.w/2,x1:x+def.w/2,z0:z-def.d/2,z1:z+def.d/2}};
+ const material=k.mat(0xd1b3b5,.8,.02);material.name='Castle wing wall / archive';
+ const outer=k.box([room.b.x0,y+4.7,z],[.6,9.4,14],material),inner=k.box([x-3,y+4.7,z],[.6,9.4,14],material);
+ const contacts=[...game.colliders],bounds=inner.userData.collider.box.clone(),outerGeometry=outer.geometry;
+ buildCastleAuditConstruction({game,k,rooms:new Map([['archive',room]]),machines:new Map(),edges:[]});
+ assert.equal(outer.geometry,outerGeometry);assert.equal(outer.material,material);assert.equal(inner.userData.castleAuditCasing,true);
+ assert.equal(inner.material.name,'Castle equipment / shared casing');assert.ok(inner.geometry.boundingBox.min.equals(V(-.5,-.5,-.5)));
+ k.batch();assert.deepEqual(game.colliders,contacts);assert.ok(inner.userData.collider.box.equals(bounds));
+ assert.ok(k.root.children.some(mesh=>mesh.visible&&mesh.material===inner.material&&mesh.name==='Machined architectural construction / joined by finish'),'finished internal panel was lost during merge');
+ assert.ok(k.root.children.some(mesh=>mesh.visible&&mesh.material===material&&mesh.isInstancedMesh),'real perimeter was lost during merge');
+ k.dispose();
+});

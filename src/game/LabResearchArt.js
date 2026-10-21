@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import {OpenChamber} from './LabOpenArchitecture.js';
 import {encloseLab,labInstrument} from './LabHumanLab.js';
 import {applyDeckFinish,sign} from './LabOpenStationArt.js';
+import {dressVisualAuditObservatory} from './LabVisualAuditObservatory.js';
 const V=(...p)=>new THREE.Vector3(...p),Q=()=>new THREE.Quaternion();
 
 /** A compact, enclosed extension of the existing manufactured laboratory kit.
@@ -79,6 +80,7 @@ export class ResearchChamber extends OpenChamber {
  }
  support(x,z,top,radius=.55){return this.column(x,z,this.base,top,radius);}
  finishResearch(spawn,cargo,goal,extra={}){
+  dressVisualAuditObservatory(this,extra);
   for(const d of this.decks.filter(d=>d.y>this.base+.5)){
    // Supports sit under the back corners, never in the intended approach.
    for(const x of [d.minX+1,d.maxX-1]){
