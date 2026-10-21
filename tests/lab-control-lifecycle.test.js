@@ -6,12 +6,15 @@ import { LabGame } from '../src/game/LabGame.js';
 // Real game methods and real Three vectors; explicit event/capture doubles.
 // The separate browser scenario verifies actual DOM and multi-touch dispatch.
 class Target {
-  constructor() { this.listeners = new Map(); this.captures = new Set(); this.style = {}; }
+  constructor() { this.listeners = new Map(); this.captures = new Set(); this.style = {}; this.attributes = new Map(); }
   addEventListener(type, fn) {
     if (!this.listeners.has(type)) this.listeners.set(type, new Set());
     this.listeners.get(type).add(fn);
   }
   removeEventListener(type, fn) { this.listeners.get(type)?.delete(fn); }
+  setAttribute(name, value) { this.attributes.set(name, String(value)); }
+  getAttribute(name) { return this.attributes.get(name) ?? null; }
+  removeAttribute(name) { this.attributes.delete(name); }
   emit(type, event = {}) {
     for (const fn of [...this.listeners.get(type) ?? []]) fn({ preventDefault() {}, ...event });
   }

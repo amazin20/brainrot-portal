@@ -115,6 +115,10 @@ export class InputController {
     this.listen(this.joystick, 'pointerup', endStick);
     this.listen(this.joystick, 'pointercancel', endStick);
     this.listen(this.joystick, 'lostpointercapture', endStick);
+    // Without capture, an end outside the pad is delivered to another target.
+    // Pointer ownership also makes the normal bubbled end safe to process twice.
+    this.listen(window, 'pointerup', endStick);
+    this.listen(window, 'pointercancel', endStick);
     this.listen(this.jumpButton, 'pointerdown', (event) => {
       if (this.disposed || !this.isActive()) return;
       event.preventDefault();

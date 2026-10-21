@@ -16,6 +16,7 @@ import {captureBrowserFrame} from './qa-browser-capture.mjs';
 import {assertFoundation20Route} from './lib/foundation20-native-proof.mjs';
 import {installPinnedYandexChecker,captureYandexChecker,YANDEX_CHECKER_PIN} from './lib/yandex-debug-checker.mjs';
 import {createMockYandexSDKSource,readMockYandexSDKObservation} from './lib/yandex-review-sdk.mjs';
+import {RELEASE_VERSION} from '../src/game/ReleaseIdentity.js';
 
 const git=(root,args)=>execFileSync('git',args,{cwd:root,maxBuffer:32000000,encoding:'utf8'}).trim();
 const positive=(value,label)=>{const n=Number(value);assert.ok(Number.isSafeInteger(n)&&n>0,label+' must identify an actual positive CI run/attempt');return n;};
@@ -58,7 +59,7 @@ export function bindPlatformReviewPackages({sourceRoot=process.cwd(),directory='
 
 /** No bundle rewriting, SDK fallback or substitute asset. Only /sdk.js is a
  * declared locally generated TEST SDK; all game bytes are frozen inventories. */
-export async function serveYandexReviewPackage(directory,{pathname='/campaign-v63/',mobile=false,sdkOptions={}}={}){
+export async function serveYandexReviewPackage(directory,{pathname='/campaign-'+RELEASE_VERSION.split('-')[0]+'/',mobile=false,sdkOptions={}}={}){
  assert.match(pathname,/^\/(?:[a-zA-Z0-9_-]+\/)+$/);const root=path.resolve(directory),sdkSource=createMockYandexSDKSource({mobile,...sdkOptions});
  const types={'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.json':'application/json','.glb':'model/gltf-binary','.wasm':'application/wasm','.webp':'image/webp','.svg':'image/svg+xml','.png':'image/png','.jpg':'image/jpeg','.ogg':'audio/ogg','.mp3':'audio/mpeg'};
  const server=http.createServer((request,response)=>{

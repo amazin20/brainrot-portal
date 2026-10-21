@@ -11,6 +11,7 @@ import { cargoLoadsPlate } from './LabPlateContact.js';
 import * as THREE from 'three';
 import { InputController } from './InputController.js';
 import { LabControls } from './LabControls.js';
+import {touchButtonContent,bindTouchFeedback} from './LabTouchPresentation.js';
 import { AudioController } from './AudioController.js';
 import { LabCamera } from './LabCamera.js';
 import {mechanismCameraArea} from './LabMechanismCamera.js';
@@ -351,18 +352,24 @@ export class LabGame {
     this.prompt = document.createElement('div'); this.prompt.className = 'lab-prompt'; document.body.appendChild(this.prompt);
     this.surfaceHint = document.createElement('div'); this.surfaceHint.className = 'lab-surface-hint'; document.body.appendChild(this.surfaceHint);
     const mobile = document.createElement('div'); mobile.className = 'lab-mobile';
+    mobile.setAttribute('role', 'group'); mobile.setAttribute('aria-label', 'Порталы и действия');
     this.mobileActionButtons = [];
-    for (const [label, description, action, activation = 'pointerdown'] of [
-      ['①', 'Голубой портал', () => this.firePortal(0)],
-      ['②', 'Оранжевый портал', () => this.firePortal(1)],
-      ['E', 'Взять или поставить друга, использовать механизм', () => this.interact()],
-      ['Пауза', 'Приостановить игру', () => this.togglePause(true), 'click'],
+    for (const [kind, label, description, action, activation = 'pointerdown', channel = ''] of [
+      ['portal', 'ПОРТАЛ', 'Голубой портал', () => this.firePortal(0), 'pointerdown', '1'],
+      ['portal', 'ПОРТАЛ', 'Оранжевый портал', () => this.firePortal(1), 'pointerdown', '2'],
+      ['interact', 'ДЕЙСТВИЕ', 'Взять или поставить друга, использовать механизм', () => this.interact()],
+      ['pause', '', 'Приостановить игру', () => this.togglePause(true), 'click'],
     ]) {
-      const button = document.createElement('button'); button.textContent = label;
+      const button = document.createElement('button'); button.type = 'button';
+      button.className = `touch-button touch-button--${kind}${channel ? ' touch-button--channel-' + channel : ''}`;
+      button.innerHTML = touchButtonContent(kind, label, channel);
       button.setAttribute('aria-label', description);
       this.mobileActionButtons.push({ button, action, activation }); mobile.appendChild(button);
     }
-    document.body.appendChild(mobile); this.bindMobileActions();
+    document.body.appendChild(mobile);
+    if (this.touch?.jumpButton) this.touch.jumpButton.innerHTML = touchButtonContent('jump', 'ПРЫЖОК');
+    if (this.touch?.sprintButton) this.touch.sprintButton.innerHTML = touchButtonContent('sprint', 'БЕГ');
+    this.bindMobileActions();
     if (this.debug) {
       this.fpsElement = document.createElement('output'); this.fpsElement.className = 'lab-fps'; this.fpsElement.setAttribute('aria-label', 'Частота кадров'); document.body.appendChild(this.fpsElement);
     }
@@ -376,6 +383,7 @@ export class LabGame {
   }
 
   bindMobileActions() {
+    this.touchFeedback?.reset();
     for (const { button, action, activation = 'pointerdown' } of this.mobileActionButtons ?? []) {
       // Opening a menu on touch pointerdown moves the target before touchend.
       // Chromium can then click the newly exposed "choose room" control.
@@ -386,12 +394,15 @@ export class LabGame {
         if (this.controls.active) action();
       });
     }
+    if (this.mobileActionButtons?.length) this.touchFeedback = bindTouchFeedback(this.controls,
+      [...this.mobileActionButtons.map(({button}) => button), this.touch?.joystick, this.touch?.jumpButton, this.touch?.sprintButton].filter(Boolean));
   }
 
   resetInput() {
     if (this.input?.reset) this.input.reset();
     else this.input?.keys.clear(); // Small physics fixtures supply only keys.
     this.controls?.reset();
+    this.touchFeedback?.reset();
     this.interactQueued = false; this.jumpBuffer = 0; this.velocityFocus = false;
   }
 

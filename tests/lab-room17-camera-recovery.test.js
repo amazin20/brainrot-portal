@@ -93,6 +93,7 @@ for(const aspect of [16/9,1.6,4/3,390/844])test(`room17 ordinary recovery turn k
 function intervals(frames){const out=[];for(const frame of frames){const last=out.at(-1);if(last&&frame===last[1]+1)last[1]=frame;else out.push([frame,frame]);}return out.map(([first,last])=>({first,last,frames:last-first+1,seconds:(last-first+1)/60}));}
 for(const [label,aspect,aspectChanges]of [
  ['landscape to portrait and back',16/9,[{frame:1600,aspect:390/844},{frame:1700,aspect:16/9}]],
+ ['phone landscape to portrait and back',844/390,[{frame:1600,aspect:390/844},{frame:1700,aspect:844/390}]],
  ['portrait to 4:3 and back',390/844,[{frame:1600,aspect:4/3},{frame:1700,aspect:390/844}]],
 ])test(`an ordinary in-zone orientation cycle ${label} has bounded measured recovery`,async t=>{
  const before=await observeRoom17CameraPrefix({aspect,disableLocalPolicy:true,aspectChanges}),after=await observeRoom17CameraPrefix({aspect,aspectChanges,denseVertexRanges:[[1590,1750]]});
@@ -101,5 +102,35 @@ for(const [label,aspect,aspectChanges]of [
  const inRecovery=frame=>frame>=1600&&frame<1650||frame>=1700&&frame<1750,bodyLoss=losses(after),vertexClips=after.meshSamples.filter(s=>s.extent>=1).map(s=>s.frame);
  assert.ok(bodyLoss.every(inRecovery),JSON.stringify(intervals(bodyLoss)));assert.ok(vertexClips.every(inRecovery),JSON.stringify(intervals(vertexClips)));
  for(let frame=1590;frame<=1750;frame++)assert.ok(after.meshSamples.some(s=>s.frame===frame),`No dense original-vertex projection for transition frame ${frame}`);
+ const sampleByFrame=new Map(after.samples.map(s=>[s.frame,s]));let previousAspect=aspect;
+ for(let index=0;index<aspectChanges.length;index++){
+  const change=aspectChanges[index],end=aspectChanges[index+1]?.frame??after.visualFrames+1;
+  if(change.aspect>previousAspect){
+   // Include the release tail after the local policy turns off. Its last
+   // shoulder or lens reset must not defer the snap until outside that mode.
+   const widening=after.samples.filter(s=>s.frame>=change.frame&&s.frame<end).map(s=>{
+    const previous=sampleByFrame.get(s.frame-1);assert.ok(previous,'No previous live eye for the widening transition');
+    return {eyeStep:Math.hypot(...s.eye.map((value,index)=>value-previous.eye[index])),fovStep:Math.abs(s.fov-previous.fov)};
+   });
+   assert.ok(widening.length>0,'No measured recovery frames after viewport widening');
+   assert.ok(widening.every(s=>s.eyeStep<1),`Viewport widening snapped the live eye: ${Math.max(...widening.map(s=>s.eyeStep))}m`);
+   assert.ok(widening.every(s=>s.fovStep<2),`Viewport widening snapped the lens: ${Math.max(...widening.map(s=>s.fovStep))} degrees`);
+  }
+  previousAspect=change.aspect;
+ }
  t.diagnostic(JSON.stringify({after:summary(after),before:summary(before),bodyLossIntervals:intervals(bodyLoss),vertexClipIntervals:intervals(vertexClips)}));
+});
+
+test('room17 viewport release freezes with zero time and resets with a new scene',()=>{
+ const camera=new THREE.PerspectiveCamera(62,390/844,.1,180),rig=new LabCamera({camera}),target=V(-22,-10,52.2);
+ rig.configureMechanismFraming({enabled:true,offsets:ROOM17_RECOVERY_CAMERA_OFFSETS});rig.reset(target,.45,-.08);
+ for(let n=0;n<120;n++)rig.update({dt:1/60,target,yaw:.45,pitch:-.08,mechanismFraming:true});
+ const portraitAspect=rig.room17RecoveryLayoutAspect,eye=camera.position.clone(),fov=camera.fov;
+ camera.aspect=16/9;camera.updateProjectionMatrix();rig.update({dt:0,target,yaw:.45,pitch:-.08,mechanismFraming:true});
+ assert.equal(rig.room17RecoveryLayoutAspect,portraitAspect);assert.ok(camera.position.distanceTo(eye)<1e-8);assert.equal(camera.fov,fov);
+ rig.update({dt:1/60,target,yaw:.45,pitch:-.08,mechanismFraming:true});
+ assert.ok(rig.room17RecoveryLayoutAspect>portraitAspect&&rig.room17RecoveryLayoutAspect<camera.aspect);
+ camera.aspect=360/800;camera.updateProjectionMatrix();rig.update({dt:1/60,target,yaw:.45,pitch:-.08,mechanismFraming:true});
+ assert.equal(rig.room17RecoveryLayoutAspect,camera.aspect,'A narrower viewport must be used on its first live frame');
+ camera.aspect=16/9;camera.updateProjectionMatrix();rig.reset(target,.45,-.08);assert.equal(rig.room17RecoveryLayoutAspect,camera.aspect);
 });

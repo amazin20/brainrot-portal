@@ -1,5 +1,6 @@
 import './styles.css';
 import './campaign.css';
+import './touch-controls.css';
 import {createCampaignMenu} from './game/LabCampaignMenu.js';
 import {LabGame} from './game/LabGame.js';
 import {ACTIVE_FOUNDATION_RUNTIME_FLAGS} from './game/ReleaseIdentity.js';

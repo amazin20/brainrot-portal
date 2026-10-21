@@ -193,9 +193,6 @@ body[data-play-state='playing'] .lab-reticle { opacity: 1; }
 .sprint-button span { display: block; font-size: 9px; letter-spacing: .05em; }
 .sprint-button[aria-pressed='true'] { border-color: #fff3d1; color: #273831; background: #ffc95b; box-shadow: 0 0 0 4px #ffc95b55, 0 3px 14px #08191b70; }
 .lab-mobile { position: fixed; z-index: 19; right: 22px; bottom: max(111px, calc(env(safe-area-inset-bottom) + 94px)); display: none; grid-template-columns: repeat(2, 52px); gap: 7px; }
-.lab-mobile button { width: 52px; height: 52px; border: 2px solid #d5edf0; border-radius: 50%; background: #18343ce8; color: #f5f6ed; font-size: 17px; box-shadow: 0 2px 12px #08191b77; }
-.lab-mobile button:first-child { border-color: var(--aqua); color: var(--aqua); }
-.lab-mobile button:nth-child(2) { border-color: var(--gold); color: var(--gold); }
 body[data-external-pause='true'] .play-tools, body[data-external-pause='true'] .lab-mobile { pointer-events: none; }
 
 @media (max-width: 850px) {

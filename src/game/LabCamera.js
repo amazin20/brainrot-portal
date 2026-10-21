@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { LabCameraBroadPhase } from './LabCameraBroadPhase.js';
 import { portalTransformMatrix, portalBacksCollider } from './LabPortals.js';
 import {MECHANISM_CAMERA_BUDGET, MECHANISM_CAMERA_FOV, MECHANISM_CAMERA_MAX_REAR, MECHANISM_CAMERA_OFFSETS, measureMechanismFrame} from './LabMechanismCamera.js';
-import {ROOM17_RECOVERY_CAMERA_OFFSETS,room17LegacyRecoveryCameraArea,room17RecoveryCameraWeight,room17RecoveryAspectWeight,room17RecoveryPortraitBlend,ROOM17_RECOVERY_LENS_RESPONSE,ROOM17_RECOVERY_DISTANCE_RESPONSE,ROOM17_RECOVERY_AVOIDANCE_RESPONSE,ROOM17_RECOVERY_FRAMING_ASPECT,room17RecoveryCameraBlend} from './LabRoom17CameraPolicy.js';
+import {ROOM17_RECOVERY_CAMERA_OFFSETS,room17LegacyRecoveryCameraArea,room17RecoveryCameraWeight,room17RecoveryAspectWeight,room17RecoveryPortraitBlend,ROOM17_RECOVERY_LENS_RESPONSE,ROOM17_RECOVERY_DISTANCE_RESPONSE,ROOM17_RECOVERY_AVOIDANCE_RESPONSE,ROOM17_RECOVERY_VIEWPORT_RELEASE_RESPONSE,ROOM17_RECOVERY_FRAMING_ASPECT,room17RecoveryCameraBlend} from './LabRoom17CameraPolicy.js';
 
 const UP = new THREE.Vector3(0, 1, 0);
 const IDENTITY = new THREE.Quaternion();
@@ -108,6 +108,7 @@ export class LabCamera {
     this.mechanismLensGoal = 0;
     this.room17RecoveryWeight = 0;
     this.room17RecoveryTransportHold = 0;
+    this.room17RecoveryLayoutAspect = camera.aspect;
     this.mechanismStats = {candidateBudget: MECHANISM_CAMERA_BUDGET, candidates: 0, cacheHit: false};
     this.queryStats = {sweeps: 0, rays: 0, candidateMeshes: 0};
   }
@@ -135,6 +136,7 @@ export class LabCamera {
     this.mechanismCurrentBlockersValid = currentBlockersValid;
     this.mechanismOffsets = offsets;
     this.room17RecoveryTransportHold = 0;this.room17RecoveryWeight = 0;
+    this.room17RecoveryLayoutAspect = this.camera.aspect;
     this.mechanismEscape = null;this.mechanismLensGoal = 0;this.mechanismHadObstruction = false;
     return this;
   }
@@ -178,6 +180,7 @@ export class LabCamera {
   reset(target, yaw = 0, pitch = -0.2) {
     this.foundation20EscapeOffset = null;
     this.room17RecoveryTransportHold = 0;this.room17RecoveryWeight = 0;
+    this.room17RecoveryLayoutAspect = this.camera.aspect;
     this.mechanismEscape = null;this.mechanismLensGoal = 0;this.mechanismHadObstruction = false;
     this.broadPhase.clear(); this.rayHits.length = 0;
     this.focus.copy(target).y += 1.32;
@@ -278,6 +281,18 @@ export class LabCamera {
       return this.reset(target, yaw, pitch);
     }
     const step = Math.min(Math.max(Number.isFinite(dt) ? dt : 0, 0), 0.1);
+    // A wider viewport already contains the narrow composition. Keep that
+    // safe shoulder while returning to landscape instead of discarding its
+    // offset and lens goal in one frame. Shrinking still uses the actual
+    // narrow aspect immediately; this does not defer the portrait constraint.
+    if (room17Recovery && step > 0) {
+      // Above1.6 this policy is already fully wide. Bound only its release
+      // goal so an ultrawide phone cannot rush across that blend interval.
+      const aspect = Math.min(this.camera.aspect, 1.7);
+      if (aspect < this.room17RecoveryLayoutAspect) this.room17RecoveryLayoutAspect = aspect;
+      else this.room17RecoveryLayoutAspect += (aspect - this.room17RecoveryLayoutAspect) * (1 - Math.exp(-ROOM17_RECOVERY_VIEWPORT_RELEASE_RESPONSE * step));
+    }
+    const room17Aspect = Math.min(this.camera.aspect, this.room17RecoveryLayoutAspect);
     this.lastTarget.copy(target);
     this.playerPivot.copy(target).y += 1.32;
     // Clipping only bridges the lens that still trails a traveller emerging
@@ -316,9 +331,9 @@ export class LabCamera {
     [this.pitch, this.pitchVelocity] = spring(
       this.pitch, this.pitchVelocity, THREE.MathUtils.clamp(pitch, CAMERA_PITCH_MIN, CAMERA_PITCH_MAX), 38, step,
     );
-    this.room17RecoveryWeight = room17Recovery && this.mechanismFramingEnabled && mechanismFraming ? room17RecoveryCameraWeight(target,this.yaw,this.pitch)*room17RecoveryAspectWeight(this.camera.aspect) : 0;
+    this.room17RecoveryWeight = room17Recovery && this.mechanismFramingEnabled && mechanismFraming ? room17RecoveryCameraWeight(target,this.yaw,this.pitch)*room17RecoveryAspectWeight(room17Aspect) : 0;
     const room17Orientation = this.room17RecoveryWeight > 0;
-    const room17Legacy = room17Recovery && room17LegacyRecoveryCameraArea(target,this.camera.aspect);
+    const room17Legacy = room17Recovery && room17LegacyRecoveryCameraArea(target,room17Aspect);
     this.mechanismFramingActive = Boolean(this.mechanismFramingEnabled && mechanismFraming && !this.foundation20Framing
       && (!room17Recovery || room17Orientation || room17Legacy));
     this.room17RecoveryTransportHold = step > 0 && this.mechanismFramingActive && room17Orientation ? .75 : Math.max(0,this.room17RecoveryTransportHold-step);
@@ -607,8 +622,9 @@ export class LabCamera {
   }
 
   measureMechanismFrame(eye, fov = this.camera.fov) {
+    const recoveryAspect = Math.min(this.camera.aspect, this.room17RecoveryLayoutAspect);
     return measureMechanismFrame({eye, target: this.lastTarget, rotation: this.mechanismSubjectRotation,
-      lookPoint: this.lookPoint, up: this.viewUp, aspect: this.mechanismOffsets === ROOM17_RECOVERY_CAMERA_OFFSETS ? THREE.MathUtils.lerp(this.camera.aspect,Math.min(this.camera.aspect,ROOM17_RECOVERY_FRAMING_ASPECT),this.room17RecoveryWeight*room17RecoveryPortraitBlend(this.camera.aspect)) : this.camera.aspect, near: this.camera.near, fov});
+      lookPoint: this.lookPoint, up: this.viewUp, aspect: this.mechanismOffsets === ROOM17_RECOVERY_CAMERA_OFFSETS ? THREE.MathUtils.lerp(this.camera.aspect,Math.min(this.camera.aspect,ROOM17_RECOVERY_FRAMING_ASPECT),this.room17RecoveryWeight*room17RecoveryPortraitBlend(recoveryAspect)) : this.camera.aspect, near: this.camera.near, fov});
   }
 
   mechanismEscapePosition() {
@@ -638,11 +654,12 @@ export class LabCamera {
       // twelve shoulder recipes continuously, with an explicit14.5m limit.
       const spatialApproach = recoveryTurn ? room17RecoveryCameraBlend(this.lastTarget) : 1;
       const approach = recoveryTurn ? spatialApproach*this.room17RecoveryWeight : 1;
-      const legacyStart = recoveryTurn && room17LegacyRecoveryCameraArea(this.lastTarget,this.camera.aspect);
+      const recoveryAspect = Math.min(this.camera.aspect, this.room17RecoveryLayoutAspect);
+      const legacyStart = recoveryTurn && room17LegacyRecoveryCameraArea(this.lastTarget,recoveryAspect);
       const startRear = legacyStart ? recipe.rear : 6.5;
       const startSide = legacyStart ? recipe.side : 1.4;
-      const endRear = recoveryTurn ? THREE.MathUtils.lerp(recipe.rear+2,recipe.recoveryRear,room17RecoveryPortraitBlend(this.camera.aspect)) : recipe.rear;
-      const endSide = recoveryTurn ? THREE.MathUtils.lerp(12,recipe.recoverySide,room17RecoveryPortraitBlend(this.camera.aspect)) : recipe.side;
+      const endRear = recoveryTurn ? THREE.MathUtils.lerp(recipe.rear+2,recipe.recoveryRear,room17RecoveryPortraitBlend(recoveryAspect)) : recipe.rear;
+      const endSide = recoveryTurn ? THREE.MathUtils.lerp(12,recipe.recoverySide,room17RecoveryPortraitBlend(recoveryAspect)) : recipe.side;
       const recoveryRear = recoveryTurn ? THREE.MathUtils.lerp(startRear,endRear,approach) + Math.sin(Math.PI*spatialApproach)*4*this.room17RecoveryWeight : recipe.rear;
       const rear = Math.min(MECHANISM_CAMERA_MAX_REAR, recoveryRear + (MECHANISM_CAMERA_MAX_REAR - 8)
         * THREE.MathUtils.smoothstep(upward, Math.sin(.7), Math.sin(CAMERA_PITCH_MAX)));

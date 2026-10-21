@@ -4,6 +4,7 @@
 export const ROOM17_RECOVERY_LENS_RESPONSE=48;
 export const ROOM17_RECOVERY_DISTANCE_RESPONSE=48;
 export const ROOM17_RECOVERY_AVOIDANCE_RESPONSE=8;
+export const ROOM17_RECOVERY_VIEWPORT_RELEASE_RESPONSE=1.5;
 export const ROOM17_RECOVERY_FRAMING_ASPECT=.45;
 export const ROOM17_RECOVERY_CAMERA_OFFSETS=Object.freeze([3.5,4.5].flatMap(rear=>
  [8,-8].flatMap(side=>[0,1.8,3.2].map(rise=>Object.freeze({rear,side,rise,recoveryRear:rear===3.5?11:13,recoverySide:22.5})))));

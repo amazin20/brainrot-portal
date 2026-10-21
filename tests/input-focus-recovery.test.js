@@ -122,6 +122,22 @@ test('a second pointer cannot steal or end the first joystick pointer', () => {
   f.joystick.emit('pointerup', { pointerId: 1 }); assertNeutral(f);
 });
 
+for (const ending of ['pointerup', 'pointercancel']) test(`window ${ending} releases only the owning stick when pointer capture is unavailable`, () => {
+  const f = fixture();
+  f.joystick.setPointerCapture = undefined;
+  startStick(f);
+  // The finger can leave the pad before release, so only window sees its end.
+  // Ending a camera/action finger must leave this movement finger untouched.
+  f.window.emit(ending, { pointerId: 2 });
+  assert.equal(f.input.joystickPointer, 1); assert.equal(f.input.getMove().x, 1);
+  f.window.emit(ending, { pointerId: 1 });
+  assertNeutral(f);
+  f.joystick.emit('pointermove', { pointerId: 1, clientX: 81, clientY: 50 });
+  assertNeutral(f);
+  startStick(f, 3);
+  assert.equal(f.input.joystickPointer, 3);
+});
+
 test('pointer cancellation is idempotent and the next touch works', () => {
   const f = fixture(); startStick(f, 0);
   f.joystick.emit('pointercancel', { pointerId: 0 });

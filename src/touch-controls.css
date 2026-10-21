@@ -1,0 +1,119 @@
+/* A compact instrument cluster: portal channels have their own colour and
+   number, movement lives under the left thumb, actions under the right. */
+:root {
+  --touch-left: max(18px, calc(env(safe-area-inset-left) + 14px));
+  --touch-right: max(18px, calc(env(safe-area-inset-right) + 14px));
+  --touch-bottom: max(20px, calc(env(safe-area-inset-bottom) + 14px));
+  --touch-top: max(16px, calc(env(safe-area-inset-top) + 12px));
+  --touch-stick: 112px;
+  --touch-key: 62px;
+  --touch-gap: 10px;
+}
+.mobile-controls {
+  bottom: var(--touch-bottom); padding: 0 var(--touch-right) 0 var(--touch-left);
+}
+.joystick {
+  width: var(--touch-stick); height: var(--touch-stick); flex: 0 0 var(--touch-stick);
+  border: 1px solid #d3f7f15c;
+  background: radial-gradient(circle at 50% 45%, #203c47b8 0 49%, #0c1c27cc 50% 63%, #a6d8d521 64% 65%, #122a35ba 66%);
+  box-shadow: inset 0 1px 1px #e5ffff35, inset 0 -5px 12px #02101d80, 0 5px 16px #020b1640;
+  transition: border-color .12s, box-shadow .12s;
+}
+.joystick::before, .joystick::after {
+  content: ''; position: absolute; border: 1px solid #b5e8e247; pointer-events: none;
+}
+.joystick::before { inset: 9px; border-radius: 50%; border-left-color: transparent; border-right-color: transparent; }
+.joystick::after { inset: 20px; border-radius: 50%; border-style: dashed; opacity: .32; }
+.joystick-guides { position: absolute; inset: 0; border-radius: inherit; pointer-events: none; }
+.joystick-guides::before, .joystick-guides::after {
+  content: ''; position: absolute; background: #dafaf170; border-radius: 1px;
+}
+.joystick-guides::before { width: 2px; height: 5px; left: calc(50% - 1px); top: 5px; box-shadow: 0 calc(var(--touch-stick) - 17px) #dafaf170; }
+.joystick-guides::after { width: 5px; height: 2px; top: calc(50% - 1px); left: 5px; box-shadow: calc(var(--touch-stick) - 17px) 0 #dafaf170; }
+#joystick-knob {
+  z-index: 1; width: 46px; height: 46px; margin: -23px;
+  border: 1px solid #ccfff5b0;
+  background: radial-gradient(circle at 38% 28%, #b6ebe5, #71b9bc 52%, #347884 90%);
+  box-shadow: inset 0 2px 2px #f0ffff80, inset 0 -3px 3px #12334266, 0 4px 8px #020d20a0, 0 0 0 4px #b0f3e90d;
+}
+#joystick-knob::after { content: ''; position: absolute; inset: 9px; border: 1px solid #1b5c7252; border-radius: 50%; box-shadow: inset 0 1px 2px #e0ffff44; }
+.joystick-label { position: absolute; bottom: 11px; left: 0; right: 0; text-align: center; color: #c5e7e3a8; font: 700 7px/1 Arial, sans-serif; letter-spacing: .15em; pointer-events: none; }
+.joystick[data-pressed='true'] { border-color: #a8f7e9c9; box-shadow: inset 0 1px 1px #e5ffff35, 0 0 0 3px #8af3e415, 0 5px 16px #020b1640; }
+.touch-actions { gap: 0; }
+.touch-button, .jump-button, .sprint-button {
+  --key-accent: #d2e8e4;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  position: relative; padding: 0; min-width: 44px; min-height: 44px;
+  color: #deeeeb; border: 1px solid #c6e7e46b;
+  border-radius: 20px; background: linear-gradient(155deg, #304954ef, #12252fe8 70%);
+  box-shadow: inset 0 1px 1px #edffff33, inset 0 -3px 0 #020e1845, 0 4px 10px #03101b59;
+  touch-action: none; -webkit-tap-highlight-color: transparent;
+  transition: transform .09s, background .12s, border-color .12s, box-shadow .12s;
+}
+.touch-button::before, .jump-button::before, .sprint-button::before {
+  content: ''; position: absolute; inset: 5px; border: 1px solid #d8f4ed19; border-radius: inherit; pointer-events: none;
+}
+.touch-icon { width: 26px; height: 26px; display: block; flex-shrink: 0; pointer-events: none; }
+.touch-label { display: block; margin-top: 5px; font: 700 8px/1 Arial, sans-serif; letter-spacing: .065em; pointer-events: none; }
+.touch-channel { position: absolute; right: 10px; top: 8px; font: 800 9px/1 Arial, sans-serif; opacity: .8; pointer-events: none; }
+.lab-mobile {
+  right: var(--touch-right); bottom: calc(var(--touch-bottom) + 84px);
+  grid-template-columns: repeat(2, var(--touch-key)); gap: var(--touch-gap); pointer-events: none;
+}
+.lab-mobile .touch-button { width: var(--touch-key); height: var(--touch-key); pointer-events: auto; }
+.lab-mobile button.touch-button--channel-1 { --key-accent: #8be9f4; color: #b1f2fb; border-color: #7ed9eaad; background: linear-gradient(150deg, #2b697cde, #102d40f0 80%); }
+.lab-mobile button.touch-button--channel-2 { --key-accent: #ffd087; color: #ffdc9f; border-color: #ffc270b0; background: linear-gradient(150deg, #775438df, #3d2d24ef 80%); }
+.touch-button--portal .touch-icon { width: 25px; height: 29px; filter: drop-shadow(0 0 5px #8be9f430); }
+.touch-button--portal .touch-label { margin-top: 2px; font-size: 7px; }
+.lab-mobile .touch-button--interact {
+  position: absolute; right: 84px; bottom: -84px; width: 64px; height: 64px;
+  border-color: #dcebe3b3; background: linear-gradient(150deg, #e4eee4ed, #b3cfcaed); color: #203e47; border-radius: 22px;
+}
+.touch-button--interact .touch-label { font-size: 7px; }
+.lab-mobile .touch-button--pause {
+  position: fixed; top: var(--touch-top); right: var(--touch-right); width: 44px; height: 44px; border-radius: 14px;
+}
+.touch-button--pause .touch-icon { width: 20px; height: 20px; }
+.touch-button--pause .touch-label { display: none; }
+.jump-button {
+  width: 74px; height: 74px; border-radius: 26px;
+  color: #244550; border-color: #f2fff3ce; background: linear-gradient(150deg, #f1f5e9f5, #cbded3f0 72%);
+}
+.jump-button .touch-icon { width: 29px; height: 29px; }
+.jump-button .touch-label { font-size: 8px; }
+.sprint-button {
+  position: fixed; left: calc(var(--touch-left) + var(--touch-stick) + 10px); bottom: var(--touch-bottom);
+  width: 50px; height: 56px; border-radius: 17px; color: #d4e8e4;
+}
+.sprint-button .touch-icon { width: 23px; height: 23px; }
+.sprint-button .touch-label { font-size: 7px; }
+.sprint-button[aria-pressed='true'] { color: #c6fff1; border-color: #8debd1; background: linear-gradient(155deg, #2c7168f0, #173e3feb); box-shadow: inset 0 1px 1px #edffff33, 0 0 0 3px #78e7c823, 0 4px 10px #03101b59; }
+.touch-button[data-pressed='true'], .jump-button[data-pressed='true'], .sprint-button[data-pressed='true'],
+.touch-button:active, .jump-button:active, .sprint-button:active {
+  transform: translateY(2px) scale(.95); border-color: var(--key-accent);
+  box-shadow: inset 0 2px 7px #020d1b66, 0 0 0 3px #c3f0e81c;
+}
+.touch-button:focus-visible, .jump-button:focus-visible, .sprint-button:focus-visible { outline: 2px solid #fff6cb; outline-offset: 4px; }
+@media (pointer: coarse) {
+  .play-tools { right: calc(var(--touch-right) + 54px); top: var(--touch-top); height: 44px; align-items: center; }
+  .level-number { border-radius: 11px; padding: 10px; font-size: 12px; background: #162b34d9; }
+  .level-number::before { font-size: 8px; }
+  .lab-fps { right: var(--touch-right); top: calc(var(--touch-top) + 52px); bottom: auto; font-size: 9px; }
+  .lab-tutorial { max-width: min(440px, calc(100vw - 210px - env(safe-area-inset-left) - env(safe-area-inset-right))); }
+}
+@media (pointer: coarse) and (orientation: portrait) {
+  :root { --touch-stick: 104px; }
+  .lab-tutorial { max-width: none; }
+}
+@media (pointer: coarse) and (max-height: 380px) {
+  :root { --touch-stick: 94px; --touch-key: 56px; --touch-bottom: max(14px, calc(env(safe-area-inset-bottom) + 10px)); }
+  .lab-mobile { bottom: calc(var(--touch-bottom) + 78px); }
+  .lab-mobile .touch-button--interact { bottom: -78px; }
+  .jump-button { width: 68px; height: 68px; border-radius: 23px; }
+  .lab-mobile .touch-button--interact { right: 78px; width: 62px; height: 62px; }
+  .lab-tutorial { max-width: calc(100vw - 200px - env(safe-area-inset-left) - env(safe-area-inset-right)); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .touch-button, .jump-button, .sprint-button, .joystick { transition: none; }
+  .touch-button[data-pressed='true'], .jump-button[data-pressed='true'], .sprint-button[data-pressed='true'] { transform: none; }
+}
