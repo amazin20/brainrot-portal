@@ -4,7 +4,7 @@
   "repository": "amazin20/brainrot-portal",
   "namespace": "campaign-v64/",
   "version": "v64-mobile-controls",
-  "controllerParent": "75c0d0adc6c9dd755ed516b589fa71bad1215ef2",
+  "controllerParent": "b2123a4e3614413b9ca017f3ce5bfa4f31558df7",
   "sourceBranch": "upgrade/mobile-controls-20261021",
   "sourceWorkflow": ".github/workflows/mobile-controls-v64-review.yml",
   "sourceCommit": "307aefaa960cc8f6b0ce9b3d7267e1eeaceccb81",

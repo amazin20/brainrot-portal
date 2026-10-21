@@ -23,6 +23,7 @@ get, api, pages, safe_extract, verify_http, producer = (getattr(io, key) for key
     ['get','api','pages','safe_extract','verify_http','producer'])
 CONFIG='tools/campaign-v64-release.json'
 PREFIX='campaign-v64/'
+SOURCE_OUTPUT=pathlib.Path('v64-provider')
 BASE=io.BASE
 GROUPS=io.GROUPS
 LIMITATIONS=[
@@ -109,14 +110,14 @@ def lease(c,deployed=False,allow_pending=False):
 def artifact(c,pin):
     io.hex_value(pin['digest'].removeprefix('sha256:'),64)
     check(pin['digest'].startswith('sha256:') and 0<pin['size_in_bytes']<=100_000_000,'Invalid bounded artifact pin')
-    archive=pathlib.Path('provider')/(str(pin['id'])+'.zip')
+    archive=SOURCE_OUTPUT/(str(pin['id'])+'.zip')
     get('https://api.github.com/repos/'+io.REPO+'/actions/artifacts/'+str(pin['id'])+'/zip',token=True,
         destination=archive,expected={'bytes':pin['size_in_bytes'],'sha256':pin['digest'][7:]})
-    folder=pathlib.Path('provider')/pin['name']; rows=safe_extract(archive,folder,100_000_000)
+    folder=SOURCE_OUTPUT/pin['name']; rows=safe_extract(archive,folder,100_000_000)
     return {'metadata':pin,'zipSha256':sha(archive.read_bytes()),'files':rows,'folder':str(folder)}
 
 def validate_source_reports(c,records):
-    root=pathlib.Path('provider'); groups=GROUPS
+    root=SOURCE_OUTPUT; groups=GROUPS
     all_files=sorted(p.name for p in pathlib.Path('source/tests').iterdir() if p.name.endswith('.test.js') and not p.name.startswith('lab-tower'))
     covered=[];counts=0;checker_summaries=[]
     for part in range(12):
@@ -166,7 +167,7 @@ def validate_source_reports(c,records):
             'mobileLayouts':len(mobile['layouts'])}
 
 def candidate(c,receipt):
-    folder=pathlib.Path('provider/v64-dist'); actual=inventory(folder); info=load(folder/'build-info.json')
+    folder=SOURCE_OUTPUT/'v64-dist'; actual=inventory(folder); info=load(folder/'build-info.json')
     check(actual==receipt['candidateFiles'],'Consumer differs from independently accepted inventory')
     check(info['commit']==info['gameCommit']==info['interfaceCommit']==c['sourceCommit'] and info['version']==c['version']
           and int(info['run'])==c['sourceRun'] and info['levels']==51 and info['verified'] is False,'Consumer build stamp differs')
@@ -195,26 +196,32 @@ def prepared_baseline(s,rows):
     check(s['baseline']==expected,'Preparation does not retain the exact accepted baseline restore proof')
     return expected
 
+def require_fresh_outputs():
+    # Main retains historical tracked provider/*.json inputs. Downloads belong
+    # to this release's isolated fresh output; never clear an existing folder.
+    outputs=(pathlib.Path('pages'),SOURCE_OUTPUT,pathlib.Path('proof'))
+    check(all(not path.exists() and not path.is_symlink() for path in outputs),'Fresh publisher output required')
+
 def preparation(c):
-    check(not pathlib.Path('pages').exists() and not pathlib.Path('provider').exists() and not pathlib.Path('proof').exists(),'Fresh publisher output required')
+    require_fresh_outputs()
     prior=baseline(c);receipt=source_receipt(c);provider=source_provider(c);deployment=lease(c)
     write('proof/source-provider.json',provider)
     records=[]
     for pin in c['sourceArtifacts']:records.append(artifact(c,pin))
     validation=validate_source_reports(c,records);candidate_files,info=candidate(c,receipt)
-    original_stamp=sha(pathlib.Path('provider/v64-dist/build-info.json').read_bytes())
+    original_stamp=sha((SOURCE_OUTPUT/'v64-dist/build-info.json').read_bytes())
     restored=verify_http(prior,'pages')
     check(inventory('pages')==prior,'Restored v63 differs')
     for target in [PREFIX,PREFIX+'index.html',PREFIX+'build-info.json']:get(BASE+target,absent=True)
-    shutil.copytree('provider/v64-dist',pathlib.Path('pages')/PREFIX)
-    yandex=load('provider/v64-yandex/report.json');archive=pathlib.Path('provider/v64-yandex/brainrot-portal-v64-yandex.zip')
+    shutil.copytree(SOURCE_OUTPUT/'v64-dist',pathlib.Path('pages')/PREFIX)
+    yandex=load(SOURCE_OUTPUT/'v64-yandex/report.json');archive=SOURCE_OUTPUT/'v64-yandex/brainrot-portal-v64-yandex.zip'
     check(yandex['pass'] is True and yandex['sourceCommit']==c['sourceCommit'] and yandex['sourceTree']==c['sourceTree']
           and yandex['sha256']==sha(archive.read_bytes()) and yandex['compressedBytes']==archive.stat().st_size
           and yandex['workingTreeModified'] is False and yandex['builtFromCurrentSource'] is True,'Production Yandex ZIP differs')
     extras=pathlib.Path('pages')/PREFIX/'release';extras.mkdir()
     shutil.copyfile(archive,extras/archive.name)
     for filename in ['controls-844x390.png','controls-390x844.png','controls-three-fingers.png','report.json']:
-        shutil.copyfile(pathlib.Path('provider/v64-mobile-controls')/filename,extras/filename)
+        shutil.copyfile(SOURCE_OUTPUT/'v64-mobile-controls'/filename,extras/filename)
     write(extras/'provenance.json',{'kind':'v64-append-only-source-provenance','publicationAccepted':False,'sourceCommit':c['sourceCommit'],
         'sourceTree':c['sourceTree'],'sourceReview':{'runId':c['sourceRun'],'runAttempt':c['sourceAttempt']},'producer':producer(),
         'sourceAcceptance':c['sourceAcceptance'],'sourceArtifacts':c['sourceArtifacts'],'baseline':restored,'limitations':LIMITATIONS})

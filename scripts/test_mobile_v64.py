@@ -1,7 +1,10 @@
 import copy
 import importlib.util
 import pathlib
+import subprocess
+import tempfile
 import unittest
+from contextlib import chdir
 from unittest.mock import patch
 
 path=pathlib.Path(__file__).with_name('publish-mobile-v64.py')
@@ -59,5 +62,42 @@ class ProviderTests(unittest.TestCase):
     def test_other_artifact_digest_rejected(self):
         self.artifacts[0]['digest']='sha256:'+'d'*64
         with self.assertRaises(ValueError):self.call()
+
+class FreshOutputTests(unittest.TestCase):
+    def test_actual_tracked_provider_inputs_do_not_block_or_change(self):
+        repository=path.resolve().parent.parent
+        tracked=subprocess.check_output(['git','ls-files','--','provider'],cwd=repository,encoding='utf8').splitlines()
+        self.assertTrue(tracked,'This regression must exercise Main\'s real tracked provider inputs')
+        before={filename:(repository/filename).read_bytes() for filename in tracked}
+        class StopBeforeNetwork(Exception):pass
+        with chdir(repository),patch.object(p,'baseline',side_effect=StopBeforeNetwork) as downstream:
+            with self.assertRaises(StopBeforeNetwork):p.preparation({})
+        downstream.assert_called_once_with({})
+        self.assertEqual({filename:(repository/filename).read_bytes() for filename in tracked},before)
+        self.assertFalse((repository/p.SOURCE_OUTPUT).exists())
+        self.assertFalse((repository/'pages').exists())
+        self.assertFalse((repository/'proof').exists())
+
+    def test_existing_v64_output_is_rejected_without_deleting_marker(self):
+        with tempfile.TemporaryDirectory() as directory,chdir(directory):
+            p.SOURCE_OUTPUT.mkdir();marker=p.SOURCE_OUTPUT/'retained.json';marker.write_bytes(b'keep this output')
+            with patch.object(p,'baseline') as downstream:
+                with self.assertRaisesRegex(ValueError,'Fresh publisher output required'):p.preparation({})
+            downstream.assert_not_called();self.assertEqual(marker.read_bytes(),b'keep this output')
+
+    def test_pages_and_proof_still_require_fresh_paths(self):
+        for name in ['pages','proof']:
+            with self.subTest(name=name),tempfile.TemporaryDirectory() as directory,chdir(directory):
+                folder=pathlib.Path(name);folder.mkdir();marker=folder/'retained.json';marker.write_bytes(b'keep original')
+                with self.assertRaisesRegex(ValueError,'Fresh publisher output required'):p.require_fresh_outputs()
+                self.assertEqual(marker.read_bytes(),b'keep original')
+
+    def test_source_archive_download_uses_isolated_output(self):
+        pin={'id':123,'name':'v64-dist','size_in_bytes':2,'digest':'sha256:'+'b'*64}
+        with tempfile.TemporaryDirectory() as directory,chdir(directory),patch.object(p,'get') as download,patch.object(p,'safe_extract',return_value=[]) as extract,patch.object(pathlib.Path,'read_bytes',return_value=b'zip'):
+            result=p.artifact({},pin)
+        self.assertEqual(download.call_args.kwargs['destination'],p.SOURCE_OUTPUT/'123.zip')
+        extract.assert_called_once_with(p.SOURCE_OUTPUT/'123.zip',p.SOURCE_OUTPUT/'v64-dist',100_000_000)
+        self.assertEqual(result['folder'],str(p.SOURCE_OUTPUT/'v64-dist'))
 
 if __name__=='__main__':unittest.main()
