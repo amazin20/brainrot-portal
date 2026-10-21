@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import {V, tracePortalRay} from './LabPuzzleMechanics.js';
+import {LabAirflowVisual} from './LabAirflowVisual.js';
 
 const UP=V(0,1,0), FORWARD=0x7edee8, REVERSE=0xf5ad75;
 const clamp=THREE.MathUtils.clamp;
@@ -25,28 +26,25 @@ export function buildTransferFunnel(k,{origin,direction,radius=2.1,speed=7}){
  const lamp=new THREE.Mesh(new THREE.TorusGeometry(radius-.11,.037,6,32),lampMaterial);
  lamp.rotation.x=Math.PI/2;lamp.position.y=-.04;housingRoot.add(lamp);
 
- const membraneMaterial=new THREE.MeshBasicMaterial({color:FORWARD,transparent:true,opacity:.035,depthWrite:false,side:THREE.DoubleSide});
- const helixMaterial=new THREE.LineBasicMaterial({color:FORWARD,transparent:true,opacity:.38,depthWrite:false});
- const particleMaterial=new THREE.MeshBasicMaterial({color:FORWARD,transparent:true,opacity:.8,depthWrite:false});
- const tubeGeometry=new THREE.CylinderGeometry(1,1,1,24,1,true);
+ // A quiet boundary preserves the exact useful radius. Feathered advected
+ // ribbons carry direction; the old wire helix and opaque motes obscured the
+ // view whenever the current crossed itself or a foreground portal.
+ const membraneMaterial=new THREE.MeshBasicMaterial({name:'Transfer current / featherlight radius',color:FORWARD,transparent:true,opacity:.014,depthWrite:false,side:THREE.DoubleSide});
+ const tubeGeometry=new THREE.CylinderGeometry(1,1,1,40,1,true);
  const lanes=[];
  for(let i=0;i<6;i++){
   const group=new THREE.Group();root.add(group);group.visible=false;
   const tube=new THREE.Mesh(tubeGeometry,membraneMaterial);group.add(tube);
-  const helixGeometry=new THREE.BufferGeometry();
-  const positions=new Float32Array(96*2*2*3);helixGeometry.setAttribute('position',new THREE.BufferAttribute(positions,3));
-  const helix=new THREE.LineSegments(helixGeometry,helixMaterial);helix.frustumCulled=false;group.add(helix);
-  lanes.push({group,tube,helix,positions,length:-1});
+  lanes.push({group,tube});
  }
- const particles=new THREE.InstancedMesh(new THREE.SphereGeometry(.055,5,4),particleMaterial,180);
- particles.frustumCulled=false;root.add(particles);
- const matrix=new THREE.Matrix4(),rotation=new THREE.Quaternion(),point=V();
- let time=0;
+ const airflow=new LabAirflowVisual(root,{capacity:180,speed,radius:radius*.94,opacity:.62});
+ airflow.mesh.name='Transfer current / soft direction ribbons';
 
- const field={origin:source,direction:axis,radius,speed,enabled:true,reversed:false,segments:[],root,housing:shell,
+ const field={origin:source,direction:axis,radius,speed,enabled:true,reversed:false,segments:[],root,housing:shell,airflow,
   update(dt=0){
-   time+=Math.max(0,dt);
    field.segments=field.enabled?tracePortalRay(game,source,axis,{medium:'air',length:100}):[];
+   airflow.setPath(field.segments,game.portals?.portals||[]);
+   airflow.step(Math.max(0,dt),field.enabled?1:0,{direction:field.reversed?-1:1});
    field.render();
   },
   acceleration(position,velocity,bodyRadius=0,{centering=18,damping=6}={}){
@@ -89,35 +87,17 @@ export function buildTransferFunnel(k,{origin,direction,radius=2.1,speed=7}){
   render(){
    root.visible=field.enabled&&field.segments.length>0;
    const color=field.reversed?REVERSE:FORWARD;
-   for(const material of [lampMaterial,membraneMaterial,helixMaterial,particleMaterial])material.color.setHex(color);
+   for(const material of [lampMaterial,membraneMaterial])material.color.setHex(color);
+   airflow.mesh.material.uniforms.tint.value.setHex(color);
    lamp.visible=field.enabled;
    lanes.forEach((lane,index)=>{
     const s=field.segments[index];lane.group.visible=!!s;if(!s)return;
     lane.group.position.copy(s.a);lane.group.quaternion.setFromUnitVectors(UP,s.direction);
     lane.tube.position.y=s.length/2;lane.tube.scale.set(field.radius,s.length,field.radius);
-    if(Math.abs(lane.length-s.length)>.001){
-     lane.length=s.length;let n=0;
-     for(let strand=0;strand<2;strand++)for(let step=0;step<96;step++)for(let end=0;end<2;end++){
-      const y=s.length*(step+end)/96,theta=y*1.8+strand*Math.PI;
-      lane.positions[n++]=Math.cos(theta)*field.radius*.88;lane.positions[n++]=y;lane.positions[n++]=Math.sin(theta)*field.radius*.88;
-     }
-     lane.helix.geometry.attributes.position.needsUpdate=true;
-    }
-    lane.helix.rotation.y=time*(field.reversed?1:-1)*1.4;
    });
-   const total=field.segments.reduce((sum,s)=>sum+s.length,0);let count=0;
-   if(total>0)for(let i=0;i<180;i++){
-    let travel=((i/180*total+time*field.speed*(field.reversed?-1:1))%total+total)%total;
-    let s=field.segments[field.segments.length-1];
-    for(const part of field.segments){s=part;if(travel<=part.length)break;travel-=part.length;}
-    const theta=i*2.39996323,spread=field.radius*(.18+.68*((i*37)%97)/97);
-    rotation.setFromUnitVectors(UP,s.direction);
-    point.set(Math.cos(theta)*spread,travel,Math.sin(theta)*spread).applyQuaternion(rotation).add(s.a);
-    matrix.makeTranslation(point.x,point.y,point.z);particles.setMatrixAt(count++,matrix);
-   }
-   particles.count=count;particles.instanceMatrix.needsUpdate=true;
+   airflow.render(1,game.quality?.shadows===false?'low':'balanced');
   },
-  reset(){time=0;field.enabled=true;field.reversed=false;field.update(0);}
+  reset(){airflow.reset();field.enabled=true;field.reversed=false;field.update(0);}
  };
  k.ticks.push(dt=>field.update(dt));k.renders.push(()=>field.render());k.resets.push(()=>field.reset());
  field.update(0);return field;

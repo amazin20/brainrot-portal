@@ -4,6 +4,7 @@ import {labInstrument} from './LabHumanLab.js';
 import {createLightBridge} from './LabLightBridge.js';
 import {StoredMotionDrive} from './LabResearchChambers.js';
 import {tracePortalRay,rayTouches,beamDrawing} from './LabPuzzleMechanics.js';
+import {prepareVisualAuditEarlyKit} from './LabVisualAuditEarly.js';
 const V=(...p)=>new THREE.Vector3(...p);
 const spec=(id,title,concept,description,accent,hints,assets=[1,2,11,22])=>({id:'foundation-'+id,title,concept,description,accent,assets,hints});
 export const FOUNDATION_SPECS=Object.freeze([
@@ -20,6 +21,7 @@ export const FOUNDATION_SPECS=Object.freeze([
 ]);
 
 function finish(k,spawn,cargo,goal,extra,learning){
+ prepareVisualAuditEarlyKit(k);
  const l=k.finishResearch(spawn,cargo,goal,{...extra,foundationChamber:true});
  l.contextHandlesCarry=true;l.researchChamber=false;l.learning=learning;
  l.puzzleGeometry={noProgressFlags:true,footprint:(k.bounds.maxX-k.bounds.minX)*(k.bounds.maxZ-k.bounds.minZ),goalHeight:goal[1],

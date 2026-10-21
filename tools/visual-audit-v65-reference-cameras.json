@@ -1,0 +1,4344 @@
+{
+  "kind": "declared-v65-visual-reference-cameras",
+  "sourceCommit": "8eee93c02d4d6da18107ba9882c5656939257938",
+  "scope": "Previously inspected v65 interior TEST camera positions. Player-start is intentionally absent: the new release must show its actual ordinary initial camera. All future captures preserve their authored fog, even where the earlier inspection used an extra fog-free view. Mechanisms remain in initial state. No camera guarantees a clear view of every mechanism.",
+  "levels": [
+    {
+      "stableLevel": 1,
+      "displayNumber": 1,
+      "views": [
+        {
+          "kind": "oblique",
+          "camera": [
+            15.600000023841858,
+            11.2,
+            15.600000023841858
+          ],
+          "target": [
+            0,
+            0.8000000047683717,
+            0
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "opposite",
+          "camera": [
+            -15.600000023841858,
+            11.2,
+            -15.600000023841858
+          ],
+          "target": [
+            0,
+            0.8000000047683717,
+            0
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "clear-layout",
+          "camera": [
+            0,
+            13.200000023841858,
+            0.2
+          ],
+          "target": [
+            0,
+            0.8000000047683717,
+            0
+          ],
+          "fov": 92,
+          "referenceFogDisabled": true
+        }
+      ]
+    },
+    {
+      "stableLevel": 2,
+      "displayNumber": 2,
+      "views": [
+        {
+          "kind": "oblique",
+          "camera": [
+            21.600000023841858,
+            13,
+            17.600000023841858
+          ],
+          "target": [
+            -1.5,
+            6.0400000047683715,
+            0
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "opposite",
+          "camera": [
+            -24.600000023841858,
+            13,
+            -17.600000023841858
+          ],
+          "target": [
+            -1.5,
+            6.0400000047683715,
+            0
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "clear-layout",
+          "camera": [
+            -1.5,
+            13,
+            0.2
+          ],
+          "target": [
+            -1.5,
+            6.0400000047683715,
+            0
+          ],
+          "fov": 92,
+          "referenceFogDisabled": true
+        },
+        {
+          "kind": "route-mid",
+          "camera": [
+            -16,
+            6.3,
+            15
+          ],
+          "target": [
+            13.904944333366211,
+            4.931979434063809,
+            7.989409289856376
+          ],
+          "fov": 68,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "route-far",
+          "camera": [
+            -16,
+            6.3,
+            15
+          ],
+          "target": [
+            13.904944333366211,
+            4.931979434063809,
+            7.989409289856376
+          ],
+          "fov": 68,
+          "referenceFogDisabled": false
+        }
+      ]
+    },
+    {
+      "stableLevel": 3,
+      "displayNumber": 3,
+      "views": [
+        {
+          "kind": "oblique",
+          "camera": [
+            26.600000023841858,
+            10,
+            19.600000023841858
+          ],
+          "target": [
+            0,
+            5,
+            -1
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "opposite",
+          "camera": [
+            -26.600000023841858,
+            10,
+            -21.600000023841858
+          ],
+          "target": [
+            0,
+            5,
+            -1
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "clear-layout",
+          "camera": [
+            0,
+            10,
+            -0.8
+          ],
+          "target": [
+            0,
+            5,
+            -1
+          ],
+          "fov": 92,
+          "referenceFogDisabled": true
+        },
+        {
+          "kind": "route-mid",
+          "camera": [
+            -18.08155272217437,
+            9.3,
+            -3.0255786544140033
+          ],
+          "target": [
+            14.42407564925161,
+            11.7,
+            -3.3939866159843572
+          ],
+          "fov": 68,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "route-far",
+          "camera": [
+            14.42407564925161,
+            13.3,
+            -3.3939866159843572
+          ],
+          "target": [
+            18.077007352491734,
+            11.7,
+            -17.068981261453423
+          ],
+          "fov": 68,
+          "referenceFogDisabled": false
+        }
+      ]
+    },
+    {
+      "stableLevel": 4,
+      "displayNumber": 4,
+      "views": [
+        {
+          "kind": "oblique",
+          "camera": [
+            23.600000023841858,
+            10,
+            22.600000023841858
+          ],
+          "target": [
+            -3,
+            5,
+            -0.5
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "opposite",
+          "camera": [
+            -29.600000023841858,
+            10,
+            -23.600000023841858
+          ],
+          "target": [
+            -3,
+            5,
+            -0.5
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "clear-layout",
+          "camera": [
+            -3,
+            10,
+            -0.3
+          ],
+          "target": [
+            -3,
+            5,
+            -0.5
+          ],
+          "fov": 92,
+          "referenceFogDisabled": true
+        },
+        {
+          "kind": "route-mid",
+          "camera": [
+            -17.994558954655435,
+            17.3,
+            -16.105270027888597
+          ],
+          "target": [
+            11.803798000109436,
+            16.7,
+            -13.805364848822077
+          ],
+          "fov": 68,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "route-far",
+          "camera": [
+            11.803798000109436,
+            18.3,
+            -13.805364848822077
+          ],
+          "target": [
+            13.926845695711467,
+            16.7,
+            -15.092619625094805
+          ],
+          "fov": 68,
+          "referenceFogDisabled": false
+        }
+      ]
+    },
+    {
+      "stableLevel": 5,
+      "displayNumber": 5,
+      "views": [
+        {
+          "kind": "oblique",
+          "camera": [
+            27.600000023841858,
+            10,
+            22.600000023841858
+          ],
+          "target": [
+            -1.5,
+            4.840000004768372,
+            -1
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "opposite",
+          "camera": [
+            -30.600000023841858,
+            10,
+            -24.600000023841858
+          ],
+          "target": [
+            -1.5,
+            4.840000004768372,
+            -1
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "clear-layout",
+          "camera": [
+            -1.5,
+            10,
+            -0.8
+          ],
+          "target": [
+            -1.5,
+            4.840000004768372,
+            -1
+          ],
+          "fov": 92,
+          "referenceFogDisabled": true
+        },
+        {
+          "kind": "route-mid",
+          "camera": [
+            -19.99999005698118,
+            9.3,
+            -14.922833911256234
+          ],
+          "target": [
+            15.924649901032227,
+            7.928581290688773,
+            -17.006117701889895
+          ],
+          "fov": 68,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "route-far",
+          "camera": [
+            15.924649901032227,
+            9.528581290688773,
+            -17.006117701889895
+          ],
+          "target": [
+            15.924649901032227,
+            7.728581290688773,
+            -22.006117701889895
+          ],
+          "fov": 68,
+          "referenceFogDisabled": false
+        }
+      ]
+    },
+    {
+      "stableLevel": 6,
+      "displayNumber": 6,
+      "views": [
+        {
+          "kind": "oblique",
+          "camera": [
+            9.27200000113249,
+            8.54000000149012,
+            10.200000001490116
+          ],
+          "target": [
+            0,
+            2.108000000298024,
+            -3.000000000000001
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "opposite",
+          "camera": [
+            -9.27200000113249,
+            8.54000000149012,
+            -16.200000001490118
+          ],
+          "target": [
+            0,
+            2.108000000298024,
+            -3.000000000000001
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "clear-layout",
+          "camera": [
+            0,
+            8.54000000149012,
+            -2.8000000000000007
+          ],
+          "target": [
+            0,
+            2.108000000298024,
+            -3.000000000000001
+          ],
+          "fov": 92,
+          "referenceFogDisabled": true
+        },
+        {
+          "kind": "route-mid",
+          "camera": [
+            -8.806748629860603,
+            3.3,
+            -4.311610882323231
+          ],
+          "target": [
+            3.9959411326874514,
+            1.7,
+            -5.492326214111209
+          ],
+          "fov": 68,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "route-far",
+          "camera": [
+            3.9959411326874514,
+            3.3,
+            -5.492326214111209
+          ],
+          "target": [
+            -0.003823206102929917,
+            1.7,
+            -14.303162764896468
+          ],
+          "fov": 68,
+          "referenceFogDisabled": false
+        }
+      ]
+    },
+    {
+      "stableLevel": 7,
+      "displayNumber": 7,
+      "views": [
+        {
+          "kind": "oblique",
+          "camera": [
+            11.20000000149012,
+            10,
+            16.200000001490118
+          ],
+          "target": [
+            -2.250000000000001,
+            3.3080000002980245,
+            0.25
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "opposite",
+          "camera": [
+            -15.700000001490121,
+            10,
+            -15.700000001490118
+          ],
+          "target": [
+            -2.250000000000001,
+            3.3080000002980245,
+            0.25
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "clear-layout",
+          "camera": [
+            -2.250000000000001,
+            10,
+            0.45
+          ],
+          "target": [
+            -2.250000000000001,
+            3.3080000002980245,
+            0.25
+          ],
+          "fov": 92,
+          "referenceFogDisabled": true
+        },
+        {
+          "kind": "route-mid",
+          "camera": [
+            0.07383583071676184,
+            6.550525704663828,
+            -1.7894045433567725
+          ],
+          "target": [
+            2.039695040978466,
+            9.899999999999999,
+            7.8078718145240575
+          ],
+          "fov": 68,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "route-far",
+          "camera": [
+            -1.7971404246293252,
+            11.5,
+            7.73960795263977
+          ],
+          "target": [
+            -1.7971404246293252,
+            9.7,
+            2.73960795263977
+          ],
+          "fov": 68,
+          "referenceFogDisabled": false
+        }
+      ]
+    },
+    {
+      "stableLevel": 8,
+      "displayNumber": 8,
+      "views": [
+        {
+          "kind": "oblique",
+          "camera": [
+            7.75200000113249,
+            10,
+            10.200000001490116
+          ],
+          "target": [
+            0,
+            3.108000000298024,
+            0
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "opposite",
+          "camera": [
+            -7.75200000113249,
+            10,
+            -10.200000001490116
+          ],
+          "target": [
+            0,
+            3.108000000298024,
+            0
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "clear-layout",
+          "camera": [
+            0,
+            10,
+            0.2
+          ],
+          "target": [
+            0,
+            3.108000000298024,
+            0
+          ],
+          "fov": 92,
+          "referenceFogDisabled": true
+        },
+        {
+          "kind": "route-mid",
+          "camera": [
+            0.011123733470646288,
+            11.609375164722355,
+            -0.03491476803268567
+          ],
+          "target": [
+            0.0184397286519226,
+            8.7,
+            -6.770874319729381
+          ],
+          "fov": 68,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "route-far",
+          "camera": [
+            0.011123733470646288,
+            11.609375164722355,
+            -0.03491476803268567
+          ],
+          "target": [
+            0.0184397286519226,
+            8.7,
+            -6.770874319729381
+          ],
+          "fov": 68,
+          "referenceFogDisabled": false
+        }
+      ]
+    },
+    {
+      "stableLevel": 9,
+      "displayNumber": 9,
+      "views": [
+        {
+          "kind": "oblique",
+          "camera": [
+            9.27200000113249,
+            10,
+            12.200000001490116
+          ],
+          "target": [
+            0,
+            2.508000000298024,
+            -2.000000000000001
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "opposite",
+          "camera": [
+            -9.27200000113249,
+            10,
+            -16.200000001490118
+          ],
+          "target": [
+            0,
+            2.508000000298024,
+            -2.000000000000001
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "clear-layout",
+          "camera": [
+            0,
+            10,
+            -1.800000000000001
+          ],
+          "target": [
+            0,
+            2.508000000298024,
+            -2.000000000000001
+          ],
+          "fov": 92,
+          "referenceFogDisabled": true
+        },
+        {
+          "kind": "route-mid",
+          "camera": [
+            -3.7866896002164014,
+            3.3,
+            9.00841509583453
+          ],
+          "target": [
+            -3.001648621133315,
+            1.7,
+            -8.899984938716125
+          ],
+          "fov": 68,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "route-far",
+          "camera": [
+            -3.001648621133315,
+            3.3,
+            -8.899984938716125
+          ],
+          "target": [
+            -0.004698633627874233,
+            1.7,
+            -14.020641507677908
+          ],
+          "fov": 68,
+          "referenceFogDisabled": false
+        }
+      ]
+    },
+    {
+      "stableLevel": 10,
+      "displayNumber": 10,
+      "views": [
+        {
+          "kind": "oblique",
+          "camera": [
+            9.27200000113249,
+            10,
+            12.200000001490116
+          ],
+          "target": [
+            0,
+            2.508000000298024,
+            -2.000000000000001
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "opposite",
+          "camera": [
+            -9.27200000113249,
+            10,
+            -16.200000001490118
+          ],
+          "target": [
+            0,
+            2.508000000298024,
+            -2.000000000000001
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "clear-layout",
+          "camera": [
+            0,
+            10,
+            -1.800000000000001
+          ],
+          "target": [
+            0,
+            2.508000000298024,
+            -2.000000000000001
+          ],
+          "fov": 92,
+          "referenceFogDisabled": true
+        },
+        {
+          "kind": "route-mid",
+          "camera": [
+            -5.404958079688795,
+            5.12,
+            4.694004929161071
+          ],
+          "target": [
+            5.18539823695678,
+            3.52,
+            4.181469859783848
+          ],
+          "fov": 68,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "route-far",
+          "camera": [
+            5.18539823695678,
+            5.12,
+            4.181469859783848
+          ],
+          "target": [
+            -0.002919859674876346,
+            1.7,
+            -14.020684620274638
+          ],
+          "fov": 68,
+          "referenceFogDisabled": false
+        }
+      ]
+    },
+    {
+      "stableLevel": 11,
+      "displayNumber": 11,
+      "views": [
+        {
+          "kind": "oblique",
+          "camera": [
+            11.20000000149012,
+            7.540000001490119,
+            12.200000001490116
+          ],
+          "target": [
+            0,
+            2,
+            -2.000000000000001
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "opposite",
+          "camera": [
+            -11.20000000149012,
+            7.540000001490119,
+            -16.200000001490118
+          ],
+          "target": [
+            0,
+            2,
+            -2.000000000000001
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "clear-layout",
+          "camera": [
+            0,
+            7.540000001490119,
+            -1.800000000000001
+          ],
+          "target": [
+            0,
+            2,
+            -2.000000000000001
+          ],
+          "fov": 92,
+          "referenceFogDisabled": true
+        },
+        {
+          "kind": "route-mid",
+          "camera": [
+            -1,
+            3.3,
+            8
+          ],
+          "target": [
+            -3.4674729452763957,
+            1.7,
+            6.666230840391146
+          ],
+          "fov": 68,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "route-far",
+          "camera": [
+            -3.4674729452763957,
+            3.3,
+            6.666230840391146
+          ],
+          "target": [
+            0.002806442610791283,
+            1.7,
+            -14.004513193436107
+          ],
+          "fov": 68,
+          "referenceFogDisabled": false
+        }
+      ]
+    },
+    {
+      "stableLevel": 12,
+      "displayNumber": 12,
+      "views": [
+        {
+          "kind": "oblique",
+          "camera": [
+            15.200000001490121,
+            10,
+            14.200000001490118
+          ],
+          "target": [
+            0,
+            5,
+            1.0000000000000009
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "opposite",
+          "camera": [
+            -15.200000001490121,
+            10,
+            -12.200000001490116
+          ],
+          "target": [
+            0,
+            5,
+            1.0000000000000009
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "clear-layout",
+          "camera": [
+            0,
+            10,
+            1.2000000000000008
+          ],
+          "target": [
+            0,
+            5,
+            1.0000000000000009
+          ],
+          "fov": 92,
+          "referenceFogDisabled": true
+        },
+        {
+          "kind": "route-mid",
+          "camera": [
+            -9.912598350050262,
+            21.3,
+            14.000222694584481
+          ],
+          "target": [
+            3.8849875454405303,
+            1.9761458333333335,
+            2.891025586396201
+          ],
+          "fov": 68,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "route-far",
+          "camera": [
+            12.012205702739932,
+            12.3,
+            4.086054412128443
+          ],
+          "target": [
+            12.012205702739932,
+            10.5,
+            -0.9139455878715568
+          ],
+          "fov": 68,
+          "referenceFogDisabled": false
+        }
+      ]
+    },
+    {
+      "stableLevel": 13,
+      "displayNumber": 13,
+      "views": [
+        {
+          "kind": "oblique",
+          "camera": [
+            17.20000000149012,
+            10,
+            16.200000001490118
+          ],
+          "target": [
+            0,
+            4.508000000298025,
+            0
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "opposite",
+          "camera": [
+            -17.20000000149012,
+            10,
+            -16.200000001490118
+          ],
+          "target": [
+            0,
+            4.508000000298025,
+            0
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "clear-layout",
+          "camera": [
+            0,
+            10,
+            0.2
+          ],
+          "target": [
+            0,
+            4.508000000298025,
+            0
+          ],
+          "fov": 92,
+          "referenceFogDisabled": true
+        },
+        {
+          "kind": "route-mid",
+          "camera": [
+            -11.404687903747638,
+            13.206805555555501,
+            11.000348762780295
+          ],
+          "target": [
+            8.987703352718158,
+            13.7,
+            5.10502270390784
+          ],
+          "fov": 68,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "route-far",
+          "camera": [
+            11.031992364221727,
+            15.3,
+            4.476632359925873
+          ],
+          "target": [
+            11.031992364221727,
+            13.5,
+            -0.5233676400741274
+          ],
+          "fov": 68,
+          "referenceFogDisabled": false
+        }
+      ]
+    },
+    {
+      "stableLevel": 14,
+      "displayNumber": 14,
+      "views": [
+        {
+          "kind": "oblique",
+          "camera": [
+            17.20000000149012,
+            10,
+            13.200000001490118
+          ],
+          "target": [
+            0,
+            5,
+            -6
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "opposite",
+          "camera": [
+            -17.20000000149012,
+            10,
+            -25.200000001490118
+          ],
+          "target": [
+            0,
+            5,
+            -6
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "clear-layout",
+          "camera": [
+            0,
+            10,
+            -5.8
+          ],
+          "target": [
+            0,
+            5,
+            -6
+          ],
+          "fov": 92,
+          "referenceFogDisabled": true
+        },
+        {
+          "kind": "route-mid",
+          "camera": [
+            -1.6036588334670672,
+            10.766223748922535,
+            -0.0031296109647061146
+          ],
+          "target": [
+            -1.6036588334670672,
+            8.966223748922536,
+            -5.003129610964706
+          ],
+          "fov": 68,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "route-far",
+          "camera": [
+            1.5939881286062059,
+            15.3,
+            -6.9015145480452285
+          ],
+          "target": [
+            3.0235515671026243,
+            15.180038934480617,
+            -23.62196089672364
+          ],
+          "fov": 68,
+          "referenceFogDisabled": false
+        }
+      ]
+    },
+    {
+      "stableLevel": 15,
+      "displayNumber": 15,
+      "views": [
+        {
+          "kind": "oblique",
+          "camera": [
+            18.20000000149012,
+            10,
+            16.200000001490118
+          ],
+          "target": [
+            0,
+            5,
+            0
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "opposite",
+          "camera": [
+            -18.20000000149012,
+            10,
+            -16.200000001490118
+          ],
+          "target": [
+            0,
+            5,
+            0
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "clear-layout",
+          "camera": [
+            0,
+            10,
+            0.2
+          ],
+          "target": [
+            0,
+            5,
+            0
+          ],
+          "fov": 92,
+          "referenceFogDisabled": true
+        },
+        {
+          "kind": "route-mid",
+          "camera": [
+            -5.030831018917026,
+            15.325000001490118,
+            2.494234446560064
+          ],
+          "target": [
+            2.0974129424903643,
+            20.04504870717686,
+            -12.032599891442926
+          ],
+          "fov": 68,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "route-far",
+          "camera": [
+            14.659690820893674,
+            17.325000001490118,
+            -10.023136371335857
+          ],
+          "target": [
+            14.659690820893674,
+            15.525000001490117,
+            -15.023136371335857
+          ],
+          "fov": 68,
+          "referenceFogDisabled": false
+        }
+      ]
+    },
+    {
+      "stableLevel": 16,
+      "displayNumber": 16,
+      "views": [
+        {
+          "kind": "oblique",
+          "camera": [
+            19.20000000149012,
+            10,
+            16.200000001490118
+          ],
+          "target": [
+            0,
+            5,
+            0
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "opposite",
+          "camera": [
+            -19.20000000149012,
+            10,
+            -16.200000001490118
+          ],
+          "target": [
+            0,
+            5,
+            0
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "clear-layout",
+          "camera": [
+            0,
+            10,
+            0.2
+          ],
+          "target": [
+            0,
+            5,
+            0
+          ],
+          "fov": 92,
+          "referenceFogDisabled": true
+        },
+        {
+          "kind": "route-mid",
+          "camera": [
+            12.00000004937646,
+            5.3,
+            1.8911910715093407
+          ],
+          "target": [
+            12.00000004937646,
+            3.5,
+            -3.1088089284906593
+          ],
+          "fov": 68,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "route-far",
+          "camera": [
+            -16.007715435160353,
+            16.7,
+            -7.255279324623314
+          ],
+          "target": [
+            -16.007715435160353,
+            14.9,
+            -12.255279324623313
+          ],
+          "fov": 68,
+          "referenceFogDisabled": false
+        }
+      ]
+    },
+    {
+      "stableLevel": 17,
+      "displayNumber": 17,
+      "views": [
+        {
+          "kind": "oblique",
+          "camera": [
+            27.600000023841858,
+            16,
+            51.60000002384186
+          ],
+          "target": [
+            0,
+            10.440000004768372,
+            13.5
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "opposite",
+          "camera": [
+            -27.600000023841858,
+            16,
+            -24.600000023841858
+          ],
+          "target": [
+            0,
+            10.440000004768372,
+            13.5
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "clear-layout",
+          "camera": [
+            0,
+            16,
+            13.7
+          ],
+          "target": [
+            0,
+            10.440000004768372,
+            13.5
+          ],
+          "fov": 92,
+          "referenceFogDisabled": true
+        },
+        {
+          "kind": "route-mid",
+          "camera": [
+            10.943851847718674,
+            9.3,
+            0.0001448552373150173
+          ],
+          "target": [
+            12.563220000703533,
+            0.5,
+            -3.214160700774703
+          ],
+          "fov": 68,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "route-far",
+          "camera": [
+            23.626289951125703,
+            9.3,
+            1.5986687350071787
+          ],
+          "target": [
+            23.626289951125703,
+            7.5,
+            -3.4013312649928213
+          ],
+          "fov": 68,
+          "referenceFogDisabled": false
+        }
+      ]
+    },
+    {
+      "stableLevel": 18,
+      "displayNumber": 18,
+      "views": [
+        {
+          "kind": "oblique",
+          "camera": [
+            24.600000023841858,
+            10,
+            22.600000023841858
+          ],
+          "target": [
+            0,
+            3.0400000047683715,
+            0
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "opposite",
+          "camera": [
+            -24.600000023841858,
+            10,
+            -22.600000023841858
+          ],
+          "target": [
+            0,
+            3.0400000047683715,
+            0
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "clear-layout",
+          "camera": [
+            0,
+            10,
+            0.2
+          ],
+          "target": [
+            0,
+            3.0400000047683715,
+            0
+          ],
+          "fov": 92,
+          "referenceFogDisabled": true
+        },
+        {
+          "kind": "route-mid",
+          "camera": [
+            -3.8330726410414138,
+            3.3,
+            7.787485384875921
+          ],
+          "target": [
+            -14.040440060571225,
+            1.7,
+            6.052702855307229
+          ],
+          "fov": 68,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "route-far",
+          "camera": [
+            -14.040440060571225,
+            3.3,
+            6.052702855307229
+          ],
+          "target": [
+            -0.0006464356210474233,
+            1.7,
+            -18.0166679535583
+          ],
+          "fov": 68,
+          "referenceFogDisabled": false
+        }
+      ]
+    },
+    {
+      "stableLevel": 19,
+      "displayNumber": 19,
+      "views": [
+        {
+          "kind": "oblique",
+          "camera": [
+            17.20000000149012,
+            10,
+            15.200000001490118
+          ],
+          "target": [
+            0,
+            4.108000000298024,
+            0
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "opposite",
+          "camera": [
+            -17.20000000149012,
+            10,
+            -15.200000001490118
+          ],
+          "target": [
+            0,
+            4.108000000298024,
+            0
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "clear-layout",
+          "camera": [
+            0,
+            10,
+            0.2
+          ],
+          "target": [
+            0,
+            4.108000000298024,
+            0
+          ],
+          "fov": 92,
+          "referenceFogDisabled": true
+        },
+        {
+          "kind": "route-mid",
+          "camera": [
+            0.9986881362602457,
+            11.3,
+            -9.007590421711868
+          ],
+          "target": [
+            -0.01644616321393321,
+            9.7,
+            -5.128181329826127
+          ],
+          "fov": 68,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "route-far",
+          "camera": [
+            10.106134424454082,
+            11.3,
+            -4.705476697712268
+          ],
+          "target": [
+            13.913413450029712,
+            9.7,
+            12.057283228802639
+          ],
+          "fov": 68,
+          "referenceFogDisabled": false
+        }
+      ]
+    },
+    {
+      "stableLevel": 20,
+      "displayNumber": 20,
+      "views": [
+        {
+          "kind": "oblique",
+          "camera": [
+            25.600000023841858,
+            10,
+            27.600000023841858
+          ],
+          "target": [
+            0,
+            3.0400000047683715,
+            1
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "opposite",
+          "camera": [
+            -25.600000023841858,
+            10,
+            -25.600000023841858
+          ],
+          "target": [
+            0,
+            3.0400000047683715,
+            1
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "clear-layout",
+          "camera": [
+            0,
+            10,
+            1.2
+          ],
+          "target": [
+            0,
+            3.0400000047683715,
+            1
+          ],
+          "fov": 92,
+          "referenceFogDisabled": true
+        },
+        {
+          "kind": "route-mid",
+          "camera": [
+            -11.000280060429027,
+            3.48,
+            16.491326801969013
+          ],
+          "target": [
+            6.169451939725824,
+            1.7,
+            4.380475287509504
+          ],
+          "fov": 68,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "route-far",
+          "camera": [
+            -16.02625826864589,
+            3.3,
+            -18.425965401220676
+          ],
+          "target": [
+            16.00000691341208,
+            1.7,
+            21.007885648564077
+          ],
+          "fov": 68,
+          "referenceFogDisabled": false
+        }
+      ]
+    },
+    {
+      "stableLevel": 21,
+      "displayNumber": 21,
+      "views": [
+        {
+          "kind": "oblique",
+          "camera": [
+            26.20000000149012,
+            20,
+            16.200000001490118
+          ],
+          "target": [
+            4.5,
+            13.908000000298024,
+            1
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "opposite",
+          "camera": [
+            -17.20000000149012,
+            20,
+            -14.200000001490118
+          ],
+          "target": [
+            4.5,
+            13.908000000298024,
+            1
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "clear-layout",
+          "camera": [
+            4.5,
+            20,
+            1.2
+          ],
+          "target": [
+            4.5,
+            13.908000000298024,
+            1
+          ],
+          "fov": 92,
+          "referenceFogDisabled": true
+        },
+        {
+          "kind": "route-mid",
+          "camera": [
+            0.0007794273751031293,
+            13.300000001490119,
+            7.849597799245233
+          ],
+          "target": [
+            -7.816235518857406,
+            8.56955576484302,
+            -6.005467412439089
+          ],
+          "fov": 68,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "route-far",
+          "camera": [
+            9.916709662997675,
+            21.3,
+            -7.518743912445825
+          ],
+          "target": [
+            9.916709662997675,
+            19.5,
+            -12.518743912445824
+          ],
+          "fov": 68,
+          "referenceFogDisabled": false
+        }
+      ]
+    },
+    {
+      "stableLevel": 22,
+      "displayNumber": 22,
+      "views": [
+        {
+          "kind": "oblique",
+          "camera": [
+            19.250000190734863,
+            10,
+            21.200000001490118
+          ],
+          "target": [
+            0.02500009462237074,
+            4.908000000298024,
+            0
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "opposite",
+          "camera": [
+            -19.20000000149012,
+            10,
+            -21.200000001490118
+          ],
+          "target": [
+            0.02500009462237074,
+            4.908000000298024,
+            0
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "clear-layout",
+          "camera": [
+            0.02500009462237074,
+            10,
+            0.2
+          ],
+          "target": [
+            0.02500009462237074,
+            4.908000000298024,
+            0
+          ],
+          "fov": 92,
+          "referenceFogDisabled": true
+        },
+        {
+          "kind": "route-mid",
+          "camera": [
+            3.55761938096581,
+            10.3,
+            0.005135871038234083
+          ],
+          "target": [
+            12.00000303476108,
+            11.7,
+            -17.998873010404683
+          ],
+          "fov": 68,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "route-far",
+          "camera": [
+            -16.09168477607104,
+            17.3,
+            -18.031434022073192
+          ],
+          "target": [
+            -16.09168477607104,
+            15.5,
+            -23.031434022073192
+          ],
+          "fov": 68,
+          "referenceFogDisabled": false
+        }
+      ]
+    },
+    {
+      "stableLevel": 23,
+      "displayNumber": 23,
+      "views": [
+        {
+          "kind": "oblique",
+          "camera": [
+            20.20000000149012,
+            10,
+            19.200000001490118
+          ],
+          "target": [
+            0,
+            5,
+            -0.5
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "opposite",
+          "camera": [
+            -20.20000000149012,
+            10,
+            -20.200000001490118
+          ],
+          "target": [
+            0,
+            5,
+            -0.5
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "clear-layout",
+          "camera": [
+            0,
+            10,
+            -0.3
+          ],
+          "target": [
+            0,
+            5,
+            -0.5
+          ],
+          "fov": 92,
+          "referenceFogDisabled": true
+        },
+        {
+          "kind": "route-mid",
+          "camera": [
+            5.603291867738012,
+            13.299990249990437,
+            4.3411769582718645
+          ],
+          "target": [
+            -2.590479118289657,
+            11.695926365070031,
+            2.733341873954908
+          ],
+          "fov": 68,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "route-far",
+          "camera": [
+            1.370952843034157,
+            23.299990251490122,
+            -20.234810165466005
+          ],
+          "target": [
+            1.370952843034157,
+            21.49999025149012,
+            -25.234810165466005
+          ],
+          "fov": 68,
+          "referenceFogDisabled": false
+        }
+      ]
+    },
+    {
+      "stableLevel": 24,
+      "displayNumber": 24,
+      "views": [
+        {
+          "kind": "oblique",
+          "camera": [
+            21.20000000149012,
+            10,
+            21.200000001490118
+          ],
+          "target": [
+            0,
+            5,
+            0
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "opposite",
+          "camera": [
+            -21.20000000149012,
+            10,
+            -21.200000001490118
+          ],
+          "target": [
+            0,
+            5,
+            0
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "clear-layout",
+          "camera": [
+            0,
+            10,
+            0.2
+          ],
+          "target": [
+            0,
+            5,
+            0
+          ],
+          "fov": 92,
+          "referenceFogDisabled": true
+        },
+        {
+          "kind": "route-mid",
+          "camera": [
+            3.6963872984347006,
+            9.3,
+            4.996814700163479
+          ],
+          "target": [
+            -20.000006305726565,
+            12.710000005364417,
+            -17.994743687053926
+          ],
+          "fov": 68,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "route-far",
+          "camera": [
+            18.078488422939465,
+            18.3,
+            -17.921508653737618
+          ],
+          "target": [
+            18.078488422939465,
+            16.5,
+            -22.921508653737618
+          ],
+          "fov": 68,
+          "referenceFogDisabled": false
+        }
+      ]
+    },
+    {
+      "stableLevel": 25,
+      "displayNumber": 25,
+      "views": [
+        {
+          "kind": "oblique",
+          "camera": [
+            19.20000000149012,
+            10,
+            22.200000001490118
+          ],
+          "target": [
+            0,
+            5,
+            1.5
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "opposite",
+          "camera": [
+            -19.20000000149012,
+            10,
+            -19.200000001490118
+          ],
+          "target": [
+            0,
+            5,
+            1.5
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "clear-layout",
+          "camera": [
+            0,
+            10,
+            1.7
+          ],
+          "target": [
+            0,
+            5,
+            1.5
+          ],
+          "fov": 92,
+          "referenceFogDisabled": true
+        },
+        {
+          "kind": "route-mid",
+          "camera": [
+            -3.0900673599102046,
+            12.3,
+            -14.454075881598603
+          ],
+          "target": [
+            -6.999764126474796,
+            10.7,
+            7.797261593830446
+          ],
+          "fov": 68,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "route-far",
+          "camera": [
+            15.903426764487342,
+            21.3,
+            -14.50045410234147
+          ],
+          "target": [
+            -14.62488003658729,
+            8.7,
+            22.95691516576676
+          ],
+          "fov": 68,
+          "referenceFogDisabled": false
+        }
+      ]
+    },
+    {
+      "stableLevel": 26,
+      "displayNumber": 26,
+      "views": [
+        {
+          "kind": "oblique",
+          "camera": [
+            21.20000000149012,
+            10,
+            21.200000001490118
+          ],
+          "target": [
+            0,
+            5,
+            0
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "opposite",
+          "camera": [
+            -21.20000000149012,
+            10,
+            -21.200000001490118
+          ],
+          "target": [
+            0,
+            5,
+            0
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "clear-layout",
+          "camera": [
+            0,
+            10,
+            0.2
+          ],
+          "target": [
+            0,
+            5,
+            0
+          ],
+          "fov": 92,
+          "referenceFogDisabled": true
+        },
+        {
+          "kind": "route-mid",
+          "camera": [
+            15.996363680799453,
+            19.3,
+            -14.102886903709184
+          ],
+          "target": [
+            -20.249400180579173,
+            17.7,
+            11.852195488658808
+          ],
+          "fov": 68,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "route-far",
+          "camera": [
+            14.901829862456944,
+            19.3,
+            19.5699
+          ],
+          "target": [
+            14.901829862456944,
+            17.5,
+            14.5699
+          ],
+          "fov": 68,
+          "referenceFogDisabled": false
+        }
+      ]
+    },
+    {
+      "stableLevel": 27,
+      "displayNumber": 27,
+      "views": [
+        {
+          "kind": "oblique",
+          "camera": [
+            21.20000000149012,
+            10,
+            20.200000001490118
+          ],
+          "target": [
+            -1,
+            5,
+            -1
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "opposite",
+          "camera": [
+            -23.20000000149012,
+            10,
+            -22.200000001490118
+          ],
+          "target": [
+            -1,
+            5,
+            -1
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "clear-layout",
+          "camera": [
+            -1,
+            10,
+            -0.8
+          ],
+          "target": [
+            -1,
+            5,
+            -1
+          ],
+          "fov": 92,
+          "referenceFogDisabled": true
+        },
+        {
+          "kind": "route-mid",
+          "camera": [
+            12.508646225566894,
+            11.379999994635583,
+            8.591297326534042
+          ],
+          "target": [
+            6.003325094162126,
+            17.7,
+            0.00010404531055396314
+          ],
+          "fov": 68,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "route-far",
+          "camera": [
+            -18.36120354349554,
+            11.3,
+            -0.2415170898985537
+          ],
+          "target": [
+            -19.588801306844275,
+            9.7,
+            -0.13074871571824787
+          ],
+          "fov": 68,
+          "referenceFogDisabled": false
+        }
+      ]
+    },
+    {
+      "stableLevel": 28,
+      "displayNumber": 28,
+      "views": [
+        {
+          "kind": "oblique",
+          "camera": [
+            23.20000000149012,
+            10,
+            20.200000001490118
+          ],
+          "target": [
+            0,
+            3.184000001300607,
+            0
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "opposite",
+          "camera": [
+            -23.20000000149012,
+            10,
+            -20.200000001490118
+          ],
+          "target": [
+            0,
+            3.184000001300607,
+            0
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "clear-layout",
+          "camera": [
+            0,
+            10,
+            0.2
+          ],
+          "target": [
+            0,
+            3.184000001300607,
+            0
+          ],
+          "fov": 92,
+          "referenceFogDisabled": true
+        },
+        {
+          "kind": "route-mid",
+          "camera": [
+            14.028795786056662,
+            6.247928829112596,
+            -4.0419970938084626e-05
+          ],
+          "target": [
+            -12.907969745442257,
+            4.752071170887406,
+            -0.00034565790166707784
+          ],
+          "fov": 68,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "route-far",
+          "camera": [
+            -12.978453475808934,
+            8.501652274395045,
+            -8.095881865934721e-05
+          ],
+          "target": [
+            -19.917704803988943,
+            7,
+            -2.7348138970227966e-06
+          ],
+          "fov": 68,
+          "referenceFogDisabled": false
+        }
+      ]
+    },
+    {
+      "stableLevel": 29,
+      "displayNumber": 29,
+      "views": [
+        {
+          "kind": "oblique",
+          "camera": [
+            19.20000000149012,
+            10,
+            19.200000001490118
+          ],
+          "target": [
+            0,
+            4.908000000298024,
+            0
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "opposite",
+          "camera": [
+            -19.20000000149012,
+            10,
+            -19.200000001490118
+          ],
+          "target": [
+            0,
+            4.908000000298024,
+            0
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "clear-layout",
+          "camera": [
+            0,
+            10,
+            0.2
+          ],
+          "target": [
+            0,
+            4.908000000298024,
+            0
+          ],
+          "fov": 92,
+          "referenceFogDisabled": true
+        },
+        {
+          "kind": "route-mid",
+          "camera": [
+            8.99132006474289,
+            9.3,
+            4.999999940671307
+          ],
+          "target": [
+            17.156671140397638,
+            10.7,
+            -18.46296030274117
+          ],
+          "fov": 68,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "route-far",
+          "camera": [
+            17.30136914231483,
+            12.324999998658896,
+            -11.004736806895654
+          ],
+          "target": [
+            17.30136914231483,
+            10.524999998658895,
+            -16.004736806895654
+          ],
+          "fov": 68,
+          "referenceFogDisabled": false
+        }
+      ]
+    },
+    {
+      "stableLevel": 30,
+      "displayNumber": 30,
+      "views": [
+        {
+          "kind": "oblique",
+          "camera": [
+            226.39999998807906,
+            62,
+            70.39999998807907
+          ],
+          "target": [
+            89,
+            57,
+            -8
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "opposite",
+          "camera": [
+            -48.399999988079074,
+            62,
+            -86.39999998807907
+          ],
+          "target": [
+            89,
+            57,
+            -8
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "clear-layout",
+          "camera": [
+            89,
+            62,
+            -7.8
+          ],
+          "target": [
+            89,
+            57,
+            -8
+          ],
+          "fov": 92,
+          "referenceFogDisabled": true
+        },
+        {
+          "kind": "route-mid",
+          "camera": [
+            49.113806521806595,
+            43.3,
+            24.03018671035165
+          ],
+          "target": [
+            43.6840573574914,
+            41.7,
+            45.00520056806307
+          ],
+          "fov": 68,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "route-far",
+          "camera": [
+            200.00477435902403,
+            31.3,
+            16.290768484520346
+          ],
+          "target": [
+            200.0005408515168,
+            29.7,
+            29.33370089335875
+          ],
+          "fov": 68,
+          "referenceFogDisabled": false
+        }
+      ]
+    },
+    {
+      "stableLevel": 31,
+      "displayNumber": 31,
+      "views": [
+        {
+          "kind": "oblique",
+          "camera": [
+            28.600000023841858,
+            10,
+            25.600000023841858
+          ],
+          "target": [
+            0,
+            4.840000004768372,
+            0
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "opposite",
+          "camera": [
+            -28.600000023841858,
+            10,
+            -25.600000023841858
+          ],
+          "target": [
+            0,
+            4.840000004768372,
+            0
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "clear-layout",
+          "camera": [
+            0,
+            10,
+            0.2
+          ],
+          "target": [
+            0,
+            4.840000004768372,
+            0
+          ],
+          "fov": 92,
+          "referenceFogDisabled": true
+        },
+        {
+          "kind": "route-mid",
+          "camera": [
+            24.184807330723675,
+            3.3,
+            22.99402032156939
+          ],
+          "target": [
+            15.9363260368399,
+            7.7,
+            -20.000000022684414
+          ],
+          "fov": 68,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "route-far",
+          "camera": [
+            15.9363260368399,
+            9.3,
+            -20.000000022684414
+          ],
+          "target": [
+            15.9363260368399,
+            7.5,
+            -25.000000022684414
+          ],
+          "fov": 68,
+          "referenceFogDisabled": false
+        }
+      ]
+    },
+    {
+      "stableLevel": 32,
+      "displayNumber": 32,
+      "views": [
+        {
+          "kind": "oblique",
+          "camera": [
+            23.600000023841858,
+            10,
+            22.600000023841858
+          ],
+          "target": [
+            0,
+            3.0400000047683715,
+            0
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "opposite",
+          "camera": [
+            -23.600000023841858,
+            10,
+            -22.600000023841858
+          ],
+          "target": [
+            0,
+            3.0400000047683715,
+            0
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "clear-layout",
+          "camera": [
+            0,
+            10,
+            0.2
+          ],
+          "target": [
+            0,
+            3.0400000047683715,
+            0
+          ],
+          "fov": 92,
+          "referenceFogDisabled": true
+        },
+        {
+          "kind": "route-mid",
+          "camera": [
+            18.168171062740317,
+            3.3,
+            12.08801393285402
+          ],
+          "target": [
+            5.44995315570111,
+            1.7,
+            -12.994880818578457
+          ],
+          "fov": 68,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "route-far",
+          "camera": [
+            0.01467754958957316,
+            3.3,
+            -17.00301501711662
+          ],
+          "target": [
+            0.01467754958957316,
+            1.5,
+            -22.00301501711662
+          ],
+          "fov": 68,
+          "referenceFogDisabled": false
+        }
+      ]
+    },
+    {
+      "stableLevel": 33,
+      "displayNumber": 33,
+      "views": [
+        {
+          "kind": "oblique",
+          "camera": [
+            27.600000023841858,
+            10,
+            29.600000023841858
+          ],
+          "target": [
+            0,
+            5,
+            1
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "opposite",
+          "camera": [
+            -27.600000023841858,
+            10,
+            -27.600000023841858
+          ],
+          "target": [
+            0,
+            5,
+            1
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "clear-layout",
+          "camera": [
+            0,
+            10,
+            1.2
+          ],
+          "target": [
+            0,
+            5,
+            1
+          ],
+          "fov": 92,
+          "referenceFogDisabled": true
+        },
+        {
+          "kind": "route-mid",
+          "camera": [
+            3.298850348358646,
+            3.308917557514883,
+            9.001667049488024
+          ],
+          "target": [
+            3.298850348358646,
+            1.5089175575148832,
+            4.001667049488024
+          ],
+          "fov": 68,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "route-far",
+          "camera": [
+            20.00308674356581,
+            13.5,
+            -18.005998008658704
+          ],
+          "target": [
+            20.00308674356581,
+            11.7,
+            -23.005998008658704
+          ],
+          "fov": 68,
+          "referenceFogDisabled": false
+        }
+      ]
+    },
+    {
+      "stableLevel": 34,
+      "displayNumber": 34,
+      "views": [
+        {
+          "kind": "oblique",
+          "camera": [
+            24.600000023841858,
+            10,
+            23.600000023841858
+          ],
+          "target": [
+            0,
+            3.440000004768372,
+            0
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "opposite",
+          "camera": [
+            -24.600000023841858,
+            10,
+            -23.600000023841858
+          ],
+          "target": [
+            0,
+            3.440000004768372,
+            0
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "clear-layout",
+          "camera": [
+            0,
+            10,
+            0.2
+          ],
+          "target": [
+            0,
+            3.440000004768372,
+            0
+          ],
+          "fov": 92,
+          "referenceFogDisabled": true
+        },
+        {
+          "kind": "route-mid",
+          "camera": [
+            -9.128375543453224,
+            3.3,
+            8.508249183579894
+          ],
+          "target": [
+            -9.128375543453224,
+            1.5,
+            3.5082491835798937
+          ],
+          "fov": 68,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "route-far",
+          "camera": [
+            -15.552191015828356,
+            3.3,
+            -19.449520084682597
+          ],
+          "target": [
+            -2.0730356411891147,
+            1.7,
+            -21.010509528310003
+          ],
+          "fov": 68,
+          "referenceFogDisabled": false
+        }
+      ]
+    },
+    {
+      "stableLevel": 35,
+      "displayNumber": 35,
+      "views": [
+        {
+          "kind": "oblique",
+          "camera": [
+            25.58999999165535,
+            10,
+            22.600000023841858
+          ],
+          "target": [
+            0,
+            3.440000004768372,
+            -1
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "opposite",
+          "camera": [
+            -25.58999999165535,
+            10,
+            -24.600000023841858
+          ],
+          "target": [
+            0,
+            3.440000004768372,
+            -1
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "clear-layout",
+          "camera": [
+            0,
+            10,
+            -0.8
+          ],
+          "target": [
+            0,
+            3.440000004768372,
+            -1
+          ],
+          "fov": 92,
+          "referenceFogDisabled": true
+        },
+        {
+          "kind": "route-mid",
+          "camera": [
+            6.154952434733502,
+            3.3,
+            -5.182014620354256
+          ],
+          "target": [
+            -0.1878632668147096,
+            1.7,
+            -24.391313866777057
+          ],
+          "fov": 68,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "route-far",
+          "camera": [
+            0.0007973488793101008,
+            3.3,
+            17.008039114052227
+          ],
+          "target": [
+            0.0007973488793101008,
+            1.5,
+            12.008039114052227
+          ],
+          "fov": 68,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "extra-review-detail",
+          "camera": [
+            -6.17,
+            1.8,
+            1.35
+          ],
+          "target": [
+            6.15,
+            1.5,
+            -5.18
+          ],
+          "fov": 62
+        }
+      ]
+    },
+    {
+      "stableLevel": 36,
+      "displayNumber": 36,
+      "views": [
+        {
+          "kind": "oblique",
+          "camera": [
+            28.600000023841858,
+            20,
+            26.600000023841858
+          ],
+          "target": [
+            0,
+            13.240000004768373,
+            1
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "opposite",
+          "camera": [
+            -28.600000023841858,
+            20,
+            -24.600000023841858
+          ],
+          "target": [
+            0,
+            13.240000004768373,
+            1
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "clear-layout",
+          "camera": [
+            0,
+            20,
+            1.2
+          ],
+          "target": [
+            0,
+            13.240000004768373,
+            1
+          ],
+          "fov": 92,
+          "referenceFogDisabled": true
+        },
+        {
+          "kind": "route-mid",
+          "camera": [
+            -18.002186499780304,
+            13.3,
+            -6.258354528197806
+          ],
+          "target": [
+            -10.301614336945377,
+            -2.3,
+            1.0080465114975485
+          ],
+          "fov": 68,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "route-far",
+          "camera": [
+            16.936158358704244,
+            13.3,
+            -13.000002371541216
+          ],
+          "target": [
+            16.936158358704244,
+            11.5,
+            -18.000002371541214
+          ],
+          "fov": 68,
+          "referenceFogDisabled": false
+        }
+      ]
+    },
+    {
+      "stableLevel": 37,
+      "displayNumber": 37,
+      "views": [
+        {
+          "kind": "oblique",
+          "camera": [
+            25.600000023841858,
+            10,
+            21.600000023841858
+          ],
+          "target": [
+            0,
+            3.440000004768372,
+            -1.5
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "opposite",
+          "camera": [
+            -25.600000023841858,
+            10,
+            -24.600000023841858
+          ],
+          "target": [
+            0,
+            3.440000004768372,
+            -1.5
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "clear-layout",
+          "camera": [
+            0,
+            10,
+            -1.3
+          ],
+          "target": [
+            0,
+            3.440000004768372,
+            -1.5
+          ],
+          "fov": 92,
+          "referenceFogDisabled": true
+        },
+        {
+          "kind": "route-mid",
+          "camera": [
+            0.1787832085960509,
+            3.3,
+            0.09806362478020052
+          ],
+          "target": [
+            8.209473487633147,
+            1.7,
+            0.20273013376351412
+          ],
+          "fov": 68,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "route-far",
+          "camera": [
+            2.090548581329724,
+            3.3,
+            -22.284796426342833
+          ],
+          "target": [
+            2.090548581329724,
+            1.5,
+            -27.284796426342833
+          ],
+          "fov": 68,
+          "referenceFogDisabled": false
+        }
+      ]
+    },
+    {
+      "stableLevel": 38,
+      "displayNumber": 38,
+      "views": [
+        {
+          "kind": "oblique",
+          "camera": [
+            27.600000023841858,
+            10,
+            22.600000023841858
+          ],
+          "target": [
+            0,
+            5,
+            -1.5
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "opposite",
+          "camera": [
+            -27.600000023841858,
+            10,
+            -25.600000023841858
+          ],
+          "target": [
+            0,
+            5,
+            -1.5
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "clear-layout",
+          "camera": [
+            0,
+            10,
+            -1.3
+          ],
+          "target": [
+            0,
+            5,
+            -1.5
+          ],
+          "fov": 92,
+          "referenceFogDisabled": true
+        },
+        {
+          "kind": "route-mid",
+          "camera": [
+            -22.99986112581647,
+            17.3,
+            -15.896636322332064
+          ],
+          "target": [
+            5.18924051384684,
+            16.7,
+            -11.924033296680761
+          ],
+          "fov": 68,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "route-far",
+          "camera": [
+            15.973964552538567,
+            18.3,
+            -19.122138198016682
+          ],
+          "target": [
+            14.837410673913599,
+            16.7,
+            -17.020810226643466
+          ],
+          "fov": 68,
+          "referenceFogDisabled": false
+        }
+      ]
+    },
+    {
+      "stableLevel": 39,
+      "displayNumber": 39,
+      "views": [
+        {
+          "kind": "oblique",
+          "camera": [
+            25.600000023841858,
+            10,
+            24.600000023841858
+          ],
+          "target": [
+            0,
+            3.440000004768372,
+            0
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "opposite",
+          "camera": [
+            -25.600000023841858,
+            10,
+            -24.600000023841858
+          ],
+          "target": [
+            0,
+            3.440000004768372,
+            0
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "clear-layout",
+          "camera": [
+            0,
+            10,
+            0.2
+          ],
+          "target": [
+            0,
+            3.440000004768372,
+            0
+          ],
+          "fov": 92,
+          "referenceFogDisabled": true
+        },
+        {
+          "kind": "route-mid",
+          "camera": [
+            -4.000775559399777,
+            3.3,
+            14.186324428208485
+          ],
+          "target": [
+            1.0674174056350679e-05,
+            1.7,
+            -19.009752889169825
+          ],
+          "fov": 68,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "route-far",
+          "camera": [
+            1.0674174056350679e-05,
+            3.3,
+            -19.009752889169825
+          ],
+          "target": [
+            1.0674174056350679e-05,
+            1.5,
+            -24.009752889169825
+          ],
+          "fov": 68,
+          "referenceFogDisabled": false
+        }
+      ]
+    },
+    {
+      "stableLevel": 40,
+      "displayNumber": 40,
+      "views": [
+        {
+          "kind": "oblique",
+          "camera": [
+            26.600000023841858,
+            10,
+            23.600000023841858
+          ],
+          "target": [
+            0,
+            3.840000004768372,
+            -0.5
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "opposite",
+          "camera": [
+            -26.600000023841858,
+            10,
+            -24.600000023841858
+          ],
+          "target": [
+            0,
+            3.840000004768372,
+            -0.5
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "clear-layout",
+          "camera": [
+            0,
+            10,
+            -0.3
+          ],
+          "target": [
+            0,
+            3.840000004768372,
+            -0.5
+          ],
+          "fov": 92,
+          "referenceFogDisabled": true
+        },
+        {
+          "kind": "route-mid",
+          "camera": [
+            6.184633077807145,
+            3.3,
+            9.19482123506096
+          ],
+          "target": [
+            -17.91832999315968,
+            1.88,
+            16.848869556789378
+          ],
+          "fov": 68,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "route-far",
+          "camera": [
+            0.04507736935793524,
+            3.3,
+            -21.03932413463492
+          ],
+          "target": [
+            0.04507736935793524,
+            1.5,
+            -26.03932413463492
+          ],
+          "fov": 68,
+          "referenceFogDisabled": false
+        }
+      ]
+    },
+    {
+      "stableLevel": 41,
+      "displayNumber": 51,
+      "views": [
+        {
+          "kind": "oblique",
+          "camera": [
+            80.6,
+            10,
+            70.6
+          ],
+          "target": [
+            0,
+            5,
+            0
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "opposite",
+          "camera": [
+            -80.6,
+            10,
+            -70.6
+          ],
+          "target": [
+            0,
+            5,
+            0
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "clear-layout",
+          "camera": [
+            0,
+            10,
+            0.2
+          ],
+          "target": [
+            0,
+            5,
+            0
+          ],
+          "fov": 92,
+          "referenceFogDisabled": true
+        },
+        {
+          "kind": "route-mid",
+          "camera": [
+            2.0004183969255003,
+            21.3,
+            54.93621967509966
+          ],
+          "target": [
+            2.0004183969255003,
+            19.5,
+            49.93621967509966
+          ],
+          "fov": 68,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "route-far",
+          "camera": [
+            2.000437993792724,
+            39.3,
+            54.936628922435965
+          ],
+          "target": [
+            -56.99999647204888,
+            73.7,
+            37.77068114468489
+          ],
+          "fov": 68,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "castle-freight",
+          "camera": [
+            -29,
+            12,
+            51.24
+          ],
+          "target": [
+            -43,
+            3,
+            39
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "castle-sluice",
+          "camera": [
+            24,
+            12,
+            55.32
+          ],
+          "target": [
+            44,
+            3,
+            39
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "castle-optics",
+          "camera": [
+            -16,
+            12,
+            -29.439999999999998
+          ],
+          "target": [
+            -46,
+            3,
+            -41
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "castle-hoist",
+          "camera": [
+            24,
+            12,
+            -20.639999999999997
+          ],
+          "target": [
+            44,
+            3,
+            -39
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "castle-archive",
+          "camera": [
+            -24,
+            29,
+            40.88
+          ],
+          "target": [
+            -42,
+            21,
+            30
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "castle-flywheel",
+          "camera": [
+            -34,
+            30,
+            -22.72
+          ],
+          "target": [
+            -48,
+            21,
+            -37
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "castle-magnet",
+          "camera": [
+            27,
+            30,
+            49.28
+          ],
+          "target": [
+            46,
+            21,
+            35
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "castle-migrant",
+          "camera": [
+            29,
+            48,
+            -17.36
+          ],
+          "target": [
+            43,
+            39,
+            -33
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "castle-pendulum",
+          "camera": [
+            -26,
+            48,
+            48.64
+          ],
+          "target": [
+            -48,
+            39,
+            33
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "castle-inertia",
+          "camera": [
+            -17,
+            66,
+            -22.08
+          ],
+          "target": [
+            -46,
+            57,
+            -35
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "castle-impulse",
+          "camera": [
+            27,
+            66,
+            40.96
+          ],
+          "target": [
+            47,
+            57,
+            26
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "castle-crown",
+          "camera": [
+            -35,
+            84,
+            39.92
+          ],
+          "target": [
+            -48,
+            75,
+            27
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "extra-impulse-alternate",
+          "camera": [
+            66,
+            66,
+            11
+          ],
+          "target": [
+            47,
+            59,
+            26
+          ],
+          "fov": 70
+        },
+        {
+          "kind": "extra-inertia-alternate",
+          "camera": [
+            -73,
+            68,
+            -48
+          ],
+          "target": [
+            -46,
+            62,
+            -35
+          ],
+          "fov": 70
+        },
+        {
+          "kind": "extra-pendulum-alternate",
+          "camera": [
+            -68,
+            46,
+            17
+          ],
+          "target": [
+            -48,
+            41,
+            33
+          ],
+          "fov": 70
+        }
+      ]
+    },
+    {
+      "stableLevel": 42,
+      "displayNumber": 41,
+      "views": [
+        {
+          "kind": "oblique",
+          "camera": [
+            37.60000002384186,
+            13,
+            39.60000002384186
+          ],
+          "target": [
+            0,
+            7.240000004768372,
+            12
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "opposite",
+          "camera": [
+            -37.60000002384186,
+            13,
+            -15.600000023841858
+          ],
+          "target": [
+            0,
+            7.240000004768372,
+            12
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "clear-layout",
+          "camera": [
+            0,
+            13,
+            12.2
+          ],
+          "target": [
+            0,
+            7.240000004768372,
+            12
+          ],
+          "fov": 92,
+          "referenceFogDisabled": true
+        },
+        {
+          "kind": "route-mid",
+          "camera": [
+            31.14690545174377,
+            12.48,
+            30.848472777733733
+          ],
+          "target": [
+            -29.93109232151986,
+            4.7,
+            -0.3790400214953152
+          ],
+          "fov": 68,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "route-far",
+          "camera": [
+            -29.93109232151986,
+            6.3,
+            -0.3790400214953152
+          ],
+          "target": [
+            -29.93109232151986,
+            4.5,
+            -5.379040021495316
+          ],
+          "fov": 68,
+          "referenceFogDisabled": false
+        }
+      ]
+    },
+    {
+      "stableLevel": 43,
+      "displayNumber": 42,
+      "views": [
+        {
+          "kind": "oblique",
+          "camera": [
+            25.600000023841858,
+            10,
+            25.600000023841858
+          ],
+          "target": [
+            -1,
+            5,
+            -1
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "opposite",
+          "camera": [
+            -27.600000023841858,
+            10,
+            -27.600000023841858
+          ],
+          "target": [
+            -1,
+            5,
+            -1
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "clear-layout",
+          "camera": [
+            -1,
+            10,
+            -0.8
+          ],
+          "target": [
+            -1,
+            5,
+            -1
+          ],
+          "fov": 92,
+          "referenceFogDisabled": true
+        },
+        {
+          "kind": "route-mid",
+          "camera": [
+            2.778379897744726,
+            18.3,
+            -18.403016611912307
+          ],
+          "target": [
+            15.39746303326604,
+            23.7,
+            20.40353596280517
+          ],
+          "fov": 68,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "route-far",
+          "camera": [
+            15.466114499552766,
+            25.3,
+            16.9992711465544
+          ],
+          "target": [
+            15.466114499552766,
+            23.5,
+            11.999271146554399
+          ],
+          "fov": 68,
+          "referenceFogDisabled": false
+        }
+      ]
+    },
+    {
+      "stableLevel": 44,
+      "displayNumber": 43,
+      "views": [
+        {
+          "kind": "oblique",
+          "camera": [
+            29.600000023841858,
+            18,
+            27.600000023841858
+          ],
+          "target": [
+            0,
+            12.040000004768373,
+            -1
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "opposite",
+          "camera": [
+            -29.600000023841858,
+            18,
+            -29.600000023841858
+          ],
+          "target": [
+            0,
+            12.040000004768373,
+            -1
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "clear-layout",
+          "camera": [
+            0,
+            18,
+            -0.8
+          ],
+          "target": [
+            0,
+            12.040000004768373,
+            -1
+          ],
+          "fov": 92,
+          "referenceFogDisabled": true
+        },
+        {
+          "kind": "route-mid",
+          "camera": [
+            -4.94236084619449,
+            11.3,
+            -15.930463591280079
+          ],
+          "target": [
+            -4.94236084619449,
+            9.5,
+            -20.93046359128008
+          ],
+          "fov": 68,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "route-far",
+          "camera": [
+            21.919672644586058,
+            11.648114835590622,
+            -20.980970057217974
+          ],
+          "target": [
+            21.919672644586058,
+            9.848114835590623,
+            -25.980970057217974
+          ],
+          "fov": 68,
+          "referenceFogDisabled": false
+        }
+      ]
+    },
+    {
+      "stableLevel": 45,
+      "displayNumber": 44,
+      "views": [
+        {
+          "kind": "oblique",
+          "camera": [
+            27.600000023841858,
+            10,
+            25.600000023841858
+          ],
+          "target": [
+            0,
+            5,
+            -3
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "opposite",
+          "camera": [
+            -27.600000023841858,
+            10,
+            -31.600000023841858
+          ],
+          "target": [
+            0,
+            5,
+            -3
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "clear-layout",
+          "camera": [
+            0,
+            10,
+            -2.8
+          ],
+          "target": [
+            0,
+            5,
+            -3
+          ],
+          "fov": 92,
+          "referenceFogDisabled": true
+        },
+        {
+          "kind": "route-mid",
+          "camera": [
+            -22.90866416770145,
+            17.3,
+            4.9953732347781195
+          ],
+          "target": [
+            -24.00544387631568,
+            15.7,
+            11.285206052176191
+          ],
+          "fov": 68,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "route-far",
+          "camera": [
+            20.2645356065094,
+            18.3,
+            -9.961935581415474
+          ],
+          "target": [
+            20.2645356065094,
+            16.5,
+            -14.961935581415474
+          ],
+          "fov": 68,
+          "referenceFogDisabled": false
+        }
+      ]
+    },
+    {
+      "stableLevel": 46,
+      "displayNumber": 45,
+      "views": [
+        {
+          "kind": "oblique",
+          "camera": [
+            26.600000023841858,
+            25,
+            25.600000023841858
+          ],
+          "target": [
+            -1,
+            19.040000004768373,
+            -1.5
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "opposite",
+          "camera": [
+            -28.600000023841858,
+            25,
+            -28.600000023841858
+          ],
+          "target": [
+            -1,
+            19.040000004768373,
+            -1.5
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "clear-layout",
+          "camera": [
+            -1,
+            25,
+            -1.3
+          ],
+          "target": [
+            -1,
+            19.040000004768373,
+            -1.5
+          ],
+          "fov": 92,
+          "referenceFogDisabled": true
+        },
+        {
+          "kind": "route-mid",
+          "camera": [
+            2.9978983102062227,
+            18.3,
+            -23.8900931763845
+          ],
+          "target": [
+            0.9848906187601947,
+            16.7,
+            3.7087734701853114
+          ],
+          "fov": 68,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "route-far",
+          "camera": [
+            15.83112326317885,
+            25.3,
+            16.96929109348905
+          ],
+          "target": [
+            15.83112326317885,
+            23.5,
+            11.969291093489051
+          ],
+          "fov": 68,
+          "referenceFogDisabled": false
+        }
+      ]
+    },
+    {
+      "stableLevel": 47,
+      "displayNumber": 46,
+      "views": [
+        {
+          "kind": "oblique",
+          "camera": [
+            26.600000023841858,
+            22,
+            25.600000023841858
+          ],
+          "target": [
+            0,
+            15.240000004768373,
+            -1.5
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "opposite",
+          "camera": [
+            -26.600000023841858,
+            22,
+            -28.600000023841858
+          ],
+          "target": [
+            0,
+            15.240000004768373,
+            -1.5
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "clear-layout",
+          "camera": [
+            0,
+            22,
+            -1.3
+          ],
+          "target": [
+            0,
+            15.240000004768373,
+            -1.5
+          ],
+          "fov": 92,
+          "referenceFogDisabled": true
+        },
+        {
+          "kind": "route-mid",
+          "camera": [
+            -15.998567765082138,
+            3.3,
+            -14.087757976936484
+          ],
+          "target": [
+            22.146088066408215,
+            1.7,
+            -10.37917770068916
+          ],
+          "fov": 68,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "route-far",
+          "camera": [
+            8.317083705861448,
+            11.3,
+            -11.994823448476616
+          ],
+          "target": [
+            8.317083705861448,
+            9.5,
+            -16.994823448476616
+          ],
+          "fov": 68,
+          "referenceFogDisabled": false
+        }
+      ]
+    },
+    {
+      "stableLevel": 48,
+      "displayNumber": 47,
+      "views": [
+        {
+          "kind": "oblique",
+          "camera": [
+            27.600000023841858,
+            18,
+            24.600000023841858
+          ],
+          "target": [
+            1,
+            11.840000004768372,
+            -4.5
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "opposite",
+          "camera": [
+            -25.600000023841858,
+            18,
+            -33.60000002384186
+          ],
+          "target": [
+            1,
+            11.840000004768372,
+            -4.5
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "clear-layout",
+          "camera": [
+            1,
+            18,
+            -4.3
+          ],
+          "target": [
+            1,
+            11.840000004768372,
+            -4.5
+          ],
+          "fov": 92,
+          "referenceFogDisabled": true
+        },
+        {
+          "kind": "route-mid",
+          "camera": [
+            23.015508101431376,
+            11.620419074505818,
+            -23.084819638841953
+          ],
+          "target": [
+            19.926362237772818,
+            10.399999994039534,
+            -20.36087423961192
+          ],
+          "fov": 68,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "route-far",
+          "camera": [
+            -2.086526283407956,
+            11.3,
+            0.13170423514457802
+          ],
+          "target": [
+            -2.086526283407956,
+            9.5,
+            -4.868295764855422
+          ],
+          "fov": 68,
+          "referenceFogDisabled": false
+        }
+      ]
+    },
+    {
+      "stableLevel": 49,
+      "displayNumber": 48,
+      "views": [
+        {
+          "kind": "oblique",
+          "camera": [
+            35.60000002384186,
+            18,
+            28.600000023841858
+          ],
+          "target": [
+            -4,
+            12.440000004768372,
+            -1
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "opposite",
+          "camera": [
+            -43.60000002384186,
+            18,
+            -30.600000023841858
+          ],
+          "target": [
+            -4,
+            12.440000004768372,
+            -1
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "clear-layout",
+          "camera": [
+            -4,
+            18,
+            -0.8
+          ],
+          "target": [
+            -4,
+            12.440000004768372,
+            -1
+          ],
+          "fov": 92,
+          "referenceFogDisabled": true
+        },
+        {
+          "kind": "route-mid",
+          "camera": [
+            3.985241667821474,
+            11.3,
+            -6.207045628146848
+          ],
+          "target": [
+            -3.6164549774650983,
+            9.7,
+            -3.3189690701683316
+          ],
+          "fov": 68,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "route-far",
+          "camera": [
+            31.046824236530913,
+            11.3,
+            8.989755176878438
+          ],
+          "target": [
+            31.046824236530913,
+            9.5,
+            3.989755176878438
+          ],
+          "fov": 68,
+          "referenceFogDisabled": false
+        }
+      ]
+    },
+    {
+      "stableLevel": 50,
+      "displayNumber": 49,
+      "views": [
+        {
+          "kind": "oblique",
+          "camera": [
+            29.600000023841858,
+            18,
+            31.600000023841858
+          ],
+          "target": [
+            -5,
+            13,
+            1
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "opposite",
+          "camera": [
+            -39.60000002384186,
+            18,
+            -29.600000023841858
+          ],
+          "target": [
+            -5,
+            13,
+            1
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "clear-layout",
+          "camera": [
+            -5,
+            18,
+            1.2
+          ],
+          "target": [
+            -5,
+            13,
+            1
+          ],
+          "fov": 92,
+          "referenceFogDisabled": true
+        },
+        {
+          "kind": "route-mid",
+          "camera": [
+            -11.906922642083474,
+            9.71000001311302,
+            -4.975674270490062
+          ],
+          "target": [
+            -11.9999151765723,
+            7.9799999999999995,
+            -5.993136700557115
+          ],
+          "fov": 68,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "route-far",
+          "camera": [
+            8.935773226037316,
+            25.450696696608095,
+            -17.9886018798079
+          ],
+          "target": [
+            8.935773226037316,
+            23.650696696608094,
+            -22.9886018798079
+          ],
+          "fov": 68,
+          "referenceFogDisabled": false
+        }
+      ]
+    },
+    {
+      "stableLevel": 51,
+      "displayNumber": 50,
+      "views": [
+        {
+          "kind": "oblique",
+          "camera": [
+            21.600000023841858,
+            10,
+            23.600000023841858
+          ],
+          "target": [
+            0,
+            4.040000004768372,
+            -2
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "opposite",
+          "camera": [
+            -21.600000023841858,
+            10,
+            -27.600000023841858
+          ],
+          "target": [
+            0,
+            4.040000004768372,
+            -2
+          ],
+          "fov": 76,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "clear-layout",
+          "camera": [
+            0,
+            10,
+            -1.8
+          ],
+          "target": [
+            0,
+            4.040000004768372,
+            -2
+          ],
+          "fov": 92,
+          "referenceFogDisabled": true
+        },
+        {
+          "kind": "route-mid",
+          "camera": [
+            -0.818613109387425,
+            3.3,
+            14.646990225691043
+          ],
+          "target": [
+            -0.818613109387425,
+            1.5,
+            9.646990225691043
+          ],
+          "fov": 68,
+          "referenceFogDisabled": false
+        },
+        {
+          "kind": "route-far",
+          "camera": [
+            -0.028114610090306545,
+            3.3,
+            -23.00202527119348
+          ],
+          "target": [
+            -0.028114610090306545,
+            1.5,
+            -28.00202527119348
+          ],
+          "fov": 68,
+          "referenceFogDisabled": false
+        }
+      ]
+    }
+  ]
+}

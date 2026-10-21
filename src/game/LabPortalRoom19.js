@@ -1,3 +1,4 @@
+import {installVisualAuditMiddleKit} from './LabVisualAuditMiddle.js';
 import {Workshop,V,glass} from './LabWorkshopKit.js';
 import {opticalLift} from './LabRoom13Mechanics.js';
 import {cargoLoadsPlate} from './LabPlateContact.js';
@@ -49,6 +50,7 @@ export function buildRoom19(game,index=18){
  w.box([16,14,9],[8,12,.3],w.materials.wall);
  // This normal gearbox changes force transmission, never a completion flag.
  const drive=createRoom19Drive(k,fan,ferry);
+ installVisualAuditMiddleKit(k,19);
  const level=k.finish([-15,0,15],[0,.55,0],[16,8,13],{workshop:k,portalPuzzle:true,inspectionRoof,cargoOnAnyPad:()=>cargoLoadsPlate(game.cargo,game.heldCube,cargoFloor.getFrame())||ferry.loaded(),playerAcceleration:(p,v)=>fan.acceleration(p.clone().add(V(0,1.2,0)),v)});
  level.mechanismArt={projectors:[{position:light.origin.toArray(),direction:[1,0,0],radius:.38}],turbines:[fan],liftSurfaces:['glass-observer']};
  level.puzzleGeometry={footprint:1440,orders:['air-first','cargo-first'],glass:panes,portalRoles:{'service-intake':'shared optical and pneumatic source','optical-window':'light crosses the sealed cargo chamber','sealed-cradle':'independent retrieval through the only opening below the cargo','open-air-duct':'air route around impermeable glass','ferry-receiver':'moving cargo receiver after releasing the drive source'},deductions:['glass separates optical transmission from air transmission','the powered lift can be left on a permanent ledge','the upper outlet is reached from its reverse side','flywheel angular momentum persists without the portal feed','the same pair must retrieve the original cargo','a clutch applies actual traveller-dependent drive load','the moving receiver belongs to the ferry, not to the dock','cargo-first is possible by returning around the bulkhead to restore the original intake']};

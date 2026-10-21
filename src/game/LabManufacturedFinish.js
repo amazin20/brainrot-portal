@@ -1,5 +1,40 @@
 import * as THREE from 'three';
 import {mapDeckUV} from './LabDeckUV.js';
+import {mergeGeometries} from 'three/addons/utils/BufferGeometryUtils.js';
+
+/** Replace the old rotational spool silhouette, never its compound support.
+ * A closed H-section carries two restrained square saddles. Every new vertex
+ * remains within the existing lathed bearing's AABB; its original collision
+ * parts and bindings continue to own all physical contact. */
+function finishStructuralColumns(k){
+ let columns=0,triangles=0;
+ for(const binding of k.solidModels||[]){
+  const model=binding.model;
+  if(model.name!=='Load-bearing telescopic column'||model.userData.auditStructuralColumn)continue;
+  const parts=model.userData.collisionParts;if(!parts?.length)continue;
+  const bounds=new THREE.Box3();for(const part of parts)bounds.union(new THREE.Box3(new THREE.Vector3().fromArray(part.min),new THREE.Vector3().fromArray(part.max)));
+  const base=bounds.min.y,top=bounds.max.y,h=top-base,r=Math.min(bounds.max.x-bounds.min.x,bounds.max.z-bounds.min.z)/2/1.4;
+  if(h<1.3||r<=0)continue;
+  const original=model.children.filter(m=>m.isMesh);for(const mesh of original)mesh.visible=false;
+  const bins=[[],[]],add=(material,p,size)=>{
+   const geometry=new THREE.BoxGeometry(...size).toNonIndexed();geometry.translate(...p);bins[material].push(geometry);
+  };
+  const length=h-.80,mid=(base+top)/2;
+  // Flanges and web form a genuinely closed section rather than fine wire.
+  for(const z of [-r*.46,r*.46])add(0,[0,mid,z],[r*1.28,length,r*.20]);
+  add(0,[0,mid,0],[r*.22,length,r*.83]);
+  for(const [y,height,width] of [[base+.12,.24,1.90],[base+.39,.30,1.34],[top-.39,.30,1.34],[top-.12,.24,1.90]])
+   add(1,[0,y,0],[r*width,height,r*width]);
+  for(const y of [base+.59,top-.59])for(const z of [-r*.48,r*.48])add(1,[0,y,z],[r*1.31,.105,r*.15]);
+  bins.forEach((geometries,i)=>{
+   const merged=mergeGeometries(geometries,false);geometries.forEach(g=>g.dispose());
+   const mesh=new THREE.Mesh(merged,i?k.m.metal:k.m.dark);mesh.name='Closed structural column / '+(i?'bearing saddles':'H-section');
+   mesh.castShadow=true;mesh.receiveShadow=true;mesh.userData.visualOnly=true;model.add(mesh);triangles+=merged.attributes.position.count/3;
+  });
+  model.userData.auditStructuralColumn=true;columns++;
+ }
+ return {columns,triangles};
+}
 
 /** The room kit uses a few honest finishes. Reflection comes from LabGame's
  * shared filtered environment; a low-resolution private sky used to turn
@@ -153,8 +188,9 @@ export function manufacturedBulkheadGeometry(width,height,depth){
  * mechanism state or per-frame callback is introduced. */
 export function finishManufacturedChamber(k){
  if(k.manufacturedFinish)return k.manufacturedFinish;
+ const structural=finishStructuralColumns(k);
  const mineral=finishMineralDecks(k);
- let foldedPanels=0,springWinding=0;const bins=k.artBins;
+ let foldedPanels=0,springWinding=0,wallCassettes=0;const bins=k.artBins;
  k.world.root.traverse(mesh=>{
   if(!mesh.isMesh||mesh.isInstancedMesh||mesh.userData?.collisionProxy)return;
   if(mesh.name==='Return spring winding'){
@@ -171,10 +207,13 @@ export function finishManufacturedChamber(k){
   }
   const source=mesh.material,p=mesh.geometry?.parameters;
   if(!p||![p.width,p.height,p.depth].every(Number.isFinite))return;
-  const replacement=source===k.m.shell?k.m.shellPanel:source===k.m.secondary?k.m.secondaryPanel:null;
+  const wallCassette=source?.name==='Inset mineral wall cassettes';
+  const replacement=wallCassette?source:source===k.m.shell?k.m.shellPanel:source===k.m.secondary?k.m.secondaryPanel:null;
   const shallowChassis=p.height>=.5&&p.height<=1.3&&Math.min(p.width,p.depth)>=6&&Math.max(p.width,p.depth)>=8;
   const upright=p.height>=2.8&&Math.max(p.width,p.depth,p.height)>=4&&Math.max(p.width,p.depth)>=.8&&Math.min(p.width,p.depth)>=.34&&Math.min(p.width,p.depth)<=1.8;
-  if(!replacement||(!shallowChassis&&!upright))return;
+  const insetWall=wallCassette&&p.height>=2.8&&Math.max(p.width,p.depth)>=4&&Math.min(p.width,p.depth)>=.045;
+  if(!replacement||(!shallowChassis&&!upright&&!insetWall))return;
+  if(wallCassette)replacement.vertexColors=true;
   const axis=shallowChassis?'y':p.width<p.depth?'x':'z';
   const geometry=axis==='y'?manufacturedBulkheadGeometry(p.width,p.depth,p.height):
    manufacturedBulkheadGeometry(axis==='x'?p.depth:p.width,p.height,axis==='x'?p.width:p.depth);
@@ -184,6 +223,7 @@ export function finishManufacturedChamber(k){
   // keep this same mesh, and moving leaves still share the same actual pivot.
   const old=mesh.geometry;mesh.geometry=geometry;mesh.material=replacement;
   mesh.userData.manufacturedFinish=true;old.dispose();foldedPanels++;
+  if(wallCassette)wallCassettes++;
   const oldBin=bins.get(source),index=oldBin?.indexOf(mesh)??-1;
   if(index>=0){oldBin.splice(index,1);const newBin=bins.get(replacement)||[];newBin.push(mesh);bins.set(replacement,newBin);}
  });
@@ -199,6 +239,6 @@ export function finishManufacturedChamber(k){
    mat.color.setHex(0xb2c0b4);mat.roughness=.88;mat.metalness=.025;mat.envMap=null;mat.envMapIntensity=.45;wallMaterials.add(mat);
   }
  });
- const result=Object.freeze({revision:50,foldedPanels,springWinding,wallFinishes:wallMaterials.size,mineralDecks:mineral.decks,staticContactJoints:mineral.contactJoints,mineralTriangles:mineral.triangles,extraLights:0,perFrameCallbacks:0});
+ const result=Object.freeze({revision:66,foldedPanels,springWinding,wallCassettes,wallFinishes:wallMaterials.size,mineralDecks:mineral.decks,staticContactJoints:mineral.contactJoints,mineralTriangles:mineral.triangles,structuralColumns:structural.columns,structuralColumnTriangles:structural.triangles,extraLights:0,perFrameCallbacks:0});
  k.manufacturedFinish=result;k.world.root.userData.manufacturedFinish=result;return result;
 }

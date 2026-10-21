@@ -1,3 +1,4 @@
+import {installVisualAuditMiddleKit} from './LabVisualAuditMiddle.js';
 import * as THREE from 'three';
 import {Workshop,V} from './LabWorkshopKit.js';
 import {buildRoom28Tides} from './LabRoom28Tides.js';
@@ -51,6 +52,7 @@ export function buildRoom28(game,index=27){
  const b=k.slider('lagoon-float',[14,0,0],[14,6,0],{width:8.8,depth:7.8,portal:false,asset:19,assetSize:3.2});
  const tide=buildRoom28Tides(k,{a,b,ports:[{panel:lowA,basin:0},{panel:lowB,basin:1},{panel:highA,basin:0},{panel:overflow,basin:0},{panel:highB,basin:1}]});
  const art=buildRoom28Art(k,tide);
+ installVisualAuditMiddleKit(k,28);
  const level=k.finish([0,0,17],[3,.55,16],[-22,5.3,0],{workshop:k,portalPuzzle:true});
  level.tidalPresentation=art;
  const dispose=level.dispose;level.dispose=()=>{art.dispose();dispose?.();};

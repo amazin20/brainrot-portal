@@ -1,3 +1,4 @@
+import {installVisualAuditMiddleKit} from './LabVisualAuditMiddle.js';
 import * as THREE from 'three';
 import { Workshop } from './LabWorkshopKit.js';
 import { cargoLoadsPlate } from './LabPlateContact.js';
@@ -149,6 +150,7 @@ export function buildRoom21(game,index=20) {
   k.control('cassette-brake',[-16.7,4,-12.2],()=>cassette.toggleBrake(),
     'Тормоз кассеты. Груз опускает её; противовес поднимает освобождённую поверхность.');
   addPocketExitMarker(k,[12,18,-8]);
+ installVisualAuditMiddleKit(k,21);
   const level=k.finish([-9,10,13],[-4,10.55,13],[12,18,-8],{
     workshop:k,spec:ROOM21_SPEC,portalPuzzle:true,cassette,serviceCar,
     puzzleGeometry:{revision:'clean-slate-cassette-1',footprint:44*36,

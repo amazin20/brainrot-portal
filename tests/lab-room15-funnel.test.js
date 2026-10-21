@@ -100,19 +100,21 @@ test('funnel respects its radius, body clearance and a thin wall parallel to its
  assert.ok(field.acceleration(p,v).x<0,'The field brakes excess momentum');assert.deepEqual(p,copyP);assert.deepEqual(v,copyV);
 });
 
-test('visible tube and workshop lifecycle use the same traced segments and shut down together',()=>{
+test('visible radius and soft tracers use the same physical path, reverse and shut down together',()=>{
  const {field,kit}=fixture();assert.equal(kit.ticks.length,1);assert.equal(kit.renders.length,1);assert.equal(kit.resets.length,1);
  const first=field.root.children[0];assert.equal(first.visible,true);
- const before=first.children[1].rotation.y;kit.ticks[0](.2);assert.notEqual(first.children[1].rotation.y,before);
+ const before=field.airflow.distance;kit.ticks[0](.2);assert.ok(field.airflow.distance>before);
  assert.equal(first.children[0].scale.y,field.segments[0].length);
  field.enabled=false;kit.ticks[0](1/120);assert.equal(field.root.visible,false);assert.deepEqual(field.segments,[]);
  assert.equal(field.acceleration(V(2,1,0),V()).lengthSq(),0);
  field.reversed=true;kit.resets[0]();assert.equal(field.enabled,true);assert.equal(field.reversed,false);assert.equal(field.root.visible,true);
- const particles=field.root.children.find(o=>o.isInstancedMesh);assert.equal(particles.count,180);
- const matrix=new THREE.Matrix4(),position=V();
- for(let i=0;i<particles.count;i++){
-  particles.getMatrixAt(i,matrix);position.setFromMatrixPosition(matrix);
-  assert.ok(position.x>=0&&position.x<=100);
-  assert.ok(Math.hypot(position.y-1,position.z)<field.radius);
+ const a=field.airflow;assert.equal(a.mesh.geometry.instanceCount,180);
+ for(let i=0;i<a.capacity;i++)if(a.shape.getZ(i)>0){
+  const x=a.center.getX(i),y=a.center.getY(i),z=a.center.getZ(i);
+  assert.ok(x>=0&&x<=100);
+  assert.ok(Math.hypot(y-1,z)<field.radius);
+  assert.ok(x-a.shape.getX(i)/2>=-1e-6&&x+a.shape.getX(i)/2<=100+1e-6);
  }
+ const forward=a.distance;field.reversed=true;kit.ticks[0](.2);assert.ok(a.distance<forward);
+ assert.equal(field.acceleration(V(2,1,0),V()).x<0,true);
 });

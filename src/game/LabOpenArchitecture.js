@@ -5,6 +5,7 @@ import {Workshop} from './LabWorkshopKit.js';
 import {SolidAssembly,placeSolidModel} from './LabSolidModels.js';
 import {cargoLoadsPlate} from './LabPlateContact.js';
 import {manufacturedMaterials,finishManufacturedChamber} from './LabManufacturedFinish.js';
+import {dressVisualAuditLate} from './LabVisualAuditLate.js';
 
 const V=(...v)=>new THREE.Vector3(...v),Q=()=>new THREE.Quaternion(),UP=V(0,1,0),Z=V(0,0,1);
 export const OPEN_METRICS=Object.freeze({walkway:8,landing:12,headroom:7,carriage:12,portalWidth:7.6,portalHeight:5.8});
@@ -195,6 +196,7 @@ export class OpenChamber extends Workshop{
   this.routes.push({name:'recovery promenade',width:10,headroom:20});
  }
  finishOpen(spawn,cargo,goal,extra={}){
+  dressVisualAuditLate(this,this.index+1);
   finishManufacturedChamber(this);
   // Pads can sit on a multi-layer deck: register its OWN skin, chassis and
   // closed hull, never nearby pillars or other platforms. The common portal

@@ -138,7 +138,20 @@ export function buildRoom22(game,index=21){
  for(let i=0;i<4;i++)deck('Freight loading stair',15+i*.55,15+(i+1)*.55,1,5,7+(i+1)*.25);
  deck('Freight loading shelf',17.2,20.4,1,5,8);
  // A genuine stair from the far side of the closed ground throat.
- for(let i=0;i<28;i++){const z=22-i*.5;deck('Freight inspection stair',16,21,z-.5,z,(i+1)*.25);block([18.5,(i+1)*.125,z-.25],[5,(i+1)*.25,.5]);}
+ for(let i=0;i<28;i++){
+  const z=22-i*.5;deck('Freight inspection stair',16,21,z-.5,z,(i+1)*.25);
+  const riser=block([18.5,(i+1)*.125,z-.25],[5,(i+1)*.25,.5]);
+  // The structural block's +Y face was exactly at the walking height, while
+  // the finished tread ends 3 mm below it. Drawing both produced the observed
+  // serrated/dotted bands over every step. Retain every vertex and the full
+  // collision bounds, but submit only the riser's five exposed faces. The
+  // existing tread is now the sole visible upper skin.
+  const geometry=riser.geometry,indices=geometry.index.array,visible=[];
+  for(const group of geometry.groups)if(group.materialIndex!==2)
+   for(let j=group.start;j<group.start+group.count;j++)visible.push(indices[j]);
+  geometry.setIndex(visible);geometry.clearGroups();geometry.name='Freight stair riser / single tread upper skin';
+  riser.userData.singleTreadSkin=true;
+ }
  // The last stair already meets the observation gallery; no coplanar overlay.
  for(let i=0;i<12;i++){const z=-11-i*.5;deck('Reverse inspection stair',9,15,z-.5,z,7+(i+1)*.25);}
  deck('Reverse high viewpoint',3,22,-24,-17,10,0x92b6a3);

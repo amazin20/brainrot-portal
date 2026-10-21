@@ -1,3 +1,4 @@
+import {installVisualAuditMiddleKit} from './LabVisualAuditMiddle.js';
 import * as THREE from 'three';
 import {Workshop,V} from './LabWorkshopKit.js';
 import {configureChapterWorld} from './LabChapterArt.js';
@@ -115,6 +116,7 @@ export function buildRoom30(game,index=29){
  };
  // Start well within the launch garden: the old x=-23 start was only half a
  // metre from its western drop, putting the player's feet on the visual rim.
+ installVisualAuditMiddleKit(k,30);
  const level=k.finish([-17,52,16],[-14.5,52.6,16],[200,28,31],{workshop:k,portalPuzzle:true,kineticCourse:true,playerAcceleration:acceleration,
   getFlightTarget:flightTarget,getShotTargets:()=>Object.values(k.panels).flatMap(p=>[0,1].map(slot=>({panel:p.mesh,slot}))),
   getContextLesson:()=>game.velocityCompanion?.connected&&!game.playerGrounded?['room30-focus',globalThis.matchMedia?.('(pointer:coarse)')?.matches?'↘':'Q',globalThis.matchMedia?.('(pointer:coarse)')?.matches?'Отпусти джойстик: импульс уже набран. Кольца ведут к широкой площадке.':'Отпусти движение: импульс уже набран. Удерживай Q, если нужно прицелиться в полёте.',false]:!game.velocityCompanion?.connected?['room30-stabilizer','E','Закрепи друга рядом: руки останутся свободны для порталов.',false]:game.playerPosition.y<3?['room30-return','↔','Промах — это нижний технический этаж. Две белые возвратные панели поднимут вас обратно.',false]:game.playerPosition.x<30?['room30-choice','↘','Две наклонные чаши ведут на разные острова. Выбери свою траекторию до прыжка.',false]:game.playerPosition.x<145?['room30-outlet','E','На каждом острове свой пульт, колодец и последняя чаша. Поверни свой выход к финишу.',false]:null,

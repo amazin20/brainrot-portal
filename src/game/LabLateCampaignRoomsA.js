@@ -1,3 +1,4 @@
+import {installVisualAuditMiddleKit} from './LabVisualAuditMiddle.js';
 import * as THREE from 'three';
 import {Body,Box,Vec3,Material} from 'cannon-es';
 import {ResearchChamber} from './LabResearchArt.js';
@@ -73,6 +74,7 @@ export function buildFreightRake(game,index,spec){
  // Full stroke lowers the contact shoe and raises the real inspection roof.
  // The stop still catches residual cargo speed; the observer jumps over it
  // to recover the same body before taking the separate western ascent.
+ installVisualAuditMiddleKit(k,31);
  const l=finish(k,[-23,0,23],[-25,.6,21],[18,6,-20],{rack,bridge,dispatch,mouth,intake,inspection,hood,air,spawnView:{yaw:.2,pitch:-.1}},
   {'rake-dispatch':'send the original cargo into an isolated low guide','rake-mouth':'shared freight and air address, too short for the observer','rake-air-intake':'reroute actual air onto the original free body'},
   ['the load is a moving actuator rather than a pressure key','air alone exerts no force on the rack','continued cargo contact produces visible horizontal displacement','the ratchet preserves a real completed bridge after flow ends','full mechanical stroke opens a manufactured inspection face to recover the same actuator','the observer uses a separate ramp to reach the mechanically completed bridge']);

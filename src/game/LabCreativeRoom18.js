@@ -1,3 +1,4 @@
+import {installVisualAuditMiddleKit} from './LabVisualAuditMiddle.js';
 import * as THREE from 'three';
 import {Body,Box,Vec3,Material} from 'cannon-es';
 import {ResearchChamber} from './LabResearchArt.js';
@@ -127,6 +128,7 @@ export function buildCreative18(g,index=17){
  k.label('18 / ЗАМКНУТАЯ ЦЕПЬ',[0,12,23.8],[0,0,-1],22,1.1);
  k.label('ДВЕ ГРАНИ / ОДНА ЦЕПЬ',[-14,4,.95],[0,0,-1],10,.8);
  k.label('РЫЧАГ КЛЕММ',[-9,3,2],[0,0,1],6,.6);
+ installVisualAuditMiddleKit(k,18);
  const l=k.finishResearch([-3,0,20],[-5,.6,19],[0,0,-20],{creativeEarly:18,researchChamber:false,circuit,electrodes,feed,mouth,door,hatch,spawnView:{yaw:.08,pitch:-.05}});
  l.puzzleGeometry={noProgressFlags:true,orders:['contact-then-power','power-before-contact','reverse-partial-stroke'],portalRoles:{'circuit-dispatch':'deliver original free conductor','circuit-contact-cell':'protected contact cell'},deductions:['two opposed physical contacts close a series circuit','current polarity reverses motor work','self-locking thread retains any actual partial door stroke','a linked hatch lets the same original conductor be retrieved']};
  const dispose=l.dispose;l.dispose=()=>{for(const e of electrodes)if(e.body&&circuit.owner?.world)circuit.owner.world.removeBody(e.body);threadGeometry.dispose();contactMaterials.forEach(m=>m.dispose());k.m.copper.dispose();dispose();};return l;

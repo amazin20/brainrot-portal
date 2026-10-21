@@ -23,7 +23,10 @@ function clipSolidRibbon(frame,point,across,normal,low,high){
  * by the player, cargo, camera and muzzle. Rotated floor apertures form a thin
  * stepped curtain rather than filling their entire diagonal bounding box. */
 export function createLightBridge(kit,{origin,direction,span=[0,0,1],width=2.2,length=90,name='Solid light bridge',clipToAperture=Boolean(kit.clipLightApertures)}={}){
- const game=kit.game,w=kit.world,material=new THREE.MeshStandardMaterial({color:0x76e5e8,emissive:0x2295a0,emissiveIntensity:.65,roughness:.4,metalness:.15,transparent:true,opacity:.82});
+ const game=kit.game,w=kit.world,material=new THREE.MeshStandardMaterial({name:'Projected solid light / luminous cyan volume',color:0x35c8de,emissive:0x1595b6,emissiveIntensity:1.25,roughness:.28,metalness:.04,transparent:true,opacity:.93,depthWrite:true});
+ // This is the existing 14cm solid sheet. A stronger cyan body and intrinsic
+ // emission separate it from white ceramic and pale walking decks without
+ // adding a second coplanar skin, light, texture or animated shader clock.
  const subdivisions=12,segmentLimit=6;
  const pieces=Array.from({length:segmentLimit*subdivisions},(_,i)=>{
   const mesh=w.box([0,-40,0],[1,1,1],material,false);mesh.name=`${name} / ${i}`;mesh.visible=false;mesh.userData.portalClearance=false;mesh.userData.keepMaterial=true;

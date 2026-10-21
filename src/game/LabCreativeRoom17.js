@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import {Body,Box,Vec3,Material} from 'cannon-es';
 import {ResearchChamber} from './LabResearchArt.js';
 import {cargoLoadsPlate} from './LabPlateContact.js';
+import {prepareVisualAuditEarlyKit} from './LabVisualAuditEarly.js';
 const V=(...p)=>new THREE.Vector3(...p),Q=()=>new THREE.Quaternion(),Z=V(0,0,1);
 export const CREATIVE_ROOM17_SPEC=Object.freeze({id:'foundation-cable-supported-architecture',title:'Свободный конец',accent:0xe8b775,assets:[1,2,11],
  concept:'Текущая геометрия портального троса несёт свободный конец пола. Друг нагружает настоящий скользящий упор анкера; верхняя и нижняя ветви создают мост и наклонный путь.',
@@ -101,6 +102,7 @@ export function buildCreative17(g,index=16){
  k.label('ОБЗОР 65 см · ГРУЗОВАЯ ЯЧЕЙКА',[-18,-6.3,-13.85],[0,0,1],9,.7);
  k.display([-8,9.6,-3.5],()=>`ОПОРА ${beam.tension.toFixed(0)} Н\nУГОЛ ${THREE.MathUtils.radToDeg(beam.angle).toFixed(1)}°`,7,1.6,[0,0,1]);
  k.routes.push({name:'live horizontal support branch',width:8,headroom:10},{name:'live descending support branch and independent ascent',width:8,headroom:7.2},{name:'dry recovery incline',width:8,headroom:30});
+ prepareVisualAuditEarlyKit(k);
  const l=k.finishResearch([-22,6,12],[-18,6.57,10],[24,6,0],{creativeEarly:17,researchChamber:false,foundationChamber:false,beam,feed,highLead,lowLead,mouth,anchor,retrieval,cargoReceiver,upperDock,lowerDock,start,cheeks,ejector,plungers,cargoOnAnyPad:()=>feed.loaded()||cargoLoadsPlate(g.cargo,g.heldCube,retrieval.getFrame()),spawnView:{yaw:.2,pitch:-.08}});
  l.puzzleGeometry={noProgressFlags:true,recoveryFloor:-10,orders:['upper-branch','lower-branch'],portalRoles:{'support-freight-floor':'original loose endpoint delivery','support-upper-branch':'high current support triangle','support-lower-branch':'lower current support triangle','support-anchor-delivery':'cargo-only side entry into real anchor','support-anchor-cable':'current cable through actual stop eye','support-anchor-floor':'reclaim the grounded original endpoint','support-far-receiver':'cargo-only reunion after permanent landing'},deductions:['the original body loads a real guided stop backed by founded cheeks','current cable direction supplies architectural torque','two continuous support geometries give independent walkable routes','reassigning the same pair removes support without a stored completion bit']};
  const dispose=l.dispose;l.dispose=()=>{ropeMat.dispose();for(const p of plungers)if(p.body&&ejector.owner?.world)ejector.owner.world.removeBody(p.body);dispose();};return l;

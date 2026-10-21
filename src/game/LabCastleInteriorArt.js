@@ -54,10 +54,11 @@ export function installCastleInteriorArt(game,level){
   bronze:new THREE.MeshStandardMaterial({name:'Castle interior / satin cornice bronze',color:0xffffff,roughness:.62,metalness:.36}),
  };
  const matrix=new THREE.Matrix4(),local=new THREE.Matrix4(),quaternion=new THREE.Quaternion();
- function add(field,role,x,y,width,height,depth,projection){
+ function add(field,role,x,y,width,height,depth,projection,angle=0){
   if(width<.1||height<.07)return;
   const center=field.center.clone().addScaledVector(field.right,x);center.y=y;
-  const rect={...field,center,halfWidth:width/2+.10,halfHeight:height/2+.10};
+  const c=Math.abs(Math.cos(angle)),s=Math.abs(Math.sin(angle)),halfWidth=(width*c+height*s)/2,halfHeight=(height*c+width*s)/2;
+  const rect={...field,center,halfWidth:halfWidth+.10,halfHeight:halfHeight+.10};
   // The whole mounted field must be backed by this one fixed slab.
   if(![-1,1].every(u=>[-1,1].every(v=>field.support.containsPoint(center.clone()
    .addScaledVector(field.right,u*rect.halfWidth).addScaledVector(UP,v*rect.halfHeight).addScaledVector(field.normal,-.05)))))return;
@@ -68,13 +69,14 @@ export function installCastleInteriorArt(game,level){
   }))return;
   const position=center.clone().addScaledVector(field.normal,projection-depth/2);
   const basis=new THREE.Matrix4().makeBasis(field.right,UP,field.normal).setPosition(position);
+  quaternion.setFromAxisAngle(Z,angle);
   matrix.multiplyMatrices(basis,local.compose(V(),quaternion,V(width,height,depth)));
   const color=new THREE.Color(role==='bronze'?field.palette.accent:field.palette.wall);
-  if(role==='panel')color.lerp(new THREE.Color(0x344653),.28);
+  if(role==='panel')color.lerp(new THREE.Color(0x344653),.36);
   if(role==='stone')color.lerp(new THREE.Color(0xf3ebda),.37);
   groups[role].push({matrix:matrix.clone(),color});
   mounts.push({id:field.id,role,center:center.toArray(),normal:field.normal.toArray(),right:field.right.toArray(),
-   halfWidth:width/2,halfHeight:height/2,projection,support:field.support.clone()});
+   halfWidth,halfHeight,projection,support:field.support.clone()});
  }
  for(const field of fields){
   const y0=Math.max(field.base+.24,field.center.y-field.height/2+.16),y1=Math.min(field.roof-.3,field.center.y+field.height/2-.16);
@@ -91,8 +93,8 @@ export function installCastleInteriorArt(game,level){
    // and upper balconies; the cap is safely backed and too shallow to stand on.
    for(const side of [-1,1]){
     const px=x+side*(width/2-.17);
-    add(field,'stone',px,(y0+y1)/2,.26,y1-y0,.055,.082);
-    add(field,'bronze',px,y1-.27,.46,.22,.07,.089);
+    add(field,'stone',px,(y0+y1)/2,.38,y1-y0,.055,.082);
+    add(field,'bronze',px,y1-.27,.52,.22,.07,.089);
    }
    if(dado>y0+.9)add(field,'stone',x,dado,width-.44,.18,.06,.078);
    add(field,'stone',x,y1-.10,width-.44,.15,.06,.078);
@@ -103,6 +105,11 @@ export function installCastleInteriorArt(game,level){
     const h=Math.min(3.4,upperTop-upperBottom),cy=upperTop-h/2;
     add(field,'panel',x,cy,width-.84,h,.018,.026);
     add(field,'bronze',x,upperTop-.12,width-1.1,.10,.04,.056);
+    // A pointed vault head is architectural construction, rather than another
+    // emblem pasted on a wall. Both legs stay backed by this exact wall slab.
+    const run=Math.min((width-1.15)*.36,1.4),rise=Math.min(h*.38,1.1),length=Math.hypot(run,rise);
+    const angle=Math.atan2(run,rise);
+    for(const side of [-1,1])add(field,'bronze',x+side*run/2,cy+h*.10+rise/2,.105,length,.045,.067,side*angle);
    }
   }
  }

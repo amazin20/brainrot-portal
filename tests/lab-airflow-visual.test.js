@@ -55,3 +55,10 @@ test('low graphics samples the entire path, reset is complete, invalid budgets f
  f.reset();f.render();assert.equal(f.mesh.visible,false);assert.equal(f.distance,0);assert.ok(f.shape.array.every(n=>n===0));
  assert.throws(()=>f.step(-1,1),RangeError);assert.throws(()=>new LabAirflowVisual(new THREE.Group(),{capacity:0}),RangeError);dispose(f);
 });
+test('long and reversed currents keep tracers on the complete physical path without portal-spanning tails',()=>{
+ const f=fx();f.setPath([segment([0,2,0],[1,0,0],100)]);f.step(0,1);f.step(.5,1);f.render(1);
+ assert.ok(Array.from({length:f.capacity},(_,i)=>f.shape.getZ(i)>0?f.center.getX(i):0).some(x=>x>90));
+ const distance=f.distance;f.step(.1,1,{direction:-1});assert.ok(f.distance<distance);f.render(1);
+ for(let i=0;i<f.capacity;i++)if(f.shape.getZ(i)>0){const x=f.center.getX(i),span=f.shape.getX(i);assert.ok(x-span/2>=-1e-6&&x+span/2<=100+1e-6);}
+ assert.throws(()=>f.step(0,1,{direction:0}),RangeError);dispose(f);
+});

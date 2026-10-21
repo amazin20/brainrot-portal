@@ -1,3 +1,4 @@
+import {installVisualAuditMiddleKit} from './LabVisualAuditMiddle.js';
 import {Workshop} from './LabWorkshopKit.js';
 import {buildRoom23Balance} from './LabRoom23Mechanics.js';
 import {buildRoom23PhysicalPrototype} from './LabRoom23PhysicalPrototype.js';
@@ -36,6 +37,7 @@ export function buildRoom23(game,index=22){
  k.control('balance-brake',[7.4,10,4.5],()=>{balance.braked=!balance.braked;},'E — тормоз обеих кабин');
  k.control('balance-coupling',[-13.3,0,5.6],()=>{balance.coupling=balance.coupling==='west'?'east':'west';},'E — связать противовес с этой кабиной');
  k.control('ground-brake-release',[-18,0,11],()=>{balance.braked=false;},'E — освободить общий тормоз для возврата кабин');
+ installVisualAuditMiddleKit(k,23);
  const level=k.finish([-17,0,15],[-11,.6,3],[0,20,-20],{workshop:k,spec:ROOM23_SPEC,portalPuzzle:true,balance,cargoOnAnyPad:()=>balance.west.loaded()||balance.east.loaded()||k.pads.some(p=>p.loaded())||(!game.heldCube&&Math.abs(game.cargo.position.y-10.45)<.3&&Math.abs(game.cargo.position.x)<3&&game.cargo.position.z<-5&&game.cargo.position.z>-11)});
  level.spawnView={yaw:0,pitch:-.15};
  level.mechanismArt={liftSurfaces:['west-load-car','east-load-car']};

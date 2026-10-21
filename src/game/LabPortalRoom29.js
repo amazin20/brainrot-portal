@@ -1,3 +1,4 @@
+import {installVisualAuditMiddleKit} from './LabVisualAuditMiddle.js';
 import * as THREE from 'three';
 import {createGuideRing,createCrystal,createPlanter,placeSolidModel} from './LabSolidModels.js';
 import {Workshop,V} from './LabWorkshopKit.js';
@@ -80,6 +81,7 @@ export function buildRoom29(game,index=28){
  // Keep the investigation space between landmarks free; no scattered low-poly shards.
  placeSolidModel(k,createPlanter('inversion'),[-1,0,18],{scale:1.2});
  placeSolidModel(k,createPlanter('inversion'),[-1,20.8,18],{scale:1.2,quaternion:new THREE.Quaternion().setFromAxisAngle(V(1,0,0),Math.PI)});
+ installVisualAuditMiddleKit(k,29);
  const level=k.finish([2,0,15.5],[-13.5,.55,12.5],[17,9,-13],{workshop:k,portalPuzzle:true,visualProfile:'inversion'});
  level.spawnView={yaw:.55,pitch:-.15};
  level.puzzleGeometry={footprint:44*44,goalHeight:9,safeFloor:0,noProgressFlags:true,orders:['split-ceiling-route','direct-garden-catch'],portalRoles:{'root-ceiling':'launch the original free companion through the visible detector','crown-ceiling':'receive the small body in a low ceiling passage','observatory-return':'the human-scale return from the observation garden','garden-return':'high receiver behind a cargo-released mechanical shutter, also a direct cargo outlet when crown gravity points down'},deductions:['gravity changes the free companion, not the observer','the same landmark is both a floor and a ceiling','a low upper passage connects the companion route to an otherwise isolated garden','the free companion crossing the upper root detector releases a physical shutter','the observation ribbon reveals a different portal route','one pair can be borrowed after the ceiling traveller has reached solid support','reversing a finite field before arrival catches the directly routed traveller'],gravityChangesPlayer:false};

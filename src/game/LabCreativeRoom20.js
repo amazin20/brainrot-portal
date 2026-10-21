@@ -1,3 +1,4 @@
+import {installVisualAuditMiddleKit} from './LabVisualAuditMiddle.js';
 import * as THREE from 'three';
 import {ResearchChamber} from './LabResearchArt.js';
 import {buildRoom20NearHook} from './LabRoom20NearHook.js';
@@ -142,6 +143,7 @@ export function buildCreative20(g,index=19){
  k.label('БЛИЖНИЙ КРЮК · ОСВОБОЖДЕНИЕ',[3.5,4.8,5.0],[0,0,1],8,.7);
  k.label('СТОПОР ЗУБА · СЕРВИСНЫЙ ВХОД',[8,5,-6],[0,0,1],9,.7);
  k.routes.push({name:'continuous ground passage and far service return',width:8,headroom:6.5},{name:'charge-only double sight slit',width:8,headroom:.64,walkable:false});
+ installVisualAuditMiddleKit(k,20);
  const l=k.finishResearch([3,0,23],[-3,0.6,23],[16,0,23],{creativeEarly:20,researchChamber:false,foundationChamber:false,rope,nearHook,leaf,returnLeaf,tie,tooth,stopFinger:stop,feed,recovery,outlet,inspection,pocketSight,spawnView:{yaw:0,pitch:-.1}});
  l.puzzleGeometry={noProgressFlags:true,recoveryFloor:0,portalRoles:{'rope-loading-floor':'free freight and source cable fairlead','rope-weight-outlet':'guarded high freight and far cable fairlead'},orders:['cargo-first','scout-first'],mechanism:'unilateral current-aperture cable, passive slip near-hook, one massive train with passive one-way opening dashpot and CANNON retaining-finger contact'};
  const dispose=l.dispose;l.dispose=()=>{stop.dispose();nearHook.dispose();cableMaterial.dispose();dispose();};

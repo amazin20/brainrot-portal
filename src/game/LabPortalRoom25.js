@@ -1,3 +1,4 @@
+import {installVisualAuditMiddleKit} from './LabVisualAuditMiddle.js';
 import * as THREE from 'three';
 import {Workshop} from './LabWorkshopKit.js';
 import {opticalPhysicalLift as opticalLift} from './LabRoom25PhysicalLift.js';
@@ -184,6 +185,7 @@ export function buildRoom25(game,index=24){
  for(const x of [-9.6,-4.4])w.box([x,4.5,12],[.12,9,.15],w.materials.trim,false);
  const shadowHall=finishShadowHall(k,optical);
  const readability=buildRoom25Readability(k,{pad,optical,passengers:[first,second]});
+ installVisualAuditMiddleKit(k,25);
  const level=k.finish([-17,0,10],[-15,.55,9],[-16,7,22],{workshop:k,portalPuzzle:true,cargoOnAnyPad:()=>optical.machine.loaded});
  level.mechanismSurfaces={'shadow-counterweight':surface};
  level.dispose=()=>{readability.dispose();optical.machine.dispose();first.dispose();second.dispose();};

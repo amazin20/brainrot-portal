@@ -1,3 +1,4 @@
+import {installVisualAuditMiddleKit} from './LabVisualAuditMiddle.js';
 import * as THREE from 'three';
 import {ResearchChamber} from './LabResearchArt.js';
 import {movingMechanismBlock} from './LabLateCampaignMechanisms.js';
@@ -102,6 +103,7 @@ export function buildSiphonObservatory(g,index=32,spec=SIPHON_OBSERVATORY_SPEC){
  });
  k.resets.push(()=>{circuit.reset();displaced=0;levelHeight=circuit.surface;lift.stations[1].y=0;lift.reset();});
  k.display([-10,17,-28.4],()=>`БАК ${circuit.surface.toFixed(2)} м / КОЛЕНО ${circuit.crest.toFixed(2)} м\n${circuit.primed?'КОЛОННА БЕЗ ВОЗДУХА':'В КОЛЕНЕ ВОЗДУХ'} / ЛИФТ ${circuit.height.toFixed(1)} м`,15,1.7);
+ installVisualAuditMiddleKit(k,33);
  const l=k.finishResearch([9,0,15],[11,.6,18],[20,top,-20],{postCampaign:false,researchChamber:false,openChamber:false,siphonObservatory:true,circuit,lift,basket,bulkhead,tank,loading,drop,passage,arrival,resetControl,getDisplacement:()=>displaced,spawnView:{yaw:.32,pitch:.04}});
  l.puzzleGeometry={noProgressFlags:true,recoveryFloor:0,orders:['load-then-ride','miss-lift-and-recirculate'],portalRoles:{'siphon-loading':'send the original body into the elevated liquid','siphon-cargo-inlet':'inclined narrow mouth and physical glass chute admit cargo but exclude the upright observer','siphon-archive-entry':'freed pair crosses the upper archive','siphon-archive-exit':'return both travellers after the hydraulic ascent'},deductions:['volume displacement reaches the dry crest','a flooded column drains below its priming height','a check valve holds actual ram volume','the service motor recirculates water rather than resetting actors','reclaim the original cargo and reuse the same portal pair']};
  l.getContextLesson=()=>['siphon-observatory','ЛКМ / ПКМ · E',spec.description,false];return l;

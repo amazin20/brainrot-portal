@@ -3,6 +3,26 @@ import * as THREE from 'three';
 const V = (...v) => new THREE.Vector3(...v);
 const clamp = THREE.MathUtils.clamp;
 
+/** The uploaded bridge shares smoothed normals between its wide steel sheets
+ * and dark perimeter rolls. Those normals bend a nearly planar deck into a
+ * quilted/mattress highlight. Restore the machined sheet normals on the local
+ * copies only: positions, source triangles, colours, ray heights and physical
+ * slices are unchanged. Curved bearings retain their authored smooth normals. */
+export function finishBridgeSheetNormals(geometry){
+  const p=geometry.attributes.position,n=geometry.attributes.normal;
+  if(!p||!n||geometry.index)return 0;
+  const a=V(),b=V(),c=V(),face=V();let sheets=0;
+  for(let i=0;i<p.count;i+=3){
+    a.fromBufferAttribute(p,i);b.fromBufferAttribute(p,i+1);c.fromBufferAttribute(p,i+2);
+    face.crossVectors(b.sub(a),c.sub(a)).normalize();
+    // Broad top and underside skins only. Avoid faceting the casing's rounded
+    // sides, rails, gaskets or the small lamps in the same imported primitive.
+    if(Math.abs(face.y)<.985)continue;
+    const y=Math.sign(face.y);for(let k=0;k<3;k++)n.setXYZ(i+k,0,y,0);sheets++;
+  }
+  n.needsUpdate=true;geometry.userData.bridgeMachinedSheets=sheets;return sheets;
+}
+
 // The derived GLBs' old Frame/Moving split was a spatial mask, not a rig:
 // it moved a spring's end bearing and half of the bridge cassette. Work in
 // normalized game.model(id, 1) space and keep every supplied triangle rigid.
@@ -31,6 +51,7 @@ function assembly(game, parent, id, { position, size, yaw }, moves) {
       const indexed = geometry.clone(); indexed.setIndex(ids);
       const piece = indexed.toNonIndexed(); indexed.dispose();
       piece.scale(size, size, size); piece.computeBoundingBox(); piece.computeBoundingSphere();
+      if(id===37)finishBridgeSheetNormals(piece);
       const mesh = new THREE.Mesh(piece, node.material);
       mesh.receiveShadow = true; mesh.castShadow = node.castShadow;
       mesh.name = part ? 'Supplied moving triangles' : 'Supplied stationary triangles';

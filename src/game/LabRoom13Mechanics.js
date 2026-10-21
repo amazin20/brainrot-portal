@@ -30,7 +30,7 @@ export function weightedOptics(k,pad,north,south){
  w.box([-11.15,7.7,0],[2.3,.14,.18],w.materials.trim,false);
  const receivers=[V(-10,8,-9),V(-10,8,9)];
  const lamps=receivers.map((p,i)=>ringDevice(w,p.toArray(),[0,0,i?-1:1],0xf0d69a,1.05));
- const optical={angle:Math.PI/4,velocity:0,segments:[],loaded:false,receivers:[false,false],update(dt){
+ const optical={pivot,plate,angle:Math.PI/4,velocity:0,segments:[],loaded:false,receivers:[false,false],update(dt){
   optical.loaded=pad.loaded()||pad.player();const target=optical.loaded?-Math.PI/4:Math.PI/4;
   // The load rotates a damped spring mirror; intermediate angles really scan
   // the walls rather than selecting a receiver by puzzle ID.

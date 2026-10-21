@@ -12,6 +12,7 @@ import {createMockYandexSDKSource} from './lib/yandex-review-sdk.mjs';
 import {installPinnedYandexChecker,captureYandexChecker} from './lib/yandex-debug-checker.mjs';
 import {activate} from './lib/singularity-ui-check.mjs';
 import {QUALITY_PRESETS} from '../src/game/LabPreferences.js';
+import {RELEASE_VERSION} from '../src/game/ReleaseIdentity.js';
 
 const scopes={sourceAccepted:false,publicationAccepted:false,liveSdkAccepted:false,liveAdsAccepted:false,moderationAccepted:false,physicalPhoneTest:false,hardwareFpsMeasured:false};
 const git=args=>execFileSync('git',args,{encoding:'utf8'}).trim();
@@ -30,7 +31,7 @@ function bindPackage(directory,archive,packageReport){
  assert.equal(packaged.sourceInputsSha256,info.sourceInputsSha256);assert.equal(packaged.compressedBytes,zip.length);assert.equal(packaged.sha256,sha256(zip));
  assert.deepEqual(walkFiles(directory).map(filename=>{const bytes=fs.readFileSync(filename);return{filename:path.relative(directory,filename).split(path.sep).join('/'),bytes:bytes.length,sha256:sha256(bytes)};}),packaged.files);
  assert.ok(!files.some(row=>/Journey|debugcheck|yandex-games-debug-checker/.test(row.path)));
- assert.equal(info.version,'v65-checker-readiness');assert.equal(info.levels,51);
+ assert.equal(info.version,RELEASE_VERSION);assert.equal(info.levels,51);
  return{localDiagnostic:local,sourceCommit:commit,sourceTree:tree,runId,runAttempt,sourceInputsSha256:info.sourceInputsSha256,
   packageFilesSha256:info.packageFilesSha256,buildInfoBytes:stamp.length,buildInfoSha256:sha256(stamp),files,
   archive:{name:path.basename(archive),bytes:zip.length,sha256:sha256(zip)}};
@@ -112,9 +113,9 @@ function assertReady(state){
  for(const type of Object.values(actual.qaHooks))assert.equal(type,'undefined');assert.equal(state.mockLog.filter(row=>row.event==='ready').length,1);assert.equal(state.mockLog.filter(row=>row.event==='start').length,0);
 }
 
-export async function runCheckerReadinessQA({directory=process.env.YANDEX_DIR||'dist-yandex',archive=process.env.YANDEX_ARCHIVE||'qa/v65-yandex/brainrot-portal-v65-yandex.zip',packageReport=process.env.YANDEX_PACKAGE_REPORT||'qa/v65-yandex/report.json',outputDirectory=process.env.OUT_DIR||'qa/checker-readiness'}={}){
+export async function runCheckerReadinessQA({directory=process.env.YANDEX_DIR||'dist-yandex',archive=process.env.YANDEX_ARCHIVE||`qa/${RELEASE_VERSION.split('-')[0]}-yandex/brainrot-portal-${RELEASE_VERSION.split('-')[0]}-yandex.zip`,packageReport=process.env.YANDEX_PACKAGE_REPORT||`qa/${RELEASE_VERSION.split('-')[0]}-yandex/report.json`,outputDirectory=process.env.OUT_DIR||'qa/checker-readiness'}={}){
  const binding=bindPackage(directory,archive,packageReport),out=path.resolve(outputDirectory);fs.mkdirSync(out,{recursive:true});assert.deepEqual(fs.readdirSync(out),[]);
- const report={kind:'v65-production-ready-and-recovery',pass:false,...scopes,binding,cases:[],errors:[],scope:'Exact extracted production ZIP; explicit local SDK, unchanged original checker on positive startup, independent rAF/menu/ready observations and native Play/retry. No live SDK/ad or physical device approval.'};let browser;
+ const report={kind:'production-ready-and-recovery',version:RELEASE_VERSION,pass:false,...scopes,binding,cases:[],errors:[],scope:'Exact extracted production ZIP; explicit local SDK, unchanged original checker on positive startup, independent rAF/menu/ready observations and native Play/retry. No live SDK/ad or physical device approval.'};let browser;
  const save=()=>write(path.join(out,'report.json'),report);
  try{
   const{default:puppeteer}=await import('puppeteer-core');browser=await puppeteer.launch({executablePath:process.env.CHROME_PATH||'/usr/bin/google-chrome',headless:process.env.CHROME_HEADLESS==='shell'?'shell':true,protocolTimeout:180000,args:['--no-sandbox','--disable-dev-shm-usage','--use-angle=swiftshader','--enable-unsafe-swiftshader']});

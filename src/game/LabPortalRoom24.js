@@ -1,3 +1,4 @@
+import {installVisualAuditMiddleKit} from './LabVisualAuditMiddle.js';
 import * as THREE from 'three';
 import {Workshop} from './LabWorkshopKit.js';
 import {configureChapterWorld} from './LabChapterArt.js';
@@ -205,6 +206,7 @@ export function buildRoom24(game,index=23){
   placeSolidModel(k,createPlanter('garden'),p);
  for(const x of [-23,-17])block([x,13,-19],[.24,6,.24],yellow);for(const z of [-22,-19,-16])block([-20,15.8,z],[6.4,.24,.32],yellow);
  const atelier=buildGardenAtelier(k,k.panels);
+ installVisualAuditMiddleKit(k,24);
  const level=k.finish([15,0,18],[11,.55,18],[16,15,-18],{workshop:k,spec:ROOM24_SPEC,portalPuzzle:true,gardenDoor:door});
  level.gardenAtelier=atelier;
  level.spawnView={yaw:.4,pitch:-.1};level.puzzleGeometry={footprint:2304,occupiedHeights:[0,6,11,15],goalHeight:15,orders:['carry-through','counterweight'],noProgressFlags:true,portalRoles:{'balcony-entry':'manual route from the south balcony through the orbiting door','garden-counterweight':'the original weight becomes its own return aperture','garden-entry':'stable entrance below the rotating door','revolving-door':'one persistent portal changes the courtyard it faces','pavilion-receiver':'a high reverse view into the gold pavilion'},deductions:['a portal retains the moving architectural face','a worm drive or a live counterweight can move the same doorway to a separate courtyard','the courtyard brake preserves orientation after the weight leaves','a floor aperture recovers that same weight','the folded stair exposes the pavilion from its reverse side']};

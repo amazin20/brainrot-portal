@@ -1,3 +1,4 @@
+import {installVisualAuditMiddleKit} from './LabVisualAuditMiddle.js';
 import {Workshop} from './LabWorkshopKit.js';
 import {buildRoom27Conveyors} from './LabRoom27Conveyors.js';
 import {configureChapterWorld} from './LabChapterArt.js';
@@ -49,6 +50,7 @@ export function buildRoom27(game,index=26){
  k.control('upper-reverse',[22,8,13],()=>{belts.reversed=!belts.reversed;},'E — реверс всех лент');
  k.control('upper-brake',[8.8,8,13],()=>{belts.braked=!belts.braked;},'E — общий тормоз лент');
  const roomArt=dressRoom27(k);
+ installVisualAuditMiddleKit(k,27);
  const level=k.finish([-20,0,15.8],[-17,.55,19.8],[-18,8,0],{workshop:k,spec:ROOM27_SPEC,portalPuzzle:true,playerAcceleration:(p,v)=>belts.acceleration(p,v,{grounded:game.playerGrounded})});
  level.spawnView={yaw:-.3,pitch:-.22};
  level.roomArt=roomArt;

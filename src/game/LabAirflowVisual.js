@@ -12,9 +12,9 @@ const UP = new THREE.Vector3(0, 1, 0);
  * A fixed-size instanced buffer is reused at every render (including portals).
  */
 export class LabAirflowVisual {
-  constructor(parent, { capacity = 180, speed = 5.6, radius = .42 } = {}) {
-    if (!Number.isInteger(capacity) || capacity < 12 || capacity > 512 || !Number.isFinite(speed) || speed <= 0 || !Number.isFinite(radius) || radius <= 0) throw new RangeError('Invalid airflow visual budget');
-    this.capacity = capacity; this.speed = speed; this.radius = radius;
+  constructor(parent, { capacity = 180, speed = 5.6, radius = .42, opacity = 1 } = {}) {
+    if (!Number.isInteger(capacity) || capacity < 12 || capacity > 512 || !Number.isFinite(speed) || speed <= 0 || !Number.isFinite(radius) || radius <= 0 || !Number.isFinite(opacity) || opacity < 0 || opacity > 1) throw new RangeError('Invalid airflow visual budget');
+    this.capacity = capacity; this.speed = speed; this.radius = radius; this.opacity = opacity;
     this.distance = this.previousDistance = this.time = this.previousTime = 0;
     this.strength = this.previousStrength = 0; this.path = []; this.length = 0;
     this._p = V(); this._q = new THREE.Quaternion(); this._temp = V();
@@ -72,11 +72,11 @@ export class LabAirflowVisual {
     this.reset();
   }
 
-  step(dt, strength) {
-    if (!Number.isFinite(dt) || dt < 0 || !Number.isFinite(strength)) throw new RangeError('Finite airflow time and strength required');
+  step(dt, strength, { direction = 1 } = {}) {
+    if (!Number.isFinite(dt) || dt < 0 || !Number.isFinite(strength) || (direction !== 1 && direction !== -1)) throw new RangeError('Finite airflow time, strength and unit direction required');
     this.previousDistance = this.distance; this.previousTime = this.time; this.previousStrength = this.strength;
     this.strength = THREE.MathUtils.clamp(strength, 0, 1);
-    this.time += dt; this.distance += dt * this.speed * (.5 + .5 * (this.previousStrength + this.strength) / 2);
+    this.time += dt; this.distance += direction * dt * this.speed * (.5 + .5 * (this.previousStrength + this.strength) / 2);
   }
 
   /** Path is rebuilt only from committed tracing data, with no per-particle raycast. */
@@ -110,8 +110,9 @@ export class LabAirflowVisual {
     const count = quality === 'low' ? Math.round(this.capacity * .55) : this.capacity;
     this.mesh.geometry.instanceCount = count;
     this.mesh.visible = strength > .005 && this.length > .02;
+    const period = Math.max(83, this.length + .6);
     for (let i = 0; i < count; i++) {
-      const seed = this.seeds[Math.floor(i * this.capacity / count)], progress = mod(distance + seed.phase, 83) - .6;
+      const seed = this.seeds[Math.floor(i * this.capacity / count)], progress = mod(distance + seed.phase * period / 83, period) - .6;
       const s = this.path.find(p => progress >= p.start && progress < p.start + p.length);
       if (!this.mesh.visible || !s) { this.shape.setXYZW(i, 0, 0, 0, 0); continue; }
       const local = progress - s.start, remaining = s.length - local;
@@ -122,7 +123,7 @@ export class LabAirflowVisual {
       const curl = seed.angle + time * .34 + progress * .24;
       this._p.copy(s.a).addScaledVector(s.direction, local)
         .addScaledVector(s.right, Math.cos(curl) * envelope).addScaledVector(s.up, Math.sin(curl) * envelope);
-      const opacity = seed.alpha * strength * smooth(0, .14, local) * smooth(0, .20, remaining)
+      const opacity = seed.alpha * this.opacity * strength * smooth(0, .14, local) * smooth(0, .20, remaining)
         * (.78 + .22 * Math.sin(time * 1.3 + seed.angle) ** 2);
       this.center.setXYZ(i, this._p.x, this._p.y, this._p.z);
       this.tangent.setXYZ(i, s.direction.x, s.direction.y, s.direction.z);

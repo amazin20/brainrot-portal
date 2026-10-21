@@ -30,7 +30,8 @@ export function parsePlatformRouteLevels(value){
  for(const room of result)assert.ok(Number.isSafeInteger(room)&&room>=1&&room<=51,'Stable level outside 1–51');return result;
 }
 
-export function bindPlatformReviewPackages({sourceRoot=process.cwd(),directory='dist-yandex-review',consumerDirectory='dist'}={}){
+export function bindPlatformReviewPackages({sourceRoot=process.cwd(),directory='dist-yandex-review',consumerDirectory='dist',localDiagnostic=false}={}){
+ assert.ok(!localDiagnostic||process.env.GITHUB_ACTIONS!=='true','CI evidence cannot opt out of its actual run identity');
  const root=path.resolve(sourceRoot),commit=git(root,['rev-parse','HEAD']),tree=git(root,['rev-parse','HEAD^{tree}']);
  assert.match(commit,/^[a-f0-9]{40}$/);assert.match(tree,/^[a-f0-9]{40}$/);
  if(process.env.BUILD_COMMIT||process.env.GITHUB_SHA)assert.equal(commit,process.env.BUILD_COMMIT||process.env.GITHUB_SHA);
@@ -50,11 +51,11 @@ export function bindPlatformReviewPackages({sourceRoot=process.cwd(),directory='
  assert.notEqual(review.packageFilesSha256,consumer.packageFilesSha256,'Declare the distinct TEST Yandex package; do not relabel consumer bytes');
  const journeys=review.files.filter(file=>/^assets\/LabV8Journey-[A-Za-z0-9_-]+\.js$/.test(file.path));assert.equal(journeys.length,1,'One actual compiled QA ordinary-input route is required');
  const controllerFiles=controllerPaths.map(filename=>{const bytes=fs.readFileSync(path.join(root,filename));assert.deepEqual(bytes,execFileSync('git',['show','HEAD:'+filename],{cwd:root}));return{path:filename,bytes:bytes.length,sha256:sha256(bytes)};});
- return {kind:'yandex-review-campaign-package-binding',...openScopes,source:{commit,tree,sourceInputsSha256,sourceInputFiles:sourceInputs.length},
+ return {kind:'yandex-review-campaign-package-binding',localDiagnostic,...openScopes,source:{commit,tree,sourceInputsSha256,sourceInputFiles:sourceInputs.length},
   controller:{commit,tree,files:controllerFiles,filesSha256:sha256(JSON.stringify(controllerFiles)),trackedWorkingTreeClean:true},
-  runId:positive(process.env.GITHUB_RUN_ID,'GITHUB_RUN_ID'),runAttempt:positive(process.env.GITHUB_RUN_ATTEMPT,'GITHUB_RUN_ATTEMPT'),
-  sourceReviewRunId:positive(process.env.SOURCE_REVIEW_RUN_ID||review.info.run,'SOURCE_REVIEW_RUN_ID'),
-  sourceReviewRunAttempt:positive(process.env.SOURCE_REVIEW_RUN_ATTEMPT||process.env.GITHUB_RUN_ATTEMPT,'SOURCE_REVIEW_RUN_ATTEMPT'),
+  runId:localDiagnostic?null:positive(process.env.GITHUB_RUN_ID,'GITHUB_RUN_ID'),runAttempt:localDiagnostic?null:positive(process.env.GITHUB_RUN_ATTEMPT,'GITHUB_RUN_ATTEMPT'),
+  sourceReviewRunId:localDiagnostic?(review.info.run||null):positive(process.env.SOURCE_REVIEW_RUN_ID||review.info.run,'SOURCE_REVIEW_RUN_ID'),
+  sourceReviewRunAttempt:localDiagnostic?null:positive(process.env.SOURCE_REVIEW_RUN_ATTEMPT||process.env.GITHUB_RUN_ATTEMPT,'SOURCE_REVIEW_RUN_ATTEMPT'),
   review:{...review,info:undefined},consumer:{...consumer,info:undefined},journey:journeys[0],checker:YANDEX_CHECKER_PIN};
 }
 

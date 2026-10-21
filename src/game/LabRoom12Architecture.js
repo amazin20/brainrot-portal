@@ -175,13 +175,18 @@ export function buildRoom12Architecture(world) {
       axis === 'x' ? [coordinate + side * offset, y + dy, u + right * du]
         : [u + right * du, y + dy, coordinate + side * offset],
       axis === 'x' ? [.007, h, w] : [w, h, .007], color);
-    rectangle(solid, 0, -step * 4.35, width, .045, paint);
+    // A complete opaque instrument plaque closes the decorative louvres
+    // behind the stencil. The lettering used to sit naked over the door's
+    // vents and read like text accidentally superimposed on a source model.
+    // Both the plaque and paint are on this same actual closed wall face.
+    rectangle(solid, 0, 0, width+.24, step*8.3, 0x263f48, .018);
+    rectangle(solid, 0, -step * 4.35, width, .045, paint, .029);
     [...text].forEach((letter,n) => GLYPHS[letter]?.forEach((row,r) => {
       for (let c = 0; c < row.length;) {
         if (row[c] !== '1') {c++; continue;}
         const start = c; while (row[c] === '1') c++;
         rectangle(lettering, -width / 2 + (n * 6 + (start + c) / 2) * step,
-          (3 - r) * step, (c - start) * step, step * .88, 0xd0d5c4);
+          (3 - r) * step, (c - start) * step, step * .88, 0xe2e3d2, .029);
       }
     }));
     mountedLabels.push(text);

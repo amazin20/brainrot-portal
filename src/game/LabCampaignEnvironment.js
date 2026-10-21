@@ -216,7 +216,10 @@ function buildMotif(batch,site,id){
  * Animation moves dim ornamental beads, never a lamp, obstacle or signal. */
 export function installCampaignEnvironment(game,level,theme){
  if(level.campaignEnvironment||!CAMPAIGN_ORNAMENTS[theme.id])return level;
- const sites=campaignOrnamentSites(game,level,{limit:game.quality?.shadows===false?8:12});
+ // One small set of chapter landmarks is enough. Repeating twelve emblems
+ // across bare walls made the room kit look stamped and competed with the
+ // machines. The castle retains its separate navigational wing identities.
+ const sites=campaignOrnamentSites(game,level,{limit:theme.id==='castle'?(game.quality?.shadows===false?8:12):4});
  if(!sites.length)return level;
  const parent=level.structure||level.world?.root||level.workshop?.world?.root;if(!parent)return level;
  const root=new THREE.Group();root.name='Chapter architectural relief';root.userData.visualOnly=true;root.userData.keepMaterial=true;

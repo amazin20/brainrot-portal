@@ -48,6 +48,11 @@ import {upgradeBrowser3DArt} from './LabBrowser3DArt.js';
 import {applyPremiumBrowser3DArt} from './LabBrowser3DPremium.js';
 import {applyMechanismReflections} from './LabMechanismReflections.js';
 import {batchStaticSurfaceFinishes} from './LabStaticSurfaceBatches.js';
+import {finishVisualAuditEarly} from './LabVisualAuditEarly.js';
+import {finishVisualAuditMiddle} from './LabVisualAuditMiddle.js';
+import {finishVisualAuditLate} from './LabVisualAuditLate.js';
+import {finishVisualAuditCastle} from './LabVisualAuditCastle.js';
+import {finishVisualAudit} from './LabVisualAuditFinish.js';
 
 const withArtAssets=(spec,...extra)=>({...spec,assets:[...new Set([...spec.assets,...extra])]});
 const ROOM13_ART_SPEC=withArtAssets(ROOM13_SPEC,19,29);
@@ -102,5 +107,11 @@ export function campaignSpec(game,index){
 export function buildLabCampaignLevel(game,index){
  const before=new Set(game.scene.children);
  const level=buildUnthemedCampaignLevel(game,index);
- return installOpticsArt(game,installBiosphereArt(game,installSecondChapterArt(game,installFirstChapterArt(game,finishCampaignTheme(game,level,index,game.scene.children.filter(root=>!before.has(root))),index))));
+ const roots=game.scene.children.filter(root=>!before.has(root));
+ installOpticsArt(game,installBiosphereArt(game,installSecondChapterArt(game,installFirstChapterArt(game,finishCampaignTheme(game,level,index,roots),index))));
+ finishVisualAuditEarly(game,level,index,roots);
+ finishVisualAuditMiddle(game,level,index,roots);
+ finishVisualAuditLate(game,level,index,roots);
+ finishVisualAuditCastle(game,level,index,roots);
+ return finishVisualAudit(game,level,index,roots);
 }

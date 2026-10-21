@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import {conveyorChevronGeometry} from './LabVisualAuditMiddle.js';
 const V=(x=0,y=0,z=0)=>new THREE.Vector3(x,y,z);
 /** A moving contact surface. The room supplies tangential friction only while
  * the real feet/body touch a belt; neither positions nor portal speed are set. */
@@ -19,9 +20,11 @@ export function buildRoom27Conveyors(k){
   const count=Math.ceil((z1-z0)/.72),rollers=new THREE.InstancedMesh(new THREE.CylinderGeometry(.16,.16,width,8),rollerMaterial,count),m=new THREE.Matrix4(),q=new THREE.Quaternion().setFromAxisAngle(V(0,0,1),Math.PI/2);
   for(let i=0;i<count;i++){m.compose(V(x,y-.23,z0+(i+.5)*(z1-z0)/count),q,V(1,1,1));rollers.setMatrixAt(i,m);}
   rollers.name=name+' visible underside rollers';preserve(rollers);w.root.add(rollers);rollers.computeBoundingSphere();
-  const slats=new THREE.InstancedMesh(new THREE.BoxGeometry(width-.3,.025,.1),stripes,count);slats.name=name+' travelling belt slats';preserve(slats);w.root.add(slats);slats.frustumCulled=false;
+  const slats=new THREE.InstancedMesh(conveyorChevronGeometry(width),stripes,count);slats.name=name+' travelling belt slats';preserve(slats);w.root.add(slats);slats.frustumCulled=false;
+  const directionRotation=new THREE.Quaternion(),unitScale=V(1,1,1),position=V();
   k.renders.push((alpha=1)=>{const length=z1-z0,offset=((b.renderFrom+b.renderStep*alpha)%length+length)%length;
-   for(let i=0;i<count;i++){const z=z0+((i+.5)*length/count+offset)%length;m.makeTranslation(x,y+.017,z);slats.setMatrixAt(i,m);}slats.instanceMatrix.needsUpdate=true;});
+   directionRotation.setFromAxisAngle(V(0,1,0),system.reversed?0:Math.PI);
+   for(let i=0;i<count;i++){const z=z0+((i+.5)*length/count+offset)%length;m.compose(position.set(x,y+.017,z),directionRotation,unitScale);slats.setMatrixAt(i,m);}slats.instanceMatrix.needsUpdate=true;});
   return b;
  }
  function contact(p,radius=0){return bands.find(b=>b.active&&Math.abs(p.y-b.y)<.18&&Math.abs(p.x-b.x)<b.width/2-radius*.35&&p.z>b.z0-.1&&p.z<b.z1+.1);}
