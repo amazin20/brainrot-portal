@@ -1,0 +1,66 @@
+{
+  "schemaVersion": 1,
+  "kind": "visual-audit-v66-source-freeze",
+  "predecessorSource": "f4d140ef5e1a962f145313f8333aba8de2d3e63d",
+  "predecessorTree": "c7c88a3cb526020c72b9fa70b061f309124a4833",
+  "gameInputsSha256": "aba54fc02da7d6e4431a420830d6160e867b149a9df35f8ab4bff05837e860de",
+  "scope": {
+    "sourceAndTestFilesChanged": 48,
+    "campaignRooms": 51,
+    "castleSections": 12,
+    "releaseVersion": "v66-visual-audit"
+  },
+  "changes": [
+    "Closed machine housings, structural supports and readable live instruments across all campaign chapters",
+    "Rigid dock10 and founded receiver frame with preserved inner apertures",
+    "Recessed closed risers21/22 and antialiased closed deck/portal plates30",
+    "Active physical room23 machine dressing",
+    "Actual physical Box ray queries for rotated impact shards47 and ordinary navigation through the broken opening",
+    "Preserved service-floor physics with one visible top skin",
+    "Castle projector, visible tank gauges and coil windings, flywheel inspection windows and internal casings"
+  ],
+  "localFrozenBuild": {
+    "pass": true,
+    "reportSha256": "093bd5586b8f677710103adf113b4abe05ebbdef9b0c117ec0176f5c0b525c74",
+    "packages": [
+      {
+        "directory": "dist",
+        "sourceInputsSha256": "aba54fc02da7d6e4431a420830d6160e867b149a9df35f8ab4bff05837e860de",
+        "packageFilesSha256": "23e54a63565cdfd672d607fad4fd89b138859ecacdcef1c3ec3c9ae71272caf5",
+        "totalBytes": 7197127
+      },
+      {
+        "directory": "dist-yandex",
+        "sourceInputsSha256": "aba54fc02da7d6e4431a420830d6160e867b149a9df35f8ab4bff05837e860de",
+        "packageFilesSha256": "5a203a74acf27de279d4824f47504d0a66b3ceab9875a67d7b2ec5b27deb8872",
+        "totalBytes": 6830885
+      },
+      {
+        "directory": "dist-yandex-review",
+        "sourceInputsSha256": "aba54fc02da7d6e4431a420830d6160e867b149a9df35f8ab4bff05837e860de",
+        "packageFilesSha256": "1c26e4994d4779bd100a08403047094a7cb2a459925ff5f630660cbc58957345",
+        "totalBytes": 7198249
+      }
+    ]
+  },
+  "reviewState": {
+    "fullLocalCpuSuite": "in progress on predecessorSource",
+    "all51OriginalCheckerRoutes": "in progress on predecessorSource",
+    "all51NativeVisualSets": "in progress on predecessorSource",
+    "critical14NativeSets": "capture passed; assistant visual review in progress",
+    "githubCi": "no run observed on predecessorSource; no CI acceptance claimed"
+  },
+  "evidencePolicy": {
+    "originalCheckerUnchanged": true,
+    "warningsNotSuppressed": true,
+    "localReportsKeepTheirActualSourceIdentity": true,
+    "sourceAccepted": false,
+    "assistantVisualAccepted": false,
+    "publicationAccepted": false,
+    "humanPlaytest": false,
+    "liveSdkAccepted": false,
+    "moderationAccepted": false,
+    "physicalPhonePerformanceAccepted": false
+  }
+}
+
