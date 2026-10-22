@@ -1,0 +1,192 @@
+{
+  "kind": "independent-root-v67-public-acceptance",
+  "pass": true,
+  "sourceAccepted": true,
+  "publicationAccepted": true,
+  "reviewer": "Codex",
+  "acceptedAt": "2026-10-22T01:51:17.444861+00:00",
+  "sourceCommit": "cebc83f5066fe819d3439dc50ad38f15f357ad22",
+  "sourceTree": "e72288cfc34aaa43eff24d8abd9ac2f3e43845c2",
+  "sourceReview": {
+    "runId": 39700325617,
+    "runAttempt": 1
+  },
+  "publicationRun": 39707212260,
+  "publicationRunAttempt": 1,
+  "publicationController": "d5a989f5df1b365b9cd494cb235ff82a94d6952a",
+  "publicationControllerTree": "11d4360f015b7c408bf0659a93b2c4fadf07e8a8",
+  "controllerParent": "2c6b787e29d81bb5e158e047fe38266a9ad6bed3",
+  "publicUrl": "https://amazin20.github.io/brainrot-portal/campaign-v67/",
+  "rootRedirectUrl": "https://amazin20.github.io/brainrot-portal/",
+  "deployment": {
+    "runId": 39707212260,
+    "runAttempt": 1,
+    "id": 7241604142,
+    "sha": "d5a989f5df1b365b9cd494cb235ff82a94d6952a",
+    "state": "success"
+  },
+  "publicJobs": [
+    {
+      "id": 119589954641,
+      "name": "prepare",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 119590417952,
+      "name": "deploy",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 119590576170,
+      "name": "public-http",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 119590576186,
+      "name": "native-smoke",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 119591173992,
+      "name": "verify",
+      "status": "completed",
+      "conclusion": "success"
+    }
+  ],
+  "sourceAcceptance": {
+    "path": "tools/campaign-v67-root-source-acceptance.json",
+    "sha256": "ada5159beb2b0e6de42653ecb76dd22d78d7f7a69bc32f25147cb72aa5167dd7"
+  },
+  "publicCatalog": {
+    "path": "tools/campaign-v67-public-files.json",
+    "sha256": "4d3b9c8041724593793cfa7eac419022bb66cbcd68c28a8f80535937f5846e2a",
+    "files": 2936,
+    "bytes": 724728846,
+    "inventorySha256": "cc88d746d57e42451a9d435d3156c53a6d575d6491d343f0e31d8bd9ce1e0c8d"
+  },
+  "publicationArtifact": {
+    "id": 12394789473,
+    "name": "github-pages",
+    "size_in_bytes": 643147553,
+    "digest": "sha256:8ea4e7d4f141f2ed139494e9a3d61e82cff5686c5d4f50bb2c05804996cdeab9",
+    "created_at": "2026-10-22T01:43:44Z",
+    "expires_at": "2026-10-23T01:43:28Z"
+  },
+  "technicalProof": {
+    "artifact": "v67-final-public-proof",
+    "path": "final-publication.json",
+    "sha256": "1049f52cd88710fe5889536940fd3e7b7bb5ce3f1f2cd63e00ff3a592cc2357e"
+  },
+  "assistantPublicVisualInspection": {
+    "accepted": true,
+    "reviewer": "Codex",
+    "images": [
+      {
+        "artifact": "v67-public-native",
+        "path": "desktop-ordinary-play.jpg",
+        "bytes": 89076,
+        "sha256": "0ba58ade2d53f40d7822e1af1ca3869ed7a93d63b99a6c20d53f5ff959bc6a13"
+      },
+      {
+        "artifact": "v67-public-native",
+        "path": "desktop-actual-game-canvas.png",
+        "bytes": 452708,
+        "sha256": "a1e7d3c267ead5600fe2858f047463f8df6e7653f3b2cb3ce2a2a5f08a284af7"
+      },
+      {
+        "artifact": "v67-public-native",
+        "path": "mobile-ordinary-play.jpg",
+        "bytes": 55128,
+        "sha256": "6999cd31c64ee0bd5354c1caa9313ba92557c3af9d048d4114774adf78df40e2"
+      },
+      {
+        "artifact": "v67-public-native",
+        "path": "mobile-actual-game-canvas.png",
+        "bytes": 218290,
+        "sha256": "cbc6d58172204070d0ffd8c67650f7f6c072d495507518603fe4275800ed5a63"
+      }
+    ],
+    "observations": [
+      "Root personally opened all4 actual public desktop/touch full-HUD and separately captured WebGL images; actual models, formed architecture, readable HUD and touch buttons are visible.",
+      "Both fresh guests retained only first-room access despite the late link; ordinary Play, pause, atlas return and root redirect passed."
+    ],
+    "humanPlaytest": false
+  },
+  "verification": {
+    "unitTests": 3046,
+    "unitFiles": 391,
+    "unitFailures": 0,
+    "unitSkipped": 0,
+    "sourceWonRoutes": 51,
+    "testHintTransactions": 153,
+    "assistantReviewedSourceLevels": 51,
+    "sourceNativeCaptureImages": 374,
+    "publicHttpFiles": 2936,
+    "rootAdditionalCurrentConsumerHttpFiles": 80,
+    "desktopAndEmulatedTouchCases": 2,
+    "originalCheckerPerLevel": {
+      "PASS": 78,
+      "FAIL": 0,
+      "WARN": 3,
+      "N/V": 1
+    },
+    "originalCheckerWarningsPreserved": true,
+    "realPublicSdkOrAdsAcceptance": false
+  },
+  "rootEntryChange": {
+    "path": "index.html",
+    "newTarget": "campaign-v67/",
+    "originalRootBytesPreservedAt": "campaign-v67/release/history/root-index-before-v67.html",
+    "otherHistoricalPathsByteIdentical": 2853
+  },
+  "evidence": [
+    {
+      "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39707212260-publish-attempt-1/root-api-provider.json",
+      "bytes": 41026,
+      "sha256": "347275b3c6fd92df12c81462bc50bdee08c5db664568709f746619f094943fdc"
+    },
+    {
+      "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39707212260-publish-attempt-1/independent-public-proof-verification.json",
+      "bytes": 12750,
+      "sha256": "6e2c8102ae4bc55cfc6af4812642e09cb016f1bd1da40265a59926f9bc76bc68"
+    },
+    {
+      "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39707212260-publish-attempt-1/root-live-current-consumer-http.json",
+      "bytes": 721,
+      "sha256": "65b116169640900ee93fb3aacca41e1e84662bcaa7e80325da5714a78e191f41"
+    },
+    {
+      "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39707212260-publish-attempt-1/v67-preparation/preparation.json",
+      "bytes": 788990,
+      "sha256": "645efe7dd501060bcd08bd5e2d69907048f687befbb8dc4f21a5cf74cbc10159"
+    },
+    {
+      "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39707212260-publish-attempt-1/v67-public-http/public-http.json",
+      "bytes": 14012,
+      "sha256": "e1632f423415f2cca1fbd11b0a07215ed0c82ae82726911c459c6cd8fc28a6f1"
+    },
+    {
+      "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39707212260-publish-attempt-1/v67-public-native/public-browser-report.json",
+      "bytes": 20227,
+      "sha256": "a7f17209771e8251142e401031aeafa61b726aff83ea72569c9033ed7c19d763"
+    },
+    {
+      "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39707212260-publish-attempt-1/v67-final-public-proof/final-publication.json",
+      "bytes": 67228,
+      "sha256": "1049f52cd88710fe5889536940fd3e7b7bb5ce3f1f2cd63e00ff3a592cc2357e"
+    }
+  ],
+  "scope": "Acceptance of this exact-source visual correction pass and public delivery. Codex source visual review covers actual final CI screenshots or exact identity to specifically inspected pixels; artistic/capture limits remain in its source summary. Source routes used mock SDK; public smoke used ordinary actual response bodies. No human, full public campaign replay, live Yandex/ads, moderation, physical phone or full master-TZ acceptance.",
+  "masterTzAccepted": false,
+  "humanPlaytest": false,
+  "liveSdkAccepted": false,
+  "liveAdsAccepted": false,
+  "moderationAccepted": false,
+  "physicalPhonePerformanceAccepted": false,
+  "hardwareFpsMeasured": false,
+  "publicFullCampaignReplay": false
+}
