@@ -1,0 +1,3058 @@
+{
+  "schemaVersion": 1,
+  "kind": "root-accepted-scoped-static-visual-review",
+  "status": "accepted-visual-correction-pass-with-recorded-limits",
+  "sourceCommit": "cebc83f5066fe819d3439dc50ad38f15f357ad22",
+  "sourceTree": "e72288cfc34aaa43eff24d8abd9ac2f3e43845c2",
+  "runId": 39700325617,
+  "runAttempt": 1,
+  "sourceAccepted": true,
+  "publicationAccepted": false,
+  "humanVisualAccepted": false,
+  "humanPlaytestAccepted": false,
+  "technicalRunAccepted": true,
+  "liveSdkAccepted": false,
+  "liveAdsAccepted": false,
+  "moderationAccepted": false,
+  "hardwareFpsMeasured": false,
+  "finalRootVisualDecision": "accepted-scoped-pass",
+  "reviewerType": "Codex agents; no human reviewer is asserted",
+  "scope": "Root accepts this visual correction pass using attributed Codex inspections of actual final CI images or exact identity to specifically inspected pixels. All51 scopes and374 original pins are retained. Recorded artistic/capture limits remain. No human, complete master-TZ or public-delivery acceptance is implied.",
+  "bindingEvidence": {
+    "contactIndexPath": "contact-sheets/index.json",
+    "contactIndexBytes": 89879,
+    "contactIndexSha256": "1401ef61be5bea3a3a0f38591c60be6ade5b261896d981752a755715a1dcab41",
+    "sourceLinkagePath": "source-linkage.json",
+    "reviewNotePins": [
+      {
+        "path": "root-castle-visual-notes.json",
+        "bytes": 5371,
+        "sha256": "38c05514087bceabe25668f670430e888400250dbf8cb568c45d4136f1e652da"
+      },
+      {
+        "path": "late-independent-visual-notes.json",
+        "bytes": 17986,
+        "sha256": "743a60fb030dcd2631d9f3fb3c6a6bd268a10fbc6fdacf714deb52209f2c7f52"
+      }
+    ],
+    "byteComparisonPath": "image-byte-comparison-to-39695420787.json",
+    "byteComparisonBytes": 218720,
+    "byteComparisonSha256": "81b82ab103bc7affc2b377479a9c628da86d53950ca2d7139bda2e50211a8233",
+    "rootImagePinVerification": {
+      "path": "root-final-image-pin-verification.json",
+      "bytes": 798,
+      "sha256": "bdee06d3b1b2d6cce446a1306ade547b1afcc68bad7917017bb29375b8152b27",
+      "scope": "Root independently rehashed all374 actual original image pins including51 native HUDs; root additionally opened final room17 nativeHUD, room18 contact sheet and room25 contact sheet. Delegated chapter judgments remain attributed to their Codex reviewers; this does not claim root personally inspected every final view."
+    }
+  },
+  "coverage": {
+    "expectedStableLevels": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      47,
+      48,
+      49,
+      50,
+      51
+    ],
+    "capturedStableLevels": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      47,
+      48,
+      49,
+      50,
+      51
+    ],
+    "pendingCaptureStableLevels": [],
+    "completeAll51Capture": true,
+    "originalSceneImageCount": 323,
+    "nativeHUDImageCount": 51,
+    "allOriginalImagesRehashed": 374,
+    "delegatedReviewPendingStableLevels": [],
+    "completeAll51DelegatedStaticReview": true
+  },
+  "comparisonToExact0eCI": {
+    "baselineSourceCommit": "0e091f77af4643d881b5aec290857510985dd4d5",
+    "baselineSourceTree": "98688f84984d8f94b70f2c67957cf336fcfd4f53",
+    "baselineRunId": 39695420787,
+    "baselineRunAttempt": 1,
+    "baselineDirectory": "../39695420787-attempt-1",
+    "method": "Compare SHA256 of every original JPG including native HUD to the matching exact 0e CI relative path. Changed counts mean byte changes, not visual failures. These counts are distinct from a reviewer’s mixed personally reviewed baseline reconciliation.",
+    "chapters": [
+      {
+        "chapter": "castle",
+        "artifact": "v67-visual-castle",
+        "originalImageCount": 24,
+        "same": 24,
+        "changed": 0,
+        "changedByRoom": {},
+        "changedOriginalPaths": [],
+        "comparisonVerifiedByDraftPreparer": true
+      },
+      {
+        "chapter": "early",
+        "artifact": "v67-visual-early",
+        "originalImageCount": 68,
+        "same": 44,
+        "changed": 24,
+        "changedByRoom": {
+          "3": 5,
+          "5": 6,
+          "8": 7,
+          "9": 6
+        },
+        "changedOriginalPaths": [
+          "v67-visual-early/room-03/player-start.jpg",
+          "v67-visual-early/room-03/oblique.jpg",
+          "v67-visual-early/room-03/opposite.jpg",
+          "v67-visual-early/room-03/route-far.jpg",
+          "v67-visual-early/room-03/player-start-hud.jpg",
+          "v67-visual-early/room-05/player-start.jpg",
+          "v67-visual-early/room-05/oblique.jpg",
+          "v67-visual-early/room-05/opposite.jpg",
+          "v67-visual-early/room-05/clear-layout.jpg",
+          "v67-visual-early/room-05/route-mid.jpg",
+          "v67-visual-early/room-05/player-start-hud.jpg",
+          "v67-visual-early/room-08/player-start.jpg",
+          "v67-visual-early/room-08/oblique.jpg",
+          "v67-visual-early/room-08/opposite.jpg",
+          "v67-visual-early/room-08/clear-layout.jpg",
+          "v67-visual-early/room-08/route-mid.jpg",
+          "v67-visual-early/room-08/route-far.jpg",
+          "v67-visual-early/room-08/player-start-hud.jpg",
+          "v67-visual-early/room-09/player-start.jpg",
+          "v67-visual-early/room-09/oblique.jpg",
+          "v67-visual-early/room-09/clear-layout.jpg",
+          "v67-visual-early/room-09/route-mid.jpg",
+          "v67-visual-early/room-09/route-far.jpg",
+          "v67-visual-early/room-09/player-start-hud.jpg"
+        ],
+        "comparisonVerifiedByDraftPreparer": true
+      },
+      {
+        "chapter": "energy",
+        "artifact": "v67-visual-energy",
+        "originalImageCount": 70,
+        "same": 59,
+        "changed": 11,
+        "changedByRoom": {
+          "17": 4,
+          "18": 7
+        },
+        "changedOriginalPaths": [
+          "v67-visual-energy/room-17/player-start.jpg",
+          "v67-visual-energy/room-17/oblique.jpg",
+          "v67-visual-energy/room-17/opposite.jpg",
+          "v67-visual-energy/room-17/player-start-hud.jpg",
+          "v67-visual-energy/room-18/player-start.jpg",
+          "v67-visual-energy/room-18/oblique.jpg",
+          "v67-visual-energy/room-18/opposite.jpg",
+          "v67-visual-energy/room-18/clear-layout.jpg",
+          "v67-visual-energy/room-18/route-mid.jpg",
+          "v67-visual-energy/room-18/route-far.jpg",
+          "v67-visual-energy/room-18/player-start-hud.jpg"
+        ],
+        "comparisonVerifiedByDraftPreparer": true
+      },
+      {
+        "chapter": "fracture",
+        "artifact": "v67-visual-fracture",
+        "originalImageCount": 70,
+        "same": 56,
+        "changed": 14,
+        "changedByRoom": {
+          "42": 5,
+          "46": 2,
+          "48": 7
+        },
+        "changedOriginalPaths": [
+          "v67-visual-fracture/room-42/player-start.jpg",
+          "v67-visual-fracture/room-42/oblique.jpg",
+          "v67-visual-fracture/room-42/opposite.jpg",
+          "v67-visual-fracture/room-42/route-mid.jpg",
+          "v67-visual-fracture/room-42/player-start-hud.jpg",
+          "v67-visual-fracture/room-46/oblique.jpg",
+          "v67-visual-fracture/room-46/route-far.jpg",
+          "v67-visual-fracture/room-48/player-start.jpg",
+          "v67-visual-fracture/room-48/oblique.jpg",
+          "v67-visual-fracture/room-48/opposite.jpg",
+          "v67-visual-fracture/room-48/clear-layout.jpg",
+          "v67-visual-fracture/room-48/route-mid.jpg",
+          "v67-visual-fracture/room-48/route-far.jpg",
+          "v67-visual-fracture/room-48/player-start-hud.jpg"
+        ],
+        "comparisonVerifiedByDraftPreparer": true
+      },
+      {
+        "chapter": "living",
+        "artifact": "v67-visual-living",
+        "originalImageCount": 70,
+        "same": 65,
+        "changed": 5,
+        "changedByRoom": {
+          "25": 5
+        },
+        "changedOriginalPaths": [
+          "v67-visual-living/room-25/player-start.jpg",
+          "v67-visual-living/room-25/oblique.jpg",
+          "v67-visual-living/room-25/opposite.jpg",
+          "v67-visual-living/room-25/route-far.jpg",
+          "v67-visual-living/room-25/player-start-hud.jpg"
+        ],
+        "comparisonVerifiedByDraftPreparer": true
+      },
+      {
+        "chapter": "optics",
+        "artifact": "v67-visual-optics",
+        "originalImageCount": 72,
+        "same": 64,
+        "changed": 8,
+        "changedByRoom": {
+          "35": 6,
+          "40": 2
+        },
+        "changedOriginalPaths": [
+          "v67-visual-optics/room-35/player-start.jpg",
+          "v67-visual-optics/room-35/clear-layout.jpg",
+          "v67-visual-optics/room-35/route-far.jpg",
+          "v67-visual-optics/room-35/extra-review-detail.jpg",
+          "v67-visual-optics/room-35/extra-observatory-drive.jpg",
+          "v67-visual-optics/room-35/player-start-hud.jpg",
+          "v67-visual-optics/room-40/opposite.jpg",
+          "v67-visual-optics/room-40/route-far.jpg"
+        ],
+        "comparisonVerifiedByDraftPreparer": true
+      }
+    ],
+    "totalOriginalImages": 374,
+    "same": 312,
+    "changed": 62
+  },
+  "delegatedCodexReviews": [
+    {
+      "reviewerAgent": "/root/observatory_art_v67",
+      "stableLevels": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "status": "complete-no-hard-blocker-reported",
+      "basis": "All 68 final original JPGs independently rehashed. 33 match personally reviewed 0e CI, 23 match personally reviewed LOCAL58b; all 12 remaining new final originals directly viewed. Earlier personal reviews include every scene view and every native HUD.",
+      "mixedPersonalBaselineReconciliation": {
+        "sameTo0eCI": 33,
+        "sameToLocal58b": 23,
+        "directlyViewedNewFinalOriginals": 12,
+        "sameToEitherPersonalBaseline": 56,
+        "localSourceCommit": "58b01b321c26d522fed755f4dff3f856ef21d27d",
+        "localSourceTree": "e523e70438d86c60c3bd57ce4afcfca28b1c9b23",
+        "localDiagnostic": true
+      },
+      "finding": "Final sign hierarchy3, clean warm cabin/single floor5, stair fix7, founded landing8, grouped workbay9 and rigid dock10 retained. No hard visual blocker in this static scope."
+    },
+    {
+      "reviewerAgent": "/root/room23_route_advisor",
+      "stableLevels": [
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17
+      ],
+      "status": "complete-no-hard-blocker-reported",
+      "basis": "All49 actual original JPGs in rooms11–17 independently rehashed against final index; energy archive SHA256 4e7e136fcbcb25d032b7a5c438186a49eec7f30067a1f49674f7e137b1ed585a, providerArtifactId12392912915. All7 final contact sheets (42 scene cells) and7 nativeHUD sheets personally reopened; all4 changed room17 originals individually viewed including actual nativeHUD. Rooms11–16 all42 originals byte-identical to reviewed 0e CI; room17 player-start/oblique/opposite/nativeHUD changed and its other3 originals match 0e.",
+      "finding": "Room17 final native view shows complete main instrument, player, original cargo/feed and beam/receiving shore together. Room12 plaque crisp;13/14 enclosed service casings;14/16 founded stairs and16 route visible. No hard corruption, wrong binding or unreadable native HUD in11–17.",
+      "staticActiveAppearanceLimit": "Room17 copper working branches are correctly hidden at elapsed0/worldStep0 without a portal pair. Their active copper appearance was not visually verified by these static captures.",
+      "retainedSoftLimits": [
+        "Room11 broad empty court and distant receiver.",
+        "Room13 optical ring remains subordinate to tall casing.",
+        "Room15 broad upper landings remain plain.",
+        "Fixed TEST reference cameras remain occluded or close to real walls, especially13 clear-layout,14 oblique,16 opposite/route-far,17 route-mid/route-far."
+      ]
+    },
+    {
+      "reviewerAgent": "/root/middle_art_v67",
+      "stableLevels": [
+        18,
+        19,
+        20
+      ],
+      "status": "complete-no-hard-blocker-reported",
+      "basis": "All21 final originals rehashed against final index. All7 changed room18 originals directly viewed including HUD; all14 room19/20 originals byte-identical to personally reviewed 0e. Final derived sheets and native HUDs also viewed.",
+      "finding": "Room18 cell and thick wall housings clean; room20 traction frame and instrument hierarchy retained. No hard overlap, binding, missing-face or palette blocker in inspected views."
+    },
+    {
+      "reviewerAgent": "/root/middle_art_v67",
+      "stableLevels": [
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30
+      ],
+      "status": "complete-no-hard-blocker-reported",
+      "basis": "Living artifact12394075099/archiveSHA2568094759d50380bd415b079c6b892ba05274d04ca4e7931f7f17dbb29c9956748 independently verified. All70 living originals rehashed against final index;65 match personally reviewed 0e CI and all5 changed room25 originals directly viewed. All7 final room25 originals additionally viewed. With rooms18–20, the reviewer independently verified91/91 originals:79 exact personally reviewed0e matches and all12 changed originals directly viewed (room18 seven, room25 five).",
+      "finding": "Rooms18–30 have no hard visual blocker in captured views. Room25 reverse-slab and room18 casings are closed, correctly bound and consistent in colour. Room22 stairs,23 native caissons and24/28 gardens retained through exact image identity.",
+      "combinedReviewStableLevels": [
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30
+      ],
+      "combinedReviewOriginalImages": 91,
+      "combinedSameToPersonallyReviewed0e": 79,
+      "combinedChangedDirectlyViewed": 12,
+      "retainedSoftLimits": [
+        "Repetitive architectural bays and broad sparse floors.",
+        "Thin supports remain where physical route clearance constrains the envelope.",
+        "Some prescribed QA poses face a real wall or floor.",
+        "Faint narrow shadow-edge speckling remains in room25 route-far, without confirmed z-fighting."
+      ]
+    },
+    {
+      "reviewerAgent": "/root/early_art_v67",
+      "stableLevels": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40
+      ],
+      "status": "complete-no-hard-blocker-reported",
+      "basis": "All72 final original JPGs verified:64 exact 0e matches, all8 changed images re-inspected.",
+      "finding": "Room35 jamb stipple gone; room40 finish marking clearer. No hard blocker in captured views. Some room35 fixed reference views remain wall-occluded."
+    },
+    {
+      "reviewerAgent": "/root",
+      "stableLevels": [
+        41
+      ],
+      "status": "complete-no-hard-blocker-reported",
+      "basis": "Root rehashed all24 final originals against fully viewed 0e set:24/24 exact byte identity. Root additionally opened final nativeHUD and sections3.",
+      "notePath": "root-castle-visual-notes.json",
+      "finding": "No new hard rendering, intersection or readability blocker within inspected castle scope."
+    },
+    {
+      "reviewerAgent": "/root/castle_art_v67",
+      "stableLevels": [
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51
+      ],
+      "status": "complete-no-hard-blocker-reported",
+      "basis": "Exact 0e comparison independently reconciled by root:56 same,14 changed. All14 changed original JPGs covered by fresh room42/46/48 six-view plus nativeHUD review; remaining images reconcile to previously viewed originals.",
+      "notePath": "late-independent-visual-notes.json",
+      "finding": "No visual chapter blocker in static scope; rear housings44/49/50 and fuse panel47 retained, readout42 and formed carriage48 clearer."
+    }
+  ],
+  "knownStylisticAndCaptureLimits": [
+    {
+      "classification": "stylistic",
+      "note": "Spacious courts, sparse floors and repeated architectural bays remain stylistic limits; this is not a claim of flawless bespoke art in every room."
+    },
+    {
+      "classification": "stylistic",
+      "stableLevels": [
+        4,
+        7
+      ],
+      "note": "Long narrow structural support proportions remain within original measured physical envelopes; they were not hidden by unsupported thick visual obstacles."
+    },
+    {
+      "classification": "stylistic",
+      "note": "Distant controls can remain small in broad room views, and some machinery remains visually subordinate to the large architecture."
+    },
+    {
+      "classification": "reference-camera-limitation",
+      "stableLevels": [
+        35
+      ],
+      "note": "Some prescribed fixed reference cameras are wall-occluded; supplementary original section viewpoints cover the device. This is retained explicitly rather than described as universal camera usability."
+    },
+    {
+      "classification": "reference-camera-limitation",
+      "note": "Other prescribed QA views can show a nearby real wall or floor. Static inspection does not establish every reachable ordinary camera view, animation, occlusion or device usability."
+    },
+    {
+      "classification": "stylistic",
+      "stableLevels": [
+        46
+      ],
+      "note": "Minor internal finish strokes remain muted; the broader marked finish field is visible."
+    },
+    {
+      "classification": "static-state-coverage-limit",
+      "stableLevels": [
+        17
+      ],
+      "note": "Room17 copper working branches are correctly hidden at elapsed0/worldStep0 without a portal pair. Their active copper appearance was not visually verified by these static captures."
+    },
+    {
+      "classification": "minor-rendering-observation-unconfirmed-depth-overlap",
+      "stableLevels": [
+        25
+      ],
+      "note": "Reviewer reported faint narrow shadow-edge speckling in route-far. No confirmed z-fighting or hard visual blocker was found; retain the observation without calling it a fixed or absent defect."
+    }
+  ],
+  "currentReportedHardVisualBlockers": [],
+  "pendingBeforeFinalization": [],
+  "artifacts": [
+    {
+      "name": "v67-visual-castle",
+      "providerArtifactId": 12392328959,
+      "archiveBytes": 1947394,
+      "archiveSha256": "1b104b01e30d7ef60b2c9266d1a85d6b01df74166b6e82bcce055c4ae1114e5f",
+      "imageCount": 24,
+      "receiptPath": "v67-visual-castle.verified.json",
+      "originalInventoryBytesRehashed": true,
+      "archiveDigestRehashed": true,
+      "receiptReportsZipCRCVerified": true,
+      "receiptReportsBoundedSafeExtraction": true
+    },
+    {
+      "name": "v67-visual-early",
+      "providerArtifactId": 12391949345,
+      "archiveBytes": 5513276,
+      "archiveSha256": "da846fb74b6615daab1c8939da3718ab1323467220a2712f053b48be908ef66e",
+      "imageCount": 68,
+      "receiptPath": "v67-visual-early.verified.json",
+      "originalInventoryBytesRehashed": true,
+      "archiveDigestRehashed": true,
+      "receiptReportsZipCRCVerified": true,
+      "receiptReportsBoundedSafeExtraction": true
+    },
+    {
+      "name": "v67-visual-energy",
+      "providerArtifactId": 12392912915,
+      "archiveBytes": 5295954,
+      "archiveSha256": "4e7e136fcbcb25d032b7a5c438186a49eec7f30067a1f49674f7e137b1ed585a",
+      "imageCount": 70,
+      "receiptPath": "v67-visual-energy.verified.json",
+      "originalInventoryBytesRehashed": true,
+      "archiveDigestRehashed": true,
+      "receiptReportsZipCRCVerified": true,
+      "receiptReportsBoundedSafeExtraction": true
+    },
+    {
+      "name": "v67-visual-fracture",
+      "providerArtifactId": 12393047861,
+      "archiveBytes": 5344378,
+      "archiveSha256": "631bf6a0499affe08ca9fa9a9d1f5733d7e02ab2a87237716d5743633269fe98",
+      "imageCount": 70,
+      "receiptPath": "v67-visual-fracture.verified.json",
+      "originalInventoryBytesRehashed": true,
+      "archiveDigestRehashed": true,
+      "receiptReportsZipCRCVerified": true,
+      "receiptReportsBoundedSafeExtraction": true
+    },
+    {
+      "name": "v67-visual-living",
+      "providerArtifactId": 12394075099,
+      "archiveBytes": 5821108,
+      "archiveSha256": "8094759d50380bd415b079c6b892ba05274d04ca4e7931f7f17dbb29c9956748",
+      "imageCount": 70,
+      "receiptPath": "v67-visual-living.verified.json",
+      "originalInventoryBytesRehashed": true,
+      "archiveDigestRehashed": true,
+      "receiptReportsZipCRCVerified": true,
+      "receiptReportsBoundedSafeExtraction": true
+    },
+    {
+      "name": "v67-visual-optics",
+      "providerArtifactId": 12392403904,
+      "archiveBytes": 4519833,
+      "archiveSha256": "c1f0390e69ced53cd62d11d5d1272482dc7e5e6090b30977b2547820d66973a4",
+      "imageCount": 72,
+      "receiptPath": "v67-visual-optics.verified.json",
+      "originalInventoryBytesRehashed": true,
+      "archiveDigestRehashed": true,
+      "receiptReportsZipCRCVerified": true,
+      "receiptReportsBoundedSafeExtraction": true
+    }
+  ],
+  "rooms": [
+    {
+      "artifact": "v67-visual-early",
+      "stableLevel": 1,
+      "displayNumber": 1,
+      "sourceCommit": "cebc83f5066fe819d3439dc50ad38f15f357ad22",
+      "sourceTree": "e72288cfc34aaa43eff24d8abd9ac2f3e43845c2",
+      "runId": 39700325617,
+      "runAttempt": 1,
+      "images": [
+        {
+          "path": "v67-visual-early/room-01/player-start.jpg",
+          "sha256": "0200bd91ab06614274ad72986553ed1fd798a5239ab19e63de12d2601ed11efa",
+          "bytes": 83430
+        },
+        {
+          "path": "v67-visual-early/room-01/oblique.jpg",
+          "sha256": "bc12e033fc169b2bc6184f9466a5f38b4fc0081dabb8b37258fcf8291bd1f2be",
+          "bytes": 107450
+        },
+        {
+          "path": "v67-visual-early/room-01/opposite.jpg",
+          "sha256": "6a87aa675b5d81581405912f21f98ce29b81a5716ab8636c2d18e7794feeeee4",
+          "bytes": 96629
+        },
+        {
+          "path": "v67-visual-early/room-01/clear-layout.jpg",
+          "sha256": "2d4facdb8502017a6e6ffa2d52459e32e0a69a33ac07cad59d024f2232dd06d4",
+          "bytes": 58146
+        }
+      ],
+      "nativeHUD": {
+        "path": "v67-visual-early/room-01/player-start-hud.jpg",
+        "sha256": "2744e9cb5d721631720bad83b4514bf6c2cae500ee63a849122a87f8ac43390b",
+        "bytes": 84672
+      }
+    },
+    {
+      "artifact": "v67-visual-early",
+      "stableLevel": 2,
+      "displayNumber": 2,
+      "sourceCommit": "cebc83f5066fe819d3439dc50ad38f15f357ad22",
+      "sourceTree": "e72288cfc34aaa43eff24d8abd9ac2f3e43845c2",
+      "runId": 39700325617,
+      "runAttempt": 1,
+      "images": [
+        {
+          "path": "v67-visual-early/room-02/player-start.jpg",
+          "sha256": "68cd99585f5dc64a74701cc3fa5f190332d61da0b5d1210506c8194b7a92427d",
+          "bytes": 83260
+        },
+        {
+          "path": "v67-visual-early/room-02/oblique.jpg",
+          "sha256": "1bf5558148d81f51cf65f9e0cb7f3a6e57af444d1f160b3452e6fd7bb63dde15",
+          "bytes": 90584
+        },
+        {
+          "path": "v67-visual-early/room-02/opposite.jpg",
+          "sha256": "56a28150f47cdf7f1413cd2d744eab9241b0e354bf972b61ed1a4af1c703d6bc",
+          "bytes": 94067
+        },
+        {
+          "path": "v67-visual-early/room-02/clear-layout.jpg",
+          "sha256": "b6e0a6c2e5886c9ec83cc7d29d711f5d0b60b89647877a2b043ff8b74a821f64",
+          "bytes": 45209
+        },
+        {
+          "path": "v67-visual-early/room-02/route-mid.jpg",
+          "sha256": "590c7e02dcff4815fca080ba7d4da5341ff69e58a853738e0a5ca2cd7a2b5cdd",
+          "bytes": 75890
+        },
+        {
+          "path": "v67-visual-early/room-02/route-far.jpg",
+          "sha256": "590c7e02dcff4815fca080ba7d4da5341ff69e58a853738e0a5ca2cd7a2b5cdd",
+          "bytes": 75890
+        }
+      ],
+      "nativeHUD": {
+        "path": "v67-visual-early/room-02/player-start-hud.jpg",
+        "sha256": "adf38964babae6808ceba3b83b0ccac0bca2c3f6907188f1b3c3aab8e8eda5a8",
+        "bytes": 84464
+      }
+    },
+    {
+      "artifact": "v67-visual-early",
+      "stableLevel": 3,
+      "displayNumber": 3,
+      "sourceCommit": "cebc83f5066fe819d3439dc50ad38f15f357ad22",
+      "sourceTree": "e72288cfc34aaa43eff24d8abd9ac2f3e43845c2",
+      "runId": 39700325617,
+      "runAttempt": 1,
+      "images": [
+        {
+          "path": "v67-visual-early/room-03/player-start.jpg",
+          "sha256": "3f18431507c36f66c5571e04be72fc6ec2ab7a9a54e983a78d1f39e41e034e5c",
+          "bytes": 101064
+        },
+        {
+          "path": "v67-visual-early/room-03/oblique.jpg",
+          "sha256": "a965f211873bf5d74a88c4e32a2443560a47f81d98c98cf53d5e8fc146c3a72c",
+          "bytes": 89938
+        },
+        {
+          "path": "v67-visual-early/room-03/opposite.jpg",
+          "sha256": "94808fb0e92619dcf55bec5cf51151ec298b3d69e0737ba3e91e51c2fd71a088",
+          "bytes": 95019
+        },
+        {
+          "path": "v67-visual-early/room-03/clear-layout.jpg",
+          "sha256": "281f350bc051759ae9bb576f6df5f574921a3cd84351beb0d8cd54b17e06a6de",
+          "bytes": 29311
+        },
+        {
+          "path": "v67-visual-early/room-03/route-mid.jpg",
+          "sha256": "e6ad39cf805aa27fbac2a17c74ad84ee3ba5510e1af77d4315023b01b8507ae1",
+          "bytes": 65079
+        },
+        {
+          "path": "v67-visual-early/room-03/route-far.jpg",
+          "sha256": "d09d6ea72d459f9fc7976fd0a81bb6d91cdf93ac6443fd3956edfd6e0481aa2b",
+          "bytes": 74581
+        }
+      ],
+      "nativeHUD": {
+        "path": "v67-visual-early/room-03/player-start-hud.jpg",
+        "sha256": "6eb90c7697af222ff4ad34fa5262ebcb8bcd3f9070e5049f9b469aec6302fba1",
+        "bytes": 102236
+      }
+    },
+    {
+      "artifact": "v67-visual-early",
+      "stableLevel": 4,
+      "displayNumber": 4,
+      "sourceCommit": "cebc83f5066fe819d3439dc50ad38f15f357ad22",
+      "sourceTree": "e72288cfc34aaa43eff24d8abd9ac2f3e43845c2",
+      "runId": 39700325617,
+      "runAttempt": 1,
+      "images": [
+        {
+          "path": "v67-visual-early/room-04/player-start.jpg",
+          "sha256": "f464b5ba3ff9a3ad1d680676b71363217c1a28d147b3a4d10c2c69659ce132d7",
+          "bytes": 71378
+        },
+        {
+          "path": "v67-visual-early/room-04/oblique.jpg",
+          "sha256": "468f9fa3e82c281ca26112c679aa340c876837709538917ce75de53ed7c494bb",
+          "bytes": 100533
+        },
+        {
+          "path": "v67-visual-early/room-04/opposite.jpg",
+          "sha256": "5ffc5153b4ef4bd0a913d69a0ed3ebb39a4ce55357368836273f82f612847583",
+          "bytes": 81844
+        },
+        {
+          "path": "v67-visual-early/room-04/clear-layout.jpg",
+          "sha256": "4231df7f4ac1d668c0bcee1b8eb7d57a86fff2b5487eee3079cb5c7df9e0358d",
+          "bytes": 34522
+        },
+        {
+          "path": "v67-visual-early/room-04/route-mid.jpg",
+          "sha256": "495db3c33f6601724e0264a9812d389d48fbf2e8933d9e2daa9b7b6fbad5895d",
+          "bytes": 80876
+        },
+        {
+          "path": "v67-visual-early/room-04/route-far.jpg",
+          "sha256": "899e0b47bae3543ac0f6712c77d96ef0e4fb4bf4451c2f86c165ea99a0dde9f8",
+          "bytes": 46890
+        }
+      ],
+      "nativeHUD": {
+        "path": "v67-visual-early/room-04/player-start-hud.jpg",
+        "sha256": "e2d72833f00b62c4bda57dfc0d51c24aff110eff630f95ef3fe775140b052123",
+        "bytes": 72553
+      }
+    },
+    {
+      "artifact": "v67-visual-early",
+      "stableLevel": 5,
+      "displayNumber": 5,
+      "sourceCommit": "cebc83f5066fe819d3439dc50ad38f15f357ad22",
+      "sourceTree": "e72288cfc34aaa43eff24d8abd9ac2f3e43845c2",
+      "runId": 39700325617,
+      "runAttempt": 1,
+      "images": [
+        {
+          "path": "v67-visual-early/room-05/player-start.jpg",
+          "sha256": "1bedaee716f7a054fed19f872a259c5e6a359a91525d6503c57e31fd6450bad1",
+          "bytes": 82217
+        },
+        {
+          "path": "v67-visual-early/room-05/oblique.jpg",
+          "sha256": "48533600e1158be6bb08e8e0ead95ca3f35758077989631ed270353aff7ad88a",
+          "bytes": 102747
+        },
+        {
+          "path": "v67-visual-early/room-05/opposite.jpg",
+          "sha256": "00e2af16ea742ab166fce64baacd7ecccff87ef7d6fd2cac20da4a803631c11e",
+          "bytes": 102395
+        },
+        {
+          "path": "v67-visual-early/room-05/clear-layout.jpg",
+          "sha256": "ac5e1b5f9393feacaa298dfbbe90fd0f4f91a726f0fdd76ff3f350a4a32e0877",
+          "bytes": 40337
+        },
+        {
+          "path": "v67-visual-early/room-05/route-mid.jpg",
+          "sha256": "ac561932b7b1e517b52df57215f1942e98607475271c1e09656a01a9f7b2025e",
+          "bytes": 74798
+        },
+        {
+          "path": "v67-visual-early/room-05/route-far.jpg",
+          "sha256": "f571903224ee2d2eac6a2dffc98498fb1ad8678aa17884a06926a7e3f0120df0",
+          "bytes": 28016
+        }
+      ],
+      "nativeHUD": {
+        "path": "v67-visual-early/room-05/player-start-hud.jpg",
+        "sha256": "d515868fd629903400a9e324d4dd160a7c6ed6b8c03f24f44d85332b2535311a",
+        "bytes": 83675
+      }
+    },
+    {
+      "artifact": "v67-visual-early",
+      "stableLevel": 6,
+      "displayNumber": 6,
+      "sourceCommit": "cebc83f5066fe819d3439dc50ad38f15f357ad22",
+      "sourceTree": "e72288cfc34aaa43eff24d8abd9ac2f3e43845c2",
+      "runId": 39700325617,
+      "runAttempt": 1,
+      "images": [
+        {
+          "path": "v67-visual-early/room-06/player-start.jpg",
+          "sha256": "437217a3ca230d7030226d68b76a466d13ce269acd9eb82d4935fc7728bbbad9",
+          "bytes": 82676
+        },
+        {
+          "path": "v67-visual-early/room-06/oblique.jpg",
+          "sha256": "40d6dba465ec6d09e4839799ca3cf265570d554c570c0c8e77f704650a36a497",
+          "bytes": 114682
+        },
+        {
+          "path": "v67-visual-early/room-06/opposite.jpg",
+          "sha256": "7e29071278216ced399b12f0d284038b287df84ed60e92aab3fa2fc227e71627",
+          "bytes": 47057
+        },
+        {
+          "path": "v67-visual-early/room-06/clear-layout.jpg",
+          "sha256": "1072621b97f3615c76dac884bff22d5f10953332dbf533466639d8300e44e90e",
+          "bytes": 65144
+        },
+        {
+          "path": "v67-visual-early/room-06/route-mid.jpg",
+          "sha256": "f7be31198f355dee65187b543be2f497314dd6f7bc52ae806da251e43418bd08",
+          "bytes": 52571
+        },
+        {
+          "path": "v67-visual-early/room-06/route-far.jpg",
+          "sha256": "df1a461d397fe30dfaf716824153d4097b90c9fee375f7cdb3d6fff4b8cf9e98",
+          "bytes": 76946
+        }
+      ],
+      "nativeHUD": {
+        "path": "v67-visual-early/room-06/player-start-hud.jpg",
+        "sha256": "9bd1da9504a836b1e2e79a691fdd178f434c47a0baf6d81172c7c976a0c8223d",
+        "bytes": 84277
+      }
+    },
+    {
+      "artifact": "v67-visual-early",
+      "stableLevel": 7,
+      "displayNumber": 7,
+      "sourceCommit": "cebc83f5066fe819d3439dc50ad38f15f357ad22",
+      "sourceTree": "e72288cfc34aaa43eff24d8abd9ac2f3e43845c2",
+      "runId": 39700325617,
+      "runAttempt": 1,
+      "images": [
+        {
+          "path": "v67-visual-early/room-07/player-start.jpg",
+          "sha256": "7466fc1a0fa0c84ac1ebf66d192cfc817949745b14c66f03d03676dfae184db7",
+          "bytes": 99379
+        },
+        {
+          "path": "v67-visual-early/room-07/oblique.jpg",
+          "sha256": "a6ea9833caad7f7154860e4949df86e8e4a6798adda58cbcf19fc1c4eb62f386",
+          "bytes": 135400
+        },
+        {
+          "path": "v67-visual-early/room-07/opposite.jpg",
+          "sha256": "8cb00f09c335809fe53bd33d7b88d345707850e504b0cec8d57405ff9d6f625f",
+          "bytes": 97601
+        },
+        {
+          "path": "v67-visual-early/room-07/clear-layout.jpg",
+          "sha256": "439e389d94970caacfa795f0aa07af560e840b7c780e7b645f8114e833dca603",
+          "bytes": 74951
+        },
+        {
+          "path": "v67-visual-early/room-07/route-mid.jpg",
+          "sha256": "ca11a26620416ed7b81698ea782f59167b4622f75cd111d869103d669a1608e3",
+          "bytes": 96074
+        },
+        {
+          "path": "v67-visual-early/room-07/route-far.jpg",
+          "sha256": "e67a16a12e6d347c152738d1520d2ad9bec57ecb1bfc98d4997472448f80578f",
+          "bytes": 111595
+        }
+      ],
+      "nativeHUD": {
+        "path": "v67-visual-early/room-07/player-start-hud.jpg",
+        "sha256": "92b964568ce004005ac1d9dc02ecd28a5b7d760266b80e02f571ffd2b150c753",
+        "bytes": 100824
+      }
+    },
+    {
+      "artifact": "v67-visual-early",
+      "stableLevel": 8,
+      "displayNumber": 8,
+      "sourceCommit": "cebc83f5066fe819d3439dc50ad38f15f357ad22",
+      "sourceTree": "e72288cfc34aaa43eff24d8abd9ac2f3e43845c2",
+      "runId": 39700325617,
+      "runAttempt": 1,
+      "images": [
+        {
+          "path": "v67-visual-early/room-08/player-start.jpg",
+          "sha256": "ec8e9be73d7219e5f6f9aa75766701c226fbae2f5b05d20d1f862120e9cecd8a",
+          "bytes": 107354
+        },
+        {
+          "path": "v67-visual-early/room-08/oblique.jpg",
+          "sha256": "049cc468d996736e115bb6160e4e33c30b9be0182f891fa43b4c2d973c54adc1",
+          "bytes": 111418
+        },
+        {
+          "path": "v67-visual-early/room-08/opposite.jpg",
+          "sha256": "01a5ec4a99597d5cc2d1cc5a4062c561dc2513615188bdae8099790ea52bef3d",
+          "bytes": 112195
+        },
+        {
+          "path": "v67-visual-early/room-08/clear-layout.jpg",
+          "sha256": "92bff32368df68a839cbdf8c8981c95781402dccdb2c761563a304373da91dd9",
+          "bytes": 91868
+        },
+        {
+          "path": "v67-visual-early/room-08/route-mid.jpg",
+          "sha256": "451ead2286b4bac140456cc711b3cb824ebb2a1f7dc858452c2b9d2ef91005d2",
+          "bytes": 72890
+        },
+        {
+          "path": "v67-visual-early/room-08/route-far.jpg",
+          "sha256": "451ead2286b4bac140456cc711b3cb824ebb2a1f7dc858452c2b9d2ef91005d2",
+          "bytes": 72890
+        }
+      ],
+      "nativeHUD": {
+        "path": "v67-visual-early/room-08/player-start-hud.jpg",
+        "sha256": "c2249a4c12b8f49b7a28bb87665f80e854a58ee50efe3201f17a0fc653247d16",
+        "bytes": 108420
+      }
+    },
+    {
+      "artifact": "v67-visual-early",
+      "stableLevel": 9,
+      "displayNumber": 9,
+      "sourceCommit": "cebc83f5066fe819d3439dc50ad38f15f357ad22",
+      "sourceTree": "e72288cfc34aaa43eff24d8abd9ac2f3e43845c2",
+      "runId": 39700325617,
+      "runAttempt": 1,
+      "images": [
+        {
+          "path": "v67-visual-early/room-09/player-start.jpg",
+          "sha256": "41bc1da353a6c5c13128da2aa2c273592ff3bd19b6ef367a29ea792d1e573615",
+          "bytes": 88495
+        },
+        {
+          "path": "v67-visual-early/room-09/oblique.jpg",
+          "sha256": "bceede2133b4dc8f3e37a8ac18ebc3786955751e6ec766b073759e8aac2c5ba1",
+          "bytes": 112893
+        },
+        {
+          "path": "v67-visual-early/room-09/opposite.jpg",
+          "sha256": "498a2ed3ccae57a5f425a47abe0e0e6425d5f4e40ed816cef690633608262b63",
+          "bytes": 46599
+        },
+        {
+          "path": "v67-visual-early/room-09/clear-layout.jpg",
+          "sha256": "34340fe248838d38ae72f96c2700b38e9dffdad8da425da7a1c9bf74eae0b1bc",
+          "bytes": 68252
+        },
+        {
+          "path": "v67-visual-early/room-09/route-mid.jpg",
+          "sha256": "93a17b25d76b774b54fba6e9999e531770bb3511dfa55e44e95aef6dae0500cf",
+          "bytes": 86880
+        },
+        {
+          "path": "v67-visual-early/room-09/route-far.jpg",
+          "sha256": "085f1b61d609b55df667041f356e7cefa989485985dcaff516851ff5240eba82",
+          "bytes": 39767
+        }
+      ],
+      "nativeHUD": {
+        "path": "v67-visual-early/room-09/player-start-hud.jpg",
+        "sha256": "69d712713c90e616bcb4b0eb33f531ee9e647cb291f1ac643cd51da33ff7c387",
+        "bytes": 89861
+      }
+    },
+    {
+      "artifact": "v67-visual-early",
+      "stableLevel": 10,
+      "displayNumber": 10,
+      "sourceCommit": "cebc83f5066fe819d3439dc50ad38f15f357ad22",
+      "sourceTree": "e72288cfc34aaa43eff24d8abd9ac2f3e43845c2",
+      "runId": 39700325617,
+      "runAttempt": 1,
+      "images": [
+        {
+          "path": "v67-visual-early/room-10/player-start.jpg",
+          "sha256": "650d17853c3bdb49403259f59ed74120eecf6b64381c4e9461c6c2f200a1572b",
+          "bytes": 96290
+        },
+        {
+          "path": "v67-visual-early/room-10/oblique.jpg",
+          "sha256": "64c209b6d39e5a065a9cdd97ae2f159630ae9f55dc088bbc9bba7d1c41b8a4f9",
+          "bytes": 126451
+        },
+        {
+          "path": "v67-visual-early/room-10/opposite.jpg",
+          "sha256": "59e00e771ab9deea37bcf7268043f5c63dc19565d7700ccc02529d674e98e1cc",
+          "bytes": 46443
+        },
+        {
+          "path": "v67-visual-early/room-10/clear-layout.jpg",
+          "sha256": "d5806cf9c2c7625763de7051cce40dc746662f67a21cc42c297a096237707bf1",
+          "bytes": 64776
+        },
+        {
+          "path": "v67-visual-early/room-10/route-mid.jpg",
+          "sha256": "e21f4bf68de4414dade3b8262e89b378825b0386b9a4994e8c2f9dce146a1fad",
+          "bytes": 92930
+        },
+        {
+          "path": "v67-visual-early/room-10/route-far.jpg",
+          "sha256": "0383b2457c9eb4acb07211ac39644f865f5fa96badfe4c3db158f342ccf4ab00",
+          "bytes": 77515
+        }
+      ],
+      "nativeHUD": {
+        "path": "v67-visual-early/room-10/player-start-hud.jpg",
+        "sha256": "baee33242ff42756e6d90067a76b7d6cd688e95909f6ff8fc94b6ac731f2e2b3",
+        "bytes": 97431
+      }
+    },
+    {
+      "artifact": "v67-visual-energy",
+      "stableLevel": 11,
+      "displayNumber": 11,
+      "sourceCommit": "cebc83f5066fe819d3439dc50ad38f15f357ad22",
+      "sourceTree": "e72288cfc34aaa43eff24d8abd9ac2f3e43845c2",
+      "runId": 39700325617,
+      "runAttempt": 1,
+      "images": [
+        {
+          "path": "v67-visual-energy/room-11/player-start.jpg",
+          "sha256": "fa1e317c309cec9f9802b38c3758e9dfd2feadae21a7aa120408e42f3d109c1f",
+          "bytes": 104808
+        },
+        {
+          "path": "v67-visual-energy/room-11/oblique.jpg",
+          "sha256": "e0a8744fb7b7c2779f3e0b6b3263acd6fffbcf22b21717cf93e06be20738d2d0",
+          "bytes": 110398
+        },
+        {
+          "path": "v67-visual-energy/room-11/opposite.jpg",
+          "sha256": "06379b70dd4d9f45230b38bf619eee9954b48fa4f4e53de6793a07bb5a37f7f7",
+          "bytes": 51850
+        },
+        {
+          "path": "v67-visual-energy/room-11/clear-layout.jpg",
+          "sha256": "ffff82db356a6c3775163fa1c97791c09ec03f62582401fcaa29c8407d936f2d",
+          "bytes": 57977
+        },
+        {
+          "path": "v67-visual-energy/room-11/route-mid.jpg",
+          "sha256": "ff7bd05ca58274bc040d1af71c983553c62a3e4144291dc5df8e734665df2645",
+          "bytes": 88940
+        },
+        {
+          "path": "v67-visual-energy/room-11/route-far.jpg",
+          "sha256": "0a702f8d789bce5d594164a23796db8a40b4c2432dc8fea222a2e132a1da098a",
+          "bytes": 97381
+        }
+      ],
+      "nativeHUD": {
+        "path": "v67-visual-energy/room-11/player-start-hud.jpg",
+        "sha256": "5898db1f82d70c2ab7d7fe3cccc60b2ce115d9ea8d71abb988321767542c2f08",
+        "bytes": 105860
+      }
+    },
+    {
+      "artifact": "v67-visual-energy",
+      "stableLevel": 12,
+      "displayNumber": 12,
+      "sourceCommit": "cebc83f5066fe819d3439dc50ad38f15f357ad22",
+      "sourceTree": "e72288cfc34aaa43eff24d8abd9ac2f3e43845c2",
+      "runId": 39700325617,
+      "runAttempt": 1,
+      "images": [
+        {
+          "path": "v67-visual-energy/room-12/player-start.jpg",
+          "sha256": "2f1db82cb2e00643d23d7a72c1a8fb9af6acf7f1e05dc8f85c47aa8eea9a4f51",
+          "bytes": 96796
+        },
+        {
+          "path": "v67-visual-energy/room-12/oblique.jpg",
+          "sha256": "15f7730b67f37024ba6a783e37b6ad086139d224b259c874c2720e7f57b74de3",
+          "bytes": 70015
+        },
+        {
+          "path": "v67-visual-energy/room-12/opposite.jpg",
+          "sha256": "47518a6d88a7e075ff351e41da7a84a8e2094aadfb2b4ac228e29f4b940c269f",
+          "bytes": 86144
+        },
+        {
+          "path": "v67-visual-energy/room-12/clear-layout.jpg",
+          "sha256": "ba244a00f221b5e99bccfd2c02287ae9750129882c67ba7bf11183f5d434d3fc",
+          "bytes": 46181
+        },
+        {
+          "path": "v67-visual-energy/room-12/route-mid.jpg",
+          "sha256": "fa3192461c60dc4a8082ad3dcef6cd52bccadac2a6e98e887d23365e98a6eddf",
+          "bytes": 68200
+        },
+        {
+          "path": "v67-visual-energy/room-12/route-far.jpg",
+          "sha256": "02116538d1caa421e03d1146986753e75e3841714e542e698adea0b5c1bca051",
+          "bytes": 49239
+        }
+      ],
+      "nativeHUD": {
+        "path": "v67-visual-energy/room-12/player-start-hud.jpg",
+        "sha256": "e3e1837bf84ba78780971cca517fe7dd211c26d112936672c5712e049aafbb2b",
+        "bytes": 98019
+      }
+    },
+    {
+      "artifact": "v67-visual-energy",
+      "stableLevel": 13,
+      "displayNumber": 13,
+      "sourceCommit": "cebc83f5066fe819d3439dc50ad38f15f357ad22",
+      "sourceTree": "e72288cfc34aaa43eff24d8abd9ac2f3e43845c2",
+      "runId": 39700325617,
+      "runAttempt": 1,
+      "images": [
+        {
+          "path": "v67-visual-energy/room-13/player-start.jpg",
+          "sha256": "5060795cd5bea6c9526ab24a6d71399ffdfea9b60c9583b0131decf395147856",
+          "bytes": 78824
+        },
+        {
+          "path": "v67-visual-energy/room-13/oblique.jpg",
+          "sha256": "99199983cfc7fdd296495ffa2d1e949aa3b26276919297f98625f99b61c2490d",
+          "bytes": 114021
+        },
+        {
+          "path": "v67-visual-energy/room-13/opposite.jpg",
+          "sha256": "150d1adb18c0735e621bb26ccb59fadc28c6d3a041134f3afc03f728dd4e4d9b",
+          "bytes": 100084
+        },
+        {
+          "path": "v67-visual-energy/room-13/clear-layout.jpg",
+          "sha256": "654b0306c67b3ca417b063c9b4788113ef8206430cabaff19531b1e192b447b2",
+          "bytes": 10072
+        },
+        {
+          "path": "v67-visual-energy/room-13/route-mid.jpg",
+          "sha256": "a975a8588ddbdc6766ee8d952a7ee3967b6cc5e4f66fcd3779c00f836be100ea",
+          "bytes": 103142
+        },
+        {
+          "path": "v67-visual-energy/room-13/route-far.jpg",
+          "sha256": "fefc79ef3684f6b6213dd1084c19212a6b1201c8f23c55effef3a82a4919f4f9",
+          "bytes": 42176
+        }
+      ],
+      "nativeHUD": {
+        "path": "v67-visual-energy/room-13/player-start-hud.jpg",
+        "sha256": "203d0afc791ff5d2000271fe472a4c092ff09125a96920c4d9d3519763ab0bbb",
+        "bytes": 80638
+      }
+    },
+    {
+      "artifact": "v67-visual-energy",
+      "stableLevel": 14,
+      "displayNumber": 14,
+      "sourceCommit": "cebc83f5066fe819d3439dc50ad38f15f357ad22",
+      "sourceTree": "e72288cfc34aaa43eff24d8abd9ac2f3e43845c2",
+      "runId": 39700325617,
+      "runAttempt": 1,
+      "images": [
+        {
+          "path": "v67-visual-energy/room-14/player-start.jpg",
+          "sha256": "f4fa7578659f00636e3f7352b2ec9e56ac29effe841ac7ced15541d4970e4e7c",
+          "bytes": 97365
+        },
+        {
+          "path": "v67-visual-energy/room-14/oblique.jpg",
+          "sha256": "507244b836120e1e2a90c16607dcde990797a7c727818b01c921724ae5bd907a",
+          "bytes": 83814
+        },
+        {
+          "path": "v67-visual-energy/room-14/opposite.jpg",
+          "sha256": "6a9b2bd02063a901fa754e6c46c1811179d8a4b42af4110d238a5397632a89b7",
+          "bytes": 66849
+        },
+        {
+          "path": "v67-visual-energy/room-14/clear-layout.jpg",
+          "sha256": "72e203fe00c0310d3c1c1738b175f3c040f7dd950466cbd1bd5ca5bba85d484d",
+          "bytes": 41078
+        },
+        {
+          "path": "v67-visual-energy/room-14/route-mid.jpg",
+          "sha256": "914768390510cbc57a875b9551a816f7421af7fdabaf7fda42f52938057a7c79",
+          "bytes": 60472
+        },
+        {
+          "path": "v67-visual-energy/room-14/route-far.jpg",
+          "sha256": "7685e12b34fa7d522bd92b530f91398c7425c30ab07bf0727efb460365139f78",
+          "bytes": 43823
+        }
+      ],
+      "nativeHUD": {
+        "path": "v67-visual-energy/room-14/player-start-hud.jpg",
+        "sha256": "bfd03d8bc86585e204d492651a56d6fa0269f33e461e20edef4b5c157c6cb3f4",
+        "bytes": 98614
+      }
+    },
+    {
+      "artifact": "v67-visual-energy",
+      "stableLevel": 15,
+      "displayNumber": 15,
+      "sourceCommit": "cebc83f5066fe819d3439dc50ad38f15f357ad22",
+      "sourceTree": "e72288cfc34aaa43eff24d8abd9ac2f3e43845c2",
+      "runId": 39700325617,
+      "runAttempt": 1,
+      "images": [
+        {
+          "path": "v67-visual-energy/room-15/player-start.jpg",
+          "sha256": "74ecb2fb7585db21b6a4724e91bce5ca51cd0ad5417b5c08ec8b882754d2f11e",
+          "bytes": 61586
+        },
+        {
+          "path": "v67-visual-energy/room-15/oblique.jpg",
+          "sha256": "470afd5e069fbce0edb63fe3c5c91631b56a4dd9a6610b83157812a5adfb60a5",
+          "bytes": 88264
+        },
+        {
+          "path": "v67-visual-energy/room-15/opposite.jpg",
+          "sha256": "cf7133d49f2be18d6071763857afefb4ba41fcca59926d333bc866e6bd32cc47",
+          "bytes": 51652
+        },
+        {
+          "path": "v67-visual-energy/room-15/clear-layout.jpg",
+          "sha256": "ff51b49348275310837e67d50cbe9aab7b2ac1a8f31642d2b11006b914469bbd",
+          "bytes": 50697
+        },
+        {
+          "path": "v67-visual-energy/room-15/route-mid.jpg",
+          "sha256": "c217e1e1364106e724dbb51dda068c270abe3081a92d3436019e8326cf594943",
+          "bytes": 100225
+        },
+        {
+          "path": "v67-visual-energy/room-15/route-far.jpg",
+          "sha256": "1eb64c4024220b90762658eaef101d6b39788f1d62138f251ef37248c22c7559",
+          "bytes": 55320
+        }
+      ],
+      "nativeHUD": {
+        "path": "v67-visual-energy/room-15/player-start-hud.jpg",
+        "sha256": "489b9e88862c7646d5ec1a5af988ef3b1d944851ec457022a11dc9e4ff81dc23",
+        "bytes": 62983
+      }
+    },
+    {
+      "artifact": "v67-visual-energy",
+      "stableLevel": 16,
+      "displayNumber": 16,
+      "sourceCommit": "cebc83f5066fe819d3439dc50ad38f15f357ad22",
+      "sourceTree": "e72288cfc34aaa43eff24d8abd9ac2f3e43845c2",
+      "runId": 39700325617,
+      "runAttempt": 1,
+      "images": [
+        {
+          "path": "v67-visual-energy/room-16/player-start.jpg",
+          "sha256": "a3986a61efa76c58f8722378e97b21dd9517525c320dfef5e4d76c46272ac0a6",
+          "bytes": 115024
+        },
+        {
+          "path": "v67-visual-energy/room-16/oblique.jpg",
+          "sha256": "06e6fdcdc43c506eac227d47b64c85f72f3bdb2505af6f182a6ca8d285cbb5d4",
+          "bytes": 114682
+        },
+        {
+          "path": "v67-visual-energy/room-16/opposite.jpg",
+          "sha256": "36440de12a8ee2de2191cd6fb08ec8a6956145ec9cd590491279f7d35c571cf0",
+          "bytes": 78933
+        },
+        {
+          "path": "v67-visual-energy/room-16/clear-layout.jpg",
+          "sha256": "4f04bf1dc977e43aa70823b344f3a712b4d2ff137fef23c46ce7018107f8098d",
+          "bytes": 67863
+        },
+        {
+          "path": "v67-visual-energy/room-16/route-mid.jpg",
+          "sha256": "8e2e4aa7ce20f71728eedf233417a719f2d0a477de8654b1b54d4a98a19f849e",
+          "bytes": 53531
+        },
+        {
+          "path": "v67-visual-energy/room-16/route-far.jpg",
+          "sha256": "5ca570dc80cbe1dd22985f334cda3a61c74ecef6f327dbc400c3dda73cf4f39d",
+          "bytes": 35775
+        }
+      ],
+      "nativeHUD": {
+        "path": "v67-visual-energy/room-16/player-start-hud.jpg",
+        "sha256": "7746e2df9352a8f1d6fc3d21b8acb5c5beaa725d7c49daa4c981ddbfa0315340",
+        "bytes": 116302
+      }
+    },
+    {
+      "artifact": "v67-visual-energy",
+      "stableLevel": 17,
+      "displayNumber": 17,
+      "sourceCommit": "cebc83f5066fe819d3439dc50ad38f15f357ad22",
+      "sourceTree": "e72288cfc34aaa43eff24d8abd9ac2f3e43845c2",
+      "runId": 39700325617,
+      "runAttempt": 1,
+      "images": [
+        {
+          "path": "v67-visual-energy/room-17/player-start.jpg",
+          "sha256": "f99fbdff9d43053067d89ebd039f73487f4937977c047979c3a50a2f5759deed",
+          "bytes": 86706
+        },
+        {
+          "path": "v67-visual-energy/room-17/oblique.jpg",
+          "sha256": "bfedbde9020081c2dbd9c6b965c1632a9b8693b2682da26227fc46ad914b52cc",
+          "bytes": 89603
+        },
+        {
+          "path": "v67-visual-energy/room-17/opposite.jpg",
+          "sha256": "858453e327f6c3e648fc74f6828f2614202b825ffbefb9f10a3655267083d21d",
+          "bytes": 90985
+        },
+        {
+          "path": "v67-visual-energy/room-17/clear-layout.jpg",
+          "sha256": "d96e13cb458678cec53d62413321b02eaab4a30db03f3c5bdb67e6d804df84cc",
+          "bytes": 54296
+        },
+        {
+          "path": "v67-visual-energy/room-17/route-mid.jpg",
+          "sha256": "a9f48b552de5fdc869514de6971d1ba2e200ba5bc5ebe250eed1b9db64d6a22c",
+          "bytes": 36421
+        },
+        {
+          "path": "v67-visual-energy/room-17/route-far.jpg",
+          "sha256": "a78283f7361bf6982bf5933e707a141fbda5a8a17fcc9030b6a68ac5f9ec7798",
+          "bytes": 51274
+        }
+      ],
+      "nativeHUD": {
+        "path": "v67-visual-energy/room-17/player-start-hud.jpg",
+        "sha256": "992cadc4fc4c7073d90cfe3f3203474ca26a3bb6c0d1bf97930f6f6e521ae2c8",
+        "bytes": 87967
+      }
+    },
+    {
+      "artifact": "v67-visual-energy",
+      "stableLevel": 18,
+      "displayNumber": 18,
+      "sourceCommit": "cebc83f5066fe819d3439dc50ad38f15f357ad22",
+      "sourceTree": "e72288cfc34aaa43eff24d8abd9ac2f3e43845c2",
+      "runId": 39700325617,
+      "runAttempt": 1,
+      "images": [
+        {
+          "path": "v67-visual-energy/room-18/player-start.jpg",
+          "sha256": "b3a29f7955e06aecb490dd428702e07c6a92dd53c8049d8a713259ec7779c5e7",
+          "bytes": 92636
+        },
+        {
+          "path": "v67-visual-energy/room-18/oblique.jpg",
+          "sha256": "0790aac613fb7086a6574a54405f2abcf467bdf778f30b5346ff81eadb4c2cb4",
+          "bytes": 97261
+        },
+        {
+          "path": "v67-visual-energy/room-18/opposite.jpg",
+          "sha256": "fc3692eaf4511ae0af34d5cef0b9bcb7c6d98898f207235bb3bf62806d3f7792",
+          "bytes": 77443
+        },
+        {
+          "path": "v67-visual-energy/room-18/clear-layout.jpg",
+          "sha256": "bd5919626bf23bb205027d59a8464058db9fea427903b38f8f63f3db18b6e6ee",
+          "bytes": 63153
+        },
+        {
+          "path": "v67-visual-energy/room-18/route-mid.jpg",
+          "sha256": "b33f095facb20b499e6637e9d5f189d0a4ba054c5929491d2f6781ea2ef58eaa",
+          "bytes": 108220
+        },
+        {
+          "path": "v67-visual-energy/room-18/route-far.jpg",
+          "sha256": "1621f2819f1f5ce4f2743996da3d558a545059c1bf290bf2914633c243129e27",
+          "bytes": 96091
+        }
+      ],
+      "nativeHUD": {
+        "path": "v67-visual-energy/room-18/player-start-hud.jpg",
+        "sha256": "b3d3b1579ae08bd2eb61a7a8de53244eaf9d0f552059637768aebcec5827995b",
+        "bytes": 93974
+      }
+    },
+    {
+      "artifact": "v67-visual-energy",
+      "stableLevel": 19,
+      "displayNumber": 19,
+      "sourceCommit": "cebc83f5066fe819d3439dc50ad38f15f357ad22",
+      "sourceTree": "e72288cfc34aaa43eff24d8abd9ac2f3e43845c2",
+      "runId": 39700325617,
+      "runAttempt": 1,
+      "images": [
+        {
+          "path": "v67-visual-energy/room-19/player-start.jpg",
+          "sha256": "11e101d8eebb232d7c4a050a45804bd985a58462086ef456cfa61c0ff45be7c8",
+          "bytes": 90207
+        },
+        {
+          "path": "v67-visual-energy/room-19/oblique.jpg",
+          "sha256": "f4ae2008af2af821b3176d9fc636e3a0baa1362c96d6ce0556dd8aebf55a0caf",
+          "bytes": 53489
+        },
+        {
+          "path": "v67-visual-energy/room-19/opposite.jpg",
+          "sha256": "a06ce4cb378e490ce8527ec60d7636ebbaa1cd4a9c70bee67e293c067579cead",
+          "bytes": 89822
+        },
+        {
+          "path": "v67-visual-energy/room-19/clear-layout.jpg",
+          "sha256": "7724d7c37d18997e24e58a4f7c48be9aaf7246b86bb3d3dd198bafa87f04ad3e",
+          "bytes": 85288
+        },
+        {
+          "path": "v67-visual-energy/room-19/route-mid.jpg",
+          "sha256": "d53f234574d9c828446ea8b83155d821bc4fe471422311d2151642b0e8381b6d",
+          "bytes": 63688
+        },
+        {
+          "path": "v67-visual-energy/room-19/route-far.jpg",
+          "sha256": "09eab8b5b4977a63238c5230d4ebc5d981b6dfe4a7f53b4d9855ef315ad497dc",
+          "bytes": 50537
+        }
+      ],
+      "nativeHUD": {
+        "path": "v67-visual-energy/room-19/player-start-hud.jpg",
+        "sha256": "f97136f388d98573b985e4dbddcd4fc9a9f6c58c6f325dc20f33423103729e6c",
+        "bytes": 91268
+      }
+    },
+    {
+      "artifact": "v67-visual-energy",
+      "stableLevel": 20,
+      "displayNumber": 20,
+      "sourceCommit": "cebc83f5066fe819d3439dc50ad38f15f357ad22",
+      "sourceTree": "e72288cfc34aaa43eff24d8abd9ac2f3e43845c2",
+      "runId": 39700325617,
+      "runAttempt": 1,
+      "images": [
+        {
+          "path": "v67-visual-energy/room-20/player-start.jpg",
+          "sha256": "1bb0ee822f176f1ab7574637aad068bf8a39adb21c0ee915e35055c13689f818",
+          "bytes": 81000
+        },
+        {
+          "path": "v67-visual-energy/room-20/oblique.jpg",
+          "sha256": "8d36f7ae6903ddb2a463e1e5a7bfb20dc9a58df5675de5d07cba85594acf0614",
+          "bytes": 79188
+        },
+        {
+          "path": "v67-visual-energy/room-20/opposite.jpg",
+          "sha256": "ad1e001700f2254bc40bdfb2e3baae5d1c2db7675ad14a0a66ab02e48af907c1",
+          "bytes": 83836
+        },
+        {
+          "path": "v67-visual-energy/room-20/clear-layout.jpg",
+          "sha256": "97788903586da93d92afe6a9fd0c1e9f82453937bc8ce39fcf7801d045d42977",
+          "bytes": 43040
+        },
+        {
+          "path": "v67-visual-energy/room-20/route-mid.jpg",
+          "sha256": "dc720e214aa816f5a455a7a1e23d2b8d2cd27716ae064586b65c447a9c13581c",
+          "bytes": 85469
+        },
+        {
+          "path": "v67-visual-energy/room-20/route-far.jpg",
+          "sha256": "d9809d5dbb8115007d208e0a27f931e5b8cee454b8ceb1a06c3a71ff2df99b16",
+          "bytes": 71038
+        }
+      ],
+      "nativeHUD": {
+        "path": "v67-visual-energy/room-20/player-start-hud.jpg",
+        "sha256": "b16084a6795bf11689f1aaea5b2b6e23b86725642451a1672ee4737908b2c6ae",
+        "bytes": 82657
+      }
+    },
+    {
+      "artifact": "v67-visual-living",
+      "stableLevel": 21,
+      "displayNumber": 21,
+      "sourceCommit": "cebc83f5066fe819d3439dc50ad38f15f357ad22",
+      "sourceTree": "e72288cfc34aaa43eff24d8abd9ac2f3e43845c2",
+      "runId": 39700325617,
+      "runAttempt": 1,
+      "images": [
+        {
+          "path": "v67-visual-living/room-21/player-start.jpg",
+          "sha256": "cdd8edab79165de5d728d32970c00369787f408525cca43cddb4c6c8a644c718",
+          "bytes": 91405
+        },
+        {
+          "path": "v67-visual-living/room-21/oblique.jpg",
+          "sha256": "c3236a45e5e3f792c1aefc7285abeb8e1b6a773aad85c4273204e83acfb57940",
+          "bytes": 127993
+        },
+        {
+          "path": "v67-visual-living/room-21/opposite.jpg",
+          "sha256": "ea45294012474f99e354346cc3379c6e0418933be4f14b1abaa12e5fe26bee24",
+          "bytes": 98636
+        },
+        {
+          "path": "v67-visual-living/room-21/clear-layout.jpg",
+          "sha256": "4d53cd3e3bae94938ab377a58861b264d20204480572b333603b0b085cbf97f0",
+          "bytes": 90392
+        },
+        {
+          "path": "v67-visual-living/room-21/route-mid.jpg",
+          "sha256": "29a0cbb360d0e90086d6e8b4367f465ba1e6a51b27111679dd1a8df1b2f5925e",
+          "bytes": 93869
+        },
+        {
+          "path": "v67-visual-living/room-21/route-far.jpg",
+          "sha256": "202b23632d1bea491c08ea80d18e7ca1255030d30822fff7e0f0cc9487458981",
+          "bytes": 46419
+        }
+      ],
+      "nativeHUD": {
+        "path": "v67-visual-living/room-21/player-start-hud.jpg",
+        "sha256": "4a3b1b69b03ffc7c2ca847bfac181b71473871c76fe400b634469c2d3b32a8dd",
+        "bytes": 92812
+      }
+    },
+    {
+      "artifact": "v67-visual-living",
+      "stableLevel": 22,
+      "displayNumber": 22,
+      "sourceCommit": "cebc83f5066fe819d3439dc50ad38f15f357ad22",
+      "sourceTree": "e72288cfc34aaa43eff24d8abd9ac2f3e43845c2",
+      "runId": 39700325617,
+      "runAttempt": 1,
+      "images": [
+        {
+          "path": "v67-visual-living/room-22/player-start.jpg",
+          "sha256": "8521b44d824cdb8ee759ac9603f4218f55a67f007ff18fc4167558e458377530",
+          "bytes": 99613
+        },
+        {
+          "path": "v67-visual-living/room-22/oblique.jpg",
+          "sha256": "036c92de98f705d27d7d05091399ad53500c05abfe1b4b3e65a3f5be65debf80",
+          "bytes": 149016
+        },
+        {
+          "path": "v67-visual-living/room-22/opposite.jpg",
+          "sha256": "998e0642d7dc14610ea9e46b776e0f43b6d4b5f617e0d5b63e3f3ae4a80b100a",
+          "bytes": 134820
+        },
+        {
+          "path": "v67-visual-living/room-22/clear-layout.jpg",
+          "sha256": "279990252c74b7c825297d73326447cbd1c9dbb67aaab851215c3cf2286d19e2",
+          "bytes": 36546
+        },
+        {
+          "path": "v67-visual-living/room-22/route-mid.jpg",
+          "sha256": "f957f5dba0ea957a3726681ac008b7d70c795c82954dd1690b4e09ab1bf9627e",
+          "bytes": 117968
+        },
+        {
+          "path": "v67-visual-living/room-22/route-far.jpg",
+          "sha256": "43dcdeee4aff7dceb47f4459c344fd3da8b10a0d9d5882b5979257430fe9000d",
+          "bytes": 39522
+        }
+      ],
+      "nativeHUD": {
+        "path": "v67-visual-living/room-22/player-start-hud.jpg",
+        "sha256": "1bb032c7c231d40ac792f7ced7d136cb1d6b7d5302d4b139d471a258c0ad297b",
+        "bytes": 100411
+      }
+    },
+    {
+      "artifact": "v67-visual-living",
+      "stableLevel": 23,
+      "displayNumber": 23,
+      "sourceCommit": "cebc83f5066fe819d3439dc50ad38f15f357ad22",
+      "sourceTree": "e72288cfc34aaa43eff24d8abd9ac2f3e43845c2",
+      "runId": 39700325617,
+      "runAttempt": 1,
+      "images": [
+        {
+          "path": "v67-visual-living/room-23/player-start.jpg",
+          "sha256": "03d06a69f0c315c94de3708cd1fd676507d9b653c41bf6f01e4a72425dca0a22",
+          "bytes": 100111
+        },
+        {
+          "path": "v67-visual-living/room-23/oblique.jpg",
+          "sha256": "fb6209c345b71472e9b7ca46555083b18f620259c9906bb23785e55b2f538399",
+          "bytes": 123003
+        },
+        {
+          "path": "v67-visual-living/room-23/opposite.jpg",
+          "sha256": "908bac2d84e443b85f5dad0b5723a57063bb1376068f8cd9ac44b2985ea3c3e2",
+          "bytes": 122579
+        },
+        {
+          "path": "v67-visual-living/room-23/clear-layout.jpg",
+          "sha256": "566ebb7a1648d50f4457d57850cca2929c9ef1ebddaa629e19bdac009da4aca4",
+          "bytes": 52312
+        },
+        {
+          "path": "v67-visual-living/room-23/route-mid.jpg",
+          "sha256": "f61cb94323a4d0b362376112e25bcda2142b201bd629d12f092a531c20843148",
+          "bytes": 83133
+        },
+        {
+          "path": "v67-visual-living/room-23/route-far.jpg",
+          "sha256": "174a1c5ffcbc17ac0ae5bfbb4bc7af03617dbea52586b7cb0ce62b01a0764390",
+          "bytes": 20613
+        }
+      ],
+      "nativeHUD": {
+        "path": "v67-visual-living/room-23/player-start-hud.jpg",
+        "sha256": "3aff93407d0f45bd198ed61906bf9b2c7b0c39377ffe003a7678b1aec65f472c",
+        "bytes": 101418
+      }
+    },
+    {
+      "artifact": "v67-visual-living",
+      "stableLevel": 24,
+      "displayNumber": 24,
+      "sourceCommit": "cebc83f5066fe819d3439dc50ad38f15f357ad22",
+      "sourceTree": "e72288cfc34aaa43eff24d8abd9ac2f3e43845c2",
+      "runId": 39700325617,
+      "runAttempt": 1,
+      "images": [
+        {
+          "path": "v67-visual-living/room-24/player-start.jpg",
+          "sha256": "d9ff4fcd95a014161e0e5679ff8682d6a7bf05db5348f8e6efa9db616c1f8913",
+          "bytes": 95025
+        },
+        {
+          "path": "v67-visual-living/room-24/oblique.jpg",
+          "sha256": "bbeda8f77b8834940e17823c4169ab6d229fd43f6be158f8e9013c4d436fda19",
+          "bytes": 121315
+        },
+        {
+          "path": "v67-visual-living/room-24/opposite.jpg",
+          "sha256": "a0c6ebb6af0163d4840e7120514a75879883021f9306acb81d2685f644ece0ca",
+          "bytes": 67094
+        },
+        {
+          "path": "v67-visual-living/room-24/clear-layout.jpg",
+          "sha256": "3c83d20baa8e7e970a7e1e763cca4dfbba857a59a8a82a36a9023855f3234185",
+          "bytes": 28266
+        },
+        {
+          "path": "v67-visual-living/room-24/route-mid.jpg",
+          "sha256": "f8957bd3f118b691a538c955d0a29e325ab002bd6c902c32b0649b315a66566c",
+          "bytes": 85070
+        },
+        {
+          "path": "v67-visual-living/room-24/route-far.jpg",
+          "sha256": "7c4607b6bc840a89331e60d928a0f7300648e18646cd60a3be677b1be5228a42",
+          "bytes": 25541
+        }
+      ],
+      "nativeHUD": {
+        "path": "v67-visual-living/room-24/player-start-hud.jpg",
+        "sha256": "e214ad619713b0d0976b3dedfc91dfcffe1a2821421ecd2c930d5484cb41811f",
+        "bytes": 96622
+      }
+    },
+    {
+      "artifact": "v67-visual-living",
+      "stableLevel": 25,
+      "displayNumber": 25,
+      "sourceCommit": "cebc83f5066fe819d3439dc50ad38f15f357ad22",
+      "sourceTree": "e72288cfc34aaa43eff24d8abd9ac2f3e43845c2",
+      "runId": 39700325617,
+      "runAttempt": 1,
+      "images": [
+        {
+          "path": "v67-visual-living/room-25/player-start.jpg",
+          "sha256": "6f724e7e1d177058bc50d0b0b8f8295b8c2751a0e020a1ad88954c1ed42cfdc3",
+          "bytes": 84156
+        },
+        {
+          "path": "v67-visual-living/room-25/oblique.jpg",
+          "sha256": "27c3f600041c2d3244b2f4ede0fca235c8afd1df41770e81e3cce8f5ef3457cd",
+          "bytes": 129139
+        },
+        {
+          "path": "v67-visual-living/room-25/opposite.jpg",
+          "sha256": "796b83069e1cd11b9b5ff8e61606b423135d54e1cf383b8c4de9d5fb320be225",
+          "bytes": 123975
+        },
+        {
+          "path": "v67-visual-living/room-25/clear-layout.jpg",
+          "sha256": "3c867f699f837f23687384f357aca1d0cd084b3623df755c0121931910d18a20",
+          "bytes": 68254
+        },
+        {
+          "path": "v67-visual-living/room-25/route-mid.jpg",
+          "sha256": "697ce230cbe647a8c3cb68bcc2aec30d664081607187ae478397a2fb4d3397fd",
+          "bytes": 22773
+        },
+        {
+          "path": "v67-visual-living/room-25/route-far.jpg",
+          "sha256": "c8ec7e2ebddbb7801d82757b640fcce0481c8cbca3eac857bf0c0de31f42c57a",
+          "bytes": 36467
+        }
+      ],
+      "nativeHUD": {
+        "path": "v67-visual-living/room-25/player-start-hud.jpg",
+        "sha256": "ddb2028095983f714c8540a3ad7eccc999131054913e2656bbe5d2ce6fa606e1",
+        "bytes": 85514
+      }
+    },
+    {
+      "artifact": "v67-visual-living",
+      "stableLevel": 26,
+      "displayNumber": 26,
+      "sourceCommit": "cebc83f5066fe819d3439dc50ad38f15f357ad22",
+      "sourceTree": "e72288cfc34aaa43eff24d8abd9ac2f3e43845c2",
+      "runId": 39700325617,
+      "runAttempt": 1,
+      "images": [
+        {
+          "path": "v67-visual-living/room-26/player-start.jpg",
+          "sha256": "81e3433d4d6f4855ec39f84ad771d7eb47fbd175ccef8b22842c6dae205a57c2",
+          "bytes": 78864
+        },
+        {
+          "path": "v67-visual-living/room-26/oblique.jpg",
+          "sha256": "02c1c3bbcbcd9bbcefe9be07ef2f9c8dc05b091e29286dd6a2f9e45a920294b3",
+          "bytes": 103121
+        },
+        {
+          "path": "v67-visual-living/room-26/opposite.jpg",
+          "sha256": "f4187837b088fb207fe239e99235258f99b51d1fe42751751a81c11184789a0f",
+          "bytes": 81443
+        },
+        {
+          "path": "v67-visual-living/room-26/clear-layout.jpg",
+          "sha256": "16e752b91acb9eb3e963e8efffa757efe9c25cefff585c9be733cfb081f90d56",
+          "bytes": 56402
+        },
+        {
+          "path": "v67-visual-living/room-26/route-mid.jpg",
+          "sha256": "1967aec94e391c8a441ec64bba65357cb1fcaf9049f1ffad9008ec360bcbb847",
+          "bytes": 102050
+        },
+        {
+          "path": "v67-visual-living/room-26/route-far.jpg",
+          "sha256": "126c60f286bd2b424310d93b574b0f7d5a8658b3b2e24772b3827803bd10da20",
+          "bytes": 78415
+        }
+      ],
+      "nativeHUD": {
+        "path": "v67-visual-living/room-26/player-start-hud.jpg",
+        "sha256": "286b64b4e9ce4dffbd09a2c3fccd87473239c170395f67566b12d77b627ef3b4",
+        "bytes": 79954
+      }
+    },
+    {
+      "artifact": "v67-visual-living",
+      "stableLevel": 27,
+      "displayNumber": 27,
+      "sourceCommit": "cebc83f5066fe819d3439dc50ad38f15f357ad22",
+      "sourceTree": "e72288cfc34aaa43eff24d8abd9ac2f3e43845c2",
+      "runId": 39700325617,
+      "runAttempt": 1,
+      "images": [
+        {
+          "path": "v67-visual-living/room-27/player-start.jpg",
+          "sha256": "e597d4b15dffb15027f5a2ff870be667e8962cfaf19662857accf8b8083198d7",
+          "bytes": 100220
+        },
+        {
+          "path": "v67-visual-living/room-27/oblique.jpg",
+          "sha256": "c9948cc0093b4178983406bdae863703f751b43db543892a40e9fb370c66c341",
+          "bytes": 113802
+        },
+        {
+          "path": "v67-visual-living/room-27/opposite.jpg",
+          "sha256": "a2dac942d2a2323011ab7685346f696cd73cfb46afb1dc606b4045d50a705aa7",
+          "bytes": 127867
+        },
+        {
+          "path": "v67-visual-living/room-27/clear-layout.jpg",
+          "sha256": "75d53fd22d36b6c54224be193ebd037fdf0ac6e042f12bab2ff78f34d2a9f6b5",
+          "bytes": 79736
+        },
+        {
+          "path": "v67-visual-living/room-27/route-mid.jpg",
+          "sha256": "bfe16b7c6a848f159ff8ca6ba37c51d5d2fe34d3bf3c8617cae0b9052917a50e",
+          "bytes": 112322
+        },
+        {
+          "path": "v67-visual-living/room-27/route-far.jpg",
+          "sha256": "02cb314997813501119d821e7e00613db8d8c4663428797b227de72d67383d09",
+          "bytes": 32730
+        }
+      ],
+      "nativeHUD": {
+        "path": "v67-visual-living/room-27/player-start-hud.jpg",
+        "sha256": "e063c5d8253c85287d10cba1b9d89c56dee3dfe9e8374679bc9aa56347648c4b",
+        "bytes": 101182
+      }
+    },
+    {
+      "artifact": "v67-visual-living",
+      "stableLevel": 28,
+      "displayNumber": 28,
+      "sourceCommit": "cebc83f5066fe819d3439dc50ad38f15f357ad22",
+      "sourceTree": "e72288cfc34aaa43eff24d8abd9ac2f3e43845c2",
+      "runId": 39700325617,
+      "runAttempt": 1,
+      "images": [
+        {
+          "path": "v67-visual-living/room-28/player-start.jpg",
+          "sha256": "2cc83645f35547908d4b4e579eb1e02935fde175d6d54e1e547a97ddf9684a53",
+          "bytes": 100139
+        },
+        {
+          "path": "v67-visual-living/room-28/oblique.jpg",
+          "sha256": "a9bb75f0c5f8538fa19b5799c780516cf3e6af496f3a25baac1063b7ae709633",
+          "bytes": 104785
+        },
+        {
+          "path": "v67-visual-living/room-28/opposite.jpg",
+          "sha256": "6f7f6f251a8a9d17dae3ec8da16b71d36b3a1314b78eddc0647efa9774c11d38",
+          "bytes": 111815
+        },
+        {
+          "path": "v67-visual-living/room-28/clear-layout.jpg",
+          "sha256": "1a97bb635186bd1ce9af574c85d485284845a8ef37d0acd21b927bae5cef1644",
+          "bytes": 48894
+        },
+        {
+          "path": "v67-visual-living/room-28/route-mid.jpg",
+          "sha256": "d46f0184f81bd0ab3a56a816a9ef1b88070958d418cbf5194fa695481951b473",
+          "bytes": 96356
+        },
+        {
+          "path": "v67-visual-living/room-28/route-far.jpg",
+          "sha256": "ed2751c485774bbc5e754d9a8c1d773d97cf74e76967e70237d5c26e5981aa76",
+          "bytes": 42621
+        }
+      ],
+      "nativeHUD": {
+        "path": "v67-visual-living/room-28/player-start-hud.jpg",
+        "sha256": "6eb70573a17c2864c65cf159f7762c0255802d4d093362155bafb07deb38d61b",
+        "bytes": 101454
+      }
+    },
+    {
+      "artifact": "v67-visual-living",
+      "stableLevel": 29,
+      "displayNumber": 29,
+      "sourceCommit": "cebc83f5066fe819d3439dc50ad38f15f357ad22",
+      "sourceTree": "e72288cfc34aaa43eff24d8abd9ac2f3e43845c2",
+      "runId": 39700325617,
+      "runAttempt": 1,
+      "images": [
+        {
+          "path": "v67-visual-living/room-29/player-start.jpg",
+          "sha256": "78ed69854a2c7fb2fc758c00984c3bf11816490f9e380bd78d0548dc2bce3c41",
+          "bytes": 87614
+        },
+        {
+          "path": "v67-visual-living/room-29/oblique.jpg",
+          "sha256": "a2260e67aa71ec24d368ef3dee182856402ce234038d345c000bc2ec93812426",
+          "bytes": 109975
+        },
+        {
+          "path": "v67-visual-living/room-29/opposite.jpg",
+          "sha256": "ef2e93ed7e862a964b5a7be404d66c1f3459f31e01252678942138c4b1e8cd48",
+          "bytes": 96194
+        },
+        {
+          "path": "v67-visual-living/room-29/clear-layout.jpg",
+          "sha256": "3bc011768c95b6dacb4231c57c84e040ec66ecdd3461d55aac7ba8095ec4f979",
+          "bytes": 40883
+        },
+        {
+          "path": "v67-visual-living/room-29/route-mid.jpg",
+          "sha256": "0941a5cf12a7e2b71a0ae3d3765a1439a189321c9789e2792d058d9bc4095bba",
+          "bytes": 79118
+        },
+        {
+          "path": "v67-visual-living/room-29/route-far.jpg",
+          "sha256": "d5e13203d3d73b76a8d84871e5aa060e0c372369feb19387187dbcf661b41c90",
+          "bytes": 53038
+        }
+      ],
+      "nativeHUD": {
+        "path": "v67-visual-living/room-29/player-start-hud.jpg",
+        "sha256": "da5895afa4166c2060ce6a809da6eee35893f8cd2c467f9d1921da568ed7d499",
+        "bytes": 89230
+      }
+    },
+    {
+      "artifact": "v67-visual-living",
+      "stableLevel": 30,
+      "displayNumber": 30,
+      "sourceCommit": "cebc83f5066fe819d3439dc50ad38f15f357ad22",
+      "sourceTree": "e72288cfc34aaa43eff24d8abd9ac2f3e43845c2",
+      "runId": 39700325617,
+      "runAttempt": 1,
+      "images": [
+        {
+          "path": "v67-visual-living/room-30/player-start.jpg",
+          "sha256": "2652c4ba99870ca195821c1f034848c63a26576636d41cd04fd0aa99617912d3",
+          "bytes": 78976
+        },
+        {
+          "path": "v67-visual-living/room-30/oblique.jpg",
+          "sha256": "118803ae701e8db43c7d18f8ec45097860f5a9f7fb286db01e6fca2eab34da0e",
+          "bytes": 92796
+        },
+        {
+          "path": "v67-visual-living/room-30/opposite.jpg",
+          "sha256": "3fa16427c12abea3e52b332f93d3aa7a198237cfcab4739c5e3ba6801746c379",
+          "bytes": 85913
+        },
+        {
+          "path": "v67-visual-living/room-30/clear-layout.jpg",
+          "sha256": "81fc20e19997be573642dc645687ecd9eb3edc178af8654a29a44510382a0c27",
+          "bytes": 42644
+        },
+        {
+          "path": "v67-visual-living/room-30/route-mid.jpg",
+          "sha256": "9cfd079d452effdb6505be550844e32731f136c3397d2ff4743da7e025d378e2",
+          "bytes": 71402
+        },
+        {
+          "path": "v67-visual-living/room-30/route-far.jpg",
+          "sha256": "6523016e86b5368eb5940ccd359764d7c5e30272263b01663e9994e1914d4636",
+          "bytes": 47339
+        }
+      ],
+      "nativeHUD": {
+        "path": "v67-visual-living/room-30/player-start-hud.jpg",
+        "sha256": "65ae954b65d85e3b519528f7dcfdb92603a324b24db19cd8227da3d53a4a3597",
+        "bytes": 80399
+      }
+    },
+    {
+      "artifact": "v67-visual-optics",
+      "stableLevel": 31,
+      "displayNumber": 31,
+      "sourceCommit": "cebc83f5066fe819d3439dc50ad38f15f357ad22",
+      "sourceTree": "e72288cfc34aaa43eff24d8abd9ac2f3e43845c2",
+      "runId": 39700325617,
+      "runAttempt": 1,
+      "images": [
+        {
+          "path": "v67-visual-optics/room-31/player-start.jpg",
+          "sha256": "636d1354921aa3a3a397ad8ae9a151475ff5861c0bb84eb45657a5f9844c6b3c",
+          "bytes": 67876
+        },
+        {
+          "path": "v67-visual-optics/room-31/oblique.jpg",
+          "sha256": "5996677794d8563d7dd1d3de2a74562a4ab8251a6316a59b68a4199ada839997",
+          "bytes": 98875
+        },
+        {
+          "path": "v67-visual-optics/room-31/opposite.jpg",
+          "sha256": "545d0d4f7058a2c167a8e14f0da12a5820457dae2867f6e51b18af8d4ed206c9",
+          "bytes": 77520
+        },
+        {
+          "path": "v67-visual-optics/room-31/clear-layout.jpg",
+          "sha256": "0707908258fc535ea0a58e72f02c456058ca3f6bba8b7d17e2ee75994d6522b5",
+          "bytes": 43937
+        },
+        {
+          "path": "v67-visual-optics/room-31/route-mid.jpg",
+          "sha256": "1f6c6fa9b8be4a2c429b53896bf3a461778521f9e7e6c3bfc5de8110e714b46b",
+          "bytes": 76845
+        },
+        {
+          "path": "v67-visual-optics/room-31/route-far.jpg",
+          "sha256": "0595e868b500d2b5952142f45bde0ad02bf89278aaabba19cf86c718917480bf",
+          "bytes": 28001
+        }
+      ],
+      "nativeHUD": {
+        "path": "v67-visual-optics/room-31/player-start-hud.jpg",
+        "sha256": "b0049fe6f0c0983e8d328ec955079da401b8ea23c9673daa1eb3cd308aad1c81",
+        "bytes": 69288
+      }
+    },
+    {
+      "artifact": "v67-visual-optics",
+      "stableLevel": 32,
+      "displayNumber": 32,
+      "sourceCommit": "cebc83f5066fe819d3439dc50ad38f15f357ad22",
+      "sourceTree": "e72288cfc34aaa43eff24d8abd9ac2f3e43845c2",
+      "runId": 39700325617,
+      "runAttempt": 1,
+      "images": [
+        {
+          "path": "v67-visual-optics/room-32/player-start.jpg",
+          "sha256": "0da9f2183f61cf7c253550a596af8a802e0c6644458f5246a41d1f202d290825",
+          "bytes": 70573
+        },
+        {
+          "path": "v67-visual-optics/room-32/oblique.jpg",
+          "sha256": "9758eb7f53c13ff30f3e4e99d9a1098402239f45e98655fdd4340cf21dea155b",
+          "bytes": 90145
+        },
+        {
+          "path": "v67-visual-optics/room-32/opposite.jpg",
+          "sha256": "a687bfb17e5a977a830c4b33f02bb03fd6ff6881324829a361a8843b80b31c34",
+          "bytes": 65225
+        },
+        {
+          "path": "v67-visual-optics/room-32/clear-layout.jpg",
+          "sha256": "4f9c1ee912ebd2d635ecca9e7c6a158dc210050b7a4f4cb2238df18e1775ed78",
+          "bytes": 42662
+        },
+        {
+          "path": "v67-visual-optics/room-32/route-mid.jpg",
+          "sha256": "ef7817600cd353f5034aa0aba8467c23123351c7ebedb7e61d8ddfda8fa48233",
+          "bytes": 59468
+        },
+        {
+          "path": "v67-visual-optics/room-32/route-far.jpg",
+          "sha256": "ffa5bb12a062eefa099d4cf8250c66f00133f328d576d67585bbfe7d41753f35",
+          "bytes": 24144
+        }
+      ],
+      "nativeHUD": {
+        "path": "v67-visual-optics/room-32/player-start-hud.jpg",
+        "sha256": "c957bd38ec0a2176ca48dbd795f92545143dd34af4f92c68080ab07cd534727c",
+        "bytes": 72350
+      }
+    },
+    {
+      "artifact": "v67-visual-optics",
+      "stableLevel": 33,
+      "displayNumber": 33,
+      "sourceCommit": "cebc83f5066fe819d3439dc50ad38f15f357ad22",
+      "sourceTree": "e72288cfc34aaa43eff24d8abd9ac2f3e43845c2",
+      "runId": 39700325617,
+      "runAttempt": 1,
+      "images": [
+        {
+          "path": "v67-visual-optics/room-33/player-start.jpg",
+          "sha256": "bdb49251e49d1e6792a4e3b4659073e8cf17955e89f4d9578a424f8afc61e521",
+          "bytes": 87203
+        },
+        {
+          "path": "v67-visual-optics/room-33/oblique.jpg",
+          "sha256": "a4ad60531281c5046092b37e07687ff85a6d23cebd6e3555d8c42435c8526362",
+          "bytes": 94070
+        },
+        {
+          "path": "v67-visual-optics/room-33/opposite.jpg",
+          "sha256": "a50a94b8b0ab32357431c30d14af662cfe98276af8942752cb6affb25c1e8de5",
+          "bytes": 71729
+        },
+        {
+          "path": "v67-visual-optics/room-33/clear-layout.jpg",
+          "sha256": "bd58704bd82e50462b8b23c85d7ec5e9c918f94669828bf4540bdced82680efb",
+          "bytes": 44348
+        },
+        {
+          "path": "v67-visual-optics/room-33/route-mid.jpg",
+          "sha256": "fbb18314cabe33f30ae972e5ca707348d06ea05777e9a913b44219a146627da2",
+          "bytes": 63023
+        },
+        {
+          "path": "v67-visual-optics/room-33/route-far.jpg",
+          "sha256": "086ad199d4a7a7637e37b0eff9cc101fdb975a41b0f1a3aedc9696dcb806ed3b",
+          "bytes": 32008
+        }
+      ],
+      "nativeHUD": {
+        "path": "v67-visual-optics/room-33/player-start-hud.jpg",
+        "sha256": "40414e55dafab4e5de11b456541a41f642d7fe6cf9deb8e0ca86adbe92221ba1",
+        "bytes": 88903
+      }
+    },
+    {
+      "artifact": "v67-visual-optics",
+      "stableLevel": 34,
+      "displayNumber": 34,
+      "sourceCommit": "cebc83f5066fe819d3439dc50ad38f15f357ad22",
+      "sourceTree": "e72288cfc34aaa43eff24d8abd9ac2f3e43845c2",
+      "runId": 39700325617,
+      "runAttempt": 1,
+      "images": [
+        {
+          "path": "v67-visual-optics/room-34/player-start.jpg",
+          "sha256": "8f293fda8edec7a79723678afffc1767d9097eacabcd82245b9a63eb25315277",
+          "bytes": 77412
+        },
+        {
+          "path": "v67-visual-optics/room-34/oblique.jpg",
+          "sha256": "34e90767731adff27d76776d6053c1324e7e6b4c0830772ebebe2b665e8cc24e",
+          "bytes": 81839
+        },
+        {
+          "path": "v67-visual-optics/room-34/opposite.jpg",
+          "sha256": "e3aac69b4d3fbd121c7673ad4401457725f8b98bcfb54522d25c2908aeb9d60c",
+          "bytes": 79935
+        },
+        {
+          "path": "v67-visual-optics/room-34/clear-layout.jpg",
+          "sha256": "7425440b5324fb0f8e9ca82d97c07d34bcac6899e1d5e9d2f2760a1947dce187",
+          "bytes": 48474
+        },
+        {
+          "path": "v67-visual-optics/room-34/route-mid.jpg",
+          "sha256": "0c54e600a49d24c8691681c3473d97ca540dc0e3c64dd94ec3eab5fd5270b056",
+          "bytes": 69324
+        },
+        {
+          "path": "v67-visual-optics/room-34/route-far.jpg",
+          "sha256": "6f2fff71adac6b082ce8969d9764b8477db09570897321967bd3be595d47e56d",
+          "bytes": 59068
+        }
+      ],
+      "nativeHUD": {
+        "path": "v67-visual-optics/room-34/player-start-hud.jpg",
+        "sha256": "de2efb91c8065cfe326fba3a60b849b163f0542d9bc469d16bb9f583ad05cfb2",
+        "bytes": 78785
+      }
+    },
+    {
+      "artifact": "v67-visual-optics",
+      "stableLevel": 35,
+      "displayNumber": 35,
+      "sourceCommit": "cebc83f5066fe819d3439dc50ad38f15f357ad22",
+      "sourceTree": "e72288cfc34aaa43eff24d8abd9ac2f3e43845c2",
+      "runId": 39700325617,
+      "runAttempt": 1,
+      "images": [
+        {
+          "path": "v67-visual-optics/room-35/player-start.jpg",
+          "sha256": "bc8bc51883405163407cc8698053cfa64a5f97f3a30e131940cfb10f2ced9671",
+          "bytes": 54059
+        },
+        {
+          "path": "v67-visual-optics/room-35/oblique.jpg",
+          "sha256": "e23050e93c402fedc93f3aeff298dd2b0a58a98fb4f453ec52aa0e31382be8a7",
+          "bytes": 11311
+        },
+        {
+          "path": "v67-visual-optics/room-35/opposite.jpg",
+          "sha256": "6de4ccd169ef3f3d0fd13c11b7997b3cce959c35183ecc80a6302561980b9640",
+          "bytes": 27292
+        },
+        {
+          "path": "v67-visual-optics/room-35/clear-layout.jpg",
+          "sha256": "a3ac6a87e1eddf441af02c774a4f163c1c342f205dcdc20e91547215d0dd2af0",
+          "bytes": 50456
+        },
+        {
+          "path": "v67-visual-optics/room-35/route-mid.jpg",
+          "sha256": "2f563f7ceb156c792e974527993feba22358631d4e9d9cde4f4fd537ed41ba0c",
+          "bytes": 12849
+        },
+        {
+          "path": "v67-visual-optics/room-35/route-far.jpg",
+          "sha256": "f2a5679bfd8399875a4c4f49618435b117cba49850637d15156a6fb7e9526c0d",
+          "bytes": 52842
+        },
+        {
+          "path": "v67-visual-optics/room-35/extra-review-detail.jpg",
+          "sha256": "d75fb3ea926dd80c8cd0111eba454cf85d35b3b054335ac32c31de59c90d1eee",
+          "bytes": 57509
+        },
+        {
+          "path": "v67-visual-optics/room-35/extra-observatory-drive.jpg",
+          "sha256": "4908101f7f21e1cb6173c5fc3a30c2aa02f2a2e3cc1ec55024c5ed8b7f9c4308",
+          "bytes": 59592
+        }
+      ],
+      "nativeHUD": {
+        "path": "v67-visual-optics/room-35/player-start-hud.jpg",
+        "sha256": "48514b068690d5c6b377af65298a960d3881ba0cb6ad9343879af6b6562fde7d",
+        "bytes": 55568
+      }
+    },
+    {
+      "artifact": "v67-visual-optics",
+      "stableLevel": 36,
+      "displayNumber": 36,
+      "sourceCommit": "cebc83f5066fe819d3439dc50ad38f15f357ad22",
+      "sourceTree": "e72288cfc34aaa43eff24d8abd9ac2f3e43845c2",
+      "runId": 39700325617,
+      "runAttempt": 1,
+      "images": [
+        {
+          "path": "v67-visual-optics/room-36/player-start.jpg",
+          "sha256": "c72a3bd9f7c2708e1756821652ac139b54afc91c55f42be50b7eb712f81dc63f",
+          "bytes": 78853
+        },
+        {
+          "path": "v67-visual-optics/room-36/oblique.jpg",
+          "sha256": "a6ad1d60b6e7364f81d64a8c955d665f591e37ff7aedc147e432f4eda6e9af50",
+          "bytes": 92457
+        },
+        {
+          "path": "v67-visual-optics/room-36/opposite.jpg",
+          "sha256": "501e423cefe8be8114dc1431fa51326b68e4a11e1f7cbd1317885c439a17d389",
+          "bytes": 86792
+        },
+        {
+          "path": "v67-visual-optics/room-36/clear-layout.jpg",
+          "sha256": "2fa1b1b2abdff0afb8c3d7b3a0f417f2563aad33f9158100fbdda43c60fccd87",
+          "bytes": 69673
+        },
+        {
+          "path": "v67-visual-optics/room-36/route-mid.jpg",
+          "sha256": "7e7b2069a6e895bd881bfd2d2a2ed4f273b31e02e547a1bebd7ba5ee954b20f7",
+          "bytes": 68884
+        },
+        {
+          "path": "v67-visual-optics/room-36/route-far.jpg",
+          "sha256": "1381ac61b1560bafcf6d151d7bfd7c82626e1d3e591005b2e7db8c8c2fbcb64c",
+          "bytes": 33079
+        }
+      ],
+      "nativeHUD": {
+        "path": "v67-visual-optics/room-36/player-start-hud.jpg",
+        "sha256": "293d8824bc198ec150dc270007a3a6e9864880a7cf1342ecf5055682b18d4efa",
+        "bytes": 80350
+      }
+    },
+    {
+      "artifact": "v67-visual-optics",
+      "stableLevel": 37,
+      "displayNumber": 37,
+      "sourceCommit": "cebc83f5066fe819d3439dc50ad38f15f357ad22",
+      "sourceTree": "e72288cfc34aaa43eff24d8abd9ac2f3e43845c2",
+      "runId": 39700325617,
+      "runAttempt": 1,
+      "images": [
+        {
+          "path": "v67-visual-optics/room-37/player-start.jpg",
+          "sha256": "e92a75b0b71eefdbfcfb67b075142e72a3f684d5007160303e23eaf481f68ade",
+          "bytes": 74254
+        },
+        {
+          "path": "v67-visual-optics/room-37/oblique.jpg",
+          "sha256": "994ca7bb85362500a1d3e57e93bcf69b919805b0c2780a38dc408c25bae5a015",
+          "bytes": 82930
+        },
+        {
+          "path": "v67-visual-optics/room-37/opposite.jpg",
+          "sha256": "34018cc7265b1c1bc580776c6d31cba28761513f5b2307135a2589f6a847a153",
+          "bytes": 67993
+        },
+        {
+          "path": "v67-visual-optics/room-37/clear-layout.jpg",
+          "sha256": "d93858db97449a4cf53da647e91d41fd26b1a2fd9636bfa273f4c8d11ec95e7f",
+          "bytes": 61273
+        },
+        {
+          "path": "v67-visual-optics/room-37/route-mid.jpg",
+          "sha256": "27af3fe43032911e2d1f50382b3c9307ae8b2f98bb417e93b44bc26b59d3f2df",
+          "bytes": 68295
+        },
+        {
+          "path": "v67-visual-optics/room-37/route-far.jpg",
+          "sha256": "7b39624930625f5693ca4e8fa07b4655bf00a28cfc7267241d66aff145833374",
+          "bytes": 24927
+        }
+      ],
+      "nativeHUD": {
+        "path": "v67-visual-optics/room-37/player-start-hud.jpg",
+        "sha256": "e13e8535b2d320d08f522957133c3f9005900127ca74d62f151868fca96cdc41",
+        "bytes": 75020
+      }
+    },
+    {
+      "artifact": "v67-visual-optics",
+      "stableLevel": 38,
+      "displayNumber": 38,
+      "sourceCommit": "cebc83f5066fe819d3439dc50ad38f15f357ad22",
+      "sourceTree": "e72288cfc34aaa43eff24d8abd9ac2f3e43845c2",
+      "runId": 39700325617,
+      "runAttempt": 1,
+      "images": [
+        {
+          "path": "v67-visual-optics/room-38/player-start.jpg",
+          "sha256": "902c3a48641f0bd8bfab2d240fcbedf4a038317469652b50e01a9247722963fe",
+          "bytes": 77491
+        },
+        {
+          "path": "v67-visual-optics/room-38/oblique.jpg",
+          "sha256": "ab1e5e62507d57b2f29bb2718ea2d2b60551ae6f560780acccf141a0c03b77a6",
+          "bytes": 105683
+        },
+        {
+          "path": "v67-visual-optics/room-38/opposite.jpg",
+          "sha256": "3e18be2ba930229d62d6f63487aa66dd9206384c31474145a59299b7abf38959",
+          "bytes": 97907
+        },
+        {
+          "path": "v67-visual-optics/room-38/clear-layout.jpg",
+          "sha256": "8a39ae90111c12586064542a4e45b12b31b9d4f748c700774b0c40f5ffe8106a",
+          "bytes": 53173
+        },
+        {
+          "path": "v67-visual-optics/room-38/route-mid.jpg",
+          "sha256": "62afd97ae293c4d3f8167cb9fa25169115adb718aa9f2c98adacf446fb381862",
+          "bytes": 78601
+        },
+        {
+          "path": "v67-visual-optics/room-38/route-far.jpg",
+          "sha256": "625c4a6bf1e5d177549382a41c8ddab0478ad74e212fbab21da6a4c2b8057a08",
+          "bytes": 48826
+        }
+      ],
+      "nativeHUD": {
+        "path": "v67-visual-optics/room-38/player-start-hud.jpg",
+        "sha256": "c00274f279d48a84646f100447079b4b62cc91765455143796eb741177acd9af",
+        "bytes": 79050
+      }
+    },
+    {
+      "artifact": "v67-visual-optics",
+      "stableLevel": 39,
+      "displayNumber": 39,
+      "sourceCommit": "cebc83f5066fe819d3439dc50ad38f15f357ad22",
+      "sourceTree": "e72288cfc34aaa43eff24d8abd9ac2f3e43845c2",
+      "runId": 39700325617,
+      "runAttempt": 1,
+      "images": [
+        {
+          "path": "v67-visual-optics/room-39/player-start.jpg",
+          "sha256": "eb08e81deeb459ff1e1bcc3d4f0bbe5f6ae9414ec91c4187d2411b6d1880d987",
+          "bytes": 64869
+        },
+        {
+          "path": "v67-visual-optics/room-39/oblique.jpg",
+          "sha256": "db9ec7ba3ab55ce3d901ab30c8728cb4caff9291e330b15f750f874741ec80f7",
+          "bytes": 77900
+        },
+        {
+          "path": "v67-visual-optics/room-39/opposite.jpg",
+          "sha256": "b6b8bd7366a4a1caa92814b20be54cf44eb4e99a72b90af52650d42a952e111d",
+          "bytes": 67293
+        },
+        {
+          "path": "v67-visual-optics/room-39/clear-layout.jpg",
+          "sha256": "091139d947ad99dca58fa108608958fb6b2d7f5a558b367b71a6ae5e1e53c087",
+          "bytes": 47561
+        },
+        {
+          "path": "v67-visual-optics/room-39/route-mid.jpg",
+          "sha256": "5418f51a82060a05a082280f6f7606c50496fc6bb13bc0e52fb91a371a74e6e1",
+          "bytes": 53742
+        },
+        {
+          "path": "v67-visual-optics/room-39/route-far.jpg",
+          "sha256": "f1653ef45ef3b12c83901ae58cc1fb61b4d4742a01d6ab4fb562f1c538d191bf",
+          "bytes": 26548
+        }
+      ],
+      "nativeHUD": {
+        "path": "v67-visual-optics/room-39/player-start-hud.jpg",
+        "sha256": "8336a7131644c326820005b5c0aaac83c7c5106bf22d6dff224c76e4802c001d",
+        "bytes": 66343
+      }
+    },
+    {
+      "artifact": "v67-visual-optics",
+      "stableLevel": 40,
+      "displayNumber": 40,
+      "sourceCommit": "cebc83f5066fe819d3439dc50ad38f15f357ad22",
+      "sourceTree": "e72288cfc34aaa43eff24d8abd9ac2f3e43845c2",
+      "runId": 39700325617,
+      "runAttempt": 1,
+      "images": [
+        {
+          "path": "v67-visual-optics/room-40/player-start.jpg",
+          "sha256": "25ecaedc3c6a26874a308dee01e551bfd49c3b6af5d6d4852619fbf055652d2f",
+          "bytes": 85239
+        },
+        {
+          "path": "v67-visual-optics/room-40/oblique.jpg",
+          "sha256": "6fad9999dafeef7cb0c68ae8324734c03082cb2840e1b1a9c9dc370e9c0c1d41",
+          "bytes": 91098
+        },
+        {
+          "path": "v67-visual-optics/room-40/opposite.jpg",
+          "sha256": "bc80864ef525f79753c4677171fae458b88637d3ca1bee6938cdcf63de75e12f",
+          "bytes": 63064
+        },
+        {
+          "path": "v67-visual-optics/room-40/clear-layout.jpg",
+          "sha256": "707ece0688d64135af2133e9f5204571d7c25a78d8678780dc8c9c1a2b34120c",
+          "bytes": 75742
+        },
+        {
+          "path": "v67-visual-optics/room-40/route-mid.jpg",
+          "sha256": "2e4947e56ec48d7a668ae2907c8a0961935e9a0e02be46131c3277df32a78f60",
+          "bytes": 76824
+        },
+        {
+          "path": "v67-visual-optics/room-40/route-far.jpg",
+          "sha256": "d775866f9690f1645ace10dfedd3efd37d8ea427ae015523d2cbde118ba0bb06",
+          "bytes": 28283
+        }
+      ],
+      "nativeHUD": {
+        "path": "v67-visual-optics/room-40/player-start-hud.jpg",
+        "sha256": "5fa6ae7ec01e5163aaaf2c1a5f7fbeae5d56bf3fce7908eb6436677ecaa7a07d",
+        "bytes": 86724
+      }
+    },
+    {
+      "artifact": "v67-visual-castle",
+      "stableLevel": 41,
+      "displayNumber": 51,
+      "sourceCommit": "cebc83f5066fe819d3439dc50ad38f15f357ad22",
+      "sourceTree": "e72288cfc34aaa43eff24d8abd9ac2f3e43845c2",
+      "runId": 39700325617,
+      "runAttempt": 1,
+      "images": [
+        {
+          "path": "v67-visual-castle/room-41/player-start.jpg",
+          "sha256": "c106f4e07f103861c8d8789573ae7d6b470d145078e92a45a7c05fa09da90313",
+          "bytes": 86419
+        },
+        {
+          "path": "v67-visual-castle/room-41/oblique.jpg",
+          "sha256": "e21d9bfc0dc79b8db7a28b0c5224f8e5f27c2755aec62cd5c76f472d1a86ebf3",
+          "bytes": 69055
+        },
+        {
+          "path": "v67-visual-castle/room-41/opposite.jpg",
+          "sha256": "d765c97eb0e30696638d7a34b3157f235115f034d5bb0f7b411baca0dc454f53",
+          "bytes": 65367
+        },
+        {
+          "path": "v67-visual-castle/room-41/clear-layout.jpg",
+          "sha256": "4a5e68d1390c7af1fd9e93ec95b7a5912b18f6245a9a4d558fc7958239905ba9",
+          "bytes": 33691
+        },
+        {
+          "path": "v67-visual-castle/room-41/route-mid.jpg",
+          "sha256": "050604a0e78cca9cfcd3fb354ed4864dd97d3cabd007ab561d400599fca915b2",
+          "bytes": 88589
+        },
+        {
+          "path": "v67-visual-castle/room-41/route-far.jpg",
+          "sha256": "5c2de8f8d886e2a676c527352bb7870fc0ab6d826e563739613b711ef80af0bd",
+          "bytes": 68888
+        },
+        {
+          "path": "v67-visual-castle/room-41/castle-freight.jpg",
+          "sha256": "f12d6a701940e1619bdf3dd8adf99839d86135b064ae701ae8eb3cafd174b7d6",
+          "bytes": 82165
+        },
+        {
+          "path": "v67-visual-castle/room-41/castle-sluice.jpg",
+          "sha256": "30faf952985ca6212e929291275df15c07801a43c9a183239c8980c87630d2e8",
+          "bytes": 107199
+        },
+        {
+          "path": "v67-visual-castle/room-41/castle-optics.jpg",
+          "sha256": "388d1846fb7095b82cb557c3ea62e9d4164ce06cd1e4dd95f68b7cb0bacf42a5",
+          "bytes": 103642
+        },
+        {
+          "path": "v67-visual-castle/room-41/castle-hoist.jpg",
+          "sha256": "b2a4b5de1055f893ef2a7f95ef0d7a39c5b67f58425e98b34aedd26130edb72d",
+          "bytes": 104825
+        },
+        {
+          "path": "v67-visual-castle/room-41/castle-archive.jpg",
+          "sha256": "c39a2259d6f717223806bc74f09ce7828ec1a80c32c2d9466a42cc4eebf3717f",
+          "bytes": 84258
+        },
+        {
+          "path": "v67-visual-castle/room-41/castle-flywheel.jpg",
+          "sha256": "0de008de8b995741184ecd9bd167411ed6f22f743dce986c60b9f1bb92ef06fd",
+          "bytes": 105091
+        },
+        {
+          "path": "v67-visual-castle/room-41/castle-magnet.jpg",
+          "sha256": "2917f57d622609a7ecb5476cd4d5365ab26f9616939935166f8fd5f36e206cbc",
+          "bytes": 77989
+        },
+        {
+          "path": "v67-visual-castle/room-41/castle-migrant.jpg",
+          "sha256": "2430efb0973fa8935a6ca1663968133a313960e4042fce9aa3dc678b3b20819d",
+          "bytes": 99593
+        },
+        {
+          "path": "v67-visual-castle/room-41/castle-pendulum.jpg",
+          "sha256": "6b621a4668c1bd5e2acfb42cac36c2b10b35e98d41805d1761c8732964ef3b7d",
+          "bytes": 49708
+        },
+        {
+          "path": "v67-visual-castle/room-41/castle-inertia.jpg",
+          "sha256": "b5ba0184d83e1ba6c68f1fa8565973445c0b20fa8638c8878dd8f3fc5aaf6d4d",
+          "bytes": 94675
+        },
+        {
+          "path": "v67-visual-castle/room-41/castle-impulse.jpg",
+          "sha256": "6c7bb54992fbac6e28af4d0c4225dfbc8e6676cb03848aa540c2efbf878c8776",
+          "bytes": 66349
+        },
+        {
+          "path": "v67-visual-castle/room-41/castle-crown.jpg",
+          "sha256": "6ee377873ef1db30ab1c6ca0531c99a3536c2c5c941935f0652943aeff0ac8bb",
+          "bytes": 79423
+        },
+        {
+          "path": "v67-visual-castle/room-41/extra-impulse-alternate.jpg",
+          "sha256": "4d19cc41d740ea4333153bf4e4e88285da9244c04db7bdc1ee6956eb37debc2e",
+          "bytes": 76296
+        },
+        {
+          "path": "v67-visual-castle/room-41/extra-inertia-alternate.jpg",
+          "sha256": "ae722ae7c53a2cf910275bfefbab4b54830158b70f7c78a02d9305454c8297c2",
+          "bytes": 81320
+        },
+        {
+          "path": "v67-visual-castle/room-41/extra-pendulum-alternate.jpg",
+          "sha256": "dd273f26cf24101fabe485519cec133260c673fd3930112ad731606ae2f671e1",
+          "bytes": 101033
+        },
+        {
+          "path": "v67-visual-castle/room-41/extra-finale-contact.jpg",
+          "sha256": "c2d6d6b49681a186b44baab1dd068504b89c4b9efffd87458ad0097430be1bd0",
+          "bytes": 75378
+        },
+        {
+          "path": "v67-visual-castle/room-41/extra-optics-projector.jpg",
+          "sha256": "366518a23e551e891bbea4d886c1668121a2f9807413388229cad204579c0294",
+          "bytes": 66867
+        }
+      ],
+      "nativeHUD": {
+        "path": "v67-visual-castle/room-41/player-start-hud.jpg",
+        "sha256": "801cf49719b8be7a00a47d8a5cdbaac717100c1fd307f4ff4e5c7585a707c917",
+        "bytes": 87927
+      }
+    },
+    {
+      "artifact": "v67-visual-fracture",
+      "stableLevel": 42,
+      "displayNumber": 41,
+      "sourceCommit": "cebc83f5066fe819d3439dc50ad38f15f357ad22",
+      "sourceTree": "e72288cfc34aaa43eff24d8abd9ac2f3e43845c2",
+      "runId": 39700325617,
+      "runAttempt": 1,
+      "images": [
+        {
+          "path": "v67-visual-fracture/room-42/player-start.jpg",
+          "sha256": "4c4304cf9c465061f142b8a08dd3d43bf635704556c41484f6f022e8cefc576c",
+          "bytes": 73224
+        },
+        {
+          "path": "v67-visual-fracture/room-42/oblique.jpg",
+          "sha256": "8001d4c05be8e24e5e69109a61cceec39ff58387c02013956b2c1bb9ecb2aed2",
+          "bytes": 85922
+        },
+        {
+          "path": "v67-visual-fracture/room-42/opposite.jpg",
+          "sha256": "3137079227ba3f442025f08dbf11b302fc607119f2a09a957d602da7f595fc86",
+          "bytes": 92843
+        },
+        {
+          "path": "v67-visual-fracture/room-42/clear-layout.jpg",
+          "sha256": "b6e18cf6b88ef63e3b00eff55e62b4197fc05aa337b58f28b94c00913e4952e3",
+          "bytes": 39018
+        },
+        {
+          "path": "v67-visual-fracture/room-42/route-mid.jpg",
+          "sha256": "8271b478d5015c588725bea1bcdc941ea2ba7a665deb7eadd6abd7fe9544df20",
+          "bytes": 100849
+        },
+        {
+          "path": "v67-visual-fracture/room-42/route-far.jpg",
+          "sha256": "6b08f1ecc4f166a9c8a97cea72305d806f27982d0ad5e9966f2e83e54d5b5bdb",
+          "bytes": 38924
+        }
+      ],
+      "nativeHUD": {
+        "path": "v67-visual-fracture/room-42/player-start-hud.jpg",
+        "sha256": "92be31874dde0750b19a70556b4e5c92554e4cb16fb5f9e88910af04ea349fab",
+        "bytes": 74459
+      }
+    },
+    {
+      "artifact": "v67-visual-fracture",
+      "stableLevel": 43,
+      "displayNumber": 42,
+      "sourceCommit": "cebc83f5066fe819d3439dc50ad38f15f357ad22",
+      "sourceTree": "e72288cfc34aaa43eff24d8abd9ac2f3e43845c2",
+      "runId": 39700325617,
+      "runAttempt": 1,
+      "images": [
+        {
+          "path": "v67-visual-fracture/room-43/player-start.jpg",
+          "sha256": "e9090a68f30387bcadb31f902cee3fd49508342d34c5c7df46cc274a8e656335",
+          "bytes": 92640
+        },
+        {
+          "path": "v67-visual-fracture/room-43/oblique.jpg",
+          "sha256": "b68e3674fcd845137c83cfa96853689856f368f1fcb0c0dc5e52b75814370447",
+          "bytes": 114100
+        },
+        {
+          "path": "v67-visual-fracture/room-43/opposite.jpg",
+          "sha256": "085dab355df4d8ccf329083418d8315a146c22992a8fb49e68f119bebe18ec06",
+          "bytes": 100762
+        },
+        {
+          "path": "v67-visual-fracture/room-43/clear-layout.jpg",
+          "sha256": "2c859f4b6d36df0e641c572ed97fc3c63c306d05dbb9452f54694eddf35a221e",
+          "bytes": 55769
+        },
+        {
+          "path": "v67-visual-fracture/room-43/route-mid.jpg",
+          "sha256": "f24b76a1d6a785cf6cf3234d10a8ea6c17df1b1f92d8a8c8b1538b367c43203e",
+          "bytes": 94009
+        },
+        {
+          "path": "v67-visual-fracture/room-43/route-far.jpg",
+          "sha256": "d7a0107627007f95099760a0db77c77b1ced121111ca9e34341806f4beca4d2c",
+          "bytes": 66491
+        }
+      ],
+      "nativeHUD": {
+        "path": "v67-visual-fracture/room-43/player-start-hud.jpg",
+        "sha256": "d413758ba95445f5a1025ce70a9be8961342137dd06dc6311ca8ba5af4510066",
+        "bytes": 94101
+      }
+    },
+    {
+      "artifact": "v67-visual-fracture",
+      "stableLevel": 44,
+      "displayNumber": 43,
+      "sourceCommit": "cebc83f5066fe819d3439dc50ad38f15f357ad22",
+      "sourceTree": "e72288cfc34aaa43eff24d8abd9ac2f3e43845c2",
+      "runId": 39700325617,
+      "runAttempt": 1,
+      "images": [
+        {
+          "path": "v67-visual-fracture/room-44/player-start.jpg",
+          "sha256": "ab7924b9fe20f6b12680e6a1d93cb38d8ecc151a39ed6ee2d6888879314bd953",
+          "bytes": 88585
+        },
+        {
+          "path": "v67-visual-fracture/room-44/oblique.jpg",
+          "sha256": "8d3d14e2be7397afe481f121d5ccd332922d721b75430aec372246ae91d66d10",
+          "bytes": 113000
+        },
+        {
+          "path": "v67-visual-fracture/room-44/opposite.jpg",
+          "sha256": "b3d398ec99b665223ff590f46a324c65a0903ac63f49a5cf48a78f52ba1e4b5a",
+          "bytes": 116454
+        },
+        {
+          "path": "v67-visual-fracture/room-44/clear-layout.jpg",
+          "sha256": "6163088478378e5fa21c4242e3fc65b11ebd0dd7c35091aa1695b91fa7121e2c",
+          "bytes": 79054
+        },
+        {
+          "path": "v67-visual-fracture/room-44/route-mid.jpg",
+          "sha256": "8679d984fa696e1236cdcf39771b1ca98e4df3fcad3ab04571ff10aa912fc65a",
+          "bytes": 43820
+        },
+        {
+          "path": "v67-visual-fracture/room-44/route-far.jpg",
+          "sha256": "0424f8b1d336ef1dbf5235f03b3bfd1484d852017ae3ffd4586836f5268651ff",
+          "bytes": 32482
+        }
+      ],
+      "nativeHUD": {
+        "path": "v67-visual-fracture/room-44/player-start-hud.jpg",
+        "sha256": "ff3a83ad5a825f75dda1b1f6e2cd889a3bb225359762a3614d599b86bfb3ead3",
+        "bytes": 90120
+      }
+    },
+    {
+      "artifact": "v67-visual-fracture",
+      "stableLevel": 45,
+      "displayNumber": 44,
+      "sourceCommit": "cebc83f5066fe819d3439dc50ad38f15f357ad22",
+      "sourceTree": "e72288cfc34aaa43eff24d8abd9ac2f3e43845c2",
+      "runId": 39700325617,
+      "runAttempt": 1,
+      "images": [
+        {
+          "path": "v67-visual-fracture/room-45/player-start.jpg",
+          "sha256": "b5e47e9a78b3ff32992af19afa8f34b1637191cb5c2f231e124fba5ab3fa7e45",
+          "bytes": 99964
+        },
+        {
+          "path": "v67-visual-fracture/room-45/oblique.jpg",
+          "sha256": "388adfd43b602da9993c5efe6bd0b7204a5ab65b8ba8371f2a55872c9953a912",
+          "bytes": 101298
+        },
+        {
+          "path": "v67-visual-fracture/room-45/opposite.jpg",
+          "sha256": "1f5acdecd10650c9cc40457df564ddf167b902afdf56a1bb429768cb21210698",
+          "bytes": 82869
+        },
+        {
+          "path": "v67-visual-fracture/room-45/clear-layout.jpg",
+          "sha256": "71f6540c6262c89c156e659e58ae275645e597fa937bbe8ebffcdfd55f87f601",
+          "bytes": 37673
+        },
+        {
+          "path": "v67-visual-fracture/room-45/route-mid.jpg",
+          "sha256": "e3703ac3c6f0db491d3a6033a2501691a72055e467cc8082a7daef3aea0fdb72",
+          "bytes": 46681
+        },
+        {
+          "path": "v67-visual-fracture/room-45/route-far.jpg",
+          "sha256": "068ea30a6805288ceac4532629981e867cd43426c25c9d44e21c27147c5a1be9",
+          "bytes": 28344
+        }
+      ],
+      "nativeHUD": {
+        "path": "v67-visual-fracture/room-45/player-start-hud.jpg",
+        "sha256": "bc4be84c628a59d431ae3669bcbf9bb34c9ea9e739cfe9648adec359000edb3b",
+        "bytes": 101037
+      }
+    },
+    {
+      "artifact": "v67-visual-fracture",
+      "stableLevel": 46,
+      "displayNumber": 45,
+      "sourceCommit": "cebc83f5066fe819d3439dc50ad38f15f357ad22",
+      "sourceTree": "e72288cfc34aaa43eff24d8abd9ac2f3e43845c2",
+      "runId": 39700325617,
+      "runAttempt": 1,
+      "images": [
+        {
+          "path": "v67-visual-fracture/room-46/player-start.jpg",
+          "sha256": "951d4ae9eb58e78074e4e7c51cb740e13deb9055c3a4e916aedf1a8ae8a6520f",
+          "bytes": 81262
+        },
+        {
+          "path": "v67-visual-fracture/room-46/oblique.jpg",
+          "sha256": "a2e9313259198cd59e4a695636bbb99f6a1bbd0a396454ff908d4fec32d1d82d",
+          "bytes": 100995
+        },
+        {
+          "path": "v67-visual-fracture/room-46/opposite.jpg",
+          "sha256": "33d82f4713565a5f94f8ed29122ad2f64487ab6f7420650640f90f018947b9f8",
+          "bytes": 62161
+        },
+        {
+          "path": "v67-visual-fracture/room-46/clear-layout.jpg",
+          "sha256": "1471fe89ce5862b26b735c9e8adde70b1fbc084ee652613a70efe20730770ae3",
+          "bytes": 74937
+        },
+        {
+          "path": "v67-visual-fracture/room-46/route-mid.jpg",
+          "sha256": "76d336c4a55d06db06285c20fc52ff7ff087a52a77d6425da1893cb2fb70ef8d",
+          "bytes": 82354
+        },
+        {
+          "path": "v67-visual-fracture/room-46/route-far.jpg",
+          "sha256": "570fb969384fd9099c1caeb9b05498d61e6d43cc61ca5f75dca2a58fe6614553",
+          "bytes": 59136
+        }
+      ],
+      "nativeHUD": {
+        "path": "v67-visual-fracture/room-46/player-start-hud.jpg",
+        "sha256": "78ec607309e4bc4461c6ef81f0f4848d5df5d140a5c70fe9dfb194c697886119",
+        "bytes": 82680
+      }
+    },
+    {
+      "artifact": "v67-visual-fracture",
+      "stableLevel": 47,
+      "displayNumber": 46,
+      "sourceCommit": "cebc83f5066fe819d3439dc50ad38f15f357ad22",
+      "sourceTree": "e72288cfc34aaa43eff24d8abd9ac2f3e43845c2",
+      "runId": 39700325617,
+      "runAttempt": 1,
+      "images": [
+        {
+          "path": "v67-visual-fracture/room-47/player-start.jpg",
+          "sha256": "57d1682fcd75eeb148ba26875a73831ad8789aa2fcd5dfe053b1e80498c87224",
+          "bytes": 102044
+        },
+        {
+          "path": "v67-visual-fracture/room-47/oblique.jpg",
+          "sha256": "9a25cb3fd6ac90abdc018ccd5b4138c4b7ef7ac00124f38248423afc9b72561e",
+          "bytes": 104343
+        },
+        {
+          "path": "v67-visual-fracture/room-47/opposite.jpg",
+          "sha256": "d4af5b5dcba49bcccdcd25357ffc84affc3b7d2c649dd620558ee953e2466861",
+          "bytes": 85872
+        },
+        {
+          "path": "v67-visual-fracture/room-47/clear-layout.jpg",
+          "sha256": "2d426e0796e0a85f061d1190d22e2f77d4854f4dbd1eca5307115bcee4cd795d",
+          "bytes": 88577
+        },
+        {
+          "path": "v67-visual-fracture/room-47/route-mid.jpg",
+          "sha256": "4ccb9acfc99c39274fc6ed16c29c1b1007c9ac579fcf65abaa10760e2350e7fa",
+          "bytes": 70176
+        },
+        {
+          "path": "v67-visual-fracture/room-47/route-far.jpg",
+          "sha256": "1c8b8469eaffd00bc63123c8b2badb39bcf0ede116f255467be1d159351307e0",
+          "bytes": 44881
+        }
+      ],
+      "nativeHUD": {
+        "path": "v67-visual-fracture/room-47/player-start-hud.jpg",
+        "sha256": "24c00bbbd4f64b70befa23f46b6e428d92a438715cb0a40e0c9548f631993d09",
+        "bytes": 103425
+      }
+    },
+    {
+      "artifact": "v67-visual-fracture",
+      "stableLevel": 48,
+      "displayNumber": 47,
+      "sourceCommit": "cebc83f5066fe819d3439dc50ad38f15f357ad22",
+      "sourceTree": "e72288cfc34aaa43eff24d8abd9ac2f3e43845c2",
+      "runId": 39700325617,
+      "runAttempt": 1,
+      "images": [
+        {
+          "path": "v67-visual-fracture/room-48/player-start.jpg",
+          "sha256": "78cd7815bb00d1f85b65861a73f4650eb5a99dffdf913275252d7c006028e54e",
+          "bytes": 82453
+        },
+        {
+          "path": "v67-visual-fracture/room-48/oblique.jpg",
+          "sha256": "afa2f97e652218219f3cffed3fe22b4d2bf38d14556bd49a1ffb37019099bf47",
+          "bytes": 78450
+        },
+        {
+          "path": "v67-visual-fracture/room-48/opposite.jpg",
+          "sha256": "369609fe9cfc700ccee309194a2e15719273b7614c4e38e5461ef6fa11937553",
+          "bytes": 96869
+        },
+        {
+          "path": "v67-visual-fracture/room-48/clear-layout.jpg",
+          "sha256": "3a1a4585049fae304eb887b581a201e33af40876b33a0f9d44b2d76d4fb37bab",
+          "bytes": 49470
+        },
+        {
+          "path": "v67-visual-fracture/room-48/route-mid.jpg",
+          "sha256": "940d85d4fe7204310704bf342568a06267c02284ddd82f393a38722013cf97de",
+          "bytes": 85943
+        },
+        {
+          "path": "v67-visual-fracture/room-48/route-far.jpg",
+          "sha256": "90572d1c24d6fc28cb0b1a7ffc6b02ecea1ecca03a47ba428998e1a41c6a3d39",
+          "bytes": 46151
+        }
+      ],
+      "nativeHUD": {
+        "path": "v67-visual-fracture/room-48/player-start-hud.jpg",
+        "sha256": "c8ec08b2e246a2c5b30773ad8e00c6d4f8b4b9e1f5e375ce6b9c5313b4d836b1",
+        "bytes": 83823
+      }
+    },
+    {
+      "artifact": "v67-visual-fracture",
+      "stableLevel": 49,
+      "displayNumber": 48,
+      "sourceCommit": "cebc83f5066fe819d3439dc50ad38f15f357ad22",
+      "sourceTree": "e72288cfc34aaa43eff24d8abd9ac2f3e43845c2",
+      "runId": 39700325617,
+      "runAttempt": 1,
+      "images": [
+        {
+          "path": "v67-visual-fracture/room-49/player-start.jpg",
+          "sha256": "2c214d7713f3dcdf517929e385cd8618196284f1d0f7368722a527838dc30c78",
+          "bytes": 89001
+        },
+        {
+          "path": "v67-visual-fracture/room-49/oblique.jpg",
+          "sha256": "dbeb55a76de229de40880368ee263ed739b246c8ce7fd8ba0796d10bf27e5fd1",
+          "bytes": 98536
+        },
+        {
+          "path": "v67-visual-fracture/room-49/opposite.jpg",
+          "sha256": "311de1413e3b527dc4741baa6ac7023fa6ce1d57ef88e5136f682e4686142faa",
+          "bytes": 97852
+        },
+        {
+          "path": "v67-visual-fracture/room-49/clear-layout.jpg",
+          "sha256": "adf80debbfb019717cd6263d9cd756d8916e19ca01fdecf2558cd87d005ab7f0",
+          "bytes": 69154
+        },
+        {
+          "path": "v67-visual-fracture/room-49/route-mid.jpg",
+          "sha256": "0147a470fc9e5214be8b664d678ef4566527bfd2f4753675a9e9d65dcb851fb0",
+          "bytes": 95236
+        },
+        {
+          "path": "v67-visual-fracture/room-49/route-far.jpg",
+          "sha256": "d0a107e129866ddae23b5fc8e2ed8681e95842d4c3b43708c1fbe449a5b9ed16",
+          "bytes": 60265
+        }
+      ],
+      "nativeHUD": {
+        "path": "v67-visual-fracture/room-49/player-start-hud.jpg",
+        "sha256": "36a98ef1388e3e97d2e4f0d0189ed486b2faa2e4d8c60560fa09463acd5a0ff9",
+        "bytes": 90758
+      }
+    },
+    {
+      "artifact": "v67-visual-fracture",
+      "stableLevel": 50,
+      "displayNumber": 49,
+      "sourceCommit": "cebc83f5066fe819d3439dc50ad38f15f357ad22",
+      "sourceTree": "e72288cfc34aaa43eff24d8abd9ac2f3e43845c2",
+      "runId": 39700325617,
+      "runAttempt": 1,
+      "images": [
+        {
+          "path": "v67-visual-fracture/room-50/player-start.jpg",
+          "sha256": "691ed84529ee181ef31f6f7271002edaca155fb5951dc703d051b5433f8fa969",
+          "bytes": 93076
+        },
+        {
+          "path": "v67-visual-fracture/room-50/oblique.jpg",
+          "sha256": "1ba255d562286ccf4f86c0a5c1cc70404352abd0c077208c4ee2617657f33efe",
+          "bytes": 108889
+        },
+        {
+          "path": "v67-visual-fracture/room-50/opposite.jpg",
+          "sha256": "165b5a77dd51e95bb2919d8588ba0f961fcbae75e8209fea8b1ec83367bfd89a",
+          "bytes": 101568
+        },
+        {
+          "path": "v67-visual-fracture/room-50/clear-layout.jpg",
+          "sha256": "7ff395e1600da07790a9535a270b6f606ff797d1209c755aa2eaf2635b29f971",
+          "bytes": 61028
+        },
+        {
+          "path": "v67-visual-fracture/room-50/route-mid.jpg",
+          "sha256": "44fb0e6dc8ce8aaf01d95d16963da89c745a487c97350421707fc23faac7caf4",
+          "bytes": 40704
+        },
+        {
+          "path": "v67-visual-fracture/room-50/route-far.jpg",
+          "sha256": "a13ea1de11c6e5cfc8d45a63fd39d36c09bfbe7fc0948d0b6f5a52b6379ac967",
+          "bytes": 44744
+        }
+      ],
+      "nativeHUD": {
+        "path": "v67-visual-fracture/room-50/player-start-hud.jpg",
+        "sha256": "c2f140b90d6227f4e4a2d92b1ad7de7a01c51479bbb13f32f1aa953c7d1d3205",
+        "bytes": 93616
+      }
+    },
+    {
+      "artifact": "v67-visual-fracture",
+      "stableLevel": 51,
+      "displayNumber": 50,
+      "sourceCommit": "cebc83f5066fe819d3439dc50ad38f15f357ad22",
+      "sourceTree": "e72288cfc34aaa43eff24d8abd9ac2f3e43845c2",
+      "runId": 39700325617,
+      "runAttempt": 1,
+      "images": [
+        {
+          "path": "v67-visual-fracture/room-51/player-start.jpg",
+          "sha256": "ed87d6f62da86c1d5feb434caa13bd2b9e91612525f266560bc9c8ae9995b68e",
+          "bytes": 72400
+        },
+        {
+          "path": "v67-visual-fracture/room-51/oblique.jpg",
+          "sha256": "8578d5095faef82575f3518ff674ed33a6d5fd686b6366bae71e320ad9eb1e89",
+          "bytes": 107364
+        },
+        {
+          "path": "v67-visual-fracture/room-51/opposite.jpg",
+          "sha256": "a05dd6975086baa0c179bcea7bee4ca29a95113c6e46906f88984890ac146636",
+          "bytes": 62910
+        },
+        {
+          "path": "v67-visual-fracture/room-51/clear-layout.jpg",
+          "sha256": "8de3e6a93d2c3d173126c942057aa95173d0c1d85dd18295fc69eb6f0748bc69",
+          "bytes": 41054
+        },
+        {
+          "path": "v67-visual-fracture/room-51/route-mid.jpg",
+          "sha256": "9d9e1206157bde05797e48a29b66b4520758ba98b81a016a672eed7fff648be8",
+          "bytes": 60761
+        },
+        {
+          "path": "v67-visual-fracture/room-51/route-far.jpg",
+          "sha256": "73061bd7350a800528af7aada2be65c3abe316b536bac7f1418503bf3bd13458",
+          "bytes": 35701
+        }
+      ],
+      "nativeHUD": {
+        "path": "v67-visual-fracture/room-51/player-start-hud.jpg",
+        "sha256": "575c5d13f854c52eb7c51720064b85d48efe9f3c1afb52457be4fd15eee74f34",
+        "bytes": 73725
+      }
+    }
+  ],
+  "reviewConclusion": {
+    "all51StaticScopesCoveredByAttributedCodexReview": true,
+    "hardVisualBlockerReported": false,
+    "retainedStylisticAndCaptureLimits": true,
+    "humanReviewerCount": 0,
+    "finalAcceptanceAuthority": "Root accepts this scoped final visual pass after all19 provider jobs and22 artifacts passed independently verified technical review."
+  },
+  "rootAcceptedAt": "2026-10-22T01:40:51.468270+00:00",
+  "additionalLocalPartialSupplement": {
+    "kind": "LOCAL-only actual final bundle active room17",
+    "report": {
+      "path": "/workspace/scratch/796a39e3632d/visual-v67-room17-local-active-supplement-attempt-2/report.json",
+      "bytes": 11771,
+      "sha256": "a1007b2c61ef0b6d969baf2350108c240a757d6a4c93724cb1e5e8d4311ddfd5"
+    },
+    "image": {
+      "path": "/workspace/scratch/796a39e3632d/visual-v67-room17-local-active-supplement-attempt-2/active-test-oblique.jpg",
+      "bytes": 89682,
+      "sha256": "8be2f998bc43ab076e3de927bff41b588345587eed7fc8808fa8cae82aea4713"
+    },
+    "aggregatePass": false,
+    "canonicalImageCountChanged": false,
+    "reviewers": [
+      "/root/room23_route_advisor",
+      "/root"
+    ],
+    "finding": "The upper active copper tether is visually clear at genuine supported-stage state. This diagnostic used an explicitly declared TEST camera. The native-camera WebGL fence poll timed out after5000ms with unknown cause; failed attempts remain retained. It does not establish all lower branches or native-route animation."
+  }
+}

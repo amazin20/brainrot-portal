@@ -1,0 +1,38 @@
+{
+  "kind": "root-accepted-final-visual-source",
+  "draft": true,
+  "pass": false,
+  "sourceAccepted": false,
+  "publicationAccepted": false,
+  "sourceCommit": null,
+  "sourceTree": null,
+  "sourceReview": {
+    "runId": null,
+    "runAttempt": null
+  },
+  "candidateFiles": [],
+  "candidateBytes": null,
+  "candidateInventorySha256": null,
+  "technicalSummarySha256": null,
+  "assistantVisualInspection": {
+    "reviewer": "Codex",
+    "accepted": false,
+    "coverage": [],
+    "images": [],
+    "summaryReceipt": {
+      "path": "tools/campaign-v67-root-visual-summary.json",
+      "sha256": null
+    }
+  },
+  "checkerWarningReviewSha256": null,
+  "checkerWarningReviewScope": "TBD: exact original-checker predicates and final-source reports; retain every original WARN and NOT VERIFIED.",
+  "technicalReview": null,
+  "masterTzAccepted": false,
+  "humanPlaytest": false,
+  "liveSdkAccepted": false,
+  "liveAdsAccepted": false,
+  "moderationAccepted": false,
+  "physicalPhonePerformanceAccepted": false,
+  "rootAcceptedAt": null,
+  "scope": "UNACCEPTED TEMPLATE ONLY. Fill exact final source/run, inventories, actual inspected image pins and technical evidence only after independently reviewing final CI. No human, live Yandex, moderation or complete master-TZ acceptance."
+}

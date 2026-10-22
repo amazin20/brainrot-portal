@@ -1,0 +1,3165 @@
+{
+  "kind": "unchanged-original-checker-warning-cause-review",
+  "pass": true,
+  "createdAt": "2026-10-22T00:49:56.748Z",
+  "sourceCommit": "cebc83f5066fe819d3439dc50ad38f15f357ad22",
+  "sourceTree": "e72288cfc34aaa43eff24d8abd9ac2f3e43845c2",
+  "sourceInputsSha256": "50a10828044a689c41eb0d03fada1b72c80ed3b8a8308e6306cd007a82e57c75",
+  "runId": 39700325617,
+  "runAttempt": 1,
+  "vendor": {
+    "path": "/workspace/scratch/796a39e3632d/visual-v67/qa/vendor/yandex-games-debug-checker/debugcheck.js",
+    "bytes": 99613,
+    "sha256": "adb1ca16e9b3172712d5eda9b64d6fd6792b5e00e85102a0bf0a2390b3239e00",
+    "upstreamCommit": "f86d4ebd1d17f92911ff64b373286fc8d85aec8e",
+    "version": "1.1.0"
+  },
+  "buildBinding": {
+    "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-build/report.json",
+    "bytes": 36610,
+    "sha256": "64f65610e130c8a490fbd113def83f8cc63e1f5b0d2c5da5a9aec635c591463f"
+  },
+  "cases": [
+    {
+      "mode": "production",
+      "providerArtifactVerification": {
+        "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-yandex.verified.json",
+        "bytes": 1481,
+        "sha256": "401d1be1ecb611f65e1ac7195df8980672c703c3bffad57adaeab96c36c67652"
+      },
+      "packageFilesSha256": "9255134cdddd9b338cfb03729b16b7e07f7aa398fa69441417022f1dfc5f1ef4",
+      "rawBrowserReport": {
+        "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-production-startup/production-original-checker/yandex-debug-checker-report.json",
+        "bytes": 66422,
+        "sha256": "1df023b8e0cb05650c33968499ccd53798acdec88aa3c89d14172029266f58f5"
+      },
+      "rawCounts": {
+        "PASS": 76,
+        "FAIL": 0,
+        "WARN": 3,
+        "N/V": 1,
+        "SCORE": 96
+      },
+      "exactSourceScan": {
+        "bytes": 2372543,
+        "sha256": "c3f26391c2dc02edaef2555b4164eb8486282e5137771fba13b724e12c4c4f5f",
+        "reconstructed": true,
+        "linkedCompletionOrder": [
+          "./assets/index-npFaCiOw.css",
+          "./assets/index-CDXO8D_y.js"
+        ]
+      },
+      "inputFiles": [
+        {
+          "path": "index.html",
+          "bytes": 13732,
+          "sha256": "49fcd9ebadbb8c04893a33fcd51d1f87f18bc9c2433aa86ca8ba9474a4d11184"
+        },
+        {
+          "path": "assets/index-CDXO8D_y.js",
+          "bytes": 2301017,
+          "sha256": "b8d603ef803a3b82b66bb7b47b2ae1b1ef1b9042c54c95d77054661a675bed42"
+        },
+        {
+          "path": "assets/index-npFaCiOw.css",
+          "bytes": 57709,
+          "sha256": "95bdd86175f2327e872226779c11e7ca792e9556cf9788befa214c14dd42099b"
+        }
+      ],
+      "predicates": [
+        {
+          "name": "GameReady timing (п.1.19)",
+          "verdict": "warn",
+          "originalBrowserStatus": "warn"
+        },
+        {
+          "name": "No WebGL notice (п.1.6.1.7)",
+          "verdict": false,
+          "originalBrowserStatus": "warn"
+        },
+        {
+          "name": "No profanity in UI text (п.8.2.4)",
+          "verdict": "warn",
+          "originalBrowserStatus": "warn"
+        },
+        {
+          "name": "Canvas text reminder",
+          "verdict": {
+            "pass": "not_verified",
+            "details": "Canvas text is not visible to DOM scanning; verify rendered text for declared languages"
+          },
+          "originalBrowserStatus": "not_verified"
+        }
+      ],
+      "gameReadyStaticCause": {
+        "initBlock": "YaGames.init()),new Promise((i,r)=>{n=setTimeout(()=>r(new Error(\"SDK Яндекс Игр не ответил. Повтори загрузку.\")),t)})]);if(!s||typeof s.features?.LoadingAPI?.ready!=\"function\")throw new Error(\"SDK Яндекс Игр не завершил подготовку. Повтори загрузку.\");return s}finally{clearTimeout(n)}}class xO{constructor({sdk:e=null,demo:t=!0,hold:n=()=>{},saveProgress:s=()=>!0,now:i=()=>Date.now(),timeout:r=15e3}={}){this.sdk=e,this.demo=t,this.hold=n,this.saveProgress=s,this.now=i,this.timeout=r,this.busy=!1,this.playing=!1,this.adLocks=new Set,this.requestSerial=0,this.lastAdAt=i(),this.lastRestartAttempt=i(),this.readySent=!1,this.disposed=!1,this.requests=new Map,this.fullscreenPending=null,this.onPause=()=>this.hold(\"sdk\",!0),this.onResume=()=>this.hold(\"sdk\",!1),e?.on?.(\"game_api_pause\",this.onPau",
+        "containsWordReady": true,
+        "recognizedReadinessGate": false,
+        "actualGate": "src/main.js:184-185 awaits src/game/LabReadyPresentation.js:4-22 before platform.ready()"
+      },
+      "profanityMatches": [
+        {
+          "pattern": "ru",
+          "match": "ебу",
+          "scanCharacterOffset": 1359045,
+          "context": "жутся по настоящему пути: дальнему резонатору требуется больше времени. Белые решётки пропускают импульс, но не путешественнико"
+        },
+        {
+          "pattern": "ru",
+          "match": "ебу",
+          "scanCharacterOffset": 1367275,
+          "context": "к единственному сервисному пандусу. Ошибка не требует перезапуска.\"]},e5]);function xf(o,e,t,n,s,i=0,r=20){return new Dt(o,t,e,"
+        },
+        {
+          "pattern": "ru",
+          "match": "ебан",
+          "scanCharacterOffset": 1388214,
+          "context": "м относятся к одному устройству.\",12035560,[\"Колебания передаются мосту через тягу. Подвешенный или удерживаемый спутник не каса"
+        },
+        {
+          "pattern": "ru",
+          "match": "ебу",
+          "scanCharacterOffset": 1481184,
+          "context": "рубильник: выключено → открыть → закрыть. Ток требует двух контактов.\"),t.control(\"circuit-contact-clamp\",[-9,0,2],()=>{u.clamp"
+        }
+      ],
+      "webglMatches": [
+        {
+          "match": "WebGLAttributes: Unsupported",
+          "scanCharacterOffset": 338617,
+          "context": "(\"THREE.WebGLAttributes: Unsupported buffer data format: \"+c);return{buffer:d,type:p"
+        },
+        {
+          "match": "WebGLRenderer:\",c,\"not ",
+          "scanCharacterOffset": 494950,
+          "context": "(\"THREE.WebGLRenderer:\",c,\"not supported, using\",h,\"instead.\"),c=h);const u=t.l"
+        },
+        {
+          "match": "WebGLRenderer: \"+n+\" extension not ",
+          "scanCharacterOffset": 510110,
+          "context": "(\"THREE.WebGLRenderer: \"+n+\" extension not supported.\"),s}}}function q_(o,e,t,n){const s={}"
+        },
+        {
+          "match": "WebGLProgram: Unsupported",
+          "scanCharacterOffset": 523662,
+          "context": "(\"THREE.WebGLProgram: Unsupported color space: \",o),[e,\"LinearTransferOETF\"]}}fun"
+        },
+        {
+          "match": "WebGLProgram: Unsupported",
+          "scanCharacterOffset": 524377,
+          "context": "(\"THREE.WebGLProgram: Unsupported toneMapping:\",e),t=\"Linear\"}return\"vec3 \"+o+\"( "
+        },
+        {
+          "match": "WebGLProgram.getParameters:\",A.precision,\"not ",
+          "scanCharacterOffset": 542120,
+          "context": "(\"THREE.WebGLProgram.getParameters:\",A.precision,\"not supported, using\",p,\"instead.\"));const I=C.morph"
+        },
+        {
+          "match": "WebGLRenderer: Attempt to load unsupported",
+          "scanCharacterOffset": 589107,
+          "context": "(\"THREE.WebGLRenderer: Attempt to load unsupported compressed texture format in .uploadTexture()\")"
+        },
+        {
+          "match": "WebGLRenderer: Attempt to load unsupported",
+          "scanCharacterOffset": 589700,
+          "context": "(\"THREE.WebGLRenderer: Attempt to load unsupported compressed texture format in .uploadTexture()\")"
+        },
+        {
+          "match": "WebGLRenderer: Attempt to load unsupported",
+          "scanCharacterOffset": 593040,
+          "context": "(\"THREE.WebGLRenderer: Attempt to load unsupported compressed texture format in .setTextureCube()\""
+        },
+        {
+          "match": "WebGLTextures: Unsupported",
+          "scanCharacterOffset": 604744,
+          "context": "(\"THREE.WebGLTextures: Unsupported texture color space:\",ge)),G}function ye(Z){ret"
+        },
+        {
+          "match": "WebGLRenderer: Texture samplers can not ",
+          "scanCharacterOffset": 628430,
+          "context": "(\"THREE.WebGLRenderer: Texture samplers can not be part of an uniforms group.\"):console.warn(\"TH"
+        },
+        {
+          "match": "WebGLRenderer: Unsupported",
+          "scanCharacterOffset": 628522,
+          "context": "(\"THREE.WebGLRenderer: Unsupported uniform value type.\",x),w}function m(x){const w"
+        },
+        {
+          "match": "WebGLRenderer: WebGL 1 is not ",
+          "scanCharacterOffset": 629241,
+          "context": "(\"THREE.WebGLRenderer: WebGL 1 is not supported since r163.\");p=n.getContextAttributes"
+        },
+        {
+          "match": "WebGLRenderer: A WebGL context could not ",
+          "scanCharacterOffset": 634885,
+          "context": "(\"THREE.WebGLRenderer: A WebGL context could not be created. Reason: \",he.statusMessage)}function"
+        },
+        {
+          "match": "WebGLRenderer.render: camera is not ",
+          "scanCharacterOffset": 638764,
+          "context": "(\"THREE.WebGLRenderer.render: camera is not an instance of THREE.Camera.\");return}if(v===!0)"
+        }
+      ]
+    },
+    {
+      "mode": "review",
+      "providerArtifactVerification": {
+        "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-yandex-review-dist.verified.json",
+        "bytes": 1517,
+        "sha256": "2f49465e6f0fc40ad9207febc74de39365100363fccf4c6eeb66cf07451660a8"
+      },
+      "packageFilesSha256": "2734ddc7ecfeb6f7e8ed91341427804dacb75ba11f79015067e55a4563be4015",
+      "rawBrowserReport": {
+        "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-checker-platform-optics/room-31/checker/yandex-debug-checker-report.json",
+        "bytes": 68214,
+        "sha256": "6152220825cc3d205a5b3e136c262643b5da8953a438619f69228cf931ee8f2e"
+      },
+      "rawCounts": {
+        "PASS": 78,
+        "FAIL": 0,
+        "WARN": 3,
+        "N/V": 1,
+        "SCORE": 96
+      },
+      "exactSourceScan": {
+        "bytes": 2383618,
+        "sha256": "dea0b8025ae255d604b2c5f1a070d0d3096ddb9fee3c5c34aef42ad191894d80",
+        "reconstructed": true,
+        "linkedCompletionOrder": [
+          "./assets/index-npFaCiOw.css",
+          "./assets/index-DAQaHAa5.js"
+        ]
+      },
+      "inputFiles": [
+        {
+          "path": "index.html",
+          "bytes": 13732,
+          "sha256": "0833f8e8808f3fe1c9e8c868a1009ebc72b530f03992cc60d90b00dd203c2711"
+        },
+        {
+          "path": "assets/index-DAQaHAa5.js",
+          "bytes": 2312092,
+          "sha256": "cdcb6154b93a99309fb4e61e0efa7c2bd543165073e61efbd618d6b2e5681ab1"
+        },
+        {
+          "path": "assets/index-npFaCiOw.css",
+          "bytes": 57709,
+          "sha256": "95bdd86175f2327e872226779c11e7ca792e9556cf9788befa214c14dd42099b"
+        }
+      ],
+      "predicates": [
+        {
+          "name": "GameReady timing (п.1.19)",
+          "verdict": "warn",
+          "originalBrowserStatus": "warn"
+        },
+        {
+          "name": "No WebGL notice (п.1.6.1.7)",
+          "verdict": false,
+          "originalBrowserStatus": "warn"
+        },
+        {
+          "name": "No profanity in UI text (п.8.2.4)",
+          "verdict": "warn",
+          "originalBrowserStatus": "warn"
+        },
+        {
+          "name": "Canvas text reminder",
+          "verdict": {
+            "pass": "not_verified",
+            "details": "Canvas text is not visible to DOM scanning; verify rendered text for declared languages"
+          },
+          "originalBrowserStatus": "not_verified"
+        }
+      ],
+      "gameReadyStaticCause": {
+        "initBlock": "YaGames.init()),new Promise((i,r)=>{n=setTimeout(()=>r(new Error(\"SDK Яндекс Игр не ответил. Повтори загрузку.\")),t)})]);if(!s||typeof s.features?.LoadingAPI?.ready!=\"function\")throw new Error(\"SDK Яндекс Игр не завершил подготовку. Повтори загрузку.\");return s}finally{clearTimeout(n)}}class FO{constructor({sdk:e=null,demo:t=!0,hold:n=()=>{},saveProgress:s=()=>!0,now:i=()=>Date.now(),timeout:r=15e3}={}){this.sdk=e,this.demo=t,this.hold=n,this.saveProgress=s,this.now=i,this.timeout=r,this.busy=!1,this.playing=!1,this.adLocks=new Set,this.requestSerial=0,this.lastAdAt=i(),this.lastRestartAttempt=i(),this.readySent=!1,this.disposed=!1,this.requests=new Map,this.fullscreenPending=null,this.onPause=()=>this.hold(\"sdk\",!0),this.onResume=()=>this.hold(\"sdk\",!1),e?.on?.(\"game_api_pause\",this.onPau",
+        "containsWordReady": true,
+        "recognizedReadinessGate": false,
+        "actualGate": "src/main.js:184-185 awaits src/game/LabReadyPresentation.js:4-22 before platform.ready()"
+      },
+      "profanityMatches": [
+        {
+          "pattern": "ru",
+          "match": "ебу",
+          "scanCharacterOffset": 1360589,
+          "context": "жутся по настоящему пути: дальнему резонатору требуется больше времени. Белые решётки пропускают импульс, но не путешественнико"
+        },
+        {
+          "pattern": "ru",
+          "match": "ебу",
+          "scanCharacterOffset": 1368819,
+          "context": "к единственному сервисному пандусу. Ошибка не требует перезапуска.\"]},l5]);function Mf(o,e,t,n,s,i=0,r=20){return new Dt(o,t,e,"
+        },
+        {
+          "pattern": "ru",
+          "match": "ебан",
+          "scanCharacterOffset": 1389758,
+          "context": "м относятся к одному устройству.\",12035560,[\"Колебания передаются мосту через тягу. Подвешенный или удерживаемый спутник не каса"
+        },
+        {
+          "pattern": "ru",
+          "match": "ебу",
+          "scanCharacterOffset": 1482728,
+          "context": "рубильник: выключено → открыть → закрыть. Ток требует двух контактов.\"),t.control(\"circuit-contact-clamp\",[-9,0,2],()=>{u.clamp"
+        }
+      ],
+      "webglMatches": [
+        {
+          "match": "WebGLAttributes: Unsupported",
+          "scanCharacterOffset": 340169,
+          "context": "(\"THREE.WebGLAttributes: Unsupported buffer data format: \"+c);return{buffer:d,type:p"
+        },
+        {
+          "match": "WebGLRenderer:\",c,\"not ",
+          "scanCharacterOffset": 496502,
+          "context": "(\"THREE.WebGLRenderer:\",c,\"not supported, using\",h,\"instead.\"),c=h);const u=t.l"
+        },
+        {
+          "match": "WebGLRenderer: \"+n+\" extension not ",
+          "scanCharacterOffset": 511662,
+          "context": "(\"THREE.WebGLRenderer: \"+n+\" extension not supported.\"),s}}}function tA(o,e,t,n){const s={}"
+        },
+        {
+          "match": "WebGLProgram: Unsupported",
+          "scanCharacterOffset": 525206,
+          "context": "(\"THREE.WebGLProgram: Unsupported color space: \",o),[e,\"LinearTransferOETF\"]}}fun"
+        },
+        {
+          "match": "WebGLProgram: Unsupported",
+          "scanCharacterOffset": 525921,
+          "context": "(\"THREE.WebGLProgram: Unsupported toneMapping:\",e),t=\"Linear\"}return\"vec3 \"+o+\"( "
+        },
+        {
+          "match": "WebGLProgram.getParameters:\",A.precision,\"not ",
+          "scanCharacterOffset": 543664,
+          "context": "(\"THREE.WebGLProgram.getParameters:\",A.precision,\"not supported, using\",p,\"instead.\"));const I=C.morph"
+        },
+        {
+          "match": "WebGLRenderer: Attempt to load unsupported",
+          "scanCharacterOffset": 590651,
+          "context": "(\"THREE.WebGLRenderer: Attempt to load unsupported compressed texture format in .uploadTexture()\")"
+        },
+        {
+          "match": "WebGLRenderer: Attempt to load unsupported",
+          "scanCharacterOffset": 591244,
+          "context": "(\"THREE.WebGLRenderer: Attempt to load unsupported compressed texture format in .uploadTexture()\")"
+        },
+        {
+          "match": "WebGLRenderer: Attempt to load unsupported",
+          "scanCharacterOffset": 594584,
+          "context": "(\"THREE.WebGLRenderer: Attempt to load unsupported compressed texture format in .setTextureCube()\""
+        },
+        {
+          "match": "WebGLTextures: Unsupported",
+          "scanCharacterOffset": 606288,
+          "context": "(\"THREE.WebGLTextures: Unsupported texture color space:\",ge)),G}function ye(Z){ret"
+        },
+        {
+          "match": "WebGLRenderer: Texture samplers can not ",
+          "scanCharacterOffset": 629974,
+          "context": "(\"THREE.WebGLRenderer: Texture samplers can not be part of an uniforms group.\"):console.warn(\"TH"
+        },
+        {
+          "match": "WebGLRenderer: Unsupported",
+          "scanCharacterOffset": 630066,
+          "context": "(\"THREE.WebGLRenderer: Unsupported uniform value type.\",x),w}function m(x){const w"
+        },
+        {
+          "match": "WebGLRenderer: WebGL 1 is not ",
+          "scanCharacterOffset": 630785,
+          "context": "(\"THREE.WebGLRenderer: WebGL 1 is not supported since r163.\");p=n.getContextAttributes"
+        },
+        {
+          "match": "WebGLRenderer: A WebGL context could not ",
+          "scanCharacterOffset": 636429,
+          "context": "(\"THREE.WebGLRenderer: A WebGL context could not be created. Reason: \",he.statusMessage)}function"
+        },
+        {
+          "match": "WebGLRenderer.render: camera is not ",
+          "scanCharacterOffset": 640308,
+          "context": "(\"THREE.WebGLRenderer.render: camera is not an instance of THREE.Camera.\");return}if(v===!0)"
+        }
+      ]
+    }
+  ],
+  "sourceAccepted": false,
+  "publicationAccepted": false,
+  "liveSdkAccepted": false,
+  "liveAdsAccepted": false,
+  "moderationAccepted": false,
+  "constraints": [
+    "No source or vendor edits; no checker rows suppressed, rewritten or promoted to PASS.",
+    "Offline predicate reproduction on exact provider package bytes is additional diagnosis, not a new browser run.",
+    "Existing exact-CI browser checker reports retain their original totals and verdicts.",
+    "Canvas command records do not prove all text is visible or all language states are correct.",
+    "No live SDK, real advertising, moderation or physical-device acceptance is claimed."
+  ],
+  "all51OriginalRouteReports": {
+    "complete": true,
+    "rows": [
+      {
+        "stableLevel": 1,
+        "displayNumber": 1,
+        "group": "early",
+        "routePass": true,
+        "rawBrowserReport": {
+          "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-checker-platform-early/room-01/checker/yandex-debug-checker-report.json",
+          "bytes": 68275,
+          "sha256": "2895fee7e9be77cf93c81ea94a7948342e95797a370cf5d8c8d200202e2a0e10"
+        },
+        "originalText": {
+          "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-checker-platform-early/room-01/checker/yandex-debug-checker-report.txt",
+          "bytes": 5586,
+          "sha256": "db382bb1e07631e5e79773c8c87d3639c77cac324ce48d0b15e78454ea37b35d"
+        },
+        "rawCounts": {
+          "PASS": 78,
+          "FAIL": 0,
+          "WARN": 3,
+          "N/V": 1,
+          "SCORE": 96
+        },
+        "exactSourceScan": {
+          "bytes": 2383618,
+          "sha256": "dea0b8025ae255d604b2c5f1a070d0d3096ddb9fee3c5c34aef42ad191894d80",
+          "reconstructed": true
+        },
+        "predicates": [
+          {
+            "name": "GameReady timing (п.1.19)",
+            "verdict": "warn",
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "No WebGL notice (п.1.6.1.7)",
+            "verdict": false,
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "No profanity in UI text (п.8.2.4)",
+            "verdict": "warn",
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "Canvas text reminder",
+            "verdict": {
+              "pass": "not_verified",
+              "details": "Canvas text is not visible to DOM scanning; verify rendered text for declared languages"
+            },
+            "originalBrowserStatus": "not_verified"
+          }
+        ]
+      },
+      {
+        "stableLevel": 2,
+        "displayNumber": 2,
+        "group": "early",
+        "routePass": true,
+        "rawBrowserReport": {
+          "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-checker-platform-early/room-02/checker/yandex-debug-checker-report.json",
+          "bytes": 68310,
+          "sha256": "016dd6d211ba047b6c9844a25d6a1033f292d2fad3cdd30277db01e6c457c6e9"
+        },
+        "originalText": {
+          "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-checker-platform-early/room-02/checker/yandex-debug-checker-report.txt",
+          "bytes": 5584,
+          "sha256": "60c2aceb0d140df24bd756d9c4ebb2e33f1438de44e390b7deaadc44e892a21b"
+        },
+        "rawCounts": {
+          "PASS": 78,
+          "FAIL": 0,
+          "WARN": 3,
+          "N/V": 1,
+          "SCORE": 96
+        },
+        "exactSourceScan": {
+          "bytes": 2383618,
+          "sha256": "dea0b8025ae255d604b2c5f1a070d0d3096ddb9fee3c5c34aef42ad191894d80",
+          "reconstructed": true
+        },
+        "predicates": [
+          {
+            "name": "GameReady timing (п.1.19)",
+            "verdict": "warn",
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "No WebGL notice (п.1.6.1.7)",
+            "verdict": false,
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "No profanity in UI text (п.8.2.4)",
+            "verdict": "warn",
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "Canvas text reminder",
+            "verdict": {
+              "pass": "not_verified",
+              "details": "Canvas text is not visible to DOM scanning; verify rendered text for declared languages"
+            },
+            "originalBrowserStatus": "not_verified"
+          }
+        ]
+      },
+      {
+        "stableLevel": 3,
+        "displayNumber": 3,
+        "group": "early",
+        "routePass": true,
+        "rawBrowserReport": {
+          "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-checker-platform-early/room-03/checker/yandex-debug-checker-report.json",
+          "bytes": 68224,
+          "sha256": "2c198b2e3d6851a506030261c08b88f2666cc78652a88e93d7b8bd26cfac1a2e"
+        },
+        "originalText": {
+          "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-checker-platform-early/room-03/checker/yandex-debug-checker-report.txt",
+          "bytes": 5586,
+          "sha256": "05209605d31006ef61b925f537eaa7554eca08a928a95ad80ec543cd52797d0c"
+        },
+        "rawCounts": {
+          "PASS": 78,
+          "FAIL": 0,
+          "WARN": 3,
+          "N/V": 1,
+          "SCORE": 96
+        },
+        "exactSourceScan": {
+          "bytes": 2383618,
+          "sha256": "dea0b8025ae255d604b2c5f1a070d0d3096ddb9fee3c5c34aef42ad191894d80",
+          "reconstructed": true
+        },
+        "predicates": [
+          {
+            "name": "GameReady timing (п.1.19)",
+            "verdict": "warn",
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "No WebGL notice (п.1.6.1.7)",
+            "verdict": false,
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "No profanity in UI text (п.8.2.4)",
+            "verdict": "warn",
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "Canvas text reminder",
+            "verdict": {
+              "pass": "not_verified",
+              "details": "Canvas text is not visible to DOM scanning; verify rendered text for declared languages"
+            },
+            "originalBrowserStatus": "not_verified"
+          }
+        ]
+      },
+      {
+        "stableLevel": 4,
+        "displayNumber": 4,
+        "group": "early",
+        "routePass": true,
+        "rawBrowserReport": {
+          "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-checker-platform-early/room-04/checker/yandex-debug-checker-report.json",
+          "bytes": 68293,
+          "sha256": "ecbab449c7924a1638a2263bb319591f9cfef2b3750441daee4eb421cbf67277"
+        },
+        "originalText": {
+          "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-checker-platform-early/room-04/checker/yandex-debug-checker-report.txt",
+          "bytes": 5584,
+          "sha256": "c46516f47e5f0475d100d087c60a90935b60ebeeb34755c8566064c073c5b583"
+        },
+        "rawCounts": {
+          "PASS": 78,
+          "FAIL": 0,
+          "WARN": 3,
+          "N/V": 1,
+          "SCORE": 96
+        },
+        "exactSourceScan": {
+          "bytes": 2383618,
+          "sha256": "dea0b8025ae255d604b2c5f1a070d0d3096ddb9fee3c5c34aef42ad191894d80",
+          "reconstructed": true
+        },
+        "predicates": [
+          {
+            "name": "GameReady timing (п.1.19)",
+            "verdict": "warn",
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "No WebGL notice (п.1.6.1.7)",
+            "verdict": false,
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "No profanity in UI text (п.8.2.4)",
+            "verdict": "warn",
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "Canvas text reminder",
+            "verdict": {
+              "pass": "not_verified",
+              "details": "Canvas text is not visible to DOM scanning; verify rendered text for declared languages"
+            },
+            "originalBrowserStatus": "not_verified"
+          }
+        ]
+      },
+      {
+        "stableLevel": 5,
+        "displayNumber": 5,
+        "group": "early",
+        "routePass": true,
+        "rawBrowserReport": {
+          "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-checker-platform-early/room-05/checker/yandex-debug-checker-report.json",
+          "bytes": 68341,
+          "sha256": "8dbf06264edf9d698887d74f93247fd02d3068536b9d6aa5bd0044c1ecfe4537"
+        },
+        "originalText": {
+          "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-checker-platform-early/room-05/checker/yandex-debug-checker-report.txt",
+          "bytes": 5584,
+          "sha256": "690d7cca91e8f19f5dbe9997fb6cc3c6f9bd101451e365d8f32f3ee2b464c018"
+        },
+        "rawCounts": {
+          "PASS": 78,
+          "FAIL": 0,
+          "WARN": 3,
+          "N/V": 1,
+          "SCORE": 96
+        },
+        "exactSourceScan": {
+          "bytes": 2383618,
+          "sha256": "dea0b8025ae255d604b2c5f1a070d0d3096ddb9fee3c5c34aef42ad191894d80",
+          "reconstructed": true
+        },
+        "predicates": [
+          {
+            "name": "GameReady timing (п.1.19)",
+            "verdict": "warn",
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "No WebGL notice (п.1.6.1.7)",
+            "verdict": false,
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "No profanity in UI text (п.8.2.4)",
+            "verdict": "warn",
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "Canvas text reminder",
+            "verdict": {
+              "pass": "not_verified",
+              "details": "Canvas text is not visible to DOM scanning; verify rendered text for declared languages"
+            },
+            "originalBrowserStatus": "not_verified"
+          }
+        ]
+      },
+      {
+        "stableLevel": 6,
+        "displayNumber": 6,
+        "group": "early",
+        "routePass": true,
+        "rawBrowserReport": {
+          "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-checker-platform-early/room-06/checker/yandex-debug-checker-report.json",
+          "bytes": 68231,
+          "sha256": "2673d8ccf8f292ac9afa36f7515528c3ba19a45f02702d2d7dfec11672b14258"
+        },
+        "originalText": {
+          "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-checker-platform-early/room-06/checker/yandex-debug-checker-report.txt",
+          "bytes": 5584,
+          "sha256": "b1e3d5f77bda826c3f4abe91c01dc91c38ef49bc51458ccb4a52b16d895b76c0"
+        },
+        "rawCounts": {
+          "PASS": 78,
+          "FAIL": 0,
+          "WARN": 3,
+          "N/V": 1,
+          "SCORE": 96
+        },
+        "exactSourceScan": {
+          "bytes": 2383618,
+          "sha256": "dea0b8025ae255d604b2c5f1a070d0d3096ddb9fee3c5c34aef42ad191894d80",
+          "reconstructed": true
+        },
+        "predicates": [
+          {
+            "name": "GameReady timing (п.1.19)",
+            "verdict": "warn",
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "No WebGL notice (п.1.6.1.7)",
+            "verdict": false,
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "No profanity in UI text (п.8.2.4)",
+            "verdict": "warn",
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "Canvas text reminder",
+            "verdict": {
+              "pass": "not_verified",
+              "details": "Canvas text is not visible to DOM scanning; verify rendered text for declared languages"
+            },
+            "originalBrowserStatus": "not_verified"
+          }
+        ]
+      },
+      {
+        "stableLevel": 7,
+        "displayNumber": 7,
+        "group": "early",
+        "routePass": true,
+        "rawBrowserReport": {
+          "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-checker-platform-early/room-07/checker/yandex-debug-checker-report.json",
+          "bytes": 68256,
+          "sha256": "38cee33af7cff4517b35df55b3a2776e6005d131d746e851ebff5bb54ca00a0e"
+        },
+        "originalText": {
+          "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-checker-platform-early/room-07/checker/yandex-debug-checker-report.txt",
+          "bytes": 5584,
+          "sha256": "4602ebe9dbcedcf7337fe5ba7c0a119b4bd409ec682b20673fff00f2e1898a36"
+        },
+        "rawCounts": {
+          "PASS": 78,
+          "FAIL": 0,
+          "WARN": 3,
+          "N/V": 1,
+          "SCORE": 96
+        },
+        "exactSourceScan": {
+          "bytes": 2383618,
+          "sha256": "dea0b8025ae255d604b2c5f1a070d0d3096ddb9fee3c5c34aef42ad191894d80",
+          "reconstructed": true
+        },
+        "predicates": [
+          {
+            "name": "GameReady timing (п.1.19)",
+            "verdict": "warn",
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "No WebGL notice (п.1.6.1.7)",
+            "verdict": false,
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "No profanity in UI text (п.8.2.4)",
+            "verdict": "warn",
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "Canvas text reminder",
+            "verdict": {
+              "pass": "not_verified",
+              "details": "Canvas text is not visible to DOM scanning; verify rendered text for declared languages"
+            },
+            "originalBrowserStatus": "not_verified"
+          }
+        ]
+      },
+      {
+        "stableLevel": 8,
+        "displayNumber": 8,
+        "group": "early",
+        "routePass": true,
+        "rawBrowserReport": {
+          "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-checker-platform-early/room-08/checker/yandex-debug-checker-report.json",
+          "bytes": 68342,
+          "sha256": "f0cc7ffba1b66089eb28c447c3c56f2dbe4021253ddcc435b1204ccb78fdbf86"
+        },
+        "originalText": {
+          "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-checker-platform-early/room-08/checker/yandex-debug-checker-report.txt",
+          "bytes": 5584,
+          "sha256": "42fa78bda7c005c11c922eeb32173dfcf98cf7900856a969845328d36cc13c93"
+        },
+        "rawCounts": {
+          "PASS": 78,
+          "FAIL": 0,
+          "WARN": 3,
+          "N/V": 1,
+          "SCORE": 96
+        },
+        "exactSourceScan": {
+          "bytes": 2383618,
+          "sha256": "dea0b8025ae255d604b2c5f1a070d0d3096ddb9fee3c5c34aef42ad191894d80",
+          "reconstructed": true
+        },
+        "predicates": [
+          {
+            "name": "GameReady timing (п.1.19)",
+            "verdict": "warn",
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "No WebGL notice (п.1.6.1.7)",
+            "verdict": false,
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "No profanity in UI text (п.8.2.4)",
+            "verdict": "warn",
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "Canvas text reminder",
+            "verdict": {
+              "pass": "not_verified",
+              "details": "Canvas text is not visible to DOM scanning; verify rendered text for declared languages"
+            },
+            "originalBrowserStatus": "not_verified"
+          }
+        ]
+      },
+      {
+        "stableLevel": 9,
+        "displayNumber": 9,
+        "group": "early",
+        "routePass": true,
+        "rawBrowserReport": {
+          "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-checker-platform-early/room-09/checker/yandex-debug-checker-report.json",
+          "bytes": 68326,
+          "sha256": "de15a8b6424185b72c09c55a1ee08af72af4da79a9e406f359d8b6a3c65e2e52"
+        },
+        "originalText": {
+          "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-checker-platform-early/room-09/checker/yandex-debug-checker-report.txt",
+          "bytes": 5584,
+          "sha256": "c7ba011c68991d3bb4c903d017c8caa3f22e7366d22f54ebb91b499ea98465ea"
+        },
+        "rawCounts": {
+          "PASS": 78,
+          "FAIL": 0,
+          "WARN": 3,
+          "N/V": 1,
+          "SCORE": 96
+        },
+        "exactSourceScan": {
+          "bytes": 2383618,
+          "sha256": "dea0b8025ae255d604b2c5f1a070d0d3096ddb9fee3c5c34aef42ad191894d80",
+          "reconstructed": true
+        },
+        "predicates": [
+          {
+            "name": "GameReady timing (п.1.19)",
+            "verdict": "warn",
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "No WebGL notice (п.1.6.1.7)",
+            "verdict": false,
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "No profanity in UI text (п.8.2.4)",
+            "verdict": "warn",
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "Canvas text reminder",
+            "verdict": {
+              "pass": "not_verified",
+              "details": "Canvas text is not visible to DOM scanning; verify rendered text for declared languages"
+            },
+            "originalBrowserStatus": "not_verified"
+          }
+        ]
+      },
+      {
+        "stableLevel": 10,
+        "displayNumber": 10,
+        "group": "early",
+        "routePass": true,
+        "rawBrowserReport": {
+          "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-checker-platform-early/room-10/checker/yandex-debug-checker-report.json",
+          "bytes": 68292,
+          "sha256": "36f9874222d08f1928397e29f15e6e4ca7378d6688e94f5f1153e280baf53974"
+        },
+        "originalText": {
+          "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-checker-platform-early/room-10/checker/yandex-debug-checker-report.txt",
+          "bytes": 5585,
+          "sha256": "346b4db7c73ac46332dda410425bbea1e70d51a20fd5069b27a2d08e1d8260b5"
+        },
+        "rawCounts": {
+          "PASS": 78,
+          "FAIL": 0,
+          "WARN": 3,
+          "N/V": 1,
+          "SCORE": 96
+        },
+        "exactSourceScan": {
+          "bytes": 2383618,
+          "sha256": "dea0b8025ae255d604b2c5f1a070d0d3096ddb9fee3c5c34aef42ad191894d80",
+          "reconstructed": true
+        },
+        "predicates": [
+          {
+            "name": "GameReady timing (п.1.19)",
+            "verdict": "warn",
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "No WebGL notice (п.1.6.1.7)",
+            "verdict": false,
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "No profanity in UI text (п.8.2.4)",
+            "verdict": "warn",
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "Canvas text reminder",
+            "verdict": {
+              "pass": "not_verified",
+              "details": "Canvas text is not visible to DOM scanning; verify rendered text for declared languages"
+            },
+            "originalBrowserStatus": "not_verified"
+          }
+        ]
+      },
+      {
+        "stableLevel": 11,
+        "displayNumber": 11,
+        "group": "energy",
+        "routePass": true,
+        "rawBrowserReport": {
+          "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-checker-platform-energy/room-11/checker/yandex-debug-checker-report.json",
+          "bytes": 68337,
+          "sha256": "9c11615b5f521b3068adc717f6f1c8818f7522c0a7640f5cc4f09d5b6909d6ad"
+        },
+        "originalText": {
+          "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-checker-platform-energy/room-11/checker/yandex-debug-checker-report.txt",
+          "bytes": 5587,
+          "sha256": "21cb9f63e2b54d734b437727afeb2e9a01c7e9d25052b03e9b599353dc63886d"
+        },
+        "rawCounts": {
+          "PASS": 78,
+          "FAIL": 0,
+          "WARN": 3,
+          "N/V": 1,
+          "SCORE": 96
+        },
+        "exactSourceScan": {
+          "bytes": 2383618,
+          "sha256": "dea0b8025ae255d604b2c5f1a070d0d3096ddb9fee3c5c34aef42ad191894d80",
+          "reconstructed": true
+        },
+        "predicates": [
+          {
+            "name": "GameReady timing (п.1.19)",
+            "verdict": "warn",
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "No WebGL notice (п.1.6.1.7)",
+            "verdict": false,
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "No profanity in UI text (п.8.2.4)",
+            "verdict": "warn",
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "Canvas text reminder",
+            "verdict": {
+              "pass": "not_verified",
+              "details": "Canvas text is not visible to DOM scanning; verify rendered text for declared languages"
+            },
+            "originalBrowserStatus": "not_verified"
+          }
+        ]
+      },
+      {
+        "stableLevel": 12,
+        "displayNumber": 12,
+        "group": "energy",
+        "routePass": true,
+        "rawBrowserReport": {
+          "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-checker-platform-energy/room-12/checker/yandex-debug-checker-report.json",
+          "bytes": 68387,
+          "sha256": "ceccb9e8bd410a494957c70cd2205e1cc8dc86f158e4469fac1270978fa986e6"
+        },
+        "originalText": {
+          "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-checker-platform-energy/room-12/checker/yandex-debug-checker-report.txt",
+          "bytes": 5587,
+          "sha256": "5b4ed16559a68ab1e32c5d242b3840634168f271558ebc5a80a8fa0d84054c62"
+        },
+        "rawCounts": {
+          "PASS": 78,
+          "FAIL": 0,
+          "WARN": 3,
+          "N/V": 1,
+          "SCORE": 96
+        },
+        "exactSourceScan": {
+          "bytes": 2383618,
+          "sha256": "dea0b8025ae255d604b2c5f1a070d0d3096ddb9fee3c5c34aef42ad191894d80",
+          "reconstructed": true
+        },
+        "predicates": [
+          {
+            "name": "GameReady timing (п.1.19)",
+            "verdict": "warn",
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "No WebGL notice (п.1.6.1.7)",
+            "verdict": false,
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "No profanity in UI text (п.8.2.4)",
+            "verdict": "warn",
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "Canvas text reminder",
+            "verdict": {
+              "pass": "not_verified",
+              "details": "Canvas text is not visible to DOM scanning; verify rendered text for declared languages"
+            },
+            "originalBrowserStatus": "not_verified"
+          }
+        ]
+      },
+      {
+        "stableLevel": 13,
+        "displayNumber": 13,
+        "group": "energy",
+        "routePass": true,
+        "rawBrowserReport": {
+          "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-checker-platform-energy/room-13/checker/yandex-debug-checker-report.json",
+          "bytes": 68292,
+          "sha256": "62ff6e00ef58b1c705e576583f8e5841ab5ed5a373f5d4f15982d39d065b1fd1"
+        },
+        "originalText": {
+          "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-checker-platform-energy/room-13/checker/yandex-debug-checker-report.txt",
+          "bytes": 5585,
+          "sha256": "28d1bb78adc34e605cbe915727d8dae000ed8bf2b13592df40918c76b2fae6d6"
+        },
+        "rawCounts": {
+          "PASS": 78,
+          "FAIL": 0,
+          "WARN": 3,
+          "N/V": 1,
+          "SCORE": 96
+        },
+        "exactSourceScan": {
+          "bytes": 2383618,
+          "sha256": "dea0b8025ae255d604b2c5f1a070d0d3096ddb9fee3c5c34aef42ad191894d80",
+          "reconstructed": true
+        },
+        "predicates": [
+          {
+            "name": "GameReady timing (п.1.19)",
+            "verdict": "warn",
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "No WebGL notice (п.1.6.1.7)",
+            "verdict": false,
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "No profanity in UI text (п.8.2.4)",
+            "verdict": "warn",
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "Canvas text reminder",
+            "verdict": {
+              "pass": "not_verified",
+              "details": "Canvas text is not visible to DOM scanning; verify rendered text for declared languages"
+            },
+            "originalBrowserStatus": "not_verified"
+          }
+        ]
+      },
+      {
+        "stableLevel": 14,
+        "displayNumber": 14,
+        "group": "energy",
+        "routePass": true,
+        "rawBrowserReport": {
+          "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-checker-platform-energy/room-14/checker/yandex-debug-checker-report.json",
+          "bytes": 68322,
+          "sha256": "57ca6f246e9c1ae5b28d3c7fc7d58653253f6b7ca50033a7a048dc19fb137f19"
+        },
+        "originalText": {
+          "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-checker-platform-energy/room-14/checker/yandex-debug-checker-report.txt",
+          "bytes": 5587,
+          "sha256": "e256a4398ebc8d1c5ab39fef512bf89373b4b0444f41af38bbce2ab3ddc98491"
+        },
+        "rawCounts": {
+          "PASS": 78,
+          "FAIL": 0,
+          "WARN": 3,
+          "N/V": 1,
+          "SCORE": 96
+        },
+        "exactSourceScan": {
+          "bytes": 2383618,
+          "sha256": "dea0b8025ae255d604b2c5f1a070d0d3096ddb9fee3c5c34aef42ad191894d80",
+          "reconstructed": true
+        },
+        "predicates": [
+          {
+            "name": "GameReady timing (п.1.19)",
+            "verdict": "warn",
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "No WebGL notice (п.1.6.1.7)",
+            "verdict": false,
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "No profanity in UI text (п.8.2.4)",
+            "verdict": "warn",
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "Canvas text reminder",
+            "verdict": {
+              "pass": "not_verified",
+              "details": "Canvas text is not visible to DOM scanning; verify rendered text for declared languages"
+            },
+            "originalBrowserStatus": "not_verified"
+          }
+        ]
+      },
+      {
+        "stableLevel": 15,
+        "displayNumber": 15,
+        "group": "energy",
+        "routePass": true,
+        "rawBrowserReport": {
+          "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-checker-platform-energy/room-15/checker/yandex-debug-checker-report.json",
+          "bytes": 68358,
+          "sha256": "9cd5f2e433b1a7cc46c2a39ba52685034e6173b01fd04887c47c854ac205f322"
+        },
+        "originalText": {
+          "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-checker-platform-energy/room-15/checker/yandex-debug-checker-report.txt",
+          "bytes": 5587,
+          "sha256": "e800e4a894dee9f11476aeee1e8d6bf5e229c54014a0d685d3e839297ffc7ad6"
+        },
+        "rawCounts": {
+          "PASS": 78,
+          "FAIL": 0,
+          "WARN": 3,
+          "N/V": 1,
+          "SCORE": 96
+        },
+        "exactSourceScan": {
+          "bytes": 2383618,
+          "sha256": "dea0b8025ae255d604b2c5f1a070d0d3096ddb9fee3c5c34aef42ad191894d80",
+          "reconstructed": true
+        },
+        "predicates": [
+          {
+            "name": "GameReady timing (п.1.19)",
+            "verdict": "warn",
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "No WebGL notice (п.1.6.1.7)",
+            "verdict": false,
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "No profanity in UI text (п.8.2.4)",
+            "verdict": "warn",
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "Canvas text reminder",
+            "verdict": {
+              "pass": "not_verified",
+              "details": "Canvas text is not visible to DOM scanning; verify rendered text for declared languages"
+            },
+            "originalBrowserStatus": "not_verified"
+          }
+        ]
+      },
+      {
+        "stableLevel": 16,
+        "displayNumber": 16,
+        "group": "energy",
+        "routePass": true,
+        "rawBrowserReport": {
+          "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-checker-platform-energy/room-16/checker/yandex-debug-checker-report.json",
+          "bytes": 68360,
+          "sha256": "3bd478507519efafd6bc91e4852e7dc188f3f440d250cc068485311dbc923084"
+        },
+        "originalText": {
+          "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-checker-platform-energy/room-16/checker/yandex-debug-checker-report.txt",
+          "bytes": 5587,
+          "sha256": "64ced3268d6f247e347abe504f2b028423d2407598cc98ddee01dfceea3d0522"
+        },
+        "rawCounts": {
+          "PASS": 78,
+          "FAIL": 0,
+          "WARN": 3,
+          "N/V": 1,
+          "SCORE": 96
+        },
+        "exactSourceScan": {
+          "bytes": 2383618,
+          "sha256": "dea0b8025ae255d604b2c5f1a070d0d3096ddb9fee3c5c34aef42ad191894d80",
+          "reconstructed": true
+        },
+        "predicates": [
+          {
+            "name": "GameReady timing (п.1.19)",
+            "verdict": "warn",
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "No WebGL notice (п.1.6.1.7)",
+            "verdict": false,
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "No profanity in UI text (п.8.2.4)",
+            "verdict": "warn",
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "Canvas text reminder",
+            "verdict": {
+              "pass": "not_verified",
+              "details": "Canvas text is not visible to DOM scanning; verify rendered text for declared languages"
+            },
+            "originalBrowserStatus": "not_verified"
+          }
+        ]
+      },
+      {
+        "stableLevel": 17,
+        "displayNumber": 17,
+        "group": "energy",
+        "routePass": true,
+        "rawBrowserReport": {
+          "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-checker-platform-energy/room-17/checker/yandex-debug-checker-report.json",
+          "bytes": 68320,
+          "sha256": "09d9301b81424b25a236399e7b2a506a915422d11f2d3076c2a00bd1aaf86da8"
+        },
+        "originalText": {
+          "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-checker-platform-energy/room-17/checker/yandex-debug-checker-report.txt",
+          "bytes": 5585,
+          "sha256": "120c279c6f51919c59d9ff8aeede512588c1283c76851250a1469657ee7d39e3"
+        },
+        "rawCounts": {
+          "PASS": 78,
+          "FAIL": 0,
+          "WARN": 3,
+          "N/V": 1,
+          "SCORE": 96
+        },
+        "exactSourceScan": {
+          "bytes": 2383618,
+          "sha256": "dea0b8025ae255d604b2c5f1a070d0d3096ddb9fee3c5c34aef42ad191894d80",
+          "reconstructed": true
+        },
+        "predicates": [
+          {
+            "name": "GameReady timing (п.1.19)",
+            "verdict": "warn",
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "No WebGL notice (п.1.6.1.7)",
+            "verdict": false,
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "No profanity in UI text (п.8.2.4)",
+            "verdict": "warn",
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "Canvas text reminder",
+            "verdict": {
+              "pass": "not_verified",
+              "details": "Canvas text is not visible to DOM scanning; verify rendered text for declared languages"
+            },
+            "originalBrowserStatus": "not_verified"
+          }
+        ]
+      },
+      {
+        "stableLevel": 18,
+        "displayNumber": 18,
+        "group": "energy",
+        "routePass": true,
+        "rawBrowserReport": {
+          "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-checker-platform-energy/room-18/checker/yandex-debug-checker-report.json",
+          "bytes": 68320,
+          "sha256": "3c2bb28c8b1af63b6568ec23bdbf954161ab22e8815a9ad562319f7e37f1bb70"
+        },
+        "originalText": {
+          "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-checker-platform-energy/room-18/checker/yandex-debug-checker-report.txt",
+          "bytes": 5585,
+          "sha256": "ce5e9445db4f5f5999bce8b33460747f2fd01e35bcf9e6ffc4a0150fb9b8063a"
+        },
+        "rawCounts": {
+          "PASS": 78,
+          "FAIL": 0,
+          "WARN": 3,
+          "N/V": 1,
+          "SCORE": 96
+        },
+        "exactSourceScan": {
+          "bytes": 2383618,
+          "sha256": "dea0b8025ae255d604b2c5f1a070d0d3096ddb9fee3c5c34aef42ad191894d80",
+          "reconstructed": true
+        },
+        "predicates": [
+          {
+            "name": "GameReady timing (п.1.19)",
+            "verdict": "warn",
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "No WebGL notice (п.1.6.1.7)",
+            "verdict": false,
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "No profanity in UI text (п.8.2.4)",
+            "verdict": "warn",
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "Canvas text reminder",
+            "verdict": {
+              "pass": "not_verified",
+              "details": "Canvas text is not visible to DOM scanning; verify rendered text for declared languages"
+            },
+            "originalBrowserStatus": "not_verified"
+          }
+        ]
+      },
+      {
+        "stableLevel": 19,
+        "displayNumber": 19,
+        "group": "energy",
+        "routePass": true,
+        "rawBrowserReport": {
+          "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-checker-platform-energy/room-19/checker/yandex-debug-checker-report.json",
+          "bytes": 68308,
+          "sha256": "a3ea08fa075ab77bdfdbebd5695ebaf1cd559ebff8e971583514a24dffc599d5"
+        },
+        "originalText": {
+          "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-checker-platform-energy/room-19/checker/yandex-debug-checker-report.txt",
+          "bytes": 5587,
+          "sha256": "fd8ba68fd101fc3b94f6a42b3ea89077a1918fd2239ab41598337d4cb33d7f98"
+        },
+        "rawCounts": {
+          "PASS": 78,
+          "FAIL": 0,
+          "WARN": 3,
+          "N/V": 1,
+          "SCORE": 96
+        },
+        "exactSourceScan": {
+          "bytes": 2383618,
+          "sha256": "dea0b8025ae255d604b2c5f1a070d0d3096ddb9fee3c5c34aef42ad191894d80",
+          "reconstructed": true
+        },
+        "predicates": [
+          {
+            "name": "GameReady timing (п.1.19)",
+            "verdict": "warn",
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "No WebGL notice (п.1.6.1.7)",
+            "verdict": false,
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "No profanity in UI text (п.8.2.4)",
+            "verdict": "warn",
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "Canvas text reminder",
+            "verdict": {
+              "pass": "not_verified",
+              "details": "Canvas text is not visible to DOM scanning; verify rendered text for declared languages"
+            },
+            "originalBrowserStatus": "not_verified"
+          }
+        ]
+      },
+      {
+        "stableLevel": 20,
+        "displayNumber": 20,
+        "group": "energy",
+        "routePass": true,
+        "rawBrowserReport": {
+          "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-checker-platform-energy/room-20/checker/yandex-debug-checker-report.json",
+          "bytes": 68292,
+          "sha256": "4ac24be9844e7afec371ae2d4f6edff7d4c0b794d5f81ddbc02f26e6d4bf8356"
+        },
+        "originalText": {
+          "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-checker-platform-energy/room-20/checker/yandex-debug-checker-report.txt",
+          "bytes": 5585,
+          "sha256": "a01dbd36ce2b9bd115f54887e079d1e9f7296b457d951fb439e63ea3cd29a460"
+        },
+        "rawCounts": {
+          "PASS": 78,
+          "FAIL": 0,
+          "WARN": 3,
+          "N/V": 1,
+          "SCORE": 96
+        },
+        "exactSourceScan": {
+          "bytes": 2383618,
+          "sha256": "dea0b8025ae255d604b2c5f1a070d0d3096ddb9fee3c5c34aef42ad191894d80",
+          "reconstructed": true
+        },
+        "predicates": [
+          {
+            "name": "GameReady timing (п.1.19)",
+            "verdict": "warn",
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "No WebGL notice (п.1.6.1.7)",
+            "verdict": false,
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "No profanity in UI text (п.8.2.4)",
+            "verdict": "warn",
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "Canvas text reminder",
+            "verdict": {
+              "pass": "not_verified",
+              "details": "Canvas text is not visible to DOM scanning; verify rendered text for declared languages"
+            },
+            "originalBrowserStatus": "not_verified"
+          }
+        ]
+      },
+      {
+        "stableLevel": 21,
+        "displayNumber": 21,
+        "group": "living",
+        "routePass": true,
+        "rawBrowserReport": {
+          "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-checker-platform-living/room-21/checker/yandex-debug-checker-report.json",
+          "bytes": 68294,
+          "sha256": "d181e4f0fc3276b81bdd9fc67e7a4b650b91233e2b395831485fab42575dca27"
+        },
+        "originalText": {
+          "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-checker-platform-living/room-21/checker/yandex-debug-checker-report.txt",
+          "bytes": 5587,
+          "sha256": "94f219b9ff844c32b3b2d29f8598c36ca1807873f816cc5f3248bc8d93731541"
+        },
+        "rawCounts": {
+          "PASS": 78,
+          "FAIL": 0,
+          "WARN": 3,
+          "N/V": 1,
+          "SCORE": 96
+        },
+        "exactSourceScan": {
+          "bytes": 2383618,
+          "sha256": "dea0b8025ae255d604b2c5f1a070d0d3096ddb9fee3c5c34aef42ad191894d80",
+          "reconstructed": true
+        },
+        "predicates": [
+          {
+            "name": "GameReady timing (п.1.19)",
+            "verdict": "warn",
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "No WebGL notice (п.1.6.1.7)",
+            "verdict": false,
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "No profanity in UI text (п.8.2.4)",
+            "verdict": "warn",
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "Canvas text reminder",
+            "verdict": {
+              "pass": "not_verified",
+              "details": "Canvas text is not visible to DOM scanning; verify rendered text for declared languages"
+            },
+            "originalBrowserStatus": "not_verified"
+          }
+        ]
+      },
+      {
+        "stableLevel": 22,
+        "displayNumber": 22,
+        "group": "living",
+        "routePass": true,
+        "rawBrowserReport": {
+          "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-checker-platform-living/room-22/checker/yandex-debug-checker-report.json",
+          "bytes": 68345,
+          "sha256": "58f09bc505f8d35fa7227d24f40bd1e104a3df65cedd2af1cb2a65214f7dd2e4"
+        },
+        "originalText": {
+          "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-checker-platform-living/room-22/checker/yandex-debug-checker-report.txt",
+          "bytes": 5587,
+          "sha256": "24bd27ca5fd1922aa04b41eddc15373920f4d3277de12d849d8c5695239fe1c5"
+        },
+        "rawCounts": {
+          "PASS": 78,
+          "FAIL": 0,
+          "WARN": 3,
+          "N/V": 1,
+          "SCORE": 96
+        },
+        "exactSourceScan": {
+          "bytes": 2383618,
+          "sha256": "dea0b8025ae255d604b2c5f1a070d0d3096ddb9fee3c5c34aef42ad191894d80",
+          "reconstructed": true
+        },
+        "predicates": [
+          {
+            "name": "GameReady timing (п.1.19)",
+            "verdict": "warn",
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "No WebGL notice (п.1.6.1.7)",
+            "verdict": false,
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "No profanity in UI text (п.8.2.4)",
+            "verdict": "warn",
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "Canvas text reminder",
+            "verdict": {
+              "pass": "not_verified",
+              "details": "Canvas text is not visible to DOM scanning; verify rendered text for declared languages"
+            },
+            "originalBrowserStatus": "not_verified"
+          }
+        ]
+      },
+      {
+        "stableLevel": 23,
+        "displayNumber": 23,
+        "group": "living",
+        "routePass": true,
+        "rawBrowserReport": {
+          "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-checker-platform-living/room-23/checker/yandex-debug-checker-report.json",
+          "bytes": 68350,
+          "sha256": "0181b7baff7ee0db0770c116f8ac17aeed77342cd7056299d8516f71a1febdea"
+        },
+        "originalText": {
+          "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-checker-platform-living/room-23/checker/yandex-debug-checker-report.txt",
+          "bytes": 5585,
+          "sha256": "aec8124efdfc024e0a586c52c6375aa4b8ee900a34e2819b5df221ec1362a7eb"
+        },
+        "rawCounts": {
+          "PASS": 78,
+          "FAIL": 0,
+          "WARN": 3,
+          "N/V": 1,
+          "SCORE": 96
+        },
+        "exactSourceScan": {
+          "bytes": 2383618,
+          "sha256": "dea0b8025ae255d604b2c5f1a070d0d3096ddb9fee3c5c34aef42ad191894d80",
+          "reconstructed": true
+        },
+        "predicates": [
+          {
+            "name": "GameReady timing (п.1.19)",
+            "verdict": "warn",
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "No WebGL notice (п.1.6.1.7)",
+            "verdict": false,
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "No profanity in UI text (п.8.2.4)",
+            "verdict": "warn",
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "Canvas text reminder",
+            "verdict": {
+              "pass": "not_verified",
+              "details": "Canvas text is not visible to DOM scanning; verify rendered text for declared languages"
+            },
+            "originalBrowserStatus": "not_verified"
+          }
+        ]
+      },
+      {
+        "stableLevel": 24,
+        "displayNumber": 24,
+        "group": "living",
+        "routePass": true,
+        "rawBrowserReport": {
+          "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-checker-platform-living/room-24/checker/yandex-debug-checker-report.json",
+          "bytes": 68364,
+          "sha256": "edb7975ad79832a74e6186a3faf9d2780cb4f646767e39779a6d4c3fc34de1e2"
+        },
+        "originalText": {
+          "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-checker-platform-living/room-24/checker/yandex-debug-checker-report.txt",
+          "bytes": 5585,
+          "sha256": "34ff7eafd0f66096516568559ace3386a2ba0e3297d5d99fc3678f4e8077bb5d"
+        },
+        "rawCounts": {
+          "PASS": 78,
+          "FAIL": 0,
+          "WARN": 3,
+          "N/V": 1,
+          "SCORE": 96
+        },
+        "exactSourceScan": {
+          "bytes": 2383618,
+          "sha256": "dea0b8025ae255d604b2c5f1a070d0d3096ddb9fee3c5c34aef42ad191894d80",
+          "reconstructed": true
+        },
+        "predicates": [
+          {
+            "name": "GameReady timing (п.1.19)",
+            "verdict": "warn",
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "No WebGL notice (п.1.6.1.7)",
+            "verdict": false,
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "No profanity in UI text (п.8.2.4)",
+            "verdict": "warn",
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "Canvas text reminder",
+            "verdict": {
+              "pass": "not_verified",
+              "details": "Canvas text is not visible to DOM scanning; verify rendered text for declared languages"
+            },
+            "originalBrowserStatus": "not_verified"
+          }
+        ]
+      },
+      {
+        "stableLevel": 25,
+        "displayNumber": 25,
+        "group": "living",
+        "routePass": true,
+        "rawBrowserReport": {
+          "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-checker-platform-living/room-25/checker/yandex-debug-checker-report.json",
+          "bytes": 68287,
+          "sha256": "364a059c1723fcc9510d6132c9b007f059f8339ae3b0c5bc0a2f808eedfaa8b0"
+        },
+        "originalText": {
+          "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-checker-platform-living/room-25/checker/yandex-debug-checker-report.txt",
+          "bytes": 5587,
+          "sha256": "dab16e97f0dd2b12cbf806a4be71930754facf8eaa0914fc7be1088fc6a24b9d"
+        },
+        "rawCounts": {
+          "PASS": 78,
+          "FAIL": 0,
+          "WARN": 3,
+          "N/V": 1,
+          "SCORE": 96
+        },
+        "exactSourceScan": {
+          "bytes": 2383618,
+          "sha256": "dea0b8025ae255d604b2c5f1a070d0d3096ddb9fee3c5c34aef42ad191894d80",
+          "reconstructed": true
+        },
+        "predicates": [
+          {
+            "name": "GameReady timing (п.1.19)",
+            "verdict": "warn",
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "No WebGL notice (п.1.6.1.7)",
+            "verdict": false,
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "No profanity in UI text (п.8.2.4)",
+            "verdict": "warn",
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "Canvas text reminder",
+            "verdict": {
+              "pass": "not_verified",
+              "details": "Canvas text is not visible to DOM scanning; verify rendered text for declared languages"
+            },
+            "originalBrowserStatus": "not_verified"
+          }
+        ]
+      },
+      {
+        "stableLevel": 26,
+        "displayNumber": 26,
+        "group": "living",
+        "routePass": true,
+        "rawBrowserReport": {
+          "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-checker-platform-living/room-26/checker/yandex-debug-checker-report.json",
+          "bytes": 68306,
+          "sha256": "66397d1f9fb32d12838074fc12b53500aa0b7bc39702f8f44927353a280a5b2d"
+        },
+        "originalText": {
+          "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-checker-platform-living/room-26/checker/yandex-debug-checker-report.txt",
+          "bytes": 5585,
+          "sha256": "529b149cc1049088df1cfdaeb3f9d934bfd95788762abecd7d4164870c279be4"
+        },
+        "rawCounts": {
+          "PASS": 78,
+          "FAIL": 0,
+          "WARN": 3,
+          "N/V": 1,
+          "SCORE": 96
+        },
+        "exactSourceScan": {
+          "bytes": 2383618,
+          "sha256": "dea0b8025ae255d604b2c5f1a070d0d3096ddb9fee3c5c34aef42ad191894d80",
+          "reconstructed": true
+        },
+        "predicates": [
+          {
+            "name": "GameReady timing (п.1.19)",
+            "verdict": "warn",
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "No WebGL notice (п.1.6.1.7)",
+            "verdict": false,
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "No profanity in UI text (п.8.2.4)",
+            "verdict": "warn",
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "Canvas text reminder",
+            "verdict": {
+              "pass": "not_verified",
+              "details": "Canvas text is not visible to DOM scanning; verify rendered text for declared languages"
+            },
+            "originalBrowserStatus": "not_verified"
+          }
+        ]
+      },
+      {
+        "stableLevel": 27,
+        "displayNumber": 27,
+        "group": "living",
+        "routePass": true,
+        "rawBrowserReport": {
+          "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-checker-platform-living/room-27/checker/yandex-debug-checker-report.json",
+          "bytes": 68295,
+          "sha256": "b81e91b1635c13403c227c8daf330098fce83a010f4be3cd167d9ded5a4dc83c"
+        },
+        "originalText": {
+          "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-checker-platform-living/room-27/checker/yandex-debug-checker-report.txt",
+          "bytes": 5587,
+          "sha256": "9c007bfb1bd0edc40cd247264f7f059b5d5a93041cc7f61af892e88f7cfcf707"
+        },
+        "rawCounts": {
+          "PASS": 78,
+          "FAIL": 0,
+          "WARN": 3,
+          "N/V": 1,
+          "SCORE": 96
+        },
+        "exactSourceScan": {
+          "bytes": 2383618,
+          "sha256": "dea0b8025ae255d604b2c5f1a070d0d3096ddb9fee3c5c34aef42ad191894d80",
+          "reconstructed": true
+        },
+        "predicates": [
+          {
+            "name": "GameReady timing (п.1.19)",
+            "verdict": "warn",
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "No WebGL notice (п.1.6.1.7)",
+            "verdict": false,
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "No profanity in UI text (п.8.2.4)",
+            "verdict": "warn",
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "Canvas text reminder",
+            "verdict": {
+              "pass": "not_verified",
+              "details": "Canvas text is not visible to DOM scanning; verify rendered text for declared languages"
+            },
+            "originalBrowserStatus": "not_verified"
+          }
+        ]
+      },
+      {
+        "stableLevel": 28,
+        "displayNumber": 28,
+        "group": "living",
+        "routePass": true,
+        "rawBrowserReport": {
+          "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-checker-platform-living/room-28/checker/yandex-debug-checker-report.json",
+          "bytes": 68299,
+          "sha256": "e7c6042587d4515fcada82c66e6dce4bfa93e2a00bf189eab00d5f523f926122"
+        },
+        "originalText": {
+          "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-checker-platform-living/room-28/checker/yandex-debug-checker-report.txt",
+          "bytes": 5585,
+          "sha256": "417a6748e66ce4c08e969ed61c233410690d59b46258225f20c4a5e0fa710fb1"
+        },
+        "rawCounts": {
+          "PASS": 78,
+          "FAIL": 0,
+          "WARN": 3,
+          "N/V": 1,
+          "SCORE": 96
+        },
+        "exactSourceScan": {
+          "bytes": 2383618,
+          "sha256": "dea0b8025ae255d604b2c5f1a070d0d3096ddb9fee3c5c34aef42ad191894d80",
+          "reconstructed": true
+        },
+        "predicates": [
+          {
+            "name": "GameReady timing (п.1.19)",
+            "verdict": "warn",
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "No WebGL notice (п.1.6.1.7)",
+            "verdict": false,
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "No profanity in UI text (п.8.2.4)",
+            "verdict": "warn",
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "Canvas text reminder",
+            "verdict": {
+              "pass": "not_verified",
+              "details": "Canvas text is not visible to DOM scanning; verify rendered text for declared languages"
+            },
+            "originalBrowserStatus": "not_verified"
+          }
+        ]
+      },
+      {
+        "stableLevel": 29,
+        "displayNumber": 29,
+        "group": "living",
+        "routePass": true,
+        "rawBrowserReport": {
+          "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-checker-platform-living/room-29/checker/yandex-debug-checker-report.json",
+          "bytes": 68365,
+          "sha256": "7ba0d570e3e2209b11231809b95db2490202039f41cef032c9842b4c5a5a1b13"
+        },
+        "originalText": {
+          "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-checker-platform-living/room-29/checker/yandex-debug-checker-report.txt",
+          "bytes": 5587,
+          "sha256": "027694aa45354273fab3f154c6959c06e4513a6228aec4352da51ccb2167300c"
+        },
+        "rawCounts": {
+          "PASS": 78,
+          "FAIL": 0,
+          "WARN": 3,
+          "N/V": 1,
+          "SCORE": 96
+        },
+        "exactSourceScan": {
+          "bytes": 2383618,
+          "sha256": "dea0b8025ae255d604b2c5f1a070d0d3096ddb9fee3c5c34aef42ad191894d80",
+          "reconstructed": true
+        },
+        "predicates": [
+          {
+            "name": "GameReady timing (п.1.19)",
+            "verdict": "warn",
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "No WebGL notice (п.1.6.1.7)",
+            "verdict": false,
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "No profanity in UI text (п.8.2.4)",
+            "verdict": "warn",
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "Canvas text reminder",
+            "verdict": {
+              "pass": "not_verified",
+              "details": "Canvas text is not visible to DOM scanning; verify rendered text for declared languages"
+            },
+            "originalBrowserStatus": "not_verified"
+          }
+        ]
+      },
+      {
+        "stableLevel": 30,
+        "displayNumber": 30,
+        "group": "living",
+        "routePass": true,
+        "rawBrowserReport": {
+          "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-checker-platform-living/room-30/checker/yandex-debug-checker-report.json",
+          "bytes": 68322,
+          "sha256": "5f7540241dd85cf102c61faeadc46cae335af9411647ff1871f69a1e73016b3b"
+        },
+        "originalText": {
+          "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-checker-platform-living/room-30/checker/yandex-debug-checker-report.txt",
+          "bytes": 5585,
+          "sha256": "92e4969780506e4fad0e0c03def6b9ac4fc4b076416a73d063dde40aa9b5121c"
+        },
+        "rawCounts": {
+          "PASS": 78,
+          "FAIL": 0,
+          "WARN": 3,
+          "N/V": 1,
+          "SCORE": 96
+        },
+        "exactSourceScan": {
+          "bytes": 2383618,
+          "sha256": "dea0b8025ae255d604b2c5f1a070d0d3096ddb9fee3c5c34aef42ad191894d80",
+          "reconstructed": true
+        },
+        "predicates": [
+          {
+            "name": "GameReady timing (п.1.19)",
+            "verdict": "warn",
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "No WebGL notice (п.1.6.1.7)",
+            "verdict": false,
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "No profanity in UI text (п.8.2.4)",
+            "verdict": "warn",
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "Canvas text reminder",
+            "verdict": {
+              "pass": "not_verified",
+              "details": "Canvas text is not visible to DOM scanning; verify rendered text for declared languages"
+            },
+            "originalBrowserStatus": "not_verified"
+          }
+        ]
+      },
+      {
+        "stableLevel": 31,
+        "displayNumber": 31,
+        "group": "optics",
+        "routePass": true,
+        "rawBrowserReport": {
+          "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-checker-platform-optics/room-31/checker/yandex-debug-checker-report.json",
+          "bytes": 68214,
+          "sha256": "6152220825cc3d205a5b3e136c262643b5da8953a438619f69228cf931ee8f2e"
+        },
+        "originalText": {
+          "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-checker-platform-optics/room-31/checker/yandex-debug-checker-report.txt",
+          "bytes": 5587,
+          "sha256": "62f71e3b94bc29b03031dd834c47942c4b74fb29caa5e6114cac757fb76da165"
+        },
+        "rawCounts": {
+          "PASS": 78,
+          "FAIL": 0,
+          "WARN": 3,
+          "N/V": 1,
+          "SCORE": 96
+        },
+        "exactSourceScan": {
+          "bytes": 2383618,
+          "sha256": "dea0b8025ae255d604b2c5f1a070d0d3096ddb9fee3c5c34aef42ad191894d80",
+          "reconstructed": true
+        },
+        "predicates": [
+          {
+            "name": "GameReady timing (п.1.19)",
+            "verdict": "warn",
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "No WebGL notice (п.1.6.1.7)",
+            "verdict": false,
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "No profanity in UI text (п.8.2.4)",
+            "verdict": "warn",
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "Canvas text reminder",
+            "verdict": {
+              "pass": "not_verified",
+              "details": "Canvas text is not visible to DOM scanning; verify rendered text for declared languages"
+            },
+            "originalBrowserStatus": "not_verified"
+          }
+        ]
+      },
+      {
+        "stableLevel": 32,
+        "displayNumber": 32,
+        "group": "optics",
+        "routePass": true,
+        "rawBrowserReport": {
+          "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-checker-platform-optics/room-32/checker/yandex-debug-checker-report.json",
+          "bytes": 68365,
+          "sha256": "b9668787a3107480861cde52c5c9916e7ef3f13d5931694d16943d8cda6e5c0d"
+        },
+        "originalText": {
+          "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-checker-platform-optics/room-32/checker/yandex-debug-checker-report.txt",
+          "bytes": 5585,
+          "sha256": "36f9e184ae8fbabd95348b31381cfb7691cd76c3c5d0af5214a372bc1d25ca1c"
+        },
+        "rawCounts": {
+          "PASS": 78,
+          "FAIL": 0,
+          "WARN": 3,
+          "N/V": 1,
+          "SCORE": 96
+        },
+        "exactSourceScan": {
+          "bytes": 2383618,
+          "sha256": "dea0b8025ae255d604b2c5f1a070d0d3096ddb9fee3c5c34aef42ad191894d80",
+          "reconstructed": true
+        },
+        "predicates": [
+          {
+            "name": "GameReady timing (п.1.19)",
+            "verdict": "warn",
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "No WebGL notice (п.1.6.1.7)",
+            "verdict": false,
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "No profanity in UI text (п.8.2.4)",
+            "verdict": "warn",
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "Canvas text reminder",
+            "verdict": {
+              "pass": "not_verified",
+              "details": "Canvas text is not visible to DOM scanning; verify rendered text for declared languages"
+            },
+            "originalBrowserStatus": "not_verified"
+          }
+        ]
+      },
+      {
+        "stableLevel": 33,
+        "displayNumber": 33,
+        "group": "optics",
+        "routePass": true,
+        "rawBrowserReport": {
+          "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-checker-platform-optics/room-33/checker/yandex-debug-checker-report.json",
+          "bytes": 68306,
+          "sha256": "70a58d3f92a2845418e4c3a6e040e13d96b04837c8726ef08170c978c8928539"
+        },
+        "originalText": {
+          "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-checker-platform-optics/room-33/checker/yandex-debug-checker-report.txt",
+          "bytes": 5585,
+          "sha256": "308e92bb8b9f46cc4e338b23f774f8edce8d7d5fb77d5bd884dee1877c670fcf"
+        },
+        "rawCounts": {
+          "PASS": 78,
+          "FAIL": 0,
+          "WARN": 3,
+          "N/V": 1,
+          "SCORE": 96
+        },
+        "exactSourceScan": {
+          "bytes": 2383618,
+          "sha256": "dea0b8025ae255d604b2c5f1a070d0d3096ddb9fee3c5c34aef42ad191894d80",
+          "reconstructed": true
+        },
+        "predicates": [
+          {
+            "name": "GameReady timing (п.1.19)",
+            "verdict": "warn",
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "No WebGL notice (п.1.6.1.7)",
+            "verdict": false,
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "No profanity in UI text (п.8.2.4)",
+            "verdict": "warn",
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "Canvas text reminder",
+            "verdict": {
+              "pass": "not_verified",
+              "details": "Canvas text is not visible to DOM scanning; verify rendered text for declared languages"
+            },
+            "originalBrowserStatus": "not_verified"
+          }
+        ]
+      },
+      {
+        "stableLevel": 34,
+        "displayNumber": 34,
+        "group": "optics",
+        "routePass": true,
+        "rawBrowserReport": {
+          "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-checker-platform-optics/room-34/checker/yandex-debug-checker-report.json",
+          "bytes": 68367,
+          "sha256": "a4d20ea3507e723721c625324d319833813b8b36efe1907c137172445b7349b5"
+        },
+        "originalText": {
+          "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-checker-platform-optics/room-34/checker/yandex-debug-checker-report.txt",
+          "bytes": 5587,
+          "sha256": "ff54d0854d903321a7a8360216881d0a80ef571e20f094a29b974abb3c7feac6"
+        },
+        "rawCounts": {
+          "PASS": 78,
+          "FAIL": 0,
+          "WARN": 3,
+          "N/V": 1,
+          "SCORE": 96
+        },
+        "exactSourceScan": {
+          "bytes": 2383618,
+          "sha256": "dea0b8025ae255d604b2c5f1a070d0d3096ddb9fee3c5c34aef42ad191894d80",
+          "reconstructed": true
+        },
+        "predicates": [
+          {
+            "name": "GameReady timing (п.1.19)",
+            "verdict": "warn",
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "No WebGL notice (п.1.6.1.7)",
+            "verdict": false,
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "No profanity in UI text (п.8.2.4)",
+            "verdict": "warn",
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "Canvas text reminder",
+            "verdict": {
+              "pass": "not_verified",
+              "details": "Canvas text is not visible to DOM scanning; verify rendered text for declared languages"
+            },
+            "originalBrowserStatus": "not_verified"
+          }
+        ]
+      },
+      {
+        "stableLevel": 35,
+        "displayNumber": 35,
+        "group": "optics",
+        "routePass": true,
+        "rawBrowserReport": {
+          "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-checker-platform-optics/room-35/checker/yandex-debug-checker-report.json",
+          "bytes": 68317,
+          "sha256": "cd3177f3e2fd4ef8b74a240947e8e9c94d434fb21123bfef4e023cec7f847ea6"
+        },
+        "originalText": {
+          "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-checker-platform-optics/room-35/checker/yandex-debug-checker-report.txt",
+          "bytes": 5585,
+          "sha256": "93ef1821c87603afeedd781ca8323b6b1968ce15d3f5abb090dcefb794dfd98a"
+        },
+        "rawCounts": {
+          "PASS": 78,
+          "FAIL": 0,
+          "WARN": 3,
+          "N/V": 1,
+          "SCORE": 96
+        },
+        "exactSourceScan": {
+          "bytes": 2383618,
+          "sha256": "dea0b8025ae255d604b2c5f1a070d0d3096ddb9fee3c5c34aef42ad191894d80",
+          "reconstructed": true
+        },
+        "predicates": [
+          {
+            "name": "GameReady timing (п.1.19)",
+            "verdict": "warn",
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "No WebGL notice (п.1.6.1.7)",
+            "verdict": false,
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "No profanity in UI text (п.8.2.4)",
+            "verdict": "warn",
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "Canvas text reminder",
+            "verdict": {
+              "pass": "not_verified",
+              "details": "Canvas text is not visible to DOM scanning; verify rendered text for declared languages"
+            },
+            "originalBrowserStatus": "not_verified"
+          }
+        ]
+      },
+      {
+        "stableLevel": 36,
+        "displayNumber": 36,
+        "group": "optics",
+        "routePass": true,
+        "rawBrowserReport": {
+          "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-checker-platform-optics/room-36/checker/yandex-debug-checker-report.json",
+          "bytes": 68316,
+          "sha256": "816225c0b24e34672566ec25ab8838ed83d53be75a4cca5535c00799b2b3b0fa"
+        },
+        "originalText": {
+          "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-checker-platform-optics/room-36/checker/yandex-debug-checker-report.txt",
+          "bytes": 5587,
+          "sha256": "3f3c1ddcf1c3d03c127bc6e143078938e0b3e3d78ed78a38b0cfba3a3218fec9"
+        },
+        "rawCounts": {
+          "PASS": 78,
+          "FAIL": 0,
+          "WARN": 3,
+          "N/V": 1,
+          "SCORE": 96
+        },
+        "exactSourceScan": {
+          "bytes": 2383618,
+          "sha256": "dea0b8025ae255d604b2c5f1a070d0d3096ddb9fee3c5c34aef42ad191894d80",
+          "reconstructed": true
+        },
+        "predicates": [
+          {
+            "name": "GameReady timing (п.1.19)",
+            "verdict": "warn",
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "No WebGL notice (п.1.6.1.7)",
+            "verdict": false,
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "No profanity in UI text (п.8.2.4)",
+            "verdict": "warn",
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "Canvas text reminder",
+            "verdict": {
+              "pass": "not_verified",
+              "details": "Canvas text is not visible to DOM scanning; verify rendered text for declared languages"
+            },
+            "originalBrowserStatus": "not_verified"
+          }
+        ]
+      },
+      {
+        "stableLevel": 37,
+        "displayNumber": 37,
+        "group": "optics",
+        "routePass": true,
+        "rawBrowserReport": {
+          "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-checker-platform-optics/room-37/checker/yandex-debug-checker-report.json",
+          "bytes": 68315,
+          "sha256": "fd3643ae68b2f0879bdcff4c8e5e91f762a534571fd7ee2c865b8d6b46ced875"
+        },
+        "originalText": {
+          "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-checker-platform-optics/room-37/checker/yandex-debug-checker-report.txt",
+          "bytes": 5585,
+          "sha256": "264d773939afd72fbd73bba7425c3bc612ba1c482ab0ced7dedb0ee3cab8fde5"
+        },
+        "rawCounts": {
+          "PASS": 78,
+          "FAIL": 0,
+          "WARN": 3,
+          "N/V": 1,
+          "SCORE": 96
+        },
+        "exactSourceScan": {
+          "bytes": 2383618,
+          "sha256": "dea0b8025ae255d604b2c5f1a070d0d3096ddb9fee3c5c34aef42ad191894d80",
+          "reconstructed": true
+        },
+        "predicates": [
+          {
+            "name": "GameReady timing (п.1.19)",
+            "verdict": "warn",
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "No WebGL notice (п.1.6.1.7)",
+            "verdict": false,
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "No profanity in UI text (п.8.2.4)",
+            "verdict": "warn",
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "Canvas text reminder",
+            "verdict": {
+              "pass": "not_verified",
+              "details": "Canvas text is not visible to DOM scanning; verify rendered text for declared languages"
+            },
+            "originalBrowserStatus": "not_verified"
+          }
+        ]
+      },
+      {
+        "stableLevel": 38,
+        "displayNumber": 38,
+        "group": "optics",
+        "routePass": true,
+        "rawBrowserReport": {
+          "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-checker-platform-optics/room-38/checker/yandex-debug-checker-report.json",
+          "bytes": 68356,
+          "sha256": "1c6e65b98abb786d089d2e3bae7d91ef538797fc08f9931d7826f050e45b9316"
+        },
+        "originalText": {
+          "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-checker-platform-optics/room-38/checker/yandex-debug-checker-report.txt",
+          "bytes": 5587,
+          "sha256": "cdff6b9c417dc50e37f84cda419b3cc43eaddab5fc41587bceafe1e935199d39"
+        },
+        "rawCounts": {
+          "PASS": 78,
+          "FAIL": 0,
+          "WARN": 3,
+          "N/V": 1,
+          "SCORE": 96
+        },
+        "exactSourceScan": {
+          "bytes": 2383618,
+          "sha256": "dea0b8025ae255d604b2c5f1a070d0d3096ddb9fee3c5c34aef42ad191894d80",
+          "reconstructed": true
+        },
+        "predicates": [
+          {
+            "name": "GameReady timing (п.1.19)",
+            "verdict": "warn",
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "No WebGL notice (п.1.6.1.7)",
+            "verdict": false,
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "No profanity in UI text (п.8.2.4)",
+            "verdict": "warn",
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "Canvas text reminder",
+            "verdict": {
+              "pass": "not_verified",
+              "details": "Canvas text is not visible to DOM scanning; verify rendered text for declared languages"
+            },
+            "originalBrowserStatus": "not_verified"
+          }
+        ]
+      },
+      {
+        "stableLevel": 39,
+        "displayNumber": 39,
+        "group": "optics",
+        "routePass": true,
+        "rawBrowserReport": {
+          "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-checker-platform-optics/room-39/checker/yandex-debug-checker-report.json",
+          "bytes": 68258,
+          "sha256": "c2fcdceb298f979ed35beb3c5c30f90d2e76d2335ca8b63b30bb6b6e2aadea91"
+        },
+        "originalText": {
+          "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-checker-platform-optics/room-39/checker/yandex-debug-checker-report.txt",
+          "bytes": 5585,
+          "sha256": "fa23cc19a564ed58b33efa8d37d2a48825fc1cea2045deee4fa36c361bf8b68a"
+        },
+        "rawCounts": {
+          "PASS": 78,
+          "FAIL": 0,
+          "WARN": 3,
+          "N/V": 1,
+          "SCORE": 96
+        },
+        "exactSourceScan": {
+          "bytes": 2383618,
+          "sha256": "dea0b8025ae255d604b2c5f1a070d0d3096ddb9fee3c5c34aef42ad191894d80",
+          "reconstructed": true
+        },
+        "predicates": [
+          {
+            "name": "GameReady timing (п.1.19)",
+            "verdict": "warn",
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "No WebGL notice (п.1.6.1.7)",
+            "verdict": false,
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "No profanity in UI text (п.8.2.4)",
+            "verdict": "warn",
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "Canvas text reminder",
+            "verdict": {
+              "pass": "not_verified",
+              "details": "Canvas text is not visible to DOM scanning; verify rendered text for declared languages"
+            },
+            "originalBrowserStatus": "not_verified"
+          }
+        ]
+      },
+      {
+        "stableLevel": 40,
+        "displayNumber": 40,
+        "group": "optics",
+        "routePass": true,
+        "rawBrowserReport": {
+          "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-checker-platform-optics/room-40/checker/yandex-debug-checker-report.json",
+          "bytes": 68181,
+          "sha256": "1420604363c82d5580ce9290335f5c43bf4c24c481c177116b1739ce115a6ecb"
+        },
+        "originalText": {
+          "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-checker-platform-optics/room-40/checker/yandex-debug-checker-report.txt",
+          "bytes": 5585,
+          "sha256": "f3bf87ede5d7852b27a26a424120e9a2f4f69d8d9dfcceeab4d47ae32c34ee4f"
+        },
+        "rawCounts": {
+          "PASS": 78,
+          "FAIL": 0,
+          "WARN": 3,
+          "N/V": 1,
+          "SCORE": 96
+        },
+        "exactSourceScan": {
+          "bytes": 2383618,
+          "sha256": "dea0b8025ae255d604b2c5f1a070d0d3096ddb9fee3c5c34aef42ad191894d80",
+          "reconstructed": true
+        },
+        "predicates": [
+          {
+            "name": "GameReady timing (п.1.19)",
+            "verdict": "warn",
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "No WebGL notice (п.1.6.1.7)",
+            "verdict": false,
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "No profanity in UI text (п.8.2.4)",
+            "verdict": "warn",
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "Canvas text reminder",
+            "verdict": {
+              "pass": "not_verified",
+              "details": "Canvas text is not visible to DOM scanning; verify rendered text for declared languages"
+            },
+            "originalBrowserStatus": "not_verified"
+          }
+        ]
+      },
+      {
+        "stableLevel": 42,
+        "displayNumber": 41,
+        "group": "fracture",
+        "routePass": true,
+        "rawBrowserReport": {
+          "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-checker-platform-fracture/room-42/checker/yandex-debug-checker-report.json",
+          "bytes": 68265,
+          "sha256": "e2b93ce9be0b1c01eba9f6850fc8b028ca0183f744512adc6c4108f1628eab84"
+        },
+        "originalText": {
+          "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-checker-platform-fracture/room-42/checker/yandex-debug-checker-report.txt",
+          "bytes": 5587,
+          "sha256": "e781b6176ba200fe0efe68d62c96c32d7e05e49ea2eafeab51acc5bd9c7a7b2d"
+        },
+        "rawCounts": {
+          "PASS": 78,
+          "FAIL": 0,
+          "WARN": 3,
+          "N/V": 1,
+          "SCORE": 96
+        },
+        "exactSourceScan": {
+          "bytes": 2383618,
+          "sha256": "dea0b8025ae255d604b2c5f1a070d0d3096ddb9fee3c5c34aef42ad191894d80",
+          "reconstructed": true
+        },
+        "predicates": [
+          {
+            "name": "GameReady timing (п.1.19)",
+            "verdict": "warn",
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "No WebGL notice (п.1.6.1.7)",
+            "verdict": false,
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "No profanity in UI text (п.8.2.4)",
+            "verdict": "warn",
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "Canvas text reminder",
+            "verdict": {
+              "pass": "not_verified",
+              "details": "Canvas text is not visible to DOM scanning; verify rendered text for declared languages"
+            },
+            "originalBrowserStatus": "not_verified"
+          }
+        ]
+      },
+      {
+        "stableLevel": 43,
+        "displayNumber": 42,
+        "group": "fracture",
+        "routePass": true,
+        "rawBrowserReport": {
+          "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-checker-platform-fracture/room-43/checker/yandex-debug-checker-report.json",
+          "bytes": 68212,
+          "sha256": "9bde1c420834195c3e32ec7414947333e64f2dc9139bbc945e5e049c3c5119c2"
+        },
+        "originalText": {
+          "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-checker-platform-fracture/room-43/checker/yandex-debug-checker-report.txt",
+          "bytes": 5587,
+          "sha256": "c524aa71e190d568b9a2fb614b1b2a8b625c1e205cd051814144c1ed8d20c566"
+        },
+        "rawCounts": {
+          "PASS": 78,
+          "FAIL": 0,
+          "WARN": 3,
+          "N/V": 1,
+          "SCORE": 96
+        },
+        "exactSourceScan": {
+          "bytes": 2383618,
+          "sha256": "dea0b8025ae255d604b2c5f1a070d0d3096ddb9fee3c5c34aef42ad191894d80",
+          "reconstructed": true
+        },
+        "predicates": [
+          {
+            "name": "GameReady timing (п.1.19)",
+            "verdict": "warn",
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "No WebGL notice (п.1.6.1.7)",
+            "verdict": false,
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "No profanity in UI text (п.8.2.4)",
+            "verdict": "warn",
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "Canvas text reminder",
+            "verdict": {
+              "pass": "not_verified",
+              "details": "Canvas text is not visible to DOM scanning; verify rendered text for declared languages"
+            },
+            "originalBrowserStatus": "not_verified"
+          }
+        ]
+      },
+      {
+        "stableLevel": 44,
+        "displayNumber": 43,
+        "group": "fracture",
+        "routePass": true,
+        "rawBrowserReport": {
+          "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-checker-platform-fracture/room-44/checker/yandex-debug-checker-report.json",
+          "bytes": 68358,
+          "sha256": "fad7e7e31b8253138dac4bf3ece9534116c1c418f5ceb3a45b23682940251c54"
+        },
+        "originalText": {
+          "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-checker-platform-fracture/room-44/checker/yandex-debug-checker-report.txt",
+          "bytes": 5585,
+          "sha256": "bc377799b127dccaee1c36ed86af8bf56f5955140ce1ca3678e469c5e3346775"
+        },
+        "rawCounts": {
+          "PASS": 78,
+          "FAIL": 0,
+          "WARN": 3,
+          "N/V": 1,
+          "SCORE": 96
+        },
+        "exactSourceScan": {
+          "bytes": 2383618,
+          "sha256": "dea0b8025ae255d604b2c5f1a070d0d3096ddb9fee3c5c34aef42ad191894d80",
+          "reconstructed": true
+        },
+        "predicates": [
+          {
+            "name": "GameReady timing (п.1.19)",
+            "verdict": "warn",
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "No WebGL notice (п.1.6.1.7)",
+            "verdict": false,
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "No profanity in UI text (п.8.2.4)",
+            "verdict": "warn",
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "Canvas text reminder",
+            "verdict": {
+              "pass": "not_verified",
+              "details": "Canvas text is not visible to DOM scanning; verify rendered text for declared languages"
+            },
+            "originalBrowserStatus": "not_verified"
+          }
+        ]
+      },
+      {
+        "stableLevel": 45,
+        "displayNumber": 44,
+        "group": "fracture",
+        "routePass": true,
+        "rawBrowserReport": {
+          "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-checker-platform-fracture/room-45/checker/yandex-debug-checker-report.json",
+          "bytes": 68341,
+          "sha256": "cf9f5672d5853ce134609f88007923e95dfc1da6eec33566dd0058ad4c07f7f9"
+        },
+        "originalText": {
+          "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-checker-platform-fracture/room-45/checker/yandex-debug-checker-report.txt",
+          "bytes": 5587,
+          "sha256": "6da711ea058066d8c290ad07a2a13da8f6d27987f1bf6e7f6cc546e5282814d7"
+        },
+        "rawCounts": {
+          "PASS": 78,
+          "FAIL": 0,
+          "WARN": 3,
+          "N/V": 1,
+          "SCORE": 96
+        },
+        "exactSourceScan": {
+          "bytes": 2383618,
+          "sha256": "dea0b8025ae255d604b2c5f1a070d0d3096ddb9fee3c5c34aef42ad191894d80",
+          "reconstructed": true
+        },
+        "predicates": [
+          {
+            "name": "GameReady timing (п.1.19)",
+            "verdict": "warn",
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "No WebGL notice (п.1.6.1.7)",
+            "verdict": false,
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "No profanity in UI text (п.8.2.4)",
+            "verdict": "warn",
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "Canvas text reminder",
+            "verdict": {
+              "pass": "not_verified",
+              "details": "Canvas text is not visible to DOM scanning; verify rendered text for declared languages"
+            },
+            "originalBrowserStatus": "not_verified"
+          }
+        ]
+      },
+      {
+        "stableLevel": 46,
+        "displayNumber": 45,
+        "group": "fracture",
+        "routePass": true,
+        "rawBrowserReport": {
+          "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-checker-platform-fracture/room-46/checker/yandex-debug-checker-report.json",
+          "bytes": 68309,
+          "sha256": "ec754cccb66e828c14ac01c0d0abeb15e08b5f411a1bd965bea9d0c3a029cff2"
+        },
+        "originalText": {
+          "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-checker-platform-fracture/room-46/checker/yandex-debug-checker-report.txt",
+          "bytes": 5585,
+          "sha256": "49a98fd5482024466643973d85f7f43306e49c3da6dc5c54994157d3313b66b2"
+        },
+        "rawCounts": {
+          "PASS": 78,
+          "FAIL": 0,
+          "WARN": 3,
+          "N/V": 1,
+          "SCORE": 96
+        },
+        "exactSourceScan": {
+          "bytes": 2383618,
+          "sha256": "dea0b8025ae255d604b2c5f1a070d0d3096ddb9fee3c5c34aef42ad191894d80",
+          "reconstructed": true
+        },
+        "predicates": [
+          {
+            "name": "GameReady timing (п.1.19)",
+            "verdict": "warn",
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "No WebGL notice (п.1.6.1.7)",
+            "verdict": false,
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "No profanity in UI text (п.8.2.4)",
+            "verdict": "warn",
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "Canvas text reminder",
+            "verdict": {
+              "pass": "not_verified",
+              "details": "Canvas text is not visible to DOM scanning; verify rendered text for declared languages"
+            },
+            "originalBrowserStatus": "not_verified"
+          }
+        ]
+      },
+      {
+        "stableLevel": 47,
+        "displayNumber": 46,
+        "group": "fracture",
+        "routePass": true,
+        "rawBrowserReport": {
+          "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-checker-platform-fracture/room-47/checker/yandex-debug-checker-report.json",
+          "bytes": 68359,
+          "sha256": "e0953b679fc0caeae7544ab6979ebc8b64f8c85f64ecbe08e4d9aad4e442c479"
+        },
+        "originalText": {
+          "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-checker-platform-fracture/room-47/checker/yandex-debug-checker-report.txt",
+          "bytes": 5587,
+          "sha256": "e25e59434cf05238a0c7bea8d20c2d728882aaf2eaae560235ded1f1d7f672a6"
+        },
+        "rawCounts": {
+          "PASS": 78,
+          "FAIL": 0,
+          "WARN": 3,
+          "N/V": 1,
+          "SCORE": 96
+        },
+        "exactSourceScan": {
+          "bytes": 2383618,
+          "sha256": "dea0b8025ae255d604b2c5f1a070d0d3096ddb9fee3c5c34aef42ad191894d80",
+          "reconstructed": true
+        },
+        "predicates": [
+          {
+            "name": "GameReady timing (п.1.19)",
+            "verdict": "warn",
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "No WebGL notice (п.1.6.1.7)",
+            "verdict": false,
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "No profanity in UI text (п.8.2.4)",
+            "verdict": "warn",
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "Canvas text reminder",
+            "verdict": {
+              "pass": "not_verified",
+              "details": "Canvas text is not visible to DOM scanning; verify rendered text for declared languages"
+            },
+            "originalBrowserStatus": "not_verified"
+          }
+        ]
+      },
+      {
+        "stableLevel": 48,
+        "displayNumber": 47,
+        "group": "fracture",
+        "routePass": true,
+        "rawBrowserReport": {
+          "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-checker-platform-fracture/room-48/checker/yandex-debug-checker-report.json",
+          "bytes": 68376,
+          "sha256": "c70315c5b41814fc0b33bb8a578ed6c2b24b7c54ccecad77b35973a3415595a0"
+        },
+        "originalText": {
+          "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-checker-platform-fracture/room-48/checker/yandex-debug-checker-report.txt",
+          "bytes": 5587,
+          "sha256": "afb5f2603be49aaaf29dc1a3c107272e114221dbcbf5ea578b16fc0a9da445be"
+        },
+        "rawCounts": {
+          "PASS": 78,
+          "FAIL": 0,
+          "WARN": 3,
+          "N/V": 1,
+          "SCORE": 96
+        },
+        "exactSourceScan": {
+          "bytes": 2383618,
+          "sha256": "dea0b8025ae255d604b2c5f1a070d0d3096ddb9fee3c5c34aef42ad191894d80",
+          "reconstructed": true
+        },
+        "predicates": [
+          {
+            "name": "GameReady timing (п.1.19)",
+            "verdict": "warn",
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "No WebGL notice (п.1.6.1.7)",
+            "verdict": false,
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "No profanity in UI text (п.8.2.4)",
+            "verdict": "warn",
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "Canvas text reminder",
+            "verdict": {
+              "pass": "not_verified",
+              "details": "Canvas text is not visible to DOM scanning; verify rendered text for declared languages"
+            },
+            "originalBrowserStatus": "not_verified"
+          }
+        ]
+      },
+      {
+        "stableLevel": 49,
+        "displayNumber": 48,
+        "group": "fracture",
+        "routePass": true,
+        "rawBrowserReport": {
+          "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-checker-platform-fracture/room-49/checker/yandex-debug-checker-report.json",
+          "bytes": 68323,
+          "sha256": "99c0e0ab3d48ee6dbd554a3025e08a0675208507929cf1ad03c0ed7fb59002f5"
+        },
+        "originalText": {
+          "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-checker-platform-fracture/room-49/checker/yandex-debug-checker-report.txt",
+          "bytes": 5585,
+          "sha256": "1f79fb6656daff4ac31fe956bc323063f9a3ed120f6640f8bedb9d2f8a7ac4ca"
+        },
+        "rawCounts": {
+          "PASS": 78,
+          "FAIL": 0,
+          "WARN": 3,
+          "N/V": 1,
+          "SCORE": 96
+        },
+        "exactSourceScan": {
+          "bytes": 2383618,
+          "sha256": "dea0b8025ae255d604b2c5f1a070d0d3096ddb9fee3c5c34aef42ad191894d80",
+          "reconstructed": true
+        },
+        "predicates": [
+          {
+            "name": "GameReady timing (п.1.19)",
+            "verdict": "warn",
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "No WebGL notice (п.1.6.1.7)",
+            "verdict": false,
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "No profanity in UI text (п.8.2.4)",
+            "verdict": "warn",
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "Canvas text reminder",
+            "verdict": {
+              "pass": "not_verified",
+              "details": "Canvas text is not visible to DOM scanning; verify rendered text for declared languages"
+            },
+            "originalBrowserStatus": "not_verified"
+          }
+        ]
+      },
+      {
+        "stableLevel": 50,
+        "displayNumber": 49,
+        "group": "fracture",
+        "routePass": true,
+        "rawBrowserReport": {
+          "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-checker-platform-fracture/room-50/checker/yandex-debug-checker-report.json",
+          "bytes": 68353,
+          "sha256": "cba2a9b529adbbb6533d248c18ed0ce9103290b5e7e83cec7d02ddf0d53b660e"
+        },
+        "originalText": {
+          "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-checker-platform-fracture/room-50/checker/yandex-debug-checker-report.txt",
+          "bytes": 5585,
+          "sha256": "13a4d36899571d69faebbe179d94d2efae37b4ba61e065cba0ea9e3ebda6640e"
+        },
+        "rawCounts": {
+          "PASS": 78,
+          "FAIL": 0,
+          "WARN": 3,
+          "N/V": 1,
+          "SCORE": 96
+        },
+        "exactSourceScan": {
+          "bytes": 2383618,
+          "sha256": "dea0b8025ae255d604b2c5f1a070d0d3096ddb9fee3c5c34aef42ad191894d80",
+          "reconstructed": true
+        },
+        "predicates": [
+          {
+            "name": "GameReady timing (п.1.19)",
+            "verdict": "warn",
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "No WebGL notice (п.1.6.1.7)",
+            "verdict": false,
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "No profanity in UI text (п.8.2.4)",
+            "verdict": "warn",
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "Canvas text reminder",
+            "verdict": {
+              "pass": "not_verified",
+              "details": "Canvas text is not visible to DOM scanning; verify rendered text for declared languages"
+            },
+            "originalBrowserStatus": "not_verified"
+          }
+        ]
+      },
+      {
+        "stableLevel": 51,
+        "displayNumber": 50,
+        "group": "fracture",
+        "routePass": true,
+        "rawBrowserReport": {
+          "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-checker-platform-fracture/room-51/checker/yandex-debug-checker-report.json",
+          "bytes": 68340,
+          "sha256": "40142a95d05df5cedfeeaa9f900cb91a26ae114fb58eb11c1bb1601f8e15db91"
+        },
+        "originalText": {
+          "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-checker-platform-fracture/room-51/checker/yandex-debug-checker-report.txt",
+          "bytes": 5587,
+          "sha256": "7fed6cec5a03c3ea4a5104b1cea3a1247661920d0b716b11ade4b1c5a0978cca"
+        },
+        "rawCounts": {
+          "PASS": 78,
+          "FAIL": 0,
+          "WARN": 3,
+          "N/V": 1,
+          "SCORE": 96
+        },
+        "exactSourceScan": {
+          "bytes": 2383618,
+          "sha256": "dea0b8025ae255d604b2c5f1a070d0d3096ddb9fee3c5c34aef42ad191894d80",
+          "reconstructed": true
+        },
+        "predicates": [
+          {
+            "name": "GameReady timing (п.1.19)",
+            "verdict": "warn",
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "No WebGL notice (п.1.6.1.7)",
+            "verdict": false,
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "No profanity in UI text (п.8.2.4)",
+            "verdict": "warn",
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "Canvas text reminder",
+            "verdict": {
+              "pass": "not_verified",
+              "details": "Canvas text is not visible to DOM scanning; verify rendered text for declared languages"
+            },
+            "originalBrowserStatus": "not_verified"
+          }
+        ]
+      },
+      {
+        "stableLevel": 41,
+        "displayNumber": 51,
+        "group": "castle",
+        "routePass": true,
+        "rawBrowserReport": {
+          "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-checker-platform-castle/room-41/checker/yandex-debug-checker-report.json",
+          "bytes": 68296,
+          "sha256": "3d134244ae89e3cfb14abe5bca38bcc114a0de6085c605db03d7f9488bbf91de"
+        },
+        "originalText": {
+          "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-checker-platform-castle/room-41/checker/yandex-debug-checker-report.txt",
+          "bytes": 5587,
+          "sha256": "f3152ab0bea9b689387464b9a77840d034679b6b4472ca3bca9eda42b78885cb"
+        },
+        "rawCounts": {
+          "PASS": 78,
+          "FAIL": 0,
+          "WARN": 3,
+          "N/V": 1,
+          "SCORE": 96
+        },
+        "exactSourceScan": {
+          "bytes": 2383618,
+          "sha256": "dea0b8025ae255d604b2c5f1a070d0d3096ddb9fee3c5c34aef42ad191894d80",
+          "reconstructed": true
+        },
+        "predicates": [
+          {
+            "name": "GameReady timing (п.1.19)",
+            "verdict": "warn",
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "No WebGL notice (п.1.6.1.7)",
+            "verdict": false,
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "No profanity in UI text (п.8.2.4)",
+            "verdict": "warn",
+            "originalBrowserStatus": "warn"
+          },
+          {
+            "name": "Canvas text reminder",
+            "verdict": {
+              "pass": "not_verified",
+              "details": "Canvas text is not visible to DOM scanning; verify rendered text for declared languages"
+            },
+            "originalBrowserStatus": "not_verified"
+          }
+        ]
+      }
+    ],
+    "retainedOriginalTotals": {
+      "PASS": 3978,
+      "FAIL": 0,
+      "WARN": 153,
+      "N/V": 51
+    },
+    "scope": "Every final-source original report and text file is pinned; all source-scan candidates and exact bytes were reconstructed. These original checker warnings and NOT VERIFIED rows remain unchanged."
+  },
+  "productionNativeStartup": {
+    "report": {
+      "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/39700325617-attempt-1/v67-production-startup/report.json",
+      "bytes": 115746,
+      "sha256": "2c7e1679d4f0ece861f1dc42a9e65d07e243ef287f2fd91f2deed9d1dc150c67"
+    },
+    "pass": true,
+    "cases": [
+      {
+        "scenario": "positive",
+        "pass": true,
+        "readyAfterFullyVisibleFrames": 2,
+        "fontsAtReady": "loaded",
+        "menuInertAtReady": false,
+        "readyCallsDuringFailure": null,
+        "failureUserText": null,
+        "playState": "playing"
+      },
+      {
+        "scenario": "renderer-unavailable",
+        "pass": true,
+        "readyAfterFullyVisibleFrames": 2,
+        "fontsAtReady": "loaded",
+        "menuInertAtReady": false,
+        "readyCallsDuringFailure": 0,
+        "failureUserText": "Не удалось подготовить 3D-сцену. Нажми «Повторить загрузку». Сохранённый прогресс комнат не изменён.",
+        "playState": "playing"
+      },
+      {
+        "scenario": "sdk-rejected",
+        "pass": true,
+        "readyAfterFullyVisibleFrames": 2,
+        "fontsAtReady": "loaded",
+        "menuInertAtReady": false,
+        "readyCallsDuringFailure": 0,
+        "failureUserText": "Не удалось подключиться к Яндекс Играм. Проверь соединение и нажми «Повторить загрузку». Сохранённый прогресс комнат не изменён.",
+        "playState": "playing"
+      }
+    ]
+  },
+  "causes": {
+    "gameReady": "The 800-character static window finds a ready capability check near SDK init, while the separately defined native presentation gate lies elsewhere. Exact-CI native probes independently verify proper order.",
+    "webgl": "All 15 scan matches belong to bundled THREE diagnostic strings, not a visible instruction to enable WebGL. Actual failure UI and retry are exercised by exact production startup.",
+    "profanity": "Four Russian substring matches are clean words: требуется, требует (two occurrences), Колебания. No English or standalone-бля pattern matches.",
+    "canvas": "The unchanged original rule unconditionally returns NOT VERIFIED whenever document.querySelector(canvas) exists; additional draw-command and visual evidence does not change this verdict."
+  },
+  "originalNormalizationPolicy": "debugcheck.js:1281-1284 converts false to WARN for checks absent from HARD_FAIL_CHECKS; No WebGL notice is not in that allow-list. Raw browser statuses above are retained verbatim.",
+  "reproducer": {
+    "path": "/workspace/scratch/796a39e3632d/visual-v67-ci/reproduce-checker-warning-review-39700325617.mjs",
+    "bytes": 14611,
+    "sha256": "20a6c781e2207662be658fe337f190e7c5fc8b85f760cf091888920ff81d7868"
+  }
+}

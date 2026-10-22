@@ -1,0 +1,219 @@
+{
+  "schemaVersion": 1,
+  "frozen": true,
+  "repository": "amazin20/brainrot-portal",
+  "namespace": "campaign-v67/",
+  "version": "v67-visual-completion",
+  "controllerParent": "2c6b787e29d81bb5e158e047fe38266a9ad6bed3",
+  "sourceBranch": "upgrade/visual-completion-20261022",
+  "sourceWorkflow": ".github/workflows/visual-completion-v67-review.yml",
+  "sourceCommit": "cebc83f5066fe819d3439dc50ad38f15f357ad22",
+  "sourceTree": "e72288cfc34aaa43eff24d8abd9ac2f3e43845c2",
+  "sourceRun": 39700325617,
+  "sourceAttempt": 1,
+  "expectedJobs": [
+    "build",
+    "checker-platform (castle, 41)",
+    "checker-platform (early, 1,2,3,4,5,6,7,8,9,10)",
+    "checker-platform (energy, 11,12,13,14,15,16,17,18,19,20)",
+    "checker-platform (fracture, 42,43,44,45,46,47,48,49,50,51)",
+    "checker-platform (living, 21,22,23,24,25,26,27,28,29,30)",
+    "checker-platform (optics, 31,32,33,34,35,36,37,38,39,40)",
+    "production-startup",
+    "review-summary",
+    "unit (0)",
+    "unit (1)",
+    "unit (2)",
+    "unit (3)",
+    "visual-capture (castle, 41)",
+    "visual-capture (early, 1,2,3,4,5,6,7,8,9,10)",
+    "visual-capture (energy, 11,12,13,14,15,16,17,18,19,20)",
+    "visual-capture (fracture, 42,43,44,45,46,47,48,49,50,51)",
+    "visual-capture (living, 21,22,23,24,25,26,27,28,29,30)",
+    "visual-capture (optics, 31,32,33,34,35,36,37,38,39,40)"
+  ],
+  "expectedArtifactNames": [
+    "v67-build",
+    "v67-checker-platform-castle",
+    "v67-checker-platform-early",
+    "v67-checker-platform-energy",
+    "v67-checker-platform-fracture",
+    "v67-checker-platform-living",
+    "v67-checker-platform-optics",
+    "v67-dist",
+    "v67-production-startup",
+    "v67-review-summary",
+    "v67-unit-0",
+    "v67-unit-1",
+    "v67-unit-2",
+    "v67-unit-3",
+    "v67-visual-castle",
+    "v67-visual-early",
+    "v67-visual-energy",
+    "v67-visual-fracture",
+    "v67-visual-living",
+    "v67-visual-optics",
+    "v67-yandex",
+    "v67-yandex-review-dist"
+  ],
+  "sourceArtifacts": [
+    {
+      "id": 12391984303,
+      "name": "v67-build",
+      "size_in_bytes": 8209,
+      "digest": "sha256:fbd6b7889389d93e61aa73031b18a85dfb31b7c1808450264da86e6f3ecc75e3"
+    },
+    {
+      "id": 12393195416,
+      "name": "v67-checker-platform-castle",
+      "size_in_bytes": 142046,
+      "digest": "sha256:7c292fa41aa33852eedeec62ee47ad88515b09188d6ff102c6d273ce0932ced1"
+    },
+    {
+      "id": 12392507477,
+      "name": "v67-checker-platform-early",
+      "size_in_bytes": 617014,
+      "digest": "sha256:0491f8b9c87d7f074d3647deacc398b2f5748b634b6e3a903b2292213afd9d22"
+    },
+    {
+      "id": 12392514420,
+      "name": "v67-checker-platform-energy",
+      "size_in_bytes": 607007,
+      "digest": "sha256:9d971ef2df07754e167c3ade1fcdc463404ee28a3cc2f04ce8165e336f138f54"
+    },
+    {
+      "id": 12392752883,
+      "name": "v67-checker-platform-fracture",
+      "size_in_bytes": 615967,
+      "digest": "sha256:3fd1dc5e1639b872154c52ecb12fb7e1f882b6a6eaa0259f3ee4693e81a1842b"
+    },
+    {
+      "id": 12393361624,
+      "name": "v67-checker-platform-living",
+      "size_in_bytes": 555627,
+      "digest": "sha256:cdcebca7ab904c8a27c1fd6ab7f075bfc304bd2eca647717a2dab077e494d390"
+    },
+    {
+      "id": 12392577661,
+      "name": "v67-checker-platform-optics",
+      "size_in_bytes": 580410,
+      "digest": "sha256:7dce41e4b0d52111bd4e73f6e5160b74ea368948a86034f907f3e0122dc55b04"
+    },
+    {
+      "id": 12393052008,
+      "name": "v67-dist",
+      "size_in_bytes": 4580909,
+      "digest": "sha256:0a65e322f92714e749b3794fc25b1f095cf21c4040cbfc8eeee32c7eea990ac8"
+    },
+    {
+      "id": 12392972706,
+      "name": "v67-production-startup",
+      "size_in_bytes": 3143114,
+      "digest": "sha256:e6963be9ced306951f644db18dc9e96e66fe934304cf8943f601726da6d352e6"
+    },
+    {
+      "id": 12395570772,
+      "name": "v67-review-summary",
+      "size_in_bytes": 3399,
+      "digest": "sha256:bc0346b8a8b448df7fd54312061f44bdd6b2366f2ed11ea4d36b592e53ba7eda"
+    },
+    {
+      "id": 12395362685,
+      "name": "v67-unit-0",
+      "size_in_bytes": 235139,
+      "digest": "sha256:0f4e17c8fcbd476c072e1e2ff2c8495708352f843e8343628958fd8bf8b1a890"
+    },
+    {
+      "id": 12393432281,
+      "name": "v67-unit-1",
+      "size_in_bytes": 40702,
+      "digest": "sha256:1a7e6cf0d30602a32f0294f4e296ab9cb529e474810e0ebb918d5f2c44711a38"
+    },
+    {
+      "id": 12393636897,
+      "name": "v67-unit-2",
+      "size_in_bytes": 54020,
+      "digest": "sha256:c32352e8b1575f44001233961baa3d6ca8722d1b7071000618e591490204cf91"
+    },
+    {
+      "id": 12394137128,
+      "name": "v67-unit-3",
+      "size_in_bytes": 49631,
+      "digest": "sha256:15b9d8e19a214cfabe8790603680c2c6eb14e9c54e00aed4666d577843892ba3"
+    },
+    {
+      "id": 12392328959,
+      "name": "v67-visual-castle",
+      "size_in_bytes": 1947394,
+      "digest": "sha256:1b104b01e30d7ef60b2c9266d1a85d6b01df74166b6e82bcce055c4ae1114e5f"
+    },
+    {
+      "id": 12391949345,
+      "name": "v67-visual-early",
+      "size_in_bytes": 5513276,
+      "digest": "sha256:da846fb74b6615daab1c8939da3718ab1323467220a2712f053b48be908ef66e"
+    },
+    {
+      "id": 12392912915,
+      "name": "v67-visual-energy",
+      "size_in_bytes": 5295954,
+      "digest": "sha256:4e7e136fcbcb25d032b7a5c438186a49eec7f30067a1f49674f7e137b1ed585a"
+    },
+    {
+      "id": 12393047861,
+      "name": "v67-visual-fracture",
+      "size_in_bytes": 5344378,
+      "digest": "sha256:631bf6a0499affe08ca9fa9a9d1f5733d7e02ab2a87237716d5743633269fe98"
+    },
+    {
+      "id": 12394075099,
+      "name": "v67-visual-living",
+      "size_in_bytes": 5821108,
+      "digest": "sha256:8094759d50380bd415b079c6b892ba05274d04ca4e7931f7f17dbb29c9956748"
+    },
+    {
+      "id": 12392403904,
+      "name": "v67-visual-optics",
+      "size_in_bytes": 4519833,
+      "digest": "sha256:c1f0390e69ced53cd62d11d5d1272482dc7e5e6090b30977b2547820d66973a4"
+    },
+    {
+      "id": 12393047021,
+      "name": "v67-yandex",
+      "size_in_bytes": 4422380,
+      "digest": "sha256:93e4d9fc217fd5fcf072d0241adc3980cd656a05f146c7c4fc3a334c5a0368d3"
+    },
+    {
+      "id": 12392957288,
+      "name": "v67-yandex-review-dist",
+      "size_in_bytes": 4581279,
+      "digest": "sha256:1c084761c0cb11e54cd3593a47a83b4eacba27beca5c5ae4d0daa7955725b3ee"
+    }
+  ],
+  "sourceAcceptance": {
+    "path": "tools/campaign-v67-root-source-acceptance.json",
+    "sha256": "ada5159beb2b0e6de42653ecb76dd22d78d7f7a69bc32f25147cb72aa5167dd7"
+  },
+  "baselineCatalog": "tools/campaign-v66-public-files.json",
+  "baselineCatalogSha256": "d612d0be5e4c3da2469583c4d389b8fcadd3ea0c72fc87e02a54b3ec363f7f7c",
+  "baselineAcceptance": "tools/campaign-v66-root-public-acceptance.json",
+  "baselineAcceptanceSha256": "6295d7b85048d63122db521356a8790ea717d15109697748a86c13d4265f735d",
+  "baselineRun": 39676538087,
+  "baselineAttempt": 1,
+  "baselineDeployment": {
+    "id": 7237404303,
+    "sha": "a2e9302c593a484918733c225392a34ad7051ecf"
+  },
+  "baselineArtifact": {
+    "id": 12381187442,
+    "name": "github-pages",
+    "size_in_bytes": 638549606,
+    "digest": "sha256:c5db7d03960ee2ae31a22b3eb838d35959e8d7a895e3b374056de9227dc4e5e4"
+  },
+  "rootEntryChange": {
+    "path": "index.html",
+    "preserveOriginalAt": "campaign-v67/release/history/root-index-before-v67.html",
+    "newTarget": "campaign-v67/"
+  },
+  "publicationAccepted": false
+}
