@@ -122,7 +122,9 @@ export function buildExpansion42(g,index=41){
  pipe(k,[[26.5,9.4,35],[24,9.4,35],[24,1,35],[24,1,-9],[-24,1,-9]],.12);
  k.control('differential-vent',[12,3,11],()=>{pressure.left=pressure.right=0;},'E — открыть служебный сброс обоих воздушных контуров.');
  k.resets.push(()=>{Object.assign(pressure,{left:0,right:0,difference:0,coverA:0,coverB:0,flowA:false,flowB:false});shuttle.stations[1].x=0;shuttle.target=1;});
- k.display([0,16,-16.6],()=>`A ${pressure.left.toFixed(0)} кПа / B ${pressure.right.toFixed(0)} кПа\nПЕРЕПАД ${pressure.difference.toFixed(0)} кПа / ХОД ${shuttle.position.x.toFixed(1)} м`,26,2);
+ k.display([0,16,-16.6],()=>`A ${pressure.left.toFixed(0)} кПа / B ${pressure.right.toFixed(0)} кПа\nПЕРЕПАД ${pressure.difference.toFixed(0)} кПа / ХОД ${shuttle.position.x.toFixed(1)} м`,26,2,[0,0,1],{
+  layout:'opposed-pressure',readings:()=>({left:pressure.left,right:pressure.right,difference:pressure.difference,stroke:shuttle.position.x})
+ });
  k.label('КЛАПАННЫЙ ДВОР B',[31,12,39],[0,0,-1],12,.65);heading(k,42,[0,20,-16.6]);
  return finish(k,[-3,3,25],[-5,3.6,22],[-32,3,0],{valveA,valveB,input,mouthA,mouthB,passenger,shuttle,pressure,spawnView:{yaw:.12,pitch:-.07}},
  {'shared-air-intake':'cargo-height fan intake supplies a live opposed pneumatic branch','positive-air-address':'follows the shuttle and supplies branch A','negative-air-address':'upward-facing address of elevated court B cannot be reached from start or lower recovery floor','moving-passenger-address':'the signed moving address becomes final transport after physically transferring the same check-valve A to B'},['positive-then-negative','observe-open-branches']);

@@ -54,10 +54,10 @@ export class ResearchChamber extends OpenChamber {
   if(n[2]<-.99&&p[2]>b.maxZ-clearance)out[2]=b.maxZ-clearance;
   return out;
  }
- display(p,read,width=12,height=1.8,normal=[0,0,1]){
+ display(p,read,width=12,height=1.8,normal=[0,0,1],{layout,readings}={}){
   p=this.signagePosition(p,normal);
   const n=V(...normal);this.block(V(...p).addScaledVector(n,-.19).toArray(),normal[0]?[.28,height+.3,width+.3]:[width+.3,height+.3,.28],'dark');
-  return labInstrument(this,p,{read,width,height,normal});
+  return labInstrument(this,p,{read,width,height,normal,layout,readings});
  }
  label(text,p,n=[0,0,1],w=7,h=.8){sign(this,text,this.signagePosition(p,n),n,w,h);}
  projector(p,normal,{radius=1.05,rotating=false}={}){

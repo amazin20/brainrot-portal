@@ -57,7 +57,7 @@ function profilePosts(root,owner,{onlyFolded=false,closedPiers=false}={}){
   const p=mesh.geometry?.parameters;
   // These measured owners receive their dedicated closed housings later;
   // profiling them here would leave a second sibling inside that housing.
-  if(mesh.userData?.earlyAuditStair||mesh.userData?.earlyAuditMachineHousing||mesh.userData?.earlyAuditBus)return;
+  if(mesh.userData?.earlyAuditStair||mesh.userData?.earlyAuditMachineHousing||mesh.userData?.earlyAuditBus||mesh.userData?.firstChapterStructuralRole)return;
   if(!mesh.isMesh||mesh.isInstancedMesh||mesh.userData?.collisionProxy||mesh.userData?.portalTile||mesh.userData?.visualAuditEarly||!mesh.visible||
    Array.isArray(mesh.material)||mesh.material?.visible===false||mesh.material?.transparent||!p||![p.width,p.height,p.depth].every(Number.isFinite))return;
   if(onlyFolded&&!/^Folded (dark|shell) casing$/.test(mesh.name))return;
@@ -80,6 +80,20 @@ function profilePosts(root,owner,{onlyFolded=false,closedPiers=false}={}){
 export function prepareVisualAuditEarlyKit(kit){
  if(kit.game?.chamberEdition!=='foundation'||![0,1,2,3,4,16].includes(kit.index)||kit.visualAuditEarlyPrepared)return;
  const owner=resources();kit.visualAuditEarlyPrepared=owner;
+ if(kit.index===2){
+  // The nearby carriage reports the load; this distant wall instrument is
+  // subordinate berth status. Contract its actual picture and its non-solid
+  // case together before batching, retaining the separate physical backing.
+  kit.world.root.traverse(mesh=>{
+   const p=mesh.geometry?.parameters;if(!mesh.isMesh||!p)return;
+   if(mesh.name==='Station berth and motion readout'){
+    const g=mesh.geometry.clone();g.scale(.76,.68,1);g.parameters={...p,width:p.width*.76,height:p.height*.68};
+    replace(owner,mesh,g,mesh.material);owner.stats.subordinateBerthDisplays=1;
+   }else if(mesh.parent===kit.world.root&&Math.abs(mesh.position.x-12)<.001&&Math.abs(mesh.position.y-17.3)<.001&&Math.abs(p.width-17.3)<.001&&Math.abs(p.height-2.5)<.001){
+    const g=mesh.geometry.clone();g.scale(.76,.68,1);g.parameters={...p,width:p.width*.76,height:p.height*.68};replace(owner,mesh,g,mesh.material);
+   }
+  });
+ }
  profilePosts(kit.world.root,owner,{onlyFolded:true});
  for(const [material,meshes]of [...kit.artBins]){
   for(const mesh of [...meshes]){
@@ -174,6 +188,9 @@ function finishDockedCabinFloor(level,owner){
  for(let i=0;i<positions.count;i++)if(Math.abs(positions.getY(i)-top)<1e-6)flat.expandByPoint(V().fromBufferAttribute(positions,i));
  if(flat.isEmpty())return;
  const uniforms={earlyDockInverse:{value:new THREE.Matrix4()},earlyDockBounds:{value:new THREE.Vector4(flat.min.x,flat.max.x,flat.min.z,flat.max.z)},earlyDockTop:{value:top}};
+ const cabinMaterial=deck.material.clone();cabinMaterial.name='Stored-power cabin / warm mineral load deck';
+ cabinMaterial.color.setHex(0xc3b18e);cabinMaterial.roughness=.86;owner.materials.push(cabinMaterial);
+ replace(owner,deck,deck.geometry,cabinMaterial);
  const originals=new Map();
  level.world.root.traverse(mesh=>{
   const source=mesh.material;
@@ -198,6 +215,16 @@ function finishDockedCabinFloor(level,owner){
      if(abs(earlyDockLocal.y-earlyDockTop)<0.00001
       &&earlyDockLocal.x>=earlyDockBounds.x&&earlyDockLocal.x<=earlyDockBounds.y
       &&earlyDockLocal.z>=earlyDockBounds.z&&earlyDockLocal.z<=earlyDockBounds.w)discard;`);
+    // These broad service fields belong to the real motor, projector and
+    // blower work areas. They are pigment in the single court, never arrows,
+    // raised pads or another surface competing with the docked walking roof.
+    shader.fragmentShader=shader.fragmentShader.replace('#include <color_fragment>',`#include <color_fragment>
+     float earlyMotorBay=step(-28.0,vEarlyDockWorld.x)*step(vEarlyDockWorld.x,-10.0)*step(-24.0,vEarlyDockWorld.z)*step(vEarlyDockWorld.z,4.0);
+     float earlyLightBay=step(-28.0,vEarlyDockWorld.x)*step(vEarlyDockWorld.x,-10.0)*step(7.0,vEarlyDockWorld.z)*step(vEarlyDockWorld.z,16.0);
+     float earlyBlowerBay=step(14.0,vEarlyDockWorld.x)*step(vEarlyDockWorld.x,27.0)*step(12.0,vEarlyDockWorld.z)*step(vEarlyDockWorld.z,24.0);
+     float earlyWorkFloor=1.0-step(.02,abs(vEarlyDockWorld.y));
+     diffuseColor.rgb*=mix(vec3(1.0),vec3(.61,.86,.91),max(earlyMotorBay,earlyBlowerBay)*earlyWorkFloor);
+     diffuseColor.rgb*=mix(vec3(1.0),vec3(1.10,.96,.72),earlyLightBay*earlyWorkFloor);`);
    };
    material.customProgramCacheKey=()=>priorKey()+'|coincident-cabin-floor67';material.needsUpdate=true;
    originals.set(source,material);owner.materials.push(material);
@@ -215,8 +242,8 @@ function finishDockedCabinFloor(level,owner){
 // thin floor decals, service props, implied platforms or solution arrows.
 const WORK_BAYS=Object.freeze({
  5:[[-3.7,3.7,-11.8,-5.0,0,0x91bec6]],
- 7:[[-3.7,3.7,-3.3,3.3,0,0x89b8bd],[-4.2,4.2,-12.8,-3.3,7,0xb8d6cd]],
- 8:[[-7.2,3.5,-9.1,-1.3,0,0x91b5bf],[-10.5,-3.5,3.0,10.5,0,0xd8c7a4]],
+ 7:[[-3.7,3.7,-3.3,3.3,0,0x89b8bd],[-4.2,4.2,-12.8,-3.3,7,0x96b8b0]],
+ 8:[[-8.5,5.0,-11.0,-.6,0,0x638b96],[-10.5,-3.5,3.0,10.5,0,0xd8c7a4]],
  9:[[-11.5,-5.2,-1.7,5.7,1.82,0x96b6be],[2.4,8.7,-1.7,4.8,1.82,0xc8c5a9]],
  10:[[-11.4,-4.3,.8,7.2,0,0x92b8bd],[-8.6,-2.1,-8.2,-1.9,0,0xd1c09a]],
  11:[[7.1,14.9,-1.9,7.8,9,0xc8b39a]],
@@ -334,7 +361,7 @@ export function finishVisualAuditEarly(game,level,index=level?.index){
  const owner=level.workshop?.visualAuditEarlyPrepared??resources();
  const root=new THREE.Group();root.name='Early visual audit / machine construction';root.userData={visualOnly:true,keepMaterial:true,revision:EARLY_AUDIT_REVISION};game.scene.add(root);
  owner.renderRoot=root;owner.protected=new Set([...(game.colliders??[]).map(c=>c.mesh),...(game.aimBlockers??[]),...(game.cameraBlockers??[])]);owner.dynamic=new Set((game.colliders??[]).filter(c=>c.kinematic).map(c=>c.mesh));
- if(index>=5&&index<=15)profilePosts(level.world.root,owner,{closedPiers:index===6});
+ if(index>=5&&index<=15)profilePosts(level.world.root,owner,{closedPiers:[6,7,8].includes(index)});
  if(index===6)restoreBalanceRoles(level,owner);
  if(index===9)finishGlass(level,owner);
  if(index===4)finishDockedCabinFloor(level,owner);

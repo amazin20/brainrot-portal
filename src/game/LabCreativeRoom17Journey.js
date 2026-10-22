@@ -6,13 +6,21 @@ const V=(...p)=>new THREE.Vector3(...p),check=(v,m)=>{if(!v)throw Error(m);};
 // An extra stationary inspection changed the free body's return phase. The
 // receiver stays in view through landing; the original aim returns during the
 // existing gallery walk before another portal is fired.
-function watchSupportDuringTravel(d,point,travel){
+function watchSupportDuringTravel(d,point,travel,{physicalOrigin=false}={}){
  const g=d.game,visual=g.updateVisuals,view={yaw:g.yaw,pitch:g.pitch};let returning=false;
  g.updateVisuals=function(...args){
   if(returning){
    const turn=Math.atan2(Math.sin(view.yaw-g.yaw),Math.cos(view.yaw-g.yaw));
    g.yaw+=THREE.MathUtils.clamp(turn,-.04,.04);
    g.pitch+=THREE.MathUtils.clamp(view.pitch-g.pitch,-.025,.025);
+  }else if(physicalOrigin){
+   // The first freight inspection follows the traveller's actual eye line.
+   // Recovery-camera framing must not change the ordinary look requested.
+   const direction=point.clone().sub(g.playerPosition).sub(V(0,1.32,0));
+   const yaw=Math.atan2(-direction.x,-direction.z),pitch=Math.atan2(direction.y,Math.hypot(direction.x,direction.z));
+   const turn=Math.atan2(Math.sin(yaw-g.yaw),Math.cos(yaw-g.yaw));
+   g.yaw+=THREE.MathUtils.clamp(turn,-.04,.04);
+   g.pitch=THREE.MathUtils.clamp(g.pitch+THREE.MathUtils.clamp(pitch-g.pitch,-.025,.025),CAMERA_PITCH_MIN,CAMERA_PITCH_MAX);
   }else{
    g.scene.updateMatrixWorld(true);
    const direction=point.clone().sub(g.camera.position);
@@ -31,9 +39,14 @@ function watchSupportDuringTravel(d,point,travel){
 }
 export function support17Service(d){d.walk(-24,18);d.walk(-24,49.5);d.walk(-18,49.5);d.walk(-18,-11);}
 export function support17Departure(d){d.walk(-18,52);d.walk(-24,52);d.walk(-24,18);}
-export function prepareSupport17(d,{swapColours=false,stopAfter=null,route='upper-branch'}={}){
+export function prepareSupport17(d,{swapColours=false,stopAfter=null,route='upper-branch',firstMouthInspection=true}={}){
  installPreciseLateAim(d);const {game:g,level:l}=d,c0=swapColours?1:0,c1=1-c0;
- support17Service(d);aimLateSurface(d,c1,l.mouth);support17Departure(d);
+ // Inspect the actual first freight mouth during the existing dry walk.
+ // Preparation must not inherit the room's initial presentation bearing.
+ // Only the declared historical camera comparator disables this inspection.
+ if(firstMouthInspection)watchSupportDuringTravel(d,l.mouth.getFrame().center.clone(),()=>support17Service(d),{physicalOrigin:true});
+ else support17Service(d);
+ aimLateSurface(d,c1,l.mouth);support17Departure(d);
  d.walk(g.cargo.position.x-1.3,g.cargo.position.z);d.pickup();d.walk(-16,13.0);d.look(V(-16,7,0));d.stop();d.wait(.3);check(g.interact()&&!g.heldCube,'Original endpoint release rejected');d.wait(.8);
  d.walk(-11,16);aimLateSurface(d,c0,l.feed.surface,g.cargo.position.clone().setY(l.feed.surface.getFrame().center.y));
  d.until(()=>g.physics.portalTransports>0&&g.cargo.position.y<-8,8,'Original endpoint did not enter the protected anchor');d.wait(1.2);d.mark('original free endpoint reaches the real ground anchor');
@@ -43,10 +56,10 @@ export function prepareSupport17(d,{swapColours=false,stopAfter=null,route='uppe
  if(route==='lower-branch'){d.until(()=>l.beam.angle<-.32&&l.beam.angle>-.50&&l.beam.tension>30,12,'Lower current cable did not form the independent descent');d.wait(2);d.mark('current lower branch forms a separate descending route');}
  else{d.until(()=>l.beam.angle>-.04&&l.beam.tension>30,12,'Current upper cable did not support the architectural floor');d.mark('current upper branch supports the free architectural end');}
 }
-export function runCreative17(d,{route='upper-branch',alternative=null,swapColours=false,stopAfter=null,recovery=false}={}){
+export function runCreative17(d,{route='upper-branch',alternative=null,swapColours=false,stopAfter=null,recovery=false,firstMouthInspection=true}={}){
  if(alternative)route=alternative;check(['upper-branch','lower-branch'].includes(route),'Unknown support route');
  const {game:g,level:l}=d,c0=swapColours?1:0,c1=1-c0;
- prepareSupport17(d,{swapColours,stopAfter,route});if(stopAfter==='delivered')return;
+ prepareSupport17(d,{swapColours,stopAfter,route,firstMouthInspection});if(stopAfter==='delivered')return;
  if(stopAfter==='supported')return;
  if(recovery){
   aimLateSurface(d,c0,l.feed.surface);d.until(()=>l.beam.angle<-.65,12,'Replacing the support charge did not drop the floor');d.walk(-6,0);d.walk(0,6);d.until(()=>g.playerGrounded&&g.playerPosition.y<-9.9,8,'Dry service landing missed');d.mark('support loss returns through the same dry floor without resetting either body');support17Departure(d);d.walk(-12,12);aimLateSurface(d,c0,route==='lower-branch'?l.lowLead:l.highLead);d.until(()=>l.beam.tension>30&&l.beam.angle>-.50,12,'Restored current pair did not recover support');d.wait(2);

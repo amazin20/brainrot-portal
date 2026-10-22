@@ -4,6 +4,10 @@ import {lateCassetteBulkheadGeometry,latePressureManifoldGeometry,installOptical
 
 const V=(...p)=>new THREE.Vector3(...p),Q=()=>new THREE.Quaternion();
 const STABLE_LEVELS=new Set([35,36,37,38,39,40,42,43,44,45,46,47,48,49,50,51]);
+// Archive builders share these stable numbers with the newer progression,
+// but contain different physical mechanisms. Bind the new castings only to
+// their authored variant; a missing owner in that variant still throws.
+const TARGET_CASTING_VARIANTS=new Map([[44,'puzzle-progression44-rearrange-the-path'],[49,'puzzle-progression49-optical-transfer'],[50,'puzzle-progression50-folded-rift']]);
 export const LATE_VISUAL_COMPLETION_REVISION='v67-pressure-painted-machinery';
 const RGB=hex=>new THREE.Color(hex).toArray();
 const LATE_DEVICE_COLORS=Object.freeze({paint:RGB(0x658f88),dark:RGB(0x253e4a),metal:RGB(0xb6c3ba),copper:RGB(0xc99665),ivory:RGB(0xc1cec2)});
@@ -185,6 +189,19 @@ function dressSuspendedCupBodies(k){
  }
  return {cups,hoods};
 }
+
+function quietRailCourtBulkheads(k){
+ const base=new THREE.Color(0x6d817b),retain=.18,rows=[];
+ for(const mesh of beforeMeshes(k)){
+  if(mesh.parent!==k.world.root||mesh.userData.visualAuditLateShape!=='bulkhead'||
+   !(Math.abs(mesh.position.z-9)<.01||Math.abs(mesh.position.z+10.6)<.01||Math.abs(mesh.position.x-8.5)<.01))continue;
+  const color=mesh.geometry.attributes.color;if(!color)continue;
+  for(let i=0;i<color.count;i++)color.setXYZ(i,base.r+(color.getX(i)-base.r)*retain,base.g+(color.getY(i)-base.g)*retain,base.b+(color.getZ(i)-base.b)*retain);
+  color.needsUpdate=true;mesh.userData.quietPassiveBulkhead=true;
+  rows.push({position:mesh.position.toArray(),size:boxSize(mesh)});
+ }
+ k.visualAuditLateQuietWalls=rows;return rows.length;
+}
 function at(mesh,p,tolerance=.025){return p.every((v,i)=>Math.abs(mesh.position.getComponent(i)-v)<tolerance);}
 function beforeMeshes(k){const a=[];k.world.root.traverse(m=>{if(m.isMesh&&!m.userData?.collisionProxy)a.push(m);});return a;}
 function select(k,predicate,kind,axis){let n=0;for(const m of beforeMeshes(k))if(predicate(m)&&machineBox(k,m,kind,axis))n++;return n;}
@@ -319,7 +336,8 @@ function finishSightHoops(k){
  * portal planes, target registries and every solver state stay unchanged. */
 export function dressVisualAuditLate(k,stableLevel=k.index+1){
  if(!STABLE_LEVELS.has(stableLevel)||k.visualAuditLate)return k.visualAuditLate??null;
- const stats={stableLevel,revision:LATE_VISUAL_COMPLETION_REVISION,housings:0,barrels:0,windings:0,sightHoops:0,railTrucks:0,portalBackCasings:0,freightFieldCasings:0,freightFieldCollars:0,suspendedCupCasings:0,freightHoodCasings:0,extraLights:0,downloadBytes:0};
+ const targetCastingVariant=TARGET_CASTING_VARIANTS.get(stableLevel)===k.spec?.id;
+ const stats={stableLevel,revision:LATE_VISUAL_COMPLETION_REVISION,housings:0,barrels:0,windings:0,sightHoops:0,railTrucks:0,portalBackCasings:0,freightFieldCasings:0,freightFieldCollars:0,suspendedCupCasings:0,freightHoodCasings:0,quietPassiveBulkheads:0,extraLights:0,downloadBytes:0};
  const shape=(predicate,kind,axis)=>{stats.housings+=select(k,predicate,kind,axis);};
  const largePanel=m=>{const s=boxSize(m);return s&&Math.max(...s)>5&&Math.min(...s)<1.2&&m.material===k.m.shell;};
  switch(stableLevel){
@@ -356,7 +374,7 @@ export function dressVisualAuditLate(k,stableLevel=k.index+1){
    stats.housings+=dressDeckUnderfaces(k,stableLevel)+dressPilotBacks(k);break;
   case 44:
    shape(m=>largePanel(m)&&m.parent===k.world.root,'bulkhead');
-   stats.portalBackCasings=dressLowPortalBacks(k);stats.housings+=stats.portalBackCasings;
+   if(targetCastingVariant){stats.portalBackCasings=dressLowPortalBacks(k);stats.housings+=stats.portalBackCasings;}
    stats.housings+=dressDeckUnderfaces(k,stableLevel);break;
   case 45:
    shape(m=>m.parent?.name==='Countercurrent / live rising air valve','valve','y');
@@ -371,11 +389,12 @@ export function dressVisualAuditLate(k,stableLevel=k.index+1){
   case 48:
    shape(m=>['48 / dynamic spring rail carriage','48 / physical pin-operated freight roof'].includes(m.parent?.name),'rail');
    shape(m=>m.name==='48 / real movable rear socket back','drive','z');
-   shape(m=>largePanel(m)&&m.parent===k.world.root,'bulkhead');break;
+   shape(m=>largePanel(m)&&m.parent===k.world.root,'bulkhead');
+   if(k.spec?.id==='puzzle-progression48-open-rail')stats.quietPassiveBulkheads=quietRailCourtBulkheads(k);break;
   case 49:
    shape(m=>m.parent?.name==='49 / actual force driven rail carriage'&&/side cheek|enclosed carriage roof|rear portal cheek/.test(m.name),'rail');
    shape(m=>/opaque receiver tube|closed receiver back/.test(m.name),'drive');
-   {const field=dressFreightField(k);stats.freightFieldCasings=field.casings;stats.freightFieldCollars=field.collars;stats.housings+=field.casings;}
+   if(targetCastingVariant){const field=dressFreightField(k);stats.freightFieldCasings=field.casings;stats.freightFieldCollars=field.collars;stats.housings+=field.casings;}
    {const parent=k.world.root.getObjectByName('49 / actual force driven rail carriage');
     if(parent){k.visualAuditLateRailTruck=installOpticalRailTruck(k,parent,mechanismMaterial(k,k.m.metal,'rail truck'));stats.railTrucks=k.visualAuditLateRailTruck?1:0;}}
    break;
@@ -383,7 +402,7 @@ export function dressVisualAuditLate(k,stableLevel=k.index+1){
    shape(m=>m.name==='50 / rigid common lower counterweight','weight','z');
    shape(m=>/^50 \/ gravity suspended cup /.test(m.parent?.name)&&at(m,[0,-7,0]),'weight','z');
    shape(m=>/^50 \/ upper-pane fixed casing/.test(m.name),'bulkhead');
-   {const bodies=dressSuspendedCupBodies(k);stats.suspendedCupCasings=bodies.cups;stats.freightHoodCasings=bodies.hoods;stats.housings+=bodies.cups+bodies.hoods;}
+   if(targetCastingVariant){const bodies=dressSuspendedCupBodies(k);stats.suspendedCupCasings=bodies.cups;stats.freightHoodCasings=bodies.hoods;stats.housings+=bodies.cups+bodies.hoods;}
    stats.housings+=dressDeckUnderfaces(k,stableLevel)+dressFoldingSpindle(k);break;
   case 51:
    shape(m=>/51 \/ (long|short) spring receiver|51 \/ real spring striker/.test(m.name),'piston');
@@ -414,7 +433,7 @@ function dialOnMesh(k,host,{read,min=0,max=100,range=2.5,mount}={}){
 /** A ground-aligned projected occupancy field marks only the real joint goal.
  * It is deliberately rectangular and flat, distinct from every portal and
  * from the castle's finale. The field creates no body, trigger or progress. */
-function finishLateGoalField(level){
+function finishLateGoalField(level,stable){
  const position=level.goal?.position,parent=level.world?.root;
  if(!position||!parent)return null;
  const root=new THREE.Group();root.name='Late finish / true joint occupancy field';root.userData={visualOnly:true,keepMaterial:true};
@@ -422,10 +441,11 @@ function finishLateGoalField(level){
  const shape=new THREE.Shape(),w=4.0,h=3.8,c=.42;
  [[-w/2+c,-h/2],[w/2-c,-h/2],[w/2,-h/2+c],[w/2,h/2-c],[w/2-c,h/2],[-w/2+c,h/2],[-w/2,h/2-c],[-w/2,-h/2+c]].forEach(([x,z],i)=>i?shape.lineTo(x,z):shape.moveTo(x,z));shape.closePath();
  const baseGeometry=new THREE.ShapeGeometry(shape);baseGeometry.rotateX(-Math.PI/2);
- const baseMaterial=new THREE.MeshBasicMaterial({name:'Late finish / projected mineral occupancy field',color:0x31575a,transparent:true,opacity:.48,depthWrite:false,toneMapped:false});
+ const emphasized=stable===40||level.puzzleProgression===46;
+ const baseMaterial=new THREE.MeshBasicMaterial({name:'Late finish / projected mineral occupancy field',color:emphasized?0x183239:0x31575a,transparent:true,opacity:emphasized?.86:.48,depthWrite:false,toneMapped:false});
  const base=new THREE.Mesh(baseGeometry,baseMaterial);base.name='Late finish / ground projection on actual finish';root.add(base);
  const geometry=new THREE.PlaneGeometry(1,1);geometry.rotateX(-Math.PI/2);
- const material=new THREE.MeshBasicMaterial({name:'Late finish / illuminated inset corner field',color:0xf4cf8a,transparent:true,opacity:.84,depthWrite:false,toneMapped:false});
+ const material=new THREE.MeshBasicMaterial({name:'Late finish / illuminated inset corner field',color:emphasized?0xe6be70:0xf4cf8a,transparent:true,opacity:emphasized?1:.84,depthWrite:false,toneMapped:false});
  const entries=[];
  for(const x of [-1,1])for(const z of [-1,1]){
   entries.push({p:[x*1.28,.006,z*1.65],s:[.84,1,.16]});
@@ -472,6 +492,6 @@ export function finishVisualAuditLate(game,level,index=level.index,roots=[]){
   const host=s.parts?.[2]?.mesh;
   if(host&&dialOnMesh(k,host,{read:()=>s.offset,min:-4,max:4}))instruments++;
  }
- const finishField=stable>=42?finishLateGoalField(level):null;
+ const finishField=stable===40||stable>=42?finishLateGoalField(level,stable):null;
  level.visualAuditLateGoal=finishField;level.visualAuditLateBound={...stats,instruments,perFrameReadings:instruments,finishField:finishField?{position:finishField.position,footprint:finishField.footprint}:null};return level;
 }

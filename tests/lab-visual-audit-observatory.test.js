@@ -10,6 +10,34 @@ function intersectsSegment(box,start,end){
  return hit&&hit.distanceTo(start)<length-.001;
 }
 
+test('return sluice partition junctions have one visible face while physical frame returns retain their original width',async()=>{
+ const g=await room(35);
+ try{
+  const surfaces=g.firstLevel.world.surfaces.filter(s=>s.name==='Sealed partition'&&Math.abs(s.width-4.8)<.001);
+  assert.equal(surfaces.length,4,'both sides of both actual sluice headers must be covered');
+  const drawing=[];g.scene.updateMatrixWorld(true);
+  g.scene.traverse(m=>{if(m.isMesh&&m.visible&&m.material?.visible!==false)drawing.push(m);});
+  for(const surface of surfaces){
+   const returns=surface.frameColliders.filter(c=>c.local.getSize(new THREE.Vector3()).x>4);
+   assert.equal(returns.length,2);
+   for(const physical of returns){
+    assert.ok(Math.abs(physical.local.getSize(new THREE.Vector3()).x-4.8)<1e-9,'visual joint must not shorten its original physical/query return');
+    const actual=new THREE.Box3().setFromObject(physical.mesh);
+    assert.ok(actual.min.distanceTo(physical.box.min)<1e-7&&actual.max.distanceTo(physical.box.max)<1e-7);
+    const y=physical.box.getCenter(new THREE.Vector3()).y,z=surface.group.position.z,sign=surface.normal.z;
+    for(const x of [-2.1,2.1]){
+     // These are the actual neighbouring jambs where a dark horizontal
+     // return previously shared exactly the same white exterior triangles.
+     const ray=new THREE.Raycaster(new THREE.Vector3(x,y,z+sign*2),new THREE.Vector3(0,0,-sign));
+     const hits=ray.intersectObjects(drawing,false);assert.ok(hits.length);
+     const nearest=hits.filter(h=>Math.abs(h.distance-hits[0].distance)<1e-7);
+     assert.equal(new Set(nearest.map(h=>h.object)).size,1,'two painted members own the same visible junction plane');
+    }
+   }
+  }
+ }finally{close(g);}
+});
+
 for(const n of [39,40])test(`observatory ${n}: new physical housings preserve the actual optical working axis`,async()=>{
  const g=await room(n);
  try{

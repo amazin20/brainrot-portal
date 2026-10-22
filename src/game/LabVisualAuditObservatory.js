@@ -269,6 +269,26 @@ function pneumaticMachine(a,l){
 
 function sluiceDrive(a,l){
  if(l.spawnView)Object.assign(l.spawnView,{yaw:-.30,pitch:.12});
+ // The central sealed header meets the two full-height side partitions.
+ // Its original horizontal returns crossed those neighbours' white jambs:
+ // both RoundedBox skins owned the exact same exterior z-plane. Keep every
+ // physical/query owner intact and end only the horizontal drawing before
+ // the adjoining jamb (inner edge x=±1.81), with a .01 m construction joint.
+ a.stats.sluiceHeaderJoints=0;
+ for(const surface of a.k.world.surfaces){
+  if(surface.name!=='Sealed partition'||Math.abs(surface.width-4.8)>.001||Math.abs(surface.height-12.35)>.001||
+   ![9,-7].some(z=>Math.abs(surface.group.position.z-z)<.14))continue;
+  for(const mesh of surface.group.children){
+   const p=mesh.geometry?.parameters;
+   if(mesh.name!=='Folded dark casing'||!p||Math.abs(p.width-4.8)>.001||Math.abs(p.height-.58)>.001||
+    Math.abs(p.depth-.66)>.001||Math.abs(Math.abs(mesh.position.y)-6.475)>.001)continue;
+   if(a.k.game.cameraBlockers.includes(mesh)||a.k.game.aimBlockers.includes(mesh)||a.k.game.colliders.some(c=>c.mesh===mesh))
+    throw new Error('Sluice header drawing unexpectedly owns a physical/query surface');
+   const original=mesh.geometry,geometry=original.clone();geometry.scale(3.6/4.8,1,1);
+   geometry.parameters={...p,width:3.6};geometry.computeBoundingBox();geometry.computeBoundingSphere();
+   mesh.geometry=geometry;mesh.userData.sluiceHeaderJoint=true;original.dispose();a.stats.sluiceHeaderJoints++;
+  }
+ }
  for(const [z,gate] of [[9,l.first],[-7,l.second]]){
   for(const x of [-3.45,3.45])a.casing([x,3.0,z],[.95,6,1.65],'sluice side guide and drive foot',{mat:'ivory'});
   a.casing([0,5.9,z],[11.2,3,1.9],'closed common sluice drive housing');

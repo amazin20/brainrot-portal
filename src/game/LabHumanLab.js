@@ -58,11 +58,12 @@ export function encloseLab(k,{base=-9,roof=k.ceiling??40,bounds=k.bounds}={}){
 
 /** A real in-world instrument. Repaints only when a rounded reading changes,
  * at most 5 Hz, rather than uploading a canvas texture every animation frame. */
-export function labInstrument(k,p,{width=8,height=2,read,normal=[0,0,1],name='Process instrument'}={}){
+export function labInstrument(k,p,{width=8,height=2,read,normal=[0,0,1],name='Process instrument',layout,readings}={}){
  const instrument={text:'',updates:0};let elapsed=.2;
  if(!globalThis.document?.createElement){k.ticks.push(()=>{instrument.text=read();});return instrument;}
  const canvas=document.createElement('canvas');if(!canvas.getContext)return instrument;
- canvas.width=1024;canvas.height=Math.round(1024*height/width);const c=canvas.getContext('2d');if(!c)return instrument;
+ const opposedPressure=layout==='opposed-pressure'&&typeof readings==='function';
+ canvas.width=opposedPressure?2048:1024;canvas.height=Math.round(canvas.width*height/width);const c=canvas.getContext('2d');if(!c)return instrument;
  const texture=new THREE.CanvasTexture(canvas);texture.anisotropy=4;k.ownedTextures??=[];k.ownedTextures.push(texture);
  const material=new THREE.MeshBasicMaterial({map:texture,toneMapped:false});
  const q=new THREE.Quaternion().setFromUnitVectors(V(0,0,1),V(...normal));
@@ -73,6 +74,20 @@ export function labInstrument(k,p,{width=8,height=2,read,normal=[0,0,1],name='Pr
   c.fillStyle='#12222b';c.fillRect(0,0,W,H);
   c.fillStyle='#28454b';c.fillRect(0,0,W,Math.max(2,H*.028));
   c.fillStyle='#79d1c6';c.fillRect(0,0,Math.max(5,W*.008),H);
+  if(opposedPressure){
+   // This wide differential-pressure board has one reading hierarchy on its
+   // existing face. All four values still come from the actual live actuator.
+   const {left,right,difference,stroke}=readings(),delta=Number(difference.toFixed(0));
+   c.textBaseline='middle';c.textAlign='center';
+   c.font=`600 ${Math.round(H*.44)}px sans-serif`;c.fillStyle='#d3e8e4';
+   c.fillText(`A ${left.toFixed(0)} кПа`,W*.16,H*.43,W*.26);
+   c.fillText(`B ${right.toFixed(0)} кПа`,W*.84,H*.43,W*.26);
+   c.font=`600 ${Math.round(H*.65)}px sans-serif`;c.fillStyle='#ffe1a2';
+   c.fillText(`Δ ${delta<0?'−':'+'}${Math.abs(delta)} кПа`,W*.5,H*.43,W*.4);
+   c.font=`600 ${Math.round(H*.23)}px sans-serif`;c.fillStyle='#96afa9';
+   c.fillText(`ХОД ${stroke.toFixed(1)} м`,W*.5,H*.84,W*.4);
+   texture.needsUpdate=true;return;
+  }
   c.fillStyle='#67d9c6';c.fillRect(gutter,header*.42,header*.26,header*.26);
   c.fillStyle='#96afa9';c.font=`600 ${Math.max(10,Math.round(header*.32))}px sans-serif`;
   c.textBaseline='middle';c.textAlign='left';c.fillText('ИССЛЕДОВАТЕЛЬСКИЙ КОНТУР',gutter+header*.44,header*.55,W*.65);

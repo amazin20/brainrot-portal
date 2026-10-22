@@ -7,7 +7,7 @@ permissions: {contents: read}
 defaults:
   run: {shell: bash}
 concurrency:
-  group: visual-completion-v67-${{ github.ref }}
+  group: visual-completion-v67-${{ github.ref }}-${{ github.sha }}
   cancel-in-progress: true
 env:
   BUILD_COMMIT: ${{ github.sha }}

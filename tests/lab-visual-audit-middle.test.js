@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import * as THREE from 'three';
 import {createHeadlessGame} from '../scripts/lab-headless.mjs';
 import {finishVisualAuditMiddle,conveyorChevronGeometry} from '../src/game/LabVisualAuditMiddle.js';
+import {tracePortalRay} from '../src/game/LabPuzzleMechanics.js';
 import {gameplayContract} from './helpers/lab-art-contract.js';
 
 const game=await createHeadlessGame();game.chamberEdition='foundation';
@@ -39,6 +40,79 @@ for(let index=17;index<=33;index++)test(`visual audit ${index+1}: exact gameplay
  }
  const matrices=art.root.children.filter(m=>m.isInstancedMesh).map(m=>Array.from(m.instanceMatrix.array));
  level.renderUpdate(.37);assert.deepEqual(art.root.children.filter(m=>m.isInstancedMesh).map(m=>Array.from(m.instanceMatrix.array)),matrices,'A render-only call advanced a private mechanism clock');
+});
+
+test('room18 final contact cell and thick right partition stay visibly closed inside their original solid owners',async()=>{
+ await game.selectLevel(17,true);const level=game.firstLevel;
+ assert.equal(level.id,'conductive-cargo-circuit');finishVisualAuditMiddle(game,level,17);
+ const art=level.visualAuditMiddle,closedGeometry=new Set();
+ for(const [position,size]of [[[-14,1.4,9.8],[4.85,2.8,.35]],[[18.5,7,-7],[17,14,1.2]]]){
+  const mount=art.root.mounts.find(m=>m.target.position.distanceTo(V(...position))<.001&&m.bounds.getSize(V()).distanceTo(V(...size))<.001);
+  assert.ok(mount,'The complete fixed housing must receive a formed skin');
+  const source=mount.target;
+  assert.equal(source.parent,level.world.root,'The structural bake must keep the hidden source and not revive its plain skin');
+  assert.equal(source.material.visible,false);
+  assert.ok(['BoxGeometry','RoundedBoxGeometry'].includes(source.geometry.type));
+  const expected=new THREE.Box3().setFromCenterAndSize(V(...position),V(...size));
+  const collider=game.colliders.find(c=>c.box.min.distanceTo(expected.min)<.001&&c.box.max.distanceTo(expected.max)<.001);
+  assert.ok(collider?.enabled);assert.ok(game.aimBlockers.includes(collider.mesh));assert.ok(game.cameraBlockers.includes(collider.mesh));
+  assert.equal(collider.mesh.geometry.type,'BoxGeometry');
+  assert.equal(collider.mesh.geometry.index.count,36,'The original query owner must retain all six faces');
+  assert.ok(mount.parts.length>10);
+  for(const part of mount.parts){
+   assert.ok(part.mesh.parent&&part.mesh.visible&&part.mesh.material.visible);
+   const geometry=part.mesh.geometry;
+   if(!closedGeometry.has(geometry)){
+    const vertices=geometry.getAttribute('position'),index=geometry.index,edges=new Map();
+    const vertex=n=>{const v=V().fromBufferAttribute(vertices,index?index.getX(n):n);return v.toArray().map(c=>Math.round(c*1e6)).join(',');};
+    for(let n=0;n<(index?.count??vertices.count);n+=3){
+     const triangle=[vertex(n),vertex(n+1),vertex(n+2)];if(new Set(triangle).size<3)continue;
+     for(let e=0;e<3;e++){const key=[triangle[e],triangle[(e+1)%3]].sort().join('/');edges.set(key,(edges.get(key)||0)+1);}
+    }
+    assert.ok(edges.size>0&&[...edges.values()].every(count=>count===2),'The final rendered casing must remain watertight');
+    closedGeometry.add(geometry);
+   }
+   assert.ok(mount.bounds.containsBox(part.bounds));
+  }
+  for(let i=0;i<mount.parts.length;i++)for(let j=i+1;j<mount.parts.length;j++){
+   const a=mount.parts[i].bounds,b=mount.parts[j].bounds;
+   for(const axis of ['x','y','z'])for(const edge of ['min','max']){
+    if(Math.abs(a[edge][axis]-b[edge][axis])>1e-8)continue;
+    const commonArea=['x','y','z'].filter(k=>k!==axis).every(k=>Math.min(a.max[k],b.max[k])-Math.max(a.min[k],b.min[k])>1e-8);
+    assert.equal(commonArea,false,'Two exterior skins must not share a coplanar area');
+   }
+  }
+ }
+});
+
+test('room25 fixed reverse screen receives its blue closed finish on the exact opaque source without changing the optical stop',async()=>{
+ await game.selectLevel(24,true);const level=game.firstLevel;
+ finishVisualAuditMiddle(game,level,24);level.visualAuditMiddle.root.dispose();
+ delete level.workshop.visualAuditMiddle;delete level.visualAuditMiddle;
+ const position=V(11.1,13.5,-13.75),size=V(.3,27,8.5),expected=new THREE.Box3().setFromCenterAndSize(position,size);
+ let source;level.world.root.traverse(m=>{const p=m.geometry?.parameters;if(m.isMesh&&m.position.distanceTo(position)<.001&&p&&V(p.width,p.height,p.depth).distanceTo(size)<.001)source=m;});
+ assert.ok(source);assert.equal(source.userData.keepMaterial,true);
+ const geometry=source.geometry,children=source.children.slice(),matrix=source.matrix.clone(),bounds=new THREE.Box3().setFromObject(source);
+ const collider=game.colliders.find(c=>c.box.min.distanceTo(expected.min)<.001&&c.box.max.distanceTo(expected.max)<.001);
+ assert.ok(collider?.enabled);assert.notEqual(collider.opticallyTransparent,true);
+ assert.ok(game.aimBlockers.includes(collider.mesh));assert.ok(game.cameraBlockers.includes(collider.mesh));
+ const before=gameplayContract(game),ray=()=>tracePortalRay(game,V(12.25,20,-13.75),V(-1,0,0),{length:2});
+ const stop=ray();assert.equal(stop.length,1);assert.equal(stop[0].kind,'wall');assert.ok(stop[0].b.distanceTo(V(11.25,20,-13.75))<.00001);
+ finishVisualAuditMiddle(game,level,24);const art=level.visualAuditMiddle,mount=art.root.mounts.find(m=>m.target===source);
+ assert.ok(mount,'The existing fixed return screen must receive its own formed casing');
+ assert.equal(source.geometry,geometry);assert.deepEqual(source.children,children);assert.deepEqual(source.matrix,matrix);assert.deepEqual(new THREE.Box3().setFromObject(source),bounds);
+ assert.equal(source.userData.keepMaterial,true);assert.equal(source.material.visible,false);
+ assert.deepEqual(gameplayContract(game),before);assert.deepEqual(ray(),stop);
+ assert.ok(mount.parts.length>20);assert.ok(mount.parts.some(p=>p.color===0x406775),'The original main blue palette must stay present');
+ for(const part of mount.parts){assert.ok(part.mesh.parent&&part.mesh.material.visible);assert.ok(mount.bounds.containsBox(part.bounds));}
+ for(let i=0;i<mount.parts.length;i++)for(let j=i+1;j<mount.parts.length;j++){
+  const a=mount.parts[i].bounds,b=mount.parts[j].bounds;
+  for(const axis of ['x','y','z'])for(const edge of ['min','max']){
+   if(Math.abs(a[edge][axis]-b[edge][axis])>1e-8)continue;
+   const commonArea=['x','y','z'].filter(k=>k!==axis).every(k=>Math.min(a.max[k],b.max[k])-Math.max(a.min[k],b.min[k])>1e-8);
+   assert.equal(commonArea,false,'The fixed screen casing must not share coplanar exterior areas');
+  }
+ }
 });
 
 for(const [index,count,flag]of [[20,56,'recoveryStairRiser'],[21,28,'freightStairRiser']])test(`room${index+1} final post-premium stair has one visible tread above a closed recessed riser while original six-face collision owners remain exact`,async()=>{

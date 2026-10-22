@@ -354,21 +354,16 @@ export function finishEarlyMachineConstruction(level,index,owner,replace,materia
   const p=mesh.geometry.parameters;replace(owner,mesh,busGeometry(p.width,p.height,p.depth),material());owner.stats.utilityBusBodies++;
  }
  if(index===7){
-  // The former thin rectangular beams become actual folded girders; the
-  // original physical extents and every guard/landing plane stay unchanged.
+  // Every part of this founded landing has one dedicated drawing. Closed
+  // full-width column sockets and cast footings connect the upper gallery
+  // to the actual ground, while its pale guards frame the receiving floor.
   for(const mesh of level.mechanismArt?.airGalleryStructure??[]){
    const p=mesh.geometry.parameters;
-   if(!/girder|solid .*guard/.test(mesh.name))continue;
    let g;
-   if(p.width>.6&&p.depth>.6)continue;
-   const long=p.width>p.depth;
-   // Recesses on both broad faces expose a continuous load-bearing web.
-   const a=long?p.width:p.depth,b=p.height,c=long?p.depth:p.width;
-   const parts=[],flange=Math.min(b*.24,.10),web=c*.34;
-   boxPiece(parts,[0,0,0],[a,b,web],C.service);
-   for(const s of [-1,1])boxPiece(parts,[0,s*(b-flange)/2,0],[a,flange,c],C.frame);
-   g=merge(parts,'Receiving gallery / folded girder and structural guard',{width:a,height:b,depth:c});
-   if(!long)g.rotateY(Math.PI/2);g.parameters={width:p.width,height:p.height,depth:p.depth};
+   if(/founded column|column footing/.test(mesh.name))g=earlyFoundedPierGeometry(p.width,p.height,p.depth);
+   else if(/solid .*guard/.test(mesh.name))g=earlyPartitionGeometry(p.width,p.height,p.depth);
+   else if(/girder/.test(mesh.name))g=earlyBoxGirderGeometry(p.width,p.height,p.depth);
+   else continue;
    replace(owner,mesh,g,material());owner.stats.integralGalleryGirders++;
   }
  }

@@ -405,6 +405,10 @@ export function installVisualAuditMiddleKit(k,number){
    for(const x of [-22,19])a.cabinet(at([x,2.5,14],[4.2,5,4.4]),'18 / closed generator cabinet with cooling cheeks',{paint:0x8c9f92});
    for(const e of k.world.root.children.filter(m=>m.name==='Spring-loaded insulated electrode'))chamber(e,'18 / ribbed ceramic clamping jaw',{axis:0,paint:0xb8c6ba,style:'electrode'});
    chamber(at([10.35,5.1,-6.1],[2,1.4,1.25]),'18 / screw-drive motor casting',{paint:0x506c72});
+   chamber(at([-14,1.4,9.8],[4.85,2.8,.35]),'18 / closed contact-cell rear service casting',{axis:2,paint:0x779994});
+   // This fixed 1.2m wall is deliberately outside the general thin-baffle
+   // selector. Finish its own closed hull without widening that selector.
+   a.bulkhead(at([18.5,7,-7],[17,14,1.2]),'18 / right fixed circuit service bulkhead',{paint:0x718b8d,accent:0xd4ad68,theme:'service'});
    for(const mesh of a.meshes){
     const p=mesh.geometry?.parameters;
     if(/^Electrical cell service hatch$/.test(mesh.name))chamber(mesh,'18 / divided insulated service hatch',{paint:0x708e91});
@@ -460,6 +464,7 @@ export function installVisualAuditMiddleKit(k,number){
   }
   case 25:
    for(const blade of k.state.optical?.blades||[])coat(blade.mesh,0x436d74);
+   a.bulkhead(at([11.1,13.5,-13.75],[.3,27,8.5]),'25 / fixed reverse optical screen casing',{axis:0,paint:0x406775,accent:0xe5b864,theme:'service'});
    chamber(named('Room25 optical freight carriage'),'25 / guided optical carriage channel',{axis:1,paint:0x628b8c});
    for(const m of a.meshes.filter(m=>m.name==='Room25 founded shutter end stop'))chamber(m,'25 / shutter founded stop shoe',{paint:0x7d9294});
    break;

@@ -8,7 +8,7 @@ import {observeRoom17CameraPrefix} from './helpers/lab-room17-camera-prefix.js';
 import {createHeadlessGame} from '../scripts/lab-headless.mjs';
 const level={id:'foundation-cable-supported-architecture',creativeEarly:17},V=(...p)=>new THREE.Vector3(...p);
 const baseline=new Map();
-function oldPrefix(aspect=16/9){if(!baseline.has(aspect))baseline.set(aspect,observeRoom17CameraPrefix({aspect,disableLocalPolicy:true}));return baseline.get(aspect);}
+function currentPolicyOffPrefix(aspect=16/9){if(!baseline.has(aspect))baseline.set(aspect,observeRoom17CameraPrefix({aspect,disableLocalPolicy:true}));return baseline.get(aspect);}
 const losses=r=>r.samples.filter(s=>s.points.every(p=>Math.abs(p[0])>1||Math.abs(p[1])>1)).map(s=>s.frame);
 function maxDelta(a,b){assert.equal(a.length,b.length);let delta=0;for(let i=0;i<a.length;i++)delta=Math.max(delta,Math.abs(a[i]-b[i]));return delta;}
 function controlsEqual(a,b){
@@ -76,8 +76,9 @@ test('unaffected actual rooms keep their original camera configuration',async()=
  finally{g.physics.dispose();g.portals.dispose();}
 });
 
-test('the unchanged ordinary prefix exposes the old missing-body view when local policy is disabled',async()=>{
- const r=await oldPrefix();assert.equal(r.complete,true);assert.equal(r.resets+r.respawns,0);assert.equal(r.sameOriginal,true);
+test('the declared historical initial look and driver retain the exact former missing-body witness',async()=>{
+ const r=await observeRoom17CameraPrefix({disableLocalPolicy:true,historicalInitialView:true});assert.equal(r.complete,true);assert.equal(r.resets+r.respawns,0);assert.equal(r.sameOriginal,true);
+ assert.deepEqual(r.initialLook,{historicalFixture:true,currentAuthored:{yaw:-.60,pitch:-.08},actual:{yaw:.2,pitch:-.08},firstMouthInspection:false});
  const loss=r.samples.find(s=>s.frame===1630);assert.ok(loss.points[1][1]<-2.8);assert.ok(Math.abs(loss.eye[1]-(-3.2042825912498936))<1e-8);assert.ok(r.worstSourceVertex>1);assert.equal(r.physicsSteps,r.visualFrames*2);
 });
 
@@ -86,7 +87,7 @@ for(const aspect of [16/9,1.6,4/3,390/844])test(`room17 ordinary recovery turn k
  assert.ok(r.worstReference<.95,JSON.stringify(r.samples.filter(s=>s.points.some(p=>Math.abs(p[0])>=.95||Math.abs(p[1])>=.95))));
  assert.ok(r.worstSourceVertex<1,JSON.stringify(r.meshSamples.filter(s=>s.extent>=1)));assert.ok(r.minSourceDepth>.1);assert.ok(r.maxCenterRayError<1e-10);assert.ok(r.maxFov<=MECHANISM_CAMERA_FOV);assert.ok(r.maxCandidates<=MECHANISM_CAMERA_BUDGET);assert.ok(r.maxFinalSweepDisplacement<1e-8);assert.ok(r.maxRecoveryMotionDisplacement<1e-8);assert.ok(r.maxRecoveryFovStep<2);assert.ok(r.maxRecoveryEyeStep<1,`Camera moved ${r.maxRecoveryEyeStep}m in one new-policy visual update`);
  assert.ok(r.samples.some(s=>s.active));
- const before=await oldPrefix(aspect);const controlDelta=controlsEqual(r,before);assert.equal(r.samples.length,before.samples.length);for(let i=0;i<r.samples.length;i++)assert.ok(maxDelta(r.samples[i].player,before.samples[i].player)<1e-10);
+ const before=await currentPolicyOffPrefix(aspect);assert.deepEqual(r.initialLook,{historicalFixture:false,currentAuthored:{yaw:-.60,pitch:-.08},actual:{yaw:-.60,pitch:-.08},firstMouthInspection:true});assert.deepEqual(before.initialLook,r.initialLook);const controlDelta=controlsEqual(r,before);assert.equal(r.samples.length,before.samples.length);for(let i=0;i<r.samples.length;i++)assert.ok(maxDelta(r.samples[i].player,before.samples[i].player)<1e-10);
  t.diagnostic(JSON.stringify({after:summary(r),before:summary(before),controlDelta}));
 });
 
@@ -99,6 +100,13 @@ for(const [label,aspect,aspectChanges]of [
  const before=await observeRoom17CameraPrefix({aspect,disableLocalPolicy:true,aspectChanges}),after=await observeRoom17CameraPrefix({aspect,aspectChanges,denseVertexRanges:[[1590,1750]]});
  assert.equal(after.complete,true);assert.equal(after.sameOriginal,true);assert.equal(after.resets+after.respawns,0);assert.equal(after.visualFrames,2000);assert.equal(after.physicsSteps,4000);controlsEqual(before,after);
  assert.equal(after.playerVertices,96753);assert.ok(after.minSourceDepth>.1);assert.ok(after.maxFov<=MECHANISM_CAMERA_FOV);assert.ok(after.maxCandidates<=MECHANISM_CAMERA_BUDGET);assert.ok(after.maxFinalSweepDisplacement<1e-8);assert.ok(after.maxRecoveryMotionDisplacement<1e-8);assert.ok(after.maxCenterRayError<1e-10);
+ const transitionWitnesses=aspectChanges.map(({frame})=>{
+  const sample=after.samples.find(s=>s.frame===frame);assert.ok(sample);
+  assert.equal(sample.active,true,'Viewport change must exercise the actual local recovery camera');
+  assert.equal(room17RecoveryCameraArea(level,16,V(...sample.player),sample.aspect),true,
+   'Viewport change must remain inside the measured physical recovery turn');
+  return{frame,player:sample.player,active:sample.active,aspect:sample.aspect};
+ });
  const inRecovery=frame=>frame>=1600&&frame<1650||frame>=1700&&frame<1750,bodyLoss=losses(after),vertexClips=after.meshSamples.filter(s=>s.extent>=1).map(s=>s.frame);
  assert.ok(bodyLoss.every(inRecovery),JSON.stringify(intervals(bodyLoss)));assert.ok(vertexClips.every(inRecovery),JSON.stringify(intervals(vertexClips)));
  for(let frame=1590;frame<=1750;frame++)assert.ok(after.meshSamples.some(s=>s.frame===frame),`No dense original-vertex projection for transition frame ${frame}`);
@@ -118,7 +126,7 @@ for(const [label,aspect,aspectChanges]of [
   }
   previousAspect=change.aspect;
  }
- t.diagnostic(JSON.stringify({after:summary(after),before:summary(before),bodyLossIntervals:intervals(bodyLoss),vertexClipIntervals:intervals(vertexClips)}));
+ t.diagnostic(JSON.stringify({after:summary(after),before:summary(before),transitionWitnesses,bodyLossIntervals:intervals(bodyLoss),vertexClipIntervals:intervals(vertexClips)}));
 });
 
 test('room17 viewport release freezes with zero time and resets with a new scene',()=>{
