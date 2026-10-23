@@ -94,13 +94,6 @@ export function installCastleInteriorArt(game,level){
     add(field,'panel',x,(y0+lowTop)/2,width-.52,lowTop-y0,.025,.034);
     add(field,'bronze',x,lowTop-.14,width-.74,.08,.045,.062);
    }
-   // Broad mineral ribs give the tall slabs scale from both ground routes
-   // and upper balconies; the cap is safely backed and too shallow to stand on.
-   for(const side of [-1,1]){
-    const px=x+side*(width/2-.17);
-    add(field,'stone',px,(y0+y1)/2,.38,y1-y0,.055,.082);
-    add(field,'bronze',px,y1-.27,.52,.22,.07,.089);
-   }
    if(dado>y0+.9)add(field,'stone',x,dado,width-.44,.18,.06,.078);
    add(field,'stone',x,y1-.10,width-.44,.15,.06,.078);
    // A long, quiet upper inset breaks large blank walls without resembling a
@@ -116,6 +109,15 @@ export function installCastleInteriorArt(game,level){
     const angle=Math.atan2(run,rise);
     for(const side of [-1,1])add(field,'bronze',x+side*run/2,cy+h*.10+rise/2,.105,length,.045,.067,side*angle);
    }
+  }
+  // Each bay boundary owns a single pier. Emitting a left and right pier per
+  // bay doubled the shared junction: stone faces overlapped by 4 cm and bronze
+  // capitals by 18 cm, at identical depths along the full wall height.
+  // Keep the outer piers inset so their complete capitals stay slab-backed.
+  for(let boundary=0;boundary<=bays;boundary++){
+   const px=-field.span/2+.2+width*boundary+(boundary===0?.17:boundary===bays?-.17:0);
+   add(field,'stone',px,(y0+y1)/2,.38,y1-y0,.055,.082);
+   add(field,'bronze',px,y1-.27,.52,.22,.07,.089);
   }
  }
  const root=new THREE.Group();root.name='Castle wing interior architecture';root.userData.visualOnly=true;root.userData.keepMaterial=true;

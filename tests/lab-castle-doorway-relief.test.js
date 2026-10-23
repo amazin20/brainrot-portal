@@ -114,3 +114,25 @@ test('existing portal-address reveals retain their real opaque-art clearance', (
   }
   assert.ok(samples >= 100, 'Inspect actual production portal-address rectangles');
 });
+
+test('all twelve production wings keep one owner for each coplanar pier and capital face',()=>{
+  const art=game.firstLevel.castleInteriorArt;
+  assert.ok(art && art.mounts.length>3000,'Inspect the complete production interior');
+  const wings=new Set();let comparisons=0;
+  for(const projection of [.082,.089]){
+    const parts=art.mounts.filter(m=>m.projection===projection);
+    for(let i=0;i<parts.length;i++){
+      const a=parts[i];wings.add(a.id);
+      for(let j=i+1;j<parts.length;j++){
+        const b=parts[j];if(a.normal.some((n,k)=>n!==b.normal[k]))continue;
+        const delta=new THREE.Vector3(...b.center).sub(new THREE.Vector3(...a.center));
+        if(Math.abs(delta.dot(new THREE.Vector3(...a.normal)))>1e-6)continue;
+        const width=a.halfWidth+b.halfWidth-Math.abs(delta.dot(new THREE.Vector3(...a.right)));
+        const height=a.halfHeight+b.halfHeight-Math.abs(delta.y);comparisons++;
+        assert.ok(width<1e-6||height<1e-6,`${a.id}/${b.id}: coplanar ${a.role} junction overlaps by ${width} x ${height}`);
+      }
+    }
+  }
+  assert.equal(wings.size,12);assert.ok(comparisons>1000);
+  assert.equal(art.diagnostics.batches,3);
+});

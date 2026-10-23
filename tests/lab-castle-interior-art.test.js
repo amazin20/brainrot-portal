@@ -59,3 +59,24 @@ test('interior batches install once and release their geometry, materials and in
  f.level.dispose();f.level.dispose();
  assert.equal(geometries,1);assert.equal(finishes,3);assert.equal(batches,3);assert.equal(f.disposals(),1);assert.equal(root.parent,null);assert.equal(art.disposed,true);
 });
+
+test('adjacent wall bays share one pilaster and capital without coplanar doubled faces',()=>{
+ const f=fixture();installCastleInteriorArt(f.game,f.level);
+ try{
+  const mounts=f.level.castleInteriorArt.mounts;
+  // Repeated vertical piers and their capitals used to be emitted by both
+  // neighbouring bays, with overlapping front faces at the same depth.
+  for(const projection of [.082,.089]){
+   const parts=mounts.filter(m=>m.projection===projection);
+   for(let i=0;i<parts.length;i++)for(let j=i+1;j<parts.length;j++){
+    const a=parts[i],b=parts[j];
+    if(a.id!==b.id||a.normal.some((n,k)=>n!==b.normal[k]))continue;
+    const delta=V(...b.center).sub(V(...a.center)),normal=V(...a.normal),right=V(...a.right);
+    if(Math.abs(delta.dot(normal))>1e-6)continue;
+    const overlapX=a.halfWidth+b.halfWidth-Math.abs(delta.dot(right));
+    const overlapY=a.halfHeight+b.halfHeight-Math.abs(delta.y);
+    assert.ok(overlapX<1e-6||overlapY<1e-6,`${a.id}: doubled ${a.role} face (${overlapX}m by ${overlapY}m)`);
+   }
+  }
+ }finally{f.level.dispose();}
+});
