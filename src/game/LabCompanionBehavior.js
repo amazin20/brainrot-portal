@@ -23,8 +23,8 @@ export class LabCompanionBehavior {
     body.material.friction = 1;
     this.age += dt;
     if (held) { this.state = 'held'; this.wasHeld = true; this.wasGrounded = false; return; }
-    // The impulse scoop is an energy-transfer surface. Its current positive
-    // physical contact disables both curiosity and the upright recovery motor;
+    // An energy-transfer support reports its current positive physical contact.
+    // This disables both curiosity and the upright recovery motor;
     // a tilted companion rests naturally until the player retrieves it.
     if (passiveSupport) {
       this.state = 'waiting_on_pad'; this.target = null; this.recovery = 0;
