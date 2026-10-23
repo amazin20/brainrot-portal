@@ -1,7 +1,7 @@
 /** One connected, load-bearing castle. The same atrium is crossed at five
  * elevations and each wing returns to a different side of it. */
 export const SINGULARITY_ROOMS=Object.freeze([
- {id:'freight',name:'ГРУЗОВОЙ ПЕРЕПЛЁТ',at:[-43,0,39],w:34,d:36,h:15,entry:'e',color:'copper',requires:[],rule:'sealed-freight-bay-with-carried-portal-crossing',hint:'Транспортный проём меньше человека. Белые приёмники находятся по разные стороны несущей стены.'},
+ {id:'freight',name:'ГРУЗОВОЙ ПЕРЕПЛЁТ',at:[-43,0,39],w:34,d:36,h:15,entry:'e',color:'copper',requires:[],rule:'original-cargo-load-unlocks-reversible-return-gate-and-reloads-near-tray',hint:'Транспортная щель пропускает прицел. Дальняя чаша снимает запор возврата; поднятая защёлка держит проход, когда друг покидает чашу. Ближний приёмник проверяет возвращённый груз.'},
  {id:'sluice',name:'ЗАТВОРОВЫЙ ДВОР',at:[44,0,39],w:46,d:48,h:16,entry:'w',color:'mint',requires:[],rule:'conserved-hydraulic-head-and-recessed-span',hint:'Сосуды вмещают 10, 7 и 3. Весь запас должен разделиться между большими сосудами.'},
  {id:'optics',name:'РАСКОЛОТЫЙ ФОНАРЬ',at:[-46,0,-41],w:66,d:34,h:16,entry:'e',color:'cyan',requires:[],rule:'portal-ray-with-physical-reflector',hint:'Фонарь, зеркало и дальний приёмник разделены настоящими перегородками. Проследи путь света.'},
  {id:'hoist',name:'КОЛОДЕЦ ПРОТИВОВЕСА',at:[44,0,-39],w:46,d:54,h:27,entry:'w',color:'copper',requires:['freight'],rule:'cargo-powered-hoist-upper-pawl-and-floor-transfer',hint:'Один груз поднимает клеть. Верхний уловитель держит её после снятия нагрузки. У верхнего выхода есть свой белый приёмник.',upperDoor:18},

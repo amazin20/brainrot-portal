@@ -11,7 +11,8 @@ export async function observeSingularityReadability(hook,phase,{look,wait,snapsh
  const freeze=value=>{if(value&&typeof value==='object'){Object.values(value).forEach(freeze);Object.freeze(value);}return value;};
  await hook(Object.freeze({phase,look,wait,snapshot:freeze(structuredClone(snapshot()))}));
 }
-export async function runSingularityJourney(game,{onMilestone=()=>{},stopAfter=null,order=null,onFrame=null,annexVariant='direct',onReadabilityPhase=null}={}){
+export async function runSingularityJourney(game,{onMilestone=()=>{},stopAfter=null,order=null,onFrame=null,annexVariant='direct',freightReturn='gate',onReadabilityPhase=null}={}){
+ check(['gate','portal'].includes(freightReturn),'Unknown freight return plan');
  const level=game.firstLevel;check(level.singularity&&game.state==='playing','Start the new Tower through Play');
  check(level.completedStages===0,'A route must start with an untouched attempt');
  const original={move:game.input.getMove,reset:game.resetRun,respawn:game.respawn,cargoReset:game.physics.resetCargo};
@@ -92,7 +93,28 @@ export async function runSingularityJourney(game,{onMilestone=()=>{},stopAfter=n
  async function arrive(id){await travel(level.rooms.get(id).door);await walk(P(id,0,0));mark('Entered '+id);}
  async function leave(id,via=[]){for(const p of via)await walk(p);await walk(level.rooms.get(id).door);}
  const routines={
-  async freight(){await travel([0,0,54]);await pickup();await travel(level.rooms.get('freight').door);await walk(P('freight',12,13));await dropAt(P('freight',12,13));await walk(P('freight',13,7));await shoot(0,st('freight').intake.center);await walk(P('freight',12,-10));await shoot(1,st('freight').outlet.center);await walk(P('freight',12,13));await pickup();await enter(st('freight').intake);await walk(st('freight').receiver);await until(()=>level.getTowerMetrics().solvedIds.includes('freight'),2,'Freight joint delivery');await enter(st('freight').outlet);await leave('freight',[P('freight',13,0)]);await travel([0,0,54]);await dropAt([2,0,54]);},
+  async freight(){
+   await travel([0,0,54]);await pickup();await travel(level.rooms.get('freight').door);
+   await walk(P('freight',12,13));await dropAt(P('freight',12,13));
+   await walk(P('freight',13,7));await shoot(0,st('freight').intake.center);
+   await walk(P('freight',12,-10));await shoot(1,st('freight').outlet.center);
+   await walk(P('freight',12,13));await pickup();await enter(st('freight').intake);
+   await dropAt(st('freight').receiver);
+   await until(()=>st('freight').innerLoaded,3,'Original free cargo did not load the return interlock');
+   mark('Original companion loads freight return interlock');
+   // The near face keeps the resting original outside pickup reach while
+   // leaving a clear path back to the tray beside the console casing.
+   await use('freight:return',{side:-1});
+   await until(()=>st('freight').passable,5,'Freight return leaves did not clear the standing aperture');
+   mark('Freight physical return opened');await pickup();
+   if(freightReturn==='portal')await enter(st('freight').outlet);
+   else {await walk(P('freight',-4,8));await walk(P('freight',3,8));mark('Original companion crosses physical freight return');}
+   await dropAt(st('freight').returnReceiver);
+   await until(()=>st('freight').returnLoaded,3,'Original free cargo did not reach the near return tray');
+   mark('Original companion loads near freight tray');await walk(st('freight').contact);
+   await until(()=>level.getTowerMetrics().solvedIds.includes('freight'),2,'Freight return joint delivery');
+   await pickup();await leave('freight',[P('freight',13,0)]);await travel([0,0,54]);await dropAt([2,0,54]);
+  },
   async sluice(){await arrive('sluice');const capacities=st('sluice').capacities,queue=[{v:[10,0,0],route:[]}],seen=new Set(['10,0,0']);let route;
    for(let n=0;n<queue.length&&!route;n++){const node=queue[n];if(node.v.join(',')==='5,5,0'){route=node.route;break;}for(let a=0;a<3;a++)for(let b=0;b<3;b++)if(a!==b){const v=[...node.v],amount=Math.min(v[a],capacities[b]-v[b]);v[a]-=amount;v[b]+=amount;const key=v.join(',');if(!seen.has(key)){seen.add(key);queue.push({v,route:[...node.route,[a,b]]});}}}
    check(route,'Hydraulic target unreachable');for(const[a,b]of route){await use(`sluice:${a}-${b}`);await until(()=>!st('sluice').flowing,3,'Unfinished physical pour');}await walk(P('sluice',0,12));await until(()=>st('sluice').height>-.02,3,'Hydraulic span did not rise');await walk(P('sluice',0,22));await until(()=>level.getTowerMetrics().solvedIds.includes('sluice'),2,'Hydraulic receiving bank');await walk(P('sluice',0,12));await leave('sluice',[P('sluice',-18,12),P('sluice',-18,0)]);},
