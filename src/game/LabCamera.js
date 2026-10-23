@@ -26,6 +26,11 @@ function spring(value, velocity, goal, frequency, dt) {
   ];
 }
 
+function ordinaryPortraitBoomScale(rig) {
+  return rig.fullBodyFraming || rig.mechanismFramingEnabled ? 1
+    : THREE.MathUtils.clamp(.9 / rig.camera.aspect, 1, 2);
+}
+
 /**
  * Third-person camera. `target` is the player's world-space foot position.
  * Keep the blockers array itself alive: moving doors / added walls may share it.
@@ -80,7 +85,7 @@ export class LabCamera {
     this.pitch = -0.2;
     this.yawVelocity = 0;
     this.pitchVelocity = 0;
-    this.distance = 6.5;
+    this.distance = 6.5 * ordinaryPortraitBoomScale(this);
     this.distanceVelocity = 0;
     this.fovVelocity = 0;
     this.aimBlend = 0;
@@ -197,7 +202,7 @@ export class LabCamera {
     this.pitch = THREE.MathUtils.clamp(pitch, CAMERA_PITCH_MIN, CAMERA_PITCH_MAX);
     this.yawVelocity = 0;
     this.pitchVelocity = 0;
-    this.distance = 6.5;
+    this.distance = 6.5 * ordinaryPortraitBoomScale(this);
     this.distanceVelocity = 0;
     this.fovVelocity = 0;
     this.aimBlend = 0;
@@ -376,8 +381,12 @@ export class LabCamera {
     this.forward.set(0, 0, -1).applyQuaternion(this.orbitQuaternion);
     this.right.set(1, 0, 0).applyQuaternion(this.orbitQuaternion);
     this.viewUp.copy(UP).applyQuaternion(this.portalUpOrientation);
-    const length = THREE.MathUtils.lerp(6.5, 5.7, this.aimBlend)
-      + this.epicFraming * (1 - .65 * this.aimBlend);
+    // In a narrow ordinary viewport, keep the shoulder's clear centre ray
+    // and retreat instead of pushing the hero across the reticle. The same
+    // blocker sweeps below still limit this boom to the actual free space.
+    const portraitBackoff = ordinaryPortraitBoomScale(this);
+    const length = (THREE.MathUtils.lerp(6.5, 5.7, this.aimBlend)
+      + this.epicFraming * (1 - .65 * this.aimBlend)) * portraitBackoff;
     // Near a vertical downward shot the normal shoulder creates a lateral
     // blind spot directly below the traveller. Follow the already-smoothed
     // orbit into an overhead view; ordinary walking/aiming keeps its shoulder.
