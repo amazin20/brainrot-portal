@@ -184,6 +184,7 @@ export class LabCamera {
 
   reset(target, yaw = 0, pitch = -0.2) {
     this.foundation20EscapeOffset = null;
+    this.ordinaryPortraitRecipe = null;
     this.room17RecoveryTransportHold = 0;this.room17RecoveryWeight = 0;
     this.room17RecoveryLayoutAspect = this.camera.aspect;
     this.mechanismEscape = null;this.mechanismLensGoal = 0;this.mechanismHadObstruction = false;
@@ -223,6 +224,7 @@ export class LabCamera {
    * The returned yaw/pitch replace the game's orbit controls exactly once. */
   applyPortalTransform(entryOrMatrix, exit, { target, yaw = this.yaw, pitch = this.pitch, clipExit = true } = {}) {
     this.foundation20EscapeOffset = null;
+    this.ordinaryPortraitRecipe = null;
     this.room17RecoveryTransportHold = 0;this.room17RecoveryWeight = 0;
     this.mechanismEscape = null;
     this.mechanismHadObstruction = false;
@@ -437,7 +439,16 @@ export class LabCamera {
     this.lookPoint.copy(this.focus).addScaledVector(this.forward, 16);
     const avoidGoal = new THREE.Vector3();
     let escapePosition = null;
-    if (this.mechanismFramingActive && step > 0) {
+    const portraitEscape = portraitBackoff > 1 && this.obstructed && this.viewUp.dot(UP) > .999
+      ? this.ordinaryPortraitEscape() : null;
+    if (portraitEscape) {
+      escapePosition = portraitEscape.position;
+      avoidGoal.copy(escapePosition).sub(this.desired);this.avoidanceActive = true;
+      if (step === 0) this.avoidance.copy(avoidGoal);
+      if (portraitEscape.fov > this.camera.fov) {
+        this.camera.fov = portraitEscape.fov;this.fovVelocity = Math.max(0,this.fovVelocity);this.camera.updateProjectionMatrix();
+      }
+    } else if (this.mechanismFramingActive && step > 0) {
       escapePosition = this.mechanismEscapePosition();
       if (escapePosition) {avoidGoal.copy(escapePosition).sub(this.desired);this.avoidanceActive = true;}
       else this.avoidanceActive = false;
@@ -570,7 +581,9 @@ export class LabCamera {
     const confinedOverBudget = this.fullBodyFraming && this.confinedFraming
       && this.viewUp.dot(UP) >= Math.cos(.01) && this.silhouetteFovAt(this.camera.position) > 120
       && escapePosition && this.silhouetteFovAt(escapePosition) <= 120;
-    if (escapePosition && (this.camera.position.distanceTo(this.playerPivot) < 2.2 || confinedOverBudget)) {
+    const portraitOccluded = portraitEscape && (!this.ordinaryPortraitAimClear(this.camera.position)
+      || this.silhouetteFovAt(this.camera.position) > this.camera.fov + .00001);
+    if (escapePosition && (this.camera.position.distanceTo(this.playerPivot) < 2.2 || confinedOverBudget || portraitOccluded)) {
       this.camera.position.copy(escapePosition);
       this.distance = this.camera.position.distanceTo(this.focus);
       this.distanceVelocity = 0;
@@ -707,6 +720,44 @@ export class LabCamera {
     this.mechanismEscape = chosen;
     stats.selected = chosen;stats.selectedFrame = bestFrame;
     return chosen ? best : null;
+  }
+
+  ordinaryPortraitAimClear(position) {
+    const half = new THREE.Vector3(.85,1.52,.85);
+    const box = new THREE.Box3(this.playerPivot.clone().sub(half),this.playerPivot.clone().add(half));
+    const ray = new THREE.Ray(position,this.lookPoint.clone().sub(position).normalize());
+    return !ray.intersectBox(box,new THREE.Vector3());
+  }
+
+  // Rear walls can shorten a portrait boom enough to push the hero across
+  // the reticle. Inspect a finite same-shoulder set in actual free space,
+  // keeping the original aim point and a bounded lens. No world object moves.
+  ordinaryPortraitEscape() {
+    const back = this.forward.clone().setY(0).normalize();
+    const side = this.right.clone().setY(0).normalize();
+    const inspect = recipe => {
+      const {rear,lateral,height}=recipe;
+      const position = this.playerPivot.clone().addScaledVector(back,-rear).addScaledVector(side,lateral);
+      position.y += height;
+      this.constrain(this.playerPivot,position,110);
+      if(position.distanceTo(this.playerPivot)<2.4||!this.ordinaryPortraitAimClear(position))return null;
+      const fov = Math.max(62,this.silhouetteFovAt(position));
+      return fov<=110?{position,fov}:null;
+    };
+    // Reuse only a recipe, never a stale world endpoint. Every displayed frame
+    // checks the live aim, actor, geometry and full near-plane sweep again.
+    if(this.ordinaryPortraitRecipe){
+      const cached=inspect(this.ordinaryPortraitRecipe);
+      if(cached)return cached;
+      this.ordinaryPortraitRecipe=null;
+    }
+    let best = null,score = Infinity;
+    for(const rear of [3.6,5.6,7.2])for(const lateral of [1.4,2.2,3])for(const height of [.4,1.6]) {
+      const recipe={rear,lateral,height},frame=inspect(recipe);if(!frame)continue;
+      const cost = frame.position.distanceToSquared(this.desired) + frame.position.distanceToSquared(this.camera.position)*.15 + (frame.fov-62)*.1;
+      if(cost<score){score=cost;best=frame;this.ordinaryPortraitRecipe=recipe;}
+    }
+    return best;
   }
 
   // A portal's rolling horizon and a newly solid backing can retract the

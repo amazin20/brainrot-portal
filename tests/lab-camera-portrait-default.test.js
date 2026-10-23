@@ -50,3 +50,19 @@ test('specialized silhouette and mechanism policies keep their authored portrait
   rig.reset(new THREE.Vector3(),0,-.12);assert.equal(rig.distance,6.5);
  }
 });
+
+test('a cached portrait escape revalidates current collision and keeps aim entry continuous',()=>{
+ const camera=new THREE.PerspectiveCamera(62,390/844,.06,160);
+ const wall=new THREE.Mesh(new THREE.BoxGeometry(20,12,.3),new THREE.MeshBasicMaterial({side:THREE.DoubleSide}));wall.position.set(0,4,5);wall.updateMatrixWorld(true);
+ const rig=new LabCamera({camera,blockers:[wall]}),target=new THREE.Vector3();rig.reset(target,0,-.12);
+ for(let i=0;i<120;i++)rig.update({dt:1/60,target,yaw:0,pitch:-.12});
+ assert.ok(rig.ordinaryPortraitRecipe,'The rear wall must exercise the real escape search');
+ const before=camera.position.clone(),rotation=camera.quaternion.clone(),fov=camera.fov;
+ rig.update({dt:1/60,target,yaw:0,pitch:-.12,aiming:true});
+ assert.ok(camera.position.distanceTo(before)<.15);assert.ok(camera.quaternion.angleTo(rotation)<.02);assert.ok(Math.abs(camera.fov-fov)<1);
+ // A newly closed volume must be queried before any cached recipe is reused.
+ const constrain=rig.constrain;let liveQueries=0;
+ rig.constrain=(origin,end)=>{liveQueries++;end.copy(origin);return true;};
+ assert.equal(rig.ordinaryPortraitEscape(),null);assert.equal(rig.ordinaryPortraitRecipe,null);assert.ok(liveQueries>1);
+ rig.constrain=constrain;wall.geometry.dispose();wall.material.dispose();
+});
