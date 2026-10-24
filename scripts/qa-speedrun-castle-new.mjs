@@ -6,7 +6,7 @@ import path from 'node:path';
 import crypto from 'node:crypto';
 import * as THREE from 'three';
 import {createHeadlessGame} from './lab-headless.mjs';
-import {runSingularityJourney} from '../src/game/LabSingularityJourney.js';
+import {runSingularityJourney,prepareCrownSpatialRoom} from '../src/game/LabSingularityJourney.js';
 import {SINGULARITY_ROOMS} from '../src/game/LabSingularityLayout.js';
 export async function runNewCastleCase(g, THREE, journey, name, {capture=async()=>{}}={}) {
   const V=(...p)=>new THREE.Vector3(...p), up=V(0,1,0), angle=x=>Math.atan2(Math.sin(x),Math.cos(x));
@@ -106,9 +106,9 @@ export async function runNewCastleCase(g, THREE, journey, name, {capture=async()
     const accepted=!!g.heldCube&&g.interact();r.interactions.push({kind:'drop',accepted,...snap()});
     if(!accepted)throw Error('Ordinary drop rejected');await wait(1);
   }
-  async function use(id){
+  async function use(id,{side=null}={}){
     const t=l.terminals.find(t=>t.id===id);if(!t)throw Error('Missing control '+id);
-    await walk([t.position.x,t.position.y-1,t.position.z+(g.playerPosition.z<t.position.z?-1.5:1.5)]);
+    await walk([t.position.x,t.position.y-1,t.position.z+(side??(g.playerPosition.z<t.position.z?-1:1))*1.5]);
     const accepted=g.interact();r.interactions.push({kind:'control',id,accepted,...snap()});await wait(.3);if(!accepted)throw Error('Setup control input rejected '+id);return accepted;
   }
   // Physical infrastructure graph only plans ordinary walking. Every edge is
@@ -274,10 +274,30 @@ export async function runNewCastleCase(g, THREE, journey, name, {capture=async()
       await pickup();await travel([0,72,54]);const door=l.rooms.get('crown').door;try{await travel(door);}catch(e){if(!String(e).startsWith('Error: Blocked ')||g.playerPosition.distanceTo(V(...door))>1.15)throw e;r.expectedCollision={label:'Locked crown doorway reached by real galleries',error:String(e)};stop();}testMark('Locked crown doorway reached');await force(P('crown',12,13),12,{jump:true,skirt:true});
       testMark('Early crown door attacked with cargo');
     }else if(name==='crown-held-socket-contact'){
-      await stage([...first,'migrant','pendulum','inertia','impulse']);await travel([0,36,54]);await pickup();await travel(l.rooms.get('crown').door);await walk(P('crown',12,13));await dropAt(P('crown',12,13));await walk(P('crown',13,7));await shoot(0,state('crown').intake);await walk(P('crown',12,-10));await shoot(1,state('crown').outlet);await walk(P('crown',12,13));await pickup();await enter(state('crown').intake);r.inputAttackStarted=true;await walk(state('crown').contact);await wait(2);testMark('Held cargo near contact, no independent socket');
+      r.expectedHeldNegative=true;
+      await stage([...first,'migrant','pendulum','inertia','impulse']);await travel([0,36,54]);await pickup();await travel([0,72,54]);await travel(l.rooms.get('crown').door);
+      const machine=state('crown'),before={player:g.teleportCount,cargo:g.physics.portalTransports,interactions:r.interactions.length};
+      await prepareCrownSpatialRoom({state:machine,P:(...p)=>P('crown',...p),walk,dropAt,use,until,pickup,enter,
+        shoot:(slot,center)=>{const point=V(...(center.toArray?.()??center)),panel=[machine.intake,machine.outlet].find(p=>p.center.distanceTo(point)<1e-7);if(!panel)throw Error('Crown preparation requested an unknown physical portal panel');return shoot(slot,panel);},
+        mark:label=>testMark('Crown ordinary setup: '+label)});
+      assertOriginal();
+      const quarter=new THREE.Quaternion().setFromAxisAngle(up,Math.PI/2),controls=r.interactions.slice(before.interactions).filter(i=>i.kind==='control'&&i.accepted).map(i=>i.id);
+      const rotorsOpen=machine.rotors.length===2&&machine.rotors.every(rotor=>Math.abs(rotor.angle-Math.PI/2)<1e-7&&rotor.body?.world===g.physics.world
+        &&new THREE.Quaternion().copy(rotor.body.quaternion).angleTo(quarter)<1e-7&&g.physics.inspectBodyBox(rotor.mesh.uuid,{bounds:rotor.collider.box,orientedBox:rotor.collider.orientedBox,enabled:true}).valid);
+      r.crownHeldSetup={rotorAngles:machine.rotors.map(rotor=>rotor.angle),rotorsOpen,controls,playerPortal:g.teleportCount>before.player,cargoPortal:g.physics.portalTransports>before.cargo,heldOriginal:g.heldCube===cargo&&!!g.physics.carryTarget};
+      if(!rotorsOpen||!['crown:sight','crown:passage'].every(id=>controls.includes(id))||!r.crownHeldSetup.playerPortal||!r.crownHeldSetup.cargoPortal||!r.crownHeldSetup.heldOriginal)
+        throw Error('Crown held-contact preparation did not open both real rotors and transport the held original');
+      // This setup is not a defense test until both genuine spatial changes
+      // and the original held portal transit are established. Any collision
+      // before reaching the new socket and contact remains a setup failure.
+      r.inputAttackStarted=true;observeMechanism=()=>{assertOriginal();if(g.heldCube!==cargo||!g.physics.carryTarget)throw Error('Crown held-contact probe lost the original grip');};
+      await walk(machine.socket);testMark('Held original reached actual crown socket');await walk(machine.contact);await wait(2);observeMechanism();
+      const solved=l.getTowerMetrics().solvedIds.includes('crown');r.crownHeldNegativeVerified=g.state==='playing'&&!solved&&!machine.loaded;
+      testMark(r.crownHeldNegativeVerified?'Held original reaches socket and contact without a free socket load':'Held crown contact produced unexpected completion or support',{loaded:machine.loaded,heldOriginal:g.heldCube===cargo,rotorAngles:machine.rotors.map(rotor=>rotor.angle)});
+      if(!r.crownHeldNegativeVerified&&!solved&&g.state!=='won')throw Error('Crown held-contact negative conditions were not observed');
     }else throw Error('Unknown new castle test '+name);
     await wait(.5);r.executed=true;
-  }catch(error){r.error=String(error);r.executed=false;if(r.inputAttackStarted&&String(error).startsWith('Error: Blocked ')){r.executed=true;r.stoppedByPhysicalCollision=true;}if(String(error)==='Error: Attack reset the attempt'&&!error.singularityReport){r.endedByProductionDeath=true;r.executed=!!r.inputAttackStarted;r.setupDeath=!r.inputAttackStarted;}if(error.singularityReport)r.routeFailure=error.singularityReport;}
+  }catch(error){r.error=String(error);r.executed=false;if(name!=='crown-held-socket-contact'&&r.inputAttackStarted&&String(error).startsWith('Error: Blocked ')){r.executed=true;r.stoppedByPhysicalCollision=true;}if(String(error)==='Error: Attack reset the attempt'&&!error.singularityReport){r.endedByProductionDeath=true;r.executed=!!r.inputAttackStarted;r.setupDeath=!r.inputAttackStarted;}if(error.singularityReport)r.routeFailure=error.singularityReport;}
   finally{
     stop();r.finish=snap();r.metrics=l.getTowerMetrics();r.solvedDuringAttack=r.routeFailure?[]:[...new Set([...r.finish.solved,...observedIds])].filter(id=>!(r.routePrefix?.metrics?.solvedIds??r.routeFailure?.metrics?.solvedIds??[]).includes(id));
     const allowedAlternateId=r.validAlternate?({'freight-separated-cargo-transit':'freight','hoist-no-lift-ride-exterior-stairs':'hoist','migrant-readdress-moving-transit':'migrant'}[name]):null;r.allowedAlternateSolvedIds=allowedAlternateId?[allowedAlternateId]:[];r.unexpectedSolvedDuringAttack=r.solvedDuringAttack.filter(id=>id!==allowedAlternateId);
@@ -300,6 +320,6 @@ if(import.meta.url===new URL(process.argv[1],'file:').href){
  report.fullGameFingerprint=crypto.createHash('sha256').update(JSON.stringify(report.sources)).digest('hex');
  const save=()=>fs.writeFileSync(out,JSON.stringify(report,null,2)+'\n');const g=await createHeadlessGame();g.chamberEdition='foundation';
  try{for(const name of names){await g.selectLevel(40,true);const start=Date.now();const row=await runNewCastleCase(g,THREE,runSingularityJourney,name);row.wallSeconds=(Date.now()-start)/1000;report.rows.push(row);save();console.log(JSON.stringify({name,error:row.error,executed:row.executed,solved:row.finish.solved,candidateBypass:row.candidateBypass,routeVerified:row.routeVerified,wallSeconds:row.wallSeconds}));}
- report.sourcesAfter=hashes();report.fullGameFingerprintAfter=crypto.createHash('sha256').update(JSON.stringify(report.sourcesAfter)).digest('hex');report.harnessSha256After=harnessHash();report.harnessDrift=report.harnessSha256!==report.harnessSha256After;report.sourceDrift=files.filter(f=>report.sources[f]!==report.sourcesAfter[f]);report.finished=true;report.bypasses=report.rows.filter(r=>r.candidateBypass).map(r=>r.name);report.setupFailures=report.rows.filter(r=>!r.executed).map(r=>({name:r.name,error:r.error}));report.pass=!report.bypasses.length&&!report.setupFailures.length&&!report.sourceDrift.length&&!report.harnessDrift&&report.rows.every(r=>r.finiteActors&&r.sameCompanion&&(!r.expectedWin||r.routeVerified)&&(!r.expectedAlternate||r.validAlternate)&&(r.endedByProductionDeath||(!r.resets&&!r.respawns&&!r.cargoResets)));save();if(!report.pass)process.exitCode=1;
+ report.sourcesAfter=hashes();report.fullGameFingerprintAfter=crypto.createHash('sha256').update(JSON.stringify(report.sourcesAfter)).digest('hex');report.harnessSha256After=harnessHash();report.harnessDrift=report.harnessSha256!==report.harnessSha256After;report.sourceDrift=files.filter(f=>report.sources[f]!==report.sourcesAfter[f]);report.finished=true;report.bypasses=report.rows.filter(r=>r.candidateBypass).map(r=>r.name);report.setupFailures=report.rows.filter(r=>!r.executed).map(r=>({name:r.name,error:r.error}));report.pass=!report.bypasses.length&&!report.setupFailures.length&&!report.sourceDrift.length&&!report.harnessDrift&&report.rows.every(r=>r.finiteActors&&r.sameCompanion&&(!r.expectedWin||r.routeVerified)&&(!r.expectedAlternate||r.validAlternate)&&(!r.expectedHeldNegative||r.crownHeldNegativeVerified)&&(r.endedByProductionDeath||(!r.resets&&!r.respawns&&!r.cargoResets)));save();if(!report.pass)process.exitCode=1;
  }finally{g.physics?.dispose();g.portals?.dispose();save();}
 }

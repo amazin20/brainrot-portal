@@ -387,6 +387,14 @@ export function buildCastleAuditConstruction({game,k,rooms,machines,edges}){
   const beam=k.geo(new THREE.CylinderGeometry(.035,.065,.45,8)),plateMaterial=k.mat(0xffffff,.63,.35);plateMaterial.vertexColors=true;plateMaterial.name='Castle crown / integral engraved docking plates';
   for(const p of [contact,socket]){
    const isSocket=p===socket,light=isSocket?socketEnergy:energy;
+   const physicalSocket=machines.get('crown')?.state.receiverMesh;
+   if(physicalSocket){
+    // The new load tray owns its real top face. Cut its socket engraving
+    // into that same closed envelope instead of hovering a legacy halo and
+    // two field posts above the original body's actual support contact.
+    if(isSocket){physicalSocket.geometry=k.geo(castleDockingFaceGeometry({socket:true}));physicalSocket.material=plateMaterial;physicalSocket.name='Castle crown / physical engraved original-load tray';}
+    continue;
+   }
    const plate=source.find(mesh=>Math.abs(mesh.position.x-p[0])<.01&&Math.abs(mesh.position.y-p[1]-.065)<.01&&Math.abs(mesh.position.z-p[2])<.01&&Math.abs(mesh.scale.y-.035)<.002);
    if(plate){plate.geometry=k.geo(castleDockingFaceGeometry({socket:isSocket}));plate.material=plateMaterial;plate.name='Castle crown / '+(isSocket?'companion socket':'traveller contact')+' engraved face';}
    const ring=k.mesh(k.geo(new THREE.TorusGeometry(isSocket?1.41:1.12,.035,6,48)),light,[p[0],p[1]+.092,p[2]]);

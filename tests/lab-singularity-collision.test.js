@@ -252,10 +252,21 @@ test('The freight aiming aperture passes a ray but stops a complete ordinary cap
  }finally{level?.dispose();f.dispose();if(oldDocument===undefined)delete globalThis.document;else globalThis.document=oldDocument;}
 });
 
-test('The crown slit gives a real shot to the sealed receiver without a walkable bypass',()=>{
+test('The crown slit retains its physical capsule stop while the closed sight rotor occludes the whole receiver',()=>{
  const f=fixture(),{game}=f,oldDocument=globalThis.document;let level;
  try{globalThis.document??={};game.markPortalSurface=LabGame.prototype.markPortalSurface;level=buildTowerLevel(game);const room=level.rooms.get('crown'),eye=V(...room.P(12,-10,2)),target=level.panels.crownPortal.center.clone().add(V(0,-.4,0));
-  const first=rayHit(game,eye.toArray(),target.clone().sub(eye).normalize().toArray());assert.equal(first?.object,level.panels.crownPortal.mesh);assert.ok(first.point.distanceTo(target)<1e-6);
+  const state=level.machines.get('crown').state,rotor=state.rotors.find(r=>r.id==='sight');
+  assert.ok(rotor?.mesh?.userData.collider,'The authored sight rotor has a real visible collider');
+  const first=rayHit(game,eye.toArray(),target.clone().sub(eye).normalize().toArray());assert.equal(first?.object,rotor.mesh,'The closed sight section must physically intercept the original aiming ray');
+  // Prepared optical rays start immediately west of the real slit. Cover
+  // every extreme of its rectangular view cone to all receiver corners;
+  // merely blocking the centre ray would leave a corner-shot shortcut.
+  const frame=state.outlet.frame();
+  for(const z of [-10.699,-9.301])for(const y of [1.401,3.299])for(const sx of [-1,1])for(const sy of [-1,1]){
+   const from=V(...room.P(-.351,z,y)),to=frame.center.clone().addScaledVector(frame.right,sx*(frame.halfWidth-.001)).addScaledVector(frame.up,sy*(frame.halfHeight-.001));
+   const hit=rayHit(game,from.toArray(),to.clone().sub(from).normalize().toArray());
+   assert.equal(hit?.object,rotor.mesh,'The entire closed slit-to-receiver cone must hit the sight section');
+  }
   const p=V(...room.P(-2,-10)),before=V(...room.P(2,-10)),velocity=V(-20,0,0);LabGame.prototype.resolveBody.call(game,p,before,velocity,.43,2.4,false);assert.ok(p.x>room.def.at[0]+.77);
  }finally{level?.dispose();f.dispose();if(oldDocument===undefined)delete globalThis.document;else globalThis.document=oldDocument;}
 });

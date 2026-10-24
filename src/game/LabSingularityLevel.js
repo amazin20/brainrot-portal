@@ -10,6 +10,7 @@ import {buildTower41PendulumCell} from './LabTower41PendulumCell.js';
 import {buildTower41UpperLift} from './LabTower41UpperLift.js';
 import {buildCastleImpulseBranch} from './LabCastleImpulseBranch.js';
 import {buildCastleFreightGate} from './LabCastleFreightGate.js';
+import {buildCastleCrownRotation} from './LabCastleCrownRotation.js';
 import {capsuleBoxGrounded,orientedBoxSupport} from './LabOrientedBoxContact.js';
 export {SINGULARITY_SPEC as TOWER_SPEC};
 const UP=V(0,1,0),close=(p,q,r=1.25)=>Math.hypot(p.x-q[0],p.z-q[2])<r&&Math.abs(p.y-q[1])<1.5;
@@ -378,15 +379,12 @@ export function buildTowerLevel(game,index=40){
  }
  // A passive over-centre spring carriage opens its own service passage.
  impulseBranch=buildCastleImpulseBranch({game,k,room:rooms.get('impulse'),standing,plate,sign,goal,base,register});
- // Crown has a second physically sealed receiver, reached with the one pair
- // of portals. A held companion does not satisfy its independent load socket.
+ // A sight shutter conceals the fixed portal address. A separate transverse
+ // section changes the real route from the portal vestibule to the socket.
  const crown=rooms.get('crown'),C=crown.P;base(crown);
- for(const[a,b]of [[-19,-10.7],[-9.3,19]])k.box(C(0,(a+b)/2,5.4),[.7,10.8,b-a],m.dark);
- k.box(C(0,-10,.7),[.7,1.4,1.4],m.dark);k.box(C(0,-10,6.8),[.7,6.4,1.4],m.dark);
- const crownNear=k.panel('crown outer docking door',C(8,7,2.4),[1,0,0]);
- const crownPortal=k.panel('crown sealed docking door',C(-10,-10,2.4),[1,0,0]);
- const socket=C(-9,6),contact=C(-9,12);plate(socket,3.5,m.copper);plate(contact,2.8,m.rose);
- register('crown',{state:{socket,contact,intake:crownNear,outlet:crownPortal},update(){if(loaded(socket,1.55)&&standing(contact,1.3)){complete('crown',{independentLoads:true,originalCargo:true,carriedPortalCrossings:carriedTransits.get('crown')});won=solved.has('crown');}},reset(){}});
+ const crownBranch=buildCastleCrownRotation({game,k,room:crown,standing,complete:(id,proof)=>{complete(id,{...proof,carriedPortalCrossings:carriedTransits.get(id)});won=solved.has('crown');},plate,sign,available:()=>available('crown')});
+ const {socket,contact,outlet:crownPortal}=crownBranch.state;
+ register('crown',crownBranch);
  const spawn=V(0,0,54),cargoSpawn=V(2,.57,54);
  const basePortal=k.panel('castle ground return',[2,2.4,49],[-1,0,0]);
  const upperPortal=k.panel('castle upper return',[2,74.4,49],[-1,0,0]);
@@ -409,10 +407,10 @@ export function buildTowerLevel(game,index=40){
   // A verified original-body load is passive on every energy-transfer cell.
   // The ordinary on-pad flag stops curiosity only after upright recovery;
   // that recovery motor must not push a loaded cup or drive the linkage.
-  passiveCompanionSupport:()=>Boolean(freightBranch?.passiveSupport()||impulseBranch?.cell.loadContact||flywheelCell?.loadContact||pendulumCell?.loadContact),
+  passiveCompanionSupport:()=>Boolean(crownBranch.passiveSupport()||freightBranch?.passiveSupport()||impulseBranch?.cell.loadContact||flywheelCell?.loadContact||pendulumCell?.loadContact),
   playerAcceleration:()=>V(),applyCargoForces(dt){ratchetCell?.updateForces(dt);flywheelCell?.updateForces(dt);pendulumCell?.updateForces(dt);upperLiftCell?.updateForces(dt);impulseBranch?.cell.updateForces(dt);if(available('magnet'))machines.get('magnet').force();},
   onTeleport(){const r=roomAt(game.playerPosition);lastTransit={id:r?.id??'atrium',seconds:time};if(game.heldCube&&r)carriedTransits.set(r.id,(carriedTransits.get(r.id)??0)+1);if(r?.id==='inertia')machines.get('inertia').transit();return true;},
-  renderUpdate(){ratchetCell?.syncPose();flywheelCell?.syncPose();pendulumCell?.syncPose();upperLiftCell?.syncPose();impulseBranch?.cell.syncPose();art.update();},diagnostics(){return{...this.getTowerMetrics(),archivePhysicalMemory:archiveMemory.diagnostics(),freightReturnGate:freightBranch.diagnostics(),flywheelPhysicalCell:flywheelCell.diagnostics(),pendulumPhysicalCell:pendulumCell.diagnostics(),upperLiftPhysicalCell:upperLiftCell.diagnostics(),impulsePhysicalCell:impulseBranch.cell.diagnostics(),...(ratchetCell?{ratchetPhysicalCell:ratchetCell.diagnostics()}:{}),uniqueRules:SINGULARITY_ROOMS.map(r=>r.rule),rooms:SINGULARITY_ROOMS.length,portalSurfaces:k.panels.length,heightBands:[0,18,36,54,72],connectedCastle:true};},
-  dispose(){if(disposed)return;disposed=true;ratchetCell?.dispose();flywheelCell?.dispose();pendulumCell?.dispose();upperLiftCell?.dispose();impulseBranch?.cell.dispose();art.dispose();k.dispose();fill.removeFromParent();sideFill.removeFromParent();sideFill.target.removeFromParent();fill.dispose();sideFill.dispose();game.scene.background=prior.background;game.scene.fog=prior.fog;},
+  renderUpdate(){ratchetCell?.syncPose();flywheelCell?.syncPose();pendulumCell?.syncPose();upperLiftCell?.syncPose();impulseBranch?.cell.syncPose();crownBranch.syncPose();art.update();},diagnostics(){return{...this.getTowerMetrics(),archivePhysicalMemory:archiveMemory.diagnostics(),freightReturnGate:freightBranch.diagnostics(),crownSpatialMechanism:crownBranch.diagnostics(),flywheelPhysicalCell:flywheelCell.diagnostics(),pendulumPhysicalCell:pendulumCell.diagnostics(),upperLiftPhysicalCell:upperLiftCell.diagnostics(),impulsePhysicalCell:impulseBranch.cell.diagnostics(),...(ratchetCell?{ratchetPhysicalCell:ratchetCell.diagnostics()}:{}),uniqueRules:SINGULARITY_ROOMS.map(r=>r.rule),rooms:SINGULARITY_ROOMS.length,portalSurfaces:k.panels.length,heightBands:[0,18,36,54,72],connectedCastle:true};},
+  dispose(){if(disposed)return;disposed=true;ratchetCell?.dispose();flywheelCell?.dispose();pendulumCell?.dispose();upperLiftCell?.dispose();impulseBranch?.cell.dispose();crownBranch.dispose();art.dispose();k.dispose();fill.removeFromParent();sideFill.removeFromParent();sideFill.target.removeFromParent();fill.dispose();sideFill.dispose();game.scene.background=prior.background;game.scene.fog=prior.fog;},
  };return level;
 }

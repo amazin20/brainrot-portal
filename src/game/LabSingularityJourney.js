@@ -11,6 +11,24 @@ export async function observeSingularityReadability(hook,phase,{look,wait,snapsh
  const freeze=value=>{if(value&&typeof value==='object'){Object.values(value).forEach(freeze);Object.freeze(value);}return value;};
  await hook(Object.freeze({phase,look,wait,snapshot:freeze(structuredClone(snapshot()))}));
 }
+/** Shared ordinary room route. A room fixture may supply the same inputs,
+ * while the full castle carries the actual original here from its galleries. */
+export async function prepareCrownSpatialRoom({state,P,walk,dropAt,use,until,shoot,pickup,enter,mark=()=>{}}){
+ await walk(P(12,13));await dropAt(P(12,13));
+ await walk(P(13,-16));await use('crown:sight',{side:-1});
+ await until(()=>Math.abs(state.rotors[0].angle-Math.PI/2)<1e-7,6,'Crown sight section did not expose the actual receiver');mark('Crown sight section opens portal ray');
+ await walk(P(13,-16));await walk(P(13,7));await shoot(0,state.intake.center);await walk(P(12,-10));await shoot(1,state.outlet.center);
+ await walk(P(12,13));await pickup();await enter(state.intake);
+ await walk(P(-9.5,-14));await walk(P(-13,-14));await dropAt(P(-13,-11));
+ await walk(P(-13,-5));await use('crown:passage',{side:-1});
+ await until(()=>Math.abs(state.rotors[1].angle-Math.PI/2)<1e-7,6,'Crown transverse section did not clear the real gallery');mark('Crown transverse section opens north gallery');
+ await walk(P(-13,-5));await pickup();await walk(P(-15,-4));await walk(P(-15,0));await walk(P(-5.8,0));await walk(P(-5.8,9));
+}
+export async function traverseCrownSpatialRoom(args){
+ await prepareCrownSpatialRoom(args);const {state,walk,dropAt,until,won,mark=()=>{}}=args;
+ await dropAt(state.socket);await until(()=>state.loaded,3,'Original free cargo did not load the physical crown socket');mark('Original companion loads crown socket');
+ await walk(state.contact);await until(won,3,'Independent crown loads not closed');
+}
 export async function runSingularityJourney(game,{onMilestone=()=>{},stopAfter=null,order=null,onFrame=null,annexVariant='direct',freightReturn='gate',onReadabilityPhase=null}={}){
  check(['gate','portal'].includes(freightReturn),'Unknown freight return plan');
  const level=game.firstLevel;check(level.singularity&&game.state==='playing','Start the new Tower through Play');
@@ -260,7 +278,7 @@ export async function runSingularityJourney(game,{onMilestone=()=>{},stopAfter=n
    await walk(P('impulse',-6,17.2));await pickup();await walk(P('impulse',3,17));await walk(P('impulse',3,12));await walk(P('impulse',7,12));await walk(P('impulse',7,7));
    await leave('impulse',[P('impulse',-19,7),P('impulse',-19,0)]);await travel(returnHub);await dropAt([2,returnHub[1],54]);
   },
-  async crown(){await travel([0,36,54]);await pickup();await travel([0,72,54]);await travel(level.rooms.get('crown').door);await walk(P('crown',12,13));await dropAt(P('crown',12,13));await walk(P('crown',13,7));await shoot(0,st('crown').intake.center);await walk(P('crown',12,-10));await shoot(1,st('crown').outlet.center);await walk(P('crown',12,13));await pickup();await enter(st('crown').intake);await dropAt(st('crown').socket);await walk(st('crown').contact);await until(()=>game.state==='won',3,'Independent crown loads not closed');},
+  async crown(){await travel([0,36,54]);await pickup();await travel([0,72,54]);await travel(level.rooms.get('crown').door);await traverseCrownSpatialRoom({state:st('crown'),P:(...p)=>P('crown',...p),walk,dropAt,use,until,shoot,pickup,enter,mark,won:()=>game.state==='won'});},
  };
  try{const sequence=order??['freight','sluice','optics','hoist','archive','flywheel','magnet','migrant','pendulum','inertia','impulse','crown'];for(const id of sequence){check(routines[id],'Unknown route '+id);mark('Start '+id);await routines[id]();check(level.getTowerMetrics().solvedIds.includes(id),'Missing solved mechanism '+id);mark('Solved '+id,['pendulum','impulse'].includes(id)?{physicsProof:structuredClone(level.getTowerMetrics().events.find(e=>e.id===id).proof)}:{});await globalThis.__SINGULARITY_FLUSH__?.();if(stopAfter===id){report.partial=true;break;}}
   report.pass=!report.partial&&game.state==='won';report.seconds=report.physicsSteps/120;report.teleports=game.teleportCount;report.metrics=level.getTowerMetrics();report.sameCompanion=game.cargo===companion&&game.physics.cargoBody.id===body;return report;
