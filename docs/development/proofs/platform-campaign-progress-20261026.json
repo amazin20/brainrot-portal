@@ -1,0 +1,2187 @@
+{
+  "schemaVersion": 1,
+  "kind": "local-original-nioris-campaign-verification",
+  "capturedAt": "2026-10-26T10:07:15.439505+00:00",
+  "pass": false,
+  "all51Complete": false,
+  "sourceAccepted": false,
+  "publicationAccepted": false,
+  "liveSdkAccepted": false,
+  "moderationAccepted": false,
+  "completedStableRooms": [
+    1
+  ],
+  "pendingStableRooms": [
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40,
+    41,
+    42,
+    43,
+    44,
+    45,
+    46,
+    47,
+    48,
+    49,
+    50,
+    51
+  ],
+  "completedCount": 1,
+  "expectedCount": 51,
+  "source": {
+    "commit": "eef9a1215dfa97698cf73fa72ec8e041aa600ee4",
+    "tree": "b7840fe87a64980d7b23a8ac6baac3078a502ea9",
+    "sourceInputsSha256": "4bdb587cdd2c4fd2d266b08610cbf8e12cdd347aa59e753085a8c5c30b80609e",
+    "sourceInputFiles": 365
+  },
+  "binding": {
+    "kind": "yandex-review-campaign-package-binding",
+    "localDiagnostic": true,
+    "sourceAccepted": false,
+    "publicationAccepted": false,
+    "liveSdkAccepted": false,
+    "moderationAccepted": false,
+    "source": {
+      "commit": "eef9a1215dfa97698cf73fa72ec8e041aa600ee4",
+      "tree": "b7840fe87a64980d7b23a8ac6baac3078a502ea9",
+      "sourceInputsSha256": "4bdb587cdd2c4fd2d266b08610cbf8e12cdd347aa59e753085a8c5c30b80609e",
+      "sourceInputFiles": 365
+    },
+    "controller": {
+      "commit": "eef9a1215dfa97698cf73fa72ec8e041aa600ee4",
+      "tree": "b7840fe87a64980d7b23a8ac6baac3078a502ea9",
+      "files": [
+        {
+          "path": "scripts/qa-campaign-platform-route.mjs",
+          "bytes": 29760,
+          "sha256": "394674c61a3303cb83c5b02a7d25f0fd4887cb63b5816116696d599b1eafd64b"
+        },
+        {
+          "path": "scripts/lib/canvas-text-observer.mjs",
+          "bytes": 6952,
+          "sha256": "186eda454f265f1c699c2a5c3c52b267bc4124879cc047a4e2aa83bebc1bfddd"
+        },
+        {
+          "path": "scripts/lib/yandex-debug-checker.mjs",
+          "bytes": 19892,
+          "sha256": "d5b96b84995d7a268492a678c4a84501c653d4f154a167ac9866c1a406f329b9"
+        },
+        {
+          "path": "scripts/lib/yandex-review-sdk.mjs",
+          "bytes": 3363,
+          "sha256": "c8d4d75050be13ff2441a46e265140669da3baf37935d25d0bcaf0ed853c5fb1"
+        },
+        {
+          "path": "scripts/lib/campaign-access-fixture.mjs",
+          "bytes": 2763,
+          "sha256": "bc67ea25cae7bdb46d40a1dae661d81acf4dfd5f9430d2cc66670469c59635e5"
+        },
+        {
+          "path": "scripts/qa-browser-capture.mjs",
+          "bytes": 10872,
+          "sha256": "9af34e80cc9e935e63725098134f3ee218b51c5f10602f48443e0b133d123904"
+        },
+        {
+          "path": "qa/vendor/yandex-games-debug-checker/debugcheck.js",
+          "bytes": 99613,
+          "sha256": "adb1ca16e9b3172712d5eda9b64d6fd6792b5e00e85102a0bf0a2390b3239e00"
+        },
+        {
+          "path": "qa/vendor/yandex-games-debug-checker/LICENSE",
+          "bytes": 1066,
+          "sha256": "30db7316101f11b4667062331bc37bb9739f0352982ce1e693af2adb72b8fb39"
+        },
+        {
+          "path": "qa/vendor/yandex-games-debug-checker/upstream.json",
+          "bytes": 673,
+          "sha256": "81ef68ba1bd818f1c1273ceeb63466eb23f58061a16e8bd40b145dbac5c4ac1c"
+        }
+      ],
+      "filesSha256": "8458091a4954619be0b6996ef133908fa728892e7b7ee362ea118e5bf17ed8fd",
+      "trackedWorkingTreeClean": true
+    },
+    "runId": null,
+    "runAttempt": null,
+    "sourceReviewRunId": null,
+    "sourceReviewRunAttempt": null,
+    "review": {
+      "mode": "yandex-review-test",
+      "commit": "eef9a1215dfa97698cf73fa72ec8e041aa600ee4",
+      "buildInfoBytes": 113398,
+      "buildInfoSha256": "ebca238f1fa98404f0193c9478a42a1f5ca9cfe61aa3d1a70ae0d7b78d465c6d",
+      "sourceInputsSha256": "4bdb587cdd2c4fd2d266b08610cbf8e12cdd347aa59e753085a8c5c30b80609e",
+      "packageFilesSha256": "f77f69811ecd8466c5be39e3b381ce2db956b2ec844bf3d90909f84ef00fbc85",
+      "files": [
+        {
+          "path": "art/portal-laboratory-menu.webp",
+          "bytes": 158200,
+          "sha256": "f6a544096a6418a0f65ba8c609415d0393a1081d18537ecac5eb4c345b13b4be"
+        },
+        {
+          "path": "assets/LabAnimationJourney-Rmguw2Jn.js",
+          "bytes": 3040,
+          "sha256": "3cd7a5d9778dc422714e83d2b7a846ddadfcf92cfc20297bbb9ec0a5e38876f9"
+        },
+        {
+          "path": "assets/LabCreativeRoom17Journey-DIL4VXy9.js",
+          "bytes": 5831,
+          "sha256": "b96e176747f668dfe1a4261cff4bcd176171dcfd2b125ff96ec5b39758d982e1"
+        },
+        {
+          "path": "assets/LabCreativeRoom18Journey-CLn6V08F.js",
+          "bytes": 3636,
+          "sha256": "e2757bc839234e67fb18a9cf32924b0bd301aa7b3e4c84d1b2cbc35c3099d54a"
+        },
+        {
+          "path": "assets/LabCreativeRoom20Journey-BMPcvQCI.js",
+          "bytes": 4663,
+          "sha256": "94207330c3fe505eb246cc4065dc43e7db7b70c093991efaae831415e9623434"
+        },
+        {
+          "path": "assets/LabEchoHorizonJourney-BmvU38tb.js",
+          "bytes": 2217,
+          "sha256": "b1579671d635e07bb316ef292be5dc55c7386fbd8d748cbf68cf2b03532417f9"
+        },
+        {
+          "path": "assets/LabExpansionAlternateJourney47-3qgixs4y.js",
+          "bytes": 1864,
+          "sha256": "2054a9f53789e8c5aa399142bef5a6700bd7c6be3353874cd5b89eba9482c851"
+        },
+        {
+          "path": "assets/LabExpansionAlternateJourney48-BPfx-czE.js",
+          "bytes": 2275,
+          "sha256": "368557564c920dd8d9f367343b59205f9a3ae8c64794269aa9ce644b60f50ad8"
+        },
+        {
+          "path": "assets/LabExpansionAlternateJourney49-IFThMczX.js",
+          "bytes": 1985,
+          "sha256": "c8601e3d83c80fe3ae810a9b7e28b894d3994d214447778f6569cde5f77951c0"
+        },
+        {
+          "path": "assets/LabExpansionAlternateJourneyB-DvMACCki.js",
+          "bytes": 2916,
+          "sha256": "b00cbe51e784a476502f832e95286603154e02660ce99ce23adde4888ae1362b"
+        },
+        {
+          "path": "assets/LabExpansionJourneyA-CPUQU1BU.js",
+          "bytes": 7363,
+          "sha256": "35ed1d4b7c3cb000e69877c51eee41b0475336e7b4c9711cb82d2b4a2826206d"
+        },
+        {
+          "path": "assets/LabExpansionJourneyB-CAThUbu1.js",
+          "bytes": 5545,
+          "sha256": "d7cb73c2b398da49a572dc6fc306d62bca1cd5a09fd6d6dcc914f160d6843d51"
+        },
+        {
+          "path": "assets/LabExtendedJourney-Cy-9qfX8.js",
+          "bytes": 9305,
+          "sha256": "2775d561a444665b2a0e4792868ac9f909e3729d87294b5f70caf237c197adc8"
+        },
+        {
+          "path": "assets/LabFoundation20PhysicalJourney-CbP1Dl4t.js",
+          "bytes": 12259,
+          "sha256": "ce0cfd397a754b045e42f322c5cb45816abb713b32b9874ce495bf8c9a44063a"
+        },
+        {
+          "path": "assets/LabFoundationJourney-8J8bMJ-2.js",
+          "bytes": 9213,
+          "sha256": "e51c7fe6d009e1e4e634c44cfe8cbaf814beca045b4df2b3aff5f092cb1c6e1a"
+        },
+        {
+          "path": "assets/LabIntroductoryAlternates-DcdsCClA.js",
+          "bytes": 1341,
+          "sha256": "a6451adc49d9c2f86f43455bfa4ced44d7166234f4fde82082990bf21f76cd5c"
+        },
+        {
+          "path": "assets/LabOpenJourney-e_9lYonm.js",
+          "bytes": 6345,
+          "sha256": "c6c9470d45e5a1eb007eb6a4d2747ef801ea85a14c9f8b7c627b3d80075c3ff0"
+        },
+        {
+          "path": "assets/LabPortalEdgeJourney-DdyAQMcf.js",
+          "bytes": 2293,
+          "sha256": "230b1575b6596fc6819aa6887d92d4e74190eb2ccb826f4388e5116ded994da7"
+        },
+        {
+          "path": "assets/LabPortalFloorJourney-BwSB0m7O.js",
+          "bytes": 1462,
+          "sha256": "c26f516aa18fda520694bf2d662d17bd40990b8c6fd8ea7e9d577bf965e7cc07"
+        },
+        {
+          "path": "assets/LabPostJourneyA-CsEdXwpT.js",
+          "bytes": 12130,
+          "sha256": "205fcfffa47a945ac9a1b501749e7a37f5acbf35fc2a509f9c085cc454d77880"
+        },
+        {
+          "path": "assets/LabPostJourneyB-D3D5CN_t.js",
+          "bytes": 10782,
+          "sha256": "82fde0500fcfc3922ed982fded169198803522f1fe146dce5c4ad1a963ba23e1"
+        },
+        {
+          "path": "assets/LabPuzzlePilot43Journey-8R9RlB9q.js",
+          "bytes": 3068,
+          "sha256": "a54abf407524761569a53dbe218021b5d4f244ba458af15edc58cac1bc52dcd0"
+        },
+        {
+          "path": "assets/LabPuzzleProgression44Journey-BFty3hF5.js",
+          "bytes": 1876,
+          "sha256": "62f15b220d3d1a5a3c56543f3aa188a2840283c0bdf82825839a68f63214f15d"
+        },
+        {
+          "path": "assets/LabPuzzleProgression45Journey-C3TQlgP5.js",
+          "bytes": 5412,
+          "sha256": "dbdf75bc0ecef3f6535bb43482bb6d412ef005e9a14bc10a16843fac79642330"
+        },
+        {
+          "path": "assets/LabPuzzleProgression46Journey-BYVuH_Qe.js",
+          "bytes": 3569,
+          "sha256": "6d3b263f07ba4bbce30df17f24e4fbed70d0b4718f44a67d32d9105df065dd25"
+        },
+        {
+          "path": "assets/LabPuzzleProgression47Journey-Oyljuhvu.js",
+          "bytes": 6134,
+          "sha256": "851baf9805f7591b069b03c69af1301755802855d6850c91e1bfe1c0ada39e85"
+        },
+        {
+          "path": "assets/LabPuzzleProgression48Journey-V3TUGWXX.js",
+          "bytes": 6921,
+          "sha256": "106f6a893fdc1d8cb5a8dd51ea031ac5b722e06d6d7ea329aa3fa40dc4c84e74"
+        },
+        {
+          "path": "assets/LabPuzzleProgression49Journey-DxU5wj1E.js",
+          "bytes": 4636,
+          "sha256": "a9ccd8e2481cf82455ad53ff1fa2b79222a5688c7aea49da7d7fb8d1ca6ee884"
+        },
+        {
+          "path": "assets/LabPuzzleProgression50BeamJourney-DcxtR47q.js",
+          "bytes": 12593,
+          "sha256": "b841f1c8bc06e46b4fafccdac3ecf9578dae45846e2222a87b7b613481333186"
+        },
+        {
+          "path": "assets/LabPuzzleProgression50Journey-35GAGfNm.js",
+          "bytes": 6103,
+          "sha256": "bc0ffb48ee8f3390da0ef8e1e694823a674c6cbe72e9f58e025eebdaa29fe8ce"
+        },
+        {
+          "path": "assets/LabPuzzleProgression51Journey-ByePSC9d.js",
+          "bytes": 3372,
+          "sha256": "f209a58eb6d6cea703902af47eab2672c8a326042ebb0a38e09d7c036909ed74"
+        },
+        {
+          "path": "assets/LabResearchJourney-D8XDdYNX.js",
+          "bytes": 7892,
+          "sha256": "c1be1d510b8cd185da33b5bbe3235057cd78b1c0cd6c8c9aa93d7bc4cd82b1ef"
+        },
+        {
+          "path": "assets/LabRoom13Journey-4kJUUTmk.js",
+          "bytes": 6258,
+          "sha256": "c1540786e510d7c4c6bfc757542e0e68e877f10e5fe7cdbb7273657a27fe7768"
+        },
+        {
+          "path": "assets/LabRoom14Journey-9oTSbL5X.js",
+          "bytes": 4731,
+          "sha256": "d8d97c8bcbee8ed3a60390d73f2fe78156c21f94c57c755a0ea93baaae90f250"
+        },
+        {
+          "path": "assets/LabRoom15Journey-vWv8hgXu.js",
+          "bytes": 4604,
+          "sha256": "122b2dad2340a235e64cc08475dfddb5dbb2fbd38c52d2309abe50a46ffa4728"
+        },
+        {
+          "path": "assets/LabRoom16Journey-DcT0PHn1.js",
+          "bytes": 2534,
+          "sha256": "43814ce0e94d01e0e2b9152c6ea1c722073f13a019b2992525f6b0480fa97e74"
+        },
+        {
+          "path": "assets/LabRoom17Journey-C2EE7523.js",
+          "bytes": 3260,
+          "sha256": "b621bf8abcb99cec72e5a8b0ef53e4ef6a005e414141e9502855a2759ba02708"
+        },
+        {
+          "path": "assets/LabRoom18Journey-XS3Qf_-y.js",
+          "bytes": 6065,
+          "sha256": "3e493c59db2ee491dc5f07a5f3b8e57915fffc635d931a9f71c8a9e905c897aa"
+        },
+        {
+          "path": "assets/LabRoom19Journey-BVk2pOJ3.js",
+          "bytes": 3087,
+          "sha256": "edbd9e87a7c68f527a6a6d6794cfcb3a8de5780d1c656265ccf7910207066ab4"
+        },
+        {
+          "path": "assets/LabRoom20Journey-Dnjdo837.js",
+          "bytes": 5013,
+          "sha256": "84ee4a4debf18d555e80bbf468821d58576e6fcf805b34adcd2670e8502fc0fd"
+        },
+        {
+          "path": "assets/LabRoom22Journey-OAOTNpQL.js",
+          "bytes": 2888,
+          "sha256": "5269c44547f03f2f15c997539ba7ba0346135e630e261c0e2d7b4cf2fdb10e72"
+        },
+        {
+          "path": "assets/LabRoom23Journey-DtTrEKgw.js",
+          "bytes": 2689,
+          "sha256": "646210214e75cec1e1a33fdee26deca5914d3681c792090a45d3ae97443505f2"
+        },
+        {
+          "path": "assets/LabRoom23PhysicalJourney-GpJPO4gu.js",
+          "bytes": 4135,
+          "sha256": "117aa19e0a1e985c0c9b3f8ea1325f972c68db0760d15641a36e03f95e3180d2"
+        },
+        {
+          "path": "assets/LabRoom24Journey-rpSFu-RX.js",
+          "bytes": 3621,
+          "sha256": "06171b696b807e58ef84f9a435e5203ed3062ef412f43a44320462ae0b0dded5"
+        },
+        {
+          "path": "assets/LabRoom25Journey-COqi9k-Z.js",
+          "bytes": 4626,
+          "sha256": "4113270db838996f7bcd1cd8d5edd4ca13461d19057e13a1a5f4e0f5085b9296"
+        },
+        {
+          "path": "assets/LabRoom26Journey-D5Lhf6Yz.js",
+          "bytes": 4194,
+          "sha256": "f568e01fcbf2e28f9bf1d89aa1d8e83df957bb60ea13a63a77cab81b61577e74"
+        },
+        {
+          "path": "assets/LabRoom27Journey-CtMoXjWq.js",
+          "bytes": 3350,
+          "sha256": "ea4e62a0eed62998b64515b56db65142d1a7d3fb8d5c91b6e31653c5ef4422b5"
+        },
+        {
+          "path": "assets/LabRoom28Journey-BK5o10zU.js",
+          "bytes": 3238,
+          "sha256": "abb63b08a5336b66f9274808b2d715e56d00520d744756fd68875b0c7442e686"
+        },
+        {
+          "path": "assets/LabRoom29Journey-FXLiWbZf.js",
+          "bytes": 2592,
+          "sha256": "625138692ba0641ed1ea63e7bb6ea332c70bf235ee3bc8b3cbd80456012e04ef"
+        },
+        {
+          "path": "assets/LabRoom30Journey-zAsFaYdh.js",
+          "bytes": 3762,
+          "sha256": "1d260d8e49e983b2f7a9c354898fe771c41df56434d67e203bd8fb51bbc8f925"
+        },
+        {
+          "path": "assets/LabSingularityJourney-KwujDJon.js",
+          "bytes": 28048,
+          "sha256": "79f548ab4083a393ab79519918c8386d177436dc35b792ac7769e938d24e454b"
+        },
+        {
+          "path": "assets/LabSiphonObservatoryJourney-BknKhBMm.js",
+          "bytes": 2649,
+          "sha256": "62f497aad27f1eee6df55446fb7bc06c624b114a439c4779b483b45fcd5a8f49"
+        },
+        {
+          "path": "assets/LabTower41RatchetCellJourney-BM3qAI1z.js",
+          "bytes": 24187,
+          "sha256": "fef4a7f7813baf10d4312db924c6a3e4c6ed2a393d3c73e93723a188fb655fd2"
+        },
+        {
+          "path": "assets/LabTowerJourney-DcY_qPi0.js",
+          "bytes": 31405,
+          "sha256": "e03b7ce51fcdd4c8570d70cffe852636019dcc3d3c608d411851c404a19abcb1"
+        },
+        {
+          "path": "assets/LabV8Journey-Ds1PoulD.js",
+          "bytes": 19745,
+          "sha256": "eb6992225295cc589acf145de2b0bbf86a1582c43867beb225c4d048f3daee1b"
+        },
+        {
+          "path": "assets/LabWorkshopJourney-BtwRB-tt.js",
+          "bytes": 7249,
+          "sha256": "2677b20236706fdeee22804258f40bc1c58ad003e28358037082109e7521c775"
+        },
+        {
+          "path": "assets/index-C001kXKc.css",
+          "bytes": 58602,
+          "sha256": "3c06e42c51dcb03884cb6b5f344f1c7f730276d1081f476a1dbade6db084335f"
+        },
+        {
+          "path": "assets/index-CPlrBrS0.js",
+          "bytes": 2348750,
+          "sha256": "030c9436c1b05eb2ccacddb468d95318c9d1f4c4caa0111d2b91d97bd4a5ec47"
+        },
+        {
+          "path": "draco/draco_decoder.js",
+          "bytes": 719410,
+          "sha256": "30e4d486fa020737af10e3c56197693e5b904bdc05b8bfa5d7b06751dec6da04"
+        },
+        {
+          "path": "draco/draco_decoder.wasm",
+          "bytes": 285747,
+          "sha256": "c55a594e8ffd18426d36b27fea9618af3df5e173640a3e56d46f09d76f0574f2"
+        },
+        {
+          "path": "draco/draco_wasm_wrapper.js",
+          "bytes": 58763,
+          "sha256": "e8049906ef3f8f75d3456c22a3f31bfdfe5b5b5bd09ccdec613b9e9a49d554d8"
+        },
+        {
+          "path": "index.html",
+          "bytes": 14280,
+          "sha256": "bb064cab8bdec60d827a213b4cf260768d73083ce634f388582f36a9fb95df1a"
+        },
+        {
+          "path": "models/runtime/manifest.json",
+          "bytes": 2421,
+          "sha256": "8806346ed3ac0fb096aa26321d5620c16a6a2a55f2523023fb21f6c4749fe2ed"
+        },
+        {
+          "path": "models/runtime/model-01-player.glb",
+          "bytes": 549756,
+          "sha256": "e5b09ff0281377b679d6fdd505fa1ed89550bb662e94e7f593ed67ee50a66a91"
+        },
+        {
+          "path": "models/runtime/model-02-cargo.glb",
+          "bytes": 510376,
+          "sha256": "65763c87e7f14cc807cffa8fc2adc364e8421dae819271a0c406a6b0d2c8c697"
+        },
+        {
+          "path": "models/runtime/model-11-portal-gun.glb",
+          "bytes": 393116,
+          "sha256": "d8c76c41efbbf0a6d70e30ab5a7b70f49fd806e497f67ea06cb28f9f4edca1d7"
+        },
+        {
+          "path": "models/runtime/model-19-lift-platform.glb",
+          "bytes": 404076,
+          "sha256": "afd039e831ff0baa514f076a505ffbb7c57dac2251959b3d858fc92dcf3d04b9"
+        },
+        {
+          "path": "models/runtime/model-22-terminal.glb",
+          "bytes": 377108,
+          "sha256": "9e2f4ff758996f67596d3935041f632bafdf7e84efd4869341920b64a5919c26"
+        },
+        {
+          "path": "models/runtime/model-23-floor-tile.glb",
+          "bytes": 103600,
+          "sha256": "0950bc6ef31bb28939087bad53695f21cde0b9fe5740394df202a0b242f77b0c"
+        },
+        {
+          "path": "models/runtime/model-24-wall-panel.glb",
+          "bytes": 62448,
+          "sha256": "15aaca48f6e436d5e89abf7548c0fe43580bba8faff4619e476d3a6d306b004d"
+        },
+        {
+          "path": "models/runtime/model-28-rotating-panel.glb",
+          "bytes": 366120,
+          "sha256": "3159916bad63903e73b8e660ce4aab8a3b1e38f1231152b68f3df63d6987ac4b"
+        },
+        {
+          "path": "models/runtime/model-29-pressure-platform.glb",
+          "bytes": 390244,
+          "sha256": "ee65bd9706ad4f4658e54ec5ad8f6f45b24d9027e4e6072f162358a4c1b3291b"
+        },
+        {
+          "path": "models/runtime/model-31-wind-generator.glb",
+          "bytes": 25768,
+          "sha256": "024f25db27e96e1efdaa5e200c13a665dee487e798338f86fef985feeae9019e"
+        },
+        {
+          "path": "models/runtime/model-32-spring-ram.glb",
+          "bytes": 25400,
+          "sha256": "958d5ed533736d5779da078be20ae2b0e84212bfc3a00b456dc0106bc0a093d7"
+        },
+        {
+          "path": "models/runtime/model-35-shutter-fan.glb",
+          "bytes": 27816,
+          "sha256": "8e11d5ab83250348f6e08f034ec87d82727162742d5a7be18f981fc523aa907a"
+        },
+        {
+          "path": "models/runtime/model-37-extension-bridge.glb",
+          "bytes": 25764,
+          "sha256": "96173a9ef89375066b08fad8dff1928425863c6b4e6b8c0373c497448f109c55"
+        },
+        {
+          "path": "models/runtime/model-39-cable-winch.glb",
+          "bytes": 28608,
+          "sha256": "301f148938ec83e2a8f4b45c7f9bdfd19fb40ca79d8fb9abc7601caf4fe0eafd"
+        }
+      ],
+      "fileCount": 77,
+      "totalBytes": 7288344
+    },
+    "consumer": {
+      "mode": "consumer",
+      "commit": "eef9a1215dfa97698cf73fa72ec8e041aa600ee4",
+      "buildInfoBytes": 113398,
+      "buildInfoSha256": "da67ac0bb399cf7efc97e7403e15e305bf6353e00da530284017a58039bb4645",
+      "sourceInputsSha256": "4bdb587cdd2c4fd2d266b08610cbf8e12cdd347aa59e753085a8c5c30b80609e",
+      "packageFilesSha256": "f7a70b2be43624d4d41a9e020482e699bc1eff03a3fb1ecfcbdac1e089661c68",
+      "files": [
+        {
+          "path": "art/portal-laboratory-menu.webp",
+          "bytes": 158200,
+          "sha256": "f6a544096a6418a0f65ba8c609415d0393a1081d18537ecac5eb4c345b13b4be"
+        },
+        {
+          "path": "assets/LabAnimationJourney-BqXO9Ocu.js",
+          "bytes": 3040,
+          "sha256": "cf9e2010784c3cc7c92443f0564647c0e01e71b4637e3da93e0f44ffc646e94e"
+        },
+        {
+          "path": "assets/LabCreativeRoom17Journey-D2sTpKDR.js",
+          "bytes": 5831,
+          "sha256": "5651f3ef003345acacdc1ee5bb3ce6e2620b8dea69a024f94c990c0d75ba7ce3"
+        },
+        {
+          "path": "assets/LabCreativeRoom18Journey-C39-D5Og.js",
+          "bytes": 3636,
+          "sha256": "1e1ba1e463df1225365559740c9a5ff0329ff93ef44181f0ccb8966f20d027ae"
+        },
+        {
+          "path": "assets/LabCreativeRoom20Journey-CwWtcUZD.js",
+          "bytes": 4663,
+          "sha256": "8ce98e8a4a05cbef68bd46a066bab6674c2ed5a18f274df5b467692fc560a58b"
+        },
+        {
+          "path": "assets/LabEchoHorizonJourney-4J4etre2.js",
+          "bytes": 2217,
+          "sha256": "dfab7f4b3ea709a5ec1c4025d69ac69431fb0d4c7b59bd805a3d43cfc085caa8"
+        },
+        {
+          "path": "assets/LabExpansionAlternateJourney47-3qgixs4y.js",
+          "bytes": 1864,
+          "sha256": "2054a9f53789e8c5aa399142bef5a6700bd7c6be3353874cd5b89eba9482c851"
+        },
+        {
+          "path": "assets/LabExpansionAlternateJourney48-CAu9nWG0.js",
+          "bytes": 2275,
+          "sha256": "c9bed344a703072f58a239d62901852cca1037720a7121a950c413e8d06bdc20"
+        },
+        {
+          "path": "assets/LabExpansionAlternateJourney49-KsmJfAal.js",
+          "bytes": 1985,
+          "sha256": "a5c875be18bab274570950e2854bf491de755eb6892a5fda2f58430127bfee39"
+        },
+        {
+          "path": "assets/LabExpansionAlternateJourneyB-BWwJu-3e.js",
+          "bytes": 2916,
+          "sha256": "5f747149382c0a1a7910763f1f6bef11cd1f1a791591f379a4ddca20924f3934"
+        },
+        {
+          "path": "assets/LabExpansionJourneyA-D2unAnD0.js",
+          "bytes": 7363,
+          "sha256": "9ff03b4737a3b43c63b5cd74cbf8b357cab10bf7dd9bded735489b09b1c84b8b"
+        },
+        {
+          "path": "assets/LabExpansionJourneyB-BoSOrciL.js",
+          "bytes": 5545,
+          "sha256": "5473f42b883185c5855090f1a7777ef43adfab980bc7730e385831aad3891b93"
+        },
+        {
+          "path": "assets/LabExtendedJourney-fUVcYiym.js",
+          "bytes": 9305,
+          "sha256": "587e90c795cefb748784cde79cdc5688e22d8bff4902622ea41107e19ad24e59"
+        },
+        {
+          "path": "assets/LabFoundation20PhysicalJourney-CdoI9xtW.js",
+          "bytes": 12259,
+          "sha256": "32e24685115bcc5011ff63a28185c89b175dd13f5909555a7c07fbc44a556197"
+        },
+        {
+          "path": "assets/LabFoundationJourney-D8T82R5q.js",
+          "bytes": 9213,
+          "sha256": "6728b0792ee3d5ee67593ca34e8eaaf884358d61f99bc9bf81bb8ec871efc9b3"
+        },
+        {
+          "path": "assets/LabIntroductoryAlternates-DcdsCClA.js",
+          "bytes": 1341,
+          "sha256": "a6451adc49d9c2f86f43455bfa4ced44d7166234f4fde82082990bf21f76cd5c"
+        },
+        {
+          "path": "assets/LabOpenJourney-C3hF-h6h.js",
+          "bytes": 6345,
+          "sha256": "a43cebf82358f8cb83d07adbc8913675aa003ea474c4839538cfd7ebacd7509f"
+        },
+        {
+          "path": "assets/LabPortalEdgeJourney-CoNRdOmq.js",
+          "bytes": 2293,
+          "sha256": "655b8b416b4ff6d10c54e7608e01274bb00ef0fab6c60eba1663d7e941c53ef2"
+        },
+        {
+          "path": "assets/LabPortalFloorJourney-D6KSIiJT.js",
+          "bytes": 1462,
+          "sha256": "dcd630c021dc715fb6664b3213385487b04aae3caa52f8676b61ed5346a5b0d9"
+        },
+        {
+          "path": "assets/LabPostJourneyA-CfCLTzRN.js",
+          "bytes": 12130,
+          "sha256": "6629a508377d751a6982084f33c07eef1dd77c67b39dcd424d9e04f80114b98b"
+        },
+        {
+          "path": "assets/LabPostJourneyB-Sz6fHHvq.js",
+          "bytes": 10782,
+          "sha256": "9a8565e1a44fdd5c9c6e2de8c7edae0f1f23099bd567fac8f780363f5d63ee84"
+        },
+        {
+          "path": "assets/LabPuzzlePilot43Journey-MeBmG5WZ.js",
+          "bytes": 3068,
+          "sha256": "f1b9eb902972cd271e55dcfa5c51c42921542707acd8544fa5635959612be87f"
+        },
+        {
+          "path": "assets/LabPuzzleProgression44Journey-CH8tJ6iZ.js",
+          "bytes": 1876,
+          "sha256": "d7a725628f4fa26984dbdf768db54db57c4ce07b830afed8bac069d8860e72cd"
+        },
+        {
+          "path": "assets/LabPuzzleProgression45Journey-C_vkgB_g.js",
+          "bytes": 5412,
+          "sha256": "c53da313ef55fc82dd8aa791edcdecc0eff2dd2842d1671f6fe94f93588d70cd"
+        },
+        {
+          "path": "assets/LabPuzzleProgression46Journey-BClhiuoE.js",
+          "bytes": 3569,
+          "sha256": "ac0cbd7d8a18b2e5f089eff85a16435d4f428bacd1c3c4eab0ca5aaea2726bf0"
+        },
+        {
+          "path": "assets/LabPuzzleProgression47Journey-D95HPzgt.js",
+          "bytes": 6134,
+          "sha256": "ea3a16b4ea4082ebe74a994f5baf5344d53458f7f725a238854daba85408a04f"
+        },
+        {
+          "path": "assets/LabPuzzleProgression48Journey-fcABZSwa.js",
+          "bytes": 6921,
+          "sha256": "ddc7d0c9e13d1b3d8a59e856402e065b51c7962fd87030994468241d79499ada"
+        },
+        {
+          "path": "assets/LabPuzzleProgression49Journey-Ba9BABgJ.js",
+          "bytes": 4636,
+          "sha256": "45d417cff462b66e642db236102682eedcaf290a6a5ab74c4b423a169cea3adc"
+        },
+        {
+          "path": "assets/LabPuzzleProgression50BeamJourney-DdjruabS.js",
+          "bytes": 12593,
+          "sha256": "50ef09a3c7b7e765da60da10aa64c1ef4b2b0c18e8cd8dfbc528167507f2491c"
+        },
+        {
+          "path": "assets/LabPuzzleProgression50Journey-CjAPQAii.js",
+          "bytes": 6103,
+          "sha256": "7b5600df5e2bc7688c498c21df90e3ab69883c5f7b39f519eae624cd693e3889"
+        },
+        {
+          "path": "assets/LabPuzzleProgression51Journey--eVbYm2X.js",
+          "bytes": 3372,
+          "sha256": "71b820c58f0d8568c4a97b8e3d14ccb0fc64c9d45fa876db27ef44ce2d4ce26d"
+        },
+        {
+          "path": "assets/LabResearchJourney-CDLHZzuc.js",
+          "bytes": 7892,
+          "sha256": "ff73f21f51533c56a062a90f4ee933e52e3e965590d51dfe25466a1a41490929"
+        },
+        {
+          "path": "assets/LabRoom13Journey-4kJUUTmk.js",
+          "bytes": 6258,
+          "sha256": "c1540786e510d7c4c6bfc757542e0e68e877f10e5fe7cdbb7273657a27fe7768"
+        },
+        {
+          "path": "assets/LabRoom14Journey-BI0xaYkm.js",
+          "bytes": 4731,
+          "sha256": "808828c90029e685bc76a95cdb582a00da904cfc5f5813fe67e91618182619e7"
+        },
+        {
+          "path": "assets/LabRoom15Journey-28c7-efW.js",
+          "bytes": 4604,
+          "sha256": "d7f5c11a1282e1ccb85ff9d2ff01aeb03e349ae78c79453c5c613916fd80b614"
+        },
+        {
+          "path": "assets/LabRoom16Journey-DcT0PHn1.js",
+          "bytes": 2534,
+          "sha256": "43814ce0e94d01e0e2b9152c6ea1c722073f13a019b2992525f6b0480fa97e74"
+        },
+        {
+          "path": "assets/LabRoom17Journey-C2EE7523.js",
+          "bytes": 3260,
+          "sha256": "b621bf8abcb99cec72e5a8b0ef53e4ef6a005e414141e9502855a2759ba02708"
+        },
+        {
+          "path": "assets/LabRoom18Journey-CKuBwKk6.js",
+          "bytes": 6065,
+          "sha256": "319d3556fdb5b9d12be64ca7b297230ef1f81783f5c77d06a1ce4cbb4e4ad5d9"
+        },
+        {
+          "path": "assets/LabRoom19Journey-BVk2pOJ3.js",
+          "bytes": 3087,
+          "sha256": "edbd9e87a7c68f527a6a6d6794cfcb3a8de5780d1c656265ccf7910207066ab4"
+        },
+        {
+          "path": "assets/LabRoom20Journey-Dnjdo837.js",
+          "bytes": 5013,
+          "sha256": "84ee4a4debf18d555e80bbf468821d58576e6fcf805b34adcd2670e8502fc0fd"
+        },
+        {
+          "path": "assets/LabRoom22Journey-CE4eehxi.js",
+          "bytes": 2888,
+          "sha256": "bdeb40e0b8c94be0dd39f2de259c301a0f15297298caeacb5b7ad6d2423c05f6"
+        },
+        {
+          "path": "assets/LabRoom23Journey-D__adfvE.js",
+          "bytes": 2689,
+          "sha256": "9bc907601399c6e62f79e355e21807be14e32cf89660b3cc1c5fed81ac7dceb0"
+        },
+        {
+          "path": "assets/LabRoom23PhysicalJourney-CDHXoWJr.js",
+          "bytes": 4135,
+          "sha256": "295c6c9b8119d2577cff39290362829cf18dc792b12140bab7c6a9d5a18a598d"
+        },
+        {
+          "path": "assets/LabRoom24Journey-QMv6z1Du.js",
+          "bytes": 3621,
+          "sha256": "16b25f68d2041d4d8acb912cebb3ecff1fa018b2a0531a1123778c59a61cc444"
+        },
+        {
+          "path": "assets/LabRoom25Journey-COqi9k-Z.js",
+          "bytes": 4626,
+          "sha256": "4113270db838996f7bcd1cd8d5edd4ca13461d19057e13a1a5f4e0f5085b9296"
+        },
+        {
+          "path": "assets/LabRoom26Journey-D5Lhf6Yz.js",
+          "bytes": 4194,
+          "sha256": "f568e01fcbf2e28f9bf1d89aa1d8e83df957bb60ea13a63a77cab81b61577e74"
+        },
+        {
+          "path": "assets/LabRoom27Journey-CtMoXjWq.js",
+          "bytes": 3350,
+          "sha256": "ea4e62a0eed62998b64515b56db65142d1a7d3fb8d5c91b6e31653c5ef4422b5"
+        },
+        {
+          "path": "assets/LabRoom28Journey-BK5o10zU.js",
+          "bytes": 3238,
+          "sha256": "abb63b08a5336b66f9274808b2d715e56d00520d744756fd68875b0c7442e686"
+        },
+        {
+          "path": "assets/LabRoom29Journey-FXLiWbZf.js",
+          "bytes": 2592,
+          "sha256": "625138692ba0641ed1ea63e7bb6ea332c70bf235ee3bc8b3cbd80456012e04ef"
+        },
+        {
+          "path": "assets/LabRoom30Journey-zAsFaYdh.js",
+          "bytes": 3762,
+          "sha256": "1d260d8e49e983b2f7a9c354898fe771c41df56434d67e203bd8fb51bbc8f925"
+        },
+        {
+          "path": "assets/LabSingularityJourney-DONw_nEB.js",
+          "bytes": 28048,
+          "sha256": "ba5a90d8a473b2a22090f5f81fe976c1fdb755fa7c1c611361c65de3d1b5caf1"
+        },
+        {
+          "path": "assets/LabSiphonObservatoryJourney-DO-DGM2U.js",
+          "bytes": 2649,
+          "sha256": "c09788a63d9c505b02b69b60ae097ef9eb3c1f601ef7da80f4fb5585bff34d0d"
+        },
+        {
+          "path": "assets/LabTower41RatchetCellJourney-WDyEbd1_.js",
+          "bytes": 24187,
+          "sha256": "d09cb7e3ee565b20f47488c38517aacbff13c1b5ffe95ad470dde48b2f788e96"
+        },
+        {
+          "path": "assets/LabTowerJourney-DO6CL_e2.js",
+          "bytes": 31405,
+          "sha256": "346157781cc65fa57301f0122a4893d05b62aefd064b3b63871fc3264ab9c517"
+        },
+        {
+          "path": "assets/LabV8Journey-DItXodt6.js",
+          "bytes": 19745,
+          "sha256": "c136d065c976076b85882bbb69fa00561bf026d0aa4a34c540b608161aea06d5"
+        },
+        {
+          "path": "assets/LabWorkshopJourney-DHHOsw3o.js",
+          "bytes": 7249,
+          "sha256": "ad4c96905d08c33af9074c715feabae72e687d24f0b66f5f4f979a496c73ec64"
+        },
+        {
+          "path": "assets/index-BTNoXFMG.js",
+          "bytes": 2347410,
+          "sha256": "49344d2c5fcb51e96b1d2b75d2540dc4faf6fc7254e4f7c1b2b2660f418618b8"
+        },
+        {
+          "path": "assets/index-C001kXKc.css",
+          "bytes": 58602,
+          "sha256": "3c06e42c51dcb03884cb6b5f344f1c7f730276d1081f476a1dbade6db084335f"
+        },
+        {
+          "path": "draco/draco_decoder.js",
+          "bytes": 719410,
+          "sha256": "30e4d486fa020737af10e3c56197693e5b904bdc05b8bfa5d7b06751dec6da04"
+        },
+        {
+          "path": "draco/draco_decoder.wasm",
+          "bytes": 285747,
+          "sha256": "c55a594e8ffd18426d36b27fea9618af3df5e173640a3e56d46f09d76f0574f2"
+        },
+        {
+          "path": "draco/draco_wasm_wrapper.js",
+          "bytes": 58763,
+          "sha256": "e8049906ef3f8f75d3456c22a3f31bfdfe5b5b5bd09ccdec613b9e9a49d554d8"
+        },
+        {
+          "path": "index.html",
+          "bytes": 14498,
+          "sha256": "5e8b2758f01d69f67cd48a4187599cd35f463d359028519a50256abafe1c9eb9"
+        },
+        {
+          "path": "models/runtime/manifest.json",
+          "bytes": 2421,
+          "sha256": "8806346ed3ac0fb096aa26321d5620c16a6a2a55f2523023fb21f6c4749fe2ed"
+        },
+        {
+          "path": "models/runtime/model-01-player.glb",
+          "bytes": 549756,
+          "sha256": "e5b09ff0281377b679d6fdd505fa1ed89550bb662e94e7f593ed67ee50a66a91"
+        },
+        {
+          "path": "models/runtime/model-02-cargo.glb",
+          "bytes": 510376,
+          "sha256": "65763c87e7f14cc807cffa8fc2adc364e8421dae819271a0c406a6b0d2c8c697"
+        },
+        {
+          "path": "models/runtime/model-11-portal-gun.glb",
+          "bytes": 393116,
+          "sha256": "d8c76c41efbbf0a6d70e30ab5a7b70f49fd806e497f67ea06cb28f9f4edca1d7"
+        },
+        {
+          "path": "models/runtime/model-19-lift-platform.glb",
+          "bytes": 404076,
+          "sha256": "afd039e831ff0baa514f076a505ffbb7c57dac2251959b3d858fc92dcf3d04b9"
+        },
+        {
+          "path": "models/runtime/model-22-terminal.glb",
+          "bytes": 377108,
+          "sha256": "9e2f4ff758996f67596d3935041f632bafdf7e84efd4869341920b64a5919c26"
+        },
+        {
+          "path": "models/runtime/model-23-floor-tile.glb",
+          "bytes": 103600,
+          "sha256": "0950bc6ef31bb28939087bad53695f21cde0b9fe5740394df202a0b242f77b0c"
+        },
+        {
+          "path": "models/runtime/model-24-wall-panel.glb",
+          "bytes": 62448,
+          "sha256": "15aaca48f6e436d5e89abf7548c0fe43580bba8faff4619e476d3a6d306b004d"
+        },
+        {
+          "path": "models/runtime/model-28-rotating-panel.glb",
+          "bytes": 366120,
+          "sha256": "3159916bad63903e73b8e660ce4aab8a3b1e38f1231152b68f3df63d6987ac4b"
+        },
+        {
+          "path": "models/runtime/model-29-pressure-platform.glb",
+          "bytes": 390244,
+          "sha256": "ee65bd9706ad4f4658e54ec5ad8f6f45b24d9027e4e6072f162358a4c1b3291b"
+        },
+        {
+          "path": "models/runtime/model-31-wind-generator.glb",
+          "bytes": 25768,
+          "sha256": "024f25db27e96e1efdaa5e200c13a665dee487e798338f86fef985feeae9019e"
+        },
+        {
+          "path": "models/runtime/model-32-spring-ram.glb",
+          "bytes": 25400,
+          "sha256": "958d5ed533736d5779da078be20ae2b0e84212bfc3a00b456dc0106bc0a093d7"
+        },
+        {
+          "path": "models/runtime/model-35-shutter-fan.glb",
+          "bytes": 27816,
+          "sha256": "8e11d5ab83250348f6e08f034ec87d82727162742d5a7be18f981fc523aa907a"
+        },
+        {
+          "path": "models/runtime/model-37-extension-bridge.glb",
+          "bytes": 25764,
+          "sha256": "96173a9ef89375066b08fad8dff1928425863c6b4e6b8c0373c497448f109c55"
+        },
+        {
+          "path": "models/runtime/model-39-cable-winch.glb",
+          "bytes": 28608,
+          "sha256": "301f148938ec83e2a8f4b45c7f9bdfd19fb40ca79d8fb9abc7601caf4fe0eafd"
+        }
+      ],
+      "fileCount": 77,
+      "totalBytes": 7287222
+    },
+    "journey": {
+      "path": "assets/LabV8Journey-Ds1PoulD.js",
+      "bytes": 19745,
+      "sha256": "eb6992225295cc589acf145de2b0bbf86a1582c43867beb225c4d048f3daee1b"
+    },
+    "checker": {
+      "repository": "https://github.com/Nioris/yandex-games-debug-checker",
+      "commit": "f86d4ebd1d17f92911ff64b373286fc8d85aec8e",
+      "version": "1.1.0",
+      "filename": "qa/vendor/yandex-games-debug-checker/debugcheck.js",
+      "bytes": 99613,
+      "sha256": "adb1ca16e9b3172712d5eda9b64d6fd6792b5e00e85102a0bf0a2390b3239e00"
+    }
+  },
+  "sdk": {
+    "kind": "explicit-local-test-sdk",
+    "bytes": 2116,
+    "sha256": "5be7b387fded2a7cb07d429a5a6ce7b8fbe06886ee7b089afc2eea0db334d3f6",
+    "liveSdk": false,
+    "liveAds": false
+  },
+  "scope": "Every listed actual compiled ordinary-input route plus the unchanged upstream checker on a fresh page of the distinct Yandex REVIEW TEST build. Explicit mock SDK. Existing legacy route initialization resets are outside its own route counters; this is not an all-room continuous/native no-reset claim.",
+  "runtime": {
+    "executablePath": "/workspace/scratch/cefcdffdf3ad/browser-temp/chromium",
+    "puppeteerModule": "/workspace/scratch/cefcdffdf3ad/browser-qa/node_modules/puppeteer-core/lib/puppeteer/puppeteer-core.js",
+    "graphics": true,
+    "installation": "npm @sparticuz/chromium153.0.0, Brotli archives extracted with safe tar filter because sandbox chown unsupported; no browser session started"
+  },
+  "aggregation": {
+    "controllerSha256": "7d3b2f3673c10343f26a491eb988a8e9b8b3df9a3e57bd5e0a0231620971cdcc",
+    "method": "One fresh Chromium invocation per stable room; exact common source/controller/package bindings; original copied checker text and network/body hashes retained. Duplicate successful room rows or mixed bindings are rejected."
+  },
+  "packagePreflightFailure": {
+    "kind": "package-preflight-failure-before-browser",
+    "at": "2026-10-26T09:56:46.044330+00:00",
+    "sourceCommit": "eef9a1215dfa97698cf73fa72ec8e041aa600ee4",
+    "error": "One actual compiled QA ordinary-input route is required:2 !==1",
+    "browserStarted": false,
+    "journeyFiles": [
+      {
+        "path": "assets/LabV8Journey-Ds1PoulD.js",
+        "bytes": 19745,
+        "sha256": "eb6992225295cc589acf145de2b0bbf86a1582c43867beb225c4d048f3daee1b",
+        "leadingImportMap": "const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=[\"./LabRoom14Journey-9oTSbL5X.js\",\"./index-CPlrBrS0.js\",\"./index-C001kXKc.css\",\"./LabRoom15Journey-vWv8hgXu.js\",\"./LabRoom18Journey-XS3Qf_-y.js\",\"./LabRoom22Journey-OAOTNpQL.js\",\"./Lab"
+      },
+      {
+        "path": "assets/LabV8Journey-LDk2ptPF.js",
+        "bytes": 19745,
+        "sha256": "cd9153a9c4c44e234c2c53ea97476e4f77bad01f8325db5a51c5ef8df8ec9c3d",
+        "leadingImportMap": "const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=[\"./LabRoom14Journey-BzaU3-B9.js\",\"./index-C3LLDRzm.js\",\"./index-CULe0BfX.css\",\"./LabRoom15Journey-BEMyyQDd.js\",\"./LabRoom18Journey-BP_E3kAO.js\",\"./LabRoom22Journey-CQBptn0T.js\",\"./Lab"
+      }
+    ]
+  },
+  "failedRouteAttempts": [],
+  "warningAnalysis": {
+    "paths": [
+      "index.html",
+      "assets/index-C001kXKc.css",
+      "assets/index-CPlrBrS0.js"
+    ],
+    "matches": [
+      {
+        "filename": "assets/index-CPlrBrS0.js",
+        "rule": "webgl",
+        "match": "WebGLAttributes: Unsupported",
+        "context": "pedArray)p=o.UNSIGNED_BYTE;else throw new Error(\"THREE.WebGLAttributes: Unsupported buffer data format: \"+c);return{buffer:d,type:p,bytesPerElement:"
+      },
+      {
+        "filename": "assets/index-CPlrBrS0.js",
+        "rule": "webgl",
+        "match": "WebGLRenderer:\",c,\"not ",
+        "context": "ision:\"highp\";const h=l(c);h!==c&&(console.warn(\"THREE.WebGLRenderer:\",c,\"not supported, using\",h,\"instead.\"),c=h);const u=t.logarithmicDepthBu"
+      },
+      {
+        "filename": "assets/index-CPlrBrS0.js",
+        "rule": "webgl",
+        "match": "WebGLRenderer: \"+n+\" extension not ",
+        "context": "et:function(n){const s=t(n);return s===null&&Bu(\"THREE.WebGLRenderer: \"+n+\" extension not supported.\"),s}}}function TA(o,e,t,n){const s={},i=new WeakMap;fu"
+      },
+      {
+        "filename": "assets/index-CPlrBrS0.js",
+        "rule": "webgl",
+        "match": "WebGLProgram: Unsupported",
+        "context": "\"sRGBTransferOETF\"];default:return console.warn(\"THREE.WebGLProgram: Unsupported color space: \",o),[e,\"LinearTransferOETF\"]}}function X2(o,e,t){c"
+      },
+      {
+        "filename": "assets/index-CPlrBrS0.js",
+        "rule": "webgl",
+        "match": "WebGLProgram: Unsupported",
+        "context": "k;case d4:t=\"Custom\";break;default:console.warn(\"THREE.WebGLProgram: Unsupported toneMapping:\",e),t=\"Linear\"}return\"vec3 \"+o+\"( vec3 color ) { re"
+      },
+      {
+        "filename": "assets/index-CPlrBrS0.js",
+        "rule": "webgl",
+        "match": "WebGLProgram.getParameters:\",A.precision,\"not ",
+        "context": "sion(A.precision),p!==A.precision&&console.warn(\"THREE.WebGLProgram.getParameters:\",A.precision,\"not supported, using\",p,\"instead.\"));const I=P.morphAttributes.positi"
+      },
+      {
+        "filename": "assets/index-CPlrBrS0.js",
+        "rule": "webgl",
+        "match": "WebGLRenderer: Attempt to load unsupported",
+        "context": "eight,Ae.depth,0,Ue.data,0,0);else console.warn(\"THREE.WebGLRenderer: Attempt to load unsupported compressed texture format in .uploadTexture()\");else ve?et&&t.te"
+      },
+      {
+        "filename": "assets/index-CPlrBrS0.js",
+        "rule": "webgl",
+        "match": "WebGLRenderer: Attempt to load unsupported",
+        "context": "e,Ne,Ue.width,Ue.height,0,Ue.data):console.warn(\"THREE.WebGLRenderer: Attempt to load unsupported compressed texture format in .uploadTexture()\"):ve?et&&t.texSubI"
+      },
+      {
+        "filename": "assets/index-CPlrBrS0.js",
+        "rule": "webgl",
+        "match": "WebGLRenderer: Attempt to load unsupported",
+        "context": "e,tt,oe.width,oe.height,0,oe.data):console.warn(\"THREE.WebGLRenderer: Attempt to load unsupported compressed texture format in .setTextureCube()\"):ve?et&&t.texSub"
+      },
+      {
+        "filename": "assets/index-CPlrBrS0.js",
+        "rule": "webgl",
+        "match": "WebGLTextures: Unsupported",
+        "context": "GBAFormat and UnsignedByteType.\"):console.error(\"THREE.WebGLTextures: Unsupported texture color space:\",ye)),j}function fe(Y){return typeof HTMLIm"
+      },
+      {
+        "filename": "assets/index-CPlrBrS0.js",
+        "rule": "webgl",
+        "match": "WebGLRenderer: Texture samplers can not ",
+        "context": "ndary=64,w.storage=64):x.isTexture?console.warn(\"THREE.WebGLRenderer: Texture samplers can not be part of an uniforms group.\"):console.warn(\"THREE.WebGLRenderer"
+      },
+      {
+        "filename": "assets/index-CPlrBrS0.js",
+        "rule": "webgl",
+        "match": "WebGLRenderer: Unsupported",
+        "context": "ot be part of an uniforms group.\"):console.warn(\"THREE.WebGLRenderer: Unsupported uniform value type.\",x),w}function m(x){const w=x.target;w.remov"
+      },
+      {
+        "filename": "assets/index-CPlrBrS0.js",
+        "rule": "webgl",
+        "match": "WebGLRenderer: WebGL 1 is not ",
+        "context": "nstanceof WebGLRenderingContext)throw new Error(\"THREE.WebGLRenderer: WebGL 1 is not supported since r163.\");p=n.getContextAttributes().alpha}else p=r"
+      },
+      {
+        "filename": "assets/index-CPlrBrS0.js",
+        "rule": "webgl",
+        "match": "WebGLRenderer: A WebGL context could not ",
+        "context": "ate=qe,Se.type=ze}function je(ue){console.error(\"THREE.WebGLRenderer: A WebGL context could not be created. Reason: \",ue.statusMessage)}function be(ue){const Fe="
+      },
+      {
+        "filename": "assets/index-CPlrBrS0.js",
+        "rule": "webgl",
+        "match": "WebGLRenderer.render: camera is not ",
+        "context": "if(Fe!==void 0&&Fe.isCamera!==!0){console.error(\"THREE.WebGLRenderer.render: camera is not an instance of THREE.Camera.\");return}if(v===!0)return;if(ue.matr"
+      },
+      {
+        "filename": "assets/index-CPlrBrS0.js",
+        "rule": "ru",
+        "match": "ебу",
+        "context": "ьца движутся по настоящему пути: дальнему резонатору требуется больше времени. Белые решётки пропускают импульс, но не путе"
+      },
+      {
+        "filename": "assets/index-CPlrBrS0.js",
+        "rule": "ru",
+        "match": "ебу",
+        "context": "утника к единственному сервисному пандусу. Ошибка не требует перезапуска.\"]},z5]);function Ff(o,e,t,n,s,i=0,r=20){return ne"
+      },
+      {
+        "filename": "assets/index-CPlrBrS0.js",
+        "rule": "ru",
+        "match": "ебан",
+        "context": "й прижим относятся к одному устройству.\",12035560,[\"Колебания передаются мосту через тягу. Подвешенный или удерживаемый спут"
+      },
+      {
+        "filename": "assets/index-CPlrBrS0.js",
+        "rule": "ru",
+        "match": "ебу",
+        "context": "},\"E — рубильник: выключено → открыть → закрыть. Ток требует двух контактов.\"),t.control(\"circuit-contact-clamp\",[-9,0,2],("
+      }
+    ],
+    "scope": "Read-only analysis of the exact files scanned on room1. It does not replace or promote any original checker verdict.",
+    "interpretation": {
+      "gameReady": "Pinned static rule examines an extracted minified init block. Source main.js awaits waitForMenuPaint (fonts, background decode and two fully opaque menu frames) before platform.ready(). Room1 actual checker timing is preserved in its row; this is causal source review, not an altered Nioris verdict.",
+      "webgl": "All15 exact regex matches are Three.js internal error/console messages. The game startupFailureMessage uses a Russian retry message. This static match alone does not establish that a WebGL notice was shown.",
+      "profanity": "All4 Russian stem matches occur in clean words: требуется, требует and Колебания. No English or standalone-бля matches were found in the exact scanned files.",
+      "canvas": "The original NOT VERIFIED remains. Canvas observer checks command completeness/font availability/overflow; it does not prove human readability or every declared language."
+    },
+    "sourceFiles": [
+      {
+        "path": "src/main.js",
+        "sha256": "26cbcfefc4878ca70dd55f72db2a660e858a0983dff81d8caa2a448aec50c255"
+      },
+      {
+        "path": "src/game/LabReadyPresentation.js",
+        "sha256": "6523b1ef63a23a504be03f52a5481590080f8fc0a6bc9a0dec8b6cb4b584bb1a"
+      },
+      {
+        "path": "qa/vendor/yandex-games-debug-checker/debugcheck.js",
+        "sha256": "adb1ca16e9b3172712d5eda9b64d6fd6792b5e00e85102a0bf0a2390b3239e00"
+      }
+    ]
+  },
+  "rows": [
+    {
+      "level": 1,
+      "displayNumber": 1,
+      "pass": true,
+      "fixture": {
+        "key": "brainrot-campaign-v67:brainrot-portal.preferences.v24",
+        "raw": "{\"quality\":\"low\",\"volume\":0.29,\"lookSensitivity\":1,\"muted\":false,\"tutorial\":false,\"completed\":[],\"hints\":{},\"resumeLevel\":0,\"campaignSequenceRevision\":\"fifty-rooms-then-castle-v1\",\"campaignRevision\":\"creative-campaign-v48\",\"roomRevisions\":{\"16\":\"cable-supported-architecture-v1\",\"22\":\"counterweight-dynamic-v1\",\"32\":\"siphon-observatory-v1\",\"42\":\"spatial-progression43-v1\",\"43\":\"spatial-progression44-v1\",\"44\":\"spatial-progression45-v1\",\"45\":\"spatial-progression46-v1\",\"46\":\"spatial-progression47-v1\",\"47\":\"spatial-progression48-v1\",\"48\":\"spatial-progression49-v1\",\"49\":\"spatial-progression50-v1\",\"50\":\"spatial-progression51-v1\"}}",
+        "preferences": {
+          "quality": "low",
+          "volume": 0.29,
+          "lookSensitivity": 1,
+          "muted": false,
+          "tutorial": false,
+          "completed": [],
+          "hints": {},
+          "resumeLevel": 0,
+          "campaignSequenceRevision": "fifty-rooms-then-castle-v1",
+          "campaignRevision": "creative-campaign-v48",
+          "roomRevisions": {
+            "16": "cable-supported-architecture-v1",
+            "22": "counterweight-dynamic-v1",
+            "32": "siphon-observatory-v1",
+            "42": "spatial-progression43-v1",
+            "43": "spatial-progression44-v1",
+            "44": "spatial-progression45-v1",
+            "45": "spatial-progression46-v1",
+            "46": "spatial-progression47-v1",
+            "47": "spatial-progression48-v1",
+            "48": "spatial-progression49-v1",
+            "49": "spatial-progression50-v1",
+            "50": "spatial-progression51-v1"
+          }
+        },
+        "completed": [],
+        "targetIndex": 0,
+        "targetCompleted": false,
+        "constructorWrites": 0,
+        "scope": "QA setup supplies the previously completed campaign prefix in the candidate own storage before construction; the current target is not completed. This is not a fresh guest full-campaign playthrough."
+      },
+      "normalPlay": {
+        "levelIndex": 0,
+        "id": "foundation-first-connection",
+        "state": "playing",
+        "worldStep": 0,
+        "elapsed": 0,
+        "cargoUUID": "26cd7895-4ad1-4542-9237-a68de4758b86",
+        "cargoBodyId": 77,
+        "cargoMass": 3.2,
+        "actualProductionWin": false,
+        "player": [
+          0,
+          0,
+          12
+        ],
+        "cargo": [
+          -4,
+          0.6,
+          9
+        ],
+        "normalPlayerSpawnDistance": 0,
+        "normalCargoSpawnDistance": 0,
+        "completed": [],
+        "selectedLevel": 0,
+        "platformDemo": false
+      },
+      "route": {
+        "level": 1,
+        "id": "foundation-first-connection",
+        "pass": true,
+        "milestones": [
+          {
+            "name": "A pair changes floor, and carries the companion",
+            "player": [
+              4.914826461817537,
+              4,
+              -12.324970789293168
+            ],
+            "cargo": [
+              5.528697039314094,
+              5.0509862425807,
+              -11.948568271068881
+            ],
+            "teleports": 1
+          },
+          {
+            "name": "both at exit",
+            "player": [
+              4.914826461817537,
+              4,
+              -12.324970789293168
+            ],
+            "cargo": [
+              5.528697039314094,
+              5.0509862425807,
+              -11.948568271068881
+            ],
+            "teleports": 1
+          }
+        ],
+        "respawns": 0,
+        "resets": 0,
+        "frames": 528,
+        "teleports": 1
+      },
+      "finished": {
+        "levelIndex": 0,
+        "id": "foundation-first-connection",
+        "state": "won",
+        "worldStep": 1055,
+        "elapsed": 8791.666666666591,
+        "cargoUUID": "26cd7895-4ad1-4542-9237-a68de4758b86",
+        "cargoBodyId": 77,
+        "cargoMass": 3.2,
+        "actualProductionWin": true,
+        "player": [
+          4.914826461817537,
+          4,
+          -12.324970789293168
+        ],
+        "cargo": [
+          5.528697039314094,
+          5.0509862425807,
+          -11.948568271068881
+        ],
+        "normalPlayerSpawnDistance": 25.136820066383653,
+        "normalCargoSpawnDistance": 23.440346806442726,
+        "completed": [
+          0
+        ],
+        "selectedLevel": 0,
+        "platformDemo": false
+      },
+      "scheduler": "Automatic render scheduling suppressed before genuine Play and hint pause/resume; actual route uses its own fixed-rate ordinary input clock.",
+      "canvasText": {
+        "schemaVersion": 1,
+        "kind": "canvas-text-draw-observation",
+        "present": true,
+        "installed": true,
+        "instrumentationIntact": true,
+        "captureComplete": true,
+        "reason": null,
+        "methods": [
+          "fillText",
+          "strokeText"
+        ],
+        "maxUniqueEntries": 2048,
+        "maxTextCodeUnits": 16384,
+        "calls": {
+          "fillText": 3,
+          "strokeText": 0
+        },
+        "successfulCalls": 3,
+        "thrownCalls": 0,
+        "unrecordedTextCalls": 0,
+        "fontUnavailableCalls": 0,
+        "observationErrors": 0,
+        "overflow": false,
+        "overflowCalls": 0,
+        "oversizedTextCalls": 0,
+        "entries": [
+          {
+            "method": "fillText",
+            "text": "ГАЛЕРЕЯ / +4 м",
+            "font": "600 103px sans-serif",
+            "count": 1,
+            "firstCall": 1,
+            "lastCall": 1
+          },
+          {
+            "method": "fillText",
+            "text": "КЕРАМИКА = ПОРТАЛ",
+            "font": "600 80px sans-serif",
+            "count": 1,
+            "firstCall": 2,
+            "lastCall": 2
+          },
+          {
+            "method": "fillText",
+            "text": "1 / ПО ТУ СТОРОНУ",
+            "font": "600 69px sans-serif",
+            "count": 1,
+            "firstCall": 3,
+            "lastCall": 3
+          }
+        ],
+        "scope": "Successful native CanvasRenderingContext2D text commands; no pixel visibility, human readability or language verdict."
+      },
+      "sdk": {
+        "kind": "explicit-local-test-sdk",
+        "liveSdk": false,
+        "liveAds": false,
+        "log": [
+          {
+            "event": "init",
+            "detail": null,
+            "time": 248.29999999701977
+          },
+          {
+            "event": "sdk-language-get",
+            "detail": null,
+            "time": 248.5
+          },
+          {
+            "event": "on",
+            "detail": "game_api_pause",
+            "time": 250.29999999701977
+          },
+          {
+            "event": "on",
+            "detail": "game_api_resume",
+            "time": 250.29999999701977
+          },
+          {
+            "event": "ready",
+            "detail": null,
+            "time": 13870.79999999702
+          },
+          {
+            "event": "start",
+            "detail": null,
+            "time": 14311.89999999851
+          },
+          {
+            "event": "stop",
+            "detail": null,
+            "time": 14510.199999999255
+          },
+          {
+            "event": "rewarded-open",
+            "detail": {
+              "outcome": "close"
+            },
+            "time": 15067.89999999851
+          },
+          {
+            "event": "rewarded-close",
+            "detail": null,
+            "time": 15098.79999999702
+          },
+          {
+            "event": "rewarded-open",
+            "detail": {
+              "outcome": "error"
+            },
+            "time": 15170.89999999851
+          },
+          {
+            "event": "rewarded-error",
+            "detail": null,
+            "time": 15207.29999999702
+          },
+          {
+            "event": "rewarded-open",
+            "detail": {
+              "outcome": "reward"
+            },
+            "time": 15251.89999999851
+          },
+          {
+            "event": "rewarded-confirmed",
+            "detail": null,
+            "time": 15277
+          },
+          {
+            "event": "rewarded-confirmed-duplicate",
+            "detail": null,
+            "time": 15277.29999999702
+          },
+          {
+            "event": "rewarded-close",
+            "detail": null,
+            "time": 15277.29999999702
+          },
+          {
+            "event": "start",
+            "detail": null,
+            "time": 15408.5
+          },
+          {
+            "event": "stop",
+            "detail": null,
+            "time": 18876.199999999255
+          }
+        ],
+        "registeredEvents": [
+          "game_api_pause",
+          "game_api_resume"
+        ],
+        "platformDemo": false
+      },
+      "network": {
+        "kind": "actual-browser-response-body-hashes",
+        "allReceivedBytesMatched": true,
+        "responses": [
+          {
+            "url": "http://127.0.0.1:35791/sdk.js",
+            "path": "/sdk.js",
+            "status": 200,
+            "bytes": 2116,
+            "sha256": "5be7b387fded2a7cb07d429a5a6ce7b8fbe06886ee7b089afc2eea0db334d3f6",
+            "fromCache": false,
+            "checkerSourceScan": false,
+            "mockSdk": true
+          },
+          {
+            "url": "http://127.0.0.1:35791/campaign-v67/assets/index-C001kXKc.css",
+            "path": "assets/index-C001kXKc.css",
+            "status": 200,
+            "bytes": 58602,
+            "sha256": "3c06e42c51dcb03884cb6b5f344f1c7f730276d1081f476a1dbade6db084335f",
+            "fromCache": false,
+            "checkerSourceScan": false,
+            "mockSdk": false
+          },
+          {
+            "url": "http://127.0.0.1:35791/campaign-v67/?edition=foundation&level=1&debug=1",
+            "path": "index.html",
+            "status": 200,
+            "bytes": 14280,
+            "sha256": "bb064cab8bdec60d827a213b4cf260768d73083ce634f388582f36a9fb95df1a",
+            "fromCache": false,
+            "checkerSourceScan": false,
+            "mockSdk": false
+          },
+          {
+            "url": "http://127.0.0.1:35791/campaign-v67/art/portal-laboratory-menu.webp",
+            "path": "art/portal-laboratory-menu.webp",
+            "status": 200,
+            "bytes": 158200,
+            "sha256": "f6a544096a6418a0f65ba8c609415d0393a1081d18537ecac5eb4c345b13b4be",
+            "fromCache": false,
+            "checkerSourceScan": false,
+            "mockSdk": false
+          },
+          {
+            "url": "http://127.0.0.1:35791/campaign-v67/assets/index-CPlrBrS0.js",
+            "path": "assets/index-CPlrBrS0.js",
+            "status": 200,
+            "bytes": 2348750,
+            "sha256": "030c9436c1b05eb2ccacddb468d95318c9d1f4c4caa0111d2b91d97bd4a5ec47",
+            "fromCache": false,
+            "checkerSourceScan": false,
+            "mockSdk": false
+          },
+          {
+            "url": "http://127.0.0.1:35791/campaign-v67/draco/draco_wasm_wrapper.js",
+            "path": "draco/draco_wasm_wrapper.js",
+            "status": 200,
+            "bytes": 58763,
+            "sha256": "e8049906ef3f8f75d3456c22a3f31bfdfe5b5b5bd09ccdec613b9e9a49d554d8",
+            "fromCache": false,
+            "checkerSourceScan": false,
+            "mockSdk": false
+          },
+          {
+            "url": "http://127.0.0.1:35791/campaign-v67/draco/draco_decoder.wasm",
+            "path": "draco/draco_decoder.wasm",
+            "status": 200,
+            "bytes": 285747,
+            "sha256": "c55a594e8ffd18426d36b27fea9618af3df5e173640a3e56d46f09d76f0574f2",
+            "fromCache": false,
+            "checkerSourceScan": false,
+            "mockSdk": false
+          },
+          {
+            "url": "http://127.0.0.1:35791/campaign-v67/models/runtime/manifest.json",
+            "path": "models/runtime/manifest.json",
+            "status": 200,
+            "bytes": 2421,
+            "sha256": "8806346ed3ac0fb096aa26321d5620c16a6a2a55f2523023fb21f6c4749fe2ed",
+            "fromCache": false,
+            "checkerSourceScan": false,
+            "mockSdk": false
+          },
+          {
+            "url": "http://127.0.0.1:35791/campaign-v67/models/runtime/model-11-portal-gun.glb?v=d8c76c41efbb",
+            "path": "models/runtime/model-11-portal-gun.glb",
+            "status": 200,
+            "bytes": 393116,
+            "sha256": "d8c76c41efbbf0a6d70e30ab5a7b70f49fd806e497f67ea06cb28f9f4edca1d7",
+            "fromCache": false,
+            "checkerSourceScan": false,
+            "mockSdk": false
+          },
+          {
+            "url": "http://127.0.0.1:35791/campaign-v67/models/runtime/model-01-player.glb?v=e5b09ff02813",
+            "path": "models/runtime/model-01-player.glb",
+            "status": 200,
+            "bytes": 549756,
+            "sha256": "e5b09ff0281377b679d6fdd505fa1ed89550bb662e94e7f593ed67ee50a66a91",
+            "fromCache": false,
+            "checkerSourceScan": false,
+            "mockSdk": false
+          },
+          {
+            "url": "http://127.0.0.1:35791/campaign-v67/models/runtime/model-02-cargo.glb?v=65763c87e7f1",
+            "path": "models/runtime/model-02-cargo.glb",
+            "status": 200,
+            "bytes": 510376,
+            "sha256": "65763c87e7f14cc807cffa8fc2adc364e8421dae819271a0c406a6b0d2c8c697",
+            "fromCache": false,
+            "checkerSourceScan": false,
+            "mockSdk": false
+          },
+          {
+            "url": "http://127.0.0.1:35791/campaign-v67/models/runtime/model-22-terminal.glb?v=9e2f4ff75899",
+            "path": "models/runtime/model-22-terminal.glb",
+            "status": 200,
+            "bytes": 377108,
+            "sha256": "9e2f4ff758996f67596d3935041f632bafdf7e84efd4869341920b64a5919c26",
+            "fromCache": false,
+            "checkerSourceScan": false,
+            "mockSdk": false
+          },
+          {
+            "url": "http://127.0.0.1:35791/campaign-v67/assets/LabV8Journey-Ds1PoulD.js",
+            "path": "assets/LabV8Journey-Ds1PoulD.js",
+            "status": 200,
+            "bytes": 19745,
+            "sha256": "eb6992225295cc589acf145de2b0bbf86a1582c43867beb225c4d048f3daee1b",
+            "fromCache": false,
+            "checkerSourceScan": false,
+            "mockSdk": false
+          },
+          {
+            "url": "http://127.0.0.1:35791/campaign-v67/assets/LabFoundationJourney-8J8bMJ-2.js",
+            "path": "assets/LabFoundationJourney-8J8bMJ-2.js",
+            "status": 200,
+            "bytes": 9213,
+            "sha256": "e51c7fe6d009e1e4e634c44cfe8cbaf814beca045b4df2b3aff5f092cb1c6e1a",
+            "fromCache": false,
+            "checkerSourceScan": false,
+            "mockSdk": false
+          },
+          {
+            "url": "http://127.0.0.1:35791/campaign-v67/index.html?_dc=1793008847277",
+            "path": "index.html",
+            "status": 200,
+            "bytes": 14280,
+            "sha256": "bb064cab8bdec60d827a213b4cf260768d73083ce634f388582f36a9fb95df1a",
+            "fromCache": false,
+            "checkerSourceScan": true,
+            "mockSdk": false
+          },
+          {
+            "url": "http://127.0.0.1:35791/campaign-v67/assets/index-C001kXKc.css?_dc=1793008847291",
+            "path": "assets/index-C001kXKc.css",
+            "status": 200,
+            "bytes": 58602,
+            "sha256": "3c06e42c51dcb03884cb6b5f344f1c7f730276d1081f476a1dbade6db084335f",
+            "fromCache": false,
+            "checkerSourceScan": true,
+            "mockSdk": false
+          },
+          {
+            "url": "http://127.0.0.1:35791/campaign-v67/assets/index-CPlrBrS0.js?_dc=1793008847291",
+            "path": "assets/index-CPlrBrS0.js",
+            "status": 200,
+            "bytes": 2348750,
+            "sha256": "030c9436c1b05eb2ccacddb468d95318c9d1f4c4caa0111d2b91d97bd4a5ec47",
+            "fromCache": false,
+            "checkerSourceScan": true,
+            "mockSdk": false
+          }
+        ],
+        "responseCount": 17,
+        "totalObservedBytes": 7209825
+      },
+      "errors": [],
+      "hintTransactions": {
+        "kind": "actual-rewarded-hint-ui-with-explicit-sdk-mock",
+        "level": 1,
+        "liveAds": false,
+        "pause": {
+          "control": "native Escape or ordinary pointer-lock-loss pause",
+          "before": {
+            "state": "playing",
+            "worldStep": 0,
+            "elapsed": 0,
+            "pauseQueued": false,
+            "pointerLocked": true
+          },
+          "afterPointerLockExit": {
+            "state": "paused",
+            "worldStep": 0,
+            "elapsed": 0,
+            "pauseQueued": false,
+            "pointerLocked": false
+          },
+          "afterKeyboard": null,
+          "clockTick": null,
+          "after": {
+            "state": "paused",
+            "worldStep": 0,
+            "elapsed": 0,
+            "pauseQueued": false,
+            "pointerLocked": false
+          }
+        },
+        "before": {
+          "levelIndex": 0,
+          "state": "paused",
+          "runtimeState": "paused",
+          "worldStep": 0,
+          "platformBusy": false,
+          "adLocks": 0,
+          "audioContextState": "suspended",
+          "audioAudible": false,
+          "audioBlocks": [
+            "menu"
+          ],
+          "savedHintCount": 0,
+          "runtimeHintCount": 0,
+          "hintsHidden": false,
+          "hintText": "Открой сначала намёк. Следующие подсказки раскрывают решение подробнее.",
+          "revealedParagraphs": 0,
+          "unlockDisabled": false,
+          "status": "Подсказка открывается после подтверждённого просмотра. Прочитанные подсказки остаются доступны.",
+          "rewardedOpenCount": 0,
+          "rewardedConfirmedCount": 0,
+          "duplicateConfirmedCount": 0,
+          "savedRawSha256": "bfb42dd67c4079a4e388c6858dd3d110ee7c567d2c60c83f665c9ccdbf42eb53"
+        },
+        "reread": {
+          "levelIndex": 0,
+          "state": "paused",
+          "runtimeState": "paused",
+          "worldStep": 0,
+          "externalPause": "false",
+          "externalBlocked": false,
+          "platformBusy": false,
+          "adLocks": 0,
+          "audioContextState": "suspended",
+          "audioAudible": false,
+          "audioBlocks": [
+            "menu"
+          ],
+          "savedHintCount": 1,
+          "runtimeHintCount": 1,
+          "hintsHidden": false,
+          "hintText": "1. Светлая плита над галереей находится на другом этаже.",
+          "revealedParagraphs": 1,
+          "unlockDisabled": false,
+          "status": "Подсказка открывается после подтверждённого просмотра. Прочитанные подсказки остаются доступны.",
+          "rewardedOpenCount": 3,
+          "rewardedConfirmedCount": 1,
+          "duplicateConfirmedCount": 1,
+          "savedRawSha256": "627c1ab98f450c679dc478021da263acdf7242ecc4a132140b752f09e9037a9d"
+        },
+        "resumed": {
+          "levelIndex": 0,
+          "state": "playing",
+          "runtimeState": "playing",
+          "worldStep": 0,
+          "externalPause": "false",
+          "externalBlocked": false,
+          "platformBusy": false,
+          "adLocks": 0,
+          "audioContextState": "running",
+          "audioAudible": true,
+          "audioBlocks": [],
+          "savedHintCount": 1,
+          "runtimeHintCount": 1,
+          "hintsHidden": false,
+          "hintText": "1. Светлая плита над галереей находится на другом этаже.",
+          "revealedParagraphs": 1,
+          "unlockDisabled": false,
+          "status": "Подсказка открывается после подтверждённого просмотра. Прочитанные подсказки остаются доступны.",
+          "rewardedOpenCount": 3,
+          "rewardedConfirmedCount": 1,
+          "duplicateConfirmedCount": 1,
+          "savedRawSha256": "627c1ab98f450c679dc478021da263acdf7242ecc4a132140b752f09e9037a9d"
+        },
+        "pass": true,
+        "transactions": [
+          {
+            "outcome": "close",
+            "before": {
+              "levelIndex": 0,
+              "state": "paused",
+              "runtimeState": "paused",
+              "worldStep": 0,
+              "platformBusy": false,
+              "adLocks": 0,
+              "audioContextState": "suspended",
+              "audioAudible": false,
+              "audioBlocks": [
+                "menu"
+              ],
+              "savedHintCount": 0,
+              "runtimeHintCount": 0,
+              "hintsHidden": false,
+              "hintText": "Открой сначала намёк. Следующие подсказки раскрывают решение подробнее.",
+              "revealedParagraphs": 0,
+              "unlockDisabled": false,
+              "status": "Подсказка открывается после подтверждённого просмотра. Прочитанные подсказки остаются доступны.",
+              "rewardedOpenCount": 0,
+              "rewardedConfirmedCount": 0,
+              "duplicateConfirmedCount": 0,
+              "savedRawSha256": "bfb42dd67c4079a4e388c6858dd3d110ee7c567d2c60c83f665c9ccdbf42eb53"
+            },
+            "during": {
+              "levelIndex": 0,
+              "state": "paused",
+              "runtimeState": "paused",
+              "worldStep": 0,
+              "externalPause": "true",
+              "externalBlocked": true,
+              "platformBusy": true,
+              "adLocks": 1,
+              "audioContextState": "suspended",
+              "audioAudible": false,
+              "audioBlocks": [
+                "ad",
+                "menu"
+              ],
+              "savedHintCount": 0,
+              "runtimeHintCount": 0,
+              "hintsHidden": false,
+              "hintText": "Открой сначала намёк. Следующие подсказки раскрывают решение подробнее.",
+              "revealedParagraphs": 0,
+              "unlockDisabled": true,
+              "status": "Подсказка открывается после подтверждённого просмотра. Прочитанные подсказки остаются доступны.",
+              "rewardedOpenCount": 1,
+              "rewardedConfirmedCount": 0,
+              "duplicateConfirmedCount": 0,
+              "savedRawSha256": "bfb42dd67c4079a4e388c6858dd3d110ee7c567d2c60c83f665c9ccdbf42eb53"
+            },
+            "after": {
+              "levelIndex": 0,
+              "state": "paused",
+              "runtimeState": "paused",
+              "worldStep": 0,
+              "externalPause": "false",
+              "externalBlocked": false,
+              "platformBusy": false,
+              "adLocks": 0,
+              "audioContextState": "suspended",
+              "audioAudible": false,
+              "audioBlocks": [
+                "menu"
+              ],
+              "savedHintCount": 0,
+              "runtimeHintCount": 0,
+              "hintsHidden": false,
+              "hintText": "Открой сначала намёк. Следующие подсказки раскрывают решение подробнее.",
+              "revealedParagraphs": 0,
+              "unlockDisabled": false,
+              "status": "Просмотр не подтверждён или реклама недоступна. Новая подсказка не открыта; игру можно продолжить.",
+              "rewardedOpenCount": 1,
+              "rewardedConfirmedCount": 0,
+              "duplicateConfirmedCount": 0,
+              "savedRawSha256": "bfb42dd67c4079a4e388c6858dd3d110ee7c567d2c60c83f665c9ccdbf42eb53"
+            }
+          },
+          {
+            "outcome": "error",
+            "before": {
+              "levelIndex": 0,
+              "state": "paused",
+              "runtimeState": "paused",
+              "worldStep": 0,
+              "externalPause": "false",
+              "externalBlocked": false,
+              "platformBusy": false,
+              "adLocks": 0,
+              "audioContextState": "suspended",
+              "audioAudible": false,
+              "audioBlocks": [
+                "menu"
+              ],
+              "savedHintCount": 0,
+              "runtimeHintCount": 0,
+              "hintsHidden": false,
+              "hintText": "Открой сначала намёк. Следующие подсказки раскрывают решение подробнее.",
+              "revealedParagraphs": 0,
+              "unlockDisabled": false,
+              "status": "Просмотр не подтверждён или реклама недоступна. Новая подсказка не открыта; игру можно продолжить.",
+              "rewardedOpenCount": 1,
+              "rewardedConfirmedCount": 0,
+              "duplicateConfirmedCount": 0,
+              "savedRawSha256": "bfb42dd67c4079a4e388c6858dd3d110ee7c567d2c60c83f665c9ccdbf42eb53"
+            },
+            "during": {
+              "levelIndex": 0,
+              "state": "paused",
+              "runtimeState": "paused",
+              "worldStep": 0,
+              "externalPause": "true",
+              "externalBlocked": true,
+              "platformBusy": true,
+              "adLocks": 1,
+              "audioContextState": "suspended",
+              "audioAudible": false,
+              "audioBlocks": [
+                "ad",
+                "menu"
+              ],
+              "savedHintCount": 0,
+              "runtimeHintCount": 0,
+              "hintsHidden": false,
+              "hintText": "Открой сначала намёк. Следующие подсказки раскрывают решение подробнее.",
+              "revealedParagraphs": 0,
+              "unlockDisabled": true,
+              "status": "Подсказка открывается после подтверждённого просмотра. Прочитанные подсказки остаются доступны.",
+              "rewardedOpenCount": 2,
+              "rewardedConfirmedCount": 0,
+              "duplicateConfirmedCount": 0,
+              "savedRawSha256": "bfb42dd67c4079a4e388c6858dd3d110ee7c567d2c60c83f665c9ccdbf42eb53"
+            },
+            "after": {
+              "levelIndex": 0,
+              "state": "paused",
+              "runtimeState": "paused",
+              "worldStep": 0,
+              "externalPause": "false",
+              "externalBlocked": false,
+              "platformBusy": false,
+              "adLocks": 0,
+              "audioContextState": "suspended",
+              "audioAudible": false,
+              "audioBlocks": [
+                "menu"
+              ],
+              "savedHintCount": 0,
+              "runtimeHintCount": 0,
+              "hintsHidden": false,
+              "hintText": "Открой сначала намёк. Следующие подсказки раскрывают решение подробнее.",
+              "revealedParagraphs": 0,
+              "unlockDisabled": false,
+              "status": "Просмотр не подтверждён или реклама недоступна. Новая подсказка не открыта; игру можно продолжить.",
+              "rewardedOpenCount": 2,
+              "rewardedConfirmedCount": 0,
+              "duplicateConfirmedCount": 0,
+              "savedRawSha256": "bfb42dd67c4079a4e388c6858dd3d110ee7c567d2c60c83f665c9ccdbf42eb53"
+            }
+          },
+          {
+            "outcome": "reward",
+            "before": {
+              "levelIndex": 0,
+              "state": "paused",
+              "runtimeState": "paused",
+              "worldStep": 0,
+              "externalPause": "false",
+              "externalBlocked": false,
+              "platformBusy": false,
+              "adLocks": 0,
+              "audioContextState": "suspended",
+              "audioAudible": false,
+              "audioBlocks": [
+                "menu"
+              ],
+              "savedHintCount": 0,
+              "runtimeHintCount": 0,
+              "hintsHidden": false,
+              "hintText": "Открой сначала намёк. Следующие подсказки раскрывают решение подробнее.",
+              "revealedParagraphs": 0,
+              "unlockDisabled": false,
+              "status": "Просмотр не подтверждён или реклама недоступна. Новая подсказка не открыта; игру можно продолжить.",
+              "rewardedOpenCount": 2,
+              "rewardedConfirmedCount": 0,
+              "duplicateConfirmedCount": 0,
+              "savedRawSha256": "bfb42dd67c4079a4e388c6858dd3d110ee7c567d2c60c83f665c9ccdbf42eb53"
+            },
+            "during": {
+              "levelIndex": 0,
+              "state": "paused",
+              "runtimeState": "paused",
+              "worldStep": 0,
+              "externalPause": "true",
+              "externalBlocked": true,
+              "platformBusy": true,
+              "adLocks": 1,
+              "audioContextState": "suspended",
+              "audioAudible": false,
+              "audioBlocks": [
+                "ad",
+                "menu"
+              ],
+              "savedHintCount": 0,
+              "runtimeHintCount": 0,
+              "hintsHidden": false,
+              "hintText": "Открой сначала намёк. Следующие подсказки раскрывают решение подробнее.",
+              "revealedParagraphs": 0,
+              "unlockDisabled": true,
+              "status": "Подсказка открывается после подтверждённого просмотра. Прочитанные подсказки остаются доступны.",
+              "rewardedOpenCount": 3,
+              "rewardedConfirmedCount": 0,
+              "duplicateConfirmedCount": 0,
+              "savedRawSha256": "bfb42dd67c4079a4e388c6858dd3d110ee7c567d2c60c83f665c9ccdbf42eb53"
+            },
+            "after": {
+              "levelIndex": 0,
+              "state": "paused",
+              "runtimeState": "paused",
+              "worldStep": 0,
+              "externalPause": "false",
+              "externalBlocked": false,
+              "platformBusy": false,
+              "adLocks": 0,
+              "audioContextState": "suspended",
+              "audioAudible": false,
+              "audioBlocks": [
+                "menu"
+              ],
+              "savedHintCount": 1,
+              "runtimeHintCount": 1,
+              "hintsHidden": false,
+              "hintText": "1. Светлая плита над галереей находится на другом этаже.",
+              "revealedParagraphs": 1,
+              "unlockDisabled": false,
+              "status": "Подсказка открывается после подтверждённого просмотра. Прочитанные подсказки остаются доступны.",
+              "rewardedOpenCount": 3,
+              "rewardedConfirmedCount": 1,
+              "duplicateConfirmedCount": 1,
+              "savedRawSha256": "627c1ab98f450c679dc478021da263acdf7242ecc4a132140b752f09e9037a9d"
+            }
+          }
+        ]
+      },
+      "checker": {
+        "summary": {
+          "checked": true,
+          "checks": 82,
+          "hardFailures": 0,
+          "warnings": 3,
+          "notVerified": 1,
+          "originalScorePercent": 96,
+          "originalCoveragePercent": 99,
+          "context": "mock-yandex-platform",
+          "localDiagnostic": true,
+          "liveSdkAccepted": false,
+          "moderationAccepted": false
+        },
+        "identity": {
+          "sourceCommit": "eef9a1215dfa97698cf73fa72ec8e041aa600ee4",
+          "sourceTree": "b7840fe87a64980d7b23a8ac6baac3078a502ea9",
+          "sourceInputsSha256": "4bdb587cdd2c4fd2d266b08610cbf8e12cdd347aa59e753085a8c5c30b80609e",
+          "localDiagnostic": true,
+          "runId": null,
+          "runAttempt": null,
+          "level": 1,
+          "displayNumber": 1,
+          "reviewPackageFilesSha256": "f77f69811ecd8466c5be39e3b381ce2db956b2ec844bf3d90909f84ef00fbc85",
+          "consumerPackageFilesSha256": "f7a70b2be43624d4d41a9e020482e699bc1eff03a3fb1ecfcbdac1e089661c68",
+          "controllerFilesSha256": "8458091a4954619be0b6996ef133908fa728892e7b7ee362ea118e5bf17ed8fd"
+        },
+        "sourceScan": {
+          "bytes": 2421717,
+          "sha256": "4d6a5f7d7b6c1351dd4a2b637ddf3d0d4d469b9e8ea559d1dae7b635f249b1ff"
+        },
+        "timing": {
+          "domReady": 441.5,
+          "firstPaint": 445.0999999977648,
+          "fontsLoaded": 464.3999999985099,
+          "sdkInit": 247.69999999925494,
+          "gameReady": 13868.199999999255,
+          "gameplayStart": 15408.5,
+          "langDetected": 249.5,
+          "firstAdShown": 0,
+          "firstUserClick": 14320.29999999702,
+          "firstInterstitial": 0,
+          "log": [
+            {
+              "event": "sdkInit",
+              "time": 247.69999999925494,
+              "delta": 247.69999999925494
+            },
+            {
+              "event": "sdkPatched",
+              "time": 248.5,
+              "delta": 248.5
+            },
+            {
+              "event": "langDetected",
+              "time": 249.5,
+              "delta": 249.5
+            },
+            {
+              "event": "domReady",
+              "time": 441.5,
+              "delta": 0
+            },
+            {
+              "event": "firstPaint",
+              "time": 445.0999999977648,
+              "delta": 3.599999997764826
+            },
+            {
+              "event": "fontsLoaded",
+              "time": 464.3999999985099,
+              "delta": 22.899999998509884
+            },
+            {
+              "event": "gameReady",
+              "time": 13868.199999999255,
+              "delta": 13426.699999999255
+            },
+            {
+              "event": "gameplayStart",
+              "time": 14311.89999999851,
+              "delta": 13870.39999999851
+            },
+            {
+              "event": "firstUserClick",
+              "time": 14320.29999999702,
+              "delta": 13878.79999999702
+            },
+            {
+              "event": "gameplayStart",
+              "time": 15408.5,
+              "delta": 14967
+            }
+          ],
+          "lastUserGesture": 15407.099999997765,
+          "adCalls": [
+            {
+              "type": "rewarded",
+              "time": 15067.89999999851,
+              "gestureDelta": 1
+            },
+            {
+              "type": "rewarded",
+              "time": 15170.89999999851,
+              "gestureDelta": 0.3999999985098839
+            },
+            {
+              "type": "rewarded",
+              "time": 15251.89999999851,
+              "gestureDelta": 0.19999999925494194
+            }
+          ],
+          "_patched": true,
+          "sdkPatched": 248.5
+        },
+        "runtime": {
+          "calls": [
+            "YaGames global found"
+          ],
+          "errors": [],
+          "warnings": [
+            "%c[DEBUGCHECK] 1 TIMING ISSUES DETECTED: color:#ff4040;font-weight:bold;font-size:14px",
+            "[DEBUGCHECK] ⚠️ LoadingAPI.ready() NOT CALLED after 8 seconds! (Yandex 1.19.2 — red after 90s = not implemented)",
+            "[DEBUGCHECK] Open panel: Ctrl+Shift+2 (×3) for full report"
+          ],
+          "_i18nRead": true,
+          "_i18nObservation": "early",
+          "_detectedLang": "ru"
+        },
+        "nonPassRows": [
+          {
+            "category": "Common Rejections",
+            "name": "GameReady timing (п.1.19)",
+            "metadata": "REQ 1.19",
+            "status": "warn",
+            "description": "LoadingAPI.ready() called AFTER full load, not in SDK init",
+            "detail": "LoadingAPI.ready() may be called too early — ensure it runs AFTER game is playable",
+            "text": "⚠\nGameReady timing (п.1.19) REQ 1.19\nLoadingAPI.ready() called AFTER full load, not in SDK init\nLoadingAPI.ready() may be called too early — ensure it runs AFTER game is playable",
+            "renderedDOMName": "GameReady timing (п.1.19)",
+            "copiedName": "GameReady timing (п.1.19)",
+            "copiedLine": "  [WARN][REQ 1.19] GameReady timing (п.1.19) — LoadingAPI.ready() may be called too early — ensure it runs AFTER game is playable"
+          },
+          {
+            "category": "Quality",
+            "name": "No WebGL notice (п.1.6.1.7)",
+            "metadata": "REQ 1.6.1.7",
+            "status": "warn",
+            "description": "No \"WebGL not supported/enable WebGL\" prompt shown to user",
+            "detail": "Detected risk — review this item",
+            "text": "⚠\nNo WebGL notice (п.1.6.1.7) REQ 1.6.1.7\nNo \"WebGL not supported/enable WebGL\" prompt shown to user\nDetected risk — review this item",
+            "renderedDOMName": "No WebGL notice (п.1.6.1.7)",
+            "copiedName": "No WebGL notice (п.1.6.1.7)",
+            "copiedLine": "  [WARN][REQ 1.6.1.7] No WebGL notice (п.1.6.1.7) — Detected risk — review this item"
+          },
+          {
+            "category": "Quality",
+            "name": "No profanity in UI text (п.8.2.4)",
+            "metadata": "REQ 8.2.4",
+            "status": "warn",
+            "description": "Visible text must not contain profanity in any language.",
+            "detail": "Possible profanity detected in the source/UI text (п.8.2.4 — no obscene language in any language). Review and replace; if it is a false match (clean homograph), ignore.",
+            "text": "⚠\nNo profanity in UI text (п.8.2.4) REQ 8.2.4\nVisible text must not contain profanity in any language.\nPossible profanity detected in the source/UI text (п.8.2.4 — no obscene language in any language). Review and replace; if it is a false match (clean homograph), ignore.",
+            "renderedDOMName": "No profanity in UI text (п.8.2.4)",
+            "copiedName": "No profanity in UI text (п.8.2.4)",
+            "copiedLine": "  [WARN][REQ 8.2.4] No profanity in UI text (п.8.2.4) — Possible profanity detected in the source/UI text (п.8.2.4 — no obscene language in any language). Review and replace; if it is a false match (clean homograph), ignore."
+          },
+          {
+            "category": "Language Check (Runtime)",
+            "name": "Canvas text reminder",
+            "metadata": "HEURISTIC",
+            "status": "not_verified",
+            "description": "Canvas drawText not scannable by DOM",
+            "detail": "NOT VERIFIED — Canvas text is not visible to DOM scanning; verify rendered text for declared languages",
+            "text": "?\nCanvas text reminder HEURISTIC\nCanvas drawText not scannable by DOM\nNOT VERIFIED — Canvas text is not visible to DOM scanning; verify rendered text for declared languages",
+            "renderedDOMName": "Canvas text reminder",
+            "copiedName": "Canvas text reminder",
+            "copiedLine": "  [NOT VERIFIED][HEURISTIC] Canvas text reminder — Canvas text is not visible to DOM scanning; verify rendered text for declared languages"
+          }
+        ],
+        "originalReport": "YG DEBUG CHECKER REPORT\nDate: 10/26/2026, 3:00:47 PM\nURL: http://127.0.0.1:35791/campaign-v67/?edition=foundation&level=1&debug=1\nScanned source: 2305 KB\n================================\n\n📦 SDK Integration\n  [PASS][REQ 1.1] SDK script tag\n  [PASS][REQ 1.19.1] YaGames.init()\n\n🔄 Lifecycle API\n  [PASS][REQ 1.19.2] LoadingAPI.ready()\n\n🔊 Sound Management\n  [PASS][HEURISTIC] visibilitychange\n  [PASS][HEURISTIC] AudioContext suspend/resume\n\n📺 Ads — Interstitial\n  [PASS][HEURISTIC] showFullscreenAdv\n  [PASS][HEURISTIC] onOpen callback\n  [PASS][HEURISTIC] onClose callback\n  [PASS][HEURISTIC] onError callback\n\n🎬 Ads — Rewarded\n  [PASS][HEURISTIC] showRewardedVideo\n  [PASS][HEURISTIC] onRewarded callback\n  [PASS][HEURISTIC] onOpen callback\n  [PASS][HEURISTIC] onClose callback\n\n💾 Cloud Saves — N/A (not used)\n\n💰 In-App Purchases — N/A (not used)\n\n🌐 Localization (I18N)\n  [PASS][REQ 2.14] environment.i18n.lang — Runtime confirmed: environment.i18n.lang read → ru at +-192ms\n  [PASS][HEURISTIC] Yandex lang fallback — Resolver executed: be→ru, kk→ru, uk→ru, uz→ru\n\n📱 UX & Mobile\n  [PASS][REQ 1.6.2.7] Context menu disabled\n  [PASS][REQ 1.6.2.7] Text selection disabled\n  [PASS][HEURISTIC] touch-action configured\n  [PASS][HEURISTIC] Viewport meta tag\n  [PASS][REQ 1.10.2] Overflow hidden on body/html\n  [PASS][REQ 1.10.2] overscroll-behavior\n  [PASS][HEURISTIC] -webkit-touch-callout: none\n\n🚨 Common Rejections\n  [PASS][REQ 1.10.2] Scroll prevention (п.1.10.2)\n  [PASS][REQ 1.10.2] Swipe-to-refresh blocked (iOS/Android)\n  [WARN][REQ 1.19] GameReady timing (п.1.19) — LoadingAPI.ready() may be called too early — ensure it runs AFTER game is playable\n  [PASS][REQ 2.14] I18N auto-detection (п.2.14)\n  [PASS][REQ 4.7] Sound paused during ads (п.4.7)\n  [PASS][REQ 4.7] Game paused during ads (п.4.7)\n  [PASS][REQ 1.6.2.7] Selection/callout in game area (п.1.6.2.7)\n\n⚠️ Dangerous Patterns\n  [PASS][HEURISTIC] No alert()\n  [PASS][HEURISTIC] No confirm()\n  [PASS][HEURISTIC] No prompt()\n  [PASS][HEURISTIC] No document.write()\n  [PASS][HEURISTIC] No eval()\n\n📦 Archive\n  [PASS][REQ 1.7] No Yandex S3 URLs\n\n⭐ Quality\n  [WARN][REQ 1.6.1.7] No WebGL notice (п.1.6.1.7) — Detected risk — review this item\n  [PASS][REQ 1.6.1.6] Video has no system controls (п.1.6.1.6/1.6.2.5)\n  [PASS][REQ 1.6.1.6] Music via Web Audio, not <audio>/new Audio (п.1.6.1.6/1.6.2.5)\n  [PASS][REQ 2.14] SDK language before URL fallback\n  [PASS][REQ 2.14] Language detected before the game is interactive (п.2.14/1.19)\n  [PASS][REQ 1.6.1.2] Keyboard auto-shows on input (п.1.6.1.2)\n  [PASS][REQ 1.18] No URL-based gating (п.1.18)\n  [PASS][REQ 1.6.1.1] Fullscreen on mobile (п.1.6.1.1)\n  [PASS][REQ 1.6.2.2] Desktop field aspect ≤ 2:1 (п.1.6.2.2)\n  [PASS][REQ 1.15] Нет debug-инструментов в UI (п.1.15)\n  [PASS][REQ 1.19] Ввод закрыт до ready() (REQ-1.19)\n  [PASS][HEURISTIC] Keyboard via e.code, not e.key (ru-раскладка)\n  [PASS][REQ 1.6.2.6] No OS-shortcut key handlers (п.1.6.2.6)\n  [PASS][HEURISTIC] No flat-black letterbox void (десктоп, 1.6.2.1)\n  [PASS][REQ 1.15] Game looks finished, not WIP (п.1.15)\n  [PASS][REQ 1.16] No imitation ad blocks (п.1.16)\n  [PASS][REQ 3.9] No YouTube/external video player (п.3.9)\n  [PASS][REQ 4.3] Ad orientation matches game (п.4.3)\n  [PASS][REC] Sound toggle present (реком. 6.2)\n  [PASS][REC] Pause available (реком. 6.3)\n  [PASS][REC] Title without the word \"игра/game\" (реком. 6.5)\n  [PASS][REC] No useless exit button (реком. 6.7)\n  [WARN][REQ 8.2.4] No profanity in UI text (п.8.2.4) — Possible profanity detected in the source/UI text (п.8.2.4 — no obscene language in any language). Review and replace; if it is a false match (clean homograph), ignore.\n  [PASS][REQ 1.6.1.3] Canvas resizes on orientation change (п.1.6.1.3/1.10.1)\n  [PASS][HEURISTIC] ready() not tuned to pass the checker (integrity)\n  [PASS][REQ 4.2] Progress saved before ad (п.4.2)\n  [PASS][REQ 4.1] No external ad networks\n\n🏆 Leaderboard — N/A (not used)\n\n⏱️ Timing Verification\n  [PASS][REQ 1.19] GameReady after fonts\n  [PASS][REQ 1.19] GameReady after first paint\n  [PASS][REQ 1.19.2] GameReady not too late\n  [PASS][REQ 2.14] UI not interactive before SDK\n  [PASS][REQ 2.14] Language detected before UI\n\n📐 Visual Overflow (п.1.10.1)\n  [PASS][REQ 1.10.1] No elements overflow viewport\n  [PASS][REQ 1.6.2.1] Canvas fills screen\n  [PASS][REQ 1.8] Touch targets >= 44px\n\n🌍 Language Check (Runtime)\n  [PASS][REQ 2.14] SDK language read before Game Ready — Runtime order confirmed: lang +-192ms → ready +13427ms\n  [PASS][REQ 8.2.3] No untranslated Cyrillic on non-RU\n  [NOT VERIFIED][HEURISTIC] Canvas text reminder — Canvas text is not visible to DOM scanning; verify rendered text for declared languages\n\n📜 Scroll/Refresh (Runtime)\n  [PASS][REQ 1.10.2] No body scroll\n  [PASS][HEURISTIC] Document not scrollable\n  [PASS][HEURISTIC] touch-action blocks iOS refresh\n  [PASS][HEURISTIC] contextmenu actually blocked\n\n📺 Ad Context (Runtime)\n  [PASS][REQ 4.4] Interstitial placement context (REQ-4.4)\n  [PASS][REQ 4.5] All rewarded videos follow user gesture (REQ-4.5)\n\n🎮 Runtime Detection\n  [PASS][HEURISTIC] SDK loaded\n  [PASS][HEURISTIC] SDK initialized\n  [PASS][REC 1.14] No console errors\n\n================================\nTOTAL: 78 pass, 0 fail, 3 warn, 1 not verified (96% score; 99% automated coverage)\nNO HARD FAILURES DETECTED — WARN = detected risk; NOT VERIFIED = insufficient automatic evidence\n",
+        "rawReport": {
+          "path": "platform/room-01/room-01/checker/yandex-debug-checker-report.json",
+          "bytes": 68301,
+          "sha256": "2614b583905a9286bff78620279a163e550b89461ea3581a8538b57d43e1bda7"
+        },
+        "originalText": {
+          "path": "platform/room-01/room-01/checker/yandex-debug-checker-report.txt",
+          "bytes": 5585,
+          "sha256": "a73312c5bcbce3f36c69dd298d9af538cde64cc3b868d035c6dc262a674a0aa4"
+        }
+      },
+      "rawRouteReport": {
+        "path": "platform/room-01/platform-route-report.json",
+        "bytes": 101099,
+        "sha256": "d61c45031048150eee2136e0b9daac566067cccdb02368f1b2420b856e90584f"
+      },
+      "rawArtifacts": {
+        "files": [
+          {
+            "path": "room-01/canvas-text.json",
+            "bytes": 1250,
+            "sha256": "dd8ce05872cab1c1f156f71dcc9a0c6ce14e50242233f6b3c8f628ede64f24c6"
+          },
+          {
+            "path": "room-01/checker/yandex-debug-checker-report.json",
+            "bytes": 68301,
+            "sha256": "2614b583905a9286bff78620279a163e550b89461ea3581a8538b57d43e1bda7"
+          },
+          {
+            "path": "room-01/checker/yandex-debug-checker-report.txt",
+            "bytes": 5585,
+            "sha256": "a73312c5bcbce3f36c69dd298d9af538cde64cc3b868d035c6dc262a674a0aa4"
+          },
+          {
+            "path": "room-01/finished-canvas.jpg",
+            "bytes": 26850,
+            "sha256": "cc2279bca5141b75cfff13b8ce59ead50250385c9ac0d957c8bc9dc6fe3ab126"
+          },
+          {
+            "path": "room-01/route-report.json",
+            "bytes": 58487,
+            "sha256": "aef74341d5efb5d7d4cc108212f2474c414122602cb37707fd573cd55580b6ee"
+          }
+        ],
+        "filesSha256": "dd49662cbe37df26c09d330626625193933254d93a08eba8deeb0706a1ba5faa",
+        "fileCount": 5
+      }
+    }
+  ]
+}

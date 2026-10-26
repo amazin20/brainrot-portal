@@ -1,0 +1,71 @@
+vite v7.3.6 building client environment for yandex-review...
+transforming...
+✓ 309 modules transformed.
+rendering chunks...
+computing gzip size...
+dist-yandex-review/index.html                                               14.28 kB │ gzip:   4.55 kB
+dist-yandex-review/assets/index-C001kXKc.css                                58.60 kB │ gzip:  13.53 kB
+dist-yandex-review/assets/LabIntroductoryAlternates-DcdsCClA.js              1.34 kB │ gzip:   0.69 kB
+dist-yandex-review/assets/LabPortalFloorJourney-BwSB0m7O.js                  1.46 kB │ gzip:   0.81 kB
+dist-yandex-review/assets/LabExpansionAlternateJourney47-3qgixs4y.js         1.86 kB │ gzip:   0.92 kB
+dist-yandex-review/assets/LabPuzzleProgression44Journey-BFty3hF5.js          1.88 kB │ gzip:   0.95 kB
+dist-yandex-review/assets/LabExpansionAlternateJourney49-IFThMczX.js         1.99 kB │ gzip:   0.96 kB
+dist-yandex-review/assets/LabEchoHorizonJourney-BmvU38tb.js                  2.22 kB │ gzip:   1.05 kB
+dist-yandex-review/assets/LabExpansionAlternateJourney48-BPfx-czE.js         2.28 kB │ gzip:   1.03 kB
+dist-yandex-review/assets/LabPortalEdgeJourney-DdyAQMcf.js                   2.29 kB │ gzip:   1.17 kB
+dist-yandex-review/assets/LabRoom16Journey-DcT0PHn1.js                       2.53 kB │ gzip:   1.16 kB
+dist-yandex-review/assets/LabRoom29Journey-FXLiWbZf.js                       2.59 kB │ gzip:   1.09 kB
+dist-yandex-review/assets/LabSiphonObservatoryJourney-BknKhBMm.js            2.65 kB │ gzip:   1.21 kB
+dist-yandex-review/assets/LabRoom23Journey-DtTrEKgw.js                       2.69 kB │ gzip:   1.18 kB
+dist-yandex-review/assets/LabRoom22Journey-OAOTNpQL.js                       2.89 kB │ gzip:   1.21 kB
+dist-yandex-review/assets/LabExpansionAlternateJourneyB-DvMACCki.js          2.92 kB │ gzip:   1.27 kB
+dist-yandex-review/assets/LabAnimationJourney-Rmguw2Jn.js                    3.04 kB │ gzip:   1.50 kB
+dist-yandex-review/assets/LabPuzzlePilot43Journey-8R9RlB9q.js                3.07 kB │ gzip:   1.32 kB
+dist-yandex-review/assets/LabRoom19Journey-BVk2pOJ3.js                       3.09 kB │ gzip:   1.46 kB
+dist-yandex-review/assets/LabRoom28Journey-BK5o10zU.js                       3.24 kB │ gzip:   1.35 kB
+dist-yandex-review/assets/LabRoom17Journey-C2EE7523.js                       3.26 kB │ gzip:   1.41 kB
+dist-yandex-review/assets/LabRoom27Journey-CtMoXjWq.js                       3.35 kB │ gzip:   1.31 kB
+dist-yandex-review/assets/LabPuzzleProgression51Journey-ByePSC9d.js          3.37 kB │ gzip:   1.47 kB
+dist-yandex-review/assets/LabPuzzleProgression46Journey-BYVuH_Qe.js          3.57 kB │ gzip:   1.54 kB
+dist-yandex-review/assets/LabRoom24Journey-rpSFu-RX.js                       3.62 kB │ gzip:   1.41 kB
+dist-yandex-review/assets/LabCreativeRoom18Journey-CLn6V08F.js               3.64 kB │ gzip:   1.63 kB
+dist-yandex-review/assets/LabRoom30Journey-zAsFaYdh.js                       3.76 kB │ gzip:   1.53 kB
+dist-yandex-review/assets/LabRoom23PhysicalJourney-GpJPO4gu.js               4.14 kB │ gzip:   1.66 kB
+dist-yandex-review/assets/LabRoom26Journey-D5Lhf6Yz.js                       4.19 kB │ gzip:   1.59 kB
+dist-yandex-review/assets/LabRoom15Journey-vWv8hgXu.js                       4.60 kB │ gzip:   1.91 kB
+dist-yandex-review/assets/LabRoom25Journey-COqi9k-Z.js                       4.63 kB │ gzip:   1.73 kB
+dist-yandex-review/assets/LabPuzzleProgression49Journey-DxU5wj1E.js          4.64 kB │ gzip:   1.73 kB
+dist-yandex-review/assets/LabCreativeRoom20Journey-BMPcvQCI.js               4.66 kB │ gzip:   1.96 kB
+dist-yandex-review/assets/LabRoom14Journey-9oTSbL5X.js                       4.73 kB │ gzip:   1.52 kB
+dist-yandex-review/assets/LabRoom20Journey-Dnjdo837.js                       5.01 kB │ gzip:   1.76 kB
+dist-yandex-review/assets/LabPuzzleProgression45Journey-C3TQlgP5.js          5.41 kB │ gzip:   2.00 kB
+dist-yandex-review/assets/LabExpansionJourneyB-CAThUbu1.js                   5.55 kB │ gzip:   1.95 kB
+dist-yandex-review/assets/LabCreativeRoom17Journey-DIL4VXy9.js               5.83 kB │ gzip:   2.28 kB
+dist-yandex-review/assets/LabRoom18Journey-XS3Qf_-y.js                       6.07 kB │ gzip:   2.32 kB
+dist-yandex-review/assets/LabPuzzleProgression50Journey-35GAGfNm.js          6.10 kB │ gzip:   2.33 kB
+dist-yandex-review/assets/LabPuzzleProgression47Journey-Oyljuhvu.js          6.13 kB │ gzip:   2.70 kB
+dist-yandex-review/assets/LabRoom13Journey-4kJUUTmk.js                       6.26 kB │ gzip:   2.23 kB
+dist-yandex-review/assets/LabOpenJourney-e_9lYonm.js                         6.35 kB │ gzip:   2.80 kB
+dist-yandex-review/assets/LabPuzzleProgression48Journey-V3TUGWXX.js          6.92 kB │ gzip:   2.53 kB
+dist-yandex-review/assets/LabWorkshopJourney-BtwRB-tt.js                     7.25 kB │ gzip:   2.99 kB
+dist-yandex-review/assets/LabExpansionJourneyA-CPUQU1BU.js                   7.36 kB │ gzip:   2.90 kB
+dist-yandex-review/assets/LabResearchJourney-D8XDdYNX.js                     7.89 kB │ gzip:   2.78 kB
+dist-yandex-review/assets/LabFoundationJourney-8J8bMJ-2.js                   9.21 kB │ gzip:   3.19 kB
+dist-yandex-review/assets/LabExtendedJourney-Cy-9qfX8.js                     9.31 kB │ gzip:   3.44 kB
+dist-yandex-review/assets/LabPostJourneyB-D3D5CN_t.js                       10.78 kB │ gzip:   4.21 kB
+dist-yandex-review/assets/LabPostJourneyA-CsEdXwpT.js                       12.13 kB │ gzip:   4.42 kB
+dist-yandex-review/assets/LabFoundation20PhysicalJourney-CbP1Dl4t.js        12.26 kB │ gzip:   4.72 kB
+dist-yandex-review/assets/LabPuzzleProgression50BeamJourney-DcxtR47q.js     12.59 kB │ gzip:   4.98 kB
+dist-yandex-review/assets/LabV8Journey-Ds1PoulD.js                          19.75 kB │ gzip:   5.51 kB
+dist-yandex-review/assets/LabTower41RatchetCellJourney-BM3qAI1z.js          24.19 kB │ gzip:   8.69 kB
+dist-yandex-review/assets/LabSingularityJourney-KwujDJon.js                 28.05 kB │ gzip:   8.74 kB
+dist-yandex-review/assets/LabTowerJourney-DcY_qPi0.js                       31.41 kB │ gzip:  10.36 kB
+dist-yandex-review/assets/index-CPlrBrS0.js                              2,348.75 kB │ gzip: 756.25 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+Campaign package: 14 models, 3.29 MB models; 1 referenced public images/audio; 7.29 MB complete files before ZIP. Startup transfer is measured separately.
+✓ built in 6.71s
+Stamped dist-yandex-review: v67-visual-completion / eef9a1215dfa97698cf73fa72ec8e041aa600ee4

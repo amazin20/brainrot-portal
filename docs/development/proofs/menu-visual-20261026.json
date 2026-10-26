@@ -1,0 +1,157 @@
+{
+  "schemaVersion": 2,
+  "kind": "campaign-menu-visual-review-summary",
+  "pass": true,
+  "counts": {
+    "atlasTitleChecks": 255,
+    "completeCardChecks": 102,
+    "supplementalCardChecks": 6,
+    "totalCardChecks": 108,
+    "trustedNativeClicks": 156,
+    "nativeScreenshots": 14,
+    "selectedImages": 4,
+    "capturedSourceFiles": 433,
+    "overflows": 0,
+    "pageErrors": 0,
+    "sourceDriftFiles": 0
+  },
+  "viewports": [
+    {
+      "width": 1280,
+      "height": 720
+    },
+    {
+      "width": 390,
+      "height": 844
+    },
+    {
+      "width": 320,
+      "height": 568
+    },
+    {
+      "width": 820,
+      "height": 900
+    },
+    {
+      "width": 1100,
+      "height": 720
+    }
+  ],
+  "completeCardViewports": [
+    {
+      "width": 1280,
+      "height": 720
+    },
+    {
+      "width": 390,
+      "height": 844
+    }
+  ],
+  "scope": "Development menu copy, real native click targeting, displayed numbering, canonical accessible titles and layout. Does not establish production unlocks, room completion, human discovery, live platform operation or physical-device performance.",
+  "runtime": {
+    "node": "v24.22.1",
+    "chromium": "Chromium 153.0.8010.0",
+    "puppeteer": "25.16.0",
+    "chromiumPath": "/workspace/scratch/cefcdffdf3ad/browser-temp/chromium",
+    "kind": "runtime executable/package metadata; not hardware acceptance"
+  },
+  "sourceBinding": {
+    "observedHeadStart": "bbd86f4492a468fb8a6f5615aa6b09bb66028403",
+    "observedHeadEnd": "bbd86f4492a468fb8a6f5615aa6b09bb66028403",
+    "actualCodeCommit": "eef9a1215dfa97698cf73fa72ec8e041aa600ee4",
+    "all433CapturedFilesExactlyMatchGitCommit": true,
+    "capturedFileSetExactlyMatchesCommitSrcPublicAndConfigs": true,
+    "sourceManifestSha256": "704a11b81d91c16a5e7b8b81e2865c292133d55d916752b83b2b1b8a0c9fe7ce",
+    "sourceManifestSerialization": "JSON object of path to SHA-256, sorted keys, UTF-8, separators comma/colon without whitespace",
+    "controllerPath": "scripts/qa-campaign-menu-visual.mjs",
+    "controllerSha256": "d492aaf1b68b9f0222372ac8f2a2e2378aacdbb821c2599484240f3ee6fa2d1d",
+    "controllerExactlyMatchesGitCommit": true,
+    "controllerUnchangedDuringRun": true,
+    "capturedSourceBytesUnchangedDuringRun": true,
+    "note": "The recorded HEAD remained bbd86f4 during observation. Frozen working bytes, including both heading fixes and the revised QA controller, match eef9a1215dfa97698cf73fa72ec8e041aa600ee4 exactly via git archive/git show. The raw observed HEAD fields remain unchanged in the full archive."
+  },
+  "fullArchive": {
+    "file": "menu-visual-full-20261026.json.gz",
+    "compression": "gzip, level 9, mtime 0, empty embedded filename",
+    "compressedBytes": 184778,
+    "compressedSha256": "a9f47bff7ca31b3fb7a489748e27fb8d8306a67cea218dfddbd2810dca0b516c",
+    "uncompressedBytes": 2059994,
+    "uncompressedSha256": "8e6abadc0faad2ee2f805b22a01206668bb098ccc97338533d927c5c69f450c3",
+    "originalFilename": "menu-visual-20261026.json",
+    "contains": "Exact original full JSON bytes, including all 255 title rows, 108 card rows, click events, full source snapshots, controller provenance, failed-attempt report, historical notes and selected-image metadata.",
+    "roundTripExact": true,
+    "deterministicRecompressionVerified": true
+  },
+  "history": [
+    {
+      "kind": "pre-cleanup-diagnostics",
+      "artifactsLostToExecutorCleanup": true,
+      "claims": [
+        "Initial wrong tab selector produced zero cards; corrected before later attempts.",
+        "A subsequent run validated 51 desktop cards but portrait selection expected room2 and read room1. Later native hit-test diagnostics did not reproduce a UI failure.",
+        "The full baseline npm-test managed session76542 returned exit_code1; its redirected TAP was lost, so no full-suite pass or failure count is claimed."
+      ],
+      "evidenceStatus": "Retained task/tool record only, no surviving raw files."
+    },
+    {
+      "kind": "first-recovered-menu-sweep",
+      "pass": false,
+      "counts": {
+        "atlasTitleChecks": 255,
+        "completeCardChecks": 102,
+        "supplementalCardChecks": 6,
+        "selectedTitleFlags": 108,
+        "screenshots": 14,
+        "pageErrors": 0,
+        "sourceDriftFiles": 0
+      },
+      "sourceSnapshotExactlyMatchedCommit": "bbd86f4492a468fb8a6f5615aa6b09bb66028403",
+      "interpretation": "Failed assertion used vertical font Range em-box extents as layout overflow. All108 selected titles were marked although ordinary font ascent can extend beyond tight line-height. This was a QA observer false positive. Independently, room34 intrinsic width genuinely exceeded viewport at320/820/1100; native before images preserve that defect. V2 checks parent/viewport horizontal bounds and actual hidden/clip overflow, and preserves canonical titles via SHY removal plus exact aria-label.",
+      "fullReportPreservedInArchive": true
+    }
+  ],
+  "selectedImages": [
+    {
+      "file": "menu-title-320-before-20261026.png",
+      "kind": "native-before",
+      "sha256": "21d3f42849a7d7a47477111c6f6f056eaa6f6fbdd800b5a19097bada342e1487",
+      "bytes": 161574
+    },
+    {
+      "file": "menu-title-320-after-20261026.png",
+      "kind": "native-after",
+      "sha256": "15e4295abb2e9f29d59392768274a6c864986cceac0d347c6ef1f693c12feffb",
+      "bytes": 157274
+    },
+    {
+      "file": "menu-title-34-desktop-after-20261026.png",
+      "kind": "native-after",
+      "sha256": "4e79c0cf1560f088ef8feaf8ab70ea63e3f87c3cb12bc1031af8d7767ae4455b",
+      "bytes": 680084
+    },
+    {
+      "file": "menu-title-320-comparison-20261026.jpg",
+      "kind": "deterministic two-panel figure from the two listed native PNGs; labels are added outside the source image rectangles",
+      "width": 672,
+      "height": 612,
+      "sha256": "a05ca3ab6365dfc1a226e9d42600e8799cd0f203919b17f9d6ac3c98af331b3a",
+      "bytes": 156236,
+      "nativeImageRectangles": [
+        {
+          "file": "menu-title-320-before-20261026.png",
+          "x": 8,
+          "y": 36,
+          "width": 320,
+          "height": 568
+        },
+        {
+          "file": "menu-title-320-after-20261026.png",
+          "x": 344,
+          "y": 36,
+          "width": 320,
+          "height": 568
+        }
+      ]
+    }
+  ]
+}

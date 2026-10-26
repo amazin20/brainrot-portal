@@ -1,0 +1,17 @@
+{
+  "kind": "rejected-generated-package",
+  "sourceCommit": "eef9a1215dfa97698cf73fa72ec8e041aa600ee4",
+  "reason": "Strict binder found two compiled LabV8Journey assets after reuse of the generated review output directory. This package was rejected before any browser run.",
+  "files": [
+    {
+      "file": "LabV8Journey-Ds1PoulD.js",
+      "sha256": "eb6992225295cc589acf145de2b0bbf86a1582c43867beb225c4d048f3daee1b"
+    },
+    {
+      "file": "LabV8Journey-LDk2ptPF.js",
+      "sha256": "cd9153a9c4c44e234c2c53ea97476e4f77bad01f8325db5a51c5ef8df8ec9c3d"
+    }
+  ],
+  "packageFilesSha256": "4bd2d3b4791d768e1d2addfb112cb9af5fdec9bbdd168ee6d022b01361e080ce",
+  "action": "Preserved the rejected directory and rebuilt into a new empty output directory; no source/controller assertion changed."
+}
