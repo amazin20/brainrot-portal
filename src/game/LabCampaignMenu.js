@@ -1,5 +1,20 @@
 import {CAMPAIGN_THEMES,campaignTheme} from './LabCampaignThemes.js';
 import {deriveCampaignAccess} from './LabCampaignAccess.js';
+// Optional Russian syllable breaks keep the narrow atlas labels readable
+// even on browsers without a Russian hyphenation dictionary. Full titles in
+// the mission panel and accessible button labels remain unchanged.
+const atlasWordBreaks=new Map([
+ ['перекрёстный','пере\u00adкрёстный'],['телескопический','теле\u00adскопи\u00adческий'],
+ ['противотечение','противо\u00adтечение'],['пространство','простран\u00adство'],
+ ['гравитационный','гравита\u00adционный'],['перекрёстная','пере\u00adкрёстная'],
+ ['обсерватория','обсерва\u00adтория'],['пневмоаккумулятор','пневмо\u00adаккумулятор'],
+ ['дифференциальный','дифферен\u00adциальный'],['перестановка','пере\u00adстановка'],
+ ['освобождение','освобож\u00adдение'],
+]);
+function atlasTitle(title){return title.replace(/\p{L}+/gu,word=>{
+ const broken=atlasWordBreaks.get(word.toLocaleLowerCase('ru'));if(!broken)return word;
+ return word[0]+broken.slice(1);
+});}
 /** Accessible map of the actual campaign and its saved completion frontier.
  * Selecting a node does not launch or reset a room. Only Play does that. */
 export function createCampaignMenu({root,select,availableRooms,spec,preferences,onChoose,number=index=>index+1,theme=campaignTheme,isAccessible}) {
@@ -49,7 +64,7 @@ export function createCampaignMenu({root,select,availableRooms,spec,preferences,
     button.style.setProperty('--node-order',String(order));
     const numeral=document.createElement('span');numeral.className='room-node-number';numeral.textContent=String(number(roomIndex)).padStart(2,'0');
     const lock=document.createElement('span');lock.className='room-node-lock';lock.setAttribute('aria-hidden','true');numeral.append(lock);
-    const title=document.createElement('span');title.className='room-node-title';title.textContent=room.title;
+    const title=document.createElement('span');title.className='room-node-title';title.textContent=atlasTitle(room.title);
     const state=document.createElement('span');state.className='room-node-state';state.textContent=stateText(roomIndex);
     button.append(numeral,title,state);syncNode(button,roomIndex);
     button.addEventListener('click',()=>{if(!canChoose(roomIndex))return;select.value=String(roomIndex);sync();onChoose(roomIndex);});nodes.append(button);

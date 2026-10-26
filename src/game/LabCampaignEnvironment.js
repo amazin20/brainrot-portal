@@ -52,7 +52,37 @@ function supportedFootprint(rect,boxes){
   .addScaledVector(rect.right,x*rect.halfWidth).addScaledVector(rect.up,y*rect.halfHeight).addScaledVector(rect.normal,-.10)))));
 }
 
-function visibleWallField(rect,meshes){
+function completeWallField(rect,meshes){
+ // Room 39 has a narrow service-bay edge between the sampled sightlines.
+ // Test the complete reserved field against actual finite triangles, not
+ // the enclosing box of a merged batch (which also contains open space).
+ const inverse=new THREE.Matrix4().makeBasis(rect.right,rect.up,rect.normal).setPosition(rect.center).invert();
+ const field=new THREE.Box3(V(-rect.halfWidth,-rect.halfHeight,.20),V(rect.halfWidth,rect.halfHeight,2));
+ const local=new THREE.Matrix4(),matrix=new THREE.Matrix4(),bounds=new THREE.Box3(),triangle=new THREE.Triangle();
+ for(const mesh of meshes){
+  const geometry=mesh.geometry,positions=geometry?.attributes.position;if(!positions)continue;
+  const index=geometry.index,count=index?.count??positions.count;
+  if(!geometry.boundingBox)geometry.computeBoundingBox();
+  const groups=Array.isArray(mesh.material)?geometry.groups:[{start:0,count,materialIndex:0}];
+  for(let instance=0;instance<(mesh.isInstancedMesh?mesh.count:1);instance++){
+   matrix.multiplyMatrices(inverse,mesh.matrixWorld);
+   if(mesh.isInstancedMesh){mesh.getMatrixAt(instance,local);matrix.multiply(local);}
+   bounds.copy(geometry.boundingBox).applyMatrix4(matrix);if(!bounds.intersectsBox(field))continue;
+   for(const group of groups){
+    const material=Array.isArray(mesh.material)?mesh.material[group.materialIndex]:mesh.material;
+    if(!material||material.visible===false||material.transparent)continue;
+    const start=Math.max(group.start,geometry.drawRange.start),end=Math.min(count,group.start+group.count,geometry.drawRange.start+geometry.drawRange.count);
+    for(let i=start;i<end;i+=3){
+     for(const [vertex,offset]of [[triangle.a,0],[triangle.b,1],[triangle.c,2]])vertex.fromBufferAttribute(positions,index?index.getX(i+offset):i+offset).applyMatrix4(matrix);
+     if(field.intersectsTriangle(triangle))return false;
+    }
+   }
+  }
+ }
+ return true;
+}
+
+function visibleWallField(rect,meshes,complete=false){
  // A finite patch needs a clear front, not just a wall behind its centre.
  // Check actual opaque triangles, including the manufactured instance skin.
  // This runs only while selecting the two fixed reviewed wall ornaments.
@@ -65,7 +95,7 @@ function visibleWallField(rect,meshes){
    return material?.visible!==false&&!material?.transparent;
   }))return false;
  }
- return true;
+ return !complete||completeWallField(rect,meshes);
 }
 
 function observedScreenFrames(level,kit,world){
@@ -153,7 +183,7 @@ export function campaignOrnamentSites(game,level,{limit=12}={}){
     const projected={...p,center:p.center.clone().addScaledVector(wall.normal,-p.center.clone().sub(center).dot(wall.normal))};
     return architecturalRectOverlapsPortal(rect,projected,.45);
    });
-   if(covered||!supportedFootprint(rect,wall.supports)||(reviewed&&!visibleWallField(rect,frontSolids)))continue;
+   if(covered||!supportedFootprint(rect,wall.supports)||(reviewed&&!visibleWallField(rect,frontSolids,level.id==='post-thermal-memory')))continue;
    candidates.push({...rect,width:w,height:h,wallDepth:.77,serviceField:wall.serviceField===true});
   }
   walls.push(candidates);

@@ -1,0 +1,38 @@
+{
+  "kind": "workspace-recovery-record",
+  "date": "2026-10-26",
+  "savedSourceCommit": "6f214422ad174ef12e7db5bd3c108dd414328f92",
+  "savedSourceTree": "237e579c03335b8e87f15c4214f642724ca25b1d",
+  "preservedCodeAndDocumentFilesInSourceCommit": 73,
+  "event": "The former local workspace became unavailable during final review. The saved GitHub source was cloned into a fresh workspace. Subsequent uncommitted source patches were restored from their exact recorded diffs.",
+  "lostEvidence": "Uncommitted comparison images, proof JSON and raw logs from before recovery are unavailable. Historical results are not substituted for new final proof. The original full baseline test session returned exit code 1 with no recoverable redirected log; its cause and final pass/fail counts are unknown.",
+  "oldFullBaselineAccepted": false,
+  "freshChecks": [
+    {
+      "kind": "ornament placement and contracts",
+      "passed": 23,
+      "failed": 0,
+      "log": {
+        "file": "ornament-targeted-23-20261026.tap",
+        "bytes": 2529,
+        "sha256": "6fd7c62fe11a44c17fb5ddb801d2c890e07aab9355fc31afb9a83eadcad6145f"
+      }
+    },
+    {
+      "kind": "checker local/CI scope and binding",
+      "passed": 24,
+      "failed": 0,
+      "log": {
+        "file": "checker-local-scope-24-20261026.tap",
+        "bytes": 2669,
+        "sha256": "f409530740b7e7eba95c68e00d50596b29dafa9a639f911540feb0554e911563"
+      }
+    }
+  ],
+  "browserRuntime": {
+    "file": "browser-runtime-20261026.json",
+    "bytes": 389,
+    "sha256": "7759cbf5c7d9c3234e985bddbf185245d7cd5c2cb31d77614a11cdf39aa9aaa3"
+  },
+  "publicationCancelled": true
+}

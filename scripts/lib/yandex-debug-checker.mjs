@@ -162,12 +162,20 @@ export function copyOriginalYandexCheckerReport(){
  return copied;
 }
 
-export function assertYandexCheckerDiagnostic(report,{requireNoHardFailures=true,requireGameplay=true}={}){
+export function assertYandexCheckerDiagnostic(report,{requireNoHardFailures=true,requireGameplay=true,allowLocalDiagnostic=false}={}){
  assert.equal(report.kind,'original-yandex-debug-checker-browser-diagnostic');assert.equal(report.context,'mock-yandex-platform');
  assert.deepEqual(report.checker,YANDEX_CHECKER_PIN);assert.equal(report.publicVersion,YANDEX_CHECKER_PIN.version);
  assert.equal(report.sourceAccepted,false);assert.equal(report.publicationAccepted,false);assert.equal(report.liveSdkAccepted,false);assert.equal(report.moderationAccepted,false);
  assert.ok(GIT.test(report.identity.sourceCommit)&&GIT.test(report.identity.sourceTree));
- for(const key of ['runId','runAttempt','level'])assert.ok(Number.isSafeInteger(report.identity[key])&&report.identity[key]>0);
+ if(report.identity.localDiagnostic!==undefined)assert.equal(typeof report.identity.localDiagnostic,'boolean');
+ if(report.identity.localDiagnostic===true){
+  // Local evidence must opt in at both the report and validator. It cannot
+  // masquerade as a CI run or be accepted by the default CI validator.
+  assert.equal(allowLocalDiagnostic,true,'Local checker evidence requires explicit validator opt-in');
+  assert.notEqual(process.env.GITHUB_ACTIONS,'true','CI evidence cannot opt out of its actual run identity');
+  for(const key of ['runId','runAttempt'])assert.equal(report.identity[key],null,'Local checker evidence must not claim a CI run');
+ }else for(const key of ['runId','runAttempt'])assert.ok(Number.isSafeInteger(report.identity[key])&&report.identity[key]>0);
+ assert.ok(Number.isSafeInteger(report.identity.level)&&report.identity.level>0);
  assert.ok(report.identity.level<=51);assert.equal(report.observedPage.levelIndex,report.identity.level-1);
  assert.ok(['ready','playing','paused','won'].includes(report.observedPage.runtimeState));
  assert.deepEqual(report.boot.pin,YANDEX_CHECKER_PIN);assert.equal(report.boot.installed,true);assert.equal(report.boot.error,null);
@@ -203,12 +211,14 @@ export function assertYandexCheckerDiagnostic(report,{requireNoHardFailures=true
  assert.ok(Array.isArray(report.runtime.errors)&&Array.isArray(report.runtime.warnings));
  return {checked:true,checks:all,hardFailures:totals.fail,warnings:totals.warn,notVerified:totals.not_verified,
   originalScorePercent:report.counts.SCORE,originalCoveragePercent:report.coveragePercent,
-  context:report.context,liveSdkAccepted:false,moderationAccepted:false};
+  context:report.context,localDiagnostic:report.identity.localDiagnostic===true,liveSdkAccepted:false,moderationAccepted:false};
 }
 
-export async function captureYandexChecker(page,{outputDirectory,identity,context='mock-yandex-platform',timeoutMs=20000,requireGameplay=true}={}){
+export async function captureYandexChecker(page,{outputDirectory,identity,context='mock-yandex-platform',timeoutMs=20000,requireGameplay=true,localDiagnostic=false}={}){
  assert.equal(context,'mock-yandex-platform','Do not present an SDK-less web demo as a Yandex platform check');
  assert.ok(outputDirectory&&identity);assert.ok(Number.isSafeInteger(timeoutMs)&&timeoutMs>0&&timeoutMs<=60000);
+ assert.equal(identity.localDiagnostic===true,localDiagnostic,'Capture and report must agree on local evidence scope');
+ assert.ok(!localDiagnostic||process.env.GITHUB_ACTIONS!=='true','CI capture must retain its actual run identity');
  const directory=path.resolve(outputDirectory);fs.mkdirSync(directory,{recursive:true});
  for(const name of ['yandex-debug-checker-report.json','yandex-debug-checker-report.txt'])assert.ok(!fs.existsSync(path.join(directory,name)),'Never overwrite an earlier checker capture');
  let report;
@@ -225,7 +235,7 @@ export async function captureYandexChecker(page,{outputDirectory,identity,contex
    coveragePercent:total?Math.round(scored/total*100):0,sourceAccepted:false,publicationAccepted:false,liveSdkAccepted:false,moderationAccepted:false,
    scope:YANDEX_CHECKER_SCOPE,limitations:['The original regex/runtime checker cannot prove gameplay quality, every bypass, actual advertising delivery or moderation approval.','Mock SDK callbacks test lifecycle only. NOT VERIFIED is insufficient evidence and WARN is an observed risk; neither is promoted to PASS.','Source-scan XHR responses are actual same-origin game files; strict package observers must hash them despite the checker cache-busting query.']};
   fs.writeFileSync(path.join(directory,'yandex-debug-checker-report.txt'),originalReport);
-  const verified=assertYandexCheckerDiagnostic(report,{requireGameplay});report.pass=true;report.summary=verified;
+  const verified=assertYandexCheckerDiagnostic(report,{requireGameplay,allowLocalDiagnostic:localDiagnostic});report.pass=true;report.summary=verified;
   fs.writeFileSync(path.join(directory,'yandex-debug-checker-report.json'),JSON.stringify(report,null,2)+'\n');
   console.log('YANDEX_DEBUG_CHECKER_CAPTURE_COMPLETE',identity.level,identity.sourceCommit,identity.runId,JSON.stringify(verified));
   return report;

@@ -4,7 +4,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
-import {spawn} from 'node:child_process';
+import {spawn,execFileSync} from 'node:child_process';
 import {fileURLToPath} from 'node:url';
 
 const repo=path.resolve(process.env.SOURCE_ROOT||fileURLToPath(new URL('..',import.meta.url)));
@@ -19,7 +19,8 @@ const source=()=>Object.fromEntries(['src','public','index.html'].flatMap(entry=
  const full=path.join(repo,entry);return fs.statSync(full).isDirectory()?fs.readdirSync(full,{recursive:true}).filter(f=>fs.statSync(path.join(full,f)).isFile()).map(f=>entry+'/'+f):[entry];
 }).sort().map(f=>[f,hash(fs.readFileSync(path.join(repo,f)))]));
 const reference=JSON.parse(fs.readFileSync(path.join(repo,'tools/visual-audit-v65-reference-cameras.json')));
-const report={kind:'local-campaign-visual-review',controllerSha256:hash(fs.readFileSync(fileURLToPath(import.meta.url))),sourceStart:source(),levels,
+const git=(...args)=>execFileSync('git',args,{cwd:repo,encoding:'utf8'}).trim();
+const report={kind:'local-campaign-visual-review',sourceCommit:git('rev-parse','HEAD'),sourceTree:git('rev-parse','HEAD^{tree}'),trackedWorkingTreeClean:git('status','--porcelain','--untracked-files=no')==='',controllerSha256:hash(fs.readFileSync(fileURLToPath(import.meta.url))),sourceStart:source(),levels,
  scope:'Actual WebGL and authored scene/fog. Genuine Play at wide viewport; portrait uses the ordinary camera reset after a resize at the same zero-step state. Other views are declared camera-only interior fixtures. No physical-device performance or ordinary-route acceptance.',rows:[],errors:[],pass:false};
 const save=()=>fs.writeFileSync(path.join(out,'report.json'),JSON.stringify(report,null,2)+'\n');save();
 const server=spawn('node',['node_modules/vite/bin/vite.js','--host','127.0.0.1','--port',String(port),'--strictPort'],{cwd:repo,stdio:['ignore','pipe','pipe']});

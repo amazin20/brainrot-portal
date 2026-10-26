@@ -104,6 +104,42 @@ test('validator preserves WARN and NOT VERIFIED as distinct insufficient/risk st
  assert.equal(summary.originalScorePercent,88);assert.equal(summary.originalCoveragePercent,89);assert.equal(summary.liveSdkAccepted,false);
 });
 
+test('explicit local checker evidence keeps null CI identity and the original verdict meanings',()=>{
+ const previous=process.env.GITHUB_ACTIONS;process.env.GITHUB_ACTIONS='false';
+ try{
+  const report=syntheticDiagnostic();Object.assign(report.identity,{localDiagnostic:true,runId:null,runAttempt:null});
+  const summary=assertYandexCheckerDiagnostic(report,{allowLocalDiagnostic:true});
+  assert.equal(summary.localDiagnostic,true);assert.equal(summary.warnings,1);assert.equal(summary.notVerified,1);
+  assert.equal(report.identity.runId,null);assert.equal(report.identity.runAttempt,null);
+  assert.throws(()=>assertYandexCheckerDiagnostic(report),/explicit validator opt-in/);
+ }finally{if(previous===undefined)delete process.env.GITHUB_ACTIONS;else process.env.GITHUB_ACTIONS=previous;}
+});
+
+test('local opt-in cannot disguise missing CI identity, fake run IDs or an ambiguous scope',()=>{
+ const previous=process.env.GITHUB_ACTIONS;process.env.GITHUB_ACTIONS='false';
+ try{for(const mutate of [
+  identity=>{identity.runId=null;identity.runAttempt=null;},
+  identity=>{delete identity.runId;},identity=>{delete identity.runAttempt;},
+  identity=>{identity.localDiagnostic=false;identity.runId=null;identity.runAttempt=null;},
+  identity=>{identity.localDiagnostic='true';identity.runId=null;identity.runAttempt=null;},
+  identity=>{identity.localDiagnostic=true;},
+  identity=>{identity.localDiagnostic=true;identity.runId=null;delete identity.runAttempt;},
+  identity=>{identity.localDiagnostic=true;identity.runId=null;identity.runAttempt=null;identity.level=0;},
+ ]){const report=syntheticDiagnostic();mutate(report.identity);assert.throws(()=>assertYandexCheckerDiagnostic(report,{allowLocalDiagnostic:true}));}
+ }finally{if(previous===undefined)delete process.env.GITHUB_ACTIONS;else process.env.GITHUB_ACTIONS=previous;}
+});
+
+test('CI rejects even explicitly opted-in local evidence and retains positive run identity',()=>{
+ const previous=process.env.GITHUB_ACTIONS;process.env.GITHUB_ACTIONS='true';
+ try{
+  const report=syntheticDiagnostic();Object.assign(report.identity,{localDiagnostic:true,runId:null,runAttempt:null});
+  assert.throws(()=>assertYandexCheckerDiagnostic(report,{allowLocalDiagnostic:true}),/CI evidence cannot opt out/);
+  const ci=syntheticDiagnostic();ci.identity.localDiagnostic=false;
+  assert.equal(assertYandexCheckerDiagnostic(ci).localDiagnostic,false);
+  assert.equal(ci.identity.runId,1);assert.equal(ci.identity.runAttempt,1);
+ }finally{if(previous===undefined)delete process.env.GITHUB_ACTIONS;else process.env.GITHUB_ACTIONS=previous;}
+});
+
 test('validator rejects promoted verdicts, inconsistent original text, missing observations and acceptance claims',()=>{
  for(const mutate of [
   report=>{report.rows[0].status='fail';report.counts.PASS--;report.counts.FAIL++;report.counts.SCORE=75;},

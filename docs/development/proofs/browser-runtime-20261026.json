@@ -1,0 +1,6 @@
+{
+  "executablePath": "/workspace/scratch/cefcdffdf3ad/browser-temp/chromium",
+  "puppeteerModule": "/workspace/scratch/cefcdffdf3ad/browser-qa/node_modules/puppeteer-core/lib/puppeteer/puppeteer-core.js",
+  "graphics": true,
+  "installation": "npm @sparticuz/chromium153.0.0, Brotli archives extracted with safe tar filter because sandbox chown unsupported; no browser session started"
+}

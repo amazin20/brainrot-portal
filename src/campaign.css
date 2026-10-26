@@ -75,7 +75,7 @@
 .start-screen .room-node-number { display:grid; place-items:center; position:relative; width:68px; height:78px; margin:1px 0 0;
  clip-path:polygon(50% 1%,92% 25%,92% 75%,50% 99%,8% 75%,8% 25%); background:linear-gradient(135deg,#214863,#132c47); font-size:27px; font-weight:650; color:#deefff; line-height:1;
 }
-.start-screen .room-node-title { font-size:11px; line-height:1.35; font-weight:550; color:inherit; width:100%; overflow-wrap:break-word; min-height:30px; padding:0 2px; }
+.start-screen .room-node-title { font-size:11px; line-height:1.35; font-weight:550; color:inherit; width:100%; overflow-wrap:normal; hyphens:manual; min-height:30px; padding:0 2px; }
 .start-screen .room-node-state { font-size:7px; letter-spacing:.07em; color:#85a8bd; line-height:1.5; margin-top:auto; }
 .start-screen .room-node:hover { color:#fff; background:#7cdcff07; box-shadow:none; transform:none; }
 .start-screen .room-node:hover::before { background:#c1faff; }

@@ -1,0 +1,31 @@
+✔ discovery relief reserves full portal aperture and adds bounded instanced art only (22.505569ms)
+✔ dynamo relief reserves full portal aperture and adds bounded instanced art only (5.942454ms)
+✔ biosphere relief reserves full portal aperture and adds bounded instanced art only (6.106393ms)
+✔ observatory relief reserves full portal aperture and adds bounded instanced art only (4.895922ms)
+✔ fracture relief reserves full portal aperture and adds bounded instanced art only (5.66496ms)
+✔ castle relief reserves full portal aperture and adds bounded instanced art only (11.922413ms)
+✔ ornamental motion follows elapsed simulation time, freezes at zero dt and resets without changing delegated behavior (5.520187ms)
+✔ level disposal releases every generated resource exactly once and stops later decoration updates (3.797096ms)
+✔ absence of a genuine wall support creates no floating ornament or update wrapper (1.135035ms)
+✔ a small detail budget covers every wall before repeating one bay (0.865148ms)
+✔ discovery calibrations use offset open arcs and copper rather than closed porcelain-like portal targets (3.23037ms)
+✔ observed return-sluice wall fields receive eye-height relief while moving and portal surfaces remain excluded (3.890176ms)
+✔ observed archive screen relief needs its full footprint inside the authored fixed shell slab (1.159344ms)
+✔ castle lancets face the atrium on complete fixed piers and reserve actual portal openings (0.839205ms)
+✔ room-one calibration arcs remain visible below the actual cornice that hid the old mounts (2568.778034ms)
+✔ reviewed wall mounts retain the recorded placement in every other active room (19360.045604ms)
+✔ room 18: actual wall ornament clears the finished cornice and finite machinery (1068.567662ms)
+✔ room 20: actual wall ornament clears the finished cornice and finite machinery (1243.218342ms)
+✔ room 32: actual wall ornament clears the finished cornice and finite machinery (1077.880072ms)
+✔ room 34: actual wall ornament clears the finished cornice and finite machinery (884.482308ms)
+✔ room 37: actual wall ornament clears the finished cornice and finite machinery (861.043976ms)
+✔ room 39: actual wall ornament clears the finished cornice and finite machinery (811.454738ms)
+✔ room 39: every painted front triangle clears the narrow service bay that escaped the former nine rays (8859.191029ms)
+ℹ tests 23
+ℹ suites 0
+ℹ pass 23
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 39834.476755
