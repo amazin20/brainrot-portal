@@ -27,9 +27,12 @@ export function room13Access(d,{carry=true}={}){
  if(carry){walk(game.cargo.position.x-1,game.cargo.position.z);pickup();walk(-15.5,16);}
  enter(p['access-low']);until(()=>game.playerGrounded,4,'Optical shelf landing');mark('optical shelf arrival');
 }
-export function room13Light(d,{branch='south'}={}){
+export function room13Light(d,{branch='south',settleSeconds=2}={}){
  const {level,walk,aim,wait}=d;
- walk(-10,-6);aim(0,level.panels['light-intake'].getFrame().center);walk(-14,-6);walk(-14,branch==='south'?11:-11);walk(-11.4,branch==='south'?11:-11);aim(1,level.panels['light-output'].getFrame().center);wait(2);
+ // The north entrance exposes the intake around the finite central mass,
+ // including the wider shoulder offset of the ordinary portrait camera.
+ const cageX=d.game.camera.aspect<1&&branch==='south'?-11.8:-11.4;
+ walk(-12,-7);aim(0,level.panels['light-intake'].getFrame().center);walk(-14,-6);walk(-14,branch==='south'?11:-11);walk(cageX,branch==='south'?11:-11);aim(1,level.panels['light-output'].getFrame().center);wait(settleSeconds);
 }
 export async function runRoom13(d,{order='cargo-first',interruptPower=false}={}){
  const {game,level,walk,aim,pickup,wait,until,mark}=d,p=level.panels,s=level.state;

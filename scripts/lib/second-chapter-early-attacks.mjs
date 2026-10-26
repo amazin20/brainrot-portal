@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import {runV8Journey} from '../../src/game/LabV8Journey.js';
-import {room12Access} from '../../src/game/LabRoom12Journey.js';
+import {room12Access,room12FreightAim,room12CollectFreight,aimRoom12} from '../../src/game/LabRoom12Journey.js';
 import {room13Access,room13Light} from '../../src/game/LabRoom13Journey.js';
 import {runRoom14} from '../../src/game/LabRoom14Journey.js';
 import {room15Extract,room15Ascend} from '../../src/game/LabRoom15Journey.js';
@@ -48,15 +48,22 @@ export const SECOND_CHAPTER_EARLY_ATTACKS=[
  }},
  {level:12,name:'jumping-owner-at-shared-freight-throat',run(d){
   room12Access(d,{carry:true});d.walk(-15,-8);d.walk(-15,14);d.walk(-10,14);d.game.interact();d.wait(.8);
-  d.walk(-15,14);d.walk(-15,-8);d.walk(-9,-8);d.aim(1,d.level.panels.cargo.getFrame().center);d.walk(-9,-7.2);d.aim(0,V(-10,.025,9.8));d.walk(-15,-8);d.walk(-15,14);
-  const c=d.game.cargo.position;d.walk(c.x,c.z+1.1);d.pickup();d.walk(-10,11.65);
+  d.walk(-15,14);d.walk(-15,-8);d.walk(-9,-8);room12FreightAim(d);d.walk(-9,-7.2);aimRoom12(d,0,V(-10,.025,9.8));d.walk(-15,-8);d.walk(-15,14);
+  room12CollectFreight(d);d.walk(-10,11.65);
   d.beginTarget('same loaded traveller at the genuine freight drop',d.game.heldCube&&d.game.playerPosition.y>6.9&&d.game.portals.ready);
   rush(d,-10,7,9.8,5,{jumpEvery:19});rush(d,10,9,4,5,{jumpEvery:23});d.mark('owner attempts the cargo route using repeated ordinary jumps');
  }},
  {level:13,name:'release-mirror-during-partial-south-ascent',run(d){
   room13Access(d);d.walk(-16,-15.2);d.walk(-16,-12);d.walk(-12,-6);d.walk(-12,-2);d.walk(-14,3);d.walk(-10,3);d.look(d.level.panels['mirror-cradle'].getFrame().center.clone().add(V(0,2,0)));d.walk(-10,.85);d.wait(.7);d.game.interact();d.wait(1.8);
-  check(d.level.state.optical.loaded,'The real companion did not load the mirror');room13Light(d);d.until(()=>d.game.playerPosition.y>8.2,12,'Partial optical ascent');
+  const portrait=d.game.camera.aspect<1;
+  check(d.level.state.optical.loaded,'The real companion did not load the mirror');room13Light(d,{settleSeconds:portrait?.4:2});
+  // In portrait the camera's real sight to the lower mirror passes through
+  // the cab floor from the rear. Reach its front edge during early ascent,
+  // then jump for the shot while the cage is still below the upper gallery.
+  if(portrait)d.walk(-11.8,9.2);
+  d.until(()=>d.game.playerPosition.y>8.2,12,'Partial optical ascent');
   d.beginTarget('live southern lift has not completed its ascent',d.level.state.optical.receivers[1]&&d.level.state['south-cage'].position.y<11.9);
+  if(portrait){d.game.input.jumpQueued=true;d.evidence.jumpInputs++;d.frame();}
   d.aim(0,d.level.panels['mirror-cradle'].getFrame().center);d.wait(2);d.mark('ordinary floor shot releases the shared mirror and light address');rush(d,-10,12,14.5,4,{jumpEvery:19});d.mark('attempted continued ascent after the physical ray was lost');
  }},
  {level:13,name:'unloaded-north-gallery-receiver-leap',run(d){

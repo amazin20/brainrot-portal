@@ -40,7 +40,7 @@ test('new room20 and room41 saves reload independently while every historical by
  const f=fixture(),before=new Map(f.data);
  const room=readPhysicalReviewEntry('/foundation20-physical-v1/'),tower=readPhysicalReviewEntry('/tower41-native-v3/');
  const roomPrefs=createPhysicalReviewPreferences(f.storage,room),towerPrefs=createPhysicalReviewPreferences(f.storage,tower);
- for(const prefs of [roomPrefs,towerPrefs])assert.deepEqual(prefs.value,{quality:'low',volume:.21,muted:true,tutorial:false,completed:[],hints:{},resumeLevel:null});
+ for(const prefs of [roomPrefs,towerPrefs])assert.deepEqual(prefs.value,{quality:'low',volume:.21,lookSensitivity:1,muted:true,tutorial:false,completed:[],hints:{},resumeLevel:null});
  roomPrefs.complete(19);roomPrefs.save({resumeLevel:19,quality:'high'});
  towerPrefs.complete(40);towerPrefs.save({resumeLevel:40,quality:'balanced'});
  assert.deepEqual(createPhysicalReviewPreferences(f.storage,room).value,roomPrefs.value);

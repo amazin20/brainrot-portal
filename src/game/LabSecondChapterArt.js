@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import {RoundedBoxGeometry} from 'three/addons/geometries/RoundedBoxGeometry.js';
+import {installSecondChapterMounts} from './LabSecondChapterMounts.js';
 
 export const SECOND_CHAPTER_ART_REVISION='second-chapter-industrial-energy-v1';
 const V=(...p)=>new THREE.Vector3(...p),Q=()=>new THREE.Quaternion();
@@ -175,6 +176,7 @@ export function installSecondChapterArt(game,level){
   mesh.instanceMatrix.setUsage(THREE.DynamicDrawUsage);root.add(mesh);list.forEach((entry,index)=>{entry.mesh=mesh;entry.index=index;mesh.setColorAt(index,new THREE.Color(entry.color));});
   mesh.instanceColor.needsUpdate=true;stats.batches++;
  }
+ const mounting=installSecondChapterMounts(game,level,root);root.mounting=mounting;stats.mountedCastings=mounting.castings.length;stats.extraColliders=mounting.colliders.length;
  root.userData.stats=stats;
  const inverse=new THREE.Matrix4(),pose=new THREE.Matrix4(),matrix=new THREE.Matrix4();
  let disposed=false;
@@ -192,7 +194,7 @@ export function installSecondChapterArt(game,level){
  const reset=function(...args){const result=oldReset?.apply(this,args);sync();return result;};
  const dispose=function(...args){if(disposed)return;release(false);return oldDispose?.apply(this,args);};
  function release(restoreLifecycle=true){
-  if(disposed)return;disposed=true;root.removeFromParent();
+  if(disposed)return;disposed=true;mounting.dispose();root.removeFromParent();
   for(const list of banks.values())list[0].mesh.dispose();
   root.clear();
   for(const entry of hidden)if(entry.target&&entry.target.material===entry.replacement)entry.target.material=entry.original;
@@ -206,7 +208,7 @@ export function installSecondChapterArt(game,level){
  }
  // Explicit release is useful when the presentation is rebuilt while the
  // physics owner survives. Normal level lifetime calls the wrapper above.
- root.dispose=()=>release(true);root.mounts=mounts;root.ownedResources=[...banks.values()].map(list=>list[0].mesh).concat(Object.values(geometries),Object.values(materials),hidden.flatMap(e=>e.copy?[e.copy]:[]));
+ root.dispose=()=>release(true);root.mounts=mounts;root.ownedResources=[...banks.values()].map(list=>list[0].mesh).concat(Object.values(geometries),Object.values(materials),hidden.flatMap(e=>e.copy?[e.copy]:[]),mounting.material?[mounting.material,...mounting.meshes.map(m=>m.geometry)]:[]);
  level.renderUpdate=render;level.reset=reset;level.dispose=dispose;level.secondChapterArt=root;sync();
  return level;
 }

@@ -189,13 +189,13 @@ export async function observeRewardedHintUI(page,{level,key}){
  proof.pass=true;return proof;
 }
 
-export async function runCampaignPlatformRoutes({sourceRoot=process.cwd(),directory=process.env.YANDEX_REVIEW_DIR||'dist-yandex-review',consumerDirectory=process.env.CONSUMER_DIR||'dist',outputDirectory=process.env.OUT_DIR||'qa/campaign-platform-routes',levels=parsePlatformRouteLevels(process.env.LEVELS),browser:givenBrowser}={}){
+export async function runCampaignPlatformRoutes({sourceRoot=process.cwd(),directory=process.env.YANDEX_REVIEW_DIR||'dist-yandex-review',consumerDirectory=process.env.CONSUMER_DIR||'dist',outputDirectory=process.env.OUT_DIR||'qa/campaign-platform-routes',levels=parsePlatformRouteLevels(process.env.LEVELS),localDiagnostic=process.env.LOCAL_DIAGNOSTIC==='1',browser:givenBrowser}={}){
  const out=path.resolve(outputDirectory);assert.ok(!fs.existsSync(out)||fs.readdirSync(out).length===0,'Use a fresh output directory');fs.mkdirSync(out,{recursive:true});
- const binding=bindPlatformReviewPackages({sourceRoot,directory,consumerDirectory}),mount=await serveYandexReviewPackage(directory),report={kind:'mock-yandex-original-checker-campaign-routes',pass:false,...openScopes,binding,levels,rows:[],
+ const binding=bindPlatformReviewPackages({sourceRoot,directory,consumerDirectory,localDiagnostic}),mount=await serveYandexReviewPackage(directory),report={kind:'mock-yandex-original-checker-campaign-routes',pass:false,...openScopes,binding,levels,rows:[],
   scope:'Every listed actual compiled ordinary-input route plus the unchanged upstream checker on a fresh page of the distinct Yandex REVIEW TEST build. Explicit mock SDK. Existing legacy route initialization resets are outside its own route counters; this is not an all-room continuous/native no-reset claim.',sdk:mount.sdk};
  let browser=givenBrowser,page;
  try{
-  if(!browser){const {default:puppeteer}=await import('puppeteer-core');browser=await puppeteer.launch({executablePath:process.env.CHROME_PATH||'/usr/bin/google-chrome',headless:true,args:['--no-sandbox','--disable-dev-shm-usage','--use-angle=swiftshader','--enable-unsafe-swiftshader'],protocolTimeout:7200000});}
+  if(!browser){const {default:puppeteer}=await import(process.env.PUPPETEER_MODULE||'puppeteer-core');browser=await puppeteer.launch({executablePath:process.env.CHROME_PATH||'/usr/bin/google-chrome',headless:true,args:['--no-sandbox','--disable-dev-shm-usage','--use-angle=swiftshader','--enable-unsafe-swiftshader'],protocolTimeout:7200000});}
   for(const level of levels){
    const roomOut=path.join(out,'room-'+String(level).padStart(2,'0'));fs.mkdirSync(roomOut);const errors=[];
    const row={level,displayNumber:foundationDisplayNumber(level-1),pass:false,...openScopes};report.rows.push(row);

@@ -2,6 +2,10 @@ import * as THREE from 'three';
 import {architecturalRectOverlapsPortal} from './LabArchitecturalModels.js';
 
 const V=(x=0,y=0,z=0)=>new THREE.Vector3(x,y,z),Z=V(0,0,1),UP=V(0,1,0);
+// These enclosed later rooms were inspected against their finished solids.
+// Their old mounts were partly buried in cornices or machinery bulkheads.
+const REVIEWED_ENCLOSED_FIELDS=new Set(['conductive-cargo-circuit','foundation-portal-tension',
+ 'post-thin-shadow','post-pneumatic-reservoir','post-magnetic-u-channel','post-thermal-memory']);
 export const CAMPAIGN_ORNAMENTS=Object.freeze({
  discovery:'Open research calibration arcs',dynamo:'Copper induction fins',biosphere:'Botanical mineral relief',
  observatory:'Engraved orbital instruments',fracture:'Faceted geological relief',castle:'Gilded castle lancets',
@@ -48,6 +52,22 @@ function supportedFootprint(rect,boxes){
   .addScaledVector(rect.right,x*rect.halfWidth).addScaledVector(rect.up,y*rect.halfHeight).addScaledVector(rect.normal,-.10)))));
 }
 
+function visibleWallField(rect,meshes){
+ // A finite patch needs a clear front, not just a wall behind its centre.
+ // Check actual opaque triangles, including the manufactured instance skin.
+ // This runs only while selecting the two fixed reviewed wall ornaments.
+ const ray=new THREE.Raycaster(),point=V();
+ for(const x of [-.8,0,.8])for(const y of [-.8,0,.8]){
+  point.copy(rect.center).addScaledVector(rect.right,x*rect.halfWidth).addScaledVector(rect.up,y*rect.halfHeight);
+  ray.set(point.addScaledVector(rect.normal,2),rect.normal.clone().negate());ray.near=0;ray.far=1.8;
+  if(ray.intersectObjects(meshes,false).some(hit=>{
+   const material=Array.isArray(hit.object.material)?hit.object.material[hit.face?.materialIndex??0]:hit.object.material;
+   return material?.visible!==false&&!material?.transparent;
+  }))return false;
+ }
+ return true;
+}
+
 function observedScreenFrames(level,kit,world){
  const frames=[],spawn=Array.isArray(level.spawn)?V().fromArray(level.spawn):V().copy(level.spawn||{});
  // These two fields were inspected from ordinary spawn views. Keep this
@@ -72,6 +92,15 @@ function observedScreenFrames(level,kit,world){
  * just its centre. No floor, ramp, collider or portal registry is extended. */
 export function campaignOrnamentSites(game,level,{limit=12}={}){
  const kit=level.workshop,world=level.world||kit?.world,frames=[];
+ const reviewed=REVIEWED_ENCLOSED_FIELDS.has(level.id),frontSolids=[];
+ if(reviewed&&world?.root){
+  world.root.updateWorldMatrix(true,true);
+  world.root.traverse(node=>{
+   if(!node.isMesh||node.userData?.visualOnly||node.name.startsWith('Chapter ornament /'))return;
+   for(let p=node;p;p=p.parent)if(!p.visible)return;
+   frontSolids.push(node);
+  });
+ }
  if(kit?.roomEnvelope){
   const e=kit.roomEnvelope;frames.push(...wallFrames(e,e.base,e.roof,.77));
  }else if(level.tower&&level.rooms?.values){
@@ -103,11 +132,11 @@ export function campaignOrnamentSites(game,level,{limit=12}={}){
   // reliefs use the closed 0–6.6 m wall band below fixed glazing instead.
   let cy=Number.isFinite(wall.fieldY)?THREE.MathUtils.clamp(wall.fieldY-wall.center.y,-wall.height/2+h/2+.22,wall.height/2-h/2-.22):
    level.tower?0:Math.min(wall.height*.20,wall.height/2-h/2-2);
-  if(level.id==='foundation-first-connection'&&kit?.enclosed&&Number.isFinite(kit.roomEnvelope?.roof)){
+  if((level.id==='foundation-first-connection'||reviewed)&&kit?.enclosed&&Number.isFinite(kit.roomEnvelope?.roof)){
    // encloseLab carries a real 0.7 m cornice at roof - 2.6. Its front
    // projects beyond these shallow carvings. Keep the complete reserved
    // field below that beam instead of letting it erase the upper arc/ticks.
-   // This reviewed opening-room repair leaves later chapter mounts intact.
+   // Only the opening room and the reviewed later enclosures use this cap.
    const upper=kit.roomEnvelope.roof-2.95-.12-h/2-.22-wall.center.y;
    if(upper< -wall.height/2+h/2+.22)continue;
    cy=Math.min(cy,upper);
@@ -124,7 +153,7 @@ export function campaignOrnamentSites(game,level,{limit=12}={}){
     const projected={...p,center:p.center.clone().addScaledVector(wall.normal,-p.center.clone().sub(center).dot(wall.normal))};
     return architecturalRectOverlapsPortal(rect,projected,.45);
    });
-   if(covered||!supportedFootprint(rect,wall.supports))continue;
+   if(covered||!supportedFootprint(rect,wall.supports)||(reviewed&&!visibleWallField(rect,frontSolids)))continue;
    candidates.push({...rect,width:w,height:h,wallDepth:.77,serviceField:wall.serviceField===true});
   }
   walls.push(candidates);

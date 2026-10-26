@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import {RoundedBoxGeometry} from 'three/addons/geometries/RoundedBoxGeometry.js';
 
-export const BIOSPHERE_ART_REVISION='biosphere-founded-drive-and-shutters-v1';
+export const BIOSPHERE_ART_REVISION='biosphere-founded-drive-and-shutters-v2';
 const V=(...v)=>new THREE.Vector3(...v),Q=()=>new THREE.Quaternion();
 const JADE=0x6b9585,MINERAL=0xb7aa8c,STEEL=0x526b68,BRONZE=0xb58b58,DARK=0x263e40;
 const TARGET_ROOMS=new Set([20,21,22,25,28]);
@@ -33,7 +33,10 @@ export function installBiosphereArt(game,level){
  if(level.index===22&&(!level.room23PhysicalPrototype||!level.balance?.parts))return level;
  const root=new THREE.Group();root.name='Biosphere / founded manufactured drive machinery';
  root.userData={visualOnly:true,revision:BIOSPHERE_ART_REVISION};level.world.root.add(root);
- const latheProfile=[[0,-.5],[.62,-.5],[.74,-.24],[.90,-.24],[.94,-.5],[1,-.5],[1,.5],[.94,.5],[.90,.24],[.74,.24],[.62,.5],[0,.5]];
+ // The recessed bearing faces expose the existing captive fasteners. The
+ // earlier full-height centre caps buried every head inside the casting.
+ // The unchanged outer friction rim still owns the full original envelope.
+ const latheProfile=[[0,-.42],[.62,-.42],[.74,-.24],[.90,-.24],[.94,-.5],[1,-.5],[1,.5],[.94,.5],[.90,.24],[.74,.24],[.62,.42],[0,.42]];
  const geometries={
   box:new RoundedBoxGeometry(1,1,1,1,.025),
   disc:new THREE.LatheGeometry(latheProfile.map(p=>new THREE.Vector2(...p)),32),
@@ -103,7 +106,12 @@ export function installBiosphereArt(game,level){
      const spanX=Math.max(.1,cw-.3),spanY=innerH*.62,length=Math.hypot(spanX,spanY),angle=(n%2?1:-1)*Math.atan2(spanY,spanX);
      box(x,0,sign*(d/2-well*.37),length,.10,well*.38,BRONZE,true,angle);
     }else for(const y of [-1,1])box(x,y*innerH*.30,sign*(d/2-well*.37),Math.max(.1,cw-.18),.09,well*.38,BRONZE,true);
-    for(const y of [-1,1])bolt(x,y*(innerH/2-.16),sign*(d/2-well*.20),Math.min(.043,cw*.04),well*.16);
+    // Seat the existing heads in their own cassette skin. The shallow
+    // freight backstop has its transverse brace under these heads, so its
+    // original raised seat is already supported and must remain above it.
+    const headY=innerH/2-.16,onBrace=!diagonal&&Math.abs(headY-innerH*.30)<.045;
+    const headZ=onBrace?sign*(d/2-well*.20):fieldZ+sign*(skin/2+well*.04);
+    for(const y of [-1,1])bolt(x,y*headY,headZ,Math.min(.043,cw*.04),well*.16);
    }
   }
   stats.chassis++;return owner;
@@ -119,8 +127,11 @@ export function installBiosphereArt(game,level){
   for(const y of [-1,1])box(0,y*(h-rail)/2,-d/2+well/2,w-2*rail,rail,well,paint);
   for(const y of [-.25,0,.25])box(0,y*h,-d/2+well*.72,w-2*rail,.10,well*.43,BRONZE,true);
   const panelW=w*.55,panelH=h*.55;
-  box(0,0,-d/2+well*.88,panelW,panelH,Math.min(.035,well*.25),paint);
-  for(const x of [-1,1])for(const y of [-1,1])bolt(x*panelW*.39,y*panelH*.38,-d/2+well*.60,Math.min(.05,w*.02,h*.02),well*.18);
+  const panelZ=-d/2+well*.88,panelDepth=Math.min(.035,well*.25),headLength=well*.18;
+  box(0,0,panelZ,panelW,panelH,panelDepth,paint);
+  // The lower service cover carries its own fasteners; derive their seat
+  // from that real cover, not the deeper perimeter rails beside it.
+  for(const x of [-1,1])for(const y of [-1,1])bolt(x*panelW*.39,y*panelH*.38,panelZ-panelDepth/2-headLength*.25,Math.min(.05,w*.02,h*.02),headLength);
   stats.chassis++;return owner;
  }
  function freightHood(target,name){

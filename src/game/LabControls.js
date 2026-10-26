@@ -1,4 +1,5 @@
 import { CAMERA_PITCH_MIN, CAMERA_PITCH_MAX } from './LabCamera.js';
+import { normalizeLookSensitivity } from './LabLookSensitivity.js';
 
 const clampPitch = pitch => Math.min(CAMERA_PITCH_MAX, Math.max(CAMERA_PITCH_MIN, pitch));
 
@@ -66,15 +67,17 @@ export class LabControls {
             (unchangedPosition || Math.abs(event.timeStamp - rebound.lockedAt) < 250)) return;
       }
       if (!this.active) return;
-      game.yaw -= event.movementX * .002;
-      game.pitch = clampPitch(game.pitch - event.movementY * .0018);
+      const sensitivity = normalizeLookSensitivity(game.lookSensitivity);
+      game.yaw -= event.movementX * .002 * sensitivity;
+      game.pitch = clampPitch(game.pitch - event.movementY * .0018 * sensitivity);
     });
     this.listen(canvas, 'pointermove', event => {
       if (!this.active) { this.reset(); return; }
       const pointer = this.lookPointer;
       if (!pointer || pointer.id !== event.pointerId) return;
-      game.yaw -= (event.clientX - pointer.x) * .005;
-      game.pitch = clampPitch(game.pitch - (event.clientY - pointer.y) * .004);
+      const sensitivity = normalizeLookSensitivity(game.lookSensitivity);
+      game.yaw -= (event.clientX - pointer.x) * .005 * sensitivity;
+      game.pitch = clampPitch(game.pitch - (event.clientY - pointer.y) * .004 * sensitivity);
       pointer.x = event.clientX; pointer.y = event.clientY;
     });
     const endLook = event => {

@@ -77,7 +77,12 @@ export function runPuzzleProgression47(d,{stopAfter=null,noCargo=false,recover=f
  d.walk(-16,-12);d.walk(20,-12);d.walk(22,-10.5);d.wait(.2);check(g.interact(),'The far contact pin terminal is unreachable');check(l.drive.pinInserted,'Contact pin input failed');d.until(()=>Math.abs(l.drive.pinBody.position.z+19.4)<.02,5,'The actual transverse pin did not enter behind the piston');d.mark('A real removable contact pin enters the guide behind the piston');if(stopAfter==='pinned')return;
  d.walk(20,-12);d.walk(-16,-12);collect(d);d.until(()=>!l.drive.powered&&l.drive.contacts>0,4,'Cargo removal did not leave the dynamic piston resting against its physical pin');check(l.drive.body.type===1,'A pinned piston must remain dynamic');d.mark('Returning the original cargo releases the motor; true pin contact preserves alignment');if(stopAfter==='retrieved')return;
  d.walk(-16,-8);d.look(l.loadSupport.center);d.stop();d.wait(.2);check(g.interact()&&!g.heldCube,'Freeing the hands on permanent mineral floor failed');d.wait(.6);
- d.walk(-20,-8);aimLateSurface(d,0,l.entrance);d.walk(0,-16);d.walk(8.3,-16);d.walk(8.3,-14.8);aimLateSurface(d,1,l.address);
+ d.walk(-20,-8);aimLateSurface(d,0,l.entrance);d.walk(0,-16);
+ // The longer portrait boom sees the gallery's underside from directly
+ // below it. The permanent west court gives both camera and muzzle a real
+ // diagonal view through the same receiving window, above the side fascia.
+ if(g.camera.aspect<.75){d.walk(-6,-16);d.walk(-6,-6);const f=l.address.getFrame();aimLateSurface(d,1,l.address,f.center.clone().addScaledVector(f.up,1.3));}
+ else{d.walk(8.3,-16);d.walk(8.3,-14.8);aimLateSurface(d,1,l.address);}
  // Return along the dry motor-side court to the original companion. A real
  // tilted fragment can occupy (0,-8) long after fracture; that fixed debris
  // waypoint is unnecessary once both final apertures are prepared.

@@ -55,8 +55,8 @@ export function createTower41PreviewPreferences(storage,{prefix=TOWER41_PREVIEW_
   if(!raw)return preferences;
   const previous=JSON.parse(raw);
   if(!previous||typeof previous!=='object'||Array.isArray(previous))return preferences;
-  const {quality,volume,muted,tutorial}=sanitizePreferences(previous);
-  preferences.save({quality,volume,muted,tutorial});
+  const {quality,volume,lookSensitivity,muted,tutorial}=sanitizePreferences(previous);
+  preferences.save({quality,volume,lookSensitivity,muted,tutorial});
  }catch{/* Corrupt or inaccessible old settings never affect a new tower session. */}
  return preferences;
 }

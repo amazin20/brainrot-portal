@@ -112,6 +112,7 @@ body:not([data-play-state='playing']) .play-tools { display: none; }
 .level-number { display: inline-flex; align-items: center; gap: 8px; padding: 9px 12px; border: 1px solid #ffffff57; border-radius: 7px; background: #172a30e6; color: white; box-shadow: 0 3px 15px #0004; font: 800 13px/1 'Courier New', monospace; pointer-events: none; }
 .level-number::before { content: 'КОМНАТА'; color: #a8dbd7; font: 800 9px/1 'Trebuchet MS', sans-serif; letter-spacing: .12em; }
 .lab-fps { position: fixed; z-index: 18; right: 18px; bottom: max(15px, env(safe-area-inset-bottom)); padding: 6px 9px; border-radius: 5px; background: #152e32bb; color: #e7f5ee; font: 11px/1.2 'Courier New', monospace; pointer-events: auto; }
+.lab-fps:empty { display: none; }
 .lab-tutorial { position: fixed; z-index: 18; left: max(20px, env(safe-area-inset-left)); top: max(20px, env(safe-area-inset-top)); display: flex; align-items: center; gap: 10px; max-width: min(520px, calc(100vw - 180px)); padding: 11px 14px; border-left: 4px solid var(--gold); border-radius: 6px; background: #152d30e8; color: #f2f8ee; box-shadow: 0 3px 20px #08191b6b; font-size: 13px; line-height: 1.45; pointer-events: none; }
 .lab-tutorial kbd { background: #eef3e5; color: #1f4851; border-color: white; }
 .lab-tutorial span { min-width: 0; overflow-wrap: anywhere; }
@@ -170,6 +171,10 @@ body[data-play-state='playing'] .lab-reticle { opacity: 1; }
 .settings-panel { padding: 15px 16px 6px; border: 1px solid #c6d9d2; border-radius: 11px; background: #eef4ed; }
 .settings-title { color: #60817c; font-size: 10px; }
 .settings-panel .setting-row { min-height: 34px; margin: 12px 0; }
+.settings-panel .sensitivity-setting { display: block; }
+.sensitivity-setting > span { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.sensitivity-setting output { flex: 0 0 auto; font-variant-numeric: tabular-nums; }
+.sensitivity-setting input[type='range'] { display: block; width: 100%; }
 .text-button { min-height: 44px; display: flex; align-items: center; justify-content: space-between; gap: 10px; width: 100%; margin-top: 16px; padding: 9px 0; border: 0; border-bottom: 1px solid #bbd1cb; background: none; color: #216a79; text-align: left; font-size: 12px; }
 .text-button:hover { color: #f26d4b; border-color: #f26d4b; }
 #hint-detail { margin: 12px 0; padding: 13px 15px; border: 1px solid #a9ceca; border-radius: 8px; background: #edf6f3; font-size: 13px; line-height: 1.5; }

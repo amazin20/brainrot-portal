@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import {suspendLateLuminaire} from './LabLateMachineConstruction.js';
 const V=(...p)=>new THREE.Vector3(...p),Z=V(0,0,1);
 function foldedFrame(w,h,d,r){
  const loop=(x,y,c)=>[[-x+c,-y],[x-c,-y],[x,-y+c],[x,y-c],[x-c,y],[-x+c,y],[-x,y-c],[-x,-y+c]];
@@ -39,6 +40,8 @@ export function dressPuzzleProgression45(k,r){
  for(const [x,z,target,color]of [[-16,20,[-15,0,19],0xd6fff0],[-23,-9,[-23,14,-9],0xd6fff0],[19,-10,[20,15,-8],0xffdfad]]){
   arch([x,28.3,z],10.4,5.4,bone,[0,-1,0],.24,.65);
   part([x,28.17,z],[8.9,.07,3.9],k.m.white);
+  const housing=k.block([x,28.55,z],[10.3,.24,5.3],'dark',false);
+  suspendLateLuminaire(k,housing,'45 / roof-mounted countercurrent luminaire suspension');
   const light=new THREE.SpotLight(color,22,35,Math.PI*.36,.82,1);light.position.set(x,27.95,z);light.target.position.fromArray(target);light.castShadow=false;k.world.root.add(light,light.target);lights.push(light);
  }
  const state=new THREE.MeshBasicMaterial({name:'Countercurrent / live weight diffuser',color:0xf0bd74});materials.push(state);

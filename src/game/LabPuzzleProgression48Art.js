@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import {installLateRailSpring} from './LabLateMachineConstruction.js';
 /** Whole mint/clay machines reveal the force path. Decoration never closes a
  * freight aperture or adds an invisible gameplay support. */
 export function dressPuzzleProgression48(k,{entry,gallery,goal,arm,machine}){
@@ -14,10 +15,9 @@ export function dressPuzzleProgression48(k,{entry,gallery,goal,arm,machine}){
  for(const x of [-25.8,28.8])for(const z of [-20,1,21])band([x,14,z],[.25,6.5,8],x<0?'shell':'secondary');
  // Compression follows actual shoe displacement; the visible spring does
  // not independently animate to an invented target or indicate solved state.
- const spring=new THREE.Group();k.world.root.add(spring);spring.position.set(-2.3,4.6,-15.1);
- for(let i=0;i<18;i++)k.geometry(new THREE.TorusGeometry(.34,.055,5,10),'metal',[i*.22,0,0],new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0,1,0),Math.PI/2),{parent:spring,batch:false,name:'48 / actual spring extension winding'});
+ installLateRailSpring(k,machine);
  const linkage=k.geometry(new THREE.CylinderGeometry(.07,.07,1,8),'metal',[0,0,0],new THREE.Quaternion(),{batch:false,name:'48 / transverse pin to freight lid mechanical linkage'});
- k.renders.push(()=>{spring.scale.x=(machine.x+2.3)/3.96;const a=machine.pinGroup.position.clone().add(new THREE.Vector3(0,.75,0)),b=machine.roofGroup.position.clone().add(new THREE.Vector3(0,.3,0)),v=b.clone().sub(a);linkage.position.copy(a).add(b).multiplyScalar(.5);linkage.scale.y=v.length();linkage.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),v.normalize());});
+ k.renders.push(()=>{const a=machine.pinGroup.position.clone().add(new THREE.Vector3(0,.75,0)),b=machine.roofGroup.position.clone().add(new THREE.Vector3(0,.3,0)),v=b.clone().sub(a);linkage.position.copy(a).add(b).multiplyScalar(.5);linkage.scale.y=v.length();linkage.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),v.normalize());});
  k.wire([[-20,8.25,17],[-20,.25,17],[-25,.25,17],[-25,.25,-24],[23,.25,-24],[23,8.25,-24],[23,8.25,-20],[18.7,8.25,-20],[18.7,8.25,-13.65],[18.7,6,-13.65]],()=>machine.magnet);
  k.label('48 / РАЗОМКНУТЫЙ РЕЛЬС',[-26.4,13.5,18],[1,0,0],12,.9);
  k.label('ПОПЕРЕЧНЫЙ ШТИФТ',[17,12,-24.6],[0,0,1],9,.7);

@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import {RoundedBoxGeometry} from 'three/addons/geometries/RoundedBoxGeometry.js';
 
-export const OPTICS_ART_REVISION='optics-owned-receivers-and-thermal-cassettes-v1';
+export const OPTICS_ART_REVISION='optics-owned-receivers-and-thermal-cassettes-v2';
 const V=(...p)=>new THREE.Vector3(...p),Q=()=>new THREE.Quaternion();
 const IVORY=0xc5c6b8,STEEL=0x576d76,DARK=0x293e49,COPPER=0xbd8d60,COOL=0x91c6cb;
 
@@ -26,8 +26,10 @@ export function installOpticsArt(game,level){
  if(game.chamberEdition!=='foundation'||!level?.world||![34,38].includes(level.index)||level.opticsArt)return level;
  const root=new THREE.Group();root.name='Optics / manufactured receiver and thermal hardware';
  root.userData={visualOnly:true,revision:OPTICS_ART_REVISION};level.world.root.add(root);
- // A turned casing with two load flanges and a recessed central barrel.
- const profile=[[0,-.5],[.88,-.5],[.88,-.44],[1,-.44],[1,-.28],[.87,-.28],[.87,.28],[1,.28],[1,.44],[.88,.44],[.88,.5],[0,.5]];
+ // The bearing faces sit below their captive heads, with a bevel into the
+ // raised rim. Previously the flat end caps completely covered those heads.
+ // Both end rims and the load flanges keep the original cylindrical volume.
+ const profile=[[0,-.44],[.82,-.44],[.88,-.5],[.94,-.5],[1,-.44],[1,-.28],[.87,-.28],[.87,.28],[1,.28],[1,.44],[.94,.5],[.88,.5],[.82,.44],[0,.44]];
  const geometries={box:new RoundedBoxGeometry(1,1,1,1,.025),casing:new THREE.LatheGeometry(profile.map(p=>new THREE.Vector2(...p)),32),bolt:new THREE.CylinderGeometry(1,1,1,6)};
  const materials={paint:new THREE.MeshStandardMaterial({name:'Optics folded mineral enamel',color:0xffffff,roughness:.58,metalness:.22,envMapIntensity:.6}),metal:new THREE.MeshStandardMaterial({name:'Optics machined copper and steel',color:0xffffff,roughness:.39,metalness:.72,envMapIntensity:.7})};
  const mounts=[],banks=new Map(),replacements=[],readouts=[];

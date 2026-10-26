@@ -24,7 +24,12 @@ export function conveyorChevronGeometry(width){
 function makeWorkshop(k,number){
  const root=new THREE.Group();root.name=`Visual audit ${number} / authored machinery`;root.userData={visualOnly:true,keepMaterial:true};k.world.root.add(root);
  const geometry={box:new RoundedBoxGeometry(1,1,1,1,.025),riser:new THREE.BoxGeometry(1,1,1),plate:new THREE.BoxGeometry(1,1,1),cylinder:new THREE.CylinderGeometry(1,1,1,24),wheel:new THREE.TorusGeometry(.84,.16,8,32),
-  turned:new THREE.LatheGeometry([[0,-.5],[.87,-.5],[.94,-.46],[1,-.40],[1,-.31],[.84,-.27],[.84,.27],[1,.31],[1,.40],[.94,.46],[.87,.5],[0,.5]].map(p=>new THREE.Vector2(...p)),32)};
+  // Room33's inner hydraulic hardware already sits inside later authored
+  // physical sleeves. Preserve that drawing; expose the bearing covers only
+  // on Room34's visible reservoir and manifold, without adding hidden detail.
+  turned:new THREE.LatheGeometry((number===34?
+   [[0,-.455],[.75,-.455],[.87,-.5],[.94,-.46],[1,-.40],[1,-.31],[.84,-.27],[.84,.27],[1,.31],[1,.40],[.94,.46],[.87,.5],[.75,.455],[0,.455]]:
+   [[0,-.5],[.87,-.5],[.94,-.46],[1,-.40],[1,-.31],[.84,-.27],[.84,.27],[1,.31],[1,.40],[.94,.46],[.87,.5],[0,.5]]).map(p=>new THREE.Vector2(...p)),32)};
  const materials={paint:new THREE.MeshStandardMaterial({name:'Audit satin machine enamel',color:0xffffff,roughness:.64,metalness:.19}),
   metal:new THREE.MeshStandardMaterial({name:'Audit brushed machine alloy',color:0xffffff,roughness:.43,metalness:.68}),
   deck:new THREE.MeshStandardMaterial({name:'Launch closed plate / distance-filtered seams',color:0xffffff,roughness:.80,metalness:.025})};
@@ -123,7 +128,12 @@ function makeWorkshop(k,number){
   }
   for(let i=0;i<6;i++){
    const a=i*Math.PI/3;
-   part(o,[Math.cos(a)*r*.79,0,Math.sin(a)*r*.79],[r*.075,h*.52,r*.075],COLORS.copper,{metal:true,q:Q().setFromAxisAngle(V(0,1,0),-a)});
+   // Room34's ribs cross the .84r barrel skin with positive embed. The former
+   // .79r centres hid the entire rib inside the barrel. The recessed end
+   // faces likewise leave the existing dark bearing covers visible, still
+   // below the unchanged end rims and within the original pressure volume.
+   const ribRadius=r*(number===34?.86:.79);
+   part(o,[Math.cos(a)*ribRadius,0,Math.sin(a)*ribRadius],[r*.075,h*.52,r*.075],COLORS.copper,{metal:true,q:Q().setFromAxisAngle(V(0,1,0),-a)});
   }
   return o;
  }

@@ -13,6 +13,7 @@ import {buildRoom14} from '../src/game/LabPortalRoom14.js';
 import {buildRoom15} from '../src/game/LabPortalRoom15.js';
 import {installSecondChapterArt,SECOND_CHAPTER_ART_REVISION} from '../src/game/LabSecondChapterArt.js';
 import {gameplayContract} from './helpers/lab-art-contract.js';
+import {originalSecondChapterContract} from './helpers/lab-second-chapter-mount-contract.js';
 
 const game=await createHeadlessGame();game.chamberEdition='foundation';
 after(()=>{game.firstLevel?.dispose?.();game.physics?.dispose();game.portals?.dispose();});
@@ -62,11 +63,11 @@ for(let index=10;index<20;index++)test(`room ${index+1}: manufactured models pre
  for(const collider of game.colliders){geometry.set(collider.mesh,collider.mesh.geometry);children.set(collider.mesh,collider.mesh.children.slice());raycasts.set(collider.mesh,rayDistances(collider.mesh));}
  installSecondChapterArt(game,l);const art=l.secondChapterArt;
  assert.ok(art);assert.equal(art.userData.revision,SECOND_CHAPTER_ART_REVISION);
- assert.equal(art.userData.stats.extraColliders,0);assert.equal(art.userData.stats.extraLights,0);assert.equal(art.userData.stats.independentClocks,0);
+ assert.equal(art.userData.stats.extraColliders,index===12?14:index===13?10:0);assert.equal(art.userData.stats.extraLights,0);assert.equal(art.userData.stats.independentClocks,0);
  assert.ok(art.userData.stats.chassis+art.userData.stats.pedestals>=1);
  assert.ok(art.userData.stats.parts>=12&&art.userData.stats.parts<=320);assert.equal(art.userData.stats.batches,3);
- assert.deepEqual(gameplayContract(game),before,'Manufactured coat changed physical registry, current state, ray target or interaction frame');
- assert.deepEqual(game.physics.world.bodies,bodies);
+ assert.deepEqual(originalSecondChapterContract(game),before,'Manufactured coat changed physical registry, current state, ray target or interaction frame');
+ const supportBodies=new Set(art.mounting.meshes.map(m=>game.physics.solids.get(m.uuid)?.body));assert.deepEqual(game.physics.world.bodies.filter(body=>!supportBodies.has(body)),bodies);
  for(let n=0;n<bodies.length;n++)assert.deepEqual(bodies[n].shapes,shapes[n]);
  for(const [mesh,old]of geometry){assert.equal(mesh.geometry,old);assert.deepEqual(mesh.children,children.get(mesh));assert.deepEqual(rayDistances(mesh),raycasts.get(mesh));}
  assert.equal(assetBuffers(),assetHash,'A supplied GLB vertex/index buffer changed');assert.equal(originalMaterials(),materialHash,'A supplied GLB master material changed');
@@ -154,10 +155,10 @@ for(const room of [12,13,14,15])test(`liked room ${room}: actual mirror, lift, s
  const baseline=pairedRawRoom(room),upgraded=pairedRawRoom(room);
  try{
   assert.deepEqual(gameplayContract(upgraded),gameplayContract(baseline));installSecondChapterArt(upgraded,upgraded.firstLevel);
-  assert.deepEqual(gameplayContract(upgraded),gameplayContract(baseline));let observedMotion=false;
+  assert.deepEqual(originalSecondChapterContract(upgraded),gameplayContract(baseline));let observedMotion=false;
   for(let frame=0;frame<240;frame++){
    stimulate(baseline,room,frame);stimulate(upgraded,room,frame);
-   if(frame%30===0||frame===239)assert.deepEqual(gameplayContract(upgraded),gameplayContract(baseline),`Mechanics diverged at frame ${frame}`);
+   if(frame%30===0||frame===239)assert.deepEqual(originalSecondChapterContract(upgraded),gameplayContract(baseline),`Mechanics diverged at frame ${frame}`);
    if(room===13)observedMotion ||= baseline.firstLevel.state['north-cage'].progress>0||baseline.firstLevel.state['south-cage'].progress>0;
    if(room===14)observedMotion ||= baseline.firstLevel.state.counterweightStair.offset> -7.1;
    if(room===15)observedMotion ||= baseline.firstLevel.state.funnel.segments.length>1;

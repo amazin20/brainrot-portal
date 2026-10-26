@@ -105,6 +105,11 @@
   :root { --touch-stick: 104px; }
   .lab-tutorial { max-width: none; }
 }
+/* At 320px the side-by-side sprint and interaction targets overlap by 28px.
+   Keep the run toggle in the left-thumb area, above its movement pad. */
+@media (pointer: coarse) and (orientation: portrait) and (max-width: 360px) {
+  .sprint-button { left: var(--touch-left); bottom: calc(var(--touch-bottom) + var(--touch-stick) + 12px); }
+}
 @media (pointer: coarse) and (max-height: 380px) {
   :root { --touch-stick: 94px; --touch-key: 56px; --touch-bottom: max(14px, calc(env(safe-area-inset-bottom) + 10px)); }
   .lab-mobile { bottom: calc(var(--touch-bottom) + 78px); }

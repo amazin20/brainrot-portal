@@ -80,7 +80,7 @@ function buildFreightArchitecture(k,shutters){
  // Keep the painted bands outside the moving meshes' hierarchy. The physics
  // layer measures whole object trees for door colliders, so a child band
  // would silently enlarge a real shutter even though it is only paint.
- const lowerBand=inlay('Lower freight counterweight stripe',[0,0,0],[.05,4.95,5.4],illuminated);
+ const lowerBand=inlay('Lower freight counterweight stripe',[0,0,0],[.05,.37,5.4],illuminated);
  const upperBand=inlay('High inspection counterweight stripe',[0,0,0],[18.3,.37,.05],idle);
  const signal=[
   inlay('Lower gate connected indicator',[-.83,5.7,8.67],[.07,.16,.45],illuminated),

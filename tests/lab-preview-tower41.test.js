@@ -44,7 +44,7 @@ test('ordinary tower preview copies only foundation settings and never rewrites 
  const fixture=memoryStorage(previousRecords()),before=new Map(fixture.data);
  const preview=createTower41PreviewPreferences(fixture.storage);
  assert.ok(preview instanceof LabPreferences);
- assert.deepEqual(preview.value,{quality:'high',volume:.21,muted:true,tutorial:false,completed:[],hints:{},resumeLevel:null});
+ assert.deepEqual(preview.value,{quality:'high',volume:.21,lookSensitivity:1,muted:true,tutorial:false,completed:[],hints:{},resumeLevel:null});
  preview.complete(40);preview.save({resumeLevel:40,quality:'low',volume:.83,muted:false,tutorial:true});
  assert.deepEqual(preview.value.completed,[40]);
  unchanged(before,fixture.data);
@@ -81,7 +81,7 @@ test('missing foundation settings use defaults without consulting another editio
 test('foundation legacy settings are read directly and only seed the new namespace',()=>{
  const fixture=memoryStorage([['brainrot-foundation-v1:'+LEGACY_KEY,JSON.stringify({quality:'low',volume:2,muted:true,tutorial:false,completed:[40],hints:{40:3},resumeLevel:40})]]);
  const before=new Map(fixture.data),preview=createTower41PreviewPreferences(fixture.storage);
- assert.deepEqual(preview.value,{quality:'low',volume:1,muted:true,tutorial:false,completed:[],hints:{},resumeLevel:null});
+ assert.deepEqual(preview.value,{quality:'low',volume:1,lookSensitivity:1,muted:true,tutorial:false,completed:[],hints:{},resumeLevel:null});
  unchanged(before,fixture.data);
 });
 

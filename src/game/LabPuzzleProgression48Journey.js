@@ -1,8 +1,30 @@
 import {installPreciseLateAim,aimLateSurface} from './LabLateCampaignAim.js';
+import {CAMERA_PITCH_MIN,CAMERA_PITCH_MAX} from './LabCamera.js';
 const check=(ok,message)=>{if(!ok)throw Error(message);};
 function use(d,x,z,message){d.walk(x,z);check(d.game.interact(),message);d.wait(.3);}
 function collect(d){for(let i=0;i<6;i++){const p=d.game.cargo.position.clone();d.walk(p.x+.85,p.z);if(d.game.interact()&&d.game.heldCube){d.wait(.55);return;}d.wait(.3);}throw Error('Could not collect the same original free rail cargo');}
 function release(d){d.stop();check(d.game.interact()&&!d.game.heldCube,'Original rail cargo could not be released');d.wait(.65);}
+function jumpAimFreightWindow(d,index,surface){
+ const g=d.game,point=surface.getFrame().center,clamp=n=>Math.max(-1,Math.min(1,n));
+ d.look(point);const footing=g.playerPosition.y;g.input.jumpQueued=true;
+ // The portrait boom is behind the inspection deck. A normal jump exposes
+ // its lower freight opening without a view through the near edge of that
+ // same floor. Track with ordinary look input, then fire the real charge.
+ for(let i=0;i<90;i++){
+  g.scene.updateMatrixWorld(true);const ndc=point.clone().project(g.camera);
+  g.yaw-=clamp(ndc.x)*.18;g.pitch=Math.max(CAMERA_PITCH_MIN,Math.min(CAMERA_PITCH_MAX,g.pitch+clamp(ndc.y)*.17));
+  g.portalShots.captureTarget(index);const hit=g.portalShots.firstHit();
+  if(i>6&&!g.playerGrounded&&hit?.object===surface.mesh&&hit.point.distanceTo(point)<.25){
+   check(g.firePortal(index),'Freight window jump shot rejected');
+   d.until(()=>!g.portalShots.queue.length&&!g.portalShots.active.length,3,'Freight window jump shot unresolved');
+   check(g.portalShots.lastImpact?.valid&&g.portals.portals[index]?.surfaceId===surface.mesh.uuid,'Freight window charge missed its actual surface');
+   d.until(()=>g.playerGrounded,2,'Inspection jump did not return to its original gallery');
+   check(Math.abs(g.playerPosition.y-footing)<.05,'Inspection jump left its original gallery');return;
+  }
+  d.frame();
+ }
+ throw Error('No clear ordinary jump view of the freight window');
+}
 /** Every causal operation uses ordinary camera shots, movement and E input.
  * No actor, force target, mechanism transform or completion state is assigned. */
 export function runPuzzleProgression48(d,{stopAfter=null,recover=false}={}){
@@ -23,7 +45,8 @@ export function runPuzzleProgression48(d,{stopAfter=null,recover=false}={}){
  // Prepare the ordinary cargo aperture while the real field still supports
  // the free weight. Cutting the coil then makes gravity feed the same pair.
  d.walk(23,-24);aimLateSurface(d,1,p['gallery-reunion']);d.walk(20,-30);d.walk(10.3,-30);d.walk(10.3,-26.1);
- aimLateSurface(d,0,p['original-cargo-window'],p['original-cargo-window'].getFrame().center);
+ if(g.camera.aspect<.75)jumpAimFreightWindow(d,0,p['original-cargo-window']);
+ else aimLateSurface(d,0,p['original-cargo-window'],p['original-cargo-window'].getFrame().center);
  d.walk(10.3,-30);d.walk(23,-30);use(d,26,-26,'Upper coil switch inaccessible');
  d.until(()=>g.cargo.position.y>8.35&&g.cargo.position.z<-17,7,'Pin-opened gravity window did not recover the same original companion');
  d.until(()=>Math.abs(m.body.velocity.x)<.04&&m.contacts.pinCarriage>0,4,'The inserted contact pin did not retain the spring carriage');

@@ -1,7 +1,49 @@
 import * as THREE from 'three';
 import {CAMERA_PITCH_MIN,CAMERA_PITCH_MAX} from './LabCamera.js';
+import {installPreciseLateAim} from './LabLateCampaignAim.js';
 const V=(x=0,y=0,z=0)=>new THREE.Vector3(x,y,z);
 const check=(ok,message)=>{if(!ok)throw Error(message);};
+export function aimRoom12(d,index,point){
+ // The long portrait boom magnifies the broad route's NDC tolerance enough
+ // to raise the ground aperture above a standing capsule. Settle ordinary
+ // look input on the real ceramic centre before the observed charged shot.
+ if(d.game.camera.aspect<1){const precise={...d};installPreciseLateAim(precise);precise.look(point);}
+ d.aim(index,point);
+}
+function aimAccess(d,index,panel){
+ aimRoom12(d,index,panel.getFrame().center);
+ check(d.game.portals.portals[index]?.surfaceId===panel.mesh.uuid,'Folded access shot hit a different ceramic');
+}
+export function room12FreightAim(d,point=d.level.panels.cargo.getFrame().center){
+ // The west return is the genuine front-side sight into the freight throat.
+ // Return around its floor corner before approaching the high drop address.
+ if(d.game.camera.aspect<1){d.walk(-15,-8);d.walk(-15,-6);}
+ aimRoom12(d,1,point);
+ check(d.game.portals.portals[1]?.surfaceId===d.level.panels.cargo.mesh.uuid,'Freight sight missed its actual receiver');
+ if(d.game.camera.aspect<1){d.walk(-15,-8);d.walk(-9,-8);}
+}
+export function room12CollectFreight(d){
+ const c=d.game.cargo.position;
+ // The free companion may explore the real ledge while the pair is aimed.
+ // Approach from its inward side near the south edge, not beyond the deck.
+ d.walk(THREE.MathUtils.clamp(c.x,-15.8,-8),THREE.MathUtils.clamp(c.z+(c.z>14.4?-1.1:1.1),12.2,15.2));
+ d.pickup();
+}
+function lineUpFreight(d){
+ if(d.game.camera.aspect>=1){d.walk(-10,11.65);return;}
+ // Brake on the loading line, then approach the edge straight. The full
+ // original box must fit the real ellipse; a diagonal carry cannot borrow
+ // the aperture's rounded corners when the portal is aimed exactly.
+ for(const z of [14,11.55]){
+  let settled=false;
+  for(let n=0;n<600;n++){
+   const p=d.game.playerPosition,v=d.game.playerVelocity,dx=-10-p.x,dz=z-p.z;
+   if(Math.hypot(dx,dz)<.012&&Math.hypot(v.x,v.z)<.04){settled=true;break;}
+   d.worldMove(THREE.MathUtils.clamp(dx*2-v.x*1.2,-1,1),THREE.MathUtils.clamp(dz*2-v.z*1.2,-1,1));d.frame();
+  }
+  d.stop();check(settled,'Ordinary shaft freight alignment did not settle');
+ }
+}
 function aimMoving(d,index,point,{seconds=4,keepPosition=null,fireWhen=()=>true}={}){
  const {game,frame}=d;let fired=false;
  for(let n=0;n<seconds*60;n++){
@@ -19,7 +61,7 @@ function aimMoving(d,index,point,{seconds=4,keepPosition=null,fireWhen=()=>true}
 export function room12Access(d,{carry=false,wandering=false}={}){
  const {game,level,walk,aim,enter,pickup,until,mark}=d,p=level.panels;
  walk(10,14.5);walk(-14.5,14.5);walk(-14.5,12);
- aim(0,p['access-low'].getFrame().center);aim(1,p['access-high'].getFrame().center);
+ aimAccess(d,0,p['access-low']);aimAccess(d,1,p['access-high']);
  if(carry){
   walk(-14.5,14.5);walk(11,14.5);
   walk(game.cargo.position.x-.9,game.cargo.position.z);
@@ -30,9 +72,9 @@ export function room12Access(d,{carry=false,wandering=false}={}){
 export function room12Freight(d){
  const {game,level,walk,aim,pickup,wait,frame,worldMove,stop,until,mark}=d,p=level.panels;
  walk(-15,-8);walk(-15,14);walk(-10,14);wait(.4);game.interact();wait(.8);
- walk(-15,14);walk(-15,-8);walk(-9,-8);aim(1,p.cargo.getFrame().center);walk(-9,-7.2);aim(0,V(-10,.025,9.8));
+ walk(-15,14);walk(-15,-8);walk(-9,-8);room12FreightAim(d);walk(-9,-7.2);aimRoom12(d,0,V(-10,.025,9.8));
  walk(-15,-8);walk(-15,14);walk(-10,14);
- walk(game.cargo.position.x,game.cargo.position.z+1.1);pickup();walk(-10,11.65);
+ room12CollectFreight(d);lineUpFreight(d);
  for(let n=0;n<10;n++){worldMove(0,-.12);frame();}stop();wait(.4);mark('shared shaft delivery');const cargoBefore=game.physics.portalTransports;game.interact();
  until(()=>game.physics.portalTransports>cargoBefore,5,'Friend enters shared drop');
  until(()=>game.cargo.position.z>1.2&&game.cargo.position.y>8.9,5,'Friend crosses the low throat');
@@ -42,7 +84,7 @@ export function room12Climb(d){
  const {walk,aim,mark}=d;
  if(d.game.playerPosition.z<0)walk(-15.5,-8);
  walk(-15.5,14);walk(-15.5,-12.5);walk(1.5,-12.5);walk(1.5,-2.5);walk(5,-2.5);walk(5,-9.5);walk(8,-9.5);walk(8,14);
- walk(5.5,12.05);aim(1,V(4,.025,1));walk(5.5,14);walk(-10,14);mark('crossing flight');
+ walk(5.5,12.05);aimRoom12(d,1,V(4,.025,1));walk(5.5,14);walk(-10,14);mark('crossing flight');
 }
 export function room12Fling(d){
  const {game,level,walk,frame,worldMove,stop,until,mark}=d,p=level.panels;
@@ -70,13 +112,13 @@ export async function runRoom12(d,{order='cargo-first'}={}){
   const {game,level,walk,aim,until,mark}=d,p=level.panels;
   room12Access(d);
   check(game.cargo.position.y<1&&!game.heldCube,'Remote route must leave the original companion at the entrance');
-  walk(-15,-8);walk(-9,-8);aim(1,p.cargo.getFrame().center.clone().add({x:.7,y:0,z:0}));
+  walk(-15,-8);walk(-9,-8);room12FreightAim(d,p.cargo.getFrame().center.clone().add({x:.7,y:0,z:0}));
   walk(-15,-8);walk(-15,14);walk(-8,14);walk(-7.8,12.3);
   const before=game.physics.portalTransports;
-  aim(0,p['entry-freight'].getFrame().center);
+  aimRoom12(d,0,p['entry-freight'].getFrame().center);
   until(()=>game.physics.portalTransports>before&&game.cargo.position.y>8.9,6,'Original friend did not cross the remote freight address');
   mark('companion delivered directly from the entrance to the receiving dock');
-  walk(-15,14);walk(-15,-8);walk(-9,-7.2);aim(0,V(-10,.025,9.8));
+  walk(-15,14);walk(-15,-8);walk(-9,-7.2);aimRoom12(d,0,V(-10,.025,9.8));
   room12Climb(d);room12Fling(d);
   walk(THREE.MathUtils.clamp(game.cargo.position.x-1.1,8,14),THREE.MathUtils.clamp(game.cargo.position.z,1.5,7));
   if(game.state==='playing')d.pickup();walk(10,4);until(()=>game.state==='won',3,'Remote freight reunion');
@@ -84,7 +126,7 @@ export async function runRoom12(d,{order='cargo-first'}={}){
  }
  if(order==='scout-first'){
   room12Access(d);
-  d.walk(-9,-7.2);d.aim(0,V(-10,.025,9.8));
+  d.walk(-9,-7.2);aimRoom12(d,0,V(-10,.025,9.8));
   room12Climb(d);room12Fling(d);d.mark('scout reaches the empty dock');
   check(!d.game.heldCube&&d.game.cargo.position.y<1,'The friend stays below during exploration');
   room12DockReturn(d);

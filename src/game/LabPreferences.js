@@ -1,13 +1,15 @@
+import { normalizeLookSensitivity } from './LabLookSensitivity.js';
 const KEY='brainrot-portal.preferences.v24';
 const LEGACY_KEY='nesi.preferences.v8';
 const CAMPAIGN_REVISION='folded-junction-v28';
 export const CREATIVE_CAMPAIGN_REVISION='creative-campaign-v48';
 export const CREATIVE_REPLACED_INDICES=Object.freeze([13,15,16,17,19,30,31,32,33,34,35,36,38,39,40]);
-export const DEFAULT_PREFERENCES=Object.freeze({quality:'balanced',volume:.65,muted:false,tutorial:true,completed:[],hints:{},resumeLevel:null});
+export const DEFAULT_PREFERENCES=Object.freeze({quality:'balanced',volume:.65,lookSensitivity:1,muted:false,tutorial:true,completed:[],hints:{},resumeLevel:null});
 export function sanitizePreferences(value={}) {
   const safe=value&&typeof value==='object'?value:{};
   return {quality:['low','balanced','high'].includes(safe.quality)?safe.quality:'balanced',
     volume:Number.isFinite(safe.volume)?Math.min(1,Math.max(0,safe.volume)):.65,
+    lookSensitivity:normalizeLookSensitivity(safe.lookSensitivity),
     muted:safe.muted===true,tutorial:safe.tutorial!==false,
     ...(typeof safe.campaignSequenceRevision==='string'?{campaignSequenceRevision:safe.campaignSequenceRevision}:{}),
     resumeLevel:Number.isInteger(safe.resumeLevel)&&safe.resumeLevel>=0&&safe.resumeLevel<100?safe.resumeLevel:null,

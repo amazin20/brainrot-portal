@@ -30,11 +30,14 @@ const POST35_PREFIX_MILESTONES=[
  'Both actual latches retain the sluices before the shared air pair is borrowed',
  'The original free companion leaves its sealed bay through the shared floor-to-middle pair',
 ];
-function validPost35Prerequisites(row){
+export function validPost35Prerequisites(row){
  const p=row.prerequisitePhysics;
  const retained=s=>s?.firstLatched===true&&s?.secondLatched===true&&Number.isFinite(s.firstProgress)&&s.firstProgress>.9&&s.firstProgress<=1.01&&Number.isFinite(s.secondProgress)&&s.secondProgress>.9&&s.secondProgress<=1.01;
  const middle=(s,y0,y1)=>Array.isArray(s?.cargoPosition)&&s.cargoPosition.every(Number.isFinite)&&s.cargoPosition[0]>=-24&&s.cargoPosition[0]<=24&&s.cargoPosition[1]>=y0&&s.cargoPosition[1]<=y1&&s.cargoPosition[2]>-7&&s.cargoPosition[2]<9;
- return row.level===35&&row.id==='post-air-switch'&&row.name==='held-corner-jumps'&&row.shots.length===0&&p?.schema==='post35-causal-prefix-v1'&&p.level===35
+ // Both finite movement probes begin only after the real two-latch/freight
+ // prefix. Finishing that already earned return is a legitimate route, not
+ // a new bypass merely because the driver chose a floor detour over jumps.
+ return row.level===35&&row.id==='post-air-switch'&&['held-corner-jumps','held-walkaround-detour'].includes(row.name)&&row.shots.length===0&&p?.schema==='post35-causal-prefix-v1'&&p.level===35
   &&p.sourceRoute?.driver==='runPost35'&&p.sourceRoute.path==='src/game/LabPostJourneyA.js'&&p.sourceRoute.route==='latches-before-freight'&&p.sourceRoute.stopAfter==='freight'&&p.sourceRoute.returned===true
   &&JSON.stringify(p.sourceRoute.milestones)===JSON.stringify(POST35_PREFIX_MILESTONES)
   &&p.initial?.firstLatched===false&&p.initial?.secondLatched===false&&Number.isInteger(p.initial.cargoTransports)&&p.initial.cargoTransports>=0

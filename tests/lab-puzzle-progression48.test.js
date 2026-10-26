@@ -44,7 +44,8 @@ test('48 authored entry spawn clears the real departure-panel camera boom and fr
   // Offset arithmetic compares the old authored spawn without assigning any
   // live player/cargo transform or inserting a substitute render/physics model.
   for(const x of actorOffsets.map(p=>p.x))for(const y of actorOffsets.map(p=>p.y))for(const z of actorOffsets.map(p=>p.z))actorPoints.push(target.clone().add(new THREE.Vector3(x,y,z)).project(camera));
-  return {blocked:rig.obstructed,boom:camera.position.distanceTo(rig.playerPivot),camera:camera.position.toArray(),
+  const swept=camera.position.clone();rig.constrain(rig.playerPivot,swept,camera.fov);
+  return {blocked:rig.obstructed,finalSweepClear:swept.distanceTo(camera.position)<1e-7,boom:camera.position.distanceTo(rig.playerPivot),camera:camera.position.toArray(),
    ndc:{x:[Math.min(...points.map(p=>p.x)),Math.max(...points.map(p=>p.x))],y:[Math.min(...points.map(p=>p.y)),Math.max(...points.map(p=>p.y))],z:[Math.min(...points.map(p=>p.z)),Math.max(...points.map(p=>p.z))]},
    actorNdc:{x:[Math.min(...actorPoints.map(p=>p.x)),Math.max(...actorPoints.map(p=>p.x))],y:[Math.min(...actorPoints.map(p=>p.y)),Math.max(...actorPoints.map(p=>p.y))],z:[Math.min(...actorPoints.map(p=>p.z)),Math.max(...actorPoints.map(p=>p.z))]}};
  };
@@ -52,7 +53,12 @@ test('48 authored entry spawn clears the real departure-panel camera boom and fr
  for(const aspect of [16/9,16/10,9/16]){
   const old=sample(new THREE.Vector3(-18,8,20),aspect),fixed=sample(new THREE.Vector3(...l.spawn),aspect);
   assert.equal(old.blocked,true);assert.ok(old.boom<3);assert.ok(old.ndc.x[0]<-1||old.ndc.y[0]<-1||old.ndc.y[1]>1,'old departure pose no longer reproduces clipping');
-  assert.equal(fixed.blocked,false);assert.ok(fixed.boom>6.4);assert.ok(fixed.camera[2]<departure.center.z-.3,'new lens crossed the actual porcelain wall');
+  // In portrait the longer preferred boom meets the departure wall, then
+  // the ordinary camera selects a clear fitted position. "obstructed"
+  // describes that preferred boom, not a collision at the final live eye.
+  if(aspect>=1)assert.equal(fixed.blocked,false);
+  assert.equal(fixed.finalSweepClear,true,'The final full near-plane sweep crosses the real departure geometry');
+  assert.ok(fixed.boom>6.4);assert.ok(fixed.camera[2]<departure.center.z-.3,'new lens crossed the actual porcelain wall');
   assert.ok(fixed.ndc.x.every(v=>Math.abs(v)<.85)&&fixed.ndc.y.every(v=>Math.abs(v)<.85)&&fixed.ndc.z.every(v=>v>-1&&v<1));
   assert.ok(old.actorNdc.x.some(v=>Math.abs(v)>1)||old.actorNdc.y.some(v=>Math.abs(v)>1),'actual old actor envelope no longer reproduces crop');
   assert.ok(fixed.actorNdc.x.every(v=>Math.abs(v)<.99)&&fixed.actorNdc.y.every(v=>Math.abs(v)<.99)&&fixed.actorNdc.z.every(v=>v>-1&&v<1),'original startup actor mesh envelope is cropped');

@@ -1,15 +1,33 @@
 import {installPreciseLateAim,aimLateSurface} from './LabLateCampaignAim.js';
 const check=(v,m)=>{if(!v)throw Error(m);};
 function control(d){d.walk(-4,7.65);check(d.game.interact(),'Electrical knife switch is unreachable');d.wait(.25);}
+function lineUpFreight(d,source){
+ if(d.game.camera.aspect>=1){d.walk(source.x,source.z+2);d.walk(source.x,source.z+.70);d.stop();return;}
+ // Reach the loading line and brake using ordinary movement before the
+ // final straight approach. A loose angled drop can jam one real electrode;
+ // do not replace that contact with a distance check or rotate the body.
+ for(const z of [source.z+3,source.z+.70]){
+  let settled=false;
+  for(let n=0;n<600;n++){
+   const p=d.game.playerPosition,v=d.game.playerVelocity,dx=source.x-p.x,dz=z-p.z;
+   if(Math.hypot(dx,dz)<.012&&Math.hypot(v.x,v.z)<.04){settled=true;break;}
+   const clamp=x=>Math.max(-1,Math.min(1,x));
+   d.worldMove(clamp(dx*2-v.x*1.2),clamp(dz*2-v.z*1.2));d.frame();
+  }
+  d.stop();check(settled,'Ordinary freight alignment did not settle');
+ }
+}
 export function runCreative18(d,{route='contact-then-power',alternate=false,recover=false,stopBeforeFeed=false,stopBeforePower=false,stopBeforeRetrieval=false}={}){
  if(alternate)route='power-before-contact';if(recover)route='reverse-partial-stroke';
  check(['contact-then-power','power-before-contact','reverse-partial-stroke'].includes(route),'Unknown electrical circuit route: '+route);
  installPreciseLateAim(d);const{game:g,level:l,walk,wait,until,mark}=d,s=l.circuit;check(s,'Missing electrical circuit');
  if(route==='power-before-contact'){control(d);wait(2);check(s.current===0&&s.stroke===0,'The open circuit cannot power its motor');mark('A powered empty cell remains an electrically open circuit');}
- walk(-8,0);walk(-14,.4);aimLateSurface(d,1,l.mouth);walk(-8,.4);walk(-8,19);walk(-7,19);
+ // This grounded inspection stance aligns the real camera with the narrow
+ // service sight slot at both aspect ratios; the jamb remains a solid wall.
+ walk(-8,0);walk(-13,-1);aimLateSurface(d,1,l.mouth);walk(-8,.4);walk(-8,19);walk(-7,19);
  if(stopBeforeFeed)return;
  aimLateSurface(d,0,l.feed.surface);const source=g.portals.portals[0].position;
- walk(g.cargo.position.x+1.15,g.cargo.position.z);d.pickup();walk(source.x,source.z+2);walk(source.x,source.z+.70);d.stop();wait(.45);check(g.interact()&&!g.heldCube,'The original conductor was not released');
+ walk(g.cargo.position.x+1.15,g.cargo.position.z);d.pickup();lineUpFreight(d,source);wait(.45);check(g.interact()&&!g.heldCube,'The original conductor was not released');
  wait(.5);walk(-3,16);until(()=>g.physics.portalTransports>0,8,'The original free conductor did not enter the contact cell');wait(.8);
  walk(-9,3.65);check(g.interact()&&s.clamped,'The real spring contact lever did not close');
  until(()=>s.contacts.every(Boolean),8,'The original body did not close both real spring contacts');

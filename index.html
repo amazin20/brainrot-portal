@@ -77,6 +77,7 @@
       <h2 id="menu-settings-title">Настройки<span>.</span></h2>
       <label>Качество графики<select id="menu-quality"><option value="low">Экономичная</option><option value="balanced">Сбалансированная</option><option value="high">Высокая</option></select></label>
       <label>Громкость<input id="menu-volume" type="range" min="0" max="100" step="1" /></label>
+      <label class="sensitivity-setting"><span>Чувствительность камеры <output id="menu-sensitivity-value" for="menu-sensitivity">100%</output></span><input id="menu-sensitivity" type="range" min="25" max="200" step="5" value="100" /></label>
       <label class="settings-check"><span>Выключить звук</span><input id="menu-muted" type="checkbox" /></label>
       <label class="settings-check"><span>Обучение управлению</span><input id="menu-tutorial" type="checkbox" /></label>
       <p>Настройки сохраняются автоматически. Прогресс комнат не меняется.</p>
@@ -113,6 +114,7 @@
             <label class="setting-row"><span>Обучение управлению</span><input id="tutorial-toggle" type="checkbox" checked></label>
             <label class="setting-row"><span>Выключить звук</span><input id="mute-toggle" type="checkbox"></label>
             <label class="setting-row">Громкость <input id="volume-control" type="range" min="0" max="100" value="65" aria-label="Громкость"></label>
+            <label class="setting-row sensitivity-setting"><span>Чувствительность камеры <output id="look-sensitivity-value" for="look-sensitivity">100%</output></span><input id="look-sensitivity" type="range" min="25" max="200" step="5" value="100" /></label>
             <label class="setting-row">Графика <select id="quality-select"><option value="low">Лёгкая</option><option value="balanced" selected>Сбалансированная</option><option value="high">Высокая</option></select></label>
           </div>
         </details>

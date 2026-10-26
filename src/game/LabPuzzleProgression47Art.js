@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import {suspendLateLuminaire} from './LabLateMachineConstruction.js';
 const V=(...p)=>new THREE.Vector3(...p),Q=()=>new THREE.Quaternion();
 function frame(w,h){const s=new THREE.Shape();for(const [i,p]of [[-w/2+1,-h/2],[w/2-1,-h/2],[w/2,-h/2+1],[w/2,h/2-1],[w/2-1,h/2],[-w/2+1,h/2],[-w/2,h/2-1],[-w/2,-h/2+1]].entries())i?s.lineTo(...p):s.moveTo(...p);s.closePath();const a=new THREE.Path();a.moveTo(-w/2+.65,-h/2+.65);a.lineTo(-w/2+.65,h/2-.65);a.lineTo(w/2-.65,h/2-.65);a.lineTo(w/2-.65,-h/2+.65);a.closePath();s.holes.push(a);return new THREE.ExtrudeGeometry(s,{depth:.45,bevelEnabled:false});}
 /** Local mint/clay architectural dressing adds no collider or solution state. */
@@ -12,6 +13,6 @@ export function dressPuzzleProgression47(k,refs){
  for(let x=-8;x<9;x+=2)k.block([x,.6,-21.3],[.5,.16,.16],clay,false);
  k.block([7.25,1.1,-26],[2.1,2.7,2.1],clay,false);k.block([7.25,1.1,-24.9],[1.35,2.4,.12],'dark',false);
  const lamp=new THREE.MeshBasicMaterial({name:'47 / live original cargo drive indicator',color:0x65786f});k.block([-16,.13,-11.75],[4.4,.08,.12],lamp,false);k.renders.push(()=>lamp.color.setHex(refs.drive.powered?0x95edd3:0x65786f));
- for(const [x,y,z]of [[-22,24,16],[0,24,1],[12,24,-12]]){k.block([x,y,z],[9,.45,4],'dark',false);k.block([x,y-.25,z],[7.8,.06,2.8],'white',false);}
+ for(const [x,y,z]of [[-22,24,16],[0,24,1],[12,24,-12]]){const housing=k.block([x,y,z],[9,.45,4],'dark',false);k.block([x,y-.25,z],[7.8,.06,2.8],'white',false);suspendLateLuminaire(k,housing,'47 / roof-mounted archive luminaire suspension');}
  const owned=[mint,clay,lamp];let disposed=false;const dispose=()=>{if(disposed)return;disposed=true;owned.forEach(m=>m.dispose());};const old=k.restoreLight.bind(k);k.restoreLight=()=>{dispose();old();};return {style:'folded mint ceramic impact archive and clay piston gallery',downloadBytes:0,extraShadowLights:0,dispose};
 }

@@ -1,0 +1,1706 @@
+{
+  "13 / north optical receiver left cast arm / load arm": {
+    "positionSha256": "c00b379b14fab0f9c3d938b1e90464546041011db83bcfe9e2eb656a951e4218",
+    "normalSha256": "798d023d48e7588ba6cd6cdaf15631e65d49293524eb95271be32c93cc91dcb4",
+    "colorSha256": "87181123e739024b41a29cff0f562169ee7682ff55d99d95cfc8bef80cd36818",
+    "query": {
+      "name": "13 / north optical receiver left cast arm / load arm",
+      "visible": true,
+      "ancestorsVisible": true,
+      "raycastChildren": [],
+      "matrix": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        -11.73,
+        8,
+        -8.78,
+        1
+      ],
+      "frame": null
+    },
+    "collider": {
+      "mesh": {
+        "name": "13 / north optical receiver left cast arm / load arm",
+        "visible": true,
+        "ancestorsVisible": true,
+        "raycastChildren": [],
+        "matrix": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          -11.73,
+          8,
+          -8.78,
+          1
+        ],
+        "frame": null
+      },
+      "box": {
+        "min": [
+          -12.379999976,
+          7.890000001,
+          -8.960000007
+        ],
+        "max": [
+          -11.080000024,
+          8.109999999,
+          -8.599999993
+        ]
+      },
+      "enabled": true,
+      "frontPlane": null
+    }
+  },
+  "13 / north optical receiver left cast arm / rail collar": {
+    "positionSha256": "6912df2238dc8a77bdc256564d6ff7b9eacc36921d89d6f978e41604e714164a",
+    "normalSha256": "798d023d48e7588ba6cd6cdaf15631e65d49293524eb95271be32c93cc91dcb4",
+    "colorSha256": "98c54f62d9e8123f94302d40a04bd145b0d2edd30f45c49b1e982832e78bd64d",
+    "query": {
+      "name": "13 / north optical receiver left cast arm / rail collar",
+      "visible": true,
+      "ancestorsVisible": true,
+      "raycastChildren": [],
+      "matrix": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        -12.28,
+        8,
+        -8.745,
+        1
+      ],
+      "frame": null
+    },
+    "collider": {
+      "mesh": {
+        "name": "13 / north optical receiver left cast arm / rail collar",
+        "visible": true,
+        "ancestorsVisible": true,
+        "raycastChildren": [],
+        "matrix": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          -12.28,
+          8,
+          -8.745,
+          1
+        ],
+        "frame": null
+      },
+      "box": {
+        "min": [
+          -12.389999999,
+          7.810000002,
+          -8.835000004
+        ],
+        "max": [
+          -12.170000001,
+          8.189999998,
+          -8.654999996
+        ]
+      },
+      "enabled": true,
+      "frontPlane": null
+    }
+  },
+  "13 / north optical receiver left cast arm / receiver saddle": {
+    "positionSha256": "4a2d397a0cf69a3ab3abf7058a3bf92c8daad4f54fa885d10234e0dbdf0eacc5",
+    "normalSha256": "798d023d48e7588ba6cd6cdaf15631e65d49293524eb95271be32c93cc91dcb4",
+    "colorSha256": "e301fbaa7e570f129d9748616a33005ea56bdadbbf18a73a0e0cf8c6ce3ef760",
+    "query": {
+      "name": "13 / north optical receiver left cast arm / receiver saddle",
+      "visible": true,
+      "ancestorsVisible": true,
+      "raycastChildren": [],
+      "matrix": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        -11.15,
+        8,
+        -8.925,
+        1
+      ],
+      "frame": null
+    },
+    "collider": {
+      "mesh": {
+        "name": "13 / north optical receiver left cast arm / receiver saddle",
+        "visible": true,
+        "ancestorsVisible": true,
+        "raycastChildren": [],
+        "matrix": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          -11.15,
+          8,
+          -8.925,
+          1
+        ],
+        "frame": null
+      },
+      "box": {
+        "min": [
+          -11.250000001,
+          7.829999998,
+          -8.96
+        ],
+        "max": [
+          -11.049999999,
+          8.170000002,
+          -8.89
+        ]
+      },
+      "enabled": true,
+      "frontPlane": null
+    }
+  },
+  "13 / north optical receiver left cast arm / upper return": {
+    "positionSha256": "3753db0d41b21ad69f4b7041dd0f797346548b3e76238ea3b099f90db23be967",
+    "normalSha256": "798d023d48e7588ba6cd6cdaf15631e65d49293524eb95271be32c93cc91dcb4",
+    "colorSha256": "117c998cff77afd458b5a28be451d77445f3732932341dccdb006f3b6d1bbfba",
+    "query": {
+      "name": "13 / north optical receiver left cast arm / upper return",
+      "visible": true,
+      "ancestorsVisible": true,
+      "raycastChildren": [],
+      "matrix": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        -11.73,
+        8.115,
+        -8.78,
+        1
+      ],
+      "frame": null
+    },
+    "collider": {
+      "mesh": {
+        "name": "13 / north optical receiver left cast arm / upper return",
+        "visible": true,
+        "ancestorsVisible": true,
+        "raycastChildren": [],
+        "matrix": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          -11.73,
+          8.115,
+          -8.78,
+          1
+        ],
+        "frame": null
+      },
+      "box": {
+        "min": [
+          -12.190000008,
+          8.0975,
+          -8.880000001
+        ],
+        "max": [
+          -11.269999992,
+          8.1325,
+          -8.679999999
+        ]
+      },
+      "enabled": true,
+      "frontPlane": null
+    }
+  },
+  "13 / north optical receiver right cast arm / load arm": {
+    "positionSha256": "c00b379b14fab0f9c3d938b1e90464546041011db83bcfe9e2eb656a951e4218",
+    "normalSha256": "798d023d48e7588ba6cd6cdaf15631e65d49293524eb95271be32c93cc91dcb4",
+    "colorSha256": "87181123e739024b41a29cff0f562169ee7682ff55d99d95cfc8bef80cd36818",
+    "query": {
+      "name": "13 / north optical receiver right cast arm / load arm",
+      "visible": true,
+      "ancestorsVisible": true,
+      "raycastChildren": [],
+      "matrix": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        -8.27,
+        8,
+        -8.78,
+        1
+      ],
+      "frame": null
+    },
+    "collider": {
+      "mesh": {
+        "name": "13 / north optical receiver right cast arm / load arm",
+        "visible": true,
+        "ancestorsVisible": true,
+        "raycastChildren": [],
+        "matrix": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          -8.27,
+          8,
+          -8.78,
+          1
+        ],
+        "frame": null
+      },
+      "box": {
+        "min": [
+          -8.919999976,
+          7.890000001,
+          -8.960000007
+        ],
+        "max": [
+          -7.620000024,
+          8.109999999,
+          -8.599999993
+        ]
+      },
+      "enabled": true,
+      "frontPlane": null
+    }
+  },
+  "13 / north optical receiver right cast arm / rail collar": {
+    "positionSha256": "6912df2238dc8a77bdc256564d6ff7b9eacc36921d89d6f978e41604e714164a",
+    "normalSha256": "798d023d48e7588ba6cd6cdaf15631e65d49293524eb95271be32c93cc91dcb4",
+    "colorSha256": "98c54f62d9e8123f94302d40a04bd145b0d2edd30f45c49b1e982832e78bd64d",
+    "query": {
+      "name": "13 / north optical receiver right cast arm / rail collar",
+      "visible": true,
+      "ancestorsVisible": true,
+      "raycastChildren": [],
+      "matrix": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        -7.72,
+        8,
+        -8.745,
+        1
+      ],
+      "frame": null
+    },
+    "collider": {
+      "mesh": {
+        "name": "13 / north optical receiver right cast arm / rail collar",
+        "visible": true,
+        "ancestorsVisible": true,
+        "raycastChildren": [],
+        "matrix": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          -7.72,
+          8,
+          -8.745,
+          1
+        ],
+        "frame": null
+      },
+      "box": {
+        "min": [
+          -7.829999999,
+          7.810000002,
+          -8.835000004
+        ],
+        "max": [
+          -7.610000001,
+          8.189999998,
+          -8.654999996
+        ]
+      },
+      "enabled": true,
+      "frontPlane": null
+    }
+  },
+  "13 / north optical receiver right cast arm / receiver saddle": {
+    "positionSha256": "4a2d397a0cf69a3ab3abf7058a3bf92c8daad4f54fa885d10234e0dbdf0eacc5",
+    "normalSha256": "798d023d48e7588ba6cd6cdaf15631e65d49293524eb95271be32c93cc91dcb4",
+    "colorSha256": "e301fbaa7e570f129d9748616a33005ea56bdadbbf18a73a0e0cf8c6ce3ef760",
+    "query": {
+      "name": "13 / north optical receiver right cast arm / receiver saddle",
+      "visible": true,
+      "ancestorsVisible": true,
+      "raycastChildren": [],
+      "matrix": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        -8.85,
+        8,
+        -8.925,
+        1
+      ],
+      "frame": null
+    },
+    "collider": {
+      "mesh": {
+        "name": "13 / north optical receiver right cast arm / receiver saddle",
+        "visible": true,
+        "ancestorsVisible": true,
+        "raycastChildren": [],
+        "matrix": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          -8.85,
+          8,
+          -8.925,
+          1
+        ],
+        "frame": null
+      },
+      "box": {
+        "min": [
+          -8.950000001,
+          7.829999998,
+          -8.96
+        ],
+        "max": [
+          -8.749999999,
+          8.170000002,
+          -8.89
+        ]
+      },
+      "enabled": true,
+      "frontPlane": null
+    }
+  },
+  "13 / north optical receiver right cast arm / upper return": {
+    "positionSha256": "3753db0d41b21ad69f4b7041dd0f797346548b3e76238ea3b099f90db23be967",
+    "normalSha256": "798d023d48e7588ba6cd6cdaf15631e65d49293524eb95271be32c93cc91dcb4",
+    "colorSha256": "117c998cff77afd458b5a28be451d77445f3732932341dccdb006f3b6d1bbfba",
+    "query": {
+      "name": "13 / north optical receiver right cast arm / upper return",
+      "visible": true,
+      "ancestorsVisible": true,
+      "raycastChildren": [],
+      "matrix": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        -8.27,
+        8.115,
+        -8.78,
+        1
+      ],
+      "frame": null
+    },
+    "collider": {
+      "mesh": {
+        "name": "13 / north optical receiver right cast arm / upper return",
+        "visible": true,
+        "ancestorsVisible": true,
+        "raycastChildren": [],
+        "matrix": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          -8.27,
+          8.115,
+          -8.78,
+          1
+        ],
+        "frame": null
+      },
+      "box": {
+        "min": [
+          -8.730000008,
+          8.0975,
+          -8.880000001
+        ],
+        "max": [
+          -7.809999992,
+          8.1325,
+          -8.679999999
+        ]
+      },
+      "enabled": true,
+      "frontPlane": null
+    }
+  },
+  "13 / south optical receiver left grounded standard / grounded foot": {
+    "positionSha256": "c5cc63f221d3353e2221fc2637f34a35d313545ad186bdb00df413dc73e4f39b",
+    "normalSha256": "798d023d48e7588ba6cd6cdaf15631e65d49293524eb95271be32c93cc91dcb4",
+    "colorSha256": "98c54f62d9e8123f94302d40a04bd145b0d2edd30f45c49b1e982832e78bd64d",
+    "query": {
+      "name": "13 / south optical receiver left grounded standard / grounded foot",
+      "visible": true,
+      "ancestorsVisible": true,
+      "raycastChildren": [],
+      "matrix": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        -11.15,
+        6.035,
+        8.78,
+        1
+      ],
+      "frame": null
+    },
+    "collider": {
+      "mesh": {
+        "name": "13 / south optical receiver left grounded standard / grounded foot",
+        "visible": true,
+        "ancestorsVisible": true,
+        "raycastChildren": [],
+        "matrix": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          -11.15,
+          6.035,
+          8.78,
+          1
+        ],
+        "frame": null
+      },
+      "box": {
+        "min": [
+          -11.330000007,
+          5.989999998,
+          8.609999998
+        ],
+        "max": [
+          -10.969999993,
+          6.080000002,
+          8.950000002
+        ]
+      },
+      "enabled": true,
+      "frontPlane": null
+    }
+  },
+  "13 / south optical receiver left grounded standard / standard": {
+    "positionSha256": "268e25fdb9c219fd3b739ae6ec3c6e459d1c26b9a736bfdfe09aad70a5b14173",
+    "normalSha256": "798d023d48e7588ba6cd6cdaf15631e65d49293524eb95271be32c93cc91dcb4",
+    "colorSha256": "87181123e739024b41a29cff0f562169ee7682ff55d99d95cfc8bef80cd36818",
+    "query": {
+      "name": "13 / south optical receiver left grounded standard / standard",
+      "visible": true,
+      "ancestorsVisible": true,
+      "raycastChildren": [],
+      "matrix": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        -11.15,
+        6.9,
+        8.87,
+        1
+      ],
+      "frame": null
+    },
+    "collider": {
+      "mesh": {
+        "name": "13 / south optical receiver left grounded standard / standard",
+        "visible": true,
+        "ancestorsVisible": true,
+        "raycastChildren": [],
+        "matrix": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          -11.15,
+          6.9,
+          8.87,
+          1
+        ],
+        "frame": null
+      },
+      "box": {
+        "min": [
+          -11.22,
+          6.000000024,
+          8.8
+        ],
+        "max": [
+          -11.08,
+          7.799999976,
+          8.94
+        ]
+      },
+      "enabled": true,
+      "frontPlane": null
+    }
+  },
+  "13 / south optical receiver left grounded standard / receiver saddle": {
+    "positionSha256": "eef87a533ade6cbef5b16d359da325febe54a494558ccb582f7b9a9c5e57ca5a",
+    "normalSha256": "798d023d48e7588ba6cd6cdaf15631e65d49293524eb95271be32c93cc91dcb4",
+    "colorSha256": "e301fbaa7e570f129d9748616a33005ea56bdadbbf18a73a0e0cf8c6ce3ef760",
+    "query": {
+      "name": "13 / south optical receiver left grounded standard / receiver saddle",
+      "visible": true,
+      "ancestorsVisible": true,
+      "raycastChildren": [],
+      "matrix": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        -11.15,
+        7.85,
+        8.925,
+        1
+      ],
+      "frame": null
+    },
+    "collider": {
+      "mesh": {
+        "name": "13 / south optical receiver left grounded standard / receiver saddle",
+        "visible": true,
+        "ancestorsVisible": true,
+        "raycastChildren": [],
+        "matrix": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          -11.15,
+          7.85,
+          8.925,
+          1
+        ],
+        "frame": null
+      },
+      "box": {
+        "min": [
+          -11.259999999,
+          7.699999994,
+          8.89
+        ],
+        "max": [
+          -11.040000001,
+          8.000000006,
+          8.96
+        ]
+      },
+      "enabled": true,
+      "frontPlane": null
+    }
+  },
+  "13 / south optical receiver right grounded standard / grounded foot": {
+    "positionSha256": "c5cc63f221d3353e2221fc2637f34a35d313545ad186bdb00df413dc73e4f39b",
+    "normalSha256": "798d023d48e7588ba6cd6cdaf15631e65d49293524eb95271be32c93cc91dcb4",
+    "colorSha256": "98c54f62d9e8123f94302d40a04bd145b0d2edd30f45c49b1e982832e78bd64d",
+    "query": {
+      "name": "13 / south optical receiver right grounded standard / grounded foot",
+      "visible": true,
+      "ancestorsVisible": true,
+      "raycastChildren": [],
+      "matrix": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        -8.85,
+        6.035,
+        8.78,
+        1
+      ],
+      "frame": null
+    },
+    "collider": {
+      "mesh": {
+        "name": "13 / south optical receiver right grounded standard / grounded foot",
+        "visible": true,
+        "ancestorsVisible": true,
+        "raycastChildren": [],
+        "matrix": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          -8.85,
+          6.035,
+          8.78,
+          1
+        ],
+        "frame": null
+      },
+      "box": {
+        "min": [
+          -9.030000007,
+          5.989999998,
+          8.609999998
+        ],
+        "max": [
+          -8.669999993,
+          6.080000002,
+          8.950000002
+        ]
+      },
+      "enabled": true,
+      "frontPlane": null
+    }
+  },
+  "13 / south optical receiver right grounded standard / standard": {
+    "positionSha256": "268e25fdb9c219fd3b739ae6ec3c6e459d1c26b9a736bfdfe09aad70a5b14173",
+    "normalSha256": "798d023d48e7588ba6cd6cdaf15631e65d49293524eb95271be32c93cc91dcb4",
+    "colorSha256": "87181123e739024b41a29cff0f562169ee7682ff55d99d95cfc8bef80cd36818",
+    "query": {
+      "name": "13 / south optical receiver right grounded standard / standard",
+      "visible": true,
+      "ancestorsVisible": true,
+      "raycastChildren": [],
+      "matrix": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        -8.85,
+        6.9,
+        8.87,
+        1
+      ],
+      "frame": null
+    },
+    "collider": {
+      "mesh": {
+        "name": "13 / south optical receiver right grounded standard / standard",
+        "visible": true,
+        "ancestorsVisible": true,
+        "raycastChildren": [],
+        "matrix": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          -8.85,
+          6.9,
+          8.87,
+          1
+        ],
+        "frame": null
+      },
+      "box": {
+        "min": [
+          -8.92,
+          6.000000024,
+          8.8
+        ],
+        "max": [
+          -8.78,
+          7.799999976,
+          8.94
+        ]
+      },
+      "enabled": true,
+      "frontPlane": null
+    }
+  },
+  "13 / south optical receiver right grounded standard / receiver saddle": {
+    "positionSha256": "eef87a533ade6cbef5b16d359da325febe54a494558ccb582f7b9a9c5e57ca5a",
+    "normalSha256": "798d023d48e7588ba6cd6cdaf15631e65d49293524eb95271be32c93cc91dcb4",
+    "colorSha256": "e301fbaa7e570f129d9748616a33005ea56bdadbbf18a73a0e0cf8c6ce3ef760",
+    "query": {
+      "name": "13 / south optical receiver right grounded standard / receiver saddle",
+      "visible": true,
+      "ancestorsVisible": true,
+      "raycastChildren": [],
+      "matrix": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        -8.85,
+        7.85,
+        8.925,
+        1
+      ],
+      "frame": null
+    },
+    "collider": {
+      "mesh": {
+        "name": "13 / south optical receiver right grounded standard / receiver saddle",
+        "visible": true,
+        "ancestorsVisible": true,
+        "raycastChildren": [],
+        "matrix": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          -8.85,
+          7.85,
+          8.925,
+          1
+        ],
+        "frame": null
+      },
+      "box": {
+        "min": [
+          -8.959999999,
+          7.699999994,
+          8.89
+        ],
+        "max": [
+          -8.740000001,
+          8.000000006,
+          8.96
+        ]
+      },
+      "enabled": true,
+      "frontPlane": null
+    }
+  },
+  "14 / light-sheet projector left wall bracket / wall plate": {
+    "positionSha256": "f980a27c00c77344104745bd59628685c679cfcf04dfaffac6e0b1ea69d7c82d",
+    "normalSha256": "798d023d48e7588ba6cd6cdaf15631e65d49293524eb95271be32c93cc91dcb4",
+    "colorSha256": "98c54f62d9e8123f94302d40a04bd145b0d2edd30f45c49b1e982832e78bd64d",
+    "query": {
+      "name": "14 / light-sheet projector left wall bracket / wall plate",
+      "visible": true,
+      "ancestorsVisible": true,
+      "raycastChildren": [],
+      "matrix": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        -10.82,
+        4.56,
+        -8.63,
+        1
+      ],
+      "frame": null
+    },
+    "collider": {
+      "mesh": {
+        "name": "14 / light-sheet projector left wall bracket / wall plate",
+        "visible": true,
+        "ancestorsVisible": true,
+        "raycastChildren": [],
+        "matrix": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          -10.82,
+          4.56,
+          -8.63,
+          1
+        ],
+        "frame": null
+      },
+      "box": {
+        "min": [
+          -10.960000001,
+          4.199999986,
+          -8.749999997
+        ],
+        "max": [
+          -10.679999999,
+          4.920000014,
+          -8.510000003
+        ]
+      },
+      "enabled": true,
+      "frontPlane": null
+    }
+  },
+  "14 / light-sheet projector left wall bracket / cantilever": {
+    "positionSha256": "f6dc5adc436efa4e5189ce0f3d077cf1413ae6634099b54143df99c03c3f5189",
+    "normalSha256": "798d023d48e7588ba6cd6cdaf15631e65d49293524eb95271be32c93cc91dcb4",
+    "colorSha256": "87181123e739024b41a29cff0f562169ee7682ff55d99d95cfc8bef80cd36818",
+    "query": {
+      "name": "14 / light-sheet projector left wall bracket / cantilever",
+      "visible": true,
+      "ancestorsVisible": true,
+      "raycastChildren": [],
+      "matrix": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        -10.82,
+        4.86,
+        -7.61,
+        1
+      ],
+      "frame": null
+    },
+    "collider": {
+      "mesh": {
+        "name": "14 / light-sheet projector left wall bracket / cantilever",
+        "visible": true,
+        "ancestorsVisible": true,
+        "raycastChildren": [],
+        "matrix": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          -10.82,
+          4.86,
+          -7.61,
+          1
+        ],
+        "frame": null
+      },
+      "box": {
+        "min": [
+          -10.910000004,
+          4.780000002,
+          -8.61999999
+        ],
+        "max": [
+          -10.729999996,
+          4.939999998,
+          -6.60000001
+        ]
+      },
+      "enabled": true,
+      "frontPlane": null
+    }
+  },
+  "14 / light-sheet projector left wall bracket / projector saddle": {
+    "positionSha256": "2aa1982f0e046932240e597fd7e457cf8b704625510dde2d3d25699b72de6a76",
+    "normalSha256": "798d023d48e7588ba6cd6cdaf15631e65d49293524eb95271be32c93cc91dcb4",
+    "colorSha256": "e301fbaa7e570f129d9748616a33005ea56bdadbbf18a73a0e0cf8c6ce3ef760",
+    "query": {
+      "name": "14 / light-sheet projector left wall bracket / projector saddle",
+      "visible": true,
+      "ancestorsVisible": true,
+      "raycastChildren": [],
+      "matrix": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        -10.82,
+        4.9,
+        -6.79,
+        1
+      ],
+      "frame": null
+    },
+    "collider": {
+      "mesh": {
+        "name": "14 / light-sheet projector left wall bracket / projector saddle",
+        "visible": true,
+        "ancestorsVisible": true,
+        "raycastChildren": [],
+        "matrix": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          -10.82,
+          4.9,
+          -6.79,
+          1
+        ],
+        "frame": null
+      },
+      "box": {
+        "min": [
+          -10.975000001,
+          4.860000001,
+          -6.960000002
+        ],
+        "max": [
+          -10.664999999,
+          4.939999999,
+          -6.619999998
+        ]
+      },
+      "enabled": true,
+      "frontPlane": null
+    }
+  },
+  "14 / light-sheet projector left wall bracket / plate insert": {
+    "positionSha256": "fe9cf028eaf6327b76a5adbf3c850ab8c326916c7fbfd3d5664bdcbad5e71e71",
+    "normalSha256": "798d023d48e7588ba6cd6cdaf15631e65d49293524eb95271be32c93cc91dcb4",
+    "colorSha256": "117c998cff77afd458b5a28be451d77445f3732932341dccdb006f3b6d1bbfba",
+    "query": {
+      "name": "14 / light-sheet projector left wall bracket / plate insert",
+      "visible": true,
+      "ancestorsVisible": true,
+      "raycastChildren": [],
+      "matrix": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        -10.82,
+        4.56,
+        -8.493,
+        1
+      ],
+      "frame": null
+    },
+    "collider": {
+      "mesh": {
+        "name": "14 / light-sheet projector left wall bracket / plate insert",
+        "visible": true,
+        "ancestorsVisible": true,
+        "raycastChildren": [],
+        "matrix": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          -10.82,
+          4.56,
+          -8.493,
+          1
+        ],
+        "frame": null
+      },
+      "box": {
+        "min": [
+          -10.879999999,
+          4.335000006,
+          -8.515500001
+        ],
+        "max": [
+          -10.760000001,
+          4.784999994,
+          -8.470499999
+        ]
+      },
+      "enabled": true,
+      "frontPlane": null
+    }
+  },
+  "14 / light-sheet projector left wall bracket / closed root haunch": {
+    "positionSha256": "ed3c0b3b4da92ea7e011bbc1e7cb5c93e3daba527f502c5cd275bb6bb0f8abae",
+    "normalSha256": "798d023d48e7588ba6cd6cdaf15631e65d49293524eb95271be32c93cc91dcb4",
+    "colorSha256": "98c54f62d9e8123f94302d40a04bd145b0d2edd30f45c49b1e982832e78bd64d",
+    "query": {
+      "name": "14 / light-sheet projector left wall bracket / closed root haunch",
+      "visible": true,
+      "ancestorsVisible": true,
+      "raycastChildren": [],
+      "matrix": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        -10.82,
+        4.67,
+        -8.18,
+        1
+      ],
+      "frame": null
+    },
+    "collider": {
+      "mesh": {
+        "name": "14 / light-sheet projector left wall bracket / closed root haunch",
+        "visible": true,
+        "ancestorsVisible": true,
+        "raycastChildren": [],
+        "matrix": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          -10.82,
+          4.67,
+          -8.18,
+          1
+        ],
+        "frame": null
+      },
+      "box": {
+        "min": [
+          -10.899999998,
+          4.545,
+          -8.619999998
+        ],
+        "max": [
+          -10.740000002,
+          4.795,
+          -7.740000002
+        ]
+      },
+      "enabled": true,
+      "frontPlane": null
+    }
+  },
+  "14 / light-sheet projector right wall bracket / wall plate": {
+    "positionSha256": "f980a27c00c77344104745bd59628685c679cfcf04dfaffac6e0b1ea69d7c82d",
+    "normalSha256": "798d023d48e7588ba6cd6cdaf15631e65d49293524eb95271be32c93cc91dcb4",
+    "colorSha256": "98c54f62d9e8123f94302d40a04bd145b0d2edd30f45c49b1e982832e78bd64d",
+    "query": {
+      "name": "14 / light-sheet projector right wall bracket / wall plate",
+      "visible": true,
+      "ancestorsVisible": true,
+      "raycastChildren": [],
+      "matrix": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        -9.18,
+        4.56,
+        -8.63,
+        1
+      ],
+      "frame": null
+    },
+    "collider": {
+      "mesh": {
+        "name": "14 / light-sheet projector right wall bracket / wall plate",
+        "visible": true,
+        "ancestorsVisible": true,
+        "raycastChildren": [],
+        "matrix": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          -9.18,
+          4.56,
+          -8.63,
+          1
+        ],
+        "frame": null
+      },
+      "box": {
+        "min": [
+          -9.320000001,
+          4.199999986,
+          -8.749999997
+        ],
+        "max": [
+          -9.039999999,
+          4.920000014,
+          -8.510000003
+        ]
+      },
+      "enabled": true,
+      "frontPlane": null
+    }
+  },
+  "14 / light-sheet projector right wall bracket / cantilever": {
+    "positionSha256": "f6dc5adc436efa4e5189ce0f3d077cf1413ae6634099b54143df99c03c3f5189",
+    "normalSha256": "798d023d48e7588ba6cd6cdaf15631e65d49293524eb95271be32c93cc91dcb4",
+    "colorSha256": "87181123e739024b41a29cff0f562169ee7682ff55d99d95cfc8bef80cd36818",
+    "query": {
+      "name": "14 / light-sheet projector right wall bracket / cantilever",
+      "visible": true,
+      "ancestorsVisible": true,
+      "raycastChildren": [],
+      "matrix": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        -9.18,
+        4.86,
+        -7.61,
+        1
+      ],
+      "frame": null
+    },
+    "collider": {
+      "mesh": {
+        "name": "14 / light-sheet projector right wall bracket / cantilever",
+        "visible": true,
+        "ancestorsVisible": true,
+        "raycastChildren": [],
+        "matrix": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          -9.18,
+          4.86,
+          -7.61,
+          1
+        ],
+        "frame": null
+      },
+      "box": {
+        "min": [
+          -9.270000004,
+          4.780000002,
+          -8.61999999
+        ],
+        "max": [
+          -9.089999996,
+          4.939999998,
+          -6.60000001
+        ]
+      },
+      "enabled": true,
+      "frontPlane": null
+    }
+  },
+  "14 / light-sheet projector right wall bracket / projector saddle": {
+    "positionSha256": "2aa1982f0e046932240e597fd7e457cf8b704625510dde2d3d25699b72de6a76",
+    "normalSha256": "798d023d48e7588ba6cd6cdaf15631e65d49293524eb95271be32c93cc91dcb4",
+    "colorSha256": "e301fbaa7e570f129d9748616a33005ea56bdadbbf18a73a0e0cf8c6ce3ef760",
+    "query": {
+      "name": "14 / light-sheet projector right wall bracket / projector saddle",
+      "visible": true,
+      "ancestorsVisible": true,
+      "raycastChildren": [],
+      "matrix": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        -9.18,
+        4.9,
+        -6.79,
+        1
+      ],
+      "frame": null
+    },
+    "collider": {
+      "mesh": {
+        "name": "14 / light-sheet projector right wall bracket / projector saddle",
+        "visible": true,
+        "ancestorsVisible": true,
+        "raycastChildren": [],
+        "matrix": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          -9.18,
+          4.9,
+          -6.79,
+          1
+        ],
+        "frame": null
+      },
+      "box": {
+        "min": [
+          -9.335000001,
+          4.860000001,
+          -6.960000002
+        ],
+        "max": [
+          -9.024999999,
+          4.939999999,
+          -6.619999998
+        ]
+      },
+      "enabled": true,
+      "frontPlane": null
+    }
+  },
+  "14 / light-sheet projector right wall bracket / plate insert": {
+    "positionSha256": "fe9cf028eaf6327b76a5adbf3c850ab8c326916c7fbfd3d5664bdcbad5e71e71",
+    "normalSha256": "798d023d48e7588ba6cd6cdaf15631e65d49293524eb95271be32c93cc91dcb4",
+    "colorSha256": "117c998cff77afd458b5a28be451d77445f3732932341dccdb006f3b6d1bbfba",
+    "query": {
+      "name": "14 / light-sheet projector right wall bracket / plate insert",
+      "visible": true,
+      "ancestorsVisible": true,
+      "raycastChildren": [],
+      "matrix": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        -9.18,
+        4.56,
+        -8.493,
+        1
+      ],
+      "frame": null
+    },
+    "collider": {
+      "mesh": {
+        "name": "14 / light-sheet projector right wall bracket / plate insert",
+        "visible": true,
+        "ancestorsVisible": true,
+        "raycastChildren": [],
+        "matrix": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          -9.18,
+          4.56,
+          -8.493,
+          1
+        ],
+        "frame": null
+      },
+      "box": {
+        "min": [
+          -9.239999999,
+          4.335000006,
+          -8.515500001
+        ],
+        "max": [
+          -9.120000001,
+          4.784999994,
+          -8.470499999
+        ]
+      },
+      "enabled": true,
+      "frontPlane": null
+    }
+  },
+  "14 / light-sheet projector right wall bracket / closed root haunch": {
+    "positionSha256": "ed3c0b3b4da92ea7e011bbc1e7cb5c93e3daba527f502c5cd275bb6bb0f8abae",
+    "normalSha256": "798d023d48e7588ba6cd6cdaf15631e65d49293524eb95271be32c93cc91dcb4",
+    "colorSha256": "98c54f62d9e8123f94302d40a04bd145b0d2edd30f45c49b1e982832e78bd64d",
+    "query": {
+      "name": "14 / light-sheet projector right wall bracket / closed root haunch",
+      "visible": true,
+      "ancestorsVisible": true,
+      "raycastChildren": [],
+      "matrix": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        -9.18,
+        4.67,
+        -8.18,
+        1
+      ],
+      "frame": null
+    },
+    "collider": {
+      "mesh": {
+        "name": "14 / light-sheet projector right wall bracket / closed root haunch",
+        "visible": true,
+        "ancestorsVisible": true,
+        "raycastChildren": [],
+        "matrix": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          -9.18,
+          4.67,
+          -8.18,
+          1
+        ],
+        "frame": null
+      },
+      "box": {
+        "min": [
+          -9.259999998,
+          4.545,
+          -8.619999998
+        ],
+        "max": [
+          -9.100000002,
+          4.795,
+          -7.740000002
+        ]
+      },
+      "enabled": true,
+      "frontPlane": null
+    }
+  }
+}

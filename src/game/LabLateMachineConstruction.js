@@ -110,3 +110,65 @@ export function installOpticalRailTruck(k,parent,material){
  const bounds=new THREE.Box3(V(-4.7,-3.25,.65),V(4.7,-.80,11.35));
  const receipt={chassis,wheels,bounds,originalMovingParent:parent};parent.userData.lateOpticalRailTruck=true;return receipt;
 }
+
+/** Two closed hangers join a real light housing to the actual closed roof.
+ * Their end plates overlap the finite source solids; no free-standing rods,
+ * extra light, collider, aim owner or animation is introduced. */
+export function suspendLateLuminaire(k,housing,name){
+ const roof=k.world.root.getObjectByName('Closed laboratory roof');
+ if(!roof||!housing?.isMesh)throw new Error('A roof and an actual luminaire housing are required');
+ roof.updateWorldMatrix(true,false);housing.updateWorldMatrix(true,false);
+ const roofBounds=new THREE.Box3().setFromObject(roof),housingBounds=new THREE.Box3().setFromObject(housing);
+ const floor=housingBounds.max.y,ceiling=roofBounds.min.y,gap=ceiling-floor;
+ if(gap<=.04)throw new Error('Suspension is only needed for a separated housing');
+ const center=housingBounds.getCenter(V()),size=housingBounds.getSize(V()),b=builder();
+ const ends=[];
+ for(const side of [-1,1]){
+  const x=center.x+side*size.x*.34,z=center.z;
+  const top=new THREE.Box3(V(x-.28,ceiling-.06,z-.38),V(x+.28,ceiling+.04,z+.38));
+  const bottom=new THREE.Box3(V(x-.28,floor-.06,z-.38),V(x+.28,floor+.04,z+.38));
+  if(x-.28<roofBounds.min.x||x+.28>roofBounds.max.x||z-.38<roofBounds.min.z||z+.38>roofBounds.max.z||
+   x-.28<housingBounds.min.x||x+.28>housingBounds.max.x||z-.38<housingBounds.min.z||z+.38>housingBounds.max.z)throw new Error('Suspension plates must be supported by finite solids');
+  b.box([x,(floor+ceiling)/2,z],[.16,gap+.04,.36],.72);
+  for(const y of [floor-.01,ceiling-.01])b.box([x,y,z],[.56,.10,.76],.46);
+  ends.push({top,bottom});
+ }
+ const mesh=k.geometry(join(b.parts,name),'metal',[0,0,0],Q(),{batch:false,name});
+ const receipt={mesh,housing,roof,housingBounds,roofBounds,ends,gap};
+ (k.lateRoofSuspensions??=[]).push(receipt);return receipt;
+}
+
+/** The rail's real return force is -8*x along its only free axis. Depict it
+ * with one continuous spring, whose extension from the authored rest span is
+ * exactly x. The rear service strip clears both the cargo and travel buffer;
+ * the terminal bends into the actual carriage cheek. No force is added here. */
+export function installLateRailSpring(k,machine){
+ const segments=216,sides=6,wire=.025,coil=.09,turns=18;
+ const anchor=V(-10.15,4.6,-16.29),seat=V(-1.4,0,-1.08),end=V();
+ const count=(segments+1)*(sides+1),positions=new Float32Array((count+2)*3),normals=new Float32Array((count+2)*3),indices=[];
+ for(let i=0;i<segments;i++)for(let j=0;j<sides;j++){
+  const a=i*(sides+1)+j,b=a+sides+1;indices.push(a,a+1,b,b,a+1,b+1);
+ }
+ for(let j=0;j<sides;j++){indices.push(count,j+1,j);const last=segments*(sides+1);indices.push(count+1,last+j,last+j+1);}
+ const geometry=new THREE.BufferGeometry();geometry.setAttribute('position',new THREE.BufferAttribute(positions,3).setUsage(THREE.DynamicDrawUsage));geometry.setAttribute('normal',new THREE.BufferAttribute(normals,3).setUsage(THREE.DynamicDrawUsage));geometry.setIndex(indices);
+ const mesh=k.geometry(geometry,'metal',[0,0,0],Q(),{batch:false,name:'48 / continuous spring between endwall and actual moving cheek'});mesh.frustumCulled=false;
+ const p=V(),before=V(),after=V(),tangent=V(),normal=V(),binormal=V(),up=V(0,0,1),cross=V(),smooth=t=>{const x=THREE.MathUtils.clamp(t,0,1);return x*x*(3-2*x);};
+ let previous='';
+ function sync(){
+  if(!machine.body){mesh.visible=false;return;}mesh.visible=true;
+  machine.carGroup.updateWorldMatrix(true,false);end.copy(seat).applyMatrix4(machine.carGroup.matrixWorld);
+  const pose=end.toArray().join(',');if(pose===previous)return;previous=pose;
+  const length=end.x-anchor.x;
+  if(!Number.isFinite(length)||length<=1)throw new Error('The real rail spring requires its finite guided stroke');
+  const center=(t,out)=>{const s=t*length,amplitude=coil*smooth(s/.16)*smooth((length-s)/.20),a=t*turns*Math.PI*2;
+   return out.set(anchor.x+s,THREE.MathUtils.lerp(anchor.y,end.y,t)+amplitude*Math.sin(a),anchor.z+amplitude*Math.cos(a)+(end.z-anchor.z)*smooth((s-length+.14)/.14));};
+  for(let i=0;i<=segments;i++){
+   const t=i/segments;center(t,p);center(Math.max(0,t-.00001),before);center(Math.min(1,t+.00001),after);tangent.copy(after).sub(before).normalize();binormal.crossVectors(tangent,up).normalize();normal.crossVectors(binormal,tangent).normalize();
+   for(let j=0;j<=sides;j++){const a=j/sides*Math.PI*2,id=(i*(sides+1)+j)*3;cross.copy(normal).multiplyScalar(Math.cos(a)).addScaledVector(binormal,Math.sin(a));positions[id]=p.x+cross.x*wire;positions[id+1]=p.y+cross.y*wire;positions[id+2]=p.z+cross.z*wire;normals[id]=cross.x;normals[id+1]=cross.y;normals[id+2]=cross.z;}
+  }
+  positions.set(anchor.toArray(),count*3);positions.set(end.toArray(),(count+1)*3);normals.set([-1,0,0],count*3);normals.set([1,0,0],(count+1)*3);
+  geometry.attributes.position.needsUpdate=true;geometry.attributes.normal.needsUpdate=true;geometry.computeBoundingBox();geometry.computeBoundingSphere();
+ }
+ k.renders.push(sync);sync();
+ const receipt={mesh,anchor,seat,end,restLength:8.75,stiffness:8,wireRadius:wire,turns,sync,originalMovingParent:machine.carGroup};k.lateRailSpring=receipt;return receipt;
+}

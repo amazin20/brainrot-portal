@@ -1,7 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import fs from 'node:fs';
 import * as THREE from 'three';
 import {createHeadlessGame} from '../scripts/lab-headless.mjs';
+import {ACTIVE_FOUNDATION_RUNTIME_FLAGS} from '../src/game/ReleaseIdentity.js';
 
 const V=(...a)=>new THREE.Vector3(...a);
 function drawn(hit){
@@ -38,14 +40,17 @@ test('room-one calibration arcs remain visible below the actual cornice that hid
  }finally{g.firstLevel.dispose();g.physics.dispose();g.portals.dispose();}
 });
 
-test('the reviewed opening-room mount repair retains the recorded later-chapter mount heights',async()=>{
- const g=await createHeadlessGame();g.chamberEdition='foundation';
+test('reviewed wall mounts retain the recorded placement in every other active room',async()=>{
+ const g=await createHeadlessGame();Object.assign(g,ACTIVE_FOUNDATION_RUNTIME_FLAGS);g.chamberEdition='foundation';
+ const baseline=JSON.parse(fs.readFileSync(new URL('./fixtures/ornament-mounts-901ff9d.json',import.meta.url),'utf8'));
  try{
-  // Recorded before the repair; these rooms share the enclosure builder but
-  // their artwork has not received this opening-chapter visual review.
-  for(const [number,y]of [[18,9.8],[20,9.8],[32,8.9],[34,11.2],[37,11.2],[39,11.2]]){
-   await g.selectLevel(number-1,false);
-   assert.deepEqual(g.firstLevel.campaignEnvironment.root.userData.mounts.map(s=>s.center[1]),[y,y],`Room ${number} changed outside the reviewed scope`);
+  // The follow-up review deliberately extends the opening-room repair to
+  // six later enclosures. The other 45 rooms retain their exact whole mounts.
+  assert.equal(baseline.commit,'901ff9d43dff2642b8125a4ac36540ae863ec9f5');assert.equal(baseline.rows.length,51);
+  for(const row of baseline.rows.filter(r=>![18,20,32,34,37,39].includes(r.n))){
+   await g.selectLevel(row.n-1,false);
+   assert.equal(g.firstLevel.id,row.id);
+   assert.deepEqual(g.firstLevel.campaignEnvironment?.root.userData.mounts??[],row.mounts,`Room ${row.n} changed outside the reviewed scope`);
   }
  }finally{g.firstLevel.dispose();g.physics.dispose();g.portals.dispose();}
 });

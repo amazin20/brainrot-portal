@@ -286,12 +286,20 @@ $('#quality-select').value=preferences.value.quality;$('#quality-select').addEve
 $('#mute-toggle').checked=preferences.value.muted;$('#volume-control').value=preferences.value.volume*100;
 $('#mute-toggle').addEventListener('change',e=>{preferences.save({muted:e.target.checked});game.audio.configure(preferences.value);});
 $('#volume-control').addEventListener('input',e=>{preferences.save({volume:Number(e.target.value)/100});game.audio.configure(preferences.value);});
+function syncLookSensitivity(){
+ game.lookSensitivity=preferences.value.lookSensitivity;
+ const percent=String(Math.round(game.lookSensitivity*100));
+ for(const selector of ['#look-sensitivity','#menu-sensitivity']){$(selector).value=percent;$(selector).setAttribute('aria-valuetext',percent+'%');}
+ for(const selector of ['#look-sensitivity-value','#menu-sensitivity-value'])$(selector).value=percent+'%';
+}
+syncLookSensitivity();
+$('#look-sensitivity').addEventListener('input',e=>{preferences.save({lookSensitivity:Number(e.target.value)/100});syncLookSensitivity();});
 
 // Settings are a real modal available before Play. The game stays ready;
 // there is no phantom pause or hidden restart, and existing in-game controls
 // remain the single action path for preference changes.
 const menuSettings=$('#menu-settings');
-const settingPairs=[['#menu-quality','#quality-select','value','change'],['#menu-volume','#volume-control','value','input'],['#menu-muted','#mute-toggle','checked','change'],['#menu-tutorial','#tutorial-toggle','checked','change']];
+const settingPairs=[['#menu-quality','#quality-select','value','change'],['#menu-volume','#volume-control','value','input'],['#menu-sensitivity','#look-sensitivity','value','input'],['#menu-muted','#mute-toggle','checked','change'],['#menu-tutorial','#tutorial-toggle','checked','change']];
 $('#menu-settings-button').addEventListener('click',()=>{
  if(game.state!=='ready'||holds.size)return;
  for(const [menu,existing,property]of settingPairs)$(menu)[property]=$(existing)[property];
