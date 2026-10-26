@@ -1,0 +1,34 @@
+TAP version 13
+# Subtest: 13 portrait: release-mirror-during-partial-south-ascent reaches its actual target before being blocked
+ok 1 - 13 portrait: release-mirror-during-partial-south-ascent reaches its actual target before being blocked
+  ---
+  duration_ms: 17764.141465
+  type: 'test'
+  ...
+# Subtest: 13 portrait: unloaded-north-gallery-receiver-leap reaches its actual target before being blocked
+ok 2 - 13 portrait: unloaded-north-gallery-receiver-leap reaches its actual target before being blocked
+  ---
+  duration_ms: 12983.786418
+  type: 'test'
+  ...
+# Subtest: 35: held-corner-jumps recognises the earned return only after both real latches and freight transport
+ok 3 - 35: held-corner-jumps recognises the earned return only after both real latches and freight transport
+  ---
+  duration_ms: 12188.877305
+  type: 'test'
+  ...
+# Subtest: 35: held-walkaround-detour recognises the earned return only after both real latches and freight transport
+ok 4 - 35: held-walkaround-detour recognises the earned return only after both real latches and freight transport
+  ---
+  duration_ms: 7329.870977
+  type: 'test'
+  ...
+1..4
+# tests 4
+# suites 0
+# pass 4
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 51294.792097

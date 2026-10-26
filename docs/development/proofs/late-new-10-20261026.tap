@@ -1,0 +1,77 @@
+TAP version 13
+# Subtest: late fixture mounts and the continuous spring preserve all five original room contracts
+ok 1 - late fixture mounts and the continuous spring preserve all five original room contracts
+  ---
+  duration_ms: 20868.594624
+  type: 'test'
+  ...
+# Subtest: each new luminaire suspension intersects the finite roof and actual closed housing at both ends
+ok 2 - each new luminaire suspension intersects the finite roof and actual closed housing at both ends
+  ---
+  duration_ms: 2507.372163
+  type: 'test'
+  ...
+# Subtest: the single rail spring is closed, mounted, clear of the buffer and cargo, and keeps its wire gauge through the actual guided stroke
+ok 3 - the single rail spring is closed, mounted, clear of the buffer and cargo, and keeps its wire gauge through the actual guided stroke
+  ---
+  duration_ms: 1087.943613
+  type: 'test'
+  ...
+# 47 complete portrait route {"aspect":0.46208530805687204,"frames":7275,"requests":4,"impacts":4,"addressShot":{"index":1,"player":[-5.992496905886193,0,-5.7934901461662704],"camera":[-8.37413670943368,0.3276596755475153,-5.76713050549131],"surface":"c19d46ab-ed78-408b-b223-dad9a1240602","point":[8.160330526397614,12.150224273069627,-19.40000000268221]},"resets":0,"respawns":0,"sameCargo":true,"sameBody":true,"sameShape":true,"state":"won"}
+# 47 complete portrait route {"aspect":0.5625,"frames":7474,"requests":4,"impacts":4,"addressShot":{"index":1,"player":[-5.992496905587185,0,-5.793490146517788],"camera":[-8.3738778210522,0.32788644690378266,-5.7668871683338505],"surface":"13d13772-6121-4dc5-a754-c2c4665103b2","point":[8.160342717168225,12.14907288820661,-19.40000000268221]},"resets":0,"respawns":0,"sameCargo":true,"sameBody":true,"sameShape":true,"state":"won"}
+# Subtest: 47 portrait 0.46208530805687204 sees the actual upper address from the west court and completes the joint route
+ok 4 - 47 portrait 0.46208530805687204 sees the actual upper address from the west court and completes the joint route
+  ---
+  duration_ms: 35994.718361
+  type: 'test'
+  ...
+# Subtest: 47 portrait 0.5625 sees the actual upper address from the west court and completes the joint route
+ok 5 - 47 portrait 0.5625 sees the actual upper address from the west court and completes the joint route
+  ---
+  duration_ms: 38371.21955
+  type: 'test'
+  ...
+# 48 complete portrait route {"aspect":0.46208530805687204,"frames":9706,"requests":10,"impacts":10,"inspectionJump":{"index":0,"airborne":true,"player":[10.322116280164954,9.153750011920932,-25.887300618443707],"camera":[8.398520844997265,11.372255696116822,-31.586134665313196],"surface":"bccc5c95-0e66-4860-8d31-c8138878a537","worldStep":4478},"resets":0,"respawns":0,"sameCargo":true,"sameBody":true,"sameShape":true,"state":"won"}
+# 48 complete portrait route {"aspect":0.5625,"frames":9637,"requests":10,"impacts":10,"inspectionJump":{"index":0,"airborne":true,"player":[10.322116029170873,8.52406251192093,-25.887302748956508],"camera":[9.48996351756721,14.383946216403242,-34.67442388594078],"surface":"f4e45110-e5ed-429a-97be-6cc60f6f8ddb","worldStep":4338},"resets":0,"respawns":0,"sameCargo":true,"sameBody":true,"sameShape":true,"state":"won"}
+# Subtest: 48 portrait 0.46208530805687204 uses one real inspection jump and wins with the original contact weight
+ok 6 - 48 portrait 0.46208530805687204 uses one real inspection jump and wins with the original contact weight
+  ---
+  duration_ms: 52955.242138
+  type: 'test'
+  ...
+# Subtest: 48 portrait 0.5625 uses one real inspection jump and wins with the original contact weight
+ok 7 - 48 portrait 0.5625 uses one real inspection jump and wins with the original contact weight
+  ---
+  duration_ms: 48874.450698
+  type: 'test'
+  ...
+# 49 complete original-actor route {"aspect":0.46208530805687204,"frames":4835,"visualFrames":4835,"shots":10,"allSweptImpactsValid":true,"boarding":{"name":"The moving passenger aperture admits the original player to the closed carriage","player":[4.089604589755628,8.15,3.6836802705825846],"cargo":[-3.253907752696955,8.53997468626488,10.99846343234687],"teleports":1,"grounded":true,"floor":8.15,"entry":[8.49939081481993,10.700455378783365,-3],"exit":[5.687781784510794,10.849966213974668,3.6997121045760366]},"closures":[{"grounded":true,"player":[4.089604589755628,8.15,3.6836802705825846],"floor":8.15,"teleports":1,"braked":true,"loaded":true}],"resets":0,"respawns":0,"state":"won","sameOriginalActors":true}
+# 49 complete original-actor route {"aspect":0.5625,"frames":4726,"visualFrames":4726,"shots":10,"allSweptImpactsValid":true,"boarding":{"name":"The moving passenger aperture admits the original player to the closed carriage","player":[4.089604589755441,8.15,3.683703533115173],"cargo":[-2.4744913190342186,8.53997473487688,10.540349542822973],"teleports":1,"grounded":true,"floor":8.15,"entry":[8.499872013460006,10.701494760675848,-3],"exit":[5.687781784510933,10.849978632184637,3.700216565748686]},"closures":[{"grounded":true,"player":[4.089604589755441,8.15,3.683703533115173],"floor":8.15,"teleports":1,"braked":true,"loaded":true}],"resets":0,"respawns":0,"state":"won","sameOriginalActors":true}
+# 49 complete original-actor route {"aspect":1.7777777777777777,"frames":4677,"visualFrames":4677,"shots":10,"allSweptImpactsValid":true,"boarding":{"name":"The moving passenger aperture admits the original player to the closed carriage","player":[4.0896022108500345,8.15,3.681523485233204],"cargo":[-3.3113213782942976,8.539974700175073,10.270694375710493],"teleports":1,"grounded":true,"floor":8.15,"entry":[8.497920848415536,10.700195121120116,-3],"exit":[5.687781784510895,10.849501051035357,3.6960847881563432]},"closures":[],"resets":0,"respawns":0,"state":"won","sameOriginalActors":true}
+# Subtest: 49 complete route 0.46208530805687204 boards at the actual deck height and retains every original actor
+ok 8 - 49 complete route 0.46208530805687204 boards at the actual deck height and retains every original actor
+  ---
+  duration_ms: 25968.752659
+  type: 'test'
+  ...
+# Subtest: 49 complete route 0.5625 boards at the actual deck height and retains every original actor
+ok 9 - 49 complete route 0.5625 boards at the actual deck height and retains every original actor
+  ---
+  duration_ms: 20041.797533
+  type: 'test'
+  ...
+# Subtest: 49 complete route 1.7777777777777777 boards at the actual deck height and retains every original actor
+ok 10 - 49 complete route 1.7777777777777777 boards at the actual deck height and retains every original actor
+  ---
+  duration_ms: 20670.390693
+  type: 'test'
+  ...
+1..10
+# tests 10
+# suites 0
+# pass 10
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 270599.666448

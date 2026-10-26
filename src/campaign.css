@@ -107,10 +107,10 @@
 .mission-art-caption { position:absolute; bottom:9px; left:20px; color:#c1e2e9; font-size:6px; letter-spacing:.14em; z-index:1; }
 .mission-art-orbit { position:absolute; right:26px; top:22px; width:82px; height:121px; border:2px solid #83effaaa; border-left:4px solid #d3feff; border-radius:50%; box-shadow:0 0 20px #5edfff40,inset 0 0 18px #5edfff33; transform:rotate(12deg); }
 .mission-chapter { color:var(--mission-accent); text-transform:uppercase; font-size:9px; letter-spacing:.11em; margin:17px 8px 0; line-height:1.6; }
-.mission-panel .start-actions { margin:0 8px; gap:0; }
-.mission-panel .selected-room { padding:14px 0 18px; margin:0; border:0; }
+.mission-panel .start-actions { margin:0 8px; gap:0; min-width:0; grid-template-columns:minmax(0,1fr); }
+.mission-panel .selected-room { padding:14px 0 18px; margin:0; border:0; min-width:0; }
 .mission-panel #selected-room-number { color:#9bb6cc; font-size:9px; letter-spacing:.13em; }
-.mission-panel .selected-room h2 { font-size:27px; line-height:1.07; letter-spacing:-.035em; margin:8px 0 15px; color:#fff; }
+.mission-panel .selected-room h2 { font-size:27px; line-height:1.07; letter-spacing:-.035em; margin:8px 0 15px; color:#fff; overflow-wrap:anywhere; hyphens:manual; }
 .mission-panel .selected-room p { font-size:13px; line-height:1.7; color:#bdd1e0; min-height:70px; margin:0 0 17px; }
 .mission-panel #selected-room-status { font-size:10px; color:var(--mission-accent); display:block; border:1px solid #a1d1e330; background:#03192566; border-radius:8px; padding:11px 9px; line-height:1.5; }
 .mission-panel .primary-button { min-height:56px; width:100%; border-radius:10px; background:linear-gradient(110deg,#47e7ec,#44b6f8); border:1px solid #91f5ff; color:#062338; font-size:14px; padding:14px 13px; font-weight:750; }

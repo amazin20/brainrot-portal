@@ -48,10 +48,26 @@ function boundsInPage(selector){
  const node=document.querySelector(selector);if(!node)throw Error('Missing '+selector);
  const b=node.getBoundingClientRect(),style=getComputedStyle(node),range=document.createRange();range.selectNodeContents(node);
  const lines=[...range.getClientRects()].filter(r=>r.width>.05&&r.height>.05).map(r=>({x:r.x,y:r.y,width:r.width,height:r.height,right:r.right,bottom:r.bottom}));
- const left=b.left+parseFloat(style.paddingLeft||0),right=b.right-parseFloat(style.paddingRight||0);
+ let left=Math.max(0,b.left+parseFloat(style.paddingLeft||0)),right=Math.min(innerWidth,b.right-parseFloat(style.paddingRight||0));
+ const containers=[];let verticalClipped=false,canScrollVertically=false;
+ for(let parent=node;parent;parent=parent.parentElement){
+  const rect=parent.getBoundingClientRect(),css=getComputedStyle(parent);
+  if(parent!==node&&rect.width>0&&css.display!=='contents'){
+   const contentLeft=rect.left+parseFloat(css.borderLeftWidth||0)+parseFloat(css.paddingLeft||0);
+   const contentRight=rect.right-parseFloat(css.borderRightWidth||0)-parseFloat(css.paddingRight||0);
+   left=Math.max(left,contentLeft);right=Math.min(right,contentRight);
+   containers.push({tag:parent.tagName,id:parent.id,className:parent.className,left:contentLeft,right:contentRight});
+  }
+  // Font Range em boxes can extend above a tight line-height without clipped
+  // ink. Reject real hidden/clip overflow, not those normal font metrics.
+  // Content inside a scrolling screen may be below the current viewport.
+  if(!canScrollVertically&&['hidden','clip'].includes(css.overflowY)&&parent.scrollHeight>parent.clientHeight+1)verticalClipped=true;
+  if(['auto','scroll'].includes(css.overflowY))canScrollVertically=true;
+ }
+ const horizontalOverflow=lines.some(r=>r.x<left-1||r.right>right+1);
  return{text:node.textContent,box:{x:b.x,y:b.y,width:b.width,height:b.height,right:b.right,bottom:b.bottom},lines,
   visible:style.display!=='none'&&style.visibility!=='hidden',scrollWidth:node.scrollWidth,clientWidth:node.clientWidth,
-  overflow:lines.some(r=>r.x<left-1||r.right>right+1||r.y<b.top-1||r.bottom>b.bottom+1)};
+  contentLimits:{left,right},containers,horizontalOverflow,verticalClipped,overflow:horizontalOverflow||verticalClipped};
 }
 async function nativeClick(selector){
  const before=await page.evaluate(()=>window.__menuNativeClicks.length);
@@ -85,10 +101,11 @@ async function choose(index,width,height,completeSweep){
  await page.waitForFunction(index=>document.querySelector('#level-select').value===String(index),{timeout:5000},index);
  const card=await page.evaluate(boundsSource=>{
   const bounds=(0,eval)('('+boundsSource+')');
-  return{title:document.querySelector('#selected-room-title').textContent,description:document.querySelector('#selected-room-description').textContent,
+  return{title:document.querySelector('#selected-room-title').textContent,titleAria:document.querySelector('#selected-room-title').getAttribute('aria-label'),description:document.querySelector('#selected-room-description').textContent,
    number:document.querySelector('#selected-room-number').textContent,titleBounds:bounds('#selected-room-title'),descriptionBounds:bounds('#selected-room-description')};
  },boundsInPage.toString());
- assert.equal(card.title,specs[index].title);
+ assert.equal(card.title.replace(/\u00ad/g,''),specs[index].title);
+ assert.equal(card.titleAria,specs[index].title);
  assert.equal(card.description,specs[index].description.split(/(?<=\.)\s+/)[0]);
  const number=index<40?index+1:index===40?51:index;
  assert.equal(card.number,'КОМНАТА '+String(number).padStart(2,'0'));
@@ -182,4 +199,3 @@ try{
 }
 assert.ok(report.pass,report.provenanceFailure||report.failure);
 console.log(JSON.stringify({pass:report.pass,allCardChecks:102,atlasTitleChecks:255,nativeClicks:report.clicks.length,screenshots:report.screenshots.length,sourceFiles:Object.keys(report.sourceStart).length,sourceDrift:report.sourceDrift.length,errors:report.errors.length}));
-

@@ -1,0 +1,108 @@
+{
+  "kind": "fresh-native-code-regressions",
+  "sourceCommit": "bbd86f4492a468fb8a6f5615aa6b09bb66028403",
+  "sourceInputsSha256": "826c134e32ad9299fb4b0e41a947d4eade6ab510be65bd573c7bb8628086e728",
+  "scope": "Production-controller and physical simulation tests in Node; no physical-device or browser acceptance. UI typography changed separately after this source snapshot. The listed tested files are byte-identical to the current working tree.",
+  "runs": [
+    {
+      "tests": 66,
+      "pass": 66,
+      "fail": 0,
+      "skip": 0,
+      "format": "node-spec",
+      "file": "mobile-node-66-20261026.txt",
+      "sha256": "12793e287409f7213364d2be3acf26116079aa41fe4d22556e4af9779b29f2c3"
+    },
+    {
+      "tests": 4,
+      "pass": 4,
+      "fail": 0,
+      "skip": 0,
+      "format": "tap",
+      "file": "attack-regressions-4-20261026.tap",
+      "sha256": "102c0e6cc7122fe9a444420805a95ec532b66cbd2a053fb4d9592443e33e354b"
+    }
+  ],
+  "testedFiles": [
+    {
+      "path": "index.html",
+      "sha256": "a3ec000f98a25cc24799f315f05dafb8327c5004b4a6ed6cecfb8ab617e1e15b"
+    },
+    {
+      "path": "src/main.js",
+      "sha256": "26cbcfefc4878ca70dd55f72db2a660e858a0983dff81d8caa2a448aec50c255"
+    },
+    {
+      "path": "src/styles.css",
+      "sha256": "5529cdf3ebd416459618bae4c99d8aee720b994fee36fbd3c9f681bcf04d88d3"
+    },
+    {
+      "path": "src/touch-controls.css",
+      "sha256": "3bb1e3b92ddfa7737f5a429a644a4c3576a9d909b8803a431a0470cfe9e40f96"
+    },
+    {
+      "path": "src/game/LabControls.js",
+      "sha256": "ef592c32659a5e69153743deaf0f8633b36b9072e4171571fbbc8da9450468f9"
+    },
+    {
+      "path": "src/game/LabPreferences.js",
+      "sha256": "50d3c05c12d3526e2ac68112f5ca3f5d119d41bfd1a067fe914bfb467ac60f05"
+    },
+    {
+      "path": "src/game/LabLookSensitivity.js",
+      "sha256": "fc56863183954536a95be7502f0dbc9883ad38d65c9912fd32c37aef2d569868"
+    },
+    {
+      "path": "src/game/LabTower41Preview.js",
+      "sha256": "5a0b527f0d8a56acb37c97695b3c7b52db0594aaffac138d71d301afef79ebc0"
+    },
+    {
+      "path": "scripts/qa-campaign-shortcuts.mjs",
+      "sha256": "d16632fb5f9cd2186c6ff53581a61175639d508c7dc6685571f5ca9aceb50499"
+    },
+    {
+      "path": "scripts/lib/second-chapter-early-attacks.mjs",
+      "sha256": "68c634549ca7c4f350c187cc21213222268a310260283c1a3724dcbd2e21ec4a"
+    },
+    {
+      "path": "tests/lab-look-sensitivity.test.js",
+      "sha256": "95aba778210e2c26da190ac0eec37a8ad81a4a85bb3449c6e00c82a4145d4569"
+    },
+    {
+      "path": "tests/lab-preview-tower41.test.js",
+      "sha256": "3500ce05b9fd8c95a51347f9044379471cc26bc4f770655452e7fa6471daad1c"
+    },
+    {
+      "path": "tests/physical-review-entry.test.js",
+      "sha256": "6da9022166065603fbb84518a63f6e998f34103f033c86987c1e9742e2564eb4"
+    },
+    {
+      "path": "tests/input-focus-recovery.test.js",
+      "sha256": "9c3162338e182f608f74d165078a59a309b10d879cd96c63613125ff84aa518e"
+    },
+    {
+      "path": "tests/lab-touch-feedback.test.js",
+      "sha256": "44ba0b1ae5ce03ea930e07a1cd530f6b8d57e5c2591f9bed5546c3784074cb98"
+    },
+    {
+      "path": "tests/lab-preferences-checkpoint.test.js",
+      "sha256": "f875ec82719a20c5660f306ab592d6936c3607ac4a79724edd5ff0bdf9840043"
+    },
+    {
+      "path": "tests/lab-preferences-edition-continuity.test.js",
+      "sha256": "ac81811bc96a3b2ea91468b3a96988e588f9809db47fb8747b469cc67be0fd18"
+    },
+    {
+      "path": "tests/lab-preferences-migration.test.js",
+      "sha256": "f0c1ad77bb568f87841382d784f198cfe2cf2455efc49d1ca891402bc18c2fe4"
+    },
+    {
+      "path": "tests/lab-room13-portrait-attacks.test.js",
+      "sha256": "b821ce2760cb6d97831420bf3fec3f2f53b5563412a069d388d6e664bebede8d"
+    },
+    {
+      "path": "tests/lab-room35-shortcut-classification.test.js",
+      "sha256": "7c750d12a9b81d9e4bf3cb912cd90820dafa4bc069784d0e5ea09f2e8697ec56"
+    }
+  ]
+}

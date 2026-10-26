@@ -1,0 +1,262 @@
+TAP version 13
+# Subtest: 13 wide: real south receiver mounts do not replace the unpowered lift
+ok 1 - 13 wide: real south receiver mounts do not replace the unpowered lift
+  ---
+  duration_ms: 6254.564602
+  type: 'test'
+  ...
+# Subtest: 13 wide: real north receiver mounts do not replace the unpowered lift
+ok 2 - 13 wide: real north receiver mounts do not replace the unpowered lift
+  ---
+  duration_ms: 5047.261919
+  type: 'test'
+  ...
+# Subtest: 13 portrait: real south receiver mounts do not replace the unpowered lift
+ok 3 - 13 portrait: real south receiver mounts do not replace the unpowered lift
+  ---
+  duration_ms: 6905.268371
+  type: 'test'
+  ...
+# Subtest: 13 portrait: real north receiver mounts do not replace the unpowered lift
+ok 4 - 13 portrait: real north receiver mounts do not replace the unpowered lift
+  ---
+  duration_ms: 6353.651812
+  type: 'test'
+  ...
+# Subtest: 14 wide: free observer reaches the projector but cannot replace the routed light crossing
+ok 5 - 14 wide: free observer reaches the projector but cannot replace the routed light crossing
+  ---
+  duration_ms: 4739.02098
+  type: 'test'
+  ...
+# Subtest: 14 wide: original carried pair reaches the projector but cannot replace the routed light crossing
+ok 6 - 14 wide: original carried pair reaches the projector but cannot replace the routed light crossing
+  ---
+  duration_ms: 6627.315294
+  type: 'test'
+  ...
+# Subtest: 14 portrait: free observer reaches the projector but cannot replace the routed light crossing
+ok 7 - 14 portrait: free observer reaches the projector but cannot replace the routed light crossing
+  ---
+  duration_ms: 8341.755714
+  type: 'test'
+  ...
+# Subtest: 14 portrait: original carried pair reaches the projector but cannot replace the routed light crossing
+ok 8 - 14 portrait: original carried pair reaches the projector but cannot replace the routed light crossing
+  ---
+  duration_ms: 11175.278333
+  type: 'test'
+  ...
+# Subtest: room13 wide: ordinary portal, optical and cargo route passes real fixed mount bodies
+ok 9 - room13 wide: ordinary portal, optical and cargo route passes real fixed mount bodies
+  ---
+  duration_ms: 12578.255673
+  type: 'test'
+  ...
+# Subtest: room14 wide: ordinary portal, optical and cargo route passes real fixed mount bodies
+ok 10 - room14 wide: ordinary portal, optical and cargo route passes real fixed mount bodies
+  ---
+  duration_ms: 14366.179134
+  type: 'test'
+  ...
+# Subtest: room13 portrait: ordinary portal, optical and cargo route passes real fixed mount bodies
+ok 11 - room13 portrait: ordinary portal, optical and cargo route passes real fixed mount bodies
+  ---
+  duration_ms: 15334.095889
+  type: 'test'
+  ...
+# Subtest: room14 portrait: ordinary portal, optical and cargo route passes real fixed mount bodies
+ok 12 - room14 portrait: ordinary portal, optical and cargo route passes real fixed mount bodies
+  ---
+  duration_ms: 13847.489359
+  type: 'test'
+  ...
+# Subtest: 12: ordinary wide route reaches the same exit through real access and service sight lines
+ok 13 - 12: ordinary wide route reaches the same exit through real access and service sight lines
+  ---
+  duration_ms: 21737.015365
+  type: 'test'
+  ...
+# Subtest: 12: ordinary portrait route reaches the same exit through real access and service sight lines
+ok 14 - 12: ordinary portrait route reaches the same exit through real access and service sight lines
+  ---
+  duration_ms: 35415.836522
+  type: 'test'
+  ...
+# Subtest: 13: ordinary wide route reaches the same exit through real access and service sight lines
+ok 15 - 13: ordinary wide route reaches the same exit through real access and service sight lines
+  ---
+  duration_ms: 32525.293098
+  type: 'test'
+  ...
+# Subtest: 13: ordinary portrait route reaches the same exit through real access and service sight lines
+ok 16 - 13: ordinary portrait route reaches the same exit through real access and service sight lines
+  ---
+  duration_ms: 31339.074547
+  type: 'test'
+  ...
+# Subtest: 18: ordinary wide route reaches the same exit through real access and service sight lines
+ok 17 - 18: ordinary wide route reaches the same exit through real access and service sight lines
+  ---
+  duration_ms: 12029.994511
+  type: 'test'
+  ...
+# Subtest: 18: ordinary portrait route reaches the same exit through real access and service sight lines
+ok 18 - 18: ordinary portrait route reaches the same exit through real access and service sight lines
+  ---
+  duration_ms: 13316.590107
+  type: 'test'
+  ...
+# Subtest: room 11: manufactured models preserve actual physics, aim targets, source buffers and working geometry
+ok 19 - room 11: manufactured models preserve actual physics, aim targets, source buffers and working geometry
+  ---
+  duration_ms: 679.473127
+  type: 'test'
+  ...
+# Subtest: room 12: manufactured models preserve actual physics, aim targets, source buffers and working geometry
+ok 20 - room 12: manufactured models preserve actual physics, aim targets, source buffers and working geometry
+  ---
+  duration_ms: 841.878496
+  type: 'test'
+  ...
+# Subtest: room 13: manufactured models preserve actual physics, aim targets, source buffers and working geometry
+ok 21 - room 13: manufactured models preserve actual physics, aim targets, source buffers and working geometry
+  ---
+  duration_ms: 748.241706
+  type: 'test'
+  ...
+# Subtest: room 14: manufactured models preserve actual physics, aim targets, source buffers and working geometry
+ok 22 - room 14: manufactured models preserve actual physics, aim targets, source buffers and working geometry
+  ---
+  duration_ms: 690.351812
+  type: 'test'
+  ...
+# Subtest: room 15: manufactured models preserve actual physics, aim targets, source buffers and working geometry
+ok 23 - room 15: manufactured models preserve actual physics, aim targets, source buffers and working geometry
+  ---
+  duration_ms: 729.017271
+  type: 'test'
+  ...
+# Subtest: room 16: manufactured models preserve actual physics, aim targets, source buffers and working geometry
+ok 24 - room 16: manufactured models preserve actual physics, aim targets, source buffers and working geometry
+  ---
+  duration_ms: 754.042637
+  type: 'test'
+  ...
+# Subtest: room 17: manufactured models preserve actual physics, aim targets, source buffers and working geometry
+ok 25 - room 17: manufactured models preserve actual physics, aim targets, source buffers and working geometry
+  ---
+  duration_ms: 901.586526
+  type: 'test'
+  ...
+# Subtest: room 18: manufactured models preserve actual physics, aim targets, source buffers and working geometry
+ok 26 - room 18: manufactured models preserve actual physics, aim targets, source buffers and working geometry
+  ---
+  duration_ms: 1205.657478
+  type: 'test'
+  ...
+# Subtest: room 19: manufactured models preserve actual physics, aim targets, source buffers and working geometry
+ok 27 - room 19: manufactured models preserve actual physics, aim targets, source buffers and working geometry
+  ---
+  duration_ms: 614.991797
+  type: 'test'
+  ...
+# Subtest: room 20: manufactured models preserve actual physics, aim targets, source buffers and working geometry
+ok 28 - room 20: manufactured models preserve actual physics, aim targets, source buffers and working geometry
+  ---
+  duration_ms: 1457.05889
+  type: 'test'
+  ...
+# Subtest: a new presentation survives real updates and preserves room 18 and 20 live physical ownership
+ok 29 - a new presentation survives real updates and preserves room 18 and 20 live physical ownership
+  ---
+  duration_ms: 5962.672903
+  type: 'test'
+  ...
+# Subtest: moving render attachments use the current full source matrix and never advance a private clock
+ok 30 - moving render attachments use the current full source matrix and never advance a private clock
+  ---
+  duration_ms: 1437.403732
+  type: 'test'
+  ...
+# Subtest: art release restores original local materials and owns every GPU resource exactly once
+ok 31 - art release restores original local materials and owns every GPU resource exactly once
+  ---
+  duration_ms: 958.089252
+  type: 'test'
+  ...
+# Subtest: other chapters and editions receive no second-chapter render layer
+ok 32 - other chapters and editions receive no second-chapter render layer
+  ---
+  duration_ms: 680.893955
+  type: 'test'
+  ...
+# Subtest: liked room 12: actual mirror, lift, stair and field mechanics remain equal during activation, rerouting and release
+ok 33 - liked room 12: actual mirror, lift, stair and field mechanics remain equal during activation, rerouting and release
+  ---
+  duration_ms: 320.424408
+  type: 'test'
+  ...
+# Subtest: liked room 13: actual mirror, lift, stair and field mechanics remain equal during activation, rerouting and release
+ok 34 - liked room 13: actual mirror, lift, stair and field mechanics remain equal during activation, rerouting and release
+  ---
+  duration_ms: 304.45396
+  type: 'test'
+  ...
+# Subtest: liked room 14: actual mirror, lift, stair and field mechanics remain equal during activation, rerouting and release
+ok 35 - liked room 14: actual mirror, lift, stair and field mechanics remain equal during activation, rerouting and release
+  ---
+  duration_ms: 364.397422
+  type: 'test'
+  ...
+# Subtest: liked room 15: actual mirror, lift, stair and field mechanics remain equal during activation, rerouting and release
+ok 36 - liked room 15: actual mirror, lift, stair and field mechanics remain equal during activation, rerouting and release
+  ---
+  duration_ms: 151.967842
+  type: 'test'
+  ...
+# Subtest: normal repeated level disposal invokes the earlier mechanism owner once
+ok 37 - normal repeated level disposal invokes the earlier mechanism owner once
+  ---
+  duration_ms: 782.633244
+  type: 'test'
+  ...
+# Subtest: room13 receiver castings bear on finite visible rails, existing lugs and permanent entrance tiles
+ok 38 - room13 receiver castings bear on finite visible rails, existing lugs and permanent entrance tiles
+  ---
+  duration_ms: 2757.752239
+  type: 'test'
+  ...
+# Subtest: room14 closed brackets reach the real wall skin and the projector underside without covering its emitted sheet
+ok 39 - room14 closed brackets reach the real wall skin and the projector underside without covering its emitted sheet
+  ---
+  duration_ms: 525.261681
+  type: 'test'
+  ...
+# Subtest: the narrow mount exception rejects hidden, shifted, rescaled, duplicate and altered-triangle query owners
+ok 40 - the narrow mount exception rejects hidden, shifted, rescaled, duplicate and altered-triangle query owners
+  ---
+  duration_ms: 529.996675
+  type: 'test'
+  ...
+# Subtest: reachable southern standards have real Cannon contact with the original companion, not cosmetic pass-through posts
+ok 41 - reachable southern standards have real Cannon contact with the original companion, not cosmetic pass-through posts
+  ---
+  duration_ms: 851.516776
+  type: 'test'
+  ...
+# Subtest: every casting is a connected assembly of visible per-piece solids with no enclosing void collider
+ok 42 - every casting is a connected assembly of visible per-piece solids with no enclosing void collider
+  ---
+  duration_ms: 941.855097
+  type: 'test'
+  ...
+1..42
+# tests 42
+# suites 0
+# pass 42
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 291008.920473

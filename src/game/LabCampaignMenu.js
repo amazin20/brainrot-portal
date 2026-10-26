@@ -1,8 +1,8 @@
 import {CAMPAIGN_THEMES,campaignTheme} from './LabCampaignThemes.js';
 import {deriveCampaignAccess} from './LabCampaignAccess.js';
 // Optional Russian syllable breaks keep the narrow atlas labels readable
-// even on browsers without a Russian hyphenation dictionary. Full titles in
-// the mission panel and accessible button labels remain unchanged.
+// even on browsers without a Russian hyphenation dictionary. Campaign titles
+// and accessible labels retain their original unbroken text.
 const atlasWordBreaks=new Map([
  ['перекрёстный','пере\u00adкрёстный'],['телескопический','теле\u00adскопи\u00adческий'],
  ['противотечение','противо\u00adтечение'],['пространство','простран\u00adство'],
@@ -114,7 +114,8 @@ export function createCampaignMenu({root,select,availableRooms,spec,preferences,
   nodes.querySelectorAll('.room-node').forEach(button=>syncNode(button,Number(button.dataset.roomIndex)));
   syncSectorStatus();
   document.querySelector('#selected-room-number').textContent=`КОМНАТА ${String(number(index)).padStart(2,'0')}`;
-  document.querySelector('#selected-room-title').textContent=room.title;
+  const heading=document.querySelector('#selected-room-title');
+  heading.textContent=atlasTitle(room.title);heading.setAttribute('aria-label',room.title);
   document.querySelector('#selected-room-description').textContent=room.description?.split(/(?<=\.)\s+/)[0]||'Исследуй пространство и доберись до выхода вместе с другом.';
   document.querySelector('#selected-room-status').textContent=completed(index)?'✓ Пройдено · можно повторить':index===40?'Финал · один заход без контрольных точек':'Следующее испытание · доступно';
   document.querySelector('.hero-index').textContent=String(number(index)).padStart(2,'0');
