@@ -200,6 +200,14 @@ body[data-external-pause='true'] .play-tools, body[data-external-pause='true'] .
   .start-caption { display: none; }
   .start-screen { background: linear-gradient(90deg, #10262bd9, #11272b77 75%, #11272b4d); }
 }
+/* A narrow mouse/trackpad window needs the same full text width as portrait
+   touch play. Keep its lesson below the room badge; otherwise the fixed key
+   column leaves only a few characters per line. Touch-specific bands below
+   retain their own spacing for the FPS label and room badge. */
+@media (max-width: 600px) and (orientation: portrait) {
+  .lab-tutorial { top: max(62px, calc(env(safe-area-inset-top) + 52px)); left: max(14px, env(safe-area-inset-left)); right: max(14px, env(safe-area-inset-right)); max-width: none; display: flow-root; font-size: 12px; }
+  .lab-tutorial kbd { float: left; margin: 0 10px 3px 0; }
+}
 @media (pointer: coarse) {
   .control-grid { display: none; }
   .mobile-note { display: block; }

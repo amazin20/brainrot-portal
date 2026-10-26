@@ -430,6 +430,9 @@ export class LabCamera {
     // when crossing a doorway: a lagging focus must never see through its wall.
     this.obstructed = this.constrain(this.focus, this.desired);
     this.obstructed = this.constrain(this.playerPivot, this.desired) || this.obstructed;
+    // A temporary opposite shoulder must retire once the ordinary boom is
+    // clear. The established preferred-shoulder cache keeps its own policy.
+    if (!this.obstructed && this.ordinaryPortraitRecipe?.lateral < 0) this.ordinaryPortraitRecipe = null;
     if (this.mechanismFramingActive && this.obstructed) this.mechanismHadObstruction = true;
     // A straight retracting boom can end inside the head/backpack at a wall.
     // Start routing it upward before it reaches the body, and sweep every
@@ -730,8 +733,9 @@ export class LabCamera {
   }
 
   // Rear walls can shorten a portrait boom enough to push the hero across
-  // the reticle. Inspect a finite same-shoulder set in actual free space,
-  // keeping the original aim point and a bounded lens. No world object moves.
+  // the reticle. Prefer the established same-shoulder set, then try the other
+  // shoulder only when that set has no valid view. The latter also needs a
+  // clear transport from the live eye; a free endpoint across a wall is unsafe.
   ordinaryPortraitEscape() {
     const back = this.forward.clone().setY(0).normalize();
     const side = this.right.clone().setY(0).normalize();
@@ -742,20 +746,31 @@ export class LabCamera {
       this.constrain(this.playerPivot,position,110);
       if(position.distanceTo(this.playerPivot)<2.4||!this.ordinaryPortraitAimClear(position))return null;
       const fov = Math.max(62,this.silhouetteFovAt(position));
-      return fov<=110?{position,fov}:null;
+      if(fov>110)return null;
+      if(lateral<0 && this.constrain(this.camera.position,position.clone(),110))return null;
+      return {position,fov};
     };
     // Reuse only a recipe, never a stale world endpoint. Every displayed frame
     // checks the live aim, actor, geometry and full near-plane sweep again.
+    let rejected = null;
     if(this.ordinaryPortraitRecipe){
       const cached=inspect(this.ordinaryPortraitRecipe);
       if(cached)return cached;
+      rejected=this.ordinaryPortraitRecipe;
       this.ordinaryPortraitRecipe=null;
     }
     let best = null,score = Infinity;
-    for(const rear of [3.6,5.6,7.2])for(const lateral of [1.4,2.2,3])for(const height of [.4,1.6]) {
-      const recipe={rear,lateral,height},frame=inspect(recipe);if(!frame)continue;
-      const cost = frame.position.distanceToSquared(this.desired) + frame.position.distanceToSquared(this.camera.position)*.15 + (frame.fov-62)*.1;
-      if(cost<score){score=cost;best=frame;this.ordinaryPortraitRecipe=recipe;}
+    for(const shoulder of [1,-1]) {
+      for(const rear of [3.6,5.6,7.2])for(const amount of [1.4,2.2,3])for(const height of [.4,1.6]) {
+        const lateral=amount*shoulder;
+        // The failed cached recipe was already checked against this frame's
+        // geometry. Do not spend a 37th candidate query on it again.
+        if(rejected?.rear===rear&&rejected.lateral===lateral&&rejected.height===height)continue;
+        const recipe={rear,lateral,height},frame=inspect(recipe);if(!frame)continue;
+        const cost = frame.position.distanceToSquared(this.desired) + frame.position.distanceToSquared(this.camera.position)*.15 + (frame.fov-62)*.1;
+        if(cost<score){score=cost;best=frame;this.ordinaryPortraitRecipe=recipe;}
+      }
+      if(best)break;
     }
     return best;
   }

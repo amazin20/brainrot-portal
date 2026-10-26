@@ -3,6 +3,24 @@ import assert from 'node:assert/strict';
 const round=n=>Math.round(n*1e9)/1e9;
 const vector=a=>a.map(round);
 const at=(row,name)=>(row.mesh?.name??row.name)===name;
+
+/** Only two existing optical signal drawings moved to meet their receivers.
+ * They are also the actual camera/aim owners. Keep those owners coherent
+ * with their drawing, and audit just these four query-row translations.
+ * No collider, portal, terminal or other query row is exempted. */
+export function originalRoom6Contract(contract){
+ const baseline=structuredClone(contract);
+ for(const key of ['camera','aim'])for(const p of [[0,3.475,-10.5],[9.7,3.535,-8]]){
+  const rows=baseline[key].filter(r=>r.matrix[12]===p[0]&&r.matrix[14]===p[2]);
+  assert.equal(rows.length,1,'An optical receiver must retain exactly one original query owner');
+  const row=rows[0];
+  assert.deepEqual(row,{name:'',visible:true,ancestorsVisible:true,raycastChildren:[],
+   matrix:[1,0,0,0,0,1,0,0,0,0,1,0,...p,1],frame:null},
+  'Only the approved live optical signal pose may differ from the original contract');
+  row.matrix[13]=4.15;
+ }
+ return baseline;
+}
 function subtractClosedBodies(contract,name,approved){
  const rows=contract.colliders.filter(r=>at(r,name));assert.equal(rows.length,approved.length);
  for(let i=0;i<rows.length;i++){

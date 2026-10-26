@@ -5,6 +5,7 @@ import {createLightBridge} from './LabLightBridge.js';
 import {StoredMotionDrive} from './LabResearchChambers.js';
 import {tracePortalRay,rayTouches,beamDrawing} from './LabPuzzleMechanics.js';
 import {prepareVisualAuditEarlyKit} from './LabVisualAuditEarly.js';
+import {earlyFoundedPierGeometry} from './LabEarlyMachineConstruction.js';
 const V=(...p)=>new THREE.Vector3(...p);
 const spec=(id,title,concept,description,accent,hints,assets=[1,2,11,22])=>({id:'foundation-'+id,title,concept,description,accent,assets,hints});
 export const FOUNDATION_SPECS=Object.freeze([
@@ -110,13 +111,13 @@ function dressFirstConnection(k,hoist){
 
  // The upper gallery is carried by a deep enamel fascia at its existing front
  // lip; the clear space underneath stays the same height and remains open.
- k.block([0,2.94,-5.49],[30.8,.96,.28],'secondary',false);
- k.block([0,3.54,-5.38],[30.8,.16,.34],'metal',false);
+ k.block([0,2.94,-5.99],[30.8,.96,.28],'secondary',false);
+ k.block([0,3.54,-5.88],[30.8,.16,.34],'metal',false);
  for(const x of [-14.3,14.3]){
-  k.block([x,2.94,-5.32],[.86,.83,.12],'dark',false);
-  k.block([x,2.94,-5.22],[.13,.61,.075],'light',false);
+  k.block([x,2.94,-5.82],[.86,.83,.12],'dark',false);
+  k.block([x,2.94,-5.72],[.13,.61,.075],'light',false);
  }
- k.block([0,2.94,-5.31],[7.5,.26,.075],'light',false);
+ k.block([0,2.94,-5.81],[7.5,.26,.075],'light',false);
 
  // Overhead side rails identify the two equivalent lower portal bays. They
  // are above the porcelain sheets, set back toward the existing side walls.
@@ -269,7 +270,10 @@ export function buildFoundation3(g,index=2){
    // opening view it occupies a separate row below the distant wall screen.
    k.block([5.5,-1.27,11.89],[8.0,.95,.70],'dark',false,c.group);
    k.geometry(new THREE.PlaneGeometry(7.65,.69),material,[5.5,-1.27,12.26],new THREE.Quaternion(),{parent:c.group,batch:false,name:'Carriage front berth and cargo readout'});
-   k.geometry(new THREE.PlaneGeometry(6.6,1.15),material,[-9.00,2.0,3.4],new THREE.Quaternion().setFromUnitVectors(V(0,0,1),V(1,0,0)),
+   // Keep the complete picture on the opaque protective guard, between its
+   // founded end posts. The former picture extended beyond the guard and
+   // through the front upright, which cut directly across its reading.
+   k.geometry(new THREE.PlaneGeometry(6.6,.93),material,[-9.00,1.55,6],new THREE.Quaternion().setFromUnitVectors(V(0,0,1),V(1,0,0)),
     {parent:c.group,batch:false,name:'Carriage side berth and cargo readout'});
    let previous='';
    const repaint=()=>{
@@ -299,7 +303,28 @@ export function buildFoundation4(g,index=3){
  k.deck('Southern return',-14,24,15,23,0);
  const pit=k.loadPad('fall-entry',[-17,-4,-6],10);
  const outlet=k.panel('inclined-exit',[-8,10,-11],[.435889894,.9,0],9,7);
- k.support(-9,-16.3,8.8,.42);k.support(-9,-5.7,8.8,.42);
+ const shieldColumns=[k.support(-9,-16.3,8.8,.42),k.support(-9,-5.7,8.8,.42)];
+ // The old columns ended below the finite tilted frame. These closed
+ // cantilevers join their real top saddles to that frame, within its ALREADY
+ // occupied Cannon backing box. Their visible triangles also own camera and
+ // aim queries: no invisible stand-in or walk-through metal is introduced.
+ const shieldFrame=outlet.getFrame();outlet.group.updateWorldMatrix(true,true);
+ for(const [i,binding]of shieldColumns.entries()){
+  const side=i===0?1:-1,column=binding.model,columnWorld=column.getWorldPosition(V());
+  const crosshead=outlet.group.children.find(m=>m.isMesh&&Math.abs(m.position.y-side*(outlet.height/2+.30))<1e-6&&Math.abs(m.geometry?.parameters?.width-outlet.width)<1e-6);
+  if(!crosshead)throw new Error('The inclined shield requires its finite upper and lower crossheads');
+  const v=crosshead.position.y,n=crosshead.position.z-crosshead.geometry.parameters.depth/2+.13;
+  const u=(columnWorld.x-shieldFrame.center.x-shieldFrame.up.x*v-shieldFrame.normal.x*n)/shieldFrame.right.x;
+  const to=V(u,v,n).applyMatrix4(outlet.group.matrixWorld),top=Math.max(...column.userData.collisionParts.map(p=>p.max[1]));
+  const from=V(columnWorld.x,columnWorld.y+top-.10,columnWorld.z+(i===0?.31:-.30)),span=to.clone().sub(from);
+  const mesh=k.geometry(earlyFoundedPierGeometry(.28,span.length(),.18),'metal',from.clone().add(to).multiplyScalar(.5).toArray(),
+   new THREE.Quaternion().setFromUnitVectors(V(0,1,0),span.clone().normalize()),{batch:false,name:`Inclined shield / closed ${i===0?'north':'south'} support clevis`});
+  mesh.userData.firstChapterStructuralRole='inclined-support-clevis';mesh.userData.physicalSourceId=outlet.mesh.uuid;
+  mesh.userData.clevisColumnId=column.uuid;mesh.userData.clevisCrossheadId=crosshead.uuid;
+  mesh.updateWorldMatrix(true,false);const vertices=mesh.geometry.attributes.position;
+  for(let j=0;j<vertices.count;j++)if(!outlet.collider.box.containsPoint(V().fromBufferAttribute(vertices,j).applyMatrix4(mesh.matrixWorld)))throw new Error('Inclined support escaped its existing physical backing');
+  g.cameraBlockers.push(mesh);g.aimBlockers.push(mesh);
+ }
  // Four broad arrestor plates visibly divide the braking wall into bays.
  // Their closed steel faces and recessed chassis are both physical, while
  // their seams point across the apron instead of drawing attention offscreen.

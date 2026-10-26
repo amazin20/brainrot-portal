@@ -195,6 +195,21 @@ export function serviceMassGeometry(width,height,depth){
  return merge(parts,'Fabricated process enclosure / continuous frame, offset spine and recessed service bays',{width,height,depth});
 }
 
+/** The dock banks are low founded castings. Their top sits 20 cm inside the
+ * existing floor skirt: a recessed upper shoulder keeps those two drawings
+ * from submitting the same outside side plane. The original source Box and
+ * every contact extremum are retained, including the concealed top face. */
+export function freightBankFoundationGeometry(width,height,depth){
+ const g=serviceMassGeometry(width,height,depth),p=g.attributes.position;
+ const rebate=Math.min(.24,height*.2),inset=Math.min(.08,width*.025,depth*.025),start=height/2-rebate;
+ for(let i=0;i<p.count;i++){
+  const t=THREE.MathUtils.clamp((p.getY(i)-start)/rebate,0,1);
+  p.setX(i,p.getX(i)*(1-2*inset*t/width));p.setZ(i,p.getZ(i)*(1-2*inset*t/depth));
+ }
+ p.needsUpdate=true;g.computeVertexNormals();g.computeBoundingBox();g.computeBoundingSphere();
+ g.name='Freight dock foundation / closed service casting and recessed deck shoulder';return g;
+}
+
 /** A tread has an integral central pan and two continuous inclined edge
  * channels. Their slope follows the next tread; every vertex stays in this
  * tread's original solid casing, including both extreme contact planes. */
@@ -277,6 +292,7 @@ function machineSkid(owner,target,material){
 }
 
 const MASSES={
+ 9:[[-8.375,.81,2,6.45,1.62,7.6],[-3.2,.81,4.46,3.9,1.62,2.68],[5.55,.81,1.55,6.5,1.62,6.7]],
  11:[[-12.5,3.3,-11.25,11,6.6,7.5],[16.5,13,1,3,26,32],[9.15,13,-12.5,11.7,26,5],[-2.5,7.5,2.5,5,15,7]],
  12:[[4,2,0,18,12,11],[-18.8,3,0,2.4,6,24],[16,11,-5,2,22,8]],
  13:[[16,12.5,-11,8,25,34],[-6,12.5,-21,12,25,14],[3.5,6.6,-25.75,7,13.2,3.5]],
@@ -301,7 +317,8 @@ export function finishEarlyMachineConstruction(level,index,owner,replace,materia
    const p=n.geometry?.parameters;return p&&Math.abs(p.width-w)<.015&&Math.abs(p.height-h)<.015&&Math.abs(p.depth-d)<.015&&n.getWorldPosition(V()).distanceTo(V(x,y,z))<.035;
   });
   if(!target)throw new Error(`Missing room ${index+1} process mass at ${x},${y},${z}`);
-  retireCoat(level,target,owner);replace(owner,target,serviceMassGeometry(w,h,d),material());owner.stats.serviceEnclosures++;
+  const geometry=index===9?freightBankFoundationGeometry(w,h,d):serviceMassGeometry(w,h,d);
+  retireCoat(level,target,owner);replace(owner,target,geometry,material());owner.stats.serviceEnclosures++;
  }
  for(const mesh of meshes){
   const stair=mesh.userData.earlyAuditStair;if(!stair)continue;

@@ -101,8 +101,17 @@ export function campaignOrnamentSites(game,level,{limit=12}={}){
   if(h<1.8||w<1.8)continue;
   // Bias the artwork to upper wall fields in laboratory rooms. Castle
   // reliefs use the closed 0–6.6 m wall band below fixed glazing instead.
-  const cy=Number.isFinite(wall.fieldY)?THREE.MathUtils.clamp(wall.fieldY-wall.center.y,-wall.height/2+h/2+.22,wall.height/2-h/2-.22):
+  let cy=Number.isFinite(wall.fieldY)?THREE.MathUtils.clamp(wall.fieldY-wall.center.y,-wall.height/2+h/2+.22,wall.height/2-h/2-.22):
    level.tower?0:Math.min(wall.height*.20,wall.height/2-h/2-2);
+  if(level.id==='foundation-first-connection'&&kit?.enclosed&&Number.isFinite(kit.roomEnvelope?.roof)){
+   // encloseLab carries a real 0.7 m cornice at roof - 2.6. Its front
+   // projects beyond these shallow carvings. Keep the complete reserved
+   // field below that beam instead of letting it erase the upper arc/ticks.
+   // This reviewed opening-room repair leaves later chapter mounts intact.
+   const upper=kit.roomEnvelope.roof-2.95-.12-h/2-.22-wall.center.y;
+   if(upper< -wall.height/2+h/2+.22)continue;
+   cy=Math.min(cy,upper);
+  }
   const field=Number.isFinite(wall.fieldX)?(wall.fieldX-wall.center.dot(wall.right)+wall.span/2)/bay-.5:(bayCount-1)/2;
   const candidates=[],bays=Array.from({length:bayCount},(_,i)=>i).sort((a,b)=>Math.abs(a-field)-Math.abs(b-field));
   for(const i of bays){

@@ -16,7 +16,7 @@ import {addExplorationSurfaces} from '../src/game/LabExplorationSurfaces.js';
 import {gameplayContract,digest,sceneWorkload} from './helpers/lab-art-contract.js';
 import {originalRoom8Contract} from './helpers/lab-room8-gallery-contract.js';
 import {originalRoom15Contract} from './helpers/lab-room15-observation-sill-contract.js';
-import {originalRoom9Contract,originalRoom11Contract} from './helpers/lab-early-construction-contract.js';
+import {originalRoom6Contract,originalRoom9Contract,originalRoom11Contract} from './helpers/lab-early-construction-contract.js';
 import {originalRoom10Contract} from './helpers/lab-room10-rigid-deck-contract.js';
 
 const baseline=JSON.parse(fs.readFileSync(new URL('./fixtures/early-art-v35-contract.json',import.meta.url)));
@@ -30,7 +30,7 @@ for(const expected of baseline.rooms)test(`room ${expected.level} matches the au
  const contract=gameplayContract(assets);
  // Preserve both original goldens: subtract only room eight's exact gallery,
  // or normalize room fifteen's exact independently audited observation sill.
- const retained=expected.level===8?originalRoom8Contract(contract):expected.level===9?originalRoom9Contract(contract):expected.level===10?originalRoom10Contract(contract):expected.level===11?originalRoom11Contract(contract):expected.level===15?originalRoom15Contract(contract):contract;
+ const retained=expected.level===6?originalRoom6Contract(contract):expected.level===8?originalRoom8Contract(contract):expected.level===9?originalRoom9Contract(contract):expected.level===10?originalRoom10Contract(contract):expected.level===11?originalRoom11Contract(contract):expected.level===15?originalRoom15Contract(contract):contract;
  if(expected.nativeViewAudit){
   // The v67 room16 entry aim changed deliberately. Keep its full current
   // contract and independently retain the original collision/interaction

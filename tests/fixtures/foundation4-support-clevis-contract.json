@@ -1,0 +1,129 @@
+{
+  "baselineGameplayDigest": "85e8e419e6d94aa0948ba8c1b49db051469e284d03d624c3a94f1a6cda4c2131",
+  "geometry": [
+    {
+      "name": "Inclined shield / closed north support clevis",
+      "parameters": {
+        "width": 0.28,
+        "height": 1.806771929793148,
+        "depth": 0.18
+      },
+      "positionHash": "746a51fc777e3d4124dfc54480392ab206ce3e3ed85e54d880198637c50e158a",
+      "normalHash": "0804c63f1946419342d4a12e1986e687910d1a824aabab31f6428a08c25078f2"
+    },
+    {
+      "name": "Inclined shield / closed south support clevis",
+      "parameters": {
+        "width": 0.28,
+        "height": 1.380751022099094,
+        "depth": 0.18
+      },
+      "positionHash": "4ae33284f098d689d67719bbb022f311c223169de914b9c24efbaaf39e423765",
+      "normalHash": "e202b2cd655a79f181bc1576ff81b505f381de55a3f89024b39b0007f9c230b1"
+    }
+  ],
+  "camera": [
+    {
+      "name": "Inclined shield / closed north support clevis",
+      "visible": true,
+      "ancestorsVisible": true,
+      "raycastChildren": [],
+      "matrix": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        0.741586388,
+        0.670857384,
+        0,
+        0,
+        -0.670857384,
+        0.741586388,
+        0,
+        -9,
+        9.369938925,
+        -15.383956855,
+        1
+      ],
+      "frame": null
+    },
+    {
+      "name": "Inclined shield / closed south support clevis",
+      "visible": true,
+      "ancestorsVisible": true,
+      "raycastChildren": [],
+      "matrix": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        0.970397594,
+        -0.241512961,
+        0,
+        0,
+        0.241512961,
+        0.970397594,
+        0,
+        -9,
+        9.369938925,
+        -6.166734634,
+        1
+      ],
+      "frame": null
+    }
+  ],
+  "aim": [
+    {
+      "name": "Inclined shield / closed north support clevis",
+      "visible": true,
+      "ancestorsVisible": true,
+      "raycastChildren": [],
+      "matrix": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        0.741586388,
+        0.670857384,
+        0,
+        0,
+        -0.670857384,
+        0.741586388,
+        0,
+        -9,
+        9.369938925,
+        -15.383956855,
+        1
+      ],
+      "frame": null
+    },
+    {
+      "name": "Inclined shield / closed south support clevis",
+      "visible": true,
+      "ancestorsVisible": true,
+      "raycastChildren": [],
+      "matrix": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        0.970397594,
+        -0.241512961,
+        0,
+        0,
+        0.241512961,
+        0.970397594,
+        0,
+        -9,
+        9.369938925,
+        -6.166734634,
+        1
+      ],
+      "frame": null
+    }
+  ]
+}

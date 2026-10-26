@@ -80,10 +80,14 @@ export function buildExtendedCampaign(game,index){
   const sensor=ringDevice(world,[9.7,2.1,-8],[-1,0,0],0xa38b6b,.55);
   const pilotBeacon=new THREE.MeshBasicMaterial({color:0xb28d6c});
   const exitBeacon=new THREE.MeshBasicMaterial({color:0xa38b6b});
-  world.box([0,4.15,-10.5],[.16,1.45,.15],pilotBeacon,false);
-  world.box([9.7,4.15,-8],[.16,1.45,.15],exitBeacon,false);
-  mechanismArt.earlyOptics={emitter,mirror,pilot,sensor};
-  const ray=beamDrawing(world,0x28edff,.065),door=gate(world,-13,24,10);
+  // Each existing signal stem meets its actual finished receiver instead of
+  // floating above it. Their upper ends still clear the character and the
+  // reflector's cross-head; neither adds an obstacle or changes the light ray.
+  const pilotStem=world.box([0,3.475,-10.5],[.16,1.45,.15],pilotBeacon,false);
+  const exitStem=world.box([9.7,3.535,-8],[.16,1.45,.15],exitBeacon,false);
+  mechanismArt.earlyOptics={emitter,mirror,pilot,sensor,signalStems:{pilot:pilotStem,exit:exitStem}};
+  const ray=beamDrawing(world,0x28edff,.03),door=gate(world,-13,24,10);
+  ray.root.name='Room six / traced optical core';
   const reflector={position:V(0,2.1,-8),normal:V(1,0,0),radius:.83};
   state.mirror=0;state.target=0;state.pilotLit=false;state.lit=false;state.door=door;
   console([-8,0,-5.8],()=>{state.target=state.target?0:1;game.audio?.mechanism?.('switch');},'mirror','E — повернуть зеркало. Луч отражается от диска и проходит через порталы.');
