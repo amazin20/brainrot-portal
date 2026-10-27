@@ -1,0 +1,78 @@
+name: TZ continuation validation
+
+# Development evidence only. No Pages, releases or Yandex publication.
+on:
+  push:
+    branches: [upgrade/tz-completion-20261023]
+    paths:
+      - 'src/**'
+      - 'tests/**'
+      - 'scripts/**'
+      - 'package*.json'
+      - '.github/workflows/tz-completion-review.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: tz-continuation-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  source-and-regressions:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install locked dependencies
+        id: install
+        run: npm ci
+      - name: Preserve exact public source and dependency snapshot
+        run: |
+          mkdir -p evidence
+          git rev-parse HEAD > evidence/source-sha.txt
+          git archive --format=tar HEAD | gzip -n > evidence/source.tar.gz
+          tar -czf evidence/dependencies.tar.gz node_modules
+          sha256sum evidence/source.tar.gz evidence/dependencies.tar.gz > evidence/workspace-sha256.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: tz-workspace-${{ github.sha }}
+          path: |
+            evidence/source.tar.gz
+            evidence/dependencies.tar.gz
+            evidence/source-sha.txt
+            evidence/workspace-sha256.txt
+          retention-days: 7
+          if-no-files-found: error
+      - name: Run all active regression tests without changing the acceptance scope
+        id: regressions
+        run: |
+          set -o pipefail
+          npm test 2>&1 | tee evidence/active-tests.tap
+      - name: Build exact candidate even when a regression fails
+        if: always() && steps.install.outcome == 'success'
+        env:
+          BUILD_COMMIT: ${{ github.sha }}
+        run: |
+          set -o pipefail
+          npm run build 2>&1 | tee evidence/build.log
+      - name: Preserve unfiltered validation output
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tz-validation-${{ github.sha }}
+          path: |
+            evidence/active-tests.tap
+            evidence/build.log
+            evidence/source-sha.txt
+          retention-days: 14
+          if-no-files-found: warn
