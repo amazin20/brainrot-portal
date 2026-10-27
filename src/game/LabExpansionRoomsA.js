@@ -4,6 +4,7 @@ import {tracePortalRay,rayTouches,beamDrawing} from './LabPuzzleMechanics.js';
 import {lateShutter,movingMechanismBlock} from './LabLateCampaignMechanisms.js';
 import {cargoLoadsPlate} from './LabPlateContact.js';
 import {DamperDrive} from './LabDamperDrive.js';
+import {hangDifferentialReceiver} from './LabFixedEquipmentMounts.js';
 
 const V=(...p)=>new THREE.Vector3(...p),Q=()=>new THREE.Quaternion();
 const assets=[1,2,11,22,23,24];
@@ -95,6 +96,7 @@ export function buildExpansion42(g,index=41){
  const passenger=k.panel('moving-passenger-address',[-8.2,2.5,.2],[0,0,1],8,5.8,shuttle.group,true);
  const receiverA=k.projector([4,6.2,3],[0,0,-1],{radius:.6}),receiverCollider=g.colliders.at(-1);receiverCollider.kinematic=true;shuttle.group.attach(receiverA.root);
  const receiverB=k.projector([33,15,34],[0,-1,0],{radius:.6});
+ hangDifferentialReceiver(k);
  const emitter=k.projector([20,6.2,18],[-1,0,0],{radius:.8,rotating:true}),drawing=beamDrawing(k.world,0xa8e4d5,.045);
  const pressure={left:0,right:0,difference:0,coverA:0,coverB:0,flowA:false,flowB:false};
  const coverage=(s,p)=>s.loaded()?THREE.MathUtils.clamp((.56-Math.abs(g.cargo.position.x-p.x))/.12,0,1)*THREE.MathUtils.clamp((.56-Math.abs(g.cargo.position.z-p.z))/.12,0,1):0;

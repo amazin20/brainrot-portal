@@ -16,7 +16,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: tz-continuation-${{ github.ref }}
+  group: tz-continuation-${{ github.sha }}
   cancel-in-progress: false
 
 jobs:
@@ -76,3 +76,59 @@ jobs:
             evidence/source-sha.txt
           retention-days: 14
           if-no-files-found: warn
+
+  equipment-native:
+    name: Equipment mounts / stable ${{ matrix.level }} / native before-after
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        level: [11, 42, 43]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Build exact candidate and retained baseline
+        env:
+          BUILD_COMMIT: ${{ github.sha }}
+        run: |
+          npm ci
+          npm install --no-save --package-lock=false puppeteer-core@24.16.0
+          npm run build
+      - uses: actions/checkout@v4
+        with:
+          ref: 6c634dec2bc6098d5cb374bbf6b25492fa59e30d
+          path: baseline
+          persist-credentials: false
+      - name: Build retained unmodified baseline
+        working-directory: baseline
+        run: |
+          ln -s ../node_modules node_modules
+          npm run build
+      - name: Matched real WebGL and ordinary actor-preserving routes
+        env:
+          STABLE_LEVEL: ${{ matrix.level }}
+          BUILD_COMMIT: ${{ github.sha }}
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 --directory dist > candidate-server.log 2>&1 &
+          python3 -m http.server 4174 --bind 127.0.0.1 --directory baseline/dist > baseline-server.log 2>&1 &
+          for i in {1..30}; do curl -fsS http://127.0.0.1:4173/ >/dev/null && curl -fsS http://127.0.0.1:4174/ >/dev/null && break; sleep 1; done
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+          node scripts/qa-fixed-equipment-visual.mjs
+      - name: Preserve actual screenshots and all failures
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: fixed-equipment-native-${{ matrix.level }}-${{ github.sha }}
+          path: |
+            qa/fixed-equipment-${{ matrix.level }}/
+            candidate-server.log
+            baseline-server.log
+          retention-days: 14
+          if-no-files-found: error

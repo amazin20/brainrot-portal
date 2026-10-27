@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import {ResearchChamber} from './LabResearchArt.js';
 import {dressPuzzlePilot43} from './LabPuzzlePilot43Art.js';
+import {mountLaunchPanel} from './LabFixedEquipmentMounts.js';
 
 export const PILOT43_SPEC=Object.freeze({
  id:'puzzle-pilot43-return-and-release',title:'Другой ракурс',
@@ -80,6 +81,7 @@ export function buildPuzzlePilot43(game,index=42){
  k.block([-20.5,6,9],[7,12,.55],'secondary');
  const fall=k.loadPad('fall',[13,-4,-22],10);
  const launch=k.panel('launch',[-8,10,13],[.435889894,.9,0],9,7);
+ mountLaunchPanel(k,launch);
  // Wide flight apertures tolerate a real carried body and camera-directed
  // floor-portal rotation. Their actual rims and collision openings agree.
  fall.surface.mesh.userData.portalSize={width:2.8,height:2.8};

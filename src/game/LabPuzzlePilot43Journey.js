@@ -31,6 +31,9 @@ export function runPuzzlePilot43(d,{stopAfter=null,recover=false}={}){
  d.walk(-27,-14);d.walk(-27,-22);d.walk(2.8,-22);d.walk(2.8,-18.6);
  if(stopAfter==='gallery')return;
  const cargoTransports=g.physics.portalTransports;
+ // A narrow view looks past the same real cheek from the outer side of the
+ // existing gallery. This is an ordinary sidestep, not a wider shot tolerance.
+ if(g.camera.aspect<1)d.walk(3.75,-18.6);
  aimLateSurface(d,1,p.return);
  aimLateSurface(d,0,p['floor-button']);
  d.until(()=>g.physics.portalTransports>cargoTransports,5,'The lower button aperture did not return the original free cargo');

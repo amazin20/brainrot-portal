@@ -107,7 +107,7 @@ export function buildReadableWindRoom(game, spec) {
   for(const [p,size]of [
     [[-11.6,6.55,-3.7],[.42,.42,15.4]],
     [[-11.6,4.325,4],[.24,4.45,.24]],
-    [[-11.6,4.325,-11.4],[.24,4.45,.24]],
+    [[-11.6,3.275,-11.4],[.24,6.55,.24]],
     [[-11.24,2.1,4],[.72,.24,.24]],
   ]){
     const bus=w.box(p,size,w.materials.trim);bus.name='Wind test service bus / closed power casing';bus.userData.earlyAuditBus=true;
