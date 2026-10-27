@@ -1,0 +1,96 @@
+name: Preserve completed equipment review evidence
+
+# Repository evidence only; never deploys Pages or publishes the game.
+on:
+  push:
+    branches: [upgrade/tz-completion-20261023]
+    paths: ['.github/workflows/preserve-equipment-evidence.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+  actions: read
+concurrency:
+  group: preserve-equipment-evidence
+  cancel-in-progress: false
+jobs:
+  preserve:
+    if: github.ref == 'refs/heads/upgrade/tz-completion-20261023'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 1
+      - name: Download and authenticate the exact completed review artifacts
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs=require('fs'),crypto=require('crypto');
+            const expectedSha='e3a3a2fdd40fc34fd535c0cf9112dc4a11e66102';
+            const expectedRun=40572827955;
+            const rows=[
+              {level:11,id:12766925356,bytes:4488855,sha256:'4c129dbe89a0b17ee25a10147f6f57444f3214580d48e3e0408bfb5de80ab2d2'},
+              {level:42,id:12766516365,bytes:3903785,sha256:'5e8bfb9a0707ac13a252a9ff380762145e830a91c76ad54ad0fc66ca82ce3f2f'},
+              {level:43,id:12767000788,bytes:7738440,sha256:'0b06dfb24c677d19e2e3dea1ab7390e5f055fa40c6f2cad4067021641a0a6488'},
+              {level:'partial-full-suite',id:12770600919,bytes:39780,sha256:'527cf869b440cbb3ba2bab67ffce7355d8d7eede8f4fa0b2b806951ca7d2c0ce'}
+            ];
+            const root=process.env.RUNNER_TEMP+'/equipment-evidence';fs.mkdirSync(root,{recursive:true});
+            for(const row of rows){
+              const args={...context.repo,artifact_id:row.id};
+              const meta=(await github.rest.actions.getArtifact(args)).data;
+              if(meta.expired||meta.workflow_run?.id!==expectedRun||meta.workflow_run?.head_sha!==expectedSha)throw Error('Artifact provenance mismatch '+row.id);
+              const response=await github.rest.actions.downloadArtifact({...args,archive_format:'zip'});
+              const bytes=Buffer.from(response.data);
+              if(bytes.length!==row.bytes||crypto.createHash('sha256').update(bytes).digest('hex')!==row.sha256)throw Error('Artifact byte mismatch '+row.id);
+              fs.writeFileSync(root+'/'+row.level+'.zip',bytes);
+            }
+            fs.writeFileSync(root+'/manifest.json',JSON.stringify({run:expectedRun,sourceCommit:expectedSha,artifacts:rows},null,2)+'\n');
+      - name: Retain original PNGs and reports with a browsable before-after index
+        shell: python
+        run: |
+          import os, json, zipfile, hashlib, pathlib, shutil, html
+          source=pathlib.Path(os.environ['RUNNER_TEMP'])/'equipment-evidence'
+          target=pathlib.Path('docs/development/proofs/fixed-equipment-20261027')
+          target.mkdir(parents=True,exist_ok=True)
+          manifest=json.loads((source/'manifest.json').read_text())
+          sections=[]; image_count=0
+          for item in manifest['artifacts']:
+              level=str(item['level']); destination=target/('room-'+level); destination.mkdir(exist_ok=True)
+              with zipfile.ZipFile(source/(level+'.zip')) as archive:
+                  names=archive.namelist()
+                  for name in names:
+                      path=pathlib.PurePosixPath(name)
+                      if path.is_absolute() or '..' in path.parts: raise RuntimeError('Unsafe archive path')
+                  if level=='partial-full-suite':
+                      for name in names:
+                          if pathlib.PurePosixPath(name).name in ['active-tests.tap','build.log','source-sha.txt']:
+                              (destination/pathlib.PurePosixPath(name).name).write_bytes(archive.read(name))
+                      continue
+                  report_name=next(name for name in names if name.endswith('/report.json'))
+                  report=archive.read(report_name); data=json.loads(report)
+                  if data['sourceCommit']!=manifest['sourceCommit'] or not data['pass']: raise RuntimeError('Review identity mismatch')
+                  (destination/'report.json').write_bytes(report)
+                  folder=str(pathlib.PurePosixPath(report_name).parent)
+                  for row in data['rows']:
+                      for image in row['images']:
+                          payload=archive.read(folder+'/'+image['file'])
+                          if hashlib.sha256(payload).hexdigest()!=image['sha256'] or len(payload)!=image['bytes']: raise RuntimeError('PNG digest mismatch')
+                          (destination/image['file']).write_bytes(payload); image_count+=1
+                  for name in names:
+                      if name.endswith('-server.log'): (destination/pathlib.PurePosixPath(name).name).write_bytes(archive.read(name))
+                  title={'11':'11 — Запас ветра','42':'41 — Разность давлений','43':'42 — Другой ракурс'}[level]
+                  sections.append(f'<section><h2>{html.escape(title)}</h2><p><a href="room-{level}/report.json">Исходный отчёт</a></p><div class="pair"><figure><figcaption>До</figcaption><img src="room-{level}/before-wide-inspection.png"></figure><figure><figcaption>После</figcaption><img src="room-{level}/after-wide-inspection.png"></figure></div></section>')
+          if image_count!=64: raise RuntimeError(f'Expected 64 original images, got {image_count}')
+          manifest['verifiedOriginalPngs']=image_count
+          (target/'manifest.json').write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+'\n')
+          (target/'index.html').write_text('<!doctype html><html lang="ru"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Крепления — исходные кадры проверки</title><style>body{max-width:1500px;margin:32px auto;padding:0 20px;font:17px system-ui;background:#151b23;color:#edf1f5}a{color:#90caff}.pair{display:flex;gap:16px}figure{flex:1;margin:0;min-width:0}img{width:100%}section{margin:36px 0}figcaption{margin:12px 0}@media(max-width:700px){.pair{display:block}}</style><h1>Крепления: до и после</h1><p>Подлинные WebGL-кадры прогона 40572827955. Все 64 исходных PNG и отчёты хранятся рядом. Это адресная проверка трёх комнат, не приёмка всей кампании.</p>'+''.join(sections)+'</html>')
+          (target/'README.md').write_text('# Сохранённые результаты проверки креплений\n\nИсточник: GitHub Actions run `40572827955`, код `e3a3a2f`. SHA-256 исходных ZIP и число проверенных PNG — в [manifest.json](manifest.json).\n\n'+''.join(f'## {title}\n\nДо | После\n---|---\n![До](room-{level}/before-wide-inspection.png) | ![После](room-{level}/after-wide-inspection.png)\n\n[Полный исходный отчёт](room-{level}/report.json)\n\n' for level,title in [('11','Запас ветра'),('42','Разность давлений'),('43','Другой ракурс')])+'[Незавершённый общий прогон](room-partial-full-suite/active-tests.tap) сохранён как незавершённый: не считать успешной проверкой всей игры.\n')
+      - name: Commit evidence only without overwriting concurrent source changes
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add docs/development/proofs/fixed-equipment-20261027
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m 'Preserve 64 original WebGL frames and unfiltered review logs in Git history'
+          git push origin HEAD:refs/heads/upgrade/tz-completion-20261023
