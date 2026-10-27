@@ -1,0 +1,55 @@
+{
+  "gameCommit": "47159025e48384ee452eaa3d9d5b49004dbe88da",
+  "observerCommit": "e3a3a2fdd40fc34fd535c0cf9112dc4a11e66102",
+  "nodeTests": 50,
+  "nodePassed": 50,
+  "nodeFailed": 0,
+  "nodeSkipped": 0,
+  "ordinaryRoutes": 6,
+  "finiteAttackAttempts": 8,
+  "newStructuralTests": 8,
+  "retainedTests": 28,
+  "sdkMockScenarios": 9,
+  "buildExitCode": 0,
+  "sourceDrift": [],
+  "files": {
+    "frozen-4715902/tests.tap": {
+      "bytes": 12294,
+      "sha256": "1b8dcb57f4f70ba583637724650b361aab826cd5d98751727d04ea1a0be1a466"
+    },
+    "frozen-4715902/routes.jsonl": {
+      "bytes": 25117,
+      "sha256": "7cdd9ef3ee08bb30065378a6780112c0ada89722ffbe6f1eecc51b214d422419"
+    },
+    "frozen-4715902/summary.json": {
+      "bytes": 562,
+      "sha256": "ab8347ccd7d55b8f2bcfe8906ca4f3e15fcbeb78e10630a27e20e6b3884c1118"
+    },
+    "frozen-4715902/source-manifest.json": {
+      "bytes": 164839,
+      "sha256": "9cddbb8f486fa20c08ef2c34e59707c002c174a89e30f94e58f5487efda64009"
+    },
+    "frozen-4715902/build.log": {
+      "bytes": 9435,
+      "sha256": "0151e8da58038b0f444eee9c7abef0a90414fb5c2677efafdd6a603b949c0b25"
+    },
+    "routes-initial-failures.tap": {
+      "bytes": 6024,
+      "sha256": "0ef6462f85a57929e909f90eba975f31de6084f2c9f190cfcfcaa42f7d42b95f"
+    },
+    "routes-initial-traces.jsonl": {
+      "bytes": 20520,
+      "sha256": "e34ce19033f980b13b4139acec531dd16c00f8120f54d28f03f74d4a84e8f9c1"
+    },
+    "platform-mocks-4715902.json": {
+      "bytes": 958,
+      "sha256": "8854594db5e66783c9307a7bea18cc8b661d8f8761c270e0121832f2b1868664"
+    }
+  },
+  "limits": [
+    "This is an addressed check set, not full campaign acceptance.",
+    "Upper pressure hangers are not reached by the finite attack; only the approach and jump are tested.",
+    "No claim of no remaining bypasses.",
+    "SDK mocks are not the live Yandex checker or moderation."
+  ]
+}

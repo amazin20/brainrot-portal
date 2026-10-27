@@ -1,0 +1,235 @@
+{
+  "gameCommit": "47159025e48384ee452eaa3d9d5b49004dbe88da",
+  "observerCommit": "e3a3a2fdd40fc34fd535c0cf9112dc4a11e66102",
+  "baselineCommit": "6c634dec2bc6098d5cb374bbf6b25492fa59e30d",
+  "workflowRun": 40572827955,
+  "nativeJobsPassed": 3,
+  "candidateRoutesPassed": 6,
+  "baselineRoutesPassed": 6,
+  "nativeImages": 64,
+  "inspectionImages": 12,
+  "milestoneImages": 52,
+  "imageHashesVerified": 64,
+  "imageDecodingVerified": 64,
+  "artifacts": [
+    {
+      "stableLevel": 11,
+      "id": "stored-wind",
+      "artifactId": 12766925356,
+      "zipSha256": "4c129dbe89a0b17ee25a10147f6f57444f3214580d48e3e0408bfb5de80ab2d2",
+      "zipBytes": 4488855,
+      "rawReportSha256": "09cc0a526e0e5d4a453fdef726218cb85e2dbfee83abc359768c566ab50ba2a5",
+      "rows": [
+        {
+          "version": "before",
+          "viewport": [
+            1280,
+            720
+          ],
+          "pass": true,
+          "frames": 1266,
+          "physicalUpdatesObserved": 2531,
+          "setupResets": 0,
+          "routeResets": 0,
+          "routeRespawns": 0,
+          "sameOriginalActors": true,
+          "nativeImages": 4
+        },
+        {
+          "version": "before",
+          "viewport": [
+            390,
+            844
+          ],
+          "pass": true,
+          "frames": 1275,
+          "physicalUpdatesObserved": 2549,
+          "setupResets": 0,
+          "routeResets": 0,
+          "routeRespawns": 0,
+          "sameOriginalActors": true,
+          "nativeImages": 4
+        },
+        {
+          "version": "after",
+          "viewport": [
+            1280,
+            720
+          ],
+          "pass": true,
+          "frames": 1266,
+          "physicalUpdatesObserved": 2531,
+          "setupResets": 0,
+          "routeResets": 0,
+          "routeRespawns": 0,
+          "sameOriginalActors": true,
+          "nativeImages": 4
+        },
+        {
+          "version": "after",
+          "viewport": [
+            390,
+            844
+          ],
+          "pass": true,
+          "frames": 1275,
+          "physicalUpdatesObserved": 2549,
+          "setupResets": 0,
+          "routeResets": 0,
+          "routeRespawns": 0,
+          "sameOriginalActors": true,
+          "nativeImages": 4
+        }
+      ]
+    },
+    {
+      "stableLevel": 42,
+      "id": "expansion-differential-valves",
+      "artifactId": 12766516365,
+      "zipSha256": "5e8bfb9a0707ac13a252a9ff380762145e830a91c76ad54ad0fc66ca82ce3f2f",
+      "zipBytes": 3903785,
+      "rawReportSha256": "a7f5f5546eb7ba89ad62b6a07ab6f111f21e2155e3a5301d2d583dda28ba7734",
+      "rows": [
+        {
+          "version": "before",
+          "viewport": [
+            1280,
+            720
+          ],
+          "pass": true,
+          "frames": 3873,
+          "physicalUpdatesObserved": 7745,
+          "setupResets": 1,
+          "routeResets": 0,
+          "routeRespawns": 0,
+          "sameOriginalActors": true,
+          "nativeImages": 5
+        },
+        {
+          "version": "before",
+          "viewport": [
+            390,
+            844
+          ],
+          "pass": true,
+          "frames": 3852,
+          "physicalUpdatesObserved": 7703,
+          "setupResets": 1,
+          "routeResets": 0,
+          "routeRespawns": 0,
+          "sameOriginalActors": true,
+          "nativeImages": 5
+        },
+        {
+          "version": "after",
+          "viewport": [
+            1280,
+            720
+          ],
+          "pass": true,
+          "frames": 3873,
+          "physicalUpdatesObserved": 7745,
+          "setupResets": 1,
+          "routeResets": 0,
+          "routeRespawns": 0,
+          "sameOriginalActors": true,
+          "nativeImages": 5
+        },
+        {
+          "version": "after",
+          "viewport": [
+            390,
+            844
+          ],
+          "pass": true,
+          "frames": 3852,
+          "physicalUpdatesObserved": 7703,
+          "setupResets": 1,
+          "routeResets": 0,
+          "routeRespawns": 0,
+          "sameOriginalActors": true,
+          "nativeImages": 5
+        }
+      ]
+    },
+    {
+      "stableLevel": 43,
+      "id": "puzzle-pilot43-return-and-release",
+      "artifactId": 12767000788,
+      "zipSha256": "0b06dfb24c677d19e2e3dea1ab7390e5f055fa40c6f2cad4067021641a0a6488",
+      "zipBytes": 7738440,
+      "rawReportSha256": "3475fddd6030fe9c75454db373240842c82015517fdd571c8281c949e62dcee3",
+      "rows": [
+        {
+          "version": "before",
+          "viewport": [
+            1280,
+            720
+          ],
+          "pass": true,
+          "frames": 2591,
+          "physicalUpdatesObserved": 5181,
+          "setupResets": 1,
+          "routeResets": 0,
+          "routeRespawns": 0,
+          "sameOriginalActors": true,
+          "nativeImages": 7
+        },
+        {
+          "version": "before",
+          "viewport": [
+            390,
+            844
+          ],
+          "pass": true,
+          "frames": 2546,
+          "physicalUpdatesObserved": 5091,
+          "setupResets": 1,
+          "routeResets": 0,
+          "routeRespawns": 0,
+          "sameOriginalActors": true,
+          "nativeImages": 7
+        },
+        {
+          "version": "after",
+          "viewport": [
+            1280,
+            720
+          ],
+          "pass": true,
+          "frames": 2591,
+          "physicalUpdatesObserved": 5181,
+          "setupResets": 1,
+          "routeResets": 0,
+          "routeRespawns": 0,
+          "sameOriginalActors": true,
+          "nativeImages": 7
+        },
+        {
+          "version": "after",
+          "viewport": [
+            390,
+            844
+          ],
+          "pass": true,
+          "frames": 2547,
+          "physicalUpdatesObserved": 5093,
+          "setupResets": 1,
+          "routeResets": 0,
+          "routeRespawns": 0,
+          "sameOriginalActors": true,
+          "nativeImages": 7
+        }
+      ]
+    }
+  ],
+  "limits": [
+    "Scripted ordinary production routes with a seeded completed-prior-prefix access fixture; the target starts unfinished and is completed only by the route.",
+    "Native software WebGL is not hardware-device performance or human discovery.",
+    "Late-room drivers make one normal setup reset before route observation; no reset or respawn during the observed route.",
+    "Wide static inspection cameras and original start state match before/after; ordinary-route cameras are not guaranteed pixel-identical.",
+    "The portrait static inspection of the inclined panel does not frame both feet; the third portrait route milestone shows both actual floors and standards.",
+    "The old portrait route also passes the native comparison; the earlier Node aim failure is not evidence of a broken production level.",
+    "Whole campaign npm test is still unaccepted; no full campaign, Yandex checker or publication signoff."
+  ]
+}
