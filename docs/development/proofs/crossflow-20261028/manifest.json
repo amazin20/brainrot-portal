@@ -1,0 +1,60 @@
+{
+  "baseline": "b71e8dc2d2bc62281f62eb7dc7c2da823470b9c9",
+  "candidate": "296594596451637fe9ceded007b810267471ee63",
+  "artifacts": [
+    {
+      "name": "chapters-before-21-25",
+      "kind": "chapter",
+      "run": 40606182493,
+      "source": "b71e8dc2d2bc62281f62eb7dc7c2da823470b9c9",
+      "id": 12781780412,
+      "bytes": 7323713,
+      "sha256": "37be870face43dde03be13545a2e7bc8eb309bcdcf16af6124f2171989d1f3bd"
+    },
+    {
+      "name": "chapters-before-26-30",
+      "kind": "chapter",
+      "run": 40606182493,
+      "source": "b71e8dc2d2bc62281f62eb7dc7c2da823470b9c9",
+      "id": 12781960084,
+      "bytes": 6653474,
+      "sha256": "8ce37231de629351bc8c5c87b29801224c70403abf3d3f16fc91d40d9ea62c28"
+    },
+    {
+      "name": "chapters-after-21-25",
+      "kind": "chapter",
+      "run": 40608953754,
+      "source": "296594596451637fe9ceded007b810267471ee63",
+      "id": 12781779101,
+      "bytes": 7323700,
+      "sha256": "8c00a357de0d32a79a52312ca4c6e3d349a9cf5f0bdb3a734167ac91fabd4b55"
+    },
+    {
+      "name": "chapters-after-26-30",
+      "kind": "chapter",
+      "run": 40608953754,
+      "source": "296594596451637fe9ceded007b810267471ee63",
+      "id": 12781214914,
+      "bytes": 6664090,
+      "sha256": "dfdaef88998f5d403b4c4fa25bf58da6c72372173b21f584d29fe5e9f1034890"
+    },
+    {
+      "name": "route-retrieve-first",
+      "kind": "route",
+      "run": 40608953758,
+      "source": "296594596451637fe9ceded007b810267471ee63",
+      "id": 12782570434,
+      "bytes": 8286097,
+      "sha256": "acc2629fdbc331625b444961f4a68f1eefdf9c89be33e608c5bd717f6a39597b"
+    },
+    {
+      "name": "route-air-freight",
+      "kind": "route",
+      "run": 40608953758,
+      "source": "296594596451637fe9ceded007b810267471ee63",
+      "id": 12781314927,
+      "bytes": 8972942,
+      "sha256": "f8b22cedc2c076252e0ff032fa84fa0b89f66fc2af0b57fef91d167c35b85437"
+    }
+  ]
+}

@@ -1,0 +1,1556 @@
+{
+  "sourceCommit": "b71e8dc2d2bc62281f62eb7dc7c2da823470b9c9",
+  "scope": "Native production WebGL. Initial ordinary camera and two declared inspection cameras; zero physics steps. Prior-prefix access fixture does not complete the target. No ordinary-route or hardware-performance claim.",
+  "build": {
+    "art/portal-laboratory-menu.webp": "f6a544096a6418a0f65ba8c609415d0393a1081d18537ecac5eb4c345b13b4be",
+    "assets/LabAnimationJourney-BUqfC_nM.js": "47f9490188786c73232742204e3c268800e3e1714deea56367e44e301f3249b1",
+    "assets/LabCreativeRoom17Journey-DXj-ZCvJ.js": "9456e630841ca07947a5b8776450a6f717b45df33f6321faa8d553892d54374f",
+    "assets/LabCreativeRoom18Journey-DgL4s58t.js": "b7c3a36d45ec01d8efdf66782466cbecdb52014d37fe034ca701bc845be1b5d6",
+    "assets/LabCreativeRoom20Journey-DkC_XZ_C.js": "3a29c246498917d3ae0693ed4159fb0ee3f10d8604e54e97fe02647a688eb29c",
+    "assets/LabEchoHorizonJourney-BgBB-YCu.js": "a10929d8555eba5ed298f0273c344fb971fb0669bb0a9b97bc3e87185d3859e3",
+    "assets/LabExpansionAlternateJourney47-3qgixs4y.js": "2054a9f53789e8c5aa399142bef5a6700bd7c6be3353874cd5b89eba9482c851",
+    "assets/LabExpansionAlternateJourney48-YfCCIxcN.js": "2794b1a6a59235f485cd46d9b708240cbc97469ff600a186cb73755c3f217c20",
+    "assets/LabExpansionAlternateJourney49-Cle-_dd2.js": "aaf0e0c1a8982d863499acff10b37b2f83aba8776e4fa54dc284d80631bcc660",
+    "assets/LabExpansionAlternateJourneyB-C7Hht9Bn.js": "4e6f3ca9aaf6806d0e80e3dcc6d93967fe30fef78593488801f9b25cf9e933e3",
+    "assets/LabExpansionJourneyA-CjkG45Nm.js": "24352baa3f20fa98cf6db23cc3ecfe4ca6e9ebeeec986171691f130b6cb5eb88",
+    "assets/LabExpansionJourneyB-BMEX5LHL.js": "5f8590e70339a001990e40b092173341916668c5bdc517fbb8ec9a74b781573a",
+    "assets/LabExtendedJourney-PXbQKgcS.js": "92ec015e67a9b24df92b78a7bf16926c7c976a1707b5b4aa7415c8c943e77739",
+    "assets/LabFoundation20PhysicalJourney-D9iC626p.js": "57a6e64fe9c23590410379da4a5d94b34f3e88a7cdf3cf5575afad3913d7b5fb",
+    "assets/LabFoundationJourney-DPGyDIdT.js": "cb4208b5dd72b59006145e41a74ee13ea2e1bc440b36d39ee2433c23020ec640",
+    "assets/LabIntroductoryAlternates-DcdsCClA.js": "a6451adc49d9c2f86f43455bfa4ced44d7166234f4fde82082990bf21f76cd5c",
+    "assets/LabOpenJourney-DZ8xqEpY.js": "0a8887bfc7abb31e304e985a77ec622f8c26528058fff5e0ad68ef07fe4245d3",
+    "assets/LabPortalEdgeJourney-CpgpDFld.js": "0d720b7290e72afece2927ebe369c96e689275650eb14ac5f4e504bf3d8afd2d",
+    "assets/LabPortalFloorJourney-Da7FLWOu.js": "8c36612443ea21d2bd82a41a2ea49f55716648138f338fc83aec35cbe3f58e5f",
+    "assets/LabPostJourneyA-BiBCl-oi.js": "fcfbc5c79fe8889e0b34c0922d988ac37670ac7abe5fe89d11be0ebe77371fdc",
+    "assets/LabPostJourneyB-DVMBhI8o.js": "9d64e43e0fe9b78ad27b4013d4a1d63fc03e170c7050272a45f9a4521080ba34",
+    "assets/LabPuzzlePilot43Journey-BvunzLkj.js": "9ed42acb1751d514c5b45d829a69d2a43846bff9e2fd7c5711f06196051f23cd",
+    "assets/LabPuzzleProgression44Journey-CHZ_gOCX.js": "0d4728232edbafe7bd39e37678e44109d9d8673a23cc5ec414bca40daa893652",
+    "assets/LabPuzzleProgression45Journey-5c7eJL6R.js": "5f6bffaf1c4a93a0eaf76723da03d3a7525b9a7b47f8bbf1d358bd84645024b1",
+    "assets/LabPuzzleProgression46Journey-CkAPrfVC.js": "83f2605bcfe3095eb2508aafce45380ead164d28050f3e62bc92da5864b9270a",
+    "assets/LabPuzzleProgression47Journey-DcPzcck3.js": "f6ecfef37ef2e139000d320f24dc55e81d9b553cba76209b8d9cf89010601371",
+    "assets/LabPuzzleProgression48Journey-C7__oHMI.js": "fde18d50131af4a7ea21abb4d066b78068ededc67a6d9cd15e1b9432368dfd5d",
+    "assets/LabPuzzleProgression49Journey-C_6F36Un.js": "698bb97ebe4a79612a7803f8389125545633549b40a9bd4ac6665665e3f1ac55",
+    "assets/LabPuzzleProgression50BeamJourney-wh2YXc2u.js": "9997f44bafc0a32eed722597b31a6c7e539e3caf4a541ac843978f9f9869d899",
+    "assets/LabPuzzleProgression50Journey-Ds716jmD.js": "85e521e20079fcc41f98aaea465d56c6c52d6614b39c87d999f89dd4113d7c5d",
+    "assets/LabPuzzleProgression51Journey-CnzDA36g.js": "16c8b4d44b3aaa87e21e3f7a9137fb92096afbbbb77c9143c2f2300cd88c75b9",
+    "assets/LabResearchJourney-CrXNnI2n.js": "835a8517ce689b8166c095dd284cc1ee0d4f64527202a7bc66984bda800fb041",
+    "assets/LabRoom13Journey-4kJUUTmk.js": "c1540786e510d7c4c6bfc757542e0e68e877f10e5fe7cdbb7273657a27fe7768",
+    "assets/LabRoom14Journey-DCGUsIZf.js": "b950f3d1fb8f5f610f40146eab9686e34fb1e7a2b6e408e46ded891960f6d664",
+    "assets/LabRoom15Journey-BnHDY8T6.js": "de245016cb4e9f42dfa6f91d20c1ee414e16659c748650f04111d5e81bf64a29",
+    "assets/LabRoom16Journey-DcT0PHn1.js": "43814ce0e94d01e0e2b9152c6ea1c722073f13a019b2992525f6b0480fa97e74",
+    "assets/LabRoom17Journey-C2EE7523.js": "b621bf8abcb99cec72e5a8b0ef53e4ef6a005e414141e9502855a2759ba02708",
+    "assets/LabRoom18Journey-QYxslbwP.js": "5e88d366924eb9ad145ffed60973bcd958e906e673cf4ad4fed40b9d7b027bc0",
+    "assets/LabRoom19Journey-BVk2pOJ3.js": "edbd9e87a7c68f527a6a6d6794cfcb3a8de5780d1c656265ccf7910207066ab4",
+    "assets/LabRoom20Journey-Dnjdo837.js": "84ee4a4debf18d555e80bbf468821d58576e6fcf805b34adcd2670e8502fc0fd",
+    "assets/LabRoom22Journey-DHVUmRYF.js": "6f1d5abdcb4fbab2578b6d71fee69149545933398838e861669111adf55a272a",
+    "assets/LabRoom23Journey-Cdlhe3AB.js": "2c6dd27733a6e6c39f8cf33bf1fcf9edeeafa05e39dd879df209b8370b4dc308",
+    "assets/LabRoom23PhysicalJourney-DINwVio7.js": "52f9ac809c53f8cd32e84f8b789c0cc18e1e3462fe34212299cd0f24f76ed180",
+    "assets/LabRoom24Journey-DdPQsgXl.js": "dcf41bfb63249b82de38a65f8fc6f0834f693c430fd765e61de48a5119922b6c",
+    "assets/LabRoom25Journey-COqi9k-Z.js": "4113270db838996f7bcd1cd8d5edd4ca13461d19057e13a1a5f4e0f5085b9296",
+    "assets/LabRoom26Journey-D5Lhf6Yz.js": "f568e01fcbf2e28f9bf1d89aa1d8e83df957bb60ea13a63a77cab81b61577e74",
+    "assets/LabRoom27Journey-CtMoXjWq.js": "ea4e62a0eed62998b64515b56db65142d1a7d3fb8d5c91b6e31653c5ef4422b5",
+    "assets/LabRoom28Journey-BK5o10zU.js": "abb63b08a5336b66f9274808b2d715e56d00520d744756fd68875b0c7442e686",
+    "assets/LabRoom29Journey-FXLiWbZf.js": "625138692ba0641ed1ea63e7bb6ea332c70bf235ee3bc8b3cbd80456012e04ef",
+    "assets/LabRoom30Journey-zAsFaYdh.js": "1d260d8e49e983b2f7a9c354898fe771c41df56434d67e203bd8fb51bbc8f925",
+    "assets/LabSingularityJourney-DNVyOn_c.js": "f9234b607d2d71218f942a761b0905311bb95e7f7dd2f881f6b2333433200814",
+    "assets/LabSiphonObservatoryJourney-BUVIGRuz.js": "8495b8f5eaa3dd1e9ab96f668b86dd2d48b2d7403075951d846dc98b86c3c490",
+    "assets/LabTower41RatchetCellJourney-DsMBsFZM.js": "a5802066add69863ea7adc1fb5a28c14f0b55786be11969126f50b7e3176c49a",
+    "assets/LabTowerJourney-CSg_gznL.js": "0226694a5704ba70cfbacdb3282117f75b7ea5e6b89c8dbb7c054ca42050286f",
+    "assets/LabV8Journey-BkqJOhnU.js": "1a011060271becb7a85f210318c7ea8f4bf77f20883effdbe62ad45b98236330",
+    "assets/LabWorkshopJourney-SCoRds0k.js": "76b4a70910e914c6da1c440300427879b839cd6b420a39b385daf3fd1215ded5",
+    "assets/index-BwE-oite.js": "7dbe5fd599c8a504aa9afa1d41fe99877ceb37c1f36785786238977ed9a9928f",
+    "assets/index-C001kXKc.css": "3c06e42c51dcb03884cb6b5f344f1c7f730276d1081f476a1dbade6db084335f",
+    "draco/draco_decoder.js": "30e4d486fa020737af10e3c56197693e5b904bdc05b8bfa5d7b06751dec6da04",
+    "draco/draco_decoder.wasm": "c55a594e8ffd18426d36b27fea9618af3df5e173640a3e56d46f09d76f0574f2",
+    "draco/draco_wasm_wrapper.js": "e8049906ef3f8f75d3456c22a3f31bfdfe5b5b5bd09ccdec613b9e9a49d554d8",
+    "index.html": "311490a5072982385b85e4a7cec59dfe9315f02a08f7ae85323027758b2c6108",
+    "models/runtime/manifest.json": "8806346ed3ac0fb096aa26321d5620c16a6a2a55f2523023fb21f6c4749fe2ed",
+    "models/runtime/model-01-player.glb": "e5b09ff0281377b679d6fdd505fa1ed89550bb662e94e7f593ed67ee50a66a91",
+    "models/runtime/model-02-cargo.glb": "65763c87e7f14cc807cffa8fc2adc364e8421dae819271a0c406a6b0d2c8c697",
+    "models/runtime/model-11-portal-gun.glb": "d8c76c41efbbf0a6d70e30ab5a7b70f49fd806e497f67ea06cb28f9f4edca1d7",
+    "models/runtime/model-19-lift-platform.glb": "afd039e831ff0baa514f076a505ffbb7c57dac2251959b3d858fc92dcf3d04b9",
+    "models/runtime/model-22-terminal.glb": "9e2f4ff758996f67596d3935041f632bafdf7e84efd4869341920b64a5919c26",
+    "models/runtime/model-23-floor-tile.glb": "0950bc6ef31bb28939087bad53695f21cde0b9fe5740394df202a0b242f77b0c",
+    "models/runtime/model-24-wall-panel.glb": "15aaca48f6e436d5e89abf7548c0fe43580bba8faff4619e476d3a6d306b004d",
+    "models/runtime/model-28-rotating-panel.glb": "3159916bad63903e73b8e660ce4aab8a3b1e38f1231152b68f3df63d6987ac4b",
+    "models/runtime/model-29-pressure-platform.glb": "ee65bd9706ad4f4658e54ec5ad8f6f45b24d9027e4e6072f162358a4c1b3291b",
+    "models/runtime/model-31-wind-generator.glb": "024f25db27e96e1efdaa5e200c13a665dee487e798338f86fef985feeae9019e",
+    "models/runtime/model-32-spring-ram.glb": "958d5ed533736d5779da078be20ae2b0e84212bfc3a00b456dc0106bc0a093d7",
+    "models/runtime/model-35-shutter-fan.glb": "8e11d5ab83250348f6e08f034ec87d82727162742d5a7be18f981fc523aa907a",
+    "models/runtime/model-37-extension-bridge.glb": "96173a9ef89375066b08fad8dff1928425863c6b4e6b8c0373c497448f109c55",
+    "models/runtime/model-39-cable-winch.glb": "301f148938ec83e2a8f4b45c7f9bdfd19fb40ca79d8fb9abc7601caf4fe0eafd"
+  },
+  "rows": [
+    {
+      "level": 21,
+      "errors": [],
+      "consoleErrors": [],
+      "views": [
+        {
+          "before": {
+            "id": "gravity-pocket",
+            "index": 20,
+            "steps": 0,
+            "state": "playing",
+            "elapsed": 0,
+            "player": [
+              -9,
+              10,
+              13
+            ],
+            "cargo": [
+              -4,
+              10.55,
+              13
+            ],
+            "cargoBody": 256,
+            "cargoShape": 512
+          },
+          "after": {
+            "id": "gravity-pocket",
+            "index": 20,
+            "steps": 0,
+            "state": "playing",
+            "elapsed": 0,
+            "player": [
+              -9,
+              10,
+              13
+            ],
+            "cargo": [
+              -4,
+              10.55,
+              13
+            ],
+            "cargoBody": 256,
+            "cargoShape": 512
+          },
+          "camera": {
+            "p": [
+              -11.276434821554062,
+              12.650906409438862,
+              18.653804987698447
+            ],
+            "q": [
+              -0.10562459351148014,
+              -0.26472587632056815,
+              -0.029185084047420415,
+              0.9580771819227232
+            ],
+            "fov": 62
+          },
+          "filename": "room-21-start.png",
+          "sha256": "e27890872289cbadd51c7d001d4aa34dd2e19f93bac844de18d2bc3c5c7c164d",
+          "bytes": 409743,
+          "fixture": {
+            "kind": "start"
+          }
+        },
+        {
+          "before": {
+            "id": "gravity-pocket",
+            "index": 20,
+            "steps": 0,
+            "state": "playing",
+            "elapsed": 0,
+            "player": [
+              -9,
+              10,
+              13
+            ],
+            "cargo": [
+              -4,
+              10.55,
+              13
+            ],
+            "cargoBody": 256,
+            "cargoShape": 512
+          },
+          "after": {
+            "id": "gravity-pocket",
+            "index": 20,
+            "steps": 0,
+            "state": "playing",
+            "elapsed": 0,
+            "player": [
+              -9,
+              10,
+              13
+            ],
+            "cargo": [
+              -4,
+              10.55,
+              13
+            ],
+            "cargoBody": 256,
+            "cargoShape": 512
+          },
+          "camera": {
+            "p": [
+              26.20000000149012,
+              20,
+              16.200000001490118
+            ],
+            "q": [
+              -0.10002815782579522,
+              0.4587285475033509,
+              0.05206056087563938,
+              0.8813921858904568
+            ],
+            "fov": 76
+          },
+          "filename": "room-21-oblique.png",
+          "sha256": "b93fa7b652e90ad27ba08889d19118b12de69ddfd1e9ee894108a80e0aa4d9c7",
+          "bytes": 478622,
+          "fixture": {
+            "kind": "oblique",
+            "camera": [
+              26.20000000149012,
+              20,
+              16.200000001490118
+            ],
+            "target": [
+              4.5,
+              13.908000000298024,
+              1
+            ],
+            "fov": 76,
+            "referenceFogDisabled": false
+          }
+        },
+        {
+          "before": {
+            "id": "gravity-pocket",
+            "index": 20,
+            "steps": 0,
+            "state": "playing",
+            "elapsed": 0,
+            "player": [
+              -9,
+              10,
+              13
+            ],
+            "cargo": [
+              -4,
+              10.55,
+              13
+            ],
+            "cargoBody": 256,
+            "cargoShape": 512
+          },
+          "after": {
+            "id": "gravity-pocket",
+            "index": 20,
+            "steps": 0,
+            "state": "playing",
+            "elapsed": 0,
+            "player": [
+              -9,
+              10,
+              13
+            ],
+            "cargo": [
+              -4,
+              10.55,
+              13
+            ],
+            "cargoBody": 256,
+            "cargoShape": 512
+          },
+          "camera": {
+            "p": [
+              -17.20000000149012,
+              20,
+              -14.200000001490118
+            ],
+            "q": [
+              0.05206056087563938,
+              0.8813921858904568,
+              0.10002815782579522,
+              -0.4587285475033509
+            ],
+            "fov": 76
+          },
+          "filename": "room-21-opposite.png",
+          "sha256": "0a034d6365a4e60f0b7de9bec81f5a1954953bf072ce6f3c523ce4a782d8fdfa",
+          "bytes": 444321,
+          "fixture": {
+            "kind": "opposite",
+            "camera": [
+              -17.20000000149012,
+              20,
+              -14.200000001490118
+            ],
+            "target": [
+              4.5,
+              13.908000000298024,
+              1
+            ],
+            "fov": 76,
+            "referenceFogDisabled": false
+          }
+        }
+      ],
+      "pass": true,
+      "fixture": {
+        "key": "brainrot-campaign-v67:brainrot-portal.preferences.v24",
+        "raw": "{\"quality\":\"balanced\",\"volume\":0,\"lookSensitivity\":1,\"muted\":true,\"tutorial\":false,\"completed\":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19],\"hints\":{},\"resumeLevel\":20,\"campaignSequenceRevision\":\"fifty-rooms-then-castle-v1\",\"campaignRevision\":\"creative-campaign-v48\",\"roomRevisions\":{\"16\":\"cable-supported-architecture-v1\",\"22\":\"counterweight-dynamic-v1\",\"32\":\"siphon-observatory-v1\",\"42\":\"spatial-progression43-v1\",\"43\":\"spatial-progression44-v1\",\"44\":\"spatial-progression45-v1\",\"45\":\"spatial-progression46-v1\",\"46\":\"spatial-progression47-v1\",\"47\":\"spatial-progression48-v1\",\"48\":\"spatial-progression49-v1\",\"49\":\"spatial-progression50-v1\",\"50\":\"spatial-progression51-v1\"}}",
+        "preferences": {
+          "quality": "balanced",
+          "volume": 0,
+          "lookSensitivity": 1,
+          "muted": true,
+          "tutorial": false,
+          "completed": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19
+          ],
+          "hints": {},
+          "resumeLevel": 20,
+          "campaignSequenceRevision": "fifty-rooms-then-castle-v1",
+          "campaignRevision": "creative-campaign-v48",
+          "roomRevisions": {
+            "16": "cable-supported-architecture-v1",
+            "22": "counterweight-dynamic-v1",
+            "32": "siphon-observatory-v1",
+            "42": "spatial-progression43-v1",
+            "43": "spatial-progression44-v1",
+            "44": "spatial-progression45-v1",
+            "45": "spatial-progression46-v1",
+            "46": "spatial-progression47-v1",
+            "47": "spatial-progression48-v1",
+            "48": "spatial-progression49-v1",
+            "49": "spatial-progression50-v1",
+            "50": "spatial-progression51-v1"
+          }
+        },
+        "completed": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19
+        ],
+        "targetIndex": 20,
+        "targetCompleted": false,
+        "constructorWrites": 0,
+        "scope": "QA setup supplies the previously completed campaign prefix in the candidate own storage before construction; the current target is not completed. This is not a fresh guest full-campaign playthrough."
+      },
+      "displayNumber": 21
+    },
+    {
+      "level": 22,
+      "errors": [],
+      "consoleErrors": [],
+      "views": [
+        {
+          "before": {
+            "id": "opposed-freight-lock",
+            "index": 21,
+            "steps": 0,
+            "state": "playing",
+            "elapsed": 0,
+            "player": [
+              -17,
+              0,
+              18
+            ],
+            "cargo": [
+              -15,
+              0.55,
+              17
+            ],
+            "cargoBody": 175,
+            "cargoShape": 350
+          },
+          "after": {
+            "id": "opposed-freight-lock",
+            "index": 21,
+            "steps": 0,
+            "state": "playing",
+            "elapsed": 0,
+            "player": [
+              -17,
+              0,
+              18
+            ],
+            "cargo": [
+              -15,
+              0.55,
+              17
+            ],
+            "cargoBody": 175,
+            "cargoShape": 350
+          },
+          "camera": {
+            "p": [
+              -17.210099859268926,
+              1.8796442824246533,
+              23.703091327551228
+            ],
+            "q": [
+              -0.04966679331568472,
+              -0.09667521969108929,
+              -0.004830219012500024,
+              0.9940642738393266
+            ],
+            "fov": 62
+          },
+          "filename": "room-22-start.png",
+          "sha256": "931ff22d596f2eee26d3670f13707f7e32d0c4af951eda7425c37c7415cb292d",
+          "bytes": 482850,
+          "fixture": {
+            "kind": "start"
+          }
+        },
+        {
+          "before": {
+            "id": "opposed-freight-lock",
+            "index": 21,
+            "steps": 0,
+            "state": "playing",
+            "elapsed": 0,
+            "player": [
+              -17,
+              0,
+              18
+            ],
+            "cargo": [
+              -15,
+              0.55,
+              17
+            ],
+            "cargoBody": 175,
+            "cargoShape": 350
+          },
+          "after": {
+            "id": "opposed-freight-lock",
+            "index": 21,
+            "steps": 0,
+            "state": "playing",
+            "elapsed": 0,
+            "player": [
+              -17,
+              0,
+              18
+            ],
+            "cargo": [
+              -15,
+              0.55,
+              17
+            ],
+            "cargoBody": 175,
+            "cargoShape": 350
+          },
+          "camera": {
+            "p": [
+              19.250000190734863,
+              10,
+              21.200000001490118
+            ],
+            "q": [
+              -0.08203118110418704,
+              0.3586267289318811,
+              0.03165565501613317,
+              0.9293307668036019
+            ],
+            "fov": 76
+          },
+          "filename": "room-22-oblique.png",
+          "sha256": "13c0d1335adc3415e41be07b0846e966070cc50c007ae9ea150cfb7e1a0e3802",
+          "bytes": 583973,
+          "fixture": {
+            "kind": "oblique",
+            "camera": [
+              19.250000190734863,
+              10,
+              21.200000001490118
+            ],
+            "target": [
+              0.02500009462237074,
+              4.908000000298024,
+              0
+            ],
+            "fov": 76,
+            "referenceFogDisabled": false
+          }
+        },
+        {
+          "before": {
+            "id": "opposed-freight-lock",
+            "index": 21,
+            "steps": 0,
+            "state": "playing",
+            "elapsed": 0,
+            "player": [
+              -17,
+              0,
+              18
+            ],
+            "cargo": [
+              -15,
+              0.55,
+              17
+            ],
+            "cargoBody": 175,
+            "cargoShape": 350
+          },
+          "after": {
+            "id": "opposed-freight-lock",
+            "index": 21,
+            "steps": 0,
+            "state": "playing",
+            "elapsed": 0,
+            "player": [
+              -17,
+              0,
+              18
+            ],
+            "cargo": [
+              -15,
+              0.55,
+              17
+            ],
+            "cargoBody": 175,
+            "cargoShape": 350
+          },
+          "camera": {
+            "p": [
+              -19.20000000149012,
+              10,
+              -21.200000001490118
+            ],
+            "q": [
+              0.03165565501613317,
+              0.9293307668036019,
+              0.08203118110418704,
+              -0.3586267289318811
+            ],
+            "fov": 76
+          },
+          "filename": "room-22-opposite.png",
+          "sha256": "203fd6d2f94adda859297cc221b678dd848fd85b4e66f1d44891532e05aae490",
+          "bytes": 525826,
+          "fixture": {
+            "kind": "opposite",
+            "camera": [
+              -19.20000000149012,
+              10,
+              -21.200000001490118
+            ],
+            "target": [
+              0.02500009462237074,
+              4.908000000298024,
+              0
+            ],
+            "fov": 76,
+            "referenceFogDisabled": false
+          }
+        }
+      ],
+      "pass": true,
+      "fixture": {
+        "key": "brainrot-campaign-v67:brainrot-portal.preferences.v24",
+        "raw": "{\"quality\":\"balanced\",\"volume\":0,\"lookSensitivity\":1,\"muted\":true,\"tutorial\":false,\"completed\":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20],\"hints\":{},\"resumeLevel\":21,\"campaignSequenceRevision\":\"fifty-rooms-then-castle-v1\",\"campaignRevision\":\"creative-campaign-v48\",\"roomRevisions\":{\"16\":\"cable-supported-architecture-v1\",\"22\":\"counterweight-dynamic-v1\",\"32\":\"siphon-observatory-v1\",\"42\":\"spatial-progression43-v1\",\"43\":\"spatial-progression44-v1\",\"44\":\"spatial-progression45-v1\",\"45\":\"spatial-progression46-v1\",\"46\":\"spatial-progression47-v1\",\"47\":\"spatial-progression48-v1\",\"48\":\"spatial-progression49-v1\",\"49\":\"spatial-progression50-v1\",\"50\":\"spatial-progression51-v1\"}}",
+        "preferences": {
+          "quality": "balanced",
+          "volume": 0,
+          "lookSensitivity": 1,
+          "muted": true,
+          "tutorial": false,
+          "completed": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20
+          ],
+          "hints": {},
+          "resumeLevel": 21,
+          "campaignSequenceRevision": "fifty-rooms-then-castle-v1",
+          "campaignRevision": "creative-campaign-v48",
+          "roomRevisions": {
+            "16": "cable-supported-architecture-v1",
+            "22": "counterweight-dynamic-v1",
+            "32": "siphon-observatory-v1",
+            "42": "spatial-progression43-v1",
+            "43": "spatial-progression44-v1",
+            "44": "spatial-progression45-v1",
+            "45": "spatial-progression46-v1",
+            "46": "spatial-progression47-v1",
+            "47": "spatial-progression48-v1",
+            "48": "spatial-progression49-v1",
+            "49": "spatial-progression50-v1",
+            "50": "spatial-progression51-v1"
+          }
+        },
+        "completed": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20
+        ],
+        "targetIndex": 21,
+        "targetCompleted": false,
+        "constructorWrites": 0,
+        "scope": "QA setup supplies the previously completed campaign prefix in the candidate own storage before construction; the current target is not completed. This is not a fresh guest full-campaign playthrough."
+      },
+      "displayNumber": 22
+    },
+    {
+      "level": 23,
+      "errors": [],
+      "consoleErrors": [],
+      "views": [
+        {
+          "before": {
+            "id": "counterweight-reversal",
+            "index": 22,
+            "steps": 0,
+            "state": "playing",
+            "elapsed": 0,
+            "player": [
+              -17,
+              0,
+              15
+            ],
+            "cargo": [
+              -3.1,
+              0.6,
+              3
+            ],
+            "cargoBody": 70,
+            "cargoShape": 140
+          },
+          "after": {
+            "id": "counterweight-reversal",
+            "index": 22,
+            "steps": 0,
+            "state": "playing",
+            "elapsed": 0,
+            "player": [
+              -17,
+              0,
+              15
+            ],
+            "cargo": [
+              -3.1,
+              0.6,
+              3
+            ],
+            "cargoBody": 70,
+            "cargoShape": 140
+          },
+          "camera": {
+            "p": [
+              -20.55357509278927,
+              2.269571972172212,
+              20.359143320491878
+            ],
+            "q": [
+              -0.06975256831926022,
+              -0.35974712548125587,
+              -0.02698064553009595,
+              0.9300476491490206
+            ],
+            "fov": 62
+          },
+          "filename": "room-23-start.png",
+          "sha256": "322614304a45cacdf99c8fc33bacd8f3b937bbbe41afe0349ee96c1a1950fd9a",
+          "bytes": 508362,
+          "fixture": {
+            "kind": "start"
+          }
+        },
+        {
+          "before": {
+            "id": "counterweight-reversal",
+            "index": 22,
+            "steps": 0,
+            "state": "playing",
+            "elapsed": 0,
+            "player": [
+              -17,
+              0,
+              15
+            ],
+            "cargo": [
+              -3.1,
+              0.6,
+              3
+            ],
+            "cargoBody": 70,
+            "cargoShape": 140
+          },
+          "after": {
+            "id": "counterweight-reversal",
+            "index": 22,
+            "steps": 0,
+            "state": "playing",
+            "elapsed": 0,
+            "player": [
+              -17,
+              0,
+              15
+            ],
+            "cargo": [
+              -3.1,
+              0.6,
+              3
+            ],
+            "cargoBody": 70,
+            "cargoShape": 140
+          },
+          "camera": {
+            "p": [
+              20.20000000149012,
+              10,
+              19.200000001490118
+            ],
+            "q": [
+              -0.08070200407089806,
+              0.38697161353690057,
+              0.034021790473421944,
+              0.9179230221693816
+            ],
+            "fov": 76
+          },
+          "filename": "room-23-oblique.png",
+          "sha256": "3b041a26f179ab0c78d1de28a27587d7d5cf5b0e41ee583747c2bd49c82a5349",
+          "bytes": 540990,
+          "fixture": {
+            "kind": "oblique",
+            "camera": [
+              20.20000000149012,
+              10,
+              19.200000001490118
+            ],
+            "target": [
+              0,
+              5,
+              -0.5
+            ],
+            "fov": 76,
+            "referenceFogDisabled": false
+          }
+        },
+        {
+          "before": {
+            "id": "counterweight-reversal",
+            "index": 22,
+            "steps": 0,
+            "state": "playing",
+            "elapsed": 0,
+            "player": [
+              -17,
+              0,
+              15
+            ],
+            "cargo": [
+              -3.1,
+              0.6,
+              3
+            ],
+            "cargoBody": 70,
+            "cargoShape": 140
+          },
+          "after": {
+            "id": "counterweight-reversal",
+            "index": 22,
+            "steps": 0,
+            "state": "playing",
+            "elapsed": 0,
+            "player": [
+              -17,
+              0,
+              15
+            ],
+            "cargo": [
+              -3.1,
+              0.6,
+              3
+            ],
+            "cargoBody": 70,
+            "cargoShape": 140
+          },
+          "camera": {
+            "p": [
+              -20.20000000149012,
+              10,
+              -20.200000001490118
+            ],
+            "q": [
+              0.034021790473421944,
+              0.9179230221693816,
+              0.08070200407089806,
+              -0.3869716135369006
+            ],
+            "fov": 76
+          },
+          "filename": "room-23-opposite.png",
+          "sha256": "5f8763120ddde05199490c310ecaf4d3d4f4a72bdab3b17719fcafbf662d3eb0",
+          "bytes": 501031,
+          "fixture": {
+            "kind": "opposite",
+            "camera": [
+              -20.20000000149012,
+              10,
+              -20.200000001490118
+            ],
+            "target": [
+              0,
+              5,
+              -0.5
+            ],
+            "fov": 76,
+            "referenceFogDisabled": false
+          }
+        }
+      ],
+      "pass": true,
+      "fixture": {
+        "key": "brainrot-campaign-v67:brainrot-portal.preferences.v24",
+        "raw": "{\"quality\":\"balanced\",\"volume\":0,\"lookSensitivity\":1,\"muted\":true,\"tutorial\":false,\"completed\":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21],\"hints\":{},\"resumeLevel\":22,\"campaignSequenceRevision\":\"fifty-rooms-then-castle-v1\",\"campaignRevision\":\"creative-campaign-v48\",\"roomRevisions\":{\"16\":\"cable-supported-architecture-v1\",\"22\":\"counterweight-dynamic-v1\",\"32\":\"siphon-observatory-v1\",\"42\":\"spatial-progression43-v1\",\"43\":\"spatial-progression44-v1\",\"44\":\"spatial-progression45-v1\",\"45\":\"spatial-progression46-v1\",\"46\":\"spatial-progression47-v1\",\"47\":\"spatial-progression48-v1\",\"48\":\"spatial-progression49-v1\",\"49\":\"spatial-progression50-v1\",\"50\":\"spatial-progression51-v1\"}}",
+        "preferences": {
+          "quality": "balanced",
+          "volume": 0,
+          "lookSensitivity": 1,
+          "muted": true,
+          "tutorial": false,
+          "completed": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21
+          ],
+          "hints": {},
+          "resumeLevel": 22,
+          "campaignSequenceRevision": "fifty-rooms-then-castle-v1",
+          "campaignRevision": "creative-campaign-v48",
+          "roomRevisions": {
+            "16": "cable-supported-architecture-v1",
+            "22": "counterweight-dynamic-v1",
+            "32": "siphon-observatory-v1",
+            "42": "spatial-progression43-v1",
+            "43": "spatial-progression44-v1",
+            "44": "spatial-progression45-v1",
+            "45": "spatial-progression46-v1",
+            "46": "spatial-progression47-v1",
+            "47": "spatial-progression48-v1",
+            "48": "spatial-progression49-v1",
+            "49": "spatial-progression50-v1",
+            "50": "spatial-progression51-v1"
+          }
+        },
+        "completed": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21
+        ],
+        "targetIndex": 22,
+        "targetCompleted": false,
+        "constructorWrites": 0,
+        "scope": "QA setup supplies the previously completed campaign prefix in the candidate own storage before construction; the current target is not completed. This is not a fresh guest full-campaign playthrough."
+      },
+      "displayNumber": 23
+    },
+    {
+      "level": 24,
+      "errors": [],
+      "consoleErrors": [],
+      "views": [
+        {
+          "before": {
+            "id": "garden-of-turning-doors",
+            "index": 23,
+            "steps": 0,
+            "state": "playing",
+            "elapsed": 0,
+            "player": [
+              15,
+              0,
+              18
+            ],
+            "cargo": [
+              11,
+              0.55,
+              18
+            ],
+            "cargoBody": 204,
+            "cargoShape": 408
+          },
+          "after": {
+            "id": "garden-of-turning-doors",
+            "index": 23,
+            "steps": 0,
+            "state": "playing",
+            "elapsed": 0,
+            "player": [
+              15,
+              0,
+              18
+            ],
+            "cargo": [
+              11,
+              0.55,
+              18
+            ],
+            "cargoBody": 204,
+            "cargoShape": 408
+          },
+          "camera": {
+            "p": [
+              18.68580431853146,
+              1.9480842309295674,
+              23.238059608590415
+            ],
+            "q": [
+              -0.048567356963027664,
+              0.22818850879541677,
+              0.01139779794345497,
+              0.9723380618351778
+            ],
+            "fov": 62
+          },
+          "filename": "room-24-start.png",
+          "sha256": "2ffc993ac0a0b6da8023c77b4327393aa037030d3a1972a702bbbc6fab7d2bb8",
+          "bytes": 428206,
+          "fixture": {
+            "kind": "start"
+          }
+        },
+        {
+          "before": {
+            "id": "garden-of-turning-doors",
+            "index": 23,
+            "steps": 0,
+            "state": "playing",
+            "elapsed": 0,
+            "player": [
+              15,
+              0,
+              18
+            ],
+            "cargo": [
+              11,
+              0.55,
+              18
+            ],
+            "cargoBody": 204,
+            "cargoShape": 408
+          },
+          "after": {
+            "id": "garden-of-turning-doors",
+            "index": 23,
+            "steps": 0,
+            "state": "playing",
+            "elapsed": 0,
+            "player": [
+              15,
+              0,
+              18
+            ],
+            "cargo": [
+              11,
+              0.55,
+              18
+            ],
+            "cargoBody": 204,
+            "cargoShape": 408
+          },
+          "camera": {
+            "p": [
+              21.20000000149012,
+              10,
+              21.200000001490118
+            ],
+            "q": [
+              -0.07624856876209692,
+              0.38137791157130324,
+              0.03158319129279806,
+              0.920727726504967
+            ],
+            "fov": 76
+          },
+          "filename": "room-24-oblique.png",
+          "sha256": "0051e0e82ef2e82797ee94d1e4d91922dcba1465845369eaa3860bb4e14c5ecd",
+          "bytes": 490837,
+          "fixture": {
+            "kind": "oblique",
+            "camera": [
+              21.20000000149012,
+              10,
+              21.200000001490118
+            ],
+            "target": [
+              0,
+              5,
+              0
+            ],
+            "fov": 76,
+            "referenceFogDisabled": false
+          }
+        },
+        {
+          "before": {
+            "id": "garden-of-turning-doors",
+            "index": 23,
+            "steps": 0,
+            "state": "playing",
+            "elapsed": 0,
+            "player": [
+              15,
+              0,
+              18
+            ],
+            "cargo": [
+              11,
+              0.55,
+              18
+            ],
+            "cargoBody": 204,
+            "cargoShape": 408
+          },
+          "after": {
+            "id": "garden-of-turning-doors",
+            "index": 23,
+            "steps": 0,
+            "state": "playing",
+            "elapsed": 0,
+            "player": [
+              15,
+              0,
+              18
+            ],
+            "cargo": [
+              11,
+              0.55,
+              18
+            ],
+            "cargoBody": 204,
+            "cargoShape": 408
+          },
+          "camera": {
+            "p": [
+              -21.20000000149012,
+              10,
+              -21.200000001490118
+            ],
+            "q": [
+              0.03158319129279806,
+              0.920727726504967,
+              0.07624856876209692,
+              -0.38137791157130324
+            ],
+            "fov": 76
+          },
+          "filename": "room-24-opposite.png",
+          "sha256": "8cc436fae0c68f298754556a2f27463d1bf8c85a71e5592ef5f30e7ff6a091ec",
+          "bytes": 238393,
+          "fixture": {
+            "kind": "opposite",
+            "camera": [
+              -21.20000000149012,
+              10,
+              -21.200000001490118
+            ],
+            "target": [
+              0,
+              5,
+              0
+            ],
+            "fov": 76,
+            "referenceFogDisabled": false
+          }
+        }
+      ],
+      "pass": true,
+      "fixture": {
+        "key": "brainrot-campaign-v67:brainrot-portal.preferences.v24",
+        "raw": "{\"quality\":\"balanced\",\"volume\":0,\"lookSensitivity\":1,\"muted\":true,\"tutorial\":false,\"completed\":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22],\"hints\":{},\"resumeLevel\":23,\"campaignSequenceRevision\":\"fifty-rooms-then-castle-v1\",\"campaignRevision\":\"creative-campaign-v48\",\"roomRevisions\":{\"16\":\"cable-supported-architecture-v1\",\"22\":\"counterweight-dynamic-v1\",\"32\":\"siphon-observatory-v1\",\"42\":\"spatial-progression43-v1\",\"43\":\"spatial-progression44-v1\",\"44\":\"spatial-progression45-v1\",\"45\":\"spatial-progression46-v1\",\"46\":\"spatial-progression47-v1\",\"47\":\"spatial-progression48-v1\",\"48\":\"spatial-progression49-v1\",\"49\":\"spatial-progression50-v1\",\"50\":\"spatial-progression51-v1\"}}",
+        "preferences": {
+          "quality": "balanced",
+          "volume": 0,
+          "lookSensitivity": 1,
+          "muted": true,
+          "tutorial": false,
+          "completed": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22
+          ],
+          "hints": {},
+          "resumeLevel": 23,
+          "campaignSequenceRevision": "fifty-rooms-then-castle-v1",
+          "campaignRevision": "creative-campaign-v48",
+          "roomRevisions": {
+            "16": "cable-supported-architecture-v1",
+            "22": "counterweight-dynamic-v1",
+            "32": "siphon-observatory-v1",
+            "42": "spatial-progression43-v1",
+            "43": "spatial-progression44-v1",
+            "44": "spatial-progression45-v1",
+            "45": "spatial-progression46-v1",
+            "46": "spatial-progression47-v1",
+            "47": "spatial-progression48-v1",
+            "48": "spatial-progression49-v1",
+            "49": "spatial-progression50-v1",
+            "50": "spatial-progression51-v1"
+          }
+        },
+        "completed": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22
+        ],
+        "targetIndex": 23,
+        "targetCompleted": false,
+        "constructorWrites": 0,
+        "scope": "QA setup supplies the previously completed campaign prefix in the candidate own storage before construction; the current target is not completed. This is not a fresh guest full-campaign playthrough."
+      },
+      "displayNumber": 24
+    },
+    {
+      "level": 25,
+      "errors": [],
+      "consoleErrors": [],
+      "views": [
+        {
+          "before": {
+            "id": "opposed-shadows",
+            "index": 24,
+            "steps": 0,
+            "state": "playing",
+            "elapsed": 0,
+            "player": [
+              -17,
+              0,
+              10
+            ],
+            "cargo": [
+              -15,
+              0.55,
+              9
+            ],
+            "cargoBody": 88,
+            "cargoShape": 176
+          },
+          "after": {
+            "id": "opposed-shadows",
+            "index": 24,
+            "steps": 0,
+            "state": "playing",
+            "elapsed": 0,
+            "player": [
+              -17,
+              0,
+              10
+            ],
+            "cargo": [
+              -15,
+              0.55,
+              9
+            ],
+            "cargoBody": 88,
+            "cargoShape": 176
+          },
+          "camera": {
+            "p": [
+              -16.086680257184604,
+              1.9536794133317164,
+              14.192797823517857
+            ],
+            "q": [
+              -0.07483364946617456,
+              0.02273624663301375,
+              0.0017066666610693068,
+              0.9969353415771378
+            ],
+            "fov": 62
+          },
+          "filename": "room-25-start.png",
+          "sha256": "7bd65d0376a5b0e2510c3e1f114c4c16dd6841856e01a73e1f4b23cd1768fa86",
+          "bytes": 485521,
+          "fixture": {
+            "kind": "start"
+          }
+        },
+        {
+          "before": {
+            "id": "opposed-shadows",
+            "index": 24,
+            "steps": 0,
+            "state": "playing",
+            "elapsed": 0,
+            "player": [
+              -17,
+              0,
+              10
+            ],
+            "cargo": [
+              -15,
+              0.55,
+              9
+            ],
+            "cargoBody": 88,
+            "cargoShape": 176
+          },
+          "after": {
+            "id": "opposed-shadows",
+            "index": 24,
+            "steps": 0,
+            "state": "playing",
+            "elapsed": 0,
+            "player": [
+              -17,
+              0,
+              10
+            ],
+            "cargo": [
+              -15,
+              0.55,
+              9
+            ],
+            "cargoBody": 88,
+            "cargoShape": 176
+          },
+          "camera": {
+            "p": [
+              19.20000000149012,
+              10,
+              22.200000001490118
+            ],
+            "q": [
+              -0.08147896804190402,
+              0.36385713591855146,
+              0.0319698464669939,
+              0.9273333226649692
+            ],
+            "fov": 76
+          },
+          "filename": "room-25-oblique.png",
+          "sha256": "1bee7e5bf72541c94f9244f573b498e6c8340a1dd1c15325de970970a1e5b595",
+          "bytes": 589067,
+          "fixture": {
+            "kind": "oblique",
+            "camera": [
+              19.20000000149012,
+              10,
+              22.200000001490118
+            ],
+            "target": [
+              0,
+              5,
+              1.5
+            ],
+            "fov": 76,
+            "referenceFogDisabled": false
+          }
+        },
+        {
+          "before": {
+            "id": "opposed-shadows",
+            "index": 24,
+            "steps": 0,
+            "state": "playing",
+            "elapsed": 0,
+            "player": [
+              -17,
+              0,
+              10
+            ],
+            "cargo": [
+              -15,
+              0.55,
+              9
+            ],
+            "cargoBody": 88,
+            "cargoShape": 176
+          },
+          "after": {
+            "id": "opposed-shadows",
+            "index": 24,
+            "steps": 0,
+            "state": "playing",
+            "elapsed": 0,
+            "player": [
+              -17,
+              0,
+              10
+            ],
+            "cargo": [
+              -15,
+              0.55,
+              9
+            ],
+            "cargoBody": 88,
+            "cargoShape": 176
+          },
+          "camera": {
+            "p": [
+              -19.20000000149012,
+              10,
+              -19.200000001490118
+            ],
+            "q": [
+              0.0319698464669939,
+              0.9273333226649693,
+              0.08147896804190402,
+              -0.36385713591855146
+            ],
+            "fov": 76
+          },
+          "filename": "room-25-opposite.png",
+          "sha256": "b3a4b5d3c74fc313336fc4ed38a070b24c8efc17b705bc32e2c080355af111ac",
+          "bytes": 617077,
+          "fixture": {
+            "kind": "opposite",
+            "camera": [
+              -19.20000000149012,
+              10,
+              -19.200000001490118
+            ],
+            "target": [
+              0,
+              5,
+              1.5
+            ],
+            "fov": 76,
+            "referenceFogDisabled": false
+          }
+        }
+      ],
+      "pass": true,
+      "fixture": {
+        "key": "brainrot-campaign-v67:brainrot-portal.preferences.v24",
+        "raw": "{\"quality\":\"balanced\",\"volume\":0,\"lookSensitivity\":1,\"muted\":true,\"tutorial\":false,\"completed\":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23],\"hints\":{},\"resumeLevel\":24,\"campaignSequenceRevision\":\"fifty-rooms-then-castle-v1\",\"campaignRevision\":\"creative-campaign-v48\",\"roomRevisions\":{\"16\":\"cable-supported-architecture-v1\",\"22\":\"counterweight-dynamic-v1\",\"32\":\"siphon-observatory-v1\",\"42\":\"spatial-progression43-v1\",\"43\":\"spatial-progression44-v1\",\"44\":\"spatial-progression45-v1\",\"45\":\"spatial-progression46-v1\",\"46\":\"spatial-progression47-v1\",\"47\":\"spatial-progression48-v1\",\"48\":\"spatial-progression49-v1\",\"49\":\"spatial-progression50-v1\",\"50\":\"spatial-progression51-v1\"}}",
+        "preferences": {
+          "quality": "balanced",
+          "volume": 0,
+          "lookSensitivity": 1,
+          "muted": true,
+          "tutorial": false,
+          "completed": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23
+          ],
+          "hints": {},
+          "resumeLevel": 24,
+          "campaignSequenceRevision": "fifty-rooms-then-castle-v1",
+          "campaignRevision": "creative-campaign-v48",
+          "roomRevisions": {
+            "16": "cable-supported-architecture-v1",
+            "22": "counterweight-dynamic-v1",
+            "32": "siphon-observatory-v1",
+            "42": "spatial-progression43-v1",
+            "43": "spatial-progression44-v1",
+            "44": "spatial-progression45-v1",
+            "45": "spatial-progression46-v1",
+            "46": "spatial-progression47-v1",
+            "47": "spatial-progression48-v1",
+            "48": "spatial-progression49-v1",
+            "49": "spatial-progression50-v1",
+            "50": "spatial-progression51-v1"
+          }
+        },
+        "completed": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23
+        ],
+        "targetIndex": 24,
+        "targetCompleted": false,
+        "constructorWrites": 0,
+        "scope": "QA setup supplies the previously completed campaign prefix in the candidate own storage before construction; the current target is not completed. This is not a fresh guest full-campaign playthrough."
+      },
+      "displayNumber": 25
+    }
+  ],
+  "pass": true
+}
