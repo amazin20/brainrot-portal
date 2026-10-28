@@ -1,0 +1,232 @@
+TAP version 13
+# Subtest: complete matching manifests and finished successful TAP are accepted
+ok 1 - complete matching manifests and finished successful TAP are accepted
+  ---
+  duration_ms: 79.742864
+  type: 'test'
+  ...
+# Subtest: acceptance rejects missing shard
+ok 2 - acceptance rejects missing shard
+  ---
+  duration_ms: 97.797302
+  type: 'test'
+  ...
+# Subtest: acceptance rejects omitted test
+ok 3 - acceptance rejects omitted test
+  ---
+  duration_ms: 138.5093
+  type: 'test'
+  ...
+# Subtest: acceptance rejects repeated test
+ok 4 - acceptance rejects repeated test
+  ---
+  duration_ms: 74.040779
+  type: 'test'
+  ...
+# Subtest: acceptance rejects wrong source
+ok 5 - acceptance rejects wrong source
+  ---
+  duration_ms: 92.529787
+  type: 'test'
+  ...
+# Subtest: acceptance rejects changed test bytes
+ok 6 - acceptance rejects changed test bytes
+  ---
+  duration_ms: 137.680912
+  type: 'test'
+  ...
+# Subtest: acceptance rejects cancelled runner
+ok 7 - acceptance rejects cancelled runner
+  ---
+  duration_ms: 73.641995
+  type: 'test'
+  ...
+# Subtest: acceptance rejects partial TAP
+ok 8 - acceptance rejects partial TAP
+  ---
+  duration_ms: 93.827732
+  type: 'test'
+  ...
+# Subtest: acceptance rejects failed TAP
+ok 9 - acceptance rejects failed TAP
+  ---
+  duration_ms: 82.797741
+  type: 'test'
+  ...
+# Subtest: a failed Actions job cannot be replaced by apparently successful artifacts
+ok 10 - a failed Actions job cannot be replaced by apparently successful artifacts
+  ---
+  duration_ms: 76.058458
+  type: 'test'
+  ...
+# Subtest: sharded enumeration retains every old active test and no archived tower fixture
+ok 11 - sharded enumeration retains every old active test and no archived tower fixture
+  ---
+  duration_ms: 5.769638
+  type: 'test'
+  ...
+# Subtest: 1 test shards cover the whole suite exactly once, in stable order
+ok 12 - 1 test shards cover the whole suite exactly once, in stable order
+  ---
+  duration_ms: 0.959702
+  type: 'test'
+  ...
+# Subtest: 2 test shards cover the whole suite exactly once, in stable order
+ok 13 - 2 test shards cover the whole suite exactly once, in stable order
+  ---
+  duration_ms: 4.026578
+  type: 'test'
+  ...
+# Subtest: 8 test shards cover the whole suite exactly once, in stable order
+ok 14 - 8 test shards cover the whole suite exactly once, in stable order
+  ---
+  duration_ms: 1.358034
+  type: 'test'
+  ...
+# Subtest: 16 test shards cover the whole suite exactly once, in stable order
+ok 15 - 16 test shards cover the whole suite exactly once, in stable order
+  ---
+  duration_ms: 1.214464
+  type: 'test'
+  ...
+# Subtest: 32 test shards cover the whole suite exactly once, in stable order
+ok 16 - 32 test shards cover the whole suite exactly once, in stable order
+  ---
+  duration_ms: 1.190518
+  type: 'test'
+  ...
+# Subtest: invalid shard configuration fails instead of silently skipping tests
+ok 17 - invalid shard configuration fails instead of silently skipping tests
+  ---
+  duration_ms: 1.112545
+  type: 'test'
+  ...
+# Subtest: worker configuration preserves old default and rejects unbounded concurrency
+ok 18 - worker configuration preserves old default and rejects unbounded concurrency
+  ---
+  duration_ms: 0.315845
+  type: 'test'
+  ...
+# Subtest: room26 only adds twelve exact closed hangers; every previous gameplay record is unchanged
+ok 19 - room26 only adds twelve exact closed hangers; every previous gameplay record is unchanged
+  ---
+  duration_ms: 2700.08562
+  type: 'test'
+  ...
+# Subtest: all suspension shoes meet the finite stop faces and all roof plates meet actual visible roof triangles
+ok 20 - all suspension shoes meet the finite stop faces and all roof plates meet actual visible roof triangles
+  ---
+  duration_ms: 443.290941
+  type: 'test'
+  ...
+# Subtest: hanger registries reject hidden, displaced, duplicated and nonphysical substitutes
+ok 21 - hanger registries reject hidden, displaced, duplicated and nonphysical substitutes
+  ---
+  duration_ms: 247.949607
+  type: 'test'
+  ...
+# Subtest: all new ties and plates are removed from physics and queries; each geometry disposes exactly once
+ok 22 - all new ties and plates are removed from physics and queries; each geometry disposes exactly once
+  ---
+  duration_ms: 587.569038
+  type: 'test'
+  ...
+# Subtest: room26 wide original: ordinary original-actor route with all real hangers
+ok 23 - room26 wide original: ordinary original-actor route with all real hangers
+  ---
+  duration_ms: 34914.54375
+  type: 'test'
+  ...
+# Subtest: room26 wide free-freight: ordinary original-actor route with all real hangers
+ok 24 - room26 wide free-freight: ordinary original-actor route with all real hangers
+  ---
+  duration_ms: 20043.970879
+  type: 'test'
+  ...
+# Subtest: room26 wide recovery: ordinary original-actor route with all real hangers
+ok 25 - room26 wide recovery: ordinary original-actor route with all real hangers
+  ---
+  duration_ms: 21320.435011
+  type: 'test'
+  ...
+# Subtest: room26 portrait original: ordinary original-actor route with all real hangers
+ok 26 - room26 portrait original: ordinary original-actor route with all real hangers
+  ---
+  duration_ms: 17167.186802
+  type: 'test'
+  ...
+# Subtest: room26 portrait free-freight: ordinary original-actor route with all real hangers
+ok 27 - room26 portrait free-freight: ordinary original-actor route with all real hangers
+  ---
+  duration_ms: 14907.962771
+  type: 'test'
+  ...
+# Subtest: room26 portrait recovery: ordinary original-actor route with all real hangers
+ok 28 - room26 portrait recovery: ordinary original-actor route with all real hangers
+  ---
+  duration_ms: 17774.669316
+  type: 'test'
+  ...
+# Subtest: room26 wide: live ascent and jump attempts still stop below the supported first plate
+ok 29 - room26 wide: live ascent and jump attempts still stop below the supported first plate
+  ---
+  duration_ms: 3457.359985
+  type: 'test'
+  ...
+# Subtest: room26 portrait: live ascent and jump attempts still stop below the supported first plate
+ok 30 - room26 portrait: live ascent and jump attempts still stop below the supported first plate
+  ---
+  duration_ms: 3450.285274
+  type: 'test'
+  ...
+# Subtest: room26 delivers its original companion independently on the transverse current before the player follows
+ok 31 - room26 delivers its original companion independently on the transverse current before the player follows
+  ---
+  duration_ms: 13239.317752
+  type: 'test'
+  ...
+# Subtest: room26 normal: ordinary input carries one original companion through both live fields
+ok 32 - room26 normal: ordinary input carries one original companion through both live fields
+  ---
+  duration_ms: 11150.580002
+  type: 'test'
+  ...
+# Subtest: room26 inspect the unpowered shaft first: ordinary input carries one original companion through both live fields
+ok 33 - room26 inspect the unpowered shaft first: ordinary input carries one original companion through both live fields
+  ---
+  duration_ms: 9366.598507
+  type: 'test'
+  ...
+# Subtest: room26 missed first landing and repeated reversal: ordinary input carries one original companion through both live fields
+ok 34 - room26 missed first landing and repeated reversal: ordinary input carries one original companion through both live fields
+  ---
+  duration_ms: 9488.894349
+  type: 'test'
+  ...
+# Subtest: room26 load-operated obstruction stops the actual lower ray without disabling the independent stream
+ok 35 - room26 load-operated obstruction stops the actual lower ray without disabling the independent stream
+  ---
+  duration_ms: 1477.330217
+  type: 'test'
+  ...
+# Subtest: room26 overlapping fields compensate gravity once while adding their real horizontal forces
+ok 36 - room26 overlapping fields compensate gravity once while adding their real horizontal forces
+  ---
+  duration_ms: 2.680959
+  type: 'test'
+  ...
+# Subtest: room26 has five purposeful portal faces and no progression flags; joint arrival is still required
+ok 37 - room26 has five purposeful portal faces and no progression flags; joint arrival is still required
+  ---
+  duration_ms: 251.827593
+  type: 'test'
+  ...
+1..37
+# tests 37
+# suites 0
+# pass 37
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 187966.482655
