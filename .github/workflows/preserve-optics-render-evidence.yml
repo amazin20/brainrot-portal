@@ -1,0 +1,70 @@
+name: Preserve completed Optics render evidence
+on:
+  push:
+    branches: [upgrade/tz-completion-20261023]
+    paths: ['.github/workflows/preserve-optics-render-evidence.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+  actions: read
+concurrency:
+  group: optics-render-evidence-preservation
+  cancel-in-progress: false
+jobs:
+  preserve:
+    if: github.ref == 'refs/heads/upgrade/tz-completion-20261023'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+      - name: Fetch only completed source-bound PNG review artifacts
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs=require('fs'),crypto=require('crypto');
+            const baselineCommit='e589c0ed0b0e8ea5dcac60b1b549a6adde75c32e',gameCommit='868ace3397b61f3d893e2e4ff74bb1f778f63966';
+            const nativeRuns={before:40623811924,after:40624685195};
+            for(const [version,id]of Object.entries(nativeRuns)){
+              const run=(await github.rest.actions.getWorkflowRun({...context.repo,run_id:id})).data;
+              if(run.status!=='completed'||run.conclusion!=='success'||run.head_sha!==(version==='before'?baselineCommit:gameCommit))throw Error('Unaccepted source-bound review');
+            }
+            const targets=[
+              [12788751153,'before',31,5924241,'b641c5b3a58970b03da04f24d2dd93bcdfef55889deba1e545b5a04ddcfc1baa'],
+              [12788646739,'before',36,6531336,'aa73fc9a69e09de7087f8434c12970e8a733f3f27e8dddaec0fd8a486211f69c'],
+              [12788808122,'after',31,7987842,'fc7d88a62c9eb1a686cf227d2a4d85ab5f9dc79362e70f6326a0de7e57cb9415'],
+              [12788294316,'after',36,8467810,'d3ad6ecfb2136d99313d6dd8f577f6d4b86ea51e36c9974a5f0acd16490df410'],
+            ];
+            const root=process.env.RUNNER_TEMP+'/optics-render-evidence';fs.mkdirSync(root,{recursive:true});const artifacts=[];
+            for(const [id,version,first,expectedBytes,expectedHash]of targets){
+              const sourceCommit=version==='before'?baselineCommit:gameCommit;
+              const metadata=(await github.rest.actions.getArtifact({...context.repo,artifact_id:id})).data;
+              if(metadata.expired||metadata.workflow_run?.head_sha!==sourceCommit||metadata.workflow_run?.id!==nativeRuns[version])throw Error('Wrong artifact origin');
+              const response=await github.rest.actions.downloadArtifact({...context.repo,artifact_id:id,archive_format:'zip'}),bytes=Buffer.from(response.data),sha256=crypto.createHash('sha256').update(bytes).digest('hex');
+              if(bytes.length!==expectedBytes||sha256!==expectedHash)throw Error('Artifact bytes differ from inspected version');
+              fs.writeFileSync(root+'/'+id+'.zip',bytes);
+              artifacts.push({id,version,levels:Array.from({length:5},(_,i)=>first+i),sourceCommit,bytes:bytes.length,sha256});
+            }
+            fs.writeFileSync(root+'/manifest.json',JSON.stringify({baselineCommit,gameCommit,nativeRuns,artifacts},null,2)+'\n');
+      - name: Validate PNG bytes, actor routes and matching cameras; compose comparisons
+        run: |
+          python3 -m pip install pillow==11.3.0
+          python3 tools/preserve-optics-evidence.py
+      - name: Save only render evidence into the working branch without publication
+        run: |
+          git fetch origin refs/heads/upgrade/tz-completion-20261023
+          test "$(git rev-parse FETCH_HEAD)" = "${{ github.sha }}"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add docs/development/proofs/optics-remaster-20261028
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m 'Preserve genuine Optics before-after frames, ten completed routes and 26 exact-source checks'
+          git push origin HEAD:refs/heads/upgrade/tz-completion-20261023
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: optics-verified-render-evidence-868ace3
+          path: docs/development/proofs/optics-remaster-20261028/
+          retention-days: 14
+          if-no-files-found: warn
