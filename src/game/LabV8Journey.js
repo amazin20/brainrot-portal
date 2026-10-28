@@ -67,10 +67,12 @@ export async function runV8Journey(game,{onMilestone=()=>{},scenario=null,journe
   }
   function look(point){
     stop();
-    // Room25's 0.82 m optical mouths can present a grazing side face while
-    // their centre is still within the broad campaign probe's .01 NDC margin.
-    // Use the same precise ordinary look convergence as its native driver.
-    const tolerance = level.id === 'opposed-shadows' ? .001 : .01;
+    // Narrow optical mouths and room13's projector rim need a more precise
+    // ordinary look than the general .01 NDC margin. This converges actual
+    // yaw/pitch input; it does not assign the camera or bypass muzzle hits.
+    const narrowIntake = game.camera.aspect >= 1 && level.id === 'optical-paradox'
+      && point.distanceTo(level.panels['light-intake'].getFrame().center) < .1;
+    const tolerance = level.id === 'opposed-shadows' || narrowIntake ? .001 : .01;
     for(let n=0;n<240;n++){
       game.scene.updateMatrixWorld(true);
       if(point.clone().sub(game.camera.position).dot(game.camera.getWorldDirection(V()))<0){game.yaw+=.18;frame();continue;}

@@ -120,7 +120,9 @@ export function runPost35(d,{route='latches-before-freight',stopAfter=null}={}){
  mark('The first actual mechanical latch preserves the later entry return');if(stopAfter==='first-latch')return;
  shot(d,1,p['second-receiver']);
  until(()=>l.powered()[1]&&l.second.progress>.9,5,'Flow did not open second sluice');
- const visitBay=()=>{walk(0,-5);walk(0,-12);walk(8,-12);walk(8,-24.4);walk(l.bay.aim[0],l.bay.aim[2]);};
+ // A short sidestep aligns the narrow-view camera and muzzle with the real
+ // inspection slots. Their metal mullions remain fully solid.
+ const visitBay=()=>{walk(0,-5);walk(0,-12);walk(8,-12);walk(8,-24.4);walk(g.camera.aspect<1?.6:l.bay.aim[0],l.bay.aim[2]);};
  const leaveBay=()=>{walk(8,-24.4);walk(8,-12);walk(0,-12);walk(0,-5);};
  if(route==='scout-before-second-latch'){
   visitBay();d.look(p['companion-address'].getFrame().center);
@@ -143,4 +145,3 @@ export const POST_A_ROUTES=Object.freeze([runPost31,runPost32,runPost33,runPost3
 export function runPostA(d,options={}){
  const fn=POST_A_ROUTES[d.level.index-30];check(fn,'Unknown post-campaign room');return fn(d,options);
 }
-

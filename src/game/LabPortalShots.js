@@ -21,7 +21,7 @@ export class LabPortalShots {
   // Keep only one such click, with its own target, during the last 80 ms.
   const blocked=![0,1].includes(index)?'channel':g.state!=='playing'?'paused':g.externalBlocked?'external':g.heldCube?'hands-full':this.buffered?'buffer-full':busy&&!(g.kineticMode ?? g.epicMode)&&remaining>.08?(this.cooldown>0?'cooldown':'preparing'):null;
   if(blocked){this.lastRequest={accepted:false,index,reason:blocked};return false;}
-  const point=this.captureTarget(index);
+  const point=this.captureTarget(index),targetSurfaceId=this.targetSurfaceId;
   const facing=Math.atan2(point.x-g.playerPosition.x,point.z-g.playerPosition.z);
   const turn=Math.abs(Math.atan2(Math.sin(facing-g.facing),Math.cos(facing-g.facing)));
   const sequence=++this.serial[index];
@@ -30,7 +30,7 @@ export class LabPortalShots {
   const fastWindup=(g.kineticMode ?? g.epicMode)&&(!g.firstLevel?.kineticCourse||!g.playerGrounded);
   const wait=fastWindup?Math.max(VELOCITY_SHOT_PROFILE.prepare,g.heldDevice?.holsterProgress*.32||0)
     :Math.max(.23,Math.min(.30,turn/14),g.heldDevice?.holsterProgress*.32||0);
-  const shot={index,sequence,epoch:this.epoch,point,facing,delay:wait,bufferedInput:busy,
+  const shot={index,sequence,epoch:this.epoch,point,targetSurfaceId,facing,delay:wait,bufferedInput:busy,
     velocityMode:!!(g.kineticMode ?? g.epicMode),wasAirborne:g.playerGrounded===false,requestTime:this.time,
     requestTeleportCount:g.teleportCount??0};
   if(busy){this.buffered=shot;this.lastOutcome={state:'buffered',index,sequence,epoch:this.epoch};}
@@ -48,13 +48,15 @@ export class LabPortalShots {
   this.ray.far=Infinity;return target;
  }
  captureTarget(index){
+  this.targetSurfaceId=null;
   const g=this.game;
   const assisted=this.getAssistTarget(index);
-  if(assisted)return assisted.point.clone();
+  if(assisted){this.targetSurfaceId=assisted.panel.uuid;return assisted.point.clone();}
   g.scene.updateMatrixWorld(true);g.camera.updateWorldMatrix(true,false);
   this.ray.near=0;this.ray.far=(g.kineticMode ?? g.epicMode)?VELOCITY_SHOT_PROFILE.range:Infinity;
   this.ray.setFromCamera(new THREE.Vector2(),g.camera);
   const hit=this.firstHit(),point=hit?.point.clone()||this.ray.ray.at((g.kineticMode ?? g.epicMode)?VELOCITY_SHOT_PROFILE.range:65,V());
+  this.targetSurfaceId=hit?.object.userData.portalable?hit.object.uuid:null;
   this.ray.far=Infinity;
   return point;
  }
@@ -108,7 +110,7 @@ export class LabPortalShots {
   // across the world toward a stale pre-entry target. Already flying charges
   // keep their immutable world path and sequence; no portal changes mid-call.
   if(s.velocityMode&&(g.teleportCount??0)!==s.requestTeleportCount){
-   s.point=this.captureTarget(s.index);s.rebasedAfterTransit=true;
+   s.point=this.captureTarget(s.index);s.targetSurfaceId=this.targetSurfaceId;s.rebasedAfterTransit=true;
    s.facing=Math.atan2(s.point.x-g.playerPosition.x,s.point.z-g.playerPosition.z);
    g.shotFacing=s.facing;g.shotAimPoint=s.point.clone();
   }
@@ -154,7 +156,12 @@ export class LabPortalShots {
     impactTime:this.time,requestTeleportCount:shot.requestTeleportCount,launchTeleportCount:shot.launchTeleportCount,
     rebasedAfterTransit:!!shot.rebasedAfterTransit});
   }
-  if(reason==='surface')g.callbacks?.onToast?.('Заряд попал в препятствие. Нужна свободная белая поверхность');
+  // Third-person parallax can expose a white panel to the camera while
+  // the actual muzzle path hits machinery. Explain that physical failure;
+  // never move the charge, erase the blocker or place the portal remotely.
+  if(reason==='surface')g.callbacks?.onToast?.(shot.targetSurfaceId
+   ? 'Панель видна, но путь от пушки перекрыт. Смени угол выстрела'
+   : 'Заряд попал в препятствие. Нужна свободная белая поверхность');
   if(reason==='back-face')g.callbacks?.onToast?.('Установи проход на лицевую поверхность панели');
   if(reason==='miss')g.callbacks?.onToast?.('Заряд рассеялся: поверхность слишком далеко');
   if(valid)g.audio?.portal?.(shot.index);else g.audio?.rejectShot?.(shot.index);
@@ -194,6 +201,6 @@ export class LabPortalShots {
   for(const s of this.active){s.slot.group.position.lerpVectors(s.previous,s.position,alpha);renderCharge(s.slot,s,this.time);}
   for(const p of this.pulses)renderImpact(p);
  }
-  reset(){this.epoch++;this.serial=[0,0];this.placedSerial=[0,0];this.queue=[];this.buffered=null;this.active=[];this.pulses=[];this.time=this.cooldown=0;this.lastImpact=this.lastRequest=this.lastOutcome=null;for(const p of this.pool)p.group.visible=false;for(const p of this.impactPool)p.mesh.visible=false;}
+  reset(){this.epoch++;this.serial=[0,0];this.placedSerial=[0,0];this.queue=[];this.buffered=null;this.active=[];this.pulses=[];this.time=this.cooldown=0;this.targetSurfaceId=null;this.lastImpact=this.lastRequest=this.lastOutcome=null;for(const p of this.pool)p.group.visible=false;for(const p of this.impactPool)p.mesh.visible=false;}
  get diagnostics(){return{pending:this.queue.length+Number(Boolean(this.buffered)),flying:this.active.length,lastImpact:this.lastImpact};}
 }

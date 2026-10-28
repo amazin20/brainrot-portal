@@ -31,7 +31,7 @@ jobs:
         run: |
           mkdir -p evidence
           set -o pipefail
-          node --test --test-concurrency=1 tests/lab-campaign-v67-storage.test.js tests/lab-campaign-access.test.js tests/lab-campaign-sequence.test.js tests/lab-atlas-runtime.test.js tests/lab-player-entry.test.js tests/lab-v8-platform.test.js | tee evidence/tests.tap
+          node --test --test-concurrency=1 tests/lab-campaign-v67-storage.test.js tests/lab-campaign-access.test.js tests/lab-campaign-sequence.test.js tests/lab-atlas-runtime.test.js tests/lab-player-entry.test.js tests/lab-v8-platform.test.js tests/lab-shot-obstruction-feedback.test.js tests/lab-shot-collision.test.js tests/lab-velocity-shots.test.js | tee evidence/tests.tap
       - name: Build every current improvement from this single commit
         env:
           BUILD_COMMIT: ${{ github.sha }}
@@ -54,3 +54,57 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with: {name: current-demo-checks, path: evidence/, retention-days: 30, if-no-files-found: error}
+
+  route-access:
+    name: Ordinary repaired routes / room ${{ matrix.level }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - level: 13
+            tests: tests/lab-room13.test.js tests/lab-room13-portrait-attacks.test.js tests/second-chapter-early-attacks.test.js
+          - level: 16
+            tests: tests/lab-room16-alternate.test.js tests/lab-room16-bypass.test.js tests/lab-room16-recovery.test.js
+          - level: 35
+            tests: tests/lab-room35-live-flow.test.js
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: '${{ github.sha }}', persist-credentials: false}
+      - uses: actions/setup-node@v4
+        with: {node-version: 22, cache: npm}
+      - run: npm ci
+      - name: Keep the full existing positive and negative acceptance criteria
+        env:
+          ROUTE_TESTS: ${{ matrix.tests }}
+        run: |
+          mkdir -p evidence
+          git rev-parse HEAD > evidence/source-sha.txt
+          set -o pipefail
+          node --test --test-concurrency=1 $ROUTE_TESTS | tee evidence/tests.tap
+      - name: Build the exact candidate and observation tools
+        env:
+          BUILD_COMMIT: ${{ github.sha }}
+        run: |
+          npm run build
+          python3 -m pip install playwright==1.57.0
+          git diff --exit-code -- package.json package-lock.json
+      - name: Complete original-traveller routes from untouched Play
+        env:
+          BUILD_COMMIT: ${{ github.sha }}
+          ROUTE_LEVELS: ${{ matrix.level }}
+        run: |
+          mkdir -p route-site
+          ln -s ../dist route-site/campaign-v67
+          python3 -m http.server 4173 --bind 127.0.0.1 --directory route-site > evidence/server.log 2>&1 &
+          for i in {1..30}; do curl -fsS http://127.0.0.1:4173/campaign-v67/ >/dev/null && break; sleep 1; done
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+          python3 tools/qa-route-access-repairs.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: route-access-${{ matrix.level }}-${{ github.sha }}
+          path: evidence/
+          retention-days: 30
+          if-no-files-found: error

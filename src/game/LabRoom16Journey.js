@@ -10,7 +10,11 @@ export async function runRoom16(d,{order='cargo-first',supportPause=0}={}){
  walk(game.cargo.position.x-1,game.cargo.position.z);pickup();enter(p.arrival);
  walk(-17,2);game.interact();wait(.8);aim(0,p.source.getFrame().center);
  walk(game.cargo.position.x-1,game.cargo.position.z);pickup();mark('borrowed floor crossing');
- walk(-16,1.75);wait(.15);game.input.jumpQueued=true;walk(-16,0);wait(.4);
+ // Shot placement changes the projected deck's offset. Approach its real
+ // near edge before jumping, rather than walking into its vertical side.
+ const firstCrossing=level.state.lightBridge.pieces.find(piece=>piece.floor.enabled&&piece.floor.y>6.3&&piece.floor.y<8.5&&piece.floor.minX<-16&&piece.floor.maxX>-16)?.floor;
+ check(firstCrossing,'The first projection has no physical boarding edge');
+ walk(-16,firstCrossing.maxZ+.65);wait(.15);game.input.jumpQueued=true;walk(-16,(firstCrossing.minZ+firstCrossing.maxZ)/2);wait(.4);
  walk(-1.2,0);wait(.3);
  game.interact();wait(.6);mark('companion waits on borrowed support');if(supportPause>0)wait(supportPause);
  walk(8.1,0);walk(8.1,2.7);
