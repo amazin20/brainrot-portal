@@ -1,0 +1,3987 @@
+
+> brainrot-portal@1.0.0 test
+> node scripts/test-active-game.mjs
+
+TAP version 13
+# Subtest: actual room 21 and 26 array spawns and equivalent Vector3 spawns retain exact numeric distances without moving actors
+ok 1 - actual room 21 and 26 array spawns and equivalent Vector3 spawns retain exact numeric distances without moving actors
+  ---
+  duration_ms: 4973.324904
+  type: 'test'
+  ...
+# Subtest: the real original-model guard permits ordinary camera FOV animation and rejects rig/lens/model substitution
+ok 2 - the real original-model guard permits ordinary camera FOV animation and rejects rig/lens/model substitution
+  ---
+  duration_ms: 1513.414106
+  type: 'test'
+  ...
+# Subtest: actual native attack observer and capture never assign actors, lens, mechanism state or use level selection/reset
+ok 3 - actual native attack observer and capture never assign actors, lens, mechanism state or use level selection/reset
+  ---
+  duration_ms: 11.939584
+  type: 'test'
+  ...
+# Subtest: browser gate refuses empty, wrong-group and declaration-only evidence instead of manufacturing attack coverage
+ok 4 - browser gate refuses empty, wrong-group and declaration-only evidence instead of manufacturing attack coverage
+  ---
+  duration_ms: 1.144003
+  type: 'test'
+  ...
+# Subtest: provider run identifiers use positive safe-integer range without borrowing the bounded simulation counter cap
+ok 5 - provider run identifiers use positive safe-integer range without borrowing the bounded simulation counter cap
+  ---
+  duration_ms: 2.621406
+  type: 'test'
+  ...
+# BIOSPHERE_FINITE_CASE 21 braked-cassette-hidden-edge-charges {"pass":true,"error":null,"targetFrames":532,"final":{"worldStep":3616,"player":[0.0000011237313532793117,0.8375000014901179,1.9570383182623583],"velocity":[0.000018615773860189116,5.362500000000005,-0.7117047589233547],"cargo":[11.415604005447307,3.489998147032071,5.069620699912453],"cargoVelocity":[0,0,0],"held":false,"grounded":false,"state":"playing","won":false,"teleports":0,"cargoTransports":1,"causes":{"loaded":true,"braked":true,"cassetteHeight":15.8,"serviceHeight":18}},"attempt":{"shots":[{"valid":false},{"valid":false}],"rush":{"requested":[0,2],"requestedFrames":480,"frames":480,"jumpRequests":11,"interactRequests":0,"takeoffs":111,"from":[-0.00015380348084637735,10.000000001490118,7.880103081985212],"to":[0.0000011237313532793117,0.8375000014901179,1.9570383182623583],"min":[-0.0001535372022223485,0.025000001490117663,0.7958137874102588],"max":[0.00003149741228799317,11.527500001490122,7.869922910839532]},"omitted":"independent physical cassette brake"}}
+# BIOSPHERE_FINITE_CASE 21 lower-receiver-partition-loaded-jump {"pass":true,"error":null,"targetFrames":480,"final":{"worldStep":1966,"player":[4.529900005960465,1.4218750000000016,5.998028489151051],"velocity":[0,2.112500000000007,0.0011968202665538672],"cargo":[4.718536112121743,2.4813778086247646,5.989734433756132],"cargoVelocity":[2.0742638549518545e-13,2.1573804429816272,0.0012093162028270652],"held":true,"grounded":false,"state":"playing","won":false,"teleports":0,"cargoTransports":0,"causes":{"loaded":false,"braked":true,"cassetteHeight":15.8,"serviceHeight":18}},"attempt":{"rush":{"requested":[13,6],"requestedFrames":480,"frames":480,"jumpRequests":21,"interactRequests":16,"takeoffs":135,"from":[4.4020101197419725,0,6.092883946849498],"to":[4.529900005960465,1.4218750000000016,5.998028489151051],"min":[4.411831352406914,0,5.36156627411436],"max":[4.719900005960464,1.5275000000000023,6.076215534852515]},"omitted":"free cargo freight mouth and receiver support"}}
+# BIOSPHERE_FINITE_CASE 22 closed-ground-shutter-loaded-jamb-jumps {"pass":true,"error":null,"targetFrames":420,"final":{"worldStep":1736,"player":[-0.945099988079071,1.5234375000000022,11.99999846210982],"velocity":[0,0.4875000000000065,0.000008691898691336437],"cargo":[-0.7522175142779913,2.58343629357313,12.000400148519331],"cargoVelocity":[0,0.48754825229892,0.000008800211598760126],"held":true,"grounded":false,"state":"playing","won":false,"teleports":0,"cargoTransports":0,"causes":{"loaded":false,"progress":0,"lowerY":2.7,"upperY":15.1}},"attempt":{"rush":{"requested":[7,12],"requestedFrames":420,"frames":420,"jumpRequests":19,"interactRequests":0,"takeoffs":120,"from":[-1.2490029049938178,0,11.999880576424914],"to":[-0.945099988079071,1.5234375000000022,11.99999846210982],"min":[-1.2227042748074142,0,11.999901380168124],"max":[-0.945099988079071,1.5275000000000023,12.00079564270032]},"omitted":"released freight weight"}}
+# BIOSPHERE_FINITE_CASE 22 upper-opposed-shutter-still-loaded {"pass":true,"error":null,"targetFrames":420,"final":{"worldStep":4890,"player":[11.999996444337189,8.12125,-7.244900011920929],"velocity":[-9.53260933819928e-7,4.062500000000008,0],"cargo":[-11.999002506192014,0.5149981478137947,0.30941708015771874],"cargoVelocity":[0,0,0],"held":false,"grounded":false,"state":"playing","won":false,"teleports":0,"cargoTransports":0,"causes":{"loaded":true,"progress":1,"lowerY":8.100000000000001,"upperY":9.7}},"attempt":{"rush":{"requested":[12,-18],"requestedFrames":420,"frames":420,"jumpRequests":15,"interactRequests":0,"takeoffs":117,"from":[11.999694727513878,7,-6.608551077273118],"to":[11.999996444337189,8.12125,-7.244900011920929],"min":[11.999765866242836,7,-7.244900011920929],"max":[12.002225654898096,8.527500000000002,-6.6399601899166045]},"omitted":"retrieval that reverses the two real shutters"}}
+# BIOSPHERE_FINITE_CASE 23 empty-pan-clutch-and-passenger-jumps {"pass":true,"error":null,"targetFrames":480,"final":{"worldStep":2078,"player":[-5.499999683552014,-0.001334612343214081,3.1005989206461515],"velocity":[-2.0569518067279857e-8,0.054575399817310966,4.771919277659308],"cargo":[-4.393274953059185,0.3899982369950886,3.3216487722022054],"cargoVelocity":[-0.028701151240127447,0.0000016906027979768368,0.290188288813661],"held":false,"grounded":true,"state":"playing","won":false,"teleports":0,"cargoTransports":0,"causes":{"clutch":true,"brake":false,"clutchNormal":2639.99897793362,"brakeNormal":0,"sourceInput":0.00021139558034354982,"westY":-7.171673550367686e-8,"eastY":19.999999258313565,"westLoad":0,"eastLoad":0,"ownership":true,"fault":null}},"attempt":{"rush":{"requested":[-5.5,3],"requestedFrames":480,"frames":480,"jumpRequests":12,"interactRequests":0,"takeoffs":84,"from":[-5.497608711301746,-0.000009748612518345467,1.8620564446493655],"to":[-5.499999683552014,-0.001334612343214081,3.1005989206461515],"min":[-5.500308138803699,-0.06500974858766573,1.7533909423407246],"max":[-5.497611162331273,1.5304932443829087,4.2645145491584815]},"omitted":"real raised east freight load"}}
+# BIOSPHERE_FINITE_CASE 23 loaded-east-pan-without-clutch {"pass":true,"error":null,"targetFrames":480,"final":{"worldStep":4656,"player":[-5.500000000468514,0.3677960002094547,3.7991327188317427],"velocity":[4.4915332555401933e-10,7.410210438278273,2.7630502972307625],"cargo":[1.5755469202905041,20.83023488385003,3.8073513008294633],"cargoVelocity":[9.412007403773507e-8,4.1343230716338795,8.475211578120838e-7],"held":false,"grounded":false,"state":"playing","won":false,"teleports":0,"cargoTransports":1,"causes":{"clutch":false,"brake":false,"clutchNormal":0,"brakeNormal":0,"sourceInput":-1,"westY":-0.0017729291231352523,"eastY":20.001771720157418,"westLoad":0,"eastLoad":0,"ownership":true,"fault":null}},"attempt":{"rush":{"requested":[-5.5,3],"requestedFrames":480,"frames":480,"jumpRequests":10,"interactRequests":0,"takeoffs":128,"from":[-5.492862056918624,-0.000009748602540771145,1.8510972388445759],"to":[-5.500000000468514,0.3677960002094547,3.7991327188317427],"min":[-5.501451617477201,-0.031071576962247383,1.8309554933129097],"max":[-5.492895419968717,1.7793663697485542,4.174624664470899]},"omitted":"ground clutch engagement"}}
+# BIOSPHERE_FINITE_CASE 24 unturned-courtyard-diagonal-corner-jump {"pass":true,"error":null,"targetFrames":480,"final":{"worldStep":5098,"player":[-8.03502043575511,0.30468750000000006,-4.3799],"velocity":[0.00823664601462833,6.987500000000002,0],"cargo":[-8.755020456154506,1.3646702094734857,-4.379882597946397],"cargoVelocity":[0.008236578766891996,6.987548252298925,-0.00003333457791648475],"held":true,"grounded":false,"state":"playing","won":false,"teleports":1,"cargoTransports":1,"causes":{"angle":0,"loaded":false,"braked":false,"manualTurn":false}},"attempt":{"rush":{"requested":[-8,-8],"requestedFrames":480,"frames":480,"jumpRequests":26,"interactRequests":0,"takeoffs":123,"from":[0.016708255592312513,6,3.1045372589120968],"to":[-8.03502043575511,0.30468750000000006,-4.3799],"min":[-9.386222397580227,0,-4.3799],"max":[0.008546037051860408,7.527500001490119,3.0795947966873864]},"omitted":"worm drive or real turning counterweight"}}
+# BIOSPHERE_FINITE_CASE 24 ground-pavilion-skirt-and-side-jumps {"pass":true,"error":null,"targetFrames":480,"final":{"worldStep":2596,"player":[15.985200613412852,1.453020833333335,-11.3799],"velocity":[-0.0010614472234643933,1.7875000000000068,0],"cargo":[15.96492933563349,2.2498853440578963,-11.562231172657254],"cargoVelocity":[0.1649278975655921,21.992696670506156,-0.08236922597821794],"held":true,"grounded":false,"state":"playing","won":false,"teleports":0,"cargoTransports":0,"causes":{"angle":0,"loaded":false,"braked":false,"manualTurn":false}},"attempt":{"rush":{"requested":[16,-18],"requestedFrames":480,"frames":480,"jumpRequests":29,"interactRequests":12,"takeoffs":150,"from":[16.040786153336402,0,-10.506439899240913],"to":[15.985200613412852,1.453020833333335,-11.3799],"min":[15.773255958538769,0,-11.5699],"max":[16.059986834158938,1.5275000000000023,-10.532588247264268]},"omitted":"rotated courtyard, reverse perch and high receiver"}}
+# BIOSPHERE_FINITE_CASE 25 unloaded-shadow-ray-and-passenger-jump {"pass":true,"error":null,"targetFrames":480,"final":{"worldStep":5308,"player":[-16.01894113468177,0.4712500000000046,-13.35259017921383],"velocity":[-3.941310055225558,-6.33749999999999,-0.5329303380739414],"cargo":[-12.811867912004223,0.38999814625182744,9.999597903007636],"cargoVelocity":[-0.2105849771100196,5.689893001203927e-15,-0.14475967227348013],"held":false,"grounded":false,"state":"playing","won":false,"teleports":0,"cargoTransports":0,"causes":{"loaded":false,"travel":3.3165359347719914e-11,"motorLit":false,"receivers":[false,false],"hoistHeight":-6.938893903907228e-18,"hoistVelocity":2.7755575615628914e-17,"driveEnabled":false}},"attempt":{"rush":{"requested":[-14,-13],"requestedFrames":480,"frames":480,"jumpRequests":16,"interactRequests":0,"takeoffs":120,"from":[-14.086627089770516,0.00009994828896524023,-10.050478665700869],"to":[-16.01894113468177,0.4712500000000046,-13.35259017921383],"min":[-16.531820812350826,0,-13.897078555875206],"max":[-12.116679979713966,1.5275999858728009,-10.049734782047102]},"omitted":"real weight clearing the first optical path"}}
+# BIOSPHERE_FINITE_CASE 25 loaded-lit-hoist-without-motor-switch {"pass":true,"error":null,"targetFrames":480,"final":{"worldStep":7098,"player":[-13.995143919381013,0,-13.042268946045443],"velocity":[-0.038013846536422716,0,-0.9063975371931139],"cargo":[-6.989349158642922,0.5675831218782599,12.00533994368854],"cargoVelocity":[0,0,0],"held":false,"grounded":true,"state":"playing","won":false,"teleports":0,"cargoTransports":0,"causes":{"loaded":true,"travel":0.999999971475779,"motorLit":true,"receivers":[false,false],"hoistHeight":-6.938893903907228e-18,"hoistVelocity":0,"driveEnabled":false}},"attempt":{"rush":{"requested":[-14,-13],"requestedFrames":480,"frames":480,"jumpRequests":12,"interactRequests":0,"takeoffs":90,"from":[-14.08503894326997,0,-10.049814224679105],"to":[-13.995143919381013,0,-13.042268946045443],"min":[-14.147302297228338,-0.0008261279530593802,-13.17175340319864],"max":[-13.485475530601327,1.5275000000000023,-10.049114848460109]},"omitted":"ordinary lower optical freight motor switch"}}
+# BIOSPHERE_FINITE_CASE 26 closed-air-valve-unloaded-shaft-jumps {"pass":true,"error":null,"targetFrames":480,"final":{"worldStep":2740,"player":[-12.20534469581013,1.2431250000000011,2.079709053007528],"velocity":[0.28887455872294554,3.4125000000000076,5.9600307202592715],"cargo":[-21.00334831104672,0.3899981462518275,18.241999787707915],"cargoVelocity":[0.11012605375591251,1.0269562977782698e-15,0.26492697552745187],"held":false,"grounded":false,"state":"playing","won":false,"teleports":2,"cargoTransports":0,"causes":{"loaded":false,"shutterOpen":false,"shutterY":2.6,"liftSegments":[{"a":[-22,2.6,-12],"b":[-18.174999997019768,2.6,-12],"direction":[1,0,0]}],"crossingReversed":true}},"attempt":{"rush":{"requested":[-12,5.5],"requestedFrames":480,"frames":480,"jumpRequests":17,"interactRequests":0,"takeoffs":119,"from":[-12.000000008540363,-0.8281249985098834,7.945711619135869],"to":[-12.20534469581013,1.2431250000000011,2.079709053007528],"min":[-12.353927671928844,-1.1409374985098832,-12.15909525640652],"max":[-8.054999999999998,1.5525000014901187,8.137142209343374]},"omitted":"released original valve weight"}}
+# BIOSPHERE_FINITE_CASE 26 upper-loaded-jump-against-unreversed-crossflow {"pass":true,"error":null,"targetFrames":600,"final":{"worldStep":16212,"player":[11.997980399184001,18.513524269888634,-21.499899994039534],"velocity":[0.0012795315155705422,-0.007452692499862995,0],"cargo":[12.00911659662387,19.573524288330173,-21.687012958066497],"cargoVelocity":[0.0012959605600580493,-0.007452702657189432,0],"held":true,"grounded":false,"state":"playing","won":false,"teleports":0,"cargoTransports":1,"causes":{"loaded":false,"shutterOpen":false,"shutterY":2.6000000000000076,"liftSegments":[{"a":[-22,2.6,-12],"b":[-18.174999997019768,2.6,-12],"direction":[1,0,0]}],"crossingReversed":true}},"attempt":{"rush":{"requested":[12,19],"requestedFrames":600,"frames":600,"jumpRequests":20,"interactRequests":0,"takeoffs":26,"from":[12.10750229640624,16,-13.999999859391208],"to":[11.997980399184001,18.513524269888634,-21.499899994039534],"min":[11.708173137431633,16,-21.499899994039534],"max":[12.089549598260374,19.302857380090956,-13.633756002225605]},"omitted":"independent upper crossing valve reversal"}}
+# BIOSPHERE_FINITE_CASE 27 wrong-way-belt-held-sprint-and-jumps {"pass":true,"error":null,"targetFrames":480,"final":{"worldStep":3750,"player":[-13.173253312698167,1.2702083333333367,15.581262542394693],"velocity":[0.034389141016253025,-3.0874999999999946,-5.116869056122981],"cargo":[-13.17877390256841,2.3302159731612675,14.861198746274084],"cargoVelocity":[-0.02326594971051117,-3.0874517477010612,-5.117068912257698],"held":true,"grounded":false,"state":"playing","won":false,"teleports":0,"cargoTransports":0,"causes":{"reversed":true,"braked":false}},"attempt":{"rush":{"requested":[-13,-16],"requestedFrames":480,"frames":480,"jumpRequests":13,"interactRequests":0,"takeoffs":105,"from":[-12.904520907579906,0,16.99994213310365],"to":[-13.173253312698167,1.2702083333333367,15.581262542394693],"min":[-13.549707165902957,0,14.055539237117364],"max":[-12.921357862277418,1.5275000000000023,18.62593019871059]},"omitted":"real belt reversing drum"}}
+# BIOSPHERE_FINITE_CASE 27 earned-sky-balcony-direct-west-gap {"pass":true,"error":null,"targetFrames":480,"final":{"worldStep":4534,"player":[-18.776644736426693,0.5755208333333378,-12.763549536110183],"velocity":[0.38045708987089527,-6.01249999999999,6.717985254078595],"cargo":[-18.73544580639074,1.6355357110061075,-12.04474565125031],"cargoVelocity":[0.20328870099735494,-6.012451747701031,6.727982523649785],"held":true,"grounded":false,"state":"playing","won":false,"teleports":1,"cargoTransports":1,"causes":{"reversed":false,"braked":false}},"attempt":{"rush":{"requested":[-18,0],"requestedFrames":480,"frames":480,"jumpRequests":17,"interactRequests":0,"takeoffs":120,"from":[8.892013235382128,8,7.034844869502803],"to":[-18.776644736426693,0.5755208333333378,-12.763549536110183],"min":[-19.18830109289374,0,-23.337996433988902],"max":[8.867176568447617,9.527500000000003,7.026477236374601]},"omitted":"upper belt or gravity-post bridge"}}
+# BIOSPHERE_FINITE_CASE 28 low-tide-pontoon-to-middle-garden-jump {"pass":true,"error":null,"targetFrames":480,"final":{"worldStep":2648,"player":[14.009782321352974,0,6.01037480136029],"velocity":[-1.3524517406899785,0,-1.4343649171628616],"cargo":[14.675724058220673,1.0723457304137578,5.7365760701430455],"cargoVelocity":[-3.4118333081861025,0.1723438246135863,-6.978944033012924],"held":true,"grounded":true,"state":"playing","won":false,"teleports":0,"cargoTransports":0,"causes":{"levels":[6,0],"flow":0,"connection":null,"coralY":6,"lagoonY":0}},"attempt":{"rush":{"requested":[14,6],"requestedFrames":480,"frames":480,"jumpRequests":21,"interactRequests":0,"takeoffs":30,"from":[18.800045112498452,0.6,-0.001396834634624968],"to":[14.009782321352974,0,6.01037480136029],"min":[13.297823676564212,0,0.005968367494292237],"max":[18.777097166526257,2.1275000000000017,6.150587994683676]},"omitted":"water transfer between basins"}}
+# BIOSPHERE_FINITE_CASE 28 middle-coral-jump-before-return-tide {"pass":true,"error":null,"targetFrames":480,"final":{"worldStep":7692,"player":[-18.169899952316285,4.566029504220741,-0.000003224421556010425],"velocity":[0,0.8125000000000064,0.0000061346061887454564],"cargo":[-18.1729253207841,5.626027493588886,-0.0001410458370415579],"cargoVelocity":[0,0.8125482522988456,0.000006135761695866504],"held":true,"grounded":false,"state":"playing","won":false,"teleports":0,"cargoTransports":0,"causes":{"levels":[3.0520711708874053,2.9479288291125947],"flow":0,"connection":[{"basin":0,"sill":0.6817433576515755},{"basin":1,"sill":0.5776010158767653}],"coralY":3.0520711708874053,"lagoonY":2.9479288291125947}},"attempt":{"rush":{"requested":[-22,0],"requestedFrames":480,"frames":480,"jumpRequests":26,"interactRequests":0,"takeoffs":135,"from":[-12.907969745442257,3.0520711708874053,-0.000345657901667078],"to":[-18.169899952316285,4.566029504220741,-0.000003224421556010425],"min":[-18.169899952316285,3.0520711708874053,-0.0002834320566140907],"max":[-12.933608565996392,4.579571170887408,0.0018476430907478332]},"omitted":"second real return of the finite water volume"}}
+# BIOSPHERE_FINITE_CASE 29 held-original-in-inverted-source-jumps {"pass":true,"error":null,"targetFrames":480,"final":{"worldStep":1902,"player":[-12.036076219248738,1.2431250000000011,8.568985211966524],"velocity":[0.2517654731035531,3.4125000000000076,-3.9707828054819085],"cargo":[-11.716318887462954,2.30311655572829,7.9238329654071995],"cargoVelocity":[-3.155318942630511,3.4125482522989437,-5.756652423729959],"held":true,"grounded":false,"state":"playing","won":false,"teleports":0,"cargoTransports":0,"causes":{"sourceUp":true,"crownUp":true,"latch":false,"shutterY":11.4}},"attempt":{"rush":{"requested":[-12,8],"requestedFrames":480,"frames":480,"jumpRequests":17,"interactRequests":0,"takeoffs":134,"from":[-12.006486461999014,0,8.102302887936215],"to":[-12.036076219248738,1.2431250000000011,8.568985211966524],"min":[-12.13599367028286,0,6.295886644332346],"max":[-11.89195155559266,1.5275000000000023,10.144858554080994]},"omitted":"free original passage through upper root detector"}}
+# BIOSPHERE_FINITE_CASE 29 closed-garden-shutter-edge-charges {"pass":true,"error":null,"targetFrames":480,"final":{"worldStep":5320,"player":[17.000006680280116,0.4712500000000046,0.6801],"velocity":[-0.000005740118060529482,-6.33749999999999,0],"cargo":[14.04538552927272,6.389998146251823,6.703782970584124],"cargoVelocity":[-0.047187984982527714,2.3203661214665772e-14,0.47710283465908077],"held":false,"grounded":false,"state":"playing","won":false,"teleports":0,"cargoTransports":0,"causes":{"sourceUp":false,"crownUp":true,"latch":false,"shutterY":11.4}},"attempt":{"shots":[{"side":-1,"valid":false,"reason":"surface"},{"side":1,"valid":false,"reason":"surface"}],"rush":{"requested":[17,-13],"requestedFrames":480,"frames":480,"jumpRequests":16,"interactRequests":0,"takeoffs":120,"from":[17.000550749103887,6,7.500407059210679],"to":[17.000006680280116,0.4712500000000046,0.6801],"min":[17.000006680280116,0,0.6801],"max":[17.00055047561116,9.027500000000002,7.490226888065475]},"omitted":"free upper-detector weight opening the actual receiver shutter"}}
+# BIOSPHERE_FINITE_CASE 30 unpaired-first-well-sprint-jump {"pass":true,"error":null,"targetFrames":600,"final":{"worldStep":2266,"player":[0.0012956131522063768,16,-33.89591640677946],"velocity":[-0.0008660679862980781,0,-0.23316557706413904],"cargo":[-15.801183613212345,52.38999814625183,16.50614991124876],"cargoVelocity":[-0.009185339333429575,8.493206138382448e-15,0.0928700774686036],"held":false,"grounded":true,"state":"playing","won":false,"teleports":0,"cargoTransports":0,"causes":{"tilt":0,"eastTilt":0,"connected":false}},"attempt":{"rush":{"requested":[0,-35],"requestedFrames":600,"frames":600,"jumpRequests":14,"interactRequests":0,"takeoffs":120,"from":[-0.10552805931059092,52,-17.00322489113107],"to":[0.0012956131522063768,16,-33.89591640677946],"min":[0.0012956131522063768,16,-34.97072218667007],"max":[9.519340258965865,54.32302083333334,-17.010094852575136]},"omitted":"paired first ballistic outlet and companion stabilizer"}}
+# BIOSPHERE_FINITE_CASE 30 unturned-final-outlet-real-second-dive {"pass":true,"error":null,"targetFrames":600,"final":{"worldStep":5362,"player":[99.27139938615282,0.7621833422740301,34.989930921749455],"velocity":[-7.338273116880889,-1.1375,9.643202769216956],"cargo":[100.18203848711295,1.9421861568720682,35.10290902303493],"cargoVelocity":[-7.52747626704117,-1.1374517477010813,11.26668417967627],"held":false,"grounded":false,"state":"playing","won":false,"teleports":2,"cargoTransports":2,"causes":{"tilt":0,"eastTilt":0,"connected":true}},"attempt":{"rush":{"requested":[60,46],"requestedFrames":600,"frames":600,"jumpRequests":15,"interactRequests":0,"takeoffs":100,"from":[60.01146532850555,40,30.000581909876786],"to":[99.27139938615282,0.7621833422740301,34.989930921749455],"min":[59.89140535571762,0,-66.9662811241156],"max":[199.90680315340904,42.32302083333334,45.340163466635246]},"omitted":"physical final outlet angle control"}}
+# BIOSPHERE_POSITIVE_ORDINARY_CONTROL 21 5325
+# BIOSPHERE_POSITIVE_ORDINARY_CONTROL 22 3483
+# BIOSPHERE_POSITIVE_ORDINARY_CONTROL 23 7578
+# BIOSPHERE_POSITIVE_ORDINARY_CONTROL 24 4402
+# BIOSPHERE_POSITIVE_ORDINARY_CONTROL 25 9209
+# BIOSPHERE_POSITIVE_ORDINARY_CONTROL 26 8182
+# BIOSPHERE_POSITIVE_ORDINARY_CONTROL 27 5802
+# BIOSPHERE_POSITIVE_ORDINARY_CONTROL 28 4348
+# BIOSPHERE_POSITIVE_ORDINARY_CONTROL 29 4258
+# BIOSPHERE_POSITIVE_ORDINARY_CONTROL 30 2707
+# Subtest: twenty finite biosphere attacks reach actual targets from zero-step Play with untouched original actors
+ok 6 - twenty finite biosphere attacks reach actual targets from zero-step Play with untouched original actors
+  ---
+  duration_ms: 128252.552073
+  type: 'test'
+  ...
+# Subtest: finite raw evidence rejects missing coverage
+ok 7 - finite raw evidence rejects missing coverage
+  ---
+  duration_ms: 19.665392
+  type: 'test'
+  ...
+# Subtest: finite raw evidence rejects duplicate case
+ok 8 - finite raw evidence rejects duplicate case
+  ---
+  duration_ms: 21.393179
+  type: 'test'
+  ...
+# Subtest: finite raw evidence rejects unreached target
+ok 9 - finite raw evidence rejects unreached target
+  ---
+  duration_ms: 20.730699
+  type: 'test'
+  ...
+# Subtest: finite raw evidence rejects approach error
+ok 10 - finite raw evidence rejects approach error
+  ---
+  duration_ms: 20.376091
+  type: 'test'
+  ...
+# Subtest: finite raw evidence rejects reset
+ok 11 - finite raw evidence rejects reset
+  ---
+  duration_ms: 20.726101
+  type: 'test'
+  ...
+# Subtest: finite raw evidence rejects late start
+ok 12 - finite raw evidence rejects late start
+  ---
+  duration_ms: 20.432987
+  type: 'test'
+  ...
+# Subtest: finite raw evidence rejects new win
+ok 13 - finite raw evidence rejects new win
+  ---
+  duration_ms: 20.355482
+  type: 'test'
+  ...
+# Subtest: finite raw evidence rejects missing original body
+ok 14 - finite raw evidence rejects missing original body
+  ---
+  duration_ms: 21.652151
+  type: 'test'
+  ...
+# Subtest: finite raw evidence rejects skipped clock
+ok 15 - finite raw evidence rejects skipped clock
+  ---
+  duration_ms: 20.960235
+  type: 'test'
+  ...
+# Subtest: finite raw evidence rejects unresolved charged impact
+ok 16 - finite raw evidence rejects unresolved charged impact
+  ---
+  duration_ms: 22.762571
+  type: 'test'
+  ...
+# Subtest: finite raw evidence rejects missing actual jump
+ok 17 - finite raw evidence rejects missing actual jump
+  ---
+  duration_ms: 36.97069
+  type: 'test'
+  ...
+# Subtest: finite raw evidence rejects scope promoted
+ok 18 - finite raw evidence rejects scope promoted
+  ---
+  duration_ms: 21.867991
+  type: 'test'
+  ...
+# Subtest: finite raw evidence rejects truncated retained trajectory
+ok 19 - finite raw evidence rejects truncated retained trajectory
+  ---
+  duration_ms: 21.368924
+  type: 'test'
+  ...
+# Subtest: finite raw evidence rejects nonfinite velocity
+ok 20 - finite raw evidence rejects nonfinite velocity
+  ---
+  duration_ms: 17.521281
+  type: 'test'
+  ...
+# Subtest: all ten same-source ordinary routes remain positive controls
+ok 21 - all ten same-source ordinary routes remain positive controls
+  ---
+  duration_ms: 156234.924238
+  type: 'test'
+  ...
+# Subtest: fresh normal Play rejects cloned definitions and prepared state before any attack simulation
+ok 22 - fresh normal Play rejects cloned definitions and prepared state before any attack simulation
+  ---
+  duration_ms: 484.434124
+  type: 'test'
+  ...
+# Subtest: room25 omitted motor is false at actual target and terminal rather than merely failing to rise
+ok 23 - room25 omitted motor is false at actual target and terminal rather than merely failing to rise
+  ---
+  duration_ms: 26.411134
+  type: 'test'
+  ...
+# Subtest: room28 west skirt is bound by actual minimum x and jump height
+ok 24 - room28 west skirt is bound by actual minimum x and jump height
+  ---
+  duration_ms: 29.666784
+  type: 'test'
+  ...
+# Subtest: room27 and30 retain absence of sampled grounded far-island landings even if the final player later falls
+ok 25 - room27 and30 retain absence of sampled grounded far-island landings even if the final player later falls
+  ---
+  duration_ms: 26.480959
+  type: 'test'
+  ...
+# Subtest: the actual full native observer has no Node closure, including late completion paths
+ok 26 - the actual full native observer has no Node closure, including late completion paths
+  ---
+  duration_ms: 15.718549
+  type: 'test'
+  ...
+# Subtest: actual page.evaluate transfers every contract and scope as data
+ok 27 - actual page.evaluate transfers every contract and scope as data
+  ---
+  duration_ms: 7.617811
+  type: 'test'
+  ...
+# Subtest: native observation never assigns a camera lens, actor pose, mechanism target or win state
+ok 28 - native observation never assigns a camera lens, actor pose, mechanism target or win state
+  ---
+  duration_ms: 4.064516
+  type: 'test'
+  ...
+# Subtest: serialized full observer rejects forged broad acceptance before reading the game
+ok 29 - serialized full observer rejects forged broad acceptance before reading the game
+  ---
+  duration_ms: 22.33424
+  type: 'test'
+  ...
+# Subtest: native cadence accepts regular frames plus one real off-stride terminal without padding
+ok 30 - native cadence accepts regular frames plus one real off-stride terminal without padding
+  ---
+  duration_ms: 1.361898
+  type: 'test'
+  ...
+# Subtest: native cadence rejects missing/repeated frames, fake terminal and reset/identity mutations
+ok 31 - native cadence rejects missing/repeated frames, fake terminal and reset/identity mutations
+  ---
+  duration_ms: 14.897945
+  type: 'test'
+  ...
+# Subtest: native SOURCE/capture/provider IDs retain real GitHub values up to the positive safe-integer limit
+ok 32 - native SOURCE/capture/provider IDs retain real GitHub values up to the positive safe-integer limit
+  ---
+  duration_ms: 3.189521
+  type: 'test'
+  ...
+# Subtest: the actual native UI reader normalizes arrays and Vector3 without accepting an offset or mutating coordinates
+ok 33 - the actual native UI reader normalizes arrays and Vector3 without accepting an offset or mutating coordinates
+  ---
+  duration_ms: 2.055215
+  type: 'test'
+  ...
+# Subtest: native cadence binds visible rooms 21–30 and camera17 and rejects neighbouring or earlier chapter identities
+ok 34 - native cadence binds visible rooms 21–30 and camera17 and rejects neighbouring or earlier chapter identities
+  ---
+  duration_ms: 1.204737
+  type: 'test'
+  ...
+# Subtest: viewport contract closes chapter captures and all three full camera17 cases
+ok 35 - viewport contract closes chapter captures and all three full camera17 cases
+  ---
+  duration_ms: 1.269336
+  type: 'test'
+  ...
+# Subtest: serialized observer rejects viewport substitution and arbitrary dimensions before touching the game
+ok 36 - serialized observer rejects viewport substitution and arbitrary dimensions before touching the game
+  ---
+  duration_ms: 19.577804
+  type: 'test'
+  ...
+# Subtest: portrait capture chooses real mobile/coarse-pointer layout while both wide profiles retain desktop setup
+ok 37 - portrait capture chooses real mobile/coarse-pointer layout while both wide profiles retain desktop setup
+  ---
+  duration_ms: 4.845325
+  type: 'test'
+  ...
+# Subtest: actual viewport guard rejects desktop-clamped portrait, faked buffer size, pointer, DPR and camera-aspect substitutions
+ok 38 - actual viewport guard rejects desktop-clamped portrait, faked buffer size, pointer, DPR and camera-aspect substitutions
+  ---
+  duration_ms: 2.989951
+  type: 'test'
+  ...
+# Subtest: retained browser viewport reader is closure-free and reads production dimensions without resizing renderer or camera
+ok 39 - retained browser viewport reader is closure-free and reads production dimensions without resizing renderer or camera
+  ---
+  duration_ms: 1.079244
+  type: 'test'
+  ...
+# Subtest: reload waits for an already in-flight request and its later response body
+ok 40 - reload waits for an already in-flight request and its later response body
+  ---
+  duration_ms: 5.968199
+  type: 'test'
+  ...
+# Subtest: a request and response arriving during a pending drain are not lost to its first snapshot
+ok 41 - a request and response arriving during a pending drain are not lost to its first snapshot
+  ---
+  duration_ms: 1.287711
+  type: 'test'
+  ...
+# Subtest: goto and close wait for every response-body promise before invalidating the document
+ok 42 - goto and close wait for every response-body promise before invalidating the document
+  ---
+  duration_ms: 2.928046
+  type: 'test'
+  ...
+# Subtest: a response-body read rejection is fatal and cannot be ignored by reload
+ok 43 - a response-body read rejection is fatal and cannot be ignored by reload
+  ---
+  duration_ms: 3.934514
+  type: 'test'
+  ...
+# Subtest: requestfailed is fatal even when no response body was emitted
+ok 44 - requestfailed is fatal even when no response body was emitted
+  ---
+  duration_ms: 1.2016
+  type: 'test'
+  ...
+# Subtest: never-finished requests time out, retain failure details and allow listener/method cleanup
+ok 45 - never-finished requests time out, retain failure details and allow listener/method cleanup
+  ---
+  duration_ms: 23.086097
+  type: 'test'
+  ...
+# Subtest: a body promise that never settles has the same bounded fatal drain behavior
+ok 46 - a body promise that never settles has the same bounded fatal drain behavior
+  ---
+  duration_ms: 19.656575
+  type: 'test'
+  ...
+# Subtest: ERR_ABORTED after a complete verified body preserves the exact request outcome and failure text
+ok 47 - ERR_ABORTED after a complete verified body preserves the exact request outcome and failure text
+  ---
+  duration_ms: 1.634514
+  type: 'test'
+  ...
+# Subtest: an early ERR_ABORTED waits for this same request body to finish verification before classification
+ok 48 - an early ERR_ABORTED waits for this same request body to finish verification before classification
+  ---
+  duration_ms: 1.027417
+  type: 'test'
+  ...
+# Subtest: ERR_ABORTED without a complete verification token remains fatal even if a body was merely read
+ok 49 - ERR_ABORTED without a complete verification token remains fatal even if a body was merely read
+  ---
+  duration_ms: 1.956763
+  type: 'test'
+  ...
+# Subtest: another request object at the same URL cannot provide the aborted request body, even if its CDP ID is reused
+ok 50 - another request object at the same URL cannot provide the aborted request body, even if its CDP ID is reused
+  ---
+  duration_ms: 1.737476
+  type: 'test'
+  ...
+# Subtest: a failed or truncated body read cannot be excused by the streamed ERR_ABORTED exception
+ok 51 - a failed or truncated body read cannot be excused by the streamed ERR_ABORTED exception
+  ---
+  duration_ms: 2.648447
+  type: 'test'
+  ...
+# Subtest: the abort exception requires status 200, nonempty actual CDP identity and a valid matching verification token
+ok 52 - the abort exception requires status 200, nonempty actual CDP identity and a valid matching verification token
+  ---
+  duration_ms: 18.393795
+  type: 'test'
+  ...
+# Subtest: durable body configuration uses the page response client and propagates a rejected CDP setup
+ok 53 - durable body configuration uses the page response client and propagates a rejected CDP setup
+  ---
+  duration_ms: 0.687536
+  type: 'test'
+  ...
+# Subtest: a successful owned browser launches once with preserved options and the startup budget
+ok 54 - a successful owned browser launches once with preserved options and the startup budget
+  ---
+  duration_ms: 2.138039
+  type: 'test'
+  ...
+# Subtest: an endpoint startup timeout waits for retirement and retries only once
+ok 55 - an endpoint startup timeout waits for retirement and retries only once
+  ---
+  duration_ms: 0.466035
+  type: 'test'
+  ...
+# Subtest: a second endpoint startup timeout propagates the original error without a third launch
+ok 56 - a second endpoint startup timeout propagates the original error without a third launch
+  ---
+  duration_ms: 1.516986
+  type: 'test'
+  ...
+# Subtest: page navigation timeout propagates immediately without retry or cleanup wait
+ok 57 - page navigation timeout propagates immediately without retry or cleanup wait
+  ---
+  duration_ms: 0.254763
+  type: 'test'
+  ...
+# Subtest: a same-named non-Puppeteer exception propagates immediately without retry or cleanup wait
+ok 58 - a same-named non-Puppeteer exception propagates immediately without retry or cleanup wait
+  ---
+  duration_ms: 0.165287
+  type: 'test'
+  ...
+# Subtest: protocol or closed-target failure propagates immediately without retry or cleanup wait
+ok 59 - protocol or closed-target failure propagates immediately without retry or cleanup wait
+  ---
+  duration_ms: 0.136794
+  type: 'test'
+  ...
+# Subtest: gameplay assertion failure propagates immediately without retry or cleanup wait
+ok 60 - gameplay assertion failure propagates immediately without retry or cleanup wait
+  ---
+  duration_ms: 0.265724
+  type: 'test'
+  ...
+# Subtest: every QA target starts unfinished behind exactly its real previously completed prefix
+ok 61 - every QA target starts unfinished behind exactly its real previously completed prefix
+  ---
+  duration_ms: 12.198475
+  type: 'test'
+  ...
+# Subtest: castle QA setup includes fifty ordinary completions and never a precompleted castle
+ok 62 - castle QA setup includes fifty ordinary completions and never a precompleted castle
+  ---
+  duration_ms: 0.286462
+  type: 'test'
+  ...
+# Subtest: an invalid room or undeclared archive mount cannot silently become a valid access fixture
+ok 63 - an invalid room or undeclared archive mount cannot silently become a valid access fixture
+  ---
+  duration_ms: 1.126761
+  type: 'test'
+  ...
+# Subtest: frozen browser evidence rejects another source, runtime configuration or visible castle mapping
+ok 64 - frozen browser evidence rejects another source, runtime configuration or visible castle mapping
+  ---
+  duration_ms: 4.30388
+  type: 'test'
+  ...
+# Subtest: live root inspection checks actual replacement builders and HUD numbers without turning flags on
+ok 65 - live root inspection checks actual replacement builders and HUD numbers without turning flags on
+  ---
+  duration_ms: 1.491419
+  type: 'test'
+  ...
+# Subtest: an encodable blank animation, missing samples or undecoded pixels cannot pass visual evidence
+ok 66 - an encodable blank animation, missing samples or undecoded pixels cannot pass visual evidence
+  ---
+  duration_ms: 1.807946
+  type: 'test'
+  ...
+# Subtest: actual Source observer proves read-through then ordinary settings persistence, Play and reload
+ok 67 - actual Source observer proves read-through then ordinary settings persistence, Play and reload
+  ---
+  duration_ms: 10.332561
+  type: 'test'
+  ...
+# Subtest: shared real page collector supports bare entry without synthesizing private preferences or runtime hints
+ok 68 - shared real page collector supports bare entry without synthesizing private preferences or runtime hints
+  ---
+  duration_ms: 0.986271
+  type: 'test'
+  ...
+# Subtest: lifecycle rejects absent phase, synthetic initial own record and false DOM progress/settings
+ok 69 - lifecycle rejects absent phase, synthetic initial own record and false DOM progress/settings
+  ---
+  duration_ms: 4.456383
+  type: 'test'
+  ...
+# Subtest: lifecycle rejects absent persisted bytes, wrong progress/hints/revisions and non-private or absent writes
+ok 70 - lifecycle rejects absent persisted bytes, wrong progress/hints/revisions and non-private or absent writes
+  ---
+  duration_ms: 3.37812
+  type: 'test'
+  ...
+# Subtest: serialized preload forwards native receiver, arguments and return while recording exact strings/fonts
+ok 71 - serialized preload forwards native receiver, arguments and return while recording exact strings/fonts
+  ---
+  duration_ms: 4.645324
+  type: 'test'
+  ...
+# Subtest: native failures propagate the identical exception and are never counted as drawn text
+ok 72 - native failures propagate the identical exception and are never counted as drawn text
+  ---
+  duration_ms: 1.13108
+  type: 'test'
+  ...
+# Subtest: observation never coerces an object twice or invokes a shadowed font getter
+ok 73 - observation never coerces an object twice or invokes a shadowed font getter
+  ---
+  duration_ms: 0.950895
+  type: 'test'
+  ...
+# Subtest: primitive conversions are captured without changing the native arguments
+ok 74 - primitive conversions are captured without changing the native arguments
+  ---
+  duration_ms: 1.000156
+  type: 'test'
+  ...
+# Subtest: repeated strings count separately by method/font and snapshots cannot change stored observations
+ok 75 - repeated strings count separately by method/font and snapshots cannot change stored observations
+  ---
+  duration_ms: 1.02376
+  type: 'test'
+  ...
+# Subtest: unique entry overflow is explicit while native calls and retained counts continue
+ok 76 - unique entry overflow is explicit while native calls and retained counts continue
+  ---
+  duration_ms: 1.397144
+  type: 'test'
+  ...
+# Subtest: oversized strings are passed intact and reported as overflow instead of truncated evidence
+ok 77 - oversized strings are passed intact and reported as overflow instead of truncated evidence
+  ---
+  duration_ms: 2.124113
+  type: 'test'
+  ...
+# Subtest: a second installation does not double-wrap and replaced instrumentation is detectable
+ok 78 - a second installation does not double-wrap and replaced instrumentation is detectable
+  ---
+  duration_ms: 0.819972
+  type: 'test'
+  ...
+# Subtest: missing native support and missing preload are explicit unobserved states
+ok 79 - missing native support and missing preload are explicit unobserved states
+  ---
+  duration_ms: 1.303299
+  type: 'test'
+  ...
+# Subtest: invalid observation budgets fail before any native method replacement
+ok 80 - invalid observation budgets fail before any native method replacement
+  ---
+  duration_ms: 3.709216
+  type: 'test'
+  ...
+# Subtest: native proof accepts actual current freely colliding original-cargo spring mechanism, preserving all original handles
+ok 81 - native proof accepts actual current freely colliding original-cargo spring mechanism, preserving all original handles
+  ---
+  duration_ms: 3128.371663
+  type: 'test'
+  ...
+# Subtest: ordinary completion proof rejects swapped body/shape, stale contact, fake energy, held cargo, powered springs or missing physical impact
+ok 82 - ordinary completion proof rejects swapped body/shape, stale contact, fake energy, held cargo, powered springs or missing physical impact
+  ---
+  duration_ms: 2622.479945
+  type: 'test'
+  ...
+# Subtest: free original shape disabled after an accepted impact cannot pass the independently consumed completion gate
+ok 83 - free original shape disabled after an accepted impact cannot pass the independently consumed completion gate
+  ---
+  duration_ms: 2730.460333
+  type: 'test'
+  ...
+# Subtest: impact proof rejects actual recorded external cargo motor force or torque rather than trusting an airborne label
+ok 84 - impact proof rejects actual recorded external cargo motor force or torque rather than trusting an airborne label
+  ---
+  duration_ms: 2381.122091
+  type: 'test'
+  ...
+# Subtest: guide proof rejects forged pivots and checks radial COM and true pivot residuals separately
+ok 85 - guide proof rejects forged pivots and checks radial COM and true pivot residuals separately
+  ---
+  duration_ms: 2405.802249
+  type: 'test'
+  ...
+# Subtest: the real full-shell guide sag leaves the founded receiver frame unchanged and all sampled cell gates valid
+ok 86 - the real full-shell guide sag leaves the founded receiver frame unchanged and all sampled cell gates valid
+  ---
+  duration_ms: 7514.694923
+  type: 'test'
+  ...
+# Subtest: complete movie contract is bounded real-time cadence and cannot silently grant larger acceptance
+ok 87 - complete movie contract is bounded real-time cadence and cannot silently grant larger acceptance
+  ---
+  duration_ms: 1.247657
+  type: 'test'
+  ...
+# Subtest: actual native observer serialization contains no Node closure, including nested late completion callbacks
+ok 88 - actual native observer serialization contains no Node closure, including nested late completion callbacks
+  ---
+  duration_ms: 15.659339
+  type: 'test'
+  ...
+# Subtest: binding analysis distinguishes lexical references from keys, nested locals, destructuring and hoisted var
+ok 89 - binding analysis distinguishes lexical references from keys, nested locals, destructuring and hoisted var
+  ---
+  duration_ms: 0.742409
+  type: 'test'
+  ...
+# Subtest: serialized observer validates exact false-only scopes before touching the game
+ok 90 - serialized observer validates exact false-only scopes before touching the game
+  ---
+  duration_ms: 52.098162
+  type: 'test'
+  ...
+# Subtest: the actual page.evaluate call explicitly transfers scope data instead of a browser closure
+ok 91 - the actual page.evaluate call explicitly transfers scope data instead of a browser closure
+  ---
+  duration_ms: 3.314447
+  type: 'test'
+  ...
+# Subtest: native comparison tolerates final-bit pose noise while retaining different rendering costs
+ok 92 - native comparison tolerates final-bit pose noise while retaining different rendering costs
+  ---
+  duration_ms: 3.505719
+  type: 'test'
+  ...
+# Subtest: native comparison rejects a real pose change and every non-finite coordinate
+ok 93 - native comparison rejects a real pose change and every non-finite coordinate
+  ---
+  duration_ms: 1.734141
+  type: 'test'
+  ...
+# Subtest: frame counts, route order, identities and flags remain exact
+ok 94 - frame counts, route order, identities and flags remain exact
+  ---
+  duration_ms: 2.909553
+  type: 'test'
+  ...
+# Subtest: actual room 1 and 6 array spawns and equivalent Vector3 spawns retain exact numeric distances without moving actors
+ok 95 - actual room 1 and 6 array spawns and equivalent Vector3 spawns retain exact numeric distances without moving actors
+  ---
+  duration_ms: 3461.842965
+  type: 'test'
+  ...
+# Subtest: the real original-model guard permits ordinary camera FOV animation and rejects rig/lens/model substitution
+ok 96 - the real original-model guard permits ordinary camera FOV animation and rejects rig/lens/model substitution
+  ---
+  duration_ms: 1514.292347
+  type: 'test'
+  ...
+# Subtest: actual native attack observer and capture never assign actors, lens, mechanism state or use level selection/reset
+ok 97 - actual native attack observer and capture never assign actors, lens, mechanism state or use level selection/reset
+  ---
+  duration_ms: 11.205807
+  type: 'test'
+  ...
+# Subtest: browser gate refuses empty, wrong-group and declaration-only evidence instead of manufacturing attack coverage
+ok 98 - browser gate refuses empty, wrong-group and declaration-only evidence instead of manufacturing attack coverage
+  ---
+  duration_ms: 1.143773
+  type: 'test'
+  ...
+# Subtest: provider run identifiers use positive safe-integer range without borrowing the bounded simulation counter cap
+ok 99 - provider run identifiers use positive safe-integer range without borrowing the bounded simulation counter cap
+  ---
+  duration_ms: 2.618873
+  type: 'test'
+  ...
+# Subtest: ten actual early-chapter attacks retain original cargo and omit the challenged support or drive
+ok 100 - ten actual early-chapter attacks retain original cargo and omit the challenged support or drive
+  ---
+  duration_ms: 42885.204913
+  type: 'test'
+  ...
+# Subtest: a fresh normal Play attack observes its original actors without invoking level selection or reset
+ok 101 - a fresh normal Play attack observes its original actors without invoking level selection or reset
+  ---
+  duration_ms: 3631.412136
+  type: 'test'
+  ...
+# Subtest: early chapter proof rejects missing addressed attack
+ok 102 - early chapter proof rejects missing addressed attack
+  ---
+  duration_ms: 7.852091
+  type: 'test'
+  ...
+# Subtest: early chapter proof rejects duplicate replaces a distinct attempt
+ok 103 - early chapter proof rejects duplicate replaces a distinct attempt
+  ---
+  duration_ms: 8.21224
+  type: 'test'
+  ...
+# Subtest: early chapter proof rejects genuine new win requires review
+ok 104 - early chapter proof rejects genuine new win requires review
+  ---
+  duration_ms: 7.320815
+  type: 'test'
+  ...
+# Subtest: early chapter proof rejects interrupted approach cannot become protection
+ok 105 - early chapter proof rejects interrupted approach cannot become protection
+  ---
+  duration_ms: 6.879004
+  type: 'test'
+  ...
+# Subtest: early chapter proof rejects replacement cargo body
+ok 106 - early chapter proof rejects replacement cargo body
+  ---
+  duration_ms: 7.516718
+  type: 'test'
+  ...
+# Subtest: early chapter proof rejects reset during the attempted route
+ok 107 - early chapter proof rejects reset during the attempted route
+  ---
+  duration_ms: 9.457301
+  type: 'test'
+  ...
+# Subtest: early chapter proof rejects CPU reset mislabelled as fresh native Play
+ok 108 - early chapter proof rejects CPU reset mislabelled as fresh native Play
+  ---
+  duration_ms: 6.785951
+  type: 'test'
+  ...
+# Subtest: early chapter proof rejects missing trajectory segment
+ok 109 - early chapter proof rejects missing trajectory segment
+  ---
+  duration_ms: 6.953082
+  type: 'test'
+  ...
+# Subtest: early chapter proof rejects nonfinite observed motion
+ok 110 - early chapter proof rejects nonfinite observed motion
+  ---
+  duration_ms: 6.668552
+  type: 'test'
+  ...
+# Subtest: early chapter proof rejects forged final actor pose
+ok 111 - early chapter proof rejects forged final actor pose
+  ---
+  duration_ms: 7.143174
+  type: 'test'
+  ...
+# Subtest: early chapter proof rejects missing all-projectile witness
+ok 112 - early chapter proof rejects missing all-projectile witness
+  ---
+  duration_ms: 8.484364
+  type: 'test'
+  ...
+# Subtest: early chapter proof rejects wrong actual addressed ceramic
+ok 113 - early chapter proof rejects wrong actual addressed ceramic
+  ---
+  duration_ms: 11.915847
+  type: 'test'
+  ...
+# Subtest: early chapter proof rejects source portal took a different real ceramic
+ok 114 - early chapter proof rejects source portal took a different real ceramic
+  ---
+  duration_ms: 12.28375
+  type: 'test'
+  ...
+# Subtest: early chapter proof rejects drive was actually powered
+ok 115 - early chapter proof rejects drive was actually powered
+  ---
+  duration_ms: 8.135948
+  type: 'test'
+  ...
+# Subtest: early chapter proof rejects passenger cabin actually rose
+ok 116 - early chapter proof rejects passenger cabin actually rose
+  ---
+  duration_ms: 8.908081
+  type: 'test'
+  ...
+# Subtest: early chapter proof rejects carriage actually moved
+ok 117 - early chapter proof rejects carriage actually moved
+  ---
+  duration_ms: 13.533291
+  type: 'test'
+  ...
+# Subtest: early chapter proof rejects direct-transit attempt never traversed
+ok 118 - early chapter proof rejects direct-transit attempt never traversed
+  ---
+  duration_ms: 10.241418
+  type: 'test'
+  ...
+# Subtest: early chapter proof rejects false global acceptance claim
+ok 119 - early chapter proof rejects false global acceptance claim
+  ---
+  duration_ms: 6.613351
+  type: 'test'
+  ...
+# Subtest: the actual full native observer has no Node closure, including late completion paths
+ok 120 - the actual full native observer has no Node closure, including late completion paths
+  ---
+  duration_ms: 13.080141
+  type: 'test'
+  ...
+# Subtest: actual page.evaluate transfers every contract and scope as data
+ok 121 - actual page.evaluate transfers every contract and scope as data
+  ---
+  duration_ms: 7.278276
+  type: 'test'
+  ...
+# Subtest: native observation never assigns a camera lens, actor pose, mechanism target or win state
+ok 122 - native observation never assigns a camera lens, actor pose, mechanism target or win state
+  ---
+  duration_ms: 5.339515
+  type: 'test'
+  ...
+# Subtest: serialized full observer rejects forged broad acceptance before reading the game
+ok 123 - serialized full observer rejects forged broad acceptance before reading the game
+  ---
+  duration_ms: 27.922089
+  type: 'test'
+  ...
+# Subtest: native cadence accepts regular frames plus one real off-stride terminal without padding
+ok 124 - native cadence accepts regular frames plus one real off-stride terminal without padding
+  ---
+  duration_ms: 1.807937
+  type: 'test'
+  ...
+# Subtest: native cadence rejects missing/repeated frames, fake terminal and reset/identity mutations
+ok 125 - native cadence rejects missing/repeated frames, fake terminal and reset/identity mutations
+  ---
+  duration_ms: 18.642924
+  type: 'test'
+  ...
+# Subtest: real original mutable-state fixture reads all vertices/bones without updating cached production state
+ok 126 - real original mutable-state fixture reads all vertices/bones without updating cached production state
+  ---
+  duration_ms: 3733.943646
+  type: 'test'
+  ...
+# Subtest: serialized20 factory and strict lossless encoding retain every original number and field order
+ok 127 - serialized20 factory and strict lossless encoding retain every original number and field order
+  ---
+  duration_ms: 5.774943
+  type: 'test'
+  ...
+# Subtest: camera diagnostic clocks reject skipped/repeated or invented terminal steps
+ok 128 - camera diagnostic clocks reject skipped/repeated or invented terminal steps
+  ---
+  duration_ms: 0.296901
+  type: 'test'
+  ...
+# Subtest: codec rejects foreign schema, missing original bone/vertex identity and nonfinite lens witness
+ok 129 - codec rejects foreign schema, missing original bone/vertex identity and nonfinite lens witness
+  ---
+  duration_ms: 20.263975
+  type: 'test'
+  ...
+# Subtest: prepared current bone matrices and lens caches are required; observer never repairs them
+ok 130 - prepared current bone matrices and lens caches are required; observer never repairs them
+  ---
+  duration_ms: 1982.802086
+  type: 'test'
+  ...
+# Subtest: removed world ownership, changed mask, replaced skin and loaded-asset references are rejected
+ok 131 - removed world ownership, changed mask, replaced skin and loaded-asset references are rejected
+  ---
+  duration_ms: 1913.763065
+  type: 'test'
+  ...
+# Subtest: actual mutable original physical state cannot change during a vertex read
+ok 132 - actual mutable original physical state cannot change during a vertex read
+  ---
+  duration_ms: 1992.887621
+  type: 'test'
+  ...
+# Subtest: actual mutable original camera state cannot change during a vertex read
+ok 133 - actual mutable original camera state cannot change during a vertex read
+  ---
+  duration_ms: 1964.066451
+  type: 'test'
+  ...
+# Subtest: actual mutable original bone state cannot change during a vertex read
+ok 134 - actual mutable original bone state cannot change during a vertex read
+  ---
+  duration_ms: 2017.287059
+  type: 'test'
+  ...
+# Subtest: actual mutable original rig state cannot change during a vertex read
+ok 135 - actual mutable original rig state cannot change during a vertex read
+  ---
+  duration_ms: 1956.492489
+  type: 'test'
+  ...
+# Subtest: the isolated runner observes only after its existing production render and defaults to unchanged ABI
+ok 136 - the isolated runner observes only after its existing production render and defaults to unchanged ABI
+  ---
+  duration_ms: 0.903808
+  type: 'test'
+  ...
+# Subtest: 361 long-number lossless protocol records fit25M and bind every capture plus terminal without camera acceptance
+ok 137 - 361 long-number lossless protocol records fit25M and bind every capture plus terminal without camera acceptance
+  ---
+  duration_ms: 1055.841232
+  type: 'test'
+  ...
+# Subtest: whole-file protocol rejects wrongRoom
+ok 138 - whole-file protocol rejects wrongRoom
+  ---
+  duration_ms: 10.61466
+  type: 'test'
+  ...
+# Subtest: whole-file protocol rejects falseAcceptance
+ok 139 - whole-file protocol rejects falseAcceptance
+  ---
+  duration_ms: 9.110296
+  type: 'test'
+  ...
+# Subtest: whole-file protocol rejects omittedCapture
+ok 140 - whole-file protocol rejects omittedCapture
+  ---
+  duration_ms: 8.798256
+  type: 'test'
+  ...
+# Subtest: whole-file protocol rejects splicedBinding
+ok 141 - whole-file protocol rejects splicedBinding
+  ---
+  duration_ms: 10.249932
+  type: 'test'
+  ...
+# Subtest: whole-file protocol rejects splicedWorld
+ok 142 - whole-file protocol rejects splicedWorld
+  ---
+  duration_ms: 12.320066
+  type: 'test'
+  ...
+# Subtest: whole-file protocol rejects spoofedState
+ok 143 - whole-file protocol rejects spoofedState
+  ---
+  duration_ms: 9.457521
+  type: 'test'
+  ...
+# Subtest: whole-file protocol rejects missingFinalClock
+ok 144 - whole-file protocol rejects missingFinalClock
+  ---
+  duration_ms: 9.876198
+  type: 'test'
+  ...
+# Subtest: whole-file protocol rejects falseScope
+ok 145 - whole-file protocol rejects falseScope
+  ---
+  duration_ms: 9.956877
+  type: 'test'
+  ...
+# Subtest: whole-file protocol rejects wrongRoomScope
+ok 146 - whole-file protocol rejects wrongRoomScope
+  ---
+  duration_ms: 9.901996
+  type: 'test'
+  ...
+# Subtest: whole-file protocol rejects falseFinalWorldStep
+ok 147 - whole-file protocol rejects falseFinalWorldStep
+  ---
+  duration_ms: 11.666602
+  type: 'test'
+  ...
+# Subtest: whole-file protocol rejects falseFinalState
+ok 148 - whole-file protocol rejects falseFinalState
+  ---
+  duration_ms: 10.692253
+  type: 'test'
+  ...
+# Subtest: whole-file protocol rejects extraFinalClockField
+ok 149 - whole-file protocol rejects extraFinalClockField
+  ---
+  duration_ms: 11.9073
+  type: 'test'
+  ...
+# Subtest: whole-file protocol rejects substitutedAppearance
+ok 150 - whole-file protocol rejects substitutedAppearance
+  ---
+  duration_ms: 9.179374
+  type: 'test'
+  ...
+# Subtest: whole-file protocol rejects substitutedLens
+ok 151 - whole-file protocol rejects substitutedLens
+  ---
+  duration_ms: 10.115793
+  type: 'test'
+  ...
+# Subtest: whole-file protocol rejects substitutedFov
+ok 152 - whole-file protocol rejects substitutedFov
+  ---
+  duration_ms: 10.183649
+  type: 'test'
+  ...
+# Subtest: whole-file protocol rejects missingModel
+ok 153 - whole-file protocol rejects missingModel
+  ---
+  duration_ms: 9.938874
+  type: 'test'
+  ...
+# Subtest: oversized whole file and source/capture receipts cannot pass bounded diagnostic validation
+ok 154 - oversized whole file and source/capture receipts cannot pass bounded diagnostic validation
+  ---
+  duration_ms: 714.108728
+  type: 'test'
+  ...
+# Subtest: literal oldR4 captures keep actualoffset24 and terminal5392 distinct from driverCOUNT5393
+ok 155 - literal oldR4 captures keep actualoffset24 and terminal5392 distinct from driverCOUNT5393
+  ---
+  duration_ms: 5.162376
+  type: 'test'
+  ...
+# Subtest: actual Three library padded GPU bone texture is read unchanged with all256 current entries
+ok 156 - actual Three library padded GPU bone texture is read unchanged with all256 current entries
+  ---
+  duration_ms: 2020.160027
+  type: 'test'
+  ...
+# Subtest: a self-consistent extrema label cannot substitute an invented world-to-lens projection
+ok 157 - a self-consistent extrema label cannot substitute an invented world-to-lens projection
+  ---
+  duration_ms: 10.666266
+  type: 'test'
+  ...
+# Subtest: observer refuses a changed player parent position during an original vertex read
+ok 158 - observer refuses a changed player parent position during an original vertex read
+  ---
+  duration_ms: 2033.987258
+  type: 'test'
+  ...
+# Subtest: observer refuses a changed cargo visual position during an original vertex read
+ok 159 - observer refuses a changed cargo visual position during an original vertex read
+  ---
+  duration_ms: 1917.19565
+  type: 'test'
+  ...
+# Subtest: observer refuses a changed cargo parent quaternion during an original vertex read
+ok 160 - observer refuses a changed cargo parent quaternion during an original vertex read
+  ---
+  duration_ms: 1932.360303
+  type: 'test'
+  ...
+# Subtest: observer refuses a changed held-device state during an original vertex read
+ok 161 - observer refuses a changed held-device state during an original vertex read
+  ---
+  duration_ms: 1937.31677
+  type: 'test'
+  ...
+# Subtest: observer refuses a changed loaded original root pose during an original vertex read
+ok 162 - observer refuses a changed loaded original root pose during an original vertex read
+  ---
+  duration_ms: 2031.454654
+  type: 'test'
+  ...
+# Subtest: observer refuses a changed prepared skin cache reference during an original vertex read
+ok 163 - observer refuses a changed prepared skin cache reference during an original vertex read
+  ---
+  duration_ms: 1985.67973
+  type: 'test'
+  ...
+# Subtest: main clipping and authored player material planes are explicitly unsupported
+ok 164 - main clipping and authored player material planes are explicitly unsupported
+  ---
+  duration_ms: 3529.302081
+  type: 'test'
+  ...
+# Subtest: measured original outside extrema cannot be turned into zero outside by changing counters
+ok 165 - measured original outside extrema cannot be turned into zero outside by changing counters
+  ---
+  duration_ms: 2118.267134
+  type: 'test'
+  ...
+# Subtest: independent raw diagnostic guards reject invertedBounds
+ok 166 - independent raw diagnostic guards reject invertedBounds
+  ---
+  duration_ms: 11.12701
+  type: 'test'
+  ...
+# Subtest: independent raw diagnostic guards reject impossibleNearCount
+ok 167 - independent raw diagnostic guards reject impossibleNearCount
+  ---
+  duration_ms: 14.353371
+  type: 'test'
+  ...
+# Subtest: independent raw diagnostic guards reject impossibleOutsideCount
+ok 168 - independent raw diagnostic guards reject impossibleOutsideCount
+  ---
+  duration_ms: 13.449113
+  type: 'test'
+  ...
+# Subtest: independent raw diagnostic guards reject foreignMainWitness
+ok 169 - independent raw diagnostic guards reject foreignMainWitness
+  ---
+  duration_ms: 11.846476
+  type: 'test'
+  ...
+# Subtest: independent raw diagnostic guards reject mainClipping
+ok 170 - independent raw diagnostic guards reject mainClipping
+  ---
+  duration_ms: 12.641713
+  type: 'test'
+  ...
+# Subtest: independent raw diagnostic guards reject materialClipping
+ok 171 - independent raw diagnostic guards reject materialClipping
+  ---
+  duration_ms: 14.110341
+  type: 'test'
+  ...
+# Subtest: independent raw diagnostic guards reject nonunitLensQuaternion
+ok 172 - independent raw diagnostic guards reject nonunitLensQuaternion
+  ---
+  duration_ms: 10.232169
+  type: 'test'
+  ...
+# Subtest: independent raw diagnostic guards reject nonunitBoneQuaternion
+ok 173 - independent raw diagnostic guards reject nonunitBoneQuaternion
+  ---
+  duration_ms: 10.544238
+  type: 'test'
+  ...
+# Subtest: independent raw diagnostic guards reject missingRigVector
+ok 174 - independent raw diagnostic guards reject missingRigVector
+  ---
+  duration_ms: 12.325046
+  type: 'test'
+  ...
+# Subtest: independent raw diagnostic guards reject missingReadPurity
+ok 175 - independent raw diagnostic guards reject missingReadPurity
+  ---
+  duration_ms: 13.330361
+  type: 'test'
+  ...
+# Subtest: independent raw diagnostic guards reject fakeIndependentReconstruction
+ok 176 - independent raw diagnostic guards reject fakeIndependentReconstruction
+  ---
+  duration_ms: 12.912877
+  type: 'test'
+  ...
+# Subtest: independent raw diagnostic guards reject offAxisCanonicalProjection
+ok 177 - independent raw diagnostic guards reject offAxisCanonicalProjection
+  ---
+  duration_ms: 15.183193
+  type: 'test'
+  ...
+# Subtest: independent raw diagnostic guards reject coherentInverseWrongWorldPose
+ok 178 - independent raw diagnostic guards reject coherentInverseWrongWorldPose
+  ---
+  duration_ms: 14.872746
+  type: 'test'
+  ...
+# Subtest: campaign-v55 QA serves exact frozen bytes and returns 404 instead of a source or HTML fallback
+ok 179 - campaign-v55 QA serves exact frozen bytes and returns 404 instead of a source or HTML fallback
+  ---
+  duration_ms: 52.177404
+  type: 'test'
+  ...
+# Subtest: campaign-v56 QA serves exact frozen bytes and returns 404 instead of a source or HTML fallback
+ok 180 - campaign-v56 QA serves exact frozen bytes and returns 404 instead of a source or HTML fallback
+  ---
+  duration_ms: 26.719583
+  type: 'test'
+  ...
+# Subtest: campaign-v57 QA serves exact frozen bytes and returns 404 instead of a source or HTML fallback
+ok 181 - campaign-v57 QA serves exact frozen bytes and returns 404 instead of a source or HTML fallback
+  ---
+  duration_ms: 19.21011
+  type: 'test'
+  ...
+# Subtest: campaign-v58 QA serves exact frozen bytes and returns 404 instead of a source or HTML fallback
+ok 182 - campaign-v58 QA serves exact frozen bytes and returns 404 instead of a source or HTML fallback
+  ---
+  duration_ms: 13.416592
+  type: 'test'
+  ...
+# Subtest: campaign-v59 QA serves exact frozen bytes and returns 404 instead of a source or HTML fallback
+ok 183 - campaign-v59 QA serves exact frozen bytes and returns 404 instead of a source or HTML fallback
+  ---
+  duration_ms: 13.227902
+  type: 'test'
+  ...
+# Subtest: campaign-v60 QA serves exact frozen bytes and returns 404 instead of a source or HTML fallback
+ok 184 - campaign-v60 QA serves exact frozen bytes and returns 404 instead of a source or HTML fallback
+  ---
+  duration_ms: 11.02435
+  type: 'test'
+  ...
+# Subtest: campaign-v61 QA serves exact frozen bytes and returns 404 instead of a source or HTML fallback
+ok 185 - campaign-v61 QA serves exact frozen bytes and returns 404 instead of a source or HTML fallback
+  ---
+  duration_ms: 13.053117
+  type: 'test'
+  ...
+# Subtest: campaign-v62 QA serves exact frozen bytes and returns 404 instead of a source or HTML fallback
+ok 186 - campaign-v62 QA serves exact frozen bytes and returns 404 instead of a source or HTML fallback
+  ---
+  duration_ms: 9.332759
+  type: 'test'
+  ...
+# Subtest: touch sprint toggles without another finger, remains available during jumps, and resets on pause/blur
+ok 187 - touch sprint toggles without another finger, remains available during jumps, and resets on pause/blur
+  ---
+  duration_ms: 3.638996
+  type: 'test'
+  ...
+# Subtest: blur clears keyboard, touch movement, capture and queued one-shot input
+ok 188 - blur clears keyboard, touch movement, capture and queued one-shot input
+  ---
+  duration_ms: 0.903507
+  type: 'test'
+  ...
+# Subtest: hiding a tab clears input even without a window blur event
+ok 189 - hiding a tab clears input even without a window blur event
+  ---
+  duration_ms: 0.880154
+  type: 'test'
+  ...
+# Subtest: a visible visibilitychange does not cancel active input
+ok 190 - a visible visibilitychange does not cancel active input
+  ---
+  duration_ms: 0.78123
+  type: 'test'
+  ...
+# Subtest: lost capture ends the owning joystick without waiting for pointerup
+ok 191 - lost capture ends the owning joystick without waiting for pointerup
+  ---
+  duration_ms: 0.691203
+  type: 'test'
+  ...
+# Subtest: a second pointer cannot steal or end the first joystick pointer
+ok 192 - a second pointer cannot steal or end the first joystick pointer
+  ---
+  duration_ms: 0.746967
+  type: 'test'
+  ...
+# Subtest: window pointerup releases only the owning stick when pointer capture is unavailable
+ok 193 - window pointerup releases only the owning stick when pointer capture is unavailable
+  ---
+  duration_ms: 0.782112
+  type: 'test'
+  ...
+# Subtest: window pointercancel releases only the owning stick when pointer capture is unavailable
+ok 194 - window pointercancel releases only the owning stick when pointer capture is unavailable
+  ---
+  duration_ms: 1.482723
+  type: 'test'
+  ...
+# Subtest: pointer cancellation is idempotent and the next touch works
+ok 195 - pointer cancellation is idempotent and the next touch works
+  ---
+  duration_ms: 0.994096
+  type: 'test'
+  ...
+# Subtest: reset safely handles reentrant lostpointercapture during release
+ok 196 - reset safely handles reentrant lostpointercapture during release
+  ---
+  duration_ms: 0.939054
+  type: 'test'
+  ...
+# Subtest: an already expired pointer cannot interrupt the reset
+ok 197 - an already expired pointer cannot interrupt the reset
+  ---
+  duration_ms: 0.891816
+  type: 'test'
+  ...
+# Subtest: zero-size controls produce neutral movement instead of NaN
+ok 198 - zero-size controls produce neutral movement instead of NaN
+  ---
+  duration_ms: 0.609282
+  type: 'test'
+  ...
+# Subtest: keyboard diagonals remain normalized and key release still works
+ok 199 - keyboard diagonals remain normalized and key release still works
+  ---
+  duration_ms: 0.758529
+  type: 'test'
+  ...
+# Subtest: touch jump and keyboard one-shot actions remain consumable exactly once
+ok 200 - touch jump and keyboard one-shot actions remain consumable exactly once
+  ---
+  duration_ms: 0.673921
+  type: 'test'
+  ...
+# Subtest: dispose removes every controller listener and can be repeated
+ok 201 - dispose removes every controller listener and can be repeated
+  ---
+  duration_ms: 0.711561
+  type: 'test'
+  ...
+# Subtest: room 13 has valid tiles and no duplicate coplanar walking decks
+ok 202 - room 13 has valid tiles and no duplicate coplanar walking decks
+  ---
+  duration_ms: 537.700266
+  type: 'test'
+  ...
+# Subtest: room 14 has valid tiles and no duplicate coplanar walking decks
+ok 203 - room 14 has valid tiles and no duplicate coplanar walking decks
+  ---
+  duration_ms: 368.302575
+  type: 'test'
+  ...
+# Subtest: room 15 has valid tiles and no duplicate coplanar walking decks
+ok 204 - room 15 has valid tiles and no duplicate coplanar walking decks
+  ---
+  duration_ms: 351.179054
+  type: 'test'
+  ...
+# Subtest: room13 return ceramic is hidden from sampled lower and optical-shelf viewpoints by the physical chamber turn
+ok 205 - room13 return ceramic is hidden from sampled lower and optical-shelf viewpoints by the physical chamber turn
+  ---
+  duration_ms: 1363.831171
+  type: 'test'
+  ...
+# Subtest: the east edge of the room14 arrival court remains solid under ordinary walking
+ok 206 - the east edge of the room14 arrival court remains solid under ordinary walking
+  ---
+  duration_ms: 2643.225921
+  type: 'test'
+  ...
+# Subtest: room14 narrow stair requires separating the original carried friend at the stable island
+ok 207 - room14 narrow stair requires separating the original carried friend at the stable island
+  ---
+  duration_ms: 4622.050413
+  type: 'test'
+  ...
+# Subtest: switching away from a live light bridge removes its support from every collision and view registry
+ok 208 - switching away from a live light bridge removes its support from every collision and view registry
+  ---
+  duration_ms: 1502.341413
+  type: 'test'
+  ...
+# Subtest: new machinery metadata follows real moving mechanisms without changing their physical registries
+ok 209 - new machinery metadata follows real moving mechanisms without changing their physical registries
+  ---
+  duration_ms: 263.337768
+  type: 'test'
+  ...
+# Subtest: rooms 16–20 retain distinct muted finishes and complete two-digit wall numbers
+ok 210 - rooms 16–20 retain distinct muted finishes and complete two-digit wall numbers
+  ---
+  duration_ms: 54.402605
+  type: 'test'
+  ...
+# Subtest: jump-windup-coyote-reuse
+ok 211 - jump-windup-coyote-reuse
+  ---
+  duration_ms: 20.585824
+  type: 'test'
+  ...
+# Subtest: ordinary-source-portal-barrier
+ok 212 - ordinary-source-portal-barrier
+  ---
+  duration_ms: 7.973245
+  type: 'test'
+  ...
+# Subtest: ordinary-destination-portal-wall
+ok 213 - ordinary-destination-portal-wall
+  ---
+  duration_ms: 1.997118
+  type: 'test'
+  ...
+# Subtest: clear-portal-earned-momentum
+ok 214 - clear-portal-earned-momentum
+  ---
+  duration_ms: 42.349134
+  type: 'test'
+  ...
+# Subtest: cargo-only-portal-keeps-player-floor-solid
+ok 215 - cargo-only-portal-keeps-player-floor-solid
+  ---
+  duration_ms: 18.541899
+  type: 'test'
+  ...
+# Subtest: thin-wall-and-jump-spam
+ok 216 - thin-wall-and-jump-spam
+  ---
+  duration_ms: 7.234412
+  type: 'test'
+  ...
+# Subtest: asymmetric-portal-cargo-edge-keeps-source-solid
+ok 217 - asymmetric-portal-cargo-edge-keeps-source-solid
+  ---
+  duration_ms: 12.897268
+  type: 'test'
+  ...
+# Subtest: tilted-cargo-aperture-keeps-source-solid
+ok 218 - tilted-cargo-aperture-keeps-source-solid
+  ---
+  duration_ms: 9.27911
+  type: 'test'
+  ...
+# Subtest: rotating-cargo-rejected-crossing-keeps-source-solid
+ok 219 - rotating-cargo-rejected-crossing-keeps-source-solid
+  ---
+  duration_ms: 19.389403
+  type: 'test'
+  ...
+# Subtest: lateral-cargo-rejected-crossing-keeps-source-solid
+ok 220 - lateral-cargo-rejected-crossing-keeps-source-solid
+  ---
+  duration_ms: 2.96151
+  type: 'test'
+  ...
+# Subtest: portal-replacement-and-backside
+ok 221 - portal-replacement-and-backside
+  ---
+  duration_ms: 11.16399
+  type: 'test'
+  ...
+# Subtest: cargo-carry-release-corner-spam
+ok 222 - cargo-carry-release-corner-spam
+  ---
+  duration_ms: 151.369214
+  type: 'test'
+  ...
+# Subtest: moving-door-through-cargo
+ok 223 - moving-door-through-cargo
+  ---
+  duration_ms: 1.504273
+  type: 'test'
+  ...
+# Subtest: cargo-transit-rotated-corners
+ok 224 - cargo-transit-rotated-corners
+  ---
+  duration_ms: 3.47349
+  type: 'test'
+  ...
+# Subtest: free-cargo-portal-corner-transit
+ok 225 - free-cargo-portal-corner-transit
+  ---
+  duration_ms: 3.134971
+  type: 'test'
+  ...
+# Subtest: preferences-exclude-puzzle-state
+ok 226 - preferences-exclude-puzzle-state
+  ---
+  duration_ms: 0.563456
+  type: 'test'
+  ...
+# Subtest: authored-dynamic-mechanism-impulses
+ok 227 - authored-dynamic-mechanism-impulses
+  ---
+  duration_ms: 3814.471951
+  type: 'test'
+  ...
+# Subtest: player-animation-at-15-fps
+ok 228 - player-animation-at-15-fps
+  ---
+  duration_ms: 144.739399
+  type: 'test'
+  ...
+# Subtest: air trails use one bounded instanced draw and no solid sphere geometry
+ok 229 - air trails use one bounded instanced draw and no solid sphere geometry
+  ---
+  duration_ms: 3.314514
+  type: 'test'
+  ...
+# Subtest: same world speed is used for short and long air segments, not proportional to length
+ok 230 - same world speed is used for short and long air segments, not proportional to length
+  ---
+  duration_ms: 1.406091
+  type: 'test'
+  ...
+# Subtest: ribbons never span the space between linked portals or extend past blocked endpoints
+ok 231 - ribbons never span the space between linked portals or extend past blocked endpoints
+  ---
+  duration_ms: 1.057674
+  type: 'test'
+  ...
+# Subtest: portal twist maps the plume basis with the same transform as physical travel
+ok 232 - portal twist maps the plume basis with the same transform as physical travel
+  ---
+  duration_ms: 0.906894
+  type: 'test'
+  ...
+# Subtest: vertical flow, short segments and missing pair remain finite
+ok 233 - vertical flow, short segments and missing pair remain finite
+  ---
+  duration_ms: 2.02522
+  type: 'test'
+  ...
+# Subtest: repeated render calls do not advance time, rewrite state or allocate buffers
+ok 234 - repeated render calls do not advance time, rewrite state or allocate buffers
+  ---
+  duration_ms: 20.319349
+  type: 'test'
+  ...
+# Subtest: removing portals replaces the path immediately, not leaving a ghost outlet
+ok 235 - removing portals replaces the path immediately, not leaving a ghost outlet
+  ---
+  duration_ms: 0.5384
+  type: 'test'
+  ...
+# Subtest: low graphics samples the entire path, reset is complete, invalid budgets fail early
+ok 236 - low graphics samples the entire path, reset is complete, invalid budgets fail early
+  ---
+  duration_ms: 1.004986
+  type: 'test'
+  ...
+# Subtest: long and reversed currents keep tracers on the complete physical path without portal-spanning tails
+ok 237 - long and reversed currents keep tracers on the complete physical path without portal-spanning tails
+  ---
+  duration_ms: 1.191011
+  type: 'test'
+  ...
+# Subtest: every selectable chamber declares the models it constructs at startup
+ok 238 - every selectable chamber declares the models it constructs at startup
+  ---
+  duration_ms: 36782.770306
+  type: 'test'
+  ...
+# Subtest: room36 proxy agrees with Cannon Box for 400 finite rays across five rotor phases without changing mechanics
+ok 239 - room36 proxy agrees with Cannon Box for 400 finite rays across five rotor phases without changing mechanics
+  ---
+  duration_ms: 22.812419
+  type: 'test'
+  ...
+# Subtest: the production portal first-hit path clears the old face and detects the newly rotated face
+ok 240 - the production portal first-hit path clears the old face and detects the newly rotated face
+  ---
+  duration_ms: 0.975251
+  type: 'test'
+  ...
+# Subtest: a query after an actual physics step uses the current Box before the next room update
+ok 241 - a query after an actual physics step uses the current Box before the next room update
+  ---
+  duration_ms: 11.881683
+  type: 'test'
+  ...
+# Subtest: nonuniform rotated parents retain the exact current physical world matrix, including shear in local space
+ok 242 - nonuniform rotated parents retain the exact current physical world matrix, including shear in local space
+  ---
+  duration_ms: 7.950943
+  type: 'test'
+  ...
+# Subtest: camera broad phase begun before rotation preserves both full-list nine-ray constraint outcomes
+ok 243 - camera broad phase begun before rotation preserves both full-list nine-ray constraint outcomes
+  ---
+  duration_ms: 3.044273
+  type: 'test'
+  ...
+# Subtest: invalid ownership, removed bodies and invalid physical state fail explicitly without creating physics
+ok 244 - invalid ownership, removed bodies and invalid physical state fail explicitly without creating physics
+  ---
+  duration_ms: 1.293392
+  type: 'test'
+  ...
+# Subtest: reset is immediately queryable and a real room replacement releases the old binding
+ok 245 - reset is immediately queryable and a real room replacement releases the old binding
+  ---
+  duration_ms: 484.850235
+  type: 'test'
+  ...
+# Subtest: ordinary player and held-friend jump routes preserve physics across render sampling rates
+ok 246 - ordinary player and held-friend jump routes preserve physics across render sampling rates
+  ---
+  duration_ms: 6983.459764
+  type: 'test'
+  ...
+# Subtest: room 12 art preserves its actual gameplay contract before and during mechanism motion
+ok 247 - room 12 art preserves its actual gameplay contract before and during mechanism motion
+  ---
+  duration_ms: 264.897304
+  type: 'test'
+  ...
+# Subtest: room 13 art preserves its actual gameplay contract before and during mechanism motion
+ok 248 - room 13 art preserves its actual gameplay contract before and during mechanism motion
+  ---
+  duration_ms: 349.409112
+  type: 'test'
+  ...
+# Subtest: room 14 art preserves its actual gameplay contract before and during mechanism motion
+ok 249 - room 14 art preserves its actual gameplay contract before and during mechanism motion
+  ---
+  duration_ms: 246.931933
+  type: 'test'
+  ...
+# Subtest: room 15 art preserves its actual gameplay contract before and during mechanism motion
+ok 250 - room 15 art preserves its actual gameplay contract before and during mechanism motion
+  ---
+  duration_ms: 170.272353
+  type: 'test'
+  ...
+# Subtest: transfer turbine interpolates visually without modifying funnel routing, settings or force
+ok 251 - transfer turbine interpolates visually without modifying funnel routing, settings or force
+  ---
+  duration_ms: 47.546875
+  type: 'test'
+  ...
+# Subtest: actual new models retain original textures, attributes and every source surface after partition
+ok 252 - actual new models retain original textures, attributes and every source surface after partition
+  ---
+  duration_ms: 1797.233917
+  type: 'test'
+  ...
+# Subtest: pressure platform moves only its real inset and reported portal plane stays on that inset
+ok 253 - pressure platform moves only its real inset and reported portal plane stays on that inset
+  ---
+  duration_ms: 410.09685
+  type: 'test'
+  ...
+# Subtest: portal panel rotates around its bearings with stationary feet and a usable horizontal face
+ok 254 - portal panel rotates around its bearings with stationary feet and a usable horizontal face
+  ---
+  duration_ms: 381.175106
+  type: 'test'
+  ...
+# Subtest: counterweight bridge opens a level real deck while towers remain fixed
+ok 255 - counterweight bridge opens a level real deck while towers remain fixed
+  ---
+  duration_ms: 305.75486
+  type: 'test'
+  ...
+# Subtest: Actual ready-screen state function stops hidden WebGL rendering without stopping playing or pause controls
+ok 256 - Actual ready-screen state function stops hidden WebGL rendering without stopping playing or pause controls
+  ---
+  duration_ms: 3.686696
+  type: 'test'
+  ...
+# Subtest: Room construction clears stale percentages; actual asset progress restores its real numeric phase
+ok 257 - Room construction clears stale percentages; actual asset progress restores its real numeric phase
+  ---
+  duration_ms: 0.350541
+  type: 'test'
+  ...
+# Subtest: resuming before a pending suspend settles restores audio without another settings change
+ok 258 - resuming before a pending suspend settles restores audio without another settings change
+  ---
+  duration_ms: 5.725481
+  type: 'test'
+  ...
+# Subtest: a mute during pending resume leaves the context suspended and gain zero
+ok 259 - a mute during pending resume leaves the context suspended and gain zero
+  ---
+  duration_ms: 1.229192
+  type: 'test'
+  ...
+# Subtest: independent page and ad holds survive a late transition and repeated sync does not queue duplicates
+ok 260 - independent page and ad holds survive a late transition and repeated sync does not queue duplicates
+  ---
+  duration_ms: 2.099128
+  type: 'test'
+  ...
+# Subtest: disposal cannot let a late resume issue another transition against the closed context
+ok 261 - disposal cannot let a late resume issue another transition against the closed context
+  ---
+  duration_ms: 0.868644
+  type: 'test'
+  ...
+# Subtest: a rejected device transition does not spin retries; a later user action may retry
+ok 262 - a rejected device transition does not spin retries; a later user action may retry
+  ---
+  duration_ms: 0.926991
+  type: 'test'
+  ...
+# Subtest: ad mute zeros output immediately and preserves independent manual/page holds after close
+ok 263 - ad mute zeros output immediately and preserves independent manual/page holds after close
+  ---
+  duration_ms: 0.893488
+  type: 'test'
+  ...
+# Subtest: a late resume cannot restore sound beneath a newly opened advert or override the user mute
+ok 264 - a late resume cannot restore sound beneath a newly opened advert or override the user mute
+  ---
+  duration_ms: 0.87211
+  type: 'test'
+  ...
+# Subtest: recorded room-7 carry jumping cannot bypass the receiving balcony
+ok 265 - recorded room-7 carry jumping cannot bypass the receiving balcony
+  ---
+  duration_ms: 3673.122294
+  type: 'test'
+  ...
+# Subtest: counterweight settings and repeated jumps cannot replace the lever load
+ok 266 - counterweight settings and repeated jumps cannot replace the lever load
+  ---
+  duration_ms: 138374.706555
+  type: 'test'
+  ...
+# Subtest: room-7 gravity flight and portal retrieval complete with the same friend
+ok 267 - room-7 gravity flight and portal retrieval complete with the same friend
+  ---
+  duration_ms: 9280.845408
+  type: 'test'
+  ...
+# Subtest: room seven uses the new articulated rocker with independent trays and a narrow supported spine
+ok 268 - room seven uses the new articulated rocker with independent trays and a narrow supported spine
+  ---
+  duration_ms: 402.849916
+  type: 'test'
+  ...
+# Subtest: both trays tilt around the stationary bearing and moving portal apertures remain usable
+ok 269 - both trays tilt around the stationary bearing and moving portal apertures remain usable
+  ---
+  duration_ms: 319.106551
+  type: 'test'
+  ...
+# Subtest: each rotated player support plane matches its real Cannon top and visible deck
+ok 270 - each rotated player support plane matches its real Cannon top and visible deck
+  ---
+  duration_ms: 273.779155
+  type: 'test'
+  ...
+# Subtest: grounded support proxies do not occupy any point above the moving walk surface
+ok 271 - grounded support proxies do not occupy any point above the moving walk surface
+  ---
+  duration_ms: 243.627393
+  type: 'test'
+  ...
+# Subtest: a real free companion reverses the rocker torque and a longer arm increases its moment
+ok 272 - a real free companion reverses the rocker torque and a longer arm increases its moment
+  ---
+  duration_ms: 247.73952
+  type: 'test'
+  ...
+# Subtest: level eight uses the front impeller on grounded feet, with soft portal-traced air
+ok 273 - level eight uses the front impeller on grounded feet, with soft portal-traced air
+  ---
+  duration_ms: 240.795708
+  type: 'test'
+  ...
+# Subtest: room eight still completes with ordinary input and the same companion
+ok 274 - room eight still completes with ordinary input and the same companion
+  ---
+  duration_ms: 1925.10117
+  type: 'test'
+  ...
+# Subtest: switching away releases the repaired mechanism without modifying the cached model
+ok 275 - switching away releases the repaired mechanism without modifying the cached model
+  ---
+  duration_ms: 869.618649
+  type: 'test'
+  ...
+# Subtest: room 7 portrait retrieves the original friend through clear camera sightlines
+ok 276 - room 7 portrait retrieves the original friend through clear camera sightlines
+  ---
+  duration_ms: 11666.477417
+  type: 'test'
+  ...
+# Subtest: room 7 wide retrieves the original friend through clear camera sightlines
+ok 277 - room 7 wide retrieves the original friend through clear camera sightlines
+  ---
+  duration_ms: 9107.301944
+  type: 'test'
+  ...
+# Subtest: the new rocker has two broad trays and a narrow real spine with no phantom central floor
+ok 278 - the new rocker has two broad trays and a narrow real spine with no phantom central floor
+  ---
+  duration_ms: 40.514208
+  type: 'test'
+  ...
+# Subtest: bearing feet remain grounded while the whole rocker clears the floor throughout its travel
+ok 279 - bearing feet remain grounded while the whole rocker clears the floor throughout its travel
+  ---
+  duration_ms: 32.049079
+  type: 'test'
+  ...
+# Subtest: animation preserves rigid deck geometry, keeps bearing housings still and twists the anchored springs
+ok 280 - animation preserves rigid deck geometry, keeps bearing housings still and twists the anchored springs
+  ---
+  duration_ms: 9.443385
+  type: 'test'
+  ...
+# Subtest: the complete visible balance beam and under-tray rails reject a player capsule entering from below
+ok 281 - the complete visible balance beam and under-tray rails reject a player capsule entering from below
+  ---
+  duration_ms: 23.893385
+  type: 'test'
+  ...
+# Subtest: solid balance undersides do not push a player already walking on either tray or the narrow spine
+ok 282 - solid balance undersides do not push a player already walking on either tray or the narrow spine
+  ---
+  duration_ms: 10.088352
+  type: 'test'
+  ...
+# Subtest: each tilted tray admits a full portal and opens only its own registered structural backing
+ok 283 - each tilted tray admits a full portal and opens only its own registered structural backing
+  ---
+  duration_ms: 8.553533
+  type: 'test'
+  ...
+# Subtest: room 21: new manufactured forms preserve original physics owners, measured subtrees and GLB buffers
+ok 284 - room 21: new manufactured forms preserve original physics owners, measured subtrees and GLB buffers
+  ---
+  duration_ms: 580.932816
+  type: 'test'
+  ...
+# Subtest: room 22: new manufactured forms preserve original physics owners, measured subtrees and GLB buffers
+ok 285 - room 22: new manufactured forms preserve original physics owners, measured subtrees and GLB buffers
+  ---
+  duration_ms: 430.35726
+  type: 'test'
+  ...
+# Subtest: room 23: new manufactured forms preserve original physics owners, measured subtrees and GLB buffers
+ok 286 - room 23: new manufactured forms preserve original physics owners, measured subtrees and GLB buffers
+  ---
+  duration_ms: 451.503117
+  type: 'test'
+  ...
+# Subtest: room 26: new manufactured forms preserve original physics owners, measured subtrees and GLB buffers
+ok 287 - room 26: new manufactured forms preserve original physics owners, measured subtrees and GLB buffers
+  ---
+  duration_ms: 419.460179
+  type: 'test'
+  ...
+# Subtest: room 29: new manufactured forms preserve original physics owners, measured subtrees and GLB buffers
+ok 288 - room 29: new manufactured forms preserve original physics owners, measured subtrees and GLB buffers
+  ---
+  duration_ms: 527.532344
+  type: 'test'
+  ...
+# Subtest: room 23 machined drive geometry stays inside both original round contact discs
+ok 289 - room 23 machined drive geometry stays inside both original round contact discs
+  ---
+  duration_ms: 298.785565
+  type: 'test'
+  ...
+# Subtest: moving gate batches follow complete translated, rotated and scaled source matrices without a private clock
+ok 290 - moving gate batches follow complete translated, rotated and scaled source matrices without a private clock
+  ---
+  duration_ms: 231.067977
+  type: 'test'
+  ...
+# Subtest: real moving shutter and lift updates keep their registered boxes exactly on the original meshes
+ok 291 - real moving shutter and lift updates keep their registered boxes exactly on the original meshes
+  ---
+  duration_ms: 1098.033716
+  type: 'test'
+  ...
+# Subtest: physical Room23 dynamic cars, clutch and real passenger retain ownership under the new visual layer
+ok 292 - physical Room23 dynamic cars, clutch and real passenger retain ownership under the new visual layer
+  ---
+  duration_ms: 2119.787936
+  type: 'test'
+  ...
+# Subtest: explicit art release restores local source materials and disposes only owned GPU resources exactly once
+ok 293 - explicit art release restores local source materials and disposes only owned GPU resources exactly once
+  ---
+  duration_ms: 257.762457
+  type: 'test'
+  ...
+# Subtest: normal level disposal releases the art before invoking its earlier physical owner once
+ok 294 - normal level disposal releases the art before invoking its earlier physical owner once
+  ---
+  duration_ms: 244.230144
+  type: 'test'
+  ...
+# Subtest: already authored rooms and historical nonphysical Room23 retain their existing presentation
+ok 295 - already authored rooms and historical nonphysical Room23 retain their existing presentation
+  ---
+  duration_ms: 4915.825931
+  type: 'test'
+  ...
+# Subtest: nativeStart room 21 reaches actual WON from original zero-step spawns within 300 simulation seconds
+ok 296 - nativeStart room 21 reaches actual WON from original zero-step spawns within 300 simulation seconds
+  ---
+  duration_ms: 18027.297904
+  type: 'test'
+  ...
+# {"room":21,"id":"gravity-pocket","visualFrames":5325,"worldSteps":10650,"simulationSeconds":88.75,"teleports":4,"milestones":13,"resets":0,"respawns":0}
+# Subtest: nativeStart room 22 reaches actual WON from original zero-step spawns within 300 simulation seconds
+ok 297 - nativeStart room 22 reaches actual WON from original zero-step spawns within 300 simulation seconds
+  ---
+  duration_ms: 8205.576784
+  type: 'test'
+  ...
+# {"room":22,"id":"opposed-freight-lock","visualFrames":3483,"worldSteps":6966,"simulationSeconds":58.05,"teleports":1,"milestones":6,"resets":0,"respawns":0}
+# Subtest: nativeStart room 23 reaches actual WON from original zero-step spawns within 300 simulation seconds
+ok 298 - nativeStart room 23 reaches actual WON from original zero-step spawns within 300 simulation seconds
+  ---
+  duration_ms: 38820.251156
+  type: 'test'
+  ...
+# {"room":23,"id":"counterweight-reversal","visualFrames":7578,"worldSteps":15156,"simulationSeconds":126.3,"teleports":0,"milestones":8,"resets":0,"respawns":0}
+# Subtest: nativeStart room 24 reaches actual WON from original zero-step spawns within 300 simulation seconds
+ok 299 - nativeStart room 24 reaches actual WON from original zero-step spawns within 300 simulation seconds
+  ---
+  duration_ms: 10137.93183
+  type: 'test'
+  ...
+# {"room":24,"id":"garden-of-turning-doors","visualFrames":4402,"worldSteps":8804,"simulationSeconds":73.36666666666666,"teleports":3,"milestones":5,"resets":0,"respawns":0}
+# Subtest: nativeStart room 25 reaches actual WON from original zero-step spawns within 300 simulation seconds
+ok 300 - nativeStart room 25 reaches actual WON from original zero-step spawns within 300 simulation seconds
+  ---
+  duration_ms: 49543.572788
+  type: 'test'
+  ...
+# {"room":25,"id":"opposed-shadows","visualFrames":9209,"worldSteps":18418,"simulationSeconds":153.48333333333332,"teleports":1,"milestones":7,"resets":0,"respawns":0}
+# Subtest: nativeStart room 26 reaches actual WON from original zero-step spawns within 300 simulation seconds
+ok 301 - nativeStart room 26 reaches actual WON from original zero-step spawns within 300 simulation seconds
+  ---
+  duration_ms: 12542.131991
+  type: 'test'
+  ...
+# {"room":26,"id":"crossflow-foundry","visualFrames":8182,"worldSteps":16363,"simulationSeconds":136.35833333333332,"teleports":0,"milestones":6,"resets":0,"respawns":0}
+# Subtest: nativeStart room 27 reaches actual WON from original zero-step spawns within 300 simulation seconds
+ok 302 - nativeStart room 27 reaches actual WON from original zero-step spawns within 300 simulation seconds
+  ---
+  duration_ms: 14591.691277
+  type: 'test'
+  ...
+# {"room":27,"id":"conveyor-city","visualFrames":5802,"worldSteps":11603,"simulationSeconds":96.69166666666666,"teleports":2,"milestones":7,"resets":0,"respawns":0}
+# Subtest: nativeStart room 28 reaches actual WON from original zero-step spawns within 300 simulation seconds
+ok 303 - nativeStart room 28 reaches actual WON from original zero-step spawns within 300 simulation seconds
+  ---
+  duration_ms: 10497.586809
+  type: 'test'
+  ...
+# {"room":28,"id":"tidal-observatory","visualFrames":4348,"worldSteps":8696,"simulationSeconds":72.46666666666667,"teleports":0,"milestones":7,"resets":0,"respawns":0}
+# Subtest: nativeStart room 29 reaches actual WON from original zero-step spawns within 300 simulation seconds
+ok 304 - nativeStart room 29 reaches actual WON from original zero-step spawns within 300 simulation seconds
+  ---
+  duration_ms: 8134.109225
+  type: 'test'
+  ...
+# {"room":29,"id":"inverted-orchard","visualFrames":4258,"worldSteps":8515,"simulationSeconds":70.95833333333333,"teleports":1,"milestones":5,"resets":0,"respawns":0}
+# Subtest: nativeStart room 30 reaches actual WON from original zero-step spawns within 300 simulation seconds
+ok 305 - nativeStart room 30 reaches actual WON from original zero-step spawns within 300 simulation seconds
+  ---
+  duration_ms: 11300.437091
+  type: 'test'
+  ...
+# {"room":30,"id":"sunward-limit","visualFrames":2707,"worldSteps":5413,"simulationSeconds":45.108333333333334,"teleports":2,"milestones":6,"resets":0,"respawns":0}
+# Subtest: nativeStart rejects prepared biosphere states before changing input, clocks, poses or resetting
+ok 306 - nativeStart rejects prepared biosphere states before changing input, clocks, poses or resetting
+  ---
+  duration_ms: 4698.152035
+  type: 'test'
+  ...
+# Subtest: ordinary non-native journey retains its one legacy fixture reset
+ok 307 - ordinary non-native journey retains its one legacy fixture reset
+  ---
+  duration_ms: 1445.369963
+  type: 'test'
+  ...
+# Subtest: room 12 browser-3d art is detailed but gameplay-neutral
+ok 308 - room 12 browser-3d art is detailed but gameplay-neutral
+  ---
+  duration_ms: 378.265969
+  type: 'test'
+  ...
+# Subtest: room 13 browser-3d art is detailed but gameplay-neutral
+ok 309 - room 13 browser-3d art is detailed but gameplay-neutral
+  ---
+  duration_ms: 469.173405
+  type: 'test'
+  ...
+# Subtest: room 14 browser-3d art is detailed but gameplay-neutral
+ok 310 - room 14 browser-3d art is detailed but gameplay-neutral
+  ---
+  duration_ms: 281.044487
+  type: 'test'
+  ...
+# Subtest: room 15 browser-3d art is detailed but gameplay-neutral
+ok 311 - room 15 browser-3d art is detailed but gameplay-neutral
+  ---
+  duration_ms: 288.054285
+  type: 'test'
+  ...
+# Subtest: room 13 machinery stays upright below its moving deck and pressure surface
+ok 312 - room 13 machinery stays upright below its moving deck and pressure surface
+  ---
+  duration_ms: 317.661967
+  type: 'test'
+  ...
+# Subtest: changing rooms releases the procedural art textures once
+ok 313 - changing rooms releases the procedural art textures once
+  ---
+  duration_ms: 497.007413
+  type: 'test'
+  ...
+# Subtest: conservative nine-ray volume agrees with the unfiltered query on 1200 seeded casts
+ok 314 - conservative nine-ray volume agrees with the unfiltered query on 1200 seeded casts
+  ---
+  duration_ms: 530.661095
+  type: 'test'
+  ...
+# Subtest: invisible proxies, ray starts inside a volume, tangents and far-extension stay solid
+ok 315 - invisible proxies, ray starts inside a volume, tangents and far-extension stay solid
+  ---
+  duration_ms: 2.831367
+  type: 'test'
+  ...
+# Subtest: parent transforms, geometry edits, swaps and blocker-list replacement refresh on the next update
+ok 316 - parent transforms, geometry edits, swaps and blocker-list replacement refresh on the next update
+  ---
+  duration_ms: 2.724549
+  type: 'test'
+  ...
+# Subtest: custom, hierarchical, instanced and deformed shapes always retain original raycast semantics
+ok 317 - custom, hierarchical, instanced and deformed shapes always retain original raycast semantics
+  ---
+  duration_ms: 2.165501
+  type: 'test'
+  ...
+# Subtest: duplicate roots and layer masks retain intersection order and filtering
+ok 318 - duplicate roots and layer masks retain intersection order and filtering
+  ---
+  duration_ms: 7.075017
+  type: 'test'
+  ...
+# Subtest: selection does not mutate geometry bounds or retain old rooms when cleared
+ok 319 - selection does not mutate geometry bounds or retain old rooms when cleared
+  ---
+  duration_ms: 0.474261
+  type: 'test'
+  ...
+# Subtest: interleaved position updates cannot retain stale bounds
+ok 320 - interleaved position updates cannot retain stale bounds
+  ---
+  duration_ms: 0.686945
+  type: 'test'
+  ...
+# Subtest: an exceptional filter leaves no active cached broad phase
+ok 321 - an exceptional filter leaves no active cached broad phase
+  ---
+  duration_ms: 2.980575
+  type: 'test'
+  ...
+# Subtest: full room21 route has identical camera/actor trace with culling enabled or disabled; recovery=false
+ok 322 - full room21 route has identical camera/actor trace with culling enabled or disabled; recovery=false
+  ---
+  duration_ms: 39413.429948
+  type: 'test'
+  ...
+# Subtest: full room21 route has identical camera/actor trace with culling enabled or disabled; recovery=true
+ok 323 - full room21 route has identical camera/actor trace with culling enabled or disabled; recovery=true
+  ---
+  duration_ms: 33328.467436
+  type: 'test'
+  ...
+# Subtest: cap search measures the actual unchanged look axis and does not write camera or controls
+ok 324 - cap search measures the actual unchanged look axis and does not write camera or controls
+  ---
+  duration_ms: 57.267227
+  type: 'test'
+  ...
+# Subtest: a settled upright floor look beside the real north-wall dimensions finds a swept finite-budget view
+ok 325 - a settled upright floor look beside the real north-wall dimensions finds a swept finite-budget view
+  ---
+  duration_ms: 1012.770823
+  type: 'test'
+  ...
+# Subtest: a north-west corner retains the full envelope while the sparse aim ring rotates past the wall direction
+ok 326 - a north-west corner retains the full envelope while the sparse aim ring rotates past the wall direction
+  ---
+  duration_ms: 1356.002844
+  type: 'test'
+  ...
+# Subtest: exit lens sweeps ignore only intersections discarded by the active render plane
+ok 327 - exit lens sweeps ignore only intersections discarded by the active render plane
+  ---
+  duration_ms: 14.834736
+  type: 'test'
+  ...
+# Subtest: clipping tests the hit point, not the whole collider or a room identifier
+ok 328 - clipping tests the hit point, not the whole collider or a room identifier
+  ---
+  duration_ms: 1.342383
+  type: 'test'
+  ...
+# Subtest: ordinary wall collision returns when exit plane ends: crossing
+ok 329 - ordinary wall collision returns when exit plane ends: crossing
+  ---
+  duration_ms: 4.566018
+  type: 'test'
+  ...
+# Subtest: ordinary wall collision returns when exit plane ends: turn-away
+ok 330 - ordinary wall collision returns when exit plane ends: turn-away
+  ---
+  duration_ms: 1.349575
+  type: 'test'
+  ...
+# Subtest: ordinary wall collision returns when exit plane ends: removed
+ok 331 - ordinary wall collision returns when exit plane ends: removed
+  ---
+  duration_ms: 1.533688
+  type: 'test'
+  ...
+# Subtest: ordinary wall collision returns when exit plane ends: reset
+ok 332 - ordinary wall collision returns when exit plane ends: reset
+  ---
+  duration_ms: 3.219788
+  type: 'test'
+  ...
+# Subtest: flat wall and floor exits retain the previously tested camera contact policy
+ok 333 - flat wall and floor exits retain the previously tested camera contact policy
+  ---
+  duration_ms: 1.179871
+  type: 'test'
+  ...
+# Subtest: both ordinary room21 exits retain the emerging skin and re-sweep on plane retirement
+ok 334 - both ordinary room21 exits retain the emerging skin and re-sweep on plane retirement
+  ---
+  duration_ms: 18044.978029
+  type: 'test'
+  ...
+# Subtest: the accepted upward freight pitch reproduces the cropped feet until the chamber opts in
+ok 335 - the accepted upward freight pitch reproduces the cropped feet until the chamber opts in
+  ---
+  duration_ms: 28.910209
+  type: 'test'
+  ...
+# Subtest: settled high and low aim frames every original player vertex and the original carried companion on landscape and portrait
+ok 336 - settled high and low aim frames every original player vertex and the original carried companion on landscape and portrait
+  ---
+  duration_ms: 3139.00815
+  type: 'test'
+  ...
+# Subtest: ordinary orbit still centres distant high freight and nearly vertical floor shots on both viewports
+ok 337 - ordinary orbit still centres distant high freight and nearly vertical floor shots on both viewports
+  ---
+  duration_ms: 41.480078
+  type: 'test'
+  ...
+# Subtest: an abrupt high aim recovers framing within half a second and never jumps on a frozen frame
+ok 338 - an abrupt high aim recovers framing within half a second and never jumps on a frozen frame
+  ---
+  duration_ms: 4.964478
+  type: 'test'
+  ...
+# Subtest: high-aim framing retains the exact transported lens and its exit constraint at zero elapsed time
+ok 339 - high-aim framing retains the exact transported lens and its exit constraint at zero elapsed time
+  ---
+  duration_ms: 6.462268
+  type: 'test'
+  ...
+# Subtest: a blocked retreat keeps the camera and near-plane sweep on the player side of the wall
+ok 340 - a blocked retreat keeps the camera and near-plane sweep on the player side of the wall
+  ---
+  duration_ms: 139.794823
+  type: 'test'
+  ...
+# Subtest: the recorded third-portal retraction fits feet immediately and rechecks the widened near plane
+ok 341 - the recorded third-portal retraction fits feet immediately and rechecks the widened near plane
+  ---
+  duration_ms: 3.562785
+  type: 'test'
+  ...
+# Subtest: the ordinary non-transported room51 route retains every accepted camera state
+ok 342 - the ordinary non-transported room51 route retains every accepted camera state
+  ---
+  duration_ms: 7819.748966
+  type: 'test'
+  ...
+# Subtest: vertical mechanism policy is limited to Room25 and the actual owned upper castle bay
+ok 343 - vertical mechanism policy is limited to Room25 and the actual owned upper castle bay
+  ---
+  duration_ms: 1.042295
+  type: 'test'
+  ...
+# Subtest: bounded full-body shoulder framing keeps the manual centre line on landscape and portrait screens
+ok 344 - bounded full-body shoulder framing keeps the manual centre line on landscape and portrait screens
+  ---
+  duration_ms: 295.536837
+  type: 'test'
+  ...
+# Subtest: every intermediate wall approach and release rechecks the near-plane volume within the fixed ray budget
+ok 345 - every intermediate wall approach and release rechecks the near-plane volume within the fixed ray budget
+  ---
+  duration_ms: 272.640268
+  type: 'test'
+  ...
+# Subtest: current-body query proxies and cache invalidation retain original blocker ownership and source poses
+ok 346 - current-body query proxies and cache invalidation retain original blocker ownership and source poses
+  ---
+  duration_ms: 23.584802
+  type: 'test'
+  ...
+# Subtest: entering from a wider castle lens sweeps the actual near plane during the smooth FOV transition
+ok 347 - entering from a wider castle lens sweeps the actual near plane during the smooth FOV transition
+  ---
+  duration_ms: 4.213253
+  type: 'test'
+  ...
+# Subtest: a portal rigidly transports the active lens and centre shot before ordinary framing resumes
+ok 348 - a portal rigidly transports the active lens and centre shot before ordinary framing resumes
+  ---
+  duration_ms: 9.548801
+  type: 'test'
+  ...
+# Subtest: measured Room25 gallery pose exposes the real opaque player and reachable wall target with ordinary look controls
+ok 349 - measured Room25 gallery pose exposes the real opaque player and reachable wall target with ordinary look controls
+  ---
+  duration_ms: 5251.365029
+  type: 'test'
+  ...
+# Subtest: production current-box ownership is fresh and the accepted Foundation20 provider remains independent
+ok 350 - production current-box ownership is fresh and the accepted Foundation20 provider remains independent
+  ---
+  duration_ms: 3234.420422
+  type: 'test'
+  ...
+# Subtest: ordinary portrait shoulder retains the character envelope at 320x568, aiming=false
+ok 351 - ordinary portrait shoulder retains the character envelope at 320x568, aiming=false
+  ---
+  duration_ms: 18.210097
+  type: 'test'
+  ...
+# Subtest: ordinary portrait shoulder retains the character envelope at 320x568, aiming=true
+ok 352 - ordinary portrait shoulder retains the character envelope at 320x568, aiming=true
+  ---
+  duration_ms: 6.12362
+  type: 'test'
+  ...
+# Subtest: ordinary portrait shoulder retains the character envelope at 390x844, aiming=false
+ok 353 - ordinary portrait shoulder retains the character envelope at 390x844, aiming=false
+  ---
+  duration_ms: 4.252386
+  type: 'test'
+  ...
+# Subtest: ordinary portrait shoulder retains the character envelope at 390x844, aiming=true
+ok 354 - ordinary portrait shoulder retains the character envelope at 390x844, aiming=true
+  ---
+  duration_ms: 4.085636
+  type: 'test'
+  ...
+# Subtest: ordinary portrait shoulder retains the character envelope at 414x896, aiming=false
+ok 355 - ordinary portrait shoulder retains the character envelope at 414x896, aiming=false
+  ---
+  duration_ms: 5.238506
+  type: 'test'
+  ...
+# Subtest: ordinary portrait shoulder retains the character envelope at 414x896, aiming=true
+ok 356 - ordinary portrait shoulder retains the character envelope at 414x896, aiming=true
+  ---
+  duration_ms: 4.056933
+  type: 'test'
+  ...
+# Subtest: portrait retreat retains the real blocker sweep at a wall behind the player
+ok 357 - portrait retreat retains the real blocker sweep at a wall behind the player
+  ---
+  duration_ms: 62.206215
+  type: 'test'
+  ...
+# Subtest: landscape and square viewports retain the same physical camera path
+ok 358 - landscape and square viewports retain the same physical camera path
+  ---
+  duration_ms: 9.899692
+  type: 'test'
+  ...
+# Subtest: specialized silhouette and mechanism policies keep their authored portrait distance
+ok 359 - specialized silhouette and mechanism policies keep their authored portrait distance
+  ---
+  duration_ms: 0.641621
+  type: 'test'
+  ...
+# Subtest: a cached portrait escape revalidates current collision and keeps aim entry continuous
+ok 360 - a cached portrait escape revalidates current collision and keeps aim entry continuous
+  ---
+  duration_ms: 39.397786
+  type: 'test'
+  ...
+# Subtest: a clear preferred shoulder never inspects opposite candidates
+ok 361 - a clear preferred shoulder never inspects opposite candidates
+  ---
+  duration_ms: 8.166304
+  type: 'test'
+  ...
+# Subtest: a real preferred-side wall admits only a bounded, swept opposite escape and revalidates its cache
+ok 362 - a real preferred-side wall admits only a bounded, swept opposite escape and revalidates its cache
+  ---
+  duration_ms: 43.298407
+  type: 'test'
+  ...
+# Subtest: an opposite endpoint across a newly inserted wall is rejected even when its actor sweep remains clear
+ok 363 - an opposite endpoint across a newly inserted wall is rejected even when its actor sweep remains clear
+  ---
+  duration_ms: 15.198189
+  type: 'test'
+  ...
+# Subtest: only the temporary opposite cache retires when the ordinary boom clears
+ok 364 - only the temporary opposite cache retires when the ordinary boom clears
+  ---
+  duration_ms: 1.442308
+  type: 'test'
+  ...
+# Subtest: wide, square and specialized portrait camera paths never enter the ordinary escape search
+ok 365 - wide, square and specialized portrait camera paths never enter the ordinary escape search
+  ---
+  duration_ms: 84.470334
+  type: 'test'
+  ...
+# Subtest: the ordinary room9 portrait route repeatedly exposes the linkage without changing either actor or crossing walls
+ok 366 - the ordinary room9 portrait route repeatedly exposes the linkage without changing either actor or crossing walls
+  ---
+  duration_ms: 6840.044947
+  type: 'test'
+  ...
+# Subtest: actual first-room portrait start retains the hero and a clear centre ray, aiming=false
+ok 367 - actual first-room portrait start retains the hero and a clear centre ray, aiming=false
+  ---
+  duration_ms: 3138.153638
+  type: 'test'
+  ...
+# Subtest: actual first-room portrait start retains the hero and a clear centre ray, aiming=true
+ok 368 - actual first-room portrait start retains the hero and a clear centre ray, aiming=true
+  ---
+  duration_ms: 1475.35644
+  type: 'test'
+  ...
+# Subtest: classic floor-to-wall flights frame the original traveller on their first rendered frame
+ok 369 - classic floor-to-wall flights frame the original traveller on their first rendered frame
+  ---
+  duration_ms: 17803.709612
+  type: 'test'
+  ...
+# Subtest: ordinary, flat-portal and already-framed tilted views receive no correction
+ok 370 - ordinary, flat-portal and already-framed tilted views receive no correction
+  ---
+  duration_ms: 0.816577
+  type: 'test'
+  ...
+# Subtest: a ceiling above a blocked boom retains a swept lateral escape outside the body
+ok 371 - a ceiling above a blocked boom retains a swept lateral escape outside the body
+  ---
+  duration_ms: 155.50361
+  type: 'test'
+  ...
+# Subtest: the ordinary folded junction route keeps the camera outside the player and inside entry walls
+ok 372 - the ordinary folded junction route keeps the camera outside the player and inside entry walls
+  ---
+  duration_ms: 17017.780547
+  type: 'test'
+  ...
+# Subtest: main world clipping is isolated from portal textures and restored after rendering
+ok 373 - main world clipping is isolated from portal textures and restored after rendering
+  ---
+  duration_ms: 1.696981
+  type: 'test'
+  ...
+# Subtest: walking around the optical access panel releases its clipping plane before inspecting the mirror
+ok 374 - walking around the optical access panel releases its clipping plane before inspecting the mirror
+  ---
+  duration_ms: 15537.950974
+  type: 'test'
+  ...
+# Subtest: the upper light crossing leaves room for a visible, collision-safe camera during the boarding jump
+ok 375 - the upper light crossing leaves room for a visible, collision-safe camera during the boarding jump
+  ---
+  duration_ms: 20869.350974
+  type: 'test'
+  ...
+# Subtest: normal production camera reveals travelling charges and impacts beside the animated uploaded player
+ok 376 - normal production camera reveals travelling charges and impacts beside the animated uploaded player
+  ---
+  duration_ms: 9018.321174
+  type: 'test'
+  ...
+# Subtest: inclined composition lasts beyond discard-plane retirement, but not beyond horizon recovery
+ok 377 - inclined composition lasts beyond discard-plane retirement, but not beyond horizon recovery
+  ---
+  duration_ms: 20.122544
+  type: 'test'
+  ...
+# Subtest: flat exits, unframed transforms and respawns do not retain the inclined search
+ok 378 - flat exits, unframed transforms and respawns do not retain the inclined search
+  ---
+  duration_ms: 1.171765
+  type: 'test'
+  ...
+# Subtest: a chest-only frame is penalized when the upper silhouette extends past the lens
+ok 379 - a chest-only frame is penalized when the upper silhouette extends past the lens
+  ---
+  duration_ms: 0.47902
+  type: 'test'
+  ...
+# Subtest: inclined recovery keeps final collision sweep at side=-1, display=30
+ok 380 - inclined recovery keeps final collision sweep at side=-1, display=30
+  ---
+  duration_ms: 45.463797
+  type: 'test'
+  ...
+# Subtest: inclined recovery keeps final collision sweep at side=-1, display=60
+ok 381 - inclined recovery keeps final collision sweep at side=-1, display=60
+  ---
+  duration_ms: 43.448537
+  type: 'test'
+  ...
+# Subtest: inclined recovery keeps final collision sweep at side=-1, display=120
+ok 382 - inclined recovery keeps final collision sweep at side=-1, display=120
+  ---
+  duration_ms: 41.8843
+  type: 'test'
+  ...
+# Subtest: inclined recovery keeps final collision sweep at side=-1, display=long
+ok 383 - inclined recovery keeps final collision sweep at side=-1, display=long
+  ---
+  duration_ms: 11.362368
+  type: 'test'
+  ...
+# Subtest: inclined recovery keeps final collision sweep at side=1, display=30
+ok 384 - inclined recovery keeps final collision sweep at side=1, display=30
+  ---
+  duration_ms: 7.056222
+  type: 'test'
+  ...
+# Subtest: inclined recovery keeps final collision sweep at side=1, display=60
+ok 385 - inclined recovery keeps final collision sweep at side=1, display=60
+  ---
+  duration_ms: 13.222221
+  type: 'test'
+  ...
+# Subtest: inclined recovery keeps final collision sweep at side=1, display=120
+ok 386 - inclined recovery keeps final collision sweep at side=1, display=120
+  ---
+  duration_ms: 25.09702
+  type: 'test'
+  ...
+# Subtest: inclined recovery keeps final collision sweep at side=1, display=long
+ok 387 - inclined recovery keeps final collision sweep at side=1, display=long
+  ---
+  duration_ms: 10.854405
+  type: 'test'
+  ...
+# Subtest: ordinary room21 solo and joint flights retain the actual skin for the full two-second window
+ok 388 - ordinary room21 solo and joint flights retain the actual skin for the full two-second window
+  ---
+  duration_ms: 22760.194022
+  type: 'test'
+  ...
+# Subtest: castle silhouette fitting is scoped to room41 and clears on ordinary and accepted finale transitions
+ok 389 - castle silhouette fitting is scoped to room41 and clears on ordinary and accepted finale transitions
+  ---
+  duration_ms: 6774.165943
+  type: 'test'
+  ...
+# Subtest: upright confined fit preserves the optical axis, frozen frames and a finite obstruction budget
+ok 390 - upright confined fit preserves the optical axis, frozen frames and a finite obstruction budget
+  ---
+  duration_ms: 2.441654
+  type: 'test'
+  ...
+# Subtest: historical v66 flat-wall queries reproduce fifteen camera crop samples while the actual current castle route fits
+not ok 391 - historical v66 flat-wall queries reproduce fifteen camera crop samples while the actual current castle route fits
+  ---
+  duration_ms: 290682.029565
+  type: 'test'
+  location: '/home/runner/work/brainrot-portal/brainrot-portal/tests/lab-camera-tower41-contact-route.test.js:179:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    8238 !== 7248
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 7248
+  actual: 8238
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///home/runner/work/brainrot-portal/brainrot-portal/tests/lab-camera-tower41-contact-route.test.js:188:12)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: ordinary mouse orbit can target the floor almost directly beneath a high traveller
+ok 392 - ordinary mouse orbit can target the floor almost directly beneath a high traveller
+  ---
+  duration_ms: 23.938368
+  type: 'test'
+  ...
+# Subtest: a falling traveller can fire a real charge into the floor with production aiming
+ok 393 - a falling traveller can fire a real charge into the floor with production aiming
+  ---
+  duration_ms: 3507.351297
+  type: 'test'
+  ...
+# Subtest: third-person default frames a 2.5 m character with no camera roll
+ok 394 - third-person default frames a 2.5 m character with no camera roll
+  ---
+  duration_ms: 8.191781
+  type: 'test'
+  ...
+# Subtest: critical follow and orbit agree during motion at 30 and 120 fps
+ok 395 - critical follow and orbit agree during motion at 30 and 120 fps
+  ---
+  duration_ms: 9.602449
+  type: 'test'
+  ...
+# Subtest: camera retracts on the first blocked frame and releases smoothly
+ok 396 - camera retracts on the first blocked frame and releases smoothly
+  ---
+  duration_ms: 20.861495
+  type: 'test'
+  ...
+# Subtest: camera volume detects a wall edge missed by the centre ray
+ok 397 - camera volume detects a wall edge missed by the centre ray
+  ---
+  duration_ms: 1.722498
+  type: 'test'
+  ...
+# Subtest: teleport clears spring velocity and snaps to the destination side of a wall
+ok 398 - teleport clears spring velocity and snaps to the destination side of a wall
+  ---
+  duration_ms: 3.635871
+  type: 'test'
+  ...
+# Subtest: orbit remains on the player side around corners with a wide near plane
+ok 399 - orbit remains on the player side around corners with a wide near plane
+  ---
+  duration_ms: 89.584771
+  type: 'test'
+  ...
+# Subtest: yaw follows the shortest arc across the angle wrap and speed FOV stays subtle
+ok 400 - yaw follows the shortest arc across the angle wrap and speed FOV stays subtle
+  ---
+  duration_ms: 3.112349
+  type: 'test'
+  ...
+# Subtest: explicit aim blends the shoulder and boom without a first-frame screen kick
+ok 401 - explicit aim blends the shoulder and boom without a first-frame screen kick
+  ---
+  duration_ms: 11.33695
+  type: 'test'
+  ...
+# Subtest: aim framing follows the same continuous path at 30, 60 and 144 fps
+ok 402 - aim framing follows the same continuous path at 30, 60 and 144 fps
+  ---
+  duration_ms: 11.155022
+  type: 'test'
+  ...
+# Subtest: portal transport preserves the rendered lens, momentum, FOV and aim instead of resetting the rig
+ok 403 - portal transport preserves the rendered lens, momentum, FOV and aim instead of resetting the rig
+  ---
+  duration_ms: 2.474775
+  type: 'test'
+  ...
+# Subtest: floor exit horizon and capsule correction recover continuously after transport
+ok 404 - floor exit horizon and capsule correction recover continuously after transport
+  ---
+  duration_ms: 10.068385
+  type: 'test'
+  ...
+# Subtest: aperture-aware camera collision receives each hit without ignoring the rest of its wall
+ok 405 - aperture-aware camera collision receives each hit without ignoring the rest of its wall
+  ---
+  duration_ms: 4.953809
+  type: 'test'
+  ...
+# Subtest: transported lens clips its backing with a world plane while keeping ordinary depth precision
+ok 406 - transported lens clips its backing with a world plane while keeping ordinary depth precision
+  ---
+  duration_ms: 0.957868
+  type: 'test'
+  ...
+# Subtest: a vertical portal view does not convert an Euler singularity into an orbit whip
+ok 407 - a vertical portal view does not convert an Euler singularity into an orbit whip
+  ---
+  duration_ms: 0.652743
+  type: 'test'
+  ...
+# Subtest: floor and wall passages preserve mouse pitch while the transported horizon recovers
+ok 408 - floor and wall passages preserve mouse pitch while the transported horizon recovers
+  ---
+  duration_ms: 69.805126
+  type: 'test'
+  ...
+# Subtest: emerging portal lens never reverses depth or retains a clipping plane behind its eye
+ok 409 - emerging portal lens never reverses depth or retains a clipping plane behind its eye
+  ---
+  duration_ms: 1.411401
+  type: 'test'
+  ...
+# Subtest: a new player can launch only the first room, including through a direct late-room request
+ok 410 - a new player can launch only the first room, including through a direct late-room request
+  ---
+  duration_ms: 3.504407
+  type: 'test'
+  ...
+# Subtest: each real campaign win opens exactly one next room and the castle is the fifty-first
+ok 411 - each real campaign win opens exactly one next room and the castle is the fifty-first
+  ---
+  duration_ms: 6.439186
+  type: 'test'
+  ...
+# Subtest: sparse accepted historical completions remain replayable without opening their intervening rooms
+ok 412 - sparse accepted historical completions remain replayable without opening their intervening rooms
+  ---
+  duration_ms: 0.436471
+  type: 'test'
+  ...
+# Subtest: a completed late replay cannot skip an earlier gap through the normal next-room request
+ok 413 - a completed late replay cannot skip an earlier gap through the normal next-room request
+  ---
+  duration_ms: 0.188671
+  type: 'test'
+  ...
+# Subtest: unlocking survives a real preference save and reload without a second access record
+ok 414 - unlocking survives a real preference save and reload without a second access record
+  ---
+  duration_ms: 0.83495
+  type: 'test'
+  ...
+# Subtest: unrelated and malformed completions cannot open rooms in an edition or reordered selection
+ok 415 - unrelated and malformed completions cannot open rooms in an edition or reordered selection
+  ---
+  duration_ms: 0.250436
+  type: 'test'
+  ...
+# Subtest: the access projection cannot mutate campaign order or save data through returned arrays
+ok 416 - the access projection cannot mutate campaign order or save data through returned arrays
+  ---
+  duration_ms: 0.622636
+  type: 'test'
+  ...
+# Subtest: discovery relief reserves full portal aperture and adds bounded instanced art only
+ok 417 - discovery relief reserves full portal aperture and adds bounded instanced art only
+  ---
+  duration_ms: 15.171621
+  type: 'test'
+  ...
+# Subtest: dynamo relief reserves full portal aperture and adds bounded instanced art only
+ok 418 - dynamo relief reserves full portal aperture and adds bounded instanced art only
+  ---
+  duration_ms: 4.743438
+  type: 'test'
+  ...
+# Subtest: biosphere relief reserves full portal aperture and adds bounded instanced art only
+ok 419 - biosphere relief reserves full portal aperture and adds bounded instanced art only
+  ---
+  duration_ms: 4.848533
+  type: 'test'
+  ...
+# Subtest: observatory relief reserves full portal aperture and adds bounded instanced art only
+ok 420 - observatory relief reserves full portal aperture and adds bounded instanced art only
+  ---
+  duration_ms: 3.616755
+  type: 'test'
+  ...
+# Subtest: fracture relief reserves full portal aperture and adds bounded instanced art only
+ok 421 - fracture relief reserves full portal aperture and adds bounded instanced art only
+  ---
+  duration_ms: 3.909118
+  type: 'test'
+  ...
+# Subtest: castle relief reserves full portal aperture and adds bounded instanced art only
+ok 422 - castle relief reserves full portal aperture and adds bounded instanced art only
+  ---
+  duration_ms: 4.157049
+  type: 'test'
+  ...
+# Subtest: ornamental motion follows elapsed simulation time, freezes at zero dt and resets without changing delegated behavior
+ok 423 - ornamental motion follows elapsed simulation time, freezes at zero dt and resets without changing delegated behavior
+  ---
+  duration_ms: 3.307722
+  type: 'test'
+  ...
+# Subtest: level disposal releases every generated resource exactly once and stops later decoration updates
+ok 424 - level disposal releases every generated resource exactly once and stops later decoration updates
+  ---
+  duration_ms: 1.52975
+  type: 'test'
+  ...
+# Subtest: absence of a genuine wall support creates no floating ornament or update wrapper
+ok 425 - absence of a genuine wall support creates no floating ornament or update wrapper
+  ---
+  duration_ms: 0.488507
+  type: 'test'
+  ...
+# Subtest: a small detail budget covers every wall before repeating one bay
+ok 426 - a small detail budget covers every wall before repeating one bay
+  ---
+  duration_ms: 0.594855
+  type: 'test'
+  ...
+# Subtest: discovery calibrations use offset open arcs and copper rather than closed porcelain-like portal targets
+ok 427 - discovery calibrations use offset open arcs and copper rather than closed porcelain-like portal targets
+  ---
+  duration_ms: 1.418473
+  type: 'test'
+  ...
+# Subtest: observed return-sluice wall fields receive eye-height relief while moving and portal surfaces remain excluded
+ok 428 - observed return-sluice wall fields receive eye-height relief while moving and portal surfaces remain excluded
+  ---
+  duration_ms: 1.848483
+  type: 'test'
+  ...
+# Subtest: observed archive screen relief needs its full footprint inside the authored fixed shell slab
+ok 429 - observed archive screen relief needs its full footprint inside the authored fixed shell slab
+  ---
+  duration_ms: 0.760752
+  type: 'test'
+  ...
+# Subtest: castle lancets face the atrium on complete fixed piers and reserve actual portal openings
+ok 430 - castle lancets face the atrium on complete fixed piers and reserve actual portal openings
+  ---
+  duration_ms: 0.740264
+  type: 'test'
+  ...
+# Subtest: the actual active fifty-one-room campaign has three authored hints per room
+ok 431 - the actual active fifty-one-room campaign has three authored hints per room
+  ---
+  duration_ms: 1.619767
+  type: 'test'
+  ...
+# Subtest: mock SDK rewards reveal and persist all three actual hints in every room without completing rooms
+ok 432 - mock SDK rewards reveal and persist all three actual hints in every room without completing rooms
+  ---
+  duration_ms: 17.488613
+  type: 'test'
+  ...
+# Subtest: all fifty ordinary rooms precede the castle exactly once
+ok 433 - all fifty ordinary rooms precede the castle exactly once
+  ---
+  duration_ms: 2.138902
+  type: 'test'
+  ...
+# Subtest: fifth chapter navigation and numbering lead into one final castle
+ok 434 - fifth chapter navigation and numbering lead into one final castle
+  ---
+  duration_ms: 0.289778
+  type: 'test'
+  ...
+# Subtest: permanent room bookmarks retain their original actor and save identity
+ok 435 - permanent room bookmarks retain their original actor and save identity
+  ---
+  duration_ms: 1.502981
+  type: 'test'
+  ...
+# Subtest: Campaign signs follow the final castle order without changing readings
+ok 436 - Campaign signs follow the final castle order without changing readings
+  ---
+  duration_ms: 1.096115
+  type: 'test'
+  ...
+# Subtest: Archive, previews and unnumbered descriptions retain their text
+ok 437 - Archive, previews and unnumbered descriptions retain their text
+  ---
+  duration_ms: 0.189161
+  type: 'test'
+  ...
+# Subtest: v59 imports the whole v58 record, reopens only the expanded castle and preserves every historical byte
+ok 438 - v59 imports the whole v58 record, reopens only the expanded castle and preserves every historical byte
+  ---
+  duration_ms: 4.123556
+  type: 'test'
+  ...
+# Subtest: v59 chooses one newest predecessor including its legacy key, then v57, v56, v55 and Foundation
+ok 439 - v59 chooses one newest predecessor including its legacy key, then v57, v56, v55 and Foundation
+  ---
+  duration_ms: 1.763094
+  type: 'test'
+  ...
+# Subtest: v59 own primary and legacy records retain new castle victories; corrupt newest records block all fallback writes
+ok 440 - v59 own primary and legacy records retain new castle victories; corrupt newest records block all fallback writes
+  ---
+  duration_ms: 0.583815
+  type: 'test'
+  ...
+# Subtest: only exact v59 entries use its namespace and old v58 imports keep the old castle completion
+ok 441 - only exact v59 entries use its namespace and old v58 imports keep the old castle completion
+  ---
+  duration_ms: 0.330334
+  type: 'test'
+  ...
+# Subtest: v57 imports the newest v56 record once and all later saves leave every predecessor byte intact
+ok 442 - v57 imports the newest v56 record once and all later saves leave every predecessor byte intact
+  ---
+  duration_ms: 0.401936
+  type: 'test'
+  ...
+# Subtest: v57 exact entry boundaries isolate saves and preview paths retain their original namespace
+ok 443 - v57 exact entry boundaries isolate saves and preview paths retain their original namespace
+  ---
+  duration_ms: 0.203929
+  type: 'test'
+  ...
+# Subtest: v57 selects a predecessor as a whole, including legacy v56 and fallback v55 then Foundation
+ok 444 - v57 selects a predecessor as a whole, including legacy v56 and fallback v55 then Foundation
+  ---
+  duration_ms: 0.59782
+  type: 'test'
+  ...
+# Subtest: v57 own legacy data takes precedence and corrupt newest records never import older progress
+ok 445 - v57 own legacy data takes precedence and corrupt newest records never import older progress
+  ---
+  duration_ms: 0.277926
+  type: 'test'
+  ...
+# Subtest: only the exact candidate entry and its GitHub project prefix use the isolated campaign namespace
+ok 446 - only the exact candidate entry and its GitHub project prefix use the isolated campaign namespace
+  ---
+  duration_ms: 0.411704
+  type: 'test'
+  ...
+# Subtest: a first candidate visit imports old progress by reading and saves only into its own namespace
+ok 447 - a first candidate visit imports old progress by reading and saves only into its own namespace
+  ---
+  duration_ms: 0.609522
+  type: 'test'
+  ...
+# Subtest: own legacy records outrank historical primary records and corrupt own data never re-imports historical progress
+ok 448 - own legacy records outrank historical primary records and corrupt own data never re-imports historical progress
+  ---
+  duration_ms: 0.366491
+  type: 'test'
+  ...
+# Subtest: root and opted-in previews keep their existing storage boundaries
+ok 449 - root and opted-in previews keep their existing storage boundaries
+  ---
+  duration_ms: 0.555742
+  type: 'test'
+  ...
+# Subtest: blocked reads cannot turn an imported candidate into a write over historical data
+ok 450 - blocked reads cannot turn an imported candidate into a write over historical data
+  ---
+  duration_ms: 0.181738
+  type: 'test'
+  ...
+# Subtest: v56 imports the latest v55 progress and leaves both previous editions intact
+ok 451 - v56 imports the latest v55 progress and leaves both previous editions intact
+  ---
+  duration_ms: 0.333569
+  type: 'test'
+  ...
+# Subtest: v56 keeps its exact entry boundary and never reimports over corrupt own progress
+ok 452 - v56 keeps its exact entry boundary and never reimports over corrupt own progress
+  ---
+  duration_ms: 0.238734
+  type: 'test'
+  ...
+# Subtest: v56 falls back to Foundation for a first visit and imports v55 legacy saves before older primary saves
+ok 453 - v56 falls back to Foundation for a first visit and imports v55 legacy saves before older primary saves
+  ---
+  duration_ms: 0.259341
+  type: 'test'
+  ...
+# Subtest: v56 own legacy progress wins and an unreadable v55 save never silently downgrades to Foundation
+ok 454 - v56 own legacy progress wins and an unreadable v55 save never silently downgrades to Foundation
+  ---
+  duration_ms: 0.276884
+  type: 'test'
+  ...
+# Subtest: Five exact ten-room themes precede the separate castle finale without changing save indices
+ok 455 - Five exact ten-room themes precede the separate castle finale without changing save indices
+  ---
+  duration_ms: 2.486968
+  type: 'test'
+  ...
+# Subtest: Theme copies architecture without recoloring original actors, signals, portal surfaces or shared source materials
+ok 456 - Theme copies architecture without recoloring original actors, signals, portal surfaces or shared source materials
+  ---
+  duration_ms: 4.269637
+  type: 'test'
+  ...
+# Subtest: Classic and open editions do not inherit foundation theme or metadata
+ok 457 - Classic and open editions do not inherit foundation theme or metadata
+  ---
+  duration_ms: 1.23906
+  type: 'test'
+  ...
+# Subtest: Castle theme preserves independently colored wing navigation accents
+ok 458 - Castle theme preserves independently colored wing navigation accents
+  ---
+  duration_ms: 1.332825
+  type: 'test'
+  ...
+# Subtest: Castle theme retains the authored mineral walls and floor inlays of each wing
+ok 459 - Castle theme retains the authored mineral walls and floor inlays of each wing
+  ---
+  duration_ms: 1.174811
+  type: 'test'
+  ...
+# Subtest: Castle common gallery floor and recessed soffit retain separate mineral values without recoloring unclassified machine metal
+ok 460 - Castle common gallery floor and recessed soffit retain separate mineral values without recoloring unclassified machine metal
+  ---
+  duration_ms: 1.171295
+  type: 'test'
+  ...
+# Subtest: Instanced architectural skin receives the same chapter palette without changing placement or portal instances
+ok 461 - Instanced architectural skin receives the same chapter palette without changing placement or portal instances
+  ---
+  duration_ms: 3.291833
+  type: 'test'
+  ...
+# Subtest: v58 reads the complete newest save and persists only its own progress across reloads
+ok 462 - v58 reads the complete newest save and persists only its own progress across reloads
+  ---
+  duration_ms: 4.126783
+  type: 'test'
+  ...
+# Subtest: v58 imports one whole preceding namespace, including its legacy key, without mixing older fields
+ok 463 - v58 imports one whole preceding namespace, including its legacy key, without mixing older fields
+  ---
+  duration_ms: 1.687733
+  type: 'test'
+  ...
+# Subtest: v58 never downgrades corrupt current or newest previous data to an older valid save
+ok 464 - v58 never downgrades corrupt current or newest previous data to an older valid save
+  ---
+  duration_ms: 0.481424
+  type: 'test'
+  ...
+# Subtest: only exact v58 entry paths select the new namespace and preview opts remain isolated
+ok 465 - only exact v58 entry paths select the new namespace and preview opts remain isolated
+  ---
+  duration_ms: 0.346253
+  type: 'test'
+  ...
+# Subtest: v60 preserves every v59 completion including the expanded castle and writes only its own record
+ok 466 - v60 preserves every v59 completion including the expanded castle and writes only its own record
+  ---
+  duration_ms: 3.189072
+  type: 'test'
+  ...
+# Subtest: v60 chooses one complete preceding namespace and retains v59 legacy-key castle progress
+ok 467 - v60 chooses one complete preceding namespace and retains v59 legacy-key castle progress
+  ---
+  duration_ms: 2.095361
+  type: 'test'
+  ...
+# Subtest: corrupt own or newest historical v60 imports never downgrade to older data
+ok 468 - corrupt own or newest historical v60 imports never downgrade to older data
+  ---
+  duration_ms: 0.425199
+  type: 'test'
+  ...
+# Subtest: only exact v60 entry paths activate the new isolated namespace
+ok 469 - only exact v60 entry paths activate the new isolated namespace
+  ---
+  duration_ms: 0.251968
+  type: 'test'
+  ...
+# Subtest: v61 preserves every v60 completion including the expanded castle and writes only its own record
+ok 470 - v61 preserves every v60 completion including the expanded castle and writes only its own record
+  ---
+  duration_ms: 3.247139
+  type: 'test'
+  ...
+# Subtest: v61 chooses one complete preceding namespace and retains v60 and v59 legacy-key castle progress
+ok 471 - v61 chooses one complete preceding namespace and retains v60 and v59 legacy-key castle progress
+  ---
+  duration_ms: 2.232907
+  type: 'test'
+  ...
+# Subtest: corrupt own or newest historical v61 imports never downgrade to older data
+ok 472 - corrupt own or newest historical v61 imports never downgrade to older data
+  ---
+  duration_ms: 1.171796
+  type: 'test'
+  ...
+# Subtest: only exact v61 entry paths activate the new isolated namespace
+ok 473 - only exact v61 entry paths activate the new isolated namespace
+  ---
+  duration_ms: 0.294777
+  type: 'test'
+  ...
+# Subtest: v62 imports all51 v61 completions including biosphere and castle, while every historical byte remains intact
+ok 474 - v62 imports all51 v61 completions including biosphere and castle, while every historical byte remains intact
+  ---
+  duration_ms: 3.280241
+  type: 'test'
+  ...
+# Subtest: actual bootstrap still invalidates missing or stale room23 mechanism revision without touching v61 bytes
+ok 475 - actual bootstrap still invalidates missing or stale room23 mechanism revision without touching v61 bytes
+  ---
+  duration_ms: 0.900141
+  type: 'test'
+  ...
+# Subtest: presentation fixture retains completed22 and hint22, while the old malformed fixture reproduces their invalidation
+ok 476 - presentation fixture retains completed22 and hint22, while the old malformed fixture reproduces their invalidation
+  ---
+  duration_ms: 0.642263
+  type: 'test'
+  ...
+# Subtest: v62 selects one newest whole namespace and applies old castle migration only before v59
+ok 477 - v62 selects one newest whole namespace and applies old castle migration only before v59
+  ---
+  duration_ms: 3.716801
+  type: 'test'
+  ...
+# Subtest: corrupt own or newest v62 predecessor never downgrades progress or overwrites the damaged data
+ok 478 - corrupt own or newest v62 predecessor never downgrades progress or overwrites the damaged data
+  ---
+  duration_ms: 0.639448
+  type: 'test'
+  ...
+# Subtest: v62 own legacy data does not mix missing keys with another edition
+ok 479 - v62 own legacy data does not mix missing keys with another edition
+  ---
+  duration_ms: 0.363034
+  type: 'test'
+  ...
+# Subtest: only exact v62 entry paths activate its namespace, while historical and preview paths retain theirs
+ok 480 - only exact v62 entry paths activate its namespace, while historical and preview paths retain theirs
+  ---
+  duration_ms: 0.302392
+  type: 'test'
+  ...
+# Subtest: v63 reads the whole accepted v62 sparse record without startup writes or an invented frontier field
+ok 481 - v63 reads the whole accepted v62 sparse record without startup writes or an invented frontier field
+  ---
+  duration_ms: 4.670031
+  type: 'test'
+  ...
+# Subtest: v63 keeps all51 accepted v62 completions, expanded castle hints and settings intact
+ok 482 - v63 keeps all51 accepted v62 completions, expanded castle hints and settings intact
+  ---
+  duration_ms: 0.958811
+  type: 'test'
+  ...
+# Subtest: v63 chooses each newest whole predecessor, with castle migration only for pre-v59 records
+ok 483 - v63 chooses each newest whole predecessor, with castle migration only for pre-v59 records
+  ---
+  duration_ms: 5.544565
+  type: 'test'
+  ...
+# Subtest: v63 corrupt own or newest predecessor blocks older import and every unsafe write
+ok 484 - v63 corrupt own or newest predecessor blocks older import and every unsafe write
+  ---
+  duration_ms: 2.703239
+  type: 'test'
+  ...
+# Subtest: v63 own primary and legacy keys never mix missing keys with older namespaces
+ok 485 - v63 own primary and legacy keys never mix missing keys with older namespaces
+  ---
+  duration_ms: 0.510147
+  type: 'test'
+  ...
+# Subtest: only exact v63 entry paths activate its namespace and historical paths retain their prefix
+ok 486 - only exact v63 entry paths activate its namespace and historical paths retain their prefix
+  ---
+  duration_ms: 0.389764
+  type: 'test'
+  ...
+# Subtest: v63 blocked reads cannot persist an empty private or historical record
+ok 487 - v63 blocked reads cannot persist an empty private or historical record
+  ---
+  duration_ms: 0.233764
+  type: 'test'
+  ...
+# Subtest: v64 reads a whole valid v63 sparse record without startup writes or an invented frontier field
+ok 488 - v64 reads a whole valid v63 sparse record without startup writes or an invented frontier field
+  ---
+  duration_ms: 3.457008
+  type: 'test'
+  ...
+# Subtest: v64 keeps all51 v63 completions, expanded castle hints and settings intact
+ok 489 - v64 keeps all51 v63 completions, expanded castle hints and settings intact
+  ---
+  duration_ms: 0.658594
+  type: 'test'
+  ...
+# Subtest: v64 chooses each newest whole predecessor, with castle migration only for pre-v59 records
+ok 490 - v64 chooses each newest whole predecessor, with castle migration only for pre-v59 records
+  ---
+  duration_ms: 4.789693
+  type: 'test'
+  ...
+# Subtest: v64 corrupt own or newest predecessor blocks older import and every unsafe write
+ok 491 - v64 corrupt own or newest predecessor blocks older import and every unsafe write
+  ---
+  duration_ms: 2.852556
+  type: 'test'
+  ...
+# Subtest: v64 own primary and legacy keys never mix missing keys with older namespaces
+ok 492 - v64 own primary and legacy keys never mix missing keys with older namespaces
+  ---
+  duration_ms: 1.496078
+  type: 'test'
+  ...
+# Subtest: only exact v64 entry paths activate its namespace and historical paths retain their prefix
+ok 493 - only exact v64 entry paths activate its namespace and historical paths retain their prefix
+  ---
+  duration_ms: 0.369706
+  type: 'test'
+  ...
+# Subtest: v64 blocked reads cannot persist an empty private or historical record
+ok 494 - v64 blocked reads cannot persist an empty private or historical record
+  ---
+  duration_ms: 0.208697
+  type: 'test'
+  ...
+# Subtest: v65 imports all51 v64 wins and castle hints without writes, then checkpoints only its own record
+ok 495 - v65 imports all51 v64 wins and castle hints without writes, then checkpoints only its own record
+  ---
+  duration_ms: 2.900245
+  type: 'test'
+  ...
+# Subtest: a corrupt own v65 record cannot fall back to v64 or overwrite either record before an advert
+ok 496 - a corrupt own v65 record cannot fall back to v64 or overwrite either record before an advert
+  ---
+  duration_ms: 0.329101
+  type: 'test'
+  ...
+# Subtest: all exact v66 public paths use own namespace; archives and lookalikes do not
+ok 497 - all exact v66 public paths use own namespace; archives and lookalikes do not
+  ---
+  duration_ms: 4.4805
+  type: 'test'
+  ...
+# Subtest: v66 imports newest v65 all51 wins and castle hints, and checkpoints only its own record
+ok 498 - v66 imports newest v65 all51 wins and castle hints, and checkpoints only its own record
+  ---
+  duration_ms: 1.040743
+  type: 'test'
+  ...
+# Subtest: corrupt own v66 progress never reimports a prior victory or overwrites a save
+ok 499 - corrupt own v66 progress never reimports a prior victory or overwrites a save
+  ---
+  duration_ms: 0.469792
+  type: 'test'
+  ...
+# Subtest: all exact v67 public paths use own namespace; archives and lookalikes do not
+ok 500 - all exact v67 public paths use own namespace; archives and lookalikes do not
+  ---
+  duration_ms: 3.437743
+  type: 'test'
+  ...
+# Subtest: v67 imports newest v66 all51 wins and castle hints, and checkpoints only its own record
+ok 501 - v67 imports newest v66 all51 wins and castle hints, and checkpoints only its own record
+  ---
+  duration_ms: 0.836263
+  type: 'test'
+  ...
+# Subtest: corrupt own v67 progress never reimports a prior victory or overwrites a save
+ok 502 - corrupt own v67 progress never reimports a prior victory or overwrites a save
+  ---
+  duration_ms: 0.395915
+  type: 'test'
+  ...
+# Subtest: original tilted cube cannot fit a cargo aperture that admits its centre and upright shape
+ok 503 - original tilted cube cannot fit a cargo aperture that admits its centre and upright shape
+  ---
+  duration_ms: 1.822514
+  type: 'test'
+  ...
+# Subtest: swept cargo admission rejects the rotated destination while preserving upright transfer
+ok 504 - swept cargo admission rejects the rotated destination while preserving upright transfer
+  ---
+  duration_ms: 1.149164
+  type: 'test'
+  ...
+# Subtest: source cargo aperture also rejects protruding box corners
+ok 505 - source cargo aperture also rejects protruding box corners
+  ---
+  duration_ms: 0.397959
+  type: 'test'
+  ...
+# Subtest: box admission uses the body orientation at the crossing time
+ok 506 - box admission uses the body orientation at the crossing time
+  ---
+  duration_ms: 0.343818
+  type: 'test'
+  ...
+# Subtest: cargo portal exit clearance cannot bypass near axis-aligned or tilted barriers
+ok 507 - cargo portal exit clearance cannot bypass near axis-aligned or tilted barriers
+  ---
+  duration_ms: 138.721112
+  type: 'test'
+  ...
+# Subtest: player portal exit clearance and internal pair closing cannot bypass separate nearby barriers
+ok 508 - player portal exit clearance and internal pair closing cannot bypass separate nearby barriers
+  ---
+  duration_ms: 13.341372
+  type: 'test'
+  ...
+# Subtest: tilted obstacle transit keeps tangent and angular momentum without an interpolated wall trail
+ok 509 - tilted obstacle transit keeps tangent and angular momentum without an interpolated wall trail
+  ---
+  duration_ms: 0.731598
+  type: 'test'
+  ...
+# Subtest: pickup, approach, owner transfer, clear and release cannot smuggle held cargo through a destination barrier
+ok 510 - pickup, approach, owner transfer, clear and release cannot smuggle held cargo through a destination barrier
+  ---
+  duration_ms: 163.773846
+  type: 'test'
+  ...
+# Subtest: a production-permitted near-skin portal placement still cannot bypass its independent front barrier
+ok 511 - a production-permitted near-skin portal placement still cannot bypass its independent front barrier
+  ---
+  duration_ms: 3.866198
+  type: 'test'
+  ...
+# Subtest: release at throat 0.7, clear delay 0 stays on original side
+ok 512 - release at throat 0.7, clear delay 0 stays on original side
+  ---
+  duration_ms: 115.515779
+  type: 'test'
+  ...
+# Subtest: release at throat 0.7, clear delay 1 stays on original side
+ok 513 - release at throat 0.7, clear delay 1 stays on original side
+  ---
+  duration_ms: 66.823598
+  type: 'test'
+  ...
+# Subtest: release at throat 0.7, clear delay 5 stays on original side
+ok 514 - release at throat 0.7, clear delay 5 stays on original side
+  ---
+  duration_ms: 43.967238
+  type: 'test'
+  ...
+# Subtest: release at throat 0.7, clear delay 30 stays on original side
+ok 515 - release at throat 0.7, clear delay 30 stays on original side
+  ---
+  duration_ms: 43.072618
+  type: 'test'
+  ...
+# Subtest: release at throat 0.7, clear delay open pair stays on original side
+ok 516 - release at throat 0.7, clear delay open pair stays on original side
+  ---
+  duration_ms: 45.608726
+  type: 'test'
+  ...
+# Subtest: release at throat 0.4, clear delay 0 stays on original side
+ok 517 - release at throat 0.4, clear delay 0 stays on original side
+  ---
+  duration_ms: 31.033122
+  type: 'test'
+  ...
+# Subtest: release at throat 0.4, clear delay 1 stays on original side
+ok 518 - release at throat 0.4, clear delay 1 stays on original side
+  ---
+  duration_ms: 18.431052
+  type: 'test'
+  ...
+# Subtest: release at throat 0.4, clear delay 5 stays on original side
+ok 519 - release at throat 0.4, clear delay 5 stays on original side
+  ---
+  duration_ms: 21.930872
+  type: 'test'
+  ...
+# Subtest: release at throat 0.4, clear delay 30 stays on original side
+ok 520 - release at throat 0.4, clear delay 30 stays on original side
+  ---
+  duration_ms: 22.78652
+  type: 'test'
+  ...
+# Subtest: release at throat 0.4, clear delay open pair stays on original side
+ok 521 - release at throat 0.4, clear delay open pair stays on original side
+  ---
+  duration_ms: 16.677245
+  type: 'test'
+  ...
+# Subtest: release at throat 0.3, clear delay 0 stays on original side
+ok 522 - release at throat 0.3, clear delay 0 stays on original side
+  ---
+  duration_ms: 15.233187
+  type: 'test'
+  ...
+# Subtest: release at throat 0.3, clear delay 1 stays on original side
+ok 523 - release at throat 0.3, clear delay 1 stays on original side
+  ---
+  duration_ms: 22.754882
+  type: 'test'
+  ...
+# Subtest: release at throat 0.3, clear delay 5 stays on original side
+ok 524 - release at throat 0.3, clear delay 5 stays on original side
+  ---
+  duration_ms: 12.555343
+  type: 'test'
+  ...
+# Subtest: release at throat 0.3, clear delay 30 stays on original side
+ok 525 - release at throat 0.3, clear delay 30 stays on original side
+  ---
+  duration_ms: 19.56573
+  type: 'test'
+  ...
+# Subtest: release at throat 0.3, clear delay open pair stays on original side
+ok 526 - release at throat 0.3, clear delay open pair stays on original side
+  ---
+  duration_ms: 20.084052
+  type: 'test'
+  ...
+# Subtest: release at throat 0.2, clear delay 0 stays on original side
+ok 527 - release at throat 0.2, clear delay 0 stays on original side
+  ---
+  duration_ms: 18.326168
+  type: 'test'
+  ...
+# Subtest: release at throat 0.2, clear delay 1 stays on original side
+ok 528 - release at throat 0.2, clear delay 1 stays on original side
+  ---
+  duration_ms: 15.390317
+  type: 'test'
+  ...
+# Subtest: release at throat 0.2, clear delay 5 stays on original side
+ok 529 - release at throat 0.2, clear delay 5 stays on original side
+  ---
+  duration_ms: 28.222704
+  type: 'test'
+  ...
+# Subtest: release at throat 0.2, clear delay 30 stays on original side
+ok 530 - release at throat 0.2, clear delay 30 stays on original side
+  ---
+  duration_ms: 15.158115
+  type: 'test'
+  ...
+# Subtest: release at throat 0.2, clear delay open pair stays on original side
+ok 531 - release at throat 0.2, clear delay open pair stays on original side
+  ---
+  duration_ms: 17.5787
+  type: 'test'
+  ...
+# Subtest: release at throat 0.1, clear delay 0 stays on original side
+ok 532 - release at throat 0.1, clear delay 0 stays on original side
+  ---
+  duration_ms: 18.291974
+  type: 'test'
+  ...
+# Subtest: release at throat 0.1, clear delay 1 stays on original side
+ok 533 - release at throat 0.1, clear delay 1 stays on original side
+  ---
+  duration_ms: 6.961065
+  type: 'test'
+  ...
+# Subtest: release at throat 0.1, clear delay 5 stays on original side
+ok 534 - release at throat 0.1, clear delay 5 stays on original side
+  ---
+  duration_ms: 7.58347
+  type: 'test'
+  ...
+# Subtest: release at throat 0.1, clear delay 30 stays on original side
+ok 535 - release at throat 0.1, clear delay 30 stays on original side
+  ---
+  duration_ms: 9.61851
+  type: 'test'
+  ...
+# Subtest: release at throat 0.1, clear delay open pair stays on original side
+ok 536 - release at throat 0.1, clear delay open pair stays on original side
+  ---
+  duration_ms: 11.684536
+  type: 'test'
+  ...
+# Subtest: internal pair closing then ordinary release remains a front-side contact at throat 0.7
+ok 537 - internal pair closing then ordinary release remains a front-side contact at throat 0.7
+  ---
+  duration_ms: 7.193537
+  type: 'test'
+  ...
+# Subtest: clear while still holding the original box recovers the complete grip at throat 0.7
+ok 538 - clear while still holding the original box recovers the complete grip at throat 0.7
+  ---
+  duration_ms: 6.584306
+  type: 'test'
+  ...
+# Subtest: internal pair closing then ordinary release remains a front-side contact at throat 0.4
+ok 539 - internal pair closing then ordinary release remains a front-side contact at throat 0.4
+  ---
+  duration_ms: 7.692323
+  type: 'test'
+  ...
+# Subtest: clear while still holding the original box recovers the complete grip at throat 0.4
+ok 540 - clear while still holding the original box recovers the complete grip at throat 0.4
+  ---
+  duration_ms: 8.56814
+  type: 'test'
+  ...
+# Subtest: internal pair closing then ordinary release remains a front-side contact at throat 0.3
+ok 541 - internal pair closing then ordinary release remains a front-side contact at throat 0.3
+  ---
+  duration_ms: 20.472202
+  type: 'test'
+  ...
+# Subtest: clear while still holding the original box recovers the complete grip at throat 0.3
+ok 542 - clear while still holding the original box recovers the complete grip at throat 0.3
+  ---
+  duration_ms: 16.056333
+  type: 'test'
+  ...
+# Subtest: internal pair closing then ordinary release remains a front-side contact at throat 0.2
+ok 543 - internal pair closing then ordinary release remains a front-side contact at throat 0.2
+  ---
+  duration_ms: 22.692411
+  type: 'test'
+  ...
+# Subtest: clear while still holding the original box recovers the complete grip at throat 0.2
+ok 544 - clear while still holding the original box recovers the complete grip at throat 0.2
+  ---
+  duration_ms: 9.007565
+  type: 'test'
+  ...
+# Subtest: internal pair closing then ordinary release remains a front-side contact at throat 0.1
+ok 545 - internal pair closing then ordinary release remains a front-side contact at throat 0.1
+  ---
+  duration_ms: 10.68253
+  type: 'test'
+  ...
+# Subtest: clear while still holding the original box recovers the complete grip at throat 0.1
+ok 546 - clear while still holding the original box recovers the complete grip at throat 0.1
+  ---
+  duration_ms: 9.342167
+  type: 'test'
+  ...
+# Subtest: an ordinary moving release retains earned inward speed and sends the original free box through the pair
+ok 547 - an ordinary moving release retains earned inward speed and sends the original free box through the pair
+  ---
+  duration_ms: 4.962485
+  type: 'test'
+  ...
+# Subtest: legal free cargo behind a backing is never pulled to the player side
+ok 548 - legal free cargo behind a backing is never pulled to the player side
+  ---
+  duration_ms: 10.499546
+  type: 'test'
+  ...
+# Subtest: the same original free cargo still traverses a real smaller floor-to-wall portal
+ok 549 - the same original free cargo still traverses a real smaller floor-to-wall portal
+  ---
+  duration_ms: 2.384478
+  type: 'test'
+  ...
+# Subtest: a rack spring rejects a pulse before a tooth and retains a captured stroke after complete power loss
+ok 550 - a rack spring rejects a pulse before a tooth and retains a captured stroke after complete power loss
+  ---
+  duration_ms: 2.280815
+  type: 'test'
+  ...
+# Subtest: one true source retracts only its own lock rack and leaves the common doorway constrained
+ok 551 - one true source retracts only its own lock rack and leaves the common doorway constrained
+  ---
+  duration_ms: 43.901003
+  type: 'test'
+  ...
+# Subtest: the actual visible racks, pawls and door arms retain earned clearance after both raw inputs disappear
+ok 552 - the actual visible racks, pawls and door arms retain earned clearance after both raw inputs disappear
+  ---
+  duration_ms: 9.081853
+  type: 'test'
+  ...
+# Subtest: a nearly complete uncaptured stroke releases transiently, then springs back and blocks the yoke
+ok 553 - a nearly complete uncaptured stroke releases transiently, then springs back and blocks the yoke
+  ---
+  duration_ms: 7.868911
+  type: 'test'
+  ...
+# Subtest: each captured tooth rests by its lower shoulder on the founded pawl and door arms clear static guides over their stroke
+ok 554 - each captured tooth rests by its lower shoulder on the founded pawl and door arms clear static guides over their stroke
+  ---
+  duration_ms: 5.236563
+  type: 'test'
+  ...
+# Subtest: archive memory is mounted outside the standing entry and keeps original actor and source state untouched
+ok 555 - archive memory is mounted outside the standing entry and keeps original actor and source state untouched
+  ---
+  duration_ms: 4.483144
+  type: 'test'
+  ...
+# Isolated Crown ordinary witness {"scope":"initially available isolated production room, no full-castle prerequisite claim","heldNegative":false,"counters":{"frames":3855,"steps":7710,"shots":2,"interactions":8,"resets":0,"respawns":0,"cargoResets":0},"closedProbe":{"frames":120,"jumpInputs":3,"maxFeetY":1.5275000000000023,"maxZ":3.419899999999,"nearLeafFrames":82},"stamps":{"sightMotion":1374,"sightOpen":1688,"portal":3986,"passageMotion":5886,"passageOpen":6200,"load":7546,"won":7710},"crossedGallery":{"step":6960,"foot":[-5.734874848570452,0,4.013190850847202],"heldOriginal":true},"marks":[{"name":"Crown sight section opens portal ray","frame":844,"player":[11.957370365254809,0,-15.536400984069482],"cargo":[11.517157834939463,0.3899981447617061,12.533606679165896],"angles":[1.5707963267948966,0],"held":false,"state":"playing"},{"name":"Crown transverse section opens north gallery","frame":3100,"player":[-13.002011632202205,0,-2.4478089453135783],"cargo":[-13.763927867695344,0.3899981447617061,-8.61343202579246],"angles":[1.5707963267948966,1.5707963267948966],"held":false,"state":"playing"},{"name":"Original companion loads crown socket","frame":3816,"player":[-9.000485964367408,0.14,10.936553125450263],"cargo":[-9.000151478462842,0.5299981463217539,10.216553831749424],"angles":[1.5707963267948966,1.5707963267948966],"held":false,"state":"playing"}],"bodyId":1863,"shapeId":3726,"proof":{"independentLoads":true,"originalCargo":true,"spatialMechanism":true,"originalLoad":{"worldStep":7709,"originalCargoBodyId":1863,"originalCargoShapeId":3726,"supportBodyId":1904,"supportShapeId":3964,"normalForce":62.41852888278752,"contacts":4,"freeOriginal":true},"rotorAngles":[1.5707963267948966,1.5707963267948966],"readsAchievements":false}}
+# Isolated Crown ordinary witness {"scope":"initially available isolated production room, no full-castle prerequisite claim","heldNegative":true,"counters":{"frames":3410,"steps":6820,"shots":2,"interactions":7,"resets":0,"respawns":0,"cargoResets":0},"closedProbe":{"frames":0,"jumpInputs":0,"maxFeetY":0,"maxZ":null,"nearLeafFrames":0},"stamps":{"sightMotion":1374,"sightOpen":1688,"portal":3986,"passageMotion":5032,"passageOpen":5346},"crossedGallery":{"step":6154,"foot":[-5.734821292068503,0,4.013227223386262],"heldOriginal":true},"marks":[{"name":"Crown sight section opens portal ray","frame":844,"player":[11.957370365254809,0,-15.536400984069482],"cargo":[11.517157834939463,0.3899981447617061,12.533606679165896],"angles":[1.5707963267948966,0],"held":false,"state":"playing"},{"name":"Crown transverse section opens north gallery","frame":2673,"player":[-13.00000001106153,0,-2.4466439523506494],"cargo":[-13.21270566094688,0.38999814476170613,-9.701444944940414],"angles":[1.5707963267948966,1.5707963267948966],"held":false,"state":"playing"}],"bodyId":3775,"shapeId":7707,"proof":null}
+# Subtest: isolated Crown ordinary closed-section attack is blocked before the shared route wins with its original free load
+ok 556 - isolated Crown ordinary closed-section attack is blocked before the shared route wins with its original free load
+  ---
+  duration_ms: 9398.028672
+  type: 'test'
+  ...
+# Subtest: isolated Crown ordinary held-original visits to both final contacts cannot replace a free physical socket load
+ok 557 - isolated Crown ordinary held-original visits to both final contacts cannot replace a free physical socket load
+  ---
+  duration_ms: 6039.880703
+  type: 'test'
+  ...
+# Subtest: crown owns two actual oriented rotors and retains original cargo after normal physics creation
+ok 558 - crown owns two actual oriented rotors and retains original cargo after normal physics creation
+  ---
+  duration_ms: 37.859337
+  type: 'test'
+  ...
+# Subtest: crown owns two actual oriented rotors and retains original cargo after late physics creation
+ok 559 - crown owns two actual oriented rotors and retains original cargo after late physics creation
+  ---
+  duration_ms: 13.697554
+  type: 'test'
+  ...
+# Subtest: the first real shutter blocks the receiver shot, then its rotated open section exposes the unchanged portal
+ok 560 - the first real shutter blocks the receiver shot, then its rotated open section exposes the unchanged portal
+  ---
+  duration_ms: 126.447518
+  type: 'test'
+  ...
+# Subtest: both complete rotor strokes retain exact contact shapes and clear every fixed physical member
+ok 561 - both complete rotor strokes retain exact contact shapes and clear every fixed physical member
+  ---
+  duration_ms: 201.362861
+  type: 'test'
+  ...
+# Subtest: the second closed rotor stops the actual capsule and its rotated section leaves the new west doorway passable
+ok 562 - the second closed rotor stops the actual capsule and its rotated section leaves the new west doorway passable
+  ---
+  duration_ms: 22.569167
+  type: 'test'
+  ...
+# Subtest: rotor 1 reserves its opening sweep for player and resumes without moving the actor
+ok 563 - rotor 1 reserves its opening sweep for player and resumes without moving the actor
+  ---
+  duration_ms: 7.453459
+  type: 'test'
+  ...
+# Subtest: rotor 1 reserves its opening sweep for free and resumes without moving the actor
+ok 564 - rotor 1 reserves its opening sweep for free and resumes without moving the actor
+  ---
+  duration_ms: 6.654035
+  type: 'test'
+  ...
+# Subtest: rotor 1 reserves its opening sweep for held and resumes without moving the actor
+ok 565 - rotor 1 reserves its opening sweep for held and resumes without moving the actor
+  ---
+  duration_ms: 3.479491
+  type: 'test'
+  ...
+# Subtest: rotor 1 reserves its opening sweep for carryTarget and resumes without moving the actor
+ok 566 - rotor 1 reserves its opening sweep for carryTarget and resumes without moving the actor
+  ---
+  duration_ms: 4.813076
+  type: 'test'
+  ...
+# Subtest: rotor 1 reserves its closing sweep for player and resumes without moving the actor
+ok 567 - rotor 1 reserves its closing sweep for player and resumes without moving the actor
+  ---
+  duration_ms: 40.053181
+  type: 'test'
+  ...
+# Subtest: rotor 1 reserves its closing sweep for free and resumes without moving the actor
+ok 568 - rotor 1 reserves its closing sweep for free and resumes without moving the actor
+  ---
+  duration_ms: 27.524707
+  type: 'test'
+  ...
+# Subtest: rotor 1 reserves its closing sweep for held and resumes without moving the actor
+ok 569 - rotor 1 reserves its closing sweep for held and resumes without moving the actor
+  ---
+  duration_ms: 17.426898
+  type: 'test'
+  ...
+# Subtest: rotor 1 reserves its closing sweep for carryTarget and resumes without moving the actor
+ok 570 - rotor 1 reserves its closing sweep for carryTarget and resumes without moving the actor
+  ---
+  duration_ms: 18.724107
+  type: 'test'
+  ...
+# Subtest: rotor 2 reserves its opening sweep for player and resumes without moving the actor
+ok 571 - rotor 2 reserves its opening sweep for player and resumes without moving the actor
+  ---
+  duration_ms: 3.757006
+  type: 'test'
+  ...
+# Subtest: rotor 2 reserves its opening sweep for free and resumes without moving the actor
+ok 572 - rotor 2 reserves its opening sweep for free and resumes without moving the actor
+  ---
+  duration_ms: 3.687637
+  type: 'test'
+  ...
+# Subtest: rotor 2 reserves its opening sweep for held and resumes without moving the actor
+ok 573 - rotor 2 reserves its opening sweep for held and resumes without moving the actor
+  ---
+  duration_ms: 3.97998
+  type: 'test'
+  ...
+# Subtest: rotor 2 reserves its opening sweep for carryTarget and resumes without moving the actor
+ok 574 - rotor 2 reserves its opening sweep for carryTarget and resumes without moving the actor
+  ---
+  duration_ms: 6.148146
+  type: 'test'
+  ...
+# Subtest: rotor 2 reserves its closing sweep for player and resumes without moving the actor
+ok 575 - rotor 2 reserves its closing sweep for player and resumes without moving the actor
+  ---
+  duration_ms: 13.350619
+  type: 'test'
+  ...
+# Subtest: rotor 2 reserves its closing sweep for free and resumes without moving the actor
+ok 576 - rotor 2 reserves its closing sweep for free and resumes without moving the actor
+  ---
+  duration_ms: 13.568253
+  type: 'test'
+  ...
+# Subtest: rotor 2 reserves its closing sweep for held and resumes without moving the actor
+ok 577 - rotor 2 reserves its closing sweep for held and resumes without moving the actor
+  ---
+  duration_ms: 18.265305
+  type: 'test'
+  ...
+# Subtest: rotor 2 reserves its closing sweep for carryTarget and resumes without moving the actor
+ok 578 - rotor 2 reserves its closing sweep for carryTarget and resumes without moving the actor
+  ---
+  duration_ms: 15.572675
+  type: 'test'
+  ...
+# Subtest: a genuinely floor-supported original blocks a closing sweep without hidden teleport or motion
+ok 579 - a genuinely floor-supported original blocks a closing sweep without hidden teleport or motion
+  ---
+  duration_ms: 14.34179
+  type: 'test'
+  ...
+# Subtest: actual original free tray support and a grounded neighbour complete the crown without an angle or achievement flag
+ok 580 - actual original free tray support and a grounded neighbour complete the crown without an angle or achievement flag
+  ---
+  duration_ms: 9.764972
+  type: 'test'
+  ...
+# Subtest: held, servo-driven, foreign, unsupported and disabled cargo never substitute for the actual original free crown load
+ok 581 - held, servo-driven, foreign, unsupported and disabled cargo never substitute for the actual original free crown load
+  ---
+  duration_ms: 89.936394
+  type: 'test'
+  ...
+# Subtest: whole-attempt reset restores both owned poses and retains bodies, shape identities and resources
+ok 582 - whole-attempt reset restores both owned poses and retains bodies, shape identities and resources
+  ---
+  duration_ms: 37.730678
+  type: 'test'
+  ...
+# Subtest: unavailable crown controls reject input and invalid dt cannot manufacture rotor motion or completion
+ok 583 - unavailable crown controls reject input and invalid dt cannot manufacture rotor motion or completion
+  ---
+  duration_ms: 6.778977
+  type: 'test'
+  ...
+# Subtest: the ordinary magnet-entry camera ray no longer meets opaque relief 32 cm from its lens
+ok 584 - the ordinary magnet-entry camera ray no longer meets opaque relief 32 cm from its lens
+  ---
+  duration_ms: 7.406673
+  type: 'test'
+  ...
+# Subtest: real lower and upper shell openings remain clear of all attached opaque wall skins
+ok 585 - real lower and upper shell openings remain clear of all attached opaque wall skins
+  ---
+  duration_ms: 104.726883
+  type: 'test'
+  ...
+# Subtest: magnet wall relief outside the actual entry stays visible and the opposite wall stays finished
+ok 586 - magnet wall relief outside the actual entry stays visible and the opposite wall stays finished
+  ---
+  duration_ms: 2.583327
+  type: 'test'
+  ...
+# Subtest: existing portal-address reveals retain their real opaque-art clearance
+ok 587 - existing portal-address reveals retain their real opaque-art clearance
+  ---
+  duration_ms: 47.144689
+  type: 'test'
+  ...
+# Subtest: all twelve production wings keep one owner for each coplanar pier and capital face
+ok 588 - all twelve production wings keep one owner for each coplanar pier and capital face
+  ---
+  duration_ms: 54.882659
+  type: 'test'
+  ...
+# Freight closed return ordinary witness {"counters":{"frames":2604,"resets":0,"respawns":0,"cargoResets":0,"jumps":19,"controlInputs":12,"heldFrames":378,"freeFrames":498},"samples":{"held":{"minPlayerX":-42.25999377531538,"minCargoX":-42.441771321029115,"maxFeetY":1.5275000000000023,"nearLeafFrames":346},"free":{"minPlayerX":-42.44999763418153,"minCargoX":-41.78493800705274,"maxFeetY":1.5275000000000023,"nearLeafFrames":480}},"freeCargoBefore":[-41.78493801651012,0.38999814632217555,47.00101077254698],"finalPlayer":[-42.4499,1.4665625000000029,47.026568685919955],"finalCargo":[-36.29283148130043,0.3899981457434821,46.10742583388681],"plane":-43,"scope":"finite attacks at the new closed return aperture; free cargo is an attempted step, not a claim of successful standing on it"}
+# Subtest: ordinary E spam, carried sprint-jumps and a free-cargo step attempt cannot cross the unloaded freight return
+ok 589 - ordinary E spam, carried sprint-jumps and a free-cargo step attempt cannot cross the unloaded freight return
+  ---
+  duration_ms: 28308.403138
+  type: 'test'
+  ...
+# Subtest: empty waiting, coincident airborne cargo and repeated controls cannot release the freight gate
+ok 590 - empty waiting, coincident airborne cargo and repeated controls cannot release the freight gate
+  ---
+  duration_ms: 97.161041
+  type: 'test'
+  ...
+# Subtest: the load release is an actual positive contact with the original free body and the finite tray
+ok 591 - the load release is an actual positive contact with the original free body and the finite tray
+  ---
+  duration_ms: 58.859701
+  type: 'test'
+  ...
+# Subtest: held cargo, a carry servo and disabled body/shape/support responses invalidate a retained contact immediately
+ok 592 - held cargo, a carry servo and disabled body/shape/support responses invalidate a retained contact immediately
+  ---
+  duration_ms: 17.612914
+  type: 'test'
+  ...
+# Subtest: a foreign physical body, render identity or removed tray cannot impersonate the original supported cargo
+ok 593 - a foreign physical body, render identity or removed tray cannot impersonate the original supported cargo
+  ---
+  duration_ms: 12.557397
+  type: 'test'
+  ...
+# Subtest: the old aiming slit remains optically open while the closed return doorway is opaque
+ok 594 - the old aiming slit remains optically open while the closed return doorway is opaque
+  ---
+  duration_ms: 12.691576
+  type: 'test'
+  ...
+# Subtest: both complete orthogonal strokes continuously clear fixed geometry and retain live matching collider bodies
+ok 595 - both complete orthogonal strokes continuously clear fixed geometry and retain live matching collider bodies
+  ---
+  duration_ms: 138.882561
+  type: 'test'
+  ...
+# Subtest: opening stops before its first outward stroke can push a player into the receiving chamber
+ok 596 - opening stops before its first outward stroke can push a player into the receiving chamber
+  ---
+  duration_ms: 65.296944
+  type: 'test'
+  ...
+# Subtest: closing retains the passage while occupied by player
+ok 597 - closing retains the passage while occupied by player
+  ---
+  duration_ms: 65.932137
+  type: 'test'
+  ...
+# Subtest: closing retains the passage while occupied by free cargo
+ok 598 - closing retains the passage while occupied by free cargo
+  ---
+  duration_ms: 59.579678
+  type: 'test'
+  ...
+# Subtest: closing retains the passage while occupied by held cargo
+ok 599 - closing retains the passage while occupied by held cargo
+  ---
+  duration_ms: 34.158174
+  type: 'test'
+  ...
+# Subtest: closing retains the passage while occupied by carry target
+ok 600 - closing retains the passage while occupied by carry target
+  ---
+  duration_ms: 44.385806
+  type: 'test'
+  ...
+# Subtest: an opened load latch retains without cargo, reverses mid-stroke, and requires a fresh load after fully closing
+ok 601 - an opened load latch retains without cargo, reverses mid-stroke, and requires a fresh load after fully closing
+  ---
+  duration_ms: 31.242561
+  type: 'test'
+  ...
+# Subtest: only the physically returned free original and a separate standing traveller complete the freight exchange
+ok 602 - only the physically returned free original and a separate standing traveller complete the freight exchange
+  ---
+  duration_ms: 20.441706
+  type: 'test'
+  ...
+# Subtest: whole-attempt reset restores leaf and bolt poses without changing the original body or adding resources
+ok 603 - whole-attempt reset restores leaf and bolt poses without changing the original body or adding resources
+  ---
+  duration_ms: 21.305771
+  type: 'test'
+  ...
+# Subtest: an initial positive-dt update before physics exists remains locked and binds the eventual original body
+ok 604 - an initial positive-dt update before physics exists remains locked and binds the eventual original body
+  ---
+  duration_ms: 34.814413
+  type: 'test'
+  ...
+# Subtest: zero, negative and non-finite dt cannot advance a released gate or rewrite its contact witnesses
+ok 605 - zero, negative and non-finite dt cannot advance a released gate or rewrite its contact witnesses
+  ---
+  duration_ms: 14.535119
+  type: 'test'
+  ...
+# Subtest: the visible retaining bolt travels through an actually open guide without penetrating fixed metal
+ok 606 - the visible retaining bolt travels through an actually open guide without penetrating fixed metal
+  ---
+  duration_ms: 53.51232
+  type: 'test'
+  ...
+# Subtest: a real load on the near return tray cannot replace opening the gate and releasing its far-side interlock
+ok 607 - a real load on the near return tray cannot replace opening the gate and releasing its far-side interlock
+  ---
+  duration_ms: 6.347576
+  type: 'test'
+  ...
+# Subtest: a prepared raising bolt intrusion by player stops and resumes without moving the occupant
+ok 608 - a prepared raising bolt intrusion by player stops and resumes without moving the occupant
+  ---
+  duration_ms: 5.210304
+  type: 'test'
+  ...
+# Subtest: a prepared raising bolt intrusion by free cargo stops and resumes without moving the occupant
+ok 609 - a prepared raising bolt intrusion by free cargo stops and resumes without moving the occupant
+  ---
+  duration_ms: 4.970288
+  type: 'test'
+  ...
+# Subtest: a prepared raising bolt intrusion by held cargo stops and resumes without moving the occupant
+ok 610 - a prepared raising bolt intrusion by held cargo stops and resumes without moving the occupant
+  ---
+  duration_ms: 5.768
+  type: 'test'
+  ...
+# Subtest: a prepared raising bolt intrusion by carry target stops and resumes without moving the occupant
+ok 611 - a prepared raising bolt intrusion by carry target stops and resumes without moving the occupant
+  ---
+  duration_ms: 7.328956
+  type: 'test'
+  ...
+# Subtest: a prepared lowering bolt intrusion by player stops and resumes without moving the occupant
+ok 612 - a prepared lowering bolt intrusion by player stops and resumes without moving the occupant
+  ---
+  duration_ms: 37.045206
+  type: 'test'
+  ...
+# Subtest: a prepared lowering bolt intrusion by free cargo stops and resumes without moving the occupant
+ok 613 - a prepared lowering bolt intrusion by free cargo stops and resumes without moving the occupant
+  ---
+  duration_ms: 36.159231
+  type: 'test'
+  ...
+# Subtest: a prepared lowering bolt intrusion by held cargo stops and resumes without moving the occupant
+ok 614 - a prepared lowering bolt intrusion by held cargo stops and resumes without moving the occupant
+  ---
+  duration_ms: 26.654692
+  type: 'test'
+  ...
+# Subtest: a prepared lowering bolt intrusion by carry target stops and resumes without moving the occupant
+ok 615 - a prepared lowering bolt intrusion by carry target stops and resumes without moving the occupant
+  ---
+  duration_ms: 29.858642
+  type: 'test'
+  ...
+# Subtest: a genuinely supported high free cargo stops the descending pin before contact and remains on its prepared pedestal
+ok 616 - a genuinely supported high free cargo stops the descending pin before contact and remains on its prepared pedestal
+  ---
+  duration_ms: 35.930346
+  type: 'test'
+  ...
+# Subtest: a rotated high carry target reserves its actual oriented extent before the descending pin reaches it
+ok 617 - a rotated high carry target reserves its actual oriented extent before the descending pin reaches it
+  ---
+  duration_ms: 38.01695
+  type: 'test'
+  ...
+# Subtest: tray perimeter lights remain below and outside both real load surfaces and the readout has a founded load path
+ok 618 - tray perimeter lights remain below and outside both real load surfaces and the readout has a founded load path
+  ---
+  duration_ms: 2.29998
+  type: 'test'
+  ...
+# Freight ordinary route witness {"freightReturn":"gate","stamps":{"inner":5064,"bolt":5196,"motion":5234,"passable":5474,"return":6508,"solved":6674},"counts":{"movingFrames":134,"innerSamples":228,"returnSamples":153},"playerCrossing":{"worldStep":5846,"player":[-42.95084605290415,0,46.9878849558552],"heldOriginal":true},"cargoCrossing":{"worldStep":5826,"cargo":[-42.98081906575241,1.0701041848914055,46.98381424218724],"heldOriginal":true},"bodyId":1863,"shapeId":3726,"resetsDuringRoute":0,"routeFrames":4471,"routeSeconds":74.51666666666667}
+# Freight ordinary route witness {"freightReturn":"portal","stamps":{"inner":5064,"bolt":5196,"motion":5234,"passable":5474,"return":6750,"solved":6916},"counts":{"movingFrames":134,"innerSamples":228,"returnSamples":153},"playerCrossing":null,"cargoCrossing":null,"bodyId":3746,"shapeId":7649,"resetsDuringRoute":0,"routeFrames":4592,"routeSeconds":76.53333333333333}
+# Subtest: freight ordinary gate return keeps the original free load and physical gate sequence
+ok 619 - freight ordinary gate return keeps the original free load and physical gate sequence
+  ---
+  duration_ms: 58808.398074
+  type: 'test'
+  ...
+# Subtest: freight ordinary portal return keeps the original free load and physical gate sequence
+ok 620 - freight ordinary portal return keeps the original free load and physical gate sequence
+  ---
+  duration_ms: 64280.248269
+  type: 'test'
+  ...
+# Subtest: Hoist requires a marked two-dimensional receiving tray inside the closed bay
+ok 621 - Hoist requires a marked two-dimensional receiving tray inside the closed bay
+  ---
+  duration_ms: 3556.74208
+  type: 'test'
+  ...
+# Subtest: Catcher sight slit admits the real muzzle ray and rejects the smallest cargo cross-section
+ok 622 - Catcher sight slit admits the real muzzle ray and rejects the smallest cargo cross-section
+  ---
+  duration_ms: 0.905994
+  type: 'test'
+  ...
+# Subtest: Upper catcher has solid roof, side walls and rear wall
+ok 623 - Upper catcher has solid roof, side walls and rear wall
+  ---
+  duration_ms: 2.690599
+  type: 'test'
+  ...
+# Subtest: Geometry fixture: the entire two-stage hatch stroke clears real solids and the upper exit corridor
+ok 624 - Geometry fixture: the entire two-stage hatch stroke clears real solids and the upper exit corridor
+  ---
+  duration_ms: 1492.445307
+  type: 'test'
+  ...
+# Subtest: Ordinary-input freight and hoist route opens the physical hatch, retrieves the same companion and resets the stroke
+ok 625 - Ordinary-input freight and hoist route opens the physical hatch, retrieves the same companion and resets the stroke
+  ---
+  duration_ms: 141146.038251
+  type: 'test'
+  ...
+# Subtest: a fallen original on a passive support receives neither an upright motor nor a clearance shuffle
+ok 626 - a fallen original on a passive support receives neither an upright motor nor a clearance shuffle
+  ---
+  duration_ms: 130.036922
+  type: 'test'
+  ...
+# Subtest: passive support preserves actual outside forces, rigid-body state and shape instead of cancelling energy
+ok 627 - passive support preserves actual outside forces, rigid-body state and shape instead of cancelling energy
+  ---
+  duration_ms: 2.873928
+  type: 'test'
+  ...
+# Subtest: Castle impulse module provides real original-cargo portal carriers and a cargo-only horizontal throat
+ok 628 - Castle impulse module provides real original-cargo portal carriers and a cargo-only horizontal throat
+  ---
+  duration_ms: 28.403153
+  type: 'test'
+  ...
+# Subtest: Castle impulse aiming slit passes the real outlet ray while excluding either physical traveller
+ok 629 - Castle impulse aiming slit passes the real outlet ray while excluding either physical traveller
+  ---
+  duration_ms: 16.017959
+  type: 'test'
+  ...
+# Subtest: Castle impulse service geometry leaves the entire physical carriage stroke and finite guide compliance clear
+ok 630 - Castle impulse service geometry leaves the entire physical carriage stroke and finite guide compliance clear
+  ---
+  duration_ms: 89.424009
+  type: 'test'
+  ...
+# 756 carriage poses, 9072 moving-part boxes, 1088640 pose comparisons and 1440 continuous-envelope comparisons against 120 non-cell static colliders; minimum rail inset 0.08000000000000142 m, rail vertical gap 0.07499999999999574 m, shutter floor gap 0.05999999999999517 m, pocket side/end gaps 0.14999999999999858/0.030000000000006466 m
+# Subtest: Castle impulse roof, real pocket and finite pickup opening retain physical separation
+ok 631 - Castle impulse roof, real pocket and finite pickup opening retain physical separation
+  ---
+  duration_ms: 5.772152
+  type: 'test'
+  ...
+# Subtest: Castle impulse receiver measures positive current contact from the same free original shape
+ok 632 - Castle impulse receiver measures positive current contact from the same free original shape
+  ---
+  duration_ms: 403.173775
+  type: 'test'
+  ...
+# Subtest: Castle impulse complete production shell permits an initial-condition cargo launch to flip the actual carriage
+ok 633 - Castle impulse complete production shell permits an initial-condition cargo launch to flip the actual carriage
+  ---
+  duration_ms: 4182.015346
+  type: 'test'
+  ...
+# Subtest: compression spring geometry has two minima and a finite energy barrier
+ok 634 - compression spring geometry has two minima and a finite energy barrier
+  ---
+  duration_ms: 1.380644
+  type: 'test'
+  ...
+# Subtest: unloaded carriage remains in its near well with true five-equation guide and matching live geometry
+ok 635 - unloaded carriage remains in its near well with true five-equation guide and matching live geometry
+  ---
+  duration_ms: 623.342254
+  type: 'test'
+  ...
+# Subtest: a real original-cargo normal impact crosses the energy barrier and leaves the shutter in the other well
+ok 636 - a real original-cargo normal impact crosses the energy barrier and leaves the shutter in the other well
+  ---
+  duration_ms: 2566.522622
+  type: 'test'
+  ...
+# Subtest: springs dissipate disturbed near-well energy without a powered attraction or position assignment
+ok 637 - springs dissipate disturbed near-well energy without a powered attraction or position assignment
+  ---
+  duration_ms: 808.333722
+  type: 'test'
+  ...
+# Subtest: each force packet binds the actual spring additions to one completed interval and nonpositive damping work
+ok 638 - each force packet binds the actual spring additions to one completed interval and nonpositive damping work
+  ---
+  duration_ms: 85.303236
+  type: 'test'
+  ...
+# Subtest: a high-energy carriage impulse without the original cargo collision never qualifies a branch proof
+ok 639 - a high-energy carriage impulse without the original cargo collision never qualifies a branch proof
+  ---
+  duration_ms: 918.997156
+  type: 'test'
+  ...
+# Subtest: only a current contacting original sleeper is woken without a pose, velocity or force assignment
+ok 640 - only a current contacting original sleeper is woken without a pose, velocity or force assignment
+  ---
+  duration_ms: 1511.453734
+  type: 'test'
+  ...
+# Subtest: founded frame uses the actual static bodies and stays immutable while the loaded carriage guide sags
+ok 641 - founded frame uses the actual static bodies and stays immutable while the loaded carriage guide sags
+  ---
+  duration_ms: 20.871835
+  type: 'test'
+  ...
+# Subtest: tray support is an upward solved original-shape contact and rejects held, stale-pose or disabled contact state
+ok 642 - tray support is an upward solved original-shape contact and rejects held, stale-pose or disabled contact state
+  ---
+  duration_ms: 1532.680334
+  type: 'test'
+  ...
+# Subtest: impact and force packets preserve external cargo force, torque and behavior instead of concealing motor input
+ok 643 - impact and force packets preserve external cargo force, torque and behavior instead of concealing motor input
+  ---
+  duration_ms: 8.01018
+  type: 'test'
+  ...
+# Subtest: passive tray aggregates bind actual support, explicit scope and uncancelled motor inputs to current force clocks
+ok 644 - passive tray aggregates bind actual support, explicit scope and uncancelled motor inputs to current force clocks
+  ---
+  duration_ms: 1510.355883
+  type: 'test'
+  ...
+# Subtest: disabled original shape and removed mechanism body fail closed even after an actual accepted impact
+ok 645 - disabled original shape and removed mechanism body fail closed even after an actual accepted impact
+  ---
+  duration_ms: 2244.436985
+  type: 'test'
+  ...
+# Subtest: held cargo, replaced original body and removed physical guide cannot qualify a collision proof
+ok 646 - held cargo, replaced original body and removed physical guide cannot qualify a collision proof
+  ---
+  duration_ms: 202.08275
+  type: 'test'
+  ...
+# Subtest: reset retains original identities, clears impact history, and disposal removes every owned object once
+ok 647 - reset retains original identities, clears impact history, and disposal removes every owned object once
+  ---
+  duration_ms: 84.733531
+  type: 'test'
+  ...
+# Tower41 ordinary order progress {"order":"the default late impulse branch","milestone":"Solved freight","seconds":74.51666666666667}
+# Tower41 ordinary order progress {"order":"the default late impulse branch","milestone":"Solved sluice","seconds":136.61666666666667}
+# Tower41 ordinary order progress {"order":"the default late impulse branch","milestone":"Solved optics","seconds":191.46666666666667}
+# Tower41 ordinary order progress {"order":"the default late impulse branch","milestone":"Solved hoist","seconds":302.8333333333333}
+# Tower41 ordinary order progress {"order":"the default late impulse branch","milestone":"Solved archive","seconds":344.3333333333333}
+# Tower41 ordinary order progress {"order":"the default late impulse branch","milestone":"Solved flywheel","seconds":440.85}
+# Tower41 ordinary order progress {"order":"the default late impulse branch","milestone":"Solved magnet","seconds":576.8}
+# Tower41 ordinary order progress {"order":"the default late impulse branch","milestone":"Solved migrant","seconds":713.8333333333334}
+# Tower41 ordinary order progress {"order":"the default late impulse branch","milestone":"Solved pendulum","seconds":854.8333333333334}
+# Tower41 ordinary order progress {"order":"the default late impulse branch","milestone":"Solved inertia","seconds":960.3}
+# Tower41 ordinary order progress {"order":"the default late impulse branch","milestone":"Start impulse","seconds":960.3}
+# Tower41 ordinary order progress {"order":"the default late impulse branch","milestone":"Solved impulse","seconds":1214.65}
+# Tower41 ordinary order progress {"order":"the default late impulse branch","milestone":"Solved crown","seconds":1377.7333333333333}
+# Tower41 actual impulse route {"order":["freight","sluice","optics","hoist","archive","flywheel","magnet","migrant","pendulum","inertia","impulse","crown"],"pass":true,"physicsSteps":165328,"seconds":1377.7333333333333,"resets":0,"respawns":0,"cargoResets":0,"originalCargoBodyId":1863,"originalCargoShapeId":3726,"normalImpulse":45.556489078500434,"impactStep":131876,"retrievalStep":135478,"hubY":36}
+# Tower41 ordinary order progress {"order":"the impulse branch immediately after the hoist","milestone":"Solved freight","seconds":74.51666666666667}
+# Tower41 ordinary order progress {"order":"the impulse branch immediately after the hoist","milestone":"Solved sluice","seconds":136.61666666666667}
+# Tower41 ordinary order progress {"order":"the impulse branch immediately after the hoist","milestone":"Solved optics","seconds":191.46666666666667}
+# Tower41 ordinary order progress {"order":"the impulse branch immediately after the hoist","milestone":"Solved hoist","seconds":302.8333333333333}
+# Tower41 ordinary order progress {"order":"the impulse branch immediately after the hoist","milestone":"Start impulse","seconds":302.8333333333333}
+# Tower41 ordinary order progress {"order":"the impulse branch immediately after the hoist","milestone":"Solved impulse","seconds":519.2166666666667}
+# Tower41 ordinary order progress {"order":"the impulse branch immediately after the hoist","milestone":"Solved archive","seconds":560.7166666666667}
+# Tower41 ordinary order progress {"order":"the impulse branch immediately after the hoist","milestone":"Solved flywheel","seconds":657.4333333333333}
+# Tower41 ordinary order progress {"order":"the impulse branch immediately after the hoist","milestone":"Solved magnet","seconds":793.3833333333333}
+# Tower41 ordinary order progress {"order":"the impulse branch immediately after the hoist","milestone":"Solved migrant","seconds":928.9166666666666}
+# Tower41 ordinary order progress {"order":"the impulse branch immediately after the hoist","milestone":"Solved pendulum","seconds":1064.6833333333334}
+# Tower41 ordinary order progress {"order":"the impulse branch immediately after the hoist","milestone":"Solved inertia","seconds":1170.15}
+# Tower41 ordinary order progress {"order":"the impulse branch immediately after the hoist","milestone":"Solved crown","seconds":1383.1166666666666}
+# Tower41 actual impulse route {"order":["freight","sluice","optics","hoist","impulse","archive","flywheel","magnet","migrant","pendulum","inertia","crown"],"pass":true,"physicsSteps":165974,"seconds":1383.1166666666666,"resets":0,"respawns":0,"cargoResets":0,"originalCargoBodyId":3746,"originalCargoShapeId":7915,"normalImpulse":45.55937586703151,"impactStep":47828,"retrievalStep":51448,"hubY":18}
+# Tower41 ordinary order progress {"order":"the impulse branch immediately after the magnetic transfer","milestone":"Solved freight","seconds":74.51666666666667}
+# Tower41 ordinary order progress {"order":"the impulse branch immediately after the magnetic transfer","milestone":"Solved sluice","seconds":136.61666666666667}
+# Tower41 ordinary order progress {"order":"the impulse branch immediately after the magnetic transfer","milestone":"Solved optics","seconds":191.46666666666667}
+# Tower41 ordinary order progress {"order":"the impulse branch immediately after the magnetic transfer","milestone":"Solved hoist","seconds":302.8333333333333}
+# Tower41 ordinary order progress {"order":"the impulse branch immediately after the magnetic transfer","milestone":"Solved archive","seconds":344.3333333333333}
+# Tower41 ordinary order progress {"order":"the impulse branch immediately after the magnetic transfer","milestone":"Solved flywheel","seconds":440.85}
+# Tower41 ordinary order progress {"order":"the impulse branch immediately after the magnetic transfer","milestone":"Solved magnet","seconds":576.8}
+# Tower41 ordinary order progress {"order":"the impulse branch immediately after the magnetic transfer","milestone":"Start impulse","seconds":576.8}
+# Tower41 ordinary order progress {"order":"the impulse branch immediately after the magnetic transfer","milestone":"Solved impulse","seconds":782.8833333333333}
+# Tower41 ordinary order progress {"order":"the impulse branch immediately after the magnetic transfer","milestone":"Solved migrant","seconds":918.4166666666666}

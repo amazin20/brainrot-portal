@@ -1,0 +1,1227 @@
+{
+  "level": 42,
+  "expectedId": "expansion-differential-valves",
+  "fixture": {
+    "key": "brainrot-campaign-v67:brainrot-portal.preferences.v24",
+    "raw": "{\"quality\":\"balanced\",\"volume\":0,\"lookSensitivity\":1,\"muted\":true,\"tutorial\":false,\"completed\":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39],\"hints\":{},\"resumeLevel\":41,\"campaignSequenceRevision\":\"fifty-rooms-then-castle-v1\",\"campaignRevision\":\"creative-campaign-v48\",\"roomRevisions\":{\"16\":\"cable-supported-architecture-v1\",\"22\":\"counterweight-dynamic-v1\",\"32\":\"siphon-observatory-v1\",\"42\":\"spatial-progression43-v1\",\"43\":\"spatial-progression44-v1\",\"44\":\"spatial-progression45-v1\",\"45\":\"spatial-progression46-v1\",\"46\":\"spatial-progression47-v1\",\"47\":\"spatial-progression48-v1\",\"48\":\"spatial-progression49-v1\",\"49\":\"spatial-progression50-v1\",\"50\":\"spatial-progression51-v1\"}}",
+    "preferences": {
+      "quality": "balanced",
+      "volume": 0,
+      "lookSensitivity": 1,
+      "muted": true,
+      "tutorial": false,
+      "completed": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39
+      ],
+      "hints": {},
+      "resumeLevel": 41,
+      "campaignSequenceRevision": "fifty-rooms-then-castle-v1",
+      "campaignRevision": "creative-campaign-v48",
+      "roomRevisions": {
+        "16": "cable-supported-architecture-v1",
+        "22": "counterweight-dynamic-v1",
+        "32": "siphon-observatory-v1",
+        "42": "spatial-progression43-v1",
+        "43": "spatial-progression44-v1",
+        "44": "spatial-progression45-v1",
+        "45": "spatial-progression46-v1",
+        "46": "spatial-progression47-v1",
+        "47": "spatial-progression48-v1",
+        "48": "spatial-progression49-v1",
+        "49": "spatial-progression50-v1",
+        "50": "spatial-progression51-v1"
+      }
+    },
+    "completed": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39
+    ],
+    "targetIndex": 41,
+    "targetCompleted": false,
+    "constructorWrites": 0,
+    "scope": "QA setup supplies the previously completed campaign prefix in the candidate own storage before construction; the current target is not completed. This is not a fresh guest full-campaign playthrough."
+  },
+  "sourceCommit": "e3a3a2fdd40fc34fd535c0cf9112dc4a11e66102",
+  "baselineCommit": "6c634dec2bc6098d5cb374bbf6b25492fa59e30d",
+  "scope": "Native software WebGL of two frozen ordinary production builds. Matched static camera inspection and scripted real-input routes, not human playtesting or hardware FPS. An isolated prior-completed-prefix save admits the still-uncompleted target through the unchanged production gate. Late route drivers perform one normal setup reset before observation; no resets are allowed during the observed route.",
+  "rows": [
+    {
+      "version": "before",
+      "view": "wide",
+      "width": 1280,
+      "height": 720,
+      "pass": true,
+      "pageErrors": [],
+      "consoleErrors": [],
+      "images": [
+        {
+          "file": "before-wide-inspection.png",
+          "sha256": "4ff0284c615a8341d7451e73f33c6e6850fa63484f5c415f55114ebf0e8b580e",
+          "bytes": 173369
+        },
+        {
+          "file": "before-wide-route-01.png",
+          "sha256": "76a1d0d6ae42148f463378bf328c2181876cbbda2663ea652e7a6a2d9eda50ee",
+          "bytes": 277952
+        },
+        {
+          "file": "before-wide-route-02.png",
+          "sha256": "4b6902d947d213b17b0d16b9d79654b78bf35d0e2066ce15e90ae4403a454613",
+          "bytes": 302600
+        },
+        {
+          "file": "before-wide-route-03.png",
+          "sha256": "cc15d3f560334eaf67c766a898191f5049adc84d498ac3e28594e5fe32615fa2",
+          "bytes": 350989
+        },
+        {
+          "file": "before-wide-route-04.png",
+          "sha256": "cc15d3f560334eaf67c766a898191f5049adc84d498ac3e28594e5fe32615fa2",
+          "bytes": 350989
+        }
+      ],
+      "inspection": {
+        "before": {
+          "player": [
+            -3,
+            3,
+            25
+          ],
+          "cargo": [
+            -5,
+            3.6,
+            22
+          ],
+          "steps": 0,
+          "id": "expansion-differential-valves"
+        },
+        "after": {
+          "player": [
+            -3,
+            3,
+            25
+          ],
+          "cargo": [
+            -5,
+            3.6,
+            22
+          ],
+          "steps": 0,
+          "id": "expansion-differential-valves"
+        },
+        "camera": {
+          "p": [
+            26.7,
+            15.7,
+            27.6
+          ],
+          "q": [
+            -0.05700141964267033,
+            0.917298823299105,
+            -0.1422696061914261,
+            -0.36752287831770986
+          ],
+          "fov": 56
+        }
+      },
+      "result": {
+        "route": {
+          "level": 42,
+          "id": "expansion-differential-valves",
+          "pass": true,
+          "milestones": [
+            {
+              "name": "The original A check-valve and routed air move the actual positive berth",
+              "player": [
+                19.91959688494966,
+                3,
+                -0.1650961354092193
+              ],
+              "cargo": [
+                17.983624853759054,
+                3.3903335866121687,
+                -0.08993654759981883
+              ],
+              "teleports": 0
+            },
+            {
+              "name": "Moving the same check-valve into the upper B court reverses the pressure sign",
+              "player": [
+                31.14690545174377,
+                9.18,
+                30.848472777733733
+              ],
+              "cargo": [
+                26.58294076722475,
+                9.549998146883087,
+                34.91300649327523
+              ],
+              "teleports": 0
+            },
+            {
+              "name": "The shared pair reunites both at the pressure-selected moving passenger address",
+              "player": [
+                -29.93109232151986,
+                3,
+                -0.3790400214953152
+              ],
+              "cargo": [
+                -30.641286914686823,
+                4.048286556200738,
+                -0.26016732974492346
+              ],
+              "teleports": 1
+            },
+            {
+              "name": "both at exit",
+              "player": [
+                -29.93109232151986,
+                3,
+                -0.3790400214953152
+              ],
+              "cargo": [
+                -30.641286914686823,
+                4.048286556200738,
+                -0.26016732974492346
+              ],
+              "teleports": 1
+            }
+          ],
+          "respawns": 0,
+          "resets": 0,
+          "frames": 3873,
+          "teleports": 1
+        },
+        "pictures": [
+          {
+            "mark": {
+              "name": "The original A check-valve and routed air move the actual positive berth",
+              "player": [
+                19.91959688494966,
+                3,
+                -0.1650961354092193
+              ],
+              "cargo": [
+                17.983624853759054,
+                3.3903335866121687,
+                -0.08993654759981883
+              ],
+              "teleports": 0
+            },
+            "camera": {
+              "p": [
+                21.015790044079303,
+                3.670000000000001,
+                6.280888710497364
+              ],
+              "q": [
+                0.0617599732487865,
+                0.02996334564404253,
+                -0.0018549140514117297,
+                0.997639445348863
+              ],
+              "fov": 62.00000000000002
+            }
+          },
+          {
+            "mark": {
+              "name": "Moving the same check-valve into the upper B court reverses the pressure sign",
+              "player": [
+                31.14690545174377,
+                9.18,
+                30.848472777733733
+              ],
+              "cargo": [
+                26.58294076722475,
+                9.549998146883087,
+                34.91300649327523
+              ],
+              "teleports": 0
+            },
+            "camera": {
+              "p": [
+                25.998356921362294,
+                12.751076725749883,
+                27.29388396816745
+              ],
+              "q": [
+                0.06893559781529777,
+                0.9053929929859122,
+                0.16145066737238842,
+                -0.3865812897837528
+              ],
+              "fov": 62.00000000000002
+            }
+          },
+          {
+            "mark": {
+              "name": "The shared pair reunites both at the pressure-selected moving passenger address",
+              "player": [
+                -29.93109232151986,
+                3,
+                -0.3790400214953152
+              ],
+              "cargo": [
+                -30.641286914686823,
+                4.048286556200738,
+                -0.26016732974492346
+              ],
+              "teleports": 1
+            },
+            "camera": {
+              "p": [
+                -31.269135351178324,
+                6.552039629260108,
+                -6.495085034528528
+              ],
+              "q": [
+                0.0052805803292662,
+                0.9842060432676288,
+                0.1739410026899842,
+                -0.03248241755269224
+              ],
+              "fov": 62.31207458500351
+            }
+          },
+          {
+            "mark": {
+              "name": "both at exit",
+              "player": [
+                -29.93109232151986,
+                3,
+                -0.3790400214953152
+              ],
+              "cargo": [
+                -30.641286914686823,
+                4.048286556200738,
+                -0.26016732974492346
+              ],
+              "teleports": 1
+            },
+            "camera": {
+              "p": [
+                -31.269135351178324,
+                6.552039629260108,
+                -6.495085034528528
+              ],
+              "q": [
+                0.0052805803292662,
+                0.9842060432676288,
+                0.1739410026899842,
+                -0.03248241755269224
+              ],
+              "fov": 62.31207458500351
+            }
+          }
+        ],
+        "updates": 7745,
+        "setupResets": 1,
+        "state": "won",
+        "sameOriginal": true
+      }
+    },
+    {
+      "version": "before",
+      "view": "portrait",
+      "width": 390,
+      "height": 844,
+      "pass": true,
+      "pageErrors": [],
+      "consoleErrors": [],
+      "images": [
+        {
+          "file": "before-portrait-inspection.png",
+          "sha256": "2c6f90edc1426495ca4261fcf7ba55098f6a49b52fb34ead952ab23809ae2a7b",
+          "bytes": 63392
+        },
+        {
+          "file": "before-portrait-route-01.png",
+          "sha256": "4f4b60edad0707d96aad497c24f408e3d42dd24f22847934b5466fb289abbab6",
+          "bytes": 87666
+        },
+        {
+          "file": "before-portrait-route-02.png",
+          "sha256": "6bf70ea6dd223f50fe100398ab8525a6b6d0a3cd080ac25cc532d98f81a9b3b0",
+          "bytes": 116210
+        },
+        {
+          "file": "before-portrait-route-03.png",
+          "sha256": "e693ad87111236ee18ce12df5788078c1fd55bcba5d248bf3f13c7b7e3d20b55",
+          "bytes": 112501
+        },
+        {
+          "file": "before-portrait-route-04.png",
+          "sha256": "e693ad87111236ee18ce12df5788078c1fd55bcba5d248bf3f13c7b7e3d20b55",
+          "bytes": 112501
+        }
+      ],
+      "inspection": {
+        "before": {
+          "player": [
+            -3,
+            3,
+            25
+          ],
+          "cargo": [
+            -5,
+            3.6,
+            22
+          ],
+          "steps": 0,
+          "id": "expansion-differential-valves"
+        },
+        "after": {
+          "player": [
+            -3,
+            3,
+            25
+          ],
+          "cargo": [
+            -5,
+            3.6,
+            22
+          ],
+          "steps": 0,
+          "id": "expansion-differential-valves"
+        },
+        "camera": {
+          "p": [
+            26.7,
+            15.7,
+            27.6
+          ],
+          "q": [
+            -0.05700141964267033,
+            0.917298823299105,
+            -0.1422696061914261,
+            -0.36752287831770986
+          ],
+          "fov": 56
+        }
+      },
+      "result": {
+        "route": {
+          "level": 42,
+          "id": "expansion-differential-valves",
+          "pass": true,
+          "milestones": [
+            {
+              "name": "The original A check-valve and routed air move the actual positive berth",
+              "player": [
+                19.919596884752448,
+                3,
+                -0.1650961358428219
+              ],
+              "cargo": [
+                17.983624659043684,
+                3.3903335866121553,
+                -0.08993623025531947
+              ],
+              "teleports": 0
+            },
+            {
+              "name": "Moving the same check-valve into the upper B court reverses the pressure sign",
+              "player": [
+                31.14690545174377,
+                9.18,
+                30.848472777733733
+              ],
+              "cargo": [
+                26.5829408839611,
+                9.549998146883087,
+                34.9130063435582
+              ],
+              "teleports": 0
+            },
+            {
+              "name": "The shared pair reunites both at the pressure-selected moving passenger address",
+              "player": [
+                -29.93753147075574,
+                3,
+                -0.41984385676887054
+              ],
+              "cargo": [
+                -30.645347090271578,
+                4.051402911146006,
+                -0.28750316186497915
+              ],
+              "teleports": 1
+            },
+            {
+              "name": "both at exit",
+              "player": [
+                -29.93753147075574,
+                3,
+                -0.41984385676887054
+              ],
+              "cargo": [
+                -30.645347090271578,
+                4.051402911146006,
+                -0.28750316186497915
+              ],
+              "teleports": 1
+            }
+          ],
+          "respawns": 0,
+          "resets": 0,
+          "frames": 3852,
+          "teleports": 1
+        },
+        "pictures": [
+          {
+            "mark": {
+              "name": "The original A check-valve and routed air move the actual positive berth",
+              "player": [
+                19.919596884752448,
+                3,
+                -0.1650961358428219
+              ],
+              "cargo": [
+                17.983624659043684,
+                3.3903335866121553,
+                -0.08993623025531947
+              ],
+              "teleports": 0
+            },
+            "camera": {
+              "p": [
+                20.985523355839266,
+                3.670000014400628,
+                11.441546165112005
+              ],
+              "q": [
+                0.0493788523288838,
+                0.023394475381535728,
+                -0.0011569214480125244,
+                0.9985054276252422
+              ],
+              "fov": 62.00001750362022
+            }
+          },
+          {
+            "mark": {
+              "name": "Moving the same check-valve into the upper B court reverses the pressure sign",
+              "player": [
+                31.14690545174377,
+                9.18,
+                30.848472777733733
+              ],
+              "cargo": [
+                26.5829408839611,
+                9.549998146883087,
+                34.9130063435582
+              ],
+              "teleports": 0
+            },
+            "camera": {
+              "p": [
+                22.995738619570105,
+                14.526849544686428,
+                23.35227627427075
+              ],
+              "q": [
+                0.06427698532123718,
+                0.9154547997756882,
+                0.1622818070730248,
+                -0.36259563403160494
+              ],
+              "fov": 62.00000000000002
+            }
+          },
+          {
+            "mark": {
+              "name": "The shared pair reunites both at the pressure-selected moving passenger address",
+              "player": [
+                -29.93753147075574,
+                3,
+                -0.41984385676887054
+              ],
+              "cargo": [
+                -30.645347090271578,
+                4.051402911146006,
+                -0.28750316186497915
+              ],
+              "teleports": 1
+            },
+            "camera": {
+              "p": [
+                -31.275808081438765,
+                8.314181945175182,
+                -11.429409576627968
+              ],
+              "q": [
+                0.004186416784131155,
+                0.9845531803596838,
+                0.1730379255730316,
+                -0.026370158731482286
+              ],
+              "fov": 62.31175043179761
+            }
+          },
+          {
+            "mark": {
+              "name": "both at exit",
+              "player": [
+                -29.93753147075574,
+                3,
+                -0.41984385676887054
+              ],
+              "cargo": [
+                -30.645347090271578,
+                4.051402911146006,
+                -0.28750316186497915
+              ],
+              "teleports": 1
+            },
+            "camera": {
+              "p": [
+                -31.275808081438765,
+                8.314181945175182,
+                -11.429409576627968
+              ],
+              "q": [
+                0.004186416784131155,
+                0.9845531803596838,
+                0.1730379255730316,
+                -0.026370158731482286
+              ],
+              "fov": 62.31175043179761
+            }
+          }
+        ],
+        "updates": 7703,
+        "setupResets": 1,
+        "state": "won",
+        "sameOriginal": true
+      }
+    },
+    {
+      "version": "after",
+      "view": "wide",
+      "width": 1280,
+      "height": 720,
+      "pass": true,
+      "pageErrors": [],
+      "consoleErrors": [],
+      "images": [
+        {
+          "file": "after-wide-inspection.png",
+          "sha256": "92d848af0d4236d11e7dc8aa29f7f229260f9ac6512eeaee49da97d2795d2b86",
+          "bytes": 181448
+        },
+        {
+          "file": "after-wide-route-01.png",
+          "sha256": "76a1d0d6ae42148f463378bf328c2181876cbbda2663ea652e7a6a2d9eda50ee",
+          "bytes": 277952
+        },
+        {
+          "file": "after-wide-route-02.png",
+          "sha256": "4b6902d947d213b17b0d16b9d79654b78bf35d0e2066ce15e90ae4403a454613",
+          "bytes": 302600
+        },
+        {
+          "file": "after-wide-route-03.png",
+          "sha256": "cc15d3f560334eaf67c766a898191f5049adc84d498ac3e28594e5fe32615fa2",
+          "bytes": 350989
+        },
+        {
+          "file": "after-wide-route-04.png",
+          "sha256": "cc15d3f560334eaf67c766a898191f5049adc84d498ac3e28594e5fe32615fa2",
+          "bytes": 350989
+        }
+      ],
+      "inspection": {
+        "before": {
+          "player": [
+            -3,
+            3,
+            25
+          ],
+          "cargo": [
+            -5,
+            3.6,
+            22
+          ],
+          "steps": 0,
+          "id": "expansion-differential-valves"
+        },
+        "after": {
+          "player": [
+            -3,
+            3,
+            25
+          ],
+          "cargo": [
+            -5,
+            3.6,
+            22
+          ],
+          "steps": 0,
+          "id": "expansion-differential-valves"
+        },
+        "camera": {
+          "p": [
+            26.7,
+            15.7,
+            27.6
+          ],
+          "q": [
+            -0.05700141964267033,
+            0.917298823299105,
+            -0.1422696061914261,
+            -0.36752287831770986
+          ],
+          "fov": 56
+        }
+      },
+      "result": {
+        "route": {
+          "level": 42,
+          "id": "expansion-differential-valves",
+          "pass": true,
+          "milestones": [
+            {
+              "name": "The original A check-valve and routed air move the actual positive berth",
+              "player": [
+                19.91959688494966,
+                3,
+                -0.1650961354092193
+              ],
+              "cargo": [
+                17.983624853759054,
+                3.3903335866121687,
+                -0.08993654759981883
+              ],
+              "teleports": 0
+            },
+            {
+              "name": "Moving the same check-valve into the upper B court reverses the pressure sign",
+              "player": [
+                31.14690545174377,
+                9.18,
+                30.848472777733733
+              ],
+              "cargo": [
+                26.58294076722475,
+                9.549998146883087,
+                34.91300649327523
+              ],
+              "teleports": 0
+            },
+            {
+              "name": "The shared pair reunites both at the pressure-selected moving passenger address",
+              "player": [
+                -29.93109232151986,
+                3,
+                -0.3790400214953152
+              ],
+              "cargo": [
+                -30.641286914686823,
+                4.048286556200738,
+                -0.26016732974492346
+              ],
+              "teleports": 1
+            },
+            {
+              "name": "both at exit",
+              "player": [
+                -29.93109232151986,
+                3,
+                -0.3790400214953152
+              ],
+              "cargo": [
+                -30.641286914686823,
+                4.048286556200738,
+                -0.26016732974492346
+              ],
+              "teleports": 1
+            }
+          ],
+          "respawns": 0,
+          "resets": 0,
+          "frames": 3873,
+          "teleports": 1
+        },
+        "pictures": [
+          {
+            "mark": {
+              "name": "The original A check-valve and routed air move the actual positive berth",
+              "player": [
+                19.91959688494966,
+                3,
+                -0.1650961354092193
+              ],
+              "cargo": [
+                17.983624853759054,
+                3.3903335866121687,
+                -0.08993654759981883
+              ],
+              "teleports": 0
+            },
+            "camera": {
+              "p": [
+                21.015790044079303,
+                3.670000000000001,
+                6.280888710497364
+              ],
+              "q": [
+                0.0617599732487865,
+                0.02996334564404253,
+                -0.0018549140514117297,
+                0.997639445348863
+              ],
+              "fov": 62.00000000000002
+            }
+          },
+          {
+            "mark": {
+              "name": "Moving the same check-valve into the upper B court reverses the pressure sign",
+              "player": [
+                31.14690545174377,
+                9.18,
+                30.848472777733733
+              ],
+              "cargo": [
+                26.58294076722475,
+                9.549998146883087,
+                34.91300649327523
+              ],
+              "teleports": 0
+            },
+            "camera": {
+              "p": [
+                25.998356921362294,
+                12.751076725749883,
+                27.29388396816745
+              ],
+              "q": [
+                0.06893559781529777,
+                0.9053929929859122,
+                0.16145066737238842,
+                -0.3865812897837528
+              ],
+              "fov": 62.00000000000002
+            }
+          },
+          {
+            "mark": {
+              "name": "The shared pair reunites both at the pressure-selected moving passenger address",
+              "player": [
+                -29.93109232151986,
+                3,
+                -0.3790400214953152
+              ],
+              "cargo": [
+                -30.641286914686823,
+                4.048286556200738,
+                -0.26016732974492346
+              ],
+              "teleports": 1
+            },
+            "camera": {
+              "p": [
+                -31.269135351178324,
+                6.552039629260108,
+                -6.495085034528528
+              ],
+              "q": [
+                0.0052805803292662,
+                0.9842060432676288,
+                0.1739410026899842,
+                -0.03248241755269224
+              ],
+              "fov": 62.31207458500351
+            }
+          },
+          {
+            "mark": {
+              "name": "both at exit",
+              "player": [
+                -29.93109232151986,
+                3,
+                -0.3790400214953152
+              ],
+              "cargo": [
+                -30.641286914686823,
+                4.048286556200738,
+                -0.26016732974492346
+              ],
+              "teleports": 1
+            },
+            "camera": {
+              "p": [
+                -31.269135351178324,
+                6.552039629260108,
+                -6.495085034528528
+              ],
+              "q": [
+                0.0052805803292662,
+                0.9842060432676288,
+                0.1739410026899842,
+                -0.03248241755269224
+              ],
+              "fov": 62.31207458500351
+            }
+          }
+        ],
+        "updates": 7745,
+        "setupResets": 1,
+        "state": "won",
+        "sameOriginal": true
+      }
+    },
+    {
+      "version": "after",
+      "view": "portrait",
+      "width": 390,
+      "height": 844,
+      "pass": true,
+      "pageErrors": [],
+      "consoleErrors": [],
+      "images": [
+        {
+          "file": "after-portrait-inspection.png",
+          "sha256": "765d91602d3442a95116e3e8d1a28afb6d1a84fe10bc93810ec84725b188f1b8",
+          "bytes": 72051
+        },
+        {
+          "file": "after-portrait-route-01.png",
+          "sha256": "4f4b60edad0707d96aad497c24f408e3d42dd24f22847934b5466fb289abbab6",
+          "bytes": 87666
+        },
+        {
+          "file": "after-portrait-route-02.png",
+          "sha256": "8827440d853db5db742cc26efdfc61dc65153d9ff8358ff1fc22ccb128624b73",
+          "bytes": 116552
+        },
+        {
+          "file": "after-portrait-route-03.png",
+          "sha256": "e693ad87111236ee18ce12df5788078c1fd55bcba5d248bf3f13c7b7e3d20b55",
+          "bytes": 112501
+        },
+        {
+          "file": "after-portrait-route-04.png",
+          "sha256": "e693ad87111236ee18ce12df5788078c1fd55bcba5d248bf3f13c7b7e3d20b55",
+          "bytes": 112501
+        }
+      ],
+      "inspection": {
+        "before": {
+          "player": [
+            -3,
+            3,
+            25
+          ],
+          "cargo": [
+            -5,
+            3.6,
+            22
+          ],
+          "steps": 0,
+          "id": "expansion-differential-valves"
+        },
+        "after": {
+          "player": [
+            -3,
+            3,
+            25
+          ],
+          "cargo": [
+            -5,
+            3.6,
+            22
+          ],
+          "steps": 0,
+          "id": "expansion-differential-valves"
+        },
+        "camera": {
+          "p": [
+            26.7,
+            15.7,
+            27.6
+          ],
+          "q": [
+            -0.05700141964267033,
+            0.917298823299105,
+            -0.1422696061914261,
+            -0.36752287831770986
+          ],
+          "fov": 56
+        }
+      },
+      "result": {
+        "route": {
+          "level": 42,
+          "id": "expansion-differential-valves",
+          "pass": true,
+          "milestones": [
+            {
+              "name": "The original A check-valve and routed air move the actual positive berth",
+              "player": [
+                19.919596884752448,
+                3,
+                -0.1650961358428219
+              ],
+              "cargo": [
+                17.983624659043684,
+                3.3903335866121553,
+                -0.08993623025531947
+              ],
+              "teleports": 0
+            },
+            {
+              "name": "Moving the same check-valve into the upper B court reverses the pressure sign",
+              "player": [
+                31.14690545174377,
+                9.18,
+                30.848472777733733
+              ],
+              "cargo": [
+                26.5829408839611,
+                9.549998146883087,
+                34.9130063435582
+              ],
+              "teleports": 0
+            },
+            {
+              "name": "The shared pair reunites both at the pressure-selected moving passenger address",
+              "player": [
+                -29.93753147075574,
+                3,
+                -0.41984385676887054
+              ],
+              "cargo": [
+                -30.645347090271578,
+                4.051402911146006,
+                -0.28750316186497915
+              ],
+              "teleports": 1
+            },
+            {
+              "name": "both at exit",
+              "player": [
+                -29.93753147075574,
+                3,
+                -0.41984385676887054
+              ],
+              "cargo": [
+                -30.645347090271578,
+                4.051402911146006,
+                -0.28750316186497915
+              ],
+              "teleports": 1
+            }
+          ],
+          "respawns": 0,
+          "resets": 0,
+          "frames": 3852,
+          "teleports": 1
+        },
+        "pictures": [
+          {
+            "mark": {
+              "name": "The original A check-valve and routed air move the actual positive berth",
+              "player": [
+                19.919596884752448,
+                3,
+                -0.1650961358428219
+              ],
+              "cargo": [
+                17.983624659043684,
+                3.3903335866121553,
+                -0.08993623025531947
+              ],
+              "teleports": 0
+            },
+            "camera": {
+              "p": [
+                20.985523355839266,
+                3.670000014400628,
+                11.441546165112005
+              ],
+              "q": [
+                0.0493788523288838,
+                0.023394475381535728,
+                -0.0011569214480125244,
+                0.9985054276252422
+              ],
+              "fov": 62.00001750362022
+            }
+          },
+          {
+            "mark": {
+              "name": "Moving the same check-valve into the upper B court reverses the pressure sign",
+              "player": [
+                31.14690545174377,
+                9.18,
+                30.848472777733733
+              ],
+              "cargo": [
+                26.5829408839611,
+                9.549998146883087,
+                34.9130063435582
+              ],
+              "teleports": 0
+            },
+            "camera": {
+              "p": [
+                22.995738619570105,
+                14.526849544686428,
+                23.35227627427075
+              ],
+              "q": [
+                0.06427698532123718,
+                0.9154547997756882,
+                0.1622818070730248,
+                -0.36259563403160494
+              ],
+              "fov": 62.00000000000002
+            }
+          },
+          {
+            "mark": {
+              "name": "The shared pair reunites both at the pressure-selected moving passenger address",
+              "player": [
+                -29.93753147075574,
+                3,
+                -0.41984385676887054
+              ],
+              "cargo": [
+                -30.645347090271578,
+                4.051402911146006,
+                -0.28750316186497915
+              ],
+              "teleports": 1
+            },
+            "camera": {
+              "p": [
+                -31.275808081438765,
+                8.314181945175182,
+                -11.429409576627968
+              ],
+              "q": [
+                0.004186416784131155,
+                0.9845531803596838,
+                0.1730379255730316,
+                -0.026370158731482286
+              ],
+              "fov": 62.31175043179761
+            }
+          },
+          {
+            "mark": {
+              "name": "both at exit",
+              "player": [
+                -29.93753147075574,
+                3,
+                -0.41984385676887054
+              ],
+              "cargo": [
+                -30.645347090271578,
+                4.051402911146006,
+                -0.28750316186497915
+              ],
+              "teleports": 1
+            },
+            "camera": {
+              "p": [
+                -31.275808081438765,
+                8.314181945175182,
+                -11.429409576627968
+              ],
+              "q": [
+                0.004186416784131155,
+                0.9845531803596838,
+                0.1730379255730316,
+                -0.026370158731482286
+              ],
+              "fov": 62.31175043179761
+            }
+          }
+        ],
+        "updates": 7703,
+        "setupResets": 1,
+        "state": "won",
+        "sameOriginal": true
+      }
+    }
+  ],
+  "pass": true
+}

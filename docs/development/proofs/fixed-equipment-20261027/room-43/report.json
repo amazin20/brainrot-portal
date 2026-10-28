@@ -1,0 +1,1621 @@
+{
+  "level": 43,
+  "expectedId": "puzzle-pilot43-return-and-release",
+  "fixture": {
+    "key": "brainrot-campaign-v67:brainrot-portal.preferences.v24",
+    "raw": "{\"quality\":\"balanced\",\"volume\":0,\"lookSensitivity\":1,\"muted\":true,\"tutorial\":false,\"completed\":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,41],\"hints\":{},\"resumeLevel\":42,\"campaignSequenceRevision\":\"fifty-rooms-then-castle-v1\",\"campaignRevision\":\"creative-campaign-v48\",\"roomRevisions\":{\"16\":\"cable-supported-architecture-v1\",\"22\":\"counterweight-dynamic-v1\",\"32\":\"siphon-observatory-v1\",\"42\":\"spatial-progression43-v1\",\"43\":\"spatial-progression44-v1\",\"44\":\"spatial-progression45-v1\",\"45\":\"spatial-progression46-v1\",\"46\":\"spatial-progression47-v1\",\"47\":\"spatial-progression48-v1\",\"48\":\"spatial-progression49-v1\",\"49\":\"spatial-progression50-v1\",\"50\":\"spatial-progression51-v1\"}}",
+    "preferences": {
+      "quality": "balanced",
+      "volume": 0,
+      "lookSensitivity": 1,
+      "muted": true,
+      "tutorial": false,
+      "completed": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        41
+      ],
+      "hints": {},
+      "resumeLevel": 42,
+      "campaignSequenceRevision": "fifty-rooms-then-castle-v1",
+      "campaignRevision": "creative-campaign-v48",
+      "roomRevisions": {
+        "16": "cable-supported-architecture-v1",
+        "22": "counterweight-dynamic-v1",
+        "32": "siphon-observatory-v1",
+        "42": "spatial-progression43-v1",
+        "43": "spatial-progression44-v1",
+        "44": "spatial-progression45-v1",
+        "45": "spatial-progression46-v1",
+        "46": "spatial-progression47-v1",
+        "47": "spatial-progression48-v1",
+        "48": "spatial-progression49-v1",
+        "49": "spatial-progression50-v1",
+        "50": "spatial-progression51-v1"
+      }
+    },
+    "completed": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      41
+    ],
+    "targetIndex": 42,
+    "targetCompleted": false,
+    "constructorWrites": 0,
+    "scope": "QA setup supplies the previously completed campaign prefix in the candidate own storage before construction; the current target is not completed. This is not a fresh guest full-campaign playthrough."
+  },
+  "sourceCommit": "e3a3a2fdd40fc34fd535c0cf9112dc4a11e66102",
+  "baselineCommit": "6c634dec2bc6098d5cb374bbf6b25492fa59e30d",
+  "scope": "Native software WebGL of two frozen ordinary production builds. Matched static camera inspection and scripted real-input routes, not human playtesting or hardware FPS. An isolated prior-completed-prefix save admits the still-uncompleted target through the unchanged production gate. Late route drivers perform one normal setup reset before observation; no resets are allowed during the observed route.",
+  "rows": [
+    {
+      "version": "before",
+      "view": "wide",
+      "width": 1280,
+      "height": 720,
+      "pass": true,
+      "pageErrors": [],
+      "consoleErrors": [],
+      "images": [
+        {
+          "file": "before-wide-inspection.png",
+          "sha256": "6f2e74431746d286068464a285a64555c112c9ee63bf7469a57d616978c02020",
+          "bytes": 490997
+        },
+        {
+          "file": "before-wide-route-01.png",
+          "sha256": "c6eada2ff4fbde418b3972a3f2fac9326e4fe4252ab5068b2cbb669de75d972e",
+          "bytes": 446442
+        },
+        {
+          "file": "before-wide-route-02.png",
+          "sha256": "f7f3bbfd24e4d7d7eb3bf0453315ea7229542036e0a0550d8248059d9f54dd27",
+          "bytes": 381860
+        },
+        {
+          "file": "before-wide-route-03.png",
+          "sha256": "98e937ca3c99ccf7eb9b64949bd8151d2963d39613f3a52ce0982f081f697cc7",
+          "bytes": 432838
+        },
+        {
+          "file": "before-wide-route-04.png",
+          "sha256": "a17bf98f86e86e5a5ef0b4288914eb93e7a3c525fb067838987f03f36e08e87a",
+          "bytes": 359083
+        },
+        {
+          "file": "before-wide-route-05.png",
+          "sha256": "100c78084505b5da0275a326ee6f1a2ed1b3c8ad226088540aa3f45cc8b80b5d",
+          "bytes": 349690
+        },
+        {
+          "file": "before-wide-route-06.png",
+          "sha256": "100c78084505b5da0275a326ee6f1a2ed1b3c8ad226088540aa3f45cc8b80b5d",
+          "bytes": 349690
+        }
+      ],
+      "inspection": {
+        "before": {
+          "player": [
+            -14,
+            0,
+            20
+          ],
+          "cargo": [
+            -12,
+            0.6,
+            19
+          ],
+          "steps": 0,
+          "id": "puzzle-pilot43-return-and-release"
+        },
+        "after": {
+          "player": [
+            -14,
+            0,
+            20
+          ],
+          "cargo": [
+            -12,
+            0.6,
+            19
+          ],
+          "steps": 0,
+          "id": "puzzle-pilot43-return-and-release"
+        },
+        "camera": {
+          "p": [
+            -1,
+            5,
+            23
+          ],
+          "q": [
+            0.03896872809139473,
+            0.300388328280371,
+            -0.012283809401152394,
+            0.9529414454679045
+          ],
+          "fov": 56
+        }
+      },
+      "result": {
+        "route": {
+          "level": 43,
+          "id": "puzzle-pilot43-return-and-release",
+          "pass": true,
+          "milestones": [
+            {
+              "name": "The original companion holds open a real observation aperture",
+              "player": [
+                -19.998020721798646,
+                0.18,
+                14.624069765255147
+              ],
+              "cargo": [
+                -19.864517577705044,
+                0.5699981434788693,
+                13.91075579005497
+              ],
+              "teleports": 0
+            },
+            {
+              "name": "The player reaches a raised receiving apron while the companion remains below",
+              "player": [
+                -20.030050677966415,
+                16.79999997615814,
+                -13.980036067604132
+              ],
+              "cargo": [
+                -19.86451823224742,
+                0.5699981434788887,
+                13.910756482338481
+              ],
+              "teleports": 1
+            },
+            {
+              "name": "A shot around the partition returns the original weight and closes the observation shutter",
+              "player": [
+                2.778379897744726,
+                15,
+                -18.403016611912307
+              ],
+              "cargo": [
+                -20.372063524155834,
+                15.53445655510604,
+                -23.231349773626135
+              ],
+              "teleports": 1
+            },
+            {
+              "name": "The same pair carries the original travellers through a real fall and upward flight",
+              "player": [
+                15.39746303326604,
+                22,
+                20.40353596280517
+              ],
+              "cargo": [
+                16.05905666884263,
+                23.04396070887684,
+                20.6877075334629
+              ],
+              "teleports": 2
+            },
+            {
+              "name": "Both original travellers reach the visible exit without reset or checkpoint",
+              "player": [
+                15.466114499552766,
+                22,
+                16.9992711465544
+              ],
+              "cargo": [
+                15.305657238055302,
+                23.05511761450181,
+                16.297388392509863
+              ],
+              "teleports": 2
+            },
+            {
+              "name": "both at exit",
+              "player": [
+                15.466114499552766,
+                22,
+                16.9992711465544
+              ],
+              "cargo": [
+                15.305657238055302,
+                23.05511761450181,
+                16.297388392509863
+              ],
+              "teleports": 2
+            }
+          ],
+          "respawns": 0,
+          "resets": 0,
+          "frames": 2591,
+          "teleports": 2
+        },
+        "pictures": [
+          {
+            "mark": {
+              "name": "The original companion holds open a real observation aperture",
+              "player": [
+                -19.998020721798646,
+                0.18,
+                14.624069765255147
+              ],
+              "cargo": [
+                -19.864517577705044,
+                0.5699981434788693,
+                13.91075579005497
+              ],
+              "teleports": 0
+            },
+            "camera": {
+              "p": [
+                -20.445622439741665,
+                1.1102339579849785,
+                21.24658708375211
+              ],
+              "q": [
+                0.02976029596711121,
+                -0.10860941707799773,
+                0.0032529580183100165,
+                0.9936336032814402
+              ],
+              "fov": 62.00031512739237
+            }
+          },
+          {
+            "mark": {
+              "name": "The player reaches a raised receiving apron while the companion remains below",
+              "player": [
+                -20.030050677966415,
+                16.79999997615814,
+                -13.980036067604132
+              ],
+              "cargo": [
+                -19.86451823224742,
+                0.5699981434788887,
+                13.910756482338481
+              ],
+              "teleports": 1
+            },
+            "camera": {
+              "p": [
+                -17.884548834326367,
+                17.51731074821792,
+                -8.82740211727744
+              ],
+              "q": [
+                0.1815893797364625,
+                0.11037738102692707,
+                -0.020516368428292273,
+                0.9769448344461821
+              ],
+              "fov": 62.17887587043145
+            }
+          },
+          {
+            "mark": {
+              "name": "A shot around the partition returns the original weight and closes the observation shutter",
+              "player": [
+                2.778379897744726,
+                15,
+                -18.403016611912307
+              ],
+              "cargo": [
+                -20.372063524155834,
+                15.53445655510604,
+                -23.231349773626135
+              ],
+              "teleports": 1
+            },
+            "camera": {
+              "p": [
+                5.332474142994271,
+                18.776435520635555,
+                -24.029074478602162
+              ],
+              "q": [
+                -0.05565384688099195,
+                0.9393069112945599,
+                0.18393862747308395,
+                0.28420372454445203
+              ],
+              "fov": 62.00000000003269
+            }
+          },
+          {
+            "mark": {
+              "name": "The same pair carries the original travellers through a real fall and upward flight",
+              "player": [
+                15.39746303326604,
+                22,
+                20.40353596280517
+              ],
+              "cargo": [
+                16.05905666884263,
+                23.04396070887684,
+                20.6877075334629
+              ],
+              "teleports": 2
+            },
+            "camera": {
+              "p": [
+                8.496686375720072,
+                25.78256178149952,
+                21.541836686271672
+              ],
+              "q": [
+                -0.06147021518387886,
+                -0.6855471834861677,
+                -0.058641971492107356,
+                0.7230543486066239
+              ],
+              "fov": 64.19998617969776
+            }
+          },
+          {
+            "mark": {
+              "name": "Both original travellers reach the visible exit without reset or checkpoint",
+              "player": [
+                15.466114499552766,
+                22,
+                16.9992711465544
+              ],
+              "cargo": [
+                15.305657238055302,
+                23.05511761450181,
+                16.297388392509863
+              ],
+              "teleports": 2
+            },
+            "camera": {
+              "p": [
+                9.061392004136964,
+                24.422958645955564,
+                18.39837746085074
+              ],
+              "q": [
+                -0.06167188993163108,
+                -0.6855068683262387,
+                -0.05847834538239648,
+                0.7230886491925805
+              ],
+              "fov": 62.31811343498888
+            }
+          },
+          {
+            "mark": {
+              "name": "both at exit",
+              "player": [
+                15.466114499552766,
+                22,
+                16.9992711465544
+              ],
+              "cargo": [
+                15.305657238055302,
+                23.05511761450181,
+                16.297388392509863
+              ],
+              "teleports": 2
+            },
+            "camera": {
+              "p": [
+                9.061392004136964,
+                24.422958645955564,
+                18.39837746085074
+              ],
+              "q": [
+                -0.06167188993163108,
+                -0.6855068683262387,
+                -0.05847834538239648,
+                0.7230886491925805
+              ],
+              "fov": 62.31811343498888
+            }
+          }
+        ],
+        "updates": 5181,
+        "setupResets": 1,
+        "state": "won",
+        "sameOriginal": true
+      }
+    },
+    {
+      "version": "before",
+      "view": "portrait",
+      "width": 390,
+      "height": 844,
+      "pass": true,
+      "pageErrors": [],
+      "consoleErrors": [],
+      "images": [
+        {
+          "file": "before-portrait-inspection.png",
+          "sha256": "448c768cb6bc5c9a199c22db2cd7c225d291c24c71770e0f4c8c250ad8c0e730",
+          "bytes": 149215
+        },
+        {
+          "file": "before-portrait-route-01.png",
+          "sha256": "065d5b562118213fc9e34aaeb5fca5217b155e82ef93ae4482b508379531f924",
+          "bytes": 147463
+        },
+        {
+          "file": "before-portrait-route-02.png",
+          "sha256": "1a267ede84001fe7ff6c8cfbe8962957e4e97075fb9ebb2ab016bc5e571b0d90",
+          "bytes": 171514
+        },
+        {
+          "file": "before-portrait-route-03.png",
+          "sha256": "ac9858b2dd8270f4871afc51bbdfce2f8b365ccc97ae2df5b131e999c7958bd5",
+          "bytes": 159760
+        },
+        {
+          "file": "before-portrait-route-04.png",
+          "sha256": "19a152234ac880a2c43000ec9ff0b526826990a6608c7639a8ef2fe6a594cec1",
+          "bytes": 146205
+        },
+        {
+          "file": "before-portrait-route-05.png",
+          "sha256": "dd5925a80eb1d890e2919e8e6a1cf30ff092408e00086819755eba94d2c1b819",
+          "bytes": 128760
+        },
+        {
+          "file": "before-portrait-route-06.png",
+          "sha256": "dd5925a80eb1d890e2919e8e6a1cf30ff092408e00086819755eba94d2c1b819",
+          "bytes": 128760
+        }
+      ],
+      "inspection": {
+        "before": {
+          "player": [
+            -14,
+            0,
+            20
+          ],
+          "cargo": [
+            -12,
+            0.6,
+            19
+          ],
+          "steps": 0,
+          "id": "puzzle-pilot43-return-and-release"
+        },
+        "after": {
+          "player": [
+            -14,
+            0,
+            20
+          ],
+          "cargo": [
+            -12,
+            0.6,
+            19
+          ],
+          "steps": 0,
+          "id": "puzzle-pilot43-return-and-release"
+        },
+        "camera": {
+          "p": [
+            -1,
+            5,
+            23
+          ],
+          "q": [
+            0.03896872809139473,
+            0.300388328280371,
+            -0.012283809401152394,
+            0.9529414454679045
+          ],
+          "fov": 56
+        }
+      },
+      "result": {
+        "route": {
+          "level": 43,
+          "id": "puzzle-pilot43-return-and-release",
+          "pass": true,
+          "milestones": [
+            {
+              "name": "The original companion holds open a real observation aperture",
+              "player": [
+                -19.998020721798646,
+                0.18,
+                14.624069765255147
+              ],
+              "cargo": [
+                -19.864517577705044,
+                0.5699981434788693,
+                13.91075579005497
+              ],
+              "teleports": 0
+            },
+            {
+              "name": "The player reaches a raised receiving apron while the companion remains below",
+              "player": [
+                -20.029375422177115,
+                16.79999997615814,
+                -13.980036067604132
+              ],
+              "cargo": [
+                -19.86451823224742,
+                0.5699981434788887,
+                13.910756482338481
+              ],
+              "teleports": 1
+            },
+            {
+              "name": "A shot around the partition returns the original weight and closes the observation shutter",
+              "player": [
+                2.778379979513094,
+                15,
+                -18.403016515902102
+              ],
+              "cargo": [
+                -20.340276372265325,
+                15.509524260723785,
+                -23.220964807757426
+              ],
+              "teleports": 1
+            },
+            {
+              "name": "The same pair carries the original travellers through a real fall and upward flight",
+              "player": [
+                15.362698172088995,
+                22,
+                20.39031264957613
+              ],
+              "cargo": [
+                16.024939725264172,
+                23.04313486729924,
+                20.67290508055584
+              ],
+              "teleports": 2
+            },
+            {
+              "name": "Both original travellers reach the visible exit without reset or checkpoint",
+              "player": [
+                15.48481307172582,
+                22,
+                16.963714175258303
+              ],
+              "cargo": [
+                15.309680745180344,
+                23.070521747597553,
+                16.265339622845055
+              ],
+              "teleports": 2
+            },
+            {
+              "name": "both at exit",
+              "player": [
+                15.48481307172582,
+                22,
+                16.963714175258303
+              ],
+              "cargo": [
+                15.309680745180344,
+                23.070521747597553,
+                16.265339622845055
+              ],
+              "teleports": 2
+            }
+          ],
+          "respawns": 0,
+          "resets": 0,
+          "frames": 2546,
+          "teleports": 2
+        },
+        "pictures": [
+          {
+            "mark": {
+              "name": "The original companion holds open a real observation aperture",
+              "player": [
+                -19.998020721798646,
+                0.18,
+                14.624069765255147
+              ],
+              "cargo": [
+                -19.864517577705044,
+                0.5699981434788693,
+                13.91075579005497
+              ],
+              "teleports": 0
+            },
+            "camera": {
+              "p": [
+                -21.879861381046172,
+                0.8500775409207133,
+                26.233697463239153
+              ],
+              "q": [
+                0.028838656892768752,
+                -0.1144074093356281,
+                0.0033225819138235756,
+                0.9930096862604902
+              ],
+              "fov": 62.009822609102784
+            }
+          },
+          {
+            "mark": {
+              "name": "The player reaches a raised receiving apron while the companion remains below",
+              "player": [
+                -20.029375422177115,
+                16.79999997615814,
+                -13.980036067604132
+              ],
+              "cargo": [
+                -19.86451823224742,
+                0.5699981434788887,
+                13.910756482338481
+              ],
+              "teleports": 1
+            },
+            "camera": {
+              "p": [
+                -18.072674257206106,
+                18.41918106585507,
+                -8.640576861315552
+              ],
+              "q": [
+                0.16101006274061636,
+                0.105155993200938,
+                -0.017255875714954752,
+                0.9811830672935083
+              ],
+              "fov": 84.0961746789362
+            }
+          },
+          {
+            "mark": {
+              "name": "A shot around the partition returns the original weight and closes the observation shutter",
+              "player": [
+                2.778379979513094,
+                15,
+                -18.403016515902102
+              ],
+              "cargo": [
+                -20.340276372265325,
+                15.509524260723785,
+                -23.220964807757426
+              ],
+              "teleports": 1
+            },
+            "camera": {
+              "p": [
+                8.188147845666975,
+                20.737307542037318,
+                -27.893633235239896
+              ],
+              "q": [
+                -0.0560438497383168,
+                0.9386854117294646,
+                0.183755176882985,
+                0.2862914942527935
+              ],
+              "fov": 62.000000000000256
+            }
+          },
+          {
+            "mark": {
+              "name": "The same pair carries the original travellers through a real fall and upward flight",
+              "player": [
+                15.362698172088995,
+                22,
+                20.39031264957613
+              ],
+              "cargo": [
+                16.024939725264172,
+                23.04313486729924,
+                20.67290508055584
+              ],
+              "teleports": 2
+            },
+            "camera": {
+              "p": [
+                3.3210152064596272,
+                26.55593260922251,
+                21.582556874909347
+              ],
+              "q": [
+                -0.057412839029505086,
+                -0.6868022846666244,
+                -0.054937293569754825,
+                0.7224875649217138
+              ],
+              "fov": 64.2002717304824
+            }
+          },
+          {
+            "mark": {
+              "name": "Both original travellers reach the visible exit without reset or checkpoint",
+              "player": [
+                15.48481307172582,
+                22,
+                16.963714175258303
+              ],
+              "cargo": [
+                15.309680745180344,
+                23.070521747597553,
+                16.265339622845055
+              ],
+              "teleports": 2
+            },
+            "camera": {
+              "p": [
+                3.9475880099435674,
+                25.17652234368313,
+                18.420279719356657
+              ],
+              "q": [
+                -0.05761031750261785,
+                -0.6867590460226141,
+                -0.054769535718369816,
+                0.7225256825750562
+              ],
+              "fov": 62.31857994944313
+            }
+          },
+          {
+            "mark": {
+              "name": "both at exit",
+              "player": [
+                15.48481307172582,
+                22,
+                16.963714175258303
+              ],
+              "cargo": [
+                15.309680745180344,
+                23.070521747597553,
+                16.265339622845055
+              ],
+              "teleports": 2
+            },
+            "camera": {
+              "p": [
+                3.9475880099435674,
+                25.17652234368313,
+                18.420279719356657
+              ],
+              "q": [
+                -0.05761031750261785,
+                -0.6867590460226141,
+                -0.054769535718369816,
+                0.7225256825750562
+              ],
+              "fov": 62.31857994944313
+            }
+          }
+        ],
+        "updates": 5091,
+        "setupResets": 1,
+        "state": "won",
+        "sameOriginal": true
+      }
+    },
+    {
+      "version": "after",
+      "view": "wide",
+      "width": 1280,
+      "height": 720,
+      "pass": true,
+      "pageErrors": [],
+      "consoleErrors": [],
+      "images": [
+        {
+          "file": "after-wide-inspection.png",
+          "sha256": "b95280fe9ebb2d4df6ad06a9d00ae05e4ed0230d7edd24fde8af30b2a3772e18",
+          "bytes": 507817
+        },
+        {
+          "file": "after-wide-route-01.png",
+          "sha256": "cd7d4da9b65c5319d7e5976ea1f0e90c3bee71b761241ca07825bb82fa0a8187",
+          "bytes": 467328
+        },
+        {
+          "file": "after-wide-route-02.png",
+          "sha256": "9ed889365b5138b042a33bec964bb131e8573e1b3793396cf4d9df4b80273b9d",
+          "bytes": 384036
+        },
+        {
+          "file": "after-wide-route-03.png",
+          "sha256": "1aeca476c09bb89ebe3f99055b6608256774ec2fc3398d61e6907fe154b9269b",
+          "bytes": 434977
+        },
+        {
+          "file": "after-wide-route-04.png",
+          "sha256": "a17bf98f86e86e5a5ef0b4288914eb93e7a3c525fb067838987f03f36e08e87a",
+          "bytes": 359083
+        },
+        {
+          "file": "after-wide-route-05.png",
+          "sha256": "100c78084505b5da0275a326ee6f1a2ed1b3c8ad226088540aa3f45cc8b80b5d",
+          "bytes": 349690
+        },
+        {
+          "file": "after-wide-route-06.png",
+          "sha256": "100c78084505b5da0275a326ee6f1a2ed1b3c8ad226088540aa3f45cc8b80b5d",
+          "bytes": 349690
+        }
+      ],
+      "inspection": {
+        "before": {
+          "player": [
+            -14,
+            0,
+            20
+          ],
+          "cargo": [
+            -12,
+            0.6,
+            19
+          ],
+          "steps": 0,
+          "id": "puzzle-pilot43-return-and-release"
+        },
+        "after": {
+          "player": [
+            -14,
+            0,
+            20
+          ],
+          "cargo": [
+            -12,
+            0.6,
+            19
+          ],
+          "steps": 0,
+          "id": "puzzle-pilot43-return-and-release"
+        },
+        "camera": {
+          "p": [
+            -1,
+            5,
+            23
+          ],
+          "q": [
+            0.03896872809139473,
+            0.300388328280371,
+            -0.012283809401152394,
+            0.9529414454679045
+          ],
+          "fov": 56
+        }
+      },
+      "result": {
+        "route": {
+          "level": 43,
+          "id": "puzzle-pilot43-return-and-release",
+          "pass": true,
+          "milestones": [
+            {
+              "name": "The original companion holds open a real observation aperture",
+              "player": [
+                -19.998020721798646,
+                0.18,
+                14.624069765255147
+              ],
+              "cargo": [
+                -19.864517577705044,
+                0.5699981434788693,
+                13.91075579005497
+              ],
+              "teleports": 0
+            },
+            {
+              "name": "The player reaches a raised receiving apron while the companion remains below",
+              "player": [
+                -20.030050677966415,
+                16.79999997615814,
+                -13.980036067604132
+              ],
+              "cargo": [
+                -19.86451823224742,
+                0.5699981434788887,
+                13.910756482338481
+              ],
+              "teleports": 1
+            },
+            {
+              "name": "A shot around the partition returns the original weight and closes the observation shutter",
+              "player": [
+                2.778379897744726,
+                15,
+                -18.403016611912307
+              ],
+              "cargo": [
+                -20.372063524155834,
+                15.53445655510604,
+                -23.231349773626135
+              ],
+              "teleports": 1
+            },
+            {
+              "name": "The same pair carries the original travellers through a real fall and upward flight",
+              "player": [
+                15.39746303326604,
+                22,
+                20.40353596280517
+              ],
+              "cargo": [
+                16.05905666884263,
+                23.04396070887684,
+                20.6877075334629
+              ],
+              "teleports": 2
+            },
+            {
+              "name": "Both original travellers reach the visible exit without reset or checkpoint",
+              "player": [
+                15.466114499552766,
+                22,
+                16.9992711465544
+              ],
+              "cargo": [
+                15.305657238055302,
+                23.05511761450181,
+                16.297388392509863
+              ],
+              "teleports": 2
+            },
+            {
+              "name": "both at exit",
+              "player": [
+                15.466114499552766,
+                22,
+                16.9992711465544
+              ],
+              "cargo": [
+                15.305657238055302,
+                23.05511761450181,
+                16.297388392509863
+              ],
+              "teleports": 2
+            }
+          ],
+          "respawns": 0,
+          "resets": 0,
+          "frames": 2591,
+          "teleports": 2
+        },
+        "pictures": [
+          {
+            "mark": {
+              "name": "The original companion holds open a real observation aperture",
+              "player": [
+                -19.998020721798646,
+                0.18,
+                14.624069765255147
+              ],
+              "cargo": [
+                -19.864517577705044,
+                0.5699981434788693,
+                13.91075579005497
+              ],
+              "teleports": 0
+            },
+            "camera": {
+              "p": [
+                -20.445622439741665,
+                1.1102339579849785,
+                21.24658708375211
+              ],
+              "q": [
+                0.02976029596711121,
+                -0.10860941707799773,
+                0.0032529580183100165,
+                0.9936336032814402
+              ],
+              "fov": 62.00031512739237
+            }
+          },
+          {
+            "mark": {
+              "name": "The player reaches a raised receiving apron while the companion remains below",
+              "player": [
+                -20.030050677966415,
+                16.79999997615814,
+                -13.980036067604132
+              ],
+              "cargo": [
+                -19.86451823224742,
+                0.5699981434788887,
+                13.910756482338481
+              ],
+              "teleports": 1
+            },
+            "camera": {
+              "p": [
+                -17.884548834326367,
+                17.51731074821792,
+                -8.82740211727744
+              ],
+              "q": [
+                0.1815893797364625,
+                0.11037738102692707,
+                -0.020516368428292273,
+                0.9769448344461821
+              ],
+              "fov": 62.17887587043145
+            }
+          },
+          {
+            "mark": {
+              "name": "A shot around the partition returns the original weight and closes the observation shutter",
+              "player": [
+                2.778379897744726,
+                15,
+                -18.403016611912307
+              ],
+              "cargo": [
+                -20.372063524155834,
+                15.53445655510604,
+                -23.231349773626135
+              ],
+              "teleports": 1
+            },
+            "camera": {
+              "p": [
+                5.332474142994271,
+                18.776435520635555,
+                -24.029074478602162
+              ],
+              "q": [
+                -0.05565384688099195,
+                0.9393069112945599,
+                0.18393862747308395,
+                0.28420372454445203
+              ],
+              "fov": 62.00000000003269
+            }
+          },
+          {
+            "mark": {
+              "name": "The same pair carries the original travellers through a real fall and upward flight",
+              "player": [
+                15.39746303326604,
+                22,
+                20.40353596280517
+              ],
+              "cargo": [
+                16.05905666884263,
+                23.04396070887684,
+                20.6877075334629
+              ],
+              "teleports": 2
+            },
+            "camera": {
+              "p": [
+                8.496686375720072,
+                25.78256178149952,
+                21.541836686271672
+              ],
+              "q": [
+                -0.06147021518387886,
+                -0.6855471834861677,
+                -0.058641971492107356,
+                0.7230543486066239
+              ],
+              "fov": 64.19998617969776
+            }
+          },
+          {
+            "mark": {
+              "name": "Both original travellers reach the visible exit without reset or checkpoint",
+              "player": [
+                15.466114499552766,
+                22,
+                16.9992711465544
+              ],
+              "cargo": [
+                15.305657238055302,
+                23.05511761450181,
+                16.297388392509863
+              ],
+              "teleports": 2
+            },
+            "camera": {
+              "p": [
+                9.061392004136964,
+                24.422958645955564,
+                18.39837746085074
+              ],
+              "q": [
+                -0.06167188993163108,
+                -0.6855068683262387,
+                -0.05847834538239648,
+                0.7230886491925805
+              ],
+              "fov": 62.31811343498888
+            }
+          },
+          {
+            "mark": {
+              "name": "both at exit",
+              "player": [
+                15.466114499552766,
+                22,
+                16.9992711465544
+              ],
+              "cargo": [
+                15.305657238055302,
+                23.05511761450181,
+                16.297388392509863
+              ],
+              "teleports": 2
+            },
+            "camera": {
+              "p": [
+                9.061392004136964,
+                24.422958645955564,
+                18.39837746085074
+              ],
+              "q": [
+                -0.06167188993163108,
+                -0.6855068683262387,
+                -0.05847834538239648,
+                0.7230886491925805
+              ],
+              "fov": 62.31811343498888
+            }
+          }
+        ],
+        "updates": 5181,
+        "setupResets": 1,
+        "state": "won",
+        "sameOriginal": true
+      }
+    },
+    {
+      "version": "after",
+      "view": "portrait",
+      "width": 390,
+      "height": 844,
+      "pass": true,
+      "pageErrors": [],
+      "consoleErrors": [],
+      "images": [
+        {
+          "file": "after-portrait-inspection.png",
+          "sha256": "44c491b0b5eea837f05ff8000dcbd352eb05329e9c6cede9b9ffb97b9287a87c",
+          "bytes": 155436
+        },
+        {
+          "file": "after-portrait-route-01.png",
+          "sha256": "065d5b562118213fc9e34aaeb5fca5217b155e82ef93ae4482b508379531f924",
+          "bytes": 147463
+        },
+        {
+          "file": "after-portrait-route-02.png",
+          "sha256": "5ac19238eb11d8f469c464b7be56660f934001c5f533f9fae506ca5c728fc0e5",
+          "bytes": 172639
+        },
+        {
+          "file": "after-portrait-route-03.png",
+          "sha256": "9469e49b8849d790a016b869c8d166be019f89a96708fccd7f8de3eeb611eb27",
+          "bytes": 175345
+        },
+        {
+          "file": "after-portrait-route-04.png",
+          "sha256": "9cb061e28cd0b741f85332c694ecdaa91486a1447dedbd032e61b8cc34a5d34f",
+          "bytes": 146241
+        },
+        {
+          "file": "after-portrait-route-05.png",
+          "sha256": "a50ff2309cc219f9bc8afe109254689ef7551e7676dd598e96f510f11a3df524",
+          "bytes": 128658
+        },
+        {
+          "file": "after-portrait-route-06.png",
+          "sha256": "a50ff2309cc219f9bc8afe109254689ef7551e7676dd598e96f510f11a3df524",
+          "bytes": 128658
+        }
+      ],
+      "inspection": {
+        "before": {
+          "player": [
+            -14,
+            0,
+            20
+          ],
+          "cargo": [
+            -12,
+            0.6,
+            19
+          ],
+          "steps": 0,
+          "id": "puzzle-pilot43-return-and-release"
+        },
+        "after": {
+          "player": [
+            -14,
+            0,
+            20
+          ],
+          "cargo": [
+            -12,
+            0.6,
+            19
+          ],
+          "steps": 0,
+          "id": "puzzle-pilot43-return-and-release"
+        },
+        "camera": {
+          "p": [
+            -1,
+            5,
+            23
+          ],
+          "q": [
+            0.03896872809139473,
+            0.300388328280371,
+            -0.012283809401152394,
+            0.9529414454679045
+          ],
+          "fov": 56
+        }
+      },
+      "result": {
+        "route": {
+          "level": 43,
+          "id": "puzzle-pilot43-return-and-release",
+          "pass": true,
+          "milestones": [
+            {
+              "name": "The original companion holds open a real observation aperture",
+              "player": [
+                -19.998020721798646,
+                0.18,
+                14.624069765255147
+              ],
+              "cargo": [
+                -19.864517577705044,
+                0.5699981434788693,
+                13.91075579005497
+              ],
+              "teleports": 0
+            },
+            {
+              "name": "The player reaches a raised receiving apron while the companion remains below",
+              "player": [
+                -20.029375422177115,
+                16.79999997615814,
+                -13.980036067604132
+              ],
+              "cargo": [
+                -19.86451823224742,
+                0.5699981434788887,
+                13.910756482338481
+              ],
+              "teleports": 1
+            },
+            {
+              "name": "A shot around the partition returns the original weight and closes the observation shutter",
+              "player": [
+                3.9176251628740295,
+                15,
+                -18.565590112194936
+              ],
+              "cargo": [
+                -20.301126817760277,
+                15.483735105991729,
+                -23.220925427186035
+              ],
+              "teleports": 1
+            },
+            {
+              "name": "The same pair carries the original travellers through a real fall and upward flight",
+              "player": [
+                15.362003140041864,
+                22,
+                20.395775890136896
+              ],
+              "cargo": [
+                16.0241868295648,
+                23.043128937970838,
+                20.67850425692029
+              ],
+              "teleports": 2
+            },
+            {
+              "name": "Both original travellers reach the visible exit without reset or checkpoint",
+              "player": [
+                15.485388292889409,
+                22,
+                16.969097382588735
+              ],
+              "cargo": [
+                15.31052333188462,
+                23.07048171067267,
+                16.270655932313026
+              ],
+              "teleports": 2
+            },
+            {
+              "name": "both at exit",
+              "player": [
+                15.485388292889409,
+                22,
+                16.969097382588735
+              ],
+              "cargo": [
+                15.31052333188462,
+                23.07048171067267,
+                16.270655932313026
+              ],
+              "teleports": 2
+            }
+          ],
+          "respawns": 0,
+          "resets": 0,
+          "frames": 2547,
+          "teleports": 2
+        },
+        "pictures": [
+          {
+            "mark": {
+              "name": "The original companion holds open a real observation aperture",
+              "player": [
+                -19.998020721798646,
+                0.18,
+                14.624069765255147
+              ],
+              "cargo": [
+                -19.864517577705044,
+                0.5699981434788693,
+                13.91075579005497
+              ],
+              "teleports": 0
+            },
+            "camera": {
+              "p": [
+                -21.879861381046172,
+                0.8500775409207133,
+                26.233697463239153
+              ],
+              "q": [
+                0.028838656892768752,
+                -0.1144074093356281,
+                0.0033225819138235756,
+                0.9930096862604902
+              ],
+              "fov": 62.009822609102784
+            }
+          },
+          {
+            "mark": {
+              "name": "The player reaches a raised receiving apron while the companion remains below",
+              "player": [
+                -20.029375422177115,
+                16.79999997615814,
+                -13.980036067604132
+              ],
+              "cargo": [
+                -19.86451823224742,
+                0.5699981434788887,
+                13.910756482338481
+              ],
+              "teleports": 1
+            },
+            "camera": {
+              "p": [
+                -18.072674257206106,
+                18.41918106585507,
+                -8.640576861315552
+              ],
+              "q": [
+                0.16101006274061636,
+                0.105155993200938,
+                -0.017255875714954752,
+                0.9811830672935083
+              ],
+              "fov": 84.0961746789362
+            }
+          },
+          {
+            "mark": {
+              "name": "A shot around the partition returns the original weight and closes the observation shutter",
+              "player": [
+                3.9176251628740295,
+                15,
+                -18.565590112194936
+              ],
+              "cargo": [
+                -20.301126817760277,
+                15.483735105991729,
+                -23.220925427186035
+              ],
+              "teleports": 1
+            },
+            "camera": {
+              "p": [
+                9.529794610708246,
+                20.66307877178234,
+                -27.97256735628349
+              ],
+              "q": [
+                -0.05683541630477259,
+                0.9364498911673379,
+                0.17999836997109125,
+                0.29568889663613407
+              ],
+              "fov": 62.00000000000039
+            }
+          },
+          {
+            "mark": {
+              "name": "The same pair carries the original travellers through a real fall and upward flight",
+              "player": [
+                15.362003140041864,
+                22,
+                20.395775890136896
+              ],
+              "cargo": [
+                16.0241868295648,
+                23.043128937970838,
+                20.67850425692029
+              ],
+              "teleports": 2
+            },
+            "camera": {
+              "p": [
+                3.320078697000394,
+                26.55656520024487,
+                21.58584804556588
+              ],
+              "q": [
+                -0.057413640214077986,
+                -0.6868660846349353,
+                -0.054947956923325,
+                0.722426036162592
+              ],
+              "fov": 64.20027174115249
+            }
+          },
+          {
+            "mark": {
+              "name": "Both original travellers reach the visible exit without reset or checkpoint",
+              "player": [
+                15.485388292889409,
+                22,
+                16.969097382588735
+              ],
+              "cargo": [
+                15.31052333188462,
+                23.07048171067267,
+                16.270655932313026
+              ],
+              "teleports": 2
+            },
+            "camera": {
+              "p": [
+                3.947922693288106,
+                25.17670682077035,
+                18.423612542292936
+              ],
+              "q": [
+                -0.05761120629558393,
+                -0.6868228487252221,
+                -0.05478013717755959,
+                0.7224641582452005
+              ],
+              "fov": 62.31858339999738
+            }
+          },
+          {
+            "mark": {
+              "name": "both at exit",
+              "player": [
+                15.485388292889409,
+                22,
+                16.969097382588735
+              ],
+              "cargo": [
+                15.31052333188462,
+                23.07048171067267,
+                16.270655932313026
+              ],
+              "teleports": 2
+            },
+            "camera": {
+              "p": [
+                3.947922693288106,
+                25.17670682077035,
+                18.423612542292936
+              ],
+              "q": [
+                -0.05761120629558393,
+                -0.6868228487252221,
+                -0.05478013717755959,
+                0.7224641582452005
+              ],
+              "fov": 62.31858339999738
+            }
+          }
+        ],
+        "updates": 5093,
+        "setupResets": 1,
+        "state": "won",
+        "sameOriginal": true
+      }
+    }
+  ],
+  "pass": true
+}

@@ -1,0 +1,31 @@
+{
+  "run": 40572827955,
+  "sourceCommit": "e3a3a2fdd40fc34fd535c0cf9112dc4a11e66102",
+  "artifacts": [
+    {
+      "level": 11,
+      "id": 12766925356,
+      "bytes": 4488855,
+      "sha256": "4c129dbe89a0b17ee25a10147f6f57444f3214580d48e3e0408bfb5de80ab2d2"
+    },
+    {
+      "level": 42,
+      "id": 12766516365,
+      "bytes": 3903785,
+      "sha256": "5e8bfb9a0707ac13a252a9ff380762145e830a91c76ad54ad0fc66ca82ce3f2f"
+    },
+    {
+      "level": 43,
+      "id": 12767000788,
+      "bytes": 7738440,
+      "sha256": "0b06dfb24c677d19e2e3dea1ab7390e5f055fa40c6f2cad4067021641a0a6488"
+    },
+    {
+      "level": "partial-full-suite",
+      "id": 12770600919,
+      "bytes": 39780,
+      "sha256": "527cf869b440cbb3ba2bab67ffce7355d8d7eede8f4fa0b2b806951ca7d2c0ce"
+    }
+  ],
+  "verifiedOriginalPngs": 64
+}

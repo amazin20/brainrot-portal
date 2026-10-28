@@ -1,0 +1,971 @@
+{
+  "level": 11,
+  "expectedId": "stored-wind",
+  "fixture": {
+    "key": "brainrot-campaign-v67:brainrot-portal.preferences.v24",
+    "raw": "{\"quality\":\"balanced\",\"volume\":0,\"lookSensitivity\":1,\"muted\":true,\"tutorial\":false,\"completed\":[0,1,2,3,4,5,6,7,8,9],\"hints\":{},\"resumeLevel\":10,\"campaignSequenceRevision\":\"fifty-rooms-then-castle-v1\",\"campaignRevision\":\"creative-campaign-v48\",\"roomRevisions\":{\"16\":\"cable-supported-architecture-v1\",\"22\":\"counterweight-dynamic-v1\",\"32\":\"siphon-observatory-v1\",\"42\":\"spatial-progression43-v1\",\"43\":\"spatial-progression44-v1\",\"44\":\"spatial-progression45-v1\",\"45\":\"spatial-progression46-v1\",\"46\":\"spatial-progression47-v1\",\"47\":\"spatial-progression48-v1\",\"48\":\"spatial-progression49-v1\",\"49\":\"spatial-progression50-v1\",\"50\":\"spatial-progression51-v1\"}}",
+    "preferences": {
+      "quality": "balanced",
+      "volume": 0,
+      "lookSensitivity": 1,
+      "muted": true,
+      "tutorial": false,
+      "completed": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "hints": {},
+      "resumeLevel": 10,
+      "campaignSequenceRevision": "fifty-rooms-then-castle-v1",
+      "campaignRevision": "creative-campaign-v48",
+      "roomRevisions": {
+        "16": "cable-supported-architecture-v1",
+        "22": "counterweight-dynamic-v1",
+        "32": "siphon-observatory-v1",
+        "42": "spatial-progression43-v1",
+        "43": "spatial-progression44-v1",
+        "44": "spatial-progression45-v1",
+        "45": "spatial-progression46-v1",
+        "46": "spatial-progression47-v1",
+        "47": "spatial-progression48-v1",
+        "48": "spatial-progression49-v1",
+        "49": "spatial-progression50-v1",
+        "50": "spatial-progression51-v1"
+      }
+    },
+    "completed": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9
+    ],
+    "targetIndex": 10,
+    "targetCompleted": false,
+    "constructorWrites": 0,
+    "scope": "QA setup supplies the previously completed campaign prefix in the candidate own storage before construction; the current target is not completed. This is not a fresh guest full-campaign playthrough."
+  },
+  "sourceCommit": "e3a3a2fdd40fc34fd535c0cf9112dc4a11e66102",
+  "baselineCommit": "6c634dec2bc6098d5cb374bbf6b25492fa59e30d",
+  "scope": "Native software WebGL of two frozen ordinary production builds. Matched static camera inspection and scripted real-input routes, not human playtesting or hardware FPS. An isolated prior-completed-prefix save admits the still-uncompleted target through the unchanged production gate. Late route drivers perform one normal setup reset before observation; no resets are allowed during the observed route.",
+  "rows": [
+    {
+      "version": "before",
+      "view": "wide",
+      "width": 1280,
+      "height": 720,
+      "pass": true,
+      "pageErrors": [],
+      "consoleErrors": [],
+      "images": [
+        {
+          "file": "before-wide-inspection.png",
+          "sha256": "5fab1b1fb2759d2c24b49ba84fb3bcdcf13616231ffb616c30e321a748d42afc",
+          "bytes": 250479
+        },
+        {
+          "file": "before-wide-route-01.png",
+          "sha256": "9369a27544f2e28074101ceea542e1cbde87167bdc06281ffce55e6360f597f4",
+          "bytes": 475146
+        },
+        {
+          "file": "before-wide-route-02.png",
+          "sha256": "09645c3d7ca831875a03f5d6d1a7df8252a583aa109c6c9cad8c5e1e81ab0556",
+          "bytes": 595212
+        },
+        {
+          "file": "before-wide-route-03.png",
+          "sha256": "fbef54a60e6ee006eb225e9c4a9c180d07fbf7f767d20461c327d1f7e084a7a1",
+          "bytes": 304812
+        }
+      ],
+      "inspection": {
+        "before": {
+          "player": [
+            -1,
+            0,
+            8
+          ],
+          "cargo": [
+            1.5,
+            0.55,
+            7.5
+          ],
+          "steps": 0,
+          "id": "stored-wind"
+        },
+        "after": {
+          "player": [
+            -1,
+            0,
+            8
+          ],
+          "cargo": [
+            1.5,
+            0.55,
+            7.5
+          ],
+          "steps": 0,
+          "id": "stored-wind"
+        },
+        "camera": {
+          "p": [
+            -5,
+            4.4,
+            -5
+          ],
+          "q": [
+            -0.059722065918189494,
+            0.3889577418461634,
+            0.02527759919490427,
+            0.9189701806257581
+          ],
+          "fov": 56
+        }
+      },
+      "result": {
+        "route": {
+          "level": 11,
+          "id": "stored-wind",
+          "pass": true,
+          "milestones": [
+            {
+              "name": "portal pair addresses the wind drive before fan power",
+              "player": [
+                -1,
+                0,
+                8
+              ],
+              "cargo": [
+                1.508926166984906,
+                0.3899981464429393,
+                7.480783552297484
+              ],
+              "teleports": 0
+            },
+            {
+              "name": "air spun flywheel and lifted ratchet",
+              "player": [
+                -3.4674729452763957,
+                0,
+                6.666230840391146
+              ],
+              "cargo": [
+                0.4414169113722517,
+                0.38999814625182594,
+                6.928353966217053
+              ],
+              "teleports": 0
+            },
+            {
+              "name": "both at exit",
+              "player": [
+                0.002806442610791283,
+                0,
+                -14.004513193436107
+              ],
+              "cargo": [
+                -0.001263641136452991,
+                1.0516227082473084,
+                -14.724501005978961
+              ],
+              "teleports": 0
+            }
+          ],
+          "respawns": 0,
+          "resets": 0,
+          "frames": 1266,
+          "teleports": 0
+        },
+        "pictures": [
+          {
+            "mark": {
+              "name": "portal pair addresses the wind drive before fan power",
+              "player": [
+                -1,
+                0,
+                8
+              ],
+              "cargo": [
+                1.508926166984906,
+                0.3899981464429393,
+                7.480783552297484
+              ],
+              "teleports": 0
+            },
+            "camera": {
+              "p": [
+                -5.011341907414932,
+                1.0632562992511696,
+                13.296528926584436
+              ],
+              "q": [
+                0.01816542885967375,
+                -0.38856179577316713,
+                0.007662073195267674,
+                0.92121172414067
+              ],
+              "fov": 62
+            }
+          },
+          {
+            "mark": {
+              "name": "air spun flywheel and lifted ratchet",
+              "player": [
+                -3.4674729452763957,
+                0,
+                6.666230840391146
+              ],
+              "cargo": [
+                0.4414169113722517,
+                0.38999814625182594,
+                6.928353966217053
+              ],
+              "teleports": 0
+            },
+            "camera": {
+              "p": [
+                -7.478814860744857,
+                1.0632562987778371,
+                11.962759770651845
+              ],
+              "q": [
+                0.01816542886956096,
+                -0.38856179604049174,
+                0.007662073205649606,
+                0.9212117240276329
+              ],
+              "fov": 62
+            }
+          },
+          {
+            "mark": {
+              "name": "both at exit",
+              "player": [
+                0.002806442610791283,
+                0,
+                -14.004513193436107
+              ],
+              "cargo": [
+                -0.001263641136452991,
+                1.0516227082473084,
+                -14.724501005978961
+              ],
+              "teleports": 0
+            },
+            "camera": {
+              "p": [
+                -4.006796101762975,
+                1.0633642013405626,
+                -8.672162423340072
+              ],
+              "q": [
+                0.0181653787837907,
+                -0.3885703358108782,
+                0.007662250440103356,
+                0.9212081214685722
+              ],
+              "fov": 62.00000000021869
+            }
+          }
+        ],
+        "updates": 2531,
+        "setupResets": 0,
+        "state": "won",
+        "sameOriginal": true
+      }
+    },
+    {
+      "version": "before",
+      "view": "portrait",
+      "width": 390,
+      "height": 844,
+      "pass": true,
+      "pageErrors": [],
+      "consoleErrors": [],
+      "images": [
+        {
+          "file": "before-portrait-inspection.png",
+          "sha256": "9301a7727ec3ba96b3deb43700901d9d1c6c4cbf0ffbe0e43c9edb89427c7ce3",
+          "bytes": 81327
+        },
+        {
+          "file": "before-portrait-route-01.png",
+          "sha256": "ac96fea5f15c1ad6f41ee210baec74037c3688227993f8970da5d38feb2132f0",
+          "bytes": 197954
+        },
+        {
+          "file": "before-portrait-route-02.png",
+          "sha256": "a53e15230709e2c02892c63497f521399e920c784c467c9238baaded9c3c6a4b",
+          "bytes": 207187
+        },
+        {
+          "file": "before-portrait-route-03.png",
+          "sha256": "8ed121f217c5d3c3ded830d8962fc044eb36dd20b9e1d0e5b9197bbde7f5e5eb",
+          "bytes": 133590
+        }
+      ],
+      "inspection": {
+        "before": {
+          "player": [
+            -1,
+            0,
+            8
+          ],
+          "cargo": [
+            1.5,
+            0.55,
+            7.5
+          ],
+          "steps": 0,
+          "id": "stored-wind"
+        },
+        "after": {
+          "player": [
+            -1,
+            0,
+            8
+          ],
+          "cargo": [
+            1.5,
+            0.55,
+            7.5
+          ],
+          "steps": 0,
+          "id": "stored-wind"
+        },
+        "camera": {
+          "p": [
+            -5,
+            4.4,
+            -5
+          ],
+          "q": [
+            -0.059722065918189494,
+            0.3889577418461634,
+            0.02527759919490427,
+            0.9189701806257581
+          ],
+          "fov": 56
+        }
+      },
+      "result": {
+        "route": {
+          "level": 11,
+          "id": "stored-wind",
+          "pass": true,
+          "milestones": [
+            {
+              "name": "portal pair addresses the wind drive before fan power",
+              "player": [
+                -1,
+                0,
+                8
+              ],
+              "cargo": [
+                1.535358062852838,
+                0.38999814625472623,
+                7.423881165852644
+              ],
+              "teleports": 0
+            },
+            {
+              "name": "air spun flywheel and lifted ratchet",
+              "player": [
+                -3.4674729452763957,
+                0,
+                6.666230840391146
+              ],
+              "cargo": [
+                0.41573002723242014,
+                0.389998146251826,
+                6.933868717352955
+              ],
+              "teleports": 0
+            },
+            {
+              "name": "both at exit",
+              "player": [
+                0.0021214772602672857,
+                0,
+                -14.005000991983824
+              ],
+              "cargo": [
+                0.003358559130078771,
+                1.065594349283857,
+                -14.72499553817549
+              ],
+              "teleports": 0
+            }
+          ],
+          "respawns": 0,
+          "resets": 0,
+          "frames": 1275,
+          "teleports": 0
+        },
+        "pictures": [
+          {
+            "mark": {
+              "name": "portal pair addresses the wind drive before fan power",
+              "player": [
+                -1,
+                0,
+                8
+              ],
+              "cargo": [
+                1.535358062852838,
+                0.38999814625472623,
+                7.423881165852644
+              ],
+              "teleports": 0
+            },
+            "camera": {
+              "p": [
+                -4.863709012941891,
+                2.9199999947650848,
+                14.461558545996045
+              ],
+              "q": [
+                -0.014500222565899138,
+                -0.3619523867213529,
+                -0.0056309163750563876,
+                0.9320667927101752
+              ],
+              "fov": 74.48693776339411
+            }
+          },
+          {
+            "mark": {
+              "name": "air spun flywheel and lifted ratchet",
+              "player": [
+                -3.4674729452763957,
+                0,
+                6.666230840391146
+              ],
+              "cargo": [
+                0.41573002723242014,
+                0.389998146251826,
+                6.933868717352955
+              ],
+              "teleports": 0
+            },
+            "camera": {
+              "p": [
+                -7.33118265287008,
+                2.9199999999999995,
+                13.127790040417585
+              ],
+              "q": [
+                -0.014500222066030397,
+                -0.36195238709765604,
+                -0.005630916187623985,
+                0.9320667925729531
+              ],
+              "fov": 74.48693773028432
+            }
+          },
+          {
+            "mark": {
+              "name": "both at exit",
+              "player": [
+                0.0021214772602672857,
+                0,
+                -14.005000991983824
+              ],
+              "cargo": [
+                0.003358559130078771,
+                1.065594349283857,
+                -14.72499553817549
+              ],
+              "teleports": 0
+            },
+            "camera": {
+              "p": [
+                -2.4233448995715974,
+                1.6963815390280716,
+                -7.708608819617143
+              ],
+              "q": [
+                0.010569177812794909,
+                -0.3424711409037741,
+                0.0038528884056986848,
+                0.9394609972635171
+              ],
+              "fov": 99.36805999849297
+            }
+          }
+        ],
+        "updates": 2549,
+        "setupResets": 0,
+        "state": "won",
+        "sameOriginal": true
+      }
+    },
+    {
+      "version": "after",
+      "view": "wide",
+      "width": 1280,
+      "height": 720,
+      "pass": true,
+      "pageErrors": [],
+      "consoleErrors": [],
+      "images": [
+        {
+          "file": "after-wide-inspection.png",
+          "sha256": "e3d75a3107713503fc804b07f426d05bf557f32a98aa588620d2b834680a87e0",
+          "bytes": 250502
+        },
+        {
+          "file": "after-wide-route-01.png",
+          "sha256": "9369a27544f2e28074101ceea542e1cbde87167bdc06281ffce55e6360f597f4",
+          "bytes": 475146
+        },
+        {
+          "file": "after-wide-route-02.png",
+          "sha256": "09645c3d7ca831875a03f5d6d1a7df8252a583aa109c6c9cad8c5e1e81ab0556",
+          "bytes": 595212
+        },
+        {
+          "file": "after-wide-route-03.png",
+          "sha256": "fbef54a60e6ee006eb225e9c4a9c180d07fbf7f767d20461c327d1f7e084a7a1",
+          "bytes": 304812
+        }
+      ],
+      "inspection": {
+        "before": {
+          "player": [
+            -1,
+            0,
+            8
+          ],
+          "cargo": [
+            1.5,
+            0.55,
+            7.5
+          ],
+          "steps": 0,
+          "id": "stored-wind"
+        },
+        "after": {
+          "player": [
+            -1,
+            0,
+            8
+          ],
+          "cargo": [
+            1.5,
+            0.55,
+            7.5
+          ],
+          "steps": 0,
+          "id": "stored-wind"
+        },
+        "camera": {
+          "p": [
+            -5,
+            4.4,
+            -5
+          ],
+          "q": [
+            -0.059722065918189494,
+            0.3889577418461634,
+            0.02527759919490427,
+            0.9189701806257581
+          ],
+          "fov": 56
+        }
+      },
+      "result": {
+        "route": {
+          "level": 11,
+          "id": "stored-wind",
+          "pass": true,
+          "milestones": [
+            {
+              "name": "portal pair addresses the wind drive before fan power",
+              "player": [
+                -1,
+                0,
+                8
+              ],
+              "cargo": [
+                1.508926166984906,
+                0.3899981464429393,
+                7.480783552297484
+              ],
+              "teleports": 0
+            },
+            {
+              "name": "air spun flywheel and lifted ratchet",
+              "player": [
+                -3.4674729452763957,
+                0,
+                6.666230840391146
+              ],
+              "cargo": [
+                0.4414169113722517,
+                0.38999814625182594,
+                6.928353966217053
+              ],
+              "teleports": 0
+            },
+            {
+              "name": "both at exit",
+              "player": [
+                0.002806442610791283,
+                0,
+                -14.004513193436107
+              ],
+              "cargo": [
+                -0.001263641136452991,
+                1.0516227082473084,
+                -14.724501005978961
+              ],
+              "teleports": 0
+            }
+          ],
+          "respawns": 0,
+          "resets": 0,
+          "frames": 1266,
+          "teleports": 0
+        },
+        "pictures": [
+          {
+            "mark": {
+              "name": "portal pair addresses the wind drive before fan power",
+              "player": [
+                -1,
+                0,
+                8
+              ],
+              "cargo": [
+                1.508926166984906,
+                0.3899981464429393,
+                7.480783552297484
+              ],
+              "teleports": 0
+            },
+            "camera": {
+              "p": [
+                -5.011341907414932,
+                1.0632562992511696,
+                13.296528926584436
+              ],
+              "q": [
+                0.01816542885967375,
+                -0.38856179577316713,
+                0.007662073195267674,
+                0.92121172414067
+              ],
+              "fov": 62
+            }
+          },
+          {
+            "mark": {
+              "name": "air spun flywheel and lifted ratchet",
+              "player": [
+                -3.4674729452763957,
+                0,
+                6.666230840391146
+              ],
+              "cargo": [
+                0.4414169113722517,
+                0.38999814625182594,
+                6.928353966217053
+              ],
+              "teleports": 0
+            },
+            "camera": {
+              "p": [
+                -7.478814860744857,
+                1.0632562987778371,
+                11.962759770651845
+              ],
+              "q": [
+                0.01816542886956096,
+                -0.38856179604049174,
+                0.007662073205649606,
+                0.9212117240276329
+              ],
+              "fov": 62
+            }
+          },
+          {
+            "mark": {
+              "name": "both at exit",
+              "player": [
+                0.002806442610791283,
+                0,
+                -14.004513193436107
+              ],
+              "cargo": [
+                -0.001263641136452991,
+                1.0516227082473084,
+                -14.724501005978961
+              ],
+              "teleports": 0
+            },
+            "camera": {
+              "p": [
+                -4.006796101762975,
+                1.0633642013405626,
+                -8.672162423340072
+              ],
+              "q": [
+                0.0181653787837907,
+                -0.3885703358108782,
+                0.007662250440103356,
+                0.9212081214685722
+              ],
+              "fov": 62.00000000021869
+            }
+          }
+        ],
+        "updates": 2531,
+        "setupResets": 0,
+        "state": "won",
+        "sameOriginal": true
+      }
+    },
+    {
+      "version": "after",
+      "view": "portrait",
+      "width": 390,
+      "height": 844,
+      "pass": true,
+      "pageErrors": [],
+      "consoleErrors": [],
+      "images": [
+        {
+          "file": "after-portrait-inspection.png",
+          "sha256": "d61d0a4a743c3d9074bffc387d461af3a6b53b1337f14aa732b1181f31af2e30",
+          "bytes": 81405
+        },
+        {
+          "file": "after-portrait-route-01.png",
+          "sha256": "ac96fea5f15c1ad6f41ee210baec74037c3688227993f8970da5d38feb2132f0",
+          "bytes": 197954
+        },
+        {
+          "file": "after-portrait-route-02.png",
+          "sha256": "a53e15230709e2c02892c63497f521399e920c784c467c9238baaded9c3c6a4b",
+          "bytes": 207187
+        },
+        {
+          "file": "after-portrait-route-03.png",
+          "sha256": "8ed121f217c5d3c3ded830d8962fc044eb36dd20b9e1d0e5b9197bbde7f5e5eb",
+          "bytes": 133590
+        }
+      ],
+      "inspection": {
+        "before": {
+          "player": [
+            -1,
+            0,
+            8
+          ],
+          "cargo": [
+            1.5,
+            0.55,
+            7.5
+          ],
+          "steps": 0,
+          "id": "stored-wind"
+        },
+        "after": {
+          "player": [
+            -1,
+            0,
+            8
+          ],
+          "cargo": [
+            1.5,
+            0.55,
+            7.5
+          ],
+          "steps": 0,
+          "id": "stored-wind"
+        },
+        "camera": {
+          "p": [
+            -5,
+            4.4,
+            -5
+          ],
+          "q": [
+            -0.059722065918189494,
+            0.3889577418461634,
+            0.02527759919490427,
+            0.9189701806257581
+          ],
+          "fov": 56
+        }
+      },
+      "result": {
+        "route": {
+          "level": 11,
+          "id": "stored-wind",
+          "pass": true,
+          "milestones": [
+            {
+              "name": "portal pair addresses the wind drive before fan power",
+              "player": [
+                -1,
+                0,
+                8
+              ],
+              "cargo": [
+                1.535358062852838,
+                0.38999814625472623,
+                7.423881165852644
+              ],
+              "teleports": 0
+            },
+            {
+              "name": "air spun flywheel and lifted ratchet",
+              "player": [
+                -3.4674729452763957,
+                0,
+                6.666230840391146
+              ],
+              "cargo": [
+                0.41573002723242014,
+                0.389998146251826,
+                6.933868717352955
+              ],
+              "teleports": 0
+            },
+            {
+              "name": "both at exit",
+              "player": [
+                0.0021214772602672857,
+                0,
+                -14.005000991983824
+              ],
+              "cargo": [
+                0.003358559130078771,
+                1.065594349283857,
+                -14.72499553817549
+              ],
+              "teleports": 0
+            }
+          ],
+          "respawns": 0,
+          "resets": 0,
+          "frames": 1275,
+          "teleports": 0
+        },
+        "pictures": [
+          {
+            "mark": {
+              "name": "portal pair addresses the wind drive before fan power",
+              "player": [
+                -1,
+                0,
+                8
+              ],
+              "cargo": [
+                1.535358062852838,
+                0.38999814625472623,
+                7.423881165852644
+              ],
+              "teleports": 0
+            },
+            "camera": {
+              "p": [
+                -4.863709012941891,
+                2.9199999947650848,
+                14.461558545996045
+              ],
+              "q": [
+                -0.014500222565899138,
+                -0.3619523867213529,
+                -0.0056309163750563876,
+                0.9320667927101752
+              ],
+              "fov": 74.48693776339411
+            }
+          },
+          {
+            "mark": {
+              "name": "air spun flywheel and lifted ratchet",
+              "player": [
+                -3.4674729452763957,
+                0,
+                6.666230840391146
+              ],
+              "cargo": [
+                0.41573002723242014,
+                0.389998146251826,
+                6.933868717352955
+              ],
+              "teleports": 0
+            },
+            "camera": {
+              "p": [
+                -7.33118265287008,
+                2.9199999999999995,
+                13.127790040417585
+              ],
+              "q": [
+                -0.014500222066030397,
+                -0.36195238709765604,
+                -0.005630916187623985,
+                0.9320667925729531
+              ],
+              "fov": 74.48693773028432
+            }
+          },
+          {
+            "mark": {
+              "name": "both at exit",
+              "player": [
+                0.0021214772602672857,
+                0,
+                -14.005000991983824
+              ],
+              "cargo": [
+                0.003358559130078771,
+                1.065594349283857,
+                -14.72499553817549
+              ],
+              "teleports": 0
+            },
+            "camera": {
+              "p": [
+                -2.4233448995715974,
+                1.6963815390280716,
+                -7.708608819617143
+              ],
+              "q": [
+                0.010569177812794909,
+                -0.3424711409037741,
+                0.0038528884056986848,
+                0.9394609972635171
+              ],
+              "fov": 99.36805999849297
+            }
+          }
+        ],
+        "updates": 2549,
+        "setupResets": 0,
+        "state": "won",
+        "sameOriginal": true
+      }
+    }
+  ],
+  "pass": true
+}
