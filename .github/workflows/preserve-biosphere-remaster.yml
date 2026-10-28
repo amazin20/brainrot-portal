@@ -1,0 +1,83 @@
+name: Preserve verified Biosphere remaster evidence
+on:
+  push:
+    branches: [upgrade/tz-completion-20261023]
+    paths: ['.github/workflows/preserve-biosphere-remaster.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+  actions: read
+concurrency:
+  group: biosphere-evidence-preservation
+  cancel-in-progress: false
+env:
+  VERIFIED_SOURCE: 4f31b6ad05782c912c70f924c1edbc204d3c73a0
+jobs:
+  preserve:
+    if: github.ref == 'refs/heads/upgrade/tz-completion-20261023'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+      - name: Require completed chapter review and authenticate each immutable artifact
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs=require('fs'),crypto=require('crypto');
+            const run=40615001152,sourceCommit=process.env.VERIFIED_SOURCE,baselineCommit='a38730963973834b75b11ef77a08b5ca9ff6cacc';
+            let state;
+            for(let n=0;n<36;n++){
+              state=(await github.rest.actions.getWorkflowRun({...context.repo,run_id:run})).data;
+              if(state.head_sha!==sourceCommit)throw Error('Wrong source');
+              if(state.status==='completed')break;
+              await new Promise(resolve=>setTimeout(resolve,10000));
+            }
+            if(state.status!=='completed'||state.conclusion!=='success')throw Error('Native chapter review is not accepted');
+            const items=await github.paginate(github.rest.actions.listWorkflowRunArtifacts,{...context.repo,run_id:run,per_page:100});
+            const root=process.env.RUNNER_TEMP+'/biosphere-evidence';fs.mkdirSync(root,{recursive:true});const rows=[];
+            for(const level of ['structure',21,22,23,24,25,26,27,28,29,30]){
+              const name=level==='structure'?`biosphere-structure-${sourceCommit}`:`biosphere-native-${level}-${sourceCommit}`;
+              const matches=items.filter(a=>a.name===name&&!a.expired);if(matches.length!==1)throw Error('Missing or ambiguous '+name);
+              const item=matches[0];if(item.workflow_run?.head_sha!==sourceCommit||item.workflow_run?.id!==run)throw Error('Artifact source mismatch');
+              const digest=item.digest;if(!digest?.startsWith('sha256:'))throw Error('Missing immutable artifact digest');
+              const response=await github.rest.actions.downloadArtifact({...context.repo,artifact_id:item.id,archive_format:'zip'}),bytes=Buffer.from(response.data),sha256=crypto.createHash('sha256').update(bytes).digest('hex');
+              if(bytes.length!==item.size_in_bytes||'sha256:'+sha256!==digest)throw Error('Artifact bytes mismatch');
+              fs.writeFileSync(root+'/'+level+'.zip',bytes);rows.push({level,id:item.id,name,bytes:bytes.length,sha256});
+            }
+            fs.writeFileSync(root+'/manifest.json',JSON.stringify({run,sourceCommit,baselineCommit,artifacts:rows},null,2)+'\n');
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.VERIFIED_SOURCE }}
+          path: verified-source
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Repeat related tests on the exact verified game source
+        working-directory: verified-source
+        run: |
+          npm ci
+          mkdir -p ../docs/development/proofs/biosphere-remaster-20261028
+          set -o pipefail
+          node --test --test-concurrency=1 tests/lab-biosphere-art.test.js tests/lab-campaign-themes.test.js tests/lab-biosphere-architecture.test.js | tee ../docs/development/proofs/biosphere-remaster-20261028/related-tests.tap
+      - name: Decode actual PNGs and compose a browsable before-after comparison
+        run: |
+          python3 -m pip install pillow==11.3.0
+          python3 tools/preserve-biosphere-evidence.py
+      - name: Commit only preserved evidence; never deploy the game
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add docs/development/proofs/biosphere-remaster-20261028
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m 'Preserve all ten remastered Biosphere rooms: original before-after PNGs, completed routes and exact-source checks'
+          git push origin HEAD:refs/heads/upgrade/tz-completion-20261023
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: biosphere-complete-review-4f31b6a
+          path: docs/development/proofs/biosphere-remaster-20261028/
+          retention-days: 14
+          if-no-files-found: warn
