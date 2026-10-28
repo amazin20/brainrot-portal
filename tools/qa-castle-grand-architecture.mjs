@@ -38,11 +38,14 @@ for(const version of ['before','after']){
   if(version==='after'&&process.env.CASTLE_FULL_ROUTE==='1'){
    const result=await page.evaluate(async()=>{
     const g=window.__NESI_DEMO_GAME__,c=g.camera,s=window.__CASTLE_REVIEW_CAMERA__;c.position.copy(s.p);c.quaternion.copy(s.q);c.fov=s.fov;c.updateProjectionMatrix();c.updateMatrixWorld(true);g.renderer.setAnimationLoop=window.__CASTLE_REVIEW_LOOP__;delete window.__CASTLE_REVIEW_LOOP__;delete window.__CASTLE_REVIEW_CAMERA__;
+    if(g.levelIndex!==40||g.physics.world.stepnumber!==0||g.elapsed!==0||g.firstLevel.completedStages!==0)throw Error('Castle proof must start at untouched Play');
     const cargo=g.cargo,group=cargo.group,body=g.physics.cargoBody,shape=body.shapes[0],player=g.playerGroup,update=g.updatePlaying,clear=g.clearPortals;let observations=0,deletions=0;const captures=[];
     g.clearPortals=()=>{deletions++;throw Error('Pair deletion is not an ordinary player action');};
     g.updatePlaying=function(...args){if(g.cargo!==cargo||g.cargo.group!==group||g.physics.cargoBody!==body||body.shapes[0]!==shape||g.playerGroup!==player)throw Error('Original actor replaced');observations++;return update.apply(this,args);};
     window.__NESI_CAPTURE_LEVEL_MARK__=mark=>captures.push({mark,png:g.renderer.domElement.toDataURL('image/png').split(',')[1]});
-    try{const route=await window.__NESI_RUN_LEVEL_ROUTE__({nativeStart:true});g.render();return{route,state:g.state,observations,deletions,sameOriginal:g.cargo===cargo&&g.physics.cargoBody===body,metrics:g.firstLevel.getTowerMetrics(),captures,png:g.renderer.domElement.toDataURL('image/png').split(',')[1]};}
+    // Castle dispatch has its own Play/untouched-attempt guards and counts
+    // every reset; the short-chapter nativeStart option only accepts 1–40.
+    try{const route=await window.__NESI_RUN_LEVEL_ROUTE__();g.render();return{route,state:g.state,observations,deletions,sameOriginal:g.cargo===cargo&&g.physics.cargoBody===body,metrics:g.firstLevel.getTowerMetrics(),captures,png:g.renderer.domElement.toDataURL('image/png').split(',')[1]};}
     catch(e){return{error:String(e.stack||e),state:g.state,observations,deletions,captures,metrics:g.firstLevel.getTowerMetrics()};}
     finally{g.updatePlaying=update;g.clearPortals=clear;delete window.__NESI_CAPTURE_LEVEL_MARK__;}
    });

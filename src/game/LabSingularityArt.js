@@ -1,3 +1,4 @@
+import {buildCastleGrandArchitecture} from './LabCastleGrandArchitecture.js';
 import * as THREE from 'three';
 import {architecturalCassetteGeometry,clipArchitecturalRect} from './LabArchitecturalModels.js';
 import {V} from './LabSingularityKit.js';
@@ -119,5 +120,6 @@ export function buildSingularityArt({game,k,rooms,machines,edges,solved}){
  const upperReadability=buildTower41UpperReadability({k,cell:machines.get('pendulum').state.upperCell});
  const visualAudit=buildCastleAuditConstruction({game,k,rooms,machines,edges});
  const lamps=new Map();for(const r of rooms.values()){const lamp=k.box([r.door[0],r.door[1]+4.6,r.door[2]],[.4,.10,.12],m.idle,{solid:false,dynamic:true});lamps.set(r.def.id,lamp);}
- return{update(){mechanisms.update();upperReadability.update();for(const[id,mesh]of lamps)mesh.material=solved.has(id)?m.live:m.idle;},dispose(){upperReadability.dispose();mechanisms.dispose();},upperReadability,visualAudit,profile:'folded-castle-five-storeys',geometrySource:'authored-bevelled-cassettes-and-physical-ribs',artDirection:'twelve-wing-mineral-cedar-and-satin',finishes};
+ const grand=buildCastleGrandArchitecture({game,k,rooms,solved});
+ return{grand,update(){grand.update();mechanisms.update();upperReadability.update();for(const[id,mesh]of lamps)mesh.material=solved.has(id)?m.live:m.idle;},dispose(){grand.dispose();upperReadability.dispose();mechanisms.dispose();},upperReadability,visualAudit,profile:'folded-castle-five-storeys',geometrySource:'authored-bevelled-cassettes-and-physical-ribs',artDirection:'twelve-wing-mineral-cedar-and-satin',finishes};
 }

@@ -5,8 +5,10 @@ on:
     paths:
       - 'src/game/LabCastleGrandArchitecture.js'
       - 'src/game/LabSingularityArt.js'
-      - 'tests/lab-castle-grand-architecture.test.js'
+      - 'tests/lab-castle-grand*.test.js'
+      - 'tests/helpers/castle-building-contract.js'
       - 'tools/qa-castle-grand-architecture.mjs'
+      - 'tools/verify-castle-baseline-contract.mjs'
       - '.github/workflows/castle-grand-architecture.yml'
   workflow_dispatch:
 permissions:
@@ -15,6 +17,42 @@ concurrency:
   group: castle-architecture-${{ github.ref }}
   cancel-in-progress: false
 jobs:
+  structural-and-route:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - uses: actions/checkout@v4
+        with:
+          ref: 6f4b9b58a5f51efb99492e20d54349fd5fee9add
+          path: baseline
+          persist-credentials: false
+      - name: Independently verify the retained baseline contract
+        run: |
+          ln -s ../node_modules baseline/node_modules
+          node tools/verify-castle-baseline-contract.mjs
+      - name: Run structural, preserved and full ordinary route checks
+        env:
+          CASTLE_GRAND_ROUTE_REPORT: evidence/castle-route.json
+        run: |
+          mkdir -p evidence
+          git rev-parse HEAD > evidence/source-sha.txt
+          set -o pipefail
+          node --test --test-concurrency=1 tests/lab-castle-grand-architecture.test.js tests/lab-castle-grand-route.test.js tests/lab-castle-interior-art.test.js tests/lab-castle-visual-audit.test.js tests/lab-castle-doorway-relief.test.js tests/lab-castle-mechanism-details.test.js tests/lab-castle-upper-readability.test.js tests/lab-singularity-collision.test.js tests/lab-campaign-themes.test.js | tee evidence/tests.tap
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: castle-tests-${{ github.sha }}
+          path: evidence/
+          retention-days: 14
+          if-no-files-found: error
   native:
     runs-on: ubuntu-latest
     timeout-minutes: 30
@@ -42,10 +80,10 @@ jobs:
         run: |
           ln -s ../node_modules node_modules
           npm run build
-      - name: Compare native production views without altering actors
+      - name: Compare native production views and complete the actual castle
         env:
           BUILD_COMMIT: ${{ github.sha }}
-          CASTLE_FULL_ROUTE: '0'
+          CASTLE_FULL_ROUTE: '1'
         run: |
           mkdir -p before-site after-site
           ln -s ../baseline/dist before-site/campaign-v67
