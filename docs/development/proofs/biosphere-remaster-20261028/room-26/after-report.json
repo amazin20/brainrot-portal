@@ -1,0 +1,420 @@
+{
+  "scope": "Native software WebGL. Prior-prefix access fixture; target unfinished. Static views move only camera. Routes use retained input driver, not human playtest or hardware benchmark.",
+  "rows": [
+    {
+      "version": "after",
+      "level": 26,
+      "errors": [],
+      "consoleErrors": [],
+      "views": [
+        {
+          "before": {
+            "id": "crossflow-foundry",
+            "index": 25,
+            "steps": 0,
+            "elapsed": 0,
+            "player": [
+              -19,
+              0,
+              10
+            ],
+            "cargo": [
+              -20,
+              0.55,
+              17
+            ],
+            "state": "playing"
+          },
+          "after": {
+            "id": "crossflow-foundry",
+            "index": 25,
+            "steps": 0,
+            "elapsed": 0,
+            "player": [
+              -19,
+              0,
+              10
+            ],
+            "cargo": [
+              -20,
+              0.55,
+              17
+            ],
+            "state": "playing"
+          },
+          "camera": {
+            "p": [
+              -17.63138550635692,
+              2.2695719721722125,
+              16.28292984502096
+            ],
+            "q": [
+              -0.07475312816713924,
+              0.030828568814222846,
+              0.0023121093358675245,
+              0.9967227414504564
+            ],
+            "fov": 62
+          },
+          "stats": {
+            "revision": "biosphere-conservatory-architecture-v2",
+            "sourcePanels": 858,
+            "floorPanels": 417,
+            "wallPanels": 360,
+            "ceilingPanels": 81,
+            "botanicalPanels": 80,
+            "leaves": 1920,
+            "parts": 9540,
+            "batches": 8,
+            "triangles": 137688,
+            "newColliders": 0,
+            "newLights": 0
+          },
+          "render": {
+            "calls": 113,
+            "triangles": 707632
+          },
+          "file": "after-26-start.png",
+          "bytes": 610668,
+          "sha256": "bd08b7abc37fd6168dbc143215829ca18b4b710ce9f8885a26b73ee8ac802693"
+        },
+        {
+          "before": {
+            "id": "crossflow-foundry",
+            "index": 25,
+            "steps": 0,
+            "elapsed": 0,
+            "player": [
+              -19,
+              0,
+              10
+            ],
+            "cargo": [
+              -20,
+              0.55,
+              17
+            ],
+            "state": "playing"
+          },
+          "after": {
+            "id": "crossflow-foundry",
+            "index": 25,
+            "steps": 0,
+            "elapsed": 0,
+            "player": [
+              -19,
+              0,
+              10
+            ],
+            "cargo": [
+              -20,
+              0.55,
+              17
+            ],
+            "state": "playing"
+          },
+          "camera": {
+            "p": [
+              21.20000000149012,
+              10,
+              21.200000001490118
+            ],
+            "q": [
+              -0.07624856876209692,
+              0.38137791157130324,
+              0.03158319129279806,
+              0.920727726504967
+            ],
+            "fov": 76
+          },
+          "stats": {
+            "revision": "biosphere-conservatory-architecture-v2",
+            "sourcePanels": 858,
+            "floorPanels": 417,
+            "wallPanels": 360,
+            "ceilingPanels": 81,
+            "botanicalPanels": 80,
+            "leaves": 1920,
+            "parts": 9540,
+            "batches": 8,
+            "triangles": 137688,
+            "newColliders": 0,
+            "newLights": 0
+          },
+          "render": {
+            "calls": 164,
+            "triangles": 880112
+          },
+          "file": "after-26-oblique.png",
+          "bytes": 822006,
+          "sha256": "75be1b38834e880b3681d14058da0e156d48951375c4591ab85ae2fb4742bae4"
+        },
+        {
+          "before": {
+            "id": "crossflow-foundry",
+            "index": 25,
+            "steps": 0,
+            "elapsed": 0,
+            "player": [
+              -19,
+              0,
+              10
+            ],
+            "cargo": [
+              -20,
+              0.55,
+              17
+            ],
+            "state": "playing"
+          },
+          "after": {
+            "id": "crossflow-foundry",
+            "index": 25,
+            "steps": 0,
+            "elapsed": 0,
+            "player": [
+              -19,
+              0,
+              10
+            ],
+            "cargo": [
+              -20,
+              0.55,
+              17
+            ],
+            "state": "playing"
+          },
+          "camera": {
+            "p": [
+              -21.20000000149012,
+              10,
+              -21.200000001490118
+            ],
+            "q": [
+              0.03158319129279806,
+              0.920727726504967,
+              0.07624856876209692,
+              -0.38137791157130324
+            ],
+            "fov": 76
+          },
+          "stats": {
+            "revision": "biosphere-conservatory-architecture-v2",
+            "sourcePanels": 858,
+            "floorPanels": 417,
+            "wallPanels": 360,
+            "ceilingPanels": 81,
+            "botanicalPanels": 80,
+            "leaves": 1920,
+            "parts": 9540,
+            "batches": 8,
+            "triangles": 137688,
+            "newColliders": 0,
+            "newLights": 0
+          },
+          "render": {
+            "calls": 173,
+            "triangles": 879712
+          },
+          "file": "after-26-opposite.png",
+          "bytes": 696132,
+          "sha256": "444f7510cc8891088abfba283e93c22fad9b3c04415d2402b06fee8b11a9d18f"
+        }
+      ],
+      "pass": true,
+      "fixture": {
+        "key": "brainrot-campaign-v67:brainrot-portal.preferences.v24",
+        "raw": "{\"quality\":\"balanced\",\"volume\":0,\"lookSensitivity\":1,\"muted\":true,\"tutorial\":false,\"completed\":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24],\"hints\":{},\"resumeLevel\":25,\"campaignSequenceRevision\":\"fifty-rooms-then-castle-v1\",\"campaignRevision\":\"creative-campaign-v48\",\"roomRevisions\":{\"16\":\"cable-supported-architecture-v1\",\"22\":\"counterweight-dynamic-v1\",\"32\":\"siphon-observatory-v1\",\"42\":\"spatial-progression43-v1\",\"43\":\"spatial-progression44-v1\",\"44\":\"spatial-progression45-v1\",\"45\":\"spatial-progression46-v1\",\"46\":\"spatial-progression47-v1\",\"47\":\"spatial-progression48-v1\",\"48\":\"spatial-progression49-v1\",\"49\":\"spatial-progression50-v1\",\"50\":\"spatial-progression51-v1\"}}",
+        "preferences": {
+          "quality": "balanced",
+          "volume": 0,
+          "lookSensitivity": 1,
+          "muted": true,
+          "tutorial": false,
+          "completed": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24
+          ],
+          "hints": {},
+          "resumeLevel": 25,
+          "campaignSequenceRevision": "fifty-rooms-then-castle-v1",
+          "campaignRevision": "creative-campaign-v48",
+          "roomRevisions": {
+            "16": "cable-supported-architecture-v1",
+            "22": "counterweight-dynamic-v1",
+            "32": "siphon-observatory-v1",
+            "42": "spatial-progression43-v1",
+            "43": "spatial-progression44-v1",
+            "44": "spatial-progression45-v1",
+            "45": "spatial-progression46-v1",
+            "46": "spatial-progression47-v1",
+            "47": "spatial-progression48-v1",
+            "48": "spatial-progression49-v1",
+            "49": "spatial-progression50-v1",
+            "50": "spatial-progression51-v1"
+          }
+        },
+        "completed": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24
+        ],
+        "targetIndex": 25,
+        "targetCompleted": false,
+        "constructorWrites": 0,
+        "scope": "QA setup supplies the previously completed campaign prefix in the candidate own storage before construction; the current target is not completed. This is not a fresh guest full-campaign playthrough."
+      },
+      "route": {
+        "route": {
+          "level": 26,
+          "id": "crossflow-foundry",
+          "pass": true,
+          "milestones": [
+            {
+              "name": "the original load opens a real air shutter",
+              "player": [
+                -17.000281558394565,
+                0.12500000000000003,
+                22.028420751220633
+              ],
+              "cargo": [
+                -17.10521426266831,
+                0.5149981476580665,
+                21.07538569590518
+              ],
+              "teleports": 0
+            },
+            {
+              "name": "the first permanent gallery preserves height",
+              "player": [
+                -12.003565854645213,
+                8,
+                2.10514233190734
+              ],
+              "cargo": [
+                -16.95559561006703,
+                0.5149981470430831,
+                20.404324860596976
+              ],
+              "teleports": 0
+            },
+            {
+              "name": "crossing streams expose the upper retaining dock",
+              "player": [
+                15.996345122563827,
+                16,
+                -14.103415648878135
+              ],
+              "cargo": [
+                -16.95559561006703,
+                0.5149981470430831,
+                20.404324860596976
+              ],
+              "teleports": 0
+            },
+            {
+              "name": "borrow the lift portals to recover their own power source",
+              "player": [
+                -20.24940018057945,
+                16,
+                11.852195488659174
+              ],
+              "cargo": [
+                6.99788005506247,
+                16.389997246188276,
+                -16.94962340562442
+              ],
+              "teleports": 0
+            },
+            {
+              "name": "both travellers cross the independent return stream",
+              "player": [
+                14.901829862570237,
+                16,
+                19.5699
+              ],
+              "cargo": [
+                15.621822968076648,
+                17.063067322113326,
+                19.570988865741736
+              ],
+              "teleports": 0
+            },
+            {
+              "name": "both at exit",
+              "player": [
+                14.901829862570237,
+                16,
+                19.5699
+              ],
+              "cargo": [
+                15.621822968076648,
+                17.063067322113326,
+                19.570988865741736
+              ],
+              "teleports": 0
+            }
+          ],
+          "respawns": 0,
+          "resets": 0,
+          "frames": 8182,
+          "teleports": 0
+        },
+        "state": "won",
+        "observations": 16363,
+        "sameBody": true,
+        "image": {
+          "file": "after-26-won.png",
+          "bytes": 679099,
+          "sha256": "d79c96d72cf0915caf45551d48bdfc157a49606ffffc6567190828caa9db5343"
+        }
+      }
+    }
+  ],
+  "pass": true
+}

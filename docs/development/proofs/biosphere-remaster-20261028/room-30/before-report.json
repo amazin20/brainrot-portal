@@ -1,0 +1,284 @@
+{
+  "scope": "Native software WebGL. Prior-prefix access fixture; target unfinished. Static views move only camera. Routes use retained input driver, not human playtest or hardware benchmark.",
+  "rows": [
+    {
+      "version": "before",
+      "level": 30,
+      "errors": [],
+      "consoleErrors": [],
+      "views": [
+        {
+          "before": {
+            "id": "sunward-limit",
+            "index": 29,
+            "steps": 0,
+            "elapsed": 0,
+            "player": [
+              -17,
+              52,
+              16
+            ],
+            "cargo": [
+              -14.5,
+              52.6,
+              16
+            ],
+            "state": "playing"
+          },
+          "after": {
+            "id": "sunward-limit",
+            "index": 29,
+            "steps": 0,
+            "elapsed": 0,
+            "player": [
+              -17,
+              52,
+              16
+            ],
+            "cargo": [
+              -14.5,
+              52.6,
+              16
+            ],
+            "state": "playing"
+          },
+          "camera": {
+            "p": [
+              -15.631385506356919,
+              53.95436964023066,
+              22.322536637089872
+            ],
+            "q": [
+              -0.0498619804643974,
+              0.03068378476259119,
+              0.001532584963817647,
+              0.9982834965279851
+            ],
+            "fov": 68
+          },
+          "stats": null,
+          "render": {
+            "calls": 73,
+            "triangles": 732594
+          },
+          "file": "before-30-start.png",
+          "bytes": 301564,
+          "sha256": "02236452d99f4d8aec1bda4f9b857e6ef2bb7497f7b0210c435479c0e35083a6"
+        },
+        {
+          "before": {
+            "id": "sunward-limit",
+            "index": 29,
+            "steps": 0,
+            "elapsed": 0,
+            "player": [
+              -17,
+              52,
+              16
+            ],
+            "cargo": [
+              -14.5,
+              52.6,
+              16
+            ],
+            "state": "playing"
+          },
+          "after": {
+            "id": "sunward-limit",
+            "index": 29,
+            "steps": 0,
+            "elapsed": 0,
+            "player": [
+              -17,
+              52,
+              16
+            ],
+            "cargo": [
+              -14.5,
+              52.6,
+              16
+            ],
+            "state": "playing"
+          },
+          "camera": {
+            "p": [
+              226.39999998807906,
+              62,
+              70.39999998807907
+            ],
+            "q": [
+              -0.013660904668118548,
+              0.5021353845161104,
+              0.0079334591916325,
+              0.8646447221406959
+            ],
+            "fov": 76
+          },
+          "stats": null,
+          "render": {
+            "calls": 179,
+            "triangles": 802346
+          },
+          "file": "before-30-oblique.png",
+          "bytes": 368961,
+          "sha256": "5bfa8d14417636542f5ed5ba5d5b3bbfaea7231a9095e5eb5dadc33f7df78cd4"
+        },
+        {
+          "before": {
+            "id": "sunward-limit",
+            "index": 29,
+            "steps": 0,
+            "elapsed": 0,
+            "player": [
+              -17,
+              52,
+              16
+            ],
+            "cargo": [
+              -14.5,
+              52.6,
+              16
+            ],
+            "state": "playing"
+          },
+          "after": {
+            "id": "sunward-limit",
+            "index": 29,
+            "steps": 0,
+            "elapsed": 0,
+            "player": [
+              -17,
+              52,
+              16
+            ],
+            "cargo": [
+              -14.5,
+              52.6,
+              16
+            ],
+            "state": "playing"
+          },
+          "camera": {
+            "p": [
+              -48.399999988079074,
+              62,
+              -86.39999998807907
+            ],
+            "q": [
+              -0.007933459191632504,
+              -0.8646447221406959,
+              -0.013660904668118546,
+              0.5021353845161104
+            ],
+            "fov": 76
+          },
+          "stats": null,
+          "render": {
+            "calls": 180,
+            "triangles": 802358
+          },
+          "file": "before-30-opposite.png",
+          "bytes": 351796,
+          "sha256": "b04e26b702a8ebe03d4d36b8b42e400db6b843174f4ded0b6f57e6f351f53816"
+        }
+      ],
+      "pass": true,
+      "fixture": {
+        "key": "brainrot-campaign-v67:brainrot-portal.preferences.v24",
+        "raw": "{\"quality\":\"balanced\",\"volume\":0,\"lookSensitivity\":1,\"muted\":true,\"tutorial\":false,\"completed\":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28],\"hints\":{},\"resumeLevel\":29,\"campaignSequenceRevision\":\"fifty-rooms-then-castle-v1\",\"campaignRevision\":\"creative-campaign-v48\",\"roomRevisions\":{\"16\":\"cable-supported-architecture-v1\",\"22\":\"counterweight-dynamic-v1\",\"32\":\"siphon-observatory-v1\",\"42\":\"spatial-progression43-v1\",\"43\":\"spatial-progression44-v1\",\"44\":\"spatial-progression45-v1\",\"45\":\"spatial-progression46-v1\",\"46\":\"spatial-progression47-v1\",\"47\":\"spatial-progression48-v1\",\"48\":\"spatial-progression49-v1\",\"49\":\"spatial-progression50-v1\",\"50\":\"spatial-progression51-v1\"}}",
+        "preferences": {
+          "quality": "balanced",
+          "volume": 0,
+          "lookSensitivity": 1,
+          "muted": true,
+          "tutorial": false,
+          "completed": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28
+          ],
+          "hints": {},
+          "resumeLevel": 29,
+          "campaignSequenceRevision": "fifty-rooms-then-castle-v1",
+          "campaignRevision": "creative-campaign-v48",
+          "roomRevisions": {
+            "16": "cable-supported-architecture-v1",
+            "22": "counterweight-dynamic-v1",
+            "32": "siphon-observatory-v1",
+            "42": "spatial-progression43-v1",
+            "43": "spatial-progression44-v1",
+            "44": "spatial-progression45-v1",
+            "45": "spatial-progression46-v1",
+            "46": "spatial-progression47-v1",
+            "47": "spatial-progression48-v1",
+            "48": "spatial-progression49-v1",
+            "49": "spatial-progression50-v1",
+            "50": "spatial-progression51-v1"
+          }
+        },
+        "completed": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28
+        ],
+        "targetIndex": 29,
+        "targetCompleted": false,
+        "constructorWrites": 0,
+        "scope": "QA setup supplies the previously completed campaign prefix in the candidate own storage before construction; the current target is not completed. This is not a fresh guest full-campaign playthrough."
+      }
+    }
+  ],
+  "pass": true
+}

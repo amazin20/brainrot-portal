@@ -1,0 +1,280 @@
+{
+  "scope": "Native software WebGL. Prior-prefix access fixture; target unfinished. Static views move only camera. Routes use retained input driver, not human playtest or hardware benchmark.",
+  "rows": [
+    {
+      "version": "before",
+      "level": 28,
+      "errors": [],
+      "consoleErrors": [],
+      "views": [
+        {
+          "before": {
+            "id": "tidal-observatory",
+            "index": 27,
+            "steps": 0,
+            "elapsed": 0,
+            "player": [
+              0,
+              0,
+              17
+            ],
+            "cargo": [
+              3,
+              0.55,
+              16
+            ],
+            "state": "playing"
+          },
+          "after": {
+            "id": "tidal-observatory",
+            "index": 27,
+            "steps": 0,
+            "elapsed": 0,
+            "player": [
+              0,
+              0,
+              17
+            ],
+            "cargo": [
+              3,
+              0.55,
+              16
+            ],
+            "state": "playing"
+          },
+          "camera": {
+            "p": [
+              1.2359360266076453,
+              2.1775170113393334,
+              22.673839773126712
+            ],
+            "q": [
+              -0.07477736192943224,
+              0.028634452678674108,
+              0.0021481112772061615,
+              0.9967867374120747
+            ],
+            "fov": 62
+          },
+          "stats": null,
+          "render": {
+            "calls": 210,
+            "triangles": 1206636
+          },
+          "file": "before-28-start.png",
+          "bytes": 444335,
+          "sha256": "c9759517d3a26a59f6be2cdc5eeb7da88e25c4731e1dd2a8497d105f84449d23"
+        },
+        {
+          "before": {
+            "id": "tidal-observatory",
+            "index": 27,
+            "steps": 0,
+            "elapsed": 0,
+            "player": [
+              0,
+              0,
+              17
+            ],
+            "cargo": [
+              3,
+              0.55,
+              16
+            ],
+            "state": "playing"
+          },
+          "after": {
+            "id": "tidal-observatory",
+            "index": 27,
+            "steps": 0,
+            "elapsed": 0,
+            "player": [
+              0,
+              0,
+              17
+            ],
+            "cargo": [
+              3,
+              0.55,
+              16
+            ],
+            "state": "playing"
+          },
+          "camera": {
+            "p": [
+              23.20000000149012,
+              10,
+              20.200000001490118
+            ],
+            "q": [
+              -0.09903083960243847,
+              0.4118698408770214,
+              0.04508321114240117,
+              0.9047229581792776
+            ],
+            "fov": 76
+          },
+          "stats": null,
+          "render": {
+            "calls": 244,
+            "triangles": 1214752
+          },
+          "file": "before-28-oblique.png",
+          "bytes": 429879,
+          "sha256": "622356299f9c6fa51f1c13df45af7f9cfadfc077605bdc8cd45d745e0561ecbe"
+        },
+        {
+          "before": {
+            "id": "tidal-observatory",
+            "index": 27,
+            "steps": 0,
+            "elapsed": 0,
+            "player": [
+              0,
+              0,
+              17
+            ],
+            "cargo": [
+              3,
+              0.55,
+              16
+            ],
+            "state": "playing"
+          },
+          "after": {
+            "id": "tidal-observatory",
+            "index": 27,
+            "steps": 0,
+            "elapsed": 0,
+            "player": [
+              0,
+              0,
+              17
+            ],
+            "cargo": [
+              3,
+              0.55,
+              16
+            ],
+            "state": "playing"
+          },
+          "camera": {
+            "p": [
+              -23.20000000149012,
+              10,
+              -20.200000001490118
+            ],
+            "q": [
+              0.045083211142401165,
+              0.9047229581792777,
+              0.09903083960243846,
+              -0.4118698408770214
+            ],
+            "fov": 76
+          },
+          "stats": null,
+          "render": {
+            "calls": 248,
+            "triangles": 1214790
+          },
+          "file": "before-28-opposite.png",
+          "bytes": 526801,
+          "sha256": "3c1d6d261e2a6ee722a083a4682b4e3d3b77e25f538b4da56d5433e9024af2c5"
+        }
+      ],
+      "pass": true,
+      "fixture": {
+        "key": "brainrot-campaign-v67:brainrot-portal.preferences.v24",
+        "raw": "{\"quality\":\"balanced\",\"volume\":0,\"lookSensitivity\":1,\"muted\":true,\"tutorial\":false,\"completed\":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26],\"hints\":{},\"resumeLevel\":27,\"campaignSequenceRevision\":\"fifty-rooms-then-castle-v1\",\"campaignRevision\":\"creative-campaign-v48\",\"roomRevisions\":{\"16\":\"cable-supported-architecture-v1\",\"22\":\"counterweight-dynamic-v1\",\"32\":\"siphon-observatory-v1\",\"42\":\"spatial-progression43-v1\",\"43\":\"spatial-progression44-v1\",\"44\":\"spatial-progression45-v1\",\"45\":\"spatial-progression46-v1\",\"46\":\"spatial-progression47-v1\",\"47\":\"spatial-progression48-v1\",\"48\":\"spatial-progression49-v1\",\"49\":\"spatial-progression50-v1\",\"50\":\"spatial-progression51-v1\"}}",
+        "preferences": {
+          "quality": "balanced",
+          "volume": 0,
+          "lookSensitivity": 1,
+          "muted": true,
+          "tutorial": false,
+          "completed": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26
+          ],
+          "hints": {},
+          "resumeLevel": 27,
+          "campaignSequenceRevision": "fifty-rooms-then-castle-v1",
+          "campaignRevision": "creative-campaign-v48",
+          "roomRevisions": {
+            "16": "cable-supported-architecture-v1",
+            "22": "counterweight-dynamic-v1",
+            "32": "siphon-observatory-v1",
+            "42": "spatial-progression43-v1",
+            "43": "spatial-progression44-v1",
+            "44": "spatial-progression45-v1",
+            "45": "spatial-progression46-v1",
+            "46": "spatial-progression47-v1",
+            "47": "spatial-progression48-v1",
+            "48": "spatial-progression49-v1",
+            "49": "spatial-progression50-v1",
+            "50": "spatial-progression51-v1"
+          }
+        },
+        "completed": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26
+        ],
+        "targetIndex": 27,
+        "targetCompleted": false,
+        "constructorWrites": 0,
+        "scope": "QA setup supplies the previously completed campaign prefix in the candidate own storage before construction; the current target is not completed. This is not a fresh guest full-campaign playthrough."
+      }
+    }
+  ],
+  "pass": true
+}

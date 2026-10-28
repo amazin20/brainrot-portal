@@ -1,0 +1,432 @@
+{
+  "scope": "Native software WebGL. Prior-prefix access fixture; target unfinished. Static views move only camera. Routes use retained input driver, not human playtest or hardware benchmark.",
+  "rows": [
+    {
+      "version": "after",
+      "level": 25,
+      "errors": [],
+      "consoleErrors": [],
+      "views": [
+        {
+          "before": {
+            "id": "opposed-shadows",
+            "index": 24,
+            "steps": 0,
+            "elapsed": 0,
+            "player": [
+              -17,
+              0,
+              10
+            ],
+            "cargo": [
+              -15,
+              0.55,
+              9
+            ],
+            "state": "playing"
+          },
+          "after": {
+            "id": "opposed-shadows",
+            "index": 24,
+            "steps": 0,
+            "elapsed": 0,
+            "player": [
+              -17,
+              0,
+              10
+            ],
+            "cargo": [
+              -15,
+              0.55,
+              9
+            ],
+            "state": "playing"
+          },
+          "camera": {
+            "p": [
+              -16.086680257184604,
+              1.9536794133317164,
+              14.192797823517857
+            ],
+            "q": [
+              -0.07483364946617456,
+              0.02273624663301375,
+              0.0017066666610693068,
+              0.9969353415771378
+            ],
+            "fov": 62
+          },
+          "stats": {
+            "revision": "biosphere-conservatory-architecture-v2",
+            "sourcePanels": 730,
+            "floorPanels": 289,
+            "wallPanels": 360,
+            "ceilingPanels": 81,
+            "botanicalPanels": 80,
+            "leaves": 2000,
+            "parts": 9076,
+            "batches": 8,
+            "triangles": 127192,
+            "newColliders": 0,
+            "newLights": 0
+          },
+          "render": {
+            "calls": 166,
+            "triangles": 784470
+          },
+          "file": "after-25-start.png",
+          "bytes": 664587,
+          "sha256": "6fccf81bf0d5595b8a55e3441627954feb8c8f9c67a4a8d4b61e637c02ba9305"
+        },
+        {
+          "before": {
+            "id": "opposed-shadows",
+            "index": 24,
+            "steps": 0,
+            "elapsed": 0,
+            "player": [
+              -17,
+              0,
+              10
+            ],
+            "cargo": [
+              -15,
+              0.55,
+              9
+            ],
+            "state": "playing"
+          },
+          "after": {
+            "id": "opposed-shadows",
+            "index": 24,
+            "steps": 0,
+            "elapsed": 0,
+            "player": [
+              -17,
+              0,
+              10
+            ],
+            "cargo": [
+              -15,
+              0.55,
+              9
+            ],
+            "state": "playing"
+          },
+          "camera": {
+            "p": [
+              19.20000000149012,
+              10,
+              22.200000001490118
+            ],
+            "q": [
+              -0.08147896804190402,
+              0.36385713591855146,
+              0.0319698464669939,
+              0.9273333226649692
+            ],
+            "fov": 76
+          },
+          "stats": {
+            "revision": "biosphere-conservatory-architecture-v2",
+            "sourcePanels": 730,
+            "floorPanels": 289,
+            "wallPanels": 360,
+            "ceilingPanels": 81,
+            "botanicalPanels": 80,
+            "leaves": 2000,
+            "parts": 9076,
+            "batches": 8,
+            "triangles": 127192,
+            "newColliders": 0,
+            "newLights": 0
+          },
+          "render": {
+            "calls": 362,
+            "triangles": 1048790
+          },
+          "file": "after-25-oblique.png",
+          "bytes": 969494,
+          "sha256": "bd59435f17b6686b3bf0bc79fb729ed17abd0a3f662305dc4992f45dcf41bd01"
+        },
+        {
+          "before": {
+            "id": "opposed-shadows",
+            "index": 24,
+            "steps": 0,
+            "elapsed": 0,
+            "player": [
+              -17,
+              0,
+              10
+            ],
+            "cargo": [
+              -15,
+              0.55,
+              9
+            ],
+            "state": "playing"
+          },
+          "after": {
+            "id": "opposed-shadows",
+            "index": 24,
+            "steps": 0,
+            "elapsed": 0,
+            "player": [
+              -17,
+              0,
+              10
+            ],
+            "cargo": [
+              -15,
+              0.55,
+              9
+            ],
+            "state": "playing"
+          },
+          "camera": {
+            "p": [
+              -19.20000000149012,
+              10,
+              -19.200000001490118
+            ],
+            "q": [
+              0.0319698464669939,
+              0.9273333226649693,
+              0.08147896804190402,
+              -0.36385713591855146
+            ],
+            "fov": 76
+          },
+          "stats": {
+            "revision": "biosphere-conservatory-architecture-v2",
+            "sourcePanels": 730,
+            "floorPanels": 289,
+            "wallPanels": 360,
+            "ceilingPanels": 81,
+            "botanicalPanels": 80,
+            "leaves": 2000,
+            "parts": 9076,
+            "batches": 8,
+            "triangles": 127192,
+            "newColliders": 0,
+            "newLights": 0
+          },
+          "render": {
+            "calls": 364,
+            "triangles": 1061762
+          },
+          "file": "after-25-opposite.png",
+          "bytes": 947548,
+          "sha256": "b0b825443688cecc3062ae6496c9b5254361ecac178bb884b436b8cfe3b8259b"
+        }
+      ],
+      "pass": true,
+      "fixture": {
+        "key": "brainrot-campaign-v67:brainrot-portal.preferences.v24",
+        "raw": "{\"quality\":\"balanced\",\"volume\":0,\"lookSensitivity\":1,\"muted\":true,\"tutorial\":false,\"completed\":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23],\"hints\":{},\"resumeLevel\":24,\"campaignSequenceRevision\":\"fifty-rooms-then-castle-v1\",\"campaignRevision\":\"creative-campaign-v48\",\"roomRevisions\":{\"16\":\"cable-supported-architecture-v1\",\"22\":\"counterweight-dynamic-v1\",\"32\":\"siphon-observatory-v1\",\"42\":\"spatial-progression43-v1\",\"43\":\"spatial-progression44-v1\",\"44\":\"spatial-progression45-v1\",\"45\":\"spatial-progression46-v1\",\"46\":\"spatial-progression47-v1\",\"47\":\"spatial-progression48-v1\",\"48\":\"spatial-progression49-v1\",\"49\":\"spatial-progression50-v1\",\"50\":\"spatial-progression51-v1\"}}",
+        "preferences": {
+          "quality": "balanced",
+          "volume": 0,
+          "lookSensitivity": 1,
+          "muted": true,
+          "tutorial": false,
+          "completed": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23
+          ],
+          "hints": {},
+          "resumeLevel": 24,
+          "campaignSequenceRevision": "fifty-rooms-then-castle-v1",
+          "campaignRevision": "creative-campaign-v48",
+          "roomRevisions": {
+            "16": "cable-supported-architecture-v1",
+            "22": "counterweight-dynamic-v1",
+            "32": "siphon-observatory-v1",
+            "42": "spatial-progression43-v1",
+            "43": "spatial-progression44-v1",
+            "44": "spatial-progression45-v1",
+            "45": "spatial-progression46-v1",
+            "46": "spatial-progression47-v1",
+            "47": "spatial-progression48-v1",
+            "48": "spatial-progression49-v1",
+            "49": "spatial-progression50-v1",
+            "50": "spatial-progression51-v1"
+          }
+        },
+        "completed": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23
+        ],
+        "targetIndex": 24,
+        "targetCompleted": false,
+        "constructorWrites": 0,
+        "scope": "QA setup supplies the previously completed campaign prefix in the candidate own storage before construction; the current target is not completed. This is not a fresh guest full-campaign playthrough."
+      },
+      "route": {
+        "route": {
+          "level": 25,
+          "id": "opposed-shadows",
+          "pass": true,
+          "milestones": [
+            {
+              "name": "one weight moves two opposite shadows",
+              "player": [
+                -6.9999888376684005,
+                0.1773485327750986,
+                12.72588555660367
+              ],
+              "cargo": [
+                -6.989349130611842,
+                0.5673485705134609,
+                12.005339959944886
+              ],
+              "teleports": 0
+            },
+            {
+              "name": "ground switch supplies the continuously illuminated moving freight mirror",
+              "player": [
+                -6.999784846996093,
+                0,
+                7.797322049966231
+              ],
+              "cargo": [
+                -6.989349158642922,
+                0.5675831218782599,
+                12.00533994368854
+              ],
+              "teleports": 0
+            },
+            {
+              "name": "permanent gallery keeps height after losing light",
+              "player": [
+                -3.0900673599102046,
+                9,
+                -14.454075881598603
+              ],
+              "cargo": [
+                -6.989349865312051,
+                9.567579659066121,
+                12.005339532706133
+              ],
+              "teleports": 0
+            },
+            {
+              "name": "first optical receiver raised the loaded counterweight onto a physical balcony",
+              "player": [
+                -6.999764126474796,
+                9,
+                7.797261593830446
+              ],
+              "cargo": [
+                -6.989350369148863,
+                9.567579659066121,
+                12.005339239324725
+              ],
+              "teleports": 0
+            },
+            {
+              "name": "balcony retrieval reverses both linked shadows without a cargo portal",
+              "player": [
+                -9.951135309407404,
+                9,
+                11.095804790196334
+              ],
+              "cargo": [
+                -10.671025066471142,
+                10.06,
+                11.08320567615158
+              ],
+              "teleports": 0
+            },
+            {
+              "name": "reverse overlook reveals the starting room",
+              "player": [
+                15.903426764487342,
+                18,
+                -14.50045410234147
+              ],
+              "cargo": [
+                16.62342675597519,
+                19.065803455882683,
+                -14.49939277235353
+              ],
+              "teleports": 0
+            },
+            {
+              "name": "both at exit",
+              "player": [
+                -14.62488003658729,
+                7,
+                22.95691516576676
+              ],
+              "cargo": [
+                -13.904886428136473,
+                8.0633553635371,
+                22.95738542360232
+              ],
+              "teleports": 1
+            }
+          ],
+          "respawns": 0,
+          "resets": 0,
+          "frames": 9209,
+          "teleports": 1
+        },
+        "state": "won",
+        "observations": 18418,
+        "sameBody": true,
+        "image": {
+          "file": "after-25-won.png",
+          "bytes": 331694,
+          "sha256": "cc6aef2cf9fd43043e939f15976747340878a61e0aeec5ef58aa8aec8120e4b6"
+        }
+      }
+    }
+  ],
+  "pass": true
+}

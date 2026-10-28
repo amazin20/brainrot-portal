@@ -1,0 +1,412 @@
+{
+  "scope": "Native software WebGL. Prior-prefix access fixture; target unfinished. Static views move only camera. Routes use retained input driver, not human playtest or hardware benchmark.",
+  "rows": [
+    {
+      "version": "after",
+      "level": 22,
+      "errors": [],
+      "consoleErrors": [],
+      "views": [
+        {
+          "before": {
+            "id": "opposed-freight-lock",
+            "index": 21,
+            "steps": 0,
+            "elapsed": 0,
+            "player": [
+              -17,
+              0,
+              18
+            ],
+            "cargo": [
+              -15,
+              0.55,
+              17
+            ],
+            "state": "playing"
+          },
+          "after": {
+            "id": "opposed-freight-lock",
+            "index": 21,
+            "steps": 0,
+            "elapsed": 0,
+            "player": [
+              -17,
+              0,
+              18
+            ],
+            "cargo": [
+              -15,
+              0.55,
+              17
+            ],
+            "state": "playing"
+          },
+          "camera": {
+            "p": [
+              -17.210099859268926,
+              1.8796442824246533,
+              23.703091327551228
+            ],
+            "q": [
+              -0.04966679331568472,
+              -0.09667521969108929,
+              -0.004830219012500024,
+              0.9940642738393266
+            ],
+            "fov": 62
+          },
+          "stats": {
+            "revision": "biosphere-conservatory-architecture-v2",
+            "sourcePanels": 499,
+            "floorPanels": 98,
+            "wallPanels": 320,
+            "ceilingPanels": 81,
+            "botanicalPanels": 68,
+            "leaves": 1700,
+            "parts": 6930,
+            "batches": 8,
+            "triangles": 94324,
+            "newColliders": 0,
+            "newLights": 0
+          },
+          "render": {
+            "calls": 151,
+            "triangles": 797874
+          },
+          "file": "after-22-start.png",
+          "bytes": 527798,
+          "sha256": "c14bb5e82e64483d68fea876cd9d2ce2f2f7f064b8c9b84b3790df793b21e260"
+        },
+        {
+          "before": {
+            "id": "opposed-freight-lock",
+            "index": 21,
+            "steps": 0,
+            "elapsed": 0,
+            "player": [
+              -17,
+              0,
+              18
+            ],
+            "cargo": [
+              -15,
+              0.55,
+              17
+            ],
+            "state": "playing"
+          },
+          "after": {
+            "id": "opposed-freight-lock",
+            "index": 21,
+            "steps": 0,
+            "elapsed": 0,
+            "player": [
+              -17,
+              0,
+              18
+            ],
+            "cargo": [
+              -15,
+              0.55,
+              17
+            ],
+            "state": "playing"
+          },
+          "camera": {
+            "p": [
+              19.250000190734863,
+              10,
+              21.200000001490118
+            ],
+            "q": [
+              -0.08203118110418704,
+              0.3586267289318811,
+              0.03165565501613317,
+              0.9293307668036019
+            ],
+            "fov": 76
+          },
+          "stats": {
+            "revision": "biosphere-conservatory-architecture-v2",
+            "sourcePanels": 499,
+            "floorPanels": 98,
+            "wallPanels": 320,
+            "ceilingPanels": 81,
+            "botanicalPanels": 68,
+            "leaves": 1700,
+            "parts": 6930,
+            "batches": 8,
+            "triangles": 94324,
+            "newColliders": 0,
+            "newLights": 0
+          },
+          "render": {
+            "calls": 183,
+            "triangles": 798498
+          },
+          "file": "after-22-oblique.png",
+          "bytes": 680874,
+          "sha256": "b151703288ab0a6c09a02a7309b6578b401223dbda7b0a646826878f4de9cc74"
+        },
+        {
+          "before": {
+            "id": "opposed-freight-lock",
+            "index": 21,
+            "steps": 0,
+            "elapsed": 0,
+            "player": [
+              -17,
+              0,
+              18
+            ],
+            "cargo": [
+              -15,
+              0.55,
+              17
+            ],
+            "state": "playing"
+          },
+          "after": {
+            "id": "opposed-freight-lock",
+            "index": 21,
+            "steps": 0,
+            "elapsed": 0,
+            "player": [
+              -17,
+              0,
+              18
+            ],
+            "cargo": [
+              -15,
+              0.55,
+              17
+            ],
+            "state": "playing"
+          },
+          "camera": {
+            "p": [
+              -19.20000000149012,
+              10,
+              -21.200000001490118
+            ],
+            "q": [
+              0.03165565501613317,
+              0.9293307668036019,
+              0.08203118110418704,
+              -0.3586267289318811
+            ],
+            "fov": 76
+          },
+          "stats": {
+            "revision": "biosphere-conservatory-architecture-v2",
+            "sourcePanels": 499,
+            "floorPanels": 98,
+            "wallPanels": 320,
+            "ceilingPanels": 81,
+            "botanicalPanels": 68,
+            "leaves": 1700,
+            "parts": 6930,
+            "batches": 8,
+            "triangles": 94324,
+            "newColliders": 0,
+            "newLights": 0
+          },
+          "render": {
+            "calls": 181,
+            "triangles": 740782
+          },
+          "file": "after-22-opposite.png",
+          "bytes": 745985,
+          "sha256": "ce3e95b92de1665069772e207639994ff28a2854745612fa1063737f2621c8ff"
+        }
+      ],
+      "pass": true,
+      "fixture": {
+        "key": "brainrot-campaign-v67:brainrot-portal.preferences.v24",
+        "raw": "{\"quality\":\"balanced\",\"volume\":0,\"lookSensitivity\":1,\"muted\":true,\"tutorial\":false,\"completed\":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20],\"hints\":{},\"resumeLevel\":21,\"campaignSequenceRevision\":\"fifty-rooms-then-castle-v1\",\"campaignRevision\":\"creative-campaign-v48\",\"roomRevisions\":{\"16\":\"cable-supported-architecture-v1\",\"22\":\"counterweight-dynamic-v1\",\"32\":\"siphon-observatory-v1\",\"42\":\"spatial-progression43-v1\",\"43\":\"spatial-progression44-v1\",\"44\":\"spatial-progression45-v1\",\"45\":\"spatial-progression46-v1\",\"46\":\"spatial-progression47-v1\",\"47\":\"spatial-progression48-v1\",\"48\":\"spatial-progression49-v1\",\"49\":\"spatial-progression50-v1\",\"50\":\"spatial-progression51-v1\"}}",
+        "preferences": {
+          "quality": "balanced",
+          "volume": 0,
+          "lookSensitivity": 1,
+          "muted": true,
+          "tutorial": false,
+          "completed": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20
+          ],
+          "hints": {},
+          "resumeLevel": 21,
+          "campaignSequenceRevision": "fifty-rooms-then-castle-v1",
+          "campaignRevision": "creative-campaign-v48",
+          "roomRevisions": {
+            "16": "cable-supported-architecture-v1",
+            "22": "counterweight-dynamic-v1",
+            "32": "siphon-observatory-v1",
+            "42": "spatial-progression43-v1",
+            "43": "spatial-progression44-v1",
+            "44": "spatial-progression45-v1",
+            "45": "spatial-progression46-v1",
+            "46": "spatial-progression47-v1",
+            "47": "spatial-progression48-v1",
+            "48": "spatial-progression49-v1",
+            "49": "spatial-progression50-v1",
+            "50": "spatial-progression51-v1"
+          }
+        },
+        "completed": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20
+        ],
+        "targetIndex": 21,
+        "targetCompleted": false,
+        "constructorWrites": 0,
+        "scope": "QA setup supplies the previously completed campaign prefix in the candidate own storage before construction; the current target is not completed. This is not a fresh guest full-campaign playthrough."
+      },
+      "route": {
+        "route": {
+          "level": 22,
+          "id": "opposed-freight-lock",
+          "pass": true,
+          "milestones": [
+            {
+              "name": "original cargo opens ground passage and closes upper inspection",
+              "player": [
+                -12.000043154690744,
+                0.12500000000000017,
+                1.0295509221237347
+              ],
+              "cargo": [
+                -11.999002006112457,
+                0.5149981478133052,
+                0.30941628481156597
+              ],
+              "teleports": 0
+            },
+            {
+              "name": "inspection stair joins the permanent gallery",
+              "player": [
+                18.002131599754033,
+                7,
+                7.605899508770072
+              ],
+              "cargo": [
+                -11.999002506192014,
+                0.5149981478137947,
+                0.30941708015771874
+              ],
+              "teleports": 0
+            },
+            {
+              "name": "permanent gallery retains height while the same cargo reverses both shutters",
+              "player": [
+                3.55761938096581,
+                7,
+                0.005135871038234013
+              ],
+              "cargo": [
+                20.140163656222434,
+                8.392124181425737,
+                3.295983812551567
+              ],
+              "teleports": 0
+            },
+            {
+              "name": "reverse high slot reveals the receiving chamber",
+              "player": [
+                12.00000303476108,
+                10,
+                -17.998873010404683
+              ],
+              "cargo": [
+                19.769189174056613,
+                8.389998147101812,
+                2.4084404971691518
+              ],
+              "teleports": 0
+            },
+            {
+              "name": "original companion and traveller exit through the reverse side",
+              "player": [
+                -16.091684802672813,
+                14,
+                -18.031434071795744
+              ],
+              "cargo": [
+                -15.371676035690465,
+                15.044560147201341,
+                -18.02708518729506
+              ],
+              "teleports": 1
+            },
+            {
+              "name": "both at exit",
+              "player": [
+                -16.091684802672813,
+                14,
+                -18.031434071795744
+              ],
+              "cargo": [
+                -15.371676035690465,
+                15.044560147201341,
+                -18.02708518729506
+              ],
+              "teleports": 1
+            }
+          ],
+          "respawns": 0,
+          "resets": 0,
+          "frames": 3483,
+          "teleports": 1
+        },
+        "state": "won",
+        "observations": 6966,
+        "sameBody": true,
+        "image": {
+          "file": "after-22-won.png",
+          "bytes": 326681,
+          "sha256": "58097e0fcd1b7bfe48626faf96425922921019484aabebd30ac461be6e7d5b7d"
+        }
+      }
+    }
+  ],
+  "pass": true
+}

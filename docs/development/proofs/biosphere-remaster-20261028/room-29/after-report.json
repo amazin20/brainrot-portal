@@ -1,0 +1,412 @@
+{
+  "scope": "Native software WebGL. Prior-prefix access fixture; target unfinished. Static views move only camera. Routes use retained input driver, not human playtest or hardware benchmark.",
+  "rows": [
+    {
+      "version": "after",
+      "level": 29,
+      "errors": [],
+      "consoleErrors": [],
+      "views": [
+        {
+          "before": {
+            "id": "inverted-orchard",
+            "index": 28,
+            "steps": 0,
+            "elapsed": 0,
+            "player": [
+              2,
+              0,
+              15.5
+            ],
+            "cargo": [
+              -13.5,
+              0.55,
+              12.5
+            ],
+            "state": "playing"
+          },
+          "after": {
+            "id": "inverted-orchard",
+            "index": 28,
+            "steps": 0,
+            "elapsed": 0,
+            "player": [
+              2,
+              0,
+              15.5
+            ],
+            "cargo": [
+              -13.5,
+              0.55,
+              12.5
+            ],
+            "state": "playing"
+          },
+          "camera": {
+            "p": [
+              6.45078460733652,
+              2.269571972172212,
+              20.140994446103257
+            ],
+            "q": [
+              -0.07131644794152552,
+              0.3003271988689952,
+              0.022524215266184783,
+              0.9508996779887716
+            ],
+            "fov": 62
+          },
+          "stats": {
+            "revision": "biosphere-conservatory-architecture-v2",
+            "sourcePanels": 271,
+            "floorPanels": 103,
+            "wallPanels": 120,
+            "ceilingPanels": 48,
+            "botanicalPanels": 24,
+            "leaves": 1056,
+            "parts": 3696,
+            "batches": 8,
+            "triangles": 49884,
+            "newColliders": 0,
+            "newLights": 0
+          },
+          "render": {
+            "calls": 162,
+            "triangles": 694568
+          },
+          "file": "after-29-start.png",
+          "bytes": 676809,
+          "sha256": "d5894e76468cd88931e853b4b4276bc241526a877898a2a54c12db632911bead"
+        },
+        {
+          "before": {
+            "id": "inverted-orchard",
+            "index": 28,
+            "steps": 0,
+            "elapsed": 0,
+            "player": [
+              2,
+              0,
+              15.5
+            ],
+            "cargo": [
+              -13.5,
+              0.55,
+              12.5
+            ],
+            "state": "playing"
+          },
+          "after": {
+            "id": "inverted-orchard",
+            "index": 28,
+            "steps": 0,
+            "elapsed": 0,
+            "player": [
+              2,
+              0,
+              15.5
+            ],
+            "cargo": [
+              -13.5,
+              0.55,
+              12.5
+            ],
+            "state": "playing"
+          },
+          "camera": {
+            "p": [
+              19.20000000149012,
+              10,
+              19.200000001490118
+            ],
+            "q": [
+              -0.08551068594932643,
+              0.38104075275638505,
+              0.03541968584803747,
+              0.9199137531213183
+            ],
+            "fov": 76
+          },
+          "stats": {
+            "revision": "biosphere-conservatory-architecture-v2",
+            "sourcePanels": 271,
+            "floorPanels": 103,
+            "wallPanels": 120,
+            "ceilingPanels": 48,
+            "botanicalPanels": 24,
+            "leaves": 1056,
+            "parts": 3696,
+            "batches": 8,
+            "triangles": 49884,
+            "newColliders": 0,
+            "newLights": 0
+          },
+          "render": {
+            "calls": 217,
+            "triangles": 841668
+          },
+          "file": "after-29-oblique.png",
+          "bytes": 910500,
+          "sha256": "8c989f42fb6ac468770be7bcaa651d09bf8a1355ca0b19680c7d303b87126b50"
+        },
+        {
+          "before": {
+            "id": "inverted-orchard",
+            "index": 28,
+            "steps": 0,
+            "elapsed": 0,
+            "player": [
+              2,
+              0,
+              15.5
+            ],
+            "cargo": [
+              -13.5,
+              0.55,
+              12.5
+            ],
+            "state": "playing"
+          },
+          "after": {
+            "id": "inverted-orchard",
+            "index": 28,
+            "steps": 0,
+            "elapsed": 0,
+            "player": [
+              2,
+              0,
+              15.5
+            ],
+            "cargo": [
+              -13.5,
+              0.55,
+              12.5
+            ],
+            "state": "playing"
+          },
+          "camera": {
+            "p": [
+              -19.20000000149012,
+              10,
+              -19.200000001490118
+            ],
+            "q": [
+              0.03541968584803747,
+              0.9199137531213182,
+              0.08551068594932644,
+              -0.38104075275638505
+            ],
+            "fov": 76
+          },
+          "stats": {
+            "revision": "biosphere-conservatory-architecture-v2",
+            "sourcePanels": 271,
+            "floorPanels": 103,
+            "wallPanels": 120,
+            "ceilingPanels": 48,
+            "botanicalPanels": 24,
+            "leaves": 1056,
+            "parts": 3696,
+            "batches": 8,
+            "triangles": 49884,
+            "newColliders": 0,
+            "newLights": 0
+          },
+          "render": {
+            "calls": 215,
+            "triangles": 841872
+          },
+          "file": "after-29-opposite.png",
+          "bytes": 807001,
+          "sha256": "93cd376fab74fb1cfc590ae6538108a82af4341b99d95f1ed95af26fd5873204"
+        }
+      ],
+      "pass": true,
+      "fixture": {
+        "key": "brainrot-campaign-v67:brainrot-portal.preferences.v24",
+        "raw": "{\"quality\":\"balanced\",\"volume\":0,\"lookSensitivity\":1,\"muted\":true,\"tutorial\":false,\"completed\":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27],\"hints\":{},\"resumeLevel\":28,\"campaignSequenceRevision\":\"fifty-rooms-then-castle-v1\",\"campaignRevision\":\"creative-campaign-v48\",\"roomRevisions\":{\"16\":\"cable-supported-architecture-v1\",\"22\":\"counterweight-dynamic-v1\",\"32\":\"siphon-observatory-v1\",\"42\":\"spatial-progression43-v1\",\"43\":\"spatial-progression44-v1\",\"44\":\"spatial-progression45-v1\",\"45\":\"spatial-progression46-v1\",\"46\":\"spatial-progression47-v1\",\"47\":\"spatial-progression48-v1\",\"48\":\"spatial-progression49-v1\",\"49\":\"spatial-progression50-v1\",\"50\":\"spatial-progression51-v1\"}}",
+        "preferences": {
+          "quality": "balanced",
+          "volume": 0,
+          "lookSensitivity": 1,
+          "muted": true,
+          "tutorial": false,
+          "completed": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27
+          ],
+          "hints": {},
+          "resumeLevel": 28,
+          "campaignSequenceRevision": "fifty-rooms-then-castle-v1",
+          "campaignRevision": "creative-campaign-v48",
+          "roomRevisions": {
+            "16": "cable-supported-architecture-v1",
+            "22": "counterweight-dynamic-v1",
+            "32": "siphon-observatory-v1",
+            "42": "spatial-progression43-v1",
+            "43": "spatial-progression44-v1",
+            "44": "spatial-progression45-v1",
+            "45": "spatial-progression46-v1",
+            "46": "spatial-progression47-v1",
+            "47": "spatial-progression48-v1",
+            "48": "spatial-progression49-v1",
+            "49": "spatial-progression50-v1",
+            "50": "spatial-progression51-v1"
+          }
+        },
+        "completed": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27
+        ],
+        "targetIndex": 28,
+        "targetCompleted": false,
+        "constructorWrites": 0,
+        "scope": "QA setup supplies the previously completed campaign prefix in the candidate own storage before construction; the current target is not completed. This is not a fresh guest full-campaign playthrough."
+      },
+      "route": {
+        "route": {
+          "level": 29,
+          "id": "inverted-orchard",
+          "pass": true,
+          "milestones": [
+            {
+              "name": "the root crystal reverses and the free companion rises",
+              "player": [
+                -5.004842011881058,
+                0,
+                10.998909965964009
+              ],
+              "cargo": [
+                -12.242949956802676,
+                0.38999855535565336,
+                8.533766120688465
+              ],
+              "teleports": 0
+            },
+            {
+              "name": "the companion crosses a passage too low for its observer",
+              "player": [
+                8.99132006474289,
+                6,
+                4.999999940671307
+              ],
+              "cargo": [
+                14.804261662085182,
+                15.14002784413961,
+                -12.944864693232104
+              ],
+              "teleports": 0
+            },
+            {
+              "name": "borrow the pair for the independent grounded route",
+              "player": [
+                17.156671140397638,
+                9,
+                -18.46296030274117
+              ],
+              "cargo": [
+                15.384691085589012,
+                15.835001448208441,
+                -12.971731014439428
+              ],
+              "teleports": 1
+            },
+            {
+              "name": "the two versions of the garden meet at the same physical exit",
+              "player": [
+                17.30136914231483,
+                9.024999998658895,
+                -11.004736806895654
+              ],
+              "cargo": [
+                15.384709235834487,
+                9.389998537069285,
+                -12.971730340121788
+              ],
+              "teleports": 1
+            },
+            {
+              "name": "both at exit",
+              "player": [
+                17.30136914231483,
+                9.024999998658895,
+                -11.004736806895654
+              ],
+              "cargo": [
+                15.384709235834487,
+                9.389998537069285,
+                -12.971730340121788
+              ],
+              "teleports": 1
+            }
+          ],
+          "respawns": 0,
+          "resets": 0,
+          "frames": 4258,
+          "teleports": 1
+        },
+        "state": "won",
+        "observations": 8515,
+        "sameBody": true,
+        "image": {
+          "file": "after-29-won.png",
+          "bytes": 601036,
+          "sha256": "515e373e17f8f2ee5b77842fb191f74568d5bba751106a41b68cec8b56e6375e"
+        }
+      }
+    }
+  ],
+  "pass": true
+}

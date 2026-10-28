@@ -1,0 +1,428 @@
+{
+  "scope": "Native software WebGL. Prior-prefix access fixture; target unfinished. Static views move only camera. Routes use retained input driver, not human playtest or hardware benchmark.",
+  "rows": [
+    {
+      "version": "after",
+      "level": 30,
+      "errors": [],
+      "consoleErrors": [],
+      "views": [
+        {
+          "before": {
+            "id": "sunward-limit",
+            "index": 29,
+            "steps": 0,
+            "elapsed": 0,
+            "player": [
+              -17,
+              52,
+              16
+            ],
+            "cargo": [
+              -14.5,
+              52.6,
+              16
+            ],
+            "state": "playing"
+          },
+          "after": {
+            "id": "sunward-limit",
+            "index": 29,
+            "steps": 0,
+            "elapsed": 0,
+            "player": [
+              -17,
+              52,
+              16
+            ],
+            "cargo": [
+              -14.5,
+              52.6,
+              16
+            ],
+            "state": "playing"
+          },
+          "camera": {
+            "p": [
+              -15.631385506356919,
+              53.95436964023066,
+              22.322536637089872
+            ],
+            "q": [
+              -0.0498619804643974,
+              0.03068378476259119,
+              0.001532584963817647,
+              0.9982834965279851
+            ],
+            "fov": 68
+          },
+          "stats": {
+            "revision": "biosphere-conservatory-architecture-v2",
+            "sourcePanels": 228,
+            "floorPanels": 228,
+            "wallPanels": 0,
+            "ceilingPanels": 0,
+            "botanicalPanels": 0,
+            "leaves": 0,
+            "parts": 1166,
+            "batches": 3,
+            "triangles": 22200,
+            "newColliders": 0,
+            "newLights": 0
+          },
+          "render": {
+            "calls": 76,
+            "triangles": 754794
+          },
+          "file": "after-30-start.png",
+          "bytes": 390352,
+          "sha256": "9760050b274921c06811b4c77f0ee8407075aec11fa3fe63818bdf3e5f466208"
+        },
+        {
+          "before": {
+            "id": "sunward-limit",
+            "index": 29,
+            "steps": 0,
+            "elapsed": 0,
+            "player": [
+              -17,
+              52,
+              16
+            ],
+            "cargo": [
+              -14.5,
+              52.6,
+              16
+            ],
+            "state": "playing"
+          },
+          "after": {
+            "id": "sunward-limit",
+            "index": 29,
+            "steps": 0,
+            "elapsed": 0,
+            "player": [
+              -17,
+              52,
+              16
+            ],
+            "cargo": [
+              -14.5,
+              52.6,
+              16
+            ],
+            "state": "playing"
+          },
+          "camera": {
+            "p": [
+              226.39999998807906,
+              62,
+              70.39999998807907
+            ],
+            "q": [
+              -0.013660904668118548,
+              0.5021353845161104,
+              0.0079334591916325,
+              0.8646447221406959
+            ],
+            "fov": 76
+          },
+          "stats": {
+            "revision": "biosphere-conservatory-architecture-v2",
+            "sourcePanels": 228,
+            "floorPanels": 228,
+            "wallPanels": 0,
+            "ceilingPanels": 0,
+            "botanicalPanels": 0,
+            "leaves": 0,
+            "parts": 1166,
+            "batches": 3,
+            "triangles": 22200,
+            "newColliders": 0,
+            "newLights": 0
+          },
+          "render": {
+            "calls": 182,
+            "triangles": 824546
+          },
+          "file": "after-30-oblique.png",
+          "bytes": 658864,
+          "sha256": "7d28df4dd2143f4c3ff2b446255c368e7f031539c76c63bc3bc25107fc81dcd9"
+        },
+        {
+          "before": {
+            "id": "sunward-limit",
+            "index": 29,
+            "steps": 0,
+            "elapsed": 0,
+            "player": [
+              -17,
+              52,
+              16
+            ],
+            "cargo": [
+              -14.5,
+              52.6,
+              16
+            ],
+            "state": "playing"
+          },
+          "after": {
+            "id": "sunward-limit",
+            "index": 29,
+            "steps": 0,
+            "elapsed": 0,
+            "player": [
+              -17,
+              52,
+              16
+            ],
+            "cargo": [
+              -14.5,
+              52.6,
+              16
+            ],
+            "state": "playing"
+          },
+          "camera": {
+            "p": [
+              -48.399999988079074,
+              62,
+              -86.39999998807907
+            ],
+            "q": [
+              -0.007933459191632504,
+              -0.8646447221406959,
+              -0.013660904668118546,
+              0.5021353845161104
+            ],
+            "fov": 76
+          },
+          "stats": {
+            "revision": "biosphere-conservatory-architecture-v2",
+            "sourcePanels": 228,
+            "floorPanels": 228,
+            "wallPanels": 0,
+            "ceilingPanels": 0,
+            "botanicalPanels": 0,
+            "leaves": 0,
+            "parts": 1166,
+            "batches": 3,
+            "triangles": 22200,
+            "newColliders": 0,
+            "newLights": 0
+          },
+          "render": {
+            "calls": 183,
+            "triangles": 824558
+          },
+          "file": "after-30-opposite.png",
+          "bytes": 619101,
+          "sha256": "d22689e2bda7f28f0bb32a5c25b3af411ae61ccfc4e2212ded78b99cc53eadf9"
+        }
+      ],
+      "pass": true,
+      "fixture": {
+        "key": "brainrot-campaign-v67:brainrot-portal.preferences.v24",
+        "raw": "{\"quality\":\"balanced\",\"volume\":0,\"lookSensitivity\":1,\"muted\":true,\"tutorial\":false,\"completed\":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28],\"hints\":{},\"resumeLevel\":29,\"campaignSequenceRevision\":\"fifty-rooms-then-castle-v1\",\"campaignRevision\":\"creative-campaign-v48\",\"roomRevisions\":{\"16\":\"cable-supported-architecture-v1\",\"22\":\"counterweight-dynamic-v1\",\"32\":\"siphon-observatory-v1\",\"42\":\"spatial-progression43-v1\",\"43\":\"spatial-progression44-v1\",\"44\":\"spatial-progression45-v1\",\"45\":\"spatial-progression46-v1\",\"46\":\"spatial-progression47-v1\",\"47\":\"spatial-progression48-v1\",\"48\":\"spatial-progression49-v1\",\"49\":\"spatial-progression50-v1\",\"50\":\"spatial-progression51-v1\"}}",
+        "preferences": {
+          "quality": "balanced",
+          "volume": 0,
+          "lookSensitivity": 1,
+          "muted": true,
+          "tutorial": false,
+          "completed": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28
+          ],
+          "hints": {},
+          "resumeLevel": 29,
+          "campaignSequenceRevision": "fifty-rooms-then-castle-v1",
+          "campaignRevision": "creative-campaign-v48",
+          "roomRevisions": {
+            "16": "cable-supported-architecture-v1",
+            "22": "counterweight-dynamic-v1",
+            "32": "siphon-observatory-v1",
+            "42": "spatial-progression43-v1",
+            "43": "spatial-progression44-v1",
+            "44": "spatial-progression45-v1",
+            "45": "spatial-progression46-v1",
+            "46": "spatial-progression47-v1",
+            "47": "spatial-progression48-v1",
+            "48": "spatial-progression49-v1",
+            "49": "spatial-progression50-v1",
+            "50": "spatial-progression51-v1"
+          }
+        },
+        "completed": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28
+        ],
+        "targetIndex": 29,
+        "targetCompleted": false,
+        "constructorWrites": 0,
+        "scope": "QA setup supplies the previously completed campaign prefix in the candidate own storage before construction; the current target is not completed. This is not a fresh guest full-campaign playthrough."
+      },
+      "route": {
+        "route": {
+          "level": 30,
+          "id": "sunward-limit",
+          "pass": true,
+          "milestones": [
+            {
+              "name": "room30 first flight prepared",
+              "player": [
+                -22.629326694933816,
+                52,
+                -32.018453900387435
+              ],
+              "cargo": [
+                -22.85956342722119,
+                53.18,
+                -31.13020222034082
+              ],
+              "teleports": 0
+            },
+            {
+              "name": "north-south physical arc reaches the central island",
+              "player": [
+                59.9954316601673,
+                40,
+                26.074999962390887
+              ],
+              "cargo": [
+                60.85545103737811,
+                41.18000002444962,
+                25.75498376653399
+              ],
+              "teleports": 1
+            },
+            {
+              "name": "turning the real outlet changes the last ballistic arc",
+              "player": [
+                49.113806521806595,
+                40,
+                24.030186710351625
+              ],
+              "cargo": [
+                49.734252727084495,
+                41.18,
+                23.35413456269122
+              ],
+              "teleports": 1
+            },
+            {
+              "name": "central well and north-facing outlet prepare the final flight",
+              "player": [
+                43.6840573574914,
+                40,
+                45.00520056806307
+              ],
+              "cargo": [
+                44.292133047345814,
+                41.18,
+                45.69240065203285
+              ],
+              "teleports": 1
+            },
+            {
+              "name": "the original travellers cross the final gap with conserved momentum",
+              "player": [
+                200.00477435902403,
+                28,
+                16.290768484520346
+              ],
+              "cargo": [
+                200.86475276509907,
+                29.180000006996064,
+                15.97064836285986
+              ],
+              "teleports": 2
+            },
+            {
+              "name": "both at exit",
+              "player": [
+                200.0005408515168,
+                28,
+                29.33370089335875
+              ],
+              "cargo": [
+                200.86064465692345,
+                29.18,
+                29.013942890377702
+              ],
+              "teleports": 2
+            }
+          ],
+          "respawns": 0,
+          "resets": 0,
+          "frames": 2707,
+          "teleports": 2
+        },
+        "state": "won",
+        "observations": 5413,
+        "sameBody": true,
+        "image": {
+          "file": "after-30-won.png",
+          "bytes": 356120,
+          "sha256": "ec11e98d7c83550f36330ff16ad8280225b36c8708680e4f44cc28fae00e079b"
+        }
+      }
+    }
+  ],
+  "pass": true
+}

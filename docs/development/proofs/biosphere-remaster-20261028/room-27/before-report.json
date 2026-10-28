@@ -1,0 +1,278 @@
+{
+  "scope": "Native software WebGL. Prior-prefix access fixture; target unfinished. Static views move only camera. Routes use retained input driver, not human playtest or hardware benchmark.",
+  "rows": [
+    {
+      "version": "before",
+      "level": 27,
+      "errors": [],
+      "consoleErrors": [],
+      "views": [
+        {
+          "before": {
+            "id": "conveyor-city",
+            "index": 26,
+            "steps": 0,
+            "elapsed": 0,
+            "player": [
+              -20,
+              0,
+              15.8
+            ],
+            "cargo": [
+              -17,
+              0.55,
+              19.8
+            ],
+            "state": "playing"
+          },
+          "after": {
+            "id": "conveyor-city",
+            "index": 26,
+            "steps": 0,
+            "elapsed": 0,
+            "player": [
+              -20,
+              0,
+              15.8
+            ],
+            "cargo": [
+              -17,
+              0.55,
+              19.8
+            ],
+            "state": "playing"
+          },
+          "camera": {
+            "p": [
+              -20.525071021606678,
+              2.7066924736355986,
+              22.128616310524073
+            ],
+            "q": [
+              -0.10879995405053107,
+              -0.11768188986571074,
+              -0.012972583847420907,
+              0.9869879709827059
+            ],
+            "fov": 62
+          },
+          "stats": null,
+          "render": {
+            "calls": 132,
+            "triangles": 1463618
+          },
+          "file": "before-27-start.png",
+          "bytes": 558056,
+          "sha256": "1828d24ab6131ef4d9f1935da41a853e0e4c70c910ca83bb97d08220c822db1d"
+        },
+        {
+          "before": {
+            "id": "conveyor-city",
+            "index": 26,
+            "steps": 0,
+            "elapsed": 0,
+            "player": [
+              -20,
+              0,
+              15.8
+            ],
+            "cargo": [
+              -17,
+              0.55,
+              19.8
+            ],
+            "state": "playing"
+          },
+          "after": {
+            "id": "conveyor-city",
+            "index": 26,
+            "steps": 0,
+            "elapsed": 0,
+            "player": [
+              -20,
+              0,
+              15.8
+            ],
+            "cargo": [
+              -17,
+              0.55,
+              19.8
+            ],
+            "state": "playing"
+          },
+          "camera": {
+            "p": [
+              21.20000000149012,
+              10,
+              20.200000001490118
+            ],
+            "q": [
+              -0.07414641499514002,
+              0.39201865936829117,
+              0.03171789788712311,
+              0.9164156561321277
+            ],
+            "fov": 76
+          },
+          "stats": null,
+          "render": {
+            "calls": 159,
+            "triangles": 1572458
+          },
+          "file": "before-27-oblique.png",
+          "bytes": 547109,
+          "sha256": "a30a3f99817c854b3027633dc8be1f3a5d3a5f467094b91e18b1c67380bc72f6"
+        },
+        {
+          "before": {
+            "id": "conveyor-city",
+            "index": 26,
+            "steps": 0,
+            "elapsed": 0,
+            "player": [
+              -20,
+              0,
+              15.8
+            ],
+            "cargo": [
+              -17,
+              0.55,
+              19.8
+            ],
+            "state": "playing"
+          },
+          "after": {
+            "id": "conveyor-city",
+            "index": 26,
+            "steps": 0,
+            "elapsed": 0,
+            "player": [
+              -20,
+              0,
+              15.8
+            ],
+            "cargo": [
+              -17,
+              0.55,
+              19.8
+            ],
+            "state": "playing"
+          },
+          "camera": {
+            "p": [
+              -23.20000000149012,
+              10,
+              -22.200000001490118
+            ],
+            "q": [
+              0.031717897887123106,
+              0.9164156561321278,
+              0.07414641499514,
+              -0.3920186593682911
+            ],
+            "fov": 76
+          },
+          "stats": null,
+          "render": {
+            "calls": 159,
+            "triangles": 1572458
+          },
+          "file": "before-27-opposite.png",
+          "bytes": 569184,
+          "sha256": "66f67af447ea3e4c8e69425c514c1818e4c58d4d058baabaaa3020205e061956"
+        }
+      ],
+      "pass": true,
+      "fixture": {
+        "key": "brainrot-campaign-v67:brainrot-portal.preferences.v24",
+        "raw": "{\"quality\":\"balanced\",\"volume\":0,\"lookSensitivity\":1,\"muted\":true,\"tutorial\":false,\"completed\":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25],\"hints\":{},\"resumeLevel\":26,\"campaignSequenceRevision\":\"fifty-rooms-then-castle-v1\",\"campaignRevision\":\"creative-campaign-v48\",\"roomRevisions\":{\"16\":\"cable-supported-architecture-v1\",\"22\":\"counterweight-dynamic-v1\",\"32\":\"siphon-observatory-v1\",\"42\":\"spatial-progression43-v1\",\"43\":\"spatial-progression44-v1\",\"44\":\"spatial-progression45-v1\",\"45\":\"spatial-progression46-v1\",\"46\":\"spatial-progression47-v1\",\"47\":\"spatial-progression48-v1\",\"48\":\"spatial-progression49-v1\",\"49\":\"spatial-progression50-v1\",\"50\":\"spatial-progression51-v1\"}}",
+        "preferences": {
+          "quality": "balanced",
+          "volume": 0,
+          "lookSensitivity": 1,
+          "muted": true,
+          "tutorial": false,
+          "completed": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25
+          ],
+          "hints": {},
+          "resumeLevel": 26,
+          "campaignSequenceRevision": "fifty-rooms-then-castle-v1",
+          "campaignRevision": "creative-campaign-v48",
+          "roomRevisions": {
+            "16": "cable-supported-architecture-v1",
+            "22": "counterweight-dynamic-v1",
+            "32": "siphon-observatory-v1",
+            "42": "spatial-progression43-v1",
+            "43": "spatial-progression44-v1",
+            "44": "spatial-progression45-v1",
+            "45": "spatial-progression46-v1",
+            "46": "spatial-progression47-v1",
+            "47": "spatial-progression48-v1",
+            "48": "spatial-progression49-v1",
+            "49": "spatial-progression50-v1",
+            "50": "spatial-progression51-v1"
+          }
+        },
+        "completed": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25
+        ],
+        "targetIndex": 26,
+        "targetCompleted": false,
+        "constructorWrites": 0,
+        "scope": "QA setup supplies the previously completed campaign prefix in the candidate own storage before construction; the current target is not completed. This is not a fresh guest full-campaign playthrough."
+      }
+    }
+  ],
+  "pass": true
+}

@@ -1,0 +1,266 @@
+{
+  "scope": "Native software WebGL. Prior-prefix access fixture; target unfinished. Static views move only camera. Routes use retained input driver, not human playtest or hardware benchmark.",
+  "rows": [
+    {
+      "version": "before",
+      "level": 21,
+      "errors": [],
+      "consoleErrors": [],
+      "views": [
+        {
+          "before": {
+            "id": "gravity-pocket",
+            "index": 20,
+            "steps": 0,
+            "elapsed": 0,
+            "player": [
+              -9,
+              10,
+              13
+            ],
+            "cargo": [
+              -4,
+              10.55,
+              13
+            ],
+            "state": "playing"
+          },
+          "after": {
+            "id": "gravity-pocket",
+            "index": 20,
+            "steps": 0,
+            "elapsed": 0,
+            "player": [
+              -9,
+              10,
+              13
+            ],
+            "cargo": [
+              -4,
+              10.55,
+              13
+            ],
+            "state": "playing"
+          },
+          "camera": {
+            "p": [
+              -11.276434821554062,
+              12.650906409438862,
+              18.653804987698447
+            ],
+            "q": [
+              -0.10562459351148014,
+              -0.26472587632056815,
+              -0.029185084047420415,
+              0.9580771819227232
+            ],
+            "fov": 62
+          },
+          "stats": null,
+          "render": {
+            "calls": 253,
+            "triangles": 920280
+          },
+          "file": "before-21-start.png",
+          "bytes": 409743,
+          "sha256": "e27890872289cbadd51c7d001d4aa34dd2e19f93bac844de18d2bc3c5c7c164d"
+        },
+        {
+          "before": {
+            "id": "gravity-pocket",
+            "index": 20,
+            "steps": 0,
+            "elapsed": 0,
+            "player": [
+              -9,
+              10,
+              13
+            ],
+            "cargo": [
+              -4,
+              10.55,
+              13
+            ],
+            "state": "playing"
+          },
+          "after": {
+            "id": "gravity-pocket",
+            "index": 20,
+            "steps": 0,
+            "elapsed": 0,
+            "player": [
+              -9,
+              10,
+              13
+            ],
+            "cargo": [
+              -4,
+              10.55,
+              13
+            ],
+            "state": "playing"
+          },
+          "camera": {
+            "p": [
+              26.20000000149012,
+              20,
+              16.200000001490118
+            ],
+            "q": [
+              -0.10002815782579522,
+              0.4587285475033509,
+              0.05206056087563938,
+              0.8813921858904568
+            ],
+            "fov": 76
+          },
+          "stats": null,
+          "render": {
+            "calls": 298,
+            "triangles": 922572
+          },
+          "file": "before-21-oblique.png",
+          "bytes": 478622,
+          "sha256": "b93fa7b652e90ad27ba08889d19118b12de69ddfd1e9ee894108a80e0aa4d9c7"
+        },
+        {
+          "before": {
+            "id": "gravity-pocket",
+            "index": 20,
+            "steps": 0,
+            "elapsed": 0,
+            "player": [
+              -9,
+              10,
+              13
+            ],
+            "cargo": [
+              -4,
+              10.55,
+              13
+            ],
+            "state": "playing"
+          },
+          "after": {
+            "id": "gravity-pocket",
+            "index": 20,
+            "steps": 0,
+            "elapsed": 0,
+            "player": [
+              -9,
+              10,
+              13
+            ],
+            "cargo": [
+              -4,
+              10.55,
+              13
+            ],
+            "state": "playing"
+          },
+          "camera": {
+            "p": [
+              -17.20000000149012,
+              20,
+              -14.200000001490118
+            ],
+            "q": [
+              0.05206056087563938,
+              0.8813921858904568,
+              0.10002815782579522,
+              -0.4587285475033509
+            ],
+            "fov": 76
+          },
+          "stats": null,
+          "render": {
+            "calls": 268,
+            "triangles": 840602
+          },
+          "file": "before-21-opposite.png",
+          "bytes": 444321,
+          "sha256": "0a034d6365a4e60f0b7de9bec81f5a1954953bf072ce6f3c523ce4a782d8fdfa"
+        }
+      ],
+      "pass": true,
+      "fixture": {
+        "key": "brainrot-campaign-v67:brainrot-portal.preferences.v24",
+        "raw": "{\"quality\":\"balanced\",\"volume\":0,\"lookSensitivity\":1,\"muted\":true,\"tutorial\":false,\"completed\":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19],\"hints\":{},\"resumeLevel\":20,\"campaignSequenceRevision\":\"fifty-rooms-then-castle-v1\",\"campaignRevision\":\"creative-campaign-v48\",\"roomRevisions\":{\"16\":\"cable-supported-architecture-v1\",\"22\":\"counterweight-dynamic-v1\",\"32\":\"siphon-observatory-v1\",\"42\":\"spatial-progression43-v1\",\"43\":\"spatial-progression44-v1\",\"44\":\"spatial-progression45-v1\",\"45\":\"spatial-progression46-v1\",\"46\":\"spatial-progression47-v1\",\"47\":\"spatial-progression48-v1\",\"48\":\"spatial-progression49-v1\",\"49\":\"spatial-progression50-v1\",\"50\":\"spatial-progression51-v1\"}}",
+        "preferences": {
+          "quality": "balanced",
+          "volume": 0,
+          "lookSensitivity": 1,
+          "muted": true,
+          "tutorial": false,
+          "completed": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19
+          ],
+          "hints": {},
+          "resumeLevel": 20,
+          "campaignSequenceRevision": "fifty-rooms-then-castle-v1",
+          "campaignRevision": "creative-campaign-v48",
+          "roomRevisions": {
+            "16": "cable-supported-architecture-v1",
+            "22": "counterweight-dynamic-v1",
+            "32": "siphon-observatory-v1",
+            "42": "spatial-progression43-v1",
+            "43": "spatial-progression44-v1",
+            "44": "spatial-progression45-v1",
+            "45": "spatial-progression46-v1",
+            "46": "spatial-progression47-v1",
+            "47": "spatial-progression48-v1",
+            "48": "spatial-progression49-v1",
+            "49": "spatial-progression50-v1",
+            "50": "spatial-progression51-v1"
+          }
+        },
+        "completed": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19
+        ],
+        "targetIndex": 20,
+        "targetCompleted": false,
+        "constructorWrites": 0,
+        "scope": "QA setup supplies the previously completed campaign prefix in the candidate own storage before construction; the current target is not completed. This is not a fresh guest full-campaign playthrough."
+      }
+    }
+  ],
+  "pass": true
+}

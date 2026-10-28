@@ -1,0 +1,272 @@
+{
+  "scope": "Native software WebGL. Prior-prefix access fixture; target unfinished. Static views move only camera. Routes use retained input driver, not human playtest or hardware benchmark.",
+  "rows": [
+    {
+      "version": "before",
+      "level": 24,
+      "errors": [],
+      "consoleErrors": [],
+      "views": [
+        {
+          "before": {
+            "id": "garden-of-turning-doors",
+            "index": 23,
+            "steps": 0,
+            "elapsed": 0,
+            "player": [
+              15,
+              0,
+              18
+            ],
+            "cargo": [
+              11,
+              0.55,
+              18
+            ],
+            "state": "playing"
+          },
+          "after": {
+            "id": "garden-of-turning-doors",
+            "index": 23,
+            "steps": 0,
+            "elapsed": 0,
+            "player": [
+              15,
+              0,
+              18
+            ],
+            "cargo": [
+              11,
+              0.55,
+              18
+            ],
+            "state": "playing"
+          },
+          "camera": {
+            "p": [
+              18.68580431853146,
+              1.9480842309295674,
+              23.238059608590415
+            ],
+            "q": [
+              -0.048567356963027664,
+              0.22818850879541677,
+              0.01139779794345497,
+              0.9723380618351778
+            ],
+            "fov": 62
+          },
+          "stats": null,
+          "render": {
+            "calls": 227,
+            "triangles": 1008912
+          },
+          "file": "before-24-start.png",
+          "bytes": 428206,
+          "sha256": "2ffc993ac0a0b6da8023c77b4327393aa037030d3a1972a702bbbc6fab7d2bb8"
+        },
+        {
+          "before": {
+            "id": "garden-of-turning-doors",
+            "index": 23,
+            "steps": 0,
+            "elapsed": 0,
+            "player": [
+              15,
+              0,
+              18
+            ],
+            "cargo": [
+              11,
+              0.55,
+              18
+            ],
+            "state": "playing"
+          },
+          "after": {
+            "id": "garden-of-turning-doors",
+            "index": 23,
+            "steps": 0,
+            "elapsed": 0,
+            "player": [
+              15,
+              0,
+              18
+            ],
+            "cargo": [
+              11,
+              0.55,
+              18
+            ],
+            "state": "playing"
+          },
+          "camera": {
+            "p": [
+              21.20000000149012,
+              10,
+              21.200000001490118
+            ],
+            "q": [
+              -0.07624856876209692,
+              0.38137791157130324,
+              0.03158319129279806,
+              0.920727726504967
+            ],
+            "fov": 76
+          },
+          "stats": null,
+          "render": {
+            "calls": 228,
+            "triangles": 913544
+          },
+          "file": "before-24-oblique.png",
+          "bytes": 490837,
+          "sha256": "0051e0e82ef2e82797ee94d1e4d91922dcba1465845369eaa3860bb4e14c5ecd"
+        },
+        {
+          "before": {
+            "id": "garden-of-turning-doors",
+            "index": 23,
+            "steps": 0,
+            "elapsed": 0,
+            "player": [
+              15,
+              0,
+              18
+            ],
+            "cargo": [
+              11,
+              0.55,
+              18
+            ],
+            "state": "playing"
+          },
+          "after": {
+            "id": "garden-of-turning-doors",
+            "index": 23,
+            "steps": 0,
+            "elapsed": 0,
+            "player": [
+              15,
+              0,
+              18
+            ],
+            "cargo": [
+              11,
+              0.55,
+              18
+            ],
+            "state": "playing"
+          },
+          "camera": {
+            "p": [
+              -21.20000000149012,
+              10,
+              -21.200000001490118
+            ],
+            "q": [
+              0.03158319129279806,
+              0.920727726504967,
+              0.07624856876209692,
+              -0.38137791157130324
+            ],
+            "fov": 76
+          },
+          "stats": null,
+          "render": {
+            "calls": 238,
+            "triangles": 1016832
+          },
+          "file": "before-24-opposite.png",
+          "bytes": 238393,
+          "sha256": "8cc436fae0c68f298754556a2f27463d1bf8c85a71e5592ef5f30e7ff6a091ec"
+        }
+      ],
+      "pass": true,
+      "fixture": {
+        "key": "brainrot-campaign-v67:brainrot-portal.preferences.v24",
+        "raw": "{\"quality\":\"balanced\",\"volume\":0,\"lookSensitivity\":1,\"muted\":true,\"tutorial\":false,\"completed\":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22],\"hints\":{},\"resumeLevel\":23,\"campaignSequenceRevision\":\"fifty-rooms-then-castle-v1\",\"campaignRevision\":\"creative-campaign-v48\",\"roomRevisions\":{\"16\":\"cable-supported-architecture-v1\",\"22\":\"counterweight-dynamic-v1\",\"32\":\"siphon-observatory-v1\",\"42\":\"spatial-progression43-v1\",\"43\":\"spatial-progression44-v1\",\"44\":\"spatial-progression45-v1\",\"45\":\"spatial-progression46-v1\",\"46\":\"spatial-progression47-v1\",\"47\":\"spatial-progression48-v1\",\"48\":\"spatial-progression49-v1\",\"49\":\"spatial-progression50-v1\",\"50\":\"spatial-progression51-v1\"}}",
+        "preferences": {
+          "quality": "balanced",
+          "volume": 0,
+          "lookSensitivity": 1,
+          "muted": true,
+          "tutorial": false,
+          "completed": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22
+          ],
+          "hints": {},
+          "resumeLevel": 23,
+          "campaignSequenceRevision": "fifty-rooms-then-castle-v1",
+          "campaignRevision": "creative-campaign-v48",
+          "roomRevisions": {
+            "16": "cable-supported-architecture-v1",
+            "22": "counterweight-dynamic-v1",
+            "32": "siphon-observatory-v1",
+            "42": "spatial-progression43-v1",
+            "43": "spatial-progression44-v1",
+            "44": "spatial-progression45-v1",
+            "45": "spatial-progression46-v1",
+            "46": "spatial-progression47-v1",
+            "47": "spatial-progression48-v1",
+            "48": "spatial-progression49-v1",
+            "49": "spatial-progression50-v1",
+            "50": "spatial-progression51-v1"
+          }
+        },
+        "completed": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22
+        ],
+        "targetIndex": 23,
+        "targetCompleted": false,
+        "constructorWrites": 0,
+        "scope": "QA setup supplies the previously completed campaign prefix in the candidate own storage before construction; the current target is not completed. This is not a fresh guest full-campaign playthrough."
+      }
+    }
+  ],
+  "pass": true
+}

@@ -1,0 +1,34 @@
+TAP version 13
+# Subtest: Every Biosphere room receives the remaster while preserving its complete old gameplay contract
+ok 1 - Every Biosphere room receives the remaster while preserving its complete old gameplay contract
+  ---
+  duration_ms: 7514.528733
+  type: 'test'
+  ...
+# Subtest: Imported source models and white portal materials are not recoloured; resources release once
+ok 2 - Imported source models and white portal materials are not recoloured; resources release once
+  ---
+  duration_ms: 2180.625058
+  type: 'test'
+  ...
+# Subtest: Botanical movement uses simulation time and reduced motion, never physics or actor transforms
+ok 3 - Botanical movement uses simulation time and reduced motion, never physics or actor transforms
+  ---
+  duration_ms: 1434.588099
+  type: 'test'
+  ...
+# Subtest: Bronze floor inlay has a real four-millimetre depth separation, not coincident faces
+ok 4 - Bronze floor inlay has a real four-millimetre depth separation, not coincident faces
+  ---
+  duration_ms: 2444.26413
+  type: 'test'
+  ...
+1..4
+# tests 4
+# suites 0
+# pass 4
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 13951.214304

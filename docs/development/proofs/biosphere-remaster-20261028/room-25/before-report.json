@@ -1,0 +1,274 @@
+{
+  "scope": "Native software WebGL. Prior-prefix access fixture; target unfinished. Static views move only camera. Routes use retained input driver, not human playtest or hardware benchmark.",
+  "rows": [
+    {
+      "version": "before",
+      "level": 25,
+      "errors": [],
+      "consoleErrors": [],
+      "views": [
+        {
+          "before": {
+            "id": "opposed-shadows",
+            "index": 24,
+            "steps": 0,
+            "elapsed": 0,
+            "player": [
+              -17,
+              0,
+              10
+            ],
+            "cargo": [
+              -15,
+              0.55,
+              9
+            ],
+            "state": "playing"
+          },
+          "after": {
+            "id": "opposed-shadows",
+            "index": 24,
+            "steps": 0,
+            "elapsed": 0,
+            "player": [
+              -17,
+              0,
+              10
+            ],
+            "cargo": [
+              -15,
+              0.55,
+              9
+            ],
+            "state": "playing"
+          },
+          "camera": {
+            "p": [
+              -16.086680257184604,
+              1.9536794133317164,
+              14.192797823517857
+            ],
+            "q": [
+              -0.07483364946617456,
+              0.02273624663301375,
+              0.0017066666610693068,
+              0.9969353415771378
+            ],
+            "fov": 62
+          },
+          "stats": null,
+          "render": {
+            "calls": 159,
+            "triangles": 692318
+          },
+          "file": "before-25-start.png",
+          "bytes": 485521,
+          "sha256": "7bd65d0376a5b0e2510c3e1f114c4c16dd6841856e01a73e1f4b23cd1768fa86"
+        },
+        {
+          "before": {
+            "id": "opposed-shadows",
+            "index": 24,
+            "steps": 0,
+            "elapsed": 0,
+            "player": [
+              -17,
+              0,
+              10
+            ],
+            "cargo": [
+              -15,
+              0.55,
+              9
+            ],
+            "state": "playing"
+          },
+          "after": {
+            "id": "opposed-shadows",
+            "index": 24,
+            "steps": 0,
+            "elapsed": 0,
+            "player": [
+              -17,
+              0,
+              10
+            ],
+            "cargo": [
+              -15,
+              0.55,
+              9
+            ],
+            "state": "playing"
+          },
+          "camera": {
+            "p": [
+              19.20000000149012,
+              10,
+              22.200000001490118
+            ],
+            "q": [
+              -0.08147896804190402,
+              0.36385713591855146,
+              0.0319698464669939,
+              0.9273333226649692
+            ],
+            "fov": 76
+          },
+          "stats": null,
+          "render": {
+            "calls": 355,
+            "triangles": 956638
+          },
+          "file": "before-25-oblique.png",
+          "bytes": 589067,
+          "sha256": "1bee7e5bf72541c94f9244f573b498e6c8340a1dd1c15325de970970a1e5b595"
+        },
+        {
+          "before": {
+            "id": "opposed-shadows",
+            "index": 24,
+            "steps": 0,
+            "elapsed": 0,
+            "player": [
+              -17,
+              0,
+              10
+            ],
+            "cargo": [
+              -15,
+              0.55,
+              9
+            ],
+            "state": "playing"
+          },
+          "after": {
+            "id": "opposed-shadows",
+            "index": 24,
+            "steps": 0,
+            "elapsed": 0,
+            "player": [
+              -17,
+              0,
+              10
+            ],
+            "cargo": [
+              -15,
+              0.55,
+              9
+            ],
+            "state": "playing"
+          },
+          "camera": {
+            "p": [
+              -19.20000000149012,
+              10,
+              -19.200000001490118
+            ],
+            "q": [
+              0.0319698464669939,
+              0.9273333226649693,
+              0.08147896804190402,
+              -0.36385713591855146
+            ],
+            "fov": 76
+          },
+          "stats": null,
+          "render": {
+            "calls": 357,
+            "triangles": 969610
+          },
+          "file": "before-25-opposite.png",
+          "bytes": 617077,
+          "sha256": "b3a4b5d3c74fc313336fc4ed38a070b24c8efc17b705bc32e2c080355af111ac"
+        }
+      ],
+      "pass": true,
+      "fixture": {
+        "key": "brainrot-campaign-v67:brainrot-portal.preferences.v24",
+        "raw": "{\"quality\":\"balanced\",\"volume\":0,\"lookSensitivity\":1,\"muted\":true,\"tutorial\":false,\"completed\":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23],\"hints\":{},\"resumeLevel\":24,\"campaignSequenceRevision\":\"fifty-rooms-then-castle-v1\",\"campaignRevision\":\"creative-campaign-v48\",\"roomRevisions\":{\"16\":\"cable-supported-architecture-v1\",\"22\":\"counterweight-dynamic-v1\",\"32\":\"siphon-observatory-v1\",\"42\":\"spatial-progression43-v1\",\"43\":\"spatial-progression44-v1\",\"44\":\"spatial-progression45-v1\",\"45\":\"spatial-progression46-v1\",\"46\":\"spatial-progression47-v1\",\"47\":\"spatial-progression48-v1\",\"48\":\"spatial-progression49-v1\",\"49\":\"spatial-progression50-v1\",\"50\":\"spatial-progression51-v1\"}}",
+        "preferences": {
+          "quality": "balanced",
+          "volume": 0,
+          "lookSensitivity": 1,
+          "muted": true,
+          "tutorial": false,
+          "completed": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23
+          ],
+          "hints": {},
+          "resumeLevel": 24,
+          "campaignSequenceRevision": "fifty-rooms-then-castle-v1",
+          "campaignRevision": "creative-campaign-v48",
+          "roomRevisions": {
+            "16": "cable-supported-architecture-v1",
+            "22": "counterweight-dynamic-v1",
+            "32": "siphon-observatory-v1",
+            "42": "spatial-progression43-v1",
+            "43": "spatial-progression44-v1",
+            "44": "spatial-progression45-v1",
+            "45": "spatial-progression46-v1",
+            "46": "spatial-progression47-v1",
+            "47": "spatial-progression48-v1",
+            "48": "spatial-progression49-v1",
+            "49": "spatial-progression50-v1",
+            "50": "spatial-progression51-v1"
+          }
+        },
+        "completed": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23
+        ],
+        "targetIndex": 24,
+        "targetCompleted": false,
+        "constructorWrites": 0,
+        "scope": "QA setup supplies the previously completed campaign prefix in the candidate own storage before construction; the current target is not completed. This is not a fresh guest full-campaign playthrough."
+      }
+    }
+  ],
+  "pass": true
+}

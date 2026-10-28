@@ -1,0 +1,508 @@
+{
+  "scope": "Native software WebGL. Prior-prefix access fixture; target unfinished. Static views move only camera. Routes use retained input driver, not human playtest or hardware benchmark.",
+  "rows": [
+    {
+      "version": "after",
+      "level": 21,
+      "errors": [],
+      "consoleErrors": [],
+      "views": [
+        {
+          "before": {
+            "id": "gravity-pocket",
+            "index": 20,
+            "steps": 0,
+            "elapsed": 0,
+            "player": [
+              -9,
+              10,
+              13
+            ],
+            "cargo": [
+              -4,
+              10.55,
+              13
+            ],
+            "state": "playing"
+          },
+          "after": {
+            "id": "gravity-pocket",
+            "index": 20,
+            "steps": 0,
+            "elapsed": 0,
+            "player": [
+              -9,
+              10,
+              13
+            ],
+            "cargo": [
+              -4,
+              10.55,
+              13
+            ],
+            "state": "playing"
+          },
+          "camera": {
+            "p": [
+              -11.276434821554062,
+              12.650906409438862,
+              18.653804987698447
+            ],
+            "q": [
+              -0.10562459351148014,
+              -0.26472587632056815,
+              -0.029185084047420415,
+              0.9580771819227232
+            ],
+            "fov": 62
+          },
+          "stats": {
+            "revision": "biosphere-conservatory-architecture-v2",
+            "sourcePanels": 812,
+            "floorPanels": 362,
+            "wallPanels": 380,
+            "ceilingPanels": 70,
+            "botanicalPanels": 85,
+            "leaves": 1991,
+            "parts": 9231,
+            "batches": 8,
+            "triangles": 132040,
+            "newColliders": 0,
+            "newLights": 0
+          },
+          "render": {
+            "calls": 260,
+            "triangles": 1013344
+          },
+          "file": "after-21-start.png",
+          "bytes": 708028,
+          "sha256": "f57bde245d56006a43d8885c2a82dc990689dac183581a0acd07eae62e7f3f53"
+        },
+        {
+          "before": {
+            "id": "gravity-pocket",
+            "index": 20,
+            "steps": 0,
+            "elapsed": 0,
+            "player": [
+              -9,
+              10,
+              13
+            ],
+            "cargo": [
+              -4,
+              10.55,
+              13
+            ],
+            "state": "playing"
+          },
+          "after": {
+            "id": "gravity-pocket",
+            "index": 20,
+            "steps": 0,
+            "elapsed": 0,
+            "player": [
+              -9,
+              10,
+              13
+            ],
+            "cargo": [
+              -4,
+              10.55,
+              13
+            ],
+            "state": "playing"
+          },
+          "camera": {
+            "p": [
+              26.20000000149012,
+              20,
+              16.200000001490118
+            ],
+            "q": [
+              -0.10002815782579522,
+              0.4587285475033509,
+              0.05206056087563938,
+              0.8813921858904568
+            ],
+            "fov": 76
+          },
+          "stats": {
+            "revision": "biosphere-conservatory-architecture-v2",
+            "sourcePanels": 812,
+            "floorPanels": 362,
+            "wallPanels": 380,
+            "ceilingPanels": 70,
+            "botanicalPanels": 85,
+            "leaves": 1991,
+            "parts": 9231,
+            "batches": 8,
+            "triangles": 132040,
+            "newColliders": 0,
+            "newLights": 0
+          },
+          "render": {
+            "calls": 305,
+            "triangles": 1015636
+          },
+          "file": "after-21-oblique.png",
+          "bytes": 996217,
+          "sha256": "9273b5aa203056c520b8ad6a95018bd2e17267d7a3754c8d8e9e0a1cce276a15"
+        },
+        {
+          "before": {
+            "id": "gravity-pocket",
+            "index": 20,
+            "steps": 0,
+            "elapsed": 0,
+            "player": [
+              -9,
+              10,
+              13
+            ],
+            "cargo": [
+              -4,
+              10.55,
+              13
+            ],
+            "state": "playing"
+          },
+          "after": {
+            "id": "gravity-pocket",
+            "index": 20,
+            "steps": 0,
+            "elapsed": 0,
+            "player": [
+              -9,
+              10,
+              13
+            ],
+            "cargo": [
+              -4,
+              10.55,
+              13
+            ],
+            "state": "playing"
+          },
+          "camera": {
+            "p": [
+              -17.20000000149012,
+              20,
+              -14.200000001490118
+            ],
+            "q": [
+              0.05206056087563938,
+              0.8813921858904568,
+              0.10002815782579522,
+              -0.4587285475033509
+            ],
+            "fov": 76
+          },
+          "stats": {
+            "revision": "biosphere-conservatory-architecture-v2",
+            "sourcePanels": 812,
+            "floorPanels": 362,
+            "wallPanels": 380,
+            "ceilingPanels": 70,
+            "botanicalPanels": 85,
+            "leaves": 1991,
+            "parts": 9231,
+            "batches": 8,
+            "triangles": 132040,
+            "newColliders": 0,
+            "newLights": 0
+          },
+          "render": {
+            "calls": 275,
+            "triangles": 933666
+          },
+          "file": "after-21-opposite.png",
+          "bytes": 829613,
+          "sha256": "4eb55bca1166ba9735f8d0feffbdf4491619e08b3e1d9b937d03d5e833003c2b"
+        }
+      ],
+      "pass": true,
+      "fixture": {
+        "key": "brainrot-campaign-v67:brainrot-portal.preferences.v24",
+        "raw": "{\"quality\":\"balanced\",\"volume\":0,\"lookSensitivity\":1,\"muted\":true,\"tutorial\":false,\"completed\":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19],\"hints\":{},\"resumeLevel\":20,\"campaignSequenceRevision\":\"fifty-rooms-then-castle-v1\",\"campaignRevision\":\"creative-campaign-v48\",\"roomRevisions\":{\"16\":\"cable-supported-architecture-v1\",\"22\":\"counterweight-dynamic-v1\",\"32\":\"siphon-observatory-v1\",\"42\":\"spatial-progression43-v1\",\"43\":\"spatial-progression44-v1\",\"44\":\"spatial-progression45-v1\",\"45\":\"spatial-progression46-v1\",\"46\":\"spatial-progression47-v1\",\"47\":\"spatial-progression48-v1\",\"48\":\"spatial-progression49-v1\",\"49\":\"spatial-progression50-v1\",\"50\":\"spatial-progression51-v1\"}}",
+        "preferences": {
+          "quality": "balanced",
+          "volume": 0,
+          "lookSensitivity": 1,
+          "muted": true,
+          "tutorial": false,
+          "completed": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19
+          ],
+          "hints": {},
+          "resumeLevel": 20,
+          "campaignSequenceRevision": "fifty-rooms-then-castle-v1",
+          "campaignRevision": "creative-campaign-v48",
+          "roomRevisions": {
+            "16": "cable-supported-architecture-v1",
+            "22": "counterweight-dynamic-v1",
+            "32": "siphon-observatory-v1",
+            "42": "spatial-progression43-v1",
+            "43": "spatial-progression44-v1",
+            "44": "spatial-progression45-v1",
+            "45": "spatial-progression46-v1",
+            "46": "spatial-progression47-v1",
+            "47": "spatial-progression48-v1",
+            "48": "spatial-progression49-v1",
+            "49": "spatial-progression50-v1",
+            "50": "spatial-progression51-v1"
+          }
+        },
+        "completed": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19
+        ],
+        "targetIndex": 20,
+        "targetCompleted": false,
+        "constructorWrites": 0,
+        "scope": "QA setup supplies the previously completed campaign prefix in the candidate own storage before construction; the current target is not completed. This is not a fresh guest full-campaign playthrough."
+      },
+      "route": {
+        "route": {
+          "level": 21,
+          "id": "gravity-pocket",
+          "pass": true,
+          "milestones": [
+            {
+              "name": "same free cargo falls through the low freight mouth",
+              "player": [
+                -0.00015380348095496495,
+                10.000000001490118,
+                7.880103082006462
+              ],
+              "cargo": [
+                -4.539999999999999,
+                8.648697434344122,
+                6.030318546363991
+              ],
+              "teleports": 0
+            },
+            {
+              "name": "cargo weight holds receiver; delivery survives a portal change",
+              "player": [
+                -0.00015380348084637687,
+                10.000000001490118,
+                7.880103081985212
+              ],
+              "cargo": [
+                10.05684278356869,
+                3.52038898241322,
+                5.928739977084828
+              ],
+              "teleports": 0
+            },
+            {
+              "name": "inspection bay reached by ordinary portal traversal",
+              "player": [
+                -15.96607234665057,
+                4,
+                -15.112227398962217
+              ],
+              "cargo": [
+                11.415604005446795,
+                3.489998147032071,
+                5.069620699910355
+              ],
+              "teleports": 1
+            },
+            {
+              "name": "physical cassette brake released",
+              "player": [
+                -15.501504237522134,
+                4,
+                -12.209398983070022
+              ],
+              "cargo": [
+                11.415604005446795,
+                3.489998147032071,
+                5.069620699910355
+              ],
+              "teleports": 1
+            },
+            {
+              "name": "portal installed on the actual lowered moving ceramic",
+              "player": [
+                0.0007794273033090186,
+                10.000000001490118,
+                7.849597799282296
+              ],
+              "cargo": [
+                11.41560219029872,
+                3.4899981470322197,
+                5.069630335264829
+              ],
+              "teleports": 2
+            },
+            {
+              "name": "departure fall through the lowered cassette",
+              "player": [
+                -7.81623551888905,
+                6.869555764858962,
+                -6.00546741241765
+              ],
+              "cargo": [
+                11.415601667503601,
+                3.4899981470322197,
+                5.06963311042056
+              ],
+              "teleports": 3
+            },
+            {
+              "name": "permanent landing",
+              "player": [
+                6.087014796020409,
+                7,
+                -6.5824785140471755
+              ],
+              "cargo": [
+                11.415601333495609,
+                3.4899981470322197,
+                5.069634883436797
+              ],
+              "teleports": 3
+            },
+            {
+              "name": "move only the entry to the service fall while the friend still supports the low exit",
+              "player": [
+                0.005931223829421218,
+                7,
+                -3.103040662042209
+              ],
+              "cargo": [
+                11.415599489190605,
+                3.4899981470322192,
+                5.069644673569932
+              ],
+              "teleports": 3
+            },
+            {
+              "name": "cargo recovered; the same prepared exit rises with its surface",
+              "player": [
+                12.413416029927289,
+                3.1,
+                5.068663700025516
+              ],
+              "cargo": [
+                11.758191674311641,
+                4.159999999999998,
+                4.770199223398799
+              ],
+              "teleports": 3
+            },
+            {
+              "name": "lower service fall through the raised SAME exit",
+              "player": [
+                -7.591936399732505,
+                17.993095752400674,
+                -5.4510176733968745
+              ],
+              "cargo": [
+                -6.998571984260745,
+                19.053064817280447,
+                -5.858834946772942
+              ],
+              "teleports": 4
+            },
+            {
+              "name": "permanent landing",
+              "player": [
+                2.4335309788854813,
+                18,
+                -5.910504231763276
+              ],
+              "cargo": [
+                3.1531481827521857,
+                19.076999702220185,
+                -5.934973968402027
+              ],
+              "teleports": 4
+            },
+            {
+              "name": "both on upper permanent balcony",
+              "player": [
+                9.91670965123987,
+                18,
+                -7.518743908057608
+              ],
+              "cargo": [
+                10.620235944429172,
+                19.076904550867642,
+                -7.672106334396355
+              ],
+              "teleports": 4
+            },
+            {
+              "name": "both at exit",
+              "player": [
+                9.91670965123987,
+                18,
+                -7.518743908057608
+              ],
+              "cargo": [
+                10.620235944429172,
+                19.076904550867642,
+                -7.672106334396355
+              ],
+              "teleports": 4
+            }
+          ],
+          "respawns": 0,
+          "resets": 0,
+          "frames": 5325,
+          "teleports": 4
+        },
+        "state": "won",
+        "observations": 10650,
+        "sameBody": true,
+        "image": {
+          "file": "after-21-won.png",
+          "bytes": 640704,
+          "sha256": "87ec276a0ca514993f9f41359b66d32dcb61616b349c1f4a50a892bc76043c7b"
+        }
+      }
+    }
+  ],
+  "pass": true
+}

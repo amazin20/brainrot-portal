@@ -1,0 +1,270 @@
+{
+  "scope": "Native software WebGL. Prior-prefix access fixture; target unfinished. Static views move only camera. Routes use retained input driver, not human playtest or hardware benchmark.",
+  "rows": [
+    {
+      "version": "before",
+      "level": 23,
+      "errors": [],
+      "consoleErrors": [],
+      "views": [
+        {
+          "before": {
+            "id": "counterweight-reversal",
+            "index": 22,
+            "steps": 0,
+            "elapsed": 0,
+            "player": [
+              -17,
+              0,
+              15
+            ],
+            "cargo": [
+              -3.1,
+              0.6,
+              3
+            ],
+            "state": "playing"
+          },
+          "after": {
+            "id": "counterweight-reversal",
+            "index": 22,
+            "steps": 0,
+            "elapsed": 0,
+            "player": [
+              -17,
+              0,
+              15
+            ],
+            "cargo": [
+              -3.1,
+              0.6,
+              3
+            ],
+            "state": "playing"
+          },
+          "camera": {
+            "p": [
+              -20.55357509278927,
+              2.269571972172212,
+              20.359143320491878
+            ],
+            "q": [
+              -0.06975256831926022,
+              -0.35974712548125587,
+              -0.02698064553009595,
+              0.9300476491490206
+            ],
+            "fov": 62
+          },
+          "stats": null,
+          "render": {
+            "calls": 92,
+            "triangles": 660184
+          },
+          "file": "before-23-start.png",
+          "bytes": 508362,
+          "sha256": "322614304a45cacdf99c8fc33bacd8f3b937bbbe41afe0349ee96c1a1950fd9a"
+        },
+        {
+          "before": {
+            "id": "counterweight-reversal",
+            "index": 22,
+            "steps": 0,
+            "elapsed": 0,
+            "player": [
+              -17,
+              0,
+              15
+            ],
+            "cargo": [
+              -3.1,
+              0.6,
+              3
+            ],
+            "state": "playing"
+          },
+          "after": {
+            "id": "counterweight-reversal",
+            "index": 22,
+            "steps": 0,
+            "elapsed": 0,
+            "player": [
+              -17,
+              0,
+              15
+            ],
+            "cargo": [
+              -3.1,
+              0.6,
+              3
+            ],
+            "state": "playing"
+          },
+          "camera": {
+            "p": [
+              20.20000000149012,
+              10,
+              19.200000001490118
+            ],
+            "q": [
+              -0.08070200407089806,
+              0.38697161353690057,
+              0.034021790473421944,
+              0.9179230221693816
+            ],
+            "fov": 76
+          },
+          "stats": null,
+          "render": {
+            "calls": 132,
+            "triangles": 820316
+          },
+          "file": "before-23-oblique.png",
+          "bytes": 540990,
+          "sha256": "3b041a26f179ab0c78d1de28a27587d7d5cf5b0e41ee583747c2bd49c82a5349"
+        },
+        {
+          "before": {
+            "id": "counterweight-reversal",
+            "index": 22,
+            "steps": 0,
+            "elapsed": 0,
+            "player": [
+              -17,
+              0,
+              15
+            ],
+            "cargo": [
+              -3.1,
+              0.6,
+              3
+            ],
+            "state": "playing"
+          },
+          "after": {
+            "id": "counterweight-reversal",
+            "index": 22,
+            "steps": 0,
+            "elapsed": 0,
+            "player": [
+              -17,
+              0,
+              15
+            ],
+            "cargo": [
+              -3.1,
+              0.6,
+              3
+            ],
+            "state": "playing"
+          },
+          "camera": {
+            "p": [
+              -20.20000000149012,
+              10,
+              -20.200000001490118
+            ],
+            "q": [
+              0.034021790473421944,
+              0.9179230221693816,
+              0.08070200407089806,
+              -0.3869716135369006
+            ],
+            "fov": 76
+          },
+          "stats": null,
+          "render": {
+            "calls": 118,
+            "triangles": 762304
+          },
+          "file": "before-23-opposite.png",
+          "bytes": 501031,
+          "sha256": "5f8763120ddde05199490c310ecaf4d3d4f4a72bdab3b17719fcafbf662d3eb0"
+        }
+      ],
+      "pass": true,
+      "fixture": {
+        "key": "brainrot-campaign-v67:brainrot-portal.preferences.v24",
+        "raw": "{\"quality\":\"balanced\",\"volume\":0,\"lookSensitivity\":1,\"muted\":true,\"tutorial\":false,\"completed\":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21],\"hints\":{},\"resumeLevel\":22,\"campaignSequenceRevision\":\"fifty-rooms-then-castle-v1\",\"campaignRevision\":\"creative-campaign-v48\",\"roomRevisions\":{\"16\":\"cable-supported-architecture-v1\",\"22\":\"counterweight-dynamic-v1\",\"32\":\"siphon-observatory-v1\",\"42\":\"spatial-progression43-v1\",\"43\":\"spatial-progression44-v1\",\"44\":\"spatial-progression45-v1\",\"45\":\"spatial-progression46-v1\",\"46\":\"spatial-progression47-v1\",\"47\":\"spatial-progression48-v1\",\"48\":\"spatial-progression49-v1\",\"49\":\"spatial-progression50-v1\",\"50\":\"spatial-progression51-v1\"}}",
+        "preferences": {
+          "quality": "balanced",
+          "volume": 0,
+          "lookSensitivity": 1,
+          "muted": true,
+          "tutorial": false,
+          "completed": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21
+          ],
+          "hints": {},
+          "resumeLevel": 22,
+          "campaignSequenceRevision": "fifty-rooms-then-castle-v1",
+          "campaignRevision": "creative-campaign-v48",
+          "roomRevisions": {
+            "16": "cable-supported-architecture-v1",
+            "22": "counterweight-dynamic-v1",
+            "32": "siphon-observatory-v1",
+            "42": "spatial-progression43-v1",
+            "43": "spatial-progression44-v1",
+            "44": "spatial-progression45-v1",
+            "45": "spatial-progression46-v1",
+            "46": "spatial-progression47-v1",
+            "47": "spatial-progression48-v1",
+            "48": "spatial-progression49-v1",
+            "49": "spatial-progression50-v1",
+            "50": "spatial-progression51-v1"
+          }
+        },
+        "completed": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21
+        ],
+        "targetIndex": 22,
+        "targetCompleted": false,
+        "constructorWrites": 0,
+        "scope": "QA setup supplies the previously completed campaign prefix in the candidate own storage before construction; the current target is not completed. This is not a fresh guest full-campaign playthrough."
+      }
+    }
+  ],
+  "pass": true
+}

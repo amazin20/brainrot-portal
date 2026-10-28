@@ -1,0 +1,442 @@
+{
+  "scope": "Native software WebGL. Prior-prefix access fixture; target unfinished. Static views move only camera. Routes use retained input driver, not human playtest or hardware benchmark.",
+  "rows": [
+    {
+      "version": "after",
+      "level": 23,
+      "errors": [],
+      "consoleErrors": [],
+      "views": [
+        {
+          "before": {
+            "id": "counterweight-reversal",
+            "index": 22,
+            "steps": 0,
+            "elapsed": 0,
+            "player": [
+              -17,
+              0,
+              15
+            ],
+            "cargo": [
+              -3.1,
+              0.6,
+              3
+            ],
+            "state": "playing"
+          },
+          "after": {
+            "id": "counterweight-reversal",
+            "index": 22,
+            "steps": 0,
+            "elapsed": 0,
+            "player": [
+              -17,
+              0,
+              15
+            ],
+            "cargo": [
+              -3.1,
+              0.6,
+              3
+            ],
+            "state": "playing"
+          },
+          "camera": {
+            "p": [
+              -20.55357509278927,
+              2.269571972172212,
+              20.359143320491878
+            ],
+            "q": [
+              -0.06975256831926022,
+              -0.35974712548125587,
+              -0.02698064553009595,
+              0.9300476491490206
+            ],
+            "fov": 62
+          },
+          "stats": {
+            "revision": "biosphere-conservatory-architecture-v2",
+            "sourcePanels": 842,
+            "floorPanels": 361,
+            "wallPanels": 400,
+            "ceilingPanels": 81,
+            "botanicalPanels": 91,
+            "leaves": 2184,
+            "parts": 10140,
+            "batches": 8,
+            "triangles": 143256,
+            "newColliders": 0,
+            "newLights": 0
+          },
+          "render": {
+            "calls": 99,
+            "triangles": 763024
+          },
+          "file": "after-23-start.png",
+          "bytes": 858958,
+          "sha256": "d8232fee556b211677233e60052a8adcab72d00ee70007f029e5300663345972"
+        },
+        {
+          "before": {
+            "id": "counterweight-reversal",
+            "index": 22,
+            "steps": 0,
+            "elapsed": 0,
+            "player": [
+              -17,
+              0,
+              15
+            ],
+            "cargo": [
+              -3.1,
+              0.6,
+              3
+            ],
+            "state": "playing"
+          },
+          "after": {
+            "id": "counterweight-reversal",
+            "index": 22,
+            "steps": 0,
+            "elapsed": 0,
+            "player": [
+              -17,
+              0,
+              15
+            ],
+            "cargo": [
+              -3.1,
+              0.6,
+              3
+            ],
+            "state": "playing"
+          },
+          "camera": {
+            "p": [
+              20.20000000149012,
+              10,
+              19.200000001490118
+            ],
+            "q": [
+              -0.08070200407089806,
+              0.38697161353690057,
+              0.034021790473421944,
+              0.9179230221693816
+            ],
+            "fov": 76
+          },
+          "stats": {
+            "revision": "biosphere-conservatory-architecture-v2",
+            "sourcePanels": 842,
+            "floorPanels": 361,
+            "wallPanels": 400,
+            "ceilingPanels": 81,
+            "botanicalPanels": 91,
+            "leaves": 2184,
+            "parts": 10140,
+            "batches": 8,
+            "triangles": 143256,
+            "newColliders": 0,
+            "newLights": 0
+          },
+          "render": {
+            "calls": 139,
+            "triangles": 923156
+          },
+          "file": "after-23-oblique.png",
+          "bytes": 1121780,
+          "sha256": "dc31f0017a62a303fea14e0454c7e4182dfbc91a05be8ebd251b9fa34cf42ce4"
+        },
+        {
+          "before": {
+            "id": "counterweight-reversal",
+            "index": 22,
+            "steps": 0,
+            "elapsed": 0,
+            "player": [
+              -17,
+              0,
+              15
+            ],
+            "cargo": [
+              -3.1,
+              0.6,
+              3
+            ],
+            "state": "playing"
+          },
+          "after": {
+            "id": "counterweight-reversal",
+            "index": 22,
+            "steps": 0,
+            "elapsed": 0,
+            "player": [
+              -17,
+              0,
+              15
+            ],
+            "cargo": [
+              -3.1,
+              0.6,
+              3
+            ],
+            "state": "playing"
+          },
+          "camera": {
+            "p": [
+              -20.20000000149012,
+              10,
+              -20.200000001490118
+            ],
+            "q": [
+              0.034021790473421944,
+              0.9179230221693816,
+              0.08070200407089806,
+              -0.3869716135369006
+            ],
+            "fov": 76
+          },
+          "stats": {
+            "revision": "biosphere-conservatory-architecture-v2",
+            "sourcePanels": 842,
+            "floorPanels": 361,
+            "wallPanels": 400,
+            "ceilingPanels": 81,
+            "botanicalPanels": 91,
+            "leaves": 2184,
+            "parts": 10140,
+            "batches": 8,
+            "triangles": 143256,
+            "newColliders": 0,
+            "newLights": 0
+          },
+          "render": {
+            "calls": 125,
+            "triangles": 865144
+          },
+          "file": "after-23-opposite.png",
+          "bytes": 951458,
+          "sha256": "3595d2c221af0a841a34363427bb8b6625d5e0643e546ce3ad905b71f81566a6"
+        }
+      ],
+      "pass": true,
+      "fixture": {
+        "key": "brainrot-campaign-v67:brainrot-portal.preferences.v24",
+        "raw": "{\"quality\":\"balanced\",\"volume\":0,\"lookSensitivity\":1,\"muted\":true,\"tutorial\":false,\"completed\":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21],\"hints\":{},\"resumeLevel\":22,\"campaignSequenceRevision\":\"fifty-rooms-then-castle-v1\",\"campaignRevision\":\"creative-campaign-v48\",\"roomRevisions\":{\"16\":\"cable-supported-architecture-v1\",\"22\":\"counterweight-dynamic-v1\",\"32\":\"siphon-observatory-v1\",\"42\":\"spatial-progression43-v1\",\"43\":\"spatial-progression44-v1\",\"44\":\"spatial-progression45-v1\",\"45\":\"spatial-progression46-v1\",\"46\":\"spatial-progression47-v1\",\"47\":\"spatial-progression48-v1\",\"48\":\"spatial-progression49-v1\",\"49\":\"spatial-progression50-v1\",\"50\":\"spatial-progression51-v1\"}}",
+        "preferences": {
+          "quality": "balanced",
+          "volume": 0,
+          "lookSensitivity": 1,
+          "muted": true,
+          "tutorial": false,
+          "completed": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21
+          ],
+          "hints": {},
+          "resumeLevel": 22,
+          "campaignSequenceRevision": "fifty-rooms-then-castle-v1",
+          "campaignRevision": "creative-campaign-v48",
+          "roomRevisions": {
+            "16": "cable-supported-architecture-v1",
+            "22": "counterweight-dynamic-v1",
+            "32": "siphon-observatory-v1",
+            "42": "spatial-progression43-v1",
+            "43": "spatial-progression44-v1",
+            "44": "spatial-progression45-v1",
+            "45": "spatial-progression46-v1",
+            "46": "spatial-progression47-v1",
+            "47": "spatial-progression48-v1",
+            "48": "spatial-progression49-v1",
+            "49": "spatial-progression50-v1",
+            "50": "spatial-progression51-v1"
+          }
+        },
+        "completed": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21
+        ],
+        "targetIndex": 22,
+        "targetCompleted": false,
+        "constructorWrites": 0,
+        "scope": "QA setup supplies the previously completed campaign prefix in the candidate own storage before construction; the current target is not completed. This is not a fresh guest full-campaign playthrough."
+      },
+      "route": {
+        "route": {
+          "level": 23,
+          "id": "counterweight-reversal",
+          "pass": true,
+          "milestones": [
+            {
+              "name": "normal-spawn original loads actual raised east freight pan",
+              "player": [
+                -4.1042212759265295,
+                -0.0017261334895202207,
+                2.8350957050495427
+              ],
+              "cargo": [
+                1.575546920299499,
+                20.568561774952833,
+                3.8073506523273153
+              ],
+              "teleports": 0
+            },
+            {
+              "name": "normal-spawn same original descends while real west passenger reaches dock",
+              "player": [
+                -5.4970303340159345,
+                9.99999266912315,
+                1.8411273077371797
+              ],
+              "cargo": [
+                1.5755469210743673,
+                10.568617912401189,
+                3.8073506572877864
+              ],
+              "teleports": 0
+            },
+            {
+              "name": "actual common brake holds both real cabins at docking",
+              "player": [
+                5.608139816193008,
+                9.999990249990436,
+                4.342461506427846
+              ],
+              "cargo": [
+                1.5755469216453244,
+                10.568384705161925,
+                3.807350660411622
+              ],
+              "teleports": 0
+            },
+            {
+              "name": "same original transfers directly and rests on actual opposite pan",
+              "player": [
+                -2.5914354229489676,
+                9.99592141256045,
+                2.733547633677558
+              ],
+              "cargo": [
+                -1.1920048656016582,
+                10.564331115421256,
+                2.5437608540824814
+              ],
+              "teleports": 0
+            },
+            {
+              "name": "same original descends to ground while real east passenger reaches upper exit",
+              "player": [
+                5.513278861930984,
+                19.999990223037898,
+                8.144010434807532
+              ],
+              "cargo": [
+                -1.1920048676647215,
+                0.5684289564019617,
+                2.543760854825772
+              ],
+              "teleports": 0
+            },
+            {
+              "name": "same original physically retrieved through pan and high receiver",
+              "player": [
+                -16.17078395892973,
+                19.999990251490125,
+                1.1412555505976558
+              ],
+              "cargo": [
+                -2.3564600692538598,
+                20.45083096588298,
+                -20.269753949570795
+              ],
+              "teleports": 0
+            },
+            {
+              "name": "normal-spawn joint WON with both real bodies",
+              "player": [
+                -1.3491490285160226,
+                19.999989628965523,
+                -18.059727140500883
+              ],
+              "cargo": [
+                -1.8827494483445812,
+                20.608939725823202,
+                -18.01868002865085
+              ],
+              "teleports": 0
+            },
+            {
+              "name": "both at exit",
+              "player": [
+                -1.3491490285160226,
+                19.999989628965523,
+                -18.059727140500883
+              ],
+              "cargo": [
+                -1.8827494483445812,
+                20.608939725823202,
+                -18.01868002865085
+              ],
+              "teleports": 0
+            }
+          ],
+          "respawns": 0,
+          "resets": 0,
+          "frames": 7578,
+          "teleports": 0
+        },
+        "state": "won",
+        "observations": 15156,
+        "sameBody": true,
+        "image": {
+          "file": "after-23-won.png",
+          "bytes": 413555,
+          "sha256": "f7659e3b2e37d0f81f599bc042f5417c0547a8ccbcf06f542d6799451e0f75da"
+        }
+      }
+    }
+  ],
+  "pass": true
+}

@@ -1,0 +1,369 @@
+{
+  "sourceCommit": "4f31b6ad05782c912c70f924c1edbc204d3c73a0",
+  "baselineCommit": "a38730963973834b75b11ef77a08b5ca9ff6cacc",
+  "run": 40615001152,
+  "nativeRoutes": [
+    {
+      "level": 21,
+      "frames": 5325,
+      "physicalUpdates": 10650,
+      "resets": 0,
+      "respawns": 0,
+      "originalActor": true,
+      "state": "won"
+    },
+    {
+      "level": 22,
+      "frames": 3483,
+      "physicalUpdates": 6966,
+      "resets": 0,
+      "respawns": 0,
+      "originalActor": true,
+      "state": "won"
+    },
+    {
+      "level": 23,
+      "frames": 7578,
+      "physicalUpdates": 15156,
+      "resets": 0,
+      "respawns": 0,
+      "originalActor": true,
+      "state": "won"
+    },
+    {
+      "level": 24,
+      "frames": 4402,
+      "physicalUpdates": 8804,
+      "resets": 0,
+      "respawns": 0,
+      "originalActor": true,
+      "state": "won"
+    },
+    {
+      "level": 25,
+      "frames": 9209,
+      "physicalUpdates": 18418,
+      "resets": 0,
+      "respawns": 0,
+      "originalActor": true,
+      "state": "won"
+    },
+    {
+      "level": 26,
+      "frames": 8182,
+      "physicalUpdates": 16363,
+      "resets": 0,
+      "respawns": 0,
+      "originalActor": true,
+      "state": "won"
+    },
+    {
+      "level": 27,
+      "frames": 5802,
+      "physicalUpdates": 11603,
+      "resets": 0,
+      "respawns": 0,
+      "originalActor": true,
+      "state": "won"
+    },
+    {
+      "level": 28,
+      "frames": 4348,
+      "physicalUpdates": 8696,
+      "resets": 0,
+      "respawns": 0,
+      "originalActor": true,
+      "state": "won"
+    },
+    {
+      "level": 29,
+      "frames": 4258,
+      "physicalUpdates": 8515,
+      "resets": 0,
+      "respawns": 0,
+      "originalActor": true,
+      "state": "won"
+    },
+    {
+      "level": 30,
+      "frames": 2707,
+      "physicalUpdates": 5413,
+      "resets": 0,
+      "respawns": 0,
+      "originalActor": true,
+      "state": "won"
+    }
+  ],
+  "nativeImages": 70,
+  "comparisons": [
+    {
+      "level": 21,
+      "matchedStaticViews": 3,
+      "beforeRender": {
+        "calls": 253,
+        "triangles": 920280
+      },
+      "afterRender": {
+        "calls": 260,
+        "triangles": 1013344
+      },
+      "artwork": {
+        "revision": "biosphere-conservatory-architecture-v2",
+        "sourcePanels": 812,
+        "floorPanels": 362,
+        "wallPanels": 380,
+        "ceilingPanels": 70,
+        "botanicalPanels": 85,
+        "leaves": 1991,
+        "parts": 9231,
+        "batches": 8,
+        "triangles": 132040,
+        "newColliders": 0,
+        "newLights": 0
+      }
+    },
+    {
+      "level": 22,
+      "matchedStaticViews": 3,
+      "beforeRender": {
+        "calls": 144,
+        "triangles": 727502
+      },
+      "afterRender": {
+        "calls": 151,
+        "triangles": 797874
+      },
+      "artwork": {
+        "revision": "biosphere-conservatory-architecture-v2",
+        "sourcePanels": 499,
+        "floorPanels": 98,
+        "wallPanels": 320,
+        "ceilingPanels": 81,
+        "botanicalPanels": 68,
+        "leaves": 1700,
+        "parts": 6930,
+        "batches": 8,
+        "triangles": 94324,
+        "newColliders": 0,
+        "newLights": 0
+      }
+    },
+    {
+      "level": 23,
+      "matchedStaticViews": 3,
+      "beforeRender": {
+        "calls": 92,
+        "triangles": 660184
+      },
+      "afterRender": {
+        "calls": 99,
+        "triangles": 763024
+      },
+      "artwork": {
+        "revision": "biosphere-conservatory-architecture-v2",
+        "sourcePanels": 842,
+        "floorPanels": 361,
+        "wallPanels": 400,
+        "ceilingPanels": 81,
+        "botanicalPanels": 91,
+        "leaves": 2184,
+        "parts": 10140,
+        "batches": 8,
+        "triangles": 143256,
+        "newColliders": 0,
+        "newLights": 0
+      }
+    },
+    {
+      "level": 24,
+      "matchedStaticViews": 3,
+      "beforeRender": {
+        "calls": 227,
+        "triangles": 1008912
+      },
+      "afterRender": {
+        "calls": 234,
+        "triangles": 1046448
+      },
+      "artwork": {
+        "revision": "biosphere-conservatory-architecture-v2",
+        "sourcePanels": 282,
+        "floorPanels": 114,
+        "wallPanels": 120,
+        "ceilingPanels": 48,
+        "botanicalPanels": 24,
+        "leaves": 1056,
+        "parts": 3762,
+        "batches": 8,
+        "triangles": 51072,
+        "newColliders": 0,
+        "newLights": 0
+      }
+    },
+    {
+      "level": 25,
+      "matchedStaticViews": 3,
+      "beforeRender": {
+        "calls": 159,
+        "triangles": 692318
+      },
+      "afterRender": {
+        "calls": 166,
+        "triangles": 784470
+      },
+      "artwork": {
+        "revision": "biosphere-conservatory-architecture-v2",
+        "sourcePanels": 730,
+        "floorPanels": 289,
+        "wallPanels": 360,
+        "ceilingPanels": 81,
+        "botanicalPanels": 80,
+        "leaves": 2000,
+        "parts": 9076,
+        "batches": 8,
+        "triangles": 127192,
+        "newColliders": 0,
+        "newLights": 0
+      }
+    },
+    {
+      "level": 26,
+      "matchedStaticViews": 3,
+      "beforeRender": {
+        "calls": 106,
+        "triangles": 611128
+      },
+      "afterRender": {
+        "calls": 113,
+        "triangles": 707632
+      },
+      "artwork": {
+        "revision": "biosphere-conservatory-architecture-v2",
+        "sourcePanels": 858,
+        "floorPanels": 417,
+        "wallPanels": 360,
+        "ceilingPanels": 81,
+        "botanicalPanels": 80,
+        "leaves": 1920,
+        "parts": 9540,
+        "batches": 8,
+        "triangles": 137688,
+        "newColliders": 0,
+        "newLights": 0
+      }
+    },
+    {
+      "level": 27,
+      "matchedStaticViews": 3,
+      "beforeRender": {
+        "calls": 132,
+        "triangles": 1463618
+      },
+      "afterRender": {
+        "calls": 139,
+        "triangles": 1504666
+      },
+      "artwork": {
+        "revision": "biosphere-conservatory-architecture-v2",
+        "sourcePanels": 322,
+        "floorPanels": 136,
+        "wallPanels": 130,
+        "ceilingPanels": 56,
+        "botanicalPanels": 26,
+        "leaves": 1144,
+        "parts": 4124,
+        "batches": 8,
+        "triangles": 56504,
+        "newColliders": 0,
+        "newLights": 0
+      }
+    },
+    {
+      "level": 28,
+      "matchedStaticViews": 3,
+      "beforeRender": {
+        "calls": 210,
+        "triangles": 1206636
+      },
+      "afterRender": {
+        "calls": 217,
+        "triangles": 1235204
+      },
+      "artwork": {
+        "revision": "biosphere-conservatory-architecture-v2",
+        "sourcePanels": 229,
+        "floorPanels": 95,
+        "wallPanels": 78,
+        "ceilingPanels": 56,
+        "botanicalPanels": 14,
+        "leaves": 616,
+        "parts": 2815,
+        "batches": 8,
+        "triangles": 39560,
+        "newColliders": 0,
+        "newLights": 0
+      }
+    },
+    {
+      "level": 29,
+      "matchedStaticViews": 3,
+      "beforeRender": {
+        "calls": 155,
+        "triangles": 657692
+      },
+      "afterRender": {
+        "calls": 162,
+        "triangles": 694568
+      },
+      "artwork": {
+        "revision": "biosphere-conservatory-architecture-v2",
+        "sourcePanels": 271,
+        "floorPanels": 103,
+        "wallPanels": 120,
+        "ceilingPanels": 48,
+        "botanicalPanels": 24,
+        "leaves": 1056,
+        "parts": 3696,
+        "batches": 8,
+        "triangles": 49884,
+        "newColliders": 0,
+        "newLights": 0
+      }
+    },
+    {
+      "level": 30,
+      "matchedStaticViews": 3,
+      "beforeRender": {
+        "calls": 73,
+        "triangles": 732594
+      },
+      "afterRender": {
+        "calls": 76,
+        "triangles": 754794
+      },
+      "artwork": {
+        "revision": "biosphere-conservatory-architecture-v2",
+        "sourcePanels": 228,
+        "floorPanels": 228,
+        "wallPanels": 0,
+        "ceilingPanels": 0,
+        "botanicalPanels": 0,
+        "leaves": 0,
+        "parts": 1166,
+        "batches": 3,
+        "triangles": 22200,
+        "newColliders": 0,
+        "newLights": 0
+      }
+    }
+  ],
+  "fullCampaignAccepted": false,
+  "published": false,
+  "limits": [
+    "The completed-prefix save admits only the target and does not prove preceding rooms were played in this run.",
+    "1280x720 software WebGL and scripted ordinary input are not human discovery or hardware FPS.",
+    "Static view comparisons move only the camera; gameplay starts with original actors.",
+    "This pass changes art, not puzzle uniqueness, the castle or unrelated outstanding route failures.",
+    "No Pages or Yandex deployment."
+  ]
+}

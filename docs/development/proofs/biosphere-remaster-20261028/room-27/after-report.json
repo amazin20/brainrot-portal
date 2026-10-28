@@ -1,0 +1,436 @@
+{
+  "scope": "Native software WebGL. Prior-prefix access fixture; target unfinished. Static views move only camera. Routes use retained input driver, not human playtest or hardware benchmark.",
+  "rows": [
+    {
+      "version": "after",
+      "level": 27,
+      "errors": [],
+      "consoleErrors": [],
+      "views": [
+        {
+          "before": {
+            "id": "conveyor-city",
+            "index": 26,
+            "steps": 0,
+            "elapsed": 0,
+            "player": [
+              -20,
+              0,
+              15.8
+            ],
+            "cargo": [
+              -17,
+              0.55,
+              19.8
+            ],
+            "state": "playing"
+          },
+          "after": {
+            "id": "conveyor-city",
+            "index": 26,
+            "steps": 0,
+            "elapsed": 0,
+            "player": [
+              -20,
+              0,
+              15.8
+            ],
+            "cargo": [
+              -17,
+              0.55,
+              19.8
+            ],
+            "state": "playing"
+          },
+          "camera": {
+            "p": [
+              -20.525071021606678,
+              2.7066924736355986,
+              22.128616310524073
+            ],
+            "q": [
+              -0.10879995405053107,
+              -0.11768188986571074,
+              -0.012972583847420907,
+              0.9869879709827059
+            ],
+            "fov": 62
+          },
+          "stats": {
+            "revision": "biosphere-conservatory-architecture-v2",
+            "sourcePanels": 322,
+            "floorPanels": 136,
+            "wallPanels": 130,
+            "ceilingPanels": 56,
+            "botanicalPanels": 26,
+            "leaves": 1144,
+            "parts": 4124,
+            "batches": 8,
+            "triangles": 56504,
+            "newColliders": 0,
+            "newLights": 0
+          },
+          "render": {
+            "calls": 139,
+            "triangles": 1504666
+          },
+          "file": "after-27-start.png",
+          "bytes": 794717,
+          "sha256": "981622e542988804797ec8c404ac3239452acf2333a8c515b7ce97706f48eb9a"
+        },
+        {
+          "before": {
+            "id": "conveyor-city",
+            "index": 26,
+            "steps": 0,
+            "elapsed": 0,
+            "player": [
+              -20,
+              0,
+              15.8
+            ],
+            "cargo": [
+              -17,
+              0.55,
+              19.8
+            ],
+            "state": "playing"
+          },
+          "after": {
+            "id": "conveyor-city",
+            "index": 26,
+            "steps": 0,
+            "elapsed": 0,
+            "player": [
+              -20,
+              0,
+              15.8
+            ],
+            "cargo": [
+              -17,
+              0.55,
+              19.8
+            ],
+            "state": "playing"
+          },
+          "camera": {
+            "p": [
+              21.20000000149012,
+              10,
+              20.200000001490118
+            ],
+            "q": [
+              -0.07414641499514002,
+              0.39201865936829117,
+              0.03171789788712311,
+              0.9164156561321277
+            ],
+            "fov": 76
+          },
+          "stats": {
+            "revision": "biosphere-conservatory-architecture-v2",
+            "sourcePanels": 322,
+            "floorPanels": 136,
+            "wallPanels": 130,
+            "ceilingPanels": 56,
+            "botanicalPanels": 26,
+            "leaves": 1144,
+            "parts": 4124,
+            "batches": 8,
+            "triangles": 56504,
+            "newColliders": 0,
+            "newLights": 0
+          },
+          "render": {
+            "calls": 166,
+            "triangles": 1613506
+          },
+          "file": "after-27-oblique.png",
+          "bytes": 1063212,
+          "sha256": "6749f1f2e4e5a54ae0ddde645ee52f7a83fd679df03f2f67ace889157ca378b8"
+        },
+        {
+          "before": {
+            "id": "conveyor-city",
+            "index": 26,
+            "steps": 0,
+            "elapsed": 0,
+            "player": [
+              -20,
+              0,
+              15.8
+            ],
+            "cargo": [
+              -17,
+              0.55,
+              19.8
+            ],
+            "state": "playing"
+          },
+          "after": {
+            "id": "conveyor-city",
+            "index": 26,
+            "steps": 0,
+            "elapsed": 0,
+            "player": [
+              -20,
+              0,
+              15.8
+            ],
+            "cargo": [
+              -17,
+              0.55,
+              19.8
+            ],
+            "state": "playing"
+          },
+          "camera": {
+            "p": [
+              -23.20000000149012,
+              10,
+              -22.200000001490118
+            ],
+            "q": [
+              0.031717897887123106,
+              0.9164156561321278,
+              0.07414641499514,
+              -0.3920186593682911
+            ],
+            "fov": 76
+          },
+          "stats": {
+            "revision": "biosphere-conservatory-architecture-v2",
+            "sourcePanels": 322,
+            "floorPanels": 136,
+            "wallPanels": 130,
+            "ceilingPanels": 56,
+            "botanicalPanels": 26,
+            "leaves": 1144,
+            "parts": 4124,
+            "batches": 8,
+            "triangles": 56504,
+            "newColliders": 0,
+            "newLights": 0
+          },
+          "render": {
+            "calls": 166,
+            "triangles": 1613506
+          },
+          "file": "after-27-opposite.png",
+          "bytes": 1046016,
+          "sha256": "402b6b35ffd1ad0da2ffcfce9ac45e3774e7e15c638e752ff9ddf7f6f0718ddb"
+        }
+      ],
+      "pass": true,
+      "fixture": {
+        "key": "brainrot-campaign-v67:brainrot-portal.preferences.v24",
+        "raw": "{\"quality\":\"balanced\",\"volume\":0,\"lookSensitivity\":1,\"muted\":true,\"tutorial\":false,\"completed\":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25],\"hints\":{},\"resumeLevel\":26,\"campaignSequenceRevision\":\"fifty-rooms-then-castle-v1\",\"campaignRevision\":\"creative-campaign-v48\",\"roomRevisions\":{\"16\":\"cable-supported-architecture-v1\",\"22\":\"counterweight-dynamic-v1\",\"32\":\"siphon-observatory-v1\",\"42\":\"spatial-progression43-v1\",\"43\":\"spatial-progression44-v1\",\"44\":\"spatial-progression45-v1\",\"45\":\"spatial-progression46-v1\",\"46\":\"spatial-progression47-v1\",\"47\":\"spatial-progression48-v1\",\"48\":\"spatial-progression49-v1\",\"49\":\"spatial-progression50-v1\",\"50\":\"spatial-progression51-v1\"}}",
+        "preferences": {
+          "quality": "balanced",
+          "volume": 0,
+          "lookSensitivity": 1,
+          "muted": true,
+          "tutorial": false,
+          "completed": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25
+          ],
+          "hints": {},
+          "resumeLevel": 26,
+          "campaignSequenceRevision": "fifty-rooms-then-castle-v1",
+          "campaignRevision": "creative-campaign-v48",
+          "roomRevisions": {
+            "16": "cable-supported-architecture-v1",
+            "22": "counterweight-dynamic-v1",
+            "32": "siphon-observatory-v1",
+            "42": "spatial-progression43-v1",
+            "43": "spatial-progression44-v1",
+            "44": "spatial-progression45-v1",
+            "45": "spatial-progression46-v1",
+            "46": "spatial-progression47-v1",
+            "47": "spatial-progression48-v1",
+            "48": "spatial-progression49-v1",
+            "49": "spatial-progression50-v1",
+            "50": "spatial-progression51-v1"
+          }
+        },
+        "completed": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25
+        ],
+        "targetIndex": 26,
+        "targetCompleted": false,
+        "constructorWrites": 0,
+        "scope": "QA setup supplies the previously completed campaign prefix in the candidate own storage before construction; the current target is not completed. This is not a fresh guest full-campaign playthrough."
+      },
+      "route": {
+        "route": {
+          "level": 27,
+          "id": "conveyor-city",
+          "pass": true,
+          "milestones": [
+            {
+              "name": "ready to ride the saffron belt into the sky well",
+              "player": [
+                -12.904518448385915,
+                0,
+                16.99994211206855
+              ],
+              "cargo": [
+                -13.624516584905114,
+                1.0551497034507558,
+                16.99854434319471
+              ],
+              "teleports": 0
+            },
+            {
+              "name": "the ground belt turns horizontal speed into height",
+              "player": [
+                4.036958363288057,
+                4.136468698433147,
+                8.178207039408463
+              ],
+              "cargo": [
+                4.051709294909335,
+                0.9404541332692712,
+                8.280988533638217
+              ],
+              "teleports": 1
+            },
+            {
+              "name": "height is retained on the side street",
+              "player": [
+                12.508646225566892,
+                8.079999994635582,
+                8.591297326534018
+              ],
+              "cargo": [
+                13.212728620985734,
+                9.208664154814851,
+                8.615695575088226
+              ],
+              "teleports": 1
+            },
+            {
+              "name": "the upper return reveals the reverse side of the high outlet",
+              "player": [
+                6.003325094162126,
+                16,
+                0.00010404531055396595
+              ],
+              "cargo": [
+                7.58272784203061,
+                8.389998146950221,
+                8.093314760062853
+              ],
+              "teleports": 1
+            },
+            {
+              "name": "ready for the upper conveyor crossing",
+              "player": [
+                15.19889175734519,
+                8,
+                11.000252566206363
+              ],
+              "cargo": [
+                15.91889827159788,
+                9.066071911802652,
+                11.003134778460591
+              ],
+              "teleports": 1
+            },
+            {
+              "name": "belt momentum becomes the final bridge",
+              "player": [
+                -18.36120354349554,
+                8,
+                -0.24151708990046084
+              ],
+              "cargo": [
+                -10.764806024595712,
+                13.193653279156731,
+                -0.24320640735439497
+              ],
+              "teleports": 2
+            },
+            {
+              "name": "both at exit",
+              "player": [
+                -19.58880130684442,
+                8,
+                -0.13074871571930685
+              ],
+              "cargo": [
+                -17.28700653410744,
+                10.314515756171476,
+                0.08948133715320034
+              ],
+              "teleports": 2
+            }
+          ],
+          "respawns": 0,
+          "resets": 0,
+          "frames": 5802,
+          "teleports": 2
+        },
+        "state": "won",
+        "observations": 11603,
+        "sameBody": true,
+        "image": {
+          "file": "after-27-won.png",
+          "bytes": 485401,
+          "sha256": "da3ae792f34096ba18120674b09159c17de6ccc06a1ce1001c13e9b2cf4021e7"
+        }
+      }
+    }
+  ],
+  "pass": true
+}

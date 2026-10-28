@@ -1,0 +1,438 @@
+{
+  "scope": "Native software WebGL. Prior-prefix access fixture; target unfinished. Static views move only camera. Routes use retained input driver, not human playtest or hardware benchmark.",
+  "rows": [
+    {
+      "version": "after",
+      "level": 28,
+      "errors": [],
+      "consoleErrors": [],
+      "views": [
+        {
+          "before": {
+            "id": "tidal-observatory",
+            "index": 27,
+            "steps": 0,
+            "elapsed": 0,
+            "player": [
+              0,
+              0,
+              17
+            ],
+            "cargo": [
+              3,
+              0.55,
+              16
+            ],
+            "state": "playing"
+          },
+          "after": {
+            "id": "tidal-observatory",
+            "index": 27,
+            "steps": 0,
+            "elapsed": 0,
+            "player": [
+              0,
+              0,
+              17
+            ],
+            "cargo": [
+              3,
+              0.55,
+              16
+            ],
+            "state": "playing"
+          },
+          "camera": {
+            "p": [
+              1.2359360266076453,
+              2.1775170113393334,
+              22.673839773126712
+            ],
+            "q": [
+              -0.07477736192943224,
+              0.028634452678674108,
+              0.0021481112772061615,
+              0.9967867374120747
+            ],
+            "fov": 62
+          },
+          "stats": {
+            "revision": "biosphere-conservatory-architecture-v2",
+            "sourcePanels": 229,
+            "floorPanels": 95,
+            "wallPanels": 78,
+            "ceilingPanels": 56,
+            "botanicalPanels": 14,
+            "leaves": 616,
+            "parts": 2815,
+            "batches": 8,
+            "triangles": 39560,
+            "newColliders": 0,
+            "newLights": 0
+          },
+          "render": {
+            "calls": 217,
+            "triangles": 1235204
+          },
+          "file": "after-28-start.png",
+          "bytes": 685025,
+          "sha256": "914663d291aa032206cbd3957e0835fda5fd93a145bb57271dec0eb0262a8caa"
+        },
+        {
+          "before": {
+            "id": "tidal-observatory",
+            "index": 27,
+            "steps": 0,
+            "elapsed": 0,
+            "player": [
+              0,
+              0,
+              17
+            ],
+            "cargo": [
+              3,
+              0.55,
+              16
+            ],
+            "state": "playing"
+          },
+          "after": {
+            "id": "tidal-observatory",
+            "index": 27,
+            "steps": 0,
+            "elapsed": 0,
+            "player": [
+              0,
+              0,
+              17
+            ],
+            "cargo": [
+              3,
+              0.55,
+              16
+            ],
+            "state": "playing"
+          },
+          "camera": {
+            "p": [
+              23.20000000149012,
+              10,
+              20.200000001490118
+            ],
+            "q": [
+              -0.09903083960243847,
+              0.4118698408770214,
+              0.04508321114240117,
+              0.9047229581792776
+            ],
+            "fov": 76
+          },
+          "stats": {
+            "revision": "biosphere-conservatory-architecture-v2",
+            "sourcePanels": 229,
+            "floorPanels": 95,
+            "wallPanels": 78,
+            "ceilingPanels": 56,
+            "botanicalPanels": 14,
+            "leaves": 616,
+            "parts": 2815,
+            "batches": 8,
+            "triangles": 39560,
+            "newColliders": 0,
+            "newLights": 0
+          },
+          "render": {
+            "calls": 251,
+            "triangles": 1243320
+          },
+          "file": "after-28-oblique.png",
+          "bytes": 906128,
+          "sha256": "32c05a3ba13cbabe0d40419510f7d05da90fdc761486a4e705367b67d4a592e3"
+        },
+        {
+          "before": {
+            "id": "tidal-observatory",
+            "index": 27,
+            "steps": 0,
+            "elapsed": 0,
+            "player": [
+              0,
+              0,
+              17
+            ],
+            "cargo": [
+              3,
+              0.55,
+              16
+            ],
+            "state": "playing"
+          },
+          "after": {
+            "id": "tidal-observatory",
+            "index": 27,
+            "steps": 0,
+            "elapsed": 0,
+            "player": [
+              0,
+              0,
+              17
+            ],
+            "cargo": [
+              3,
+              0.55,
+              16
+            ],
+            "state": "playing"
+          },
+          "camera": {
+            "p": [
+              -23.20000000149012,
+              10,
+              -20.200000001490118
+            ],
+            "q": [
+              0.045083211142401165,
+              0.9047229581792777,
+              0.09903083960243846,
+              -0.4118698408770214
+            ],
+            "fov": 76
+          },
+          "stats": {
+            "revision": "biosphere-conservatory-architecture-v2",
+            "sourcePanels": 229,
+            "floorPanels": 95,
+            "wallPanels": 78,
+            "ceilingPanels": 56,
+            "botanicalPanels": 14,
+            "leaves": 616,
+            "parts": 2815,
+            "batches": 8,
+            "triangles": 39560,
+            "newColliders": 0,
+            "newLights": 0
+          },
+          "render": {
+            "calls": 255,
+            "triangles": 1243358
+          },
+          "file": "after-28-opposite.png",
+          "bytes": 947510,
+          "sha256": "99dc2cf39f4cc09abcdaf9596b6914890fa8b6e6faf48e87d927ccd439af66c9"
+        }
+      ],
+      "pass": true,
+      "fixture": {
+        "key": "brainrot-campaign-v67:brainrot-portal.preferences.v24",
+        "raw": "{\"quality\":\"balanced\",\"volume\":0,\"lookSensitivity\":1,\"muted\":true,\"tutorial\":false,\"completed\":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26],\"hints\":{},\"resumeLevel\":27,\"campaignSequenceRevision\":\"fifty-rooms-then-castle-v1\",\"campaignRevision\":\"creative-campaign-v48\",\"roomRevisions\":{\"16\":\"cable-supported-architecture-v1\",\"22\":\"counterweight-dynamic-v1\",\"32\":\"siphon-observatory-v1\",\"42\":\"spatial-progression43-v1\",\"43\":\"spatial-progression44-v1\",\"44\":\"spatial-progression45-v1\",\"45\":\"spatial-progression46-v1\",\"46\":\"spatial-progression47-v1\",\"47\":\"spatial-progression48-v1\",\"48\":\"spatial-progression49-v1\",\"49\":\"spatial-progression50-v1\",\"50\":\"spatial-progression51-v1\"}}",
+        "preferences": {
+          "quality": "balanced",
+          "volume": 0,
+          "lookSensitivity": 1,
+          "muted": true,
+          "tutorial": false,
+          "completed": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26
+          ],
+          "hints": {},
+          "resumeLevel": 27,
+          "campaignSequenceRevision": "fifty-rooms-then-castle-v1",
+          "campaignRevision": "creative-campaign-v48",
+          "roomRevisions": {
+            "16": "cable-supported-architecture-v1",
+            "22": "counterweight-dynamic-v1",
+            "32": "siphon-observatory-v1",
+            "42": "spatial-progression43-v1",
+            "43": "spatial-progression44-v1",
+            "44": "spatial-progression45-v1",
+            "45": "spatial-progression46-v1",
+            "46": "spatial-progression47-v1",
+            "47": "spatial-progression48-v1",
+            "48": "spatial-progression49-v1",
+            "49": "spatial-progression50-v1",
+            "50": "spatial-progression51-v1"
+          }
+        },
+        "completed": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26
+        ],
+        "targetIndex": 27,
+        "targetCompleted": false,
+        "constructorWrites": 0,
+        "scope": "QA setup supplies the previously completed campaign prefix in the candidate own storage before construction; the current target is not completed. This is not a fresh guest full-campaign playthrough."
+      },
+      "route": {
+        "route": {
+          "level": 28,
+          "id": "tidal-observatory",
+          "pass": true,
+          "milestones": [
+            {
+              "name": "the collector opens and the lagoon begins to rise",
+              "player": [
+                14.028795786056662,
+                0,
+                -4.0419970938084626e-05
+              ],
+              "cargo": [
+                13.308797075297065,
+                0.3899982801757587,
+                0.0009702577305761971
+              ],
+              "teleports": 0
+            },
+            {
+              "name": "the east gauge and receiving current show the moving tide",
+              "player": [
+                14.028795786056662,
+                0.34103886883476964,
+                -4.0419970938084626e-05
+              ],
+              "cargo": [
+                13.308797495393419,
+                0.7310317293066799,
+                0.000970263044921829
+              ],
+              "teleports": 0
+            },
+            {
+              "name": "equal tides reveal the middle garden",
+              "player": [
+                14.028795786056662,
+                2.9479288291125965,
+                -4.0419970938084626e-05
+              ],
+              "cargo": [
+                13.308803749475077,
+                3.3379269769263686,
+                0.0009701008376443814
+              ],
+              "teleports": 0
+            },
+            {
+              "name": "the tide changes which coral doorway is usable",
+              "player": [
+                -12.907969745442257,
+                3.052071170887406,
+                -0.000345657901667078
+              ],
+              "cargo": [
+                -13.627960075351217,
+                4.1107144169519545,
+                0.0028392051787881093
+              ],
+              "teleports": 0
+            },
+            {
+              "name": "the occupied coral island begins its return tide",
+              "player": [
+                -12.978453475808934,
+                3.052071170887406,
+                -8.095881865934964e-05
+              ],
+              "cargo": [
+                -13.698448036884285,
+                3.4420693187015288,
+                0.002622892204070706
+              ],
+              "teleports": 0
+            },
+            {
+              "name": "the same water returns beneath both travellers",
+              "player": [
+                -12.978453475808934,
+                5.201652274395045,
+                -8.095881865934963e-05
+              ],
+              "cargo": [
+                -13.698442493758785,
+                5.591649209587096,
+                0.002622739782932057
+              ],
+              "teleports": 0
+            },
+            {
+              "name": "both at exit",
+              "player": [
+                -19.917704803988947,
+                5.3,
+                -2.7348138970258014e-06
+              ],
+              "cargo": [
+                -20.637697578348885,
+                6.34306191390915,
+                0.008837363663866652
+              ],
+              "teleports": 0
+            }
+          ],
+          "respawns": 0,
+          "resets": 0,
+          "frames": 4348,
+          "teleports": 0
+        },
+        "state": "won",
+        "observations": 8696,
+        "sameBody": true,
+        "image": {
+          "file": "after-28-won.png",
+          "bytes": 596350,
+          "sha256": "509d0de53211cc294b038c0ed29be7ddc9b27ee8cd614abb8520ca7ce7827bd3"
+        }
+      }
+    }
+  ],
+  "pass": true
+}
