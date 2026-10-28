@@ -1,0 +1,68 @@
+name: Castle architectural review
+on:
+  push:
+    branches: [upgrade/tz-completion-20261023]
+    paths:
+      - 'src/game/LabCastleGrandArchitecture.js'
+      - 'src/game/LabSingularityArt.js'
+      - 'tests/lab-castle-grand-architecture.test.js'
+      - 'tools/qa-castle-grand-architecture.mjs'
+      - '.github/workflows/castle-grand-architecture.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: castle-architecture-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  native:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Build locked game and isolate browser tooling
+        run: |
+          npm ci
+          npm run build
+          npm install --prefix "$RUNNER_TEMP/browser" --no-save --package-lock=false puppeteer-core@24.16.0
+          git diff --exit-code -- package.json package-lock.json
+      - uses: actions/checkout@v4
+        with:
+          ref: 6f4b9b58a5f51efb99492e20d54349fd5fee9add
+          path: baseline
+          persist-credentials: false
+      - name: Build retained source with the same dependencies
+        working-directory: baseline
+        run: |
+          ln -s ../node_modules node_modules
+          npm run build
+      - name: Compare native production views without altering actors
+        env:
+          BUILD_COMMIT: ${{ github.sha }}
+          CASTLE_FULL_ROUTE: '0'
+        run: |
+          mkdir -p before-site after-site
+          ln -s ../baseline/dist before-site/campaign-v67
+          ln -s ../dist after-site/campaign-v67
+          python3 -m http.server 4174 --bind 127.0.0.1 --directory before-site > before-server.log 2>&1 &
+          python3 -m http.server 4173 --bind 127.0.0.1 --directory after-site > after-server.log 2>&1 &
+          for i in {1..30}; do curl -fsS http://127.0.0.1:4173/campaign-v67/ >/dev/null && curl -fsS http://127.0.0.1:4174/campaign-v67/ >/dev/null && break; sleep 1; done
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+          export PUPPETEER_MODULE="$RUNNER_TEMP/browser/node_modules/puppeteer-core/lib/esm/puppeteer/puppeteer-core.js"
+          node tools/qa-castle-grand-architecture.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: castle-native-${{ github.sha }}
+          path: |
+            qa/castle-grand/
+            before-server.log
+            after-server.log
+          retention-days: 14
+          if-no-files-found: error
