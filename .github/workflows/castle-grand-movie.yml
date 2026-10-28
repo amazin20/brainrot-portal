@@ -1,0 +1,60 @@
+name: Castle ordinary-route recording
+on:
+  push:
+    branches: [upgrade/tz-completion-20261023]
+    paths: ['.github/workflows/castle-grand-movie.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: castle-grand-movie
+  cancel-in-progress: false
+env:
+  GAME_COMMIT: 92d02d1d7febfe9162c08912f6728e459403f8af
+jobs:
+  record:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.GAME_COMMIT }}
+          path: candidate
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Build the exact game source and isolated observation tools
+        env:
+          BUILD_COMMIT: ${{ env.GAME_COMMIT }}
+        run: |
+          (cd candidate && npm ci && npm run build)
+          npm install --prefix "$RUNNER_TEMP/browser" --no-save --package-lock=false puppeteer-core@24.16.0
+          command -v ffmpeg
+          command -v ffprobe
+          mkdir -p qa/castle-movie
+          git rev-parse HEAD > qa/castle-movie/observer-sha.txt
+          git -C candidate rev-parse HEAD > qa/castle-movie/source-sha.txt
+          (cd candidate/dist && find . -type f -print0 | sort -z | xargs -0 sha256sum) > qa/castle-movie/build-sha256.txt
+      - name: Record original travellers from the real Play spawn to the crown
+        env:
+          BUILD_COMMIT: ${{ env.GAME_COMMIT }}
+        run: |
+          mkdir -p movie-site
+          ln -s ../candidate/dist movie-site/campaign-v67
+          python3 -m http.server 4173 --bind 127.0.0.1 --directory movie-site > qa/castle-movie/server.log 2>&1 &
+          for i in {1..30}; do curl -fsS http://127.0.0.1:4173/campaign-v67/ >/dev/null && break; sleep 1; done
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+          export PUPPETEER_MODULE="$RUNNER_TEMP/browser/node_modules/puppeteer-core/lib/esm/puppeteer/puppeteer-core.js"
+          node tools/record-castle-grand-route.mjs
+          (cd candidate/dist && sha256sum -c ../../qa/castle-movie/build-sha256.txt)
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: castle-movie-92d02d1
+          path: qa/castle-movie/
+          retention-days: 14
+          if-no-files-found: warn
