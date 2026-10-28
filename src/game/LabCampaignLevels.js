@@ -1,3 +1,4 @@
+import {installOpticsArchitecture} from './LabOpticsArchitecture.js';
 import {finishCampaignTheme} from './LabCampaignThemeFinish.js';
 import {installFirstChapterArt} from './LabFirstChapterArt.js';
 import {installSecondChapterArt} from './LabSecondChapterArt.js';
@@ -113,5 +114,5 @@ export function buildLabCampaignLevel(game,index){
  finishVisualAuditMiddle(game,level,index,roots);
  finishVisualAuditLate(game,level,index,roots);
  finishVisualAuditCastle(game,level,index,roots);
- return finishVisualAudit(game,level,index,roots);
+ return installOpticsArchitecture(game,finishVisualAudit(game,level,index,roots));
 }
