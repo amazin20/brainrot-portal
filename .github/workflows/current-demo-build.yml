@@ -1,0 +1,47 @@
+name: Build current GitHub demo
+on:
+  push:
+    branches: [upgrade/tz-completion-20261023]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: current-demo-build-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: '${{ github.sha }}', persist-credentials: false}
+      - uses: actions/setup-node@v4
+        with: {node-version: 22, cache: npm}
+      - run: npm ci
+      - name: Preserve access, Atlas and v67 save compatibility
+        run: |
+          mkdir -p evidence
+          set -o pipefail
+          node --test --test-concurrency=1 tests/lab-campaign-v67-storage.test.js tests/lab-campaign-access.test.js tests/lab-campaign-sequence.test.js tests/lab-atlas-runtime.test.js tests/lab-player-entry.test.js tests/lab-v8-platform.test.js | tee evidence/tests.tap
+      - name: Build every current improvement from this single commit
+        env:
+          BUILD_COMMIT: ${{ github.sha }}
+        run: |
+          npm run build
+          node tools/current-demo/stamp.mjs
+          npm install --prefix "$RUNNER_TEMP/browser" --no-save --package-lock=false puppeteer-core@24.16.0
+          git diff --exit-code -- package.json package-lock.json
+      - name: Check real native startup and the Biosphere, Optics and castle remasters
+        run: |
+          mkdir -p smoke-site
+          ln -s ../dist smoke-site/campaign-v67
+          python3 -m http.server 4173 --bind 127.0.0.1 --directory smoke-site > evidence/server.log 2>&1 &
+          for i in {1..30}; do curl -fsS http://127.0.0.1:4173/campaign-v67/ >/dev/null && break; sleep 1; done
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+          export PUPPETEER_MODULE="$RUNNER_TEMP/browser/node_modules/puppeteer-core/lib/esm/puppeteer/puppeteer-core.js"
+          node tools/current-demo/smoke.mjs
+      - uses: actions/upload-artifact@v4
+        with: {name: current-demo-browser, path: dist/, retention-days: 90, if-no-files-found: error}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: {name: current-demo-checks, path: evidence/, retention-days: 30, if-no-files-found: error}

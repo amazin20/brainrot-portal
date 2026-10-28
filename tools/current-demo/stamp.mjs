@@ -1,0 +1,25 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import assert from 'node:assert/strict';
+import {execFileSync} from 'node:child_process';
+import {createReleaseManifest,sha256,walkFiles} from '../../scripts/lib/release-manifest.mjs';
+const dir='dist',commit=process.env.GITHUB_SHA;
+assert.match(commit||'',/^[a-f0-9]{40}$/);
+assert.equal(execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),commit);
+assert.equal(execFileSync('git',['status','--porcelain','--untracked-files=no'],{encoding:'utf8'}).trim(),'');
+const builtAt=new Date().toISOString(),short=commit.slice(0,7);
+const chip=`<p id="demo-build-label" style="font:12px/1.6 system-ui;opacity:.8;margin:8px 0;overflow-wrap:anywhere"><a href="./build-info.json" target="_blank" rel="noopener" style="color:inherit">ДЕМО · ${builtAt.slice(0,10)} · ${short}</a><br>Рабочая версия · полная приёмка ещё не завершена</p>`;
+let html=fs.readFileSync(dir+'/index.html','utf8');
+assert.ok(html.includes('<div class="hero-meta">'),'The actual Atlas header must exist');
+html=html.replace('<div class="hero-meta">',chip+'\n<div class="hero-meta">');
+fs.writeFileSync(dir+'/index.html',html);
+const info=createReleaseManifest({directory:dir,commit});
+assert.equal(info.levels,51);assert.equal(info.runtimeConfig.chamberEdition,'foundation');
+assert.equal(info.features.foundation.castleEndsCampaign,true);
+Object.assign(info,{status:'development-demo',builtAt,demoChannel:'continuous',demoSourceBranch:'upgrade/tz-completion-20261023',verified:false,
+ verificationScope:'Automatic development demo: build, save/access checks and native startup smoke. This is not full campaign acceptance, all-level route acceptance, hardware benchmarking or live Yandex approval.'});
+fs.writeFileSync(dir+'/build-info.json',JSON.stringify(info,null,2)+'\n');
+const files=walkFiles(dir).map(file=>({path:path.relative(dir,file).split(path.sep).join('/'),bytes:fs.statSync(file).size,sha256:sha256(fs.readFileSync(file))}));
+assert.ok(files.reduce((sum,f)=>sum+f.bytes,0)<100_000_000);
+fs.writeFileSync(dir+'/demo-manifest.json',JSON.stringify({schema:1,commit,builtAt,runId:process.env.GITHUB_RUN_ID,files},null,2)+'\n');
+console.log('Current demo stamped',commit,files.length,'files');
