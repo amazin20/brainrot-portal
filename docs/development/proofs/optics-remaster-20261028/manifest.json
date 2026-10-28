@@ -1,0 +1,66 @@
+{
+  "baselineCommit": "e589c0ed0b0e8ea5dcac60b1b549a6adde75c32e",
+  "gameCommit": "868ace3397b61f3d893e2e4ff74bb1f778f63966",
+  "nativeRuns": {
+    "before": 40623811924,
+    "after": 40624685195
+  },
+  "artifacts": [
+    {
+      "id": 12788751153,
+      "version": "before",
+      "levels": [
+        31,
+        32,
+        33,
+        34,
+        35
+      ],
+      "sourceCommit": "e589c0ed0b0e8ea5dcac60b1b549a6adde75c32e",
+      "bytes": 5924241,
+      "sha256": "b641c5b3a58970b03da04f24d2dd93bcdfef55889deba1e545b5a04ddcfc1baa"
+    },
+    {
+      "id": 12788646739,
+      "version": "before",
+      "levels": [
+        36,
+        37,
+        38,
+        39,
+        40
+      ],
+      "sourceCommit": "e589c0ed0b0e8ea5dcac60b1b549a6adde75c32e",
+      "bytes": 6531336,
+      "sha256": "aa73fc9a69e09de7087f8434c12970e8a733f3f27e8dddaec0fd8a486211f69c"
+    },
+    {
+      "id": 12788808122,
+      "version": "after",
+      "levels": [
+        31,
+        32,
+        33,
+        34,
+        35
+      ],
+      "sourceCommit": "868ace3397b61f3d893e2e4ff74bb1f778f63966",
+      "bytes": 7987842,
+      "sha256": "fc7d88a62c9eb1a686cf227d2a4d85ab5f9dc79362e70f6326a0de7e57cb9415"
+    },
+    {
+      "id": 12788294316,
+      "version": "after",
+      "levels": [
+        36,
+        37,
+        38,
+        39,
+        40
+      ],
+      "sourceCommit": "868ace3397b61f3d893e2e4ff74bb1f778f63966",
+      "bytes": 8467810,
+      "sha256": "d3ad6ecfb2136d99313d6dd8f577f6d4b86ea51e36c9974a5f0acd16490df410"
+    }
+  ]
+}

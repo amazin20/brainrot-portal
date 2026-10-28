@@ -1,0 +1,103 @@
+{
+  "baselineCommit": "e589c0ed0b0e8ea5dcac60b1b549a6adde75c32e",
+  "gameCommit": "868ace3397b61f3d893e2e4ff74bb1f778f63966",
+  "nativeRuns": {
+    "before": 40623811924,
+    "after": 40624685195
+  },
+  "verifiedImages": 70,
+  "matchedViews": 30,
+  "nativeRoutes": [
+    {
+      "level": 31,
+      "frames": 5304,
+      "physicalUpdates": 10607,
+      "resets": 0,
+      "respawns": 0,
+      "sameOriginal": true
+    },
+    {
+      "level": 32,
+      "frames": 2439,
+      "physicalUpdates": 4878,
+      "resets": 0,
+      "respawns": 0,
+      "sameOriginal": true
+    },
+    {
+      "level": 33,
+      "frames": 4664,
+      "physicalUpdates": 9328,
+      "resets": 0,
+      "respawns": 0,
+      "sameOriginal": true
+    },
+    {
+      "level": 34,
+      "frames": 2019,
+      "physicalUpdates": 4037,
+      "resets": 0,
+      "respawns": 0,
+      "sameOriginal": true
+    },
+    {
+      "level": 35,
+      "frames": 2453,
+      "physicalUpdates": 4905,
+      "resets": 0,
+      "respawns": 0,
+      "sameOriginal": true
+    },
+    {
+      "level": 36,
+      "frames": 4727,
+      "physicalUpdates": 9454,
+      "resets": 0,
+      "respawns": 0,
+      "sameOriginal": true
+    },
+    {
+      "level": 37,
+      "frames": 2733,
+      "physicalUpdates": 5466,
+      "resets": 0,
+      "respawns": 0,
+      "sameOriginal": true
+    },
+    {
+      "level": 38,
+      "frames": 2495,
+      "physicalUpdates": 4989,
+      "resets": 0,
+      "respawns": 0,
+      "sameOriginal": true
+    },
+    {
+      "level": 39,
+      "frames": 1894,
+      "physicalUpdates": 3788,
+      "resets": 0,
+      "respawns": 0,
+      "sameOriginal": true
+    },
+    {
+      "level": 40,
+      "frames": 2540,
+      "physicalUpdates": 5080,
+      "resets": 0,
+      "respawns": 0,
+      "sameOriginal": true
+    }
+  ],
+  "structuralTests": 26,
+  "fullCampaignAccepted": false,
+  "published": false,
+  "limits": [
+    "Decorative observatory relief is not a new interactive iris mechanism or a new puzzle.",
+    "Native software WebGL at 1280x720 is not hardware-device FPS or a human playtest.",
+    "Prior-prefix access fixture admits the unfinished target, not a live full-campaign playthrough.",
+    "Room35 oblique/opposite reference cameras are obstructed by existing geometry before and after; the gallery uses its normal start view.",
+    "Existing diagonal artifacts on some internal partitions remain; this pass does not claim their removal.",
+    "Other gameplay, full-suite failures and live Yandex moderation remain outside acceptance."
+  ]
+}

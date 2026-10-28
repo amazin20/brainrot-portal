@@ -1,0 +1,2461 @@
+{
+  "sourceCommit": "868ace3397b61f3d893e2e4ff74bb1f778f63966",
+  "scope": "Native production WebGL. Inspection moves only the camera at zero physics steps. Rooms 31–40 then use normal-input routes from Play, preserving original actors. Prior-prefix save does not complete the target. No hardware-performance or human-playtest claim.",
+  "build": {
+    "art/portal-laboratory-menu.webp": "f6a544096a6418a0f65ba8c609415d0393a1081d18537ecac5eb4c345b13b4be",
+    "assets/LabAnimationJourney-Brpq3pnN.js": "6180778a5055c3fbf8f43d0a08602520179e4314ad7c34c376892bfea0716b26",
+    "assets/LabCreativeRoom17Journey-C4DlIMff.js": "e070e578cb04d6ad8ac8300ce423c89d9e22b586665504a007471e7effe2c8f8",
+    "assets/LabCreativeRoom18Journey-DTnev62V.js": "366b40a59b6d83d7e26f8bbec6af61b4a0751f3af2635ee6a42a10acb5a1f859",
+    "assets/LabCreativeRoom20Journey-BBimmHsW.js": "2cb45c32f5775a10c8202b7b23d8c74b95f35f1aad6a80f6572244d565726e45",
+    "assets/LabEchoHorizonJourney-DN13JZ_d.js": "d767ae4f7c36dbd307525e65fd12f8ac550eed90485d1b11c80c8058254922e6",
+    "assets/LabExpansionAlternateJourney47-3qgixs4y.js": "2054a9f53789e8c5aa399142bef5a6700bd7c6be3353874cd5b89eba9482c851",
+    "assets/LabExpansionAlternateJourney48-dpVHt59Q.js": "34db4759385589004de700464fd6d5696e922b2e78f888f2a536922184604d19",
+    "assets/LabExpansionAlternateJourney49-BPjOGFVR.js": "517ea4ed249ef904092b4b3383272a9ee995a62e81f4433d301ccdbe8acf3411",
+    "assets/LabExpansionAlternateJourneyB-DXDWKIjE.js": "c525ba2578ed107b072fbc5abf03dda46e6ab3bafbdde1fc7e1716adf39fb3a7",
+    "assets/LabExpansionJourneyA-DZr7OWiN.js": "12c07ded01281a9189ad4815d79e05d43c35cc03042c8ddc24808d6d45d5eaf2",
+    "assets/LabExpansionJourneyB-mExO5yWl.js": "42b21c735235f4c12d7b84d0cd15895d881dca4469e3db8a91f010e96da72ee3",
+    "assets/LabExtendedJourney-CmaAwuZJ.js": "83c161f421ecf1dba6866dce62c1a5dc354f54caa678b665a952cbc1ed9515ec",
+    "assets/LabFoundation20PhysicalJourney-BRmNDi-g.js": "05891489b04e02fdfc20eef58baf8a144f7cec45b208e4a1a550732cbe7ed567",
+    "assets/LabFoundationJourney-BeGQxcCc.js": "a8aa5d1653c4cd9827c7a9def02691ba4a34aac49b5f1f896065ad069e0816ee",
+    "assets/LabIntroductoryAlternates-DcdsCClA.js": "a6451adc49d9c2f86f43455bfa4ced44d7166234f4fde82082990bf21f76cd5c",
+    "assets/LabOpenJourney-D2w3vkUQ.js": "f3debe1c1098a6d8d5d9d848ed50496d23e13e8c75d05275b2af5109a2408f19",
+    "assets/LabPortalEdgeJourney-CnFooLn0.js": "2d6bb5767f29d6d2830fa2e0656fad8474492e34cbc8b3c324794be24d54cbfa",
+    "assets/LabPortalFloorJourney-C8Z_x9_0.js": "648afd1d5ee309884370a2591eac6dac35f970b3c692725e4ccdcf4dbcb9e8da",
+    "assets/LabPostJourneyA-RSW7EHwT.js": "22bbf3a23de8e9f702353d338420e0e0cd323f26516f8272e7e7ac0b1e6a72c9",
+    "assets/LabPostJourneyB-iwQkb4A3.js": "741721a25f46664ac4587e6e19b48736c7b3f9ee70bf3f1d8c1f19d7dff430a2",
+    "assets/LabPuzzlePilot43Journey-1h32DeVj.js": "c32726086aa64fa92f8b60bdf00ddc7db098e8d8aa13209576ffe374ff8f0f80",
+    "assets/LabPuzzleProgression44Journey-CSrxtKK_.js": "f8caf870b836743da9ec4bc78ddd756ad08dcf4d9592f69a10e29ed5d86668f2",
+    "assets/LabPuzzleProgression45Journey-IH-bWmJa.js": "206346565c8028e1001a497507ac6fecc6697ce030e7fce417d04dd80f56e1e3",
+    "assets/LabPuzzleProgression46Journey-BSnSMhqv.js": "6759ba6d708d57f5d0323be8191bd5d2eed10265794566cc69d6a89607397103",
+    "assets/LabPuzzleProgression47Journey-C1W0uKxn.js": "831cca1e30e4da2af5e0f1b06e4e38a783de44057bbc98ed5f62b695589c0a91",
+    "assets/LabPuzzleProgression48Journey-wwwxRjCS.js": "a09294f1478cf1137f36a69c420f2751531f576034c0206870e1353775854917",
+    "assets/LabPuzzleProgression49Journey-BjxU9T9D.js": "08354349792f6a9da7dfd3e990c42895e88f15f21adb0e131854d860471963ce",
+    "assets/LabPuzzleProgression50BeamJourney-BO4G0qJI.js": "1e68ef3ce6cb5791b12faa843a27c5021aa24cd089e8219fce24d8236fa82d5b",
+    "assets/LabPuzzleProgression50Journey-BIXJ26yl.js": "090b5445423bf4d75241ead884ab9d144734ccd0ba02ebadf5e467ee387ed2e8",
+    "assets/LabPuzzleProgression51Journey-DRC8qOBC.js": "e08834b61f1ebdb5cf594a79e903fc7e65951eccaf9d789e1ddf13ce94f30cc1",
+    "assets/LabResearchJourney-CuFMdbBK.js": "2ba00593db689da7d5acaeab48e1765426b94439ed33430d1b815e4343d75735",
+    "assets/LabRoom13Journey-4kJUUTmk.js": "c1540786e510d7c4c6bfc757542e0e68e877f10e5fe7cdbb7273657a27fe7768",
+    "assets/LabRoom14Journey-DIGYQ-qY.js": "e49f872d64ce5d1d81ffa8551d5d1467a1bf927f4fdea2e37f87c371908c926f",
+    "assets/LabRoom15Journey-ChXElo55.js": "1f5c4f45c2cfa054192dbd0e8b9e3764a17bfb4ff78f97db078d06ba456de8c8",
+    "assets/LabRoom16Journey-DcT0PHn1.js": "43814ce0e94d01e0e2b9152c6ea1c722073f13a019b2992525f6b0480fa97e74",
+    "assets/LabRoom17Journey-C2EE7523.js": "b621bf8abcb99cec72e5a8b0ef53e4ef6a005e414141e9502855a2759ba02708",
+    "assets/LabRoom18Journey-BUaCuBkK.js": "2f1e2cba5ef458f01c01df3b7f2aa5f18c0d8dc32006f6f775c8e21b62006c55",
+    "assets/LabRoom19Journey-BVk2pOJ3.js": "edbd9e87a7c68f527a6a6d6794cfcb3a8de5780d1c656265ccf7910207066ab4",
+    "assets/LabRoom20Journey-Dnjdo837.js": "84ee4a4debf18d555e80bbf468821d58576e6fcf805b34adcd2670e8502fc0fd",
+    "assets/LabRoom22Journey-Dp22JbGx.js": "0fcc1860f121cebe9a04bfe7f71cc8807059e684b393ecf27b62cbc2914ff2f6",
+    "assets/LabRoom23Journey-Bz1I_XOk.js": "33d411ae161adb5d1136d4d4be882ed09f42a9dafce1148dce914a328ccab531",
+    "assets/LabRoom23PhysicalJourney-AbmHCReX.js": "46bf1e30b31305151d29a50c8ef95d3fcffbc2443314badd0ba9816e579ebade",
+    "assets/LabRoom24Journey-CxPUV0rM.js": "440b0d33282ea9a3c54e88d96ca82c8eda02f7a9751fc3cb6cf89adf20d1027a",
+    "assets/LabRoom25Journey-COqi9k-Z.js": "4113270db838996f7bcd1cd8d5edd4ca13461d19057e13a1a5f4e0f5085b9296",
+    "assets/LabRoom26Journey-GMbq5-ym.js": "c7b73b9300d7e24194a413c21582a3b432289be2bcb3ef2044e8859d5fb65164",
+    "assets/LabRoom27Journey-CtMoXjWq.js": "ea4e62a0eed62998b64515b56db65142d1a7d3fb8d5c91b6e31653c5ef4422b5",
+    "assets/LabRoom28Journey-BK5o10zU.js": "abb63b08a5336b66f9274808b2d715e56d00520d744756fd68875b0c7442e686",
+    "assets/LabRoom29Journey-FXLiWbZf.js": "625138692ba0641ed1ea63e7bb6ea332c70bf235ee3bc8b3cbd80456012e04ef",
+    "assets/LabRoom30Journey-zAsFaYdh.js": "1d260d8e49e983b2f7a9c354898fe771c41df56434d67e203bd8fb51bbc8f925",
+    "assets/LabSingularityJourney-CN8MsAZ-.js": "08c4f369dc98e315af123d2d0010034be54db91f7ef6684600fbdc8d27774452",
+    "assets/LabSiphonObservatoryJourney-CpPzpekg.js": "b0c45cb1186f03c3c8339f8ee5a7768fce694311193894bc984d486cfd6d9454",
+    "assets/LabTower41RatchetCellJourney-DBPHXzp0.js": "a460f4b4c1ecbb6b856532cb83d21baf9690680836402caec76adaaf69de967d",
+    "assets/LabTowerJourney-BGxAulBm.js": "15ad67ec0a9086443d6627bb102fad6e77c4a6187be390a974bca19386fbb2b3",
+    "assets/LabV8Journey-CYPy2av4.js": "37194e4622738b913317934215360317a2b6d184e0b46aec022ad3c5b12a17a7",
+    "assets/LabWorkshopJourney-C4-ThrRg.js": "f2615d972439cc030825a0f249dd649898e0e252df185f39a54bc7e82fe0eb82",
+    "assets/index-C001kXKc.css": "3c06e42c51dcb03884cb6b5f344f1c7f730276d1081f476a1dbade6db084335f",
+    "assets/index-CWnZRdTo.js": "7fcf95307f88194eacf6bb9cce2406db85d67de813700ceb9fc7ea81785ecaf6",
+    "draco/draco_decoder.js": "30e4d486fa020737af10e3c56197693e5b904bdc05b8bfa5d7b06751dec6da04",
+    "draco/draco_decoder.wasm": "c55a594e8ffd18426d36b27fea9618af3df5e173640a3e56d46f09d76f0574f2",
+    "draco/draco_wasm_wrapper.js": "e8049906ef3f8f75d3456c22a3f31bfdfe5b5b5bd09ccdec613b9e9a49d554d8",
+    "index.html": "5e5add7c5e8303b102b9301c35f0e62adc1078d6be13218341dde7c71e3be51d",
+    "models/runtime/manifest.json": "8806346ed3ac0fb096aa26321d5620c16a6a2a55f2523023fb21f6c4749fe2ed",
+    "models/runtime/model-01-player.glb": "e5b09ff0281377b679d6fdd505fa1ed89550bb662e94e7f593ed67ee50a66a91",
+    "models/runtime/model-02-cargo.glb": "65763c87e7f14cc807cffa8fc2adc364e8421dae819271a0c406a6b0d2c8c697",
+    "models/runtime/model-11-portal-gun.glb": "d8c76c41efbbf0a6d70e30ab5a7b70f49fd806e497f67ea06cb28f9f4edca1d7",
+    "models/runtime/model-19-lift-platform.glb": "afd039e831ff0baa514f076a505ffbb7c57dac2251959b3d858fc92dcf3d04b9",
+    "models/runtime/model-22-terminal.glb": "9e2f4ff758996f67596d3935041f632bafdf7e84efd4869341920b64a5919c26",
+    "models/runtime/model-23-floor-tile.glb": "0950bc6ef31bb28939087bad53695f21cde0b9fe5740394df202a0b242f77b0c",
+    "models/runtime/model-24-wall-panel.glb": "15aaca48f6e436d5e89abf7548c0fe43580bba8faff4619e476d3a6d306b004d",
+    "models/runtime/model-28-rotating-panel.glb": "3159916bad63903e73b8e660ce4aab8a3b1e38f1231152b68f3df63d6987ac4b",
+    "models/runtime/model-29-pressure-platform.glb": "ee65bd9706ad4f4658e54ec5ad8f6f45b24d9027e4e6072f162358a4c1b3291b",
+    "models/runtime/model-31-wind-generator.glb": "024f25db27e96e1efdaa5e200c13a665dee487e798338f86fef985feeae9019e",
+    "models/runtime/model-32-spring-ram.glb": "958d5ed533736d5779da078be20ae2b0e84212bfc3a00b456dc0106bc0a093d7",
+    "models/runtime/model-35-shutter-fan.glb": "8e11d5ab83250348f6e08f034ec87d82727162742d5a7be18f981fc523aa907a",
+    "models/runtime/model-37-extension-bridge.glb": "96173a9ef89375066b08fad8dff1928425863c6b4e6b8c0373c497448f109c55",
+    "models/runtime/model-39-cable-winch.glb": "301f148938ec83e2a8f4b45c7f9bdfd19fb40ca79d8fb9abc7601caf4fe0eafd"
+  },
+  "rows": [
+    {
+      "level": 36,
+      "errors": [],
+      "consoleErrors": [],
+      "views": [
+        {
+          "before": {
+            "id": "post-angular-cassette",
+            "index": 35,
+            "steps": 0,
+            "state": "playing",
+            "elapsed": 0,
+            "player": [
+              -21.2,
+              10,
+              0.7
+            ],
+            "cargo": [
+              -23.3,
+              10.6,
+              -1.5
+            ],
+            "cargoBody": 168,
+            "cargoShape": 335
+          },
+          "after": {
+            "id": "post-angular-cassette",
+            "index": 35,
+            "steps": 0,
+            "state": "playing",
+            "elapsed": 0,
+            "player": [
+              -21.2,
+              10,
+              0.7
+            ],
+            "cargo": [
+              -23.3,
+              10.6,
+              -1.5
+            ],
+            "cargoBody": 168,
+            "cargoShape": 335
+          },
+          "camera": {
+            "p": [
+              -25.355817831363254,
+              15.165524828999777,
+              3.8923528849532687
+            ],
+            "q": [
+              -0.27137432970052866,
+              -0.4967537105853435,
+              -0.16698740418247335,
+              0.8072836744563097
+            ],
+            "fov": 62
+          },
+          "architecture": {
+            "revision": "observatory-arched-archive-and-celestial-soffit-v1",
+            "panels": 78,
+            "irises": 24,
+            "archives": 54,
+            "parts": 2202,
+            "batches": 8,
+            "triangles": 95760,
+            "newColliders": 0,
+            "newLights": 0
+          },
+          "render": {
+            "calls": 132,
+            "triangles": 453840
+          },
+          "filename": "room-36-start.png",
+          "sha256": "e1f584221568fe19049fcb7ce018e266a0e6bfb8763a293894cbd9f9d05f09dd",
+          "bytes": 485504,
+          "fixture": {
+            "kind": "start"
+          }
+        },
+        {
+          "before": {
+            "id": "post-angular-cassette",
+            "index": 35,
+            "steps": 0,
+            "state": "playing",
+            "elapsed": 0,
+            "player": [
+              -21.2,
+              10,
+              0.7
+            ],
+            "cargo": [
+              -23.3,
+              10.6,
+              -1.5
+            ],
+            "cargoBody": 168,
+            "cargoShape": 335
+          },
+          "after": {
+            "id": "post-angular-cassette",
+            "index": 35,
+            "steps": 0,
+            "state": "playing",
+            "elapsed": 0,
+            "player": [
+              -21.2,
+              10,
+              0.7
+            ],
+            "cargo": [
+              -23.3,
+              10.6,
+              -1.5
+            ],
+            "cargoBody": 168,
+            "cargoShape": 335
+          },
+          "camera": {
+            "p": [
+              28.600000023841858,
+              20,
+              26.600000023841858
+            ],
+            "q": [
+              -0.07947546884582389,
+              0.4065272791988763,
+              0.03552456411200387,
+              0.9094818450434001
+            ],
+            "fov": 76
+          },
+          "architecture": {
+            "revision": "observatory-arched-archive-and-celestial-soffit-v1",
+            "panels": 78,
+            "irises": 24,
+            "archives": 54,
+            "parts": 2202,
+            "batches": 8,
+            "triangles": 95760,
+            "newColliders": 0,
+            "newLights": 0
+          },
+          "render": {
+            "calls": 133,
+            "triangles": 453872
+          },
+          "filename": "room-36-oblique.png",
+          "sha256": "b4792172004e4894b8356fe20c823029be810bfd4dafa7a5c05b6116c5ad7487",
+          "bytes": 548202,
+          "fixture": {
+            "kind": "oblique",
+            "camera": [
+              28.600000023841858,
+              20,
+              26.600000023841858
+            ],
+            "target": [
+              0,
+              13.240000004768373,
+              1
+            ],
+            "fov": 76,
+            "referenceFogDisabled": false
+          }
+        },
+        {
+          "before": {
+            "id": "post-angular-cassette",
+            "index": 35,
+            "steps": 0,
+            "state": "playing",
+            "elapsed": 0,
+            "player": [
+              -21.2,
+              10,
+              0.7
+            ],
+            "cargo": [
+              -23.3,
+              10.6,
+              -1.5
+            ],
+            "cargoBody": 168,
+            "cargoShape": 335
+          },
+          "after": {
+            "id": "post-angular-cassette",
+            "index": 35,
+            "steps": 0,
+            "state": "playing",
+            "elapsed": 0,
+            "player": [
+              -21.2,
+              10,
+              0.7
+            ],
+            "cargo": [
+              -23.3,
+              10.6,
+              -1.5
+            ],
+            "cargoBody": 168,
+            "cargoShape": 335
+          },
+          "camera": {
+            "p": [
+              -28.600000023841858,
+              20,
+              -24.600000023841858
+            ],
+            "q": [
+              0.03552456411200387,
+              0.9094818450434002,
+              0.07947546884582388,
+              -0.4065272791988763
+            ],
+            "fov": 76
+          },
+          "architecture": {
+            "revision": "observatory-arched-archive-and-celestial-soffit-v1",
+            "panels": 78,
+            "irises": 24,
+            "archives": 54,
+            "parts": 2202,
+            "batches": 8,
+            "triangles": 95760,
+            "newColliders": 0,
+            "newLights": 0
+          },
+          "render": {
+            "calls": 130,
+            "triangles": 453776
+          },
+          "filename": "room-36-opposite.png",
+          "sha256": "b47736537239a1a2a2d6396f043f1ce04b5e518e6a9433a167921e95314bbec9",
+          "bytes": 558775,
+          "fixture": {
+            "kind": "opposite",
+            "camera": [
+              -28.600000023841858,
+              20,
+              -24.600000023841858
+            ],
+            "target": [
+              0,
+              13.240000004768373,
+              1
+            ],
+            "fov": 76,
+            "referenceFogDisabled": false
+          }
+        }
+      ],
+      "pass": true,
+      "fixture": {
+        "key": "brainrot-campaign-v67:brainrot-portal.preferences.v24",
+        "raw": "{\"quality\":\"balanced\",\"volume\":0,\"lookSensitivity\":1,\"muted\":true,\"tutorial\":false,\"completed\":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34],\"hints\":{},\"resumeLevel\":35,\"campaignSequenceRevision\":\"fifty-rooms-then-castle-v1\",\"campaignRevision\":\"creative-campaign-v48\",\"roomRevisions\":{\"16\":\"cable-supported-architecture-v1\",\"22\":\"counterweight-dynamic-v1\",\"32\":\"siphon-observatory-v1\",\"42\":\"spatial-progression43-v1\",\"43\":\"spatial-progression44-v1\",\"44\":\"spatial-progression45-v1\",\"45\":\"spatial-progression46-v1\",\"46\":\"spatial-progression47-v1\",\"47\":\"spatial-progression48-v1\",\"48\":\"spatial-progression49-v1\",\"49\":\"spatial-progression50-v1\",\"50\":\"spatial-progression51-v1\"}}",
+        "preferences": {
+          "quality": "balanced",
+          "volume": 0,
+          "lookSensitivity": 1,
+          "muted": true,
+          "tutorial": false,
+          "completed": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34
+          ],
+          "hints": {},
+          "resumeLevel": 35,
+          "campaignSequenceRevision": "fifty-rooms-then-castle-v1",
+          "campaignRevision": "creative-campaign-v48",
+          "roomRevisions": {
+            "16": "cable-supported-architecture-v1",
+            "22": "counterweight-dynamic-v1",
+            "32": "siphon-observatory-v1",
+            "42": "spatial-progression43-v1",
+            "43": "spatial-progression44-v1",
+            "44": "spatial-progression45-v1",
+            "45": "spatial-progression46-v1",
+            "46": "spatial-progression47-v1",
+            "47": "spatial-progression48-v1",
+            "48": "spatial-progression49-v1",
+            "49": "spatial-progression50-v1",
+            "50": "spatial-progression51-v1"
+          }
+        },
+        "completed": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          32,
+          33,
+          34
+        ],
+        "targetIndex": 35,
+        "targetCompleted": false,
+        "constructorWrites": 0,
+        "scope": "QA setup supplies the previously completed campaign prefix in the candidate own storage before construction; the current target is not completed. This is not a fresh guest full-campaign playthrough."
+      },
+      "displayNumber": 36,
+      "route": {
+        "result": {
+          "level": 36,
+          "id": "post-angular-cassette",
+          "pass": true,
+          "milestones": [
+            {
+              "name": "Floor-to-wall pair is aimed at the long arm of the real dynamic rotor",
+              "player": [
+                -9.916448329933989,
+                -4,
+                -10.168985029280263
+              ],
+              "cargo": [
+                -25.62435560613121,
+                10.389998156682635,
+                -6.875915564001417
+              ],
+              "teleports": 0
+            },
+            {
+              "name": "The original loose companion retains its falling momentum through the portal",
+              "player": [
+                -18.002124843126147,
+                10,
+                -6.261395394846803
+              ],
+              "cargo": [
+                -11.921265588338441,
+                3.2508895800985314,
+                -12.54
+              ],
+              "teleports": 0
+            },
+            {
+              "name": "Actual angular momentum turns the spindle and translates the bridge into its dock",
+              "player": [
+                -18.00212484312621,
+                10,
+                -6.261395394843673
+              ],
+              "cargo": [
+                -12.226480599864026,
+                -3.610001842107642,
+                -2.353728615069572
+              ],
+              "teleports": 0
+            },
+            {
+              "name": "The same companion is recovered on the lower service floor",
+              "player": [
+                -11.281156870702343,
+                -4,
+                -0.9196501348759183
+              ],
+              "cargo": [
+                -11.045440247123913,
+                -2.939992687309781,
+                -1.5999718742492632
+              ],
+              "teleports": 0
+            },
+            {
+              "name": "Both travellers walk across the physically docked high cassette",
+              "player": [
+                16.93615831543109,
+                10,
+                -13.000002371932855
+              ],
+              "cargo": [
+                17.656146427371592,
+                11.043261950056076,
+                -12.990804439054772
+              ],
+              "teleports": 0
+            },
+            {
+              "name": "both at exit",
+              "player": [
+                16.93615831543109,
+                10,
+                -13.000002371932855
+              ],
+              "cargo": [
+                17.656146427371592,
+                11.043261950056076,
+                -12.990804439054772
+              ],
+              "teleports": 0
+            }
+          ],
+          "respawns": 0,
+          "resets": 0,
+          "frames": 4727,
+          "teleports": 0
+        },
+        "state": "won",
+        "observations": 9454,
+        "resets": 0,
+        "sameOriginal": true,
+        "image": {
+          "filename": "room-36-won.png",
+          "bytes": 253546,
+          "sha256": "522bf6666339b26d98eb4f3049c3f9cddcbfedfd46f079d9005686e08ec087ae"
+        }
+      }
+    },
+    {
+      "level": 37,
+      "errors": [],
+      "consoleErrors": [],
+      "views": [
+        {
+          "before": {
+            "id": "post-magnetic-u-channel",
+            "index": 36,
+            "steps": 0,
+            "state": "playing",
+            "elapsed": 0,
+            "player": [
+              -8,
+              0,
+              18
+            ],
+            "cargo": [
+              -11,
+              0.6,
+              16
+            ],
+            "cargoBody": 102,
+            "cargoShape": 204
+          },
+          "after": {
+            "id": "post-magnetic-u-channel",
+            "index": 36,
+            "steps": 0,
+            "state": "playing",
+            "elapsed": 0,
+            "player": [
+              -8,
+              0,
+              18
+            ],
+            "cargo": [
+              -11,
+              0.6,
+              16
+            ],
+            "cargoBody": 102,
+            "cargoShape": 204
+          },
+          "camera": {
+            "p": [
+              -6.232430295056167,
+              1.5705108864962918,
+              22.806415659492387
+            ],
+            "q": [
+              -0.02485021983612462,
+              0.09552278668872723,
+              0.002385417035938909,
+              0.9951141510313682
+            ],
+            "fov": 62
+          },
+          "architecture": {
+            "revision": "observatory-arched-archive-and-celestial-soffit-v1",
+            "panels": 48,
+            "irises": 16,
+            "archives": 32,
+            "parts": 1344,
+            "batches": 8,
+            "triangles": 59200,
+            "newColliders": 0,
+            "newLights": 0
+          },
+          "render": {
+            "calls": 115,
+            "triangles": 510412
+          },
+          "filename": "room-37-start.png",
+          "sha256": "e903dbf6b5bca202837379570969219d37e4c6c36bb266e472d4e17162bd2153",
+          "bytes": 505372,
+          "fixture": {
+            "kind": "start"
+          }
+        },
+        {
+          "before": {
+            "id": "post-magnetic-u-channel",
+            "index": 36,
+            "steps": 0,
+            "state": "playing",
+            "elapsed": 0,
+            "player": [
+              -8,
+              0,
+              18
+            ],
+            "cargo": [
+              -11,
+              0.6,
+              16
+            ],
+            "cargoBody": 102,
+            "cargoShape": 204
+          },
+          "after": {
+            "id": "post-magnetic-u-channel",
+            "index": 36,
+            "steps": 0,
+            "state": "playing",
+            "elapsed": 0,
+            "player": [
+              -8,
+              0,
+              18
+            ],
+            "cargo": [
+              -11,
+              0.6,
+              16
+            ],
+            "cargoBody": 102,
+            "cargoShape": 204
+          },
+          "camera": {
+            "p": [
+              25.600000023841858,
+              10,
+              21.600000023841858
+            ],
+            "q": [
+              -0.08576754252513044,
+              0.404454255576898,
+              0.0381311916668222,
+              0.9097289134775289
+            ],
+            "fov": 76
+          },
+          "architecture": {
+            "revision": "observatory-arched-archive-and-celestial-soffit-v1",
+            "panels": 48,
+            "irises": 16,
+            "archives": 32,
+            "parts": 1344,
+            "batches": 8,
+            "triangles": 59200,
+            "newColliders": 0,
+            "newLights": 0
+          },
+          "render": {
+            "calls": 117,
+            "triangles": 510528
+          },
+          "filename": "room-37-oblique.png",
+          "sha256": "283e4b3d1852d9df43f97de99d2338770ee54608106eec587bc6f6f13ad4d89d",
+          "bytes": 465294,
+          "fixture": {
+            "kind": "oblique",
+            "camera": [
+              25.600000023841858,
+              10,
+              21.600000023841858
+            ],
+            "target": [
+              0,
+              3.440000004768372,
+              -1.5
+            ],
+            "fov": 76,
+            "referenceFogDisabled": false
+          }
+        },
+        {
+          "before": {
+            "id": "post-magnetic-u-channel",
+            "index": 36,
+            "steps": 0,
+            "state": "playing",
+            "elapsed": 0,
+            "player": [
+              -8,
+              0,
+              18
+            ],
+            "cargo": [
+              -11,
+              0.6,
+              16
+            ],
+            "cargoBody": 102,
+            "cargoShape": 204
+          },
+          "after": {
+            "id": "post-magnetic-u-channel",
+            "index": 36,
+            "steps": 0,
+            "state": "playing",
+            "elapsed": 0,
+            "player": [
+              -8,
+              0,
+              18
+            ],
+            "cargo": [
+              -11,
+              0.6,
+              16
+            ],
+            "cargoBody": 102,
+            "cargoShape": 204
+          },
+          "camera": {
+            "p": [
+              -25.600000023841858,
+              10,
+              -24.600000023841858
+            ],
+            "q": [
+              0.0381311916668222,
+              0.9097289134775289,
+              0.08576754252513044,
+              -0.40445425557689796
+            ],
+            "fov": 76
+          },
+          "architecture": {
+            "revision": "observatory-arched-archive-and-celestial-soffit-v1",
+            "panels": 48,
+            "irises": 16,
+            "archives": 32,
+            "parts": 1344,
+            "batches": 8,
+            "triangles": 59200,
+            "newColliders": 0,
+            "newLights": 0
+          },
+          "render": {
+            "calls": 117,
+            "triangles": 510528
+          },
+          "filename": "room-37-opposite.png",
+          "sha256": "9a496c36abdb8bc5f9d200f86fa87d62869ff166f4040a27df7b26758d587eab",
+          "bytes": 311375,
+          "fixture": {
+            "kind": "opposite",
+            "camera": [
+              -25.600000023841858,
+              10,
+              -24.600000023841858
+            ],
+            "target": [
+              0,
+              3.440000004768372,
+              -1.5
+            ],
+            "fov": 76,
+            "referenceFogDisabled": false
+          }
+        }
+      ],
+      "pass": true,
+      "fixture": {
+        "key": "brainrot-campaign-v67:brainrot-portal.preferences.v24",
+        "raw": "{\"quality\":\"balanced\",\"volume\":0,\"lookSensitivity\":1,\"muted\":true,\"tutorial\":false,\"completed\":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35],\"hints\":{},\"resumeLevel\":36,\"campaignSequenceRevision\":\"fifty-rooms-then-castle-v1\",\"campaignRevision\":\"creative-campaign-v48\",\"roomRevisions\":{\"16\":\"cable-supported-architecture-v1\",\"22\":\"counterweight-dynamic-v1\",\"32\":\"siphon-observatory-v1\",\"42\":\"spatial-progression43-v1\",\"43\":\"spatial-progression44-v1\",\"44\":\"spatial-progression45-v1\",\"45\":\"spatial-progression46-v1\",\"46\":\"spatial-progression47-v1\",\"47\":\"spatial-progression48-v1\",\"48\":\"spatial-progression49-v1\",\"49\":\"spatial-progression50-v1\",\"50\":\"spatial-progression51-v1\"}}",
+        "preferences": {
+          "quality": "balanced",
+          "volume": 0,
+          "lookSensitivity": 1,
+          "muted": true,
+          "tutorial": false,
+          "completed": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35
+          ],
+          "hints": {},
+          "resumeLevel": 36,
+          "campaignSequenceRevision": "fifty-rooms-then-castle-v1",
+          "campaignRevision": "creative-campaign-v48",
+          "roomRevisions": {
+            "16": "cable-supported-architecture-v1",
+            "22": "counterweight-dynamic-v1",
+            "32": "siphon-observatory-v1",
+            "42": "spatial-progression43-v1",
+            "43": "spatial-progression44-v1",
+            "44": "spatial-progression45-v1",
+            "45": "spatial-progression46-v1",
+            "46": "spatial-progression47-v1",
+            "47": "spatial-progression48-v1",
+            "48": "spatial-progression49-v1",
+            "49": "spatial-progression50-v1",
+            "50": "spatial-progression51-v1"
+          }
+        },
+        "completed": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          32,
+          33,
+          34,
+          35
+        ],
+        "targetIndex": 36,
+        "targetCompleted": false,
+        "constructorWrites": 0,
+        "scope": "QA setup supplies the previously completed campaign prefix in the candidate own storage before construction; the current target is not completed. This is not a fresh guest full-campaign playthrough."
+      },
+      "displayNumber": 37,
+      "route": {
+        "result": {
+          "level": 37,
+          "id": "post-magnetic-u-channel",
+          "pass": true,
+          "milestones": [
+            {
+              "name": "Original free companion enters the low hood through the same real pair",
+              "player": [
+                -9.556910536317957,
+                0,
+                18.190153915282195
+              ],
+              "cargo": [
+                -16.25290456543879,
+                0.6710255479524587,
+                2.0958248212774544
+              ],
+              "teleports": 0
+            },
+            {
+              "name": "The first field pulls cargo along a real low-walled leg",
+              "player": [
+                -8.990780459766064,
+                0,
+                4.984950633031609
+              ],
+              "cargo": [
+                -15.992147102988028,
+                0.49001935514317657,
+                -5.039441195011196
+              ],
+              "teleports": 0
+            },
+            {
+              "name": "The second field transfers the original body across the transverse tunnel",
+              "player": [
+                0.1787832085960509,
+                0,
+                0.09806362478020052
+              ],
+              "cargo": [
+                15.035373194466198,
+                0.9661103948272837,
+                -5.975383500311486
+              ],
+              "teleports": 0
+            },
+            {
+              "name": "Original mass rests on the remote contact socket and opens the collision door",
+              "player": [
+                8.209473487633147,
+                0,
+                0.20273013376351412
+              ],
+              "cargo": [
+                15.771470064257143,
+                0.7204686739177034,
+                -20.03627204787382
+              ],
+              "teleports": 0
+            },
+            {
+              "name": "Open receiving door is held by its visible pawl and the field is disconnected",
+              "player": [
+                10.195025537116388,
+                0,
+                -16.83466427109218
+              ],
+              "cargo": [
+                16.06609069243791,
+                0.5699981432674904,
+                -19.664388750237958
+              ],
+              "teleports": 0
+            },
+            {
+              "name": "Field is disconnected; same companion leaves its socket after the door is clamped",
+              "player": [
+                16.859852726622364,
+                0.18,
+                -19.674545571117843
+              ],
+              "cargo": [
+                16.141155734511727,
+                1.2399965057499531,
+                -19.71784241798347
+              ],
+              "teleports": 0
+            },
+            {
+              "name": "The human takes the grounded outer gallery and reunites with original cargo",
+              "player": [
+                2.091925376313397,
+                0,
+                -22.284924342693127
+              ],
+              "cargo": [
+                1.3800627175653801,
+                1.0700406462949243,
+                -22.17645982873407
+              ],
+              "teleports": 0
+            },
+            {
+              "name": "both at exit",
+              "player": [
+                2.091925376313397,
+                0,
+                -22.284924342693127
+              ],
+              "cargo": [
+                1.3800627175653801,
+                1.0700406462949243,
+                -22.17645982873407
+              ],
+              "teleports": 0
+            }
+          ],
+          "respawns": 0,
+          "resets": 0,
+          "frames": 2733,
+          "teleports": 0
+        },
+        "state": "won",
+        "observations": 5466,
+        "resets": 0,
+        "sameOriginal": true,
+        "image": {
+          "filename": "room-37-won.png",
+          "bytes": 286956,
+          "sha256": "5b72773b7aab7770534f4ae9a9594321bcbea67f554245272694fe56c5acaa20"
+        }
+      }
+    },
+    {
+      "level": 38,
+      "errors": [],
+      "consoleErrors": [],
+      "views": [
+        {
+          "before": {
+            "id": "post-separated-freight",
+            "index": 37,
+            "steps": 0,
+            "state": "playing",
+            "elapsed": 0,
+            "player": [
+              9,
+              0,
+              17
+            ],
+            "cargo": [
+              7,
+              0.6,
+              14
+            ],
+            "cargoBody": 313,
+            "cargoShape": 624
+          },
+          "after": {
+            "id": "post-separated-freight",
+            "index": 37,
+            "steps": 0,
+            "state": "playing",
+            "elapsed": 0,
+            "player": [
+              9,
+              0,
+              17
+            ],
+            "cargo": [
+              7,
+              0.6,
+              14
+            ],
+            "cargoBody": 313,
+            "cargoShape": 624
+          },
+          "camera": {
+            "p": [
+              9.279223996381253,
+              1.9543696402306594,
+              23.462941212745054
+            ],
+            "q": [
+              -0.049812075397086486,
+              -0.05417894932302307,
+              -0.0027061147681213074,
+              0.9972843503924798
+            ],
+            "fov": 62
+          },
+          "architecture": {
+            "revision": "observatory-arched-archive-and-celestial-soffit-v1",
+            "panels": 72,
+            "irises": 24,
+            "archives": 48,
+            "parts": 2016,
+            "batches": 8,
+            "triangles": 88800,
+            "newColliders": 0,
+            "newLights": 0
+          },
+          "render": {
+            "calls": 132,
+            "triangles": 476452
+          },
+          "filename": "room-38-start.png",
+          "sha256": "a0589afe7db093d575a906d61c4c9c0e6d23ef14917f92ec27442251660c8d94",
+          "bytes": 434321,
+          "fixture": {
+            "kind": "start"
+          }
+        },
+        {
+          "before": {
+            "id": "post-separated-freight",
+            "index": 37,
+            "steps": 0,
+            "state": "playing",
+            "elapsed": 0,
+            "player": [
+              9,
+              0,
+              17
+            ],
+            "cargo": [
+              7,
+              0.6,
+              14
+            ],
+            "cargoBody": 313,
+            "cargoShape": 624
+          },
+          "after": {
+            "id": "post-separated-freight",
+            "index": 37,
+            "steps": 0,
+            "state": "playing",
+            "elapsed": 0,
+            "player": [
+              9,
+              0,
+              17
+            ],
+            "cargo": [
+              7,
+              0.6,
+              14
+            ],
+            "cargoBody": 313,
+            "cargoShape": 624
+          },
+          "camera": {
+            "p": [
+              27.600000023841858,
+              10,
+              22.600000023841858
+            ],
+            "q": [
+              -0.06168883629766236,
+              0.41273306727649584,
+              0.028030640895512063,
+              0.9083282368305868
+            ],
+            "fov": 76
+          },
+          "architecture": {
+            "revision": "observatory-arched-archive-and-celestial-soffit-v1",
+            "panels": 72,
+            "irises": 24,
+            "archives": 48,
+            "parts": 2016,
+            "batches": 8,
+            "triangles": 88800,
+            "newColliders": 0,
+            "newLights": 0
+          },
+          "render": {
+            "calls": 151,
+            "triangles": 500108
+          },
+          "filename": "room-38-oblique.png",
+          "sha256": "c1593d2530828c01c7a4842d3254c42c5883cd0e77af8e9f76fc227ddc7cec11",
+          "bytes": 587483,
+          "fixture": {
+            "kind": "oblique",
+            "camera": [
+              27.600000023841858,
+              10,
+              22.600000023841858
+            ],
+            "target": [
+              0,
+              5,
+              -1.5
+            ],
+            "fov": 76,
+            "referenceFogDisabled": false
+          }
+        },
+        {
+          "before": {
+            "id": "post-separated-freight",
+            "index": 37,
+            "steps": 0,
+            "state": "playing",
+            "elapsed": 0,
+            "player": [
+              9,
+              0,
+              17
+            ],
+            "cargo": [
+              7,
+              0.6,
+              14
+            ],
+            "cargoBody": 313,
+            "cargoShape": 624
+          },
+          "after": {
+            "id": "post-separated-freight",
+            "index": 37,
+            "steps": 0,
+            "state": "playing",
+            "elapsed": 0,
+            "player": [
+              9,
+              0,
+              17
+            ],
+            "cargo": [
+              7,
+              0.6,
+              14
+            ],
+            "cargoBody": 313,
+            "cargoShape": 624
+          },
+          "camera": {
+            "p": [
+              -27.600000023841858,
+              10,
+              -25.600000023841858
+            ],
+            "q": [
+              0.028030640895512066,
+              0.9083282368305868,
+              0.06168883629766236,
+              -0.41273306727649584
+            ],
+            "fov": 76
+          },
+          "architecture": {
+            "revision": "observatory-arched-archive-and-celestial-soffit-v1",
+            "panels": 72,
+            "irises": 24,
+            "archives": 48,
+            "parts": 2016,
+            "batches": 8,
+            "triangles": 88800,
+            "newColliders": 0,
+            "newLights": 0
+          },
+          "render": {
+            "calls": 153,
+            "triangles": 500240
+          },
+          "filename": "room-38-opposite.png",
+          "sha256": "f0617567fcb9c9d2f8354a8ba5fd7d4ca42245c121e11e5aa9eaad9ea95e698d",
+          "bytes": 488316,
+          "fixture": {
+            "kind": "opposite",
+            "camera": [
+              -27.600000023841858,
+              10,
+              -25.600000023841858
+            ],
+            "target": [
+              0,
+              5,
+              -1.5
+            ],
+            "fov": 76,
+            "referenceFogDisabled": false
+          }
+        }
+      ],
+      "pass": true,
+      "fixture": {
+        "key": "brainrot-campaign-v67:brainrot-portal.preferences.v24",
+        "raw": "{\"quality\":\"balanced\",\"volume\":0,\"lookSensitivity\":1,\"muted\":true,\"tutorial\":false,\"completed\":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36],\"hints\":{},\"resumeLevel\":37,\"campaignSequenceRevision\":\"fifty-rooms-then-castle-v1\",\"campaignRevision\":\"creative-campaign-v48\",\"roomRevisions\":{\"16\":\"cable-supported-architecture-v1\",\"22\":\"counterweight-dynamic-v1\",\"32\":\"siphon-observatory-v1\",\"42\":\"spatial-progression43-v1\",\"43\":\"spatial-progression44-v1\",\"44\":\"spatial-progression45-v1\",\"45\":\"spatial-progression46-v1\",\"46\":\"spatial-progression47-v1\",\"47\":\"spatial-progression48-v1\",\"48\":\"spatial-progression49-v1\",\"49\":\"spatial-progression50-v1\",\"50\":\"spatial-progression51-v1\"}}",
+        "preferences": {
+          "quality": "balanced",
+          "volume": 0,
+          "lookSensitivity": 1,
+          "muted": true,
+          "tutorial": false,
+          "completed": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36
+          ],
+          "hints": {},
+          "resumeLevel": 37,
+          "campaignSequenceRevision": "fifty-rooms-then-castle-v1",
+          "campaignRevision": "creative-campaign-v48",
+          "roomRevisions": {
+            "16": "cable-supported-architecture-v1",
+            "22": "counterweight-dynamic-v1",
+            "32": "siphon-observatory-v1",
+            "42": "spatial-progression43-v1",
+            "43": "spatial-progression44-v1",
+            "44": "spatial-progression45-v1",
+            "45": "spatial-progression46-v1",
+            "46": "spatial-progression47-v1",
+            "47": "spatial-progression48-v1",
+            "48": "spatial-progression49-v1",
+            "49": "spatial-progression50-v1",
+            "50": "spatial-progression51-v1"
+          }
+        },
+        "completed": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          32,
+          33,
+          34,
+          35,
+          36
+        ],
+        "targetIndex": 37,
+        "targetCompleted": false,
+        "constructorWrites": 0,
+        "scope": "QA setup supplies the previously completed campaign prefix in the candidate own storage before construction; the current target is not completed. This is not a fresh guest full-campaign playthrough."
+      },
+      "displayNumber": 38,
+      "route": {
+        "result": {
+          "level": 38,
+          "id": "post-separated-freight",
+          "pass": true,
+          "milestones": [
+            {
+              "name": "The original companion waits on its own cargo elevator",
+              "player": [
+                11.019189641915577,
+                0,
+                1.9159143010523079
+              ],
+              "cargo": [
+                11.180445676751466,
+                0.3899981460379913,
+                1.2076245109371744
+              ],
+              "teleports": 0
+            },
+            {
+              "name": "west entrance to ascent",
+              "player": [
+                -22.919235104061624,
+                0,
+                8.991295924185359
+              ],
+              "cargo": [
+                11.065299376267388,
+                0.389998144761706,
+                0.4334304735897914
+              ],
+              "teleports": 0
+            },
+            {
+              "name": "west balcony end",
+              "player": [
+                -22.99986112581647,
+                14,
+                -15.896636322332064
+              ],
+              "cargo": [
+                9.982911886508992,
+                0.3899981460090611,
+                0.6658101109882393
+              ],
+              "teleports": 0
+            },
+            {
+              "name": "The player reaches the remote upper freight switch with earned speed",
+              "player": [
+                5.18924051384684,
+                15,
+                -11.924033296680761
+              ],
+              "cargo": [
+                9.972803450195594,
+                0.38999814476170613,
+                1.9581604497973224
+              ],
+              "teleports": 1
+            },
+            {
+              "name": "High-gallery console raises original loose companion after independent flight",
+              "player": [
+                15.973964552538567,
+                15,
+                -19.122138198016682
+              ],
+              "cargo": [
+                10.2373997253503,
+                15.389966595279661,
+                2.594682954515627
+              ],
+              "teleports": 1
+            },
+            {
+              "name": "both at exit",
+              "player": [
+                14.837410673913599,
+                15,
+                -17.020810226643466
+              ],
+              "cargo": [
+                14.954810239815124,
+                16.058462288391834,
+                -17.73116262766905
+              ],
+              "teleports": 1
+            }
+          ],
+          "respawns": 0,
+          "resets": 0,
+          "frames": 2495,
+          "teleports": 1
+        },
+        "state": "won",
+        "observations": 4989,
+        "resets": 0,
+        "sameOriginal": true,
+        "image": {
+          "filename": "room-38-won.png",
+          "bytes": 239381,
+          "sha256": "ef266b736d6dc9a4bb17439022bbca432cd82af0affa91ffd130fa02f77cab93"
+        }
+      }
+    },
+    {
+      "level": 39,
+      "errors": [],
+      "consoleErrors": [],
+      "views": [
+        {
+          "before": {
+            "id": "post-thermal-memory",
+            "index": 38,
+            "steps": 0,
+            "state": "playing",
+            "elapsed": 0,
+            "player": [
+              -5,
+              0,
+              22
+            ],
+            "cargo": [
+              -9,
+              0.6,
+              21
+            ],
+            "cargoBody": 80,
+            "cargoShape": 160
+          },
+          "after": {
+            "id": "post-thermal-memory",
+            "index": 38,
+            "steps": 0,
+            "state": "playing",
+            "elapsed": 0,
+            "player": [
+              -5,
+              0,
+              22
+            ],
+            "cargo": [
+              -9,
+              0.6,
+              21
+            ],
+            "cargoBody": 80,
+            "cargoShape": 160
+          },
+          "camera": {
+            "p": [
+              -3.335024299952437,
+              1.563863846158996,
+              25.804577632069467
+            ],
+            "q": [
+              -0.029744744809198625,
+              0.12149494192863698,
+              0.003642467337988851,
+              0.9921395877968403
+            ],
+            "fov": 62
+          },
+          "architecture": {
+            "revision": "observatory-arched-archive-and-celestial-soffit-v1",
+            "panels": 48,
+            "irises": 16,
+            "archives": 32,
+            "parts": 1344,
+            "batches": 8,
+            "triangles": 59200,
+            "newColliders": 0,
+            "newLights": 0
+          },
+          "render": {
+            "calls": 95,
+            "triangles": 397680
+          },
+          "filename": "room-39-start.png",
+          "sha256": "5e6a02697847307ed2ddd474a90849e91de0b9f38799725a6571c47990d03661",
+          "bytes": 531004,
+          "fixture": {
+            "kind": "start"
+          }
+        },
+        {
+          "before": {
+            "id": "post-thermal-memory",
+            "index": 38,
+            "steps": 0,
+            "state": "playing",
+            "elapsed": 0,
+            "player": [
+              -5,
+              0,
+              22
+            ],
+            "cargo": [
+              -9,
+              0.6,
+              21
+            ],
+            "cargoBody": 80,
+            "cargoShape": 160
+          },
+          "after": {
+            "id": "post-thermal-memory",
+            "index": 38,
+            "steps": 0,
+            "state": "playing",
+            "elapsed": 0,
+            "player": [
+              -5,
+              0,
+              22
+            ],
+            "cargo": [
+              -9,
+              0.6,
+              21
+            ],
+            "cargoBody": 80,
+            "cargoShape": 160
+          },
+          "camera": {
+            "p": [
+              25.600000023841858,
+              10,
+              24.600000023841858
+            ],
+            "q": [
+              -0.08393105556461147,
+              0.3902310392293107,
+              0.03574873683490255,
+              0.9161863029692877
+            ],
+            "fov": 76
+          },
+          "architecture": {
+            "revision": "observatory-arched-archive-and-celestial-soffit-v1",
+            "panels": 48,
+            "irises": 16,
+            "archives": 32,
+            "parts": 1344,
+            "batches": 8,
+            "triangles": 59200,
+            "newColliders": 0,
+            "newLights": 0
+          },
+          "render": {
+            "calls": 153,
+            "triangles": 402424
+          },
+          "filename": "room-39-oblique.png",
+          "sha256": "10168bd6640c9baba62bfa80f5b9cf018219d553a158f858955ebf2237710dcd",
+          "bytes": 430344,
+          "fixture": {
+            "kind": "oblique",
+            "camera": [
+              25.600000023841858,
+              10,
+              24.600000023841858
+            ],
+            "target": [
+              0,
+              3.440000004768372,
+              0
+            ],
+            "fov": 76,
+            "referenceFogDisabled": false
+          }
+        },
+        {
+          "before": {
+            "id": "post-thermal-memory",
+            "index": 38,
+            "steps": 0,
+            "state": "playing",
+            "elapsed": 0,
+            "player": [
+              -5,
+              0,
+              22
+            ],
+            "cargo": [
+              -9,
+              0.6,
+              21
+            ],
+            "cargoBody": 80,
+            "cargoShape": 160
+          },
+          "after": {
+            "id": "post-thermal-memory",
+            "index": 38,
+            "steps": 0,
+            "state": "playing",
+            "elapsed": 0,
+            "player": [
+              -5,
+              0,
+              22
+            ],
+            "cargo": [
+              -9,
+              0.6,
+              21
+            ],
+            "cargoBody": 80,
+            "cargoShape": 160
+          },
+          "camera": {
+            "p": [
+              -25.600000023841858,
+              10,
+              -24.600000023841858
+            ],
+            "q": [
+              0.03574873683490255,
+              0.9161863029692876,
+              0.08393105556461149,
+              -0.39023103922931074
+            ],
+            "fov": 76
+          },
+          "architecture": {
+            "revision": "observatory-arched-archive-and-celestial-soffit-v1",
+            "panels": 48,
+            "irises": 16,
+            "archives": 32,
+            "parts": 1344,
+            "batches": 8,
+            "triangles": 59200,
+            "newColliders": 0,
+            "newLights": 0
+          },
+          "render": {
+            "calls": 153,
+            "triangles": 402424
+          },
+          "filename": "room-39-opposite.png",
+          "sha256": "5094ef43c4e21944f665e719d54717ff3187cd311855ce4f1ab28636c27f43a0",
+          "bytes": 331258,
+          "fixture": {
+            "kind": "opposite",
+            "camera": [
+              -25.600000023841858,
+              10,
+              -24.600000023841858
+            ],
+            "target": [
+              0,
+              3.440000004768372,
+              0
+            ],
+            "fov": 76,
+            "referenceFogDisabled": false
+          }
+        }
+      ],
+      "pass": true,
+      "fixture": {
+        "key": "brainrot-campaign-v67:brainrot-portal.preferences.v24",
+        "raw": "{\"quality\":\"balanced\",\"volume\":0,\"lookSensitivity\":1,\"muted\":true,\"tutorial\":false,\"completed\":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37],\"hints\":{},\"resumeLevel\":38,\"campaignSequenceRevision\":\"fifty-rooms-then-castle-v1\",\"campaignRevision\":\"creative-campaign-v48\",\"roomRevisions\":{\"16\":\"cable-supported-architecture-v1\",\"22\":\"counterweight-dynamic-v1\",\"32\":\"siphon-observatory-v1\",\"42\":\"spatial-progression43-v1\",\"43\":\"spatial-progression44-v1\",\"44\":\"spatial-progression45-v1\",\"45\":\"spatial-progression46-v1\",\"46\":\"spatial-progression47-v1\",\"47\":\"spatial-progression48-v1\",\"48\":\"spatial-progression49-v1\",\"49\":\"spatial-progression50-v1\",\"50\":\"spatial-progression51-v1\"}}",
+        "preferences": {
+          "quality": "balanced",
+          "volume": 0,
+          "lookSensitivity": 1,
+          "muted": true,
+          "tutorial": false,
+          "completed": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37
+          ],
+          "hints": {},
+          "resumeLevel": 38,
+          "campaignSequenceRevision": "fifty-rooms-then-castle-v1",
+          "campaignRevision": "creative-campaign-v48",
+          "roomRevisions": {
+            "16": "cable-supported-architecture-v1",
+            "22": "counterweight-dynamic-v1",
+            "32": "siphon-observatory-v1",
+            "42": "spatial-progression43-v1",
+            "43": "spatial-progression44-v1",
+            "44": "spatial-progression45-v1",
+            "45": "spatial-progression46-v1",
+            "46": "spatial-progression47-v1",
+            "47": "spatial-progression48-v1",
+            "48": "spatial-progression49-v1",
+            "49": "spatial-progression50-v1",
+            "50": "spatial-progression51-v1"
+          }
+        },
+        "completed": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37
+        ],
+        "targetIndex": 38,
+        "targetCompleted": false,
+        "constructorWrites": 0,
+        "scope": "QA setup supplies the previously completed campaign prefix in the candidate own storage before construction; the current target is not completed. This is not a fresh guest full-campaign playthrough."
+      },
+      "displayNumber": 39,
+      "route": {
+        "result": {
+          "level": 39,
+          "id": "post-thermal-memory",
+          "pass": true,
+          "milestones": [
+            {
+              "name": "A terminating ray stores thermal energy and extends the visible rod",
+              "player": [
+                -5,
+                0,
+                22
+              ],
+              "cargo": [
+                -10.197533636926025,
+                0.3899981579299883,
+                20.458185806781227
+              ],
+              "teleports": 0
+            },
+            {
+              "name": "The same source leaves the cooling rod to open a remote door",
+              "player": [
+                -4.000775559399777,
+                0,
+                14.186324428208485
+              ],
+              "cargo": [
+                -10.30272939777311,
+                0.38999815814118677,
+                21.52178739413193
+              ],
+              "teleports": 0
+            },
+            {
+              "name": "Both original travellers cross the continuous thermal mechanism",
+              "player": [
+                0.000010674174056350679,
+                0,
+                -19.009752889169825
+              ],
+              "cargo": [
+                0.006881349755956103,
+                1.0440357908696902,
+                -19.72974104822416
+              ],
+              "teleports": 0
+            },
+            {
+              "name": "both at exit",
+              "player": [
+                0.000010674174056350679,
+                0,
+                -19.009752889169825
+              ],
+              "cargo": [
+                0.006881349755956103,
+                1.0440357908696902,
+                -19.72974104822416
+              ],
+              "teleports": 0
+            }
+          ],
+          "respawns": 0,
+          "resets": 0,
+          "frames": 1894,
+          "teleports": 0
+        },
+        "state": "won",
+        "observations": 3788,
+        "resets": 0,
+        "sameOriginal": true,
+        "image": {
+          "filename": "room-39-won.png",
+          "bytes": 347164,
+          "sha256": "5549ccd73005e1669d51eea5a9819719a9dcc46629bd6dc7ac29262ec1df3ceb"
+        }
+      }
+    },
+    {
+      "level": 40,
+      "errors": [],
+      "consoleErrors": [],
+      "views": [
+        {
+          "before": {
+            "id": "post-differential-optical-calibration",
+            "index": 39,
+            "steps": 0,
+            "state": "playing",
+            "elapsed": 0,
+            "player": [
+              -10,
+              0,
+              22
+            ],
+            "cargo": [
+              -12,
+              0.6,
+              20
+            ],
+            "cargoBody": 108,
+            "cargoShape": 216
+          },
+          "after": {
+            "id": "post-differential-optical-calibration",
+            "index": 39,
+            "steps": 0,
+            "state": "playing",
+            "elapsed": 0,
+            "player": [
+              -10,
+              0,
+              22
+            ],
+            "cargo": [
+              -12,
+              0.6,
+              20
+            ],
+            "cargoBody": 108,
+            "cargoShape": 216
+          },
+          "camera": {
+            "p": [
+              -9.091739327947627,
+              1.4934696759537411,
+              24.81105986381283
+            ],
+            "q": [
+              -0.02991289566286233,
+              0.06643475188344858,
+              0.00199255540294685,
+              0.9973402990645737
+            ],
+            "fov": 62
+          },
+          "architecture": {
+            "revision": "observatory-arched-archive-and-celestial-soffit-v1",
+            "panels": 48,
+            "irises": 16,
+            "archives": 32,
+            "parts": 1344,
+            "batches": 8,
+            "triangles": 59200,
+            "newColliders": 0,
+            "newLights": 0
+          },
+          "render": {
+            "calls": 144,
+            "triangles": 413286
+          },
+          "filename": "room-40-start.png",
+          "sha256": "a59f67788b786af2613c016c08a1f1da5681c853992e0337ffa397fab256daf0",
+          "bytes": 541549,
+          "fixture": {
+            "kind": "start"
+          }
+        },
+        {
+          "before": {
+            "id": "post-differential-optical-calibration",
+            "index": 39,
+            "steps": 0,
+            "state": "playing",
+            "elapsed": 0,
+            "player": [
+              -10,
+              0,
+              22
+            ],
+            "cargo": [
+              -12,
+              0.6,
+              20
+            ],
+            "cargoBody": 108,
+            "cargoShape": 216
+          },
+          "after": {
+            "id": "post-differential-optical-calibration",
+            "index": 39,
+            "steps": 0,
+            "state": "playing",
+            "elapsed": 0,
+            "player": [
+              -10,
+              0,
+              22
+            ],
+            "cargo": [
+              -12,
+              0.6,
+              20
+            ],
+            "cargoBody": 108,
+            "cargoShape": 216
+          },
+          "camera": {
+            "p": [
+              26.600000023841858,
+              10,
+              23.600000023841858
+            ],
+            "q": [
+              -0.0775935530038053,
+              0.40386198673266066,
+              0.03440332259884017,
+              0.9108738373664895
+            ],
+            "fov": 76
+          },
+          "architecture": {
+            "revision": "observatory-arched-archive-and-celestial-soffit-v1",
+            "panels": 48,
+            "irises": 16,
+            "archives": 32,
+            "parts": 1344,
+            "batches": 8,
+            "triangles": 59200,
+            "newColliders": 0,
+            "newLights": 0
+          },
+          "render": {
+            "calls": 182,
+            "triangles": 438984
+          },
+          "filename": "room-40-oblique.png",
+          "sha256": "4c05c6b478aee0d9dc0672ffd89bbe8e6c14c40c09b91297ab47a7911acb41e0",
+          "bytes": 471773,
+          "fixture": {
+            "kind": "oblique",
+            "camera": [
+              26.600000023841858,
+              10,
+              23.600000023841858
+            ],
+            "target": [
+              0,
+              3.840000004768372,
+              -0.5
+            ],
+            "fov": 76,
+            "referenceFogDisabled": false
+          }
+        },
+        {
+          "before": {
+            "id": "post-differential-optical-calibration",
+            "index": 39,
+            "steps": 0,
+            "state": "playing",
+            "elapsed": 0,
+            "player": [
+              -10,
+              0,
+              22
+            ],
+            "cargo": [
+              -12,
+              0.6,
+              20
+            ],
+            "cargoBody": 108,
+            "cargoShape": 216
+          },
+          "after": {
+            "id": "post-differential-optical-calibration",
+            "index": 39,
+            "steps": 0,
+            "state": "playing",
+            "elapsed": 0,
+            "player": [
+              -10,
+              0,
+              22
+            ],
+            "cargo": [
+              -12,
+              0.6,
+              20
+            ],
+            "cargoBody": 108,
+            "cargoShape": 216
+          },
+          "camera": {
+            "p": [
+              -26.600000023841858,
+              10,
+              -24.600000023841858
+            ],
+            "q": [
+              0.03440332259884017,
+              0.9108738373664895,
+              0.07759355300380529,
+              -0.40386198673266066
+            ],
+            "fov": 76
+          },
+          "architecture": {
+            "revision": "observatory-arched-archive-and-celestial-soffit-v1",
+            "panels": 48,
+            "irises": 16,
+            "archives": 32,
+            "parts": 1344,
+            "batches": 8,
+            "triangles": 59200,
+            "newColliders": 0,
+            "newLights": 0
+          },
+          "render": {
+            "calls": 185,
+            "triangles": 439056
+          },
+          "filename": "room-40-opposite.png",
+          "sha256": "eccabc6f0f3a96123dd641c5b11d31fc5e1a7b02b3b41c1e2b034f0cafea1820",
+          "bytes": 274452,
+          "fixture": {
+            "kind": "opposite",
+            "camera": [
+              -26.600000023841858,
+              10,
+              -24.600000023841858
+            ],
+            "target": [
+              0,
+              3.840000004768372,
+              -0.5
+            ],
+            "fov": 76,
+            "referenceFogDisabled": false
+          }
+        }
+      ],
+      "pass": true,
+      "fixture": {
+        "key": "brainrot-campaign-v67:brainrot-portal.preferences.v24",
+        "raw": "{\"quality\":\"balanced\",\"volume\":0,\"lookSensitivity\":1,\"muted\":true,\"tutorial\":false,\"completed\":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38],\"hints\":{},\"resumeLevel\":39,\"campaignSequenceRevision\":\"fifty-rooms-then-castle-v1\",\"campaignRevision\":\"creative-campaign-v48\",\"roomRevisions\":{\"16\":\"cable-supported-architecture-v1\",\"22\":\"counterweight-dynamic-v1\",\"32\":\"siphon-observatory-v1\",\"42\":\"spatial-progression43-v1\",\"43\":\"spatial-progression44-v1\",\"44\":\"spatial-progression45-v1\",\"45\":\"spatial-progression46-v1\",\"46\":\"spatial-progression47-v1\",\"47\":\"spatial-progression48-v1\",\"48\":\"spatial-progression49-v1\",\"49\":\"spatial-progression50-v1\",\"50\":\"spatial-progression51-v1\"}}",
+        "preferences": {
+          "quality": "balanced",
+          "volume": 0,
+          "lookSensitivity": 1,
+          "muted": true,
+          "tutorial": false,
+          "completed": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38
+          ],
+          "hints": {},
+          "resumeLevel": 39,
+          "campaignSequenceRevision": "fifty-rooms-then-castle-v1",
+          "campaignRevision": "creative-campaign-v48",
+          "roomRevisions": {
+            "16": "cable-supported-architecture-v1",
+            "22": "counterweight-dynamic-v1",
+            "32": "siphon-observatory-v1",
+            "42": "spatial-progression43-v1",
+            "43": "spatial-progression44-v1",
+            "44": "spatial-progression45-v1",
+            "45": "spatial-progression46-v1",
+            "46": "spatial-progression47-v1",
+            "47": "spatial-progression48-v1",
+            "48": "spatial-progression49-v1",
+            "49": "spatial-progression50-v1",
+            "50": "spatial-progression51-v1"
+          }
+        },
+        "completed": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38
+        ],
+        "targetIndex": 39,
+        "targetCompleted": false,
+        "constructorWrites": 0,
+        "scope": "QA setup supplies the previously completed campaign prefix in the candidate own storage before construction; the current target is not completed. This is not a fresh guest full-campaign playthrough."
+      },
+      "displayNumber": 40,
+      "route": {
+        "result": {
+          "level": 40,
+          "id": "post-differential-optical-calibration",
+          "pass": true,
+          "milestones": [
+            {
+              "name": "One optical source is routed through two independently calibrated real slits",
+              "player": [
+                -5.991451779474922,
+                0,
+                9.802271646347315
+              ],
+              "cargo": [
+                -11.647177280694104,
+                0.389998156682635,
+                19.73782123204213
+              ],
+              "teleports": 0
+            },
+            {
+              "name": "Original mass and its measured lever arm move the two shutters oppositely",
+              "player": [
+                -18.99499639540054,
+                0.18,
+                17.605088826142342
+              ],
+              "cargo": [
+                -18.91234183653111,
+                0.5699981247013003,
+                16.888494615939884
+              ],
+              "teleports": 0
+            },
+            {
+              "name": "Common adjustment brings both physical windows onto the same portal ray",
+              "player": [
+                6.184633077807146,
+                0,
+                9.19482123506096
+              ],
+              "cargo": [
+                -18.91234255544725,
+                0.5699981435945598,
+                16.888495519436297
+              ],
+              "teleports": 0
+            },
+            {
+              "name": "The visible clamps retain slit positions while the original companion is recovered",
+              "player": [
+                -17.91832999315968,
+                0.18,
+                16.848869556789378
+              ],
+              "cargo": [
+                -18.625346509690754,
+                1.2399952842827748,
+                16.712753277858724
+              ],
+              "teleports": 0
+            },
+            {
+              "name": "Actual receiver illumination opens the final collision door",
+              "player": [
+                0.045077369357935486,
+                0,
+                -21.03932413463492
+              ],
+              "cargo": [
+                0.016537656211984643,
+                1.060205667719199,
+                -21.75884645910005
+              ],
+              "teleports": 0
+            },
+            {
+              "name": "both at exit",
+              "player": [
+                0.045077369357935486,
+                0,
+                -21.03932413463492
+              ],
+              "cargo": [
+                0.016537656211984643,
+                1.060205667719199,
+                -21.75884645910005
+              ],
+              "teleports": 0
+            }
+          ],
+          "respawns": 0,
+          "resets": 0,
+          "frames": 2540,
+          "teleports": 0
+        },
+        "state": "won",
+        "observations": 5080,
+        "resets": 0,
+        "sameOriginal": true,
+        "image": {
+          "filename": "room-40-won.png",
+          "bytes": 374553,
+          "sha256": "704c834f6fa3eb05f53dd283fc37ef9ad69f94cbef127ae0b8c8268ba0684de5"
+        }
+      }
+    }
+  ],
+  "pass": true
+}
