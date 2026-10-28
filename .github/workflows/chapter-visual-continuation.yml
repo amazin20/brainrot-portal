@@ -1,0 +1,58 @@
+name: Current chapter native inspection
+on:
+  push:
+    branches: [upgrade/tz-completion-20261023]
+    paths:
+      - 'src/game/**'
+      - 'tools/qa-chapter-visual-continuation.mjs'
+      - '.github/workflows/chapter-visual-continuation.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: chapter-native-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        levels: ['21,22,23,24,25', '26,27,28,29,30']
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Build unchanged locked game dependencies
+        run: |
+          npm ci
+          npm run build
+          npm install --prefix "$RUNNER_TEMP/brainrot-browser" --no-save --package-lock=false puppeteer-core@24.16.0
+          git diff --exit-code -- package.json package-lock.json
+      - name: Capture actual authored production scenes
+        env:
+          LEVELS: ${{ matrix.levels }}
+          BUILD_COMMIT: ${{ github.sha }}
+        run: |
+          mkdir -p inspection-site
+          ln -s ../dist inspection-site/campaign-v67
+          python3 -m http.server 4173 --bind 127.0.0.1 --directory inspection-site > native-server.log 2>&1 &
+          for i in {1..30}; do curl -fsS http://127.0.0.1:4173/campaign-v67/ >/dev/null && break; sleep 1; done
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+          export PUPPETEER_MODULE="$RUNNER_TEMP/brainrot-browser/node_modules/puppeteer-core/lib/esm/puppeteer/puppeteer-core.js"
+          node tools/qa-chapter-visual-continuation.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: chapter-native-${{ matrix.levels }}-${{ github.sha }}
+          path: |
+            qa/chapter-native/
+            native-server.log
+          retention-days: 14
+          if-no-files-found: error
