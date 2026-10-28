@@ -42,4 +42,4 @@ class PublisherSafety(unittest.TestCase):
  def test_overlapping_publication_rejected(self):
   self.m.write('proof/before.json',{'kind':'continuous-demo','receiptSha256':self.m.digest(b'old')});self.m.get=lambda *args,**kwargs:b'new'
   with self.assertRaises(AssertionError):self.m.gate()
-if __name__=='__main__':unittest.main()"}
+if __name__=='__main__':unittest.main()
