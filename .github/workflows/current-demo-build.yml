@@ -15,6 +15,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with: {ref: '${{ github.sha }}', persist-credentials: false}
+      - name: Retain tracked public source without credentials or generated evidence
+        run: |
+          mkdir -p source-snapshot
+          git archive --format=tar HEAD src public tests scripts tools package.json package-lock.json index.html vite.config.js .github | gzip -n > source-snapshot/source.tar.gz
+          git rev-parse HEAD > source-snapshot/source-sha.txt
+          git ls-tree -r HEAD -- src public tests scripts tools package.json package-lock.json index.html vite.config.js .github > source-snapshot/source-tree.txt
+          sha256sum source-snapshot/source.tar.gz > source-snapshot/source.sha256
+      - uses: actions/upload-artifact@v4
+        with: {name: current-demo-source, path: source-snapshot/, retention-days: 14, if-no-files-found: error}
       - uses: actions/setup-node@v4
         with: {node-version: 22, cache: npm}
       - run: npm ci
