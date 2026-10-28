@@ -1,0 +1,18 @@
+{
+  "sourceCommit": "92d02d1d7febfe9162c08912f6728e459403f8af",
+  "run": 40633248429,
+  "artifacts": [
+    {
+      "kind": "native",
+      "id": 12792853824,
+      "bytes": 26965451,
+      "sha256": "28350cd163848463a884a7214c11c188c232016d140a98b64de767c1381bfe20"
+    },
+    {
+      "kind": "tests",
+      "id": 12793012217,
+      "bytes": 40630,
+      "sha256": "78cc8ca76bd678c3cd09f6e5932e71354e1e7f150b018f47c9fa581909c6f927"
+    }
+  ]
+}

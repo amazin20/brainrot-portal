@@ -1,0 +1,376 @@
+TAP version 13
+# Subtest: Five exact ten-room themes precede the separate castle finale without changing save indices
+ok 1 - Five exact ten-room themes precede the separate castle finale without changing save indices
+  ---
+  duration_ms: 1.998441
+  type: 'test'
+  ...
+# Subtest: Theme copies architecture without recoloring original actors, signals, portal surfaces or shared source materials
+ok 2 - Theme copies architecture without recoloring original actors, signals, portal surfaces or shared source materials
+  ---
+  duration_ms: 4.163125
+  type: 'test'
+  ...
+# Subtest: Classic and open editions do not inherit foundation theme or metadata
+ok 3 - Classic and open editions do not inherit foundation theme or metadata
+  ---
+  duration_ms: 0.966259
+  type: 'test'
+  ...
+# Subtest: Castle theme preserves independently colored wing navigation accents
+ok 4 - Castle theme preserves independently colored wing navigation accents
+  ---
+  duration_ms: 1.230696
+  type: 'test'
+  ...
+# Subtest: Castle theme retains the authored mineral walls and floor inlays of each wing
+ok 5 - Castle theme retains the authored mineral walls and floor inlays of each wing
+  ---
+  duration_ms: 1.206561
+  type: 'test'
+  ...
+# Subtest: Castle common gallery floor and recessed soffit retain separate mineral values without recoloring unclassified machine metal
+ok 6 - Castle common gallery floor and recessed soffit retain separate mineral values without recoloring unclassified machine metal
+  ---
+  duration_ms: 1.139144
+  type: 'test'
+  ...
+# Subtest: Instanced architectural skin receives the same chapter palette without changing placement or portal instances
+ok 7 - Instanced architectural skin receives the same chapter palette without changing placement or portal instances
+  ---
+  duration_ms: 3.827441
+  type: 'test'
+  ...
+# Subtest: the ordinary magnet-entry camera ray no longer meets opaque relief 32 cm from its lens
+ok 8 - the ordinary magnet-entry camera ray no longer meets opaque relief 32 cm from its lens
+  ---
+  duration_ms: 10.797951
+  type: 'test'
+  ...
+# Subtest: real lower and upper shell openings remain clear of all attached opaque wall skins
+ok 9 - real lower and upper shell openings remain clear of all attached opaque wall skins
+  ---
+  duration_ms: 778.985754
+  type: 'test'
+  ...
+# Subtest: magnet wall relief outside the actual entry stays visible and the opposite wall stays finished
+ok 10 - magnet wall relief outside the actual entry stays visible and the opposite wall stays finished
+  ---
+  duration_ms: 15.011778
+  type: 'test'
+  ...
+# Subtest: existing portal-address reveals retain their real opaque-art clearance
+ok 11 - existing portal-address reveals retain their real opaque-art clearance
+  ---
+  duration_ms: 364.265461
+  type: 'test'
+  ...
+# Subtest: all twelve production wings keep one owner for each coplanar pier and capital face
+ok 12 - all twelve production wings keep one owner for each coplanar pier and capital face
+  ---
+  duration_ms: 52.212012
+  type: 'test'
+  ...
+# Subtest: Carved original envelope 32,6.8,0.5: finite closed faces, no coincident interior skin
+ok 13 - Carved original envelope 32,6.8,0.5: finite closed faces, no coincident interior skin
+  ---
+  duration_ms: 42.448089
+  type: 'test'
+  ...
+# Subtest: Carved original envelope 0.5,15,36: finite closed faces, no coincident interior skin
+ok 14 - Carved original envelope 0.5,15,36: finite closed faces, no coincident interior skin
+  ---
+  duration_ms: 16.541771
+  type: 'test'
+  ...
+# Subtest: Carved original envelope 6.8,8,0.5: finite closed faces, no coincident interior skin
+ok 15 - Carved original envelope 6.8,8,0.5: finite closed faces, no coincident interior skin
+  ---
+  duration_ms: 4.030112
+  type: 'test'
+  ...
+# Subtest: Carved original envelope 0.5,2.4,9: finite closed faces, no coincident interior skin
+ok 16 - Carved original envelope 0.5,2.4,9: finite closed faces, no coincident interior skin
+  ---
+  duration_ms: 5.004435
+  type: 'test'
+  ...
+# Subtest: Carved original envelope 166,114,1.2: finite closed faces, no coincident interior skin
+ok 17 - Carved original envelope 166,114,1.2: finite closed faces, no coincident interior skin
+  ---
+  duration_ms: 75.812931
+  type: 'test'
+  ...
+# Subtest: Carved original envelope 34.7,0.5,36.7: finite closed faces, no coincident interior skin
+ok 18 - Carved original envelope 34.7,0.5,36.7: finite closed faces, no coincident interior skin
+  ---
+  duration_ms: 5.69246
+  type: 'test'
+  ...
+# Subtest: Load piers retain both ends, full collars and nondegenerate chamfers
+ok 19 - Load piers retain both ends, full collars and nondegenerate chamfers
+  ---
+  duration_ms: 2.971451
+  type: 'test'
+  ...
+# Subtest: Wing reaction reads real completion state and simulation time, independent of render rate
+ok 20 - Wing reaction reads real completion state and simulation time, independent of render rate
+  ---
+  duration_ms: 28.962269
+  type: 'test'
+  ...
+# Subtest: New geometry and materials install once and remain owned by the original level lifetime
+ok 21 - New geometry and materials install once and remain owned by the original level lifetime
+  ---
+  duration_ms: 6.507744
+  type: 'test'
+  ...
+# Subtest: The complete castle keeps every original collider, floor, portal, control, body and starting state
+ok 22 - The complete castle keeps every original collider, floor, portal, control, body and starting state
+  ---
+  duration_ms: 3174.947506
+  type: 'test'
+  ...
+# Subtest: Remastered final castle: all twelve original mechanisms through ordinary input with no reset or debug deletion
+ok 23 - Remastered final castle: all twelve original mechanisms through ordinary input with no reset or debug deletion
+  ---
+  duration_ms: 1034499.454631
+  type: 'test'
+  ...
+# Subtest: castle interior relief is completely supported, clears doors and portal apertures, and adds no physical surface
+ok 24 - castle interior relief is completely supported, clears doors and portal apertures, and adds no physical surface
+  ---
+  duration_ms: 31.680633
+  type: 'test'
+  ...
+# Subtest: moving, disabled and non-wall volumes never receive interior relief
+ok 25 - moving, disabled and non-wall volumes never receive interior relief
+  ---
+  duration_ms: 1.925844
+  type: 'test'
+  ...
+# Subtest: interior batches install once and release their geometry, materials and instance buffers exactly once
+ok 26 - interior batches install once and release their geometry, materials and instance buffers exactly once
+  ---
+  duration_ms: 10.469807
+  type: 'test'
+  ...
+# Subtest: adjacent wall bays share one pilaster and capital without coplanar doubled faces
+ok 27 - adjacent wall bays share one pilaster and capital without coplanar doubled faces
+  ---
+  duration_ms: 12.430867
+  type: 'test'
+  ...
+# Subtest: Castle fittings retain the central hoist, freight aperture and all valve-console approaches
+ok 28 - Castle fittings retain the central hoist, freight aperture and all valve-console approaches
+  ---
+  duration_ms: 21.441957
+  type: 'test'
+  ...
+# Subtest: Archive rails and closed wall-borne cassettes clear both physical sections over their complete strokes
+ok 29 - Archive rails and closed wall-borne cassettes clear both physical sections over their complete strokes
+  ---
+  duration_ms: 16.661366
+  type: 'test'
+  ...
+# Subtest: Tension legs and routing wheels read real machine samples without moving either actor or writing machine state
+ok 30 - Tension legs and routing wheels read real machine samples without moving either actor or writing machine state
+  ---
+  duration_ms: 6.540464
+  type: 'test'
+  ...
+# Subtest: upper readability neither initializes physics nor adds a physical surface, blocker or camera obstruction
+ok 31 - upper readability neither initializes physics nor adds a physical surface, blocker or camera obstruction
+  ---
+  duration_ms: 51.97281
+  type: 'test'
+  ...
+# Subtest: body-linked upper finishes track translated and rotated real compound frames without parenting beneath collider meshes
+ok 32 - body-linked upper finishes track translated and rotated real compound frames without parenting beneath collider meshes
+  ---
+  duration_ms: 10.332098
+  type: 'test'
+  ...
+# Subtest: actual motion, current caught contact and pressure loss control upper world-space cues without granting progress
+ok 33 - actual motion, current caught contact and pressure loss control upper world-space cues without granting progress
+  ---
+  duration_ms: 583.960574
+  type: 'test'
+  ...
+# Subtest: upper finishes restore only their own material assignments and dispose their resources exactly once
+ok 34 - upper finishes restore only their own material assignments and dispose their resources exactly once
+  ---
+  duration_ms: 4.607967
+  type: 'test'
+  ...
+# Subtest: castle coffer frame volumes do not duplicate any exterior coplanar face
+ok 35 - castle coffer frame volumes do not duplicate any exterior coplanar face
+  ---
+  duration_ms: 29.044142
+  type: 'test'
+  ...
+# Subtest: migrant suspension follows the actual carriage without enlarging its physical deck and disposes once
+ok 36 - migrant suspension follows the actual carriage without enlarging its physical deck and disposes once
+  ---
+  duration_ms: 13.60968
+  type: 'test'
+  ...
+# Subtest: closed castle casings retain exact original bounds and finite normals at every equipment orientation
+ok 37 - closed castle casings retain exact original bounds and finite normals at every equipment orientation
+  ---
+  duration_ms: 10.611593
+  type: 'test'
+  ...
+# Subtest: all twelve castle wings gain finish while contacts, portal identities and moving box bounds remain unchanged
+ok 38 - all twelve castle wings gain finish while contacts, portal identities and moving box bounds remain unchanged
+  ---
+  duration_ms: 12.512941
+  type: 'test'
+  ...
+# Subtest: integral castle work-bay finish does not bridge an authored floor opening
+ok 39 - integral castle work-bay finish does not bridge an authored floor opening
+  ---
+  duration_ms: 3.82052
+  type: 'test'
+  ...
+# Subtest: real source projector stays completely behind the original beam plane with physical box and barrel contacts
+ok 40 - real source projector stays completely behind the original beam plane with physical box and barrel contacts
+  ---
+  duration_ms: 5.644743
+  type: 'test'
+  ...
+# Subtest: magnetic copper winding is visible outside its core but remains inside the old physical horseshoe envelope
+ok 41 - magnetic copper winding is visible outside its core but remains inside the old physical horseshoe envelope
+  ---
+  duration_ms: 11.48952
+  type: 'test'
+  ...
+# Subtest: wing-coloured internal walls receive closed casings while the real perimeter survives static batching
+ok 42 - wing-coloured internal walls receive closed casings while the real perimeter survives static batching
+  ---
+  duration_ms: 6.778099
+  type: 'test'
+  ...
+# Subtest: An ordinary high-speed capsule cannot skip a thin wall in either direction and retains tangential movement
+ok 43 - An ordinary high-speed capsule cannot skip a thin wall in either direction and retains tangential movement
+  ---
+  duration_ms: 11.898678
+  type: 'test'
+  ...
+# Subtest: Fast ordinary contacts land on thin floors and stop below thin ceilings
+ok 44 - Fast ordinary contacts land on thin floors and stop below thin ceilings
+  ---
+  duration_ms: 6.400602
+  type: 'test'
+  ...
+# Subtest: Fast capsule sampling retains true drum corners and open ring centres
+ok 45 - Fast capsule sampling retains true drum corners and open ring centres
+  ---
+  duration_ms: 9.796323
+  type: 'test'
+  ...
+# Subtest: A high-speed ordinary approach respects the production portal aperture and its solid shoulder
+ok 46 - A high-speed ordinary approach respects the production portal aperture and its solid shoulder
+  ---
+  duration_ms: 6.231714
+  type: 'test'
+  ...
+# Subtest: A sliding mechanism sweeps the persistent companion on every axis and ignores a disabled door
+ok 47 - A sliding mechanism sweeps the persistent companion on every axis and ignores a disabled door
+  ---
+  duration_ms: 9.17082
+  type: 'test'
+  ...
+# Subtest: A physical torus blocks its visible rim and retains a real ray and cargo aperture
+ok 48 - A physical torus blocks its visible rim and retains a real ray and cargo aperture
+  ---
+  duration_ms: 31.288655
+  type: 'test'
+  ...
+# Subtest: Round vessel collision follows its silhouette instead of blocking the empty AABB corners
+ok 49 - Round vessel collision follows its silhouette instead of blocking the empty AABB corners
+  ---
+  duration_ms: 4.76435
+  type: 'test'
+  ...
+# Subtest: Horizontal lift rings and magnetic side rings preserve the companion aperture on every axis
+ok 50 - Horizontal lift rings and magnetic side rings preserve the companion aperture on every axis
+  ---
+  duration_ms: 39.337498
+  type: 'test'
+  ...
+# Subtest: The magnetic horseshoe has a visible lower opening and real contact on its upper winding
+ok 51 - The magnetic horseshoe has a visible lower opening and real contact on its upper winding
+  ---
+  duration_ms: 10.42887
+  type: 'test'
+  ...
+# Subtest: The receiver horseshoe leaves headroom for an ordinary player retrieving the companion from the upper gallery
+ok 52 - The receiver horseshoe leaves headroom for an ordinary player retrieving the companion from the upper gallery
+  ---
+  duration_ms: 3.707167
+  type: 'test'
+  ...
+# Subtest: Rotation and scale changes sync collision even when a moving mechanism keeps the same position
+ok 53 - Rotation and scale changes sync collision even when a moving mechanism keeps the same position
+  ---
+  duration_ms: 1.832829
+  type: 'test'
+  ...
+# Subtest: Transmission wheel blocks a traveller while pure axle spin does not rebuild its rigid contacts
+ok 54 - Transmission wheel blocks a traveller while pure axle spin does not rebuild its rigid contacts
+  ---
+  duration_ms: 9.647554
+  type: 'test'
+  ...
+# Subtest: Overlapping floor junctions have one top and no coincident internal side faces
+ok 55 - Overlapping floor junctions have one top and no coincident internal side faces
+  ---
+  duration_ms: 4.204329
+  type: 'test'
+  ...
+# Subtest: Cast-in finishes preserve real gaps and protected decks without overlapping top triangles
+ok 56 - Cast-in finishes preserve real gaps and protected decks without overlapping top triangles
+  ---
+  duration_ms: 4.240618
+  type: 'test'
+  ...
+# Subtest: A whole-attempt restart clears operated control visuals as well as mechanism state
+ok 57 - A whole-attempt restart clears operated control visuals as well as mechanism state
+  ---
+  duration_ms: 2.834088
+  type: 'test'
+  ...
+# Subtest: The freight aiming aperture passes a ray but stops a complete ordinary capsule
+ok 58 - The freight aiming aperture passes a ray but stops a complete ordinary capsule
+  ---
+  duration_ms: 729.746187
+  type: 'test'
+  ...
+# Subtest: The crown slit retains its physical capsule stop while the closed sight rotor occludes the whole receiver
+ok 59 - The crown slit retains its physical capsule stop while the closed sight rotor occludes the whole receiver
+  ---
+  duration_ms: 537.719571
+  type: 'test'
+  ...
+# Subtest: The upper magnetic receiver has a real floor at its displayed plate, and its freight slit rejects a standing player
+ok 60 - The upper magnetic receiver has a real floor at its displayed plate, and its freight slit rejects a standing player
+  ---
+  duration_ms: 463.620807
+  type: 'test'
+  ...
+# Subtest: High glazed viewing bands retain visible transparency and real player, cargo, camera and aim contacts
+ok 61 - High glazed viewing bands retain visible transparency and real player, cargo, camera and aim contacts
+  ---
+  duration_ms: 472.777339
+  type: 'test'
+  ...
+1..61
+# tests 61
+# suites 0
+# pass 61
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1047511.273911

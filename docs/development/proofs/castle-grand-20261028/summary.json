@@ -1,0 +1,68 @@
+{
+  "sourceCommit": "92d02d1d7febfe9162c08912f6728e459403f8af",
+  "baselineCommit": "6f4b9b58a5f51efb99492e20d54349fd5fee9add",
+  "run": 40633248429,
+  "testsPassed": 61,
+  "newStructuralTests": 10,
+  "fullRouteTests": 1,
+  "retainedTests": 50,
+  "images": 73,
+  "pairedViews": 15,
+  "fullCampaignAccepted": false,
+  "published": false,
+  "nativeRoute": {
+    "frames": 82665,
+    "physicsSteps": 165330,
+    "seconds": 1377.75,
+    "activeSeconds": 1289.0333333324897,
+    "distance": 5930.017950714127,
+    "maxIdleSeconds": 13.43333333333358,
+    "resets": 0,
+    "respawns": 0,
+    "cargoResets": 0,
+    "state": "won",
+    "sameOriginal": true,
+    "pairDeletions": 0,
+    "completedMechanisms": 12,
+    "checkpoints": false
+  },
+  "architecture": {
+    "revision": "folded-castle-carved-arcades-v1",
+    "exteriorWalls": 4,
+    "wingSlabs": 109,
+    "roofSlabs": 13,
+    "piers": 16,
+    "triangles": 179754,
+    "newColliders": 0,
+    "newLights": 0
+  },
+  "startRender": {
+    "before": {
+      "calls": 406,
+      "triangles": 435614
+    },
+    "after": {
+      "calls": 410,
+      "triangles": 569562
+    }
+  },
+  "cpuRoute": {
+    "frames": 82661,
+    "seconds": 1377.6833333333334,
+    "activeSeconds": 1288.9833333324898,
+    "maxIdleSeconds": 13.43333333333358,
+    "resets": 0,
+    "respawns": 0,
+    "cargoResets": 0
+  },
+  "limits": [
+    "This remasters 142 existing building meshes; it adds no rooms, causal puzzles or checkpoints.",
+    "The castle remains a twelve-mechanism challenge; this is not completion of a 500-stage request.",
+    "Native and CPU runs are scripted known routes, not a human speedrun or a proven minimum completion time.",
+    "Active time means measured player movement or camera rotation; it does not establish the quality of every second.",
+    "The fixed pendulum camera is obstructed by an old internal wall in both builds; its route milestones supply separate real views.",
+    "The original AABB collision envelopes remain, including the shallow wall relief; these are closed wall niches, not new passages.",
+    "Native software WebGL counts are not hardware FPS, mobile-device testing or complete campaign acceptance.",
+    "No Pages, releases or Yandex game publication."
+  ]
+}
