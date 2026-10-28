@@ -25,10 +25,23 @@ export async function runRoom26(d,{inspectFirst=false,reverse=false,firstFall=fa
   reverseCrossing();check(s.load.loaded()&&s.shutter.open,'Lower load must still power the lift while reversing the independent stream');
   mark('reverse the independent upper stream while the companion still powers the lower shutter');
  }
- walk(12,-14);walk(7,-14);aim(1,p['freight-receiver'].getFrame().center);walk(12,-14);walk(12,-21);walk(-22,-21);walk(-22,11.85);walk(-20.25,11.85);aim(0,p['valve-load'].getFrame().center);
+ walk(12,-14);walk(7,-14);aim(1,p['freight-receiver'].getFrame().center);walk(12,-14);walk(12,-21);walk(-22,-21);walk(-22,11.85);walk(-20.25,11.85);
+ // The portrait shoulder view cannot see the pad through the actual return
+ // deck. Keep the addressed upper receiver and use the real lower service
+ // floor, then ride the same pair back up after the cargo. No lens or hit
+ // tolerance is changed to make a shot through the deck appear valid.
+ const floorReturn=game.camera.aspect<1;
+ if(floorReturn){walk(-20.25,13);until(()=>game.playerGrounded&&game.playerPosition.y<.1,6,'Return-arm fall must reach the real foundation');walk(-20,19);mark('walk the actual lower service floor instead of aiming through the return deck');}
+ aim(0,p['valve-load'].getFrame().center);
  until(()=>game.cargo.position.y>16,8,'Borrowed portals did not retrieve the original load');wait(1);
  check(!s.load.loaded(),'Retrieval must unload the real lower plate');mark('borrow the lift portals to recover their own power source');
- walk(-22,11);walk(-22,-21);walk(12,-21);walk(12,-14);if(route!=='reverse-first')reverseCrossing();
+ if(floorReturn){
+  const before=game.teleportCount,entry=p['valve-load'].getFrame().center;
+  for(let n=0;n<300&&game.teleportCount===before;n++){const dx=entry.x-game.playerPosition.x,dz=entry.z-game.playerPosition.z,length=Math.hypot(dx,dz)||1;d.worldMove(dx/length,dz/length);d.frame();}d.stop();
+  check(game.teleportCount>before,'Walk into the actual floor aperture');
+  until(()=>game.playerGrounded&&game.playerPosition.y>15.9,6,'The unchanged freight pair must return the player to the upper dock');walk(7,-14);walk(12,-14);mark('follow the original companion through the same addressed freight pair');}
+ else{walk(-22,11);walk(-22,-21);walk(12,-21);walk(12,-14);}
+ if(route!=='reverse-first')reverseCrossing();
  walk(12,-14);walk(7,-14);walk(6,game.cargo.position.z);pickup();walk(7,-14);walk(16,-14);
  if(route==='air-freight'){
   // The independent upper current can take the free companion to the far

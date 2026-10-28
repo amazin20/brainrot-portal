@@ -1,4 +1,5 @@
 import {installVisualAuditMiddleKit} from './LabVisualAuditMiddle.js';
+import {installCrossflowStopHangers} from './LabCrossflowStopHangers.js';
 import * as THREE from 'three';
 import {Workshop,V} from './LabWorkshopKit.js';
 import {buildTransferFunnel} from './LabTransferFunnel.js';
@@ -50,8 +51,11 @@ export function buildRoom26(game,index=25){
  w.box([12,24,7],[16,2,.4],w.materials.wall);
  // Shafts have visible upper stops; they let novices leave a flowing column
  // without racing an exact height, and do not create climbable shortcuts.
- w.box([-12,13.8,8],[5.5,.4,5.5],w.materials.trim);
- w.box([12,23,-8],[5.5,.4,5.5],w.materials.trim);
+ const shaftStops=[
+  w.box([-12,13.8,8],[5.5,.4,5.5],w.materials.trim),
+  w.box([12,23,-8],[5.5,.4,5.5],w.materials.trim),
+ ];
+ const stopHangers=installCrossflowStopHangers(k,shaftStops);
  const lower=k.panel('first-shaft',[-12,.025,8],[0,1,0],5.6,5.6);
  const relay=k.panel('relay-shaft',[12,8.025,-8],[0,1,0],5.6,5.6);
  k.panel('pressure-intake',[-7.6,2.6,-12],[-1,0,0],5.6,5.2);
@@ -90,6 +94,7 @@ export function buildRoom26(game,index=25){
  installVisualAuditMiddleKit(k,26);
  const level=k.finish([-19,0,10],[-20,.55,17],[17,16,19],{workshop:k,portalPuzzle:true,playerAcceleration:(p,v)=>crossflowAcceleration(fields,p.clone().add(V(0,1.2,0)),v,.46,{centering:.8,damping:2}),cargoOnAnyPad:()=>load.loaded()||cargoLoadsPlate(game.cargo,game.heldCube,relay.getFrame())||cargoLoadsPlate(game.cargo,game.heldCube,collector.getFrame())});
  level.mechanismArt={turbines:fields};
+ level.stopHangers=stopHangers;
  level.puzzleGeometry={footprint:48*48,goalHeight:16,safeFloor:0,noProgressFlags:true,orders:['carry-in-current','send-free-companion-first'],portalRoles:{'pressure-intake':'collect the stream behind the real load-operated shutter','first-shaft':'retain the first eight metres on a permanent balcony','relay-shaft':'reuse the source from a second elevated floor','valve-load':'the original companion both powers the shutter and becomes the final retrieval source','freight-receiver':'retrieve the load after preserving the final height'},deductions:['a live load opens an actual air obstruction','a fixed balcony retains height after a portal changes','the second floor is visible only from the attained gallery','a crossing flow can carry the observer past the intended retaining dock','the power source is also the cargo to retrieve through the same pair','removing the load closes only its physical air branch','the independent perpendicular stream carries both travellers together or separately to the air freight collector']};
  level.conceptLesson={position:[17,16,-16],range:4,key:'↔',text:'Поперечный поток независим от нижней заслонки. Реверс меняет силу; он не переносит тебя мгновенно.'};
  return level;

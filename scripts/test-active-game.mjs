@@ -1,16 +1,24 @@
 import fs from 'node:fs';
+import path from 'node:path';
+import crypto from 'node:crypto';
 import {spawnSync} from 'node:child_process';
+import {activeGameTests,selectActiveTestShard,activeTestConcurrency} from './lib/active-game-tests.mjs';
 
-// The active finale is Singularity. The archived eighteen-wing Tower fixtures
-// exercise a superseded level selection contract and remain in the repository
-// for that implementation's history. All other game regressions run here.
-const tests=fs.readdirSync(new URL('../tests/',import.meta.url))
- .filter(name=>name.endsWith('.test.js')&&!name.startsWith('lab-tower'))
- .sort().map(name=>'tests/'+name);
-if(!tests.length)throw new Error('No active game regression tests found');
-// Bound each worker's heap so simultaneous mesh/physics fixtures collect
-// unreachable rooms before exhausting the CI container's memory.
-const result=spawnSync(process.execPath,['--max-old-space-size=1024','--test','--test-reporter=tap','--test-concurrency=2',...tests],{stdio:'inherit'});
+const all=activeGameTests(),shard=selectActiveTestShard(all,process.env.ACTIVE_TEST_SHARD);
+const concurrency=activeTestConcurrency(process.env.ACTIVE_TEST_CONCURRENCY);
+if(process.env.ACTIVE_TEST_MANIFEST){
+ const manifest={sourceCommit:process.env.BUILD_COMMIT??null,index:shard.index,count:shard.count,
+  activeFiles:all,selectedFiles:shard.files,fileSha256:Object.fromEntries(all.map(file=>[file,crypto.createHash('sha256').update(fs.readFileSync(file)).digest('hex')])),
+  scope:'All existing active regressions; archived lab-tower*.test.js remain excluded exactly as before. This manifest records selection, not successful execution.'};
+ fs.mkdirSync(path.dirname(process.env.ACTIVE_TEST_MANIFEST),{recursive:true});fs.writeFileSync(process.env.ACTIVE_TEST_MANIFEST,JSON.stringify(manifest,null,2)+'\n');
+}
+// Keep a bounded heap. Independent CI shards can each use one worker without
+// serializing hundreds of entire-castle simulations behind one hour-long job.
+const result=spawnSync(process.execPath,['--max-old-space-size=1024','--test','--test-reporter=tap',`--test-concurrency=${concurrency}`,...shard.files],{stdio:'inherit'});
+if(process.env.ACTIVE_TEST_RESULT){
+ fs.mkdirSync(path.dirname(process.env.ACTIVE_TEST_RESULT),{recursive:true});
+ fs.writeFileSync(process.env.ACTIVE_TEST_RESULT,JSON.stringify({sourceCommit:process.env.BUILD_COMMIT??null,index:shard.index,count:shard.count,status:result.status,signal:result.signal,error:result.error?.message??null},null,2)+'\n');
+}
 if(result.error)throw result.error;
 if(result.signal)throw new Error(`Active test process ended with ${result.signal}`);
 process.exit(result.status??1);

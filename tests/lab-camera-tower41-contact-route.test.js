@@ -1,4 +1,5 @@
 import test from 'node:test';
+import fs from 'node:fs';
 import assert from 'node:assert/strict';
 import * as THREE from 'three';
 import {LabCamera} from '../src/game/LabCamera.js';
@@ -172,25 +173,41 @@ async function measureRoute(legacy) {
     assert.equal(g.heldCube, cargo);
     if (!legacy) for (const row of currentCoffers) assert.equal(row.mesh.geometry, row.geometry,
       'The fixed-camera run must keep every actual new coffer query geometry');
-    return {frames, samples, maxFov, comparisonScene, outside: samples.filter(s => s.outside > 0)};
+    return {frames, samples, maxFov, comparisonScene, outside: samples.filter(s => s.outside > 0),
+      route: {preparationFrames:route.preparation.frames, contactFrames:route.frames,
+        phases:route.phases.map(p=>p.name),
+        actions:route.actions.map(a=>({kind:a.kind,...(a.beforeHeld===undefined?{}:{beforeHeld:a.beforeHeld})})),
+        preparationActions:route.preparation.actions.map(a=>({kind:a.kind,...(a.id?{id:a.id}:{}),...(a.slot===undefined?{}:{slot:a.slot})}))}};
   } finally {if (originalVisual) g.updateVisuals = originalVisual;dispose(g);}
 }
 
-test('historical v66 flat-wall queries reproduce fifteen camera crop samples while the actual current castle route fits',
+test('current ordinary castle contact route fits the original skin while flat-wall negative control still crops it',
   {timeout: 600000}, async () => {
-    // Both runs use the unchanged ordinary freight preparation, then native
+    // Both runs use the CURRENT ordinary freight preparation, then native
     // move/jump/E and the real four-body contact cell. This CPU optical evidence
     // is sampled at 4fps plus the terminal frame; it is not a WebGL, occlusion,
     // every-render-frame, portrait-device or human-usability acceptance.
     const old = await measureRoute(true), fixed = await measureRoute(false);
+    if (process.env.CASTLE_CAMERA_REPORT) fs.writeFileSync(process.env.CASTLE_CAMERA_REPORT, JSON.stringify({old,fixed},null,2));
     assert.equal(old.comparisonScene.kind, 'historical-v66-flat-wing-wall-camera-query');
     assert.equal(fixed.comparisonScene.kind, 'current-actual-v67-coffer-scene');
-    assert.equal(old.frames, 7248);assert.equal(fixed.frames, old.frames);
-    assert.equal(old.samples.length, 485);assert.equal(fixed.samples.length, old.samples.length);
-    assert.equal(old.outside.length, 15, 'Retain the accepted recorded-route crop witness');
-    assert.ok(old.samples.find(s => s.frame === 2535).outside > 70000,
-      'The severe upright approach failure must remain reproducible');
-    assert.ok(old.samples.at(-1).outside > 250, 'Retain the persistent final shoulder crop');
+    // The gate-return redesign added real freight travel after the historical
+    // 7248-frame / 485-sample / 15-crop recording. Do not apply that obsolete
+    // clock to a different route, or retime inputs to recover its old numbers.
+    // The independent recorded severe-pose optical test above is retained.
+    for(const run of [old,fixed]){
+      assert.equal(run.frames,run.route.preparationFrames+run.route.contactFrames);
+      const schedule=Array.from({length:Math.ceil(run.frames/15)},(_,i)=>i*15);
+      schedule.push(run.frames-1);
+      assert.deepEqual(run.samples.map(s=>s.frame),schedule,'Every scheduled sample and the final frame must be present');
+      assert.equal(run.samples.at(-1).terminal,true);
+    }
+    assert.deepEqual(old.route.phases,fixed.route.phases,'Both cameras must exercise the same contact phases');
+    assert.deepEqual(old.route.actions,fixed.route.actions,'Neither camera run may skip ordinary contact actions');
+    assert.deepEqual(old.route.preparationActions,fixed.route.preparationActions,'Freight preparation must retain its complete ordinary input plan');
+    assert.ok(old.outside.length>0,'Negative control must fail on the current physical route');
+    assert.ok(Math.max(...old.outside.map(s=>s.outside))>5000,'Retain a substantial original-skin crop witness, not rounding noise');
+    assert.ok(old.samples.at(-1).outside>250,'Retain the persistent terminal shoulder crop');
     assert.deepEqual(fixed.outside, [], 'Every declared original-skin sample must fit the actual lens');
     assert.ok(fixed.maxFov > 102 && fixed.maxFov <= 120,
       'This confined-view correction needs a separate finite castle lens budget');

@@ -16,64 +16,111 @@ permissions:
   contents: read
 
 concurrency:
-  group: tz-continuation-${{ github.sha }}
-  cancel-in-progress: false
+  group: tz-continuation-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   source-and-regressions:
+    name: Active source regressions ${{ matrix.shard }}/16
     runs-on: ubuntu-latest
     timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
     steps:
       - uses: actions/checkout@v4
         with:
           ref: ${{ github.sha }}
-          fetch-depth: 0
           persist-credentials: false
       - uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: npm
-      - name: Install locked dependencies
-        id: install
-        run: npm ci
-      - name: Preserve exact public source and dependency snapshot
+      - run: npm ci
+      - name: Run the exact selected subset of the unchanged active boundary
+        env:
+          BUILD_COMMIT: ${{ github.sha }}
+          ACTIVE_TEST_SHARD: ${{ matrix.shard }}/16
+          ACTIVE_TEST_CONCURRENCY: '1'
+          ACTIVE_TEST_MANIFEST: evidence/manifest.json
+          ACTIVE_TEST_RESULT: evidence/result.json
+          CASTLE_CAMERA_REPORT: evidence/castle-camera.json
         run: |
           mkdir -p evidence
-          git rev-parse HEAD > evidence/source-sha.txt
-          git archive --format=tar HEAD | gzip -n > evidence/source.tar.gz
-          tar -czf evidence/dependencies.tar.gz node_modules
-          sha256sum evidence/source.tar.gz evidence/dependencies.tar.gz > evidence/workspace-sha256.txt
-      - uses: actions/upload-artifact@v4
-        with:
-          name: tz-workspace-${{ github.sha }}
-          path: |
-            evidence/source.tar.gz
-            evidence/dependencies.tar.gz
-            evidence/source-sha.txt
-            evidence/workspace-sha256.txt
-          retention-days: 7
-          if-no-files-found: error
-      - name: Run all active regression tests without changing the acceptance scope
-        id: regressions
-        run: |
           set -o pipefail
           npm test 2>&1 | tee evidence/active-tests.tap
-      - name: Build exact candidate even when a regression fails
-        if: always() && steps.install.outcome == 'success'
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: active-regressions-${{ matrix.shard }}
+          path: evidence/
+          retention-days: 14
+          if-no-files-found: error
+
+  build:
+    name: Exact source production build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Build and preserve exact source identity
         env:
           BUILD_COMMIT: ${{ github.sha }}
         run: |
+          mkdir -p evidence
+          git rev-parse HEAD > evidence/source-sha.txt
           set -o pipefail
           npm run build 2>&1 | tee evidence/build.log
-      - name: Preserve unfiltered validation output
+          node scripts/stamp-build.mjs v67-visual-completion
+          (cd dist && find . -type f -print0 | sort -z | xargs -0 sha256sum) > evidence/build-sha256.txt
+      - uses: actions/upload-artifact@v4
         if: always()
-        uses: actions/upload-artifact@v4
         with:
-          name: tz-validation-${{ github.sha }}
+          name: exact-production-build
           path: |
-            evidence/active-tests.tap
-            evidence/build.log
-            evidence/source-sha.txt
+            evidence/
+            dist/
+          retention-days: 14
+          if-no-files-found: error
+
+  verify-complete-suite:
+    name: Verify no missing, repeated or unfinished regression shard
+    if: always() && !cancelled()
+    needs: source-and-regressions
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: active-regressions-*
+          path: shard-artifacts
+      - name: Verify complete selection, exact checksums and final successful TAP
+        env:
+          BUILD_COMMIT: ${{ github.sha }}
+          ACTIVE_TEST_SHARD_COUNT: '16'
+          TEST_JOBS_RESULT: ${{ needs.source-and-regressions.result }}
+        run: node scripts/verify-active-test-shards.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: active-suite-summary
+          path: active-suite-summary.json
           retention-days: 14
           if-no-files-found: warn
 
@@ -134,6 +181,64 @@ jobs:
           name: fixed-equipment-native-${{ matrix.level }}-${{ github.sha }}
           path: |
             qa/fixed-equipment-${{ matrix.level }}/
+            candidate-server.log
+            baseline-server.log
+          retention-days: 14
+          if-no-files-found: error
+
+  crossflow-native:
+    name: Room 26 mounted stops / ${{ matrix.route }} / native before-after
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      matrix:
+        route: [retrieve-first, air-freight]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Build the exact candidate
+        run: |
+          npm ci
+          npm run build
+          npm install --prefix "$RUNNER_TEMP/brainrot-browser" --no-save --package-lock=false puppeteer-core@24.16.0
+          git diff --exit-code -- package.json package-lock.json
+      - uses: actions/checkout@v4
+        with:
+          ref: b71e8dc2d2bc62281f62eb7dc7c2da823470b9c9
+          path: baseline
+          persist-credentials: false
+      - name: Build original unsupported stops without changing their source
+        working-directory: baseline
+        run: |
+          ln -s ../node_modules node_modules
+          npm run build
+      - name: Compare visible contact and run both original-traveller routes
+        env:
+          BUILD_COMMIT: ${{ github.sha }}
+          ROUTE: ${{ matrix.route }}
+        run: |
+          mkdir -p candidate-site baseline-site
+          ln -s ../dist candidate-site/campaign-v67
+          ln -s ../baseline/dist baseline-site/campaign-v67
+          python3 -m http.server 4173 --bind 127.0.0.1 --directory candidate-site > candidate-server.log 2>&1 &
+          python3 -m http.server 4174 --bind 127.0.0.1 --directory baseline-site > baseline-server.log 2>&1 &
+          for i in {1..30}; do curl -fsS http://127.0.0.1:4173/campaign-v67/ >/dev/null && curl -fsS http://127.0.0.1:4174/campaign-v67/ >/dev/null && break; sleep 1; done
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+          export PUPPETEER_MODULE="$RUNNER_TEMP/brainrot-browser/node_modules/puppeteer-core/lib/esm/puppeteer/puppeteer-core.js"
+          node tools/qa-crossflow-hangers-native.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: crossflow-native-${{ matrix.route }}-${{ github.sha }}
+          path: |
+            qa/crossflow-hangers-${{ matrix.route }}/
             candidate-server.log
             baseline-server.log
           retention-days: 14
