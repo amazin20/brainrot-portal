@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import {architecturalCassetteGeometry,clipArchitecturalRect} from './LabArchitecturalModels.js';
 
-export const BIOSPHERE_ARCHITECTURE_REVISION='biosphere-conservatory-architecture-v1';
+export const BIOSPHERE_ARCHITECTURE_REVISION='biosphere-conservatory-architecture-v2';
 const V=(...p)=>new THREE.Vector3(...p),Q=()=>new THREE.Quaternion();
 const PALETTE={stone:0xc8c6af,jade:0x365b50,deep:0x182f2c,brass:0xa88a52,rim:0x647b6e,floor:0x9caaa0};
 
@@ -113,18 +113,19 @@ export function installBiosphereArchitecture(game,level){
    const top=depth/2,front=top-.002,back=-depth/2;
    const add=(kind,p,s,color,shape,angle)=>part(frame,kind,p,s,color,shape,angle);
    const seed=i+level.index*17;stats.sourcePanels++;
-   // Preserve even narrow stair treads. Their walking plane does not recede.
+   // Keep the top within the original closed finish. Separate stone and
+   // bronze by 4 mm; coincident faces shimmer when the camera moves.
    if(normal.y>.80){
     stats.floorPanels++;
-    add('mineral',[0,0,-.001],[w,h,depth-.002],position.y>base+3?0xb8bfae:PALETTE.floor,'cassette');
+    add('mineral',[0,0,-.0025],[w,h,depth-.005],position.y>base+3?0xb8bfae:PALETTE.floor,'cassette');
     if(w>1.5&&h>1.5){
      const inset=Math.min(.13,w*.08,h*.08),d=.008;
      for(const sign of [-1,1]){
-      add('metal',[sign*(w/2-inset),0,front-.004],[.018,h-inset*2,d],PALETTE.brass);
-      add('metal',[0,sign*(h/2-inset),front-.004],[w-inset*2,.018,d],PALETTE.brass);
+      add('metal',[sign*(w/2-inset),0,front-.003],[.018,h-inset*2,d],PALETTE.brass);
+      add('metal',[0,sign*(h/2-inset),front-.003],[w-inset*2-.018,.018,d],PALETTE.brass);
      }
      if(seed%9===0){
-      add('enamel',[-w*.34,-h*.34,front-.004],[Math.min(.32,w*.12),Math.min(.32,h*.12),.008],PALETTE.jade,'box',Math.PI/4);
+      add('enamel',[-w*.34,-h*.34,front-.003],[Math.min(.32,w*.12),Math.min(.32,h*.12),.008],PALETTE.jade,'box',Math.PI/4);
      }
     }
    }else if(normal.y<-.80){

@@ -39,3 +39,18 @@ test('Botanical movement uses simulation time and reduced motion, never physics 
  assert.equal(g.cargo,cargo);assert.equal(g.physics.cargoBody,body);assert.equal(body.shapes[0],shape);assert.deepEqual(g.playerPosition.toArray(),p.toArray());
  l.reset();assert.equal(a.time.value,0);disposeLabLevel(g);
 });
+
+test('Bronze floor inlay has a real four-millimetre depth separation, not coincident faces',async()=>{
+ const g=await createHeadlessGame();Object.assign(g,{chamberEdition:'foundation',...ACTIVE_FOUNDATION_RUNTIME_FLAGS});
+ for(const index of [20,29]){
+  await g.selectLevel(index,true);const a=g.firstLevel.biosphereArchitecture;
+  const r=a.records.find(r=>r.normal[1]>.9&&r.width>1.5&&r.height>1.5);assert.ok(r);
+  const inset=Math.min(.13,r.width*.08,r.height*.08),point=new THREE.Vector3(r.width/2-inset,0,1).applyMatrix4(r.frame);
+  a.root.updateWorldMatrix(true,true);point.applyMatrix4(a.root.matrixWorld);
+  const normal=new THREE.Vector3(...r.normal).transformDirection(a.root.matrixWorld),ray=new THREE.Raycaster(point,normal.negate(),0,2);
+  const hits=ray.intersectObject(a.root,true),metal=hits.find(h=>h.object.material.name.includes('bronze')),stone=hits.find(h=>h.object.material.name.includes('limestone'));
+  assert.ok(metal&&stone);assert.ok(Math.abs(stone.distance-metal.distance-.004)<.00003,'Floor face and inlay are coplanar or separated by the wrong depth');
+  assert.equal(hits[0].object,metal.object);assert.equal(hits[0].instanceId,metal.instanceId);
+ }
+ disposeLabLevel(g);
+});

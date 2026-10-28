@@ -45,9 +45,9 @@ jobs:
     timeout-minutes: 20
     strategy:
       fail-fast: false
-      max-parallel: 3
+      max-parallel: 5
       matrix:
-        level: [21, 24, 29]
+        level: [21, 22, 23, 24, 25, 26, 27, 28, 29, 30]
     steps:
       - uses: actions/checkout@v4
         with:
@@ -74,6 +74,7 @@ jobs:
       - name: Actual production views and unchanged-input candidate route
         env:
           LEVELS: ${{ matrix.level }}
+          BUILD_COMMIT: ${{ github.sha }}
         run: |
           mkdir -p before-site after-site
           ln -s ../baseline/dist before-site/campaign-v67
