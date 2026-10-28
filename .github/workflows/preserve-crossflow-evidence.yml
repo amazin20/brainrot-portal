@@ -1,0 +1,122 @@
+name: Preserve room26 and chapter review evidence
+
+# Saves already executed evidence only. Does not deploy or publish the game.
+on:
+  push:
+    branches: [upgrade/tz-completion-20261023]
+    paths: ['.github/workflows/preserve-crossflow-evidence.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+  actions: read
+concurrency:
+  group: preserve-crossflow-evidence
+  cancel-in-progress: false
+jobs:
+  preserve:
+    if: github.ref == 'refs/heads/upgrade/tz-completion-20261023'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 1
+      - name: Download exact immutable evidence and authenticate all archive bytes
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs=require('fs'),crypto=require('crypto');
+            const baseline='b71e8dc2d2bc62281f62eb7dc7c2da823470b9c9',candidate='296594596451637fe9ceded007b810267471ee63';
+            const rows=[
+              {name:'chapters-before-21-25',kind:'chapter',run:40606182493,source:baseline,id:12781780412,bytes:7323713,sha256:'37be870face43dde03be13545a2e7bc8eb309bcdcf16af6124f2171989d1f3bd'},
+              {name:'chapters-before-26-30',kind:'chapter',run:40606182493,source:baseline,id:12781960084,bytes:6653474,sha256:'8ce37231de629351bc8c5c87b29801224c70403abf3d3f16fc91d40d9ea62c28'},
+              {name:'chapters-after-21-25',kind:'chapter',run:40608953754,source:candidate,id:12781779101,bytes:7323700,sha256:'8c00a357de0d32a79a52312ca4c6e3d349a9cf5f0bdb3a734167ac91fabd4b55'},
+              {name:'chapters-after-26-30',kind:'chapter',run:40608953754,source:candidate,id:12781214914,bytes:6664090,sha256:'dfdaef88998f5d403b4c4fa25bf58da6c72372173b21f584d29fe5e9f1034890'},
+              {name:'route-retrieve-first',kind:'route',run:40608953758,source:candidate,id:12782570434,bytes:8286097,sha256:'acc2629fdbc331625b444961f4a68f1eefdf9c89be33e608c5bd717f6a39597b'},
+              {name:'route-air-freight',kind:'route',run:40608953758,source:candidate,id:12781314927,bytes:8972942,sha256:'f8b22cedc2c076252e0ff032fa84fa0b89f66fc2af0b57fef91d167c35b85437'}
+            ];
+            const root=process.env.RUNNER_TEMP+'/crossflow-evidence';fs.mkdirSync(root,{recursive:true});
+            for(const row of rows){
+              const args={...context.repo,artifact_id:row.id};
+              const meta=(await github.rest.actions.getArtifact(args)).data;
+              if(meta.expired||meta.workflow_run?.id!==row.run||meta.workflow_run?.head_sha!==row.source)throw Error('Artifact source mismatch '+row.id);
+              const response=await github.rest.actions.downloadArtifact({...args,archive_format:'zip'}),bytes=Buffer.from(response.data);
+              if(bytes.length!==row.bytes||crypto.createHash('sha256').update(bytes).digest('hex')!==row.sha256)throw Error('Archive checksum mismatch '+row.id);
+              fs.writeFileSync(root+'/'+row.name+'.zip',bytes);
+            }
+            fs.writeFileSync(root+'/manifest.json',JSON.stringify({baseline,candidate,artifacts:rows},null,2)+'\n');
+      - name: Retain original reports, all PNGs and both historical failures unchanged
+        shell: python
+        run: |
+          import os, json, zipfile, hashlib, pathlib
+          source=pathlib.Path(os.environ['RUNNER_TEMP'])/'crossflow-evidence'
+          target=pathlib.Path('docs/development/proofs/crossflow-20261028')
+          target.mkdir(parents=True,exist_ok=True)
+          manifest=json.loads((source/'manifest.json').read_text())
+          summary={'sourceCommit':manifest['candidate'],'baselineCommit':manifest['baseline'],'nativeCandidateRoutesPassed':0,'baselineRoutesPassed':0,'baselineRoutesFailed':0,'verifiedPngs':0,'rows':[],'wholeCampaignAccepted':False}
+          for item in manifest['artifacts']:
+              destination=target/item['name'];destination.mkdir(exist_ok=True)
+              with zipfile.ZipFile(source/(item['name']+'.zip')) as archive:
+                  names=archive.namelist()
+                  for name in names:
+                      path=pathlib.PurePosixPath(name)
+                      if path.is_absolute() or '..' in path.parts: raise RuntimeError('Unsafe ZIP path')
+                  reports=[name for name in names if name.endswith('/report.json')]
+                  if len(reports)!=1: raise RuntimeError('Ambiguous source report')
+                  report_name=reports[0];raw=archive.read(report_name);report=json.loads(raw)
+                  if report['sourceCommit']!=item['source']: raise RuntimeError('Report source mismatch')
+                  (destination/'report.json').write_bytes(raw)
+                  folder=str(pathlib.PurePosixPath(report_name).parent)
+                  images=[]
+                  if item['kind']=='chapter':
+                      if not report['pass'] or len(report['rows'])!=5: raise RuntimeError('Incomplete chapter capture')
+                      for row in report['rows']:
+                          if not row['pass'] or len(row['views'])!=3: raise RuntimeError('Incomplete room capture')
+                          images.extend({'file':v['filename'],'sha256':v['sha256'],'bytes':v['bytes']} for v in row['views'])
+                  else:
+                      if len(report['rows'])!=4: raise RuntimeError('Incomplete before/after attempt')
+                      for row in report['rows']:
+                          images.extend(row['images'])
+                          record={'route':report['route'],'version':row['version'],'view':row['view'],'pass':row['pass'],'sourceReport':item['name']+'/report.json'}
+                          if row['version']=='after':
+                              result=row.get('route',{})
+                              if not row['pass'] or result.get('state')!='won' or not result.get('sameOriginal') or result.get('resets')!=0: raise RuntimeError('Candidate did not finish with its original actor')
+                              if result['result']['resets']+result['result']['respawns']!=0: raise RuntimeError('Candidate route reset')
+                              summary['nativeCandidateRoutesPassed']+=1
+                          elif row['pass']: summary['baselineRoutesPassed']+=1
+                          else:
+                              if row['view']!='portrait' or 'Return observation arm / collision' not in row.get('route',{}).get('error',''): raise RuntimeError('Unexpected baseline failure; retain and review separately')
+                              record['failure']='Original portrait input route hits the real return deck; unmodified historical failure, not a candidate success.'
+                              summary['baselineRoutesFailed']+=1
+                          summary['rows'].append(record)
+                  for image in images:
+                      name=image['file']
+                      if pathlib.PurePosixPath(name).name!=name: raise RuntimeError('Unsafe image name')
+                      payload=archive.read(folder+'/'+name)
+                      if len(payload)!=image['bytes'] or hashlib.sha256(payload).hexdigest()!=image['sha256']: raise RuntimeError('PNG checksum mismatch')
+                      (destination/name).write_bytes(payload);summary['verifiedPngs']+=1
+                  for name in names:
+                      if name.endswith('-server.log'): (destination/pathlib.PurePosixPath(name).name).write_bytes(archive.read(name))
+          if summary['verifiedPngs']!=125 or summary['nativeCandidateRoutesPassed']!=4 or summary['baselineRoutesPassed']!=2 or summary['baselineRoutesFailed']!=2: raise RuntimeError('Evidence scope mismatch')
+          (target/'manifest.json').write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+'\n')
+          (target/'summary.json').write_text(json.dumps(summary,ensure_ascii=False,indent=2)+'\n')
+          text='# Комната 26: подвесы и обычные прохождения\n\nПроверенный игровой код: `296594596451637fe9ceded007b810267471ee63`. Все изображения ниже — подлинные кадры обычных production-сборок, не иллюстрации. Здесь постоянно сохранены 125 исходных PNG и неизменённые отчёты.\n\n'
+          text+='## Нижний ограничитель: до и после\n\nДо | После\n---|---\n![До](route-retrieve-first/before-wide-lower-stop.png) | ![После](route-retrieve-first/after-wide-lower-stop.png)\n\n'
+          text+='## Верхний ограничитель: до и после\n\nДо | После\n---|---\n![До](route-retrieve-first/before-wide-upper-stop.png) | ![После](route-retrieve-first/after-wide-upper-stop.png)\n\n'
+          text+='## Реальные результаты маршрутов\n\nНовая сборка завершила четыре браузерных прохождения: обычный перенос и отдельная перевозка спутника, каждый при 1280×720 и 390×844. Оригинальные объекты и физические тела сохранены, сбросов и возрождений нет.\n\nСтарая сборка прошла два широких маршрута. Оба прежних портретных маршрута упёрлись выстрелом в настоящий настил. Поэтому исходные два сравнительных задания остаются красными, а их отчёты `pass:false` сохранены без исправления. Это ошибка автоматического пути, не доказательство непроходимости уровня человеком. В новом пути используется существующий нижний этаж и та же пара порталов.\n\n'
+          text+='[Обычный маршрут: полный исходный отчёт](route-retrieve-first/report.json) · [Раздельная перевозка: полный исходный отчёт](route-air-freight/report.json) · [Сводка с границами результата](summary.json) · [Источники и SHA-256 ZIP](manifest.json)\n\n'
+          text+='## Снимки комнат 21–30\n\nДля каждой комнаты сохранены начальный вид и два заранее заданных ракурса в старой и новой сборках. Это статический осмотр, не полное прохождение десяти комнат.\n\nКомната | Начальный вид | Второй ракурс\n---|---|---\n'
+          for level in range(21,31):
+              folder='chapters-after-21-25' if level<=25 else 'chapters-after-26-30'
+              text+=f'{level} | ![Начало {level}]({folder}/room-{level}-start.png) | ![Осмотр {level}]({folder}/room-{level}-oblique.png)\n'
+          text+='\nПрограммный WebGL не заменяет ручной плейтест или аппаратное измерение FPS. Полная кампания и Яндекс Игры здесь не объявляются принятыми. Публикации игры не было.\n'
+          (target/'README.md').write_text(text)
+      - name: Commit evidence only and reject concurrent ref changes
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add docs/development/proofs/crossflow-20261028
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m 'Keep 125 source-bound chapter and room26 PNGs with original successful and failed route reports'
+          git push origin HEAD:refs/heads/upgrade/tz-completion-20261023
