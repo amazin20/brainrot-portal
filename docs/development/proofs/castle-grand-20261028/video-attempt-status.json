@@ -1,0 +1,23 @@
+{
+  "gameCommit": "92d02d1d7febfe9162c08912f6728e459403f8af",
+  "observerCommit": "5336dc196d01bef41e61260188ffb81c18d06e89",
+  "run": 40634115552,
+  "artifactId": 12794227029,
+  "artifactBytes": 16183292,
+  "artifactSha256": "a6484c0b34682d65b848212f665e7aa2642a58ed2c440cb82e6c6afd6f681de0",
+  "pass": false,
+  "completeRecording": false,
+  "failure": "Runtime.callFunctionOn protocol timeout during native software-WebGL recording",
+  "recordedFrames": 1180,
+  "recordingFps": 6,
+  "width": 960,
+  "height": 540,
+  "partialVideoDurationSeconds": 196.666667,
+  "lastPhysicsStep": 23580,
+  "lastSimulationSeconds": 196.5,
+  "lastState": "playing",
+  "lastSolved": ["freight", "sluice", "optics"],
+  "rawReportSha256": "b9433a2fa0c9a06628c67f33d71afd0edd0e1d483c62b3127a97dc6756f53bb8",
+  "clockCorrection": "The failed observer stored game.elapsed milliseconds under the frame key seconds. All 1180 rows verify after division by 1000. The old report remains unchanged. The recorder now explicitly converts to seconds and checks the 120 Hz simulation clock.",
+  "claims": "This failed recording is not the accepted separate full route, not a 15-minute video, and not a completed castle proof. Video preservation and chapter scripts are prepared but have not produced accepted movie output."
+}

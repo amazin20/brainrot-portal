@@ -1,0 +1,13 @@
+{
+  "gameCommit": "92d02d1d7febfe9162c08912f6728e459403f8af",
+  "testBlob": "21a074ef3d51f05ebb3d290976abf56e964ac020",
+  "scope": "Local Node CPU projection checks after adapting the historical negative-control owner assertion to the delivered carved-arcade geometry. No camera, game, actor or threshold change. Not every-frame rendering acceptance.",
+  "testsPassed": 3,
+  "testsFailed": 0,
+  "old": {"frames": 8238, "samples": 551, "outsideSamples": 13, "maxFov": 62.39999999999883, "maxOutsideVertices": 5621, "terminalOutsideVertices": 285},
+  "fixed": {"frames": 8239, "samples": 551, "outsideSamples": 0, "maxFov": 108.30244454570396, "maxOutsideVertices": 0, "terminalOutsideVertices": 0},
+  "verticesPerSample": 96753,
+  "fullLocalTrace": {"file": "castle-camera-remaster.json", "bytes": 175040, "sha256": "28abf24089151106dd5aeaf0ad6f5fd9d6e41c9ec154e89340f330c5833d583d", "location": "session proof archive; not claimed to be a file in this repository"},
+  "tapSha256": "bbd50757d353d460b812eba78e052caa685dfa9e337520f35c0650d457ccdc27",
+  "fullCampaignAccepted": false
+}

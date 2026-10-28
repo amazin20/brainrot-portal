@@ -87,7 +87,7 @@ test('upright confined fit preserves the optical axis, frozen frames and a finit
  * original shared unit cube already present in this very castle. This is not
  * a current-scene art adjustment, and it never runs on the fixed-camera path.
  * Collider bounds, poses, physical bodies, rendered batches and new exterior
- * columns remain actual v67; this comparator is specifically the old flat
+ * columns remain the current carved-arcade castle; this comparator is specifically the old flat
  * wing-wall camera-query scene, not a claim to replay the entire old build. */
 function historicalV66FlatWallQueries(g) {
   const walls = [...new Set(g.cameraBlockers)].filter(mesh => mesh.userData.castlePerimeterCoffer);
@@ -103,7 +103,10 @@ function historicalV66FlatWallQueries(g) {
   const before = registries.map(items => [...items]);
   for (const mesh of walls) {
     const geometry = mesh.geometry, collider = mesh.userData.collider;
-    assert.equal(geometry.name, 'Castle perimeter / closed load-bearing stone coffers');
+    assert.equal(mesh.userData.castleGrandFinish, true, 'The comparator must start from the delivered carved wall');
+    assert.equal(geometry.name, 'Castle / closed pointed stone arcade');
+    assert.ok(new THREE.Box3().setFromObject(mesh).equals(collider.box),
+      'The original physical/query envelope must still match the delivered wall');
     assert.ok(collider && !collider.kinematic);
     const box = collider.box.clone(), pose = mesh.matrixWorld.clone();
     mesh.geometry = originalUnitCube;
@@ -123,7 +126,7 @@ async function measureRoute(legacy) {
     await g.selectLevel(40, true);
     const currentCoffers = [...new Set(g.cameraBlockers)].filter(mesh => mesh.userData.castlePerimeterCoffer)
       .map(mesh => ({mesh, geometry: mesh.geometry}));
-    const comparisonScene = legacy ? historicalV66FlatWallQueries(g) : {kind: 'current-actual-v67-coffer-scene'};
+    const comparisonScene = legacy ? historicalV66FlatWallQueries(g) : {kind: 'current-actual-carved-arcade-scene'};
     if (legacy) g.cameraRig.configureSilhouette({enabled: false});
     const cargo = g.cargo, body = g.physics.cargoBody, root = g.playerGroup, visual = g.playerVisual;
     const meshes = [];
@@ -190,7 +193,7 @@ test('current ordinary castle contact route fits the original skin while flat-wa
     const old = await measureRoute(true), fixed = await measureRoute(false);
     if (process.env.CASTLE_CAMERA_REPORT) fs.writeFileSync(process.env.CASTLE_CAMERA_REPORT, JSON.stringify({old,fixed},null,2));
     assert.equal(old.comparisonScene.kind, 'historical-v66-flat-wing-wall-camera-query');
-    assert.equal(fixed.comparisonScene.kind, 'current-actual-v67-coffer-scene');
+    assert.equal(fixed.comparisonScene.kind, 'current-actual-carved-arcade-scene');
     // The gate-return redesign added real freight travel after the historical
     // 7248-frame / 485-sample / 15-crop recording. Do not apply that obsolete
     // clock to a different route, or retime inputs to recover its old numbers.

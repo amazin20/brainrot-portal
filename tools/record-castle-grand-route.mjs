@@ -11,7 +11,7 @@ const out=process.env.OUT_DIR||'qa/castle-movie';fs.mkdirSync(out,{recursive:tru
 const source=process.env.BUILD_COMMIT;assert.match(source||'',/^[a-f0-9]{40}$/);
 const fps=6,stride=10,width=960,height=540,file=path.join(out,'castle-ordinary-route.mp4');
 assert.ok(!fs.existsSync(file),'Never overwrite an existing recording');
-const report={sourceCommit:source,scope:'Silent native software-WebGL recording of the scripted ordinary castle route. Six sampled frames per simulated second; not measured game FPS or a human speedrun. No inserted idle, cuts, actor replacement or checkpoint recovery.',fps,width,height,frames:0,errors:[],consoleErrors:[],pass:false};
+const report={sourceCommit:source,scope:'Silent native software-WebGL recording of the scripted ordinary castle route. Six sampled frames per simulated second; not measured game FPS or a human speedrun. No inserted idle, cuts, actor replacement or checkpoint recovery.',recordedClockUnit:'seconds',fps,width,height,frames:0,errors:[],consoleErrors:[],pass:false};
 const save=()=>fs.writeFileSync(path.join(out,'report.json'),JSON.stringify(report,null,2)+'\n');save();
 const log=fs.openSync(path.join(out,'encoder.log'),'w'),frames=fs.createWriteStream(path.join(out,'frames.jsonl'));
 const encoder=spawn('ffmpeg',['-hide_banner','-loglevel','warning','-f','image2pipe','-framerate',String(fps),'-vcodec','png','-i','pipe:0','-an','-c:v','libx264','-threads','2','-preset','veryfast','-crf','23','-pix_fmt','yuv420p','-movflags','+faststart',file],{stdio:['pipe','ignore',log]});
@@ -22,6 +22,7 @@ try{
  const page=await browser.newPage();await page.setViewport({width,height});page.on('pageerror',e=>report.errors.push(String(e)));page.on('console',m=>{if(m.type()==='error')report.consoleErrors.push(m.text());});
  await page.exposeFunction('__WRITE_CASTLE_FRAME__',async(sample,png)=>{
   if(encodeError)throw encodeError;
+  assert.ok(Math.abs(sample.seconds-sample.steps/120)<.001,'Recorded seconds must match the original 120 Hz simulation clock');
   const bytes=Buffer.from(png,'base64');assert.ok(bytes.length>10000&&bytes.subarray(0,8).equals(Buffer.from([137,80,78,71,13,10,26,10])));
   frames.write(JSON.stringify({...sample,videoFrame:report.frames,bytes:bytes.length,sha256:crypto.createHash('sha256').update(bytes).digest('hex')})+'\n');
   await new Promise((resolve,reject)=>encoder.stdin.write(bytes,e=>e?reject(e):resolve()));
@@ -40,7 +41,8 @@ try{
   if(r.domElement.width!==width||r.domElement.height!==height)throw Error('Unexpected native canvas size');
   r.setAnimationLoop=window.__MOVIE_LOOP__;delete window.__MOVIE_LOOP__;
   const cargo=g.cargo,group=cargo.group,body=g.physics.cargoBody,shape=body.shapes[0],player=g.playerGroup,update=g.updatePlaying,clear=g.clearPortals;let updates=0,deletions=0,last=-1;
-  const sample=()=>({steps:g.physics.world.stepnumber,seconds:g.elapsed,player:g.playerPosition.toArray(),cargo:g.cargo.position.toArray(),solved:g.firstLevel.getTowerMetrics().solvedIds,state:g.state});
+  // LabGame.elapsed is milliseconds; the route report uses seconds.
+  const sample=()=>({steps:g.physics.world.stepnumber,seconds:g.elapsed/1000,elapsedMilliseconds:g.elapsed,player:g.playerPosition.toArray(),cargo:g.cargo.position.toArray(),solved:g.firstLevel.getTowerMetrics().solvedIds,state:g.state});
   const capture=async visualFrame=>{g.render();await window.__WRITE_CASTLE_FRAME__({...sample(),visualFrame},r.domElement.toDataURL('image/png').split(',')[1]);last=visualFrame;};
   g.clearPortals=()=>{deletions++;throw Error('Pair deletion unavailable to the player');};
   g.updatePlaying=function(...a){if(g.cargo!==cargo||g.cargo.group!==group||g.physics.cargoBody!==body||body.shapes[0]!==shape||g.playerGroup!==player)throw Error('Original actor replaced');updates++;return update.apply(this,a);};
