@@ -46,11 +46,20 @@ jobs:
               fs.writeFileSync(root+'/'+id+'.zip',bytes);
               artifacts.push({id,version,levels:Array.from({length:5},(_,i)=>first+i),sourceCommit,bytes:bytes.length,sha256});
             }
-            fs.writeFileSync(root+'/manifest.json',JSON.stringify({baselineCommit,gameCommit,nativeRuns,artifacts},null,2)+'\n');
+            const repairArtifact={id:12790046848,run:40626157829,sourceCommit:'40b66d128efae24caa2414715374c029e85fd2d5',bytes:17778815,sha256:'c620b363d548820d24ca68f64702ea945663a6550e030536facf9770c8c9211c'};
+            const run=(await github.rest.actions.getWorkflowRun({...context.repo,run_id:repairArtifact.run})).data;
+            if(run.status!=='completed'||run.conclusion!=='success'||run.head_sha!==repairArtifact.sourceCommit)throw Error('Ordinary repairs not accepted');
+            const metadata=(await github.rest.actions.getArtifact({...context.repo,artifact_id:repairArtifact.id})).data;
+            if(metadata.expired||metadata.workflow_run?.head_sha!==repairArtifact.sourceCommit||metadata.workflow_run?.id!==repairArtifact.run)throw Error('Repair artifact source mismatch');
+            const response=await github.rest.actions.downloadArtifact({...context.repo,artifact_id:repairArtifact.id,archive_format:'zip'}),bytes=Buffer.from(response.data);
+            if(bytes.length!==repairArtifact.bytes||crypto.createHash('sha256').update(bytes).digest('hex')!==repairArtifact.sha256)throw Error('Repair artifact bytes mismatch');
+            fs.writeFileSync(root+'/'+repairArtifact.id+'.zip',bytes);
+            fs.writeFileSync(root+'/manifest.json',JSON.stringify({baselineCommit,gameCommit,nativeRuns,artifacts,repairArtifact},null,2)+'\n');
       - name: Validate PNG bytes, actor routes and matching cameras; compose comparisons
         run: |
           python3 -m pip install pillow==11.3.0
           python3 tools/preserve-optics-evidence.py
+          python3 tools/preserve-ordinary-repair-evidence.py
       - name: Save only render evidence into the working branch without publication
         run: |
           git fetch origin refs/heads/upgrade/tz-completion-20261023
@@ -59,7 +68,7 @@ jobs:
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add docs/development/proofs/optics-remaster-20261028
           if git diff --cached --quiet; then exit 0; fi
-          git commit -m 'Preserve genuine Optics before-after frames, ten completed routes and 26 exact-source checks'
+          git commit -m 'Preserve genuine Optics frames and completed room 7/49 ordinary routes with no hidden pair deletion'
           git push origin HEAD:refs/heads/upgrade/tz-completion-20261023
       - uses: actions/upload-artifact@v4
         if: always()
