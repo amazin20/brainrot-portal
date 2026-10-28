@@ -1,0 +1,63 @@
+name: Preserve completed castle architecture evidence
+on:
+  push:
+    branches: [upgrade/tz-completion-20261023]
+    paths: ['.github/workflows/preserve-castle-grand-evidence.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+  actions: read
+concurrency:
+  group: castle-grand-evidence
+  cancel-in-progress: false
+jobs:
+  preserve:
+    if: github.ref == 'refs/heads/upgrade/tz-completion-20261023'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+      - name: Require completed exact-source review and authenticate immutable artifacts
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs=require('fs'),crypto=require('crypto');
+            const run=40633248429,sourceCommit='92d02d1d7febfe9162c08912f6728e459403f8af';
+            const state=(await github.rest.actions.getWorkflowRun({...context.repo,run_id:run})).data;
+            if(state.status!=='completed'||state.conclusion!=='success'||state.head_sha!==sourceCommit)throw Error('Castle review has not been accepted');
+            const targets=[
+              {kind:'native',id:12792853824,bytes:26965451,sha256:'28350cd163848463a884a7214c11c188c232016d140a98b64de767c1381bfe20'},
+              {kind:'tests',id:12793012217,bytes:40630,sha256:'78cc8ca76bd678c3cd09f6e5932e71354e1e7f150b018f47c9fa581909c6f927'},
+            ];
+            const root=process.env.RUNNER_TEMP+'/castle-grand-evidence';fs.mkdirSync(root,{recursive:true});
+            for(const item of targets){
+              const metadata=(await github.rest.actions.getArtifact({...context.repo,artifact_id:item.id})).data;
+              if(metadata.expired||metadata.workflow_run?.head_sha!==sourceCommit||metadata.workflow_run?.id!==run)throw Error('Wrong castle artifact source');
+              const response=await github.rest.actions.downloadArtifact({...context.repo,artifact_id:item.id,archive_format:'zip'}),bytes=Buffer.from(response.data);
+              if(bytes.length!==item.bytes||crypto.createHash('sha256').update(bytes).digest('hex')!==item.sha256)throw Error('Artifact differs from inspected bytes');
+              fs.writeFileSync(root+'/'+item.id+'.zip',bytes);
+            }
+            fs.writeFileSync(root+'/manifest.json',JSON.stringify({sourceCommit,run,artifacts:targets},null,2)+'\n');
+      - name: Verify genuine PNGs, matching worlds, original actors and full successful TAP
+        run: |
+          python3 -m pip install pillow==11.3.0
+          python3 tools/preserve-castle-grand-evidence.py
+      - name: Commit evidence only and refuse any concurrent branch change
+        run: |
+          git fetch origin refs/heads/upgrade/tz-completion-20261023
+          test "$(git rev-parse FETCH_HEAD)" = "${{ github.sha }}"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add docs/development/proofs/castle-grand-20261028
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m 'Preserve castle before-after PNGs, full no-reset native route and 61 accepted source-bound checks'
+          git push origin HEAD:refs/heads/upgrade/tz-completion-20261023
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: castle-accepted-review-92d02d1
+          path: docs/development/proofs/castle-grand-20261028/
+          retention-days: 14
+          if-no-files-found: warn
