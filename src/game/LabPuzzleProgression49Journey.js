@@ -32,9 +32,8 @@ export function runPuzzleProgression49(d,{stopAfter=null,noCargo=false,recover=f
  // Approach along the actual gallery, keeping both passenger portal heights.
  d.walk(-2.5,g.camera.aspect<.75?-3.5:-5);
  aimLateSurface(d,1,p.passenger);d.walk(-2.5,-12.3);d.walk(8.5,-12.3);d.enter(p['gallery-passenger']);d.mark('The moving passenger aperture admits the original player to the closed carriage');if(stopAfter==='aboard')return;
- // Once grounded inside, release the spent pair normally. Its trailing exit
- // view otherwise remains outside the carriage during the next optical aim.
- if(g.camera.aspect<.75){check(g.clearPortals(),'Onboard passenger pair did not close');d.wait(.4);}
+ // Keep the passenger pair open; step into the carriage before addressing optics.
+ if(g.camera.aspect<.75){d.walk(0,6);d.wait(.4);}
  d.walk(4,1.5);aimLateSurface(d,0,p['optical-source'],p['optical-source'].getFrame().center.clone().addScaledVector(p['optical-source'].getFrame().right,sourceAimOffset));d.walk(-4,6);aimLateSurface(d,1,p['optical-branch-b']);d.until(()=>l.receiverB.lit,4,'The second actual reflected directional receiver stayed dark');
  d.walk(0,5.4);check(g.interact(),'Onboard rail brake linkage inaccessible');d.wait(.3);check(!l.carriage.braked,'Onboard linkage did not release actual rail brake');
  d.until(()=>l.carriage.position.x>23.8,30,'Second real optical stroke did not reach dock');d.mark('Second optical direction powers the released physical carriage to the final dock');

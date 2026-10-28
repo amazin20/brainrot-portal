@@ -17,16 +17,13 @@ for(const aspect of [390/844,9/16,16/9])test(`49 complete route ${aspect} boards
   if(impact&&key!==last){last=key;impacts.push({...impact,surfaceId:g.portals.portals[impact.index]?.surfaceId});}
   return visual.apply(this,args);
  };
- g.clearPortals=function(){
-  const entry={grounded:g.playerGrounded,player:g.playerPosition.toArray(),floor:l.carriage.floor.y,teleports:g.teleportCount,braked:l.carriage.braked,loaded:l.carriage.loaded()},cargo=original.body.position.clone();
-  assert.equal(entry.grounded,true);assert.equal(entry.teleports,1);assert.ok(Math.abs(entry.player[1]-entry.floor)<.04);assert.equal(entry.braked,true);assert.equal(entry.loaded,true);
-  const result=clear.call(this);assert.deepEqual(original.body.position,cargo,'closing the unused pair must not relocate the free original weight');closures.push(entry);return result;
- };
+ g.clearPortals=function(){closures.push({player:g.playerPosition.toArray()});throw Error('Pair deletion is not an ordinary player action');};
  try{
   const r=await runV8Journey(g,{onMilestone:item=>{if(item.name.startsWith('The moving passenger aperture'))boarding={...item,grounded:g.playerGrounded,floor:l.carriage.floor.y,entry:g.portals.portals[0].position.toArray(),exit:g.portals.portals[1].position.toArray()};}});
   assert.equal(r.pass,true);assert.equal(g.state,'won');assert.equal(r.resets,0);assert.equal(r.respawns,0);assert.equal(r.teleports,1);assert.ok(frames>4000);
   assert.ok(boarding);assert.equal(boarding.grounded,true);assert.ok(Math.abs(boarding.player[1]-boarding.floor)<.04);assert.ok(Math.abs((boarding.exit[1]-boarding.entry[1])-(boarding.floor-8))<.01,'both apertures preserve the actual floor-height difference');
-  assert.equal(closures.length,aspect<.75?1:0);
+  assert.equal(closures.length,0);
+  assert.equal(g.portals.ready,true,'Optical pair remains live after genuine retargeting');
   const expected=['cargo-feed','mirror-freight','optical-source','optical-branch-a','carriage-freight','mirror-freight','gallery-passenger','passenger','optical-source','optical-branch-b'].map(name=>l.panels[name].mesh.uuid);
   assert.equal(requests.length,10);assert.equal(impacts.length,10);assert.ok(impacts.every(hit=>hit.valid));assert.deepEqual(requests.map(r=>r.surface),expected);assert.deepEqual(impacts.map(r=>r.surfaceId),expected);
   assert.ok(l.carriage.position.x>23.8);assert.ok(g.physics.portalTransports>=2);

@@ -5,6 +5,7 @@ on:
     paths:
       - 'src/game/**'
       - 'tools/qa-chapter-visual-continuation.mjs'
+      - 'tools/qa-ordinary-route-repairs.mjs'
       - '.github/workflows/chapter-visual-continuation.yml'
   workflow_dispatch:
 permissions:
@@ -15,7 +16,7 @@ concurrency:
 jobs:
   inspect:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 25
     strategy:
       fail-fast: false
       matrix:
@@ -47,6 +48,16 @@ jobs:
           export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
           export PUPPETEER_MODULE="$RUNNER_TEMP/brainrot-browser/node_modules/puppeteer-core/lib/esm/puppeteer/puppeteer-core.js"
           node tools/qa-chapter-visual-continuation.mjs
+      - name: Require player-accessible room 7 and 49 routes with pair deletion forbidden
+        if: matrix.levels == '31,32,33,34,35'
+        env:
+          BUILD_COMMIT: ${{ github.sha }}
+        run: |
+          set -o pipefail
+          node --test --test-concurrency=1 tests/lab-balance-portrait-route.test.js tests/lab-ordinary-action-contract.test.js tests/lab-puzzle-progression49-portrait.test.js | tee qa/chapter-native/ordinary-repair-tests.tap
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+          export PUPPETEER_MODULE="$RUNNER_TEMP/brainrot-browser/node_modules/puppeteer-core/lib/esm/puppeteer/puppeteer-core.js"
+          node tools/qa-ordinary-route-repairs.mjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:

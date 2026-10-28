@@ -116,11 +116,10 @@ export async function runBalanceJourney(d, { order } = {}) {
   aim(0, loadFrame.center.clone().addScaledVector(loadFrame.up, .32));
   until(() => game.cargo.position.y > 8.6, 8, 'The friend did not leave the load tray through the new pair');
   mark('retrieved the original friend through the load tray');
-  // Close the floor aperture while the friend is clear of it, so the friend
-  // can land on the dock and the player can walk across to collect them.
-  check(game.clearPortals(), 'Could not close the retrieval pair');
-  wait(1.2);
-  const c = game.cargo.position.clone(); walk(c.x - 1.05, c.z);
+  // Keep the real pair open and approach beside its floor aperture. If the
+  // two travellers have not already won, use the ordinary pickup button.
+  // Pair deletion is not exposed in the player's controls.
+  walk(1.8, 10.7);
   if (game.state === 'playing') pickup();
   walk(0, 12.3);
 }
