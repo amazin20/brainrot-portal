@@ -14,22 +14,87 @@ concurrency:
   group: biosphere-remaster-${{ github.ref }}
   cancel-in-progress: true
 jobs:
-  workspace:
+  structural:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
         with:
           persist-credentials: false
-      - name: Preserve exact source for local development and review
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Verify all ten unchanged gameplay contracts and artwork ownership
         run: |
           mkdir -p evidence
-          git archive --format=tar HEAD | gzip -n > evidence/source.tar.gz
+          set -o pipefail
+          node --test tests/lab-biosphere-architecture.test.js | tee evidence/structural.tap
+          npm run build | tee evidence/build.log
           git rev-parse HEAD > evidence/source-sha.txt
-          sha256sum evidence/source.tar.gz > evidence/source.sha256
       - uses: actions/upload-artifact@v4
+        if: always()
         with:
-          name: biosphere-exact-source
+          name: biosphere-structure-${{ github.sha }}
           path: evidence/
+          retention-days: 14
+          if-no-files-found: error
+  native:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      max-parallel: 3
+      matrix:
+        level: [21, 24, 29]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Build locked candidate and independent baseline
+        run: |
+          npm ci
+          npm run build
+          python3 -m pip install playwright==1.57.0
+      - uses: actions/checkout@v4
+        with:
+          ref: a38730963973834b75b11ef77a08b5ca9ff6cacc
+          path: baseline
+          persist-credentials: false
+      - name: Build baseline with identical dependency versions
+        working-directory: baseline
+        run: |
+          ln -s ../node_modules node_modules
+          npm run build
+      - name: Actual production views and unchanged-input candidate route
+        env:
+          LEVELS: ${{ matrix.level }}
+        run: |
+          mkdir -p before-site after-site
+          ln -s ../baseline/dist before-site/campaign-v67
+          ln -s ../dist after-site/campaign-v67
+          python3 -m http.server 4174 --bind 127.0.0.1 --directory before-site > before-server.log 2>&1 &
+          python3 -m http.server 4173 --bind 127.0.0.1 --directory after-site > after-server.log 2>&1 &
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+          for i in {1..30}; do curl -fsS http://127.0.0.1:4173/campaign-v67/ >/dev/null && curl -fsS http://127.0.0.1:4174/campaign-v67/ >/dev/null && break; sleep 1; done
+          set +e
+          VERSIONS=before ROUTES=0 OUT_DIR=qa/biosphere-${LEVELS}/before python3 tools/qa-biosphere-remaster.py
+          BEFORE=$?
+          VERSIONS=after ROUTES=1 OUT_DIR=qa/biosphere-${LEVELS}/after python3 tools/qa-biosphere-remaster.py
+          AFTER=$?
+          test "$BEFORE" -eq 0 && test "$AFTER" -eq 0
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: biosphere-native-${{ matrix.level }}-${{ github.sha }}
+          path: |
+            qa/biosphere-${{ matrix.level }}/
+            before-server.log
+            after-server.log
           retention-days: 14
           if-no-files-found: error

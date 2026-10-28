@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import {installBiosphereArchitecture} from './LabBiosphereArchitecture.js';
 import {manufacturedBulkheadGeometry} from './LabManufacturedFinish.js';
 import {finishArchitecturalMaterials} from './LabArchitecturalFinishV67.js';
 
@@ -104,5 +105,5 @@ export function finishVisualAudit(game,level,index,roots=[]){
   return dispose?.apply(this,args);
  };
  level.visualAuditFinish={diagnostics,root:instruments?.root||null,get disposed(){return disposed;}};
- return level;
+ return installBiosphereArchitecture(game,level);
 }
