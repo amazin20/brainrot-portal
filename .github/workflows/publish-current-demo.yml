@@ -1,0 +1,141 @@
+name: Publish current GitHub demo
+on:
+  workflow_run:
+    workflows: [Build current GitHub demo]
+    branches: [upgrade/tz-completion-20261023]
+    types: [completed]
+  workflow_dispatch:
+    inputs:
+      build_run:
+        description: Successful Build current GitHub demo run ID; empty selects the latest branch-head build
+        required: false
+        type: string
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: pages
+  cancel-in-progress: false
+jobs:
+  source:
+    if: github.repository == 'amazin20/brainrot-portal' && (github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success')
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      eligible: ${{ steps.guard.outputs.eligible }}
+      commit: ${{ steps.guard.outputs.commit }}
+      run: ${{ steps.guard.outputs.run }}
+    steps:
+      - id: guard
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const branch='upgrade/tz-completion-20261023';
+            const head=(await github.rest.git.getRef({...context.repo,ref:'heads/'+branch})).data.object.sha;
+            let id=context.payload.workflow_run?.id||context.payload.inputs?.build_run;
+            if(!id){const runs=(await github.rest.actions.listWorkflowRuns({...context.repo,workflow_id:'current-demo-build.yml',head_sha:head,status:'success',per_page:5})).data.workflow_runs;id=runs[0]?.id;}
+            if(!id)throw Error('No successful current-source demo build exists');
+            const run=(await github.rest.actions.getWorkflowRun({...context.repo,run_id:Number(id)})).data;
+            if(run.conclusion!=='success'||run.status!=='completed'||run.path!=='.github/workflows/current-demo-build.yml'||run.head_branch!==branch||run.head_repository.full_name!==context.repo.owner+'/'+context.repo.repo)throw Error('Untrusted or unsuccessful demo build');
+            core.setOutput('eligible',run.head_sha===head?'true':'false');
+            core.setOutput('commit',run.head_sha);core.setOutput('run',String(run.id));
+            if(run.head_sha!==head)core.notice('Skip obsolete run: newer work must not be replaced by an older build');
+  prepare:
+    needs: source
+    if: needs.source.outputs.eligible == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    env:
+      SOURCE_COMMIT: ${{ needs.source.outputs.commit }}
+      SOURCE_RUN: ${{ needs.source.outputs.run }}
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: '${{ github.sha }}', persist-credentials: false}
+      - uses: actions/download-artifact@v4
+        with:
+          name: current-demo-browser
+          run-id: ${{ needs.source.outputs.run }}
+          github-token: ${{ github.token }}
+          path: candidate
+      - uses: actions/download-artifact@v4
+        with:
+          name: current-demo-checks
+          run-id: ${{ needs.source.outputs.run }}
+          github-token: ${{ github.token }}
+          path: checks
+      - name: Require the exact successful native smoke evidence
+        run: |
+          python3 - <<'PY'
+          import json,os
+          p=json.load(open('checks/demo-smoke/report.json'))
+          assert p['pass'] and p['sourceCommit']==os.environ['SOURCE_COMMIT']
+          assert len(p['rows'])==6 and all(r['pass'] and not r['errors'] and not r['consoleErrors'] for r in p['rows'])
+          PY
+      - name: Preserve existing versions and videos, then assemble the current demo
+        run: |
+          python3 scripts/current-demo/site.py restore
+          python3 scripts/current-demo/site.py assemble
+      - uses: actions/upload-pages-artifact@v3
+        with: {path: pages, name: github-pages, retention-days: 14}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: {name: current-demo-preparation, path: proof/, retention-days: 30, if-no-files-found: warn}
+  deploy:
+    needs: [source,prepare]
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      actions: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.publish.outputs.page_url }}campaign-v67/
+    env:
+      SOURCE_COMMIT: ${{ needs.source.outputs.commit }}
+      SOURCE_RUN: ${{ needs.source.outputs.run }}
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: '${{ github.sha }}', persist-credentials: false}
+      - uses: actions/download-artifact@v4
+        with: {name: current-demo-preparation, path: proof}
+      - uses: actions/configure-pages@v5
+      - name: Refuse an obsolete source or changed public deployment
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const head=(await github.rest.git.getRef({...context.repo,ref:'heads/upgrade/tz-completion-20261023'})).data.object.sha;
+            if(head!==process.env.SOURCE_COMMIT)throw Error('A newer source arrived; do not deploy the old build');
+      - run: python3 scripts/current-demo/site.py gate
+      - uses: actions/deploy-pages@v4
+        id: publish
+      - name: Verify every new published file by HTTP and SHA-256
+        run: python3 scripts/current-demo/site.py verify
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: {name: current-demo-public-http, path: proof/, retention-days: 30, if-no-files-found: warn}
+  public-native:
+    needs: [source,deploy]
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      EXPECTED_COMMIT: ${{ needs.source.outputs.commit }}
+      DEMO_BASE: https://amazin20.github.io/brainrot-portal/campaign-v67/
+      DEMO_PROOF_DIR: evidence/public-demo
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: '${{ needs.source.outputs.commit }}', persist-credentials: false}
+      - uses: actions/setup-node@v4
+        with: {node-version: 22, cache: npm}
+      - run: |
+          npm ci
+          npm install --prefix "$RUNNER_TEMP/browser" --no-save --package-lock=false puppeteer-core@24.16.0
+      - name: Open the actual published game and verify the three remastered sections
+        run: |
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+          export PUPPETEER_MODULE="$RUNNER_TEMP/browser/node_modules/puppeteer-core/lib/esm/puppeteer/puppeteer-core.js"
+          node tools/current-demo/smoke.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: {name: current-demo-public-native, path: evidence/public-demo/, retention-days: 30, if-no-files-found: error}
