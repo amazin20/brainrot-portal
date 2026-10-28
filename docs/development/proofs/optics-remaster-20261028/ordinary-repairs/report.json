@@ -1,0 +1,1869 @@
+{
+  "sourceCommit": "40b66d128efae24caa2414715374c029e85fd2d5",
+  "scope": "Production software WebGL; real-control scripted routes, not human playtesting. Room49 retains one legacy setup reset before observation; room7 starts directly from Play. All pairs remain or are retargeted by shots, never deleted by debug API.",
+  "rows": [
+    {
+      "level": 7,
+      "name": "wide",
+      "width": 1280,
+      "height": 720,
+      "errors": [],
+      "consoleErrors": [],
+      "images": [
+        {
+          "filename": "room-7-wide-01.png",
+          "mark": {
+            "name": "loaded friend sets the moving portal launch angle",
+            "player": [
+              -4.291511375101095,
+              0,
+              2.500717648015736
+            ],
+            "cargo": [
+              0.6425745305573427,
+              1.7868333503549159,
+              2.3244470433614643
+            ],
+            "teleports": 0
+          },
+          "bytes": 431430,
+          "sha256": "a312db937a6b74d45fdd82e1010594bad9f6d5bf4c7908e14a60676f23040dfe"
+        },
+        {
+          "filename": "room-7-wide-02.png",
+          "mark": {
+            "name": "gravity speed redirected by the tilting portal",
+            "player": [
+              0.07383583071676184,
+              3.2505257046638287,
+              -1.7894045433567725
+            ],
+            "cargo": [
+              0.6440144035033721,
+              1.7809569990771819,
+              2.3274035947648044
+            ],
+            "teleports": 1
+          },
+          "bytes": 474553,
+          "sha256": "5c1a797929a5e6f92a026a1efabf89e0b47b85490d00729ce493f62fdc6bf394"
+        },
+        {
+          "filename": "room-7-wide-03.png",
+          "mark": {
+            "name": "landed on the upper receiving balcony",
+            "player": [
+              2.039695040978466,
+              8.2,
+              7.8078718145240575
+            ],
+            "cargo": [
+              0.6440348364309518,
+              1.7808818211835122,
+              2.3275924728878685
+            ],
+            "teleports": 1
+          },
+          "bytes": 441974,
+          "sha256": "f349749c14ae265d5f7176622cc7b40beacac53cb476fdce477974f3c6682f76"
+        },
+        {
+          "filename": "room-7-wide-04.png",
+          "mark": {
+            "name": "retrieved the original friend through the load tray",
+            "player": [
+              1.6971208388102892,
+              8.2,
+              7.421327930720474
+            ],
+            "cargo": [
+              0.18954316344955982,
+              8.790486143235762,
+              10.600052011502296
+            ],
+            "teleports": 1
+          },
+          "bytes": 525597,
+          "sha256": "7cf791fc31d4104e1e2975029979b72791aa03b24700c83f3ca76aa5c77d11df"
+        },
+        {
+          "filename": "room-7-wide-05.png",
+          "mark": {
+            "name": "both at exit",
+            "player": [
+              2.1377488448027173,
+              8.225000001490116,
+              8.510720638380628
+            ],
+            "cargo": [
+              0.9408359635083687,
+              8.632244474168752,
+              11.108163983715821
+            ],
+            "teleports": 1
+          },
+          "bytes": 521023,
+          "sha256": "13254c7a25abcf5abe30b4f4aeaa18aac7020ff2c7b2511653363998252f4ad4"
+        }
+      ],
+      "pass": true,
+      "fixture": {
+        "key": "brainrot-campaign-v67:brainrot-portal.preferences.v24",
+        "raw": "{\"quality\":\"balanced\",\"volume\":0,\"lookSensitivity\":1,\"muted\":true,\"tutorial\":false,\"completed\":[0,1,2,3,4,5],\"hints\":{},\"resumeLevel\":6,\"campaignSequenceRevision\":\"fifty-rooms-then-castle-v1\",\"campaignRevision\":\"creative-campaign-v48\",\"roomRevisions\":{\"16\":\"cable-supported-architecture-v1\",\"22\":\"counterweight-dynamic-v1\",\"32\":\"siphon-observatory-v1\",\"42\":\"spatial-progression43-v1\",\"43\":\"spatial-progression44-v1\",\"44\":\"spatial-progression45-v1\",\"45\":\"spatial-progression46-v1\",\"46\":\"spatial-progression47-v1\",\"47\":\"spatial-progression48-v1\",\"48\":\"spatial-progression49-v1\",\"49\":\"spatial-progression50-v1\",\"50\":\"spatial-progression51-v1\"}}",
+        "preferences": {
+          "quality": "balanced",
+          "volume": 0,
+          "lookSensitivity": 1,
+          "muted": true,
+          "tutorial": false,
+          "completed": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "hints": {},
+          "resumeLevel": 6,
+          "campaignSequenceRevision": "fifty-rooms-then-castle-v1",
+          "campaignRevision": "creative-campaign-v48",
+          "roomRevisions": {
+            "16": "cable-supported-architecture-v1",
+            "22": "counterweight-dynamic-v1",
+            "32": "siphon-observatory-v1",
+            "42": "spatial-progression43-v1",
+            "43": "spatial-progression44-v1",
+            "44": "spatial-progression45-v1",
+            "45": "spatial-progression46-v1",
+            "46": "spatial-progression47-v1",
+            "47": "spatial-progression48-v1",
+            "48": "spatial-progression49-v1",
+            "49": "spatial-progression50-v1",
+            "50": "spatial-progression51-v1"
+          }
+        },
+        "completed": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "targetIndex": 6,
+        "targetCompleted": false,
+        "constructorWrites": 0,
+        "scope": "QA setup supplies the previously completed campaign prefix in the candidate own storage before construction; the current target is not completed. This is not a fresh guest full-campaign playthrough."
+      },
+      "result": {
+        "route": {
+          "level": 7,
+          "id": "moment-arm",
+          "pass": true,
+          "milestones": [
+            {
+              "name": "loaded friend sets the moving portal launch angle",
+              "player": [
+                -4.291511375101095,
+                0,
+                2.500717648015736
+              ],
+              "cargo": [
+                0.6425745305573427,
+                1.7868333503549159,
+                2.3244470433614643
+              ],
+              "teleports": 0
+            },
+            {
+              "name": "gravity speed redirected by the tilting portal",
+              "player": [
+                0.07383583071676184,
+                3.2505257046638287,
+                -1.7894045433567725
+              ],
+              "cargo": [
+                0.6440144035033721,
+                1.7809569990771819,
+                2.3274035947648044
+              ],
+              "teleports": 1
+            },
+            {
+              "name": "landed on the upper receiving balcony",
+              "player": [
+                2.039695040978466,
+                8.2,
+                7.8078718145240575
+              ],
+              "cargo": [
+                0.6440348364309518,
+                1.7808818211835122,
+                2.3275924728878685
+              ],
+              "teleports": 1
+            },
+            {
+              "name": "retrieved the original friend through the load tray",
+              "player": [
+                1.6971208388102892,
+                8.2,
+                7.421327930720474
+              ],
+              "cargo": [
+                0.18954316344955982,
+                8.790486143235762,
+                10.600052011502296
+              ],
+              "teleports": 1
+            },
+            {
+              "name": "both at exit",
+              "player": [
+                2.1377488448027173,
+                8.225000001490116,
+                8.510720638380628
+              ],
+              "cargo": [
+                0.9408359635083687,
+                8.632244474168752,
+                11.108163983715821
+              ],
+              "teleports": 1
+            }
+          ],
+          "respawns": 0,
+          "resets": 0,
+          "frames": 3729,
+          "teleports": 1
+        },
+        "observations": 7457,
+        "resets": 0,
+        "deletions": 0,
+        "state": "won",
+        "sameOriginal": true,
+        "pairReady": true
+      }
+    },
+    {
+      "level": 7,
+      "name": "portrait",
+      "width": 390,
+      "height": 844,
+      "errors": [],
+      "consoleErrors": [],
+      "images": [
+        {
+          "filename": "room-7-portrait-01.png",
+          "mark": {
+            "name": "loaded friend sets the moving portal launch angle",
+            "player": [
+              -4.2915113750853155,
+              0,
+              2.5007176480107867
+            ],
+            "cargo": [
+              0.6447886811376741,
+              1.7965030666830943,
+              2.326745991682406
+            ],
+            "teleports": 0
+          },
+          "bytes": 172125,
+          "sha256": "55765daf55837ee70f132016bf71fe551646ce7a2b517d2dfce4cf799bba4279"
+        },
+        {
+          "filename": "room-7-portrait-02.png",
+          "mark": {
+            "name": "gravity speed redirected by the tilting portal",
+            "player": [
+              0.053180521262437795,
+              3.5212583948770373,
+              -2.4672408951418987
+            ],
+            "cargo": [
+              0.6446404717589358,
+              1.7812633746140945,
+              2.326637716468144
+            ],
+            "teleports": 1
+          },
+          "bytes": 137918,
+          "sha256": "c642c22cab8556234e6230fb9192a4def61d895f0c340823b5f425c2a58a5cc2"
+        },
+        {
+          "filename": "room-7-portrait-03.png",
+          "mark": {
+            "name": "landed on the upper receiving balcony",
+            "player": [
+              2.881357605211745,
+              8.2,
+              7.599369006015048
+            ],
+            "cargo": [
+              0.6446683055886362,
+              1.7811969019716216,
+              2.3268041138392936
+            ],
+            "teleports": 1
+          },
+          "bytes": 126419,
+          "sha256": "bb873399726529aa372527cc74a4d0909f7ca141f98bbd8920df83defc7890b2"
+        },
+        {
+          "filename": "room-7-portrait-04.png",
+          "mark": {
+            "name": "retrieved the original friend through the load tray",
+            "player": [
+              1.6974452386640426,
+              8.2,
+              7.421174301671135
+            ],
+            "cargo": [
+              0.4248375524129089,
+              8.790346120281347,
+              10.334445674211803
+            ],
+            "teleports": 1
+          },
+          "bytes": 212081,
+          "sha256": "393b415c9dc1fe122b85b93c8f69dba410122ad8b1e6b363fbd43e766e742f8b"
+        },
+        {
+          "filename": "room-7-portrait-05.png",
+          "mark": {
+            "name": "both at exit",
+            "player": [
+              2.217625677680969,
+              8.225000001490116,
+              8.916909935335296
+            ],
+            "cargo": [
+              0.7373893641011192,
+              8.614998147581215,
+              11.827918666482484
+            ],
+            "teleports": 1
+          },
+          "bytes": 206599,
+          "sha256": "3276be9c293b45ad661027038d8ff12264b8fb3c0c16eed26b440867104790b7"
+        }
+      ],
+      "pass": true,
+      "fixture": {
+        "key": "brainrot-campaign-v67:brainrot-portal.preferences.v24",
+        "raw": "{\"quality\":\"balanced\",\"volume\":0,\"lookSensitivity\":1,\"muted\":true,\"tutorial\":false,\"completed\":[0,1,2,3,4,5],\"hints\":{},\"resumeLevel\":6,\"campaignSequenceRevision\":\"fifty-rooms-then-castle-v1\",\"campaignRevision\":\"creative-campaign-v48\",\"roomRevisions\":{\"16\":\"cable-supported-architecture-v1\",\"22\":\"counterweight-dynamic-v1\",\"32\":\"siphon-observatory-v1\",\"42\":\"spatial-progression43-v1\",\"43\":\"spatial-progression44-v1\",\"44\":\"spatial-progression45-v1\",\"45\":\"spatial-progression46-v1\",\"46\":\"spatial-progression47-v1\",\"47\":\"spatial-progression48-v1\",\"48\":\"spatial-progression49-v1\",\"49\":\"spatial-progression50-v1\",\"50\":\"spatial-progression51-v1\"}}",
+        "preferences": {
+          "quality": "balanced",
+          "volume": 0,
+          "lookSensitivity": 1,
+          "muted": true,
+          "tutorial": false,
+          "completed": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "hints": {},
+          "resumeLevel": 6,
+          "campaignSequenceRevision": "fifty-rooms-then-castle-v1",
+          "campaignRevision": "creative-campaign-v48",
+          "roomRevisions": {
+            "16": "cable-supported-architecture-v1",
+            "22": "counterweight-dynamic-v1",
+            "32": "siphon-observatory-v1",
+            "42": "spatial-progression43-v1",
+            "43": "spatial-progression44-v1",
+            "44": "spatial-progression45-v1",
+            "45": "spatial-progression46-v1",
+            "46": "spatial-progression47-v1",
+            "47": "spatial-progression48-v1",
+            "48": "spatial-progression49-v1",
+            "49": "spatial-progression50-v1",
+            "50": "spatial-progression51-v1"
+          }
+        },
+        "completed": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "targetIndex": 6,
+        "targetCompleted": false,
+        "constructorWrites": 0,
+        "scope": "QA setup supplies the previously completed campaign prefix in the candidate own storage before construction; the current target is not completed. This is not a fresh guest full-campaign playthrough."
+      },
+      "result": {
+        "route": {
+          "level": 7,
+          "id": "moment-arm",
+          "pass": true,
+          "milestones": [
+            {
+              "name": "loaded friend sets the moving portal launch angle",
+              "player": [
+                -4.2915113750853155,
+                0,
+                2.5007176480107867
+              ],
+              "cargo": [
+                0.6447886811376741,
+                1.7965030666830943,
+                2.326745991682406
+              ],
+              "teleports": 0
+            },
+            {
+              "name": "gravity speed redirected by the tilting portal",
+              "player": [
+                0.053180521262437795,
+                3.5212583948770373,
+                -2.4672408951418987
+              ],
+              "cargo": [
+                0.6446404717589358,
+                1.7812633746140945,
+                2.326637716468144
+              ],
+              "teleports": 1
+            },
+            {
+              "name": "landed on the upper receiving balcony",
+              "player": [
+                2.881357605211745,
+                8.2,
+                7.599369006015048
+              ],
+              "cargo": [
+                0.6446683055886362,
+                1.7811969019716216,
+                2.3268041138392936
+              ],
+              "teleports": 1
+            },
+            {
+              "name": "retrieved the original friend through the load tray",
+              "player": [
+                1.6974452386640426,
+                8.2,
+                7.421174301671135
+              ],
+              "cargo": [
+                0.4248375524129089,
+                8.790346120281347,
+                10.334445674211803
+              ],
+              "teleports": 1
+            },
+            {
+              "name": "both at exit",
+              "player": [
+                2.217625677680969,
+                8.225000001490116,
+                8.916909935335296
+              ],
+              "cargo": [
+                0.7373893641011192,
+                8.614998147581215,
+                11.827918666482484
+              ],
+              "teleports": 1
+            }
+          ],
+          "respawns": 0,
+          "resets": 0,
+          "frames": 3879,
+          "teleports": 1
+        },
+        "observations": 7758,
+        "resets": 0,
+        "deletions": 0,
+        "state": "won",
+        "sameOriginal": true,
+        "pairReady": true
+      }
+    },
+    {
+      "level": 49,
+      "name": "wide",
+      "width": 1280,
+      "height": 720,
+      "errors": [],
+      "consoleErrors": [],
+      "images": [
+        {
+          "filename": "room-49-wide-01.png",
+          "mark": {
+            "name": "Original weight tilts the true hinged mirror",
+            "player": [
+              -28.998740557474886,
+              8.18,
+              20.643353933798238
+            ],
+            "cargo": [
+              -11.58289830965527,
+              10.607153559571353,
+              -17.37414576391925
+            ],
+            "teleports": 0
+          },
+          "bytes": 418021,
+          "sha256": "f7b5610535b4cc2603ae43bc4adabc7c72e39bc2db9098dec99c4d361595af9b"
+        },
+        {
+          "filename": "room-49-wide-02.png",
+          "mark": {
+            "name": "Directional receiver sees the actual first reflected optical branch",
+            "player": [
+              -32.996605017907925,
+              8,
+              -1.215452630272841
+            ],
+            "cargo": [
+              -11.58289830965527,
+              10.607153559571353,
+              -17.37414576391925
+            ],
+            "teleports": 0
+          },
+          "bytes": 410992,
+          "sha256": "066839d57028afe6bb7af2b28633395237c27ed9841e30c3255d689ee6eef493"
+        },
+        {
+          "filename": "room-49-wide-03.png",
+          "mark": {
+            "name": "Physical rail motion reaches the permanent observation gallery",
+            "player": [
+              -2.002568327483901,
+              8,
+              -3.9092617684568403
+            ],
+            "cargo": [
+              -11.582840563810255,
+              10.60715513126148,
+              -17.371477692430933
+            ],
+            "teleports": 0
+          },
+          "bytes": 396910,
+          "sha256": "ce22528e0b99ee109bcb8dc089c5151955b3797919b9679d20000c6d6ab0d671"
+        },
+        {
+          "filename": "room-49-wide-04.png",
+          "mark": {
+            "name": "Mechanical mirror and rail clamps retain actual rigid poses",
+            "player": [
+              3.985241667821475,
+              8,
+              -6.207045628146848
+            ],
+            "cargo": [
+              -11.582697406300909,
+              10.607130236574351,
+              -17.370588108269004
+            ],
+            "teleports": 0
+          },
+          "bytes": 323919,
+          "sha256": "0d1f980947d99065cb6bd20de848ad1ed67c45cac8ff76c41f16f3ae0221dd1e"
+        },
+        {
+          "filename": "room-49-wide-05.png",
+          "mark": {
+            "name": "The same pair extracts the original weight into the physical carriage",
+            "player": [
+              -3.616454977465098,
+              8,
+              -3.318969070168331
+            ],
+            "cargo": [
+              5.020259394069948,
+              9.42696021529547,
+              10.538245550635443
+            ],
+            "teleports": 0
+          },
+          "bytes": 365522,
+          "sha256": "381ae2da11d651b5f5ea92ada198f45b42fb709e49fa199579eda429bc54717e"
+        },
+        {
+          "filename": "room-49-wide-06.png",
+          "mark": {
+            "name": "The moving passenger aperture admits the original player to the closed carriage",
+            "player": [
+              4.089602210849972,
+              8.15,
+              3.6815234848621587
+            ],
+            "cargo": [
+              -3.311321367684314,
+              8.539974700175073,
+              10.270694361699455
+            ],
+            "teleports": 1
+          },
+          "bytes": 384697,
+          "sha256": "23717c5ba0674cfbaf367580749882620b244f0d6ced1990eee6948907b0385e"
+        },
+        {
+          "filename": "room-49-wide-07.png",
+          "mark": {
+            "name": "Second optical direction powers the released physical carriage to the final dock",
+            "player": [
+              23.98596722854521,
+              8.15,
+              5.3676832782500465
+            ],
+            "cargo": [
+              18.906645451419696,
+              8.533833557276692,
+              10.763504141249506
+            ],
+            "teleports": 1
+          },
+          "bytes": 498252,
+          "sha256": "4bf9f21d54db4e6b7b153f6644607ef4c4e41707f1a9e554479abf2f60346e15"
+        },
+        {
+          "filename": "room-49-wide-08.png",
+          "mark": {
+            "name": "Both original travellers reach the joint physical optical dock",
+            "player": [
+              31.046824238478806,
+              8,
+              8.989755173322992
+            ],
+            "cargo": [
+              31.040117951266748,
+              9.0751525694553,
+              8.269725616638206
+            ],
+            "teleports": 1
+          },
+          "bytes": 474187,
+          "sha256": "48fb13d0bc8a653f15d9db484d8c666d9bb5d71b117afa18aa5820e6d8c45e7a"
+        },
+        {
+          "filename": "room-49-wide-09.png",
+          "mark": {
+            "name": "both at exit",
+            "player": [
+              31.046824238478806,
+              8,
+              8.989755173322992
+            ],
+            "cargo": [
+              31.040117951266748,
+              9.0751525694553,
+              8.269725616638206
+            ],
+            "teleports": 1
+          },
+          "bytes": 474187,
+          "sha256": "48fb13d0bc8a653f15d9db484d8c666d9bb5d71b117afa18aa5820e6d8c45e7a"
+        }
+      ],
+      "pass": true,
+      "fixture": {
+        "key": "brainrot-campaign-v67:brainrot-portal.preferences.v24",
+        "raw": "{\"quality\":\"balanced\",\"volume\":0,\"lookSensitivity\":1,\"muted\":true,\"tutorial\":false,\"completed\":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,41,42,43,44,45,46,47],\"hints\":{},\"resumeLevel\":48,\"campaignSequenceRevision\":\"fifty-rooms-then-castle-v1\",\"campaignRevision\":\"creative-campaign-v48\",\"roomRevisions\":{\"16\":\"cable-supported-architecture-v1\",\"22\":\"counterweight-dynamic-v1\",\"32\":\"siphon-observatory-v1\",\"42\":\"spatial-progression43-v1\",\"43\":\"spatial-progression44-v1\",\"44\":\"spatial-progression45-v1\",\"45\":\"spatial-progression46-v1\",\"46\":\"spatial-progression47-v1\",\"47\":\"spatial-progression48-v1\",\"48\":\"spatial-progression49-v1\",\"49\":\"spatial-progression50-v1\",\"50\":\"spatial-progression51-v1\"}}",
+        "preferences": {
+          "quality": "balanced",
+          "volume": 0,
+          "lookSensitivity": 1,
+          "muted": true,
+          "tutorial": false,
+          "completed": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47
+          ],
+          "hints": {},
+          "resumeLevel": 48,
+          "campaignSequenceRevision": "fifty-rooms-then-castle-v1",
+          "campaignRevision": "creative-campaign-v48",
+          "roomRevisions": {
+            "16": "cable-supported-architecture-v1",
+            "22": "counterweight-dynamic-v1",
+            "32": "siphon-observatory-v1",
+            "42": "spatial-progression43-v1",
+            "43": "spatial-progression44-v1",
+            "44": "spatial-progression45-v1",
+            "45": "spatial-progression46-v1",
+            "46": "spatial-progression47-v1",
+            "47": "spatial-progression48-v1",
+            "48": "spatial-progression49-v1",
+            "49": "spatial-progression50-v1",
+            "50": "spatial-progression51-v1"
+          }
+        },
+        "completed": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          41,
+          42,
+          43,
+          44,
+          45,
+          46,
+          47
+        ],
+        "targetIndex": 48,
+        "targetCompleted": false,
+        "constructorWrites": 0,
+        "scope": "QA setup supplies the previously completed campaign prefix in the candidate own storage before construction; the current target is not completed. This is not a fresh guest full-campaign playthrough."
+      },
+      "result": {
+        "route": {
+          "level": 49,
+          "id": "puzzle-progression49-optical-transfer",
+          "pass": true,
+          "milestones": [
+            {
+              "name": "Original weight tilts the true hinged mirror",
+              "player": [
+                -28.998740557474886,
+                8.18,
+                20.643353933798238
+              ],
+              "cargo": [
+                -11.58289830965527,
+                10.607153559571353,
+                -17.37414576391925
+              ],
+              "teleports": 0
+            },
+            {
+              "name": "Directional receiver sees the actual first reflected optical branch",
+              "player": [
+                -32.996605017907925,
+                8,
+                -1.215452630272841
+              ],
+              "cargo": [
+                -11.58289830965527,
+                10.607153559571353,
+                -17.37414576391925
+              ],
+              "teleports": 0
+            },
+            {
+              "name": "Physical rail motion reaches the permanent observation gallery",
+              "player": [
+                -2.002568327483901,
+                8,
+                -3.9092617684568403
+              ],
+              "cargo": [
+                -11.582840563810255,
+                10.60715513126148,
+                -17.371477692430933
+              ],
+              "teleports": 0
+            },
+            {
+              "name": "Mechanical mirror and rail clamps retain actual rigid poses",
+              "player": [
+                3.985241667821475,
+                8,
+                -6.207045628146848
+              ],
+              "cargo": [
+                -11.582697406300909,
+                10.607130236574351,
+                -17.370588108269004
+              ],
+              "teleports": 0
+            },
+            {
+              "name": "The same pair extracts the original weight into the physical carriage",
+              "player": [
+                -3.616454977465098,
+                8,
+                -3.318969070168331
+              ],
+              "cargo": [
+                5.020259394069948,
+                9.42696021529547,
+                10.538245550635443
+              ],
+              "teleports": 0
+            },
+            {
+              "name": "The moving passenger aperture admits the original player to the closed carriage",
+              "player": [
+                4.089602210849972,
+                8.15,
+                3.6815234848621587
+              ],
+              "cargo": [
+                -3.311321367684314,
+                8.539974700175073,
+                10.270694361699455
+              ],
+              "teleports": 1
+            },
+            {
+              "name": "Second optical direction powers the released physical carriage to the final dock",
+              "player": [
+                23.98596722854521,
+                8.15,
+                5.3676832782500465
+              ],
+              "cargo": [
+                18.906645451419696,
+                8.533833557276692,
+                10.763504141249506
+              ],
+              "teleports": 1
+            },
+            {
+              "name": "Both original travellers reach the joint physical optical dock",
+              "player": [
+                31.046824238478806,
+                8,
+                8.989755173322992
+              ],
+              "cargo": [
+                31.040117951266748,
+                9.0751525694553,
+                8.269725616638206
+              ],
+              "teleports": 1
+            },
+            {
+              "name": "both at exit",
+              "player": [
+                31.046824238478806,
+                8,
+                8.989755173322992
+              ],
+              "cargo": [
+                31.040117951266748,
+                9.0751525694553,
+                8.269725616638206
+              ],
+              "teleports": 1
+            }
+          ],
+          "respawns": 0,
+          "resets": 0,
+          "frames": 4677,
+          "teleports": 1
+        },
+        "observations": 9353,
+        "resets": 1,
+        "deletions": 0,
+        "state": "won",
+        "sameOriginal": true,
+        "pairReady": true
+      }
+    },
+    {
+      "level": 49,
+      "name": "portrait",
+      "width": 390,
+      "height": 844,
+      "errors": [],
+      "consoleErrors": [],
+      "images": [
+        {
+          "filename": "room-49-portrait-01.png",
+          "mark": {
+            "name": "Original weight tilts the true hinged mirror",
+            "player": [
+              -28.998740557511592,
+              8.18,
+              20.643353933618094
+            ],
+            "cargo": [
+              -11.688389869918959,
+              10.625936162598315,
+              -17.193450735748993
+            ],
+            "teleports": 0
+          },
+          "bytes": 167780,
+          "sha256": "1e6cd325c1e08d6525c2f107082fda375bded2e0a076a4c75c087c0c7629409e"
+        },
+        {
+          "filename": "room-49-portrait-02.png",
+          "mark": {
+            "name": "Directional receiver sees the actual first reflected optical branch",
+            "player": [
+              -32.99660501790773,
+              8,
+              -1.2154526302732063
+            ],
+            "cargo": [
+              -11.688389869918959,
+              10.625936162598315,
+              -17.193450735748993
+            ],
+            "teleports": 0
+          },
+          "bytes": 190824,
+          "sha256": "b3fda321729bc1d1de6b0652fa5292b017762b2ddf5e7185c221167cd9db5f3b"
+        },
+        {
+          "filename": "room-49-portrait-03.png",
+          "mark": {
+            "name": "Physical rail motion reaches the permanent observation gallery",
+            "player": [
+              -2.002568327483901,
+              8,
+              -3.9092617684568407
+            ],
+            "cargo": [
+              -11.68844104066283,
+              10.625989240749062,
+              -17.19101119498506
+            ],
+            "teleports": 0
+          },
+          "bytes": 132403,
+          "sha256": "f3ce18086c85217d19386f35b8f2202b7d0f70072c1e715f4a6f5c76de41b0b9"
+        },
+        {
+          "filename": "room-49-portrait-04.png",
+          "mark": {
+            "name": "Mechanical mirror and rail clamps retain actual rigid poses",
+            "player": [
+              3.985241667821474,
+              8,
+              -6.207045628146848
+            ],
+            "cargo": [
+              -11.68843056240829,
+              10.626011867777688,
+              -17.19022265606512
+            ],
+            "teleports": 0
+          },
+          "bytes": 140756,
+          "sha256": "86c3e58bb461d999d99359d0c8997732d4a661f66b51f9f36c909bf5e7e7a89e"
+        },
+        {
+          "filename": "room-49-portrait-05.png",
+          "mark": {
+            "name": "The same pair extracts the original weight into the physical carriage",
+            "player": [
+              -3.6164549774651755,
+              8,
+              -3.3189690701684005
+            ],
+            "cargo": [
+              5.009127473858111,
+              9.362231642797907,
+              10.539931448241491
+            ],
+            "teleports": 0
+          },
+          "bytes": 122632,
+          "sha256": "0fba49fdb02f1c9faf26d043ba78b29a8ce5b41732644cb29a4ddaebc772334e"
+        },
+        {
+          "filename": "room-49-portrait-06.png",
+          "mark": {
+            "name": "The moving passenger aperture admits the original player to the closed carriage",
+            "player": [
+              4.089604589755722,
+              8.15,
+              3.6828576131530126
+            ],
+            "cargo": [
+              -2.466404814827677,
+              8.539974735628034,
+              10.547452182968797
+            ],
+            "teleports": 1
+          },
+          "bytes": 147879,
+          "sha256": "3de79feb3955e4f844242014674e2a167cbee4d7e06b6560a88b0d77cbed4b72"
+        },
+        {
+          "filename": "room-49-portrait-07.png",
+          "mark": {
+            "name": "Second optical direction powers the released physical carriage to the final dock",
+            "player": [
+              23.985891267023153,
+              8.15,
+              5.367615002168786
+            ],
+            "cargo": [
+              19.64892226169925,
+              8.533833716412305,
+              10.436539143227733
+            ],
+            "teleports": 1
+          },
+          "bytes": 121054,
+          "sha256": "78fbc55f32625060210b8e1aa9d6bec8e85756476cec6af5e6ed95b3166a9d52"
+        },
+        {
+          "filename": "room-49-portrait-08.png",
+          "mark": {
+            "name": "Both original travellers reach the joint physical optical dock",
+            "player": [
+              31.046788047396426,
+              8,
+              8.989737054681173
+            ],
+            "cargo": [
+              31.035909889487854,
+              9.045207105973546,
+              8.269805748894303
+            ],
+            "teleports": 1
+          },
+          "bytes": 142972,
+          "sha256": "4dfce24613be5160d04c44bd1277ac75e52384c694052dfa7cd9d3e40bb529d2"
+        },
+        {
+          "filename": "room-49-portrait-09.png",
+          "mark": {
+            "name": "both at exit",
+            "player": [
+              31.046788047396426,
+              8,
+              8.989737054681173
+            ],
+            "cargo": [
+              31.035909889487854,
+              9.045207105973546,
+              8.269805748894303
+            ],
+            "teleports": 1
+          },
+          "bytes": 142972,
+          "sha256": "4dfce24613be5160d04c44bd1277ac75e52384c694052dfa7cd9d3e40bb529d2"
+        }
+      ],
+      "pass": true,
+      "fixture": {
+        "key": "brainrot-campaign-v67:brainrot-portal.preferences.v24",
+        "raw": "{\"quality\":\"balanced\",\"volume\":0,\"lookSensitivity\":1,\"muted\":true,\"tutorial\":false,\"completed\":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,41,42,43,44,45,46,47],\"hints\":{},\"resumeLevel\":48,\"campaignSequenceRevision\":\"fifty-rooms-then-castle-v1\",\"campaignRevision\":\"creative-campaign-v48\",\"roomRevisions\":{\"16\":\"cable-supported-architecture-v1\",\"22\":\"counterweight-dynamic-v1\",\"32\":\"siphon-observatory-v1\",\"42\":\"spatial-progression43-v1\",\"43\":\"spatial-progression44-v1\",\"44\":\"spatial-progression45-v1\",\"45\":\"spatial-progression46-v1\",\"46\":\"spatial-progression47-v1\",\"47\":\"spatial-progression48-v1\",\"48\":\"spatial-progression49-v1\",\"49\":\"spatial-progression50-v1\",\"50\":\"spatial-progression51-v1\"}}",
+        "preferences": {
+          "quality": "balanced",
+          "volume": 0,
+          "lookSensitivity": 1,
+          "muted": true,
+          "tutorial": false,
+          "completed": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47
+          ],
+          "hints": {},
+          "resumeLevel": 48,
+          "campaignSequenceRevision": "fifty-rooms-then-castle-v1",
+          "campaignRevision": "creative-campaign-v48",
+          "roomRevisions": {
+            "16": "cable-supported-architecture-v1",
+            "22": "counterweight-dynamic-v1",
+            "32": "siphon-observatory-v1",
+            "42": "spatial-progression43-v1",
+            "43": "spatial-progression44-v1",
+            "44": "spatial-progression45-v1",
+            "45": "spatial-progression46-v1",
+            "46": "spatial-progression47-v1",
+            "47": "spatial-progression48-v1",
+            "48": "spatial-progression49-v1",
+            "49": "spatial-progression50-v1",
+            "50": "spatial-progression51-v1"
+          }
+        },
+        "completed": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          41,
+          42,
+          43,
+          44,
+          45,
+          46,
+          47
+        ],
+        "targetIndex": 48,
+        "targetCompleted": false,
+        "constructorWrites": 0,
+        "scope": "QA setup supplies the previously completed campaign prefix in the candidate own storage before construction; the current target is not completed. This is not a fresh guest full-campaign playthrough."
+      },
+      "result": {
+        "route": {
+          "level": 49,
+          "id": "puzzle-progression49-optical-transfer",
+          "pass": true,
+          "milestones": [
+            {
+              "name": "Original weight tilts the true hinged mirror",
+              "player": [
+                -28.998740557511592,
+                8.18,
+                20.643353933618094
+              ],
+              "cargo": [
+                -11.688389869918959,
+                10.625936162598315,
+                -17.193450735748993
+              ],
+              "teleports": 0
+            },
+            {
+              "name": "Directional receiver sees the actual first reflected optical branch",
+              "player": [
+                -32.99660501790773,
+                8,
+                -1.2154526302732063
+              ],
+              "cargo": [
+                -11.688389869918959,
+                10.625936162598315,
+                -17.193450735748993
+              ],
+              "teleports": 0
+            },
+            {
+              "name": "Physical rail motion reaches the permanent observation gallery",
+              "player": [
+                -2.002568327483901,
+                8,
+                -3.9092617684568407
+              ],
+              "cargo": [
+                -11.68844104066283,
+                10.625989240749062,
+                -17.19101119498506
+              ],
+              "teleports": 0
+            },
+            {
+              "name": "Mechanical mirror and rail clamps retain actual rigid poses",
+              "player": [
+                3.985241667821474,
+                8,
+                -6.207045628146848
+              ],
+              "cargo": [
+                -11.68843056240829,
+                10.626011867777688,
+                -17.19022265606512
+              ],
+              "teleports": 0
+            },
+            {
+              "name": "The same pair extracts the original weight into the physical carriage",
+              "player": [
+                -3.6164549774651755,
+                8,
+                -3.3189690701684005
+              ],
+              "cargo": [
+                5.009127473858111,
+                9.362231642797907,
+                10.539931448241491
+              ],
+              "teleports": 0
+            },
+            {
+              "name": "The moving passenger aperture admits the original player to the closed carriage",
+              "player": [
+                4.089604589755722,
+                8.15,
+                3.6828576131530126
+              ],
+              "cargo": [
+                -2.466404814827677,
+                8.539974735628034,
+                10.547452182968797
+              ],
+              "teleports": 1
+            },
+            {
+              "name": "Second optical direction powers the released physical carriage to the final dock",
+              "player": [
+                23.985891267023153,
+                8.15,
+                5.367615002168786
+              ],
+              "cargo": [
+                19.64892226169925,
+                8.533833716412305,
+                10.436539143227733
+              ],
+              "teleports": 1
+            },
+            {
+              "name": "Both original travellers reach the joint physical optical dock",
+              "player": [
+                31.046788047396426,
+                8,
+                8.989737054681173
+              ],
+              "cargo": [
+                31.035909889487854,
+                9.045207105973546,
+                8.269805748894303
+              ],
+              "teleports": 1
+            },
+            {
+              "name": "both at exit",
+              "player": [
+                31.046788047396426,
+                8,
+                8.989737054681173
+              ],
+              "cargo": [
+                31.035909889487854,
+                9.045207105973546,
+                8.269805748894303
+              ],
+              "teleports": 1
+            }
+          ],
+          "respawns": 0,
+          "resets": 0,
+          "frames": 4826,
+          "teleports": 1
+        },
+        "observations": 9651,
+        "resets": 1,
+        "deletions": 0,
+        "state": "won",
+        "sameOriginal": true,
+        "pairReady": true
+      }
+    },
+    {
+      "level": 49,
+      "name": "9by16",
+      "width": 450,
+      "height": 800,
+      "errors": [],
+      "consoleErrors": [],
+      "images": [
+        {
+          "filename": "room-49-9by16-01.png",
+          "mark": {
+            "name": "Original weight tilts the true hinged mirror",
+            "player": [
+              -28.99874055757463,
+              8.18,
+              20.64335393330858
+            ],
+            "cargo": [
+              -11.687241043580762,
+              10.625709926704713,
+              -17.193552548631832
+            ],
+            "teleports": 0
+          },
+          "bytes": 197494,
+          "sha256": "7c9b924a1a5c75701782d6e5a4c53c4a71d7bffe6b2f49e5de7373d7d5c9c84c"
+        },
+        {
+          "filename": "room-49-9by16-02.png",
+          "mark": {
+            "name": "Directional receiver sees the actual first reflected optical branch",
+            "player": [
+              -32.996605017907434,
+              8,
+              -1.2154526302738267
+            ],
+            "cargo": [
+              -11.687241043580762,
+              10.625709926704713,
+              -17.193552548631832
+            ],
+            "teleports": 0
+          },
+          "bytes": 217893,
+          "sha256": "9cae9aa1452326f3f2b367a82f23442c62070c9d823fabb533b8e127439ac1fa"
+        },
+        {
+          "filename": "room-49-9by16-03.png",
+          "mark": {
+            "name": "Physical rail motion reaches the permanent observation gallery",
+            "player": [
+              -2.002568327483901,
+              8,
+              -3.9092617684568403
+            ],
+            "cargo": [
+              -11.687291189179277,
+              10.625793684846169,
+              -17.19111299414185
+            ],
+            "teleports": 0
+          },
+          "bytes": 151656,
+          "sha256": "e5778827e596bff00834617b6a7dca74e3236624c0bfce57cdcb7276ca879008"
+        },
+        {
+          "filename": "room-49-9by16-04.png",
+          "mark": {
+            "name": "Mechanical mirror and rail clamps retain actual rigid poses",
+            "player": [
+              3.985241667821475,
+              8,
+              -6.207045628146848
+            ],
+            "cargo": [
+              -11.687255124104986,
+              10.625801042050744,
+              -17.19029742458993
+            ],
+            "teleports": 0
+          },
+          "bytes": 162586,
+          "sha256": "70fa207d4224334e5acb5feb09bf899e6457b65c4ceb395de3542e8c4aecb1f3"
+        },
+        {
+          "filename": "room-49-9by16-05.png",
+          "mark": {
+            "name": "The same pair extracts the original weight into the physical carriage",
+            "player": [
+              -3.6164549774652017,
+              8,
+              -3.3189690701684262
+            ],
+            "cargo": [
+              5.009179648912359,
+              9.36284340059085,
+              10.540170033381278
+            ],
+            "teleports": 0
+          },
+          "bytes": 129799,
+          "sha256": "b587bd90054825530874edeac11e211f1fd2d3037f55e7572df74cadefb518d2"
+        },
+        {
+          "filename": "room-49-9by16-06.png",
+          "mark": {
+            "name": "The moving passenger aperture admits the original player to the closed carriage",
+            "player": [
+              4.089604589755381,
+              8.15,
+              3.683703532800595
+            ],
+            "cargo": [
+              -2.47449136361263,
+              8.539974734876882,
+              10.540349559872785
+            ],
+            "teleports": 1
+          },
+          "bytes": 166714,
+          "sha256": "86479da763bd99a957ea9bb0728992c8736f4e389505057129d92a4e6693d3aa"
+        },
+        {
+          "filename": "room-49-9by16-07.png",
+          "mark": {
+            "name": "Second optical direction powers the released physical carriage to the final dock",
+            "player": [
+              23.985953255009754,
+              8.15,
+              5.367614641755826
+            ],
+            "cargo": [
+              19.637356546994546,
+              8.533833598842223,
+              10.452594103291437
+            ],
+            "teleports": 1
+          },
+          "bytes": 145695,
+          "sha256": "88deaee1679a9009a82a2462b63f87327ee836929af12d03869a7f54aeb287fa"
+        },
+        {
+          "filename": "room-49-9by16-08.png",
+          "mark": {
+            "name": "Both original travellers reach the joint physical optical dock",
+            "player": [
+              31.046789265676765,
+              8,
+              8.989737559783688
+            ],
+            "cargo": [
+              31.03764893036772,
+              9.043216035793984,
+              8.269765398734728
+            ],
+            "teleports": 1
+          },
+          "bytes": 162415,
+          "sha256": "880b37444f1bc71e2b684f342a052c893288f1dbfa4f47cedca94ef4e39909b7"
+        },
+        {
+          "filename": "room-49-9by16-09.png",
+          "mark": {
+            "name": "both at exit",
+            "player": [
+              31.046789265676765,
+              8,
+              8.989737559783688
+            ],
+            "cargo": [
+              31.03764893036772,
+              9.043216035793984,
+              8.269765398734728
+            ],
+            "teleports": 1
+          },
+          "bytes": 162415,
+          "sha256": "880b37444f1bc71e2b684f342a052c893288f1dbfa4f47cedca94ef4e39909b7"
+        }
+      ],
+      "pass": true,
+      "fixture": {
+        "key": "brainrot-campaign-v67:brainrot-portal.preferences.v24",
+        "raw": "{\"quality\":\"balanced\",\"volume\":0,\"lookSensitivity\":1,\"muted\":true,\"tutorial\":false,\"completed\":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,41,42,43,44,45,46,47],\"hints\":{},\"resumeLevel\":48,\"campaignSequenceRevision\":\"fifty-rooms-then-castle-v1\",\"campaignRevision\":\"creative-campaign-v48\",\"roomRevisions\":{\"16\":\"cable-supported-architecture-v1\",\"22\":\"counterweight-dynamic-v1\",\"32\":\"siphon-observatory-v1\",\"42\":\"spatial-progression43-v1\",\"43\":\"spatial-progression44-v1\",\"44\":\"spatial-progression45-v1\",\"45\":\"spatial-progression46-v1\",\"46\":\"spatial-progression47-v1\",\"47\":\"spatial-progression48-v1\",\"48\":\"spatial-progression49-v1\",\"49\":\"spatial-progression50-v1\",\"50\":\"spatial-progression51-v1\"}}",
+        "preferences": {
+          "quality": "balanced",
+          "volume": 0,
+          "lookSensitivity": 1,
+          "muted": true,
+          "tutorial": false,
+          "completed": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47
+          ],
+          "hints": {},
+          "resumeLevel": 48,
+          "campaignSequenceRevision": "fifty-rooms-then-castle-v1",
+          "campaignRevision": "creative-campaign-v48",
+          "roomRevisions": {
+            "16": "cable-supported-architecture-v1",
+            "22": "counterweight-dynamic-v1",
+            "32": "siphon-observatory-v1",
+            "42": "spatial-progression43-v1",
+            "43": "spatial-progression44-v1",
+            "44": "spatial-progression45-v1",
+            "45": "spatial-progression46-v1",
+            "46": "spatial-progression47-v1",
+            "47": "spatial-progression48-v1",
+            "48": "spatial-progression49-v1",
+            "49": "spatial-progression50-v1",
+            "50": "spatial-progression51-v1"
+          }
+        },
+        "completed": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          41,
+          42,
+          43,
+          44,
+          45,
+          46,
+          47
+        ],
+        "targetIndex": 48,
+        "targetCompleted": false,
+        "constructorWrites": 0,
+        "scope": "QA setup supplies the previously completed campaign prefix in the candidate own storage before construction; the current target is not completed. This is not a fresh guest full-campaign playthrough."
+      },
+      "result": {
+        "route": {
+          "level": 49,
+          "id": "puzzle-progression49-optical-transfer",
+          "pass": true,
+          "milestones": [
+            {
+              "name": "Original weight tilts the true hinged mirror",
+              "player": [
+                -28.99874055757463,
+                8.18,
+                20.64335393330858
+              ],
+              "cargo": [
+                -11.687241043580762,
+                10.625709926704713,
+                -17.193552548631832
+              ],
+              "teleports": 0
+            },
+            {
+              "name": "Directional receiver sees the actual first reflected optical branch",
+              "player": [
+                -32.996605017907434,
+                8,
+                -1.2154526302738267
+              ],
+              "cargo": [
+                -11.687241043580762,
+                10.625709926704713,
+                -17.193552548631832
+              ],
+              "teleports": 0
+            },
+            {
+              "name": "Physical rail motion reaches the permanent observation gallery",
+              "player": [
+                -2.002568327483901,
+                8,
+                -3.9092617684568403
+              ],
+              "cargo": [
+                -11.687291189179277,
+                10.625793684846169,
+                -17.19111299414185
+              ],
+              "teleports": 0
+            },
+            {
+              "name": "Mechanical mirror and rail clamps retain actual rigid poses",
+              "player": [
+                3.985241667821475,
+                8,
+                -6.207045628146848
+              ],
+              "cargo": [
+                -11.687255124104986,
+                10.625801042050744,
+                -17.19029742458993
+              ],
+              "teleports": 0
+            },
+            {
+              "name": "The same pair extracts the original weight into the physical carriage",
+              "player": [
+                -3.6164549774652017,
+                8,
+                -3.3189690701684262
+              ],
+              "cargo": [
+                5.009179648912359,
+                9.36284340059085,
+                10.540170033381278
+              ],
+              "teleports": 0
+            },
+            {
+              "name": "The moving passenger aperture admits the original player to the closed carriage",
+              "player": [
+                4.089604589755381,
+                8.15,
+                3.683703532800595
+              ],
+              "cargo": [
+                -2.47449136361263,
+                8.539974734876882,
+                10.540349559872785
+              ],
+              "teleports": 1
+            },
+            {
+              "name": "Second optical direction powers the released physical carriage to the final dock",
+              "player": [
+                23.985953255009754,
+                8.15,
+                5.367614641755826
+              ],
+              "cargo": [
+                19.637356546994546,
+                8.533833598842223,
+                10.452594103291437
+              ],
+              "teleports": 1
+            },
+            {
+              "name": "Both original travellers reach the joint physical optical dock",
+              "player": [
+                31.046789265676765,
+                8,
+                8.989737559783688
+              ],
+              "cargo": [
+                31.03764893036772,
+                9.043216035793984,
+                8.269765398734728
+              ],
+              "teleports": 1
+            },
+            {
+              "name": "both at exit",
+              "player": [
+                31.046789265676765,
+                8,
+                8.989737559783688
+              ],
+              "cargo": [
+                31.03764893036772,
+                9.043216035793984,
+                8.269765398734728
+              ],
+              "teleports": 1
+            }
+          ],
+          "respawns": 0,
+          "resets": 0,
+          "frames": 4812,
+          "teleports": 1
+        },
+        "observations": 9623,
+        "resets": 1,
+        "deletions": 0,
+        "state": "won",
+        "sameOriginal": true,
+        "pairReady": true
+      }
+    }
+  ],
+  "pass": true
+}

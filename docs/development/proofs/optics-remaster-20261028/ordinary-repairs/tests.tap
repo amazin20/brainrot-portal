@@ -1,0 +1,73 @@
+TAP version 13
+# Subtest: room 7 portrait retrieves the original friend through clear camera sightlines
+ok 1 - room 7 portrait retrieves the original friend through clear camera sightlines
+  ---
+  duration_ms: 10905.931942
+  type: 'test'
+  ...
+# Subtest: room 7 wide retrieves the original friend through clear camera sightlines
+ok 2 - room 7 wide retrieves the original friend through clear camera sightlines
+  ---
+  duration_ms: 8465.328857
+  type: 'test'
+  ...
+# Subtest: ordinary journey proofs never call the unavailable pair deletion command
+ok 3 - ordinary journey proofs never call the unavailable pair deletion command
+  ---
+  duration_ms: 5.417599
+  type: 'test'
+  ...
+# Subtest: active finite attacks never call an unavailable player deletion command
+ok 4 - active finite attacks never call an unavailable player deletion command
+  ---
+  duration_ms: 0.485224
+  type: 'test'
+  ...
+# Subtest: 31: recovery wins using the same cargo while pair deletion is unavailable
+ok 5 - 31: recovery wins using the same cargo while pair deletion is unavailable
+  ---
+  duration_ms: 24704.531928
+  type: 'test'
+  ...
+# Subtest: 34: recovery wins using the same cargo while pair deletion is unavailable
+ok 6 - 34: recovery wins using the same cargo while pair deletion is unavailable
+  ---
+  duration_ms: 5333.414225
+  type: 'test'
+  ...
+# Subtest: 48: recovery wins using the same cargo while pair deletion is unavailable
+ok 7 - 48: recovery wins using the same cargo while pair deletion is unavailable
+  ---
+  duration_ms: 3618.049181
+  type: 'test'
+  ...
+# 49 complete original-actor route {"aspect":0.46208530805687204,"frames":4920,"visualFrames":4920,"shots":10,"allSweptImpactsValid":true,"boarding":{"name":"The moving passenger aperture admits the original player to the closed carriage","player":[4.089604589755628,8.15,3.6836802705825846],"cargo":[-3.253907752696955,8.53997468626488,10.99846343234687],"teleports":1,"grounded":true,"floor":8.15,"entry":[8.49939081481993,10.700455378783365,-3],"exit":[5.687781784510794,10.849966213974668,3.6997121045760366]},"closures":[],"resets":0,"respawns":0,"state":"won","sameOriginalActors":true}
+# 49 complete original-actor route {"aspect":0.5625,"frames":4812,"visualFrames":4812,"shots":10,"allSweptImpactsValid":true,"boarding":{"name":"The moving passenger aperture admits the original player to the closed carriage","player":[4.089604589755441,8.15,3.683703533115173],"cargo":[-2.4744913190342186,8.53997473487688,10.540349542822973],"teleports":1,"grounded":true,"floor":8.15,"entry":[8.499872013460006,10.701494760675848,-3],"exit":[5.687781784510933,10.849978632184637,3.700216565748686]},"closures":[],"resets":0,"respawns":0,"state":"won","sameOriginalActors":true}
+# 49 complete original-actor route {"aspect":1.7777777777777777,"frames":4677,"visualFrames":4677,"shots":10,"allSweptImpactsValid":true,"boarding":{"name":"The moving passenger aperture admits the original player to the closed carriage","player":[4.0896022108500345,8.15,3.681523485233204],"cargo":[-3.3113213782942976,8.539974700175073,10.270694375710493],"teleports":1,"grounded":true,"floor":8.15,"entry":[8.497920848415536,10.700195121120116,-3],"exit":[5.687781784510895,10.849501051035357,3.6960847881563432]},"closures":[],"resets":0,"respawns":0,"state":"won","sameOriginalActors":true}
+# Subtest: 49 complete route 0.46208530805687204 boards at the actual deck height and retains every original actor
+ok 8 - 49 complete route 0.46208530805687204 boards at the actual deck height and retains every original actor
+  ---
+  duration_ms: 19531.080615
+  type: 'test'
+  ...
+# Subtest: 49 complete route 0.5625 boards at the actual deck height and retains every original actor
+ok 9 - 49 complete route 0.5625 boards at the actual deck height and retains every original actor
+  ---
+  duration_ms: 17199.756744
+  type: 'test'
+  ...
+# Subtest: 49 complete route 1.7777777777777777 boards at the actual deck height and retains every original actor
+ok 10 - 49 complete route 1.7777777777777777 boards at the actual deck height and retains every original actor
+  ---
+  duration_ms: 17124.00399
+  type: 'test'
+  ...
+1..10
+# tests 10
+# suites 0
+# pass 10
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 110053.672466

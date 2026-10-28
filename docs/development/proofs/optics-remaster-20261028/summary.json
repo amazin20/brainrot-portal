@@ -99,5 +99,123 @@
     "Room35 oblique/opposite reference cameras are obstructed by existing geometry before and after; the gallery uses its normal start view.",
     "Existing diagonal artifacts on some internal partitions remain; this pass does not claim their removal.",
     "Other gameplay, full-suite failures and live Yandex moderation remain outside acceptance."
-  ]
+  ],
+  "ordinaryRepairs": {
+    "sourceCommit": "40b66d128efae24caa2414715374c029e85fd2d5",
+    "run": 40626157829,
+    "images": 37,
+    "rows": [
+      {
+        "level": 7,
+        "name": "wide",
+        "viewport": [
+          1280,
+          720
+        ],
+        "nativeCanvasSizes": [
+          [
+            1280,
+            720
+          ]
+        ],
+        "frames": 3729,
+        "physicalUpdates": 7457,
+        "setupResets": 0,
+        "routeResets": 0,
+        "routeRespawns": 0,
+        "pairDeletions": 0,
+        "sameOriginal": true,
+        "state": "won"
+      },
+      {
+        "level": 7,
+        "name": "portrait",
+        "viewport": [
+          390,
+          844
+        ],
+        "nativeCanvasSizes": [
+          [
+            390,
+            780
+          ]
+        ],
+        "frames": 3879,
+        "physicalUpdates": 7758,
+        "setupResets": 0,
+        "routeResets": 0,
+        "routeRespawns": 0,
+        "pairDeletions": 0,
+        "sameOriginal": true,
+        "state": "won"
+      },
+      {
+        "level": 49,
+        "name": "wide",
+        "viewport": [
+          1280,
+          720
+        ],
+        "nativeCanvasSizes": [
+          [
+            1280,
+            720
+          ]
+        ],
+        "frames": 4677,
+        "physicalUpdates": 9353,
+        "setupResets": 1,
+        "routeResets": 0,
+        "routeRespawns": 0,
+        "pairDeletions": 0,
+        "sameOriginal": true,
+        "state": "won"
+      },
+      {
+        "level": 49,
+        "name": "portrait",
+        "viewport": [
+          390,
+          844
+        ],
+        "nativeCanvasSizes": [
+          [
+            390,
+            780
+          ]
+        ],
+        "frames": 4826,
+        "physicalUpdates": 9651,
+        "setupResets": 1,
+        "routeResets": 0,
+        "routeRespawns": 0,
+        "pairDeletions": 0,
+        "sameOriginal": true,
+        "state": "won"
+      },
+      {
+        "level": 49,
+        "name": "9by16",
+        "viewport": [
+          450,
+          800
+        ],
+        "nativeCanvasSizes": [
+          [
+            450,
+            800
+          ]
+        ],
+        "frames": 4812,
+        "physicalUpdates": 9623,
+        "setupResets": 1,
+        "routeResets": 0,
+        "routeRespawns": 0,
+        "pairDeletions": 0,
+        "sameOriginal": true,
+        "state": "won"
+      }
+    ],
+    "testsPassed": 10
+  }
 }

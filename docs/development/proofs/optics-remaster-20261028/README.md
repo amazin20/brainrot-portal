@@ -34,3 +34,5 @@
 38 | [PNG](room-38/before-room-38-start.png) | [PNG](room-38/after-room-38-start.png) | [PNG](room-38/after-room-38-won.png)
 39 | [PNG](room-39/before-room-39-start.png) | [PNG](room-39/after-room-39-start.png) | [PNG](room-39/after-room-39-won.png)
 40 | [PNG](room-40/before-room-40-start.png) | [PNG](room-40/after-room-40-start.png) | [PNG](room-40/after-room-40-won.png)
+
+[Обычные маршруты комнат 7 и 49: исходные кадры и проверки](ordinary-repairs/README.md).
