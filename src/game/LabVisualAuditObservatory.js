@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import {mergeGeometries} from 'three/addons/utils/BufferGeometryUtils.js';
 
 const V=(...p)=>new THREE.Vector3(...p),Q=()=>new THREE.Quaternion(),Z=V(0,0,1);
-export const OBSERVATORY_ART_REVISION='v67-observatory-built-in-service-bays';
+export const OBSERVATORY_ART_REVISION='v67-observatory-service-bay-butt-joints';
 
 /** A wall-sized equipment enclosure, drawn inside the existing closed hull.
  * The old broad white slab made every machine read like a tiny prop in a
@@ -41,7 +41,16 @@ function serviceBayGeometry(size,{axis='z',paint=0x527888,accent=0xacae9a,deck=f
    }
   }
   for(let x=1;x<cols;x++)add(-w/2+rim+x*cw,0,sign*d*.46,rim*.44,h-rim*2,d*.08,'metal');
-  if(!deck)for(let y=1;y<rows;y++)add(0,-h/2+rim+y*ch,sign*d*.46,w-rim*2,rim*.44,d*.08,'frame');
+  // Each horizontal member ends exactly at its vertical neighbour's side.
+  // A full-width rail shared the mullion's exterior plane at every crossing,
+  // leaving two differently painted triangles at the same depth. Butt joints
+  // keep one continuous closed front without a gap or a depth-bias layer.
+  if(!deck)for(let y=1;y<rows;y++)for(let x=0;x<cols;x++){
+   const halfMullion=rim*.22;
+   const left=-w/2+rim+x*cw+(x>0?halfMullion:0);
+   const right=-w/2+rim+(x+1)*cw-(x<cols-1?halfMullion:0);
+   add((left+right)/2,-h/2+rim+y*ch,sign*d*.46,right-left,rim*.44,d*.08,'frame');
+  }
  }
  const g=mergeGeometries(parts,false);parts.forEach(p=>p.dispose());
  if(axis==='x')g.rotateY(Math.PI/2);else if(axis==='y')g.rotateX(-Math.PI/2);

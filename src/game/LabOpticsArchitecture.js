@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import {architecturalCassetteGeometry} from './LabArchitecturalModels.js';
 import {mergeGeometries} from 'three/addons/utils/BufferGeometryUtils.js';
+import {installObservatoryShadows} from './LabObservatoryShadows.js';
 
 export const OPTICS_ARCHITECTURE_REVISION='observatory-arched-archive-and-celestial-soffit-v1';
 const V=(...p)=>new THREE.Vector3(...p),Q=()=>new THREE.Quaternion();
@@ -170,11 +171,13 @@ export function installOpticsArchitecture(game,level){
   if(light.isHemisphereLight){lights.push({light,intensity:light.intensity,color:light.color.clone(),ground:light.groundColor.clone()});light.intensity=.78;light.color.setHex(0xc8d7ff);light.groundColor.setHex(0x344360);}
   else if(light===game.keyLight){lights.push({light,intensity:light.intensity,color:light.color.clone()});light.intensity=2.7;light.color.setHex(0xe4eaff);}
  });
+ const shadows=installObservatoryShadows(game,level);
  const oldRender=level.renderUpdate,oldDispose=level.dispose;let disposed=false;
  const render=function(...args){const result=oldRender?.apply(this,args);if(!disposed)time.value=game.epicDirector?.options?.reducedMotion||game.epicOptions?.reducedMotion||globalThis.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches?0:k.time;return result;};
  level.renderUpdate=render;
  function release(){
   if(disposed)return;disposed=true;
+  shadows?.release();
   for(const [source,visible]of sourceVisibility)source.visible=visible;
   for(const {mesh,original,replacement}of changed)if(mesh.material===replacement)mesh.material=original;
   for(const {registry,key,original,replacement}of bindings)if(registry[key]===replacement)registry[key]=original;
@@ -183,5 +186,5 @@ export function installOpticsArchitecture(game,level){
   if(level.renderUpdate===render)level.renderUpdate=oldRender;
  }
  level.dispose=function(...args){release();return oldDispose?.apply(this,args);};
- level.opticsArchitecture={root,stats,panels,banks,geometry,materials,clones,time,release,get disposed(){return disposed;}};return level;
+ level.opticsArchitecture={root,stats,panels,banks,geometry,materials,clones,time,shadows,release,get disposed(){return disposed;}};return level;
 }

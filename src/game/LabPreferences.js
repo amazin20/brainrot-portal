@@ -84,6 +84,7 @@ export function applyLabQuality(game,key,dpr=globalThis.devicePixelRatio||1){
     if(shadow.mapSize.x!==profile.shadowSize||shadow.mapSize.y!==profile.shadowSize){
       shadow.mapSize.set(profile.shadowSize,profile.shadowSize);shadow.map?.dispose();shadow.map=null;shadow.needsUpdate=true;
     }}
+  game.firstLevel?.observatoryShadow?.refresh();
   if(game.portals)game.portals.maxResolution=profile.portalResolution;
   game.performanceMonitor?.reset();
 }
