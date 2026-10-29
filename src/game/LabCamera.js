@@ -110,6 +110,7 @@ export class LabCamera {
     this.mechanismOffsets = MECHANISM_CAMERA_OFFSETS;
     this.mechanismHadObstruction = false;
     this.mechanismSubjectRotation = null;
+    this.mechanismSubjectHalfWidth = 1.05;
     this.mechanismLensGoal = 0;
     this.room17RecoveryWeight = 0;
     this.room17RecoveryTransportHold = 0;
@@ -132,7 +133,9 @@ export class LabCamera {
     return this;
   }
 
-  configureMechanismFraming({enabled = false, currentBlocker = null, currentBlockersValid = null, offsets = MECHANISM_CAMERA_OFFSETS} = {}) {
+  configureMechanismFraming({enabled = false, currentBlocker = null, currentBlockersValid = null, offsets = MECHANISM_CAMERA_OFFSETS, subjectHalfWidth = 1.05} = {}) {
+    if (!Number.isFinite(subjectHalfWidth) || subjectHalfWidth < 1.05 || subjectHalfWidth > 1.35)
+      throw new TypeError('Mechanism actor envelope must retain the original body and gun');
     if (offsets !== MECHANISM_CAMERA_OFFSETS && offsets !== ROOM17_RECOVERY_CAMERA_OFFSETS)
       throw new TypeError('Mechanism framing requires one of the two frozen twelve-candidate camera policies');
     this.mechanismFramingEnabled = !!enabled;
@@ -140,6 +143,7 @@ export class LabCamera {
     this.mechanismCurrentBlocker = currentBlocker;
     this.mechanismCurrentBlockersValid = currentBlockersValid;
     this.mechanismOffsets = offsets;
+    this.mechanismSubjectHalfWidth = subjectHalfWidth;
     this.room17RecoveryTransportHold = 0;this.room17RecoveryWeight = 0;
     this.room17RecoveryLayoutAspect = this.camera.aspect;
     this.mechanismEscape = null;this.mechanismLensGoal = 0;this.mechanismHadObstruction = false;
@@ -288,6 +292,8 @@ export class LabCamera {
       return this.reset(target, yaw, pitch);
     }
     const step = Math.min(Math.max(Number.isFinite(dt) ? dt : 0, 0), 0.1);
+    const room17ViewportNarrowed = room17Recovery && step > 0
+      && this.camera.aspect < this.room17RecoveryLayoutAspect - 1e-6;
     // A wider viewport already contains the narrow composition. Keep that
     // safe shoulder while returning to landscape instead of discarding its
     // offset and lens goal in one frame. Shrinking still uses the actual
@@ -370,6 +376,13 @@ export class LabCamera {
     [this.camera.fov, this.fovVelocity] = spring(oldFov, this.fovVelocity, fovGoal,
       this.mechanismFramingActive && room17Recovery ? THREE.MathUtils.lerp(room17Legacy ? ROOM17_RECOVERY_LENS_RESPONSE : 7,ROOM17_RECOVERY_LENS_RESPONSE,this.room17RecoveryWeight)
         : this.fullBodyFraming && upwardFraming > 0 ? 12 : 7, step);
+    // Resizing removes part of the image immediately. A spring from the old
+    // wide composition would knowingly lose the body for several frames.
+    // Refit the existing bounded lens on that viewport event only; ordinary
+    // movement, aiming and the smooth release back to landscape stay intact.
+    if (room17ViewportNarrowed && room17Orientation) {
+      this.camera.fov = MECHANISM_CAMERA_FOV;this.fovVelocity = 0;
+    }
     if (Math.abs(oldFov - this.camera.fov) > 0.00001) this.camera.updateProjectionMatrix();
 
     // A wall-to-floor passage initially retains the exact transported view.
@@ -455,6 +468,16 @@ export class LabCamera {
       escapePosition = this.mechanismEscapePosition();
       if (escapePosition) {avoidGoal.copy(escapePosition).sub(this.desired);this.avoidanceActive = true;}
       else this.avoidanceActive = false;
+      if (room17ViewportNarrowed && room17Orientation && escapePosition) {
+        // The target already passed the player/near-plane sweep. Also sweep
+        // the complete resize transport from the previous live eye before
+        // adopting it; a clear endpoint beyond a wall is never sufficient.
+        const swept = escapePosition.clone();
+        this.constrain(previousEye,swept,MECHANISM_CAMERA_FOV);
+        escapePosition.copy(swept);avoidGoal.copy(swept).sub(this.desired);
+        this.avoidance.copy(avoidGoal);this.avoidanceVelocity.set(0,0,0);
+        this.distance = swept.distanceTo(this.focus);this.distanceVelocity = 0;
+      }
     } else if (!this.mechanismFramingActive && (directDistance < (this.avoidanceActive ? 4.1 : 3.1)
       || this.camera.position.distanceTo(this.playerPivot) < 3.1
       || ((this.rampFraming || this.fullBodyFraming) && this.framingPenalty(this.desired) > .005)) && this.blockers.length) {
@@ -649,7 +672,7 @@ export class LabCamera {
   measureMechanismFrame(eye, fov = this.camera.fov) {
     const recoveryAspect = Math.min(this.camera.aspect, this.room17RecoveryLayoutAspect);
     return measureMechanismFrame({eye, target: this.lastTarget, rotation: this.mechanismSubjectRotation,
-      lookPoint: this.lookPoint, up: this.viewUp, aspect: this.mechanismOffsets === ROOM17_RECOVERY_CAMERA_OFFSETS ? THREE.MathUtils.lerp(this.camera.aspect,Math.min(this.camera.aspect,ROOM17_RECOVERY_FRAMING_ASPECT),this.room17RecoveryWeight*room17RecoveryPortraitBlend(recoveryAspect)) : this.camera.aspect, near: this.camera.near, fov});
+      lookPoint: this.lookPoint, up: this.viewUp, aspect: this.mechanismOffsets === ROOM17_RECOVERY_CAMERA_OFFSETS ? THREE.MathUtils.lerp(this.camera.aspect,Math.min(this.camera.aspect,ROOM17_RECOVERY_FRAMING_ASPECT),this.room17RecoveryWeight*room17RecoveryPortraitBlend(recoveryAspect)) : this.camera.aspect, near: this.camera.near, fov, halfWidth: this.mechanismSubjectHalfWidth});
   }
 
   mechanismEscapePosition() {

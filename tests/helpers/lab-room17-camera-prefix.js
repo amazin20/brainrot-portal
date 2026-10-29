@@ -9,7 +9,7 @@ import {runV8Journey} from '../../src/game/LabV8Journey.js';
  * separately declared historical comparator restores the former authored
  * look before Play and retains its original first-walk control sequence.
  */
-export async function observeRoom17CameraPrefix({aspect=16/9,disableLocalPolicy=false,aspectChanges=[],denseVertexRanges=[],historicalInitialView=false}={}){
+export async function observeRoom17CameraPrefix({aspect=16/9,disableLocalPolicy=false,aspectChanges=[],denseVertexRanges=[],historicalInitialView=false,replayInput=null}={}){
  const g=await createHeadlessGame();g.chamberEdition='foundation';g.camera.aspect=aspect;g.camera.updateProjectionMatrix();await g.selectLevel(16,!historicalInitialView);
  const authoredView={...g.firstLevel.spawnView};
  if(historicalInitialView){
@@ -21,10 +21,22 @@ export async function observeRoom17CameraPrefix({aspect=16/9,disableLocalPolicy=
  g.playerGroup.traverse(mesh=>{if(mesh.isMesh)meshes.push({mesh,geometry:mesh.geometry,position:mesh.geometry.attributes.position.array,index:mesh.geometry.index?.array,materials:(Array.isArray(mesh.material)?mesh.material:[mesh.material]).map(material=>({material,opacity:material.opacity,transparent:material.transparent,visible:material.visible,depthWrite:material.depthWrite}))});});
  assert.equal(g.physics.world.stepnumber,0);assert.equal(g.elapsed,0);assert.deepEqual(g.playerPosition.toArray(),[-22,6,12]);assert.deepEqual(g.cargo.position.toArray(),[-18,6.57,10]);
  const report={scope:historicalInitialView?'Declared previous-presentation and previous-driver CPU control comparator; not the current native Play bearing. No WebGL or hardware evidence.':'Bounded current native-start CPU route and projection; no WebGL, hardware or exhaustive camera acceptance.',initialLook:{historicalFixture:historicalInitialView,currentAuthored:authoredView,actual:{yaw:g.yaw,pitch:g.pitch},firstMouthInspection:!historicalInitialView},aspect,aspectChanges,disableLocalPolicy,controls:[],complete:false,visualFrames:0,physicsSteps:0,resets:0,respawns:0,samples:[],meshSamples:[],playerVertices:meshes.reduce((n,m)=>n+m.mesh.geometry.attributes.position.count,0),worstReference:0,worstSourceVertex:0,minSourceDepth:Infinity,maxFov:0,maxCandidates:0,maxCenterRayError:0,maxFinalSweepDisplacement:0,maxEyeStep:0,maxRecoveryFovStep:0,maxRecoveryEyeStep:0,maxRecoveryMotionDisplacement:0,recoveryFrames:[]};
- const end=Symbol('bounded-camera-prefix'),visual=g.updateVisuals,reset=g.resetRun,respawn=g.respawn,cargoReset=g.physics.resetCargo;
+ // A closed-loop aiming driver reads the rendered camera. Running that driver
+ // twice is therefore not a same-input comparison of two camera policies.
+ // Record ordinary controls and actions at their original call boundaries,
+ // then replay those inputs through the complete production simulation. No
+ // actor, camera, physics state or solved condition is copied into the replay.
+ const inputTape=[],inputState=()=>({move:g.input.getMove().toArray(),yaw:g.yaw,pitch:g.pitch,keys:[...g.input.keys].sort(),jumpQueued:g.input.jumpQueued,interactQueued:g.interactQueued});
+ const end=Symbol('bounded-camera-prefix'),visual=g.updateVisuals,physics=g.updatePlaying,fire=g.firePortal,interact=g.interact,move=g.input.getMove,reset=g.resetRun,respawn=g.respawn,cargoReset=g.physics.resetCargo;
+ let insidePhysics=false,replayedEvents=0;
+ const remember=(type,args)=>{if(!replayInput)inputTape.push({type,args,input:inputState()});};
+ g.updatePlaying=function(...args){remember('physics',args);insidePhysics=true;try{return physics.apply(this,args);}finally{insidePhysics=false;}};
+ g.firePortal=function(...args){if(!insidePhysics)remember('fire',args);return fire.apply(this,args);};
+ g.interact=function(...args){if(!insidePhysics)remember('interact',args);return interact.apply(this,args);};
  g.resetRun=function(){report.resets++;throw Error('Prefix reset after Play');};g.respawn=function(){report.respawns++;throw Error('Prefix respawned after Play');};g.physics.resetCargo=function(){report.resets++;throw Error('Prefix reset original cargo');};
  const point=new THREE.Vector3(),local=new THREE.Vector3();
  g.updateVisuals=function(...args){
+  remember('visual',args);
   const nextFrame=report.visualFrames+1;
   const resize=aspectChanges.find(change=>change.frame===nextFrame);if(resize){this.camera.aspect=resize.aspect;this.camera.updateProjectionMatrix();}
   report.controls.push({frame:nextFrame,move:this.input.getMove().toArray(),yaw:this.yaw,pitch:this.pitch,keys:[...this.input.keys].sort()});
@@ -62,7 +74,20 @@ export async function observeRoom17CameraPrefix({aspect=16/9,disableLocalPolicy=
   }
   if(report.visualFrames>=2000)throw end;
  };
- try{await runV8Journey(g,{journeyOptions:{nativeStart:true,firstMouthInspection:!historicalInitialView}});}catch(error){if(error!==end)throw error;report.complete=true;}
- finally{g.updateVisuals=visual;g.resetRun=reset;g.respawn=respawn;g.physics.resetCargo=cargoReset;report.physicsSteps=g.physics.world.stepnumber;report.finalState=g.state;report.sameOriginal=g.playerGroup===original.player&&g.cargo===original.cargo&&g.physics.cargoBody===original.body&&g.physics.cargoBody.shapes[0]===original.shape;report.bodyMass=original.body.mass;report.shapeHalfExtents=[original.shape.halfExtents.x,original.shape.halfExtents.y,original.shape.halfExtents.z];g.physics.dispose();g.portals.dispose();}
+ try{
+  if(replayInput){
+   assert.ok(Array.isArray(replayInput)&&replayInput.length>0,'Replay requires a captured ordinary-input prefix');
+   for(const event of replayInput){
+    const {type,args,input}=event;assert.ok(['physics','visual','fire','interact'].includes(type));
+    g.input.getMove=()=>new THREE.Vector2(...input.move);g.input.keys=new Set(input.keys);
+    g.input.jumpQueued=input.jumpQueued;g.interactQueued=input.interactQueued;g.yaw=input.yaw;g.pitch=input.pitch;
+    replayedEvents++;
+    if(type==='physics')g.updatePlaying(...args);else if(type==='visual')g.updateVisuals(...args);
+    else if(type==='fire')g.firePortal(...args);else g.interact(...args);
+   }
+   assert.fail('Captured input prefix did not reach its original bounded endpoint');
+  }else await runV8Journey(g,{journeyOptions:{nativeStart:true,firstMouthInspection:!historicalInitialView}});
+ }catch(error){if(error!==end)throw error;report.complete=true;}
+ finally{g.updateVisuals=visual;g.updatePlaying=physics;g.firePortal=fire;g.interact=interact;g.input.getMove=move;g.resetRun=reset;g.respawn=respawn;g.physics.resetCargo=cargoReset;report.inputTape=replayInput??inputTape;report.replayedEvents=replayedEvents;report.physicsSteps=g.physics.world.stepnumber;report.finalState=g.state;report.sameOriginal=g.playerGroup===original.player&&g.cargo===original.cargo&&g.physics.cargoBody===original.body&&g.physics.cargoBody.shapes[0]===original.shape;report.bodyMass=original.body.mass;report.shapeHalfExtents=[original.shape.halfExtents.x,original.shape.halfExtents.y,original.shape.halfExtents.z];g.physics.dispose();g.portals.dispose();}
  return report;
 }

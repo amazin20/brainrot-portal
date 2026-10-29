@@ -7,7 +7,7 @@ function preciseAim(d){
 function release(d){d.stop();d.wait(.3);check(d.game.interact()&&!d.game.heldCube,'Release failed');d.wait(1.0);}
 
 const V=(...p)=>new THREE.Vector3(...p),check=(c,m)=>{if(!c)throw Error(m);};
-function collect(d){const p=d.game.cargo.position;d.walk(p.x+1.35,p.z);d.pickup();}
+function collect(d,side=1){const p=d.game.cargo.position;d.walk(p.x+side*1.35,p.z);d.pickup();}
 export function runResearch31(d,{route='carry-first',recover=false}={}){
  preciseAim(d);const {game:g,level:l,walk,wait,mark,until}=d,p=l.panels;
  check(['carry-first','scout-first','island-freight'].includes(route),'Unknown light-interchange route');
@@ -25,8 +25,10 @@ export function runResearch31(d,{route='carry-first',recover=false}={}){
   check(l.light.segments.length>1,'Solo light crossing was not built');
   walk(-19,8);walk(4,8);walk(4,5);
   check(g.physics.grounded&&g.cargo.position.y>6,'Freight must remain on the independent island deck');
-  collect(d);mark('player and original companion reunite after separate routes');
-  release(d);d.aim(1,p['north-bridge'].getFrame().center);wait(.3);collect(d);walk(4,1);walk(4,-20);
+  // Freight can settle beside the island's solid eastern cheek. Approach
+  // from the open western deck instead of trying to walk behind that wall.
+  collect(d,-1);mark('player and original companion reunite after separate routes');
+  release(d);d.aim(1,p['north-bridge'].getFrame().center);wait(.3);collect(d,-1);walk(4,1);walk(4,-20);
   until(()=>g.state==='won',3,'Independent freight light relay missed');mark('perpendicular light bridge joins both travellers at exit');
   return;
  }

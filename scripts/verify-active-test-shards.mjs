@@ -24,5 +24,5 @@ for(let index=1;index<=count;index++){
 }
 assert.equal(new Set(seen).size,expected.length);assert.deepEqual(seen.sort(),expected);assert.equal(process.env.TEST_JOBS_RESULT,'success');
 const totals=Object.fromEntries(['tests','pass','fail','cancelled','skipped','todo'].map(k=>[k,rows.reduce((n,r)=>n+r[k],0)]));
-const summary={sourceCommit:source,pass:true,activeFileCount:expected.length,shardCount:count,totals,rows,scope:'Every active test file appears exactly once; each shard completed successfully. Not a WebGL all-room, live SDK, human playtest or hardware acceptance.'};
+const summary={sourceCommit:source,runId:process.env.GITHUB_RUN_ID??null,runAttempt:process.env.GITHUB_RUN_ATTEMPT===undefined?null:Number(process.env.GITHUB_RUN_ATTEMPT),pass:true,activeFileCount:expected.length,shardCount:count,totals,rows,scope:'Every active test file appears exactly once; each shard completed successfully. Not a WebGL all-room, live SDK, human playtest or hardware acceptance.'};
 fs.writeFileSync(process.env.ACTIVE_TEST_SUMMARY||'active-suite-summary.json',JSON.stringify(summary,null,2)+'\n');console.log(JSON.stringify(summary,null,2));

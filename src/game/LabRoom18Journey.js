@@ -61,11 +61,19 @@ export function room18Flight(d,{aimDelayFrames=0}={}){
 export function room18Return(d,{order='portal-first'}={}){
  const {game,level,walk,aim,pickup,wait,mark,frame,worldMove,stop,until}=d;
  check(['portal-first','retrieve-first','send-ahead'].includes(order),'Unknown return-gallery route');
+ const addressReturnWell=point=>{
+  // In portrait framing the shoulder camera's downward ray hits the freight
+  // shelf before reaching the well. Its existing western lip has a clear
+  // sight line. Walk there and back; the shelf and real charge stay solid.
+  if(game.camera.aspect<1){walk(-14.85,-4);walk(-21.2,-4);}
+  aim(0,point);
+  if(game.camera.aspect<1){walk(-14.85,-4);walk(-14.85,-2);}
+ };
  walk(12,0);walk(4,0);
  if(order==='retrieve-first'){
   // Keep the original friend on permanent support while the observer climbs
   // to the sight line and changes the other portal to the hidden exit.
-  walk(4,-2);walk(-12,-2);walk(-14.85,-2);aim(0,V(-20,.025,-1.2));
+  walk(4,-2);walk(-12,-2);walk(-14.85,-2);addressReturnWell(V(-20,.025,-1.2));
   walk(game.cargo.position.x-1,game.cargo.position.z);pickup();walk(-12,-2);walk(7,0);
   // Stop before placing the live body. Releasing straight out of a walk
   // preserves the hand's lateral velocity and can send it off the gallery.
@@ -78,7 +86,7 @@ export function room18Return(d,{order='portal-first'}={}){
   walk(4,0);walk(game.cargo.position.x+1,game.cargo.position.z);pickup();walk(-12,-2);
  }else{
   walk(4,25);aim(1,level.panels.home.getFrame().center);
-  walk(4,0);walk(4,-2);walk(-12,-2);walk(-14.85,-2);aim(0,V(-20,.025,order==='send-ahead'?0:-1.2));
+  walk(4,0);walk(4,-2);walk(-12,-2);walk(-14.85,-2);addressReturnWell(V(-20,.025,order==='send-ahead'?0:-1.2));
   walk(game.cargo.position.x-1,game.cargo.position.z);pickup();
  }
  walk(-12,-4);walk(order==='send-ahead'?-21.2:-20,-4);mark('return flight behind the entrance');

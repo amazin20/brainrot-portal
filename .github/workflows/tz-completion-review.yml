@@ -4,12 +4,6 @@ name: TZ continuation validation
 on:
   push:
     branches: [upgrade/tz-completion-20261023]
-    paths:
-      - 'src/**'
-      - 'tests/**'
-      - 'scripts/**'
-      - 'package*.json'
-      - '.github/workflows/tz-completion-review.yml'
   workflow_dispatch:
 
 permissions:
@@ -33,6 +27,8 @@ jobs:
         with:
           ref: ${{ github.sha }}
           persist-credentials: false
+      - name: Retain the exact accepted historical camera for the unchanged comparison
+        run: git fetch --no-tags --depth=1 origin 65207e98b463c03fa7614e04c2865aa471a37f7e
       - uses: actions/setup-node@v4
         with:
           node-version: 22

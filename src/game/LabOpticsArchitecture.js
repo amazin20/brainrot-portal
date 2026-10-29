@@ -157,6 +157,15 @@ export function installOpticsArchitecture(game,level){
   }
   changed.push({mesh,original,replacement:clones.get(original)});mesh.material=clones.get(original);
  });
+ // Instruments and moving decks resolve the same floor through the kit's
+ // registries. Keep those references on the actual rendered finish, and
+ // restore them before the original world disposes its owned materials.
+ const bindings=[];
+ for(const registry of new Set([k.m,level.world.materials].filter(Boolean))){
+  for(const [key,original]of Object.entries(registry))if(clones.has(original)){
+   const replacement=clones.get(original);bindings.push({registry,key,original,replacement});registry[key]=replacement;
+  }
+ }
  game.scene.traverse(light=>{
   if(light.isHemisphereLight){lights.push({light,intensity:light.intensity,color:light.color.clone(),ground:light.groundColor.clone()});light.intensity=.78;light.color.setHex(0xc8d7ff);light.groundColor.setHex(0x344360);}
   else if(light===game.keyLight){lights.push({light,intensity:light.intensity,color:light.color.clone()});light.intensity=2.7;light.color.setHex(0xe4eaff);}
@@ -168,6 +177,7 @@ export function installOpticsArchitecture(game,level){
   if(disposed)return;disposed=true;
   for(const [source,visible]of sourceVisibility)source.visible=visible;
   for(const {mesh,original,replacement}of changed)if(mesh.material===replacement)mesh.material=original;
+  for(const {registry,key,original,replacement}of bindings)if(registry[key]===replacement)registry[key]=original;
   for(const {light,intensity,color,ground}of lights){light.intensity=intensity;light.color.copy(color);if(ground)light.groundColor.copy(ground);}
   root.removeFromParent();root.children.forEach(m=>m.dispose());root.clear();Object.values(geometry).forEach(g=>g.dispose());Object.values(materials).forEach(m=>m.dispose());clones.forEach(m=>m.dispose());
   if(level.renderUpdate===render)level.renderUpdate=oldRender;

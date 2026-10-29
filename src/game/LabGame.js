@@ -17,6 +17,7 @@ import { AudioController } from './AudioController.js';
 import { LabCamera } from './LabCamera.js';
 import {mechanismCameraArea} from './LabMechanismCamera.js';
 import {room17RecoveryCameraEnabled,ROOM17_RECOVERY_CAMERA_OFFSETS} from './LabRoom17CameraPolicy.js';
+import {room13ReunionCameraArea} from './LabRoom13CameraPolicy.js';
 import { LabPortalActors } from './LabPortalActors.js';
 import { warmPortalRendering } from './LabPortalWarmup.js';
 import { LabPlayerAnimator } from './LabPlayerAnimator.js';
@@ -1562,8 +1563,15 @@ export class LabGame {
     const rampFraming = this.ramps.some(r => subject.x >= r.minX - 1 && subject.x <= r.maxX + 1
       && subject.z >= r.minZ - 1 && subject.z <= r.maxZ + 1
       && Math.abs(subject.y - sampleRampSurface(r, subject.z).height) < 3.5);
+    const opticalReunion = room13ReunionCameraArea(this.firstLevel, this.levelIndex, subject, this.cargo.position);
+    if (this.levelIndex === 12 && this.firstLevel?.id === 'optical-paradox'
+      && this.cameraRig.mechanismFramingEnabled !== opticalReunion)
+      this.cameraRig.configureMechanismFraming({enabled: opticalReunion,
+        subjectHalfWidth: opticalReunion ? 1.35 : 1.05,
+        currentBlocker: this.cameraRig.mechanismCurrentBlocker,
+        currentBlockersValid: this.cameraRig.mechanismCurrentBlockersValid});
     this.cameraRig.update({ dt: active ? cameraDt : 0, rampFraming, target: this.playerGroup.position, yaw: this.yaw, pitch: this.pitch, velocity: this.playerVelocity, aiming: this.isAiming(), epic: this.kineticMode, dynamicFov: this.epicOptions?.dynamicFov !== false,
-      mechanismFraming: mechanismCameraArea(this.firstLevel, this.levelIndex, this.playerGroup.position, this.camera.aspect), subjectRotation: this.playerGroup.quaternion });
+      mechanismFraming: opticalReunion || mechanismCameraArea(this.firstLevel, this.levelIndex, this.playerGroup.position, this.camera.aspect), subjectRotation: this.playerGroup.quaternion });
     if (this.epicDirector) {
       if (this.teleportCount > (this.epicLastTeleport || 0)) this.epicDirector.portal(this.lastPortalTravel?.speed || this.playerVelocity.length(), this.teleportCount);
       if (this.playerGrounded && this.epicWasGrounded === false) this.epicDirector.land(this.lastLanding || 0);

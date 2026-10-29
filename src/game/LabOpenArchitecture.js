@@ -172,7 +172,7 @@ export class OpenChamber extends Workshop{
   const panel=portal?this.panel(name,[0,2.85,.30],[0,0,1],OPEN_METRICS.portalWidth,OPEN_METRICS.portalHeight,group,true):null;
   const floor={minX:0,maxX:0,minZ:0,maxZ:0,y:stations[0][1],mesh:bodyCollider.mesh,enabled:true};this.game.floors.push(floor);this.world.floors.push(floor);
   const k=this;let previous=V(...stations[0]),current=previous.clone(),lastTarget=0,path=[];
-  const c={name,group,panel,floor,position:current,stations:stations.map(a=>V(...a)),target:0,braked:false,speed:10,
+  const c={name,group,mesh:body,panel,floor,position:current,stations:stations.map(a=>V(...a)),target:0,braked:false,speed:10,
    update(dt){previous.copy(current);if(this.target!==lastTarget){lastTarget=this.target;path=interchange?[V(...interchange),this.stations[this.target].clone()]:[this.stations[this.target].clone()];}while(path.length&&current.distanceTo(path[0])<.001)path.shift();const destination=path[0]||this.stations[this.target];const delta=destination.clone().sub(current),dist=delta.length();const step=Math.min(dist,this.speed*dt);if(!this.braked&&dist>.00001)current.addScaledVector(delta,step/dist);const travel=current.clone().sub(previous);
     const player=k.game.playerPosition,aboard=k.game.playerGrounded&&Math.abs(player.y-floor.y)<.15&&player.x>floor.minX-.08&&player.x<floor.maxX+.08&&player.z>floor.minZ-.08&&player.z<floor.maxZ+.08;
     if(aboard&&dt){player.add(travel);k.game.previousPlayerPosition.add(travel);}

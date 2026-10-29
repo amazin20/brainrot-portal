@@ -22,14 +22,14 @@ export function mechanismCameraArea(level, index, target, aspect = 16/9) {
 /** Eight conservative actor/gun corners, never production vertex projection.
  * Measure against the unchanged centre look point. The actual animated root
  * rotation also covers the brief transported pose after a portal passage. */
-export function measureMechanismFrame({eye, target, rotation, lookPoint, up = UP, aspect, near, fov}) {
+export function measureMechanismFrame({eye, target, rotation, lookPoint, up = UP, aspect, near, fov, halfWidth = 1.05}) {
   const forward = lookPoint.clone().sub(eye).normalize();
   const right = new THREE.Vector3().crossVectors(forward, up).normalize();
   if (right.lengthSq() < .01) right.set(1, 0, 0);
   const vertical = new THREE.Vector3().crossVectors(right, forward).normalize();
   const tangent = Math.tan(THREE.MathUtils.degToRad(fov / 2));
   let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity, needed = 0;
-  for (const x of [-1.05, 1.05]) for (const y of [-.2, 2.84]) for (const z of [-1.05, 1.05]) {
+  for (const x of [-halfWidth, halfWidth]) for (const y of [-.2, 2.84]) for (const z of [-halfWidth, halfWidth]) {
     const point = new THREE.Vector3(x, y, z);
     if (rotation) point.applyQuaternion(rotation);
     point.add(target).sub(eye);
