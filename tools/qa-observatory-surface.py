@@ -93,7 +93,7 @@ def start(browser, site, level, quality, row):
     page.evaluate("""()=>{const g=window.__NESI_DEMO_GAME__,r=g.renderer;window.__SURFACE_LOOP__=r.setAnimationLoop;
       r.setAnimationLoop=function(){return window.__SURFACE_LOOP__.call(this,null)};r.setAnimationLoop(null);}""")
     page.click('#play-button'); page.wait_for_function("window.__NESI_DEMO_GAME__.state==='playing'")
-    page.evaluate("""()=>{const g=window.__NESI_DEMO_GAME__;g.renderer.setAnimationLoop=window.__SURFACE_LOOP__;delete window.__SURFACE_LOOP__;
+    page.evaluate(r"""()=>{const g=window.__NESI_DEMO_GAME__;g.renderer.setAnimationLoop=window.__SURFACE_LOOP__;delete window.__SURFACE_LOOP__;
       if(g.elapsed!==0||g.physics.world.stepnumber!==0)throw Error('Not native zero-step Play');
       const original={player:g.playerGroup,cargo:g.cargo,group:g.cargo.group,body:g.physics.cargoBody,shape:g.physics.cargoBody.shapes[0]};
       const actors=[];for(const root of [g.playerGroup,g.cargo.group])root.traverse(mesh=>{if(mesh.isMesh)actors.push({mesh,geometry:mesh.geometry,position:mesh.geometry.attributes.position.array,material:mesh.material});});
@@ -118,6 +118,47 @@ def start(browser, site, level, quality, row):
             mesh.getVertexPosition(i,p).applyMatrix4(mesh.matrixWorld).applyMatrix4(camera.matrixWorldInverse);vertices++;
             outsideXY+=Number(p.x<camera.left||p.x>camera.right||p.y<camera.bottom||p.y>camera.top);behindNear+=Number(-p.z<camera.near);beyondFar+=Number(-p.z>camera.far);
           }});out.push({name,vertices,outsideXY,behindNear,beyondFar});}return out;};
+      // Observe the actual authored receiver cohort independently of its
+      // policy report. The rotor hall legitimately has no such material.
+      // Probe disposable shader text; never replace a live material callback,
+      // mutate a uniform, or make a cache-key label stand in for shader effect.
+      const probeReceiver=(material,callback)=>{
+        const shader={uniforms:{},vertexShader:'#include <common>\nvoid main() {\n#include <project_vertex>\n#include <shadowmap_vertex>\n}',
+          fragmentShader:'#include <common>\nvoid main() {\n#include <color_fragment>\n}'};
+        try{callback.call(material,shader,g.renderer);const uniform=shader.uniforms.observatoryWallShadowExtra,text=shader.vertexShader;
+          return{error:null,uniformPresent:!!uniform,extraValue:Number.isFinite(uniform?.value)?uniform.value:null,
+            expanded:!text.includes('#include <shadowmap_vertex>'),uniformDeclared:text.includes('uniform float observatoryWallShadowExtra;'),
+            verticalDirectionalLookup:text.includes('directionalLightShadows[ i ].shadowNormalBias + observatoryWallShadowExtra')&&text.includes('smoothstep(0.75, 0.90, abs(shadowWorldNormal.y))'),
+            pointLookupUnchanged:text.includes('shadowWorldNormal * pointLightShadows[ i ].shadowNormalBias'),
+            spotLookupUnchanged:text.includes('shadowWorldNormal * spotLightShadows[ i ].shadowNormalBias'),
+            renderPositionUnchanged:text.includes('#include <project_vertex>')};
+        }catch(error){return{error:String(error),uniformPresent:false,extraValue:null,expanded:false};}
+      };
+      const validReceiverProbe=(probe,extra)=>!probe.error&&probe.uniformPresent&&Number.isFinite(probe.extraValue)
+        &&Number.isFinite(extra)&&Math.abs(probe.extraValue-extra)<1e-12&&probe.expanded&&probe.uniformDeclared
+        &&probe.verticalDirectionalLookup&&probe.pointLookupUnchanged&&probe.spotLookupUnchanged&&probe.renderPositionUnchanged;
+      const bayReceivers=()=>{
+        const root=g.firstLevel.world?.root??g.firstLevel.workshop?.world?.root;
+        if(!root)throw Error('Receiver inventory requires the current authored world root');
+        const materials=new Map(),meshes=[];
+        root.traverse(mesh=>{
+          if(!mesh.isMesh||!mesh.visible||Array.isArray(mesh.material)||mesh.material?.name!=='Observatory / recessed structural service bays')return;
+          if(!materials.has(mesh.material))materials.set(mesh.material,[]);
+          materials.get(mesh.material).push(mesh.name);meshes.push({name:mesh.name,effectiveVisible:effectiveVisible(mesh)});
+        });
+        const extra=g.firstLevel.observatoryShadow?.report?.wallNormalExtra,rows=[];
+        for(const [material,names]of materials){
+          const hook=material.onBeforeCompile,key=material.customProgramCacheKey,version=material.version,cache=key.call(material);
+          const actual=probeReceiver(material,hook),negative=probeReceiver(material,Object.getPrototypeOf(material).onBeforeCompile);
+          if(material.onBeforeCompile!==hook||material.customProgramCacheKey!==key||material.version!==version||key.call(material)!==cache)
+            throw Error('Disposable receiver observation changed the live material or cache key');
+          rows.push({name:material.name,meshNames:names,cacheKey:cache,probe:actual,
+            matchesPolicy:Number.isFinite(extra)?validReceiverProbe(actual,extra):null,
+            negativeProbe:negative,negativeRejected:Number.isFinite(extra)?!validReceiverProbe(negative,extra):null,
+            negativeType:'Prototype no-effect callback, with the same cohort counts and live cache key',observationPreservedMaterial:true});
+        }
+        return{meshCount:meshes.length,materialCount:materials.size,meshes,materials:rows};
+      };
       const render=()=>{shadow.needsUpdate=true;g.renderer.shadowMap.needsUpdate=true;g.render();check();return{state:state(),lighting:lighting(),png:g.renderer.domElement.toDataURL('image/png').split(',')[1]};};
       const restore=()=>{light.position.copy(saved.position);light.target.position.copy(saved.target);light.castShadow=saved.castShadow;shadow.bias=saved.bias;shadow.normalBias=saved.normalBias;Object.assign(camera,saved.camera);camera.updateProjectionMatrix();};
       const fit=(move=0)=>{if(move){const direction=light.position.clone().sub(light.target.position).normalize().multiplyScalar(move);light.position.add(direction);light.target.position.add(direction);}
@@ -145,7 +186,7 @@ def start(browser, site, level, quality, row):
           grounded:g.physics.grounded,supportY:support,bodyBottom:feet,gap:feet-support,cargoBounds:[minX,minY,maxX,maxY],
           floorPolygon:polygon(c.x-1.8,c.x+1.8,c.z-1.8,c.z+1.8),basePolygon:polygon(b.aabb.lowerBound.x,b.aabb.upperBound.x,b.aabb.lowerBound.z,b.aabb.upperBound.z),
           projectedMeshes,casterCount:casters.filter(([,v])=>v).length,castOff(){casters.forEach(([m])=>m.castShadow=false);},castRestore(){casters.forEach(([m,v])=>m.castShadow=v);}};};
-      window.__SURFACE_PROOF__={state,check,lighting,render,restore,fit,saved,actorCoverage,contact,wallSurface};
+      window.__SURFACE_PROOF__={state,check,lighting,render,restore,fit,saved,actorCoverage,contact,wallSurface,bayReceivers};
     }""")
     return context, page, fixture
 
@@ -269,6 +310,11 @@ try:
                             context, page, fixture = start(browser, site, level, quality, row)
                             native = picture(row, 'native', page.evaluate('()=>window.__SURFACE_PROOF__.render()'))
                             row['originalActorShadowCoverage'] = page.evaluate('()=>window.__SURFACE_PROOF__.actorCoverage()')
+                            inventory = page.evaluate('()=>window.__SURFACE_PROOF__.bayReceivers()')
+                            row['receiverInventory'] = inventory
+                            expected_materials = 0 if level == 36 else 1
+                            assert inventory['materialCount'] == expected_materials, f"Room {level} has {inventory['materialCount']} eligible bay materials; expected {expected_materials} from its authored geometry"
+                            assert (inventory['meshCount'] == 0 if level == 36 else inventory['meshCount'] > 0), f"Room {level} has an unexpected eligible bay-mesh cohort: {inventory['meshCount']}"
                             if level == 31: row['flatWallSurface'] = page.evaluate('()=>window.__SURFACE_PROOF__.wallSurface()')
                             assert native['state']['state'] == 'playing' and native['state']['steps'] == 2
                             light = native['lighting']
@@ -279,9 +325,15 @@ try:
                                 assert policy and policy['revision'] == 'room-fitted-observatory-shadow-v1'
                                 assert policy['camera'] == light['frustum'] and policy['normalBias'] == light['normalBias'] and policy['bias'] == light['bias']
                                 assert policy['mapSize'] == light['mapSize'], 'Current quality did not refresh the authored shadow policy'
-                                assert policy['receiverPolicy'] == 'vertical-service-bay-only' and policy['receiverMaterialCount'] > 0 and policy['receiverMeshCount'] > 0
+                                assert policy['receiverPolicy'] == 'vertical-service-bay-only', f"Room {level} installed a different receiver policy"
+                                assert policy['receiverMaterialCount'] == inventory['materialCount'] and policy['receiverMeshCount'] == inventory['meshCount'], f"Room {level} policy counts do not match the independent authored-world receiver inventory"
+                                for material in inventory['materials']:
+                                    assert material['matchesPolicy'], f"Room {level} eligible receiver has no effective vertical directional hook or correct uniform: {material['probe']}"
+                                    assert material['negativeRejected'], f"Room {level} receiver validation accepted a no-effect callback with unchanged counts/cache key"
                                 assert policy['wallNormalBias'] >= policy['normalBias'] and abs(policy['wallNormalExtra']-(policy['wallNormalBias']-policy['normalBias'])) < 1e-12
-                            else: assert light['policy'] is None, 'Baseline unexpectedly contains the new policy'
+                            else:
+                                assert light['policy'] is None, 'Baseline unexpectedly contains the new policy'
+                                assert all(not material['probe']['uniformPresent'] for material in inventory['materials']), f"Room {level} baseline unexpectedly contains the new wall-receiver uniform"
                             assert all(math.isfinite(v) for v in light['frustum'].values())
                             assert light['frustum']['far'] > light['frustum']['near'] > 0
                             if level == 31 and DIAGNOSTICS: controls(page, row)
@@ -308,6 +360,8 @@ try:
         after = next((r for r in report['rows'] if r['version'] == 'after' and r['level'] == before['level'] and r['quality'] == before['quality'] and r['pass']), None)
         if after:
             assert before['captures']['native']['state'] == after['captures']['native']['state'], 'Matched native cameras/actors differ between builds'
+            old_inventory, new_inventory = before['receiverInventory'], after['receiverInventory']
+            assert old_inventory['meshCount'] == new_inventory['meshCount'] and old_inventory['materialCount'] == new_inventory['materialCount'], f"Room {before['level']} changed its authored receiver cohort between builds"
             old_light = before['captures']['native']['lighting']; new_light = after['captures']['native']['lighting']
             for key in ['position', 'target', 'intensity', 'color', 'normalBias']:
                 assert old_light[key] == new_light[key], 'The wall fix changed the authored light or global actor/floor receiver offset'
